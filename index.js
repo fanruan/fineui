@@ -26,17 +26,16 @@ $(function(){
         type: "bi.resizable_table",
         el: {
             type: "bi.collection_table",
-            isNeedMerge: true,
-            mergeCols: [0, 1],
-            mergeRule: function (col1, col2) {
-                return BI.isEqual(col1, col2);
-            }
         },
         width: 600,
         height: 500,
         isResizeAdapt: true,
         isNeedResize: true,
         isNeedMerge: true,
+        mergeCols: [0, 1],
+        mergeRule: function (col1, col2) {
+            return BI.isEqual(col1, col2);
+        },
         isNeedFreeze: true,
         freezeCols: [0, 1],
         columnSize: columnSize,

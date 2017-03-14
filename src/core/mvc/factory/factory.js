@@ -4,14 +4,26 @@
  * @class BI.Factory
  */
 BI.Factory = {
+    parsePath: function parsePath (path) {
+        var segments = path.split('.');
+        return function (obj) {
+            for (var i = 0; i < segments.length; i++) {
+                if (!obj) {
+                    return;
+                }
+                obj = obj[segments[i]];
+            }
+            return obj;
+        }
+    },
     createView : function(url, viewFunc, mData, vData, context){
         var modelFunc = viewFunc.replace(/View/, "Model");
-        if(modelFunc === viewFunc || !_.isFunction(eval(modelFunc))){
-            console.warn("没有对应的Model:" + modelFunc + "使用默认的Model方式");
-            modelFunc = "BI.Model";
+        modelFunc = this.parsePath(modelFunc)(window);
+        if(!_.isFunction(modelFunc)){
+            modelFunc = BI.Model;
         }
 //        try {
-            var model = new (eval(modelFunc))(_.extend({}, mData, {
+            var model = new (modelFunc)(_.extend({}, mData, {
                     parent: context && context.model,
                     rootURL: url
             }), {silent: true});
