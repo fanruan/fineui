@@ -1,7 +1,7 @@
 {
-  "name": "index",
+  "name": "fineui",
   "version": "1.0.0",
-  "description": "BI4.0测试",
+  "description": "fineui",
   "main": "index.js",
   "dependencies": {
 
@@ -18,5 +18,5 @@
     "grunt": "grunt"
   },
   "author": "",
-  "license": "ISC"
+  "license": "MIT"
 }
