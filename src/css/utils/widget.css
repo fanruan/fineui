@@ -1,0 +1,120 @@
+/****添加计算宽度的--运算符直接需要space****/
+/****** common color(常用颜色,可用于普遍场景) *****/
+/**** custom color(自定义颜色,用于特定场景) ****/
+@font-face {
+  font-family: 'bi';
+  src: url('${servletURL}?op=resource&resource=/com/fr/bi/web/resources/fonts/iconfont.eot?#iefix') format('embedded-opentype'), /* IE6-IE8 */ url('${servletURL}?op=resource&resource=/com/fr/bi/web/resources/fonts/iconfont.woff') format('woff'), /* chrome、firefox */ url('${servletURL}?op=resource&resource=/com/fr/bi/web/resources/fonts/iconfont.ttf') format('truetype'), /* chrome、firefox、opera、Safari, Android, iOS 4.2+*/ url('${servletURL}?op=resource&resource=/com/fr/bi/web/resources/fonts/iconfont.svg#svgFontName') format('svg');
+  
+  /*  iOS 4.1- */
+}
+.b-font {
+  font-family: "bi";
+  font-style: normal;
+  -webkit-font-smoothing: antialiased;
+  -webkit-text-stroke-width: 0.2px;
+  -moz-osx-font-smoothing: grayscale;
+}
+html,
+button,
+input,
+select,
+textarea,
+* {
+  font-family: "Microsoft YaHei", "Hiragino Sans GB W3";
+}
+html,
+body,
+div,
+ul,
+li,
+img,
+a,
+span,
+p,
+* {
+  margin: 0px;
+}
+html {
+  height: 100%;
+  overflow: hidden;
+}
+body {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  margin: 0;
+  padding: 0;
+  top: 0;
+  left: 0;
+  background-repeat: repeat;
+  -webkit-user-select: none;
+  -khtml-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  -o-user-select: none;
+  user-select: none;
+  color: #1a1a1a;
+  font: normal 12px "Microsoft YaHei", "Hiragino Sans GB W3";
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-decoration: none;
+  -kthml-user-focus: normal;
+  -moz-user-focus: normal;
+  -moz-outline: 0 none;
+  outline: 0 none;
+}
+#wrapper {
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 0;
+  bottom: 0;
+  overflow: hidden;
+  overflow-x: hidden;
+  overflow-y: hidden;
+}
+a {
+  outline: none;
+  text-decoration: none;
+}
+a:focus {
+  outline: 0;
+}
+input,
+textarea {
+  margin: 0;
+  padding: 0;
+  outline: none;
+  border: 1px solid #cccccc;
+}
+ul,
+ol {
+  margin: 0;
+  padding: 0;
+}
+ul {
+  list-style: disc;
+}
+li {
+  list-style-type: none;
+}
+i {
+  font-style: normal;
+  -webkit-font-smoothing: antialiased;
+  -webkit-text-stroke-width: 0.2px;
+  -moz-osx-font-smoothing: grayscale;
+}
+div::-webkit-scrollbar,
+textarea::-webkit-scrollbar {
+  -webkit-appearance: none;
+  background-color: #f4f4f4;
+  width: 6px;
+  height: 6px;
+}
+div::-webkit-scrollbar-thumb,
+textarea::-webkit-scrollbar-thumb {
+  -webkit-border-radius: 0;
+  -moz-border-radius: 0;
+  border-radius: 0;
+  background-color: #e2e2e2;
+}

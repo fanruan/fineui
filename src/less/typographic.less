@@ -1,0 +1,32 @@
+.x-overflow-auto(){
+  overflow-y: hidden;
+  overflow-x: auto;
+}
+
+.y-overflow-auto(){
+  overflow-x: hidden;
+  overflow-y: auto;
+}
+
+.overflow-auto(){
+  overflow-x: auto;
+  overflow-y: auto;
+}
+
+.overflow-hidden(){
+  overflow-x: hidden;
+  overflow-y: hidden;
+}
+.overflow-dot(){
+  text-overflow:ellipsis;
+  overflow-x: hidden;
+  white-space:nowrap;
+}
+.user-select(@select){
+  -webkit-user-select: @select;
+  -khtml-user-select: @select;
+  -moz-user-select: @select;
+  -ms-user-select: @select;
+  -o-user-select: @select;
+  user-select: @select;
+}

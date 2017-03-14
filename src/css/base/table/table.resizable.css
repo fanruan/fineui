@@ -1,0 +1,16 @@
+/****添加计算宽度的--运算符直接需要space****/
+/****** common color(常用颜色,可用于普遍场景) *****/
+/**** custom color(自定义颜色,用于特定场景) ****/
+.bi-resizable-table .resizable-table-resizer {
+  cursor: ew-resize;
+  z-index: 1;
+  background-color: #009de3;
+}
+.bi-resizable-table .resizable-table-region-resizer {
+  cursor: ew-resize;
+  z-index: 1;
+}
+.bi-resizable-table .resizable-table-region-resizer:hover .resizable-table-region-resizer-knob,
+.bi-resizable-table .resizable-table-region-resizer.dragging .resizable-table-region-resizer-knob {
+  background-color: #009de3;
+}

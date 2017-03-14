@@ -1,0 +1,27 @@
+@import "../../bibase";
+
+
+/**********FR.BIListView*************/
+.bi-list-view {
+  position: fixed !important;
+  overflow-y: visible !important;
+  overflow-x: visible !important;
+  overflow: visible !important;
+  cursor: default;
+  & .list-view-outer{
+    border: 1px solid @color-bi-split-dark;
+    .border-radius(2px);
+    background:@color-bi-background-default;
+  }
+  & .list-view-toolbar {
+    border-top: 1px solid @color-bi-split-light;
+    line-height: 30px;
+    color: @color-bi-text-highlight;
+    & > .center-element {
+      border-left: 1px solid @color-bi-split-light;
+    }
+    & > .first-element{
+      border-left: none;
+    }
+  }
+}

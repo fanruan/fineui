@@ -1,0 +1,93 @@
+/****添加计算宽度的--运算符直接需要space****/
+/****** common color(常用颜色,可用于普遍场景) *****/
+/**** custom color(自定义颜色,用于特定场景) ****/
+.bi-button {
+  -webkit-border-radius: 2px;
+  -moz-border-radius: 2px;
+  border-radius: 2px;
+  border: 1px solid #009de3;
+  background-color: #009de3;
+  text-align: center;
+  vertical-align: middle;
+  cursor: pointer !important;
+  font-size: 14px;
+}
+.bi-button.button-common,
+.bi-button.button-common .b-font {
+  color: #ffffff;
+}
+.bi-button.button-common .b-font:before {
+  color: #ffffff;
+}
+.bi-button.button-ignore {
+  background-color: #ffffff;
+  border-color: #d4dadd;
+}
+.bi-button.button-ignore,
+.bi-button.button-ignore .b-font {
+  color: #1a1a1a;
+}
+.bi-button.button-success {
+  background-color: #58cc7d;
+  border-color: #58cc7d;
+}
+.bi-button.button-success,
+.bi-button.button-success .b-font {
+  color: #ffffff;
+}
+.bi-button.button-success .b-font:before {
+  color: #ffffff;
+}
+.bi-button.button-warning {
+  background-color: #e85050;
+  border-color: #e85050;
+}
+.bi-button.button-warning,
+.bi-button.button-warning .b-font {
+  color: #ffffff;
+}
+.bi-button.button-warning .b-font:before {
+  color: #ffffff;
+}
+.bi-button.button-common.disabled,
+.bi-button.button-success.disabled,
+.bi-button.button-warning.disabled {
+  background: #c4c6c6 !important;
+  border-color: #c4c6c6 !important;
+}
+.bi-button.button-common.disabled,
+.bi-button.button-success.disabled,
+.bi-button.button-warning.disabled,
+.bi-button.button-common.disabled .b-font,
+.bi-button.button-success.disabled .b-font,
+.bi-button.button-warning.disabled .b-font {
+  color: #ffffff !important;
+}
+.bi-button.button-common.disabled .b-font:before,
+.bi-button.button-success.disabled .b-font:before,
+.bi-button.button-warning.disabled .b-font:before {
+  color: #ffffff !important;
+}
+.bi-button.button-ignore.disabled {
+  background: #ffffff !important;
+  border-color: #d4dadd !important;
+}
+.bi-button.button-ignore.disabled,
+.bi-button.button-ignore.disabled .b-font {
+  color: #c4c6c6 !important;
+}
+.bi-button.button-ignore.disabled .b-font:before {
+  color: #c4c6c6 !important;
+}
+.bi-basic-button.button-common .bi-button-mask,
+.bi-basic-button.button-success .bi-button-mask,
+.bi-basic-button.button-warning .bi-button-mask {
+  opacity: 0.2;
+  filter: alpha(opacity=20);
+  background-color: #ffffff;
+}
+.bi-basic-button .bi-button-mask {
+  opacity: 0.2;
+  filter: alpha(opacity=20);
+  background-color: #1a1a1a;
+}

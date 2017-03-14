@@ -1,0 +1,18 @@
+/****添加计算宽度的--运算符直接需要space****/
+/****** common color(常用颜色,可用于普遍场景) *****/
+/**** custom color(自定义颜色,用于特定场景) ****/
+.bi-scroll-view .scroll-container {
+  border-left: 1px solid #d4dadd;
+  border-right: 1px solid #d4dadd;
+  border-bottom: 1px solid #d4dadd;
+}
+.bi-scroll-view .scroll-drop-down-icon {
+  font-size: 14px;
+  border-bottom: 1px solid #d4dadd;
+  border-left: 1px solid #d4dadd;
+  border-right: 1px solid #d4dadd;
+  background: #f4f4f4;
+}
+.bi-scroll-view .scroll-drop-down-icon:active {
+  background: #d4dadd;
+}

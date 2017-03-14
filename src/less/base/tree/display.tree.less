@@ -1,0 +1,30 @@
+@import "../../bibase";
+
+.bi-display-tree{
+  .ztree * {
+    color: @color-bi-text-gray;
+  }
+  & .ztree li span.button.switch.center_open{
+    background-image:url("${servletURL}?op=resource&resource=/com/fr/bi/web/images/icon/tree-vertical-line-3.png");
+  }
+
+  & .ztree li span.button.switch.roots_open{
+    background-image:url("${servletURL}?op=resource&resource=/com/fr/bi/web/images/icon/tree-vertical-line-2.png");
+  }
+
+  & .ztree li span.button.switch.bottom_open{
+    background-image:url("${servletURL}?op=resource&resource=/com/fr/bi/web/images/icon/tree-vertical-line-4.png");
+  }
+  & .ztree li a, & .ztree li span{
+    cursor: default !important;
+  }
+  & .ztree li a:hover{
+    text-decoration: none;
+  }
+  & .ztree li a.curSelectedNode{
+    padding-top: 1px;
+    border: none;
+    background-color: inherit;
+    .opacity(1);
+  }
+}

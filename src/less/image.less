@@ -1,0 +1,263 @@
+@import "var";
+
+.imagePath(none) {
+  background: none;
+  _filter: none;
+}
+
+.imagePath(@path, @top:center, @left:center, @repeat: no-repeat) when not (@path = none) {
+  background: url('@{imageUrl}@{path}') @repeat @left @top;
+  _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='@{imageUrl}@{path}');
+  _background: none;
+}
+
+.icon(@class, @iconPath, @top:0px, @left:0px) {
+  .@{class} {
+    & .x-icon,
+    &:hover .x-icon,
+    &:active .x-icon {
+      display: block;
+      .imagePath(@iconPath, -@top, -@left);
+    }
+    &.native .x-icon,
+    &.disabled .x-icon {
+      display: block;
+      .imagePath(@iconPath, -@top, -@left);
+    }
+  }
+}
+
+.icon_hover(@class, @iconPath, @top:0px, @left:0px, @distance: 20) {
+  .@{class} {
+    & .x-icon {
+      display: block;
+      .imagePath(@iconPath, -@top, -@left);
+    }
+    &:hover .x-icon,
+    &:focus .x-icon,
+    &.hover .x-icon,
+    &:active .x-icon,
+    &.active .x-icon {
+      display: block;
+      .imagePath(@iconPath, -@top, -(@left + @distance));
+    }
+    &.native .x-icon,
+    &.disabled .x-icon {
+      display: block;
+      .imagePath(@iconPath, -@top, -@left);
+    }
+  }
+}
+
+.icon_active(@class, @iconPath, @top:0px, @left:0px, @distance: 20) {
+  .@{class} {
+    & .x-icon,
+    &:hover .x-icon,
+    &:focus .x-icon,
+    &.hover .x-icon {
+      display: block;
+      .imagePath(@iconPath, -@top, -@left);
+    }
+    &:active .x-icon,
+    &.active .x-icon {
+      display: block;
+      .imagePath(@iconPath, -@top, -(@left + @distance));
+    }
+    &.native .x-icon,
+    &.disabled .x-icon {
+      display: block;
+      .imagePath(@iconPath, -@top, -@left);
+    }
+  }
+}
+
+.icon_hover_active(@class, @iconPath, @top:0px, @left:0px, @distance: 20) {
+  .@{class} {
+    & .x-icon {
+      display: block;
+      .imagePath(@iconPath, -@top, -@left);
+    }
+    &:hover .x-icon,
+    &:focus .x-icon,
+    &.hover .x-icon {
+      display: block;
+      .imagePath(@iconPath, -@top, -(@left+@distance));
+    }
+
+    &:active .x-icon,
+    &.active .x-icon {
+      display: block;
+      .imagePath(@iconPath, -@top, -(@left+@distance*2));
+    }
+    &.native .x-icon,
+    &.disabled .x-icon {
+      display: block;
+      .imagePath(@iconPath, -@top, -@left);
+    }
+  }
+}
+
+.icon_select(@class, @iconPath, @top:0px, @left:0px, @distance: 20) {
+  .@{class} {
+    & .x-icon {
+      display: block;
+      .imagePath(@iconPath, -@top, -@left);
+    }
+    &.active .x-icon {
+      display: block;
+      .imagePath(@iconPath, -@top, -(@left+@distance));
+    }
+    &.native .x-icon,
+    &.disabled .x-icon {
+      display: block;
+      .imagePath(@iconPath, -@top, -@left);
+    }
+  }
+}
+
+.icon_custom(@class, @iconPath, @hoverPath:none, @activePath:none, @disablePath:none, @activeDisablePath:none) {
+  .@{class} {
+    & .x-icon {
+      display: block;
+      .imagePath(@iconPath, 0, 0);
+    }
+    &:hover .x-icon,
+    &:focus .x-icon,
+    &.hover .x-icon {
+      display: block;
+      .imagePath(@hoverPath, 0, 0);
+    }
+
+    &:active .x-icon,
+    &.active .x-icon {
+      display: block;
+      .imagePath(@activePath, 0, 0);
+    }
+    &.native .x-icon,
+    &.disabled .x-icon {
+      display: block;
+      .imagePath(@disablePath, 0, 0);
+    }
+    &.native .x-icon,
+    &.disabled.active .x-icon {
+      display: block;
+      .imagePath(@activeDisablePath, 0, 0);
+    }
+  }
+}
+
+.icon_custom_hover(@class, @iconPath, @hoverPath:none, @disablePath:none) {
+  .@{class} {
+    & .x-icon {
+      display: block;
+      .imagePath(@iconPath, 0, 0);
+    }
+    &:hover .x-icon,
+    &:focus .x-icon,
+    &.hover .x-icon {
+      display: block;
+      .imagePath(@hoverPath, 0, 0);
+    }
+
+    &.native .x-icon,
+    &.disabled .x-icon {
+      display: block;
+      .imagePath(@disablePath, 0, 0);
+    }
+  }
+}
+
+//
+@color-bi-font-native: #808080;
+//active
+@color-bi-font-hover: #808080;
+//hover
+@color-bi-font-active: #009de3;
+
+.font(@class,@content, @color: @color-bi-font-native) {
+  .@{class} {
+    & .b-font:before {
+      content: @content;
+      color: @color;
+    }
+    &.native .b-font:before,
+    &.disabled .b-font:before {
+      content: @content;
+      color: @color;
+    }
+  }
+}
+
+.font-hover(@class,@content,@color-native: @color-bi-font-native, @color-hover: @color-bi-font-hover) {
+  .@{class} {
+    & .b-font:before {
+      content: @content;
+      color: @color-native;
+    }
+    &:hover .b-font:before,
+    &:focus .b-font:before,
+    &.hover .b-font:before {
+      content: @content;
+      color: @color-hover;
+    }
+    &.native .b-font:before,
+    &.disabled .b-font:before {
+      content: @content;
+      color: @color-native;
+    }
+  }
+}
+
+.font-effect(@class,@content,@color-native: @color-bi-font-native, @color-hover: @color-bi-font-hover, @color-active: @color-bi-font-active, @color-selected: @color-bi-font-active) {
+  .@{class} {
+    & .b-font:before {
+      content: @content;
+      color: @color-native;
+    }
+    &:hover .b-font:before,
+    &:focus .b-font:before,
+    &.hover .b-font:before {
+      content: @content;
+      color: @color-hover;
+    }
+    &.active .b-font:before {
+      content: @content;
+      color: @color-selected;
+    }
+    &:active .b-font:before {
+      content: @content;
+      color: @color-active;
+    }
+    &.native .b-font:before,
+    &.disabled .b-font:before {
+      content: @content;
+      color: @color-native;
+    }
+  }
+}
+
+.font-hover-active(@class,@content,@color-native: @color-bi-font-native, @color-hover: @color-bi-font-hover, @color-active: @color-bi-font-active) {
+  .@{class} {
+    & .b-font:before {
+      content: @content;
+      color: @color-native;
+    }
+    &:hover .b-font:before,
+    &:focus .b-font:before,
+    &.hover .b-font:before {
+      content: @content;
+      color: @color-hover;
+    }
+
+    &:active .b-font:before,
+    &.active .b-font:before {
+      content: @content;
+      color: @color-active;
+    }
+    &.native .b-font:before,
+    &.disabled .b-font:before {
+      content: @content;
+      color: @color-native;
+    }
+  }
+}

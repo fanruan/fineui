@@ -1,0 +1,20 @@
+/****添加计算宽度的--运算符直接需要space****/
+/****** common color(常用颜色,可用于普遍场景) *****/
+/**** custom color(自定义颜色,用于特定场景) ****/
+.bi-tooltip {
+  max-width: 250px;
+  -webkit-border-radius: 2px;
+  -moz-border-radius: 2px;
+  border-radius: 2px;
+  font-size: 12px;
+}
+.bi-tooltip.tooltip-success {
+  background: #fff5c1;
+  border: 1px solid #fff5c1;
+  color: #1a1a1a;
+}
+.bi-tooltip.tooltip-warning {
+  background: #fddddd;
+  color: #e85050;
+  border: 1px solid #f4cbcb;
+}

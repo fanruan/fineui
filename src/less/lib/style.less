@@ -1,0 +1,81 @@
+@import "colors";
+
+//公共样式类库
+
+//只有背景变化
+.list-item() {
+  &:hover, &.hover {
+    background-color: @color-bi-background-gray;
+  }
+  &.disabled {
+    &, &:hover, &:active {
+      background-color: @color-bi-background-default;
+    }
+  }
+}
+
+//文字active时变化
+.list-item-effect() {
+  &.active, &:active {
+    color: @color-bi-text-highlight;
+  }
+  &.disabled {
+    &, &:hover, &:active {
+      color: @color-bi-text-black;
+    }
+  }
+}
+
+//文字和背景hover时变化
+.list-item-hover() {
+  &:hover, &.hover {
+    color: @color-bi-text-highlight;
+    background-color: @color-bi-background-gray;
+  }
+  &.disabled {
+    &, &:hover, &:active {
+      color: @color-bi-text-black;
+      background-color: @color-bi-background-default;
+    }
+  }
+}
+
+//文字和背景hover和active时变化
+.list-item-active() {
+  &:hover, &.hover {
+    background-color: @color-bi-background-gray;
+  }
+  &.active, &:active {
+    color: @color-bi-text-highlight;
+    background-color: @color-bi-background-gray;
+  }
+  &.disabled {
+    &, &:hover, &:active {
+      background-color: @color-bi-background-default;
+    }
+  }
+}
+
+//有选中效果
+.list-item-select() {
+  &:hover, &.hover {
+    color: @color-bi-text-highlight;
+    background-color: @color-bi-background-gray;
+  }
+  &:active, &.active {
+    color: @color-bi-text;
+    background-color: @color-bi-background-highlight;
+    & .bi-high-light {
+      color: @color-bi-text;
+    }
+  }
+  &.disabled {
+    &, &:hover, &:active {
+      color: @color-bi-text-disabled !important;
+      background-color: @color-bi-background-default !important;
+      & .bi-high-light {
+        color: @color-bi-text-disabled !important;
+      }
+    }
+  }
+}

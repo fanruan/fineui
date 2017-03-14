@@ -1,0 +1,14 @@
+/****添加计算宽度的--运算符直接需要space****/
+/****** common color(常用颜色,可用于普遍场景) *****/
+/**** custom color(自定义颜色,用于特定场景) ****/
+.bi-request-loading .mask-pane {
+  background: #ffffff;
+  opacity: 0.8;
+  filter: alpha(opacity=80);
+}
+.bi-request-loading .loading-comment {
+  font-size: 14px;
+}
+.bi-request-loading .load-fail-comment {
+  font-size: 14px;
+}

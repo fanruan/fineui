@@ -1,0 +1,40 @@
+/****添加计算宽度的--运算符直接需要space****/
+/****** common color(常用颜色,可用于普遍场景) *****/
+/**** custom color(自定义颜色,用于特定场景) ****/
+.y-overflow-auto {
+  overflow-y: auto;
+  overflow-x: hidden;
+}
+.x-overflow-auto {
+  overflow-y: hidden;
+  overflow-x: auto;
+}
+.y-overflow-scroll {
+  overflow-y: scroll;
+  overflow-x: hidden;
+}
+.x-overflow-scroll {
+  overflow-y: hidden;
+  overflow-x: scroll;
+}
+.overflow-auto {
+  overflow-x: auto;
+  overflow-y: auto;
+}
+.overflow-scroll {
+  overflow-x: scroll;
+  overflow-y: scroll;
+}
+.overflow-hidden {
+  overflow-x: hidden;
+  overflow-y: hidden;
+}
+.td-overflow {
+  white-space: normal;
+  word-break: break-all;
+}
+.overflow-dot {
+  text-overflow: ellipsis;
+  overflow-x: hidden;
+  white-space: nowrap;
+}

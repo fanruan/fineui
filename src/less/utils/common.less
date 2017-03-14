@@ -1,0 +1,71 @@
+@import "../bibase";
+
+.base-disabled {
+  cursor: default !important;
+  color: #c4c6c6 !important;
+  //.opacity(0.5);
+  & .b-font:before {
+    color: #c4c6c6 !important;
+  }
+}
+
+.base-invalid {
+  cursor: default !important;
+}
+
+.clearfix {
+  .clearfix();
+}
+
+//标红
+.bi-keyword-red-mark {
+  color: @color-bi-text-redmark;
+}
+
+//高亮
+.bi-high-light {
+  color: @color-bi-text-highlight;
+}
+
+//水印
+.bi-water-mark {
+  color: @water-mark-color;
+  cursor: text;
+}
+
+//提示文本, 灰色字体
+.bi-tips {
+  color: @color-bi-text-tips;
+}
+
+//resize
+.bi-resizer{
+  background:@color-bi-background-virtual-blue;
+  .opacity(0.8);
+  z-index: @zIndex-tip;
+}
+
+.bi-z-index-mask{
+  background-color: @color-bi-background-black;
+  .opacity(0.5);
+}
+
+.bi-list-item {
+  .list-item();
+}
+
+.bi-list-item-effect {
+  .list-item-effect();
+}
+
+.bi-list-item-hover {
+  .list-item-hover();
+}
+
+.bi-list-item-active {
+  .list-item-active();
+}
+
+.bi-list-item-select {
+  .list-item-select();
+}

@@ -1,0 +1,523 @@
+.base-line-conn-background {
+  background: url('${servletURL}?op=resource&resource=/com/fr/bi/web/images/icon/tree-vertical-line-1.png') repeat-y 0 0;
+  _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='${servletURL}?op=resource&resource=/com/fr/bi/web/images/icon/tree-vertical-line-1.png');
+  _background: none;
+}
+.first-line-conn-background {
+  background: url('${servletURL}?op=resource&resource=/com/fr/bi/web/images/icon/tree-vertical-line-2.png') no-repeat center center;
+  _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='${servletURL}?op=resource&resource=/com/fr/bi/web/images/icon/tree-vertical-line-2.png');
+  _background: none;
+}
+.last-line-conn-background {
+  background: url('${servletURL}?op=resource&resource=/com/fr/bi/web/images/icon/tree-vertical-line-4.png') no-repeat center center;
+  _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='${servletURL}?op=resource&resource=/com/fr/bi/web/images/icon/tree-vertical-line-4.png');
+  _background: none;
+}
+.mid-line-conn-background {
+  background: url('${servletURL}?op=resource&resource=/com/fr/bi/web/images/icon/tree-vertical-line-3.png') no-repeat center center;
+  _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='${servletURL}?op=resource&resource=/com/fr/bi/web/images/icon/tree-vertical-line-3.png');
+  _background: none;
+}
+.loading-background {
+  background: url('${servletURL}?op=resource&resource=/com/fr/bi/web/images/icon/loading.gif') no-repeat center center;
+  _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='${servletURL}?op=resource&resource=/com/fr/bi/web/images/icon/loading.gif');
+  _background: none;
+}
+.loading-background-f25 {
+  background: url('${servletURL}?op=resource&resource=/com/fr/bi/web/images/background/F.25.gif') no-repeat center center;
+  _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='${servletURL}?op=resource&resource=/com/fr/bi/web/images/background/F.25.gif');
+  _background: none;
+}
+.loading-background-e50 {
+  background: url('${servletURL}?op=resource&resource=/com/fr/bi/web/images/background/E.50.gif') no-repeat center center;
+  _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='${servletURL}?op=resource&resource=/com/fr/bi/web/images/background/E.50.gif');
+  _background: none;
+}
+.loading-background-d100 {
+  background: url('${servletURL}?op=resource&resource=/com/fr/bi/web/images/background/D.100.gif') no-repeat center center;
+  _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='${servletURL}?op=resource&resource=/com/fr/bi/web/images/background/D.100.gif');
+  _background: none;
+}
+.axis-tip-background {
+  background: url('${servletURL}?op=resource&resource=/com/fr/bi/web/images/background/charts/axis.png') no-repeat center center;
+  _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='${servletURL}?op=resource&resource=/com/fr/bi/web/images/background/charts/axis.png');
+  _background: none;
+  background-color: #ffffff;
+  z-index: 2;
+}
+.axis-accu-tip-background {
+  background: url('${servletURL}?op=resource&resource=/com/fr/bi/web/images/background/charts/axis_accu.png') no-repeat center center;
+  _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='${servletURL}?op=resource&resource=/com/fr/bi/web/images/background/charts/axis_accu.png');
+  _background: none;
+  background-color: #ffffff;
+  z-index: 2;
+}
+.axis-percent-tip-background {
+  background: url('${servletURL}?op=resource&resource=/com/fr/bi/web/images/background/charts/axis_percent.png') no-repeat center center;
+  _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='${servletURL}?op=resource&resource=/com/fr/bi/web/images/background/charts/axis_percent.png');
+  _background: none;
+  background-color: #ffffff;
+  z-index: 2;
+}
+.axis-compare-tip-background {
+  background: url('${servletURL}?op=resource&resource=/com/fr/bi/web/images/background/charts/axis_compare.png') no-repeat center center;
+  _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='${servletURL}?op=resource&resource=/com/fr/bi/web/images/background/charts/axis_compare.png');
+  _background: none;
+  background-color: #ffffff;
+  z-index: 2;
+}
+.axis-fall-tip-background {
+  background: url('${servletURL}?op=resource&resource=/com/fr/bi/web/images/background/charts/axis_fall.png') no-repeat center center;
+  _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='${servletURL}?op=resource&resource=/com/fr/bi/web/images/background/charts/axis_fall.png');
+  _background: none;
+  background-color: #ffffff;
+  z-index: 2;
+}
+.bubble-tip-background {
+  background: url('${servletURL}?op=resource&resource=/com/fr/bi/web/images/background/charts/bubble.png') no-repeat center center;
+  _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='${servletURL}?op=resource&resource=/com/fr/bi/web/images/background/charts/bubble.png');
+  _background: none;
+  background-color: #ffffff;
+  z-index: 2;
+}
+.bubble-force-tip-background {
+  background: url('${servletURL}?op=resource&resource=/com/fr/bi/web/images/background/charts/bubble_force.png') no-repeat center center;
+  _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='${servletURL}?op=resource&resource=/com/fr/bi/web/images/background/charts/bubble_force.png');
+  _background: none;
+  background-color: #ffffff;
+  z-index: 2;
+}
+.dashboard-tip-background {
+  background: url('${servletURL}?op=resource&resource=/com/fr/bi/web/images/background/charts/dashboard.png') no-repeat center center;
+  _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='${servletURL}?op=resource&resource=/com/fr/bi/web/images/background/charts/dashboard.png');
+  _background: none;
+  background-color: #ffffff;
+  z-index: 2;
+}
+.donut-tip-background {
+  background: url('${servletURL}?op=resource&resource=/com/fr/bi/web/images/background/charts/donut.png') no-repeat center center;
+  _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='${servletURL}?op=resource&resource=/com/fr/bi/web/images/background/charts/donut.png');
+  _background: none;
+  background-color: #ffffff;
+  z-index: 2;
+}
+.funnel-tip-background {
+  background: url('${servletURL}?op=resource&resource=/com/fr/bi/web/images/background/charts/funnel.png') no-repeat center center;
+  _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='${servletURL}?op=resource&resource=/com/fr/bi/web/images/background/charts/funnel.png');
+  _background: none;
+  background-color: #ffffff;
+  z-index: 2;
+}
+.map-tip-background {
+  background: url('${servletURL}?op=resource&resource=/com/fr/bi/web/images/background/charts/map.png') no-repeat center center;
+  _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='${servletURL}?op=resource&resource=/com/fr/bi/web/images/background/charts/map.png');
+  _background: none;
+  background-color: #ffffff;
+  z-index: 2;
+}
+.map-gis-tip-background {
+  background: url('${servletURL}?op=resource&resource=/com/fr/bi/web/images/background/charts/map_gis.png') no-repeat center center;
+  _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='${servletURL}?op=resource&resource=/com/fr/bi/web/images/background/charts/map_gis.png');
+  _background: none;
+  background-color: #ffffff;
+  z-index: 2;
+}
+.map-svg-tip-background {
+  background: url('${servletURL}?op=resource&resource=/com/fr/bi/web/images/background/charts/map_svg.png') no-repeat center center;
+  _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='${servletURL}?op=resource&resource=/com/fr/bi/web/images/background/charts/map_svg.png');
+  _background: none;
+  background-color: #ffffff;
+  z-index: 2;
+}
+.map-svg-c-tip-background {
+  background: url('${servletURL}?op=resource&resource=/com/fr/bi/web/images/background/charts/map_svg_c.png') no-repeat center center;
+  _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='${servletURL}?op=resource&resource=/com/fr/bi/web/images/background/charts/map_svg_c.png');
+  _background: none;
+  background-color: #ffffff;
+  z-index: 2;
+}
+.map-svg-g-tip-background {
+  background: url('${servletURL}?op=resource&resource=/com/fr/bi/web/images/background/charts/map_svg_g.png') no-repeat center center;
+  _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='${servletURL}?op=resource&resource=/com/fr/bi/web/images/background/charts/map_svg_g.png');
+  _background: none;
+  background-color: #ffffff;
+  z-index: 2;
+}
+.pie-tip-background {
+  background: url('${servletURL}?op=resource&resource=/com/fr/bi/web/images/background/charts/pie.png') no-repeat center center;
+  _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='${servletURL}?op=resource&resource=/com/fr/bi/web/images/background/charts/pie.png');
+  _background: none;
+  background-color: #ffffff;
+  z-index: 2;
+}
+.radar-tip-background {
+  background: url('${servletURL}?op=resource&resource=/com/fr/bi/web/images/background/charts/radar.png') no-repeat center center;
+  _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='${servletURL}?op=resource&resource=/com/fr/bi/web/images/background/charts/radar.png');
+  _background: none;
+  background-color: #ffffff;
+  z-index: 2;
+}
+.radar-accu-tip-background {
+  background: url('${servletURL}?op=resource&resource=/com/fr/bi/web/images/background/charts/radar_accu.png') no-repeat center center;
+  _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='${servletURL}?op=resource&resource=/com/fr/bi/web/images/background/charts/radar_accu.png');
+  _background: none;
+  background-color: #ffffff;
+  z-index: 2;
+}
+.area-tip-background {
+  background: url('${servletURL}?op=resource&resource=/com/fr/bi/web/images/background/charts/area.png') no-repeat center center;
+  _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='${servletURL}?op=resource&resource=/com/fr/bi/web/images/background/charts/area.png');
+  _background: none;
+  background-color: #ffffff;
+  z-index: 2;
+}
+.area-accu-tip-background {
+  background: url('${servletURL}?op=resource&resource=/com/fr/bi/web/images/background/charts/area_accu.png') no-repeat center center;
+  _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='${servletURL}?op=resource&resource=/com/fr/bi/web/images/background/charts/area_accu.png');
+  _background: none;
+  background-color: #ffffff;
+  z-index: 2;
+}
+.area-compare-tip-background {
+  background: url('${servletURL}?op=resource&resource=/com/fr/bi/web/images/background/charts/area_compare.png') no-repeat center center;
+  _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='${servletURL}?op=resource&resource=/com/fr/bi/web/images/background/charts/area_compare.png');
+  _background: none;
+  background-color: #ffffff;
+  z-index: 2;
+}
+.area-percent-tip-background {
+  background: url('${servletURL}?op=resource&resource=/com/fr/bi/web/images/background/charts/area_percent.png') no-repeat center center;
+  _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='${servletURL}?op=resource&resource=/com/fr/bi/web/images/background/charts/area_percent.png');
+  _background: none;
+  background-color: #ffffff;
+  z-index: 2;
+}
+.area-range-tip-background {
+  background: url('${servletURL}?op=resource&resource=/com/fr/bi/web/images/background/charts/area_range.png') no-repeat center center;
+  _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='${servletURL}?op=resource&resource=/com/fr/bi/web/images/background/charts/area_range.png');
+  _background: none;
+  background-color: #ffffff;
+  z-index: 2;
+}
+.bar-tip-background {
+  background: url('${servletURL}?op=resource&resource=/com/fr/bi/web/images/background/charts/bar.png') no-repeat center center;
+  _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='${servletURL}?op=resource&resource=/com/fr/bi/web/images/background/charts/bar.png');
+  _background: none;
+  background-color: #ffffff;
+  z-index: 2;
+}
+.bar-accu-tip-background {
+  background: url('${servletURL}?op=resource&resource=/com/fr/bi/web/images/background/charts/bar_accu.png') no-repeat center center;
+  _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='${servletURL}?op=resource&resource=/com/fr/bi/web/images/background/charts/bar_accu.png');
+  _background: none;
+  background-color: #ffffff;
+  z-index: 2;
+}
+.bar-compare-tip-background {
+  background: url('${servletURL}?op=resource&resource=/com/fr/bi/web/images/background/charts/bar_compare.png') no-repeat center center;
+  _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='${servletURL}?op=resource&resource=/com/fr/bi/web/images/background/charts/bar_compare.png');
+  _background: none;
+  background-color: #ffffff;
+  z-index: 2;
+}
+.combine-tip-background {
+  background: url('${servletURL}?op=resource&resource=/com/fr/bi/web/images/background/charts/combine.png') no-repeat center center;
+  _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='${servletURL}?op=resource&resource=/com/fr/bi/web/images/background/charts/combine.png');
+  _background: none;
+  background-color: #ffffff;
+  z-index: 2;
+}
+.combine-m-tip-background {
+  background: url('${servletURL}?op=resource&resource=/com/fr/bi/web/images/background/charts/combine_m.png') no-repeat center center;
+  _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='${servletURL}?op=resource&resource=/com/fr/bi/web/images/background/charts/combine_m.png');
+  _background: none;
+  background-color: #ffffff;
+  z-index: 2;
+}
+.line-tip-background {
+  background: url('${servletURL}?op=resource&resource=/com/fr/bi/web/images/background/charts/line.png') no-repeat center center;
+  _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='${servletURL}?op=resource&resource=/com/fr/bi/web/images/background/charts/line.png');
+  _background: none;
+  background-color: #ffffff;
+  z-index: 2;
+}
+.scatter-tip-background {
+  background: url('${servletURL}?op=resource&resource=/com/fr/bi/web/images/background/charts/scatter.png') no-repeat center center;
+  _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='${servletURL}?op=resource&resource=/com/fr/bi/web/images/background/charts/scatter.png');
+  _background: none;
+  background-color: #ffffff;
+  z-index: 2;
+}
+.table-complex-tip-background {
+  background: url('${servletURL}?op=resource&resource=/com/fr/bi/web/images/background/charts/table_complex.png') no-repeat center center;
+  _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='${servletURL}?op=resource&resource=/com/fr/bi/web/images/background/charts/table_complex.png');
+  _background: none;
+  background-color: #ffffff;
+  z-index: 2;
+}
+.table-cross-tip-background {
+  background: url('${servletURL}?op=resource&resource=/com/fr/bi/web/images/background/charts/table_cross.png') no-repeat center center;
+  _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='${servletURL}?op=resource&resource=/com/fr/bi/web/images/background/charts/table_cross.png');
+  _background: none;
+  background-color: #ffffff;
+  z-index: 2;
+}
+.table-group-tip-background {
+  background: url('${servletURL}?op=resource&resource=/com/fr/bi/web/images/background/charts/table_group.png') no-repeat center center;
+  _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='${servletURL}?op=resource&resource=/com/fr/bi/web/images/background/charts/table_group.png');
+  _background: none;
+  background-color: #ffffff;
+  z-index: 2;
+}
+.table-detail-tip-background {
+  background: url('${servletURL}?op=resource&resource=/com/fr/bi/web/images/background/charts/table_detail.png') no-repeat center center;
+  _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='${servletURL}?op=resource&resource=/com/fr/bi/web/images/background/charts/table_detail.png');
+  _background: none;
+  background-color: #ffffff;
+  z-index: 2;
+}
+.axis-text-tip-background {
+  background: url('${servletURL}?op=resource&resource=/com/fr/bi/web/images/background/charts/text/axis_text.png') no-repeat center center;
+  _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='${servletURL}?op=resource&resource=/com/fr/bi/web/images/background/charts/text/axis_text.png');
+  _background: none;
+  background-color: #ffffff;
+  z-index: 2;
+}
+.axis-accu-text-tip-background {
+  background: url('${servletURL}?op=resource&resource=/com/fr/bi/web/images/background/charts/text/axis_accu_text.png') no-repeat center center;
+  _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='${servletURL}?op=resource&resource=/com/fr/bi/web/images/background/charts/text/axis_accu_text.png');
+  _background: none;
+  background-color: #ffffff;
+  z-index: 2;
+}
+.axis-percent-text-tip-background {
+  background: url('${servletURL}?op=resource&resource=/com/fr/bi/web/images/background/charts/text/axis_percent_text.png') no-repeat center center;
+  _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='${servletURL}?op=resource&resource=/com/fr/bi/web/images/background/charts/text/axis_percent_text.png');
+  _background: none;
+  background-color: #ffffff;
+  z-index: 2;
+}
+.axis-compare-text-tip-background {
+  background: url('${servletURL}?op=resource&resource=/com/fr/bi/web/images/background/charts/text/axis_compare_text.png') no-repeat center center;
+  _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='${servletURL}?op=resource&resource=/com/fr/bi/web/images/background/charts/text/axis_compare_text.png');
+  _background: none;
+  background-color: #ffffff;
+  z-index: 2;
+}
+.axis-fall-text-tip-background {
+  background: url('${servletURL}?op=resource&resource=/com/fr/bi/web/images/background/charts/text/axis_fall_text.png') no-repeat center center;
+  _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='${servletURL}?op=resource&resource=/com/fr/bi/web/images/background/charts/text/axis_fall_text.png');
+  _background: none;
+  background-color: #ffffff;
+  z-index: 2;
+}
+.bubble-text-tip-background {
+  background: url('${servletURL}?op=resource&resource=/com/fr/bi/web/images/background/charts/text/bubble_text.png') no-repeat center center;
+  _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='${servletURL}?op=resource&resource=/com/fr/bi/web/images/background/charts/text/bubble_text.png');
+  _background: none;
+  background-color: #ffffff;
+  z-index: 2;
+}
+.bubble-force-text-tip-background {
+  background: url('${servletURL}?op=resource&resource=/com/fr/bi/web/images/background/charts/text/bubble_force_text.png') no-repeat center center;
+  _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='${servletURL}?op=resource&resource=/com/fr/bi/web/images/background/charts/text/bubble_force_text.png');
+  _background: none;
+  background-color: #ffffff;
+  z-index: 2;
+}
+.dashboard-text-tip-background {
+  background: url('${servletURL}?op=resource&resource=/com/fr/bi/web/images/background/charts/text/dashboard_text.png') no-repeat center center;
+  _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='${servletURL}?op=resource&resource=/com/fr/bi/web/images/background/charts/text/dashboard_text.png');
+  _background: none;
+  background-color: #ffffff;
+  z-index: 2;
+}
+.donut-text-tip-background {
+  background: url('${servletURL}?op=resource&resource=/com/fr/bi/web/images/background/charts/text/donut_text.png') no-repeat center center;
+  _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='${servletURL}?op=resource&resource=/com/fr/bi/web/images/background/charts/text/donut_text.png');
+  _background: none;
+  background-color: #ffffff;
+  z-index: 2;
+}
+.funnel-text-tip-background {
+  background: url('${servletURL}?op=resource&resource=/com/fr/bi/web/images/background/charts/text/funnel_text.png') no-repeat center center;
+  _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='${servletURL}?op=resource&resource=/com/fr/bi/web/images/background/charts/text/funnel_text.png');
+  _background: none;
+  background-color: #ffffff;
+  z-index: 2;
+}
+.map-text-tip-background {
+  background: url('${servletURL}?op=resource&resource=/com/fr/bi/web/images/background/charts/text/map_text.png') no-repeat center center;
+  _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='${servletURL}?op=resource&resource=/com/fr/bi/web/images/background/charts/text/map_text.png');
+  _background: none;
+  background-color: #ffffff;
+  z-index: 2;
+}
+.map-gis-text-tip-background {
+  background: url('${servletURL}?op=resource&resource=/com/fr/bi/web/images/background/charts/text/map_gis_text.png') no-repeat center center;
+  _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='${servletURL}?op=resource&resource=/com/fr/bi/web/images/background/charts/text/map_gis_text.png');
+  _background: none;
+  background-color: #ffffff;
+  z-index: 2;
+}
+.map-svg-text-tip-background {
+  background: url('${servletURL}?op=resource&resource=/com/fr/bi/web/images/background/charts/text/map_svg_text.png') no-repeat center center;
+  _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='${servletURL}?op=resource&resource=/com/fr/bi/web/images/background/charts/text/map_svg_text.png');
+  _background: none;
+  background-color: #ffffff;
+  z-index: 2;
+}
+.map-svg-c-text-tip-background {
+  background: url('${servletURL}?op=resource&resource=/com/fr/bi/web/images/background/charts/text/map_svg_c_text.png') no-repeat center center;
+  _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='${servletURL}?op=resource&resource=/com/fr/bi/web/images/background/charts/text/map_svg_c_text.png');
+  _background: none;
+  background-color: #ffffff;
+  z-index: 2;
+}
+.map-svg-g-text-tip-background {
+  background: url('${servletURL}?op=resource&resource=/com/fr/bi/web/images/background/charts/text/map_svg_g_text.png') no-repeat center center;
+  _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='${servletURL}?op=resource&resource=/com/fr/bi/web/images/background/charts/text/map_svg_g_text.png');
+  _background: none;
+  background-color: #ffffff;
+  z-index: 2;
+}
+.pie-text-tip-background {
+  background: url('${servletURL}?op=resource&resource=/com/fr/bi/web/images/background/charts/text/pie_text.png') no-repeat center center;
+  _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='${servletURL}?op=resource&resource=/com/fr/bi/web/images/background/charts/text/pie_text.png');
+  _background: none;
+  background-color: #ffffff;
+  z-index: 2;
+}
+.radar-text-tip-background {
+  background: url('${servletURL}?op=resource&resource=/com/fr/bi/web/images/background/charts/text/radar_text.png') no-repeat center center;
+  _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='${servletURL}?op=resource&resource=/com/fr/bi/web/images/background/charts/text/radar_text.png');
+  _background: none;
+  background-color: #ffffff;
+  z-index: 2;
+}
+.radar-accu-text-tip-background {
+  background: url('${servletURL}?op=resource&resource=/com/fr/bi/web/images/background/charts/text/radar_accu_text.png') no-repeat center center;
+  _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='${servletURL}?op=resource&resource=/com/fr/bi/web/images/background/charts/text/radar_accu_text.png');
+  _background: none;
+  background-color: #ffffff;
+  z-index: 2;
+}
+.area-text-tip-background {
+  background: url('${servletURL}?op=resource&resource=/com/fr/bi/web/images/background/charts/text/area_text.png') no-repeat center center;
+  _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='${servletURL}?op=resource&resource=/com/fr/bi/web/images/background/charts/text/area_text.png');
+  _background: none;
+  background-color: #ffffff;
+  z-index: 2;
+}
+.area-accu-text-tip-background {
+  background: url('${servletURL}?op=resource&resource=/com/fr/bi/web/images/background/charts/text/area_accu_text.png') no-repeat center center;
+  _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='${servletURL}?op=resource&resource=/com/fr/bi/web/images/background/charts/text/area_accu_text.png');
+  _background: none;
+  background-color: #ffffff;
+  z-index: 2;
+}
+.area-compare-text-tip-background {
+  background: url('${servletURL}?op=resource&resource=/com/fr/bi/web/images/background/charts/text/area_compare_text.png') no-repeat center center;
+  _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='${servletURL}?op=resource&resource=/com/fr/bi/web/images/background/charts/text/area_compare_text.png');
+  _background: none;
+  background-color: #ffffff;
+  z-index: 2;
+}
+.area-percent-text-tip-background {
+  background: url('${servletURL}?op=resource&resource=/com/fr/bi/web/images/background/charts/text/area_percent_text.png') no-repeat center center;
+  _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='${servletURL}?op=resource&resource=/com/fr/bi/web/images/background/charts/text/area_percent_text.png');
+  _background: none;
+  background-color: #ffffff;
+  z-index: 2;
+}
+.area-range-text-tip-background {
+  background: url('${servletURL}?op=resource&resource=/com/fr/bi/web/images/background/charts/text/area_range_text.png') no-repeat center center;
+  _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='${servletURL}?op=resource&resource=/com/fr/bi/web/images/background/charts/text/area_range_text.png');
+  _background: none;
+  background-color: #ffffff;
+  z-index: 2;
+}
+.bar-text-tip-background {
+  background: url('${servletURL}?op=resource&resource=/com/fr/bi/web/images/background/charts/text/bar_text.png') no-repeat center center;
+  _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='${servletURL}?op=resource&resource=/com/fr/bi/web/images/background/charts/text/bar_text.png');
+  _background: none;
+  background-color: #ffffff;
+  z-index: 2;
+}
+.bar-accu-text-tip-background {
+  background: url('${servletURL}?op=resource&resource=/com/fr/bi/web/images/background/charts/text/bar_accu_text.png') no-repeat center center;
+  _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='${servletURL}?op=resource&resource=/com/fr/bi/web/images/background/charts/text/bar_accu_text.png');
+  _background: none;
+  background-color: #ffffff;
+  z-index: 2;
+}
+.bar-compare-text-tip-background {
+  background: url('${servletURL}?op=resource&resource=/com/fr/bi/web/images/background/charts/text/bar_compare_text.png') no-repeat center center;
+  _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='${servletURL}?op=resource&resource=/com/fr/bi/web/images/background/charts/text/bar_compare_text.png');
+  _background: none;
+  background-color: #ffffff;
+  z-index: 2;
+}
+.combine-text-tip-background {
+  background: url('${servletURL}?op=resource&resource=/com/fr/bi/web/images/background/charts/text/combine_text.png') no-repeat center center;
+  _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='${servletURL}?op=resource&resource=/com/fr/bi/web/images/background/charts/text/combine_text.png');
+  _background: none;
+  background-color: #ffffff;
+  z-index: 2;
+}
+.combine-m-text-tip-background {
+  background: url('${servletURL}?op=resource&resource=/com/fr/bi/web/images/background/charts/text/combine_m_text.png') no-repeat center center;
+  _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='${servletURL}?op=resource&resource=/com/fr/bi/web/images/background/charts/text/combine_m_text.png');
+  _background: none;
+  background-color: #ffffff;
+  z-index: 2;
+}
+.line-text-tip-background {
+  background: url('${servletURL}?op=resource&resource=/com/fr/bi/web/images/background/charts/text/line_text.png') no-repeat center center;
+  _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='${servletURL}?op=resource&resource=/com/fr/bi/web/images/background/charts/text/line_text.png');
+  _background: none;
+  background-color: #ffffff;
+  z-index: 2;
+}
+.scatter-text-tip-background {
+  background: url('${servletURL}?op=resource&resource=/com/fr/bi/web/images/background/charts/text/text/scatter_text.png') no-repeat center center;
+  _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='${servletURL}?op=resource&resource=/com/fr/bi/web/images/background/charts/text/text/scatter_text.png');
+  _background: none;
+  background-color: #ffffff;
+  z-index: 2;
+}
+.table-complex-text-tip-background {
+  background: url('${servletURL}?op=resource&resource=/com/fr/bi/web/images/background/charts/text/table_complex_text.png') no-repeat center center;
+  _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='${servletURL}?op=resource&resource=/com/fr/bi/web/images/background/charts/text/table_complex_text.png');
+  _background: none;
+  background-color: #ffffff;
+  z-index: 2;
+}
+.table-cross-text-tip-background {
+  background: url('${servletURL}?op=resource&resource=/com/fr/bi/web/images/background/charts/text/table_cross_text.png') no-repeat center center;
+  _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='${servletURL}?op=resource&resource=/com/fr/bi/web/images/background/charts/text/table_cross_text.png');
+  _background: none;
+  background-color: #ffffff;
+  z-index: 2;
+}
+.table-group-text-tip-background {
+  background: url('${servletURL}?op=resource&resource=/com/fr/bi/web/images/background/charts/text/table_group_text.png') no-repeat center center;
+  _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='${servletURL}?op=resource&resource=/com/fr/bi/web/images/background/charts/text/table_group_text.png');
+  _background: none;
+  background-color: #ffffff;
+  z-index: 2;
+}
+.table-detail-text-tip-background {
+  background: url('${servletURL}?op=resource&resource=/com/fr/bi/web/images/background/charts/text/table_detail_text.png') no-repeat center center;
+  _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='${servletURL}?op=resource&resource=/com/fr/bi/web/images/background/charts/text/table_detail_text.png');
+  _background: none;
+  background-color: #ffffff;
+  z-index: 2;
+}
+.data-miss-background {
+  background: url('${servletURL}?op=resource&resource=/com/fr/bi/web/images/background/data_miss.png') no-repeat center center;
+  _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='${servletURL}?op=resource&resource=/com/fr/bi/web/images/background/data_miss.png');
+  _background: none;
+  background-color: #ffffff;
+  z-index: 2;
+}

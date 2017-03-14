@@ -1,0 +1,15 @@
+@import "../../../bibase";
+
+.bi-loading-bar{
+  & .loading-text{
+    color: @color-bi-text-gray;
+    &:hover, &.hover {
+      color: @color-bi-text-highlight;
+    }
+    &.disabled {
+      &, &:hover, &:active {
+        color: @color-bi-background-default;
+      }
+    }
+  }
+}

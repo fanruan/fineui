@@ -1,0 +1,29 @@
+/****添加计算宽度的--运算符直接需要space****/
+/****** common color(常用颜色,可用于普遍场景) *****/
+/**** custom color(自定义颜色,用于特定场景) ****/
+.bi-display-tree .ztree * {
+  color: #808080;
+}
+.bi-display-tree .ztree li span.button.switch.center_open {
+  background-image: url("${servletURL}?op=resource&resource=/com/fr/bi/web/images/icon/tree-vertical-line-3.png");
+}
+.bi-display-tree .ztree li span.button.switch.roots_open {
+  background-image: url("${servletURL}?op=resource&resource=/com/fr/bi/web/images/icon/tree-vertical-line-2.png");
+}
+.bi-display-tree .ztree li span.button.switch.bottom_open {
+  background-image: url("${servletURL}?op=resource&resource=/com/fr/bi/web/images/icon/tree-vertical-line-4.png");
+}
+.bi-display-tree .ztree li a,
+.bi-display-tree .ztree li span {
+  cursor: default !important;
+}
+.bi-display-tree .ztree li a:hover {
+  text-decoration: none;
+}
+.bi-display-tree .ztree li a.curSelectedNode {
+  padding-top: 1px;
+  border: none;
+  background-color: inherit;
+  opacity: 1;
+  filter: alpha(opacity=100);
+}

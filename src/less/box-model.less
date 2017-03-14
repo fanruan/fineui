@@ -1,0 +1,62 @@
+.box-sizing(@box-model){
+  -webkit-box-sizing: @box-model;/*Safari3.2+*/
+  -moz-box-sizing: @box-model;/*Firefox3.5+*/
+  -ms-box-sizing: @box-model;/*IE8*/
+  box-sizing: @box-model;/*W3C标准(IE9+，Safari5.1+,Chrome10.0+,Opera10.6+都符合box-sizing的w3c标准语法)*/
+}
+.clearfix() {
+  *zoom: 1;
+  &:before,
+  &:after {
+    content: " ";
+    display: table;
+    line-height: 0;
+  }
+  &:after {
+    clear: both;
+  }
+}
+/****添加计算宽度的--运算符直接需要space****/
+.calc( @expression) {
+  /*Firefox*/
+  width: -moz-calc(@expression);
+  /*chrome safari*/
+  width: -webkit-calc(@expression);
+  /*Standard */
+  width: calc(@expression);
+}
+
+.float-left(@left:0px){
+  position: relative;
+  float:left;
+  left:@left;
+}
+
+.float-right(@right:0px){
+  position: relative;
+  float:right;
+  right: @right;
+}
+.size(@width, @height){
+  width: @width;
+  height: @height;
+}
+.full-size(){
+  .size(100%,100%);
+}
+.absolute-full-size(@top:0px, @right:0px, @bottom:0px, @left:0px){
+  position: absolute;
+  left: @left;
+  right: @right;
+  bottom: @bottom;
+  top: @top;
+}
+.inline-block(){
+  display:inline-block;
+  *display:inline;
+  *zoom:1;
+}
+.line-height(@height){
+  height: @height;
+  line-height: @height;
+}

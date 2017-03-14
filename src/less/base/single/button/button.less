@@ -1,0 +1,81 @@
+@import "../../../bibase";
+
+.bi-button {
+  .border-radius(2px);
+  border: 1px solid @color-bi-text-highlight;
+  background-color: @color-bi-text-highlight;
+  text-align: center;
+  vertical-align: middle;
+  cursor: pointer !important;
+  font-size: 14px;
+  &.button-common {
+    &, & .b-font {
+      color: @color-bi-text;
+    }
+    & .b-font:before {
+      color: @color-bi-text;
+    }
+  }
+  &.button-ignore {
+    &, & .b-font {
+      color: @color-bi-text-black;
+    }
+    background-color: @color-bi-background-default;
+    border-color: @color-bi-split-dark;
+  }
+  &.button-success {
+    &, & .b-font {
+      color: @color-bi-text;
+    }
+    background-color: @color-bi-background-success;
+    border-color: @color-bi-border-success;
+    & .b-font:before {
+      color: @color-bi-text;
+    }
+  }
+  &.button-warning {
+    &, & .b-font {
+      color: @color-bi-text;
+    }
+    background-color: @color-bi-background-delete;
+    border-color: @color-bi-border-delete;
+    & .b-font:before {
+      color: @color-bi-text;
+    }
+  }
+  &.button-common.disabled,
+  &.button-success.disabled,
+  &.button-warning.disabled {
+    &, & .b-font {
+      color: @color-bi-text !important;
+    }
+    & .b-font:before {
+      color: @color-bi-text !important;
+    }
+    background: @color-bi-background-disabled !important;
+    border-color: @color-bi-split-disabled !important;
+  }
+  &.button-ignore.disabled {
+    &, & .b-font {
+      color: @color-bi-text-disabled !important;
+    }
+    & .b-font:before {
+      color: @color-bi-text-disabled !important;
+    }
+    background: @color-bi-background-default !important;
+    border-color: @color-bi-split-dark !important;
+  }
+}
+
+.bi-basic-button {
+  &.button-common, &.button-success, &.button-warning {
+    & .bi-button-mask {
+      .opacity(0.2);
+      background-color: @color-bi-background-default;
+    }
+  }
+  & .bi-button-mask {
+    .opacity(0.2);
+    background-color: @color-bi-button-mask;
+  }
+}

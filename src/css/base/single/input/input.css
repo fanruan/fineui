@@ -1,0 +1,22 @@
+/****添加计算宽度的--运算符直接需要space****/
+/****** common color(常用颜色,可用于普遍场景) *****/
+/**** custom color(自定义颜色,用于特定场景) ****/
+.bi-input {
+  border: none;
+  outline: none;
+  background-color: transparent;
+  padding: 0;
+  margin: 0;
+  width: 100%;
+  height: 100%;
+}
+.bi-input.bi-input-focus {
+  border: none;
+}
+.bi-input.bi-input-error {
+  border: none;
+  color: #e85050 !important;
+}
+.bi-input.disabled {
+  background-color: white;
+}

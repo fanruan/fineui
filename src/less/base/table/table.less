@@ -1,0 +1,79 @@
+@import "../../bibase";
+
+.bi-table {
+  > .center-element {
+    //border-top: 1px solid @color-bi-border-normal;
+    //border-left: 1px solid @color-bi-border-normal;
+  }
+
+  > .first-col {
+    border-left: none;
+  }
+  > .first-row {
+    border-top: none;
+  }
+
+  & > div > div > table {
+    border-bottom: 1px solid @border-color-line;
+    border-right: 1px solid @border-color-line;
+  }
+  & > div.top-left > div > div > table {
+    border-bottom: 1px solid @border-color-line;
+    border-right: 1px solid @border-color-line;
+  }
+  & > div.top-right > div > div > table {
+    border-bottom: 1px solid @border-color-line;
+    border-right: 1px solid @border-color-line;
+  }
+  & > div.bottom-left > div > div > table {
+    border-bottom: 1px solid @border-color-line;
+    border-right: 1px solid @border-color-line;
+  }
+  & > div.bottom-right > div > div > table {
+    border-right: 1px solid @border-color-line;
+    border-bottom: 1px solid @border-color-line;
+  }
+
+  & > div > div > table, & > div > div > div > table {
+    &, & > * > * > th, & > * > * > td {
+      vertical-align: middle;
+      margin: 0;
+      padding: 0;
+    }
+    min-width: 100%;
+    clear: both;
+    vertical-align: middle;
+    border-spacing: 0;
+    border-collapse: separate;
+
+    & > tbody > tr > td, & > thead > tr > td {
+      border-top: 1px solid @border-color-line;
+      border-left: 1px solid @color-bi-border-line;
+    }
+    & > tbody > tr.odd {
+      //background-color: #f9f9f9;
+      //&:hover {
+      //  background-color: whitesmoke;
+      //}
+    }
+    & > tbody > tr.even {
+      //background-color: white;
+      //&:hover {
+      //  background-color: whitesmoke;
+      //}
+    }
+
+    & > thead > tr.odd {
+      //background-color: #f9f9f9;
+      //&:hover {
+      //  background-color: whitesmoke;
+      //}
+    }
+    & > thead > tr.even {
+      //background-color: white;
+      //&:hover {
+      //  background-color: whitesmoke;
+      //}
+    }
+  }
+}

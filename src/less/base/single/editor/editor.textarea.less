@@ -1,0 +1,14 @@
+@import "../../../bibase";
+
+.bi-textarea-editor {
+  .overflow-hidden();
+  & .textarea-editor-content {
+    font-size: @font-size-12;
+    & {
+      border: none;
+    }
+    &.textarea-editor-focus{
+      border: 1px solid @color-bi-border-outline;
+    }
+  }
+}

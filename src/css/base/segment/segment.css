@@ -1,0 +1,22 @@
+/****添加计算宽度的--运算符直接需要space****/
+/****** common color(常用颜色,可用于普遍场景) *****/
+/**** custom color(自定义颜色,用于特定场景) ****/
+.bi-segment > .center-element {
+  overflow-x: hidden;
+  overflow-y: hidden;
+  background: #ffffff;
+  border-right: 1px solid #d4dadd;
+  border-top: 1px solid #d4dadd;
+  border-bottom: 1px solid #d4dadd;
+}
+.bi-segment > .first-element {
+  border-left: 1px solid #d4dadd;
+  -webkit-border-radius: 6px 0px 0px 6px;
+  -moz-border-radius: 6px 0px 0px 6px;
+  border-radius: 6px 0px 0px 6px;
+}
+.bi-segment > .last-element {
+  -webkit-border-radius: 0px 6px 6px 0px;
+  -moz-border-radius: 0px 6px 6px 0px;
+  border-radius: 0px 6px 6px 0px;
+}

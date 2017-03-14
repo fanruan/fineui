@@ -1,0 +1,18 @@
+@import "../../bibase";
+
+.bi-segment{
+  & > .center-element{
+    .overflow-hidden();
+    background: @color-bi-background-default;
+    border-right: 1px solid @color-bi-split-dark;
+    border-top: 1px solid @color-bi-split-dark;
+    border-bottom: 1px solid @color-bi-split-dark;
+  }
+  & > .first-element{
+    border-left: 1px solid @color-bi-split-dark;
+    .border-corner-radius(6px,0px,0px,6px)
+  }
+  & > .last-element{
+    .border-corner-radius(0px,6px,6px,0px)
+  }
+}

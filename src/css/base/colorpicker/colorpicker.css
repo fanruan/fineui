@@ -1,0 +1,7 @@
+/****添加计算宽度的--运算符直接需要space****/
+/****** common color(常用颜色,可用于普遍场景) *****/
+/**** custom color(自定义颜色,用于特定场景) ****/
+.bi-color-picker > .center-element {
+  border-left: 1px solid #ffffff;
+  border-top: 1px solid #ffffff;
+}
