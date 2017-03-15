@@ -223,9 +223,9 @@ BI.Collection = BI.inherit(BI.Widget, {
         }
         this._scrollLock = true;
         this.options.scrollLeft = BI.clamp(scrollLeft || 0, 0, this._getMaxScrollLeft());
-        this.element.scrollLeft(this.options.scrollLeft);
         this._debounceRelease();
         this._calculateChildrenToRender();
+        this.element.scrollLeft(this.options.scrollLeft);
     },
 
     setScrollTop: function (scrollTop) {
@@ -234,9 +234,9 @@ BI.Collection = BI.inherit(BI.Widget, {
         }
         this._scrollLock = true;
         this.options.scrollTop = BI.clamp(scrollTop || 0, 0, this._getMaxScrollTop());
-        this.element.scrollTop(this.options.scrollTop);
         this._debounceRelease();
         this._calculateChildrenToRender();
+        this.element.scrollTop(this.options.scrollTop);
     },
 
     setOverflowX: function (b) {
