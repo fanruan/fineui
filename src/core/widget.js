@@ -75,14 +75,16 @@ BI.Widget = BI.inherit(BI.OB, {
     },
 
     _initVisualEffects: function () {
-        BI.nextTick(BI.bind(function () {
-            if (this.options.disabled) {
-                this.setEnable(false);
-            }
-            if (this.options.invalid) {
-                this.setValid(false);
-            }
-        }, this));
+        if (this.options.diabled || this.options.invalid) {
+            BI.nextTick(BI.bind(function () {
+                if (this.options.disabled) {
+                    this.setEnable(false);
+                }
+                if (this.options.invalid) {
+                    this.setValid(false);
+                }
+            }, this));
+        }
 
         if (this.options.invisible) {
             this.setVisible(false);
@@ -100,7 +102,7 @@ BI.Widget = BI.inherit(BI.OB, {
                     }
                 }
             } else {
-                var args = Array.prototype.slice.call(arguments, 1)
+                var args = Array.prototype.slice.call(arguments, 1);
                 for (var i = 0; i < fns.length; i++) {
                     if (fns[i].apply(this, args) === false) {
                         return false;
@@ -141,7 +143,7 @@ BI.Widget = BI.inherit(BI.OB, {
     },
 
     setVisible: function (visible) {
-        BI.assert(visible, [true, false]);
+        // BI.assert(visible, [true, false]);
         if (visible === true) {
             this.options.invisible = false;
             this.element.show();
@@ -153,7 +155,7 @@ BI.Widget = BI.inherit(BI.OB, {
     },
 
     setValid: function (valid) {
-        BI.assert(valid, [true, false]);
+        // BI.assert(valid, [true, false]);
         this.options.invalid = !valid;
         if (valid === true) {
             this.element.removeClass("base-invalid invalid");
@@ -260,11 +262,11 @@ BI.Widget = BI.inherit(BI.OB, {
         return this.options[key];
     },
 
-    getText : function() {
+    getText: function () {
 
     },
 
-    setText : function(text) {
+    setText: function (text) {
 
     },
 
