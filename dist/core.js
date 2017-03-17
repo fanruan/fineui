@@ -14017,8 +14017,8 @@ $.extend(BI.OB.prototype, {
         if (this.options.listeners != null) {
             $.each(this.options.listeners, function (i, lis) {
                 (lis.target ? lis.target : self)[lis.once ? 'once' : 'on']
-                (lis.eventName, lis.action.createDelegate(self))
-            })
+                (lis.eventName, _.bind(lis.action, self))
+            });
             delete this.options.listeners;
         }
     },
@@ -14114,14 +14114,7 @@ $.extend(BI.OB.prototype, {
         }
         return true;
     }
-});
-BI.OB.capture = function (o, fn, scope) {
-    o.fireEvent = o.fireEvent.createInterceptor(fn, scope);
-}
-// alex:释放事件的捕捉
-BI.OB.releaseCapture = function (o) {
-    o.fireEvent = BI.OB.prototype.fireEvent;
-};/**
+});/**
  * Widget超类
  * @class BI.Widget
  * @extends BI.OB
@@ -14198,14 +14191,16 @@ BI.Widget = BI.inherit(BI.OB, {
     },
 
     _initVisualEffects: function () {
-        BI.nextTick(BI.bind(function () {
-            if (this.options.disabled) {
-                this.setEnable(false);
-            }
-            if (this.options.invalid) {
-                this.setValid(false);
-            }
-        }, this));
+        if (this.options.diabled || this.options.invalid) {
+            BI.nextTick(BI.bind(function () {
+                if (this.options.disabled) {
+                    this.setEnable(false);
+                }
+                if (this.options.invalid) {
+                    this.setValid(false);
+                }
+            }, this));
+        }
 
         if (this.options.invisible) {
             this.setVisible(false);
@@ -14223,7 +14218,7 @@ BI.Widget = BI.inherit(BI.OB, {
                     }
                 }
             } else {
-                var args = Array.prototype.slice.call(arguments, 1)
+                var args = Array.prototype.slice.call(arguments, 1);
                 for (var i = 0; i < fns.length; i++) {
                     if (fns[i].apply(this, args) === false) {
                         return false;
@@ -14264,7 +14259,7 @@ BI.Widget = BI.inherit(BI.OB, {
     },
 
     setVisible: function (visible) {
-        BI.assert(visible, [true, false]);
+        // BI.assert(visible, [true, false]);
         if (visible === true) {
             this.options.invisible = false;
             this.element.show();
@@ -14276,7 +14271,7 @@ BI.Widget = BI.inherit(BI.OB, {
     },
 
     setValid: function (valid) {
-        BI.assert(valid, [true, false]);
+        // BI.assert(valid, [true, false]);
         this.options.invalid = !valid;
         if (valid === true) {
             this.element.removeClass("base-invalid invalid");
@@ -14383,11 +14378,11 @@ BI.Widget = BI.inherit(BI.OB, {
         return this.options[key];
     },
 
-    getText : function() {
+    getText: function () {
 
     },
 
-    setText : function(text) {
+    setText: function (text) {
 
     },
 
@@ -15477,9 +15472,9 @@ BI.View = BI.inherit(BI.V, {
         var el;
         options || (options = {});
         if (BI.isEmpty(item) && BI.isEmpty(options)) {
-            return BI.Plugin.getObject("bi.layout", BI.createWidget({
+            return BI.createWidget({
                 type: "bi.layout"
-            }));
+            });
         }
         if (BI.isWidget(item)) {
             return item;

@@ -35,9 +35,9 @@
         var el;
         options || (options = {});
         if (BI.isEmpty(item) && BI.isEmpty(options)) {
-            return BI.Plugin.getObject("bi.layout", BI.createWidget({
+            return BI.createWidget({
                 type: "bi.layout"
-            }));
+            });
         }
         if (BI.isWidget(item)) {
             return item;
