@@ -35,7 +35,7 @@ BI.IconChangeButton = BI.inherit(BI.Single, {
         var self = this, o = this.options;
         this.button = BI.createWidget({
             type: "bi.icon_button",
-            element: this.element,
+            element: this,
             cls: o.iconClass,
             height: o.height,
             iconWidth: o.iconWidth,

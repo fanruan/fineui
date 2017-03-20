@@ -4,8 +4,8 @@
  * @extends BI.Layout
  */
 BI.TdLayout = BI.inherit(BI.Layout, {
-    _defaultConfig: function () {
-        return BI.extend(BI.TdLayout.superclass._defaultConfig.apply(this, arguments), {
+    props: function () {
+        return BI.extend(BI.TdLayout.superclass.props.apply(this, arguments), {
             baseCls: "bi-td-layout",
             columnSize: [200, 200, 200],
             hgap: 0,
@@ -23,21 +23,16 @@ BI.TdLayout = BI.inherit(BI.Layout, {
             ]]
         });
     },
-    _init: function () {
-        BI.TdLayout.superclass._init.apply(this, arguments);
-        this.table = BI.createWidget({
-            type: "bi.layout",
-            tagName: "table",
-            attribute: {"cellspacing": 0, "cellpadding": 0}
-        });
-        this.table.element.css({
+    created: function () {
+        BI.TdLayout.superclass.created.apply(this, arguments);
+        this.$table = $("<table>").attr({"cellspacing": 0, "cellpadding": 0}).css({
             "position": "relative",
             "width": "100%",
             "height": "100%",
             "border-spacing": "0px",
             "border": "none",
             "border-collapse": "separate"
-        }).appendTo(this.element);
+        });
         this.rows = 0;
         this.populate(this.options.items);
     },
@@ -108,8 +103,24 @@ BI.TdLayout = BI.inherit(BI.Layout, {
             });
             tr.addItem(td);
         }
-        this.table.element.append(tr.element);
+        this.addWidget(this.getName() + idx, tr);
         return tr;
+    },
+
+    _mountChildren: function(){
+        var self = this;
+        var frag = document.createDocumentFragment();
+        var hasChild = false;
+        BI.each(this._children, function (i, widget) {
+            if (widget.element !== self.element) {
+                frag.appendChild(widget.element[0]);
+                hasChild = true;
+            }
+        });
+        if (hasChild === true) {
+            this.$table.append(frag);
+            this.element.append(this.$table);
+        }
     },
 
     resize: function () {
@@ -125,6 +136,7 @@ BI.TdLayout = BI.inherit(BI.Layout, {
 
     populate: function (items) {
         BI.TdLayout.superclass.populate.apply(this, arguments);
+        this._mount();
     }
 });
 $.shortcut('bi.td', BI.TdLayout);

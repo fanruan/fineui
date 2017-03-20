@@ -4,8 +4,8 @@
  * @extends BI.Layout
  */
 BI.WindowLayout = BI.inherit(BI.Layout, {
-    _defaultConfig: function () {
-        return BI.extend(BI.WindowLayout.superclass._defaultConfig.apply(this, arguments), {
+    props: function () {
+        return BI.extend(BI.WindowLayout.superclass.props.apply(this, arguments), {
             baseCls: "bi-window-layout",
             columns: 3,
             rows: 2,
@@ -30,8 +30,8 @@ BI.WindowLayout = BI.inherit(BI.Layout, {
             ]]
         });
     },
-    _init: function () {
-        BI.WindowLayout.superclass._init.apply(this, arguments);
+    created: function () {
+        BI.WindowLayout.superclass.created.apply(this, arguments);
         this.populate(this.options.items);
     },
 
@@ -182,7 +182,7 @@ BI.WindowLayout = BI.inherit(BI.Layout, {
 
     populate: function (items) {
         BI.WindowLayout.superclass.populate.apply(this, arguments);
-        this.render();
+        this._mount();
     }
 });
 $.shortcut('bi.window', BI.WindowLayout);

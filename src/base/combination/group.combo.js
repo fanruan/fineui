@@ -60,7 +60,7 @@ BI.ComboGroup = BI.inherit(BI.Widget, {
         })
         this.combo = BI.createWidget({
             type: "bi.combo",
-            element: this.element,
+            element: this,
             height: o.height,
             trigger: o.trigger,
             direction: o.direction,

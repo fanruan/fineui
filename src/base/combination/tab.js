@@ -33,7 +33,7 @@ BI.Tab = BI.inherit(BI.Widget, {
         });
 
         BI.createWidget(BI.extend({
-            element: this.element
+            element: this
         }, BI.LogicFactory.createLogic(BI.LogicFactory.createLogicTypeByDirection(o.direction), BI.extend({}, o.logic, {
             items: BI.LogicFactory.createLogicItemsByDirection(o.direction, this.tab, this.layout)
         }))));
@@ -114,9 +114,9 @@ BI.Tab = BI.inherit(BI.Widget, {
         this.cardMap = {};
     },
 
-    destroy: function () {
+    destroyed: function () {
+        this.layout.deleteAllCard();
         this.cardMap = {};
-        BI.Tab.superclass.destroy.apply(this, arguments);
     }
 });
 BI.Tab.EVENT_CHANGE = "EVENT_CHANGE";

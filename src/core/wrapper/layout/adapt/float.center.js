@@ -2,8 +2,8 @@
  * 浮动的居中布局
  */
 BI.FloatCenterAdaptLayout = BI.inherit(BI.Layout, {
-    _defaultConfig: function () {
-        return BI.extend(BI.FloatCenterAdaptLayout.superclass._defaultConfig.apply(this, arguments), {
+    props: function () {
+        return BI.extend(BI.FloatCenterAdaptLayout.superclass.props.apply(this, arguments), {
             baseCls: "bi-float-center-adapt-layout",
             items: [],
             hgap: 0,
@@ -14,8 +14,8 @@ BI.FloatCenterAdaptLayout = BI.inherit(BI.Layout, {
             rgap: 0
         });
     },
-    _init: function () {
-        BI.FloatCenterAdaptLayout.superclass._init.apply(this, arguments);
+    created: function () {
+        BI.FloatCenterAdaptLayout.superclass.created.apply(this, arguments);
         this.populate(this.options.items);
     },
 
@@ -28,9 +28,21 @@ BI.FloatCenterAdaptLayout = BI.inherit(BI.Layout, {
         throw new Error("不能添加元素")
     },
 
+    mounted: function () {
+        var width = this.left.element.width(),
+            height = this.left.element.height();
+        this.left.element.width(width).height(height).css("float", "none");
+        BI.createWidget({
+            type: "bi.center_adapt",
+            element: this,
+            items: [this.left]
+        });
+        this.removeWidget(this.container.getName());
+    },
+
     stroke: function (items) {
         var self = this, o = this.options;
-        var left = BI.createWidget({
+        this.left = BI.createWidget({
             type: "bi.vertical",
             items: items,
             hgap: o.hgap,
@@ -41,27 +53,17 @@ BI.FloatCenterAdaptLayout = BI.inherit(BI.Layout, {
             rgap: o.rgap
         });
 
-        BI.createWidget({
+        this.container = BI.createWidget({
             type: "bi.left",
-            element: this.element,
-            items: [left]
+            element: this,
+            items: [this.left]
         });
 
-        BI.nextTick(function () {
-            var width = left.element.width(),
-                height = left.element.height();
-            BI.DOM.hang([left]);
-            left.element.width(width).height(height).css("float", "none");
-            BI.createWidget({
-                type: "bi.center_adapt",
-                element: self.element,
-                items: [left]
-            })
-        });
     },
 
     populate: function (items) {
         BI.FloatCenterAdaptLayout.superclass.populate.apply(this, arguments);
+        this._mount();
     }
 });
 $.shortcut('bi.float_center_adapt', BI.FloatCenterAdaptLayout);

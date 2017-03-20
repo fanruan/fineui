@@ -20,7 +20,7 @@ BI.SelectTextTrigger = BI.inherit(BI.Trigger, {
         var self = this, o = this.options;
         this.trigger = BI.createWidget({
             type: "bi.text_trigger",
-            element: this.element,
+            element: this,
             height: o.height
         });
         if (BI.isKey(o.text)) {

@@ -56,7 +56,7 @@
                 });
                 BI.createWidget({
                     type: "bi.absolute",
-                    element: self.element,
+                    element: self,
                     items: [{
                         el: self.watermark,
                         left: 0,

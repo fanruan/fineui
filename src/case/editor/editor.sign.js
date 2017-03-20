@@ -64,7 +64,7 @@ BI.SignEditor = BI.inherit(BI.Single, {
         });
         BI.createWidget({
             type: "bi.absolute",
-            element: this.element,
+            element: this,
             items: [{
                 el: this.text,
                 left: 0,
@@ -128,7 +128,7 @@ BI.SignEditor = BI.inherit(BI.Single, {
         BI.createWidget({
             type: "bi.vertical",
             scrolly: false,
-            element: this.element,
+            element: this,
             items: [this.editor]
         });
         this._showHint();

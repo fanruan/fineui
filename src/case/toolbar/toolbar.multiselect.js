@@ -63,7 +63,7 @@ BI.MultiSelectBar = BI.inherit(BI.BasicButton, {
         });
         BI.createWidget({
             type: "bi.htape",
-            element: this.element,
+            element: this,
             items: [{
                 width: 36,
                 el: {

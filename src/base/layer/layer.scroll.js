@@ -30,7 +30,7 @@ BI.ScrollView = BI.inherit(BI.Widget, {
         })
         BI.createWidget({
             type: "bi.vertical",
-            element: this.element,
+            element: this,
             scrolly: false,
             items: [this.scroll]
         })
@@ -44,7 +44,7 @@ BI.ScrollView = BI.inherit(BI.Widget, {
 
         BI.createWidget({
             type: "bi.absolute",
-            element: this.element,
+            element: this,
             items: [{
                 el: this.dropdown,
                 left: 0,

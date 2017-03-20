@@ -1,6 +1,6 @@
 BI.AdaptiveLayout = BI.inherit(BI.Layout, {
-    _defaultConfig: function () {
-        return BI.extend(BI.AdaptiveLayout.superclass._defaultConfig.apply(this, arguments), {
+    props: function () {
+        return BI.extend(BI.AdaptiveLayout.superclass.props.apply(this, arguments), {
             baseCls: "bi-adaptive-layout",
             hgap: null,
             vgap: null,
@@ -10,8 +10,8 @@ BI.AdaptiveLayout = BI.inherit(BI.Layout, {
             bgap: null
         });
     },
-    _init: function () {
-        BI.AdaptiveLayout.superclass._init.apply(this, arguments);
+    created: function () {
+        BI.AdaptiveLayout.superclass.created.apply(this, arguments);
         this.populate(this.options.items);
     },
 
@@ -86,7 +86,7 @@ BI.AdaptiveLayout = BI.inherit(BI.Layout, {
 
     populate: function (items) {
         BI.AbsoluteLayout.superclass.populate.apply(this, arguments);
-        this.render();
+        this._mount();
     }
 });
 $.shortcut('bi.adaptive', BI.AdaptiveLayout);

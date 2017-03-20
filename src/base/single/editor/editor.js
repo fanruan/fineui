@@ -93,7 +93,7 @@ BI.Editor = BI.inherit(BI.Single, {
 
         BI.createWidget({
             type: "bi.absolute",
-            element: this.element,
+            element: this,
             items: items
         });
         this.editor.on(BI.Controller.EVENT_CHANGE, function () {

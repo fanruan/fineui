@@ -8,8 +8,8 @@
  * @extends BI.Layout
  */
 BI.LeftRightVerticalAdaptLayout = BI.inherit(BI.Layout, {
-    _defaultConfig: function () {
-        return BI.extend(BI.LeftRightVerticalAdaptLayout.superclass._defaultConfig.apply(this, arguments), {
+    props: function () {
+        return BI.extend(BI.LeftRightVerticalAdaptLayout.superclass.props.apply(this, arguments), {
             baseCls: "bi-left-right-vertical-adapt-layout",
             items: {},
             llgap: 0,
@@ -20,8 +20,8 @@ BI.LeftRightVerticalAdaptLayout = BI.inherit(BI.Layout, {
             rhgap: 0
         });
     },
-    _init: function () {
-        BI.LeftRightVerticalAdaptLayout.superclass._init.apply(this, arguments);
+    created: function () {
+        BI.LeftRightVerticalAdaptLayout.superclass.created.apply(this, arguments);
         this.populate(this.options.items);
     },
 
@@ -47,10 +47,9 @@ BI.LeftRightVerticalAdaptLayout = BI.inherit(BI.Layout, {
             left.element.css("height", "100%");
             BI.createWidget({
                 type: "bi.left",
-                element: this.element,
+                element: this,
                 items: [left]
             });
-            this.addWidget(left);
         }
         if ("right" in items) {
             var right = BI.createWidget({
@@ -63,23 +62,23 @@ BI.LeftRightVerticalAdaptLayout = BI.inherit(BI.Layout, {
             right.element.css("height", "100%");
             BI.createWidget({
                 type: "bi.right",
-                element: this.element,
+                element: this,
                 items: [right]
             });
-            this.addWidget(right);
         }
     },
 
     populate: function (items) {
         BI.LeftRightVerticalAdaptLayout.superclass.populate.apply(this, arguments);
+        this._mount();
     }
 });
 $.shortcut('bi.left_right_vertical_adapt', BI.LeftRightVerticalAdaptLayout);
 
 
 BI.LeftVerticalAdaptLayout = BI.inherit(BI.Layout, {
-    _defaultConfig: function () {
-        return BI.extend(BI.LeftRightVerticalAdaptLayout.superclass._defaultConfig.apply(this, arguments), {
+    props: function () {
+        return BI.extend(BI.LeftRightVerticalAdaptLayout.superclass.props.apply(this, arguments), {
             baseCls: "bi-left-vertical-adapt-layout",
             items: [],
             lgap: 0,
@@ -87,8 +86,8 @@ BI.LeftVerticalAdaptLayout = BI.inherit(BI.Layout, {
             hgap: 0
         });
     },
-    _init: function () {
-        BI.LeftVerticalAdaptLayout.superclass._init.apply(this, arguments);
+    created: function () {
+        BI.LeftVerticalAdaptLayout.superclass.created.apply(this, arguments);
         this.populate(this.options.items);
     },
 
@@ -114,17 +113,17 @@ BI.LeftVerticalAdaptLayout = BI.inherit(BI.Layout, {
         left.element.css("height", "100%");
         BI.createWidget({
             type: "bi.left",
-            element: this.element,
+            element: this,
             items: [left]
         });
-        this.addWidget(left);
+        this._mount();
     }
 });
 $.shortcut('bi.left_vertical_adapt', BI.LeftVerticalAdaptLayout);
 
 BI.RightVerticalAdaptLayout = BI.inherit(BI.Layout, {
-    _defaultConfig: function () {
-        return BI.extend(BI.RightVerticalAdaptLayout.superclass._defaultConfig.apply(this, arguments), {
+    props: function () {
+        return BI.extend(BI.RightVerticalAdaptLayout.superclass.props.apply(this, arguments), {
             baseCls: "bi-right-vertical-adapt-layout",
             items: [],
             lgap: 0,
@@ -132,8 +131,8 @@ BI.RightVerticalAdaptLayout = BI.inherit(BI.Layout, {
             hgap: 0
         });
     },
-    _init: function () {
-        BI.RightVerticalAdaptLayout.superclass._init.apply(this, arguments);
+    created: function () {
+        BI.RightVerticalAdaptLayout.superclass.created.apply(this, arguments);
         this.populate(this.options.items);
     },
 
@@ -159,10 +158,10 @@ BI.RightVerticalAdaptLayout = BI.inherit(BI.Layout, {
         right.element.css("height", "100%");
         BI.createWidget({
             type: "bi.right",
-            element: this.element,
+            element: this,
             items: [right]
         });
-        this.addWidget(right);
+        this._mount();
     }
 });
 $.shortcut('bi.right_vertical_adapt', BI.RightVerticalAdaptLayout);

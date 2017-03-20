@@ -5,8 +5,8 @@
  * @extends BI.Layout
  */
 BI.GridLayout = BI.inherit(BI.Layout, {
-    _defaultConfig: function () {
-        return BI.extend(BI.GridLayout.superclass._defaultConfig.apply(this, arguments), {
+    props: function () {
+        return BI.extend(BI.GridLayout.superclass.props.apply(this, arguments), {
             baseCls: "bi-grid-layout",
             columns: null,
             rows: null,
@@ -30,8 +30,8 @@ BI.GridLayout = BI.inherit(BI.Layout, {
              ]*/
         });
     },
-    _init: function () {
-        BI.GridLayout.superclass._init.apply(this, arguments);
+    created: function () {
+        BI.GridLayout.superclass.created.apply(this, arguments);
         this.populate(this.options.items);
     },
 
@@ -121,7 +121,7 @@ BI.GridLayout = BI.inherit(BI.Layout, {
 
     populate: function (items) {
         BI.GridLayout.superclass.populate.apply(this, arguments);
-        this.render();
+        this._mount();
     }
 });
 $.shortcut('bi.grid', BI.GridLayout);

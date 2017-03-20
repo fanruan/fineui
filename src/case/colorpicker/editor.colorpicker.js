@@ -56,7 +56,7 @@ BI.ColorPickerEditor = BI.inherit(BI.Widget, {
 
         BI.createWidget({
             type: "bi.htape",
-            element: this.element,
+            element: this,
             items: [{
                 el: this.colorShow,
                 width: 'fill'

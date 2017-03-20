@@ -286,7 +286,7 @@ BI.ButtonMap = BI.inherit(BI.ButtonTree, {
         this.empty();
 
         var packages = this._packageItems(items, this._packageBtns(array));
-        BI.createWidget(BI.extend({element: this.element}, this._packageLayout(packages)));
+        BI.createWidget(BI.extend({element: this}, this._packageLayout(packages)));
     },
 
     getIndexByValue: function (value) {

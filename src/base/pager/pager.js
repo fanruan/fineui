@@ -183,7 +183,7 @@ BI.Pager = BI.inherit(BI.Widget, {
 
         this.button_group = BI.createWidget({
             type: "bi.button_group",
-            element: this.element,
+            element: this,
             items: BI.createItems(view, {
                 cls: "page-item",
                 height: 23,

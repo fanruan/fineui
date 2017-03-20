@@ -60,7 +60,7 @@ BI.BlankIconTextItem = BI.inherit(BI.BasicButton, {
         });
 
         BI.createWidget(BI.extend({
-            element: this.element
+            element: this
         }, BI.LogicFactory.createLogic("horizontal", BI.extend(o.logic, {
             items: BI.LogicFactory.createLogicItemsByDirection("left", blank, this.icon, this.text)
         }))));

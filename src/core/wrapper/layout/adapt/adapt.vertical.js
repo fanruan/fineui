@@ -18,24 +18,16 @@ BI.VerticalAdaptLayout = BI.inherit(BI.Layout, {
     },
     _init: function () {
         BI.VerticalAdaptLayout.superclass._init.apply(this, arguments);
-        var table = BI.createWidget({
-            type: "bi.layout",
-            tagName: "table",
-            attribute: {"cellspacing": 0, "cellpadding": 0}
-        });
-        table.element.css({
+        this.$table = $("<table>").attr({"cellspacing": 0, "cellpadding": 0}).css({
             "position": "relative",
             "height": "100%",
             "white-space": "nowrap",
             "border-spacing": "0px",
             "border": "none",
             "border-collapse": "separate"
-        }).appendTo(this.element);
-        this.tr = BI.createWidget({
-            type: "bi.layout",
-            tagName: "tr"
         });
-        this.tr.element.appendTo(table.element);
+        this.$tr = $("<tr>");
+        this.$tr.appendTo(this.$table);
         this.populate(this.options.items);
     },
 
@@ -43,7 +35,7 @@ BI.VerticalAdaptLayout = BI.inherit(BI.Layout, {
         var o = this.options;
         var td;
         var width = o.columnSize[i] <= 1 ? (o.columnSize[i] * 100 + "%") : o.columnSize[i];
-        if (!this.hasWidget(this.getName() + i)) {
+        if (!this.hasWidget(this.getName() + "-" + i)) {
             var w = BI.createWidget(item);
             w.element.css({"position": "relative", "top": "0", "left": "0", "margin": "0px auto"});
             td = BI.createWidget({
@@ -54,9 +46,9 @@ BI.VerticalAdaptLayout = BI.inherit(BI.Layout, {
                 },
                 items: [w]
             });
-            this.addWidget(this.getName() + i, td);
+            this.addWidget(this.getName() + "-" + i, td);
         } else {
-            td = this.getWidgetByName(this.getName() + i);
+            td = this.getWidgetByName(this.getName() + "-" + i);
             td.element.attr("width", width);
         }
 
@@ -94,24 +86,28 @@ BI.VerticalAdaptLayout = BI.inherit(BI.Layout, {
         return td;
     },
 
-    render: function () {
-        if (!BI.isEmpty(this.widgets)) {
-            this.tr.element.append(this.hang());
+    _mountChildren: function () {
+        var self = this;
+        var frag = document.createDocumentFragment();
+        var hasChild = false;
+        BI.each(this._children, function (i, widget) {
+            if (widget.element !== self.element) {
+                frag.appendChild(widget.element[0]);
+                hasChild = true;
+            }
+        });
+        if (hasChild === true) {
+            this.$tr.append(frag);
+            this.element.append(this.$table);
         }
     },
 
-    clear: function () {
-        this.hang();
-        this.widgets = {};
-        this.tr.empty();
-    },
-
-    empty: function () {
-        BI.each(this.widgets, function (i, wi) {
-            wi.destroy();
-        });
-        this.widgets = {};
-        this.tr.empty();
+    addItem: function (item) {
+        var w = this._addElement(this.options.items.length, item);
+        w._mount();
+        this.options.items.push(item);
+        w.element.appendTo(this.$tr);
+        return w;
     },
 
     resize: function () {
@@ -120,7 +116,7 @@ BI.VerticalAdaptLayout = BI.inherit(BI.Layout, {
 
     populate: function (items) {
         BI.VerticalAdaptLayout.superclass.populate.apply(this, arguments);
-        this.render();
+        this._mount();
     }
 });
 $.shortcut('bi.vertical_adapt', BI.VerticalAdaptLayout);

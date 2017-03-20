@@ -49,7 +49,7 @@ BI.ArrowNode = BI.inherit(BI.NodeButton, {
             el: this.checkbox
         }, this.text);
         BI.createWidget(BI.extend({
-            element: this.element
+            element: this
         }, BI.LogicFactory.createLogic(type, BI.extend(o.logic, {
             items: items
         }))));

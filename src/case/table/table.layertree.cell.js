@@ -17,7 +17,7 @@ BI.LayerTreeTableCell = BI.inherit(BI.Widget, {
         var o = this.options;
         BI.createWidget({
             type: "bi.label",
-            element: this.element,
+            element: this,
             textAlign: "left",
             whiteSpace: "nowrap",
             height: o.height,

@@ -48,7 +48,7 @@ BI.Collection = BI.inherit(BI.Widget, {
         });
         BI.createWidget({
             type: "bi.vertical",
-            element: this.element,
+            element: this,
             scrollable: o.overflowX === true && o.overflowY === true,
             scrolly: o.overflowX === false && o.overflowY === true,
             scrollx: o.overflowX === true && o.overflowY === false,
@@ -58,12 +58,18 @@ BI.Collection = BI.inherit(BI.Widget, {
             this._calculateSizeAndPositionData();
             this._populate();
         }
+    },
+
+    mounted: function () {
+        var o = this.options;
         if (o.scrollLeft !== 0 || o.scrollTop !== 0) {
-            BI.nextTick(function () {
-                self.element.scrollTop(o.scrollTop);
-                self.element.scrollLeft(o.scrollLeft);
-            });
+            this.element.scrollTop(o.scrollTop);
+            this.element.scrollLeft(o.scrollLeft);
         }
+    },
+
+    destroyed: function () {
+        this._debounceRelease = null;
     },
 
     _calculateSizeAndPositionData: function () {

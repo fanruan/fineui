@@ -56,7 +56,7 @@ BI.Expander = BI.inherit(BI.Widget, {
         BI.createWidget({
             type: "bi.vertical",
             scrolly: false,
-            element: this.element,
+            element: this,
             items: [
                 {el: this.expander}
             ]
@@ -156,7 +156,7 @@ BI.Expander = BI.inherit(BI.Widget, {
             BI.createWidget({
                 type: "bi.vertical",
                 scrolly: false,
-                element: this.element,
+                element: this,
                 items: [
                     {el: this.popupView}
                 ]
@@ -254,8 +254,8 @@ BI.Expander = BI.inherit(BI.Widget, {
         return this.popupView && this.popupView.getNodeByValue(value);
     },
 
-    destroy: function () {
-        BI.Expander.superclass.destroy.apply(this, arguments);
+    destroyed: function () {
+        this.popupView && this.popupView.destroy();
     }
 });
 BI.Expander.EVENT_EXPAND = "EVENT_EXPAND";

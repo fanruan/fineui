@@ -49,7 +49,7 @@ BI.MultiLayerIconArrowNode = BI.inherit(BI.NodeButton, {
         items.push(this.node);
         BI.createWidget({
             type: "bi.td",
-            element: this.element,
+            element: this,
             columnSize: BI.makeArray(o.layer, 13),
             items: [items]
         })

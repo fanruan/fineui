@@ -154,7 +154,7 @@ BI.ColorPicker = BI.inherit(BI.Widget, {
         var self = this, o = this.options;
         this.colors = BI.createWidget({
             type: "bi.button_group",
-            element: this.element,
+            element: this,
             items: BI.createItems(o.items || this._items, {
                 type: "bi.color_picker_button",
                 once: false

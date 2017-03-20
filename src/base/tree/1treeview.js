@@ -28,7 +28,7 @@ BI.TreeView = BI.inherit(BI.Pane, {
             type: "bi.vertical",
             scrollable: true,
             scrolly: false,
-            element: this.element,
+            element: this,
             items: [this.container, this.tip]
         });
 

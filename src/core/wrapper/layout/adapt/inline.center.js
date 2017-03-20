@@ -8,8 +8,8 @@
  * @cfg {Number} [vgap=0] 垂直间隙
  */
 BI.InlineCenterAdaptLayout = BI.inherit(BI.Layout, {
-    _defaultConfig: function () {
-        return BI.extend(BI.InlineCenterAdaptLayout.superclass._defaultConfig.apply(this, arguments), {
+    props: function () {
+        return BI.extend(BI.InlineCenterAdaptLayout.superclass.props.apply(this, arguments), {
             baseCls: "bi-inline-center-adapt-layout",
             hgap: 0,
             vgap: 0,
@@ -19,8 +19,8 @@ BI.InlineCenterAdaptLayout = BI.inherit(BI.Layout, {
             bgap: 0
         });
     },
-    _init: function () {
-        BI.InlineCenterAdaptLayout.superclass._init.apply(this, arguments);
+    created: function () {
+        BI.InlineCenterAdaptLayout.superclass.created.apply(this, arguments);
         this.element.css({
             whiteSpace: "nowrap"
         });
@@ -29,7 +29,7 @@ BI.InlineCenterAdaptLayout = BI.inherit(BI.Layout, {
 
     _addElement: function (i, item, length) {
         var o = this.options;
-        if (!this.hasWidget(this.getName() + i)) {
+        if (!this.hasWidget(this.getName() + "-" + i)) {
             var t = BI.createWidget(item);
             t.element.css({
                 "position": "relative"
@@ -38,9 +38,9 @@ BI.InlineCenterAdaptLayout = BI.inherit(BI.Layout, {
                 type: "bi.horizontal_auto",
                 items: [t]
             });
-            this.addWidget(this.getName() + i, w);
+            this.addWidget(this.getName() + "-" + i, w);
         } else {
-            var w = this.getWidgetByName(this.getName() + i);
+            var w = this.getWidgetByName(this.getName() + "-" + i);
         }
         w.element.css({
             "position": "relative",
@@ -92,7 +92,7 @@ BI.InlineCenterAdaptLayout = BI.inherit(BI.Layout, {
 
     populate: function (items) {
         BI.InlineCenterAdaptLayout.superclass.populate.apply(this, arguments);
-        this.render();
+        this._mount();
     }
 });
 $.shortcut('bi.inline_center_adapt', BI.InlineCenterAdaptLayout);

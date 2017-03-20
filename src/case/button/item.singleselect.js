@@ -16,7 +16,7 @@ BI.SingleSelectItem = BI.inherit(BI.BasicButton, {
         var self = this, o = this.options;
         this.text = BI.createWidget({
             type: "bi.label",
-            element: this.element,
+            element: this,
             textAlign: "left",
             whiteSpace: "nowrap",
             textHeight: o.height,

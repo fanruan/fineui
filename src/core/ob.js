@@ -4,41 +4,54 @@
  * @abstract
  */
 BI.OB = function (config) {
-    this.options = $.extend(this._defaultConfig(), config);
+    this.options = $.extend(this._defaultConfig(config), config);
     this._init();
-    this._confirmEvents();
+    this._initRef();
 };
 $.extend(BI.OB.prototype, {
-    _defaultConfig: function () {
-        return {};
+    props: {},
+    init: function () {
     },
+
+    _defaultConfig: function (config) {
+        if (BI.isFunction(this.props)) {
+            return this.props(config);
+        }
+        return this.props;
+    },
+
     _init: function () {
+        this._initListeners();
+        this.init();
+    },
+
+    _initListeners: function () {
         var self = this;
         if (this.options.listeners != null) {
             $.each(this.options.listeners, function (i, lis) {
                 (lis.target ? lis.target : self)[lis.once ? 'once' : 'on']
-                (lis.eventName, lis.action.createDelegate(self))
-            })
+                (lis.eventName, _.bind(lis.action, self))
+            });
             delete this.options.listeners;
         }
     },
 
-    _confirmEvents: function () {
-        this.fireEvent(BI.Events.AFTERINIT);
+    //获得一个当前对象的引用
+    _initRef: function () {
+        if (this.options.ref) {
+            this.options.ref.call(this, this);
+        }
     },
 
     _getEvents: function () {
         if (!$.isArray(this.events)) {
             this.events = []
         }
-
         return this.events;
     },
 
     /**
      * 给观察者绑定一个事件
-     * e.g. 给填报页面添加一个提交失败事件：contentPane.on(BI.Events.WF, function() {alert("填报失败！");});
-     *      给文本框控件p1添加一个初始化后事件：p1.on(BI.Evnets.AFTERINIT, function() {alert("初始化完成！");});
      * @param {String} eventName 事件的名字
      * @param {Function} fn 事件对应的执行函数
      */
@@ -104,21 +117,22 @@ $.extend(BI.OB.prototype, {
     fireEvent: function () {
         var eventName = arguments[0].toLowerCase();
         var fns = this._getEvents()[eventName];
-        if ($.isArray(fns)) {
-            var args = Array.prototype.slice.call(arguments, 1)
-            for (var i = 0; i < fns.length; i++) {
-                if (fns[i].apply(this, args) === false) {
-                    return false;
+        if (BI.isArray(fns)) {
+            if (BI.isArguments(arguments[1])) {
+                for (var i = 0; i < fns.length; i++) {
+                    if (fns[i].apply(this, arguments[1]) === false) {
+                        return false;
+                    }
+                }
+            } else {
+                var args = Array.prototype.slice.call(arguments, 1);
+                for (var i = 0; i < fns.length; i++) {
+                    if (fns[i].apply(this, args) === false) {
+                        return false;
+                    }
                 }
             }
         }
         return true;
     }
 });
-BI.OB.capture = function (o, fn, scope) {
-    o.fireEvent = o.fireEvent.createInterceptor(fn, scope);
-}
-// alex:释放事件的捕捉
-BI.OB.releaseCapture = function (o) {
-    o.fireEvent = BI.OB.prototype.fireEvent;
-};

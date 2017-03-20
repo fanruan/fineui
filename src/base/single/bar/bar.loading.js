@@ -45,7 +45,7 @@ BI.LoadingBar = BI.inherit(BI.Single, {
         })
         this.cardLayout = BI.createWidget({
             type: "bi.card",
-            element: this.element,
+            element: this,
             items: [{
                 el: loaded,
                 cardName: "loaded"

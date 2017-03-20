@@ -4,8 +4,8 @@
  * @extends BI.Layout
  */
 BI.HorizontalLayout = BI.inherit(BI.Layout, {
-    _defaultConfig: function () {
-        return BI.extend(BI.HorizontalLayout.superclass._defaultConfig.apply(this, arguments), {
+    props: function () {
+        return BI.extend(BI.HorizontalLayout.superclass.props.apply(this, arguments), {
             baseCls: "bi-horizontal-layout",
             verticalAlign: "middle",
             columnSize: [],
@@ -18,25 +18,17 @@ BI.HorizontalLayout = BI.inherit(BI.Layout, {
             bgap: 0
         });
     },
-    _init: function () {
-        BI.HorizontalLayout.superclass._init.apply(this, arguments);
-        var table = BI.createWidget({
-            type: "bi.layout",
-            tagName: "table",
-            attribute: {"cellspacing": 0, "cellpadding": 0}
-        });
-        table.element.css({
+    created: function () {
+        BI.HorizontalLayout.superclass.created.apply(this, arguments);
+        this.$table = $("<table>").attr({"cellspacing": 0, "cellpadding": 0}).css({
             "position": "relative",
             "white-space": "nowrap",
             "border-spacing": "0px",
             "border": "none",
             "border-collapse": "separate"
-        }).appendTo(this.element);
-        this.tr = BI.createWidget({
-            type: "bi.layout",
-            tagName: "tr"
         });
-        this.tr.element.appendTo(table.element);
+        this.$tr = $("<tr>");
+        this.$tr.appendTo(this.$table);
         this.populate(this.options.items);
     },
 
@@ -94,26 +86,22 @@ BI.HorizontalLayout = BI.inherit(BI.Layout, {
         return td;
     },
 
-    render: function () {
-        if (!BI.isEmpty(this.widgets)) {
-            this.tr.element.append(this.hang());
-        }
-        return this;
-    },
-
-    clear: function () {
-        this.hang();
-        this.widgets = {};
-        this.tr.empty();
-    },
-
-    empty: function () {
-        BI.each(this.widgets, function (i, wi) {
-            wi.destroy();
+    _mountChildren: function () {
+        var self = this;
+        var frag = document.createDocumentFragment();
+        var hasChild = false;
+        BI.each(this._children, function (i, widget) {
+            if (widget.element !== self.element) {
+                frag.appendChild(widget.element[0]);
+                hasChild = true;
+            }
         });
-        this.widgets = {};
-        this.tr.empty();
+        if (hasChild === true) {
+            this.$tr.append(frag);
+            this.element.append(this.$table);
+        }
     },
+
 
     resize: function () {
         // console.log("horizontal layout do not need to resize");
@@ -121,14 +109,15 @@ BI.HorizontalLayout = BI.inherit(BI.Layout, {
 
     addItem: function (item) {
         var w = this._addElement(this.options.items.length, item);
+        w._mount();
         this.options.items.push(item);
-        w.element.appendTo(this.tr.element);
+        w.element.appendTo(this.$tr);
         return w;
     },
 
     populate: function (items) {
         BI.HorizontalLayout.superclass.populate.apply(this, arguments);
-        this.render();
+        this._mount();
     }
 });
 $.shortcut('bi.horizontal', BI.HorizontalLayout);
@@ -139,8 +128,8 @@ $.shortcut('bi.horizontal', BI.HorizontalLayout);
  * @extends BI.Layout
  */
 BI.HorizontalCellLayout = BI.inherit(BI.Layout, {
-    _defaultConfig: function () {
-        return BI.extend(BI.HorizontalCellLayout.superclass._defaultConfig.apply(this, arguments), {
+    props: function () {
+        return BI.extend(BI.HorizontalCellLayout.superclass.props.apply(this, arguments), {
             baseCls: "bi-horizontal-cell-layout",
             scrollable: true,
             hgap: 0,
@@ -151,8 +140,8 @@ BI.HorizontalCellLayout = BI.inherit(BI.Layout, {
             bgap: 0
         });
     },
-    _init: function () {
-        BI.HorizontalCellLayout.superclass._init.apply(this, arguments);
+    created: function () {
+        BI.HorizontalCellLayout.superclass.created.apply(this, arguments);
         this.element.css({"display": "table", "vertical-align": "top"});
         this.populate(this.options.items);
     },
@@ -190,7 +179,7 @@ BI.HorizontalCellLayout = BI.inherit(BI.Layout, {
 
     populate: function (items) {
         BI.HorizontalCellLayout.superclass.populate.apply(this, arguments);
-        this.render();
+        this._mount();
     }
 });
 $.shortcut('bi.horizontal_cell', BI.HorizontalCellLayout);

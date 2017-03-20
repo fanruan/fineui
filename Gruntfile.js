@@ -52,12 +52,37 @@ module.exports = function (grunt) {
                 dest: 'dist/case.js'
             },
             coreCss: {
-                src: ['src/css/core/**/*.css','src/css/utils/**/*.css'],
+                src: ['src/css/core/**/*.css', 'src/css/utils/**/*.css'],
                 dest: 'dist/core.css'
             },
             baseCss: {
                 src: ['src/css/base/**/*.css'],
                 dest: 'dist/base.css'
+            },
+
+            demoJs: {
+                src: ['demo/version.js', 'demo/app.js', 'demo/js/**/*.js'],
+                dest: 'demo/dist/demo.js'
+            },
+            demoCss: {
+                src: ['demo/css/**/*.css'],
+                dest: 'demo/dist/demo.css'
+            }
+        },
+
+        less: {
+            main: {
+                expand: true,
+                cwd: 'demo/less',
+                src: ['**/*.less'],
+                dest: 'demo/css/',
+                ext: '.css'
+            },
+            dev: {
+                options: {
+                    compress: true,
+                    yuicompress: false
+                }
             }
         },
 
@@ -106,8 +131,8 @@ module.exports = function (grunt) {
         },
         watch: {
             scripts: {
-                files: ['src/**/*.js'],
-                tasks: ['concat'],
+                files: ['src/**/*.js', 'demo/**/*.js', 'demo/**/*.less'],
+                tasks: ['less', 'concat'],
                 options: {
                     spanw: true,
                     interrupt: true
@@ -118,9 +143,10 @@ module.exports = function (grunt) {
 
     grunt.loadNpmTasks('grunt-contrib-uglify');
     grunt.loadNpmTasks('grunt-contrib-jshint');
+    grunt.loadNpmTasks('grunt-contrib-less');
     grunt.loadNpmTasks('grunt-contrib-watch');
     grunt.loadNpmTasks('grunt-contrib-concat');
     grunt.loadNpmTasks('grunt-contrib-cssmin');
 
-    grunt.registerTask('default', ['concat', 'watch']);
+    grunt.registerTask('default', ['less', 'concat', 'watch']);
 };

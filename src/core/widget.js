@@ -7,42 +7,54 @@
  */
 BI.Widget = BI.inherit(BI.OB, {
     _defaultConfig: function () {
-        return BI.extend(BI.Widget.superclass._defaultConfig.apply(this, arguments), {
+        return BI.extend({
             tagName: "div",
-            attributes: {},
-            data: {},
+            attributes: null,
+            data: null,
 
             tag: null,
-            widgetName: "",
             disabled: false,
             invisible: false,
             invalid: false,
             baseCls: "",
-            extraCls: "",
             cls: ""
-        })
+        }, BI.Widget.superclass._defaultConfig.call(this))
     },
 
-    _initOpts: function () {
+    //生命周期函数
+    beforeCreate: function () {
+
+    },
+
+    created: function () {
+
+    },
+
+    render: function () {
+
+    },
+
+    beforeMounted: function () {
+
+    },
+
+    mounted: function () {
+
+    },
+
+    destroyed: function () {
     },
 
     _init: function () {
-        var o = this.options;
-        this._initOpts()
-        BI.isWidget(o.element) && (o.element = o.element.element);
-        BI.isString(o.element) && (o.element = $(o.element));
-        o.renderEl || (o.renderEl = o.element);
-        o.element || (o.element = o.renderEl);
-        o.element || (o.renderEl = o.element = $(document.createElement(o.tagName)));
-        this.widgetName = o.widgetName || (o.widgetName = BI.uniqueId("widget"));
+        BI.Widget.superclass._init.apply(this, arguments);
+        this.beforeCreate();
         this._initRoot();
         this._initElementWidth();
         this._initElementHeight();
         this._initVisualEffects();
-        o.extraCls && this.element.addClass(o.extraCls);
-        o.cls && this.element.addClass(o.cls);
-        this.element.attr(o.attributes).data(o.data);
-        this.widgets = {};//保存子组件
+        this._initState();
+        this._initElement();
+        this.created();
     },
 
     /**
@@ -50,14 +62,31 @@ BI.Widget = BI.inherit(BI.OB, {
      * @private
      */
     _initRoot: function () {
-        if (this.options.renderEl != null) {
-            this.element = $(this.options.renderEl);
+        var o = this.options;
+        this.widgetName = o.widgetName || BI.uniqueId("widget");
+        if (BI.isWidget(o.element)) {
+            this._parent = o.element;
+            this._parent.addWidget(this.widgetName, this);
+            this.element = this.options.element.element;
+        } else if (o.element) {
+            this.element = $(o.element);
+            this._isRoot = true;
         } else {
-            this.element = this._defaultRoot();
+            this.element = $(document.createElement(o.tagName));
         }
-        if (this.options.baseCls) {
-            this.element.addClass(this.options.baseCls);
+        if (o.baseCls) {
+            this.element.addClass(o.baseCls);
         }
+        if (o.cls) {
+            this.element.addClass(o.cls);
+        }
+        if (o.attributes) {
+            this.element.attr(o.attributes);
+        }
+        if (o.data) {
+            this.element.data(o.data);
+        }
+        this._children = {};
     },
 
     _initElementWidth: function () {
@@ -75,40 +104,90 @@ BI.Widget = BI.inherit(BI.OB, {
     },
 
     _initVisualEffects: function () {
-        BI.nextTick(BI.bind(function () {
-            if (this.options.disabled) {
-                this.setEnable(false);
-            }
-            if (this.options.invalid) {
-                this.setValid(false);
-            }
-        }, this));
-
-        if (this.options.invisible) {
-            this.setVisible(false);
+        var o = this.options;
+        if (o.invisible) {
+            this.element.hide();
+        }
+        if (o.disabled) {
+            this.element.addClass("base-disabled disabled");
+        }
+        if (o.invalid) {
+            this.element.addClass("base-invalid invalid");
         }
     },
 
-    fireEvent: function () {
-        var eventName = arguments[0].toLowerCase();
-        var fns = this._getEvents()[eventName];
-        if (BI.isArray(fns)) {
-            if (BI.isArguments(arguments[1])) {
-                for (var i = 0; i < fns.length; i++) {
-                    if (fns[i].apply(this, arguments[1]) === false) {
-                        return false;
-                    }
-                }
-            } else {
-                var args = Array.prototype.slice.call(arguments, 1)
-                for (var i = 0; i < fns.length; i++) {
-                    if (fns[i].apply(this, args) === false) {
-                        return false;
-                    }
-                }
-            }
+    _initState: function () {
+        this._isMounted = false;
+    },
+
+    _initElement: function () {
+        var self = this;
+        var els = this.render();
+        if (BI.isPlainObject(els)) {
+            els = [els];
         }
-        return true;
+        if (BI.isArray(els)) {
+            BI.each(els, function (i, el) {
+                BI.createWidget(el, {
+                    element: self
+                })
+            })
+        }
+        if (this._isRoot === true) {
+            this._mount();
+        }
+    },
+
+    _setParent: function (parent) {
+        this._parent = parent;
+    },
+
+    _mount: function () {
+        var self = this;
+        var isMounted = this._isMounted;
+        if (isMounted) {
+            return;
+        }
+        if (this._isRoot === true) {
+            isMounted = true;
+        } else if (this._parent && this._parent._isMounted === true) {
+            isMounted = true;
+        }
+        if (!isMounted) {
+            return;
+        }
+        this.beforeMounted();
+        this._isMounted = true;
+        this._mountChildren();
+        BI.each(this._children, function (i, widget) {
+            widget._mount();
+        });
+        this.mounted();
+    },
+
+    _mountChildren: function () {
+        var self = this;
+        var frag = document.createDocumentFragment();
+        var hasChild = false;
+        BI.each(this._children, function (i, widget) {
+            if (widget.element !== self.element) {
+                frag.appendChild(widget.element[0]);
+                hasChild = true;
+            }
+        });
+        if (hasChild === true) {
+            this.element.append(frag);
+        }
+    },
+
+    _unMount: function () {
+        BI.each(this._children, function (i, widget) {
+            widget._unMount();
+        });
+        this._children = {};
+        this._parent = null;
+        this._isMounted = false;
+        this.destroyed();
     },
 
     setWidth: function (w) {
@@ -121,16 +200,7 @@ BI.Widget = BI.inherit(BI.OB, {
         this._initElementHeight();
     },
 
-    setElement: function (widget) {
-        if (widget == this) {
-            return;
-        }
-        this.element = BI.isWidget(widget) ? widget.element : $(widget);
-        return this;
-    },
-
     setEnable: function (enable) {
-        BI.assert(enable, [true, false]);
         if (enable === true) {
             this.options.disabled = false;
             this.element.removeClass("base-disabled disabled");
@@ -141,7 +211,6 @@ BI.Widget = BI.inherit(BI.OB, {
     },
 
     setVisible: function (visible) {
-        BI.assert(visible, [true, false]);
         if (visible === true) {
             this.options.invisible = false;
             this.element.show();
@@ -149,11 +218,9 @@ BI.Widget = BI.inherit(BI.OB, {
             this.options.invisible = true;
             this.element.hide();
         }
-        this.fireEvent(BI.Events.VIEW, visible);
     },
 
     setValid: function (valid) {
-        BI.assert(valid, [true, false]);
         this.options.invalid = !valid;
         if (valid === true) {
             this.element.removeClass("base-invalid invalid");
@@ -174,32 +241,21 @@ BI.Widget = BI.inherit(BI.OB, {
         return !this.options.invalid;
     },
 
-    valid: function () {
-        this.setValid(true);
-    },
-
-    invalid: function () {
-        this.setValid(false);
-    },
-
     addWidget: function (name, widget) {
         var self = this;
         if (name instanceof BI.Widget) {
             widget = name;
             name = widget.getName();
         }
-        if (!BI.isKey(name)) {
-            throw new Error("name cannot be null");
-        }
-        name = BI.isKey(name) ? (name + "") : "";
-        name = name || widget.getName() || BI.UUID();
-        if (this.widgets[name]) {
+        name = name || widget.getName() || BI.uniqueId("widget");
+        if (this._children[name]) {
             throw new Error("name has already been existed");
         }
+        widget._setParent(this);
         widget.on(BI.Events.DESTROY, function () {
-            delete self.widgets[name]
+            delete self._children[name]
         });
-        return (this.widgets[name] = widget);
+        return (this._children[name] = widget);
     },
 
     getWidgetByName: function (name) {
@@ -208,7 +264,7 @@ BI.Widget = BI.inherit(BI.OB, {
         }
         name = name + "";
         var widget = void 0, other = {};
-        BI.any(this.widgets, function (i, wi) {
+        BI.any(this._children, function (i, wi) {
             if (i === name) {
                 widget = wi;
                 return true;
@@ -223,26 +279,16 @@ BI.Widget = BI.inherit(BI.OB, {
         return widget;
     },
 
+    removeWidget: function (name) {
+        delete this._children[name];
+    },
+
     hasWidget: function (name) {
-        return this.widgets[name] != null;
-    },
-
-    getWidgets: function () {
-        return this.widgets;
-    },
-
-    getValidWidgets: function () {
-        var widgets = [];
-        BI.each(this.widgets, function (i, wi) {
-            if (wi.isValid()) {
-                widgets.push(wi);
-            }
-        });
-        return widgets;
+        return this._children[name] != null;
     },
 
     getName: function () {
-        return this.options.widgetName;
+        return this.widgetName;
     },
 
     setTag: function (tag) {
@@ -260,11 +306,11 @@ BI.Widget = BI.inherit(BI.OB, {
         return this.options[key];
     },
 
-    getText : function() {
+    getText: function () {
 
     },
 
-    setText : function(text) {
+    setText: function (text) {
 
     },
 
@@ -272,12 +318,8 @@ BI.Widget = BI.inherit(BI.OB, {
 
     },
 
-    setValue: function (value, shouldFireEvent) {
+    setValue: function (value) {
 
-    },
-
-    getType: function () {
-        return this.options.type;
     },
 
     isEnabled: function () {
@@ -288,44 +330,6 @@ BI.Widget = BI.inherit(BI.OB, {
         return !this.options.invisible;
     },
 
-    render: function () {
-        this.element.append(this.hang());
-        return this;
-    },
-
-    hang: function () {
-        return BI.DOM.hang(BI.trans2Element(this.widgets));
-    },
-
-    clear: function () {
-        this.hang();
-        this.element.empty();
-        this.widgets = {};
-    },
-
-    empty: function () {
-        BI.each(this.widgets, function (i, wi) {
-            wi.destroy();
-        });
-        this.element.empty();
-        this.widgets = {};
-    },
-
-    destroy: function () {
-        this.empty();
-        this.element.each(function () {
-            $(this).remove();
-            if (BI.isIE()) {
-                this.outerHTML = '';
-            }
-        });
-        this.fireEvent(BI.Events.DESTROY);
-    },
-
-    _defaultRoot: function () {
-        return $("<div/>");
-    },
-
     disable: function () {
         this.setEnable(false);
     },
@@ -334,11 +338,33 @@ BI.Widget = BI.inherit(BI.OB, {
         this.setEnable(true);
     },
 
+    valid: function () {
+        this.setValid(true);
+    },
+
+    invalid: function () {
+        this.setValid(false);
+    },
+
     invisible: function () {
         this.setVisible(false);
     },
 
     visible: function () {
         this.setVisible(true);
+    },
+
+    empty: function () {
+        BI.each(this._children, function (i, widget) {
+            widget._unMount();
+        });
+        this._children = {};
+        this.element.empty();
+    },
+
+    destroy: function () {
+        this._unMount();
+        this.element.destroy();
+        this.fireEvent(BI.Events.DESTROY);
     }
 });

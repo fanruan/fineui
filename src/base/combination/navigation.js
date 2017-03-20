@@ -34,7 +34,7 @@ BI.Navigation = BI.inherit(BI.Widget, {
             type: "bi.card"
         });
         BI.createWidget(BI.extend({
-            element: this.element
+            element: this
         }, BI.LogicFactory.createLogic(BI.LogicFactory.createLogicTypeByDirection(o.direction), BI.extend({}, o.logic, {
             items: BI.LogicFactory.createLogicItemsByDirection(o.direction, this.tab, this.layout)
         }))));
@@ -127,10 +127,6 @@ BI.Navigation = BI.inherit(BI.Widget, {
     empty: function(){
         this.layout.deleteAllCard();
         this.cardMap = {};
-    },
-
-    destroy: function(){
-        BI.Navigation.superclass.destroy.apply(this, arguments);
     }
 });
 BI.Navigation.EVENT_CHANGE = "EVENT_CHANGE";

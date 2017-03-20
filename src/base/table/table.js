@@ -443,7 +443,7 @@ BI.Table = BI.inherit(BI.Widget, {
             regionColumnSize = isRight ? [0, 'fill'] : ['fill', 0];
         }
         this.partitions = BI.createWidget(BI.extend({
-            element: this.element
+            element: this
         }, BI.LogicFactory.createLogic("table", BI.extend({}, o.logic, {
             rows: 2,
             columns: 2,
@@ -1051,7 +1051,7 @@ BI.Table = BI.inherit(BI.Widget, {
         BI.createWidget({
             type: "bi.adaptive",
             cls: "bottom-right",
-            element: this.element,
+            element: this,
             scrollable: false,
             items: [this.scrollBottomRight]
         });

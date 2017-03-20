@@ -22,7 +22,7 @@ BI.A = BI.inherit(BI.Text, {
         BI.A.superclass._init.apply(this, arguments);
         if (o.el) {
             BI.createWidget(o.el, {
-                element: this.element
+                element: this
             });
         }
     }

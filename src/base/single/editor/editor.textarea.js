@@ -24,7 +24,7 @@ BI.TextAreaEditor = BI.inherit(BI.Single, {
         this.content.element.css({"resize": "none"});
         BI.createWidget({
             type: "bi.absolute",
-            element: this.element,
+            element: this,
             items: [{
                 el: {
                     type: "bi.adaptive",

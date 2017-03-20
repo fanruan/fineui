@@ -8,14 +8,14 @@
  * @cfg {Number} [vgap=0] 垂直间隙
  */
 BI.LatticeLayout = BI.inherit(BI.Layout, {
-    _defaultConfig: function () {
-        return BI.extend(BI.LatticeLayout.superclass._defaultConfig.apply(this, arguments), {
+    props: function () {
+        return BI.extend(BI.LatticeLayout.superclass.props.apply(this, arguments), {
             baseCls: "bi-lattice-layout clearfix"
             //columnSize: [0.2, 0.2, 0.6],
         });
     },
-    _init: function () {
-        BI.LatticeLayout.superclass._init.apply(this, arguments);
+    created: function () {
+        BI.LatticeLayout.superclass.created.apply(this, arguments);
         this.populate(this.options.items);
     },
 
@@ -43,7 +43,7 @@ BI.LatticeLayout = BI.inherit(BI.Layout, {
 
     populate: function (items) {
         BI.LatticeLayout.superclass.populate.apply(this, arguments);
-        this.render();
+        this._mount();
     }
 });
 $.shortcut('bi.lattice', BI.LatticeLayout);

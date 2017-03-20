@@ -8,8 +8,8 @@
  * @cfg {Number} [vgap=0] 垂直间隙
  */
 BI.FloatLeftLayout = BI.inherit(BI.Layout, {
-    _defaultConfig: function () {
-        return BI.extend(BI.FloatLeftLayout.superclass._defaultConfig.apply(this, arguments), {
+    props: function () {
+        return BI.extend(BI.FloatLeftLayout.superclass.props.apply(this, arguments), {
             baseCls: "bi-float-left-layout clearfix",
             hgap: 0,
             vgap: 0,
@@ -19,8 +19,8 @@ BI.FloatLeftLayout = BI.inherit(BI.Layout, {
             bgap: 0
         });
     },
-    _init: function () {
-        BI.FloatLeftLayout.superclass._init.apply(this, arguments);
+    created: function () {
+        BI.FloatLeftLayout.superclass.created.apply(this, arguments);
         this.populate(this.options.items);
     },
 
@@ -58,7 +58,7 @@ BI.FloatLeftLayout = BI.inherit(BI.Layout, {
 
     populate: function (items) {
         BI.FloatLeftLayout.superclass.populate.apply(this, arguments);
-        this.render();
+        this._mount();
     }
 });
 $.shortcut('bi.left', BI.FloatLeftLayout);
@@ -73,8 +73,8 @@ $.shortcut('bi.left', BI.FloatLeftLayout);
  * @cfg {Number} [vgap=0] 垂直间隙
  */
 BI.FloatRightLayout = BI.inherit(BI.Layout, {
-    _defaultConfig: function () {
-        return BI.extend(BI.FloatRightLayout.superclass._defaultConfig.apply(this, arguments), {
+    props: function () {
+        return BI.extend(BI.FloatRightLayout.superclass.props.apply(this, arguments), {
             baseCls: "bi-float-right-layout clearfix",
             hgap: 0,
             vgap: 0,
@@ -84,8 +84,8 @@ BI.FloatRightLayout = BI.inherit(BI.Layout, {
             bgap: 0
         });
     },
-    _init: function () {
-        BI.FloatRightLayout.superclass._init.apply(this, arguments);
+    created: function () {
+        BI.FloatRightLayout.superclass.created.apply(this, arguments);
         this.populate(this.options.items);
     },
 
@@ -123,7 +123,7 @@ BI.FloatRightLayout = BI.inherit(BI.Layout, {
 
     populate: function (items) {
         BI.FloatRightLayout.superclass.populate.apply(this, arguments);
-        this.render();
+        this._mount();
     }
 });
 $.shortcut('bi.right', BI.FloatRightLayout);

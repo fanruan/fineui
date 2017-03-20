@@ -103,7 +103,7 @@ BI.GridTable = BI.inherit(BI.Widget, {
         });
         this.contextLayout = BI.createWidget({
             type: "bi.absolute",
-            element: this.element,
+            element: this,
             items: [{
                 el: this.topLeft,
                 top: 0,
@@ -148,7 +148,7 @@ BI.GridTable = BI.inherit(BI.Widget, {
         });
         this.scrollBarLayout = BI.createWidget({
             type: "bi.absolute",
-            element: this.element,
+            element: this,
             items: [{
                 el: this.topScrollbar,
                 right: 0,

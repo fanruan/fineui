@@ -4,8 +4,8 @@
  * @extends BI.Layout
  */
 BI.HorizontalCenterLayout = BI.inherit(BI.Layout, {
-    _defaultConfig: function () {
-        return BI.extend(BI.HorizontalCenterLayout.superclass._defaultConfig.apply(this, arguments), {
+    props: function () {
+        return BI.extend(BI.HorizontalCenterLayout.superclass.props.apply(this, arguments), {
             baseCls: "bi-horizontal-center-layout",
             hgap: 0,
             vgap: 0,
@@ -15,8 +15,8 @@ BI.HorizontalCenterLayout = BI.inherit(BI.Layout, {
             bgap: 0
         });
     },
-    _init: function () {
-        BI.HorizontalCenterLayout.superclass._init.apply(this, arguments);
+    created: function () {
+        BI.HorizontalCenterLayout.superclass.created.apply(this, arguments);
         this.populate(this.options.items);
     },
 
@@ -31,14 +31,13 @@ BI.HorizontalCenterLayout = BI.inherit(BI.Layout, {
 
     stroke: function (items) {
         var o = this.options;
-        this.clear();
         var list = [];
         BI.each(items, function (i) {
             list.push({
                 column: i,
                 row: 0,
                 el: BI.createWidget({
-                    type: "bi.layout",
+                    type: "bi.default",
                     cls: "center-element " + (i === 0 ? "first-element " : "") + (i === items.length - 1 ? "last-element" : "")
                 })
             });
@@ -53,13 +52,13 @@ BI.HorizontalCenterLayout = BI.inherit(BI.Layout, {
                     top: o.vgap + o.tgap,
                     bottom: o.vgap + o.bgap,
                     width: "auto"
-                }).appendTo(list[i].el.element);
-                self.addWidget(w);
+                });
+                list[i].el.addItem(w);
             }
         });
         BI.createWidget({
             type: "bi.grid",
-            element: this.element,
+            element: this,
             columns: list.length,
             rows: 1,
             items: list
@@ -68,6 +67,7 @@ BI.HorizontalCenterLayout = BI.inherit(BI.Layout, {
 
     populate: function (items) {
         BI.HorizontalCenterLayout.superclass.populate.apply(this, arguments);
+        this._mount();
     }
 });
 $.shortcut('bi.horizontal_center', BI.HorizontalCenterLayout);

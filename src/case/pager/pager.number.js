@@ -85,7 +85,7 @@ BI.NumberPager = BI.inherit(BI.Widget, {
 
         BI.createWidget({
             type: "bi.center_adapt",
-            element: this.element,
+            element: this,
             columnSize: [20, "", 20, 36],
             items: [{type: "bi.label", text: "第"}, this.label, {type: "bi.label", text: "页"}, this.pager]
         })

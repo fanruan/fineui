@@ -59,7 +59,7 @@ BI.Label = BI.inherit(BI.Single, {
                         type: "bi.adaptive",
                         height: o.height,
                         scrollable: true,
-                        element: this.element,
+                        element: this,
                         items: [
                             {
                                 el: (this.text = BI.createWidget(json)),
@@ -77,7 +77,7 @@ BI.Label = BI.inherit(BI.Single, {
                 BI.createWidget({
                     type: "bi.center_adapt",
                     scrollable: true,
-                    element: this.element,
+                    element: this,
                     items: [
                         {
                             el: (this.text = BI.createWidget(json))
@@ -97,7 +97,7 @@ BI.Label = BI.inherit(BI.Single, {
                     rgap: o.rgap,
                     tgap: o.tgap,
                     bgap: o.bgap,
-                    element: this.element,
+                    element: this,
                     items: [this.text]
                 });
                 return;
@@ -109,7 +109,7 @@ BI.Label = BI.inherit(BI.Single, {
                 BI.createWidget({
                     type: "bi.absolute",
                     scrollable: true,
-                    element: this.element,
+                    element: this,
                     items: [{
                         el: (this.text = BI.createWidget(json)),
                         left: o.hgap + o.lgap,
@@ -124,7 +124,7 @@ BI.Label = BI.inherit(BI.Single, {
             BI.createWidget({
                 type: "bi.center_adapt",
                 scrollable: true,
-                element: this.element,
+                element: this,
                 items: [{
                     el: (this.text = BI.createWidget(json))
                 }]
@@ -136,7 +136,7 @@ BI.Label = BI.inherit(BI.Single, {
             BI.createWidget({
                 type: "bi.center_adapt",
                 scrollable: true,
-                element: this.element,
+                element: this,
                 items: [
                     {
                         el: (this.text = BI.createWidget(json))
@@ -156,7 +156,7 @@ BI.Label = BI.inherit(BI.Single, {
                 tgap: o.tgap,
                 bgap: o.bgap,
                 scrollable: true,
-                element: this.element,
+                element: this,
                 items: [this.text]
             });
             return;
@@ -170,7 +170,7 @@ BI.Label = BI.inherit(BI.Single, {
                     type: "bi.adaptive",
                     height: o.height,
                     scrollable: true,
-                    element: this.element,
+                    element: this,
                     items: [{
                         el: (this.text = BI.createWidget(json)),
                         left: o.hgap + o.lgap,
@@ -193,7 +193,7 @@ BI.Label = BI.inherit(BI.Single, {
                 "line-height": o.height + "px"
             });
             this.text = BI.createWidget(BI.extend(json, {
-                element: this.element
+                element: this
             }));
             BI.createWidget({
                 type: "bi.layout",
@@ -214,13 +214,13 @@ BI.Label = BI.inherit(BI.Single, {
             this.text = BI.createWidget(json);
             BI.createWidget({
                 type: "bi.center_adapt",
-                element: this.element,
+                element: this,
                 items: [this.text]
             });
             return;
         }
         this.text = BI.createWidget(BI.extend(json, {
-            element: this.element
+            element: this
         }));
         BI.createWidget({
             type: "bi.layout",
@@ -239,7 +239,7 @@ BI.Label = BI.inherit(BI.Single, {
                         type: "bi.adaptive",
                         height: o.height,
                         scrollable: true,
-                        element: this.element,
+                        element: this,
                         items: [
                             {
                                 el: (this.text = BI.createWidget(json)),
@@ -263,7 +263,7 @@ BI.Label = BI.inherit(BI.Single, {
                     rgap: o.rgap,
                     tgap: o.tgap,
                     bgap: o.bgap,
-                    element: this.element,
+                    element: this,
                     items: [
                         {
                             el: (this.text = BI.createWidget(json))
@@ -283,7 +283,7 @@ BI.Label = BI.inherit(BI.Single, {
                     rgap: o.rgap,
                     tgap: o.tgap,
                     bgap: o.bgap,
-                    element: this.element,
+                    element: this,
                     items: [this.text]
                 });
                 return;
@@ -295,7 +295,7 @@ BI.Label = BI.inherit(BI.Single, {
                 BI.createWidget({
                     type: "bi.absolute",
                     scrollable: true,
-                    element: this.element,
+                    element: this,
                     items: [{
                         el: (this.text = BI.createWidget(json)),
                         left: o.hgap + o.lgap,
@@ -316,7 +316,7 @@ BI.Label = BI.inherit(BI.Single, {
                 rgap: o.rgap,
                 tgap: o.tgap,
                 bgap: o.bgap,
-                element: this.element,
+                element: this,
                 items: [{
                     el: (this.text = BI.createWidget(json))
                 }]
@@ -334,7 +334,7 @@ BI.Label = BI.inherit(BI.Single, {
                 rgap: o.rgap,
                 tgap: o.tgap,
                 bgap: o.bgap,
-                element: this.element,
+                element: this,
                 items: [
                     {
                         el: (this.text = BI.createWidget(json))
@@ -354,7 +354,7 @@ BI.Label = BI.inherit(BI.Single, {
                 rgap: o.rgap,
                 tgap: o.tgap,
                 bgap: o.bgap,
-                element: this.element,
+                element: this,
                 items: [this.text]
             });
             return;
@@ -368,7 +368,7 @@ BI.Label = BI.inherit(BI.Single, {
                     type: "bi.adaptive",
                     height: o.height,
                     scrollable: true,
-                    element: this.element,
+                    element: this,
                     items: [{
                         el: (this.text = BI.createWidget(json)),
                         left: o.hgap + o.lgap,
@@ -391,7 +391,7 @@ BI.Label = BI.inherit(BI.Single, {
                 "line-height": o.height + "px"
             });
             this.text = BI.createWidget(BI.extend(json, {
-                element: this.element
+                element: this
             }));
             BI.createWidget({
                 type: "bi.layout",
@@ -412,13 +412,13 @@ BI.Label = BI.inherit(BI.Single, {
             this.text = BI.createWidget(json);
             BI.createWidget({
                 type: "bi.vertical_adapt",
-                element: this.element,
+                element: this,
                 items: [this.text]
             });
             return;
         }
         this.text = BI.createWidget(BI.extend(json, {
-            element: this.element
+            element: this
         }));
         BI.createWidget({
             type: "bi.layout",

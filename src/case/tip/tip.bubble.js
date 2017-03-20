@@ -24,7 +24,7 @@ BI.Bubble = BI.inherit(BI.Tip, {
         this.element.bind({"click": fn, "mousedown": fn, "mouseup": fn, "mouseover": fn, "mouseenter": fn, "mouseleave": fn, "mousemove": fn});
         BI.createWidget({
             type: "bi.left",
-            element: this.element,
+            element: this,
             items: [this["_" + this.options.direction]()]
         })
     },

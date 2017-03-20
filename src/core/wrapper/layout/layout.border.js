@@ -5,14 +5,14 @@
  * @extends BI.Layout
  */
 BI.BorderLayout = BI.inherit(BI.Layout, {
-    _defaultConfig: function () {
-        return BI.extend(BI.BorderLayout.superclass._defaultConfig.apply(this, arguments), {
+    props: function () {
+        return BI.extend(BI.BorderLayout.superclass.props.apply(this, arguments), {
             baseCls: "bi-border-layout",
             items: {}
         });
     },
-    _init: function () {
-        BI.BorderLayout.superclass._init.apply(this, arguments);
+    created: function () {
+        BI.BorderLayout.superclass.created.apply(this, arguments);
         this.populate(this.options.items);
     },
 
@@ -126,7 +126,7 @@ BI.BorderLayout = BI.inherit(BI.Layout, {
 
     populate: function (items) {
         BI.BorderLayout.superclass.populate.apply(this, arguments);
-        this.render();
+        this._mount();
     }
 });
 $.shortcut('bi.border', BI.BorderLayout);

@@ -6,8 +6,8 @@
  * @extends BI.Layout
  */
 BI.FlexVerticalCenter = BI.inherit(BI.Layout, {
-    _defaultConfig: function () {
-        return BI.extend(BI.FlexVerticalCenter.superclass._defaultConfig.apply(this, arguments), {
+    props: function () {
+        return BI.extend(BI.FlexVerticalCenter.superclass.props.apply(this, arguments), {
             baseCls: "bi-flex-wrapper-vertical-center clearfix",
             columnSize: [],
             hgap: 0,
@@ -18,17 +18,17 @@ BI.FlexVerticalCenter = BI.inherit(BI.Layout, {
             bgap: 0
         });
     },
-    _init: function () {
-        BI.FlexVerticalCenter.superclass._init.apply(this, arguments);
+    created: function () {
+        BI.FlexVerticalCenter.superclass.created.apply(this, arguments);
         var o = this.options;
-        this.wrapper = $("<div>").addClass("flex-wrapper-vertical-center-wrapper").appendTo(this.element);
+        this.$wrapper = $("<div>").addClass("flex-wrapper-vertical-center-wrapper");
         this.populate(this.options.items);
     },
 
     _addElement: function (i, item) {
         var o = this.options;
         var w = BI.FlexVerticalCenter.superclass._addElement.apply(this, arguments);
-        w.element.css({"position": "relative"}).appendTo(this.wrapper);
+        w.element.css({"position": "relative"});
         if (o.hgap + o.lgap + (item.lgap || 0) > 0) {
             w.element.css({
                 "margin-left": o.hgap + o.lgap + (item.lgap || 0) + "px"
@@ -52,10 +52,26 @@ BI.FlexVerticalCenter = BI.inherit(BI.Layout, {
         return w;
     },
 
+    _mountChildren: function () {
+        var self = this;
+        var frag = document.createDocumentFragment();
+        var hasChild = false;
+        BI.each(this._children, function (i, widget) {
+            if (widget.element !== self.element) {
+                frag.appendChild(widget.element[0]);
+                hasChild = true;
+            }
+        });
+        if (hasChild === true) {
+            this.$wrapper.append(frag);
+            this.element.append(this.$wrapper);
+        }
+    },
+
     addItem: function (item) {
         var w = this._addElement(this.options.items.length, item);
         this.options.items.push(item);
-        w.element.appendTo(this.wrapper);
+        w.element.appendTo(this.$wrapper);
         return w;
     },
 
@@ -65,6 +81,7 @@ BI.FlexVerticalCenter = BI.inherit(BI.Layout, {
 
     populate: function (items) {
         BI.FlexVerticalCenter.superclass.populate.apply(this, arguments);
+        this._mount();
     }
 });
 $.shortcut('bi.flex_wrapper_vertical_center', BI.FlexVerticalCenter);

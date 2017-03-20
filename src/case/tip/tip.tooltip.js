@@ -31,7 +31,7 @@ BI.Tooltip = BI.inherit(BI.Tip, {
 
         this.text = BI.createWidget({
             type: "bi.label",
-            element: this.element,
+            element: this,
             textAlign: "left",
             whiteSpace: "normal",
             text: o.text,

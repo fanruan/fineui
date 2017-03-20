@@ -17,7 +17,7 @@ BI.Segment = BI.inherit(BI.Widget, {
         BI.Segment.superclass._init.apply(this, arguments);
         var self = this, o = this.options;
         this.buttonGroup = BI.createWidget({
-            element: this.element,
+            element: this,
             type: "bi.button_group",
             items: BI.createItems(o.items, {
                 type: "bi.segment_button",
