@@ -17,8 +17,8 @@ $.extend(BI.OB.prototype, {
         if (this.options.listeners != null) {
             $.each(this.options.listeners, function (i, lis) {
                 (lis.target ? lis.target : self)[lis.once ? 'once' : 'on']
-                (lis.eventName, lis.action.createDelegate(self))
-            })
+                (lis.eventName, _.bind(lis.action, self))
+            });
             delete this.options.listeners;
         }
     },
@@ -115,10 +115,3 @@ $.extend(BI.OB.prototype, {
         return true;
     }
 });
-BI.OB.capture = function (o, fn, scope) {
-    o.fireEvent = o.fireEvent.createInterceptor(fn, scope);
-}
-// alex:释放事件的捕捉
-BI.OB.releaseCapture = function (o) {
-    o.fireEvent = BI.OB.prototype.fireEvent;
-};
