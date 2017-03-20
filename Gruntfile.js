@@ -62,11 +62,11 @@ module.exports = function (grunt) {
 
             demoJs: {
                 src: ['demo/version.js', 'demo/**/*.js'],
-                dest: 'demo.js'
+                dest: 'demo/dist/demo.js'
             },
             demoCss: {
                 src: ['demo/css/**/*.css'],
-                dest: 'demo.css'
+                dest: 'demo/dist/demo.css'
             }
         },
 
