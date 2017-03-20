@@ -70,6 +70,22 @@ module.exports = function (grunt) {
             }
         },
 
+        less: {
+            main: {
+                expand: true,
+                cwd: 'demo/less',
+                src: ['**/*.less'],
+                dest: 'demo/css/',
+                ext: '.css'
+            },
+            dev: {
+                options: {
+                    compress: true,
+                    yuicompress: false
+                }
+            }
+        },
+
         uglify: {
             options: {
                 banner: '/*! <%= pkg.name %> <%= grunt.template.today("dd-mm-yyyy") %> */\n'
@@ -115,8 +131,8 @@ module.exports = function (grunt) {
         },
         watch: {
             scripts: {
-                files: ['src/**/*.js', 'demo/**/*.js'],
-                tasks: ['concat'],
+                files: ['src/**/*.js', 'demo/**/*.js', 'demo/**/*.less'],
+                tasks: ['less', 'concat'],
                 options: {
                     spanw: true,
                     interrupt: true
@@ -127,9 +143,10 @@ module.exports = function (grunt) {
 
     grunt.loadNpmTasks('grunt-contrib-uglify');
     grunt.loadNpmTasks('grunt-contrib-jshint');
+    grunt.loadNpmTasks('grunt-contrib-less');
     grunt.loadNpmTasks('grunt-contrib-watch');
     grunt.loadNpmTasks('grunt-contrib-concat');
     grunt.loadNpmTasks('grunt-contrib-cssmin');
 
-    grunt.registerTask('default', ['concat', 'watch']);
+    grunt.registerTask('default', ['less', 'concat', 'watch']);
 };

@@ -4,14 +4,26 @@ Demo.Main = BI.inherit(BI.Widget, {
     },
     render: function () {
         return {
-            type: "bi.button_group",
-            layouts: [{
-                type: "bi.vertical"
-            }],
-            items: [{
-                type: "bi.button",
-                text: 1
-            }]
+            type: "bi.border",
+            items: {
+                north: {
+                    height: 50,
+                    el: {
+                        type: "demo.north"
+                    }
+                },
+                west: {
+                    width: 230,
+                    el: {
+                        type: "demo.west"
+                    }
+                },
+                center: {
+                    el: {
+                        type: "demo.center",
+                    }
+                }
+            }
         }
     }
 });

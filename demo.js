@@ -11,21 +11,57 @@ Demo = {
         element: '#wrapper'
     });
     // ref.destroy();
-});Demo.Main = BI.inherit(BI.Widget, {
+});Demo.Center = BI.inherit(BI.Widget, {
+    props: {
+        baseCls: "demo-center"
+    },
+    render: function () {
+
+    }
+});
+$.shortcut("demo.center", Demo.Center);Demo.Main = BI.inherit(BI.Widget, {
     props: {
         baseCls: "demo-main"
     },
     render: function () {
         return {
-            type: "bi.button_group",
-            layouts: [{
-                type: "bi.vertical"
-            }],
-            items: [{
-                type: "bi.button",
-                text: 1
-            }]
+            type: "bi.border",
+            items: {
+                north: {
+                    height: 50,
+                    el: {
+                        type: "demo.north"
+                    }
+                },
+                west: {
+                    width: 230,
+                    el: {
+                        type: "demo.west"
+                    }
+                },
+                center: {
+                    el: {
+                        type: "demo.center",
+                    }
+                }
+            }
         }
     }
 });
-$.shortcut("demo.main", Demo.Main);
+$.shortcut("demo.main", Demo.Main);Demo.North = BI.inherit(BI.Widget, {
+    props: {
+        baseCls: "demo-north"
+    },
+    render: function () {
+
+    }
+});
+$.shortcut("demo.north", Demo.North);Demo.West = BI.inherit(BI.Widget, {
+    props: {
+        baseCls: "demo-west"
+    },
+    render: function () {
+
+    }
+});
+$.shortcut("demo.west", Demo.West);
