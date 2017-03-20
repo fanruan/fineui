@@ -7,7 +7,7 @@
  */
 BI.Widget = BI.inherit(BI.OB, {
     _defaultConfig: function () {
-        return BI.extend({
+        return BI.extend(BI.Widget.superclass._defaultConfig.apply(this), {
             tagName: "div",
             attributes: null,
             data: null,
@@ -17,8 +17,9 @@ BI.Widget = BI.inherit(BI.OB, {
             invisible: false,
             invalid: false,
             baseCls: "",
+            extraCls: "",
             cls: ""
-        }, BI.Widget.superclass._defaultConfig.call(this))
+        })
     },
 
     //生命周期函数
@@ -74,11 +75,8 @@ BI.Widget = BI.inherit(BI.OB, {
         } else {
             this.element = $(document.createElement(o.tagName));
         }
-        if (o.baseCls) {
-            this.element.addClass(o.baseCls);
-        }
-        if (o.cls) {
-            this.element.addClass(o.cls);
+        if (o.baseCls || o.extraCls || o.cls) {
+            this.element.addClass((o.baseCls || "") + " " + (o.extraCls || "") + " " + (o.cls || ""));
         }
         if (o.attributes) {
             this.element.attr(o.attributes);
