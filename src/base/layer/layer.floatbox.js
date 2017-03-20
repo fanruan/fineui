@@ -41,7 +41,7 @@ BI.FloatBox = BI.inherit(BI.Widget, {
         this._south = BI.createWidget();
         BI.createWidget({
             type: 'bi.border',
-            element: this.element,
+            element: this,
             items: {
                 'north': {
                     el: {

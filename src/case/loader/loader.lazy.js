@@ -15,7 +15,7 @@ BI.LazyLoader = BI.inherit(BI.Widget, {
         var all = o.items.length;
         this.loader = BI.createWidget({
             type: "bi.loader",
-            element: this.element,
+            element: this,
             //下面是button_group的属性
             el: o.el,
 

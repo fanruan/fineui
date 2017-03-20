@@ -4,8 +4,8 @@
  * @extends BI.Layout
  */
 BI.FloatCenterLayout = BI.inherit(BI.Layout, {
-    _defaultConfig: function () {
-        return BI.extend(BI.FloatCenterLayout.superclass._defaultConfig.apply(this, arguments), {
+    props: function () {
+        return BI.extend(BI.FloatCenterLayout.superclass.props.apply(this, arguments), {
             baseCls: "bi-float-center-layout",
             hgap: 0,
             vgap: 0,
@@ -15,8 +15,8 @@ BI.FloatCenterLayout = BI.inherit(BI.Layout, {
             bgap: 0
         });
     },
-    _init: function () {
-        BI.FloatCenterLayout.superclass._init.apply(this, arguments);
+    created: function () {
+        BI.FloatCenterLayout.superclass.created.apply(this, arguments);
         this.populate(this.options.items);
     },
 
@@ -31,10 +31,11 @@ BI.FloatCenterLayout = BI.inherit(BI.Layout, {
 
     stroke: function (items) {
         var self = this, o = this.options;
-        this.clear();
         var list = [], width = 100 / items.length;
         BI.each(items, function (i) {
-            var widget = BI.createWidget();
+            var widget = BI.createWidget({
+                type: "bi.default"
+            });
             widget.element.addClass("center-element " + (i === 0 ? "first-element " : "") + (i === items.length - 1 ? "last-element" : "")).css({
                 width: width + "%",
                 height: "100%"
@@ -54,19 +55,20 @@ BI.FloatCenterLayout = BI.inherit(BI.Layout, {
                     bottom: o.vgap + o.bgap,
                     width: "auto",
                     height: "auto"
-                }).appendTo(list[i].el.element);
-                self.addWidget(w);
+                });
+                list[i].el.addItem(w);
             }
         });
         BI.createWidget({
             type: "bi.left",
-            element: this.element,
+            element: this,
             items: list
         });
     },
 
     populate: function (items) {
         BI.FloatCenterLayout.superclass.populate.apply(this, arguments);
+        this._mount();
     }
 });
 $.shortcut('bi.float_center', BI.FloatCenterLayout);

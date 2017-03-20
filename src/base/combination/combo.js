@@ -4,9 +4,8 @@
  */
 BI.Combo = BI.inherit(BI.Widget, {
     _defaultConfig: function () {
-        var conf = BI.Combo.superclass._defaultConfig.apply(this, arguments);
-        return BI.extend(conf, {
-            baseCls: (conf.baseCls || "") + " bi-combo",
+        return BI.extend(BI.Combo.superclass._defaultConfig.apply(this, arguments), {
+            baseCls: "bi-combo",
             trigger: "click",
             toggle: true,
             direction: "bottom", //top||bottom||left||right||top,left||top,right||bottom,left||bottom,right
@@ -62,7 +61,7 @@ BI.Combo = BI.inherit(BI.Widget, {
         BI.createWidget({
             type: "bi.vertical",
             scrolly: false,
-            element: this.element,
+            element: this,
             items: [
                 {el: this.combo}
             ]
@@ -159,7 +158,7 @@ BI.Combo = BI.inherit(BI.Widget, {
             BI.createWidget({
                 type: "bi.vertical",
                 scrolly: false,
-                element: this.element,
+                element: this,
                 items: [
                     {el: this.popupView}
                 ]

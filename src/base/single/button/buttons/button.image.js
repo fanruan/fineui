@@ -29,13 +29,13 @@ BI.ImageButton = BI.inherit(BI.BasicButton, {
         if (BI.isNumber(o.iconWidth) || BI.isNumber(o.iconHeight)) {
             BI.createWidget({
                 type: "bi.center_adapt",
-                element: this.element,
+                element: this,
                 items: [this.image]
             })
         } else {
             BI.createWidget({
                 type: "bi.adaptive",
-                element: this.element,
+                element: this,
                 items: [this.image],
                 scrollable: false
             })

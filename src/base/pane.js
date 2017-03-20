@@ -32,7 +32,7 @@ BI.Pane = BI.inherit(BI.Widget, {
             });
             BI.createWidget({
                 type: "bi.vertical",
-                element: this.element,
+                element: this,
                 items: [this._tipText],
                 bgap: 25
             });
@@ -65,7 +65,7 @@ BI.Pane = BI.inherit(BI.Widget, {
             this._loading.element.css("zIndex", 1);
             BI.createWidget({
                 type: "bi.absolute",
-                element: this.element,
+                element: this,
                 items: [{
                     el: this._loading,
                     left: 0,

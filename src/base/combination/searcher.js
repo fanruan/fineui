@@ -53,7 +53,7 @@ BI.Searcher = BI.inherit(BI.Widget, {
 
         BI.createWidget({
             type: "bi.vertical",
-            element: this.element,
+            element: this,
             lgap: o.lgap,
             rgap: o.rgap,
             tgap: o.tgap,

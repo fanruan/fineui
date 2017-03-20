@@ -7,14 +7,14 @@
  * @cfg {String} options.defaultShowName 默认展示的子组件名
  */
 BI.CardLayout = BI.inherit(BI.Layout, {
-    _defaultConfig: function () {
-        return BI.extend(BI.CardLayout.superclass._defaultConfig.apply(this, arguments), {
+    props: function () {
+        return BI.extend(BI.CardLayout.superclass.props.apply(this, arguments), {
             baseCls: "bi-card-layout",
             items: []
         });
     },
-    _init: function () {
-        BI.CardLayout.superclass._init.apply(this, arguments);
+    created: function () {
+        BI.CardLayout.superclass.created.apply(this, arguments);
         this.populate(this.options.items);
     },
 
@@ -28,7 +28,6 @@ BI.CardLayout = BI.inherit(BI.Layout, {
 
     stroke: function (items) {
         var self = this;
-        this.clear();
         this.showIndex = void 0;
         BI.each(items, function (i, item) {
             if (!!item) {
@@ -39,14 +38,14 @@ BI.CardLayout = BI.inherit(BI.Layout, {
                     var w = self.getWidgetByName(self._getCardName(item.cardName));
                 }
                 w.element.css({"position": "absolute", "top": "0", "right": "0", "bottom": "0", "left": "0"});
-                w.invisible();
+                w.setVisible(false);
             }
         });
     },
 
     populate: function (items) {
         BI.CardLayout.superclass.populate.apply(this, arguments);
-        this.render();
+        this._mount();
         this.options.defaultShowName && this.showCardByName(this.options.defaultShowName);
     },
 
@@ -59,7 +58,7 @@ BI.CardLayout = BI.inherit(BI.Layout, {
         if (!this.hasWidget(this._getCardName(cardName))) {
             throw new Error("cardName不存在，无法获取");
         }
-        return this.widgets[this._getCardName(cardName)];
+        return this._children[this._getCardName(cardName)];
     },
 
     deleteCardByName: function (cardName) {
@@ -71,7 +70,7 @@ BI.CardLayout = BI.inherit(BI.Layout, {
             return item.cardName == cardName;
         });
         this.options.items.splice(index, 1);
-        delete this.widgets[this._getCardName(cardName)];
+        delete this._children[this._getCardName(cardName)];
     },
 
     addCardByName: function (cardName, cardItem) {
@@ -96,7 +95,7 @@ BI.CardLayout = BI.inherit(BI.Layout, {
         }
         this.showIndex = this._getCardName(name);
         var flag = false;
-        BI.each(this.widgets, function (i, el) {
+        BI.each(this._children, function (i, el) {
             if (self._getCardName(name) != i) {
                 //动画效果只有在全部都隐藏的时候才有意义,且只要执行一次动画操作就够了
                 !flag && !exist && (BI.Action && action instanceof BI.Action) ? (action.actionBack(el), flag = true) : el.element.hide();
@@ -109,7 +108,7 @@ BI.CardLayout = BI.inherit(BI.Layout, {
     showLastCard: function () {
         var self = this;
         this.showIndex = this.lastShowIndex;
-        BI.each(this.widgets, function (i, el) {
+        BI.each(this._children, function (i, el) {
             if (self.showIndex != i) {
                 el.element.hide();
             } else {
@@ -148,14 +147,14 @@ BI.CardLayout = BI.inherit(BI.Layout, {
     },
 
     hideAllCard: function () {
-        BI.each(this.widgets, function (i, el) {
+        BI.each(this._children, function (i, el) {
             el.invisible();
         });
     },
 
     isAllCardHide: function () {
         var flag = true;
-        BI.each(this.widgets, function (i, el) {
+        BI.each(this._children, function (i, el) {
             if (el.isVisible()) {
                 flag = true;
                 return false;
@@ -163,10 +162,5 @@ BI.CardLayout = BI.inherit(BI.Layout, {
         });
         return flag;
     },
-
-    empty: function () {
-        BI.CardLayout.superclass.empty.apply(this, arguments);
-        this.showIndex = void 0;
-    }
 });
 $.shortcut('bi.card', BI.CardLayout);

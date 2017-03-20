@@ -41,7 +41,7 @@ BI.DirectionPager = BI.inherit(BI.Widget, {
         BI.createWidget({
             type: "bi.absolute",
             scrollable: false,
-            element: this.element,
+            element: this,
             items: [{
                 el: this.vpager,
                 top: 0,

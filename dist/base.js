@@ -20537,7 +20537,7 @@ BI.Pane = BI.inherit(BI.Widget, {
             });
             BI.createWidget({
                 type: "bi.vertical",
-                element: this.element,
+                element: this,
                 items: [this._tipText],
                 bgap: 25
             });
@@ -20570,7 +20570,7 @@ BI.Pane = BI.inherit(BI.Widget, {
             this._loading.element.css("zIndex", 1);
             BI.createWidget({
                 type: "bi.absolute",
-                element: this.element,
+                element: this,
                 items: [{
                     el: this._loading,
                     left: 0,
@@ -20932,7 +20932,7 @@ BI.BasicButton = BI.inherit(BI.Single, {
                 self.$mask.invisible();
                 BI.createWidget({
                     type: "bi.absolute",
-                    element: self.element,
+                    element: self,
                     items: [{
                         el: self.$mask,
                         left: 0,
@@ -21366,94 +21366,6 @@ BI.Canvas = BI.inherit(BI.Widget, {
     }
 });
 $.shortcut("bi.canvas", BI.Canvas);/**
- * 图表控件
- * @class BI.Chart
- * @extends BI.Widget
- */
-BI.Chart = BI.inherit(BI.Pane, {
-
-    _defaultConfig: function () {
-        return BI.extend(BI.Chart.superclass._defaultConfig.apply(this, arguments), {
-            baseCls: "bi-chart"
-        })
-    },
-
-    _init: function () {
-        BI.Chart.superclass._init.apply(this, arguments);
-        var self = this, o = this.options;
-
-        this.isInit = false;
-        this.isSetOptions = false;
-        this.wants2SetData = false;
-        var width = 0;
-        var height = 0;
-
-        this._resizer = BI.debounce(function () {
-            if (self.element.is(":visible") && self.vanCharts) {
-                self.vanCharts.resize();
-            }
-        }, 30);
-        BI.Resizers.add(this.getName(), function (e) {
-            if (BI.isWindow(e.target) && self.element.is(":visible")) {
-                var newW = self.element.width(), newH = self.element.height();
-                if (newW > 0 && newH > 0 && (width !== newW || height !== newH)) {
-                    self._resizer();
-                    width = newW;
-                    height = newH;
-                }
-            }
-        });
-    },
-
-    _setData: function () {
-        this.vanCharts && this.vanCharts.setData(this.config);
-    },
-
-    resize: function () {
-        if (this.element.is(":visible") && this.isSetOptions === true) {
-            this._resizer();
-        }
-    },
-
-    magnify: function () {
-        this.vanCharts && this.vanCharts.charts[0] && this.vanCharts.charts[0].refreshRestore();
-    },
-
-    populate: function (items, options) {
-        var self = this, o = this.options;
-        o.items = items;
-        this.config = options || {};
-        this.config.series = o.items;
-
-        var setOptions = function () {
-            self.vanCharts.setOptions(self.config);
-            self.isSetOptions = true;
-            //if (self.wants2SetData === true) {
-            //    self._setData();
-            //}
-        };
-        var init = function () {
-            if (self.element.is(":visible")) {
-                self.vanCharts = VanCharts.init(self.element[0]);
-                BI.nextTick(setOptions);
-                self.isInit = true;
-            }
-        };
-
-        if (this.isInit === false) {
-            BI.nextTick(init);
-        }
-
-        if (this.element.is(":visible") && this.isSetOptions === true) {
-            this._setData();
-            this.wants2SetData = null;
-        } else {
-            this.wants2SetData = true;
-        }
-    }
-});
-BI.Chart.EVENT_CHANGE = "EVENT_CHANGE";
-$.shortcut('bi.chart', BI.Chart);/**
  * Collection
  *
  * Created by GUY on 2016/1/15.
@@ -21503,7 +21415,7 @@ BI.Collection = BI.inherit(BI.Widget, {
         });
         BI.createWidget({
             type: "bi.vertical",
-            element: this.element,
+            element: this,
             scrollable: o.overflowX === true && o.overflowY === true,
             scrolly: o.overflowX === false && o.overflowY === true,
             scrollx: o.overflowX === true && o.overflowY === false,
@@ -21513,11 +21425,13 @@ BI.Collection = BI.inherit(BI.Widget, {
             this._calculateSizeAndPositionData();
             this._populate();
         }
+    },
+
+    mounted: function () {
+        var o = this.options;
         if (o.scrollLeft !== 0 || o.scrollTop !== 0) {
-            BI.nextTick(function () {
-                self.element.scrollTop(o.scrollTop);
-                self.element.scrollLeft(o.scrollLeft);
-            });
+            this.element.scrollTop(o.scrollTop);
+            this.element.scrollLeft(o.scrollLeft);
         }
     },
 
@@ -21754,9 +21668,8 @@ $.shortcut('bi.collection_view', BI.Collection);/**
  */
 BI.Combo = BI.inherit(BI.Widget, {
     _defaultConfig: function () {
-        var conf = BI.Combo.superclass._defaultConfig.apply(this, arguments);
-        return BI.extend(conf, {
-            baseCls: (conf.baseCls || "") + " bi-combo",
+        return BI.extend(BI.Combo.superclass._defaultConfig.apply(this, arguments), {
+            baseCls: "bi-combo",
             trigger: "click",
             toggle: true,
             direction: "bottom", //top||bottom||left||right||top,left||top,right||bottom,left||bottom,right
@@ -21812,7 +21725,7 @@ BI.Combo = BI.inherit(BI.Widget, {
         BI.createWidget({
             type: "bi.vertical",
             scrolly: false,
-            element: this.element,
+            element: this,
             items: [
                 {el: this.combo}
             ]
@@ -21909,7 +21822,7 @@ BI.Combo = BI.inherit(BI.Widget, {
             BI.createWidget({
                 type: "bi.vertical",
                 scrolly: false,
-                element: this.element,
+                element: this,
                 items: [
                     {el: this.popupView}
                 ]
@@ -22187,7 +22100,7 @@ BI.Expander = BI.inherit(BI.Widget, {
         BI.createWidget({
             type: "bi.vertical",
             scrolly: false,
-            element: this.element,
+            element: this,
             items: [
                 {el: this.expander}
             ]
@@ -22287,7 +22200,7 @@ BI.Expander = BI.inherit(BI.Widget, {
             BI.createWidget({
                 type: "bi.vertical",
                 scrolly: false,
-                element: this.element,
+                element: this,
                 items: [
                     {el: this.popupView}
                 ]
@@ -22579,7 +22492,7 @@ BI.ButtonGroup = BI.inherit(BI.Widget, {
         this.buttons = this._btnsCreator.apply(this, arguments);
         var items = this._packageItems(items, this._packageBtns(this.buttons));
 
-        this.layouts = BI.createWidget(BI.extend({element: this.element}, this._packageLayout(items)));
+        this.layouts = BI.createWidget(BI.extend({element: this}, this._packageLayout(items)));
     },
 
     setEnable: function (b) {
@@ -22779,7 +22692,7 @@ BI.ComboGroup = BI.inherit(BI.Widget, {
         })
         this.combo = BI.createWidget({
             type: "bi.combo",
-            element: this.element,
+            element: this,
             height: o.height,
             trigger: o.trigger,
             direction: o.direction,
@@ -22918,7 +22831,7 @@ BI.Loader = BI.inherit(BI.Widget, {
         }
 
         BI.createWidget(BI.extend({
-            element: this.element
+            element: this
         }, BI.LogicFactory.createLogic(BI.LogicFactory.createLogicTypeByDirection(o.direction), BI.extend({
             scrolly: true
         }, o.logic, {
@@ -23114,7 +23027,7 @@ BI.Navigation = BI.inherit(BI.Widget, {
             type: "bi.card"
         });
         BI.createWidget(BI.extend({
-            element: this.element
+            element: this
         }, BI.LogicFactory.createLogic(BI.LogicFactory.createLogicTypeByDirection(o.direction), BI.extend({}, o.logic, {
             items: BI.LogicFactory.createLogicItemsByDirection(o.direction, this.tab, this.layout)
         }))));
@@ -23270,7 +23183,7 @@ BI.Searcher = BI.inherit(BI.Widget, {
 
         BI.createWidget({
             type: "bi.vertical",
-            element: this.element,
+            element: this,
             lgap: o.lgap,
             rgap: o.rgap,
             tgap: o.tgap,
@@ -23570,7 +23483,7 @@ BI.Switcher = BI.inherit(BI.Widget, {
         BI.createWidget({
             type: "bi.vertical",
             scrolly: false,
-            element: this.element,
+            element: this,
             items: [
                 {el: this.switcher}
             ]
@@ -23658,7 +23571,7 @@ BI.Switcher = BI.inherit(BI.Widget, {
                 BI.createWidget({
                     type: "bi.vertical",
                     scrolly: false,
-                    element: this.element,
+                    element: this,
                     items: [
                         {el: this.popupView}
                     ]
@@ -23823,7 +23736,7 @@ BI.Tab = BI.inherit(BI.Widget, {
         });
 
         BI.createWidget(BI.extend({
-            element: this.element
+            element: this
         }, BI.LogicFactory.createLogic(BI.LogicFactory.createLogicTypeByDirection(o.direction), BI.extend({}, o.logic, {
             items: BI.LogicFactory.createLogicItemsByDirection(o.direction, this.tab, this.layout)
         }))));
@@ -24199,7 +24112,7 @@ BI.ButtonMap = BI.inherit(BI.ButtonTree, {
         this.empty();
 
         var packages = this._packageItems(items, this._packageBtns(array));
-        BI.createWidget(BI.extend({element: this.element}, this._packageLayout(packages)));
+        BI.createWidget(BI.extend({element: this}, this._packageLayout(packages)));
     },
 
     getIndexByValue: function (value) {
@@ -24229,7 +24142,7 @@ BI.EL = BI.inherit(BI.Widget, {
         this.ele = BI.createWidget(o.el);
         BI.createWidget(o.layout, {
             type: "bi.adaptive",
-            element: this.element,
+            element: this,
             items: [this.ele]
         });
         this.ele.on(BI.Controller.EVENT_CHANGE, function () {
@@ -24342,7 +24255,7 @@ $.shortcut("bi.farbtastic", BI.Farbtastic);;
                 });
                 BI.createWidget({
                     type: "bi.absolute",
-                    element: self.element,
+                    element: self,
                     items: [{
                         el: self.watermark,
                         left: 0,
@@ -24734,7 +24647,7 @@ BI.Grid = BI.inherit(BI.Widget, {
         });
         BI.createWidget({
             type: "bi.vertical",
-            element: this.element,
+            element: this,
             scrollable: o.overflowX === true && o.overflowY === true,
             scrolly: o.overflowX === false && o.overflowY === true,
             scrollx: o.overflowX === true && o.overflowY === false,
@@ -24743,11 +24656,13 @@ BI.Grid = BI.inherit(BI.Widget, {
         if (o.items.length > 0) {
             this._populate();
         }
+    },
+
+    mounted: function () {
+        var o = this.options;
         if (o.scrollLeft !== 0 || o.scrollTop !== 0) {
-            BI.nextTick(function () {
-                self.element.scrollTop(o.scrollTop);
-                self.element.scrollLeft(o.scrollLeft);
-            });
+            this.element.scrollTop(o.scrollTop);
+            this.element.scrollLeft(o.scrollLeft);
         }
     },
 
@@ -25021,7 +24936,7 @@ BI.FloatBox = BI.inherit(BI.Widget, {
         this._south = BI.createWidget();
         BI.createWidget({
             type: 'bi.border',
-            element: this.element,
+            element: this,
             items: {
                 'north': {
                     el: {
@@ -25196,7 +25111,7 @@ BI.PopupView = BI.inherit(BI.Widget, {
         });
 
         BI.createWidget(BI.extend({
-            element: this.element
+            element: this
         }, BI.LogicFactory.createLogic(BI.LogicFactory.createLogicTypeByDirection(o.direction), BI.extend({}, o.logic, {
             scrolly: false,
             lgap: o.lgap,
@@ -25325,7 +25240,7 @@ BI.ScrollView = BI.inherit(BI.Widget, {
         })
         BI.createWidget({
             type: "bi.vertical",
-            element: this.element,
+            element: this,
             scrolly: false,
             items: [this.scroll]
         })
@@ -25339,7 +25254,7 @@ BI.ScrollView = BI.inherit(BI.Widget, {
 
         BI.createWidget({
             type: "bi.absolute",
-            element: this.element,
+            element: this,
             items: [{
                 el: this.dropdown,
                 left: 0,
@@ -25506,7 +25421,7 @@ BI.SearcherView = BI.inherit(BI.Pane, {
 
         BI.createWidget({
             type: "bi.vertical",
-            element: this.element,
+            element: this,
             items: [this.matcher, this.spliter, this.searcher]
         });
     },
@@ -25733,7 +25648,7 @@ BI.Pager = BI.inherit(BI.Widget, {
 
         this.button_group = BI.createWidget({
             type: "bi.button_group",
-            element: this.element,
+            element: this,
             items: BI.createItems(view, {
                 cls: "page-item",
                 height: 23,
@@ -25857,7 +25772,7 @@ BI.A = BI.inherit(BI.Text, {
         BI.A.superclass._init.apply(this, arguments);
         if (o.el) {
             BI.createWidget(o.el, {
-                element: this.element
+                element: this
             });
         }
     }
@@ -25910,7 +25825,7 @@ BI.LoadingBar = BI.inherit(BI.Single, {
         })
         this.cardLayout = BI.createWidget({
             type: "bi.card",
-            element: this.element,
+            element: this,
             items: [{
                 el: loaded,
                 cardName: "loaded"
@@ -25976,12 +25891,12 @@ BI.IconButton = BI.inherit(BI.BasicButton, {
             this.element.css("lineHeight", o.height + "px");
             BI.createWidget({
                 type: "bi.default",
-                element: this.element,
+                element: this,
                 items: [this.icon]
             })
         } else {
             BI.createWidget({
-                element: this.element,
+                element: this,
                 type: 'bi.center_adapt',
                 items: [this.icon]
             });
@@ -26027,13 +25942,13 @@ BI.ImageButton = BI.inherit(BI.BasicButton, {
         if (BI.isNumber(o.iconWidth) || BI.isNumber(o.iconHeight)) {
             BI.createWidget({
                 type: "bi.center_adapt",
-                element: this.element,
+                element: this,
                 items: [this.image]
             })
         } else {
             BI.createWidget({
                 type: "bi.adaptive",
-                element: this.element,
+                element: this,
                 items: [this.image],
                 scrollable: false
             })
@@ -26140,7 +26055,7 @@ $.shortcut("bi.image_button", BI.ImageButton);(function ($) {
                 BI.createWidget({
                     type: "bi.horizontal_auto",
                     cls: "button-" + o.level + " " + o.iconClass,
-                    element: this.element,
+                    element: this,
                     hgap: o.hgap,
                     vgap: o.vgap,
                     tgap: o.tgap,
@@ -26167,7 +26082,7 @@ $.shortcut("bi.image_button", BI.ImageButton);(function ($) {
                     bgap: o.bgap,
                     lgap: o.lgap,
                     rgap: o.rgap,
-                    element: this.element,
+                    element: this,
                     text: o.text,
                     value: o.value
                 });
@@ -26253,7 +26168,7 @@ BI.TextButton = BI.inherit(BI.BasicButton, {
         var o = this.options;
         this.text = BI.createWidget({
             type: "bi.label",
-            element: this.element,
+            element: this,
             textAlign: o.textAlign,
             whiteSpace: o.whiteSpace,
             textWidth: o.textWidth,
@@ -26369,7 +26284,7 @@ BI.BlankIconTextIconItem = BI.inherit(BI.BasicButton, {
         })
         BI.createWidget({
             type: "bi.absolute",
-            element: this.element,
+            element: this,
             items: [{
                 el: {
                     type: "bi.center_adapt",
@@ -26390,7 +26305,7 @@ BI.BlankIconTextIconItem = BI.inherit(BI.BasicButton, {
         })
 
         BI.createWidget(BI.extend({
-            element: this.element
+            element: this
         }, BI.LogicFactory.createLogic("horizontal", BI.extend(o.logic, {
             items: BI.LogicFactory.createLogicItemsByDirection("left", {
                 type: "bi.layout",
@@ -26506,7 +26421,7 @@ BI.BlankIconTextItem = BI.inherit(BI.BasicButton, {
         });
 
         BI.createWidget(BI.extend({
-            element: this.element
+            element: this
         }, BI.LogicFactory.createLogic("horizontal", BI.extend(o.logic, {
             items: BI.LogicFactory.createLogicItemsByDirection("left", blank, this.icon, this.text)
         }))));
@@ -26618,7 +26533,7 @@ BI.IconTextIconItem = BI.inherit(BI.BasicButton, {
         })
         BI.createWidget({
             type: "bi.absolute",
-            element: this.element,
+            element: this,
             items: [{
                 el: {
                     type: "bi.center_adapt",
@@ -26639,7 +26554,7 @@ BI.IconTextIconItem = BI.inherit(BI.BasicButton, {
         })
 
         BI.createWidget(BI.extend({
-            element: this.element
+            element: this
         }, BI.LogicFactory.createLogic("horizontal", BI.extend(o.logic, {
             items: BI.LogicFactory.createLogicItemsByDirection("left", icon1, this.text, blank)
         }))));
@@ -26744,7 +26659,7 @@ BI.IconTextItem = BI.inherit(BI.BasicButton, {
         });
 
         BI.createWidget(BI.extend({
-            element: this.element
+            element: this
         }, BI.LogicFactory.createLogic(BI.LogicFactory.createLogicTypeByDirection(o.direction), BI.extend(o.logic, {
             items: BI.LogicFactory.createLogicItemsByDirection(o.direction, this.icon, this.text)
         }))));
@@ -26850,7 +26765,7 @@ BI.TextIconItem = BI.inherit(BI.BasicButton, {
         });
 
         BI.createWidget(BI.extend({
-            element: this.element
+            element: this
         }, BI.LogicFactory.createLogic("horizontal", BI.extend(o.logic, {
             items: BI.LogicFactory.createLogicItemsByDirection("left", this.text, this.icon)
         }))));
@@ -26925,7 +26840,7 @@ BI.TextItem = BI.inherit(BI.BasicButton, {
         var o = this.options;
         this.text = BI.createWidget({
             type: "bi.label",
-            element: this.element,
+            element: this,
             textAlign: o.textAlign,
             whiteSpace: o.whiteSpace,
             textHeight: o.whiteSpace == "nowrap" ? o.height : o.textHeight,
@@ -27045,7 +26960,7 @@ BI.IconTextIconNode = BI.inherit(BI.NodeButton, {
         })
         BI.createWidget({
             type: "bi.absolute",
-            element: this.element,
+            element: this,
             items: [{
                 el: {
                     type: "bi.center_adapt",
@@ -27066,7 +26981,7 @@ BI.IconTextIconNode = BI.inherit(BI.NodeButton, {
         })
 
         BI.createWidget(BI.extend({
-            element: this.element
+            element: this
         }, BI.LogicFactory.createLogic("horizontal", BI.extend(o.logic, {
             items: BI.LogicFactory.createLogicItemsByDirection("left", icon1, this.text, blank)
         }))));
@@ -27162,7 +27077,7 @@ BI.IconTextNode = BI.inherit(BI.NodeButton, {
         })
 
         BI.createWidget(BI.extend({
-            element: this.element
+            element: this
         }, BI.LogicFactory.createLogic("horizontal", BI.extend(o.logic, {
             items: BI.LogicFactory.createLogicItemsByDirection("left", this.icon, this.text)
         }))));
@@ -27257,7 +27172,7 @@ BI.TextIconNode = BI.inherit(BI.NodeButton, {
         });
 
         BI.createWidget(BI.extend({
-            element: this.element
+            element: this
         }, BI.LogicFactory.createLogic("horizontal", BI.extend(o.logic, {
             items: BI.LogicFactory.createLogicItemsByDirection("left", this.text, this.icon)
         }))));
@@ -27323,7 +27238,7 @@ BI.TextNode = BI.inherit(BI.NodeButton, {
         var o = this.options;
         this.text = BI.createWidget({
             type: "bi.label",
-            element: this.element,
+            element: this,
             textAlign: o.textAlign,
             whiteSpace: o.whiteSpace,
             textHeight: o.whiteSpace == "nowrap" ? o.height : o.textHeight,
@@ -27436,7 +27351,7 @@ BI.CodeEditor = BI.inherit(BI.Single, {
         });
         BI.createWidget({
             type: "bi.absolute",
-            element: this.element,
+            element: this,
             items: [{
                 el: watermark,
                 top: 0,
@@ -27613,7 +27528,7 @@ BI.Editor = BI.inherit(BI.Single, {
 
         BI.createWidget({
             type: "bi.absolute",
-            element: this.element,
+            element: this,
             items: items
         });
         this.editor.on(BI.Controller.EVENT_CHANGE, function () {
@@ -27899,7 +27814,7 @@ BI.MultifileEditor = BI.inherit(BI.Single, {
 
         BI.createWidget({
             type: "bi.absolute",
-            element: this.element,
+            element: this,
             items: [{
                 el: {
                     type: "bi.adaptive",
@@ -27966,7 +27881,7 @@ BI.TextAreaEditor = BI.inherit(BI.Single, {
         this.content.element.css({"resize": "none"});
         BI.createWidget({
             type: "bi.absolute",
-            element: this.element,
+            element: this,
             items: [{
                 el: {
                     type: "bi.adaptive",
@@ -29129,7 +29044,7 @@ BI.Label = BI.inherit(BI.Single, {
                         type: "bi.adaptive",
                         height: o.height,
                         scrollable: true,
-                        element: this.element,
+                        element: this,
                         items: [
                             {
                                 el: (this.text = BI.createWidget(json)),
@@ -29147,7 +29062,7 @@ BI.Label = BI.inherit(BI.Single, {
                 BI.createWidget({
                     type: "bi.center_adapt",
                     scrollable: true,
-                    element: this.element,
+                    element: this,
                     items: [
                         {
                             el: (this.text = BI.createWidget(json))
@@ -29167,7 +29082,7 @@ BI.Label = BI.inherit(BI.Single, {
                     rgap: o.rgap,
                     tgap: o.tgap,
                     bgap: o.bgap,
-                    element: this.element,
+                    element: this,
                     items: [this.text]
                 });
                 return;
@@ -29179,7 +29094,7 @@ BI.Label = BI.inherit(BI.Single, {
                 BI.createWidget({
                     type: "bi.absolute",
                     scrollable: true,
-                    element: this.element,
+                    element: this,
                     items: [{
                         el: (this.text = BI.createWidget(json)),
                         left: o.hgap + o.lgap,
@@ -29194,7 +29109,7 @@ BI.Label = BI.inherit(BI.Single, {
             BI.createWidget({
                 type: "bi.center_adapt",
                 scrollable: true,
-                element: this.element,
+                element: this,
                 items: [{
                     el: (this.text = BI.createWidget(json))
                 }]
@@ -29206,7 +29121,7 @@ BI.Label = BI.inherit(BI.Single, {
             BI.createWidget({
                 type: "bi.center_adapt",
                 scrollable: true,
-                element: this.element,
+                element: this,
                 items: [
                     {
                         el: (this.text = BI.createWidget(json))
@@ -29226,7 +29141,7 @@ BI.Label = BI.inherit(BI.Single, {
                 tgap: o.tgap,
                 bgap: o.bgap,
                 scrollable: true,
-                element: this.element,
+                element: this,
                 items: [this.text]
             });
             return;
@@ -29240,7 +29155,7 @@ BI.Label = BI.inherit(BI.Single, {
                     type: "bi.adaptive",
                     height: o.height,
                     scrollable: true,
-                    element: this.element,
+                    element: this,
                     items: [{
                         el: (this.text = BI.createWidget(json)),
                         left: o.hgap + o.lgap,
@@ -29263,7 +29178,7 @@ BI.Label = BI.inherit(BI.Single, {
                 "line-height": o.height + "px"
             });
             this.text = BI.createWidget(BI.extend(json, {
-                element: this.element
+                element: this
             }));
             BI.createWidget({
                 type: "bi.layout",
@@ -29284,13 +29199,13 @@ BI.Label = BI.inherit(BI.Single, {
             this.text = BI.createWidget(json);
             BI.createWidget({
                 type: "bi.center_adapt",
-                element: this.element,
+                element: this,
                 items: [this.text]
             });
             return;
         }
         this.text = BI.createWidget(BI.extend(json, {
-            element: this.element
+            element: this
         }));
         BI.createWidget({
             type: "bi.layout",
@@ -29309,7 +29224,7 @@ BI.Label = BI.inherit(BI.Single, {
                         type: "bi.adaptive",
                         height: o.height,
                         scrollable: true,
-                        element: this.element,
+                        element: this,
                         items: [
                             {
                                 el: (this.text = BI.createWidget(json)),
@@ -29333,7 +29248,7 @@ BI.Label = BI.inherit(BI.Single, {
                     rgap: o.rgap,
                     tgap: o.tgap,
                     bgap: o.bgap,
-                    element: this.element,
+                    element: this,
                     items: [
                         {
                             el: (this.text = BI.createWidget(json))
@@ -29353,7 +29268,7 @@ BI.Label = BI.inherit(BI.Single, {
                     rgap: o.rgap,
                     tgap: o.tgap,
                     bgap: o.bgap,
-                    element: this.element,
+                    element: this,
                     items: [this.text]
                 });
                 return;
@@ -29365,7 +29280,7 @@ BI.Label = BI.inherit(BI.Single, {
                 BI.createWidget({
                     type: "bi.absolute",
                     scrollable: true,
-                    element: this.element,
+                    element: this,
                     items: [{
                         el: (this.text = BI.createWidget(json)),
                         left: o.hgap + o.lgap,
@@ -29386,7 +29301,7 @@ BI.Label = BI.inherit(BI.Single, {
                 rgap: o.rgap,
                 tgap: o.tgap,
                 bgap: o.bgap,
-                element: this.element,
+                element: this,
                 items: [{
                     el: (this.text = BI.createWidget(json))
                 }]
@@ -29404,7 +29319,7 @@ BI.Label = BI.inherit(BI.Single, {
                 rgap: o.rgap,
                 tgap: o.tgap,
                 bgap: o.bgap,
-                element: this.element,
+                element: this,
                 items: [
                     {
                         el: (this.text = BI.createWidget(json))
@@ -29424,7 +29339,7 @@ BI.Label = BI.inherit(BI.Single, {
                 rgap: o.rgap,
                 tgap: o.tgap,
                 bgap: o.bgap,
-                element: this.element,
+                element: this,
                 items: [this.text]
             });
             return;
@@ -29438,7 +29353,7 @@ BI.Label = BI.inherit(BI.Single, {
                     type: "bi.adaptive",
                     height: o.height,
                     scrollable: true,
-                    element: this.element,
+                    element: this,
                     items: [{
                         el: (this.text = BI.createWidget(json)),
                         left: o.hgap + o.lgap,
@@ -29461,7 +29376,7 @@ BI.Label = BI.inherit(BI.Single, {
                 "line-height": o.height + "px"
             });
             this.text = BI.createWidget(BI.extend(json, {
-                element: this.element
+                element: this
             }));
             BI.createWidget({
                 type: "bi.layout",
@@ -29482,13 +29397,13 @@ BI.Label = BI.inherit(BI.Single, {
             this.text = BI.createWidget(json);
             BI.createWidget({
                 type: "bi.vertical_adapt",
-                element: this.element,
+                element: this,
                 items: [this.text]
             });
             return;
         }
         this.text = BI.createWidget(BI.extend(json, {
-            element: this.element
+            element: this
         }));
         BI.createWidget({
             type: "bi.layout",
@@ -29743,7 +29658,7 @@ BI.TableCell = BI.inherit(BI.Widget, {
         BI.TableCell.superclass._init.apply(this, arguments);
         BI.createWidget({
             type: "bi.label",
-            element: this.element,
+            element: this,
             whiteSpace: "nowrap",
             textAlign: this.options.textAlign,
             height: this.options.height,
@@ -29786,7 +29701,7 @@ BI.CollectionTableCell = BI.inherit(BI.Widget, {
         }));
         BI.createWidget({
             type: "bi.absolute",
-            element: this.element,
+            element: this,
             items: [{
                 el: this.cell,
                 left: 0,
@@ -29913,7 +29828,7 @@ BI.CollectionTable = BI.inherit(BI.Widget, {
         });
         this.contextLayout = BI.createWidget({
             type: "bi.absolute",
-            element: this.element,
+            element: this,
             items: [{
                 el: this.topLeft,
                 top: 0,
@@ -29958,7 +29873,7 @@ BI.CollectionTable = BI.inherit(BI.Widget, {
         });
         this.scrollBarLayout = BI.createWidget({
             type: "bi.absolute",
-            element: this.element,
+            element: this,
             items: [{
                 el: this.topScrollbar,
                 right: 0,
@@ -30529,7 +30444,7 @@ BI.GridTableCell = BI.inherit(BI.Widget, {
         }));
         BI.createWidget({
             type: "bi.absolute",
-            element: this.element,
+            element: this,
             items: [{
                 el: this.cell,
                 left: 0,
@@ -30658,7 +30573,7 @@ BI.GridTable = BI.inherit(BI.Widget, {
         });
         this.contextLayout = BI.createWidget({
             type: "bi.absolute",
-            element: this.element,
+            element: this,
             items: [{
                 el: this.topLeft,
                 top: 0,
@@ -30703,7 +30618,7 @@ BI.GridTable = BI.inherit(BI.Widget, {
         });
         this.scrollBarLayout = BI.createWidget({
             type: "bi.absolute",
-            element: this.element,
+            element: this,
             items: [{
                 el: this.topScrollbar,
                 right: 0,
@@ -31229,7 +31144,7 @@ BI.GridTableScrollbar = BI.inherit(BI.Widget, {
         });
         this.contextLayout = BI.createWidget({
             type: "bi.absolute",
-            element: this.element,
+            element: this,
             items: [{
                 el: this.face,
                 left: 0,
@@ -31551,7 +31466,7 @@ BI.GridTableHorizontalScrollbar = BI.inherit(BI.Widget, {
         BI.createWidget({
             type: "bi.absolute",
             cls: "horizontal-scrollbar",
-            element: this.element,
+            element: this,
             width: o.size,
             height: BI.GridTableScrollbar.SIZE,
             items: [{
@@ -31613,7 +31528,7 @@ BI.TableHeaderCell = BI.inherit(BI.Widget, {
         BI.TableHeaderCell.superclass._init.apply(this, arguments);
         BI.createWidget({
             type: "bi.label",
-            element: this.element,
+            element: this,
             textAlign: "center",
             height: this.options.height,
             text: this.options.text,
@@ -32067,7 +31982,7 @@ BI.Table = BI.inherit(BI.Widget, {
             regionColumnSize = isRight ? [0, 'fill'] : ['fill', 0];
         }
         this.partitions = BI.createWidget(BI.extend({
-            element: this.element
+            element: this
         }, BI.LogicFactory.createLogic("table", BI.extend({}, o.logic, {
             rows: 2,
             columns: 2,
@@ -32675,7 +32590,7 @@ BI.Table = BI.inherit(BI.Widget, {
         BI.createWidget({
             type: "bi.adaptive",
             cls: "bottom-right",
-            element: this.element,
+            element: this,
             scrollable: false,
             items: [this.scrollBottomRight]
         });
@@ -33818,7 +33733,7 @@ BI.ResizableTableCell = BI.inherit(BI.Widget, {
         });
         BI.createWidget({
             type: "bi.absolute",
-            element: this.element,
+            element: this,
             items: [{
                 el: this.cell,
                 left: 0,
@@ -33889,7 +33804,7 @@ BI.ResizableTable = BI.inherit(BI.Widget, {
         this.regionResizerHandler = this._createResizerHandler();
         this.table = BI.createWidget(o.el, {
             type: "bi.grid_table",
-            element: this.element,
+            element: this,
             width: o.width,
             height: o.height,
             headerRowSize: o.headerRowSize,
@@ -33911,7 +33826,7 @@ BI.ResizableTable = BI.inherit(BI.Widget, {
         });
         BI.createWidget({
             type: "bi.absolute",
-            element: this.element,
+            element: this,
             items: [{
                 el: this.regionResizerHandler,
                 left: 0,
@@ -34224,7 +34139,7 @@ BI.TreeView = BI.inherit(BI.Pane, {
             type: "bi.vertical",
             scrollable: true,
             scrolly: false,
-            element: this.element,
+            element: this,
             items: [this.container, this.tip]
         });
 
@@ -35176,7 +35091,7 @@ BI.CustomTree = BI.inherit(BI.Widget, {
     initTree: function (nodes) {
         var self = this, o = this.options;
         this.tree = BI.createWidget(o.el, {
-            element: this.element,
+            element: this,
             items: this._formatItems(nodes),
             itemsCreator: function (op, callback) {
                 o.itemsCreator.apply(this, [op, function (items) {

@@ -58,6 +58,11 @@ module.exports = function (grunt) {
             baseCss: {
                 src: ['src/css/base/**/*.css'],
                 dest: 'dist/base.css'
+            },
+
+            demoJs: {
+                src: ['demo/**/*.js'],
+                dest: 'demo.js'
             }
         },
 
@@ -106,7 +111,7 @@ module.exports = function (grunt) {
         },
         watch: {
             scripts: {
-                files: ['src/**/*.js'],
+                files: ['src/**/*.js', 'demo/**/*.js'],
                 tasks: ['concat'],
                 options: {
                     spanw: true,

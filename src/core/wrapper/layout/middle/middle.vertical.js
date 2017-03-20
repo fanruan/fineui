@@ -4,8 +4,8 @@
  * @extends BI.Layout
  */
 BI.VerticalCenterLayout = BI.inherit(BI.Layout, {
-    _defaultConfig: function () {
-        return BI.extend(BI.VerticalCenterLayout.superclass._defaultConfig.apply(this, arguments), {
+    props: function () {
+        return BI.extend(BI.VerticalCenterLayout.superclass.props.apply(this, arguments), {
             baseCls: "bi-vertical-center-layout",
             hgap: 0,
             vgap: 0,
@@ -15,8 +15,8 @@ BI.VerticalCenterLayout = BI.inherit(BI.Layout, {
             bgap: 0
         });
     },
-    _init: function () {
-        BI.VerticalCenterLayout.superclass._init.apply(this, arguments);
+    created: function () {
+        BI.VerticalCenterLayout.superclass.created.apply(this, arguments);
         this.populate(this.options.items);
     },
 
@@ -31,14 +31,13 @@ BI.VerticalCenterLayout = BI.inherit(BI.Layout, {
 
     stroke: function (items) {
         var self = this, o = this.options;
-        this.clear();
         var list = [];
         BI.each(items, function (i) {
             list.push({
                 column: 0,
                 row: i,
                 el: BI.createWidget({
-                    type: "bi.layout",
+                    type: "bi.default",
                     cls: "center-element " + (i === 0 ? "first-element " : "") + (i === items.length - 1 ? "last-element" : "")
                 })
             });
@@ -53,13 +52,13 @@ BI.VerticalCenterLayout = BI.inherit(BI.Layout, {
                     top: o.vgap + o.tgap,
                     bottom: o.vgap + o.bgap,
                     height: "auto"
-                }).appendTo(list[i].el.element);
-                self.addWidget(w);
+                });
+                list[i].el.addItem(w);
             }
         });
         BI.createWidget({
             type: "bi.grid",
-            element: this.element,
+            element: this,
             columns: 1,
             rows: list.length,
             items: list
@@ -68,6 +67,7 @@ BI.VerticalCenterLayout = BI.inherit(BI.Layout, {
 
     populate: function (items) {
         BI.VerticalCenterLayout.superclass.populate.apply(this, arguments);
+        this._mount();
     }
 });
 $.shortcut('bi.vertical_center', BI.VerticalCenterLayout);

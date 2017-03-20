@@ -9,24 +9,20 @@
  * @cfg {Boolean} [options.scrolly=false] 子组件超出容器边界之后是否会出现纵向滚动条
  */
 BI.Layout = BI.inherit(BI.Widget, {
-    _defaultConfig: function () {
-        return BI.extend(BI.Layout.superclass._defaultConfig.apply(this, arguments), {
+    props: function () {
+        return {
             scrollable: null, //true, false, null
             scrollx: false, //true, false
             scrolly: false, //true, false
             items: []
-        });
+        };
     },
-    _init: function () {
-        BI.Layout.superclass._init.apply(this, arguments);
+
+    created: function () {
         this._init4Margin();
         this._init4Scroll();
     },
 
-    /**
-     * 初始化布局与外层容器的边间距
-     * @private
-     */
     _init4Margin: function () {
         if (this.options.top) {
             this.element.css('top', this.options.top);
@@ -42,10 +38,6 @@ BI.Layout = BI.inherit(BI.Widget, {
         }
     },
 
-    /**
-     * 初始化布局的滚动形态
-     * @private
-     */
     _init4Scroll: function () {
         switch (this.options.scrollable) {
             case true:
@@ -94,12 +86,8 @@ BI.Layout = BI.inherit(BI.Widget, {
 
     populate: function (items) {
         var self = this;
-        this.reset(items);
-        this.stroke(items);
-    },
-
-    reset: function (items) {
         this.options.items = items || [];
+        this.stroke(items);
     },
 
     resize: function () {
@@ -112,6 +100,7 @@ BI.Layout = BI.inherit(BI.Widget, {
      */
     addItem: function (item) {
         var w = this._addElement(this.options.items.length, item);
+        w._mount();
         this.options.items.push(item);
         w.element.appendTo(this.element);
         return w;
@@ -124,40 +113,26 @@ BI.Layout = BI.inherit(BI.Widget, {
         })
     },
 
-    getValue: function (name) {
-        if (name) {
-            return this.getWidgetByName(name).getValue();
-        }
+    getValue: function () {
         var value = [];
-        BI.each(this.widgets, function (i, wi) {
-            var v = wi.getValue(name);
+        BI.each(this._children, function (i, wi) {
+            var v = wi.getValue();
             v = BI.isArray(v) ? v : [v];
             value = value.concat(v);
         });
         return value;
     },
 
-    setValue: function (v, name) {
-        if (name) {
-            return this.getWidgetByName(name).setValue(v);
-        }
-        BI.each(this.widgets, function (i, wi) {
+    setValue: function (v) {
+        BI.each(this._children, function (i, wi) {
             wi.setValue(v);
         })
     },
 
-    setText: function (v, name) {
-        if (name) {
-            return this.getWidgetByName(name).setText(v);
-        }
-        BI.each(this.widgets, function (i, wi) {
+    setText: function (v) {
+        BI.each(this._children, function (i, wi) {
             wi.setText(v);
         })
-    },
-
-    empty: function () {
-        BI.Layout.superclass.empty.apply(this, arguments);
-        this.reset();
     }
 });
 $.shortcut('bi.layout', BI.Layout);

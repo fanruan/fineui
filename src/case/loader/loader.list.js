@@ -46,7 +46,7 @@ BI.ListLoader = BI.inherit(BI.Widget, {
 
         this.button_group = BI.createWidget(o.el, {
             type: "bi.button_group",
-            element: this.element,
+            element: this,
             chooseType: 0,
             items: o.items,
             behaviors: {},
@@ -74,7 +74,7 @@ BI.ListLoader = BI.inherit(BI.Widget, {
 
         BI.createWidget({
             type: "bi.vertical",
-            element: this.element,
+            element: this,
             items: [this.next]
         });
 

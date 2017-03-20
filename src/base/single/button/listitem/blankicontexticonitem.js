@@ -59,7 +59,7 @@ BI.BlankIconTextIconItem = BI.inherit(BI.BasicButton, {
         })
         BI.createWidget({
             type: "bi.absolute",
-            element: this.element,
+            element: this,
             items: [{
                 el: {
                     type: "bi.center_adapt",
@@ -80,7 +80,7 @@ BI.BlankIconTextIconItem = BI.inherit(BI.BasicButton, {
         })
 
         BI.createWidget(BI.extend({
-            element: this.element
+            element: this
         }, BI.LogicFactory.createLogic("horizontal", BI.extend(o.logic, {
             items: BI.LogicFactory.createLogicItemsByDirection("left", {
                 type: "bi.layout",

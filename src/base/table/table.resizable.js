@@ -41,7 +41,7 @@ BI.ResizableTable = BI.inherit(BI.Widget, {
         this.regionResizerHandler = this._createResizerHandler();
         this.table = BI.createWidget(o.el, {
             type: "bi.grid_table",
-            element: this.element,
+            element: this,
             width: o.width,
             height: o.height,
             headerRowSize: o.headerRowSize,
@@ -63,7 +63,7 @@ BI.ResizableTable = BI.inherit(BI.Widget, {
         });
         BI.createWidget({
             type: "bi.absolute",
-            element: this.element,
+            element: this,
             items: [{
                 el: this.regionResizerHandler,
                 left: 0,

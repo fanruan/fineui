@@ -35,7 +35,7 @@ BI.Toast = BI.inherit(BI.Tip, {
 
         this.text = BI.createWidget({
             type: "bi.label",
-            element: this.element,
+            element: this,
             text: o.text,
             height: 30,
             hgap: this._const.hgap

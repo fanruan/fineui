@@ -4,8 +4,8 @@
  * @extends BI.Layout
  */
 BI.AbsoluteVerticalLayout = BI.inherit(BI.Layout, {
-    _defaultConfig: function () {
-        return BI.extend(BI.AbsoluteVerticalLayout.superclass._defaultConfig.apply(this, arguments), {
+    props: function () {
+        return BI.extend(BI.AbsoluteVerticalLayout.superclass.props.apply(this, arguments), {
             baseCls: "bi-absolute-vertical-layout",
             hgap: 0,
             lgap: 0,
@@ -16,8 +16,8 @@ BI.AbsoluteVerticalLayout = BI.inherit(BI.Layout, {
         });
     },
 
-    _init: function () {
-        BI.AbsoluteVerticalLayout.superclass._init.apply(this, arguments);
+    created: function () {
+        BI.AbsoluteVerticalLayout.superclass.created.apply(this, arguments);
         this.populate(this.options.items);
     },
 
@@ -47,7 +47,7 @@ BI.AbsoluteVerticalLayout = BI.inherit(BI.Layout, {
 
     populate: function (items) {
         BI.AbsoluteVerticalLayout.superclass.populate.apply(this, arguments);
-        this.render();
+        this._mount();
     }
 });
 $.shortcut('bi.absolute_vertical_adapt', BI.AbsoluteVerticalLayout);

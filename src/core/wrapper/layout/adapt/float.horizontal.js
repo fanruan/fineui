@@ -2,8 +2,8 @@
  * 浮动的水平居中布局
  */
 BI.FloatHorizontalLayout = BI.inherit(BI.Layout, {
-    _defaultConfig: function () {
-        return BI.extend(BI.FloatHorizontalLayout.superclass._defaultConfig.apply(this, arguments), {
+    props: function () {
+        return BI.extend(BI.FloatHorizontalLayout.superclass.props.apply(this, arguments), {
             baseCls: "bi-float-horizontal-adapt-layout",
             items: [],
             hgap: 0,
@@ -14,8 +14,8 @@ BI.FloatHorizontalLayout = BI.inherit(BI.Layout, {
             rgap: 0
         });
     },
-    _init: function () {
-        BI.FloatHorizontalLayout.superclass._init.apply(this, arguments);
+    created: function () {
+        BI.FloatHorizontalLayout.superclass.created.apply(this, arguments);
         this.populate(this.options.items);
     },
 
@@ -23,11 +23,23 @@ BI.FloatHorizontalLayout = BI.inherit(BI.Layout, {
         // console.log("float_horizontal_adapt布局不需要resize");
     },
 
+    mounted: function () {
+        var width = this.left.element.width(),
+            height = this.left.element.height();
+        this.left.element.width(width).height(height).css("float", "none");
+        BI.createWidget({
+            type: "bi.horizontal_auto",
+            element: this,
+            items: [this.left]
+        });
+        this.removeWidget(this.container.getName());
+    },
+
     _addElement: function (i, item) {
         var self = this, o = this.options;
-        var left = BI.createWidget({
+        this.left = BI.createWidget({
             type: "bi.vertical",
-            items: [item],
+            items: items,
             hgap: o.hgap,
             vgap: o.vgap,
             tgap: o.tgap,
@@ -36,29 +48,18 @@ BI.FloatHorizontalLayout = BI.inherit(BI.Layout, {
             rgap: o.rgap
         });
 
-        BI.createWidget({
+        this.container = BI.createWidget({
             type: "bi.left",
-            element: this.element,
-            items: [left]
+            element: this,
+            items: [this.left]
         });
 
-        BI.nextTick(function () {
-            var width = left.element.width(),
-                height = left.element.height();
-            BI.DOM.hang([left]);
-            left.element.width(width).height(height).css("float", "none");
-            BI.createWidget({
-                type: "bi.horizontal_auto",
-                element: self.element,
-                items: [left]
-            })
-        });
-        this.addWidget(left);
         return left;
     },
 
     populate: function (items) {
         BI.HorizontalAutoLayout.superclass.populate.apply(this, arguments);
+        this._mount();
     }
 });
 $.shortcut('bi.horizontal_float', BI.FloatHorizontalLayout);

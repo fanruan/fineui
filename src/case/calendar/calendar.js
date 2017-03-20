@@ -120,7 +120,7 @@ BI.Calendar = BI.inherit(BI.Widget, {
             self.fireEvent(BI.Controller.EVENT_CHANGE, arguments);
         })
         BI.createWidget(BI.extend({
-            element: this.element
+            element: this
 
         }, BI.LogicFactory.createLogic("vertical", BI.extend({}, o.logic, {
             items: BI.LogicFactory.createLogicItemsByDirection("top", title, this.days)

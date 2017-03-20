@@ -67,7 +67,7 @@ BI.ListPane = BI.inherit(BI.Pane, {
         this.check();
 
         BI.createWidget(BI.extend({
-            element: this.element
+            element: this
         }, BI.LogicFactory.createLogic(BI.LogicFactory.createLogicTypeByDirection(BI.Direction.Top), BI.extend({
             scrolly: true,
             lgap: o.lgap,

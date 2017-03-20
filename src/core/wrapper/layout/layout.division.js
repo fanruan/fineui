@@ -5,8 +5,8 @@
  * @extends BI.Layout
  */
 BI.DivisionLayout = BI.inherit(BI.Layout, {
-    _defaultConfig: function () {
-        return BI.extend(BI.DivisionLayout.superclass._defaultConfig.apply(this, arguments), {
+    props: function () {
+        return BI.extend(BI.DivisionLayout.superclass.props.apply(this, arguments), {
             baseCls: "bi-division-layout",
             columns: null,
             rows: null,
@@ -36,8 +36,8 @@ BI.DivisionLayout = BI.inherit(BI.Layout, {
             //]
         });
     },
-    _init: function () {
-        BI.DivisionLayout.superclass._init.apply(this, arguments);
+    created: function () {
+        BI.DivisionLayout.superclass.created.apply(this, arguments);
         this.populate(this.options.items);
     },
 
@@ -151,7 +151,7 @@ BI.DivisionLayout = BI.inherit(BI.Layout, {
 
     populate: function (items) {
         BI.DivisionLayout.superclass.populate.apply(this, arguments);
-        this.render();
+        this._mount();
     }
 });
 $.shortcut('bi.division', BI.DivisionLayout);

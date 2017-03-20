@@ -62,7 +62,7 @@ BI.Tabler = BI.inherit(BI.Widget, {
         })
         BI.createWidget({
             type: "bi.vtape",
-            element: this.element,
+            element: this,
             items: [{
                 el: this.container
             }, {

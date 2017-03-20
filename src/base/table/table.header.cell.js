@@ -18,7 +18,7 @@ BI.TableHeaderCell = BI.inherit(BI.Widget, {
         BI.TableHeaderCell.superclass._init.apply(this, arguments);
         BI.createWidget({
             type: "bi.label",
-            element: this.element,
+            element: this,
             textAlign: "center",
             height: this.options.height,
             text: this.options.text,

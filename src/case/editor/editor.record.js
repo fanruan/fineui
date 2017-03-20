@@ -116,7 +116,7 @@ BI.RecordEditor = BI.inherit(BI.Single, {
         });
         BI.createWidget({
             type: "bi.inline",
-            element: this.element,
+            element: this,
             items: [this.textContainer, this.editor]
         });
         BI.Resizers.add(this.getName(), BI.bind(this._adjustInputWidth, this));

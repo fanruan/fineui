@@ -5,8 +5,8 @@
  * @extends BI.Layout
  */
 BI.TableLayout = BI.inherit(BI.Layout, {
-    _defaultConfig: function () {
-        return BI.extend(BI.TableLayout.superclass._defaultConfig.apply(this, arguments), {
+    props: function () {
+        return BI.extend(BI.TableLayout.superclass.props.apply(this, arguments), {
             baseCls: "bi-table-layout",
             scrolly: true,
             columnSize: [200, 200, 'fill'],
@@ -26,8 +26,8 @@ BI.TableLayout = BI.inherit(BI.Layout, {
             ]]
         });
     },
-    _init: function () {
-        BI.TableLayout.superclass._init.apply(this, arguments);
+    created: function () {
+        BI.TableLayout.superclass.created.apply(this, arguments);
         this.rows = 0;
         this.populate(this.options.items);
     },
@@ -140,7 +140,7 @@ BI.TableLayout = BI.inherit(BI.Layout, {
 
     populate: function (items) {
         BI.TableLayout.superclass.populate.apply(this, arguments);
-        this.render();
+        this._mount();
     }
 });
 $.shortcut('bi.table', BI.TableLayout);

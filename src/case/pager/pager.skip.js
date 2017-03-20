@@ -90,7 +90,7 @@ BI.SkipPager = BI.inherit(BI.Widget, {
 
         BI.createWidget({
             type: "bi.center_adapt",
-            element: this.element,
+            element: this,
             items: [{type: "bi.label", text: "第"}, this.editor, {type: "bi.label", text: "页"}, this.pager]
         })
     },

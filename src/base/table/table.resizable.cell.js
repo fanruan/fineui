@@ -65,7 +65,7 @@ BI.ResizableTableCell = BI.inherit(BI.Widget, {
         });
         BI.createWidget({
             type: "bi.absolute",
-            element: this.element,
+            element: this,
             items: [{
                 el: this.cell,
                 left: 0,

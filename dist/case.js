@@ -35,7 +35,7 @@ BI.IconChangeButton = BI.inherit(BI.Single, {
         var self = this, o = this.options;
         this.button = BI.createWidget({
             type: "bi.icon_button",
-            element: this.element,
+            element: this,
             cls: o.iconClass,
             height: o.height,
             iconWidth: o.iconWidth,
@@ -187,7 +187,7 @@ BI.MultiSelectItem = BI.inherit(BI.BasicButton, {
         });
 
         BI.createWidget(BI.extend({
-            element: this.element
+            element: this
         }, BI.LogicFactory.createLogic("horizontal", BI.extend(o.logic, {
             items: BI.LogicFactory.createLogicItemsByDirection("left", {
                 type: "bi.center_adapt",
@@ -236,7 +236,7 @@ BI.SingleSelectIconTextItem = BI.inherit(BI.Single, {
         var self = this, o = this.options;
         this.text = BI.createWidget({
             type: "bi.icon_text_item",
-            element: this.element,
+            element: this,
             cls: o.iconClass,
             once: o.once,
             selected: o.selected,
@@ -292,7 +292,7 @@ BI.SingleSelectItem = BI.inherit(BI.BasicButton, {
         var self = this, o = this.options;
         this.text = BI.createWidget({
             type: "bi.label",
-            element: this.element,
+            element: this,
             textAlign: "left",
             whiteSpace: "nowrap",
             textHeight: o.height,
@@ -365,7 +365,7 @@ BI.SingleSelectRadioItem = BI.inherit(BI.BasicButton, {
         });
 
         BI.createWidget(BI.extend({
-            element: this.element
+            element: this
         }, BI.LogicFactory.createLogic("horizontal", BI.extend(o.logic, {
             items: BI.LogicFactory.createLogicItemsByDirection("left", {
                 type: "bi.center_adapt",
@@ -446,7 +446,7 @@ BI.ArrowNode = BI.inherit(BI.NodeButton, {
             el: this.checkbox
         }, this.text);
         BI.createWidget(BI.extend({
-            element: this.element
+            element: this
         }, BI.LogicFactory.createLogic(type, BI.extend(o.logic, {
             items: items
         }))));
@@ -527,7 +527,7 @@ BI.FirstPlusGroupNode = BI.inherit(BI.NodeButton, {
             el: this.checkbox
         }, this.text);
         BI.createWidget(BI.extend({
-            element: this.element
+            element: this
         }, BI.LogicFactory.createLogic(type, BI.extend(o.logic, {
             items: items
         }))));
@@ -628,7 +628,7 @@ BI.IconArrowNode = BI.inherit(BI.NodeButton, {
             el: icon
         }, this.text);
         BI.createWidget(BI.extend({
-            element: this.element
+            element: this
         }, BI.LogicFactory.createLogic(type, BI.extend(o.logic, {
             items: items
         }))));
@@ -708,7 +708,7 @@ BI.LastPlusGroupNode = BI.inherit(BI.NodeButton, {
             el: this.checkbox
         }, this.text);
         BI.createWidget(BI.extend({
-            element: this.element
+            element: this
         }, BI.LogicFactory.createLogic(type, BI.extend(o.logic, {
             items: items
         }))));
@@ -788,7 +788,7 @@ BI.MidPlusGroupNode = BI.inherit(BI.NodeButton, {
             el: this.checkbox
         }, this.text);
         BI.createWidget(BI.extend({
-            element: this.element
+            element: this
         }, BI.LogicFactory.createLogic(type, BI.extend(o.logic, {
             items: items
         }))));
@@ -866,7 +866,7 @@ $.shortcut("bi.mid_plus_group_node", BI.MidPlusGroupNode);BI.MultiLayerIconArrow
         items.push(this.node);
         BI.createWidget({
             type: "bi.td",
-            element: this.element,
+            element: this,
             columnSize: BI.makeArray(o.layer, 13),
             items: [items]
         })
@@ -953,7 +953,7 @@ BI.PlusGroupNode = BI.inherit(BI.NodeButton, {
             el: this.checkbox
         }, this.text);
         BI.createWidget(BI.extend({
-            element: this.element
+            element: this
         }, BI.LogicFactory.createLogic(type, BI.extend(o.logic, {
             items: items
         }))));
@@ -1032,7 +1032,7 @@ BI.TriangleGroupNode = BI.inherit(BI.NodeButton, {
             el: this.checkbox
         }, this.text);
         BI.createWidget(BI.extend({
-            element: this.element
+            element: this
         }, BI.LogicFactory.createLogic(type, BI.extend(o.logic, {
             items: items
         }))));
@@ -1124,7 +1124,7 @@ BI.FirstTreeLeafItem = BI.inherit(BI.BasicButton, {
             el: this.text
         });
         BI.createWidget(BI.extend({
-            element: this.element
+            element: this
         }, BI.LogicFactory.createLogic(type, BI.extend(o.logic, {
             items: items
         }))));
@@ -1213,7 +1213,7 @@ $.shortcut("bi.first_tree_leaf_item", BI.FirstTreeLeafItem);BI.IconTreeLeafItem 
             el: this.text
         });
         BI.createWidget(BI.extend({
-            element: this.element
+            element: this
         }, BI.LogicFactory.createLogic(type, BI.extend(o.logic, {
             items: items
         }))));
@@ -1314,7 +1314,7 @@ BI.LastTreeLeafItem = BI.inherit(BI.BasicButton, {
             el: this.text
         });
         BI.createWidget(BI.extend({
-            element: this.element
+            element: this
         }, BI.LogicFactory.createLogic(type, BI.extend(o.logic, {
             items: items
         }))));
@@ -1417,7 +1417,7 @@ BI.MidTreeLeafItem = BI.inherit(BI.BasicButton, {
             el: this.text
         });
         BI.createWidget(BI.extend({
-            element: this.element
+            element: this
         }, BI.LogicFactory.createLogic(type, BI.extend(o.logic, {
             items: items
         }))));
@@ -1511,7 +1511,7 @@ BI.MultiLayerIconTreeLeafItem = BI.inherit(BI.BasicButton, {
         items.push(this.item);
         BI.createWidget({
             type: "bi.td",
-            element: this.element,
+            element: this,
             columnSize: BI.makeArray(o.layer, 13),
             items: [items]
         });
@@ -1592,7 +1592,7 @@ BI.TreeTextLeafItem = BI.inherit(BI.BasicButton, {
         });
         BI.createWidget({
             type: "bi.htape",
-            element: this.element,
+            element: this,
             items: [{
                 el: this.text
             }]
@@ -1746,7 +1746,7 @@ BI.Calendar = BI.inherit(BI.Widget, {
             self.fireEvent(BI.Controller.EVENT_CHANGE, arguments);
         })
         BI.createWidget(BI.extend({
-            element: this.element
+            element: this
 
         }, BI.LogicFactory.createLogic("vertical", BI.extend({}, o.logic, {
             items: BI.LogicFactory.createLogicItemsByDirection("top", title, this.days)
@@ -1885,7 +1885,7 @@ BI.YearCalendar = BI.inherit(BI.Widget, {
             self.fireEvent(BI.Controller.EVENT_CHANGE, arguments);
         });
         BI.createWidget(BI.extend({
-            element: this.element
+            element: this
 
         }, BI.LogicFactory.createLogic("vertical", BI.extend({}, o.logic, {
             items: BI.LogicFactory.createLogicItemsByDirection("top", this.years)
@@ -1955,7 +1955,7 @@ BI.ComplexCanvas = BI.inherit(BI.Widget, {
         var o = this.options;
         this.canvas = BI.createWidget({
             type: "bi.canvas",
-            element: this.element,
+            element: this,
             width: o.width,
             height: o.height
         });
@@ -2051,7 +2051,7 @@ BI.CombineChart = BI.inherit(BI.Widget, {
         //图可配置属性
         this.CombineChart = BI.createWidget({
             type: "bi.chart",
-            element: this.element
+            element: this
         });
         this.CombineChart.on(BI.Chart.EVENT_CHANGE, function (obj) {
             self.fireEvent(BI.CombineChart.EVENT_CHANGE, obj);
@@ -2797,7 +2797,7 @@ BI.ColorPicker = BI.inherit(BI.Widget, {
         var self = this, o = this.options;
         this.colors = BI.createWidget({
             type: "bi.button_group",
-            element: this.element,
+            element: this,
             items: BI.createItems(o.items || this._items, {
                 type: "bi.color_picker_button",
                 once: false
@@ -2887,7 +2887,7 @@ BI.ColorPickerEditor = BI.inherit(BI.Widget, {
 
         BI.createWidget({
             type: "bi.htape",
-            element: this.element,
+            element: this,
             items: [{
                 el: this.colorShow,
                 width: 'fill'
@@ -3052,7 +3052,7 @@ BI.RecordEditor = BI.inherit(BI.Single, {
         });
         BI.createWidget({
             type: "bi.inline",
-            element: this.element,
+            element: this,
             items: [this.textContainer, this.editor]
         });
         BI.Resizers.add(this.getName(), BI.bind(this._adjustInputWidth, this));
@@ -3217,7 +3217,7 @@ BI.ShelterEditor = BI.inherit(BI.Single, {
         });
         BI.createWidget({
             type: "bi.absolute",
-            element: this.element,
+            element: this,
             items: [{
                 el: this.text,
                 left: 0,
@@ -3288,7 +3288,7 @@ BI.ShelterEditor = BI.inherit(BI.Single, {
         BI.createWidget({
             type: "bi.vertical",
             scrolly: false,
-            element: this.element,
+            element: this,
             items: [this.editor]
         });
         this._showHint();
@@ -3471,7 +3471,7 @@ BI.SignEditor = BI.inherit(BI.Single, {
         });
         BI.createWidget({
             type: "bi.absolute",
-            element: this.element,
+            element: this,
             items: [{
                 el: this.text,
                 left: 0,
@@ -3535,7 +3535,7 @@ BI.SignEditor = BI.inherit(BI.Single, {
         BI.createWidget({
             type: "bi.vertical",
             scrolly: false,
-            element: this.element,
+            element: this,
             items: [this.editor]
         });
         this._showHint();
@@ -3724,7 +3724,7 @@ BI.StateEditor = BI.inherit(BI.Single, {
         });
         BI.createWidget({
             type: "bi.absolute",
-            element: this.element,
+            element: this,
             items: [{
                 el: this.text,
                 left: 0,
@@ -3786,7 +3786,7 @@ BI.StateEditor = BI.inherit(BI.Single, {
         BI.createWidget({
             type: "bi.vertical",
             scrolly: false,
-            element: this.element,
+            element: this,
             items: [this.editor]
         });
         this._showHint();
@@ -3979,7 +3979,7 @@ BI.SimpleStateEditor = BI.inherit(BI.Single, {
         });
         BI.createWidget({
             type: "bi.absolute",
-            element: this.element,
+            element: this,
             items: [{
                 el: this.text,
                 left: 0,
@@ -4041,7 +4041,7 @@ BI.SimpleStateEditor = BI.inherit(BI.Single, {
         BI.createWidget({
             type: "bi.vertical",
             scrolly: false,
-            element: this.element,
+            element: this,
             items: [this.editor]
         });
         this._showHint();
@@ -4192,7 +4192,7 @@ BI.HandStandBranchExpander = BI.inherit(BI.Widget, {
         this._initExpander();
         this._initBranchView();
         BI.createWidget(BI.extend({
-            element: this.element
+            element: this
         }, BI.LogicFactory.createLogic(BI.LogicFactory.createLogicTypeByDirection(o.direction), BI.extend({}, o.logic, {
             items: BI.LogicFactory.createLogicItemsByDirection(o.direction, {
                 type: "bi.center_adapt",
@@ -4250,7 +4250,7 @@ BI.BranchExpander = BI.inherit(BI.Widget, {
         this._initExpander();
         this._initBranchView();
         BI.createWidget(BI.extend({
-            element: this.element
+            element: this
         }, BI.LogicFactory.createLogic(BI.LogicFactory.createLogicTypeByDirection(o.direction), BI.extend({}, o.logic, {
             items: BI.LogicFactory.createLogicItemsByDirection(o.direction, this.expander, this.branchView)
         }))));
@@ -4585,7 +4585,7 @@ BI.ListPane = BI.inherit(BI.Pane, {
         this.check();
 
         BI.createWidget(BI.extend({
-            element: this.element
+            element: this
         }, BI.LogicFactory.createLogic(BI.LogicFactory.createLogicTypeByDirection(BI.Direction.Top), BI.extend({
             scrolly: true,
             lgap: o.lgap,
@@ -4710,7 +4710,7 @@ BI.Panel = BI.inherit(BI.Widget,{
         var o = this.options;
 
         BI.createWidget(BI.extend({
-            element: this.element
+            element: this
         }, BI.LogicFactory.createLogic("vertical", BI.extend(o.logic, {
             items: BI.LogicFactory.createLogicItemsByDirection("top", this._createTitle()
                 ,this.options.el)
@@ -4835,7 +4835,7 @@ BI.SelectList = BI.inherit(BI.Widget, {
         });
 
         BI.createWidget(BI.extend({
-            element: this.element
+            element: this
         }, BI.LogicFactory.createLogic(BI.LogicFactory.createLogicTypeByDirection(o.direction), BI.extend({
             scrolly: true
         }, o.logic, {
@@ -4990,7 +4990,7 @@ BI.LazyLoader = BI.inherit(BI.Widget, {
         var all = o.items.length;
         this.loader = BI.createWidget({
             type: "bi.loader",
-            element: this.element,
+            element: this,
             //下面是button_group的属性
             el: o.el,
 
@@ -5123,7 +5123,7 @@ BI.ListLoader = BI.inherit(BI.Widget, {
 
         this.button_group = BI.createWidget(o.el, {
             type: "bi.button_group",
-            element: this.element,
+            element: this,
             chooseType: 0,
             items: o.items,
             behaviors: {},
@@ -5151,7 +5151,7 @@ BI.ListLoader = BI.inherit(BI.Widget, {
 
         BI.createWidget({
             type: "bi.vertical",
-            element: this.element,
+            element: this,
             items: [this.next]
         });
 
@@ -5311,7 +5311,7 @@ BI.SortList = BI.inherit(BI.Widget, {
         var self = this, o = this.options;
         this.loader = BI.createWidget({
             type: "bi.list_loader",
-            element: this.element,
+            element: this,
             isDefaultInit: o.isDefaultInit,
             el: o.el,
             items: this._formatItems(o.items),
@@ -5543,7 +5543,7 @@ BI.AllPagger = BI.inherit(BI.Widget, {
 
         BI.createWidget({
             type: "bi.center_adapt",
-            element: this.element,
+            element: this,
             columnSize: [30, "", 36],
             items: [this.editor, this.allPages, this.pager]
         })
@@ -5619,7 +5619,7 @@ BI.DirectionPager = BI.inherit(BI.Widget, {
         BI.createWidget({
             type: "bi.absolute",
             scrollable: false,
-            element: this.element,
+            element: this,
             items: [{
                 el: this.vpager,
                 top: 0,
@@ -5906,7 +5906,7 @@ BI.NumberPager = BI.inherit(BI.Widget, {
 
         BI.createWidget({
             type: "bi.center_adapt",
-            element: this.element,
+            element: this,
             columnSize: [20, "", 20, 36],
             items: [{type: "bi.label", text: "第"}, this.label, {type: "bi.label", text: "页"}, this.pager]
         })
@@ -6026,7 +6026,7 @@ BI.SkipPager = BI.inherit(BI.Widget, {
 
         BI.createWidget({
             type: "bi.center_adapt",
-            element: this.element,
+            element: this,
             items: [{type: "bi.label", text: "第"}, this.editor, {type: "bi.label", text: "页"}, this.pager]
         })
     },
@@ -6072,7 +6072,7 @@ BI.SegmentButton = BI.inherit(BI.BasicButton, {
         //}
         this.text = BI.createWidget({
             type: "bi.label",
-            element: this.element,
+            element: this,
             height: opts.height-2,
             whiteSpace: opts.whiteSpace,
             text: opts.text,
@@ -6113,7 +6113,7 @@ BI.Segment = BI.inherit(BI.Widget, {
         BI.Segment.superclass._init.apply(this, arguments);
         var self = this, o = this.options;
         this.buttonGroup = BI.createWidget({
-            element: this.element,
+            element: this,
             type: "bi.button_group",
             items: BI.createItems(o.items, {
                 type: "bi.segment_button",
@@ -6287,7 +6287,7 @@ BI.DynamicSummaryLayerTreeTable = BI.inherit(BI.Widget, {
         var items = this._formatItems(o.items, deep);
         this.table = BI.createWidget({
             type: "bi.table_view",
-            element: this.element,
+            element: this,
             logic: o.logic,
             isNeedResize: o.isNeedResize,
             isResizeAdapt: o.isResizeAdapt,
@@ -6557,7 +6557,7 @@ BI.DynamicSummaryTreeTable = BI.inherit(BI.Widget, {
         items = BI.DynamicSummaryTreeTable.formatSummaryItems(items, o.crossItems, deep);
         this.table = BI.createWidget({
             type: "bi.table_view",
-            element: this.element,
+            element: this,
             logic: o.logic,
 
             isNeedResize: o.isNeedResize,
@@ -6859,7 +6859,7 @@ BI.LayerTreeTableCell = BI.inherit(BI.Widget, {
         var o = this.options;
         BI.createWidget({
             type: "bi.label",
-            element: this.element,
+            element: this,
             textAlign: "left",
             whiteSpace: "nowrap",
             height: o.height,
@@ -7007,7 +7007,7 @@ BI.LayerTreeTable = BI.inherit(BI.Widget, {
         var items = this._formatItems(o.items);
         this.table = BI.createWidget({
             type: "bi.table_view",
-            element: this.element,
+            element: this,
             logic: o.logic,
             isNeedResize: o.isNeedResize,
             isResizeAdapt: o.isResizeAdapt,
@@ -7260,7 +7260,7 @@ BI.Tabler = BI.inherit(BI.Widget, {
         })
         BI.createWidget({
             type: "bi.vtape",
-            element: this.element,
+            element: this,
             items: [{
                 el: this.container
             }, {
@@ -7313,7 +7313,7 @@ BI.Bubble = BI.inherit(BI.Tip, {
         this.element.bind({"click": fn, "mousedown": fn, "mouseup": fn, "mouseover": fn, "mouseenter": fn, "mouseleave": fn, "mousemove": fn});
         BI.createWidget({
             type: "bi.left",
-            element: this.element,
+            element: this,
             items: [this["_" + this.options.direction]()]
         })
     },
@@ -7430,7 +7430,7 @@ BI.Toast = BI.inherit(BI.Tip, {
 
         this.text = BI.createWidget({
             type: "bi.label",
-            element: this.element,
+            element: this,
             text: o.text,
             height: 30,
             hgap: this._const.hgap
@@ -7479,7 +7479,7 @@ BI.Tooltip = BI.inherit(BI.Tip, {
 
         this.text = BI.createWidget({
             type: "bi.label",
-            element: this.element,
+            element: this,
             textAlign: "left",
             whiteSpace: "normal",
             text: o.text,
@@ -7567,7 +7567,7 @@ BI.MultiSelectBar = BI.inherit(BI.BasicButton, {
         });
         BI.createWidget({
             type: "bi.htape",
-            element: this.element,
+            element: this,
             items: [{
                 width: 36,
                 el: {
@@ -7655,7 +7655,7 @@ BI.HandStandBranchTree = BI.inherit(BI.Widget, {
         var self = this, o = this.options;
         this.branchTree = BI.createWidget({
             type: "bi.custom_tree",
-            element: this.element,
+            element: this,
             expander: BI.extend({
                 type: "bi.handstand_branch_expander",
                 el: {},
@@ -7709,7 +7709,7 @@ BI.BranchTree = BI.inherit(BI.Widget, {
         var self = this, o = this.options;
         this.branchTree = BI.createWidget({
             type: "bi.custom_tree",
-            element: this.element,
+            element: this,
             expander: BI.extend({
                 type: "bi.branch_expander",
                 el: {},
@@ -7874,7 +7874,7 @@ BI.LevelTree = BI.inherit(BI.Widget, {
         this._assertId(nodes);
         this.tree = BI.createWidget({
             type: "bi.custom_tree",
-            element: this.element,
+            element: this,
             expander: BI.extend({
                 el: {},
                 popup: {
@@ -7957,7 +7957,7 @@ BI.SimpleTreeView = BI.inherit(BI.Widget, {
         this.structure = new BI.Tree();
         this.tree = BI.createWidget({
             type: "bi.tree",
-            element: this.element,
+            element: this,
             itemsCreator: function (op, callback) {
                 var fn = function (items) {
                     callback({
@@ -8106,7 +8106,7 @@ BI.EditorTrigger = BI.inherit(BI.Trigger, {
         });
 
         BI.createWidget({
-            element: this.element,
+            element: this,
             type: 'bi.htape',
             items: [
                 {
@@ -8156,7 +8156,7 @@ BI.IconTrigger = BI.inherit(BI.Trigger, {
         BI.IconTrigger.superclass._init.apply(this, arguments);
         this.iconButton = BI.createWidget(o.el, {
             type: "bi.trigger_icon_button",
-            element: this.element,
+            element: this,
             width: o.width,
             height: o.height
         });
@@ -8199,7 +8199,7 @@ BI.TextTrigger = BI.inherit(BI.Trigger, {
         });
 
         BI.createWidget({
-            element: this.element,
+            element: this,
             type: 'bi.htape',
             items: [
                 {
@@ -8248,7 +8248,7 @@ BI.SelectTextTrigger = BI.inherit(BI.Trigger, {
         var self = this, o = this.options;
         this.trigger = BI.createWidget({
             type: "bi.text_trigger",
-            element: this.element,
+            element: this,
             height: o.height
         });
         if (BI.isKey(o.text)) {
@@ -8301,7 +8301,7 @@ BI.SmallSelectTextTrigger = BI.inherit(BI.Trigger, {
         var self = this, o = this.options;
         this.trigger = BI.createWidget({
             type: "bi.small_text_trigger",
-            element: this.element,
+            element: this,
             height: o.height - 2
         });
         if (BI.isKey(o.text)) {
@@ -8369,7 +8369,7 @@ BI.SmallTextTrigger = BI.inherit(BI.Trigger, {
         });
 
         BI.createWidget({
-            element: this.element,
+            element: this,
             type: 'bi.htape',
             items: [
                 {

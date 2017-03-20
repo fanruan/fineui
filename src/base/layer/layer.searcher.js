@@ -94,7 +94,7 @@ BI.SearcherView = BI.inherit(BI.Pane, {
 
         BI.createWidget({
             type: "bi.vertical",
-            element: this.element,
+            element: this,
             items: [this.matcher, this.spliter, this.searcher]
         });
     },

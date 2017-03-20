@@ -56,7 +56,7 @@ BI.Expander = BI.inherit(BI.Widget, {
         BI.createWidget({
             type: "bi.vertical",
             scrolly: false,
-            element: this.element,
+            element: this,
             items: [
                 {el: this.expander}
             ]
@@ -156,7 +156,7 @@ BI.Expander = BI.inherit(BI.Widget, {
             BI.createWidget({
                 type: "bi.vertical",
                 scrolly: false,
-                element: this.element,
+                element: this,
                 items: [
                     {el: this.popupView}
                 ]

@@ -19,7 +19,7 @@ BI.IconTrigger = BI.inherit(BI.Trigger, {
         BI.IconTrigger.superclass._init.apply(this, arguments);
         this.iconButton = BI.createWidget(o.el, {
             type: "bi.trigger_icon_button",
-            element: this.element,
+            element: this,
             width: o.width,
             height: o.height
         });

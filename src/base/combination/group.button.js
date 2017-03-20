@@ -176,7 +176,7 @@ BI.ButtonGroup = BI.inherit(BI.Widget, {
         this.buttons = this._btnsCreator.apply(this, arguments);
         var items = this._packageItems(items, this._packageBtns(this.buttons));
 
-        this.layouts = BI.createWidget(BI.extend({element: this.element}, this._packageLayout(items)));
+        this.layouts = BI.createWidget(BI.extend({element: this}, this._packageLayout(items)));
     },
 
     setEnable: function (b) {

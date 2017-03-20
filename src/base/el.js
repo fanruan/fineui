@@ -19,7 +19,7 @@ BI.EL = BI.inherit(BI.Widget, {
         this.ele = BI.createWidget(o.el);
         BI.createWidget(o.layout, {
             type: "bi.adaptive",
-            element: this.element,
+            element: this,
             items: [this.ele]
         });
         this.ele.on(BI.Controller.EVENT_CHANGE, function () {

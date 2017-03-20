@@ -18,7 +18,7 @@ BI.SingleSelectIconTextItem = BI.inherit(BI.Single, {
         var self = this, o = this.options;
         this.text = BI.createWidget({
             type: "bi.icon_text_item",
-            element: this.element,
+            element: this,
             cls: o.iconClass,
             once: o.once,
             selected: o.selected,

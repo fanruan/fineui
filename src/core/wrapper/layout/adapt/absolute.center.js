@@ -4,8 +4,8 @@
  * @extends BI.Layout
  */
 BI.AbsoluteCenterLayout = BI.inherit(BI.Layout, {
-    _defaultConfig: function () {
-        return BI.extend(BI.AbsoluteCenterLayout.superclass._defaultConfig.apply(this, arguments), {
+    props: function () {
+        return BI.extend(BI.AbsoluteCenterLayout.superclass.props.apply(this, arguments), {
             baseCls: "bi-absolute-center-layout",
             hgap: 0,
             lgap: 0,
@@ -16,8 +16,8 @@ BI.AbsoluteCenterLayout = BI.inherit(BI.Layout, {
         });
     },
 
-    _init: function () {
-        BI.AbsoluteCenterLayout.superclass._init.apply(this, arguments);
+    created: function () {
+        BI.AbsoluteCenterLayout.superclass.created.apply(this, arguments);
         this.populate(this.options.items);
     },
 
@@ -41,7 +41,7 @@ BI.AbsoluteCenterLayout = BI.inherit(BI.Layout, {
 
     populate: function (items) {
         BI.AbsoluteCenterLayout.superclass.populate.apply(this, arguments);
-        this.render();
+        this._mount();
     }
 });
 $.shortcut('bi.absolute_center_adapt', BI.AbsoluteCenterLayout);

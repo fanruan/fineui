@@ -134,7 +134,7 @@ BI.DynamicSummaryLayerTreeTable = BI.inherit(BI.Widget, {
         var items = this._formatItems(o.items, deep);
         this.table = BI.createWidget({
             type: "bi.table_view",
-            element: this.element,
+            element: this,
             logic: o.logic,
             isNeedResize: o.isNeedResize,
             isResizeAdapt: o.isResizeAdapt,

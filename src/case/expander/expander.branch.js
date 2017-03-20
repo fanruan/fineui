@@ -22,7 +22,7 @@ BI.BranchExpander = BI.inherit(BI.Widget, {
         this._initExpander();
         this._initBranchView();
         BI.createWidget(BI.extend({
-            element: this.element
+            element: this
         }, BI.LogicFactory.createLogic(BI.LogicFactory.createLogicTypeByDirection(o.direction), BI.extend({}, o.logic, {
             items: BI.LogicFactory.createLogicItemsByDirection(o.direction, this.expander, this.branchView)
         }))));
