@@ -6,6 +6,7 @@
 BI.OB = function (config) {
     this.options = $.extend(this._defaultConfig(config), config);
     this._init();
+    this._initRef();
 };
 $.extend(BI.OB.prototype, {
     props: {},
@@ -21,7 +22,6 @@ $.extend(BI.OB.prototype, {
 
     _init: function () {
         this._initListeners();
-        this._initRef();
         this.init();
     },
 
