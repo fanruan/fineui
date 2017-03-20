@@ -22,7 +22,7 @@ BI.Widget = BI.inherit(BI.OB, {
     },
 
     //生命周期函数
-    beforeCreated: function () {
+    beforeCreate: function () {
 
     },
 
@@ -47,7 +47,7 @@ BI.Widget = BI.inherit(BI.OB, {
 
     _init: function () {
         BI.Widget.superclass._init.apply(this, arguments);
-        this.beforeCreated();
+        this.beforeCreate();
         this._initRoot();
         this._initElementWidth();
         this._initElementHeight();
