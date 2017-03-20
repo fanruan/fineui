@@ -68,6 +68,10 @@ BI.Collection = BI.inherit(BI.Widget, {
         }
     },
 
+    destroyed: function () {
+        this._debounceRelease = null;
+    },
+
     _calculateSizeAndPositionData: function () {
         var o = this.options;
         var cellMetadata = [];

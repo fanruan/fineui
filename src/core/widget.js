@@ -68,7 +68,7 @@ BI.Widget = BI.inherit(BI.OB, {
             this._parent = o.element;
             this._parent.addWidget(this.widgetName, this);
             this.element = this.options.element.element;
-        } else if (BI.isString(o.element)) {
+        } else if (o.element) {
             this.element = $(o.element);
             this._isRoot = true;
         } else {
@@ -184,7 +184,7 @@ BI.Widget = BI.inherit(BI.OB, {
         BI.each(this._children, function (i, widget) {
             widget._unMount();
         });
-        this._children = [];
+        this._children = {};
         this._parent = null;
         this._isMounted = false;
         this.destroyed();
@@ -328,6 +328,38 @@ BI.Widget = BI.inherit(BI.OB, {
 
     isVisible: function () {
         return !this.options.invisible;
+    },
+
+    disable: function () {
+        this.setEnable(false);
+    },
+
+    enable: function () {
+        this.setEnable(true);
+    },
+
+    valid: function () {
+        this.setValid(true);
+    },
+
+    invalid: function () {
+        this.setValid(false);
+    },
+
+    invisible: function () {
+        this.setVisible(false);
+    },
+
+    visible: function () {
+        this.setVisible(true);
+    },
+
+    empty: function () {
+        BI.each(this._children, function (i, widget) {
+            widget._unMount();
+        });
+        this._children = {};
+        this.element.empty();
     },
 
     destroy: function () {

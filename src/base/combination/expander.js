@@ -254,8 +254,8 @@ BI.Expander = BI.inherit(BI.Widget, {
         return this.popupView && this.popupView.getNodeByValue(value);
     },
 
-    destroy: function () {
-        BI.Expander.superclass.destroy.apply(this, arguments);
+    destroyed: function () {
+        this.popupView && this.popupView.destroy();
     }
 });
 BI.Expander.EVENT_EXPAND = "EVENT_EXPAND";

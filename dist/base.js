@@ -21435,6 +21435,10 @@ BI.Collection = BI.inherit(BI.Widget, {
         }
     },
 
+    destroyed: function () {
+        this._debounceRelease = null;
+    },
+
     _calculateSizeAndPositionData: function () {
         var o = this.options;
         var cellMetadata = [];
@@ -21899,35 +21903,35 @@ BI.Combo = BI.inherit(BI.Widget, {
                 break;
             case "top":
             case "top,right":
-                p = $.getComboPosition(this.combo, this.popupView, o.adjustYOffset || o.adjustLength,o.isNeedAdjustHeight, ['top', 'bottom', 'right', 'left'], o.offsetStyle);
+                p = $.getComboPosition(this.combo, this.popupView, o.adjustYOffset || o.adjustLength, o.isNeedAdjustHeight, ['top', 'bottom', 'right', 'left'], o.offsetStyle);
                 break;
             case "left":
             case "left,bottom":
-                p = $.getComboPosition(this.combo, this.popupView, o.adjustXOffset|| o.adjustLength, o.adjustYOffset,o.isNeedAdjustHeight, ['left', 'right', 'bottom', 'top'], o.offsetStyle);
+                p = $.getComboPosition(this.combo, this.popupView, o.adjustXOffset || o.adjustLength, o.adjustYOffset, o.isNeedAdjustHeight, ['left', 'right', 'bottom', 'top'], o.offsetStyle);
                 break;
             case "right":
             case "right,bottom":
-                p = $.getComboPosition(this.combo, this.popupView, o.adjustXOffset|| o.adjustLength, o.adjustYOffset,o.isNeedAdjustHeight, ['right', 'left', 'bottom', 'top'], o.offsetStyle);
+                p = $.getComboPosition(this.combo, this.popupView, o.adjustXOffset || o.adjustLength, o.adjustYOffset, o.isNeedAdjustHeight, ['right', 'left', 'bottom', 'top'], o.offsetStyle);
                 break;
             case "top,left":
-                p = $.getComboPosition(this.combo, this.popupView,  o.adjustXOffset, o.adjustYOffset|| o.adjustLength,o.isNeedAdjustHeight, ['top', 'bottom', 'left', 'right'], o.offsetStyle);
+                p = $.getComboPosition(this.combo, this.popupView, o.adjustXOffset, o.adjustYOffset || o.adjustLength, o.isNeedAdjustHeight, ['top', 'bottom', 'left', 'right'], o.offsetStyle);
                 break;
             case "bottom,left":
-                p = $.getComboPosition(this.combo, this.popupView,  o.adjustXOffset, o.adjustYOffset|| o.adjustLength,o.isNeedAdjustHeight, ['bottom', 'top', 'left', 'right'], o.offsetStyle);
+                p = $.getComboPosition(this.combo, this.popupView, o.adjustXOffset, o.adjustYOffset || o.adjustLength, o.isNeedAdjustHeight, ['bottom', 'top', 'left', 'right'], o.offsetStyle);
                 break;
             case "left,top":
-                p = $.getComboPosition(this.combo, this.popupView,  o.adjustXOffset|| o.adjustLength, o.adjustYOffset,o.isNeedAdjustHeight, ['left', 'right', 'top', 'bottom'], o.offsetStyle);
+                p = $.getComboPosition(this.combo, this.popupView, o.adjustXOffset || o.adjustLength, o.adjustYOffset, o.isNeedAdjustHeight, ['left', 'right', 'top', 'bottom'], o.offsetStyle);
                 break;
             case "right,top":
-                p = $.getComboPosition(this.combo, this.popupView, o.adjustXOffset|| o.adjustLength, o.adjustYOffset,o.isNeedAdjustHeight, ['right', 'left', 'top', 'bottom'], o.offsetStyle);
+                p = $.getComboPosition(this.combo, this.popupView, o.adjustXOffset || o.adjustLength, o.adjustYOffset, o.isNeedAdjustHeight, ['right', 'left', 'top', 'bottom'], o.offsetStyle);
                 break;
             case "top,custom":
             case "custom,top":
-                p = $.getTopAdaptPosition(this.combo, this.popupView, o.adjustYOffset || o.adjustLength,o.isNeedAdjustHeight);
+                p = $.getTopAdaptPosition(this.combo, this.popupView, o.adjustYOffset || o.adjustLength, o.isNeedAdjustHeight);
                 break;
             case "custom,bottom":
             case "bottom,custom":
-                p = $.getBottomAdaptPosition(this.combo, this.popupView, o.adjustYOffset || o.adjustLength,o.isNeedAdjustHeight);
+                p = $.getBottomAdaptPosition(this.combo, this.popupView, o.adjustYOffset || o.adjustLength, o.isNeedAdjustHeight);
                 break;
             case "left,custom":
             case "custom,left":
@@ -22020,14 +22024,14 @@ BI.Combo = BI.inherit(BI.Widget, {
         this._toggle();
     },
 
-    destroy: function () {
+    destroyed: function () {
         $(document).unbind("mousedown." + this.getName())
             .unbind("mousewheel." + this.getName())
             .unbind("mouseenter." + this.getName())
             .unbind("mousemove." + this.getName())
             .unbind("mouseleave." + this.getName());
+        this.popupView && this.popupView.destroy();
         BI.Resizers.remove(this.getName());
-        BI.Combo.superclass.destroy.apply(this, arguments);
     }
 });
 BI.Combo.EVENT_TRIGGER_CHANGE = "EVENT_TRIGGER_CHANGE";
@@ -22298,8 +22302,8 @@ BI.Expander = BI.inherit(BI.Widget, {
         return this.popupView && this.popupView.getNodeByValue(value);
     },
 
-    destroy: function () {
-        BI.Expander.superclass.destroy.apply(this, arguments);
+    destroyed: function () {
+        this.popupView && this.popupView.destroy();
     }
 });
 BI.Expander.EVENT_EXPAND = "EVENT_EXPAND";
@@ -22614,10 +22618,6 @@ BI.ButtonGroup = BI.inherit(BI.Widget, {
             }
         });
         return node;
-    },
-
-    destroy: function () {
-        BI.ButtonGroup.superclass.destroy.apply(this, arguments);
     }
 });
 BI.extend(BI.ButtonGroup, {
@@ -22984,10 +22984,6 @@ BI.Loader = BI.inherit(BI.Widget, {
         BI.each([this.prev, this.next], function (i, ob) {
             ob && ob.setVisible(false);
         });
-    },
-
-    destroy: function () {
-        BI.Loader.superclass.destroy.apply(this, arguments);
     }
 });
 BI.Loader.EVENT_CHANGE = "EVENT_CHANGE";
@@ -23120,10 +23116,6 @@ BI.Navigation = BI.inherit(BI.Widget, {
     empty: function(){
         this.layout.deleteAllCard();
         this.cardMap = {};
-    },
-
-    destroy: function(){
-        BI.Navigation.superclass.destroy.apply(this, arguments);
     }
 });
 BI.Navigation.EVENT_CHANGE = "EVENT_CHANGE";
@@ -23413,9 +23405,9 @@ BI.Searcher = BI.inherit(BI.Widget, {
         this.popupView && this.popupView.empty();
     },
 
-    destroy: function () {
+    destroyed: function () {
+        this.popupView && this.popupView.destroy();
         BI.Maskers.remove(this.getName());
-        BI.Searcher.superclass.destroy.apply(this, arguments);
     }
 });
 BI.Searcher.EVENT_CHANGE = "EVENT_CHANGE";
@@ -23685,8 +23677,8 @@ BI.Switcher = BI.inherit(BI.Widget, {
         this.popupView && this.popupView.empty();
     },
 
-    destroy: function () {
-        BI.Switcher.superclass.destroy.apply(this, arguments);
+    destroyed: function () {
+        this.popupView && this.popupView.destroy();
     }
 });
 BI.Switcher.EVENT_EXPAND = "EVENT_EXPAND";
@@ -23817,9 +23809,9 @@ BI.Tab = BI.inherit(BI.Widget, {
         this.cardMap = {};
     },
 
-    destroy: function () {
+    destroyed: function () {
+        this.layout.deleteAllCard();
         this.cardMap = {};
-        BI.Tab.superclass.destroy.apply(this, arguments);
     }
 });
 BI.Tab.EVENT_CHANGE = "EVENT_CHANGE";

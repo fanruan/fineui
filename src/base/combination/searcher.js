@@ -283,9 +283,9 @@ BI.Searcher = BI.inherit(BI.Widget, {
         this.popupView && this.popupView.empty();
     },
 
-    destroy: function () {
+    destroyed: function () {
+        this.popupView && this.popupView.destroy();
         BI.Maskers.remove(this.getName());
-        BI.Searcher.superclass.destroy.apply(this, arguments);
     }
 });
 BI.Searcher.EVENT_CHANGE = "EVENT_CHANGE";

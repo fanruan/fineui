@@ -52,7 +52,7 @@ module.exports = function (grunt) {
                 dest: 'dist/case.js'
             },
             coreCss: {
-                src: ['src/css/core/**/*.css','src/css/utils/**/*.css'],
+                src: ['src/css/core/**/*.css', 'src/css/utils/**/*.css'],
                 dest: 'dist/core.css'
             },
             baseCss: {
@@ -61,8 +61,12 @@ module.exports = function (grunt) {
             },
 
             demoJs: {
-                src: ['demo/**/*.js'],
+                src: ['demo/version.js', 'demo/**/*.js'],
                 dest: 'demo.js'
+            },
+            demoCss: {
+                src: ['demo/css/**/*.css'],
+                dest: 'demo.css'
             }
         },
 

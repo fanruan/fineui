@@ -29,7 +29,7 @@ BI.InlineCenterAdaptLayout = BI.inherit(BI.Layout, {
 
     _addElement: function (i, item, length) {
         var o = this.options;
-        if (!this.hasWidget(this.getName() + i)) {
+        if (!this.hasWidget(this.getName() + "-" + i)) {
             var t = BI.createWidget(item);
             t.element.css({
                 "position": "relative"
@@ -38,9 +38,9 @@ BI.InlineCenterAdaptLayout = BI.inherit(BI.Layout, {
                 type: "bi.horizontal_auto",
                 items: [t]
             });
-            this.addWidget(this.getName() + i, w);
+            this.addWidget(this.getName() + "-" + i, w);
         } else {
-            var w = this.getWidgetByName(this.getName() + i);
+            var w = this.getWidgetByName(this.getName() + "-" + i);
         }
         w.element.css({
             "position": "relative",

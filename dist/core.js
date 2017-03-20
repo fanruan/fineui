@@ -14205,7 +14205,7 @@ BI.Widget = BI.inherit(BI.OB, {
             this._parent = o.element;
             this._parent.addWidget(this.widgetName, this);
             this.element = this.options.element.element;
-        } else if (BI.isString(o.element)) {
+        } else if (o.element) {
             this.element = $(o.element);
             this._isRoot = true;
         } else {
@@ -14321,7 +14321,7 @@ BI.Widget = BI.inherit(BI.OB, {
         BI.each(this._children, function (i, widget) {
             widget._unMount();
         });
-        this._children = [];
+        this._children = {};
         this._parent = null;
         this._isMounted = false;
         this.destroyed();
@@ -14465,6 +14465,38 @@ BI.Widget = BI.inherit(BI.OB, {
 
     isVisible: function () {
         return !this.options.invisible;
+    },
+
+    disable: function () {
+        this.setEnable(false);
+    },
+
+    enable: function () {
+        this.setEnable(true);
+    },
+
+    valid: function () {
+        this.setValid(true);
+    },
+
+    invalid: function () {
+        this.setValid(false);
+    },
+
+    invisible: function () {
+        this.setVisible(false);
+    },
+
+    visible: function () {
+        this.setVisible(true);
+    },
+
+    empty: function () {
+        BI.each(this._children, function (i, widget) {
+            widget._unMount();
+        });
+        this._children = {};
+        this.element.empty();
     },
 
     destroy: function () {
@@ -19122,11 +19154,11 @@ BI.Layout = BI.inherit(BI.Widget, {
     _addElement: function (i, item) {
         var o = this.options;
         var w;
-        if (!this.hasWidget(this.getName() + i)) {
+        if (!this.hasWidget(this.getName() + "-" + i)) {
             w = BI.createWidget(item);
-            this.addWidget(this.getName() + i, w);
+            this.addWidget(this.getName() + "-" + i, w);
         } else {
-            w = this.getWidgetByName(this.getName() + i);
+            w = this.getWidgetByName(this.getName() + "-" + i);
         }
         return w;
     },
@@ -24147,7 +24179,7 @@ BI.CenterAdaptLayout = BI.inherit(BI.Layout, {
         var o = this.options;
         var td;
         var width = o.columnSize[i] <= 1 ? (o.columnSize[i] * 100 + "%") : o.columnSize[i];
-        if (!this.hasWidget(this.getName() + i)) {
+        if (!this.hasWidget(this.getName() + "-" + i)) {
             var w = BI.createWidget(item);
             w.element.css({"position": "relative", "top": "0", "left": "0", "margin": "0px auto"});
             td = BI.createWidget({
@@ -24158,9 +24190,9 @@ BI.CenterAdaptLayout = BI.inherit(BI.Layout, {
                 },
                 items: [w]
             });
-            this.addWidget(this.getName() + i, td);
+            this.addWidget(this.getName() + "-" + i, td);
         } else {
-            td = this.getWidgetByName(this.getName() + i);
+            td = this.getWidgetByName(this.getName() + "-" + i);
             td.element.attr("width", width);
         }
         td.element.css({"max-width": o.columnSize[i]});
@@ -24269,7 +24301,7 @@ BI.HorizontalAdaptLayout = BI.inherit(BI.Layout, {
         var o = this.options;
         var td;
         var width = o.columnSize[i] <= 1 ? (o.columnSize[i] * 100 + "%") : o.columnSize[i];
-        if (!this.hasWidget(this.getName() + i)) {
+        if (!this.hasWidget(this.getName() + "-" + i)) {
             var w = BI.createWidget(item);
             w.element.css({"position": "relative", "top": "0", "left": "0", "margin": "0px auto"});
             td = BI.createWidget({
@@ -24280,9 +24312,9 @@ BI.HorizontalAdaptLayout = BI.inherit(BI.Layout, {
                 },
                 items: [w]
             });
-            this.addWidget(this.getName() + i, td);
+            this.addWidget(this.getName() + "-" + i, td);
         } else {
-            td = this.getWidgetByName(this.getName() + i);
+            td = this.getWidgetByName(this.getName() + "-" + i);
             td.element.attr("width", width);
         }
         td.element.css({"max-width": o.columnSize[i] + "px"});
@@ -24424,6 +24456,7 @@ BI.LeftRightVerticalAdaptLayout = BI.inherit(BI.Layout, {
 
     populate: function (items) {
         BI.LeftRightVerticalAdaptLayout.superclass.populate.apply(this, arguments);
+        this._mount();
     }
 });
 $.shortcut('bi.left_right_vertical_adapt', BI.LeftRightVerticalAdaptLayout);
@@ -24554,7 +24587,7 @@ BI.VerticalAdaptLayout = BI.inherit(BI.Layout, {
         var o = this.options;
         var td;
         var width = o.columnSize[i] <= 1 ? (o.columnSize[i] * 100 + "%") : o.columnSize[i];
-        if (!this.hasWidget(this.getName() + i)) {
+        if (!this.hasWidget(this.getName() + "-" + i)) {
             var w = BI.createWidget(item);
             w.element.css({"position": "relative", "top": "0", "left": "0", "margin": "0px auto"});
             td = BI.createWidget({
@@ -24565,9 +24598,9 @@ BI.VerticalAdaptLayout = BI.inherit(BI.Layout, {
                 },
                 items: [w]
             });
-            this.addWidget(this.getName() + i, td);
+            this.addWidget(this.getName() + "-" + i, td);
         } else {
-            td = this.getWidgetByName(this.getName() + i);
+            td = this.getWidgetByName(this.getName() + "-" + i);
             td.element.attr("width", width);
         }
 
@@ -24863,7 +24896,7 @@ BI.InlineCenterAdaptLayout = BI.inherit(BI.Layout, {
 
     _addElement: function (i, item, length) {
         var o = this.options;
-        if (!this.hasWidget(this.getName() + i)) {
+        if (!this.hasWidget(this.getName() + "-" + i)) {
             var t = BI.createWidget(item);
             t.element.css({
                 "position": "relative"
@@ -24872,9 +24905,9 @@ BI.InlineCenterAdaptLayout = BI.inherit(BI.Layout, {
                 type: "bi.horizontal_auto",
                 items: [t]
             });
-            this.addWidget(this.getName() + i, w);
+            this.addWidget(this.getName() + "-" + i, w);
         } else {
-            var w = this.getWidgetByName(this.getName() + i);
+            var w = this.getWidgetByName(this.getName() + "-" + i);
         }
         w.element.css({
             "position": "relative",
@@ -27753,74 +27786,74 @@ Data.Source = BISource = {
 $(function () {
     //注册布局
     var isSupportFlex = BI.isSupportCss3("flex");
-    // BI.Plugin.registerWidget("bi.horizontal", function (ob) {
-    //     if (isSupportFlex) {
-    //         return BI.extend(ob, {type: "bi.flex_horizontal"});
-    //     } else {
-    //         return ob;
-    //     }
-    // });
-    // BI.Plugin.registerWidget("bi.center_adapt", function (ob) {
-    //     if (isSupportFlex && ob.items && ob.items.length <= 1) {
-    //         //有滚动条的情况下需要用到flex_wrapper_center布局
-    //         if (ob.scrollable === true || ob.scrollx === true || ob.scrolly === true) {
-    //             //不是IE用flex_wrapper_center布局
-    //             if (!BI.isIE()) {
-    //                 return BI.extend(ob, {type: "bi.flex_wrapper_center"});
-    //             }
-    //             return ob;
-    //         }
-    //         return BI.extend(ob, {type: "bi.flex_center"});
-    //     } else {
-    //         return ob;
-    //     }
-    // });
-    // BI.Plugin.registerWidget("bi.vertical_adapt", function (ob) {
-    //     if (isSupportFlex) {
-    //         //有滚动条的情况下需要用到flex_wrapper_center布局
-    //         if (ob.scrollable === true || ob.scrollx === true || ob.scrolly === true) {
-    //             //不是IE用flex_wrapper_center布局
-    //             if (!BI.isIE()) {
-    //                 return BI.extend({}, ob, {type: "bi.flex_wrapper_vertical_center"});
-    //             }
-    //             return ob;
-    //         }
-    //         return BI.extend(ob, {type: "bi.flex_vertical_center"});
-    //     } else {
-    //         return ob;
-    //     }
-    // });
-    // BI.Plugin.registerWidget("bi.float_center_adapt", function (ob) {
-    //     if (isSupportFlex) {
-    //         //有滚动条的情况下需要用到flex_wrapper_center布局
-    //         if (ob.scrollable === true || ob.scrollx === true || ob.scrolly === true) {
-    //             //不是IE用flex_wrapper_center布局
-    //             if (!BI.isIE()) {
-    //                 return BI.extend({}, ob, {type: "bi.flex_wrapper_center"});
-    //             }
-    //             return ob;
-    //         }
-    //         return BI.extend(ob, {type: "bi.flex_center"});
-    //     } else {
-    //         return ob;
-    //     }
-    // });
-    //
-    // //注册控件
-    // BI.Plugin.registerWidget("bi.grid_table", function (ob) {
-    //     //IE下滚动条滑动效果不好，禁止掉
-    //     if (BI.isIE() || BI.isFireFox()) {
-    //         return BI.extend(ob, {type: "bi.quick_grid_table"});
-    //     } else {
-    //         return ob;
-    //     }
-    // });
-    // BI.Plugin.registerWidget("bi.collection_table", function (ob) {
-    //     //IE下滚动条滑动效果不好，禁止掉
-    //     if (BI.isIE() || BI.isFireFox()) {
-    //         return BI.extend(ob, {type: "bi.quick_collection_table"});
-    //     } else {
-    //         return ob;
-    //     }
-    // });
+    BI.Plugin.registerWidget("bi.horizontal", function (ob) {
+        if (isSupportFlex) {
+            return BI.extend(ob, {type: "bi.flex_horizontal"});
+        } else {
+            return ob;
+        }
+    });
+    BI.Plugin.registerWidget("bi.center_adapt", function (ob) {
+        if (isSupportFlex && ob.items && ob.items.length <= 1) {
+            //有滚动条的情况下需要用到flex_wrapper_center布局
+            if (ob.scrollable === true || ob.scrollx === true || ob.scrolly === true) {
+                //不是IE用flex_wrapper_center布局
+                if (!BI.isIE()) {
+                    return BI.extend(ob, {type: "bi.flex_wrapper_center"});
+                }
+                return ob;
+            }
+            return BI.extend(ob, {type: "bi.flex_center"});
+        } else {
+            return ob;
+        }
+    });
+    BI.Plugin.registerWidget("bi.vertical_adapt", function (ob) {
+        if (isSupportFlex) {
+            //有滚动条的情况下需要用到flex_wrapper_center布局
+            if (ob.scrollable === true || ob.scrollx === true || ob.scrolly === true) {
+                //不是IE用flex_wrapper_center布局
+                if (!BI.isIE()) {
+                    return BI.extend({}, ob, {type: "bi.flex_wrapper_vertical_center"});
+                }
+                return ob;
+            }
+            return BI.extend(ob, {type: "bi.flex_vertical_center"});
+        } else {
+            return ob;
+        }
+    });
+    BI.Plugin.registerWidget("bi.float_center_adapt", function (ob) {
+        if (isSupportFlex) {
+            //有滚动条的情况下需要用到flex_wrapper_center布局
+            if (ob.scrollable === true || ob.scrollx === true || ob.scrolly === true) {
+                //不是IE用flex_wrapper_center布局
+                if (!BI.isIE()) {
+                    return BI.extend({}, ob, {type: "bi.flex_wrapper_center"});
+                }
+                return ob;
+            }
+            return BI.extend(ob, {type: "bi.flex_center"});
+        } else {
+            return ob;
+        }
+    });
+
+    //注册控件
+    BI.Plugin.registerWidget("bi.grid_table", function (ob) {
+        //IE下滚动条滑动效果不好，禁止掉
+        if (BI.isIE() || BI.isFireFox()) {
+            return BI.extend(ob, {type: "bi.quick_grid_table"});
+        } else {
+            return ob;
+        }
+    });
+    BI.Plugin.registerWidget("bi.collection_table", function (ob) {
+        //IE下滚动条滑动效果不好，禁止掉
+        if (BI.isIE() || BI.isFireFox()) {
+            return BI.extend(ob, {type: "bi.quick_collection_table"});
+        } else {
+            return ob;
+        }
+    });
 });

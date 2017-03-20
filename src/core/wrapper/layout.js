@@ -66,11 +66,11 @@ BI.Layout = BI.inherit(BI.Widget, {
     _addElement: function (i, item) {
         var o = this.options;
         var w;
-        if (!this.hasWidget(this.getName() + i)) {
+        if (!this.hasWidget(this.getName() + "-" + i)) {
             w = BI.createWidget(item);
-            this.addWidget(this.getName() + i, w);
+            this.addWidget(this.getName() + "-" + i, w);
         } else {
-            w = this.getWidgetByName(this.getName() + i);
+            w = this.getWidgetByName(this.getName() + "-" + i);
         }
         return w;
     },

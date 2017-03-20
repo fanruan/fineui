@@ -70,6 +70,7 @@ BI.LeftRightVerticalAdaptLayout = BI.inherit(BI.Layout, {
 
     populate: function (items) {
         BI.LeftRightVerticalAdaptLayout.superclass.populate.apply(this, arguments);
+        this._mount();
     }
 });
 $.shortcut('bi.left_right_vertical_adapt', BI.LeftRightVerticalAdaptLayout);
