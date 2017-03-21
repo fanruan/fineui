@@ -1,13 +1,7 @@
 /**
  * Created by User on 2017/3/21.
  */
-FINEUI = {};
-FINEUI.WIDGET = [{
-    id: -1,
-    text: "文本框",
-    isParent: true,
-    open: false
-}, {
+Demo.WIDGET = [{
     id: 2,
     pId: -1,
     text: "文本框",
@@ -76,315 +70,315 @@ FINEUI.WIDGET = [{
 }, {
     pId: -1,
     text: "bi.message",
-    type: "message"
+    value: "message"
 }, {
     pId: -1,
     text: "bi.button",
-    type: "button"
+    value: "button"
 }, {
     pId: -1,
     text: "bi.multifile",
-    type: "multifile"
+    value: "multifile"
 }, {
     pId: -1,
     text: "bi.label",
-    type: "label"
+    value: "label"
 }, {
     pId: 2,
     text: "bi.editor",
-    type: "editor"
+    value: "demo.absolute"
 }, {
     pId: 2,
     text: "bi.state_editor",
-    type: "state_editor"
+    value: "state_editor"
 }, {
     pId: 2,
     text: "bi.record_editor",
-    type: "record_editor"
+    value: "record_editor"
 }, {
     pId: 2,
     text: "bi.sign_editor",
-    type: "sign_editor"
+    value: "sign_editor"
 }, {
     pId: 2,
     text: "bi.shelter_editor",
-    type: "shelter_editor"
+    value: "shelter_editor"
 }, {
     pId: 2,
     text: "bi.code_editor",
-    type: "code_editor"
+    value: "code_editor"
 }, {
     pId: 2,
     text: "bi.textareaeditor",
-    type: "textareaeditor"
+    value: "textareaeditor"
 }, {
     pId: 6,
     text: "bi.combo",
-    type: "combo"
+    value: "combo"
 }, {
     pId: 6,
     text: "bi.combo(各种位置)",
-    type: "combo2"
+    value: "combo2"
 }, {
     pId: 6,
     text: "bi.expander",
-    type: "expander"
+    value: "expander"
 }, {
     pId: 6,
     text: "bi.switcher",
-    type: "switcher"
+    value: "switcher"
 }, {
     pId: 6,
     text: "bi.searcher",
-    type: "searcher"
+    value: "searcher"
 }, {
     pId: 6,
     text: "bi.bubble_combo",
-    type: "bubble_combo"
+    value: "bubble_combo"
 }, {
     pId: 1,
     text: "bi.customtree",
-    type: "customtree"
+    value: "customtree"
 }, {
     pId: 1,
     text: "bi.tree",
-    type: "tree"
+    value: "tree"
 }, {
     pId: 1,
     text: "bi.sync_tree",
-    type: "synctree"
+    value: "synctree"
 }, {
     pId: 1,
     text: "bi.part_tree",
-    type: "parttree"
+    value: "parttree"
 }, {
     pId: 1,
     text: "bi.display_tree",
-    type: "displaytree"
+    value: "displaytree"
 }, {
     pId: 1,
     text: "bi.simple_tree",
-    type: "simpletree"
+    value: "simpletree"
 }, {
     pId: 1,
     text: "bi.level_tree",
-    type: "leveltree"
+    value: "leveltree"
 }, {
     pId: 1,
     text: "bi.branch_tree",
-    type: "branch_tree"
+    value: "branch_tree"
 }, {
     pId: 1,
     text: "bi.handstand_branch_tree",
-    type: "handstand_branch_tree"
+    value: "handstand_branch_tree"
 }, {
     pId: 2,
     text: "bi.formula",
-    type: "formula"
+    value: "formula"
 }, {
     pId: 9,
     text: "bi.farbtastic",
-    type: "farbtastic"
+    value: "farbtastic"
 }, {
     pId: 9,
     text: "bi.color_picker",
-    type: "color_picker"
+    value: "color_picker"
 }, {
     pId: 9,
     text: "bi.color_picker_editor",
-    type: "color_picker_editor"
+    value: "color_picker_editor"
 }, {
     pId: 7,
     text: "bi.table_view",
-    type: "table_view"
+    value: "table_view"
 }, {
     pId: 7,
     text: "bi.table_tree",
-    type: "tabletree"
+    value: "tabletree"
 }, {
     pId: 7,
     text: "bi.layer_tree_table",
-    type: "layer_tree_table"
+    value: "layer_tree_table"
 }, {
     pId: 7,
     text: "bi.tabler",
-    type: "tabler"
+    value: "tabler"
 }, {
     pId: 8,
     text: "bi.chart",
-    type: "chart"
+    value: "chart"
 }, {
     pId: 8,
     text: "charts",
-    type: "charts"
+    value: "charts"
 }, {
     pId: 5,
     text: "bi.bubble",
-    type: "bubble"
+    value: "bubble"
 }, {
     pId: 5,
     text: "bi.toast",
-    type: "toast"
+    value: "toast"
 }, {
     pId: 5,
     text: "bi.tooltip",
-    type: "tooltip"
+    value: "tooltip"
 }, {
     pId: 4,
     text: "bi.tab",
-    type: "tab"
+    value: "tab"
 }, {
     pId: 4,
     text: "bi.pager",
-    type: "pager"
+    value: "pager"
 }, {
     pId: 4,
     text: "bi.loader",
-    type: "loader"
+    value: "loader"
 }, {
     pId: 4,
     text: "bi.navigation",
-    type: "navigation"
+    value: "navigation"
 }, {
     pId: 4,
     text: "bi.scroll_view",
-    type: "scrollview"
+    value: "scrollview"
 }, {
     pId: 4,
     text: "bi.number_pager",
-    type: "numberpager"
+    value: "numberpager"
 }, {
     pId: 4,
     text: "bi.direction_pager",
-    type: "directionpager"
+    value: "directionpager"
 }, {
     pId: 4,
     text: "bi.skip_pager",
-    type: "skippager"
+    value: "skippager"
 }, {
     pId: 4,
     text: "bi.all_pager",
-    type: "allpager"
+    value: "allpager"
 }, {
     pId: 4,
     text: "bi.lazyloader",
-    type: "lazy_loader"
+    value: "lazy_loader"
 }, {
     pId: 3,
     text: "bi.calendar",
-    type: "calendar"
+    value: "calendar"
 }, {
     pId: 3,
     text: "bi.year_calendar",
-    type: "year_calendar"
+    value: "year_calendar"
 }, {
     pId: 10,
     text: "bi.canvas",
-    type: "canvas"
+    value: "canvas"
 }, {
     pId: 10,
     text: "bi.complex_canvas",
-    type: "complex_canvas"
+    value: "complex_canvas"
 }, {
     pId: 11,
     text: "bi.svg",
-    type: "svg"
+    value: "svg"
 }, {
     text: "bi.zero_clip",
-    type: "zclip"
+    value: "zclip"
 }, {
     text: "bi.grid_view",
-    type: "gridview"
+    value: "gridview"
 }, {
     text: "bi.collection_view",
-    type: "collectionview"
+    value: "collectionview"
 }, {
     text: "bi.grid_table",
-    type: "gridtable"
+    value: "gridtable"
 }];
-_Models.layout = [{
+Demo.layout = [{
     text: "bi.center_adapt",
-    type: "center_adapt"
+    value: "center_adapt"
 }, {
     text: "bi.float_center_adapt",
-    type: "float_center_adapt"
+    value: "float_center_adapt"
 }, {
     text: "bi.absolute_center_adapt",
-    type: "absolute_center_adapt"
+    value: "absolute_center_adapt"
 }, {
     text: "bi.flex_center",
-    type: "flex_center"
+    value: "flex_center"
 }, {
     text: "bi.inline_center_adapt",
-    type: "inline_center_adapt"
+    value: "inline_center_adapt"
 }, {
     text: "bi.vertical_adapt",
-    type: "vertical_adapt"
+    value: "vertical_adapt"
 }, {
     text: "bi.inline_vertical_adapt",
-    type: "inline_vertical_adapt"
+    value: "inline_vertical_adapt"
 }, {
     text: "bi.horizontal_adapt",
-    type: "horizontal_adapt"
+    value: "horizontal_adapt"
 }, {
     text: "bi.horizontal_auto",
-    type: "horizontal_auto"
+    value: "horizontal_auto"
 }, {
     text: "bi.horizontal_float",
-    type: "horizontal_float"
+    value: "horizontal_float"
 }, {
     text: "bi.left_right_vertical_adapt",
-    type: "left_right_vertical_adapt"
+    value: "left_right_vertical_adapt"
 }, {
     text: "bi.center",
-    type: "center"
+    value: "center"
 }, {
     text: "bi.float_center",
-    type: "float_center"
+    value: "float_center"
 }, {
     text: "bi.vertical",
-    type: "vertical"
+    value: "vertical"
 }, {
     text: "bi.horizontal",
-    type: "horizontal"
+    value: "horizontal"
 }, {
     text: "bi.border",
-    type: "border"
+    value: "border"
 }, {
     text: "bi.card",
-    type: "card"
+    value: "card"
 }, {
     text: "bi.left, bi.right",
-    type: "flow"
+    value: "flow"
 }, {
     text: "bi.lattice",
-    type: "lattice"
+    value: "lattice"
 }, {
     text: "bi.inline",
-    type: "inline"
+    value: "inline"
 }, {
     text: "bi.htape",
-    type: "htape"
+    value: "htape"
 }, {
     text: "bi.vtape",
-    type: "vtape"
+    value: "vtape"
 }, {
     text: "bi.grid",
-    type: "grid"
+    value: "grid"
 }, {
     text: "bi.table",
-    type: "table"
+    value: "table"
 }, {
     text: "bi.division",
-    type: "division"
+    value: "division"
 }, {
     text: "bi.window",
-    type: "window"
+    value: "window"
 }, {
     text: "bi.td",
-    type: "td"
+    value: "td"
 }];
-FINEUI.DETAIL = [{
+Demo.DETAIL = [{
     id: -2,
     text: "各种基础小控件"
 },{
@@ -557,381 +551,381 @@ FINEUI.DETAIL = [{
     {
         pId: -1,
         text: "各种通用按钮",
-        type: "buttons"
+        value: "buttons"
     }, {
         pId: -1,
         text: "各种提示性信息",
-        type: "tips"
+        value: "tips"
     }, {
         pId: -1,
         text: "各种items",
-        type: "items"
+        value: "items"
     }, {
         pId: -1,
         text: "各种节点node",
-        type: "nodes"
+        value: "nodes"
     }, {
         pId: -1,
         text: "各种segment",
-        type: "segments"
+        value: "segments"
     }, {
         pId: -1,
         text: "各种面板",
-        type: "panes"
+        value: "panes"
     }, {
         pId: -1,
         text: "bi.loading_mask",
-        type: "loadingmask"
+        value: "loadingmask"
     }, {
         pId: -1,
         text: "可以切换的树",
-        type: "switch_tree"
+        value: "switch_tree"
     }, {
         pId: -1,
         text: "进度条",
-        type: "progressbar"
+        value: "progressbar"
     }, {
         pId: 1,
         text: "bi.text_editor",
-        type: "text_editor"
+        value: "text_editor"
     }, {
         pId: 1,
         text: "bi.search_editor",
-        type: "search_editor"
+        value: "search_editor"
     }, {
         pId: 1,
         text: "bi.adapt_editor",
-        type: "adapt_editor"
+        value: "adapt_editor"
     }, {
         pId: 1,
         text: "bi.sign_initial_editor",
-        type: "sign_initial_editor"
+        value: "sign_initial_editor"
     }, {
         pId: 1,
         text: "bi.sign_style_editor",
-        type: "sign_style_editor"
+        value: "sign_style_editor"
     }, {
         pId: 2,
         text: "bi.year_combo",
-        type: "year_combo"
+        value: "year_combo"
     }, {
         pId: 3,
         text: "bi.month_combo",
-        type: "month_combo"
+        value: "month_combo"
     }, {
         pId: 4,
         text: "bi.quarter_combo",
-        type: "quarter_combo"
+        value: "quarter_combo"
     }, {
         pId: 5,
         text: "bi.date_combo",
-        type: "date_combo"
+        value: "date_combo"
     }, {
         pId: 7,
         text: "bi.down_list_combo",
-        type: "down_list_combo"
+        value: "down_list_combo"
     }, {
         pId: 12,
         text: "各种trigger",
-        type: "triggers"
+        value: "triggers"
     }, {
         pId: 12,
-        text: "bi.text_type_combo",
-        type: "text_icon_combo"
+        text: "bi.text_value_combo",
+        value: "text_icon_combo"
     }, {
         pId: 12,
         text: "bi.static_combo",
-        type: "single_select_combo"
+        value: "single_select_combo"
     }, {
         pId: 12,
-        text: "bi.text_type_down_list_combo",
-        type: "text_icon_down_list_combo"
+        text: "bi.text_value_down_list_combo",
+        value: "text_icon_down_list_combo"
     }, {
         pId: 12,
         text: "bi.param_date_combo",
-        type: "param_date_combo"
+        value: "param_date_combo"
     }, {
         pId: 12,
         text: "bi.icon_combo",
-        type: "icon_combo"
+        value: "icon_combo"
     }, {
         pId: 12,
         text: "bi.formula_combo",
-        type: "formula_combo"
+        value: "formula_combo"
     }, {
         pId: 9,
         text: "bi.formula_insert",
-        type: "formula_insert"
+        value: "formula_insert"
     }, {
         pId: 9,
         text: "bi.formula_pane",
-        type: "formula_pane"
+        value: "formula_pane"
     }, {
         pId: 8,
         text: "bi.select_data_tree",
-        type: "select_data_tree"
+        value: "select_data_tree"
     }, {
         pId: 8,
         text: "bi.select_data_switcher",
-        type: "select_data_switcher"
+        value: "select_data_switcher"
     }, {
         pId: 8,
         text: "bi.select_data_search_result",
-        type: "select_data_search_result"
+        value: "select_data_search_result"
     }, {
         pId: 8,
         text: "bi.select_data_searcher(点这)",
-        type: "select_data_searcher"
+        value: "select_data_searcher"
     }, {
         pId: 6,
         text: "bi.multidate_combo",
-        type: "multidate_combo"
+        value: "multidate_combo"
     }, {
         pId: 17,
         text: "bi.time_interval",
-        type: "time_interval"
+        value: "time_interval"
     }, {
         pId: 10,
         text: "bi.numerical_interval",
-        type: "numerical_interval"
+        value: "numerical_interval"
     }, {
         pId: 11,
         text: "bi.multi_select_trigger",
-        type: "multi_select_trigger"
+        value: "multi_select_trigger"
     }, {
         pId: 11,
         text: "bi.multi_select_search_pane",
-        type: "multi_select_search_pane"
+        value: "multi_select_search_pane"
     }, {
         pId: 11,
         text: "bi.multi_select_popup_view",
-        type: "multi_select_popup_view"
+        value: "multi_select_popup_view"
     }, {
         pId: 11,
         text: "bi.multi_select_check_pane",
-        type: "multi_select_check_pane"
+        value: "multi_select_check_pane"
     }, {
         pId: 11,
         text: "bi.multi_select_combo",
-        type: "multi_select_combo"
+        value: "multi_select_combo"
     }, {
         pId: 13,
         text: "bi.move2group_combo",
-        type: "move2group_combo"
+        value: "move2group_combo"
     }, {
         pId: 13,
         text: "bi.copy2group_combo",
-        type: "copy2group_combo"
+        value: "copy2group_combo"
     }, {
         pId: 14,
         text: "bi.single_tree_combo",
-        type: "single_tree_combo"
+        value: "single_tree_combo"
     }, {
         pId: 14,
         text: "bi.multilayer_single_tree_combo",
-        type: "multilayer_single_tree_combo"
+        value: "multilayer_single_tree_combo"
     }, {
         pId: 23,
         text: "bi.select_tree_combo",
-        type: "select_tree_combo"
+        value: "select_tree_combo"
     }, {
         pId: 23,
         text: "bi.multilayer_select_tree_combo",
-        type: "multilayer_select_tree_combo"
+        value: "multilayer_select_tree_combo"
     }, {
         pId: 15,
         text: "bi.dialog",
-        type: "dialog"
+        value: "dialog"
     }, {
         pId: 16,
         text: "bi.multi_tree",
-        type: "multi_tree"
+        value: "multi_tree"
     }, {
         pId: 18,
         text: "bi.simple_select_data_searcher",
-        type: "simple_select_data_searcher"
+        value: "simple_select_data_searcher"
     }, {
         pId: 19,
         text: "bi.filter_pane",
-        type: "filter_pane"
+        value: "filter_pane"
     }, {
         pId: 19,
         text: "bi.filter_operation",
-        type: "filter_operation"
+        value: "filter_operation"
     }, {
         pId: 19,
         text: "bi.filter",
-        type: "filter"
+        value: "filter"
     }, {
         pId: 20,
         text: "bi.color_chooser",
-        type: "color_chooser"
+        value: "color_chooser"
     }, {
         pId: 21,
         text: "bi.text_toolbar",
-        type: "text_toolbar"
+        value: "text_toolbar"
     }, {
         pId: 21,
         text: "bi.text_area",
-        type: "text_area"
+        value: "text_area"
     }, {
         pId: 22,
         text: "bi.path_chooser",
-        type: "path_chooser"
+        value: "path_chooser"
     }, {
         pId: 22,
         text: "bi.direction_path_chooser",
-        type: "direction_path_chooser"
+        value: "direction_path_chooser"
     }, {
         pId: 24,
         text: "bi.file_manager",
-        type: "file_manager"
+        value: "file_manager"
     }, {
         pId: 25,
         text: "bi.branch_relation",
-        type: "branch_relation"
+        value: "branch_relation"
     }, {
         pId: 26,
         text: "bi.relation_view",
-        type: "relation_view"
+        value: "relation_view"
     }, {
         pId: 27,
         text: "bi.preview_table",
-        type: "preview_table"
+        value: "preview_table"
     }, {
         pId: 27,
         text: "bi.adaptive_table",
-        type: "adaptive_table"
+        value: "adaptive_table"
     }, {
         pId: 27,
         text: "bi.adaptive_table(冻结表头)",
-        type: "adaptive_table2"
+        value: "adaptive_table2"
     }, {
         pId: 27,
         text: "bi.custom_scroll_table",
-        type: "custom_scroll_table"
+        value: "custom_scroll_table"
     }, {
         pId: 27,
         text: "bi.page_table",
-        type: "page_table"
+        value: "page_table"
     }, {
         pId: 27,
         text: "bi.page_table(冻结)",
-        type: "page_table2"
+        value: "page_table2"
     }, {
         pId: 27,
         text: "bi.page_table(调整列宽)",
-        type: "page_table3"
+        value: "page_table3"
     }, {
         pId: 27,
         text: "bi.excel_table",
-        type: "excel_table"
+        value: "excel_table"
     }, {
         pId: 27,
         text: "bi.sortable_table",
-        type: "sortable_table"
+        value: "sortable_table"
     }, {
         pId: 27,
         text: "bi.excel_view_display_manager",
-        type: "excel_view_display_manager"
+        value: "excel_view_display_manager"
     }, {
         pId: 32,
         text: "bi.sequence_table",
-        type: "sequence_table"
+        value: "sequence_table"
     }, {
         pId: 32,
         text: "bi.sequence_table(带有汇总)",
-        type: "sequence_table2"
+        value: "sequence_table2"
     }, {
         pId: 28,
         text: "bi.upload_image",
-        type: "upload_image"
+        value: "upload_image"
     }, {
         pId: 28,
         text: "bi.web_page",
-        type: "web_page"
+        value: "web_page"
     }, {
         pId: 29,
         text: "bi.arrangement_droppable",
-        type: "arrangement_droppable"
+        value: "arrangement_droppable"
     }, {
         pId: 29,
         text: "bi.arrangement",
-        type: "arrangement"
+        value: "arrangement"
     }, {
         pId: 29,
         text: "bi.adaptive_arrangement",
-        type: "adaptive_arrangement"
+        value: "adaptive_arrangement"
     }, {
         pId: 29,
         text: "bi.arrangement(网格布局)",
-        type: "grid_arrangement"
+        value: "grid_arrangement"
     }, {
         pId: 29,
         text: "bi.adaptive_arrangement(网格布局)",
-        type: "grid_adaptive_arrangement"
+        value: "grid_adaptive_arrangement"
     }, {
         pId: 30,
         text: "bi.simple_searcher",
-        type: "simple_searcher"
+        value: "simple_searcher"
     }, {
         pId: 31,
         text: "选色",
-        type: "select_color_combo"
+        value: "select_color_combo"
     }, {
         pId: 31,
         text: "bi.detail_chart",
-        type: "detail_chart"
+        value: "detail_chart"
     }, {
         pId: 31,
         text: "柱形",
-        type: "column_charts"
+        value: "column_charts"
     }, {
         pId: 31,
         text: "条形图",
-        type: "bar_charts"
+        value: "bar_charts"
     }, {
         pId: 31,
         text: "面积图",
-        type: "area_charts"
+        value: "area_charts"
     }, {
         pId: 31,
         text: "其他",
-        type: "other_charts"
+        value: "other_charts"
     }, {
         pId: 33,
         text: "文本标签",
-        type: "list_label"
+        value: "list_label"
     }, {
         pId: 33,
         text: "树标签",
-        type: "tree_label"
+        value: "tree_label"
     }, {
         pId: 34,
         text: "滑块",
-        type: "slider"
+        value: "slider"
     }, {
         pId: 35,
         text: "区间双滑块",
-        type: "interval_slider"
+        value: "interval_slider"
     }, {
         pId: 36,
         text: "文本列表",
-        type: "string_list"
+        value: "string_list"
     }, {
         pId: 37,
         text: "树列表",
-        type: "tree_list"
+        value: "tree_list"
     }, {
         pId: 38,
         text: "日期面板",
-        type: "data_pane"
+        value: "data_pane"
     }, {
         pId: 39,
         text: "螺旋分析tab控件",
-        type: "dynamic_group_tab"
+        value: "dynamic_group_tab"
     }, {
         pId: 40,
         text: "数值微调器",
-        type: "finetuning_number_editor"
+        value: "finetuning_number_editor"
     }];

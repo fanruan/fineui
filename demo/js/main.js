@@ -3,24 +3,40 @@ Demo.Main = BI.inherit(BI.Widget, {
         baseCls: "demo-main"
     },
     render: function () {
+        var center;
         return {
             type: "bi.border",
             items: {
                 north: {
                     height: 50,
                     el: {
-                        type: "demo.north"
+                        type: "demo.north",
+                        listeners: [{
+                            eventName: Demo.North.EVENT_VALUE_CHANGE,
+                            action: function () {
+                                center.setValue(0);
+                            }
+                        }]
                     }
                 },
                 west: {
                     width: 230,
                     el: {
-                        type: "demo.west"
+                        type: "demo.west",
+                        listeners: [{
+                            eventName: Demo.West.EVENT_VALUE_CHANGE,
+                            action: function (v) {
+                                center.setValue(v);
+                            }
+                        }]
                     }
                 },
                 center: {
                     el: {
                         type: "demo.center",
+                        ref: function (_ref) {
+                            center = _ref;
+                        }
                     }
                 }
             }

@@ -25840,6 +25840,7 @@ BI.CardLayout = BI.inherit(BI.Layout, {
             .appendTo(this.element);
         widget.invisible();
         this.addWidget(this._getCardName(cardName), widget);
+        widget._mount();
         return widget;
     },
 
@@ -25918,7 +25919,7 @@ BI.CardLayout = BI.inherit(BI.Layout, {
             }
         });
         return flag;
-    },
+    }
 });
 $.shortcut('bi.card', BI.CardLayout);/**
  * 默认的布局方式
