@@ -7,7 +7,7 @@
 BI.BarFloatSection = BI.inherit(BI.FloatSection, {
     _defaultConfig: function () {
         return BI.extend(BI.BarFloatSection.superclass._defaultConfig.apply(this, arguments), {
-            btns: [BI.i18nText(BI.i18nText("BI-Sure")), BI.i18nText("BI-Cancel")]
+            btns: [BI.i18nText(BI.i18nText("BI-Basic_Sure")), BI.i18nText("BI-Basic_Cancel")]
         })
     },
 
@@ -73,7 +73,7 @@ BI.BarFloatSection = BI.inherit(BI.FloatSection, {
 BI.BarPopoverSection = BI.inherit(BI.PopoverSection, {
     _defaultConfig: function () {
         return BI.extend(BI.BarPopoverSection.superclass._defaultConfig.apply(this, arguments), {
-            btns: [BI.i18nText(BI.i18nText("BI-Sure")), BI.i18nText(BI.i18nText("BI-Cancel"))]
+            btns: [BI.i18nText(BI.i18nText("BI-Basic_Sure")), BI.i18nText(BI.i18nText("BI-Basic_Cancel"))]
         })
     },
 
@@ -82,10 +82,11 @@ BI.BarPopoverSection = BI.inherit(BI.PopoverSection, {
     },
 
     rebuildSouth: function (south) {
-        var self = this;
+        var self = this, o = this.options;
         this.sure = BI.createWidget({
             type: 'bi.button',
             text: this.options.btns[0],
+            warningTitle: o.warningTitle,
             height: 30,
             value: 0,
             handler: function (v) {
@@ -109,5 +110,9 @@ BI.BarPopoverSection = BI.inherit(BI.PopoverSection, {
             hgap: 5,
             items: [this.cancel, this.sure]
         });
+    },
+
+    setConfirmButtonEnable: function(v){
+        this.sure.setEnable(!!v);
     }
 });

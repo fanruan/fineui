@@ -19,7 +19,7 @@ BI.ZeroClip = BI.inherit(BI.BasicButton, {
         FR.$defaultImport('/com/fr/bi/web/js/third/jquery.zclip.js', 'js');
         BI.nextTick(function () {
             self.element.zclip({
-                path: "resources/ZeroClipboard.swf",
+                path: FR.servletURL + "?op=resource&resource=/com/fr/bi/web/resources/ZeroClipboard.swf",
                 copy: o.copy,
                 beforeCopy: o.beforeCopy,
                 afterCopy: o.afterCopy

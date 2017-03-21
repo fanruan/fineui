@@ -137,13 +137,15 @@ BI.SignEditor = BI.inherit(BI.Single, {
 
     _checkText: function () {
         var o = this.options;
-        if (this.editor.getValue() === "") {
-            this.text.setValue(o.watermark || "");
-            this.text.element.addClass("bi-water-mark");
-        } else {
-            this.text.setValue(this.editor.getValue());
-            this.text.element.removeClass("bi-water-mark");
-        }
+        BI.nextTick(BI.bind(function () {
+            if (this.editor.getValue() === "") {
+                this.text.setValue(o.watermark || "");
+                this.text.element.addClass("bi-water-mark");
+            } else {
+                this.text.setValue(this.editor.getValue());
+                this.text.element.removeClass("bi-water-mark");
+            }
+        }, this));
     },
 
     _showInput: function () {
