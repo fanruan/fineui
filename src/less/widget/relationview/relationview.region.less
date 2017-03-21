@@ -1,0 +1,16 @@
+@import "../../bibase";
+
+.bi-relation-view-region{
+  & .relation-view-region-container{
+    background: @color-bi-background-default;
+    border: 1px solid @color-bi-border-normal;
+    &.other-package{
+      border: 1px dashed @color-bi-border-normal;
+    }
+    z-index: 1;
+    .border-radius(2px);
+    & .relation-view-region-title{
+      border-bottom: 1px solid @color-bi-border-normal;
+    }
+  }
+}

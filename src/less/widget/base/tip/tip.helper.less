@@ -1,0 +1,16 @@
+@import "../../../bibase";
+.bi-helper{
+  background-color: @background-color-highlight;
+  font-size: 13px;
+  color:@color-bi-text;
+  cursor: url('@{dragCursor}'), auto;
+  opacity: 0.7;
+  &.dragging-modify{
+    background: none;
+    & .helper-warning{
+      color: @color-bi-text-black;
+      border: 1px solid @color-bi-border-failure;
+      .border-radius(2px);
+    }
+  }
+}

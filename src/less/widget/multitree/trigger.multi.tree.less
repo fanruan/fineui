@@ -1,0 +1,18 @@
+@import "../../bibase";
+
+.bi-multi-tree-trigger{
+  border: 1px solid @color-bi-border-normal;
+  .border-corner-radius(2px, 2px, 2px, 2px);
+  & .trigger-check-selected{
+    border: 1px solid @color-bi-text-highlight;
+    .border-corner-radius(8px, 8px, 8px, 8px);
+    color: @color-bi-text-highlight;
+    background-color: @color-bi-background-default;
+    z-index: 1;
+  }
+
+  & .trigger-icon-button{
+    border-left: 1px solid @color-bi-border-normal;
+    font-size: 16px;
+  }
+}

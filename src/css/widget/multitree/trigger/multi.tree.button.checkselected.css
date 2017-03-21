@@ -1,0 +1,12 @@
+/****添加计算宽度的--运算符直接需要space****/
+/****** common color(常用颜色,可用于普遍场景) *****/
+/**** custom color(自定义颜色,用于特定场景) ****/
+.bi-multi-tree-check-selected-button .trigger-check-selected {
+  border: 1px solid #009de3;
+  -webkit-border-radius: 8px 8px 8px 8px;
+  -moz-border-radius: 8px 8px 8px 8px;
+  border-radius: 8px 8px 8px 8px;
+  color: #009de3;
+  background-color: #ffffff;
+  z-index: 1;
+}

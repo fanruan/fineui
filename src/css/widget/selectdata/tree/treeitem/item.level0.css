@@ -1,0 +1,53 @@
+/****添加计算宽度的--运算符直接需要space****/
+/****** common color(常用颜色,可用于普遍场景) *****/
+/**** custom color(自定义颜色,用于特定场景) ****/
+.bi-select-data-level0-item .select-data-level0-item-button {
+  -webkit-border-radius: 3px;
+  -moz-border-radius: 3px;
+  border-radius: 3px;
+}
+.bi-select-data-level0-item .select-data-level0-item-button:hover,
+.bi-select-data-level0-item .select-data-level0-item-button.hover {
+  color: #009de3;
+  background-color: #f4f4f4;
+}
+.bi-select-data-level0-item .select-data-level0-item-button:active,
+.bi-select-data-level0-item .select-data-level0-item-button.active {
+  color: #ffffff;
+  background-color: #009de3;
+}
+.bi-select-data-level0-item .select-data-level0-item-button:active .bi-high-light,
+.bi-select-data-level0-item .select-data-level0-item-button.active .bi-high-light {
+  color: #ffffff;
+}
+.bi-select-data-level0-item .select-data-level0-item-button.disabled,
+.bi-select-data-level0-item .select-data-level0-item-button.disabled:hover,
+.bi-select-data-level0-item .select-data-level0-item-button.disabled:active {
+  color: #c4c6c6 !important;
+  background-color: #ffffff !important;
+}
+.bi-select-data-level0-item .select-data-level0-item-button.disabled .bi-high-light,
+.bi-select-data-level0-item .select-data-level0-item-button.disabled:hover .bi-high-light,
+.bi-select-data-level0-item .select-data-level0-item-button.disabled:active .bi-high-light {
+  color: #c4c6c6 !important;
+}
+.bi-select-data-level0-item .select-data-top-line,
+.bi-select-data-level0-item .select-data-bottom-line {
+  background-color: #009de3;
+}
+.bi-select-data-level0-item.select-data-item-top .select-data-level0-item-button {
+  -moz-border-radius-topleft: 0;
+  -webkit-border-top-left-radius: 0;
+  -moz-border-radius-topright: 0;
+  -webkit-border-top-right-radius: 0;
+  border-top-left-radius: 0;
+  border-top-right-radius: 0;
+}
+.bi-select-data-level0-item.select-data-item-bottom .select-data-level0-item-button {
+  -moz-border-radius-bottomleft: 0;
+  -webkit-border-bottom-left-radius: 0;
+  -moz-border-radius-bottomright: 0;
+  -webkit-border-bottom-right-radius: 0;
+  border-bottom-right-radius: 0;
+  border-bottom-left-radius: 0;
+}

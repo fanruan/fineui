@@ -1,0 +1,14 @@
+@import "../../bibase";
+
+.bi-path-region {
+  background: @color-bi-background-light;
+  & .path-region-label {
+    z-index: 1;
+    background: @color-bi-background-default;
+    border: 1px solid @color-bi-border-default;
+    &.active{
+      background: @color-bi-background-highlight;
+      color: @color-bi-text;
+    }
+  }
+}

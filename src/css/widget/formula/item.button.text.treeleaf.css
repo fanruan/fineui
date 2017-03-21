@@ -1,0 +1,19 @@
+/****添加计算宽度的--运算符直接需要space****/
+/****** common color(常用颜色,可用于普遍场景) *****/
+/**** custom color(自定义颜色,用于特定场景) ****/
+.bi-button-text-tree-item:hover,
+.bi-button-text-tree-item.hover {
+  background-color: #f4f4f4;
+}
+.bi-button-text-tree-item.active {
+  color: #009de3;
+  background-color: #f4f4f4;
+}
+.bi-button-text-tree-item.disabled,
+.bi-button-text-tree-item.disabled:hover,
+.bi-button-text-tree-item.disabled:active {
+  background-color: #ffffff;
+}
+.bi-button-text-tree-item .formula-function-insert-button {
+  color: #009de3;
+}

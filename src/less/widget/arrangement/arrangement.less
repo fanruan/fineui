@@ -1,0 +1,29 @@
+@import "../../bibase";
+
+.bi-arrangement {
+  & .arrangement-helper {
+    border: 1px solid @color-bi-border-normal;
+    background: @color-bi-background-highlight;
+    z-index: @zIndex-tip;
+  }
+  & .arrangement-block {
+    z-index: @zIndex-tip;
+  }
+  & .arrangement-drop-container {
+    z-index: @zIndex-tip;
+    & .arrangement-drop-region {
+      overflow: hidden;
+    }
+    & .drop-devider{
+      z-index: @zIndex-tip + 1;
+      background: @color-bi-background-highlight;
+    }
+    & .top-left, & .top-right, & .bottom-left, & .bottom-right,
+    & .top-left-second, & .top-right-second, & .bottom-left-second, & .bottom-right-second,
+    & .top-center, & .bottom-center, & .left-center, & .right-center,
+    & .top-center-second, & .bottom-center-second, & .left-center-second, & .right-center-second {
+      z-index: @zIndex-tip + 1;
+      background: @color-bi-background-highlight;
+    }
+  }
+}
