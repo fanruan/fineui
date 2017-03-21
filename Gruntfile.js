@@ -73,7 +73,7 @@ module.exports = function (grunt) {
             },
 
             demoJs: {
-                src: ['demo/version.js', 'demo/app.js', 'demo/config.js', 'demo/js/**/*.js'],
+                src: ['demo/version.js', 'demo/config.js', 'demo/app.js', 'demo/js/**/*.js'],
                 dest: 'demo/dist/demo.js'
             },
             demoCss: {
@@ -143,7 +143,7 @@ module.exports = function (grunt) {
         },
         watch: {
             scripts: {
-                files: ['src/**/*.js', 'demo/js/**/*.js', 'demo/less/**/*.less'],
+                files: ['src/**/*.js', 'demo/js/**/*.js', 'demo/config.js', 'demo/less/**/*.less'],
                 tasks: ['less', 'concat'],
                 options: {
                     spanw: true,
