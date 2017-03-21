@@ -1,0 +1,16 @@
+/****添加计算宽度的--运算符直接需要space****/
+/****** common color(常用颜色,可用于普遍场景) *****/
+/**** custom color(自定义颜色,用于特定场景) ****/
+.bi-formula-function-pane .style-inner {
+  border-left: 1px solid #d4dadd;
+  border-top: 1px solid #d4dadd;
+}
+.bi-formula-function-pane .style-top {
+  border-top: 1px solid #d4dadd;
+}
+.bi-formula-function-pane .style-left {
+  border-left: 1px solid #d4dadd;
+}
+.bi-formula-function-pane {
+  background-color: #ffffff;
+}

@@ -1,0 +1,21 @@
+/****添加计算宽度的--运算符直接需要space****/
+/****** common color(常用颜色,可用于普遍场景) *****/
+/**** custom color(自定义颜色,用于特定场景) ****/
+.bi-slider-track .background-track {
+  background-color: #f4f4f4;
+  -webkit-border-radius: 12px;
+  -moz-border-radius: 12px;
+  border-radius: 12px;
+}
+.bi-slider-track .gray-track {
+  background: #cccccc;
+  -webkit-border-radius: 4px;
+  -moz-border-radius: 4px;
+  border-radius: 4px;
+}
+.bi-slider-track .blue-track {
+  background: #009de3;
+  -webkit-border-radius: 4px;
+  -moz-border-radius: 4px;
+  border-radius: 4px;
+}

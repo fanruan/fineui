@@ -1,0 +1,13 @@
+@import "../../../bibase";
+
+.bi-line-segment-button{
+  &.active {
+    & .line-segment-button-line {
+      background: @color-bi-background-highlight;
+    }
+  }
+  &.disabled, &.disabled:hover, &.disabled:active {
+    color: @color-bi-text-black;
+    background: @color-bi-background-default;
+  }
+}

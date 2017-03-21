@@ -1,0 +1,19 @@
+/****添加计算宽度的--运算符直接需要space****/
+/****** common color(常用颜色,可用于普遍场景) *****/
+/**** custom color(自定义颜色,用于特定场景) ****/
+.bi-down-list-popup .bi-down-list-item:hover,
+.bi-down-list-popup .bi-down-list-item.hover {
+  background-color: #f4f4f4;
+}
+.bi-down-list-popup .bi-down-list-item.disabled,
+.bi-down-list-popup .bi-down-list-item.disabled:hover,
+.bi-down-list-popup .bi-down-list-item.disabled:active {
+  background-color: #ffffff;
+}
+.bi-down-list-popup .bi-down-list-item:active {
+  color: #009de3;
+  background-color: #f4f4f4;
+}
+.bi-down-list-popup .bi-down-list-item .list-item-text {
+  max-width: 203px;
+}

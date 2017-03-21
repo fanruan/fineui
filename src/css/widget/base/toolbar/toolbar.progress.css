@@ -1,0 +1,11 @@
+/****添加计算宽度的--运算符直接需要space****/
+/****** common color(常用颜色,可用于普遍场景) *****/
+/**** custom color(自定义颜色,用于特定场景) ****/
+.bi-progress-bar .progress-bar-label {
+  font-weight: bold;
+  font-family: "微软雅黑";
+  color: #009de3;
+}
+.bi-progress-bar .progress-bar-label.success {
+  color: #0c6d23;
+}

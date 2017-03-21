@@ -1,0 +1,21 @@
+@import "../../bibase";
+
+.bi-formula-symbol-group{
+  & .symbol-button{
+    &:hover, &.hover, &:active, &.active{
+      color:@color-bi-text-highlight;
+      background-color:@color-bi-background-gray;
+      border:1px solid @color-bi-background-dark;
+    }
+    &{
+      color:@color-bi-text-highlight;
+      border:1px solid @color-bi-background-default;
+    }
+  }
+}
+
+.symbol-group-column{
+  &{
+    border:1px solid @color-bi-background-dark;
+  }
+}

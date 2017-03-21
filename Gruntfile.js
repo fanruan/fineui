@@ -51,6 +51,14 @@ module.exports = function (grunt) {
                 ],
                 dest: 'dist/case.js'
             },
+            widgetJs: {
+                src: [
+                    'src/widget/paramsettingcombo/popup.param.js',
+                    'src/widget/sequencetable/treenumber.sequencetable.js',
+                    'src/widget/**/*.js'
+                ],
+                dest: "dist/widget.js"
+            },
             coreCss: {
                 src: ['src/css/core/**/*.css', 'src/css/utils/**/*.css'],
                 dest: 'dist/core.css'
@@ -59,9 +67,13 @@ module.exports = function (grunt) {
                 src: ['src/css/base/**/*.css'],
                 dest: 'dist/base.css'
             },
+            widgetCss: {
+                src: ['src/css/widget/**/*.css'],
+                dest: 'dist/widget.css'
+            },
 
             demoJs: {
-                src: ['demo/version.js', 'demo/app.js', 'demo/js/**/*.js'],
+                src: ['demo/version.js', 'demo/app.js', 'demo/config.js', 'demo/js/**/*.js'],
                 dest: 'demo/dist/demo.js'
             },
             demoCss: {

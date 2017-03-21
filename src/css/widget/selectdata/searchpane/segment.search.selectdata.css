@@ -1,0 +1,13 @@
+/****添加计算宽度的--运算符直接需要space****/
+/****** common color(常用颜色,可用于普遍场景) *****/
+/**** custom color(自定义颜色,用于特定场景) ****/
+.bi-select-data-search-segment .search-segment-field-table > .first-element {
+  -webkit-border-radius: 3px 0px 0px 3px;
+  -moz-border-radius: 3px 0px 0px 3px;
+  border-radius: 3px 0px 0px 3px;
+}
+.bi-select-data-search-segment .search-segment-field-table > .last-element {
+  -webkit-border-radius: 0px 3 3px 0px;
+  -moz-border-radius: 0px 3 3px 0px;
+  border-radius: 0px 3 3px 0px;
+}

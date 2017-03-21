@@ -1,0 +1,24 @@
+@import "../../../../bibase";
+
+.bi-select-data-level1-item {
+  & .select-data-level1-item-button {
+    .border-radius(3px);
+    .list-item-select();
+  }
+
+  & .select-data-top-line, & .select-data-bottom-line {
+    background-color: @color-bi-background-highlight;
+  }
+
+  &.select-data-item-top {
+    & .select-data-level1-item-button {
+      .border-corner-top-radius(0, 0);
+    }
+  }
+
+  &.select-data-item-bottom {
+    & .select-data-level1-item-button {
+      .border-corner-bottom-radius(0, 0);
+    }
+  }
+}
