@@ -131,7 +131,7 @@ module.exports = function (grunt) {
         },
         watch: {
             scripts: {
-                files: ['src/**/*.js', 'demo/**/*.js', 'demo/**/*.less'],
+                files: ['src/**/*.js', 'demo/js/**/*.js', 'demo/less/**/*.less'],
                 tasks: ['less', 'concat'],
                 options: {
                     spanw: true,
