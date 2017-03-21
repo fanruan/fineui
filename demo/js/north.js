@@ -9,11 +9,11 @@ Demo.North = BI.inherit(BI.Widget, {
             items: [{
                 width: 230,
                 el: {
-                    type: "bi.button",
+                    type: "bi.text_button",
                     listeners: [{
                         eventName: BI.Button.EVENT_CHANGE,
                         action: function () {
-                           self.fireEvent(Demo.North.EVENT_VALUE_CHANGE, 0)
+                            self.fireEvent(Demo.North.EVENT_VALUE_CHANGE, 0)
                         }
                     }],
                     cls: "logo",
