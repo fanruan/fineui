@@ -27,29 +27,55 @@ BI.Tooltip = BI.inherit(BI.Tip, {
             e.stopEvent();
             return false;
         };
-        this.element.bind({"click": fn, "mousedown": fn, "mouseup": fn, "mouseover": fn, "mouseenter": fn, "mouseleave": fn, "mousemove": fn});
-
-        this.text = BI.createWidget({
-            type: "bi.label",
-            element: this,
-            textAlign: "left",
-            whiteSpace: "normal",
-            text: o.text,
-            textHeight: 20,
-            hgap: this._const.hgap
+        this.element.bind({
+            "click": fn,
+            "mousedown": fn,
+            "mouseup": fn,
+            "mouseover": fn,
+            "mouseenter": fn,
+            "mouseleave": fn,
+            "mousemove": fn
         });
+
+        var texts = (o.text + "").split("\n");
+        if (texts.length > 1) {
+            BI.createWidget({
+                type: "bi.vertical",
+                element: this,
+                hgap: this._const.hgap,
+                items: BI.map(texts, function (i, text) {
+                    return {
+                        type: "bi.label",
+                        textAlign: "left",
+                        whiteSpace: "normal",
+                        text: text,
+                        textHeight: 16
+                    }
+                })
+            })
+        } else {
+            this.text = BI.createWidget({
+                type: "bi.label",
+                element: this,
+                textAlign: "left",
+                whiteSpace: "normal",
+                text: o.text,
+                textHeight: 20,
+                hgap: this._const.hgap
+            });
+        }
     },
 
-    setWidth: function(width){
+    setWidth: function (width) {
         this.element.width(width - 2 * this._const.hgap);
     },
 
     setText: function (text) {
-        this.text.setText(text);
+        this.text && this.text.setText(text);
     },
 
     setLevel: function (level) {
-       this.element.removeClass("tooltip-success").removeClass("tooltip-warning");
+        this.element.removeClass("tooltip-success").removeClass("tooltip-warning");
         this.element.addClass("tooltip-" + level);
     }
 });

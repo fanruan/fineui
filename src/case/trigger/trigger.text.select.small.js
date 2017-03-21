@@ -33,7 +33,7 @@ BI.SmallSelectTextTrigger = BI.inherit(BI.Trigger, {
         var result = [];
         var items = BI.Tree.transformToArrayFormat(this.options.items);
         BI.each(items, function (i, item) {
-            if (BI.deepContains(vals, item.value)) {
+            if (BI.deepContains(vals, item.value) && !result.contains(item.text || item.value)) {
                 result.push(item.text || item.value);
             }
         });

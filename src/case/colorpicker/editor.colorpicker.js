@@ -10,7 +10,7 @@ BI.ColorPickerEditor = BI.inherit(BI.Widget, {
     _defaultConfig: function () {
         return BI.extend(BI.ColorPickerEditor.superclass._defaultConfig.apply(this, arguments), {
             baseCls: "bi-color-picker-editor",
-            width: 190,
+            width: 200,
             height: 20
         })
     },
@@ -38,6 +38,7 @@ BI.ColorPickerEditor = BI.inherit(BI.Widget, {
             cls: "color-picker-editor-input",
             validationChecker: checker,
             errorText: BI.i18nText("BI-Color_Picker_Error_Text"),
+            allowBlank: true,
             value: 255,
             width: 35,
             height: 20
@@ -54,6 +55,22 @@ BI.ColorPickerEditor = BI.inherit(BI.Widget, {
         this.G = Ws[1];
         this.B = Ws[2];
 
+        this.none = BI.createWidget({
+            type: "bi.checkbox"
+        });
+        this.none.on(BI.Checkbox.EVENT_CHANGE, function () {
+            if (this.isSelected()) {
+                self.lastColor = self.getValue();
+                self.setValue("");
+            } else {
+                self.setValue(self.lastColor || "#000000");
+            }
+            if (self.R.isValid() && self.G.isValid() && self.B.isValid()) {
+                self.colorShow.element.css("background-color", self.getValue());
+                self.fireEvent(BI.ColorPickerEditor.EVENT_CHANGE);
+            }
+        });
+
         BI.createWidget({
             type: "bi.htape",
             element: this,
@@ -66,32 +83,43 @@ BI.ColorPickerEditor = BI.inherit(BI.Widget, {
                 width: 20
             }, {
                 el: this.R,
-                width: 35
+                width: 32
             }, {
                 el: RGB[1],
                 lgap: 10,
                 width: 20
             }, {
                 el: this.G,
-                width: 35
+                width: 32
             }, {
                 el: RGB[2],
                 lgap: 10,
                 width: 20
             }, {
                 el: this.B,
-                width: 35
+                width: 32
+            }, {
+                el: {
+                    type: "bi.center_adapt",
+                    items: [this.none]
+                },
+                width: 20
             }]
         })
     },
 
     setValue: function (color) {
-        color || (color = "#000000");
+        if (!color) {
+            color = "";
+            this.none.setSelected(true);
+        } else {
+            this.none.setSelected(false);
+        }
         this.colorShow.element.css("background-color", color);
         var json = BI.DOM.rgb2json(BI.DOM.hex2rgb(color));
-        this.R.setValue(json.r);
-        this.G.setValue(json.g);
-        this.B.setValue(json.b);
+        this.R.setValue(BI.isNull(json.r) ? "" : json.r);
+        this.G.setValue(BI.isNull(json.g) ? "" : json.g);
+        this.B.setValue(BI.isNull(json.b) ? "" : json.b);
     },
 
     getValue: function () {

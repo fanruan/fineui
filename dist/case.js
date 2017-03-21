@@ -1,4 +1,76 @@
 /**
+ * Created by GUY on 2017/2/8.
+ *
+ * @class BI.BubblePopupView
+ * @extends BI.PopupView
+ */
+BI.BubblePopupView = BI.inherit(BI.PopupView, {
+    _defaultConfig: function () {
+        var config = BI.BubblePopupView.superclass._defaultConfig.apply(this, arguments);
+        return BI.extend(config, {
+            baseCls: config.baseCls + " bi-bubble-popup-view"
+        })
+    },
+    _init: function () {
+        BI.BubblePopupView.superclass._init.apply(this, arguments);
+    },
+
+    showLine: function (direction) {
+        var pos = {}, op = {};
+        switch (direction) {
+            case "left":
+                pos = {
+                    top: 0,
+                    bottom: 0,
+                    left: -1
+                };
+                op = {width: 3};
+                break;
+            case "right":
+                pos = {
+                    top: 0,
+                    bottom: 0,
+                    right: -1
+                };
+                op = {width: 3};
+                break;
+            case "top":
+                pos = {
+                    left: 0,
+                    right: 0,
+                    top: -1
+                };
+                op = {height: 3};
+                break;
+            case "bottom":
+                pos = {
+                    left: 0,
+                    right: 0,
+                    bottom: -1
+                };
+                op = {height: 3};
+                break;
+            default:
+                break;
+        }
+        this.line = BI.createWidget(op, {
+            type: "bi.layout",
+            cls: "bubble-popup-line"
+        });
+        pos.el = this.line;
+        BI.createWidget({
+            type: "bi.absolute",
+            element: this,
+            items: [pos]
+        })
+    },
+
+    hideLine: function () {
+        this.line && this.line.destroy();
+    }
+});
+
+$.shortcut("bi.bubble_popup_view", BI.BubblePopupView);/**
  * 可以改变图标的button
  *
  * Created by GUY on 2016/2/2.
@@ -197,6 +269,11 @@ BI.MultiSelectItem = BI.inherit(BI.BasicButton, {
         }))));
     },
 
+    setEnable: function (v) {
+        BI.MultiSelectItem.superclass.setEnable.apply(this, arguments);
+        this.checkbox.setEnable(v);
+    },
+
     doRedMark: function(){
         this.text.doRedMark.apply(this.text, arguments);
     },
@@ -215,7 +292,7 @@ BI.MultiSelectItem = BI.inherit(BI.BasicButton, {
         this.checkbox.setSelected(v);
     }
 });
-
+BI.MultiSelectItem.EVENT_CHANGE = "EVENT_CHANGE";
 $.shortcut("bi.multi_select_item", BI.MultiSelectItem);/**
  * Created by GUY on 2016/2/2.
  *
@@ -284,7 +361,8 @@ BI.SingleSelectItem = BI.inherit(BI.BasicButton, {
         return BI.extend(BI.SingleSelectItem.superclass._defaultConfig.apply(this, arguments), {
             extraCls: "bi-single-select-item bi-list-item-active",
             hgap: 10,
-            height: 25
+            height: 25,
+            textAlign: "left",
         })
     },
     _init: function () {
@@ -293,7 +371,7 @@ BI.SingleSelectItem = BI.inherit(BI.BasicButton, {
         this.text = BI.createWidget({
             type: "bi.label",
             element: this,
-            textAlign: "left",
+            textAlign: o.textAlign,
             whiteSpace: "nowrap",
             textHeight: o.height,
             height: o.height,
@@ -836,9 +914,9 @@ $.shortcut("bi.mid_plus_group_node", BI.MidPlusGroupNode);BI.MultiLayerIconArrow
         this.node = BI.createWidget({
             type: "bi.icon_arrow_node",
             iconCls: o.iconCls,
-            logic: {
-                dynamic: true
-            },
+            //logic: {
+            //    dynamic: true
+            //},
             id: o.id,
             pId: o.pId,
             open: o.open,
@@ -1479,9 +1557,6 @@ BI.MultiLayerIconTreeLeafItem = BI.inherit(BI.BasicButton, {
         this.item = BI.createWidget({
             type: "bi.icon_tree_leaf_item",
             iconCls: o.iconCls,
-            logic: {
-                dynamic: true
-            },
             id: o.id,
             pId: o.pId,
             isFront: true,
@@ -1655,12 +1730,13 @@ BI.Calendar = BI.inherit(BI.Widget, {
         De.setFullYear(Y, M, D);
         log.ymd = [De.getFullYear(), De.getMonth(), De.getDate()];
 
-        Date._MD[1] = Date.isLeap(log.ymd[0]) ? 29 : 28;
+        var MD = Date._MD.slice(0);
+        MD[1] = Date.isLeap(log.ymd[0]) ? 29 : 28;
 
         De.setFullYear(log.ymd[0], log.ymd[1], 1);
         log.FDay = De.getDay();
 
-        log.PDay = Date._MD[M === 0 ? 11 : M - 1] - log.FDay + 1;
+        log.PDay = MD[M === 0 ? 11 : M - 1] - log.FDay + 1;
         log.NDay = 1;
 
         var items = [];
@@ -1671,7 +1747,7 @@ BI.Calendar = BI.inherit(BI.Widget, {
                 DD = i + log.PDay;
                 MM === 1 && (YY -= 1);
                 MM = MM === 1 ? 12 : MM - 1;
-            } else if (i >= log.FDay && i < log.FDay + Date._MD[log.ymd[1]]) {
+            } else if (i >= log.FDay && i < log.FDay + MD[log.ymd[1]]) {
                 DD = i - log.FDay + 1;
                 if (i - log.FDay + 1 === log.ymd[2]) {
                     td.currentDay = true;
@@ -1792,6 +1868,23 @@ BI.extend(BI.Calendar, {
         var page = (json.year - year) * 12;
         page += json.month - month;
         return page;
+    },
+    getDateJSONByPage: function(v){
+        var months = new Date().getMonth();
+        var page = v;
+
+        //对当前page做偏移,使到当前年初
+        page = page + months;
+
+        var year = BI.parseInt(page / 12);
+        if(page < 0 && page % 12 !== 0){
+            year--;
+        }
+        var month = page >= 0 ? (page % 12) : ((12 + page % 12) % 12);
+        return {
+            year: new Date().getFullYear() + year,
+            month: month
+        }
     }
 });
 
@@ -2467,7 +2560,7 @@ BI.ColorPickerEditor = BI.inherit(BI.Widget, {
     _defaultConfig: function () {
         return BI.extend(BI.ColorPickerEditor.superclass._defaultConfig.apply(this, arguments), {
             baseCls: "bi-color-picker-editor",
-            width: 190,
+            width: 200,
             height: 20
         })
     },
@@ -2495,6 +2588,7 @@ BI.ColorPickerEditor = BI.inherit(BI.Widget, {
             cls: "color-picker-editor-input",
             validationChecker: checker,
             errorText: BI.i18nText("BI-Color_Picker_Error_Text"),
+            allowBlank: true,
             value: 255,
             width: 35,
             height: 20
@@ -2511,6 +2605,22 @@ BI.ColorPickerEditor = BI.inherit(BI.Widget, {
         this.G = Ws[1];
         this.B = Ws[2];
 
+        this.none = BI.createWidget({
+            type: "bi.checkbox"
+        });
+        this.none.on(BI.Checkbox.EVENT_CHANGE, function () {
+            if (this.isSelected()) {
+                self.lastColor = self.getValue();
+                self.setValue("");
+            } else {
+                self.setValue(self.lastColor || "#000000");
+            }
+            if (self.R.isValid() && self.G.isValid() && self.B.isValid()) {
+                self.colorShow.element.css("background-color", self.getValue());
+                self.fireEvent(BI.ColorPickerEditor.EVENT_CHANGE);
+            }
+        });
+
         BI.createWidget({
             type: "bi.htape",
             element: this,
@@ -2523,32 +2633,43 @@ BI.ColorPickerEditor = BI.inherit(BI.Widget, {
                 width: 20
             }, {
                 el: this.R,
-                width: 35
+                width: 32
             }, {
                 el: RGB[1],
                 lgap: 10,
                 width: 20
             }, {
                 el: this.G,
-                width: 35
+                width: 32
             }, {
                 el: RGB[2],
                 lgap: 10,
                 width: 20
             }, {
                 el: this.B,
-                width: 35
+                width: 32
+            }, {
+                el: {
+                    type: "bi.center_adapt",
+                    items: [this.none]
+                },
+                width: 20
             }]
         })
     },
 
     setValue: function (color) {
-        color || (color = "#000000");
+        if (!color) {
+            color = "";
+            this.none.setSelected(true);
+        } else {
+            this.none.setSelected(false);
+        }
         this.colorShow.element.css("background-color", color);
         var json = BI.DOM.rgb2json(BI.DOM.hex2rgb(color));
-        this.R.setValue(json.r);
-        this.G.setValue(json.g);
-        this.B.setValue(json.b);
+        this.R.setValue(BI.isNull(json.r) ? "" : json.r);
+        this.G.setValue(BI.isNull(json.g) ? "" : json.g);
+        this.B.setValue(BI.isNull(json.b) ? "" : json.b);
     },
 
     getValue: function () {
@@ -2561,15 +2682,267 @@ BI.ColorPickerEditor = BI.inherit(BI.Widget, {
 });
 BI.ColorPickerEditor.EVENT_CHANGE = "ColorPickerEditor.EVENT_CHANGE";
 $.shortcut("bi.color_picker_editor", BI.ColorPickerEditor);/**
+ * Created by GUY on 2017/2/8.
+ *
+ * @class BI.BubbleCombo
+ * @extends BI.Widget
+ */
+BI.BubbleCombo = BI.inherit(BI.Widget, {
+    _const: {
+        TRIANGLE_LENGTH: 6
+    },
+    _defaultConfig: function () {
+        return BI.extend(BI.BubbleCombo.superclass._defaultConfig.apply(this, arguments), {
+            baseCls: "bi-bubble-combo",
+            trigger: "click",
+            toggle: true,
+            direction: "bottom", //top||bottom||left||right||top,left||top,right||bottom,left||bottom,right
+            isDefaultInit: false,
+            isNeedAdjustHeight: true,//是否需要高度调整
+            isNeedAdjustWidth: true,
+            stopPropagation: false,
+            adjustLength: 0,//调整的距离
+            // adjustXOffset: 0,
+            // adjustYOffset: 10,
+            hideChecker: BI.emptyFn,
+            offsetStyle: "left", //left,right,center
+            el: {},
+            popup: {},
+        })
+    },
+    _init: function () {
+        BI.BubbleCombo.superclass._init.apply(this, arguments);
+        var self = this, o = this.options;
+        this.combo = BI.createWidget({
+            type: "bi.combo",
+            element: this,
+            trigger: o.trigger,
+            toggle: o.toggle,
+            direction: o.direction,
+            isDefaultInit: o.isDefaultInit,
+            isNeedAdjustHeight: o.isNeedAdjustHeight,
+            isNeedAdjustWidth: o.isNeedAdjustWidth,
+            adjustLength: this._getAdjustLength(),
+            stopPropagation: o.stopPropagation,
+            adjustXOffset: 0,
+            adjustYOffset: 0,
+            hideChecker: o.hideChecker,
+            offsetStyle: o.offsetStyle,
+            el: o.el,
+            popup: BI.extend({
+                type: "bi.bubble_popup_view"
+            }, o.popup),
+        });
+        this.combo.on(BI.Combo.EVENT_TRIGGER_CHANGE, function () {
+            self.fireEvent(BI.BubbleCombo.EVENT_TRIGGER_CHANGE, arguments);
+        });
+        this.combo.on(BI.Combo.EVENT_CHANGE, function () {
+            self.fireEvent(BI.BubbleCombo.EVENT_CHANGE, arguments);
+        });
+        this.combo.on(BI.Combo.EVENT_EXPAND, function () {
+            self.fireEvent(BI.BubbleCombo.EVENT_EXPAND, arguments);
+        });
+        this.combo.on(BI.Combo.EVENT_COLLAPSE, function () {
+            self.fireEvent(BI.BubbleCombo.EVENT_COLLAPSE, arguments);
+        });
+        this.combo.on(BI.Combo.EVENT_AFTER_INIT, function () {
+            self.fireEvent(BI.BubbleCombo.EVENT_AFTER_INIT, arguments);
+        });
+        this.combo.on(BI.Combo.EVENT_BEFORE_POPUPVIEW, function () {
+            self.fireEvent(BI.BubbleCombo.EVENT_BEFORE_POPUPVIEW, arguments);
+        });
+        this.combo.on(BI.Combo.EVENT_AFTER_POPUPVIEW, function () {
+            self._showTriangle();
+            self.fireEvent(BI.BubbleCombo.EVENT_AFTER_POPUPVIEW, arguments);
+        });
+        this.combo.on(BI.Combo.EVENT_BEFORE_HIDEVIEW, function () {
+            self._hideTriangle();
+            self.fireEvent(BI.BubbleCombo.EVENT_BEFORE_HIDEVIEW, arguments);
+        });
+        this.combo.on(BI.Combo.EVENT_AFTER_HIDEVIEW, function () {
+            self.fireEvent(BI.BubbleCombo.EVENT_AFTER_HIDEVIEW, arguments);
+        });
+    },
+
+    _getAdjustLength: function () {
+        return this._const.TRIANGLE_LENGTH + this.options.adjustLength;
+    },
+
+    _createTriangle: function (direction) {
+        var pos = {}, op = {};
+        var adjustLength = this._getAdjustLength();
+        switch (direction) {
+            case "left":
+                pos = {
+                    top: 0,
+                    bottom: 0,
+                    left: -adjustLength
+                };
+                op = {width: this._const.TRIANGLE_LENGTH};
+                break;
+            case "right":
+                pos = {
+                    top: 0,
+                    bottom: 0,
+                    right: -adjustLength
+                };
+                op = {width: this._const.TRIANGLE_LENGTH};
+                break;
+            case "top":
+                pos = {
+                    left: 0,
+                    right: 0,
+                    top: -adjustLength
+                };
+                op = {height: this._const.TRIANGLE_LENGTH};
+                break;
+            case "bottom":
+                pos = {
+                    left: 0,
+                    right: 0,
+                    bottom: -adjustLength
+                };
+                op = {height: this._const.TRIANGLE_LENGTH};
+                break;
+            default:
+                break;
+        }
+        this.triangle = BI.createWidget(op, {
+            type: "bi.center_adapt",
+            items: [{
+                type: "bi.layout",
+                cls: "bubble-combo-triangle-" + direction
+            }]
+        });
+        pos.el = this.triangle;
+        BI.createWidget({
+            type: "bi.absolute",
+            element: this,
+            items: [pos]
+        })
+    },
+
+    _createLeftTriangle: function () {
+        this._createTriangle("left");
+    },
+
+    _createRightTriangle: function () {
+        this._createTriangle("right");
+    },
+
+    _createTopTriangle: function () {
+        this._createTriangle("top");
+    },
+
+    _createBottomTriangle: function () {
+        this._createTriangle("bottom");
+    },
+
+    _showTriangle: function () {
+        var pos = this.combo.getPopupPosition();
+        switch (pos.dir) {
+            case "left,top":
+            case "left,bottom":
+                this._createLeftTriangle();
+                this.combo.getView().showLine("right");
+                break;
+            case "right,top":
+            case "right,bottom":
+                this._createRightTriangle();
+                this.combo.getView().showLine("left");
+                break;
+            case "top,left":
+            case "top,right":
+                this._createTopTriangle();
+                this.combo.getView().showLine("bottom");
+                break;
+            case "bottom,left":
+            case "bottom,right":
+                this._createBottomTriangle();
+                this.combo.getView().showLine("top");
+                break;
+        }
+    },
+
+    _hideTriangle: function () {
+        this.triangle && this.triangle.destroy();
+        this.combo.getView().hideLine();
+    },
+
+    hideView: function () {
+        this._hideTriangle();
+        this.combo && this.combo.hideView();
+    },
+
+    showView: function () {
+        this.combo && this.combo.showView();
+    }
+});
+
+BI.BubbleCombo.EVENT_TRIGGER_CHANGE = "EVENT_TRIGGER_CHANGE";
+BI.BubbleCombo.EVENT_CHANGE = "EVENT_CHANGE";
+BI.BubbleCombo.EVENT_EXPAND = "EVENT_EXPAND";
+BI.BubbleCombo.EVENT_COLLAPSE = "EVENT_COLLAPSE";
+BI.BubbleCombo.EVENT_AFTER_INIT = "EVENT_AFTER_INIT";
+
+
+BI.BubbleCombo.EVENT_BEFORE_POPUPVIEW = "EVENT_BEFORE_POPUPVIEW";
+BI.BubbleCombo.EVENT_AFTER_POPUPVIEW = "EVENT_AFTER_POPUPVIEW";
+BI.BubbleCombo.EVENT_BEFORE_HIDEVIEW = "EVENT_BEFORE_HIDEVIEW";
+BI.BubbleCombo.EVENT_AFTER_HIDEVIEW = "EVENT_AFTER_HIDEVIEW";
+$.shortcut("bi.bubble_combo", BI.BubbleCombo);/**
+ * Created by GUY on 2017/2/8.
+ *
+ * @class BI.BubblePopupBarView
+ * @extends BI.BubblePopupView
+ */
+BI.BubblePopupBarView = BI.inherit(BI.BubblePopupView, {
+    _defaultConfig: function () {
+        return BI.extend(BI.BubblePopupBarView.superclass._defaultConfig.apply(this, arguments), {
+            extraCls: "bi-bubble-bar-popup-view",
+            buttons: [{value: BI.i18nText(BI.i18nText("BI-Basic_Sure"))}, {value: BI.i18nText("BI-Basic_Cancel"), level: "ignore"}]
+        })
+    },
+    _init: function () {
+        BI.BubblePopupBarView.superclass._init.apply(this, arguments);
+    },
+    _createToolBar: function () {
+        var o = this.options, self = this;
+
+        var items = [];
+        BI.each(o.buttons.reverse(), function (i, buttonOpt) {
+            if(BI.isWidget(buttonOpt)){
+                items.push(buttonOpt);
+            }else{
+                items.push(BI.extend({
+                    type: 'bi.button',
+                    height: 30,
+                    handler: function (v) {
+                        self.fireEvent(BI.BubblePopupBarView.EVENT_CLICK_TOOLBAR_BUTTON, v);
+                    }
+                }, buttonOpt))
+            }
+        });
+        return BI.createWidget({
+            type: 'bi.right_vertical_adapt',
+            height: 40,
+            hgap: 10,
+            bgap: 10,
+            items: items
+        });
+    }
+});
+BI.BubblePopupBarView.EVENT_CLICK_TOOLBAR_BUTTON = "EVENT_CLICK_TOOLBAR_BUTTON";
+$.shortcut("bi.bubble_bar_popup_view", BI.BubblePopupBarView);/**
  * guy
  * 记录内容的输入框
  * @class BI.RecordEditor
  * @extends BI.Single
  */
 BI.RecordEditor = BI.inherit(BI.Single, {
-    _defaultConfig: function() {
+    _defaultConfig: function () {
         var conf = BI.RecordEditor.superclass._defaultConfig.apply(this, arguments);
-        return BI.extend(conf , {
+        return BI.extend(conf, {
             baseCls: (conf.baseCls || "") + " bi-record-editor",
             hgap: 4,
             vgap: 2,
@@ -2586,7 +2959,7 @@ BI.RecordEditor = BI.inherit(BI.Single, {
         })
     },
 
-    _init : function() {
+    _init: function () {
         BI.RecordEditor.superclass._init.apply(this, arguments);
         this.contents = [];
         var self = this, o = this.options;
@@ -2604,7 +2977,7 @@ BI.RecordEditor = BI.inherit(BI.Single, {
             validationChecker: o.validationChecker,
             quitChecker: o.quitChecker,
             mouseOut: o.mouseOut,
-            allowBlank : o.allowBlank,
+            allowBlank: o.allowBlank,
             watermark: o.watermark,
             errorText: o.errorText
         });
@@ -2616,64 +2989,64 @@ BI.RecordEditor = BI.inherit(BI.Single, {
         this.editor.on(BI.Controller.EVENT_CHANGE, function () {
             self.fireEvent(BI.Controller.EVENT_CHANGE, arguments);
         });
-        this.editor.on(BI.Editor.EVENT_FOCUS, function(){
+        this.editor.on(BI.Editor.EVENT_FOCUS, function () {
             self._checkInputState();
             self.fireEvent(BI.RecordEditor.EVENT_FOCUS, arguments);
         });
-        this.editor.on(BI.Editor.EVENT_BLUR, function(){
+        this.editor.on(BI.Editor.EVENT_BLUR, function () {
             self._checkInputState();
             self.fireEvent(BI.RecordEditor.EVENT_BLUR, arguments);
         });
-        this.editor.on(BI.Editor.EVENT_CLICK, function(){
+        this.editor.on(BI.Editor.EVENT_CLICK, function () {
             self.fireEvent(BI.RecordEditor.EVENT_CLICK, arguments);
         });
-        this.editor.on(BI.Editor.EVENT_CHANGE, function(){
+        this.editor.on(BI.Editor.EVENT_CHANGE, function () {
             self.fireEvent(BI.RecordEditor.EVENT_CHANGE, arguments);
         });
-        this.editor.on(BI.Editor.EVENT_KEY_DOWN, function(v){
+        this.editor.on(BI.Editor.EVENT_KEY_DOWN, function (v) {
             self.fireEvent(BI.RecordEditor.EVENT_KEY_DOWN, arguments);
         });
 
-        this.editor.on(BI.Editor.EVENT_VALID, function(){
+        this.editor.on(BI.Editor.EVENT_VALID, function () {
             self.fireEvent(BI.RecordEditor.EVENT_VALID, arguments);
         });
-        this.editor.on(BI.Editor.EVENT_SPACE, function(){
+        this.editor.on(BI.Editor.EVENT_SPACE, function () {
             self.fireEvent(BI.RecordEditor.EVENT_SPACE, arguments);
         });
-        this.editor.on(BI.Editor.EVENT_CONFIRM, function(){
-            self.setValue(self.getValue());
+        this.editor.on(BI.Editor.EVENT_CONFIRM, function () {
+            self.setState(self.getValue());
             self.editor.isValid() && self.editor.setValue("");
             self.fireEvent(BI.RecordEditor.EVENT_CONFIRM, arguments);
         });
-        this.editor.on(BI.Editor.EVENT_START, function(){
+        this.editor.on(BI.Editor.EVENT_START, function () {
             self.fireEvent(BI.RecordEditor.EVENT_START, arguments);
         });
-        this.editor.on(BI.Editor.EVENT_PAUSE, function(){
+        this.editor.on(BI.Editor.EVENT_PAUSE, function () {
             self.fireEvent(BI.RecordEditor.EVENT_PAUSE, arguments);
         });
-        this.editor.on(BI.Editor.EVENT_STOP, function(){
+        this.editor.on(BI.Editor.EVENT_STOP, function () {
             self.fireEvent(BI.RecordEditor.EVENT_STOP, arguments);
         });
         this.editor.on(BI.Editor.EVENT_ENTER, function () {
             self.fireEvent(BI.RecordEditor.EVENT_ENTER, arguments);
         });
-        this.editor.on(BI.Editor.EVENT_BACKSPACE, function(){
+        this.editor.on(BI.Editor.EVENT_BACKSPACE, function () {
             self._checkInputState();
         });
-        this.editor.on(BI.Editor.EVENT_REMOVE, function(){
-            if(!BI.isEmpty(self.contents)){
+        this.editor.on(BI.Editor.EVENT_REMOVE, function () {
+            if (!BI.isEmpty(self.contents)) {
                 self.contents.pop().destroy();
                 self.setValue(self.getValue());
                 self._adjustInputWidth();
             }
         });
-        this.editor.on(BI.Editor.EVENT_ERROR, function(){
+        this.editor.on(BI.Editor.EVENT_ERROR, function () {
             self.fireEvent(BI.RecordEditor.EVENT_ERROR, arguments);
         });
-        this.editor.on(BI.Editor.EVENT_RESTRICT, function(){
+        this.editor.on(BI.Editor.EVENT_RESTRICT, function () {
             self.fireEvent(BI.RecordEditor.EVENT_RESTRICT, arguments);
         });
-        this.editor.on(BI.Editor.EVENT_EMPTY, function(){
+        this.editor.on(BI.Editor.EVENT_EMPTY, function () {
             self.fireEvent(BI.RecordEditor.EVENT_EMPTY, arguments);
         });
         BI.createWidget({
@@ -2681,41 +3054,41 @@ BI.RecordEditor = BI.inherit(BI.Single, {
             element: this,
             items: [this.textContainer, this.editor]
         });
-        BI.Resizers.add(this.getName(), BI.bind(this._adjustInputWidth, this));
+        BI.ResizeDetector.addResizeListener(this, BI.bind(this._adjustInputWidth, this));
         this._adjustInputWidth();
     },
 
-    _adjustInputWidth: function(){
-        BI.nextTick(BI.bind(function(){
+    _adjustInputWidth: function () {
+        BI.nextTick(BI.bind(function () {
             this.editor.element.css("width", this.element.width() - this.textContainer.element.outerWidth() - 10);
         }, this));
     },
 
-    _checkInputState: function(){
-        if(BI.isEmpty(this.contents)){
+    _checkInputState: function () {
+        if (BI.isEmpty(this.contents)) {
             this.editor.enableWarterMark();
         } else {
             this.editor.disableWarterMark();
         }
     },
 
-    focus: function(){
+    focus: function () {
         this.editor.focus();
     },
 
-    blur: function(){
+    blur: function () {
         this.editor.blur();
     },
 
-    isValid : function() {
+    isValid: function () {
         return this.editor.isValid();
     },
 
-    setErrorText: function(text){
+    setErrorText: function (text) {
         this.editor.setErrorText(text);
     },
 
-    getErrorText: function(){
+    getErrorText: function () {
         return this.editor.getErrorText();
     },
 
@@ -2735,21 +3108,21 @@ BI.RecordEditor = BI.inherit(BI.Single, {
         return this.editor.getValue();
     },
 
-    getState: function(){
-        var values = BI.map(this.contents, function(i, lb){
+    getState: function () {
+        var values = BI.map(this.contents, function (i, lb) {
             return lb.getText();
         });
-        if(BI.isNotEmptyString(this.editor.getValue())){
+        if (BI.isNotEmptyString(this.editor.getValue())) {
             return values.concat([this.editor.getValue()]);
         }
         return values;
     },
 
-    setState: function(v){
-        BI.StateEditor.superclass.setValue.apply(this, arguments);
-        v =  BI.isArray(v) ? v : (v == "" ? [] : [v]);
+    setState: function (v) {
+        BI.RecordEditor.superclass.setValue.apply(this, arguments);
+        v = BI.isArray(v) ? v : (v == "" ? [] : [v]);
         var contents = this.contents = [];
-        BI.each(v, function(i, lb){
+        BI.each(v, function (i, lb) {
             contents.push(BI.createWidget({
                 type: "bi.label",
                 height: 25,
@@ -2764,7 +3137,7 @@ BI.RecordEditor = BI.inherit(BI.Single, {
         this._adjustInputWidth();
     },
 
-    destroy: function(){
+    destroy: function () {
         BI.Resizers.remove(this.getName());
         BI.RecordEditor.superclass.destroy.apply(this, arguments);
     }
@@ -2995,6 +3368,10 @@ BI.ShelterEditor = BI.inherit(BI.Single, {
         return this.editor.getLastValidValue();
     },
 
+    setTextStyle: function (style) {
+        this.text.setStyle(style);
+    },
+
     setValue: function (k) {
         this.editor.setValue(k);
         this._checkText();
@@ -3170,13 +3547,15 @@ BI.SignEditor = BI.inherit(BI.Single, {
 
     _checkText: function () {
         var o = this.options;
-        if (this.editor.getValue() === "") {
-            this.text.setValue(o.watermark || "");
-            this.text.element.addClass("bi-water-mark");
-        } else {
-            this.text.setValue(this.editor.getValue());
-            this.text.element.removeClass("bi-water-mark");
-        }
+        BI.nextTick(BI.bind(function () {
+            if (this.editor.getValue() === "") {
+                this.text.setValue(o.watermark || "");
+                this.text.element.addClass("bi-water-mark");
+            } else {
+                this.text.setValue(this.editor.getValue());
+                this.text.element.removeClass("bi-water-mark");
+            }
+        }, this));
     },
 
     _showInput: function () {
@@ -3441,8 +3820,10 @@ BI.StateEditor = BI.inherit(BI.Single, {
     },
 
     focus: function () {
-        this._showInput();
-        this.editor.focus();
+        if (this.options.disabled === false) {
+            this._showInput();
+            this.editor.focus();
+        }
     },
 
     blur: function () {
@@ -3484,6 +3865,11 @@ BI.StateEditor = BI.inherit(BI.Single, {
         this.editor.setValue(k);
     },
 
+    setEnable: function (v) {
+        this.text.setEnable(v);
+        this.editor.setEnable(v);
+    },
+
     getValue: function () {
         return this.editor.getValue();
     },
@@ -3497,26 +3883,44 @@ BI.StateEditor = BI.inherit(BI.Single, {
         if (BI.isNumber(v)) {
             if (v === BI.Selection.All) {
                 this.text.setText(BI.i18nText("BI-Select_All"));
+                this.text.setTitle("");
                 this.text.element.removeClass("state-editor-infinite-text");
             } else if (v === BI.Selection.Multi) {
                 this.text.setText(BI.i18nText("BI-Select_Part"));
+                this.text.setTitle("");
                 this.text.element.removeClass("state-editor-infinite-text");
             } else {
                 this.text.setText(BI.i18nText("BI-Unrestricted"));
+                this.text.setTitle("");
                 this.text.element.addClass("state-editor-infinite-text");
             }
             return;
         }
-        if (!BI.isArray(v) || v.length === 1) {
-            this.text.setText(v);
-            this.text.setTitle(v);
-            this.text.element.removeClass("state-editor-infinite-text");
-        } else if (BI.isEmpty(v)) {
-            this.text.setText(BI.i18nText("BI-Unrestricted"));
-            this.text.element.addClass("state-editor-infinite-text");
-        } else {
-            this.text.setText(BI.i18nText("BI-Select_Part"));
-            this.text.element.removeClass("state-editor-infinite-text");
+        if (BI.isString(v)) {
+            if (BI.isEmpty(v)) {
+                this.text.setText(BI.i18nText("BI-Unrestricted"));
+                this.text.setTitle("");
+                this.text.element.addClass("state-editor-infinite-text");
+            } else {
+                this.text.setText(v);
+                this.text.setTitle(v);
+                this.text.element.removeClass("state-editor-infinite-text");
+            }
+            return;
+        }
+        if (BI.isArray(v)) {
+            if (BI.isEmpty(v)) {
+                this.text.setText(BI.i18nText("BI-Unrestricted"));
+                this.text.element.addClass("state-editor-infinite-text");
+            } else if (v.length === 1) {
+                this.text.setText(v[0]);
+                this.text.setTitle(v[0]);
+                this.text.element.removeClass("state-editor-infinite-text");
+            } else {
+                this.text.setText(BI.i18nText("BI-Select_Part"));
+                this.text.setTitle("");
+                this.text.element.removeClass("state-editor-infinite-text");
+            }
         }
     }
 });
@@ -3739,6 +4143,11 @@ BI.SimpleStateEditor = BI.inherit(BI.Single, {
         this.editor.setValue(k);
     },
 
+    setEnable: function(v){
+        this.text.setEnable(v);
+        this.editor.setEnable(v);
+    },
+
     getValue: function () {
         return this.editor.getValue();
     },
@@ -3751,10 +4160,10 @@ BI.SimpleStateEditor = BI.inherit(BI.Single, {
         BI.SimpleStateEditor.superclass.setValue.apply(this, arguments);
         if (BI.isNumber(v)) {
             if (v === BI.Selection.All) {
-                this.text.setText(BI.i18nText("BI-Aleady_Selected"));
+                this.text.setText(BI.i18nText("BI-Already_Selected"));
                 this.text.element.removeClass("state-editor-infinite-text");
             } else if (v === BI.Selection.Multi) {
-                this.text.setText(BI.i18nText("BI-Aleady_Selected"));
+                this.text.setText(BI.i18nText("BI-Already_Selected"));
                 this.text.element.removeClass("state-editor-infinite-text");
             } else {
                 this.text.setText(BI.i18nText("BI-Unrestricted"));
@@ -3770,7 +4179,7 @@ BI.SimpleStateEditor = BI.inherit(BI.Single, {
             this.text.setText(BI.i18nText("BI-Unrestricted"));
             this.text.element.addClass("state-editor-infinite-text");
         } else {
-            this.text.setText(BI.i18nText("BI-Aleady_Selected"));
+            this.text.setText(BI.i18nText("BI-Already_Selected"));
             this.text.element.removeClass("state-editor-infinite-text");
         }
     }
@@ -3920,7 +4329,7 @@ $.shortcut("bi.branch_expander", BI.BranchExpander);/**
 BI.BarFloatSection = BI.inherit(BI.FloatSection, {
     _defaultConfig: function () {
         return BI.extend(BI.BarFloatSection.superclass._defaultConfig.apply(this, arguments), {
-            btns: [BI.i18nText(BI.i18nText("BI-Sure")), BI.i18nText("BI-Cancel")]
+            btns: [BI.i18nText(BI.i18nText("BI-Basic_Sure")), BI.i18nText("BI-Basic_Cancel")]
         })
     },
 
@@ -3986,7 +4395,7 @@ BI.BarFloatSection = BI.inherit(BI.FloatSection, {
 BI.BarPopoverSection = BI.inherit(BI.PopoverSection, {
     _defaultConfig: function () {
         return BI.extend(BI.BarPopoverSection.superclass._defaultConfig.apply(this, arguments), {
-            btns: [BI.i18nText(BI.i18nText("BI-Sure")), BI.i18nText(BI.i18nText("BI-Cancel"))]
+            btns: [BI.i18nText(BI.i18nText("BI-Basic_Sure")), BI.i18nText(BI.i18nText("BI-Basic_Cancel"))]
         })
     },
 
@@ -3995,10 +4404,11 @@ BI.BarPopoverSection = BI.inherit(BI.PopoverSection, {
     },
 
     rebuildSouth: function (south) {
-        var self = this;
+        var self = this, o = this.options;
         this.sure = BI.createWidget({
             type: 'bi.button',
             text: this.options.btns[0],
+            warningTitle: o.warningTitle,
             height: 30,
             value: 0,
             handler: function (v) {
@@ -4022,6 +4432,10 @@ BI.BarPopoverSection = BI.inherit(BI.PopoverSection, {
             hgap: 5,
             items: [this.cancel, this.sure]
         });
+    },
+
+    setConfirmButtonEnable: function(v){
+        this.sure.setEnable(!!v);
     }
 });/**
  * 下拉框弹出层的多选版本，toolbar带有若干按钮, zIndex在1000w
@@ -4035,7 +4449,7 @@ BI.MultiPopupView = BI.inherit(BI.PopupView, {
         var conf = BI.MultiPopupView.superclass._defaultConfig.apply(this, arguments);
         return BI.extend(conf, {
             baseCls: (conf.baseCls || "") + " bi-multi-list-view",
-            buttons: [BI.i18nText("BI-Sure")]
+            buttons: [BI.i18nText("BI-Basic_Sure")]
         })
     },
 
@@ -5077,38 +5491,277 @@ BI.SortList = BI.inherit(BI.Widget, {
 });
 BI.SortList.EVENT_CHANGE = "EVENT_CHANGE";
 $.shortcut("bi.sort_list", BI.SortList);/**
- * 有总页数的分页控件
- *
- * Created by GUY on 2015/9/8.
- * @class BI.AllPagger
- * @extends BI.Widget
+ * Created by Young's on 2016/8/30.
  */
-BI.AllPagger = BI.inherit(BI.Widget, {
+BI.LoginTimeOut = BI.inherit(BI.BarPopoverSection, {
+    _defaultConfig: function () {
+        return BI.extend(BI.LoginTimeOut.superclass._defaultConfig.apply(this, arguments), {})
+    },
+
+    _init: function () {
+        BI.LoginTimeOut.superclass._init.apply(this, arguments);
+    },
+
+    rebuildNorth: function (north) {
+        BI.createWidget({
+            type: "bi.label",
+            element: north,
+            text: BI.i18nText("BI-Login_Timeout"),
+            height: 50,
+            textAlign: "left"
+        })
+    },
+
+    rebuildCenter: function (center) {
+        var self = this, o = this.options;
+        var userNameInput = BI.createWidget({
+            type: "bi.editor",
+            watermark: BI.i18nText("BI-Username"),
+            cls: "login-input",
+            allowBlank: true,
+            width: 300,
+            height: 30
+        });
+        var userNameMask = BI.createWidget({
+            type: "bi.text_button",
+            width: 330,
+            height: 56,
+            cls: "error-mask"
+        });
+        userNameMask.setVisible(false);
+        userNameMask.on(BI.TextButton.EVENT_CHANGE, function () {
+            userNameInput.focus();
+            this.element.fadeOut();
+        });
+
+        var userNameWrapper = BI.createWidget({
+            type: "bi.absolute",
+            cls: "input-wrapper login-username-icon",
+            items: [{
+                el: {
+                    type: "bi.icon",
+                    width: 26,
+                    height: 26
+                },
+                top: 10,
+                left: 0
+            }, {
+                el: userNameInput,
+                top: 8,
+                left: 30
+            }, {
+                el: userNameMask,
+                top: 0,
+                left: 0
+            }],
+            width: 330,
+            height: 56
+        });
+
+
+        var passwordInput = BI.createWidget({
+            type: "bi.editor",
+            inputType: "password",
+            cls: "login-input",
+            allowBlank: true,
+            watermark: BI.i18nText("BI-Basic_Password"),
+            width: 300,
+            height: 30
+        });
+        var passwordMask = BI.createWidget({
+            type: "bi.text_button",
+            width: 330,
+            height: 56,
+            cls: "error-mask"
+        });
+        passwordMask.setVisible(false);
+        passwordMask.on(BI.TextButton.EVENT_CHANGE, function () {
+            passwordInput.focus();
+            this.element.fadeOut();
+        });
+
+        var passwordWrapper = BI.createWidget({
+            type: "bi.absolute",
+            cls: "input-wrapper login-password-icon",
+            items: [{
+                el: {
+                    type: "bi.icon",
+                    width: 26,
+                    height: 26
+                },
+                top: 10,
+                left: 0
+            }, {
+                el: passwordInput,
+                top: 8,
+                left: 30
+            }, {
+                el: passwordMask,
+                top: 0,
+                left: 0
+            }],
+            width: 330,
+            height: 56
+        });
+
+        var loginButton = BI.createWidget({
+            type: "bi.text_button",
+            text: BI.i18nText("BI-Basic_Login"),
+            cls: "login-button",
+            width: 330,
+            height: 50
+        });
+        loginButton.on(BI.TextButton.EVENT_CHANGE, function () {
+            if (BI.isEmptyString(userNameInput.getValue())) {
+                self._showMes(userNameMask, BI.i18nText("BI-Username_Not_Null"));
+                return;
+            }
+            if (BI.isEmptyString(passwordInput.getValue())) {
+                self._showMes(passwordMask, BI.i18nText("BI-Password_Not_Null"));
+                return;
+            }
+
+            //反正是登录直接用FR的登录了
+            FR.ajax({
+                url: FR.servletURL + '?op=fs_load&cmd=login',
+                data: FR.cjkEncodeDO({
+                    fr_username: encodeURIComponent(userNameInput.getValue()),
+                    fr_password: encodeURIComponent(passwordInput.getValue()),
+                    fr_remember: self.keepLoginState.isSelected()
+                }),
+                type: 'POST',
+                async: false,
+                error: function () {
+                    BI.Msg.toast("Error!");
+                },
+                complete: function (res, status) {
+                    if (BI.isEmptyString(res.responseText)) {
+                        self._showMes(userNameMask, BI.i18nText("BI-Authentication_Failed"));
+                        return;
+                    }
+                    var signResult = FR.jsonDecode(res.responseText);
+                    if (signResult.fail) {
+                        //用户名和密码不匹配
+                        self._showMes(userNameMask, BI.i18nText("BI-Username_Password_Not_Correct"));
+                    } else if (signResult.url) {
+                        self.fireEvent(BI.LoginTimeOut.EVENT_LOGIN);
+                    }
+                }
+            });
+        });
+
+        var logo;
+        if (BI.isNotNull(window.top.FS)) {
+            logo = window.top.FS.config.logoImageID4FS;
+        }
+        BI.createWidget({
+            type: "bi.absolute",
+            element: center,
+            cls: "bi-login-timeout-center",
+            items: [{
+                el: {
+                    type: "bi.center_adapt",
+                    items: [{
+                        type: "bi.img",
+                        src: FR.servletURL + (logo ?
+                            '?op=fr_attach&cmd=ah_image&id=' + logo + '&isAdjust=false' :
+                            '?op=resource&resource=/com/fr/bi/web/images/login/bi_logo.png'),
+                        width: 120,
+                        height: 120
+                    }],
+                    width: 200,
+                    height: 300
+                },
+                left: 0,
+                top: 0
+            }, {
+                el: userNameWrapper,
+                top: 30,
+                left: 230
+            }, {
+                el: passwordWrapper,
+                top: 100,
+                left: 230
+            }, {
+                el: loginButton,
+                top: 200,
+                left: 230
+            }]
+        });
+    },
+
+    _showMes: function (widget, mes) {
+        widget.setText(mes);
+        widget.element.fadeIn();
+        setTimeout(function () {
+            if (widget.element.isVisible()) {
+                widget.element.fadeOut();
+            }
+        }, 5000);
+    },
+
+    rebuildSouth: function (south) {
+        this.keepLoginState = BI.createWidget({
+            type: "bi.checkbox",
+            width: 16,
+            height: 16
+        });
+        BI.createWidget({
+            type: "bi.absolute",
+            element: south,
+            cls: "bi-login-timeout-south",
+            items: [{
+                el: this.keepLoginState,
+                top: 0,
+                left: 230
+            }, {
+                el: {
+                    type: "bi.label",
+                    text: BI.i18nText("BI-Keep_Login_State"),
+                    cls: "keep-state",
+                    height: 30
+                },
+                top: -7,
+                left: 260
+            }]
+        })
+    }
+});
+BI.extend(BI.LoginTimeOut, {
+    POPOVER_ID: "___popover__id___"
+});
+BI.LoginTimeOut.EVENT_LOGIN = "EVENT_LOGIN";
+$.shortcut("bi.login_timeout", BI.LoginTimeOut);
+/**
+ * 有总页数和总行数的分页控件
+ * Created by Young's on 2016/10/13.
+ */
+BI.AllCountPager = BI.inherit(BI.Widget, {
 
     _defaultConfig: function () {
-        return BI.extend(BI.AllPagger.superclass._defaultConfig.apply(this, arguments), {
-            extraCls: "bi-all-pager",
-            width: 96,
-            height: 25,
+        return BI.extend(BI.AllCountPager.superclass._defaultConfig.apply(this, arguments), {
+            extraCls: "bi-all-count-pager",
+            height: 30,
             pages: 1, //必选项
-            curr: 1 //初始化当前页， pages为数字时可用
+            curr: 1, //初始化当前页， pages为数字时可用，
+            count: 1 //总行数
         })
     },
     _init: function () {
-        BI.AllPagger.superclass._init.apply(this, arguments);
+        BI.AllCountPager.superclass._init.apply(this, arguments);
         var self = this, o = this.options;
         this.editor = BI.createWidget({
             type: "bi.small_text_editor",
             cls: "pager-editor",
             validationChecker: function (v) {
-                return BI.isPositiveInteger(v);
+                return (self.rowCount.getValue() === 0 && v === "0") || BI.isPositiveInteger(v);
             },
             hgap: 4,
             vgap: 0,
             value: o.curr,
             errorText: BI.i18nText("BI-Please_Input_Integer"),
             width: 30,
-            height: o.height - 2
+            height: 20
         });
         this.pager = BI.createWidget({
             type: "bi.pager",
@@ -5131,7 +5784,7 @@ BI.AllPagger = BI.inherit(BI.Widget, {
                 value: "prev",
                 title: BI.i18nText("BI-Previous_Page"),
                 warningTitle: BI.i18nText("BI-Current_Is_First_Page"),
-                height: o.height - 2,
+                height: 20,
                 cls: "all-pager-prev column-pre-page-h-font"
             },
             next: {
@@ -5139,7 +5792,7 @@ BI.AllPagger = BI.inherit(BI.Widget, {
                 value: "next",
                 title: BI.i18nText("BI-Next_Page"),
                 warningTitle: BI.i18nText("BI-Current_Is_Last_Page"),
-                height: o.height - 2,
+                height: 20,
                 cls: "all-pager-next column-next-page-h-font"
             },
 
@@ -5151,10 +5804,10 @@ BI.AllPagger = BI.inherit(BI.Widget, {
 
         this.editor.on(BI.TextEditor.EVENT_CONFIRM, function () {
             self.pager.setValue(BI.parseInt(self.editor.getValue()));
-            self.fireEvent(BI.AllPagger.EVENT_CHANGE);
+            self.fireEvent(BI.AllCountPager.EVENT_CHANGE);
         });
         this.pager.on(BI.Pager.EVENT_CHANGE, function () {
-            self.fireEvent(BI.AllPagger.EVENT_CHANGE);
+            self.fireEvent(BI.AllCountPager.EVENT_CHANGE);
         });
         this.pager.on(BI.Pager.EVENT_AFTER_POPULATE, function () {
             self.editor.setValue(self.pager.getCurrentPage());
@@ -5167,11 +5820,34 @@ BI.AllPagger = BI.inherit(BI.Widget, {
             text: "/" + o.pages
         });
 
+        this.rowCount = BI.createWidget({
+            type: "bi.label",
+            height: o.height,
+            hgap: 5,
+            text: o.count,
+            title: o.count
+        });
+
+        var count = BI.createWidget({
+            type: "bi.left",
+            items: [{
+                type: "bi.label",
+                height: o.height,
+                text: BI.i18nText("BI-Basic_Total"),
+                width: 15
+            }, this.rowCount, {
+                type: "bi.label",
+                height: o.height,
+                text: BI.i18nText("BI-Tiao_Data"),
+                width: 50,
+                textAlign: "left"
+            }]
+        });
         BI.createWidget({
             type: "bi.center_adapt",
             element: this,
-            columnSize: [30, "", 36],
-            items: [this.editor, this.allPages, this.pager]
+            columnSize: ["", 30, 40, 36],
+            items: [count, this.editor, this.allPages, this.pager]
         })
     },
 
@@ -5179,10 +5855,16 @@ BI.AllPagger = BI.inherit(BI.Widget, {
         this.allPages.setText("/" + v);
         this.allPages.setTitle(v);
         this.pager.setAllPages(v);
+        this.editor.setEnable(v >= 1);
     },
 
     setValue: function (v) {
         this.pager.setValue(v);
+    },
+
+    setCount: function (count) {
+        this.rowCount.setText(count);
+        this.rowCount.setTitle(count);
     },
 
     getCurrentPage: function () {
@@ -5197,12 +5879,22 @@ BI.AllPagger = BI.inherit(BI.Widget, {
         return this.pager.hasNext();
     },
 
+    setPagerVisible: function (b) {
+        this.editor.setVisible(b);
+        this.allPages.setVisible(b);
+        this.pager.setVisible(b);
+    },
+
+    getAliasWidth: function () {
+        return this.options.width - 100;
+    },
+
     populate: function () {
         this.pager.populate();
     }
 });
-BI.AllPagger.EVENT_CHANGE = "EVENT_CHANGE";
-$.shortcut("bi.all_pager", BI.AllPagger);/**
+BI.AllCountPager.EVENT_CHANGE = "EVENT_CHANGE";
+$.shortcut("bi.all_count_pager", BI.AllCountPager);/**
  * 显示页码的分页控件
  *
  * Created by GUY on 2016/6/30.
@@ -5214,8 +5906,7 @@ BI.DirectionPager = BI.inherit(BI.Widget, {
     _defaultConfig: function () {
         return BI.extend(BI.DirectionPager.superclass._defaultConfig.apply(this, arguments), {
             baseCls: "bi-direction-pager",
-            width: 108,
-            height: 25,
+            height: 30,
             horizontal: {
                 pages: false, //总页数
                 curr: 1, //初始化当前页， pages为数字时可用
@@ -5242,26 +5933,26 @@ BI.DirectionPager = BI.inherit(BI.Widget, {
         var v = o.vertical, h = o.horizontal;
         this._createVPager();
         this._createHPager();
-        BI.createWidget({
+        this.layout = BI.createWidget({
             type: "bi.absolute",
             scrollable: false,
             element: this,
             items: [{
                 el: this.vpager,
-                top: 0,
-                left: -19
+                top: 5,
+                right: 74
             }, {
                 el: this.vlabel,
-                top: 0,
-                left: 16
+                top: 5,
+                right: 111
             }, {
                 el: this.hpager,
-                top: 0,
-                right: -19
+                top: 5,
+                right: -9
             }, {
                 el: this.hlabel,
-                top: 0,
-                right: 16
+                top: 5,
+                right: 28
             }]
         });
     },
@@ -5271,17 +5962,18 @@ BI.DirectionPager = BI.inherit(BI.Widget, {
         var v = o.vertical;
         this.vlabel = BI.createWidget({
             type: "bi.label",
-            width: 20,
-            height: o.height,
+            width: 24,
+            height: 20,
             value: v.curr,
             title: v.curr
         });
         this.vpager = BI.createWidget({
             type: "bi.pager",
-            width: 72,
+            width: 76,
             layouts: [{
                 type: "bi.horizontal",
-                lgap: 20,
+                scrollx: false,
+                rgap: 24,
                 vgap: 1
             }],
 
@@ -5297,9 +5989,9 @@ BI.DirectionPager = BI.inherit(BI.Widget, {
                 value: "prev",
                 title: BI.i18nText("BI-Up_Page"),
                 warningTitle: BI.i18nText("BI-Current_Is_First_Page"),
-                height: o.height - 2,
-                iconWidth: o.height - 2,
-                iconHeight: o.height - 2,
+                height: 20,
+                iconWidth: 16,
+                iconHeight: 16,
                 cls: "direction-pager-prev column-pre-page-h-font"
             },
             next: {
@@ -5307,9 +5999,9 @@ BI.DirectionPager = BI.inherit(BI.Widget, {
                 value: "next",
                 title: BI.i18nText("BI-Down_Page"),
                 warningTitle: BI.i18nText("BI-Current_Is_Last_Page"),
-                height: o.height - 2,
-                iconWidth: o.height - 2,
-                iconHeight: o.height - 2,
+                height: 20,
+                iconWidth: 16,
+                iconHeight: 16,
                 cls: "direction-pager-next column-next-page-h-font"
             },
 
@@ -5324,6 +6016,7 @@ BI.DirectionPager = BI.inherit(BI.Widget, {
         });
         this.vpager.on(BI.Pager.EVENT_AFTER_POPULATE, function () {
             self.vlabel.setValue(this.getCurrentPage());
+            self.vlabel.setTitle(this.getCurrentPage());
         });
     },
 
@@ -5332,17 +6025,18 @@ BI.DirectionPager = BI.inherit(BI.Widget, {
         var h = o.horizontal;
         this.hlabel = BI.createWidget({
             type: "bi.label",
-            width: 20,
-            height: o.height,
+            width: 24,
+            height: 20,
             value: h.curr,
             title: h.curr
         });
         this.hpager = BI.createWidget({
             type: "bi.pager",
-            width: 72,
+            width: 76,
             layouts: [{
                 type: "bi.horizontal",
-                rgap: 20,
+                scrollx: false,
+                rgap: 24,
                 vgap: 1
             }],
 
@@ -5358,9 +6052,9 @@ BI.DirectionPager = BI.inherit(BI.Widget, {
                 value: "prev",
                 title: BI.i18nText("BI-Left_Page"),
                 warningTitle: BI.i18nText("BI-Current_Is_First_Page"),
-                height: o.height - 2,
-                iconWidth: o.height - 2,
-                iconHeight: o.height - 2,
+                height: 20,
+                iconWidth: 16,
+                iconHeight: 16,
                 cls: "direction-pager-prev row-pre-page-h-font"
             },
             next: {
@@ -5368,9 +6062,9 @@ BI.DirectionPager = BI.inherit(BI.Widget, {
                 value: "next",
                 title: BI.i18nText("BI-Right_Page"),
                 warningTitle: BI.i18nText("BI-Current_Is_Last_Page"),
-                height: o.height - 2,
-                iconWidth: o.height - 2,
-                iconHeight: o.height - 2,
+                height: 20,
+                iconWidth: 16,
+                iconHeight: 16,
                 cls: "direction-pager-next row-next-page-h-font"
             },
 
@@ -5385,6 +6079,7 @@ BI.DirectionPager = BI.inherit(BI.Widget, {
         });
         this.hpager.on(BI.Pager.EVENT_AFTER_POPULATE, function () {
             self.hlabel.setValue(this.getCurrentPage());
+            self.hlabel.setTitle(this.getCurrentPage());
         });
     },
 
@@ -5437,241 +6132,332 @@ BI.DirectionPager = BI.inherit(BI.Widget, {
     populate: function () {
         this.vpager.populate();
         this.hpager.populate();
+        var vShow = false, hShow = false;
+        if (!this.hasHNext() && !this.hasHPrev()) {
+            this.setHPagerVisible(false);
+        } else {
+            this.setHPagerVisible(true);
+            hShow = true;
+        }
+        if (!this.hasVNext() && !this.hasVPrev()) {
+            this.setVPagerVisible(false);
+        } else {
+            this.setVPagerVisible(true);
+            vShow = true;
+        }
+        var num = [74, 111, -9, 28];
+        var items = this.layout.attr("items");
+
+        if (vShow === true && hShow === true) {
+            items[0].right = num[0];
+            items[1].right = num[1];
+            items[2].right = num[2];
+            items[3].right = num[3];
+        } else if (vShow === true) {
+            items[0].right = num[2];
+            items[1].right = num[3];
+        } else if (hShow === true) {
+            items[2].right = num[2];
+            items[3].right = num[3];
+        }
+        this.layout.attr("items", items);
+        this.layout.resize();
     },
-    
-    refresh: function () {
-        this.vpager.refresh();
-        this.hpager.refresh();
+
+    clear: function () {
+        this.vpager.attr("curr", 1);
+        this.hpager.attr("curr", 1);
     }
 });
 BI.DirectionPager.EVENT_CHANGE = "EVENT_CHANGE";
 $.shortcut("bi.direction_pager", BI.DirectionPager);/**
- * 显示页码的分页控件
+ * 分页控件
  *
- * Created by GUY on 2016/2/17.
- * @class BI.NumberPager
+ * Created by GUY on 2015/8/31.
+ * @class BI.DetailPager
  * @extends BI.Widget
  */
-BI.NumberPager = BI.inherit(BI.Widget, {
-
+BI.DetailPager = BI.inherit(BI.Widget, {
     _defaultConfig: function () {
-        return BI.extend(BI.NumberPager.superclass._defaultConfig.apply(this, arguments), {
-            baseCls: "bi-number-pager",
-            width: 95,
-            height: 25,
-            pages: false, //总页数
-            curr: 1, //初始化当前页， pages为数字时可用
+        return BI.extend(BI.DetailPager.superclass._defaultConfig.apply(this, arguments), {
+            baseCls: "bi-detail-pager",
+            behaviors: {},
+            layouts: [{
+                type: "bi.horizontal",
+                hgap: 10,
+                vgap: 0
+            }],
 
-            hasPrev: BI.emptyFn,
-            hasNext: BI.emptyFn,
+            dynamicShow: true, //是否动态显示上一页、下一页、首页、尾页， 若为false，则指对其设置使能状态
+            //dynamicShow为false时以下两个有用
+            dynamicShowFirstLast: false,//是否动态显示首页、尾页
+            dynamicShowPrevNext: false,//是否动态显示上一页、下一页
+            pages: false, //总页数
+            curr: function () {
+                return 1;
+            }, //初始化当前页
+            groups: 0, //连续显示分页数
+            jump: BI.emptyFn, //分页的回调函数
+
+            first: false, //是否显示首页
+            last: false, //是否显示尾页
+            prev: "上一页",
+            next: "下一页",
+
             firstPage: 1,
-            lastPage: BI.emptyFn
+            lastPage: function () { //在万不得已时才会调用这个函数获取最后一页的页码,  主要作用于setValue方法
+                return 1;
+            },
+            hasPrev: BI.emptyFn, //pages不可用时有效
+            hasNext: BI.emptyFn  //pages不可用时有效
         })
     },
     _init: function () {
-        BI.NumberPager.superclass._init.apply(this, arguments);
-        var self = this, o = this.options;
-        this.currentPage = o.curr;
-        this.label = BI.createWidget({
-            type: "bi.label",
-            height: o.height - 2,
-            value: this.currentPage
-        });
-        this.pager = BI.createWidget({
-            type: "bi.pager",
-            width: 36,
-            layouts: [{
-                type: "bi.horizontal",
-                hgap: 1,
-                vgap: 1
-            }],
+        BI.DetailPager.superclass._init.apply(this, arguments);
+        var self = this;
+        this.currPage = BI.result(this.options, "curr");
+        //翻页太灵敏
+        this._lock = false;
+        this._debouce = BI.debounce(function () {
+            self._lock = false;
+        }, 300);
+        this._populate();
+    },
 
-            dynamicShow: false,
-            pages: o.pages,
-            curr: o.curr,
-            groups: 0,
+    _populate: function () {
+        var self = this, o = this.options, view = [], dict = {};
+        this.empty();
+        var pages = BI.result(o, "pages");
+        var curr = BI.result(this, "currPage");
+        var groups = BI.result(o, "groups");
+        var first = BI.result(o, "first");
+        var last = BI.result(o, "last");
+        var prev = BI.result(o, "prev");
+        var next = BI.result(o, "next");
 
-            first: false,
-            last: false,
-            prev: {
-                type: "bi.icon_button",
-                value: "prev",
-                title: BI.i18nText("BI-Previous_Page"),
-                warningTitle: BI.i18nText("BI-Current_Is_First_Page"),
-                height: o.height - 2,
-                iconWidth: o.height - 2,
-                iconHeight: o.height - 2,
-                cls: "number-pager-prev column-pre-page-h-font"
-            },
-            next: {
-                type: "bi.icon_button",
-                value: "next",
-                title: BI.i18nText("BI-Next_Page"),
-                warningTitle: BI.i18nText("BI-Current_Is_Last_Page"),
-                height: o.height - 2,
-                iconWidth: o.height - 2,
-                iconHeight: o.height - 2,
-                cls: "number-pager-next column-next-page-h-font"
-            },
+        if (pages === false) {
+            groups = 0;
+            first = false;
+            last = false;
+        } else {
+            groups > pages && (groups = pages);
+        }
 
-            hasPrev: o.hasPrev,
-            hasNext: o.hasNext,
-            firstPage: o.firstPage,
-            lastPage: o.lastPage
-        });
+        //计算当前组
+        dict.index = Math.ceil((curr + ((groups > 1 && groups !== pages) ? 1 : 0)) / (groups === 0 ? 1 : groups));
 
-        this.pager.on(BI.Pager.EVENT_CHANGE, function () {
-            if (self.getCurrentPage() !== self.pager.getCurrentPage()) {
-                self.currentPage = self.pager.getCurrentPage();
-                self.fireEvent(BI.NumberPager.EVENT_CHANGE);
+        //当前页非首页，则输出上一页
+        if (((!o.dynamicShow && !o.dynamicShowPrevNext) || curr > 1) && prev !== false) {
+            if (BI.isKey(prev)) {
+                view.push({
+                    text: prev,
+                    value: "prev",
+                    disabled: pages === false ? o.hasPrev(curr) === false : !(curr > 1 && prev !== false)
+                })
+            } else {
+                view.push(BI.extend({
+                    disabled: pages === false ? o.hasPrev(curr) === false : !(curr > 1 && prev !== false)
+                }, prev));
             }
-        });
-        this.pager.on(BI.Pager.EVENT_AFTER_POPULATE, function () {
-            self.label.setValue(self.pager.getCurrentPage());
-        });
+        }
 
-        BI.createWidget({
-            type: "bi.center_adapt",
+        //当前组非首组，则输出首页
+        if (((!o.dynamicShow && !o.dynamicShowFirstLast) || (dict.index > 1 && groups !== 0)) && first) {
+            view.push({
+                text: first,
+                value: "first",
+                disabled: !(dict.index > 1 && groups !== 0)
+            });
+            if (dict.index > 1 && groups !== 0) {
+                view.push({
+                    type: "bi.label",
+                    cls: "page-ellipsis",
+                    text: "\u2026"
+                });
+            }
+        }
+
+        //输出当前页组
+        dict.poor = Math.floor((groups - 1) / 2);
+        dict.start = dict.index > 1 ? curr - dict.poor : 1;
+        dict.end = dict.index > 1 ? (function () {
+            var max = curr + (groups - dict.poor - 1);
+            return max > pages ? pages : max;
+        }()) : groups;
+        if (dict.end - dict.start < groups - 1) { //最后一组状态
+            dict.start = dict.end - groups + 1;
+        }
+        var s = dict.start, e = dict.end;
+        if (first && last && (dict.index > 1 && groups !== 0) && (pages > groups && dict.end < pages && groups !== 0)) {
+            s++;
+            e--;
+        }
+        for (; s <= e; s++) {
+            if (s === curr) {
+                view.push({
+                    text: s,
+                    value: s,
+                    selected: true
+                })
+            } else {
+                view.push({
+                    text: s,
+                    value: s
+                })
+            }
+        }
+
+        //总页数大于连续分页数，且当前组最大页小于总页，输出尾页
+        if (((!o.dynamicShow && !o.dynamicShowFirstLast) || (pages > groups && dict.end < pages && groups !== 0)) && last) {
+            if (pages > groups && dict.end < pages && groups !== 0) {
+                view.push({
+                    type: "bi.label",
+                    cls: "page-ellipsis",
+                    text: "\u2026"
+                });
+            }
+            view.push({
+                text: last,
+                value: "last",
+                disabled: !(pages > groups && dict.end < pages && groups !== 0)
+            })
+        }
+
+        //当前页不为尾页时，输出下一页
+        dict.flow = !prev && groups === 0;
+        if (((!o.dynamicShow && !o.dynamicShowPrevNext) && next) || (curr !== pages && next || dict.flow)) {
+            view.push((function () {
+                if (BI.isKey(next)) {
+                    if (pages === false) {
+                        return {text: next, value: "next", disabled: o.hasNext(curr) === false}
+                    }
+                    return (dict.flow && curr === pages)
+                        ?
+                    {text: next, value: "next", disabled: true}
+                        :
+                    {text: next, value: "next", disabled: !(curr !== pages && next || dict.flow)};
+                } else {
+                    return BI.extend({
+                        disabled: pages === false ? o.hasNext(curr) === false : !(curr !== pages && next || dict.flow)
+                    }, next);
+                }
+            }()));
+        }
+
+        this.button_group = BI.createWidget({
+            type: "bi.button_group",
             element: this,
-            columnSize: [20, "", 20, 36],
-            items: [{type: "bi.label", text: "第"}, this.label, {type: "bi.label", text: "页"}, this.pager]
-        })
+            items: BI.createItems(view, {
+                cls: "page-item",
+                height: 23,
+                hgap: 10
+            }),
+            behaviors: o.behaviors,
+            layouts: o.layouts
+        });
+        this.button_group.on(BI.Controller.EVENT_CHANGE, function (type, value, obj) {
+            if (self._lock === true) {
+                return;
+            }
+            self._lock = true;
+            self._debouce();
+            if (type === BI.Events.CLICK) {
+                var v = self.button_group.getValue()[0];
+                switch (v) {
+                    case "first":
+                        self.currPage = 1;
+                        break;
+                    case "last":
+                        self.currPage = pages;
+                        break;
+                    case "prev":
+                        self.currPage--;
+                        break;
+                    case "next":
+                        self.currPage++;
+                        break;
+                    default:
+                        self.currPage = v;
+                        break;
+                }
+                o.jump.apply(self, [{
+                    pages: pages,
+                    curr: self.currPage
+                }]);
+                self._populate();
+                self.fireEvent(BI.DetailPager.EVENT_CHANGE, obj);
+            }
+            self.fireEvent(BI.Controller.EVENT_CHANGE, arguments);
+        });
+        this.fireEvent(BI.DetailPager.EVENT_AFTER_POPULATE);
     },
 
     getCurrentPage: function () {
-        return this.currentPage;
+        return this.currPage;
     },
 
-    hasPrev: function () {
-        return this.pager.hasPrev();
+    setAllPages: function (pages) {
+        this.options.pages = pages;
     },
 
-    hasNext: function () {
-        return this.pager.hasNext();
+    hasPrev: function (v) {
+        v || (v = 1);
+        var o = this.options;
+        var pages = this.options.pages;
+        return pages === false ? o.hasPrev(v) : v > 1;
+    },
+
+    hasNext: function (v) {
+        v || (v = 1);
+        var o = this.options;
+        var pages = this.options.pages;
+        return pages === false ? o.hasNext(v) : v < pages;
     },
 
     setValue: function (v) {
-        this.currentPage = v;
-        this.pager.setValue(v);
+        var o = this.options;
+        v = v | 0;
+        v = v < 1 ? 1 : v;
+        if (o.pages === false) {
+            var lastPage = BI.result(o, "lastPage"), firstPage = 1;
+            this.currPage = v > lastPage ? lastPage : ((firstPage = BI.result(o, "firstPage")), (v < firstPage ? firstPage : v));
+        } else {
+            v = v > o.pages ? o.pages : v;
+            this.currPage = v;
+        }
+        this._populate();
+    },
+
+    getValue: function () {
+        var val = this.button_group.getValue()[0];
+        switch (val) {
+            case "prev":
+                return -1;
+            case "next":
+                return 1;
+            case "first":
+                return BI.MIN;
+            case "last":
+                return BI.MAX;
+            default :
+                return val;
+        }
+    },
+
+    attr: function (key, value) {
+        BI.DetailPager.superclass.attr.apply(this, arguments);
+        if (key === "curr") {
+            this.currPage = BI.result(this.options, "curr");
+        }
     },
 
     populate: function () {
-        this.pager.populate();
+        this._populate();
     }
 });
-BI.NumberPager.EVENT_CHANGE = "EVENT_CHANGE";
-$.shortcut("bi.number_pager", BI.NumberPager);/**
- * 可以跳转的分页控件
- *
- * Created by GUY on 2015/9/8.
- * @class BI.SkipPager
- * @extends BI.Widget
- */
-BI.SkipPager = BI.inherit(BI.Widget, {
-
-    _defaultConfig: function () {
-        return BI.extend(BI.SkipPager.superclass._defaultConfig.apply(this, arguments), {
-            extraCls: "bi-skip-pager",
-            width: 110,
-            height: 25,
-            pages: false, //总页数
-            curr: 1, //初始化当前页， pages为数字时可用
-
-            hasPrev: BI.emptyFn,
-            hasNext: BI.emptyFn,
-            firstPage: 1,
-            lastPage: BI.emptyFn
-        })
-    },
-    _init: function () {
-        BI.SkipPager.superclass._init.apply(this, arguments);
-        var self = this, o = this.options;
-        this.currentPage = o.curr;
-        this.editor = BI.createWidget({
-            type: "bi.small_text_editor",
-            validationChecker: function (v) {
-                return BI.isPositiveInteger(v);
-            },
-            hgap: 4,
-            vgap: 0,
-            value: o.curr,
-            errorText: BI.i18nText("BI-Please_Input_Integer"),
-            width: 30,
-            height: o.height - 2
-        });
-        this.pager = BI.createWidget({
-            type: "bi.pager",
-            layouts: [{
-                type: "bi.horizontal",
-                hgap: 1,
-                vgap: 1
-            }],
-
-            dynamicShow: false,
-            pages: o.pages,
-            curr: o.curr,
-            groups: 0,
-
-            first: false,
-            last: false,
-            prev: {
-                type: "bi.icon_button",
-                value: "prev",
-                title: BI.i18nText("BI-Previous_Page"),
-                warningTitle: BI.i18nText("BI-Current_Is_First_Page"),
-                height: o.height - 2,
-                cls: "number-pager-prev column-pre-page-h-font"
-            },
-            next: {
-                type: "bi.icon_button",
-                value: "next",
-                title: BI.i18nText("BI-Next_Page"),
-                warningTitle: BI.i18nText("BI-Current_Is_Last_Page"),
-                height: o.height - 2,
-                cls: "number-pager-next column-next-page-h-font"
-            },
-
-            hasPrev: o.hasPrev,
-            hasNext: o.hasNext,
-            firstPage: o.firstPage,
-            lastPage: o.lastPage
-        });
-
-        this.editor.on(BI.TextEditor.EVENT_CONFIRM, function () {
-            self.pager.setValue(self.editor.getValue());
-        });
-        this.pager.on(BI.Pager.EVENT_CHANGE, function () {
-            if (self.getCurrentPage() !== self.pager.getCurrentPage()) {
-                self.currentPage = self.pager.getCurrentPage();
-                self.fireEvent(BI.SkipPager.EVENT_CHANGE);
-            }
-        });
-        this.pager.on(BI.Pager.EVENT_AFTER_POPULATE, function () {
-            self.editor.setValue(self.pager.getCurrentPage());
-        });
-
-        BI.createWidget({
-            type: "bi.center_adapt",
-            element: this,
-            items: [{type: "bi.label", text: "第"}, this.editor, {type: "bi.label", text: "页"}, this.pager]
-        })
-    },
-
-    getCurrentPage: function () {
-        return this.currentPage;
-    },
-
-    setValue: function(v){
-        this.currentPage = v;
-        this.pager.setValue(v);
-    },
-
-    populate: function () {
-        this.pager.populate();
-    }
-});
-BI.SkipPager.EVENT_CHANGE = "EVENT_CHANGE";
-$.shortcut("bi.skip_pager", BI.SkipPager);/**
+BI.DetailPager.EVENT_CHANGE = "EVENT_CHANGE";
+BI.DetailPager.EVENT_AFTER_POPULATE = "EVENT_AFTER_POPULATE";
+$.shortcut("bi.detail_pager", BI.DetailPager);/**
  * 分段控件使用的button
  *
  * Created by GUY on 2015/9/7.
@@ -5778,6 +6564,240 @@ BI.Segment = BI.inherit(BI.Widget, {
 });
 BI.Segment.EVENT_CHANGE = "EVENT_CHANGE";
 $.shortcut('bi.segment', BI.Segment);/**
+ * 自适应宽度的表格
+ *
+ * Created by GUY on 2016/2/3.
+ * @class BI.AdaptiveTable
+ * @extends BI.Widget
+ */
+BI.AdaptiveTable = BI.inherit(BI.Widget, {
+
+    _const: {
+        perColumnSize: 100
+    },
+
+    _defaultConfig: function () {
+        return BI.extend(BI.AdaptiveTable.superclass._defaultConfig.apply(this, arguments), {
+            baseCls: "bi-adaptive-table",
+            el: {
+                type: "bi.resizable_table"
+            },
+            isNeedResize: true,
+            isNeedFreeze: false,//是否需要冻结单元格
+            freezeCols: [], //冻结的列号,从0开始,isNeedFreeze为true时生效
+
+            isNeedMerge: false,//是否需要合并单元格
+            mergeCols: [], //合并的单元格列号
+            mergeRule: BI.emptyFn,
+
+            columnSize: [],
+            minColumnSize: [],
+            maxColumnSize: [],
+
+            headerRowSize: 25,
+            rowSize: 25,
+
+            regionColumnSize: [],
+
+            headerCellStyleGetter: BI.emptyFn,
+            summaryCellStyleGetter: BI.emptyFn,
+            sequenceCellStyleGetter: BI.emptyFn,
+
+            header: [],
+            items: [], //二维数组
+
+            //交叉表头
+            crossHeader: [],
+            crossItems: []
+        });
+    },
+
+    _init: function () {
+        BI.AdaptiveTable.superclass._init.apply(this, arguments);
+        var self = this, o = this.options;
+
+        var data = this._digest();
+        this.table = BI.createWidget(o.el, {
+            type: "bi.resizable_table",
+            element: this,
+            width: o.width,
+            height: o.height,
+            isNeedResize: o.isNeedResize,
+            isResizeAdapt: false,
+
+            isNeedFreeze: o.isNeedFreeze,
+            freezeCols: data.freezeCols,
+
+            isNeedMerge: o.isNeedMerge,
+            mergeCols: o.mergeCols,
+            mergeRule: o.mergeRule,
+
+            columnSize: data.columnSize,
+
+            headerRowSize: o.headerRowSize,
+            rowSize: o.rowSize,
+
+            regionColumnSize: data.regionColumnSize,
+
+            headerCellStyleGetter: o.headerCellStyleGetter,
+            summaryCellStyleGetter: o.summaryCellStyleGetter,
+            sequenceCellStyleGetter: o.sequenceCellStyleGetter,
+
+            header: o.header,
+            items: o.items,
+            //交叉表头
+            crossHeader: o.crossHeader,
+            crossItems: o.crossItems
+        });
+        this.table.on(BI.Table.EVENT_TABLE_SCROLL, function () {
+            self.fireEvent(BI.Table.EVENT_TABLE_SCROLL, arguments);
+        });
+        this.table.on(BI.Table.EVENT_TABLE_AFTER_REGION_RESIZE, function () {
+            o.regionColumnSize = this.getRegionColumnSize();
+            self._populate();
+            self.table.populate();
+            self.fireEvent(BI.Table.EVENT_TABLE_AFTER_REGION_RESIZE, arguments);
+        });
+
+        this.table.on(BI.Table.EVENT_TABLE_AFTER_COLUMN_RESIZE, function () {
+            o.columnSize = this.getColumnSize();
+            self._populate();
+            self.table.populate();
+            self.fireEvent(BI.Table.EVENT_TABLE_AFTER_COLUMN_RESIZE, arguments);
+        });
+    },
+
+    _getFreezeColLength: function () {
+        return this.options.isNeedFreeze === true ? this.options.freezeCols.length : 0;
+    },
+
+    _digest: function () {
+        var o = this.options;
+        var columnSize = o.columnSize.slice();
+        var regionColumnSize = o.regionColumnSize.slice();
+        var freezeCols = o.freezeCols.slice();
+        var regionSize = o.regionColumnSize[0];
+        var freezeColLength = this._getFreezeColLength();
+        if (!regionSize || regionSize > o.width - 10 || regionSize < 10) {
+            regionSize = (freezeColLength > o.columnSize.length / 2 ? 2 / 3 : 1 / 3) * o.width;
+        }
+        if (freezeColLength === 0) {
+            regionSize = 0;
+        }
+        if (freezeCols.length >= columnSize.length) {
+            freezeCols = [];
+        }
+        if (!BI.isNumber(columnSize[0])) {
+            columnSize = o.minColumnSize;
+        }
+        var summaryFreezeColumnSize = 0, summaryColumnSize = 0;
+        BI.each(columnSize, function (i, size) {
+            if (i < freezeColLength) {
+                summaryFreezeColumnSize += size;
+            }
+            summaryColumnSize += size;
+        });
+        if (freezeColLength > 0) {
+            columnSize[freezeColLength - 1] = BI.clamp(regionSize - (summaryFreezeColumnSize - columnSize[freezeColLength - 1]),
+                o.minColumnSize[freezeColLength - 1] || 10, o.maxColumnSize[freezeColLength - 1] || Number.MAX_VALUE);
+        }
+        if (columnSize.length > 0) {
+            columnSize[columnSize.length - 1] = BI.clamp(o.width - BI.GridTableScrollbar.SIZE - regionSize - (summaryColumnSize - summaryFreezeColumnSize - columnSize[columnSize.length - 1]),
+                o.minColumnSize[columnSize.length - 1] || 10, o.maxColumnSize[columnSize.length - 1] || Number.MAX_VALUE);
+        }
+        regionColumnSize[0] = regionSize;
+
+        return {
+            freezeCols: freezeCols,
+            columnSize: columnSize,
+            regionColumnSize: regionColumnSize
+        }
+    },
+
+    _populate: function () {
+        var o = this.options;
+        var data = this._digest();
+        o.regionColumnSize = data.regionColumnSize;
+        o.columnSize = data.columnSize;
+        this.table.setColumnSize(data.columnSize);
+        this.table.setRegionColumnSize(data.regionColumnSize);
+        this.table.attr("freezeCols", data.freezeCols);
+    },
+
+    setWidth: function (width) {
+        BI.AdaptiveTable.superclass.setWidth.apply(this, arguments);
+        this.table.setWidth(width);
+    },
+
+    setHeight: function (height) {
+        BI.AdaptiveTable.superclass.setHeight.apply(this, arguments);
+        this.table.setHeight(height);
+    },
+
+    setColumnSize: function (columnSize) {
+        this.options.columnSize = columnSize;
+    },
+
+    getColumnSize: function () {
+        return this.table.getColumnSize();
+    },
+
+    setRegionColumnSize: function (regionColumnSize) {
+        this.options.regionColumnSize = regionColumnSize;
+    },
+
+    getRegionColumnSize: function () {
+        return this.table.getRegionColumnSize();
+    },
+
+    setVerticalScroll: function (scrollTop) {
+        this.table.setVerticalScroll(scrollTop);
+    },
+
+    setLeftHorizontalScroll: function (scrollLeft) {
+        this.table.setLeftHorizontalScroll(scrollLeft);
+    },
+
+    setRightHorizontalScroll: function (scrollLeft) {
+        this.table.setRightHorizontalScroll(scrollLeft);
+    },
+
+    getVerticalScroll: function () {
+        return this.table.getVerticalScroll();
+    },
+
+    getLeftHorizontalScroll: function () {
+        return this.table.getLeftHorizontalScroll();
+    },
+
+    getRightHorizontalScroll: function () {
+        return this.table.getRightHorizontalScroll();
+    },
+
+    attr: function (key, value) {
+        var v = BI.AdaptiveTable.superclass.attr.apply(this, arguments);
+        if (key === "freezeCols") {
+            return v;
+        }
+        return this.table.attr.apply(this.table, arguments);
+    },
+
+    restore: function () {
+        this.table.restore();
+    },
+
+    populate: function (items) {
+        var self = this, o = this.options;
+        this._populate();
+        this.table.populate.apply(this.table, arguments);
+    },
+
+    destroy: function () {
+        this.table.destroy();
+        BI.AdaptiveTable.superclass.destroy.apply(this, arguments);
+    }
+});
+$.shortcut('bi.adaptive_table', BI.AdaptiveTable);/**
  *
  * 层级树状结构的表格
  *
@@ -5789,11 +6809,11 @@ BI.DynamicSummaryLayerTreeTable = BI.inherit(BI.Widget, {
     _defaultConfig: function () {
         return BI.extend(BI.DynamicSummaryLayerTreeTable.superclass._defaultConfig.apply(this, arguments), {
             baseCls: "bi-dynamic-summary-layer-tree-table",
-            logic: { //冻结的页面布局逻辑
-                dynamic: false
-            },
 
-            isNeedResize: false,//是否需要调整列宽
+            el: {
+                type: "bi.resizable_table"
+            },
+            isNeedResize: true,//是否需要调整列宽
             isResizeAdapt: true,//是否需要在调整列宽或区域宽度的时候它们自适应变化
 
             isNeedFreeze: false,//是否需要冻结单元格
@@ -5801,16 +6821,18 @@ BI.DynamicSummaryLayerTreeTable = BI.inherit(BI.Widget, {
 
             isNeedMerge: true,//是否需要合并单元格
             mergeCols: [],
-            mergeRule: function (row1, row2) { //合并规则, 默认相等时合并
-                return BI.isEqual(row1, row2);
-            },
+            mergeRule: BI.emptyFn,
 
             columnSize: [],
             headerRowSize: 25,
             footerRowSize: 25,
             rowSize: 25,
 
-            regionColumnSize: false,
+            regionColumnSize: [],
+
+            headerCellStyleGetter: BI.emptyFn,
+            summaryCellStyleGetter: BI.emptyFn,
+            sequenceCellStyleGetter: BI.emptyFn,
 
             header: [],
             footer: false,
@@ -5834,30 +6856,34 @@ BI.DynamicSummaryLayerTreeTable = BI.inherit(BI.Widget, {
     _createHeader: function (vDeep) {
         var self = this, o = this.options;
         var header = o.header || [], crossHeader = o.crossHeader || [];
-        var items = BI.DynamicSummaryTreeTable.formatCrossItems(o.crossItems, vDeep);
+        var items = BI.TableTree.formatCrossItems(o.crossItems, vDeep, o.headerCellStyleGetter);
         var result = [];
         BI.each(items, function (row, node) {
             var c = [crossHeader[row]];
             result.push(c.concat(node || []));
         });
-        var newHeader = this._formatColumns(header);
-        var deep = this._getHDeep();
-        if (deep <= 0) {
-            newHeader.unshift({
-                cls: "layer-tree-table-title",
-                text: BI.i18nText("BI-Row_Header")
-            });
-        } else {
-            newHeader[0] = {
-                cls: "layer-tree-table-title",
-                text: BI.i18nText("BI-Row_Header")
-            };
+        if (header && header.length > 0) {
+            var newHeader = this._formatColumns(header);
+            var deep = this._getHDeep();
+            if (deep <= 0) {
+                newHeader.unshift({
+                    type: "bi.table_style_cell",
+                    text: BI.i18nText("BI-Row_Header"),
+                    styleGetter: o.headerCellStyleGetter
+                });
+            } else {
+                newHeader[0] = {
+                    type: "bi.table_style_cell",
+                    text: BI.i18nText("BI-Row_Header"),
+                    styleGetter: o.headerCellStyleGetter
+                };
+            }
+            result.push(newHeader);
         }
-        result.push(newHeader);
         return result;
     },
 
-    _formatItems: function (nodes, deep) {
+    _formatItems: function (nodes, header, deep) {
         var self = this, o = this.options;
         var result = [];
 
@@ -5881,19 +6907,17 @@ BI.DynamicSummaryLayerTreeTable = BI.inherit(BI.Widget, {
                 track(c, 0);
             });
             if (BI.isArray(node.values)) {
-                var next = [{cls: "summary-cell last", text: BI.i18nText("BI-Summary_Values")}].concat(node.values);
+                var next = [{
+                    type: "bi.table_style_cell",
+                    text: BI.i18nText("BI-Summary_Values"),
+                    styleGetter: function () {
+                        return o.summaryCellStyleGetter(true);
+                    }
+                }].concat(node.values);
                 result.push(next)
             }
         });
-        return BI.DynamicSummaryTreeTable.formatSummaryItems(result, o.crossItems, deep);
-    },
-
-    _formatCols: function (cols, deep) {
-        deep = deep || this._getHDeep();
-        cols = this._formatColumns(cols);
-        return BI.map(cols, function (i, c) {
-            return c - (deep - 1);
-        })
+        return BI.DynamicSummaryTreeTable.formatSummaryItems(result, header, o.crossItems, 1);
     },
 
     _formatColumns: function (columns, deep) {
@@ -5904,126 +6928,129 @@ BI.DynamicSummaryLayerTreeTable = BI.inherit(BI.Widget, {
         return columns;
     },
 
-    _init: function () {
-        BI.DynamicSummaryLayerTreeTable.superclass._init.apply(this, arguments);
-        var self = this, o = this.options;
+    _formatFreezeCols: function () {
+        if (this.options.freezeCols.length > 0) {
+            return [0];
+        }
+        return [];
+    },
+
+    _formatColumnSize: function (columnSize, deep) {
+        if (columnSize.length <= 0) {
+            return [];
+        }
+        var result = [0];
+        deep = deep || this._getHDeep();
+        BI.each(columnSize, function (i, size) {
+            if (i < deep) {
+                result[0] += size;
+                return;
+            }
+            result.push(size);
+        });
+        return result;
+    },
+
+    _recomputeColumnSize: function () {
+        var o = this.options;
+        o.regionColumnSize = this.table.getRegionColumnSize();
+        var columnSize = this.table.getColumnSize();
+        if (o.freezeCols.length > 1) {
+            for (var i = 0; i < o.freezeCols.length - 1; i++) {
+                columnSize.splice(1, 0, 0);
+            }
+        }
+        o.columnSize = columnSize;
+    },
+
+    _digest: function () {
+        var o = this.options;
         var deep = this._getHDeep();
         var vDeep = this._getVDeep();
         var header = this._createHeader(vDeep);
-        var items = this._formatItems(o.items, deep);
-        this.table = BI.createWidget({
-            type: "bi.table_view",
+        var data = this._formatItems(o.items, header, deep);
+        // var columnSize = o.columnSize.slice();
+        // var minColumnSize = o.minColumnSize.slice();
+        // var maxColumnSize = o.maxColumnSize.slice();
+        // BI.removeAt(columnSize, data.deletedCols);
+        // BI.removeAt(minColumnSize, data.deletedCols);
+        // BI.removeAt(maxColumnSize, data.deletedCols);
+        return {
+            header: data.header,
+            items: data.items,
+            columnSize: this._formatColumnSize(o.columnSize, deep),
+            minColumnSize: this._formatColumns(o.minColumnSize, deep),
+            maxColumnSize: this._formatColumns(o.maxColumnSize, deep),
+            freezeCols: this._formatFreezeCols()
+        }
+    },
+
+    _init: function () {
+        BI.DynamicSummaryLayerTreeTable.superclass._init.apply(this, arguments);
+        var self = this, o = this.options;
+        var data = this._digest();
+        this.table = BI.createWidget(o.el, {
+            type: "bi.resizable_table",
             element: this,
-            logic: o.logic,
+            width: o.width,
+            height: o.height,
             isNeedResize: o.isNeedResize,
             isResizeAdapt: o.isResizeAdapt,
             isNeedFreeze: o.isNeedFreeze,
-            freezeCols: this._formatCols(o.freezeCols, deep),
+            freezeCols: data.freezeCols,
             isNeedMerge: o.isNeedMerge,
             mergeCols: [],
             mergeRule: o.mergeRule,
-            columnSize: this._formatColumns(o.columnSize, deep),
+            columnSize: data.columnSize,
+            minColumnSize: data.minColumnSize,
+            maxColumnSize: data.maxColumnSize,
             headerRowSize: o.headerRowSize,
-            footerRowSize: o.footerRowSize,
             rowSize: o.rowSize,
             regionColumnSize: o.regionColumnSize,
-            header: header,
-            footer: this._formatColumns(o.footer, deep),
-            items: items
-        });
-        this.table.on(BI.Table.EVENT_TABLE_AFTER_INIT, function () {
-            self.fireEvent(BI.Table.EVENT_TABLE_AFTER_INIT, arguments);
-        });
-        this.table.on(BI.Table.EVENT_TABLE_RESIZE, function () {
-            self.fireEvent(BI.Table.EVENT_TABLE_RESIZE, arguments);
+            headerCellStyleGetter: o.headerCellStyleGetter,
+            summaryCellStyleGetter: o.summaryCellStyleGetter,
+            sequenceCellStyleGetter: o.sequenceCellStyleGetter,
+            header: data.header,
+            items: data.items
         });
         this.table.on(BI.Table.EVENT_TABLE_SCROLL, function () {
             self.fireEvent(BI.Table.EVENT_TABLE_SCROLL, arguments);
         });
-        this.table.on(BI.Table.EVENT_TABLE_BEFORE_REGION_RESIZE, function () {
-            self.fireEvent(BI.Table.EVENT_TABLE_BEFORE_REGION_RESIZE, arguments);
-        });
-        this.table.on(BI.Table.EVENT_TABLE_REGION_RESIZE, function () {
-            self.fireEvent(BI.Table.EVENT_TABLE_REGION_RESIZE, arguments);
-        });
         this.table.on(BI.Table.EVENT_TABLE_AFTER_REGION_RESIZE, function () {
+            self._recomputeColumnSize();
             self.fireEvent(BI.Table.EVENT_TABLE_AFTER_REGION_RESIZE, arguments);
         });
-        this.table.on(BI.Table.EVENT_TABLE_BEFORE_COLUMN_RESIZE, function () {
-            self.fireEvent(BI.Table.EVENT_TABLE_BEFORE_COLUMN_RESIZE, arguments);
-        });
-        this.table.on(BI.Table.EVENT_TABLE_COLUMN_RESIZE, function () {
-            self.fireEvent(BI.Table.EVENT_TABLE_COLUMN_RESIZE, arguments);
-        });
         this.table.on(BI.Table.EVENT_TABLE_AFTER_COLUMN_RESIZE, function () {
+            self._recomputeColumnSize();
             self.fireEvent(BI.Table.EVENT_TABLE_AFTER_COLUMN_RESIZE, arguments);
         });
     },
 
-    resize: function () {
-        this.table.resize();
+    setWidth: function (width) {
+        BI.DynamicSummaryLayerTreeTable.superclass.setWidth.apply(this, arguments);
+        this.table.setWidth(width);
+    },
+
+    setHeight: function (height) {
+        BI.DynamicSummaryLayerTreeTable.superclass.setHeight.apply(this, arguments);
+        this.table.setHeight(height);
     },
 
     setColumnSize: function (columnSize) {
-        columnSize = this._formatColumns(columnSize);
-        this.table.setColumnSize(columnSize);
+        this.options.columnSize = columnSize;
     },
 
     getColumnSize: function () {
-        var columnSize = this.table.getColumnSize();
-        var deep = this._getHDeep();
-        var pre = [];
-        if (deep > 0) {
-            pre = BI.makeArray(deep - 1, 0);
-        }
-        return pre.concat(columnSize);
-    },
-
-    getCalculateColumnSize: function () {
-        var columnSize = this.table.getCalculateColumnSize();
-        var deep = this._getHDeep();
-        var pre = [];
-        if (deep > 0) {
-            pre = BI.makeArray(deep - 1, "");
-        }
-        return pre.concat(columnSize);
-    },
-
-    setHeaderColumnSize: function (columnSize) {
-        columnSize = this._formatColumns(columnSize);
-        this.table.setHeaderColumnSize(columnSize);
+        return this.options.columnSize;
     },
 
     setRegionColumnSize: function (columnSize) {
+        this.options.regionColumnSize = columnSize;
         this.table.setRegionColumnSize(columnSize);
     },
 
     getRegionColumnSize: function () {
         return this.table.getRegionColumnSize();
-    },
-
-    getCalculateRegionColumnSize: function () {
-        return this.table.getCalculateRegionColumnSize();
-    },
-
-    getCalculateRegionRowSize: function () {
-        return this.table.getCalculateRegionRowSize();
-    },
-
-    getClientRegionColumnSize: function () {
-        return this.table.getClientRegionColumnSize();
-    },
-
-    getScrollRegionColumnSize: function () {
-        return this.table.getScrollRegionColumnSize();
-    },
-
-    getScrollRegionRowSize: function () {
-        return this.table.getScrollRegionRowSize();
-    },
-
-    hasVerticalScroll: function () {
-        return this.table.hasVerticalScroll();
     },
 
     setVerticalScroll: function (scrollTop) {
@@ -6050,10 +7077,6 @@ BI.DynamicSummaryLayerTreeTable = BI.inherit(BI.Widget, {
         return this.table.getRightHorizontalScroll();
     },
 
-    getColumns: function () {
-        return this.table.getColumns();
-    },
-
     attr: function (key, value) {
         var self = this;
         if (BI.isObject(key)) {
@@ -6065,22 +7088,24 @@ BI.DynamicSummaryLayerTreeTable = BI.inherit(BI.Widget, {
         BI.DynamicSummaryLayerTreeTable.superclass.attr.apply(this, arguments);
         switch (key) {
             case "columnSize":
-            case "footer":
-                value = this._formatColumns(value);
-                break;
+            case "minColumnSize":
+            case "maxColumnSize":
             case "freezeCols":
-                value = value.length > 0 ? [0] : [];
-                break;
             case "mergeCols":
-                value = value.length > 0 ? [0] : [];
-                break;
+                return;
         }
         this.table.attr.apply(this.table, [key, value]);
     },
 
+    restore: function () {
+        this.table.restore();
+    },
+
     populate: function (items, header, crossItems, crossHeader) {
         var o = this.options;
-        o.items = items || [];
+        if (items) {
+            o.items = items;
+        }
         if (header) {
             o.header = header;
         }
@@ -6090,11 +7115,12 @@ BI.DynamicSummaryLayerTreeTable = BI.inherit(BI.Widget, {
         if (crossHeader) {
             o.crossHeader = crossHeader;
         }
-        var deep = this._getHDeep();
-        var vDeep = this._getVDeep();
-        var header = this._createHeader(vDeep);
-        items = this._formatItems(o.items, deep);
-        this.table.populate(items, header);
+        var data = this._digest();
+        this.table.setColumnSize(data.columnSize);
+        this.table.attr("minColumnSize", data.minColumnSize);
+        this.table.attr("maxColumnSize", data.maxColumnSize);
+        this.table.attr("freezeCols", data.freezeCols);
+        this.table.populate(data.items, data.header);
     },
 
     destroy: function () {
@@ -6115,11 +7141,11 @@ BI.DynamicSummaryTreeTable = BI.inherit(BI.Widget, {
     _defaultConfig: function () {
         return BI.extend(BI.DynamicSummaryTreeTable.superclass._defaultConfig.apply(this, arguments), {
             baseCls: "bi-dynamic-summary-tree-table",
-            logic: { //冻结的页面布局逻辑
-                dynamic: false
+            el: {
+                type: "bi.resizable_table"
             },
 
-            isNeedResize: false,//是否需要调整列宽
+            isNeedResize: true,//是否需要调整列宽
             isResizeAdapt: true,//是否需要在调整列宽或区域宽度的时候它们自适应变化
 
             isNeedFreeze: false,//是否需要冻结单元格
@@ -6127,16 +7153,18 @@ BI.DynamicSummaryTreeTable = BI.inherit(BI.Widget, {
 
             isNeedMerge: true,//是否需要合并单元格
             mergeCols: [],
-            mergeRule: function (row1, row2) { //合并规则, 默认相等时合并
-                return BI.isEqual(row1, row2);
-            },
+            mergeRule: BI.emptyFn,
 
             columnSize: [],
             headerRowSize: 25,
             footerRowSize: 25,
             rowSize: 25,
 
-            regionColumnSize: false,
+            regionColumnSize: [],
+
+            headerCellStyleGetter: BI.emptyFn,
+            summaryCellStyleGetter: BI.emptyFn,
+            sequenceCellStyleGetter: BI.emptyFn,
 
             header: [],
             footer: false,
@@ -6146,22 +7174,6 @@ BI.DynamicSummaryTreeTable = BI.inherit(BI.Widget, {
             crossHeader: [],
             crossItems: []
         })
-    },
-
-    _createHeader: function (deep, vDeep) {
-        var self = this, o = this.options;
-        var header = o.header || [], crossHeader = o.crossHeader || [];
-        var items = BI.DynamicSummaryTreeTable.formatCrossItems(o.crossItems, vDeep);
-        var result = [];
-        BI.each(items, function (row, node) {
-            var c = [];
-            for (var i = 0; i < deep; i++) {
-                c.push(crossHeader[row]);
-            }
-            result.push(c.concat(node || []));
-        });
-        result.push(header);
-        return result;
     },
 
     _getVDeep: function () {
@@ -6176,15 +7188,12 @@ BI.DynamicSummaryTreeTable = BI.inherit(BI.Widget, {
     _init: function () {
         BI.DynamicSummaryTreeTable.superclass._init.apply(this, arguments);
         var self = this, o = this.options;
-        var deep = this._getHDeep();
-        var vDeep = this._getVDeep();
-        var header = this._createHeader(deep, vDeep);
-        var items = BI.DynamicSummaryTreeTable.formatItems(o.items, deep);
-        items = BI.DynamicSummaryTreeTable.formatSummaryItems(items, o.crossItems, deep);
-        this.table = BI.createWidget({
-            type: "bi.table_view",
+        var data = this._digest();
+        this.table = BI.createWidget(o.el, {
+            type: "bi.resizable_table",
             element: this,
-            logic: o.logic,
+            width: o.width,
+            height: o.height,
 
             isNeedResize: o.isNeedResize,
             isResizeAdapt: o.isResizeAdapt,
@@ -6197,94 +7206,79 @@ BI.DynamicSummaryTreeTable = BI.inherit(BI.Widget, {
 
             columnSize: o.columnSize,
             headerRowSize: o.headerRowSize,
-            footerRowSize: o.footerRowSize,
             rowSize: o.rowSize,
 
             regionColumnSize: o.regionColumnSize,
 
-            header: header,
-            footer: o.footer,
-            items: items
-        });
-        this.table.on(BI.Table.EVENT_TABLE_AFTER_INIT, function () {
-            self.fireEvent(BI.Table.EVENT_TABLE_AFTER_INIT, arguments);
-        });
-        this.table.on(BI.Table.EVENT_TABLE_RESIZE, function () {
-            self.fireEvent(BI.Table.EVENT_TABLE_RESIZE, arguments);
+            headerCellStyleGetter: o.headerCellStyleGetter,
+            summaryCellStyleGetter: o.summaryCellStyleGetter,
+            sequenceCellStyleGetter: o.sequenceCellStyleGetter,
+
+            header: data.header,
+            items: data.items
         });
         this.table.on(BI.Table.EVENT_TABLE_SCROLL, function () {
             self.fireEvent(BI.Table.EVENT_TABLE_SCROLL, arguments);
         });
-        this.table.on(BI.Table.EVENT_TABLE_BEFORE_REGION_RESIZE, function () {
-            self.fireEvent(BI.Table.EVENT_TABLE_BEFORE_REGION_RESIZE, arguments);
-        });
-        this.table.on(BI.Table.EVENT_TABLE_REGION_RESIZE, function () {
-            self.fireEvent(BI.Table.EVENT_TABLE_REGION_RESIZE, arguments);
-        });
         this.table.on(BI.Table.EVENT_TABLE_AFTER_REGION_RESIZE, function () {
+            o.regionColumnSize = this.getRegionColumnSize();
+            o.columnSize = this.getColumnSize();
             self.fireEvent(BI.Table.EVENT_TABLE_AFTER_REGION_RESIZE, arguments);
         });
-        this.table.on(BI.Table.EVENT_TABLE_BEFORE_COLUMN_RESIZE, function () {
-            self.fireEvent(BI.Table.EVENT_TABLE_BEFORE_COLUMN_RESIZE, arguments);
-        });
-        this.table.on(BI.Table.EVENT_TABLE_COLUMN_RESIZE, function () {
-            self.fireEvent(BI.Table.EVENT_TABLE_COLUMN_RESIZE, arguments);
-        });
         this.table.on(BI.Table.EVENT_TABLE_AFTER_COLUMN_RESIZE, function () {
+            o.regionColumnSize = this.getRegionColumnSize();
+            o.columnSize = this.getColumnSize();
             self.fireEvent(BI.Table.EVENT_TABLE_AFTER_COLUMN_RESIZE, arguments);
         });
     },
 
-    resize: function () {
-        this.table.resize();
+    _digest: function () {
+        var o = this.options;
+        var deep = this._getHDeep();
+        var vDeep = this._getVDeep();
+        var header = BI.TableTree.formatHeader(o.header, o.crossHeader, o.crossItems, deep, vDeep, o.headerCellStyleGetter);
+        var items = BI.DynamicSummaryTreeTable.formatHorizontalItems(o.items, deep, false, o.summaryCellStyleGetter);
+        var data = BI.DynamicSummaryTreeTable.formatSummaryItems(items, header, o.crossItems, deep);
+        var columnSize = o.columnSize.slice();
+        var minColumnSize = o.minColumnSize.slice();
+        var maxColumnSize = o.maxColumnSize.slice();
+        BI.removeAt(columnSize, data.deletedCols);
+        BI.removeAt(minColumnSize, data.deletedCols);
+        BI.removeAt(maxColumnSize, data.deletedCols);
+        return {
+            header: data.header,
+            items: data.items,
+            columnSize: columnSize,
+            minColumnSize: minColumnSize,
+            maxColumnSize: maxColumnSize
+        };
+    },
+
+    setWidth: function (width) {
+        BI.DynamicSummaryTreeTable.superclass.setWidth.apply(this, arguments);
+        this.table.setWidth(width);
+    },
+
+    setHeight: function (height) {
+        BI.DynamicSummaryTreeTable.superclass.setHeight.apply(this, arguments);
+        this.table.setHeight(height);
     },
 
     setColumnSize: function (columnSize) {
-        this.table.setColumnSize(columnSize);
+        this.options.columnSize = columnSize;
     },
 
     getColumnSize: function () {
         return this.table.getColumnSize();
     },
 
-    getCalculateColumnSize: function () {
-        return this.table.getCalculateColumnSize();
-    },
-
-    setHeaderColumnSize: function (columnSize) {
-        this.table.setHeaderColumnSize(columnSize);
-    },
-
     setRegionColumnSize: function (columnSize) {
+        this.options.regionColumnSize = columnSize;
         this.table.setRegionColumnSize(columnSize);
     },
 
     getRegionColumnSize: function () {
         return this.table.getRegionColumnSize();
-    },
-
-    getCalculateRegionColumnSize: function () {
-        return this.table.getCalculateRegionColumnSize();
-    },
-
-    getCalculateRegionRowSize: function () {
-        return this.table.getCalculateRegionRowSize();
-    },
-
-    getClientRegionColumnSize: function () {
-        return this.table.getClientRegionColumnSize();
-    },
-
-    getScrollRegionColumnSize: function () {
-        return this.table.getScrollRegionColumnSize();
-    },
-
-    getScrollRegionRowSize: function () {
-        return this.table.getScrollRegionRowSize();
-    },
-
-    hasVerticalScroll: function () {
-        return this.table.hasVerticalScroll();
     },
 
     setVerticalScroll: function (scrollTop) {
@@ -6311,18 +7305,25 @@ BI.DynamicSummaryTreeTable = BI.inherit(BI.Widget, {
         return this.table.getRightHorizontalScroll();
     },
 
-    getColumns: function () {
-        return this.table.getColumns();
+    attr: function (key) {
+        BI.DynamicSummaryTreeTable.superclass.attr.apply(this, arguments);
+        switch (key) {
+            case "minColumnSize":
+            case "maxColumnSize":
+                return;
+        }
+        this.table.attr.apply(this.table, arguments);
     },
 
-    attr: function () {
-        BI.DynamicSummaryTreeTable.superclass.attr.apply(this, arguments);
-        this.table.attr.apply(this.table, arguments);
+    restore: function () {
+        this.table.restore();
     },
 
     populate: function (items, header, crossItems, crossHeader) {
         var o = this.options;
-        o.items = items || [];
+        if (items) {
+            o.items = items;
+        }
         if (header) {
             o.header = header;
         }
@@ -6332,12 +7333,11 @@ BI.DynamicSummaryTreeTable = BI.inherit(BI.Widget, {
         if (crossHeader) {
             o.crossHeader = crossHeader;
         }
-        var deep = this._getHDeep();
-        var vDeep = this._getVDeep();
-        var header = this._createHeader(deep, vDeep);
-        items = BI.DynamicSummaryTreeTable.formatItems(o.items, deep);
-        items = BI.DynamicSummaryTreeTable.formatSummaryItems(items, o.crossItems, deep);
-        this.table.populate(items, header);
+        var data = this._digest();
+        this.table.setColumnSize(data.columnSize);
+        this.table.attr("minColumnSize", data.minColumnSize);
+        this.table.attr("maxColumnSize", data.maxColumnSize);
+        this.table.populate(data.items, data.header);
     },
 
     destroy: function () {
@@ -6347,8 +7347,8 @@ BI.DynamicSummaryTreeTable = BI.inherit(BI.Widget, {
 });
 
 BI.extend(BI.DynamicSummaryTreeTable, {
-    formatItems: function (nodes, deep, isCross) {
-        var self = this;
+
+    formatHorizontalItems: function (nodes, deep, isCross, styleGetter) {
         var result = [];
 
         function track(store, node) {
@@ -6357,7 +7357,7 @@ BI.extend(BI.DynamicSummaryTreeTable, {
                 BI.each(node.children, function (index, child) {
                     var next;
                     if (store != -1) {
-                        next = BI.clone(store);
+                        next = store.slice();
                         next.push(node);
                     } else {
                         next = [];
@@ -6365,16 +7365,21 @@ BI.extend(BI.DynamicSummaryTreeTable, {
                     track(next, child);
                 });
                 if (store != -1) {
-                    next = BI.clone(store);
+                    next = store.slice();
                     next.push(node);
                 } else {
                     next = [];
                 }
                 if ((store == -1 || node.children.length > 1) && BI.isNotEmptyArray(node.values)) {
-                    var cls = store === -1 ? " last" : "";
-                    var id = BI.UUID();
+                    var summary = {
+                        text: BI.i18nText("BI-Summary_Values"),
+                        type: "bi.table_style_cell",
+                        styleGetter: function () {
+                            return styleGetter(store === -1)
+                        }
+                    };
                     for (var i = next.length; i < deep; i++) {
-                        next.push({text: BI.i18nText("BI-Summary_Values"), tag: id, cls: "summary-cell" + cls});
+                        next.push(summary);
                     }
                     if (!isCross) {
                         next = next.concat(node.values);
@@ -6392,7 +7397,7 @@ BI.extend(BI.DynamicSummaryTreeTable, {
                 return;
             }
             if (store != -1) {
-                next = BI.clone(store);
+                next = store.slice();
                 for (var i = next.length; i < deep; i++) {
                     next.push(node);
                 }
@@ -6420,19 +7425,14 @@ BI.extend(BI.DynamicSummaryTreeTable, {
         //填充空位
         BI.each(result, function (i, line) {
             var last = BI.last(line);
-            for (var i = line.length; i < deep; i++) {
+            for (var j = line.length; j < deep; j++) {
                 line.push(last);
             }
         });
         return result;
     },
 
-    formatCrossItems: function (nodes, deep) {
-        var items = BI.DynamicSummaryTreeTable.formatItems(nodes, deep, true);
-        return BI.unzip(items);
-    },
-
-    formatSummaryItems: function (items, crossItems, deep) {
+    formatSummaryItems: function (items, header, crossItems, deep) {
         //求纵向需要去除的列
         var cols = [];
         var leaf = 0;
@@ -6443,14 +7443,20 @@ BI.extend(BI.DynamicSummaryTreeTable, {
                     track(child);
                 });
                 if (BI.isNotEmptyArray(node.values)) {
-                    leaf++;
                     if (node.children.length === 1) {
-                        cols.push(leaf - 1 + deep);
+                        for (var i = 0; i < node.values.length; i++) {
+                            cols.push(leaf + i + deep);
+                        }
                     }
+                    leaf += node.values.length;
                 }
                 return;
             }
-            leaf++;
+            if (node.values && node.values.length > 1) {
+                leaf += node.values.length;
+            } else {
+                leaf++;
+            }
         }
 
         BI.each(crossItems, function (i, node) {
@@ -6458,46 +7464,18 @@ BI.extend(BI.DynamicSummaryTreeTable, {
         });
 
         if (cols.length > 0) {
+            BI.each(header, function (i, node) {
+                BI.removeAt(node, cols);
+            });
             BI.each(items, function (i, node) {
                 BI.removeAt(node, cols);
-            })
+            });
         }
-        return items;
+        return {items: items, header: header, deletedCols: cols};
     }
 });
 
 $.shortcut("bi.dynamic_summary_tree_table", BI.DynamicSummaryTreeTable);/**
- * Created by GUY on 2016/5/7.
- * @class BI.LayerTreeTableCell
- * @extends BI.Single
- */
-BI.LayerTreeTableCell = BI.inherit(BI.Widget, {
-    _defaultConfig: function () {
-        return BI.extend(BI.LayerTreeTableCell.superclass._defaultConfig.apply(this, arguments), {
-            baseCls: "bi-layer-tree-table-cell",
-            layer: 0,
-            text: ""
-        })
-    },
-
-    _init: function () {
-        BI.LayerTreeTableCell.superclass._init.apply(this, arguments);
-        var o = this.options;
-        BI.createWidget({
-            type: "bi.label",
-            element: this,
-            textAlign: "left",
-            whiteSpace: "nowrap",
-            height: o.height,
-            text: o.text,
-            value: o.value,
-            lgap: 5 + 30 * o.layer,
-            rgap: 5
-        })
-    }
-});
-
-$.shortcut("bi.layer_tree_table_cell", BI.LayerTreeTableCell);/**
  *
  * 层级树状结构的表格
  *
@@ -6509,8 +7487,8 @@ BI.LayerTreeTable = BI.inherit(BI.Widget, {
     _defaultConfig: function () {
         return BI.extend(BI.LayerTreeTable.superclass._defaultConfig.apply(this, arguments), {
             baseCls: "bi-layer-tree-table",
-            logic: { //冻结的页面布局逻辑
-                dynamic: false
+            el: {
+                type: "bi.resizable_table"
             },
 
             isNeedResize: false,//是否需要调整列宽
@@ -6521,19 +7499,22 @@ BI.LayerTreeTable = BI.inherit(BI.Widget, {
 
             isNeedMerge: true,//是否需要合并单元格
             mergeCols: [],
-            mergeRule: function (row1, row2) { //合并规则, 默认相等时合并
-                return BI.isEqual(row1, row2);
-            },
+            mergeRule: BI.emptyFn,
 
             columnSize: [],
+            minColumnSize: [],
+            maxColumnSize: [],
+
             headerRowSize: 25,
-            footerRowSize: 25,
             rowSize: 25,
 
-            regionColumnSize: false,
+            regionColumnSize: [],
+
+            headerCellStyleGetter: BI.emptyFn,
+            summaryCellStyleGetter: BI.emptyFn,
+            sequenceCellStyleGetter: BI.emptyFn,
 
             header: [],
-            footer: false,
             items: [],
 
             //交叉表头
@@ -6554,31 +7535,35 @@ BI.LayerTreeTable = BI.inherit(BI.Widget, {
     _createHeader: function (vDeep) {
         var self = this, o = this.options;
         var header = o.header || [], crossHeader = o.crossHeader || [];
-        var items = BI.TableTree.formatCrossItems(o.crossItems, vDeep);
+        var items = BI.TableTree.formatCrossItems(o.crossItems, vDeep, o.headerCellStyleGetter);
         var result = [];
         BI.each(items, function (row, node) {
             var c = [crossHeader[row]];
             result.push(c.concat(node || []));
         });
-        var newHeader = this._formatColumns(header);
-        var deep = this._getHDeep();
-        if (deep <= 0) {
-            newHeader.unshift({
-                cls: "layer-tree-table-title",
-                text: BI.i18nText("BI-Row_Header")
-            });
-        } else {
-            newHeader[0] = {
-                cls: "layer-tree-table-title",
-                text: BI.i18nText("BI-Row_Header")
-            };
+        if (header && header.length > 0) {
+            var newHeader = this._formatColumns(header);
+            var deep = this._getHDeep();
+            if (deep <= 0) {
+                newHeader.unshift({
+                    type: "bi.table_style_cell",
+                    text: BI.i18nText("BI-Row_Header"),
+                    styleGetter: o.headerCellStyleGetter
+                });
+            } else {
+                newHeader[0] = {
+                    type: "bi.table_style_cell",
+                    text: BI.i18nText("BI-Row_Header"),
+                    styleGetter: o.headerCellStyleGetter
+                };
+            }
+            result.push(newHeader);
         }
-        result.push(newHeader);
         return result;
     },
 
     _formatItems: function (nodes) {
-        var self = this;
+        var self = this, o = this.options;
         var result = [];
 
         function track(node, layer) {
@@ -6601,19 +7586,15 @@ BI.LayerTreeTable = BI.inherit(BI.Widget, {
                 track(c, 0);
             });
             if (BI.isArray(node.values)) {
-                var next = [{cls: "summary-cell last", text: BI.i18nText("BI-Summary_Values")}].concat(node.values);
+                var next = [{
+                    type: "bi.table_style_cell", text: BI.i18nText("BI-Summary_Values"), styleGetter: function () {
+                        return o.summaryCellStyleGetter(true);
+                    }
+                }].concat(node.values);
                 result.push(next)
             }
         });
         return result;
-    },
-
-    _formatCols: function (cols, deep) {
-        deep = deep || this._getHDeep();
-        cols = this._formatColumns(cols);
-        return BI.map(cols, function (i, c) {
-            return c - (deep - 1);
-        })
     },
 
     _formatColumns: function (columns, deep) {
@@ -6624,69 +7605,99 @@ BI.LayerTreeTable = BI.inherit(BI.Widget, {
         return columns;
     },
 
+    _formatFreezeCols: function () {
+        if (this.options.freezeCols.length > 0) {
+            return [0];
+        }
+        return [];
+    },
+
+    _formatColumnSize: function (columnSize, deep) {
+        if (columnSize.length <= 0) {
+            return [];
+        }
+        var result = [0];
+        deep = deep || this._getHDeep();
+        BI.each(columnSize, function (i, size) {
+            if (i < deep) {
+                result[0] += size;
+                return;
+            }
+            result.push(size);
+        });
+        return result;
+    },
+
+    _digest: function () {
+        var o = this.options;
+        var deep = this._getHDeep();
+        var vDeep = this._getVDeep();
+        return {
+            header: this._createHeader(vDeep),
+            items: this._formatItems(o.items),
+            columnSize: this._formatColumnSize(o.columnSize, deep),
+            minColumnSize: this._formatColumns(o.minColumnSize, deep),
+            maxColumnSize: this._formatColumns(o.maxColumnSize, deep),
+            freezeCols: this._formatFreezeCols()
+        }
+    },
+
     _init: function () {
         BI.LayerTreeTable.superclass._init.apply(this, arguments);
         var self = this, o = this.options;
-        var deep = this._getHDeep();
-        var vDeep = this._getVDeep();
-        var header = this._createHeader(vDeep);
-        var items = this._formatItems(o.items);
-        this.table = BI.createWidget({
-            type: "bi.table_view",
+
+        var data = this._digest();
+        this.table = BI.createWidget(o.el, {
+            type: "bi.resizable_table",
             element: this,
-            logic: o.logic,
+            width: o.width,
+            height: o.height,
             isNeedResize: o.isNeedResize,
             isResizeAdapt: o.isResizeAdapt,
             isNeedFreeze: o.isNeedFreeze,
-            freezeCols: this._formatCols(o.freezeCols, deep),
+            freezeCols: data.freezeCols,
             isNeedMerge: o.isNeedMerge,
             mergeCols: [],
             mergeRule: o.mergeRule,
-            columnSize: this._formatColumns(o.columnSize, deep),
+            columnSize: data.columnSize,
+            minColumnSize: data.minColumnSize,
+            maxColumnSize: data.maxColumnSize,
             headerRowSize: o.headerRowSize,
-            footerRowSize: o.footerRowSize,
             rowSize: o.rowSize,
             regionColumnSize: o.regionColumnSize,
-            header: header,
-            footer: this._formatColumns(o.footer, deep),
-            items: items
-        });
-        this.table.on(BI.Table.EVENT_TABLE_AFTER_INIT, function () {
-            self.fireEvent(BI.Table.EVENT_TABLE_AFTER_INIT, arguments);
-        });
-        this.table.on(BI.Table.EVENT_TABLE_RESIZE, function () {
-            self.fireEvent(BI.Table.EVENT_TABLE_RESIZE, arguments);
+            headerCellStyleGetter: o.headerCellStyleGetter,
+            summaryCellStyleGetter: o.summaryCellStyleGetter,
+            sequenceCellStyleGetter: o.sequenceCellStyleGetter,
+            header: data.header,
+            items: data.items
         });
         this.table.on(BI.Table.EVENT_TABLE_SCROLL, function () {
             self.fireEvent(BI.Table.EVENT_TABLE_SCROLL, arguments);
         });
-        this.table.on(BI.Table.EVENT_TABLE_BEFORE_REGION_RESIZE, function () {
-            self.fireEvent(BI.Table.EVENT_TABLE_BEFORE_REGION_RESIZE, arguments);
-        });
-        this.table.on(BI.Table.EVENT_TABLE_REGION_RESIZE, function () {
-            self.fireEvent(BI.Table.EVENT_TABLE_REGION_RESIZE, arguments);
-        });
         this.table.on(BI.Table.EVENT_TABLE_AFTER_REGION_RESIZE, function () {
+            o.regionColumnSize = this.getRegionColumnSize();
+            o.columnSize = this.getColumnSize();
             self.fireEvent(BI.Table.EVENT_TABLE_AFTER_REGION_RESIZE, arguments);
         });
-        this.table.on(BI.Table.EVENT_TABLE_BEFORE_COLUMN_RESIZE, function () {
-            self.fireEvent(BI.Table.EVENT_TABLE_BEFORE_COLUMN_RESIZE, arguments);
-        });
-        this.table.on(BI.Table.EVENT_TABLE_COLUMN_RESIZE, function () {
-            self.fireEvent(BI.Table.EVENT_TABLE_COLUMN_RESIZE, arguments);
-        });
         this.table.on(BI.Table.EVENT_TABLE_AFTER_COLUMN_RESIZE, function () {
+            o.regionColumnSize = this.getRegionColumnSize();
+            o.columnSize = this.getColumnSize();
             self.fireEvent(BI.Table.EVENT_TABLE_AFTER_COLUMN_RESIZE, arguments);
         });
     },
 
-    resize: function () {
-        this.table.resize();
+    setWidth: function (width) {
+        BI.LayerTreeTable.superclass.setWidth.apply(this, arguments);
+        this.table.setWidth(width);
+    },
+
+    setHeight: function (height) {
+        BI.LayerTreeTable.superclass.setHeight.apply(this, arguments);
+        this.table.setHeight(height);
     },
 
     setColumnSize: function (columnSize) {
-        columnSize = this._formatColumns(columnSize);
-        this.table.setColumnSize(columnSize);
+        this.options.columnSize = columnSize;
     },
 
     getColumnSize: function () {
@@ -6694,56 +7705,18 @@ BI.LayerTreeTable = BI.inherit(BI.Widget, {
         var deep = this._getHDeep();
         var pre = [];
         if (deep > 0) {
-            pre = BI.makeArray(deep - 1, 0);
+            pre = BI.makeArray(deep, columnSize[0] / deep);
         }
-        return pre.concat(columnSize);
-    },
-
-    getCalculateColumnSize: function () {
-        var columnSize = this.table.getCalculateColumnSize();
-        var deep = this._getHDeep();
-        var pre = [];
-        if (deep > 0) {
-            pre = BI.makeArray(deep - 1, "");
-        }
-        return pre.concat(columnSize);
-    },
-
-    setHeaderColumnSize: function (columnSize) {
-        columnSize = this._formatColumns(columnSize);
-        this.table.setHeaderColumnSize(columnSize);
+        return pre.concat(columnSize.slice(1));
     },
 
     setRegionColumnSize: function (columnSize) {
+        this.options.regionColumnSize = columnSize;
         this.table.setRegionColumnSize(columnSize);
     },
 
     getRegionColumnSize: function () {
         return this.table.getRegionColumnSize();
-    },
-
-    getCalculateRegionColumnSize: function () {
-        return this.table.getCalculateRegionColumnSize();
-    },
-
-    getCalculateRegionRowSize: function () {
-        return this.table.getCalculateRegionRowSize();
-    },
-
-    getClientRegionColumnSize: function () {
-        return this.table.getClientRegionColumnSize();
-    },
-
-    getScrollRegionColumnSize: function () {
-        return this.table.getScrollRegionColumnSize();
-    },
-
-    getScrollRegionRowSize: function () {
-        return this.table.getScrollRegionRowSize();
-    },
-
-    hasVerticalScroll: function () {
-        return this.table.hasVerticalScroll();
     },
 
     setVerticalScroll: function (scrollTop) {
@@ -6770,10 +7743,6 @@ BI.LayerTreeTable = BI.inherit(BI.Widget, {
         return this.table.getRightHorizontalScroll();
     },
 
-    getColumns: function () {
-        return this.table.getColumns();
-    },
-
     attr: function (key, value) {
         var self = this;
         if (BI.isObject(key)) {
@@ -6785,17 +7754,17 @@ BI.LayerTreeTable = BI.inherit(BI.Widget, {
         BI.LayerTreeTable.superclass.attr.apply(this, arguments);
         switch (key) {
             case "columnSize":
-            case "footer":
-                value = this._formatColumns(value);
-                break;
+            case "minColumnSize":
+            case "maxColumnSize":
             case "freezeCols":
-                value = value.length > 0 ? [0] : [];
-                break;
             case "mergeCols":
-                value = value.length > 0 ? [0] : [];
-                break;
+                return;
         }
         this.table.attr.apply(this.table, [key, value]);
+    },
+
+    restore: function () {
+        this.table.restore();
     },
 
     populate: function (items, header, crossItems, crossHeader) {
@@ -6810,10 +7779,12 @@ BI.LayerTreeTable = BI.inherit(BI.Widget, {
         if (crossHeader) {
             o.crossHeader = crossHeader;
         }
-        var vDeep = this._getVDeep();
-        var header = this._createHeader(vDeep);
-        items = this._formatItems(o.items);
-        this.table.populate(items, header);
+        var data = this._digest();
+        this.table.setColumnSize(data.columnSize);
+        this.table.attr("freezeCols", data.freezeCols);
+        this.table.attr("minColumnSize", data.minColumnSize);
+        this.table.attr("maxColumnSize", data.maxColumnSize);
+        this.table.populate(data.items, data.header);
     },
 
     destroy: function () {
@@ -6823,97 +7794,380 @@ BI.LayerTreeTable = BI.inherit(BI.Widget, {
 });
 
 $.shortcut("bi.layer_tree_table", BI.LayerTreeTable);/**
- * 分页table
  *
- * Created by GUY on 2015/9/8.
- * @class BI.Tabler
- * @extends BI.Widget
+ * Created by GUY on 2016/5/26.
+ * @class BI.TableStyleCell
+ * @extends BI.Single
  */
-BI.Tabler = BI.inherit(BI.Widget, {
+BI.TableStyleCell = BI.inherit(BI.Single, {
 
     _defaultConfig: function () {
-        return BI.extend(BI.Tabler.superclass._defaultConfig.apply(this, arguments), {
-            extraCls: "bi-tabler",
-
-            pager: {},
-
-            layouts: [{
-                type: "bi.float_center_adapt"
-            }],
-
-            tabler: {
-                isNeedFreeze: false,//是否需要冻结单元格
-                freezeCols: [], //冻结的列号,从0开始,isNeedFreeze为tree时生效
-
-                isNeedMerge: true,//是否需要合并单元格
-
-                mergeRule: function (row1, row2) { //合并规则, 默认相等时合并
-                    return BI.isEqual(row1, row2);
-                },
-
-                columnSize: [],
-                rowSize: 37,
-                header: [],
-                items: [],
-
-                //交叉表头
-                crossHeader: [],
-                crossItems: []
-            }
-        })
+        return BI.extend(BI.TableStyleCell.superclass._defaultConfig.apply(this, arguments), {
+            baseCls: "bi-table-style-cell",
+            styleGetter: BI.emptyFn
+        });
     },
+
     _init: function () {
-        BI.Tabler.superclass._init.apply(this, arguments);
-        var self = this, o = this.options;
-
-        this.pager = BI.createWidget(o.pager, {
-            type: "bi.pager"
-        });
-        var creater = BI.createWidget({
-            type: "bi.button_tree",
-            items: [{
-                el: this.pager
-            }],
-            layouts: o.layouts
-        })
-        this.pager.on(BI.Controller.EVENT_CHANGE, function (type) {
-            if (type === BI.Events.CLICK) {
-                self.fireEvent(BI.Tabler.EVENT_CHANGE);
-            }
-        });
-        this.container = BI.createWidget({
-            type: "bi.layout"
-        })
-        BI.createWidget({
-            type: "bi.vtape",
-            element: this,
-            items: [{
-                el: this.container
-            }, {
-                el: creater,
-                height: 40
-            }]
-        });
-        this.populate();
-    },
-
-    getCurrentPage: function () {
-        return this.pager.getValue();
-    },
-
-    populate: function (opt) {
+        BI.TableStyleCell.superclass._init.apply(this, arguments);
         var o = this.options;
-        this.container.empty();
-
-        BI.extend(o.tabler, opt);
-        this.table = BI.createWidget(this.options.tabler, {
-            type: "bi.table_tree",
-            element: this.container
+        this.text = BI.createWidget({
+            type: "bi.label",
+            element: this,
+            textAlign: "left",
+            forceCenter: true,
+            hgap: 5,
+            text: o.text
         });
+        this._digestStyle();
+    },
+
+    _digestStyle: function () {
+        var o = this.options;
+        var style = o.styleGetter();
+        if (style) {
+            this.text.element.css(style);
+        }
+    },
+
+    setText: function (text) {
+        this.text.setText(text);
+    },
+
+    populate: function () {
+        this._digestStyle();
     }
 });
-BI.Tabler.EVENT_CHANGE = "EVENT_CHANGE";
-$.shortcut("bi.tabler", BI.Tabler);/**
+$.shortcut('bi.table_style_cell', BI.TableStyleCell);/**
+ *
+ * 树状结构的表格
+ *
+ * Created by GUY on 2015/9/22.
+ * @class BI.TableTree
+ * @extends BI.Widget
+ */
+BI.TableTree = BI.inherit(BI.Widget, {
+    _defaultConfig: function () {
+        return BI.extend(BI.TableTree.superclass._defaultConfig.apply(this, arguments), {
+            baseCls: "bi-table-tree",
+            el: {
+                type: "bi.resizable_table"
+            },
+            isNeedResize: true,//是否需要调整列宽
+            isResizeAdapt: true,//是否需要在调整列宽或区域宽度的时候它们自适应变化
+
+            freezeCols: [], //冻结的列号,从0开始,isNeedFreeze为tree时生效
+
+            isNeedMerge: true,//是否需要合并单元格
+            mergeCols: [],
+            mergeRule: BI.emptyFn,
+
+            columnSize: [],
+            minColumnSize: [],
+            maxColumnSize: [],
+            headerRowSize: 25,
+            rowSize: 25,
+
+            regionColumnSize: [],
+
+            headerCellStyleGetter: BI.emptyFn,
+            summaryCellStyleGetter: BI.emptyFn,
+            sequenceCellStyleGetter: BI.emptyFn,
+
+            header: [],
+            items: [],
+
+            //交叉表头
+            crossHeader: [],
+            crossItems: []
+        })
+    },
+
+    _getVDeep: function () {
+        return this.options.crossHeader.length;//纵向深度
+    },
+
+    _getHDeep: function () {
+        var o = this.options;
+        return Math.max(o.mergeCols.length, o.freezeCols.length, BI.TableTree.maxDeep(o.items) - 1);
+    },
+
+    _init: function () {
+        BI.TableTree.superclass._init.apply(this, arguments);
+        var self = this, o = this.options;
+        var data = this._digest();
+        this.table = BI.createWidget(o.el, {
+            type: "bi.resizable_table",
+            element: this,
+            width: o.width,
+            height: o.height,
+            isNeedResize: o.isNeedResize,
+            isResizeAdapt: o.isResizeAdapt,
+
+            isNeedFreeze: o.isNeedFreeze,
+            freezeCols: o.freezeCols,
+            isNeedMerge: o.isNeedMerge,
+            mergeCols: o.mergeCols,
+            mergeRule: o.mergeRule,
+
+            columnSize: o.columnSize,
+            minColumnSize: o.minColumnSize,
+            maxColumnSize: o.maxColumnSize,
+
+            headerRowSize: o.headerRowSize,
+            rowSize: o.rowSize,
+
+            regionColumnSize: o.regionColumnSize,
+
+            headerCellStyleGetter: o.headerCellStyleGetter,
+            summaryCellStyleGetter: o.summaryCellStyleGetter,
+            sequenceCellStyleGetter: o.sequenceCellStyleGetter,
+
+            header: data.header,
+            items: data.items
+        });
+        this.table.on(BI.Table.EVENT_TABLE_SCROLL, function () {
+            self.fireEvent(BI.Table.EVENT_TABLE_SCROLL, arguments);
+        });
+        this.table.on(BI.Table.EVENT_TABLE_AFTER_REGION_RESIZE, function () {
+            o.regionColumnSize = this.getRegionColumnSize();
+            o.columnSize = this.getColumnSize();
+            self.fireEvent(BI.Table.EVENT_TABLE_AFTER_REGION_RESIZE, arguments);
+        });
+        this.table.on(BI.Table.EVENT_TABLE_AFTER_COLUMN_RESIZE, function () {
+            o.regionColumnSize = this.getRegionColumnSize();
+            o.columnSize = this.getColumnSize();
+            self.fireEvent(BI.Table.EVENT_TABLE_AFTER_COLUMN_RESIZE, arguments);
+        });
+    },
+
+    _digest: function () {
+        var self = this, o = this.options;
+        var deep = this._getHDeep();
+        var vDeep = this._getVDeep();
+        var header = BI.TableTree.formatHeader(o.header, o.crossHeader, o.crossItems, deep, vDeep, o.headerCellStyleGetter);
+        var items = BI.TableTree.formatItems(o.items, deep, false, o.summaryCellStyleGetter);
+        return {
+            header: header,
+            items: items
+        }
+    },
+
+    setWidth: function (width) {
+        BI.TableTree.superclass.setWidth.apply(this, arguments);
+        this.table.setWidth(width);
+    },
+
+    setHeight: function (height) {
+        BI.TableTree.superclass.setHeight.apply(this, arguments);
+        this.table.setHeight(height);
+    },
+
+    setColumnSize: function (columnSize) {
+        this.options.columnSize = columnSize;
+        this.table.setColumnSize(columnSize);
+    },
+
+    getColumnSize: function () {
+        return this.table.getColumnSize();
+    },
+
+    setRegionColumnSize: function (columnSize) {
+        this.options.regionColumnSize = columnSize;
+        this.table.setRegionColumnSize(columnSize);
+    },
+
+    getRegionColumnSize: function () {
+        return this.table.getRegionColumnSize();
+    },
+
+    setVerticalScroll: function (scrollTop) {
+        this.table.setVerticalScroll(scrollTop);
+    },
+
+    setLeftHorizontalScroll: function (scrollLeft) {
+        this.table.setLeftHorizontalScroll(scrollLeft);
+    },
+
+    setRightHorizontalScroll: function (scrollLeft) {
+        this.table.setRightHorizontalScroll(scrollLeft);
+    },
+
+    getVerticalScroll: function () {
+        return this.table.getVerticalScroll();
+    },
+
+    getLeftHorizontalScroll: function () {
+        return this.table.getLeftHorizontalScroll();
+    },
+
+    getRightHorizontalScroll: function () {
+        return this.table.getRightHorizontalScroll();
+    },
+
+    attr: function () {
+        BI.TableTree.superclass.attr.apply(this, arguments);
+        this.table.attr.apply(this.table, arguments);
+    },
+
+    restore: function () {
+        this.table.restore();
+    },
+
+    populate: function (items, header, crossItems, crossHeader) {
+        var o = this.options;
+        if (items) {
+            o.items = items || [];
+        }
+        if (header) {
+            o.header = header;
+        }
+        if (crossItems) {
+            o.crossItems = crossItems;
+        }
+        if (crossHeader) {
+            o.crossHeader = crossHeader;
+        }
+        var data = this._digest();
+        this.table.populate(data.items, data.header);
+    },
+
+    destroy: function () {
+        this.table.destroy();
+        BI.TableTree.superclass.destroy.apply(this, arguments);
+    }
+});
+
+BI.extend(BI.TableTree, {
+    formatHeader: function (header, crossHeader, crossItems, hDeep, vDeep, styleGetter) {
+        var items = BI.TableTree.formatCrossItems(crossItems, vDeep, styleGetter);
+        var result = [];
+        for (var i = 0; i < vDeep; i++) {
+            var c = [];
+            for (var j = 0; j < hDeep; j++) {
+                c.push(crossHeader[i]);
+            }
+            result.push(c.concat(items[i] || []));
+        }
+        if (header && header.length > 0) {
+            result.push(header);
+        }
+        return result;
+    },
+
+    formatItems: function (nodes, deep, isCross, styleGetter) {
+        var self = this;
+        var result = [];
+
+        function track(store, node) {
+            var next;
+            if (BI.isArray(node.children)) {
+                BI.each(node.children, function (index, child) {
+                    var next;
+                    if (store != -1) {
+                        next = store.slice();
+                        next.push(node);
+                    } else {
+                        next = [];
+                    }
+                    track(next, child);
+                });
+                if (store != -1) {
+                    next = store.slice();
+                    next.push(node);
+                } else {
+                    next = [];
+                }
+                if (/**(store == -1 || node.children.length > 1) &&**/ BI.isNotEmptyArray(node.values)) {
+                    var summary = {
+                        text: BI.i18nText("BI-Summary_Values"),
+                        type: "bi.table_style_cell",
+                        styleGetter: function () {
+                            return styleGetter(store === -1)
+                        }
+                    };
+                    for (var i = next.length; i < deep; i++) {
+                        next.push(summary);
+                    }
+                    if (!isCross) {
+                        next = next.concat(node.values);
+                    }
+                    if (next.length > 0) {
+                        if (!isCross) {
+                            result.push(next);
+                        } else {
+                            for (var k = 0, l = node.values.length; k < l; k++) {
+                                result.push(next);
+                            }
+                        }
+                    }
+                }
+
+                return;
+            }
+            if (store != -1) {
+                next = store.slice();
+                for (var i = next.length; i < deep; i++) {
+                    next.push(node);
+                }
+            } else {
+                next = [];
+            }
+            if (!isCross && BI.isArray(node.values)) {
+                next = next.concat(node.values);
+            }
+            if (isCross && BI.isArray(node.values)) {
+                for (var i = 0, len = node.values.length; i < len - 1; i++) {
+                    if (next.length > 0) {
+                        result.push(next);
+                    }
+                }
+            }
+            if (next.length > 0) {
+                result.push(next);
+            }
+        }
+
+        BI.each(nodes, function (i, node) {
+            track(-1, node);
+        });
+        //填充空位
+        BI.each(result, function (i, line) {
+            var last = BI.last(line);
+            for (var j = line.length; j < deep; j++) {
+                line.push(last);
+            }
+        });
+        return result;
+    },
+
+    formatCrossItems: function (nodes, deep, styleGetter) {
+        var items = BI.TableTree.formatItems(nodes, deep, true, styleGetter);
+        return BI.unzip(items);
+    },
+
+    maxDeep: function (nodes) {
+        function track(deep, node) {
+            var d = deep;
+            if (BI.isNotEmptyArray(node.children)) {
+                BI.each(node.children, function (index, child) {
+                    d = Math.max(d, track(deep + 1, child));
+                });
+            }
+            return d;
+        }
+
+        var deep = 1;
+        if (BI.isObject(nodes)) {
+            BI.each(nodes, function (i, node) {
+                deep = Math.max(deep, track(1, node));
+            });
+        }
+        return deep;
+    }
+});
+
+$.shortcut("bi.table_tree", BI.TableTree);/**
  * guy
  * 气泡提示
  * @class BI.Bubble
@@ -7101,29 +8355,55 @@ BI.Tooltip = BI.inherit(BI.Tip, {
             e.stopEvent();
             return false;
         };
-        this.element.bind({"click": fn, "mousedown": fn, "mouseup": fn, "mouseover": fn, "mouseenter": fn, "mouseleave": fn, "mousemove": fn});
-
-        this.text = BI.createWidget({
-            type: "bi.label",
-            element: this,
-            textAlign: "left",
-            whiteSpace: "normal",
-            text: o.text,
-            textHeight: 20,
-            hgap: this._const.hgap
+        this.element.bind({
+            "click": fn,
+            "mousedown": fn,
+            "mouseup": fn,
+            "mouseover": fn,
+            "mouseenter": fn,
+            "mouseleave": fn,
+            "mousemove": fn
         });
+
+        var texts = (o.text + "").split("\n");
+        if (texts.length > 1) {
+            BI.createWidget({
+                type: "bi.vertical",
+                element: this,
+                hgap: this._const.hgap,
+                items: BI.map(texts, function (i, text) {
+                    return {
+                        type: "bi.label",
+                        textAlign: "left",
+                        whiteSpace: "normal",
+                        text: text,
+                        textHeight: 16
+                    }
+                })
+            })
+        } else {
+            this.text = BI.createWidget({
+                type: "bi.label",
+                element: this,
+                textAlign: "left",
+                whiteSpace: "normal",
+                text: o.text,
+                textHeight: 20,
+                hgap: this._const.hgap
+            });
+        }
     },
 
-    setWidth: function(width){
+    setWidth: function (width) {
         this.element.width(width - 2 * this._const.hgap);
     },
 
     setText: function (text) {
-        this.text.setText(text);
+        this.text && this.text.setText(text);
     },
 
     setLevel: function (level) {
-       this.element.removeClass("tooltip-success").removeClass("tooltip-warning");
+        this.element.removeClass("tooltip-success").removeClass("tooltip-warning");
         this.element.addClass("tooltip-" + level);
     }
 });
@@ -7846,10 +9126,12 @@ BI.TextTrigger = BI.inherit(BI.Trigger, {
 
     setValue: function (value) {
         this.text.setValue(value);
+        this.text.setTitle(value);
     },
 
     setText: function (text) {
         this.text.setText(text);
+        this.text.setTitle(text);
     }
 });
 $.shortcut("bi.text_trigger", BI.TextTrigger);/**
@@ -7888,7 +9170,7 @@ BI.SelectTextTrigger = BI.inherit(BI.Trigger, {
         var result = [];
         var items = BI.Tree.transformToArrayFormat(this.options.items);
         BI.each(items, function (i, item) {
-            if (BI.deepContains(vals, item.value)) {
+            if (BI.deepContains(vals, item.value) && !result.contains(item.text || item.value)) {
                 result.push(item.text || item.value);
             }
         });
@@ -7941,7 +9223,7 @@ BI.SmallSelectTextTrigger = BI.inherit(BI.Trigger, {
         var result = [];
         var items = BI.Tree.transformToArrayFormat(this.options.items);
         BI.each(items, function (i, item) {
-            if (BI.deepContains(vals, item.value)) {
+            if (BI.deepContains(vals, item.value) && !result.contains(item.text || item.value)) {
                 result.push(item.text || item.value);
             }
         });
@@ -8043,7 +9325,7 @@ BI.ZeroClip = BI.inherit(BI.BasicButton, {
         FR.$defaultImport('/com/fr/bi/web/js/third/jquery.zclip.js', 'js');
         BI.nextTick(function () {
             self.element.zclip({
-                path: "resources/ZeroClipboard.swf",
+                path: FR.servletURL + "?op=resource&resource=/com/fr/bi/web/resources/ZeroClipboard.swf",
                 copy: o.copy,
                 beforeCopy: o.beforeCopy,
                 afterCopy: o.afterCopy

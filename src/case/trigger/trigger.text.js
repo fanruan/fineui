@@ -56,10 +56,12 @@ BI.TextTrigger = BI.inherit(BI.Trigger, {
 
     setValue: function (value) {
         this.text.setValue(value);
+        this.text.setTitle(value);
     },
 
     setText: function (text) {
         this.text.setText(text);
+        this.text.setTitle(text);
     }
 });
 $.shortcut("bi.text_trigger", BI.TextTrigger);
