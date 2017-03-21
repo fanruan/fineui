@@ -29,12 +29,13 @@ BI.Calendar = BI.inherit(BI.Widget, {
         De.setFullYear(Y, M, D);
         log.ymd = [De.getFullYear(), De.getMonth(), De.getDate()];
 
-        Date._MD[1] = Date.isLeap(log.ymd[0]) ? 29 : 28;
+        var MD = Date._MD.slice(0);
+        MD[1] = Date.isLeap(log.ymd[0]) ? 29 : 28;
 
         De.setFullYear(log.ymd[0], log.ymd[1], 1);
         log.FDay = De.getDay();
 
-        log.PDay = Date._MD[M === 0 ? 11 : M - 1] - log.FDay + 1;
+        log.PDay = MD[M === 0 ? 11 : M - 1] - log.FDay + 1;
         log.NDay = 1;
 
         var items = [];
@@ -45,7 +46,7 @@ BI.Calendar = BI.inherit(BI.Widget, {
                 DD = i + log.PDay;
                 MM === 1 && (YY -= 1);
                 MM = MM === 1 ? 12 : MM - 1;
-            } else if (i >= log.FDay && i < log.FDay + Date._MD[log.ymd[1]]) {
+            } else if (i >= log.FDay && i < log.FDay + MD[log.ymd[1]]) {
                 DD = i - log.FDay + 1;
                 if (i - log.FDay + 1 === log.ymd[2]) {
                     td.currentDay = true;
@@ -166,6 +167,23 @@ BI.extend(BI.Calendar, {
         var page = (json.year - year) * 12;
         page += json.month - month;
         return page;
+    },
+    getDateJSONByPage: function(v){
+        var months = new Date().getMonth();
+        var page = v;
+
+        //对当前page做偏移,使到当前年初
+        page = page + months;
+
+        var year = BI.parseInt(page / 12);
+        if(page < 0 && page % 12 !== 0){
+            year--;
+        }
+        var month = page >= 0 ? (page % 12) : ((12 + page % 12) % 12);
+        return {
+            year: new Date().getFullYear() + year,
+            month: month
+        }
     }
 });
 

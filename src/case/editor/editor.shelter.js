@@ -207,6 +207,10 @@ BI.ShelterEditor = BI.inherit(BI.Single, {
         return this.editor.getLastValidValue();
     },
 
+    setTextStyle: function (style) {
+        this.text.setStyle(style);
+    },
+
     setValue: function (k) {
         this.editor.setValue(k);
         this._checkText();

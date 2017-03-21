@@ -5,9 +5,9 @@
  * @extends BI.Single
  */
 BI.RecordEditor = BI.inherit(BI.Single, {
-    _defaultConfig: function() {
+    _defaultConfig: function () {
         var conf = BI.RecordEditor.superclass._defaultConfig.apply(this, arguments);
-        return BI.extend(conf , {
+        return BI.extend(conf, {
             baseCls: (conf.baseCls || "") + " bi-record-editor",
             hgap: 4,
             vgap: 2,
@@ -24,7 +24,7 @@ BI.RecordEditor = BI.inherit(BI.Single, {
         })
     },
 
-    _init : function() {
+    _init: function () {
         BI.RecordEditor.superclass._init.apply(this, arguments);
         this.contents = [];
         var self = this, o = this.options;
@@ -42,7 +42,7 @@ BI.RecordEditor = BI.inherit(BI.Single, {
             validationChecker: o.validationChecker,
             quitChecker: o.quitChecker,
             mouseOut: o.mouseOut,
-            allowBlank : o.allowBlank,
+            allowBlank: o.allowBlank,
             watermark: o.watermark,
             errorText: o.errorText
         });
@@ -54,64 +54,64 @@ BI.RecordEditor = BI.inherit(BI.Single, {
         this.editor.on(BI.Controller.EVENT_CHANGE, function () {
             self.fireEvent(BI.Controller.EVENT_CHANGE, arguments);
         });
-        this.editor.on(BI.Editor.EVENT_FOCUS, function(){
+        this.editor.on(BI.Editor.EVENT_FOCUS, function () {
             self._checkInputState();
             self.fireEvent(BI.RecordEditor.EVENT_FOCUS, arguments);
         });
-        this.editor.on(BI.Editor.EVENT_BLUR, function(){
+        this.editor.on(BI.Editor.EVENT_BLUR, function () {
             self._checkInputState();
             self.fireEvent(BI.RecordEditor.EVENT_BLUR, arguments);
         });
-        this.editor.on(BI.Editor.EVENT_CLICK, function(){
+        this.editor.on(BI.Editor.EVENT_CLICK, function () {
             self.fireEvent(BI.RecordEditor.EVENT_CLICK, arguments);
         });
-        this.editor.on(BI.Editor.EVENT_CHANGE, function(){
+        this.editor.on(BI.Editor.EVENT_CHANGE, function () {
             self.fireEvent(BI.RecordEditor.EVENT_CHANGE, arguments);
         });
-        this.editor.on(BI.Editor.EVENT_KEY_DOWN, function(v){
+        this.editor.on(BI.Editor.EVENT_KEY_DOWN, function (v) {
             self.fireEvent(BI.RecordEditor.EVENT_KEY_DOWN, arguments);
         });
 
-        this.editor.on(BI.Editor.EVENT_VALID, function(){
+        this.editor.on(BI.Editor.EVENT_VALID, function () {
             self.fireEvent(BI.RecordEditor.EVENT_VALID, arguments);
         });
-        this.editor.on(BI.Editor.EVENT_SPACE, function(){
+        this.editor.on(BI.Editor.EVENT_SPACE, function () {
             self.fireEvent(BI.RecordEditor.EVENT_SPACE, arguments);
         });
-        this.editor.on(BI.Editor.EVENT_CONFIRM, function(){
-            self.setValue(self.getValue());
+        this.editor.on(BI.Editor.EVENT_CONFIRM, function () {
+            self.setState(self.getValue());
             self.editor.isValid() && self.editor.setValue("");
             self.fireEvent(BI.RecordEditor.EVENT_CONFIRM, arguments);
         });
-        this.editor.on(BI.Editor.EVENT_START, function(){
+        this.editor.on(BI.Editor.EVENT_START, function () {
             self.fireEvent(BI.RecordEditor.EVENT_START, arguments);
         });
-        this.editor.on(BI.Editor.EVENT_PAUSE, function(){
+        this.editor.on(BI.Editor.EVENT_PAUSE, function () {
             self.fireEvent(BI.RecordEditor.EVENT_PAUSE, arguments);
         });
-        this.editor.on(BI.Editor.EVENT_STOP, function(){
+        this.editor.on(BI.Editor.EVENT_STOP, function () {
             self.fireEvent(BI.RecordEditor.EVENT_STOP, arguments);
         });
         this.editor.on(BI.Editor.EVENT_ENTER, function () {
             self.fireEvent(BI.RecordEditor.EVENT_ENTER, arguments);
         });
-        this.editor.on(BI.Editor.EVENT_BACKSPACE, function(){
+        this.editor.on(BI.Editor.EVENT_BACKSPACE, function () {
             self._checkInputState();
         });
-        this.editor.on(BI.Editor.EVENT_REMOVE, function(){
-            if(!BI.isEmpty(self.contents)){
+        this.editor.on(BI.Editor.EVENT_REMOVE, function () {
+            if (!BI.isEmpty(self.contents)) {
                 self.contents.pop().destroy();
                 self.setValue(self.getValue());
                 self._adjustInputWidth();
             }
         });
-        this.editor.on(BI.Editor.EVENT_ERROR, function(){
+        this.editor.on(BI.Editor.EVENT_ERROR, function () {
             self.fireEvent(BI.RecordEditor.EVENT_ERROR, arguments);
         });
-        this.editor.on(BI.Editor.EVENT_RESTRICT, function(){
+        this.editor.on(BI.Editor.EVENT_RESTRICT, function () {
             self.fireEvent(BI.RecordEditor.EVENT_RESTRICT, arguments);
         });
-        this.editor.on(BI.Editor.EVENT_EMPTY, function(){
+        this.editor.on(BI.Editor.EVENT_EMPTY, function () {
             self.fireEvent(BI.RecordEditor.EVENT_EMPTY, arguments);
         });
         BI.createWidget({
@@ -119,41 +119,41 @@ BI.RecordEditor = BI.inherit(BI.Single, {
             element: this,
             items: [this.textContainer, this.editor]
         });
-        BI.Resizers.add(this.getName(), BI.bind(this._adjustInputWidth, this));
+        BI.ResizeDetector.addResizeListener(this, BI.bind(this._adjustInputWidth, this));
         this._adjustInputWidth();
     },
 
-    _adjustInputWidth: function(){
-        BI.nextTick(BI.bind(function(){
+    _adjustInputWidth: function () {
+        BI.nextTick(BI.bind(function () {
             this.editor.element.css("width", this.element.width() - this.textContainer.element.outerWidth() - 10);
         }, this));
     },
 
-    _checkInputState: function(){
-        if(BI.isEmpty(this.contents)){
+    _checkInputState: function () {
+        if (BI.isEmpty(this.contents)) {
             this.editor.enableWarterMark();
         } else {
             this.editor.disableWarterMark();
         }
     },
 
-    focus: function(){
+    focus: function () {
         this.editor.focus();
     },
 
-    blur: function(){
+    blur: function () {
         this.editor.blur();
     },
 
-    isValid : function() {
+    isValid: function () {
         return this.editor.isValid();
     },
 
-    setErrorText: function(text){
+    setErrorText: function (text) {
         this.editor.setErrorText(text);
     },
 
-    getErrorText: function(){
+    getErrorText: function () {
         return this.editor.getErrorText();
     },
 
@@ -173,21 +173,21 @@ BI.RecordEditor = BI.inherit(BI.Single, {
         return this.editor.getValue();
     },
 
-    getState: function(){
-        var values = BI.map(this.contents, function(i, lb){
+    getState: function () {
+        var values = BI.map(this.contents, function (i, lb) {
             return lb.getText();
         });
-        if(BI.isNotEmptyString(this.editor.getValue())){
+        if (BI.isNotEmptyString(this.editor.getValue())) {
             return values.concat([this.editor.getValue()]);
         }
         return values;
     },
 
-    setState: function(v){
-        BI.StateEditor.superclass.setValue.apply(this, arguments);
-        v =  BI.isArray(v) ? v : (v == "" ? [] : [v]);
+    setState: function (v) {
+        BI.RecordEditor.superclass.setValue.apply(this, arguments);
+        v = BI.isArray(v) ? v : (v == "" ? [] : [v]);
         var contents = this.contents = [];
-        BI.each(v, function(i, lb){
+        BI.each(v, function (i, lb) {
             contents.push(BI.createWidget({
                 type: "bi.label",
                 height: 25,
@@ -202,7 +202,7 @@ BI.RecordEditor = BI.inherit(BI.Single, {
         this._adjustInputWidth();
     },
 
-    destroy: function(){
+    destroy: function () {
         BI.Resizers.remove(this.getName());
         BI.RecordEditor.superclass.destroy.apply(this, arguments);
     }

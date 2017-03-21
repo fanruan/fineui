@@ -47,6 +47,7 @@ module.exports = function (grunt) {
             //实现好的一些基础实例
             caseJs: {
                 src: [
+                    'src/case/combo/popup.bubble.js',
                     'src/case/**/*.js'
                 ],
                 dest: 'dist/case.js'
