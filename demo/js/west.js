@@ -14,7 +14,7 @@ Demo.West = BI.inherit(BI.Widget, {
                         self.fireEvent(Demo.West.EVENT_VALUE_CHANGE, v);
                     }
                 }],
-                items: Demo.WIDGET
+                items: Demo.CONFIG
             }]
         }
     }
