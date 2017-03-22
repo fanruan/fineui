@@ -9,7 +9,7 @@ Date._DN = [BI.i18nText("BI-Sunday"),
     BI.i18nText("BI-Sunday")];
 
 // short day names
-Date._SDN = ['日',
+Date._SDN = ['',
     '',
     '',
     '',

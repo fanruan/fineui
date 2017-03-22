@@ -14244,11 +14244,15 @@ BI.Widget = BI.inherit(BI.OB, {
         if (o.invisible) {
             this.element.hide();
         }
-        if (o.disabled) {
-            this.element.addClass("base-disabled disabled");
-        }
-        if (o.invalid) {
-            this.element.addClass("base-invalid invalid");
+        if (o.disabled || o.invalid) {
+            BI.nextTick(BI.bind(function () {
+                if (this.options.disabled) {
+                    this.setEnable(false);
+                }
+                if (this.options.invalid) {
+                    this.setValid(false);
+                }
+            }, this));
         }
     },
 
@@ -22746,7 +22750,7 @@ Date._DN = [BI.i18nText("BI-Sunday"),
     BI.i18nText("BI-Sunday")];
 
 // short day names
-Date._SDN = ['日',
+Date._SDN = ['',
     '',
     '',
     '',

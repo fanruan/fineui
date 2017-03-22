@@ -13,8 +13,8 @@ Demo.Main = BI.inherit(BI.Widget, {
                         type: "demo.north",
                         listeners: [{
                             eventName: Demo.North.EVENT_VALUE_CHANGE,
-                            action: function () {
-                                center.setValue(0);
+                            action: function (v) {
+                                center.setValue(v);
                             }
                         }]
                     }

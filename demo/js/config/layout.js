@@ -1,18 +1,6 @@
-Demo.CONFIG = [{
+Demo.LAYOUT_CONFIG = [{
     id: 1,
     text: "布局"
-}, {
-    id: 2,
-    text: "基础控件"
-}, {
-    id: 3,
-    text: "实例控件"
-}, {
-    id: 4,
-    text: "详细控件"
-}, {
-    id: 5,
-    text: "通用组件"
 }, {
     pId: 1,
     text: "bi.center_adapt",
