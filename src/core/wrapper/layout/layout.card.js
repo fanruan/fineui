@@ -86,7 +86,7 @@ BI.CardLayout = BI.inherit(BI.Layout, {
         return widget;
     },
 
-    showCardByName: function (name, action) {
+    showCardByName: function (name, action, callback) {
         var self = this;
         //name不存在的时候全部隐藏
         var exist = this.hasWidget(this._getCardName(name));
@@ -100,7 +100,7 @@ BI.CardLayout = BI.inherit(BI.Layout, {
                 //动画效果只有在全部都隐藏的时候才有意义,且只要执行一次动画操作就够了
                 !flag && !exist && (BI.Action && action instanceof BI.Action) ? (action.actionBack(el), flag = true) : el.invisible();
             } else {
-                (BI.Action && action instanceof BI.Action) ? action.actionPerformed(void 0, el, callback) : (el.visible(), el._mount())
+                (BI.Action && action instanceof BI.Action) ? action.actionPerformed(void 0, el, callback) : (el.visible(), callback && callback())
             }
         });
     },
@@ -109,12 +109,7 @@ BI.CardLayout = BI.inherit(BI.Layout, {
         var self = this;
         this.showIndex = this.lastShowIndex;
         BI.each(this._children, function (i, el) {
-            if (self.showIndex != i) {
-                el.element.hide();
-            } else {
-                el.element.show();
-                el._mount();
-            }
+            el.setVisible(self.showIndex == i);
         })
     },
 

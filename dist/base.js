@@ -21353,8 +21353,8 @@ BI.ButtonGroup = BI.inherit(BI.Widget, {
             return;
         }
 
-        var items = this._packageItems(items, this._packageBtns(btns));
-        BI.createWidget(BI.extend(this._packageLayout(items))).element.children().prependTo(this.element);
+        items = this._packageItems(items, this._packageBtns(btns));
+        this.layouts.prependItems(this._packageLayout(items).items);
     },
 
     addItems: function (items) {
@@ -21369,8 +21369,8 @@ BI.ButtonGroup = BI.inherit(BI.Widget, {
             return;
         }
 
-        var items = this._packageItems(items, this._packageBtns(btns));
-        BI.createWidget(BI.extend(this._packageLayout(items))).element.children().appendTo(this.element);
+        items = this._packageItems(items, this._packageBtns(btns));
+        this.layouts.addItems(this._packageLayout(items).items);
     },
 
     removeItemAt: function (indexes) {

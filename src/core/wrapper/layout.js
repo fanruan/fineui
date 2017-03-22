@@ -106,10 +106,25 @@ BI.Layout = BI.inherit(BI.Widget, {
         return w;
     },
 
+    prependItem: function (item) {
+        var w = this._addElement(this.options.items.length, item);
+        w._mount();
+        this.options.items.unshift(item);
+        w.element.prependTo(this.element);
+        return w;
+    },
+
     addItems: function (items) {
         var self = this;
         BI.each(items, function (i, item) {
             self.addItem(item);
+        })
+    },
+
+    prependItems: function (items) {
+        var self = this;
+        BI.each(items, function (i, item) {
+            self.prependItem(item);
         })
     },
 
