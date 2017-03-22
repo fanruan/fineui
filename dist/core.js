@@ -22117,7 +22117,7 @@ $(function () {
         },
 
         getTextSizeWidth: function (text, fontSize) {
-            var span = $("<span></span>").addClass("text-width-span").appendTo($("#container"));
+            var span = $("<span></span>").addClass("text-width-span").appendTo($("body"));
 
             if (fontSize == null) {
                 fontSize = 12;
@@ -22139,7 +22139,7 @@ $(function () {
                     position: "absolute",
                     top: "-9999px",
                     overflow: "scroll"
-                }).appendTo($("#container"));
+                }).appendTo($("body"));
                 this._scrollWidth = ul[0].offsetWidth - ul[0].clientWidth;
                 ul.destroy();
             }

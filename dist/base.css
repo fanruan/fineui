@@ -73,6 +73,37 @@
 /****添加计算宽度的--运算符直接需要space****/
 /****** common color(常用颜色,可用于普遍场景) *****/
 /**** custom color(自定义颜色,用于特定场景) ****/
+.bi-bubble-combo .bubble-combo-triangle-left {
+  width: 0;
+  height: 0;
+  border-top: 6px solid transparent;
+  border-left: 6px solid #009de3;
+  border-bottom: 6px solid transparent;
+}
+.bi-bubble-combo .bubble-combo-triangle-right {
+  width: 0;
+  height: 0;
+  border-top: 6px solid transparent;
+  border-right: 6px solid #009de3;
+  border-bottom: 6px solid transparent;
+}
+.bi-bubble-combo .bubble-combo-triangle-top {
+  width: 0;
+  height: 0;
+  border-left: 6px solid transparent;
+  border-right: 6px solid transparent;
+  border-top: 6px solid #009de3;
+}
+.bi-bubble-combo .bubble-combo-triangle-bottom {
+  width: 0;
+  height: 0;
+  border-left: 6px solid transparent;
+  border-right: 6px solid transparent;
+  border-bottom: 6px solid #009de3;
+}
+/****添加计算宽度的--运算符直接需要space****/
+/****** common color(常用颜色,可用于普遍场景) *****/
+/**** custom color(自定义颜色,用于特定场景) ****/
 .bi-bubble-popup-view {
   -webkit-box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
   -moz-box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
@@ -736,6 +767,7 @@ li.CodeMirror-hint-active {
 /****** common color(常用颜色,可用于普遍场景) *****/
 /**** custom color(自定义颜色,用于特定场景) ****/
 .bi-segment > .center-element {
+  overflow: hidden;
   overflow-x: hidden;
   overflow-y: hidden;
   background: #ffffff;
@@ -931,6 +963,7 @@ li.CodeMirror-hint-active {
 /****** common color(常用颜色,可用于普遍场景) *****/
 /**** custom color(自定义颜色,用于特定场景) ****/
 .bi-textarea-editor {
+  overflow: hidden;
   overflow-x: hidden;
   overflow-y: hidden;
 }
@@ -982,6 +1015,7 @@ li.CodeMirror-hint-active {
 .bi-text {
   text-overflow: ellipsis;
   overflow-x: hidden;
+  overflow-y: hidden;
   white-space: nowrap;
   word-break: break-all;
 }
