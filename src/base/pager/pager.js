@@ -52,15 +52,6 @@ BI.Pager = BI.inherit(BI.Widget, {
         this._populate();
     },
 
-    populate: function () {
-        this.currPage = BI.result(this.options, "curr");
-        this._populate();
-    },
-    
-    refresh: function () {
-        this._populate();  
-    },
-
     _populate: function () {
         var self = this, o = this.options, view = [], dict = {};
         this.empty();
@@ -279,6 +270,17 @@ BI.Pager = BI.inherit(BI.Widget, {
             default :
                 return val;
         }
+    },
+
+    attr: function (key, value) {
+        BI.Pager.superclass.attr.apply(this, arguments);
+        if (key === "curr") {
+            this.currPage = BI.result(this.options, "curr");
+        }
+    },
+
+    populate: function () {
+        this._populate();
     }
 });
 BI.Pager.EVENT_CHANGE = "EVENT_CHANGE";

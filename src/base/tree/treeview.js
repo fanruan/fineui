@@ -14,6 +14,9 @@ BI.TreeView = BI.inherit(BI.Pane, {
     },
     _init: function () {
         BI.TreeView.superclass._init.apply(this, arguments);
+        FR.$defaultImport('/com/fr/bi/web/js/third/ztree/jquery.ztree.core-3.5.js', 'js');
+        FR.$defaultImport('/com/fr/bi/web/js/third/ztree/jquery.ztree.excheck-3.5.js', 'js');
+        FR.$defaultImport('/com/fr/bi/web/css/base/third/ztree/zTreeStyle.css', 'css');
 
         this._stop = false;
         this.container = BI.createWidget();
@@ -68,7 +71,7 @@ BI.TreeView = BI.inherit(BI.Pane, {
                 enable: true,
                 url: getUrl,
                 autoParam: ["id", "name"],
-                otherParam: BI.cjkEncodeDO(paras)
+                otherParam: FR.cjkEncodeDO(paras)
             },
             check: {
                 enable: true
@@ -110,10 +113,10 @@ BI.TreeView = BI.inherit(BI.Pane, {
             treeNode.times = treeNode.times || 1;
             var param = "id=" + treeNode.id
                 + "&times=" + (treeNode.times++)
-                + "&parent_values= " + window.encodeURIComponent(BI.jsonEncode(parentNode))
-                + "&check_state=" + window.encodeURIComponent(BI.jsonEncode(treeNode.getCheckStatus()));
+                + "&parent_values= " + window.encodeURIComponent(FR.jsonEncode(parentNode))
+                + "&check_state=" + window.encodeURIComponent(FR.jsonEncode(treeNode.getCheckStatus()));
 
-            return BI.servletURL + '?op=' + self.options.op + '&cmd=' + self.options.cmd + "&" + param;
+            return FR.servletURL + '?op=' + self.options.op + '&cmd=' + self.options.cmd + "&" + param;
         }
 
         function beforeExpand(treeId, treeNode) {
@@ -310,7 +313,7 @@ BI.TreeView = BI.inherit(BI.Pane, {
         //处理标红
         if (BI.isKey(o.paras.keyword)) {
             var keyword = o.paras.keyword;
-            var ns = BI.Tree.transformToArrayFormat(nodes);
+            var ns = BI.Tree.arrayFormat(nodes);
             BI.each(ns, function (i, n) {
                 n.text = $("<div>").__textKeywordMarked__(n.text, keyword, n.py).html();
             });
@@ -443,11 +446,15 @@ BI.TreeView = BI.inherit(BI.Pane, {
     },
 
     setValue: function (value, param) {
-        this.options.paras.selected_values = value || {};
-        this.selected_values = BI.deepClone(value) || {};
+        this.setSelectedValue(value);
         this.checkAll(false);
         this.updateValue(value, param);
         this.refresh();
+    },
+
+    setSelectedValue: function (value) {
+        this.options.paras.selected_values = value || {};
+        this.selected_values = BI.deepClone(value) || {};
     },
 
     updateValue: function (values, param) {

@@ -13698,6 +13698,10 @@ if (!window.BI) {
             return (string + "").toLocaleLowerCase();
         },
 
+        isEndWithBlank: function (string) {
+            return /(\s|\u00A0)$/.test(string);
+        },
+
         isLiteral: function (exp) {
             var literalValueRE = /^\s?(true|false|-?[\d\.]+|'[^']*'|"[^"]*")\s?$/
             return literalValueRE.test(exp)
@@ -19644,7 +19648,7 @@ BI.Cache = {
  * 控制器
  * Controller层超类
  * @class BI.Controller
- * @extends FR.OB
+ * @extends BI.OB
  * @abstract
  */
 BI.Controller = BI.inherit(BI.OB, {
@@ -22009,6 +22013,52 @@ BI.ShowListener = BI.inherit(BI.OB, {
     }
 });
 BI.ShowListener.EVENT_CHANGE = "ShowListener.EVENT_CHANGE";/**
+ * style加载管理器
+ *
+ * Created by GUY on 2015/9/7.
+ * @class
+ */
+BI.StyleLoaderManager = BI.inherit(BI.OB, {
+    _defaultConfig: function () {
+        return BI.extend(BI.StyleLoaderManager.superclass._defaultConfig.apply(this, arguments), {});
+    },
+
+    _init: function () {
+        BI.StyleLoaderManager.superclass._init.apply(this, arguments);
+        this.stylesManager = {};
+    },
+
+    loadStyle: function (name, styleString) {
+        var d = document, styles = d.createElement('style');
+        d.getElementsByTagName('head')[0].appendChild(styles);
+        styles.setAttribute('type', 'text/css');
+        if (styles.styleSheet) {
+            styles.styleSheet.cssText = styleString;
+        } else {
+            styles.appendChild(document.createTextNode(styleString));
+        }
+        this.stylesManager[name] = styles;
+
+        return this;
+    },
+
+    get: function (name) {
+        return this.stylesManager[name];
+    },
+
+    has: function (name) {
+        return this.stylesManager[name] != null;
+    },
+
+    removeStyle: function (name) {
+        if (!this.has(name)) {
+            return this;
+        }
+        this.stylesManager[name].parentNode.removeChild(this.stylesManager[name]);
+        delete this.stylesManager[name];
+        return this;
+    }
+});/**
  * @class BI.Logic
  * @extends BI.OB
  */
@@ -23160,6 +23210,66 @@ Function.prototype.after = function (func) {
         func.apply(this, arguments);
         return ret;
     }
+};/*!
+ * jLayout JQuery Plugin v0.11
+ *
+ * Licensed under the revised BSD License.
+ * Copyright 2008, Bram Stein
+ * All rights reserved.
+ */
+if (jQuery) {
+    (function($){
+        // richer:容器在其各个边缘留出的空间
+        $.fn.insets = function () {
+            var p = this.padding(),
+                b = this.border();
+            return {
+                'top': p.top,
+                'bottom': p.bottom + b.bottom + b.top,
+                'left': p.left,
+                'right': p.right + b.right + b.left
+            };
+        };
+
+        // richer:获取 && 设置jQuery元素的边界
+        $.fn.bounds = function (value) {
+            var tmp = {hasIgnoredBounds : true};
+
+            if (value) {
+                if (!isNaN(value.x)) {
+                    tmp.left = value.x;
+                }
+                if (!isNaN(value.y)) {
+                    tmp.top = value.y;
+                }
+                if (value.width != null) {
+                    tmp.width = (value.width - (this.outerWidth(true) - this.width()));
+                    tmp.width = (tmp.width >= 0) ? tmp.width : value.width;
+                    // fix chrome
+                    //tmp.width = (tmp.width >= 0) ? tmp.width : 0;
+                }
+                if (value.height != null) {
+                    tmp.height = value.height - (this.outerHeight(true) - this.height());
+                    tmp.height = (tmp.height >= 0) ? tmp.height : value.height;
+                    // fix chrome
+                    //tmp.height = (tmp.height >= 0) ? tmp.height : value.0;
+                }
+                this.css(tmp);
+                return this;
+            }
+            else {
+                // richer:注意此方法只对可见元素有效
+                tmp = this.position();
+                return {
+                    'x': tmp.left,
+                    'y': tmp.top,
+                    // richer:这里计算外部宽度和高度的时候，都不包括边框
+                    'width': this.outerWidth(),
+                    'height': this.outerHeight()
+                };
+            }
+        };
+    })(jQuery);
 };if (!Number.prototype.toFixed || (0.00008).toFixed(3) !== '0.000' ||
     (0.9).toFixed(0) === '0' || (1.255).toFixed(2) !== '1.25' ||
     (1000000000000000128).toFixed(0) !== "1000000000000000128") {
@@ -23644,51 +23754,6 @@ $.extend(String, {
             return args[i];
         });
     }
-});/**
- * guy
- * 状态常量
- */
-
-_.extend(BI, {
-    Status: {
-        SUCCESS: 1,
-        WRONG: 2,
-        START: 3,
-        END: 4,
-        WAITING: 5,
-        READY: 6,
-        RUNNING: 7,
-        OUTOFBOUNDS: 8,
-        NULL: -1
-    },
-    Direction: {
-        Top: "top",
-        Bottom: "bottom",
-        Left: "left",
-        Right: "right",
-        Custom: "custom"
-    },
-    Axis: {
-        Vertical: "vertical",
-        Horizontal: "horizontal"
-    },
-    Selection: {
-        Default: -999,
-        None: -1,
-        Single: 0,
-        Multi: 1,
-        All: 2
-    },
-    HorizontalAlign: {
-        Left: "left",
-        Right: "right",
-        Center: "center"
-    },
-    VerticalAlign: {
-        Middle: "middle",
-        Top: "top",
-        Bottom: "bottom"
-    }
 });BI.EventListener = {
     listen: function listen(target, eventType, callback) {
         if (target.addEventListener) {
@@ -23995,7 +24060,70 @@ _.extend(BI, {
     emptyStr: "",
     emptyFn: function () {
     },
-    empty: null
+    empty: null,
+    KeyCode: {
+        BACKSPACE: 8,
+        COMMA: 188,
+        DELETE: 46,
+        DOWN: 40,
+        END: 35,
+        ENTER: 13,
+        ESCAPE: 27,
+        HOME: 36,
+        LEFT: 37,
+        NUMPAD_ADD: 107,
+        NUMPAD_DECIMAL: 110,
+        NUMPAD_DIVIDE: 111,
+        NUMPAD_ENTER: 108,
+        NUMPAD_MULTIPLY: 106,
+        NUMPAD_SUBTRACT: 109,
+        PAGE_DOWN: 34,
+        PAGE_UP: 33,
+        PERIOD: 190,
+        RIGHT: 39,
+        SPACE: 32,
+        TAB: 9,
+        UP: 38
+    },
+    Status: {
+        SUCCESS: 1,
+        WRONG: 2,
+        START: 3,
+        END: 4,
+        WAITING: 5,
+        READY: 6,
+        RUNNING: 7,
+        OUTOFBOUNDS: 8,
+        NULL: -1
+    },
+    Direction: {
+        Top: "top",
+        Bottom: "bottom",
+        Left: "left",
+        Right: "right",
+        Custom: "custom"
+    },
+    Axis: {
+        Vertical: "vertical",
+        Horizontal: "horizontal"
+    },
+    Selection: {
+        Default: -999,
+        None: -1,
+        Single: 0,
+        Multi: 1,
+        All: 2
+    },
+    HorizontalAlign: {
+        Left: "left",
+        Right: "right",
+        Center: "center"
+    },
+    VerticalAlign: {
+        Middle: "middle",
+        Top: "top",
+        Bottom: "bottom"
+    }
 });/**
  * absolute实现的居中布局
  * @class BI.AbsoluteCenterLayout
@@ -25844,7 +25972,6 @@ BI.CardLayout = BI.inherit(BI.Layout, {
             .appendTo(this.element);
         widget.invisible();
         this.addWidget(this._getCardName(cardName), widget);
-        widget._mount();
         return widget;
     },
 
@@ -25862,7 +25989,10 @@ BI.CardLayout = BI.inherit(BI.Layout, {
                 //动画效果只有在全部都隐藏的时候才有意义,且只要执行一次动画操作就够了
                 !flag && !exist && (BI.Action && action instanceof BI.Action) ? (action.actionBack(el), flag = true) : el.element.hide();
             } else {
-                (BI.Action && action instanceof BI.Action) ? action.actionPerformed(void 0, el, callback) : el.element.show(0, callback);
+                (BI.Action && action instanceof BI.Action) ? action.actionPerformed(void 0, el, callback) : el.element.show(0, function () {
+                    el._mount();
+                    callback && callback();
+                });
             }
         });
     },

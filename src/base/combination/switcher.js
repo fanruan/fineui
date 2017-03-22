@@ -258,8 +258,8 @@ BI.Switcher = BI.inherit(BI.Widget, {
         this.popupView && this.popupView.empty();
     },
 
-    destroyed: function () {
-        this.popupView && this.popupView.destroy();
+    destroy: function () {
+        BI.Switcher.superclass.destroy.apply(this, arguments);
     }
 });
 BI.Switcher.EVENT_EXPAND = "EVENT_EXPAND";

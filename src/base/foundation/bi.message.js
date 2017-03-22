@@ -9,6 +9,15 @@ $.extend(BI, {
         var messageShow, $mask, $pop;
 
         return {
+            alert: function (title, message, callback) {
+                this._show(false, title, message, callback);
+            },
+            confirm: function (title, message, callback, min_width) {
+                this._show(true, title, message, callback);
+            },
+            prompt: function (title, message, value, callback, min_width) {
+                FR.Msg.prompt(title, message, value, callback, min_width);
+            },
             toast: function (message, level, context) {
                 context = context || $("body");
                 var toast = BI.createWidget({
@@ -41,16 +50,16 @@ $.extend(BI, {
             _show: function (hasCancel, title, message, callback) {
                 $mask = $('<div class="bi-message-mask">').css({
                     position: 'absolute',
-                    'zIndex': 99999998,
+                    'zIndex': BI.zIndex_tip - 2,
                     top: 0,
                     left: 0,
                     right: 0,
                     bottom: 0,
-                    opacity: 0.1
+                    opacity: 0.5
                 }).appendTo('body');
                 $pop = $('<div class="bi-message-depend">').css({
                     position: 'absolute',
-                    'zIndex': 99999999,
+                    'zIndex': BI.zIndex_tip - 1,
                     top: 0,
                     left: 0,
                     right: 0,
@@ -65,7 +74,7 @@ $.extend(BI, {
                     controlItems.push({
                         el: {
                             type: 'bi.button',
-                            text: BI.i18nText("BI-Cancel"),
+                            text: BI.i18nText("BI-Basic_Cancel"),
                             height: 30,
                             level: 'ignore',
                             handler: function () {
@@ -80,7 +89,7 @@ $.extend(BI, {
                 controlItems.push({
                     el: {
                         type: 'bi.button',
-                        text: BI.i18nText("BI-OK"),
+                        text: BI.i18nText("BI-Basic_OK"),
                         height: 30,
                         handler: function () {
                             close();
@@ -106,7 +115,7 @@ $.extend(BI, {
                                             center: {
                                                 el: {
                                                     type: 'bi.label',
-                                                    text: title || BI.i18nText("BI-Prompt"),
+                                                    text: title || BI.i18nText("BI-Basic_Prompt"),
                                                     textAlign: 'left',
                                                     hgap: 20,
                                                     height: 50

@@ -1,8 +1,116 @@
 Demo.CASE_CONFIG = [{
     id: 3,
-    text: "基础控件"
+    text: "实例控件"
 }, {
     pId: 3,
-    text: "bi.center_adapt",
-    value: "demo.center_adapt"
+    text: "bi.calendar",
+    value: "demo.calendar"
+}, {
+    pId: 3,
+    text: "bi.zclip",
+    value: "demo.zclip"
+}, {
+    pId: 3,
+    text: "bi.complex_calendar",
+    value: "demo.complex_calendar"
+}, {
+    pId: 3,
+    text: "bi.calendar",
+    value: "demo.calendar"
+}, {
+    pId: 3,
+    text: "bi.colorpicker",
+    value: "demo.colorpicker"
+}, {
+    pId: 3,
+    text: "bi.bubble_combo",
+    value: "demo.bubble_combo"
+}, {
+    pId: 3,
+    id: 11,
+    text: "editors"
+}, {
+    pId: 11,
+    text: "bi.record_editor",
+    value: "demo.record_editor"
+}, {
+    pId: 11,
+    text: "bi.shelter_editor",
+    value: "demo.shelter_editor"
+}, {
+    pId: 11,
+    text: "bi.sign_editor",
+    value: "demo.sign_editor"
+}, {
+    pId: 11,
+    text: "bi.state_editor",
+    value: "demo.state_editor"
+}, {
+    pId: 3,
+    text: "各种checkbox",
+    value: "demo.checkboxes"
+}, {
+    pId: 3,
+    text: "各种tip",
+    value: "demo.tips"
+}, {
+    pId: 3,
+    text: "bi.branch_expander",
+    value: "demo.branch_expander"
+}, {
+    pId: 3,
+    text: "bi.float_box",
+    value: "demo.float_box"
+}, {
+    pId: 3,
+    text: "bi.float_box",
+    value: "demo.float_box"
+}, {
+    pId: 3,
+    text: "bi.segment",
+    value: "demo.segment"
+}, {
+    pId: 3,
+    id: 12,
+    text: "各种表格"
+}, {
+    pId: 3,
+    id: 13,
+    text: "各种tree"
+}, {
+    pId: 3,
+    text: "各种trigger",
+    value: "demo.triggers"
+}, {
+    pId: 12,
+    text: "bi.adaptive_table",
+    value: "demo.adaptive_table"
+}, {
+    pId: 12,
+    text: "bi.table_tree",
+    value: "demo.table_tree"
+}, {
+    pId: 12,
+    text: "bi.layer_tree_table",
+    value: "demo.layer_tree_table"
+}, {
+    pId: 13,
+    text: "bi.branch_tree",
+    value: "demo.branch_tree"
+}, {
+    pId: 13,
+    text: "bi.display_tree",
+    value: "demo.display_tree"
+}, {
+    pId: 13,
+    text: "bi.level_tree",
+    value: "demo.level_tree"
+}, {
+    pId: 13,
+    text: "bi.simple_tree",
+    value: "demo.simple_tree"
+}, {
+    pId: 13,
+    text: "bi.handstand_branch_tree",
+    value: "demo.handstand_branch_tree"
 }];

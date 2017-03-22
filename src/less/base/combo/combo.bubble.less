@@ -1,0 +1,16 @@
+@import "../../bibase";
+
+.bi-bubble-combo {
+  & .bubble-combo-triangle-left {
+    .solid-triangle-right(@color-bi-background-highlight);
+  }
+  & .bubble-combo-triangle-right {
+    .solid-triangle-left(@color-bi-background-highlight);
+  }
+  & .bubble-combo-triangle-top {
+    .solid-triangle-down(@color-bi-background-highlight);
+  }
+  & .bubble-combo-triangle-bottom {
+    .solid-triangle-up(@color-bi-background-highlight);
+  }
+}

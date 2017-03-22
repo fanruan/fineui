@@ -298,6 +298,10 @@ BI.ButtonGroup = BI.inherit(BI.Widget, {
             }
         });
         return node;
+    },
+
+    destroy: function () {
+        BI.ButtonGroup.superclass.destroy.apply(this, arguments);
     }
 });
 BI.extend(BI.ButtonGroup, {

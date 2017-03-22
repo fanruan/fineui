@@ -5,5 +5,5 @@
   text-overflow: ellipsis;
   overflow-x: hidden;
   white-space: nowrap;
-  word-break: break-word;
+  word-break: break-all;
 }

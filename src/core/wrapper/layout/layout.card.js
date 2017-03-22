@@ -83,7 +83,6 @@ BI.CardLayout = BI.inherit(BI.Layout, {
             .appendTo(this.element);
         widget.invisible();
         this.addWidget(this._getCardName(cardName), widget);
-        widget._mount();
         return widget;
     },
 
@@ -101,7 +100,10 @@ BI.CardLayout = BI.inherit(BI.Layout, {
                 //动画效果只有在全部都隐藏的时候才有意义,且只要执行一次动画操作就够了
                 !flag && !exist && (BI.Action && action instanceof BI.Action) ? (action.actionBack(el), flag = true) : el.element.hide();
             } else {
-                (BI.Action && action instanceof BI.Action) ? action.actionPerformed(void 0, el, callback) : el.element.show(0, callback);
+                (BI.Action && action instanceof BI.Action) ? action.actionPerformed(void 0, el, callback) : el.element.show(0, function () {
+                    el._mount();
+                    callback && callback();
+                });
             }
         });
     },

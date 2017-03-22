@@ -19,7 +19,7 @@ BI.SyncTree = BI.inherit(BI.TreeView, {
         var setting = {
             async: {
                 enable: false,
-                otherParam: BI.cjkEncodeDO(paras)
+                otherParam: FR.cjkEncodeDO(paras)
             },
             check: {
                 enable: true
@@ -157,36 +157,24 @@ BI.SyncTree = BI.inherit(BI.TreeView, {
         }
     },
 
-    _joinTree: function (map, values, isLast) {
-        var cur = map;
-        BI.each(values, function (i, value) {
-            if (i > 0 && BI.isPlainObject(cur) && BI.isEmpty(cur)) {
-                return;
-            }
-            if (isLast === true && i === values.length - 1) {
-                cur[value] = {};
-                return;
-            }
-            if (cur[value] == null) {
-                cur[value] = {};
-            }
-            cur = cur[value];
-        })
-    },
-
     _join: function (valueA, valueB) {
         var self = this;
-        var hashMap = valueA || {};
-        track([], valueB);
-        function track(parent, node) {
+        var map = {};
+        track([], valueA, valueB);
+        track([], valueB, valueA);
+        function track(parent, node, compare) {
             BI.each(node, function (n, item) {
-                var next = parent.concat([n]);
-                self._joinTree(hashMap, next, BI.isPlainObject(item) && BI.isEmpty(item));
-                track(next, item);
+                if (BI.isNull(compare[n])) {
+                    self._addTreeNode(map, parent, n, item);
+                } else if (BI.isEmpty(compare[n])) {
+                    self._addTreeNode(map, parent, n, {});
+                } else {
+                    track(parent.concat([n]), node[n], compare[n]);
+                }
             })
         }
 
-        return hashMap;
+        return map;
     },
 
     hasChecked: function () {

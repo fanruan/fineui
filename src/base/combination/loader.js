@@ -252,6 +252,10 @@ BI.Loader = BI.inherit(BI.Widget, {
         BI.each([this.prev, this.next], function (i, ob) {
             ob && ob.setVisible(false);
         });
+    },
+
+    destroy: function () {
+        BI.Loader.superclass.destroy.apply(this, arguments);
     }
 });
 BI.Loader.EVENT_CHANGE = "EVENT_CHANGE";
