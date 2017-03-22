@@ -7,106 +7,70 @@ Demo.LAYOUT_CONFIG = [{
     value: "demo.center_adapt"
 }, {
     pId: 1,
-    text: "bi.float_center_adapt",
-    value: "float_center_adapt"
-}, {
-    pId: 1,
-    text: "bi.absolute_center_adapt",
-    value: "absolute_center_adapt"
-}, {
-    pId: 1,
-    text: "bi.flex_center",
-    value: "flex_center"
-}, {
-    pId: 1,
-    text: "bi.inline_center_adapt",
-    value: "inline_center_adapt"
-}, {
-    pId: 1,
     text: "bi.vertical_adapt",
-    value: "vertical_adapt"
-}, {
-    pId: 1,
-    text: "bi.inline_vertical_adapt",
-    value: "inline_vertical_adapt"
+    value: "demo.vertical_adapt"
 }, {
     pId: 1,
     text: "bi.horizontal_adapt",
-    value: "horizontal_adapt"
+    value: "demo.horizontal_adapt"
 }, {
     pId: 1,
     text: "bi.horizontal_auto",
-    value: "horizontal_auto"
+    value: "demo.horizontal_auto"
 }, {
     pId: 1,
     text: "bi.horizontal_float",
-    value: "horizontal_float"
+    value: "demo.horizontal_float"
 }, {
     pId: 1,
     text: "bi.left_right_vertical_adapt",
-    value: "left_right_vertical_adapt"
+    value: "demo.left_right_vertical_adapt"
 }, {
     pId: 1,
     text: "bi.center",
-    value: "center"
+    value: "demo.center_layout"
 }, {
     pId: 1,
     text: "bi.float_center",
-    value: "float_center"
+    value: "demo.float_center"
 }, {
     pId: 1,
     text: "bi.vertical",
-    value: "vertical"
+    value: "demo.vertical"
 }, {
     pId: 1,
     text: "bi.horizontal",
-    value: "horizontal"
+    value: "demo.horizontal"
 }, {
     pId: 1,
     text: "bi.border",
-    value: "border"
-}, {
-    pId: 1,
-    text: "bi.card",
-    value: "card"
+    value: "demo.border"
 }, {
     pId: 1,
     text: "bi.left, bi.right",
-    value: "flow"
-}, {
-    pId: 1,
-    text: "bi.lattice",
-    value: "lattice"
+    value: "demo.flow"
 }, {
     pId: 1,
     text: "bi.inline",
-    value: "inline"
+    value: "demo.inline"
 }, {
     pId: 1,
     text: "bi.htape",
-    value: "htape"
+    value: "demo.htape"
 }, {
     pId: 1,
     text: "bi.vtape",
-    value: "vtape"
+    value: "demo.vtape"
 }, {
     pId: 1,
     text: "bi.grid",
-    value: "grid"
+    value: "demo.grid"
 }, {
     pId: 1,
     text: "bi.table",
-    value: "table"
-}, {
-    pId: 1,
-    text: "bi.division",
-    value: "division"
-}, {
-    pId: 1,
-    text: "bi.window",
-    value: "window"
+    value: "demo.table_layout"
 }, {
     pId: 1,
     text: "bi.td",
-    value: "td"
+    value: "demo.td"
 }];
