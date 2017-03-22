@@ -14434,9 +14434,9 @@ BI.Widget = BI.inherit(BI.OB, {
                 })
             })
         }
-        if (this._isRoot === true || !(this instanceof BI.Layout)) {
-            this._mount();
-        }
+        // if (this._isRoot === true || !(this instanceof BI.Layout)) {
+        this._mount();
+        // }
     },
 
     _setParent: function (parent) {
@@ -19275,7 +19275,7 @@ BI.Layout = BI.inherit(BI.Widget, {
         };
     },
 
-    created: function () {
+    render: function () {
         this._init4Margin();
         this._init4Scroll();
     },
@@ -24805,8 +24805,8 @@ BI.AbsoluteCenterLayout = BI.inherit(BI.Layout, {
         });
     },
 
-    created: function () {
-        BI.AbsoluteCenterLayout.superclass.created.apply(this, arguments);
+    render: function () {
+        BI.AbsoluteCenterLayout.superclass.render.apply(this, arguments);
         this.populate(this.options.items);
     },
 
@@ -24851,8 +24851,8 @@ BI.AbsoluteHorizontalLayout = BI.inherit(BI.Layout, {
         });
     },
 
-    created: function () {
-        BI.AbsoluteHorizontalLayout.superclass.created.apply(this, arguments);
+    render: function () {
+        BI.AbsoluteHorizontalLayout.superclass.render.apply(this, arguments);
         this.populate(this.options.items);
     },
 
@@ -24901,8 +24901,8 @@ BI.AbsoluteVerticalLayout = BI.inherit(BI.Layout, {
         });
     },
 
-    created: function () {
-        BI.AbsoluteVerticalLayout.superclass.created.apply(this, arguments);
+    render: function () {
+        BI.AbsoluteVerticalLayout.superclass.render.apply(this, arguments);
         this.populate(this.options.items);
     },
 
@@ -24953,8 +24953,8 @@ BI.CenterAdaptLayout = BI.inherit(BI.Layout, {
             bgap: 0
         });
     },
-    created: function () {
-        BI.CenterAdaptLayout.superclass.created.apply(this, arguments);
+    render: function () {
+        BI.CenterAdaptLayout.superclass.render.apply(this, arguments);
         this.$table = $("<table>").attr({"cellspacing": 0, "cellpadding": 0}).css({
             "position": "relative",
             "width": "100%",
@@ -25076,8 +25076,8 @@ BI.HorizontalAdaptLayout = BI.inherit(BI.Layout, {
             bgap: 0
         });
     },
-    created: function () {
-        BI.HorizontalAdaptLayout.superclass.created.apply(this, arguments);
+    render: function () {
+        BI.HorizontalAdaptLayout.superclass.render.apply(this, arguments);
         this.$table = $("<table>").attr({"cellspacing": 0, "cellpadding": 0}).css({
             "position": "relative",
             "width": "100%",
@@ -25200,8 +25200,8 @@ BI.LeftRightVerticalAdaptLayout = BI.inherit(BI.Layout, {
             rhgap: 0
         });
     },
-    created: function () {
-        BI.LeftRightVerticalAdaptLayout.superclass.created.apply(this, arguments);
+    render: function () {
+        BI.LeftRightVerticalAdaptLayout.superclass.render.apply(this, arguments);
         this.populate(this.options.items);
     },
 
@@ -25266,8 +25266,8 @@ BI.LeftVerticalAdaptLayout = BI.inherit(BI.Layout, {
             hgap: 0
         });
     },
-    created: function () {
-        BI.LeftVerticalAdaptLayout.superclass.created.apply(this, arguments);
+    render: function () {
+        BI.LeftVerticalAdaptLayout.superclass.render.apply(this, arguments);
         this.populate(this.options.items);
     },
 
@@ -25280,8 +25280,7 @@ BI.LeftVerticalAdaptLayout = BI.inherit(BI.Layout, {
         throw new Error("不能添加元素")
     },
 
-    populate: function (items) {
-        BI.LeftVerticalAdaptLayout.superclass.populate.apply(this, arguments);
+    stroke: function (items) {
         var o = this.options;
         var left = BI.createWidget({
             type: "bi.vertical_adapt",
@@ -25296,6 +25295,10 @@ BI.LeftVerticalAdaptLayout = BI.inherit(BI.Layout, {
             element: this,
             items: [left]
         });
+    },
+
+    populate: function (items) {
+        BI.LeftVerticalAdaptLayout.superclass.populate.apply(this, arguments);
         this._mount();
     }
 });
@@ -25311,8 +25314,8 @@ BI.RightVerticalAdaptLayout = BI.inherit(BI.Layout, {
             hgap: 0
         });
     },
-    created: function () {
-        BI.RightVerticalAdaptLayout.superclass.created.apply(this, arguments);
+    render: function () {
+        BI.RightVerticalAdaptLayout.superclass.render.apply(this, arguments);
         this.populate(this.options.items);
     },
 
@@ -25325,8 +25328,7 @@ BI.RightVerticalAdaptLayout = BI.inherit(BI.Layout, {
         throw new Error("不能添加元素")
     },
 
-    populate: function (items) {
-        BI.RightVerticalAdaptLayout.superclass.populate.apply(this, arguments);
+    stroke: function (items) {
         var o = this.options;
         var right = BI.createWidget({
             type: "bi.vertical_adapt",
@@ -25341,6 +25343,10 @@ BI.RightVerticalAdaptLayout = BI.inherit(BI.Layout, {
             element: this,
             items: [right]
         });
+    },
+
+    populate: function (items) {
+        BI.RightVerticalAdaptLayout.superclass.populate.apply(this, arguments);
         this._mount();
     }
 });
@@ -25350,20 +25356,18 @@ $.shortcut('bi.right_vertical_adapt', BI.RightVerticalAdaptLayout);/**
  * @extends BI.Layout
  */
 BI.VerticalAdaptLayout = BI.inherit(BI.Layout, {
-    _defaultConfig: function () {
-        return BI.extend(BI.VerticalAdaptLayout.superclass._defaultConfig.apply(this, arguments), {
-            baseCls: "bi-vertical-adapt-layout",
-            columnSize: [],
-            hgap: 0,
-            vgap: 0,
-            lgap: 0,
-            rgap: 0,
-            tgap: 0,
-            bgap: 0
-        });
+    props: {
+        baseCls: "bi-vertical-adapt-layout",
+        columnSize: [],
+        hgap: 0,
+        vgap: 0,
+        lgap: 0,
+        rgap: 0,
+        tgap: 0,
+        bgap: 0
     },
-    _init: function () {
-        BI.VerticalAdaptLayout.superclass._init.apply(this, arguments);
+    render: function () {
+        BI.VerticalAdaptLayout.superclass.render.apply(this, arguments);
         this.$table = $("<table>").attr({"cellspacing": 0, "cellpadding": 0}).css({
             "position": "relative",
             "height": "100%",
@@ -25483,8 +25487,8 @@ BI.HorizontalAutoLayout = BI.inherit(BI.Layout, {
         });
     },
 
-    created: function () {
-        BI.HorizontalAutoLayout.superclass.created.apply(this, arguments);
+    render: function () {
+        BI.HorizontalAutoLayout.superclass.render.apply(this, arguments);
         this.populate(this.options.items);
     },
 
@@ -25543,8 +25547,8 @@ BI.FloatCenterAdaptLayout = BI.inherit(BI.Layout, {
             rgap: 0
         });
     },
-    created: function () {
-        BI.FloatCenterAdaptLayout.superclass.created.apply(this, arguments);
+    render: function () {
+        BI.FloatCenterAdaptLayout.superclass.render.apply(this, arguments);
         this.populate(this.options.items);
     },
 
@@ -25611,8 +25615,8 @@ BI.FloatHorizontalLayout = BI.inherit(BI.Layout, {
             rgap: 0
         });
     },
-    created: function () {
-        BI.FloatHorizontalLayout.superclass.created.apply(this, arguments);
+    render: function () {
+        BI.FloatHorizontalLayout.superclass.render.apply(this, arguments);
         this.populate(this.options.items);
     },
 
@@ -25680,8 +25684,8 @@ BI.InlineCenterAdaptLayout = BI.inherit(BI.Layout, {
             bgap: 0
         });
     },
-    created: function () {
-        BI.InlineCenterAdaptLayout.superclass.created.apply(this, arguments);
+    render: function () {
+        BI.InlineCenterAdaptLayout.superclass.render.apply(this, arguments);
         this.element.css({
             whiteSpace: "nowrap"
         });
@@ -25777,8 +25781,8 @@ BI.InlineVerticalAdaptLayout = BI.inherit(BI.Layout, {
             bgap: 0
         });
     },
-    created: function () {
-        BI.InlineVerticalAdaptLayout.superclass.created.apply(this, arguments);
+    render: function () {
+        BI.InlineVerticalAdaptLayout.superclass.render.apply(this, arguments);
         this.element.css({
             whiteSpace: "nowrap"
         });
@@ -25840,8 +25844,8 @@ BI.FlexCenterLayout = BI.inherit(BI.Layout, {
             baseCls: "bi-flex-center-layout"
         });
     },
-    created: function () {
-        BI.FlexCenterLayout.superclass.created.apply(this, arguments);
+    render: function () {
+        BI.FlexCenterLayout.superclass.render.apply(this, arguments);
         this.populate(this.options.items);
     },
 
@@ -25883,8 +25887,8 @@ BI.FlexHorizontalLayout = BI.inherit(BI.Layout, {
             bgap: 0
         });
     },
-    created: function () {
-        BI.FlexHorizontalLayout.superclass.created.apply(this, arguments);
+    render: function () {
+        BI.FlexHorizontalLayout.superclass.render.apply(this, arguments);
         var o = this.options;
         this.element.addClass(o.verticalAlign);
         this.populate(this.options.items);
@@ -25946,8 +25950,8 @@ BI.FlexVerticalCenter = BI.inherit(BI.Layout, {
             bgap: 0
         });
     },
-    created: function () {
-        BI.FlexVerticalCenter.superclass.created.apply(this, arguments);
+    render: function () {
+        BI.FlexVerticalCenter.superclass.render.apply(this, arguments);
         var o = this.options;
         this.populate(this.options.items);
     },
@@ -26001,8 +26005,8 @@ BI.FlexCenterLayout = BI.inherit(BI.Layout, {
             baseCls: "bi-flex-wrapper-center-layout clearfix"
         });
     },
-    created: function () {
-        BI.FlexCenterLayout.superclass.created.apply(this, arguments);
+    render: function () {
+        BI.FlexCenterLayout.superclass.render.apply(this, arguments);
         this.$wrapper = $("<div>").addClass("flex-wrapper-center-layout-wrapper");
         this.populate(this.options.items);
     },
@@ -26069,8 +26073,8 @@ BI.FlexHorizontalLayout = BI.inherit(BI.Layout, {
             bgap: 0
         });
     },
-    created: function () {
-        BI.FlexHorizontalLayout.superclass.created.apply(this, arguments);
+    render: function () {
+        BI.FlexHorizontalLayout.superclass.render.apply(this, arguments);
         var o = this.options;
         this.$wrapper = $("<div>").addClass("flex-wrapper-horizontal-layout-wrapper " + o.verticalAlign);
         this.populate(this.options.items);
@@ -26156,8 +26160,8 @@ BI.FlexVerticalCenter = BI.inherit(BI.Layout, {
             bgap: 0
         });
     },
-    created: function () {
-        BI.FlexVerticalCenter.superclass.created.apply(this, arguments);
+    render: function () {
+        BI.FlexVerticalCenter.superclass.render.apply(this, arguments);
         var o = this.options;
         this.$wrapper = $("<div>").addClass("flex-wrapper-vertical-center-wrapper");
         this.populate(this.options.items);
@@ -26239,8 +26243,8 @@ BI.AbsoluteLayout = BI.inherit(BI.Layout, {
             bgap: null
         });
     },
-    created: function () {
-        BI.AbsoluteLayout.superclass.created.apply(this, arguments);
+    render: function () {
+        BI.AbsoluteLayout.superclass.render.apply(this, arguments);
         this.populate(this.options.items);
     },
 
@@ -26340,8 +26344,8 @@ $.shortcut('bi.absolute', BI.AbsoluteLayout);BI.AdaptiveLayout = BI.inherit(BI.L
             bgap: null
         });
     },
-    created: function () {
-        BI.AdaptiveLayout.superclass.created.apply(this, arguments);
+    render: function () {
+        BI.AdaptiveLayout.superclass.render.apply(this, arguments);
         this.populate(this.options.items);
     },
 
@@ -26432,8 +26436,8 @@ BI.BorderLayout = BI.inherit(BI.Layout, {
             items: {}
         });
     },
-    created: function () {
-        BI.BorderLayout.superclass.created.apply(this, arguments);
+    render: function () {
+        BI.BorderLayout.superclass.render.apply(this, arguments);
         this.populate(this.options.items);
     },
 
@@ -26565,8 +26569,8 @@ BI.CardLayout = BI.inherit(BI.Layout, {
             items: []
         });
     },
-    created: function () {
-        BI.CardLayout.superclass.created.apply(this, arguments);
+    render: function () {
+        BI.CardLayout.superclass.render.apply(this, arguments);
         this.populate(this.options.items);
     },
 
@@ -26729,8 +26733,8 @@ BI.DefaultLayout = BI.inherit(BI.Layout, {
             items: []
         });
     },
-    created: function () {
-        BI.DefaultLayout.superclass.created.apply(this, arguments);
+    render: function () {
+        BI.DefaultLayout.superclass.render.apply(this, arguments);
         this.populate(this.options.items);
     },
 
@@ -26807,8 +26811,8 @@ BI.DivisionLayout = BI.inherit(BI.Layout, {
             //]
         });
     },
-    created: function () {
-        BI.DivisionLayout.superclass.created.apply(this, arguments);
+    render: function () {
+        BI.DivisionLayout.superclass.render.apply(this, arguments);
         this.populate(this.options.items);
     },
 
@@ -26946,8 +26950,8 @@ BI.FloatLeftLayout = BI.inherit(BI.Layout, {
             bgap: 0
         });
     },
-    created: function () {
-        BI.FloatLeftLayout.superclass.created.apply(this, arguments);
+    render: function () {
+        BI.FloatLeftLayout.superclass.render.apply(this, arguments);
         this.populate(this.options.items);
     },
 
@@ -27011,8 +27015,8 @@ BI.FloatRightLayout = BI.inherit(BI.Layout, {
             bgap: 0
         });
     },
-    created: function () {
-        BI.FloatRightLayout.superclass.created.apply(this, arguments);
+    render: function () {
+        BI.FloatRightLayout.superclass.render.apply(this, arguments);
         this.populate(this.options.items);
     },
 
@@ -27085,8 +27089,8 @@ BI.GridLayout = BI.inherit(BI.Layout, {
              ]*/
         });
     },
-    created: function () {
-        BI.GridLayout.superclass.created.apply(this, arguments);
+    render: function () {
+        BI.GridLayout.superclass.render.apply(this, arguments);
         this.populate(this.options.items);
     },
 
@@ -27199,8 +27203,8 @@ BI.HorizontalLayout = BI.inherit(BI.Layout, {
             bgap: 0
         });
     },
-    created: function () {
-        BI.HorizontalLayout.superclass.created.apply(this, arguments);
+    render: function () {
+        BI.HorizontalLayout.superclass.render.apply(this, arguments);
         this.$table = $("<table>").attr({"cellspacing": 0, "cellpadding": 0}).css({
             "position": "relative",
             "white-space": "nowrap",
@@ -27321,8 +27325,8 @@ BI.HorizontalCellLayout = BI.inherit(BI.Layout, {
             bgap: 0
         });
     },
-    created: function () {
-        BI.HorizontalCellLayout.superclass.created.apply(this, arguments);
+    render: function () {
+        BI.HorizontalCellLayout.superclass.render.apply(this, arguments);
         this.element.css({"display": "table", "vertical-align": "top"});
         this.populate(this.options.items);
     },
@@ -27384,8 +27388,8 @@ BI.InlineLayout = BI.inherit(BI.Layout, {
             bgap: 0
         });
     },
-    created: function () {
-        BI.InlineLayout.superclass.created.apply(this, arguments);
+    render: function () {
+        BI.InlineLayout.superclass.render.apply(this, arguments);
         this.populate(this.options.items);
     },
 
@@ -27441,8 +27445,8 @@ BI.LatticeLayout = BI.inherit(BI.Layout, {
             //columnSize: [0.2, 0.2, 0.6],
         });
     },
-    created: function () {
-        BI.LatticeLayout.superclass.created.apply(this, arguments);
+    render: function () {
+        BI.LatticeLayout.superclass.render.apply(this, arguments);
         this.populate(this.options.items);
     },
 
@@ -27501,8 +27505,8 @@ BI.TableLayout = BI.inherit(BI.Layout, {
             ]]
         });
     },
-    created: function () {
-        BI.TableLayout.superclass.created.apply(this, arguments);
+    render: function () {
+        BI.TableLayout.superclass.render.apply(this, arguments);
         this.rows = 0;
         this.populate(this.options.items);
     },
@@ -27649,8 +27653,8 @@ BI.HTapeLayout = BI.inherit(BI.Layout, {
             ]
         });
     },
-    created: function () {
-        BI.HTapeLayout.superclass.created.apply(this, arguments);
+    render: function () {
+        BI.HTapeLayout.superclass.render.apply(this, arguments);
         this.populate(this.options.items);
     },
 
@@ -27753,8 +27757,8 @@ BI.VTapeLayout = BI.inherit(BI.Layout, {
             ]
         });
     },
-    created: function () {
-        BI.VTapeLayout.superclass.created.apply(this, arguments);
+    render: function () {
+        BI.VTapeLayout.superclass.render.apply(this, arguments);
         this.populate(this.options.items);
     },
 
@@ -27850,8 +27854,8 @@ BI.TdLayout = BI.inherit(BI.Layout, {
             ]]
         });
     },
-    created: function () {
-        BI.TdLayout.superclass.created.apply(this, arguments);
+    render: function () {
+        BI.TdLayout.superclass.render.apply(this, arguments);
         this.$table = $("<table>").attr({"cellspacing": 0, "cellpadding": 0}).css({
             "position": "relative",
             "width": "100%",
@@ -27984,8 +27988,8 @@ BI.VerticalLayout = BI.inherit(BI.Layout, {
             scrolly: true
         });
     },
-    created: function () {
-        BI.VerticalLayout.superclass.created.apply(this, arguments);
+    render: function () {
+        BI.VerticalLayout.superclass.render.apply(this, arguments);
         this.populate(this.options.items);
     },
 
@@ -28059,8 +28063,8 @@ BI.WindowLayout = BI.inherit(BI.Layout, {
             ]]
         });
     },
-    created: function () {
-        BI.WindowLayout.superclass.created.apply(this, arguments);
+    render: function () {
+        BI.WindowLayout.superclass.render.apply(this, arguments);
         this.populate(this.options.items);
     },
 
@@ -28232,8 +28236,8 @@ BI.CenterLayout = BI.inherit(BI.Layout, {
         });
     },
 
-    created: function () {
-        BI.CenterLayout.superclass.created.apply(this, arguments);
+    render: function () {
+        BI.CenterLayout.superclass.render.apply(this, arguments);
         this.populate(this.options.items);
     },
 
@@ -28305,8 +28309,8 @@ BI.FloatCenterLayout = BI.inherit(BI.Layout, {
             bgap: 0
         });
     },
-    created: function () {
-        BI.FloatCenterLayout.superclass.created.apply(this, arguments);
+    render: function () {
+        BI.FloatCenterLayout.superclass.render.apply(this, arguments);
         this.populate(this.options.items);
     },
 
@@ -28378,8 +28382,8 @@ BI.HorizontalCenterLayout = BI.inherit(BI.Layout, {
             bgap: 0
         });
     },
-    created: function () {
-        BI.HorizontalCenterLayout.superclass.created.apply(this, arguments);
+    render: function () {
+        BI.HorizontalCenterLayout.superclass.render.apply(this, arguments);
         this.populate(this.options.items);
     },
 
@@ -28450,8 +28454,8 @@ BI.VerticalCenterLayout = BI.inherit(BI.Layout, {
             bgap: 0
         });
     },
-    created: function () {
-        BI.VerticalCenterLayout.superclass.created.apply(this, arguments);
+    render: function () {
+        BI.VerticalCenterLayout.superclass.render.apply(this, arguments);
         this.populate(this.options.items);
     },
 

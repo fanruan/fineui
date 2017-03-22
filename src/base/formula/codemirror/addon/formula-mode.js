@@ -11,7 +11,7 @@
         }
 
         var atoms = wordObj(['false', 'true']);
-        var keywords = wordObj(FormulaCollections);
+        var keywords = wordObj(BI.FormulaCollections);
 
         function tokenBase(stream, state) {
             if (stream.eatSpace()) {

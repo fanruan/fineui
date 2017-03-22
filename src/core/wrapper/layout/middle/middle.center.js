@@ -16,8 +16,8 @@ BI.CenterLayout = BI.inherit(BI.Layout, {
         });
     },
 
-    created: function () {
-        BI.CenterLayout.superclass.created.apply(this, arguments);
+    render: function () {
+        BI.CenterLayout.superclass.render.apply(this, arguments);
         this.populate(this.options.items);
     },
 

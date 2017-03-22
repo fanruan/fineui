@@ -30,8 +30,8 @@ BI.WindowLayout = BI.inherit(BI.Layout, {
             ]]
         });
     },
-    created: function () {
-        BI.WindowLayout.superclass.created.apply(this, arguments);
+    render: function () {
+        BI.WindowLayout.superclass.render.apply(this, arguments);
         this.populate(this.options.items);
     },
 

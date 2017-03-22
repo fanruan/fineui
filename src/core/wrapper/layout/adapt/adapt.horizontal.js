@@ -17,8 +17,8 @@ BI.HorizontalAdaptLayout = BI.inherit(BI.Layout, {
             bgap: 0
         });
     },
-    created: function () {
-        BI.HorizontalAdaptLayout.superclass.created.apply(this, arguments);
+    render: function () {
+        BI.HorizontalAdaptLayout.superclass.render.apply(this, arguments);
         this.$table = $("<table>").attr({"cellspacing": 0, "cellpadding": 0}).css({
             "position": "relative",
             "width": "100%",

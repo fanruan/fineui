@@ -20,8 +20,8 @@ BI.LeftRightVerticalAdaptLayout = BI.inherit(BI.Layout, {
             rhgap: 0
         });
     },
-    created: function () {
-        BI.LeftRightVerticalAdaptLayout.superclass.created.apply(this, arguments);
+    render: function () {
+        BI.LeftRightVerticalAdaptLayout.superclass.render.apply(this, arguments);
         this.populate(this.options.items);
     },
 
@@ -86,8 +86,8 @@ BI.LeftVerticalAdaptLayout = BI.inherit(BI.Layout, {
             hgap: 0
         });
     },
-    created: function () {
-        BI.LeftVerticalAdaptLayout.superclass.created.apply(this, arguments);
+    render: function () {
+        BI.LeftVerticalAdaptLayout.superclass.render.apply(this, arguments);
         this.populate(this.options.items);
     },
 
@@ -100,8 +100,7 @@ BI.LeftVerticalAdaptLayout = BI.inherit(BI.Layout, {
         throw new Error("不能添加元素")
     },
 
-    populate: function (items) {
-        BI.LeftVerticalAdaptLayout.superclass.populate.apply(this, arguments);
+    stroke: function (items) {
         var o = this.options;
         var left = BI.createWidget({
             type: "bi.vertical_adapt",
@@ -116,6 +115,10 @@ BI.LeftVerticalAdaptLayout = BI.inherit(BI.Layout, {
             element: this,
             items: [left]
         });
+    },
+
+    populate: function (items) {
+        BI.LeftVerticalAdaptLayout.superclass.populate.apply(this, arguments);
         this._mount();
     }
 });
@@ -131,8 +134,8 @@ BI.RightVerticalAdaptLayout = BI.inherit(BI.Layout, {
             hgap: 0
         });
     },
-    created: function () {
-        BI.RightVerticalAdaptLayout.superclass.created.apply(this, arguments);
+    render: function () {
+        BI.RightVerticalAdaptLayout.superclass.render.apply(this, arguments);
         this.populate(this.options.items);
     },
 
@@ -145,8 +148,7 @@ BI.RightVerticalAdaptLayout = BI.inherit(BI.Layout, {
         throw new Error("不能添加元素")
     },
 
-    populate: function (items) {
-        BI.RightVerticalAdaptLayout.superclass.populate.apply(this, arguments);
+    stroke: function (items) {
         var o = this.options;
         var right = BI.createWidget({
             type: "bi.vertical_adapt",
@@ -161,6 +163,10 @@ BI.RightVerticalAdaptLayout = BI.inherit(BI.Layout, {
             element: this,
             items: [right]
         });
+    },
+
+    populate: function (items) {
+        BI.RightVerticalAdaptLayout.superclass.populate.apply(this, arguments);
         this._mount();
     }
 });

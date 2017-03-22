@@ -11,8 +11,8 @@ BI.BorderLayout = BI.inherit(BI.Layout, {
             items: {}
         });
     },
-    created: function () {
-        BI.BorderLayout.superclass.created.apply(this, arguments);
+    render: function () {
+        BI.BorderLayout.superclass.render.apply(this, arguments);
         this.populate(this.options.items);
     },
 

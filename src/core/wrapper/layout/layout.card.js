@@ -13,8 +13,8 @@ BI.CardLayout = BI.inherit(BI.Layout, {
             items: []
         });
     },
-    created: function () {
-        BI.CardLayout.superclass.created.apply(this, arguments);
+    render: function () {
+        BI.CardLayout.superclass.render.apply(this, arguments);
         this.populate(this.options.items);
     },
 

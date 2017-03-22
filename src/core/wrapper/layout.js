@@ -18,7 +18,7 @@ BI.Layout = BI.inherit(BI.Widget, {
         };
     },
 
-    created: function () {
+    render: function () {
         this._init4Margin();
         this._init4Scroll();
     },

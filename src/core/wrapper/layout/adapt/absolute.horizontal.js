@@ -16,8 +16,8 @@ BI.AbsoluteHorizontalLayout = BI.inherit(BI.Layout, {
         });
     },
 
-    created: function () {
-        BI.AbsoluteHorizontalLayout.superclass.created.apply(this, arguments);
+    render: function () {
+        BI.AbsoluteHorizontalLayout.superclass.render.apply(this, arguments);
         this.populate(this.options.items);
     },
 

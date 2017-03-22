@@ -135,9 +135,9 @@ BI.Widget = BI.inherit(BI.OB, {
                 })
             })
         }
-        if (this._isRoot === true || !(this instanceof BI.Layout)) {
-            this._mount();
-        }
+        // if (this._isRoot === true || !(this instanceof BI.Layout)) {
+        this._mount();
+        // }
     },
 
     _setParent: function (parent) {

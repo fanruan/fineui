@@ -30,8 +30,8 @@ BI.GridLayout = BI.inherit(BI.Layout, {
              ]*/
         });
     },
-    created: function () {
-        BI.GridLayout.superclass.created.apply(this, arguments);
+    render: function () {
+        BI.GridLayout.superclass.render.apply(this, arguments);
         this.populate(this.options.items);
     },
 

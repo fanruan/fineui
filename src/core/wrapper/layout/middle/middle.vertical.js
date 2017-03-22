@@ -15,8 +15,8 @@ BI.VerticalCenterLayout = BI.inherit(BI.Layout, {
             bgap: 0
         });
     },
-    created: function () {
-        BI.VerticalCenterLayout.superclass.created.apply(this, arguments);
+    render: function () {
+        BI.VerticalCenterLayout.superclass.render.apply(this, arguments);
         this.populate(this.options.items);
     },
 

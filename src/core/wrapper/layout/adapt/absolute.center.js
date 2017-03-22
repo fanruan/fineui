@@ -16,8 +16,8 @@ BI.AbsoluteCenterLayout = BI.inherit(BI.Layout, {
         });
     },
 
-    created: function () {
-        BI.AbsoluteCenterLayout.superclass.created.apply(this, arguments);
+    render: function () {
+        BI.AbsoluteCenterLayout.superclass.render.apply(this, arguments);
         this.populate(this.options.items);
     },
 

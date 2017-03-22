@@ -14,8 +14,8 @@ BI.LatticeLayout = BI.inherit(BI.Layout, {
             //columnSize: [0.2, 0.2, 0.6],
         });
     },
-    created: function () {
-        BI.LatticeLayout.superclass.created.apply(this, arguments);
+    render: function () {
+        BI.LatticeLayout.superclass.render.apply(this, arguments);
         this.populate(this.options.items);
     },
 

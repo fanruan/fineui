@@ -11,8 +11,8 @@ BI.FlexCenterLayout = BI.inherit(BI.Layout, {
             baseCls: "bi-flex-wrapper-center-layout clearfix"
         });
     },
-    created: function () {
-        BI.FlexCenterLayout.superclass.created.apply(this, arguments);
+    render: function () {
+        BI.FlexCenterLayout.superclass.render.apply(this, arguments);
         this.$wrapper = $("<div>").addClass("flex-wrapper-center-layout-wrapper");
         this.populate(this.options.items);
     },

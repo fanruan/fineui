@@ -4,20 +4,18 @@
  * @extends BI.Layout
  */
 BI.VerticalAdaptLayout = BI.inherit(BI.Layout, {
-    _defaultConfig: function () {
-        return BI.extend(BI.VerticalAdaptLayout.superclass._defaultConfig.apply(this, arguments), {
-            baseCls: "bi-vertical-adapt-layout",
-            columnSize: [],
-            hgap: 0,
-            vgap: 0,
-            lgap: 0,
-            rgap: 0,
-            tgap: 0,
-            bgap: 0
-        });
+    props: {
+        baseCls: "bi-vertical-adapt-layout",
+        columnSize: [],
+        hgap: 0,
+        vgap: 0,
+        lgap: 0,
+        rgap: 0,
+        tgap: 0,
+        bgap: 0
     },
-    _init: function () {
-        BI.VerticalAdaptLayout.superclass._init.apply(this, arguments);
+    render: function () {
+        BI.VerticalAdaptLayout.superclass.render.apply(this, arguments);
         this.$table = $("<table>").attr({"cellspacing": 0, "cellpadding": 0}).css({
             "position": "relative",
             "height": "100%",
