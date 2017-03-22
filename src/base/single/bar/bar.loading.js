@@ -5,8 +5,8 @@
  */
 BI.LoadingBar = BI.inherit(BI.Single, {
     consts: {
-        loadedText: '加载更多',
-        endText: '无更多数据'
+        loadedText: BI.i18nText("BI-Load_More"),
+        endText: BI.i18nText("BI-No_More_Data")
     },
     _defaultConfig: function() {
         var conf = BI.LoadingBar.superclass._defaultConfig.apply(this, arguments);

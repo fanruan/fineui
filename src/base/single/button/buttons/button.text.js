@@ -6,11 +6,10 @@
  * 文字button
  */
 BI.TextButton = BI.inherit(BI.BasicButton, {
-    _defaultConfig: function() {
+    _defaultConfig: function () {
         var conf = BI.TextButton.superclass._defaultConfig.apply(this, arguments);
-        return BI.extend( conf, {
-            tagName: "a",
-            baseCls: (conf.baseCls || "") + " bi-text-button display-block",
+        return BI.extend(conf, {
+            baseCls: (conf.baseCls || "") + " bi-text-button",
             textAlign: "center",
             whiteSpace: "nowrap",
             forceCenter: false,
@@ -19,12 +18,12 @@ BI.TextButton = BI.inherit(BI.BasicButton, {
             hgap: 0,
             lgap: 0,
             rgap: 0,
-            text:"",
+            text: "",
             py: ""
         })
     },
 
-    _init:function() {
+    _init: function () {
         BI.TextButton.superclass._init.apply(this, arguments);
         var o = this.options;
         this.text = BI.createWidget({
@@ -46,18 +45,18 @@ BI.TextButton = BI.inherit(BI.BasicButton, {
         });
     },
 
-    doClick: function(){
+    doClick: function () {
         BI.TextButton.superclass.doClick.apply(this, arguments);
-        if(this.isValid()) {
+        if (this.isValid()) {
             this.fireEvent(BI.TextButton.EVENT_CHANGE, this.getValue(), this);
         }
     },
 
-    doRedMark: function(){
+    doRedMark: function () {
         this.text.doRedMark.apply(this.text, arguments);
     },
 
-    unRedMark: function(){
+    unRedMark: function () {
         this.text.unRedMark.apply(this.text, arguments);
     },
 
@@ -69,15 +68,19 @@ BI.TextButton = BI.inherit(BI.BasicButton, {
         this.text.unHighLight.apply(this.text, arguments);
     },
 
-    setText: function(text){
+    setText: function (text) {
         BI.TextButton.superclass.setText.apply(this, arguments);
         text = BI.isArray(text) ? text.join(",") : text;
         this.text.setText(text);
     },
 
-    setValue: function(text){
+    setStyle: function (style) {
+        this.text.setStyle(style);
+    },
+
+    setValue: function (text) {
         BI.TextButton.superclass.setValue.apply(this, arguments);
-        if(!this.isReadOnly()) {
+        if (!this.isReadOnly()) {
             text = BI.isArray(text) ? text.join(",") : text;
             this.text.setValue(text);
         }

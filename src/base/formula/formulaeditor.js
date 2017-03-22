@@ -11,7 +11,8 @@
                 baseCls: 'bi-formula-editor',
                 watermark: '',
                 value: '',
-                fieldTextValueMap: {}
+                fieldTextValueMap: {},
+                showHint: true
             });
         },
         _init: function () {
@@ -25,7 +26,9 @@
             });
             this.editor.on("change", function (cm, change) {
                 self._checkWaterMark();
-                CodeMirror.showHint(cm, CodeMirror.formulaHint, {completeSingle: false});
+                if(o.showHint){
+                    CodeMirror.showHint(cm, CodeMirror.formulaHint, {completeSingle: false});
+                }
                 BI.nextTick(function () {
                     self.fireEvent(BI.FormulaEditor.EVENT_CHANGE)
                 });
@@ -97,6 +100,10 @@
         disableWarterMark: function () {
             this.disabledWarterMark = true;
             this._checkWaterMark();
+        },
+
+        focus: function() {
+            this.editor.focus();
         },
 
         /**

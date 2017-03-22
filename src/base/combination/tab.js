@@ -114,9 +114,9 @@ BI.Tab = BI.inherit(BI.Widget, {
         this.cardMap = {};
     },
 
-    destroyed: function () {
-        this.layout.deleteAllCard();
+    destroy: function () {
         this.cardMap = {};
+        BI.Tab.superclass.destroy.apply(this, arguments);
     }
 });
 BI.Tab.EVENT_CHANGE = "EVENT_CHANGE";

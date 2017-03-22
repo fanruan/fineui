@@ -1,0 +1,25 @@
+@import "../../bibase";
+
+.bi-timeout-toast {
+  font-size: @font-size-14;
+  .border-radius(2px);
+  background: @color-bi-tip-warning-background;
+  color: @color-bi-text-warning;
+  & .cancel-button {
+    background: @color-bi-background-default;
+    border: 1px solid @color-bi-border-normal;
+    color: @color-bi-text-black;
+    .border-radius(2px);
+    &:hover {
+      .opacity(0.8);
+    }
+  }
+  & .retry-button {
+    background: @color-bi-background-highlight;
+    .border-radius(2px);
+    color: @color-bi-text;
+    &:hover {
+      .opacity(0.8);
+    }
+  }
+}

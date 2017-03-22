@@ -7,7 +7,6 @@ BI.Radio = BI.inherit(BI.IconButton, {
     _defaultConfig: function() {
         var conf = BI.Radio.superclass._defaultConfig.apply(this,arguments);
         return BI.extend(conf, {
-            tagName: "a",
             baseCls: (conf.baseCls || "") + " bi-radio radio-icon",
             selected: false,
             handler: BI.emptyFn,

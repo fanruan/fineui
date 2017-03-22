@@ -9,8 +9,7 @@ BI.ImageButton = BI.inherit(BI.BasicButton, {
     _defaultConfig: function () {
         var conf = BI.ImageButton.superclass._defaultConfig.apply(this, arguments);
         return BI.extend(conf, {
-            tagName: "a",
-            baseCls: (conf.baseCls || "") + " bi-image-button display-block",
+            baseCls: (conf.baseCls || "") + " bi-image-button",
             src: "",
             iconWidth: "100%",
             iconHeight: "100%"

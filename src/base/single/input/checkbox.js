@@ -7,7 +7,6 @@ BI.Checkbox = BI.inherit(BI.IconButton, {
     _defaultConfig: function() {
         var conf = BI.Checkbox.superclass._defaultConfig.apply(this,arguments);
         return BI.extend(conf, {
-            tagName: "a",
             baseCls: (conf.baseCls || "") + " bi-checkbox check-box-icon",
             selected: false,
             handler: BI.emptyFn,

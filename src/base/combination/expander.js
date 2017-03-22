@@ -35,8 +35,13 @@ BI.Expander = BI.inherit(BI.Widget, {
                 self._hideView();
             }
             if (self.isEnabled() && this.isEnabled()) {
-                if (type === BI.Events.EXPAND || type === BI.Events.COLLAPSE) {
+                if (type === BI.Events.EXPAND) {
                     self.fireEvent(BI.Controller.EVENT_CHANGE, arguments);
+                    self.fireEvent(BI.Expander.EVENT_EXPAND);
+                }
+                if(type === BI.Events.COLLAPSE) {
+                    self.fireEvent(BI.Controller.EVENT_CHANGE, arguments);
+                    self.fireEvent(BI.Expander.EVENT_COLLAPSE);
                 }
                 if (type === BI.Events.CLICK) {
                     self.fireEvent(BI.Expander.EVENT_TRIGGER_CHANGE, value, obj);
@@ -254,8 +259,8 @@ BI.Expander = BI.inherit(BI.Widget, {
         return this.popupView && this.popupView.getNodeByValue(value);
     },
 
-    destroyed: function () {
-        this.popupView && this.popupView.destroy();
+    destroy: function () {
+        BI.Expander.superclass.destroy.apply(this, arguments);
     }
 });
 BI.Expander.EVENT_EXPAND = "EVENT_EXPAND";

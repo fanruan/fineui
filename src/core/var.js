@@ -15,7 +15,7 @@ _.extend(BI, {
     emptyFn: function () {
     },
     empty: null,
-    keyCode: {
+    KeyCode: {
         BACKSPACE: 8,
         COMMA: 188,
         DELETE: 46,

@@ -56,7 +56,7 @@ BI.Pane = BI.inherit(BI.Widget, {
                 });
             }
             BI.Maskers.show(self.getName());
-        } else {
+        } else if (BI.isNull(this._loading)) {
             this._loading = BI.createWidget({
                 type: "bi.layout",
                 cls: "loading-background",
