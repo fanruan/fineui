@@ -16,7 +16,7 @@ $.extend(BI, {
                 this._show(true, title, message, callback);
             },
             prompt: function (title, message, value, callback, min_width) {
-                FR.Msg.prompt(title, message, value, callback, min_width);
+                BI.Msg.prompt(title, message, value, callback, min_width);
             },
             toast: function (message, level, context) {
                 context = context || $("body");

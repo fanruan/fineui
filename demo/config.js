@@ -1,1 +1,1 @@
-Demo.CONFIG = Demo.LAYOUT_CONFIG.concat(Demo.BASE_CONFIG).concat(Demo.CASE_CONFIG).concat(Demo.WIDGET_CONFIG);
+Demo.CONFIG = Demo.LAYOUT_CONFIG.concat(Demo.BASE_CONFIG).concat(Demo.CASE_CONFIG).concat(Demo.WIDGET_CONFIG).concat(Demo.COMPONENT_CONFIG);

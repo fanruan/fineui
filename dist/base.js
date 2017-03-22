@@ -21851,9 +21851,9 @@ BI.TreeView = BI.inherit(BI.Pane, {
     },
     _init: function () {
         BI.TreeView.superclass._init.apply(this, arguments);
-        FR.$defaultImport('/com/fr/bi/web/js/third/ztree/jquery.ztree.core-3.5.js', 'js');
-        FR.$defaultImport('/com/fr/bi/web/js/third/ztree/jquery.ztree.excheck-3.5.js', 'js');
-        FR.$defaultImport('/com/fr/bi/web/css/base/third/ztree/zTreeStyle.css', 'css');
+        
+        
+        
 
         this._stop = false;
         this.container = BI.createWidget();
@@ -21908,7 +21908,7 @@ BI.TreeView = BI.inherit(BI.Pane, {
                 enable: true,
                 url: getUrl,
                 autoParam: ["id", "name"],
-                otherParam: FR.cjkEncodeDO(paras)
+                otherParam: BI.cjkEncodeDO(paras)
             },
             check: {
                 enable: true
@@ -21950,10 +21950,10 @@ BI.TreeView = BI.inherit(BI.Pane, {
             treeNode.times = treeNode.times || 1;
             var param = "id=" + treeNode.id
                 + "&times=" + (treeNode.times++)
-                + "&parent_values= " + window.encodeURIComponent(FR.jsonEncode(parentNode))
-                + "&check_state=" + window.encodeURIComponent(FR.jsonEncode(treeNode.getCheckStatus()));
+                + "&parent_values= " + window.encodeURIComponent(BI.jsonEncode(parentNode))
+                + "&check_state=" + window.encodeURIComponent(BI.jsonEncode(treeNode.getCheckStatus()));
 
-            return FR.servletURL + '?op=' + self.options.op + '&cmd=' + self.options.cmd + "&" + param;
+            return BI.servletURL + '?op=' + self.options.op + '&cmd=' + self.options.cmd + "&" + param;
         }
 
         function beforeExpand(treeId, treeNode) {
@@ -22002,7 +22002,7 @@ BI.TreeView = BI.inherit(BI.Pane, {
         function ajaxGetNodes(treeNode, reloadType) {
             var zTree = self.nodes;
             if (reloadType == "refresh") {
-                //treeNode.icon = FR.servletURL +"?op=resource&resource=/com/fr/bi/web/css/base/third/ztree/img/loading.gif";
+                //treeNode.icon = BI.servletURL +"?op=resource&resource=/com/fr/bi/web/css/base/third/ztree/img/loading.gif";
                 zTree.updateNode(treeNode);
             }
             zTree.reAsyncChildNodes(treeNode, reloadType, true);
@@ -22362,7 +22362,7 @@ BI.SyncTree = BI.inherit(BI.TreeView, {
         var setting = {
             async: {
                 enable: false,
-                otherParam: FR.cjkEncodeDO(paras)
+                otherParam: BI.cjkEncodeDO(paras)
             },
             check: {
                 enable: true
@@ -25091,8 +25091,8 @@ BI.Farbtastic = BI.inherit(BI.Widget, {
     _init: function () {
         BI.Farbtastic.superclass._init.apply(this, arguments);
         var self = this;
-        FR.$defaultImport('/com/fr/bi/web/js/third/farbtastic.js', 'js');
-        FR.$defaultImport('/com/fr/bi/web/css/base/third/farbtastic/farbtastic.css', 'css');
+        
+        
 
         this.farbtastic = $.farbtastic(this.element, function (v) {
             self.fireEvent(BI.Farbtastic.EVENT_CHANGE, self.getValue(), self);
@@ -34693,7 +34693,7 @@ $.extend(BI, {
                 this._show(true, title, message, callback);
             },
             prompt: function (title, message, value, callback, min_width) {
-                FR.Msg.prompt(title, message, value, callback, min_width);
+                BI.Msg.prompt(title, message, value, callback, min_width);
             },
             toast: function (message, level, context) {
                 context = context || $("body");
@@ -38815,7 +38815,7 @@ $.shortcut("bi.checkbox", BI.Checkbox);/**
         var multipart = function (boundary, name, file) {
                 return "--".concat(
                     boundary, CRLF,
-                    'Content-Disposition: form-data; name="', name, '"; filename="', FR.cjkEncode(file.fileName), '"', CRLF,
+                    'Content-Disposition: form-data; name="', name, '"; filename="', BI.cjkEncode(file.fileName), '"', CRLF,
                     "Content-Type: application/octet-stream", CRLF,
                     CRLF,
                     file.getAsBinary(), CRLF,
@@ -38884,7 +38884,7 @@ $.shortcut("bi.checkbox", BI.Checkbox);/**
                     },
                     false
                 );
-                xhr.open("post", handler.url + '&filename=' + FR.cjkEncode(handler.file.fileName), true);
+                xhr.open("post", handler.url + '&filename=' + BI.cjkEncode(handler.file.fileName), true);
                 if (!xhr.upload) {
                     var rpe = {loaded: 0, total: handler.file.fileSize || handler.file.size, simulation: true};
                     rpe.interval = setInterval(function () {
@@ -38915,8 +38915,8 @@ $.shortcut("bi.checkbox", BI.Checkbox);/**
                                 upload.onprogress(rpe);
                                 if (199 < xhr.status && xhr.status < 400) {
                                     upload["onload"]({});
-                                    var attachO = FR.jsonDecode(xhr.responseText);
-                                    attachO.filename = FR.cjkDecode(handler.file.fileName);
+                                    var attachO = BI.jsonDecode(xhr.responseText);
+                                    attachO.filename = BI.cjkDecode(handler.file.fileName);
                                     if (handler.file.type.indexOf('image') != -1) {
                                         attachO.attach_type = "image";
                                     }
@@ -38932,7 +38932,7 @@ $.shortcut("bi.checkbox", BI.Checkbox);/**
                     xhr.onreadystatechange = function () {
                         switch (xhr.readyState) {
                             case    4:
-                                var attachO = FR.jsonDecode(xhr.responseText);
+                                var attachO = BI.jsonDecode(xhr.responseText);
                                 if (handler.file.type.indexOf('image') != -1) {
                                     attachO.attach_type = "image";
                                 }
@@ -38982,13 +38982,13 @@ $.shortcut("bi.checkbox", BI.Checkbox);/**
                         //rpe.loaded = rpe.total;
                         try {
                             var responseText = (iframe.contentWindow.document || iframe.contentWindow.contentDocument).body.innerHTML;
-                            var attachO = FR.jsonDecode(responseText);
+                            var attachO = BI.jsonDecode(responseText);
                             if (handler.file.type.indexOf('image') != -1) {
                                 attachO.attach_type = "image";
                             }
 
                             //attachO.fileSize = responseText.length;
-                            attachO.filename = FR.cjkDecode(handler.file.fileName);
+                            attachO.filename = BI.cjkDecode(handler.file.fileName);
                             if (handler.maxlength == 1) {
                                 handler.attach_array[0] = attachO;
                             } else {
@@ -39205,7 +39205,7 @@ $.shortcut("bi.checkbox", BI.Checkbox);/**
                         // enable again the submit button/element
                     }, 1000);
                 };
-                _wrap.url = o.url ? o.url : FR.servletURL
+                _wrap.url = o.url ? o.url : BI.servletURL
                 + '?op=fr_attach&cmd=ah_upload';
                 _wrap.fileType = o.accept;   //文件类型限制
                 _wrap.attach_array = [];

@@ -1344,19 +1344,19 @@ li.CodeMirror-hint-active {
   height: 101px;
 }
 .farbtastic .wheel {
-  background: url(${servletURL}?op=resource&resource=/com/fr/bi/web/css/base/third/farbtastic/wheel.png) no-repeat;
+  background: url(farbtastic/wheel.png) no-repeat;
   width: 195px;
   height: 195px;
 }
 .farbtastic .overlay {
-  background: url(${servletURL}?op=resource&resource=/com/fr/bi/web/css/base/third/farbtastic/mask.png) no-repeat;
+  background: url(farbtastic/mask.png) no-repeat;
 }
 .farbtastic .marker {
   width: 17px;
   height: 17px;
   margin: -8px 0 0 -8px;
   overflow: hidden;
-  background: url(${servletURL}?op=resource&resource=/com/fr/bi/web/css/base/third/farbtastic/marker.png) no-repeat;
+  background: url(farbtastic/marker.png) no-repeat;
 }
 /* required styles */
 .leaflet-pane,
@@ -1880,7 +1880,7 @@ website:	http://code.google.com/p/jquerytree/
   padding: 0 0 0 18px;
 }
 .ztree li ul.line {
-  background: url(${servletURL}?op=resource&resource=/com/fr/bi/web/images/icon/tree-vertical-line-1.png) 0 0 repeat-y;
+  background: url(icon/tree-vertical-line-1.png) 0 0 repeat-y;
 }
 .ztree li a {
   padding: 1px 3px 0 0;
@@ -1935,8 +1935,8 @@ website:	http://code.google.com/p/jquerytree/
   background-color: transparent;
   background-repeat: no-repeat;
   background-attachment: scroll;
-  background-image: url("${servletURL}?op=resource&resource=/com/fr/bi/web/css/base/third/ztree/img/zTreeStandard.png");
-  *background-image: url("${servletURL}?op=resource&resource=/com/fr/bi/web/css/base/third/ztree/img/zTreeStandard.gif");
+  background-image: url("ztree/img/zTreeStandard.png");
+  *background-image: url("ztree/img/zTreeStandard.gif");
 }
 .ztree li span.button.chk {
   width: 16px;
@@ -1945,31 +1945,31 @@ website:	http://code.google.com/p/jquerytree/
   cursor: auto;
 }
 .ztree li span.button.chk.checkbox_false_full {
-  background-image: url("${servletURL}?op=resource&resource=/com/fr/bi/web/images/icon/check-box-normal.png");
+  background-image: url("icon/check-box-normal.png");
 }
 .ztree li span.button.chk.checkbox_false_full_focus {
-  background-image: url("${servletURL}?op=resource&resource=/com/fr/bi/web/images/icon/check-box-normal.png");
+  background-image: url("icon/check-box-normal.png");
 }
 .ztree li span.button.chk.checkbox_false_part {
-  background-image: url("${servletURL}?op=resource&resource=/com/fr/bi/web/images/icon/half_selected.png");
+  background-image: url("icon/half_selected.png");
 }
 .ztree li span.button.chk.checkbox_false_part_focus {
-  background-image: url("${servletURL}?op=resource&resource=/com/fr/bi/web/images/icon/half_selected.png");
+  background-image: url("icon/half_selected.png");
 }
 .ztree li span.button.chk.checkbox_false_disable {
   background-position: 0 -56px;
 }
 .ztree li span.button.chk.checkbox_true_full {
-  background-image: url("${servletURL}?op=resource&resource=/com/fr/bi/web/images/icon/check-box-active.png");
+  background-image: url("icon/check-box-active.png");
 }
 .ztree li span.button.chk.checkbox_true_full_focus {
-  background-image: url("${servletURL}?op=resource&resource=/com/fr/bi/web/images/icon/check-box-active.png");
+  background-image: url("icon/check-box-active.png");
 }
 .ztree li span.button.chk.checkbox_true_part {
-  background-image: url("${servletURL}?op=resource&resource=/com/fr/bi/web/images/icon/half_selected.png");
+  background-image: url("icon/half_selected.png");
 }
 .ztree li span.button.chk.checkbox_true_part_focus {
-  background-image: url("${servletURL}?op=resource&resource=/com/fr/bi/web/images/icon/half_selected.png");
+  background-image: url("icon/half_selected.png");
 }
 .ztree li span.button.chk.checkbox_true_disable {
   background-position: -14px -56px;
@@ -2009,28 +2009,28 @@ website:	http://code.google.com/p/jquerytree/
   height: 25px;
 }
 .ztree li span.button.root_open {
-  background-image: url("${servletURL}?op=resource&resource=/com/fr/bi/web/images/icon/tree-expand-1.png");
+  background-image: url("icon/tree-expand-1.png");
 }
 .ztree li span.button.root_close {
-  background-image: url("${servletURL}?op=resource&resource=/com/fr/bi/web/images/icon/tree-collapse-1.png");
+  background-image: url("icon/tree-collapse-1.png");
 }
 .ztree li span.button.roots_open {
-  background-image: url("${servletURL}?op=resource&resource=/com/fr/bi/web/images/icon/tree-expand-2.png");
+  background-image: url("icon/tree-expand-2.png");
 }
 .ztree li span.button.roots_close {
-  background-image: url("${servletURL}?op=resource&resource=/com/fr/bi/web/images/icon/tree-collapse-2.png");
+  background-image: url("icon/tree-collapse-2.png");
 }
 .ztree li span.button.center_open {
-  background-image: url("${servletURL}?op=resource&resource=/com/fr/bi/web/images/icon/tree-expand-3.png");
+  background-image: url("icon/tree-expand-3.png");
 }
 .ztree li span.button.center_close {
-  background-image: url("${servletURL}?op=resource&resource=/com/fr/bi/web/images/icon/tree-collapse-3.png");
+  background-image: url("icon/tree-collapse-3.png");
 }
 .ztree li span.button.bottom_open {
-  background-image: url("${servletURL}?op=resource&resource=/com/fr/bi/web/images/icon/tree-expand-4.png");
+  background-image: url("icon/tree-expand-4.png");
 }
 .ztree li span.button.bottom_close {
-  background-image: url("${servletURL}?op=resource&resource=/com/fr/bi/web/images/icon/tree-collapse-4.png");
+  background-image: url("icon/tree-collapse-4.png");
 }
 .ztree li span.button.noline_open {
   background-position: -92px -72px;
@@ -2042,13 +2042,13 @@ website:	http://code.google.com/p/jquerytree/
   background: none;
 }
 .ztree li span.button.roots_docu {
-  background-image: url("${servletURL}?op=resource&resource=/com/fr/bi/web/images/icon/tree-vertical-line-2.png");
+  background-image: url("icon/tree-vertical-line-2.png");
 }
 .ztree li span.button.center_docu {
-  background-image: url("${servletURL}?op=resource&resource=/com/fr/bi/web/images/icon/tree-vertical-line-3.png");
+  background-image: url("icon/tree-vertical-line-3.png");
 }
 .ztree li span.button.bottom_docu {
-  background-image: url("${servletURL}?op=resource&resource=/com/fr/bi/web/images/icon/tree-vertical-line-4.png");
+  background-image: url("icon/tree-vertical-line-4.png");
 }
 .ztree li span.button.noline_docu {
   background: none;
@@ -2086,7 +2086,7 @@ website:	http://code.google.com/p/jquerytree/
 .ztree li span.button.ico_loading {
   width: 0px;
   margin-right: 2px;
-  background: url("${servletURL}?op=resource&resource=/com/fr/bi/web/css/base/third/ztree/img/loading.gif") no-repeat scroll 0 0 transparent;
+  background: url("ztree/img/loading.gif") no-repeat scroll 0 0 transparent;
   vertical-align: top;
   *vertical-align: middle;
 }
@@ -2107,8 +2107,8 @@ span.tmpzTreeMove_arrow {
   background-repeat: no-repeat;
   background-attachment: scroll;
   background-position: -110px -80px;
-  background-image: url("${servletURL}?op=resource&resource=/com/fr/bi/web/css/base/third/ztree/img/zTreeStandard.png");
-  *background-image: url("${servletURL}?op=resource&resource=/com/fr/bi/web/css/base/third/ztree/img/zTreeStandard.gif");
+  background-image: url("ztree/img/zTreeStandard.png");
+  *background-image: url("ztree/img/zTreeStandard.gif");
 }
 ul.ztree.zTreeDragUL {
   margin: 0;
@@ -2260,7 +2260,7 @@ ul.ztree.zTreeDragUL {
 /****添加计算宽度的--运算符直接需要space****/
 /****** common color(常用颜色,可用于普遍场景) *****/
 /**** custom color(自定义颜色,用于特定场景) ****/
-/**********FR.BIListView*************/
+/**********BI.BIListView*************/
 .bi-list-view {
   position: fixed !important;
   overflow-y: visible !important;

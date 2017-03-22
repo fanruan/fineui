@@ -121,7 +121,7 @@ $(function () {
         },
 
         getCompleteImageUrl: function (url) {
-            return FR.servletURL + "?op=fr_bi&cmd=get_uploaded_image&image_id=" + url;
+            return BI.servletURL + "?op=fr_bi&cmd=get_uploaded_image&image_id=" + url;
         }
 
     });

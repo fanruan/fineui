@@ -19,7 +19,7 @@ BI.SyncTree = BI.inherit(BI.TreeView, {
         var setting = {
             async: {
                 enable: false,
-                otherParam: FR.cjkEncodeDO(paras)
+                otherParam: BI.cjkEncodeDO(paras)
             },
             check: {
                 enable: true
