@@ -24962,9 +24962,6 @@ BI.Tab = BI.inherit(BI.Widget, {
         listener.on(BI.ShowListener.EVENT_CHANGE, function (value) {
             self.fireEvent(BI.Tab.EVENT_CHANGE, value, self);
         });
-        if (o.defaultShowIndex !== false) {
-            this.setSelect(o.defaultShowIndex);
-        }
     },
 
     _assertCard: function (v) {
@@ -24972,6 +24969,13 @@ BI.Tab = BI.inherit(BI.Widget, {
             var card = this.options.cardCreator(v);
             this.cardMap[v] = card;
             this.layout.addCardByName(v, card);
+        }
+    },
+
+    mounted: function () {
+        var o = this.options;
+        if (o.defaultShowIndex !== false) {
+            this.setSelect(o.defaultShowIndex);
         }
     },
 
@@ -36274,6 +36278,7 @@ BI.LoadingBar = BI.inherit(BI.Single, {
 
         this.loading = BI.createWidget({
             type: "bi.layout",
+            width: this.options.height,
             height:this.options.height,
             cls: "loading-background cursor-default"
         })
