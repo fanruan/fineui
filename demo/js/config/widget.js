@@ -1,8 +1,356 @@
 Demo.WIDGET_CONFIG = [{
     id: 4,
-    text: "基础控件"
+    text: "详细控件"
 }, {
     pId: 4,
-    text: "bi.center_adapt",
-    value: "demo.center_adapt"
+    text: "bi.loading_mask",
+    value: "demo.loadingmask"
+}, {
+    pId: 4,
+    text: "可以切换的树",
+    value: "demo.switch_tree"
+}, {
+    pId: 4,
+    text: "进度条",
+    value: "demo.progressbar"
+}, {
+    pId: 4,
+    text: "bi.text_editor",
+    value: "demo.text_editor"
+}, {
+    pId: 4,
+    text: "bi.search_editor",
+    value: "demo.search_editor"
+}, {
+    pId: 4,
+    text: "bi.adapt_editor",
+    value: "demo.adapt_editor"
+}, {
+    pId: 4,
+    text: "bi.sign_initial_editor",
+    value: "demo.sign_initial_editor"
+}, {
+    pId: 4,
+    text: "bi.sign_style_editor",
+    value: "demo.sign_style_editor"
+}, {
+    pId: 4,
+    text: "bi.year_combo",
+    value: "demo.year_combo"
+}, {
+    pId: 4,
+    text: "bi.month_combo",
+    value: "demo.month_combo"
+}, {
+    pId: 4,
+    text: "bi.quarter_combo",
+    value: "demo.quarter_combo"
+}, {
+    pId: 4,
+    text: "bi.date_combo",
+    value: "demo.date_combo"
+}, {
+    pId: 4,
+    text: "bi.down_list_combo",
+    value: "demo.down_list_combo"
+}, {
+    pId: 4,
+    text: "bi.text_value_combo",
+    value: "demo.text_icon_combo"
+}, {
+    pId: 4,
+    text: "bi.static_combo",
+    value: "demo.single_select_combo"
+}, {
+    pId: 4,
+    text: "bi.text_value_down_list_combo",
+    value: "demo.text_icon_down_list_combo"
+}, {
+    pId: 4,
+    text: "bi.param_date_combo",
+    value: "demo.param_date_combo"
+}, {
+    pId: 4,
+    text: "bi.icon_combo",
+    value: "demo.icon_combo"
+}, {
+    pId: 4,
+    text: "bi.formula_combo",
+    value: "demo.formula_combo"
+}, {
+    pId: 4,
+    text: "bi.formula_insert",
+    value: "demo.formula_insert"
+}, {
+    pId: 4,
+    text: "bi.formula_pane",
+    value: "demo.formula_pane"
+}, {
+    pId: 4,
+    text: "bi.select_data_tree",
+    value: "demo.select_data_tree"
+}, {
+    pId: 4,
+    text: "bi.select_data_switcher",
+    value: "demo.select_data_switcher"
+}, {
+    pId: 4,
+    text: "bi.select_data_search_result",
+    value: "demo.select_data_search_result"
+}, {
+    pId: 4,
+    text: "bi.select_data_searcher(点这)",
+    value: "demo.select_data_searcher"
+}, {
+    pId: 4,
+    text: "bi.multidate_combo",
+    value: "demo.multidate_combo"
+}, {
+    pId: 4,
+    text: "bi.time_interval",
+    value: "demo.time_interval"
+}, {
+    pId: 4,
+    text: "bi.numerical_interval",
+    value: "demo.numerical_interval"
+}, {
+    pId: 4,
+    text: "bi.multi_select_trigger",
+    value: "demo.multi_select_trigger"
+}, {
+    pId: 4,
+    text: "bi.multi_select_search_pane",
+    value: "demo.multi_select_search_pane"
+}, {
+    pId: 4,
+    text: "bi.multi_select_popup_view",
+    value: "demo.multi_select_popup_view"
+}, {
+    pId: 4,
+    text: "bi.multi_select_check_pane",
+    value: "demo.multi_select_check_pane"
+}, {
+    pId: 4,
+    text: "bi.multi_select_combo",
+    value: "demo.multi_select_combo"
+}, {
+    pId: 4,
+    text: "bi.move2group_combo",
+    value: "demo.move2group_combo"
+}, {
+    pId: 4,
+    text: "bi.copy2group_combo",
+    value: "demo.copy2group_combo"
+}, {
+    pId: 4,
+    text: "bi.single_tree_combo",
+    value: "demo.single_tree_combo"
+}, {
+    pId: 4,
+    text: "bi.multilayer_single_tree_combo",
+    value: "demo.multilayer_single_tree_combo"
+}, {
+    pId: 4,
+    text: "bi.select_tree_combo",
+    value: "demo.select_tree_combo"
+}, {
+    pId: 4,
+    text: "bi.multilayer_select_tree_combo",
+    value: "demo.multilayer_select_tree_combo"
+}, {
+    pId: 4,
+    text: "bi.dialog",
+    value: "demo.dialog"
+}, {
+    pId: 4,
+    text: "bi.multi_tree",
+    value: "demo.multi_tree"
+}, {
+    pId: 4,
+    text: "bi.simple_select_data_searcher",
+    value: "demo.simple_select_data_searcher"
+}, {
+    pId: 4,
+    text: "bi.filter_pane",
+    value: "demo.filter_pane"
+}, {
+    pId: 4,
+    text: "bi.filter_operation",
+    value: "demo.filter_operation"
+}, {
+    pId: 4,
+    text: "bi.filter",
+    value: "demo.filter"
+}, {
+    pId: 4,
+    text: "bi.color_chooser",
+    value: "demo.color_chooser"
+}, {
+    pId: 4,
+    text: "bi.text_toolbar",
+    value: "demo.text_toolbar"
+}, {
+    pId: 4,
+    text: "bi.text_area",
+    value: "demo.text_area"
+}, {
+    pId: 4,
+    text: "bi.path_chooser",
+    value: "demo.path_chooser"
+}, {
+    pId: 4,
+    text: "bi.direction_path_chooser",
+    value: "demo.direction_path_chooser"
+}, {
+    pId: 4,
+    text: "bi.file_manager",
+    value: "demo.file_manager"
+}, {
+    pId: 4,
+    text: "bi.branch_relation",
+    value: "demo.branch_relation"
+}, {
+    pId: 4,
+    text: "bi.relation_view",
+    value: "demo.relation_view"
+}, {
+    pId: 4,
+    text: "bi.preview_table",
+    value: "demo.preview_table"
+}, {
+    pId: 4,
+    text: "bi.adaptive_table",
+    value: "demo.adaptive_table"
+}, {
+    pId: 4,
+    text: "bi.adaptive_table(冻结表头)",
+    value: "demo.adaptive_table2"
+}, {
+    pId: 4,
+    text: "bi.custom_scroll_table",
+    value: "demo.custom_scroll_table"
+}, {
+    pId: 4,
+    text: "bi.page_table",
+    value: "demo.page_table"
+}, {
+    pId: 4,
+    text: "bi.page_table(冻结)",
+    value: "demo.page_table2"
+}, {
+    pId: 4,
+    text: "bi.page_table(调整列宽)",
+    value: "demo.page_table3"
+}, {
+    pId: 4,
+    text: "bi.excel_table",
+    value: "demo.excel_table"
+}, {
+    pId: 4,
+    text: "bi.sortable_table",
+    value: "demo.sortable_table"
+}, {
+    pId: 4,
+    text: "bi.excel_view_display_manager",
+    value: "demo.excel_view_display_manager"
+}, {
+    pId: 4,
+    text: "bi.sequence_table",
+    value: "demo.sequence_table"
+}, {
+    pId: 4,
+    text: "bi.sequence_table(带有汇总)",
+    value: "demo.sequence_table2"
+}, {
+    pId: 4,
+    text: "bi.upload_image",
+    value: "demo.upload_image"
+}, {
+    pId: 4,
+    text: "bi.web_page",
+    value: "demo.web_page"
+}, {
+    pId: 4,
+    text: "bi.arrangement_droppable",
+    value: "demo.arrangement_droppable"
+}, {
+    pId: 4,
+    text: "bi.arrangement",
+    value: "demo.arrangement"
+}, {
+    pId: 4,
+    text: "bi.adaptive_arrangement",
+    value: "demo.adaptive_arrangement"
+}, {
+    pId: 4,
+    text: "bi.arrangement(网格布局)",
+    value: "demo.grid_arrangement"
+}, {
+    pId: 4,
+    text: "bi.adaptive_arrangement(网格布局)",
+    value: "demo.grid_adaptive_arrangement"
+}, {
+    pId: 4,
+    text: "bi.simple_searcher",
+    value: "demo.simple_searcher"
+}, {
+    pId: 4,
+    text: "选色",
+    value: "demo.select_color_combo"
+}, {
+    pId: 4,
+    text: "bi.detail_chart",
+    value: "demo.detail_chart"
+}, {
+    pId: 4,
+    text: "柱形",
+    value: "demo.column_charts"
+}, {
+    pId: 4,
+    text: "条形图",
+    value: "demo.bar_charts"
+}, {
+    pId: 4,
+    text: "面积图",
+    value: "demo.area_charts"
+}, {
+    pId: 4,
+    text: "其他",
+    value: "demo.other_charts"
+}, {
+    pId: 4,
+    text: "文本标签",
+    value: "demo.list_label"
+}, {
+    pId: 4,
+    text: "树标签",
+    value: "demo.tree_label"
+}, {
+    pId: 4,
+    text: "滑块",
+    value: "demo.slider"
+}, {
+    pId: 4,
+    text: "区间双滑块",
+    value: "demo.interval_slider"
+}, {
+    pId: 4,
+    text: "文本列表",
+    value: "demo.string_list"
+}, {
+    pId: 4,
+    text: "树列表",
+    value: "demo.tree_list"
+}, {
+    pId: 4,
+    text: "日期面板",
+    value: "demo.data_pane"
+}, {
+    pId: 4,
+    text: "螺旋分析tab控件",
+    value: "demo.dynamic_group_tab"
+}, {
+    pId: 4,
+    text: "数值微调器",
+    value: "demo.finetuning_number_editor"
 }];
