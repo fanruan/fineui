@@ -33,7 +33,7 @@ if (!window.BI) {
     //Utility
     _.extend(BI, {
         i18nText: function (key) {
-            var localeText = FR.i18n[key];
+            var localeText = "";
             if (!localeText) {
                 localeText = key;
             }
@@ -485,7 +485,11 @@ if (!window.BI) {
         },
 
         isWidthOrHeight: function (w) {
-            return FR.isWidthOrHeight(w);
+            if (typeof w == 'number') {
+                return w >= 0;
+            } else if (typeof w == 'string') {
+                return /^\d{1,3}%$/.exec(w) || w == 'auto' || /^\d+px$/.exec(w);
+            }
         },
 
         isNotNull: function (obj) {
