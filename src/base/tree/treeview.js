@@ -361,7 +361,7 @@ BI.TreeView = BI.inherit(BI.Pane, {
         };
         var op = BI.extend({}, o.paras, {
             times: 1,
-            type: BICst.TREE.TREE_REQ_TYPE.INIT_DATA
+            type: BI.TreeView.REQ_TYPE_INIT_DATA
         });
 
         o.itemsCreator(op, function (res) {

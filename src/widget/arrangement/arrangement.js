@@ -2885,9 +2885,9 @@ BI.extend(BI.Arrangement, {
     PORTION: 24,
     GRID_HEIGHT: 50,
     LAYOUT_TYPE: {
-        ADAPTIVE: BICst.DASHBOARD_LAYOUT_ADAPT,
-        FREE: BICst.DASHBOARD_LAYOUT_FREE,
-        GRID: BICst.DASHBOARD_LAYOUT_GRID
+        ADAPTIVE: 0,
+        FREE: 1,
+        GRID: 2
     }
 });
 $.shortcut('bi.arrangement', BI.Arrangement);
