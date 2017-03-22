@@ -10,7 +10,7 @@ if (!window.BI) {
 ;
 !(function ($, undefined) {
     _.extend(BI, {
-        version: "4.0"
+        version: "2.0"
     });
     var traverse = function (func, context) {
         return function (value, key, obj) {
@@ -33,7 +33,7 @@ if (!window.BI) {
     //Utility
     _.extend(BI, {
         i18nText: function (key) {
-            var localeText = "";
+            var localeText = (BI.i18n && BI.i18n[key]) || "";
             if (!localeText) {
                 localeText = key;
             }
@@ -79,30 +79,6 @@ if (!window.BI) {
 
         isWidget: function (widget) {
             return widget instanceof BI.Widget || (BI.View && widget instanceof BI.View);
-        },
-
-        createWidget: function (item, options) {
-            var el;
-            options || (options = {});
-            if (BI.isEmpty(item) && BI.isEmpty(options)) {
-                return BI.Plugin.getObject("bi.layout", BI.createWidget({
-                    type: "bi.layout"
-                }));
-            }
-            if (BI.isWidget(item)) {
-                return item;
-            }
-            if (item && (item.type || options.type)) {
-                el = BI.extend({}, options, item);
-                return BI.Plugin.getObject(el.type, FR.createWidget(BI.Plugin.getWidget(el.type, el), true));
-            }
-            if (item && item.el && (item.el.type || options.type)) {
-                el = BI.extend({}, options, item.el);
-                return BI.Plugin.getObject(el.type, FR.createWidget(BI.Plugin.getWidget(el.type, el), true));
-            }
-            if (item && BI.isWidget(item.el)) {
-                return item.el;
-            }
         },
 
         createWidgets: function (items, options) {

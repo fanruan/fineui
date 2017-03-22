@@ -12883,7 +12883,7 @@ if (!window.BI) {
 ;
 !(function ($, undefined) {
     _.extend(BI, {
-        version: "4.0"
+        version: "2.0"
     });
     var traverse = function (func, context) {
         return function (value, key, obj) {
@@ -12906,7 +12906,7 @@ if (!window.BI) {
     //Utility
     _.extend(BI, {
         i18nText: function (key) {
-            var localeText = "";
+            var localeText = (BI.i18n && BI.i18n[key]) || "";
             if (!localeText) {
                 localeText = key;
             }
@@ -12952,30 +12952,6 @@ if (!window.BI) {
 
         isWidget: function (widget) {
             return widget instanceof BI.Widget || (BI.View && widget instanceof BI.View);
-        },
-
-        createWidget: function (item, options) {
-            var el;
-            options || (options = {});
-            if (BI.isEmpty(item) && BI.isEmpty(options)) {
-                return BI.Plugin.getObject("bi.layout", BI.createWidget({
-                    type: "bi.layout"
-                }));
-            }
-            if (BI.isWidget(item)) {
-                return item;
-            }
-            if (item && (item.type || options.type)) {
-                el = BI.extend({}, options, item);
-                return BI.Plugin.getObject(el.type, FR.createWidget(BI.Plugin.getWidget(el.type, el), true));
-            }
-            if (item && item.el && (item.el.type || options.type)) {
-                el = BI.extend({}, options, item.el);
-                return BI.Plugin.getObject(el.type, FR.createWidget(BI.Plugin.getWidget(el.type, el), true));
-            }
-            if (item && BI.isWidget(item.el)) {
-                return item.el;
-            }
         },
 
         createWidgets: function (items, options) {
@@ -19726,104 +19702,7 @@ BI.RedMarkBehavior = BI.inherit(BI.Behavior, {
             }
         })
     }
-});/*
- * 前端缓存
- */
-window.localStorage || (window.localStorage = {
-    items: {},
-    setItem: function (k, v) {
-        BI.Cache.addCookie(k, v);
-    },
-    getItem: function (k) {
-        return BI.Cache.getCookie(k);
-    },
-    removeItem: function (k) {
-        BI.Cache.deleteCookie(k);
-    },
-    key: function () {
-
-    },
-    clear: function () {
-        this.items = {};
-    }
-});
-BI.Cache = {
-    _prefix: "bi",
-    setUsername: function (username) {
-        localStorage.setItem(BI.Cache._prefix + ".username", (username + "" || "").toUpperCase());
-    },
-    getUsername: function () {
-        return localStorage.getItem(BI.Cache._prefix + ".username") || "";
-    },
-    _getKeyPrefix: function () {
-        return BI.Cache.getUsername() + "." + BI.Cache._prefix + ".";
-    },
-    _generateKey: function (key) {
-        return BI.Cache._getKeyPrefix() + (key || "");
-    },
-    getItem: function (key) {
-        return localStorage.getItem(BI.Cache._generateKey(key));
-    },
-    setItem: function (key, value) {
-        localStorage.setItem(BI.Cache._generateKey(key), value);
-    },
-    removeItem: function (key) {
-        localStorage.removeItem(BI.Cache._generateKey(key));
-    },
-    clear: function () {
-        for (var i = localStorage.length; i >= 0; i--) {
-            var key = localStorage.key(i);
-            if (key) {
-                if (key.indexOf(BI.Cache._getKeyPrefix()) === 0) {
-                    localStorage.removeItem(key);
-                }
-            }
-        }
-    },
-    keys: function () {
-        var result = [];
-        for (var i = localStorage.length; i >= 0; i--) {
-            var key = localStorage.key(i);
-            if (key) {
-                var prefix = BI.Cache._getKeyPrefix();
-                if (key.indexOf(prefix) === 0) {
-                    result[result.length] = key.substring(prefix.length);
-                }
-            }
-        }
-        return result;
-    },
-
-    addCookie: function (name, value, path, expiresHours) {
-        var cookieString = name + "=" + escape(value);
-        // 判断是否设置过期时间
-        if (expiresHours && expiresHours > 0) {
-            var date = new Date();
-            date.setTime(date.getTime() + expiresHours * 3600 * 1000);
-            cookieString = cookieString + "; expires=" + date.toGMTString();
-        }
-        if (path) {
-            cookieString = cookieString + "; path=" + path;
-        }
-        document.cookie = cookieString;
-    },
-    getCookie: function (name) {
-        var arr, reg = new RegExp("(^| )" + name + "=([^;]*)(;|$)");
-        if (arr = document.cookie.match(reg))
-            return unescape(arr[2]);
-        else
-            return null;
-    },
-    deleteCookie: function (name, path) {
-        var date = new Date();
-        date.setTime(date.getTime() - 10000);
-        var cookieString = name + "=v; expires=" + date.toGMTString();
-        if (path) {
-            cookieString = cookieString + "; path=" + path;
-        }
-        document.cookie = cookieString;
-    }
-};/**
+});/**
  * guy
  * 控制器
  * Controller层超类
