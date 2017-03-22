@@ -18,8 +18,8 @@ BI.Farbtastic = BI.inherit(BI.Widget, {
     _init: function () {
         BI.Farbtastic.superclass._init.apply(this, arguments);
         var self = this;
-        FR.$defaultImport('/com/fr/bi/web/js/third/farbtastic.js', 'js');
-        FR.$defaultImport('/com/fr/bi/web/css/base/third/farbtastic/farbtastic.css', 'css');
+        
+        
 
         this.farbtastic = $.farbtastic(this.element, function (v) {
             self.fireEvent(BI.Farbtastic.EVENT_CHANGE, self.getValue(), self);

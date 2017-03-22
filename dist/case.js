@@ -5622,9 +5622,9 @@ BI.LoginTimeOut = BI.inherit(BI.BarPopoverSection, {
             }
 
             //反正是登录直接用FR的登录了
-            FR.ajax({
-                url: FR.servletURL + '?op=fs_load&cmd=login',
-                data: FR.cjkEncodeDO({
+            BI.ajax({
+                url: BI.servletURL + '?op=fs_load&cmd=login',
+                data: BI.cjkEncodeDO({
                     fr_username: encodeURIComponent(userNameInput.getValue()),
                     fr_password: encodeURIComponent(passwordInput.getValue()),
                     fr_remember: self.keepLoginState.isSelected()
@@ -5639,7 +5639,7 @@ BI.LoginTimeOut = BI.inherit(BI.BarPopoverSection, {
                         self._showMes(userNameMask, BI.i18nText("BI-Authentication_Failed"));
                         return;
                     }
-                    var signResult = FR.jsonDecode(res.responseText);
+                    var signResult = BI.jsonDecode(res.responseText);
                     if (signResult.fail) {
                         //用户名和密码不匹配
                         self._showMes(userNameMask, BI.i18nText("BI-Username_Password_Not_Correct"));
@@ -5663,7 +5663,7 @@ BI.LoginTimeOut = BI.inherit(BI.BarPopoverSection, {
                     type: "bi.center_adapt",
                     items: [{
                         type: "bi.img",
-                        src: FR.servletURL + (logo ?
+                        src: BI.servletURL + (logo ?
                             '?op=fr_attach&cmd=ah_image&id=' + logo + '&isAdjust=false' :
                             '?op=resource&resource=/com/fr/bi/web/images/login/bi_logo.png'),
                         width: 120,
@@ -9322,10 +9322,10 @@ BI.ZeroClip = BI.inherit(BI.BasicButton, {
     _init: function () {
         BI.ZeroClip.superclass._init.apply(this, arguments);
         var self = this, o = this.options;
-        FR.$defaultImport('/com/fr/bi/web/js/third/jquery.zclip.js', 'js');
+        
         BI.nextTick(function () {
             self.element.zclip({
-                path: FR.servletURL + "?op=resource&resource=/com/fr/bi/web/resources/ZeroClipboard.swf",
+                path: BI.servletURL + "?op=resource&resource=/com/fr/bi/web/resources/ZeroClipboard.swf",
                 copy: o.copy,
                 beforeCopy: o.beforeCopy,
                 afterCopy: o.afterCopy

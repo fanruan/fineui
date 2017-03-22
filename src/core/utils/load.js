@@ -8,7 +8,7 @@ $.extend(BI, {
             type: null,
             must: false
         }, options);
-        config.url = FR.servletURL + '?op=' + config.op + '&resource=' + config.path;
+        config.url = BI.servletURL + '?op=' + config.op + '&resource=' + config.path;
         this.$import(config.url, config.type,config.must);
     },
     $import: function () {

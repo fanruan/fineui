@@ -81,30 +81,6 @@ if (!window.BI) {
             return widget instanceof BI.Widget || (BI.View && widget instanceof BI.View);
         },
 
-        createWidget: function (item, options) {
-            var el;
-            options || (options = {});
-            if (BI.isEmpty(item) && BI.isEmpty(options)) {
-                return BI.Plugin.getObject("bi.layout", BI.createWidget({
-                    type: "bi.layout"
-                }));
-            }
-            if (BI.isWidget(item)) {
-                return item;
-            }
-            if (item && (item.type || options.type)) {
-                el = BI.extend({}, options, item);
-                return BI.Plugin.getObject(el.type, FR.createWidget(BI.Plugin.getWidget(el.type, el), true));
-            }
-            if (item && item.el && (item.el.type || options.type)) {
-                el = BI.extend({}, options, item.el);
-                return BI.Plugin.getObject(el.type, FR.createWidget(BI.Plugin.getWidget(el.type, el), true));
-            }
-            if (item && BI.isWidget(item.el)) {
-                return item.el;
-            }
-        },
-
         createWidgets: function (items, options) {
             if (!BI.isArray(items)) {
                 throw new Error("cannot create Widgets")
@@ -929,10 +905,6 @@ if (!window.BI) {
             return BI.isString(str) && BI.isEmpty(str);
         },
 
-        contentFormat: function () {
-            return FR.contentFormat.apply(FR, arguments);
-        },
-
         /**
          * 对字符串进行加密 {@link #decrypt}
          * @static
@@ -1126,7 +1098,12 @@ if (!window.BI) {
                 }
                 timeoutToast.addReq(option);
 
-                FR.ajax({
+
+                option.data = BI.cjkEncodeDO(option.data);
+                    
+                    
+                
+                $.ajax({
                     url: option.url,
                     type: "POST",
                     data: option.data,
@@ -1181,10 +1158,10 @@ if (!window.BI) {
                             loading.showError();
 
                         } else if (status === "success" && BI.isFunction(option.success)) {
-                            option.success(FR.jsonDecode(res.responseText));
+                            option.success(BI.jsonDecode(res.responseText));
                         }
                         if (BI.isFunction(option.complete)) {
-                            option.complete(FR.jsonDecode(res.responseText), status);
+                            option.complete(BI.jsonDecode(res.responseText), status);
                         }
                     }
                 });
@@ -1196,7 +1173,7 @@ if (!window.BI) {
                 function encodeBIParam(data) {
                     for (var key in data) {
                         if (_.isObject(data[key])) {
-                            data[key] = window.encodeURIComponent(FR.jsonEncode(data[key]));
+                            data[key] = window.encodeURIComponent(BI.jsonEncode(data[key]));
                         } else {
                             data[key] = window.encodeURIComponent(data[key]);
                         }
@@ -1207,7 +1184,7 @@ if (!window.BI) {
                     for (var key in data) {
                         data[key] = window.decodeURIComponent(data[key]);
                         if (_.isObject(data[key])) {
-                            data[key] = FR.jsonDecode(data[key]);
+                            data[key] = BI.jsonDecode(data[key]);
                         }
                     }
                 }
@@ -1230,7 +1207,7 @@ if (!window.BI) {
             if (op === "fr_bi_dezi" || op === "fr_bi_configure") {
                 data.sessionID = Data.SharingPool.get("sessionID");
             }
-            var url = FR.servletURL + '?op=' + op + '&cmd=' + cmd + "&_=" + Math.random();
+            var url = BI.servletURL + '?op=' + op + '&cmd=' + cmd + "&_=" + Math.random();
             return (BI.ajax)({
                 url: url,
                 type: 'POST',
@@ -1266,7 +1243,7 @@ if (!window.BI) {
             if (op === "fr_bi_dezi") {
                 data.sessionID = Data.SharingPool.get("sessionID");
             }
-            var url = FR.servletURL + '?op=' + op + '&cmd=' + cmd + "&_=" + Math.random();
+            var url = BI.servletURL + '?op=' + op + '&cmd=' + cmd + "&_=" + Math.random();
             var result = {};
             (BI.ajax)({
                 url: url,

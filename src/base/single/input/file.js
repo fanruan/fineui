@@ -84,7 +84,7 @@
         var multipart = function (boundary, name, file) {
                 return "--".concat(
                     boundary, CRLF,
-                    'Content-Disposition: form-data; name="', name, '"; filename="', FR.cjkEncode(file.fileName), '"', CRLF,
+                    'Content-Disposition: form-data; name="', name, '"; filename="', BI.cjkEncode(file.fileName), '"', CRLF,
                     "Content-Type: application/octet-stream", CRLF,
                     CRLF,
                     file.getAsBinary(), CRLF,
@@ -153,7 +153,7 @@
                     },
                     false
                 );
-                xhr.open("post", handler.url + '&filename=' + FR.cjkEncode(handler.file.fileName), true);
+                xhr.open("post", handler.url + '&filename=' + BI.cjkEncode(handler.file.fileName), true);
                 if (!xhr.upload) {
                     var rpe = {loaded: 0, total: handler.file.fileSize || handler.file.size, simulation: true};
                     rpe.interval = setInterval(function () {
@@ -184,8 +184,8 @@
                                 upload.onprogress(rpe);
                                 if (199 < xhr.status && xhr.status < 400) {
                                     upload["onload"]({});
-                                    var attachO = FR.jsonDecode(xhr.responseText);
-                                    attachO.filename = FR.cjkDecode(handler.file.fileName);
+                                    var attachO = BI.jsonDecode(xhr.responseText);
+                                    attachO.filename = BI.cjkDecode(handler.file.fileName);
                                     if (handler.file.type.indexOf('image') != -1) {
                                         attachO.attach_type = "image";
                                     }
@@ -201,7 +201,7 @@
                     xhr.onreadystatechange = function () {
                         switch (xhr.readyState) {
                             case    4:
-                                var attachO = FR.jsonDecode(xhr.responseText);
+                                var attachO = BI.jsonDecode(xhr.responseText);
                                 if (handler.file.type.indexOf('image') != -1) {
                                     attachO.attach_type = "image";
                                 }
@@ -251,13 +251,13 @@
                         //rpe.loaded = rpe.total;
                         try {
                             var responseText = (iframe.contentWindow.document || iframe.contentWindow.contentDocument).body.innerHTML;
-                            var attachO = FR.jsonDecode(responseText);
+                            var attachO = BI.jsonDecode(responseText);
                             if (handler.file.type.indexOf('image') != -1) {
                                 attachO.attach_type = "image";
                             }
 
                             //attachO.fileSize = responseText.length;
-                            attachO.filename = FR.cjkDecode(handler.file.fileName);
+                            attachO.filename = BI.cjkDecode(handler.file.fileName);
                             if (handler.maxlength == 1) {
                                 handler.attach_array[0] = attachO;
                             } else {
@@ -474,7 +474,7 @@
                         // enable again the submit button/element
                     }, 1000);
                 };
-                _wrap.url = o.url ? o.url : FR.servletURL
+                _wrap.url = o.url ? o.url : BI.servletURL
                 + '?op=fr_attach&cmd=ah_upload';
                 _wrap.fileType = o.accept;   //文件类型限制
                 _wrap.attach_array = [];

@@ -62,7 +62,8 @@ module.exports = function (grunt) {
                 src: [
                     'src/widget/paramsettingcombo/popup.param.js',
                     'src/widget/sequencetable/treenumber.sequencetable.js',
-                    'src/widget/**/*.js'
+                    'src/widget/**/*.js',
+                    'src/component/**/*.js'
                 ],
                 dest: "dist/widget.js"
             },
