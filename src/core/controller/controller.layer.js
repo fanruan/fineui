@@ -127,7 +127,6 @@ BI.LayerController = BI.inherit(BI.Controller, {
             return this;
         }
         this._getLayout(name).visible();
-        this._getLayout(name)._mount();
         this._getLayout(name).element.css("z-index", this.zindex++).show(0, callback).trigger("__resize__");
         return this;
     },
