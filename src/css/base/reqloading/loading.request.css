@@ -7,8 +7,14 @@
   filter: alpha(opacity=80);
 }
 .bi-request-loading .loading-comment {
-  font-size: 14px;
+  font-size: 20px;
+  color: #808080;
 }
 .bi-request-loading .load-fail-comment {
-  font-size: 14px;
+  font-size: 20px;
+  color: #808080;
+}
+.bi-request-loading .load-timeout-warning {
+  font-size: 16px;
+  color: #e85050;
 }

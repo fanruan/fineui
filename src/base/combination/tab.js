@@ -53,9 +53,6 @@ BI.Tab = BI.inherit(BI.Widget, {
         listener.on(BI.ShowListener.EVENT_CHANGE, function (value) {
             self.fireEvent(BI.Tab.EVENT_CHANGE, value, self);
         });
-        if (o.defaultShowIndex !== false) {
-            this.setSelect(o.defaultShowIndex);
-        }
     },
 
     _assertCard: function (v) {
@@ -63,6 +60,13 @@ BI.Tab = BI.inherit(BI.Widget, {
             var card = this.options.cardCreator(v);
             this.cardMap[v] = card;
             this.layout.addCardByName(v, card);
+        }
+    },
+
+    mounted: function () {
+        var o = this.options;
+        if (o.defaultShowIndex !== false) {
+            this.setSelect(o.defaultShowIndex);
         }
     },
 
@@ -114,9 +118,9 @@ BI.Tab = BI.inherit(BI.Widget, {
         this.cardMap = {};
     },
 
-    destroyed: function () {
-        this.layout.deleteAllCard();
+    destroy: function () {
         this.cardMap = {};
+        BI.Tab.superclass.destroy.apply(this, arguments);
     }
 });
 BI.Tab.EVENT_CHANGE = "EVENT_CHANGE";

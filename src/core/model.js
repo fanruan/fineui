@@ -377,7 +377,7 @@ BI.Model = BI.inherit(BI.M, {
     },
 
     urlRoot: function () {
-        return FR.servletURL;
+        return BI.servletURL;
     },
 
     parse: function (data) {

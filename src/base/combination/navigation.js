@@ -127,6 +127,10 @@ BI.Navigation = BI.inherit(BI.Widget, {
     empty: function(){
         this.layout.deleteAllCard();
         this.cardMap = {};
+    },
+
+    destroy: function(){
+        BI.Navigation.superclass.destroy.apply(this, arguments);
     }
 });
 BI.Navigation.EVENT_CHANGE = "EVENT_CHANGE";

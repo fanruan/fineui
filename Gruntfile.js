@@ -40,6 +40,12 @@ module.exports = function (grunt) {
                     'src/base/single/text.js',
                     'src/base/single/button/button.basic.js',
                     'src/base/single/button/button.node.js',
+                    'src/base/combination/group.button.js',
+                    'src/base/combination/tree.button.js',
+                    'src/base/combination/map.button.js',
+                    'src/base/tree/treeview.js',
+                    'src/base/tree/synctree.js',
+                    'src/base/tree/parttree.js',
                     'src/base/**/*.js'
                 ],
                 dest: 'dist/base.js'
@@ -56,7 +62,8 @@ module.exports = function (grunt) {
                 src: [
                     'src/widget/paramsettingcombo/popup.param.js',
                     'src/widget/sequencetable/treenumber.sequencetable.js',
-                    'src/widget/**/*.js'
+                    'src/widget/**/*.js',
+                    'src/component/**/*.js'
                 ],
                 dest: "dist/widget.js"
             },

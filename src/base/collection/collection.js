@@ -58,18 +58,12 @@ BI.Collection = BI.inherit(BI.Widget, {
             this._calculateSizeAndPositionData();
             this._populate();
         }
-    },
-
-    mounted: function () {
-        var o = this.options;
         if (o.scrollLeft !== 0 || o.scrollTop !== 0) {
-            this.element.scrollTop(o.scrollTop);
-            this.element.scrollLeft(o.scrollLeft);
+            BI.nextTick(function () {
+                self.element.scrollTop(o.scrollTop);
+                self.element.scrollLeft(o.scrollLeft);
+            });
         }
-    },
-
-    destroyed: function () {
-        this._debounceRelease = null;
     },
 
     _calculateSizeAndPositionData: function () {

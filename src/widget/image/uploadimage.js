@@ -268,7 +268,7 @@ BI.UploadImage = BI.inherit(BI.Widget, {
 
 BI.extend(BI.UploadImage, {
     getImageSrc: function (src) {
-        return FR.servletURL + "?op=fr_bi&cmd=get_uploaded_image&image_id=" + src;
+        return BI.servletURL + "?op=fr_bi&cmd=get_uploaded_image&image_id=" + src;
     }
 });
 

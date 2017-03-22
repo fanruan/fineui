@@ -205,6 +205,7 @@
   -webkit-border-radius: 20px;
   -moz-border-radius: 20px;
   border-radius: 20px;
+  overflow: hidden;
   overflow-x: hidden;
   overflow-y: hidden;
 }
@@ -1324,6 +1325,7 @@
 /****** common color(常用颜色,可用于普遍场景) *****/
 /**** custom color(自定义颜色,用于特定场景) ****/
 .bi-sequence-table-dynamic-number .sequence-table-title-cell {
+  overflow: hidden;
   overflow-x: hidden;
   overflow-y: hidden;
   -webkit-box-sizing: border-box;
@@ -1353,6 +1355,7 @@
 /****** common color(常用颜色,可用于普遍场景) *****/
 /**** custom color(自定义颜色,用于特定场景) ****/
 .bi-sequence-table-list-number .sequence-table-title-cell {
+  overflow: hidden;
   overflow-x: hidden;
   overflow-y: hidden;
   -webkit-box-sizing: border-box;
@@ -1385,6 +1388,7 @@
 /****** common color(常用颜色,可用于普遍场景) *****/
 /**** custom color(自定义颜色,用于特定场景) ****/
 .bi-sequence-table-tree-number .sequence-table-title-cell {
+  overflow: hidden;
   overflow-x: hidden;
   overflow-y: hidden;
   -webkit-box-sizing: border-box;

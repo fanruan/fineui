@@ -1,13 +1,20 @@
 @import "../../bibase";
-.bi-request-loading{
-  & .mask-pane{
+
+.bi-request-loading {
+  & .mask-pane {
     background: @color-bi-background-default;
     .opacity(0.8);
   }
-  & .loading-comment{
-    font-size: @font-size-14;
+  & .loading-comment {
+    font-size: 20px;
+    color: @color-bi-text-gray;
   }
-  & .load-fail-comment{
-    font-size: @font-size-14;
+  & .load-fail-comment {
+    font-size: 20px;
+    color: @color-bi-text-gray;
+  }
+  & .load-timeout-warning {
+    font-size: @font-size-16;
+    color: @color-bi-text-warning;
   }
 }

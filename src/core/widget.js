@@ -135,7 +135,7 @@ BI.Widget = BI.inherit(BI.OB, {
                 })
             })
         }
-        if (this._isRoot === true) {
+        if (this._isRoot === true || !(this instanceof BI.Layout)) {
             this._mount();
         }
     },
@@ -147,7 +147,7 @@ BI.Widget = BI.inherit(BI.OB, {
     _mount: function () {
         var self = this;
         var isMounted = this._isMounted;
-        if (isMounted) {
+        if (isMounted || !this.isVisible()) {
             return;
         }
         if (this._isRoot === true) {
@@ -216,10 +216,12 @@ BI.Widget = BI.inherit(BI.OB, {
         if (visible === true) {
             this.options.invisible = false;
             this.element.show();
+            this._mount();
         } else if (visible === false) {
             this.options.invisible = true;
             this.element.hide();
         }
+        this.fireEvent(BI.Events.VIEW, visible);
     },
 
     setValid: function (valid) {
@@ -365,7 +367,10 @@ BI.Widget = BI.inherit(BI.OB, {
     },
 
     destroy: function () {
-        this._unMount();
+        this.empty();
+        this._isMounted = false;
+        this._parent = null;
+        this.destroyed();
         this.element.destroy();
         this.fireEvent(BI.Events.DESTROY);
     }

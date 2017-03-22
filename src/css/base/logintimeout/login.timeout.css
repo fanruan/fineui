@@ -1,0 +1,32 @@
+/****添加计算宽度的--运算符直接需要space****/
+/****** common color(常用颜色,可用于普遍场景) *****/
+/**** custom color(自定义颜色,用于特定场景) ****/
+.bi-login-timeout-center .input-wrapper {
+  border-bottom: 1px solid #eaeaea;
+}
+.bi-login-timeout-center .input-wrapper .login-input {
+  font-size: 16px;
+}
+.bi-login-timeout-center .input-wrapper .error-mask {
+  background: #1a1a1a;
+  opacity: 0.25;
+  filter: alpha(opacity=25);
+  color: #ffffff;
+  font-size: 16px;
+}
+.bi-login-timeout-center .login-button {
+  background: #009de3;
+  -webkit-border-radius: 25px;
+  -moz-border-radius: 25px;
+  border-radius: 25px;
+  font-size: 22px;
+  color: #ffffff;
+}
+.bi-login-timeout-center .login-button:hover {
+  opacity: 0.8;
+  filter: alpha(opacity=80);
+}
+.bi-login-timeout-south .keep-state {
+  font-size: 14px;
+  color: #808080;
+}

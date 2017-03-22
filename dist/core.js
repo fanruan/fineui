@@ -12883,7 +12883,7 @@ if (!window.BI) {
 ;
 !(function ($, undefined) {
     _.extend(BI, {
-        version: "4.0"
+        version: "2.0"
     });
     var traverse = function (func, context) {
         return function (value, key, obj) {
@@ -12906,7 +12906,7 @@ if (!window.BI) {
     //Utility
     _.extend(BI, {
         i18nText: function (key) {
-            var localeText = key;
+            var localeText = (BI.i18n && BI.i18n[key]) || "";
             if (!localeText) {
                 localeText = key;
             }
@@ -12923,7 +12923,7 @@ if (!window.BI) {
         assert: function (v, is) {
             if (this.isFunction(is)) {
                 if (!is(v)) {
-                    throw new Error(v + "值不合法");
+                    throw new Error(v + " error");
                 } else {
                     return true;
                 }
@@ -12932,7 +12932,7 @@ if (!window.BI) {
                 is = [is];
             }
             if (!this.deepContains(is, v)) {
-                throw new Error(v + "值不合法");
+                throw new Error(v + " error");
             }
         },
 
@@ -12956,7 +12956,7 @@ if (!window.BI) {
 
         createWidgets: function (items, options) {
             if (!BI.isArray(items)) {
-                throw new Error("无法根据items创建组件?")
+                throw new Error("cannot create Widgets")
             }
             return BI.map(BI.flatten(items), function (i, item) {
                 return BI.createWidget(item, BI.deepClone(options));
@@ -13127,7 +13127,9 @@ if (!window.BI) {
         backAny: function (obj, predicate, context) {
             predicate = BI.iteratee(predicate, context);
             for (var index = obj.length - 1; index >= 0; index--) {
-                if (predicate(index, obj[index], obj)) return true;
+                if (predicate(index, obj[index], obj)) {
+                    return true;
+                }
             }
             return false;
         },
@@ -13135,7 +13137,9 @@ if (!window.BI) {
         backEvery: function (obj, predicate, context) {
             predicate = BI.iteratee(predicate, context);
             for (var index = obj.length - 1; index >= 0; index--) {
-                if (!predicate(index, obj[index], obj)) return false;
+                if (!predicate(index, obj[index], obj)) {
+                    return false;
+                }
             }
             return true;
         },
@@ -13261,7 +13265,9 @@ if (!window.BI) {
         },
 
         uniq: function (array, isSorted, iteratee, context) {
-            if (array == null) return [];
+            if (array == null) {
+                return [];
+            }
             if (!_.isBoolean(isSorted)) {
                 context = iteratee;
                 iteratee = isSorted;
@@ -13423,11 +13429,15 @@ if (!window.BI) {
 
         isDeepMatch: function (object, attrs) {
             var keys = BI.keys(attrs), length = keys.length;
-            if (object == null) return !length;
+            if (object == null) {
+                return !length;
+            }
             var obj = Object(object);
             for (var i = 0; i < length; i++) {
                 var key = keys[i];
-                if (!BI.isEqual(attrs[key], obj[key]) || !(key in obj)) return false;
+                if (!BI.isEqual(attrs[key], obj[key]) || !(key in obj)) {
+                    return false;
+                }
             }
             return true;
         },
@@ -13453,20 +13463,24 @@ if (!window.BI) {
         },
 
         deepRemove: function (obj, target) {
+            var done = false;
             var i;
             if (BI.isArray(obj)) {
                 for (i = 0; i < obj.length; i++) {
                     if (BI.isEqual(target, obj[i])) {
                         obj.splice(i--, 1);
+                        done = true;
                     }
                 }
             } else {
                 BI.each(obj, function (i, v) {
                     if (BI.isEqual(target, obj[i])) {
                         delete obj[i];
+                        done = true;
                     }
                 });
             }
+            return done;
         },
 
         deepWithout: function (obj, target) {
@@ -13489,8 +13503,14 @@ if (!window.BI) {
             }
         },
 
-        deepUniq: function () {
-
+        deepUnique: function (array) {
+            var result = [];
+            BI.each(array, function (i, item) {
+                if (!BI.deepContains(result, item)) {
+                    result.push(item);
+                }
+            });
+            return result;
         },
 
         //比较两个对象得出不一样的key值
@@ -13541,31 +13561,54 @@ if (!window.BI) {
                 var copies = callbacks.slice(0);
                 callbacks = [];
                 for (var i = 0; i < copies.length; i++) {
-                    copies[i].func.apply(null, copies[i].args);
+                    copies[i]();
                 }
             }
+
+            if (typeof Promise !== 'undefined') {
+                var p = Promise.resolve();
+                timerFunc = function () {
+                    p.then(nextTickHandler);
+                }
+            } else
 
             /* istanbul ignore if */
             if (typeof MutationObserver !== 'undefined') {
                 var counter = 1;
                 var observer = new MutationObserver(nextTickHandler);
-                var textNode = document.createTextNode(counter);
+                var textNode = document.createTextNode(counter + "");
                 observer.observe(textNode, {
                     characterData: true
                 });
                 timerFunc = function () {
                     counter = (counter + 1) % 2;
-                    textNode.data = counter;
+                    textNode.data = counter + "";
                 }
             } else {
-                timerFunc = setTimeout
+                timerFunc = function () {
+                    setTimeout(nextTickHandler, 0)
+                }
             }
-            return function (cb) {
+            return function queueNextTick(cb) {
+                var _resolve;
                 var args = [].slice.call(arguments, 1);
-                callbacks.push({func: cb, args: args});
-                if (pending) return;
-                pending = true;
-                timerFunc(nextTickHandler, 0);
+                callbacks.push(function () {
+                    if (cb) {
+                        cb.apply(null, args);
+                    }
+                    if (_resolve) {
+                        _resolve.apply(null, args);
+                    }
+                });
+                if (!pending) {
+                    pending = true;
+                    timerFunc();
+                }
+                if (!cb && typeof Promise !== 'undefined') {
+                    return new Promise(function (resolve) {
+                        _resolve = resolve
+                    })
+                }
             }
         })()
     });
@@ -13599,7 +13642,7 @@ if (!window.BI) {
             try {
                 return parseInt(number, radix);
             } catch (e) {
-                throw new Error("转成int类型失败");
+                throw new Error(number + "parse int error");
                 return NaN;
             }
         },
@@ -13608,7 +13651,7 @@ if (!window.BI) {
             try {
                 return parseFloat(number);
             } catch (e) {
-                throw new Error("转成float类型失败");
+                throw new Error(number + "parse float error");
                 return NaN;
             }
         },
@@ -13670,9 +13713,9 @@ if (!window.BI) {
             var sum = 0;
             BI.each(array, function (i, item) {
                 if (iteratee) {
-                    sum += new Number(iteratee.apply(context, [i, item]));
+                    sum += Number(iteratee.apply(context, [i, item]));
                 } else {
-                    sum += new Number(item);
+                    sum += Number(item);
                 }
             });
             return sum;
@@ -13696,6 +13739,10 @@ if (!window.BI) {
 
         toLowerCase: function (string) {
             return (string + "").toLocaleLowerCase();
+        },
+
+        isEndWithBlank: function (string) {
+            return /(\s|\u00A0)$/.test(string);
         },
 
         isLiteral: function (exp) {
@@ -13844,23 +13891,23 @@ if (!window.BI) {
     //浏览器相关方法
     _.extend(BI, {
         isIE: function () {
-            return $.browser.msie;
+            return /(msie|trident)/i.test(navigator.userAgent.toLowerCase());
         },
 
         isChrome: function () {
-            return $.browser.chrome;
+            return /chrome/i.test(navigator.userAgent.toLowerCase());
         },
 
         isFireFox: function () {
-            return $.browser.mozilla;
+            return /firefox/i.test(navigator.userAgent.toLowerCase());
         },
 
         isOpera: function () {
-            return $.browser.opera;
+            return /opera/i.test(navigator.userAgent.toLowerCase());
         },
 
         isSafari: function () {
-            return $.browser.safari;
+            return /safari/i.test(navigator.userAgent.toLowerCase());
         },
 
         isKhtml: function () {
@@ -13894,6 +13941,129 @@ if (!window.BI) {
     //BI请求
     _.extend(BI, {
 
+        ajax: (function () {
+            var loading, timeoutToast;
+            return function (option) {
+                option || (option = {});
+                option.data = BI.extend({}, Data.SharingPool.cat("urlParameters"), option.data);
+                //encode
+                encodeBIParam(option.data);
+
+                var async = true;
+                if (BI.isNotNull(option.async)) {
+                    async = option.async;
+                }
+
+                if (BI.isNull(loading)) {
+                    loading = BI.createWidget({
+                        type: "bi.request_loading"
+                    });
+                }
+
+                if (BI.isNull(timeoutToast)) {
+                    timeoutToast = BI.createWidget({
+                        type: "bi.timeout_toast"
+                    });
+                    timeoutToast.setCallback(function (op) {
+                        decodeBIParam(op.data);
+                        BI.ajax(op);
+                    });
+                }
+                timeoutToast.addReq(option);
+
+
+                option.data = BI.cjkEncodeDO(option.data);
+                    
+                    
+                
+                $.ajax({
+                    url: option.url,
+                    type: "POST",
+                    data: option.data,
+                    async: async,
+                    error: function () {
+                        if (!timeoutToast.hasReq(option)) {
+                            return;
+                        }
+                        timeoutToast.removeReq(option);
+                        //失败 取消、重新加载
+                        loading.setCallback(function () {
+                            decodeBIParam(option.data);
+                            BI.ajax(option);
+                        });
+                        loading.showError();
+                    },
+                    complete: function (res, status) {
+                        if (!timeoutToast.hasReq(option)) {
+                            return;
+                        }
+                        timeoutToast.removeReq(option);
+                        //登录超时
+                        if (BI.isNotNull(res.responseText) &&
+                            res.responseText.indexOf("fs-login-content") > -1 &&
+                            res.responseText.indexOf("fs-login-input-password-confirm") === -1) {
+                            if (BI.Popovers.isVisible(BI.LoginTimeOut.POPOVER_ID)) {
+                                return;
+                            }
+                            if (BI.isNotNull(BI.Popovers.get(BI.LoginTimeOut.POPOVER_ID))) {
+                                BI.Popovers.open(BI.LoginTimeOut.POPOVER_ID);
+                                return;
+                            }
+                            var loginTimeout = BI.createWidget({
+                                type: "bi.login_timeout"
+                            });
+                            loginTimeout.on(BI.LoginTimeOut.EVENT_LOGIN, function () {
+                                decodeBIParam(option.data);
+                                BI.ajax(option);
+                                BI.Popovers.remove(BI.LoginTimeOut.POPOVER_ID);
+                            });
+                            BI.Popovers.create(BI.LoginTimeOut.POPOVER_ID, loginTimeout, {
+                                width: 600,
+                                height: 400
+                            }).open(BI.LoginTimeOut.POPOVER_ID);
+                        } else if (BI.isNotNull(res.responseText) &&
+                            res.responseText.indexOf("script") > -1 &&
+                            res.responseText.indexOf("Session Timeout...") > -1) {
+                            //登录失效
+                            loading.setCallback(function () {
+                                location.reload();
+                            });
+                            loading.showError();
+
+                        } else if (status === "success" && BI.isFunction(option.success)) {
+                            option.success(BI.jsonDecode(res.responseText));
+                        }
+                        if (BI.isFunction(option.complete)) {
+                            option.complete(BI.jsonDecode(res.responseText), status);
+                        }
+                    }
+                });
+
+                return function cancel() {
+                    timeoutToast.removeReq(option);
+                };
+
+                function encodeBIParam(data) {
+                    for (var key in data) {
+                        if (_.isObject(data[key])) {
+                            data[key] = window.encodeURIComponent(BI.jsonEncode(data[key]));
+                        } else {
+                            data[key] = window.encodeURIComponent(data[key]);
+                        }
+                    }
+                }
+
+                function decodeBIParam(data) {
+                    for (var key in data) {
+                        data[key] = window.decodeURIComponent(data[key]);
+                        if (_.isObject(data[key])) {
+                            data[key] = BI.jsonDecode(data[key]);
+                        }
+                    }
+                }
+            }
+        })(),
+
         /**
          * 异步ajax请求
          * @param {String} op op参数
@@ -13903,38 +14073,29 @@ if (!window.BI) {
          * @param {Function} complete 回调
          */
         requestAsync: function (op, cmd, data, callback, complete) {
-            // if (BI.isNull(BI.REQUEST_LOADING)) {
-            //     BI.REQUEST_LOADING = BI.createWidget({
-            //         type: "bi.request_loading"
-            //     });
-            // }
             data = data || {};
             if (!BI.isKey(op)) {
                 op = 'fr_bi_dezi';
             }
-            if (op === "fr_bi_dezi") {
+            if (op === "fr_bi_dezi" || op === "fr_bi_configure") {
                 data.sessionID = Data.SharingPool.get("sessionID");
             }
-            var url = FR.servletURL + '?op=' + op + '&cmd=' + cmd + "&_=" + Math.random();
-            (BI.ajax || FR.ajax)({
+            var url = BI.servletURL + '?op=' + op + '&cmd=' + cmd + "&_=" + Math.random();
+            return (BI.ajax)({
                 url: url,
                 type: 'POST',
                 data: data,
                 error: function () {
                     // BI.Msg.toast(BI.i18nText("BI-Ajax_Error"));
-                    //失败 取消、重新加载
-                    // BI.REQUEST_LOADING.setCallback(function () {
-                    //     BI.requestAsync(op, cmd, data, callback, complete);
-                    // });
-                    // BI.REQUEST_LOADING.showError();
+                },
+                success: function (res) {
+                    if (BI.isFunction(callback)) {
+                        callback(res);
+                    }
                 },
                 complete: function (res, status) {
-                    if (BI.isFunction(callback) && status === 'success') {
-                        callback(BI.jsonDecode(res.responseText));
-                        BI.Maskers.hide(BI.RequstLoading.MASK_ID);
-                    }
                     if (BI.isFunction(complete)) {
-                        complete();
+                        complete(res);
                     }
                 }
             });
@@ -13955,9 +14116,9 @@ if (!window.BI) {
             if (op === "fr_bi_dezi") {
                 data.sessionID = Data.SharingPool.get("sessionID");
             }
-            var url = FR.servletURL + '?op=' + op + '&cmd=' + cmd + "&_=" + Math.random();
+            var url = BI.servletURL + '?op=' + op + '&cmd=' + cmd + "&_=" + Math.random();
             var result = {};
-            (BI.ajax || FR.ajax)({
+            (BI.ajax)({
                 url: url,
                 type: 'POST',
                 async: false,
@@ -13967,7 +14128,7 @@ if (!window.BI) {
                 },
                 complete: function (res, status) {
                     if (status === 'success') {
-                        result = BI.jsonDecode(res.responseText);
+                        result = res;
                     }
                 }
             });
@@ -14273,7 +14434,7 @@ BI.Widget = BI.inherit(BI.OB, {
                 })
             })
         }
-        if (this._isRoot === true) {
+        if (this._isRoot === true || !(this instanceof BI.Layout)) {
             this._mount();
         }
     },
@@ -14285,7 +14446,7 @@ BI.Widget = BI.inherit(BI.OB, {
     _mount: function () {
         var self = this;
         var isMounted = this._isMounted;
-        if (isMounted) {
+        if (isMounted || !this.isVisible()) {
             return;
         }
         if (this._isRoot === true) {
@@ -14354,10 +14515,12 @@ BI.Widget = BI.inherit(BI.OB, {
         if (visible === true) {
             this.options.invisible = false;
             this.element.show();
+            this._mount();
         } else if (visible === false) {
             this.options.invisible = true;
             this.element.hide();
         }
+        this.fireEvent(BI.Events.VIEW, visible);
     },
 
     setValid: function (valid) {
@@ -14503,7 +14666,10 @@ BI.Widget = BI.inherit(BI.OB, {
     },
 
     destroy: function () {
-        this._unMount();
+        this.empty();
+        this._isMounted = false;
+        this._parent = null;
+        this.destroyed();
         this.element.destroy();
         this.fireEvent(BI.Events.DESTROY);
     }
@@ -14886,7 +15052,7 @@ BI.Widget = BI.inherit(BI.OB, {
     },
 
     urlRoot: function () {
-        return FR.servletURL;
+        return BI.servletURL;
     },
 
     parse: function (data) {
@@ -17316,7 +17482,7 @@ $.extend(BI, {
             type: null,
             must: false
         }, options);
-        config.url = FR.servletURL + '?op=' + config.op + '&resource=' + config.path;
+        config.url = BI.servletURL + '?op=' + config.op + '&resource=' + config.path;
         this.$import(config.url, config.type,config.must);
     },
     $import: function () {
@@ -19197,10 +19363,25 @@ BI.Layout = BI.inherit(BI.Widget, {
         return w;
     },
 
+    prependItem: function (item) {
+        var w = this._addElement(this.options.items.length, item);
+        w._mount();
+        this.options.items.unshift(item);
+        w.element.prependTo(this.element);
+        return w;
+    },
+
     addItems: function (items) {
         var self = this;
         BI.each(items, function (i, item) {
             self.addItem(item);
+        })
+    },
+
+    prependItems: function (items) {
+        var self = this;
+        BI.each(items, function (i, item) {
+            self.prependItem(item);
         })
     },
 
@@ -19476,7 +19657,597 @@ BI.PopoverSection = BI.inherit(BI.Widget, {
 
     }
 });
-BI.PopoverSection.EVENT_CLOSE = "EVENT_CLOSE";/**
+BI.PopoverSection.EVENT_CLOSE = "EVENT_CLOSE";BI.cjkEncode = function (text) {
+    // alex:如果非字符串,返回其本身(cjkEncode(234) 返回 ""是不对的)
+    if (typeof text !== 'string') {
+        return text;
+    }
+
+    var newText = "";
+    for (var i = 0; i < text.length; i++) {
+        var code = text.charCodeAt(i);
+        if (code >= 128 || code === 91 || code === 93) {//91 is "[", 93 is "]".
+            newText += "[" + code.toString(16) + "]";
+        } else {
+            newText += text.charAt(i);
+        }
+    }
+
+    return newText
+};
+
+BI.cjkEncodeDO = function (o) {
+    if (BI.isPlainObject(o)) {
+        var result = {};
+        $.each(o, function (k, v) {
+            if (!(typeof v == "string")) {
+                v = BI.jsonEncode(v);
+            }
+            //wei:bug 43338，如果key是中文，cjkencode后o的长度就加了1，ie9以下版本死循环，所以新建对象result。
+            k = BI.cjkEncode(k);
+            result[k] = BI.cjkEncode(v);
+        });
+        return result;
+    }
+    return o;
+};
+
+BI.jsonEncode = function (o) {
+    //james:这个Encode是抄的EXT的
+    var useHasOwn = {}.hasOwnProperty ? true : false;
+
+    // crashes Safari in some instances
+    //var validRE = /^("(\\.|[^"\\\n\r])*?"|[,:{}\[\]0-9.\-+Eaeflnr-u \n\r\t])+?$/;
+
+    var m = {
+        "\b": '\\b',
+        "\t": '\\t',
+        "\n": '\\n',
+        "\f": '\\f',
+        "\r": '\\r',
+        '"': '\\"',
+        "\\": '\\\\'
+    };
+
+    var encodeString = function (s) {
+        if (/["\\\x00-\x1f]/.test(s)) {
+            return '"' + s.replace(/([\x00-\x1f\\"])/g, function (a, b) {
+                    var c = m[b];
+                    if (c) {
+                        return c;
+                    }
+                    c = b.charCodeAt();
+                    return "\\u00" +
+                        Math.floor(c / 16).toString(16) +
+                        (c % 16).toString(16);
+                }) + '"';
+        }
+        return '"' + s + '"';
+    };
+
+    var encodeArray = function (o) {
+        var a = ["["], b, i, l = o.length, v;
+        for (i = 0; i < l; i += 1) {
+            v = o[i];
+            switch (typeof v) {
+                case "undefined":
+                case "function":
+                case "unknown":
+                    break;
+                default:
+                    if (b) {
+                        a.push(',');
+                    }
+                    a.push(v === null ? "null" : BI.jsonEncode(v));
+                    b = true;
+            }
+        }
+        a.push("]");
+        return a.join("");
+    };
+
+    if (typeof o == "undefined" || o === null) {
+        return "null";
+    } else if (BI.isArray(o)) {
+        return encodeArray(o);
+    } else if (o instanceof Date) {
+        /*
+         * alex:原来只是把年月日时分秒简单地拼成一个String,无法decode
+         * 现在这么处理就可以decode了,但是JS.jsonDecode和Java.JSONObject也要跟着改一下
+         */
+        return BI.jsonEncode({
+            __time__: o.getTime()
+        })
+    } else if (typeof o == "string") {
+        return encodeString(o);
+    } else if (typeof o == "number") {
+        return isFinite(o) ? String(o) : "null";
+    } else if (typeof o == "boolean") {
+        return String(o);
+    } else if (BI.isFunction(o)) {
+        return String(o);
+    } else {
+        var a = ["{"], b, i, v;
+        for (i in o) {
+            if (!useHasOwn || o.hasOwnProperty(i)) {
+                v = o[i];
+                switch (typeof v) {
+                    case "undefined":
+                    case "unknown":
+                        break;
+                    default:
+                        if (b) {
+                            a.push(',');
+                        }
+                        a.push(BI.jsonEncode(i), ":",
+                            v === null ? "null" : BI.jsonEncode(v));
+                        b = true;
+                }
+            }
+        }
+        a.push("}");
+        return a.join("");
+    }
+};
+
+BI.contentFormat = function (cv, fmt) {
+    if (BI.isEmpty(cv)) {
+        //原值为空，返回空字符
+        return '';
+    }
+    var text = cv.toString();
+    if (BI.isEmpty(fmt)) {
+        //格式为空，返回原字符
+        return text;
+    }
+    if (fmt.match(/^T/)) {
+        //T - 文本格式
+        return text;
+    } else if (fmt.match(/^D/)) {
+        //D - 日期(时间)格式
+        if (!(cv instanceof Date)) {
+            if (typeof cv === 'number') {
+                //毫秒数类型
+                cv = new Date(cv);
+            } else {
+                //字符串类型，如yyyyMMdd、MMddyyyy等这样无分隔符的结构
+                cv = Date.parseDate(cv + "", Date.patterns.ISO8601Long);
+            }
+        }
+        if (!BI.isNull(cv)) {
+            var needTrim = fmt.match(/^DT/);
+            text = BI.date2Str(cv, fmt.substring(needTrim ? 2 : 1));
+        }
+    } else if (fmt.match(/E/)) {
+        //科学计数格式
+        text = BI._eFormat(text, fmt);
+    } else {
+        //数字格式
+        text = BI._numberFormat(text, fmt);
+    }
+    //¤ - 货币格式
+    text = text.replace(/¤/g, '￥');
+    return text;
+};
+
+/**
+ * 把日期对象按照指定格式转化成字符串
+ *
+ *      @example
+ *      var date = new Date('Thu Dec 12 2013 00:00:00 GMT+0800');
+ *      var result = BI.date2Str(date, 'yyyy-MM-dd');//2013-12-12
+ *
+ * @class BI.date2Str
+ * @param date 日期
+ * @param format 日期格式
+ * @returns {String}
+ */
+date2Str = function (date, format) {
+    if (!date) {
+        return '';
+    }
+    // O(len(format))
+    var len = format.length, result = '';
+    if (len > 0) {
+        var flagch = format.charAt(0), start = 0, str = flagch;
+        for (var i = 1; i < len; i++) {
+            var ch = format.charAt(i);
+            if (flagch !== ch) {
+                result += compileJFmt({
+                    'char': flagch,
+                    'str': str,
+                    'len': i - start
+                }, date);
+                flagch = ch;
+                start = i;
+                str = flagch;
+            } else {
+                str += ch;
+            }
+        }
+        result += compileJFmt({
+            'char': flagch,
+            'str': str,
+            'len': len - start
+        }, date);
+    }
+    return result;
+
+    function compileJFmt(jfmt, date) {
+        var str = jfmt.str, len = jfmt.len, ch = jfmt['char'];
+        switch (ch) {
+            case 'E': //星期
+                str = Date._DN[date.getDay()];
+                break;
+            case 'y': //年
+                if (len <= 3) {
+                    str = (date.getFullYear() + '').slice(2, 4);
+                } else {
+                    str = date.getFullYear();
+                }
+                break;
+            case 'M': //月
+                if (len > 2) {
+                    str = Date._MN[date.getMonth()];
+                } else if (len < 2) {
+                    str = date.getMonth() + 1;
+                } else {
+                    str = String.leftPad(date.getMonth() + 1 + '', 2, '0');
+                }
+                break;
+            case 'd': //日
+                if (len > 1) {
+                    str = String.leftPad(date.getDate() + '', 2, '0');
+                } else {
+                    str = date.getDate();
+                }
+                break;
+            case 'h': //时(12)
+                var hour = date.getHours() % 12;
+                if (hour === 0) {
+                    hour = 12;
+                }
+                if (len > 1) {
+                    str = String.leftPad(hour + '', 2, '0');
+                } else {
+                    str = hour;
+                }
+                break;
+            case 'H': //时(24)
+                if (len > 1) {
+                    str = String.leftPad(date.getHours() + '', 2, '0');
+                } else {
+                    str = date.getHours();
+                }
+                break;
+            case 'm':
+                if (len > 1) {
+                    str = String.leftPad(date.getMinutes() + '', 2, '0');
+                } else {
+                    str = date.getMinutes();
+                }
+                break;
+            case 's':
+                if (len > 1) {
+                    str = String.leftPad(date.getSeconds() + '', 2, '0');
+                } else {
+                    str = date.getSeconds();
+                }
+                break;
+            case 'a':
+                str = date.getHours() < 12 ? 'am' : 'pm';
+                break;
+            case 'z':
+                str = date.getTimezone();
+                break;
+            default:
+                str = jfmt.str;
+                break;
+        }
+        return str;
+    }
+};
+
+/**
+ * 数字格式
+ */
+BI._numberFormat = function (text, format) {
+    var text = text + '';
+    //数字格式，区分正负数
+    var numMod = format.indexOf(';');
+    if (numMod > -1) {
+        if (text >= 0) {
+            return BI._numberFormat(text + "", format.substring(0, numMod));
+        } else {
+            return BI._numberFormat((-text) + "", format.substr(numMod + 1));
+        }
+    }
+    var tp = text.split('.'), fp = format.split('.'),
+        tleft = tp[0] || '', fleft = fp[0] || '',
+        tright = tp[1] || '', fright = fp[1] || '';
+    //百分比,千分比的小数点移位处理
+    if (/[%‰]$/.test(format)) {
+        var paddingZero = /[%]$/.test(format) ? '00' : '000';
+        tright += paddingZero;
+        tleft += tright.substr(0, paddingZero.length);
+        tleft = tleft.replace(/^0+/gi, '');
+        tright = tright.substr(paddingZero.length).replace(/0+$/gi, '');
+    }
+    var right = BI._dealWithRight(tright, fright);
+    if (right.leftPlus) {
+        //小数点后有进位
+        tleft = parseInt(tleft) + 1 + '';
+
+        tleft = isNaN(tleft) ? '1' : tleft;
+    }
+    right = right.num;
+    var left = BI._dealWithLeft(tleft, fleft);
+    if (!(/[0-9]/.test(left))) {
+        left = left + '0';
+    }
+    if (!(/[0-9]/.test(right))) {
+        return left + right;
+    } else {
+        return left + '.' + right;
+    }
+};
+/**
+ * 处理小数点右边小数部分
+ * @param tright 右边内容
+ * @param fright 右边格式
+ * @returns {JSON} 返回处理结果和整数部分是否需要进位
+ * @private
+ */
+BI._dealWithRight = function (tright, fright) {
+    var right = '', j = 0, i = 0;
+    for (var len = fright.length; i < len; i++) {
+        var ch = fright.charAt(i);
+        var c = tright.charAt(j);
+        switch (ch) {
+            case '0':
+                if (BI.isEmpty(c)) {
+                    c = '0';
+                }
+                right += c;
+                j++;
+                break;
+            case '#':
+                right += c;
+                j++;
+                break;
+            default :
+                right += ch;
+                break;
+        }
+    }
+    var rll = tright.substr(j);
+    var result = {};
+    if (!BI.isEmpty(rll) && rll.charAt(0) > 4) {
+        //有多余字符，需要四舍五入
+        result.leftPlus = true;
+        var numReg = right.match(/^[0-9]+/);
+        if (numReg) {
+            var num = numReg[0];
+            var orilen = num.length;
+            var newnum = BI.parseINT(num) + 1 + '';
+            //进位到整数部分
+            if (newnum.length > orilen) {
+                newnum = newnum.substr(1);
+            } else {
+                newnum = BI.leftPad(newnum, orilen, '0');
+                result.leftPlus = false;
+            }
+            right = right.replace(/^[0-9]+/, newnum);
+        }
+    }
+    result.num = right;
+    return result;
+};
+
+BI.parseINT = function (str) {
+    return parseInt(str, 10);
+};
+
+BI.leftPad = function (val, size, ch) {
+    var result = String(val);
+    if (!ch) {
+        ch = " ";
+    }
+    while (result.length < size) {
+        result = ch + result;
+    }
+    return result.toString();
+};
+
+/**
+ * 处理小数点左边整数部分
+ * @param tleft 左边内容
+ * @param fleft 左边格式
+ * @returns {string} 返回处理结果
+ * @private
+ */
+BI._dealWithLeft = function (tleft, fleft) {
+    var left = '';
+    var j = tleft.length - 1;
+    var combo = -1, last = -1;
+    var i = fleft.length - 1;
+    for (; i >= 0; i--) {
+        var ch = fleft.charAt(i);
+        var c = tleft.charAt(j);
+        switch (ch) {
+            case '0':
+                if (BI.isEmpty(c)) {
+                    c = '0';
+                }
+                last = -1;
+                left = c + left;
+                j--;
+                break;
+            case '#':
+                last = i;
+                left = c + left;
+                j--;
+                break;
+            case ',':
+                if (!BI.isEmpty(c)) {
+                    //计算一个,分隔区间的长度
+                    var com = fleft.match(/,[#0]+/);
+                    if (com) {
+                        combo = com[0].length - 1;
+                    }
+                    left = ',' + left;
+                }
+                break;
+            default :
+                left = ch + left;
+                break;
+        }
+    }
+    if (last > -1) {
+        //处理剩余字符
+        var tll = tleft.substr(0, j + 1);
+        left = left.substr(0, last) + tll + left.substr(last);
+    }
+    if (combo > 0) {
+        //处理,分隔区间
+        var res = left.match(/[0-9]+,/);
+        if (res) {
+            res = res[0];
+            var newstr = '', n = res.length - 1 - combo;
+            for (; n >= 0; n = n - combo) {
+                newstr = res.substr(n, combo) + ',' + newstr;
+            }
+            var lres = res.substr(0, n + combo);
+            if (!BI.isEmpty(lres)) {
+                newstr = lres + ',' + newstr;
+            }
+        }
+        left = left.replace(/[0-9]+,/, newstr);
+    }
+    return left;
+};
+
+BI.object2Number = function (value) {
+    if (value == null) {
+        return 0;
+    }
+    if (typeof value == 'number') {
+        return value;
+    } else {
+        var str = value + "";
+        if (str.indexOf(".") === -1) {
+            return parseInt(str);
+        } else {
+            return parseFloat(str);
+        }
+    }
+};
+
+BI.object2Date = function (obj) {
+    if (obj == null) {
+        return new Date();
+    }
+    if (obj instanceof Date) {
+        return obj;
+    } else if (typeof obj == 'number') {
+        return new Date(obj);
+    } else {
+        var str = obj + "";
+        str = str.replace(/-/g, '/');
+        var dt = new Date(str);
+        if (!BI.isInvalidDate(dt)) {
+            return dt;
+        }
+
+        return new Date();
+    }
+};
+
+BI.isArray = function (a) {
+    return Object.prototype.toString.call(a) == '[object Array]';
+};
+
+BI.object2Time = function (obj) {
+    if (obj == null) {
+        return new Date();
+    }
+    if (obj instanceof Date) {
+        return obj;
+    } else {
+        var str = obj + "";
+        str = str.replace(/-/g, '/');
+        var dt = new Date(str);
+        if (!BI.isInvalidDate(dt)) {
+            return dt;
+        }
+        if (str.indexOf('/') === -1 && str.indexOf(':') !== -1) {
+            dt = new Date("1970/01/01 " + str);
+            if (!BI.isInvalidDate(dt)) {
+                return dt;
+            }
+        }
+        dt = BI.str2Date(str, "HH:mm:ss");
+        if (!BI.isInvalidDate(dt)) {
+            return dt;
+        }
+        return new Date();
+    }
+};
+
+// 判断是否是无效的日期
+BI.isInvalidDate = function (date) {
+    return date == "Invalid Date" || date == "NaN";
+};
+
+
+/**
+ * 科学计数格式
+ */
+BI._eFormat = function (text, fmt) {
+    var e = fmt.indexOf("E");
+    var eleft = fmt.substr(0, e), eright = fmt.substr(e + 1);
+    if (/^[0\.-]+$/.test(text)) {
+        text = BI._numberFormat(0.0, eleft) + 'E' + BI._numberFormat(0, eright)
+    } else {
+        var isNegative = text < 0;
+        if (isNegative) {
+            text = text.substr(1);
+        }
+        var elvl = (eleft.split('.')[0] || '').length;
+        var point = text.indexOf(".");
+        if (point < 0) {
+            point = text.length;
+        }
+        var i = 0; //第一个不为0的数的位置
+        text = text.replace('.', '');
+        for (var len = text.length; i < len; i++) {
+            var ech = text.charAt(i);
+            if (ech <= '9' && ech >= '1') {
+                break;
+            }
+        }
+        var right = point - i - elvl;
+        var left = text.substr(i, elvl);
+        var dis = i + elvl - text.length;
+        if (dis > 0) {
+            //末位补全0
+            for (var k = 0; k < dis; k++) {
+                left += '0';
+            }
+        } else {
+            left += '.' + text.substr(i + elvl);
+        }
+        left = left.replace(/^[0]+/, '');
+        if (right < 0 && eright.indexOf('-') < 0) {
+            eright += ';-' + eright;
+        }
+        text = BI._numberFormat(left, eleft) + 'E' + BI._numberFormat(right, eright);
+        if (isNegative) {
+            text = '-' + text;
+        }
+    }
+    return text;
+};/**
  * guy
  *
  * @class BI.HighlightBehavior
@@ -19542,109 +20313,12 @@ BI.RedMarkBehavior = BI.inherit(BI.Behavior, {
             }
         })
     }
-});/*
- * 前端缓存
- */
-window.localStorage || (window.localStorage = {
-    items: {},
-    setItem: function (k, v) {
-        BI.Cache.addCookie(k, v);
-    },
-    getItem: function (k) {
-        return BI.Cache.getCookie(k);
-    },
-    removeItem: function (k) {
-        BI.Cache.deleteCookie(k);
-    },
-    key: function () {
-
-    },
-    clear: function () {
-        this.items = {};
-    }
-});
-BI.Cache = {
-    _prefix: "bi",
-    setUsername: function (username) {
-        localStorage.setItem(BI.Cache._prefix + ".username", (username + "" || "").toUpperCase());
-    },
-    getUsername: function () {
-        return localStorage.getItem(BI.Cache._prefix + ".username") || "";
-    },
-    _getKeyPrefix: function () {
-        return BI.Cache.getUsername() + "." + BI.Cache._prefix + ".";
-    },
-    _generateKey: function (key) {
-        return BI.Cache._getKeyPrefix() + (key || "");
-    },
-    getItem: function (key) {
-        return localStorage.getItem(BI.Cache._generateKey(key));
-    },
-    setItem: function (key, value) {
-        localStorage.setItem(BI.Cache._generateKey(key), value);
-    },
-    removeItem: function (key) {
-        localStorage.removeItem(BI.Cache._generateKey(key));
-    },
-    clear: function () {
-        for (var i = localStorage.length; i >= 0; i--) {
-            var key = localStorage.key(i);
-            if (key) {
-                if (key.indexOf(BI.Cache._getKeyPrefix()) === 0) {
-                    localStorage.removeItem(key);
-                }
-            }
-        }
-    },
-    keys: function () {
-        var result = [];
-        for (var i = localStorage.length; i >= 0; i--) {
-            var key = localStorage.key(i);
-            if (key) {
-                var prefix = BI.Cache._getKeyPrefix();
-                if (key.indexOf(prefix) === 0) {
-                    result[result.length] = key.substring(prefix.length);
-                }
-            }
-        }
-        return result;
-    },
-
-    addCookie: function (name, value, path, expiresHours) {
-        var cookieString = name + "=" + escape(value);
-        // 判断是否设置过期时间
-        if (expiresHours && expiresHours > 0) {
-            var date = new Date();
-            date.setTime(date.getTime() + expiresHours * 3600 * 1000);
-            cookieString = cookieString + "; expires=" + date.toGMTString();
-        }
-        if (path) {
-            cookieString = cookieString + "; path=" + path;
-        }
-        document.cookie = cookieString;
-    },
-    getCookie: function (name) {
-        var arr, reg = new RegExp("(^| )" + name + "=([^;]*)(;|$)");
-        if (arr = document.cookie.match(reg))
-            return unescape(arr[2]);
-        else
-            return null;
-    },
-    deleteCookie: function (name, path) {
-        var date = new Date();
-        date.setTime(date.getTime() - 10000);
-        var cookieString = name + "=v; expires=" + date.toGMTString();
-        if (path) {
-            cookieString = cookieString + "; path=" + path;
-        }
-        document.cookie = cookieString;
-    }
-};/**
+});/**
  * guy
  * 控制器
  * Controller层超类
  * @class BI.Controller
- * @extends FR.OB
+ * @extends BI.OB
  * @abstract
  */
 BI.Controller = BI.inherit(BI.OB, {
@@ -21756,7 +22430,7 @@ $(function () {
         },
 
         getCompleteImageUrl: function (url) {
-            return FR.servletURL + "?op=fr_bi&cmd=get_uploaded_image&image_id=" + url;
+            return BI.servletURL + "?op=fr_bi&cmd=get_uploaded_image&image_id=" + url;
         }
 
     });
@@ -21933,7 +22607,7 @@ $(function () {
         },
 
         getTextSizeWidth: function (text, fontSize) {
-            var span = $("<span></span>").addClass("text-width-span").appendTo($("#container"));
+            var span = $("<span></span>").addClass("text-width-span").appendTo($("body"));
 
             if (fontSize == null) {
                 fontSize = 12;
@@ -21955,7 +22629,7 @@ $(function () {
                     position: "absolute",
                     top: "-9999px",
                     overflow: "scroll"
-                }).appendTo($("#container"));
+                }).appendTo($("body"));
                 this._scrollWidth = ul[0].offsetWidth - ul[0].clientWidth;
                 ul.destroy();
             }
@@ -22009,6 +22683,52 @@ BI.ShowListener = BI.inherit(BI.OB, {
     }
 });
 BI.ShowListener.EVENT_CHANGE = "ShowListener.EVENT_CHANGE";/**
+ * style加载管理器
+ *
+ * Created by GUY on 2015/9/7.
+ * @class
+ */
+BI.StyleLoaderManager = BI.inherit(BI.OB, {
+    _defaultConfig: function () {
+        return BI.extend(BI.StyleLoaderManager.superclass._defaultConfig.apply(this, arguments), {});
+    },
+
+    _init: function () {
+        BI.StyleLoaderManager.superclass._init.apply(this, arguments);
+        this.stylesManager = {};
+    },
+
+    loadStyle: function (name, styleString) {
+        var d = document, styles = d.createElement('style');
+        d.getElementsByTagName('head')[0].appendChild(styles);
+        styles.setAttribute('type', 'text/css');
+        if (styles.styleSheet) {
+            styles.styleSheet.cssText = styleString;
+        } else {
+            styles.appendChild(document.createTextNode(styleString));
+        }
+        this.stylesManager[name] = styles;
+
+        return this;
+    },
+
+    get: function (name) {
+        return this.stylesManager[name];
+    },
+
+    has: function (name) {
+        return this.stylesManager[name] != null;
+    },
+
+    removeStyle: function (name) {
+        if (!this.has(name)) {
+            return this;
+        }
+        this.stylesManager[name].parentNode.removeChild(this.stylesManager[name]);
+        delete this.stylesManager[name];
+        return this;
+    }
+});/**
  * @class BI.Logic
  * @extends BI.OB
  */
@@ -23160,6 +23880,66 @@ Function.prototype.after = function (func) {
         func.apply(this, arguments);
         return ret;
     }
+};/*!
+ * jLayout JQuery Plugin v0.11
+ *
+ * Licensed under the revised BSD License.
+ * Copyright 2008, Bram Stein
+ * All rights reserved.
+ */
+if (jQuery) {
+    (function($){
+        // richer:容器在其各个边缘留出的空间
+        $.fn.insets = function () {
+            var p = this.padding(),
+                b = this.border();
+            return {
+                'top': p.top,
+                'bottom': p.bottom + b.bottom + b.top,
+                'left': p.left,
+                'right': p.right + b.right + b.left
+            };
+        };
+
+        // richer:获取 && 设置jQuery元素的边界
+        $.fn.bounds = function (value) {
+            var tmp = {hasIgnoredBounds : true};
+
+            if (value) {
+                if (!isNaN(value.x)) {
+                    tmp.left = value.x;
+                }
+                if (!isNaN(value.y)) {
+                    tmp.top = value.y;
+                }
+                if (value.width != null) {
+                    tmp.width = (value.width - (this.outerWidth(true) - this.width()));
+                    tmp.width = (tmp.width >= 0) ? tmp.width : value.width;
+                    // fix chrome
+                    //tmp.width = (tmp.width >= 0) ? tmp.width : 0;
+                }
+                if (value.height != null) {
+                    tmp.height = value.height - (this.outerHeight(true) - this.height());
+                    tmp.height = (tmp.height >= 0) ? tmp.height : value.height;
+                    // fix chrome
+                    //tmp.height = (tmp.height >= 0) ? tmp.height : value.0;
+                }
+                this.css(tmp);
+                return this;
+            }
+            else {
+                // richer:注意此方法只对可见元素有效
+                tmp = this.position();
+                return {
+                    'x': tmp.left,
+                    'y': tmp.top,
+                    // richer:这里计算外部宽度和高度的时候，都不包括边框
+                    'width': this.outerWidth(),
+                    'height': this.outerHeight()
+                };
+            }
+        };
+    })(jQuery);
 };if (!Number.prototype.toFixed || (0.00008).toFixed(3) !== '0.000' ||
     (0.9).toFixed(0) === '0' || (1.255).toFixed(2) !== '1.25' ||
     (1000000000000000128).toFixed(0) !== "1000000000000000128") {
@@ -23644,51 +24424,6 @@ $.extend(String, {
             return args[i];
         });
     }
-});/**
- * guy
- * 状态常量
- */
-
-_.extend(BI, {
-    Status: {
-        SUCCESS: 1,
-        WRONG: 2,
-        START: 3,
-        END: 4,
-        WAITING: 5,
-        READY: 6,
-        RUNNING: 7,
-        OUTOFBOUNDS: 8,
-        NULL: -1
-    },
-    Direction: {
-        Top: "top",
-        Bottom: "bottom",
-        Left: "left",
-        Right: "right",
-        Custom: "custom"
-    },
-    Axis: {
-        Vertical: "vertical",
-        Horizontal: "horizontal"
-    },
-    Selection: {
-        Default: -999,
-        None: -1,
-        Single: 0,
-        Multi: 1,
-        All: 2
-    },
-    HorizontalAlign: {
-        Left: "left",
-        Right: "right",
-        Center: "center"
-    },
-    VerticalAlign: {
-        Middle: "middle",
-        Top: "top",
-        Bottom: "bottom"
-    }
 });BI.EventListener = {
     listen: function listen(target, eventType, callback) {
         if (target.addEventListener) {
@@ -23995,7 +24730,70 @@ _.extend(BI, {
     emptyStr: "",
     emptyFn: function () {
     },
-    empty: null
+    empty: null,
+    KeyCode: {
+        BACKSPACE: 8,
+        COMMA: 188,
+        DELETE: 46,
+        DOWN: 40,
+        END: 35,
+        ENTER: 13,
+        ESCAPE: 27,
+        HOME: 36,
+        LEFT: 37,
+        NUMPAD_ADD: 107,
+        NUMPAD_DECIMAL: 110,
+        NUMPAD_DIVIDE: 111,
+        NUMPAD_ENTER: 108,
+        NUMPAD_MULTIPLY: 106,
+        NUMPAD_SUBTRACT: 109,
+        PAGE_DOWN: 34,
+        PAGE_UP: 33,
+        PERIOD: 190,
+        RIGHT: 39,
+        SPACE: 32,
+        TAB: 9,
+        UP: 38
+    },
+    Status: {
+        SUCCESS: 1,
+        WRONG: 2,
+        START: 3,
+        END: 4,
+        WAITING: 5,
+        READY: 6,
+        RUNNING: 7,
+        OUTOFBOUNDS: 8,
+        NULL: -1
+    },
+    Direction: {
+        Top: "top",
+        Bottom: "bottom",
+        Left: "left",
+        Right: "right",
+        Custom: "custom"
+    },
+    Axis: {
+        Vertical: "vertical",
+        Horizontal: "horizontal"
+    },
+    Selection: {
+        Default: -999,
+        None: -1,
+        Single: 0,
+        Multi: 1,
+        All: 2
+    },
+    HorizontalAlign: {
+        Left: "left",
+        Right: "right",
+        Center: "center"
+    },
+    VerticalAlign: {
+        Middle: "middle",
+        Top: "top",
+        Bottom: "bottom"
+    }
 });/**
  * absolute实现的居中布局
  * @class BI.AbsoluteCenterLayout
@@ -24845,7 +25643,7 @@ BI.FloatHorizontalLayout = BI.inherit(BI.Layout, {
         var self = this, o = this.options;
         this.left = BI.createWidget({
             type: "bi.vertical",
-            items: items,
+            items: [item],
             hgap: o.hgap,
             vgap: o.vgap,
             tgap: o.tgap,
@@ -24860,7 +25658,7 @@ BI.FloatHorizontalLayout = BI.inherit(BI.Layout, {
             items: [this.left]
         });
 
-        return left;
+        return this.left;
     },
 
     populate: function (items) {
@@ -25844,7 +26642,6 @@ BI.CardLayout = BI.inherit(BI.Layout, {
             .appendTo(this.element);
         widget.invisible();
         this.addWidget(this._getCardName(cardName), widget);
-        widget._mount();
         return widget;
     },
 
@@ -25860,9 +26657,9 @@ BI.CardLayout = BI.inherit(BI.Layout, {
         BI.each(this._children, function (i, el) {
             if (self._getCardName(name) != i) {
                 //动画效果只有在全部都隐藏的时候才有意义,且只要执行一次动画操作就够了
-                !flag && !exist && (BI.Action && action instanceof BI.Action) ? (action.actionBack(el), flag = true) : el.element.hide();
+                !flag && !exist && (BI.Action && action instanceof BI.Action) ? (action.actionBack(el), flag = true) : el.invisible();
             } else {
-                (BI.Action && action instanceof BI.Action) ? action.actionPerformed(void 0, el, callback) : el.element.show(0, callback);
+                (BI.Action && action instanceof BI.Action) ? action.actionPerformed(void 0, el, callback) : (el.visible(), callback && callback())
             }
         });
     },
@@ -25871,11 +26668,7 @@ BI.CardLayout = BI.inherit(BI.Layout, {
         var self = this;
         this.showIndex = this.lastShowIndex;
         BI.each(this._children, function (i, el) {
-            if (self.showIndex != i) {
-                el.element.hide();
-            } else {
-                el.element.show();
-            }
+            el.setVisible(self.showIndex == i);
         })
     },
 

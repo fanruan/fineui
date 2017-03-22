@@ -10,13 +10,10 @@ website:	http://code.google.com/p/jquerytree/
 .ztree * {
   padding: 0;
   margin: 0;
-  font-size: 12px;
-  font-family: Verdana, Arial, Helvetica, AppleGothic, sans-serif;
 }
 .ztree {
   margin: 0;
   padding: 5px;
-  color: #333333;
 }
 .ztree li {
   padding: 0;
@@ -39,7 +36,6 @@ website:	http://code.google.com/p/jquerytree/
   margin: 0;
   cursor: pointer;
   height: 24px;
-  color: #333;
   background-color: transparent;
   text-decoration: none;
   vertical-align: top;
@@ -88,8 +84,8 @@ website:	http://code.google.com/p/jquerytree/
   background-color: transparent;
   background-repeat: no-repeat;
   background-attachment: scroll;
-  background-image: url("${servletURL}?op=resource&resource=/com/fr/bi/web/css/base/third/ztree/img/zTreeStandard.png");
-  *background-image: url("${servletURL}?op=resource&resource=/com/fr/bi/web/css/base/third/ztree/img/zTreeStandard.gif");
+  background-image: url("ztree/img/zTreeStandard.png");
+  *background-image: url("ztree/img/zTreeStandard.gif");
 }
 .ztree li span.button.chk {
   width: 16px;
@@ -239,7 +235,7 @@ website:	http://code.google.com/p/jquerytree/
 .ztree li span.button.ico_loading {
   width: 0px;
   margin-right: 2px;
-  background: url("${servletURL}?op=resource&resource=/com/fr/bi/web/css/base/third/ztree/img/loading.gif") no-repeat scroll 0 0 transparent;
+  background: url("ztree/img/loading.gif") no-repeat scroll 0 0 transparent;
   vertical-align: top;
   *vertical-align: middle;
 }
@@ -260,8 +256,8 @@ span.tmpzTreeMove_arrow {
   background-repeat: no-repeat;
   background-attachment: scroll;
   background-position: -110px -80px;
-  background-image: url("${servletURL}?op=resource&resource=/com/fr/bi/web/css/base/third/ztree/img/zTreeStandard.png");
-  *background-image: url("${servletURL}?op=resource&resource=/com/fr/bi/web/css/base/third/ztree/img/zTreeStandard.gif");
+  background-image: url("ztree/img/zTreeStandard.png");
+  *background-image: url("ztree/img/zTreeStandard.gif");
 }
 ul.ztree.zTreeDragUL {
   margin: 0;
