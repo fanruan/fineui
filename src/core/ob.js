@@ -4,7 +4,11 @@
  * @abstract
  */
 BI.OB = function (config) {
-    this.options = $.extend(this._defaultConfig(config), config);
+    var props = this.props;
+    if (BI.isFunction(this.props)) {
+        props = this.props(config);
+    }
+    this.options = $.extend(this._defaultConfig(config), props, config);
     this._init();
     this._initRef();
 };
@@ -14,10 +18,7 @@ $.extend(BI.OB.prototype, {
     },
 
     _defaultConfig: function (config) {
-        if (BI.isFunction(this.props)) {
-            return this.props(config);
-        }
-        return this.props;
+        return {};
     },
 
     _init: function () {

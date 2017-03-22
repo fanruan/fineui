@@ -1,0 +1,23 @@
+@import "../../bibase";
+
+.bi-filter-expander {
+  min-width: 100%;
+  border-right: 0px;
+  border-bottom: 0px;
+  & > .filter-item-empty-item {
+    border-top: 0px;
+    border-right: 1px solid @color-bi-border-normal;
+    border-bottom: 1px solid @color-bi-border-normal;
+  }
+  & .condition-and-or {
+
+  }
+  > table {
+    min-width: 100%;
+  }
+  > table > tbody > tr > td.first-element {
+    width: 20px;
+    border-right: 1px solid @color-bi-border-normal !important;
+    border-bottom: 1px solid @color-bi-border-normal !important;
+  }
+}

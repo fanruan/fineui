@@ -10,8 +10,7 @@ BI.DirectionPager = BI.inherit(BI.Widget, {
     _defaultConfig: function () {
         return BI.extend(BI.DirectionPager.superclass._defaultConfig.apply(this, arguments), {
             baseCls: "bi-direction-pager",
-            width: 108,
-            height: 25,
+            height: 30,
             horizontal: {
                 pages: false, //总页数
                 curr: 1, //初始化当前页， pages为数字时可用
@@ -38,26 +37,26 @@ BI.DirectionPager = BI.inherit(BI.Widget, {
         var v = o.vertical, h = o.horizontal;
         this._createVPager();
         this._createHPager();
-        BI.createWidget({
+        this.layout = BI.createWidget({
             type: "bi.absolute",
             scrollable: false,
             element: this,
             items: [{
                 el: this.vpager,
-                top: 0,
-                left: -19
+                top: 5,
+                right: 74
             }, {
                 el: this.vlabel,
-                top: 0,
-                left: 16
+                top: 5,
+                right: 111
             }, {
                 el: this.hpager,
-                top: 0,
-                right: -19
+                top: 5,
+                right: -9
             }, {
                 el: this.hlabel,
-                top: 0,
-                right: 16
+                top: 5,
+                right: 28
             }]
         });
     },
@@ -67,17 +66,18 @@ BI.DirectionPager = BI.inherit(BI.Widget, {
         var v = o.vertical;
         this.vlabel = BI.createWidget({
             type: "bi.label",
-            width: 20,
-            height: o.height,
+            width: 24,
+            height: 20,
             value: v.curr,
             title: v.curr
         });
         this.vpager = BI.createWidget({
             type: "bi.pager",
-            width: 72,
+            width: 76,
             layouts: [{
                 type: "bi.horizontal",
-                lgap: 20,
+                scrollx: false,
+                rgap: 24,
                 vgap: 1
             }],
 
@@ -93,9 +93,9 @@ BI.DirectionPager = BI.inherit(BI.Widget, {
                 value: "prev",
                 title: BI.i18nText("BI-Up_Page"),
                 warningTitle: BI.i18nText("BI-Current_Is_First_Page"),
-                height: o.height - 2,
-                iconWidth: o.height - 2,
-                iconHeight: o.height - 2,
+                height: 20,
+                iconWidth: 16,
+                iconHeight: 16,
                 cls: "direction-pager-prev column-pre-page-h-font"
             },
             next: {
@@ -103,9 +103,9 @@ BI.DirectionPager = BI.inherit(BI.Widget, {
                 value: "next",
                 title: BI.i18nText("BI-Down_Page"),
                 warningTitle: BI.i18nText("BI-Current_Is_Last_Page"),
-                height: o.height - 2,
-                iconWidth: o.height - 2,
-                iconHeight: o.height - 2,
+                height: 20,
+                iconWidth: 16,
+                iconHeight: 16,
                 cls: "direction-pager-next column-next-page-h-font"
             },
 
@@ -120,6 +120,7 @@ BI.DirectionPager = BI.inherit(BI.Widget, {
         });
         this.vpager.on(BI.Pager.EVENT_AFTER_POPULATE, function () {
             self.vlabel.setValue(this.getCurrentPage());
+            self.vlabel.setTitle(this.getCurrentPage());
         });
     },
 
@@ -128,17 +129,18 @@ BI.DirectionPager = BI.inherit(BI.Widget, {
         var h = o.horizontal;
         this.hlabel = BI.createWidget({
             type: "bi.label",
-            width: 20,
-            height: o.height,
+            width: 24,
+            height: 20,
             value: h.curr,
             title: h.curr
         });
         this.hpager = BI.createWidget({
             type: "bi.pager",
-            width: 72,
+            width: 76,
             layouts: [{
                 type: "bi.horizontal",
-                rgap: 20,
+                scrollx: false,
+                rgap: 24,
                 vgap: 1
             }],
 
@@ -154,9 +156,9 @@ BI.DirectionPager = BI.inherit(BI.Widget, {
                 value: "prev",
                 title: BI.i18nText("BI-Left_Page"),
                 warningTitle: BI.i18nText("BI-Current_Is_First_Page"),
-                height: o.height - 2,
-                iconWidth: o.height - 2,
-                iconHeight: o.height - 2,
+                height: 20,
+                iconWidth: 16,
+                iconHeight: 16,
                 cls: "direction-pager-prev row-pre-page-h-font"
             },
             next: {
@@ -164,9 +166,9 @@ BI.DirectionPager = BI.inherit(BI.Widget, {
                 value: "next",
                 title: BI.i18nText("BI-Right_Page"),
                 warningTitle: BI.i18nText("BI-Current_Is_Last_Page"),
-                height: o.height - 2,
-                iconWidth: o.height - 2,
-                iconHeight: o.height - 2,
+                height: 20,
+                iconWidth: 16,
+                iconHeight: 16,
                 cls: "direction-pager-next row-next-page-h-font"
             },
 
@@ -181,6 +183,7 @@ BI.DirectionPager = BI.inherit(BI.Widget, {
         });
         this.hpager.on(BI.Pager.EVENT_AFTER_POPULATE, function () {
             self.hlabel.setValue(this.getCurrentPage());
+            self.hlabel.setTitle(this.getCurrentPage());
         });
     },
 
@@ -233,11 +236,41 @@ BI.DirectionPager = BI.inherit(BI.Widget, {
     populate: function () {
         this.vpager.populate();
         this.hpager.populate();
+        var vShow = false, hShow = false;
+        if (!this.hasHNext() && !this.hasHPrev()) {
+            this.setHPagerVisible(false);
+        } else {
+            this.setHPagerVisible(true);
+            hShow = true;
+        }
+        if (!this.hasVNext() && !this.hasVPrev()) {
+            this.setVPagerVisible(false);
+        } else {
+            this.setVPagerVisible(true);
+            vShow = true;
+        }
+        var num = [74, 111, -9, 28];
+        var items = this.layout.attr("items");
+
+        if (vShow === true && hShow === true) {
+            items[0].right = num[0];
+            items[1].right = num[1];
+            items[2].right = num[2];
+            items[3].right = num[3];
+        } else if (vShow === true) {
+            items[0].right = num[2];
+            items[1].right = num[3];
+        } else if (hShow === true) {
+            items[2].right = num[2];
+            items[3].right = num[3];
+        }
+        this.layout.attr("items", items);
+        this.layout.resize();
     },
-    
-    refresh: function () {
-        this.vpager.refresh();
-        this.hpager.refresh();
+
+    clear: function () {
+        this.vpager.attr("curr", 1);
+        this.hpager.attr("curr", 1);
     }
 });
 BI.DirectionPager.EVENT_CHANGE = "EVENT_CHANGE";

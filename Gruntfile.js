@@ -47,9 +47,18 @@ module.exports = function (grunt) {
             //实现好的一些基础实例
             caseJs: {
                 src: [
+                    'src/case/combo/popup.bubble.js',
                     'src/case/**/*.js'
                 ],
                 dest: 'dist/case.js'
+            },
+            widgetJs: {
+                src: [
+                    'src/widget/paramsettingcombo/popup.param.js',
+                    'src/widget/sequencetable/treenumber.sequencetable.js',
+                    'src/widget/**/*.js'
+                ],
+                dest: "dist/widget.js"
             },
             coreCss: {
                 src: ['src/css/core/**/*.css', 'src/css/utils/**/*.css'],
@@ -59,9 +68,13 @@ module.exports = function (grunt) {
                 src: ['src/css/base/**/*.css'],
                 dest: 'dist/base.css'
             },
+            widgetCss: {
+                src: ['src/css/widget/**/*.css'],
+                dest: 'dist/widget.css'
+            },
 
             demoJs: {
-                src: ['demo/version.js', 'demo/app.js', 'demo/js/**/*.js'],
+                src: ['demo/version.js', 'demo/app.js', 'demo/js/**/*.js', 'demo/config.js'],
                 dest: 'demo/dist/demo.js'
             },
             demoCss: {
@@ -131,7 +144,7 @@ module.exports = function (grunt) {
         },
         watch: {
             scripts: {
-                files: ['src/**/*.js', 'demo/**/*.js', 'demo/**/*.less'],
+                files: ['src/**/*.js', 'demo/js/**/*.js', 'demo/config.js', 'demo/less/**/*.less'],
                 tasks: ['less', 'concat'],
                 options: {
                     spanw: true,

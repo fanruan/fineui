@@ -1,0 +1,14 @@
+@import "../../bibase";
+
+.bi-filter-item {
+  //min-width: 470px;
+  border-right: 1px solid @color-bi-border-normal;
+  border-bottom: 1px solid @color-bi-border-normal;
+  & .filter-item-empty-item {
+    border-top: 1px solid @color-bi-border-normal;
+    & .empty-filter-item-leaf{
+      border: 1px dashed @color-bi-border-highlight;
+      background: @color-bi-background-success;
+    }
+  }
+}

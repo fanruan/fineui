@@ -1,0 +1,21 @@
+/****添加计算宽度的--运算符直接需要space****/
+/****** common color(常用颜色,可用于普遍场景) *****/
+/**** custom color(自定义颜色,用于特定场景) ****/
+.bi-filter-expander {
+  min-width: 100%;
+  border-right: 0px;
+  border-bottom: 0px;
+}
+.bi-filter-expander > .filter-item-empty-item {
+  border-top: 0px;
+  border-right: 1px solid #d4dadd;
+  border-bottom: 1px solid #d4dadd;
+}
+.bi-filter-expander > table {
+  min-width: 100%;
+}
+.bi-filter-expander > table > tbody > tr > td.first-element {
+  width: 20px;
+  border-right: 1px solid #d4dadd !important;
+  border-bottom: 1px solid #d4dadd !important;
+}

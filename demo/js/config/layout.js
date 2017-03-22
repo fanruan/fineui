@@ -1,0 +1,112 @@
+Demo.LAYOUT_CONFIG = [{
+    id: 1,
+    text: "布局"
+}, {
+    pId: 1,
+    text: "bi.center_adapt",
+    value: "demo.center_adapt"
+}, {
+    pId: 1,
+    text: "bi.float_center_adapt",
+    value: "float_center_adapt"
+}, {
+    pId: 1,
+    text: "bi.absolute_center_adapt",
+    value: "absolute_center_adapt"
+}, {
+    pId: 1,
+    text: "bi.flex_center",
+    value: "flex_center"
+}, {
+    pId: 1,
+    text: "bi.inline_center_adapt",
+    value: "inline_center_adapt"
+}, {
+    pId: 1,
+    text: "bi.vertical_adapt",
+    value: "vertical_adapt"
+}, {
+    pId: 1,
+    text: "bi.inline_vertical_adapt",
+    value: "inline_vertical_adapt"
+}, {
+    pId: 1,
+    text: "bi.horizontal_adapt",
+    value: "horizontal_adapt"
+}, {
+    pId: 1,
+    text: "bi.horizontal_auto",
+    value: "horizontal_auto"
+}, {
+    pId: 1,
+    text: "bi.horizontal_float",
+    value: "horizontal_float"
+}, {
+    pId: 1,
+    text: "bi.left_right_vertical_adapt",
+    value: "left_right_vertical_adapt"
+}, {
+    pId: 1,
+    text: "bi.center",
+    value: "center"
+}, {
+    pId: 1,
+    text: "bi.float_center",
+    value: "float_center"
+}, {
+    pId: 1,
+    text: "bi.vertical",
+    value: "vertical"
+}, {
+    pId: 1,
+    text: "bi.horizontal",
+    value: "horizontal"
+}, {
+    pId: 1,
+    text: "bi.border",
+    value: "border"
+}, {
+    pId: 1,
+    text: "bi.card",
+    value: "card"
+}, {
+    pId: 1,
+    text: "bi.left, bi.right",
+    value: "flow"
+}, {
+    pId: 1,
+    text: "bi.lattice",
+    value: "lattice"
+}, {
+    pId: 1,
+    text: "bi.inline",
+    value: "inline"
+}, {
+    pId: 1,
+    text: "bi.htape",
+    value: "htape"
+}, {
+    pId: 1,
+    text: "bi.vtape",
+    value: "vtape"
+}, {
+    pId: 1,
+    text: "bi.grid",
+    value: "grid"
+}, {
+    pId: 1,
+    text: "bi.table",
+    value: "table"
+}, {
+    pId: 1,
+    text: "bi.division",
+    value: "division"
+}, {
+    pId: 1,
+    text: "bi.window",
+    value: "window"
+}, {
+    pId: 1,
+    text: "bi.td",
+    value: "td"
+}];

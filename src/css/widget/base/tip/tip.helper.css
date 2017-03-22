@@ -1,0 +1,20 @@
+/****添加计算宽度的--运算符直接需要space****/
+/****** common color(常用颜色,可用于普遍场景) *****/
+/**** custom color(自定义颜色,用于特定场景) ****/
+.bi-helper {
+  background-color: #009de3;
+  font-size: 13px;
+  color: #ffffff;
+  cursor: url('cursor/cursor_drag_hand.cur'), auto;
+  opacity: 0.7;
+}
+.bi-helper.dragging-modify {
+  background: none;
+}
+.bi-helper.dragging-modify .helper-warning {
+  color: #1a1a1a;
+  border: 1px solid #e85050;
+  -webkit-border-radius: 2px;
+  -moz-border-radius: 2px;
+  border-radius: 2px;
+}

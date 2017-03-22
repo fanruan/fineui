@@ -7,7 +7,7 @@
  */
 BI.Widget = BI.inherit(BI.OB, {
     _defaultConfig: function () {
-        return BI.extend({
+        return BI.extend(BI.Widget.superclass._defaultConfig.apply(this), {
             tagName: "div",
             attributes: null,
             data: null,
@@ -17,8 +17,9 @@ BI.Widget = BI.inherit(BI.OB, {
             invisible: false,
             invalid: false,
             baseCls: "",
+            extraCls: "",
             cls: ""
-        }, BI.Widget.superclass._defaultConfig.call(this))
+        })
     },
 
     //生命周期函数
@@ -74,11 +75,8 @@ BI.Widget = BI.inherit(BI.OB, {
         } else {
             this.element = $(document.createElement(o.tagName));
         }
-        if (o.baseCls) {
-            this.element.addClass(o.baseCls);
-        }
-        if (o.cls) {
-            this.element.addClass(o.cls);
+        if (o.baseCls || o.extraCls || o.cls) {
+            this.element.addClass((o.baseCls || "") + " " + (o.extraCls || "") + " " + (o.cls || ""));
         }
         if (o.attributes) {
             this.element.attr(o.attributes);
@@ -108,11 +106,15 @@ BI.Widget = BI.inherit(BI.OB, {
         if (o.invisible) {
             this.element.hide();
         }
-        if (o.disabled) {
-            this.element.addClass("base-disabled disabled");
-        }
-        if (o.invalid) {
-            this.element.addClass("base-invalid invalid");
+        if (o.disabled || o.invalid) {
+            BI.nextTick(BI.bind(function () {
+                if (this.options.disabled) {
+                    this.setEnable(false);
+                }
+                if (this.options.invalid) {
+                    this.setValid(false);
+                }
+            }, this));
         }
     },
 

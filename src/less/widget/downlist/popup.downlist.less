@@ -1,0 +1,21 @@
+@import "../../bibase";
+
+.bi-down-list-popup {
+  & .bi-down-list-item {
+    &:hover, &.hover {
+      background-color: @color-bi-background-gray;
+    }
+    &.disabled {
+      &, &:hover, &:active {
+        background-color: @color-bi-background-default;
+      }
+    }
+    &:active {
+      color: @color-bi-text-highlight;
+      background-color: @color-bi-background-gray;
+    }
+    & .list-item-text {
+      max-width: 203px;
+    }
+  }
+}
