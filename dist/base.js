@@ -21163,13 +21163,8 @@ BI.BasicButton = BI.inherit(BI.Single, {
         }
     },
 
-    empty: function () {
+    destroyed: function () {
         $(document).unbind("mouseup." + this.getName());
-        BI.BasicButton.superclass.empty.apply(this, arguments);
-    },
-
-    destroy: function () {
-        BI.BasicButton.superclass.destroy.apply(this, arguments);
     }
 });
 BI.BasicButton.EVENT_CHANGE = "BasicButton.EVENT_CHANGE";/**

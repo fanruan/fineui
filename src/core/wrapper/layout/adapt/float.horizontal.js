@@ -39,7 +39,7 @@ BI.FloatHorizontalLayout = BI.inherit(BI.Layout, {
         var self = this, o = this.options;
         this.left = BI.createWidget({
             type: "bi.vertical",
-            items: items,
+            items: [item],
             hgap: o.hgap,
             vgap: o.vgap,
             tgap: o.tgap,
@@ -54,7 +54,7 @@ BI.FloatHorizontalLayout = BI.inherit(BI.Layout, {
             items: [this.left]
         });
 
-        return left;
+        return this.left;
     },
 
     populate: function (items) {
