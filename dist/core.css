@@ -9745,6 +9745,7 @@ textarea::-webkit-scrollbar-thumb {
 .overflow-dot {
   text-overflow: ellipsis;
   overflow-x: hidden;
+  overflow-y: hidden;
   white-space: nowrap;
 }
 /****添加计算宽度的--运算符直接需要space****/
