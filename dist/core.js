@@ -14518,6 +14518,7 @@ BI.Widget = BI.inherit(BI.OB, {
             this.options.invisible = true;
             this.element.hide();
         }
+        this.fireEvent(BI.Events.VIEW, visible);
     },
 
     setValid: function (valid) {
@@ -14663,7 +14664,10 @@ BI.Widget = BI.inherit(BI.OB, {
     },
 
     destroy: function () {
-        this._unMount();
+        this.empty();
+        this._isMounted = false;
+        this._parent = null;
+        this.destroyed();
         this.element.destroy();
         this.fireEvent(BI.Events.DESTROY);
     }
