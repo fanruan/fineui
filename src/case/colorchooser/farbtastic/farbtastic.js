@@ -17,10 +17,10 @@ BI.Farbtastic = BI.inherit(BI.Widget, {
 
     _init: function () {
         BI.Farbtastic.superclass._init.apply(this, arguments);
-        var self = this;
-        
-        
+    },
 
+    mounted: function () {
+        var self = this;
         this.farbtastic = $.farbtastic(this.element, function (v) {
             self.fireEvent(BI.Farbtastic.EVENT_CHANGE, self.getValue(), self);
         });

@@ -103,10 +103,6 @@ Demo.BASE_CONFIG = [{
     value: "demo.canvas"
 }, {
     pId: 2,
-    text: "bi.farbtastic",
-    value: "demo.farbtastic"
-}, {
-    pId: 2,
     text: "bi.pager",
     value: "demo.pager"
 }, {

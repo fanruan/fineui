@@ -1,76 +1,4 @@
 /**
- * Created by GUY on 2017/2/8.
- *
- * @class BI.BubblePopupView
- * @extends BI.PopupView
- */
-BI.BubblePopupView = BI.inherit(BI.PopupView, {
-    _defaultConfig: function () {
-        var config = BI.BubblePopupView.superclass._defaultConfig.apply(this, arguments);
-        return BI.extend(config, {
-            baseCls: config.baseCls + " bi-bubble-popup-view"
-        })
-    },
-    _init: function () {
-        BI.BubblePopupView.superclass._init.apply(this, arguments);
-    },
-
-    showLine: function (direction) {
-        var pos = {}, op = {};
-        switch (direction) {
-            case "left":
-                pos = {
-                    top: 0,
-                    bottom: 0,
-                    left: -1
-                };
-                op = {width: 3};
-                break;
-            case "right":
-                pos = {
-                    top: 0,
-                    bottom: 0,
-                    right: -1
-                };
-                op = {width: 3};
-                break;
-            case "top":
-                pos = {
-                    left: 0,
-                    right: 0,
-                    top: -1
-                };
-                op = {height: 3};
-                break;
-            case "bottom":
-                pos = {
-                    left: 0,
-                    right: 0,
-                    bottom: -1
-                };
-                op = {height: 3};
-                break;
-            default:
-                break;
-        }
-        this.line = BI.createWidget(op, {
-            type: "bi.layout",
-            cls: "bubble-popup-line"
-        });
-        pos.el = this.line;
-        BI.createWidget({
-            type: "bi.absolute",
-            element: this,
-            items: [pos]
-        })
-    },
-
-    hideLine: function () {
-        this.line && this.line.destroy();
-    }
-});
-
-$.shortcut("bi.bubble_popup_view", BI.BubblePopupView);/**
  * 可以改变图标的button
  *
  * Created by GUY on 2016/2/2.
@@ -2302,6 +2230,410 @@ BI.TreeNodeCheckbox = BI.inherit(BI.IconButton, {
     }
 });
 $.shortcut("bi.tree_node_checkbox", BI.TreeNodeCheckbox);/**
+ * 自定义选色
+ *
+ * Created by GUY on 2015/11/17.
+ * @class BI.CustomColorChooser
+ * @extends BI.Widget
+ */
+BI.CustomColorChooser = BI.inherit(BI.Widget, {
+
+    _defaultConfig: function () {
+        return BI.extend(BI.CustomColorChooser.superclass._defaultConfig.apply(this, arguments), {
+            baseCls: "bi-custom-color-chooser",
+            width: 227,
+            height: 245
+        })
+    },
+
+    _init: function () {
+        BI.CustomColorChooser.superclass._init.apply(this, arguments);
+        var self = this;
+        this.editor = BI.createWidget({
+            type: "bi.color_picker_editor",
+            width: 195
+        });
+        this.editor.on(BI.ColorPickerEditor.EVENT_CHANGE, function () {
+            self.setValue(this.getValue());
+        });
+        this.farbtastic = BI.createWidget({
+            type: "bi.farbtastic"
+        });
+        this.farbtastic.on(BI.Farbtastic.EVENT_CHANGE, function () {
+            self.setValue(this.getValue());
+        });
+
+        BI.createWidget({
+            type: "bi.vtape",
+            element: this,
+            items: [{
+                type: "bi.absolute",
+                items: [{
+                    el: this.editor,
+                    left: 15,
+                    top: 10,
+                    right: 15
+                }],
+                height: 30
+            }, {
+                type: "bi.absolute",
+                items: [{
+                    el: this.farbtastic,
+                    left: 15,
+                    right: 15,
+                    top: 10
+                }],
+                height: 215
+            }]
+        })
+    },
+
+    setValue: function (color) {
+        this.editor.setValue(color);
+        this.farbtastic.setValue(color);
+    },
+
+    getValue: function () {
+        return this.editor.getValue();
+    }
+});
+BI.CustomColorChooser.EVENT_CHANGE = "CustomColorChooser.EVENT_CHANGE";
+$.shortcut("bi.custom_color_chooser", BI.CustomColorChooser);/**
+ * 选色控件
+ *
+ * Created by GUY on 2015/11/17.
+ * @class BI.ColorChooser
+ * @extends BI.Widget
+ */
+BI.ColorChooser = BI.inherit(BI.Widget, {
+
+    _defaultConfig: function () {
+        return BI.extend(BI.ColorChooser.superclass._defaultConfig.apply(this, arguments), {
+            baseCls: "bi-color-chooser",
+            el: {}
+        })
+    },
+
+    _init: function () {
+        BI.ColorChooser.superclass._init.apply(this, arguments);
+        var self = this, o = this.options;
+        this.trigger = BI.createWidget(BI.extend({
+            type: "bi.color_chooser_trigger",
+            width: o.width,
+            height: o.height
+        }, o.el));
+        this.colorPicker = BI.createWidget({
+            type: "bi.color_chooser_popup"
+        });
+
+        this.combo = BI.createWidget({
+            type: "bi.combo",
+            element: this,
+            adjustLength: 1,
+            el: this.trigger,
+            popup: {
+                el: this.colorPicker,
+                stopPropagation: false,
+                minWidth: 202
+            }
+        });
+
+        var fn = function () {
+            var color = self.colorPicker.getValue();
+            self.trigger.setValue(color);
+            var colors = BI.string2Array(BI.Cache.getItem("colors") || "");
+            var que = new BI.Queue(8);
+            que.fromArray(colors);
+            que.remove(color);
+            que.unshift(color);
+            BI.Cache.setItem("colors", BI.array2String(que.toArray()));
+        };
+
+        this.colorPicker.on(BI.ColorChooserPopup.EVENT_VALUE_CHANGE, function () {
+            fn();
+        });
+
+        this.colorPicker.on(BI.ColorChooserPopup.EVENT_CHANGE, function () {
+            fn();
+            self.combo.hideView();
+        });
+        this.combo.on(BI.Combo.EVENT_BEFORE_POPUPVIEW, function () {
+            self.colorPicker.setStoreColors(BI.string2Array(BI.Cache.getItem("colors") || ""));
+        });
+
+        this.combo.on(BI.Combo.EVENT_AFTER_HIDEVIEW, function () {
+            self.fireEvent(BI.ColorChooser.EVENT_CHANGE, arguments);
+        })
+    },
+
+    isViewVisible: function () {
+        return this.combo.isViewVisible();
+    },
+
+    setEnable: function (v) {
+        this.combo.setEnable(v)
+    },
+
+    setValue: function (color) {
+        this.combo.setValue(color);
+    },
+
+    getValue: function () {
+        return this.colorPicker.getValue();
+    }
+});
+BI.ColorChooser.EVENT_CHANGE = "ColorChooser.EVENT_CHANGE";
+$.shortcut("bi.color_chooser", BI.ColorChooser);/**
+ * 选色控件
+ *
+ * Created by GUY on 2015/11/17.
+ * @class BI.ColorChooserPopup
+ * @extends BI.Widget
+ */
+BI.ColorChooserPopup = BI.inherit(BI.Widget, {
+
+    _defaultConfig: function () {
+        return BI.extend(BI.ColorChooserPopup.superclass._defaultConfig.apply(this, arguments), {
+            baseCls: "bi-color-chooser-popup",
+            height: 145
+        })
+    },
+
+    _init: function () {
+        BI.ColorChooserPopup.superclass._init.apply(this, arguments);
+        var self = this, o = this.options;
+        this.colorEditor = BI.createWidget({
+            type: "bi.color_picker_editor"
+        });
+
+        this.colorEditor.on(BI.ColorPickerEditor.EVENT_CHANGE, function () {
+            self.setValue(this.getValue());
+            self.fireEvent(BI.ColorChooserPopup.EVENT_VALUE_CHANGE, arguments);
+        });
+
+        this.storeColors = BI.createWidget({
+            type: "bi.color_picker",
+            items: [[{
+                value: "",
+                disabled: true
+            }, {
+                value: "",
+                disabled: true
+            }, {
+                value: "",
+                disabled: true
+            }, {
+                value: "",
+                disabled: true
+            }, {
+                value: "",
+                disabled: true
+            }, {
+                value: "",
+                disabled: true
+            }, {
+                value: "",
+                disabled: true
+            }, {
+                value: "",
+                disabled: true
+            }]],
+            width: 190,
+            height: 25
+        });
+        this.storeColors.on(BI.ColorPicker.EVENT_CHANGE, function () {
+            self.setValue(this.getValue()[0]);
+            self.fireEvent(BI.ColorChooserPopup.EVENT_CHANGE, arguments);
+        });
+
+        this.colorPicker = BI.createWidget({
+            type: "bi.color_picker",
+            width: 190,
+            height: 50
+        });
+
+        this.colorPicker.on(BI.ColorPicker.EVENT_CHANGE, function () {
+            self.setValue(this.getValue()[0]);
+            self.fireEvent(BI.ColorChooserPopup.EVENT_CHANGE, arguments);
+        });
+
+        this.customColorChooser = BI.createWidget({
+            type: "bi.custom_color_chooser"
+        });
+
+        var panel = BI.createWidget({
+            type: "bi.popup_panel",
+            buttons: [BI.i18nText("BI-Basic_Cancel"), BI.i18nText("BI-Basic_Save")],
+            title: BI.i18nText("BI-Custom_Color"),
+            el: this.customColorChooser,
+            stopPropagation: false,
+            bgap: -1,
+            rgap: 1,
+            lgap: 1,
+            minWidth: 227
+        });
+
+        this.more = BI.createWidget({
+            type: "bi.combo",
+            direction: "right,top",
+            isNeedAdjustHeight: false,
+            el: {
+                type: "bi.text_item",
+                cls: "color-chooser-popup-more",
+                textAlign: "center",
+                height: 20,
+                text: BI.i18nText("BI-Basic_More") + "..."
+            },
+            popup: panel
+        });
+
+        this.more.on(BI.Combo.EVENT_AFTER_POPUPVIEW, function () {
+            self.customColorChooser.setValue(self.getValue());
+        });
+        panel.on(BI.PopupPanel.EVENT_CLICK_TOOLBAR_BUTTON, function (index) {
+            switch (index) {
+                case 0:
+                    self.more.hideView();
+                    break;
+                case 1:
+                    self.setValue(self.customColorChooser.getValue());
+                    self.more.hideView();
+                    self.fireEvent(BI.ColorChooserPopup.EVENT_CHANGE, arguments);
+                    break;
+            }
+        });
+
+        BI.createWidget({
+            type: "bi.vtape",
+            element: this,
+            items: [{
+                el: {
+                    type: "bi.absolute",
+                    cls: "color-chooser-popup-title",
+                    items: [{
+                        el: this.colorEditor,
+                        left: 0,
+                        right: 0,
+                        top: 5
+                    }]
+                },
+                height: 30
+            }, {
+                el: {
+                    type: "bi.absolute",
+                    items: [{
+                        el: this.storeColors,
+                        left: 5,
+                        right: 5,
+                        top: 5
+                    }]
+                },
+                height: 30
+            }, {
+                el: {
+                    type: "bi.absolute",
+                    items: [{
+                        el: this.colorPicker,
+                        left: 5,
+                        right: 5,
+                        top: 5
+                    }]
+                },
+                height: 65
+            }, {
+                el: this.more,
+                height: 20
+            }]
+        })
+    },
+
+    setStoreColors: function (colors) {
+        if (BI.isArray(colors)) {
+            var items = BI.map(colors, function (i, color) {
+                return {
+                    value: color
+                }
+            });
+            BI.count(colors.length, 8, function (i) {
+                items.push({
+                    value: "",
+                    disabled: true
+                })
+            });
+            this.storeColors.populate([items]);
+        }
+    },
+
+    setValue: function (color) {
+        this.colorEditor.setValue(color);
+        this.colorPicker.setValue(color);
+        this.storeColors.setValue(color);
+    },
+
+    getValue: function () {
+        return this.colorEditor.getValue();
+    }
+});
+BI.ColorChooserPopup.EVENT_VALUE_CHANGE = "ColorChooserPopup.EVENT_VALUE_CHANGE";
+BI.ColorChooserPopup.EVENT_CHANGE = "ColorChooserPopup.EVENT_CHANGE";
+$.shortcut("bi.color_chooser_popup", BI.ColorChooserPopup);/**
+ * 选色控件
+ *
+ * Created by GUY on 2015/11/17.
+ * @class BI.ColorChooserTrigger
+ * @extends BI.Trigger
+ */
+BI.ColorChooserTrigger = BI.inherit(BI.Trigger, {
+
+    _defaultConfig: function () {
+        var conf = BI.ColorChooserTrigger.superclass._defaultConfig.apply(this, arguments);
+        return BI.extend(conf, {
+            baseCls: (conf.baseCls || "") + " bi-color-chooser-trigger",
+            height: 30
+        })
+    },
+
+    _init: function () {
+        BI.ColorChooserTrigger.superclass._init.apply(this, arguments);
+        this.colorContainer = BI.createWidget({
+            type: "bi.layout"
+        });
+
+        var down = BI.createWidget({
+            type: "bi.icon_button",
+            disableSelected: true,
+            cls: "icon-combo-down-icon trigger-triangle-font",
+            width: 12,
+            height: 8
+        });
+
+        BI.createWidget({
+            type: "bi.absolute",
+            element: this,
+            items: [{
+                el: this.colorContainer,
+                left: 3,
+                right: 3,
+                top: 3,
+                bottom: 3
+            }, {
+                el: down,
+                right: 3,
+                bottom: 3
+            }]
+        });
+        if (this.options.value) {
+            this.setValue(this.options.value);
+        }
+    },
+
+    setValue: function (color) {
+        BI.ColorChooserTrigger.superclass.setValue.apply(this, arguments);
+        this.colorContainer.element.css("background-color", color);
+    }
+});
+BI.ColorChooserTrigger.EVENT_CHANGE = "ColorChooserTrigger.EVENT_CHANGE";
+$.shortcut("bi.color_chooser_trigger", BI.ColorChooserTrigger);/**
  * 简单选色控件按钮
  *
  * Created by GUY on 2015/11/16.
@@ -2682,6 +3014,387 @@ BI.ColorPickerEditor = BI.inherit(BI.Widget, {
 });
 BI.ColorPickerEditor.EVENT_CHANGE = "ColorPickerEditor.EVENT_CHANGE";
 $.shortcut("bi.color_picker_editor", BI.ColorPickerEditor);/**
+ * 选色控件
+ *
+ * Created by GUY on 2015/11/16.
+ * @class BI.Farbtastic
+ * @extends BI.Widget
+ */
+BI.Farbtastic = BI.inherit(BI.Widget, {
+
+    _defaultConfig: function () {
+        return BI.extend(BI.Farbtastic.superclass._defaultConfig.apply(this, arguments), {
+            baseCls: "bi-farbtastic",
+            width: 195,
+            height: 195
+        })
+    },
+
+    _init: function () {
+        BI.Farbtastic.superclass._init.apply(this, arguments);
+    },
+
+    mounted: function () {
+        var self = this;
+        this.farbtastic = $.farbtastic(this.element, function (v) {
+            self.fireEvent(BI.Farbtastic.EVENT_CHANGE, self.getValue(), self);
+        });
+    },
+
+    setValue: function (color) {
+        this.farbtastic.setColor(color);
+    },
+
+    getValue: function () {
+        return this.farbtastic.color;
+    }
+});
+BI.Farbtastic.EVENT_CHANGE = "Farbtastic.EVENT_CHANGE";
+$.shortcut("bi.farbtastic", BI.Farbtastic);/**
+ * Farbtastic Color Picker 1.2
+ * © 2008 Steven Wittens
+ *
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation; either version 2 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, write to the Free Software
+ * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
+ */
+
+jQuery.fn.farbtastic = function (callback) {
+  $.farbtastic(this, callback);
+  return this;
+};
+
+jQuery.farbtastic = function (container, callback) {
+  var container = $(container).get(0);
+  return container.farbtastic || (container.farbtastic = new jQuery._farbtastic(container, callback));
+}
+
+jQuery._farbtastic = function (container, callback) {
+  // Store farbtastic object
+  var fb = this;
+
+  // Insert markup
+  $(container).html('<div class="farbtastic"><div class="color"></div><div class="wheel"></div><div class="overlay"></div><div class="h-marker marker"></div><div class="sl-marker marker"></div></div>');
+  var e = $('.farbtastic', container);
+  fb.wheel = $('.wheel', container).get(0);
+  // Dimensions
+  fb.radius = 84;
+  fb.square = 100;
+  fb.width = 194;
+
+  // Fix background PNGs in IE6
+  if (navigator.appVersion.match(/MSIE [0-6]\./)) {
+    $('*', e).each(function () {
+      if (this.currentStyle.backgroundImage != 'none') {
+        var image = this.currentStyle.backgroundImage;
+        image = this.currentStyle.backgroundImage.substring(5, image.length - 2);
+        $(this).css({
+          'backgroundImage': 'none',
+          'filter': "progid:DXImageTransform.Microsoft.AlphaImageLoader(enabled=true, sizingMethod=crop, src='" + image + "')"
+        });
+      }
+    });
+  }
+
+  /**
+   * Link to the given element(s) or callback.
+   */
+  fb.linkTo = function (callback) {
+    // Unbind previous nodes
+    if (typeof fb.callback == 'object') {
+      $(fb.callback).unbind('keyup', fb.updateValue);
+    }
+
+    // Reset color
+    fb.color = null;
+
+    // Bind callback or elements
+    if (typeof callback == 'function') {
+      fb.callback = callback;
+    }
+    else if (typeof callback == 'object' || typeof callback == 'string') {
+      fb.callback = $(callback);
+      fb.callback.bind('keyup', fb.updateValue);
+      if (fb.callback.get(0).value) {
+        fb.setColor(fb.callback.get(0).value);
+      }
+    }
+    return this;
+  }
+  fb.updateValue = function (event) {
+    if (this.value && this.value != fb.color) {
+      fb.setColor(this.value);
+    }
+  }
+
+  /**
+   * Change color with HTML syntax #123456
+   */
+  fb.setColor = function (color) {
+    var unpack = fb.unpack(color);
+    if (fb.color != color && unpack) {
+      fb.color = color;
+      fb.rgb = unpack;
+      fb.hsl = fb.RGBToHSL(fb.rgb);
+      fb.updateDisplay();
+    }
+    return this;
+  }
+
+  /**
+   * Change color with HSL triplet [0..1, 0..1, 0..1]
+   */
+  fb.setHSL = function (hsl) {
+    fb.hsl = hsl;
+    fb.rgb = fb.HSLToRGB(hsl);
+    fb.color = fb.pack(fb.rgb);
+    fb.updateDisplay();
+    return this;
+  }
+
+  /////////////////////////////////////////////////////
+
+  /**
+   * Retrieve the coordinates of the given event relative to the center
+   * of the widget.
+   */
+  fb.widgetCoords = function (event) {
+    var x, y;
+    var el = event.target || event.srcElement;
+    var reference = fb.wheel;
+
+    if (typeof event.offsetX != 'undefined') {
+      // Use offset coordinates and find common offsetParent
+      var pos = { x: event.offsetX, y: event.offsetY };
+
+      // Send the coordinates upwards through the offsetParent chain.
+      var e = el;
+      while (e) {
+        e.mouseX = pos.x;
+        e.mouseY = pos.y;
+        pos.x += e.offsetLeft;
+        pos.y += e.offsetTop;
+        e = e.offsetParent;
+      }
+
+      // Look for the coordinates starting from the wheel widget.
+      var e = reference;
+      var offset = { x: 0, y: 0 }
+      while (e) {
+        if (typeof e.mouseX != 'undefined') {
+          x = e.mouseX - offset.x;
+          y = e.mouseY - offset.y;
+          break;
+        }
+        offset.x += e.offsetLeft;
+        offset.y += e.offsetTop;
+        e = e.offsetParent;
+      }
+
+      // Reset stored coordinates
+      e = el;
+      while (e) {
+        e.mouseX = undefined;
+        e.mouseY = undefined;
+        e = e.offsetParent;
+      }
+    }
+    else {
+      // Use absolute coordinates
+      var pos = fb.absolutePosition(reference);
+      x = (event.pageX || 0*(event.clientX + $('html').get(0).scrollLeft)) - pos.x;
+      y = (event.pageY || 0*(event.clientY + $('html').get(0).scrollTop)) - pos.y;
+    }
+    // Subtract distance to middle
+    return { x: x - fb.width / 2, y: y - fb.width / 2 };
+  }
+
+  /**
+   * Mousedown handler
+   */
+  fb.mousedown = function (event) {
+    // Capture mouse
+    if (!document.dragging) {
+      $(document).bind('mousemove', fb.mousemove).bind('mouseup', fb.mouseup);
+      document.dragging = true;
+    }
+
+    // Check which area is being dragged
+    var pos = fb.widgetCoords(event);
+    fb.circleDrag = Math.max(Math.abs(pos.x), Math.abs(pos.y)) * 2 > fb.square;
+
+    // Process
+    fb.mousemove(event);
+    return false;
+  }
+
+  /**
+   * Mousemove handler
+   */
+  fb.mousemove = function (event) {
+    // Get coordinates relative to color picker center
+    var pos = fb.widgetCoords(event);
+
+    // Set new HSL parameters
+    if (fb.circleDrag) {
+      var hue = Math.atan2(pos.x, -pos.y) / 6.28;
+      if (hue < 0) hue += 1;
+      fb.setHSL([hue, fb.hsl[1], fb.hsl[2]]);
+    }
+    else {
+      var sat = Math.max(0, Math.min(1, -(pos.x / fb.square) + .5));
+      var lum = Math.max(0, Math.min(1, -(pos.y / fb.square) + .5));
+      fb.setHSL([fb.hsl[0], sat, lum]);
+    }
+    return false;
+  }
+
+  /**
+   * Mouseup handler
+   */
+  fb.mouseup = function () {
+    // Uncapture mouse
+    $(document).unbind('mousemove', fb.mousemove);
+    $(document).unbind('mouseup', fb.mouseup);
+    document.dragging = false;
+  }
+
+  /**
+   * Update the markers and styles
+   */
+  fb.updateDisplay = function () {
+    // Markers
+    var angle = fb.hsl[0] * 6.28;
+    $('.h-marker', e).css({
+      left: Math.round(Math.sin(angle) * fb.radius + fb.width / 2) + 'px',
+      top: Math.round(-Math.cos(angle) * fb.radius + fb.width / 2) + 'px'
+    });
+
+    $('.sl-marker', e).css({
+      left: Math.round(fb.square * (.5 - fb.hsl[1]) + fb.width / 2) + 'px',
+      top: Math.round(fb.square * (.5 - fb.hsl[2]) + fb.width / 2) + 'px'
+    });
+
+    // Saturation/Luminance gradient
+    $('.color', e).css('backgroundColor', fb.pack(fb.HSLToRGB([fb.hsl[0], 1, 0.5])));
+
+    // Linked elements or callback
+    if (typeof fb.callback == 'object') {
+      // Set background/foreground color
+      $(fb.callback).css({
+        backgroundColor: fb.color,
+        color: fb.hsl[2] > 0.5 ? '#000' : '#fff'
+      });
+
+      // Change linked value
+      $(fb.callback).each(function() {
+        if (this.value && this.value != fb.color) {
+          this.value = fb.color;
+        }
+      });
+    }
+    else if (typeof fb.callback == 'function') {
+      fb.callback.call(fb, fb.color);
+    }
+  }
+
+  /**
+   * Get absolute position of element
+   */
+  fb.absolutePosition = function (el) {
+    var r = { x: el.offsetLeft, y: el.offsetTop };
+    // Resolve relative to offsetParent
+    if (el.offsetParent) {
+      var tmp = fb.absolutePosition(el.offsetParent);
+      r.x += tmp.x;
+      r.y += tmp.y;
+    }
+    return r;
+  };
+
+  /* Various color utility functions */
+  fb.pack = function (rgb) {
+    var r = Math.round(rgb[0] * 255);
+    var g = Math.round(rgb[1] * 255);
+    var b = Math.round(rgb[2] * 255);
+    return '#' + (r < 16 ? '0' : '') + r.toString(16) +
+           (g < 16 ? '0' : '') + g.toString(16) +
+           (b < 16 ? '0' : '') + b.toString(16);
+  }
+
+  fb.unpack = function (color) {
+    if (color.length == 7) {
+      return [parseInt('0x' + color.substring(1, 3)) / 255,
+        parseInt('0x' + color.substring(3, 5)) / 255,
+        parseInt('0x' + color.substring(5, 7)) / 255];
+    }
+    else if (color.length == 4) {
+      return [parseInt('0x' + color.substring(1, 2)) / 15,
+        parseInt('0x' + color.substring(2, 3)) / 15,
+        parseInt('0x' + color.substring(3, 4)) / 15];
+    }
+  }
+
+  fb.HSLToRGB = function (hsl) {
+    var m1, m2, r, g, b;
+    var h = hsl[0], s = hsl[1], l = hsl[2];
+    m2 = (l <= 0.5) ? l * (s + 1) : l + s - l*s;
+    m1 = l * 2 - m2;
+    return [this.hueToRGB(m1, m2, h+0.33333),
+        this.hueToRGB(m1, m2, h),
+        this.hueToRGB(m1, m2, h-0.33333)];
+  }
+
+  fb.hueToRGB = function (m1, m2, h) {
+    h = (h < 0) ? h + 1 : ((h > 1) ? h - 1 : h);
+    if (h * 6 < 1) return m1 + (m2 - m1) * h * 6;
+    if (h * 2 < 1) return m2;
+    if (h * 3 < 2) return m1 + (m2 - m1) * (0.66666 - h) * 6;
+    return m1;
+  }
+
+  fb.RGBToHSL = function (rgb) {
+    var min, max, delta, h, s, l;
+    var r = rgb[0], g = rgb[1], b = rgb[2];
+    min = Math.min(r, Math.min(g, b));
+    max = Math.max(r, Math.max(g, b));
+    delta = max - min;
+    l = (min + max) / 2;
+    s = 0;
+    if (l > 0 && l < 1) {
+      s = delta / (l < 0.5 ? (2 * l) : (2 - 2 * l));
+    }
+    h = 0;
+    if (delta > 0) {
+      if (max == r && max != g) h += (g - b) / delta;
+      if (max == g && max != b) h += (2 + (b - r) / delta);
+      if (max == b && max != r) h += (4 + (r - g) / delta);
+      h /= 6;
+    }
+    return [h, s, l];
+  }
+
+  // Install mousedown handler (the others are set on the document on-demand)
+  $('*', e).mousedown(fb.mousedown);
+
+    // Init color
+  fb.setColor('#000000');
+
+  // Set linked elements/callback
+  if (callback) {
+    fb.linkTo(callback);
+  }
+}/**
  * Created by GUY on 2017/2/8.
  *
  * @class BI.BubbleCombo
@@ -2891,6 +3604,123 @@ BI.BubbleCombo.EVENT_AFTER_POPUPVIEW = "EVENT_AFTER_POPUPVIEW";
 BI.BubbleCombo.EVENT_BEFORE_HIDEVIEW = "EVENT_BEFORE_HIDEVIEW";
 BI.BubbleCombo.EVENT_AFTER_HIDEVIEW = "EVENT_AFTER_HIDEVIEW";
 $.shortcut("bi.bubble_combo", BI.BubbleCombo);/**
+ * Created by GUY on 2017/2/8.
+ *
+ * @class BI.BubblePopupView
+ * @extends BI.PopupView
+ */
+BI.BubblePopupView = BI.inherit(BI.PopupView, {
+    _defaultConfig: function () {
+        var config = BI.BubblePopupView.superclass._defaultConfig.apply(this, arguments);
+        return BI.extend(config, {
+            baseCls: config.baseCls + " bi-bubble-popup-view"
+        })
+    },
+    _init: function () {
+        BI.BubblePopupView.superclass._init.apply(this, arguments);
+    },
+
+    showLine: function (direction) {
+        var pos = {}, op = {};
+        switch (direction) {
+            case "left":
+                pos = {
+                    top: 0,
+                    bottom: 0,
+                    left: -1
+                };
+                op = {width: 3};
+                break;
+            case "right":
+                pos = {
+                    top: 0,
+                    bottom: 0,
+                    right: -1
+                };
+                op = {width: 3};
+                break;
+            case "top":
+                pos = {
+                    left: 0,
+                    right: 0,
+                    top: -1
+                };
+                op = {height: 3};
+                break;
+            case "bottom":
+                pos = {
+                    left: 0,
+                    right: 0,
+                    bottom: -1
+                };
+                op = {height: 3};
+                break;
+            default:
+                break;
+        }
+        this.line = BI.createWidget(op, {
+            type: "bi.layout",
+            cls: "bubble-popup-line"
+        });
+        pos.el = this.line;
+        BI.createWidget({
+            type: "bi.absolute",
+            element: this,
+            items: [pos]
+        })
+    },
+
+    hideLine: function () {
+        this.line && this.line.destroy();
+    }
+});
+
+$.shortcut("bi.bubble_popup_view", BI.BubblePopupView);
+
+/**
+ * Created by GUY on 2017/2/8.
+ *
+ * @class BI.BubblePopupBarView
+ * @extends BI.BubblePopupView
+ */
+BI.BubblePopupBarView = BI.inherit(BI.BubblePopupView, {
+    _defaultConfig: function () {
+        return BI.extend(BI.BubblePopupBarView.superclass._defaultConfig.apply(this, arguments), {
+            extraCls: "bi-bubble-bar-popup-view",
+            buttons: [{value: BI.i18nText(BI.i18nText("BI-Basic_Sure"))}, {value: BI.i18nText("BI-Basic_Cancel"), level: "ignore"}]
+        })
+    },
+    _init: function () {
+        BI.BubblePopupBarView.superclass._init.apply(this, arguments);
+    },
+    _createToolBar: function () {
+        var o = this.options, self = this;
+
+        var items = [];
+        BI.each(o.buttons.reverse(), function (i, buttonOpt) {
+            if(BI.isWidget(buttonOpt)){
+                items.push(buttonOpt);
+            }else{
+                items.push(BI.extend({
+                    type: 'bi.button',
+                    height: 30,
+                    handler: function (v) {
+                        self.fireEvent(BI.BubblePopupBarView.EVENT_CLICK_TOOLBAR_BUTTON, v);
+                    }
+                }, buttonOpt))
+            }
+        });
+        return BI.createWidget({
+            type: 'bi.right_vertical_adapt',
+            height: 40,
+            hgap: 10,
+            bgap: 10,
+            items: items
+        });
+    }
+});
+BI.BubblePopupBarView.EVENT_CLICK_TOOLBAR_BUTTON = "EVENT_CLICK_TOOLBAR_BUTTON";
+$.shortcut("bi.bubble_bar_popup_view", BI.BubblePopupBarView);/**
  * Created by Young's on 2016/4/28.
  */
 BI.EditorIconCheckCombo = BI.inherit(BI.Widget, {
@@ -3463,49 +4293,6 @@ BI.IconComboTrigger = BI.inherit(BI.Trigger, {
 });
 BI.IconComboTrigger.EVENT_CHANGE = "EVENT_CHANGE";
 $.shortcut("bi.icon_combo_trigger", BI.IconComboTrigger);/**
- * Created by GUY on 2017/2/8.
- *
- * @class BI.BubblePopupBarView
- * @extends BI.BubblePopupView
- */
-BI.BubblePopupBarView = BI.inherit(BI.BubblePopupView, {
-    _defaultConfig: function () {
-        return BI.extend(BI.BubblePopupBarView.superclass._defaultConfig.apply(this, arguments), {
-            extraCls: "bi-bubble-bar-popup-view",
-            buttons: [{value: BI.i18nText(BI.i18nText("BI-Basic_Sure"))}, {value: BI.i18nText("BI-Basic_Cancel"), level: "ignore"}]
-        })
-    },
-    _init: function () {
-        BI.BubblePopupBarView.superclass._init.apply(this, arguments);
-    },
-    _createToolBar: function () {
-        var o = this.options, self = this;
-
-        var items = [];
-        BI.each(o.buttons.reverse(), function (i, buttonOpt) {
-            if(BI.isWidget(buttonOpt)){
-                items.push(buttonOpt);
-            }else{
-                items.push(BI.extend({
-                    type: 'bi.button',
-                    height: 30,
-                    handler: function (v) {
-                        self.fireEvent(BI.BubblePopupBarView.EVENT_CLICK_TOOLBAR_BUTTON, v);
-                    }
-                }, buttonOpt))
-            }
-        });
-        return BI.createWidget({
-            type: 'bi.right_vertical_adapt',
-            height: 40,
-            hgap: 10,
-            bgap: 10,
-            items: items
-        });
-    }
-});
-BI.BubblePopupBarView.EVENT_CLICK_TOOLBAR_BUTTON = "EVENT_CLICK_TOOLBAR_BUTTON";
-$.shortcut("bi.bubble_bar_popup_view", BI.BubblePopupBarView);/**
  * 单选combo
  *
  * @class BI.StaticCombo
@@ -6669,248 +7456,6 @@ BI.SortList = BI.inherit(BI.Widget, {
 });
 BI.SortList.EVENT_CHANGE = "EVENT_CHANGE";
 $.shortcut("bi.sort_list", BI.SortList);/**
- * Created by Young's on 2016/8/30.
- */
-BI.LoginTimeOut = BI.inherit(BI.BarPopoverSection, {
-    _defaultConfig: function () {
-        return BI.extend(BI.LoginTimeOut.superclass._defaultConfig.apply(this, arguments), {})
-    },
-
-    _init: function () {
-        BI.LoginTimeOut.superclass._init.apply(this, arguments);
-    },
-
-    rebuildNorth: function (north) {
-        BI.createWidget({
-            type: "bi.label",
-            element: north,
-            text: BI.i18nText("BI-Login_Timeout"),
-            height: 50,
-            textAlign: "left"
-        })
-    },
-
-    rebuildCenter: function (center) {
-        var self = this, o = this.options;
-        var userNameInput = BI.createWidget({
-            type: "bi.editor",
-            watermark: BI.i18nText("BI-Username"),
-            cls: "login-input",
-            allowBlank: true,
-            width: 300,
-            height: 30
-        });
-        var userNameMask = BI.createWidget({
-            type: "bi.text_button",
-            width: 330,
-            height: 56,
-            cls: "error-mask"
-        });
-        userNameMask.setVisible(false);
-        userNameMask.on(BI.TextButton.EVENT_CHANGE, function () {
-            userNameInput.focus();
-            this.element.fadeOut();
-        });
-
-        var userNameWrapper = BI.createWidget({
-            type: "bi.absolute",
-            cls: "input-wrapper login-username-icon",
-            items: [{
-                el: {
-                    type: "bi.icon",
-                    width: 26,
-                    height: 26
-                },
-                top: 10,
-                left: 0
-            }, {
-                el: userNameInput,
-                top: 8,
-                left: 30
-            }, {
-                el: userNameMask,
-                top: 0,
-                left: 0
-            }],
-            width: 330,
-            height: 56
-        });
-
-
-        var passwordInput = BI.createWidget({
-            type: "bi.editor",
-            inputType: "password",
-            cls: "login-input",
-            allowBlank: true,
-            watermark: BI.i18nText("BI-Basic_Password"),
-            width: 300,
-            height: 30
-        });
-        var passwordMask = BI.createWidget({
-            type: "bi.text_button",
-            width: 330,
-            height: 56,
-            cls: "error-mask"
-        });
-        passwordMask.setVisible(false);
-        passwordMask.on(BI.TextButton.EVENT_CHANGE, function () {
-            passwordInput.focus();
-            this.element.fadeOut();
-        });
-
-        var passwordWrapper = BI.createWidget({
-            type: "bi.absolute",
-            cls: "input-wrapper login-password-icon",
-            items: [{
-                el: {
-                    type: "bi.icon",
-                    width: 26,
-                    height: 26
-                },
-                top: 10,
-                left: 0
-            }, {
-                el: passwordInput,
-                top: 8,
-                left: 30
-            }, {
-                el: passwordMask,
-                top: 0,
-                left: 0
-            }],
-            width: 330,
-            height: 56
-        });
-
-        var loginButton = BI.createWidget({
-            type: "bi.text_button",
-            text: BI.i18nText("BI-Basic_Login"),
-            cls: "login-button",
-            width: 330,
-            height: 50
-        });
-        loginButton.on(BI.TextButton.EVENT_CHANGE, function () {
-            if (BI.isEmptyString(userNameInput.getValue())) {
-                self._showMes(userNameMask, BI.i18nText("BI-Username_Not_Null"));
-                return;
-            }
-            if (BI.isEmptyString(passwordInput.getValue())) {
-                self._showMes(passwordMask, BI.i18nText("BI-Password_Not_Null"));
-                return;
-            }
-
-            //反正是登录直接用FR的登录了
-            BI.ajax({
-                url: BI.servletURL + '?op=fs_load&cmd=login',
-                data: BI.cjkEncodeDO({
-                    fr_username: encodeURIComponent(userNameInput.getValue()),
-                    fr_password: encodeURIComponent(passwordInput.getValue()),
-                    fr_remember: self.keepLoginState.isSelected()
-                }),
-                type: 'POST',
-                async: false,
-                error: function () {
-                    BI.Msg.toast("Error!");
-                },
-                complete: function (res, status) {
-                    if (BI.isEmptyString(res.responseText)) {
-                        self._showMes(userNameMask, BI.i18nText("BI-Authentication_Failed"));
-                        return;
-                    }
-                    var signResult = BI.jsonDecode(res.responseText);
-                    if (signResult.fail) {
-                        //用户名和密码不匹配
-                        self._showMes(userNameMask, BI.i18nText("BI-Username_Password_Not_Correct"));
-                    } else if (signResult.url) {
-                        self.fireEvent(BI.LoginTimeOut.EVENT_LOGIN);
-                    }
-                }
-            });
-        });
-
-        var logo;
-        if (BI.isNotNull(window.top.FS)) {
-            logo = window.top.FS.config.logoImageID4FS;
-        }
-        BI.createWidget({
-            type: "bi.absolute",
-            element: center,
-            cls: "bi-login-timeout-center",
-            items: [{
-                el: {
-                    type: "bi.center_adapt",
-                    items: [{
-                        type: "bi.img",
-                        src: BI.servletURL + (logo ?
-                            '?op=fr_attach&cmd=ah_image&id=' + logo + '&isAdjust=false' :
-                            '?op=resource&resource=/com/fr/bi/web/images/login/bi_logo.png'),
-                        width: 120,
-                        height: 120
-                    }],
-                    width: 200,
-                    height: 300
-                },
-                left: 0,
-                top: 0
-            }, {
-                el: userNameWrapper,
-                top: 30,
-                left: 230
-            }, {
-                el: passwordWrapper,
-                top: 100,
-                left: 230
-            }, {
-                el: loginButton,
-                top: 200,
-                left: 230
-            }]
-        });
-    },
-
-    _showMes: function (widget, mes) {
-        widget.setText(mes);
-        widget.element.fadeIn();
-        setTimeout(function () {
-            if (widget.element.isVisible()) {
-                widget.element.fadeOut();
-            }
-        }, 5000);
-    },
-
-    rebuildSouth: function (south) {
-        this.keepLoginState = BI.createWidget({
-            type: "bi.checkbox",
-            width: 16,
-            height: 16
-        });
-        BI.createWidget({
-            type: "bi.absolute",
-            element: south,
-            cls: "bi-login-timeout-south",
-            items: [{
-                el: this.keepLoginState,
-                top: 0,
-                left: 230
-            }, {
-                el: {
-                    type: "bi.label",
-                    text: BI.i18nText("BI-Keep_Login_State"),
-                    cls: "keep-state",
-                    height: 30
-                },
-                top: -7,
-                left: 260
-            }]
-        })
-    }
-});
-BI.extend(BI.LoginTimeOut, {
-    POPOVER_ID: "___popover__id___"
-});
-BI.LoginTimeOut.EVENT_LOGIN = "EVENT_LOGIN";
-$.shortcut("bi.login_timeout", BI.LoginTimeOut);
-/**
  * 有总页数和总行数的分页控件
  * Created by Young's on 2016/10/13.
  */
@@ -10241,7 +10786,502 @@ BI.SmallTextTrigger = BI.inherit(BI.Trigger, {
         this.text.setText(text);
     }
 });
-$.shortcut("bi.small_text_trigger", BI.SmallTextTrigger);/**
+$.shortcut("bi.small_text_trigger", BI.SmallTextTrigger);/*
+ * zClip :: jQuery ZeroClipboard v1.1.1
+ * http://steamdev.com/zclip
+ *
+ * Copyright 2011, SteamDev
+ * Released under the MIT license.
+ * http://www.opensource.org/licenses/mit-license.php
+ *
+ * Date: Wed Jun 01, 2011
+ */
+
+
+(function ($) {
+
+    $.fn.zclip = function (params) {
+
+        if (typeof params == "object" && !params.length) {
+
+            var settings = $.extend({
+
+                path: 'ZeroClipboard.swf',
+                copy: null,
+                beforeCopy: null,
+                afterCopy: null,
+                clickAfter: true,
+                setHandCursor: true,
+                setCSSEffects: true
+
+            }, params);
+			
+
+            return this.each(function () {
+
+                var o = $(this);
+
+                if (o.is(':visible') && (typeof settings.copy == 'string' || $.isFunction(settings.copy))) {
+
+                    ZeroClipboard.setMoviePath(settings.path);
+                    var clip = new ZeroClipboard.Client();
+                    
+                    if($.isFunction(settings.copy)){
+                    	o.bind('zClip_copy',settings.copy);
+                    }
+                    if($.isFunction(settings.beforeCopy)){
+                    	o.bind('zClip_beforeCopy',settings.beforeCopy);
+                    }
+                    if($.isFunction(settings.afterCopy)){
+                    	o.bind('zClip_afterCopy',settings.afterCopy);
+                    }                    
+
+                    clip.setHandCursor(settings.setHandCursor);
+                    clip.setCSSEffects(settings.setCSSEffects);
+                    clip.addEventListener('mouseOver', function (client) {
+                        o.trigger('mouseenter');
+                    });
+                    clip.addEventListener('mouseOut', function (client) {
+                        o.trigger('mouseleave');
+                    });
+                    clip.addEventListener('mouseDown', function (client) {
+
+                        o.trigger('mousedown');
+                        
+			if(!$.isFunction(settings.copy)){
+			   clip.setText(settings.copy);
+			} else {
+			   clip.setText(o.triggerHandler('zClip_copy'));
+			}                        
+                        
+                        if ($.isFunction(settings.beforeCopy)) {
+                            o.trigger('zClip_beforeCopy');                            
+                        }
+
+                    });
+
+                    clip.addEventListener('complete', function (client, text) {
+
+                        if ($.isFunction(settings.afterCopy)) {
+                            
+                            o.trigger('zClip_afterCopy');
+
+                        } else {
+                            if (text.length > 500) {
+                                text = text.substr(0, 500) + "...\n\n(" + (text.length - 500) + " characters not shown)";
+                            }
+							
+			    o.removeClass('hover');
+                            alert("Copied text to clipboard:\n\n " + text);
+                        }
+
+                        if (settings.clickAfter) {
+                            o.trigger('click');
+                        }
+
+                    });
+
+					
+                    clip.glue(o[0], o.parent()[0]);
+					
+		    $(window).bind('load resize',function(){clip.reposition();});
+					
+
+                }
+
+            });
+
+        } else if (typeof params == "string") {
+
+            return this.each(function () {
+
+                var o = $(this);
+
+                params = params.toLowerCase();
+                var zclipId = o.data('zclipId');
+                var clipElm = $('#' + zclipId + '.zclip');
+
+                if (params == "remove") {
+
+                    clipElm.remove();
+                    o.removeClass('active hover');
+
+                } else if (params == "hide") {
+
+                    clipElm.hide();
+                    o.removeClass('active hover');
+
+                } else if (params == "show") {
+
+                    clipElm.show();
+
+                }
+
+            });
+
+        }
+
+    }	
+	
+	
+
+})(jQuery);
+
+
+
+
+
+
+
+// ZeroClipboard
+// Simple Set Clipboard System
+// Author: Joseph Huckaby
+var ZeroClipboard = {
+
+    version: "1.0.7",
+    clients: {},
+    // registered upload clients on page, indexed by id
+    moviePath: 'ZeroClipboard.swf',
+    // URL to movie
+    nextId: 1,
+    // ID of next movie
+    $: function (thingy) {
+        // simple DOM lookup utility function
+        if (typeof(thingy) == 'string') thingy = document.getElementById(thingy);
+        if (!thingy.addClass) {
+            // extend element with a few useful methods
+            thingy.hide = function () {
+                this.style.display = 'none';
+            };
+            thingy.show = function () {
+                this.style.display = '';
+            };
+            thingy.addClass = function (name) {
+                this.removeClass(name);
+                this.className += ' ' + name;
+            };
+            thingy.removeClass = function (name) {
+                var classes = this.className.split(/\s+/);
+                var idx = -1;
+                for (var k = 0; k < classes.length; k++) {
+                    if (classes[k] == name) {
+                        idx = k;
+                        k = classes.length;
+                    }
+                }
+                if (idx > -1) {
+                    classes.splice(idx, 1);
+                    this.className = classes.join(' ');
+                }
+                return this;
+            };
+            thingy.hasClass = function (name) {
+                return !!this.className.match(new RegExp("\\s*" + name + "\\s*"));
+            };
+        }
+        return thingy;
+    },
+
+    setMoviePath: function (path) {
+        // set path to ZeroClipboard.swf
+        this.moviePath = path;
+    },
+
+    dispatch: function (id, eventName, args) {
+        // receive event from flash movie, send to client		
+        var client = this.clients[id];
+        if (client) {
+            client.receiveEvent(eventName, args);
+        }
+    },
+
+    register: function (id, client) {
+        // register new client to receive events
+        this.clients[id] = client;
+    },
+
+    getDOMObjectPosition: function (obj, stopObj) {
+        // get absolute coordinates for dom element
+        var info = {
+            left: 0,
+            top: 0,
+            width: obj.width ? obj.width : obj.offsetWidth,
+            height: obj.height ? obj.height : obj.offsetHeight
+        };
+
+        if (obj && (obj != stopObj)) {
+			info.left += obj.offsetLeft;
+            info.top += obj.offsetTop;
+        }
+
+        return info;
+    },
+
+    Client: function (elem) {
+        // constructor for new simple upload client
+        this.handlers = {};
+
+        // unique ID
+        this.id = ZeroClipboard.nextId++;
+        this.movieId = 'ZeroClipboardMovie_' + this.id;
+
+        // register client with singleton to receive flash events
+        ZeroClipboard.register(this.id, this);
+
+        // create movie
+        if (elem) this.glue(elem);
+    }
+};
+
+ZeroClipboard.Client.prototype = {
+
+    id: 0,
+    // unique ID for us
+    ready: false,
+    // whether movie is ready to receive events or not
+    movie: null,
+    // reference to movie object
+    clipText: '',
+    // text to copy to clipboard
+    handCursorEnabled: true,
+    // whether to show hand cursor, or default pointer cursor
+    cssEffects: true,
+    // enable CSS mouse effects on dom container
+    handlers: null,
+    // user event handlers
+    glue: function (elem, appendElem, stylesToAdd) {
+        // glue to DOM element
+        // elem can be ID or actual DOM element object
+        this.domElement = ZeroClipboard.$(elem);
+
+        // float just above object, or zIndex 99 if dom element isn't set
+        var zIndex = 99;
+        if (this.domElement.style.zIndex) {
+            zIndex = parseInt(this.domElement.style.zIndex, 10) + 1;
+        }
+
+        if (typeof(appendElem) == 'string') {
+            appendElem = ZeroClipboard.$(appendElem);
+        } else if (typeof(appendElem) == 'undefined') {
+            appendElem = document.getElementsByTagName('body')[0];
+        }
+
+        // find X/Y position of domElement
+        var box = ZeroClipboard.getDOMObjectPosition(this.domElement, appendElem);
+
+        // create floating DIV above element
+        this.div = document.createElement('div');
+        this.div.className = "zclip";
+        this.div.id = "zclip-" + this.movieId;
+        $(this.domElement).data('zclipId', 'zclip-' + this.movieId);
+        var style = this.div.style;
+        style.position = 'absolute';
+        style.left = '' + box.left + 'px';
+        style.top = '' + box.top + 'px';
+        style.width = '' + box.width + 'px';
+        style.height = '' + box.height + 'px';
+        style.zIndex = zIndex;
+
+        if (typeof(stylesToAdd) == 'object') {
+            for (addedStyle in stylesToAdd) {
+                style[addedStyle] = stylesToAdd[addedStyle];
+            }
+        }
+
+        // style.backgroundColor = '#f00'; // debug
+        appendElem.appendChild(this.div);
+
+        this.div.innerHTML = this.getHTML(box.width, box.height);
+    },
+
+    getHTML: function (width, height) {
+        // return HTML for movie
+        var html = '';
+        var flashvars = 'id=' + this.id + '&width=' + width + '&height=' + height;
+
+        if (navigator.userAgent.match(/MSIE/)) {
+            // IE gets an OBJECT tag
+            var protocol = location.href.match(/^https/i) ? 'https://' : 'http://';
+            html += '<object classid="clsid:d27cdb6e-ae6d-11cf-96b8-444553540000" codebase="' + protocol + 'download.macromedia.com/pub/shockwave/cabs/flash/swflash.cab#version=9,0,0,0" width="' + width + '" height="' + height + '" id="' + this.movieId + '" align="middle"><param name="allowScriptAccess" value="always" /><param name="allowFullScreen" value="false" /><param name="movie" value="' + ZeroClipboard.moviePath + '" /><param name="loop" value="false" /><param name="menu" value="false" /><param name="quality" value="best" /><param name="bgcolor" value="#ffffff" /><param name="flashvars" value="' + flashvars + '"/><param name="wmode" value="transparent"/></object>';
+        } else {
+            // all other browsers get an EMBED tag
+            html += '<embed id="' + this.movieId + '" src="' + ZeroClipboard.moviePath + '" loop="false" menu="false" quality="best" bgcolor="#ffffff" width="' + width + '" height="' + height + '" name="' + this.movieId + '" align="middle" allowScriptAccess="always" allowFullScreen="false" type="application/x-shockwave-flash" pluginspage="http://www.macromedia.com/go/getflashplayer" flashvars="' + flashvars + '" wmode="transparent" />';
+        }
+        return html;
+    },
+
+    hide: function () {
+        // temporarily hide floater offscreen
+        if (this.div) {
+            this.div.style.left = '-2000px';
+        }
+    },
+
+    show: function () {
+        // show ourselves after a call to hide()
+        this.reposition();
+    },
+
+    destroy: function () {
+        // destroy control and floater
+        if (this.domElement && this.div) {
+            this.hide();
+            this.div.innerHTML = '';
+
+            var body = document.getElementsByTagName('body')[0];
+            try {
+                body.removeChild(this.div);
+            } catch (e) {;
+            }
+
+            this.domElement = null;
+            this.div = null;
+        }
+    },
+
+    reposition: function (elem) {
+        // reposition our floating div, optionally to new container
+        // warning: container CANNOT change size, only position
+        if (elem) {
+            this.domElement = ZeroClipboard.$(elem);
+            if (!this.domElement) this.hide();
+        }
+
+        if (this.domElement && this.div) {
+            var box = ZeroClipboard.getDOMObjectPosition(this.domElement);
+            var style = this.div.style;
+            style.left = '' + box.left + 'px';
+            style.top = '' + box.top + 'px';
+        }
+    },
+
+    setText: function (newText) {
+        // set text to be copied to clipboard
+        this.clipText = newText;
+        if (this.ready) {
+            this.movie.setText(newText);
+        }
+    },
+
+    addEventListener: function (eventName, func) {
+        // add user event listener for event
+        // event types: load, queueStart, fileStart, fileComplete, queueComplete, progress, error, cancel
+        eventName = eventName.toString().toLowerCase().replace(/^on/, '');
+        if (!this.handlers[eventName]) {
+            this.handlers[eventName] = [];
+        }
+        this.handlers[eventName].push(func);
+    },
+
+    setHandCursor: function (enabled) {
+        // enable hand cursor (true), or default arrow cursor (false)
+        this.handCursorEnabled = enabled;
+        if (this.ready) {
+            this.movie.setHandCursor(enabled);
+        }
+    },
+
+    setCSSEffects: function (enabled) {
+        // enable or disable CSS effects on DOM container
+        this.cssEffects = !! enabled;
+    },
+
+    receiveEvent: function (eventName, args) {
+        // receive event from flash
+        eventName = eventName.toString().toLowerCase().replace(/^on/, '');
+
+        // special behavior for certain events
+        switch (eventName) {
+        case 'load':
+            // movie claims it is ready, but in IE this isn't always the case...
+            // bug fix: Cannot extend EMBED DOM elements in Firefox, must use traditional function
+            this.movie = document.getElementById(this.movieId);
+            if (!this.movie) {
+                var self = this;
+                setTimeout(function () {
+                    self.receiveEvent('load', null);
+                }, 1);
+                return;
+            }
+
+            // firefox on pc needs a "kick" in order to set these in certain cases
+            if (!this.ready && navigator.userAgent.match(/Firefox/) && navigator.userAgent.match(/Windows/)) {
+                var self = this;
+                setTimeout(function () {
+                    self.receiveEvent('load', null);
+                }, 100);
+                this.ready = true;
+                return;
+            }
+
+            this.ready = true;
+            try {
+                this.movie.setText(this.clipText);
+            } catch (e) {}
+            try {
+                this.movie.setHandCursor(this.handCursorEnabled);
+            } catch (e) {}
+            break;
+
+        case 'mouseover':
+            if (this.domElement && this.cssEffects) {
+                this.domElement.addClass('hover');
+                if (this.recoverActive) {
+                    this.domElement.addClass('active');
+                }
+
+
+            }
+
+
+            break;
+
+        case 'mouseout':
+            if (this.domElement && this.cssEffects) {
+                this.recoverActive = false;
+                if (this.domElement.hasClass('active')) {
+                    this.domElement.removeClass('active');
+                    this.recoverActive = true;
+                }
+                this.domElement.removeClass('hover');
+
+            }
+            break;
+
+        case 'mousedown':
+            if (this.domElement && this.cssEffects) {
+                this.domElement.addClass('active');
+            }
+            break;
+
+        case 'mouseup':
+            if (this.domElement && this.cssEffects) {
+                this.domElement.removeClass('active');
+                this.recoverActive = false;
+            }
+            break;
+        } // switch eventName
+        if (this.handlers[eventName]) {
+            for (var idx = 0, len = this.handlers[eventName].length; idx < len; idx++) {
+                var func = this.handlers[eventName][idx];
+
+                if (typeof(func) == 'function') {
+                    // actual function reference
+                    func(this, args);
+                } else if ((typeof(func) == 'object') && (func.length == 2)) {
+                    // PHP style object + method, i.e. [myObject, 'myMethod']
+                    func[0][func[1]](this, args);
+                } else if (typeof(func) == 'string') {
+                    // name of function
+                    window[func](this, args);
+                }
+            } // foreach event handler defined
+        } // user defined handler for event
+    }
+
+};	
+
+/**
  * 复制
  * Created by GUY on 2016/2/16.
  * @class BI.ZeroClip
@@ -10262,7 +11302,7 @@ BI.ZeroClip = BI.inherit(BI.BasicButton, {
         
         BI.nextTick(function () {
             self.element.zclip({
-                path: BI.servletURL + "?op=resource&resource=/com/fr/bi/web/resources/ZeroClipboard.swf",
+                path: BI.servletURL + "resources/ZeroClipboard.swf",
                 copy: o.copy,
                 beforeCopy: o.beforeCopy,
                 afterCopy: o.afterCopy

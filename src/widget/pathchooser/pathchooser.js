@@ -62,7 +62,7 @@ BI.PathChooser = BI.inherit(BI.Widget, {
     _drawPath: function (start, offset, index) {
         var self = this;
         var starts = [];
-        if (this.start.contains(start)) {
+        if (BI.contains(this.start, start)) {
             starts = this.start;
         } else {
             starts = [start];
@@ -148,7 +148,7 @@ BI.PathChooser = BI.inherit(BI.Widget, {
             var endRegionIndex = self.getRegionIndexById(BI.last(line));
             var endOffset = self.regions[endRegionIndex].getIndexByValue(BI.last(line));
             var eleft = 50 + 100 * endRegionIndex;
-            if (self.start.contains(start)) {
+            if (BI.contains(self.start, start)) {
                 radioStartX = sleft - 50;
                 path += "M" + (sleft - 50) + "," + stop;
                 self.pathes[start][i].push({
@@ -211,10 +211,10 @@ BI.PathChooser = BI.inherit(BI.Widget, {
                 self.lines[start][0].toFront();
             }
             //第一个元素无论有多少个都要显示radio
-            if (self.start.contains(start)) {
+            if (BI.contains(self.start, start)) {
                 self.lines[self.regions[0].getValueByIndex(0)][0].toFront();
             }
-            if (lines.length > 1 || self.start.contains(start)) {
+            if (lines.length > 1 || BI.contains(self.start, start)) {
                 self._drawRadio(start, offset, i, radioStartX, radioStartY);
             }
         });
@@ -258,7 +258,7 @@ BI.PathChooser = BI.inherit(BI.Widget, {
                 }
                 break;
             }
-            if (i > 0 || self.start.contains(id)) {
+            if (i > 0 || BI.contains(self.start, id)) {
                 region.addItem(id, self.texts[id]);
             }
         }
@@ -317,8 +317,8 @@ BI.PathChooser = BI.inherit(BI.Widget, {
                     //交换区域
                     if (index1 > index2) {
                         var t = regions[index2];
-                        for(var j =index2; j < index1; j++){
-                            regions[j] = regions[j+1];
+                        for (var j = index2; j < index1; j++) {
+                            regions[j] = regions[j + 1];
                         }
                         regions[index1] = t;
                     }
@@ -385,7 +385,7 @@ BI.PathChooser = BI.inherit(BI.Widget, {
             }
             BI.each(s, function (i, n) {
                 tree._recursion(n, [n.id], function (node, route) {
-                    if (e.contains(node)) {
+                    if (BI.contains(e, node)) {
                         if (!routes[n.id]) {
                             routes[n.id] = [];
                         }

@@ -3,50 +3,26 @@ Demo.Face = BI.inherit(BI.Widget, {
         baseCls: "demo-face"
     },
     render: function () {
+        var self = this;
         return {
-            type: "bi.vertical",
-            hgap: 50,
-            vgap: 20,
+            type: "bi.absolute",
             items: [{
-                type: "bi.label",
-                text: "栅格布局",
-                height: 50
-            }, {
-                type: "bi.lattice",
-                columnSize: [0.1, 0.1, 0.3, 0.4, 0.1],
-                items: [{
-                    type: "bi.label",
-                    height: 30,
-                    text: "Left-1",
-                    cls: "layout-bg1 lattice-item",
-                    hgap: 20
-                }, {
-                    type: "bi.label",
-                    height: 30,
-                    text: "Left-2",
-                    cls: "layout-bg2 lattice-item",
-                    hgap: 20
-                }, {
-                    type: "bi.label",
-                    height: 30,
-                    text: "Left-3",
-                    cls: "layout-bg3 lattice-item",
-                    hgap: 20
-                }, {
-                    type: "bi.label",
-                    height: 30,
-                    text: "Left-4",
-                    cls: "layout-bg4 lattice-item",
-                    hgap: 20
-                }, {
-                    type: "bi.label",
-                    height: 30,
-                    text: "Left-5",
-                    cls: "layout-bg5 lattice-item",
-                    hgap: 20
-                }]
+                el: {
+                    type: "bi.svg",
+                    ref: function () {
+                        self.svg = this;
+                    }
+                },
+                left: 0,
+                right: 0,
+                top: 0,
+                bottom: 0
             }]
         }
+    },
+    mounted: function () {
+        var circle = this.svg.circle(this.element.width() / 2, this.element.height() / 2, 20);
+        circle.animate({fill: "#223fa3", stroke: "#000", "stroke-width": 80, "stroke-opacity": 0.5}, 2000);
     }
 });
 $.shortcut("demo.face", Demo.Face);
