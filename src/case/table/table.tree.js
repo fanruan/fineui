@@ -327,4 +327,4 @@ BI.extend(BI.TableTree, {
     }
 });
 
-$.shortcut("bi.table_tree", BI.TableTree);
+$.shortcut("bi.tree_table", BI.TableTree);

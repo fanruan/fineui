@@ -151,8 +151,8 @@ Demo.CORE_CONFIG = [{
     value: "demo.layer_searcher"
 }, {
     pId: 102,
-    text: "bi.customtree",
-    value: "demo.customtree"
+    text: "bi.custom_tree",
+    value: "demo.custom_tree"
 }, {
     pId: 102,
     text: "bi.grid_view",

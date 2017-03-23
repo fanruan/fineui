@@ -9890,7 +9890,7 @@ BI.extend(BI.TableTree, {
     }
 });
 
-$.shortcut("bi.table_tree", BI.TableTree);/**
+$.shortcut("bi.tree_table", BI.TableTree);/**
  * guy
  * 复选导航条
  * Created by GUY on 2015/8/25.
@@ -10344,7 +10344,7 @@ BI.SimpleTreeView = BI.inherit(BI.Widget, {
         var self = this, o = this.options;
         this.structure = new BI.Tree();
         this.tree = BI.createWidget({
-            type: "bi.tree",
+            type: "bi.tree_view",
             element: this,
             itemsCreator: function (op, callback) {
                 var fn = function (items) {

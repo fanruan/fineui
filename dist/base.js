@@ -1438,13 +1438,13 @@ BI.ButtonTree = BI.inherit(BI.ButtonGroup, {
         var node;
         BI.any(this.buttons, function (i, item) {
             if (item.isEnabled()) {
-                if (item.getValue() === value) {
-                    node = item;
-                    return true;
-                } else if (BI.isFunction(item.getNodeByValue)) {
+                if (BI.isFunction(item.getNodeByValue)) {
                     if (node = item.getNodeByValue(value)) {
                         return true;
                     }
+                } else if (item.attr("value") === value) {
+                    node = item;
+                    return true;
                 }
             }
         });
@@ -2073,7 +2073,7 @@ BI.TreeView.EVENT_CHANGE = "EVENT_CHANGE";
 BI.TreeView.EVENT_INIT = BI.Events.INIT;
 BI.TreeView.EVENT_AFTERINIT = BI.Events.AFTERINIT;
 
-$.shortcut("bi.tree", BI.TreeView);/**
+$.shortcut("bi.tree_view", BI.TreeView);/**
  * guy
  * 同步树
  * @class BI.SyncTree

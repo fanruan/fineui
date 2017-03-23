@@ -69,23 +69,23 @@ Demo.BASE_CONFIG = [{
 }, {
     pId: 2,
     id: 203,
-    text: "树控件"
+    text: "tree"
 }, {
     pId: 203,
-    text: "bi.treeview",
-    value: "demo.treeview"
+    text: "bi.tree_view",
+    value: "demo.tree_view"
 }, {
     pId: 203,
-    text: "bi.synctree",
-    value: "demo.synctree"
+    text: "bi.sync_tree",
+    value: "demo.sync_tree"
 }, {
     pId: 203,
-    text: "bi.parttree",
-    value: "demo.parttree"
+    text: "bi.part_tree",
+    value: "demo.part_tree"
 }, {
     pId: 2,
     id: 204,
-    text: "表格"
+    text: "table"
 }, {
     pId: 204,
     text: "bi.table_view",
@@ -98,6 +98,10 @@ Demo.BASE_CONFIG = [{
     pId: 204,
     text: "bi.collection_table",
     value: "demo.collection_table"
+}, {
+    pId: 204,
+    text: "bi.resizable_table",
+    value: "demo.resizable_table"
 }, {
     pId: 2,
     text: "bi.canvas",

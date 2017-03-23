@@ -56,6 +56,22 @@ Demo.CASE_CONFIG = [{
     value: "demo.level_tree"
 }, {
     pId: 3,
+    id: 304,
+    text: "table"
+}, {
+    pId: 304,
+    text: "bi.adaptive_table",
+    value: "demo.adaptive_table"
+}, {
+    pId: 304,
+    text: "bi.tree_table",
+    value: "demo.tree_table"
+}, {
+    pId: 304,
+    text: "bi.layer_tree_table",
+    value: "demo.layer_tree_table"
+}, {
+    pId: 3,
     text: "bi.calendar",
     value: "demo.calendar"
 }, {
@@ -70,50 +86,8 @@ Demo.CASE_CONFIG = [{
     pId: 3,
     text: "bi.color_chooser",
     value: "demo.color_chooser"
-},
-
-    {
-        pId: 3,
-        text: "各种checkbox",
-        value: "demo.checkboxes"
-    }, {
-        pId: 3,
-        text: "各种tip",
-        value: "demo.tips"
-    }, {
-        pId: 3,
-        text: "bi.float_box",
-        value: "demo.float_box"
-    }, {
-        pId: 3,
-        text: "bi.float_box",
-        value: "demo.float_box"
-    }, {
-        pId: 3,
-        text: "bi.segment",
-        value: "demo.segment"
-    }, {
-        pId: 3,
-        id: 12,
-        text: "各种表格"
-    }, {
-        pId: 3,
-        id: 13,
-        text: "各种tree"
-    }, {
-        pId: 3,
-        text: "各种trigger",
-        value: "demo.triggers"
-    }, {
-        pId: 12,
-        text: "bi.adaptive_table",
-        value: "demo.adaptive_table"
-    }, {
-        pId: 12,
-        text: "bi.table_tree",
-        value: "demo.table_tree"
-    }, {
-        pId: 12,
-        text: "bi.layer_tree_table",
-        value: "demo.layer_tree_table"
-    }];
+}, {
+    pId: 3,
+    text: "bi.segment",
+    value: "demo.segment"
+}];
