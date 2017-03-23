@@ -15479,10 +15479,10 @@ BI.Pager = BI.inherit(BI.Widget, {
         var self = this;
         this.currPage = BI.result(this.options, "curr");
         //翻页太灵敏
-        this._lock = false;
-        this._debouce = BI.debounce(function () {
-            self._lock = false;
-        }, 300);
+        // this._lock = false;
+        // this._debouce = BI.debounce(function () {
+        //     self._lock = false;
+        // }, 300);
         this._populate();
     },
 
@@ -15618,11 +15618,11 @@ BI.Pager = BI.inherit(BI.Widget, {
             layouts: o.layouts
         });
         this.button_group.on(BI.Controller.EVENT_CHANGE, function (type, value, obj) {
-            if (self._lock === true) {
-                return;
-            }
-            self._lock = true;
-            self._debouce();
+            // if (self._lock === true) {
+            //     return;
+            // }
+            // self._lock = true;
+            // self._debouce();
             if (type === BI.Events.CLICK) {
                 var v = self.button_group.getValue()[0];
                 switch (v) {
@@ -28233,6 +28233,7 @@ BI.Svg = BI.inherit(BI.Widget, {
         BI.Svg.superclass._init.apply(this, arguments);
         this.paper = Raphael(this.element[0]);
 
+        this.element.css("overflow", "hidden");
         $(this.paper.canvas).width("100%").height("100%").css({"left": "0", "top": "0"}).appendTo(this.element);
 
         this.top = this.paper.top;

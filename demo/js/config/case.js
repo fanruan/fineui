@@ -55,6 +55,10 @@ Demo.CASE_CONFIG = [{
     text: "bi.level_tree",
     value: "demo.level_tree"
 }, {
+    pId: 303,
+    text: "bi.branch_relation",
+    value: "demo.branch_relation"
+}, {
     pId: 3,
     id: 304,
     text: "table"
