@@ -18,8 +18,8 @@ BI.HorizontalLayout = BI.inherit(BI.Layout, {
             bgap: 0
         });
     },
-    created: function () {
-        BI.HorizontalLayout.superclass.created.apply(this, arguments);
+    render: function () {
+        BI.HorizontalLayout.superclass.render.apply(this, arguments);
         this.$table = $("<table>").attr({"cellspacing": 0, "cellpadding": 0}).css({
             "position": "relative",
             "white-space": "nowrap",
@@ -140,8 +140,8 @@ BI.HorizontalCellLayout = BI.inherit(BI.Layout, {
             bgap: 0
         });
     },
-    created: function () {
-        BI.HorizontalCellLayout.superclass.created.apply(this, arguments);
+    render: function () {
+        BI.HorizontalCellLayout.superclass.render.apply(this, arguments);
         this.element.css({"display": "table", "vertical-align": "top"});
         this.populate(this.options.items);
     },

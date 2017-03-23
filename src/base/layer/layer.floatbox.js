@@ -20,7 +20,6 @@ BI.FloatBox = BI.inherit(BI.Widget, {
         this._center = BI.createWidget();
         this._north = BI.createWidget();
         this.element.draggable({
-            cursor: BICst.cursorUrl,
             handle: ".bi-message-title",
             drag: function (e, ui) {
                 var W = $("body").width(), H = $("body").height();

@@ -11,8 +11,8 @@ BI.FlexCenterLayout = BI.inherit(BI.Layout, {
             baseCls: "bi-flex-center-layout"
         });
     },
-    created: function () {
-        BI.FlexCenterLayout.superclass.created.apply(this, arguments);
+    render: function () {
+        BI.FlexCenterLayout.superclass.render.apply(this, arguments);
         this.populate(this.options.items);
     },
 

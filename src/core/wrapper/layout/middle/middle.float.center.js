@@ -15,8 +15,8 @@ BI.FloatCenterLayout = BI.inherit(BI.Layout, {
             bgap: 0
         });
     },
-    created: function () {
-        BI.FloatCenterLayout.superclass.created.apply(this, arguments);
+    render: function () {
+        BI.FloatCenterLayout.superclass.render.apply(this, arguments);
         this.populate(this.options.items);
     },
 

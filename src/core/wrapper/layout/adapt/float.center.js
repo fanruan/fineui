@@ -14,8 +14,8 @@ BI.FloatCenterAdaptLayout = BI.inherit(BI.Layout, {
             rgap: 0
         });
     },
-    created: function () {
-        BI.FloatCenterAdaptLayout.superclass.created.apply(this, arguments);
+    render: function () {
+        BI.FloatCenterAdaptLayout.superclass.render.apply(this, arguments);
         this.populate(this.options.items);
     },
 

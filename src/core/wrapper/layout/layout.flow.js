@@ -19,8 +19,8 @@ BI.FloatLeftLayout = BI.inherit(BI.Layout, {
             bgap: 0
         });
     },
-    created: function () {
-        BI.FloatLeftLayout.superclass.created.apply(this, arguments);
+    render: function () {
+        BI.FloatLeftLayout.superclass.render.apply(this, arguments);
         this.populate(this.options.items);
     },
 
@@ -84,8 +84,8 @@ BI.FloatRightLayout = BI.inherit(BI.Layout, {
             bgap: 0
         });
     },
-    created: function () {
-        BI.FloatRightLayout.superclass.created.apply(this, arguments);
+    render: function () {
+        BI.FloatRightLayout.superclass.render.apply(this, arguments);
         this.populate(this.options.items);
     },
 

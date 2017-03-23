@@ -10,8 +10,8 @@ BI.AdaptiveLayout = BI.inherit(BI.Layout, {
             bgap: null
         });
     },
-    created: function () {
-        BI.AdaptiveLayout.superclass.created.apply(this, arguments);
+    render: function () {
+        BI.AdaptiveLayout.superclass.render.apply(this, arguments);
         this.populate(this.options.items);
     },
 

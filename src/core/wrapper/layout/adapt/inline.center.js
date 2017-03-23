@@ -19,8 +19,8 @@ BI.InlineCenterAdaptLayout = BI.inherit(BI.Layout, {
             bgap: 0
         });
     },
-    created: function () {
-        BI.InlineCenterAdaptLayout.superclass.created.apply(this, arguments);
+    render: function () {
+        BI.InlineCenterAdaptLayout.superclass.render.apply(this, arguments);
         this.element.css({
             whiteSpace: "nowrap"
         });

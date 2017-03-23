@@ -33,13 +33,13 @@ module.exports = function (grunt) {
             //最基础的控件
             baseJs: {
                 src: [
-                    'src/third/codemirror/codemirror.js',
                     'src/third/**/*.js',
                     'src/base/pane.js',
                     'src/base/single/single.js',
                     'src/base/single/text.js',
                     'src/base/single/button/button.basic.js',
                     'src/base/single/button/button.node.js',
+                    'src/base/single/tip/tip.js',
                     'src/base/combination/group.button.js',
                     'src/base/combination/tree.button.js',
                     'src/base/combination/map.button.js',

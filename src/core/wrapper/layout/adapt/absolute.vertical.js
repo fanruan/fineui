@@ -16,8 +16,8 @@ BI.AbsoluteVerticalLayout = BI.inherit(BI.Layout, {
         });
     },
 
-    created: function () {
-        BI.AbsoluteVerticalLayout.superclass.created.apply(this, arguments);
+    render: function () {
+        BI.AbsoluteVerticalLayout.superclass.render.apply(this, arguments);
         this.populate(this.options.items);
     },
 

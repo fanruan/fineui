@@ -36,8 +36,8 @@ BI.DivisionLayout = BI.inherit(BI.Layout, {
             //]
         });
     },
-    created: function () {
-        BI.DivisionLayout.superclass.created.apply(this, arguments);
+    render: function () {
+        BI.DivisionLayout.superclass.render.apply(this, arguments);
         this.populate(this.options.items);
     },
 

@@ -32,6 +32,7 @@ BI.LoadingBar = BI.inherit(BI.Single, {
 
         this.loading = BI.createWidget({
             type: "bi.layout",
+            width: this.options.height,
             height:this.options.height,
             cls: "loading-background cursor-default"
         })

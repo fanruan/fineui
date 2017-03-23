@@ -14,8 +14,8 @@ BI.FloatHorizontalLayout = BI.inherit(BI.Layout, {
             rgap: 0
         });
     },
-    created: function () {
-        BI.FloatHorizontalLayout.superclass.created.apply(this, arguments);
+    render: function () {
+        BI.FloatHorizontalLayout.superclass.render.apply(this, arguments);
         this.populate(this.options.items);
     },
 

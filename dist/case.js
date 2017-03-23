@@ -5017,6 +5017,9 @@ $.shortcut("bi.select_list", BI.SelectList);/**
  * Created by roy on 15/11/6.
  */
 BI.LazyLoader = BI.inherit(BI.Widget, {
+    _const: {
+        PAGE: 100
+    },
     _defaultConfig: function () {
         return BI.extend(BI.LazyLoader.superclass._defaultConfig.apply(this, arguments), {
             baseCls: "bi-lazy-loader",
@@ -5048,9 +5051,9 @@ BI.LazyLoader = BI.inherit(BI.Widget, {
     },
     _getNextItems: function (options) {
         var self = this, o = this.options;
-        var lastNum = o.items.length - BICst.PAGE_COUNT * (options.times - 1);
+        var lastNum = o.items.length - this._const.PAGE * (options.times - 1);
         var lastItems = BI.last(o.items, lastNum);
-        var nextItems = BI.first(lastItems, BICst.PAGE_COUNT);
+        var nextItems = BI.first(lastItems, this._const.PAGE);
         return nextItems;
     },
 
@@ -8168,247 +8171,6 @@ BI.extend(BI.TableTree, {
 });
 
 $.shortcut("bi.table_tree", BI.TableTree);/**
- * guy
- * 气泡提示
- * @class BI.Bubble
- * @extends BI.Tip
- * @type {*|void|Object}
- */
-BI.Bubble = BI.inherit(BI.Tip, {
-    _defaultConfig: function() {
-        return BI.extend(BI.Bubble.superclass._defaultConfig.apply(this, arguments), {
-            extraCls: "bi-bubble",
-            direction: "top",
-            text: "",
-            height: 35
-        })
-    },
-    _init : function() {
-        BI.Bubble.superclass._init.apply(this, arguments);
-        var fn = function (e) {
-            e.stopPropagation();
-            e.stopEvent();
-            return false;
-        };
-        this.element.bind({"click": fn, "mousedown": fn, "mouseup": fn, "mouseover": fn, "mouseenter": fn, "mouseleave": fn, "mousemove": fn});
-        BI.createWidget({
-            type: "bi.left",
-            element: this,
-            items: [this["_" + this.options.direction]()]
-        })
-    },
-
-    _createBubbleText: function(){
-        return (this.text = BI.createWidget({
-            type: "bi.label",
-            cls: "bubble-text",
-            text: this.options.text,
-            hgap: 10,
-            height: 30
-        }));
-    },
-
-    _top: function(){
-        return BI.createWidget({
-            type: "bi.vertical",
-            items: [{
-                el: this._createBubbleText(),
-                height: 30
-            }, {
-                el: {
-                    type: "bi.layout"
-                },
-                height: 3
-            }]
-        })
-    },
-
-    _bottom: function(){
-        return BI.createWidget({
-            type: "bi.vertical",
-            items: [{
-                el: {
-                    type: "bi.layout"
-                },
-                height: 3
-            }, {
-                el: this._createBubbleText(),
-                height: 30
-            }]
-        })
-    },
-
-    _left: function(){
-        return BI.createWidget({
-            type: "bi.right",
-            items: [{
-                el: {
-                    type: "bi.layout",
-                    width: 3,
-                    height: 30
-                }
-            }, {
-                el: this._createBubbleText()
-            }]
-        })
-    },
-
-    _right: function(){
-        return BI.createWidget({
-            type: "bi.inline",
-            items: [{
-                el: {
-                    type: "bi.layout",
-                    width: 3,
-                    height: 30
-                }
-            }, {
-                el: this._createBubbleText()
-            }]
-        })
-    },
-
-    setText: function(text){
-        this.text.setText(text);
-    }
-});
-
-$.shortcut("bi.bubble", BI.Bubble);/**
- * toast提示
- *
- * Created by GUY on 2015/9/7.
- * @class BI.Toast
- * @extends BI.Tip
- */
-BI.Toast = BI.inherit(BI.Tip, {
-    _const: {
-        minWidth: 200,
-        hgap: 20
-    },
-
-    _defaultConfig: function () {
-        return BI.extend(BI.Toast.superclass._defaultConfig.apply(this, arguments), {
-            extraCls: "bi-toast",
-            text: "",
-            level: "success",//success或warning
-            height: 30
-        })
-    },
-    _init: function () {
-        BI.Toast.superclass._init.apply(this, arguments);
-        var o = this.options;
-        this.element.css({
-            minWidth: this._const.minWidth + "px"
-        })
-        this.element.addClass("toast-" + o.level);
-        var fn = function (e) {
-            e.stopPropagation();
-            e.stopEvent();
-            return false;
-        };
-        this.element.bind({"click": fn, "mousedown": fn, "mouseup": fn, "mouseover": fn, "mouseenter": fn, "mouseleave": fn, "mousemove": fn});
-
-        this.text = BI.createWidget({
-            type: "bi.label",
-            element: this,
-            text: o.text,
-            height: 30,
-            hgap: this._const.hgap
-        })
-    },
-
-    setWidth: function(width){
-        this.element.width(width);
-    },
-
-    setText: function (text) {
-        this.text.setText(text);
-    }
-});
-
-$.shortcut("bi.toast", BI.Toast);/**
- * toast提示
- *
- * Created by GUY on 2015/9/7.
- * @class BI.Tooltip
- * @extends BI.Tip
- */
-BI.Tooltip = BI.inherit(BI.Tip, {
-    _const: {
-        hgap: 10
-    },
-
-    _defaultConfig: function () {
-        return BI.extend(BI.Tooltip.superclass._defaultConfig.apply(this, arguments), {
-            extraCls: "bi-tooltip",
-            text: "",
-            level: "success",//success或warning
-            height: 20
-        })
-    },
-    _init: function () {
-        BI.Tooltip.superclass._init.apply(this, arguments);
-        var self = this, o = this.options;
-        this.element.addClass("tooltip-" + o.level);
-        var fn = function (e) {
-            e.stopPropagation();
-            e.stopEvent();
-            return false;
-        };
-        this.element.bind({
-            "click": fn,
-            "mousedown": fn,
-            "mouseup": fn,
-            "mouseover": fn,
-            "mouseenter": fn,
-            "mouseleave": fn,
-            "mousemove": fn
-        });
-
-        var texts = (o.text + "").split("\n");
-        if (texts.length > 1) {
-            BI.createWidget({
-                type: "bi.vertical",
-                element: this,
-                hgap: this._const.hgap,
-                items: BI.map(texts, function (i, text) {
-                    return {
-                        type: "bi.label",
-                        textAlign: "left",
-                        whiteSpace: "normal",
-                        text: text,
-                        textHeight: 16
-                    }
-                })
-            })
-        } else {
-            this.text = BI.createWidget({
-                type: "bi.label",
-                element: this,
-                textAlign: "left",
-                whiteSpace: "normal",
-                text: o.text,
-                textHeight: 20,
-                hgap: this._const.hgap
-            });
-        }
-    },
-
-    setWidth: function (width) {
-        this.element.width(width - 2 * this._const.hgap);
-    },
-
-    setText: function (text) {
-        this.text && this.text.setText(text);
-    },
-
-    setLevel: function (level) {
-        this.element.removeClass("tooltip-success").removeClass("tooltip-warning");
-        this.element.addClass("tooltip-" + level);
-    }
-});
-
-$.shortcut("bi.tooltip", BI.Tooltip);/**
  * guy
  * 复选导航条
  * Created by GUY on 2015/8/25.

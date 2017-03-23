@@ -29,8 +29,8 @@ BI.HTapeLayout = BI.inherit(BI.Layout, {
             ]
         });
     },
-    created: function () {
-        BI.HTapeLayout.superclass.created.apply(this, arguments);
+    render: function () {
+        BI.HTapeLayout.superclass.render.apply(this, arguments);
         this.populate(this.options.items);
     },
 
@@ -133,8 +133,8 @@ BI.VTapeLayout = BI.inherit(BI.Layout, {
             ]
         });
     },
-    created: function () {
-        BI.VTapeLayout.superclass.created.apply(this, arguments);
+    render: function () {
+        BI.VTapeLayout.superclass.render.apply(this, arguments);
         this.populate(this.options.items);
     },
 

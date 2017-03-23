@@ -55,7 +55,7 @@
     }
 
     function getFormulaKeywords() {
-        return FormulaCollections;
+        return BI.FormulaCollections;
     }
 
     function formulaHint(editor, options) {

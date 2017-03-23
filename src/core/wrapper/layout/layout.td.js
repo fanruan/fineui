@@ -23,8 +23,8 @@ BI.TdLayout = BI.inherit(BI.Layout, {
             ]]
         });
     },
-    created: function () {
-        BI.TdLayout.superclass.created.apply(this, arguments);
+    render: function () {
+        BI.TdLayout.superclass.render.apply(this, arguments);
         this.$table = $("<table>").attr({"cellspacing": 0, "cellpadding": 0}).css({
             "position": "relative",
             "width": "100%",
