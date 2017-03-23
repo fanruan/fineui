@@ -3,22 +3,29 @@ Demo.Bubble = BI.inherit(BI.Widget, {
         baseCls: "demo-bubble"
     },
     render: function () {
+        var btns = [];
         var items = [
             {
                 el: {
+                    ref: function (_ref) {
+                        btns.push(_ref);
+                    },
                     type: 'bi.button',
                     text: 'bubble测试',
-                    height : 30,
-                    handler: function(){
+                    height: 30,
+                    handler: function () {
                         BI.Bubbles.show("singleBubble1", "bubble测试", this);
                     }
                 }
             }, {
                 el: {
+                    ref: function (_ref) {
+                        btns.push(_ref);
+                    },
                     type: 'bi.button',
                     text: 'bubble测试(居中显示)',
-                    height : 30,
-                    handler: function(){
+                    height: 30,
+                    handler: function () {
                         BI.Bubbles.show("singleBubble2", "bubble测试", this, {
                             offsetStyle: "center"
                         });
@@ -26,10 +33,13 @@ Demo.Bubble = BI.inherit(BI.Widget, {
                 }
             }, {
                 el: {
+                    ref: function (_ref) {
+                        btns.push(_ref);
+                    },
                     type: 'bi.button',
                     text: 'bubble测试(右边显示)',
-                    height : 30,
-                    handler: function(){
+                    height: 30,
+                    handler: function () {
                         BI.Bubbles.show("singleBubble3", "bubble测试", this, {
                             offsetStyle: "right"
                         });
@@ -39,8 +49,8 @@ Demo.Bubble = BI.inherit(BI.Widget, {
         ];
         return {
             type: "bi.left",
-            vgap : 200,
-            hgap : 20,
+            vgap: 200,
+            hgap: 20,
             items: items
         }
     }

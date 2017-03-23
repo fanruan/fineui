@@ -1,7 +1,10 @@
 Demo.CASE_CONFIG = [{
     id: 3,
-    text: "实例控件"
+    text: "实例控件",
+    open: true,
 }, {
+
+},{
     pId: 3,
     text: "bi.calendar",
     value: "demo.calendar"
