@@ -159,8 +159,8 @@ Demo.CORE_CONFIG = [{
     value: "demo.grid_view"
 }, {
     pId: 102,
-    text: "bi.collection",
-    value: "demo.collection"
+    text: "bi.collection_view",
+    value: "demo.collection_view"
 }, {
     pId: 1,
     text: "widget",

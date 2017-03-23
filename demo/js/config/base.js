@@ -1,6 +1,7 @@
 Demo.BASE_CONFIG = [{
     id: 2,
     text: "基础控件",
+    open: true
 }, {
     pId: 2,
     text: "bi.label",
@@ -91,12 +92,12 @@ Demo.BASE_CONFIG = [{
     value: "demo.table_view"
 }, {
     pId: 204,
-    text: "bi.table_grid",
-    value: "demo.table_grid"
+    text: "bi.grid_table",
+    value: "demo.grid_table"
 }, {
     pId: 204,
-    text: "bi.table_collection",
-    value: "demo.table_collection"
+    text: "bi.collection_table",
+    value: "demo.collection_table"
 }, {
     pId: 2,
     text: "bi.canvas",

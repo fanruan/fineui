@@ -23083,6 +23083,9 @@ BI.HorizontalFillLayoutLogic = BI.inherit(BI.Logic, {
  * @class Array
  */
 $.extend(Array.prototype, {
+    contains: function (o) {
+        return this.indexOf(o) > -1;
+    },
     /**
      * 检查指定的值是否在数组中
      * @param {Object} o 要检查的值

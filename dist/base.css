@@ -2190,13 +2190,13 @@ ul.ztree.zTreeDragUL {
   color: #808080;
 }
 .bi-display-tree .ztree li span.button.switch.center_open {
-  background-image: url("${servletURL}?op=resource&resource=/com/fr/bi/web/images/icon/tree-vertical-line-3.png");
+  background-image: url("icon/tree-vertical-line-3.png");
 }
 .bi-display-tree .ztree li span.button.switch.roots_open {
-  background-image: url("${servletURL}?op=resource&resource=/com/fr/bi/web/images/icon/tree-vertical-line-2.png");
+  background-image: url("icon/tree-vertical-line-2.png");
 }
 .bi-display-tree .ztree li span.button.switch.bottom_open {
-  background-image: url("${servletURL}?op=resource&resource=/com/fr/bi/web/images/icon/tree-vertical-line-4.png");
+  background-image: url("icon/tree-vertical-line-4.png");
 }
 .bi-display-tree .ztree li a,
 .bi-display-tree .ztree li span {
