@@ -100,17 +100,17 @@ BI.Layout = BI.inherit(BI.Widget, {
      */
     addItem: function (item) {
         var w = this._addElement(this.options.items.length, item);
-        w._mount();
         this.options.items.push(item);
         w.element.appendTo(this.element);
+        w._mount();
         return w;
     },
 
     prependItem: function (item) {
         var w = this._addElement(this.options.items.length, item);
-        w._mount();
         this.options.items.unshift(item);
         w.element.prependTo(this.element);
+        w._mount();
         return w;
     },
 
@@ -122,10 +122,10 @@ BI.Layout = BI.inherit(BI.Widget, {
     },
 
     prependItems: function (items) {
-        var self = this;
-        BI.each(items, function (i, item) {
-            self.prependItem(item);
-        })
+        items = items || [];
+        for (var i = items.length - 1; i >= 0; i--) {
+            this.prependItem(items[i]);
+        }
     },
 
     getValue: function () {
