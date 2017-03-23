@@ -29,16 +29,7 @@ BI.BubblesController = BI.inherit(BI.Controller, {
         });
     },
 
-    hide: function (name, callback) {
-        if (!this.has(name)) {
-            return this;
-        }
-        this.get(name).element.hide(0, callback);
-        this.get(name).invisible();
-        return this;
-    },
-
-    _getOffsetLeft: function(name, context, offsetStyle){
+    _getOffsetLeft: function (name, context, offsetStyle) {
         var left = 0;
         if ("center" === offsetStyle) {
             left = context.element.offset().left + (context.element.bounds().width - this.get(name).element.bounds().width) / 2;
@@ -57,7 +48,7 @@ BI.BubblesController = BI.inherit(BI.Controller, {
         return context.element.offset().left;
     },
 
-    _getOffsetTop: function(name, context, offsetStyle){
+    _getOffsetTop: function (name, context, offsetStyle) {
         var top = 0;
         if ("center" === offsetStyle) {
             top = context.element.offset().top + (context.element.bounds().height - this.get(name).element.bounds().height) / 2;
@@ -75,25 +66,25 @@ BI.BubblesController = BI.inherit(BI.Controller, {
         return context.element.offset().top;
     },
 
-    _getLeftPosition: function(name, context, offsetStyle){
+    _getLeftPosition: function (name, context, offsetStyle) {
         var position = $.getLeftPosition(context, this.get(name));
         position.top = this._getOffsetTop(name, context, offsetStyle);
         return position;
     },
 
-    _getBottomPosition: function(name, context, offsetStyle){
+    _getBottomPosition: function (name, context, offsetStyle) {
         var position = $.getBottomPosition(context, this.get(name));
         position.left = this._getOffsetLeft(name, context, offsetStyle);
         return position;
     },
 
-    _getTopPosition: function(name, context, offsetStyle){
+    _getTopPosition: function (name, context, offsetStyle) {
         var position = $.getTopPosition(context, this.get(name));
         position.left = this._getOffsetLeft(name, context, offsetStyle);
         return position;
     },
 
-    _getRightPosition: function(name, context, offsetStyle){
+    _getRightPosition: function (name, context, offsetStyle) {
         var position = $.getRightPosition(context, this.get(name));
         position.top = this._getOffsetTop(name, context, offsetStyle);
         return position;
@@ -123,8 +114,8 @@ BI.BubblesController = BI.inherit(BI.Controller, {
             items: [{
                 el: this.storeBubbles[name]["top"]
             }]
-        })
-        this.set(name, this.storeBubbles[name]["top"])
+        });
+        this.set(name, this.storeBubbles[name]["top"]);
         var position = this._getTopPosition(name, context, offsetStyle);
         this.get(name).element.css({left: position.left, top: position.top});
         this.get(name).invisible();
@@ -138,7 +129,7 @@ BI.BubblesController = BI.inherit(BI.Controller, {
                 items: [{
                     el: this.storeBubbles[name]["left"]
                 }]
-            })
+            });
             this.set(name, this.storeBubbles[name]["left"]);
             var position = this._getLeftPosition(name, context, offsetStyle);
             this.get(name).element.css({left: position.left, top: position.top});
@@ -153,8 +144,8 @@ BI.BubblesController = BI.inherit(BI.Controller, {
                     items: [{
                         el: this.storeBubbles[name]["right"]
                     }]
-                })
-                this.set(name, this.storeBubbles[name]["right"])
+                });
+                this.set(name, this.storeBubbles[name]["right"]);
                 var position = this._getRightPosition(name, context, offsetStyle);
                 this.get(name).element.css({left: position.left, top: position.top});
                 this.get(name).invisible();
@@ -178,6 +169,14 @@ BI.BubblesController = BI.inherit(BI.Controller, {
         }
         this.get(name).setText(text);
         this.get(name).visible();
+        return this;
+    },
+
+    hide: function (name) {
+        if (!this.has(name)) {
+            return this;
+        }
+        this.get(name).invisible();
         return this;
     },
 
@@ -205,7 +204,10 @@ BI.BubblesController = BI.inherit(BI.Controller, {
         if (!this.has(name)) {
             return this;
         }
-        this.bubblesManager[name].destroy();
+        BI.each(this.storeBubbles[name], function (dir, bubble) {
+            bubble.destroy();
+        });
+        delete this.storeBubbles[name];
         delete this.bubblesManager[name];
         return this;
     }

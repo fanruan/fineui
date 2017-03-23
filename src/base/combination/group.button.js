@@ -9,11 +9,7 @@ BI.ButtonGroup = BI.inherit(BI.Widget, {
         return BI.extend(BI.ButtonGroup.superclass._defaultConfig.apply(this, arguments), {
             baseCls: "bi-button-group",
             behaviors: {},
-            items: [
-                {
-                    el: {type: "bi.text_button", text: "", value: ""}
-                }
-            ],
+            items: [],
             chooseType: BI.Selection.Single,
             layouts: [{
                 type: "bi.center",

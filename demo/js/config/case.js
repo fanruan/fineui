@@ -1,6 +1,35 @@
 Demo.CASE_CONFIG = [{
     id: 3,
-    text: "实例控件"
+    text: "实例控件",
+    open: true,
+}, {
+    pId: 3,
+    id: 301,
+    text: "editors"
+}, {
+    pId: 301,
+    text: "bi.record_editor",
+    value: "demo.record_editor"
+}, {
+    pId: 301,
+    text: "bi.shelter_editor",
+    value: "demo.shelter_editor"
+}, {
+    pId: 301,
+    text: "bi.sign_editor",
+    value: "demo.sign_editor"
+}, {
+    pId: 301,
+    text: "bi.state_editor",
+    value: "demo.state_editor"
+}, {
+    pId: 3,
+    id: 302,
+    text: "combo"
+}, {
+    pId: 302,
+    text: "bi.bubble_combo",
+    value: "demo.bubble_combo"
 }, {
     pId: 3,
     text: "bi.calendar",
@@ -11,40 +40,12 @@ Demo.CASE_CONFIG = [{
     value: "demo.zclip"
 }, {
     pId: 3,
-    text: "bi.complex_calendar",
-    value: "demo.complex_calendar"
+    text: "bi.complex_canvas",
+    value: "demo.complex_canvas"
 }, {
     pId: 3,
-    text: "bi.calendar",
-    value: "demo.calendar"
-}, {
-    pId: 3,
-    text: "bi.colorpicker",
-    value: "demo.colorpicker"
-}, {
-    pId: 3,
-    text: "bi.bubble_combo",
-    value: "demo.bubble_combo"
-}, {
-    pId: 3,
-    id: 11,
-    text: "editors"
-}, {
-    pId: 11,
-    text: "bi.record_editor",
-    value: "demo.record_editor"
-}, {
-    pId: 11,
-    text: "bi.shelter_editor",
-    value: "demo.shelter_editor"
-}, {
-    pId: 11,
-    text: "bi.sign_editor",
-    value: "demo.sign_editor"
-}, {
-    pId: 11,
-    text: "bi.state_editor",
-    value: "demo.state_editor"
+    text: "bi.color_chooser",
+    value: "demo.color_chooser"
 }, {
     pId: 3,
     text: "各种checkbox",

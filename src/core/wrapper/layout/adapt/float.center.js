@@ -29,8 +29,8 @@ BI.FloatCenterAdaptLayout = BI.inherit(BI.Layout, {
     },
 
     mounted: function () {
-        var width = this.left.element.width(),
-            height = this.left.element.height();
+        var width = this.left.element.outerWidth(),
+            height = this.left.element.outerHeight();
         this.left.element.width(width).height(height).css("float", "none");
         BI.createWidget({
             type: "bi.center_adapt",

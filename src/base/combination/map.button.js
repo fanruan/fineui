@@ -22,7 +22,7 @@ BI.ButtonMap = BI.inherit(BI.ButtonTree, {
         var buttons = BI.createWidgets(BI.createItems(items, {type: "bi.text_button", once: o.chooseType === 0}));
         var keys = BI.map(items, function (i, item) {
             item = BI.stripEL(item);
-            if (!(item.id || item.value)) {
+            if (!(BI.isKey(item.id) || BI.isKey(item.value))) {
                 throw new Error("item必须包含id或value属性");
             }
             return item.id || item.value;

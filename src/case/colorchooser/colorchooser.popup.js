@@ -102,7 +102,7 @@ BI.ColorChooserPopup = BI.inherit(BI.Widget, {
             popup: panel
         });
 
-        this.more.on(BI.Combo.EVENT_BEFORE_POPUPVIEW, function () {
+        this.more.on(BI.Combo.EVENT_AFTER_POPUPVIEW, function () {
             self.customColorChooser.setValue(self.getValue());
         });
         panel.on(BI.PopupPanel.EVENT_CLICK_TOOLBAR_BUTTON, function (index) {
