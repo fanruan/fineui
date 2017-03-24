@@ -18,7 +18,7 @@ Demo.Func = BI.inherit(BI.Widget, {
             vgap: 20,
             items: [{
                 type: "bi.virtual_group",
-                width: 200,
+                width: 500,
                 height: 300,
                 ref: function () {
                     self.buttonMap = this;
@@ -34,7 +34,9 @@ Demo.Func = BI.inherit(BI.Widget, {
                 type: "bi.button",
                 text: "点击刷新",
                 handler: function () {
-                    self.buttonMap.populate(self._createItems());
+                    var items = self._createItems();
+                    items.pop();
+                    self.buttonMap.populate(items);
                 }
             }]
 
@@ -69,6 +71,10 @@ Demo.Item = BI.inherit(BI.Widget, {
 
     created: function () {
         console.log("创建了一项");
+    },
+
+    destroyed: function(){
+        console.log("删除了一项");
     }
 });
 $.shortcut("demo.virtual_group_item", Demo.Item);

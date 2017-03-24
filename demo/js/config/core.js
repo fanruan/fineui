@@ -143,10 +143,6 @@ Demo.CORE_CONFIG = [{
     value: "demo.layer_popup"
 }, {
     pId: 10202,
-    text: "bi.layer_scroll",
-    value: "demo.layer_scroll"
-}, {
-    pId: 10202,
     text: "bi.layer_searcher",
     value: "demo.layer_searcher"
 }, {

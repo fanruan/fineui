@@ -2672,11 +2672,7 @@ BI.Collection = BI.inherit(BI.Widget, {
         BI.each(addSet, function (index) {
             addedItems.push(renderedCells[index])
         });
-        BI.createWidget({
-            type: "bi.absolute",
-            element: this.container,
-            items: addedItems
-        });
+        this.container.addItems(addedItems);
         this.renderedCells = renderedCells;
         this.renderedKeys = renderedKeys;
     },
@@ -14520,7 +14516,7 @@ $.extend(BI, {
 BI.Grid = BI.inherit(BI.Widget, {
     _defaultConfig: function () {
         return BI.extend(BI.Grid.superclass._defaultConfig.apply(this, arguments), {
-            baseCls: "bi-grid",
+            baseCls: "bi-grid-view",
             width: 400,
             height: 300,
             overflowX: true,
@@ -14688,11 +14684,7 @@ BI.Grid = BI.inherit(BI.Widget, {
             BI.each(addSet, function (index) {
                 addedItems.push(renderedCells[index])
             });
-            BI.createWidget({
-                type: "bi.absolute",
-                element: this.container,
-                items: addedItems
-            });
+            this.container.addItems(addedItems);
             this.renderedCells = renderedCells;
             this.renderedKeys = renderedKeys;
         }
@@ -14828,7 +14820,7 @@ BI.FloatBox = BI.inherit(BI.Widget, {
         });
         this._center = BI.createWidget();
         this._north = BI.createWidget();
-        this.element.draggable({
+        this.element.draggable && this.element.draggable({
             handle: ".bi-message-title",
             drag: function (e, ui) {
                 var W = $("body").width(), H = $("body").height();
