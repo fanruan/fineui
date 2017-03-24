@@ -92,7 +92,7 @@ BI.AbsoluteLayout = BI.inherit(BI.Layout, {
         BI.each(items, function (i, item) {
             if (!!item) {
                 if (!BI.isWidget(item) && !item.el) {
-                    throw new Error("absolute布局中el 是必要属性");
+                    throw new Error("el must be exist");
                 }
                 self._addElement(i, item);
             }

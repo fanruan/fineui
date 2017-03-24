@@ -952,8 +952,12 @@ BI.Arrangement = BI.inherit(BI.Widget, {
                     break;
                 }
 
-                if (lefts.length > 0) lefts = this._getTopAlignRegions(lefts[0].id).left;
-                if (rights.length > 0) rights = this._getTopAlignRegions(rights[0].id).right;
+                if (lefts.length > 0) {
+                    lefts = this._getTopAlignRegions(lefts[0].id).left;
+                }
+                if (rights.length > 0) {
+                    rights = this._getTopAlignRegions(rights[0].id).right;
+                }
             }
         }
         //有下方居中drop
@@ -1000,8 +1004,12 @@ BI.Arrangement = BI.inherit(BI.Widget, {
                     break;
                 }
 
-                if (lefts.length > 0) lefts = this._getBottomAlignRegions(lefts[0].id).left;
-                if (rights.length > 0) rights = this._getBottomAlignRegions(rights[0].id).right;
+                if (lefts.length > 0) {
+                    lefts = this._getBottomAlignRegions(lefts[0].id).left;
+                }
+                if (rights.length > 0) {
+                    rights = this._getBottomAlignRegions(rights[0].id).right;
+                }
             }
         }
         //有左方居中drop
@@ -1049,8 +1057,12 @@ BI.Arrangement = BI.inherit(BI.Widget, {
                     break;
                 }
 
-                if (tops.length > 0) tops = this._getLeftAlignRegions(tops[0].id).top;
-                if (bottoms.length > 0) bottoms = this._getLeftAlignRegions(bottoms[0].id).bottom;
+                if (tops.length > 0) {
+                    tops = this._getLeftAlignRegions(tops[0].id).top;
+                }
+                if (bottoms.length > 0) {
+                    bottoms = this._getLeftAlignRegions(bottoms[0].id).bottom;
+                }
             }
         }
         //有右方居中drop
@@ -1097,8 +1109,12 @@ BI.Arrangement = BI.inherit(BI.Widget, {
                     break;
                 }
 
-                if (tops.length > 0) tops = this._getRightAlignRegions(tops[0].id).top;
-                if (bottoms.length > 0) bottoms = this._getRightAlignRegions(bottoms[0].id).bottom;
+                if (tops.length > 0) {
+                    tops = this._getRightAlignRegions(tops[0].id).top;
+                }
+                if (bottoms.length > 0) {
+                    bottoms = this._getRightAlignRegions(bottoms[0].id).bottom;
+                }
             }
         }
         var lefts = this._getEquivalentRelativeRegions(name, ["left"]);
@@ -2067,24 +2083,38 @@ BI.Arrangement = BI.inherit(BI.Widget, {
 
     _moveElement: function (layout, l, x, y, isUserAction) {
         var self = this;
-        if (l.static) return layout;
+        if (l.static) {
+            return layout;
+        }
 
-        if (l.y === y && l.x === x) return layout;
+        if (l.y === y && l.x === x) {
+            return layout;
+        }
 
         var movingUp = y && l.y > y;
-        if (typeof x === 'number') l.x = x;
-        if (typeof y === 'number') l.y = y;
+        if (typeof x === 'number') {
+            l.x = x;
+        }
+        if (typeof y === 'number') {
+            l.y = y;
+        }
         l.moved = true;
 
         var sorted = this._sortLayoutItemsByRowCol(layout);
-        if (movingUp) sorted = sorted.reverse();
+        if (movingUp) {
+            sorted = sorted.reverse();
+        }
         var collisions = getAllCollisions(sorted, l);
 
         for (var i = 0, len = collisions.length; i < len; i++) {
             var collision = collisions[i];
-            if (collision.moved) continue;
+            if (collision.moved) {
+                continue;
+            }
 
-            if (l.y > collision.y && l.y - collision.y > collision.h / 4) continue;
+            if (l.y > collision.y && l.y - collision.y > collision.h / 4) {
+                continue;
+            }
 
             if (collision.static) {
                 layout = this._moveElementAwayFromCollision(layout, collision, l, isUserAction);
@@ -2112,17 +2142,29 @@ BI.Arrangement = BI.inherit(BI.Widget, {
     },
 
     _collides: function (l1, l2) {
-        if (l1 === l2) return false; // same element
-        if (l1.x + l1.w <= l2.x) return false; // l1 is left of l2
-        if (l1.x >= l2.x + l2.w) return false; // l1 is right of l2
-        if (l1.y + l1.h <= l2.y) return false; // l1 is above l2
-        if (l1.y >= l2.y + l2.h) return false; // l1 is below l2
+        if (l1 === l2) {
+            return false;
+        } // same element
+        if (l1.x + l1.w <= l2.x) {
+            return false;
+        } // l1 is left of l2
+        if (l1.x >= l2.x + l2.w) {
+            return false;
+        } // l1 is right of l2
+        if (l1.y + l1.h <= l2.y) {
+            return false;
+        } // l1 is above l2
+        if (l1.y >= l2.y + l2.h) {
+            return false;
+        } // l1 is below l2
         return true; // boxes overlap
     },
 
     _getFirstCollision: function (layout, layoutItem) {
         for (var i = 0, len = layout.length; i < len; i++) {
-            if (this._collides(layout[i], layoutItem)) return layout[i];
+            if (this._collides(layout[i], layoutItem)) {
+                return layout[i];
+            }
         }
     },
 

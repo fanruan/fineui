@@ -102,15 +102,21 @@ BI.Layout = BI.inherit(BI.Widget, {
 
         //不比较函数
         function eq(a, b, aStack, bStack) {
-            if (a === b) return a !== 0 || 1 / a === 1 / b;
-            if (a == null || b == null) return a === b;
+            if (a === b) {
+                return a !== 0 || 1 / a === 1 / b;
+            }
+            if (a == null || b == null) {
+                return a === b;
+            }
             var className = Object.prototype.toString.call(a);
             switch (className) {
                 case '[object RegExp]':
                 case '[object String]':
                     return '' + a === '' + b;
                 case '[object Number]':
-                    if (+a !== +a) return +b !== +b;
+                    if (+a !== +a) {
+                        return +b !== +b;
+                    }
                     return +a === 0 ? 1 / +a === 1 / b : +a === +b;
                 case '[object Date]':
                 case '[object Boolean]':
@@ -130,7 +136,9 @@ BI.Layout = BI.inherit(BI.Widget, {
             bStack = bStack || [];
             var length = aStack.length;
             while (length--) {
-                if (aStack[length] === a) return bStack[length] === b;
+                if (aStack[length] === a) {
+                    return bStack[length] === b;
+                }
             }
 
             aStack.push(a);
@@ -138,17 +146,25 @@ BI.Layout = BI.inherit(BI.Widget, {
 
             if (areArrays) {
                 length = a.length;
-                if (length !== b.length) return false;
+                if (length !== b.length) {
+                    return false;
+                }
                 while (length--) {
-                    if (!eq(a[length], b[length], aStack, bStack)) return false;
+                    if (!eq(a[length], b[length], aStack, bStack)) {
+                        return false;
+                    }
                 }
             } else {
                 var keys = _.keys(a), key;
                 length = keys.length;
-                if (_.keys(b).length !== length) return false;
+                if (_.keys(b).length !== length) {
+                    return false;
+                }
                 while (length--) {
                     key = keys[length];
-                    if (!(_.has(b, key) && eq(a[key], b[key], aStack, bStack))) return false;
+                    if (!(_.has(b, key) && eq(a[key], b[key], aStack, bStack))) {
+                        return false;
+                    }
                 }
             }
             aStack.pop();
@@ -185,7 +201,7 @@ BI.Layout = BI.inherit(BI.Widget, {
     },
 
     prependItem: function (item) {
-        return this.addItemAt(0,item);
+        return this.addItemAt(0, item);
     },
 
     addItemAt: function (index, item) {
@@ -207,8 +223,9 @@ BI.Layout = BI.inherit(BI.Widget, {
         if (index < 0 || index > this.options.items.length - 1) {
             return;
         }
-        this._children[this._getChildName(index)].destroy();
+        var child = this._children[this._getChildName(index)];
         this._removeItemAt(index);
+        child.destroy();
     },
 
     updateItemAt: function (index, item) {
@@ -254,7 +271,8 @@ BI.Layout = BI.inherit(BI.Widget, {
     },
 
     prependItems: function (items) {
-        var self =this,items = items || [];
+        var self = this;
+        items = items || [];
         var fragment = document.createDocumentFragment();
         var added = [];
         for (var i = items.length - 1; i >= 0; i--) {

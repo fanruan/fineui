@@ -25,7 +25,7 @@ BI.FloatCenterAdaptLayout = BI.inherit(BI.Layout, {
 
     addItem: function () {
         //do nothing
-        throw new Error("不能添加元素")
+        throw new Error("cannot be added")
     },
 
     mounted: function () {

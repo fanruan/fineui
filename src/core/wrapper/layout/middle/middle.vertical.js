@@ -26,7 +26,7 @@ BI.VerticalCenterLayout = BI.inherit(BI.Layout, {
 
     addItem: function (item) {
         //do nothing
-        throw new Error("不能添加元素")
+        throw new Error("cannot be added")
     },
 
     stroke: function (items) {

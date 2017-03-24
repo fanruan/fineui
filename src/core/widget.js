@@ -168,7 +168,7 @@ BI.Widget = BI.inherit(BI.OB, {
         this._isMounted = true;
         this._mountChildren();
         BI.each(this._children, function (i, widget) {
-            widget._mount&&widget._mount();
+            widget._mount && widget._mount();
         });
         this.mounted();
     },
@@ -195,6 +195,7 @@ BI.Widget = BI.inherit(BI.OB, {
         this._children = {};
         this._parent = null;
         this._isMounted = false;
+        this.purgeListeners();
         this.destroyed();
     },
 
@@ -206,6 +207,14 @@ BI.Widget = BI.inherit(BI.OB, {
     setHeight: function (h) {
         this.options.height = h;
         this._initElementHeight();
+    },
+
+    setElement: function (widget) {
+        if (widget == this) {
+            return;
+        }
+        this.element = BI.isWidget(widget) ? widget.element : $(widget);
+        return this;
     },
 
     setEnable: function (enable) {
@@ -373,8 +382,15 @@ BI.Widget = BI.inherit(BI.OB, {
     },
 
     destroy: function () {
-        this._unMount();
+        BI.each(this._children, function (i, widget) {
+            widget._unMount && widget._unMount();
+        });
+        this._children = {};
+        this._parent = null;
+        this._isMounted = false;
+        this.destroyed();
         this.element.destroy();
         this.fireEvent(BI.Events.DESTROY);
+        this.purgeListeners();
     }
 });

@@ -31,7 +31,7 @@ BI.LeftRightVerticalAdaptLayout = BI.inherit(BI.Layout, {
 
     addItem: function () {
         //do nothing
-        throw new Error("不能添加元素")
+        throw new Error("cannot be added")
     },
 
     stroke: function (items) {
@@ -92,12 +92,12 @@ BI.LeftVerticalAdaptLayout = BI.inherit(BI.Layout, {
     },
 
     resize: function () {
-        console.log("left_vertical_adapt布局不需要resize");
+        // console.log("left_vertical_adapt布局不需要resize");
     },
 
     addItem: function () {
         //do nothing
-        throw new Error("不能添加元素")
+        throw new Error("cannot be added")
     },
 
     stroke: function (items) {
@@ -140,12 +140,12 @@ BI.RightVerticalAdaptLayout = BI.inherit(BI.Layout, {
     },
 
     resize: function () {
-        console.log("right_vertical_adapt布局不需要resize");
+
     },
 
     addItem: function () {
         //do nothing
-        throw new Error("不能添加元素")
+        throw new Error("cannot be added")
     },
 
     stroke: function (items) {

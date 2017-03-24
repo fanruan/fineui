@@ -14467,7 +14467,7 @@ BI.Widget = BI.inherit(BI.OB, {
         this._isMounted = true;
         this._mountChildren();
         BI.each(this._children, function (i, widget) {
-            widget._mount&&widget._mount();
+            widget._mount && widget._mount();
         });
         this.mounted();
     },
@@ -14494,6 +14494,7 @@ BI.Widget = BI.inherit(BI.OB, {
         this._children = {};
         this._parent = null;
         this._isMounted = false;
+        this.purgeListeners();
         this.destroyed();
     },
 
@@ -14505,6 +14506,14 @@ BI.Widget = BI.inherit(BI.OB, {
     setHeight: function (h) {
         this.options.height = h;
         this._initElementHeight();
+    },
+
+    setElement: function (widget) {
+        if (widget == this) {
+            return;
+        }
+        this.element = BI.isWidget(widget) ? widget.element : $(widget);
+        return this;
     },
 
     setEnable: function (enable) {
@@ -14672,9 +14681,16 @@ BI.Widget = BI.inherit(BI.OB, {
     },
 
     destroy: function () {
-        this._unMount();
+        BI.each(this._children, function (i, widget) {
+            widget._unMount && widget._unMount();
+        });
+        this._children = {};
+        this._parent = null;
+        this._isMounted = false;
+        this.destroyed();
         this.element.destroy();
         this.fireEvent(BI.Events.DESTROY);
+        this.purgeListeners();
     }
 });BI.Model = BI.inherit(BI.M, {
     _defaultConfig: function () {
@@ -18943,8 +18959,9 @@ BI.Region.prototype = {
     };
 
     XML.getNSResolver = function (str) {
-        if (!str)
+        if (!str) {
             return null;
+        }
         var list = str.split(' ');
         var namespaces = {};
         for (var i = 0; i < list.length; i++) {
@@ -18996,7 +19013,7 @@ BI.Region.prototype = {
 
     XML.eval2 = function (context, xpathExp, resultType, namespaces) {
         if (resultType !== "single" && resultType !== undefined && resultType !== null) {
-            throw new Error("justep.SimpleXML.eval只支持resultType='single', 不支持" + resultType);
+            throw new Error("justep.SimpleXML.eval only be resultType='single', not" + resultType);
         }
 
         if (context === null || context === undefined || xpathExp === null || xpathExp === undefined) {
@@ -19159,8 +19176,9 @@ BI.Region.prototype = {
 
     XML.setNodeText = function (context, xpathExp, text) {
         var finded = this.eval(context, xpathExp, this.ResultType.single);
-        if (finded === null)
+        if (finded === null) {
             return;
+        }
         if (finded.nodeType == XML.Document.NodeType.ELEMENT) {
             var textNode = this.eval(finded, "./text()", this.ResultType.single);
             if (!textNode) {
@@ -19200,26 +19218,36 @@ BI.Region.prototype = {
         JUSTEP: "http://www.justep.com/x5#",
         'get': function (type) {
             type = type ? type.toLowerCase() : "string";
-            if ("string" == type)
+            if ("string" == type) {
                 return XML.Namespaces.XMLSCHEMA_STRING;
-            else if ("integer" == type)
+            }
+            else if ("integer" == type) {
                 return XML.Namespaces.XMLSCHEMA_INTEGER;
-            else if ("long" == type)
+            }
+            else if ("long" == type) {
                 return XML.Namespaces.XMLSCHEMA_LONG;
-            else if ("float" == type)
+            }
+            else if ("float" == type) {
                 return XML.Namespaces.XMLSCHEMA_FLOAT;
-            else if ("double" == type)
+            }
+            else if ("double" == type) {
                 return XML.Namespaces.XMLSCHEMA_DOUBLE;
-            else if ("decimal" == type)
+            }
+            else if ("decimal" == type) {
                 return XML.Namespaces.XMLSCHEMA_DECIMAL;
-            else if ("date" == type)
+            }
+            else if ("date" == type) {
                 return XML.Namespaces.XMLSCHEMA_DATE;
-            else if ("time" == type)
+            }
+            else if ("time" == type) {
                 return XML.Namespaces.XMLSCHEMA_TIME;
-            else if ("datetime" == type)
+            }
+            else if ("datetime" == type) {
                 return XML.Namespaces.XMLSCHEMA_DATETIME;
-            else if ("boolean" == type)
+            }
+            else if ("boolean" == type) {
                 return XML.Namespaces.XMLSCHEMA_BOOLEAN;
+            }
         }
     };
 })(BI);BI.BehaviorFactory = {
@@ -19362,15 +19390,21 @@ BI.Layout = BI.inherit(BI.Widget, {
 
         //不比较函数
         function eq(a, b, aStack, bStack) {
-            if (a === b) return a !== 0 || 1 / a === 1 / b;
-            if (a == null || b == null) return a === b;
+            if (a === b) {
+                return a !== 0 || 1 / a === 1 / b;
+            }
+            if (a == null || b == null) {
+                return a === b;
+            }
             var className = Object.prototype.toString.call(a);
             switch (className) {
                 case '[object RegExp]':
                 case '[object String]':
                     return '' + a === '' + b;
                 case '[object Number]':
-                    if (+a !== +a) return +b !== +b;
+                    if (+a !== +a) {
+                        return +b !== +b;
+                    }
                     return +a === 0 ? 1 / +a === 1 / b : +a === +b;
                 case '[object Date]':
                 case '[object Boolean]':
@@ -19390,7 +19424,9 @@ BI.Layout = BI.inherit(BI.Widget, {
             bStack = bStack || [];
             var length = aStack.length;
             while (length--) {
-                if (aStack[length] === a) return bStack[length] === b;
+                if (aStack[length] === a) {
+                    return bStack[length] === b;
+                }
             }
 
             aStack.push(a);
@@ -19398,17 +19434,25 @@ BI.Layout = BI.inherit(BI.Widget, {
 
             if (areArrays) {
                 length = a.length;
-                if (length !== b.length) return false;
+                if (length !== b.length) {
+                    return false;
+                }
                 while (length--) {
-                    if (!eq(a[length], b[length], aStack, bStack)) return false;
+                    if (!eq(a[length], b[length], aStack, bStack)) {
+                        return false;
+                    }
                 }
             } else {
                 var keys = _.keys(a), key;
                 length = keys.length;
-                if (_.keys(b).length !== length) return false;
+                if (_.keys(b).length !== length) {
+                    return false;
+                }
                 while (length--) {
                     key = keys[length];
-                    if (!(_.has(b, key) && eq(a[key], b[key], aStack, bStack))) return false;
+                    if (!(_.has(b, key) && eq(a[key], b[key], aStack, bStack))) {
+                        return false;
+                    }
                 }
             }
             aStack.pop();
@@ -19445,7 +19489,7 @@ BI.Layout = BI.inherit(BI.Widget, {
     },
 
     prependItem: function (item) {
-        return this.addItemAt(0,item);
+        return this.addItemAt(0, item);
     },
 
     addItemAt: function (index, item) {
@@ -19467,8 +19511,9 @@ BI.Layout = BI.inherit(BI.Widget, {
         if (index < 0 || index > this.options.items.length - 1) {
             return;
         }
-        this._children[this._getChildName(index)].destroy();
+        var child = this._children[this._getChildName(index)];
         this._removeItemAt(index);
+        child.destroy();
     },
 
     updateItemAt: function (index, item) {
@@ -19514,7 +19559,8 @@ BI.Layout = BI.inherit(BI.Widget, {
     },
 
     prependItems: function (items) {
-        var self =this,items = items || [];
+        var self = this;
+        items = items || [];
         var fragment = document.createDocumentFragment();
         var added = [];
         for (var i = items.length - 1; i >= 0; i--) {
@@ -21061,7 +21107,7 @@ BI.LayerController = BI.inherit(BI.Controller, {
 
     add: function (name, layer, layout) {
         if (this.has(name)) {
-            throw new Error("该弹出面板已经存在了，不能添加该key值");
+            throw new Error("name is already exist");
         }
         layout.setVisible(false);
         this.layerManager[name] = layer;
@@ -22869,7 +22915,7 @@ BI.ShowListener = BI.inherit(BI.OB, {
                 v = v || o.eventObj.getValue();
                 v = BI.isArray(v) ? (v.length > 1 ? v.toString() : v[0]) : v;
                 if (BI.isNull(v)) {
-                    throw new Error("value值不能为空");
+                    throw new Error("value cannot be null");
                 }
                 var cardName = o.cardNameCreator(v);
                 if (!o.cardLayout.isCardExisted(cardName)) {
@@ -25410,7 +25456,7 @@ BI.LeftRightVerticalAdaptLayout = BI.inherit(BI.Layout, {
 
     addItem: function () {
         //do nothing
-        throw new Error("不能添加元素")
+        throw new Error("cannot be added")
     },
 
     stroke: function (items) {
@@ -25471,12 +25517,12 @@ BI.LeftVerticalAdaptLayout = BI.inherit(BI.Layout, {
     },
 
     resize: function () {
-        console.log("left_vertical_adapt布局不需要resize");
+        // console.log("left_vertical_adapt布局不需要resize");
     },
 
     addItem: function () {
         //do nothing
-        throw new Error("不能添加元素")
+        throw new Error("cannot be added")
     },
 
     stroke: function (items) {
@@ -25519,12 +25565,12 @@ BI.RightVerticalAdaptLayout = BI.inherit(BI.Layout, {
     },
 
     resize: function () {
-        console.log("right_vertical_adapt布局不需要resize");
+
     },
 
     addItem: function () {
         //do nothing
-        throw new Error("不能添加元素")
+        throw new Error("cannot be added")
     },
 
     stroke: function (items) {
@@ -25753,7 +25799,7 @@ BI.FloatCenterAdaptLayout = BI.inherit(BI.Layout, {
 
     addItem: function () {
         //do nothing
-        throw new Error("不能添加元素")
+        throw new Error("cannot be added")
     },
 
     mounted: function () {
@@ -25938,7 +25984,7 @@ BI.InlineCenterAdaptLayout = BI.inherit(BI.Layout, {
     },
 
     addItem: function (item) {
-        throw new Error("不能添加元素");
+        throw new Error("cannot be added");
     },
 
     stroke: function (items) {
@@ -26504,7 +26550,7 @@ BI.AbsoluteLayout = BI.inherit(BI.Layout, {
         BI.each(items, function (i, item) {
             if (!!item) {
                 if (!BI.isWidget(item) && !item.el) {
-                    throw new Error("absolute布局中el 是必要属性");
+                    throw new Error("el must be exist");
                 }
                 self._addElement(i, item);
             }
@@ -26631,7 +26677,7 @@ BI.BorderLayout = BI.inherit(BI.Layout, {
 
     addItem: function (item) {
         // do nothing
-        throw new Error("不能添加元素")
+        throw new Error("cannot be added")
     },
 
     stroke: function(regions){
@@ -26774,6 +26820,9 @@ BI.CardLayout = BI.inherit(BI.Layout, {
                 if (!self.hasWidget(self._getCardName(item.cardName))) {
                     var w = BI.createWidget(item);
                     self.addWidget(self._getCardName(item.cardName), w);
+                    w.on(BI.Events.DESTROY, function () {
+                        delete self._children[self._getCardName(item.cardName)];
+                    });
                 } else {
                     var w = self.getWidgetByName(self._getCardName(item.cardName));
                 }
@@ -26783,6 +26832,9 @@ BI.CardLayout = BI.inherit(BI.Layout, {
         });
     },
 
+    update: function () {
+    },
+
     populate: function (items) {
         BI.CardLayout.superclass.populate.apply(this, arguments);
         this._mount();
@@ -26790,32 +26842,32 @@ BI.CardLayout = BI.inherit(BI.Layout, {
     },
 
     isCardExisted: function (cardName) {
-        return this.hasWidget(this._getCardName(cardName))
-            && $(this.getWidgetByName(this._getCardName(cardName)).element).length !== 0;
+        return this.hasWidget(this._getCardName(cardName));
     },
 
     getCardByName: function (cardName) {
         if (!this.hasWidget(this._getCardName(cardName))) {
-            throw new Error("cardName不存在，无法获取");
+            throw new Error("cardName is not exist");
         }
         return this._children[this._getCardName(cardName)];
     },
 
     deleteCardByName: function (cardName) {
         if (!this.hasWidget(this._getCardName(cardName))) {
-            throw new Error("cardName不存在，无法删除");
+            return;
         }
-        this.getWidgetByName(this._getCardName(cardName)).destroy();
         var index = BI.findKey(this.options.items, function (i, item) {
             return item.cardName == cardName;
         });
         this.options.items.splice(index, 1);
+        var child = this.getWidgetByName(this._getCardName(cardName));
         delete this._children[this._getCardName(cardName)];
+        child.destroy();
     },
 
     addCardByName: function (cardName, cardItem) {
         if (this.hasWidget(this._getCardName(cardName))) {
-            throw new Error("cardName已经存在了");
+            throw new Error("cardName is already exist");
         }
         this.options.items.push({el: cardItem, cardName: cardName});
         var widget = BI.createWidget(cardItem);
@@ -26890,9 +26942,9 @@ BI.CardLayout = BI.inherit(BI.Layout, {
 
     isAllCardHide: function () {
         var flag = true;
-        BI.each(this._children, function (i, el) {
+        BI.some(this._children, function (i, el) {
             if (el.isVisible()) {
-                flag = true;
+                flag = false;
                 return false;
             }
         });
@@ -27006,7 +27058,7 @@ BI.DivisionLayout = BI.inherit(BI.Layout, {
 
     addItem: function (item) {
         // do nothing
-        throw new Error("不能添加元素")
+        throw new Error("cannot be added")
     },
 
     stroke: function(items){
@@ -27069,7 +27121,7 @@ BI.DivisionLayout = BI.inherit(BI.Layout, {
             var totalW = 0;
             for (var j = 0; j < columns; j++) {
                 if (!map[i][j]) {
-                    throw new Error("缺少item项");
+                    throw new Error("item be required");
                 }
                 if(!this.hasWidget(this.getName() + i + "_" + j)) {
                     var w = BI.createWidget(map[i][j]);
@@ -27284,15 +27336,17 @@ BI.GridLayout = BI.inherit(BI.Layout, {
 
     addItem: function () {
         //do nothing
-        throw new Error("不能添加元素")
+        throw new Error("cannot be added")
     },
 
     stroke: function (items) {
         var o = this.options;
         var rows = o.rows || o.items.length, columns = o.columns || ((o.items[0] && o.items[0].length) | 0);
         var width = 100 / columns, height = 100 / rows;
-        var els = new Array(rows);
-
+        var els = [];
+        for (var i = 0; i < rows; i++) {
+            els[i] = [];
+        }
         function firstElement(item, row, col) {
             if (row === 0) {
                 item.addClass("first-row")
@@ -27330,9 +27384,6 @@ BI.GridLayout = BI.inherit(BI.Layout, {
             }
         }
 
-        BI.each(els, function (i) {
-            els[i] = new Array(columns);
-        });
         BI.each(items, function (i, item) {
             if (BI.isArray(item)) {
                 BI.each(item, function (j, el) {
@@ -27763,7 +27814,7 @@ BI.TableLayout = BI.inherit(BI.Layout, {
                 }, arr[j]))
                 right += o.columnSize[j] + (o.columnSize[j] < 1 ? 0 : o.hgap);
             } else {
-                throw new Error("只能有一个fill属性的item");
+                throw new Error("item with fill can only be one");
             }
         }
         if (i >= 0 && i < arr.length) {
@@ -27798,7 +27849,7 @@ BI.TableLayout = BI.inherit(BI.Layout, {
 
     addItem: function (arr) {
         if (!BI.isArray(arr)) {
-            throw new Error("item 必须是数组");
+            throw new Error("item must be array");
         }
         return BI.TableLayout.superclass.addItem.apply(this, arguments);
     },
@@ -27849,7 +27900,7 @@ BI.HTapeLayout = BI.inherit(BI.Layout, {
     },
     addItem: function (item) {
         // do nothing
-        throw new Error("不能添加元素")
+        throw new Error("cannot be added")
     },
 
     stroke: function (items) {
@@ -27954,7 +28005,7 @@ BI.VTapeLayout = BI.inherit(BI.Layout, {
 
     addItem: function (item) {
         // do nothing
-        throw new Error("不能添加元素")
+        throw new Error("cannot be added")
     },
 
     stroke: function (items) {
@@ -28146,7 +28197,7 @@ BI.TdLayout = BI.inherit(BI.Layout, {
 
     addItem: function (arr) {
         if (!BI.isArray(arr)) {
-            throw new Error("item 必须是数组");
+            throw new Error("item must be array");
         }
         return BI.TdLayout.superclass.addItem.apply(this, arguments);
     },
@@ -28260,7 +28311,7 @@ BI.WindowLayout = BI.inherit(BI.Layout, {
 
     addItem: function (item) {
         // do nothing
-        throw new Error("不能添加元素")
+        throw new Error("cannot be added")
     },
 
     stroke: function (items) {
@@ -28311,7 +28362,7 @@ BI.WindowLayout = BI.inherit(BI.Layout, {
         for (var i = 0; i < o.rows; i++) {
             for (var j = 0; j < o.columns; j++) {
                 if (!o.items[i][j]) {
-                    throw new Error("缺少item项");
+                    throw new Error("item be required");
                 }
                 if (!this.hasWidget(this.getName() + i + "_" + j)) {
                     var w = BI.createWidget(o.items[i][j]);
@@ -28433,7 +28484,7 @@ BI.CenterLayout = BI.inherit(BI.Layout, {
 
     addItem: function (item) {
         //do nothing
-        throw new Error("不能添加元素");
+        throw new Error("cannot be added");
     },
 
     stroke: function (items) {
@@ -28506,7 +28557,7 @@ BI.FloatCenterLayout = BI.inherit(BI.Layout, {
 
     addItem: function (item) {
         //do nothing
-        throw new Error("不能添加元素")
+        throw new Error("cannot be added")
     },
 
     stroke: function (items) {
@@ -28579,7 +28630,7 @@ BI.HorizontalCenterLayout = BI.inherit(BI.Layout, {
 
     addItem: function (item) {
         //do nothing
-        throw new Error("不能添加元素")
+        throw new Error("cannot be added")
     },
 
     stroke: function (items) {
@@ -28651,7 +28702,7 @@ BI.VerticalCenterLayout = BI.inherit(BI.Layout, {
 
     addItem: function (item) {
         //do nothing
-        throw new Error("不能添加元素")
+        throw new Error("cannot be added")
     },
 
     stroke: function (items) {
