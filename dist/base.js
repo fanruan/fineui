@@ -2349,6 +2349,7 @@ BI.Bubbles = new BI.BubblesController();
 BI.Tooltips = new BI.TooltipsController();
 BI.Popovers = new BI.FloatBoxController();
 BI.Broadcasts = new BI.BroadcastController();
+BI.StyleLoaders = new BI.StyleLoaderManager();
 
 BI.servletURL = "dist/";
 BI.i18n = {};/**
@@ -3597,6 +3598,14 @@ $.shortcut("bi.combo_group", BI.ComboGroup);BI.VirtualGroup = BI.inherit(BI.Widg
         return layout;
     },
 
+    addItems: function (items) {
+        this.layouts.addItems(items);
+    },
+
+    prependItems: function (items) {
+        this.layouts.prependItems(items);  
+    },
+
     populate: function (items) {
         var self = this;
         items = items || [];
@@ -4607,8 +4616,7 @@ BI.Tab = BI.inherit(BI.Widget, {
         })
     },
 
-    _init: function () {
-        BI.Tab.superclass._init.apply(this, arguments);
+    render: function () {
         var self = this, o = this.options;
         if (BI.isObject(o.tab)) {
             this.tab = BI.createWidget(this.options.tab, {type: "bi.button_group"});

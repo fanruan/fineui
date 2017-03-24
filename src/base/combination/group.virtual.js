@@ -47,6 +47,14 @@ BI.VirtualGroup = BI.inherit(BI.Widget, {
         return layout;
     },
 
+    addItems: function (items) {
+        this.layouts.addItems(items);
+    },
+
+    prependItems: function (items) {
+        this.layouts.prependItems(items);  
+    },
+
     populate: function (items) {
         var self = this;
         items = items || [];
