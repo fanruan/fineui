@@ -14369,8 +14369,12 @@ BI.Widget = BI.inherit(BI.OB, {
         var o = this.options;
         this.widgetName = o.widgetName || BI.uniqueId("widget");
         if (BI.isWidget(o.element)) {
-            this._parent = o.element;
-            this._parent.addWidget(this.widgetName, this);
+            if (o.element instanceof BI.Widget) {
+                this._parent = o.element;
+                this._parent.addWidget(this.widgetName, this);
+            } else {
+                this._isRoot = true;
+            }
             this.element = this.options.element.element;
         } else if (o.element) {
             this.element = $(o.element);
@@ -14465,7 +14469,7 @@ BI.Widget = BI.inherit(BI.OB, {
         this._isMounted = true;
         this._mountChildren();
         BI.each(this._children, function (i, widget) {
-            widget._mount();
+            widget._mount&&widget._mount();
         });
         this.mounted();
     },
@@ -14487,7 +14491,7 @@ BI.Widget = BI.inherit(BI.OB, {
 
     _unMount: function () {
         BI.each(this._children, function (i, widget) {
-            widget._unMount();
+            widget._unMount && widget._unMount();
         });
         this._children = {};
         this._parent = null;
@@ -14558,7 +14562,7 @@ BI.Widget = BI.inherit(BI.OB, {
         if (this._children[name]) {
             throw new Error("name has already been existed");
         }
-        widget._setParent(this);
+        widget._setParent && widget._setParent(this);
         widget.on(BI.Events.DESTROY, function () {
             delete self._children[name]
         });
@@ -19439,19 +19443,11 @@ BI.Layout = BI.inherit(BI.Widget, {
      * @param {JSON/BI.Widget} item 子组件
      */
     addItem: function (item) {
-        var w = this._addElement(this.options.items.length, item);
-        this.options.items.push(item);
-        w.element.appendTo(this._getWrapper());
-        w._mount();
-        return w;
+        return this.addItemAt(this.options.items.length, item);
     },
 
     prependItem: function (item) {
-        var w = this._addElement(this.options.items.length, item);
-        this.options.items.unshift(item);
-        w.element.prependTo(this._getWrapper());
-        w._mount();
-        return w;
+        return this.addItemAt(0,item);
     },
 
     addItemAt: function (index, item) {
@@ -19486,14 +19482,18 @@ BI.Layout = BI.inherit(BI.Widget, {
         if (updated = this._children[this._getChildName(index)].update(this._getOptions(item))) {
             return updated;
         }
-        this._children[this._getChildName(index)].destroy();
+        var del = this._children[this._getChildName(index)];
+        delete this._children[this._getChildName(index)];
+        this.options.items.splice(index, 1);
         var w = this._addElement(index, item);
+        this.options.items.splice(index, 0, item);
         this._children[this._getChildName(index)] = w;
         if (index > 0) {
             this._children[this._getChildName(index - 1)].element.after(w.element);
         } else {
             w.element.prependTo(this._getWrapper());
         }
+        del.destroy();
         w._mount();
     },
 
@@ -19503,6 +19503,7 @@ BI.Layout = BI.inherit(BI.Widget, {
         var added = [];
         BI.each(items, function (i, item) {
             var w = self._addElement(o.items.length, item);
+            self._children[self._getChildName(o.items.length)] = w;
             o.items.push(item);
             added.push(w);
             fragment.appendChild(w.element[0]);
@@ -19514,11 +19515,13 @@ BI.Layout = BI.inherit(BI.Widget, {
     },
 
     prependItems: function (items) {
-        items = items || [];
+        var self =this,items = items || [];
         var fragment = document.createDocumentFragment();
         var added = [];
         for (var i = items.length - 1; i >= 0; i--) {
-            var w = this._addElement(this.options.items.length, items[i]);
+            this._addItemAt(0, items[i]);
+            var w = this._addElement(0, items[i]);
+            self._children[self._getChildName(0)] = w;
             this.options.items.unshift(items[i]);
             added.push(w);
             fragment.appendChild(w.element[0]);
@@ -19563,9 +19566,13 @@ BI.Layout = BI.inherit(BI.Widget, {
             }
         }
         if (o.items.length > items.length) {
+            var deleted = [];
             for (i = items.length; i < o.items.length; i++) {
-                this.removeItemAt(i);
+                deleted.push(this._children[this._getChildName(i)]);
             }
+            BI.each(deleted, function (i, w) {
+                w.destroy();
+            })
         } else if (items.length > o.items.length) {
             for (i = o.items.length; i < items.length; i++) {
                 this.addItemAt(i, items[i]);
@@ -20544,10 +20551,14 @@ BI.BroadcastController = BI.inherit(BI.Controller, {
     },
 
     on: function (name, fn) {
+        var self = this;
         if (!this._broadcasts[name]) {
             this._broadcasts[name] = [];
         }
         this._broadcasts[name].push(fn);
+        return function () {
+            self._broadcasts[name].remove(fn);
+        }
     },
 
     send: function (name) {
@@ -20559,7 +20570,7 @@ BI.BroadcastController = BI.inherit(BI.Controller, {
 
     remove: function (name, fn) {
         if (fn) {
-            BI.remove(this._broadcasts[name], fn);
+            this._broadcasts[name].remove(fn);
         } else {
             delete this._broadcasts[name];
         }

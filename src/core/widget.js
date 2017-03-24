@@ -70,8 +70,12 @@ BI.Widget = BI.inherit(BI.OB, {
         var o = this.options;
         this.widgetName = o.widgetName || BI.uniqueId("widget");
         if (BI.isWidget(o.element)) {
-            this._parent = o.element;
-            this._parent.addWidget(this.widgetName, this);
+            if (o.element instanceof BI.Widget) {
+                this._parent = o.element;
+                this._parent.addWidget(this.widgetName, this);
+            } else {
+                this._isRoot = true;
+            }
             this.element = this.options.element.element;
         } else if (o.element) {
             this.element = $(o.element);
@@ -166,7 +170,7 @@ BI.Widget = BI.inherit(BI.OB, {
         this._isMounted = true;
         this._mountChildren();
         BI.each(this._children, function (i, widget) {
-            widget._mount();
+            widget._mount&&widget._mount();
         });
         this.mounted();
     },
@@ -188,7 +192,7 @@ BI.Widget = BI.inherit(BI.OB, {
 
     _unMount: function () {
         BI.each(this._children, function (i, widget) {
-            widget._unMount();
+            widget._unMount && widget._unMount();
         });
         this._children = {};
         this._parent = null;
@@ -259,7 +263,7 @@ BI.Widget = BI.inherit(BI.OB, {
         if (this._children[name]) {
             throw new Error("name has already been existed");
         }
-        widget._setParent(this);
+        widget._setParent && widget._setParent(this);
         widget.on(BI.Events.DESTROY, function () {
             delete self._children[name]
         });

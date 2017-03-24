@@ -18,8 +18,7 @@ BI.Tab = BI.inherit(BI.Widget, {
         })
     },
 
-    _init: function () {
-        BI.Tab.superclass._init.apply(this, arguments);
+    render: function () {
         var self = this, o = this.options;
         if (BI.isObject(o.tab)) {
             this.tab = BI.createWidget(this.options.tab, {type: "bi.button_group"});
