@@ -66,14 +66,13 @@ Demo.Item = BI.inherit(BI.Widget, {
     update: function (item) {
         this.label.setText(item.value);
         console.log("更新了一项");
-        return true;
     },
 
     created: function () {
         console.log("创建了一项");
     },
 
-    destroyed: function(){
+    destroyed: function () {
         console.log("删除了一项");
     }
 });

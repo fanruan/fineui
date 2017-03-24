@@ -224,9 +224,10 @@ BI.Layout = BI.inherit(BI.Widget, {
             return;
         }
 
-        var updated;
-        if (updated = this._children[this._getChildName(index)].update(this._getOptions(item))) {
-            return updated;
+        var child = this._children[this._getChildName(index)];
+        if (child.update) {
+            child.update(this._getOptions(item));
+            return true;
         }
         this._children[this._getChildName(index)].destroy();
         var w = this._addElement(index, item);
