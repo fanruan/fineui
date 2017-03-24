@@ -95,6 +95,18 @@ Demo.CORE_CONFIG = [{
     value: "demo.virtual_group"
 }, {
     pId: 102,
+    text: "bi.custom_tree",
+    value: "demo.custom_tree"
+}, {
+    pId: 102,
+    text: "bi.grid_view",
+    value: "demo.grid_view"
+}, {
+    pId: 102,
+    text: "bi.collection_view",
+    value: "demo.collection_view"
+}, {
+    pId: 102,
     id: 10201,
     text: "组合控件"
 }, {
@@ -145,18 +157,6 @@ Demo.CORE_CONFIG = [{
     pId: 10202,
     text: "bi.layer_searcher",
     value: "demo.layer_searcher"
-}, {
-    pId: 102,
-    text: "bi.custom_tree",
-    value: "demo.custom_tree"
-}, {
-    pId: 102,
-    text: "bi.grid_view",
-    value: "demo.grid_view"
-}, {
-    pId: 102,
-    text: "bi.collection_view",
-    value: "demo.collection_view"
 }, {
     pId: 1,
     text: "widget",

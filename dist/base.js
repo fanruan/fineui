@@ -3565,26 +3565,21 @@ $.shortcut("bi.combo_group", BI.ComboGroup);BI.VirtualGroup = BI.inherit(BI.Widg
         this.populate(this.options.items);
     },
 
-    _createBtns: function (items) {
-        var o = this.options;
-        return BI.createItems(items, {
-            type: "bi.text_button"
-        });
-    },
-
-    _packageBtns: function (btns) {
+    _packageBtns: function (items) {
         var o = this.options;
 
         for (var i = o.layouts.length - 1; i > 0; i--) {
-            btns = BI.map(btns, function (k, it) {
+            items = BI.map(items, function (k, it) {
                 return BI.extend({}, o.layouts[i], {
                     items: [
-                        BI.extend({}, o.layouts[i].el, it)
+                        BI.extend({}, o.layouts[i].el, {
+                            el: BI.stripEL(it)
+                        })
                     ]
                 })
             })
         }
-        return btns;
+        return items;
     },
 
     _packageItems: function (items, packBtns) {
@@ -3606,7 +3601,7 @@ $.shortcut("bi.combo_group", BI.ComboGroup);BI.VirtualGroup = BI.inherit(BI.Widg
         var self = this;
         items = items || [];
         this.options.items = items;
-        items = this._packageItems(items, this._packageBtns(this._createBtns(items)));
+        items = this._packageItems(items, this._packageBtns(items));
         if (!this.layouts) {
             this.layouts = BI.createWidget(BI.extend({element: this}, this._packageLayout(items)));
         } else {
