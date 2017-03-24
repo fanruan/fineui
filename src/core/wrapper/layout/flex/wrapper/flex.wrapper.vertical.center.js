@@ -68,20 +68,8 @@ BI.FlexVerticalCenter = BI.inherit(BI.Layout, {
         }
     },
 
-    addItem: function (item) {
-        var w = this._addElement(this.options.items.length, item);
-        this.options.items.push(item);
-        w.element.appendTo(this.$wrapper);
-        w._mount();
-        return w;
-    },
-
-    prependItem: function (item) {
-        var w = this._addElement(this.options.items.length, item);
-        this.options.items.unshift(item);
-        w.element.appendTo(this.$wrapper);
-        w._mount();
-        return w;
+    _getWrapper: function(){
+        return this.$wrapper;
     },
 
     resize: function () {

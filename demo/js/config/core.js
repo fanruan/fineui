@@ -91,8 +91,8 @@ Demo.CORE_CONFIG = [{
     value: "demo.button_tree"
 }, {
     pId: 102,
-    text: "bi.button_map",
-    value: "demo.button_map"
+    text: "bi.virtual_group",
+    value: "demo.virtual_group"
 }, {
     pId: 102,
     id: 10201,

@@ -166,11 +166,12 @@ BI.ButtonGroup = BI.inherit(BI.Widget, {
     },
 
     populate: function (items) {
-        this.options.items = items || [];
+        items = items || [];
+        this.options.items = items;
         this.empty();
 
         this.buttons = this._btnsCreator.apply(this, arguments);
-        var items = this._packageItems(items, this._packageBtns(this.buttons));
+        items = this._packageItems(items, this._packageBtns(this.buttons));
 
         this.layouts = BI.createWidget(BI.extend({element: this}, this._packageLayout(items)));
     },

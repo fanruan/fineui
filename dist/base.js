@@ -1129,11 +1129,12 @@ BI.ButtonGroup = BI.inherit(BI.Widget, {
     },
 
     populate: function (items) {
-        this.options.items = items || [];
+        items = items || [];
+        this.options.items = items;
         this.empty();
 
         this.buttons = this._btnsCreator.apply(this, arguments);
-        var items = this._packageItems(items, this._packageBtns(this.buttons));
+        items = this._packageItems(items, this._packageBtns(this.buttons));
 
         this.layouts = BI.createWidget(BI.extend({element: this}, this._packageLayout(items)));
     },
@@ -1454,120 +1455,6 @@ BI.ButtonTree = BI.inherit(BI.ButtonGroup, {
 BI.ButtonTree.EVENT_CHANGE = "EVENT_CHANGE";
 
 $.shortcut("bi.button_tree", BI.ButtonTree);/**
- * value作为key值缓存button，  不支持顺序读写
- * 适合用于频繁增删的一组button
- * Created by GUY on 2015/8/10.
- * @class BI.ButtonMap
- * @extends BI.ButtonTree
- */
-
-BI.ButtonMap = BI.inherit(BI.ButtonTree, {
-    _defaultConfig: function () {
-        return BI.extend(BI.ButtonMap.superclass._defaultConfig.apply(this, arguments), {
-            baseCls: "bi-button-map"
-        })
-    },
-
-    _init: function () {
-        BI.ButtonMap.superclass._init.apply(this, arguments);
-    },
-
-    _createBtns: function (items) {
-        var self = this, o = this.options;
-        var buttons = BI.createWidgets(BI.createItems(items, {type: "bi.text_button", once: o.chooseType === 0}));
-        var keys = BI.map(items, function (i, item) {
-            item = BI.stripEL(item);
-            if (!(BI.isKey(item.id) || BI.isKey(item.value))) {
-                throw new Error("item必须包含id或value属性");
-            }
-            return item.id || item.value;
-        });
-        return BI.object(keys, buttons);
-    },
-
-    setValue: function (v) {
-        var self = this;
-        v = BI.isArray(v) ? v : [v];
-        BI.each(this.buttons, function (val, item) {
-            if (!BI.isFunction(item.setSelected)) {
-                item.setValue(v);
-                return;
-            }
-            if (v.contains(val)) {
-                item.setSelected && item.setSelected(true);
-            } else {
-                item.setSelected && item.setSelected(false);
-            }
-        });
-    },
-
-    setNotSelectedValue: function (v) {
-        var self = this;
-        v = BI.isArray(v) ? v : [v];
-        BI.each(this.buttons, function (val, item) {
-            if (!BI.isFunction(item.setSelected)) {
-                item.setNotSelectedValue(v);
-                return;
-            }
-            if (v.contains(val)) {
-                item.setSelected && item.setSelected(false);
-            } else {
-                item.setSelected && item.setSelected(true);
-            }
-        });
-    },
-
-    populate: function (items) {
-        var self = this;
-        var args = [].slice.call(arguments);
-        var linkHashMap = new BI.LinkHashMap();
-        var val = function (item) {
-            return item.id || item.value;
-        };
-        if (!this.buttons) {
-            this.buttons = {};
-        }
-        //所有已存在的和新添加的
-        var willCreated = [];
-        BI.each(items, function (i, item) {
-            item = BI.stripEL(item);
-            if (self.buttons[val(item)]) {
-                var ob = self.buttons[val(item)];
-                args[0] = item.items;
-                args[2] = item;
-                ob.populate && ob.populate.apply(ob, args);
-            } else {
-                willCreated.push(item);
-            }
-        });
-        //创建新元素
-        args[0] = willCreated;
-        var newBtns = this._btnsCreator.apply(this, args);
-
-        //整理
-        var array = [];
-        BI.each(items, function (i, item) {
-            item = BI.stripEL(item);
-            var button = self.buttons[val(item)] || newBtns[val(item)];
-            linkHashMap.add(val(item), button);
-            array.push(button);
-        });
-        this.buttons = linkHashMap.map;
-
-        BI.DOM.hang(this.buttons);
-        this.empty();
-
-        var packages = this._packageItems(items, this._packageBtns(array));
-        BI.createWidget(BI.extend({element: this}, this._packageLayout(packages)));
-    },
-
-    getIndexByValue: function (value) {
-        throw new Error("不能使用getIndexByValue方法");
-    }
-});
-BI.ButtonMap.EVENT_CHANGE = "EVENT_CHANGE";
-
-$.shortcut("bi.button_map", BI.ButtonMap);/**
  * guy
  * 异步树
  * @class BI.TreeView
@@ -3665,7 +3552,75 @@ BI.ComboGroup = BI.inherit(BI.Widget, {
 });
 BI.ComboGroup.EVENT_CHANGE = "EVENT_CHANGE";
 
-$.shortcut("bi.combo_group", BI.ComboGroup);/**
+$.shortcut("bi.combo_group", BI.ComboGroup);BI.VirtualGroup = BI.inherit(BI.Widget, {
+    _defaultConfig: function () {
+        return BI.extend(BI.VirtualGroup.superclass._defaultConfig.apply(this, arguments), {
+            baseCls: "bi-virtual-group",
+            items: [],
+            layouts: [{
+                type: "bi.center",
+                hgap: 0,
+                vgap: 0
+            }]
+        })
+    },
+
+    render: function () {
+        this.populate(this.options.items);
+    },
+
+    _createBtns: function (items) {
+        var o = this.options;
+        return BI.createItems(items, {
+            type: "bi.text_button"
+        });
+    },
+
+    _packageBtns: function (btns) {
+        var o = this.options;
+
+        for (var i = o.layouts.length - 1; i > 0; i--) {
+            btns = BI.map(btns, function (k, it) {
+                return BI.extend({}, o.layouts[i], {
+                    items: [
+                        BI.extend({}, o.layouts[i].el, it)
+                    ]
+                })
+            })
+        }
+        return btns;
+    },
+
+    _packageItems: function (items, packBtns) {
+        return BI.createItems(BI.makeArrayByArray(items, {}), BI.clone(packBtns));
+    },
+
+    _packageLayout: function (items) {
+        var o = this.options, layout = BI.deepClone(o.layouts[0]);
+
+        var lay = BI.formatEL(layout).el;
+        while (lay && lay.items && !BI.isEmpty(lay.items)) {
+            lay = BI.formatEL(lay.items[0]).el;
+        }
+        lay.items = items;
+        return layout;
+    },
+
+    populate: function (items) {
+        var self = this;
+        items = items || [];
+        this.options.items = items;
+        items = this._packageItems(items, this._packageBtns(this._createBtns(items)));
+        if (!this.layouts) {
+            this.layouts = BI.createWidget(BI.extend({element: this}, this._packageLayout(items)));
+        } else {
+            this.layouts.populate(this._packageLayout(items).items);
+        }
+    }
+});
+BI.VirtualGroup.EVENT_CHANGE = "EVENT_CHANGE";
+
+$.shortcut("bi.virtual_group", BI.VirtualGroup);/**
  * 加载控件
  *
  * Created by GUY on 2015/8/31.

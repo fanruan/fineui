@@ -72,7 +72,7 @@ Demo.Func = BI.inherit(BI.Widget, {
         var tree = BI.createWidget({
             type: "bi.branch_tree",
             el: {
-                type: "bi.button_group"
+                type: "bi.virtual_group"
             },
             items: [{
                 text: "且",
@@ -159,8 +159,8 @@ Demo.Func = BI.inherit(BI.Widget, {
                         type: "bi.label",
                         height: 30,
                         textAlign: "left",
-                        text: "这里是一段文字" + BI.UUID(),
-                        value: "这里是一段文字" + BI.UUID()
+                        text: "这里是一段文字" ,
+                        value: "这里是一段文字"
                     }, {
                         text: "且",
                         value: "且3",

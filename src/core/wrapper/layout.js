@@ -63,35 +63,117 @@ BI.Layout = BI.inherit(BI.Widget, {
         }
     },
 
+    _getChildName: function (index) {
+        return index + "";
+    },
+
     _addElement: function (i, item) {
-        var o = this.options;
-        var w;
-        if (!this.hasWidget(this.getName() + "-" + i)) {
+        var self = this, w;
+        if (!this.hasWidget(this._getChildName(i))) {
             w = BI.createWidget(item);
-            this.addWidget(this.getName() + "-" + i, w);
+            this.addWidget(this._getChildName(i), w);
+            w.on(BI.Events.DESTROY, function () {
+                BI.each(self._children, function (name, child) {
+                    if (child === w) {
+                        self.removeItemAt(name | 0);
+                    }
+                });
+            });
         } else {
-            w = this.getWidgetByName(this.getName() + "-" + i);
+            w = this.getWidgetByName(this._getChildName(i));
         }
         return w;
     },
 
-    stroke: function (items) {
+    _getOptions: function (item) {
+        if (item instanceof BI.Widget) {
+            item = item.options;
+        }
+        item = BI.stripEL(item);
+        if (item instanceof BI.Widget) {
+            item = item.options;
+        }
+        return item;
+    },
+
+    _compare: function (item1, item2) {
         var self = this;
-        BI.each(items, function (i, item) {
-            if (!!item) {
-                self._addElement(i, item);
+        return eq(item1, item2);
+
+        //不比较函数
+        function eq(a, b, aStack, bStack) {
+            if (a === b) return a !== 0 || 1 / a === 1 / b;
+            if (a == null || b == null) return a === b;
+            var className = Object.prototype.toString.call(a);
+            switch (className) {
+                case '[object RegExp]':
+                case '[object String]':
+                    return '' + a === '' + b;
+                case '[object Number]':
+                    if (+a !== +a) return +b !== +b;
+                    return +a === 0 ? 1 / +a === 1 / b : +a === +b;
+                case '[object Date]':
+                case '[object Boolean]':
+                    return +a === +b;
             }
-        });
+
+            var areArrays = className === '[object Array]';
+            if (!areArrays) {
+                if (BI.isFunction(a) && BI.isFunction(b)) {
+                    return true;
+                }
+                a = self._getOptions(a);
+                b = self._getOptions(b);
+            }
+
+            aStack = aStack || [];
+            bStack = bStack || [];
+            var length = aStack.length;
+            while (length--) {
+                if (aStack[length] === a) return bStack[length] === b;
+            }
+
+            aStack.push(a);
+            bStack.push(b);
+
+            if (areArrays) {
+                length = a.length;
+                if (length !== b.length) return false;
+                while (length--) {
+                    if (!eq(a[length], b[length], aStack, bStack)) return false;
+                }
+            } else {
+                var keys = _.keys(a), key;
+                length = keys.length;
+                if (_.keys(b).length !== length) return false;
+                while (length--) {
+                    key = keys[length];
+                    if (!(_.has(b, key) && eq(a[key], b[key], aStack, bStack))) return false;
+                }
+            }
+            aStack.pop();
+            bStack.pop();
+            return true;
+        }
     },
 
-    populate: function (items) {
-        var self = this;
-        this.options.items = items || [];
-        this.stroke(items);
+    _getWrapper: function () {
+        return this.element;
     },
 
-    resize: function () {
+    _addItem: function (index, item) {
+        for (var i = this.options.items.length; i > index; i--) {
+            this._children[this._getChildName(i)] = this._children[this._getChildName(i - 1)];
+        }
+        delete this._children[index];
+        this.options.items.splice(index, 0, item);
+    },
 
+    _removeItem: function (index) {
+        for (var i = index; i < this.options.items.length - 1; i++) {
+            this._children[this._getChildName(i)] = this._children[this._getChildName(i + 1)];
+        }
+        this.options.items.splice(index, 1);
     },
 
     /**
@@ -101,7 +183,7 @@ BI.Layout = BI.inherit(BI.Widget, {
     addItem: function (item) {
         var w = this._addElement(this.options.items.length, item);
         this.options.items.push(item);
-        w.element.appendTo(this.element);
+        w.element.appendTo(this._getWrapper());
         w._mount();
         return w;
     },
@@ -109,9 +191,52 @@ BI.Layout = BI.inherit(BI.Widget, {
     prependItem: function (item) {
         var w = this._addElement(this.options.items.length, item);
         this.options.items.unshift(item);
-        w.element.prependTo(this.element);
+        w.element.prependTo(this._getWrapper());
         w._mount();
         return w;
+    },
+
+    addItemAt: function (index, item) {
+        if (index < 0 || index > this.options.items.length) {
+            return;
+        }
+        this._addItem(index, item);
+        var w = this._addElement(index, item);
+        if (index > 0) {
+            this._children[this._getChildName(index - 1)].element.after(w.element);
+        } else {
+            w.element.prependTo(this._getWrapper());
+        }
+        w._mount();
+        return w;
+    },
+
+    removeItemAt: function (index) {
+        if (index < 0 || index > this.options.items.length - 1) {
+            return;
+        }
+        this._children[this._getChildName(index)].destroy();
+        this._removeItem(index);
+    },
+
+    updateItemAt: function (index, item) {
+        if (index < 0 || index > this.options.items.length - 1) {
+            return;
+        }
+
+        var updated;
+        if (updated = this._children[this._getChildName(index)].update(this._getOptions(item))) {
+            return updated;
+        }
+        this._children[this._getChildName(index)].destroy();
+        var w = this._addElement(index, item);
+        this._children[this._getChildName(index)] = w;
+        if (index > 0) {
+            this._children[this._getChildName(index - 1)].element.after(w.element);
+        } else {
+            w.element.prependTo(this._getWrapper());
+        }
+        w._mount();
     },
 
     addItems: function (items) {
@@ -129,9 +254,9 @@ BI.Layout = BI.inherit(BI.Widget, {
     },
 
     getValue: function () {
-        var value = [];
-        BI.each(this._children, function (i, wi) {
-            var v = wi.getValue();
+        var self = this, value = [];
+        BI.each(this.options.items, function (i) {
+            var v = self._children[self._getChildName(i)].getValue();
             v = BI.isArray(v) ? v : [v];
             value = value.concat(v);
         });
@@ -139,15 +264,63 @@ BI.Layout = BI.inherit(BI.Widget, {
     },
 
     setValue: function (v) {
-        BI.each(this._children, function (i, wi) {
-            wi.setValue(v);
+        var self = this;
+        BI.each(this.options.items, function (i) {
+            self._children[self._getChildName(i)].setValue(v);
         })
     },
 
     setText: function (v) {
-        BI.each(this._children, function (i, wi) {
-            wi.setText(v);
+        var self = this;
+        BI.each(this.options.items, function (i) {
+            self._children[self._getChildName(i)].setText(v);
         })
+    },
+
+    update: function (item) {
+        var o = this.options;
+        var items = item.items;
+        var updated = false, i, len;
+        for (i = 0, len = o.items.length; i < len; i++) {
+            if (!this._compare(o.items[i], items[i])) {
+                updated = this.updateItemAt(i, items[i]) || updated;
+            }
+        }
+        if (o.items.length > items.length) {
+            for (i = items.length; i < o.items.length; i++) {
+                this.removeItemAt(i);
+            }
+        } else if (items.length > o.items.length) {
+            for (i = o.items.length; i < items.length; i++) {
+                this.addItemAt(i, items[i]);
+            }
+        }
+        this.options.items = items;
+        return updated;
+    },
+
+    stroke: function (items) {
+        var self = this;
+        BI.each(items, function (i, item) {
+            if (!!item) {
+                self._addElement(i, item);
+            }
+        });
+    },
+
+    populate: function (items) {
+        var self = this, o = this.options;
+        items = items || [];
+        if (this._isMounted) {
+            this.update({items: items});
+            return;
+        }
+        this.options.items = items;
+        this.stroke(items);
+    },
+
+    resize: function () {
+
     }
 });
 $.shortcut('bi.layout', BI.Layout);

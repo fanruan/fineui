@@ -43,6 +43,10 @@ BI.Widget = BI.inherit(BI.OB, {
 
     },
 
+    update: function () {
+
+    },
+
     destroyed: function () {
     },
 
@@ -367,10 +371,7 @@ BI.Widget = BI.inherit(BI.OB, {
     },
 
     destroy: function () {
-        this.empty();
-        this._isMounted = false;
-        this._parent = null;
-        this.destroyed();
+        this._unMount();
         this.element.destroy();
         this.fireEvent(BI.Events.DESTROY);
     }

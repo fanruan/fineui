@@ -37,6 +37,12 @@ BI.LatticeLayout = BI.inherit(BI.Layout, {
         return w;
     },
 
+    addItemAt: function (item) {
+        var w = BI.LatticeLayout.superclass.addItemAt.apply(this, arguments);
+        this.resize();
+        return w;
+    },
+
     resize: function () {
         this.stroke(this.options.items);
     },
