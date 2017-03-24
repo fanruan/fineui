@@ -19357,17 +19357,17 @@ BI.Layout = BI.inherit(BI.Widget, {
      */
     addItem: function (item) {
         var w = this._addElement(this.options.items.length, item);
-        w._mount();
         this.options.items.push(item);
         w.element.appendTo(this.element);
+        w._mount();
         return w;
     },
 
     prependItem: function (item) {
         var w = this._addElement(this.options.items.length, item);
-        w._mount();
         this.options.items.unshift(item);
         w.element.prependTo(this.element);
+        w._mount();
         return w;
     },
 
@@ -19379,10 +19379,10 @@ BI.Layout = BI.inherit(BI.Widget, {
     },
 
     prependItems: function (items) {
-        var self = this;
-        BI.each(items, function (i, item) {
-            self.prependItem(item);
-        })
+        items = items || [];
+        for (var i = items.length - 1; i >= 0; i--) {
+            this.prependItem(items[i]);
+        }
     },
 
     getValue: function () {
@@ -23083,6 +23083,9 @@ BI.HorizontalFillLayoutLogic = BI.inherit(BI.Logic, {
  * @class Array
  */
 $.extend(Array.prototype, {
+    contains: function (o) {
+        return this.indexOf(o) > -1;
+    },
     /**
      * 检查指定的值是否在数组中
      * @param {Object} o 要检查的值
@@ -25048,9 +25051,17 @@ BI.CenterAdaptLayout = BI.inherit(BI.Layout, {
 
     addItem: function (item) {
         var w = this._addElement(this.options.items.length, item);
-        w._mount();
         this.options.items.push(item);
         w.element.appendTo(this.$tr);
+        w._mount();
+        return w;
+    },
+
+    prependItem: function (item) {
+        var w = this._addElement(this.options.items.length, item);
+        this.options.items.unshift(item);
+        w.element.appendTo(this.$tr);
+        w._mount();
         return w;
     },
 
@@ -25169,9 +25180,17 @@ BI.HorizontalAdaptLayout = BI.inherit(BI.Layout, {
 
     addItem: function (item) {
         var w = this._addElement(this.options.items.length, item);
-        w._mount();
         this.options.items.push(item);
         w.element.appendTo(this.$tr);
+        w._mount();
+        return w;
+    },
+
+    prependItem: function (item) {
+        var w = this._addElement(this.options.items.length, item);
+        this.options.items.unshift(item);
+        w.element.appendTo(this.$tr);
+        w._mount();
         return w;
     },
 
@@ -25456,9 +25475,17 @@ BI.VerticalAdaptLayout = BI.inherit(BI.Layout, {
 
     addItem: function (item) {
         var w = this._addElement(this.options.items.length, item);
-        w._mount();
         this.options.items.push(item);
         w.element.appendTo(this.$tr);
+        w._mount();
+        return w;
+    },
+
+    prependItem: function (item) {
+        var w = this._addElement(this.options.items.length, item);
+        this.options.items.unshift(item);
+        w.element.appendTo(this.$tr);
+        w._mount();
         return w;
     },
 
@@ -26038,9 +26065,17 @@ BI.FlexCenterLayout = BI.inherit(BI.Layout, {
 
     addItem: function (item) {
         var w = this._addElement(this.options.items.length, item);
-        w._mount();
         this.options.items.push(item);
         w.element.appendTo(this.$wrapper);
+        w._mount();
+        return w;
+    },
+
+    prependItem: function (item) {
+        var w = this._addElement(this.options.items.length, item);
+        this.options.items.unshift(item);
+        w.element.appendTo(this.$wrapper);
+        w._mount();
         return w;
     },
 
@@ -26127,9 +26162,17 @@ BI.FlexHorizontalLayout = BI.inherit(BI.Layout, {
 
     addItem: function (item) {
         var w = this._addElement(this.options.items.length, item);
-        w._mount();
         this.options.items.push(item);
         w.element.appendTo(this.$wrapper);
+        w._mount();
+        return w;
+    },
+
+    prependItem: function (item) {
+        var w = this._addElement(this.options.items.length, item);
+        this.options.items.unshift(item);
+        w.element.appendTo(this.$wrapper);
+        w._mount();
         return w;
     },
 
@@ -26216,6 +26259,15 @@ BI.FlexVerticalCenter = BI.inherit(BI.Layout, {
         var w = this._addElement(this.options.items.length, item);
         this.options.items.push(item);
         w.element.appendTo(this.$wrapper);
+        w._mount();
+        return w;
+    },
+
+    prependItem: function (item) {
+        var w = this._addElement(this.options.items.length, item);
+        this.options.items.unshift(item);
+        w.element.appendTo(this.$wrapper);
+        w._mount();
         return w;
     },
 

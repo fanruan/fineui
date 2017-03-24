@@ -164,13 +164,13 @@ BI.ButtonTree = BI.inherit(BI.ButtonGroup, {
         var node;
         BI.any(this.buttons, function (i, item) {
             if (item.isEnabled()) {
-                if (item.getValue() === value) {
-                    node = item;
-                    return true;
-                } else if (BI.isFunction(item.getNodeByValue)) {
+                if (BI.isFunction(item.getNodeByValue)) {
                     if (node = item.getNodeByValue(value)) {
                         return true;
                     }
+                } else if (item.attr("value") === value) {
+                    node = item;
+                    return true;
                 }
             }
         });

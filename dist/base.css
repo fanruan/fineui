@@ -2190,13 +2190,13 @@ ul.ztree.zTreeDragUL {
   color: #808080;
 }
 .bi-display-tree .ztree li span.button.switch.center_open {
-  background-image: url("${servletURL}?op=resource&resource=/com/fr/bi/web/images/icon/tree-vertical-line-3.png");
+  background-image: url("icon/tree-vertical-line-3.png");
 }
 .bi-display-tree .ztree li span.button.switch.roots_open {
-  background-image: url("${servletURL}?op=resource&resource=/com/fr/bi/web/images/icon/tree-vertical-line-2.png");
+  background-image: url("icon/tree-vertical-line-2.png");
 }
 .bi-display-tree .ztree li span.button.switch.bottom_open {
-  background-image: url("${servletURL}?op=resource&resource=/com/fr/bi/web/images/icon/tree-vertical-line-4.png");
+  background-image: url("icon/tree-vertical-line-4.png");
 }
 .bi-display-tree .ztree li a,
 .bi-display-tree .ztree li span {
@@ -2286,24 +2286,6 @@ ul.ztree.zTreeDragUL {
 }
 .bi-list-view .list-view-toolbar > .first-element {
   border-left: none;
-}
-/****添加计算宽度的--运算符直接需要space****/
-/****** common color(常用颜色,可用于普遍场景) *****/
-/**** custom color(自定义颜色,用于特定场景) ****/
-.bi-scroll-view .scroll-container {
-  border-left: 1px solid #d4dadd;
-  border-right: 1px solid #d4dadd;
-  border-bottom: 1px solid #d4dadd;
-}
-.bi-scroll-view .scroll-drop-down-icon {
-  font-size: 14px;
-  border-bottom: 1px solid #d4dadd;
-  border-left: 1px solid #d4dadd;
-  border-right: 1px solid #d4dadd;
-  background: #f4f4f4;
-}
-.bi-scroll-view .scroll-drop-down-icon:active {
-  background: #d4dadd;
 }
 .bi-flex-center-layout {
   display: box;

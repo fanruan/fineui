@@ -109,9 +109,17 @@ BI.CenterAdaptLayout = BI.inherit(BI.Layout, {
 
     addItem: function (item) {
         var w = this._addElement(this.options.items.length, item);
-        w._mount();
         this.options.items.push(item);
         w.element.appendTo(this.$tr);
+        w._mount();
+        return w;
+    },
+
+    prependItem: function (item) {
+        var w = this._addElement(this.options.items.length, item);
+        this.options.items.unshift(item);
+        w.element.appendTo(this.$tr);
+        w._mount();
         return w;
     },
 

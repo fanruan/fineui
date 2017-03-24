@@ -17,6 +17,7 @@ BI.Svg = BI.inherit(BI.Widget, {
         BI.Svg.superclass._init.apply(this, arguments);
         this.paper = Raphael(this.element[0]);
 
+        this.element.css("overflow", "hidden");
         $(this.paper.canvas).width("100%").height("100%").css({"left": "0", "top": "0"}).appendTo(this.element);
 
         this.top = this.paper.top;

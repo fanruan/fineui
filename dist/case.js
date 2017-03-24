@@ -6165,124 +6165,6 @@ BI.SimpleStateEditor.EVENT_SPACE = "EVENT_SPACE";
 BI.SimpleStateEditor.EVENT_EMPTY = "EVENT_EMPTY";
 
 $.shortcut("bi.simple_state_editor", BI.SimpleStateEditor);/**
- * 倒立的Branch
- * @class BI.HandStandBranchExpander
- * @extend BI.Widget
- * create by young
- */
-BI.HandStandBranchExpander = BI.inherit(BI.Widget, {
-    _defaultConfig: function () {
-        return BI.extend(BI.HandStandBranchExpander.superclass._defaultConfig.apply(this, arguments), {
-            baseCls: "bi-handstand-branch-expander",
-            direction: BI.Direction.Top,
-            logic: {
-                dynamic: true
-            },
-            el: {type: "bi.label"},
-            popup: {}
-        })
-    },
-
-    _init: function () {
-        BI.HandStandBranchExpander.superclass._init.apply(this, arguments);
-        var o = this.options;
-        this._initExpander();
-        this._initBranchView();
-        BI.createWidget(BI.extend({
-            element: this
-        }, BI.LogicFactory.createLogic(BI.LogicFactory.createLogicTypeByDirection(o.direction), BI.extend({}, o.logic, {
-            items: BI.LogicFactory.createLogicItemsByDirection(o.direction, {
-                type: "bi.center_adapt",
-                items: [this.expander]
-            }, this.branchView)
-        }))));
-    },
-
-    _initExpander: function () {
-        var self = this, o = this.options;
-        this.expander = BI.createWidget(o.el);
-        this.expander.on(BI.Controller.EVENT_CHANGE, function () {
-            self.fireEvent(BI.Controller.EVENT_CHANGE, arguments);
-        });
-    },
-
-    _initBranchView: function () {
-        var self = this, o = this.options;
-        this.branchView = BI.createWidget(o.popup, {});
-        this.branchView.on(BI.Controller.EVENT_CHANGE, function () {
-            self.fireEvent(BI.Controller.EVENT_CHANGE, arguments);
-        });
-    },
-
-    populate: function (items) {
-        this.branchView.populate.apply(this.branchView, arguments);
-    },
-
-    getValue: function () {
-        return this.branchView.getValue();
-    }
-});
-BI.HandStandBranchExpander.EVENT_CHANGE = "EVENT_CHANGE";
-$.shortcut("bi.handstand_branch_expander", BI.HandStandBranchExpander);/**
- * @class BI.BranchExpander
- * @extend BI.Widget
- * create by young
- */
-BI.BranchExpander = BI.inherit(BI.Widget, {
-    _defaultConfig: function () {
-        return BI.extend(BI.BranchExpander.superclass._defaultConfig.apply(this, arguments), {
-            baseCls: "bi-branch-expander",
-            direction: BI.Direction.Left,
-            logic: {
-                dynamic: true
-            },
-            el: {},
-            popup: {}
-        })
-    },
-
-    _init: function () {
-        BI.BranchExpander.superclass._init.apply(this, arguments);
-        var o = this.options;
-        this._initExpander();
-        this._initBranchView();
-        BI.createWidget(BI.extend({
-            element: this
-        }, BI.LogicFactory.createLogic(BI.LogicFactory.createLogicTypeByDirection(o.direction), BI.extend({}, o.logic, {
-            items: BI.LogicFactory.createLogicItemsByDirection(o.direction, this.expander, this.branchView)
-        }))));
-    },
-
-    _initExpander: function () {
-        var self = this, o = this.options;
-        this.expander = BI.createWidget(o.el, {
-            type: "bi.label",
-            width: 30,
-            height: "100%"
-        });
-        this.expander.on(BI.Controller.EVENT_CHANGE, function () {
-            self.fireEvent(BI.Controller.EVENT_CHANGE, arguments);
-        });
-    },
-
-    _initBranchView: function () {
-        var self = this, o = this.options;
-        this.branchView = BI.createWidget(o.popup, {});
-        this.branchView.on(BI.Controller.EVENT_CHANGE, function () {
-            self.fireEvent(BI.Controller.EVENT_CHANGE, arguments);
-        });
-    },
-
-    populate: function (items) {
-        this.branchView.populate.apply(this.branchView, arguments);
-    },
-
-    getValue: function () {
-        return this.branchView.getValue();
-    }
-});
-BI.BranchExpander.EVENT_CHANGE = "EVENT_CHANGE";
-$.shortcut("bi.branch_expander", BI.BranchExpander);/**
  * 有确定取消按钮的弹出层
  * @class BI.BarFloatSection
  * @extends BI.FloatSection
@@ -9890,7 +9772,7 @@ BI.extend(BI.TableTree, {
     }
 });
 
-$.shortcut("bi.table_tree", BI.TableTree);/**
+$.shortcut("bi.tree_table", BI.TableTree);/**
  * guy
  * 复选导航条
  * Created by GUY on 2015/8/25.
@@ -10024,6 +9906,124 @@ BI.MultiSelectBar = BI.inherit(BI.BasicButton, {
 });
 BI.MultiSelectBar.EVENT_CHANGE = "MultiSelectBar.EVENT_CHANGE";
 $.shortcut("bi.multi_select_bar", BI.MultiSelectBar);/**
+ * 倒立的Branch
+ * @class BI.HandStandBranchExpander
+ * @extend BI.Widget
+ * create by young
+ */
+BI.HandStandBranchExpander = BI.inherit(BI.Widget, {
+    _defaultConfig: function () {
+        return BI.extend(BI.HandStandBranchExpander.superclass._defaultConfig.apply(this, arguments), {
+            baseCls: "bi-handstand-branch-expander",
+            direction: BI.Direction.Top,
+            logic: {
+                dynamic: true
+            },
+            el: {type: "bi.label"},
+            popup: {}
+        })
+    },
+
+    _init: function () {
+        BI.HandStandBranchExpander.superclass._init.apply(this, arguments);
+        var o = this.options;
+        this._initExpander();
+        this._initBranchView();
+        BI.createWidget(BI.extend({
+            element: this
+        }, BI.LogicFactory.createLogic(BI.LogicFactory.createLogicTypeByDirection(o.direction), BI.extend({}, o.logic, {
+            items: BI.LogicFactory.createLogicItemsByDirection(o.direction, {
+                type: "bi.center_adapt",
+                items: [this.expander]
+            }, this.branchView)
+        }))));
+    },
+
+    _initExpander: function () {
+        var self = this, o = this.options;
+        this.expander = BI.createWidget(o.el);
+        this.expander.on(BI.Controller.EVENT_CHANGE, function () {
+            self.fireEvent(BI.Controller.EVENT_CHANGE, arguments);
+        });
+    },
+
+    _initBranchView: function () {
+        var self = this, o = this.options;
+        this.branchView = BI.createWidget(o.popup, {});
+        this.branchView.on(BI.Controller.EVENT_CHANGE, function () {
+            self.fireEvent(BI.Controller.EVENT_CHANGE, arguments);
+        });
+    },
+
+    populate: function (items) {
+        this.branchView.populate.apply(this.branchView, arguments);
+    },
+
+    getValue: function () {
+        return this.branchView.getValue();
+    }
+});
+BI.HandStandBranchExpander.EVENT_CHANGE = "EVENT_CHANGE";
+$.shortcut("bi.handstand_branch_expander", BI.HandStandBranchExpander);/**
+ * @class BI.BranchExpander
+ * @extend BI.Widget
+ * create by young
+ */
+BI.BranchExpander = BI.inherit(BI.Widget, {
+    _defaultConfig: function () {
+        return BI.extend(BI.BranchExpander.superclass._defaultConfig.apply(this, arguments), {
+            baseCls: "bi-branch-expander",
+            direction: BI.Direction.Left,
+            logic: {
+                dynamic: true
+            },
+            el: {},
+            popup: {}
+        })
+    },
+
+    _init: function () {
+        BI.BranchExpander.superclass._init.apply(this, arguments);
+        var o = this.options;
+        this._initExpander();
+        this._initBranchView();
+        BI.createWidget(BI.extend({
+            element: this
+        }, BI.LogicFactory.createLogic(BI.LogicFactory.createLogicTypeByDirection(o.direction), BI.extend({}, o.logic, {
+            items: BI.LogicFactory.createLogicItemsByDirection(o.direction, this.expander, this.branchView)
+        }))));
+    },
+
+    _initExpander: function () {
+        var self = this, o = this.options;
+        this.expander = BI.createWidget(o.el, {
+            type: "bi.label",
+            width: 30,
+            height: "100%"
+        });
+        this.expander.on(BI.Controller.EVENT_CHANGE, function () {
+            self.fireEvent(BI.Controller.EVENT_CHANGE, arguments);
+        });
+    },
+
+    _initBranchView: function () {
+        var self = this, o = this.options;
+        this.branchView = BI.createWidget(o.popup, {});
+        this.branchView.on(BI.Controller.EVENT_CHANGE, function () {
+            self.fireEvent(BI.Controller.EVENT_CHANGE, arguments);
+        });
+    },
+
+    populate: function (items) {
+        this.branchView.populate.apply(this.branchView, arguments);
+    },
+
+    getValue: function () {
+        return this.branchView.getValue();
+    }
+});
+BI.BranchExpander.EVENT_CHANGE = "EVENT_CHANGE";
+$.shortcut("bi.branch_expander", BI.BranchExpander);/**
  * @class BI.HandStandBranchTree
  * @extends BI.Widget
  * create by young
@@ -10344,7 +10344,7 @@ BI.SimpleTreeView = BI.inherit(BI.Widget, {
         var self = this, o = this.options;
         this.structure = new BI.Tree();
         this.tree = BI.createWidget({
-            type: "bi.tree",
+            type: "bi.tree_view",
             element: this,
             itemsCreator: function (op, callback) {
                 var fn = function (items) {
