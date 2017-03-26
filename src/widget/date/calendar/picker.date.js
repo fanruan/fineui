@@ -87,7 +87,7 @@ BI.DatePicker = BI.inherit(BI.Widget, {
 
         BI.createWidget({
             type: "bi.htape",
-            element: this,
+            element: this.element,
             items: [{
                 el: this.left,
                 width: 25

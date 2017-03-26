@@ -13,8 +13,8 @@ BI.CardLayout = BI.inherit(BI.Layout, {
             items: []
         });
     },
-    created: function () {
-        BI.CardLayout.superclass.created.apply(this, arguments);
+    render: function () {
+        BI.CardLayout.superclass.render.apply(this, arguments);
         this.populate(this.options.items);
     },
 
@@ -34,6 +34,9 @@ BI.CardLayout = BI.inherit(BI.Layout, {
                 if (!self.hasWidget(self._getCardName(item.cardName))) {
                     var w = BI.createWidget(item);
                     self.addWidget(self._getCardName(item.cardName), w);
+                    w.on(BI.Events.DESTROY, function () {
+                        delete self._children[self._getCardName(item.cardName)];
+                    });
                 } else {
                     var w = self.getWidgetByName(self._getCardName(item.cardName));
                 }
@@ -43,6 +46,9 @@ BI.CardLayout = BI.inherit(BI.Layout, {
         });
     },
 
+    update: function () {
+    },
+
     populate: function (items) {
         BI.CardLayout.superclass.populate.apply(this, arguments);
         this._mount();
@@ -50,32 +56,32 @@ BI.CardLayout = BI.inherit(BI.Layout, {
     },
 
     isCardExisted: function (cardName) {
-        return this.hasWidget(this._getCardName(cardName))
-            && $(this.getWidgetByName(this._getCardName(cardName)).element).length !== 0;
+        return this.hasWidget(this._getCardName(cardName));
     },
 
     getCardByName: function (cardName) {
         if (!this.hasWidget(this._getCardName(cardName))) {
-            throw new Error("cardName不存在，无法获取");
+            throw new Error("cardName is not exist");
         }
         return this._children[this._getCardName(cardName)];
     },
 
     deleteCardByName: function (cardName) {
         if (!this.hasWidget(this._getCardName(cardName))) {
-            throw new Error("cardName不存在，无法删除");
+            return;
         }
-        this.getWidgetByName(this._getCardName(cardName)).destroy();
         var index = BI.findKey(this.options.items, function (i, item) {
             return item.cardName == cardName;
         });
         this.options.items.splice(index, 1);
+        var child = this.getWidgetByName(this._getCardName(cardName));
         delete this._children[this._getCardName(cardName)];
+        child.destroy();
     },
 
     addCardByName: function (cardName, cardItem) {
         if (this.hasWidget(this._getCardName(cardName))) {
-            throw new Error("cardName已经存在了");
+            throw new Error("cardName is already exist");
         }
         this.options.items.push({el: cardItem, cardName: cardName});
         var widget = BI.createWidget(cardItem);
@@ -150,9 +156,9 @@ BI.CardLayout = BI.inherit(BI.Layout, {
 
     isAllCardHide: function () {
         var flag = true;
-        BI.each(this._children, function (i, el) {
+        BI.some(this._children, function (i, el) {
             if (el.isVisible()) {
-                flag = true;
+                flag = false;
                 return false;
             }
         });

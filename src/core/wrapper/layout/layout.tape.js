@@ -29,8 +29,8 @@ BI.HTapeLayout = BI.inherit(BI.Layout, {
             ]
         });
     },
-    created: function () {
-        BI.HTapeLayout.superclass.created.apply(this, arguments);
+    render: function () {
+        BI.HTapeLayout.superclass.render.apply(this, arguments);
         this.populate(this.options.items);
     },
 
@@ -39,7 +39,7 @@ BI.HTapeLayout = BI.inherit(BI.Layout, {
     },
     addItem: function (item) {
         // do nothing
-        throw new Error("不能添加元素")
+        throw new Error("cannot be added")
     },
 
     stroke: function (items) {
@@ -133,8 +133,8 @@ BI.VTapeLayout = BI.inherit(BI.Layout, {
             ]
         });
     },
-    created: function () {
-        BI.VTapeLayout.superclass.created.apply(this, arguments);
+    render: function () {
+        BI.VTapeLayout.superclass.render.apply(this, arguments);
         this.populate(this.options.items);
     },
 
@@ -144,7 +144,7 @@ BI.VTapeLayout = BI.inherit(BI.Layout, {
 
     addItem: function (item) {
         // do nothing
-        throw new Error("不能添加元素")
+        throw new Error("cannot be added")
     },
 
     stroke: function (items) {

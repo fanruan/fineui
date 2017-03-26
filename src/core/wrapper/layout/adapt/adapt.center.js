@@ -16,8 +16,8 @@ BI.CenterAdaptLayout = BI.inherit(BI.Layout, {
             bgap: 0
         });
     },
-    created: function () {
-        BI.CenterAdaptLayout.superclass.created.apply(this, arguments);
+    render: function () {
+        BI.CenterAdaptLayout.superclass.render.apply(this, arguments);
         this.$table = $("<table>").attr({"cellspacing": 0, "cellpadding": 0}).css({
             "position": "relative",
             "width": "100%",
@@ -36,7 +36,7 @@ BI.CenterAdaptLayout = BI.inherit(BI.Layout, {
         var o = this.options;
         var td;
         var width = o.columnSize[i] <= 1 ? (o.columnSize[i] * 100 + "%") : o.columnSize[i];
-        if (!this.hasWidget(this.getName() + "-" + i)) {
+        if (!this.hasWidget(this._getChildName(i))) {
             var w = BI.createWidget(item);
             w.element.css({"position": "relative", "top": "0", "left": "0", "margin": "0px auto"});
             td = BI.createWidget({
@@ -47,9 +47,9 @@ BI.CenterAdaptLayout = BI.inherit(BI.Layout, {
                 },
                 items: [w]
             });
-            this.addWidget(this.getName() + "-" + i, td);
+            this.addWidget(this._getChildName(i), td);
         } else {
-            td = this.getWidgetByName(this.getName() + "-" + i);
+            td = this.getWidgetByName(this._getChildName(i));
             td.element.attr("width", width);
         }
         td.element.css({"max-width": o.columnSize[i]});
@@ -107,12 +107,8 @@ BI.CenterAdaptLayout = BI.inherit(BI.Layout, {
         // console.log("center_adapt布局不需要resize");
     },
 
-    addItem: function (item) {
-        var w = this._addElement(this.options.items.length, item);
-        w._mount();
-        this.options.items.push(item);
-        w.element.appendTo(this.$tr);
-        return w;
+    _getWrapper: function(){
+        return this.$tr;
     },
 
     populate: function (items) {

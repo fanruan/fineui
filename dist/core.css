@@ -3371,7 +3371,7 @@ textarea::-webkit-scrollbar-thumb {
   _background: none;
 }
 .loading-background {
-  background: url('icon/loading.gif') no-repeat center center;
+  background: url('background/loading.gif') no-repeat center center;
   _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='icon/loading.gif');
   _background: none;
 }

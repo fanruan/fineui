@@ -188,11 +188,7 @@ BI.Collection = BI.inherit(BI.Widget, {
         BI.each(addSet, function (index) {
             addedItems.push(renderedCells[index])
         });
-        BI.createWidget({
-            type: "bi.absolute",
-            element: this.container,
-            items: addedItems
-        });
+        this.container.addItems(addedItems);
         this.renderedCells = renderedCells;
         this.renderedKeys = renderedKeys;
     },

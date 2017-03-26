@@ -35,7 +35,7 @@ BI.DateCombo = BI.inherit(BI.Widget, {
         this.combo = BI.createWidget({
             type: "bi.combo",
             toggle: false,
-            element: this,
+            element: this.element,
             isNeedAdjustHeight: false,
             isNeedAdjustWidth: false,
             el: this.trigger,

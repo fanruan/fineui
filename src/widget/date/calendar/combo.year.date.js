@@ -38,7 +38,7 @@ BI.YearDateCombo = BI.inherit(BI.Trigger, {
         this.combo = BI.createWidget({
             type: "bi.combo",
             offsetStyle: "center",
-            element: this,
+            element: this.element,
             isNeedAdjustHeight: false,
             isNeedAdjustWidth: false,
             el: this.trigger,

@@ -18,8 +18,8 @@ BI.HorizontalLayout = BI.inherit(BI.Layout, {
             bgap: 0
         });
     },
-    created: function () {
-        BI.HorizontalLayout.superclass.created.apply(this, arguments);
+    render: function () {
+        BI.HorizontalLayout.superclass.render.apply(this, arguments);
         this.$table = $("<table>").attr({"cellspacing": 0, "cellpadding": 0}).css({
             "position": "relative",
             "white-space": "nowrap",
@@ -36,7 +36,7 @@ BI.HorizontalLayout = BI.inherit(BI.Layout, {
         var o = this.options;
         var td;
         var width = o.columnSize[i] <= 1 ? (o.columnSize[i] * 100 + "%") : o.columnSize[i];
-        if (!this.hasWidget(this.getName() + i)) {
+        if (!this.hasWidget(this._getChildName(i))) {
             var w = BI.createWidget(item);
             w.element.css({"position": "relative", "margin": "0px auto"});
             td = BI.createWidget({
@@ -47,9 +47,9 @@ BI.HorizontalLayout = BI.inherit(BI.Layout, {
                 },
                 items: [w]
             });
-            this.addWidget(this.getName() + i, td);
+            this.addWidget(this._getChildName(i), td);
         } else {
-            td = this.getWidgetByName(this.getName() + i);
+            td = this.getWidgetByName(this._getChildName(i));
             td.element.attr("width", width);
         }
 
@@ -107,12 +107,8 @@ BI.HorizontalLayout = BI.inherit(BI.Layout, {
         // console.log("horizontal layout do not need to resize");
     },
 
-    addItem: function (item) {
-        var w = this._addElement(this.options.items.length, item);
-        w._mount();
-        this.options.items.push(item);
-        w.element.appendTo(this.$tr);
-        return w;
+    _getWrapper: function(){
+        return this.$tr;
     },
 
     populate: function (items) {
@@ -140,8 +136,8 @@ BI.HorizontalCellLayout = BI.inherit(BI.Layout, {
             bgap: 0
         });
     },
-    created: function () {
-        BI.HorizontalCellLayout.superclass.created.apply(this, arguments);
+    render: function () {
+        BI.HorizontalCellLayout.superclass.render.apply(this, arguments);
         this.element.css({"display": "table", "vertical-align": "top"});
         this.populate(this.options.items);
     },

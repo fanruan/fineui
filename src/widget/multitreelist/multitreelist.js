@@ -125,7 +125,7 @@ BI.MultiTreeList = BI.inherit(BI.Widget, {
         });
         BI.createWidget({
             type: "bi.vtape",
-            element: this,
+            element: this.element,
             height: "100%",
             width: "100%",
             items: [{

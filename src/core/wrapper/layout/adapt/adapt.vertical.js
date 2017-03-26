@@ -4,20 +4,18 @@
  * @extends BI.Layout
  */
 BI.VerticalAdaptLayout = BI.inherit(BI.Layout, {
-    _defaultConfig: function () {
-        return BI.extend(BI.VerticalAdaptLayout.superclass._defaultConfig.apply(this, arguments), {
-            baseCls: "bi-vertical-adapt-layout",
-            columnSize: [],
-            hgap: 0,
-            vgap: 0,
-            lgap: 0,
-            rgap: 0,
-            tgap: 0,
-            bgap: 0
-        });
+    props: {
+        baseCls: "bi-vertical-adapt-layout",
+        columnSize: [],
+        hgap: 0,
+        vgap: 0,
+        lgap: 0,
+        rgap: 0,
+        tgap: 0,
+        bgap: 0
     },
-    _init: function () {
-        BI.VerticalAdaptLayout.superclass._init.apply(this, arguments);
+    render: function () {
+        BI.VerticalAdaptLayout.superclass.render.apply(this, arguments);
         this.$table = $("<table>").attr({"cellspacing": 0, "cellpadding": 0}).css({
             "position": "relative",
             "height": "100%",
@@ -35,7 +33,7 @@ BI.VerticalAdaptLayout = BI.inherit(BI.Layout, {
         var o = this.options;
         var td;
         var width = o.columnSize[i] <= 1 ? (o.columnSize[i] * 100 + "%") : o.columnSize[i];
-        if (!this.hasWidget(this.getName() + "-" + i)) {
+        if (!this.hasWidget(this._getChildName(i))) {
             var w = BI.createWidget(item);
             w.element.css({"position": "relative", "top": "0", "left": "0", "margin": "0px auto"});
             td = BI.createWidget({
@@ -46,9 +44,9 @@ BI.VerticalAdaptLayout = BI.inherit(BI.Layout, {
                 },
                 items: [w]
             });
-            this.addWidget(this.getName() + "-" + i, td);
+            this.addWidget(this._getChildName(i), td);
         } else {
-            td = this.getWidgetByName(this.getName() + "-" + i);
+            td = this.getWidgetByName(this._getChildName(i));
             td.element.attr("width", width);
         }
 
@@ -102,12 +100,8 @@ BI.VerticalAdaptLayout = BI.inherit(BI.Layout, {
         }
     },
 
-    addItem: function (item) {
-        var w = this._addElement(this.options.items.length, item);
-        w._mount();
-        this.options.items.push(item);
-        w.element.appendTo(this.$tr);
-        return w;
+    _getWrapper: function(){
+        return this.$tr;
     },
 
     resize: function () {

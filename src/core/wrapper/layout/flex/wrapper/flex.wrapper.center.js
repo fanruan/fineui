@@ -11,8 +11,8 @@ BI.FlexCenterLayout = BI.inherit(BI.Layout, {
             baseCls: "bi-flex-wrapper-center-layout clearfix"
         });
     },
-    created: function () {
-        BI.FlexCenterLayout.superclass.created.apply(this, arguments);
+    render: function () {
+        BI.FlexCenterLayout.superclass.render.apply(this, arguments);
         this.$wrapper = $("<div>").addClass("flex-wrapper-center-layout-wrapper");
         this.populate(this.options.items);
     },
@@ -40,12 +40,8 @@ BI.FlexCenterLayout = BI.inherit(BI.Layout, {
         }
     },
 
-    addItem: function (item) {
-        var w = this._addElement(this.options.items.length, item);
-        w._mount();
-        this.options.items.push(item);
-        w.element.appendTo(this.$wrapper);
-        return w;
+    _getWrapper: function(){
+        return this.$wrapper;
     },
 
     resize: function () {

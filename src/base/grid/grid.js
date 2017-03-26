@@ -8,7 +8,7 @@
 BI.Grid = BI.inherit(BI.Widget, {
     _defaultConfig: function () {
         return BI.extend(BI.Grid.superclass._defaultConfig.apply(this, arguments), {
-            baseCls: "bi-grid",
+            baseCls: "bi-grid-view",
             width: 400,
             height: 300,
             overflowX: true,
@@ -176,11 +176,7 @@ BI.Grid = BI.inherit(BI.Widget, {
             BI.each(addSet, function (index) {
                 addedItems.push(renderedCells[index])
             });
-            BI.createWidget({
-                type: "bi.absolute",
-                element: this.container,
-                items: addedItems
-            });
+            this.container.addItems(addedItems);
             this.renderedCells = renderedCells;
             this.renderedKeys = renderedKeys;
         }

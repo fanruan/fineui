@@ -23,6 +23,7 @@ Demo.TreeValueChooser = BI.inherit(BI.Widget, {
         }
         var widget = BI.createWidget({
             type: "bi.tree_value_chooser_combo",
+            width: 300,
             items: tree,
             itemsCreator: function (op, callback) {
                 callback(tree);

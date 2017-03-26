@@ -14,7 +14,7 @@ BI.MultiStringListPopup=BI.inherit(BI.Widget,{
         this.popup = BI.createWidget({
             type: "bi.sync_tree",
             height: 400,
-            element: this,
+            element:this.element,
             itemsCreator: o.itemsCreator
         });
         this.popup.on(BI.TreeView.EVENT_AFTERINIT, function () {

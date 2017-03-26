@@ -16,8 +16,8 @@ BI.DefaultLayout = BI.inherit(BI.Layout, {
             items: []
         });
     },
-    created: function () {
-        BI.DefaultLayout.superclass.created.apply(this, arguments);
+    render: function () {
+        BI.DefaultLayout.superclass.render.apply(this, arguments);
         this.populate(this.options.items);
     },
 

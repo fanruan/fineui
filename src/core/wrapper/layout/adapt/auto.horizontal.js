@@ -16,8 +16,8 @@ BI.HorizontalAutoLayout = BI.inherit(BI.Layout, {
         });
     },
 
-    created: function () {
-        BI.HorizontalAutoLayout.superclass.created.apply(this, arguments);
+    render: function () {
+        BI.HorizontalAutoLayout.superclass.render.apply(this, arguments);
         this.populate(this.options.items);
     },
 
