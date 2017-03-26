@@ -1,0 +1,28 @@
+/****添加计算宽度的--运算符直接需要space****/
+/****** common color(常用颜色,可用于普遍场景) *****/
+/**** custom color(自定义颜色,用于特定场景) ****/
+.display-block {
+  display: block;
+}
+.display-inline {
+  display: inline-block;
+  *display: inline;
+  *zoom: 1;
+}
+/**常用于span元素在与combo并列时**/
+.vertical-super {
+  vertical-align: super;
+}
+.vertical-top {
+  vertical-align: top;
+}
+.horizon-center {
+  text-align: center;
+}
+.horizon-left {
+  text-align: left;
+}
+.div-horizon-center {
+  margin-left: auto;
+  margin-right: auto;
+}

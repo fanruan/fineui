@@ -1,0 +1,117 @@
+/****添加计算宽度的--运算符直接需要space****/
+/****** common color(常用颜色,可用于普遍场景) *****/
+/**** custom color(自定义颜色,用于特定场景) ****/
+.base-disabled {
+  cursor: default !important;
+  color: #c4c6c6 !important;
+}
+.base-disabled .b-font:before {
+  color: #c4c6c6 !important;
+}
+.base-invalid {
+  cursor: default !important;
+}
+.clearfix {
+  *zoom: 1;
+}
+.clearfix:before,
+.clearfix:after {
+  content: " ";
+  display: table;
+  line-height: 0;
+}
+.clearfix:after {
+  clear: both;
+}
+.bi-keyword-red-mark {
+  color: #f07d0a;
+}
+.bi-high-light {
+  color: #009de3;
+}
+.bi-water-mark {
+  color: #cccccc;
+  cursor: text;
+}
+.bi-tips {
+  color: #c4c6c6;
+}
+.bi-resizer {
+  background: #d8f3fe;
+  opacity: 0.8;
+  filter: alpha(opacity=80);
+  z-index: 1000000000;
+}
+.bi-z-index-mask {
+  background-color: #1a1a1a;
+  opacity: 0.5;
+  filter: alpha(opacity=50);
+}
+.bi-list-item:hover,
+.bi-list-item.hover {
+  background-color: #f4f4f4;
+}
+.bi-list-item.disabled,
+.bi-list-item.disabled:hover,
+.bi-list-item.disabled:active {
+  background-color: #ffffff;
+}
+.bi-list-item-effect.active,
+.bi-list-item-effect:active {
+  color: #009de3;
+}
+.bi-list-item-effect.disabled,
+.bi-list-item-effect.disabled:hover,
+.bi-list-item-effect.disabled:active {
+  color: #1a1a1a;
+}
+.bi-list-item-hover:hover,
+.bi-list-item-hover.hover {
+  color: #009de3;
+  background-color: #f4f4f4;
+}
+.bi-list-item-hover.disabled,
+.bi-list-item-hover.disabled:hover,
+.bi-list-item-hover.disabled:active {
+  color: #1a1a1a;
+  background-color: #ffffff;
+}
+.bi-list-item-active:hover,
+.bi-list-item-active.hover {
+  background-color: #f4f4f4;
+}
+.bi-list-item-active.active,
+.bi-list-item-active:active {
+  color: #009de3;
+  background-color: #f4f4f4;
+}
+.bi-list-item-active.disabled,
+.bi-list-item-active.disabled:hover,
+.bi-list-item-active.disabled:active {
+  background-color: #ffffff;
+}
+.bi-list-item-select:hover,
+.bi-list-item-select.hover {
+  color: #009de3;
+  background-color: #f4f4f4;
+}
+.bi-list-item-select:active,
+.bi-list-item-select.active {
+  color: #ffffff;
+  background-color: #009de3;
+}
+.bi-list-item-select:active .bi-high-light,
+.bi-list-item-select.active .bi-high-light {
+  color: #ffffff;
+}
+.bi-list-item-select.disabled,
+.bi-list-item-select.disabled:hover,
+.bi-list-item-select.disabled:active {
+  color: #c4c6c6 !important;
+  background-color: #ffffff !important;
+}
+.bi-list-item-select.disabled .bi-high-light,
+.bi-list-item-select.disabled:hover .bi-high-light,
+.bi-list-item-select.disabled:active .bi-high-light {
+  color: #c4c6c6 !important;
+}
