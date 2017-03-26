@@ -1,0 +1,18 @@
+/****添加计算宽度的--运算符直接需要space****/
+/****** common color(常用颜色,可用于普遍场景) *****/
+/**** custom color(自定义颜色,用于特定场景) ****/
+.bi-panel {
+  border: 1px solid #a3d6e8;
+  -webkit-border-radius: 2px;
+  -moz-border-radius: 2px;
+  border-radius: 2px;
+}
+.bi-panel .panel-title {
+  background-color: #d8f2fd;
+  border-bottom: 1px solid #a3d6e8;
+}
+.bi-panel .panel-title .panel-title-text {
+  cursor: text;
+  color: #808080;
+  font-size: 14px;
+}

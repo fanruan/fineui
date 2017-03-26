@@ -1,0 +1,94 @@
+.scrollbar-layout-main {
+  box-sizing: border-box;
+  outline: none;
+  overflow: hidden;
+  position: absolute;
+  transition-duration: 250ms;
+  transition-timing-function: ease;
+  user-select: none;
+  background-color: rgba(0, 0, 0, 0.1);
+  border-radius: 5px;
+}
+.scrollbar-layout-main-vertical {
+  bottom: 0;
+  right: 0;
+  top: 0;
+  transition-property: background-color;
+  width: 10px;
+}
+.scrollbar-layout-main-vertical.public-scrollbar-main-active,
+.scrollbar-layout-main-vertical:hover {
+  width: 10px;
+}
+.scrollbar-layout-main-horizontal {
+  bottom: 0;
+  height: 10px;
+  left: 0;
+  transition-property: background-color;
+  background-color: rgba(0, 0, 0, 0.1);
+}
+/* Touching the scroll-track directly makes the scroll-track bolder */
+.scrollbar-layout-main-horizontal.public-scrollbar-main-active,
+.scrollbar-layout-main-horizontal:hover {
+  height: 10px;
+}
+.scrollbar-layout-face {
+  left: 0;
+  overflow: hidden;
+  position: absolute;
+  z-index: 1;
+}
+/**
+ * This selector renders the "nub" of the scrollface. The nub must
+ * be rendered as pseudo-element so that it won't receive any UI events then
+ * we can get the correct `event.offsetX` and `event.offsetY` from the
+ * scrollface element while dragging it.
+ */
+.scrollbar-layout-face:after {
+  border-radius: 6px;
+  content: '';
+  display: block;
+  position: absolute;
+  transition: background-color 250ms ease;
+}
+.scrollbar-layout-face-horizontal {
+  bottom: 0;
+  left: 0;
+  top: 0;
+}
+.scrollbar-layout-face-horizontal:after {
+  bottom: 2px;
+  left: 0;
+  top: 2px;
+  width: 100%;
+}
+.scrollbar-layout-face-vertical {
+  left: 0;
+  right: 0;
+  top: 0;
+}
+.scrollbar-layout-face-vertical:after {
+  height: 100%;
+  left: 2px;
+  right: 2px;
+  top: 0;
+}
+/**
+ * scrollbars.
+ */
+/* Touching the scroll-track directly makes the scroll-track bolder */
+.public-scrollbar-face:after {
+  background-color: #c2c2c2;
+}
+.public-scrollbar-main:hover .public-scrollbar-face:after,
+.public-scrollbar-main-active .public-scrollbar-face:after,
+.public-scrollbar-faceActive:after {
+  background-color: #7d7d7d;
+}
+.horizontal-scrollbar {
+  bottom: 0;
+  position: absolute;
+}
+.horizontal-scrollbar .public-scrollbar-main-horizontal {
+  background-color: #fff;
+}

@@ -1,0 +1,13 @@
+/****添加计算宽度的--运算符直接需要space****/
+/****** common color(常用颜色,可用于普遍场景) *****/
+/**** custom color(自定义颜色,用于特定场景) ****/
+.bi-bubble {
+  font-size: 14px;
+}
+.bi-bubble .bubble-text {
+  -webkit-border-radius: 2px;
+  -moz-border-radius: 2px;
+  border-radius: 2px;
+  background: #fddddd;
+  color: #e85050;
+}

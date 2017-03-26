@@ -1,0 +1,17 @@
+/****添加计算宽度的--运算符直接需要space****/
+/****** common color(常用颜色,可用于普遍场景) *****/
+/**** custom color(自定义颜色,用于特定场景) ****/
+.bi-toast {
+  font-size: 14px;
+  -webkit-border-radius: 2px;
+  -moz-border-radius: 2px;
+  border-radius: 2px;
+}
+.bi-toast.toast-success {
+  background: #e1f4e7;
+  color: #0c6d23;
+}
+.bi-toast.toast-warning {
+  background: #fddddd;
+  color: #e85050;
+}

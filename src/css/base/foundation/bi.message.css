@@ -1,0 +1,31 @@
+/****添加计算宽度的--运算符直接需要space****/
+/****** common color(常用颜色,可用于普遍场景) *****/
+/**** custom color(自定义颜色,用于特定场景) ****/
+.bi-message-mask {
+  background-color: #1a1a1a;
+  opacity: 0.5;
+  filter: alpha(opacity=50);
+}
+.bi-message-title {
+  background-color: #f4f4f4;
+  color: #808080;
+  font-size: 16px;
+  cursor: pointer;
+}
+.bi-message-text {
+  font-size: 16px;
+  -webkit-user-select: text;
+  -khtml-user-select: text;
+  -moz-user-select: text;
+  -ms-user-select: text;
+  -o-user-select: text;
+  user-select: text;
+}
+.bi-message-content {
+  background-color: #ffffff;
+  color: #808080;
+  font-size: 16px;
+}
+.bi-message-close {
+  font-size: 25px;
+}

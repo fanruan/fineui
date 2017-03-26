@@ -1,0 +1,11 @@
+/****添加计算宽度的--运算符直接需要space****/
+/****** common color(常用颜色,可用于普遍场景) *****/
+/**** custom color(自定义颜色,用于特定场景) ****/
+.bi-resizable-table-cell .resizable-table-cell-resizer-container {
+  cursor: ew-resize;
+  z-index: 1;
+}
+.bi-resizable-table-cell .resizable-table-cell-resizer-container:hover .resizable-table-cell-resizer-knob,
+.bi-resizable-table-cell .resizable-table-cell-resizer-container.dragging .resizable-table-cell-resizer-knob {
+  background-color: #009de3;
+}

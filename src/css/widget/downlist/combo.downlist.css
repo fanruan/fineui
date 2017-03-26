@@ -1,0 +1,16 @@
+/****添加计算宽度的--运算符直接需要space****/
+/****** common color(常用颜色,可用于普遍场景) *****/
+/**** custom color(自定义颜色,用于特定场景) ****/
+.bi-down-list-combo .down-list-group.bi-combo-hover .bi-down-list-group-item,
+.bi-down-list-combo .down-list-group.bi-combo-hover .bi-down-list-group-item .b-font:before {
+  background-color: #f4f4f4;
+}
+.bi-down-list-combo .down-list-group.bi-combo-hover .bi-down-list-group-item:disabled,
+.bi-down-list-combo .down-list-group.bi-combo-hover .bi-down-list-group-item.disabled,
+.bi-down-list-combo .down-list-group.bi-combo-hover .bi-down-list-group-item:disabled .b-font:before,
+.bi-down-list-combo .down-list-group.bi-combo-hover .bi-down-list-group-item.disabled .b-font:before {
+  background-color: #ffffff;
+}
+.bi-down-list-combo .bi-down-list-spliter {
+  border-top: 1px solid #eaeaea;
+}

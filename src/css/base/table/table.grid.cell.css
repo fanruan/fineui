@@ -1,0 +1,21 @@
+/****添加计算宽度的--运算符直接需要space****/
+/****** common color(常用颜色,可用于普遍场景) *****/
+/**** custom color(自定义颜色,用于特定场景) ****/
+.bi-grid-table-cell {
+  -webkit-box-sizing: border-box;
+  /*Safari3.2+*/
+  -moz-box-sizing: border-box;
+  /*Firefox3.5+*/
+  -ms-box-sizing: border-box;
+  /*IE8*/
+  box-sizing: border-box;
+  /*W3C标准(IE9+，Safari5.1+,Chrome10.0+,Opera10.6+都符合box-sizing的w3c标准语法)*/
+  border-right: 1px solid #eaeaea;
+  border-bottom: 1px solid #eaeaea;
+}
+.bi-grid-table-cell.first-row {
+  border-top: 1px solid #eaeaea;
+}
+.bi-grid-table-cell.first-col {
+  border-left: 1px solid #eaeaea;
+}

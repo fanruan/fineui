@@ -1,0 +1,12 @@
+/****添加计算宽度的--运算符直接需要space****/
+/****** common color(常用颜色,可用于普遍场景) *****/
+/**** custom color(自定义颜色,用于特定场景) ****/
+.bi-multi-tree-check-pane {
+  background-color: #f4f4f4;
+}
+.bi-multi-tree-check-pane .multi-tree-continue-select {
+  background-color: #f4f4f4;
+}
+.bi-multi-tree-check-pane .multi-tree-check-selected {
+  color: #009de3;
+}
