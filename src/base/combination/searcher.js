@@ -130,7 +130,7 @@ BI.Searcher = BI.inherit(BI.Widget, {
         this.fireEvent(BI.Searcher.EVENT_START);
         this.popupView.startSearch && this.popupView.startSearch();
         //搜索前先清空dom
-        BI.Maskers.get(this.getName()).empty();
+        // BI.Maskers.get(this.getName()).empty();
         BI.nextTick(function (name) {
             BI.Maskers.show(name);
         }, this.getName());
@@ -155,9 +155,9 @@ BI.Searcher = BI.inherit(BI.Widget, {
         BI.Maskers.hide(name);
         if (BI.Maskers.has(name) && this._isSearching === true) {
             //搜索后清空dom
-            BI.nextTick(function () {
-                BI.Maskers.has(name) && BI.Maskers.get(name).empty();
-            });
+            // BI.nextTick(function () {
+            //     BI.Maskers.has(name) && BI.Maskers.get(name).empty();
+            // });
             this.popupView && this.popupView.stopSearch && this.popupView.stopSearch();
             this.fireEvent(BI.Searcher.EVENT_STOP);
         }

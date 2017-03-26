@@ -4896,6 +4896,335 @@ BI.DownListSelectTextTrigger = BI.inherit(BI.Trigger, {
     }
 });
 $.shortcut("bi.down_list_select_text_trigger", BI.DownListSelectTextTrigger);/**
+ * 根据内容自适应长度的输入框
+ * @class BI.AdaptiveEditor
+ * @extends BI.Single
+ */
+BI.AdaptiveEditor = BI.inherit(BI.Single, {
+    _defaultConfig: function () {
+        var conf = BI.AdaptiveEditor.superclass._defaultConfig.apply(this, arguments);
+        return BI.extend(conf, {
+            baseCls: (conf.baseCls || "") + " bi-adapt-editor",
+            hgap: 4,
+            vgap: 2,
+            lgap: 0,
+            rgap: 0,
+            tgap: 0,
+            bgap: 0,
+            validationChecker: BI.emptyFn,
+            quitChecker: BI.emptyFn,
+            mouseOut: false,
+            allowBlank: true,
+            watermark: "",
+            errorText: "",
+            height: 30
+        })
+    },
+
+    _init: function () {
+        BI.AdaptiveEditor.superclass._init.apply(this, arguments);
+        var self = this, o = this.options;
+        this.editor = BI.createWidget({
+            type: "bi.sign_editor",
+            element: this,
+            height: o.height,
+            hgap: o.hgap,
+            vgap: o.vgap,
+            lgap: o.lgap,
+            rgap: o.rgap,
+            tgap: o.tgap,
+            bgap: o.bgap,
+            value: o.value,
+            validationChecker: o.validationChecker,
+            quitChecker: o.quitChecker,
+            mouseOut: o.mouseOut,
+            allowBlank: o.allowBlank,
+            watermark: o.watermark,
+            errorText: o.errorText
+        });
+
+        this.editor.on(BI.Controller.EVENT_CHANGE, function () {
+            self.fireEvent(BI.Controller.EVENT_CHANGE, arguments);
+        });
+        this.editor.on(BI.SignEditor.EVENT_FOCUS, function () {
+            self.fireEvent(BI.AdaptiveEditor.EVENT_FOCUS);
+        });
+        this.editor.on(BI.SignEditor.EVENT_BLUR, function () {
+            self.fireEvent(BI.AdaptiveEditor.EVENT_BLUR);
+        });
+        this.editor.on(BI.SignEditor.EVENT_CLICK, function () {
+            self.fireEvent(BI.AdaptiveEditor.EVENT_CLICK);
+        });
+        this.editor.on(BI.SignEditor.EVENT_CHANGE, function () {
+            self._checkEditorLength();
+            self.fireEvent(BI.AdaptiveEditor.EVENT_CHANGE);
+        });
+        this.editor.on(BI.SignEditor.EVENT_KEY_DOWN, function (v) {
+            self.fireEvent(BI.AdaptiveEditor.EVENT_KEY_DOWN);
+        });
+
+        this.editor.on(BI.SignEditor.EVENT_VALID, function () {
+            self.fireEvent(BI.AdaptiveEditor.EVENT_VALID);
+        });
+        this.editor.on(BI.SignEditor.EVENT_CONFIRM, function () {
+            self.fireEvent(BI.AdaptiveEditor.EVENT_CONFIRM);
+        });
+        this.editor.on(BI.SignEditor.EVENT_START, function () {
+            self.fireEvent(BI.AdaptiveEditor.EVENT_START);
+        });
+        this.editor.on(BI.SignEditor.EVENT_PAUSE, function () {
+            self.fireEvent(BI.AdaptiveEditor.EVENT_PAUSE);
+        });
+        this.editor.on(BI.Editor.EVENT_STOP, function () {
+            self.fireEvent(BI.AdaptiveEditor.EVENT_STOP);
+        });
+        this.editor.on(BI.SignEditor.EVENT_SPACE, function () {
+            self.fireEvent(BI.AdaptiveEditor.EVENT_SPACE);
+        });
+        this.editor.on(BI.SignEditor.EVENT_ERROR, function () {
+            self.fireEvent(BI.AdaptiveEditor.EVENT_ERROR);
+        });
+        this.editor.on(BI.SignEditor.EVENT_ENTER, function () {
+            self.fireEvent(BI.AdaptiveEditor.EVENT_ENTER);
+        });
+        this.editor.on(BI.SignEditor.EVENT_RESTRICT, function () {
+            self.fireEvent(BI.AdaptiveEditor.EVENT_RESTRICT);
+        });
+        this.editor.on(BI.SignEditor.EVENT_EMPTY, function () {
+            self.fireEvent(BI.AdaptiveEditor.EVENT_EMPTY);
+        });
+        this._checkEditorLength();
+    },
+
+    _checkEditorLength: function () {
+        var o = this.options;
+        this.element.width(BI.DOM.getTextSizeWidth(this.getValue(), 14) + 2 * o.hgap + o.lgap + o.rgap);
+    },
+
+    focus: function () {
+        this.editor.focus();
+    },
+
+    blur: function () {
+        this.editor.blur();
+    },
+
+    isValid: function () {
+        return this.editor.isValid();
+    },
+
+    setErrorText: function (text) {
+        this.editor.setErrorText(text);
+    },
+
+    getErrorText: function () {
+        return this.editor.getErrorText();
+    },
+
+    setValue: function (k) {
+        this.editor.setValue(k);
+        this._checkEditorLength();
+    },
+
+    getValue: function () {
+        return this.editor.getValue();
+    },
+
+    getState: function () {
+        return this.editor.getState();
+    },
+
+    setState: function (v) {
+
+    }
+});
+BI.AdaptiveEditor.EVENT_CHANGE = "EVENT_CHANGE";
+BI.AdaptiveEditor.EVENT_FOCUS = "EVENT_FOCUS";
+BI.AdaptiveEditor.EVENT_BLUR = "EVENT_BLUR";
+BI.AdaptiveEditor.EVENT_CLICK = "EVENT_CLICK";
+BI.AdaptiveEditor.EVENT_KEY_DOWN = "EVENT_KEY_DOWN";
+BI.AdaptiveEditor.EVENT_CLICK_LABEL = "EVENT_CLICK_LABEL";
+
+BI.AdaptiveEditor.EVENT_START = "EVENT_START";
+BI.AdaptiveEditor.EVENT_PAUSE = "EVENT_PAUSE";
+BI.AdaptiveEditor.EVENT_STOP = "EVENT_STOP";
+BI.AdaptiveEditor.EVENT_CONFIRM = "EVENT_CONFIRM";
+BI.AdaptiveEditor.EVENT_VALID = "EVENT_VALID";
+BI.AdaptiveEditor.EVENT_ERROR = "EVENT_ERROR";
+BI.AdaptiveEditor.EVENT_ENTER = "EVENT_ENTER";
+BI.AdaptiveEditor.EVENT_RESTRICT = "EVENT_RESTRICT";
+BI.AdaptiveEditor.EVENT_SPACE = "EVENT_SPACE";
+BI.AdaptiveEditor.EVENT_EMPTY = "EVENT_EMPTY";
+
+$.shortcut("bi.adapt_editor", BI.AdaptiveEditor);/**
+ * 有清楚按钮的文本框
+ * Created by GUY on 2015/9/29.
+ * @class BI.SmallTextEditor
+ * @extends BI.SearchEditor
+ */
+BI.ClearEditor = BI.inherit(BI.Widget, {
+    _defaultConfig: function () {
+        var conf = BI.ClearEditor.superclass._defaultConfig.apply(this, arguments);
+        return BI.extend(conf, {
+            baseCls: "bi-clear-editor",
+            height: 30,
+            errorText: "",
+            watermark: "",
+            validationChecker: BI.emptyFn,
+            quitChecker: BI.emptyFn
+        });
+    },
+    _init: function () {
+        BI.ClearEditor.superclass._init.apply(this, arguments);
+        var self = this, o = this.options;
+        this.editor = BI.createWidget({
+            type: "bi.editor",
+            height: o.height,
+            watermark: o.watermark,
+            allowBlank: true,
+            errorText: o.errorText,
+            validationChecker: o.validationChecker,
+            quitChecker: o.quitChecker
+        });
+        this.clear = BI.createWidget({
+            type: "bi.icon_button",
+            stopEvent: true,
+            cls: "search-close-h-font"
+        });
+        this.clear.on(BI.IconButton.EVENT_CHANGE, function () {
+            self.setValue("");
+            self.fireEvent(BI.Controller.EVENT_CHANGE, BI.Events.STOPEDIT);
+            self.fireEvent(BI.ClearEditor.EVENT_CLEAR);
+        });
+        BI.createWidget({
+            element: this,
+            type: "bi.htape",
+            items: [
+                {
+                    el: this.editor
+                },
+                {
+                    el: this.clear,
+                    width: 25
+                }]
+        });
+        this.editor.on(BI.Controller.EVENT_CHANGE, function () {
+            self.fireEvent(BI.Controller.EVENT_CHANGE, arguments);
+        });
+
+        this.editor.on(BI.Editor.EVENT_FOCUS, function () {
+            self.fireEvent(BI.ClearEditor.EVENT_FOCUS);
+        });
+        this.editor.on(BI.Editor.EVENT_BLUR, function () {
+            self.fireEvent(BI.ClearEditor.EVENT_BLUR);
+        });
+        this.editor.on(BI.Editor.EVENT_CLICK, function () {
+            self.fireEvent(BI.ClearEditor.EVENT_CLICK);
+        });
+        this.editor.on(BI.Editor.EVENT_CHANGE, function () {
+            self._checkClear();
+            self.fireEvent(BI.ClearEditor.EVENT_CHANGE);
+        });
+        this.editor.on(BI.Editor.EVENT_KEY_DOWN, function (v) {
+            self.fireEvent(BI.ClearEditor.EVENT_KEY_DOWN, v);
+        });
+        this.editor.on(BI.Editor.EVENT_SPACE, function () {
+            self.fireEvent(BI.ClearEditor.EVENT_SPACE)
+        });
+        this.editor.on(BI.Editor.EVENT_BACKSPACE, function () {
+            self.fireEvent(BI.ClearEditor.EVENT_BACKSPACE)
+        });
+
+
+        this.editor.on(BI.Editor.EVENT_VALID, function () {
+            self.fireEvent(BI.ClearEditor.EVENT_VALID)
+        });
+        this.editor.on(BI.Editor.EVENT_ERROR, function () {
+            self.fireEvent(BI.ClearEditor.EVENT_ERROR)
+        });
+        this.editor.on(BI.Editor.EVENT_ENTER, function () {
+            self.fireEvent(BI.ClearEditor.EVENT_ENTER);
+        });
+        this.editor.on(BI.Editor.EVENT_RESTRICT, function () {
+            self.fireEvent(BI.ClearEditor.EVENT_RESTRICT)
+        });
+        this.editor.on(BI.Editor.EVENT_EMPTY, function () {
+            self._checkClear();
+            self.fireEvent(BI.ClearEditor.EVENT_EMPTY)
+        });
+        this.editor.on(BI.Editor.EVENT_REMOVE, function () {
+            self.fireEvent(BI.ClearEditor.EVENT_REMOVE)
+        });
+        this.editor.on(BI.Editor.EVENT_CONFIRM, function () {
+            self.fireEvent(BI.ClearEditor.EVENT_CONFIRM)
+        });
+        this.editor.on(BI.Editor.EVENT_START, function () {
+            self.fireEvent(BI.ClearEditor.EVENT_START);
+        });
+        this.editor.on(BI.Editor.EVENT_PAUSE, function () {
+            self.fireEvent(BI.ClearEditor.EVENT_PAUSE);
+        });
+        this.editor.on(BI.Editor.EVENT_STOP, function () {
+            self.fireEvent(BI.ClearEditor.EVENT_STOP);
+        });
+
+        this.clear.invisible();
+    },
+
+    _checkClear: function () {
+        if (!this.getValue()) {
+            this.clear.invisible();
+        } else {
+            this.clear.visible();
+        }
+    },
+
+    focus: function () {
+        this.editor.focus();
+    },
+
+    blur: function () {
+        this.editor.blur();
+    },
+
+    getValue: function () {
+        if (this.isValid()) {
+            var res = this.editor.getValue().match(/[\S]+/g);
+            return BI.isNull(res) ? "" : res[res.length - 1];
+        }
+    },
+
+    setValue: function (v) {
+        this.editor.setValue(v);
+        if (BI.isKey(v)) {
+            this.clear.visible();
+        }
+    },
+
+    isValid: function () {
+        return this.editor.isValid();
+    }
+});
+BI.ClearEditor.EVENT_CHANGE = "EVENT_CHANGE";
+BI.ClearEditor.EVENT_FOCUS = "EVENT_FOCUS";
+BI.ClearEditor.EVENT_BLUR = "EVENT_BLUR";
+BI.ClearEditor.EVENT_CLICK = "EVENT_CLICK";
+BI.ClearEditor.EVENT_KEY_DOWN = "EVENT_KEY_DOWN";
+BI.ClearEditor.EVENT_SPACE = "EVENT_SPACE";
+BI.ClearEditor.EVENT_BACKSPACE = "EVENT_BACKSPACE";
+BI.ClearEditor.EVENT_CLEAR = "EVENT_CLEAR";
+
+BI.ClearEditor.EVENT_START = "EVENT_START";
+BI.ClearEditor.EVENT_PAUSE = "EVENT_PAUSE";
+BI.ClearEditor.EVENT_STOP = "EVENT_STOP";
+BI.ClearEditor.EVENT_CONFIRM = "EVENT_CONFIRM";
+BI.ClearEditor.EVENT_VALID = "EVENT_VALID";
+BI.ClearEditor.EVENT_ERROR = "EVENT_ERROR";
+BI.ClearEditor.EVENT_ENTER = "EVENT_ENTER";
+BI.ClearEditor.EVENT_RESTRICT = "EVENT_RESTRICT";
+BI.ClearEditor.EVENT_REMOVE = "EVENT_REMOVE";
+BI.ClearEditor.EVENT_EMPTY = "EVENT_EMPTY";
+$.shortcut("bi.clear_editor", BI.ClearEditor);/**
  * guy
  * 记录内容的输入框
  * @class BI.RecordEditor
@@ -5122,6 +5451,222 @@ BI.RecordEditor.EVENT_SPACE = "EVENT_SPACE";
 BI.RecordEditor.EVENT_EMPTY = "EVENT_EMPTY";
 
 $.shortcut("bi.record_editor", BI.RecordEditor);/**
+ * Created by roy on 15/9/14.
+ */
+BI.SearchEditor = BI.inherit(BI.Widget, {
+    _defaultConfig: function () {
+        var conf = BI.SearchEditor.superclass._defaultConfig.apply(this, arguments);
+        return BI.extend(conf, {
+            baseCls: "bi-search-editor",
+            height: 30,
+            errorText: "",
+            watermark: BI.i18nText("BI-Basic_Search"),
+            validationChecker: BI.emptyFn,
+            quitChecker: BI.emptyFn
+        });
+    },
+    _init: function () {
+        this.options.height -= 2;
+        BI.SearchEditor.superclass._init.apply(this, arguments);
+        var self = this, o = this.options;
+        this.editor = BI.createWidget({
+            type: "bi.editor",
+            height: o.height,
+            watermark: o.watermark,
+            allowBlank: true,
+            errorText: o.errorText,
+            validationChecker: o.validationChecker,
+            quitChecker: o.quitChecker
+        });
+        this.clear = BI.createWidget({
+            type: "bi.icon_button",
+            stopEvent: true,
+            cls: "search-close-h-font"
+        });
+        this.clear.on(BI.IconButton.EVENT_CHANGE, function () {
+            self.setValue("");
+            self.fireEvent(BI.Controller.EVENT_CHANGE, BI.Events.STOPEDIT);
+            self.fireEvent(BI.SearchEditor.EVENT_CLEAR);
+        });
+        BI.createWidget({
+            element: this,
+            type: "bi.htape",
+            items: [
+                {
+                    el: {
+                        type: "bi.center_adapt",
+                        cls: "search-font",
+                        items: [{
+                            el: {
+                                type: "bi.icon"
+                            }
+                        }]
+                    },
+                    width: 25
+                },
+                {
+                    el: self.editor
+                },
+                {
+                    el: this.clear,
+                    width: 25
+                }
+            ]
+        });
+        this.editor.on(BI.Controller.EVENT_CHANGE, function () {
+            self.fireEvent(BI.Controller.EVENT_CHANGE, arguments);
+        });
+
+        this.editor.on(BI.Editor.EVENT_FOCUS, function () {
+            self.fireEvent(BI.SearchEditor.EVENT_FOCUS);
+        });
+        this.editor.on(BI.Editor.EVENT_BLUR, function () {
+            self.fireEvent(BI.SearchEditor.EVENT_BLUR);
+        });
+        this.editor.on(BI.Editor.EVENT_CLICK, function () {
+            self.fireEvent(BI.SearchEditor.EVENT_CLICK);
+        });
+        this.editor.on(BI.Editor.EVENT_CHANGE, function () {
+            self._checkClear();
+            self.fireEvent(BI.SearchEditor.EVENT_CHANGE);
+        });
+        this.editor.on(BI.Editor.EVENT_KEY_DOWN, function (v) {
+            self.fireEvent(BI.SearchEditor.EVENT_KEY_DOWN, v);
+        });
+        this.editor.on(BI.Editor.EVENT_SPACE, function () {
+            self.fireEvent(BI.SearchEditor.EVENT_SPACE)
+        });
+        this.editor.on(BI.Editor.EVENT_BACKSPACE, function () {
+            self.fireEvent(BI.SearchEditor.EVENT_BACKSPACE)
+        });
+
+
+        this.editor.on(BI.Editor.EVENT_VALID, function () {
+            self.fireEvent(BI.SearchEditor.EVENT_VALID)
+        });
+        this.editor.on(BI.Editor.EVENT_ERROR, function () {
+            self.fireEvent(BI.SearchEditor.EVENT_ERROR)
+        });
+        this.editor.on(BI.Editor.EVENT_ENTER, function () {
+            self.fireEvent(BI.SearchEditor.EVENT_ENTER);
+        });
+        this.editor.on(BI.Editor.EVENT_RESTRICT, function () {
+            self.fireEvent(BI.SearchEditor.EVENT_RESTRICT)
+        });
+        this.editor.on(BI.Editor.EVENT_EMPTY, function () {
+            self._checkClear();
+            self.fireEvent(BI.SearchEditor.EVENT_EMPTY)
+        });
+        this.editor.on(BI.Editor.EVENT_REMOVE, function () {
+            self.fireEvent(BI.SearchEditor.EVENT_REMOVE)
+        });
+        this.editor.on(BI.Editor.EVENT_CONFIRM, function () {
+            self.fireEvent(BI.SearchEditor.EVENT_CONFIRM)
+        });
+        this.editor.on(BI.Editor.EVENT_START, function () {
+            self.fireEvent(BI.SearchEditor.EVENT_START);
+        });
+        this.editor.on(BI.Editor.EVENT_PAUSE, function () {
+            self.fireEvent(BI.SearchEditor.EVENT_PAUSE);
+        });
+        this.editor.on(BI.Editor.EVENT_STOP, function () {
+            self.fireEvent(BI.SearchEditor.EVENT_STOP);
+        });
+
+        this.clear.invisible();
+    },
+
+    _checkClear: function () {
+        if (!this.getValue()) {
+            this.clear.invisible();
+        } else {
+            this.clear.visible();
+        }
+    },
+
+    focus: function () {
+        this.editor.focus();
+    },
+
+    blur: function () {
+        this.editor.blur();
+    },
+
+    getValue: function () {
+        if (this.isValid()) {
+            var res = this.editor.getValue().match(/[\S]+/g);
+            return BI.isNull(res) ? "" : res[res.length - 1];
+        }
+    },
+
+    getLastValidValue: function () {
+        return this.editor.getLastValidValue();
+    },
+
+    setValue: function (v) {
+        this.editor.setValue(v);
+        if (BI.isKey(v)) {
+            this.clear.visible();
+        }
+    },
+
+    setValid: function (b) {
+        this.editor.setValid(b);
+    },
+
+    isEditing: function () {
+        return this.editor.isEditing();
+    },
+
+    isValid: function () {
+        return this.editor.isValid();
+    },
+
+    setEnable: function (b) {
+        BI.Editor.superclass.setEnable.apply(this, arguments);
+        this.editor && this.editor.setEnable(b);
+        this.clear.setEnabled(b);
+    }
+});
+BI.SearchEditor.EVENT_CHANGE = "EVENT_CHANGE";
+BI.SearchEditor.EVENT_FOCUS = "EVENT_FOCUS";
+BI.SearchEditor.EVENT_BLUR = "EVENT_BLUR";
+BI.SearchEditor.EVENT_CLICK = "EVENT_CLICK";
+BI.SearchEditor.EVENT_KEY_DOWN = "EVENT_KEY_DOWN";
+BI.SearchEditor.EVENT_SPACE = "EVENT_SPACE";
+BI.SearchEditor.EVENT_BACKSPACE = "EVENT_BACKSPACE";
+BI.SearchEditor.EVENT_CLEAR = "EVENT_CLEAR";
+
+BI.SearchEditor.EVENT_START = "EVENT_START";
+BI.SearchEditor.EVENT_PAUSE = "EVENT_PAUSE";
+BI.SearchEditor.EVENT_STOP = "EVENT_STOP";
+BI.SearchEditor.EVENT_CONFIRM = "EVENT_CONFIRM";
+BI.SearchEditor.EVENT_VALID = "EVENT_VALID";
+BI.SearchEditor.EVENT_ERROR = "EVENT_ERROR";
+BI.SearchEditor.EVENT_ENTER = "EVENT_ENTER";
+BI.SearchEditor.EVENT_RESTRICT = "EVENT_RESTRICT";
+BI.SearchEditor.EVENT_REMOVE = "EVENT_REMOVE";
+BI.SearchEditor.EVENT_EMPTY = "EVENT_EMPTY";
+$.shortcut("bi.search_editor", BI.SearchEditor);/**
+ * 小号搜索框
+ * Created by GUY on 2015/9/29.
+ * @class BI.SmallSearchEditor
+ * @extends BI.SearchEditor
+ */
+BI.SmallSearchEditor = BI.inherit(BI.SearchEditor, {
+    _defaultConfig: function () {
+        var conf = BI.SmallSearchEditor.superclass._defaultConfig.apply(this, arguments);
+        return BI.extend(conf, {
+            baseCls: (conf.baseCls || "") + " bi-small-search-editor",
+            height: 24
+        });
+    },
+
+    _init: function () {
+        BI.SmallSearchEditor.superclass._init.apply(this, arguments);
+    }
+});
+$.shortcut("bi.small_search_editor", BI.SmallSearchEditor);/**
  * 带标记的文本框
  * Created by GUY on 2016/1/25.
  * @class BI.ShelterEditor
@@ -5371,6 +5916,170 @@ BI.ShelterEditor.EVENT_SPACE = "EVENT_SPACE";
 BI.ShelterEditor.EVENT_EMPTY = "EVENT_EMPTY";
 
 $.shortcut("bi.shelter_editor", BI.ShelterEditor);/**
+ * sign是新值（初始value值）形式的自适应宽度的输入框
+ * @class BI.SignInitialEditor
+ * @extends BI.Single
+ */
+BI.SignInitialEditor = BI.inherit(BI.Single, {
+    _defaultConfig: function () {
+        var conf = BI.SignInitialEditor.superclass._defaultConfig.apply(this, arguments);
+        return BI.extend(conf, {
+            baseCls: (conf.baseCls || "") + " bi-sign-initial-editor",
+            hgap: 4,
+            vgap: 2,
+            lgap: 0,
+            rgap: 0,
+            tgap: 0,
+            bgap: 0,
+            validationChecker: BI.emptyFn,
+            quitChecker: BI.emptyFn,
+            mouseOut: false,
+            allowBlank: true,
+            watermark: "",
+            errorText: "",
+            value: "",
+            text: "",
+            height: 30
+        })
+    },
+
+    _init: function () {
+        BI.SignInitialEditor.superclass._init.apply(this, arguments);
+        var self = this, o = this.options;
+        this.editor = BI.createWidget({
+            type: "bi.sign_editor",
+            element: this,
+            height: o.height,
+            hgap: o.hgap,
+            vgap: o.vgap,
+            lgap: o.lgap,
+            rgap: o.rgap,
+            tgap: o.tgap,
+            bgap: o.bgap,
+            value: o.value || o.text,
+            validationChecker: o.validationChecker,
+            quitChecker: o.quitChecker,
+            mouseOut: o.mouseOut,
+            allowBlank: o.allowBlank,
+            watermark: o.watermark,
+            errorText: o.errorText
+        });
+        if(BI.isNotNull(o.value)){
+            this.setState(o.value);
+        }
+        this.editor.on(BI.Controller.EVENT_CHANGE, function () {
+            self.fireEvent(BI.Controller.EVENT_CHANGE, arguments);
+        });
+        this.editor.on(BI.SignEditor.EVENT_FOCUS, function () {
+            self.fireEvent(BI.SignInitialEditor.EVENT_FOCUS);
+        });
+        this.editor.on(BI.SignEditor.EVENT_BLUR, function () {
+            self.fireEvent(BI.SignInitialEditor.EVENT_BLUR);
+        });
+        this.editor.on(BI.SignEditor.EVENT_CLICK, function () {
+            self.fireEvent(BI.SignInitialEditor.EVENT_CLICK);
+        });
+        this.editor.on(BI.SignEditor.EVENT_CHANGE, function () {
+            self.fireEvent(BI.SignInitialEditor.EVENT_CHANGE);
+        });
+        this.editor.on(BI.SignEditor.EVENT_KEY_DOWN, function (v) {
+            self.fireEvent(BI.SignInitialEditor.EVENT_KEY_DOWN);
+        });
+
+        this.editor.on(BI.SignEditor.EVENT_VALID, function () {
+            self.fireEvent(BI.SignInitialEditor.EVENT_VALID);
+        });
+        this.editor.on(BI.SignEditor.EVENT_CONFIRM, function () {
+            self.setState(self.editor.getValue());
+            self.fireEvent(BI.SignInitialEditor.EVENT_CONFIRM);
+        });
+        this.editor.on(BI.SignEditor.EVENT_START, function () {
+            self.fireEvent(BI.SignInitialEditor.EVENT_START);
+        });
+        this.editor.on(BI.SignEditor.EVENT_PAUSE, function () {
+            self.fireEvent(BI.SignInitialEditor.EVENT_PAUSE);
+        });
+        this.editor.on(BI.SignEditor.EVENT_STOP, function () {
+            self.fireEvent(BI.SignInitialEditor.EVENT_STOP);
+        });
+        this.editor.on(BI.SignEditor.EVENT_SPACE, function () {
+            self.fireEvent(BI.SignInitialEditor.EVENT_SPACE);
+        });
+        this.editor.on(BI.SignEditor.EVENT_ERROR, function () {
+            self.fireEvent(BI.SignInitialEditor.EVENT_ERROR);
+        });
+        this.editor.on(BI.SignEditor.EVENT_ENTER, function () {
+            self.fireEvent(BI.SignInitialEditor.EVENT_ENTER);
+        });
+        this.editor.on(BI.SignEditor.EVENT_RESTRICT, function () {
+            self.fireEvent(BI.SignInitialEditor.EVENT_RESTRICT);
+        });
+        this.editor.on(BI.SignEditor.EVENT_EMPTY, function () {
+            self.fireEvent(BI.SignInitialEditor.EVENT_EMPTY);
+        });
+    },
+
+    focus: function () {
+        this.editor.focus();
+    },
+
+    blur: function () {
+        this.editor.blur();
+    },
+
+    isValid: function () {
+        return this.editor.isValid();
+    },
+
+    setErrorText: function (text) {
+        this.editor.setErrorText(text);
+    },
+
+    getErrorText: function () {
+        return this.editor.getErrorText();
+    },
+
+    setValue: function (v) {
+        this.editor.setValue(v.value);
+        this.setState(v.value);
+    },
+
+    getValue: function () {
+        return {
+            value: this.editor.getValue(),
+            text: this.options.text
+        }
+    },
+
+    getState: function () {
+        return this.editor.getState();
+    },
+
+    setState: function (v) {
+        var o = this.options;
+        v = (BI.isEmpty(v) || v == o.text) ? o.text : v + "(" + o.text + ")";
+        this.editor.setState(v);
+    }
+});
+BI.SignInitialEditor.EVENT_CHANGE = "EVENT_CHANGE";
+BI.SignInitialEditor.EVENT_FOCUS = "EVENT_FOCUS";
+BI.SignInitialEditor.EVENT_BLUR = "EVENT_BLUR";
+BI.SignInitialEditor.EVENT_CLICK = "EVENT_CLICK";
+BI.SignInitialEditor.EVENT_KEY_DOWN = "EVENT_KEY_DOWN";
+BI.SignInitialEditor.EVENT_CLICK_LABEL = "EVENT_CLICK_LABEL";
+
+BI.SignInitialEditor.EVENT_START = "EVENT_START";
+BI.SignInitialEditor.EVENT_PAUSE = "EVENT_PAUSE";
+BI.SignInitialEditor.EVENT_STOP = "EVENT_STOP";
+BI.SignInitialEditor.EVENT_CONFIRM = "EVENT_CONFIRM";
+BI.SignInitialEditor.EVENT_VALID = "EVENT_VALID";
+BI.SignInitialEditor.EVENT_ERROR = "EVENT_ERROR";
+BI.SignInitialEditor.EVENT_ENTER = "EVENT_ENTER";
+BI.SignInitialEditor.EVENT_RESTRICT = "EVENT_RESTRICT";
+BI.SignInitialEditor.EVENT_SPACE = "EVENT_SPACE";
+BI.SignInitialEditor.EVENT_EMPTY = "EVENT_EMPTY";
+
+$.shortcut("bi.sign_initial_editor", BI.SignInitialEditor);/**
  * 带标记的文本框
  * Created by GUY on 2015/8/28.
  * @class BI.SignEditor
@@ -5625,6 +6334,265 @@ BI.SignEditor.EVENT_SPACE = "EVENT_SPACE";
 BI.SignEditor.EVENT_EMPTY = "EVENT_EMPTY";
 
 $.shortcut("bi.sign_editor", BI.SignEditor);/**
+ * sign标签分两段，可以自定义样式
+ * @class BI.SignStyleEditor
+ * @extends BI.Single
+ */
+BI.SignStyleEditor = BI.inherit(BI.Single, {
+
+    constants: {
+        tipTextGap: 4
+    },
+
+    _defaultConfig: function () {
+        var conf = BI.SignStyleEditor.superclass._defaultConfig.apply(this, arguments);
+        return BI.extend(conf, {
+            baseCls: (conf.baseCls || "") + " bi-sign-style-editor",
+            text: "",
+            hgap: 4,
+            vgap: 2,
+            lgap: 0,
+            rgap: 0,
+            tgap: 0,
+            bgap: 0,
+            validationChecker: BI.emptyFn,
+            quitChecker: BI.emptyFn,
+            mouseOut: false,
+            allowBlank: false,
+            watermark: "",
+            errorText: "",
+            height: 30
+        })
+    },
+
+    _init: function () {
+        BI.SignStyleEditor.superclass._init.apply(this, arguments);
+        var self = this, o = this.options;
+        this.editor = BI.createWidget({
+            type: "bi.editor",
+            height: o.height,
+            hgap: o.hgap,
+            vgap: o.vgap,
+            lgap: o.lgap,
+            rgap: o.rgap,
+            tgap: o.tgap,
+            bgap: o.bgap,
+            value: o.value,
+            validationChecker: o.validationChecker,
+            quitChecker: o.quitChecker,
+            mouseOut: o.mouseOut,
+            allowBlank: o.allowBlank,
+            watermark: o.watermark,
+            errorText: o.errorText
+        });
+        this.text = BI.createWidget({
+            type: "bi.text_button",
+            cls: "sign-style-editor-text",
+            textAlign: "left",
+            height: o.height,
+            hgap: 4,
+            handler: function () {
+                self._showInput();
+                self.editor.focus();
+                self.editor.selectAll();
+            }
+        });
+
+        this.tipText = BI.createWidget({
+            type: "bi.text_button",
+            cls: "sign-style-editor-tip",
+            textAlign: "right",
+            rgap: 4,
+            height: o.height,
+            text: o.text,
+            handler: function () {
+                self._showInput();
+                self.editor.focus();
+                self.editor.selectAll();
+            }
+        });
+
+        this.text.on(BI.TextButton.EVENT_CHANGE, function () {
+            BI.nextTick(function () {
+                self.fireEvent(BI.SignStyleEditor.EVENT_CLICK_LABEL)
+            });
+        });
+
+        this.tipText.on(BI.TextButton.EVENT_CHANGE, function () {
+            BI.nextTick(function () {
+                self.fireEvent(BI.SignStyleEditor.EVENT_CLICK_LABEL)
+            });
+        });
+
+        this.wrap = BI.createWidget({
+            type: "bi.htape",
+            element: this,
+            items: [this.text, this.tipText]
+        });
+
+        this.editor.on(BI.Controller.EVENT_CHANGE, function () {
+            self.fireEvent(BI.Controller.EVENT_CHANGE, arguments);
+        });
+        this.editor.on(BI.Editor.EVENT_FOCUS, function () {
+            self.fireEvent(BI.SignStyleEditor.EVENT_FOCUS);
+        });
+        this.editor.on(BI.Editor.EVENT_BLUR, function () {
+            self.fireEvent(BI.SignStyleEditor.EVENT_BLUR);
+        });
+        this.editor.on(BI.Editor.EVENT_CLICK, function () {
+            self.fireEvent(BI.SignStyleEditor.EVENT_CLICK);
+        });
+        this.editor.on(BI.Editor.EVENT_CHANGE, function () {
+            self.fireEvent(BI.SignStyleEditor.EVENT_CHANGE);
+        });
+        this.editor.on(BI.Editor.EVENT_KEY_DOWN, function (v) {
+            self.fireEvent(BI.SignStyleEditor.EVENT_KEY_DOWN);
+        });
+
+        this.editor.on(BI.Editor.EVENT_VALID, function () {
+            self.fireEvent(BI.SignStyleEditor.EVENT_VALID);
+        });
+        this.editor.on(BI.Editor.EVENT_CONFIRM, function () {
+            self._showHint();
+            self._checkText();
+            self._resizeLayout();
+            self.fireEvent(BI.SignStyleEditor.EVENT_CONFIRM);
+        });
+        this.editor.on(BI.Editor.EVENT_START, function () {
+            self.fireEvent(BI.SignStyleEditor.EVENT_START);
+        });
+        this.editor.on(BI.Editor.EVENT_PAUSE, function () {
+            self.fireEvent(BI.SignStyleEditor.EVENT_PAUSE);
+        });
+        this.editor.on(BI.Editor.EVENT_STOP, function () {
+            self.fireEvent(BI.SignStyleEditor.EVENT_STOP);
+        });
+        this.editor.on(BI.Editor.EVENT_SPACE, function () {
+            self.fireEvent(BI.SignStyleEditor.EVENT_SPACE);
+        });
+        this.editor.on(BI.Editor.EVENT_ERROR, function () {
+            self.fireEvent(BI.SignStyleEditor.EVENT_ERROR);
+        });
+        this.editor.on(BI.Editor.EVENT_ENTER, function () {
+            self.fireEvent(BI.SignStyleEditor.EVENT_ENTER);
+        });
+        this.editor.on(BI.Editor.EVENT_RESTRICT, function () {
+            self.fireEvent(BI.SignStyleEditor.EVENT_RESTRICT);
+        });
+        this.editor.on(BI.Editor.EVENT_EMPTY, function () {
+            self.fireEvent(BI.SignStyleEditor.EVENT_EMPTY);
+        });
+        BI.createWidget({
+            type: "bi.vertical",
+            scrolly: false,
+            element: this,
+            items: [this.editor]
+        });
+        this._showHint();
+        this._checkText();
+
+        BI.nextTick(function () {
+            var tipTextSize = self.text.element.getStyle("font-size");
+            self.tipTextSize = tipTextSize.substring(0, tipTextSize.length - 2);
+            self._resizeLayout();
+        });
+    },
+
+    _checkText: function () {
+        var o = this.options;
+        if (this.editor.getValue() === "") {
+            this.text.setValue(o.watermark || "");
+            this.text.element.addClass("bi-water-mark");
+        } else {
+            this.text.setValue(this.editor.getValue());
+            this.tipText.setValue("(" + o.text + ")");
+            this.text.element.removeClass("bi-water-mark");
+        }
+        this.setTitle(this.text.getValue() + this.tipText.getValue());
+    },
+
+    _showInput: function () {
+        this.editor.setVisible(true);
+        this.text.setVisible(false);
+        this.tipText.setVisible(false);
+    },
+
+    _showHint: function () {
+        this.editor.setVisible(false);
+        this.text.setVisible(true);
+        this.tipText.setVisible(true);
+    },
+
+    _resizeLayout: function () {
+        this.wrap.attr("items")[0].width = BI.DOM.getTextSizeWidth(this.text.getValue(), this.tipTextSize) + 2 * this.constants.tipTextGap;
+        this.wrap.resize();
+    },
+
+    focus: function () {
+        this._showInput();
+        this.editor.focus();
+    },
+
+    blur: function () {
+        this.editor.blur();
+        this._showHint();
+        this._checkText();
+    },
+
+    isValid: function () {
+        return this.editor.isValid();
+    },
+
+    setErrorText: function (text) {
+        this.editor.setErrorText(text);
+    },
+
+    getErrorText: function () {
+        return this.editor.getErrorText();
+    },
+
+    setValue: function (k) {
+        BI.SignStyleEditor.superclass.setValue.apply(this, arguments);
+        this.editor.setValue(k);
+        this._checkText();
+        this._resizeLayout();
+    },
+
+    getValue: function () {
+        return this.editor.getValue();
+    },
+
+    getState: function () {
+        return this.options.text;
+    },
+
+    setState: function (v) {
+        var o = this.options;
+        o.text = v;
+        this._showHint();
+        this.tipText.setValue("(" + v + ")");
+        this._checkText();
+    }
+});
+BI.SignStyleEditor.EVENT_CHANGE = "EVENT_CHANGE";
+BI.SignStyleEditor.EVENT_FOCUS = "EVENT_FOCUS";
+BI.SignStyleEditor.EVENT_BLUR = "EVENT_BLUR";
+BI.SignStyleEditor.EVENT_CLICK = "EVENT_CLICK";
+BI.SignStyleEditor.EVENT_KEY_DOWN = "EVENT_KEY_DOWN";
+BI.SignStyleEditor.EVENT_CLICK_LABEL = "EVENT_CLICK_LABEL";
+
+BI.SignStyleEditor.EVENT_START = "EVENT_START";
+BI.SignStyleEditor.EVENT_PAUSE = "EVENT_PAUSE";
+BI.SignStyleEditor.EVENT_STOP = "EVENT_STOP";
+BI.SignStyleEditor.EVENT_CONFIRM = "EVENT_CONFIRM";
+BI.SignStyleEditor.EVENT_VALID = "EVENT_VALID";
+BI.SignStyleEditor.EVENT_ERROR = "EVENT_ERROR";
+BI.SignStyleEditor.EVENT_ENTER = "EVENT_ENTER";
+BI.SignStyleEditor.EVENT_RESTRICT = "EVENT_RESTRICT";
+BI.SignStyleEditor.EVENT_SPACE = "EVENT_SPACE";
+BI.SignStyleEditor.EVENT_EMPTY = "EVENT_EMPTY";
+
+$.shortcut("bi.sign_style_editor", BI.SignStyleEditor);/**
  * guy
  * 记录状态的输入框
  * @class BI.StateEditor
@@ -6165,6 +7133,194 @@ BI.SimpleStateEditor.EVENT_SPACE = "EVENT_SPACE";
 BI.SimpleStateEditor.EVENT_EMPTY = "EVENT_EMPTY";
 
 $.shortcut("bi.simple_state_editor", BI.SimpleStateEditor);/**
+ * guy
+ * @class BI.TextEditor
+ * @extends BI.Single
+ */
+BI.TextEditor = BI.inherit(BI.Single, {
+    _defaultConfig: function () {
+        var conf = BI.TextEditor.superclass._defaultConfig.apply(this, arguments);
+        return BI.extend(conf, {
+            extraCls: "bi-text-editor",
+            hgap: 4,
+            vgap: 2,
+            lgap: 0,
+            rgap: 0,
+            tgap: 0,
+            bgap: 0,
+            validationChecker: BI.emptyFn,
+            quitChecker: BI.emptyFn,
+            mouseOut: false,
+            allowBlank: false,
+            watermark: "",
+            errorText: "",
+            height: 30
+        })
+    },
+
+    _init: function () {
+        BI.TextEditor.superclass._init.apply(this, arguments);
+        var self = this, o = this.options;
+        if (BI.isNumber(o.height)) {
+            this.element.css({height: o.height - 2});
+        }
+        if (BI.isNumber(o.width)) {
+            this.element.css({width: o.width - 2});
+        }
+        this.editor = BI.createWidget({
+            type: "bi.editor",
+            height: o.height - 2,
+            hgap: o.hgap,
+            vgap: o.vgap,
+            lgap: o.lgap,
+            rgap: o.rgap,
+            tgap: o.tgap,
+            bgap: o.bgap,
+            value: o.value,
+            validationChecker: o.validationChecker,
+            quitChecker: o.quitChecker,
+            mouseOut: o.mouseOut,
+            allowBlank: o.allowBlank,
+            watermark: o.watermark,
+            errorText: o.errorText
+        });
+        this.editor.on(BI.Controller.EVENT_CHANGE, function () {
+            self.fireEvent(BI.Controller.EVENT_CHANGE, arguments);
+        });
+
+        this.editor.on(BI.Editor.EVENT_FOCUS, function () {
+            self.fireEvent(BI.TextEditor.EVENT_FOCUS);
+        });
+        this.editor.on(BI.Editor.EVENT_BLUR, function () {
+            self.fireEvent(BI.TextEditor.EVENT_BLUR);
+        });
+        this.editor.on(BI.Editor.EVENT_CLICK, function () {
+            self.fireEvent(BI.TextEditor.EVENT_CLICK);
+        });
+        this.editor.on(BI.Editor.EVENT_CHANGE, function () {
+            self.fireEvent(BI.TextEditor.EVENT_CHANGE);
+        });
+        this.editor.on(BI.Editor.EVENT_KEY_DOWN, function (v) {
+            self.fireEvent(BI.TextEditor.EVENT_KEY_DOWN);
+        });
+        this.editor.on(BI.Editor.EVENT_SPACE, function (v) {
+            self.fireEvent(BI.TextEditor.EVENT_SPACE);
+        });
+        this.editor.on(BI.Editor.EVENT_BACKSPACE, function (v) {
+            self.fireEvent(BI.TextEditor.EVENT_BACKSPACE);
+        });
+
+
+        this.editor.on(BI.Editor.EVENT_VALID, function () {
+            self.fireEvent(BI.TextEditor.EVENT_VALID);
+        });
+        this.editor.on(BI.Editor.EVENT_CONFIRM, function () {
+            self.fireEvent(BI.TextEditor.EVENT_CONFIRM);
+        });
+        this.editor.on(BI.Editor.EVENT_REMOVE, function (v) {
+            self.fireEvent(BI.TextEditor.EVENT_REMOVE);
+        });
+        this.editor.on(BI.Editor.EVENT_START, function () {
+            self.fireEvent(BI.TextEditor.EVENT_START);
+        });
+        this.editor.on(BI.Editor.EVENT_PAUSE, function () {
+            self.fireEvent(BI.TextEditor.EVENT_PAUSE);
+        });
+        this.editor.on(BI.Editor.EVENT_STOP, function () {
+            self.fireEvent(BI.TextEditor.EVENT_STOP);
+        });
+        this.editor.on(BI.Editor.EVENT_ERROR, function () {
+            self.fireEvent(BI.TextEditor.EVENT_ERROR);
+        });
+        this.editor.on(BI.Editor.EVENT_ENTER, function () {
+            self.fireEvent(BI.TextEditor.EVENT_ENTER);
+        });
+        this.editor.on(BI.Editor.EVENT_RESTRICT, function () {
+            self.fireEvent(BI.TextEditor.EVENT_RESTRICT);
+        });
+        this.editor.on(BI.Editor.EVENT_EMPTY, function () {
+            self.fireEvent(BI.TextEditor.EVENT_EMPTY);
+        });
+        BI.createWidget({
+            type: "bi.vertical",
+            scrolly: false,
+            element: this,
+            items: [this.editor]
+        });
+    },
+
+    focus: function () {
+        this.editor.focus();
+    },
+
+    blur: function () {
+        this.editor.blur();
+    },
+
+    setErrorText: function (text) {
+        this.editor.setErrorText(text);
+    },
+
+    getErrorText: function () {
+        return this.editor.getErrorText();
+    },
+
+    isValid: function () {
+        return this.editor.isValid();
+    },
+
+    setValue: function (v) {
+        this.editor.setValue(v);
+    },
+
+    getValue: function () {
+        return this.editor.getValue();
+    },
+
+    setEnable: function (b) {
+        BI.Editor.superclass.setEnable.apply(this, arguments);
+        this.editor && this.editor.setEnable(b);
+    }
+});
+BI.TextEditor.EVENT_CHANGE = "EVENT_CHANGE";
+BI.TextEditor.EVENT_FOCUS = "EVENT_FOCUS";
+BI.TextEditor.EVENT_BLUR = "EVENT_BLUR";
+BI.TextEditor.EVENT_CLICK = "EVENT_CLICK";
+BI.TextEditor.EVENT_KEY_DOWN = "EVENT_KEY_DOWN";
+BI.TextEditor.EVENT_SPACE = "EVENT_SPACE";
+BI.TextEditor.EVENT_BACKSPACE = "EVENT_BACKSPACE";
+
+BI.TextEditor.EVENT_START = "EVENT_START";
+BI.TextEditor.EVENT_PAUSE = "EVENT_PAUSE";
+BI.TextEditor.EVENT_STOP = "EVENT_STOP";
+BI.TextEditor.EVENT_CONFIRM = "EVENT_CONFIRM";
+BI.TextEditor.EVENT_VALID = "EVENT_VALID";
+BI.TextEditor.EVENT_ERROR = "EVENT_ERROR";
+BI.TextEditor.EVENT_ENTER = "EVENT_ENTER";
+BI.TextEditor.EVENT_RESTRICT = "EVENT_RESTRICT";
+BI.TextEditor.EVENT_REMOVE = "EVENT_REMOVE";
+BI.TextEditor.EVENT_EMPTY = "EVENT_EMPTY";
+
+$.shortcut("bi.text_editor", BI.TextEditor);/**
+ * 小号搜索框
+ * Created by GUY on 2015/9/29.
+ * @class BI.SmallTextEditor
+ * @extends BI.SearchEditor
+ */
+BI.SmallTextEditor = BI.inherit(BI.TextEditor, {
+    _defaultConfig: function () {
+        var conf = BI.SmallTextEditor.superclass._defaultConfig.apply(this, arguments);
+        return BI.extend(conf, {
+            baseCls: (conf.baseCls || "") + " bi-small-text-editor",
+            height: 25
+        });
+    },
+
+    _init: function () {
+        BI.SmallTextEditor.superclass._init.apply(this, arguments);
+    }
+});
+$.shortcut("bi.small_text_editor", BI.SmallTextEditor);/**
  * 有确定取消按钮的弹出层
  * @class BI.BarFloatSection
  * @extends BI.FloatSection

@@ -3870,1659 +3870,6 @@ BI.extend(BI.Arrangement, {
     }
 });
 $.shortcut('bi.arrangement', BI.Arrangement);/**
- * 根据内容自适应长度的输入框
- * @class BI.AdaptiveEditor
- * @extends BI.Single
- */
-BI.AdaptiveEditor = BI.inherit(BI.Single, {
-    _defaultConfig: function () {
-        var conf = BI.AdaptiveEditor.superclass._defaultConfig.apply(this, arguments);
-        return BI.extend(conf, {
-            baseCls: (conf.baseCls || "") + " bi-adapt-editor",
-            hgap: 4,
-            vgap: 2,
-            lgap: 0,
-            rgap: 0,
-            tgap: 0,
-            bgap: 0,
-            validationChecker: BI.emptyFn,
-            quitChecker: BI.emptyFn,
-            mouseOut: false,
-            allowBlank: true,
-            watermark: "",
-            errorText: "",
-            height: 30
-        })
-    },
-
-    _init: function () {
-        BI.AdaptiveEditor.superclass._init.apply(this, arguments);
-        var self = this, o = this.options;
-        this.editor = BI.createWidget({
-            type: "bi.sign_editor",
-            element: this,
-            height: o.height,
-            hgap: o.hgap,
-            vgap: o.vgap,
-            lgap: o.lgap,
-            rgap: o.rgap,
-            tgap: o.tgap,
-            bgap: o.bgap,
-            value: o.value,
-            validationChecker: o.validationChecker,
-            quitChecker: o.quitChecker,
-            mouseOut: o.mouseOut,
-            allowBlank: o.allowBlank,
-            watermark: o.watermark,
-            errorText: o.errorText
-        });
-
-        this.editor.on(BI.Controller.EVENT_CHANGE, function () {
-            self.fireEvent(BI.Controller.EVENT_CHANGE, arguments);
-        });
-        this.editor.on(BI.SignEditor.EVENT_FOCUS, function () {
-            self.fireEvent(BI.AdaptiveEditor.EVENT_FOCUS);
-        });
-        this.editor.on(BI.SignEditor.EVENT_BLUR, function () {
-            self.fireEvent(BI.AdaptiveEditor.EVENT_BLUR);
-        });
-        this.editor.on(BI.SignEditor.EVENT_CLICK, function () {
-            self.fireEvent(BI.AdaptiveEditor.EVENT_CLICK);
-        });
-        this.editor.on(BI.SignEditor.EVENT_CHANGE, function () {
-            self._checkEditorLength();
-            self.fireEvent(BI.AdaptiveEditor.EVENT_CHANGE);
-        });
-        this.editor.on(BI.SignEditor.EVENT_KEY_DOWN, function (v) {
-            self.fireEvent(BI.AdaptiveEditor.EVENT_KEY_DOWN);
-        });
-
-        this.editor.on(BI.SignEditor.EVENT_VALID, function () {
-            self.fireEvent(BI.AdaptiveEditor.EVENT_VALID);
-        });
-        this.editor.on(BI.SignEditor.EVENT_CONFIRM, function () {
-            self.fireEvent(BI.AdaptiveEditor.EVENT_CONFIRM);
-        });
-        this.editor.on(BI.SignEditor.EVENT_START, function () {
-            self.fireEvent(BI.AdaptiveEditor.EVENT_START);
-        });
-        this.editor.on(BI.SignEditor.EVENT_PAUSE, function () {
-            self.fireEvent(BI.AdaptiveEditor.EVENT_PAUSE);
-        });
-        this.editor.on(BI.Editor.EVENT_STOP, function () {
-            self.fireEvent(BI.AdaptiveEditor.EVENT_STOP);
-        });
-        this.editor.on(BI.SignEditor.EVENT_SPACE, function () {
-            self.fireEvent(BI.AdaptiveEditor.EVENT_SPACE);
-        });
-        this.editor.on(BI.SignEditor.EVENT_ERROR, function () {
-            self.fireEvent(BI.AdaptiveEditor.EVENT_ERROR);
-        });
-        this.editor.on(BI.SignEditor.EVENT_ENTER, function () {
-            self.fireEvent(BI.AdaptiveEditor.EVENT_ENTER);
-        });
-        this.editor.on(BI.SignEditor.EVENT_RESTRICT, function () {
-            self.fireEvent(BI.AdaptiveEditor.EVENT_RESTRICT);
-        });
-        this.editor.on(BI.SignEditor.EVENT_EMPTY, function () {
-            self.fireEvent(BI.AdaptiveEditor.EVENT_EMPTY);
-        });
-        this._checkEditorLength();
-    },
-
-    _checkEditorLength: function () {
-        var o = this.options;
-        this.element.width(BI.DOM.getTextSizeWidth(this.getValue(), 14) + 2 * o.hgap + o.lgap + o.rgap);
-    },
-
-    focus: function () {
-        this.editor.focus();
-    },
-
-    blur: function () {
-        this.editor.blur();
-    },
-
-    isValid: function () {
-        return this.editor.isValid();
-    },
-
-    setErrorText: function (text) {
-        this.editor.setErrorText(text);
-    },
-
-    getErrorText: function () {
-        return this.editor.getErrorText();
-    },
-
-    setValue: function (k) {
-        this.editor.setValue(k);
-        this._checkEditorLength();
-    },
-
-    getValue: function () {
-        return this.editor.getValue();
-    },
-
-    getState: function () {
-        return this.editor.getState();
-    },
-
-    setState: function (v) {
-
-    }
-});
-BI.AdaptiveEditor.EVENT_CHANGE = "EVENT_CHANGE";
-BI.AdaptiveEditor.EVENT_FOCUS = "EVENT_FOCUS";
-BI.AdaptiveEditor.EVENT_BLUR = "EVENT_BLUR";
-BI.AdaptiveEditor.EVENT_CLICK = "EVENT_CLICK";
-BI.AdaptiveEditor.EVENT_KEY_DOWN = "EVENT_KEY_DOWN";
-BI.AdaptiveEditor.EVENT_CLICK_LABEL = "EVENT_CLICK_LABEL";
-
-BI.AdaptiveEditor.EVENT_START = "EVENT_START";
-BI.AdaptiveEditor.EVENT_PAUSE = "EVENT_PAUSE";
-BI.AdaptiveEditor.EVENT_STOP = "EVENT_STOP";
-BI.AdaptiveEditor.EVENT_CONFIRM = "EVENT_CONFIRM";
-BI.AdaptiveEditor.EVENT_VALID = "EVENT_VALID";
-BI.AdaptiveEditor.EVENT_ERROR = "EVENT_ERROR";
-BI.AdaptiveEditor.EVENT_ENTER = "EVENT_ENTER";
-BI.AdaptiveEditor.EVENT_RESTRICT = "EVENT_RESTRICT";
-BI.AdaptiveEditor.EVENT_SPACE = "EVENT_SPACE";
-BI.AdaptiveEditor.EVENT_EMPTY = "EVENT_EMPTY";
-
-$.shortcut("bi.adapt_editor", BI.AdaptiveEditor);/**
- * 有清楚按钮的文本框
- * Created by GUY on 2015/9/29.
- * @class BI.SmallTextEditor
- * @extends BI.SearchEditor
- */
-BI.ClearEditor = BI.inherit(BI.Widget, {
-    _defaultConfig: function () {
-        var conf = BI.ClearEditor.superclass._defaultConfig.apply(this, arguments);
-        return BI.extend(conf, {
-            baseCls: "bi-clear-editor",
-            height: 30,
-            errorText: "",
-            watermark: "",
-            validationChecker: BI.emptyFn,
-            quitChecker: BI.emptyFn
-        });
-    },
-    _init: function () {
-        BI.ClearEditor.superclass._init.apply(this, arguments);
-        var self = this, o = this.options;
-        this.editor = BI.createWidget({
-            type: "bi.editor",
-            height: o.height,
-            watermark: o.watermark,
-            allowBlank: true,
-            errorText: o.errorText,
-            validationChecker: o.validationChecker,
-            quitChecker: o.quitChecker
-        });
-        this.clear = BI.createWidget({
-            type: "bi.icon_button",
-            stopEvent: true,
-            cls: "search-close-h-font"
-        });
-        this.clear.on(BI.IconButton.EVENT_CHANGE, function () {
-            self.setValue("");
-            self.fireEvent(BI.Controller.EVENT_CHANGE, BI.Events.STOPEDIT);
-            self.fireEvent(BI.ClearEditor.EVENT_CLEAR);
-        });
-        BI.createWidget({
-            element: this,
-            type: "bi.htape",
-            items: [
-                {
-                    el: this.editor
-                },
-                {
-                    el: this.clear,
-                    width: 25
-                }]
-        });
-        this.editor.on(BI.Controller.EVENT_CHANGE, function () {
-            self.fireEvent(BI.Controller.EVENT_CHANGE, arguments);
-        });
-
-        this.editor.on(BI.Editor.EVENT_FOCUS, function () {
-            self.fireEvent(BI.ClearEditor.EVENT_FOCUS);
-        });
-        this.editor.on(BI.Editor.EVENT_BLUR, function () {
-            self.fireEvent(BI.ClearEditor.EVENT_BLUR);
-        });
-        this.editor.on(BI.Editor.EVENT_CLICK, function () {
-            self.fireEvent(BI.ClearEditor.EVENT_CLICK);
-        });
-        this.editor.on(BI.Editor.EVENT_CHANGE, function () {
-            self._checkClear();
-            self.fireEvent(BI.ClearEditor.EVENT_CHANGE);
-        });
-        this.editor.on(BI.Editor.EVENT_KEY_DOWN, function (v) {
-            self.fireEvent(BI.ClearEditor.EVENT_KEY_DOWN, v);
-        });
-        this.editor.on(BI.Editor.EVENT_SPACE, function () {
-            self.fireEvent(BI.ClearEditor.EVENT_SPACE)
-        });
-        this.editor.on(BI.Editor.EVENT_BACKSPACE, function () {
-            self.fireEvent(BI.ClearEditor.EVENT_BACKSPACE)
-        });
-
-
-        this.editor.on(BI.Editor.EVENT_VALID, function () {
-            self.fireEvent(BI.ClearEditor.EVENT_VALID)
-        });
-        this.editor.on(BI.Editor.EVENT_ERROR, function () {
-            self.fireEvent(BI.ClearEditor.EVENT_ERROR)
-        });
-        this.editor.on(BI.Editor.EVENT_ENTER, function () {
-            self.fireEvent(BI.ClearEditor.EVENT_ENTER);
-        });
-        this.editor.on(BI.Editor.EVENT_RESTRICT, function () {
-            self.fireEvent(BI.ClearEditor.EVENT_RESTRICT)
-        });
-        this.editor.on(BI.Editor.EVENT_EMPTY, function () {
-            self._checkClear();
-            self.fireEvent(BI.ClearEditor.EVENT_EMPTY)
-        });
-        this.editor.on(BI.Editor.EVENT_REMOVE, function () {
-            self.fireEvent(BI.ClearEditor.EVENT_REMOVE)
-        });
-        this.editor.on(BI.Editor.EVENT_CONFIRM, function () {
-            self.fireEvent(BI.ClearEditor.EVENT_CONFIRM)
-        });
-        this.editor.on(BI.Editor.EVENT_START, function () {
-            self.fireEvent(BI.ClearEditor.EVENT_START);
-        });
-        this.editor.on(BI.Editor.EVENT_PAUSE, function () {
-            self.fireEvent(BI.ClearEditor.EVENT_PAUSE);
-        });
-        this.editor.on(BI.Editor.EVENT_STOP, function () {
-            self.fireEvent(BI.ClearEditor.EVENT_STOP);
-        });
-
-        this.clear.invisible();
-    },
-
-    _checkClear: function () {
-        if (!this.getValue()) {
-            this.clear.invisible();
-        } else {
-            this.clear.visible();
-        }
-    },
-
-    focus: function () {
-        this.editor.focus();
-    },
-
-    blur: function () {
-        this.editor.blur();
-    },
-
-    getValue: function () {
-        if (this.isValid()) {
-            var res = this.editor.getValue().match(/[\S]+/g);
-            return BI.isNull(res) ? "" : res[res.length - 1];
-        }
-    },
-
-    setValue: function (v) {
-        this.editor.setValue(v);
-        if (BI.isKey(v)) {
-            this.clear.visible();
-        }
-    },
-
-    isValid: function () {
-        return this.editor.isValid();
-    }
-});
-BI.ClearEditor.EVENT_CHANGE = "EVENT_CHANGE";
-BI.ClearEditor.EVENT_FOCUS = "EVENT_FOCUS";
-BI.ClearEditor.EVENT_BLUR = "EVENT_BLUR";
-BI.ClearEditor.EVENT_CLICK = "EVENT_CLICK";
-BI.ClearEditor.EVENT_KEY_DOWN = "EVENT_KEY_DOWN";
-BI.ClearEditor.EVENT_SPACE = "EVENT_SPACE";
-BI.ClearEditor.EVENT_BACKSPACE = "EVENT_BACKSPACE";
-BI.ClearEditor.EVENT_CLEAR = "EVENT_CLEAR";
-
-BI.ClearEditor.EVENT_START = "EVENT_START";
-BI.ClearEditor.EVENT_PAUSE = "EVENT_PAUSE";
-BI.ClearEditor.EVENT_STOP = "EVENT_STOP";
-BI.ClearEditor.EVENT_CONFIRM = "EVENT_CONFIRM";
-BI.ClearEditor.EVENT_VALID = "EVENT_VALID";
-BI.ClearEditor.EVENT_ERROR = "EVENT_ERROR";
-BI.ClearEditor.EVENT_ENTER = "EVENT_ENTER";
-BI.ClearEditor.EVENT_RESTRICT = "EVENT_RESTRICT";
-BI.ClearEditor.EVENT_REMOVE = "EVENT_REMOVE";
-BI.ClearEditor.EVENT_EMPTY = "EVENT_EMPTY";
-$.shortcut("bi.clear_editor", BI.ClearEditor);/**
- * Created by roy on 15/9/14.
- */
-BI.SearchEditor = BI.inherit(BI.Widget, {
-    _defaultConfig: function () {
-        var conf = BI.SearchEditor.superclass._defaultConfig.apply(this, arguments);
-        return BI.extend(conf, {
-            baseCls: "bi-search-editor",
-            height: 30,
-            errorText: "",
-            watermark: BI.i18nText("BI-Basic_Search"),
-            validationChecker: BI.emptyFn,
-            quitChecker: BI.emptyFn
-        });
-    },
-    _init: function () {
-        this.options.height -= 2;
-        BI.SearchEditor.superclass._init.apply(this, arguments);
-        var self = this, o = this.options;
-        this.editor = BI.createWidget({
-            type: "bi.editor",
-            height: o.height,
-            watermark: o.watermark,
-            allowBlank: true,
-            errorText: o.errorText,
-            validationChecker: o.validationChecker,
-            quitChecker: o.quitChecker
-        });
-        this.clear = BI.createWidget({
-            type: "bi.icon_button",
-            stopEvent: true,
-            cls: "search-close-h-font"
-        });
-        this.clear.on(BI.IconButton.EVENT_CHANGE, function () {
-            self.setValue("");
-            self.fireEvent(BI.Controller.EVENT_CHANGE, BI.Events.STOPEDIT);
-            self.fireEvent(BI.SearchEditor.EVENT_CLEAR);
-        });
-        BI.createWidget({
-            element: this,
-            type: "bi.htape",
-            items: [
-                {
-                    el: {
-                        type: "bi.center_adapt",
-                        cls: "search-font",
-                        items: [{
-                            el: {
-                                type: "bi.icon"
-                            }
-                        }]
-                    },
-                    width: 25
-                },
-                {
-                    el: self.editor
-                },
-                {
-                    el: this.clear,
-                    width: 25
-                }
-            ]
-        });
-        this.editor.on(BI.Controller.EVENT_CHANGE, function () {
-            self.fireEvent(BI.Controller.EVENT_CHANGE, arguments);
-        });
-
-        this.editor.on(BI.Editor.EVENT_FOCUS, function () {
-            self.fireEvent(BI.SearchEditor.EVENT_FOCUS);
-        });
-        this.editor.on(BI.Editor.EVENT_BLUR, function () {
-            self.fireEvent(BI.SearchEditor.EVENT_BLUR);
-        });
-        this.editor.on(BI.Editor.EVENT_CLICK, function () {
-            self.fireEvent(BI.SearchEditor.EVENT_CLICK);
-        });
-        this.editor.on(BI.Editor.EVENT_CHANGE, function () {
-            self._checkClear();
-            self.fireEvent(BI.SearchEditor.EVENT_CHANGE);
-        });
-        this.editor.on(BI.Editor.EVENT_KEY_DOWN, function (v) {
-            self.fireEvent(BI.SearchEditor.EVENT_KEY_DOWN, v);
-        });
-        this.editor.on(BI.Editor.EVENT_SPACE, function () {
-            self.fireEvent(BI.SearchEditor.EVENT_SPACE)
-        });
-        this.editor.on(BI.Editor.EVENT_BACKSPACE, function () {
-            self.fireEvent(BI.SearchEditor.EVENT_BACKSPACE)
-        });
-
-
-        this.editor.on(BI.Editor.EVENT_VALID, function () {
-            self.fireEvent(BI.SearchEditor.EVENT_VALID)
-        });
-        this.editor.on(BI.Editor.EVENT_ERROR, function () {
-            self.fireEvent(BI.SearchEditor.EVENT_ERROR)
-        });
-        this.editor.on(BI.Editor.EVENT_ENTER, function () {
-            self.fireEvent(BI.SearchEditor.EVENT_ENTER);
-        });
-        this.editor.on(BI.Editor.EVENT_RESTRICT, function () {
-            self.fireEvent(BI.SearchEditor.EVENT_RESTRICT)
-        });
-        this.editor.on(BI.Editor.EVENT_EMPTY, function () {
-            self._checkClear();
-            self.fireEvent(BI.SearchEditor.EVENT_EMPTY)
-        });
-        this.editor.on(BI.Editor.EVENT_REMOVE, function () {
-            self.fireEvent(BI.SearchEditor.EVENT_REMOVE)
-        });
-        this.editor.on(BI.Editor.EVENT_CONFIRM, function () {
-            self.fireEvent(BI.SearchEditor.EVENT_CONFIRM)
-        });
-        this.editor.on(BI.Editor.EVENT_START, function () {
-            self.fireEvent(BI.SearchEditor.EVENT_START);
-        });
-        this.editor.on(BI.Editor.EVENT_PAUSE, function () {
-            self.fireEvent(BI.SearchEditor.EVENT_PAUSE);
-        });
-        this.editor.on(BI.Editor.EVENT_STOP, function () {
-            self.fireEvent(BI.SearchEditor.EVENT_STOP);
-        });
-
-        this.clear.invisible();
-    },
-
-    _checkClear: function () {
-        if (!this.getValue()) {
-            this.clear.invisible();
-        } else {
-            this.clear.visible();
-        }
-    },
-
-    focus: function () {
-        this.editor.focus();
-    },
-
-    blur: function () {
-        this.editor.blur();
-    },
-
-    getValue: function () {
-        if (this.isValid()) {
-            var res = this.editor.getValue().match(/[\S]+/g);
-            return BI.isNull(res) ? "" : res[res.length - 1];
-        }
-    },
-
-    getLastValidValue: function () {
-        return this.editor.getLastValidValue();
-    },
-
-    setValue: function (v) {
-        this.editor.setValue(v);
-        if (BI.isKey(v)) {
-            this.clear.visible();
-        }
-    },
-
-    setValid: function (b) {
-        this.editor.setValid(b);
-    },
-
-    isEditing: function () {
-        return this.editor.isEditing();
-    },
-
-    isValid: function () {
-        return this.editor.isValid();
-    },
-
-    setEnable: function (b) {
-        BI.Editor.superclass.setEnable.apply(this, arguments);
-        this.editor && this.editor.setEnable(b);
-        this.clear.setEnabled(b);
-    }
-});
-BI.SearchEditor.EVENT_CHANGE = "EVENT_CHANGE";
-BI.SearchEditor.EVENT_FOCUS = "EVENT_FOCUS";
-BI.SearchEditor.EVENT_BLUR = "EVENT_BLUR";
-BI.SearchEditor.EVENT_CLICK = "EVENT_CLICK";
-BI.SearchEditor.EVENT_KEY_DOWN = "EVENT_KEY_DOWN";
-BI.SearchEditor.EVENT_SPACE = "EVENT_SPACE";
-BI.SearchEditor.EVENT_BACKSPACE = "EVENT_BACKSPACE";
-BI.SearchEditor.EVENT_CLEAR = "EVENT_CLEAR";
-
-BI.SearchEditor.EVENT_START = "EVENT_START";
-BI.SearchEditor.EVENT_PAUSE = "EVENT_PAUSE";
-BI.SearchEditor.EVENT_STOP = "EVENT_STOP";
-BI.SearchEditor.EVENT_CONFIRM = "EVENT_CONFIRM";
-BI.SearchEditor.EVENT_VALID = "EVENT_VALID";
-BI.SearchEditor.EVENT_ERROR = "EVENT_ERROR";
-BI.SearchEditor.EVENT_ENTER = "EVENT_ENTER";
-BI.SearchEditor.EVENT_RESTRICT = "EVENT_RESTRICT";
-BI.SearchEditor.EVENT_REMOVE = "EVENT_REMOVE";
-BI.SearchEditor.EVENT_EMPTY = "EVENT_EMPTY";
-$.shortcut("bi.search_editor", BI.SearchEditor);/**
- * 小号搜索框
- * Created by GUY on 2015/9/29.
- * @class BI.SmallSearchEditor
- * @extends BI.SearchEditor
- */
-BI.SmallSearchEditor = BI.inherit(BI.SearchEditor, {
-    _defaultConfig: function () {
-        var conf = BI.SmallSearchEditor.superclass._defaultConfig.apply(this, arguments);
-        return BI.extend(conf, {
-            baseCls: (conf.baseCls || "") + " bi-small-search-editor",
-            height: 24
-        });
-    },
-
-    _init: function () {
-        BI.SmallSearchEditor.superclass._init.apply(this, arguments);
-    }
-});
-$.shortcut("bi.small_search_editor", BI.SmallSearchEditor);/**
- * sign是新值（初始value值）形式的自适应宽度的输入框
- * @class BI.SignInitialEditor
- * @extends BI.Single
- */
-BI.SignInitialEditor = BI.inherit(BI.Single, {
-    _defaultConfig: function () {
-        var conf = BI.SignInitialEditor.superclass._defaultConfig.apply(this, arguments);
-        return BI.extend(conf, {
-            baseCls: (conf.baseCls || "") + " bi-sign-initial-editor",
-            hgap: 4,
-            vgap: 2,
-            lgap: 0,
-            rgap: 0,
-            tgap: 0,
-            bgap: 0,
-            validationChecker: BI.emptyFn,
-            quitChecker: BI.emptyFn,
-            mouseOut: false,
-            allowBlank: true,
-            watermark: "",
-            errorText: "",
-            value: "",
-            text: "",
-            height: 30
-        })
-    },
-
-    _init: function () {
-        BI.SignInitialEditor.superclass._init.apply(this, arguments);
-        var self = this, o = this.options;
-        this.editor = BI.createWidget({
-            type: "bi.sign_editor",
-            element: this,
-            height: o.height,
-            hgap: o.hgap,
-            vgap: o.vgap,
-            lgap: o.lgap,
-            rgap: o.rgap,
-            tgap: o.tgap,
-            bgap: o.bgap,
-            value: o.value || o.text,
-            validationChecker: o.validationChecker,
-            quitChecker: o.quitChecker,
-            mouseOut: o.mouseOut,
-            allowBlank: o.allowBlank,
-            watermark: o.watermark,
-            errorText: o.errorText
-        });
-        if(BI.isNotNull(o.value)){
-            this.setState(o.value);
-        }
-        this.editor.on(BI.Controller.EVENT_CHANGE, function () {
-            self.fireEvent(BI.Controller.EVENT_CHANGE, arguments);
-        });
-        this.editor.on(BI.SignEditor.EVENT_FOCUS, function () {
-            self.fireEvent(BI.SignInitialEditor.EVENT_FOCUS);
-        });
-        this.editor.on(BI.SignEditor.EVENT_BLUR, function () {
-            self.fireEvent(BI.SignInitialEditor.EVENT_BLUR);
-        });
-        this.editor.on(BI.SignEditor.EVENT_CLICK, function () {
-            self.fireEvent(BI.SignInitialEditor.EVENT_CLICK);
-        });
-        this.editor.on(BI.SignEditor.EVENT_CHANGE, function () {
-            self.fireEvent(BI.SignInitialEditor.EVENT_CHANGE);
-        });
-        this.editor.on(BI.SignEditor.EVENT_KEY_DOWN, function (v) {
-            self.fireEvent(BI.SignInitialEditor.EVENT_KEY_DOWN);
-        });
-
-        this.editor.on(BI.SignEditor.EVENT_VALID, function () {
-            self.fireEvent(BI.SignInitialEditor.EVENT_VALID);
-        });
-        this.editor.on(BI.SignEditor.EVENT_CONFIRM, function () {
-            self.setState(self.editor.getValue());
-            self.fireEvent(BI.SignInitialEditor.EVENT_CONFIRM);
-        });
-        this.editor.on(BI.SignEditor.EVENT_START, function () {
-            self.fireEvent(BI.SignInitialEditor.EVENT_START);
-        });
-        this.editor.on(BI.SignEditor.EVENT_PAUSE, function () {
-            self.fireEvent(BI.SignInitialEditor.EVENT_PAUSE);
-        });
-        this.editor.on(BI.SignEditor.EVENT_STOP, function () {
-            self.fireEvent(BI.SignInitialEditor.EVENT_STOP);
-        });
-        this.editor.on(BI.SignEditor.EVENT_SPACE, function () {
-            self.fireEvent(BI.SignInitialEditor.EVENT_SPACE);
-        });
-        this.editor.on(BI.SignEditor.EVENT_ERROR, function () {
-            self.fireEvent(BI.SignInitialEditor.EVENT_ERROR);
-        });
-        this.editor.on(BI.SignEditor.EVENT_ENTER, function () {
-            self.fireEvent(BI.SignInitialEditor.EVENT_ENTER);
-        });
-        this.editor.on(BI.SignEditor.EVENT_RESTRICT, function () {
-            self.fireEvent(BI.SignInitialEditor.EVENT_RESTRICT);
-        });
-        this.editor.on(BI.SignEditor.EVENT_EMPTY, function () {
-            self.fireEvent(BI.SignInitialEditor.EVENT_EMPTY);
-        });
-    },
-
-    focus: function () {
-        this.editor.focus();
-    },
-
-    blur: function () {
-        this.editor.blur();
-    },
-
-    isValid: function () {
-        return this.editor.isValid();
-    },
-
-    setErrorText: function (text) {
-        this.editor.setErrorText(text);
-    },
-
-    getErrorText: function () {
-        return this.editor.getErrorText();
-    },
-
-    setValue: function (v) {
-        this.editor.setValue(v.value);
-        this.setState(v.value);
-    },
-
-    getValue: function () {
-        return {
-            value: this.editor.getValue(),
-            text: this.options.text
-        }
-    },
-
-    getState: function () {
-        return this.editor.getState();
-    },
-
-    setState: function (v) {
-        var o = this.options;
-        v = (BI.isEmpty(v) || v == o.text) ? o.text : v + "(" + o.text + ")";
-        this.editor.setState(v);
-    }
-});
-BI.SignInitialEditor.EVENT_CHANGE = "EVENT_CHANGE";
-BI.SignInitialEditor.EVENT_FOCUS = "EVENT_FOCUS";
-BI.SignInitialEditor.EVENT_BLUR = "EVENT_BLUR";
-BI.SignInitialEditor.EVENT_CLICK = "EVENT_CLICK";
-BI.SignInitialEditor.EVENT_KEY_DOWN = "EVENT_KEY_DOWN";
-BI.SignInitialEditor.EVENT_CLICK_LABEL = "EVENT_CLICK_LABEL";
-
-BI.SignInitialEditor.EVENT_START = "EVENT_START";
-BI.SignInitialEditor.EVENT_PAUSE = "EVENT_PAUSE";
-BI.SignInitialEditor.EVENT_STOP = "EVENT_STOP";
-BI.SignInitialEditor.EVENT_CONFIRM = "EVENT_CONFIRM";
-BI.SignInitialEditor.EVENT_VALID = "EVENT_VALID";
-BI.SignInitialEditor.EVENT_ERROR = "EVENT_ERROR";
-BI.SignInitialEditor.EVENT_ENTER = "EVENT_ENTER";
-BI.SignInitialEditor.EVENT_RESTRICT = "EVENT_RESTRICT";
-BI.SignInitialEditor.EVENT_SPACE = "EVENT_SPACE";
-BI.SignInitialEditor.EVENT_EMPTY = "EVENT_EMPTY";
-
-$.shortcut("bi.sign_initial_editor", BI.SignInitialEditor);/**
- * sign标签分两段，可以自定义样式
- * @class BI.SignStyleEditor
- * @extends BI.Single
- */
-BI.SignStyleEditor = BI.inherit(BI.Single, {
-
-    constants: {
-        tipTextGap: 4
-    },
-
-    _defaultConfig: function () {
-        var conf = BI.SignStyleEditor.superclass._defaultConfig.apply(this, arguments);
-        return BI.extend(conf, {
-            baseCls: (conf.baseCls || "") + " bi-sign-style-editor",
-            text: "",
-            hgap: 4,
-            vgap: 2,
-            lgap: 0,
-            rgap: 0,
-            tgap: 0,
-            bgap: 0,
-            validationChecker: BI.emptyFn,
-            quitChecker: BI.emptyFn,
-            mouseOut: false,
-            allowBlank: false,
-            watermark: "",
-            errorText: "",
-            height: 30
-        })
-    },
-
-    _init: function () {
-        BI.SignStyleEditor.superclass._init.apply(this, arguments);
-        var self = this, o = this.options;
-        this.editor = BI.createWidget({
-            type: "bi.editor",
-            height: o.height,
-            hgap: o.hgap,
-            vgap: o.vgap,
-            lgap: o.lgap,
-            rgap: o.rgap,
-            tgap: o.tgap,
-            bgap: o.bgap,
-            value: o.value,
-            validationChecker: o.validationChecker,
-            quitChecker: o.quitChecker,
-            mouseOut: o.mouseOut,
-            allowBlank: o.allowBlank,
-            watermark: o.watermark,
-            errorText: o.errorText
-        });
-        this.text = BI.createWidget({
-            type: "bi.text_button",
-            cls: "sign-style-editor-text",
-            textAlign: "left",
-            height: o.height,
-            hgap: 4,
-            handler: function () {
-                self._showInput();
-                self.editor.focus();
-                self.editor.selectAll();
-            }
-        });
-
-        this.tipText = BI.createWidget({
-            type: "bi.text_button",
-            cls: "sign-style-editor-tip",
-            textAlign: "right",
-            rgap: 4,
-            height: o.height,
-            text: o.text,
-            handler: function () {
-                self._showInput();
-                self.editor.focus();
-                self.editor.selectAll();
-            }
-        });
-
-        this.text.on(BI.TextButton.EVENT_CHANGE, function () {
-            BI.nextTick(function () {
-                self.fireEvent(BI.SignStyleEditor.EVENT_CLICK_LABEL)
-            });
-        });
-
-        this.tipText.on(BI.TextButton.EVENT_CHANGE, function () {
-            BI.nextTick(function () {
-                self.fireEvent(BI.SignStyleEditor.EVENT_CLICK_LABEL)
-            });
-        });
-
-        this.wrap = BI.createWidget({
-            type: "bi.htape",
-            element: this,
-            items: [this.text, this.tipText]
-        });
-
-        this.editor.on(BI.Controller.EVENT_CHANGE, function () {
-            self.fireEvent(BI.Controller.EVENT_CHANGE, arguments);
-        });
-        this.editor.on(BI.Editor.EVENT_FOCUS, function () {
-            self.fireEvent(BI.SignStyleEditor.EVENT_FOCUS);
-        });
-        this.editor.on(BI.Editor.EVENT_BLUR, function () {
-            self.fireEvent(BI.SignStyleEditor.EVENT_BLUR);
-        });
-        this.editor.on(BI.Editor.EVENT_CLICK, function () {
-            self.fireEvent(BI.SignStyleEditor.EVENT_CLICK);
-        });
-        this.editor.on(BI.Editor.EVENT_CHANGE, function () {
-            self.fireEvent(BI.SignStyleEditor.EVENT_CHANGE);
-        });
-        this.editor.on(BI.Editor.EVENT_KEY_DOWN, function (v) {
-            self.fireEvent(BI.SignStyleEditor.EVENT_KEY_DOWN);
-        });
-
-        this.editor.on(BI.Editor.EVENT_VALID, function () {
-            self.fireEvent(BI.SignStyleEditor.EVENT_VALID);
-        });
-        this.editor.on(BI.Editor.EVENT_CONFIRM, function () {
-            self._showHint();
-            self._checkText();
-            self._resizeLayout();
-            self.fireEvent(BI.SignStyleEditor.EVENT_CONFIRM);
-        });
-        this.editor.on(BI.Editor.EVENT_START, function () {
-            self.fireEvent(BI.SignStyleEditor.EVENT_START);
-        });
-        this.editor.on(BI.Editor.EVENT_PAUSE, function () {
-            self.fireEvent(BI.SignStyleEditor.EVENT_PAUSE);
-        });
-        this.editor.on(BI.Editor.EVENT_STOP, function () {
-            self.fireEvent(BI.SignStyleEditor.EVENT_STOP);
-        });
-        this.editor.on(BI.Editor.EVENT_SPACE, function () {
-            self.fireEvent(BI.SignStyleEditor.EVENT_SPACE);
-        });
-        this.editor.on(BI.Editor.EVENT_ERROR, function () {
-            self.fireEvent(BI.SignStyleEditor.EVENT_ERROR);
-        });
-        this.editor.on(BI.Editor.EVENT_ENTER, function () {
-            self.fireEvent(BI.SignStyleEditor.EVENT_ENTER);
-        });
-        this.editor.on(BI.Editor.EVENT_RESTRICT, function () {
-            self.fireEvent(BI.SignStyleEditor.EVENT_RESTRICT);
-        });
-        this.editor.on(BI.Editor.EVENT_EMPTY, function () {
-            self.fireEvent(BI.SignStyleEditor.EVENT_EMPTY);
-        });
-        BI.createWidget({
-            type: "bi.vertical",
-            scrolly: false,
-            element: this,
-            items: [this.editor]
-        });
-        this._showHint();
-        this._checkText();
-
-        BI.nextTick(function () {
-            var tipTextSize = self.text.element.getStyle("font-size");
-            self.tipTextSize = tipTextSize.substring(0, tipTextSize.length - 2);
-            self._resizeLayout();
-        });
-    },
-
-    _checkText: function () {
-        var o = this.options;
-        if (this.editor.getValue() === "") {
-            this.text.setValue(o.watermark || "");
-            this.text.element.addClass("bi-water-mark");
-        } else {
-            this.text.setValue(this.editor.getValue());
-            this.tipText.setValue("(" + o.text + ")");
-            this.text.element.removeClass("bi-water-mark");
-        }
-        this.setTitle(this.text.getValue() + this.tipText.getValue());
-    },
-
-    _showInput: function () {
-        this.editor.setVisible(true);
-        this.text.setVisible(false);
-        this.tipText.setVisible(false);
-    },
-
-    _showHint: function () {
-        this.editor.setVisible(false);
-        this.text.setVisible(true);
-        this.tipText.setVisible(true);
-    },
-
-    _resizeLayout: function () {
-        this.wrap.attr("items")[0].width = BI.DOM.getTextSizeWidth(this.text.getValue(), this.tipTextSize) + 2 * this.constants.tipTextGap;
-        this.wrap.resize();
-    },
-
-    focus: function () {
-        this._showInput();
-        this.editor.focus();
-    },
-
-    blur: function () {
-        this.editor.blur();
-        this._showHint();
-        this._checkText();
-    },
-
-    isValid: function () {
-        return this.editor.isValid();
-    },
-
-    setErrorText: function (text) {
-        this.editor.setErrorText(text);
-    },
-
-    getErrorText: function () {
-        return this.editor.getErrorText();
-    },
-
-    setValue: function (k) {
-        BI.SignStyleEditor.superclass.setValue.apply(this, arguments);
-        this.editor.setValue(k);
-        this._checkText();
-        this._resizeLayout();
-    },
-
-    getValue: function () {
-        return this.editor.getValue();
-    },
-
-    getState: function () {
-        return this.options.text;
-    },
-
-    setState: function (v) {
-        var o = this.options;
-        o.text = v;
-        this._showHint();
-        this.tipText.setValue("(" + v + ")");
-        this._checkText();
-    }
-});
-BI.SignStyleEditor.EVENT_CHANGE = "EVENT_CHANGE";
-BI.SignStyleEditor.EVENT_FOCUS = "EVENT_FOCUS";
-BI.SignStyleEditor.EVENT_BLUR = "EVENT_BLUR";
-BI.SignStyleEditor.EVENT_CLICK = "EVENT_CLICK";
-BI.SignStyleEditor.EVENT_KEY_DOWN = "EVENT_KEY_DOWN";
-BI.SignStyleEditor.EVENT_CLICK_LABEL = "EVENT_CLICK_LABEL";
-
-BI.SignStyleEditor.EVENT_START = "EVENT_START";
-BI.SignStyleEditor.EVENT_PAUSE = "EVENT_PAUSE";
-BI.SignStyleEditor.EVENT_STOP = "EVENT_STOP";
-BI.SignStyleEditor.EVENT_CONFIRM = "EVENT_CONFIRM";
-BI.SignStyleEditor.EVENT_VALID = "EVENT_VALID";
-BI.SignStyleEditor.EVENT_ERROR = "EVENT_ERROR";
-BI.SignStyleEditor.EVENT_ENTER = "EVENT_ENTER";
-BI.SignStyleEditor.EVENT_RESTRICT = "EVENT_RESTRICT";
-BI.SignStyleEditor.EVENT_SPACE = "EVENT_SPACE";
-BI.SignStyleEditor.EVENT_EMPTY = "EVENT_EMPTY";
-
-$.shortcut("bi.sign_style_editor", BI.SignStyleEditor);/**
- * guy
- * @class BI.TextEditor
- * @extends BI.Single
- */
-BI.TextEditor = BI.inherit(BI.Single, {
-    _defaultConfig: function () {
-        var conf = BI.TextEditor.superclass._defaultConfig.apply(this, arguments);
-        return BI.extend(conf, {
-            extraCls: "bi-text-editor",
-            hgap: 4,
-            vgap: 2,
-            lgap: 0,
-            rgap: 0,
-            tgap: 0,
-            bgap: 0,
-            validationChecker: BI.emptyFn,
-            quitChecker: BI.emptyFn,
-            mouseOut: false,
-            allowBlank: false,
-            watermark: "",
-            errorText: "",
-            height: 30
-        })
-    },
-
-    _init: function () {
-        BI.TextEditor.superclass._init.apply(this, arguments);
-        var self = this, o = this.options;
-        if (BI.isNumber(o.height)) {
-            this.element.css({height: o.height - 2});
-        }
-        if (BI.isNumber(o.width)) {
-            this.element.css({width: o.width - 2});
-        }
-        this.editor = BI.createWidget({
-            type: "bi.editor",
-            height: o.height - 2,
-            hgap: o.hgap,
-            vgap: o.vgap,
-            lgap: o.lgap,
-            rgap: o.rgap,
-            tgap: o.tgap,
-            bgap: o.bgap,
-            value: o.value,
-            validationChecker: o.validationChecker,
-            quitChecker: o.quitChecker,
-            mouseOut: o.mouseOut,
-            allowBlank: o.allowBlank,
-            watermark: o.watermark,
-            errorText: o.errorText
-        });
-        this.editor.on(BI.Controller.EVENT_CHANGE, function () {
-            self.fireEvent(BI.Controller.EVENT_CHANGE, arguments);
-        });
-
-        this.editor.on(BI.Editor.EVENT_FOCUS, function () {
-            self.fireEvent(BI.TextEditor.EVENT_FOCUS);
-        });
-        this.editor.on(BI.Editor.EVENT_BLUR, function () {
-            self.fireEvent(BI.TextEditor.EVENT_BLUR);
-        });
-        this.editor.on(BI.Editor.EVENT_CLICK, function () {
-            self.fireEvent(BI.TextEditor.EVENT_CLICK);
-        });
-        this.editor.on(BI.Editor.EVENT_CHANGE, function () {
-            self.fireEvent(BI.TextEditor.EVENT_CHANGE);
-        });
-        this.editor.on(BI.Editor.EVENT_KEY_DOWN, function (v) {
-            self.fireEvent(BI.TextEditor.EVENT_KEY_DOWN);
-        });
-        this.editor.on(BI.Editor.EVENT_SPACE, function (v) {
-            self.fireEvent(BI.TextEditor.EVENT_SPACE);
-        });
-        this.editor.on(BI.Editor.EVENT_BACKSPACE, function (v) {
-            self.fireEvent(BI.TextEditor.EVENT_BACKSPACE);
-        });
-
-
-        this.editor.on(BI.Editor.EVENT_VALID, function () {
-            self.fireEvent(BI.TextEditor.EVENT_VALID);
-        });
-        this.editor.on(BI.Editor.EVENT_CONFIRM, function () {
-            self.fireEvent(BI.TextEditor.EVENT_CONFIRM);
-        });
-        this.editor.on(BI.Editor.EVENT_REMOVE, function (v) {
-            self.fireEvent(BI.TextEditor.EVENT_REMOVE);
-        });
-        this.editor.on(BI.Editor.EVENT_START, function () {
-            self.fireEvent(BI.TextEditor.EVENT_START);
-        });
-        this.editor.on(BI.Editor.EVENT_PAUSE, function () {
-            self.fireEvent(BI.TextEditor.EVENT_PAUSE);
-        });
-        this.editor.on(BI.Editor.EVENT_STOP, function () {
-            self.fireEvent(BI.TextEditor.EVENT_STOP);
-        });
-        this.editor.on(BI.Editor.EVENT_ERROR, function () {
-            self.fireEvent(BI.TextEditor.EVENT_ERROR);
-        });
-        this.editor.on(BI.Editor.EVENT_ENTER, function () {
-            self.fireEvent(BI.TextEditor.EVENT_ENTER);
-        });
-        this.editor.on(BI.Editor.EVENT_RESTRICT, function () {
-            self.fireEvent(BI.TextEditor.EVENT_RESTRICT);
-        });
-        this.editor.on(BI.Editor.EVENT_EMPTY, function () {
-            self.fireEvent(BI.TextEditor.EVENT_EMPTY);
-        });
-        BI.createWidget({
-            type: "bi.vertical",
-            scrolly: false,
-            element: this,
-            items: [this.editor]
-        });
-    },
-
-    focus: function () {
-        this.editor.focus();
-    },
-
-    blur: function () {
-        this.editor.blur();
-    },
-
-    setErrorText: function (text) {
-        this.editor.setErrorText(text);
-    },
-
-    getErrorText: function () {
-        return this.editor.getErrorText();
-    },
-
-    isValid: function () {
-        return this.editor.isValid();
-    },
-
-    setValue: function (v) {
-        this.editor.setValue(v);
-    },
-
-    getValue: function () {
-        return this.editor.getValue();
-    },
-
-    setEnable: function (b) {
-        BI.Editor.superclass.setEnable.apply(this, arguments);
-        this.editor && this.editor.setEnable(b);
-    }
-});
-BI.TextEditor.EVENT_CHANGE = "EVENT_CHANGE";
-BI.TextEditor.EVENT_FOCUS = "EVENT_FOCUS";
-BI.TextEditor.EVENT_BLUR = "EVENT_BLUR";
-BI.TextEditor.EVENT_CLICK = "EVENT_CLICK";
-BI.TextEditor.EVENT_KEY_DOWN = "EVENT_KEY_DOWN";
-BI.TextEditor.EVENT_SPACE = "EVENT_SPACE";
-BI.TextEditor.EVENT_BACKSPACE = "EVENT_BACKSPACE";
-
-BI.TextEditor.EVENT_START = "EVENT_START";
-BI.TextEditor.EVENT_PAUSE = "EVENT_PAUSE";
-BI.TextEditor.EVENT_STOP = "EVENT_STOP";
-BI.TextEditor.EVENT_CONFIRM = "EVENT_CONFIRM";
-BI.TextEditor.EVENT_VALID = "EVENT_VALID";
-BI.TextEditor.EVENT_ERROR = "EVENT_ERROR";
-BI.TextEditor.EVENT_ENTER = "EVENT_ENTER";
-BI.TextEditor.EVENT_RESTRICT = "EVENT_RESTRICT";
-BI.TextEditor.EVENT_REMOVE = "EVENT_REMOVE";
-BI.TextEditor.EVENT_EMPTY = "EVENT_EMPTY";
-
-$.shortcut("bi.text_editor", BI.TextEditor);/**
- * 小号搜索框
- * Created by GUY on 2015/9/29.
- * @class BI.SmallTextEditor
- * @extends BI.SearchEditor
- */
-BI.SmallTextEditor = BI.inherit(BI.TextEditor, {
-    _defaultConfig: function () {
-        var conf = BI.SmallTextEditor.superclass._defaultConfig.apply(this, arguments);
-        return BI.extend(conf, {
-            baseCls: (conf.baseCls || "") + " bi-small-text-editor",
-            height: 25
-        });
-    },
-
-    _init: function () {
-        BI.SmallTextEditor.superclass._init.apply(this, arguments);
-    }
-});
-$.shortcut("bi.small_text_editor", BI.SmallTextEditor);/**
- * @class BI.LoadingCancelMask
- * @extend BI.Widget
- * 带有取消按钮的正在加载mask
- */
-BI.LoadingCancelMask = BI.inherit(BI.Widget, {
-    _defaultConfig: function () {
-        return BI.extend(BI.LoadingCancelMask.superclass._defaultConfig.apply(this, arguments), {})
-    },
-
-    _init: function () {
-        BI.LoadingCancelMask.superclass._init.apply(this, arguments);
-        var self = this, o = this.options;
-        var cancelButton = BI.createWidget({
-            type: "bi.button",
-            level: "ignore",
-            width: 100,
-            height: 30,
-            text: BI.i18nText("BI-Basic_Cancel")
-        });
-        cancelButton.on(BI.Button.EVENT_CHANGE, function () {
-            self.fireEvent(BI.LoadingCancelMask.EVENT_VALUE_CANCEL);
-            self.destroy();
-        });
-        var mask = BI.Maskers.create(this.getName(), o.masker);
-        BI.createWidget({
-            type: "bi.absolute",
-            element: mask,
-            items: [{
-                el: {
-                    type: "bi.layout",
-                    cls: "bi-loading-main-background"
-                },
-                top: 0,
-                left: 0,
-                bottom: 0,
-                right: 0
-            }, {
-                el: {
-                    type: "bi.center_adapt",
-                    cls: "bi-loading-mask-content",
-                    items: [{
-                        el: {
-                            type: "bi.vertical",
-                            items: [{
-                                type: "bi.center_adapt",
-                                cls: "loading-bar-icon",
-                                items: [{
-                                    type: "bi.icon",
-                                    width: 208,
-                                    height: 30
-                                }]
-                            }, {
-                                type: "bi.label",
-                                cls: "loading-bar-label",
-                                text: o.text,
-                                height: 30
-                            }, {
-                                type: "bi.center_adapt",
-                                items: [cancelButton]
-                            }],
-                            vgap: 10
-                        }
-                    }]
-                },
-                top: 0,
-                left: 0,
-                bottom: 0,
-                right: 0
-            }]
-        });
-        BI.Maskers.show(this.getName());
-        BI.nextTick(function () {
-            BI.Maskers.show(self.getName());
-        });
-    },
-
-    destroy: function () {
-        BI.Maskers.remove(this.getName());
-    }
-});
-BI.LoadingCancelMask.EVENT_VALUE_CANCEL = "EVENT_VALUE_CANCEL";
-$.shortcut("bi.loading_cancel_mask", BI.LoadingCancelMask);/**
- * @class BI.LoadingBackground
- * @extend BI.Widget
- * 正在加载mask层
- */
-BI.LoadingBackground = BI.inherit(BI.Widget, {
-    _defaultConfig: function () {
-        return BI.extend(BI.LoadingBackground.superclass._defaultConfig.apply(this, arguments), {
-            baseCls: "",
-            backgroundCls: "loading-background-e50"
-        })
-    },
-
-    _init: function () {
-        BI.LoadingBackground.superclass._init.apply(this, arguments);
-        var self = this, o = this.options;
-        var mask = BI.Maskers.create(this.getName(), o.masker, {offset: o.offset, container: o.container});
-        BI.createWidget({
-            type: "bi.center_adapt",
-            element: mask,
-            cls: "bi-loading-mask " + o.backgroundCls
-        });
-        BI.Maskers.show(this.getName());
-        BI.nextTick(function () {
-            BI.Maskers.show(self.getName());
-        });
-    },
-
-    destroy: function () {
-        BI.Maskers.remove(this.getName());
-    }
-});
-$.shortcut("bi.loading_background", BI.LoadingBackground);/**
- * @class BI.LoadingMask
- * @extend BI.Widget
- * 正在加载mask层
- */
-BI.LoadingMask = BI.inherit(BI.Widget, {
-    _defaultConfig: function () {
-        return BI.extend(BI.LoadingMask.superclass._defaultConfig.apply(this, arguments), {
-            baseCls: ""
-        });
-    },
-
-    _init: function () {
-        BI.LoadingMask.superclass._init.apply(this, arguments);
-        var self = this, o = this.options;
-        var mask = BI.Maskers.create(this.getName(), o.masker, {offset: o.offset, container: o.container});
-        BI.createWidget({
-            type: "bi.absolute",
-            element: mask,
-            items: [{
-                el: {
-                    type: "bi.layout",
-                    cls: "bi-loading-main-background"
-                },
-                top: 0,
-                left: 0,
-                bottom: 0,
-                right: 0
-            }, {
-                el: {
-                    type: "bi.center_adapt",
-                    cls: "bi-loading-mask-content",
-                    items: [{
-                        type: "bi.vertical",
-                        items: [{
-                            type: "bi.center_adapt",
-                            cls: "loading-bar-icon",
-                            items: [{
-                                type: "bi.icon",
-                                width: 208,
-                                height: 30
-                            }]
-                        }, {
-                            type: "bi.label",
-                            cls: "loading-bar-label",
-                            text: o.text,
-                            height: 30
-                        }]
-                    }]
-                },
-                top: 0,
-                left: 0,
-                bottom: 0,
-                right: 0
-            }]
-        });
-        BI.Maskers.show(this.getName());
-        BI.nextTick(function () {
-            BI.Maskers.show(self.getName());
-        });
-    },
-
-    destroy: function () {
-        BI.Maskers.remove(this.getName());
-    }
-});
-$.shortcut("bi.loading_mask", BI.LoadingMask);/**
- * 一个button选中的时候下面有条线
- *
- * Created by GUY on 2015/9/30.
- * @class BI.LineSegmentButton
- * @extends BI.BasicButton
- */
-BI.LineSegmentButton = BI.inherit(BI.BasicButton, {
-
-    _defaultConfig: function() {
-        var conf = BI.LineSegmentButton.superclass._defaultConfig.apply(this, arguments);
-        return BI.extend( conf, {
-            baseCls : (conf.baseCls ||"")+' bi-line-segment-button bi-list-item-effect',
-            once: true,
-            readonly: true,
-            hgap: 10,
-            height: 25
-        })
-    },
-
-    _init:function() {
-        BI.LineSegmentButton.superclass._init.apply(this, arguments);
-        var o = this.options, self = this;
-        this.text = BI.createWidget({
-            type: "bi.label",
-            element: this,
-            text: o.text,
-            height: o.height,
-            value: o.value,
-            hgap: o.hgap
-        });
-
-        this.line = BI.createWidget({
-            type: "bi.layout",
-            cls: "line-segment-button-line",
-            height: 3
-        })
-        BI.createWidget({
-            type: "bi.absolute",
-            element: this,
-            items: [{
-                el: this.line,
-                left: 0,
-                right: 0,
-                bottom: 0
-            }]
-        })
-    },
-
-    setSelected: function(v){
-        BI.LineSegmentButton.superclass.setSelected.apply(this, arguments);
-    },
-
-    setText : function(text) {
-        BI.LineSegmentButton.superclass.setText.apply(this, arguments);
-        this.text.setText(text);
-    },
-
-    destroy : function() {
-        BI.LineSegmentButton.superclass.destroy.apply(this, arguments);
-    }
-});
-$.shortcut('bi.line_segment_button', BI.LineSegmentButton);/**
- * 另一套风格的单选按钮组
- *
- * Created by GUY on 2015/9/30.
- * @class BI.LineSegment
- * @extends BI.Widget
- */
-BI.LineSegment = BI.inherit(BI.Widget, {
-    _defaultConfig: function () {
-        return BI.extend(BI.LineSegment.superclass._defaultConfig.apply(this, arguments), {
-            baseCls: "bi-line-segment",
-            items: [],
-            height: 30
-        });
-    },
-    _init: function () {
-        BI.LineSegment.superclass._init.apply(this, arguments);
-        var self = this, o = this.options;
-        if (BI.isNumber(o.height)) {
-            this.element.css({height: o.height - 1, lineHeight: (o.height - 1) + 'px'});
-        }
-        this.buttonGroup = BI.createWidget({
-            element: this,
-            type: "bi.button_group",
-            items: BI.createItems(o.items, {
-                type: "bi.line_segment_button",
-                height: o.height - 1
-            }),
-            layout: [
-                {
-                    type: "bi.center"
-                }
-            ]
-        });
-        this.buttonGroup.on(BI.Controller.EVENT_CHANGE, function(){
-            self.fireEvent(BI.Controller.EVENT_CHANGE, arguments)
-        });
-        this.buttonGroup.on(BI.ButtonGroup.EVENT_CHANGE, function () {
-            self.fireEvent(BI.LineSegment.EVENT_CHANGE)
-        })
-    },
-
-    setValue: function (v) {
-        this.buttonGroup.setValue(v);
-    },
-
-    setEnabledValue: function (v) {
-        this.buttonGroup.setEnabledValue(v);
-    },
-
-    setEnable: function (v) {
-        BI.LineSegment.superclass.setEnable.apply(this, arguments);
-        this.buttonGroup.setEnable(v)
-    },
-
-
-    getValue: function () {
-        return this.buttonGroup.getValue();
-    }
-});
-BI.LineSegment.EVENT_CHANGE = "EVENT_CHANGE";
-$.shortcut('bi.line_segment', BI.LineSegment);/**
- * 拖拽字段的helper
- * Created by roy on 15/10/13.
- */
-BI.Helper = BI.inherit(BI.Tip, {
-    _defaultConfig: function () {
-        return BI.extend(BI.Helper.superclass._defaultConfig.apply(this, arguments), {
-            extraCls: "bi-helper",
-            text: "",
-            value: ""
-        })
-    },
-
-    _init: function () {
-        BI.Helper.superclass._init.apply(this, arguments);
-        this.populate();
-    },
-
-    modifyContent: function(widget) {
-        this.empty();
-        BI.createWidget({
-            type: "bi.left",
-            element: this,
-            cls: "dragging-modify",
-            items: [widget],
-            lgap: 15
-        });
-    },
-
-    populate: function () {
-        var o = this.options;
-        this.element.data({helperWidget: this});
-        this.empty();
-        BI.createWidget({
-            element: this,
-            type: "bi.label",
-            textAlign: "center",
-            textHeight: 20,
-            hgap: 5,
-            text: o.text,
-            value: o.value
-        });
-        this.element.removeClass("dragging-modify");
-    }
-});
-$.shortcut("bi.helper", BI.Helper);/**
- * guy
- * 复选导航条
- * Created by GUY on 2015/12/24.
- * @class BI.ProgressBarBar
- * @extends BI.BasicButton
- */
-BI.ProgressBarBar = BI.inherit(BI.Single, {
-    _defaultConfig: function () {
-        return BI.extend(BI.ProgressBarBar.superclass._defaultConfig.apply(this, arguments), {
-            extraCls: "bi-progress-bar-bar",
-            height: 24
-        })
-    },
-    _init: function () {
-        BI.ProgressBarBar.superclass._init.apply(this, arguments);
-        var self = this, o = this.options;
-        this.svg = BI.createWidget({
-            type: "bi.svg",
-            width: 6,
-            height: 6
-        });
-        this.svg.circle(3, 3, 3).attr({fill: "#ffffff", "stroke": ""});
-        BI.createWidget({
-            type: "bi.absolute",
-            element: this,
-            items: [{
-                el: this.svg,
-                right: 10,
-                top: 9
-            }]
-        });
-        this.processor = BI.createWidget({
-            type: "bi.progress_bar_processor",
-            width: "0%",
-            height: o.height
-        });
-        BI.createWidget({
-            type: "bi.vertical",
-            element: this,
-            items: [this.processor]
-        });
-    },
-
-    setValue: function (process) {
-        this.processor.setValue(process);
-
-    }
-});
-$.shortcut("bi.progress_bar_bar", BI.ProgressBarBar);/**
- * guy
- * 复选导航条
- * Created by GUY on 2015/12/24.
- * @class BI.ProgressBar
- * @extends BI.BasicButton
- */
-BI.ProgressBar = BI.inherit(BI.Single, {
-    _defaultConfig: function () {
-        return BI.extend(BI.ProgressBar.superclass._defaultConfig.apply(this, arguments), {
-            extraCls: "bi-progress-bar",
-            height: 24
-        })
-    },
-    _init: function () {
-        BI.ProgressBar.superclass._init.apply(this, arguments);
-        var self = this, o = this.options;
-        this.bar = BI.createWidget({
-            type: "bi.progress_bar_bar",
-            height: o.height
-        });
-        this.label = BI.createWidget({
-            type: "bi.label",
-            cls: "progress-bar-label",
-            width: 50,
-            height: o.height,
-            value: "0%"
-        });
-        BI.createWidget({
-            type: "bi.htape",
-            element: this,
-            items: [{
-                el: this.bar
-            }, {
-                el: this.label,
-                width: 50
-            }]
-        })
-    },
-
-    setValue: function (process) {
-        if (process >= 100) {
-            process = 100;
-            this.label.element.addClass("success");
-        } else {
-            this.label.element.removeClass("success");
-        }
-        this.label.setValue(process + "%");
-        this.bar.setValue(process);
-    }
-});
-$.shortcut("bi.progress_bar", BI.ProgressBar);/**
- * guy
- * 复选导航条
- * Created by GUY on 2015/12/24.
- * @class BI.ProgressBarProcessor
- * @extends BI.BasicButton
- */
-BI.ProgressBarProcessor = BI.inherit(BI.Single, {
-    _defaultConfig: function () {
-        return BI.extend(BI.ProgressBarProcessor.superclass._defaultConfig.apply(this, arguments), {
-            extraCls: "bi-progress-bar-processor",
-            height: 24
-        })
-    },
-    _init: function () {
-        BI.ProgressBarProcessor.superclass._init.apply(this, arguments);
-        var self = this, o = this.options;
-        this.svg = BI.createWidget({
-            type: "bi.svg",
-            width: 12,
-            height: 12
-        });
-        this.svg.circle(6, 6, 6).attr({fill: "#eaeaea", "stroke": ""});
-
-        this.dot = this.svg.circle(6, 6, 3).attr({fill: "#ffffff", "stroke": ""}).hide();
-        BI.createWidget({
-            type: "bi.absolute",
-            element: this,
-            items: [{
-                el: this.svg,
-                right: 7,
-                top: 6
-            }]
-        });
-    },
-
-    setValue: function (process) {
-        if (process >= 100) {
-            process = 100;
-            this.dot.show();
-            this.element.addClass("success");
-        } else {
-            this.dot.hide();
-            this.element.removeClass("success");
-        }
-        this.element.width(process + "%");
-    }
-});
-BI.ProgressBarProcessor.EVENT_CHANGE = "ProgressBarProcessor.EVENT_CHANGE";
-$.shortcut("bi.progress_bar_processor", BI.ProgressBarProcessor);/**
  * 表关联树
  *
  * Created by GUY on 2015/12/15.
@@ -6020,6 +4367,743 @@ BI.BranchRelation = BI.inherit(BI.Widget, {
 });
 BI.BranchRelation.EVENT_CHANGE = "BranchRelation.EVENT_CHANGE";
 $.shortcut("bi.branch_relation", BI.BranchRelation);/**
+ * 日期控件中的月份下拉框
+ *
+ * Created by GUY on 2015/9/7.
+ * @class BI.MonthDateCombo
+ * @extends BI.Trigger
+ */
+BI.MonthDateCombo = BI.inherit(BI.Trigger, {
+    _defaultConfig: function() {
+        return BI.extend( BI.MonthDateCombo.superclass._defaultConfig.apply(this, arguments), {
+            baseCls: "bi-month-combo",
+            height: 25
+        });
+    },
+    _init: function() {
+        BI.MonthDateCombo.superclass._init.apply(this, arguments);
+        var self = this, o = this.options;
+
+        this.trigger = BI.createWidget({
+            type: "bi.date_triangle_trigger"
+        });
+
+        this.popup = BI.createWidget({
+            type: "bi.month_popup"
+        });
+
+        this.popup.on(BI.YearPopup.EVENT_CHANGE, function(){
+            self.setValue(self.popup.getValue());
+        })
+
+
+        this.combo = BI.createWidget({
+            type: "bi.combo",
+            offsetStyle: "center",
+            element: this.element,
+            isNeedAdjustHeight: false,
+            isNeedAdjustWidth: false,
+            el: this.trigger,
+            popup: {
+                minWidth: 85,
+                stopPropagation: false,
+                el: this.popup
+            }
+        })
+        this.combo.on(BI.Combo.EVENT_CHANGE, function(){
+            self.combo.hideView();
+            self.fireEvent(BI.MonthDateCombo.EVENT_CHANGE);
+        });
+    },
+
+    setValue: function(v){
+        this.trigger.setValue(v + 1);
+        this.popup.setValue(v);
+    },
+
+    getValue: function(){
+        return this.popup.getValue();
+    }
+});
+BI.MonthDateCombo.EVENT_CHANGE = "EVENT_CHANGE";
+$.shortcut('bi.month_date_combo', BI.MonthDateCombo);/**
+ * 年份下拉框
+ *
+ * Created by GUY on 2015/9/7.
+ * @class BI.YearDateCombo
+ * @extends BI.Trigger
+ */
+BI.YearDateCombo = BI.inherit(BI.Trigger, {
+    _defaultConfig: function() {
+        return BI.extend( BI.YearDateCombo.superclass._defaultConfig.apply(this, arguments), {
+            baseCls: "bi-year-combo",
+            min: '1900-01-01', //最小日期
+            max: '2099-12-31', //最大日期
+            height: 25
+        });
+    },
+    _init: function() {
+        BI.YearDateCombo.superclass._init.apply(this, arguments);
+        var self = this, o = this.options;
+
+        this.trigger = BI.createWidget({
+            type: "bi.date_triangle_trigger"
+        });
+
+        this.popup = BI.createWidget({
+            type: "bi.year_popup",
+            min: o.min,
+            max: o.max
+        });
+
+        this.popup.on(BI.YearPopup.EVENT_CHANGE, function(){
+            self.setValue(self.popup.getValue());
+            self.combo.hideView();
+            self.fireEvent(BI.YearDateCombo.EVENT_CHANGE);
+        })
+
+
+        this.combo = BI.createWidget({
+            type: "bi.combo",
+            offsetStyle: "center",
+            element: this.element,
+            isNeedAdjustHeight: false,
+            isNeedAdjustWidth: false,
+            el: this.trigger,
+            popup: {
+                minWidth: 85,
+                stopPropagation: false,
+                el: this.popup
+            }
+        })
+        this.combo.on(BI.Combo.EVENT_CHANGE, function(){
+            self.fireEvent(BI.YearDateCombo.EVENT_CHANGE);
+        })
+    },
+
+    setValue: function(v){
+        this.trigger.setValue(v);
+        this.popup.setValue(v);
+    },
+
+    getValue: function(){
+        return this.popup.getValue();
+    }
+});
+BI.YearDateCombo.EVENT_CHANGE = "EVENT_CHANGE";
+$.shortcut('bi.year_date_combo', BI.YearDateCombo);/**
+ * Created by GUY on 2015/9/7.
+ * @class BI.DatePicker
+ * @extends BI.Widget
+ */
+BI.DatePicker = BI.inherit(BI.Widget, {
+    _defaultConfig: function () {
+        var conf = BI.DatePicker.superclass._defaultConfig.apply(this, arguments);
+        return BI.extend(conf, {
+            baseCls: "bi-date-picker",
+            height: 25,
+            min: '1900-01-01', //最小日期
+            max: '2099-12-31' //最大日期
+        })
+    },
+
+    _init: function () {
+        BI.DatePicker.superclass._init.apply(this, arguments);
+        var self = this, o = this.options;
+        this._year = new Date().getFullYear();
+        this._month = new Date().getMonth();
+        this.left = BI.createWidget({
+            type: "bi.icon_button",
+            cls: "pre-page-h-font",
+            width: 25,
+            height: 25
+        });
+        this.left.on(BI.IconButton.EVENT_CHANGE, function () {
+            if (self._month === 0) {
+                self.setValue({
+                    year: self.year.getValue() - 1,
+                    month: 11
+                })
+            } else {
+                self.setValue({
+                    year: self.year.getValue(),
+                    month: self.month.getValue() - 1
+                })
+            }
+            self.fireEvent(BI.DatePicker.EVENT_CHANGE);
+        });
+
+        this.right = BI.createWidget({
+            type: "bi.icon_button",
+            cls: "next-page-h-font",
+            width: 25,
+            height: 25
+        });
+
+        this.right.on(BI.IconButton.EVENT_CHANGE, function () {
+            if (self._month === 11) {
+                self.setValue({
+                    year: self.year.getValue() + 1,
+                    month: 0
+                })
+            } else {
+                self.setValue({
+                    year: self.year.getValue(),
+                    month: self.month.getValue() + 1
+                })
+            }
+            self.fireEvent(BI.DatePicker.EVENT_CHANGE);
+        });
+
+        this.year = BI.createWidget({
+            type: "bi.year_date_combo",
+            min: o.min,
+            max: o.max
+        });
+        this.year.on(BI.YearDateCombo.EVENT_CHANGE, function () {
+            self.setValue({
+                year: self.year.getValue(),
+                month: self.month.getValue()
+            });
+            self.fireEvent(BI.DatePicker.EVENT_CHANGE);
+        })
+        this.month = BI.createWidget({
+            type: "bi.month_date_combo"
+        });
+        this.month.on(BI.MonthDateCombo.EVENT_CHANGE, function () {
+            self.setValue({
+                year: self.year.getValue(),
+                month: self.month.getValue()
+            });
+            self.fireEvent(BI.DatePicker.EVENT_CHANGE);
+        });
+
+        BI.createWidget({
+            type: "bi.htape",
+            element: this.element,
+            items: [{
+                el: this.left,
+                width: 25
+            }, {
+                type: "bi.center_adapt",
+                items: [{
+                    type: "bi.horizontal",
+                    width: 100,
+                    items: [this.year, this.month]
+                }]
+            }, {
+                el: this.right,
+                width: 25
+            }]
+        })
+        this.setValue({
+            year: this._year,
+            month: this._month
+        })
+    },
+
+    setValue: function (ob) {
+        this._year = ob.year;
+        this._month = ob.month;
+        this.year.setValue(ob.year);
+        this.month.setValue(ob.month);
+    },
+
+    getValue: function () {
+        return {
+            year: this.year.getValue(),
+            month: this.month.getValue()
+        }
+    }
+});
+BI.DatePicker.EVENT_CHANGE = "EVENT_CHANGE"
+$.shortcut("bi.date_picker", BI.DatePicker);/**
+ * Created by GUY on 2015/9/7.
+ * @class BI.DateCalendarPopup
+ * @extends BI.Widget
+ */
+BI.DateCalendarPopup = BI.inherit(BI.Widget, {
+    _defaultConfig: function () {
+        var conf = BI.DateCalendarPopup.superclass._defaultConfig.apply(this, arguments);
+        return BI.extend(conf, {
+            baseCls: "bi-date-calendar-popup",
+            min: '1900-01-01', //最小日期
+            max: '2099-12-31', //最大日期
+            selectedTime: null
+        })
+    },
+
+    _createNav: function (v) {
+        var date = BI.Calendar.getDateJSONByPage(v);
+        var calendar = BI.createWidget({
+            type: "bi.calendar",
+            logic: {
+                dynamic: true
+            },
+            min: this.options.min,
+            max: this.options.max,
+            year: date.year,
+            month: date.month,
+            day: this.selectedTime.day
+        });
+        return calendar;
+    },
+
+    _init: function () {
+        BI.DateCalendarPopup.superclass._init.apply(this, arguments);
+        var self = this, o = this.options;
+        this.today = new Date();
+        this._year = this.today.getFullYear();
+        this._month = this.today.getMonth();
+        this._day = this.today.getDate();
+
+        this.selectedTime = o.selectedTime || {
+                year: this._year,
+                month: this._month,
+                day: this._day
+            };
+        this.datePicker = BI.createWidget({
+            type: "bi.date_picker",
+            min: o.min,
+            max: o.max
+        });
+
+        this.calendar = BI.createWidget({
+            direction: "top",
+            element: this.element,
+            logic: {
+                dynamic: true
+            },
+            type: "bi.navigation",
+            tab: this.datePicker,
+            cardCreator: BI.bind(this._createNav, this),
+
+            afterCardCreated: function () {
+
+            },
+
+            afterCardShow: function () {
+                this.setValue(self.selectedTime);
+            }
+        });
+
+        this.datePicker.on(BI.DatePicker.EVENT_CHANGE, function () {
+            self.selectedTime = self.datePicker.getValue();
+            self.selectedTime.day = 1;
+            self.calendar.setSelect(BI.Calendar.getPageByDateJSON(self.selectedTime));
+        });
+
+        this.calendar.on(BI.Navigation.EVENT_CHANGE, function () {
+            self.selectedTime = self.calendar.getValue();
+            self.setValue(self.selectedTime);
+            self.fireEvent(BI.DateCalendarPopup.EVENT_CHANGE);
+        });
+    },
+
+    setValue: function (timeOb) {
+        this.datePicker.setValue(timeOb);
+        this.calendar.setSelect(BI.Calendar.getPageByDateJSON(timeOb));
+        this.calendar.setValue(timeOb);
+        this.selectedTime = timeOb;
+    },
+
+    getValue: function () {
+        return this.selectedTime;
+    }
+});
+BI.DateCalendarPopup.EVENT_CHANGE = "EVENT_CHANGE";
+$.shortcut("bi.date_calendar_popup", BI.DateCalendarPopup);/**
+ * 日期控件中的年份或月份trigger
+ *
+ * Created by GUY on 2015/9/7.
+ * @class BI.DateTriangleTrigger
+ * @extends BI.Trigger
+ */
+BI.DateTriangleTrigger = BI.inherit(BI.Trigger, {
+    _const: {
+        height: 25,
+        iconWidth: 16,
+        iconHeight: 13
+    },
+
+    _defaultConfig: function() {
+        return BI.extend( BI.DateTriangleTrigger.superclass._defaultConfig.apply(this, arguments), {
+            baseCls: "bi-date-triangle-trigger pull-down-ha-font cursor-pointer",
+            height: 25
+        });
+    },
+    _init: function() {
+        BI.DateTriangleTrigger.superclass._init.apply(this, arguments);
+        var o = this.options, c = this._const;
+        this.text = BI.createWidget({
+            type: "bi.label",
+            cls: "list-item-text",
+            textAlign: "right",
+            text: o.text,
+            value: o.value,
+            height: c.height
+        })
+        this.icon = BI.createWidget({
+            type: "bi.icon",
+            width: c.iconWidth,
+            height: c.iconHeight
+        });
+
+        BI.createWidget({
+            type: "bi.center_adapt",
+            element: this.element,
+            items: [{
+                type: "bi.center_adapt",
+                width: 50,
+                height: c.height,
+                items: [this.text, this.icon]
+            }]
+        })
+    },
+
+    setValue: function(v){
+        this.text.setValue(v);
+    },
+
+    getValue: function(){
+        return this.text.getValue();
+    },
+
+    setText: function(v){
+        this.text.setText(v);
+    },
+
+    getText: function(){
+        return this.item.getText();
+    },
+
+    getKey: function(){
+
+    }
+});
+$.shortcut('bi.date_triangle_trigger', BI.DateTriangleTrigger);/**
+ * 日期下拉框
+ *
+ * Created by GUY on 2015/9/7.
+ * @class BI.DateCombo
+ * @extends BI.Widget
+ */
+BI.DateCombo = BI.inherit(BI.Widget, {
+    _defaultConfig: function () {
+        return BI.extend(BI.DateCombo.superclass._defaultConfig.apply(this, arguments), {
+            baseCls: "bi-date-combo",
+            height: 30
+        });
+    },
+    _init: function () {
+        BI.DateCombo.superclass._init.apply(this, arguments);
+        var self = this, o = this.options;
+
+        this.trigger = BI.createWidget({
+            type: "bi.date_trigger"
+        });
+
+        this.trigger.on(BI.DateTrigger.EVENT_TRIGGER_CLICK, function () {
+            self.combo.toggle();
+        });
+
+        this.popup = BI.createWidget({
+            type: "bi.date_calendar_popup"
+        });
+
+        this.popup.on(BI.DateCalendarPopup.EVENT_CHANGE, function () {
+            self.setValue(self.popup.getValue());
+        });
+
+        this.combo = BI.createWidget({
+            type: "bi.combo",
+            toggle: false,
+            element: this.element,
+            isNeedAdjustHeight: false,
+            isNeedAdjustWidth: false,
+            el: this.trigger,
+            popup: {
+                width: 270,
+                el: this.popup,
+                stopPropagation: false
+            }
+        })
+    },
+
+    setValue: function (v) {
+        this.trigger.setValue(v);
+        this.popup.setValue(v);
+    },
+
+    getValue: function () {
+        return this.popup.getValue();
+    }
+});
+$.shortcut('bi.date_combo', BI.DateCombo);BI.DateTrigger = BI.inherit(BI.Trigger, {
+    _const: {
+        hgap: 4,
+        vgap: 2,
+        triggerWidth: 30,
+        watermark: BI.i18nText("BI-Unrestricted"),
+        yearLength: 4,
+        yearMonthLength: 7
+    },
+
+    _defaultConfig: function () {
+        return BI.extend(BI.DateTrigger.superclass._defaultConfig.apply(this, arguments), {
+            extraCls: "bi-date-trigger",
+            min: '1900-01-01', //最小日期
+            max: '2099-12-31', //最大日期
+            height: 25
+        });
+    },
+    _init: function () {
+        BI.DateTrigger.superclass._init.apply(this, arguments);
+        var self = this, o = this.options, c = this._const;
+        this.editor = BI.createWidget({
+            type: "bi.sign_editor",
+            height: o.height,
+            validationChecker: function (v) {
+                var date = v.match(/\d+/g);
+                self._autoAppend(v, date);
+                return self._dateCheck(v) && Date.checkLegal(v) && self._checkVoid({
+                        year: date[0],
+                        month: date[1],
+                        day: date[2]
+                    });
+            },
+            quitChecker: function () {
+                return false;
+            },
+            hgap: c.hgap,
+            vgap: c.vgap,
+            allowBlank: true,
+            watermark: c.watermark,
+            errorText: function () {
+                if (self.editor.isEditing()) {
+                    return BI.i18nText("BI-Date_Trigger_Error_Text");
+                }
+                return BI.i18nText("BI-Year_Trigger_Invalid_Text");
+            }
+        });
+        this.editor.on(BI.SignEditor.EVENT_KEY_DOWN, function () {
+            self.fireEvent(BI.DateTrigger.EVENT_KEY_DOWN)
+        });
+        this.editor.on(BI.SignEditor.EVENT_FOCUS, function () {
+            self.fireEvent(BI.DateTrigger.EVENT_FOCUS);
+        });
+        this.editor.on(BI.SignEditor.EVENT_VALID, function () {
+            self.fireEvent(BI.DateTrigger.EVENT_VALID);
+        });
+        this.editor.on(BI.SignEditor.EVENT_ERROR, function () {
+            self.fireEvent(BI.DateTrigger.EVENT_ERROR);
+        });
+        this.editor.on(BI.SignEditor.EVENT_CONFIRM, function () {
+            var value = self.editor.getState();
+            if (BI.isNotNull(value)) {
+                self.editor.setState(value);
+            }
+
+            if (BI.isNotEmptyString(value)) {
+                var date = value.split("-");
+                self.store_value = {
+                    type: BICst.MULTI_DATE_CALENDAR,
+                    value:{
+                        year: date[0] | 0,
+                        month: date[1] - 1,
+                        day: date[2] | 0
+                    }
+                };
+            }
+            self.fireEvent(BI.DateTrigger.EVENT_CONFIRM);
+        });
+        this.editor.on(BI.SignEditor.EVENT_SPACE, function () {
+            if (self.editor.isValid()) {
+                self.editor.blur();
+            }
+        });
+        this.editor.on(BI.SignEditor.EVENT_START, function () {
+            self.fireEvent(BI.DateTrigger.EVENT_START);
+        });
+        this.editor.on(BI.SignEditor.EVENT_CHANGE, function () {
+            self.fireEvent(BI.DateTrigger.EVENT_CHANGE);
+        });
+        BI.createWidget({
+            type: "bi.htape",
+            element: this.element,
+            items: [{
+                el: BI.createWidget(),
+                width: 30
+            }, {
+                el: this.editor
+            }]
+        })
+    },
+    _dateCheck: function (date) {
+        return Date.parseDateTime(date, "%Y-%x-%d").print("%Y-%x-%d") == date || Date.parseDateTime(date, "%Y-%X-%d").print("%Y-%X-%d") == date || Date.parseDateTime(date, "%Y-%x-%e").print("%Y-%x-%e") == date || Date.parseDateTime(date, "%Y-%X-%e").print("%Y-%X-%e") == date;
+    },
+    _checkVoid: function (obj) {
+        return !Date.checkVoid(obj.year, obj.month, obj.day, this.options.min, this.options.max)[0];
+    },
+    _autoAppend: function (v, dateObj) {
+        var self = this;
+        var date = Date.parseDateTime(v, "%Y-%X-%d").print("%Y-%X-%d");
+        var yearCheck = function (v) {
+            return Date.parseDateTime(v, "%Y").print("%Y") == v && date >= self.options.min && date <= self.options.max;
+        };
+        var monthCheck = function (v) {
+            return Date.parseDateTime(v, "%Y-%X").print("%Y-%X") == v && date >= self.options.min && date <= self.options.max;
+        };
+        if (BI.isNotNull(dateObj) && Date.checkLegal(v)) {
+            switch (v.length) {
+                case this._const.yearLength:
+                    if (yearCheck(v)) {
+                        this.editor.setValue(v + "-");
+                    }
+                    break;
+                case this._const.yearMonthLength:
+                    if (monthCheck(v)) {
+                        this.editor.setValue(v + "-");
+                    }
+                    break;
+            }
+        }
+    },
+
+    setValue: function (v) {
+        var type, value, self = this;
+        var date = new Date();
+        this.store_value = v;
+        if (BI.isNotNull(v)) {
+            type = v.type || BICst.MULTI_DATE_CALENDAR; value = v.value;
+            if(BI.isNull(value)){
+                value = v;
+            }
+        }
+        var _setInnerValue = function (date, text) {
+            var dateStr = date.print("%Y-%x-%e");
+            self.editor.setState(dateStr);
+            self.editor.setValue(dateStr);
+            self.setTitle(text + ":" + dateStr);
+        };
+        switch (type) {
+            case BICst.MULTI_DATE_YEAR_PREV:
+                var text = value + BICst.MULTI_DATE_SEGMENT_NUM[BICst.MULTI_DATE_YEAR_PREV];
+                date = new Date((date.getFullYear() - 1 * value), date.getMonth(), date.getDate());
+                _setInnerValue(date, text);
+                break;
+            case BICst.MULTI_DATE_YEAR_AFTER:
+                var text = value + BICst.MULTI_DATE_SEGMENT_NUM[BICst.MULTI_DATE_YEAR_AFTER];
+                date = new Date((date.getFullYear() + 1 * value), date.getMonth(), date.getDate());
+                _setInnerValue(date, text);
+                break;
+            case BICst.MULTI_DATE_YEAR_BEGIN:
+                var text = BICst.MULTI_DATE_SEGMENT_NUM[BICst.MULTI_DATE_YEAR_BEGIN];
+                date = new Date(date.getFullYear(), 0, 1);
+                _setInnerValue(date, text);
+                break;
+            case BICst.MULTI_DATE_YEAR_END:
+                var text = BICst.MULTI_DATE_SEGMENT_NUM[BICst.MULTI_DATE_YEAR_END];
+                date = new Date(date.getFullYear(), 11, 31);
+                _setInnerValue(date, text);
+                break;
+            case BICst.MULTI_DATE_QUARTER_PREV:
+                var text = value + BICst.MULTI_DATE_SEGMENT_NUM[BICst.MULTI_DATE_QUARTER_PREV];
+                date = new Date().getBeforeMulQuarter(value);
+                _setInnerValue(date, text);
+                break;
+            case BICst.MULTI_DATE_QUARTER_AFTER:
+                var text = value + BICst.MULTI_DATE_SEGMENT_NUM[BICst.MULTI_DATE_QUARTER_AFTER];
+                date = new Date().getAfterMulQuarter(value);
+                _setInnerValue(date, text);
+                break;
+            case BICst.MULTI_DATE_QUARTER_BEGIN:
+                var text = BICst.MULTI_DATE_SEGMENT_NUM[BICst.MULTI_DATE_QUARTER_BEGIN];
+                date = new Date().getQuarterStartDate();
+                _setInnerValue(date, text);
+                break;
+            case BICst.MULTI_DATE_QUARTER_END:
+                var text = BICst.MULTI_DATE_SEGMENT_NUM[BICst.MULTI_DATE_QUARTER_END];
+                date = new Date().getQuarterEndDate();
+                _setInnerValue(date, text);
+                break;
+            case BICst.MULTI_DATE_MONTH_PREV:
+                var text = value + BICst.MULTI_DATE_SEGMENT_NUM[BICst.MULTI_DATE_MONTH_PREV];
+                date = new Date().getBeforeMultiMonth(value);
+                _setInnerValue(date, text);
+                break;
+            case BICst.MULTI_DATE_MONTH_AFTER:
+                var text = value + BICst.MULTI_DATE_SEGMENT_NUM[BICst.MULTI_DATE_MONTH_AFTER];
+                date = new Date().getAfterMultiMonth(value);
+                _setInnerValue(date, text);
+                break;
+            case BICst.MULTI_DATE_MONTH_BEGIN:
+                var text = BICst.MULTI_DATE_SEGMENT_NUM[BICst.MULTI_DATE_MONTH_BEGIN];
+                date = new Date(date.getFullYear(), date.getMonth(), 1);
+                _setInnerValue(date, text);
+                break;
+            case BICst.MULTI_DATE_MONTH_END:
+                var text = BICst.MULTI_DATE_SEGMENT_NUM[BICst.MULTI_DATE_MONTH_END];
+                date = new Date(date.getFullYear(), date.getMonth(), (date.getLastDateOfMonth()).getDate());
+                _setInnerValue(date, text);
+                break;
+            case BICst.MULTI_DATE_WEEK_PREV:
+                var text = value + BICst.MULTI_DATE_SEGMENT_NUM[BICst.MULTI_DATE_WEEK_PREV];
+                date = date.getOffsetDate(-7 * value);
+                _setInnerValue(date, text);
+                break;
+            case BICst.MULTI_DATE_WEEK_AFTER:
+                var text = value + BICst.MULTI_DATE_SEGMENT_NUM[BICst.MULTI_DATE_WEEK_AFTER];
+                date = date.getOffsetDate(7 * value);
+                _setInnerValue(date, text);
+                break;
+            case BICst.MULTI_DATE_DAY_PREV:
+                var text = value + BICst.MULTI_DATE_SEGMENT_NUM[BICst.MULTI_DATE_DAY_PREV];
+                date = date.getOffsetDate(-1 * value);
+                _setInnerValue(date, text);
+                break;
+            case BICst.MULTI_DATE_DAY_AFTER:
+                var text = value + BICst.MULTI_DATE_SEGMENT_NUM[BICst.MULTI_DATE_DAY_AFTER];
+                date = date.getOffsetDate(1 * value);
+                _setInnerValue(date, text);
+                break;
+            case BICst.MULTI_DATE_DAY_TODAY:
+                var text = BICst.MULTI_DATE_SEGMENT_NUM[BICst.MULTI_DATE_DAY_TODAY];
+                date = new Date();
+                _setInnerValue(date, text);
+                break;
+            default:
+                if (BI.isNull(value) || BI.isNull(value.day)) {
+                    this.editor.setState("");
+                    this.editor.setValue("");
+                    this.setTitle("");
+                } else {
+                    var dateStr = value.year + "-" + (value.month + 1) + "-" + value.day;
+                    this.editor.setState(dateStr);
+                    this.editor.setValue(dateStr);
+                    this.setTitle(dateStr);
+                }
+                break;
+        }
+    },
+
+    getKey: function () {
+        return this.editor.getValue();
+    },
+    getValue: function () {
+        return this.store_value;
+    }
+
+});
+BI.DateTrigger.EVENT_FOCUS = "EVENT_FOCUS";
+BI.DateTrigger.EVENT_START = "EVENT_START";
+BI.DateTrigger.EVENT_CONFIRM = "EVENT_CONFIRM";
+BI.DateTrigger.EVENT_CHANGE = "EVENT_CHANGE";
+BI.DateTrigger.EVENT_VALID = "EVENT_VALID";
+BI.DateTrigger.EVENT_ERROR = "EVENT_ERROR";
+BI.DateTrigger.EVENT_TRIGGER_CLICK = "EVENT_TRIGGER_CLICK";
+BI.DateTrigger.EVENT_KEY_DOWN = "EVENT_KEY_DOWN";
+$.shortcut("bi.date_trigger", BI.DateTrigger);/**
  * Created by zcf on 2017/2/20.
  */
 BI.DatePaneWidget = BI.inherit(BI.Widget, {
@@ -8799,138 +7883,6 @@ BI.MonthTrigger.EVENT_START = "EVENT_START";
 BI.MonthTrigger.EVENT_STOP = "EVENT_STOP";
 BI.MonthTrigger.EVENT_CHANGE = "EVENT_CHANGE";
 $.shortcut("bi.month_trigger", BI.MonthTrigger);/**
- * Created by fay on 2016/9/14.
- */
-BI.TextLabelItemGroup = BI.inherit(BI.ButtonGroup, {
-    _defaultConfig: function () {
-        return BI.extend(BI.TextLabelItemGroup.superclass._defaultConfig.apply(this, arguments), {
-            chooseType: BI.Selection.Multi
-        });
-    },
-
-    _init: function () {
-        BI.TextLabelItemGroup.superclass._init.apply(this, arguments);
-        this._checkBtnStyle();
-    },
-
-    _btnsCreator: function (items) {
-        var self = this, args = Array.prototype.slice.call(arguments), o = this.options;
-        var buttons = this._createBtns(items);
-        args[0] = buttons;
-
-        BI.each(this.behaviors, function (i, behavior) {
-            behavior.doBehavior.apply(behavior, args);
-        });
-        BI.each(buttons, function (i, btn) {
-            btn.on(BI.Controller.EVENT_CHANGE, function (type, value, obj) {
-                if (type === BI.Events.CLICK) {
-                    switch (o.chooseType) {
-                        case BI.ButtonGroup.CHOOSE_TYPE_MULTI:
-                            if (BI.isEmptyString(btn.getValue())) {
-                                self.setValue([]);
-                            } else {
-                                self._checkBtnStyle();
-                            }
-                            break;
-                        case BI.ButtonGroup.CHOOSE_TYPE_SINGLE:
-                            self.setValue(btn.getValue());
-                            break;
-                        case BI.ButtonGroup.CHOOSE_TYPE_NONE:
-                            self.setValue([]);
-                            break;
-                    }
-                    self.fireEvent(BI.ButtonGroup.EVENT_CHANGE, value, obj);
-                }
-                self.fireEvent(BI.Controller.EVENT_CHANGE, arguments);
-            });
-            btn.on(BI.Events.DESTROY, function () {
-                BI.remove(self.buttons, btn);
-            })
-        });
-
-        return buttons;
-    },
-
-    _checkBtnStyle: function () {
-        var self = this;
-        var flag = BI.isEmptyArray(this.getValue());
-        BI.each(this.buttons, function (idx, btn) {
-            if (flag && BI.isEmptyString(btn.getValue())) {
-                btn.setSelected(true);
-                btn.doHighLight();
-            }
-            if (!flag && BI.isEmptyString(btn.getValue())) {
-                btn.setSelected(false);
-                btn.unHighLight();
-            }
-            if (btn.isSelected()) {
-                btn.doHighLight();
-            } else {
-                btn.unHighLight();
-            }
-        });
-    },
-
-    setValue: function (v) {
-        BI.TextLabelItemGroup.superclass.setValue.apply(this, arguments);
-        this._checkBtnStyle();
-    }
-});
-
-$.shortcut('bi.text_label_item_group', BI.TextLabelItemGroup);
-/**
- * 文本标签
- *
- * Created by fay on 2016/9/11.
- */
-BI.TextLabel = BI.inherit(BI.Widget, {
-
-    _constant: {
-        MAX_COLUMN_SIZE: 40
-    },
-
-    _defaultConfig: function () {
-        return BI.extend(BI.TextLabel.superclass._defaultConfig.apply(this, arguments), {
-            baseCls: "bi-text-label",
-            title: ""
-        })
-    },
-
-    _init: function () {
-        BI.TextLabel.superclass._init.apply(this, arguments);
-        var self = this, o = this.options;
-        var title = BI.createWidget({
-            type: "bi.label",
-            text: o.title + ":"
-        });
-        this.container = BI.createWidget({
-            type: "bi.text_label_item_group",
-            items: BI.createItems(o.items.slice(0, this._constant.MAX_COLUMN_SIZE), {
-                type: "bi.text_button"
-            }),
-            layouts: [{
-                type: "bi.horizontal",
-
-            }]
-        });
-
-        BI.createWidget({
-            type: "bi.horizontal",
-            items: [title, this.container],
-            element: this
-        })
-    },
-    
-    setValue: function (v) {
-        this.container.setValue(v);
-    },
-    
-    getValue: function () {
-        return this.container.getValue();
-    }
-});
-
-$.shortcut('bi.text_label', BI.TextLabel);/**
  * @class BI.MultiLayerSelectTreeCombo
  * @extends BI.Widget
  */
@@ -11882,6 +10834,325 @@ BI.MultiSelectCheckSelectedSwitcher = BI.inherit(BI.Widget, {
 BI.MultiSelectCheckSelectedSwitcher.EVENT_TRIGGER_CHANGE = "MultiSelectCheckSelectedSwitcher.EVENT_TRIGGER_CHANGE";
 BI.MultiSelectCheckSelectedSwitcher.EVENT_BEFORE_POPUPVIEW = "MultiSelectCheckSelectedSwitcher.EVENT_BEFORE_POPUPVIEW";
 $.shortcut('bi.multi_select_check_selected_switcher', BI.MultiSelectCheckSelectedSwitcher);/**
+ * Created by zcf on 2016/12/14.
+ */
+BI.MultiStringList = BI.inherit(BI.Widget, {
+    _defaultConfig: function () {
+        return BI.extend(BI.MultiStringList.superclass._defaultConfig.apply(this, arguments), {
+            baseCls: 'bi-multi-string-list',
+            itemsCreator: BI.emptyFn,
+            valueFormatter: BI.emptyFn,
+            height: 25
+        })
+    },
+    _init: function () {
+        BI.MultiStringList.superclass._init.apply(this, arguments);
+
+        var self = this, o = this.options;
+
+        var assertShowValue = function () {
+            BI.isKey(self._startValue) && self.storeValue.value[self.storeValue.type === BI.Selection.All ? "remove" : "pushDistinct"](self._startValue);
+            self.trigger.getSearcher().setState(self.storeValue);
+            self.trigger.getCounter().setButtonChecked(self.storeValue);
+        };
+        this.storeValue = {};
+
+
+        this.popup = BI.createWidget({
+            type: "bi.multi_select_loader",
+            cls: "popup-multi-string-list",
+            itemsCreator: o.itemsCreator,
+            valueFormatter: o.valueFormatter,
+            onLoaded: o.onLoaded,
+            el: {
+                height: ""
+            }
+        });
+        this.popup.on(BI.MultiSelectLoader.EVENT_CHANGE, function () {
+            self.storeValue = this.getValue();
+            self._adjust(function () {
+                assertShowValue();
+                self.fireEvent(BI.MultiStringList.EVENT_CHANGE);
+            });
+        });
+
+        this.trigger = BI.createWidget({
+            type: "bi.multi_select_trigger",
+            height: o.height,
+            adapter: this.popup,
+            masker: {
+                offset: {
+                    left: 1,
+                    top: 0,
+                    right: 2,
+                    bottom: 1
+                }
+            },
+            valueFormatter: o.valueFormatter,
+            itemsCreator: function (op, callback) {
+                o.itemsCreator(op, function (res) {
+                    if (op.times === 1 && BI.isNotNull(op.keyword)) {
+                        self.trigger.setValue(self.getValue());
+                    }
+                    callback.apply(self, arguments);
+                });
+            }
+        });
+
+        this.trigger.on(BI.MultiSelectTrigger.EVENT_START, function () {
+            self._setStartValue("");
+            this.getSearcher().setValue(self.storeValue);
+        });
+        this.trigger.on(BI.MultiSelectTrigger.EVENT_STOP, function () {
+            self._setStartValue("");
+        });
+        this.trigger.on(BI.MultiSelectTrigger.EVENT_PAUSE, function () {
+            if (this.getSearcher().hasMatched()) {
+                var keyword = this.getSearcher().getKeyword();
+                self._join({
+                    type: BI.Selection.Multi,
+                    value: [keyword]
+                }, function () {
+                    self.trigger.setValue(self.storeValue);
+                    self.popup.setValue(self.storeValue);
+                    self._setStartValue(keyword);
+                    assertShowValue();
+                    self.populate();
+                    self._setStartValue("");
+                    self.fireEvent(BI.MultiStringList.EVENT_CHANGE);
+                })
+            }
+        });
+        this.trigger.on(BI.MultiSelectTrigger.EVENT_SEARCHING, function (keywords) {
+            var last = BI.last(keywords);
+            keywords = BI.initial(keywords || []);
+            if (keywords.length > 0) {
+                self._joinKeywords(keywords, function () {
+                    if (BI.isEndWithBlank(last)) {
+                        self.trigger.setValue(self.storeValue);
+                        self.popup.setValue(self.storeValue);
+                        assertShowValue();
+                        self.popup.populate();
+                        self._setStartValue("");
+                    } else {
+                        self.trigger.setValue(self.storeValue);
+                        self.popup.setValue(self.storeValue);
+                        assertShowValue();
+                    }
+                });
+            }
+        });
+
+        this.trigger.on(BI.MultiSelectTrigger.EVENT_CHANGE, function (value, obj) {
+            if (obj instanceof BI.MultiSelectBar) {
+                self._joinAll(this.getValue(), function () {
+                    assertShowValue();
+                });
+            } else {
+                self._join(this.getValue(), function () {//安徽省 北京
+                    assertShowValue();
+                });
+            }
+        });
+        this.trigger.on(BI.MultiSelectTrigger.EVENT_BEFORE_COUNTER_POPUPVIEW, function () {
+            this.getCounter().setValue(self.storeValue);
+        });
+        var div = BI.createWidget({
+            type: "bi.layout"
+        });
+        BI.createWidget({
+            type: "bi.vtape",
+            element: this.element,
+            height: "100%",
+            width: "100%",
+            items: [{
+                el: this.trigger,
+                height: 25
+            }, {
+                el: div,
+                height: 2
+            }, {
+                el: this.popup,
+                height: "fill"
+            }]
+        });
+    },
+    _defaultState: function () {
+        this.trigger.stopEditing();
+    },
+
+    _assertValue: function (val) {
+        val || (val = {});
+        val.type || (val.type = BI.Selection.Multi);
+        val.value || (val.value = []);
+    },
+
+    _makeMap: function (values) {
+        return BI.makeObject(values || []);
+    },
+
+    _joinKeywords: function (keywords, callback) {
+        var self = this, o = this.options;
+        this._assertValue(this.storeValue);
+        if (!this._allData) {
+            o.itemsCreator({
+                type: BI.MultiStringList.REQ_GET_ALL_DATA
+            }, function (ob) {
+                self._allData = BI.pluck(ob.items, "value");
+                digest(self._allData);
+            })
+        } else {
+            digest(this._allData)
+        }
+
+        function digest(items) {
+            var selectedMap = self._makeMap(items);
+            BI.each(keywords, function (i, val) {
+                if (BI.isNotNull(selectedMap[val])) {
+                    self.storeValue.value[self.storeValue.type === BI.Selection.Multi ? "pushDistinct" : "remove"](val);
+                }
+            });
+            self._adjust(callback);
+        }
+    },
+
+    _joinAll: function (res, callback) {
+        var self = this, o = this.options;
+        this._assertValue(res);
+        o.itemsCreator({
+            type: BI.MultiStringList.REQ_GET_ALL_DATA,
+            keyword: this.trigger.getKey()
+        }, function (ob) {
+            var items = BI.pluck(ob.items, "value");
+            if (self.storeValue.type === res.type) {
+                var change = false;
+                var map = self._makeMap(self.storeValue.value);
+                BI.each(items, function (i, v) {
+                    if (BI.isNotNull(map[v])) {
+                        change = true;
+                        delete map[v];
+                    }
+                });
+                change && (self.storeValue.value = BI.values(map));
+                self._adjust(callback);
+                return;
+            }
+            var selectedMap = self._makeMap(self.storeValue.value);
+            var notSelectedMap = self._makeMap(res.value);
+            var newItems = [];
+            BI.each(items, function (i, item) {
+                if (BI.isNotNull(selectedMap[items[i]])) {
+                    delete selectedMap[items[i]];
+                }
+                if (BI.isNull(notSelectedMap[items[i]])) {
+                    newItems.push(item);
+                }
+            });
+            self.storeValue.value = newItems.concat(BI.values(selectedMap));
+            self._adjust(callback);
+        })
+    },
+
+    _adjust: function (callback) {
+        var self = this, o = this.options;
+        if (!this._count) {
+            o.itemsCreator({
+                type: BI.MultiStringList.REQ_GET_DATA_LENGTH
+            }, function (res) {
+                self._count = res.count;
+                adjust();
+                callback();
+            });
+        } else {
+            adjust();
+            callback();
+        }
+        function adjust() {
+            if (self.storeValue.type === BI.Selection.All && self.storeValue.value.length >= self._count) {
+                self.storeValue = {
+                    type: BI.Selection.Multi,
+                    value: []
+                }
+            } else if (self.storeValue.type === BI.Selection.Multi && self.storeValue.value.length >= self._count) {
+                self.storeValue = {
+                    type: BI.Selection.All,
+                    value: []
+                }
+            }
+        }
+    },
+
+    _join: function (res, callback) {
+        var self = this, o = this.options;
+        this._assertValue(res);
+        this._assertValue(this.storeValue);
+        if (this.storeValue.type === res.type) {
+            var map = this._makeMap(this.storeValue.value);
+            BI.each(res.value, function (i, v) {
+                if (!map[v]) {
+                    self.storeValue.value.push(v);
+                    map[v] = v;
+                }
+            });
+            var change = false;
+            BI.each(res.assist, function (i, v) {
+                if (BI.isNotNull(map[v])) {
+                    change = true;
+                    delete map[v];
+                }
+            });
+            change && (this.storeValue.value = BI.values(map));
+            self._adjust(callback);
+            return;
+        }
+        this._joinAll(res, callback);
+    },
+
+    _setStartValue: function (value) {
+        this._startValue = value;
+        this.popup.setStartValue(value);
+    },
+
+    // isAllSelected: function () {
+    //     return this.popup.isAllSelected();
+    // },
+
+    resize: function () {
+        this.trigger.getCounter().adjustView();
+        this.trigger.getSearcher().adjustView();
+    },
+
+    setEnable: function (v) {
+        this.trigger.setEnable(v);
+        this.popup.setEnable(v);
+    },
+
+    setValue: function (v) {
+        this.storeValue = v || {};
+        this._assertValue(this.storeValue);
+        this.popup.setValue(this.storeValue);
+        this.trigger.setValue(this.storeValue);
+    },
+
+    getValue: function () {
+        return this.storeValue;
+    },
+
+    populate: function () {
+        this._count = null;
+        this._allData = null;
+        this.popup.populate.apply(this.popup, arguments);
+        this.trigger.populate.apply(this.trigger, arguments);
+    }
+});
+
+BI.extend(BI.MultiStringList, {
+    REQ_GET_DATA_LENGTH: 0,
+    REQ_GET_ALL_DATA: -1
+});
+
+BI.MultiStringList.EVENT_CHANGE = "BI.MultiStringList.EVENT_CHANGE";
+$.shortcut("bi.multi_string_list", BI.MultiStringList);/**
  *
  * @class BI.MultiTreeCheckPane
  * @extends BI.Pane
@@ -12619,7 +11890,231 @@ BI.MultiTreeSearcher.EVENT_CHANGE = "EVENT_CHANGE";
 BI.MultiTreeSearcher.EVENT_START = "EVENT_START";
 BI.MultiTreeSearcher.EVENT_STOP = "EVENT_STOP";
 BI.MultiTreeSearcher.EVENT_PAUSE = "EVENT_PAUSE";
-$.shortcut('bi.multi_tree_searcher', BI.MultiTreeSearcher);//小于号的值为：0，小于等于号的值为:1
+$.shortcut('bi.multi_tree_searcher', BI.MultiTreeSearcher);/**
+ * Created by zcf on 2016/12/20.
+ */
+BI.MultiTreeList = BI.inherit(BI.Widget, {
+    constants: {
+        offset: {
+            left: 1,
+            top: 0,
+            right: 2,
+            bottom: 1
+        }
+    },
+
+    _defaultConfig: function () {
+        return BI.extend(BI.MultiTreeList.superclass._defaultConfig.apply(this, arguments), {
+            baseCls: 'bi-multi-tree-combo',
+            itemsCreator: BI.emptyFn,
+            height: 25
+        });
+    },
+
+    _init: function () {
+        BI.MultiTreeList.superclass._init.apply(this, arguments);
+
+        var self = this, o = this.options;
+
+        var isInit = false;
+        var want2showCounter = false;
+
+        this.popup = BI.createWidget({
+            type: "bi.multi_tree_list_popup",
+            itemsCreator: o.itemsCreator
+        });
+
+        this.popup.on(BI.MultiStringListPopup.EVENT_AFTER_INIT, function () {
+            self.trigger.getCounter().adjustView();
+            isInit = true;
+            if (want2showCounter === true) {
+                showCounter();
+            }
+        });
+
+        this.trigger = BI.createWidget({
+            type: "bi.multi_select_trigger",
+            height: o.height,
+            adapter: this.popup,
+            masker: {
+                offset: this.constants.offset
+            },
+            searcher: {
+                type: "bi.multi_tree_searcher",
+                itemsCreator: o.itemsCreator
+            },
+            switcher: {
+                el: {
+                    type: "bi.multi_tree_check_selected_button"
+                },
+                popup: {
+                    type: "bi.multi_tree_check_pane",
+                    itemsCreator: o.itemsCreator
+                }
+            }
+        });
+
+        this.storeValue = {value: {}};
+
+        var isSearching = function () {
+            return self.trigger.getSearcher().isSearching();
+        };
+
+        this.trigger.on(BI.MultiSelectTrigger.EVENT_START, function () {
+            self.storeValue = {value: self.popup.getValue()};
+            this.setValue(self.storeValue);
+        });
+        this.trigger.on(BI.MultiSelectTrigger.EVENT_STOP, function () {
+            self.storeValue = {value: this.getValue()};
+            self.trigger.setValue(self.storeValue);
+            self.popup.setValue(self.storeValue);
+            BI.nextTick(function () {
+                self.trigger.populate();
+                self.popup.populate();
+            });
+        });
+        function showCounter() {
+            if (isSearching()) {
+                self.storeValue = {value: self.trigger.getValue()};
+            } else {
+                self.storeValue = {value: self.popup.getValue()};
+            }
+            self.trigger.setValue(self.storeValue);
+        }
+
+        this.trigger.on(BI.MultiSelectTrigger.EVENT_BEFORE_COUNTER_POPUPVIEW, function () {
+            if (want2showCounter === false) {
+                want2showCounter = true;
+            }
+            if (isInit === true) {
+                want2showCounter = null;
+                showCounter();
+            }
+        });
+
+        this.trigger.on(BI.MultiSelectTrigger.EVENT_CHANGE, function () {
+            var val = {
+                type: BI.Selection.Multi,
+                value: this.getSearcher().hasChecked() ? {1: 1} : {}
+            };
+            this.getSearcher().setState(val);
+            this.getCounter().setButtonChecked(val);
+        });
+
+        this.popup.on(BI.MultiStringListPopup.EVENT_CHANGE, function () {
+            showCounter();
+            var val = {
+                type: BI.Selection.Multi,
+                value: this.hasChecked() ? {1: 1} : {}
+            };
+            self.trigger.getSearcher().setState(val);
+            self.trigger.getCounter().setButtonChecked(val);
+            self.fireEvent(BI.MultiTreeList.EVENT_CHANGE);
+        });
+
+        var div = BI.createWidget({
+            type: "bi.layout"
+        });
+        BI.createWidget({
+            type: "bi.vtape",
+            element: this.element,
+            height: "100%",
+            width: "100%",
+            items: [{
+                el: this.trigger,
+                height: 25
+            }, {
+                el: div,
+                height: 2
+            }, {
+                el: this.popup,
+                height: "fill"
+            }]
+        })
+    },
+
+    _defaultState: function () {
+        this.trigger.stopEditing();
+    },
+
+    resize: function () {
+        this.trigger.getCounter().adjustView();
+        this.trigger.getSearcher().adjustView();
+    },
+
+    setEnable: function (v) {
+        this.trigger.setEnable(v);
+        this.popup.setEnable(v);
+    },
+
+    setValue: function (v) {
+        this.storeValue.value = v || {};
+        this.popup.setValue({
+            value: v || {}
+        });
+        this.trigger.setValue({
+            value: v || {}
+        });
+    },
+
+    getValue: function () {
+        return this.storeValue.value;
+    },
+
+    populate: function () {
+        this.trigger.populate.apply(this.trigger, arguments);
+        this.popup.populate.apply(this.popup, arguments);
+    }
+});
+BI.MultiTreeList.EVENT_CHANGE = "MultiTreeList.EVENT_CHANGE";
+$.shortcut('bi.multi_tree_list', BI.MultiTreeList);/**
+ * Created by zcf on 2016/12/21.
+ */
+BI.MultiStringListPopup=BI.inherit(BI.Widget,{
+    _defaultConfig:function () {
+        return BI.extend(BI.MultiStringListPopup.superclass._defaultConfig.apply(this, arguments), {
+            baseCls: "bi-tree-list-popup",
+            itemsCreator: BI.emptyFn
+        });
+    },
+    _init:function () {
+        BI.MultiStringListPopup.superclass._init.apply(this, arguments);
+        var self = this, o = this.options;
+        this.popup = BI.createWidget({
+            type: "bi.sync_tree",
+            height: 400,
+            element:this.element,
+            itemsCreator: o.itemsCreator
+        });
+        this.popup.on(BI.TreeView.EVENT_AFTERINIT, function () {
+            self.fireEvent(BI.MultiStringListPopup.EVENT_AFTER_INIT)
+        });
+        this.popup.on(BI.TreeView.EVENT_CHANGE, function () {
+            self.fireEvent(BI.MultiStringListPopup.EVENT_CHANGE)
+        });
+    },
+
+    hasChecked: function () {
+        return this.popup.hasChecked();
+    },
+
+    getValue: function () {
+        return this.popup.getValue();
+    },
+
+    setValue: function (v) {
+        v || (v = {});
+        this.popup.setValue(v.value);
+    },
+
+    populate: function (config) {
+        this.popup.stroke(config);
+    }
+
+});
+BI.MultiStringListPopup.EVENT_AFTER_INIT="BI.MultiStringListPopup.EVENT_AFTER_INIT";
+BI.MultiStringListPopup.EVENT_CHANGE="BI.MultiStringListPopup.EVENT_CHANGE";
+$.shortcut("bi.multi_tree_list_popup",BI.MultiStringListPopup);//小于号的值为：0，小于等于号的值为:1
 //closeMIn：最小值的符号，closeMax：最大值的符号
 /**
  * Created by roy on 15/9/17.

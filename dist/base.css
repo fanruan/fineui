@@ -36,26 +36,20 @@
 /****添加计算宽度的--运算符直接需要space****/
 /****** common color(常用颜色,可用于普遍场景) *****/
 /**** custom color(自定义颜色,用于特定场景) ****/
-.bi-color-picker-button {
-  background-color: #eaeaea;
+.bi-color-chooser-popup .color-chooser-popup-title {
+  background: #f4f4f4;
+  border-bottom: 1px solid #d4dadd;
 }
-.bi-color-picker-button .color-picker-button-mask {
-  border: 1px solid #1a1a1a;
+.bi-color-chooser-popup .color-chooser-popup-more {
+  background: #f4f4f4;
 }
-/****添加计算宽度的--运算符直接需要space****/
-/****** common color(常用颜色,可用于普遍场景) *****/
-/**** custom color(自定义颜色,用于特定场景) ****/
-.bi-color-picker > .center-element {
-  border-left: 1px solid #ffffff;
-  border-top: 1px solid #ffffff;
+.bi-color-chooser-popup .color-chooser-popup-more:hover {
+  background: #d4dadd;
 }
 /****添加计算宽度的--运算符直接需要space****/
 /****** common color(常用颜色,可用于普遍场景) *****/
 /**** custom color(自定义颜色,用于特定场景) ****/
-.bi-color-picker-editor .color-picker-editor-label {
-  color: #808080;
-}
-.bi-color-picker-editor .color-picker-editor-display {
+.bi-color-chooser-trigger {
   background: #ffffff;
   -webkit-border-radius: 2px;
   -moz-border-radius: 2px;
@@ -63,6 +57,58 @@
   box-shadow: 0px 0px 2px 1px #d4dadd inset;
   -webkit-box-shadow: 0px 0px 2px 1px #d4dadd inset;
   -moz-box-shadow: 0px 0px 2px 1px #d4dadd inset;
+}
+/**
+ * Farbtastic Color Picker 1.2
+ * © 2008 Steven Wittens
+ *
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation; either version 2 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, write to the Free Software
+ * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
+ */
+.farbtastic {
+  position: relative;
+}
+.farbtastic * {
+  position: absolute;
+  cursor: crosshair;
+}
+.farbtastic,
+.farbtastic .wheel {
+  width: 195px;
+  height: 195px;
+}
+.farbtastic .color,
+.farbtastic .overlay {
+  top: 47px;
+  left: 47px;
+  width: 101px;
+  height: 101px;
+}
+.farbtastic .wheel {
+  background: url(third/farbtastic/wheel.png) no-repeat;
+  width: 195px;
+  height: 195px;
+}
+.farbtastic .overlay {
+  background: url(third/farbtastic/mask.png) no-repeat;
+}
+.farbtastic .marker {
+  width: 17px;
+  height: 17px;
+  margin: -8px 0 0 -8px;
+  overflow: hidden;
+  background: url(third/farbtastic/marker.png) no-repeat;
 }
 /****添加计算宽度的--运算符直接需要space****/
 /****** common color(常用颜色,可用于普遍场景) *****/
@@ -121,6 +167,72 @@
   opacity: 0.5;
   filter: alpha(opacity=50);
 }
+/****添加计算宽度的--运算符直接需要space****/
+/****** common color(常用颜色,可用于普遍场景) *****/
+/**** custom color(自定义颜色,用于特定场景) ****/
+.bi-adapt-editor .adapt-editor-text {
+  font-size: 14px;
+}
+/****添加计算宽度的--运算符直接需要space****/
+/****** common color(常用颜色,可用于普遍场景) *****/
+/**** custom color(自定义颜色,用于特定场景) ****/
+/*************BI.SearchEditor******************/
+.bi-search-editor {
+  border: 1px solid #d4dadd;
+}
+.bi-search-editor .close-font {
+  font-size: 20px;
+}
+.bi-search-editor .search-font {
+  font-size: 20px;
+}
+/****添加计算宽度的--运算符直接需要space****/
+/****** common color(常用颜色,可用于普遍场景) *****/
+/**** custom color(自定义颜色,用于特定场景) ****/
+/*************BI.SearchEditor******************/
+.bi-small-search-editor .bi-editor {
+  font-size: 12px;
+}
+.bi-small-search-editor .bi-editor .bi-input {
+  font-size: 12px;
+}
+.bi-small-search-editor .bi-editor .bi-label {
+  font-size: 12px;
+}
+.bi-small-search-editor .close-font {
+  font-size: 18px;
+}
+.bi-small-search-editor .search-font {
+  font-size: 18px;
+}
+/****添加计算宽度的--运算符直接需要space****/
+/****** common color(常用颜色,可用于普遍场景) *****/
+/**** custom color(自定义颜色,用于特定场景) ****/
+.bi-sign-initial-editor .sign-initial-editor-text {
+  font-size: 14px;
+}
+/****添加计算宽度的--运算符直接需要space****/
+/****** common color(常用颜色,可用于普遍场景) *****/
+/**** custom color(自定义颜色,用于特定场景) ****/
+.bi-sign-style-editor .sign-style-editor-text {
+  max-width: 100%;
+  font-size: 12px;
+}
+.bi-sign-style-editor .sign-style-editor-tip {
+  max-width: 100%;
+  font-size: 12px;
+  color: #808080;
+}
+/****添加计算宽度的--运算符直接需要space****/
+/****** common color(常用颜色,可用于普遍场景) *****/
+/**** custom color(自定义颜色,用于特定场景) ****/
+.bi-text-editor {
+  border: 1px solid #d4dadd;
+}
+/****添加计算宽度的--运算符直接需要space****/
+/****** common color(常用颜色,可用于普遍场景) *****/
+/**** custom color(自定义颜色,用于特定场景) ****/
+/*************BI.SearchEditor******************/
 /****添加计算宽度的--运算符直接需要space****/
 /****** common color(常用颜色,可用于普遍场景) *****/
 /**** custom color(自定义颜色,用于特定场景) ****/
@@ -669,38 +781,6 @@ li.CodeMirror-hint-active {
 /****添加计算宽度的--运算符直接需要space****/
 /****** common color(常用颜色,可用于普遍场景) *****/
 /**** custom color(自定义颜色,用于特定场景) ****/
-.bi-login-timeout-center .input-wrapper {
-  border-bottom: 1px solid #eaeaea;
-}
-.bi-login-timeout-center .input-wrapper .login-input {
-  font-size: 16px;
-}
-.bi-login-timeout-center .input-wrapper .error-mask {
-  background: #1a1a1a;
-  opacity: 0.25;
-  filter: alpha(opacity=25);
-  color: #ffffff;
-  font-size: 16px;
-}
-.bi-login-timeout-center .login-button {
-  background: #009de3;
-  -webkit-border-radius: 25px;
-  -moz-border-radius: 25px;
-  border-radius: 25px;
-  font-size: 22px;
-  color: #ffffff;
-}
-.bi-login-timeout-center .login-button:hover {
-  opacity: 0.8;
-  filter: alpha(opacity=80);
-}
-.bi-login-timeout-south .keep-state {
-  font-size: 14px;
-  color: #808080;
-}
-/****添加计算宽度的--运算符直接需要space****/
-/****** common color(常用颜色,可用于普遍场景) *****/
-/**** custom color(自定义颜色,用于特定场景) ****/
 .bi-all-count-pager .all-pager-prev {
   font-size: 16px;
 }
@@ -728,26 +808,6 @@ li.CodeMirror-hint-active {
 }
 .bi-direction-pager .direction-pager-next {
   font-size: 16px;
-}
-/****添加计算宽度的--运算符直接需要space****/
-/****** common color(常用颜色,可用于普遍场景) *****/
-/**** custom color(自定义颜色,用于特定场景) ****/
-.bi-request-loading .mask-pane {
-  background: #ffffff;
-  opacity: 0.8;
-  filter: alpha(opacity=80);
-}
-.bi-request-loading .loading-comment {
-  font-size: 20px;
-  color: #808080;
-}
-.bi-request-loading .load-fail-comment {
-  font-size: 20px;
-  color: #808080;
-}
-.bi-request-loading .load-timeout-warning {
-  font-size: 16px;
-  color: #e85050;
 }
 /****添加计算宽度的--运算符直接需要space****/
 /****** common color(常用颜色,可用于普遍场景) *****/
@@ -1306,548 +1366,46 @@ li.CodeMirror-hint-active {
 /****添加计算宽度的--运算符直接需要space****/
 /****** common color(常用颜色,可用于普遍场景) *****/
 /**** custom color(自定义颜色,用于特定场景) ****/
-/**
- * Farbtastic Color Picker 1.2
- * © 2008 Steven Wittens
- *
- * This program is free software; you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation; either version 2 of the License, or
- * (at your option) any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with this program; if not, write to the Free Software
- * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
- */
-.farbtastic {
-  position: relative;
+/****添加计算宽度的--运算符直接需要space****/
+/****** common color(常用颜色,可用于普遍场景) *****/
+/**** custom color(自定义颜色,用于特定场景) ****/
+.bi-branch-tree .bi-branch-tree-view {
+  min-width: 300px;
 }
-.farbtastic * {
-  position: absolute;
-  cursor: crosshair;
+.bi-click-branch-tree {
+  border: 1px solid #d4dadd;
 }
-.farbtastic,
-.farbtastic .wheel {
-  width: 195px;
-  height: 195px;
+.bi-click-branch-tree .bi-empty-view {
+  background: #f4f4f4;
 }
-.farbtastic .color,
-.farbtastic .overlay {
-  top: 47px;
-  left: 47px;
-  width: 101px;
-  height: 101px;
+/****添加计算宽度的--运算符直接需要space****/
+/****** common color(常用颜色,可用于普遍场景) *****/
+/**** custom color(自定义颜色,用于特定场景) ****/
+.bi-display-tree .ztree * {
+  color: #808080;
 }
-.farbtastic .wheel {
-  background: url(farbtastic/wheel.png) no-repeat;
-  width: 195px;
-  height: 195px;
+.bi-display-tree .ztree li span.button.switch.center_open {
+  background-image: url("icon/tree-vertical-line-3.png");
 }
-.farbtastic .overlay {
-  background: url(farbtastic/mask.png) no-repeat;
+.bi-display-tree .ztree li span.button.switch.roots_open {
+  background-image: url("icon/tree-vertical-line-2.png");
 }
-.farbtastic .marker {
-  width: 17px;
-  height: 17px;
-  margin: -8px 0 0 -8px;
-  overflow: hidden;
-  background: url(farbtastic/marker.png) no-repeat;
+.bi-display-tree .ztree li span.button.switch.bottom_open {
+  background-image: url("icon/tree-vertical-line-4.png");
 }
-/* required styles */
-.leaflet-pane,
-.leaflet-tile,
-.leaflet-marker-icon,
-.leaflet-marker-shadow,
-.leaflet-tile-container,
-.leaflet-map-pane svg,
-.leaflet-map-pane canvas,
-.leaflet-zoom-box,
-.leaflet-image-layer,
-.leaflet-layer {
-  position: absolute;
-  left: 0;
-  top: 0;
+.bi-display-tree .ztree li a,
+.bi-display-tree .ztree li span {
+  cursor: default !important;
 }
-.leaflet-container {
-  overflow: hidden;
-  -ms-touch-action: none;
-  touch-action: none;
-}
-.leaflet-tile,
-.leaflet-marker-icon,
-.leaflet-marker-shadow {
-  -webkit-user-select: none;
-  -moz-user-select: none;
-  user-select: none;
-  -webkit-user-drag: none;
-}
-/* Safari renders non-retina tile on retina better with this, but Chrome is worse */
-.leaflet-safari .leaflet-tile {
-  image-rendering: -webkit-optimize-contrast;
-}
-/* hack that prevents hw layers "stretching" when loading new tiles */
-.leaflet-safari .leaflet-tile-container {
-  width: 1600px;
-  height: 1600px;
-  -webkit-transform-origin: 0 0;
-}
-.leaflet-marker-icon,
-.leaflet-marker-shadow {
-  display: block;
-}
-/* .leaflet-container svg: reset svg max-width decleration shipped in Joomla! (joomla.org) 3.x */
-/* .leaflet-container img: map is broken in FF if you have max-width: 100% on tiles */
-.leaflet-container .leaflet-overlay-pane svg,
-.leaflet-container .leaflet-marker-pane img,
-.leaflet-container .leaflet-tile-pane img,
-.leaflet-container img.leaflet-image-layer {
-  max-width: none !important;
-}
-.leaflet-tile {
-  filter: inherit;
-  visibility: hidden;
-}
-.leaflet-tile-loaded {
-  visibility: inherit;
-}
-.leaflet-zoom-box {
-  width: 0;
-  height: 0;
-  -moz-box-sizing: border-box;
-  box-sizing: border-box;
-  z-index: 800;
-}
-/* workaround for https://bugzilla.mozilla.org/show_bug.cgi?id=888319 */
-.leaflet-overlay-pane svg {
-  -moz-user-select: none;
-}
-.leaflet-pane {
-  z-index: 400;
-}
-.leaflet-tile-pane {
-  z-index: 200;
-}
-.leaflet-overlay-pane {
-  z-index: 400;
-}
-.leaflet-shadow-pane {
-  z-index: 500;
-}
-.leaflet-marker-pane {
-  z-index: 600;
-}
-.leaflet-popup-pane {
-  z-index: 700;
-}
-.leaflet-map-pane canvas {
-  z-index: 100;
-}
-.leaflet-map-pane svg {
-  z-index: 200;
-}
-.leaflet-vml-shape {
-  width: 1px;
-  height: 1px;
-}
-.lvml {
-  behavior: url(#default#VML);
-  display: inline-block;
-  position: absolute;
-}
-/* control positioning */
-.leaflet-control {
-  position: relative;
-  z-index: 800;
-  pointer-events: auto;
-}
-.leaflet-top,
-.leaflet-bottom {
-  position: absolute;
-  z-index: 1000;
-  pointer-events: none;
-}
-.leaflet-top {
-  top: 0;
-}
-.leaflet-right {
-  right: 0;
-}
-.leaflet-bottom {
-  bottom: 0;
-}
-.leaflet-left {
-  left: 0;
-}
-.leaflet-control {
-  float: left;
-  clear: both;
-}
-.leaflet-right .leaflet-control {
-  float: right;
-}
-.leaflet-top .leaflet-control {
-  margin-top: 10px;
-}
-.leaflet-bottom .leaflet-control {
-  margin-bottom: 10px;
-}
-.leaflet-left .leaflet-control {
-  margin-left: 10px;
-}
-.leaflet-right .leaflet-control {
-  margin-right: 10px;
-}
-/* zoom and fade animations */
-.leaflet-fade-anim .leaflet-tile {
-  will-change: opacity;
-}
-.leaflet-fade-anim .leaflet-popup {
-  opacity: 0;
-  -webkit-transition: opacity 0.2s linear;
-  -moz-transition: opacity 0.2s linear;
-  -o-transition: opacity 0.2s linear;
-  transition: opacity 0.2s linear;
-}
-.leaflet-fade-anim .leaflet-map-pane .leaflet-popup {
-  opacity: 1;
-}
-.leaflet-zoom-animated {
-  -webkit-transform-origin: 0 0;
-  -ms-transform-origin: 0 0;
-  transform-origin: 0 0;
-}
-.leaflet-zoom-anim .leaflet-zoom-animated {
-  will-change: transform;
-}
-.leaflet-zoom-anim .leaflet-zoom-animated {
-  -webkit-transition: -webkit-transform 0.25s cubic-bezier(0, 0, 0.25, 1);
-  -moz-transition: -moz-transform 0.25s cubic-bezier(0, 0, 0.25, 1);
-  -o-transition: -o-transform 0.25s cubic-bezier(0, 0, 0.25, 1);
-  transition: transform 0.25s cubic-bezier(0, 0, 0.25, 1);
-}
-.leaflet-zoom-anim .leaflet-tile,
-.leaflet-pan-anim .leaflet-tile {
-  -webkit-transition: none;
-  -moz-transition: none;
-  -o-transition: none;
-  transition: none;
-}
-.leaflet-zoom-anim .leaflet-zoom-hide {
-  visibility: hidden;
-}
-/* cursors */
-.leaflet-interactive {
-  cursor: pointer;
-}
-.leaflet-grab {
-  cursor: -webkit-grab;
-  cursor: -moz-grab;
-}
-.leaflet-crosshair,
-.leaflet-crosshair .leaflet-interactive {
-  cursor: crosshair;
-}
-.leaflet-popup-pane,
-.leaflet-control {
-  cursor: auto;
-}
-.leaflet-dragging .leaflet-grab,
-.leaflet-dragging .leaflet-grab .leaflet-interactive,
-.leaflet-dragging .leaflet-marker-draggable {
-  cursor: move;
-  cursor: -webkit-grabbing;
-  cursor: -moz-grabbing;
-}
-/* marker & overlays interactivity */
-.leaflet-marker-icon,
-.leaflet-marker-shadow,
-.leaflet-image-layer,
-.leaflet-pane > svg path,
-.leaflet-tile-container {
-  pointer-events: none;
-}
-.leaflet-marker-icon.leaflet-interactive,
-.leaflet-image-layer.leaflet-interactive,
-.leaflet-pane > svg path.leaflet-interactive {
-  pointer-events: auto;
-}
-/* visual tweaks */
-.leaflet-container {
-  /*background: #ddd;*/
-  outline: 0;
-}
-.leaflet-container a {
-  color: #0078A8;
-}
-.leaflet-container a.leaflet-active {
-  outline: 2px solid orange;
-}
-.leaflet-zoom-box {
-  border: 2px dotted #38f;
-  background: rgba(255, 255, 255, 0.5);
-}
-/* general typography */
-.leaflet-container {
-  font: 12px/1.5 "Helvetica Neue", Arial, Helvetica, sans-serif;
-}
-/* general toolbar styles */
-.leaflet-bar {
-  box-shadow: 0 1px 5px rgba(0, 0, 0, 0.65);
-  border-radius: 4px;
-}
-.leaflet-bar a,
-.leaflet-bar a:hover {
-  background-color: #fff;
-  border-bottom: 1px solid #ccc;
-  width: 26px;
-  height: 26px;
-  line-height: 26px;
-  display: block;
-  text-align: center;
-  text-decoration: none;
-  color: black;
-}
-.leaflet-bar a,
-.leaflet-control-layers-toggle {
-  background-position: 50% 50%;
-  background-repeat: no-repeat;
-  display: block;
-}
-.leaflet-bar a:hover {
-  background-color: #f4f4f4;
-}
-.leaflet-bar a:first-child {
-  border-top-left-radius: 4px;
-  border-top-right-radius: 4px;
-}
-.leaflet-bar a:last-child {
-  border-bottom-left-radius: 4px;
-  border-bottom-right-radius: 4px;
-  border-bottom: none;
-}
-.leaflet-bar a.leaflet-disabled {
-  cursor: default;
-  background-color: #f4f4f4;
-  color: #bbb;
-}
-.leaflet-touch .leaflet-bar a {
-  width: 30px;
-  height: 30px;
-  line-height: 30px;
-}
-/* zoom control */
-.leaflet-control-zoom-in,
-.leaflet-control-zoom-out {
-  font: bold 18px 'Lucida Console', Monaco, monospace;
-  text-indent: 1px;
-}
-.leaflet-control-zoom-out {
-  font-size: 20px;
-}
-.leaflet-touch .leaflet-control-zoom-in {
-  font-size: 22px;
-}
-.leaflet-touch .leaflet-control-zoom-out {
-  font-size: 24px;
-}
-/* layers control */
-.leaflet-control-layers {
-  box-shadow: 0 1px 5px rgba(0, 0, 0, 0.4);
-  background: #fff;
-  border-radius: 5px;
-}
-.leaflet-control-layers-toggle {
-  background-image: url(images/layers.png);
-  width: 36px;
-  height: 36px;
-}
-.leaflet-retina .leaflet-control-layers-toggle {
-  background-image: url(images/layers-2x.png);
-  background-size: 26px 26px;
-}
-.leaflet-touch .leaflet-control-layers-toggle {
-  width: 44px;
-  height: 44px;
-}
-.leaflet-control-layers .leaflet-control-layers-list,
-.leaflet-control-layers-expanded .leaflet-control-layers-toggle {
-  display: none;
-}
-.leaflet-control-layers-expanded .leaflet-control-layers-list {
-  display: block;
-  position: relative;
-}
-.leaflet-control-layers-expanded {
-  padding: 6px 10px 6px 6px;
-  color: #333;
-  background: #fff;
-}
-.leaflet-control-layers-scrollbar {
-  overflow-y: scroll;
-  padding-right: 5px;
-}
-.leaflet-control-layers-selector {
-  margin-top: 2px;
-  position: relative;
-  top: 1px;
-}
-.leaflet-control-layers label {
-  display: block;
-}
-.leaflet-control-layers-separator {
-  height: 0;
-  border-top: 1px solid #ddd;
-  margin: 5px -10px 5px -6px;
-}
-/* attribution and scale controls */
-.leaflet-container .leaflet-control-attribution {
-  background: #fff;
-  background: rgba(255, 255, 255, 0.7);
-  margin: 0;
-}
-.leaflet-control-attribution,
-.leaflet-control-scale-line {
-  padding: 0 5px;
-  color: #333;
-}
-.leaflet-control-attribution a {
+.bi-display-tree .ztree li a:hover {
   text-decoration: none;
 }
-.leaflet-control-attribution a:hover {
-  text-decoration: underline;
-}
-.leaflet-container .leaflet-control-attribution,
-.leaflet-container .leaflet-control-scale {
-  font-size: 11px;
-}
-.leaflet-left .leaflet-control-scale {
-  margin-left: 5px;
-}
-.leaflet-bottom .leaflet-control-scale {
-  margin-bottom: 5px;
-}
-.leaflet-control-scale-line {
-  border: 2px solid #777;
-  border-top: none;
-  line-height: 1.1;
-  padding: 2px 5px 1px;
-  font-size: 11px;
-  white-space: nowrap;
-  overflow: hidden;
-  -moz-box-sizing: border-box;
-  box-sizing: border-box;
-  background: #fff;
-  background: rgba(255, 255, 255, 0.5);
-}
-.leaflet-control-scale-line:not(:first-child) {
-  border-top: 2px solid #777;
-  border-bottom: none;
-  margin-top: -2px;
-}
-.leaflet-control-scale-line:not(:first-child):not(:last-child) {
-  border-bottom: 2px solid #777;
-}
-.leaflet-touch .leaflet-control-attribution,
-.leaflet-touch .leaflet-control-layers,
-.leaflet-touch .leaflet-bar {
-  box-shadow: none;
-}
-.leaflet-touch .leaflet-control-layers,
-.leaflet-touch .leaflet-bar {
-  border: 2px solid rgba(0, 0, 0, 0.2);
-  background-clip: padding-box;
-}
-/* popup */
-.leaflet-popup {
-  position: absolute;
-  text-align: center;
-}
-.leaflet-popup-content-wrapper {
-  padding: 1px;
-  text-align: left;
-  border-radius: 12px;
-}
-.leaflet-popup-content {
-  margin: 13px 19px;
-  line-height: 1.4;
-}
-.leaflet-popup-content p {
-  margin: 18px 0;
-}
-.leaflet-popup-tip-container {
-  margin: 0 auto;
-  width: 40px;
-  height: 20px;
-  position: relative;
-  overflow: hidden;
-}
-.leaflet-popup-tip {
-  width: 17px;
-  height: 17px;
-  padding: 1px;
-  margin: -10px auto 0;
-  -webkit-transform: rotate(45deg);
-  -moz-transform: rotate(45deg);
-  -ms-transform: rotate(45deg);
-  -o-transform: rotate(45deg);
-  transform: rotate(45deg);
-}
-.leaflet-popup-content-wrapper,
-.leaflet-popup-tip {
-  background: white;
-  color: #333;
-  box-shadow: 0 3px 14px rgba(0, 0, 0, 0.4);
-}
-.leaflet-container a.leaflet-popup-close-button {
-  position: absolute;
-  top: 0;
-  right: 0;
-  padding: 4px 4px 0 0;
+.bi-display-tree .ztree li a.curSelectedNode {
+  padding-top: 1px;
   border: none;
-  text-align: center;
-  width: 18px;
-  height: 14px;
-  font: 16px/14px Tahoma, Verdana, sans-serif;
-  color: #c3c3c3;
-  text-decoration: none;
-  font-weight: bold;
-  background: transparent;
-}
-.leaflet-container a.leaflet-popup-close-button:hover {
-  color: #999;
-}
-.leaflet-popup-scrolled {
-  overflow: auto;
-  border-bottom: 1px solid #ddd;
-  border-top: 1px solid #ddd;
-}
-.leaflet-oldie .leaflet-popup-content-wrapper {
-  zoom: 1;
-}
-.leaflet-oldie .leaflet-popup-tip {
-  width: 24px;
-  margin: 0 auto;
-  -ms-filter: "progid:DXImageTransform.Microsoft.Matrix(M11=0.70710678, M12=0.70710678, M21=-0.70710678, M22=0.70710678)";
-  filter: progid:DXImageTransform.Microsoft.Matrix(M11=0.70710678, M12=0.70710678, M21=-0.70710678, M22=0.70710678);
-}
-.leaflet-oldie .leaflet-popup-tip-container {
-  margin-top: -1px;
-}
-.leaflet-oldie .leaflet-control-zoom,
-.leaflet-oldie .leaflet-control-layers,
-.leaflet-oldie .leaflet-popup-content-wrapper,
-.leaflet-oldie .leaflet-popup-tip {
-  border: 1px solid #999;
-}
-/* div icon */
-.leaflet-div-icon {
-  background: #fff;
-  border: 1px solid #666;
+  background-color: inherit;
+  opacity: 1;
+  filter: alpha(opacity=100);
 }
 /*-------------------------------------
 zTree Style
@@ -1935,8 +1493,8 @@ website:	http://code.google.com/p/jquerytree/
   background-color: transparent;
   background-repeat: no-repeat;
   background-attachment: scroll;
-  background-image: url("ztree/img/zTreeStandard.png");
-  *background-image: url("ztree/img/zTreeStandard.gif");
+  background-image: url("third/ztree/img/zTreeStandard.png");
+  *background-image: url("third/ztree/img/zTreeStandard.gif");
 }
 .ztree li span.button.chk {
   width: 16px;
@@ -2086,7 +1644,7 @@ website:	http://code.google.com/p/jquerytree/
 .ztree li span.button.ico_loading {
   width: 0px;
   margin-right: 2px;
-  background: url("ztree/img/loading.gif") no-repeat scroll 0 0 transparent;
+  background: url("third/ztree/img/loading.gif") no-repeat scroll 0 0 transparent;
   vertical-align: top;
   *vertical-align: middle;
 }
@@ -2107,8 +1665,8 @@ span.tmpzTreeMove_arrow {
   background-repeat: no-repeat;
   background-attachment: scroll;
   background-position: -110px -80px;
-  background-image: url("ztree/img/zTreeStandard.png");
-  *background-image: url("ztree/img/zTreeStandard.gif");
+  background-image: url("third/ztree/img/zTreeStandard.png");
+  *background-image: url("third/ztree/img/zTreeStandard.gif");
 }
 ul.ztree.zTreeDragUL {
   margin: 0;
@@ -2137,81 +1695,6 @@ ul.ztree.zTreeDragUL {
 	padding:0;
 	background:none;
 }*/
-/****添加计算宽度的--运算符直接需要space****/
-/****** common color(常用颜色,可用于普遍场景) *****/
-/**** custom color(自定义颜色,用于特定场景) ****/
-.bi-timeout-toast {
-  font-size: 14px;
-  -webkit-border-radius: 2px;
-  -moz-border-radius: 2px;
-  border-radius: 2px;
-  background: #fddddd;
-  color: #e85050;
-}
-.bi-timeout-toast .cancel-button {
-  background: #ffffff;
-  border: 1px solid #d4dadd;
-  color: #1a1a1a;
-  -webkit-border-radius: 2px;
-  -moz-border-radius: 2px;
-  border-radius: 2px;
-}
-.bi-timeout-toast .cancel-button:hover {
-  opacity: 0.8;
-  filter: alpha(opacity=80);
-}
-.bi-timeout-toast .retry-button {
-  background: #009de3;
-  -webkit-border-radius: 2px;
-  -moz-border-radius: 2px;
-  border-radius: 2px;
-  color: #ffffff;
-}
-.bi-timeout-toast .retry-button:hover {
-  opacity: 0.8;
-  filter: alpha(opacity=80);
-}
-/****添加计算宽度的--运算符直接需要space****/
-/****** common color(常用颜色,可用于普遍场景) *****/
-/**** custom color(自定义颜色,用于特定场景) ****/
-.bi-branch-tree .bi-branch-tree-view {
-  min-width: 300px;
-}
-.bi-click-branch-tree {
-  border: 1px solid #d4dadd;
-}
-.bi-click-branch-tree .bi-empty-view {
-  background: #f4f4f4;
-}
-/****添加计算宽度的--运算符直接需要space****/
-/****** common color(常用颜色,可用于普遍场景) *****/
-/**** custom color(自定义颜色,用于特定场景) ****/
-.bi-display-tree .ztree * {
-  color: #808080;
-}
-.bi-display-tree .ztree li span.button.switch.center_open {
-  background-image: url("icon/tree-vertical-line-3.png");
-}
-.bi-display-tree .ztree li span.button.switch.roots_open {
-  background-image: url("icon/tree-vertical-line-2.png");
-}
-.bi-display-tree .ztree li span.button.switch.bottom_open {
-  background-image: url("icon/tree-vertical-line-4.png");
-}
-.bi-display-tree .ztree li a,
-.bi-display-tree .ztree li span {
-  cursor: default !important;
-}
-.bi-display-tree .ztree li a:hover {
-  text-decoration: none;
-}
-.bi-display-tree .ztree li a.curSelectedNode {
-  padding-top: 1px;
-  border: none;
-  background-color: inherit;
-  opacity: 1;
-  filter: alpha(opacity=100);
-}
 /****添加计算宽度的--运算符直接需要space****/
 /****** common color(常用颜色,可用于普遍场景) *****/
 /**** custom color(自定义颜色,用于特定场景) ****/
@@ -2286,330 +1769,4 @@ ul.ztree.zTreeDragUL {
 }
 .bi-list-view .list-view-toolbar > .first-element {
   border-left: none;
-}
-.bi-flex-center-layout {
-  display: box;
-  /* OLD - Android 4.4- */
-  display: -webkit-box;
-  /* OLD - iOS 6-, Safari 3.1-6 */
-  display: -moz-box;
-  /* OLD - Firefox 19- (buggy but mostly works) */
-  display: -ms-flexbox;
-  /* TWEENER - IE 10 */
-  display: -webkit-flex;
-  /* NEW - Chrome */
-  display: flex;
-  /* NEW, Spec - Opera 12.1, Firefox 20+ */
-  /* 09版 */
-  -webkit-box-orient: horizontal;
-  /* 12版 */
-  -webkit-flex-direction: row;
-  -moz-flex-direction: row;
-  -ms-flex-direction: row;
-  -o-flex-direction: row;
-  flex-direction: row;
-  /* 09版 */
-  -webkit-box-pack: center;
-  /* 12版 */
-  -webkit-justify-content: center;
-  -moz-justify-content: center;
-  -ms-justify-content: center;
-  -o-justify-content: center;
-  justify-content: center;
-  /* 09版 */
-  -webkit-box-align: center;
-  /* 12版 */
-  -webkit-align-items: center;
-  -moz-align-items: center;
-  -ms-align-items: center;
-  -o-align-items: center;
-  align-items: center;
-}
-.bi-flex-horizontal-layout {
-  display: box;
-  /* OLD - Android 4.4- */
-  display: -webkit-box;
-  /* OLD - iOS 6-, Safari 3.1-6 */
-  display: -moz-box;
-  /* OLD - Firefox 19- (buggy but mostly works) */
-  display: -ms-flexbox;
-  /* TWEENER - IE 10 */
-  display: -webkit-flex;
-  /* NEW - Chrome */
-  display: flex;
-  /* NEW, Spec - Opera 12.1, Firefox 20+ */
-  /* 09版 */
-  -webkit-box-orient: horizontal;
-  /* 12版 */
-  -webkit-flex-direction: row;
-  -moz-flex-direction: row;
-  -ms-flex-direction: row;
-  -o-flex-direction: row;
-  flex-direction: row;
-  /* 09版 */
-  -webkit-box-pack: flex-start;
-  /* 12版 */
-  -webkit-justify-content: flex-start;
-  -moz-justify-content: flex-start;
-  -ms-justify-content: flex-start;
-  -o-justify-content: flex-start;
-  justify-content: flex-start;
-  /* 09版 */
-  -webkit-box-align: flex-start;
-  /* 12版 */
-  -webkit-align-items: flex-start;
-  -moz-align-items: flex-start;
-  -ms-align-items: flex-start;
-  -o-align-items: flex-start;
-  align-items: flex-start;
-  /* 09版 */
-  /*-webkit-box-lines: multiple;*/
-  /* 12版 */
-  -webkit-flex-wrap: nowrap;
-  -moz-flex-wrap: nowrap;
-  -ms-flex-wrap: nowrap;
-  -o-flex-wrap: nowrap;
-  flex-wrap: nowrap;
-}
-.bi-flex-horizontal-layout.middle {
-  /* 09版 */
-  -webkit-box-align: center;
-  /* 12版 */
-  -webkit-align-items: center;
-  -moz-align-items: center;
-  -ms-align-items: center;
-  -o-align-items: center;
-  align-items: center;
-}
-.bi-flex-horizontal-layout.bottom {
-  /* 09版 */
-  -webkit-box-align: flex-end;
-  /* 12版 */
-  -webkit-align-items: flex-end;
-  -moz-align-items: flex-end;
-  -ms-align-items: flex-end;
-  -o-align-items: flex-end;
-  align-items: flex-end;
-}
-.bi-flex-vertical-center {
-  display: box;
-  /* OLD - Android 4.4- */
-  display: -webkit-box;
-  /* OLD - iOS 6-, Safari 3.1-6 */
-  display: -moz-box;
-  /* OLD - Firefox 19- (buggy but mostly works) */
-  display: -ms-flexbox;
-  /* TWEENER - IE 10 */
-  display: -webkit-flex;
-  /* NEW - Chrome */
-  display: flex;
-  /* NEW, Spec - Opera 12.1, Firefox 20+ */
-  /* 09版 */
-  -webkit-box-orient: horizontal;
-  /* 12版 */
-  -webkit-flex-direction: row;
-  -moz-flex-direction: row;
-  -ms-flex-direction: row;
-  -o-flex-direction: row;
-  flex-direction: row;
-  /* 09版 */
-  -webkit-box-pack: flex-start;
-  /* 12版 */
-  -webkit-justify-content: flex-start;
-  -moz-justify-content: flex-start;
-  -ms-justify-content: flex-start;
-  -o-justify-content: flex-start;
-  justify-content: flex-start;
-  /* 09版 */
-  -webkit-box-align: center;
-  /* 12版 */
-  -webkit-align-items: center;
-  -moz-align-items: center;
-  -ms-align-items: center;
-  -o-align-items: center;
-  align-items: center;
-  /* 09版 */
-  /*-webkit-box-lines: multiple;*/
-  /* 12版 */
-  -webkit-flex-wrap: nowrap;
-  -moz-flex-wrap: nowrap;
-  -ms-flex-wrap: nowrap;
-  -o-flex-wrap: nowrap;
-  flex-wrap: nowrap;
-}
-.bi-flex-wrapper-center-layout .flex-wrapper-center-layout-wrapper {
-  display: box;
-  /* OLD - Android 4.4- */
-  display: -webkit-box;
-  /* OLD - iOS 6-, Safari 3.1-6 */
-  display: -moz-box;
-  /* OLD - Firefox 19- (buggy but mostly works) */
-  display: -ms-flexbox;
-  /* TWEENER - IE 10 */
-  display: -webkit-flex;
-  /* NEW - Chrome */
-  display: flex;
-  /* NEW, Spec - Opera 12.1, Firefox 20+ */
-  /* 09版 */
-  -webkit-box-orient: horizontal;
-  /* 12版 */
-  -webkit-flex-direction: row;
-  -moz-flex-direction: row;
-  -ms-flex-direction: row;
-  -o-flex-direction: row;
-  flex-direction: row;
-  /* 09版 */
-  -webkit-box-pack: center;
-  /* 12版 */
-  -webkit-justify-content: center;
-  -moz-justify-content: center;
-  -ms-justify-content: center;
-  -o-justify-content: center;
-  justify-content: center;
-  /* 09版 */
-  -webkit-box-align: center;
-  /* 12版 */
-  -webkit-align-items: center;
-  -moz-align-items: center;
-  -ms-align-items: center;
-  -o-align-items: center;
-  align-items: center;
-  min-width: 100%;
-  min-height: 100%;
-  float: left;
-}
-.bi-flex-wrapper-horizontal-layout .flex-wrapper-horizontal-layout-wrapper {
-  display: box;
-  /* OLD - Android 4.4- */
-  display: -webkit-box;
-  /* OLD - iOS 6-, Safari 3.1-6 */
-  display: -moz-box;
-  /* OLD - Firefox 19- (buggy but mostly works) */
-  display: -ms-flexbox;
-  /* TWEENER - IE 10 */
-  display: -webkit-flex;
-  /* NEW - Chrome */
-  display: flex;
-  /* NEW, Spec - Opera 12.1, Firefox 20+ */
-  /* 09版 */
-  -webkit-box-orient: horizontal;
-  /* 12版 */
-  -webkit-flex-direction: row;
-  -moz-flex-direction: row;
-  -ms-flex-direction: row;
-  -o-flex-direction: row;
-  flex-direction: row;
-  /* 09版 */
-  -webkit-box-pack: flex-start;
-  /* 12版 */
-  -webkit-justify-content: flex-start;
-  -moz-justify-content: flex-start;
-  -ms-justify-content: flex-start;
-  -o-justify-content: flex-start;
-  justify-content: flex-start;
-  /* 09版 */
-  -webkit-box-align: flex-start;
-  /* 12版 */
-  -webkit-align-items: flex-start;
-  -moz-align-items: flex-start;
-  -ms-align-items: flex-start;
-  -o-align-items: flex-start;
-  align-items: flex-start;
-  /* 09版 */
-  /*-webkit-box-lines: multiple;*/
-  /* 12版 */
-  -webkit-flex-wrap: nowrap;
-  -moz-flex-wrap: nowrap;
-  -ms-flex-wrap: nowrap;
-  -o-flex-wrap: nowrap;
-  flex-wrap: nowrap;
-  min-height: 100%;
-}
-.bi-flex-wrapper-horizontal-layout .flex-wrapper-horizontal-layout-wrapper.middle {
-  /* 09版 */
-  -webkit-box-align: center;
-  /* 12版 */
-  -webkit-align-items: center;
-  -moz-align-items: center;
-  -ms-align-items: center;
-  -o-align-items: center;
-  align-items: center;
-}
-.bi-flex-wrapper-horizontal-layout .flex-wrapper-horizontal-layout-wrapper.bottom {
-  /* 09版 */
-  -webkit-box-align: flex-end;
-  /* 12版 */
-  -webkit-align-items: flex-end;
-  -moz-align-items: flex-end;
-  -ms-align-items: flex-end;
-  -o-align-items: flex-end;
-  align-items: flex-end;
-}
-.bi-flex-wrapper-vertical-center .flex-wrapper-vertical-center-wrapper {
-  display: box;
-  /* OLD - Android 4.4- */
-  display: -webkit-box;
-  /* OLD - iOS 6-, Safari 3.1-6 */
-  display: -moz-box;
-  /* OLD - Firefox 19- (buggy but mostly works) */
-  display: -ms-flexbox;
-  /* TWEENER - IE 10 */
-  display: -webkit-flex;
-  /* NEW - Chrome */
-  display: flex;
-  /* NEW, Spec - Opera 12.1, Firefox 20+ */
-  /* 09版 */
-  -webkit-box-orient: horizontal;
-  /* 12版 */
-  -webkit-flex-direction: row;
-  -moz-flex-direction: row;
-  -ms-flex-direction: row;
-  -o-flex-direction: row;
-  flex-direction: row;
-  /* 09版 */
-  -webkit-box-pack: flex-start;
-  /* 12版 */
-  -webkit-justify-content: flex-start;
-  -moz-justify-content: flex-start;
-  -ms-justify-content: flex-start;
-  -o-justify-content: flex-start;
-  justify-content: flex-start;
-  /* 09版 */
-  -webkit-box-align: center;
-  /* 12版 */
-  -webkit-align-items: center;
-  -moz-align-items: center;
-  -ms-align-items: center;
-  -o-align-items: center;
-  align-items: center;
-  /* 09版 */
-  /*-webkit-box-lines: multiple;*/
-  /* 12版 */
-  -webkit-flex-wrap: nowrap;
-  -moz-flex-wrap: nowrap;
-  -ms-flex-wrap: nowrap;
-  -o-flex-wrap: nowrap;
-  flex-wrap: nowrap;
-  min-height: 100%;
-  float: left;
-}
-/****添加计算宽度的--运算符直接需要space****/
-/****** common color(常用颜色,可用于普遍场景) *****/
-/**** custom color(自定义颜色,用于特定场景) ****/
-.bi-inline-center-adapt-layout:after {
-  display: inline-block;
-  width: 0;
-  min-height: 100%;
-  vertical-align: middle;
-  content: ' ';
-}
-/****添加计算宽度的--运算符直接需要space****/
-/****** common color(常用颜色,可用于普遍场景) *****/
-/**** custom color(自定义颜色,用于特定场景) ****/
-.bi-inline-vertical-adapt-layout:after {
-  display: inline-block;
-  width: 0;
-  min-height: 100%;
-  vertical-align: middle;
-  content: ' ';
 }
