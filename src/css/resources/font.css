@@ -1,0 +1,3476 @@
+/****** common color(常用颜色,可用于普遍场景) *****/
+/**** custom color(自定义颜色,用于特定场景) ****/
+.close-font .b-font:before {
+  content: "\e600";
+  color: #808080;
+}
+.close-font.native .b-font:before,
+.close-font.disabled .b-font:before {
+  content: "\e600";
+  color: #808080;
+}
+.close-red-font .b-font:before {
+  content: "\e600";
+  color: #e85050;
+}
+.close-red-font.native .b-font:before,
+.close-red-font.disabled .b-font:before {
+  content: "\e600";
+  color: #e85050;
+}
+.close-h-font .b-font:before {
+  content: "\e600";
+  color: #808080;
+}
+.close-h-font:hover .b-font:before,
+.close-h-font:focus .b-font:before,
+.close-h-font.hover .b-font:before {
+  content: "\e600";
+  color: #808080;
+}
+.close-h-font.native .b-font:before,
+.close-h-font.disabled .b-font:before {
+  content: "\e600";
+  color: #808080;
+}
+.close-e-font .b-font:before {
+  content: "\e600";
+  color: #808080;
+}
+.close-e-font:hover .b-font:before,
+.close-e-font:focus .b-font:before,
+.close-e-font.hover .b-font:before {
+  content: "\e600";
+  color: #808080;
+}
+.close-e-font.active .b-font:before {
+  content: "\e600";
+  color: #009de3;
+}
+.close-e-font:active .b-font:before {
+  content: "\e600";
+  color: #009de3;
+}
+.close-e-font.native .b-font:before,
+.close-e-font.disabled .b-font:before {
+  content: "\e600";
+  color: #808080;
+}
+.close-ha-font .b-font:before {
+  content: "\e600";
+  color: #808080;
+}
+.close-ha-font:hover .b-font:before,
+.close-ha-font:focus .b-font:before,
+.close-ha-font.hover .b-font:before {
+  content: "\e600";
+  color: #808080;
+}
+.close-ha-font:active .b-font:before,
+.close-ha-font.active .b-font:before {
+  content: "\e600";
+  color: #009de3;
+}
+.close-ha-font.native .b-font:before,
+.close-ha-font.disabled .b-font:before {
+  content: "\e600";
+  color: #808080;
+}
+.search-close-h-font .b-font:before {
+  content: "\e600";
+  color: #808080;
+}
+.search-close-h-font:hover .b-font:before,
+.search-close-h-font:focus .b-font:before,
+.search-close-h-font.hover .b-font:before {
+  content: "\e600";
+  color: #e85050;
+}
+.search-close-h-font.native .b-font:before,
+.search-close-h-font.disabled .b-font:before {
+  content: "\e600";
+  color: #808080;
+}
+.trigger-font .b-font:before {
+  content: "\e603";
+  color: #808080;
+}
+.trigger-font.native .b-font:before,
+.trigger-font.disabled .b-font:before {
+  content: "\e603";
+  color: #808080;
+}
+.trigger-h-font .b-font:before {
+  content: "\e603";
+  color: #808080;
+}
+.trigger-h-font:hover .b-font:before,
+.trigger-h-font:focus .b-font:before,
+.trigger-h-font.hover .b-font:before {
+  content: "\e603";
+  color: #808080;
+}
+.trigger-h-font.native .b-font:before,
+.trigger-h-font.disabled .b-font:before {
+  content: "\e603";
+  color: #808080;
+}
+.trigger-ha-font .b-font:before {
+  content: "\e603";
+  color: #808080;
+}
+.trigger-ha-font:hover .b-font:before,
+.trigger-ha-font:focus .b-font:before,
+.trigger-ha-font.hover .b-font:before {
+  content: "\e603";
+  color: #808080;
+}
+.trigger-ha-font:active .b-font:before,
+.trigger-ha-font.active .b-font:before {
+  content: "\e603";
+  color: #009de3;
+}
+.trigger-ha-font.native .b-font:before,
+.trigger-ha-font.disabled .b-font:before {
+  content: "\e603";
+  color: #808080;
+}
+.pre-page-font .b-font:before {
+  content: "\e601";
+  color: #808080;
+}
+.pre-page-font.native .b-font:before,
+.pre-page-font.disabled .b-font:before {
+  content: "\e601";
+  color: #808080;
+}
+.pre-page-h-font .b-font:before {
+  content: "\e601";
+  color: #808080;
+}
+.pre-page-h-font:hover .b-font:before,
+.pre-page-h-font:focus .b-font:before,
+.pre-page-h-font.hover .b-font:before {
+  content: "\e601";
+  color: #808080;
+}
+.pre-page-h-font.native .b-font:before,
+.pre-page-h-font.disabled .b-font:before {
+  content: "\e601";
+  color: #808080;
+}
+.pre-page-ha-font .b-font:before {
+  content: "\e601";
+  color: #808080;
+}
+.pre-page-ha-font:hover .b-font:before,
+.pre-page-ha-font:focus .b-font:before,
+.pre-page-ha-font.hover .b-font:before {
+  content: "\e601";
+  color: #808080;
+}
+.pre-page-ha-font:active .b-font:before,
+.pre-page-ha-font.active .b-font:before {
+  content: "\e601";
+  color: #009de3;
+}
+.pre-page-ha-font.native .b-font:before,
+.pre-page-ha-font.disabled .b-font:before {
+  content: "\e601";
+  color: #808080;
+}
+.next-page-font .b-font:before {
+  content: "\e602";
+  color: #808080;
+}
+.next-page-font.native .b-font:before,
+.next-page-font.disabled .b-font:before {
+  content: "\e602";
+  color: #808080;
+}
+.next-page-h-font .b-font:before {
+  content: "\e602";
+  color: #808080;
+}
+.next-page-h-font:hover .b-font:before,
+.next-page-h-font:focus .b-font:before,
+.next-page-h-font.hover .b-font:before {
+  content: "\e602";
+  color: #808080;
+}
+.next-page-h-font.native .b-font:before,
+.next-page-h-font.disabled .b-font:before {
+  content: "\e602";
+  color: #808080;
+}
+.next-page-ha-font .b-font:before {
+  content: "\e602";
+  color: #808080;
+}
+.next-page-ha-font:hover .b-font:before,
+.next-page-ha-font:focus .b-font:before,
+.next-page-ha-font.hover .b-font:before {
+  content: "\e602";
+  color: #808080;
+}
+.next-page-ha-font:active .b-font:before,
+.next-page-ha-font.active .b-font:before {
+  content: "\e602";
+  color: #009de3;
+}
+.next-page-ha-font.native .b-font:before,
+.next-page-ha-font.disabled .b-font:before {
+  content: "\e602";
+  color: #808080;
+}
+.search-font .b-font:before {
+  content: "\e604";
+  color: #808080;
+}
+.search-font.native .b-font:before,
+.search-font.disabled .b-font:before {
+  content: "\e604";
+  color: #808080;
+}
+.search-h-font .b-font:before {
+  content: "\e604";
+  color: #808080;
+}
+.search-h-font:hover .b-font:before,
+.search-h-font:focus .b-font:before,
+.search-h-font.hover .b-font:before {
+  content: "\e604";
+  color: #808080;
+}
+.search-h-font.native .b-font:before,
+.search-h-font.disabled .b-font:before {
+  content: "\e604";
+  color: #808080;
+}
+.search-ha-font .b-font:before {
+  content: "\e604";
+  color: #808080;
+}
+.search-ha-font:hover .b-font:before,
+.search-ha-font:focus .b-font:before,
+.search-ha-font.hover .b-font:before {
+  content: "\e604";
+  color: #808080;
+}
+.search-ha-font:active .b-font:before,
+.search-ha-font.active .b-font:before {
+  content: "\e604";
+  color: #009de3;
+}
+.search-ha-font.native .b-font:before,
+.search-ha-font.disabled .b-font:before {
+  content: "\e604";
+  color: #808080;
+}
+.share-font .b-font:before {
+  content: "\e65a";
+  color: #808080;
+}
+.share-font.native .b-font:before,
+.share-font.disabled .b-font:before {
+  content: "\e65a";
+  color: #808080;
+}
+.share-h-font .b-font:before {
+  content: "\e65a";
+  color: #808080;
+}
+.share-h-font:hover .b-font:before,
+.share-h-font:focus .b-font:before,
+.share-h-font.hover .b-font:before {
+  content: "\e65a";
+  color: #808080;
+}
+.share-h-font.native .b-font:before,
+.share-h-font.disabled .b-font:before {
+  content: "\e65a";
+  color: #808080;
+}
+.share-ha-font .b-font:before {
+  content: "\e65a";
+  color: #808080;
+}
+.share-ha-font:hover .b-font:before,
+.share-ha-font:focus .b-font:before,
+.share-ha-font.hover .b-font:before {
+  content: "\e65a";
+  color: #808080;
+}
+.share-ha-font:active .b-font:before,
+.share-ha-font.active .b-font:before {
+  content: "\e65a";
+  color: #009de3;
+}
+.share-ha-font.native .b-font:before,
+.share-ha-font.disabled .b-font:before {
+  content: "\e65a";
+  color: #808080;
+}
+/**维度/指标 下拉列表图标字体 ~begin~**/
+.delete-font .b-font:before {
+  content: "\e605";
+  color: #1a1a1a;
+}
+.delete-font.native .b-font:before,
+.delete-font.disabled .b-font:before {
+  content: "\e605";
+  color: #1a1a1a;
+}
+.delete-h-font .b-font:before {
+  content: "\e605";
+  color: #1a1a1a;
+}
+.delete-h-font:hover .b-font:before,
+.delete-h-font:focus .b-font:before,
+.delete-h-font.hover .b-font:before {
+  content: "\e605";
+  color: #1a1a1a;
+}
+.delete-h-font.native .b-font:before,
+.delete-h-font.disabled .b-font:before {
+  content: "\e605";
+  color: #1a1a1a;
+}
+.delete-ha-font .b-font:before {
+  content: "\e605";
+  color: #1a1a1a;
+}
+.delete-ha-font:hover .b-font:before,
+.delete-ha-font:focus .b-font:before,
+.delete-ha-font.hover .b-font:before {
+  content: "\e605";
+  color: #1a1a1a;
+}
+.delete-ha-font:active .b-font:before,
+.delete-ha-font.active .b-font:before {
+  content: "\e605";
+  color: #009de3;
+}
+.delete-ha-font.native .b-font:before,
+.delete-ha-font.disabled .b-font:before {
+  content: "\e605";
+  color: #1a1a1a;
+}
+.delete-e-font .b-font:before {
+  content: "\e605";
+  color: #1a1a1a;
+}
+.delete-e-font:hover .b-font:before,
+.delete-e-font:focus .b-font:before,
+.delete-e-font.hover .b-font:before {
+  content: "\e605";
+  color: #1a1a1a;
+}
+.delete-e-font.active .b-font:before {
+  content: "\e605";
+  color: #009de3;
+}
+.delete-e-font:active .b-font:before {
+  content: "\e605";
+  color: #009de3;
+}
+.delete-e-font.native .b-font:before,
+.delete-e-font.disabled .b-font:before {
+  content: "\e605";
+  color: #1a1a1a;
+}
+.dot-font .b-font:before {
+  content: "\e606";
+  color: #1a1a1a;
+}
+.dot-font.native .b-font:before,
+.dot-font.disabled .b-font:before {
+  content: "\e606";
+  color: #1a1a1a;
+}
+.dot-h-font .b-font:before {
+  content: "\e606";
+  color: #1a1a1a;
+}
+.dot-h-font:hover .b-font:before,
+.dot-h-font:focus .b-font:before,
+.dot-h-font.hover .b-font:before {
+  content: "\e606";
+  color: #1a1a1a;
+}
+.dot-h-font.native .b-font:before,
+.dot-h-font.disabled .b-font:before {
+  content: "\e606";
+  color: #1a1a1a;
+}
+.dot-ha-font .b-font:before {
+  content: "\e606";
+  color: #ffffff;
+}
+.dot-ha-font:hover .b-font:before,
+.dot-ha-font:focus .b-font:before,
+.dot-ha-font.hover .b-font:before {
+  content: "\e606";
+  color: #f4f4f4;
+}
+.dot-ha-font:active .b-font:before,
+.dot-ha-font.active .b-font:before {
+  content: "\e606";
+  color: #1a1a1a;
+}
+.dot-ha-font.native .b-font:before,
+.dot-ha-font.disabled .b-font:before {
+  content: "\e606";
+  color: #ffffff;
+}
+.dot-e-font .b-font:before {
+  content: "\e606";
+  color: #ffffff;
+}
+.dot-e-font:hover .b-font:before,
+.dot-e-font:focus .b-font:before,
+.dot-e-font.hover .b-font:before {
+  content: "\e606";
+  color: #f4f4f4;
+}
+.dot-e-font.active .b-font:before {
+  content: "\e606";
+  color: #1a1a1a;
+}
+.dot-e-font:active .b-font:before {
+  content: "\e606";
+  color: #009de3;
+}
+.dot-e-font.native .b-font:before,
+.dot-e-font.disabled .b-font:before {
+  content: "\e606";
+  color: #ffffff;
+}
+.pull-right-font .b-font:before {
+  content: "\e607";
+  color: #1a1a1a;
+}
+.pull-right-font.native .b-font:before,
+.pull-right-font.disabled .b-font:before {
+  content: "\e607";
+  color: #1a1a1a;
+}
+.pull-right-h-font .b-font:before {
+  content: "\e607";
+  color: #1a1a1a;
+}
+.pull-right-h-font:hover .b-font:before,
+.pull-right-h-font:focus .b-font:before,
+.pull-right-h-font.hover .b-font:before {
+  content: "\e607";
+  color: #1a1a1a;
+}
+.pull-right-h-font.native .b-font:before,
+.pull-right-h-font.disabled .b-font:before {
+  content: "\e607";
+  color: #1a1a1a;
+}
+.pull-right-ha-font .b-font:before {
+  content: "\e607";
+  color: #1a1a1a;
+}
+.pull-right-ha-font:hover .b-font:before,
+.pull-right-ha-font:focus .b-font:before,
+.pull-right-ha-font.hover .b-font:before {
+  content: "\e607";
+  color: #1a1a1a;
+}
+.pull-right-ha-font:active .b-font:before,
+.pull-right-ha-font.active .b-font:before {
+  content: "\e607";
+  color: #009de3;
+}
+.pull-right-ha-font.native .b-font:before,
+.pull-right-ha-font.disabled .b-font:before {
+  content: "\e607";
+  color: #1a1a1a;
+}
+.pull-right-e-font .b-font:before {
+  content: "\e607";
+  color: #1a1a1a;
+}
+.pull-right-e-font:hover .b-font:before,
+.pull-right-e-font:focus .b-font:before,
+.pull-right-e-font.hover .b-font:before {
+  content: "\e607";
+  color: #1a1a1a;
+}
+.pull-right-e-font.active .b-font:before {
+  content: "\e607";
+  color: #009de3;
+}
+.pull-right-e-font:active .b-font:before {
+  content: "\e607";
+  color: #009de3;
+}
+.pull-right-e-font.native .b-font:before,
+.pull-right-e-font.disabled .b-font:before {
+  content: "\e607";
+  color: #1a1a1a;
+}
+.copy-font .b-font:before {
+  content: "\e610";
+  color: #1a1a1a;
+}
+.copy-font.native .b-font:before,
+.copy-font.disabled .b-font:before {
+  content: "\e610";
+  color: #1a1a1a;
+}
+.copy-h-font .b-font:before {
+  content: "\e610";
+  color: #1a1a1a;
+}
+.copy-h-font:hover .b-font:before,
+.copy-h-font:focus .b-font:before,
+.copy-h-font.hover .b-font:before {
+  content: "\e610";
+  color: #1a1a1a;
+}
+.copy-h-font.native .b-font:before,
+.copy-h-font.disabled .b-font:before {
+  content: "\e610";
+  color: #1a1a1a;
+}
+.copy-ha-font .b-font:before {
+  content: "\e610";
+  color: #1a1a1a;
+}
+.copy-ha-font:hover .b-font:before,
+.copy-ha-font:focus .b-font:before,
+.copy-ha-font.hover .b-font:before {
+  content: "\e610";
+  color: #1a1a1a;
+}
+.copy-ha-font:active .b-font:before,
+.copy-ha-font.active .b-font:before {
+  content: "\e610";
+  color: #009de3;
+}
+.copy-ha-font.native .b-font:before,
+.copy-ha-font.disabled .b-font:before {
+  content: "\e610";
+  color: #1a1a1a;
+}
+.copy-e-font .b-font:before {
+  content: "\e610";
+  color: #1a1a1a;
+}
+.copy-e-font:hover .b-font:before,
+.copy-e-font:focus .b-font:before,
+.copy-e-font.hover .b-font:before {
+  content: "\e610";
+  color: #1a1a1a;
+}
+.copy-e-font.active .b-font:before {
+  content: "\e610";
+  color: #009de3;
+}
+.copy-e-font:active .b-font:before {
+  content: "\e610";
+  color: #009de3;
+}
+.copy-e-font.native .b-font:before,
+.copy-e-font.disabled .b-font:before {
+  content: "\e610";
+  color: #1a1a1a;
+}
+.check-mark-font .b-font:before {
+  content: "\e611";
+  color: #1a1a1a;
+}
+.check-mark-font.native .b-font:before,
+.check-mark-font.disabled .b-font:before {
+  content: "\e611";
+  color: #1a1a1a;
+}
+.check-mark-h-font .b-font:before {
+  content: "\e611";
+  color: #1a1a1a;
+}
+.check-mark-h-font:hover .b-font:before,
+.check-mark-h-font:focus .b-font:before,
+.check-mark-h-font.hover .b-font:before {
+  content: "\e611";
+  color: #1a1a1a;
+}
+.check-mark-h-font.native .b-font:before,
+.check-mark-h-font.disabled .b-font:before {
+  content: "\e611";
+  color: #1a1a1a;
+}
+.check-mark-ha-font .b-font:before {
+  content: "\e611";
+  color: #1a1a1a;
+}
+.check-mark-ha-font:hover .b-font:before,
+.check-mark-ha-font:focus .b-font:before,
+.check-mark-ha-font.hover .b-font:before {
+  content: "\e611";
+  color: #1a1a1a;
+}
+.check-mark-ha-font:active .b-font:before,
+.check-mark-ha-font.active .b-font:before {
+  content: "\e611";
+  color: #009de3;
+}
+.check-mark-ha-font.native .b-font:before,
+.check-mark-ha-font.disabled .b-font:before {
+  content: "\e611";
+  color: #1a1a1a;
+}
+.check-mark-e-font .b-font:before {
+  content: "\e611";
+  color: #1a1a1a;
+}
+.check-mark-e-font:hover .b-font:before,
+.check-mark-e-font:focus .b-font:before,
+.check-mark-e-font.hover .b-font:before {
+  content: "\e611";
+  color: #1a1a1a;
+}
+.check-mark-e-font.active .b-font:before {
+  content: "\e611";
+  color: #009de3;
+}
+.check-mark-e-font:active .b-font:before {
+  content: "\e611";
+  color: #009de3;
+}
+.check-mark-e-font.native .b-font:before,
+.check-mark-e-font.disabled .b-font:before {
+  content: "\e611";
+  color: #1a1a1a;
+}
+.dimension-from-font .b-font:before {
+  content: "\e612";
+  color: #1a1a1a;
+}
+.dimension-from-font.native .b-font:before,
+.dimension-from-font.disabled .b-font:before {
+  content: "\e612";
+  color: #1a1a1a;
+}
+.dimension-from-h-font .b-font:before {
+  content: "\e612";
+  color: #1a1a1a;
+}
+.dimension-from-h-font:hover .b-font:before,
+.dimension-from-h-font:focus .b-font:before,
+.dimension-from-h-font.hover .b-font:before {
+  content: "\e612";
+  color: #1a1a1a;
+}
+.dimension-from-h-font.native .b-font:before,
+.dimension-from-h-font.disabled .b-font:before {
+  content: "\e612";
+  color: #1a1a1a;
+}
+.dimension-from-ha-font .b-font:before {
+  content: "\e612";
+  color: #1a1a1a;
+}
+.dimension-from-ha-font:hover .b-font:before,
+.dimension-from-ha-font:focus .b-font:before,
+.dimension-from-ha-font.hover .b-font:before {
+  content: "\e612";
+  color: #1a1a1a;
+}
+.dimension-from-ha-font:active .b-font:before,
+.dimension-from-ha-font.active .b-font:before {
+  content: "\e612";
+  color: #009de3;
+}
+.dimension-from-ha-font.native .b-font:before,
+.dimension-from-ha-font.disabled .b-font:before {
+  content: "\e612";
+  color: #1a1a1a;
+}
+.dimension-from-e-font .b-font:before {
+  content: "\e612";
+  color: #1a1a1a;
+}
+.dimension-from-e-font:hover .b-font:before,
+.dimension-from-e-font:focus .b-font:before,
+.dimension-from-e-font.hover .b-font:before {
+  content: "\e612";
+  color: #1a1a1a;
+}
+.dimension-from-e-font.active .b-font:before {
+  content: "\e612";
+  color: #009de3;
+}
+.dimension-from-e-font:active .b-font:before {
+  content: "\e612";
+  color: #009de3;
+}
+.dimension-from-e-font.native .b-font:before,
+.dimension-from-e-font.disabled .b-font:before {
+  content: "\e612";
+  color: #1a1a1a;
+}
+.chart-type-font .b-font:before {
+  content: "\e613";
+  color: #1a1a1a;
+}
+.chart-type-font.native .b-font:before,
+.chart-type-font.disabled .b-font:before {
+  content: "\e613";
+  color: #1a1a1a;
+}
+.chart-type-h-font .b-font:before {
+  content: "\e613";
+  color: #1a1a1a;
+}
+.chart-type-h-font:hover .b-font:before,
+.chart-type-h-font:focus .b-font:before,
+.chart-type-h-font.hover .b-font:before {
+  content: "\e613";
+  color: #1a1a1a;
+}
+.chart-type-h-font.native .b-font:before,
+.chart-type-h-font.disabled .b-font:before {
+  content: "\e613";
+  color: #1a1a1a;
+}
+.chart-type-ha-font .b-font:before {
+  content: "\e613";
+  color: #1a1a1a;
+}
+.chart-type-ha-font:hover .b-font:before,
+.chart-type-ha-font:focus .b-font:before,
+.chart-type-ha-font.hover .b-font:before {
+  content: "\e613";
+  color: #1a1a1a;
+}
+.chart-type-ha-font:active .b-font:before,
+.chart-type-ha-font.active .b-font:before {
+  content: "\e613";
+  color: #009de3;
+}
+.chart-type-ha-font.native .b-font:before,
+.chart-type-ha-font.disabled .b-font:before {
+  content: "\e613";
+  color: #1a1a1a;
+}
+.chart-type-e-font .b-font:before {
+  content: "\e613";
+  color: #1a1a1a;
+}
+.chart-type-e-font:hover .b-font:before,
+.chart-type-e-font:focus .b-font:before,
+.chart-type-e-font.hover .b-font:before {
+  content: "\e613";
+  color: #1a1a1a;
+}
+.chart-type-e-font.active .b-font:before {
+  content: "\e613";
+  color: #009de3;
+}
+.chart-type-e-font:active .b-font:before {
+  content: "\e613";
+  color: #009de3;
+}
+.chart-type-e-font.native .b-font:before,
+.chart-type-e-font.disabled .b-font:before {
+  content: "\e613";
+  color: #1a1a1a;
+}
+.style-set-font .b-font:before {
+  content: "\e60c";
+  color: #1a1a1a;
+}
+.style-set-font.native .b-font:before,
+.style-set-font.disabled .b-font:before {
+  content: "\e60c";
+  color: #1a1a1a;
+}
+.style-set-h-font .b-font:before {
+  content: "\e60c";
+  color: #1a1a1a;
+}
+.style-set-h-font:hover .b-font:before,
+.style-set-h-font:focus .b-font:before,
+.style-set-h-font.hover .b-font:before {
+  content: "\e60c";
+  color: #1a1a1a;
+}
+.style-set-h-font.native .b-font:before,
+.style-set-h-font.disabled .b-font:before {
+  content: "\e60c";
+  color: #1a1a1a;
+}
+.style-set-ha-font .b-font:before {
+  content: "\e60c";
+  color: #1a1a1a;
+}
+.style-set-ha-font:hover .b-font:before,
+.style-set-ha-font:focus .b-font:before,
+.style-set-ha-font.hover .b-font:before {
+  content: "\e60c";
+  color: #1a1a1a;
+}
+.style-set-ha-font:active .b-font:before,
+.style-set-ha-font.active .b-font:before {
+  content: "\e60c";
+  color: #009de3;
+}
+.style-set-ha-font.native .b-font:before,
+.style-set-ha-font.disabled .b-font:before {
+  content: "\e60c";
+  color: #1a1a1a;
+}
+.style-set-e-font .b-font:before {
+  content: "\e60c";
+  color: #1a1a1a;
+}
+.style-set-e-font:hover .b-font:before,
+.style-set-e-font:focus .b-font:before,
+.style-set-e-font.hover .b-font:before {
+  content: "\e60c";
+  color: #1a1a1a;
+}
+.style-set-e-font.active .b-font:before {
+  content: "\e60c";
+  color: #009de3;
+}
+.style-set-e-font:active .b-font:before {
+  content: "\e60c";
+  color: #009de3;
+}
+.style-set-e-font.native .b-font:before,
+.style-set-e-font.disabled .b-font:before {
+  content: "\e60c";
+  color: #1a1a1a;
+}
+.hyper-link-font .b-font:before {
+  content: "\e688";
+  color: #808080;
+}
+.hyper-link-font.native .b-font:before,
+.hyper-link-font.disabled .b-font:before {
+  content: "\e688";
+  color: #808080;
+}
+.filter-font .b-font:before {
+  content: "\e60f";
+  color: #808080;
+}
+.filter-font.native .b-font:before,
+.filter-font.disabled .b-font:before {
+  content: "\e60f";
+  color: #808080;
+}
+.filter-h-font .b-font:before {
+  content: "\e60f";
+  color: #1a1a1a;
+}
+.filter-h-font:hover .b-font:before,
+.filter-h-font:focus .b-font:before,
+.filter-h-font.hover .b-font:before {
+  content: "\e60f";
+  color: #1a1a1a;
+}
+.filter-h-font.native .b-font:before,
+.filter-h-font.disabled .b-font:before {
+  content: "\e60f";
+  color: #1a1a1a;
+}
+.filter-ha-font .b-font:before {
+  content: "\e60f";
+  color: #1a1a1a;
+}
+.filter-ha-font:hover .b-font:before,
+.filter-ha-font:focus .b-font:before,
+.filter-ha-font.hover .b-font:before {
+  content: "\e60f";
+  color: #1a1a1a;
+}
+.filter-ha-font:active .b-font:before,
+.filter-ha-font.active .b-font:before {
+  content: "\e60f";
+  color: #009de3;
+}
+.filter-ha-font.native .b-font:before,
+.filter-ha-font.disabled .b-font:before {
+  content: "\e60f";
+  color: #1a1a1a;
+}
+.filter-e-font .b-font:before {
+  content: "\e60f";
+  color: #1a1a1a;
+}
+.filter-e-font:hover .b-font:before,
+.filter-e-font:focus .b-font:before,
+.filter-e-font.hover .b-font:before {
+  content: "\e60f";
+  color: #1a1a1a;
+}
+.filter-e-font.active .b-font:before {
+  content: "\e60f";
+  color: #009de3;
+}
+.filter-e-font:active .b-font:before {
+  content: "\e60f";
+  color: #009de3;
+}
+.filter-e-font.native .b-font:before,
+.filter-e-font.disabled .b-font:before {
+  content: "\e60f";
+  color: #1a1a1a;
+}
+.classify-font .b-font:before {
+  content: "\e694";
+  color: #009de3;
+}
+.classify-font.native .b-font:before,
+.classify-font.disabled .b-font:before {
+  content: "\e694";
+  color: #009de3;
+}
+.series-font .b-font:before {
+  content: "\e695";
+  color: #58cc7d;
+}
+.series-font.native .b-font:before,
+.series-font.disabled .b-font:before {
+  content: "\e695";
+  color: #58cc7d;
+}
+/**维度/指标 下拉列表图标字体 ~end~**/
+/** dashboard组件/控件 下拉列表图标字体 ~begin~**/
+.link-to-widget-h-font .b-font:before {
+  content: "\e600";
+  color: #808080;
+}
+.link-to-widget-h-font:hover .b-font:before,
+.link-to-widget-h-font:focus .b-font:before,
+.link-to-widget-h-font.hover .b-font:before {
+  content: "\e600";
+  color: #009de3;
+}
+.link-to-widget-h-font.native .b-font:before,
+.link-to-widget-h-font.disabled .b-font:before {
+  content: "\e600";
+  color: #808080;
+}
+.link-to-detail-h-font .b-font:before {
+  content: "\e600";
+  color: #808080;
+}
+.link-to-detail-h-font:hover .b-font:before,
+.link-to-detail-h-font:focus .b-font:before,
+.link-to-detail-h-font.hover .b-font:before {
+  content: "\e600";
+  color: #009de3;
+}
+.link-to-detail-h-font.native .b-font:before,
+.link-to-detail-h-font.disabled .b-font:before {
+  content: "\e600";
+  color: #808080;
+}
+.detail-setting-h-font .b-font:before {
+  content: "\e600";
+  color: #808080;
+}
+.detail-setting-h-font:hover .b-font:before,
+.detail-setting-h-font:focus .b-font:before,
+.detail-setting-h-font.hover .b-font:before {
+  content: "\e600";
+  color: #009de3;
+}
+.detail-setting-h-font.native .b-font:before,
+.detail-setting-h-font.disabled .b-font:before {
+  content: "\e600";
+  color: #808080;
+}
+.export-to-excel-h-font .b-font:before {
+  content: "\e600";
+  color: #808080;
+}
+.export-to-excel-h-font:hover .b-font:before,
+.export-to-excel-h-font:focus .b-font:before,
+.export-to-excel-h-font.hover .b-font:before {
+  content: "\e600";
+  color: #009de3;
+}
+.export-to-excel-h-font.native .b-font:before,
+.export-to-excel-h-font.disabled .b-font:before {
+  content: "\e600";
+  color: #808080;
+}
+.widget-copy-h-font .b-font:before {
+  content: "\e610";
+  color: #808080;
+}
+.widget-copy-h-font:hover .b-font:before,
+.widget-copy-h-font:focus .b-font:before,
+.widget-copy-h-font.hover .b-font:before {
+  content: "\e610";
+  color: #009de3;
+}
+.widget-copy-h-font.native .b-font:before,
+.widget-copy-h-font.disabled .b-font:before {
+  content: "\e610";
+  color: #808080;
+}
+.widget-delete-h-font .b-font:before {
+  content: "\e605";
+  color: #808080;
+}
+.widget-delete-h-font:hover .b-font:before,
+.widget-delete-h-font:focus .b-font:before,
+.widget-delete-h-font.hover .b-font:before {
+  content: "\e605";
+  color: #009de3;
+}
+.widget-delete-h-font.native .b-font:before,
+.widget-delete-h-font.disabled .b-font:before {
+  content: "\e605";
+  color: #808080;
+}
+/** dashboard组件/控件 下拉列表图标字体 ~end~**/
+.tree-node-triangle-expand-font .b-font:before {
+  content: "\e608";
+  color: #808080;
+}
+.tree-node-triangle-expand-font.native .b-font:before,
+.tree-node-triangle-expand-font.disabled .b-font:before {
+  content: "\e608";
+  color: #808080;
+}
+.tree-node-triangle-collapse-font .b-font:before {
+  content: "\e607";
+  color: #808080;
+}
+.tree-node-triangle-collapse-font.native .b-font:before,
+.tree-node-triangle-collapse-font.disabled .b-font:before {
+  content: "\e607";
+  color: #808080;
+}
+.row-pre-page-h-font .b-font:before {
+  content: "\e6be";
+  color: #1a1a1a;
+}
+.row-pre-page-h-font:hover .b-font:before,
+.row-pre-page-h-font:focus .b-font:before,
+.row-pre-page-h-font.hover .b-font:before {
+  content: "\e6be";
+  color: #1a1a1a;
+}
+.row-pre-page-h-font.native .b-font:before,
+.row-pre-page-h-font.disabled .b-font:before {
+  content: "\e6be";
+  color: #1a1a1a;
+}
+.row-next-page-h-font .b-font:before {
+  content: "\e6bd";
+  color: #1a1a1a;
+}
+.row-next-page-h-font:hover .b-font:before,
+.row-next-page-h-font:focus .b-font:before,
+.row-next-page-h-font.hover .b-font:before {
+  content: "\e6bd";
+  color: #1a1a1a;
+}
+.row-next-page-h-font.native .b-font:before,
+.row-next-page-h-font.disabled .b-font:before {
+  content: "\e6bd";
+  color: #1a1a1a;
+}
+.column-pre-page-h-font .b-font:before {
+  content: "\e6bc";
+  color: #1a1a1a;
+}
+.column-pre-page-h-font:hover .b-font:before,
+.column-pre-page-h-font:focus .b-font:before,
+.column-pre-page-h-font.hover .b-font:before {
+  content: "\e6bc";
+  color: #1a1a1a;
+}
+.column-pre-page-h-font.native .b-font:before,
+.column-pre-page-h-font.disabled .b-font:before {
+  content: "\e6bc";
+  color: #1a1a1a;
+}
+.column-next-page-h-font .b-font:before {
+  content: "\e6bb";
+  color: #1a1a1a;
+}
+.column-next-page-h-font:hover .b-font:before,
+.column-next-page-h-font:focus .b-font:before,
+.column-next-page-h-font.hover .b-font:before {
+  content: "\e6bb";
+  color: #1a1a1a;
+}
+.column-next-page-h-font.native .b-font:before,
+.column-next-page-h-font.disabled .b-font:before {
+  content: "\e6bb";
+  color: #1a1a1a;
+}
+.trigger-triangle-font .b-font:before {
+  content: "\e66a";
+  color: #808080;
+}
+.trigger-triangle-font:hover .b-font:before,
+.trigger-triangle-font:focus .b-font:before,
+.trigger-triangle-font.hover .b-font:before {
+  content: "\e66a";
+  color: #808080;
+}
+.trigger-triangle-font:active .b-font:before,
+.trigger-triangle-font.active .b-font:before {
+  content: "\e66a";
+  color: #009de3;
+}
+.trigger-triangle-font.native .b-font:before,
+.trigger-triangle-font.disabled .b-font:before {
+  content: "\e66a";
+  color: #808080;
+}
+.widget-date-next-h-font .b-font:before {
+  content: "\e62f";
+  color: #808080;
+}
+.widget-date-next-h-font:hover .b-font:before,
+.widget-date-next-h-font:focus .b-font:before,
+.widget-date-next-h-font.hover .b-font:before {
+  content: "\e62f";
+  color: #808080;
+}
+.widget-date-next-h-font.native .b-font:before,
+.widget-date-next-h-font.disabled .b-font:before {
+  content: "\e62f";
+  color: #808080;
+}
+.widget-date-pre-h-font .b-font:before {
+  content: "\e62e";
+  color: #808080;
+}
+.widget-date-pre-h-font:hover .b-font:before,
+.widget-date-pre-h-font:focus .b-font:before,
+.widget-date-pre-h-font.hover .b-font:before {
+  content: "\e62e";
+  color: #808080;
+}
+.widget-date-pre-h-font.native .b-font:before,
+.widget-date-pre-h-font.disabled .b-font:before {
+  content: "\e62e";
+  color: #808080;
+}
+.widget-date-h-change-font .b-font:before {
+  content: "\e660";
+  color: #808080;
+}
+.widget-date-h-change-font:hover .b-font:before,
+.widget-date-h-change-font:focus .b-font:before,
+.widget-date-h-change-font.hover .b-font:before {
+  content: "\e660";
+  color: #808080;
+}
+.widget-date-h-change-font.native .b-font:before,
+.widget-date-h-change-font.disabled .b-font:before {
+  content: "\e660";
+  color: #808080;
+}
+.pull-down-font .b-font:before {
+  content: "\e608";
+  color: #808080;
+}
+.pull-down-font.native .b-font:before,
+.pull-down-font.disabled .b-font:before {
+  content: "\e608";
+  color: #808080;
+}
+.pull-down-h-font .b-font:before {
+  content: "\e608";
+  color: #808080;
+}
+.pull-down-h-font:hover .b-font:before,
+.pull-down-h-font:focus .b-font:before,
+.pull-down-h-font.hover .b-font:before {
+  content: "\e608";
+  color: #808080;
+}
+.pull-down-h-font.native .b-font:before,
+.pull-down-h-font.disabled .b-font:before {
+  content: "\e608";
+  color: #808080;
+}
+.pull-down-ha-font .b-font:before {
+  content: "\e608";
+  color: #808080;
+}
+.pull-down-ha-font:hover .b-font:before,
+.pull-down-ha-font:focus .b-font:before,
+.pull-down-ha-font.hover .b-font:before {
+  content: "\e608";
+  color: #808080;
+}
+.pull-down-ha-font:active .b-font:before,
+.pull-down-ha-font.active .b-font:before {
+  content: "\e608";
+  color: #009de3;
+}
+.pull-down-ha-font.native .b-font:before,
+.pull-down-ha-font.disabled .b-font:before {
+  content: "\e608";
+  color: #808080;
+}
+.delete-field-font .b-font:before {
+  content: "\e605";
+  color: #808080;
+}
+.delete-field-font.native .b-font:before,
+.delete-field-font.disabled .b-font:before {
+  content: "\e605";
+  color: #808080;
+}
+.delete-field-h-font .b-font:before {
+  content: "\e605";
+  color: #808080;
+}
+.delete-field-h-font:hover .b-font:before,
+.delete-field-h-font:focus .b-font:before,
+.delete-field-h-font.hover .b-font:before {
+  content: "\e605";
+  color: #808080;
+}
+.delete-field-h-font.native .b-font:before,
+.delete-field-h-font.disabled .b-font:before {
+  content: "\e605";
+  color: #808080;
+}
+.delete-field-ha-font .b-font:before {
+  content: "\e605";
+  color: #808080;
+}
+.delete-field-ha-font:hover .b-font:before,
+.delete-field-ha-font:focus .b-font:before,
+.delete-field-ha-font.hover .b-font:before {
+  content: "\e605";
+  color: #808080;
+}
+.delete-field-ha-font:active .b-font:before,
+.delete-field-ha-font.active .b-font:before {
+  content: "\e605";
+  color: #009de3;
+}
+.delete-field-ha-font.native .b-font:before,
+.delete-field-ha-font.disabled .b-font:before {
+  content: "\e605";
+  color: #808080;
+}
+.toolbar-save-font .b-font:before {
+  content: "\e617";
+  color: #808080;
+}
+.toolbar-save-font:hover .b-font:before,
+.toolbar-save-font:focus .b-font:before,
+.toolbar-save-font.hover .b-font:before {
+  content: "\e617";
+  color: #808080;
+}
+.toolbar-save-font.native .b-font:before,
+.toolbar-save-font.disabled .b-font:before {
+  content: "\e617";
+  color: #808080;
+}
+.toolbar-undo-font .b-font:before {
+  content: "\e619";
+  color: #808080;
+}
+.toolbar-undo-font:hover .b-font:before,
+.toolbar-undo-font:focus .b-font:before,
+.toolbar-undo-font.hover .b-font:before {
+  content: "\e619";
+  color: #808080;
+}
+.toolbar-undo-font.native .b-font:before,
+.toolbar-undo-font.disabled .b-font:before {
+  content: "\e619";
+  color: #808080;
+}
+.toolbar-redo-font .b-font:before {
+  content: "\e625";
+  color: #808080;
+}
+.toolbar-redo-font:hover .b-font:before,
+.toolbar-redo-font:focus .b-font:before,
+.toolbar-redo-font.hover .b-font:before {
+  content: "\e625";
+  color: #808080;
+}
+.toolbar-redo-font.native .b-font:before,
+.toolbar-redo-font.disabled .b-font:before {
+  content: "\e625";
+  color: #808080;
+}
+.toolbar-edit-font .b-font:before {
+  content: "\e631";
+  color: #808080;
+}
+.toolbar-edit-font:hover .b-font:before,
+.toolbar-edit-font:focus .b-font:before,
+.toolbar-edit-font.hover .b-font:before {
+  content: "\e631";
+  color: #808080;
+}
+.toolbar-edit-font.native .b-font:before,
+.toolbar-edit-font.disabled .b-font:before {
+  content: "\e631";
+  color: #808080;
+}
+.toolbar-preview-font .b-font:before {
+  content: "\e65f";
+  color: #808080;
+}
+.toolbar-preview-font:hover .b-font:before,
+.toolbar-preview-font:focus .b-font:before,
+.toolbar-preview-font.hover .b-font:before {
+  content: "\e65f";
+  color: #808080;
+}
+.toolbar-preview-font.native .b-font:before,
+.toolbar-preview-font.disabled .b-font:before {
+  content: "\e65f";
+  color: #808080;
+}
+.chart-table-font .b-font:before {
+  content: "\e60e";
+  color: #808080;
+}
+.chart-table-font:hover .b-font:before,
+.chart-table-font:focus .b-font:before,
+.chart-table-font.hover .b-font:before {
+  content: "\e60e";
+  color: #808080;
+}
+.chart-table-font:active .b-font:before,
+.chart-table-font.active .b-font:before {
+  content: "\e60e";
+  color: #009de3;
+}
+.chart-table-font.native .b-font:before,
+.chart-table-font.disabled .b-font:before {
+  content: "\e60e";
+  color: #808080;
+}
+.chart-axis-font .b-font:before {
+  content: "\e626";
+  color: #808080;
+}
+.chart-axis-font:hover .b-font:before,
+.chart-axis-font:focus .b-font:before,
+.chart-axis-font.hover .b-font:before {
+  content: "\e626";
+  color: #808080;
+}
+.chart-axis-font:active .b-font:before,
+.chart-axis-font.active .b-font:before {
+  content: "\e626";
+  color: #009de3;
+}
+.chart-axis-font.native .b-font:before,
+.chart-axis-font.disabled .b-font:before {
+  content: "\e626";
+  color: #808080;
+}
+.chart-bar-font .b-font:before {
+  content: "\e620";
+  color: #808080;
+}
+.chart-bar-font:hover .b-font:before,
+.chart-bar-font:focus .b-font:before,
+.chart-bar-font.hover .b-font:before {
+  content: "\e620";
+  color: #808080;
+}
+.chart-bar-font:active .b-font:before,
+.chart-bar-font.active .b-font:before {
+  content: "\e620";
+  color: #009de3;
+}
+.chart-bar-font.native .b-font:before,
+.chart-bar-font.disabled .b-font:before {
+  content: "\e620";
+  color: #808080;
+}
+.chart-accumulate-bar-font .b-font:before {
+  content: "\e60a";
+  color: #808080;
+}
+.chart-accumulate-bar-font:hover .b-font:before,
+.chart-accumulate-bar-font:focus .b-font:before,
+.chart-accumulate-bar-font.hover .b-font:before {
+  content: "\e60a";
+  color: #808080;
+}
+.chart-accumulate-bar-font:active .b-font:before,
+.chart-accumulate-bar-font.active .b-font:before {
+  content: "\e60a";
+  color: #009de3;
+}
+.chart-accumulate-bar-font.native .b-font:before,
+.chart-accumulate-bar-font.disabled .b-font:before {
+  content: "\e60a";
+  color: #808080;
+}
+.chart-pie-font .b-font:before {
+  content: "\e618";
+  color: #808080;
+}
+.chart-pie-font:hover .b-font:before,
+.chart-pie-font:focus .b-font:before,
+.chart-pie-font.hover .b-font:before {
+  content: "\e618";
+  color: #808080;
+}
+.chart-pie-font:active .b-font:before,
+.chart-pie-font.active .b-font:before {
+  content: "\e618";
+  color: #009de3;
+}
+.chart-pie-font.native .b-font:before,
+.chart-pie-font.disabled .b-font:before {
+  content: "\e618";
+  color: #808080;
+}
+.chart-map-font .b-font:before {
+  content: "\e62c";
+  color: #808080;
+}
+.chart-map-font:hover .b-font:before,
+.chart-map-font:focus .b-font:before,
+.chart-map-font.hover .b-font:before {
+  content: "\e62c";
+  color: #808080;
+}
+.chart-map-font:active .b-font:before,
+.chart-map-font.active .b-font:before {
+  content: "\e62c";
+  color: #009de3;
+}
+.chart-map-font.native .b-font:before,
+.chart-map-font.disabled .b-font:before {
+  content: "\e62c";
+  color: #808080;
+}
+.chart-dashboard-font .b-font:before {
+  content: "\e623";
+  color: #808080;
+}
+.chart-dashboard-font:hover .b-font:before,
+.chart-dashboard-font:focus .b-font:before,
+.chart-dashboard-font.hover .b-font:before {
+  content: "\e623";
+  color: #808080;
+}
+.chart-dashboard-font:active .b-font:before,
+.chart-dashboard-font.active .b-font:before {
+  content: "\e623";
+  color: #009de3;
+}
+.chart-dashboard-font.native .b-font:before,
+.chart-dashboard-font.disabled .b-font:before {
+  content: "\e623";
+  color: #808080;
+}
+.chart-doughnut-font .b-font:before {
+  content: "\e624";
+  color: #808080;
+}
+.chart-doughnut-font:hover .b-font:before,
+.chart-doughnut-font:focus .b-font:before,
+.chart-doughnut-font.hover .b-font:before {
+  content: "\e624";
+  color: #808080;
+}
+.chart-doughnut-font:active .b-font:before,
+.chart-doughnut-font.active .b-font:before {
+  content: "\e624";
+  color: #009de3;
+}
+.chart-doughnut-font.native .b-font:before,
+.chart-doughnut-font.disabled .b-font:before {
+  content: "\e624";
+  color: #808080;
+}
+.chart-detail-font .b-font:before {
+  content: "\e615";
+  color: #808080;
+}
+.chart-detail-font:hover .b-font:before,
+.chart-detail-font:focus .b-font:before,
+.chart-detail-font.hover .b-font:before {
+  content: "\e615";
+  color: #808080;
+}
+.chart-detail-font:active .b-font:before,
+.chart-detail-font.active .b-font:before {
+  content: "\e615";
+  color: #009de3;
+}
+.chart-detail-font.native .b-font:before,
+.chart-detail-font.disabled .b-font:before {
+  content: "\e615";
+  color: #808080;
+}
+.chart-more-font .b-font:before {
+  content: "\e60d";
+  color: #808080;
+}
+.chart-more-font:hover .b-font:before,
+.chart-more-font:focus .b-font:before,
+.chart-more-font.hover .b-font:before {
+  content: "\e60d";
+  color: #808080;
+}
+.chart-more-font:active .b-font:before,
+.chart-more-font.active .b-font:before {
+  content: "\e60d";
+  color: #009de3;
+}
+.chart-more-font.native .b-font:before,
+.chart-more-font.disabled .b-font:before {
+  content: "\e60d";
+  color: #808080;
+}
+.chart-bubble-font .b-font:before {
+  content: "\e62a";
+  color: #808080;
+}
+.chart-bubble-font:hover .b-font:before,
+.chart-bubble-font:focus .b-font:before,
+.chart-bubble-font.hover .b-font:before {
+  content: "\e62a";
+  color: #808080;
+}
+.chart-bubble-font:active .b-font:before,
+.chart-bubble-font.active .b-font:before {
+  content: "\e62a";
+  color: #009de3;
+}
+.chart-bubble-font.native .b-font:before,
+.chart-bubble-font.disabled .b-font:before {
+  content: "\e62a";
+  color: #808080;
+}
+.chart-scatter-font .b-font:before {
+  content: "\e61d";
+  color: #808080;
+}
+.chart-scatter-font:hover .b-font:before,
+.chart-scatter-font:focus .b-font:before,
+.chart-scatter-font.hover .b-font:before {
+  content: "\e61d";
+  color: #808080;
+}
+.chart-scatter-font:active .b-font:before,
+.chart-scatter-font.active .b-font:before {
+  content: "\e61d";
+  color: #009de3;
+}
+.chart-scatter-font.native .b-font:before,
+.chart-scatter-font.disabled .b-font:before {
+  content: "\e61d";
+  color: #808080;
+}
+.chart-radar-font .b-font:before {
+  content: "\e614";
+  color: #808080;
+}
+.chart-radar-font:hover .b-font:before,
+.chart-radar-font:focus .b-font:before,
+.chart-radar-font.hover .b-font:before {
+  content: "\e614";
+  color: #808080;
+}
+.chart-radar-font:active .b-font:before,
+.chart-radar-font.active .b-font:before {
+  content: "\e614";
+  color: #009de3;
+}
+.chart-radar-font.native .b-font:before,
+.chart-radar-font.disabled .b-font:before {
+  content: "\e614";
+  color: #808080;
+}
+.chart-content-font .b-font:before {
+  content: "\e621";
+  color: #808080;
+}
+.chart-content-font:hover .b-font:before,
+.chart-content-font:focus .b-font:before,
+.chart-content-font.hover .b-font:before {
+  content: "\e621";
+  color: #808080;
+}
+.chart-content-font:active .b-font:before,
+.chart-content-font.active .b-font:before {
+  content: "\e621";
+  color: #009de3;
+}
+.chart-content-font.native .b-font:before,
+.chart-content-font.disabled .b-font:before {
+  content: "\e621";
+  color: #808080;
+}
+.chart-image-font .b-font:before {
+  content: "\e68d";
+  color: #808080;
+}
+.chart-image-font:hover .b-font:before,
+.chart-image-font:focus .b-font:before,
+.chart-image-font.hover .b-font:before {
+  content: "\e68d";
+  color: #808080;
+}
+.chart-image-font:active .b-font:before,
+.chart-image-font.active .b-font:before {
+  content: "\e68d";
+  color: #009de3;
+}
+.chart-image-font.native .b-font:before,
+.chart-image-font.disabled .b-font:before {
+  content: "\e68d";
+  color: #808080;
+}
+.chart-web-font .b-font:before {
+  content: "\e68c";
+  color: #808080;
+}
+.chart-web-font:hover .b-font:before,
+.chart-web-font:focus .b-font:before,
+.chart-web-font.hover .b-font:before {
+  content: "\e68c";
+  color: #808080;
+}
+.chart-web-font:active .b-font:before,
+.chart-web-font.active .b-font:before {
+  content: "\e68c";
+  color: #009de3;
+}
+.chart-web-font.native .b-font:before,
+.chart-web-font.disabled .b-font:before {
+  content: "\e68c";
+  color: #808080;
+}
+.chart-string-font .b-font:before {
+  content: "\e622";
+  color: #808080;
+}
+.chart-string-font:hover .b-font:before,
+.chart-string-font:focus .b-font:before,
+.chart-string-font.hover .b-font:before {
+  content: "\e622";
+  color: #808080;
+}
+.chart-string-font:active .b-font:before,
+.chart-string-font.active .b-font:before {
+  content: "\e622";
+  color: #009de3;
+}
+.chart-string-font.native .b-font:before,
+.chart-string-font.disabled .b-font:before {
+  content: "\e622";
+  color: #808080;
+}
+.chart-number-font .b-font:before {
+  content: "\e61f";
+  color: #808080;
+}
+.chart-number-font:hover .b-font:before,
+.chart-number-font:focus .b-font:before,
+.chart-number-font.hover .b-font:before {
+  content: "\e61f";
+  color: #808080;
+}
+.chart-number-font:active .b-font:before,
+.chart-number-font.active .b-font:before {
+  content: "\e61f";
+  color: #009de3;
+}
+.chart-number-font.native .b-font:before,
+.chart-number-font.disabled .b-font:before {
+  content: "\e61f";
+  color: #808080;
+}
+.chart-tree-font .b-font:before {
+  content: "\e61e";
+  color: #808080;
+}
+.chart-tree-font:hover .b-font:before,
+.chart-tree-font:focus .b-font:before,
+.chart-tree-font.hover .b-font:before {
+  content: "\e61e";
+  color: #808080;
+}
+.chart-tree-font:active .b-font:before,
+.chart-tree-font.active .b-font:before {
+  content: "\e61e";
+  color: #009de3;
+}
+.chart-tree-font.native .b-font:before,
+.chart-tree-font.disabled .b-font:before {
+  content: "\e61e";
+  color: #808080;
+}
+.chart-date-font .b-font:before {
+  content: "\e61b";
+  color: #808080;
+}
+.chart-date-font:hover .b-font:before,
+.chart-date-font:focus .b-font:before,
+.chart-date-font.hover .b-font:before {
+  content: "\e61b";
+  color: #808080;
+}
+.chart-date-font:active .b-font:before,
+.chart-date-font.active .b-font:before {
+  content: "\e61b";
+  color: #009de3;
+}
+.chart-date-font.native .b-font:before,
+.chart-date-font.disabled .b-font:before {
+  content: "\e61b";
+  color: #808080;
+}
+.chart-year-font .b-font:before {
+  content: "\e628";
+  color: #808080;
+}
+.chart-year-font:hover .b-font:before,
+.chart-year-font:focus .b-font:before,
+.chart-year-font.hover .b-font:before {
+  content: "\e628";
+  color: #808080;
+}
+.chart-year-font:active .b-font:before,
+.chart-year-font.active .b-font:before {
+  content: "\e628";
+  color: #009de3;
+}
+.chart-year-font.native .b-font:before,
+.chart-year-font.disabled .b-font:before {
+  content: "\e628";
+  color: #808080;
+}
+.chart-month-font .b-font:before {
+  content: "\e627";
+  color: #808080;
+}
+.chart-month-font:hover .b-font:before,
+.chart-month-font:focus .b-font:before,
+.chart-month-font.hover .b-font:before {
+  content: "\e627";
+  color: #808080;
+}
+.chart-month-font:active .b-font:before,
+.chart-month-font.active .b-font:before {
+  content: "\e627";
+  color: #009de3;
+}
+.chart-month-font.native .b-font:before,
+.chart-month-font.disabled .b-font:before {
+  content: "\e627";
+  color: #808080;
+}
+.chart-quarter-font .b-font:before {
+  content: "\e629";
+  color: #808080;
+}
+.chart-quarter-font:hover .b-font:before,
+.chart-quarter-font:focus .b-font:before,
+.chart-quarter-font.hover .b-font:before {
+  content: "\e629";
+  color: #808080;
+}
+.chart-quarter-font:active .b-font:before,
+.chart-quarter-font.active .b-font:before {
+  content: "\e629";
+  color: #009de3;
+}
+.chart-quarter-font.native .b-font:before,
+.chart-quarter-font.disabled .b-font:before {
+  content: "\e629";
+  color: #808080;
+}
+.chart-ymd-font .b-font:before {
+  content: "\e61c";
+  color: #808080;
+}
+.chart-ymd-font:hover .b-font:before,
+.chart-ymd-font:focus .b-font:before,
+.chart-ymd-font.hover .b-font:before {
+  content: "\e61c";
+  color: #808080;
+}
+.chart-ymd-font:active .b-font:before,
+.chart-ymd-font.active .b-font:before {
+  content: "\e61c";
+  color: #009de3;
+}
+.chart-ymd-font.native .b-font:before,
+.chart-ymd-font.disabled .b-font:before {
+  content: "\e61c";
+  color: #808080;
+}
+.chart-date-range-font .b-font:before {
+  content: "\e616";
+  color: #808080;
+}
+.chart-date-range-font:hover .b-font:before,
+.chart-date-range-font:focus .b-font:before,
+.chart-date-range-font.hover .b-font:before {
+  content: "\e616";
+  color: #808080;
+}
+.chart-date-range-font:active .b-font:before,
+.chart-date-range-font.active .b-font:before {
+  content: "\e616";
+  color: #009de3;
+}
+.chart-date-range-font.native .b-font:before,
+.chart-date-range-font.disabled .b-font:before {
+  content: "\e616";
+  color: #808080;
+}
+.chart-general-query-font .b-font:before {
+  content: "\e62b";
+  color: #808080;
+}
+.chart-general-query-font:hover .b-font:before,
+.chart-general-query-font:focus .b-font:before,
+.chart-general-query-font.hover .b-font:before {
+  content: "\e62b";
+  color: #808080;
+}
+.chart-general-query-font:active .b-font:before,
+.chart-general-query-font.active .b-font:before {
+  content: "\e62b";
+  color: #009de3;
+}
+.chart-general-query-font.native .b-font:before,
+.chart-general-query-font.disabled .b-font:before {
+  content: "\e62b";
+  color: #808080;
+}
+.chart-query-font .b-font:before {
+  content: "\e609";
+  color: #808080;
+}
+.chart-query-font:hover .b-font:before,
+.chart-query-font:focus .b-font:before,
+.chart-query-font.hover .b-font:before {
+  content: "\e609";
+  color: #808080;
+}
+.chart-query-font:active .b-font:before,
+.chart-query-font.active .b-font:before {
+  content: "\e609";
+  color: #009de3;
+}
+.chart-query-font.native .b-font:before,
+.chart-query-font.disabled .b-font:before {
+  content: "\e609";
+  color: #808080;
+}
+.chart-reset-font .b-font:before {
+  content: "\e61a";
+  color: #808080;
+}
+.chart-reset-font:hover .b-font:before,
+.chart-reset-font:focus .b-font:before,
+.chart-reset-font.hover .b-font:before {
+  content: "\e61a";
+  color: #808080;
+}
+.chart-reset-font:active .b-font:before,
+.chart-reset-font.active .b-font:before {
+  content: "\e61a";
+  color: #009de3;
+}
+.chart-reset-font.native .b-font:before,
+.chart-reset-font.disabled .b-font:before {
+  content: "\e61a";
+  color: #808080;
+}
+.chart-textarea-font .b-font:before {
+  content: "\e622";
+  color: #808080;
+}
+.chart-textarea-font:hover .b-font:before,
+.chart-textarea-font:focus .b-font:before,
+.chart-textarea-font.hover .b-font:before {
+  content: "\e622";
+  color: #808080;
+}
+.chart-textarea-font:active .b-font:before,
+.chart-textarea-font.active .b-font:before {
+  content: "\e622";
+  color: #009de3;
+}
+.chart-textarea-font.native .b-font:before,
+.chart-textarea-font.disabled .b-font:before {
+  content: "\e622";
+  color: #808080;
+}
+.chart-reuse-font .b-font:before {
+  content: "\e60b";
+  color: #808080;
+}
+.chart-reuse-font:hover .b-font:before,
+.chart-reuse-font:focus .b-font:before,
+.chart-reuse-font.hover .b-font:before {
+  content: "\e60b";
+  color: #808080;
+}
+.chart-reuse-font:active .b-font:before,
+.chart-reuse-font.active .b-font:before {
+  content: "\e60b";
+  color: #009de3;
+}
+.chart-reuse-font.native .b-font:before,
+.chart-reuse-font.disabled .b-font:before {
+  content: "\e60b";
+  color: #808080;
+}
+.chart-date-normal-font .b-font:before {
+  content: "\e61b";
+  color: #808080;
+}
+.chart-date-normal-font.native .b-font:before,
+.chart-date-normal-font.disabled .b-font:before {
+  content: "\e61b";
+  color: #808080;
+}
+.less-font .b-font:before {
+  content: "\e633";
+  color: #808080;
+}
+.less-font:hover .b-font:before,
+.less-font:focus .b-font:before,
+.less-font.hover .b-font:before {
+  content: "\e633";
+  color: #808080;
+}
+.less-font:active .b-font:before,
+.less-font.active .b-font:before {
+  content: "\e633";
+  color: #009de3;
+}
+.less-font.native .b-font:before,
+.less-font.disabled .b-font:before {
+  content: "\e633";
+  color: #808080;
+}
+.less-equal-font .b-font:before {
+  content: "\e636";
+  color: #808080;
+}
+.less-equal-font:hover .b-font:before,
+.less-equal-font:focus .b-font:before,
+.less-equal-font.hover .b-font:before {
+  content: "\e636";
+  color: #808080;
+}
+.less-equal-font:active .b-font:before,
+.less-equal-font.active .b-font:before {
+  content: "\e636";
+  color: #009de3;
+}
+.less-equal-font.native .b-font:before,
+.less-equal-font.disabled .b-font:before {
+  content: "\e636";
+  color: #808080;
+}
+.check-font .b-font:before {
+  content: "\e611";
+  color: #009de3;
+}
+.check-font.native .b-font:before,
+.check-font.disabled .b-font:before {
+  content: "\e611";
+  color: #009de3;
+}
+.move2group-add-font .b-font:before {
+  content: "\e649";
+  color: #009de3;
+}
+.move2group-add-font.native .b-font:before,
+.move2group-add-font.disabled .b-font:before {
+  content: "\e649";
+  color: #009de3;
+}
+.select-data-field-calc-font .b-font:before {
+  content: "\e6a3";
+  color: #1a1a1a;
+}
+.select-data-field-calc-font:hover .b-font:before,
+.select-data-field-calc-font:focus .b-font:before,
+.select-data-field-calc-font.hover .b-font:before {
+  content: "\e6a3";
+  color: #1a1a1a;
+}
+.select-data-field-calc-font:active .b-font:before,
+.select-data-field-calc-font.active .b-font:before {
+  content: "\e6a3";
+  color: #ffffff;
+}
+.select-data-field-calc-font.native .b-font:before,
+.select-data-field-calc-font.disabled .b-font:before {
+  content: "\e6a3";
+  color: #1a1a1a;
+}
+.select-data-field-string-font .b-font:before {
+  content: "\e642";
+  color: #1a1a1a;
+}
+.select-data-field-string-font:hover .b-font:before,
+.select-data-field-string-font:focus .b-font:before,
+.select-data-field-string-font.hover .b-font:before {
+  content: "\e642";
+  color: #1a1a1a;
+}
+.select-data-field-string-font:active .b-font:before,
+.select-data-field-string-font.active .b-font:before {
+  content: "\e642";
+  color: #ffffff;
+}
+.select-data-field-string-font.native .b-font:before,
+.select-data-field-string-font.disabled .b-font:before {
+  content: "\e642";
+  color: #1a1a1a;
+}
+.select-data-field-number-font .b-font:before {
+  content: "\e641";
+  color: #1a1a1a;
+}
+.select-data-field-number-font:hover .b-font:before,
+.select-data-field-number-font:focus .b-font:before,
+.select-data-field-number-font.hover .b-font:before {
+  content: "\e641";
+  color: #1a1a1a;
+}
+.select-data-field-number-font:active .b-font:before,
+.select-data-field-number-font.active .b-font:before {
+  content: "\e641";
+  color: #ffffff;
+}
+.select-data-field-number-font.native .b-font:before,
+.select-data-field-number-font.disabled .b-font:before {
+  content: "\e641";
+  color: #1a1a1a;
+}
+.select-data-field-date-font .b-font:before {
+  content: "\e640";
+  color: #1a1a1a;
+}
+.select-data-field-date-font:hover .b-font:before,
+.select-data-field-date-font:focus .b-font:before,
+.select-data-field-date-font.hover .b-font:before {
+  content: "\e640";
+  color: #1a1a1a;
+}
+.select-data-field-date-font:active .b-font:before,
+.select-data-field-date-font.active .b-font:before {
+  content: "\e640";
+  color: #ffffff;
+}
+.select-data-field-date-font.native .b-font:before,
+.select-data-field-date-font.disabled .b-font:before {
+  content: "\e640";
+  color: #1a1a1a;
+}
+.select-data-field-string-group-font .b-font:before {
+  content: "\e642";
+  color: #808080;
+}
+.select-data-field-string-group-font.native .b-font:before,
+.select-data-field-string-group-font.disabled .b-font:before {
+  content: "\e642";
+  color: #808080;
+}
+.select-data-field-number-group-font .b-font:before {
+  content: "\e641";
+  color: #808080;
+}
+.select-data-field-number-group-font.native .b-font:before,
+.select-data-field-number-group-font.disabled .b-font:before {
+  content: "\e641";
+  color: #808080;
+}
+.select-data-field-date-group-font .b-font:before {
+  content: "\e640";
+  color: #808080;
+}
+.select-data-field-date-group-font.native .b-font:before,
+.select-data-field-date-group-font.disabled .b-font:before {
+  content: "\e640";
+  color: #808080;
+}
+.select-data-preview-font .b-font:before {
+  content: "\e65f";
+  color: #808080;
+}
+.select-data-preview-font:hover .b-font:before,
+.select-data-preview-font:focus .b-font:before,
+.select-data-preview-font.hover .b-font:before {
+  content: "\e65f";
+  color: #009de3;
+}
+.select-data-preview-font:active .b-font:before,
+.select-data-preview-font.active .b-font:before {
+  content: "\e65f";
+  color: #009de3;
+}
+.select-data-preview-font.native .b-font:before,
+.select-data-preview-font.disabled .b-font:before {
+  content: "\e65f";
+  color: #808080;
+}
+.detail-dimension-set-font .b-font:before {
+  content: "\e678";
+  color: #808080;
+}
+.detail-dimension-set-font:hover .b-font:before,
+.detail-dimension-set-font:focus .b-font:before,
+.detail-dimension-set-font.hover .b-font:before {
+  content: "\e678";
+  color: #808080;
+}
+.detail-dimension-set-font.native .b-font:before,
+.detail-dimension-set-font.disabled .b-font:before {
+  content: "\e678";
+  color: #808080;
+}
+.detail-real-data-warning-font .b-font:before {
+  content: "\e64e";
+  color: #f07d0a;
+}
+.detail-real-data-warning-font:hover .b-font:before,
+.detail-real-data-warning-font:focus .b-font:before,
+.detail-real-data-warning-font.hover .b-font:before {
+  content: "\e64e";
+  color: #f07d0a;
+}
+.detail-real-data-warning-font.native .b-font:before,
+.detail-real-data-warning-font.disabled .b-font:before {
+  content: "\e64e";
+  color: #f07d0a;
+}
+.select-group-field-string-font .b-font:before {
+  content: "\e642";
+  color: #009de3;
+}
+.select-group-field-string-font:hover .b-font:before,
+.select-group-field-string-font:focus .b-font:before,
+.select-group-field-string-font.hover .b-font:before {
+  content: "\e642";
+  color: #009de3;
+}
+.select-group-field-string-font:active .b-font:before,
+.select-group-field-string-font.active .b-font:before {
+  content: "\e642";
+  color: #009de3;
+}
+.select-group-field-string-font.native .b-font:before,
+.select-group-field-string-font.disabled .b-font:before {
+  content: "\e642";
+  color: #009de3;
+}
+.select-group-field-number-font .b-font:before {
+  content: "\e641";
+  color: #009de3;
+}
+.select-group-field-number-font:hover .b-font:before,
+.select-group-field-number-font:focus .b-font:before,
+.select-group-field-number-font.hover .b-font:before {
+  content: "\e641";
+  color: #009de3;
+}
+.select-group-field-number-font:active .b-font:before,
+.select-group-field-number-font.active .b-font:before {
+  content: "\e641";
+  color: #009de3;
+}
+.select-group-field-number-font.native .b-font:before,
+.select-group-field-number-font.disabled .b-font:before {
+  content: "\e641";
+  color: #009de3;
+}
+.select-group-field-date-font .b-font:before {
+  content: "\e640";
+  color: #009de3;
+}
+.select-group-field-date-font:hover .b-font:before,
+.select-group-field-date-font:focus .b-font:before,
+.select-group-field-date-font.hover .b-font:before {
+  content: "\e640";
+  color: #009de3;
+}
+.select-group-field-date-font:active .b-font:before,
+.select-group-field-date-font.active .b-font:before {
+  content: "\e640";
+  color: #009de3;
+}
+.select-group-field-date-font.native .b-font:before,
+.select-group-field-date-font.disabled .b-font:before {
+  content: "\e640";
+  color: #009de3;
+}
+.dashboard-widget-combo-detail-set-font .b-font:before {
+  content: "\e634";
+  color: #808080;
+}
+.dashboard-widget-combo-detail-set-font:hover .b-font:before,
+.dashboard-widget-combo-detail-set-font:focus .b-font:before,
+.dashboard-widget-combo-detail-set-font.hover .b-font:before {
+  content: "\e634";
+  color: #808080;
+}
+.dashboard-widget-combo-detail-set-font.native .b-font:before,
+.dashboard-widget-combo-detail-set-font.disabled .b-font:before {
+  content: "\e634";
+  color: #808080;
+}
+.group-add-font .b-font:before {
+  content: "\e649";
+  color: #808080;
+}
+.group-add-font.native .b-font:before,
+.group-add-font.disabled .b-font:before {
+  content: "\e649";
+  color: #808080;
+}
+.sortable-font .b-font:before {
+  content: "\e63b";
+  color: #808080;
+}
+.sortable-font.native .b-font:before,
+.sortable-font.disabled .b-font:before {
+  content: "\e63b";
+  color: #808080;
+}
+.text-bold-font .b-font:before {
+  content: "\e64d";
+  color: #1a1a1a;
+}
+.text-bold-font.native .b-font:before,
+.text-bold-font.disabled .b-font:before {
+  content: "\e64d";
+  color: #1a1a1a;
+}
+.text-italic-font .b-font:before {
+  content: "\e656";
+  color: #1a1a1a;
+}
+.text-italic-font.native .b-font:before,
+.text-italic-font.disabled .b-font:before {
+  content: "\e656";
+  color: #1a1a1a;
+}
+.text-underline-font .b-font:before {
+  content: "\e650";
+  color: #1a1a1a;
+}
+.text-underline-font.native .b-font:before,
+.text-underline-font.disabled .b-font:before {
+  content: "\e650";
+  color: #1a1a1a;
+}
+.text-color-font .b-font:before {
+  content: "\e69c";
+  color: #1a1a1a;
+}
+.text-color-font.native .b-font:before,
+.text-color-font.disabled .b-font:before {
+  content: "\e69c";
+  color: #1a1a1a;
+}
+.text-background-font .b-font:before {
+  content: "\e696";
+  color: #1a1a1a;
+}
+.text-background-font.native .b-font:before,
+.text-background-font.disabled .b-font:before {
+  content: "\e696";
+  color: #1a1a1a;
+}
+.text-color-underline-font .b-font:before {
+  content: "\e69d";
+  color: "";
+}
+.text-color-underline-font.native .b-font:before,
+.text-color-underline-font.disabled .b-font:before {
+  content: "\e69d";
+  color: "";
+}
+.text-align-left-font .b-font:before {
+  content: "\e654";
+  color: #1a1a1a;
+}
+.text-align-left-font.native .b-font:before,
+.text-align-left-font.disabled .b-font:before {
+  content: "\e654";
+  color: #1a1a1a;
+}
+.text-align-center-font .b-font:before {
+  content: "\e64f";
+  color: #1a1a1a;
+}
+.text-align-center-font.native .b-font:before,
+.text-align-center-font.disabled .b-font:before {
+  content: "\e64f";
+  color: #1a1a1a;
+}
+.text-align-right-font .b-font:before {
+  content: "\e651";
+  color: #1a1a1a;
+}
+.text-align-right-font.native .b-font:before,
+.text-align-right-font.disabled .b-font:before {
+  content: "\e651";
+  color: #1a1a1a;
+}
+.img-upload-font .b-font:before {
+  content: "\e6ba";
+  color: #009de3;
+}
+.img-upload-font.native .b-font:before,
+.img-upload-font.disabled .b-font:before {
+  content: "\e6ba";
+  color: #009de3;
+}
+.img-size-font .b-font:before {
+  content: "\e68b";
+  color: #009de3;
+}
+.img-size-font.native .b-font:before,
+.img-size-font.disabled .b-font:before {
+  content: "\e68b";
+  color: #009de3;
+}
+.img-href-font .b-font:before {
+  content: "\e688";
+  color: #009de3;
+}
+.img-href-font.native .b-font:before,
+.img-href-font.disabled .b-font:before {
+  content: "\e688";
+  color: #009de3;
+}
+.img-shutdown-font .b-font:before {
+  content: "\e689";
+  color: #009de3;
+}
+.img-shutdown-font.native .b-font:before,
+.img-shutdown-font.disabled .b-font:before {
+  content: "\e689";
+  color: #009de3;
+}
+.move-font .b-font:before {
+  content: "\e65e";
+  color: #808080;
+}
+.move-font.native .b-font:before,
+.move-font.disabled .b-font:before {
+  content: "\e65e";
+  color: #808080;
+}
+.share-font .b-font:before {
+  content: "\e65a";
+  color: #808080;
+}
+.share-font.native .b-font:before,
+.share-font.disabled .b-font:before {
+  content: "\e65a";
+  color: #808080;
+}
+.new-file-font .b-font:before {
+  content: "\e65d";
+  color: #808080;
+}
+.new-file-font.native .b-font:before,
+.new-file-font.disabled .b-font:before {
+  content: "\e65d";
+  color: #808080;
+}
+.file-font .b-font:before {
+  content: "\e65b";
+  color: #fcc550;
+}
+.file-font.native .b-font:before,
+.file-font.disabled .b-font:before {
+  content: "\e65b";
+  color: #fcc550;
+}
+.folder-font .b-font:before {
+  content: "\e65c";
+  color: #009de3;
+}
+.folder-font.native .b-font:before,
+.folder-font.disabled .b-font:before {
+  content: "\e65c";
+  color: #009de3;
+}
+.letter-font .b-font:before {
+  content: "\e659";
+  color: #808080;
+}
+.letter-font:hover .b-font:before,
+.letter-font:focus .b-font:before,
+.letter-font.hover .b-font:before {
+  content: "\e659";
+  color: #808080;
+}
+.letter-font:active .b-font:before,
+.letter-font.active .b-font:before {
+  content: "\e659";
+  color: #009de3;
+}
+.letter-font.native .b-font:before,
+.letter-font.disabled .b-font:before {
+  content: "\e659";
+  color: #808080;
+}
+.time-font .b-font:before {
+  content: "\e658";
+  color: #808080;
+}
+.time-font:hover .b-font:before,
+.time-font:focus .b-font:before,
+.time-font.hover .b-font:before {
+  content: "\e658";
+  color: #808080;
+}
+.time-font:active .b-font:before,
+.time-font.active .b-font:before {
+  content: "\e658";
+  color: #009de3;
+}
+.time-font.native .b-font:before,
+.time-font.disabled .b-font:before {
+  content: "\e658";
+  color: #808080;
+}
+.rename-font .b-font:before {
+  content: "\e687";
+  color: #808080;
+}
+.rename-font.native .b-font:before,
+.rename-font.disabled .b-font:before {
+  content: "\e687";
+  color: #808080;
+}
+.delete-template-font .b-font:before {
+  content: "\e605";
+  color: #808080;
+}
+.delete-template-font.native .b-font:before,
+.delete-template-font.disabled .b-font:before {
+  content: "\e605";
+  color: #808080;
+}
+.real-time-font .b-font:before {
+  content: "\e6af";
+  color: #fcc550;
+}
+.real-time-font.native .b-font:before,
+.real-time-font.disabled .b-font:before {
+  content: "\e6af";
+  color: #fcc550;
+}
+.data-source-table-font .b-font:before {
+  content: "\e67b";
+  color: #009de3;
+}
+.data-source-table-font:hover .b-font:before,
+.data-source-table-font:focus .b-font:before,
+.data-source-table-font.hover .b-font:before {
+  content: "\e67b";
+  color: #009de3;
+}
+.data-source-table-font:active .b-font:before,
+.data-source-table-font.active .b-font:before {
+  content: "\e67b";
+  color: #ffffff;
+}
+.data-source-table-font.native .b-font:before,
+.data-source-table-font.disabled .b-font:before {
+  content: "\e67b";
+  color: #009de3;
+}
+.etl-table-font .b-font:before {
+  content: "\e680";
+  color: #009de3;
+}
+.etl-table-font:hover .b-font:before,
+.etl-table-font:focus .b-font:before,
+.etl-table-font.hover .b-font:before {
+  content: "\e680";
+  color: #009de3;
+}
+.etl-table-font:active .b-font:before,
+.etl-table-font.active .b-font:before {
+  content: "\e680";
+  color: #ffffff;
+}
+.etl-table-font.native .b-font:before,
+.etl-table-font.disabled .b-font:before {
+  content: "\e680";
+  color: #009de3;
+}
+.excel-table-font .b-font:before {
+  content: "\e682";
+  color: #009de3;
+}
+.excel-table-font:hover .b-font:before,
+.excel-table-font:focus .b-font:before,
+.excel-table-font.hover .b-font:before {
+  content: "\e682";
+  color: #009de3;
+}
+.excel-table-font:active .b-font:before,
+.excel-table-font.active .b-font:before {
+  content: "\e682";
+  color: #ffffff;
+}
+.excel-table-font.native .b-font:before,
+.excel-table-font.disabled .b-font:before {
+  content: "\e682";
+  color: #009de3;
+}
+.sql-table-font .b-font:before {
+  content: "\e681";
+  color: #009de3;
+}
+.sql-table-font:hover .b-font:before,
+.sql-table-font:focus .b-font:before,
+.sql-table-font.hover .b-font:before {
+  content: "\e681";
+  color: #009de3;
+}
+.sql-table-font:active .b-font:before,
+.sql-table-font.active .b-font:before {
+  content: "\e681";
+  color: #ffffff;
+}
+.sql-table-font.native .b-font:before,
+.sql-table-font.disabled .b-font:before {
+  content: "\e681";
+  color: #009de3;
+}
+.refresh-table-font .b-font:before {
+  content: "\e683";
+  color: #808080;
+}
+.refresh-table-font.native .b-font:before,
+.refresh-table-font.disabled .b-font:before {
+  content: "\e683";
+  color: #808080;
+}
+.recover-chart-font-hightlight .b-font:before {
+  content: "\e6b4";
+  color: #009de3;
+}
+.recover-chart-font-hightlight.native .b-font:before,
+.recover-chart-font-hightlight.disabled .b-font:before {
+  content: "\e6b4";
+  color: #009de3;
+}
+.tables-tile-view-font .b-font:before {
+  content: "\e685";
+  color: #808080;
+}
+.tables-tile-view-font:hover .b-font:before,
+.tables-tile-view-font:focus .b-font:before,
+.tables-tile-view-font.hover .b-font:before {
+  content: "\e685";
+  color: #808080;
+}
+.tables-tile-view-font:active .b-font:before,
+.tables-tile-view-font.active .b-font:before {
+  content: "\e685";
+  color: #ffffff;
+}
+.tables-tile-view-font.native .b-font:before,
+.tables-tile-view-font.disabled .b-font:before {
+  content: "\e685";
+  color: #808080;
+}
+.tables-relation-view-font .b-font:before {
+  content: "\e684";
+  color: #808080;
+}
+.tables-relation-view-font:hover .b-font:before,
+.tables-relation-view-font:focus .b-font:before,
+.tables-relation-view-font.hover .b-font:before {
+  content: "\e684";
+  color: #808080;
+}
+.tables-relation-view-font:active .b-font:before,
+.tables-relation-view-font.active .b-font:before {
+  content: "\e684";
+  color: #ffffff;
+}
+.tables-relation-view-font.native .b-font:before,
+.tables-relation-view-font.disabled .b-font:before {
+  content: "\e684";
+  color: #808080;
+}
+.add-new-table-pull-down-font .b-font:before {
+  content: "\e62d";
+  color: #ffffff;
+}
+.add-new-table-pull-down-font.native .b-font:before,
+.add-new-table-pull-down-font.disabled .b-font:before {
+  content: "\e62d";
+  color: #ffffff;
+}
+.data-link-check-font .b-font:before {
+  content: "\e611";
+  color: #ffffff;
+}
+.data-link-check-font:hover .b-font:before,
+.data-link-check-font:focus .b-font:before,
+.data-link-check-font.hover .b-font:before {
+  content: "\e611";
+  color: #f4f4f4;
+}
+.data-link-check-font:active .b-font:before,
+.data-link-check-font.active .b-font:before {
+  content: "\e611";
+  color: #009de3;
+}
+.data-link-check-font.native .b-font:before,
+.data-link-check-font.disabled .b-font:before {
+  content: "\e611";
+  color: #ffffff;
+}
+.edit-set-font .b-font:before {
+  content: "\e634";
+  color: #808080;
+}
+.edit-set-font:hover .b-font:before,
+.edit-set-font:focus .b-font:before,
+.edit-set-font.hover .b-font:before {
+  content: "\e634";
+  color: #808080;
+}
+.edit-set-font.native .b-font:before,
+.edit-set-font.disabled .b-font:before {
+  content: "\e634";
+  color: #808080;
+}
+.new-analysis-font .b-font:before {
+  content: "\e692";
+  color: #ffffff;
+}
+.new-analysis-font:hover .b-font:before,
+.new-analysis-font:focus .b-font:before,
+.new-analysis-font.hover .b-font:before {
+  content: "\e692";
+  color: #ffffff;
+}
+.new-analysis-font.native .b-font:before,
+.new-analysis-font.disabled .b-font:before {
+  content: "\e692";
+  color: #ffffff;
+}
+.data-config-font .b-font:before {
+  content: "\e693";
+  color: #ffffff;
+}
+.data-config-font:hover .b-font:before,
+.data-config-font:focus .b-font:before,
+.data-config-font.hover .b-font:before {
+  content: "\e693";
+  color: #ffffff;
+}
+.data-config-font.native .b-font:before,
+.data-config-font.disabled .b-font:before {
+  content: "\e693";
+  color: #ffffff;
+}
+.folder-list-view .b-font:before {
+  content: "\e694";
+  color: #808080;
+}
+.folder-list-view:hover .b-font:before,
+.folder-list-view:focus .b-font:before,
+.folder-list-view.hover .b-font:before {
+  content: "\e694";
+  color: #808080;
+}
+.folder-list-view:active .b-font:before,
+.folder-list-view.active .b-font:before {
+  content: "\e694";
+  color: #ffffff;
+}
+.folder-list-view.native .b-font:before,
+.folder-list-view.disabled .b-font:before {
+  content: "\e694";
+  color: #808080;
+}
+.folder-card-view .b-font:before {
+  content: "\e685";
+  color: #808080;
+}
+.folder-card-view:hover .b-font:before,
+.folder-card-view:focus .b-font:before,
+.folder-card-view.hover .b-font:before {
+  content: "\e685";
+  color: #808080;
+}
+.folder-card-view:active .b-font:before,
+.folder-card-view.active .b-font:before {
+  content: "\e685";
+  color: #ffffff;
+}
+.folder-card-view.native .b-font:before,
+.folder-card-view.disabled .b-font:before {
+  content: "\e685";
+  color: #808080;
+}
+.item-check-font .b-font:before {
+  content: "\e611";
+  color: #ffffff;
+}
+.item-check-font:hover .b-font:before,
+.item-check-font:focus .b-font:before,
+.item-check-font.hover .b-font:before {
+  content: "\e611";
+  color: #f4f4f4;
+}
+.item-check-font:active .b-font:before,
+.item-check-font.active .b-font:before {
+  content: "\e611";
+  color: #009de3;
+}
+.item-check-font.native .b-font:before,
+.item-check-font.disabled .b-font:before {
+  content: "\e611";
+  color: #ffffff;
+}
+.table-no-sort-no-filter-font .b-font:before {
+  content: "\e66a";
+  color: "";
+}
+.table-no-sort-no-filter-font:hover .b-font:before,
+.table-no-sort-no-filter-font:focus .b-font:before,
+.table-no-sort-no-filter-font.hover .b-font:before {
+  content: "\e66a";
+  color: "";
+}
+.table-no-sort-no-filter-font.native .b-font:before,
+.table-no-sort-no-filter-font.disabled .b-font:before {
+  content: "\e66a";
+  color: "";
+}
+.table-no-sort-filter-font .b-font:before {
+  content: "\e66b";
+  color: "";
+}
+.table-no-sort-filter-font:hover .b-font:before,
+.table-no-sort-filter-font:focus .b-font:before,
+.table-no-sort-filter-font.hover .b-font:before {
+  content: "\e66b";
+  color: "";
+}
+.table-no-sort-filter-font.native .b-font:before,
+.table-no-sort-filter-font.disabled .b-font:before {
+  content: "\e66b";
+  color: "";
+}
+.table-descending-filter-font .b-font:before {
+  content: "\e667";
+  color: "";
+}
+.table-descending-filter-font:hover .b-font:before,
+.table-descending-filter-font:focus .b-font:before,
+.table-descending-filter-font.hover .b-font:before {
+  content: "\e667";
+  color: "";
+}
+.table-descending-filter-font.native .b-font:before,
+.table-descending-filter-font.disabled .b-font:before {
+  content: "\e667";
+  color: "";
+}
+.table-ascending-filter-font .b-font:before {
+  content: "\e669";
+  color: "";
+}
+.table-ascending-filter-font:hover .b-font:before,
+.table-ascending-filter-font:focus .b-font:before,
+.table-ascending-filter-font.hover .b-font:before {
+  content: "\e669";
+  color: "";
+}
+.table-ascending-filter-font.native .b-font:before,
+.table-ascending-filter-font.disabled .b-font:before {
+  content: "\e669";
+  color: "";
+}
+.table-descending-no-filter-font .b-font:before {
+  content: "\e666";
+  color: "";
+}
+.table-descending-no-filter-font:hover .b-font:before,
+.table-descending-no-filter-font:focus .b-font:before,
+.table-descending-no-filter-font.hover .b-font:before {
+  content: "\e666";
+  color: "";
+}
+.table-descending-no-filter-font.native .b-font:before,
+.table-descending-no-filter-font.disabled .b-font:before {
+  content: "\e666";
+  color: "";
+}
+.table-ascending-no-filter-font .b-font:before {
+  content: "\e668";
+  color: "";
+}
+.table-ascending-no-filter-font:hover .b-font:before,
+.table-ascending-no-filter-font:focus .b-font:before,
+.table-ascending-no-filter-font.hover .b-font:before {
+  content: "\e668";
+  color: "";
+}
+.table-ascending-no-filter-font.native .b-font:before,
+.table-ascending-no-filter-font.disabled .b-font:before {
+  content: "\e668";
+  color: "";
+}
+.table-no-sort-font .b-font:before {
+  content: "\e66c";
+  color: "";
+}
+.table-no-sort-font:hover .b-font:before,
+.table-no-sort-font:focus .b-font:before,
+.table-no-sort-font.hover .b-font:before {
+  content: "\e66c";
+  color: "";
+}
+.table-no-sort-font.native .b-font:before,
+.table-no-sort-font.disabled .b-font:before {
+  content: "\e66c";
+  color: "";
+}
+.primary-key-font .b-font:before {
+  content: "\e67d;";
+  color: #808080;
+}
+.primary-key-font:hover .b-font:before,
+.primary-key-font:focus .b-font:before,
+.primary-key-font.hover .b-font:before {
+  content: "\e67d;";
+  color: #808080;
+}
+.primary-key-font.native .b-font:before,
+.primary-key-font.disabled .b-font:before {
+  content: "\e67d;";
+  color: #808080;
+}
+.table-open-row-style-font .b-font:before {
+  content: "\e671";
+  color: #808080;
+}
+.table-open-row-style-font:hover .b-font:before,
+.table-open-row-style-font:focus .b-font:before,
+.table-open-row-style-font.hover .b-font:before {
+  content: "\e671";
+  color: #808080;
+}
+.table-open-row-style-font:active .b-font:before,
+.table-open-row-style-font.active .b-font:before {
+  content: "\e671";
+  color: #009de3;
+}
+.table-open-row-style-font.native .b-font:before,
+.table-open-row-style-font.disabled .b-font:before {
+  content: "\e671";
+  color: #808080;
+}
+.table-open-col-style-font .b-font:before {
+  content: "\e672";
+  color: #808080;
+}
+.table-open-col-style-font:hover .b-font:before,
+.table-open-col-style-font:focus .b-font:before,
+.table-open-col-style-font.hover .b-font:before {
+  content: "\e672";
+  color: #808080;
+}
+.table-open-col-style-font:active .b-font:before,
+.table-open-col-style-font.active .b-font:before {
+  content: "\e672";
+  color: #009de3;
+}
+.table-open-col-style-font.native .b-font:before,
+.table-open-col-style-font.disabled .b-font:before {
+  content: "\e672";
+  color: #808080;
+}
+.calculate-function-font .b-font:before {
+  content: "\e6a3";
+  color: #1a1a1a;
+}
+.calculate-function-font.native .b-font:before,
+.calculate-function-font.disabled .b-font:before {
+  content: "\e6a3";
+  color: #1a1a1a;
+}
+.path-set-doubt .b-font:before {
+  content: "\e69a";
+  color: #009de3;
+}
+.path-set-doubt.native .b-font:before,
+.path-set-doubt.disabled .b-font:before {
+  content: "\e69a";
+  color: #009de3;
+}
+.rename-report-font .b-font:before {
+  content: "\e687";
+  color: #009de3;
+}
+.rename-report-font.native .b-font:before,
+.rename-report-font.disabled .b-font:before {
+  content: "\e687";
+  color: #009de3;
+}
+.remove-report-font .b-font:before {
+  content: "\e605";
+  color: #e85050;
+}
+.remove-report-font.native .b-font:before,
+.remove-report-font.disabled .b-font:before {
+  content: "\e605";
+  color: #e85050;
+}
+.excel-upload-tip-font .b-font:before {
+  content: "\e69e";
+  color: #009de3;
+}
+.excel-upload-tip-font.native .b-font:before,
+.excel-upload-tip-font.disabled .b-font:before {
+  content: "\e69e";
+  color: #009de3;
+}
+.excel-field-type-string-font .b-font:before {
+  content: "\e622";
+  color: #009de3;
+}
+.excel-field-type-string-font.native .b-font:before,
+.excel-field-type-string-font.disabled .b-font:before {
+  content: "\e622";
+  color: #009de3;
+}
+.excel-field-type-number-font .b-font:before {
+  content: "\e61f";
+  color: #009de3;
+}
+.excel-field-type-number-font.native .b-font:before,
+.excel-field-type-number-font.disabled .b-font:before {
+  content: "\e61f";
+  color: #009de3;
+}
+.excel-field-type-date-font .b-font:before {
+  content: "\e61b";
+  color: #009de3;
+}
+.excel-field-type-date-font.native .b-font:before,
+.excel-field-type-date-font.disabled .b-font:before {
+  content: "\e61b";
+  color: #009de3;
+}
+.excel-field-type-pull-down-font .b-font:before {
+  content: "\e608";
+  color: #009de3;
+}
+.excel-field-type-pull-down-font.native .b-font:before,
+.excel-field-type-pull-down-font.disabled .b-font:before {
+  content: "\e608";
+  color: #009de3;
+}
+.data-link-set-font .b-font:before {
+  content: "\e678";
+  color: #009de3;
+}
+.data-link-set-font.native .b-font:before,
+.data-link-set-font.disabled .b-font:before {
+  content: "\e678";
+  color: #009de3;
+}
+.data-link-test-font .b-font:before {
+  content: "\e686";
+  color: #009de3;
+}
+.data-link-test-font.native .b-font:before,
+.data-link-test-font.disabled .b-font:before {
+  content: "\e686";
+  color: #009de3;
+}
+.data-link-copy-font .b-font:before {
+  content: "\e610";
+  color: #58cc7d;
+}
+.data-link-copy-font.native .b-font:before,
+.data-link-copy-font.disabled .b-font:before {
+  content: "\e610";
+  color: #58cc7d;
+}
+.data-link-remove-font .b-font:before {
+  content: "\e600";
+  color: #e85050;
+}
+.data-link-remove-font.native .b-font:before,
+.data-link-remove-font.disabled .b-font:before {
+  content: "\e600";
+  color: #e85050;
+}
+.cube-path-confirm-font .b-font:before {
+  content: "\e64e";
+  color: #fbb03b;
+}
+.cube-path-confirm-font.native .b-font:before,
+.cube-path-confirm-font.disabled .b-font:before {
+  content: "\e64e";
+  color: #fbb03b;
+}
+.target-style-less-dot-font .b-font:before {
+  content: "\e6a2";
+  color: #e85050;
+}
+.target-style-less-dot-font.native .b-font:before,
+.target-style-less-dot-font.disabled .b-font:before {
+  content: "\e6a2";
+  color: #e85050;
+}
+.target-style-equal-dot-font .b-font:before {
+  content: "\e6a2";
+  color: #f9a744;
+}
+.target-style-equal-dot-font.native .b-font:before,
+.target-style-equal-dot-font.disabled .b-font:before {
+  content: "\e6a2";
+  color: #f9a744;
+}
+.target-style-more-dot-font .b-font:before {
+  content: "\e6a2";
+  color: #58cc7d;
+}
+.target-style-more-dot-font.native .b-font:before,
+.target-style-more-dot-font.disabled .b-font:before {
+  content: "\e6a2";
+  color: #58cc7d;
+}
+.target-style-less-arrow-font .b-font:before {
+  content: "\e6a1";
+  color: #e85050;
+}
+.target-style-less-arrow-font.native .b-font:before,
+.target-style-less-arrow-font.disabled .b-font:before {
+  content: "\e6a1";
+  color: #e85050;
+}
+.target-style-equal-arrow-font .b-font:before {
+  content: "\e69f";
+  color: #f9a744;
+}
+.target-style-equal-arrow-font.native .b-font:before,
+.target-style-equal-arrow-font.disabled .b-font:before {
+  content: "\e69f";
+  color: #f9a744;
+}
+.target-style-more-arrow-font .b-font:before {
+  content: "\e6a0";
+  color: #58cc7d;
+}
+.target-style-more-arrow-font.native .b-font:before,
+.target-style-more-arrow-font.disabled .b-font:before {
+  content: "\e6a0";
+  color: #58cc7d;
+}
+.calculate-target-font .b-font:before {
+  content: "\e6a3";
+  color: #1a1a1a;
+}
+.calculate-target-font.native .b-font:before,
+.calculate-target-font.disabled .b-font:before {
+  content: "\e6a3";
+  color: #1a1a1a;
+}
+.task-list-font .b-font:before {
+  content: "\e694";
+  color: #009de3;
+}
+.task-list-font.native .b-font:before,
+.task-list-font.disabled .b-font:before {
+  content: "\e694";
+  color: #009de3;
+}
+.widget-combo-detail-font .b-font:before {
+  content: "\e697";
+  color: #009de3;
+}
+.widget-combo-detail-font.native .b-font:before,
+.widget-combo-detail-font.disabled .b-font:before {
+  content: "\e697";
+  color: #009de3;
+}
+.widget-combo-pull-down-font .b-font:before {
+  content: "\e6ab";
+  color: #009de3;
+}
+.widget-combo-pull-down-font.native .b-font:before,
+.widget-combo-pull-down-font.disabled .b-font:before {
+  content: "\e6ab";
+  color: #009de3;
+}
+.widget-tools-filter-font .b-font:before {
+  content: "\e60f";
+  color: #009de3;
+}
+.widget-tools-filter-font.native .b-font:before,
+.widget-tools-filter-font.disabled .b-font:before {
+  content: "\e60f";
+  color: #009de3;
+}
+.widget-tools-clear-font .b-font:before {
+  content: "\e63d";
+  color: #009de3;
+}
+.widget-tools-clear-font.native .b-font:before,
+.widget-tools-clear-font.disabled .b-font:before {
+  content: "\e63d";
+  color: #009de3;
+}
+.widget-tools-export-excel-font .b-font:before {
+  content: "\e635";
+  color: #009de3;
+}
+.widget-tools-export-excel-font.native .b-font:before,
+.widget-tools-export-excel-font.disabled .b-font:before {
+  content: "\e635";
+  color: #009de3;
+}
+.widget-combo-expand-font .b-font:before {
+  content: "\e697";
+  color: #808080;
+}
+.widget-combo-expand-font.native .b-font:before,
+.widget-combo-expand-font.disabled .b-font:before {
+  content: "\e697";
+  color: #808080;
+}
+.widget-combo-linkage-font .b-font:before {
+  content: "\e63c";
+  color: #808080;
+}
+.widget-combo-linkage-font.native .b-font:before,
+.widget-combo-linkage-font.disabled .b-font:before {
+  content: "\e63c";
+  color: #808080;
+}
+.widget-combo-rename-edit-font .b-font:before {
+  content: "\e670";
+  color: #808080;
+}
+.widget-combo-rename-edit-font.native .b-font:before,
+.widget-combo-rename-edit-font.disabled .b-font:before {
+  content: "\e670";
+  color: #808080;
+}
+.widget-combo-show-title-font .b-font:before {
+  content: "\e64c";
+  color: #808080;
+}
+.widget-combo-show-title-font.native .b-font:before,
+.widget-combo-show-title-font.disabled .b-font:before {
+  content: "\e64c";
+  color: #808080;
+}
+.widget-combo-title-left-font .b-font:before {
+  content: "\e654";
+  color: #808080;
+}
+.widget-combo-title-left-font.native .b-font:before,
+.widget-combo-title-left-font.disabled .b-font:before {
+  content: "\e654";
+  color: #808080;
+}
+.widget-combo-title-center-font .b-font:before {
+  content: "\e64f";
+  color: #808080;
+}
+.widget-combo-title-center-font.native .b-font:before,
+.widget-combo-title-center-font.disabled .b-font:before {
+  content: "\e64f";
+  color: #808080;
+}
+.widget-combo-show-filter-font .b-font:before {
+  content: "\e60f";
+  color: #808080;
+}
+.widget-combo-show-filter-font.native .b-font:before,
+.widget-combo-show-filter-font.disabled .b-font:before {
+  content: "\e60f";
+  color: #808080;
+}
+.widget-combo-export-excel-font .b-font:before {
+  content: "\e635";
+  color: #808080;
+}
+.widget-combo-export-excel-font.native .b-font:before,
+.widget-combo-export-excel-font.disabled .b-font:before {
+  content: "\e635";
+  color: #808080;
+}
+.widget-combo-copy .b-font:before {
+  content: "\e610";
+  color: #808080;
+}
+.widget-combo-copy.native .b-font:before,
+.widget-combo-copy.disabled .b-font:before {
+  content: "\e610";
+  color: #808080;
+}
+.widget-combo-delete .b-font:before {
+  content: "\e605";
+  color: #808080;
+}
+.widget-combo-delete.native .b-font:before,
+.widget-combo-delete.disabled .b-font:before {
+  content: "\e605";
+  color: #808080;
+}
+.widget-combo-asc-font .b-font:before {
+  content: "\e63f";
+  color: #808080;
+}
+.widget-combo-asc-font.native .b-font:before,
+.widget-combo-asc-font.disabled .b-font:before {
+  content: "\e63f";
+  color: #808080;
+}
+.widget-combo-des-font .b-font:before {
+  content: "\e63a";
+  color: #808080;
+}
+.widget-combo-des-font.native .b-font:before,
+.widget-combo-des-font.disabled .b-font:before {
+  content: "\e63a";
+  color: #808080;
+}
+.widget-combo-clear-font .b-font:before {
+  content: "\e63d";
+  color: #808080;
+}
+.widget-combo-clear-font.native .b-font:before,
+.widget-combo-clear-font.disabled .b-font:before {
+  content: "\e63d";
+  color: #808080;
+}
+.detail-table-popup-font .b-font:before {
+  content: "\e6ac";
+  color: #808080;
+}
+.detail-table-popup-font:hover .b-font:before,
+.detail-table-popup-font:focus .b-font:before,
+.detail-table-popup-font.hover .b-font:before {
+  content: "\e6ac";
+  color: #009de3;
+}
+.detail-table-popup-font.native .b-font:before,
+.detail-table-popup-font.disabled .b-font:before {
+  content: "\e6ac";
+  color: #808080;
+}
+.chart-drill-up .b-font:before {
+  content: "\e6ad";
+  color: "";
+}
+.chart-drill-up.native .b-font:before,
+.chart-drill-up.disabled .b-font:before {
+  content: "\e6ad";
+  color: "";
+}
+.chart-drill-down .b-font:before {
+  content: "\e608";
+  color: "";
+}
+.chart-drill-down.native .b-font:before,
+.chart-drill-down.disabled .b-font:before {
+  content: "\e608";
+  color: "";
+}
+.report-filter-open-font .b-font:before {
+  content: "\e648";
+  color: #808080;
+}
+.report-filter-open-font.native .b-font:before,
+.report-filter-open-font.disabled .b-font:before {
+  content: "\e648";
+  color: #808080;
+}
+.report-filter-close-font .b-font:before {
+  content: "\e645";
+  color: #808080;
+}
+.report-filter-close-font.native .b-font:before,
+.report-filter-close-font.disabled .b-font:before {
+  content: "\e645";
+  color: #808080;
+}
+.report-apply-hangout-normal-font .b-font:before {
+  content: "\e66d";
+  color: #808080;
+}
+.report-apply-hangout-normal-font.native .b-font:before,
+.report-apply-hangout-normal-font.disabled .b-font:before {
+  content: "\e66d";
+  color: #808080;
+}
+.report-apply-hangout-ing-font .b-font:before {
+  content: "\e66d";
+  color: #009de3;
+}
+.report-apply-hangout-ing-font.native .b-font:before,
+.report-apply-hangout-ing-font.disabled .b-font:before {
+  content: "\e66d";
+  color: #009de3;
+}
+.report-hangout-font .b-font:before {
+  content: "\e64b";
+  color: #58cc7d;
+}
+.report-hangout-font.native .b-font:before,
+.report-hangout-font.disabled .b-font:before {
+  content: "\e64b";
+  color: #58cc7d;
+}
+.report-cancel-hangout-font .b-font:before {
+  content: "\e64b";
+  color: #808080;
+}
+.report-cancel-hangout-font.native .b-font:before,
+.report-cancel-hangout-font.disabled .b-font:before {
+  content: "\e64b";
+  color: #808080;
+}
+.report-hangout-ing-mark-font .b-font:before {
+  content: "\e64b";
+  color: #009de3;
+}
+.report-hangout-ing-mark-font.native .b-font:before,
+.report-hangout-ing-mark-font.disabled .b-font:before {
+  content: "\e64b";
+  color: #009de3;
+}
+.delete-font-package .b-font:before {
+  content: "\e605";
+  color: #e85050;
+}
+.delete-font-package.native .b-font:before,
+.delete-font-package.disabled .b-font:before {
+  content: "\e605";
+  color: #e85050;
+}
+.delete-h-font-package .b-font:before {
+  content: "\e605";
+  color: #e85050;
+}
+.delete-h-font-package.native .b-font:before,
+.delete-h-font-package.disabled .b-font:before {
+  content: "\e605";
+  color: #e85050;
+}
+.rename-font-package .b-font:before {
+  content: "\e687";
+  color: #009de3;
+}
+.rename-font-package.native .b-font:before,
+.rename-font-package.disabled .b-font:before {
+  content: "\e687";
+  color: #009de3;
+}
+.package-selected-font .b-font:before {
+  content: "\e6b3";
+  color: #178cdf;
+}
+.package-selected-font.native .b-font:before,
+.package-selected-font.disabled .b-font:before {
+  content: "\e6b3";
+  color: #178cdf;
+}
+.package-not-selected-font .b-font:before {
+  content: "\e6b2";
+  color: #178cdf;
+}
+.package-not-selected-font.native .b-font:before,
+.package-not-selected-font.disabled .b-font:before {
+  content: "\e6b2";
+  color: #178cdf;
+}
+.report-detail-info-font .b-font:before {
+  content: "\e66e";
+  color: #f07d0a;
+}
+.report-detail-info-font.native .b-font:before,
+.report-detail-info-font.disabled .b-font:before {
+  content: "\e66e";
+  color: #f07d0a;
+}
+.report-rename-font .b-font:before {
+  content: "\e670";
+  color: #58cc7d;
+}
+.report-rename-font.native .b-font:before,
+.report-rename-font.disabled .b-font:before {
+  content: "\e670";
+  color: #58cc7d;
+}
+.report-cancel-share-font .b-font:before {
+  content: "\e6b5";
+  color: #009de3;
+}
+.report-cancel-share-font.native .b-font:before,
+.report-cancel-share-font.disabled .b-font:before {
+  content: "\e6b5";
+  color: #009de3;
+}
+.drill-push-up-font .b-font:before {
+  content: "\e630";
+  color: #808080;
+}
+.drill-push-up-font.native .b-font:before,
+.drill-push-up-font.disabled .b-font:before {
+  content: "\e630";
+  color: #808080;
+}
+.drill-push-down-font .b-font:before {
+  content: "\e62d";
+  color: #808080;
+}
+.drill-push-down-font.native .b-font:before,
+.drill-push-down-font.disabled .b-font:before {
+  content: "\e62d";
+  color: #808080;
+}
+.drag-tag-font .b-font:before {
+  content: "\e600";
+  color: #f07d0a;
+}
+.drag-tag-font.native .b-font:before,
+.drag-tag-font.disabled .b-font:before {
+  content: "\e600";
+  color: #f07d0a;
+}
