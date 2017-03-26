@@ -40,7 +40,7 @@ BI.MultiSelectItem = BI.inherit(BI.BasicButton, {
         });
 
         BI.createWidget(BI.extend({
-            element: this.element
+            element: this
         }, BI.LogicFactory.createLogic("horizontal", BI.extend(o.logic, {
             items: BI.LogicFactory.createLogicItemsByDirection("left", {
                 type: "bi.center_adapt",
@@ -48,6 +48,11 @@ BI.MultiSelectItem = BI.inherit(BI.BasicButton, {
                 width: 36
             } ,this.text)
         }))));
+    },
+
+    setEnable: function (v) {
+        BI.MultiSelectItem.superclass.setEnable.apply(this, arguments);
+        this.checkbox.setEnable(v);
     },
 
     doRedMark: function(){
@@ -68,5 +73,5 @@ BI.MultiSelectItem = BI.inherit(BI.BasicButton, {
         this.checkbox.setSelected(v);
     }
 });
-
+BI.MultiSelectItem.EVENT_CHANGE = "EVENT_CHANGE";
 $.shortcut("bi.multi_select_item", BI.MultiSelectItem);

@@ -1,0 +1,23 @@
+@import "../../bibase";
+
+
+
+.bi-down-list-combo{
+  & .down-list-group{
+    &.bi-combo-hover{
+      & .bi-down-list-group-item{
+        &, & .b-font:before{
+          background-color: @color-bi-background-gray;
+        }
+        &:disabled, &.disabled{
+          &, & .b-font:before{
+            background-color: @color-bi-background-default
+          }
+        }
+      }
+    }
+  }
+  & .bi-down-list-spliter{
+    border-top: 1px solid @color-bi-split-light;
+  }
+}

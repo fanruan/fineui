@@ -60,7 +60,7 @@ BI.IconTextIconNode = BI.inherit(BI.NodeButton, {
         })
         BI.createWidget({
             type: "bi.absolute",
-            element: this.element,
+            element: this,
             items: [{
                 el: {
                     type: "bi.center_adapt",
@@ -81,7 +81,7 @@ BI.IconTextIconNode = BI.inherit(BI.NodeButton, {
         })
 
         BI.createWidget(BI.extend({
-            element: this.element
+            element: this
         }, BI.LogicFactory.createLogic("horizontal", BI.extend(o.logic, {
             items: BI.LogicFactory.createLogicItemsByDirection("left", icon1, this.text, blank)
         }))));

@@ -4,8 +4,8 @@
  * @extends BI.Layout
  */
 BI.HTapeLayout = BI.inherit(BI.Layout, {
-    _defaultConfig: function () {
-        return BI.extend(BI.HTapeLayout.superclass._defaultConfig.apply(this, arguments), {
+    props: function () {
+        return BI.extend(BI.HTapeLayout.superclass.props.apply(this, arguments), {
             baseCls: "bi-h-tape-layout",
             hgap: 0,
             vgap: 0,
@@ -29,8 +29,8 @@ BI.HTapeLayout = BI.inherit(BI.Layout, {
             ]
         });
     },
-    _init: function () {
-        BI.HTapeLayout.superclass._init.apply(this, arguments);
+    render: function () {
+        BI.HTapeLayout.superclass.render.apply(this, arguments);
         this.populate(this.options.items);
     },
 
@@ -39,7 +39,7 @@ BI.HTapeLayout = BI.inherit(BI.Layout, {
     },
     addItem: function (item) {
         // do nothing
-        throw new Error("不能添加元素")
+        throw new Error("cannot be added")
     },
 
     stroke: function (items) {
@@ -97,7 +97,7 @@ BI.HTapeLayout = BI.inherit(BI.Layout, {
 
     populate: function (items) {
         BI.HTapeLayout.superclass.populate.apply(this, arguments);
-        this.render();
+        this._mount();
     }
 });
 $.shortcut('bi.htape', BI.HTapeLayout);
@@ -108,8 +108,8 @@ $.shortcut('bi.htape', BI.HTapeLayout);
  * @extends BI.Layout
  */
 BI.VTapeLayout = BI.inherit(BI.Layout, {
-    _defaultConfig: function () {
-        return BI.extend(BI.VTapeLayout.superclass._defaultConfig.apply(this, arguments), {
+    props: function () {
+        return BI.extend(BI.VTapeLayout.superclass.props.apply(this, arguments), {
             baseCls: "bi-v-tape-layout",
             hgap: 0,
             vgap: 0,
@@ -133,8 +133,8 @@ BI.VTapeLayout = BI.inherit(BI.Layout, {
             ]
         });
     },
-    _init: function () {
-        BI.VTapeLayout.superclass._init.apply(this, arguments);
+    render: function () {
+        BI.VTapeLayout.superclass.render.apply(this, arguments);
         this.populate(this.options.items);
     },
 
@@ -144,7 +144,7 @@ BI.VTapeLayout = BI.inherit(BI.Layout, {
 
     addItem: function (item) {
         // do nothing
-        throw new Error("不能添加元素")
+        throw new Error("cannot be added")
     },
 
     stroke: function (items) {
@@ -202,7 +202,7 @@ BI.VTapeLayout = BI.inherit(BI.Layout, {
 
     populate: function (items) {
         BI.VTapeLayout.superclass.populate.apply(this, arguments);
-        this.render();
+        this._mount();
     }
 });
 $.shortcut('bi.vtape', BI.VTapeLayout);

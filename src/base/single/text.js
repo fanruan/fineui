@@ -99,6 +99,10 @@ BI.Text = BI.inherit(BI.Single, {
         }
     },
 
+    setStyle: function (css) {
+        this.text.element.css(css)
+    },
+
     setText: function (text) {
         BI.Text.superclass.setText.apply(this, arguments);
         this.options.text = text;

@@ -48,7 +48,7 @@ BI.Collection = BI.inherit(BI.Widget, {
         });
         BI.createWidget({
             type: "bi.vertical",
-            element: this.element,
+            element: this,
             scrollable: o.overflowX === true && o.overflowY === true,
             scrolly: o.overflowX === false && o.overflowY === true,
             scrollx: o.overflowX === true && o.overflowY === false,
@@ -188,11 +188,7 @@ BI.Collection = BI.inherit(BI.Widget, {
         BI.each(addSet, function (index) {
             addedItems.push(renderedCells[index])
         });
-        BI.createWidget({
-            type: "bi.absolute",
-            element: this.container,
-            items: addedItems
-        });
+        this.container.addItems(addedItems);
         this.renderedCells = renderedCells;
         this.renderedKeys = renderedKeys;
     },

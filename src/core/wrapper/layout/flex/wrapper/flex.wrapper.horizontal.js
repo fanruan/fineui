@@ -6,8 +6,8 @@
  * @extends BI.Layout
  */
 BI.FlexHorizontalLayout = BI.inherit(BI.Layout, {
-    _defaultConfig: function () {
-        return BI.extend(BI.FlexHorizontalLayout.superclass._defaultConfig.apply(this, arguments), {
+    props: function () {
+        return BI.extend(BI.FlexHorizontalLayout.superclass.props.apply(this, arguments), {
             baseCls: "bi-flex-wrapper-horizontal-layout clearfix",
             verticalAlign: "middle",
             columnSize: [],
@@ -20,17 +20,17 @@ BI.FlexHorizontalLayout = BI.inherit(BI.Layout, {
             bgap: 0
         });
     },
-    _init: function () {
-        BI.FlexHorizontalLayout.superclass._init.apply(this, arguments);
+    render: function () {
+        BI.FlexHorizontalLayout.superclass.render.apply(this, arguments);
         var o = this.options;
-        this.wrapper = $("<div>").addClass("flex-wrapper-horizontal-layout-wrapper " + o.verticalAlign).appendTo(this.element);
+        this.$wrapper = $("<div>").addClass("flex-wrapper-horizontal-layout-wrapper " + o.verticalAlign);
         this.populate(this.options.items);
     },
 
     _addElement: function (i, item) {
         var o = this.options;
         var w = BI.FlexHorizontalLayout.superclass._addElement.apply(this, arguments);
-        w.element.css({"position": "relative"}).appendTo(this.wrapper);
+        w.element.css({"position": "relative"});
         if (o.hgap + o.lgap + (item.lgap || 0) > 0) {
             w.element.css({
                 "margin-left": o.hgap + o.lgap + (item.lgap || 0) + "px"
@@ -54,11 +54,24 @@ BI.FlexHorizontalLayout = BI.inherit(BI.Layout, {
         return w;
     },
 
-    addItem: function (item) {
-        var w = this._addElement(this.options.items.length, item);
-        this.options.items.push(item);
-        w.element.appendTo(this.wrapper);
-        return w;
+    _mountChildren: function () {
+        var self = this;
+        var frag = document.createDocumentFragment();
+        var hasChild = false;
+        BI.each(this._children, function (i, widget) {
+            if (widget.element !== self.element) {
+                frag.appendChild(widget.element[0]);
+                hasChild = true;
+            }
+        });
+        if (hasChild === true) {
+            this.$wrapper.append(frag);
+            this.element.append(this.$wrapper);
+        }
+    },
+
+    _getWrapper: function(){
+        return this.$wrapper;
     },
 
     resize: function () {
@@ -67,6 +80,7 @@ BI.FlexHorizontalLayout = BI.inherit(BI.Layout, {
 
     populate: function (items) {
         BI.FlexHorizontalLayout.superclass.populate.apply(this, arguments);
+        this._mount();
     }
 });
 $.shortcut('bi.flex_wrapper_horizontal', BI.FlexHorizontalLayout);

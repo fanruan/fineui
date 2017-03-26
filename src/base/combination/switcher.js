@@ -56,7 +56,7 @@ BI.Switcher = BI.inherit(BI.Widget, {
         BI.createWidget({
             type: "bi.vertical",
             scrolly: false,
-            element: this.element,
+            element: this,
             items: [
                 {el: this.switcher}
             ]
@@ -144,7 +144,7 @@ BI.Switcher = BI.inherit(BI.Widget, {
                 BI.createWidget({
                     type: "bi.vertical",
                     scrolly: false,
-                    element: this.element,
+                    element: this,
                     items: [
                         {el: this.popupView}
                     ]

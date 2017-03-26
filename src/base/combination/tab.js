@@ -18,8 +18,7 @@ BI.Tab = BI.inherit(BI.Widget, {
         })
     },
 
-    _init: function () {
-        BI.Tab.superclass._init.apply(this, arguments);
+    render: function () {
         var self = this, o = this.options;
         if (BI.isObject(o.tab)) {
             this.tab = BI.createWidget(this.options.tab, {type: "bi.button_group"});
@@ -33,7 +32,7 @@ BI.Tab = BI.inherit(BI.Widget, {
         });
 
         BI.createWidget(BI.extend({
-            element: this.element
+            element: this
         }, BI.LogicFactory.createLogic(BI.LogicFactory.createLogicTypeByDirection(o.direction), BI.extend({}, o.logic, {
             items: BI.LogicFactory.createLogicItemsByDirection(o.direction, this.tab, this.layout)
         }))));
@@ -53,9 +52,6 @@ BI.Tab = BI.inherit(BI.Widget, {
         listener.on(BI.ShowListener.EVENT_CHANGE, function (value) {
             self.fireEvent(BI.Tab.EVENT_CHANGE, value, self);
         });
-        if (o.defaultShowIndex !== false) {
-            this.setSelect(o.defaultShowIndex);
-        }
     },
 
     _assertCard: function (v) {
@@ -63,6 +59,13 @@ BI.Tab = BI.inherit(BI.Widget, {
             var card = this.options.cardCreator(v);
             this.cardMap[v] = card;
             this.layout.addCardByName(v, card);
+        }
+    },
+
+    mounted: function () {
+        var o = this.options;
+        if (o.defaultShowIndex !== false) {
+            this.setSelect(o.defaultShowIndex);
         }
     },
 

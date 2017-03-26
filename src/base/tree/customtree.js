@@ -87,7 +87,7 @@ BI.CustomTree = BI.inherit(BI.Widget, {
     initTree: function (nodes) {
         var self = this, o = this.options;
         this.tree = BI.createWidget(o.el, {
-            element: this.element,
+            element: this,
             items: this._formatItems(nodes),
             itemsCreator: function (op, callback) {
                 o.itemsCreator.apply(this, [op, function (items) {

@@ -18,7 +18,7 @@ BI.BranchTree = BI.inherit(BI.Widget, {
         var self = this, o = this.options;
         this.branchTree = BI.createWidget({
             type: "bi.custom_tree",
-            element: this.element,
+            element: this,
             expander: BI.extend({
                 type: "bi.branch_expander",
                 el: {},

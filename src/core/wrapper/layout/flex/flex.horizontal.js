@@ -6,8 +6,8 @@
  * @extends BI.Layout
  */
 BI.FlexHorizontalLayout = BI.inherit(BI.Layout, {
-    _defaultConfig: function () {
-        return BI.extend(BI.FlexHorizontalLayout.superclass._defaultConfig.apply(this, arguments), {
+    props: function () {
+        return BI.extend(BI.FlexHorizontalLayout.superclass.props.apply(this, arguments), {
             baseCls: "bi-flex-horizontal-layout",
             verticalAlign: "middle",
             columnSize: [],
@@ -20,8 +20,8 @@ BI.FlexHorizontalLayout = BI.inherit(BI.Layout, {
             bgap: 0
         });
     },
-    _init: function () {
-        BI.FlexHorizontalLayout.superclass._init.apply(this, arguments);
+    render: function () {
+        BI.FlexHorizontalLayout.superclass.render.apply(this, arguments);
         var o = this.options;
         this.element.addClass(o.verticalAlign);
         this.populate(this.options.items);
@@ -60,7 +60,7 @@ BI.FlexHorizontalLayout = BI.inherit(BI.Layout, {
 
     populate: function (items) {
         BI.FlexHorizontalLayout.superclass.populate.apply(this, arguments);
-        this.render();
+        this._mount();
     }
 });
 $.shortcut('bi.flex_horizontal', BI.FlexHorizontalLayout);

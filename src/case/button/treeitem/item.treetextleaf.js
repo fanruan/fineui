@@ -34,7 +34,7 @@ BI.TreeTextLeafItem = BI.inherit(BI.BasicButton, {
         });
         BI.createWidget({
             type: "bi.htape",
-            element: this.element,
+            element: this,
             items: [{
                 el: this.text
             }]

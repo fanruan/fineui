@@ -126,7 +126,7 @@ BI.View = BI.inherit(BI.V, {
     _vessel: function () {
         this._cardLayouts = {};
         this._cardLayouts[this.getName()] = new BI.CardLayout({
-            element: this.element
+            element: this
         });
         var vessel = BI.createWidget();
         this._cardLayouts[this.getName()].addCardByName(this.getName(), vessel);

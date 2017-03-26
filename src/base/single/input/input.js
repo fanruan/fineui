@@ -20,21 +20,28 @@ BI.Input = BI.inherit(BI.Single, {
     _init: function () {
         BI.Input.superclass._init.apply(this, arguments);
         var self = this;
+        var ctrlKey = false;
+        var inputEventValid = false;
         var _keydown = BI.debounce(function (keyCode) {
-            self.onKeyDown(keyCode);
+            self.onKeyDown(keyCode, ctrlKey);
             self._keydown_ = false;
         }, 300);
         var _clk = BI.debounce(BI.bind(this._click, this), BI.EVENT_RESPONSE_TIME, true);
         this._blurDebounce = BI.debounce(BI.bind(this._blur, this), BI.EVENT_RESPONSE_TIME, true);
         this.element
             .keydown(function (e) {
+                inputEventValid = false;
+                ctrlKey = e.ctrlKey;
                 self.fireEvent(BI.Input.EVENT_QUICK_DOWN);
             })
             .keyup(function (e) {
-                self._keydown_ = true;
-                _keydown(e.keyCode);
+                if (!(inputEventValid && e.keyCode === BI.KeyCode.ENTER)) {
+                    self._keydown_ = true;
+                    _keydown(e.keyCode);
+                }
             })
             .on("input propertychange", function (e) {
+                inputEventValid = true;
                 self._keydown_ = true;
                 _keydown(e.keyCode);
             })
@@ -97,29 +104,10 @@ BI.Input = BI.inherit(BI.Single, {
         this._click();
     },
 
-    onKeyDown: function (keyCode) {
+    onKeyDown: function (keyCode, ctrlKey) {
         if (!this.isValid() || BI.trim(this._lastValidValue) !== BI.trim(this.getValue())) {
             this._checkValidationOnValueChange();
         }
-        if (keyCode == BI.keyCode.ENTER) {
-            if (this.isValid() || this.options.quitChecker.apply(this, [BI.trim(this.getValue())]) !== false) {
-                this.blur();
-                this.fireEvent(BI.Input.EVENT_ENTER);
-            } else {
-                this.fireEvent(BI.Input.EVENT_RESTRICT);
-            }
-        }
-        if (keyCode == BI.keyCode.SPACE) {
-            this.fireEvent(BI.Input.EVENT_SPACE);
-        }
-        if (keyCode == BI.keyCode.BACKSPACE && this._lastValue == "") {
-            this.fireEvent(BI.Input.EVENT_REMOVE);
-        }
-        if (keyCode == BI.keyCode.BACKSPACE || keyCode == BI.keyCode.DELETE) {
-            this.fireEvent(BI.Input.EVENT_BACKSPACE);
-        }
-        this.fireEvent(BI.Input.EVENT_KEY_DOWN);
-
         if (this.isValid() && BI.trim(this.getValue()) !== "") {
             if (BI.trim(this.getValue()) !== this._lastValue && (!this._start || this._lastValue == null || this._lastValue === "")
                 || (this._pause === true && !/(\s|\u00A0)$/.test(this.getValue()))) {
@@ -129,13 +117,35 @@ BI.Input = BI.inherit(BI.Single, {
                 this.fireEvent(BI.Input.EVENT_START);
             }
         }
+        if (ctrlKey === true && keyCode === 86) {//ctrlKey+V
+            this._valueChange();
+        } else {
+            if (keyCode == BI.KeyCode.ENTER) {
+                if (this.isValid() || this.options.quitChecker.apply(this, [BI.trim(this.getValue())]) !== false) {
+                    this.blur();
+                    this.fireEvent(BI.Input.EVENT_ENTER);
+                } else {
+                    this.fireEvent(BI.Input.EVENT_RESTRICT);
+                }
+            }
+            if (keyCode == BI.KeyCode.SPACE) {
+                this.fireEvent(BI.Input.EVENT_SPACE);
+            }
+            if (keyCode == BI.KeyCode.BACKSPACE && this._lastValue == "") {
+                this.fireEvent(BI.Input.EVENT_REMOVE);
+            }
+            if (keyCode == BI.KeyCode.BACKSPACE || keyCode == BI.KeyCode.DELETE) {
+                this.fireEvent(BI.Input.EVENT_BACKSPACE);
+            }
+        }
+        this.fireEvent(BI.Input.EVENT_KEY_DOWN);
 
-        if (/(\s|\u00A0)$/.test(this.getValue())) {
+        if (BI.isEndWithBlank(this.getValue())) {
             this._pause = true;
             this.fireEvent(BI.Controller.EVENT_CHANGE, BI.Events.PAUSE, "", this);
             this.fireEvent(BI.Input.EVENT_PAUSE);
             this._defaultState();
-        } else if ((keyCode === BI.keyCode.BACKSPACE || keyCode === BI.keyCode.DELETE) &&
+        } else if ((keyCode === BI.KeyCode.BACKSPACE || keyCode === BI.KeyCode.DELETE) &&
             BI.trim(this.getValue()) === "" && (this._lastValue !== null && BI.trim(this._lastValue) !== "")) {
             this.fireEvent(BI.Controller.EVENT_CHANGE, BI.Events.STOPEDIT, this.getValue(), this);
             this.fireEvent(BI.Input.EVENT_STOP);

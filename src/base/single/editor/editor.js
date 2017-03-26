@@ -50,7 +50,9 @@ BI.Editor = BI.inherit(BI.Single, {
                 type: "bi.label",
                 cls: "bi-water-mark",
                 text: this.options.watermark,
+                height: this.options.height,
                 forceCenter: true,
+                height: o.height - 2 * (o.vgap + o.tgap),
                 whiteSpace: "nowrap",
                 textAlign: "left"
             });
@@ -93,7 +95,7 @@ BI.Editor = BI.inherit(BI.Single, {
 
         BI.createWidget({
             type: "bi.absolute",
-            element: this.element,
+            element: this,
             items: items
         });
         this.editor.on(BI.Controller.EVENT_CHANGE, function () {
@@ -275,7 +277,7 @@ BI.Editor = BI.inherit(BI.Single, {
     },
 
     getLastValidValue: function () {
-        return BI.trim(this.editor.getLastValidValue());
+        return this.editor.getLastValidValue();
     },
 
     resetLastValidValue: function () {

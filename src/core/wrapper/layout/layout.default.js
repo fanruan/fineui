@@ -5,8 +5,8 @@
  * @extends BI.Layout
  */
 BI.DefaultLayout = BI.inherit(BI.Layout, {
-    _defaultConfig: function () {
-        return BI.extend(BI.DefaultLayout.superclass._defaultConfig.apply(this, arguments), {
+    props: function () {
+        return BI.extend(BI.DefaultLayout.superclass.props.apply(this, arguments), {
             hgap: 0,
             vgap: 0,
             lgap: 0,
@@ -16,8 +16,8 @@ BI.DefaultLayout = BI.inherit(BI.Layout, {
             items: []
         });
     },
-    _init: function () {
-        BI.DefaultLayout.superclass._init.apply(this, arguments);
+    render: function () {
+        BI.DefaultLayout.superclass.render.apply(this, arguments);
         this.populate(this.options.items);
     },
 
@@ -53,7 +53,7 @@ BI.DefaultLayout = BI.inherit(BI.Layout, {
 
     populate: function (items) {
         BI.DefaultLayout.superclass.populate.apply(this, arguments);
-        this.render();
+        this._mount();
     }
 });
 $.shortcut('bi.default', BI.DefaultLayout);

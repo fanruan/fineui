@@ -55,7 +55,7 @@
                 BI.createWidget({
                     type: "bi.horizontal_auto",
                     cls: "button-" + o.level + " " + o.iconClass,
-                    element: this.element,
+                    element: this,
                     hgap: o.hgap,
                     vgap: o.vgap,
                     tgap: o.tgap,
@@ -82,7 +82,7 @@
                     bgap: o.bgap,
                     lgap: o.lgap,
                     rgap: o.rgap,
-                    element: this.element,
+                    element: this,
                     text: o.text,
                     value: o.value
                 });

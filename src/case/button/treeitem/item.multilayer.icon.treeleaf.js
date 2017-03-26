@@ -19,9 +19,6 @@ BI.MultiLayerIconTreeLeafItem = BI.inherit(BI.BasicButton, {
         this.item = BI.createWidget({
             type: "bi.icon_tree_leaf_item",
             iconCls: o.iconCls,
-            logic: {
-                dynamic: true
-            },
             id: o.id,
             pId: o.pId,
             isFront: true,
@@ -51,7 +48,7 @@ BI.MultiLayerIconTreeLeafItem = BI.inherit(BI.BasicButton, {
         items.push(this.item);
         BI.createWidget({
             type: "bi.td",
-            element: this.element,
+            element: this,
             columnSize: BI.makeArray(o.layer, 13),
             items: [items]
         });

@@ -19,7 +19,7 @@ BI.TableCell = BI.inherit(BI.Widget, {
         BI.TableCell.superclass._init.apply(this, arguments);
         BI.createWidget({
             type: "bi.label",
-            element: this.element,
+            element: this,
             whiteSpace: "nowrap",
             textAlign: this.options.textAlign,
             height: this.options.height,

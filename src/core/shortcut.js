@@ -1,7 +1,7 @@
 (function ($) {
 
     var kv = {}; // alex:键(编辑器简称,如text)值(也是一个字符串,如FR.TextEditor)对
-    $.shortcut = function (xtype, cls) {
+    $.shortcut = BI.shortcut = function (xtype, cls) {
         if (kv[xtype] != null) {
             throw ("shortcut:[" + xtype + "] has been registed");
         }

@@ -7,8 +7,7 @@ BI.IconButton = BI.inherit(BI.BasicButton, {
     _defaultConfig: function () {
         var conf = BI.IconButton.superclass._defaultConfig.apply(this, arguments);
         return BI.extend(conf, {
-            tagName: "a",
-            baseCls: (conf.baseCls || "") + " bi-icon-button horizon-center display-block",
+            baseCls: (conf.baseCls || "") + " bi-icon-button horizon-center",
             iconWidth: null,
             iconHeight: null
         })
@@ -29,12 +28,12 @@ BI.IconButton = BI.inherit(BI.BasicButton, {
             this.element.css("lineHeight", o.height + "px");
             BI.createWidget({
                 type: "bi.default",
-                element: this.element,
+                element: this,
                 items: [this.icon]
             })
         } else {
             BI.createWidget({
-                element: this.element,
+                element: this,
                 type: 'bi.center_adapt',
                 items: [this.icon]
             });

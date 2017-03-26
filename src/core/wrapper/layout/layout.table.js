@@ -5,8 +5,8 @@
  * @extends BI.Layout
  */
 BI.TableLayout = BI.inherit(BI.Layout, {
-    _defaultConfig: function () {
-        return BI.extend(BI.TableLayout.superclass._defaultConfig.apply(this, arguments), {
+    props: function () {
+        return BI.extend(BI.TableLayout.superclass.props.apply(this, arguments), {
             baseCls: "bi-table-layout",
             scrolly: true,
             columnSize: [200, 200, 'fill'],
@@ -26,8 +26,8 @@ BI.TableLayout = BI.inherit(BI.Layout, {
             ]]
         });
     },
-    _init: function () {
-        BI.TableLayout.superclass._init.apply(this, arguments);
+    render: function () {
+        BI.TableLayout.superclass.render.apply(this, arguments);
         this.rows = 0;
         this.populate(this.options.items);
     },
@@ -98,7 +98,7 @@ BI.TableLayout = BI.inherit(BI.Layout, {
                 }, arr[j]))
                 right += o.columnSize[j] + (o.columnSize[j] < 1 ? 0 : o.hgap);
             } else {
-                throw new Error("只能有一个fill属性的item");
+                throw new Error("item with fill can only be one");
             }
         }
         if (i >= 0 && i < arr.length) {
@@ -133,14 +133,14 @@ BI.TableLayout = BI.inherit(BI.Layout, {
 
     addItem: function (arr) {
         if (!BI.isArray(arr)) {
-            throw new Error("item 必须是数组");
+            throw new Error("item must be array");
         }
         return BI.TableLayout.superclass.addItem.apply(this, arguments);
     },
 
     populate: function (items) {
         BI.TableLayout.superclass.populate.apply(this, arguments);
-        this.render();
+        this._mount();
     }
 });
 $.shortcut('bi.table', BI.TableLayout);

@@ -6,29 +6,42 @@
  * @extends BI.Layout
  */
 BI.FlexCenterLayout = BI.inherit(BI.Layout, {
-    _defaultConfig: function () {
-        return BI.extend(BI.FlexCenterLayout.superclass._defaultConfig.apply(this, arguments), {
+    props: function () {
+        return BI.extend(BI.FlexCenterLayout.superclass.props.apply(this, arguments), {
             baseCls: "bi-flex-wrapper-center-layout clearfix"
         });
     },
-    _init: function () {
-        BI.FlexCenterLayout.superclass._init.apply(this, arguments);
-        this.wrapper = $("<div>").addClass("flex-wrapper-center-layout-wrapper").appendTo(this.element);
+    render: function () {
+        BI.FlexCenterLayout.superclass.render.apply(this, arguments);
+        this.$wrapper = $("<div>").addClass("flex-wrapper-center-layout-wrapper");
         this.populate(this.options.items);
     },
 
     _addElement: function (i, item) {
         var o = this.options;
         var w = BI.FlexCenterLayout.superclass._addElement.apply(this, arguments);
-        w.element.css({"position": "relative"}).appendTo(this.wrapper);
+        w.element.css({"position": "relative"});
         return w;
     },
 
-    addItem: function (item) {
-        var w = this._addElement(this.options.items.length, item);
-        this.options.items.push(item);
-        w.element.appendTo(this.wrapper);
-        return w;
+    _mountChildren: function () {
+        var self = this;
+        var frag = document.createDocumentFragment();
+        var hasChild = false;
+        BI.each(this._children, function (i, widget) {
+            if (widget.element !== self.element) {
+                frag.appendChild(widget.element[0]);
+                hasChild = true;
+            }
+        });
+        if (hasChild === true) {
+            this.$wrapper.append(frag);
+            this.element.append(this.$wrapper);
+        }
+    },
+
+    _getWrapper: function(){
+        return this.$wrapper;
     },
 
     resize: function () {
@@ -37,6 +50,7 @@ BI.FlexCenterLayout = BI.inherit(BI.Layout, {
 
     populate: function (items) {
         BI.FlexCenterLayout.superclass.populate.apply(this, arguments);
+        this._mount();
     }
 });
 $.shortcut('bi.flex_wrapper_center', BI.FlexCenterLayout);

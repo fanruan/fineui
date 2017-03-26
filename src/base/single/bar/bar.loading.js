@@ -5,8 +5,8 @@
  */
 BI.LoadingBar = BI.inherit(BI.Single, {
     consts: {
-        loadedText: '加载更多',
-        endText: '无更多数据'
+        loadedText: BI.i18nText("BI-Load_More"),
+        endText: BI.i18nText("BI-No_More_Data")
     },
     _defaultConfig: function() {
         var conf = BI.LoadingBar.superclass._defaultConfig.apply(this, arguments);
@@ -32,6 +32,7 @@ BI.LoadingBar = BI.inherit(BI.Single, {
 
         this.loading = BI.createWidget({
             type: "bi.layout",
+            width: this.options.height,
             height:this.options.height,
             cls: "loading-background cursor-default"
         })
@@ -45,7 +46,7 @@ BI.LoadingBar = BI.inherit(BI.Single, {
         })
         this.cardLayout = BI.createWidget({
             type: "bi.card",
-            element: this.element,
+            element: this,
             items: [{
                 el: loaded,
                 cardName: "loaded"

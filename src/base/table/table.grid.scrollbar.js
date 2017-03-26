@@ -40,7 +40,7 @@ BI.GridTableScrollbar = BI.inherit(BI.Widget, {
         });
         this.contextLayout = BI.createWidget({
             type: "bi.absolute",
-            element: this.element,
+            element: this,
             items: [{
                 el: this.face,
                 left: 0,
@@ -362,7 +362,7 @@ BI.GridTableHorizontalScrollbar = BI.inherit(BI.Widget, {
         BI.createWidget({
             type: "bi.absolute",
             cls: "horizontal-scrollbar",
-            element: this.element,
+            element: this,
             width: o.size,
             height: BI.GridTableScrollbar.SIZE,
             items: [{

@@ -13,16 +13,17 @@ BI.A = BI.inherit(BI.Text, {
             baseCls: (conf.baseCls || "") + " bi-a display-block",
             href: "",
             target: "_blank",
-            el: null
+            el: null,
+            element: "<a/>"
         })
     },
     _init: function () {
         var o = this.options;
-        this.options.element = $("<a href='" + o.href + "' target='" + o.target + "'>");
         BI.A.superclass._init.apply(this, arguments);
+        this.element.attr({href: o.href, target: o.target});
         if (o.el) {
             BI.createWidget(o.el, {
-                element: this.element
+                element: this
             });
         }
     }

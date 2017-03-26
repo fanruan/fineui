@@ -4,8 +4,8 @@
  * @extends BI.Layout
  */
 BI.AbsoluteHorizontalLayout = BI.inherit(BI.Layout, {
-    _defaultConfig: function () {
-        return BI.extend(BI.AbsoluteHorizontalLayout.superclass._defaultConfig.apply(this, arguments), {
+    props: function () {
+        return BI.extend(BI.AbsoluteHorizontalLayout.superclass.props.apply(this, arguments), {
             baseCls: "bi-absolute-horizontal-layout",
             hgap: 0,
             lgap: 0,
@@ -16,8 +16,8 @@ BI.AbsoluteHorizontalLayout = BI.inherit(BI.Layout, {
         });
     },
 
-    _init: function () {
-        BI.AbsoluteHorizontalLayout.superclass._init.apply(this, arguments);
+    render: function () {
+        BI.AbsoluteHorizontalLayout.superclass.render.apply(this, arguments);
         this.populate(this.options.items);
     },
 
@@ -45,7 +45,7 @@ BI.AbsoluteHorizontalLayout = BI.inherit(BI.Layout, {
 
     populate: function (items) {
         BI.AbsoluteHorizontalLayout.superclass.populate.apply(this, arguments);
-        this.render();
+        this._mount();
     }
 });
 $.shortcut('bi.absolute_horizontal_adapt', BI.AbsoluteHorizontalLayout);

@@ -12883,7 +12883,7 @@ if (!window.BI) {
 ;
 !(function ($, undefined) {
     _.extend(BI, {
-        version: "4.0"
+        version: "2.0"
     });
     var traverse = function (func, context) {
         return function (value, key, obj) {
@@ -12906,7 +12906,7 @@ if (!window.BI) {
     //Utility
     _.extend(BI, {
         i18nText: function (key) {
-            var localeText = key;
+            var localeText = (BI.i18n && BI.i18n[key]) || "";
             if (!localeText) {
                 localeText = key;
             }
@@ -12923,7 +12923,7 @@ if (!window.BI) {
         assert: function (v, is) {
             if (this.isFunction(is)) {
                 if (!is(v)) {
-                    throw new Error(v + "值不合法");
+                    throw new Error(v + " error");
                 } else {
                     return true;
                 }
@@ -12932,7 +12932,7 @@ if (!window.BI) {
                 is = [is];
             }
             if (!this.deepContains(is, v)) {
-                throw new Error(v + "值不合法");
+                throw new Error(v + " error");
             }
         },
 
@@ -12956,7 +12956,7 @@ if (!window.BI) {
 
         createWidgets: function (items, options) {
             if (!BI.isArray(items)) {
-                throw new Error("无法根据items创建组件?")
+                throw new Error("cannot create Widgets")
             }
             return BI.map(BI.flatten(items), function (i, item) {
                 return BI.createWidget(item, BI.deepClone(options));
@@ -13127,7 +13127,9 @@ if (!window.BI) {
         backAny: function (obj, predicate, context) {
             predicate = BI.iteratee(predicate, context);
             for (var index = obj.length - 1; index >= 0; index--) {
-                if (predicate(index, obj[index], obj)) return true;
+                if (predicate(index, obj[index], obj)) {
+                    return true;
+                }
             }
             return false;
         },
@@ -13135,7 +13137,9 @@ if (!window.BI) {
         backEvery: function (obj, predicate, context) {
             predicate = BI.iteratee(predicate, context);
             for (var index = obj.length - 1; index >= 0; index--) {
-                if (!predicate(index, obj[index], obj)) return false;
+                if (!predicate(index, obj[index], obj)) {
+                    return false;
+                }
             }
             return true;
         },
@@ -13261,7 +13265,9 @@ if (!window.BI) {
         },
 
         uniq: function (array, isSorted, iteratee, context) {
-            if (array == null) return [];
+            if (array == null) {
+                return [];
+            }
             if (!_.isBoolean(isSorted)) {
                 context = iteratee;
                 iteratee = isSorted;
@@ -13423,11 +13429,15 @@ if (!window.BI) {
 
         isDeepMatch: function (object, attrs) {
             var keys = BI.keys(attrs), length = keys.length;
-            if (object == null) return !length;
+            if (object == null) {
+                return !length;
+            }
             var obj = Object(object);
             for (var i = 0; i < length; i++) {
                 var key = keys[i];
-                if (!BI.isEqual(attrs[key], obj[key]) || !(key in obj)) return false;
+                if (!BI.isEqual(attrs[key], obj[key]) || !(key in obj)) {
+                    return false;
+                }
             }
             return true;
         },
@@ -13453,20 +13463,24 @@ if (!window.BI) {
         },
 
         deepRemove: function (obj, target) {
+            var done = false;
             var i;
             if (BI.isArray(obj)) {
                 for (i = 0; i < obj.length; i++) {
                     if (BI.isEqual(target, obj[i])) {
                         obj.splice(i--, 1);
+                        done = true;
                     }
                 }
             } else {
                 BI.each(obj, function (i, v) {
                     if (BI.isEqual(target, obj[i])) {
                         delete obj[i];
+                        done = true;
                     }
                 });
             }
+            return done;
         },
 
         deepWithout: function (obj, target) {
@@ -13489,8 +13503,14 @@ if (!window.BI) {
             }
         },
 
-        deepUniq: function () {
-
+        deepUnique: function (array) {
+            var result = [];
+            BI.each(array, function (i, item) {
+                if (!BI.deepContains(result, item)) {
+                    result.push(item);
+                }
+            });
+            return result;
         },
 
         //比较两个对象得出不一样的key值
@@ -13541,31 +13561,54 @@ if (!window.BI) {
                 var copies = callbacks.slice(0);
                 callbacks = [];
                 for (var i = 0; i < copies.length; i++) {
-                    copies[i].func.apply(null, copies[i].args);
+                    copies[i]();
                 }
             }
+
+            if (typeof Promise !== 'undefined') {
+                var p = Promise.resolve();
+                timerFunc = function () {
+                    p.then(nextTickHandler);
+                }
+            } else
 
             /* istanbul ignore if */
             if (typeof MutationObserver !== 'undefined') {
                 var counter = 1;
                 var observer = new MutationObserver(nextTickHandler);
-                var textNode = document.createTextNode(counter);
+                var textNode = document.createTextNode(counter + "");
                 observer.observe(textNode, {
                     characterData: true
                 });
                 timerFunc = function () {
                     counter = (counter + 1) % 2;
-                    textNode.data = counter;
+                    textNode.data = counter + "";
                 }
             } else {
-                timerFunc = setTimeout
+                timerFunc = function () {
+                    setTimeout(nextTickHandler, 0)
+                }
             }
-            return function (cb) {
+            return function queueNextTick(cb) {
+                var _resolve;
                 var args = [].slice.call(arguments, 1);
-                callbacks.push({func: cb, args: args});
-                if (pending) return;
-                pending = true;
-                timerFunc(nextTickHandler, 0);
+                callbacks.push(function () {
+                    if (cb) {
+                        cb.apply(null, args);
+                    }
+                    if (_resolve) {
+                        _resolve.apply(null, args);
+                    }
+                });
+                if (!pending) {
+                    pending = true;
+                    timerFunc();
+                }
+                if (!cb && typeof Promise !== 'undefined') {
+                    return new Promise(function (resolve) {
+                        _resolve = resolve
+                    })
+                }
             }
         })()
     });
@@ -13599,7 +13642,7 @@ if (!window.BI) {
             try {
                 return parseInt(number, radix);
             } catch (e) {
-                throw new Error("转成int类型失败");
+                throw new Error(number + "parse int error");
                 return NaN;
             }
         },
@@ -13608,7 +13651,7 @@ if (!window.BI) {
             try {
                 return parseFloat(number);
             } catch (e) {
-                throw new Error("转成float类型失败");
+                throw new Error(number + "parse float error");
                 return NaN;
             }
         },
@@ -13670,9 +13713,9 @@ if (!window.BI) {
             var sum = 0;
             BI.each(array, function (i, item) {
                 if (iteratee) {
-                    sum += new Number(iteratee.apply(context, [i, item]));
+                    sum += Number(iteratee.apply(context, [i, item]));
                 } else {
-                    sum += new Number(item);
+                    sum += Number(item);
                 }
             });
             return sum;
@@ -13696,6 +13739,10 @@ if (!window.BI) {
 
         toLowerCase: function (string) {
             return (string + "").toLocaleLowerCase();
+        },
+
+        isEndWithBlank: function (string) {
+            return /(\s|\u00A0)$/.test(string);
         },
 
         isLiteral: function (exp) {
@@ -13844,23 +13891,23 @@ if (!window.BI) {
     //浏览器相关方法
     _.extend(BI, {
         isIE: function () {
-            return $.browser.msie;
+            return /(msie|trident)/i.test(navigator.userAgent.toLowerCase());
         },
 
         isChrome: function () {
-            return $.browser.chrome;
+            return /chrome/i.test(navigator.userAgent.toLowerCase());
         },
 
         isFireFox: function () {
-            return $.browser.mozilla;
+            return /firefox/i.test(navigator.userAgent.toLowerCase());
         },
 
         isOpera: function () {
-            return $.browser.opera;
+            return /opera/i.test(navigator.userAgent.toLowerCase());
         },
 
         isSafari: function () {
-            return $.browser.safari;
+            return /safari/i.test(navigator.userAgent.toLowerCase());
         },
 
         isKhtml: function () {
@@ -13894,6 +13941,129 @@ if (!window.BI) {
     //BI请求
     _.extend(BI, {
 
+        ajax: (function () {
+            var loading, timeoutToast;
+            return function (option) {
+                option || (option = {});
+                option.data = BI.extend({}, Data.SharingPool.cat("urlParameters"), option.data);
+                //encode
+                encodeBIParam(option.data);
+
+                var async = true;
+                if (BI.isNotNull(option.async)) {
+                    async = option.async;
+                }
+
+                if (BI.isNull(loading)) {
+                    loading = BI.createWidget({
+                        type: "bi.request_loading"
+                    });
+                }
+
+                if (BI.isNull(timeoutToast)) {
+                    timeoutToast = BI.createWidget({
+                        type: "bi.timeout_toast"
+                    });
+                    timeoutToast.setCallback(function (op) {
+                        decodeBIParam(op.data);
+                        BI.ajax(op);
+                    });
+                }
+                timeoutToast.addReq(option);
+
+
+                option.data = BI.cjkEncodeDO(option.data);
+                    
+                    
+                
+                $.ajax({
+                    url: option.url,
+                    type: "POST",
+                    data: option.data,
+                    async: async,
+                    error: function () {
+                        if (!timeoutToast.hasReq(option)) {
+                            return;
+                        }
+                        timeoutToast.removeReq(option);
+                        //失败 取消、重新加载
+                        loading.setCallback(function () {
+                            decodeBIParam(option.data);
+                            BI.ajax(option);
+                        });
+                        loading.showError();
+                    },
+                    complete: function (res, status) {
+                        if (!timeoutToast.hasReq(option)) {
+                            return;
+                        }
+                        timeoutToast.removeReq(option);
+                        //登录超时
+                        if (BI.isNotNull(res.responseText) &&
+                            res.responseText.indexOf("fs-login-content") > -1 &&
+                            res.responseText.indexOf("fs-login-input-password-confirm") === -1) {
+                            if (BI.Popovers.isVisible(BI.LoginTimeOut.POPOVER_ID)) {
+                                return;
+                            }
+                            if (BI.isNotNull(BI.Popovers.get(BI.LoginTimeOut.POPOVER_ID))) {
+                                BI.Popovers.open(BI.LoginTimeOut.POPOVER_ID);
+                                return;
+                            }
+                            var loginTimeout = BI.createWidget({
+                                type: "bi.login_timeout"
+                            });
+                            loginTimeout.on(BI.LoginTimeOut.EVENT_LOGIN, function () {
+                                decodeBIParam(option.data);
+                                BI.ajax(option);
+                                BI.Popovers.remove(BI.LoginTimeOut.POPOVER_ID);
+                            });
+                            BI.Popovers.create(BI.LoginTimeOut.POPOVER_ID, loginTimeout, {
+                                width: 600,
+                                height: 400
+                            }).open(BI.LoginTimeOut.POPOVER_ID);
+                        } else if (BI.isNotNull(res.responseText) &&
+                            res.responseText.indexOf("script") > -1 &&
+                            res.responseText.indexOf("Session Timeout...") > -1) {
+                            //登录失效
+                            loading.setCallback(function () {
+                                location.reload();
+                            });
+                            loading.showError();
+
+                        } else if (status === "success" && BI.isFunction(option.success)) {
+                            option.success(BI.jsonDecode(res.responseText));
+                        }
+                        if (BI.isFunction(option.complete)) {
+                            option.complete(BI.jsonDecode(res.responseText), status);
+                        }
+                    }
+                });
+
+                return function cancel() {
+                    timeoutToast.removeReq(option);
+                };
+
+                function encodeBIParam(data) {
+                    for (var key in data) {
+                        if (_.isObject(data[key])) {
+                            data[key] = window.encodeURIComponent(BI.jsonEncode(data[key]));
+                        } else {
+                            data[key] = window.encodeURIComponent(data[key]);
+                        }
+                    }
+                }
+
+                function decodeBIParam(data) {
+                    for (var key in data) {
+                        data[key] = window.decodeURIComponent(data[key]);
+                        if (_.isObject(data[key])) {
+                            data[key] = BI.jsonDecode(data[key]);
+                        }
+                    }
+                }
+            }
+        })(),
+
         /**
          * 异步ajax请求
          * @param {String} op op参数
@@ -13903,38 +14073,29 @@ if (!window.BI) {
          * @param {Function} complete 回调
          */
         requestAsync: function (op, cmd, data, callback, complete) {
-            // if (BI.isNull(BI.REQUEST_LOADING)) {
-            //     BI.REQUEST_LOADING = BI.createWidget({
-            //         type: "bi.request_loading"
-            //     });
-            // }
             data = data || {};
             if (!BI.isKey(op)) {
                 op = 'fr_bi_dezi';
             }
-            if (op === "fr_bi_dezi") {
+            if (op === "fr_bi_dezi" || op === "fr_bi_configure") {
                 data.sessionID = Data.SharingPool.get("sessionID");
             }
-            var url = FR.servletURL + '?op=' + op + '&cmd=' + cmd + "&_=" + Math.random();
-            (BI.ajax || FR.ajax)({
+            var url = BI.servletURL + '?op=' + op + '&cmd=' + cmd + "&_=" + Math.random();
+            return (BI.ajax)({
                 url: url,
                 type: 'POST',
                 data: data,
                 error: function () {
                     // BI.Msg.toast(BI.i18nText("BI-Ajax_Error"));
-                    //失败 取消、重新加载
-                    // BI.REQUEST_LOADING.setCallback(function () {
-                    //     BI.requestAsync(op, cmd, data, callback, complete);
-                    // });
-                    // BI.REQUEST_LOADING.showError();
+                },
+                success: function (res) {
+                    if (BI.isFunction(callback)) {
+                        callback(res);
+                    }
                 },
                 complete: function (res, status) {
-                    if (BI.isFunction(callback) && status === 'success') {
-                        callback(BI.jsonDecode(res.responseText));
-                        BI.Maskers.hide(BI.RequstLoading.MASK_ID);
-                    }
                     if (BI.isFunction(complete)) {
-                        complete();
+                        complete(res);
                     }
                 }
             });
@@ -13955,9 +14116,9 @@ if (!window.BI) {
             if (op === "fr_bi_dezi") {
                 data.sessionID = Data.SharingPool.get("sessionID");
             }
-            var url = FR.servletURL + '?op=' + op + '&cmd=' + cmd + "&_=" + Math.random();
+            var url = BI.servletURL + '?op=' + op + '&cmd=' + cmd + "&_=" + Math.random();
             var result = {};
-            (BI.ajax || FR.ajax)({
+            (BI.ajax)({
                 url: url,
                 type: 'POST',
                 async: false,
@@ -13967,7 +14128,7 @@ if (!window.BI) {
                 },
                 complete: function (res, status) {
                     if (status === 'success') {
-                        result = BI.jsonDecode(res.responseText);
+                        result = res;
                     }
                 }
             });
@@ -14004,15 +14165,29 @@ if (!window.BI) {
  * @abstract
  */
 BI.OB = function (config) {
-    this.options = $.extend(this._defaultConfig(), config);
+    var props = this.props;
+    if (BI.isFunction(this.props)) {
+        props = this.props(config);
+    }
+    this.options = $.extend(this._defaultConfig(config), props, config);
     this._init();
-    this._confirmEvents();
+    this._initRef();
 };
 $.extend(BI.OB.prototype, {
-    _defaultConfig: function () {
+    props: {},
+    init: function () {
+    },
+
+    _defaultConfig: function (config) {
         return {};
     },
+
     _init: function () {
+        this._initListeners();
+        this.init();
+    },
+
+    _initListeners: function () {
         var self = this;
         if (this.options.listeners != null) {
             $.each(this.options.listeners, function (i, lis) {
@@ -14023,22 +14198,22 @@ $.extend(BI.OB.prototype, {
         }
     },
 
-    _confirmEvents: function () {
-        this.fireEvent(BI.Events.AFTERINIT);
+    //获得一个当前对象的引用
+    _initRef: function () {
+        if (this.options.ref) {
+            this.options.ref.call(this, this);
+        }
     },
 
     _getEvents: function () {
         if (!$.isArray(this.events)) {
             this.events = []
         }
-
         return this.events;
     },
 
     /**
      * 给观察者绑定一个事件
-     * e.g. 给填报页面添加一个提交失败事件：contentPane.on(BI.Events.WF, function() {alert("填报失败！");});
-     *      给文本框控件p1添加一个初始化后事件：p1.on(BI.Evnets.AFTERINIT, function() {alert("初始化完成！");});
      * @param {String} eventName 事件的名字
      * @param {Function} fn 事件对应的执行函数
      */
@@ -14104,112 +14279,6 @@ $.extend(BI.OB.prototype, {
     fireEvent: function () {
         var eventName = arguments[0].toLowerCase();
         var fns = this._getEvents()[eventName];
-        if ($.isArray(fns)) {
-            var args = Array.prototype.slice.call(arguments, 1)
-            for (var i = 0; i < fns.length; i++) {
-                if (fns[i].apply(this, args) === false) {
-                    return false;
-                }
-            }
-        }
-        return true;
-    }
-});/**
- * Widget超类
- * @class BI.Widget
- * @extends BI.OB
- *
- * @cfg {JSON} options 配置属性
- */
-BI.Widget = BI.inherit(BI.OB, {
-    _defaultConfig: function () {
-        return BI.extend(BI.Widget.superclass._defaultConfig.apply(this, arguments), {
-            tagName: "div",
-            attributes: {},
-            data: {},
-
-            tag: null,
-            widgetName: "",
-            disabled: false,
-            invisible: false,
-            invalid: false,
-            baseCls: "",
-            extraCls: "",
-            cls: ""
-        })
-    },
-
-    _initOpts: function () {
-    },
-
-    _init: function () {
-        var o = this.options;
-        this._initOpts()
-        BI.isWidget(o.element) && (o.element = o.element.element);
-        BI.isString(o.element) && (o.element = $(o.element));
-        o.renderEl || (o.renderEl = o.element);
-        o.element || (o.element = o.renderEl);
-        o.element || (o.renderEl = o.element = $(document.createElement(o.tagName)));
-        this.widgetName = o.widgetName || (o.widgetName = BI.uniqueId("widget"));
-        this._initRoot();
-        this._initElementWidth();
-        this._initElementHeight();
-        this._initVisualEffects();
-        o.extraCls && this.element.addClass(o.extraCls);
-        o.cls && this.element.addClass(o.cls);
-        this.element.attr(o.attributes).data(o.data);
-        this.widgets = {};//保存子组件
-    },
-
-    /**
-     * 初始化根节点
-     * @private
-     */
-    _initRoot: function () {
-        if (this.options.renderEl != null) {
-            this.element = $(this.options.renderEl);
-        } else {
-            this.element = this._defaultRoot();
-        }
-        if (this.options.baseCls) {
-            this.element.addClass(this.options.baseCls);
-        }
-    },
-
-    _initElementWidth: function () {
-        var o = this.options;
-        if (BI.isWidthOrHeight(o.width)) {
-            this.element.css("width", o.width);
-        }
-    },
-
-    _initElementHeight: function () {
-        var o = this.options;
-        if (BI.isWidthOrHeight(o.height)) {
-            this.element.css("height", o.height);
-        }
-    },
-
-    _initVisualEffects: function () {
-        if (this.options.diabled || this.options.invalid) {
-            BI.nextTick(BI.bind(function () {
-                if (this.options.disabled) {
-                    this.setEnable(false);
-                }
-                if (this.options.invalid) {
-                    this.setValid(false);
-                }
-            }, this));
-        }
-
-        if (this.options.invisible) {
-            this.setVisible(false);
-        }
-    },
-
-    fireEvent: function () {
-        var eventName = arguments[0].toLowerCase();
-        var fns = this._getEvents()[eventName];
         if (BI.isArray(fns)) {
             if (BI.isArguments(arguments[1])) {
                 for (var i = 0; i < fns.length; i++) {
@@ -14227,6 +14296,206 @@ BI.Widget = BI.inherit(BI.OB, {
             }
         }
         return true;
+    }
+});/**
+ * Widget超类
+ * @class BI.Widget
+ * @extends BI.OB
+ *
+ * @cfg {JSON} options 配置属性
+ */
+BI.Widget = BI.inherit(BI.OB, {
+    _defaultConfig: function () {
+        return BI.extend(BI.Widget.superclass._defaultConfig.apply(this), {
+            tagName: "div",
+            attributes: null,
+            data: null,
+
+            tag: null,
+            disabled: false,
+            invisible: false,
+            invalid: false,
+            baseCls: "",
+            extraCls: "",
+            cls: ""
+        })
+    },
+
+    //生命周期函数
+    beforeCreate: function () {
+
+    },
+
+    created: function () {
+
+    },
+
+    render: function () {
+
+    },
+
+    beforeMounted: function () {
+
+    },
+
+    mounted: function () {
+
+    },
+
+    update: null,
+
+    destroyed: function () {
+    },
+
+    _init: function () {
+        BI.Widget.superclass._init.apply(this, arguments);
+        this.beforeCreate();
+        this._initRoot();
+        this._initElementWidth();
+        this._initElementHeight();
+        this._initVisualEffects();
+        this._initState();
+        this._initElement();
+        this.created();
+    },
+
+    /**
+     * 初始化根节点
+     * @private
+     */
+    _initRoot: function () {
+        var o = this.options;
+        this.widgetName = o.widgetName || BI.uniqueId("widget");
+        if (BI.isWidget(o.element)) {
+            if (o.element instanceof BI.Widget) {
+                this._parent = o.element;
+                this._parent.addWidget(this.widgetName, this);
+            } else {
+                this._isRoot = true;
+            }
+            this.element = this.options.element.element;
+        } else if (o.element) {
+            this.element = $(o.element);
+            this._isRoot = true;
+        } else {
+            this.element = $(document.createElement(o.tagName));
+        }
+        if (o.baseCls || o.extraCls || o.cls) {
+            this.element.addClass((o.baseCls || "") + " " + (o.extraCls || "") + " " + (o.cls || ""));
+        }
+        if (o.attributes) {
+            this.element.attr(o.attributes);
+        }
+        if (o.data) {
+            this.element.data(o.data);
+        }
+        this._children = {};
+    },
+
+    _initElementWidth: function () {
+        var o = this.options;
+        if (BI.isWidthOrHeight(o.width)) {
+            this.element.css("width", o.width);
+        }
+    },
+
+    _initElementHeight: function () {
+        var o = this.options;
+        if (BI.isWidthOrHeight(o.height)) {
+            this.element.css("height", o.height);
+        }
+    },
+
+    _initVisualEffects: function () {
+        var o = this.options;
+        if (o.invisible) {
+            this.element.hide();
+        }
+        if (o.disabled || o.invalid) {
+            BI.nextTick(BI.bind(function () {
+                if (this.options.disabled) {
+                    this.setEnable(false);
+                }
+                if (this.options.invalid) {
+                    this.setValid(false);
+                }
+            }, this));
+        }
+    },
+
+    _initState: function () {
+        this._isMounted = false;
+    },
+
+    _initElement: function () {
+        var self = this;
+        var els = this.render();
+        if (BI.isPlainObject(els)) {
+            els = [els];
+        }
+        if (BI.isArray(els)) {
+            BI.each(els, function (i, el) {
+                BI.createWidget(el, {
+                    element: self
+                })
+            })
+        }
+        // if (this._isRoot === true || !(this instanceof BI.Layout)) {
+        this._mount();
+        // }
+    },
+
+    _setParent: function (parent) {
+        this._parent = parent;
+    },
+
+    _mount: function () {
+        var self = this;
+        var isMounted = this._isMounted;
+        if (isMounted || !this.isVisible()) {
+            return;
+        }
+        if (this._isRoot === true) {
+            isMounted = true;
+        } else if (this._parent && this._parent._isMounted === true) {
+            isMounted = true;
+        }
+        if (!isMounted) {
+            return;
+        }
+        this.beforeMounted();
+        this._isMounted = true;
+        this._mountChildren();
+        BI.each(this._children, function (i, widget) {
+            widget._mount && widget._mount();
+        });
+        this.mounted();
+    },
+
+    _mountChildren: function () {
+        var self = this;
+        var frag = document.createDocumentFragment();
+        var hasChild = false;
+        BI.each(this._children, function (i, widget) {
+            if (widget.element !== self.element) {
+                frag.appendChild(widget.element[0]);
+                hasChild = true;
+            }
+        });
+        if (hasChild === true) {
+            this.element.append(frag);
+        }
+    },
+
+    _unMount: function () {
+        BI.each(this._children, function (i, widget) {
+            widget._unMount && widget._unMount();
+        });
+        this._children = {};
+        this._parent = null;
+        this._isMounted = false;
+        this.purgeListeners();
+        this.destroyed();
     },
 
     setWidth: function (w) {
@@ -14248,7 +14517,6 @@ BI.Widget = BI.inherit(BI.OB, {
     },
 
     setEnable: function (enable) {
-        BI.assert(enable, [true, false]);
         if (enable === true) {
             this.options.disabled = false;
             this.element.removeClass("base-disabled disabled");
@@ -14259,10 +14527,10 @@ BI.Widget = BI.inherit(BI.OB, {
     },
 
     setVisible: function (visible) {
-        // BI.assert(visible, [true, false]);
         if (visible === true) {
             this.options.invisible = false;
             this.element.show();
+            this._mount();
         } else if (visible === false) {
             this.options.invisible = true;
             this.element.hide();
@@ -14271,7 +14539,6 @@ BI.Widget = BI.inherit(BI.OB, {
     },
 
     setValid: function (valid) {
-        // BI.assert(valid, [true, false]);
         this.options.invalid = !valid;
         if (valid === true) {
             this.element.removeClass("base-invalid invalid");
@@ -14292,32 +14559,21 @@ BI.Widget = BI.inherit(BI.OB, {
         return !this.options.invalid;
     },
 
-    valid: function () {
-        this.setValid(true);
-    },
-
-    invalid: function () {
-        this.setValid(false);
-    },
-
     addWidget: function (name, widget) {
         var self = this;
         if (name instanceof BI.Widget) {
             widget = name;
             name = widget.getName();
         }
-        if (!BI.isKey(name)) {
-            throw new Error("name cannot be null");
-        }
-        name = BI.isKey(name) ? (name + "") : "";
-        name = name || widget.getName() || BI.UUID();
-        if (this.widgets[name]) {
+        name = name || widget.getName() || BI.uniqueId("widget");
+        if (this._children[name]) {
             throw new Error("name has already been existed");
         }
+        widget._setParent && widget._setParent(this);
         widget.on(BI.Events.DESTROY, function () {
-            delete self.widgets[name]
+            delete self._children[name]
         });
-        return (this.widgets[name] = widget);
+        return (this._children[name] = widget);
     },
 
     getWidgetByName: function (name) {
@@ -14326,7 +14582,7 @@ BI.Widget = BI.inherit(BI.OB, {
         }
         name = name + "";
         var widget = void 0, other = {};
-        BI.any(this.widgets, function (i, wi) {
+        BI.any(this._children, function (i, wi) {
             if (i === name) {
                 widget = wi;
                 return true;
@@ -14341,26 +14597,16 @@ BI.Widget = BI.inherit(BI.OB, {
         return widget;
     },
 
+    removeWidget: function (name) {
+        delete this._children[name];
+    },
+
     hasWidget: function (name) {
-        return this.widgets[name] != null;
-    },
-
-    getWidgets: function () {
-        return this.widgets;
-    },
-
-    getValidWidgets: function () {
-        var widgets = [];
-        BI.each(this.widgets, function (i, wi) {
-            if (wi.isValid()) {
-                widgets.push(wi);
-            }
-        });
-        return widgets;
+        return this._children[name] != null;
     },
 
     getName: function () {
-        return this.options.widgetName;
+        return this.widgetName;
     },
 
     setTag: function (tag) {
@@ -14390,12 +14636,8 @@ BI.Widget = BI.inherit(BI.OB, {
 
     },
 
-    setValue: function (value, shouldFireEvent) {
+    setValue: function (value) {
 
-    },
-
-    getType: function () {
-        return this.options.type;
     },
 
     isEnabled: function () {
@@ -14406,44 +14648,6 @@ BI.Widget = BI.inherit(BI.OB, {
         return !this.options.invisible;
     },
 
-    render: function () {
-        this.element.append(this.hang());
-        return this;
-    },
-
-    hang: function () {
-        return BI.DOM.hang(BI.trans2Element(this.widgets));
-    },
-
-    clear: function () {
-        this.hang();
-        this.element.empty();
-        this.widgets = {};
-    },
-
-    empty: function () {
-        BI.each(this.widgets, function (i, wi) {
-            wi.destroy();
-        });
-        this.element.empty();
-        this.widgets = {};
-    },
-
-    destroy: function () {
-        this.empty();
-        this.element.each(function () {
-            $(this).remove();
-            if (BI.isIE()) {
-                this.outerHTML = '';
-            }
-        });
-        this.fireEvent(BI.Events.DESTROY);
-    },
-
-    _defaultRoot: function () {
-        return $("<div/>");
-    },
-
     disable: function () {
         this.setEnable(false);
     },
@@ -14452,12 +14656,41 @@ BI.Widget = BI.inherit(BI.OB, {
         this.setEnable(true);
     },
 
+    valid: function () {
+        this.setValid(true);
+    },
+
+    invalid: function () {
+        this.setValid(false);
+    },
+
     invisible: function () {
         this.setVisible(false);
     },
 
     visible: function () {
         this.setVisible(true);
+    },
+
+    empty: function () {
+        BI.each(this._children, function (i, widget) {
+            widget._unMount();
+        });
+        this._children = {};
+        this.element.empty();
+    },
+
+    destroy: function () {
+        BI.each(this._children, function (i, widget) {
+            widget._unMount && widget._unMount();
+        });
+        this._children = {};
+        this._parent = null;
+        this._isMounted = false;
+        this.destroyed();
+        this.element.destroy();
+        this.fireEvent(BI.Events.DESTROY);
+        this.purgeListeners();
     }
 });BI.Model = BI.inherit(BI.M, {
     _defaultConfig: function () {
@@ -14838,7 +15071,7 @@ BI.Widget = BI.inherit(BI.OB, {
     },
 
     urlRoot: function () {
-        return FR.servletURL;
+        return BI.servletURL;
     },
 
     parse: function (data) {
@@ -15046,7 +15279,7 @@ BI.View = BI.inherit(BI.V, {
     _vessel: function () {
         this._cardLayouts = {};
         this._cardLayouts[this.getName()] = new BI.CardLayout({
-            element: this.element
+            element: this
         });
         var vessel = BI.createWidget();
         this._cardLayouts[this.getName()].addCardByName(this.getName(), vessel);
@@ -15438,7 +15671,7 @@ BI.View = BI.inherit(BI.V, {
 });(function ($) {
 
     var kv = {}; // alex:键(编辑器简称,如text)值(也是一个字符串,如FR.TextEditor)对
-    $.shortcut = function (xtype, cls) {
+    $.shortcut = BI.shortcut = function (xtype, cls) {
         if (kv[xtype] != null) {
             throw ("shortcut:[" + xtype + "] has been registed");
         }
@@ -17268,7 +17501,7 @@ $.extend(BI, {
             type: null,
             must: false
         }, options);
-        config.url = FR.servletURL + '?op=' + config.op + '&resource=' + config.path;
+        config.url = BI.servletURL + '?op=' + config.op + '&resource=' + config.path;
         this.$import(config.url, config.type,config.must);
     },
     $import: function () {
@@ -18726,8 +18959,9 @@ BI.Region.prototype = {
     };
 
     XML.getNSResolver = function (str) {
-        if (!str)
+        if (!str) {
             return null;
+        }
         var list = str.split(' ');
         var namespaces = {};
         for (var i = 0; i < list.length; i++) {
@@ -18779,7 +19013,7 @@ BI.Region.prototype = {
 
     XML.eval2 = function (context, xpathExp, resultType, namespaces) {
         if (resultType !== "single" && resultType !== undefined && resultType !== null) {
-            throw new Error("justep.SimpleXML.eval只支持resultType='single', 不支持" + resultType);
+            throw new Error("justep.SimpleXML.eval only be resultType='single', not" + resultType);
         }
 
         if (context === null || context === undefined || xpathExp === null || xpathExp === undefined) {
@@ -18942,8 +19176,9 @@ BI.Region.prototype = {
 
     XML.setNodeText = function (context, xpathExp, text) {
         var finded = this.eval(context, xpathExp, this.ResultType.single);
-        if (finded === null)
+        if (finded === null) {
             return;
+        }
         if (finded.nodeType == XML.Document.NodeType.ELEMENT) {
             var textNode = this.eval(finded, "./text()", this.ResultType.single);
             if (!textNode) {
@@ -18983,26 +19218,36 @@ BI.Region.prototype = {
         JUSTEP: "http://www.justep.com/x5#",
         'get': function (type) {
             type = type ? type.toLowerCase() : "string";
-            if ("string" == type)
+            if ("string" == type) {
                 return XML.Namespaces.XMLSCHEMA_STRING;
-            else if ("integer" == type)
+            }
+            else if ("integer" == type) {
                 return XML.Namespaces.XMLSCHEMA_INTEGER;
-            else if ("long" == type)
+            }
+            else if ("long" == type) {
                 return XML.Namespaces.XMLSCHEMA_LONG;
-            else if ("float" == type)
+            }
+            else if ("float" == type) {
                 return XML.Namespaces.XMLSCHEMA_FLOAT;
-            else if ("double" == type)
+            }
+            else if ("double" == type) {
                 return XML.Namespaces.XMLSCHEMA_DOUBLE;
-            else if ("decimal" == type)
+            }
+            else if ("decimal" == type) {
                 return XML.Namespaces.XMLSCHEMA_DECIMAL;
-            else if ("date" == type)
+            }
+            else if ("date" == type) {
                 return XML.Namespaces.XMLSCHEMA_DATE;
-            else if ("time" == type)
+            }
+            else if ("time" == type) {
                 return XML.Namespaces.XMLSCHEMA_TIME;
-            else if ("datetime" == type)
+            }
+            else if ("datetime" == type) {
                 return XML.Namespaces.XMLSCHEMA_DATETIME;
-            else if ("boolean" == type)
+            }
+            else if ("boolean" == type) {
                 return XML.Namespaces.XMLSCHEMA_BOOLEAN;
+            }
         }
     };
 })(BI);BI.BehaviorFactory = {
@@ -19052,24 +19297,20 @@ BI.Behavior = BI.inherit(BI.OB, {
  * @cfg {Boolean} [options.scrolly=false] 子组件超出容器边界之后是否会出现纵向滚动条
  */
 BI.Layout = BI.inherit(BI.Widget, {
-    _defaultConfig: function () {
-        return BI.extend(BI.Layout.superclass._defaultConfig.apply(this, arguments), {
+    props: function () {
+        return {
             scrollable: null, //true, false, null
             scrollx: false, //true, false
             scrolly: false, //true, false
             items: []
-        });
+        };
     },
-    _init: function () {
-        BI.Layout.superclass._init.apply(this, arguments);
+
+    render: function () {
         this._init4Margin();
         this._init4Scroll();
     },
 
-    /**
-     * 初始化布局与外层容器的边间距
-     * @private
-     */
     _init4Margin: function () {
         if (this.options.top) {
             this.element.css('top', this.options.top);
@@ -19085,10 +19326,6 @@ BI.Layout = BI.inherit(BI.Widget, {
         }
     },
 
-    /**
-     * 初始化布局的滚动形态
-     * @private
-     */
     _init4Scroll: function () {
         switch (this.options.scrollable) {
             case true:
@@ -19114,16 +19351,280 @@ BI.Layout = BI.inherit(BI.Widget, {
         }
     },
 
+    _getChildName: function (index) {
+        return index + "";
+    },
+
     _addElement: function (i, item) {
-        var o = this.options;
-        var w;
-        if (!this.hasWidget(this.getName() + i)) {
+        var self = this, w;
+        if (!this.hasWidget(this._getChildName(i))) {
             w = BI.createWidget(item);
-            this.addWidget(this.getName() + i, w);
+            this.addWidget(this._getChildName(i), w);
+            w.on(BI.Events.DESTROY, function () {
+                BI.each(self._children, function (name, child) {
+                    if (child === w) {
+                        self.removeItemAt(name | 0);
+                    }
+                });
+            });
         } else {
-            w = this.getWidgetByName(this.getName() + i);
+            w = this.getWidgetByName(this._getChildName(i));
         }
         return w;
+    },
+
+    _getOptions: function (item) {
+        if (item instanceof BI.Widget) {
+            item = item.options;
+        }
+        item = BI.stripEL(item);
+        if (item instanceof BI.Widget) {
+            item = item.options;
+        }
+        return item;
+    },
+
+    _compare: function (item1, item2) {
+        var self = this;
+        return eq(item1, item2);
+
+        //不比较函数
+        function eq(a, b, aStack, bStack) {
+            if (a === b) {
+                return a !== 0 || 1 / a === 1 / b;
+            }
+            if (a == null || b == null) {
+                return a === b;
+            }
+            var className = Object.prototype.toString.call(a);
+            switch (className) {
+                case '[object RegExp]':
+                case '[object String]':
+                    return '' + a === '' + b;
+                case '[object Number]':
+                    if (+a !== +a) {
+                        return +b !== +b;
+                    }
+                    return +a === 0 ? 1 / +a === 1 / b : +a === +b;
+                case '[object Date]':
+                case '[object Boolean]':
+                    return +a === +b;
+            }
+
+            var areArrays = className === '[object Array]';
+            if (!areArrays) {
+                if (BI.isFunction(a) && BI.isFunction(b)) {
+                    return true;
+                }
+                a = self._getOptions(a);
+                b = self._getOptions(b);
+            }
+
+            aStack = aStack || [];
+            bStack = bStack || [];
+            var length = aStack.length;
+            while (length--) {
+                if (aStack[length] === a) {
+                    return bStack[length] === b;
+                }
+            }
+
+            aStack.push(a);
+            bStack.push(b);
+
+            if (areArrays) {
+                length = a.length;
+                if (length !== b.length) {
+                    return false;
+                }
+                while (length--) {
+                    if (!eq(a[length], b[length], aStack, bStack)) {
+                        return false;
+                    }
+                }
+            } else {
+                var keys = _.keys(a), key;
+                length = keys.length;
+                if (_.keys(b).length !== length) {
+                    return false;
+                }
+                while (length--) {
+                    key = keys[length];
+                    if (!(_.has(b, key) && eq(a[key], b[key], aStack, bStack))) {
+                        return false;
+                    }
+                }
+            }
+            aStack.pop();
+            bStack.pop();
+            return true;
+        }
+    },
+
+    _getWrapper: function () {
+        return this.element;
+    },
+
+    _addItemAt: function (index, item) {
+        for (var i = this.options.items.length; i > index; i--) {
+            this._children[this._getChildName(i)] = this._children[this._getChildName(i - 1)];
+        }
+        delete this._children[index];
+        this.options.items.splice(index, 0, item);
+    },
+
+    _removeItemAt: function (index) {
+        for (var i = index; i < this.options.items.length - 1; i++) {
+            this._children[this._getChildName(i)] = this._children[this._getChildName(i + 1)];
+        }
+        this.options.items.splice(index, 1);
+    },
+
+    /**
+     * 添加一个子组件到容器中
+     * @param {JSON/BI.Widget} item 子组件
+     */
+    addItem: function (item) {
+        return this.addItemAt(this.options.items.length, item);
+    },
+
+    prependItem: function (item) {
+        return this.addItemAt(0, item);
+    },
+
+    addItemAt: function (index, item) {
+        if (index < 0 || index > this.options.items.length) {
+            return;
+        }
+        this._addItemAt(index, item);
+        var w = this._addElement(index, item);
+        if (index > 0) {
+            this._children[this._getChildName(index - 1)].element.after(w.element);
+        } else {
+            w.element.prependTo(this._getWrapper());
+        }
+        w._mount();
+        return w;
+    },
+
+    removeItemAt: function (index) {
+        if (index < 0 || index > this.options.items.length - 1) {
+            return;
+        }
+        var child = this._children[this._getChildName(index)];
+        this._removeItemAt(index);
+        child.destroy();
+    },
+
+    updateItemAt: function (index, item) {
+        if (index < 0 || index > this.options.items.length - 1) {
+            return;
+        }
+
+        var child = this._children[this._getChildName(index)];
+        if (child.update) {
+            child.update(this._getOptions(item));
+            return true;
+        }
+        var del = this._children[this._getChildName(index)];
+        delete this._children[this._getChildName(index)];
+        this.options.items.splice(index, 1);
+        var w = this._addElement(index, item);
+        this.options.items.splice(index, 0, item);
+        this._children[this._getChildName(index)] = w;
+        if (index > 0) {
+            this._children[this._getChildName(index - 1)].element.after(w.element);
+        } else {
+            w.element.prependTo(this._getWrapper());
+        }
+        del.destroy();
+        w._mount();
+    },
+
+    addItems: function (items) {
+        var self = this, o = this.options;
+        var fragment = document.createDocumentFragment();
+        var added = [];
+        BI.each(items, function (i, item) {
+            var w = self._addElement(o.items.length, item);
+            self._children[self._getChildName(o.items.length)] = w;
+            o.items.push(item);
+            added.push(w);
+            fragment.appendChild(w.element[0]);
+        });
+        this._getWrapper().append(fragment);
+        BI.each(added, function (i, w) {
+            w._mount();
+        })
+    },
+
+    prependItems: function (items) {
+        var self = this;
+        items = items || [];
+        var fragment = document.createDocumentFragment();
+        var added = [];
+        for (var i = items.length - 1; i >= 0; i--) {
+            this._addItemAt(0, items[i]);
+            var w = this._addElement(0, items[i]);
+            self._children[self._getChildName(0)] = w;
+            this.options.items.unshift(items[i]);
+            added.push(w);
+            fragment.appendChild(w.element[0]);
+        }
+        this._getWrapper().prepend(fragment);
+        BI.each(added, function (i, w) {
+            w._mount();
+        })
+    },
+
+    getValue: function () {
+        var self = this, value = [];
+        BI.each(this.options.items, function (i) {
+            var v = self._children[self._getChildName(i)].getValue();
+            v = BI.isArray(v) ? v : [v];
+            value = value.concat(v);
+        });
+        return value;
+    },
+
+    setValue: function (v) {
+        var self = this;
+        BI.each(this.options.items, function (i) {
+            self._children[self._getChildName(i)].setValue(v);
+        })
+    },
+
+    setText: function (v) {
+        var self = this;
+        BI.each(this.options.items, function (i) {
+            self._children[self._getChildName(i)].setText(v);
+        })
+    },
+
+    update: function (item) {
+        var o = this.options;
+        var items = item.items;
+        var updated = false, i, len;
+        for (i = 0, len = Math.min(o.items.length, items.length); i < len; i++) {
+            if (!this._compare(o.items[i], items[i])) {
+                updated = this.updateItemAt(i, items[i]) || updated;
+            }
+        }
+        if (o.items.length > items.length) {
+            var deleted = [];
+            for (i = items.length; i < o.items.length; i++) {
+                deleted.push(this._children[this._getChildName(i)]);
+            }
+            BI.each(deleted, function (i, w) {
+                w.destroy();
+            })
+        } else if (items.length > o.items.length) {
+            for (i = o.items.length; i < items.length; i++) {
+                this.addItemAt(i, items[i]);
+            }
+        }
+        this.options.items = items;
+        return updated;
     },
 
     stroke: function (items) {
@@ -19136,71 +19637,18 @@ BI.Layout = BI.inherit(BI.Widget, {
     },
 
     populate: function (items) {
-        var self = this;
-        this.reset(items);
+        var self = this, o = this.options;
+        items = items || [];
+        if (this._isMounted) {
+            this.update({items: items});
+            return;
+        }
+        this.options.items = items;
         this.stroke(items);
-    },
-
-    reset: function (items) {
-        this.options.items = items || [];
     },
 
     resize: function () {
 
-    },
-
-    /**
-     * 添加一个子组件到容器中
-     * @param {JSON/BI.Widget} item 子组件
-     */
-    addItem: function (item) {
-        var w = this._addElement(this.options.items.length, item);
-        this.options.items.push(item);
-        w.element.appendTo(this.element);
-        return w;
-    },
-
-    addItems: function (items) {
-        var self = this;
-        BI.each(items, function (i, item) {
-            self.addItem(item);
-        })
-    },
-
-    getValue: function (name) {
-        if (name) {
-            return this.getWidgetByName(name).getValue();
-        }
-        var value = [];
-        BI.each(this.widgets, function (i, wi) {
-            var v = wi.getValue(name);
-            v = BI.isArray(v) ? v : [v];
-            value = value.concat(v);
-        });
-        return value;
-    },
-
-    setValue: function (v, name) {
-        if (name) {
-            return this.getWidgetByName(name).setValue(v);
-        }
-        BI.each(this.widgets, function (i, wi) {
-            wi.setValue(v);
-        })
-    },
-
-    setText: function (v, name) {
-        if (name) {
-            return this.getWidgetByName(name).setText(v);
-        }
-        BI.each(this.widgets, function (i, wi) {
-            wi.setText(v);
-        })
-    },
-
-    empty: function () {
-        BI.Layout.superclass.empty.apply(this, arguments);
-        this.reset();
     }
 });
 $.shortcut('bi.layout', BI.Layout);/**
@@ -19453,7 +19901,597 @@ BI.PopoverSection = BI.inherit(BI.Widget, {
 
     }
 });
-BI.PopoverSection.EVENT_CLOSE = "EVENT_CLOSE";/**
+BI.PopoverSection.EVENT_CLOSE = "EVENT_CLOSE";BI.cjkEncode = function (text) {
+    // alex:如果非字符串,返回其本身(cjkEncode(234) 返回 ""是不对的)
+    if (typeof text !== 'string') {
+        return text;
+    }
+
+    var newText = "";
+    for (var i = 0; i < text.length; i++) {
+        var code = text.charCodeAt(i);
+        if (code >= 128 || code === 91 || code === 93) {//91 is "[", 93 is "]".
+            newText += "[" + code.toString(16) + "]";
+        } else {
+            newText += text.charAt(i);
+        }
+    }
+
+    return newText
+};
+
+BI.cjkEncodeDO = function (o) {
+    if (BI.isPlainObject(o)) {
+        var result = {};
+        $.each(o, function (k, v) {
+            if (!(typeof v == "string")) {
+                v = BI.jsonEncode(v);
+            }
+            //wei:bug 43338，如果key是中文，cjkencode后o的长度就加了1，ie9以下版本死循环，所以新建对象result。
+            k = BI.cjkEncode(k);
+            result[k] = BI.cjkEncode(v);
+        });
+        return result;
+    }
+    return o;
+};
+
+BI.jsonEncode = function (o) {
+    //james:这个Encode是抄的EXT的
+    var useHasOwn = {}.hasOwnProperty ? true : false;
+
+    // crashes Safari in some instances
+    //var validRE = /^("(\\.|[^"\\\n\r])*?"|[,:{}\[\]0-9.\-+Eaeflnr-u \n\r\t])+?$/;
+
+    var m = {
+        "\b": '\\b',
+        "\t": '\\t',
+        "\n": '\\n',
+        "\f": '\\f',
+        "\r": '\\r',
+        '"': '\\"',
+        "\\": '\\\\'
+    };
+
+    var encodeString = function (s) {
+        if (/["\\\x00-\x1f]/.test(s)) {
+            return '"' + s.replace(/([\x00-\x1f\\"])/g, function (a, b) {
+                    var c = m[b];
+                    if (c) {
+                        return c;
+                    }
+                    c = b.charCodeAt();
+                    return "\\u00" +
+                        Math.floor(c / 16).toString(16) +
+                        (c % 16).toString(16);
+                }) + '"';
+        }
+        return '"' + s + '"';
+    };
+
+    var encodeArray = function (o) {
+        var a = ["["], b, i, l = o.length, v;
+        for (i = 0; i < l; i += 1) {
+            v = o[i];
+            switch (typeof v) {
+                case "undefined":
+                case "function":
+                case "unknown":
+                    break;
+                default:
+                    if (b) {
+                        a.push(',');
+                    }
+                    a.push(v === null ? "null" : BI.jsonEncode(v));
+                    b = true;
+            }
+        }
+        a.push("]");
+        return a.join("");
+    };
+
+    if (typeof o == "undefined" || o === null) {
+        return "null";
+    } else if (BI.isArray(o)) {
+        return encodeArray(o);
+    } else if (o instanceof Date) {
+        /*
+         * alex:原来只是把年月日时分秒简单地拼成一个String,无法decode
+         * 现在这么处理就可以decode了,但是JS.jsonDecode和Java.JSONObject也要跟着改一下
+         */
+        return BI.jsonEncode({
+            __time__: o.getTime()
+        })
+    } else if (typeof o == "string") {
+        return encodeString(o);
+    } else if (typeof o == "number") {
+        return isFinite(o) ? String(o) : "null";
+    } else if (typeof o == "boolean") {
+        return String(o);
+    } else if (BI.isFunction(o)) {
+        return String(o);
+    } else {
+        var a = ["{"], b, i, v;
+        for (i in o) {
+            if (!useHasOwn || o.hasOwnProperty(i)) {
+                v = o[i];
+                switch (typeof v) {
+                    case "undefined":
+                    case "unknown":
+                        break;
+                    default:
+                        if (b) {
+                            a.push(',');
+                        }
+                        a.push(BI.jsonEncode(i), ":",
+                            v === null ? "null" : BI.jsonEncode(v));
+                        b = true;
+                }
+            }
+        }
+        a.push("}");
+        return a.join("");
+    }
+};
+
+BI.contentFormat = function (cv, fmt) {
+    if (BI.isEmpty(cv)) {
+        //原值为空，返回空字符
+        return '';
+    }
+    var text = cv.toString();
+    if (BI.isEmpty(fmt)) {
+        //格式为空，返回原字符
+        return text;
+    }
+    if (fmt.match(/^T/)) {
+        //T - 文本格式
+        return text;
+    } else if (fmt.match(/^D/)) {
+        //D - 日期(时间)格式
+        if (!(cv instanceof Date)) {
+            if (typeof cv === 'number') {
+                //毫秒数类型
+                cv = new Date(cv);
+            } else {
+                //字符串类型，如yyyyMMdd、MMddyyyy等这样无分隔符的结构
+                cv = Date.parseDate(cv + "", Date.patterns.ISO8601Long);
+            }
+        }
+        if (!BI.isNull(cv)) {
+            var needTrim = fmt.match(/^DT/);
+            text = BI.date2Str(cv, fmt.substring(needTrim ? 2 : 1));
+        }
+    } else if (fmt.match(/E/)) {
+        //科学计数格式
+        text = BI._eFormat(text, fmt);
+    } else {
+        //数字格式
+        text = BI._numberFormat(text, fmt);
+    }
+    //¤ - 货币格式
+    text = text.replace(/¤/g, '￥');
+    return text;
+};
+
+/**
+ * 把日期对象按照指定格式转化成字符串
+ *
+ *      @example
+ *      var date = new Date('Thu Dec 12 2013 00:00:00 GMT+0800');
+ *      var result = BI.date2Str(date, 'yyyy-MM-dd');//2013-12-12
+ *
+ * @class BI.date2Str
+ * @param date 日期
+ * @param format 日期格式
+ * @returns {String}
+ */
+date2Str = function (date, format) {
+    if (!date) {
+        return '';
+    }
+    // O(len(format))
+    var len = format.length, result = '';
+    if (len > 0) {
+        var flagch = format.charAt(0), start = 0, str = flagch;
+        for (var i = 1; i < len; i++) {
+            var ch = format.charAt(i);
+            if (flagch !== ch) {
+                result += compileJFmt({
+                    'char': flagch,
+                    'str': str,
+                    'len': i - start
+                }, date);
+                flagch = ch;
+                start = i;
+                str = flagch;
+            } else {
+                str += ch;
+            }
+        }
+        result += compileJFmt({
+            'char': flagch,
+            'str': str,
+            'len': len - start
+        }, date);
+    }
+    return result;
+
+    function compileJFmt(jfmt, date) {
+        var str = jfmt.str, len = jfmt.len, ch = jfmt['char'];
+        switch (ch) {
+            case 'E': //星期
+                str = Date._DN[date.getDay()];
+                break;
+            case 'y': //年
+                if (len <= 3) {
+                    str = (date.getFullYear() + '').slice(2, 4);
+                } else {
+                    str = date.getFullYear();
+                }
+                break;
+            case 'M': //月
+                if (len > 2) {
+                    str = Date._MN[date.getMonth()];
+                } else if (len < 2) {
+                    str = date.getMonth() + 1;
+                } else {
+                    str = String.leftPad(date.getMonth() + 1 + '', 2, '0');
+                }
+                break;
+            case 'd': //日
+                if (len > 1) {
+                    str = String.leftPad(date.getDate() + '', 2, '0');
+                } else {
+                    str = date.getDate();
+                }
+                break;
+            case 'h': //时(12)
+                var hour = date.getHours() % 12;
+                if (hour === 0) {
+                    hour = 12;
+                }
+                if (len > 1) {
+                    str = String.leftPad(hour + '', 2, '0');
+                } else {
+                    str = hour;
+                }
+                break;
+            case 'H': //时(24)
+                if (len > 1) {
+                    str = String.leftPad(date.getHours() + '', 2, '0');
+                } else {
+                    str = date.getHours();
+                }
+                break;
+            case 'm':
+                if (len > 1) {
+                    str = String.leftPad(date.getMinutes() + '', 2, '0');
+                } else {
+                    str = date.getMinutes();
+                }
+                break;
+            case 's':
+                if (len > 1) {
+                    str = String.leftPad(date.getSeconds() + '', 2, '0');
+                } else {
+                    str = date.getSeconds();
+                }
+                break;
+            case 'a':
+                str = date.getHours() < 12 ? 'am' : 'pm';
+                break;
+            case 'z':
+                str = date.getTimezone();
+                break;
+            default:
+                str = jfmt.str;
+                break;
+        }
+        return str;
+    }
+};
+
+/**
+ * 数字格式
+ */
+BI._numberFormat = function (text, format) {
+    var text = text + '';
+    //数字格式，区分正负数
+    var numMod = format.indexOf(';');
+    if (numMod > -1) {
+        if (text >= 0) {
+            return BI._numberFormat(text + "", format.substring(0, numMod));
+        } else {
+            return BI._numberFormat((-text) + "", format.substr(numMod + 1));
+        }
+    }
+    var tp = text.split('.'), fp = format.split('.'),
+        tleft = tp[0] || '', fleft = fp[0] || '',
+        tright = tp[1] || '', fright = fp[1] || '';
+    //百分比,千分比的小数点移位处理
+    if (/[%‰]$/.test(format)) {
+        var paddingZero = /[%]$/.test(format) ? '00' : '000';
+        tright += paddingZero;
+        tleft += tright.substr(0, paddingZero.length);
+        tleft = tleft.replace(/^0+/gi, '');
+        tright = tright.substr(paddingZero.length).replace(/0+$/gi, '');
+    }
+    var right = BI._dealWithRight(tright, fright);
+    if (right.leftPlus) {
+        //小数点后有进位
+        tleft = parseInt(tleft) + 1 + '';
+
+        tleft = isNaN(tleft) ? '1' : tleft;
+    }
+    right = right.num;
+    var left = BI._dealWithLeft(tleft, fleft);
+    if (!(/[0-9]/.test(left))) {
+        left = left + '0';
+    }
+    if (!(/[0-9]/.test(right))) {
+        return left + right;
+    } else {
+        return left + '.' + right;
+    }
+};
+/**
+ * 处理小数点右边小数部分
+ * @param tright 右边内容
+ * @param fright 右边格式
+ * @returns {JSON} 返回处理结果和整数部分是否需要进位
+ * @private
+ */
+BI._dealWithRight = function (tright, fright) {
+    var right = '', j = 0, i = 0;
+    for (var len = fright.length; i < len; i++) {
+        var ch = fright.charAt(i);
+        var c = tright.charAt(j);
+        switch (ch) {
+            case '0':
+                if (BI.isEmpty(c)) {
+                    c = '0';
+                }
+                right += c;
+                j++;
+                break;
+            case '#':
+                right += c;
+                j++;
+                break;
+            default :
+                right += ch;
+                break;
+        }
+    }
+    var rll = tright.substr(j);
+    var result = {};
+    if (!BI.isEmpty(rll) && rll.charAt(0) > 4) {
+        //有多余字符，需要四舍五入
+        result.leftPlus = true;
+        var numReg = right.match(/^[0-9]+/);
+        if (numReg) {
+            var num = numReg[0];
+            var orilen = num.length;
+            var newnum = BI.parseINT(num) + 1 + '';
+            //进位到整数部分
+            if (newnum.length > orilen) {
+                newnum = newnum.substr(1);
+            } else {
+                newnum = BI.leftPad(newnum, orilen, '0');
+                result.leftPlus = false;
+            }
+            right = right.replace(/^[0-9]+/, newnum);
+        }
+    }
+    result.num = right;
+    return result;
+};
+
+BI.parseINT = function (str) {
+    return parseInt(str, 10);
+};
+
+BI.leftPad = function (val, size, ch) {
+    var result = String(val);
+    if (!ch) {
+        ch = " ";
+    }
+    while (result.length < size) {
+        result = ch + result;
+    }
+    return result.toString();
+};
+
+/**
+ * 处理小数点左边整数部分
+ * @param tleft 左边内容
+ * @param fleft 左边格式
+ * @returns {string} 返回处理结果
+ * @private
+ */
+BI._dealWithLeft = function (tleft, fleft) {
+    var left = '';
+    var j = tleft.length - 1;
+    var combo = -1, last = -1;
+    var i = fleft.length - 1;
+    for (; i >= 0; i--) {
+        var ch = fleft.charAt(i);
+        var c = tleft.charAt(j);
+        switch (ch) {
+            case '0':
+                if (BI.isEmpty(c)) {
+                    c = '0';
+                }
+                last = -1;
+                left = c + left;
+                j--;
+                break;
+            case '#':
+                last = i;
+                left = c + left;
+                j--;
+                break;
+            case ',':
+                if (!BI.isEmpty(c)) {
+                    //计算一个,分隔区间的长度
+                    var com = fleft.match(/,[#0]+/);
+                    if (com) {
+                        combo = com[0].length - 1;
+                    }
+                    left = ',' + left;
+                }
+                break;
+            default :
+                left = ch + left;
+                break;
+        }
+    }
+    if (last > -1) {
+        //处理剩余字符
+        var tll = tleft.substr(0, j + 1);
+        left = left.substr(0, last) + tll + left.substr(last);
+    }
+    if (combo > 0) {
+        //处理,分隔区间
+        var res = left.match(/[0-9]+,/);
+        if (res) {
+            res = res[0];
+            var newstr = '', n = res.length - 1 - combo;
+            for (; n >= 0; n = n - combo) {
+                newstr = res.substr(n, combo) + ',' + newstr;
+            }
+            var lres = res.substr(0, n + combo);
+            if (!BI.isEmpty(lres)) {
+                newstr = lres + ',' + newstr;
+            }
+        }
+        left = left.replace(/[0-9]+,/, newstr);
+    }
+    return left;
+};
+
+BI.object2Number = function (value) {
+    if (value == null) {
+        return 0;
+    }
+    if (typeof value == 'number') {
+        return value;
+    } else {
+        var str = value + "";
+        if (str.indexOf(".") === -1) {
+            return parseInt(str);
+        } else {
+            return parseFloat(str);
+        }
+    }
+};
+
+BI.object2Date = function (obj) {
+    if (obj == null) {
+        return new Date();
+    }
+    if (obj instanceof Date) {
+        return obj;
+    } else if (typeof obj == 'number') {
+        return new Date(obj);
+    } else {
+        var str = obj + "";
+        str = str.replace(/-/g, '/');
+        var dt = new Date(str);
+        if (!BI.isInvalidDate(dt)) {
+            return dt;
+        }
+
+        return new Date();
+    }
+};
+
+BI.isArray = function (a) {
+    return Object.prototype.toString.call(a) == '[object Array]';
+};
+
+BI.object2Time = function (obj) {
+    if (obj == null) {
+        return new Date();
+    }
+    if (obj instanceof Date) {
+        return obj;
+    } else {
+        var str = obj + "";
+        str = str.replace(/-/g, '/');
+        var dt = new Date(str);
+        if (!BI.isInvalidDate(dt)) {
+            return dt;
+        }
+        if (str.indexOf('/') === -1 && str.indexOf(':') !== -1) {
+            dt = new Date("1970/01/01 " + str);
+            if (!BI.isInvalidDate(dt)) {
+                return dt;
+            }
+        }
+        dt = BI.str2Date(str, "HH:mm:ss");
+        if (!BI.isInvalidDate(dt)) {
+            return dt;
+        }
+        return new Date();
+    }
+};
+
+// 判断是否是无效的日期
+BI.isInvalidDate = function (date) {
+    return date == "Invalid Date" || date == "NaN";
+};
+
+
+/**
+ * 科学计数格式
+ */
+BI._eFormat = function (text, fmt) {
+    var e = fmt.indexOf("E");
+    var eleft = fmt.substr(0, e), eright = fmt.substr(e + 1);
+    if (/^[0\.-]+$/.test(text)) {
+        text = BI._numberFormat(0.0, eleft) + 'E' + BI._numberFormat(0, eright)
+    } else {
+        var isNegative = text < 0;
+        if (isNegative) {
+            text = text.substr(1);
+        }
+        var elvl = (eleft.split('.')[0] || '').length;
+        var point = text.indexOf(".");
+        if (point < 0) {
+            point = text.length;
+        }
+        var i = 0; //第一个不为0的数的位置
+        text = text.replace('.', '');
+        for (var len = text.length; i < len; i++) {
+            var ech = text.charAt(i);
+            if (ech <= '9' && ech >= '1') {
+                break;
+            }
+        }
+        var right = point - i - elvl;
+        var left = text.substr(i, elvl);
+        var dis = i + elvl - text.length;
+        if (dis > 0) {
+            //末位补全0
+            for (var k = 0; k < dis; k++) {
+                left += '0';
+            }
+        } else {
+            left += '.' + text.substr(i + elvl);
+        }
+        left = left.replace(/^[0]+/, '');
+        if (right < 0 && eright.indexOf('-') < 0) {
+            eright += ';-' + eright;
+        }
+        text = BI._numberFormat(left, eleft) + 'E' + BI._numberFormat(right, eright);
+        if (isNegative) {
+            text = '-' + text;
+        }
+    }
+    return text;
+};/**
  * guy
  *
  * @class BI.HighlightBehavior
@@ -19519,109 +20557,12 @@ BI.RedMarkBehavior = BI.inherit(BI.Behavior, {
             }
         })
     }
-});/*
- * 前端缓存
- */
-window.localStorage || (window.localStorage = {
-    items: {},
-    setItem: function (k, v) {
-        BI.Cache.addCookie(k, v);
-    },
-    getItem: function (k) {
-        return BI.Cache.getCookie(k);
-    },
-    removeItem: function (k) {
-        BI.Cache.deleteCookie(k);
-    },
-    key: function () {
-
-    },
-    clear: function () {
-        this.items = {};
-    }
-});
-BI.Cache = {
-    _prefix: "bi",
-    setUsername: function (username) {
-        localStorage.setItem(BI.Cache._prefix + ".username", (username + "" || "").toUpperCase());
-    },
-    getUsername: function () {
-        return localStorage.getItem(BI.Cache._prefix + ".username") || "";
-    },
-    _getKeyPrefix: function () {
-        return BI.Cache.getUsername() + "." + BI.Cache._prefix + ".";
-    },
-    _generateKey: function (key) {
-        return BI.Cache._getKeyPrefix() + (key || "");
-    },
-    getItem: function (key) {
-        return localStorage.getItem(BI.Cache._generateKey(key));
-    },
-    setItem: function (key, value) {
-        localStorage.setItem(BI.Cache._generateKey(key), value);
-    },
-    removeItem: function (key) {
-        localStorage.removeItem(BI.Cache._generateKey(key));
-    },
-    clear: function () {
-        for (var i = localStorage.length; i >= 0; i--) {
-            var key = localStorage.key(i);
-            if (key) {
-                if (key.indexOf(BI.Cache._getKeyPrefix()) === 0) {
-                    localStorage.removeItem(key);
-                }
-            }
-        }
-    },
-    keys: function () {
-        var result = [];
-        for (var i = localStorage.length; i >= 0; i--) {
-            var key = localStorage.key(i);
-            if (key) {
-                var prefix = BI.Cache._getKeyPrefix();
-                if (key.indexOf(prefix) === 0) {
-                    result[result.length] = key.substring(prefix.length);
-                }
-            }
-        }
-        return result;
-    },
-
-    addCookie: function (name, value, path, expiresHours) {
-        var cookieString = name + "=" + escape(value);
-        // 判断是否设置过期时间
-        if (expiresHours && expiresHours > 0) {
-            var date = new Date();
-            date.setTime(date.getTime() + expiresHours * 3600 * 1000);
-            cookieString = cookieString + "; expires=" + date.toGMTString();
-        }
-        if (path) {
-            cookieString = cookieString + "; path=" + path;
-        }
-        document.cookie = cookieString;
-    },
-    getCookie: function (name) {
-        var arr, reg = new RegExp("(^| )" + name + "=([^;]*)(;|$)");
-        if (arr = document.cookie.match(reg))
-            return unescape(arr[2]);
-        else
-            return null;
-    },
-    deleteCookie: function (name, path) {
-        var date = new Date();
-        date.setTime(date.getTime() - 10000);
-        var cookieString = name + "=v; expires=" + date.toGMTString();
-        if (path) {
-            cookieString = cookieString + "; path=" + path;
-        }
-        document.cookie = cookieString;
-    }
-};/**
+});/**
  * guy
  * 控制器
  * Controller层超类
  * @class BI.Controller
- * @extends FR.OB
+ * @extends BI.OB
  * @abstract
  */
 BI.Controller = BI.inherit(BI.OB, {
@@ -19655,10 +20596,14 @@ BI.BroadcastController = BI.inherit(BI.Controller, {
     },
 
     on: function (name, fn) {
+        var self = this;
         if (!this._broadcasts[name]) {
             this._broadcasts[name] = [];
         }
         this._broadcasts[name].push(fn);
+        return function () {
+            self._broadcasts[name].remove(fn);
+        }
     },
 
     send: function (name) {
@@ -19670,7 +20615,7 @@ BI.BroadcastController = BI.inherit(BI.Controller, {
 
     remove: function (name, fn) {
         if (fn) {
-            BI.remove(this._broadcasts[name], fn);
+            this._broadcasts[name].remove(fn);
         } else {
             delete this._broadcasts[name];
         }
@@ -19707,16 +20652,7 @@ BI.BubblesController = BI.inherit(BI.Controller, {
         });
     },
 
-    hide: function (name, callback) {
-        if (!this.has(name)) {
-            return this;
-        }
-        this.get(name).element.hide(0, callback);
-        this.get(name).invisible();
-        return this;
-    },
-
-    _getOffsetLeft: function(name, context, offsetStyle){
+    _getOffsetLeft: function (name, context, offsetStyle) {
         var left = 0;
         if ("center" === offsetStyle) {
             left = context.element.offset().left + (context.element.bounds().width - this.get(name).element.bounds().width) / 2;
@@ -19735,7 +20671,7 @@ BI.BubblesController = BI.inherit(BI.Controller, {
         return context.element.offset().left;
     },
 
-    _getOffsetTop: function(name, context, offsetStyle){
+    _getOffsetTop: function (name, context, offsetStyle) {
         var top = 0;
         if ("center" === offsetStyle) {
             top = context.element.offset().top + (context.element.bounds().height - this.get(name).element.bounds().height) / 2;
@@ -19753,25 +20689,25 @@ BI.BubblesController = BI.inherit(BI.Controller, {
         return context.element.offset().top;
     },
 
-    _getLeftPosition: function(name, context, offsetStyle){
+    _getLeftPosition: function (name, context, offsetStyle) {
         var position = $.getLeftPosition(context, this.get(name));
         position.top = this._getOffsetTop(name, context, offsetStyle);
         return position;
     },
 
-    _getBottomPosition: function(name, context, offsetStyle){
+    _getBottomPosition: function (name, context, offsetStyle) {
         var position = $.getBottomPosition(context, this.get(name));
         position.left = this._getOffsetLeft(name, context, offsetStyle);
         return position;
     },
 
-    _getTopPosition: function(name, context, offsetStyle){
+    _getTopPosition: function (name, context, offsetStyle) {
         var position = $.getTopPosition(context, this.get(name));
         position.left = this._getOffsetLeft(name, context, offsetStyle);
         return position;
     },
 
-    _getRightPosition: function(name, context, offsetStyle){
+    _getRightPosition: function (name, context, offsetStyle) {
         var position = $.getRightPosition(context, this.get(name));
         position.top = this._getOffsetTop(name, context, offsetStyle);
         return position;
@@ -19801,8 +20737,8 @@ BI.BubblesController = BI.inherit(BI.Controller, {
             items: [{
                 el: this.storeBubbles[name]["top"]
             }]
-        })
-        this.set(name, this.storeBubbles[name]["top"])
+        });
+        this.set(name, this.storeBubbles[name]["top"]);
         var position = this._getTopPosition(name, context, offsetStyle);
         this.get(name).element.css({left: position.left, top: position.top});
         this.get(name).invisible();
@@ -19816,7 +20752,7 @@ BI.BubblesController = BI.inherit(BI.Controller, {
                 items: [{
                     el: this.storeBubbles[name]["left"]
                 }]
-            })
+            });
             this.set(name, this.storeBubbles[name]["left"]);
             var position = this._getLeftPosition(name, context, offsetStyle);
             this.get(name).element.css({left: position.left, top: position.top});
@@ -19831,8 +20767,8 @@ BI.BubblesController = BI.inherit(BI.Controller, {
                     items: [{
                         el: this.storeBubbles[name]["right"]
                     }]
-                })
-                this.set(name, this.storeBubbles[name]["right"])
+                });
+                this.set(name, this.storeBubbles[name]["right"]);
                 var position = this._getRightPosition(name, context, offsetStyle);
                 this.get(name).element.css({left: position.left, top: position.top});
                 this.get(name).invisible();
@@ -19856,6 +20792,14 @@ BI.BubblesController = BI.inherit(BI.Controller, {
         }
         this.get(name).setText(text);
         this.get(name).visible();
+        return this;
+    },
+
+    hide: function (name) {
+        if (!this.has(name)) {
+            return this;
+        }
+        this.get(name).invisible();
         return this;
     },
 
@@ -19883,7 +20827,10 @@ BI.BubblesController = BI.inherit(BI.Controller, {
         if (!this.has(name)) {
             return this;
         }
-        this.bubblesManager[name].destroy();
+        BI.each(this.storeBubbles[name], function (dir, bubble) {
+            bubble.destroy();
+        });
+        delete this.storeBubbles[name];
         delete this.bubblesManager[name];
         return this;
     }
@@ -20160,7 +21107,7 @@ BI.LayerController = BI.inherit(BI.Controller, {
 
     add: function (name, layer, layout) {
         if (this.has(name)) {
-            throw new Error("该弹出面板已经存在了，不能添加该key值");
+            throw new Error("name is already exist");
         }
         layout.setVisible(false);
         this.layerManager[name] = layer;
@@ -21733,7 +22680,7 @@ $(function () {
         },
 
         getCompleteImageUrl: function (url) {
-            return FR.servletURL + "?op=fr_bi&cmd=get_uploaded_image&image_id=" + url;
+            return BI.servletURL + "?op=fr_bi&cmd=get_uploaded_image&image_id=" + url;
         }
 
     });
@@ -21910,7 +22857,7 @@ $(function () {
         },
 
         getTextSizeWidth: function (text, fontSize) {
-            var span = $("<span></span>").addClass("text-width-span").appendTo($("#container"));
+            var span = $("<span></span>").addClass("text-width-span").appendTo($("body"));
 
             if (fontSize == null) {
                 fontSize = 12;
@@ -21932,7 +22879,7 @@ $(function () {
                     position: "absolute",
                     top: "-9999px",
                     overflow: "scroll"
-                }).appendTo($("#container"));
+                }).appendTo($("body"));
                 this._scrollWidth = ul[0].offsetWidth - ul[0].clientWidth;
                 ul.destroy();
             }
@@ -21968,7 +22915,7 @@ BI.ShowListener = BI.inherit(BI.OB, {
                 v = v || o.eventObj.getValue();
                 v = BI.isArray(v) ? (v.length > 1 ? v.toString() : v[0]) : v;
                 if (BI.isNull(v)) {
-                    throw new Error("value值不能为空");
+                    throw new Error("value cannot be null");
                 }
                 var cardName = o.cardNameCreator(v);
                 if (!o.cardLayout.isCardExisted(cardName)) {
@@ -21986,6 +22933,52 @@ BI.ShowListener = BI.inherit(BI.OB, {
     }
 });
 BI.ShowListener.EVENT_CHANGE = "ShowListener.EVENT_CHANGE";/**
+ * style加载管理器
+ *
+ * Created by GUY on 2015/9/7.
+ * @class
+ */
+BI.StyleLoaderManager = BI.inherit(BI.OB, {
+    _defaultConfig: function () {
+        return BI.extend(BI.StyleLoaderManager.superclass._defaultConfig.apply(this, arguments), {});
+    },
+
+    _init: function () {
+        BI.StyleLoaderManager.superclass._init.apply(this, arguments);
+        this.stylesManager = {};
+    },
+
+    loadStyle: function (name, styleString) {
+        var d = document, styles = d.createElement('style');
+        d.getElementsByTagName('head')[0].appendChild(styles);
+        styles.setAttribute('type', 'text/css');
+        if (styles.styleSheet) {
+            styles.styleSheet.cssText = styleString;
+        } else {
+            styles.appendChild(document.createTextNode(styleString));
+        }
+        this.stylesManager[name] = styles;
+
+        return this;
+    },
+
+    get: function (name) {
+        return this.stylesManager[name];
+    },
+
+    has: function (name) {
+        return this.stylesManager[name] != null;
+    },
+
+    removeStyle: function (name) {
+        if (!this.has(name)) {
+            return this;
+        }
+        this.stylesManager[name].parentNode.removeChild(this.stylesManager[name]);
+        delete this.stylesManager[name];
+        return this;
+    }
+});/**
  * @class BI.Logic
  * @extends BI.OB
  */
@@ -22338,6 +23331,9 @@ BI.HorizontalFillLayoutLogic = BI.inherit(BI.Logic, {
  * @class Array
  */
 $.extend(Array.prototype, {
+    contains: function (o) {
+        return this.indexOf(o) > -1;
+    },
     /**
      * 检查指定的值是否在数组中
      * @param {Object} o 要检查的值
@@ -22394,13 +23390,6 @@ $.extend(Array.prototype, {
  * Created by wang on 15/6/23.
  */
 !function () {
-    _.each(['contains', 'indexOf', 'lastIndexOf'], function (name) {
-        Array.prototype[name] = function () {
-            var arr = _.toArray(arguments);
-            arr.unshift(this);
-            return BI[name].apply(this, arr);
-        };
-    });
     Array.prototype.pushArray = function (array) {
         for (var i = 0; i < array.length; i++) {
             this.push(array[i]);
@@ -22727,7 +23716,7 @@ Date._DN = [BI.i18nText("BI-Sunday"),
     BI.i18nText("BI-Sunday")];
 
 // short day names
-Date._SDN = ['日',
+Date._SDN = ['',
     '',
     '',
     '',
@@ -23137,6 +24126,66 @@ Function.prototype.after = function (func) {
         func.apply(this, arguments);
         return ret;
     }
+};/*!
+ * jLayout JQuery Plugin v0.11
+ *
+ * Licensed under the revised BSD License.
+ * Copyright 2008, Bram Stein
+ * All rights reserved.
+ */
+if (jQuery) {
+    (function($){
+        // richer:容器在其各个边缘留出的空间
+        $.fn.insets = function () {
+            var p = this.padding(),
+                b = this.border();
+            return {
+                'top': p.top,
+                'bottom': p.bottom + b.bottom + b.top,
+                'left': p.left,
+                'right': p.right + b.right + b.left
+            };
+        };
+
+        // richer:获取 && 设置jQuery元素的边界
+        $.fn.bounds = function (value) {
+            var tmp = {hasIgnoredBounds : true};
+
+            if (value) {
+                if (!isNaN(value.x)) {
+                    tmp.left = value.x;
+                }
+                if (!isNaN(value.y)) {
+                    tmp.top = value.y;
+                }
+                if (value.width != null) {
+                    tmp.width = (value.width - (this.outerWidth(true) - this.width()));
+                    tmp.width = (tmp.width >= 0) ? tmp.width : value.width;
+                    // fix chrome
+                    //tmp.width = (tmp.width >= 0) ? tmp.width : 0;
+                }
+                if (value.height != null) {
+                    tmp.height = value.height - (this.outerHeight(true) - this.height());
+                    tmp.height = (tmp.height >= 0) ? tmp.height : value.height;
+                    // fix chrome
+                    //tmp.height = (tmp.height >= 0) ? tmp.height : value.0;
+                }
+                this.css(tmp);
+                return this;
+            }
+            else {
+                // richer:注意此方法只对可见元素有效
+                tmp = this.position();
+                return {
+                    'x': tmp.left,
+                    'y': tmp.top,
+                    // richer:这里计算外部宽度和高度的时候，都不包括边框
+                    'width': this.outerWidth(),
+                    'height': this.outerHeight()
+                };
+            }
+        };
+    })(jQuery);
 };if (!Number.prototype.toFixed || (0.00008).toFixed(3) !== '0.000' ||
     (0.9).toFixed(0) === '0' || (1.255).toFixed(2) !== '1.25' ||
     (1000000000000000128).toFixed(0) !== "1000000000000000128") {
@@ -23621,51 +24670,6 @@ $.extend(String, {
             return args[i];
         });
     }
-});/**
- * guy
- * 状态常量
- */
-
-_.extend(BI, {
-    Status: {
-        SUCCESS: 1,
-        WRONG: 2,
-        START: 3,
-        END: 4,
-        WAITING: 5,
-        READY: 6,
-        RUNNING: 7,
-        OUTOFBOUNDS: 8,
-        NULL: -1
-    },
-    Direction: {
-        Top: "top",
-        Bottom: "bottom",
-        Left: "left",
-        Right: "right",
-        Custom: "custom"
-    },
-    Axis: {
-        Vertical: "vertical",
-        Horizontal: "horizontal"
-    },
-    Selection: {
-        Default: -999,
-        None: -1,
-        Single: 0,
-        Multi: 1,
-        All: 2
-    },
-    HorizontalAlign: {
-        Left: "left",
-        Right: "right",
-        Center: "center"
-    },
-    VerticalAlign: {
-        Middle: "middle",
-        Top: "top",
-        Bottom: "bottom"
-    }
 });BI.EventListener = {
     listen: function listen(target, eventType, callback) {
         if (target.addEventListener) {
@@ -23972,15 +24976,78 @@ _.extend(BI, {
     emptyStr: "",
     emptyFn: function () {
     },
-    empty: null
+    empty: null,
+    KeyCode: {
+        BACKSPACE: 8,
+        COMMA: 188,
+        DELETE: 46,
+        DOWN: 40,
+        END: 35,
+        ENTER: 13,
+        ESCAPE: 27,
+        HOME: 36,
+        LEFT: 37,
+        NUMPAD_ADD: 107,
+        NUMPAD_DECIMAL: 110,
+        NUMPAD_DIVIDE: 111,
+        NUMPAD_ENTER: 108,
+        NUMPAD_MULTIPLY: 106,
+        NUMPAD_SUBTRACT: 109,
+        PAGE_DOWN: 34,
+        PAGE_UP: 33,
+        PERIOD: 190,
+        RIGHT: 39,
+        SPACE: 32,
+        TAB: 9,
+        UP: 38
+    },
+    Status: {
+        SUCCESS: 1,
+        WRONG: 2,
+        START: 3,
+        END: 4,
+        WAITING: 5,
+        READY: 6,
+        RUNNING: 7,
+        OUTOFBOUNDS: 8,
+        NULL: -1
+    },
+    Direction: {
+        Top: "top",
+        Bottom: "bottom",
+        Left: "left",
+        Right: "right",
+        Custom: "custom"
+    },
+    Axis: {
+        Vertical: "vertical",
+        Horizontal: "horizontal"
+    },
+    Selection: {
+        Default: -999,
+        None: -1,
+        Single: 0,
+        Multi: 1,
+        All: 2
+    },
+    HorizontalAlign: {
+        Left: "left",
+        Right: "right",
+        Center: "center"
+    },
+    VerticalAlign: {
+        Middle: "middle",
+        Top: "top",
+        Bottom: "bottom"
+    }
 });/**
  * absolute实现的居中布局
  * @class BI.AbsoluteCenterLayout
  * @extends BI.Layout
  */
 BI.AbsoluteCenterLayout = BI.inherit(BI.Layout, {
-    _defaultConfig: function () {
-        return BI.extend(BI.AbsoluteCenterLayout.superclass._defaultConfig.apply(this, arguments), {
+    props: function () {
+        return BI.extend(BI.AbsoluteCenterLayout.superclass.props.apply(this, arguments), {
             baseCls: "bi-absolute-center-layout",
             hgap: 0,
             lgap: 0,
@@ -23991,8 +25058,8 @@ BI.AbsoluteCenterLayout = BI.inherit(BI.Layout, {
         });
     },
 
-    _init: function () {
-        BI.AbsoluteCenterLayout.superclass._init.apply(this, arguments);
+    render: function () {
+        BI.AbsoluteCenterLayout.superclass.render.apply(this, arguments);
         this.populate(this.options.items);
     },
 
@@ -24016,7 +25083,7 @@ BI.AbsoluteCenterLayout = BI.inherit(BI.Layout, {
 
     populate: function (items) {
         BI.AbsoluteCenterLayout.superclass.populate.apply(this, arguments);
-        this.render();
+        this._mount();
     }
 });
 $.shortcut('bi.absolute_center_adapt', BI.AbsoluteCenterLayout);/**
@@ -24025,8 +25092,8 @@ $.shortcut('bi.absolute_center_adapt', BI.AbsoluteCenterLayout);/**
  * @extends BI.Layout
  */
 BI.AbsoluteHorizontalLayout = BI.inherit(BI.Layout, {
-    _defaultConfig: function () {
-        return BI.extend(BI.AbsoluteHorizontalLayout.superclass._defaultConfig.apply(this, arguments), {
+    props: function () {
+        return BI.extend(BI.AbsoluteHorizontalLayout.superclass.props.apply(this, arguments), {
             baseCls: "bi-absolute-horizontal-layout",
             hgap: 0,
             lgap: 0,
@@ -24037,8 +25104,8 @@ BI.AbsoluteHorizontalLayout = BI.inherit(BI.Layout, {
         });
     },
 
-    _init: function () {
-        BI.AbsoluteHorizontalLayout.superclass._init.apply(this, arguments);
+    render: function () {
+        BI.AbsoluteHorizontalLayout.superclass.render.apply(this, arguments);
         this.populate(this.options.items);
     },
 
@@ -24066,7 +25133,7 @@ BI.AbsoluteHorizontalLayout = BI.inherit(BI.Layout, {
 
     populate: function (items) {
         BI.AbsoluteHorizontalLayout.superclass.populate.apply(this, arguments);
-        this.render();
+        this._mount();
     }
 });
 $.shortcut('bi.absolute_horizontal_adapt', BI.AbsoluteHorizontalLayout);/**
@@ -24075,8 +25142,8 @@ $.shortcut('bi.absolute_horizontal_adapt', BI.AbsoluteHorizontalLayout);/**
  * @extends BI.Layout
  */
 BI.AbsoluteVerticalLayout = BI.inherit(BI.Layout, {
-    _defaultConfig: function () {
-        return BI.extend(BI.AbsoluteVerticalLayout.superclass._defaultConfig.apply(this, arguments), {
+    props: function () {
+        return BI.extend(BI.AbsoluteVerticalLayout.superclass.props.apply(this, arguments), {
             baseCls: "bi-absolute-vertical-layout",
             hgap: 0,
             lgap: 0,
@@ -24087,8 +25154,8 @@ BI.AbsoluteVerticalLayout = BI.inherit(BI.Layout, {
         });
     },
 
-    _init: function () {
-        BI.AbsoluteVerticalLayout.superclass._init.apply(this, arguments);
+    render: function () {
+        BI.AbsoluteVerticalLayout.superclass.render.apply(this, arguments);
         this.populate(this.options.items);
     },
 
@@ -24118,7 +25185,7 @@ BI.AbsoluteVerticalLayout = BI.inherit(BI.Layout, {
 
     populate: function (items) {
         BI.AbsoluteVerticalLayout.superclass.populate.apply(this, arguments);
-        this.render();
+        this._mount();
     }
 });
 $.shortcut('bi.absolute_vertical_adapt', BI.AbsoluteVerticalLayout);/**
@@ -24127,8 +25194,8 @@ $.shortcut('bi.absolute_vertical_adapt', BI.AbsoluteVerticalLayout);/**
  * @extends BI.Layout
  */
 BI.CenterAdaptLayout = BI.inherit(BI.Layout, {
-    _defaultConfig: function () {
-        return BI.extend(BI.CenterAdaptLayout.superclass._defaultConfig.apply(this, arguments), {
+    props: function () {
+        return BI.extend(BI.CenterAdaptLayout.superclass.props.apply(this, arguments), {
             baseCls: "bi-center-adapt-layout",
             columnSize: [],
             hgap: 0,
@@ -24139,14 +25206,9 @@ BI.CenterAdaptLayout = BI.inherit(BI.Layout, {
             bgap: 0
         });
     },
-    _init: function () {
-        BI.CenterAdaptLayout.superclass._init.apply(this, arguments);
-        var table = BI.createWidget({
-            type: "bi.layout",
-            tagName: "table",
-            attribute: {"cellspacing": 0, "cellpadding": 0}
-        });
-        table.element.css({
+    render: function () {
+        BI.CenterAdaptLayout.superclass.render.apply(this, arguments);
+        this.$table = $("<table>").attr({"cellspacing": 0, "cellpadding": 0}).css({
             "position": "relative",
             "width": "100%",
             "height": "100%",
@@ -24154,12 +25216,9 @@ BI.CenterAdaptLayout = BI.inherit(BI.Layout, {
             "border-spacing": "0px",
             "border": "none",
             "border-collapse": "separate"
-        }).appendTo(this.element);
-        this.tr = BI.createWidget({
-            type: "bi.layout",
-            tagName: "tr"
         });
-        this.tr.element.appendTo(table.element);
+        this.$tr = $("<tr>");
+        this.$tr.appendTo(this.$table);
         this.populate(this.options.items);
     },
 
@@ -24167,7 +25226,7 @@ BI.CenterAdaptLayout = BI.inherit(BI.Layout, {
         var o = this.options;
         var td;
         var width = o.columnSize[i] <= 1 ? (o.columnSize[i] * 100 + "%") : o.columnSize[i];
-        if (!this.hasWidget(this.getName() + i)) {
+        if (!this.hasWidget(this._getChildName(i))) {
             var w = BI.createWidget(item);
             w.element.css({"position": "relative", "top": "0", "left": "0", "margin": "0px auto"});
             td = BI.createWidget({
@@ -24178,9 +25237,9 @@ BI.CenterAdaptLayout = BI.inherit(BI.Layout, {
                 },
                 items: [w]
             });
-            this.addWidget(this.getName() + i, td);
+            this.addWidget(this._getChildName(i), td);
         } else {
-            td = this.getWidgetByName(this.getName() + i);
+            td = this.getWidgetByName(this._getChildName(i));
             td.element.attr("width", width);
         }
         td.element.css({"max-width": o.columnSize[i]});
@@ -24218,41 +25277,33 @@ BI.CenterAdaptLayout = BI.inherit(BI.Layout, {
         return td;
     },
 
-    render: function () {
-        if (!BI.isEmpty(this.widgets)) {
-            this.tr.element.append(this.hang());
-        }
-        return this;
-    },
-
-    clear: function () {
-        this.hang();
-        this.widgets = {};
-        this.tr.empty();
-    },
-
-    empty: function () {
-        BI.each(this.widgets, function (i, wi) {
-            wi.destroy();
+    _mountChildren: function () {
+        var self = this;
+        var frag = document.createDocumentFragment();
+        var hasChild = false;
+        BI.each(this._children, function (i, widget) {
+            if (widget.element !== self.element) {
+                frag.appendChild(widget.element[0]);
+                hasChild = true;
+            }
         });
-        this.widgets = {};
-        this.tr.empty();
+        if (hasChild === true) {
+            this.$tr.append(frag);
+            this.element.append(this.$table);
+        }
     },
 
     resize: function () {
         // console.log("center_adapt布局不需要resize");
     },
 
-    addItem: function (item) {
-        var w = this._addElement(this.options.items.length, item);
-        this.options.items.push(item);
-        w.element.appendTo(this.tr.element);
-        return w;
+    _getWrapper: function(){
+        return this.$tr;
     },
 
     populate: function (items) {
         BI.CenterAdaptLayout.superclass.populate.apply(this, arguments);
-        this.render();
+        this._mount();
     }
 });
 $.shortcut('bi.center_adapt', BI.CenterAdaptLayout);/**
@@ -24261,8 +25312,8 @@ $.shortcut('bi.center_adapt', BI.CenterAdaptLayout);/**
  * @extends BI.Layout
  */
 BI.HorizontalAdaptLayout = BI.inherit(BI.Layout, {
-    _defaultConfig: function () {
-        return BI.extend(BI.HorizontalAdaptLayout.superclass._defaultConfig.apply(this, arguments), {
+    props: function () {
+        return BI.extend(BI.HorizontalAdaptLayout.superclass.props.apply(this, arguments), {
             baseCls: "bi-horizontal-adapt-layout",
             verticalAlign: BI.VerticalAlign.Middle,
             columnSize: [],
@@ -24274,26 +25325,18 @@ BI.HorizontalAdaptLayout = BI.inherit(BI.Layout, {
             bgap: 0
         });
     },
-    _init: function () {
-        BI.HorizontalAdaptLayout.superclass._init.apply(this, arguments);
-        var table = BI.createWidget({
-            type: "bi.layout",
-            tagName: "table",
-            attribute: {"cellspacing": 0, "cellpadding": 0}
-        });
-        table.element.css({
+    render: function () {
+        BI.HorizontalAdaptLayout.superclass.render.apply(this, arguments);
+        this.$table = $("<table>").attr({"cellspacing": 0, "cellpadding": 0}).css({
             "position": "relative",
             "width": "100%",
             "white-space": "nowrap",
             "border-spacing": "0px",
             "border": "none",
             "border-collapse": "separate"
-        }).appendTo(this.element);
-        this.tr = BI.createWidget({
-            type: "bi.layout",
-            tagName: "tr"
         });
-        this.tr.element.appendTo(table.element);
+        this.$tr = $("<tr>");
+        this.$tr.appendTo(this.$table);
         this.populate(this.options.items);
     },
 
@@ -24301,7 +25344,7 @@ BI.HorizontalAdaptLayout = BI.inherit(BI.Layout, {
         var o = this.options;
         var td;
         var width = o.columnSize[i] <= 1 ? (o.columnSize[i] * 100 + "%") : o.columnSize[i];
-        if (!this.hasWidget(this.getName() + i)) {
+        if (!this.hasWidget(this._getChildName(i))) {
             var w = BI.createWidget(item);
             w.element.css({"position": "relative", "top": "0", "left": "0", "margin": "0px auto"});
             td = BI.createWidget({
@@ -24312,9 +25355,9 @@ BI.HorizontalAdaptLayout = BI.inherit(BI.Layout, {
                 },
                 items: [w]
             });
-            this.addWidget(this.getName() + i, td);
+            this.addWidget(this._getChildName(i), td);
         } else {
-            td = this.getWidgetByName(this.getName() + i);
+            td = this.getWidgetByName(this._getChildName(i));
             td.element.attr("width", width);
         }
         td.element.css({"max-width": o.columnSize[i] + "px"});
@@ -24351,40 +25394,33 @@ BI.HorizontalAdaptLayout = BI.inherit(BI.Layout, {
         return td;
     },
 
-    render: function () {
-        if (!BI.isEmpty(this.widgets)) {
-            this.tr.element.append(this.hang());
-        }
-    },
-
-    clear: function () {
-        this.hang();
-        this.widgets = {};
-        this.tr.empty();
-    },
-
-    empty: function () {
-        BI.each(this.widgets, function (i, wi) {
-            wi.destroy();
+    _mountChildren: function () {
+        var self = this;
+        var frag = document.createDocumentFragment();
+        var hasChild = false;
+        BI.each(this._children, function (i, widget) {
+            if (widget.element !== self.element) {
+                frag.appendChild(widget.element[0]);
+                hasChild = true;
+            }
         });
-        this.widgets = {};
-        this.tr.empty();
+        if (hasChild === true) {
+            this.$tr.append(frag);
+            this.element.append(this.$table);
+        }
     },
 
     resize: function () {
         // console.log("horizontal_adapt布局不需要resize");
     },
 
-    addItem: function (item) {
-        var w = this._addElement(this.options.items.length, item);
-        this.options.items.push(item);
-        w.element.appendTo(this.tr.element);
-        return w;
+    _getWrapper: function () {
+        return this.$tr;
     },
 
     populate: function (items) {
         BI.HorizontalAdaptLayout.superclass.populate.apply(this, arguments);
-        this.render();
+        this._mount();
     }
 });
 $.shortcut('bi.horizontal_adapt', BI.HorizontalAdaptLayout);/**
@@ -24397,8 +25433,8 @@ $.shortcut('bi.horizontal_adapt', BI.HorizontalAdaptLayout);/**
  * @extends BI.Layout
  */
 BI.LeftRightVerticalAdaptLayout = BI.inherit(BI.Layout, {
-    _defaultConfig: function () {
-        return BI.extend(BI.LeftRightVerticalAdaptLayout.superclass._defaultConfig.apply(this, arguments), {
+    props: function () {
+        return BI.extend(BI.LeftRightVerticalAdaptLayout.superclass.props.apply(this, arguments), {
             baseCls: "bi-left-right-vertical-adapt-layout",
             items: {},
             llgap: 0,
@@ -24409,8 +25445,8 @@ BI.LeftRightVerticalAdaptLayout = BI.inherit(BI.Layout, {
             rhgap: 0
         });
     },
-    _init: function () {
-        BI.LeftRightVerticalAdaptLayout.superclass._init.apply(this, arguments);
+    render: function () {
+        BI.LeftRightVerticalAdaptLayout.superclass.render.apply(this, arguments);
         this.populate(this.options.items);
     },
 
@@ -24420,7 +25456,7 @@ BI.LeftRightVerticalAdaptLayout = BI.inherit(BI.Layout, {
 
     addItem: function () {
         //do nothing
-        throw new Error("不能添加元素")
+        throw new Error("cannot be added")
     },
 
     stroke: function (items) {
@@ -24436,10 +25472,9 @@ BI.LeftRightVerticalAdaptLayout = BI.inherit(BI.Layout, {
             left.element.css("height", "100%");
             BI.createWidget({
                 type: "bi.left",
-                element: this.element,
+                element: this,
                 items: [left]
             });
-            this.addWidget(left);
         }
         if ("right" in items) {
             var right = BI.createWidget({
@@ -24452,23 +25487,23 @@ BI.LeftRightVerticalAdaptLayout = BI.inherit(BI.Layout, {
             right.element.css("height", "100%");
             BI.createWidget({
                 type: "bi.right",
-                element: this.element,
+                element: this,
                 items: [right]
             });
-            this.addWidget(right);
         }
     },
 
     populate: function (items) {
         BI.LeftRightVerticalAdaptLayout.superclass.populate.apply(this, arguments);
+        this._mount();
     }
 });
 $.shortcut('bi.left_right_vertical_adapt', BI.LeftRightVerticalAdaptLayout);
 
 
 BI.LeftVerticalAdaptLayout = BI.inherit(BI.Layout, {
-    _defaultConfig: function () {
-        return BI.extend(BI.LeftRightVerticalAdaptLayout.superclass._defaultConfig.apply(this, arguments), {
+    props: function () {
+        return BI.extend(BI.LeftRightVerticalAdaptLayout.superclass.props.apply(this, arguments), {
             baseCls: "bi-left-vertical-adapt-layout",
             items: [],
             lgap: 0,
@@ -24476,22 +25511,21 @@ BI.LeftVerticalAdaptLayout = BI.inherit(BI.Layout, {
             hgap: 0
         });
     },
-    _init: function () {
-        BI.LeftVerticalAdaptLayout.superclass._init.apply(this, arguments);
+    render: function () {
+        BI.LeftVerticalAdaptLayout.superclass.render.apply(this, arguments);
         this.populate(this.options.items);
     },
 
     resize: function () {
-        console.log("left_vertical_adapt布局不需要resize");
+        // console.log("left_vertical_adapt布局不需要resize");
     },
 
     addItem: function () {
         //do nothing
-        throw new Error("不能添加元素")
+        throw new Error("cannot be added")
     },
 
-    populate: function (items) {
-        BI.LeftVerticalAdaptLayout.superclass.populate.apply(this, arguments);
+    stroke: function (items) {
         var o = this.options;
         var left = BI.createWidget({
             type: "bi.vertical_adapt",
@@ -24503,17 +25537,21 @@ BI.LeftVerticalAdaptLayout = BI.inherit(BI.Layout, {
         left.element.css("height", "100%");
         BI.createWidget({
             type: "bi.left",
-            element: this.element,
+            element: this,
             items: [left]
         });
-        this.addWidget(left);
+    },
+
+    populate: function (items) {
+        BI.LeftVerticalAdaptLayout.superclass.populate.apply(this, arguments);
+        this._mount();
     }
 });
 $.shortcut('bi.left_vertical_adapt', BI.LeftVerticalAdaptLayout);
 
 BI.RightVerticalAdaptLayout = BI.inherit(BI.Layout, {
-    _defaultConfig: function () {
-        return BI.extend(BI.RightVerticalAdaptLayout.superclass._defaultConfig.apply(this, arguments), {
+    props: function () {
+        return BI.extend(BI.RightVerticalAdaptLayout.superclass.props.apply(this, arguments), {
             baseCls: "bi-right-vertical-adapt-layout",
             items: [],
             lgap: 0,
@@ -24521,22 +25559,21 @@ BI.RightVerticalAdaptLayout = BI.inherit(BI.Layout, {
             hgap: 0
         });
     },
-    _init: function () {
-        BI.RightVerticalAdaptLayout.superclass._init.apply(this, arguments);
+    render: function () {
+        BI.RightVerticalAdaptLayout.superclass.render.apply(this, arguments);
         this.populate(this.options.items);
     },
 
     resize: function () {
-        console.log("right_vertical_adapt布局不需要resize");
+
     },
 
     addItem: function () {
         //do nothing
-        throw new Error("不能添加元素")
+        throw new Error("cannot be added")
     },
 
-    populate: function (items) {
-        BI.RightVerticalAdaptLayout.superclass.populate.apply(this, arguments);
+    stroke: function (items) {
         var o = this.options;
         var right = BI.createWidget({
             type: "bi.vertical_adapt",
@@ -24548,10 +25585,14 @@ BI.RightVerticalAdaptLayout = BI.inherit(BI.Layout, {
         right.element.css("height", "100%");
         BI.createWidget({
             type: "bi.right",
-            element: this.element,
+            element: this,
             items: [right]
         });
-        this.addWidget(right);
+    },
+
+    populate: function (items) {
+        BI.RightVerticalAdaptLayout.superclass.populate.apply(this, arguments);
+        this._mount();
     }
 });
 $.shortcut('bi.right_vertical_adapt', BI.RightVerticalAdaptLayout);/**
@@ -24560,38 +25601,28 @@ $.shortcut('bi.right_vertical_adapt', BI.RightVerticalAdaptLayout);/**
  * @extends BI.Layout
  */
 BI.VerticalAdaptLayout = BI.inherit(BI.Layout, {
-    _defaultConfig: function () {
-        return BI.extend(BI.VerticalAdaptLayout.superclass._defaultConfig.apply(this, arguments), {
-            baseCls: "bi-vertical-adapt-layout",
-            columnSize: [],
-            hgap: 0,
-            vgap: 0,
-            lgap: 0,
-            rgap: 0,
-            tgap: 0,
-            bgap: 0
-        });
+    props: {
+        baseCls: "bi-vertical-adapt-layout",
+        columnSize: [],
+        hgap: 0,
+        vgap: 0,
+        lgap: 0,
+        rgap: 0,
+        tgap: 0,
+        bgap: 0
     },
-    _init: function () {
-        BI.VerticalAdaptLayout.superclass._init.apply(this, arguments);
-        var table = BI.createWidget({
-            type: "bi.layout",
-            tagName: "table",
-            attribute: {"cellspacing": 0, "cellpadding": 0}
-        });
-        table.element.css({
+    render: function () {
+        BI.VerticalAdaptLayout.superclass.render.apply(this, arguments);
+        this.$table = $("<table>").attr({"cellspacing": 0, "cellpadding": 0}).css({
             "position": "relative",
             "height": "100%",
             "white-space": "nowrap",
             "border-spacing": "0px",
             "border": "none",
             "border-collapse": "separate"
-        }).appendTo(this.element);
-        this.tr = BI.createWidget({
-            type: "bi.layout",
-            tagName: "tr"
         });
-        this.tr.element.appendTo(table.element);
+        this.$tr = $("<tr>");
+        this.$tr.appendTo(this.$table);
         this.populate(this.options.items);
     },
 
@@ -24599,7 +25630,7 @@ BI.VerticalAdaptLayout = BI.inherit(BI.Layout, {
         var o = this.options;
         var td;
         var width = o.columnSize[i] <= 1 ? (o.columnSize[i] * 100 + "%") : o.columnSize[i];
-        if (!this.hasWidget(this.getName() + i)) {
+        if (!this.hasWidget(this._getChildName(i))) {
             var w = BI.createWidget(item);
             w.element.css({"position": "relative", "top": "0", "left": "0", "margin": "0px auto"});
             td = BI.createWidget({
@@ -24610,9 +25641,9 @@ BI.VerticalAdaptLayout = BI.inherit(BI.Layout, {
                 },
                 items: [w]
             });
-            this.addWidget(this.getName() + i, td);
+            this.addWidget(this._getChildName(i), td);
         } else {
-            td = this.getWidgetByName(this.getName() + i);
+            td = this.getWidgetByName(this._getChildName(i));
             td.element.attr("width", width);
         }
 
@@ -24650,24 +25681,24 @@ BI.VerticalAdaptLayout = BI.inherit(BI.Layout, {
         return td;
     },
 
-    render: function () {
-        if (!BI.isEmpty(this.widgets)) {
-            this.tr.element.append(this.hang());
+    _mountChildren: function () {
+        var self = this;
+        var frag = document.createDocumentFragment();
+        var hasChild = false;
+        BI.each(this._children, function (i, widget) {
+            if (widget.element !== self.element) {
+                frag.appendChild(widget.element[0]);
+                hasChild = true;
+            }
+        });
+        if (hasChild === true) {
+            this.$tr.append(frag);
+            this.element.append(this.$table);
         }
     },
 
-    clear: function () {
-        this.hang();
-        this.widgets = {};
-        this.tr.empty();
-    },
-
-    empty: function () {
-        BI.each(this.widgets, function (i, wi) {
-            wi.destroy();
-        });
-        this.widgets = {};
-        this.tr.empty();
+    _getWrapper: function(){
+        return this.$tr;
     },
 
     resize: function () {
@@ -24676,7 +25707,7 @@ BI.VerticalAdaptLayout = BI.inherit(BI.Layout, {
 
     populate: function (items) {
         BI.VerticalAdaptLayout.superclass.populate.apply(this, arguments);
-        this.render();
+        this._mount();
     }
 });
 $.shortcut('bi.vertical_adapt', BI.VerticalAdaptLayout);/**
@@ -24685,8 +25716,8 @@ $.shortcut('bi.vertical_adapt', BI.VerticalAdaptLayout);/**
  * @extends BI.Layout
  */
 BI.HorizontalAutoLayout = BI.inherit(BI.Layout, {
-    _defaultConfig: function () {
-        return BI.extend(BI.HorizontalAutoLayout.superclass._defaultConfig.apply(this, arguments), {
+    props: function () {
+        return BI.extend(BI.HorizontalAutoLayout.superclass.props.apply(this, arguments), {
             baseCls: "bi-horizon-auto-layout",
             hgap: 0,
             lgap: 0,
@@ -24697,8 +25728,8 @@ BI.HorizontalAutoLayout = BI.inherit(BI.Layout, {
         });
     },
 
-    _init: function () {
-        BI.HorizontalAutoLayout.superclass._init.apply(this, arguments);
+    render: function () {
+        BI.HorizontalAutoLayout.superclass.render.apply(this, arguments);
         this.populate(this.options.items);
     },
 
@@ -24738,15 +25769,15 @@ BI.HorizontalAutoLayout = BI.inherit(BI.Layout, {
 
     populate: function (items) {
         BI.HorizontalAutoLayout.superclass.populate.apply(this, arguments);
-        this.render();
+        this._mount();
     }
 });
 $.shortcut('bi.horizontal_auto', BI.HorizontalAutoLayout);/**
  * 浮动的居中布局
  */
 BI.FloatCenterAdaptLayout = BI.inherit(BI.Layout, {
-    _defaultConfig: function () {
-        return BI.extend(BI.FloatCenterAdaptLayout.superclass._defaultConfig.apply(this, arguments), {
+    props: function () {
+        return BI.extend(BI.FloatCenterAdaptLayout.superclass.props.apply(this, arguments), {
             baseCls: "bi-float-center-adapt-layout",
             items: [],
             hgap: 0,
@@ -24757,8 +25788,8 @@ BI.FloatCenterAdaptLayout = BI.inherit(BI.Layout, {
             rgap: 0
         });
     },
-    _init: function () {
-        BI.FloatCenterAdaptLayout.superclass._init.apply(this, arguments);
+    render: function () {
+        BI.FloatCenterAdaptLayout.superclass.render.apply(this, arguments);
         this.populate(this.options.items);
     },
 
@@ -24768,12 +25799,24 @@ BI.FloatCenterAdaptLayout = BI.inherit(BI.Layout, {
 
     addItem: function () {
         //do nothing
-        throw new Error("不能添加元素")
+        throw new Error("cannot be added")
+    },
+
+    mounted: function () {
+        var width = this.left.element.outerWidth(),
+            height = this.left.element.outerHeight();
+        this.left.element.width(width).height(height).css("float", "none");
+        BI.createWidget({
+            type: "bi.center_adapt",
+            element: this,
+            items: [this.left]
+        });
+        this.removeWidget(this.container.getName());
     },
 
     stroke: function (items) {
         var self = this, o = this.options;
-        var left = BI.createWidget({
+        this.left = BI.createWidget({
             type: "bi.vertical",
             items: items,
             hgap: o.hgap,
@@ -24784,35 +25827,25 @@ BI.FloatCenterAdaptLayout = BI.inherit(BI.Layout, {
             rgap: o.rgap
         });
 
-        BI.createWidget({
+        this.container = BI.createWidget({
             type: "bi.left",
-            element: this.element,
-            items: [left]
+            element: this,
+            items: [this.left]
         });
 
-        BI.nextTick(function () {
-            var width = left.element.width(),
-                height = left.element.height();
-            BI.DOM.hang([left]);
-            left.element.width(width).height(height).css("float", "none");
-            BI.createWidget({
-                type: "bi.center_adapt",
-                element: self.element,
-                items: [left]
-            })
-        });
     },
 
     populate: function (items) {
         BI.FloatCenterAdaptLayout.superclass.populate.apply(this, arguments);
+        this._mount();
     }
 });
 $.shortcut('bi.float_center_adapt', BI.FloatCenterAdaptLayout);/**
  * 浮动的水平居中布局
  */
 BI.FloatHorizontalLayout = BI.inherit(BI.Layout, {
-    _defaultConfig: function () {
-        return BI.extend(BI.FloatHorizontalLayout.superclass._defaultConfig.apply(this, arguments), {
+    props: function () {
+        return BI.extend(BI.FloatHorizontalLayout.superclass.props.apply(this, arguments), {
             baseCls: "bi-float-horizontal-adapt-layout",
             items: [],
             hgap: 0,
@@ -24823,8 +25856,8 @@ BI.FloatHorizontalLayout = BI.inherit(BI.Layout, {
             rgap: 0
         });
     },
-    _init: function () {
-        BI.FloatHorizontalLayout.superclass._init.apply(this, arguments);
+    render: function () {
+        BI.FloatHorizontalLayout.superclass.render.apply(this, arguments);
         this.populate(this.options.items);
     },
 
@@ -24832,9 +25865,21 @@ BI.FloatHorizontalLayout = BI.inherit(BI.Layout, {
         // console.log("float_horizontal_adapt布局不需要resize");
     },
 
+    mounted: function () {
+        var width = this.left.element.width(),
+            height = this.left.element.height();
+        this.left.element.width(width).height(height).css("float", "none");
+        BI.createWidget({
+            type: "bi.horizontal_auto",
+            element: this,
+            items: [this.left]
+        });
+        this.removeWidget(this.container.getName());
+    },
+
     _addElement: function (i, item) {
         var self = this, o = this.options;
-        var left = BI.createWidget({
+        this.left = BI.createWidget({
             type: "bi.vertical",
             items: [item],
             hgap: o.hgap,
@@ -24845,29 +25890,18 @@ BI.FloatHorizontalLayout = BI.inherit(BI.Layout, {
             rgap: o.rgap
         });
 
-        BI.createWidget({
+        this.container = BI.createWidget({
             type: "bi.left",
-            element: this.element,
-            items: [left]
+            element: this,
+            items: [this.left]
         });
 
-        BI.nextTick(function () {
-            var width = left.element.width(),
-                height = left.element.height();
-            BI.DOM.hang([left]);
-            left.element.width(width).height(height).css("float", "none");
-            BI.createWidget({
-                type: "bi.horizontal_auto",
-                element: self.element,
-                items: [left]
-            })
-        });
-        this.addWidget(left);
-        return left;
+        return this.left;
     },
 
     populate: function (items) {
         BI.HorizontalAutoLayout.superclass.populate.apply(this, arguments);
+        this._mount();
     }
 });
 $.shortcut('bi.horizontal_float', BI.FloatHorizontalLayout);/**
@@ -24880,8 +25914,8 @@ $.shortcut('bi.horizontal_float', BI.FloatHorizontalLayout);/**
  * @cfg {Number} [vgap=0] 垂直间隙
  */
 BI.InlineCenterAdaptLayout = BI.inherit(BI.Layout, {
-    _defaultConfig: function () {
-        return BI.extend(BI.InlineCenterAdaptLayout.superclass._defaultConfig.apply(this, arguments), {
+    props: function () {
+        return BI.extend(BI.InlineCenterAdaptLayout.superclass.props.apply(this, arguments), {
             baseCls: "bi-inline-center-adapt-layout",
             hgap: 0,
             vgap: 0,
@@ -24891,8 +25925,8 @@ BI.InlineCenterAdaptLayout = BI.inherit(BI.Layout, {
             bgap: 0
         });
     },
-    _init: function () {
-        BI.InlineCenterAdaptLayout.superclass._init.apply(this, arguments);
+    render: function () {
+        BI.InlineCenterAdaptLayout.superclass.render.apply(this, arguments);
         this.element.css({
             whiteSpace: "nowrap"
         });
@@ -24901,7 +25935,7 @@ BI.InlineCenterAdaptLayout = BI.inherit(BI.Layout, {
 
     _addElement: function (i, item, length) {
         var o = this.options;
-        if (!this.hasWidget(this.getName() + i)) {
+        if (!this.hasWidget(this.getName() + "-" + i)) {
             var t = BI.createWidget(item);
             t.element.css({
                 "position": "relative"
@@ -24910,9 +25944,9 @@ BI.InlineCenterAdaptLayout = BI.inherit(BI.Layout, {
                 type: "bi.horizontal_auto",
                 items: [t]
             });
-            this.addWidget(this.getName() + i, w);
+            this.addWidget(this.getName() + "-" + i, w);
         } else {
-            var w = this.getWidgetByName(this.getName() + i);
+            var w = this.getWidgetByName(this.getName() + "-" + i);
         }
         w.element.css({
             "position": "relative",
@@ -24950,7 +25984,7 @@ BI.InlineCenterAdaptLayout = BI.inherit(BI.Layout, {
     },
 
     addItem: function (item) {
-        throw new Error("不能添加元素");
+        throw new Error("cannot be added");
     },
 
     stroke: function (items) {
@@ -24964,7 +25998,7 @@ BI.InlineCenterAdaptLayout = BI.inherit(BI.Layout, {
 
     populate: function (items) {
         BI.InlineCenterAdaptLayout.superclass.populate.apply(this, arguments);
-        this.render();
+        this._mount();
     }
 });
 $.shortcut('bi.inline_center_adapt', BI.InlineCenterAdaptLayout);/**
@@ -24977,8 +26011,8 @@ $.shortcut('bi.inline_center_adapt', BI.InlineCenterAdaptLayout);/**
  * @cfg {Number} [vgap=0] 垂直间隙
  */
 BI.InlineVerticalAdaptLayout = BI.inherit(BI.Layout, {
-    _defaultConfig: function () {
-        return BI.extend(BI.InlineVerticalAdaptLayout.superclass._defaultConfig.apply(this, arguments), {
+    props: function () {
+        return BI.extend(BI.InlineVerticalAdaptLayout.superclass.props.apply(this, arguments), {
             baseCls: "bi-inline-vertical-adapt-layout",
             hgap: 0,
             vgap: 0,
@@ -24988,8 +26022,8 @@ BI.InlineVerticalAdaptLayout = BI.inherit(BI.Layout, {
             bgap: 0
         });
     },
-    _init: function () {
-        BI.InlineVerticalAdaptLayout.superclass._init.apply(this, arguments);
+    render: function () {
+        BI.InlineVerticalAdaptLayout.superclass.render.apply(this, arguments);
         this.element.css({
             whiteSpace: "nowrap"
         });
@@ -25035,7 +26069,7 @@ BI.InlineVerticalAdaptLayout = BI.inherit(BI.Layout, {
 
     populate: function (items) {
         BI.InlineVerticalAdaptLayout.superclass.populate.apply(this, arguments);
-        this.render();
+        this._mount();
     }
 });
 $.shortcut('bi.inline_vertical_adapt', BI.InlineVerticalAdaptLayout);/**
@@ -25046,13 +26080,13 @@ $.shortcut('bi.inline_vertical_adapt', BI.InlineVerticalAdaptLayout);/**
  * @extends BI.Layout
  */
 BI.FlexCenterLayout = BI.inherit(BI.Layout, {
-    _defaultConfig: function () {
-        return BI.extend(BI.FlexCenterLayout.superclass._defaultConfig.apply(this, arguments), {
+    props: function () {
+        return BI.extend(BI.FlexCenterLayout.superclass.props.apply(this, arguments), {
             baseCls: "bi-flex-center-layout"
         });
     },
-    _init: function () {
-        BI.FlexCenterLayout.superclass._init.apply(this, arguments);
+    render: function () {
+        BI.FlexCenterLayout.superclass.render.apply(this, arguments);
         this.populate(this.options.items);
     },
 
@@ -25069,7 +26103,7 @@ BI.FlexCenterLayout = BI.inherit(BI.Layout, {
 
     populate: function (items) {
         BI.FlexCenterLayout.superclass.populate.apply(this, arguments);
-        this.render();
+        this._mount();
     }
 });
 $.shortcut('bi.flex_center', BI.FlexCenterLayout);/**
@@ -25080,8 +26114,8 @@ $.shortcut('bi.flex_center', BI.FlexCenterLayout);/**
  * @extends BI.Layout
  */
 BI.FlexHorizontalLayout = BI.inherit(BI.Layout, {
-    _defaultConfig: function () {
-        return BI.extend(BI.FlexHorizontalLayout.superclass._defaultConfig.apply(this, arguments), {
+    props: function () {
+        return BI.extend(BI.FlexHorizontalLayout.superclass.props.apply(this, arguments), {
             baseCls: "bi-flex-horizontal-layout",
             verticalAlign: "middle",
             columnSize: [],
@@ -25094,8 +26128,8 @@ BI.FlexHorizontalLayout = BI.inherit(BI.Layout, {
             bgap: 0
         });
     },
-    _init: function () {
-        BI.FlexHorizontalLayout.superclass._init.apply(this, arguments);
+    render: function () {
+        BI.FlexHorizontalLayout.superclass.render.apply(this, arguments);
         var o = this.options;
         this.element.addClass(o.verticalAlign);
         this.populate(this.options.items);
@@ -25134,7 +26168,7 @@ BI.FlexHorizontalLayout = BI.inherit(BI.Layout, {
 
     populate: function (items) {
         BI.FlexHorizontalLayout.superclass.populate.apply(this, arguments);
-        this.render();
+        this._mount();
     }
 });
 $.shortcut('bi.flex_horizontal', BI.FlexHorizontalLayout);/**
@@ -25145,8 +26179,8 @@ $.shortcut('bi.flex_horizontal', BI.FlexHorizontalLayout);/**
  * @extends BI.Layout
  */
 BI.FlexVerticalCenter = BI.inherit(BI.Layout, {
-    _defaultConfig: function () {
-        return BI.extend(BI.FlexVerticalCenter.superclass._defaultConfig.apply(this, arguments), {
+    props: function () {
+        return BI.extend(BI.FlexVerticalCenter.superclass.props.apply(this, arguments), {
             baseCls: "bi-flex-vertical-center",
             columnSize: [],
             hgap: 0,
@@ -25157,8 +26191,8 @@ BI.FlexVerticalCenter = BI.inherit(BI.Layout, {
             bgap: 0
         });
     },
-    _init: function () {
-        BI.FlexVerticalCenter.superclass._init.apply(this, arguments);
+    render: function () {
+        BI.FlexVerticalCenter.superclass.render.apply(this, arguments);
         var o = this.options;
         this.populate(this.options.items);
     },
@@ -25196,7 +26230,7 @@ BI.FlexVerticalCenter = BI.inherit(BI.Layout, {
 
     populate: function (items) {
         BI.FlexVerticalCenter.superclass.populate.apply(this, arguments);
-        this.render();
+        this._mount();
     }
 });
 $.shortcut('bi.flex_vertical_center', BI.FlexVerticalCenter);/**
@@ -25207,29 +26241,42 @@ $.shortcut('bi.flex_vertical_center', BI.FlexVerticalCenter);/**
  * @extends BI.Layout
  */
 BI.FlexCenterLayout = BI.inherit(BI.Layout, {
-    _defaultConfig: function () {
-        return BI.extend(BI.FlexCenterLayout.superclass._defaultConfig.apply(this, arguments), {
+    props: function () {
+        return BI.extend(BI.FlexCenterLayout.superclass.props.apply(this, arguments), {
             baseCls: "bi-flex-wrapper-center-layout clearfix"
         });
     },
-    _init: function () {
-        BI.FlexCenterLayout.superclass._init.apply(this, arguments);
-        this.wrapper = $("<div>").addClass("flex-wrapper-center-layout-wrapper").appendTo(this.element);
+    render: function () {
+        BI.FlexCenterLayout.superclass.render.apply(this, arguments);
+        this.$wrapper = $("<div>").addClass("flex-wrapper-center-layout-wrapper");
         this.populate(this.options.items);
     },
 
     _addElement: function (i, item) {
         var o = this.options;
         var w = BI.FlexCenterLayout.superclass._addElement.apply(this, arguments);
-        w.element.css({"position": "relative"}).appendTo(this.wrapper);
+        w.element.css({"position": "relative"});
         return w;
     },
 
-    addItem: function (item) {
-        var w = this._addElement(this.options.items.length, item);
-        this.options.items.push(item);
-        w.element.appendTo(this.wrapper);
-        return w;
+    _mountChildren: function () {
+        var self = this;
+        var frag = document.createDocumentFragment();
+        var hasChild = false;
+        BI.each(this._children, function (i, widget) {
+            if (widget.element !== self.element) {
+                frag.appendChild(widget.element[0]);
+                hasChild = true;
+            }
+        });
+        if (hasChild === true) {
+            this.$wrapper.append(frag);
+            this.element.append(this.$wrapper);
+        }
+    },
+
+    _getWrapper: function(){
+        return this.$wrapper;
     },
 
     resize: function () {
@@ -25238,6 +26285,7 @@ BI.FlexCenterLayout = BI.inherit(BI.Layout, {
 
     populate: function (items) {
         BI.FlexCenterLayout.superclass.populate.apply(this, arguments);
+        this._mount();
     }
 });
 $.shortcut('bi.flex_wrapper_center', BI.FlexCenterLayout);/**
@@ -25248,8 +26296,8 @@ $.shortcut('bi.flex_wrapper_center', BI.FlexCenterLayout);/**
  * @extends BI.Layout
  */
 BI.FlexHorizontalLayout = BI.inherit(BI.Layout, {
-    _defaultConfig: function () {
-        return BI.extend(BI.FlexHorizontalLayout.superclass._defaultConfig.apply(this, arguments), {
+    props: function () {
+        return BI.extend(BI.FlexHorizontalLayout.superclass.props.apply(this, arguments), {
             baseCls: "bi-flex-wrapper-horizontal-layout clearfix",
             verticalAlign: "middle",
             columnSize: [],
@@ -25262,17 +26310,17 @@ BI.FlexHorizontalLayout = BI.inherit(BI.Layout, {
             bgap: 0
         });
     },
-    _init: function () {
-        BI.FlexHorizontalLayout.superclass._init.apply(this, arguments);
+    render: function () {
+        BI.FlexHorizontalLayout.superclass.render.apply(this, arguments);
         var o = this.options;
-        this.wrapper = $("<div>").addClass("flex-wrapper-horizontal-layout-wrapper " + o.verticalAlign).appendTo(this.element);
+        this.$wrapper = $("<div>").addClass("flex-wrapper-horizontal-layout-wrapper " + o.verticalAlign);
         this.populate(this.options.items);
     },
 
     _addElement: function (i, item) {
         var o = this.options;
         var w = BI.FlexHorizontalLayout.superclass._addElement.apply(this, arguments);
-        w.element.css({"position": "relative"}).appendTo(this.wrapper);
+        w.element.css({"position": "relative"});
         if (o.hgap + o.lgap + (item.lgap || 0) > 0) {
             w.element.css({
                 "margin-left": o.hgap + o.lgap + (item.lgap || 0) + "px"
@@ -25296,11 +26344,24 @@ BI.FlexHorizontalLayout = BI.inherit(BI.Layout, {
         return w;
     },
 
-    addItem: function (item) {
-        var w = this._addElement(this.options.items.length, item);
-        this.options.items.push(item);
-        w.element.appendTo(this.wrapper);
-        return w;
+    _mountChildren: function () {
+        var self = this;
+        var frag = document.createDocumentFragment();
+        var hasChild = false;
+        BI.each(this._children, function (i, widget) {
+            if (widget.element !== self.element) {
+                frag.appendChild(widget.element[0]);
+                hasChild = true;
+            }
+        });
+        if (hasChild === true) {
+            this.$wrapper.append(frag);
+            this.element.append(this.$wrapper);
+        }
+    },
+
+    _getWrapper: function(){
+        return this.$wrapper;
     },
 
     resize: function () {
@@ -25309,6 +26370,7 @@ BI.FlexHorizontalLayout = BI.inherit(BI.Layout, {
 
     populate: function (items) {
         BI.FlexHorizontalLayout.superclass.populate.apply(this, arguments);
+        this._mount();
     }
 });
 $.shortcut('bi.flex_wrapper_horizontal', BI.FlexHorizontalLayout);/**
@@ -25319,8 +26381,8 @@ $.shortcut('bi.flex_wrapper_horizontal', BI.FlexHorizontalLayout);/**
  * @extends BI.Layout
  */
 BI.FlexVerticalCenter = BI.inherit(BI.Layout, {
-    _defaultConfig: function () {
-        return BI.extend(BI.FlexVerticalCenter.superclass._defaultConfig.apply(this, arguments), {
+    props: function () {
+        return BI.extend(BI.FlexVerticalCenter.superclass.props.apply(this, arguments), {
             baseCls: "bi-flex-wrapper-vertical-center clearfix",
             columnSize: [],
             hgap: 0,
@@ -25331,17 +26393,17 @@ BI.FlexVerticalCenter = BI.inherit(BI.Layout, {
             bgap: 0
         });
     },
-    _init: function () {
-        BI.FlexVerticalCenter.superclass._init.apply(this, arguments);
+    render: function () {
+        BI.FlexVerticalCenter.superclass.render.apply(this, arguments);
         var o = this.options;
-        this.wrapper = $("<div>").addClass("flex-wrapper-vertical-center-wrapper").appendTo(this.element);
+        this.$wrapper = $("<div>").addClass("flex-wrapper-vertical-center-wrapper");
         this.populate(this.options.items);
     },
 
     _addElement: function (i, item) {
         var o = this.options;
         var w = BI.FlexVerticalCenter.superclass._addElement.apply(this, arguments);
-        w.element.css({"position": "relative"}).appendTo(this.wrapper);
+        w.element.css({"position": "relative"});
         if (o.hgap + o.lgap + (item.lgap || 0) > 0) {
             w.element.css({
                 "margin-left": o.hgap + o.lgap + (item.lgap || 0) + "px"
@@ -25365,11 +26427,24 @@ BI.FlexVerticalCenter = BI.inherit(BI.Layout, {
         return w;
     },
 
-    addItem: function (item) {
-        var w = this._addElement(this.options.items.length, item);
-        this.options.items.push(item);
-        w.element.appendTo(this.wrapper);
-        return w;
+    _mountChildren: function () {
+        var self = this;
+        var frag = document.createDocumentFragment();
+        var hasChild = false;
+        BI.each(this._children, function (i, widget) {
+            if (widget.element !== self.element) {
+                frag.appendChild(widget.element[0]);
+                hasChild = true;
+            }
+        });
+        if (hasChild === true) {
+            this.$wrapper.append(frag);
+            this.element.append(this.$wrapper);
+        }
+    },
+
+    _getWrapper: function(){
+        return this.$wrapper;
     },
 
     resize: function () {
@@ -25378,6 +26453,7 @@ BI.FlexVerticalCenter = BI.inherit(BI.Layout, {
 
     populate: function (items) {
         BI.FlexVerticalCenter.superclass.populate.apply(this, arguments);
+        this._mount();
     }
 });
 $.shortcut('bi.flex_wrapper_vertical_center', BI.FlexVerticalCenter);/**
@@ -25386,8 +26462,8 @@ $.shortcut('bi.flex_wrapper_vertical_center', BI.FlexVerticalCenter);/**
  * @extends BI.Layout
  */
 BI.AbsoluteLayout = BI.inherit(BI.Layout, {
-    _defaultConfig: function () {
-        return BI.extend(BI.AbsoluteLayout.superclass._defaultConfig.apply(this, arguments), {
+    props: function () {
+        return BI.extend(BI.AbsoluteLayout.superclass.props.apply(this, arguments), {
             baseCls: "bi-absolute-layout",
             hgap: null,
             vgap: null,
@@ -25397,8 +26473,8 @@ BI.AbsoluteLayout = BI.inherit(BI.Layout, {
             bgap: null
         });
     },
-    _init: function () {
-        BI.AbsoluteLayout.superclass._init.apply(this, arguments);
+    render: function () {
+        BI.AbsoluteLayout.superclass.render.apply(this, arguments);
         this.populate(this.options.items);
     },
 
@@ -25469,11 +26545,12 @@ BI.AbsoluteLayout = BI.inherit(BI.Layout, {
     },
 
     stroke: function (items) {
+        this.options.items = items || [];
         var self = this;
         BI.each(items, function (i, item) {
             if (!!item) {
                 if (!BI.isWidget(item) && !item.el) {
-                    throw new Error("absolute布局中el 是必要属性");
+                    throw new Error("el must be exist");
                 }
                 self._addElement(i, item);
             }
@@ -25482,12 +26559,12 @@ BI.AbsoluteLayout = BI.inherit(BI.Layout, {
 
     populate: function (items) {
         BI.AbsoluteLayout.superclass.populate.apply(this, arguments);
-        this.render();
+        this._mount();
     }
 });
 $.shortcut('bi.absolute', BI.AbsoluteLayout);BI.AdaptiveLayout = BI.inherit(BI.Layout, {
-    _defaultConfig: function () {
-        return BI.extend(BI.AdaptiveLayout.superclass._defaultConfig.apply(this, arguments), {
+    props: function () {
+        return BI.extend(BI.AdaptiveLayout.superclass.props.apply(this, arguments), {
             baseCls: "bi-adaptive-layout",
             hgap: null,
             vgap: null,
@@ -25497,8 +26574,8 @@ $.shortcut('bi.absolute', BI.AbsoluteLayout);BI.AdaptiveLayout = BI.inherit(BI.L
             bgap: null
         });
     },
-    _init: function () {
-        BI.AdaptiveLayout.superclass._init.apply(this, arguments);
+    render: function () {
+        BI.AdaptiveLayout.superclass.render.apply(this, arguments);
         this.populate(this.options.items);
     },
 
@@ -25573,7 +26650,7 @@ $.shortcut('bi.absolute', BI.AbsoluteLayout);BI.AdaptiveLayout = BI.inherit(BI.L
 
     populate: function (items) {
         BI.AbsoluteLayout.superclass.populate.apply(this, arguments);
-        this.render();
+        this._mount();
     }
 });
 $.shortcut('bi.adaptive', BI.AdaptiveLayout);/**
@@ -25583,14 +26660,14 @@ $.shortcut('bi.adaptive', BI.AdaptiveLayout);/**
  * @extends BI.Layout
  */
 BI.BorderLayout = BI.inherit(BI.Layout, {
-    _defaultConfig: function () {
-        return BI.extend(BI.BorderLayout.superclass._defaultConfig.apply(this, arguments), {
+    props: function () {
+        return BI.extend(BI.BorderLayout.superclass.props.apply(this, arguments), {
             baseCls: "bi-border-layout",
             items: {}
         });
     },
-    _init: function () {
-        BI.BorderLayout.superclass._init.apply(this, arguments);
+    render: function () {
+        BI.BorderLayout.superclass.render.apply(this, arguments);
         this.populate(this.options.items);
     },
 
@@ -25600,7 +26677,7 @@ BI.BorderLayout = BI.inherit(BI.Layout, {
 
     addItem: function (item) {
         // do nothing
-        throw new Error("不能添加元素")
+        throw new Error("cannot be added")
     },
 
     stroke: function(regions){
@@ -25704,7 +26781,7 @@ BI.BorderLayout = BI.inherit(BI.Layout, {
 
     populate: function (items) {
         BI.BorderLayout.superclass.populate.apply(this, arguments);
-        this.render();
+        this._mount();
     }
 });
 $.shortcut('bi.border', BI.BorderLayout);/**
@@ -25716,14 +26793,14 @@ $.shortcut('bi.border', BI.BorderLayout);/**
  * @cfg {String} options.defaultShowName 默认展示的子组件名
  */
 BI.CardLayout = BI.inherit(BI.Layout, {
-    _defaultConfig: function () {
-        return BI.extend(BI.CardLayout.superclass._defaultConfig.apply(this, arguments), {
+    props: function () {
+        return BI.extend(BI.CardLayout.superclass.props.apply(this, arguments), {
             baseCls: "bi-card-layout",
             items: []
         });
     },
-    _init: function () {
-        BI.CardLayout.superclass._init.apply(this, arguments);
+    render: function () {
+        BI.CardLayout.superclass.render.apply(this, arguments);
         this.populate(this.options.items);
     },
 
@@ -25737,55 +26814,60 @@ BI.CardLayout = BI.inherit(BI.Layout, {
 
     stroke: function (items) {
         var self = this;
-        this.clear();
         this.showIndex = void 0;
         BI.each(items, function (i, item) {
             if (!!item) {
                 if (!self.hasWidget(self._getCardName(item.cardName))) {
                     var w = BI.createWidget(item);
                     self.addWidget(self._getCardName(item.cardName), w);
+                    w.on(BI.Events.DESTROY, function () {
+                        delete self._children[self._getCardName(item.cardName)];
+                    });
                 } else {
                     var w = self.getWidgetByName(self._getCardName(item.cardName));
                 }
                 w.element.css({"position": "absolute", "top": "0", "right": "0", "bottom": "0", "left": "0"});
-                w.invisible();
+                w.setVisible(false);
             }
         });
     },
 
+    update: function () {
+    },
+
     populate: function (items) {
         BI.CardLayout.superclass.populate.apply(this, arguments);
-        this.render();
+        this._mount();
         this.options.defaultShowName && this.showCardByName(this.options.defaultShowName);
     },
 
     isCardExisted: function (cardName) {
-        return this.hasWidget(this._getCardName(cardName))
-            && $(this.getWidgetByName(this._getCardName(cardName)).element).length !== 0;
+        return this.hasWidget(this._getCardName(cardName));
     },
 
     getCardByName: function (cardName) {
         if (!this.hasWidget(this._getCardName(cardName))) {
-            throw new Error("cardName不存在，无法获取");
+            throw new Error("cardName is not exist");
         }
-        return this.widgets[this._getCardName(cardName)];
+        return this._children[this._getCardName(cardName)];
     },
 
     deleteCardByName: function (cardName) {
         if (!this.hasWidget(this._getCardName(cardName))) {
-            throw new Error("cardName不存在，无法删除");
+            return;
         }
-        this.getWidgetByName(this._getCardName(cardName)).destroy();
         var index = BI.findKey(this.options.items, function (i, item) {
             return item.cardName == cardName;
         });
         this.options.items.splice(index, 1);
-        delete this.widgets[this._getCardName(cardName)];
+        var child = this.getWidgetByName(this._getCardName(cardName));
+        delete this._children[this._getCardName(cardName)];
+        child.destroy();
     },
 
     addCardByName: function (cardName, cardItem) {
         if (this.hasWidget(this._getCardName(cardName))) {
-            throw new Error("cardName已经存在了");
+            throw new Error("cardName is already exist");
         }
         this.options.items.push({el: cardItem, cardName: cardName});
         var widget = BI.createWidget(cardItem);
@@ -25805,12 +26887,12 @@ BI.CardLayout = BI.inherit(BI.Layout, {
         }
         this.showIndex = this._getCardName(name);
         var flag = false;
-        BI.each(this.widgets, function (i, el) {
+        BI.each(this._children, function (i, el) {
             if (self._getCardName(name) != i) {
                 //动画效果只有在全部都隐藏的时候才有意义,且只要执行一次动画操作就够了
-                !flag && !exist && (BI.Action && action instanceof BI.Action) ? (action.actionBack(el), flag = true) : el.element.hide();
+                !flag && !exist && (BI.Action && action instanceof BI.Action) ? (action.actionBack(el), flag = true) : el.invisible();
             } else {
-                (BI.Action && action instanceof BI.Action) ? action.actionPerformed(void 0, el, callback) : el.element.show(0, callback);
+                (BI.Action && action instanceof BI.Action) ? action.actionPerformed(void 0, el, callback) : (el.visible(), callback && callback())
             }
         });
     },
@@ -25818,12 +26900,8 @@ BI.CardLayout = BI.inherit(BI.Layout, {
     showLastCard: function () {
         var self = this;
         this.showIndex = this.lastShowIndex;
-        BI.each(this.widgets, function (i, el) {
-            if (self.showIndex != i) {
-                el.element.hide();
-            } else {
-                el.element.show();
-            }
+        BI.each(this._children, function (i, el) {
+            el.setVisible(self.showIndex == i);
         })
     },
 
@@ -25857,25 +26935,20 @@ BI.CardLayout = BI.inherit(BI.Layout, {
     },
 
     hideAllCard: function () {
-        BI.each(this.widgets, function (i, el) {
+        BI.each(this._children, function (i, el) {
             el.invisible();
         });
     },
 
     isAllCardHide: function () {
         var flag = true;
-        BI.each(this.widgets, function (i, el) {
+        BI.some(this._children, function (i, el) {
             if (el.isVisible()) {
-                flag = true;
+                flag = false;
                 return false;
             }
         });
         return flag;
-    },
-
-    empty: function () {
-        BI.CardLayout.superclass.empty.apply(this, arguments);
-        this.showIndex = void 0;
     }
 });
 $.shortcut('bi.card', BI.CardLayout);/**
@@ -25885,8 +26958,8 @@ $.shortcut('bi.card', BI.CardLayout);/**
  * @extends BI.Layout
  */
 BI.DefaultLayout = BI.inherit(BI.Layout, {
-    _defaultConfig: function () {
-        return BI.extend(BI.DefaultLayout.superclass._defaultConfig.apply(this, arguments), {
+    props: function () {
+        return BI.extend(BI.DefaultLayout.superclass.props.apply(this, arguments), {
             hgap: 0,
             vgap: 0,
             lgap: 0,
@@ -25896,8 +26969,8 @@ BI.DefaultLayout = BI.inherit(BI.Layout, {
             items: []
         });
     },
-    _init: function () {
-        BI.DefaultLayout.superclass._init.apply(this, arguments);
+    render: function () {
+        BI.DefaultLayout.superclass.render.apply(this, arguments);
         this.populate(this.options.items);
     },
 
@@ -25933,7 +27006,7 @@ BI.DefaultLayout = BI.inherit(BI.Layout, {
 
     populate: function (items) {
         BI.DefaultLayout.superclass.populate.apply(this, arguments);
-        this.render();
+        this._mount();
     }
 });
 $.shortcut('bi.default', BI.DefaultLayout);/**
@@ -25943,8 +27016,8 @@ $.shortcut('bi.default', BI.DefaultLayout);/**
  * @extends BI.Layout
  */
 BI.DivisionLayout = BI.inherit(BI.Layout, {
-    _defaultConfig: function () {
-        return BI.extend(BI.DivisionLayout.superclass._defaultConfig.apply(this, arguments), {
+    props: function () {
+        return BI.extend(BI.DivisionLayout.superclass.props.apply(this, arguments), {
             baseCls: "bi-division-layout",
             columns: null,
             rows: null,
@@ -25974,8 +27047,8 @@ BI.DivisionLayout = BI.inherit(BI.Layout, {
             //]
         });
     },
-    _init: function () {
-        BI.DivisionLayout.superclass._init.apply(this, arguments);
+    render: function () {
+        BI.DivisionLayout.superclass.render.apply(this, arguments);
         this.populate(this.options.items);
     },
 
@@ -25985,7 +27058,7 @@ BI.DivisionLayout = BI.inherit(BI.Layout, {
 
     addItem: function (item) {
         // do nothing
-        throw new Error("不能添加元素")
+        throw new Error("cannot be added")
     },
 
     stroke: function(items){
@@ -26048,7 +27121,7 @@ BI.DivisionLayout = BI.inherit(BI.Layout, {
             var totalW = 0;
             for (var j = 0; j < columns; j++) {
                 if (!map[i][j]) {
-                    throw new Error("缺少item项");
+                    throw new Error("item be required");
                 }
                 if(!this.hasWidget(this.getName() + i + "_" + j)) {
                     var w = BI.createWidget(map[i][j]);
@@ -26089,7 +27162,7 @@ BI.DivisionLayout = BI.inherit(BI.Layout, {
 
     populate: function (items) {
         BI.DivisionLayout.superclass.populate.apply(this, arguments);
-        this.render();
+        this._mount();
     }
 });
 $.shortcut('bi.division', BI.DivisionLayout);/**
@@ -26102,8 +27175,8 @@ $.shortcut('bi.division', BI.DivisionLayout);/**
  * @cfg {Number} [vgap=0] 垂直间隙
  */
 BI.FloatLeftLayout = BI.inherit(BI.Layout, {
-    _defaultConfig: function () {
-        return BI.extend(BI.FloatLeftLayout.superclass._defaultConfig.apply(this, arguments), {
+    props: function () {
+        return BI.extend(BI.FloatLeftLayout.superclass.props.apply(this, arguments), {
             baseCls: "bi-float-left-layout clearfix",
             hgap: 0,
             vgap: 0,
@@ -26113,8 +27186,8 @@ BI.FloatLeftLayout = BI.inherit(BI.Layout, {
             bgap: 0
         });
     },
-    _init: function () {
-        BI.FloatLeftLayout.superclass._init.apply(this, arguments);
+    render: function () {
+        BI.FloatLeftLayout.superclass.render.apply(this, arguments);
         this.populate(this.options.items);
     },
 
@@ -26152,7 +27225,7 @@ BI.FloatLeftLayout = BI.inherit(BI.Layout, {
 
     populate: function (items) {
         BI.FloatLeftLayout.superclass.populate.apply(this, arguments);
-        this.render();
+        this._mount();
     }
 });
 $.shortcut('bi.left', BI.FloatLeftLayout);
@@ -26167,8 +27240,8 @@ $.shortcut('bi.left', BI.FloatLeftLayout);
  * @cfg {Number} [vgap=0] 垂直间隙
  */
 BI.FloatRightLayout = BI.inherit(BI.Layout, {
-    _defaultConfig: function () {
-        return BI.extend(BI.FloatRightLayout.superclass._defaultConfig.apply(this, arguments), {
+    props: function () {
+        return BI.extend(BI.FloatRightLayout.superclass.props.apply(this, arguments), {
             baseCls: "bi-float-right-layout clearfix",
             hgap: 0,
             vgap: 0,
@@ -26178,8 +27251,8 @@ BI.FloatRightLayout = BI.inherit(BI.Layout, {
             bgap: 0
         });
     },
-    _init: function () {
-        BI.FloatRightLayout.superclass._init.apply(this, arguments);
+    render: function () {
+        BI.FloatRightLayout.superclass.render.apply(this, arguments);
         this.populate(this.options.items);
     },
 
@@ -26217,7 +27290,7 @@ BI.FloatRightLayout = BI.inherit(BI.Layout, {
 
     populate: function (items) {
         BI.FloatRightLayout.superclass.populate.apply(this, arguments);
-        this.render();
+        this._mount();
     }
 });
 $.shortcut('bi.right', BI.FloatRightLayout);/**
@@ -26227,8 +27300,8 @@ $.shortcut('bi.right', BI.FloatRightLayout);/**
  * @extends BI.Layout
  */
 BI.GridLayout = BI.inherit(BI.Layout, {
-    _defaultConfig: function () {
-        return BI.extend(BI.GridLayout.superclass._defaultConfig.apply(this, arguments), {
+    props: function () {
+        return BI.extend(BI.GridLayout.superclass.props.apply(this, arguments), {
             baseCls: "bi-grid-layout",
             columns: null,
             rows: null,
@@ -26252,8 +27325,8 @@ BI.GridLayout = BI.inherit(BI.Layout, {
              ]*/
         });
     },
-    _init: function () {
-        BI.GridLayout.superclass._init.apply(this, arguments);
+    render: function () {
+        BI.GridLayout.superclass.render.apply(this, arguments);
         this.populate(this.options.items);
     },
 
@@ -26263,15 +27336,17 @@ BI.GridLayout = BI.inherit(BI.Layout, {
 
     addItem: function () {
         //do nothing
-        throw new Error("不能添加元素")
+        throw new Error("cannot be added")
     },
 
     stroke: function (items) {
         var o = this.options;
         var rows = o.rows || o.items.length, columns = o.columns || ((o.items[0] && o.items[0].length) | 0);
         var width = 100 / columns, height = 100 / rows;
-        var els = new Array(rows);
-
+        var els = [];
+        for (var i = 0; i < rows; i++) {
+            els[i] = [];
+        }
         function firstElement(item, row, col) {
             if (row === 0) {
                 item.addClass("first-row")
@@ -26309,9 +27384,6 @@ BI.GridLayout = BI.inherit(BI.Layout, {
             }
         }
 
-        BI.each(els, function (i) {
-            els[i] = new Array(columns);
-        });
         BI.each(items, function (i, item) {
             if (BI.isArray(item)) {
                 BI.each(item, function (j, el) {
@@ -26343,7 +27415,7 @@ BI.GridLayout = BI.inherit(BI.Layout, {
 
     populate: function (items) {
         BI.GridLayout.superclass.populate.apply(this, arguments);
-        this.render();
+        this._mount();
     }
 });
 $.shortcut('bi.grid', BI.GridLayout);/**
@@ -26352,8 +27424,8 @@ $.shortcut('bi.grid', BI.GridLayout);/**
  * @extends BI.Layout
  */
 BI.HorizontalLayout = BI.inherit(BI.Layout, {
-    _defaultConfig: function () {
-        return BI.extend(BI.HorizontalLayout.superclass._defaultConfig.apply(this, arguments), {
+    props: function () {
+        return BI.extend(BI.HorizontalLayout.superclass.props.apply(this, arguments), {
             baseCls: "bi-horizontal-layout",
             verticalAlign: "middle",
             columnSize: [],
@@ -26366,25 +27438,17 @@ BI.HorizontalLayout = BI.inherit(BI.Layout, {
             bgap: 0
         });
     },
-    _init: function () {
-        BI.HorizontalLayout.superclass._init.apply(this, arguments);
-        var table = BI.createWidget({
-            type: "bi.layout",
-            tagName: "table",
-            attribute: {"cellspacing": 0, "cellpadding": 0}
-        });
-        table.element.css({
+    render: function () {
+        BI.HorizontalLayout.superclass.render.apply(this, arguments);
+        this.$table = $("<table>").attr({"cellspacing": 0, "cellpadding": 0}).css({
             "position": "relative",
             "white-space": "nowrap",
             "border-spacing": "0px",
             "border": "none",
             "border-collapse": "separate"
-        }).appendTo(this.element);
-        this.tr = BI.createWidget({
-            type: "bi.layout",
-            tagName: "tr"
         });
-        this.tr.element.appendTo(table.element);
+        this.$tr = $("<tr>");
+        this.$tr.appendTo(this.$table);
         this.populate(this.options.items);
     },
 
@@ -26392,7 +27456,7 @@ BI.HorizontalLayout = BI.inherit(BI.Layout, {
         var o = this.options;
         var td;
         var width = o.columnSize[i] <= 1 ? (o.columnSize[i] * 100 + "%") : o.columnSize[i];
-        if (!this.hasWidget(this.getName() + i)) {
+        if (!this.hasWidget(this._getChildName(i))) {
             var w = BI.createWidget(item);
             w.element.css({"position": "relative", "margin": "0px auto"});
             td = BI.createWidget({
@@ -26403,9 +27467,9 @@ BI.HorizontalLayout = BI.inherit(BI.Layout, {
                 },
                 items: [w]
             });
-            this.addWidget(this.getName() + i, td);
+            this.addWidget(this._getChildName(i), td);
         } else {
-            td = this.getWidgetByName(this.getName() + i);
+            td = this.getWidgetByName(this._getChildName(i));
             td.element.attr("width", width);
         }
 
@@ -26442,41 +27506,34 @@ BI.HorizontalLayout = BI.inherit(BI.Layout, {
         return td;
     },
 
-    render: function () {
-        if (!BI.isEmpty(this.widgets)) {
-            this.tr.element.append(this.hang());
-        }
-        return this;
-    },
-
-    clear: function () {
-        this.hang();
-        this.widgets = {};
-        this.tr.empty();
-    },
-
-    empty: function () {
-        BI.each(this.widgets, function (i, wi) {
-            wi.destroy();
+    _mountChildren: function () {
+        var self = this;
+        var frag = document.createDocumentFragment();
+        var hasChild = false;
+        BI.each(this._children, function (i, widget) {
+            if (widget.element !== self.element) {
+                frag.appendChild(widget.element[0]);
+                hasChild = true;
+            }
         });
-        this.widgets = {};
-        this.tr.empty();
+        if (hasChild === true) {
+            this.$tr.append(frag);
+            this.element.append(this.$table);
+        }
     },
+
 
     resize: function () {
         // console.log("horizontal layout do not need to resize");
     },
 
-    addItem: function (item) {
-        var w = this._addElement(this.options.items.length, item);
-        this.options.items.push(item);
-        w.element.appendTo(this.tr.element);
-        return w;
+    _getWrapper: function(){
+        return this.$tr;
     },
 
     populate: function (items) {
         BI.HorizontalLayout.superclass.populate.apply(this, arguments);
-        this.render();
+        this._mount();
     }
 });
 $.shortcut('bi.horizontal', BI.HorizontalLayout);
@@ -26487,8 +27544,8 @@ $.shortcut('bi.horizontal', BI.HorizontalLayout);
  * @extends BI.Layout
  */
 BI.HorizontalCellLayout = BI.inherit(BI.Layout, {
-    _defaultConfig: function () {
-        return BI.extend(BI.HorizontalCellLayout.superclass._defaultConfig.apply(this, arguments), {
+    props: function () {
+        return BI.extend(BI.HorizontalCellLayout.superclass.props.apply(this, arguments), {
             baseCls: "bi-horizontal-cell-layout",
             scrollable: true,
             hgap: 0,
@@ -26499,8 +27556,8 @@ BI.HorizontalCellLayout = BI.inherit(BI.Layout, {
             bgap: 0
         });
     },
-    _init: function () {
-        BI.HorizontalCellLayout.superclass._init.apply(this, arguments);
+    render: function () {
+        BI.HorizontalCellLayout.superclass.render.apply(this, arguments);
         this.element.css({"display": "table", "vertical-align": "top"});
         this.populate(this.options.items);
     },
@@ -26538,7 +27595,7 @@ BI.HorizontalCellLayout = BI.inherit(BI.Layout, {
 
     populate: function (items) {
         BI.HorizontalCellLayout.superclass.populate.apply(this, arguments);
-        this.render();
+        this._mount();
     }
 });
 $.shortcut('bi.horizontal_cell', BI.HorizontalCellLayout);/**
@@ -26551,8 +27608,8 @@ $.shortcut('bi.horizontal_cell', BI.HorizontalCellLayout);/**
  * @cfg {Number} [vgap=0] 垂直间隙
  */
 BI.InlineLayout = BI.inherit(BI.Layout, {
-    _defaultConfig: function () {
-        return BI.extend(BI.InlineLayout.superclass._defaultConfig.apply(this, arguments), {
+    props: function () {
+        return BI.extend(BI.InlineLayout.superclass.props.apply(this, arguments), {
             baseCls: "bi-inline-layout",
             hgap: 0,
             vgap: 0,
@@ -26562,8 +27619,8 @@ BI.InlineLayout = BI.inherit(BI.Layout, {
             bgap: 0
         });
     },
-    _init: function () {
-        BI.InlineLayout.superclass._init.apply(this, arguments);
+    render: function () {
+        BI.InlineLayout.superclass.render.apply(this, arguments);
         this.populate(this.options.items);
     },
 
@@ -26600,7 +27657,7 @@ BI.InlineLayout = BI.inherit(BI.Layout, {
 
     populate: function (items) {
         BI.InlineLayout.superclass.populate.apply(this, arguments);
-        this.render();
+        this._mount();
     }
 });
 $.shortcut('bi.inline', BI.InlineLayout);/**
@@ -26613,14 +27670,14 @@ $.shortcut('bi.inline', BI.InlineLayout);/**
  * @cfg {Number} [vgap=0] 垂直间隙
  */
 BI.LatticeLayout = BI.inherit(BI.Layout, {
-    _defaultConfig: function () {
-        return BI.extend(BI.LatticeLayout.superclass._defaultConfig.apply(this, arguments), {
+    props: function () {
+        return BI.extend(BI.LatticeLayout.superclass.props.apply(this, arguments), {
             baseCls: "bi-lattice-layout clearfix"
             //columnSize: [0.2, 0.2, 0.6],
         });
     },
-    _init: function () {
-        BI.LatticeLayout.superclass._init.apply(this, arguments);
+    render: function () {
+        BI.LatticeLayout.superclass.render.apply(this, arguments);
         this.populate(this.options.items);
     },
 
@@ -26642,13 +27699,19 @@ BI.LatticeLayout = BI.inherit(BI.Layout, {
         return w;
     },
 
+    addItemAt: function (item) {
+        var w = BI.LatticeLayout.superclass.addItemAt.apply(this, arguments);
+        this.resize();
+        return w;
+    },
+
     resize: function () {
         this.stroke(this.options.items);
     },
 
     populate: function (items) {
         BI.LatticeLayout.superclass.populate.apply(this, arguments);
-        this.render();
+        this._mount();
     }
 });
 $.shortcut('bi.lattice', BI.LatticeLayout);/**
@@ -26658,8 +27721,8 @@ $.shortcut('bi.lattice', BI.LatticeLayout);/**
  * @extends BI.Layout
  */
 BI.TableLayout = BI.inherit(BI.Layout, {
-    _defaultConfig: function () {
-        return BI.extend(BI.TableLayout.superclass._defaultConfig.apply(this, arguments), {
+    props: function () {
+        return BI.extend(BI.TableLayout.superclass.props.apply(this, arguments), {
             baseCls: "bi-table-layout",
             scrolly: true,
             columnSize: [200, 200, 'fill'],
@@ -26679,8 +27742,8 @@ BI.TableLayout = BI.inherit(BI.Layout, {
             ]]
         });
     },
-    _init: function () {
-        BI.TableLayout.superclass._init.apply(this, arguments);
+    render: function () {
+        BI.TableLayout.superclass.render.apply(this, arguments);
         this.rows = 0;
         this.populate(this.options.items);
     },
@@ -26751,7 +27814,7 @@ BI.TableLayout = BI.inherit(BI.Layout, {
                 }, arr[j]))
                 right += o.columnSize[j] + (o.columnSize[j] < 1 ? 0 : o.hgap);
             } else {
-                throw new Error("只能有一个fill属性的item");
+                throw new Error("item with fill can only be one");
             }
         }
         if (i >= 0 && i < arr.length) {
@@ -26786,14 +27849,14 @@ BI.TableLayout = BI.inherit(BI.Layout, {
 
     addItem: function (arr) {
         if (!BI.isArray(arr)) {
-            throw new Error("item 必须是数组");
+            throw new Error("item must be array");
         }
         return BI.TableLayout.superclass.addItem.apply(this, arguments);
     },
 
     populate: function (items) {
         BI.TableLayout.superclass.populate.apply(this, arguments);
-        this.render();
+        this._mount();
     }
 });
 $.shortcut('bi.table', BI.TableLayout);/**
@@ -26802,8 +27865,8 @@ $.shortcut('bi.table', BI.TableLayout);/**
  * @extends BI.Layout
  */
 BI.HTapeLayout = BI.inherit(BI.Layout, {
-    _defaultConfig: function () {
-        return BI.extend(BI.HTapeLayout.superclass._defaultConfig.apply(this, arguments), {
+    props: function () {
+        return BI.extend(BI.HTapeLayout.superclass.props.apply(this, arguments), {
             baseCls: "bi-h-tape-layout",
             hgap: 0,
             vgap: 0,
@@ -26827,8 +27890,8 @@ BI.HTapeLayout = BI.inherit(BI.Layout, {
             ]
         });
     },
-    _init: function () {
-        BI.HTapeLayout.superclass._init.apply(this, arguments);
+    render: function () {
+        BI.HTapeLayout.superclass.render.apply(this, arguments);
         this.populate(this.options.items);
     },
 
@@ -26837,7 +27900,7 @@ BI.HTapeLayout = BI.inherit(BI.Layout, {
     },
     addItem: function (item) {
         // do nothing
-        throw new Error("不能添加元素")
+        throw new Error("cannot be added")
     },
 
     stroke: function (items) {
@@ -26895,7 +27958,7 @@ BI.HTapeLayout = BI.inherit(BI.Layout, {
 
     populate: function (items) {
         BI.HTapeLayout.superclass.populate.apply(this, arguments);
-        this.render();
+        this._mount();
     }
 });
 $.shortcut('bi.htape', BI.HTapeLayout);
@@ -26906,8 +27969,8 @@ $.shortcut('bi.htape', BI.HTapeLayout);
  * @extends BI.Layout
  */
 BI.VTapeLayout = BI.inherit(BI.Layout, {
-    _defaultConfig: function () {
-        return BI.extend(BI.VTapeLayout.superclass._defaultConfig.apply(this, arguments), {
+    props: function () {
+        return BI.extend(BI.VTapeLayout.superclass.props.apply(this, arguments), {
             baseCls: "bi-v-tape-layout",
             hgap: 0,
             vgap: 0,
@@ -26931,8 +27994,8 @@ BI.VTapeLayout = BI.inherit(BI.Layout, {
             ]
         });
     },
-    _init: function () {
-        BI.VTapeLayout.superclass._init.apply(this, arguments);
+    render: function () {
+        BI.VTapeLayout.superclass.render.apply(this, arguments);
         this.populate(this.options.items);
     },
 
@@ -26942,7 +28005,7 @@ BI.VTapeLayout = BI.inherit(BI.Layout, {
 
     addItem: function (item) {
         // do nothing
-        throw new Error("不能添加元素")
+        throw new Error("cannot be added")
     },
 
     stroke: function (items) {
@@ -27000,7 +28063,7 @@ BI.VTapeLayout = BI.inherit(BI.Layout, {
 
     populate: function (items) {
         BI.VTapeLayout.superclass.populate.apply(this, arguments);
-        this.render();
+        this._mount();
     }
 });
 $.shortcut('bi.vtape', BI.VTapeLayout);/**
@@ -27009,8 +28072,8 @@ $.shortcut('bi.vtape', BI.VTapeLayout);/**
  * @extends BI.Layout
  */
 BI.TdLayout = BI.inherit(BI.Layout, {
-    _defaultConfig: function () {
-        return BI.extend(BI.TdLayout.superclass._defaultConfig.apply(this, arguments), {
+    props: function () {
+        return BI.extend(BI.TdLayout.superclass.props.apply(this, arguments), {
             baseCls: "bi-td-layout",
             columnSize: [200, 200, 200],
             hgap: 0,
@@ -27028,21 +28091,16 @@ BI.TdLayout = BI.inherit(BI.Layout, {
             ]]
         });
     },
-    _init: function () {
-        BI.TdLayout.superclass._init.apply(this, arguments);
-        this.table = BI.createWidget({
-            type: "bi.layout",
-            tagName: "table",
-            attribute: {"cellspacing": 0, "cellpadding": 0}
-        });
-        this.table.element.css({
+    render: function () {
+        BI.TdLayout.superclass.render.apply(this, arguments);
+        this.$table = $("<table>").attr({"cellspacing": 0, "cellpadding": 0}).css({
             "position": "relative",
             "width": "100%",
             "height": "100%",
             "border-spacing": "0px",
             "border": "none",
             "border-collapse": "separate"
-        }).appendTo(this.element);
+        });
         this.rows = 0;
         this.populate(this.options.items);
     },
@@ -27113,8 +28171,24 @@ BI.TdLayout = BI.inherit(BI.Layout, {
             });
             tr.addItem(td);
         }
-        this.table.element.append(tr.element);
+        this.addWidget(this.getName() + idx, tr);
         return tr;
+    },
+
+    _mountChildren: function(){
+        var self = this;
+        var frag = document.createDocumentFragment();
+        var hasChild = false;
+        BI.each(this._children, function (i, widget) {
+            if (widget.element !== self.element) {
+                frag.appendChild(widget.element[0]);
+                hasChild = true;
+            }
+        });
+        if (hasChild === true) {
+            this.$table.append(frag);
+            this.element.append(this.$table);
+        }
     },
 
     resize: function () {
@@ -27123,13 +28197,14 @@ BI.TdLayout = BI.inherit(BI.Layout, {
 
     addItem: function (arr) {
         if (!BI.isArray(arr)) {
-            throw new Error("item 必须是数组");
+            throw new Error("item must be array");
         }
         return BI.TdLayout.superclass.addItem.apply(this, arguments);
     },
 
     populate: function (items) {
         BI.TdLayout.superclass.populate.apply(this, arguments);
+        this._mount();
     }
 });
 $.shortcut('bi.td', BI.TdLayout);/**
@@ -27138,8 +28213,8 @@ $.shortcut('bi.td', BI.TdLayout);/**
  * @extends BI.Layout
  */
 BI.VerticalLayout = BI.inherit(BI.Layout, {
-    _defaultConfig: function () {
-        return BI.extend(BI.VerticalLayout.superclass._defaultConfig.apply(this, arguments), {
+    props: function () {
+        return BI.extend(BI.VerticalLayout.superclass.props.apply(this, arguments), {
             baseCls: "bi-vertical-layout",
             hgap: 0,
             vgap: 0,
@@ -27150,8 +28225,8 @@ BI.VerticalLayout = BI.inherit(BI.Layout, {
             scrolly: true
         });
     },
-    _init: function () {
-        BI.VerticalLayout.superclass._init.apply(this, arguments);
+    render: function () {
+        BI.VerticalLayout.superclass.render.apply(this, arguments);
         this.populate(this.options.items);
     },
 
@@ -27190,7 +28265,7 @@ BI.VerticalLayout = BI.inherit(BI.Layout, {
 
     populate: function (items) {
         BI.VerticalLayout.superclass.populate.apply(this, arguments);
-        this.render();
+        this._mount();
     }
 });
 $.shortcut('bi.vertical', BI.VerticalLayout);/**
@@ -27199,8 +28274,8 @@ $.shortcut('bi.vertical', BI.VerticalLayout);/**
  * @extends BI.Layout
  */
 BI.WindowLayout = BI.inherit(BI.Layout, {
-    _defaultConfig: function () {
-        return BI.extend(BI.WindowLayout.superclass._defaultConfig.apply(this, arguments), {
+    props: function () {
+        return BI.extend(BI.WindowLayout.superclass.props.apply(this, arguments), {
             baseCls: "bi-window-layout",
             columns: 3,
             rows: 2,
@@ -27225,8 +28300,8 @@ BI.WindowLayout = BI.inherit(BI.Layout, {
             ]]
         });
     },
-    _init: function () {
-        BI.WindowLayout.superclass._init.apply(this, arguments);
+    render: function () {
+        BI.WindowLayout.superclass.render.apply(this, arguments);
         this.populate(this.options.items);
     },
 
@@ -27236,7 +28311,7 @@ BI.WindowLayout = BI.inherit(BI.Layout, {
 
     addItem: function (item) {
         // do nothing
-        throw new Error("不能添加元素")
+        throw new Error("cannot be added")
     },
 
     stroke: function (items) {
@@ -27287,7 +28362,7 @@ BI.WindowLayout = BI.inherit(BI.Layout, {
         for (var i = 0; i < o.rows; i++) {
             for (var j = 0; j < o.columns; j++) {
                 if (!o.items[i][j]) {
-                    throw new Error("缺少item项");
+                    throw new Error("item be required");
                 }
                 if (!this.hasWidget(this.getName() + i + "_" + j)) {
                     var w = BI.createWidget(o.items[i][j]);
@@ -27377,7 +28452,7 @@ BI.WindowLayout = BI.inherit(BI.Layout, {
 
     populate: function (items) {
         BI.WindowLayout.superclass.populate.apply(this, arguments);
-        this.render();
+        this._mount();
     }
 });
 $.shortcut('bi.window', BI.WindowLayout);/**
@@ -27386,8 +28461,8 @@ $.shortcut('bi.window', BI.WindowLayout);/**
  * @extends BI.Layout
  */
 BI.CenterLayout = BI.inherit(BI.Layout, {
-    _defaultConfig: function () {
-        return BI.extend(BI.CenterLayout.superclass._defaultConfig.apply(this, arguments), {
+    props: function () {
+        return BI.extend(BI.CenterLayout.superclass.props.apply(this, arguments), {
             baseCls: "bi-center-layout",
             hgap: 0,
             vgap: 0,
@@ -27398,8 +28473,8 @@ BI.CenterLayout = BI.inherit(BI.Layout, {
         });
     },
 
-    _init: function () {
-        BI.CenterLayout.superclass._init.apply(this, arguments);
+    render: function () {
+        BI.CenterLayout.superclass.render.apply(this, arguments);
         this.populate(this.options.items);
     },
 
@@ -27409,19 +28484,18 @@ BI.CenterLayout = BI.inherit(BI.Layout, {
 
     addItem: function (item) {
         //do nothing
-        throw new Error("不能添加元素");
+        throw new Error("cannot be added");
     },
 
     stroke: function (items) {
         var self = this, o = this.options;
-        this.clear();
         var list = [];
         BI.each(items, function (i) {
             list.push({
                 column: i,
                 row: 0,
                 el: BI.createWidget({
-                    type: "bi.layout",
+                    type: "bi.default",
                     cls: "center-element " + (i === 0 ? "first-element " : "") + (i === items.length - 1 ? "last-element" : "")
                 })
             });
@@ -27437,13 +28511,13 @@ BI.CenterLayout = BI.inherit(BI.Layout, {
                     bottom: o.vgap + o.bgap,
                     width: "auto",
                     height: "auto"
-                }).appendTo(list[i].el.element);
-                self.addWidget(w);
+                });
+                list[i].el.addItem(w);
             }
         });
         BI.createWidget({
             type: "bi.grid",
-            element: this.element,
+            element: this,
             columns: list.length,
             rows: 1,
             items: list
@@ -27452,6 +28526,7 @@ BI.CenterLayout = BI.inherit(BI.Layout, {
 
     populate: function (items) {
         BI.CenterLayout.superclass.populate.apply(this, arguments);
+        this._mount();
     }
 });
 $.shortcut('bi.center', BI.CenterLayout);/**
@@ -27460,8 +28535,8 @@ $.shortcut('bi.center', BI.CenterLayout);/**
  * @extends BI.Layout
  */
 BI.FloatCenterLayout = BI.inherit(BI.Layout, {
-    _defaultConfig: function () {
-        return BI.extend(BI.FloatCenterLayout.superclass._defaultConfig.apply(this, arguments), {
+    props: function () {
+        return BI.extend(BI.FloatCenterLayout.superclass.props.apply(this, arguments), {
             baseCls: "bi-float-center-layout",
             hgap: 0,
             vgap: 0,
@@ -27471,8 +28546,8 @@ BI.FloatCenterLayout = BI.inherit(BI.Layout, {
             bgap: 0
         });
     },
-    _init: function () {
-        BI.FloatCenterLayout.superclass._init.apply(this, arguments);
+    render: function () {
+        BI.FloatCenterLayout.superclass.render.apply(this, arguments);
         this.populate(this.options.items);
     },
 
@@ -27482,15 +28557,16 @@ BI.FloatCenterLayout = BI.inherit(BI.Layout, {
 
     addItem: function (item) {
         //do nothing
-        throw new Error("不能添加元素")
+        throw new Error("cannot be added")
     },
 
     stroke: function (items) {
         var self = this, o = this.options;
-        this.clear();
         var list = [], width = 100 / items.length;
         BI.each(items, function (i) {
-            var widget = BI.createWidget();
+            var widget = BI.createWidget({
+                type: "bi.default"
+            });
             widget.element.addClass("center-element " + (i === 0 ? "first-element " : "") + (i === items.length - 1 ? "last-element" : "")).css({
                 width: width + "%",
                 height: "100%"
@@ -27510,19 +28586,20 @@ BI.FloatCenterLayout = BI.inherit(BI.Layout, {
                     bottom: o.vgap + o.bgap,
                     width: "auto",
                     height: "auto"
-                }).appendTo(list[i].el.element);
-                self.addWidget(w);
+                });
+                list[i].el.addItem(w);
             }
         });
         BI.createWidget({
             type: "bi.left",
-            element: this.element,
+            element: this,
             items: list
         });
     },
 
     populate: function (items) {
         BI.FloatCenterLayout.superclass.populate.apply(this, arguments);
+        this._mount();
     }
 });
 $.shortcut('bi.float_center', BI.FloatCenterLayout);/**
@@ -27531,8 +28608,8 @@ $.shortcut('bi.float_center', BI.FloatCenterLayout);/**
  * @extends BI.Layout
  */
 BI.HorizontalCenterLayout = BI.inherit(BI.Layout, {
-    _defaultConfig: function () {
-        return BI.extend(BI.HorizontalCenterLayout.superclass._defaultConfig.apply(this, arguments), {
+    props: function () {
+        return BI.extend(BI.HorizontalCenterLayout.superclass.props.apply(this, arguments), {
             baseCls: "bi-horizontal-center-layout",
             hgap: 0,
             vgap: 0,
@@ -27542,8 +28619,8 @@ BI.HorizontalCenterLayout = BI.inherit(BI.Layout, {
             bgap: 0
         });
     },
-    _init: function () {
-        BI.HorizontalCenterLayout.superclass._init.apply(this, arguments);
+    render: function () {
+        BI.HorizontalCenterLayout.superclass.render.apply(this, arguments);
         this.populate(this.options.items);
     },
 
@@ -27553,19 +28630,18 @@ BI.HorizontalCenterLayout = BI.inherit(BI.Layout, {
 
     addItem: function (item) {
         //do nothing
-        throw new Error("不能添加元素")
+        throw new Error("cannot be added")
     },
 
     stroke: function (items) {
         var o = this.options;
-        this.clear();
         var list = [];
         BI.each(items, function (i) {
             list.push({
                 column: i,
                 row: 0,
                 el: BI.createWidget({
-                    type: "bi.layout",
+                    type: "bi.default",
                     cls: "center-element " + (i === 0 ? "first-element " : "") + (i === items.length - 1 ? "last-element" : "")
                 })
             });
@@ -27580,13 +28656,13 @@ BI.HorizontalCenterLayout = BI.inherit(BI.Layout, {
                     top: o.vgap + o.tgap,
                     bottom: o.vgap + o.bgap,
                     width: "auto"
-                }).appendTo(list[i].el.element);
-                self.addWidget(w);
+                });
+                list[i].el.addItem(w);
             }
         });
         BI.createWidget({
             type: "bi.grid",
-            element: this.element,
+            element: this,
             columns: list.length,
             rows: 1,
             items: list
@@ -27595,6 +28671,7 @@ BI.HorizontalCenterLayout = BI.inherit(BI.Layout, {
 
     populate: function (items) {
         BI.HorizontalCenterLayout.superclass.populate.apply(this, arguments);
+        this._mount();
     }
 });
 $.shortcut('bi.horizontal_center', BI.HorizontalCenterLayout);/**
@@ -27603,8 +28680,8 @@ $.shortcut('bi.horizontal_center', BI.HorizontalCenterLayout);/**
  * @extends BI.Layout
  */
 BI.VerticalCenterLayout = BI.inherit(BI.Layout, {
-    _defaultConfig: function () {
-        return BI.extend(BI.VerticalCenterLayout.superclass._defaultConfig.apply(this, arguments), {
+    props: function () {
+        return BI.extend(BI.VerticalCenterLayout.superclass.props.apply(this, arguments), {
             baseCls: "bi-vertical-center-layout",
             hgap: 0,
             vgap: 0,
@@ -27614,8 +28691,8 @@ BI.VerticalCenterLayout = BI.inherit(BI.Layout, {
             bgap: 0
         });
     },
-    _init: function () {
-        BI.VerticalCenterLayout.superclass._init.apply(this, arguments);
+    render: function () {
+        BI.VerticalCenterLayout.superclass.render.apply(this, arguments);
         this.populate(this.options.items);
     },
 
@@ -27625,19 +28702,18 @@ BI.VerticalCenterLayout = BI.inherit(BI.Layout, {
 
     addItem: function (item) {
         //do nothing
-        throw new Error("不能添加元素")
+        throw new Error("cannot be added")
     },
 
     stroke: function (items) {
         var self = this, o = this.options;
-        this.clear();
         var list = [];
         BI.each(items, function (i) {
             list.push({
                 column: 0,
                 row: i,
                 el: BI.createWidget({
-                    type: "bi.layout",
+                    type: "bi.default",
                     cls: "center-element " + (i === 0 ? "first-element " : "") + (i === items.length - 1 ? "last-element" : "")
                 })
             });
@@ -27652,13 +28728,13 @@ BI.VerticalCenterLayout = BI.inherit(BI.Layout, {
                     top: o.vgap + o.tgap,
                     bottom: o.vgap + o.bgap,
                     height: "auto"
-                }).appendTo(list[i].el.element);
-                self.addWidget(w);
+                });
+                list[i].el.addItem(w);
             }
         });
         BI.createWidget({
             type: "bi.grid",
-            element: this.element,
+            element: this,
             columns: 1,
             rows: list.length,
             items: list
@@ -27667,6 +28743,7 @@ BI.VerticalCenterLayout = BI.inherit(BI.Layout, {
 
     populate: function (items) {
         BI.VerticalCenterLayout.superclass.populate.apply(this, arguments);
+        this._mount();
     }
 });
 $.shortcut('bi.vertical_center', BI.VerticalCenterLayout);/**

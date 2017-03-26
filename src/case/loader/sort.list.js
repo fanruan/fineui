@@ -35,7 +35,7 @@ BI.SortList = BI.inherit(BI.Widget, {
         var self = this, o = this.options;
         this.loader = BI.createWidget({
             type: "bi.list_loader",
-            element: this.element,
+            element: this,
             isDefaultInit: o.isDefaultInit,
             el: o.el,
             items: this._formatItems(o.items),

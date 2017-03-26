@@ -1,0 +1,97 @@
+Demo.CASE_CONFIG = [{
+    id: 3,
+    text: "实例控件",
+    open: true,
+}, {
+    pId: 3,
+    id: 301,
+    text: "editors"
+}, {
+    pId: 301,
+    text: "bi.record_editor",
+    value: "demo.record_editor"
+}, {
+    pId: 301,
+    text: "bi.shelter_editor",
+    value: "demo.shelter_editor"
+}, {
+    pId: 301,
+    text: "bi.sign_editor",
+    value: "demo.sign_editor"
+}, {
+    pId: 301,
+    text: "bi.state_editor",
+    value: "demo.state_editor"
+}, {
+    pId: 3,
+    id: 302,
+    text: "combo"
+}, {
+    pId: 302,
+    text: "bi.bubble_combo",
+    value: "demo.bubble_combo"
+}, {
+    pId: 3,
+    id: 303,
+    text: "tree"
+}, {
+    pId: 303,
+    text: "bi.branch_tree",
+    value: "demo.branch_tree"
+}, {
+    pId: 303,
+    text: "bi.handstand_branch_tree",
+    value: "demo.handstand_branch_tree"
+}, {
+    pId: 303,
+    text: "bi.display_tree",
+    value: "demo.display_tree"
+}, {
+    pId: 303,
+    text: "bi.simple_tree",
+    value: "demo.simple_tree"
+}, {
+    pId: 303,
+    text: "bi.level_tree",
+    value: "demo.level_tree"
+}, {
+    pId: 303,
+    text: "bi.branch_relation",
+    value: "demo.branch_relation"
+}, {
+    pId: 3,
+    id: 304,
+    text: "table"
+}, {
+    pId: 304,
+    text: "bi.adaptive_table",
+    value: "demo.adaptive_table"
+}, {
+    pId: 304,
+    text: "bi.tree_table",
+    value: "demo.tree_table"
+}, {
+    pId: 304,
+    text: "bi.layer_tree_table",
+    value: "demo.layer_tree_table"
+}, {
+    pId: 3,
+    text: "bi.calendar",
+    value: "demo.calendar"
+}, {
+    pId: 3,
+    text: "bi.zclip",
+    value: "demo.zclip"
+}, {
+    pId: 3,
+    text: "bi.complex_canvas",
+    value: "demo.complex_canvas"
+}, {
+    pId: 3,
+    text: "bi.color_chooser",
+    value: "demo.color_chooser"
+}, {
+    pId: 3,
+    text: "bi.segment",
+    value: "demo.segment"
+}];

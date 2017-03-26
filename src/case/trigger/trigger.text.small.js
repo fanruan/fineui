@@ -34,7 +34,7 @@ BI.SmallTextTrigger = BI.inherit(BI.Trigger, {
         });
 
         BI.createWidget({
-            element: this.element,
+            element: this,
             type: 'bi.htape',
             items: [
                 {

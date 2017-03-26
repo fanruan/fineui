@@ -18,7 +18,7 @@ BI.ComplexCanvas = BI.inherit(BI.Widget, {
         var o = this.options;
         this.canvas = BI.createWidget({
             type: "bi.canvas",
-            element: this.element,
+            element: this,
             width: o.width,
             height: o.height
         });

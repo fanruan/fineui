@@ -9,5 +9,5 @@ const port = 3000;
 app.use(express.static("./"));
 app.listen(port, function() {
     console.log("server start");
-    open('http://localhost:' + port + '/index.html');
+    open('http://localhost:' + port + '/demo.html');
 });

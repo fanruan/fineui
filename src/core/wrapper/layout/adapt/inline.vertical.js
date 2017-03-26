@@ -8,8 +8,8 @@
  * @cfg {Number} [vgap=0] 垂直间隙
  */
 BI.InlineVerticalAdaptLayout = BI.inherit(BI.Layout, {
-    _defaultConfig: function () {
-        return BI.extend(BI.InlineVerticalAdaptLayout.superclass._defaultConfig.apply(this, arguments), {
+    props: function () {
+        return BI.extend(BI.InlineVerticalAdaptLayout.superclass.props.apply(this, arguments), {
             baseCls: "bi-inline-vertical-adapt-layout",
             hgap: 0,
             vgap: 0,
@@ -19,8 +19,8 @@ BI.InlineVerticalAdaptLayout = BI.inherit(BI.Layout, {
             bgap: 0
         });
     },
-    _init: function () {
-        BI.InlineVerticalAdaptLayout.superclass._init.apply(this, arguments);
+    render: function () {
+        BI.InlineVerticalAdaptLayout.superclass.render.apply(this, arguments);
         this.element.css({
             whiteSpace: "nowrap"
         });
@@ -66,7 +66,7 @@ BI.InlineVerticalAdaptLayout = BI.inherit(BI.Layout, {
 
     populate: function (items) {
         BI.InlineVerticalAdaptLayout.superclass.populate.apply(this, arguments);
-        this.render();
+        this._mount();
     }
 });
 $.shortcut('bi.inline_vertical_adapt', BI.InlineVerticalAdaptLayout);

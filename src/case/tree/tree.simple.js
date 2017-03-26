@@ -18,8 +18,8 @@ BI.SimpleTreeView = BI.inherit(BI.Widget, {
         var self = this, o = this.options;
         this.structure = new BI.Tree();
         this.tree = BI.createWidget({
-            type: "bi.tree",
-            element: this.element,
+            type: "bi.tree_view",
+            element: this,
             itemsCreator: function (op, callback) {
                 var fn = function (items) {
                     callback({

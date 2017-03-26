@@ -65,7 +65,7 @@ BI.SimpleStateEditor = BI.inherit(BI.Single, {
         });
         BI.createWidget({
             type: "bi.absolute",
-            element: this.element,
+            element: this,
             items: [{
                 el: this.text,
                 left: 0,
@@ -127,7 +127,7 @@ BI.SimpleStateEditor = BI.inherit(BI.Single, {
         BI.createWidget({
             type: "bi.vertical",
             scrolly: false,
-            element: this.element,
+            element: this,
             items: [this.editor]
         });
         this._showHint();
@@ -199,6 +199,11 @@ BI.SimpleStateEditor = BI.inherit(BI.Single, {
         this.editor.setValue(k);
     },
 
+    setEnable: function(v){
+        this.text.setEnable(v);
+        this.editor.setEnable(v);
+    },
+
     getValue: function () {
         return this.editor.getValue();
     },
@@ -211,10 +216,10 @@ BI.SimpleStateEditor = BI.inherit(BI.Single, {
         BI.SimpleStateEditor.superclass.setValue.apply(this, arguments);
         if (BI.isNumber(v)) {
             if (v === BI.Selection.All) {
-                this.text.setText(BI.i18nText("BI-Aleady_Selected"));
+                this.text.setText(BI.i18nText("BI-Already_Selected"));
                 this.text.element.removeClass("state-editor-infinite-text");
             } else if (v === BI.Selection.Multi) {
-                this.text.setText(BI.i18nText("BI-Aleady_Selected"));
+                this.text.setText(BI.i18nText("BI-Already_Selected"));
                 this.text.element.removeClass("state-editor-infinite-text");
             } else {
                 this.text.setText(BI.i18nText("BI-Unrestricted"));
@@ -230,7 +235,7 @@ BI.SimpleStateEditor = BI.inherit(BI.Single, {
             this.text.setText(BI.i18nText("BI-Unrestricted"));
             this.text.element.addClass("state-editor-infinite-text");
         } else {
-            this.text.setText(BI.i18nText("BI-Aleady_Selected"));
+            this.text.setText(BI.i18nText("BI-Already_Selected"));
             this.text.element.removeClass("state-editor-infinite-text");
         }
     }

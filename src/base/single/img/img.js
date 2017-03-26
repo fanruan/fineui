@@ -10,7 +10,7 @@ BI.Img = BI.inherit(BI.Single, {
     _defaultConfig: function () {
         var conf = BI.Img.superclass._defaultConfig.apply(this, arguments);
         return BI.extend(conf, {
-            baseCls: (conf.baseCls || "") + " bi-img",
+            baseCls: (conf.baseCls || "") + " bi-img display-block",
             src: "",
             width: "100%",
             height: "100%"

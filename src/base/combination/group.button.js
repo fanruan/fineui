@@ -9,11 +9,7 @@ BI.ButtonGroup = BI.inherit(BI.Widget, {
         return BI.extend(BI.ButtonGroup.superclass._defaultConfig.apply(this, arguments), {
             baseCls: "bi-button-group",
             behaviors: {},
-            items: [
-                {
-                    el: {type: "bi.text_button", text: "", value: ""}
-                }
-            ],
+            items: [],
             chooseType: BI.Selection.Single,
             layouts: [{
                 type: "bi.center",
@@ -126,8 +122,8 @@ BI.ButtonGroup = BI.inherit(BI.Widget, {
             return;
         }
 
-        var items = this._packageItems(items, this._packageBtns(btns));
-        BI.createWidget(BI.extend(this._packageLayout(items))).element.children().prependTo(this.element);
+        items = this._packageItems(items, this._packageBtns(btns));
+        this.layouts.prependItems(this._packageLayout(items).items);
     },
 
     addItems: function (items) {
@@ -142,8 +138,8 @@ BI.ButtonGroup = BI.inherit(BI.Widget, {
             return;
         }
 
-        var items = this._packageItems(items, this._packageBtns(btns));
-        BI.createWidget(BI.extend(this._packageLayout(items))).element.children().appendTo(this.element);
+        items = this._packageItems(items, this._packageBtns(btns));
+        this.layouts.addItems(this._packageLayout(items).items);
     },
 
     removeItemAt: function (indexes) {
@@ -170,13 +166,14 @@ BI.ButtonGroup = BI.inherit(BI.Widget, {
     },
 
     populate: function (items) {
-        this.options.items = items || [];
+        items = items || [];
+        this.options.items = items;
         this.empty();
 
         this.buttons = this._btnsCreator.apply(this, arguments);
-        var items = this._packageItems(items, this._packageBtns(this.buttons));
+        items = this._packageItems(items, this._packageBtns(this.buttons));
 
-        this.layouts = BI.createWidget(BI.extend({element: this.element}, this._packageLayout(items)));
+        this.layouts = BI.createWidget(BI.extend({element: this}, this._packageLayout(items)));
     },
 
     setEnable: function (b) {

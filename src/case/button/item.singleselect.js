@@ -8,7 +8,8 @@ BI.SingleSelectItem = BI.inherit(BI.BasicButton, {
         return BI.extend(BI.SingleSelectItem.superclass._defaultConfig.apply(this, arguments), {
             extraCls: "bi-single-select-item bi-list-item-active",
             hgap: 10,
-            height: 25
+            height: 25,
+            textAlign: "left",
         })
     },
     _init: function () {
@@ -16,8 +17,8 @@ BI.SingleSelectItem = BI.inherit(BI.BasicButton, {
         var self = this, o = this.options;
         this.text = BI.createWidget({
             type: "bi.label",
-            element: this.element,
-            textAlign: "left",
+            element: this,
+            textAlign: o.textAlign,
             whiteSpace: "nowrap",
             textHeight: o.height,
             height: o.height,

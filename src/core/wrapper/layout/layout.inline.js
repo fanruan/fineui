@@ -8,8 +8,8 @@
  * @cfg {Number} [vgap=0] 垂直间隙
  */
 BI.InlineLayout = BI.inherit(BI.Layout, {
-    _defaultConfig: function () {
-        return BI.extend(BI.InlineLayout.superclass._defaultConfig.apply(this, arguments), {
+    props: function () {
+        return BI.extend(BI.InlineLayout.superclass.props.apply(this, arguments), {
             baseCls: "bi-inline-layout",
             hgap: 0,
             vgap: 0,
@@ -19,8 +19,8 @@ BI.InlineLayout = BI.inherit(BI.Layout, {
             bgap: 0
         });
     },
-    _init: function () {
-        BI.InlineLayout.superclass._init.apply(this, arguments);
+    render: function () {
+        BI.InlineLayout.superclass.render.apply(this, arguments);
         this.populate(this.options.items);
     },
 
@@ -57,7 +57,7 @@ BI.InlineLayout = BI.inherit(BI.Layout, {
 
     populate: function (items) {
         BI.InlineLayout.superclass.populate.apply(this, arguments);
-        this.render();
+        this._mount();
     }
 });
 $.shortcut('bi.inline', BI.InlineLayout);

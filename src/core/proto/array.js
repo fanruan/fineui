@@ -3,6 +3,9 @@
  * @class Array
  */
 $.extend(Array.prototype, {
+    contains: function (o) {
+        return this.indexOf(o) > -1;
+    },
     /**
      * 检查指定的值是否在数组中
      * @param {Object} o 要检查的值
@@ -59,13 +62,6 @@ $.extend(Array.prototype, {
  * Created by wang on 15/6/23.
  */
 !function () {
-    _.each(['contains', 'indexOf', 'lastIndexOf'], function (name) {
-        Array.prototype[name] = function () {
-            var arr = _.toArray(arguments);
-            arr.unshift(this);
-            return BI[name].apply(this, arr);
-        };
-    });
     Array.prototype.pushArray = function (array) {
         for (var i = 0; i < array.length; i++) {
             this.push(array[i]);

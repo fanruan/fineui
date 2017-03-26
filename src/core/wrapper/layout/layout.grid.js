@@ -5,8 +5,8 @@
  * @extends BI.Layout
  */
 BI.GridLayout = BI.inherit(BI.Layout, {
-    _defaultConfig: function () {
-        return BI.extend(BI.GridLayout.superclass._defaultConfig.apply(this, arguments), {
+    props: function () {
+        return BI.extend(BI.GridLayout.superclass.props.apply(this, arguments), {
             baseCls: "bi-grid-layout",
             columns: null,
             rows: null,
@@ -30,8 +30,8 @@ BI.GridLayout = BI.inherit(BI.Layout, {
              ]*/
         });
     },
-    _init: function () {
-        BI.GridLayout.superclass._init.apply(this, arguments);
+    render: function () {
+        BI.GridLayout.superclass.render.apply(this, arguments);
         this.populate(this.options.items);
     },
 
@@ -41,15 +41,17 @@ BI.GridLayout = BI.inherit(BI.Layout, {
 
     addItem: function () {
         //do nothing
-        throw new Error("不能添加元素")
+        throw new Error("cannot be added")
     },
 
     stroke: function (items) {
         var o = this.options;
         var rows = o.rows || o.items.length, columns = o.columns || ((o.items[0] && o.items[0].length) | 0);
         var width = 100 / columns, height = 100 / rows;
-        var els = new Array(rows);
-
+        var els = [];
+        for (var i = 0; i < rows; i++) {
+            els[i] = [];
+        }
         function firstElement(item, row, col) {
             if (row === 0) {
                 item.addClass("first-row")
@@ -87,9 +89,6 @@ BI.GridLayout = BI.inherit(BI.Layout, {
             }
         }
 
-        BI.each(els, function (i) {
-            els[i] = new Array(columns);
-        });
         BI.each(items, function (i, item) {
             if (BI.isArray(item)) {
                 BI.each(item, function (j, el) {
@@ -121,7 +120,7 @@ BI.GridLayout = BI.inherit(BI.Layout, {
 
     populate: function (items) {
         BI.GridLayout.superclass.populate.apply(this, arguments);
-        this.render();
+        this._mount();
     }
 });
 $.shortcut('bi.grid', BI.GridLayout);

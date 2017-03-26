@@ -25,7 +25,7 @@ BI.TextItem = BI.inherit(BI.BasicButton, {
         var o = this.options;
         this.text = BI.createWidget({
             type: "bi.label",
-            element: this.element,
+            element: this,
             textAlign: o.textAlign,
             whiteSpace: o.whiteSpace,
             textHeight: o.whiteSpace == "nowrap" ? o.height : o.textHeight,

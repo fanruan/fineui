@@ -9,7 +9,7 @@ BI.BasicButton = BI.inherit(BI.Single, {
     _defaultConfig: function () {
         var conf = BI.BasicButton.superclass._defaultConfig.apply(this, arguments);
         return BI.extend(conf, {
-            baseCls: (conf.baseCls || "") + " bi-basic-button cursor-pointer",
+            baseCls: (conf.baseCls || "") + " bi-basic-button" + (conf.invalid ? "" : " cursor-pointer"),
             value: "",
             text: "",
             stopEvent: false,
@@ -53,7 +53,7 @@ BI.BasicButton = BI.inherit(BI.Single, {
                 self.$mask.invisible();
                 BI.createWidget({
                     type: "bi.absolute",
-                    element: self.element,
+                    element: self,
                     items: [{
                         el: self.$mask,
                         left: 0,
@@ -122,42 +122,36 @@ BI.BasicButton = BI.inherit(BI.Single, {
                 var selected = false;
                 hand.mousedown(function (e) {
                     // if (e.button === 0) {
-                        if (mouseDown === true) {
-                            return;
+                    $(document).bind("mouseup." + self.getName(), function (e) {
+                        // if (e.button === 0) {
+                        if (BI.DOM.isExist(self) && !hand.__isMouseInBounds__(e) && mouseDown === true && !selected) {
+                            self.setSelected(!self.isSelected());
+                            self._trigger();
                         }
-                        if (self.isSelected()) {
-                            selected = true;
-                        } else {
-                            clk(e);
-                        }
-                        mouseDown = true;
-                        ev(e);
+                        mouseDown = false;
+                        $(document).unbind("mouseup." + self.getName());
+                        // }
+                    });
+                    if (mouseDown === true) {
+                        return;
+                    }
+                    if (self.isSelected()) {
+                        selected = true;
+                    } else {
+                        clk(e);
+                    }
+                    mouseDown = true;
+                    ev(e);
                     // }
                 });
                 hand.mouseup(function (e) {
                     // if (e.button === 0) {
-                        if (mouseDown === true && selected === true) {
-                            clk(e);
-                        }
-                        mouseDown = false;
-                        selected = false;
-                    // }
-                });
-                var checking = BI.debounce(function () {
-                    if (!BI.DOM.isExist(self)) {
-                        $(document).unbind("mouseup." + self.getName());
+                    if (BI.DOM.isExist(self) && mouseDown === true && selected === true) {
+                        clk(e);
                     }
-                }, 3000);
-                $(document).bind("mouseup." + this.getName(), function (e) {
-                    // if (e.button === 0) {
-                        if (BI.DOM.isExist(self)) {
-                            if (!hand.__isMouseInBounds__(e) && mouseDown === true && !selected) {
-                                self.setSelected(!self.isSelected());
-                                self._trigger();
-                            }
-                            mouseDown = false;
-                            checking();
-                        }
+                    mouseDown = false;
+                    selected = false;
+                    $(document).unbind("mouseup." + self.getName());
                     // }
                 });
                 break;

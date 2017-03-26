@@ -4,8 +4,8 @@
  * @extends BI.Layout
  */
 BI.HorizontalAutoLayout = BI.inherit(BI.Layout, {
-    _defaultConfig: function () {
-        return BI.extend(BI.HorizontalAutoLayout.superclass._defaultConfig.apply(this, arguments), {
+    props: function () {
+        return BI.extend(BI.HorizontalAutoLayout.superclass.props.apply(this, arguments), {
             baseCls: "bi-horizon-auto-layout",
             hgap: 0,
             lgap: 0,
@@ -16,8 +16,8 @@ BI.HorizontalAutoLayout = BI.inherit(BI.Layout, {
         });
     },
 
-    _init: function () {
-        BI.HorizontalAutoLayout.superclass._init.apply(this, arguments);
+    render: function () {
+        BI.HorizontalAutoLayout.superclass.render.apply(this, arguments);
         this.populate(this.options.items);
     },
 
@@ -57,7 +57,7 @@ BI.HorizontalAutoLayout = BI.inherit(BI.Layout, {
 
     populate: function (items) {
         BI.HorizontalAutoLayout.superclass.populate.apply(this, arguments);
-        this.render();
+        this._mount();
     }
 });
 $.shortcut('bi.horizontal_auto', BI.HorizontalAutoLayout);

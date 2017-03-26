@@ -17,9 +17,6 @@ BI.Table = BI.inherit(BI.Widget, {
                 dynamic: false
             },
 
-            isNeedResize: false,//是否需要调整列宽
-            isResizeAdapt: true,//是否需要在调整列宽或区域宽度的时候它们自适应变化
-
             isNeedFreeze: false,//是否需要冻结单元格
             freezeCols: [], //冻结的列号,从0开始,isNeedFreeze为true时生效
 
@@ -297,111 +294,6 @@ BI.Table = BI.inherit(BI.Widget, {
             return o.columnSize[col] > 1 ? o.columnSize[col] + 1 : o.columnSize[col];
         });
 
-        if (o.isNeedResize) {
-            var resizer;
-            var createResizer = function (size, position) {
-                var rowSize = self.getCalculateRegionRowSize();
-                resizer = BI.createWidget({
-                    type: "bi.layout",
-                    cls: "bi-resizer",
-                    width: size.width,
-                    height: rowSize[0] + rowSize[1]
-                });
-                BI.createWidget({
-                    type: "bi.absolute",
-                    element: "body",
-                    items: [{
-                        el: resizer,
-                        left: position.left,
-                        top: position.top - rowSize[0]
-                    }]
-                });
-            };
-            var resizeResizer = function (size, position) {
-                var rowSize = self.getCalculateRegionRowSize();
-                var columnSize = self.getCalculateRegionColumnSize();
-                var height = rowSize[0] + rowSize[1];
-                var sumSize = columnSize[0] + columnSize[1];
-                if (size.width > sumSize / 5 * 4) {
-                    size.width = sumSize / 5 * 4;
-                }
-                if (size.width < 10) {
-                    size.width = 10;
-                }
-                resizer.element.css({
-                    "left": position.left + "px",
-                    "width": size.width + "px",
-                    "height": height + "px"
-                });
-            };
-            var stopResizer = function () {
-                resizer && resizer.destroy();
-                resizer = null;
-            };
-            var handle;
-            if (o.freezeCols.length > 0 && o.freezeCols.length < o.columnSize.length) {
-                if (isRight) {
-                    var options = {
-                        handles: "w",
-                        minWidth: 15,
-                        helper: "clone",
-                        start: function (event, ui) {
-                            createResizer(ui.size, ui.position);
-                            self.fireEvent(BI.Table.EVENT_TABLE_BEFORE_REGION_RESIZE);
-                        },
-                        resize: function (e, ui) {
-                            resizeResizer(ui.size, ui.position);
-                            self.fireEvent(BI.Table.EVENT_TABLE_REGION_RESIZE);
-                            e.stopPropagation();
-                            //return false;
-                        },
-                        stop: function (e, ui) {
-                            stopResizer();
-                            if (o.isResizeAdapt) {
-                                var increment = ui.size.width - (BI.sum(self.columnRight) + self.columnRight.length);
-                                o.columnSize[self.columnLeft.length] += increment;
-                            } else {
-                                self.setRegionColumnSize(["fill", ui.size.width]);
-                            }
-                            self._resize();
-                            ui.element.css("left", "");
-                            self.fireEvent(BI.Table.EVENT_TABLE_AFTER_REGION_RESIZE);
-                        }
-                    };
-                    self.bottomRight.element.resizable(options);
-                    handle = $(".ui-resizable-handle", this.bottomRight.element).css("top", -1 * headerHeight);
-                } else {
-                    var options = {
-                        handles: "e",
-                        minWidth: 15,
-                        helper: "clone",
-                        start: function (event, ui) {
-                            createResizer(ui.size, ui.position);
-                            self.fireEvent(BI.Table.EVENT_TABLE_BEFORE_REGION_RESIZE);
-                        },
-                        resize: function (e, ui) {
-                            resizeResizer(ui.size, ui.position);
-                            self.fireEvent(BI.Table.EVENT_TABLE_REGION_RESIZE);
-                            e.stopPropagation();
-                            //return false;
-                        },
-                        stop: function (e, ui) {
-                            stopResizer();
-                            if (o.isResizeAdapt) {
-                                var increment = ui.size.width - (BI.sum(self.columnLeft) + self.columnLeft.length);
-                                o.columnSize[self.columnLeft.length - 1] += increment;
-                            } else {
-                                self.setRegionColumnSize([ui.size.width, "fill"]);
-                            }
-                            self._resize();
-                            self.fireEvent(BI.Table.EVENT_TABLE_AFTER_REGION_RESIZE);
-                        }
-                    };
-                    self.bottomLeft.element.resizable(options);
-                    handle = $(".ui-resizable-handle", this.bottomLeft.element).css("top", -1 * headerHeight);
-                }
-            }
-        }
         this._resize = function () {
             if (self.scrollBottomLeft.element.is(":visible")) {
                 self.scrollBottomLeft.element.css({"overflow-x": "auto"});
@@ -429,10 +321,6 @@ BI.Table = BI.inherit(BI.Widget, {
                 self.scrollTopLeft.element[0].scrollLeft = self.scrollBottomLeft.element[0].scrollLeft;
                 self.scrollTopRight.element[0].scrollLeft = self.scrollBottomRight.element[0].scrollLeft;
                 self.scrollBottomLeft.element[0].scrollTop = self.scrollBottomRight.element[0].scrollTop;
-                //调整拖拽handle的高度
-                if (o.isNeedResize) {
-                    handle && handle.css("height", self.bottomLeft.element.height() + headerHeight);
-                }
             }
         };
 
@@ -443,7 +331,7 @@ BI.Table = BI.inherit(BI.Widget, {
             regionColumnSize = isRight ? [0, 'fill'] : ['fill', 0];
         }
         this.partitions = BI.createWidget(BI.extend({
-            element: this.element
+            element: this
         }, BI.LogicFactory.createLogic("table", BI.extend({}, o.logic, {
             rows: 2,
             columns: 2,
@@ -900,70 +788,6 @@ BI.Table = BI.inherit(BI.Widget, {
         start || (start = 0);
         var frag = this._createCells(items, columnSize, BI.range(o.columnSize.length), TDs, Ws, start, o.headerRowSize || o.rowSize);
 
-        if (o.isNeedResize === true) {
-            var tds = TDs[BI.size(TDs) - 1];
-            BI.each(tds, function (j, td) {
-                j = j | 0;
-                var resizer;
-                var getHeight = function (size, position) {
-                    var rowSize = self.getCalculateRegionRowSize();
-                    if (o.isNeedFreeze === true) {
-                        var tableHeight = self.bottomRightContainer.element.outerHeight();
-                        return size.height + Math.min(rowSize[1], tableHeight);
-                    } else {
-                        var tableHeight = self.tableContainer.element.outerHeight();
-                        var offset = self.tableContainer.element.offset();
-                        var offsetTop = position.top - offset.top;
-                        var height = tableHeight - offsetTop;
-                        height = Math.min(height, rowSize[0] - offsetTop);
-                        return height;
-                    }
-                };
-                if (j < BI.size(tds) - 1) {
-                    td.resizable({
-                        handles: "e",
-                        minWidth: 15,
-                        helper: "clone",
-                        start: function (event, ui) {
-                            var height = getHeight(ui.size, ui.position);
-                            resizer = BI.createWidget({
-                                type: "bi.layout",
-                                cls: "bi-resizer",
-                                width: ui.size.width,
-                                height: height
-                            });
-
-                            BI.createWidget({
-                                type: "bi.absolute",
-                                element: "body",
-                                items: [{
-                                    el: resizer,
-                                    left: ui.position.left,
-                                    top: ui.position.top
-                                }]
-                            });
-                            self.fireEvent(BI.Table.EVENT_TABLE_BEFORE_COLUMN_RESIZE);
-                        },
-                        resize: function (e, ui) {
-                            var height = getHeight(ui.size, ui.position);
-                            resizer.element.css({"width": ui.size.width + "px", "height": height + "px"});
-                            //o.columnSize[start + j] = ui.size.width;
-                            //self.setColumnSize(o.columnSize);
-                            self.fireEvent(BI.Table.EVENT_TABLE_COLUMN_RESIZE);
-                            e.stopPropagation();
-                            //return false;
-                        },
-                        stop: function (e, ui) {
-                            resizer.destroy();
-                            resizer = null;
-                            o.columnSize[start + j] = ui.size.width - 1;
-                            self.setColumnSize(o.columnSize);
-                            self.fireEvent(BI.Table.EVENT_TABLE_AFTER_COLUMN_RESIZE);
-                        }
-                    })
-                }
-            })
-        }
         return frag;
     },
 
@@ -1051,7 +875,7 @@ BI.Table = BI.inherit(BI.Widget, {
         BI.createWidget({
             type: "bi.adaptive",
             cls: "bottom-right",
-            element: this.element,
+            element: this,
             scrollable: false,
             items: [this.scrollBottomRight]
         });
@@ -1355,13 +1179,6 @@ BI.Table = BI.inherit(BI.Widget, {
             this.bottomRightContainer.element.width(isRight ? lw : rw);
             this.scrollTopLeft.element[0].scrollLeft = this.scrollBottomLeft.element[0].scrollLeft;
             this.scrollTopRight.element[0].scrollLeft = this.scrollBottomRight.element[0].scrollLeft;
-            if (o.isNeedResize && o.isResizeAdapt) {
-                var leftWidth = BI.sum(o.freezeCols, function (i, col) {
-                    return o.columnSize[col] > 1 ? o.columnSize[col] + 1 : o.columnSize[col];
-                });
-                this.partitions.attr("columnSize", isRight ? ['fill', leftWidth] : [leftWidth, 'fill']);
-                this.partitions.resize();
-            }
         } else {
             BI.each(this.colgroupTds, function (i, colgroup) {
                 var width = colgroup.attr("width") | 0;
@@ -1823,13 +1640,6 @@ BI.Table = BI.inherit(BI.Widget, {
             this.topRightContainer.element.width(isRight ? lw : rw);
             this.scrollTopLeft.element[0].scrollLeft = this.scrollBottomLeft.element[0].scrollLeft;
             this.scrollTopRight.element[0].scrollLeft = this.scrollBottomRight.element[0].scrollLeft;
-            if (o.isNeedResize && o.isResizeAdapt) {
-                var leftWidth = BI.sum(o.freezeCols, function (i, col) {
-                    return columnSize[col] > 1 ? columnSize[col] + 1 : columnSize[col];
-                });
-                this.partitions.attr("columnSize", isRight ? ['fill', leftWidth] : [leftWidth, 'fill']);
-                this.partitions.resize();
-            }
         } else {
             BI.each(this.colgroupTds, function (i, colgroup) {
                 var width = colgroup.attr("width") | 0;

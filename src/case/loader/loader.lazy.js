@@ -2,6 +2,9 @@
  * Created by roy on 15/11/6.
  */
 BI.LazyLoader = BI.inherit(BI.Widget, {
+    _const: {
+        PAGE: 100
+    },
     _defaultConfig: function () {
         return BI.extend(BI.LazyLoader.superclass._defaultConfig.apply(this, arguments), {
             baseCls: "bi-lazy-loader",
@@ -15,7 +18,7 @@ BI.LazyLoader = BI.inherit(BI.Widget, {
         var all = o.items.length;
         this.loader = BI.createWidget({
             type: "bi.loader",
-            element: this.element,
+            element: this,
             //下面是button_group的属性
             el: o.el,
 
@@ -33,9 +36,9 @@ BI.LazyLoader = BI.inherit(BI.Widget, {
     },
     _getNextItems: function (options) {
         var self = this, o = this.options;
-        var lastNum = o.items.length - BICst.PAGE_COUNT * (options.times - 1);
+        var lastNum = o.items.length - this._const.PAGE * (options.times - 1);
         var lastItems = BI.last(o.items, lastNum);
-        var nextItems = BI.first(lastItems, BICst.PAGE_COUNT);
+        var nextItems = BI.first(lastItems, this._const.PAGE);
         return nextItems;
     },
 

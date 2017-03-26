@@ -1,0 +1,13 @@
+/****添加计算宽度的--运算符直接需要space****/
+/****** common color(常用颜色,可用于普遍场景) *****/
+/**** custom color(自定义颜色,用于特定场景) ****/
+.bi-color-chooser-popup .color-chooser-popup-title {
+  background: #f4f4f4;
+  border-bottom: 1px solid #d4dadd;
+}
+.bi-color-chooser-popup .color-chooser-popup-more {
+  background: #f4f4f4;
+}
+.bi-color-chooser-popup .color-chooser-popup-more:hover {
+  background: #d4dadd;
+}

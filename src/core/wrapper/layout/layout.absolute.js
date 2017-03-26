@@ -4,8 +4,8 @@
  * @extends BI.Layout
  */
 BI.AbsoluteLayout = BI.inherit(BI.Layout, {
-    _defaultConfig: function () {
-        return BI.extend(BI.AbsoluteLayout.superclass._defaultConfig.apply(this, arguments), {
+    props: function () {
+        return BI.extend(BI.AbsoluteLayout.superclass.props.apply(this, arguments), {
             baseCls: "bi-absolute-layout",
             hgap: null,
             vgap: null,
@@ -15,8 +15,8 @@ BI.AbsoluteLayout = BI.inherit(BI.Layout, {
             bgap: null
         });
     },
-    _init: function () {
-        BI.AbsoluteLayout.superclass._init.apply(this, arguments);
+    render: function () {
+        BI.AbsoluteLayout.superclass.render.apply(this, arguments);
         this.populate(this.options.items);
     },
 
@@ -87,11 +87,12 @@ BI.AbsoluteLayout = BI.inherit(BI.Layout, {
     },
 
     stroke: function (items) {
+        this.options.items = items || [];
         var self = this;
         BI.each(items, function (i, item) {
             if (!!item) {
                 if (!BI.isWidget(item) && !item.el) {
-                    throw new Error("absolute布局中el 是必要属性");
+                    throw new Error("el must be exist");
                 }
                 self._addElement(i, item);
             }
@@ -100,7 +101,7 @@ BI.AbsoluteLayout = BI.inherit(BI.Layout, {
 
     populate: function (items) {
         BI.AbsoluteLayout.superclass.populate.apply(this, arguments);
-        this.render();
+        this._mount();
     }
 });
 $.shortcut('bi.absolute', BI.AbsoluteLayout);
