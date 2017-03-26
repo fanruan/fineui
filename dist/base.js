@@ -2352,7 +2352,7 @@ BI.Broadcasts = new BI.BroadcastController();
 BI.StyleLoaders = new BI.StyleLoaderManager();
 
 BI.servletURL = "dist/";
-BI.resourceURL = "dist/resource";
+BI.resourceURL = "dist/resource/";
 BI.i18n = {};/**
  * canvas绘图
  *
