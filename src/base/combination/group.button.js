@@ -297,8 +297,14 @@ BI.ButtonGroup = BI.inherit(BI.Widget, {
         return node;
     },
 
+    empty: function () {
+        BI.ButtonGroup.superclass.empty.apply(this, arguments);
+        this.options.items = [];
+    },
+
     destroy: function () {
         BI.ButtonGroup.superclass.destroy.apply(this, arguments);
+        this.options.items = [];
     }
 });
 BI.extend(BI.ButtonGroup, {

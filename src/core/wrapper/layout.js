@@ -181,7 +181,7 @@ BI.Layout = BI.inherit(BI.Widget, {
         for (var i = this.options.items.length; i > index; i--) {
             this._children[this._getChildName(i)] = this._children[this._getChildName(i - 1)];
         }
-        delete this._children[index];
+        delete this._children[this._getChildName(index)];
         this.options.items.splice(index, 0, item);
     },
 
@@ -189,6 +189,7 @@ BI.Layout = BI.inherit(BI.Widget, {
         for (var i = index; i < this.options.items.length - 1; i++) {
             this._children[this._getChildName(i)] = this._children[this._getChildName(i + 1)];
         }
+        delete this._children[this._getChildName(this.options.items.length - 1)];
         this.options.items.splice(index, 1);
     },
 
@@ -346,6 +347,11 @@ BI.Layout = BI.inherit(BI.Widget, {
                 self._addElement(i, item);
             }
         });
+    },
+
+    empty: function () {
+        BI.Layout.superclass.empty.apply(this, arguments);
+        this.options.items = [];
     },
 
     populate: function (items) {
