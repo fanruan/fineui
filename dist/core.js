@@ -12147,7 +12147,7 @@ BI.Factory = {
         _init: function(){},
 
         //容器，默认放在this.element上
-        _vessel: function(){return this.element},
+        _vessel: function(){return this},
         // **render** is the core function that your view should override, in order
         // to populate its element (`this.el`), with the appropriate HTML. The
         // convention is for **render** to always return `this`.
@@ -12246,21 +12246,21 @@ BI.Factory = {
         // using `selector`). This only works for delegate-able events: not `focus`,
         // `blur`, and not `change`, `submit`, and `reset` in Internet Explorer.
         delegate: function(eventName, selector, listener) {
-            this.$vessel.on(eventName + '.delegateEvents' + this.cid, selector, listener);
+            this.$vessel.element.on(eventName + '.delegateEvents' + this.cid, selector, listener);
         },
 
         // Clears all callbacks previously bound to the view by `delegateEvents`.
         // You usually don't need to use this, but may wish to if you have multiple
         // BI views attached to the same DOM element.
         undelegateEvents: function() {
-            if (this.$vessel) this.$vessel.off('.delegateEvents' + this.cid);
+            if (this.$vessel) this.$vessel.element.off('.delegateEvents' + this.cid);
             return this;
         },
 
         // A finer-grained `undelegateEvents` for removing a single delegated event.
         // `selector` and `listener` are both optional.
         undelegate: function(eventName, selector, listener) {
-            this.$vessel.off(eventName + '.delegateEvents' + this.cid, selector, listener);
+            this.$vessel.element.off(eventName + '.delegateEvents' + this.cid, selector, listener);
         },
 
         // Produces a DOM element to be assigned to your view. Exposed for
@@ -15291,7 +15291,7 @@ BI.View = BI.inherit(BI.V, {
         });
         var vessel = BI.createWidget();
         this._cardLayouts[this.getName()].addCardByName(this.getName(), vessel);
-        return vessel.element;
+        return vessel;
     },
 
     _render: function (vessel) {
@@ -15662,15 +15662,26 @@ BI.View = BI.inherit(BI.V, {
 
     },
 
-    destroy: function () {
+    _unMount: function () {
         BI.each(this._cardLayouts, function (name, card) {
-            card && card.destroy();
+            card && card._unMount();
         });
         delete this._cardLayouts;
         delete this._cards;
+        this.off();
+        this.destroyed();
+    },
+
+    destroy: function () {
+        BI.each(this._cardLayouts, function (name, card) {
+            card && card._unMount();
+        });
+        delete this._cardLayouts;
+        delete this._cards;
+        this.destroyed();
         this.remove();
         this.trigger(BI.Events.DESTROY);
-        this.destroyed();
+        this.off();
     },
 
     destroyed: function () {
