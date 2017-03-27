@@ -3,8 +3,8 @@
  */
 
 BI.Navigation = BI.inherit(BI.Widget, {
-    _defaultConfig: function(){
-        return BI.extend(BI.Navigation.superclass._defaultConfig.apply(this,arguments), {
+    _defaultConfig: function () {
+        return BI.extend(BI.Navigation.superclass._defaultConfig.apply(this, arguments), {
             direction: "bottom",//top, bottom, left, right, custom
             logic: {
                 dynamic: false
@@ -15,7 +15,7 @@ BI.Navigation = BI.inherit(BI.Widget, {
                 items: [],
                 layouts: []
             },
-            cardCreator: function(v){
+            cardCreator: function (v) {
                 return BI.createWidget();
             },
 
@@ -24,8 +24,7 @@ BI.Navigation = BI.inherit(BI.Widget, {
         })
     },
 
-    _init: function(){
-        BI.Navigation.superclass._init.apply(this,arguments);
+    render: function () {
         var self = this, o = this.options;
         this.tab = BI.createWidget(this.options.tab, {type: "bi.button_group"});
         this.cardMap = {};
@@ -43,10 +42,10 @@ BI.Navigation = BI.inherit(BI.Widget, {
         new BI.ShowListener({
             eventObj: this.tab,
             cardLayout: this.layout,
-            cardNameCreator: function(v){
+            cardNameCreator: function (v) {
                 return self.showIndex + v;
             },
-            cardCreator: function(v){
+            cardCreator: function (v) {
                 var card = o.cardCreator(v);
                 self.cardMap[v] = card;
                 return card;
@@ -54,37 +53,41 @@ BI.Navigation = BI.inherit(BI.Widget, {
             afterCardCreated: BI.bind(this.afterCardCreated, this),
             afterCardShow: BI.bind(this.afterCardShow, this)
         })
-        if(o.defaultShowIndex !== false){
+    },
+
+    mounted: function () {
+        var o = this.options;
+        if (o.defaultShowIndex !== false) {
             this.setSelect(o.defaultShowIndex);
         }
     },
 
-    afterCardCreated: function(v){
+    afterCardCreated: function (v) {
         var self = this;
-        this.cardMap[v].on(BI.Controller.EVENT_CHANGE, function(type, value, obj){
+        this.cardMap[v].on(BI.Controller.EVENT_CHANGE, function (type, value, obj) {
             self.fireEvent(BI.Controller.EVENT_CHANGE, arguments);
-            if(type ===  BI.Events.CLICK) {
+            if (type === BI.Events.CLICK) {
                 self.fireEvent(BI.Navigation.EVENT_CHANGE, obj);
             }
         })
         this.options.afterCardCreated.apply(this, arguments);
     },
 
-    afterCardShow: function(v){
+    afterCardShow: function (v) {
         this.showIndex = v;
         this.options.afterCardShow.apply(this, arguments);
     },
 
-    populate: function(){
+    populate: function () {
         var card = this.layout.getShowingCard();
-        if(card){
+        if (card) {
             return card.populate.apply(card, arguments);
         }
     },
 
-    setSelect: function(v){
+    setSelect: function (v) {
         this.showIndex = v;
-        if(!this.layout.isCardExisted(v)){
+        if (!this.layout.isCardExisted(v)) {
             var card = this.options.cardCreator(v);
             this.cardMap[v] = card;
             this.layout.addCardByName(v, card);
@@ -94,12 +97,12 @@ BI.Navigation = BI.inherit(BI.Widget, {
         BI.nextTick(BI.bind(this.afterCardShow, this, v));
     },
 
-    getSelect: function(){
+    getSelect: function () {
         return this.showIndex;
     },
 
-    getSelectedCard: function(){
-        if(BI.isKey(this.showIndex)){
+    getSelectedCard: function () {
+        if (BI.isKey(this.showIndex)) {
             return this.cardMap[this.showIndex];
         }
     },
@@ -107,9 +110,9 @@ BI.Navigation = BI.inherit(BI.Widget, {
     /**
      * @override
      */
-    setValue: function(v){
+    setValue: function (v) {
         var card = this.layout.getShowingCard();
-        if(card){
+        if (card) {
             card.setValue(v);
         }
     },
@@ -117,19 +120,19 @@ BI.Navigation = BI.inherit(BI.Widget, {
     /**
      * @override
      */
-    getValue: function(){
+    getValue: function () {
         var card = this.layout.getShowingCard();
-        if(card){
+        if (card) {
             return card.getValue();
         }
     },
 
-    empty: function(){
+    empty: function () {
         this.layout.deleteAllCard();
         this.cardMap = {};
     },
 
-    destroy: function(){
+    destroy: function () {
         BI.Navigation.superclass.destroy.apply(this, arguments);
     }
 });
