@@ -23,41 +23,30 @@ BI.Widget = BI.inherit(BI.OB, {
     },
 
     //生命周期函数
-    beforeCreate: function () {
+    beforeCreate: null,
 
-    },
+    created: null,
 
-    created: function () {
+    render: null,
 
-    },
+    beforeMounted: null,
 
-    render: function () {
-
-    },
-
-    beforeMounted: function () {
-
-    },
-
-    mounted: function () {
-
-    },
+    mounted: null,
 
     update: null,
 
-    destroyed: function () {
-    },
+    destroyed: null,
 
     _init: function () {
         BI.Widget.superclass._init.apply(this, arguments);
-        this.beforeCreate();
+        this.beforeCreate && this.beforeCreate();
         this._initRoot();
         this._initElementWidth();
         this._initElementHeight();
         this._initVisualEffects();
         this._initState();
         this._initElement();
-        this.created();
+        this.created && this.created();
     },
 
     /**
@@ -130,7 +119,7 @@ BI.Widget = BI.inherit(BI.OB, {
 
     _initElement: function () {
         var self = this;
-        var els = this.render();
+        var els = this.render && this.render();
         if (BI.isPlainObject(els)) {
             els = [els];
         }
@@ -164,13 +153,13 @@ BI.Widget = BI.inherit(BI.OB, {
         if (!isMounted) {
             return;
         }
-        this.beforeMounted();
+        this.beforeMounted && this.beforeMounted();
         this._isMounted = true;
         this._mountChildren();
         BI.each(this._children, function (i, widget) {
             widget._mount && widget._mount();
         });
-        this.mounted();
+        this.mounted && this.mounted();
     },
 
     _mountChildren: function () {
@@ -196,7 +185,7 @@ BI.Widget = BI.inherit(BI.OB, {
         this._parent = null;
         this._isMounted = false;
         this.purgeListeners();
-        this.destroyed();
+        this.destroyed && this.destroyed();
     },
 
     setWidth: function (w) {
@@ -383,7 +372,7 @@ BI.Widget = BI.inherit(BI.OB, {
 
     empty: function () {
         BI.each(this._children, function (i, widget) {
-            widget._unMount();
+            widget._unMount && widget._unMount();
         });
         this._children = {};
         this.element.empty();
@@ -396,7 +385,7 @@ BI.Widget = BI.inherit(BI.OB, {
         this._children = {};
         this._parent = null;
         this._isMounted = false;
-        this.destroyed();
+        this.destroyed && this.destroyed();
         this.element.destroy();
         this.fireEvent(BI.Events.DESTROY);
         this.purgeListeners();
