@@ -96,4 +96,4 @@ BI.FormulaCombo = BI.inherit(BI.Widget, {
     }
 });
 BI.FormulaCombo.EVENT_CHANGE = "EVENT_CHANGE";
-$.shortcut("bi.formula_combo", BI.FormulaCombo);
+BI.shortcut("bi.formula_combo", BI.FormulaCombo);

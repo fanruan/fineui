@@ -240,4 +240,4 @@ BI.DirectionPathChooser = BI.inherit(BI.Widget, {
     }
 });
 BI.DirectionPathChooser.EVENT_CHANGE = "DirectionPathChooser.EVENT_CHANGE";
-$.shortcut('bi.direction_path_chooser', BI.DirectionPathChooser);
+BI.shortcut('bi.direction_path_chooser', BI.DirectionPathChooser);

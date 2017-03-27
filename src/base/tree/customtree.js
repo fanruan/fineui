@@ -152,4 +152,4 @@ BI.CustomTree = BI.inherit(BI.Widget, {
 });
 BI.CustomTree.EVENT_CHANGE = "EVENT_CHANGE";
 
-$.shortcut("bi.custom_tree", BI.CustomTree);
+BI.shortcut("bi.custom_tree", BI.CustomTree);

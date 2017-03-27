@@ -64,4 +64,4 @@ BI.MultiLayerSingleTreePopup = BI.inherit(BI.Pane, {
 });
 
 BI.MultiLayerSingleTreePopup.EVENT_CHANGE = "EVENT_CHANGE";
-$.shortcut("bi.multilayer_single_tree_popup", BI.MultiLayerSingleTreePopup);
+BI.shortcut("bi.multilayer_single_tree_popup", BI.MultiLayerSingleTreePopup);

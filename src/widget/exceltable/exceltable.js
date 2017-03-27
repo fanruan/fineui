@@ -204,4 +204,4 @@ BI.ExcelTable = BI.inherit(BI.Widget, {
         BI.ExcelTable.superclass.destroy.apply(this, arguments);
     }
 });
-$.shortcut('bi.excel_table', BI.ExcelTable);
+BI.shortcut('bi.excel_table', BI.ExcelTable);

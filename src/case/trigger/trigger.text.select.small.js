@@ -51,4 +51,4 @@ BI.SmallSelectTextTrigger = BI.inherit(BI.Trigger, {
         this.options.items = items;
     }
 });
-$.shortcut("bi.small_select_text_trigger", BI.SmallSelectTextTrigger);
+BI.shortcut("bi.small_select_text_trigger", BI.SmallSelectTextTrigger);

@@ -35,7 +35,7 @@ BI.DateCombo = BI.inherit(BI.Widget, {
         this.combo = BI.createWidget({
             type: "bi.combo",
             toggle: false,
-            element: this.element,
+            element: this,
             isNeedAdjustHeight: false,
             isNeedAdjustWidth: false,
             el: this.trigger,
@@ -56,4 +56,4 @@ BI.DateCombo = BI.inherit(BI.Widget, {
         return this.popup.getValue();
     }
 });
-$.shortcut('bi.date_combo', BI.DateCombo);
+BI.shortcut('bi.date_combo', BI.DateCombo);

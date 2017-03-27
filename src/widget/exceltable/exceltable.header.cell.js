@@ -28,4 +28,4 @@ BI.ExcelTableHeaderCell = BI.inherit(BI.Widget, {
         })
     }
 });
-$.shortcut('bi.excel_table_header_cell', BI.ExcelTableHeaderCell);
+BI.shortcut('bi.excel_table_header_cell', BI.ExcelTableHeaderCell);

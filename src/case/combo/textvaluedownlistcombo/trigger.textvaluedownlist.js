@@ -51,4 +51,4 @@ BI.DownListSelectTextTrigger = BI.inherit(BI.Trigger, {
         this.trigger.populate(this._formatItemArray(items));
     }
 });
-$.shortcut("bi.down_list_select_text_trigger", BI.DownListSelectTextTrigger);
+BI.shortcut("bi.down_list_select_text_trigger", BI.DownListSelectTextTrigger);

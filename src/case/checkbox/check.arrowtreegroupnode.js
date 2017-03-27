@@ -22,4 +22,4 @@ BI.ArrowTreeGroupNodeCheckbox=BI.inherit(BI.IconButton,{
         }
     }
 });
-$.shortcut("bi.arrow_tree_group_node_checkbox",BI.ArrowTreeGroupNodeCheckbox);
+BI.shortcut("bi.arrow_tree_group_node_checkbox",BI.ArrowTreeGroupNodeCheckbox);

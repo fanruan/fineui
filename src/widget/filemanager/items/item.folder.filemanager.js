@@ -150,4 +150,4 @@ BI.FileManagerFolderItem = BI.inherit(BI.Single, {
     }
 });
 BI.FileManagerFolderItem.EVENT_CHANGE = "FileManagerFolderItem.EVENT_CHANGE";
-$.shortcut("bi.file_manager_folder_item", BI.FileManagerFolderItem);
+BI.shortcut("bi.file_manager_folder_item", BI.FileManagerFolderItem);

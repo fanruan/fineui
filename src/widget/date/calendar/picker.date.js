@@ -87,7 +87,7 @@ BI.DatePicker = BI.inherit(BI.Widget, {
 
         BI.createWidget({
             type: "bi.htape",
-            element: this.element,
+            element: this,
             items: [{
                 el: this.left,
                 width: 25
@@ -124,4 +124,4 @@ BI.DatePicker = BI.inherit(BI.Widget, {
     }
 });
 BI.DatePicker.EVENT_CHANGE = "EVENT_CHANGE"
-$.shortcut("bi.date_picker", BI.DatePicker);
+BI.shortcut("bi.date_picker", BI.DatePicker);

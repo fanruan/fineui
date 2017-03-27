@@ -54,4 +54,4 @@ BI.PopupPanel.EVENT_CHANGE = "EVENT_CHANGE";
 BI.PopupPanel.EVENT_CLOSE = "EVENT_CLOSE";
 BI.PopupPanel.EVENT_CLICK_TOOLBAR_BUTTON = "EVENT_CLICK_TOOLBAR_BUTTON";
 
-$.shortcut("bi.popup_panel", BI.PopupPanel);
+BI.shortcut("bi.popup_panel", BI.PopupPanel);

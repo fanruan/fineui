@@ -78,4 +78,4 @@ Demo.CenterAdapt = BI.inherit(BI.Widget, {
         })
     },
 });
-$.shortcut("demo.center_adapt", Demo.CenterAdapt);
+BI.shortcut("demo.center_adapt", Demo.CenterAdapt);

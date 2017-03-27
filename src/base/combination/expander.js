@@ -275,4 +275,4 @@ BI.Expander.EVENT_AFTER_POPUPVIEW = "EVENT_AFTER_POPUPVIEW";
 BI.Expander.EVENT_BEFORE_HIDEVIEW = "EVENT_BEFORE_HIDEVIEW";
 BI.Expander.EVENT_AFTER_HIDEVIEW = "EVENT_AFTER_HIDEVIEW";
 
-$.shortcut("bi.expander", BI.Expander);
+BI.shortcut("bi.expander", BI.Expander);

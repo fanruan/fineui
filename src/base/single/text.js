@@ -110,4 +110,4 @@ BI.Text = BI.inherit(BI.Single, {
     }
 });
 
-$.shortcut("bi.text", BI.Text);
+BI.shortcut("bi.text", BI.Text);

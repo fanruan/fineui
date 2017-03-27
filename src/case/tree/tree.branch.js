@@ -52,4 +52,4 @@ BI.BranchTree = BI.inherit(BI.Widget, {
     }
 });
 BI.BranchTree.EVENT_CHANGE = "EVENT_CHANGE";
-$.shortcut("bi.branch_tree", BI.BranchTree);
+BI.shortcut("bi.branch_tree", BI.BranchTree);

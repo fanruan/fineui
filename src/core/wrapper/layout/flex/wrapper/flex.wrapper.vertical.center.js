@@ -81,4 +81,4 @@ BI.FlexVerticalCenter = BI.inherit(BI.Layout, {
         this._mount();
     }
 });
-$.shortcut('bi.flex_wrapper_vertical_center', BI.FlexVerticalCenter);
+BI.shortcut('bi.flex_wrapper_vertical_center', BI.FlexVerticalCenter);

@@ -98,4 +98,4 @@ BI.ComboGroup = BI.inherit(BI.Widget, {
 });
 BI.ComboGroup.EVENT_CHANGE = "EVENT_CHANGE";
 
-$.shortcut("bi.combo_group", BI.ComboGroup);
+BI.shortcut("bi.combo_group", BI.ComboGroup);

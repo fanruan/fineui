@@ -329,4 +329,4 @@ BI.Editor.EVENT_RESTRICT = "EVENT_RESTRICT";
 BI.Editor.EVENT_REMOVE = "EVENT_REMOVE";
 BI.Editor.EVENT_EMPTY = "EVENT_EMPTY";
 
-$.shortcut("bi.editor", BI.Editor);
+BI.shortcut("bi.editor", BI.Editor);

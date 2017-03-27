@@ -17,4 +17,4 @@ Demo.ValueChooserCombo = BI.inherit(BI.Widget, {
         };
     }
 });
-$.shortcut("demo.value_chooser_combo", Demo.ValueChooserCombo);
+BI.shortcut("demo.value_chooser_combo", Demo.ValueChooserCombo);

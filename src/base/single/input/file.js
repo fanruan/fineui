@@ -615,5 +615,5 @@
     BI.File.EVENT_ERROR = "EVENT_ERROR";
     BI.File.EVENT_PROGRESS = "EVENT_PROGRESS";
     BI.File.EVENT_UPLOADED = "EVENT_UPLOADED";
-    $.shortcut("bi.file", BI.File);
+    BI.shortcut("bi.file", BI.File);
 })();

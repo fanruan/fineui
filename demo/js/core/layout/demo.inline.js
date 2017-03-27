@@ -44,4 +44,4 @@ Demo.InlineLayout = BI.inherit(BI.Widget, {
         }
     }
 });
-$.shortcut("demo.inline", Demo.InlineLayout);
+BI.shortcut("demo.inline", Demo.InlineLayout);

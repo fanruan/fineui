@@ -380,4 +380,4 @@ BI.SequenceTableTreeNumber = BI.inherit(BI.Widget, {
         this._populate();
     }
 });
-$.shortcut('bi.sequence_table_tree_number', BI.SequenceTableTreeNumber);
+BI.shortcut('bi.sequence_table_tree_number', BI.SequenceTableTreeNumber);

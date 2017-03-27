@@ -344,4 +344,4 @@ BI.extend(BI.DynamicSummaryTreeTable, {
     }
 });
 
-$.shortcut("bi.dynamic_summary_tree_table", BI.DynamicSummaryTreeTable);
+BI.shortcut("bi.dynamic_summary_tree_table", BI.DynamicSummaryTreeTable);

@@ -68,4 +68,4 @@ BI.SequenceTableDynamicNumber = BI.inherit(BI.SequenceTableTreeNumber, {
         return result;
     }
 });
-$.shortcut('bi.sequence_table_dynamic_number', BI.SequenceTableDynamicNumber);
+BI.shortcut('bi.sequence_table_dynamic_number', BI.SequenceTableDynamicNumber);

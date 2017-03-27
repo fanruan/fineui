@@ -72,4 +72,4 @@ BI.MultiLayerSingleTreeCombo = BI.inherit(BI.Widget, {
 });
 
 BI.MultiLayerSingleTreeCombo.EVENT_CHANGE = "EVENT_CHANGE";
-$.shortcut("bi.multilayer_single_tree_combo", BI.MultiLayerSingleTreeCombo);
+BI.shortcut("bi.multilayer_single_tree_combo", BI.MultiLayerSingleTreeCombo);

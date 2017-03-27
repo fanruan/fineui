@@ -54,4 +54,4 @@ Demo.Func = BI.inherit(BI.Widget, {
         })
     }
 });
-$.shortcut("demo.grid_table", Demo.Func);
+BI.shortcut("demo.grid_table", Demo.Func);

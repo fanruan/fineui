@@ -25,4 +25,4 @@ Demo.Face = BI.inherit(BI.Widget, {
         circle.animate({fill: "#223fa3", stroke: "#000", "stroke-width": 80, "stroke-opacity": 0.5}, 2000);
     }
 });
-$.shortcut("demo.face", Demo.Face);
+BI.shortcut("demo.face", Demo.Face);

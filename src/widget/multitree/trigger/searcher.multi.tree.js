@@ -133,4 +133,4 @@ BI.MultiTreeSearcher.EVENT_CHANGE = "EVENT_CHANGE";
 BI.MultiTreeSearcher.EVENT_START = "EVENT_START";
 BI.MultiTreeSearcher.EVENT_STOP = "EVENT_STOP";
 BI.MultiTreeSearcher.EVENT_PAUSE = "EVENT_PAUSE";
-$.shortcut('bi.multi_tree_searcher', BI.MultiTreeSearcher);
+BI.shortcut('bi.multi_tree_searcher', BI.MultiTreeSearcher);

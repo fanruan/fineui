@@ -185,4 +185,4 @@ BI.WindowLayout = BI.inherit(BI.Layout, {
         this._mount();
     }
 });
-$.shortcut('bi.window', BI.WindowLayout);
+BI.shortcut('bi.window', BI.WindowLayout);

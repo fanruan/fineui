@@ -99,4 +99,4 @@ BI.IconArrowNode = BI.inherit(BI.NodeButton, {
     }
 });
 
-$.shortcut("bi.icon_arrow_node", BI.IconArrowNode);
+BI.shortcut("bi.icon_arrow_node", BI.IconArrowNode);

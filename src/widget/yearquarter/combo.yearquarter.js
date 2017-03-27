@@ -54,4 +54,4 @@ BI.YearQuarterCombo = BI.inherit(BI.Widget, {
     }
 });
 BI.YearQuarterCombo.EVENT_CONFIRM = "EVENT_CONFIRM";
-$.shortcut('bi.year_quarter_combo', BI.YearQuarterCombo);
+BI.shortcut('bi.year_quarter_combo', BI.YearQuarterCombo);

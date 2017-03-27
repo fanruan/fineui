@@ -278,4 +278,4 @@ BI.StateEditor.EVENT_RESTRICT = "EVENT_RESTRICT";
 BI.StateEditor.EVENT_SPACE = "EVENT_SPACE";
 BI.StateEditor.EVENT_EMPTY = "EVENT_EMPTY";
 
-$.shortcut("bi.state_editor", BI.StateEditor);
+BI.shortcut("bi.state_editor", BI.StateEditor);

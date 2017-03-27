@@ -37,7 +37,7 @@ BI.DateTriangleTrigger = BI.inherit(BI.Trigger, {
 
         BI.createWidget({
             type: "bi.center_adapt",
-            element: this.element,
+            element: this,
             items: [{
                 type: "bi.center_adapt",
                 width: 50,
@@ -67,4 +67,4 @@ BI.DateTriangleTrigger = BI.inherit(BI.Trigger, {
 
     }
 });
-$.shortcut('bi.date_triangle_trigger', BI.DateTriangleTrigger);
+BI.shortcut('bi.date_triangle_trigger', BI.DateTriangleTrigger);

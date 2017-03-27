@@ -60,4 +60,4 @@ BI.InlineLayout = BI.inherit(BI.Layout, {
         this._mount();
     }
 });
-$.shortcut('bi.inline', BI.InlineLayout);
+BI.shortcut('bi.inline', BI.InlineLayout);

@@ -30,4 +30,4 @@ BI.TableCell = BI.inherit(BI.Widget, {
     }
 });
 
-$.shortcut("bi.table_cell", BI.TableCell);
+BI.shortcut("bi.table_cell", BI.TableCell);

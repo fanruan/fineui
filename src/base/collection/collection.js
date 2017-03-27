@@ -289,4 +289,4 @@ BI.Collection = BI.inherit(BI.Widget, {
     }
 });
 BI.Collection.EVENT_SCROLL = "EVENT_SCROLL";
-$.shortcut('bi.collection_view', BI.Collection);
+BI.shortcut('bi.collection_view', BI.Collection);

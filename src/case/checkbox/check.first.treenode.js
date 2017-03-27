@@ -24,4 +24,4 @@ BI.FirstTreeNodeCheckbox = BI.inherit(BI.IconButton, {
         }
     }
 });
-$.shortcut("bi.first_tree_node_checkbox", BI.FirstTreeNodeCheckbox);
+BI.shortcut("bi.first_tree_node_checkbox", BI.FirstTreeNodeCheckbox);

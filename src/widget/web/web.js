@@ -151,4 +151,4 @@ BI.WebPage = BI.inherit(BI.Widget, {
 
 BI.WebPage.EVENT_DESTROY = "EVENT_DESTROY";
 BI.WebPage.EVENT_VALUE_CHANGE = "EVENT_VALUE_CHANGE";
-$.shortcut("bi.web_page", BI.WebPage);
+BI.shortcut("bi.web_page", BI.WebPage);

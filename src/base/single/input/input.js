@@ -281,4 +281,4 @@ BI.Input.EVENT_VALID = "EVENT_VALID";
 BI.Input.EVENT_ERROR = "EVENT_ERROR";
 BI.Input.EVENT_ENTER = "EVENT_ENTER";
 BI.Input.EVENT_RESTRICT = "EVENT_RESTRICT";
-$.shortcut("bi.input", BI.Input);
+BI.shortcut("bi.input", BI.Input);

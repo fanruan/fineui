@@ -60,4 +60,4 @@ BI.HorizontalAutoLayout = BI.inherit(BI.Layout, {
         this._mount();
     }
 });
-$.shortcut('bi.horizontal_auto', BI.HorizontalAutoLayout);
+BI.shortcut('bi.horizontal_auto', BI.HorizontalAutoLayout);

@@ -274,4 +274,4 @@ BI.DirectionPager = BI.inherit(BI.Widget, {
     }
 });
 BI.DirectionPager.EVENT_CHANGE = "EVENT_CHANGE";
-$.shortcut("bi.direction_pager", BI.DirectionPager);
+BI.shortcut("bi.direction_pager", BI.DirectionPager);

@@ -35,4 +35,4 @@ Demo.HtapeLayout = BI.inherit(BI.Widget, {
         }
     }
 });
-$.shortcut("demo.htape", Demo.HtapeLayout);
+BI.shortcut("demo.htape", Demo.HtapeLayout);

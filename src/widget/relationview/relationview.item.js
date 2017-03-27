@@ -56,4 +56,4 @@ BI.RelationViewItem = BI.inherit(BI.BasicButton, {
         this.element[b ? "addClass" : "removeClass"]("active");
     }
 });
-$.shortcut('bi.relation_view_item', BI.RelationViewItem);
+BI.shortcut('bi.relation_view_item', BI.RelationViewItem);

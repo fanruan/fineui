@@ -81,4 +81,4 @@ Demo.Func = BI.inherit(BI.Widget, {
         tip.setText(this._stringfyTimeObject(this.selectedTime));
     }
 });
-$.shortcut("demo.calendar", Demo.Func);
+BI.shortcut("demo.calendar", Demo.Func);

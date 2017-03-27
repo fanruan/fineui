@@ -70,7 +70,7 @@ BI.BubblePopupView = BI.inherit(BI.PopupView, {
     }
 });
 
-$.shortcut("bi.bubble_popup_view", BI.BubblePopupView);
+BI.shortcut("bi.bubble_popup_view", BI.BubblePopupView);
 
 /**
  * Created by GUY on 2017/2/8.
@@ -115,4 +115,4 @@ BI.BubblePopupBarView = BI.inherit(BI.BubblePopupView, {
     }
 });
 BI.BubblePopupBarView.EVENT_CLICK_TOOLBAR_BUTTON = "EVENT_CLICK_TOOLBAR_BUTTON";
-$.shortcut("bi.bubble_bar_popup_view", BI.BubblePopupBarView);
+BI.shortcut("bi.bubble_bar_popup_view", BI.BubblePopupBarView);

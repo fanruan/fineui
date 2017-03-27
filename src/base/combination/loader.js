@@ -259,4 +259,4 @@ BI.Loader = BI.inherit(BI.Widget, {
     }
 });
 BI.Loader.EVENT_CHANGE = "EVENT_CHANGE";
-$.shortcut("bi.loader", BI.Loader);
+BI.shortcut("bi.loader", BI.Loader);

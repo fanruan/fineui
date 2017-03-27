@@ -82,4 +82,4 @@ BI.SelectTreeLastPlusGroupNode = BI.inherit(BI.NodeButton, {
     }
 });
 
-$.shortcut("bi.select_tree_last_plus_group_node", BI.SelectTreeLastPlusGroupNode);
+BI.shortcut("bi.select_tree_last_plus_group_node", BI.SelectTreeLastPlusGroupNode);

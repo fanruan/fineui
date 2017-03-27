@@ -242,4 +242,4 @@ Demo.Func = BI.inherit(BI.Widget, {
         })
     }
 });
-$.shortcut("demo.custom_tree", Demo.Func);
+BI.shortcut("demo.custom_tree", Demo.Func);

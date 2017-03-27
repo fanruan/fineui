@@ -91,4 +91,4 @@ BI.RelationViewRegionContainer = BI.inherit(BI.Widget, {
 BI.RelationViewRegionContainer.EVENT_HOVER_IN = "RelationViewRegion.EVENT_HOVER_IN";
 BI.RelationViewRegionContainer.EVENT_HOVER_OUT = "RelationViewRegion.EVENT_HOVER_OUT";
 BI.RelationViewRegionContainer.EVENT_PREVIEW = "RelationViewRegion.EVENT_PREVIEW";
-$.shortcut("bi.relation_view_region_container", BI.RelationViewRegionContainer);
+BI.shortcut("bi.relation_view_region_container", BI.RelationViewRegionContainer);

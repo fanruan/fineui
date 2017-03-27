@@ -135,4 +135,4 @@ BI.Navigation = BI.inherit(BI.Widget, {
 });
 BI.Navigation.EVENT_CHANGE = "EVENT_CHANGE";
 
-$.shortcut("bi.navigation", BI.Navigation);
+BI.shortcut("bi.navigation", BI.Navigation);

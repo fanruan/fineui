@@ -76,4 +76,4 @@ BI.DownListItem = BI.inherit(BI.Single, {
     }
 });
 BI.DownListItem.EVENT_CHANGE = "EVENT_CHANGE";
-$.shortcut("bi.down_list_item", BI.DownListItem);
+BI.shortcut("bi.down_list_item", BI.DownListItem);

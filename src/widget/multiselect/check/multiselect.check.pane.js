@@ -104,4 +104,4 @@ BI.MultiSelectCheckPane = BI.inherit(BI.Widget, {
     }
 });
 
-$.shortcut("bi.multi_select_check_pane", BI.MultiSelectCheckPane);
+BI.shortcut("bi.multi_select_check_pane", BI.MultiSelectCheckPane);

@@ -89,7 +89,7 @@ BI.DateTrigger = BI.inherit(BI.Trigger, {
         });
         BI.createWidget({
             type: "bi.htape",
-            element: this.element,
+            element: this,
             items: [{
                 el: BI.createWidget(),
                 width: 30
@@ -262,4 +262,4 @@ BI.DateTrigger.EVENT_VALID = "EVENT_VALID";
 BI.DateTrigger.EVENT_ERROR = "EVENT_ERROR";
 BI.DateTrigger.EVENT_TRIGGER_CLICK = "EVENT_TRIGGER_CLICK";
 BI.DateTrigger.EVENT_KEY_DOWN = "EVENT_KEY_DOWN";
-$.shortcut("bi.date_trigger", BI.DateTrigger);
+BI.shortcut("bi.date_trigger", BI.DateTrigger);

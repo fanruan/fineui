@@ -30,7 +30,7 @@ BI.ValueChooserCombo = BI.inherit(BI.Widget, {
         }
         this.combo = BI.createWidget({
             type: 'bi.multi_select_combo',
-            element: this.element,
+            element: this,
             itemsCreator: BI.bind(this._itemsCreator, this),
             valueFormatter: function (v) {
                 var text = v;
@@ -124,4 +124,4 @@ BI.ValueChooserCombo = BI.inherit(BI.Widget, {
     }
 });
 BI.ValueChooserCombo.EVENT_CONFIRM = "ValueChooserCombo.EVENT_CONFIRM";
-$.shortcut('bi.value_chooser_combo', BI.ValueChooserCombo);
+BI.shortcut('bi.value_chooser_combo', BI.ValueChooserCombo);

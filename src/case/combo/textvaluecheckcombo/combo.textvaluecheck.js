@@ -75,4 +75,4 @@ BI.TextValueCheckCombo = BI.inherit(BI.Widget, {
     }
 });
 BI.TextValueCheckCombo.EVENT_CHANGE = "EVENT_CHANGE";
-$.shortcut("bi.text_value_check_combo", BI.TextValueCheckCombo);
+BI.shortcut("bi.text_value_check_combo", BI.TextValueCheckCombo);

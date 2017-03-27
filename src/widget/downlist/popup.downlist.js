@@ -229,4 +229,4 @@ BI.DownListPopup = BI.inherit(BI.Pane, {
 
 BI.DownListPopup.EVENT_CHANGE = "EVENT_CHANGE";
 BI.DownListPopup.EVENT_SON_VALUE_CHANGE = "EVENT_SON_VALUE_CHANGE";
-$.shortcut("bi.down_list_popup", BI.DownListPopup);
+BI.shortcut("bi.down_list_popup", BI.DownListPopup);

@@ -22,4 +22,4 @@ Demo.VerticalLayout = BI.inherit(BI.Widget, {
         }
     }
 });
-$.shortcut("demo.vertical", Demo.VerticalLayout);
+BI.shortcut("demo.vertical", Demo.VerticalLayout);

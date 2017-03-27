@@ -92,4 +92,4 @@ BI.FineTuningNumberEditor = BI.inherit(BI.Widget, {
 
 });
 BI.FineTuningNumberEditor.EVENT_CONFIRM = "EVENT_CONFIRM";
-$.shortcut("bi.fine_tuning_number_editor", BI.FineTuningNumberEditor);
+BI.shortcut("bi.fine_tuning_number_editor", BI.FineTuningNumberEditor);

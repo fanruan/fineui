@@ -20,4 +20,4 @@ Demo.Message = BI.inherit(BI.Widget, {
         }
     }
 });
-$.shortcut("demo.message", Demo.Message);
+BI.shortcut("demo.message", Demo.Message);

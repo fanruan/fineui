@@ -30,4 +30,4 @@ Demo.CodeEditor = BI.inherit(BI.Widget, {
         })
     }
 });
-$.shortcut("demo.code_editor", Demo.CodeEditor);
+BI.shortcut("demo.code_editor", Demo.CodeEditor);

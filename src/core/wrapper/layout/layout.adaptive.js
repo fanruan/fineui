@@ -89,4 +89,4 @@ BI.AdaptiveLayout = BI.inherit(BI.Layout, {
         this._mount();
     }
 });
-$.shortcut('bi.adaptive', BI.AdaptiveLayout);
+BI.shortcut('bi.adaptive', BI.AdaptiveLayout);

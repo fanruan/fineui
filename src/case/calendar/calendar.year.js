@@ -138,4 +138,4 @@ BI.extend(BI.YearCalendar, {
     }
 });
 
-$.shortcut("bi.year_calendar", BI.YearCalendar);
+BI.shortcut("bi.year_calendar", BI.YearCalendar);

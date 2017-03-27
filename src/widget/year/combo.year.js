@@ -93,4 +93,4 @@ BI.YearCombo = BI.inherit(BI.Widget, {
     }
 });
 BI.YearCombo.EVENT_CONFIRM = "EVENT_CONFIRM";
-$.shortcut('bi.year_combo', BI.YearCombo);
+BI.shortcut('bi.year_combo', BI.YearCombo);

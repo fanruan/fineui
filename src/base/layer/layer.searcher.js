@@ -136,4 +136,4 @@ BI.SearcherView = BI.inherit(BI.Pane, {
 });
 BI.SearcherView.EVENT_CHANGE = "EVENT_CHANGE";
 
-$.shortcut("bi.searcher_view", BI.SearcherView);
+BI.shortcut("bi.searcher_view", BI.SearcherView);

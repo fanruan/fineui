@@ -81,4 +81,4 @@ BI.TextValueDownListCombo = BI.inherit(BI.Widget, {
     }
 });
 BI.TextValueDownListCombo.EVENT_CHANGE = "EVENT_CHANGE";
-$.shortcut("bi.text_value_down_list_combo", BI.TextValueDownListCombo);
+BI.shortcut("bi.text_value_down_list_combo", BI.TextValueDownListCombo);

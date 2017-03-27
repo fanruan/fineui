@@ -23,4 +23,4 @@ Demo.CodeEditor = BI.inherit(BI.Widget, {
         }
     }
 });
-$.shortcut("demo.multifile_editor", Demo.CodeEditor);
+BI.shortcut("demo.multifile_editor", Demo.CodeEditor);

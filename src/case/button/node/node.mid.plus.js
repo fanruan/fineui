@@ -78,4 +78,4 @@ BI.MidPlusGroupNode = BI.inherit(BI.NodeButton, {
     }
 });
 
-$.shortcut("bi.mid_plus_group_node", BI.MidPlusGroupNode);
+BI.shortcut("bi.mid_plus_group_node", BI.MidPlusGroupNode);

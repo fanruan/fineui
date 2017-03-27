@@ -103,4 +103,4 @@ BI.YearTrigger.EVENT_ERROR = "EVENT_ERROR";
 BI.YearTrigger.EVENT_START = "EVENT_START";
 BI.YearTrigger.EVENT_CONFIRM = "EVENT_CONFIRM";
 BI.YearTrigger.EVENT_STOP = "EVENT_STOP";
-$.shortcut("bi.year_trigger", BI.YearTrigger);
+BI.shortcut("bi.year_trigger", BI.YearTrigger);

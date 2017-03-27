@@ -468,4 +468,4 @@ BI.GridTable = BI.inherit(BI.Widget, {
         this._restore();
     }
 });
-$.shortcut('bi.grid_table', BI.GridTable);
+BI.shortcut('bi.grid_table', BI.GridTable);

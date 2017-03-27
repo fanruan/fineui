@@ -69,4 +69,4 @@ BI.VirtualGroup = BI.inherit(BI.Widget, {
 });
 BI.VirtualGroup.EVENT_CHANGE = "EVENT_CHANGE";
 
-$.shortcut("bi.virtual_group", BI.VirtualGroup);
+BI.shortcut("bi.virtual_group", BI.VirtualGroup);

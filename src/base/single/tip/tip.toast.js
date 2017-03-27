@@ -51,4 +51,4 @@ BI.Toast = BI.inherit(BI.Tip, {
     }
 });
 
-$.shortcut("bi.toast", BI.Toast);
+BI.shortcut("bi.toast", BI.Toast);
