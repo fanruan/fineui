@@ -71,7 +71,6 @@ BI.ButtonGroup = BI.inherit(BI.Widget, {
 
     _packageBtns: function (btns) {
         var o = this.options;
-
         for (var i = o.layouts.length - 1; i > 0; i--) {
             btns = BI.map(btns, function (k, it) {
                 return BI.extend({}, o.layouts[i], {
@@ -84,6 +83,18 @@ BI.ButtonGroup = BI.inherit(BI.Widget, {
             })
         }
         return btns;
+    },
+
+    _packageSimpleItems: function (btns) {
+        var o = this.options;
+        return BI.map(o.items, function (i, item) {
+            if (BI.stripEL(item) === item) {
+                return btns[i];
+            }
+            return BI.extend({}, item, {
+                el: btns[i]
+            })
+        })
     },
 
     _packageItems: function (items, packBtns) {
@@ -101,6 +112,12 @@ BI.ButtonGroup = BI.inherit(BI.Widget, {
         return layout;
     },
 
+    //如果是一个简单的layout
+    _isSimpleLayout: function () {
+        var o = this.options;
+        return o.layouts.length === 1
+    },
+
 
     doBehavior: function () {
         var args = Array.prototype.slice.call(arguments);
@@ -115,9 +132,7 @@ BI.ButtonGroup = BI.inherit(BI.Widget, {
         var btns = this._btnsCreator.apply(this, arguments);
         this.buttons = BI.concat(btns, this.buttons);
 
-        //如果是一个简单的layout
-        if (o.layouts.length === 1 && !BI.isNotEmptyArray(o.layouts[0].items)
-            && this.layouts && this.layouts.prependItems) {
+        if (this._isSimpleLayout() && this.layouts && this.layouts.prependItems) {
             this.layouts.prependItems(btns);
             return;
         }
@@ -132,8 +147,7 @@ BI.ButtonGroup = BI.inherit(BI.Widget, {
         this.buttons = BI.concat(this.buttons, btns);
 
         //如果是一个简单的layout
-        if (o.layouts.length === 1 && !BI.isNotEmptyArray(o.layouts[0].items)
-            && this.layouts && this.layouts.addItems) {
+        if (this._isSimpleLayout() && this.layouts && this.layouts.addItems) {
             this.layouts.addItems(btns);
             return;
         }
@@ -142,36 +156,22 @@ BI.ButtonGroup = BI.inherit(BI.Widget, {
         this.layouts.addItems(this._packageLayout(items).items);
     },
 
-    removeItemAt: function (indexes) {
-        var self = this;
-        indexes = BI.isArray(indexes) ? indexes : [indexes];
-        var buttons = [];
-        BI.each(indexes, function (i, index) {
-            buttons.push(self.buttons[index]);
-        });
-        BI.each(buttons, function (i, btn) {
-            btn && btn.destroy();
-        })
-    },
-
-    removeItems: function (v) {
-        v = BI.isArray(v) ? v : [v];
-        var indexes = [];
-        BI.each(this.buttons, function (i, item) {
-            if (BI.deepContains(v, item.getValue())) {
-                indexes.push(i);
-            }
-        });
-        this.removeItemAt(indexes);
+    removeItemAt: function (index) {
+        this.buttons[index].destroy();
+        this.layouts.removeItemAt(index);
     },
 
     populate: function (items) {
         items = items || [];
-        this.options.items = items;
         this.empty();
+        this.options.items = items;
 
         this.buttons = this._btnsCreator.apply(this, arguments);
-        items = this._packageItems(items, this._packageBtns(this.buttons));
+        if (this._isSimpleLayout()) {
+            items = this._packageSimpleItems(this.buttons);
+        } else {
+            items = this._packageItems(items, this._packageBtns(this.buttons));
+        }
 
         this.layouts = BI.createWidget(BI.extend({element: this}, this._packageLayout(items)));
     },

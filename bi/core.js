@@ -4587,14 +4587,6 @@ BI.Widget = BI.inherit(BI.OB, {
         this._initElementHeight();
     },
 
-    setElement: function (widget) {
-        if (widget == this) {
-            return;
-        }
-        this.element = BI.isWidget(widget) ? widget.element : $(widget);
-        return this;
-    },
-
     setEnable: function (enable) {
         if (enable === true) {
             this.options.disabled = false;
@@ -4676,8 +4668,17 @@ BI.Widget = BI.inherit(BI.OB, {
         return widget;
     },
 
-    removeWidget: function (name) {
-        delete this._children[name];
+    removeWidget: function (nameOrWidget) {
+        var self = this;
+        if (BI.isWidget(nameOrWidget)) {
+            BI.each(this._children, function (name, widget) {
+                if (widget === nameOrWidget) {
+                    delete self._children[name];
+                }
+            })
+        } else {
+            delete this._children[nameOrWidget];
+        }
     },
 
     hasWidget: function (name) {
@@ -4749,6 +4750,13 @@ BI.Widget = BI.inherit(BI.OB, {
 
     visible: function () {
         this.setVisible(true);
+    },
+
+    isolate: function () {
+        if (this._parent) {
+            this._parent.removeWidget(this);
+            BI.DOM.hang([this]);
+        }
     },
 
     empty: function () {
@@ -5383,7 +5391,6 @@ BI.View = BI.inherit(BI.V, {
         options.isLayer && (vessel = BI.Layers.has(id) ? BI.Layers.get(id) : BI.Layers.create(id, vessel));
         if (this._cardLayouts[key]) {
             options.defaultShowName && this._cardLayouts[key].setDefaultShowName(options.defaultShowName);
-            this._cardLayouts[key].setElement(vessel) && this._cardLayouts[key].resize();
             return this;
         }
         this._cardLayouts[key] = BI.createWidget({
@@ -5741,6 +5748,7 @@ BI.View = BI.inherit(BI.V, {
         delete this._cardLayouts;
         delete this._cards;
         this.remove();
+        this.trigger(BI.Events.DESTROY);
         this.destroyed();
     },
 
@@ -11211,7 +11219,6 @@ BI.Layout = BI.inherit(BI.Widget, {
         var self = this, w;
         if (!this.hasWidget(this._getChildName(i))) {
             w = BI.createWidget(item);
-            this.addWidget(this._getChildName(i), w);
             w.on(BI.Events.DESTROY, function () {
                 BI.each(self._children, function (name, child) {
                     if (child === w) {
@@ -11219,6 +11226,7 @@ BI.Layout = BI.inherit(BI.Widget, {
                     }
                 });
             });
+            this.addWidget(this._getChildName(i), w);
         } else {
             w = this.getWidgetByName(this._getChildName(i));
         }
@@ -11487,6 +11495,23 @@ BI.Layout = BI.inherit(BI.Widget, {
                 self._addElement(i, item);
             }
         });
+    },
+
+    removeWidget: function (nameOrWidget) {
+        var removeIndex;
+        if (BI.isWidget(nameOrWidget)) {
+            BI.each(this._children, function (name, child) {
+                if (child === nameOrWidget) {
+                    removeIndex = name;
+                }
+            })
+        } else {
+            removeIndex = nameOrWidget;
+        }
+        if (removeIndex) {
+            this.options.items.splice(removeIndex, 1);
+        }
+        BI.Layout.superclass.removeWidget.apply(this, arguments);
     },
 
     empty: function () {
@@ -13273,27 +13298,28 @@ BI.CardLayout = BI.inherit(BI.Layout, {
         this.populate(this.options.items);
     },
 
-    _getCardName: function (cardName) {
-        return this.getName() + cardName;
-    },
-
     resize: function () {
         // console.log("default布局不需要resize");
     },
 
     stroke: function (items) {
-        var self = this;
+        var self = this, o = this.options;
         this.showIndex = void 0;
         BI.each(items, function (i, item) {
             if (!!item) {
-                if (!self.hasWidget(self._getCardName(item.cardName))) {
+                if (!self.hasWidget(item.cardName)) {
                     var w = BI.createWidget(item);
-                    self.addWidget(self._getCardName(item.cardName), w);
                     w.on(BI.Events.DESTROY, function () {
-                        delete self._children[self._getCardName(item.cardName)];
+                        var index = BI.findKey(o.items, function (i, tItem) {
+                            return tItem.cardName == item.cardName;
+                        });
+                        if (index > -1) {
+                            o.items.splice(index, 1);
+                        }
                     });
+                    self.addWidget(item.cardName, w);
                 } else {
-                    var w = self.getWidgetByName(self._getCardName(item.cardName));
+                    var w = self.getWidgetByName(item.cardName);
                 }
                 w.element.css({"position": "absolute", "top": "0", "right": "0", "bottom": "0", "left": "0"});
                 w.setVisible(false);
@@ -13304,6 +13330,11 @@ BI.CardLayout = BI.inherit(BI.Layout, {
     update: function () {
     },
 
+    empty: function () {
+        BI.CardLayout.superclass.empty.apply(this, arguments);
+        this.options.items = [];
+    },
+
     populate: function (items) {
         BI.CardLayout.superclass.populate.apply(this, arguments);
         this._mount();
@@ -13311,53 +13342,62 @@ BI.CardLayout = BI.inherit(BI.Layout, {
     },
 
     isCardExisted: function (cardName) {
-        return this.hasWidget(this._getCardName(cardName));
+        return BI.some(this.options.items, function (i, item) {
+            return item.cardName === cardName && item.el;
+        });
     },
 
     getCardByName: function (cardName) {
-        if (!this.hasWidget(this._getCardName(cardName))) {
+        if (!this.isCardExisted(cardName)) {
             throw new Error("cardName is not exist");
         }
-        return this._children[this._getCardName(cardName)];
+        return this._children[cardName];
     },
 
     deleteCardByName: function (cardName) {
-        if (!this.hasWidget(this._getCardName(cardName))) {
-            return;
+        if (!this.isCardExisted(cardName)) {
+            throw new Error("cardName is not exist");
         }
         var index = BI.findKey(this.options.items, function (i, item) {
             return item.cardName == cardName;
         });
-        this.options.items.splice(index, 1);
-        var child = this.getWidgetByName(this._getCardName(cardName));
-        delete this._children[this._getCardName(cardName)];
-        child.destroy();
+        if (index > -1) {
+            this.options.items.splice(index, 1);
+        }
+        var child = this._children[cardName];
+        child && child.destroy();
     },
 
     addCardByName: function (cardName, cardItem) {
-        if (this.hasWidget(this._getCardName(cardName))) {
+        if (this.isCardExisted(cardName)) {
             throw new Error("cardName is already exist");
         }
-        this.options.items.push({el: cardItem, cardName: cardName});
         var widget = BI.createWidget(cardItem);
-        widget.element.css({"position": "relative", "top": "0", "left": "0", "width": "100%", "height": "100%"})
-            .appendTo(this.element);
+        widget.element.css({
+            "position": "relative",
+            "top": "0",
+            "left": "0",
+            "width": "100%",
+            "height": "100%"
+        }).appendTo(this.element);
         widget.invisible();
-        this.addWidget(this._getCardName(cardName), widget);
+        this.addWidget(cardName, widget);
+        this.options.items.push({el: cardItem, cardName: cardName});
         return widget;
     },
 
     showCardByName: function (name, action, callback) {
         var self = this;
         //name不存在的时候全部隐藏
-        var exist = this.hasWidget(this._getCardName(name));
+        var exist = this.isCardExisted(name);
         if (this.showIndex != null) {
             this.lastShowIndex = this.showIndex;
         }
-        this.showIndex = this._getCardName(name);
+        this.showIndex = name;
         var flag = false;
-        BI.each(this._children, function (i, el) {
-            if (self._getCardName(name) != i) {
+        BI.each(this.options.items, function (i, item) {
+            var el = self._children[item.cardName];
+            if (name != item.cardName) {
                 //动画效果只有在全部都隐藏的时候才有意义,且只要执行一次动画操作就够了
                 !flag && !exist && (BI.Action && action instanceof BI.Action) ? (action.actionBack(el), flag = true) : el.invisible();
             } else {
@@ -13369,8 +13409,8 @@ BI.CardLayout = BI.inherit(BI.Layout, {
     showLastCard: function () {
         var self = this;
         this.showIndex = this.lastShowIndex;
-        BI.each(this._children, function (i, el) {
-            el.setVisible(self.showIndex == i);
+        BI.each(this.options.items, function (i, item) {
+            self._children[item.cardName].setVisible(self.showIndex == i);
         })
     },
 
@@ -13404,15 +13444,17 @@ BI.CardLayout = BI.inherit(BI.Layout, {
     },
 
     hideAllCard: function () {
-        BI.each(this._children, function (i, el) {
-            el.invisible();
+        var self = this;
+        BI.each(this.options.items, function (i, item) {
+            self._children[item.cardName].invisible();
         });
     },
 
     isAllCardHide: function () {
+        var self = this;
         var flag = true;
-        BI.some(this._children, function (i, el) {
-            if (el.isVisible()) {
+        BI.some(this.options.items, function (i, item) {
+            if (self._children[item.cardName].isVisible()) {
                 flag = false;
                 return false;
             }
@@ -15256,145 +15298,28 @@ BI.ActionFactory = {
 }/**
  * guy
  * 由一个元素切换到另一个元素的行为
- * @class BI.EffectShowAction
- * @extends BI.Action
- */
-BI.EffectShowAction = BI.inherit(BI.Action, {
-    _defaultConfig: function() {
-        return BI.extend(BI.EffectShowAction.superclass._defaultConfig.apply(this, arguments), {
-        });
-    },
-
-    _init : function() {
-        BI.EffectShowAction.superclass._init.apply(this, arguments);
-    },
-
-    _checkBrowser: function(){
-        return false;
-//        return !(BI.isFireFox() && parseInt($.browser.version) < 10);
-    },
-
-    actionPerformed: function(src, tar, callback){
-        src = src || this.options.src ,tar = tar || this.options.tar || "body";
-
-        if(this._checkBrowser()) {
-            var transferEl = BI.createWidget({
-                type: "bi.layout",
-                cls: "bi-transfer-temp-el"
-            })
-
-            BI.createWidget({
-                type: "bi.absolute",
-                element: "body",
-                items: [transferEl]
-            })
-
-            transferEl.element.css({
-                width: tar.element.width(),
-                height: tar.element.height(),
-                top: tar.element.offset().top,
-                left: tar.element.offset().left
-            });
-
-            src.element.effect("transfer", {
-                to: transferEl.element,
-                className: "ui-effects-transfer"
-            }, 400, function () {
-                transferEl.destroy();
-                tar && tar.element.show(0, callback);
-            })
-        } else {
-            tar && tar.element.show(0, callback);
-        }
-    },
-
-    actionBack: function(tar, src, callback){
-        src = src || this.options.src || $("body"),tar = tar || this.options.tar;
-        tar && tar.element.hide();
-        if(this._checkBrowser()) {
-            var transferEl = BI.createWidget({
-                type: "bi.layout",
-                cls: "bi-transfer-temp-el"
-            })
-
-            BI.createWidget({
-                type: "bi.absolute",
-                element: "body",
-                items: [transferEl]
-            })
-            transferEl.element.css({
-                width: src.element.width(),
-                height: src.element.height(),
-                top: src.element.offset().top,
-                left: src.element.offset().left
-            });
-
-            tar.element.effect("transfer", {
-                to: transferEl.element,
-                className: "ui-effects-transfer"
-            }, 400, function () {
-                transferEl.destroy();
-                callback && callback();
-            })
-        } else {
-            callback && callback();
-        }
-    }
-});/**
- * guy
- * 由一个元素切换到另一个元素的行为
  * @class BI.ShowAction
  * @extends BI.Action
  */
 BI.ShowAction = BI.inherit(BI.Action, {
-    _defaultConfig: function() {
-        return BI.extend(BI.ShowAction.superclass._defaultConfig.apply(this, arguments), {
-        });
+    _defaultConfig: function () {
+        return BI.extend(BI.ShowAction.superclass._defaultConfig.apply(this, arguments), {});
     },
 
-    _init : function() {
+    _init: function () {
         BI.ShowAction.superclass._init.apply(this, arguments);
     },
 
-    actionPerformed: function(src, tar, callback){
+    actionPerformed: function (src, tar, callback) {
         tar = tar || this.options.tar;
-        tar && tar.element.show(0, callback);
+        tar.setVisible(true);
+        callback && callback();
     },
 
-    actionBack: function(tar, src, callback){
+    actionBack: function (tar, src, callback) {
         tar = tar || this.options.tar;
-        tar.element.hide(0, callback);
-    }
-});/**
- * guy
- * 由一个元素切换到另一个元素的行为
- * @class BI.ScaleShowAction
- * @extends BI.Action
- * @abstract
- */
-BI.ScaleShowAction = BI.inherit(BI.Action, {
-    _defaultConfig: function() {
-        return BI.extend(BI.ScaleShowAction.superclass._defaultConfig.apply(this, arguments), {
-        });
-    },
-
-    _init : function() {
-        BI.ScaleShowAction.superclass._init.apply(this, arguments);
-    },
-
-    _checkBrowser: function(){
-        return false;
-//        return !(BI.isFireFox() && parseInt($.browser.version) < 10);
-    },
-
-    actionPerformed: function(src, tar, callback){
-        tar = tar || this.options.tar;
-        this._checkBrowser() ? tar.element.show("scale", {percent:110}, 200, callback) : tar.element.show(0,callback);
-    },
-
-    actionBack : function(tar, src, callback){
-        tar = tar || this.options.tar;
-        this._checkBrowser() ? tar.element.hide("scale", {percent:0}, 200, callback) : tar.element.hide(0,callback);
+        tar.setVisible(false);
+        callback && callback();
     }
 });/**
  * @class BI.FloatSection

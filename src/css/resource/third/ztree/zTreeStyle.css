@@ -7,6 +7,9 @@ email:		hunter.z@263.net
 website:	http://code.google.com/p/jquerytree/
 
 -------------------------------------*/
+/****添加计算宽度的--运算符直接需要space****/
+/****** common color(常用颜色,可用于普遍场景) *****/
+/**** custom color(自定义颜色,用于特定场景) ****/
 .ztree * {
   padding: 0;
   margin: 0;
@@ -29,7 +32,7 @@ website:	http://code.google.com/p/jquerytree/
   padding: 0 0 0 18px;
 }
 .ztree li ul.line {
-  background: url(icon/tree-vertical-line-1.png) 0 0 repeat-y;
+  background: url("icon/tree-vertical-line-1.png") 0 0 repeat-y;
 }
 .ztree li a {
   padding: 1px 3px 0 0;

@@ -209,14 +209,6 @@ BI.Widget = BI.inherit(BI.OB, {
         this._initElementHeight();
     },
 
-    setElement: function (widget) {
-        if (widget == this) {
-            return;
-        }
-        this.element = BI.isWidget(widget) ? widget.element : $(widget);
-        return this;
-    },
-
     setEnable: function (enable) {
         if (enable === true) {
             this.options.disabled = false;
@@ -298,8 +290,17 @@ BI.Widget = BI.inherit(BI.OB, {
         return widget;
     },
 
-    removeWidget: function (name) {
-        delete this._children[name];
+    removeWidget: function (nameOrWidget) {
+        var self = this;
+        if (BI.isWidget(nameOrWidget)) {
+            BI.each(this._children, function (name, widget) {
+                if (widget === nameOrWidget) {
+                    delete self._children[name];
+                }
+            })
+        } else {
+            delete this._children[nameOrWidget];
+        }
     },
 
     hasWidget: function (name) {
@@ -371,6 +372,13 @@ BI.Widget = BI.inherit(BI.OB, {
 
     visible: function () {
         this.setVisible(true);
+    },
+
+    isolate: function () {
+        if (this._parent) {
+            this._parent.removeWidget(this);
+            BI.DOM.hang([this]);
+        }
     },
 
     empty: function () {

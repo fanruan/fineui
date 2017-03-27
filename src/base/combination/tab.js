@@ -10,7 +10,7 @@ BI.Tab = BI.inherit(BI.Widget, {
             logic: {
                 dynamic: false
             },
-            defaultShowIndex: 0,
+            defaultShowIndex: false,
             tab: false,
             cardCreator: function (v) {
                 return BI.createWidget();

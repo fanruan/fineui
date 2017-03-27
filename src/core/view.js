@@ -151,7 +151,6 @@ BI.View = BI.inherit(BI.V, {
         options.isLayer && (vessel = BI.Layers.has(id) ? BI.Layers.get(id) : BI.Layers.create(id, vessel));
         if (this._cardLayouts[key]) {
             options.defaultShowName && this._cardLayouts[key].setDefaultShowName(options.defaultShowName);
-            this._cardLayouts[key].setElement(vessel) && this._cardLayouts[key].resize();
             return this;
         }
         this._cardLayouts[key] = BI.createWidget({
@@ -509,6 +508,7 @@ BI.View = BI.inherit(BI.V, {
         delete this._cardLayouts;
         delete this._cards;
         this.remove();
+        this.trigger(BI.Events.DESTROY);
         this.destroyed();
     },
 

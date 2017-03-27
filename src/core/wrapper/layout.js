@@ -71,7 +71,6 @@ BI.Layout = BI.inherit(BI.Widget, {
         var self = this, w;
         if (!this.hasWidget(this._getChildName(i))) {
             w = BI.createWidget(item);
-            this.addWidget(this._getChildName(i), w);
             w.on(BI.Events.DESTROY, function () {
                 BI.each(self._children, function (name, child) {
                     if (child === w) {
@@ -79,6 +78,7 @@ BI.Layout = BI.inherit(BI.Widget, {
                     }
                 });
             });
+            this.addWidget(this._getChildName(i), w);
         } else {
             w = this.getWidgetByName(this._getChildName(i));
         }
@@ -347,6 +347,23 @@ BI.Layout = BI.inherit(BI.Widget, {
                 self._addElement(i, item);
             }
         });
+    },
+
+    removeWidget: function (nameOrWidget) {
+        var removeIndex;
+        if (BI.isWidget(nameOrWidget)) {
+            BI.each(this._children, function (name, child) {
+                if (child === nameOrWidget) {
+                    removeIndex = name;
+                }
+            })
+        } else {
+            removeIndex = nameOrWidget;
+        }
+        if (removeIndex) {
+            this.options.items.splice(removeIndex, 1);
+        }
+        BI.Layout.superclass.removeWidget.apply(this, arguments);
     },
 
     empty: function () {
