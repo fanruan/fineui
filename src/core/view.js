@@ -133,7 +133,7 @@ BI.View = BI.inherit(BI.V, {
         return vessel;
     },
 
-    _render: function (vessel) {
+    render: function (vessel) {
         return this;
     },
 
