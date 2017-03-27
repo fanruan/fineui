@@ -70,4 +70,4 @@ BI.HorizontalCenterLayout = BI.inherit(BI.Layout, {
         this._mount();
     }
 });
-$.shortcut('bi.horizontal_center', BI.HorizontalCenterLayout);
+BI.shortcut('bi.horizontal_center', BI.HorizontalCenterLayout);

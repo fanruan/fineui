@@ -169,4 +169,4 @@ BI.ListPane = BI.inherit(BI.Pane, {
     }
 });
 BI.ListPane.EVENT_CHANGE = "EVENT_CHANGE";
-$.shortcut("bi.list_pane", BI.ListPane);
+BI.shortcut("bi.list_pane", BI.ListPane);

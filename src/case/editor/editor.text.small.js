@@ -17,4 +17,4 @@ BI.SmallTextEditor = BI.inherit(BI.TextEditor, {
         BI.SmallTextEditor.superclass._init.apply(this, arguments);
     }
 });
-$.shortcut("bi.small_text_editor", BI.SmallTextEditor);
+BI.shortcut("bi.small_text_editor", BI.SmallTextEditor);

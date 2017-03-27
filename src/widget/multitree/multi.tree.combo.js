@@ -249,4 +249,4 @@ BI.MultiTreeCombo = BI.inherit(BI.Single, {
 
 BI.MultiTreeCombo.EVENT_CONFIRM = "MultiTreeCombo.EVENT_CONFIRM";
 
-$.shortcut('bi.multi_tree_combo', BI.MultiTreeCombo);
+BI.shortcut('bi.multi_tree_combo', BI.MultiTreeCombo);

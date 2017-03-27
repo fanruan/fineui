@@ -33,4 +33,4 @@ BI.Img = BI.inherit(BI.Single, {
     }
 });
 
-$.shortcut("bi.img", BI.Img);
+BI.shortcut("bi.img", BI.Img);

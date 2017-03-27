@@ -186,4 +186,4 @@ BI.ColorPicker = BI.inherit(BI.Widget, {
     }
 });
 BI.ColorPicker.EVENT_CHANGE = "ColorPicker.EVENT_CHANGE";
-$.shortcut("bi.color_picker", BI.ColorPicker);
+BI.shortcut("bi.color_picker", BI.ColorPicker);

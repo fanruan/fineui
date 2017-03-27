@@ -104,4 +104,4 @@ BI.TextIconItem = BI.inherit(BI.BasicButton, {
     }
 });
 BI.TextIconItem.EVENT_CHANGE = "EVENT_CHANGE";
-$.shortcut("bi.text_icon_item", BI.TextIconItem);
+BI.shortcut("bi.text_icon_item", BI.TextIconItem);

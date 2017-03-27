@@ -172,4 +172,4 @@ BI.PartTree = BI.inherit(BI.SyncTree, {
     }
 });
 
-$.shortcut("bi.part_tree", BI.PartTree);
+BI.shortcut("bi.part_tree", BI.PartTree);

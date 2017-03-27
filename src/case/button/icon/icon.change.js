@@ -85,4 +85,4 @@ BI.IconChangeButton = BI.inherit(BI.Single, {
     }
 });
 BI.IconChangeButton.EVENT_CHANGE = "IconChangeButton.EVENT_CHANGE";
-$.shortcut("bi.icon_change_button", BI.IconChangeButton);
+BI.shortcut("bi.icon_change_button", BI.IconChangeButton);

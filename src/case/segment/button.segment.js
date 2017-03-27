@@ -47,4 +47,4 @@ BI.SegmentButton = BI.inherit(BI.BasicButton, {
         BI.SegmentButton.superclass.destroy.apply(this, arguments);
     }
 });
-$.shortcut('bi.segment_button', BI.SegmentButton);
+BI.shortcut('bi.segment_button', BI.SegmentButton);

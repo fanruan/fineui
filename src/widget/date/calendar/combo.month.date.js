@@ -32,7 +32,7 @@ BI.MonthDateCombo = BI.inherit(BI.Trigger, {
         this.combo = BI.createWidget({
             type: "bi.combo",
             offsetStyle: "center",
-            element: this.element,
+            element: this,
             isNeedAdjustHeight: false,
             isNeedAdjustWidth: false,
             el: this.trigger,
@@ -58,4 +58,4 @@ BI.MonthDateCombo = BI.inherit(BI.Trigger, {
     }
 });
 BI.MonthDateCombo.EVENT_CHANGE = "EVENT_CHANGE";
-$.shortcut('bi.month_date_combo', BI.MonthDateCombo);
+BI.shortcut('bi.month_date_combo', BI.MonthDateCombo);

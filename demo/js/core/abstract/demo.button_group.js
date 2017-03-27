@@ -21,4 +21,4 @@ Demo.Func = BI.inherit(BI.Widget, {
         }
     }
 });
-$.shortcut("demo.button_group", Demo.Func);
+BI.shortcut("demo.button_group", Demo.Func);

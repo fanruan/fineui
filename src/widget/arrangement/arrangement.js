@@ -2932,4 +2932,4 @@ BI.extend(BI.Arrangement, {
         GRID: 2
     }
 });
-$.shortcut('bi.arrangement', BI.Arrangement);
+BI.shortcut('bi.arrangement', BI.Arrangement);

@@ -86,4 +86,4 @@ BI.FormulaComboPopup = BI.inherit(BI.Widget, {
 });
 BI.FormulaComboPopup.EVENT_CHANGE = "EVENT_CHANGE";
 BI.FormulaComboPopup.EVENT_VALUE_CANCEL = "EVENT_VALUE_CANCEL";
-$.shortcut("bi.formula_combo_popup", BI.FormulaComboPopup);
+BI.shortcut("bi.formula_combo_popup", BI.FormulaComboPopup);

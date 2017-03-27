@@ -52,4 +52,4 @@ Demo.Toast = BI.inherit(BI.Widget, {
         })
     }
 });
-$.shortcut("demo.toast", Demo.Toast);
+BI.shortcut("demo.toast", Demo.Toast);

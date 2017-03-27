@@ -29,4 +29,4 @@ BI.HalfIconButton = BI.inherit(BI.IconButton, {
 });
 BI.HalfIconButton.EVENT_CHANGE = "HalfIconButton.EVENT_CHANGE";
 
-$.shortcut("bi.half_icon_button", BI.HalfIconButton);
+BI.shortcut("bi.half_icon_button", BI.HalfIconButton);

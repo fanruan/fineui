@@ -150,4 +150,4 @@ BI.MultiSelectTrigger.EVENT_PAUSE = "EVENT_PAUSE";
 BI.MultiSelectTrigger.EVENT_SEARCHING = "EVENT_SEARCHING";
 BI.MultiSelectTrigger.EVENT_BEFORE_COUNTER_POPUPVIEW = "EVENT_BEFORE_COUNTER_POPUPVIEW";
 
-$.shortcut('bi.multi_select_trigger', BI.MultiSelectTrigger);
+BI.shortcut('bi.multi_select_trigger', BI.MultiSelectTrigger);

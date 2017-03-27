@@ -29,4 +29,4 @@ Demo.Func = BI.inherit(BI.Widget, {
         })
     }
 });
-$.shortcut("demo.svg", Demo.Func);
+BI.shortcut("demo.svg", Demo.Func);

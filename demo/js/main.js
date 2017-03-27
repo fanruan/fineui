@@ -43,4 +43,4 @@ Demo.Main = BI.inherit(BI.Widget, {
         }
     }
 });
-$.shortcut("demo.main", Demo.Main);
+BI.shortcut("demo.main", Demo.Main);

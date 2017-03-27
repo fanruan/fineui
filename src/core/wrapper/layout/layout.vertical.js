@@ -59,4 +59,4 @@ BI.VerticalLayout = BI.inherit(BI.Layout, {
         this._mount();
     }
 });
-$.shortcut('bi.vertical', BI.VerticalLayout);
+BI.shortcut('bi.vertical', BI.VerticalLayout);

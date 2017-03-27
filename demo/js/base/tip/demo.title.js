@@ -36,4 +36,4 @@ Demo.Title = BI.inherit(BI.Widget, {
         }
     }
 });
-$.shortcut("demo.title", Demo.Title);
+BI.shortcut("demo.title", Demo.Title);

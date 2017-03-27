@@ -468,4 +468,4 @@ BI.Label = BI.inherit(BI.Single, {
     }
 });
 
-$.shortcut("bi.label", BI.Label);
+BI.shortcut("bi.label", BI.Label);

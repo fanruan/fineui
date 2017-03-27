@@ -68,4 +68,4 @@ BI.MultiTreeCheckSelectedButton = BI.inherit(BI.Single, {
 });
 
 BI.MultiTreeCheckSelectedButton.EVENT_CHANGE = "EVENT_CHANGE";
-$.shortcut('bi.multi_tree_check_selected_button', BI.MultiTreeCheckSelectedButton);
+BI.shortcut('bi.multi_tree_check_selected_button', BI.MultiTreeCheckSelectedButton);

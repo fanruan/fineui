@@ -56,4 +56,4 @@ BI.DefaultLayout = BI.inherit(BI.Layout, {
         this._mount();
     }
 });
-$.shortcut('bi.default', BI.DefaultLayout);
+BI.shortcut('bi.default', BI.DefaultLayout);

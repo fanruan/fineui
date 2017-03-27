@@ -83,4 +83,4 @@ BI.MultiSelectEditor = BI.inherit(BI.Widget, {
     }
 });
 BI.MultiSelectEditor.EVENT_PAUSE = "MultiSelectEditor.EVENT_PAUSE";
-$.shortcut('bi.multi_select_editor', BI.MultiSelectEditor);
+BI.shortcut('bi.multi_select_editor', BI.MultiSelectEditor);

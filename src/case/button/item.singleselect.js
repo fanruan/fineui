@@ -47,4 +47,4 @@ BI.SingleSelectItem = BI.inherit(BI.BasicButton, {
     }
 });
 
-$.shortcut("bi.single_select_item", BI.SingleSelectItem);
+BI.shortcut("bi.single_select_item", BI.SingleSelectItem);

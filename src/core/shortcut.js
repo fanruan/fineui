@@ -1,24 +1,18 @@
-(function ($) {
+(function () {
 
     var kv = {}; // alex:键(编辑器简称,如text)值(也是一个字符串,如FR.TextEditor)对
-    $.shortcut = BI.shortcut = function (xtype, cls) {
+    BI.shortcut = function (xtype, cls) {
         if (kv[xtype] != null) {
             throw ("shortcut:[" + xtype + "] has been registed");
         }
         kv[xtype] = cls;
-        $.extend(cls.prototype, {
+        _.extend(cls.prototype, {
             xtype: xtype
         })
     };
 
     // 根据配置属性生成widget
     var createWidget = function (config) {
-        // alex:如果是一个jquery对象,就在外面套一层,变成一个FR.Widget
-        if (config instanceof $) {
-            return new BI.Widget({
-                element: config
-            });
-        }
         if (config['classType']) {
             return new (new Function('return ' + config['classType'] + ';')())(config);
         }
@@ -56,4 +50,4 @@
         throw new Error('无法根据item创建组件');
     }
 
-})(jQuery);
+})();

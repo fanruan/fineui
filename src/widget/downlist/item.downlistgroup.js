@@ -120,4 +120,4 @@ BI.DownListGroupItem = BI.inherit(BI.BasicButton, {
     }
 });
 BI.DownListGroupItem.EVENT_CHANGE = "EVENT_CHANGE";
-$.shortcut("bi.down_list_group_item", BI.DownListGroupItem);
+BI.shortcut("bi.down_list_group_item", BI.DownListGroupItem);

@@ -63,4 +63,4 @@ BI.FlexHorizontalLayout = BI.inherit(BI.Layout, {
         this._mount();
     }
 });
-$.shortcut('bi.flex_horizontal', BI.FlexHorizontalLayout);
+BI.shortcut('bi.flex_horizontal', BI.FlexHorizontalLayout);

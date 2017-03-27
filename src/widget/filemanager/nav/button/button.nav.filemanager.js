@@ -89,4 +89,4 @@ BI.FileManagerNavButton = BI.inherit(BI.Widget, {
     }
 });
 BI.FileManagerNavButton.EVENT_CHANGE = "FileManagerNavButton.EVENT_CHANGE";
-$.shortcut("bi.file_manager_nav_button", BI.FileManagerNavButton);
+BI.shortcut("bi.file_manager_nav_button", BI.FileManagerNavButton);

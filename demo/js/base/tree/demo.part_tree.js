@@ -6,4 +6,4 @@ Demo.Func = BI.inherit(BI.Widget, {
     render: function () {
     }
 });
-$.shortcut("demo.part_tree", Demo.Func);
+BI.shortcut("demo.part_tree", Demo.Func);

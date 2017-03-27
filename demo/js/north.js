@@ -29,4 +29,4 @@ Demo.North = BI.inherit(BI.Widget, {
     }
 });
 Demo.North.EVENT_VALUE_CHANGE = "EVENT_VALUE_CHANGE";
-$.shortcut("demo.north", Demo.North);
+BI.shortcut("demo.north", Demo.North);

@@ -52,4 +52,4 @@ BI.LatticeLayout = BI.inherit(BI.Layout, {
         this._mount();
     }
 });
-$.shortcut('bi.lattice', BI.LatticeLayout);
+BI.shortcut('bi.lattice', BI.LatticeLayout);

@@ -165,4 +165,4 @@ BI.CardLayout = BI.inherit(BI.Layout, {
         return flag;
     }
 });
-$.shortcut('bi.card', BI.CardLayout);
+BI.shortcut('bi.card', BI.CardLayout);

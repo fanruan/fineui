@@ -113,4 +113,4 @@ BI.VerticalAdaptLayout = BI.inherit(BI.Layout, {
         this._mount();
     }
 });
-$.shortcut('bi.vertical_adapt', BI.VerticalAdaptLayout);
+BI.shortcut('bi.vertical_adapt', BI.VerticalAdaptLayout);

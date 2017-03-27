@@ -369,4 +369,4 @@ BI.Layout = BI.inherit(BI.Widget, {
 
     }
 });
-$.shortcut('bi.layout', BI.Layout);
+BI.shortcut('bi.layout', BI.Layout);

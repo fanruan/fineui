@@ -30,4 +30,4 @@ BI.Checkbox = BI.inherit(BI.IconButton, {
 });
 BI.Checkbox.EVENT_CHANGE = "Checkbox.EVENT_CHANGE";
 
-$.shortcut("bi.checkbox", BI.Checkbox);
+BI.shortcut("bi.checkbox", BI.Checkbox);

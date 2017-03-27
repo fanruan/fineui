@@ -29,7 +29,7 @@ BI.TreeValueChooserCombo = BI.inherit(BI.Widget, {
         }
         this.combo = BI.createWidget({
             type: 'bi.multi_tree_combo',
-            element: this.element,
+            element: this,
             itemsCreator: BI.bind(this._itemsCreator, this),
             width: o.width,
             height: o.height
@@ -596,4 +596,4 @@ BI.TreeValueChooserCombo = BI.inherit(BI.Widget, {
     }
 });
 BI.TreeValueChooserCombo.EVENT_CONFIRM = "TreeValueChooserCombo.EVENT_CONFIRM";
-$.shortcut('bi.tree_value_chooser_combo', BI.TreeValueChooserCombo);
+BI.shortcut('bi.tree_value_chooser_combo', BI.TreeValueChooserCombo);

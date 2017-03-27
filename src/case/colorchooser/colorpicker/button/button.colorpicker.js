@@ -57,4 +57,4 @@ BI.ColorPickerButton = BI.inherit(BI.BasicButton, {
     }
 });
 BI.ColorPickerButton.EVENT_CHANGE = "ColorPickerButton.EVENT_CHANGE";
-$.shortcut("bi.color_picker_button", BI.ColorPickerButton);
+BI.shortcut("bi.color_picker_button", BI.ColorPickerButton);

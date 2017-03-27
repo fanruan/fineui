@@ -74,4 +74,4 @@ BI.MultiSelectCheckSelectedButton = BI.inherit(BI.Single, {
 });
 
 BI.MultiSelectCheckSelectedButton.EVENT_CHANGE = "EVENT_CHANGE";
-$.shortcut('bi.multi_select_check_selected_button', BI.MultiSelectCheckSelectedButton);
+BI.shortcut('bi.multi_select_check_selected_button', BI.MultiSelectCheckSelectedButton);

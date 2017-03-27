@@ -8,4 +8,4 @@ Demo.Func = BI.inherit(BI.Widget, {
         }
     }
 });
-$.shortcut("demo.combo", Demo.Func);
+BI.shortcut("demo.combo", Demo.Func);

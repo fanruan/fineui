@@ -39,4 +39,4 @@ BI.EL = BI.inherit(BI.Widget, {
         this.ele.populate.apply(this, arguments);
     }
 });
-$.shortcut('bi.el', BI.EL);
+BI.shortcut('bi.el', BI.EL);

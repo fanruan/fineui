@@ -51,7 +51,7 @@ BI.DateCalendarPopup = BI.inherit(BI.Widget, {
 
         this.calendar = BI.createWidget({
             direction: "top",
-            element: this.element,
+            element: this,
             logic: {
                 dynamic: true
             },
@@ -93,4 +93,4 @@ BI.DateCalendarPopup = BI.inherit(BI.Widget, {
     }
 });
 BI.DateCalendarPopup.EVENT_CHANGE = "EVENT_CHANGE";
-$.shortcut("bi.date_calendar_popup", BI.DateCalendarPopup);
+BI.shortcut("bi.date_calendar_popup", BI.DateCalendarPopup);

@@ -70,4 +70,4 @@ BI.SelectTreeExpander = BI.inherit(BI.Widget, {
     }
 });
 
-$.shortcut("bi.select_tree_expander", BI.SelectTreeExpander);
+BI.shortcut("bi.select_tree_expander", BI.SelectTreeExpander);

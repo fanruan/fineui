@@ -163,4 +163,4 @@ BI.TextAreaEditor = BI.inherit(BI.Single, {
 BI.TextAreaEditor.EVENT_CHANGE = "EVENT_CHANGE";
 BI.TextAreaEditor.EVENT_BLUR = "EVENT_BLUR";
 BI.TextAreaEditor.EVENT_FOCUS = "EVENT_FOCUS";
-$.shortcut("bi.textarea_editor", BI.TextAreaEditor);
+BI.shortcut("bi.textarea_editor", BI.TextAreaEditor);

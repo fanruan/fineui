@@ -568,4 +568,4 @@ BI.InteractiveArrangement = BI.inherit(BI.Widget, {
     }
 });
 BI.InteractiveArrangement.EVENT_RESIZE = "InteractiveArrangement.EVENT_RESIZE";
-$.shortcut('bi.interactive_arrangement', BI.InteractiveArrangement);
+BI.shortcut('bi.interactive_arrangement', BI.InteractiveArrangement);

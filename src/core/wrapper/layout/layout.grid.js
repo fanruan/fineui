@@ -123,4 +123,4 @@ BI.GridLayout = BI.inherit(BI.Layout, {
         this._mount();
     }
 });
-$.shortcut('bi.grid', BI.GridLayout);
+BI.shortcut('bi.grid', BI.GridLayout);

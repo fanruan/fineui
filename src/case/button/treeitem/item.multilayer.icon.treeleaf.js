@@ -93,4 +93,4 @@ BI.MultiLayerIconTreeLeafItem = BI.inherit(BI.BasicButton, {
     }
 });
 
-$.shortcut("bi.multilayer_icon_tree_leaf_item", BI.MultiLayerIconTreeLeafItem);
+BI.shortcut("bi.multilayer_icon_tree_leaf_item", BI.MultiLayerIconTreeLeafItem);

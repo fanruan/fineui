@@ -72,4 +72,4 @@ BI.CenterLayout = BI.inherit(BI.Layout, {
         this._mount();
     }
 });
-$.shortcut('bi.center', BI.CenterLayout);
+BI.shortcut('bi.center', BI.CenterLayout);

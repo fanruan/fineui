@@ -94,4 +94,4 @@ BI.SelectTreePopup = BI.inherit(BI.Pane, {
 });
 
 BI.SelectTreePopup.EVENT_CHANGE = "EVENT_CHANGE";
-$.shortcut("bi.select_tree_popup", BI.SelectTreePopup);
+BI.shortcut("bi.select_tree_popup", BI.SelectTreePopup);

@@ -129,4 +129,4 @@ BI.BorderLayout = BI.inherit(BI.Layout, {
         this._mount();
     }
 });
-$.shortcut('bi.border', BI.BorderLayout);
+BI.shortcut('bi.border', BI.BorderLayout);

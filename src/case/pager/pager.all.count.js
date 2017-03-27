@@ -160,4 +160,4 @@ BI.AllCountPager = BI.inherit(BI.Widget, {
     }
 });
 BI.AllCountPager.EVENT_CHANGE = "EVENT_CHANGE";
-$.shortcut("bi.all_count_pager", BI.AllCountPager);
+BI.shortcut("bi.all_count_pager", BI.AllCountPager);

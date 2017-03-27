@@ -15668,27 +15668,21 @@ BI.View = BI.inherit(BI.V, {
     destroyed: function () {
 
     }
-});(function ($) {
+});(function () {
 
     var kv = {}; // alex:键(编辑器简称,如text)值(也是一个字符串,如FR.TextEditor)对
-    $.shortcut = BI.shortcut = function (xtype, cls) {
+    BI.shortcut = function (xtype, cls) {
         if (kv[xtype] != null) {
             throw ("shortcut:[" + xtype + "] has been registed");
         }
         kv[xtype] = cls;
-        $.extend(cls.prototype, {
+        _.extend(cls.prototype, {
             xtype: xtype
         })
     };
 
     // 根据配置属性生成widget
     var createWidget = function (config) {
-        // alex:如果是一个jquery对象,就在外面套一层,变成一个FR.Widget
-        if (config instanceof $) {
-            return new BI.Widget({
-                element: config
-            });
-        }
         if (config['classType']) {
             return new (new Function('return ' + config['classType'] + ';')())(config);
         }
@@ -15726,7 +15720,7 @@ BI.View = BI.inherit(BI.V, {
         throw new Error('无法根据item创建组件');
     }
 
-})(jQuery);(function (window, undefined) {
+})();(function (window, undefined) {
     function aspect(type) {
         return function (target, methodName, advice) {
             var exist = target[methodName],
@@ -19657,7 +19651,7 @@ BI.Layout = BI.inherit(BI.Widget, {
 
     }
 });
-$.shortcut('bi.layout', BI.Layout);/**
+BI.shortcut('bi.layout', BI.Layout);/**
  * guy
  * 由一个元素切换到另一个元素的行为
  * @class BI.Action
@@ -25092,7 +25086,7 @@ BI.AbsoluteCenterLayout = BI.inherit(BI.Layout, {
         this._mount();
     }
 });
-$.shortcut('bi.absolute_center_adapt', BI.AbsoluteCenterLayout);/**
+BI.shortcut('bi.absolute_center_adapt', BI.AbsoluteCenterLayout);/**
  * absolute实现的居中布局
  * @class BI.AbsoluteHorizontalLayout
  * @extends BI.Layout
@@ -25142,7 +25136,7 @@ BI.AbsoluteHorizontalLayout = BI.inherit(BI.Layout, {
         this._mount();
     }
 });
-$.shortcut('bi.absolute_horizontal_adapt', BI.AbsoluteHorizontalLayout);/**
+BI.shortcut('bi.absolute_horizontal_adapt', BI.AbsoluteHorizontalLayout);/**
  * absolute实现的居中布局
  * @class BI.AbsoluteVerticalLayout
  * @extends BI.Layout
@@ -25194,7 +25188,7 @@ BI.AbsoluteVerticalLayout = BI.inherit(BI.Layout, {
         this._mount();
     }
 });
-$.shortcut('bi.absolute_vertical_adapt', BI.AbsoluteVerticalLayout);/**
+BI.shortcut('bi.absolute_vertical_adapt', BI.AbsoluteVerticalLayout);/**
  * 自适应水平和垂直方向都居中容器
  * @class BI.CenterAdaptLayout
  * @extends BI.Layout
@@ -25312,7 +25306,7 @@ BI.CenterAdaptLayout = BI.inherit(BI.Layout, {
         this._mount();
     }
 });
-$.shortcut('bi.center_adapt', BI.CenterAdaptLayout);/**
+BI.shortcut('bi.center_adapt', BI.CenterAdaptLayout);/**
  * 水平方向居中容器
  * @class BI.HorizontalAdaptLayout
  * @extends BI.Layout
@@ -25429,7 +25423,7 @@ BI.HorizontalAdaptLayout = BI.inherit(BI.Layout, {
         this._mount();
     }
 });
-$.shortcut('bi.horizontal_adapt', BI.HorizontalAdaptLayout);/**
+BI.shortcut('bi.horizontal_adapt', BI.HorizontalAdaptLayout);/**
  * 左右分离，垂直方向居中容器
  *          items:{
                 left: [{el:{type:"bi.button"}}],
@@ -25504,7 +25498,7 @@ BI.LeftRightVerticalAdaptLayout = BI.inherit(BI.Layout, {
         this._mount();
     }
 });
-$.shortcut('bi.left_right_vertical_adapt', BI.LeftRightVerticalAdaptLayout);
+BI.shortcut('bi.left_right_vertical_adapt', BI.LeftRightVerticalAdaptLayout);
 
 
 BI.LeftVerticalAdaptLayout = BI.inherit(BI.Layout, {
@@ -25553,7 +25547,7 @@ BI.LeftVerticalAdaptLayout = BI.inherit(BI.Layout, {
         this._mount();
     }
 });
-$.shortcut('bi.left_vertical_adapt', BI.LeftVerticalAdaptLayout);
+BI.shortcut('bi.left_vertical_adapt', BI.LeftVerticalAdaptLayout);
 
 BI.RightVerticalAdaptLayout = BI.inherit(BI.Layout, {
     props: function () {
@@ -25601,7 +25595,7 @@ BI.RightVerticalAdaptLayout = BI.inherit(BI.Layout, {
         this._mount();
     }
 });
-$.shortcut('bi.right_vertical_adapt', BI.RightVerticalAdaptLayout);/**
+BI.shortcut('bi.right_vertical_adapt', BI.RightVerticalAdaptLayout);/**
  * 垂直方向居中容器
  * @class BI.VerticalAdaptLayout
  * @extends BI.Layout
@@ -25716,7 +25710,7 @@ BI.VerticalAdaptLayout = BI.inherit(BI.Layout, {
         this._mount();
     }
 });
-$.shortcut('bi.vertical_adapt', BI.VerticalAdaptLayout);/**
+BI.shortcut('bi.vertical_adapt', BI.VerticalAdaptLayout);/**
  * 水平方向居中自适应容器
  * @class BI.HorizontalAutoLayout
  * @extends BI.Layout
@@ -25778,7 +25772,7 @@ BI.HorizontalAutoLayout = BI.inherit(BI.Layout, {
         this._mount();
     }
 });
-$.shortcut('bi.horizontal_auto', BI.HorizontalAutoLayout);/**
+BI.shortcut('bi.horizontal_auto', BI.HorizontalAutoLayout);/**
  * 浮动的居中布局
  */
 BI.FloatCenterAdaptLayout = BI.inherit(BI.Layout, {
@@ -25846,7 +25840,7 @@ BI.FloatCenterAdaptLayout = BI.inherit(BI.Layout, {
         this._mount();
     }
 });
-$.shortcut('bi.float_center_adapt', BI.FloatCenterAdaptLayout);/**
+BI.shortcut('bi.float_center_adapt', BI.FloatCenterAdaptLayout);/**
  * 浮动的水平居中布局
  */
 BI.FloatHorizontalLayout = BI.inherit(BI.Layout, {
@@ -25910,7 +25904,7 @@ BI.FloatHorizontalLayout = BI.inherit(BI.Layout, {
         this._mount();
     }
 });
-$.shortcut('bi.horizontal_float', BI.FloatHorizontalLayout);/**
+BI.shortcut('bi.horizontal_float', BI.FloatHorizontalLayout);/**
  * 内联布局
  * @class BI.InlineCenterAdaptLayout
  * @extends BI.Layout
@@ -26007,7 +26001,7 @@ BI.InlineCenterAdaptLayout = BI.inherit(BI.Layout, {
         this._mount();
     }
 });
-$.shortcut('bi.inline_center_adapt', BI.InlineCenterAdaptLayout);/**
+BI.shortcut('bi.inline_center_adapt', BI.InlineCenterAdaptLayout);/**
  * 内联布局
  * @class BI.InlineVerticalAdaptLayout
  * @extends BI.Layout
@@ -26078,7 +26072,7 @@ BI.InlineVerticalAdaptLayout = BI.inherit(BI.Layout, {
         this._mount();
     }
 });
-$.shortcut('bi.inline_vertical_adapt', BI.InlineVerticalAdaptLayout);/**
+BI.shortcut('bi.inline_vertical_adapt', BI.InlineVerticalAdaptLayout);/**
  *自适应水平和垂直方向都居中容器
  * Created by GUY on 2016/12/2.
  *
@@ -26112,7 +26106,7 @@ BI.FlexCenterLayout = BI.inherit(BI.Layout, {
         this._mount();
     }
 });
-$.shortcut('bi.flex_center', BI.FlexCenterLayout);/**
+BI.shortcut('bi.flex_center', BI.FlexCenterLayout);/**
  *自适应水平和垂直方向都居中容器
  * Created by GUY on 2016/12/2.
  *
@@ -26177,7 +26171,7 @@ BI.FlexHorizontalLayout = BI.inherit(BI.Layout, {
         this._mount();
     }
 });
-$.shortcut('bi.flex_horizontal', BI.FlexHorizontalLayout);/**
+BI.shortcut('bi.flex_horizontal', BI.FlexHorizontalLayout);/**
  *自适应水平和垂直方向都居中容器
  * Created by GUY on 2016/12/2.
  *
@@ -26239,7 +26233,7 @@ BI.FlexVerticalCenter = BI.inherit(BI.Layout, {
         this._mount();
     }
 });
-$.shortcut('bi.flex_vertical_center', BI.FlexVerticalCenter);/**
+BI.shortcut('bi.flex_vertical_center', BI.FlexVerticalCenter);/**
  *自适应水平和垂直方向都居中容器
  * Created by GUY on 2016/12/2.
  *
@@ -26294,7 +26288,7 @@ BI.FlexCenterLayout = BI.inherit(BI.Layout, {
         this._mount();
     }
 });
-$.shortcut('bi.flex_wrapper_center', BI.FlexCenterLayout);/**
+BI.shortcut('bi.flex_wrapper_center', BI.FlexCenterLayout);/**
  *自适应水平和垂直方向都居中容器
  * Created by GUY on 2016/12/2.
  *
@@ -26379,7 +26373,7 @@ BI.FlexHorizontalLayout = BI.inherit(BI.Layout, {
         this._mount();
     }
 });
-$.shortcut('bi.flex_wrapper_horizontal', BI.FlexHorizontalLayout);/**
+BI.shortcut('bi.flex_wrapper_horizontal', BI.FlexHorizontalLayout);/**
  *自适应水平和垂直方向都居中容器
  * Created by GUY on 2016/12/2.
  *
@@ -26462,7 +26456,7 @@ BI.FlexVerticalCenter = BI.inherit(BI.Layout, {
         this._mount();
     }
 });
-$.shortcut('bi.flex_wrapper_vertical_center', BI.FlexVerticalCenter);/**
+BI.shortcut('bi.flex_wrapper_vertical_center', BI.FlexVerticalCenter);/**
  * 固定子组件上下左右的布局容器
  * @class BI.AbsoluteLayout
  * @extends BI.Layout
@@ -26568,7 +26562,7 @@ BI.AbsoluteLayout = BI.inherit(BI.Layout, {
         this._mount();
     }
 });
-$.shortcut('bi.absolute', BI.AbsoluteLayout);BI.AdaptiveLayout = BI.inherit(BI.Layout, {
+BI.shortcut('bi.absolute', BI.AbsoluteLayout);BI.AdaptiveLayout = BI.inherit(BI.Layout, {
     props: function () {
         return BI.extend(BI.AdaptiveLayout.superclass.props.apply(this, arguments), {
             baseCls: "bi-adaptive-layout",
@@ -26659,7 +26653,7 @@ $.shortcut('bi.absolute', BI.AbsoluteLayout);BI.AdaptiveLayout = BI.inherit(BI.L
         this._mount();
     }
 });
-$.shortcut('bi.adaptive', BI.AdaptiveLayout);/**
+BI.shortcut('bi.adaptive', BI.AdaptiveLayout);/**
  * 上下的高度固定/左右的宽度固定，中间的高度/宽度自适应
  *
  * @class BI.BorderLayout
@@ -26790,7 +26784,7 @@ BI.BorderLayout = BI.inherit(BI.Layout, {
         this._mount();
     }
 });
-$.shortcut('bi.border', BI.BorderLayout);/**
+BI.shortcut('bi.border', BI.BorderLayout);/**
  * 卡片布局，可以做到当前只显示一个组件，其他的都隐藏
  * @class BI.CardLayout
  * @extends BI.Layout
@@ -26957,7 +26951,7 @@ BI.CardLayout = BI.inherit(BI.Layout, {
         return flag;
     }
 });
-$.shortcut('bi.card', BI.CardLayout);/**
+BI.shortcut('bi.card', BI.CardLayout);/**
  * 默认的布局方式
  *
  * @class BI.DefaultLayout
@@ -27015,7 +27009,7 @@ BI.DefaultLayout = BI.inherit(BI.Layout, {
         this._mount();
     }
 });
-$.shortcut('bi.default', BI.DefaultLayout);/**
+BI.shortcut('bi.default', BI.DefaultLayout);/**
  * 分隔容器的控件，按照宽度和高度所占比平分整个容器
  *
  * @class BI.DivisionLayout
@@ -27171,7 +27165,7 @@ BI.DivisionLayout = BI.inherit(BI.Layout, {
         this._mount();
     }
 });
-$.shortcut('bi.division', BI.DivisionLayout);/**
+BI.shortcut('bi.division', BI.DivisionLayout);/**
  * 靠左对齐的自由浮动布局
  * @class BI.FloatLeftLayout
  * @extends BI.Layout
@@ -27234,7 +27228,7 @@ BI.FloatLeftLayout = BI.inherit(BI.Layout, {
         this._mount();
     }
 });
-$.shortcut('bi.left', BI.FloatLeftLayout);
+BI.shortcut('bi.left', BI.FloatLeftLayout);
 
 /**
  * 靠右对齐的自由浮动布局
@@ -27299,7 +27293,7 @@ BI.FloatRightLayout = BI.inherit(BI.Layout, {
         this._mount();
     }
 });
-$.shortcut('bi.right', BI.FloatRightLayout);/**
+BI.shortcut('bi.right', BI.FloatRightLayout);/**
  * 上下的高度固定/左右的宽度固定，中间的高度/宽度自适应
  *
  * @class BI.BorderLayout
@@ -27424,7 +27418,7 @@ BI.GridLayout = BI.inherit(BI.Layout, {
         this._mount();
     }
 });
-$.shortcut('bi.grid', BI.GridLayout);/**
+BI.shortcut('bi.grid', BI.GridLayout);/**
  * 水平布局
  * @class BI.HorizontalLayout
  * @extends BI.Layout
@@ -27542,7 +27536,7 @@ BI.HorizontalLayout = BI.inherit(BI.Layout, {
         this._mount();
     }
 });
-$.shortcut('bi.horizontal', BI.HorizontalLayout);
+BI.shortcut('bi.horizontal', BI.HorizontalLayout);
 
 /**
  * 水平布局
@@ -27604,7 +27598,7 @@ BI.HorizontalCellLayout = BI.inherit(BI.Layout, {
         this._mount();
     }
 });
-$.shortcut('bi.horizontal_cell', BI.HorizontalCellLayout);/**
+BI.shortcut('bi.horizontal_cell', BI.HorizontalCellLayout);/**
  * 内联布局
  * @class BI.InlineLayout
  * @extends BI.Layout
@@ -27666,7 +27660,7 @@ BI.InlineLayout = BI.inherit(BI.Layout, {
         this._mount();
     }
 });
-$.shortcut('bi.inline', BI.InlineLayout);/**
+BI.shortcut('bi.inline', BI.InlineLayout);/**
  * 靠左对齐的自由浮动布局
  * @class BI.LatticeLayout
  * @extends BI.Layout
@@ -27720,7 +27714,7 @@ BI.LatticeLayout = BI.inherit(BI.Layout, {
         this._mount();
     }
 });
-$.shortcut('bi.lattice', BI.LatticeLayout);/**
+BI.shortcut('bi.lattice', BI.LatticeLayout);/**
  * 上下的高度固定/左右的宽度固定，中间的高度/宽度自适应
  *
  * @class BI.TableLayout
@@ -27865,7 +27859,7 @@ BI.TableLayout = BI.inherit(BI.Layout, {
         this._mount();
     }
 });
-$.shortcut('bi.table', BI.TableLayout);/**
+BI.shortcut('bi.table', BI.TableLayout);/**
  * 水平tape布局
  * @class BI.HTapeLayout
  * @extends BI.Layout
@@ -27967,7 +27961,7 @@ BI.HTapeLayout = BI.inherit(BI.Layout, {
         this._mount();
     }
 });
-$.shortcut('bi.htape', BI.HTapeLayout);
+BI.shortcut('bi.htape', BI.HTapeLayout);
 
 /**
  * 垂直tape布局
@@ -28072,7 +28066,7 @@ BI.VTapeLayout = BI.inherit(BI.Layout, {
         this._mount();
     }
 });
-$.shortcut('bi.vtape', BI.VTapeLayout);/**
+BI.shortcut('bi.vtape', BI.VTapeLayout);/**
  * td布局
  * @class BI.TdLayout
  * @extends BI.Layout
@@ -28213,7 +28207,7 @@ BI.TdLayout = BI.inherit(BI.Layout, {
         this._mount();
     }
 });
-$.shortcut('bi.td', BI.TdLayout);/**
+BI.shortcut('bi.td', BI.TdLayout);/**
  * 垂直布局
  * @class BI.VerticalLayout
  * @extends BI.Layout
@@ -28274,7 +28268,7 @@ BI.VerticalLayout = BI.inherit(BI.Layout, {
         this._mount();
     }
 });
-$.shortcut('bi.vertical', BI.VerticalLayout);/**
+BI.shortcut('bi.vertical', BI.VerticalLayout);/**
  *
  * @class BI.WindowLayout
  * @extends BI.Layout
@@ -28461,7 +28455,7 @@ BI.WindowLayout = BI.inherit(BI.Layout, {
         this._mount();
     }
 });
-$.shortcut('bi.window', BI.WindowLayout);/**
+BI.shortcut('bi.window', BI.WindowLayout);/**
  * 水平和垂直方向都居中容器, 非自适应，用于宽度高度固定的面板
  * @class BI.CenterLayout
  * @extends BI.Layout
@@ -28535,7 +28529,7 @@ BI.CenterLayout = BI.inherit(BI.Layout, {
         this._mount();
     }
 });
-$.shortcut('bi.center', BI.CenterLayout);/**
+BI.shortcut('bi.center', BI.CenterLayout);/**
  * 浮动布局实现的居中容器
  * @class BI.FloatCenterLayout
  * @extends BI.Layout
@@ -28608,7 +28602,7 @@ BI.FloatCenterLayout = BI.inherit(BI.Layout, {
         this._mount();
     }
 });
-$.shortcut('bi.float_center', BI.FloatCenterLayout);/**
+BI.shortcut('bi.float_center', BI.FloatCenterLayout);/**
  * 水平和垂直方向都居中容器, 非自适应，用于宽度高度固定的面板
  * @class BI.HorizontalCenterLayout
  * @extends BI.Layout
@@ -28680,7 +28674,7 @@ BI.HorizontalCenterLayout = BI.inherit(BI.Layout, {
         this._mount();
     }
 });
-$.shortcut('bi.horizontal_center', BI.HorizontalCenterLayout);/**
+BI.shortcut('bi.horizontal_center', BI.HorizontalCenterLayout);/**
  * 垂直方向都居中容器, 非自适应，用于高度不固定的面板
  * @class BI.VerticalCenterLayout
  * @extends BI.Layout
@@ -28752,7 +28746,7 @@ BI.VerticalCenterLayout = BI.inherit(BI.Layout, {
         this._mount();
     }
 });
-$.shortcut('bi.vertical_center', BI.VerticalCenterLayout);/**
+BI.shortcut('bi.vertical_center', BI.VerticalCenterLayout);/**
  * 保存数据，将js里面用到的常量数据都分离
  *
  */

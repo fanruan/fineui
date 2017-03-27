@@ -60,4 +60,4 @@ BI.IconComboPopup = BI.inherit(BI.Pane, {
 
 });
 BI.IconComboPopup.EVENT_CHANGE = "EVENT_CHANGE";
-$.shortcut("bi.icon_combo_popup", BI.IconComboPopup);
+BI.shortcut("bi.icon_combo_popup", BI.IconComboPopup);

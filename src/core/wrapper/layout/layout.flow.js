@@ -61,7 +61,7 @@ BI.FloatLeftLayout = BI.inherit(BI.Layout, {
         this._mount();
     }
 });
-$.shortcut('bi.left', BI.FloatLeftLayout);
+BI.shortcut('bi.left', BI.FloatLeftLayout);
 
 /**
  * 靠右对齐的自由浮动布局
@@ -126,4 +126,4 @@ BI.FloatRightLayout = BI.inherit(BI.Layout, {
         this._mount();
     }
 });
-$.shortcut('bi.right', BI.FloatRightLayout);
+BI.shortcut('bi.right', BI.FloatRightLayout);

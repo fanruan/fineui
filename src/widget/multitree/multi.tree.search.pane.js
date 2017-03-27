@@ -66,4 +66,4 @@ BI.MultiTreeSearchPane.EVENT_CHANGE = "EVENT_CHANGE";
 BI.MultiTreeSearchPane.EVENT_CLICK_CONFIRM = "EVENT_CLICK_CONFIRM";
 BI.MultiTreeSearchPane.EVENT_CLICK_CLEAR = "EVENT_CLICK_CLEAR";
 
-$.shortcut("bi.multi_tree_search_pane", BI.MultiTreeSearchPane);
+BI.shortcut("bi.multi_tree_search_pane", BI.MultiTreeSearchPane);

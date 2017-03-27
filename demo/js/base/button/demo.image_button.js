@@ -21,4 +21,4 @@ Demo.Button = BI.inherit(BI.Widget, {
         }
     }
 });
-$.shortcut("demo.image_button", Demo.Button);
+BI.shortcut("demo.image_button", Demo.Button);

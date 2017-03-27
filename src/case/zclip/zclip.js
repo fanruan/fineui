@@ -28,4 +28,4 @@ BI.ZeroClip = BI.inherit(BI.BasicButton, {
     }
 });
 
-$.shortcut("bi.zero_clip", BI.ZeroClip);
+BI.shortcut("bi.zero_clip", BI.ZeroClip);

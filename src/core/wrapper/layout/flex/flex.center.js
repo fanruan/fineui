@@ -32,4 +32,4 @@ BI.FlexCenterLayout = BI.inherit(BI.Layout, {
         this._mount();
     }
 });
-$.shortcut('bi.flex_center', BI.FlexCenterLayout);
+BI.shortcut('bi.flex_center', BI.FlexCenterLayout);

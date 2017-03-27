@@ -104,4 +104,4 @@ BI.AbsoluteLayout = BI.inherit(BI.Layout, {
         this._mount();
     }
 });
-$.shortcut('bi.absolute', BI.AbsoluteLayout);
+BI.shortcut('bi.absolute', BI.AbsoluteLayout);

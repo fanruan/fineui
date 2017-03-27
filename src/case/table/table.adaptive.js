@@ -232,4 +232,4 @@ BI.AdaptiveTable = BI.inherit(BI.Widget, {
         BI.AdaptiveTable.superclass.destroy.apply(this, arguments);
     }
 });
-$.shortcut('bi.adaptive_table', BI.AdaptiveTable);
+BI.shortcut('bi.adaptive_table', BI.AdaptiveTable);

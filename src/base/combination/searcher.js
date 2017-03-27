@@ -300,4 +300,4 @@ BI.Searcher.EVENT_PAUSE = "EVENT_PAUSE";
 BI.Searcher.EVENT_SEARCHING = "EVENT_SEARCHING";
 BI.Searcher.EVENT_AFTER_INIT = "EVENT_AFTER_INIT";
 
-$.shortcut("bi.searcher", BI.Searcher);
+BI.shortcut("bi.searcher", BI.Searcher);

@@ -115,4 +115,4 @@ BI.HorizontalAdaptLayout = BI.inherit(BI.Layout, {
         this._mount();
     }
 });
-$.shortcut('bi.horizontal_adapt', BI.HorizontalAdaptLayout);
+BI.shortcut('bi.horizontal_adapt', BI.HorizontalAdaptLayout);

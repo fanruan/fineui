@@ -28,4 +28,4 @@ BI.ExcelTableCell = BI.inherit(BI.Widget, {
         })
     }
 });
-$.shortcut('bi.excel_table_cell', BI.ExcelTableCell);
+BI.shortcut('bi.excel_table_cell', BI.ExcelTableCell);

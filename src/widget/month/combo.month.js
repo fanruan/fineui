@@ -76,4 +76,4 @@ BI.MonthCombo = BI.inherit(BI.Widget, {
 });
 
 BI.MonthCombo.EVENT_CONFIRM = "EVENT_CONFIRM";
-$.shortcut('bi.month_combo', BI.MonthCombo);
+BI.shortcut('bi.month_combo', BI.MonthCombo);

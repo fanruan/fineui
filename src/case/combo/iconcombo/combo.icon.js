@@ -96,4 +96,4 @@ BI.IconCombo = BI.inherit(BI.Widget, {
     }
 });
 BI.IconCombo.EVENT_CHANGE = "EVENT_CHANGE";
-$.shortcut("bi.icon_combo", BI.IconCombo);
+BI.shortcut("bi.icon_combo", BI.IconCombo);

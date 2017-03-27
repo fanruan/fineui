@@ -84,4 +84,4 @@ BI.DisplaySelectedList = BI.inherit(BI.Pane, {
     }
 });
 
-$.shortcut('bi.display_selected_list', BI.DisplaySelectedList);
+BI.shortcut('bi.display_selected_list', BI.DisplaySelectedList);

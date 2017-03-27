@@ -166,4 +166,4 @@ BI.ClearEditor.EVENT_ENTER = "EVENT_ENTER";
 BI.ClearEditor.EVENT_RESTRICT = "EVENT_RESTRICT";
 BI.ClearEditor.EVENT_REMOVE = "EVENT_REMOVE";
 BI.ClearEditor.EVENT_EMPTY = "EVENT_EMPTY";
-$.shortcut("bi.clear_editor", BI.ClearEditor);
+BI.shortcut("bi.clear_editor", BI.ClearEditor);

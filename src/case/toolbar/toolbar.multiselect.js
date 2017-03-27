@@ -131,4 +131,4 @@ BI.MultiSelectBar = BI.inherit(BI.BasicButton, {
     }
 });
 BI.MultiSelectBar.EVENT_CHANGE = "MultiSelectBar.EVENT_CHANGE";
-$.shortcut("bi.multi_select_bar", BI.MultiSelectBar);
+BI.shortcut("bi.multi_select_bar", BI.MultiSelectBar);

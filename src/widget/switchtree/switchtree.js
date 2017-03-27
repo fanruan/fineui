@@ -108,4 +108,4 @@ BI.SwitchTree.SelectType = {
     SingleSelect: BI.Selection.Single,
     MultiSelect: BI.Selection.Multi
 };
-$.shortcut('bi.switch_tree', BI.SwitchTree);
+BI.shortcut('bi.switch_tree', BI.SwitchTree);

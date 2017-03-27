@@ -66,4 +66,4 @@ BI.FloatCenterAdaptLayout = BI.inherit(BI.Layout, {
         this._mount();
     }
 });
-$.shortcut('bi.float_center_adapt', BI.FloatCenterAdaptLayout);
+BI.shortcut('bi.float_center_adapt', BI.FloatCenterAdaptLayout);

@@ -179,4 +179,4 @@ BI.ButtonTree = BI.inherit(BI.ButtonGroup, {
 });
 BI.ButtonTree.EVENT_CHANGE = "EVENT_CHANGE";
 
-$.shortcut("bi.button_tree", BI.ButtonTree);
+BI.shortcut("bi.button_tree", BI.ButtonTree);

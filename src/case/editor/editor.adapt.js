@@ -159,4 +159,4 @@ BI.AdaptiveEditor.EVENT_RESTRICT = "EVENT_RESTRICT";
 BI.AdaptiveEditor.EVENT_SPACE = "EVENT_SPACE";
 BI.AdaptiveEditor.EVENT_EMPTY = "EVENT_EMPTY";
 
-$.shortcut("bi.adapt_editor", BI.AdaptiveEditor);
+BI.shortcut("bi.adapt_editor", BI.AdaptiveEditor);

@@ -596,7 +596,7 @@ BI.Text = BI.inherit(BI.Single, {
     }
 });
 
-$.shortcut("bi.text", BI.Text);/**
+BI.shortcut("bi.text", BI.Text);/**
  * guy
  * @class BI.BasicButton
  * @extends BI.Single
@@ -1279,7 +1279,7 @@ BI.extend(BI.ButtonGroup, {
 });
 BI.ButtonGroup.EVENT_CHANGE = "EVENT_CHANGE";
 
-$.shortcut("bi.button_group", BI.ButtonGroup);/**
+BI.shortcut("bi.button_group", BI.ButtonGroup);/**
  * Created by GUY on 2015/8/10.
  * @class BI.ButtonTree
  * @extends BI.ButtonGroup
@@ -1460,7 +1460,7 @@ BI.ButtonTree = BI.inherit(BI.ButtonGroup, {
 });
 BI.ButtonTree.EVENT_CHANGE = "EVENT_CHANGE";
 
-$.shortcut("bi.button_tree", BI.ButtonTree);/**
+BI.shortcut("bi.button_tree", BI.ButtonTree);/**
  * guy
  * 异步树
  * @class BI.TreeView
@@ -1966,7 +1966,7 @@ BI.TreeView.EVENT_CHANGE = "EVENT_CHANGE";
 BI.TreeView.EVENT_INIT = BI.Events.INIT;
 BI.TreeView.EVENT_AFTERINIT = BI.Events.AFTERINIT;
 
-$.shortcut("bi.tree_view", BI.TreeView);/**
+BI.shortcut("bi.tree_view", BI.TreeView);/**
  * guy
  * 同步树
  * @class BI.SyncTree
@@ -2174,7 +2174,7 @@ BI.SyncTree = BI.inherit(BI.TreeView, {
     }
 });
 
-$.shortcut("bi.sync_tree", BI.SyncTree);/**
+BI.shortcut("bi.sync_tree", BI.SyncTree);/**
  * guy
  * 局部树，两个请求树， 第一个请求构造树，第二个请求获取节点
  * @class BI.PartTree
@@ -2348,7 +2348,7 @@ BI.PartTree = BI.inherit(BI.SyncTree, {
     }
 });
 
-$.shortcut("bi.part_tree", BI.PartTree);BI.Resizers = new BI.ResizeController();
+BI.shortcut("bi.part_tree", BI.PartTree);BI.Resizers = new BI.ResizeController();
 BI.Layers = new BI.LayerController();
 BI.Maskers = new BI.MaskersController();
 BI.Bubbles = new BI.BubblesController();
@@ -2490,7 +2490,7 @@ BI.Canvas = BI.inherit(BI.Widget, {
         });
     }
 });
-$.shortcut("bi.canvas", BI.Canvas);/**
+BI.shortcut("bi.canvas", BI.Canvas);/**
  * Collection
  *
  * Created by GUY on 2016/1/15.
@@ -2781,7 +2781,7 @@ BI.Collection = BI.inherit(BI.Widget, {
     }
 });
 BI.Collection.EVENT_SCROLL = "EVENT_SCROLL";
-$.shortcut('bi.collection_view', BI.Collection);/**
+BI.shortcut('bi.collection_view', BI.Collection);/**
  * @class BI.Combo
  * @extends BI.Widget
  */
@@ -3179,7 +3179,7 @@ BI.Combo.EVENT_AFTER_POPUPVIEW = "EVENT_AFTER_POPUPVIEW";
 BI.Combo.EVENT_BEFORE_HIDEVIEW = "EVENT_BEFORE_HIDEVIEW";
 BI.Combo.EVENT_AFTER_HIDEVIEW = "EVENT_AFTER_HIDEVIEW";
 
-$.shortcut("bi.combo", BI.Combo);/**
+BI.shortcut("bi.combo", BI.Combo);/**
  *
  * 某个可以展开的节点
  *
@@ -3456,7 +3456,7 @@ BI.Expander.EVENT_AFTER_POPUPVIEW = "EVENT_AFTER_POPUPVIEW";
 BI.Expander.EVENT_BEFORE_HIDEVIEW = "EVENT_BEFORE_HIDEVIEW";
 BI.Expander.EVENT_AFTER_HIDEVIEW = "EVENT_AFTER_HIDEVIEW";
 
-$.shortcut("bi.expander", BI.Expander);/**
+BI.shortcut("bi.expander", BI.Expander);/**
  * Created by GUY on 2015/8/10.
  */
 
@@ -3556,7 +3556,7 @@ BI.ComboGroup = BI.inherit(BI.Widget, {
 });
 BI.ComboGroup.EVENT_CHANGE = "EVENT_CHANGE";
 
-$.shortcut("bi.combo_group", BI.ComboGroup);BI.VirtualGroup = BI.inherit(BI.Widget, {
+BI.shortcut("bi.combo_group", BI.ComboGroup);BI.VirtualGroup = BI.inherit(BI.Widget, {
     _defaultConfig: function () {
         return BI.extend(BI.VirtualGroup.superclass._defaultConfig.apply(this, arguments), {
             baseCls: "bi-virtual-group",
@@ -3627,7 +3627,7 @@ $.shortcut("bi.combo_group", BI.ComboGroup);BI.VirtualGroup = BI.inherit(BI.Widg
 });
 BI.VirtualGroup.EVENT_CHANGE = "EVENT_CHANGE";
 
-$.shortcut("bi.virtual_group", BI.VirtualGroup);/**
+BI.shortcut("bi.virtual_group", BI.VirtualGroup);/**
  * 加载控件
  *
  * Created by GUY on 2015/8/31.
@@ -3888,7 +3888,7 @@ BI.Loader = BI.inherit(BI.Widget, {
     }
 });
 BI.Loader.EVENT_CHANGE = "EVENT_CHANGE";
-$.shortcut("bi.loader", BI.Loader);/**
+BI.shortcut("bi.loader", BI.Loader);/**
  * Created by GUY on 2015/6/26.
  */
 
@@ -4025,7 +4025,7 @@ BI.Navigation = BI.inherit(BI.Widget, {
 });
 BI.Navigation.EVENT_CHANGE = "EVENT_CHANGE";
 
-$.shortcut("bi.navigation", BI.Navigation);/**
+BI.shortcut("bi.navigation", BI.Navigation);/**
  * 搜索逻辑控件
  *
  * Created by GUY on 2015/9/28.
@@ -4327,7 +4327,7 @@ BI.Searcher.EVENT_PAUSE = "EVENT_PAUSE";
 BI.Searcher.EVENT_SEARCHING = "EVENT_SEARCHING";
 BI.Searcher.EVENT_AFTER_INIT = "EVENT_AFTER_INIT";
 
-$.shortcut("bi.searcher", BI.Searcher);/**
+BI.shortcut("bi.searcher", BI.Searcher);/**
  *
  * 切换显示或隐藏面板
  *
@@ -4603,7 +4603,7 @@ BI.Switcher.EVENT_AFTER_POPUPVIEW = "EVENT_AFTER_POPUPVIEW";
 BI.Switcher.EVENT_BEFORE_HIDEVIEW = "EVENT_BEFORE_HIDEVIEW";
 BI.Switcher.EVENT_AFTER_HIDEVIEW = "EVENT_AFTER_HIDEVIEW";
 
-$.shortcut("bi.switcher", BI.Switcher);/**
+BI.shortcut("bi.switcher", BI.Switcher);/**
  * Created by GUY on 2015/6/26.
  */
 
@@ -4729,7 +4729,7 @@ BI.Tab = BI.inherit(BI.Widget, {
 });
 BI.Tab.EVENT_CHANGE = "EVENT_CHANGE";
 
-$.shortcut("bi.tab", BI.Tab);/**
+BI.shortcut("bi.tab", BI.Tab);/**
  * 表示当前对象
  *
  * Created by GUY on 2015/9/7.
@@ -4770,7 +4770,7 @@ BI.EL = BI.inherit(BI.Widget, {
         this.ele.populate.apply(this, arguments);
     }
 });
-$.shortcut('bi.el', BI.EL);// CodeMirror, copyright (c) by Marijn Haverbeke and others
+BI.shortcut('bi.el', BI.EL);// CodeMirror, copyright (c) by Marijn Haverbeke and others
 // Distributed under an MIT license: http://codemirror.net/LICENSE
 
 // This is CodeMirror (http://codemirror.net), a code editor
@@ -14337,7 +14337,7 @@ BI.FormulaEditor = BI.inherit(BI.Single, {
 BI.FormulaEditor.EVENT_CHANGE = "EVENT_CHANGE";
 BI.FormulaEditor.EVENT_BLUR = "EVENT_BLUR";
 BI.FormulaEditor.EVENT_FOCUS = "EVENT_FOCUS";
-$.shortcut("bi.formula_editor", BI.FormulaEditor);
+BI.shortcut("bi.formula_editor", BI.FormulaEditor);
 /**
  * z-index在1亿层级
  * 弹出提示消息框，用于模拟阻塞操作（通过回调函数实现）
@@ -14809,7 +14809,7 @@ BI.Grid = BI.inherit(BI.Widget, {
     }
 });
 BI.Grid.EVENT_SCROLL = "EVENT_SCROLL";
-$.shortcut('bi.grid_view', BI.Grid);/**
+BI.shortcut('bi.grid_view', BI.Grid);/**
  * floatBox弹出层，
  * @class BI.FloatBox
  * @extends BI.Widget
@@ -14950,7 +14950,7 @@ BI.FloatBox = BI.inherit(BI.Widget, {
     }
 });
 
-$.shortcut("bi.float_box", BI.FloatBox);
+BI.shortcut("bi.float_box", BI.FloatBox);
 
 BI.FloatBox.EVENT_FLOAT_BOX_CLOSED = "EVENT_FLOAT_BOX_CLOSED";
 BI.FloatBox.EVENT_FLOAT_BOX_OPEN = "EVENT_FLOAT_BOX_CLOSED";
@@ -15134,7 +15134,7 @@ BI.PopupView = BI.inherit(BI.Widget, {
     }
 });
 BI.PopupView.EVENT_CHANGE = "EVENT_CHANGE";
-$.shortcut("bi.popup_view", BI.PopupView);/**
+BI.shortcut("bi.popup_view", BI.PopupView);/**
  * 搜索面板
  *
  * Created by GUY on 2015/9/28.
@@ -15272,7 +15272,7 @@ BI.SearcherView = BI.inherit(BI.Pane, {
 });
 BI.SearcherView.EVENT_CHANGE = "EVENT_CHANGE";
 
-$.shortcut("bi.searcher_view", BI.SearcherView);/**
+BI.shortcut("bi.searcher_view", BI.SearcherView);/**
  * 分页控件
  *
  * Created by GUY on 2015/8/31.
@@ -15559,7 +15559,7 @@ BI.Pager = BI.inherit(BI.Widget, {
 });
 BI.Pager.EVENT_CHANGE = "EVENT_CHANGE";
 BI.Pager.EVENT_AFTER_POPULATE = "EVENT_AFTER_POPULATE";
-$.shortcut("bi.pager", BI.Pager);/**
+BI.shortcut("bi.pager", BI.Pager);/**
  * 超链接
  *
  * Created by GUY on 2015/9/9.
@@ -15590,7 +15590,7 @@ BI.A = BI.inherit(BI.Text, {
     }
 });
 
-$.shortcut("bi.a", BI.A);/**
+BI.shortcut("bi.a", BI.A);/**
  * guy
  * 加载条
  * @type {*|void|Object}
@@ -15673,7 +15673,7 @@ BI.LoadingBar = BI.inherit(BI.Single, {
     }
 });
 
-$.shortcut("bi.loading_bar", BI.LoadingBar);/**
+BI.shortcut("bi.loading_bar", BI.LoadingBar);/**
  * @class BI.IconButton
  * @extends BI.BasicButton
  * 图标的button
@@ -15723,7 +15723,7 @@ BI.IconButton = BI.inherit(BI.BasicButton, {
     }
 });
 BI.IconButton.EVENT_CHANGE = "IconButton.EVENT_CHANGE";
-$.shortcut("bi.icon_button", BI.IconButton);/**
+BI.shortcut("bi.icon_button", BI.IconButton);/**
  * 图片的button
  *
  * Created by GUY on 2016/1/27.
@@ -15809,7 +15809,7 @@ BI.ImageButton = BI.inherit(BI.BasicButton, {
     }
 });
 BI.ImageButton.EVENT_CHANGE = "ImageButton.EVENT_CHANGE";
-$.shortcut("bi.image_button", BI.ImageButton);(function ($) {
+BI.shortcut("bi.image_button", BI.ImageButton);(function ($) {
 
     /**
      * 文字类型的按钮
@@ -15946,7 +15946,7 @@ $.shortcut("bi.image_button", BI.ImageButton);(function ($) {
             BI.Button.superclass.destroy.apply(this, arguments);
         }
     });
-    $.shortcut('bi.button', BI.Button);
+    BI.shortcut('bi.button', BI.Button);
     BI.Button.EVENT_CHANGE = "EVENT_CHANGE";
 })(jQuery);/**
  * guy
@@ -16037,7 +16037,7 @@ BI.TextButton = BI.inherit(BI.BasicButton, {
     }
 });
 BI.TextButton.EVENT_CHANGE = "EVENT_CHANGE";
-$.shortcut("bi.text_button", BI.TextButton);/**
+BI.shortcut("bi.text_button", BI.TextButton);/**
  * 带有一个占位
  *
  * Created by GUY on 2015/9/11.
@@ -16155,7 +16155,7 @@ BI.BlankIconIconTextItem = BI.inherit(BI.BasicButton, {
     }
 });
 BI.BlankIconIconTextItem.EVENT_CHANGE = "EVENT_CHANGE";
-$.shortcut("bi.blank_icon_icon_text_item", BI.BlankIconIconTextItem);/**
+BI.shortcut("bi.blank_icon_icon_text_item", BI.BlankIconIconTextItem);/**
  * guy
  * 一个占位符和两个icon和一行数 组成的一行listitem
  *
@@ -16291,7 +16291,7 @@ BI.BlankIconTextIconItem = BI.inherit(BI.BasicButton, {
     }
 });
 BI.BlankIconTextIconItem.EVENT_CHANGE = "EVENT_CHANGE";
-$.shortcut("bi.blank_icon_text_icon_item", BI.BlankIconTextIconItem);/**
+BI.shortcut("bi.blank_icon_text_icon_item", BI.BlankIconTextIconItem);/**
  * 带有一个占位
  *
  * Created by GUY on 2015/9/11.
@@ -16401,7 +16401,7 @@ BI.BlankIconTextItem = BI.inherit(BI.BasicButton, {
     }
 });
 BI.BlankIconTextItem.EVENT_CHANGE = "EVENT_CHANGE";
-$.shortcut("bi.blank_icon_text_item", BI.BlankIconTextItem);/**
+BI.shortcut("bi.blank_icon_text_item", BI.BlankIconTextItem);/**
  * guy
  * 两个icon和一行数 组成的一行listitem
  *
@@ -16534,7 +16534,7 @@ BI.IconTextIconItem = BI.inherit(BI.BasicButton, {
     }
 });
 BI.IconTextIconItem.EVENT_CHANGE = "EVENT_CHANGE";
-$.shortcut("bi.icon_text_icon_item", BI.IconTextIconItem);/**
+BI.shortcut("bi.icon_text_icon_item", BI.IconTextIconItem);/**
  * guy
  *
  * Created by GUY on 2015/9/9.
@@ -16639,7 +16639,7 @@ BI.IconTextItem = BI.inherit(BI.BasicButton, {
     }
 });
 BI.IconTextItem.EVENT_CHANGE = "EVENT_CHANGE";
-$.shortcut("bi.icon_text_item", BI.IconTextItem);/**
+BI.shortcut("bi.icon_text_item", BI.IconTextItem);/**
  *
  * 图标的button
  *
@@ -16745,7 +16745,7 @@ BI.TextIconItem = BI.inherit(BI.BasicButton, {
     }
 });
 BI.TextIconItem.EVENT_CHANGE = "EVENT_CHANGE";
-$.shortcut("bi.text_icon_item", BI.TextIconItem);/**
+BI.shortcut("bi.text_icon_item", BI.TextIconItem);/**
  * guy
  * 一个button和一行数 组成的一行listitem
  *
@@ -16830,7 +16830,7 @@ BI.TextItem = BI.inherit(BI.BasicButton, {
     }
 });
 BI.TextItem.EVENT_CHANGE = "EVENT_CHANGE";
-$.shortcut("bi.text_item", BI.TextItem);/**
+BI.shortcut("bi.text_item", BI.TextItem);/**
  * guy
  * Created by GUY on 2015/9/9.
  * @class BI.IconTextIconNode
@@ -16953,7 +16953,7 @@ BI.IconTextIconNode = BI.inherit(BI.NodeButton, {
     }
 });
 BI.IconTextIconNode.EVENT_CHANGE = "EVENT_CHANGE";
-$.shortcut("bi.icon_text_icon_node", BI.IconTextIconNode);/**
+BI.shortcut("bi.icon_text_icon_node", BI.IconTextIconNode);/**
  * guy
  * Created by GUY on 2015/9/9.
  * @class BI.IconTextNode
@@ -17049,7 +17049,7 @@ BI.IconTextNode = BI.inherit(BI.NodeButton, {
     }
 });
 BI.IconTextNode.EVENT_CHANGE = "EVENT_CHANGE";
-$.shortcut("bi.icon_text_node", BI.IconTextNode);/**
+BI.shortcut("bi.icon_text_node", BI.IconTextNode);/**
  * Created by GUY on 2015/9/9.
  * @class BI.TextIconNode
  * @extends BI.NodeButton
@@ -17144,7 +17144,7 @@ BI.TextIconNode = BI.inherit(BI.NodeButton, {
     }
 });
 BI.TextIconNode.EVENT_CHANGE = "EVENT_CHANGE";
-$.shortcut("bi.text_icon_node", BI.TextIconNode);/**
+BI.shortcut("bi.text_icon_node", BI.TextIconNode);/**
  * guy
  *
  * Created by GUY on 2015/9/9.
@@ -17220,7 +17220,7 @@ BI.TextNode = BI.inherit(BI.NodeButton, {
     }
 });
 BI.TextNode.EVENT_CHANGE = "EVENT_CHANGE";
-$.shortcut("bi.text_node", BI.TextNode);/**
+BI.shortcut("bi.text_node", BI.TextNode);/**
  *
  * Created by GUY on 2016/1/15.
  * @class BI.CodeEditor
@@ -17365,7 +17365,7 @@ BI.CodeEditor = BI.inherit(BI.Single, {
 BI.CodeEditor.EVENT_CHANGE = "EVENT_CHANGE";
 BI.CodeEditor.EVENT_BLUR = "EVENT_BLUR";
 BI.CodeEditor.EVENT_FOCUS = "EVENT_FOCUS";
-$.shortcut("bi.code_editor", BI.CodeEditor);/**
+BI.shortcut("bi.code_editor", BI.CodeEditor);/**
  * Created by GUY on 2015/4/15.
  * @class BI.Editor
  * @extends BI.Single
@@ -17696,7 +17696,7 @@ BI.Editor.EVENT_RESTRICT = "EVENT_RESTRICT";
 BI.Editor.EVENT_REMOVE = "EVENT_REMOVE";
 BI.Editor.EVENT_EMPTY = "EVENT_EMPTY";
 
-$.shortcut("bi.editor", BI.Editor);/**
+BI.shortcut("bi.editor", BI.Editor);/**
  * 多文件
  *
  * Created by GUY on 2016/4/13.
@@ -17789,7 +17789,7 @@ BI.MultifileEditor.EVENT_UPLOADSTART = "MultifileEditor.EVENT_UPLOADSTART";
 BI.MultifileEditor.EVENT_ERROR = "MultifileEditor.EVENT_ERROR";
 BI.MultifileEditor.EVENT_PROGRESS = "MultifileEditor.EVENT_PROGRESS";
 BI.MultifileEditor.EVENT_UPLOADED = "MultifileEditor.EVENT_UPLOADED";
-$.shortcut("bi.multifile_editor", BI.MultifileEditor);/**
+BI.shortcut("bi.multifile_editor", BI.MultifileEditor);/**
  *
  * Created by GUY on 2016/1/18.
  * @class BI.TextAreaEditor
@@ -17954,7 +17954,7 @@ BI.TextAreaEditor = BI.inherit(BI.Single, {
 BI.TextAreaEditor.EVENT_CHANGE = "EVENT_CHANGE";
 BI.TextAreaEditor.EVENT_BLUR = "EVENT_BLUR";
 BI.TextAreaEditor.EVENT_FOCUS = "EVENT_FOCUS";
-$.shortcut("bi.textarea_editor", BI.TextAreaEditor);/**
+BI.shortcut("bi.textarea_editor", BI.TextAreaEditor);/**
  * guy 图标
  * @class BI.Icon
  * @extends BI.Single
@@ -17971,7 +17971,7 @@ BI.Icon = BI.inherit(BI.Single, {
         BI.Icon.superclass._init.apply(this, arguments);
     }
 });
-$.shortcut("bi.icon", BI.Icon);/**
+BI.shortcut("bi.icon", BI.Icon);/**
  * @class BI.Iframe
  * @extends BI.Single
  * @abstract
@@ -18012,7 +18012,7 @@ BI.Iframe = BI.inherit(BI.Single, {
     }
 });
 
-$.shortcut("bi.iframe", BI.Iframe);/**
+BI.shortcut("bi.iframe", BI.Iframe);/**
  * ͼƬ
  *
  * Created by GUY on 2016/1/26.
@@ -18047,7 +18047,7 @@ BI.Img = BI.inherit(BI.Single, {
     }
 });
 
-$.shortcut("bi.img", BI.Img);
+BI.shortcut("bi.img", BI.Img);
 /**
  * guy
  * @extends BI.Single
@@ -18080,7 +18080,7 @@ BI.Checkbox = BI.inherit(BI.IconButton, {
 });
 BI.Checkbox.EVENT_CHANGE = "Checkbox.EVENT_CHANGE";
 
-$.shortcut("bi.checkbox", BI.Checkbox);/**
+BI.shortcut("bi.checkbox", BI.Checkbox);/**
  * 文件
  *
  * Created by GUY on 2016/1/27.
@@ -18697,7 +18697,7 @@ $.shortcut("bi.checkbox", BI.Checkbox);/**
     BI.File.EVENT_ERROR = "EVENT_ERROR";
     BI.File.EVENT_PROGRESS = "EVENT_PROGRESS";
     BI.File.EVENT_UPLOADED = "EVENT_UPLOADED";
-    $.shortcut("bi.file", BI.File);
+    BI.shortcut("bi.file", BI.File);
 })();/**
  * guy
  * @class BI.Input 一个button和一行数 组成的一行listitem
@@ -18981,7 +18981,7 @@ BI.Input.EVENT_VALID = "EVENT_VALID";
 BI.Input.EVENT_ERROR = "EVENT_ERROR";
 BI.Input.EVENT_ENTER = "EVENT_ENTER";
 BI.Input.EVENT_RESTRICT = "EVENT_RESTRICT";
-$.shortcut("bi.input", BI.Input);/**
+BI.shortcut("bi.input", BI.Input);/**
  * guy
  * @extends BI.Single
  * @type {*|void|Object}
@@ -19013,7 +19013,7 @@ BI.Radio = BI.inherit(BI.IconButton, {
 });
 BI.Radio.EVENT_CHANGE = "Radio.EVENT_CHANGE";
 
-$.shortcut("bi.radio", BI.Radio);/**
+BI.shortcut("bi.radio", BI.Radio);/**
  * Created by GUY on 2015/6/26.
  */
 
@@ -19483,7 +19483,7 @@ BI.Label = BI.inherit(BI.Single, {
     }
 });
 
-$.shortcut("bi.label", BI.Label);/**
+BI.shortcut("bi.label", BI.Label);/**
  * guy a元素
  * @class BI.Link
  * @extends BI.Text
@@ -19519,7 +19519,7 @@ BI.Link = BI.inherit(BI.Label, {
     }
 });
 
-$.shortcut("bi.link", BI.Link);/**
+BI.shortcut("bi.link", BI.Link);/**
  * guy
  * 气泡提示
  * @class BI.Bubble
@@ -19625,7 +19625,7 @@ BI.Bubble = BI.inherit(BI.Tip, {
     }
 });
 
-$.shortcut("bi.bubble", BI.Bubble);/**
+BI.shortcut("bi.bubble", BI.Bubble);/**
  * toast提示
  *
  * Created by GUY on 2015/9/7.
@@ -19678,7 +19678,7 @@ BI.Toast = BI.inherit(BI.Tip, {
     }
 });
 
-$.shortcut("bi.toast", BI.Toast);/**
+BI.shortcut("bi.toast", BI.Toast);/**
  * toast提示
  *
  * Created by GUY on 2015/9/7.
@@ -19760,7 +19760,7 @@ BI.Tooltip = BI.inherit(BI.Tip, {
     }
 });
 
-$.shortcut("bi.tooltip", BI.Tooltip);/**
+BI.shortcut("bi.tooltip", BI.Tooltip);/**
  * 下拉
  * @class BI.Trigger
  * @extends BI.Single
@@ -28160,7 +28160,7 @@ BI.Svg = BI.inherit(BI.Widget, {
         return this.paper.clear.apply(this.paper, arguments);
     }
 });
-$.shortcut("bi.svg", BI.Svg);/**
+BI.shortcut("bi.svg", BI.Svg);/**
  *
  * 表格
  *
@@ -28192,7 +28192,7 @@ BI.TableCell = BI.inherit(BI.Widget, {
     }
 });
 
-$.shortcut("bi.table_cell", BI.TableCell);/**
+BI.shortcut("bi.table_cell", BI.TableCell);/**
  *
  * 表格单元格
  *
@@ -28248,7 +28248,7 @@ BI.CollectionTableCell = BI.inherit(BI.Widget, {
     }
 });
 
-$.shortcut("bi.collection_table_cell", BI.CollectionTableCell);/**
+BI.shortcut("bi.collection_table_cell", BI.CollectionTableCell);/**
  * CollectionTable
  *
  * Created by GUY on 2016/1/12.
@@ -28794,7 +28794,7 @@ BI.CollectionTable = BI.inherit(BI.Widget, {
         this._restore();
     }
 });
-$.shortcut('bi.collection_table', BI.CollectionTable);/**
+BI.shortcut('bi.collection_table', BI.CollectionTable);/**
  * QuickCollectionTable
  *
  * Created by GUY on 2016/1/12.
@@ -28933,7 +28933,7 @@ BI.QuickCollectionTable = BI.inherit(BI.CollectionTable, {
         this.bottomRightCollection.populate(rightItems);
     }
 });
-$.shortcut('bi.quick_collection_table', BI.QuickCollectionTable);/**
+BI.shortcut('bi.quick_collection_table', BI.QuickCollectionTable);/**
  *
  * 表格单元格
  *
@@ -28991,7 +28991,7 @@ BI.GridTableCell = BI.inherit(BI.Widget, {
     }
 });
 
-$.shortcut("bi.grid_table_cell", BI.GridTableCell);/**
+BI.shortcut("bi.grid_table_cell", BI.GridTableCell);/**
  * GridTable
  *
  * Created by GUY on 2016/1/12.
@@ -29461,7 +29461,7 @@ BI.GridTable = BI.inherit(BI.Widget, {
         this._restore();
     }
 });
-$.shortcut('bi.grid_table', BI.GridTable);/**
+BI.shortcut('bi.grid_table', BI.GridTable);/**
  * QuickGridTable
  *
  * Created by GUY on 2016/1/12.
@@ -29625,7 +29625,7 @@ BI.QuickGridTable = BI.inherit(BI.GridTable, {
         this.bottomRightGrid.populate(rightItems);
     }
 });
-$.shortcut('bi.quick_grid_table', BI.QuickGridTable);/**
+BI.shortcut('bi.quick_grid_table', BI.QuickGridTable);/**
  *
  * 表格滚动条
  *
@@ -29951,7 +29951,7 @@ BI.GridTableScrollbar = BI.inherit(BI.Widget, {
 });
 BI.GridTableScrollbar.SIZE = 10;
 BI.GridTableScrollbar.EVENT_SCROLL = "EVENT_SCROLL";
-$.shortcut("bi.grid_table_scrollbar", BI.GridTableScrollbar);
+BI.shortcut("bi.grid_table_scrollbar", BI.GridTableScrollbar);
 
 
 BI.GridTableHorizontalScrollbar = BI.inherit(BI.Widget, {
@@ -30031,7 +30031,7 @@ BI.GridTableHorizontalScrollbar = BI.inherit(BI.Widget, {
     }
 });
 BI.GridTableHorizontalScrollbar.EVENT_SCROLL = "EVENT_SCROLL";
-$.shortcut("bi.grid_table_horizontal_scrollbar", BI.GridTableHorizontalScrollbar);/**
+BI.shortcut("bi.grid_table_horizontal_scrollbar", BI.GridTableHorizontalScrollbar);/**
  *
  * 表格
  *
@@ -30060,7 +30060,7 @@ BI.TableHeaderCell = BI.inherit(BI.Widget, {
     }
 });
 
-$.shortcut("bi.table_header_cell", BI.TableHeaderCell);/**
+BI.shortcut("bi.table_header_cell", BI.TableHeaderCell);/**
  *
  * 表格
  *
@@ -31998,7 +31998,7 @@ BI.Table.EVENT_TABLE_AFTER_COLUMN_RESIZE = "EVENT_TABLE_AFTER_COLUMN_RESIZE";
 BI.Table.EVENT_TABLE_BEFORE_REGION_RESIZE = "EVENT_TABLE_BEFORE_REGION_RESIZE";
 BI.Table.EVENT_TABLE_REGION_RESIZE = "EVENT_TABLE_REGION_RESIZE";
 BI.Table.EVENT_TABLE_AFTER_REGION_RESIZE = "EVENT_TABLE_AFTER_REGION_RESIZE";
-$.shortcut("bi.table_view", BI.Table);
+BI.shortcut("bi.table_view", BI.Table);
 /**
  *
  * 表格单元格
@@ -32094,7 +32094,7 @@ BI.ResizableTableCell = BI.inherit(BI.Widget, {
         this.cell.setHeight(o.height);
     }
 });
-$.shortcut("bi.resizable_table_cell", BI.ResizableTableCell);/**
+BI.shortcut("bi.resizable_table_cell", BI.ResizableTableCell);/**
  *
  * 可调整列宽的grid表格
  *
@@ -32442,7 +32442,7 @@ BI.ResizableTable = BI.inherit(BI.Widget, {
     }
 });
 
-$.shortcut("bi.resizable_table", BI.ResizableTable);/**
+BI.shortcut("bi.resizable_table", BI.ResizableTable);/**
  *
  * 自定义树
  *
@@ -32596,7 +32596,7 @@ BI.CustomTree = BI.inherit(BI.Widget, {
 });
 BI.CustomTree.EVENT_CHANGE = "EVENT_CHANGE";
 
-$.shortcut("bi.custom_tree", BI.CustomTree);/*
+BI.shortcut("bi.custom_tree", BI.CustomTree);/*
  * JQuery zTree core v3.5.18
  * http://zTree.me/
  *

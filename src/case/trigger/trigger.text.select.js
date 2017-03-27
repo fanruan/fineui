@@ -52,4 +52,4 @@ BI.SelectTextTrigger = BI.inherit(BI.Trigger, {
         this.options.items = items;
     }
 });
-$.shortcut("bi.select_text_trigger", BI.SelectTextTrigger);
+BI.shortcut("bi.select_text_trigger", BI.SelectTextTrigger);

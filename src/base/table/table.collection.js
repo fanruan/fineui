@@ -544,4 +544,4 @@ BI.CollectionTable = BI.inherit(BI.Widget, {
         this._restore();
     }
 });
-$.shortcut('bi.collection_table', BI.CollectionTable);
+BI.shortcut('bi.collection_table', BI.CollectionTable);

@@ -224,4 +224,4 @@ BI.RecordEditor.EVENT_RESTRICT = "EVENT_RESTRICT";
 BI.RecordEditor.EVENT_SPACE = "EVENT_SPACE";
 BI.RecordEditor.EVENT_EMPTY = "EVENT_EMPTY";
 
-$.shortcut("bi.record_editor", BI.RecordEditor);
+BI.shortcut("bi.record_editor", BI.RecordEditor);

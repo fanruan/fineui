@@ -93,4 +93,4 @@ Demo.Editor = BI.inherit(BI.Widget, {
         })
     }
 });
-$.shortcut("demo.editor", Demo.Editor);
+BI.shortcut("demo.editor", Demo.Editor);

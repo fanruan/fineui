@@ -24,4 +24,4 @@ BI.MidTreeNodeCheckbox = BI.inherit(BI.IconButton, {
         }
     }
 });
-$.shortcut("bi.mid_tree_node_checkbox", BI.MidTreeNodeCheckbox);
+BI.shortcut("bi.mid_tree_node_checkbox", BI.MidTreeNodeCheckbox);

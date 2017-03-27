@@ -206,4 +206,4 @@ BI.SyncTree = BI.inherit(BI.TreeView, {
     }
 });
 
-$.shortcut("bi.sync_tree", BI.SyncTree);
+BI.shortcut("bi.sync_tree", BI.SyncTree);

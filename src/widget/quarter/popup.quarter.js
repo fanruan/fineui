@@ -68,4 +68,4 @@ BI.QuarterPopup = BI.inherit(BI.Widget, {
     }
 });
 BI.QuarterPopup.EVENT_CHANGE = "EVENT_CHANGE";
-$.shortcut("bi.quarter_popup", BI.QuarterPopup);
+BI.shortcut("bi.quarter_popup", BI.QuarterPopup);

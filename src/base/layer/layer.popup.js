@@ -178,4 +178,4 @@ BI.PopupView = BI.inherit(BI.Widget, {
     }
 });
 BI.PopupView.EVENT_CHANGE = "EVENT_CHANGE";
-$.shortcut("bi.popup_view", BI.PopupView);
+BI.shortcut("bi.popup_view", BI.PopupView);

@@ -139,7 +139,7 @@ BI.FloatBox = BI.inherit(BI.Widget, {
     }
 });
 
-$.shortcut("bi.float_box", BI.FloatBox);
+BI.shortcut("bi.float_box", BI.FloatBox);
 
 BI.FloatBox.EVENT_FLOAT_BOX_CLOSED = "EVENT_FLOAT_BOX_CLOSED";
 BI.FloatBox.EVENT_FLOAT_BOX_OPEN = "EVENT_FLOAT_BOX_CLOSED";

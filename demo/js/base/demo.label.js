@@ -135,4 +135,4 @@ Demo.Label = BI.inherit(BI.Widget, {
         }
     }
 });
-$.shortcut("demo.label", Demo.Label);
+BI.shortcut("demo.label", Demo.Label);

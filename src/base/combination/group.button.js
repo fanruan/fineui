@@ -316,4 +316,4 @@ BI.extend(BI.ButtonGroup, {
 });
 BI.ButtonGroup.EVENT_CHANGE = "EVENT_CHANGE";
 
-$.shortcut("bi.button_group", BI.ButtonGroup);
+BI.shortcut("bi.button_group", BI.ButtonGroup);

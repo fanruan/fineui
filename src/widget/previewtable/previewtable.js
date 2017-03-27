@@ -206,4 +206,4 @@ BI.PreviewTable = BI.inherit(BI.Widget, {
     }
 });
 BI.PreviewTable.EVENT_CHANGE = "PreviewTable.EVENT_CHANGE";
-$.shortcut('bi.preview_table', BI.PreviewTable);
+BI.shortcut('bi.preview_table', BI.PreviewTable);

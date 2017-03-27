@@ -162,4 +162,4 @@ BI.QuickGridTable = BI.inherit(BI.GridTable, {
         this.bottomRightGrid.populate(rightItems);
     }
 });
-$.shortcut('bi.quick_grid_table', BI.QuickGridTable);
+BI.shortcut('bi.quick_grid_table', BI.QuickGridTable);
