@@ -1118,9 +1118,21 @@ BI.ButtonGroup = BI.inherit(BI.Widget, {
         this.layouts.addItems(this._packageLayout(items).items);
     },
 
-    removeItemAt: function (index) {
-        this.buttons[index].destroy();
-        this.layouts.removeItemAt(index);
+    removeItemAt: function (indexes) {
+        BI.remove(this.buttons, indexes);
+        this.layouts.removeItemAt(indexes);
+    },
+
+    removeItems: function (values) {
+        values = BI.isArray(values) ? values : [values];
+        var deleted = [];
+        BI.each(this.buttons, function (i, button) {
+            if (BI.deepContains(values, button.getValue())) {
+                deleted.push(i);
+            }
+        });
+        BI.remove(this.buttons, deleted);
+        this.layouts.removeItemAt(deleted);
     },
 
     populate: function (items) {
@@ -3609,7 +3621,15 @@ BI.shortcut("bi.combo_group", BI.ComboGroup);BI.VirtualGroup = BI.inherit(BI.Wid
     },
 
     prependItems: function (items) {
-        this.layouts.prependItems(items);  
+        this.layouts.prependItems(items);
+    },
+
+    setValue: function (v) {
+        this.layouts.setValue(v);
+    },
+
+    getValue: function () {
+        return this.layouts.getValue();
     },
 
     populate: function (items) {

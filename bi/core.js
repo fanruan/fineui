@@ -11419,13 +11419,24 @@ BI.Layout = BI.inherit(BI.Widget, {
         return w;
     },
 
-    removeItemAt: function (index) {
-        if (index < 0 || index > this.options.items.length - 1) {
-            return;
+    removeItemAt: function (indexes) {
+        indexes = BI.isArray(indexes) ? indexes : [indexes];
+        var deleted = [];
+        var newItems = [], newChildren = {};
+        for (var i = 0, len = this.options.items.length; i < len; i++) {
+            var child = this._children[this._getChildName(i)];
+            if (indexes.contains(i)) {
+                deleted.push(child);
+            } else {
+                newChildren[this._getChildName(newItems.length)] = child;
+                newItems.push(this.options.items[i]);
+            }
         }
-        var child = this._children[this._getChildName(index)];
-        this._removeItemAt(index);
-        child.destroy();
+        this.options.items = newItems;
+        this._children = newChildren;
+        BI.each(deleted, function (i, c) {
+            c.destroy();
+        });
     },
 
     updateItemAt: function (index, item) {

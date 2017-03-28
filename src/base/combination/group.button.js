@@ -155,9 +155,21 @@ BI.ButtonGroup = BI.inherit(BI.Widget, {
         this.layouts.addItems(this._packageLayout(items).items);
     },
 
-    removeItemAt: function (index) {
-        this.buttons[index].destroy();
-        this.layouts.removeItemAt(index);
+    removeItemAt: function (indexes) {
+        BI.remove(this.buttons, indexes);
+        this.layouts.removeItemAt(indexes);
+    },
+
+    removeItems: function (values) {
+        values = BI.isArray(values) ? values : [values];
+        var deleted = [];
+        BI.each(this.buttons, function (i, button) {
+            if (BI.deepContains(values, button.getValue())) {
+                deleted.push(i);
+            }
+        });
+        BI.remove(this.buttons, deleted);
+        this.layouts.removeItemAt(deleted);
     },
 
     populate: function (items) {
