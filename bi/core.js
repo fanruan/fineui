@@ -4673,7 +4673,7 @@ BI.Widget = BI.inherit(BI.OB, {
             widget = name;
             name = widget.getName();
         }
-        if (BI.isKey(name)) {
+        if(BI.isKey(name)){
             name = name + "";
         }
         name = name || widget.getName() || BI.uniqueId("widget");
