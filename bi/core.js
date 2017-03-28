@@ -4671,6 +4671,9 @@ BI.Widget = BI.inherit(BI.OB, {
             widget = name;
             name = widget.getName();
         }
+        if(BI.isKey(name)){
+            name = name + "";
+        }
         name = name || widget.getName() || BI.uniqueId("widget");
         if (this._children[name]) {
             throw new Error("name has already been existed");
