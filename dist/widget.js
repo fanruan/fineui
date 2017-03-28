@@ -4905,6 +4905,9 @@ BI.shortcut('bi.date_combo', BI.DateCombo);BI.DateTrigger = BI.inherit(BI.Trigge
         this.editor.on(BI.SignEditor.EVENT_FOCUS, function () {
             self.fireEvent(BI.DateTrigger.EVENT_FOCUS);
         });
+        this.editor.on(BI.SignEditor.EVENT_STOP, function () {
+            self.fireEvent(BI.DateTrigger.EVENT_STOP);
+        });
         this.editor.on(BI.SignEditor.EVENT_VALID, function () {
             self.fireEvent(BI.DateTrigger.EVENT_VALID);
         });
@@ -5159,6 +5162,7 @@ BI.DateTrigger.MULTI_DATE_SEGMENT_NUM[BI.DateTrigger.MULTI_DATE_DAY_TODAY] = BI.
 
 BI.DateTrigger.EVENT_FOCUS = "EVENT_FOCUS";
 BI.DateTrigger.EVENT_START = "EVENT_START";
+BI.DateTrigger.EVENT_STOP = "EVENT_STOP";
 BI.DateTrigger.EVENT_CONFIRM = "EVENT_CONFIRM";
 BI.DateTrigger.EVENT_CHANGE = "EVENT_CHANGE";
 BI.DateTrigger.EVENT_VALID = "EVENT_VALID";

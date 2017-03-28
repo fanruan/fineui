@@ -4905,6 +4905,9 @@ BI.shortcut('bi.date_combo', BI.DateCombo);BI.DateTrigger = BI.inherit(BI.Trigge
         this.editor.on(BI.SignEditor.EVENT_FOCUS, function () {
             self.fireEvent(BI.DateTrigger.EVENT_FOCUS);
         });
+        this.editor.on(BI.SignEditor.EVENT_STOP, function () {
+            self.fireEvent(BI.DateTrigger.EVENT_STOP);
+        });
         this.editor.on(BI.SignEditor.EVENT_VALID, function () {
             self.fireEvent(BI.DateTrigger.EVENT_VALID);
         });
@@ -4920,7 +4923,7 @@ BI.shortcut('bi.date_combo', BI.DateCombo);BI.DateTrigger = BI.inherit(BI.Trigge
             if (BI.isNotEmptyString(value)) {
                 var date = value.split("-");
                 self.store_value = {
-                    type: BICst.MULTI_DATE_CALENDAR,
+                    type: BI.DateTrigger.MULTI_DATE_CALENDAR,
                     value:{
                         year: date[0] | 0,
                         month: date[1] - 1,
@@ -4988,7 +4991,7 @@ BI.shortcut('bi.date_combo', BI.DateCombo);BI.DateTrigger = BI.inherit(BI.Trigge
         var date = new Date();
         this.store_value = v;
         if (BI.isNotNull(v)) {
-            type = v.type || BICst.MULTI_DATE_CALENDAR; value = v.value;
+            type = v.type || BI.DateTrigger.MULTI_DATE_CALENDAR; value = v.value;
             if(BI.isNull(value)){
                 value = v;
             }
@@ -5000,88 +5003,88 @@ BI.shortcut('bi.date_combo', BI.DateCombo);BI.DateTrigger = BI.inherit(BI.Trigge
             self.setTitle(text + ":" + dateStr);
         };
         switch (type) {
-            case BICst.MULTI_DATE_YEAR_PREV:
-                var text = value + BICst.MULTI_DATE_SEGMENT_NUM[BICst.MULTI_DATE_YEAR_PREV];
+            case BI.DateTrigger.MULTI_DATE_YEAR_PREV:
+                var text = value + BI.DateTrigger.MULTI_DATE_SEGMENT_NUM[BI.DateTrigger.MULTI_DATE_YEAR_PREV];
                 date = new Date((date.getFullYear() - 1 * value), date.getMonth(), date.getDate());
                 _setInnerValue(date, text);
                 break;
-            case BICst.MULTI_DATE_YEAR_AFTER:
-                var text = value + BICst.MULTI_DATE_SEGMENT_NUM[BICst.MULTI_DATE_YEAR_AFTER];
+            case BI.DateTrigger.MULTI_DATE_YEAR_AFTER:
+                var text = value + BI.DateTrigger.MULTI_DATE_SEGMENT_NUM[BI.DateTrigger.MULTI_DATE_YEAR_AFTER];
                 date = new Date((date.getFullYear() + 1 * value), date.getMonth(), date.getDate());
                 _setInnerValue(date, text);
                 break;
-            case BICst.MULTI_DATE_YEAR_BEGIN:
-                var text = BICst.MULTI_DATE_SEGMENT_NUM[BICst.MULTI_DATE_YEAR_BEGIN];
+            case BI.DateTrigger.MULTI_DATE_YEAR_BEGIN:
+                var text = BI.DateTrigger.MULTI_DATE_SEGMENT_NUM[BI.DateTrigger.MULTI_DATE_YEAR_BEGIN];
                 date = new Date(date.getFullYear(), 0, 1);
                 _setInnerValue(date, text);
                 break;
-            case BICst.MULTI_DATE_YEAR_END:
-                var text = BICst.MULTI_DATE_SEGMENT_NUM[BICst.MULTI_DATE_YEAR_END];
+            case BI.DateTrigger.MULTI_DATE_YEAR_END:
+                var text = BI.DateTrigger.MULTI_DATE_SEGMENT_NUM[BI.DateTrigger.MULTI_DATE_YEAR_END];
                 date = new Date(date.getFullYear(), 11, 31);
                 _setInnerValue(date, text);
                 break;
-            case BICst.MULTI_DATE_QUARTER_PREV:
-                var text = value + BICst.MULTI_DATE_SEGMENT_NUM[BICst.MULTI_DATE_QUARTER_PREV];
+            case BI.DateTrigger.MULTI_DATE_QUARTER_PREV:
+                var text = value + BI.DateTrigger.MULTI_DATE_SEGMENT_NUM[BI.DateTrigger.MULTI_DATE_QUARTER_PREV];
                 date = new Date().getBeforeMulQuarter(value);
                 _setInnerValue(date, text);
                 break;
-            case BICst.MULTI_DATE_QUARTER_AFTER:
-                var text = value + BICst.MULTI_DATE_SEGMENT_NUM[BICst.MULTI_DATE_QUARTER_AFTER];
+            case BI.DateTrigger.MULTI_DATE_QUARTER_AFTER:
+                var text = value + BI.DateTrigger.MULTI_DATE_SEGMENT_NUM[BI.DateTrigger.MULTI_DATE_QUARTER_AFTER];
                 date = new Date().getAfterMulQuarter(value);
                 _setInnerValue(date, text);
                 break;
-            case BICst.MULTI_DATE_QUARTER_BEGIN:
-                var text = BICst.MULTI_DATE_SEGMENT_NUM[BICst.MULTI_DATE_QUARTER_BEGIN];
+            case BI.DateTrigger.MULTI_DATE_QUARTER_BEGIN:
+                var text = BI.DateTrigger.MULTI_DATE_SEGMENT_NUM[BI.DateTrigger.MULTI_DATE_QUARTER_BEGIN];
                 date = new Date().getQuarterStartDate();
                 _setInnerValue(date, text);
                 break;
-            case BICst.MULTI_DATE_QUARTER_END:
-                var text = BICst.MULTI_DATE_SEGMENT_NUM[BICst.MULTI_DATE_QUARTER_END];
+            case BI.DateTrigger.MULTI_DATE_QUARTER_END:
+                var text = BI.DateTrigger.MULTI_DATE_SEGMENT_NUM[BI.DateTrigger.MULTI_DATE_QUARTER_END];
                 date = new Date().getQuarterEndDate();
                 _setInnerValue(date, text);
                 break;
-            case BICst.MULTI_DATE_MONTH_PREV:
-                var text = value + BICst.MULTI_DATE_SEGMENT_NUM[BICst.MULTI_DATE_MONTH_PREV];
+            case BI.DateTrigger.MULTI_DATE_MONTH_PREV:
+                var text = value + BI.DateTrigger.MULTI_DATE_SEGMENT_NUM[BI.DateTrigger.MULTI_DATE_MONTH_PREV];
                 date = new Date().getBeforeMultiMonth(value);
                 _setInnerValue(date, text);
                 break;
-            case BICst.MULTI_DATE_MONTH_AFTER:
-                var text = value + BICst.MULTI_DATE_SEGMENT_NUM[BICst.MULTI_DATE_MONTH_AFTER];
+            case BI.DateTrigger.MULTI_DATE_MONTH_AFTER:
+                var text = value + BI.DateTrigger.MULTI_DATE_SEGMENT_NUM[BI.DateTrigger.MULTI_DATE_MONTH_AFTER];
                 date = new Date().getAfterMultiMonth(value);
                 _setInnerValue(date, text);
                 break;
-            case BICst.MULTI_DATE_MONTH_BEGIN:
-                var text = BICst.MULTI_DATE_SEGMENT_NUM[BICst.MULTI_DATE_MONTH_BEGIN];
+            case BI.DateTrigger.MULTI_DATE_MONTH_BEGIN:
+                var text = BI.DateTrigger.MULTI_DATE_SEGMENT_NUM[BI.DateTrigger.MULTI_DATE_MONTH_BEGIN];
                 date = new Date(date.getFullYear(), date.getMonth(), 1);
                 _setInnerValue(date, text);
                 break;
-            case BICst.MULTI_DATE_MONTH_END:
-                var text = BICst.MULTI_DATE_SEGMENT_NUM[BICst.MULTI_DATE_MONTH_END];
+            case BI.DateTrigger.MULTI_DATE_MONTH_END:
+                var text = BI.DateTrigger.MULTI_DATE_SEGMENT_NUM[BI.DateTrigger.MULTI_DATE_MONTH_END];
                 date = new Date(date.getFullYear(), date.getMonth(), (date.getLastDateOfMonth()).getDate());
                 _setInnerValue(date, text);
                 break;
-            case BICst.MULTI_DATE_WEEK_PREV:
-                var text = value + BICst.MULTI_DATE_SEGMENT_NUM[BICst.MULTI_DATE_WEEK_PREV];
+            case BI.DateTrigger.MULTI_DATE_WEEK_PREV:
+                var text = value + BI.DateTrigger.MULTI_DATE_SEGMENT_NUM[BI.DateTrigger.MULTI_DATE_WEEK_PREV];
                 date = date.getOffsetDate(-7 * value);
                 _setInnerValue(date, text);
                 break;
-            case BICst.MULTI_DATE_WEEK_AFTER:
-                var text = value + BICst.MULTI_DATE_SEGMENT_NUM[BICst.MULTI_DATE_WEEK_AFTER];
+            case BI.DateTrigger.MULTI_DATE_WEEK_AFTER:
+                var text = value + BI.DateTrigger.MULTI_DATE_SEGMENT_NUM[BI.DateTrigger.MULTI_DATE_WEEK_AFTER];
                 date = date.getOffsetDate(7 * value);
                 _setInnerValue(date, text);
                 break;
-            case BICst.MULTI_DATE_DAY_PREV:
-                var text = value + BICst.MULTI_DATE_SEGMENT_NUM[BICst.MULTI_DATE_DAY_PREV];
+            case BI.DateTrigger.MULTI_DATE_DAY_PREV:
+                var text = value + BI.DateTrigger.MULTI_DATE_SEGMENT_NUM[BI.DateTrigger.MULTI_DATE_DAY_PREV];
                 date = date.getOffsetDate(-1 * value);
                 _setInnerValue(date, text);
                 break;
-            case BICst.MULTI_DATE_DAY_AFTER:
-                var text = value + BICst.MULTI_DATE_SEGMENT_NUM[BICst.MULTI_DATE_DAY_AFTER];
+            case BI.DateTrigger.MULTI_DATE_DAY_AFTER:
+                var text = value + BI.DateTrigger.MULTI_DATE_SEGMENT_NUM[BI.DateTrigger.MULTI_DATE_DAY_AFTER];
                 date = date.getOffsetDate(1 * value);
                 _setInnerValue(date, text);
                 break;
-            case BICst.MULTI_DATE_DAY_TODAY:
-                var text = BICst.MULTI_DATE_SEGMENT_NUM[BICst.MULTI_DATE_DAY_TODAY];
+            case BI.DateTrigger.MULTI_DATE_DAY_TODAY:
+                var text = BI.DateTrigger.MULTI_DATE_SEGMENT_NUM[BI.DateTrigger.MULTI_DATE_DAY_TODAY];
                 date = new Date();
                 _setInnerValue(date, text);
                 break;
@@ -5108,8 +5111,58 @@ BI.shortcut('bi.date_combo', BI.DateCombo);BI.DateTrigger = BI.inherit(BI.Trigge
     }
 
 });
+
+BI.DateTrigger.MULTI_DATE_YEAR_PREV = 1;
+BI.DateTrigger.MULTI_DATE_YEAR_AFTER = 2;
+BI.DateTrigger.MULTI_DATE_YEAR_BEGIN = 3;
+BI.DateTrigger.MULTI_DATE_YEAR_END = 4;
+
+BI.DateTrigger.MULTI_DATE_MONTH_PREV = 5;
+BI.DateTrigger.MULTI_DATE_MONTH_AFTER = 6;
+BI.DateTrigger.MULTI_DATE_MONTH_BEGIN = 7;
+BI.DateTrigger.MULTI_DATE_MONTH_END = 8;
+
+BI.DateTrigger.MULTI_DATE_QUARTER_PREV = 9;
+BI.DateTrigger.MULTI_DATE_QUARTER_AFTER = 10;
+BI.DateTrigger.MULTI_DATE_QUARTER_BEGIN = 11;
+BI.DateTrigger.MULTI_DATE_QUARTER_END = 12;
+
+BI.DateTrigger.MULTI_DATE_WEEK_PREV = 13;
+BI.DateTrigger.MULTI_DATE_WEEK_AFTER = 14;
+
+BI.DateTrigger.MULTI_DATE_DAY_PREV = 15;
+BI.DateTrigger.MULTI_DATE_DAY_AFTER = 16;
+BI.DateTrigger.MULTI_DATE_DAY_TODAY = 17;
+
+BI.DateTrigger.MULTI_DATE_PARAM = 18;
+BI.DateTrigger.MULTI_DATE_CALENDAR = 19;
+
+BI.DateTrigger.MULTI_DATE_SEGMENT_NUM = {};
+BI.DateTrigger.MULTI_DATE_SEGMENT_NUM[BI.DateTrigger.MULTI_DATE_YEAR_PREV] = BI.i18nText("BI-Multi_Date_Year_Prev");
+BI.DateTrigger.MULTI_DATE_SEGMENT_NUM[BI.DateTrigger.MULTI_DATE_YEAR_AFTER] = BI.i18nText("BI-Multi_Date_Year_Next");
+BI.DateTrigger.MULTI_DATE_SEGMENT_NUM[BI.DateTrigger.MULTI_DATE_YEAR_BEGIN] = BI.i18nText("BI-Multi_Date_Year_Begin");
+BI.DateTrigger.MULTI_DATE_SEGMENT_NUM[BI.DateTrigger.MULTI_DATE_YEAR_END] = BI.i18nText("BI-Multi_Date_Year_End");
+
+BI.DateTrigger.MULTI_DATE_SEGMENT_NUM[BI.DateTrigger.MULTI_DATE_QUARTER_PREV] = BI.i18nText("BI-Multi_Date_Quarter_Prev");
+BI.DateTrigger.MULTI_DATE_SEGMENT_NUM[BI.DateTrigger.MULTI_DATE_QUARTER_AFTER] = BI.i18nText("BI-Multi_Date_Quarter_Next");
+BI.DateTrigger.MULTI_DATE_SEGMENT_NUM[BI.DateTrigger.MULTI_DATE_QUARTER_BEGIN] = BI.i18nText("BI-Multi_Date_Quarter_Begin");
+BI.DateTrigger.MULTI_DATE_SEGMENT_NUM[BI.DateTrigger.MULTI_DATE_QUARTER_END] = BI.i18nText("BI-Multi_Date_Quarter_End");
+
+BI.DateTrigger.MULTI_DATE_SEGMENT_NUM[BI.DateTrigger.MULTI_DATE_MONTH_PREV] = BI.i18nText("BI-Multi_Date_Month_Prev");
+BI.DateTrigger.MULTI_DATE_SEGMENT_NUM[BI.DateTrigger.MULTI_DATE_MONTH_AFTER] = BI.i18nText("BI-Multi_Date_Month_Next");
+BI.DateTrigger.MULTI_DATE_SEGMENT_NUM[BI.DateTrigger.MULTI_DATE_MONTH_BEGIN] = BI.i18nText("BI-Multi_Date_Month_Begin");
+BI.DateTrigger.MULTI_DATE_SEGMENT_NUM[BI.DateTrigger.MULTI_DATE_MONTH_END] = BI.i18nText("BI-Multi_Date_Month_End");
+
+BI.DateTrigger.MULTI_DATE_SEGMENT_NUM[BI.DateTrigger.MULTI_DATE_WEEK_PREV] = BI.i18nText("BI-Multi_Date_Week_Prev");
+BI.DateTrigger.MULTI_DATE_SEGMENT_NUM[BI.DateTrigger.MULTI_DATE_WEEK_AFTER] = BI.i18nText("BI-Multi_Date_Week_Next");
+
+BI.DateTrigger.MULTI_DATE_SEGMENT_NUM[BI.DateTrigger.MULTI_DATE_DAY_PREV] = BI.i18nText("BI-Multi_Date_Day_Prev");
+BI.DateTrigger.MULTI_DATE_SEGMENT_NUM[BI.DateTrigger.MULTI_DATE_DAY_AFTER] = BI.i18nText("BI-Multi_Date_Day_Next");
+BI.DateTrigger.MULTI_DATE_SEGMENT_NUM[BI.DateTrigger.MULTI_DATE_DAY_TODAY] = BI.i18nText("BI-Multi_Date_Today");
+
 BI.DateTrigger.EVENT_FOCUS = "EVENT_FOCUS";
 BI.DateTrigger.EVENT_START = "EVENT_START";
+BI.DateTrigger.EVENT_STOP = "EVENT_STOP";
 BI.DateTrigger.EVENT_CONFIRM = "EVENT_CONFIRM";
 BI.DateTrigger.EVENT_CHANGE = "EVENT_CHANGE";
 BI.DateTrigger.EVENT_VALID = "EVENT_VALID";
