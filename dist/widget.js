@@ -419,8 +419,10 @@ BI.AdaptiveArrangement = BI.inherit(BI.Widget, {
         if (o.isNeedResizeContainer) {
 
             var isResizing = false;
+            var needEnd = false;
             var height;
             var interval;
+            var startSize;
             var resize = function (e, ui) {
                 if (isResizing) {
                     return;
@@ -442,20 +444,26 @@ BI.AdaptiveArrangement = BI.inherit(BI.Widget, {
                 minHeight: 20,
                 helper: "bi-resizer",
                 autoHide: true,
+                start: function (e, ui) {
+                    startSize = BI.clone(ui.size);
+                },
                 resize: function (e, ui) {
-                    if (ui.size.height >= self.arrangement.container.element.height()) {
+                    if (ui.size.height >= startSize.height - 10) {
                         resize(e, ui);
                     } else {
                         interval && clearInterval(interval);
+                        needEnd = true;
                     }
                 },
                 stop: function (e, ui) {
                     var size = ui.size;
-                    if (isResizing) {
+                    if (isResizing && !needEnd) {
                         size.height = height;
                     }
                     self.arrangement.setContainerSize(ui.size);
+                    needEnd = false;
                     isResizing = false;
+                    startSize = null;
                     interval && clearInterval(interval);
                     self.fireEvent(BI.AdaptiveArrangement.EVENT_RESIZE);
                 }
@@ -484,17 +492,21 @@ BI.AdaptiveArrangement = BI.inherit(BI.Widget, {
         return this.arrangement._isEqual.apply(this.arrangement, arguments);
     },
 
+    _setSelect: function (item) {
+        if (!item.element.hasClass("selected")) {
+            item.element.css("zIndex", ++this.zIndex);
+            BI.each(this.getAllRegions(), function (i, region) {
+                region.el.element.removeClass("selected");
+            });
+            item.element.addClass("selected");
+        }
+    },
+
     _initResizable: function (item) {
         var self = this, o = this.options;
         item.element.css("zIndex", ++this.zIndex);
         item.element.mousedown(function () {
-            if (!item.element.hasClass("selected")) {
-                item.element.css("zIndex", ++self.zIndex);
-                BI.each(self.getAllRegions(), function (i, region) {
-                    region.el.element.removeClass("selected");
-                });
-                item.element.addClass("selected");
-            }
+            self._setSelect(item)
         });
         o.resizable && item.element.resizable({
             handles: "e, s, se",
@@ -663,6 +675,7 @@ BI.AdaptiveArrangement = BI.inherit(BI.Widget, {
 
     addRegion: function (region, position) {
         this._initResizable(region.el);
+        this._setSelect(region.el);
         var self = this, flag;
         var old = this.arrangement.getAllRegions();
         if (BI.isNotNull(this.position)) {
