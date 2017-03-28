@@ -4432,6 +4432,7 @@ $.extend(BI.OB.prototype, {
 BI.Widget = BI.inherit(BI.OB, {
     _defaultConfig: function () {
         return BI.extend(BI.Widget.superclass._defaultConfig.apply(this), {
+            root: false,
             tagName: "div",
             attributes: null,
             data: null,
@@ -4480,6 +4481,7 @@ BI.Widget = BI.inherit(BI.OB, {
     _initRoot: function () {
         var o = this.options;
         this.widgetName = o.widgetName || BI.uniqueId("widget");
+        this._isRoot = o.root;
         if (BI.isWidget(o.element)) {
             if (o.element instanceof BI.Widget) {
                 this._parent = o.element;
@@ -12351,7 +12353,7 @@ BI.FloatCenterAdaptLayout = BI.inherit(BI.Layout, {
             element: this,
             items: [this.left]
         });
-        this.removeWidget(this.container.getName());
+        this.removeWidget(this.container);
     },
 
     stroke: function (items) {
@@ -12414,7 +12416,7 @@ BI.FloatHorizontalLayout = BI.inherit(BI.Layout, {
             element: this,
             items: [this.left]
         });
-        this.removeWidget(this.container.getName());
+        this.removeWidget(this.container);
     },
 
     _addElement: function (i, item) {

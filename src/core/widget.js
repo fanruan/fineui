@@ -8,6 +8,7 @@
 BI.Widget = BI.inherit(BI.OB, {
     _defaultConfig: function () {
         return BI.extend(BI.Widget.superclass._defaultConfig.apply(this), {
+            root: false,
             tagName: "div",
             attributes: null,
             data: null,
@@ -56,6 +57,7 @@ BI.Widget = BI.inherit(BI.OB, {
     _initRoot: function () {
         var o = this.options;
         this.widgetName = o.widgetName || BI.uniqueId("widget");
+        this._isRoot = o.root;
         if (BI.isWidget(o.element)) {
             if (o.element instanceof BI.Widget) {
                 this._parent = o.element;

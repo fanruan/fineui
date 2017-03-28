@@ -4920,7 +4920,7 @@ BI.shortcut('bi.date_combo', BI.DateCombo);BI.DateTrigger = BI.inherit(BI.Trigge
             if (BI.isNotEmptyString(value)) {
                 var date = value.split("-");
                 self.store_value = {
-                    type: BICst.MULTI_DATE_CALENDAR,
+                    type: BI.DateTrigger.MULTI_DATE_CALENDAR,
                     value:{
                         year: date[0] | 0,
                         month: date[1] - 1,
@@ -4988,7 +4988,7 @@ BI.shortcut('bi.date_combo', BI.DateCombo);BI.DateTrigger = BI.inherit(BI.Trigge
         var date = new Date();
         this.store_value = v;
         if (BI.isNotNull(v)) {
-            type = v.type || BICst.MULTI_DATE_CALENDAR; value = v.value;
+            type = v.type || BI.DateTrigger.MULTI_DATE_CALENDAR; value = v.value;
             if(BI.isNull(value)){
                 value = v;
             }
@@ -5000,88 +5000,88 @@ BI.shortcut('bi.date_combo', BI.DateCombo);BI.DateTrigger = BI.inherit(BI.Trigge
             self.setTitle(text + ":" + dateStr);
         };
         switch (type) {
-            case BICst.MULTI_DATE_YEAR_PREV:
-                var text = value + BICst.MULTI_DATE_SEGMENT_NUM[BICst.MULTI_DATE_YEAR_PREV];
+            case BI.DateTrigger.MULTI_DATE_YEAR_PREV:
+                var text = value + BI.DateTrigger.MULTI_DATE_SEGMENT_NUM[BI.DateTrigger.MULTI_DATE_YEAR_PREV];
                 date = new Date((date.getFullYear() - 1 * value), date.getMonth(), date.getDate());
                 _setInnerValue(date, text);
                 break;
-            case BICst.MULTI_DATE_YEAR_AFTER:
-                var text = value + BICst.MULTI_DATE_SEGMENT_NUM[BICst.MULTI_DATE_YEAR_AFTER];
+            case BI.DateTrigger.MULTI_DATE_YEAR_AFTER:
+                var text = value + BI.DateTrigger.MULTI_DATE_SEGMENT_NUM[BI.DateTrigger.MULTI_DATE_YEAR_AFTER];
                 date = new Date((date.getFullYear() + 1 * value), date.getMonth(), date.getDate());
                 _setInnerValue(date, text);
                 break;
-            case BICst.MULTI_DATE_YEAR_BEGIN:
-                var text = BICst.MULTI_DATE_SEGMENT_NUM[BICst.MULTI_DATE_YEAR_BEGIN];
+            case BI.DateTrigger.MULTI_DATE_YEAR_BEGIN:
+                var text = BI.DateTrigger.MULTI_DATE_SEGMENT_NUM[BI.DateTrigger.MULTI_DATE_YEAR_BEGIN];
                 date = new Date(date.getFullYear(), 0, 1);
                 _setInnerValue(date, text);
                 break;
-            case BICst.MULTI_DATE_YEAR_END:
-                var text = BICst.MULTI_DATE_SEGMENT_NUM[BICst.MULTI_DATE_YEAR_END];
+            case BI.DateTrigger.MULTI_DATE_YEAR_END:
+                var text = BI.DateTrigger.MULTI_DATE_SEGMENT_NUM[BI.DateTrigger.MULTI_DATE_YEAR_END];
                 date = new Date(date.getFullYear(), 11, 31);
                 _setInnerValue(date, text);
                 break;
-            case BICst.MULTI_DATE_QUARTER_PREV:
-                var text = value + BICst.MULTI_DATE_SEGMENT_NUM[BICst.MULTI_DATE_QUARTER_PREV];
+            case BI.DateTrigger.MULTI_DATE_QUARTER_PREV:
+                var text = value + BI.DateTrigger.MULTI_DATE_SEGMENT_NUM[BI.DateTrigger.MULTI_DATE_QUARTER_PREV];
                 date = new Date().getBeforeMulQuarter(value);
                 _setInnerValue(date, text);
                 break;
-            case BICst.MULTI_DATE_QUARTER_AFTER:
-                var text = value + BICst.MULTI_DATE_SEGMENT_NUM[BICst.MULTI_DATE_QUARTER_AFTER];
+            case BI.DateTrigger.MULTI_DATE_QUARTER_AFTER:
+                var text = value + BI.DateTrigger.MULTI_DATE_SEGMENT_NUM[BI.DateTrigger.MULTI_DATE_QUARTER_AFTER];
                 date = new Date().getAfterMulQuarter(value);
                 _setInnerValue(date, text);
                 break;
-            case BICst.MULTI_DATE_QUARTER_BEGIN:
-                var text = BICst.MULTI_DATE_SEGMENT_NUM[BICst.MULTI_DATE_QUARTER_BEGIN];
+            case BI.DateTrigger.MULTI_DATE_QUARTER_BEGIN:
+                var text = BI.DateTrigger.MULTI_DATE_SEGMENT_NUM[BI.DateTrigger.MULTI_DATE_QUARTER_BEGIN];
                 date = new Date().getQuarterStartDate();
                 _setInnerValue(date, text);
                 break;
-            case BICst.MULTI_DATE_QUARTER_END:
-                var text = BICst.MULTI_DATE_SEGMENT_NUM[BICst.MULTI_DATE_QUARTER_END];
+            case BI.DateTrigger.MULTI_DATE_QUARTER_END:
+                var text = BI.DateTrigger.MULTI_DATE_SEGMENT_NUM[BI.DateTrigger.MULTI_DATE_QUARTER_END];
                 date = new Date().getQuarterEndDate();
                 _setInnerValue(date, text);
                 break;
-            case BICst.MULTI_DATE_MONTH_PREV:
-                var text = value + BICst.MULTI_DATE_SEGMENT_NUM[BICst.MULTI_DATE_MONTH_PREV];
+            case BI.DateTrigger.MULTI_DATE_MONTH_PREV:
+                var text = value + BI.DateTrigger.MULTI_DATE_SEGMENT_NUM[BI.DateTrigger.MULTI_DATE_MONTH_PREV];
                 date = new Date().getBeforeMultiMonth(value);
                 _setInnerValue(date, text);
                 break;
-            case BICst.MULTI_DATE_MONTH_AFTER:
-                var text = value + BICst.MULTI_DATE_SEGMENT_NUM[BICst.MULTI_DATE_MONTH_AFTER];
+            case BI.DateTrigger.MULTI_DATE_MONTH_AFTER:
+                var text = value + BI.DateTrigger.MULTI_DATE_SEGMENT_NUM[BI.DateTrigger.MULTI_DATE_MONTH_AFTER];
                 date = new Date().getAfterMultiMonth(value);
                 _setInnerValue(date, text);
                 break;
-            case BICst.MULTI_DATE_MONTH_BEGIN:
-                var text = BICst.MULTI_DATE_SEGMENT_NUM[BICst.MULTI_DATE_MONTH_BEGIN];
+            case BI.DateTrigger.MULTI_DATE_MONTH_BEGIN:
+                var text = BI.DateTrigger.MULTI_DATE_SEGMENT_NUM[BI.DateTrigger.MULTI_DATE_MONTH_BEGIN];
                 date = new Date(date.getFullYear(), date.getMonth(), 1);
                 _setInnerValue(date, text);
                 break;
-            case BICst.MULTI_DATE_MONTH_END:
-                var text = BICst.MULTI_DATE_SEGMENT_NUM[BICst.MULTI_DATE_MONTH_END];
+            case BI.DateTrigger.MULTI_DATE_MONTH_END:
+                var text = BI.DateTrigger.MULTI_DATE_SEGMENT_NUM[BI.DateTrigger.MULTI_DATE_MONTH_END];
                 date = new Date(date.getFullYear(), date.getMonth(), (date.getLastDateOfMonth()).getDate());
                 _setInnerValue(date, text);
                 break;
-            case BICst.MULTI_DATE_WEEK_PREV:
-                var text = value + BICst.MULTI_DATE_SEGMENT_NUM[BICst.MULTI_DATE_WEEK_PREV];
+            case BI.DateTrigger.MULTI_DATE_WEEK_PREV:
+                var text = value + BI.DateTrigger.MULTI_DATE_SEGMENT_NUM[BI.DateTrigger.MULTI_DATE_WEEK_PREV];
                 date = date.getOffsetDate(-7 * value);
                 _setInnerValue(date, text);
                 break;
-            case BICst.MULTI_DATE_WEEK_AFTER:
-                var text = value + BICst.MULTI_DATE_SEGMENT_NUM[BICst.MULTI_DATE_WEEK_AFTER];
+            case BI.DateTrigger.MULTI_DATE_WEEK_AFTER:
+                var text = value + BI.DateTrigger.MULTI_DATE_SEGMENT_NUM[BI.DateTrigger.MULTI_DATE_WEEK_AFTER];
                 date = date.getOffsetDate(7 * value);
                 _setInnerValue(date, text);
                 break;
-            case BICst.MULTI_DATE_DAY_PREV:
-                var text = value + BICst.MULTI_DATE_SEGMENT_NUM[BICst.MULTI_DATE_DAY_PREV];
+            case BI.DateTrigger.MULTI_DATE_DAY_PREV:
+                var text = value + BI.DateTrigger.MULTI_DATE_SEGMENT_NUM[BI.DateTrigger.MULTI_DATE_DAY_PREV];
                 date = date.getOffsetDate(-1 * value);
                 _setInnerValue(date, text);
                 break;
-            case BICst.MULTI_DATE_DAY_AFTER:
-                var text = value + BICst.MULTI_DATE_SEGMENT_NUM[BICst.MULTI_DATE_DAY_AFTER];
+            case BI.DateTrigger.MULTI_DATE_DAY_AFTER:
+                var text = value + BI.DateTrigger.MULTI_DATE_SEGMENT_NUM[BI.DateTrigger.MULTI_DATE_DAY_AFTER];
                 date = date.getOffsetDate(1 * value);
                 _setInnerValue(date, text);
                 break;
-            case BICst.MULTI_DATE_DAY_TODAY:
-                var text = BICst.MULTI_DATE_SEGMENT_NUM[BICst.MULTI_DATE_DAY_TODAY];
+            case BI.DateTrigger.MULTI_DATE_DAY_TODAY:
+                var text = BI.DateTrigger.MULTI_DATE_SEGMENT_NUM[BI.DateTrigger.MULTI_DATE_DAY_TODAY];
                 date = new Date();
                 _setInnerValue(date, text);
                 break;
@@ -5108,6 +5108,55 @@ BI.shortcut('bi.date_combo', BI.DateCombo);BI.DateTrigger = BI.inherit(BI.Trigge
     }
 
 });
+
+BI.DateTrigger.MULTI_DATE_YEAR_PREV = 1;
+BI.DateTrigger.MULTI_DATE_YEAR_AFTER = 2;
+BI.DateTrigger.MULTI_DATE_YEAR_BEGIN = 3;
+BI.DateTrigger.MULTI_DATE_YEAR_END = 4;
+
+BI.DateTrigger.MULTI_DATE_MONTH_PREV = 5;
+BI.DateTrigger.MULTI_DATE_MONTH_AFTER = 6;
+BI.DateTrigger.MULTI_DATE_MONTH_BEGIN = 7;
+BI.DateTrigger.MULTI_DATE_MONTH_END = 8;
+
+BI.DateTrigger.MULTI_DATE_QUARTER_PREV = 9;
+BI.DateTrigger.MULTI_DATE_QUARTER_AFTER = 10;
+BI.DateTrigger.MULTI_DATE_QUARTER_BEGIN = 11;
+BI.DateTrigger.MULTI_DATE_QUARTER_END = 12;
+
+BI.DateTrigger.MULTI_DATE_WEEK_PREV = 13;
+BI.DateTrigger.MULTI_DATE_WEEK_AFTER = 14;
+
+BI.DateTrigger.MULTI_DATE_DAY_PREV = 15;
+BI.DateTrigger.MULTI_DATE_DAY_AFTER = 16;
+BI.DateTrigger.MULTI_DATE_DAY_TODAY = 17;
+
+BI.DateTrigger.MULTI_DATE_PARAM = 18;
+BI.DateTrigger.MULTI_DATE_CALENDAR = 19;
+
+BI.DateTrigger.MULTI_DATE_SEGMENT_NUM = {};
+BI.DateTrigger.MULTI_DATE_SEGMENT_NUM[BI.DateTrigger.MULTI_DATE_YEAR_PREV] = BI.i18nText("BI-Multi_Date_Year_Prev");
+BI.DateTrigger.MULTI_DATE_SEGMENT_NUM[BI.DateTrigger.MULTI_DATE_YEAR_AFTER] = BI.i18nText("BI-Multi_Date_Year_Next");
+BI.DateTrigger.MULTI_DATE_SEGMENT_NUM[BI.DateTrigger.MULTI_DATE_YEAR_BEGIN] = BI.i18nText("BI-Multi_Date_Year_Begin");
+BI.DateTrigger.MULTI_DATE_SEGMENT_NUM[BI.DateTrigger.MULTI_DATE_YEAR_END] = BI.i18nText("BI-Multi_Date_Year_End");
+
+BI.DateTrigger.MULTI_DATE_SEGMENT_NUM[BI.DateTrigger.MULTI_DATE_QUARTER_PREV] = BI.i18nText("BI-Multi_Date_Quarter_Prev");
+BI.DateTrigger.MULTI_DATE_SEGMENT_NUM[BI.DateTrigger.MULTI_DATE_QUARTER_AFTER] = BI.i18nText("BI-Multi_Date_Quarter_Next");
+BI.DateTrigger.MULTI_DATE_SEGMENT_NUM[BI.DateTrigger.MULTI_DATE_QUARTER_BEGIN] = BI.i18nText("BI-Multi_Date_Quarter_Begin");
+BI.DateTrigger.MULTI_DATE_SEGMENT_NUM[BI.DateTrigger.MULTI_DATE_QUARTER_END] = BI.i18nText("BI-Multi_Date_Quarter_End");
+
+BI.DateTrigger.MULTI_DATE_SEGMENT_NUM[BI.DateTrigger.MULTI_DATE_MONTH_PREV] = BI.i18nText("BI-Multi_Date_Month_Prev");
+BI.DateTrigger.MULTI_DATE_SEGMENT_NUM[BI.DateTrigger.MULTI_DATE_MONTH_AFTER] = BI.i18nText("BI-Multi_Date_Month_Next");
+BI.DateTrigger.MULTI_DATE_SEGMENT_NUM[BI.DateTrigger.MULTI_DATE_MONTH_BEGIN] = BI.i18nText("BI-Multi_Date_Month_Begin");
+BI.DateTrigger.MULTI_DATE_SEGMENT_NUM[BI.DateTrigger.MULTI_DATE_MONTH_END] = BI.i18nText("BI-Multi_Date_Month_End");
+
+BI.DateTrigger.MULTI_DATE_SEGMENT_NUM[BI.DateTrigger.MULTI_DATE_WEEK_PREV] = BI.i18nText("BI-Multi_Date_Week_Prev");
+BI.DateTrigger.MULTI_DATE_SEGMENT_NUM[BI.DateTrigger.MULTI_DATE_WEEK_AFTER] = BI.i18nText("BI-Multi_Date_Week_Next");
+
+BI.DateTrigger.MULTI_DATE_SEGMENT_NUM[BI.DateTrigger.MULTI_DATE_DAY_PREV] = BI.i18nText("BI-Multi_Date_Day_Prev");
+BI.DateTrigger.MULTI_DATE_SEGMENT_NUM[BI.DateTrigger.MULTI_DATE_DAY_AFTER] = BI.i18nText("BI-Multi_Date_Day_Next");
+BI.DateTrigger.MULTI_DATE_SEGMENT_NUM[BI.DateTrigger.MULTI_DATE_DAY_TODAY] = BI.i18nText("BI-Multi_Date_Today");
+
 BI.DateTrigger.EVENT_FOCUS = "EVENT_FOCUS";
 BI.DateTrigger.EVENT_START = "EVENT_START";
 BI.DateTrigger.EVENT_CONFIRM = "EVENT_CONFIRM";
@@ -13814,11 +13863,6 @@ BI.PreviewTable = BI.inherit(BI.Widget, {
 
     populate: function (items, header) {
         this.table.populate(items, header);
-    },
-
-    destroy: function () {
-        this.table.destroy();
-        BI.PreviewTable.superclass.destroy.apply(this, arguments);
     }
 });
 BI.PreviewTable.EVENT_CHANGE = "PreviewTable.EVENT_CHANGE";
@@ -14704,6 +14748,368 @@ BI.RelationViewRegion.EVENT_HOVER_IN = "RelationViewRegion.EVENT_HOVER_IN";
 BI.RelationViewRegion.EVENT_HOVER_OUT = "RelationViewRegion.EVENT_HOVER_OUT";
 BI.RelationViewRegion.EVENT_PREVIEW = "RelationViewRegion.EVENT_PREVIEW";
 BI.shortcut('bi.relation_view_region', BI.RelationViewRegion);/**
+ * 自适应宽度的表格
+ *
+ * Created by GUY on 2016/2/3.
+ * @class BI.ResponisveTable
+ * @extends BI.Widget
+ */
+BI.ResponisveTable = BI.inherit(BI.Widget, {
+
+    _const: {
+        perColumnSize: 100
+    },
+
+    _defaultConfig: function () {
+        return BI.extend(BI.ResponisveTable.superclass._defaultConfig.apply(this, arguments), {
+            baseCls: "bi-responsive-table",
+            isNeedFreeze: false,//是否需要冻结单元格
+            freezeCols: [], //冻结的列号,从0开始,isNeedFreeze为true时生效
+
+            isNeedMerge: false,//是否需要合并单元格
+            mergeCols: [], //合并的单元格列号
+            mergeRule: function (row1, row2) { //合并规则, 默认相等时合并
+                return BI.isEqual(row1, row2);
+            },
+
+            columnSize: [],
+            headerRowSize: 25,
+            footerRowSize: 25,
+            rowSize: 25,
+
+            regionColumnSize: false,
+
+            header: [],
+            footer: false,
+            items: [], //二维数组
+
+            //交叉表头
+            crossHeader: [],
+            crossItems: []
+        });
+    },
+
+    _init: function () {
+        BI.ResponisveTable.superclass._init.apply(this, arguments);
+        var self = this, o = this.options;
+
+        this.table = BI.createWidget({
+            type: "bi.table_view",
+            element: this,
+
+            isNeedFreeze: o.isNeedFreeze,
+            freezeCols: o.freezeCols,
+
+            isNeedMerge: o.isNeedMerge,
+            mergeCols: o.mergeCols,
+            mergeRule: o.mergeRule,
+
+            columnSize: o.columnSize,
+            headerRowSize: o.headerRowSize,
+            footerRowSize: o.footerRowSize,
+            rowSize: o.rowSize,
+
+            regionColumnSize: o.regionColumnSize,
+
+            header: o.header,
+            footer: o.footer,
+            items: o.items,
+            //交叉表头
+            crossHeader: o.crossHeader,
+            crossItems: o.crossItems
+        });
+        this.table.on(BI.Table.EVENT_TABLE_AFTER_INIT, function () {
+            self._initRegionSize();
+            self.table.resize();
+            self._resizeHeader();
+            self.fireEvent(BI.Table.EVENT_TABLE_AFTER_INIT, arguments);
+        });
+        this.table.on(BI.Table.EVENT_TABLE_RESIZE, function () {
+            self._resizeRegion();
+            self._resizeHeader();
+            self.fireEvent(BI.Table.EVENT_TABLE_RESIZE, arguments);
+        });
+        this.table.on(BI.Table.EVENT_TABLE_SCROLL, function () {
+            self.fireEvent(BI.Table.EVENT_TABLE_SCROLL, arguments);
+        });
+        this.table.on(BI.Table.EVENT_TABLE_BEFORE_REGION_RESIZE, function () {
+            self.fireEvent(BI.Table.EVENT_TABLE_BEFORE_REGION_RESIZE, arguments);
+        });
+        this.table.on(BI.Table.EVENT_TABLE_REGION_RESIZE, function () {
+            //important:在冻结并自适应列宽的情况下要随时变更表头宽度
+            if (o.isNeedResize === true && self._isAdaptiveColumn()) {
+                self._resizeHeader();
+            }
+            self.fireEvent(BI.Table.EVENT_TABLE_REGION_RESIZE, arguments);
+        });
+        this.table.on(BI.Table.EVENT_TABLE_AFTER_REGION_RESIZE, function () {
+            self._resizeHeader();
+            self.fireEvent(BI.Table.EVENT_TABLE_AFTER_REGION_RESIZE, arguments);
+        });
+
+        this.table.on(BI.Table.EVENT_TABLE_BEFORE_COLUMN_RESIZE, function () {
+            self._resizeBody();
+            self.fireEvent(BI.Table.EVENT_TABLE_BEFORE_COLUMN_RESIZE, arguments);
+        });
+        this.table.on(BI.Table.EVENT_TABLE_COLUMN_RESIZE, function () {
+            self.fireEvent(BI.Table.EVENT_TABLE_COLUMN_RESIZE, arguments);
+        });
+        this.table.on(BI.Table.EVENT_TABLE_AFTER_COLUMN_RESIZE, function () {
+            self._resizeRegion();
+            self._resizeHeader();
+            self.fireEvent(BI.Table.EVENT_TABLE_AFTER_COLUMN_RESIZE, arguments);
+        });
+    },
+
+    _initRegionSize: function () {
+        var o = this.options;
+        if (o.isNeedFreeze === true) {
+            var regionColumnSize = this.table.getRegionColumnSize();
+            var maxWidth = this.table.element.width();
+            if (!regionColumnSize[0] || (regionColumnSize[0] === 'fill') || regionColumnSize[0] > maxWidth || regionColumnSize[1] > maxWidth) {
+                var freezeCols = o.freezeCols;
+                if (freezeCols.length === 0) {
+                    this.table.setRegionColumnSize([0, "fill"]);
+                } else if (freezeCols.length > 0 && freezeCols.length < o.columnSize.length) {
+                    var size = maxWidth / 3;
+                    if (freezeCols.length > o.columnSize.length / 2) {
+                        size = maxWidth * 2 / 3;
+                    }
+                    this.table.setRegionColumnSize([size, "fill"]);
+                } else {
+                    this.table.setRegionColumnSize(["fill", 0]);
+                }
+            }
+        }
+    },
+
+    _getBlockSize: function () {
+        var o = this.options;
+        var columnSize = this.table.getCalculateColumnSize();
+        if (o.isNeedFreeze === true) {
+            var columnSizeLeft = [], columnSizeRight = [];
+            BI.each(columnSize, function (i, size) {
+                if (o.freezeCols.contains(i)) {
+                    columnSizeLeft.push(size);
+                } else {
+                    columnSizeRight.push(size);
+                }
+            });
+            //因为有边框，所以加上数组长度的参数调整
+            var sumLeft = BI.sum(columnSizeLeft) + columnSizeLeft.length, sumRight = BI.sum(columnSizeRight) + columnSizeRight.length;
+            return {
+                sumLeft: sumLeft,
+                sumRight: sumRight,
+                left: columnSizeLeft,
+                right: columnSizeRight
+            }
+        }
+        return {
+            size: columnSize,
+            sum: BI.sum(columnSize) + columnSize.length
+        };
+    },
+
+    _isAdaptiveColumn: function (columnSize) {
+        return !(BI.last(columnSize || this.table.getColumnSize()) > 1.05);
+    },
+
+    _resizeHeader: function () {
+        var self = this, o = this.options;
+        if (o.isNeedFreeze === true) {
+            //若是当前处于自适应调节阶段
+            if (this._isAdaptiveColumn()) {
+                var columnSize = this.table.getCalculateColumnSize();
+                this.table.setHeaderColumnSize(columnSize);
+            } else {
+                var regionColumnSize = this.table.getClientRegionColumnSize();
+                var block = this._getBlockSize();
+                var sumLeft = block.sumLeft, sumRight = block.sumRight;
+                var columnSizeLeft = block.left, columnSizeRight = block.right;
+                columnSizeLeft[columnSizeLeft.length - 1] += regionColumnSize[0] - sumLeft;
+                columnSizeRight[columnSizeRight.length - 1] += regionColumnSize[1] - sumRight;
+
+                var newLeft = BI.clone(columnSizeLeft), newRight = BI.clone(columnSizeRight);
+                newLeft[newLeft.length - 1] = "";
+                newRight[newRight.length - 1] = "";
+                this.table.setColumnSize(newLeft.concat(newRight));
+
+                block = self._getBlockSize();
+                if (columnSizeLeft[columnSizeLeft.length - 1] < block.left[block.left.length - 1]) {
+                    columnSizeLeft[columnSizeLeft.length - 1] = block.left[block.left.length - 1]
+                }
+                if (columnSizeRight[columnSizeRight.length - 1] < block.right[block.right.length - 1]) {
+                    columnSizeRight[columnSizeRight.length - 1] = block.right[block.right.length - 1]
+                }
+
+                self.table.setColumnSize(columnSizeLeft.concat(columnSizeRight));
+            }
+        } else {
+            if (!this._isAdaptiveColumn()) {
+                var regionColumnSize = this.table.getClientRegionColumnSize();
+                var block = this._getBlockSize();
+                var sum = block.sum;
+                var size = block.size;
+
+                size[size.length - 1] += regionColumnSize[0] - sum;
+
+                var newSize = BI.clone(size);
+                newSize[newSize.length - 1] = "";
+                this.table.setColumnSize(newSize);
+                block = this._getBlockSize();
+
+                if (size[size.length - 1] < block.size[block.size.length - 1]) {
+                    size[size.length - 1] = block.size[block.size.length - 1]
+                }
+                this.table.setColumnSize(size);
+            }
+        }
+    },
+
+    _resizeBody: function () {
+        if (this._isAdaptiveColumn()) {
+            var columnSize = this.table.getCalculateColumnSize();
+            this.setColumnSize(columnSize);
+        }
+    },
+
+    _adjustRegion: function () {
+        var o = this.options;
+        var regionColumnSize = this.table.getCalculateRegionColumnSize();
+        if (o.isNeedFreeze === true && o.freezeCols.length > 0 && o.freezeCols.length < o.columnSize.length) {
+            var block = this._getBlockSize();
+            var sumLeft = block.sumLeft, sumRight = block.sumRight;
+            if (sumLeft < regionColumnSize[0] || regionColumnSize[0] >= (sumLeft + sumRight)) {
+                this.table.setRegionColumnSize([sumLeft, "fill"]);
+            }
+            this._resizeRegion();
+        }
+    },
+
+    _resizeRegion: function () {
+        var o = this.options;
+        var regionColumnSize = this.table.getCalculateRegionColumnSize();
+        if (o.isNeedFreeze === true && o.freezeCols.length > 0 && o.freezeCols.length < o.columnSize.length) {
+            var maxWidth = this.table.element.width();
+            if (regionColumnSize[0] < 15 || regionColumnSize[1] < 15) {
+                var freezeCols = o.freezeCols;
+                var size = maxWidth / 3;
+                if (freezeCols.length > o.columnSize.length / 2) {
+                    size = maxWidth * 2 / 3;
+                }
+                this.table.setRegionColumnSize([size, "fill"]);
+            }
+        }
+    },
+
+
+    resize: function () {
+        this.table.resize();
+        this._resizeRegion();
+        this._resizeHeader();
+    },
+
+    setColumnSize: function (columnSize) {
+        this.table.setColumnSize(columnSize);
+        this._adjustRegion();
+        this._resizeHeader();
+    },
+
+    getColumnSize: function () {
+        return this.table.getColumnSize();
+    },
+
+    getCalculateColumnSize: function () {
+        return this.table.getCalculateColumnSize();
+    },
+
+    setHeaderColumnSize: function (columnSize) {
+        this.table.setHeaderColumnSize(columnSize);
+        this._adjustRegion();
+        this._resizeHeader();
+    },
+
+    setRegionColumnSize: function (columnSize) {
+        this.table.setRegionColumnSize(columnSize);
+        this._resizeHeader();
+    },
+
+    getRegionColumnSize: function () {
+        return this.table.getRegionColumnSize();
+    },
+
+    getCalculateRegionColumnSize: function () {
+        return this.table.getCalculateRegionColumnSize();
+    },
+
+    getCalculateRegionRowSize: function () {
+        return this.table.getCalculateRegionRowSize();
+    },
+
+    getClientRegionColumnSize: function () {
+        return this.table.getClientRegionColumnSize();
+    },
+
+    getScrollRegionColumnSize: function () {
+        return this.table.getScrollRegionColumnSize();
+    },
+
+    getScrollRegionRowSize: function () {
+        return this.table.getScrollRegionRowSize();
+    },
+
+    hasVerticalScroll: function () {
+        return this.table.hasVerticalScroll();
+    },
+
+    setVerticalScroll: function (scrollTop) {
+        this.table.setVerticalScroll(scrollTop);
+    },
+
+    setLeftHorizontalScroll: function (scrollLeft) {
+        this.table.setLeftHorizontalScroll(scrollLeft);
+    },
+
+    setRightHorizontalScroll: function (scrollLeft) {
+        this.table.setRightHorizontalScroll(scrollLeft);
+    },
+
+    getVerticalScroll: function () {
+        return this.table.getVerticalScroll();
+    },
+
+    getLeftHorizontalScroll: function () {
+        return this.table.getLeftHorizontalScroll();
+    },
+
+    getRightHorizontalScroll: function () {
+        return this.table.getRightHorizontalScroll();
+    },
+
+    getColumns: function () {
+        return this.table.getColumns();
+    },
+
+    attr: function () {
+        BI.ResponisveTable.superclass.attr.apply(this, arguments);
+        this.table.attr.apply(this.table, arguments);
+    },
+
+    populate: function (items) {
+        var self = this, o = this.options;
+        this.table.populate.apply(this.table, arguments);
+        if (o.isNeedFreeze === true) {
+            BI.nextTick(function () {
+                if (self.element.is(":visible")) {
+                    self._initRegionSize();
+                    self.table.resize();
+                    self._resizeHeader();
+                }
+            });
+        }
+    }
+});
+BI.shortcut('bi.responsive_table', BI.ResponisveTable);/**
  * 加号表示的组节点
  * Created by GUY on 2015/9/6.
  * @class BI.SelectTreeFirstPlusGroupNode

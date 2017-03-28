@@ -37,7 +37,7 @@ BI.FloatCenterAdaptLayout = BI.inherit(BI.Layout, {
             element: this,
             items: [this.left]
         });
-        this.removeWidget(this.container.getName());
+        this.removeWidget(this.container);
     },
 
     stroke: function (items) {
