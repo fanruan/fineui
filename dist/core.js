@@ -14585,6 +14585,9 @@ BI.Widget = BI.inherit(BI.OB, {
             widget = name;
             name = widget.getName();
         }
+        if (BI.isKey(name)) {
+            name = name + "";
+        }
         name = name || widget.getName() || BI.uniqueId("widget");
         if (this._children[name]) {
             throw new Error("name has already been existed");
@@ -19690,9 +19693,8 @@ BI.Layout = BI.inherit(BI.Widget, {
             removeIndex = nameOrWidget;
         }
         if (removeIndex) {
-            this.options.items.splice(removeIndex, 1);
+            this._removeItemAt(removeIndex | 0);
         }
-        BI.Layout.superclass.removeWidget.apply(this, arguments);
     },
 
     empty: function () {
