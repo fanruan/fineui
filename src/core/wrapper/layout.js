@@ -361,9 +361,8 @@ BI.Layout = BI.inherit(BI.Widget, {
             removeIndex = nameOrWidget;
         }
         if (removeIndex) {
-            this.options.items.splice(removeIndex, 1);
+            this._removeItemAt(removeIndex | 0);
         }
-        BI.Layout.superclass.removeWidget.apply(this, arguments);
     },
 
     empty: function () {

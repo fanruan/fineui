@@ -359,11 +359,9 @@ BI.Table = BI.inherit(BI.Widget, {
                 self.fireEvent(BI.Table.EVENT_TABLE_AFTER_INIT);
             }
         });
-        BI.Resizers.add(this.getName(), function (e) {
-            if (BI.isWindow(e.target) && self.element.is(":visible")) {
-                self._resize();
-                self.fireEvent(BI.Table.EVENT_TABLE_RESIZE);
-            }
+        BI.ResizeDetector.addResizeListener(this, function () {
+            self._resize();
+            self.fireEvent(BI.Table.EVENT_TABLE_RESIZE);
         });
     },
 
@@ -745,6 +743,7 @@ BI.Table = BI.inherit(BI.Widget, {
                     .addClass(c === rows.length - 1 ? "last-col" : "");
                 var w = BI.createWidget(map[r][c], {
                     type: "bi.table_cell",
+                    root: true,
                     textAlign: "left",
                     width: BI.isNumeric(width) ? width : "",
                     height: BI.isNumeric(height) ? height : "",
@@ -823,6 +822,7 @@ BI.Table = BI.inherit(BI.Widget, {
         this.footer.element.append(this._createFooterCells(o.footer, null, this.footerTds, this.footerItems));
         return this.footer;
     },
+
 
     _createBody: function () {
         var self = this, o = this.options;

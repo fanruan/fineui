@@ -130,10 +130,10 @@ BI.View = BI.inherit(BI.V, {
         });
         var vessel = BI.createWidget();
         this._cardLayouts[this.getName()].addCardByName(this.getName(), vessel);
-        return vessel.element;
+        return vessel;
     },
 
-    _render: function (vessel) {
+    render: function (vessel) {
         return this;
     },
 
@@ -501,15 +501,26 @@ BI.View = BI.inherit(BI.V, {
 
     },
 
-    destroy: function () {
+    _unMount: function () {
         BI.each(this._cardLayouts, function (name, card) {
-            card && card.destroy();
+            card && card._unMount();
         });
         delete this._cardLayouts;
         delete this._cards;
+        this.off();
+        this.destroyed();
+    },
+
+    destroy: function () {
+        BI.each(this._cardLayouts, function (name, card) {
+            card && card._unMount();
+        });
+        delete this._cardLayouts;
+        delete this._cards;
+        this.destroyed();
         this.remove();
         this.trigger(BI.Events.DESTROY);
-        this.destroyed();
+        this.off();
     },
 
     destroyed: function () {
