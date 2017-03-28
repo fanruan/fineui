@@ -34,7 +34,8 @@ BI.Widget = BI.inherit(BI.OB, {
 
     mounted: null,
 
-    update: null,
+    update: function () {
+    },
 
     destroyed: null,
 
@@ -258,7 +259,7 @@ BI.Widget = BI.inherit(BI.OB, {
         }
         widget._setParent && widget._setParent(this);
         widget.on(BI.Events.DESTROY, function () {
-            delete self._children[name]
+            BI.remove(self._children, this);
         });
         return (this._children[name] = widget);
     },

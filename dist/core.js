@@ -13052,7 +13052,7 @@ if (!window.BI) {
         },
 
         formatEL: function (obj) {
-            if (obj && obj.el) {
+            if (obj && !obj.type && obj.el) {
                 return obj;
             }
             return {
@@ -14011,9 +14011,8 @@ if (!window.BI) {
 
 
                 option.data = BI.cjkEncodeDO(option.data);
-                    
-                    
-                
+
+
                 $.ajax({
                     url: option.url,
                     type: "POST",
@@ -14370,7 +14369,8 @@ BI.Widget = BI.inherit(BI.OB, {
 
     mounted: null,
 
-    update: null,
+    update: function () {
+    },
 
     destroyed: null,
 
@@ -14594,7 +14594,7 @@ BI.Widget = BI.inherit(BI.OB, {
         }
         widget._setParent && widget._setParent(this);
         widget.on(BI.Events.DESTROY, function () {
-            delete self._children[name]
+            BI.remove(self._children, this);
         });
         return (this._children[name] = widget);
     },
@@ -19578,9 +19578,9 @@ BI.Layout = BI.inherit(BI.Widget, {
         }
 
         var child = this._children[this._getChildName(index)];
-        if (child.update) {
-            child.update(this._getOptions(item));
-            return true;
+        var updated;
+        if (updated = child.update(this._getOptions(item))) {
+            return updated;
         }
         var del = this._children[this._getChildName(index)];
         delete this._children[this._getChildName(index)];

@@ -141,7 +141,7 @@ if (!window.BI) {
         },
 
         formatEL: function (obj) {
-            if (obj && obj.el) {
+            if (obj && !obj.type && obj.el) {
                 return obj;
             }
             return {
@@ -1100,9 +1100,8 @@ if (!window.BI) {
 
 
                 option.data = BI.cjkEncodeDO(option.data);
-                    
-                    
-                
+
+
                 $.ajax({
                     url: option.url,
                     type: "POST",
