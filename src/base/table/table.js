@@ -822,7 +822,7 @@ BI.Table = BI.inherit(BI.Widget, {
         this.footer.element.append(this._createFooterCells(o.footer, null, this.footerTds, this.footerItems));
         return this.footer;
     },
-    
+
 
     _createBody: function () {
         var self = this, o = this.options;
