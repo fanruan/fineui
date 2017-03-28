@@ -198,11 +198,6 @@ BI.PreviewTable = BI.inherit(BI.Widget, {
 
     populate: function (items, header) {
         this.table.populate(items, header);
-    },
-
-    destroy: function () {
-        this.table.destroy();
-        BI.PreviewTable.superclass.destroy.apply(this, arguments);
     }
 });
 BI.PreviewTable.EVENT_CHANGE = "PreviewTable.EVENT_CHANGE";
