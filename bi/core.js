@@ -13461,11 +13461,13 @@ BI.CardLayout = BI.inherit(BI.Layout, {
         var flag = false;
         BI.each(this.options.items, function (i, item) {
             var el = self._children[item.cardName];
-            if (name != item.cardName) {
-                //动画效果只有在全部都隐藏的时候才有意义,且只要执行一次动画操作就够了
-                !flag && !exist && (BI.Action && action instanceof BI.Action) ? (action.actionBack(el), flag = true) : el.invisible();
-            } else {
-                (BI.Action && action instanceof BI.Action) ? action.actionPerformed(void 0, el, callback) : (el.visible(), callback && callback())
+            if (el) {
+                if (name != item.cardName) {
+                    //动画效果只有在全部都隐藏的时候才有意义,且只要执行一次动画操作就够了
+                    !flag && !exist && (BI.Action && action instanceof BI.Action) ? (action.actionBack(el), flag = true) : el.invisible();
+                } else {
+                    (BI.Action && action instanceof BI.Action) ? action.actionPerformed(void 0, el, callback) : (el.visible(), callback && callback())
+                }
             }
         });
     },
