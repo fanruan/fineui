@@ -67,11 +67,11 @@ BI.VirtualGroup = BI.inherit(BI.Widget, {
         var self = this;
         items = items || [];
         this.options.items = items;
-        items = this._packageItems(items, this._packageBtns(items));
+        items = this._packageBtns(items);
         if (!this.layouts) {
             this.layouts = BI.createWidget(BI.extend({element: this}, this._packageLayout(items)));
         } else {
-            this.layouts.populate(this._packageLayout(items).items);
+            this.layouts.populate(items);
         }
     }
 });
