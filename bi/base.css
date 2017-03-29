@@ -1035,7 +1035,7 @@ li.CodeMirror-hint-active {
   overflow-x: hidden;
   overflow-y: hidden;
   white-space: nowrap;
-  word-break: break-all;
+  word-break: break-word;
 }
 /****添加计算宽度的--运算符直接需要space****/
 /****** common color(常用颜色,可用于普遍场景) *****/

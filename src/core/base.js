@@ -1100,9 +1100,8 @@ if (!window.BI) {
 
 
                 option.data = BI.cjkEncodeDO(option.data);
-                    
-                    
-                
+
+
                 $.ajax({
                     url: option.url,
                     type: "POST",

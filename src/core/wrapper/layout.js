@@ -246,9 +246,9 @@ BI.Layout = BI.inherit(BI.Widget, {
         }
 
         var child = this._children[this._getChildName(index)];
-        if (child.update) {
-            child.update(this._getOptions(item));
-            return true;
+        var updated;
+        if (updated = child.update(this._getOptions(item))) {
+            return updated;
         }
         var del = this._children[this._getChildName(index)];
         delete this._children[this._getChildName(index)];
