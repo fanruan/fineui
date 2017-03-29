@@ -3632,6 +3632,10 @@ BI.shortcut("bi.combo_group", BI.ComboGroup);BI.VirtualGroup = BI.inherit(BI.Wid
         return this.layouts.getValue();
     },
 
+    empty: function () {
+        this.layouts.empty();
+    },
+
     populate: function (items) {
         var self = this;
         items = items || [];

@@ -327,8 +327,8 @@ BI.Layout = BI.inherit(BI.Widget, {
 
     update: function (item) {
         var o = this.options;
-        var items = item.items;
-        var updated = false, i, len;
+        var items = item.items || [];
+        var updated, i, len;
         for (i = 0, len = Math.min(o.items.length, items.length); i < len; i++) {
             if (!this._compare(o.items[i], items[i])) {
                 updated = this.updateItemAt(i, items[i]) || updated;
@@ -339,6 +339,7 @@ BI.Layout = BI.inherit(BI.Widget, {
             for (i = items.length; i < o.items.length; i++) {
                 deleted.push(this._children[this._getChildName(i)]);
             }
+            o.items.splice(items.length);
             BI.each(deleted, function (i, w) {
                 w.destroy();
             })
@@ -347,7 +348,6 @@ BI.Layout = BI.inherit(BI.Widget, {
                 this.addItemAt(i, items[i]);
             }
         }
-        this.options.items = items;
         return updated;
     },
 
@@ -378,6 +378,11 @@ BI.Layout = BI.inherit(BI.Widget, {
 
     empty: function () {
         BI.Layout.superclass.empty.apply(this, arguments);
+        this.options.items = [];
+    },
+
+    destroy: function () {
+        BI.Layout.superclass.destroy.apply(this, arguments);
         this.options.items = [];
     },
 

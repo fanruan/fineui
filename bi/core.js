@@ -4795,8 +4795,8 @@ BI.Widget = BI.inherit(BI.OB, {
     isolate: function () {
         if (this._parent) {
             this._parent.removeWidget(this);
-            BI.DOM.hang([this]);
         }
+        BI.DOM.hang([this]);
     },
 
     empty: function () {
@@ -5647,18 +5647,6 @@ BI.View = BI.inherit(BI.V, {
 
     getEditing: function () {
         return this.model.getEditing();
-    },
-
-    read: function (options) {
-        this.model.read(options)
-    },
-
-    update: function (options) {
-        this.model.update(options);
-    },
-
-    patch: function (options) {
-        this.model.patch(options);
     },
 
     reading: function (options) {
@@ -11526,8 +11514,8 @@ BI.Layout = BI.inherit(BI.Widget, {
 
     update: function (item) {
         var o = this.options;
-        var items = item.items;
-        var updated = false, i, len;
+        var items = item.items || [];
+        var updated, i, len;
         for (i = 0, len = Math.min(o.items.length, items.length); i < len; i++) {
             if (!this._compare(o.items[i], items[i])) {
                 updated = this.updateItemAt(i, items[i]) || updated;
@@ -11538,6 +11526,7 @@ BI.Layout = BI.inherit(BI.Widget, {
             for (i = items.length; i < o.items.length; i++) {
                 deleted.push(this._children[this._getChildName(i)]);
             }
+            o.items.splice(items.length);
             BI.each(deleted, function (i, w) {
                 w.destroy();
             })
@@ -11546,7 +11535,6 @@ BI.Layout = BI.inherit(BI.Widget, {
                 this.addItemAt(i, items[i]);
             }
         }
-        this.options.items = items;
         return updated;
     },
 
@@ -11577,6 +11565,11 @@ BI.Layout = BI.inherit(BI.Widget, {
 
     empty: function () {
         BI.Layout.superclass.empty.apply(this, arguments);
+        this.options.items = [];
+    },
+
+    destroy: function () {
+        BI.Layout.superclass.destroy.apply(this, arguments);
         this.options.items = [];
     },
 
@@ -13371,7 +13364,7 @@ BI.CardLayout = BI.inherit(BI.Layout, {
                 if (!self.hasWidget(item.cardName)) {
                     var w = BI.createWidget(item);
                     w.on(BI.Events.DESTROY, function () {
-                        var index = BI.findKey(o.items, function (i, tItem) {
+                        var index = BI.findIndex(o.items, function (i, tItem) {
                             return tItem.cardName == item.cardName;
                         });
                         if (index > -1) {
@@ -13415,17 +13408,23 @@ BI.CardLayout = BI.inherit(BI.Layout, {
         return this._children[cardName];
     },
 
-    deleteCardByName: function (cardName) {
-        if (!this.isCardExisted(cardName)) {
-            throw new Error("cardName is not exist");
-        }
-        var index = BI.findKey(this.options.items, function (i, item) {
+    _deleteCardByName: function (cardName) {
+        delete this._children[cardName];
+        var index = BI.findIndex(this.options.items, function (i, item) {
             return item.cardName == cardName;
         });
         if (index > -1) {
             this.options.items.splice(index, 1);
         }
+    },
+
+    deleteCardByName: function (cardName) {
+        if (!this.isCardExisted(cardName)) {
+            throw new Error("cardName is not exist");
+        }
+
         var child = this._children[cardName];
+        this._deleteCardByName(cardName);
         child && child.destroy();
     },
 
@@ -13521,6 +13520,22 @@ BI.CardLayout = BI.inherit(BI.Layout, {
             }
         });
         return flag;
+    },
+
+    removeWidget: function (nameOrWidget) {
+        var removeName;
+        if (BI.isWidget(nameOrWidget)) {
+            BI.each(this._children, function (name, child) {
+                if (child === nameOrWidget) {
+                    removeName = name;
+                }
+            })
+        } else {
+            removeName = nameOrWidget;
+        }
+        if (removeName) {
+            this._deleteCardByName(removeName);
+        }
     }
 });
 BI.shortcut('bi.card', BI.CardLayout);/**

@@ -369,18 +369,6 @@ BI.View = BI.inherit(BI.V, {
         return this.model.getEditing();
     },
 
-    read: function (options) {
-        this.model.read(options)
-    },
-
-    update: function (options) {
-        this.model.update(options);
-    },
-
-    patch: function (options) {
-        this.model.patch(options);
-    },
-
     reading: function (options) {
         var self = this;
         var name = BI.UUID();

@@ -372,8 +372,8 @@ BI.Widget = BI.inherit(BI.OB, {
     isolate: function () {
         if (this._parent) {
             this._parent.removeWidget(this);
-            BI.DOM.hang([this]);
         }
+        BI.DOM.hang([this]);
     },
 
     empty: function () {

@@ -63,6 +63,10 @@ BI.VirtualGroup = BI.inherit(BI.Widget, {
         return this.layouts.getValue();
     },
 
+    empty: function () {
+        this.layouts.empty();
+    },
+
     populate: function (items) {
         var self = this;
         items = items || [];
