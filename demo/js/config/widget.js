@@ -25,8 +25,4 @@ Demo.WIDGET_CONFIG = [{
     pId: 4,
     text: "bi.relation_view",
     value: "demo.relation_view"
-}, {
-    pId: 4,
-    text: "bi.filter_pane",
-    value: "demo.filter_pane"
 }];
