@@ -327,7 +327,7 @@ BI.View = BI.inherit(BI.V, {
         }
         //采用静默方式读数据,该数据变化不引起data的change事件触发
         var success = options.success;
-        this.read(BI.extend({
+        this.model.read(BI.extend({
             silent: true
         }, options, {
             success: function (data, model) {
@@ -372,7 +372,7 @@ BI.View = BI.inherit(BI.V, {
     reading: function (options) {
         var self = this;
         var name = BI.UUID();
-        this.read(BI.extend({}, options, {
+        this.model.read(BI.extend({}, options, {
             beforeSend: function () {
                 var loading = BI.createWidget({
                     type: 'bi.vertical',
@@ -395,7 +395,7 @@ BI.View = BI.inherit(BI.V, {
     updating: function (options) {
         var self = this;
         var name = BI.UUID();
-        this.update(BI.extend({}, options, {
+        this.model.update(BI.extend({}, options, {
             noset: true,
             beforeSend: function () {
                 var loading = BI.createWidget({
@@ -419,7 +419,7 @@ BI.View = BI.inherit(BI.V, {
     patching: function (options) {
         var self = this;
         var name = BI.UUID();
-        this.patch(BI.extend({}, options, {
+        this.model.patch(BI.extend({}, options, {
             noset: true,
             beforeSend: function () {
                 var loading = BI.createWidget({

@@ -57,9 +57,11 @@ BI.ButtonGroup = BI.inherit(BI.Widget, {
                             self.setValue([]);
                             break;
                     }
+                    self.fireEvent(BI.Controller.EVENT_CHANGE, arguments);
                     self.fireEvent(BI.ButtonGroup.EVENT_CHANGE, value, obj);
+                } else {
+                    self.fireEvent(BI.Controller.EVENT_CHANGE, arguments);
                 }
-                self.fireEvent(BI.Controller.EVENT_CHANGE, arguments);
             });
             btn.on(BI.Events.DESTROY, function () {
                 BI.remove(self.buttons, btn);

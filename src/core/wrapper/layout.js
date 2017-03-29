@@ -74,6 +74,7 @@ BI.Layout = BI.inherit(BI.Widget, {
             w.on(BI.Events.DESTROY, function () {
                 BI.each(self._children, function (name, child) {
                     if (child === w) {
+                        BI.remove(self._children, child);
                         self.removeItemAt(name | 0);
                     }
                 });
@@ -227,7 +228,7 @@ BI.Layout = BI.inherit(BI.Widget, {
         for (var i = 0, len = this.options.items.length; i < len; i++) {
             var child = this._children[this._getChildName(i)];
             if (indexes.contains(i)) {
-                deleted.push(child);
+                child && deleted.push(child);
             } else {
                 newChildren[this._getChildName(newItems.length)] = child;
                 newItems.push(this.options.items[i]);
@@ -302,26 +303,32 @@ BI.Layout = BI.inherit(BI.Widget, {
     },
 
     getValue: function () {
-        var self = this, value = [];
+        var self = this, value = [], child;
         BI.each(this.options.items, function (i) {
-            var v = self._children[self._getChildName(i)].getValue();
-            v = BI.isArray(v) ? v : [v];
-            value = value.concat(v);
+            if (child = self._children[self._getChildName(i)]) {
+                var v = child.getValue();
+                v = BI.isArray(v) ? v : [v];
+                value = value.concat(v);
+            }
         });
         return value;
     },
 
     setValue: function (v) {
-        var self = this;
+        var self = this, child;
         BI.each(this.options.items, function (i) {
-            self._children[self._getChildName(i)].setValue(v);
+            if (child = self._children[self._getChildName(i)]) {
+                child.setValue(v);
+            }
         })
     },
 
     setText: function (v) {
-        var self = this;
+        var self = this, child;
         BI.each(this.options.items, function (i) {
-            self._children[self._getChildName(i)].setText(v);
+            if (child = self._children[self._getChildName(i)]) {
+                child.setText(v);
+            }
         })
     },
 
@@ -338,6 +345,7 @@ BI.Layout = BI.inherit(BI.Widget, {
             var deleted = [];
             for (i = items.length; i < o.items.length; i++) {
                 deleted.push(this._children[this._getChildName(i)]);
+                delete this._children[this._getChildName(i)];
             }
             o.items.splice(items.length);
             BI.each(deleted, function (i, w) {

@@ -4711,11 +4711,7 @@ BI.Widget = BI.inherit(BI.OB, {
     removeWidget: function (nameOrWidget) {
         var self = this;
         if (BI.isWidget(nameOrWidget)) {
-            BI.each(this._children, function (name, widget) {
-                if (widget === nameOrWidget) {
-                    delete self._children[name];
-                }
-            })
+            BI.remove(this._children, nameOrWidget);
         } else {
             delete this._children[nameOrWidget];
         }
@@ -5607,7 +5603,7 @@ BI.View = BI.inherit(BI.V, {
         }
         //采用静默方式读数据,该数据变化不引起data的change事件触发
         var success = options.success;
-        this.read(BI.extend({
+        this.model.read(BI.extend({
             silent: true
         }, options, {
             success: function (data, model) {
@@ -5652,7 +5648,7 @@ BI.View = BI.inherit(BI.V, {
     reading: function (options) {
         var self = this;
         var name = BI.UUID();
-        this.read(BI.extend({}, options, {
+        this.model.read(BI.extend({}, options, {
             beforeSend: function () {
                 var loading = BI.createWidget({
                     type: 'bi.vertical',
@@ -5675,7 +5671,7 @@ BI.View = BI.inherit(BI.V, {
     updating: function (options) {
         var self = this;
         var name = BI.UUID();
-        this.update(BI.extend({}, options, {
+        this.model.update(BI.extend({}, options, {
             noset: true,
             beforeSend: function () {
                 var loading = BI.createWidget({
@@ -5699,7 +5695,7 @@ BI.View = BI.inherit(BI.V, {
     patching: function (options) {
         var self = this;
         var name = BI.UUID();
-        this.patch(BI.extend({}, options, {
+        this.model.patch(BI.extend({}, options, {
             noset: true,
             beforeSend: function () {
                 var loading = BI.createWidget({
@@ -11261,6 +11257,7 @@ BI.Layout = BI.inherit(BI.Widget, {
             w.on(BI.Events.DESTROY, function () {
                 BI.each(self._children, function (name, child) {
                     if (child === w) {
+                        BI.remove(self._children, child);
                         self.removeItemAt(name | 0);
                     }
                 });
@@ -11414,7 +11411,7 @@ BI.Layout = BI.inherit(BI.Widget, {
         for (var i = 0, len = this.options.items.length; i < len; i++) {
             var child = this._children[this._getChildName(i)];
             if (indexes.contains(i)) {
-                deleted.push(child);
+                child && deleted.push(child);
             } else {
                 newChildren[this._getChildName(newItems.length)] = child;
                 newItems.push(this.options.items[i]);
@@ -11489,26 +11486,32 @@ BI.Layout = BI.inherit(BI.Widget, {
     },
 
     getValue: function () {
-        var self = this, value = [];
+        var self = this, value = [], child;
         BI.each(this.options.items, function (i) {
-            var v = self._children[self._getChildName(i)].getValue();
-            v = BI.isArray(v) ? v : [v];
-            value = value.concat(v);
+            if (child = self._children[self._getChildName(i)]) {
+                var v = child.getValue();
+                v = BI.isArray(v) ? v : [v];
+                value = value.concat(v);
+            }
         });
         return value;
     },
 
     setValue: function (v) {
-        var self = this;
+        var self = this, child;
         BI.each(this.options.items, function (i) {
-            self._children[self._getChildName(i)].setValue(v);
+            if (child = self._children[self._getChildName(i)]) {
+                child.setValue(v);
+            }
         })
     },
 
     setText: function (v) {
-        var self = this;
+        var self = this, child;
         BI.each(this.options.items, function (i) {
-            self._children[self._getChildName(i)].setText(v);
+            if (child = self._children[self._getChildName(i)]) {
+                child.setText(v);
+            }
         })
     },
 
@@ -11525,6 +11528,7 @@ BI.Layout = BI.inherit(BI.Widget, {
             var deleted = [];
             for (i = items.length; i < o.items.length; i++) {
                 deleted.push(this._children[this._getChildName(i)]);
+                delete this._children[this._getChildName(i)];
             }
             o.items.splice(items.length);
             BI.each(deleted, function (i, w) {

@@ -288,11 +288,7 @@ BI.Widget = BI.inherit(BI.OB, {
     removeWidget: function (nameOrWidget) {
         var self = this;
         if (BI.isWidget(nameOrWidget)) {
-            BI.each(this._children, function (name, widget) {
-                if (widget === nameOrWidget) {
-                    delete self._children[name];
-                }
-            })
+            BI.remove(this._children, nameOrWidget);
         } else {
             delete this._children[nameOrWidget];
         }
