@@ -6301,56 +6301,56 @@ BI.Cache = {
         document.cookie = cookieString;
     }
 };// full day names
-Date._DN = [BI.i18nText("BI-Sunday"),
-    BI.i18nText("BI-Monday"),
-    BI.i18nText("BI-Tuesday"),
-    BI.i18nText("BI-Wednesday"),
-    BI.i18nText("BI-Thursday"),
-    BI.i18nText("BI-Friday"),
-    BI.i18nText("BI-Saturday"),
-    BI.i18nText("BI-Sunday")];
+Date._DN = [BI.i18nText("BI-Basic_Sunday"),
+    BI.i18nText("BI-Basic_Monday"),
+    BI.i18nText("BI-Basic_Tuesday"),
+    BI.i18nText("BI-Basic_Wednesday"),
+    BI.i18nText("BI-Basic_Thursday"),
+    BI.i18nText("BI-Basic_Friday"),
+    BI.i18nText("BI-Basic_Saturday"),
+    BI.i18nText("BI-Basic_Sunday")];
 
 // short day names
-Date._SDN = ['',
-    '',
-    '',
-    '',
-    '',
-    '',
-    '',
-    ''];
+Date._SDN = [BI.i18nText("BI-Day_Ri"),
+    BI.i18nText("BI-Basic_One"),
+    BI.i18nText("BI-Basic_Two"),
+    BI.i18nText("BI-Basic_Three"),
+    BI.i18nText("BI-Basic_Four"),
+    BI.i18nText("BI-Basic_Five"),
+    BI.i18nText("BI-Basic_Six"),
+    BI.i18nText("BI-Day_Ri")];
 
 // Monday first, etc.
 Date._FD = 1;
 
 // full month names
 Date._MN = [
-    '',
-    '',
-    '',
-    '',
-    '',
-    '',
-    '',
-    '',
-    '',
-    '',
-    '',
-    ''];
+    BI.i18nText("BI-Basic_January"),
+    BI.i18nText("BI-Basic_February"),
+    BI.i18nText("BI-Basic_March"),
+    BI.i18nText("BI-Basic_April"),
+    BI.i18nText("BI-Basic_May"),
+    BI.i18nText("BI-Basic_June"),
+    BI.i18nText("BI-Basic_July"),
+    BI.i18nText("BI-Basic_August"),
+    BI.i18nText("BI-Basic_September"),
+    BI.i18nText("BI-Basic_October"),
+    BI.i18nText("BI-Basic_November"),
+    BI.i18nText("BI-Basic_December")];
 
 // short month names
-Date._SMN = ['',
-    '',
-    '',
-    '',
-    '',
-    '',
-    '',
-    '',
-    '',
-    '',
-    '',
-    ''];
+Date._SMN = [0,
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8,
+    9,
+    10,
+    11];
 
 Date._QN = ["", BI.i18nText("BI-Quarter_1"),
     BI.i18nText("BI-Quarter_2"),

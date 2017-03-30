@@ -3,7 +3,6 @@ BI.DateTrigger = BI.inherit(BI.Trigger, {
         hgap: 4,
         vgap: 2,
         triggerWidth: 30,
-        watermark: BI.i18nText("BI-Unrestricted"),
         yearLength: 4,
         yearMonthLength: 7
     },
@@ -37,7 +36,7 @@ BI.DateTrigger = BI.inherit(BI.Trigger, {
             hgap: c.hgap,
             vgap: c.vgap,
             allowBlank: true,
-            watermark: c.watermark,
+            watermark: BI.i18nText("BI-Unrestricted"),
             errorText: function () {
                 if (self.editor.isEditing()) {
                     return BI.i18nText("BI-Date_Trigger_Error_Text");
