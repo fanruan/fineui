@@ -11,7 +11,7 @@ BI.ExcelTable = BI.inherit(BI.Widget, {
         return BI.extend(BI.ExcelTable.superclass._defaultConfig.apply(this, arguments), {
             baseCls: "bi-excel-table",
             el: {
-                type: "bi.adaptive_table"
+                type: "bi.responsive_table"
             },
 
             isNeedResize: false,
@@ -45,8 +45,6 @@ BI.ExcelTable = BI.inherit(BI.Widget, {
         this.table = BI.createWidget(o.el, {
             type: "bi.table_view",
             element: this,
-            isNeedResize: o.isNeedResize,
-            isResizeAdapt: o.isResizeAdapt,
 
             isNeedFreeze: false,
 
