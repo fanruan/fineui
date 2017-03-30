@@ -4857,7 +4857,6 @@ BI.shortcut('bi.date_combo', BI.DateCombo);BI.DateTrigger = BI.inherit(BI.Trigge
         hgap: 4,
         vgap: 2,
         triggerWidth: 30,
-        watermark: BI.i18nText("BI-Unrestricted"),
         yearLength: 4,
         yearMonthLength: 7
     },
@@ -4891,7 +4890,7 @@ BI.shortcut('bi.date_combo', BI.DateCombo);BI.DateTrigger = BI.inherit(BI.Trigge
             hgap: c.hgap,
             vgap: c.vgap,
             allowBlank: true,
-            watermark: c.watermark,
+            watermark: BI.i18nText("BI-Unrestricted"),
             errorText: function () {
                 if (self.editor.isEditing()) {
                     return BI.i18nText("BI-Date_Trigger_Error_Text");

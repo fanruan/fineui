@@ -9,8 +9,10 @@
 }
 .bi-fine-tuning-number-editor .top-button {
   border-left: 1px solid #d4dadd;
-  border-bottom: 1px solid #d4dadd;
 }
 .bi-fine-tuning-number-editor .bottom-button {
   border-left: 1px solid #d4dadd;
+}
+.bi-fine-tuning-number-editor .split-line {
+  background-color: #d4dadd;
 }
