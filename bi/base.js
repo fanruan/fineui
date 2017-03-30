@@ -2368,11 +2368,7 @@ BI.Bubbles = new BI.BubblesController();
 BI.Tooltips = new BI.TooltipsController();
 BI.Popovers = new BI.FloatBoxController();
 BI.Broadcasts = new BI.BroadcastController();
-BI.StyleLoaders = new BI.StyleLoaderManager();
-
-BI.servletURL = "dist/";
-BI.resourceURL = "dist/resource/";
-BI.i18n = {};/**
+BI.StyleLoaders = new BI.StyleLoaderManager();/**
  * canvas绘图
  *
  * Created by GUY on 2015/11/18.

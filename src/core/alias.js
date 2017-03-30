@@ -138,6 +138,58 @@
         }
     };
 
+    BI.jsonDecode = function (text) {
+
+        try {
+            // 注意0啊
+            //var jo = $.parseJSON(text) || {};
+            var jo = $.parseJSON(text);
+            if (jo == null) {
+                jo = {};
+            }
+        } catch (e) {
+            /*
+             * richie:浏览器只支持标准的JSON字符串转换，而jQuery会默认调用浏览器的window.JSON.parse()函数进行解析
+             * 比如：var str = "{'a':'b'}",这种形式的字符串转换为JSON就会抛异常
+             */
+            try {
+                jo = new Function("return " + text)() || {};
+            } catch (e) {
+                //do nothing
+            }
+            if (jo == null) {
+                jo = [];
+            }
+        }
+        if (!_hasDateInJson(text)) {
+            return jo;
+        }
+
+        function _hasDateInJson(json) {
+            if (!json || typeof json !== "string") {
+                return false;
+            }
+            return json.indexOf("__time__") != -1;
+        }
+
+        return (function (o) {
+            if (typeof o === "string") {
+                return o;
+            }
+            if (o && o.__time__ != null) {
+                return new Date(o.__time__);
+            }
+            for (var a in o) {
+                if (o[a] == o || typeof o[a] == 'object' || $.isFunction(o[a])) {
+                    break;
+                }
+                o[a] = arguments.callee(o[a]);
+            }
+
+            return o;
+        })(jo);
+    }
+
     BI.contentFormat = function (cv, fmt) {
         if (isEmpty(cv)) {
             //原值为空，返回空字符

@@ -13987,28 +13987,7 @@ if (!window.BI) {
                 //encode
                 encodeBIParam(option.data);
 
-                var async = true;
-                if (BI.isNotNull(option.async)) {
-                    async = option.async;
-                }
-
-                if (BI.isNull(loading)) {
-                    loading = BI.createWidget({
-                        type: "bi.request_loading"
-                    });
-                }
-
-                if (BI.isNull(timeoutToast)) {
-                    timeoutToast = BI.createWidget({
-                        type: "bi.timeout_toast"
-                    });
-                    timeoutToast.setCallback(function (op) {
-                        decodeBIParam(op.data);
-                        BI.ajax(op);
-                    });
-                }
-                timeoutToast.addReq(option);
-
+                var async = option.async;
 
                 option.data = BI.cjkEncodeDO(option.data);
 
@@ -14018,67 +13997,13 @@ if (!window.BI) {
                     type: "POST",
                     data: option.data,
                     async: async,
-                    error: function () {
-                        if (!timeoutToast.hasReq(option)) {
-                            return;
-                        }
-                        timeoutToast.removeReq(option);
-                        //失败 取消、重新加载
-                        loading.setCallback(function () {
-                            decodeBIParam(option.data);
-                            BI.ajax(option);
-                        });
-                        loading.showError();
-                    },
+                    error: option.error,
                     complete: function (res, status) {
-                        if (!timeoutToast.hasReq(option)) {
-                            return;
-                        }
-                        timeoutToast.removeReq(option);
-                        //登录超时
-                        if (BI.isNotNull(res.responseText) &&
-                            res.responseText.indexOf("fs-login-content") > -1 &&
-                            res.responseText.indexOf("fs-login-input-password-confirm") === -1) {
-                            if (BI.Popovers.isVisible(BI.LoginTimeOut.POPOVER_ID)) {
-                                return;
-                            }
-                            if (BI.isNotNull(BI.Popovers.get(BI.LoginTimeOut.POPOVER_ID))) {
-                                BI.Popovers.open(BI.LoginTimeOut.POPOVER_ID);
-                                return;
-                            }
-                            var loginTimeout = BI.createWidget({
-                                type: "bi.login_timeout"
-                            });
-                            loginTimeout.on(BI.LoginTimeOut.EVENT_LOGIN, function () {
-                                decodeBIParam(option.data);
-                                BI.ajax(option);
-                                BI.Popovers.remove(BI.LoginTimeOut.POPOVER_ID);
-                            });
-                            BI.Popovers.create(BI.LoginTimeOut.POPOVER_ID, loginTimeout, {
-                                width: 600,
-                                height: 400
-                            }).open(BI.LoginTimeOut.POPOVER_ID);
-                        } else if (BI.isNotNull(res.responseText) &&
-                            res.responseText.indexOf("script") > -1 &&
-                            res.responseText.indexOf("Session Timeout...") > -1) {
-                            //登录失效
-                            loading.setCallback(function () {
-                                location.reload();
-                            });
-                            loading.showError();
-
-                        } else if (status === "success" && BI.isFunction(option.success)) {
-                            option.success(BI.jsonDecode(res.responseText));
-                        }
                         if (BI.isFunction(option.complete)) {
                             option.complete(BI.jsonDecode(res.responseText), status);
                         }
                     }
                 });
-
-                return function cancel() {
-                    timeoutToast.removeReq(option);
-                };
 
                 function encodeBIParam(data) {
                     for (var key in data) {
@@ -14099,102 +14024,7 @@ if (!window.BI) {
                     }
                 }
             }
-        })(),
-
-        /**
-         * 异步ajax请求
-         * @param {String} op op参数
-         * @param {String} cmd cmd参数
-         * @param {JSON} data ajax请求的参数
-         * @param {Function} callback 回调函数
-         * @param {Function} complete 回调
-         */
-        requestAsync: function (op, cmd, data, callback, complete) {
-            data = data || {};
-            if (!BI.isKey(op)) {
-                op = 'fr_bi_dezi';
-            }
-            if (op === "fr_bi_dezi" || op === "fr_bi_configure") {
-                data.sessionID = Data.SharingPool.get("sessionID");
-            }
-            var url = BI.servletURL + '?op=' + op + '&cmd=' + cmd + "&_=" + Math.random();
-            return (BI.ajax)({
-                url: url,
-                type: 'POST',
-                data: data,
-                error: function () {
-                    // BI.Msg.toast(BI.i18nText("BI-Ajax_Error"));
-                },
-                success: function (res) {
-                    if (BI.isFunction(callback)) {
-                        callback(res);
-                    }
-                },
-                complete: function (res, status) {
-                    if (BI.isFunction(complete)) {
-                        complete(res);
-                    }
-                }
-            });
-        },
-
-        /**
-         * 同步ajax请求
-         * @param {String} op op参数
-         * @param {String} cmd cmd参数
-         * @param {JSON} data ajax请求的参�?
-         * @returns {Object} ajax同步请求返回的JSON对象
-         */
-        requestSync: function (op, cmd, data) {
-            data = data || {};
-            if (!BI.isKey(op)) {
-                op = 'fr_bi_dezi';
-            }
-            if (op === "fr_bi_dezi") {
-                data.sessionID = Data.SharingPool.get("sessionID");
-            }
-            var url = BI.servletURL + '?op=' + op + '&cmd=' + cmd + "&_=" + Math.random();
-            var result = {};
-            (BI.ajax)({
-                url: url,
-                type: 'POST',
-                async: false,
-                data: data,
-                error: function () {
-                    BI.Msg.toast(BI.i18nText("BI-Ajax_Error"));
-                },
-                complete: function (res, status) {
-                    if (status === 'success') {
-                        result = res;
-                    }
-                }
-            });
-            return result;
-        },
-
-        /**
-         * 请求方法
-         * @param cmd 命令
-         * @param data 数据
-         * @param extend 参数
-         * @returns {*}
-         */
-        request: function (cmd, data, extend) {
-            extend = extend || {};
-            data = data || {};
-            var op = extend.op;
-            if (!BI.isKey(op)) {
-                op = 'fr_bi_dezi';
-            }
-            if (op === "fr_bi_dezi") {
-                data.sessionID = Data.SharingPool.get("sessionID");
-            }
-            if (extend.async === true) {
-                BI.requestAsync(op, cmd, data, extend.complete || extend.success);
-            } else {
-                return BI.requestSync(op, cmd, data);
-            }
-        }
+        })()
     });
 })(jQuery);/**
  * 客户端观察者，主要处理事件的添加、删除、执行等
@@ -19997,6 +19827,58 @@ BI.PopoverSection.EVENT_CLOSE = "EVENT_CLOSE";;(function () {
             return a.join("");
         }
     };
+
+    BI.jsonDecode = function (text) {
+
+        try {
+            // 注意0啊
+            //var jo = $.parseJSON(text) || {};
+            var jo = $.parseJSON(text);
+            if (jo == null) {
+                jo = {};
+            }
+        } catch (e) {
+            /*
+             * richie:浏览器只支持标准的JSON字符串转换，而jQuery会默认调用浏览器的window.JSON.parse()函数进行解析
+             * 比如：var str = "{'a':'b'}",这种形式的字符串转换为JSON就会抛异常
+             */
+            try {
+                jo = new Function("return " + text)() || {};
+            } catch (e) {
+                //do nothing
+            }
+            if (jo == null) {
+                jo = [];
+            }
+        }
+        if (!_hasDateInJson(text)) {
+            return jo;
+        }
+
+        function _hasDateInJson(json) {
+            if (!json || typeof json !== "string") {
+                return false;
+            }
+            return json.indexOf("__time__") != -1;
+        }
+
+        return (function (o) {
+            if (typeof o === "string") {
+                return o;
+            }
+            if (o && o.__time__ != null) {
+                return new Date(o.__time__);
+            }
+            for (var a in o) {
+                if (o[a] == o || typeof o[a] == 'object' || $.isFunction(o[a])) {
+                    break;
+                }
+                o[a] = arguments.callee(o[a]);
+            }
+
+            return o;
+        })(jo);
+    }
 
     BI.contentFormat = function (cv, fmt) {
         if (isEmpty(cv)) {
