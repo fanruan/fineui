@@ -186,9 +186,9 @@
         var numMod = format.indexOf(';');
         if (numMod > -1) {
             if (text >= 0) {
-                return BI._numberFormat(text + "", format.substring(0, numMod));
+                return _numberFormat(text + "", format.substring(0, numMod));
             } else {
-                return BI._numberFormat((-text) + "", format.substr(numMod + 1));
+                return _numberFormat((-text) + "", format.substr(numMod + 1));
             }
         }
         var tp = text.split('.'), fp = format.split('.'),

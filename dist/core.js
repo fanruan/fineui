@@ -19876,9 +19876,9 @@ BI.PopoverSection.EVENT_CLOSE = "EVENT_CLOSE";;(function () {
         var numMod = format.indexOf(';');
         if (numMod > -1) {
             if (text >= 0) {
-                return BI._numberFormat(text + "", format.substring(0, numMod));
+                return _numberFormat(text + "", format.substring(0, numMod));
             } else {
-                return BI._numberFormat((-text) + "", format.substr(numMod + 1));
+                return _numberFormat((-text) + "", format.substr(numMod + 1));
             }
         }
         var tp = text.split('.'), fp = format.split('.'),
@@ -20441,7 +20441,7 @@ BI.BroadcastController = BI.inherit(BI.Controller, {
         }
         this._broadcasts[name].push(fn);
         return function () {
-            self._broadcasts[name].remove(fn);
+            self.remove(name, fn);
         }
     },
 
@@ -20455,6 +20455,9 @@ BI.BroadcastController = BI.inherit(BI.Controller, {
     remove: function (name, fn) {
         if (fn) {
             this._broadcasts[name].remove(fn);
+            if (this._broadcasts[name].length === 0) {
+                delete this._broadcasts[name];
+            }
         } else {
             delete this._broadcasts[name];
         }
@@ -21041,11 +21044,14 @@ BI.ResizeController = BI.inherit(BI.Controller, {
     },
 
     add: function (name, resizer) {
+        var self = this;
         if (this.has(name)) {
             return this;
         }
         this.resizerManger[name] = resizer;
-        return this;
+        return function () {
+            self.remove(name);
+        };
     },
 
     get: function (name) {
