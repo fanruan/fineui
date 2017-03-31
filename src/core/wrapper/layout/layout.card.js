@@ -30,7 +30,7 @@ BI.CardLayout = BI.inherit(BI.Layout, {
                 if (!self.hasWidget(item.cardName)) {
                     var w = BI.createWidget(item);
                     w.on(BI.Events.DESTROY, function () {
-                        var index = BI.findKey(o.items, function (i, tItem) {
+                        var index = BI.findIndex(o.items, function (i, tItem) {
                             return tItem.cardName == item.cardName;
                         });
                         if (index > -1) {
@@ -74,17 +74,23 @@ BI.CardLayout = BI.inherit(BI.Layout, {
         return this._children[cardName];
     },
 
-    deleteCardByName: function (cardName) {
-        if (!this.isCardExisted(cardName)) {
-            throw new Error("cardName is not exist");
-        }
-        var index = BI.findKey(this.options.items, function (i, item) {
+    _deleteCardByName: function (cardName) {
+        delete this._children[cardName];
+        var index = BI.findIndex(this.options.items, function (i, item) {
             return item.cardName == cardName;
         });
         if (index > -1) {
             this.options.items.splice(index, 1);
         }
+    },
+
+    deleteCardByName: function (cardName) {
+        if (!this.isCardExisted(cardName)) {
+            throw new Error("cardName is not exist");
+        }
+
         var child = this._children[cardName];
+        this._deleteCardByName(cardName);
         child && child.destroy();
     },
 
@@ -117,11 +123,13 @@ BI.CardLayout = BI.inherit(BI.Layout, {
         var flag = false;
         BI.each(this.options.items, function (i, item) {
             var el = self._children[item.cardName];
-            if (name != item.cardName) {
-                //动画效果只有在全部都隐藏的时候才有意义,且只要执行一次动画操作就够了
-                !flag && !exist && (BI.Action && action instanceof BI.Action) ? (action.actionBack(el), flag = true) : el.invisible();
-            } else {
-                (BI.Action && action instanceof BI.Action) ? action.actionPerformed(void 0, el, callback) : (el.visible(), callback && callback())
+            if (el) {
+                if (name != item.cardName) {
+                    //动画效果只有在全部都隐藏的时候才有意义,且只要执行一次动画操作就够了
+                    !flag && !exist && (BI.Action && action instanceof BI.Action) ? (action.actionBack(el), flag = true) : el.invisible();
+                } else {
+                    (BI.Action && action instanceof BI.Action) ? action.actionPerformed(void 0, el, callback) : (el.visible(), callback && callback())
+                }
             }
         });
     },
@@ -180,6 +188,22 @@ BI.CardLayout = BI.inherit(BI.Layout, {
             }
         });
         return flag;
+    },
+
+    removeWidget: function (nameOrWidget) {
+        var removeName;
+        if (BI.isWidget(nameOrWidget)) {
+            BI.each(this._children, function (name, child) {
+                if (child === nameOrWidget) {
+                    removeName = name;
+                }
+            })
+        } else {
+            removeName = nameOrWidget;
+        }
+        if (removeName) {
+            this._deleteCardByName(removeName);
+        }
     }
 });
 BI.shortcut('bi.card', BI.CardLayout);

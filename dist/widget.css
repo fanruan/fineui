@@ -233,10 +233,12 @@
 }
 .bi-fine-tuning-number-editor .top-button {
   border-left: 1px solid #d4dadd;
-  border-bottom: 1px solid #d4dadd;
 }
 .bi-fine-tuning-number-editor .bottom-button {
   border-left: 1px solid #d4dadd;
+}
+.bi-fine-tuning-number-editor .split-line {
+  background-color: #d4dadd;
 }
 /****添加计算宽度的--运算符直接需要space****/
 /****** common color(常用颜色,可用于普遍场景) *****/
@@ -628,14 +630,6 @@
 }
 .bi-relation-view-region .relation-view-region-container .relation-view-region-title {
   border-bottom: 1px solid #d4dadd;
-}
-/****添加计算宽度的--运算符直接需要space****/
-/****** common color(常用颜色,可用于普遍场景) *****/
-/**** custom color(自定义颜色,用于特定场景) ****/
-.bi-responsive-table > div.bottom-left > div > div > table > * > * > td.last-col,
-.bi-responsive-table > div.bottom-right > div > div > table > * > * > td.last-col,
-.bi-responsive-table > div > div > table > * > * > td.last-col {
-  min-width: 80px;
 }
 /****添加计算宽度的--运算符直接需要space****/
 /****** common color(常用颜色,可用于普遍场景) *****/

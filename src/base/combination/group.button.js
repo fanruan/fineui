@@ -57,9 +57,11 @@ BI.ButtonGroup = BI.inherit(BI.Widget, {
                             self.setValue([]);
                             break;
                     }
+                    self.fireEvent(BI.Controller.EVENT_CHANGE, arguments);
                     self.fireEvent(BI.ButtonGroup.EVENT_CHANGE, value, obj);
+                } else {
+                    self.fireEvent(BI.Controller.EVENT_CHANGE, arguments);
                 }
-                self.fireEvent(BI.Controller.EVENT_CHANGE, arguments);
             });
             btn.on(BI.Events.DESTROY, function () {
                 BI.remove(self.buttons, btn);
@@ -155,9 +157,21 @@ BI.ButtonGroup = BI.inherit(BI.Widget, {
         this.layouts.addItems(this._packageLayout(items).items);
     },
 
-    removeItemAt: function (index) {
-        this.buttons[index].destroy();
-        this.layouts.removeItemAt(index);
+    removeItemAt: function (indexes) {
+        BI.remove(this.buttons, indexes);
+        this.layouts.removeItemAt(indexes);
+    },
+
+    removeItems: function (values) {
+        values = BI.isArray(values) ? values : [values];
+        var deleted = [];
+        BI.each(this.buttons, function (i, button) {
+            if (BI.deepContains(values, button.getValue())) {
+                deleted.push(i);
+            }
+        });
+        BI.remove(this.buttons, deleted);
+        this.layouts.removeItemAt(deleted);
     },
 
     populate: function (items) {

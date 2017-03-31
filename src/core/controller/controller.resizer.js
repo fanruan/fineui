@@ -41,11 +41,14 @@ BI.ResizeController = BI.inherit(BI.Controller, {
     },
 
     add: function (name, resizer) {
+        var self = this;
         if (this.has(name)) {
             return this;
         }
         this.resizerManger[name] = resizer;
-        return this;
+        return function () {
+            self.remove(name);
+        };
     },
 
     get: function (name) {

@@ -4857,7 +4857,6 @@ BI.shortcut('bi.date_combo', BI.DateCombo);BI.DateTrigger = BI.inherit(BI.Trigge
         hgap: 4,
         vgap: 2,
         triggerWidth: 30,
-        watermark: BI.i18nText("BI-Unrestricted"),
         yearLength: 4,
         yearMonthLength: 7
     },
@@ -4891,7 +4890,7 @@ BI.shortcut('bi.date_combo', BI.DateCombo);BI.DateTrigger = BI.inherit(BI.Trigge
             hgap: c.hgap,
             vgap: c.vgap,
             allowBlank: true,
-            watermark: c.watermark,
+            watermark: BI.i18nText("BI-Unrestricted"),
             errorText: function () {
                 if (self.editor.isEditing()) {
                     return BI.i18nText("BI-Date_Trigger_Error_Text");
@@ -6158,7 +6157,7 @@ BI.ExcelTable = BI.inherit(BI.Widget, {
         return BI.extend(BI.ExcelTable.superclass._defaultConfig.apply(this, arguments), {
             baseCls: "bi-excel-table",
             el: {
-                type: "bi.adaptive_table"
+                type: "bi.responsive_table"
             },
 
             isNeedResize: false,
@@ -6192,8 +6191,6 @@ BI.ExcelTable = BI.inherit(BI.Widget, {
         this.table = BI.createWidget(o.el, {
             type: "bi.table_view",
             element: this,
-            isNeedResize: o.isNeedResize,
-            isResizeAdapt: o.isResizeAdapt,
 
             isNeedFreeze: false,
 
@@ -16791,7 +16788,7 @@ BI.YearTrigger = BI.inherit(BI.Trigger, {
         hgap: 4,
         vgap: 2,
         triggerWidth: 25,
-        errorText: BI.i18nText("BI-Please_Input_Integer"),
+        errorText: BI.i18nText("BI-Please_Input_Positive_Integer"),
         errorTextInvalid: BI.i18nText("BI-Year_Trigger_Invalid_Text")
     },
 

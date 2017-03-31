@@ -2036,7 +2036,7 @@ if (!window.BI) {
         },
 
         formatEL: function (obj) {
-            if (obj && obj.el) {
+            if (obj && !obj.type && obj.el) {
                 return obj;
             }
             return {
@@ -2971,99 +2971,23 @@ if (!window.BI) {
                 //encode
                 encodeBIParam(option.data);
 
-                var async = true;
-                if (BI.isNotNull(option.async)) {
-                    async = option.async;
-                }
-
-                if (BI.isNull(loading)) {
-                    loading = BI.createWidget({
-                        type: "bi.request_loading"
-                    });
-                }
-
-                if (BI.isNull(timeoutToast)) {
-                    timeoutToast = BI.createWidget({
-                        type: "bi.timeout_toast"
-                    });
-                    timeoutToast.setCallback(function (op) {
-                        decodeBIParam(op.data);
-                        BI.ajax(op);
-                    });
-                }
-                timeoutToast.addReq(option);
-
+                var async = option.async;
 
                 option.data = BI.cjkEncodeDO(option.data);
-                    
-                    
-                
+
+
                 $.ajax({
                     url: option.url,
                     type: "POST",
                     data: option.data,
                     async: async,
-                    error: function () {
-                        if (!timeoutToast.hasReq(option)) {
-                            return;
-                        }
-                        timeoutToast.removeReq(option);
-                        //失败 取消、重新加载
-                        loading.setCallback(function () {
-                            decodeBIParam(option.data);
-                            BI.ajax(option);
-                        });
-                        loading.showError();
-                    },
+                    error: option.error,
                     complete: function (res, status) {
-                        if (!timeoutToast.hasReq(option)) {
-                            return;
-                        }
-                        timeoutToast.removeReq(option);
-                        //登录超时
-                        if (BI.isNotNull(res.responseText) &&
-                            res.responseText.indexOf("fs-login-content") > -1 &&
-                            res.responseText.indexOf("fs-login-input-password-confirm") === -1) {
-                            if (BI.Popovers.isVisible(BI.LoginTimeOut.POPOVER_ID)) {
-                                return;
-                            }
-                            if (BI.isNotNull(BI.Popovers.get(BI.LoginTimeOut.POPOVER_ID))) {
-                                BI.Popovers.open(BI.LoginTimeOut.POPOVER_ID);
-                                return;
-                            }
-                            var loginTimeout = BI.createWidget({
-                                type: "bi.login_timeout"
-                            });
-                            loginTimeout.on(BI.LoginTimeOut.EVENT_LOGIN, function () {
-                                decodeBIParam(option.data);
-                                BI.ajax(option);
-                                BI.Popovers.remove(BI.LoginTimeOut.POPOVER_ID);
-                            });
-                            BI.Popovers.create(BI.LoginTimeOut.POPOVER_ID, loginTimeout, {
-                                width: 600,
-                                height: 400
-                            }).open(BI.LoginTimeOut.POPOVER_ID);
-                        } else if (BI.isNotNull(res.responseText) &&
-                            res.responseText.indexOf("script") > -1 &&
-                            res.responseText.indexOf("Session Timeout...") > -1) {
-                            //登录失效
-                            loading.setCallback(function () {
-                                location.reload();
-                            });
-                            loading.showError();
-
-                        } else if (status === "success" && BI.isFunction(option.success)) {
-                            option.success(BI.jsonDecode(res.responseText));
-                        }
                         if (BI.isFunction(option.complete)) {
                             option.complete(BI.jsonDecode(res.responseText), status);
                         }
                     }
                 });
-
-                return function cancel() {
-                    timeoutToast.removeReq(option);
-                };
 
                 function encodeBIParam(data) {
                     for (var key in data) {
@@ -3084,108 +3008,349 @@ if (!window.BI) {
                     }
                 }
             }
-        })(),
-
-        /**
-         * 异步ajax请求
-         * @param {String} op op参数
-         * @param {String} cmd cmd参数
-         * @param {JSON} data ajax请求的参数
-         * @param {Function} callback 回调函数
-         * @param {Function} complete 回调
-         */
-        requestAsync: function (op, cmd, data, callback, complete) {
-            data = data || {};
-            if (!BI.isKey(op)) {
-                op = 'fr_bi_dezi';
-            }
-            if (op === "fr_bi_dezi" || op === "fr_bi_configure") {
-                data.sessionID = Data.SharingPool.get("sessionID");
-            }
-            var url = BI.servletURL + '?op=' + op + '&cmd=' + cmd + "&_=" + Math.random();
-            return (BI.ajax)({
-                url: url,
-                type: 'POST',
-                data: data,
-                error: function () {
-                    // BI.Msg.toast(BI.i18nText("BI-Ajax_Error"));
-                },
-                success: function (res) {
-                    if (BI.isFunction(callback)) {
-                        callback(res);
-                    }
-                },
-                complete: function (res, status) {
-                    if (BI.isFunction(complete)) {
-                        complete(res);
-                    }
-                }
-            });
-        },
-
-        /**
-         * 同步ajax请求
-         * @param {String} op op参数
-         * @param {String} cmd cmd参数
-         * @param {JSON} data ajax请求的参�?
-         * @returns {Object} ajax同步请求返回的JSON对象
-         */
-        requestSync: function (op, cmd, data) {
-            data = data || {};
-            if (!BI.isKey(op)) {
-                op = 'fr_bi_dezi';
-            }
-            if (op === "fr_bi_dezi") {
-                data.sessionID = Data.SharingPool.get("sessionID");
-            }
-            var url = BI.servletURL + '?op=' + op + '&cmd=' + cmd + "&_=" + Math.random();
-            var result = {};
-            (BI.ajax)({
-                url: url,
-                type: 'POST',
-                async: false,
-                data: data,
-                error: function () {
-                    BI.Msg.toast(BI.i18nText("BI-Ajax_Error"));
-                },
-                complete: function (res, status) {
-                    if (status === 'success') {
-                        result = res;
-                    }
-                }
-            });
-            return result;
-        },
-
-        /**
-         * 请求方法
-         * @param cmd 命令
-         * @param data 数据
-         * @param extend 参数
-         * @returns {*}
-         */
-        request: function (cmd, data, extend) {
-            extend = extend || {};
-            data = data || {};
-            var op = extend.op;
-            if (!BI.isKey(op)) {
-                op = 'fr_bi_dezi';
-            }
-            if (op === "fr_bi_dezi") {
-                data.sessionID = Data.SharingPool.get("sessionID");
-            }
-            if (extend.async === true) {
-                BI.requestAsync(op, cmd, data, extend.complete || extend.success);
-            } else {
-                return BI.requestSync(op, cmd, data);
-            }
-        }
+        })()
     });
 })(jQuery);;(function () {
     function isEmpty(value) {
         // 判断是否为空值
         var result = value === "" || value === null || value === undefined;
         return result;
+    }
+
+    // 判断是否是无效的日期
+    function isInvalidDate(date) {
+        return date == "Invalid Date" || date == "NaN";
+    }
+
+    /**
+     * 科学计数格式
+     */
+    function _eFormat(text, fmt) {
+        var e = fmt.indexOf("E");
+        var eleft = fmt.substr(0, e), eright = fmt.substr(e + 1);
+        if (/^[0\.-]+$/.test(text)) {
+            text = BI._numberFormat(0.0, eleft) + 'E' + BI._numberFormat(0, eright)
+        } else {
+            var isNegative = text < 0;
+            if (isNegative) {
+                text = text.substr(1);
+            }
+            var elvl = (eleft.split('.')[0] || '').length;
+            var point = text.indexOf(".");
+            if (point < 0) {
+                point = text.length;
+            }
+            var i = 0; //第一个不为0的数的位置
+            text = text.replace('.', '');
+            for (var len = text.length; i < len; i++) {
+                var ech = text.charAt(i);
+                if (ech <= '9' && ech >= '1') {
+                    break;
+                }
+            }
+            var right = point - i - elvl;
+            var left = text.substr(i, elvl);
+            var dis = i + elvl - text.length;
+            if (dis > 0) {
+                //末位补全0
+                for (var k = 0; k < dis; k++) {
+                    left += '0';
+                }
+            } else {
+                left += '.' + text.substr(i + elvl);
+            }
+            left = left.replace(/^[0]+/, '');
+            if (right < 0 && eright.indexOf('-') < 0) {
+                eright += ';-' + eright;
+            }
+            text = BI._numberFormat(left, eleft) + 'E' + BI._numberFormat(right, eright);
+            if (isNegative) {
+                text = '-' + text;
+            }
+        }
+        return text;
+    }
+
+    /**
+     * 把日期对象按照指定格式转化成字符串
+     *
+     *      @example
+     *      var date = new Date('Thu Dec 12 2013 00:00:00 GMT+0800');
+     *      var result = BI.date2Str(date, 'yyyy-MM-dd');//2013-12-12
+     *
+     * @class BI.date2Str
+     * @param date 日期
+     * @param format 日期格式
+     * @returns {String}
+     */
+    function date2Str(date, format) {
+        if (!date) {
+            return '';
+        }
+        // O(len(format))
+        var len = format.length, result = '';
+        if (len > 0) {
+            var flagch = format.charAt(0), start = 0, str = flagch;
+            for (var i = 1; i < len; i++) {
+                var ch = format.charAt(i);
+                if (flagch !== ch) {
+                    result += compileJFmt({
+                        'char': flagch,
+                        'str': str,
+                        'len': i - start
+                    }, date);
+                    flagch = ch;
+                    start = i;
+                    str = flagch;
+                } else {
+                    str += ch;
+                }
+            }
+            result += compileJFmt({
+                'char': flagch,
+                'str': str,
+                'len': len - start
+            }, date);
+        }
+        return result;
+
+        function compileJFmt(jfmt, date) {
+            var str = jfmt.str, len = jfmt.len, ch = jfmt['char'];
+            switch (ch) {
+                case 'E': //星期
+                    str = Date._DN[date.getDay()];
+                    break;
+                case 'y': //年
+                    if (len <= 3) {
+                        str = (date.getFullYear() + '').slice(2, 4);
+                    } else {
+                        str = date.getFullYear();
+                    }
+                    break;
+                case 'M': //月
+                    if (len > 2) {
+                        str = Date._MN[date.getMonth()];
+                    } else if (len < 2) {
+                        str = date.getMonth() + 1;
+                    } else {
+                        str = String.leftPad(date.getMonth() + 1 + '', 2, '0');
+                    }
+                    break;
+                case 'd': //日
+                    if (len > 1) {
+                        str = String.leftPad(date.getDate() + '', 2, '0');
+                    } else {
+                        str = date.getDate();
+                    }
+                    break;
+                case 'h': //时(12)
+                    var hour = date.getHours() % 12;
+                    if (hour === 0) {
+                        hour = 12;
+                    }
+                    if (len > 1) {
+                        str = String.leftPad(hour + '', 2, '0');
+                    } else {
+                        str = hour;
+                    }
+                    break;
+                case 'H': //时(24)
+                    if (len > 1) {
+                        str = String.leftPad(date.getHours() + '', 2, '0');
+                    } else {
+                        str = date.getHours();
+                    }
+                    break;
+                case 'm':
+                    if (len > 1) {
+                        str = String.leftPad(date.getMinutes() + '', 2, '0');
+                    } else {
+                        str = date.getMinutes();
+                    }
+                    break;
+                case 's':
+                    if (len > 1) {
+                        str = String.leftPad(date.getSeconds() + '', 2, '0');
+                    } else {
+                        str = date.getSeconds();
+                    }
+                    break;
+                case 'a':
+                    str = date.getHours() < 12 ? 'am' : 'pm';
+                    break;
+                case 'z':
+                    str = date.getTimezone();
+                    break;
+                default:
+                    str = jfmt.str;
+                    break;
+            }
+            return str;
+        }
+    };
+
+    /**
+     * 数字格式
+     */
+    function _numberFormat(text, format) {
+        var text = text + '';
+        //数字格式，区分正负数
+        var numMod = format.indexOf(';');
+        if (numMod > -1) {
+            if (text >= 0) {
+                return _numberFormat(text + "", format.substring(0, numMod));
+            } else {
+                return _numberFormat((-text) + "", format.substr(numMod + 1));
+            }
+        }
+        var tp = text.split('.'), fp = format.split('.'),
+            tleft = tp[0] || '', fleft = fp[0] || '',
+            tright = tp[1] || '', fright = fp[1] || '';
+        //百分比,千分比的小数点移位处理
+        if (/[%‰]$/.test(format)) {
+            var paddingZero = /[%]$/.test(format) ? '00' : '000';
+            tright += paddingZero;
+            tleft += tright.substr(0, paddingZero.length);
+            tleft = tleft.replace(/^0+/gi, '');
+            tright = tright.substr(paddingZero.length).replace(/0+$/gi, '');
+        }
+        var right = _dealWithRight(tright, fright);
+        if (right.leftPlus) {
+            //小数点后有进位
+            tleft = parseInt(tleft) + 1 + '';
+
+            tleft = isNaN(tleft) ? '1' : tleft;
+        }
+        right = right.num;
+        var left = _dealWithLeft(tleft, fleft);
+        if (!(/[0-9]/.test(left))) {
+            left = left + '0';
+        }
+        if (!(/[0-9]/.test(right))) {
+            return left + right;
+        } else {
+            return left + '.' + right;
+        }
+    };
+    /**
+     * 处理小数点右边小数部分
+     * @param tright 右边内容
+     * @param fright 右边格式
+     * @returns {JSON} 返回处理结果和整数部分是否需要进位
+     * @private
+     */
+    function _dealWithRight(tright, fright) {
+        var right = '', j = 0, i = 0;
+        for (var len = fright.length; i < len; i++) {
+            var ch = fright.charAt(i);
+            var c = tright.charAt(j);
+            switch (ch) {
+                case '0':
+                    if (isEmpty(c)) {
+                        c = '0';
+                    }
+                    right += c;
+                    j++;
+                    break;
+                case '#':
+                    right += c;
+                    j++;
+                    break;
+                default :
+                    right += ch;
+                    break;
+            }
+        }
+        var rll = tright.substr(j);
+        var result = {};
+        if (!isEmpty(rll) && rll.charAt(0) > 4) {
+            //有多余字符，需要四舍五入
+            result.leftPlus = true;
+            var numReg = right.match(/^[0-9]+/);
+            if (numReg) {
+                var num = numReg[0];
+                var orilen = num.length;
+                var newnum = BI.parseInt(num) + 1 + '';
+                //进位到整数部分
+                if (newnum.length > orilen) {
+                    newnum = newnum.substr(1);
+                } else {
+                    newnum = BI.leftPad(newnum, orilen, '0');
+                    result.leftPlus = false;
+                }
+                right = right.replace(/^[0-9]+/, newnum);
+            }
+        }
+        result.num = right;
+        return result;
+    }
+
+    /**
+     * 处理小数点左边整数部分
+     * @param tleft 左边内容
+     * @param fleft 左边格式
+     * @returns {string} 返回处理结果
+     * @private
+     */
+    function _dealWithLeft(tleft, fleft) {
+        var left = '';
+        var j = tleft.length - 1;
+        var combo = -1, last = -1;
+        var i = fleft.length - 1;
+        for (; i >= 0; i--) {
+            var ch = fleft.charAt(i);
+            var c = tleft.charAt(j);
+            switch (ch) {
+                case '0':
+                    if (isEmpty(c)) {
+                        c = '0';
+                    }
+                    last = -1;
+                    left = c + left;
+                    j--;
+                    break;
+                case '#':
+                    last = i;
+                    left = c + left;
+                    j--;
+                    break;
+                case ',':
+                    if (!isEmpty(c)) {
+                        //计算一个,分隔区间的长度
+                        var com = fleft.match(/,[#0]+/);
+                        if (com) {
+                            combo = com[0].length - 1;
+                        }
+                        left = ',' + left;
+                    }
+                    break;
+                default :
+                    left = ch + left;
+                    break;
+            }
+        }
+        if (last > -1) {
+            //处理剩余字符
+            var tll = tleft.substr(0, j + 1);
+            left = left.substr(0, last) + tll + left.substr(last);
+        }
+        if (combo > 0) {
+            //处理,分隔区间
+            var res = left.match(/[0-9]+,/);
+            if (res) {
+                res = res[0];
+                var newstr = '', n = res.length - 1 - combo;
+                for (; n >= 0; n = n - combo) {
+                    newstr = res.substr(n, combo) + ',' + newstr;
+                }
+                var lres = res.substr(0, n + combo);
+                if (!isEmpty(lres)) {
+                    newstr = lres + ',' + newstr;
+                }
+            }
+            left = left.replace(/[0-9]+,/, newstr);
+        }
+        return left;
     }
 
     BI.cjkEncode = function (text) {
@@ -3321,6 +3486,58 @@ if (!window.BI) {
         }
     };
 
+    BI.jsonDecode = function (text) {
+
+        try {
+            // 注意0啊
+            //var jo = $.parseJSON(text) || {};
+            var jo = $.parseJSON(text);
+            if (jo == null) {
+                jo = {};
+            }
+        } catch (e) {
+            /*
+             * richie:浏览器只支持标准的JSON字符串转换，而jQuery会默认调用浏览器的window.JSON.parse()函数进行解析
+             * 比如：var str = "{'a':'b'}",这种形式的字符串转换为JSON就会抛异常
+             */
+            try {
+                jo = new Function("return " + text)() || {};
+            } catch (e) {
+                //do nothing
+            }
+            if (jo == null) {
+                jo = [];
+            }
+        }
+        if (!_hasDateInJson(text)) {
+            return jo;
+        }
+
+        function _hasDateInJson(json) {
+            if (!json || typeof json !== "string") {
+                return false;
+            }
+            return json.indexOf("__time__") != -1;
+        }
+
+        return (function (o) {
+            if (typeof o === "string") {
+                return o;
+            }
+            if (o && o.__time__ != null) {
+                return new Date(o.__time__);
+            }
+            for (var a in o) {
+                if (o[a] == o || typeof o[a] == 'object' || $.isFunction(o[a])) {
+                    break;
+                }
+                o[a] = arguments.callee(o[a]);
+            }
+
+            return o;
+        })(jo);
+    }
+
     BI.contentFormat = function (cv, fmt) {
         if (isEmpty(cv)) {
             //原值为空，返回空字符
@@ -3351,232 +3568,14 @@ if (!window.BI) {
             }
         } else if (fmt.match(/E/)) {
             //科学计数格式
-            text = BI._eFormat(text, fmt);
+            text = _eFormat(text, fmt);
         } else {
             //数字格式
-            text = BI._numberFormat(text, fmt);
+            text = _numberFormat(text, fmt);
         }
         //¤ - 货币格式
         text = text.replace(/¤/g, '￥');
         return text;
-    };
-
-    /**
-     * 把日期对象按照指定格式转化成字符串
-     *
-     *      @example
-     *      var date = new Date('Thu Dec 12 2013 00:00:00 GMT+0800');
-     *      var result = BI.date2Str(date, 'yyyy-MM-dd');//2013-12-12
-     *
-     * @class BI.date2Str
-     * @param date 日期
-     * @param format 日期格式
-     * @returns {String}
-     */
-    date2Str = function (date, format) {
-        if (!date) {
-            return '';
-        }
-        // O(len(format))
-        var len = format.length, result = '';
-        if (len > 0) {
-            var flagch = format.charAt(0), start = 0, str = flagch;
-            for (var i = 1; i < len; i++) {
-                var ch = format.charAt(i);
-                if (flagch !== ch) {
-                    result += compileJFmt({
-                        'char': flagch,
-                        'str': str,
-                        'len': i - start
-                    }, date);
-                    flagch = ch;
-                    start = i;
-                    str = flagch;
-                } else {
-                    str += ch;
-                }
-            }
-            result += compileJFmt({
-                'char': flagch,
-                'str': str,
-                'len': len - start
-            }, date);
-        }
-        return result;
-
-        function compileJFmt(jfmt, date) {
-            var str = jfmt.str, len = jfmt.len, ch = jfmt['char'];
-            switch (ch) {
-                case 'E': //星期
-                    str = Date._DN[date.getDay()];
-                    break;
-                case 'y': //年
-                    if (len <= 3) {
-                        str = (date.getFullYear() + '').slice(2, 4);
-                    } else {
-                        str = date.getFullYear();
-                    }
-                    break;
-                case 'M': //月
-                    if (len > 2) {
-                        str = Date._MN[date.getMonth()];
-                    } else if (len < 2) {
-                        str = date.getMonth() + 1;
-                    } else {
-                        str = String.leftPad(date.getMonth() + 1 + '', 2, '0');
-                    }
-                    break;
-                case 'd': //日
-                    if (len > 1) {
-                        str = String.leftPad(date.getDate() + '', 2, '0');
-                    } else {
-                        str = date.getDate();
-                    }
-                    break;
-                case 'h': //时(12)
-                    var hour = date.getHours() % 12;
-                    if (hour === 0) {
-                        hour = 12;
-                    }
-                    if (len > 1) {
-                        str = String.leftPad(hour + '', 2, '0');
-                    } else {
-                        str = hour;
-                    }
-                    break;
-                case 'H': //时(24)
-                    if (len > 1) {
-                        str = String.leftPad(date.getHours() + '', 2, '0');
-                    } else {
-                        str = date.getHours();
-                    }
-                    break;
-                case 'm':
-                    if (len > 1) {
-                        str = String.leftPad(date.getMinutes() + '', 2, '0');
-                    } else {
-                        str = date.getMinutes();
-                    }
-                    break;
-                case 's':
-                    if (len > 1) {
-                        str = String.leftPad(date.getSeconds() + '', 2, '0');
-                    } else {
-                        str = date.getSeconds();
-                    }
-                    break;
-                case 'a':
-                    str = date.getHours() < 12 ? 'am' : 'pm';
-                    break;
-                case 'z':
-                    str = date.getTimezone();
-                    break;
-                default:
-                    str = jfmt.str;
-                    break;
-            }
-            return str;
-        }
-    };
-
-    /**
-     * 数字格式
-     */
-    BI._numberFormat = function (text, format) {
-        var text = text + '';
-        //数字格式，区分正负数
-        var numMod = format.indexOf(';');
-        if (numMod > -1) {
-            if (text >= 0) {
-                return BI._numberFormat(text + "", format.substring(0, numMod));
-            } else {
-                return BI._numberFormat((-text) + "", format.substr(numMod + 1));
-            }
-        }
-        var tp = text.split('.'), fp = format.split('.'),
-            tleft = tp[0] || '', fleft = fp[0] || '',
-            tright = tp[1] || '', fright = fp[1] || '';
-        //百分比,千分比的小数点移位处理
-        if (/[%‰]$/.test(format)) {
-            var paddingZero = /[%]$/.test(format) ? '00' : '000';
-            tright += paddingZero;
-            tleft += tright.substr(0, paddingZero.length);
-            tleft = tleft.replace(/^0+/gi, '');
-            tright = tright.substr(paddingZero.length).replace(/0+$/gi, '');
-        }
-        var right = BI._dealWithRight(tright, fright);
-        if (right.leftPlus) {
-            //小数点后有进位
-            tleft = parseInt(tleft) + 1 + '';
-
-            tleft = isNaN(tleft) ? '1' : tleft;
-        }
-        right = right.num;
-        var left = BI._dealWithLeft(tleft, fleft);
-        if (!(/[0-9]/.test(left))) {
-            left = left + '0';
-        }
-        if (!(/[0-9]/.test(right))) {
-            return left + right;
-        } else {
-            return left + '.' + right;
-        }
-    };
-    /**
-     * 处理小数点右边小数部分
-     * @param tright 右边内容
-     * @param fright 右边格式
-     * @returns {JSON} 返回处理结果和整数部分是否需要进位
-     * @private
-     */
-    BI._dealWithRight = function (tright, fright) {
-        var right = '', j = 0, i = 0;
-        for (var len = fright.length; i < len; i++) {
-            var ch = fright.charAt(i);
-            var c = tright.charAt(j);
-            switch (ch) {
-                case '0':
-                    if (isEmpty(c)) {
-                        c = '0';
-                    }
-                    right += c;
-                    j++;
-                    break;
-                case '#':
-                    right += c;
-                    j++;
-                    break;
-                default :
-                    right += ch;
-                    break;
-            }
-        }
-        var rll = tright.substr(j);
-        var result = {};
-        if (!isEmpty(rll) && rll.charAt(0) > 4) {
-            //有多余字符，需要四舍五入
-            result.leftPlus = true;
-            var numReg = right.match(/^[0-9]+/);
-            if (numReg) {
-                var num = numReg[0];
-                var orilen = num.length;
-                var newnum = BI.parseINT(num) + 1 + '';
-                //进位到整数部分
-                if (newnum.length > orilen) {
-                    newnum = newnum.substr(1);
-                } else {
-                    newnum = BI.leftPad(newnum, orilen, '0');
-                    result.leftPlus = false;
-                }
-                right = right.replace(/^[0-9]+/, newnum);
-            }
-        }
-        result.num = right;
-        return result;
-    };
-
-    BI.parseINT = function (str) {
-        return parseInt(str, 10);
     };
 
     BI.leftPad = function (val, size, ch) {
@@ -3588,74 +3587,6 @@ if (!window.BI) {
             result = ch + result;
         }
         return result.toString();
-    };
-
-    /**
-     * 处理小数点左边整数部分
-     * @param tleft 左边内容
-     * @param fleft 左边格式
-     * @returns {string} 返回处理结果
-     * @private
-     */
-    BI._dealWithLeft = function (tleft, fleft) {
-        var left = '';
-        var j = tleft.length - 1;
-        var combo = -1, last = -1;
-        var i = fleft.length - 1;
-        for (; i >= 0; i--) {
-            var ch = fleft.charAt(i);
-            var c = tleft.charAt(j);
-            switch (ch) {
-                case '0':
-                    if (isEmpty(c)) {
-                        c = '0';
-                    }
-                    last = -1;
-                    left = c + left;
-                    j--;
-                    break;
-                case '#':
-                    last = i;
-                    left = c + left;
-                    j--;
-                    break;
-                case ',':
-                    if (!isEmpty(c)) {
-                        //计算一个,分隔区间的长度
-                        var com = fleft.match(/,[#0]+/);
-                        if (com) {
-                            combo = com[0].length - 1;
-                        }
-                        left = ',' + left;
-                    }
-                    break;
-                default :
-                    left = ch + left;
-                    break;
-            }
-        }
-        if (last > -1) {
-            //处理剩余字符
-            var tll = tleft.substr(0, j + 1);
-            left = left.substr(0, last) + tll + left.substr(last);
-        }
-        if (combo > 0) {
-            //处理,分隔区间
-            var res = left.match(/[0-9]+,/);
-            if (res) {
-                res = res[0];
-                var newstr = '', n = res.length - 1 - combo;
-                for (; n >= 0; n = n - combo) {
-                    newstr = res.substr(n, combo) + ',' + newstr;
-                }
-                var lres = res.substr(0, n + combo);
-                if (!isEmpty(lres)) {
-                    newstr = lres + ',' + newstr;
-                }
-            }
-            left = left.replace(/[0-9]+,/, newstr);
-        }
-        return left;
     };
 
     BI.object2Number = function (value) {
@@ -3686,16 +3617,12 @@ if (!window.BI) {
             var str = obj + "";
             str = str.replace(/-/g, '/');
             var dt = new Date(str);
-            if (!BI.isInvalidDate(dt)) {
+            if (!isInvalidDate(dt)) {
                 return dt;
             }
 
             return new Date();
         }
-    };
-
-    BI.isArray = function (a) {
-        return Object.prototype.toString.call(a) == '[object Array]';
     };
 
     BI.object2Time = function (obj) {
@@ -3708,76 +3635,21 @@ if (!window.BI) {
             var str = obj + "";
             str = str.replace(/-/g, '/');
             var dt = new Date(str);
-            if (!BI.isInvalidDate(dt)) {
+            if (!isInvalidDate(dt)) {
                 return dt;
             }
             if (str.indexOf('/') === -1 && str.indexOf(':') !== -1) {
                 dt = new Date("1970/01/01 " + str);
-                if (!BI.isInvalidDate(dt)) {
+                if (!isInvalidDate(dt)) {
                     return dt;
                 }
             }
             dt = BI.str2Date(str, "HH:mm:ss");
-            if (!BI.isInvalidDate(dt)) {
+            if (!isInvalidDate(dt)) {
                 return dt;
             }
             return new Date();
         }
-    };
-
-// 判断是否是无效的日期
-    BI.isInvalidDate = function (date) {
-        return date == "Invalid Date" || date == "NaN";
-    };
-
-
-    /**
-     * 科学计数格式
-     */
-    BI._eFormat = function (text, fmt) {
-        var e = fmt.indexOf("E");
-        var eleft = fmt.substr(0, e), eright = fmt.substr(e + 1);
-        if (/^[0\.-]+$/.test(text)) {
-            text = BI._numberFormat(0.0, eleft) + 'E' + BI._numberFormat(0, eright)
-        } else {
-            var isNegative = text < 0;
-            if (isNegative) {
-                text = text.substr(1);
-            }
-            var elvl = (eleft.split('.')[0] || '').length;
-            var point = text.indexOf(".");
-            if (point < 0) {
-                point = text.length;
-            }
-            var i = 0; //第一个不为0的数的位置
-            text = text.replace('.', '');
-            for (var len = text.length; i < len; i++) {
-                var ech = text.charAt(i);
-                if (ech <= '9' && ech >= '1') {
-                    break;
-                }
-            }
-            var right = point - i - elvl;
-            var left = text.substr(i, elvl);
-            var dis = i + elvl - text.length;
-            if (dis > 0) {
-                //末位补全0
-                for (var k = 0; k < dis; k++) {
-                    left += '0';
-                }
-            } else {
-                left += '.' + text.substr(i + elvl);
-            }
-            left = left.replace(/^[0]+/, '');
-            if (right < 0 && eright.indexOf('-') < 0) {
-                eright += ';-' + eright;
-            }
-            text = BI._numberFormat(left, eleft) + 'E' + BI._numberFormat(right, eright);
-            if (isNegative) {
-                text = '-' + text;
-            }
-        }
-        return text;
     };
 })();
 /**
@@ -4458,7 +4330,8 @@ BI.Widget = BI.inherit(BI.OB, {
 
     mounted: null,
 
-    update: null,
+    update: function () {
+    },
 
     destroyed: null,
 
@@ -4682,7 +4555,7 @@ BI.Widget = BI.inherit(BI.OB, {
         }
         widget._setParent && widget._setParent(this);
         widget.on(BI.Events.DESTROY, function () {
-            delete self._children[name]
+            BI.remove(self._children, this);
         });
         return (this._children[name] = widget);
     },
@@ -4711,11 +4584,7 @@ BI.Widget = BI.inherit(BI.OB, {
     removeWidget: function (nameOrWidget) {
         var self = this;
         if (BI.isWidget(nameOrWidget)) {
-            BI.each(this._children, function (name, widget) {
-                if (widget === nameOrWidget) {
-                    delete self._children[name];
-                }
-            })
+            BI.remove(this._children, nameOrWidget);
         } else {
             delete this._children[nameOrWidget];
         }
@@ -4795,8 +4664,8 @@ BI.Widget = BI.inherit(BI.OB, {
     isolate: function () {
         if (this._parent) {
             this._parent.removeWidget(this);
-            BI.DOM.hang([this]);
         }
+        BI.DOM.hang([this]);
     },
 
     empty: function () {
@@ -5607,7 +5476,7 @@ BI.View = BI.inherit(BI.V, {
         }
         //采用静默方式读数据,该数据变化不引起data的change事件触发
         var success = options.success;
-        this.read(BI.extend({
+        this.model.read(BI.extend({
             silent: true
         }, options, {
             success: function (data, model) {
@@ -5649,22 +5518,10 @@ BI.View = BI.inherit(BI.V, {
         return this.model.getEditing();
     },
 
-    read: function (options) {
-        this.model.read(options)
-    },
-
-    update: function (options) {
-        this.model.update(options);
-    },
-
-    patch: function (options) {
-        this.model.patch(options);
-    },
-
     reading: function (options) {
         var self = this;
         var name = BI.UUID();
-        this.read(BI.extend({}, options, {
+        this.model.read(BI.extend({}, options, {
             beforeSend: function () {
                 var loading = BI.createWidget({
                     type: 'bi.vertical',
@@ -5687,7 +5544,7 @@ BI.View = BI.inherit(BI.V, {
     updating: function (options) {
         var self = this;
         var name = BI.UUID();
-        this.update(BI.extend({}, options, {
+        this.model.update(BI.extend({}, options, {
             noset: true,
             beforeSend: function () {
                 var loading = BI.createWidget({
@@ -5711,7 +5568,7 @@ BI.View = BI.inherit(BI.V, {
     patching: function (options) {
         var self = this;
         var name = BI.UUID();
-        this.patch(BI.extend({}, options, {
+        this.model.patch(BI.extend({}, options, {
             noset: true,
             beforeSend: function () {
                 var loading = BI.createWidget({
@@ -6317,56 +6174,56 @@ BI.Cache = {
         document.cookie = cookieString;
     }
 };// full day names
-Date._DN = [BI.i18nText("BI-Sunday"),
-    BI.i18nText("BI-Monday"),
-    BI.i18nText("BI-Tuesday"),
-    BI.i18nText("BI-Wednesday"),
-    BI.i18nText("BI-Thursday"),
-    BI.i18nText("BI-Friday"),
-    BI.i18nText("BI-Saturday"),
-    BI.i18nText("BI-Sunday")];
+Date._DN = [BI.i18nText("BI-Basic_Sunday"),
+    BI.i18nText("BI-Basic_Monday"),
+    BI.i18nText("BI-Basic_Tuesday"),
+    BI.i18nText("BI-Basic_Wednesday"),
+    BI.i18nText("BI-Basic_Thursday"),
+    BI.i18nText("BI-Basic_Friday"),
+    BI.i18nText("BI-Basic_Saturday"),
+    BI.i18nText("BI-Basic_Sunday")];
 
 // short day names
-Date._SDN = ['',
-    '',
-    '',
-    '',
-    '',
-    '',
-    '',
-    ''];
+Date._SDN = [BI.i18nText("BI-Day_Ri"),
+    BI.i18nText("BI-Basic_One"),
+    BI.i18nText("BI-Basic_Two"),
+    BI.i18nText("BI-Basic_Three"),
+    BI.i18nText("BI-Basic_Four"),
+    BI.i18nText("BI-Basic_Five"),
+    BI.i18nText("BI-Basic_Six"),
+    BI.i18nText("BI-Day_Ri")];
 
 // Monday first, etc.
 Date._FD = 1;
 
 // full month names
 Date._MN = [
-    '',
-    '',
-    '',
-    '',
-    '',
-    '',
-    '',
-    '',
-    '',
-    '',
-    '',
-    ''];
+    BI.i18nText("BI-Basic_January"),
+    BI.i18nText("BI-Basic_February"),
+    BI.i18nText("BI-Basic_March"),
+    BI.i18nText("BI-Basic_April"),
+    BI.i18nText("BI-Basic_May"),
+    BI.i18nText("BI-Basic_June"),
+    BI.i18nText("BI-Basic_July"),
+    BI.i18nText("BI-Basic_August"),
+    BI.i18nText("BI-Basic_September"),
+    BI.i18nText("BI-Basic_October"),
+    BI.i18nText("BI-Basic_November"),
+    BI.i18nText("BI-Basic_December")];
 
 // short month names
-Date._SMN = ['',
-    '',
-    '',
-    '',
-    '',
-    '',
-    '',
-    '',
-    '',
-    '',
-    '',
-    ''];
+Date._SMN = [0,
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8,
+    9,
+    10,
+    11];
 
 Date._QN = ["", BI.i18nText("BI-Quarter_1"),
     BI.i18nText("BI-Quarter_2"),
@@ -11273,6 +11130,7 @@ BI.Layout = BI.inherit(BI.Widget, {
             w.on(BI.Events.DESTROY, function () {
                 BI.each(self._children, function (name, child) {
                     if (child === w) {
+                        BI.remove(self._children, child);
                         self.removeItemAt(name | 0);
                     }
                 });
@@ -11419,13 +11277,24 @@ BI.Layout = BI.inherit(BI.Widget, {
         return w;
     },
 
-    removeItemAt: function (index) {
-        if (index < 0 || index > this.options.items.length - 1) {
-            return;
+    removeItemAt: function (indexes) {
+        indexes = BI.isArray(indexes) ? indexes : [indexes];
+        var deleted = [];
+        var newItems = [], newChildren = {};
+        for (var i = 0, len = this.options.items.length; i < len; i++) {
+            var child = this._children[this._getChildName(i)];
+            if (indexes.contains(i)) {
+                child && deleted.push(child);
+            } else {
+                newChildren[this._getChildName(newItems.length)] = child;
+                newItems.push(this.options.items[i]);
+            }
         }
-        var child = this._children[this._getChildName(index)];
-        this._removeItemAt(index);
-        child.destroy();
+        this.options.items = newItems;
+        this._children = newChildren;
+        BI.each(deleted, function (i, c) {
+            c.destroy();
+        });
     },
 
     updateItemAt: function (index, item) {
@@ -11434,9 +11303,9 @@ BI.Layout = BI.inherit(BI.Widget, {
         }
 
         var child = this._children[this._getChildName(index)];
-        if (child.update) {
-            child.update(this._getOptions(item));
-            return true;
+        var updated;
+        if (updated = child.update(this._getOptions(item))) {
+            return updated;
         }
         var del = this._children[this._getChildName(index)];
         delete this._children[this._getChildName(index)];
@@ -11490,33 +11359,39 @@ BI.Layout = BI.inherit(BI.Widget, {
     },
 
     getValue: function () {
-        var self = this, value = [];
+        var self = this, value = [], child;
         BI.each(this.options.items, function (i) {
-            var v = self._children[self._getChildName(i)].getValue();
-            v = BI.isArray(v) ? v : [v];
-            value = value.concat(v);
+            if (child = self._children[self._getChildName(i)]) {
+                var v = child.getValue();
+                v = BI.isArray(v) ? v : [v];
+                value = value.concat(v);
+            }
         });
         return value;
     },
 
     setValue: function (v) {
-        var self = this;
+        var self = this, child;
         BI.each(this.options.items, function (i) {
-            self._children[self._getChildName(i)].setValue(v);
+            if (child = self._children[self._getChildName(i)]) {
+                child.setValue(v);
+            }
         })
     },
 
     setText: function (v) {
-        var self = this;
+        var self = this, child;
         BI.each(this.options.items, function (i) {
-            self._children[self._getChildName(i)].setText(v);
+            if (child = self._children[self._getChildName(i)]) {
+                child.setText(v);
+            }
         })
     },
 
     update: function (item) {
         var o = this.options;
-        var items = item.items;
-        var updated = false, i, len;
+        var items = item.items || [];
+        var updated, i, len;
         for (i = 0, len = Math.min(o.items.length, items.length); i < len; i++) {
             if (!this._compare(o.items[i], items[i])) {
                 updated = this.updateItemAt(i, items[i]) || updated;
@@ -11526,7 +11401,9 @@ BI.Layout = BI.inherit(BI.Widget, {
             var deleted = [];
             for (i = items.length; i < o.items.length; i++) {
                 deleted.push(this._children[this._getChildName(i)]);
+                delete this._children[this._getChildName(i)];
             }
+            o.items.splice(items.length);
             BI.each(deleted, function (i, w) {
                 w.destroy();
             })
@@ -11535,7 +11412,6 @@ BI.Layout = BI.inherit(BI.Widget, {
                 this.addItemAt(i, items[i]);
             }
         }
-        this.options.items = items;
         return updated;
     },
 
@@ -11566,6 +11442,11 @@ BI.Layout = BI.inherit(BI.Widget, {
 
     empty: function () {
         BI.Layout.superclass.empty.apply(this, arguments);
+        this.options.items = [];
+    },
+
+    destroy: function () {
+        BI.Layout.superclass.destroy.apply(this, arguments);
         this.options.items = [];
     },
 
@@ -13360,7 +13241,7 @@ BI.CardLayout = BI.inherit(BI.Layout, {
                 if (!self.hasWidget(item.cardName)) {
                     var w = BI.createWidget(item);
                     w.on(BI.Events.DESTROY, function () {
-                        var index = BI.findKey(o.items, function (i, tItem) {
+                        var index = BI.findIndex(o.items, function (i, tItem) {
                             return tItem.cardName == item.cardName;
                         });
                         if (index > -1) {
@@ -13404,17 +13285,23 @@ BI.CardLayout = BI.inherit(BI.Layout, {
         return this._children[cardName];
     },
 
-    deleteCardByName: function (cardName) {
-        if (!this.isCardExisted(cardName)) {
-            throw new Error("cardName is not exist");
-        }
-        var index = BI.findKey(this.options.items, function (i, item) {
+    _deleteCardByName: function (cardName) {
+        delete this._children[cardName];
+        var index = BI.findIndex(this.options.items, function (i, item) {
             return item.cardName == cardName;
         });
         if (index > -1) {
             this.options.items.splice(index, 1);
         }
+    },
+
+    deleteCardByName: function (cardName) {
+        if (!this.isCardExisted(cardName)) {
+            throw new Error("cardName is not exist");
+        }
+
         var child = this._children[cardName];
+        this._deleteCardByName(cardName);
         child && child.destroy();
     },
 
@@ -13447,11 +13334,13 @@ BI.CardLayout = BI.inherit(BI.Layout, {
         var flag = false;
         BI.each(this.options.items, function (i, item) {
             var el = self._children[item.cardName];
-            if (name != item.cardName) {
-                //动画效果只有在全部都隐藏的时候才有意义,且只要执行一次动画操作就够了
-                !flag && !exist && (BI.Action && action instanceof BI.Action) ? (action.actionBack(el), flag = true) : el.invisible();
-            } else {
-                (BI.Action && action instanceof BI.Action) ? action.actionPerformed(void 0, el, callback) : (el.visible(), callback && callback())
+            if (el) {
+                if (name != item.cardName) {
+                    //动画效果只有在全部都隐藏的时候才有意义,且只要执行一次动画操作就够了
+                    !flag && !exist && (BI.Action && action instanceof BI.Action) ? (action.actionBack(el), flag = true) : el.invisible();
+                } else {
+                    (BI.Action && action instanceof BI.Action) ? action.actionPerformed(void 0, el, callback) : (el.visible(), callback && callback())
+                }
             }
         });
     },
@@ -13510,6 +13399,22 @@ BI.CardLayout = BI.inherit(BI.Layout, {
             }
         });
         return flag;
+    },
+
+    removeWidget: function (nameOrWidget) {
+        var removeName;
+        if (BI.isWidget(nameOrWidget)) {
+            BI.each(this._children, function (name, child) {
+                if (child === nameOrWidget) {
+                    removeName = name;
+                }
+            })
+        } else {
+            removeName = nameOrWidget;
+        }
+        if (removeName) {
+            this._deleteCardByName(removeName);
+        }
     }
 });
 BI.shortcut('bi.card', BI.CardLayout);/**
@@ -15463,7 +15368,7 @@ BI.BroadcastController = BI.inherit(BI.Controller, {
         }
         this._broadcasts[name].push(fn);
         return function () {
-            self._broadcasts[name].remove(fn);
+            self.remove(name, fn);
         }
     },
 
@@ -15477,6 +15382,9 @@ BI.BroadcastController = BI.inherit(BI.Controller, {
     remove: function (name, fn) {
         if (fn) {
             this._broadcasts[name].remove(fn);
+            if (this._broadcasts[name].length === 0) {
+                delete this._broadcasts[name];
+            }
         } else {
             delete this._broadcasts[name];
         }
@@ -15779,28 +15687,30 @@ BI.FloatBoxController = BI.inherit(BI.Controller, {
         if (!this._check(name)) {
             return this;
         }
-        var container = this.floatContainer[name];
-        container.element.css("zIndex", this.zindex++);
-        this.modal && container.element.__hasZIndexMask__(this.zindexMap[name]) && container.element.__releaseZIndexMask__(this.zindexMap[name]);
-        this.zindexMap[name] = this.zindex;
-        this.modal && container.element.__buildZIndexMask__(this.zindex++);
-        this.get(name).setZindex(this.zindex++);
-        this.floatContainer[name].visible();
-        var floatbox = this.get(name);
-        floatbox.show();
-        var W = $(this.options.render).width(), H = $(this.options.render).height();
-        var w = floatbox.element.width(), h = floatbox.element.height();
-        var left = (W - w) / 2, top = (H - h) / 2;
-        if (left < 0) {
-            left = 0;
+        if (!this.floatContainer[name].isVisible()) {
+            var container = this.floatContainer[name];
+            container.element.css("zIndex", this.zindex++);
+            this.modal && container.element.__hasZIndexMask__(this.zindexMap[name]) && container.element.__releaseZIndexMask__(this.zindexMap[name]);
+            this.zindexMap[name] = this.zindex;
+            this.modal && container.element.__buildZIndexMask__(this.zindex++);
+            this.get(name).setZindex(this.zindex++);
+            this.floatContainer[name].visible();
+            var floatbox = this.get(name);
+            floatbox.show();
+            var W = $(this.options.render).width(), H = $(this.options.render).height();
+            var w = floatbox.element.width(), h = floatbox.element.height();
+            var left = (W - w) / 2, top = (H - h) / 2;
+            if (left < 0) {
+                left = 0;
+            }
+            if (top < 0) {
+                top = 0;
+            }
+            floatbox.element.css({
+                left: left + "px",
+                top: top + "px"
+            });
         }
-        if (top < 0) {
-            top = 0;
-        }
-        floatbox.element.css({
-            left: left + "px",
-            top: top + "px"
-        });
         return this;
     },
 
@@ -15808,8 +15718,10 @@ BI.FloatBoxController = BI.inherit(BI.Controller, {
         if (!this._check(name)) {
             return this;
         }
-        this.floatContainer[name].invisible();
-        this.modal && this.floatContainer[name].element.__releaseZIndexMask__(this.zindexMap[name]);
+        if (this.floatContainer[name].isVisible()) {
+            this.floatContainer[name].invisible();
+            this.modal && this.floatContainer[name].element.__releaseZIndexMask__(this.zindexMap[name]);
+        }
         return this;
     },
 
@@ -16059,11 +15971,14 @@ BI.ResizeController = BI.inherit(BI.Controller, {
     },
 
     add: function (name, resizer) {
+        var self = this;
         if (this.has(name)) {
             return this;
         }
         this.resizerManger[name] = resizer;
-        return this;
+        return function () {
+            self.remove(name);
+        };
     },
 
     get: function (name) {

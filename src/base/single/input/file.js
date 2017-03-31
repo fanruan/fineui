@@ -153,7 +153,7 @@
                     },
                     false
                 );
-                xhr.open("post", handler.url + '&filename=' + BI.cjkEncode(handler.file.fileName), true);
+                xhr.open("post", handler.url + '&filename=' + window.encodeURIComponent(handler.file.fileName), true);
                 if (!xhr.upload) {
                     var rpe = {loaded: 0, total: handler.file.fileSize || handler.file.size, simulation: true};
                     rpe.interval = setInterval(function () {
@@ -602,7 +602,7 @@
         },
 
         setEnable: function (enable) {
-            BI.MultiFile.superclass.setEnable.apply(this, arguments);
+            BI.File.superclass.setEnable.apply(this, arguments);
             if (enable === true) {
                 this.element.attr("disabled", "disabled");
             } else {

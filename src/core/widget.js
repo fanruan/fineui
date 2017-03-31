@@ -34,7 +34,8 @@ BI.Widget = BI.inherit(BI.OB, {
 
     mounted: null,
 
-    update: null,
+    update: function () {
+    },
 
     destroyed: null,
 
@@ -258,7 +259,7 @@ BI.Widget = BI.inherit(BI.OB, {
         }
         widget._setParent && widget._setParent(this);
         widget.on(BI.Events.DESTROY, function () {
-            delete self._children[name]
+            BI.remove(self._children, this);
         });
         return (this._children[name] = widget);
     },
@@ -287,11 +288,7 @@ BI.Widget = BI.inherit(BI.OB, {
     removeWidget: function (nameOrWidget) {
         var self = this;
         if (BI.isWidget(nameOrWidget)) {
-            BI.each(this._children, function (name, widget) {
-                if (widget === nameOrWidget) {
-                    delete self._children[name];
-                }
-            })
+            BI.remove(this._children, nameOrWidget);
         } else {
             delete this._children[nameOrWidget];
         }
@@ -371,8 +368,8 @@ BI.Widget = BI.inherit(BI.OB, {
     isolate: function () {
         if (this._parent) {
             this._parent.removeWidget(this);
-            BI.DOM.hang([this]);
         }
+        BI.DOM.hang([this]);
     },
 
     empty: function () {

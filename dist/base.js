@@ -1020,9 +1020,11 @@ BI.ButtonGroup = BI.inherit(BI.Widget, {
                             self.setValue([]);
                             break;
                     }
+                    self.fireEvent(BI.Controller.EVENT_CHANGE, arguments);
                     self.fireEvent(BI.ButtonGroup.EVENT_CHANGE, value, obj);
+                } else {
+                    self.fireEvent(BI.Controller.EVENT_CHANGE, arguments);
                 }
-                self.fireEvent(BI.Controller.EVENT_CHANGE, arguments);
             });
             btn.on(BI.Events.DESTROY, function () {
                 BI.remove(self.buttons, btn);
@@ -1118,9 +1120,21 @@ BI.ButtonGroup = BI.inherit(BI.Widget, {
         this.layouts.addItems(this._packageLayout(items).items);
     },
 
-    removeItemAt: function (index) {
-        this.buttons[index].destroy();
-        this.layouts.removeItemAt(index);
+    removeItemAt: function (indexes) {
+        BI.remove(this.buttons, indexes);
+        this.layouts.removeItemAt(indexes);
+    },
+
+    removeItems: function (values) {
+        values = BI.isArray(values) ? values : [values];
+        var deleted = [];
+        BI.each(this.buttons, function (i, button) {
+            if (BI.deepContains(values, button.getValue())) {
+                deleted.push(i);
+            }
+        });
+        BI.remove(this.buttons, deleted);
+        this.layouts.removeItemAt(deleted);
     },
 
     populate: function (items) {
@@ -2354,11 +2368,7 @@ BI.Bubbles = new BI.BubblesController();
 BI.Tooltips = new BI.TooltipsController();
 BI.Popovers = new BI.FloatBoxController();
 BI.Broadcasts = new BI.BroadcastController();
-BI.StyleLoaders = new BI.StyleLoaderManager();
-
-BI.servletURL = "dist/";
-BI.resourceURL = "dist/resource/";
-BI.i18n = {};/**
+BI.StyleLoaders = new BI.StyleLoaderManager();/**
  * canvas绘图
  *
  * Created by GUY on 2015/11/18.
@@ -3609,18 +3619,30 @@ BI.shortcut("bi.combo_group", BI.ComboGroup);BI.VirtualGroup = BI.inherit(BI.Wid
     },
 
     prependItems: function (items) {
-        this.layouts.prependItems(items);  
+        this.layouts.prependItems(items);
+    },
+
+    setValue: function (v) {
+        this.layouts.setValue(v);
+    },
+
+    getValue: function () {
+        return this.layouts.getValue();
+    },
+
+    empty: function () {
+        this.layouts.empty();
     },
 
     populate: function (items) {
         var self = this;
         items = items || [];
         this.options.items = items;
-        items = this._packageItems(items, this._packageBtns(items));
+        items = this._packageBtns(items);
         if (!this.layouts) {
             this.layouts = BI.createWidget(BI.extend({element: this}, this._packageLayout(items)));
         } else {
-            this.layouts.populate(this._packageLayout(items).items);
+            this.layouts.populate(items);
         }
     }
 });
@@ -18237,7 +18259,7 @@ BI.shortcut("bi.checkbox", BI.Checkbox);/**
                     },
                     false
                 );
-                xhr.open("post", handler.url + '&filename=' + BI.cjkEncode(handler.file.fileName), true);
+                xhr.open("post", handler.url + '&filename=' + window.encodeURIComponent(handler.file.fileName), true);
                 if (!xhr.upload) {
                     var rpe = {loaded: 0, total: handler.file.fileSize || handler.file.size, simulation: true};
                     rpe.interval = setInterval(function () {
@@ -18686,7 +18708,7 @@ BI.shortcut("bi.checkbox", BI.Checkbox);/**
         },
 
         setEnable: function (enable) {
-            BI.MultiFile.superclass.setEnable.apply(this, arguments);
+            BI.File.superclass.setEnable.apply(this, arguments);
             if (enable === true) {
                 this.element.attr("disabled", "disabled");
             } else {
