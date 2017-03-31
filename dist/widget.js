@@ -16788,7 +16788,7 @@ BI.YearTrigger = BI.inherit(BI.Trigger, {
         hgap: 4,
         vgap: 2,
         triggerWidth: 25,
-        errorText: BI.i18nText("BI-Please_Input_Integer"),
+        errorText: BI.i18nText("BI-Please_Input_Positive_Integer"),
         errorTextInvalid: BI.i18nText("BI-Year_Trigger_Invalid_Text")
     },
 

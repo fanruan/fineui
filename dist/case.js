@@ -8520,7 +8520,7 @@ BI.AllCountPager = BI.inherit(BI.Widget, {
             hgap: 4,
             vgap: 0,
             value: o.curr,
-            errorText: BI.i18nText("BI-Please_Input_Integer"),
+            errorText: BI.i18nText("BI-Please_Input_Positive_Integer"),
             width: 30,
             height: 20
         });
