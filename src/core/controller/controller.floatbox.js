@@ -18,6 +18,7 @@ BI.FloatBoxController = BI.inherit(BI.Controller, {
         this.floatManager = {};
         this.floatLayer = {};
         this.floatContainer = {};
+        this.floatOpened = {};
         this.zindex = BI.zIndex_floatbox;
         this.zindexMap = {};
     },
@@ -82,7 +83,8 @@ BI.FloatBoxController = BI.inherit(BI.Controller, {
         if (!this._check(name)) {
             return this;
         }
-        if (!this.floatContainer[name].isVisible()) {
+        if (!this.floatOpened[name]) {
+            this.floatOpened[name] = true;
             var container = this.floatContainer[name];
             container.element.css("zIndex", this.zindex++);
             this.modal && container.element.__hasZIndexMask__(this.zindexMap[name]) && container.element.__releaseZIndexMask__(this.zindexMap[name]);
@@ -113,7 +115,8 @@ BI.FloatBoxController = BI.inherit(BI.Controller, {
         if (!this._check(name)) {
             return this;
         }
-        if (this.floatContainer[name].isVisible()) {
+        if (this.floatOpened[name]) {
+            delete this.floatOpened[name];
             this.floatContainer[name].invisible();
             this.modal && this.floatContainer[name].element.__releaseZIndexMask__(this.zindexMap[name]);
         }
