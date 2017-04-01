@@ -4872,6 +4872,7 @@ BI.Widget = BI.inherit(BI.OB, {
             !BI.has(self._tmp, keys[0]) && self.parent && self.parent._change(self);
             self.splice.apply(self, newKeys);
             self.trigger("splice", newKeys);
+            BI.remove(self._childs, child);
         }).on("copy", function () {
             var keys = name.split('.');
             var g = self.get(keys[0]), p, c;
@@ -5146,6 +5147,20 @@ BI.Widget = BI.inherit(BI.OB, {
         this._save(null, BI.extend({}, options, {
             patch: true
         }));
+    },
+
+    _destroy: function () {
+        var children = BI.extend({}, this._childs);
+        this._childs = {};
+        BI.each(children, function (i, child) {
+            child._destroy();
+        });
+        this.destroyed && this.destroyed();
+    },
+
+    destroy: function () {
+        this._destroy();
+        BI.Model.superclass.destroy.apply(this, arguments);
     }
 });/**
  * @class BI.View
@@ -5174,9 +5189,9 @@ BI.View = BI.inherit(BI.V, {
             this.model._changing_ = false;
             this.model.actionEnd() && this.actionEnd();
         }).listenTo(this.model, "destroy", function () {
-            this.destroy();
+            this._destroy();
         }).listenTo(this.model, "unset", function () {
-            this.destroy();
+            this._destroy();
         }).listenTo(this.model, "splice", function (arg) {
             this.splice.apply(this, arg);
         }).listenTo(this.model, "duplicate", function (arg) {
@@ -5393,7 +5408,7 @@ BI.View = BI.inherit(BI.V, {
                     delete self._cards[cardName];
                     self.model.removeChild(modelData, view.model);
                     cardLayout.deleteCardByName(cardName);
-                    view.destroy();
+                    view._destroy();
                     cardLayout.setVisible(false);
                 }
                 action.actionBack(view, null, function () {
@@ -5648,7 +5663,7 @@ BI.View = BI.inherit(BI.V, {
         this.destroyed();
     },
 
-    destroy: function () {
+    _destroy: function () {
         BI.each(this._cardLayouts, function (name, card) {
             card && card._unMount();
         });
