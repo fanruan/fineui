@@ -9,6 +9,7 @@ BI.Navigation = BI.inherit(BI.Widget, {
             logic: {
                 dynamic: false
             },
+            single: false,
             defaultShowIndex: 0,
             tab: {
                 type: "bi.button_group",
@@ -62,6 +63,18 @@ BI.Navigation = BI.inherit(BI.Widget, {
         }
     },
 
+    _deleteOtherCards: function (currCardName) {
+        var self = this, o = this.options;
+        if (o.single === true) {
+            BI.each(this.cardMap, function (name, card) {
+                if (name !== (currCardName + "")) {
+                    self.layout.deleteCardByName(name);
+                    delete self.cardMap[name];
+                }
+            });
+        }
+    },
+
     afterCardCreated: function (v) {
         var self = this;
         this.cardMap[v].on(BI.Controller.EVENT_CHANGE, function (type, value, obj) {
@@ -69,12 +82,13 @@ BI.Navigation = BI.inherit(BI.Widget, {
             if (type === BI.Events.CLICK) {
                 self.fireEvent(BI.Navigation.EVENT_CHANGE, obj);
             }
-        })
+        });
         this.options.afterCardCreated.apply(this, arguments);
     },
 
     afterCardShow: function (v) {
         this.showIndex = v;
+        this._deleteOtherCards(v);
         this.options.afterCardShow.apply(this, arguments);
     },
 
@@ -85,16 +99,23 @@ BI.Navigation = BI.inherit(BI.Widget, {
         }
     },
 
-    setSelect: function (v) {
-        this.showIndex = v;
+    _assertCard: function () {
         if (!this.layout.isCardExisted(v)) {
             var card = this.options.cardCreator(v);
             this.cardMap[v] = card;
             this.layout.addCardByName(v, card);
             this.afterCardCreated(v);
         }
+    },
+
+    setSelect: function (v) {
+        this._assertCard();
         this.layout.showCardByName(v);
-        BI.nextTick(BI.bind(this.afterCardShow, this, v));
+        this._deleteOtherCards(v);
+        if (this.showIndex !== v) {
+            this.showIndex = v;
+            BI.nextTick(BI.bind(this.afterCardShow, this, v));
+        }
     },
 
     getSelect: function () {

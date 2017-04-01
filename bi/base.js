@@ -3920,6 +3920,7 @@ BI.Navigation = BI.inherit(BI.Widget, {
             logic: {
                 dynamic: false
             },
+            single: false,
             defaultShowIndex: 0,
             tab: {
                 type: "bi.button_group",
@@ -3973,6 +3974,18 @@ BI.Navigation = BI.inherit(BI.Widget, {
         }
     },
 
+    _deleteOtherCards: function (currCardName) {
+        var self = this, o = this.options;
+        if (o.single === true) {
+            BI.each(this.cardMap, function (name, card) {
+                if (name !== (currCardName + "")) {
+                    self.layout.deleteCardByName(name);
+                    delete self.cardMap[name];
+                }
+            });
+        }
+    },
+
     afterCardCreated: function (v) {
         var self = this;
         this.cardMap[v].on(BI.Controller.EVENT_CHANGE, function (type, value, obj) {
@@ -3980,12 +3993,13 @@ BI.Navigation = BI.inherit(BI.Widget, {
             if (type === BI.Events.CLICK) {
                 self.fireEvent(BI.Navigation.EVENT_CHANGE, obj);
             }
-        })
+        });
         this.options.afterCardCreated.apply(this, arguments);
     },
 
     afterCardShow: function (v) {
         this.showIndex = v;
+        this._deleteOtherCards(v);
         this.options.afterCardShow.apply(this, arguments);
     },
 
@@ -3996,16 +4010,23 @@ BI.Navigation = BI.inherit(BI.Widget, {
         }
     },
 
-    setSelect: function (v) {
-        this.showIndex = v;
+    _assertCard: function () {
         if (!this.layout.isCardExisted(v)) {
             var card = this.options.cardCreator(v);
             this.cardMap[v] = card;
             this.layout.addCardByName(v, card);
             this.afterCardCreated(v);
         }
+    },
+
+    setSelect: function (v) {
+        this._assertCard();
         this.layout.showCardByName(v);
-        BI.nextTick(BI.bind(this.afterCardShow, this, v));
+        this._deleteOtherCards(v);
+        if (this.showIndex !== v) {
+            this.showIndex = v;
+            BI.nextTick(BI.bind(this.afterCardShow, this, v));
+        }
     },
 
     getSelect: function () {
@@ -4636,6 +4657,7 @@ BI.Tab = BI.inherit(BI.Widget, {
         return BI.extend(BI.Tab.superclass._defaultConfig.apply(this, arguments), {
             baseCls: "bi-tab",
             direction: "top",//top, bottom, left, right, custom
+            single: false, //是不是单页面
             logic: {
                 dynamic: false
             },
@@ -4675,12 +4697,25 @@ BI.Tab = BI.inherit(BI.Widget, {
                 return card;
             },
             afterCardShow: function (v) {
+                self._deleteOtherCards(v);
                 self.curr = v;
             }
         });
         listener.on(BI.ShowListener.EVENT_CHANGE, function (value) {
             self.fireEvent(BI.Tab.EVENT_CHANGE, value, self);
         });
+    },
+
+    _deleteOtherCards: function (currCardName) {
+        var self = this, o = this.options;
+        if (o.single === true) {
+            BI.each(this.cardMap, function (name, card) {
+                if (name !== (currCardName + "")) {
+                    self.layout.deleteCardByName(name);
+                    delete self.cardMap[name];
+                }
+            });
+        }
     },
 
     _assertCard: function (v) {
@@ -4702,6 +4737,7 @@ BI.Tab = BI.inherit(BI.Widget, {
         this.tab && this.tab.setValue(v);
         this._assertCard(v);
         this.layout.showCardByName(v);
+        this._deleteOtherCards(v);
         if (this.curr !== v) {
             this.curr = v;
         }

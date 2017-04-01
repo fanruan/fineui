@@ -7,6 +7,7 @@ BI.Tab = BI.inherit(BI.Widget, {
         return BI.extend(BI.Tab.superclass._defaultConfig.apply(this, arguments), {
             baseCls: "bi-tab",
             direction: "top",//top, bottom, left, right, custom
+            single: false, //是不是单页面
             logic: {
                 dynamic: false
             },
@@ -46,12 +47,25 @@ BI.Tab = BI.inherit(BI.Widget, {
                 return card;
             },
             afterCardShow: function (v) {
+                self._deleteOtherCards(v);
                 self.curr = v;
             }
         });
         listener.on(BI.ShowListener.EVENT_CHANGE, function (value) {
             self.fireEvent(BI.Tab.EVENT_CHANGE, value, self);
         });
+    },
+
+    _deleteOtherCards: function (currCardName) {
+        var self = this, o = this.options;
+        if (o.single === true) {
+            BI.each(this.cardMap, function (name, card) {
+                if (name !== (currCardName + "")) {
+                    self.layout.deleteCardByName(name);
+                    delete self.cardMap[name];
+                }
+            });
+        }
     },
 
     _assertCard: function (v) {
@@ -73,6 +87,7 @@ BI.Tab = BI.inherit(BI.Widget, {
         this.tab && this.tab.setValue(v);
         this._assertCard(v);
         this.layout.showCardByName(v);
+        this._deleteOtherCards(v);
         if (this.curr !== v) {
             this.curr = v;
         }
