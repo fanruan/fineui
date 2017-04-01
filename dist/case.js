@@ -8591,6 +8591,8 @@ BI.AllCountPager = BI.inherit(BI.Widget, {
 
         var count = BI.createWidget({
             type: "bi.left",
+            height: o.height,
+            scrollable: false,
             items: [{
                 type: "bi.label",
                 height: o.height,
