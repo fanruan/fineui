@@ -51,6 +51,14 @@ BI.Arrangement = BI.inherit(BI.Widget, {
             scrollable: true,
             items: [this.container]
         });
+        this.scrollContainer.element.scroll(function () {
+            self.fireEvent(BI.Arrangement.EVENT_SCROLL, {
+                scrollLeft: self.scrollContainer.element.scrollLeft(),
+                scrollTop: self.scrollContainer.element.scrollTop(),
+                clientWidth: self.scrollContainer.element[0].clientWidth,
+                clientHeight: self.scrollContainer.element[0].clientHeight
+            });
+        });
 
         BI.createWidget({
             type: "bi.adaptive",
@@ -2923,6 +2931,7 @@ BI.Arrangement = BI.inherit(BI.Widget, {
         this._renderRegion();
     }
 });
+BI.Arrangement.EVENT_SCROLL = "EVENT_SCROLL";
 BI.extend(BI.Arrangement, {
     PORTION: 24,
     GRID_HEIGHT: 50,
