@@ -15528,8 +15528,8 @@ BI.View = BI.inherit(BI.V, {
         });
         delete this._cardLayouts;
         delete this._cards;
-        this.off();
         this.destroyed();
+        this.off();
     },
 
     _destroy: function () {
