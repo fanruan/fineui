@@ -159,7 +159,7 @@ BI.NumericalInterval = BI.inherit(BI.Single, {
         }
         this.label = BI.createWidget({
             type: "bi.label",
-            text: BI.i18nText("BI-Value"),
+            text: BI.i18nText("BI-Basic_Value"),
             textHeight: o.height - c.border * 2,
             width: c.width - c.border * 2,
             height: o.height - c.border * 2,
