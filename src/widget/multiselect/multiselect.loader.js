@@ -169,4 +169,4 @@ BI.MultiSelectLoader = BI.inherit(BI.Widget, {
 });
 
 BI.MultiSelectLoader.EVENT_CHANGE = "EVENT_CHANGE";
-$.shortcut('bi.multi_select_loader', BI.MultiSelectLoader);
+BI.shortcut('bi.multi_select_loader', BI.MultiSelectLoader);

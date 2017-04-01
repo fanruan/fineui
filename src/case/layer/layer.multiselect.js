@@ -61,4 +61,4 @@ BI.MultiPopupView = BI.inherit(BI.PopupView, {
 BI.MultiPopupView.EVENT_CHANGE = "EVENT_CHANGE";
 BI.MultiPopupView.EVENT_CLICK_TOOLBAR_BUTTON = "EVENT_CLICK_TOOLBAR_BUTTON";
 
-$.shortcut("bi.multi_popup_view", BI.MultiPopupView);
+BI.shortcut("bi.multi_popup_view", BI.MultiPopupView);

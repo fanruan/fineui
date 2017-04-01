@@ -324,7 +324,7 @@ BI.GridTableScrollbar = BI.inherit(BI.Widget, {
 });
 BI.GridTableScrollbar.SIZE = 10;
 BI.GridTableScrollbar.EVENT_SCROLL = "EVENT_SCROLL";
-$.shortcut("bi.grid_table_scrollbar", BI.GridTableScrollbar);
+BI.shortcut("bi.grid_table_scrollbar", BI.GridTableScrollbar);
 
 
 BI.GridTableHorizontalScrollbar = BI.inherit(BI.Widget, {
@@ -404,4 +404,4 @@ BI.GridTableHorizontalScrollbar = BI.inherit(BI.Widget, {
     }
 });
 BI.GridTableHorizontalScrollbar.EVENT_SCROLL = "EVENT_SCROLL";
-$.shortcut("bi.grid_table_horizontal_scrollbar", BI.GridTableHorizontalScrollbar);
+BI.shortcut("bi.grid_table_horizontal_scrollbar", BI.GridTableHorizontalScrollbar);

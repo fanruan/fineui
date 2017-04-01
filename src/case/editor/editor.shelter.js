@@ -247,4 +247,4 @@ BI.ShelterEditor.EVENT_RESTRICT = "EVENT_RESTRICT";
 BI.ShelterEditor.EVENT_SPACE = "EVENT_SPACE";
 BI.ShelterEditor.EVENT_EMPTY = "EVENT_EMPTY";
 
-$.shortcut("bi.shelter_editor", BI.ShelterEditor);
+BI.shortcut("bi.shelter_editor", BI.ShelterEditor);

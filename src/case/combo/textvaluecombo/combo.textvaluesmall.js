@@ -68,4 +68,4 @@ BI.SmallTextValueCombo = BI.inherit(BI.Widget, {
     }
 });
 BI.SmallTextValueCombo.EVENT_CHANGE = "EVENT_CHANGE";
-$.shortcut("bi.small_text_value_combo", BI.SmallTextValueCombo);
+BI.shortcut("bi.small_text_value_combo", BI.SmallTextValueCombo);

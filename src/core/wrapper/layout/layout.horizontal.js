@@ -116,7 +116,7 @@ BI.HorizontalLayout = BI.inherit(BI.Layout, {
         this._mount();
     }
 });
-$.shortcut('bi.horizontal', BI.HorizontalLayout);
+BI.shortcut('bi.horizontal', BI.HorizontalLayout);
 
 /**
  * 水平布局
@@ -178,4 +178,4 @@ BI.HorizontalCellLayout = BI.inherit(BI.Layout, {
         this._mount();
     }
 });
-$.shortcut('bi.horizontal_cell', BI.HorizontalCellLayout);
+BI.shortcut('bi.horizontal_cell', BI.HorizontalCellLayout);

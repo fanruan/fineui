@@ -55,4 +55,4 @@ BI.Segment = BI.inherit(BI.Widget, {
     }
 });
 BI.Segment.EVENT_CHANGE = "EVENT_CHANGE";
-$.shortcut('bi.segment', BI.Segment);
+BI.shortcut('bi.segment', BI.Segment);

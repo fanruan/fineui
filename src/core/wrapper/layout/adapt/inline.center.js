@@ -95,4 +95,4 @@ BI.InlineCenterAdaptLayout = BI.inherit(BI.Layout, {
         this._mount();
     }
 });
-$.shortcut('bi.inline_center_adapt', BI.InlineCenterAdaptLayout);
+BI.shortcut('bi.inline_center_adapt', BI.InlineCenterAdaptLayout);

@@ -143,4 +143,4 @@ BI.CodeEditor = BI.inherit(BI.Single, {
 BI.CodeEditor.EVENT_CHANGE = "EVENT_CHANGE";
 BI.CodeEditor.EVENT_BLUR = "EVENT_BLUR";
 BI.CodeEditor.EVENT_FOCUS = "EVENT_FOCUS";
-$.shortcut("bi.code_editor", BI.CodeEditor);
+BI.shortcut("bi.code_editor", BI.CodeEditor);

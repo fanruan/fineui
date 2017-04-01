@@ -10,7 +10,7 @@ BI.Tab = BI.inherit(BI.Widget, {
             logic: {
                 dynamic: false
             },
-            defaultShowIndex: 0,
+            defaultShowIndex: false,
             tab: false,
             cardCreator: function (v) {
                 return BI.createWidget();
@@ -124,4 +124,4 @@ BI.Tab = BI.inherit(BI.Widget, {
 });
 BI.Tab.EVENT_CHANGE = "EVENT_CHANGE";
 
-$.shortcut("bi.tab", BI.Tab);
+BI.shortcut("bi.tab", BI.Tab);

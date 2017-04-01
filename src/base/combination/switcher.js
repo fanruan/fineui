@@ -274,4 +274,4 @@ BI.Switcher.EVENT_AFTER_POPUPVIEW = "EVENT_AFTER_POPUPVIEW";
 BI.Switcher.EVENT_BEFORE_HIDEVIEW = "EVENT_BEFORE_HIDEVIEW";
 BI.Switcher.EVENT_AFTER_HIDEVIEW = "EVENT_AFTER_HIDEVIEW";
 
-$.shortcut("bi.switcher", BI.Switcher);
+BI.shortcut("bi.switcher", BI.Switcher);

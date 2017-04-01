@@ -495,4 +495,4 @@ BI.BranchRelation = BI.inherit(BI.Widget, {
     }
 });
 BI.BranchRelation.EVENT_CHANGE = "BranchRelation.EVENT_CHANGE";
-$.shortcut("bi.branch_relation", BI.BranchRelation);
+BI.shortcut("bi.branch_relation", BI.BranchRelation);

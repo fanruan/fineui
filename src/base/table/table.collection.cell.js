@@ -54,4 +54,4 @@ BI.CollectionTableCell = BI.inherit(BI.Widget, {
     }
 });
 
-$.shortcut("bi.collection_table_cell", BI.CollectionTableCell);
+BI.shortcut("bi.collection_table_cell", BI.CollectionTableCell);

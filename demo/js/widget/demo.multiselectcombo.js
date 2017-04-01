@@ -80,4 +80,4 @@ Demo.MultiSelectCombo = BI.inherit(BI.Widget, {
         }
     }
 });
-$.shortcut("demo.multi_select_combo", Demo.MultiSelectCombo);
+BI.shortcut("demo.multi_select_combo", Demo.MultiSelectCombo);

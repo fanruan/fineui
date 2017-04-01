@@ -10,7 +10,7 @@ BI.YearTrigger = BI.inherit(BI.Trigger, {
         hgap: 4,
         vgap: 2,
         triggerWidth: 25,
-        errorText: BI.i18nText("BI-Please_Input_Integer"),
+        errorText: BI.i18nText("BI-Please_Input_Positive_Integer"),
         errorTextInvalid: BI.i18nText("BI-Year_Trigger_Invalid_Text")
     },
 
@@ -103,4 +103,4 @@ BI.YearTrigger.EVENT_ERROR = "EVENT_ERROR";
 BI.YearTrigger.EVENT_START = "EVENT_START";
 BI.YearTrigger.EVENT_CONFIRM = "EVENT_CONFIRM";
 BI.YearTrigger.EVENT_STOP = "EVENT_STOP";
-$.shortcut("bi.year_trigger", BI.YearTrigger);
+BI.shortcut("bi.year_trigger", BI.YearTrigger);

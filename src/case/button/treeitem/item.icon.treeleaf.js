@@ -85,4 +85,4 @@ BI.IconTreeLeafItem = BI.inherit(BI.BasicButton, {
     }
 });
 
-$.shortcut("bi.icon_tree_leaf_item", BI.IconTreeLeafItem);
+BI.shortcut("bi.icon_tree_leaf_item", BI.IconTreeLeafItem);

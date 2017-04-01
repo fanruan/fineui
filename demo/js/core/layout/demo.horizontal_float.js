@@ -32,4 +32,4 @@ Demo.HorizontalFloat = BI.inherit(BI.Widget, {
         }
     }
 });
-$.shortcut("demo.horizontal_float", Demo.HorizontalFloat);
+BI.shortcut("demo.horizontal_float", Demo.HorizontalFloat);

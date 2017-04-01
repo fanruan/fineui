@@ -55,4 +55,4 @@ BI.TextValueComboPopup = BI.inherit(BI.Pane, {
 
 });
 BI.TextValueComboPopup.EVENT_CHANGE = "EVENT_CHANGE";
-$.shortcut("bi.text_value_combo_popup", BI.TextValueComboPopup);
+BI.shortcut("bi.text_value_combo_popup", BI.TextValueComboPopup);

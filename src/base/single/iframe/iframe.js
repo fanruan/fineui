@@ -39,4 +39,4 @@ BI.Iframe = BI.inherit(BI.Single, {
     }
 });
 
-$.shortcut("bi.iframe", BI.Iframe);
+BI.shortcut("bi.iframe", BI.Iframe);

@@ -118,4 +118,4 @@ BI.SimpleTreeView = BI.inherit(BI.Widget, {
     }
 });
 BI.SimpleTreeView.EVENT_CHANGE = "EVENT_CHANGE";
-$.shortcut("bi.simple_tree", BI.SimpleTreeView);
+BI.shortcut("bi.simple_tree", BI.SimpleTreeView);

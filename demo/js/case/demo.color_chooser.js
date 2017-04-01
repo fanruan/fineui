@@ -18,4 +18,4 @@ Demo.Func = BI.inherit(BI.Widget, {
         }
     }
 });
-$.shortcut("demo.color_chooser", Demo.Func);
+BI.shortcut("demo.color_chooser", Demo.Func);

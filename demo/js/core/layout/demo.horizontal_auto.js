@@ -39,4 +39,4 @@ Demo.HorizontalAuto = BI.inherit(BI.Widget, {
         }
     }
 });
-$.shortcut("demo.horizontal_auto", Demo.HorizontalAuto);
+BI.shortcut("demo.horizontal_auto", Demo.HorizontalAuto);

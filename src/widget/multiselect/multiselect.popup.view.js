@@ -92,4 +92,4 @@ BI.MultiSelectPopupView.EVENT_CLICK_CONFIRM = "EVENT_CLICK_CONFIRM";
 BI.MultiSelectPopupView.EVENT_CLICK_CLEAR = "EVENT_CLICK_CLEAR";
 
 
-$.shortcut('bi.multi_select_popup_view', BI.MultiSelectPopupView);
+BI.shortcut('bi.multi_select_popup_view', BI.MultiSelectPopupView);

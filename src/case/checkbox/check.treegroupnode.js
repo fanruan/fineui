@@ -25,4 +25,4 @@ BI.TreeGroupNodeCheckbox = BI.inherit(BI.IconButton, {
         }
     }
 });
-$.shortcut("bi.tree_group_node_checkbox", BI.TreeGroupNodeCheckbox);
+BI.shortcut("bi.tree_group_node_checkbox", BI.TreeGroupNodeCheckbox);

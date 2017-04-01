@@ -532,4 +532,4 @@ BI.NumericalInterval = BI.inherit(BI.Single, {
 BI.NumericalInterval.EVENT_CHANGE = "EVENT_CHANGE";
 BI.NumericalInterval.EVENT_VALID = "EVENT_VALID";
 BI.NumericalInterval.EVENT_ERROR = "EVENT_ERROR";
-$.shortcut("bi.numerical_interval", BI.NumericalInterval);
+BI.shortcut("bi.numerical_interval", BI.NumericalInterval);

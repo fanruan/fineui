@@ -98,4 +98,4 @@ BI.MultiTreePopup.EVENT_CLICK_CLEAR = "EVENT_CLICK_CLEAR";
 BI.MultiTreePopup.EVENT_AFTERINIT = "EVENT_AFTERINIT";
 
 
-$.shortcut('bi.multi_tree_popup_view', BI.MultiTreePopup);
+BI.shortcut('bi.multi_tree_popup_view', BI.MultiTreePopup);

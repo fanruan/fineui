@@ -35,4 +35,4 @@ BI.Farbtastic = BI.inherit(BI.Widget, {
     }
 });
 BI.Farbtastic.EVENT_CHANGE = "Farbtastic.EVENT_CHANGE";
-$.shortcut("bi.farbtastic", BI.Farbtastic);
+BI.shortcut("bi.farbtastic", BI.Farbtastic);

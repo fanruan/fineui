@@ -488,4 +488,4 @@ BI.PathChooser = BI.inherit(BI.Widget, {
     }
 });
 BI.PathChooser.EVENT_CHANGE = "PathChooser.EVENT_CHANGE";
-$.shortcut("bi.path_chooser", BI.PathChooser);
+BI.shortcut("bi.path_chooser", BI.PathChooser);

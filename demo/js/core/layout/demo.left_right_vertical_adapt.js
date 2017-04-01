@@ -41,4 +41,4 @@ Demo.LeftRightVerticalAdaptLayout = BI.inherit(BI.Widget, {
         }
     }
 });
-$.shortcut("demo.left_right_vertical_adapt", Demo.LeftRightVerticalAdaptLayout);
+BI.shortcut("demo.left_right_vertical_adapt", Demo.LeftRightVerticalAdaptLayout);

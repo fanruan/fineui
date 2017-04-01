@@ -39,4 +39,4 @@ Demo.VerticalAdaptLayout = BI.inherit(BI.Widget, {
         }
     }
 });
-$.shortcut("demo.vertical_adapt", Demo.VerticalAdaptLayout);
+BI.shortcut("demo.vertical_adapt", Demo.VerticalAdaptLayout);

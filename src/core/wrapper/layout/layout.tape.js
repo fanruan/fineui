@@ -100,7 +100,7 @@ BI.HTapeLayout = BI.inherit(BI.Layout, {
         this._mount();
     }
 });
-$.shortcut('bi.htape', BI.HTapeLayout);
+BI.shortcut('bi.htape', BI.HTapeLayout);
 
 /**
  * 垂直tape布局
@@ -205,4 +205,4 @@ BI.VTapeLayout = BI.inherit(BI.Layout, {
         this._mount();
     }
 });
-$.shortcut('bi.vtape', BI.VTapeLayout);
+BI.shortcut('bi.vtape', BI.VTapeLayout);

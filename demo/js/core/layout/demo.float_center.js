@@ -24,4 +24,4 @@ Demo.FloatCenterLayout = BI.inherit(BI.Widget, {
         }
     }
 });
-$.shortcut("demo.float_center", Demo.FloatCenterLayout);
+BI.shortcut("demo.float_center", Demo.FloatCenterLayout);

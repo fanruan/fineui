@@ -82,4 +82,4 @@ Demo.FlowLayout = BI.inherit(BI.Widget, {
         }
     }
 });
-$.shortcut("demo.flow", Demo.FlowLayout);
+BI.shortcut("demo.flow", Demo.FlowLayout);

@@ -159,4 +159,4 @@ Demo.TableLayout = BI.inherit(BI.Widget, {
         }
     }
 });
-$.shortcut("demo.table_layout", Demo.TableLayout);
+BI.shortcut("demo.table_layout", Demo.TableLayout);

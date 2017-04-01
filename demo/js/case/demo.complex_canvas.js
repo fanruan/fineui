@@ -32,4 +32,4 @@ Demo.Func = BI.inherit(BI.Widget, {
         })
     }
 });
-$.shortcut("demo.complex_canvas", Demo.Func);
+BI.shortcut("demo.complex_canvas", Demo.Func);

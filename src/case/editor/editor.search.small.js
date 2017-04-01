@@ -17,4 +17,4 @@ BI.SmallSearchEditor = BI.inherit(BI.SearchEditor, {
         BI.SmallSearchEditor.superclass._init.apply(this, arguments);
     }
 });
-$.shortcut("bi.small_search_editor", BI.SmallSearchEditor);
+BI.shortcut("bi.small_search_editor", BI.SmallSearchEditor);

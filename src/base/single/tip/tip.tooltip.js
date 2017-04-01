@@ -80,4 +80,4 @@ BI.Tooltip = BI.inherit(BI.Tip, {
     }
 });
 
-$.shortcut("bi.tooltip", BI.Tooltip);
+BI.shortcut("bi.tooltip", BI.Tooltip);

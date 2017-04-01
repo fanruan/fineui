@@ -65,4 +65,4 @@ BI.SelectTreeCombo = BI.inherit(BI.Widget, {
 });
 
 
-$.shortcut("bi.select_tree_combo", BI.SelectTreeCombo);
+BI.shortcut("bi.select_tree_combo", BI.SelectTreeCombo);

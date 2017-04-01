@@ -16,6 +16,9 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
+/****添加计算宽度的--运算符直接需要space****/
+/****** common color(常用颜色,可用于普遍场景) *****/
+/**** custom color(自定义颜色,用于特定场景) ****/
 .farbtastic {
   position: relative;
 }
@@ -36,17 +39,17 @@
   height: 101px;
 }
 .farbtastic .wheel {
-  background: url(third/farbtastic/wheel.png) no-repeat;
+  background: url("third/farbtastic/wheel.png") no-repeat;
   width: 195px;
   height: 195px;
 }
 .farbtastic .overlay {
-  background: url(third/farbtastic/mask.png) no-repeat;
+  background: url("third/farbtastic/mask.png") no-repeat;
 }
 .farbtastic .marker {
   width: 17px;
   height: 17px;
   margin: -8px 0 0 -8px;
   overflow: hidden;
-  background: url(third/farbtastic/marker.png) no-repeat;
+  background: url("third/farbtastic/marker.png") no-repeat;
 }

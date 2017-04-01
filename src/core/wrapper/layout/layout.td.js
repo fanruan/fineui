@@ -139,4 +139,4 @@ BI.TdLayout = BI.inherit(BI.Layout, {
         this._mount();
     }
 });
-$.shortcut('bi.td', BI.TdLayout);
+BI.shortcut('bi.td', BI.TdLayout);

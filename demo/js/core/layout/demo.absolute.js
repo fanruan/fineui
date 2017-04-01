@@ -16,4 +16,4 @@ Demo.AbsoluteLayout = BI.inherit(BI.Widget, {
         }
     }
 });
-$.shortcut("demo.absolute", Demo.AbsoluteLayout);
+BI.shortcut("demo.absolute", Demo.AbsoluteLayout);

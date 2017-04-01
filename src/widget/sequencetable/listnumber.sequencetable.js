@@ -203,4 +203,4 @@ BI.SequenceTableListNumber = BI.inherit(BI.Widget, {
         this._populate();
     }
 });
-$.shortcut('bi.sequence_table_list_number', BI.SequenceTableListNumber);
+BI.shortcut('bi.sequence_table_list_number', BI.SequenceTableListNumber);

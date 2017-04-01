@@ -77,4 +77,4 @@ BI.EditorIconCheckCombo = BI.inherit(BI.Widget, {
     }
 });
 BI.EditorIconCheckCombo.EVENT_CHANGE = "EVENT_CHANGE";
-$.shortcut("bi.editor_icon_check_combo", BI.EditorIconCheckCombo);
+BI.shortcut("bi.editor_icon_check_combo", BI.EditorIconCheckCombo);

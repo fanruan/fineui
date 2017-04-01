@@ -61,4 +61,4 @@ BI.SmallTextTrigger = BI.inherit(BI.Trigger, {
         this.text.setText(text);
     }
 });
-$.shortcut("bi.small_text_trigger", BI.SmallTextTrigger);
+BI.shortcut("bi.small_text_trigger", BI.SmallTextTrigger);

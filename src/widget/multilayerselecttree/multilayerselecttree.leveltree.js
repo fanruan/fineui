@@ -129,4 +129,4 @@ BI.MultiLayerSelectLevelTree = BI.inherit(BI.Widget, {
 });
 BI.MultiLayerSelectLevelTree.EVENT_CHANGE = "EVENT_CHANGE";
 
-$.shortcut("bi.multilayer_select_level_tree", BI.MultiLayerSelectLevelTree);
+BI.shortcut("bi.multilayer_select_level_tree", BI.MultiLayerSelectLevelTree);

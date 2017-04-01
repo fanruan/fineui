@@ -81,4 +81,4 @@ BI.LoadingBar = BI.inherit(BI.Single, {
     }
 });
 
-$.shortcut("bi.loading_bar", BI.LoadingBar);
+BI.shortcut("bi.loading_bar", BI.LoadingBar);

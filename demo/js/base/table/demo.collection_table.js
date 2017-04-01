@@ -59,4 +59,4 @@ Demo.Func = BI.inherit(BI.Widget, {
         })
     }
 });
-$.shortcut("demo.collection_table", Demo.Func);
+BI.shortcut("demo.collection_table", Demo.Func);

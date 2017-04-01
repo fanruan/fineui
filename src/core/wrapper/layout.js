@@ -71,14 +71,15 @@ BI.Layout = BI.inherit(BI.Widget, {
         var self = this, w;
         if (!this.hasWidget(this._getChildName(i))) {
             w = BI.createWidget(item);
-            this.addWidget(this._getChildName(i), w);
             w.on(BI.Events.DESTROY, function () {
                 BI.each(self._children, function (name, child) {
                     if (child === w) {
+                        BI.remove(self._children, child);
                         self.removeItemAt(name | 0);
                     }
                 });
             });
+            this.addWidget(this._getChildName(i), w);
         } else {
             w = this.getWidgetByName(this._getChildName(i));
         }
@@ -181,7 +182,7 @@ BI.Layout = BI.inherit(BI.Widget, {
         for (var i = this.options.items.length; i > index; i--) {
             this._children[this._getChildName(i)] = this._children[this._getChildName(i - 1)];
         }
-        delete this._children[index];
+        delete this._children[this._getChildName(index)];
         this.options.items.splice(index, 0, item);
     },
 
@@ -189,6 +190,7 @@ BI.Layout = BI.inherit(BI.Widget, {
         for (var i = index; i < this.options.items.length - 1; i++) {
             this._children[this._getChildName(i)] = this._children[this._getChildName(i + 1)];
         }
+        delete this._children[this._getChildName(this.options.items.length - 1)];
         this.options.items.splice(index, 1);
     },
 
@@ -219,13 +221,24 @@ BI.Layout = BI.inherit(BI.Widget, {
         return w;
     },
 
-    removeItemAt: function (index) {
-        if (index < 0 || index > this.options.items.length - 1) {
-            return;
+    removeItemAt: function (indexes) {
+        indexes = BI.isArray(indexes) ? indexes : [indexes];
+        var deleted = [];
+        var newItems = [], newChildren = {};
+        for (var i = 0, len = this.options.items.length; i < len; i++) {
+            var child = this._children[this._getChildName(i)];
+            if (indexes.contains(i)) {
+                child && deleted.push(child);
+            } else {
+                newChildren[this._getChildName(newItems.length)] = child;
+                newItems.push(this.options.items[i]);
+            }
         }
-        var child = this._children[this._getChildName(index)];
-        this._removeItemAt(index);
-        child.destroy();
+        this.options.items = newItems;
+        this._children = newChildren;
+        BI.each(deleted, function (i, c) {
+            c.destroy();
+        });
     },
 
     updateItemAt: function (index, item) {
@@ -234,9 +247,9 @@ BI.Layout = BI.inherit(BI.Widget, {
         }
 
         var child = this._children[this._getChildName(index)];
-        if (child.update) {
-            child.update(this._getOptions(item));
-            return true;
+        var updated;
+        if (updated = child.update(this._getOptions(item))) {
+            return updated;
         }
         var del = this._children[this._getChildName(index)];
         delete this._children[this._getChildName(index)];
@@ -290,33 +303,39 @@ BI.Layout = BI.inherit(BI.Widget, {
     },
 
     getValue: function () {
-        var self = this, value = [];
+        var self = this, value = [], child;
         BI.each(this.options.items, function (i) {
-            var v = self._children[self._getChildName(i)].getValue();
-            v = BI.isArray(v) ? v : [v];
-            value = value.concat(v);
+            if (child = self._children[self._getChildName(i)]) {
+                var v = child.getValue();
+                v = BI.isArray(v) ? v : [v];
+                value = value.concat(v);
+            }
         });
         return value;
     },
 
     setValue: function (v) {
-        var self = this;
+        var self = this, child;
         BI.each(this.options.items, function (i) {
-            self._children[self._getChildName(i)].setValue(v);
+            if (child = self._children[self._getChildName(i)]) {
+                child.setValue(v);
+            }
         })
     },
 
     setText: function (v) {
-        var self = this;
+        var self = this, child;
         BI.each(this.options.items, function (i) {
-            self._children[self._getChildName(i)].setText(v);
+            if (child = self._children[self._getChildName(i)]) {
+                child.setText(v);
+            }
         })
     },
 
     update: function (item) {
         var o = this.options;
-        var items = item.items;
-        var updated = false, i, len;
+        var items = item.items || [];
+        var updated, i, len;
         for (i = 0, len = Math.min(o.items.length, items.length); i < len; i++) {
             if (!this._compare(o.items[i], items[i])) {
                 updated = this.updateItemAt(i, items[i]) || updated;
@@ -326,7 +345,9 @@ BI.Layout = BI.inherit(BI.Widget, {
             var deleted = [];
             for (i = items.length; i < o.items.length; i++) {
                 deleted.push(this._children[this._getChildName(i)]);
+                delete this._children[this._getChildName(i)];
             }
+            o.items.splice(items.length);
             BI.each(deleted, function (i, w) {
                 w.destroy();
             })
@@ -335,7 +356,6 @@ BI.Layout = BI.inherit(BI.Widget, {
                 this.addItemAt(i, items[i]);
             }
         }
-        this.options.items = items;
         return updated;
     },
 
@@ -346,6 +366,32 @@ BI.Layout = BI.inherit(BI.Widget, {
                 self._addElement(i, item);
             }
         });
+    },
+
+    removeWidget: function (nameOrWidget) {
+        var removeIndex;
+        if (BI.isWidget(nameOrWidget)) {
+            BI.each(this._children, function (name, child) {
+                if (child === nameOrWidget) {
+                    removeIndex = name;
+                }
+            })
+        } else {
+            removeIndex = nameOrWidget;
+        }
+        if (removeIndex) {
+            this._removeItemAt(removeIndex | 0);
+        }
+    },
+
+    empty: function () {
+        BI.Layout.superclass.empty.apply(this, arguments);
+        this.options.items = [];
+    },
+
+    destroy: function () {
+        BI.Layout.superclass.destroy.apply(this, arguments);
+        this.options.items = [];
     },
 
     populate: function (items) {
@@ -363,4 +409,4 @@ BI.Layout = BI.inherit(BI.Widget, {
 
     }
 });
-$.shortcut('bi.layout', BI.Layout);
+BI.shortcut('bi.layout', BI.Layout);

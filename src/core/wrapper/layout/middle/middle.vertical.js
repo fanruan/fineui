@@ -70,4 +70,4 @@ BI.VerticalCenterLayout = BI.inherit(BI.Layout, {
         this._mount();
     }
 });
-$.shortcut('bi.vertical_center', BI.VerticalCenterLayout);
+BI.shortcut('bi.vertical_center', BI.VerticalCenterLayout);

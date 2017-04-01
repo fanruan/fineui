@@ -135,6 +135,6 @@
             BI.Button.superclass.destroy.apply(this, arguments);
         }
     });
-    $.shortcut('bi.button', BI.Button);
+    BI.shortcut('bi.button', BI.Button);
     BI.Button.EVENT_CHANGE = "EVENT_CHANGE";
 })(jQuery);

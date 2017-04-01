@@ -48,4 +48,4 @@ BI.AbsoluteHorizontalLayout = BI.inherit(BI.Layout, {
         this._mount();
     }
 });
-$.shortcut('bi.absolute_horizontal_adapt', BI.AbsoluteHorizontalLayout);
+BI.shortcut('bi.absolute_horizontal_adapt', BI.AbsoluteHorizontalLayout);

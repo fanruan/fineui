@@ -32,4 +32,4 @@ Demo.CenterLayout = BI.inherit(BI.Widget, {
         }
     }
 });
-$.shortcut("demo.center_layout", Demo.CenterLayout);
+BI.shortcut("demo.center_layout", Demo.CenterLayout);

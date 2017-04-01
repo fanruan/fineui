@@ -43,7 +43,7 @@ Demo.Func = BI.inherit(BI.Widget, {
         }
     }
 });
-$.shortcut("demo.virtual_group", Demo.Func);
+BI.shortcut("demo.virtual_group", Demo.Func);
 
 Demo.Item = BI.inherit(BI.Widget, {
     props: {
@@ -66,6 +66,7 @@ Demo.Item = BI.inherit(BI.Widget, {
     update: function (item) {
         this.label.setText(item.value);
         console.log("更新了一项");
+        return true;
     },
 
     created: function () {
@@ -76,4 +77,4 @@ Demo.Item = BI.inherit(BI.Widget, {
         console.log("删除了一项");
     }
 });
-$.shortcut("demo.virtual_group_item", Demo.Item);
+BI.shortcut("demo.virtual_group_item", Demo.Item);

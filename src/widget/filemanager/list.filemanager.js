@@ -55,4 +55,4 @@ BI.FileManagerList = BI.inherit(BI.Widget, {
     }
 });
 BI.FileManagerList.EVENT_CHANGE = "FileManagerList.EVENT_CHANGE";
-$.shortcut("bi.file_manager_list", BI.FileManagerList);
+BI.shortcut("bi.file_manager_list", BI.FileManagerList);

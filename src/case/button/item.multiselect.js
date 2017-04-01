@@ -74,4 +74,4 @@ BI.MultiSelectItem = BI.inherit(BI.BasicButton, {
     }
 });
 BI.MultiSelectItem.EVENT_CHANGE = "EVENT_CHANGE";
-$.shortcut("bi.multi_select_item", BI.MultiSelectItem);
+BI.shortcut("bi.multi_select_item", BI.MultiSelectItem);

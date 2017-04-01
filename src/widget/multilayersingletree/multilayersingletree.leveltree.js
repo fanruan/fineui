@@ -132,4 +132,4 @@ BI.MultiLayerSingleLevelTree = BI.inherit(BI.Widget, {
 });
 BI.MultiLayerSingleLevelTree.EVENT_CHANGE = "EVENT_CHANGE";
 
-$.shortcut("bi.multilayer_single_level_tree", BI.MultiLayerSingleLevelTree);
+BI.shortcut("bi.multilayer_single_level_tree", BI.MultiLayerSingleLevelTree);

@@ -54,4 +54,4 @@ Demo.Func = BI.inherit(BI.Widget, {
         })
     }
 });
-$.shortcut("demo.resizable_table", Demo.Func);
+BI.shortcut("demo.resizable_table", Demo.Func);

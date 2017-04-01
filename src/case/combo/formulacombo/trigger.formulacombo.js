@@ -56,4 +56,4 @@ BI.FormulaComboTrigger = BI.inherit(BI.Widget, {
         this.label.setText(this._getTextFromFormulaValue(v));
     }
 });
-$.shortcut("bi.formula_combo_trigger", BI.FormulaComboTrigger);
+BI.shortcut("bi.formula_combo_trigger", BI.FormulaComboTrigger);

@@ -191,4 +191,4 @@ BI.ColorChooserPopup = BI.inherit(BI.Widget, {
 });
 BI.ColorChooserPopup.EVENT_VALUE_CHANGE = "ColorChooserPopup.EVENT_VALUE_CHANGE";
 BI.ColorChooserPopup.EVENT_CHANGE = "ColorChooserPopup.EVENT_CHANGE";
-$.shortcut("bi.color_chooser_popup", BI.ColorChooserPopup);
+BI.shortcut("bi.color_chooser_popup", BI.ColorChooserPopup);

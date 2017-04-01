@@ -187,4 +187,4 @@ BI.extend(BI.Calendar, {
     }
 });
 
-$.shortcut("bi.calendar", BI.Calendar);
+BI.shortcut("bi.calendar", BI.Calendar);

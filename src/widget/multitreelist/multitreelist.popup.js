@@ -14,7 +14,7 @@ BI.MultiStringListPopup=BI.inherit(BI.Widget,{
         this.popup = BI.createWidget({
             type: "bi.sync_tree",
             height: 400,
-            element:this.element,
+            element: this,
             itemsCreator: o.itemsCreator
         });
         this.popup.on(BI.TreeView.EVENT_AFTERINIT, function () {
@@ -45,4 +45,4 @@ BI.MultiStringListPopup=BI.inherit(BI.Widget,{
 });
 BI.MultiStringListPopup.EVENT_AFTER_INIT="BI.MultiStringListPopup.EVENT_AFTER_INIT";
 BI.MultiStringListPopup.EVENT_CHANGE="BI.MultiStringListPopup.EVENT_CHANGE";
-$.shortcut("bi.multi_tree_list_popup",BI.MultiStringListPopup);
+BI.shortcut("bi.multi_tree_list_popup",BI.MultiStringListPopup);

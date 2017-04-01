@@ -100,4 +100,4 @@ BI.YearPopup = BI.inherit(BI.Widget, {
     }
 });
 BI.YearPopup.EVENT_CHANGE = "EVENT_CHANGE";
-$.shortcut("bi.year_popup", BI.YearPopup);
+BI.shortcut("bi.year_popup", BI.YearPopup);

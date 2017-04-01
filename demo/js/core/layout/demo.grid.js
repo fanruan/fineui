@@ -134,4 +134,4 @@ Demo.GridLayout = BI.inherit(BI.Widget, {
         }
     }
 });
-$.shortcut("demo.grid", Demo.GridLayout);
+BI.shortcut("demo.grid", Demo.GridLayout);

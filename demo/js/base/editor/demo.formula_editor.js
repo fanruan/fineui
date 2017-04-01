@@ -18,4 +18,4 @@ Demo.CodeEditor = BI.inherit(BI.Widget, {
         })
     }
 });
-$.shortcut("demo.formula_editor", Demo.CodeEditor);
+BI.shortcut("demo.formula_editor", Demo.CodeEditor);

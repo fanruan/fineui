@@ -76,4 +76,4 @@ BI.FileManagerButtonGroup = BI.inherit(BI.Widget, {
     }
 });
 BI.FileManagerButtonGroup.EVENT_CHANGE = "FileManagerButtonGroup.EVENT_CHANGE";
-$.shortcut("bi.file_manager_button_group", BI.FileManagerButtonGroup);
+BI.shortcut("bi.file_manager_button_group", BI.FileManagerButtonGroup);

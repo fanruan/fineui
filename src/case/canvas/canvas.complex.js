@@ -89,4 +89,4 @@ BI.ComplexCanvas = BI.inherit(BI.Widget, {
     }
 });
 
-$.shortcut("bi.complex_canvas", BI.ComplexCanvas);
+BI.shortcut("bi.complex_canvas", BI.ComplexCanvas);

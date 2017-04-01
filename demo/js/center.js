@@ -22,4 +22,4 @@ Demo.Center = BI.inherit(BI.Widget, {
         this.tab.setSelect(v);
     }
 });
-$.shortcut("demo.center", Demo.Center);
+BI.shortcut("demo.center", Demo.Center);

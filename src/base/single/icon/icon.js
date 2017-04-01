@@ -15,4 +15,4 @@ BI.Icon = BI.inherit(BI.Single, {
         BI.Icon.superclass._init.apply(this, arguments);
     }
 });
-$.shortcut("bi.icon", BI.Icon);
+BI.shortcut("bi.icon", BI.Icon);

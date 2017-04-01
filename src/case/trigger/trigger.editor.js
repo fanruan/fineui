@@ -76,4 +76,4 @@ BI.EditorTrigger = BI.inherit(BI.Trigger, {
     }
 });
 BI.EditorTrigger.EVENT_CHANGE = "BI.EditorTrigger.EVENT_CHANGE";
-$.shortcut("bi.editor_trigger", BI.EditorTrigger);
+BI.shortcut("bi.editor_trigger", BI.EditorTrigger);

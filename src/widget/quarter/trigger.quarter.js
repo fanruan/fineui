@@ -103,4 +103,4 @@ BI.QuarterTrigger.EVENT_CHANGE = "EVENT_CHANGE";
 BI.QuarterTrigger.EVENT_START = "EVENT_START";
 BI.QuarterTrigger.EVENT_STOP = "EVENT_STOP";
 BI.QuarterTrigger.EVENT_CONFIRM = "EVENT_CONFIRM";
-$.shortcut("bi.quarter_trigger", BI.QuarterTrigger);
+BI.shortcut("bi.quarter_trigger", BI.QuarterTrigger);

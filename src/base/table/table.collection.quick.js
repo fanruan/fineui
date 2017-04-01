@@ -137,4 +137,4 @@ BI.QuickCollectionTable = BI.inherit(BI.CollectionTable, {
         this.bottomRightCollection.populate(rightItems);
     }
 });
-$.shortcut('bi.quick_collection_table', BI.QuickCollectionTable);
+BI.shortcut('bi.quick_collection_table', BI.QuickCollectionTable);

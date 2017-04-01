@@ -206,4 +206,4 @@ BI.SelectList = BI.inherit(BI.Widget, {
     }
 });
 BI.SelectList.EVENT_CHANGE = "EVENT_CHANGE";
-$.shortcut("bi.select_list", BI.SelectList);
+BI.shortcut("bi.select_list", BI.SelectList);

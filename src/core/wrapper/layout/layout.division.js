@@ -154,4 +154,4 @@ BI.DivisionLayout = BI.inherit(BI.Layout, {
         this._mount();
     }
 });
-$.shortcut('bi.division', BI.DivisionLayout);
+BI.shortcut('bi.division', BI.DivisionLayout);

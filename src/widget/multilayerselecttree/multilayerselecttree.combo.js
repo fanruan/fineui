@@ -67,4 +67,4 @@ BI.MultiLayerSelectTreeCombo = BI.inherit(BI.Widget, {
     }
 });
 BI.MultiLayerSelectTreeCombo.EVENT_CHANGE = "EVENT_CHANGE";
-$.shortcut("bi.multilayer_select_tree_combo", BI.MultiLayerSelectTreeCombo);
+BI.shortcut("bi.multilayer_select_tree_combo", BI.MultiLayerSelectTreeCombo);

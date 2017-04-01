@@ -101,4 +101,4 @@ BI.FirstTreeLeafItem = BI.inherit(BI.BasicButton, {
     }
 });
 
-$.shortcut("bi.first_tree_leaf_item", BI.FirstTreeLeafItem);
+BI.shortcut("bi.first_tree_leaf_item", BI.FirstTreeLeafItem);

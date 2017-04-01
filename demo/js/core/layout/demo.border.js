@@ -94,4 +94,4 @@ Demo.BorderLayout = BI.inherit(BI.Widget, {
         }
     }
 });
-$.shortcut("demo.border", Demo.BorderLayout);
+BI.shortcut("demo.border", Demo.BorderLayout);

@@ -62,4 +62,4 @@ Demo.RelationView = BI.inherit(BI.Widget, {
         }
     }
 });
-$.shortcut("demo.relation_view", Demo.RelationView);
+BI.shortcut("demo.relation_view", Demo.RelationView);

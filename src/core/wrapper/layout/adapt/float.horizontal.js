@@ -32,7 +32,7 @@ BI.FloatHorizontalLayout = BI.inherit(BI.Layout, {
             element: this,
             items: [this.left]
         });
-        this.removeWidget(this.container.getName());
+        this.removeWidget(this.container);
     },
 
     _addElement: function (i, item) {
@@ -62,4 +62,4 @@ BI.FloatHorizontalLayout = BI.inherit(BI.Layout, {
         this._mount();
     }
 });
-$.shortcut('bi.horizontal_float', BI.FloatHorizontalLayout);
+BI.shortcut('bi.horizontal_float', BI.FloatHorizontalLayout);

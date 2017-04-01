@@ -285,4 +285,4 @@ BI.DetailPager = BI.inherit(BI.Widget, {
 });
 BI.DetailPager.EVENT_CHANGE = "EVENT_CHANGE";
 BI.DetailPager.EVENT_AFTER_POPULATE = "EVENT_AFTER_POPULATE";
-$.shortcut("bi.detail_pager", BI.DetailPager);
+BI.shortcut("bi.detail_pager", BI.DetailPager);
