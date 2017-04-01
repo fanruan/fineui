@@ -34,6 +34,9 @@ BI.AdaptiveArrangement = BI.inherit(BI.Widget, {
             layoutType: o.layoutType,
             items: o.items
         });
+        this.arrangement.on(BI.Arrangement.EVENT_SCROLL, function () {
+            self.fireEvent(BI.AdaptiveArrangement.EVENT_SCROLL, arguments);
+        });
         if (o.isNeedResizeContainer) {
 
             var isResizing = false;
@@ -524,4 +527,5 @@ BI.AdaptiveArrangement.EVENT_ELEMENT_START_RESIZE = "AdaptiveArrangement.EVENT_E
 BI.AdaptiveArrangement.EVENT_ELEMENT_RESIZE = "AdaptiveArrangement.EVENT_ELEMENT_RESIZE";
 BI.AdaptiveArrangement.EVENT_ELEMENT_STOP_RESIZE = "AdaptiveArrangement.EVENT_ELEMENT_STOP_RESIZE";
 BI.AdaptiveArrangement.EVENT_RESIZE = "AdaptiveArrangement.EVENT_RESIZE";
+BI.AdaptiveArrangement.EVENT_SCROLL = "AdaptiveArrangement.EVENT_SCROLL";
 BI.shortcut('bi.adaptive_arrangement', BI.AdaptiveArrangement);

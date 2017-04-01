@@ -416,6 +416,9 @@ BI.AdaptiveArrangement = BI.inherit(BI.Widget, {
             layoutType: o.layoutType,
             items: o.items
         });
+        this.arrangement.on(BI.Arrangement.EVENT_SCROLL, function () {
+            self.fireEvent(BI.AdaptiveArrangement.EVENT_SCROLL, arguments);
+        });
         if (o.isNeedResizeContainer) {
 
             var isResizing = false;
@@ -906,6 +909,7 @@ BI.AdaptiveArrangement.EVENT_ELEMENT_START_RESIZE = "AdaptiveArrangement.EVENT_E
 BI.AdaptiveArrangement.EVENT_ELEMENT_RESIZE = "AdaptiveArrangement.EVENT_ELEMENT_RESIZE";
 BI.AdaptiveArrangement.EVENT_ELEMENT_STOP_RESIZE = "AdaptiveArrangement.EVENT_ELEMENT_STOP_RESIZE";
 BI.AdaptiveArrangement.EVENT_RESIZE = "AdaptiveArrangement.EVENT_RESIZE";
+BI.AdaptiveArrangement.EVENT_SCROLL = "AdaptiveArrangement.EVENT_SCROLL";
 BI.shortcut('bi.adaptive_arrangement', BI.AdaptiveArrangement);/**
  * Arrangement的block面板
  *
@@ -1000,6 +1004,14 @@ BI.Arrangement = BI.inherit(BI.Widget, {
             height: "100%",
             scrollable: true,
             items: [this.container]
+        });
+        this.scrollContainer.element.scroll(function () {
+            self.fireEvent(BI.Arrangement.EVENT_SCROLL, {
+                scrollLeft: self.scrollContainer.element.scrollLeft(),
+                scrollTop: self.scrollContainer.element.scrollTop(),
+                clientWidth: self.scrollContainer.element[0].clientWidth,
+                clientHeight: self.scrollContainer.element[0].clientHeight
+            });
         });
 
         BI.createWidget({
@@ -3873,6 +3885,7 @@ BI.Arrangement = BI.inherit(BI.Widget, {
         this._renderRegion();
     }
 });
+BI.Arrangement.EVENT_SCROLL = "EVENT_SCROLL";
 BI.extend(BI.Arrangement, {
     PORTION: 24,
     GRID_HEIGHT: 50,
@@ -7140,6 +7153,9 @@ BI.InteractiveArrangement = BI.inherit(BI.Widget, {
             layoutType: o.layoutType,
             items: o.items
         });
+        this.arrangement.on(BI.AdaptiveArrangement.EVENT_SCROLL, function () {
+            self.fireEvent(BI.InteractiveArrangement.EVENT_SCROLL, arguments);
+        });
         this.arrangement.on(BI.AdaptiveArrangement.EVENT_RESIZE, function () {
             self.fireEvent(BI.InteractiveArrangement.EVENT_RESIZE, arguments);
         });
@@ -7677,6 +7693,7 @@ BI.InteractiveArrangement = BI.inherit(BI.Widget, {
     }
 });
 BI.InteractiveArrangement.EVENT_RESIZE = "InteractiveArrangement.EVENT_RESIZE";
+BI.InteractiveArrangement.EVENT_SCROLL = "InteractiveArrangement.EVENT_SCROLL";
 BI.shortcut('bi.interactive_arrangement', BI.InteractiveArrangement);/**
  * 月份下拉框
  *
