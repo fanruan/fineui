@@ -16,29 +16,29 @@ BI.ColorPicker = BI.inherit(BI.Widget, {
 
     _items: [
         [{
-            value: "#ff0000"
-        }, {
-            value: "#ffff02"
-        }, {
-            value: "#00ff00"
-        }, {
-            value: "#00ffff"
-        }, {
-            value: "#0000ff"
-        }, {
-            value: "#ff02ff"
-        }, {
             value: "#ffffff"
         }, {
-            value: "#e6e6e6"
+            value: "#f2f2f2"
+        }, {
+            value: "#e5e5e5"
+        }, {
+            value: "#d9d9d9"
         }, {
             value: "#cccccc"
         }, {
-            value: "#b3b3b3"
+            value: "#bfbfbf"
+        }, {
+            value: "#b2b2b2"
+        }, {
+            value: "#a6a6a6"
         }, {
             value: "#999999"
         }, {
+            value: "#8c8c8c"
+        }, {
             value: "#808080"
+        }, {
+            value: "#737373"
         }, {
             value: "#666666"
         }, {
@@ -46,106 +46,106 @@ BI.ColorPicker = BI.inherit(BI.Widget, {
         }, {
             value: "#333333"
         }, {
-            value: "#1a1a1a"
+            value: "#000000"
         }],
         [{
-            value: "#ea9b5e"
+            value: "#d8b5a6"
         }, {
-            value: "#ebb668"
+            value: "#ff9e9a"
         }, {
-            value: "#efca69"
+            value: "#ffc17d"
         }, {
-            value: "#faf4a2"
+            value: "#f5e56b"
         }, {
-            value: "#c9da73"
+            value: "#d8e698"
         }, {
-            value: "#b6d19c"
+            value: "#e0ebaf"
         }, {
-            value: "#86be85"
+            value: "#c3d825"
         }, {
-            value: "#87c5c3"
+            value: "#bce2e8"
         }, {
-            value: "#75bfec"
+            value: "#85d3cd"
         }, {
-            value: "#85a9e0"
+            value: "#bce2e8"
         }, {
-            value: "#8890d3"
+            value: "#a0d8ef"
         }, {
-            value: "#a484b9"
+            value: "#89c3eb"
         }, {
-            value: "#b48bbf"
+            value: "#bbc8e6"
         }, {
-            value: "#ba8dc6"
+            value: "#bbbcde"
         }, {
-            value: "#e697c8"
+            value: "#d6b4cc"
         }, {
-            value: "#e49da0"
+            value: "#fbc0d3"
         }],
         [{
-            value: "#df6a18"
+            value: "#bb9581"
         }, {
-            value: "#df8d04"
+            value: "#f37d79"
         }, {
-            value: "#efb500"
+            value: "#fba74f"
         }, {
-            value: "#faf201"
+            value: "#ffdb4f"
         }, {
-            value: "#b2cc23"
+            value: "#c7dc68"
         }, {
-            value: "#7dbd2f"
+            value: "#b0ca71"
         }, {
-            value: "#48a754"
+            value: "#99ab4e"
         }, {
-            value: "#27acaa"
+            value: "#84b9cb"
         }, {
-            value: "#09abe9"
+            value: "#00a3af"
         }, {
-            value: "#357bcc"
+            value: "#2ca9e1"
         }, {
-            value: "#4d67c1"
+            value: "#0095d9"
         }, {
-            value: "#5b4aa5"
+            value: "#4c6cb3"
         }, {
-            value: "#7e52a5"
+            value: "#8491c3"
         }, {
-            value: "#a057a4"
+            value: "#a59aca"
         }, {
-            value: "#d1689c"
+            value: "#cc7eb1"
         }, {
-            value: "#d66871"
+            value: "#e89bb4"
         }],
         [{
-            value: "#d12d02"
+            value: "#9d775f"
         }, {
-            value: "#db6700"
+            value: "#dd4b4b"
         }, {
-            value: "#ee9106"
+            value: "#ef8b07"
         }, {
-            value: "#f7ed02"
+            value: "#fcc800"
         }, {
-            value: "#92b801"
+            value: "#aacf53"
         }, {
-            value: "#37a600"
+            value: "#82ae46"
         }, {
-            value: "#289100"
+            value: "#69821b"
         }, {
-            value: "#1a9589"
+            value: "#59b9c6"
         }, {
-            value: "#0292e0"
+            value: "#2a83a2"
         }, {
-            value: "#005dbb"
+            value: "#007bbb"
         }, {
-            value: "#005eb4"
+            value: "#19448e"
         }, {
-            value: "#0041a3"
+            value: "#274a78"
         }, {
-            value: "#00217f"
+            value: "#4a488e"
         }, {
-            value: "#811e89"
+            value: "#7058a3"
         }, {
-            value: "#cd2a7c"
+            value: "#884898"
         }, {
-            value: "#cd324a"
+            value: "#d47596"
         }]
     ],
 
