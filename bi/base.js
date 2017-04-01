@@ -1489,10 +1489,6 @@ BI.TreeView = BI.inherit(BI.Pane, {
     },
     _init: function () {
         BI.TreeView.superclass._init.apply(this, arguments);
-        
-        
-        
-
         this._stop = false;
         this.container = BI.createWidget();
 
