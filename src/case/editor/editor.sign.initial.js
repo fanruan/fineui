@@ -162,4 +162,4 @@ BI.SignInitialEditor.EVENT_RESTRICT = "EVENT_RESTRICT";
 BI.SignInitialEditor.EVENT_SPACE = "EVENT_SPACE";
 BI.SignInitialEditor.EVENT_EMPTY = "EVENT_EMPTY";
 
-$.shortcut("bi.sign_initial_editor", BI.SignInitialEditor);
+BI.shortcut("bi.sign_initial_editor", BI.SignInitialEditor);

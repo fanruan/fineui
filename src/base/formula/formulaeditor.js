@@ -229,4 +229,4 @@ BI.FormulaEditor = BI.inherit(BI.Single, {
 BI.FormulaEditor.EVENT_CHANGE = "EVENT_CHANGE";
 BI.FormulaEditor.EVENT_BLUR = "EVENT_BLUR";
 BI.FormulaEditor.EVENT_FOCUS = "EVENT_FOCUS";
-$.shortcut("bi.formula_editor", BI.FormulaEditor);
+BI.shortcut("bi.formula_editor", BI.FormulaEditor);

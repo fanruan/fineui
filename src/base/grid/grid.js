@@ -291,4 +291,4 @@ BI.Grid = BI.inherit(BI.Widget, {
     }
 });
 BI.Grid.EVENT_SCROLL = "EVENT_SCROLL";
-$.shortcut('bi.grid_view', BI.Grid);
+BI.shortcut('bi.grid_view', BI.Grid);

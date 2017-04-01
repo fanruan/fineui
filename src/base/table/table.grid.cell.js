@@ -56,4 +56,4 @@ BI.GridTableCell = BI.inherit(BI.Widget, {
     }
 });
 
-$.shortcut("bi.grid_table_cell", BI.GridTableCell);
+BI.shortcut("bi.grid_table_cell", BI.GridTableCell);

@@ -247,4 +247,4 @@ BI.PageTable = BI.inherit(BI.Widget, {
         BI.PageTable.superclass.destroy.apply(this, arguments);
     }
 });
-$.shortcut('bi.page_table', BI.PageTable);
+BI.shortcut('bi.page_table', BI.PageTable);

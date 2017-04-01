@@ -19,7 +19,7 @@ BI.ZeroClip = BI.inherit(BI.BasicButton, {
         
         BI.nextTick(function () {
             self.element.zclip({
-                path: BI.servletURL + "resources/ZeroClipboard.swf",
+                path: BI.resourceURL + "ZeroClipboard.swf",
                 copy: o.copy,
                 beforeCopy: o.beforeCopy,
                 afterCopy: o.afterCopy
@@ -28,4 +28,4 @@ BI.ZeroClip = BI.inherit(BI.BasicButton, {
     }
 });
 
-$.shortcut("bi.zero_clip", BI.ZeroClip);
+BI.shortcut("bi.zero_clip", BI.ZeroClip);

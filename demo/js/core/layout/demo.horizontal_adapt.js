@@ -39,4 +39,4 @@ Demo.HorizontalAdapt = BI.inherit(BI.Widget, {
         }
     }
 });
-$.shortcut("demo.horizontal_adapt", Demo.HorizontalAdapt);
+BI.shortcut("demo.horizontal_adapt", Demo.HorizontalAdapt);

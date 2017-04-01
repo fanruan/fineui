@@ -153,4 +153,4 @@ BI.MultiSelectSearchLoader = BI.inherit(BI.Widget, {
 });
 
 BI.MultiSelectSearchLoader.EVENT_CHANGE = "EVENT_CHANGE";
-$.shortcut('bi.multi_select_search_loader', BI.MultiSelectSearchLoader);
+BI.shortcut('bi.multi_select_search_loader', BI.MultiSelectSearchLoader);

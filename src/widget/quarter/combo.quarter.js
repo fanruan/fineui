@@ -79,4 +79,4 @@ BI.QuarterCombo = BI.inherit(BI.Widget, {
 });
 
 BI.QuarterCombo.EVENT_CONFIRM = "EVENT_CONFIRM";
-$.shortcut('bi.quarter_combo', BI.QuarterCombo);
+BI.shortcut('bi.quarter_combo', BI.QuarterCombo);

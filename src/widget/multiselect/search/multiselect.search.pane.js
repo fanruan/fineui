@@ -99,4 +99,4 @@ BI.MultiSelectSearchPane = BI.inherit(BI.Widget, {
 
 BI.MultiSelectSearchPane.EVENT_CHANGE = "EVENT_CHANGE";
 
-$.shortcut("bi.multi_select_search_pane", BI.MultiSelectSearchPane);
+BI.shortcut("bi.multi_select_search_pane", BI.MultiSelectSearchPane);

@@ -316,4 +316,4 @@ BI.RelationView = BI.inherit(BI.Widget, {
 });
 BI.RelationView.EVENT_CHANGE = "RelationView.EVENT_CHANGE";
 BI.RelationView.EVENT_PREVIEW = "EVENT_PREVIEW";
-$.shortcut('bi.relation_view', BI.RelationView);
+BI.shortcut('bi.relation_view', BI.RelationView);

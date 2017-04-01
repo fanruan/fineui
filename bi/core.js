@@ -1,1548 +1,4 @@
-//     Underscore.js 1.8.2
-//     http://underscorejs.org
-//     (c) 2009-2015 Jeremy Ashkenas, DocumentCloud and Investigative Reporters & Editors
-//     Underscore may be freely distributed under the MIT license.
-
-(function() {
-
-    // Baseline setup
-    // --------------
-
-    // Establish the root object, `window` in the browser, or `exports` on the server.
-    var root = this;
-
-    // Save the previous value of the `_` variable.
-    var previousUnderscore = root._;
-
-    // Save bytes in the minified (but not gzipped) version:
-    var ArrayProto = Array.prototype, ObjProto = Object.prototype, FuncProto = Function.prototype;
-
-    // Create quick reference variables for speed access to core prototypes.
-    var
-        push             = ArrayProto.push,
-        slice            = ArrayProto.slice,
-        toString         = ObjProto.toString,
-        hasOwnProperty   = ObjProto.hasOwnProperty;
-
-    // All **ECMAScript 5** native function implementations that we hope to use
-    // are declared here.
-    var
-        nativeIsArray      = Array.isArray,
-        nativeKeys         = Object.keys,
-        nativeBind         = FuncProto.bind,
-        nativeCreate       = Object.create;
-
-    // Naked function reference for surrogate-prototype-swapping.
-    var Ctor = function(){};
-
-    // Create a safe reference to the Underscore object for use below.
-    var _ = function(obj) {
-        if (obj instanceof _) return obj;
-        if (!(this instanceof _)) return new _(obj);
-        this._wrapped = obj;
-    };
-
-    // Export the Underscore object for **Node.js**, with
-    // backwards-compatibility for the old `require()` API. If we're in
-    // the browser, add `_` as a global object.
-    if (typeof exports !== 'undefined') {
-        if (typeof module !== 'undefined' && module.exports) {
-            exports = module.exports = _;
-        }
-        exports._ = _;
-    } else {
-        root._ = _;
-    }
-
-    // Current version.
-    _.VERSION = '1.8.2';
-
-    // Internal function that returns an efficient (for current engines) version
-    // of the passed-in callback, to be repeatedly applied in other Underscore
-    // functions.
-    var optimizeCb = function(func, context, argCount) {
-        if (context === void 0) return func;
-        switch (argCount == null ? 3 : argCount) {
-            case 1: return function(value) {
-                return func.call(context, value);
-            };
-            case 2: return function(value, other) {
-                return func.call(context, value, other);
-            };
-            case 3: return function(value, index, collection) {
-                return func.call(context, value, index, collection);
-            };
-            case 4: return function(accumulator, value, index, collection) {
-                return func.call(context, accumulator, value, index, collection);
-            };
-        }
-        return function() {
-            return func.apply(context, arguments);
-        };
-    };
-
-    // A mostly-internal function to generate callbacks that can be applied
-    // to each element in a collection, returning the desired result 鈥? either
-    // identity, an arbitrary callback, a property matcher, or a property accessor.
-    var cb = function(value, context, argCount) {
-        if (value == null) return _.identity;
-        if (_.isFunction(value)) return optimizeCb(value, context, argCount);
-        if (_.isObject(value)) return _.matcher(value);
-        return _.property(value);
-    };
-    _.iteratee = function(value, context) {
-        return cb(value, context, Infinity);
-    };
-
-    // An internal function for creating assigner functions.
-    var createAssigner = function(keysFunc, undefinedOnly) {
-        return function(obj) {
-            var length = arguments.length;
-            if (length < 2 || obj == null) return obj;
-            for (var index = 1; index < length; index++) {
-                var source = arguments[index],
-                    keys = keysFunc(source),
-                    l = keys.length;
-                for (var i = 0; i < l; i++) {
-                    var key = keys[i];
-                    if (!undefinedOnly || obj[key] === void 0) obj[key] = source[key];
-                }
-            }
-            return obj;
-        };
-    };
-
-    // An internal function for creating a new object that inherits from another.
-    var baseCreate = function(prototype) {
-        if (!_.isObject(prototype)) return {};
-        if (nativeCreate) return nativeCreate(prototype);
-        Ctor.prototype = prototype;
-        var result = new Ctor;
-        Ctor.prototype = null;
-        return result;
-    };
-
-    // Helper for collection methods to determine whether a collection
-    // should be iterated as an array or as an object
-    // Related: http://people.mozilla.org/~jorendorff/es6-draft.html#sec-tolength
-    var MAX_ARRAY_INDEX = Math.pow(2, 53) - 1;
-    var isArrayLike = function(collection) {
-        var length = collection != null && collection.length;
-        return typeof length == 'number' && length >= 0 && length <= MAX_ARRAY_INDEX;
-    };
-
-    // Collection Functions
-    // --------------------
-
-    // The cornerstone, an `each` implementation, aka `forEach`.
-    // Handles raw objects in addition to array-likes. Treats all
-    // sparse array-likes as if they were dense.
-    _.each = _.forEach = function(obj, iteratee, context) {
-        iteratee = optimizeCb(iteratee, context);
-        var i, length;
-        if (isArrayLike(obj)) {
-            for (i = 0, length = obj.length; i < length; i++) {
-                iteratee(obj[i], i, obj);
-            }
-        } else {
-            var keys = _.keys(obj);
-            for (i = 0, length = keys.length; i < length; i++) {
-                iteratee(obj[keys[i]], keys[i], obj);
-            }
-        }
-        return obj;
-    };
-
-    // Return the results of applying the iteratee to each element.
-    _.map = _.collect = function(obj, iteratee, context) {
-        iteratee = cb(iteratee, context);
-        var keys = !isArrayLike(obj) && _.keys(obj),
-            length = (keys || obj).length,
-            results = Array(length);
-        for (var index = 0; index < length; index++) {
-            var currentKey = keys ? keys[index] : index;
-            results[index] = iteratee(obj[currentKey], currentKey, obj);
-        }
-        return results;
-    };
-
-    // Create a reducing function iterating left or right.
-    function createReduce(dir) {
-        // Optimized iterator function as using arguments.length
-        // in the main function will deoptimize the, see #1991.
-        function iterator(obj, iteratee, memo, keys, index, length) {
-            for (; index >= 0 && index < length; index += dir) {
-                var currentKey = keys ? keys[index] : index;
-                memo = iteratee(memo, obj[currentKey], currentKey, obj);
-            }
-            return memo;
-        }
-
-        return function(obj, iteratee, memo, context) {
-            iteratee = optimizeCb(iteratee, context, 4);
-            var keys = !isArrayLike(obj) && _.keys(obj),
-                length = (keys || obj).length,
-                index = dir > 0 ? 0 : length - 1;
-            // Determine the initial value if none is provided.
-            if (arguments.length < 3) {
-                memo = obj[keys ? keys[index] : index];
-                index += dir;
-            }
-            return iterator(obj, iteratee, memo, keys, index, length);
-        };
-    }
-
-    // **Reduce** builds up a single result from a list of values, aka `inject`,
-    // or `foldl`.
-    _.reduce = _.foldl = _.inject = createReduce(1);
-
-    // The right-associative version of reduce, also known as `foldr`.
-    _.reduceRight = _.foldr = createReduce(-1);
-
-    // Return the first value which passes a truth test. Aliased as `detect`.
-    _.find = _.detect = function(obj, predicate, context) {
-        var key;
-        if (isArrayLike(obj)) {
-            key = _.findIndex(obj, predicate, context);
-        } else {
-            key = _.findKey(obj, predicate, context);
-        }
-        if (key !== void 0 && key !== -1) return obj[key];
-    };
-
-    // Return all the elements that pass a truth test.
-    // Aliased as `select`.
-    _.filter = _.select = function(obj, predicate, context) {
-        var results = [];
-        predicate = cb(predicate, context);
-        _.each(obj, function(value, index, list) {
-            if (predicate(value, index, list)) results.push(value);
-        });
-        return results;
-    };
-
-    // Return all the elements for which a truth test fails.
-    _.reject = function(obj, predicate, context) {
-        return _.filter(obj, _.negate(cb(predicate)), context);
-    };
-
-    // Determine whether all of the elements match a truth test.
-    // Aliased as `all`.
-    _.every = _.all = function(obj, predicate, context) {
-        predicate = cb(predicate, context);
-        var keys = !isArrayLike(obj) && _.keys(obj),
-            length = (keys || obj).length;
-        for (var index = 0; index < length; index++) {
-            var currentKey = keys ? keys[index] : index;
-            if (!predicate(obj[currentKey], currentKey, obj)) return false;
-        }
-        return true;
-    };
-
-    // Determine if at least one element in the object matches a truth test.
-    // Aliased as `any`.
-    _.some = _.any = function(obj, predicate, context) {
-        predicate = cb(predicate, context);
-        var keys = !isArrayLike(obj) && _.keys(obj),
-            length = (keys || obj).length;
-        for (var index = 0; index < length; index++) {
-            var currentKey = keys ? keys[index] : index;
-            if (predicate(obj[currentKey], currentKey, obj)) return true;
-        }
-        return false;
-    };
-
-    // Determine if the array or object contains a given value (using `===`).
-    // Aliased as `includes` and `include`.
-    _.contains = _.includes = _.include = function(obj, target, fromIndex) {
-        if (!isArrayLike(obj)) obj = _.values(obj);
-        return _.indexOf(obj, target, typeof fromIndex == 'number' && fromIndex) >= 0;
-    };
-
-    // Invoke a method (with arguments) on every item in a collection.
-    _.invoke = function(obj, method) {
-        var args = slice.call(arguments, 2);
-        var isFunc = _.isFunction(method);
-        return _.map(obj, function(value) {
-            var func = isFunc ? method : value[method];
-            return func == null ? func : func.apply(value, args);
-        });
-    };
-
-    // Convenience version of a common use case of `map`: fetching a property.
-    _.pluck = function(obj, key) {
-        return _.map(obj, _.property(key));
-    };
-
-    // Convenience version of a common use case of `filter`: selecting only objects
-    // containing specific `key:value` pairs.
-    _.where = function(obj, attrs) {
-        return _.filter(obj, _.matcher(attrs));
-    };
-
-    // Convenience version of a common use case of `find`: getting the first object
-    // containing specific `key:value` pairs.
-    _.findWhere = function(obj, attrs) {
-        return _.find(obj, _.matcher(attrs));
-    };
-
-    // Return the maximum element (or element-based computation).
-    _.max = function(obj, iteratee, context) {
-        var result = -Infinity, lastComputed = -Infinity,
-            value, computed;
-        if (iteratee == null && obj != null) {
-            obj = isArrayLike(obj) ? obj : _.values(obj);
-            for (var i = 0, length = obj.length; i < length; i++) {
-                value = obj[i];
-                if (value > result) {
-                    result = value;
-                }
-            }
-        } else {
-            iteratee = cb(iteratee, context);
-            _.each(obj, function(value, index, list) {
-                computed = iteratee(value, index, list);
-                if (computed > lastComputed || computed === -Infinity && result === -Infinity) {
-                    result = value;
-                    lastComputed = computed;
-                }
-            });
-        }
-        return result;
-    };
-
-    // Return the minimum element (or element-based computation).
-    _.min = function(obj, iteratee, context) {
-        var result = Infinity, lastComputed = Infinity,
-            value, computed;
-        if (iteratee == null && obj != null) {
-            obj = isArrayLike(obj) ? obj : _.values(obj);
-            for (var i = 0, length = obj.length; i < length; i++) {
-                value = obj[i];
-                if (value < result) {
-                    result = value;
-                }
-            }
-        } else {
-            iteratee = cb(iteratee, context);
-            _.each(obj, function(value, index, list) {
-                computed = iteratee(value, index, list);
-                if (computed < lastComputed || computed === Infinity && result === Infinity) {
-                    result = value;
-                    lastComputed = computed;
-                }
-            });
-        }
-        return result;
-    };
-
-    // Shuffle a collection, using the modern version of the
-    // [Fisher-Yates shuffle](http://en.wikipedia.org/wiki/Fisher鈥揧ates_shuffle).
-    _.shuffle = function(obj) {
-        var set = isArrayLike(obj) ? obj : _.values(obj);
-        var length = set.length;
-        var shuffled = Array(length);
-        for (var index = 0, rand; index < length; index++) {
-            rand = _.random(0, index);
-            if (rand !== index) shuffled[index] = shuffled[rand];
-            shuffled[rand] = set[index];
-        }
-        return shuffled;
-    };
-
-    // Sample **n** random values from a collection.
-    // If **n** is not specified, returns a single random element.
-    // The internal `guard` argument allows it to work with `map`.
-    _.sample = function(obj, n, guard) {
-        if (n == null || guard) {
-            if (!isArrayLike(obj)) obj = _.values(obj);
-            return obj[_.random(obj.length - 1)];
-        }
-        return _.shuffle(obj).slice(0, Math.max(0, n));
-    };
-
-    // Sort the object's values by a criterion produced by an iteratee.
-    _.sortBy = function(obj, iteratee, context) {
-        iteratee = cb(iteratee, context);
-        return _.pluck(_.map(obj, function(value, index, list) {
-            return {
-                value: value,
-                index: index,
-                criteria: iteratee(value, index, list)
-            };
-        }).sort(function(left, right) {
-            var a = left.criteria;
-            var b = right.criteria;
-            if (a !== b) {
-                if (a > b || a === void 0) return 1;
-                if (a < b || b === void 0) return -1;
-            }
-            return left.index - right.index;
-        }), 'value');
-    };
-
-    // An internal function used for aggregate "group by" operations.
-    var group = function(behavior) {
-        return function(obj, iteratee, context) {
-            var result = {};
-            iteratee = cb(iteratee, context);
-            _.each(obj, function(value, index) {
-                var key = iteratee(value, index, obj);
-                behavior(result, value, key);
-            });
-            return result;
-        };
-    };
-
-    // Groups the object's values by a criterion. Pass either a string attribute
-    // to group by, or a function that returns the criterion.
-    _.groupBy = group(function(result, value, key) {
-        if (_.has(result, key)) result[key].push(value); else result[key] = [value];
-    });
-
-    // Indexes the object's values by a criterion, similar to `groupBy`, but for
-    // when you know that your index values will be unique.
-    _.indexBy = group(function(result, value, key) {
-        result[key] = value;
-    });
-
-    // Counts instances of an object that group by a certain criterion. Pass
-    // either a string attribute to count by, or a function that returns the
-    // criterion.
-    _.countBy = group(function(result, value, key) {
-        if (_.has(result, key)) result[key]++; else result[key] = 1;
-    });
-
-    // Safely create a real, live array from anything iterable.
-    _.toArray = function(obj) {
-        if (!obj) return [];
-        if (_.isArray(obj)) return slice.call(obj);
-        if (isArrayLike(obj)) return _.map(obj, _.identity);
-        return _.values(obj);
-    };
-
-    // Return the number of elements in an object.
-    _.size = function(obj) {
-        if (obj == null) return 0;
-        return isArrayLike(obj) ? obj.length : _.keys(obj).length;
-    };
-
-    // Split a collection into two arrays: one whose elements all satisfy the given
-    // predicate, and one whose elements all do not satisfy the predicate.
-    _.partition = function(obj, predicate, context) {
-        predicate = cb(predicate, context);
-        var pass = [], fail = [];
-        _.each(obj, function(value, key, obj) {
-            (predicate(value, key, obj) ? pass : fail).push(value);
-        });
-        return [pass, fail];
-    };
-
-    // Array Functions
-    // ---------------
-
-    // Get the first element of an array. Passing **n** will return the first N
-    // values in the array. Aliased as `head` and `take`. The **guard** check
-    // allows it to work with `_.map`.
-    _.first = _.head = _.take = function(array, n, guard) {
-        if (array == null) return void 0;
-        if (n == null || guard) return array[0];
-        return _.initial(array, array.length - n);
-    };
-
-    // Returns everything but the last entry of the array. Especially useful on
-    // the arguments object. Passing **n** will return all the values in
-    // the array, excluding the last N.
-    _.initial = function(array, n, guard) {
-        return slice.call(array, 0, Math.max(0, array.length - (n == null || guard ? 1 : n)));
-    };
-
-    // Get the last element of an array. Passing **n** will return the last N
-    // values in the array.
-    _.last = function(array, n, guard) {
-        if (array == null) return void 0;
-        if (n == null || guard) return array[array.length - 1];
-        return _.rest(array, Math.max(0, array.length - n));
-    };
-
-    // Returns everything but the first entry of the array. Aliased as `tail` and `drop`.
-    // Especially useful on the arguments object. Passing an **n** will return
-    // the rest N values in the array.
-    _.rest = _.tail = _.drop = function(array, n, guard) {
-        return slice.call(array, n == null || guard ? 1 : n);
-    };
-
-    // Trim out all falsy values from an array.
-    _.compact = function(array) {
-        return _.filter(array, _.identity);
-    };
-
-    // Internal implementation of a recursive `flatten` function.
-    var flatten = function(input, shallow, strict, startIndex) {
-        var output = [], idx = 0;
-        for (var i = startIndex || 0, length = input && input.length; i < length; i++) {
-            var value = input[i];
-            if (isArrayLike(value) && (_.isArray(value) || _.isArguments(value))) {
-                //flatten current level of array or arguments object
-                if (!shallow) value = flatten(value, shallow, strict);
-                var j = 0, len = value.length;
-                output.length += len;
-                while (j < len) {
-                    output[idx++] = value[j++];
-                }
-            } else if (!strict) {
-                output[idx++] = value;
-            }
-        }
-        return output;
-    };
-
-    // Flatten out an array, either recursively (by default), or just one level.
-    _.flatten = function(array, shallow) {
-        return flatten(array, shallow, false);
-    };
-
-    // Return a version of the array that does not contain the specified value(s).
-    _.without = function(array) {
-        return _.difference(array, slice.call(arguments, 1));
-    };
-
-    // Produce a duplicate-free version of the array. If the array has already
-    // been sorted, you have the option of using a faster algorithm.
-    // Aliased as `unique`.
-    _.uniq = _.unique = function(array, isSorted, iteratee, context) {
-        if (array == null) return [];
-        if (!_.isBoolean(isSorted)) {
-            context = iteratee;
-            iteratee = isSorted;
-            isSorted = false;
-        }
-        if (iteratee != null) iteratee = cb(iteratee, context);
-        var result = [];
-        var seen = [];
-        for (var i = 0, length = array.length; i < length; i++) {
-            var value = array[i],
-                computed = iteratee ? iteratee(value, i, array) : value;
-            if (isSorted) {
-                if (!i || seen !== computed) result.push(value);
-                seen = computed;
-            } else if (iteratee) {
-                if (!_.contains(seen, computed)) {
-                    seen.push(computed);
-                    result.push(value);
-                }
-            } else if (!_.contains(result, value)) {
-                result.push(value);
-            }
-        }
-        return result;
-    };
-
-    // Produce an array that contains the union: each distinct element from all of
-    // the passed-in arrays.
-    _.union = function() {
-        return _.uniq(flatten(arguments, true, true));
-    };
-
-    // Produce an array that contains every item shared between all the
-    // passed-in arrays.
-    _.intersection = function(array) {
-        if (array == null) return [];
-        var result = [];
-        var argsLength = arguments.length;
-        for (var i = 0, length = array.length; i < length; i++) {
-            var item = array[i];
-            if (_.contains(result, item)) continue;
-            for (var j = 1; j < argsLength; j++) {
-                if (!_.contains(arguments[j], item)) break;
-            }
-            if (j === argsLength) result.push(item);
-        }
-        return result;
-    };
-
-    // Take the difference between one array and a number of other arrays.
-    // Only the elements present in just the first array will remain.
-    _.difference = function(array) {
-        var rest = flatten(arguments, true, true, 1);
-        return _.filter(array, function(value){
-            return !_.contains(rest, value);
-        });
-    };
-
-    // Zip together multiple lists into a single array -- elements that share
-    // an index go together.
-    _.zip = function() {
-        return _.unzip(arguments);
-    };
-
-    // Complement of _.zip. Unzip accepts an array of arrays and groups
-    // each array's elements on shared indices
-    _.unzip = function(array) {
-        var length = array && _.max(array, 'length').length || 0;
-        var result = Array(length);
-
-        for (var index = 0; index < length; index++) {
-            result[index] = _.pluck(array, index);
-        }
-        return result;
-    };
-
-    // Converts lists into objects. Pass either a single array of `[key, value]`
-    // pairs, or two parallel arrays of the same length -- one of keys, and one of
-    // the corresponding values.
-    _.object = function(list, values) {
-        var result = {};
-        for (var i = 0, length = list && list.length; i < length; i++) {
-            if (values) {
-                result[list[i]] = values[i];
-            } else {
-                result[list[i][0]] = list[i][1];
-            }
-        }
-        return result;
-    };
-
-    // Return the position of the first occurrence of an item in an array,
-    // or -1 if the item is not included in the array.
-    // If the array is large and already in sort order, pass `true`
-    // for **isSorted** to use binary search.
-    _.indexOf = function(array, item, isSorted) {
-        var i = 0, length = array && array.length;
-        if (typeof isSorted == 'number') {
-            i = isSorted < 0 ? Math.max(0, length + isSorted) : isSorted;
-        } else if (isSorted && length) {
-            i = _.sortedIndex(array, item);
-            return array[i] === item ? i : -1;
-        }
-        if (item !== item) {
-            return _.findIndex(slice.call(array, i), _.isNaN);
-        }
-        for (; i < length; i++) if (array[i] === item) return i;
-        return -1;
-    };
-
-    _.lastIndexOf = function(array, item, from) {
-        var idx = array ? array.length : 0;
-        if (typeof from == 'number') {
-            idx = from < 0 ? idx + from + 1 : Math.min(idx, from + 1);
-        }
-        if (item !== item) {
-            return _.findLastIndex(slice.call(array, 0, idx), _.isNaN);
-        }
-        while (--idx >= 0) if (array[idx] === item) return idx;
-        return -1;
-    };
-
-    // Generator function to create the findIndex and findLastIndex functions
-    function createIndexFinder(dir) {
-        return function(array, predicate, context) {
-            predicate = cb(predicate, context);
-            var length = array != null && array.length;
-            var index = dir > 0 ? 0 : length - 1;
-            for (; index >= 0 && index < length; index += dir) {
-                if (predicate(array[index], index, array)) return index;
-            }
-            return -1;
-        };
-    }
-
-    // Returns the first index on an array-like that passes a predicate test
-    _.findIndex = createIndexFinder(1);
-
-    _.findLastIndex = createIndexFinder(-1);
-
-    // Use a comparator function to figure out the smallest index at which
-    // an object should be inserted so as to maintain order. Uses binary search.
-    _.sortedIndex = function(array, obj, iteratee, context) {
-        iteratee = cb(iteratee, context, 1);
-        var value = iteratee(obj);
-        var low = 0, high = array.length;
-        while (low < high) {
-            var mid = Math.floor((low + high) / 2);
-            if (iteratee(array[mid]) < value) low = mid + 1; else high = mid;
-        }
-        return low;
-    };
-
-    // Generate an integer Array containing an arithmetic progression. A port of
-    // the native Python `range()` function. See
-    // [the Python documentation](http://docs.python.org/library/functions.html#range).
-    _.range = function(start, stop, step) {
-        if (arguments.length <= 1) {
-            stop = start || 0;
-            start = 0;
-        }
-        step = step || 1;
-
-        var length = Math.max(Math.ceil((stop - start) / step), 0);
-        var range = Array(length);
-
-        for (var idx = 0; idx < length; idx++, start += step) {
-            range[idx] = start;
-        }
-
-        return range;
-    };
-
-    // Function (ahem) Functions
-    // ------------------
-
-    // Determines whether to execute a function as a constructor
-    // or a normal function with the provided arguments
-    var executeBound = function(sourceFunc, boundFunc, context, callingContext, args) {
-        if (!(callingContext instanceof boundFunc)) return sourceFunc.apply(context, args);
-        var self = baseCreate(sourceFunc.prototype);
-        var result = sourceFunc.apply(self, args);
-        if (_.isObject(result)) return result;
-        return self;
-    };
-
-    // Create a function bound to a given object (assigning `this`, and arguments,
-    // optionally). Delegates to **ECMAScript 5**'s native `Function.bind` if
-    // available.
-    _.bind = function(func, context) {
-        if (nativeBind && func.bind === nativeBind) return nativeBind.apply(func, slice.call(arguments, 1));
-        if (!_.isFunction(func)) throw new TypeError('Bind must be called on a function');
-        var args = slice.call(arguments, 2);
-        var bound = function() {
-            return executeBound(func, bound, context, this, args.concat(slice.call(arguments)));
-        };
-        return bound;
-    };
-
-    // Partially apply a function by creating a version that has had some of its
-    // arguments pre-filled, without changing its dynamic `this` context. _ acts
-    // as a placeholder, allowing any combination of arguments to be pre-filled.
-    _.partial = function(func) {
-        var boundArgs = slice.call(arguments, 1);
-        var bound = function() {
-            var position = 0, length = boundArgs.length;
-            var args = Array(length);
-            for (var i = 0; i < length; i++) {
-                args[i] = boundArgs[i] === _ ? arguments[position++] : boundArgs[i];
-            }
-            while (position < arguments.length) args.push(arguments[position++]);
-            return executeBound(func, bound, this, this, args);
-        };
-        return bound;
-    };
-
-    // Bind a number of an object's methods to that object. Remaining arguments
-    // are the method names to be bound. Useful for ensuring that all callbacks
-    // defined on an object belong to it.
-    _.bindAll = function(obj) {
-        var i, length = arguments.length, key;
-        if (length <= 1) throw new Error('bindAll must be passed function names');
-        for (i = 1; i < length; i++) {
-            key = arguments[i];
-            obj[key] = _.bind(obj[key], obj);
-        }
-        return obj;
-    };
-
-    // Memoize an expensive function by storing its results.
-    _.memoize = function(func, hasher) {
-        var memoize = function(key) {
-            var cache = memoize.cache;
-            var address = '' + (hasher ? hasher.apply(this, arguments) : key);
-            if (!_.has(cache, address)) cache[address] = func.apply(this, arguments);
-            return cache[address];
-        };
-        memoize.cache = {};
-        return memoize;
-    };
-
-    // Delays a function for the given number of milliseconds, and then calls
-    // it with the arguments supplied.
-    _.delay = function(func, wait) {
-        var args = slice.call(arguments, 2);
-        return setTimeout(function(){
-            return func.apply(null, args);
-        }, wait);
-    };
-
-    // Defers a function, scheduling it to run after the current call stack has
-    // cleared.
-    _.defer = _.partial(_.delay, _, 1);
-
-    // Returns a function, that, when invoked, will only be triggered at most once
-    // during a given window of time. Normally, the throttled function will run
-    // as much as it can, without ever going more than once per `wait` duration;
-    // but if you'd like to disable the execution on the leading edge, pass
-    // `{leading: false}`. To disable execution on the trailing edge, ditto.
-    _.throttle = function(func, wait, options) {
-        var context, args, result;
-        var timeout = null;
-        var previous = 0;
-        if (!options) options = {};
-        var later = function() {
-            previous = options.leading === false ? 0 : _.now();
-            timeout = null;
-            result = func.apply(context, args);
-            if (!timeout) context = args = null;
-        };
-        return function() {
-            var now = _.now();
-            if (!previous && options.leading === false) previous = now;
-            var remaining = wait - (now - previous);
-            context = this;
-            args = arguments;
-            if (remaining <= 0 || remaining > wait) {
-                if (timeout) {
-                    clearTimeout(timeout);
-                    timeout = null;
-                }
-                previous = now;
-                result = func.apply(context, args);
-                if (!timeout) context = args = null;
-            } else if (!timeout && options.trailing !== false) {
-                timeout = setTimeout(later, remaining);
-            }
-            return result;
-        };
-    };
-
-    // Returns a function, that, as long as it continues to be invoked, will not
-    // be triggered. The function will be called after it stops being called for
-    // N milliseconds. If `immediate` is passed, trigger the function on the
-    // leading edge, instead of the trailing.
-    _.debounce = function(func, wait, immediate) {
-        var timeout, args, context, timestamp, result;
-
-        var later = function() {
-            var last = _.now() - timestamp;
-
-            if (last < wait && last >= 0) {
-                timeout = setTimeout(later, wait - last);
-            } else {
-                timeout = null;
-                if (!immediate) {
-                    result = func.apply(context, args);
-                    if (!timeout) context = args = null;
-                }
-            }
-        };
-
-        return function() {
-            context = this;
-            args = arguments;
-            timestamp = _.now();
-            var callNow = immediate && !timeout;
-            if (!timeout) timeout = setTimeout(later, wait);
-            if (callNow) {
-                result = func.apply(context, args);
-                context = args = null;
-            }
-
-            return result;
-        };
-    };
-
-    // Returns the first function passed as an argument to the second,
-    // allowing you to adjust arguments, run code before and after, and
-    // conditionally execute the original function.
-    _.wrap = function(func, wrapper) {
-        return _.partial(wrapper, func);
-    };
-
-    // Returns a negated version of the passed-in predicate.
-    _.negate = function(predicate) {
-        return function() {
-            return !predicate.apply(this, arguments);
-        };
-    };
-
-    // Returns a function that is the composition of a list of functions, each
-    // consuming the return value of the function that follows.
-    _.compose = function() {
-        var args = arguments;
-        var start = args.length - 1;
-        return function() {
-            var i = start;
-            var result = args[start].apply(this, arguments);
-            while (i--) result = args[i].call(this, result);
-            return result;
-        };
-    };
-
-    // Returns a function that will only be executed on and after the Nth call.
-    _.after = function(times, func) {
-        return function() {
-            if (--times < 1) {
-                return func.apply(this, arguments);
-            }
-        };
-    };
-
-    // Returns a function that will only be executed up to (but not including) the Nth call.
-    _.before = function(times, func) {
-        var memo;
-        return function() {
-            if (--times > 0) {
-                memo = func.apply(this, arguments);
-            }
-            if (times <= 1) func = null;
-            return memo;
-        };
-    };
-
-    // Returns a function that will be executed at most one time, no matter how
-    // often you call it. Useful for lazy initialization.
-    _.once = _.partial(_.before, 2);
-
-    // Object Functions
-    // ----------------
-
-    // Keys in IE < 9 that won't be iterated by `for key in ...` and thus missed.
-    var hasEnumBug = !{toString: null}.propertyIsEnumerable('toString');
-    var nonEnumerableProps = ['valueOf', 'isPrototypeOf', 'toString',
-        'propertyIsEnumerable', 'hasOwnProperty', 'toLocaleString'];
-
-    function collectNonEnumProps(obj, keys) {
-        var nonEnumIdx = nonEnumerableProps.length;
-        var constructor = obj.constructor;
-        var proto = (_.isFunction(constructor) && constructor.prototype) || ObjProto;
-
-        // Constructor is a special case.
-        var prop = 'constructor';
-        if (_.has(obj, prop) && !_.contains(keys, prop)) keys.push(prop);
-
-        while (nonEnumIdx--) {
-            prop = nonEnumerableProps[nonEnumIdx];
-            if (prop in obj && obj[prop] !== proto[prop] && !_.contains(keys, prop)) {
-                keys.push(prop);
-            }
-        }
-    }
-
-    // Retrieve the names of an object's own properties.
-    // Delegates to **ECMAScript 5**'s native `Object.keys`
-    _.keys = function(obj) {
-        if (!_.isObject(obj)) return [];
-        if (nativeKeys) return nativeKeys(obj);
-        var keys = [];
-        for (var key in obj) if (_.has(obj, key)) keys.push(key);
-        // Ahem, IE < 9.
-        if (hasEnumBug) collectNonEnumProps(obj, keys);
-        return keys;
-    };
-
-    // Retrieve all the property names of an object.
-    _.allKeys = function(obj) {
-        if (!_.isObject(obj)) return [];
-        var keys = [];
-        for (var key in obj) keys.push(key);
-        // Ahem, IE < 9.
-        if (hasEnumBug) collectNonEnumProps(obj, keys);
-        return keys;
-    };
-
-    // Retrieve the values of an object's properties.
-    _.values = function(obj) {
-        var keys = _.keys(obj);
-        var length = keys.length;
-        var values = Array(length);
-        for (var i = 0; i < length; i++) {
-            values[i] = obj[keys[i]];
-        }
-        return values;
-    };
-
-    // Returns the results of applying the iteratee to each element of the object
-    // In contrast to _.map it returns an object
-    _.mapObject = function(obj, iteratee, context) {
-        iteratee = cb(iteratee, context);
-        var keys =  _.keys(obj),
-            length = keys.length,
-            results = {},
-            currentKey;
-        for (var index = 0; index < length; index++) {
-            currentKey = keys[index];
-            results[currentKey] = iteratee(obj[currentKey], currentKey, obj);
-        }
-        return results;
-    };
-
-    // Convert an object into a list of `[key, value]` pairs.
-    _.pairs = function(obj) {
-        var keys = _.keys(obj);
-        var length = keys.length;
-        var pairs = Array(length);
-        for (var i = 0; i < length; i++) {
-            pairs[i] = [keys[i], obj[keys[i]]];
-        }
-        return pairs;
-    };
-
-    // Invert the keys and values of an object. The values must be serializable.
-    _.invert = function(obj) {
-        var result = {};
-        var keys = _.keys(obj);
-        for (var i = 0, length = keys.length; i < length; i++) {
-            result[obj[keys[i]]] = keys[i];
-        }
-        return result;
-    };
-
-    // Return a sorted list of the function names available on the object.
-    // Aliased as `methods`
-    _.functions = _.methods = function(obj) {
-        var names = [];
-        for (var key in obj) {
-            if (_.isFunction(obj[key])) names.push(key);
-        }
-        return names.sort();
-    };
-
-    // Extend a given object with all the properties in passed-in object(s).
-    _.extend = createAssigner(_.allKeys);
-
-    // Assigns a given object with all the own properties in the passed-in object(s)
-    // (https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object/assign)
-    _.extendOwn = _.assign = createAssigner(_.keys);
-
-    // Returns the first key on an object that passes a predicate test
-    _.findKey = function(obj, predicate, context) {
-        predicate = cb(predicate, context);
-        var keys = _.keys(obj), key;
-        for (var i = 0, length = keys.length; i < length; i++) {
-            key = keys[i];
-            if (predicate(obj[key], key, obj)) return key;
-        }
-    };
-
-    // Return a copy of the object only containing the whitelisted properties.
-    _.pick = function(object, oiteratee, context) {
-        var result = {}, obj = object, iteratee, keys;
-        if (obj == null) return result;
-        if (_.isFunction(oiteratee)) {
-            keys = _.allKeys(obj);
-            iteratee = optimizeCb(oiteratee, context);
-        } else {
-            keys = flatten(arguments, false, false, 1);
-            iteratee = function(value, key, obj) { return key in obj; };
-            obj = Object(obj);
-        }
-        for (var i = 0, length = keys.length; i < length; i++) {
-            var key = keys[i];
-            var value = obj[key];
-            if (iteratee(value, key, obj)) result[key] = value;
-        }
-        return result;
-    };
-
-    // Return a copy of the object without the blacklisted properties.
-    _.omit = function(obj, iteratee, context) {
-        if (_.isFunction(iteratee)) {
-            iteratee = _.negate(iteratee);
-        } else {
-            var keys = _.map(flatten(arguments, false, false, 1), String);
-            iteratee = function(value, key) {
-                return !_.contains(keys, key);
-            };
-        }
-        return _.pick(obj, iteratee, context);
-    };
-
-    // Fill in a given object with default properties.
-    _.defaults = createAssigner(_.allKeys, true);
-
-    // Creates an object that inherits from the given prototype object.
-    // If additional properties are provided then they will be added to the
-    // created object.
-    _.create = function(prototype, props) {
-        var result = baseCreate(prototype);
-        if (props) _.extendOwn(result, props);
-        return result;
-    };
-
-    // Create a (shallow-cloned) duplicate of an object.
-    _.clone = function(obj) {
-        if (!_.isObject(obj)) return obj;
-        return _.isArray(obj) ? obj.slice() : _.extend({}, obj);
-    };
-
-    // Invokes interceptor with the obj, and then returns obj.
-    // The primary purpose of this method is to "tap into" a method chain, in
-    // order to perform operations on intermediate results within the chain.
-    _.tap = function(obj, interceptor) {
-        interceptor(obj);
-        return obj;
-    };
-
-    // Returns whether an object has a given set of `key:value` pairs.
-    _.isMatch = function(object, attrs) {
-        var keys = _.keys(attrs), length = keys.length;
-        if (object == null) return !length;
-        var obj = Object(object);
-        for (var i = 0; i < length; i++) {
-            var key = keys[i];
-            if (attrs[key] !== obj[key] || !(key in obj)) return false;
-        }
-        return true;
-    };
-
-
-    // Internal recursive comparison function for `isEqual`.
-    var eq = function(a, b, aStack, bStack) {
-        // Identical objects are equal. `0 === -0`, but they aren't identical.
-        // See the [Harmony `egal` proposal](http://wiki.ecmascript.org/doku.php?id=harmony:egal).
-        if (a === b) return a !== 0 || 1 / a === 1 / b;
-        // A strict comparison is necessary because `null == undefined`.
-        if (a == null || b == null) return a === b;
-        // Unwrap any wrapped objects.
-        if (a instanceof _) a = a._wrapped;
-        if (b instanceof _) b = b._wrapped;
-        // Compare `[[Class]]` names.
-        var className = toString.call(a);
-        if (className !== toString.call(b)) return false;
-        switch (className) {
-            // Strings, numbers, regular expressions, dates, and booleans are compared by value.
-            case '[object RegExp]':
-            // RegExps are coerced to strings for comparison (Note: '' + /a/i === '/a/i')
-            case '[object String]':
-                // Primitives and their corresponding object wrappers are equivalent; thus, `"5"` is
-                // equivalent to `new String("5")`.
-                return '' + a === '' + b;
-            case '[object Number]':
-                // `NaN`s are equivalent, but non-reflexive.
-                // Object(NaN) is equivalent to NaN
-                if (+a !== +a) return +b !== +b;
-                // An `egal` comparison is performed for other numeric values.
-                return +a === 0 ? 1 / +a === 1 / b : +a === +b;
-            case '[object Date]':
-            case '[object Boolean]':
-                // Coerce dates and booleans to numeric primitive values. Dates are compared by their
-                // millisecond representations. Note that invalid dates with millisecond representations
-                // of `NaN` are not equivalent.
-                return +a === +b;
-        }
-
-        var areArrays = className === '[object Array]';
-        if (!areArrays) {
-            if (typeof a != 'object' || typeof b != 'object') return false;
-
-            // Objects with different constructors are not equivalent, but `Object`s or `Array`s
-            // from different frames are.
-            var aCtor = a.constructor, bCtor = b.constructor;
-            if (aCtor !== bCtor && !(_.isFunction(aCtor) && aCtor instanceof aCtor &&
-                _.isFunction(bCtor) && bCtor instanceof bCtor)
-                && ('constructor' in a && 'constructor' in b)) {
-                return false;
-            }
-        }
-        // Assume equality for cyclic structures. The algorithm for detecting cyclic
-        // structures is adapted from ES 5.1 section 15.12.3, abstract operation `JO`.
-
-        // Initializing stack of traversed objects.
-        // It's done here since we only need them for objects and arrays comparison.
-        aStack = aStack || [];
-        bStack = bStack || [];
-        var length = aStack.length;
-        while (length--) {
-            // Linear search. Performance is inversely proportional to the number of
-            // unique nested structures.
-            if (aStack[length] === a) return bStack[length] === b;
-        }
-
-        // Add the first object to the stack of traversed objects.
-        aStack.push(a);
-        bStack.push(b);
-
-        // Recursively compare objects and arrays.
-        if (areArrays) {
-            // Compare array lengths to determine if a deep comparison is necessary.
-            length = a.length;
-            if (length !== b.length) return false;
-            // Deep compare the contents, ignoring non-numeric properties.
-            while (length--) {
-                if (!eq(a[length], b[length], aStack, bStack)) return false;
-            }
-        } else {
-            // Deep compare objects.
-            var keys = _.keys(a), key;
-            length = keys.length;
-            // Ensure that both objects contain the same number of properties before comparing deep equality.
-            if (_.keys(b).length !== length) return false;
-            while (length--) {
-                // Deep compare each member
-                key = keys[length];
-                if (!(_.has(b, key) && eq(a[key], b[key], aStack, bStack))) return false;
-            }
-        }
-        // Remove the first object from the stack of traversed objects.
-        aStack.pop();
-        bStack.pop();
-        return true;
-    };
-
-    // Perform a deep comparison to check if two objects are equal.
-    _.isEqual = function(a, b) {
-        return eq(a, b);
-    };
-
-    // Is a given array, string, or object empty?
-    // An "empty" object has no enumerable own-properties.
-    _.isEmpty = function(obj) {
-        if (obj == null) return true;
-        if (isArrayLike(obj) && (_.isArray(obj) || _.isString(obj) || _.isArguments(obj))) return obj.length === 0;
-        return _.keys(obj).length === 0;
-    };
-
-    // Is a given value a DOM element?
-    _.isElement = function(obj) {
-        return !!(obj && obj.nodeType === 1);
-    };
-
-    // Is a given value an array?
-    // Delegates to ECMA5's native Array.isArray
-    _.isArray = nativeIsArray || function(obj) {
-        return toString.call(obj) === '[object Array]';
-    };
-
-    // Is a given variable an object?
-    _.isObject = function(obj) {
-        var type = typeof obj;
-        return type === 'function' || type === 'object' && !!obj;
-    };
-
-    // Add some isType methods: isArguments, isFunction, isString, isNumber, isDate, isRegExp, isError.
-    _.each(['Arguments', 'Function', 'String', 'Number', 'Date', 'RegExp', 'Error'], function(name) {
-        _['is' + name] = function(obj) {
-            return toString.call(obj) === '[object ' + name + ']';
-        };
-    });
-
-    // Define a fallback version of the method in browsers (ahem, IE < 9), where
-    // there isn't any inspectable "Arguments" type.
-    if (!_.isArguments(arguments)) {
-        _.isArguments = function(obj) {
-            return _.has(obj, 'callee');
-        };
-    }
-
-    // Optimize `isFunction` if appropriate. Work around some typeof bugs in old v8,
-    // IE 11 (#1621), and in Safari 8 (#1929).
-    if (typeof /./ != 'function' && typeof Int8Array != 'object') {
-        _.isFunction = function(obj) {
-            return typeof obj == 'function' || false;
-        };
-    }
-
-    // Is a given object a finite number?
-    _.isFinite = function(obj) {
-        return isFinite(obj) && !isNaN(parseFloat(obj));
-    };
-
-    // Is the given value `NaN`? (NaN is the only number which does not equal itself).
-    _.isNaN = function(obj) {
-        return _.isNumber(obj) && obj !== +obj;
-    };
-
-    // Is a given value a boolean?
-    _.isBoolean = function(obj) {
-        return obj === true || obj === false || toString.call(obj) === '[object Boolean]';
-    };
-
-    // Is a given value equal to null?
-    _.isNull = function(obj) {
-        return obj === null;
-    };
-
-    // Is a given variable undefined?
-    _.isUndefined = function(obj) {
-        return obj === void 0;
-    };
-
-    // Shortcut function for checking if an object has a given property directly
-    // on itself (in other words, not on a prototype).
-    _.has = function(obj, key) {
-        return obj != null && hasOwnProperty.call(obj, key);
-    };
-
-    // Utility Functions
-    // -----------------
-
-    // Run Underscore.js in *noConflict* mode, returning the `_` variable to its
-    // previous owner. Returns a reference to the Underscore object.
-    _.noConflict = function() {
-        root._ = previousUnderscore;
-        return this;
-    };
-
-    // Keep the identity function around for default iteratees.
-    _.identity = function(value) {
-        return value;
-    };
-
-    // Predicate-generating functions. Often useful outside of Underscore.
-    _.constant = function(value) {
-        return function() {
-            return value;
-        };
-    };
-
-    _.noop = function(){};
-
-    _.property = function(key) {
-        return function(obj) {
-            return obj == null ? void 0 : obj[key];
-        };
-    };
-
-    // Generates a function for a given object that returns a given property.
-    _.propertyOf = function(obj) {
-        return obj == null ? function(){} : function(key) {
-            return obj[key];
-        };
-    };
-
-    // Returns a predicate for checking whether an object has a given set of
-    // `key:value` pairs.
-    _.matcher = _.matches = function(attrs) {
-        attrs = _.extendOwn({}, attrs);
-        return function(obj) {
-            return _.isMatch(obj, attrs);
-        };
-    };
-
-    // Run a function **n** times.
-    _.times = function(n, iteratee, context) {
-        var accum = Array(Math.max(0, n));
-        iteratee = optimizeCb(iteratee, context, 1);
-        for (var i = 0; i < n; i++) accum[i] = iteratee(i);
-        return accum;
-    };
-
-    // Return a random integer between min and max (inclusive).
-    _.random = function(min, max) {
-        if (max == null) {
-            max = min;
-            min = 0;
-        }
-        return min + Math.floor(Math.random() * (max - min + 1));
-    };
-
-    // A (possibly faster) way to get the current timestamp as an integer.
-    _.now = Date.now || function() {
-        return new Date().getTime();
-    };
-
-    // List of HTML entities for escaping.
-    var escapeMap = {
-        '&': '&amp;',
-        '<': '&lt;',
-        '>': '&gt;',
-        '"': '&quot;',
-        "'": '&#x27;',
-        '`': '&#x60;'
-    };
-    var unescapeMap = _.invert(escapeMap);
-
-    // Functions for escaping and unescaping strings to/from HTML interpolation.
-    var createEscaper = function(map) {
-        var escaper = function(match) {
-            return map[match];
-        };
-        // Regexes for identifying a key that needs to be escaped
-        var source = '(?:' + _.keys(map).join('|') + ')';
-        var testRegexp = RegExp(source);
-        var replaceRegexp = RegExp(source, 'g');
-        return function(string) {
-            string = string == null ? '' : '' + string;
-            return testRegexp.test(string) ? string.replace(replaceRegexp, escaper) : string;
-        };
-    };
-    _.escape = createEscaper(escapeMap);
-    _.unescape = createEscaper(unescapeMap);
-
-    // If the value of the named `property` is a function then invoke it with the
-    // `object` as context; otherwise, return it.
-    _.result = function(object, property, fallback) {
-        var value = object == null ? void 0 : object[property];
-        if (value === void 0) {
-            value = fallback;
-        }
-        return _.isFunction(value) ? value.call(object) : value;
-    };
-
-    // Generate a unique integer id (unique within the entire client session).
-    // Useful for temporary DOM ids.
-    var idCounter = 0;
-    _.uniqueId = function(prefix) {
-        var id = ++idCounter + '';
-        return prefix ? prefix + id : id;
-    };
-
-    // By default, Underscore uses ERB-style template delimiters, change the
-    // following template settings to use alternative delimiters.
-    _.templateSettings = {
-        evaluate    : /<%([\s\S]+?)%>/g,
-        interpolate : /<%=([\s\S]+?)%>/g,
-        escape      : /<%-([\s\S]+?)%>/g
-    };
-
-    // When customizing `templateSettings`, if you don't want to define an
-    // interpolation, evaluation or escaping regex, we need one that is
-    // guaranteed not to match.
-    var noMatch = /(.)^/;
-
-    // Certain characters need to be escaped so that they can be put into a
-    // string literal.
-    var escapes = {
-        "'":      "'",
-        '\\':     '\\',
-        '\r':     'r',
-        '\n':     'n',
-        '\u2028': 'u2028',
-        '\u2029': 'u2029'
-    };
-
-    var escaper = /\\|'|\r|\n|\u2028|\u2029/g;
-
-    var escapeChar = function(match) {
-        return '\\' + escapes[match];
-    };
-
-    // JavaScript micro-templating, similar to John Resig's implementation.
-    // Underscore templating handles arbitrary delimiters, preserves whitespace,
-    // and correctly escapes quotes within interpolated code.
-    // NB: `oldSettings` only exists for backwards compatibility.
-    _.template = function(text, settings, oldSettings) {
-        if (!settings && oldSettings) settings = oldSettings;
-        settings = _.defaults({}, settings, _.templateSettings);
-
-        // Combine delimiters into one regular expression via alternation.
-        var matcher = RegExp([
-            (settings.escape || noMatch).source,
-            (settings.interpolate || noMatch).source,
-            (settings.evaluate || noMatch).source
-        ].join('|') + '|$', 'g');
-
-        // Compile the template source, escaping string literals appropriately.
-        var index = 0;
-        var source = "__p+='";
-        text.replace(matcher, function(match, escape, interpolate, evaluate, offset) {
-            source += text.slice(index, offset).replace(escaper, escapeChar);
-            index = offset + match.length;
-
-            if (escape) {
-                source += "'+\n((__t=(" + escape + "))==null?'':_.escape(__t))+\n'";
-            } else if (interpolate) {
-                source += "'+\n((__t=(" + interpolate + "))==null?'':__t)+\n'";
-            } else if (evaluate) {
-                source += "';\n" + evaluate + "\n__p+='";
-            }
-
-            // Adobe VMs need the match returned to produce the correct offest.
-            return match;
-        });
-        source += "';\n";
-
-        // If a variable is not specified, place data values in local scope.
-        if (!settings.variable) source = 'with(obj||{}){\n' + source + '}\n';
-
-        source = "var __t,__p='',__j=Array.prototype.join," +
-            "print=function(){__p+=__j.call(arguments,'');};\n" +
-            source + 'return __p;\n';
-
-        try {
-            var render = new Function(settings.variable || 'obj', '_', source);
-        } catch (e) {
-            e.source = source;
-            throw e;
-        }
-
-        var template = function(data) {
-            return render.call(this, data, _);
-        };
-
-        // Provide the compiled source as a convenience for precompilation.
-        var argument = settings.variable || 'obj';
-        template.source = 'function(' + argument + '){\n' + source + '}';
-
-        return template;
-    };
-
-    // Add a "chain" function. Start chaining a wrapped Underscore object.
-    _.chain = function(obj) {
-        var instance = _(obj);
-        instance._chain = true;
-        return instance;
-    };
-
-    // OOP
-    // ---------------
-    // If Underscore is called as a function, it returns a wrapped object that
-    // can be used OO-style. This wrapper holds altered versions of all the
-    // underscore functions. Wrapped objects may be chained.
-
-    // Helper function to continue chaining intermediate results.
-    var result = function(instance, obj) {
-        return instance._chain ? _(obj).chain() : obj;
-    };
-
-    // Add your own custom functions to the Underscore object.
-    _.mixin = function(obj) {
-        _.each(_.functions(obj), function(name) {
-            var func = _[name] = obj[name];
-            _.prototype[name] = function() {
-                var args = [this._wrapped];
-                push.apply(args, arguments);
-                return result(this, func.apply(_, args));
-            };
-        });
-    };
-
-    // Add all of the Underscore functions to the wrapper object.
-    _.mixin(_);
-
-    // Add all mutator Array functions to the wrapper.
-    _.each(['pop', 'push', 'reverse', 'shift', 'sort', 'splice', 'unshift'], function(name) {
-        var method = ArrayProto[name];
-        _.prototype[name] = function() {
-            var obj = this._wrapped;
-            method.apply(obj, arguments);
-            if ((name === 'shift' || name === 'splice') && obj.length === 0) delete obj[0];
-            return result(this, obj);
-        };
-    });
-
-    // Add all accessor Array functions to the wrapper.
-    _.each(['concat', 'join', 'slice'], function(name) {
-        var method = ArrayProto[name];
-        _.prototype[name] = function() {
-            return result(this, method.apply(this._wrapped, arguments));
-        };
-    });
-
-    // Extracts the result from a wrapped and chained object.
-    _.prototype.value = function() {
-        return this._wrapped;
-    };
-
-    // Provide unwrapping proxy for some methods used in engine operations
-    // such as arithmetic and JSON stringification.
-    _.prototype.valueOf = _.prototype.toJSON = _.prototype.value;
-
-    _.prototype.toString = function() {
-        return '' + this._wrapped;
-    };
-
-    // AMD registration happens at the end for compatibility with AMD loaders
-    // that may not enforce next-turn semantics on modules. Even though general
-    // practice for AMD registration is to be anonymous, underscore registers
-    // as a named module because, like jQuery, it is a base library that is
-    // popular enough to be bundled in a third party lib, but not be part of
-    // an AMD load request. Those cases could generate an error when an
-    // anonymous define() is called outside of a loader request.
-    if (typeof define === 'function' && define.amd) {
-        define('underscore', [], function() {
-            return _;
-        });
-    }
-}.call(this));/**
+/**
  * Created by richie on 15/7/8.
  */
 /**
@@ -1593,9 +49,9 @@ BI.Factory = {
 //        }
         return view;
     }
-};(function(root, factory) {
-        root.BI = factory(root, root.BI || {}, root._, (root.jQuery || root.$));
-}(this, function(root, BI, _, $) {
+};(function (root, factory) {
+    root.BI = factory(root, root.BI || {}, root._, (root.jQuery || root.$));
+}(this, function (root, BI, _, $) {
 
     var previousBI = root.BI;
 
@@ -1612,7 +68,7 @@ BI.Factory = {
 
     // Runs BI.js in *noConflict* mode, returning the `BI` variable
     // to its previous owner. Returns a reference to this BI object.
-    BI.noConflict = function() {
+    BI.noConflict = function () {
         root.BI = previousBI;
         return this;
     };
@@ -1645,7 +101,7 @@ BI.Factory = {
 
         // Bind an event to a `callback` function. Passing `"all"` will bind
         // the callback to all events fired.
-        on: function(name, callback, context) {
+        on: function (name, callback, context) {
             if (!eventsApi(this, 'on', name, [callback, context]) || !callback) return this;
             this._events || (this._events = {});
             var events = this._events[name] || (this._events[name] = []);
@@ -1655,10 +111,10 @@ BI.Factory = {
 
         // Bind an event to only be triggered a single time. After the first time
         // the callback is invoked, it will be removed.
-        once: function(name, callback, context) {
+        once: function (name, callback, context) {
             if (!eventsApi(this, 'once', name, [callback, context]) || !callback) return this;
             var self = this;
-            var once = _.once(function() {
+            var once = _.once(function () {
                 self.off(name, once);
                 callback.apply(this, arguments);
             });
@@ -1670,7 +126,7 @@ BI.Factory = {
         // callbacks with that function. If `callback` is null, removes all
         // callbacks for the event. If `name` is null, removes all bound
         // callbacks for all events.
-        off: function(name, callback, context) {
+        off: function (name, callback, context) {
             if (!this._events || !eventsApi(this, 'off', name, [callback, context])) return this;
 
             // Remove all callbacks for all events.
@@ -1701,7 +157,7 @@ BI.Factory = {
                         callback && callback !== event.callback &&
                         callback !== event.callback._callback ||
                         context && context !== event.context
-                        ) {
+                    ) {
                         remaining.push(event);
                     }
                 }
@@ -1717,11 +173,15 @@ BI.Factory = {
             return this;
         },
 
+        un: function () {
+            this.off.apply(this, arguments);
+        },
+
         // Trigger one or many events, firing all bound callbacks. Callbacks are
         // passed the same arguments as `trigger` is, apart from the event name
         // (unless you're listening on `"all"`, which will cause your callback to
         // receive the true name of the event as the first argument).
-        trigger: function(name) {
+        trigger: function (name) {
             if (!this._events) return this;
             var args = slice.call(arguments, 1);
             if (!eventsApi(this, 'trigger', name, args)) return this;
@@ -1732,10 +192,14 @@ BI.Factory = {
             return this;
         },
 
+        fireEvent: function () {
+            this.trigger.apply(this, arguments);
+        },
+
         // Inversion-of-control versions of `on` and `once`. Tell *this* object to
         // listen to an event in another object ... keeping track of what it's
         // listening to.
-        listenTo: function(obj, name, callback) {
+        listenTo: function (obj, name, callback) {
             var listeningTo = this._listeningTo || (this._listeningTo = {});
             var id = obj._listenId || (obj._listenId = _.uniqueId('l'));
             listeningTo[id] = obj;
@@ -1744,7 +208,7 @@ BI.Factory = {
             return this;
         },
 
-        listenToOnce: function(obj, name, callback) {
+        listenToOnce: function (obj, name, callback) {
             if (typeof name === 'object') {
                 for (var event in name) this.listenToOnce(obj, event, name[event]);
                 return this;
@@ -1757,7 +221,7 @@ BI.Factory = {
                 return this;
             }
             if (!callback) return this;
-            var once = _.once(function() {
+            var once = _.once(function () {
                 this.stopListening(obj, name, once);
                 callback.apply(this, arguments);
             });
@@ -1767,7 +231,7 @@ BI.Factory = {
 
         // Tell this object to stop listening to either specific events ... or
         // to every object it's currently listening to.
-        stopListening: function(obj, name, callback) {
+        stopListening: function (obj, name, callback) {
             var listeningTo = this._listeningTo;
             if (!listeningTo) return this;
             var remove = !name && !callback;
@@ -1789,7 +253,7 @@ BI.Factory = {
     // Implement fancy features of the Events API such as multiple event
     // names `"change blur"` and jQuery-style event maps `{change: action}`
     // in terms of the existing API.
-    var eventsApi = function(obj, action, name, rest) {
+    var eventsApi = function (obj, action, name, rest) {
         if (!name) return true;
 
         // Handle event maps.
@@ -1815,19 +279,29 @@ BI.Factory = {
     // A difficult-to-believe, but optimized internal dispatch function for
     // triggering events. Tries to keep the usual cases speedy (most internal
     // BI events have 3 arguments).
-    var triggerEvents = function(events, args) {
+    var triggerEvents = function (events, args) {
         var ev, i = -1, l = events.length, a1 = args[0], a2 = args[1], a3 = args[2];
         switch (args.length) {
-            case 0: while (++i < l) (ev = events[i]).callback.call(ev.ctx); return;
-            case 1: while (++i < l) (ev = events[i]).callback.call(ev.ctx, a1); return;
-            case 2: while (++i < l) (ev = events[i]).callback.call(ev.ctx, a1, a2); return;
-            case 3: while (++i < l) (ev = events[i]).callback.call(ev.ctx, a1, a2, a3); return;
-            default: while (++i < l) (ev = events[i]).callback.apply(ev.ctx, args); return;
+            case 0:
+                while (++i < l) (ev = events[i]).callback.call(ev.ctx);
+                return;
+            case 1:
+                while (++i < l) (ev = events[i]).callback.call(ev.ctx, a1);
+                return;
+            case 2:
+                while (++i < l) (ev = events[i]).callback.call(ev.ctx, a1, a2);
+                return;
+            case 3:
+                while (++i < l) (ev = events[i]).callback.call(ev.ctx, a1, a2, a3);
+                return;
+            default:
+                while (++i < l) (ev = events[i]).callback.apply(ev.ctx, args);
+                return;
         }
     };
 
     // Aliases for backwards compatibility.
-    Events.bind   = Events.on;
+    Events.bind = Events.on;
     Events.unbind = Events.off;
 
     // Allow the `BI` object to serve as a global event bus, for folks who
@@ -1844,7 +318,7 @@ BI.Factory = {
 
     // Create a new model with the specified attributes. A client id (`cid`)
     // is automatically generated and assigned for you.
-    var M = BI.M = function(attributes, options) {
+    var M = BI.M = function (attributes, options) {
         var attrs = attributes || {};
         options = options || {};
         this.cid = _.uniqueId('c');
@@ -1873,40 +347,47 @@ BI.Factory = {
         // CouchDB users may want to set this to `"_id"`.
         idAttribute: 'ID',
 
-        _defaultConfig: function(){return {}},
+        _defaultConfig: function () {
+            return {}
+        },
+
+        init: function () {
+        },
         // _init is an empty function by default. Override it with your own
         // initialization logic.
-        _init: function(){},
+        _init: function () {
+            this.init();
+        },
 
         // Return a copy of the model's `attributes` object.
-        toJSON: function(options) {
+        toJSON: function (options) {
             return _.clone(this.attributes);
         },
 
         // Proxy `BI.sync` by default -- but override this if you need
         // custom syncing semantics for *this* particular model.
-        sync: function() {
+        sync: function () {
             return BI.sync.apply(this, arguments);
         },
 
         // Get the value of an attribute.
-        get: function(attr) {
+        get: function (attr) {
             return this.attributes[attr];
         },
 
         // Get the HTML-escaped value of an attribute.
-        escape: function(attr) {
+        escape: function (attr) {
             return _.escape(this.get(attr));
         },
 
         // Returns `true` if the attribute contains a value that is not null
         // or undefined.
-        has: function(attr) {
+        has: function (attr) {
             return _.has(this.attributes, attr);
         },
 
         // Special-cased proxy to underscore's `_.matches` method.
-        matches: function(attrs) {
+        matches: function (attrs) {
             var keys = _.keys(attrs), length = keys.length;
             var obj = Object(this.attributes);
             for (var i = 0; i < length; i++) {
@@ -1919,7 +400,7 @@ BI.Factory = {
         // Set a hash of model attributes on the object, firing `"change"`. This is
         // the core primitive operation of a model, updating the data and notifying
         // anyone who needs to know about the change in state. The heart of the beast.
-        set: function(key, val, options) {
+        set: function (key, val, options) {
             var attr, attrs, unset, changes, silent, changing, changed, prev, current;
             if (key == null) return this;
 
@@ -1937,11 +418,11 @@ BI.Factory = {
             if (!this._validate(attrs, options)) return false;
 
             // Extract attributes and options.
-            unset           = options.unset;
-            silent          = options.silent;
-            changes         = [];
-            changing        = this._changing;
-            this._changing  = true;
+            unset = options.unset;
+            silent = options.silent;
+            changes = [];
+            changing = this._changing;
+            this._changing = true;
 
             if (!changing) {
                 this._previousAttributes = _.clone(this.attributes);
@@ -1991,12 +472,12 @@ BI.Factory = {
 
         // Remove an attribute from the model, firing `"change"`. `unset` is a noop
         // if the attribute doesn't exist.
-        unset: function(attr, options) {
+        unset: function (attr, options) {
             return this.set(attr, void 0, _.extend({}, options, {unset: true}));
         },
 
         // Clear all attributes on the model, firing `"change"`.
-        clear: function(options) {
+        clear: function (options) {
             var attrs = {};
             for (var key in this.attributes) attrs[key] = void 0;
             return this.set(attrs, _.extend({}, options, {unset: true}));
@@ -2004,7 +485,7 @@ BI.Factory = {
 
         // Determine if the model has changed since the last `"change"` event.
         // If you specify an attribute name, determine if that attribute has changed.
-        hasChanged: function(attr) {
+        hasChanged: function (attr) {
             if (attr == null) return !_.isEmpty(this.changed);
             return _.has(this.changed, attr);
         },
@@ -2015,7 +496,7 @@ BI.Factory = {
         // persisted to the server. Unset attributes will be set to undefined.
         // You can also pass an attributes object to diff against the model,
         // determining if there *would be* a change.
-        changedAttributes: function(diff) {
+        changedAttributes: function (diff) {
             if (!diff) return this.hasChanged() ? _.clone(this.changed) : false;
             var val, changed = false;
             var old = this._changing ? this._previousAttributes : this.attributes;
@@ -2028,27 +509,27 @@ BI.Factory = {
 
         // Get the previous value of an attribute, recorded at the time the last
         // `"change"` event was fired.
-        previous: function(attr) {
+        previous: function (attr) {
             if (attr == null || !this._previousAttributes) return null;
             return this._previousAttributes[attr];
         },
 
         // Get all of the attributes of the model at the time of the previous
         // `"change"` event.
-        previousAttributes: function() {
+        previousAttributes: function () {
             return _.clone(this._previousAttributes);
         },
 
         // Fetch the model from the server. If the server's representation of the
         // model differs from its current attributes, they will be overridden,
         // triggering a `"change"` event.
-        fetch: function(options) {
+        fetch: function (options) {
             options = options ? _.clone(options) : {};
             if (options.parse === void 0) options.parse = true;
             var model = this;
             var success = options.success;
-            options.success = function(resp) {
-                if(!options.noset) {
+            options.success = function (resp) {
+                if (!options.noset) {
                     if (!model.set(model.parse(resp, options), options)) return false;
                 }
                 if (success) success(resp, model, options);
@@ -2061,7 +542,7 @@ BI.Factory = {
         // Set a hash of model attributes, and sync the model to the server.
         // If the server returns an attributes hash that differs, the model's
         // state will be `set` again.
-        save: function(key, val, options) {
+        save: function (key, val, options) {
             var attrs, method, xhr, attributes = this.attributes;
 
             // Handle both `"key", value` and `{key: value}` -style arguments.
@@ -2093,7 +574,7 @@ BI.Factory = {
             if (options.parse === void 0) options.parse = true;
             var model = this;
             var success = options.success;
-            options.success = function(resp) {
+            options.success = function (resp) {
                 // Ensure attributes are restored during synchronous saves.
                 model.attributes = attributes;
                 var serverAttrs = model.parse(resp, options);
@@ -2120,17 +601,17 @@ BI.Factory = {
         // Destroy this model on the server if it was already persisted.
         // Optimistically removes the model from its collection, if it has one.
         // If `wait: true` is passed, waits for the server to respond before removal.
-        destroy: function(options) {
+        destroy: function (options) {
             options = options ? _.clone(options) : {};
             var model = this;
             var success = options.success;
 
-            var destroy = function() {
+            var destroy = function () {
                 model.stopListening();
                 model.trigger('destroy', model.collection, model, options);
             };
 
-            options.success = function(resp) {
+            options.success = function (resp) {
                 if (options.wait || model.isNew()) destroy();
                 if (success) success(resp, model, options);
                 if (!model.isNew()) model.trigger('sync', resp, model, options).trigger('delete', resp, model, options);
@@ -2150,7 +631,7 @@ BI.Factory = {
         // Default URL for the model's representation on the server -- if you're
         // using BI's restful methods, override this to change the endpoint
         // that will be called.
-        url: function() {
+        url: function () {
             var base =
                 _.result(this.collection, 'url');
             if (this.isNew()) return base;
@@ -2159,28 +640,28 @@ BI.Factory = {
 
         // **parse** converts a response into the hash of attributes to be `set` on
         // the model. The default implementation is just to pass the response along.
-        parse: function(resp, options) {
+        parse: function (resp, options) {
             return resp;
         },
 
         // Create a new model with identical attributes to this one.
-        clone: function() {
+        clone: function () {
             return new this.constructor(this.attributes);
         },
 
         // A model is new if it has never been saved to the server, and lacks an id.
-        isNew: function() {
+        isNew: function () {
             return !this.has(this.idAttribute);
         },
 
         // Check if the model is currently in a valid state.
-        isValid: function(options) {
-            return this._validate({}, _.extend(options || {}, { validate: true }));
+        isValid: function (options) {
+            return this._validate({}, _.extend(options || {}, {validate: true}));
         },
 
         // Run validation against the next complete set of model attributes,
         // returning `true` if all is well. Otherwise, fire an `"invalid"` event.
-        _validate: function(attrs, options) {
+        _validate: function (attrs, options) {
             if (!options.validate || !this.validate) return true;
             attrs = _.extend({}, this.attributes, attrs);
             var error = this.validationError = this.validate(attrs, options) || null;
@@ -2195,9 +676,9 @@ BI.Factory = {
     var modelMethods = ['keys', 'values', 'pairs', 'invert', 'pick', 'omit', 'chain', 'isEmpty'];
 
     // Mix in each Underscore method as a proxy to `M#attributes`.
-    _.each(modelMethods, function(method) {
+    _.each(modelMethods, function (method) {
         if (!_[method]) return;
-        M.prototype[method] = function() {
+        M.prototype[method] = function () {
             var args = slice.call(arguments);
             args.unshift(this.attributes);
             return _[method].apply(_, args);
@@ -2217,7 +698,7 @@ BI.Factory = {
     // Create a new **Collection**, perhaps to contain a specific type of `model`.
     // If a `comparator` is specified, the Collection will maintain
     // its models in sort order, as they're added and removed.
-    var Collection = BI.Collection = function(models, options) {
+    var Collection = BI.Collection = function (models, options) {
         this.options = options = options || {};
         if (options.model) this.model = options.model;
         if (options.comparator !== void 0) this.comparator = options.comparator;
@@ -2239,26 +720,29 @@ BI.Factory = {
 
         // _init is an empty function by default. Override it with your own
         // initialization logic.
-        _init: function(){},
+        _init: function () {
+        },
 
         // The JSON representation of a Collection is an array of the
         // models' attributes.
-        toJSON: function(options) {
-            return this.map(function(model){ return model.toJSON(options); });
+        toJSON: function (options) {
+            return this.map(function (model) {
+                return model.toJSON(options);
+            });
         },
 
         // Proxy `BI.sync` by default.
-        sync: function() {
+        sync: function () {
             return BI.sync.apply(this, arguments);
         },
 
         // Add a model, or list of models to the set.
-        add: function(models, options) {
+        add: function (models, options) {
             return this.set(models, _.extend({merge: false}, options, addOptions));
         },
 
         // Remove a model, or a list of models from the set.
-        remove: function(models, options) {
+        remove: function (models, options) {
             var singular = !_.isArray(models);
             models = singular ? [models] : _.clone(models);
             options || (options = {});
@@ -2284,7 +768,7 @@ BI.Factory = {
         // removing models that are no longer present, and merging models that
         // already exist in the collection, as necessary. Similar to **M#set**,
         // the core operation for updating the data contained by the collection.
-        set: function(models, options) {
+        set: function (models, options) {
             options = _.defaults({}, options, setOptions);
             if (options.parse) models = this.parse(models, options);
             var singular = !_.isArray(models);
@@ -2385,7 +869,7 @@ BI.Factory = {
         // you can reset the entire set with a new list of models, without firing
         // any granular `add` or `remove` events. Fires `reset` when finished.
         // Useful for bulk operations and optimizations.
-        reset: function(models, options) {
+        reset: function (models, options) {
             options = options ? _.clone(options) : {};
             for (var i = 0, length = this.models.length; i < length; i++) {
                 this._removeReference(this.models[i], options);
@@ -2398,66 +882,66 @@ BI.Factory = {
         },
 
         // Add a model to the end of the collection.
-        push: function(model, options) {
+        push: function (model, options) {
             return this.add(model, _.extend({at: this.length}, options));
         },
 
         // Remove a model from the end of the collection.
-        pop: function(options) {
+        pop: function (options) {
             var model = this.at(this.length - 1);
             this.remove(model, options);
             return model;
         },
 
         // Add a model to the beginning of the collection.
-        unshift: function(model, options) {
+        unshift: function (model, options) {
             return this.add(model, _.extend({at: 0}, options));
         },
 
         // Remove a model from the beginning of the collection.
-        shift: function(options) {
+        shift: function (options) {
             var model = this.at(0);
             this.remove(model, options);
             return model;
         },
 
         // Slice out a sub-array of models from the collection.
-        slice: function() {
+        slice: function () {
             return slice.apply(this.models, arguments);
         },
 
         // Get a model from the set by id.
-        get: function(obj) {
+        get: function (obj) {
             if (obj == null) return void 0;
             var id = this.modelId(this._isModel(obj) ? obj.attributes : obj);
             return this._byId[obj] || this._byId[id] || this._byId[obj.cid];
         },
 
         // Get the model at the given index.
-        at: function(index) {
+        at: function (index) {
             if (index < 0) index += this.length;
             return this.models[index];
         },
 
         // Return models with matching attributes. Useful for simple cases of
         // `filter`.
-        where: function(attrs, first) {
+        where: function (attrs, first) {
             var matches = _.matches(attrs);
-            return this[first ? 'find' : 'filter'](function(model) {
+            return this[first ? 'find' : 'filter'](function (model) {
                 return matches(model.attributes);
             });
         },
 
         // Return the first model with matching attributes. Useful for simple cases
         // of `find`.
-        findWhere: function(attrs) {
+        findWhere: function (attrs) {
             return this.where(attrs, true);
         },
 
         // Force the collection to re-sort itself. You don't need to call this under
         // normal circumstances, as the set will maintain sort order as each item
         // is added.
-        sort: function(options) {
+        sort: function (options) {
             if (!this.comparator) throw new Error('Cannot sort a set without a comparator');
             options || (options = {});
 
@@ -2473,19 +957,19 @@ BI.Factory = {
         },
 
         // Pluck an attribute from each model in the collection.
-        pluck: function(attr) {
+        pluck: function (attr) {
             return _.invoke(this.models, 'get', attr);
         },
 
         // Fetch the default set of models for this collection, resetting the
         // collection when they arrive. If `reset: true` is passed, the response
         // data will be passed through the `reset` method instead of `set`.
-        fetch: function(options) {
+        fetch: function (options) {
             options = options ? _.clone(options) : {};
             if (options.parse === void 0) options.parse = true;
             var success = options.success;
             var collection = this;
-            options.success = function(resp) {
+            options.success = function (resp) {
                 var method = options.reset ? 'reset' : 'set';
                 collection[method](resp, options);
                 if (success) success(collection, resp, options);
@@ -2498,13 +982,13 @@ BI.Factory = {
         // Create a new instance of a model in this collection. Add the model to the
         // collection immediately, unless `wait: true` is passed, in which case we
         // wait for the server to agree.
-        create: function(model, options) {
+        create: function (model, options) {
             options = options ? _.clone(options) : {};
             if (!(model = this._prepareModel(model, options))) return false;
             if (!options.wait) this.add(model, options);
             var collection = this;
             var success = options.success;
-            options.success = function(model, resp) {
+            options.success = function (model, resp) {
                 if (options.wait) collection.add(model, options);
                 if (success) success(model, resp, options);
             };
@@ -2514,12 +998,12 @@ BI.Factory = {
 
         // **parse** converts a response into a list of models to be added to the
         // collection. The default implementation is just to pass it through.
-        parse: function(resp, options) {
+        parse: function (resp, options) {
             return resp;
         },
 
         // Create a new collection with an identical list of models as this one.
-        clone: function() {
+        clone: function () {
             return new this.constructor(this.models, {
                 model: this.model,
                 comparator: this.comparator
@@ -2533,15 +1017,15 @@ BI.Factory = {
 
         // Private method to reset all internal state. Called when the collection
         // is first _initd or reset.
-        _reset: function() {
+        _reset: function () {
             this.length = 0;
             this.models = [];
-            this._byId  = {};
+            this._byId = {};
         },
 
         // Prepare a hash of attributes (or other model) to be added to this
         // collection.
-        _prepareModel: function(attrs, options) {
+        _prepareModel: function (attrs, options) {
             if (this._isModel(attrs)) {
                 if (!attrs.collection) attrs.collection = this;
                 return attrs;
@@ -2561,7 +1045,7 @@ BI.Factory = {
         },
 
         // Internal method to create a model's ties to a collection.
-        _addReference: function(model, options) {
+        _addReference: function (model, options) {
             this._byId[model.cid] = model;
             var id = this.modelId(model.attributes);
             if (id != null) this._byId[id] = model;
@@ -2569,7 +1053,7 @@ BI.Factory = {
         },
 
         // Internal method to sever a model's ties to a collection.
-        _removeReference: function(model, options) {
+        _removeReference: function (model, options) {
             if (this === model.collection) delete model.collection;
             model.off('all', this._onModelEvent, this);
         },
@@ -2578,7 +1062,7 @@ BI.Factory = {
         // Sets need to update their indexes when models change ids. All other
         // events simply proxy through. "add" and "remove" events that originate
         // in other collections are ignored.
-        _onModelEvent: function(event, model, collection, options) {
+        _onModelEvent: function (event, model, collection, options) {
             if ((event === 'add' || event === 'remove') && collection !== this) return;
             if (event === 'destroy') this.remove(model, options);
             if (event === 'change') {
@@ -2605,9 +1089,9 @@ BI.Factory = {
         'lastIndexOf', 'isEmpty', 'chain', 'sample', 'partition'];
 
     // Mix in each Underscore method as a proxy to `Collection#models`.
-    _.each(methods, function(method) {
+    _.each(methods, function (method) {
         if (!_[method]) return;
-        Collection.prototype[method] = function() {
+        Collection.prototype[method] = function () {
             var args = slice.call(arguments);
             args.unshift(this.models);
             return _[method].apply(_, args);
@@ -2618,10 +1102,10 @@ BI.Factory = {
     var attributeMethods = ['groupBy', 'countBy', 'sortBy', 'indexBy'];
 
     // Use attributes instead of properties.
-    _.each(attributeMethods, function(method) {
+    _.each(attributeMethods, function (method) {
         if (!_[method]) return;
-        Collection.prototype[method] = function(value, context) {
-            var iterator = _.isFunction(value) ? value : function(model) {
+        Collection.prototype[method] = function (value, context) {
+            var iterator = _.isFunction(value) ? value : function (model) {
                 return model.get(value);
             };
             return _[method](this.models, iterator, context);
@@ -2641,7 +1125,7 @@ BI.Factory = {
 
     // Creating a BI.V creates its initial element outside of the DOM,
     // if an existing element is not provided...
-    var V = BI.V = function(options) {
+    var V = BI.V = function (options) {
         this.cid = _.uniqueId('view');
         options = options || {};
         this.options = _.defaults(options, _.result(this, '_defaultConfig'));
@@ -2664,28 +1148,33 @@ BI.Factory = {
 
         // jQuery delegate for element lookup, scoped to DOM elements within the
         // current view. This should be preferred to global lookups where possible.
-        $: function(selector) {
+        $: function (selector) {
             return this.$el.find(selector);
         },
 
-        _defaultConfig: function(){return {}},
+        _defaultConfig: function () {
+            return {}
+        },
 
         // _init is an empty function by default. Override it with your own
         // initialization logic.
-        _init: function(){},
+        _init: function () {
+        },
 
         //容器，默认放在this.element上
-        _vessel: function(){return this.element},
+        _vessel: function () {
+            return this
+        },
         // **render** is the core function that your view should override, in order
         // to populate its element (`this.el`), with the appropriate HTML. The
         // convention is for **render** to always return `this`.
-        _render: function(vessel) {
+        render: function (vessel) {
             return this;
         },
 
         // Remove this view by taking the element out of the DOM, and removing any
         // applicable BI.Events listeners.
-        remove: function() {
+        remove: function () {
             this._removeElement();
             this.stopListening();
             return this;
@@ -2694,7 +1183,7 @@ BI.Factory = {
         // Remove this view's element from the document and all event listeners
         // attached to it. Exposed for subclasses using an alternative DOM
         // manipulation API.
-        _removeElement: function() {
+        _removeElement: function () {
             this.$el.remove();
             if ($.browser.msie === true) {
                 this.el.outerHTML = '';
@@ -2703,33 +1192,33 @@ BI.Factory = {
 
         // Change the view's element (`this.el` property) and re-delegate the
         // view's events on the new element.
-        setElement: function(element) {
+        setElement: function (element) {
             this.undelegateEvents();
             this._setElement(element);
-            this.$vessel = this._vessel();
-            this._render(this.$vessel);
+            this.vessel = this._vessel();
+            this.render(this.vessel);
             this.delegateEvents();
             return this;
         },
 
-        setVisible: function(visible){
+        setVisible: function (visible) {
             this.options.invisible = !visible;
-            if (visible){
+            if (visible) {
                 this.element.show();
             } else {
                 this.element.hide();
             }
         },
 
-        isVisible: function(){
+        isVisible: function () {
             return !this.options.invisible;
         },
 
-        visible: function(){
+        visible: function () {
             this.setVisible(true);
         },
 
-        invisible: function(){
+        invisible: function () {
             this.setVisible(false);
         },
 
@@ -2738,7 +1227,7 @@ BI.Factory = {
         // context or an element. Subclasses can override this to utilize an
         // alternative DOM manipulation API and are only required to set the
         // `this.el` property.
-        _setElement: function(el) {
+        _setElement: function (el) {
             this.$el = el instanceof BI.$ ? el : BI.$(el);
             this.element = this.$el;
             this.el = this.$el[0];
@@ -2757,7 +1246,7 @@ BI.Factory = {
         // pairs. Callbacks will be bound to the view, with `this` set properly.
         // Uses event delegation for efficiency.
         // Omitting the selector binds the event to `this.el`.
-        delegateEvents: function(events) {
+        delegateEvents: function (events) {
             if (!(events || (events = _.result(this, 'events')))) return this;
             this.undelegateEvents();
             for (var key in events) {
@@ -2773,27 +1262,27 @@ BI.Factory = {
         // Add a single event listener to the view's element (or a child element
         // using `selector`). This only works for delegate-able events: not `focus`,
         // `blur`, and not `change`, `submit`, and `reset` in Internet Explorer.
-        delegate: function(eventName, selector, listener) {
-            this.$vessel.on(eventName + '.delegateEvents' + this.cid, selector, listener);
+        delegate: function (eventName, selector, listener) {
+            this.vessel.element.on(eventName + '.delegateEvents' + this.cid, selector, listener);
         },
 
         // Clears all callbacks previously bound to the view by `delegateEvents`.
         // You usually don't need to use this, but may wish to if you have multiple
         // BI views attached to the same DOM element.
-        undelegateEvents: function() {
-            if (this.$vessel) this.$vessel.off('.delegateEvents' + this.cid);
+        undelegateEvents: function () {
+            if (this.vessel) this.vessel.element.off('.delegateEvents' + this.cid);
             return this;
         },
 
         // A finer-grained `undelegateEvents` for removing a single delegated event.
         // `selector` and `listener` are both optional.
-        undelegate: function(eventName, selector, listener) {
-            this.$vessel.off(eventName + '.delegateEvents' + this.cid, selector, listener);
+        undelegate: function (eventName, selector, listener) {
+            this.vessel.element.off(eventName + '.delegateEvents' + this.cid, selector, listener);
         },
 
         // Produces a DOM element to be assigned to your view. Exposed for
         // subclasses using an alternative DOM manipulation API.
-        _createElement: function(tagName) {
+        _createElement: function (tagName) {
             return document.createElement(tagName);
         },
 
@@ -2801,7 +1290,7 @@ BI.Factory = {
         // If `this.el` is a string, pass it through `$()`, take the first
         // matching element, and re-assign it to `el`. Otherwise, create
         // an element from the `id`, `className` and `tagName` properties.
-        _ensureElement: function() {
+        _ensureElement: function () {
             var attrs = _.extend({}, _.result(this, 'attributes'));
             if (this.baseCls) attrs['class'] = _.result(this, 'baseCls');
             if (!this.element) {
@@ -2814,7 +1303,7 @@ BI.Factory = {
 
         // Set attributes from a hash on this view's element.  Exposed for
         // subclasses using an alternative DOM manipulation API.
-        _setAttributes: function(attributes) {
+        _setAttributes: function (attributes) {
             this.$el.attr(attributes);
         }
 
@@ -2838,7 +1327,7 @@ BI.Factory = {
     // instead of `application/json` with the model in a param named `model`.
     // Useful when interfacing with server-side languages like **PHP** that make
     // it difficult to read the body of `PUT` requests.
-    BI.sync = function(method, model, options) {
+    BI.sync = function (method, model, options) {
         var type = methodMap[method];
 
         // Default options, unless specified.
@@ -2852,8 +1341,8 @@ BI.Factory = {
 
         // Ensure that we have a URL.
         if (!options.url) {
-            params.url = _.result(model, method+"URL") || _.result(model, 'url');
-            if(!params.url){
+            params.url = _.result(model, method + "URL") || _.result(model, 'url');
+            if (!params.url) {
                 return;
             }
         }
@@ -2876,7 +1365,7 @@ BI.Factory = {
             params.type = 'POST';
             if (options.emulateJSON) params.data._method = type;
             var beforeSend = options.beforeSend;
-            options.beforeSend = function(xhr) {
+            options.beforeSend = function (xhr) {
                 xhr.setRequestHeader('X-HTTP-Method-Override', type);
                 if (beforeSend) return beforeSend.apply(this, arguments);
             };
@@ -2889,7 +1378,7 @@ BI.Factory = {
 
         // Pass along `textStatus` and `errorThrown` from jQuery.
         var error = options.error;
-        options.error = function(xhr, textStatus, errorThrown) {
+        options.error = function (xhr, textStatus, errorThrown) {
             options.textStatus = textStatus;
             options.errorThrown = errorThrown;
             if (error) error.apply(this, arguments);
@@ -2905,9 +1394,9 @@ BI.Factory = {
     var methodMap = {
         'create': 'POST',
         'update': 'PUT',
-        'patch':  'PATCH',
+        'patch': 'PATCH',
         'delete': 'DELETE',
-        'read':   'GET'
+        'read': 'GET'
     };
 
     // Set the default implementation of `BI.ajax` to proxy through to `$`.
@@ -2919,7 +1408,7 @@ BI.Factory = {
 
     // Routers map faux-URLs to actions, and fire events when routes are
     // matched. Creating a new one sets its `routes` hash, if not set statically.
-    var Router = BI.Router = function(options) {
+    var Router = BI.Router = function (options) {
         options || (options = {});
         if (options.routes) this.routes = options.routes;
         this._bindRoutes();
@@ -2929,16 +1418,17 @@ BI.Factory = {
     // Cached regular expressions for matching named param parts and splatted
     // parts of route strings.
     var optionalParam = /\((.*?)\)/g;
-    var namedParam    = /(\(\?)?:\w+/g;
-    var splatParam    = /\*\w+/g;
-    var escapeRegExp  = /[\-{}\[\]+?.,\\\^$|#\s]/g;
+    var namedParam = /(\(\?)?:\w+/g;
+    var splatParam = /\*\w+/g;
+    var escapeRegExp = /[\-{}\[\]+?.,\\\^$|#\s]/g;
 
     // Set up all inheritable **BI.Router** properties and methods.
     _.extend(Router.prototype, Events, {
 
         // _init is an empty function by default. Override it with your own
         // initialization logic.
-        _init: function(){},
+        _init: function () {
+        },
 
         // Manually bind a single named route to a callback. For example:
         //
@@ -2946,7 +1436,7 @@ BI.Factory = {
         //       ...
         //     });
         //
-        route: function(route, name, callback) {
+        route: function (route, name, callback) {
             if (!_.isRegExp(route)) route = this._routeToRegExp(route);
             if (_.isFunction(name)) {
                 callback = name;
@@ -2954,7 +1444,7 @@ BI.Factory = {
             }
             if (!callback) callback = this[name];
             var router = this;
-            BI.history.route(route, function(fragment) {
+            BI.history.route(route, function (fragment) {
                 var args = router._extractParameters(route, fragment);
                 if (router.execute(callback, args, name) !== false) {
                     router.trigger.apply(router, ['route:' + name].concat(args));
@@ -2967,12 +1457,12 @@ BI.Factory = {
 
         // Execute a route handler with the provided parameters.  This is an
         // excellent place to do pre-route setup or post-route cleanup.
-        execute: function(callback, args, name) {
+        execute: function (callback, args, name) {
             if (callback) callback.apply(this, args);
         },
 
         // Simple proxy to `BI.history` to save a fragment into the history.
-        navigate: function(fragment, options) {
+        navigate: function (fragment, options) {
             BI.history.navigate(fragment, options);
             return this;
         },
@@ -2980,7 +1470,7 @@ BI.Factory = {
         // Bind all defined routes to `BI.history`. We have to reverse the
         // order of the routes here to support behavior where the most general
         // routes can be defined at the bottom of the route map.
-        _bindRoutes: function() {
+        _bindRoutes: function () {
             if (!this.routes) return;
             this.routes = _.result(this, 'routes');
             var route, routes = _.keys(this.routes);
@@ -2991,10 +1481,10 @@ BI.Factory = {
 
         // Convert a route string into a regular expression, suitable for matching
         // against the current location hash.
-        _routeToRegExp: function(route) {
+        _routeToRegExp: function (route) {
             route = route.replace(escapeRegExp, '\\$&')
                 .replace(optionalParam, '(?:$1)?')
-                .replace(namedParam, function(match, optional) {
+                .replace(namedParam, function (match, optional) {
                     return optional ? match : '([^/?]+)';
                 })
                 .replace(splatParam, '([^?]*?)');
@@ -3004,9 +1494,9 @@ BI.Factory = {
         // Given a route, and a URL fragment that it matches, return the array of
         // extracted decoded parameters. Empty or unmatched parameters will be
         // treated as `null` to normalize cross-browser behavior.
-        _extractParameters: function(route, fragment) {
+        _extractParameters: function (route, fragment) {
             var params = route.exec(fragment).slice(1);
-            return _.map(params, function(param, i) {
+            return _.map(params, function (param, i) {
                 // Don't decode the search params.
                 if (i === params.length - 1) return param || null;
                 return param ? decodeURIComponent(param) : null;
@@ -3023,7 +1513,7 @@ BI.Factory = {
     // [onhashchange](https://developer.mozilla.org/en-US/docs/DOM/window.onhashchange)
     // and URL fragments. If the browser supports neither (old IE, natch),
     // falls back to polling.
-    var History = BI.History = function() {
+    var History = BI.History = function () {
         this.handlers = [];
         _.bindAll(this, 'checkUrl');
 
@@ -3054,27 +1544,27 @@ BI.Factory = {
         interval: 50,
 
         // Are we at the app root?
-        atRoot: function() {
+        atRoot: function () {
             var path = this.location.pathname.replace(/[^\/]$/, '$&/');
             return path === this.root && !this.getSearch();
         },
 
         // In IE6, the hash fragment and search params are incorrect if the
         // fragment contains `?`.
-        getSearch: function() {
+        getSearch: function () {
             var match = this.location.href.replace(/#.*/, '').match(/\?.+/);
             return match ? match[0] : '';
         },
 
         // Gets the true hash value. Cannot use location.hash directly due to bug
         // in Firefox where location.hash will always be decoded.
-        getHash: function(window) {
+        getHash: function (window) {
             var match = (window || this).location.href.match(/#(.*)$/);
             return match ? match[1] : '';
         },
 
         // Get the pathname and search params, without the root.
-        getPath: function() {
+        getPath: function () {
             var path = decodeURI(this.location.pathname + this.getSearch());
             var root = this.root.slice(0, -1);
             if (!path.indexOf(root)) path = path.slice(root.length);
@@ -3082,7 +1572,7 @@ BI.Factory = {
         },
 
         // Get the cross-browser normalized URL fragment from the path or hash.
-        getFragment: function(fragment) {
+        getFragment: function (fragment) {
             if (fragment == null) {
                 if (this._hasPushState || !this._wantsHashChange) {
                     fragment = this.getPath();
@@ -3095,19 +1585,19 @@ BI.Factory = {
 
         // Start the hash change handling, returning `true` if the current URL matches
         // an existing route, and `false` otherwise.
-        start: function(options) {
+        start: function (options) {
             if (History.started) throw new Error('BI.history has already been started');
             History.started = true;
 
             // Figure out the initial configuration. Do we need an iframe?
             // Is pushState desired ... is it available?
-            this.options          = _.extend({root: '/'}, this.options, options);
-            this.root             = this.options.root;
+            this.options = _.extend({root: '/'}, this.options, options);
+            this.root = this.options.root;
             this._wantsHashChange = this.options.hashChange !== false;
-            this._hasHashChange   = 'onhashchange' in window;
-            this._wantsPushState  = !!this.options.pushState;
-            this._hasPushState    = !!(this.options.pushState && this.history && this.history.pushState);
-            this.fragment         = this.getFragment();
+            this._hasHashChange = 'onhashchange' in window;
+            this._wantsPushState = !!this.options.pushState;
+            this._hasPushState = !!(this.options.pushState && this.history && this.history.pushState);
+            this.fragment = this.getFragment();
 
             // Normalize root to always include a leading and trailing slash.
             this.root = ('/' + this.root + '/').replace(rootStripper, '/');
@@ -3149,8 +1639,8 @@ BI.Factory = {
 
             // Add a cross-platform `addEventListener` shim for older browsers.
             var addEventListener = window.addEventListener || function (eventName, listener) {
-                return attachEvent('on' + eventName, listener);
-            };
+                    return attachEvent('on' + eventName, listener);
+                };
 
             // Depending on whether we're using pushState or hashes, and whether
             // 'onhashchange' is supported, determine how we check the URL state.
@@ -3167,11 +1657,11 @@ BI.Factory = {
 
         // Disable BI.history, perhaps temporarily. Not useful in a real app,
         // but possibly useful for unit testing Routers.
-        stop: function() {
+        stop: function () {
             // Add a cross-platform `removeEventListener` shim for older browsers.
             var removeEventListener = window.removeEventListener || function (eventName, listener) {
-                return detachEvent('on' + eventName, listener);
-            };
+                    return detachEvent('on' + eventName, listener);
+                };
 
             // Remove window listeners.
             if (this._hasPushState) {
@@ -3193,13 +1683,13 @@ BI.Factory = {
 
         // Add a route to be tested when the fragment changes. Routes added later
         // may override previous routes.
-        route: function(route, callback) {
+        route: function (route, callback) {
             this.handlers.unshift({route: route, callback: callback});
         },
 
         // Checks the current URL to see if it has changed, and if it has,
         // calls `loadUrl`, normalizing across the hidden iframe.
-        checkUrl: function(e) {
+        checkUrl: function (e) {
             var current = this.getFragment();
 
             // If the user pressed the back button, the iframe's hash will have
@@ -3216,9 +1706,9 @@ BI.Factory = {
         // Attempt to load the current URL fragment. If a route succeeds with a
         // match, returns `true`. If no defined routes matches the fragment,
         // returns `false`.
-        loadUrl: function(fragment) {
+        loadUrl: function (fragment) {
             fragment = this.fragment = this.getFragment(fragment);
-            return _.any(this.handlers, function(handler) {
+            return _.any(this.handlers, function (handler) {
                 if (handler.route.test(fragment)) {
                     handler.callback(fragment);
                     return true;
@@ -3233,7 +1723,7 @@ BI.Factory = {
         // The options object can contain `trigger: true` if you wish to have the
         // route callback be fired (not usually desirable), or `replace: true`, if
         // you wish to modify the current URL without adding an entry to the history.
-        navigate: function(fragment, options) {
+        navigate: function (fragment, options) {
             if (!History.started) return false;
             if (!options || options === true) options = {trigger: !!options};
 
@@ -3279,7 +1769,7 @@ BI.Factory = {
 
         // Update the hash location, either replacing the current entry, or adding
         // a new one to the browser history.
-        _updateHash: function(location, fragment, replace) {
+        _updateHash: function (location, fragment, replace) {
             if (replace) {
                 var href = location.href.replace(/(javascript:|#).*$/, '');
                 location.replace(href + '#' + fragment);
@@ -3300,7 +1790,7 @@ BI.Factory = {
     // Helper function to correctly set up the prototype chain, for subclasses.
     // Similar to `goog.inherits`, but uses a hash of prototype properties and
     // class properties to be extended.
-    var extend = function(protoProps, staticProps) {
+    var extend = function (protoProps, staticProps) {
         var parent = this;
         var child;
 
@@ -3310,7 +1800,9 @@ BI.Factory = {
         if (protoProps && _.has(protoProps, 'constructor')) {
             child = protoProps.constructor;
         } else {
-            child = function(){ return parent.apply(this, arguments); };
+            child = function () {
+                return parent.apply(this, arguments);
+            };
         }
 
         // Add static properties to the constructor function, if supplied.
@@ -3318,7 +1810,9 @@ BI.Factory = {
 
         // Set the prototype chain to inherit from `parent`, without calling
         // `parent`'s constructor function.
-        var Surrogate = function(){ this.constructor = child; };
+        var Surrogate = function () {
+            this.constructor = child;
+        };
         Surrogate.prototype = parent.prototype;
         child.prototype = new Surrogate;
 
@@ -3337,14 +1831,14 @@ BI.Factory = {
     M.extend = Collection.extend = Router.extend = V.extend = History.extend = extend;
 
     // Throw an error when a URL is needed, and none is supplied.
-    var urlError = function() {
+    var urlError = function () {
         throw new Error('A "url" property or function must be specified');
     };
 
     // Wrap an optional error callback with a fallback error event.
-    var wrapError = function(model, options) {
+    var wrapError = function (model, options) {
         var error = options.error;
-        options.error = function(resp) {
+        options.error = function (resp) {
             if (error) error(model, resp, options);
             model.trigger('error', model, resp, options);
         };
@@ -3542,7 +2036,7 @@ if (!window.BI) {
         },
 
         formatEL: function (obj) {
-            if (obj && obj.el) {
+            if (obj && !obj.type && obj.el) {
                 return obj;
             }
             return {
@@ -4477,99 +2971,23 @@ if (!window.BI) {
                 //encode
                 encodeBIParam(option.data);
 
-                var async = true;
-                if (BI.isNotNull(option.async)) {
-                    async = option.async;
-                }
-
-                if (BI.isNull(loading)) {
-                    loading = BI.createWidget({
-                        type: "bi.request_loading"
-                    });
-                }
-
-                if (BI.isNull(timeoutToast)) {
-                    timeoutToast = BI.createWidget({
-                        type: "bi.timeout_toast"
-                    });
-                    timeoutToast.setCallback(function (op) {
-                        decodeBIParam(op.data);
-                        BI.ajax(op);
-                    });
-                }
-                timeoutToast.addReq(option);
-
+                var async = option.async;
 
                 option.data = BI.cjkEncodeDO(option.data);
-                    
-                    
-                
+
+
                 $.ajax({
                     url: option.url,
                     type: "POST",
                     data: option.data,
                     async: async,
-                    error: function () {
-                        if (!timeoutToast.hasReq(option)) {
-                            return;
-                        }
-                        timeoutToast.removeReq(option);
-                        //失败 取消、重新加载
-                        loading.setCallback(function () {
-                            decodeBIParam(option.data);
-                            BI.ajax(option);
-                        });
-                        loading.showError();
-                    },
+                    error: option.error,
                     complete: function (res, status) {
-                        if (!timeoutToast.hasReq(option)) {
-                            return;
-                        }
-                        timeoutToast.removeReq(option);
-                        //登录超时
-                        if (BI.isNotNull(res.responseText) &&
-                            res.responseText.indexOf("fs-login-content") > -1 &&
-                            res.responseText.indexOf("fs-login-input-password-confirm") === -1) {
-                            if (BI.Popovers.isVisible(BI.LoginTimeOut.POPOVER_ID)) {
-                                return;
-                            }
-                            if (BI.isNotNull(BI.Popovers.get(BI.LoginTimeOut.POPOVER_ID))) {
-                                BI.Popovers.open(BI.LoginTimeOut.POPOVER_ID);
-                                return;
-                            }
-                            var loginTimeout = BI.createWidget({
-                                type: "bi.login_timeout"
-                            });
-                            loginTimeout.on(BI.LoginTimeOut.EVENT_LOGIN, function () {
-                                decodeBIParam(option.data);
-                                BI.ajax(option);
-                                BI.Popovers.remove(BI.LoginTimeOut.POPOVER_ID);
-                            });
-                            BI.Popovers.create(BI.LoginTimeOut.POPOVER_ID, loginTimeout, {
-                                width: 600,
-                                height: 400
-                            }).open(BI.LoginTimeOut.POPOVER_ID);
-                        } else if (BI.isNotNull(res.responseText) &&
-                            res.responseText.indexOf("script") > -1 &&
-                            res.responseText.indexOf("Session Timeout...") > -1) {
-                            //登录失效
-                            loading.setCallback(function () {
-                                location.reload();
-                            });
-                            loading.showError();
-
-                        } else if (status === "success" && BI.isFunction(option.success)) {
-                            option.success(BI.jsonDecode(res.responseText));
-                        }
                         if (BI.isFunction(option.complete)) {
                             option.complete(BI.jsonDecode(res.responseText), status);
                         }
                     }
                 });
-
-                return function cancel() {
-                    timeoutToast.removeReq(option);
-                };
 
                 function encodeBIParam(data) {
                     for (var key in data) {
@@ -4590,694 +3008,651 @@ if (!window.BI) {
                     }
                 }
             }
-        })(),
+        })()
+    });
+})(jQuery);;(function () {
+    function isEmpty(value) {
+        // 判断是否为空值
+        var result = value === "" || value === null || value === undefined;
+        return result;
+    }
 
-        /**
-         * 异步ajax请求
-         * @param {String} op op参数
-         * @param {String} cmd cmd参数
-         * @param {JSON} data ajax请求的参数
-         * @param {Function} callback 回调函数
-         * @param {Function} complete 回调
-         */
-        requestAsync: function (op, cmd, data, callback, complete) {
-            data = data || {};
-            if (!BI.isKey(op)) {
-                op = 'fr_bi_dezi';
+    // 判断是否是无效的日期
+    function isInvalidDate(date) {
+        return date == "Invalid Date" || date == "NaN";
+    }
+
+    /**
+     * 科学计数格式
+     */
+    function _eFormat(text, fmt) {
+        var e = fmt.indexOf("E");
+        var eleft = fmt.substr(0, e), eright = fmt.substr(e + 1);
+        if (/^[0\.-]+$/.test(text)) {
+            text = BI._numberFormat(0.0, eleft) + 'E' + BI._numberFormat(0, eright)
+        } else {
+            var isNegative = text < 0;
+            if (isNegative) {
+                text = text.substr(1);
             }
-            if (op === "fr_bi_dezi" || op === "fr_bi_configure") {
-                data.sessionID = Data.SharingPool.get("sessionID");
+            var elvl = (eleft.split('.')[0] || '').length;
+            var point = text.indexOf(".");
+            if (point < 0) {
+                point = text.length;
             }
-            var url = BI.servletURL + '?op=' + op + '&cmd=' + cmd + "&_=" + Math.random();
-            return (BI.ajax)({
-                url: url,
-                type: 'POST',
-                data: data,
-                error: function () {
-                    // BI.Msg.toast(BI.i18nText("BI-Ajax_Error"));
-                },
-                success: function (res) {
-                    if (BI.isFunction(callback)) {
-                        callback(res);
-                    }
-                },
-                complete: function (res, status) {
-                    if (BI.isFunction(complete)) {
-                        complete(res);
-                    }
+            var i = 0; //第一个不为0的数的位置
+            text = text.replace('.', '');
+            for (var len = text.length; i < len; i++) {
+                var ech = text.charAt(i);
+                if (ech <= '9' && ech >= '1') {
+                    break;
                 }
-            });
-        },
-
-        /**
-         * 同步ajax请求
-         * @param {String} op op参数
-         * @param {String} cmd cmd参数
-         * @param {JSON} data ajax请求的参�?
-         * @returns {Object} ajax同步请求返回的JSON对象
-         */
-        requestSync: function (op, cmd, data) {
-            data = data || {};
-            if (!BI.isKey(op)) {
-                op = 'fr_bi_dezi';
             }
-            if (op === "fr_bi_dezi") {
-                data.sessionID = Data.SharingPool.get("sessionID");
-            }
-            var url = BI.servletURL + '?op=' + op + '&cmd=' + cmd + "&_=" + Math.random();
-            var result = {};
-            (BI.ajax)({
-                url: url,
-                type: 'POST',
-                async: false,
-                data: data,
-                error: function () {
-                    BI.Msg.toast(BI.i18nText("BI-Ajax_Error"));
-                },
-                complete: function (res, status) {
-                    if (status === 'success') {
-                        result = res;
-                    }
+            var right = point - i - elvl;
+            var left = text.substr(i, elvl);
+            var dis = i + elvl - text.length;
+            if (dis > 0) {
+                //末位补全0
+                for (var k = 0; k < dis; k++) {
+                    left += '0';
                 }
-            });
-            return result;
-        },
-
-        /**
-         * 请求方法
-         * @param cmd 命令
-         * @param data 数据
-         * @param extend 参数
-         * @returns {*}
-         */
-        request: function (cmd, data, extend) {
-            extend = extend || {};
-            data = data || {};
-            var op = extend.op;
-            if (!BI.isKey(op)) {
-                op = 'fr_bi_dezi';
-            }
-            if (op === "fr_bi_dezi") {
-                data.sessionID = Data.SharingPool.get("sessionID");
-            }
-            if (extend.async === true) {
-                BI.requestAsync(op, cmd, data, extend.complete || extend.success);
             } else {
-                return BI.requestSync(op, cmd, data);
+                left += '.' + text.substr(i + elvl);
+            }
+            left = left.replace(/^[0]+/, '');
+            if (right < 0 && eright.indexOf('-') < 0) {
+                eright += ';-' + eright;
+            }
+            text = BI._numberFormat(left, eleft) + 'E' + BI._numberFormat(right, eright);
+            if (isNegative) {
+                text = '-' + text;
             }
         }
-    });
-})(jQuery);BI.cjkEncode = function (text) {
-    // alex:如果非字符串,返回其本身(cjkEncode(234) 返回 ""是不对的)
-    if (typeof text !== 'string') {
         return text;
     }
 
-    var newText = "";
-    for (var i = 0; i < text.length; i++) {
-        var code = text.charCodeAt(i);
-        if (code >= 128 || code === 91 || code === 93) {//91 is "[", 93 is "]".
-            newText += "[" + code.toString(16) + "]";
-        } else {
-            newText += text.charAt(i);
+    /**
+     * 把日期对象按照指定格式转化成字符串
+     *
+     *      @example
+     *      var date = new Date('Thu Dec 12 2013 00:00:00 GMT+0800');
+     *      var result = BI.date2Str(date, 'yyyy-MM-dd');//2013-12-12
+     *
+     * @class BI.date2Str
+     * @param date 日期
+     * @param format 日期格式
+     * @returns {String}
+     */
+    function date2Str(date, format) {
+        if (!date) {
+            return '';
         }
-    }
-
-    return newText
-};
-
-BI.cjkEncodeDO = function (o) {
-    if (BI.isPlainObject(o)) {
-        var result = {};
-        $.each(o, function (k, v) {
-            if (!(typeof v == "string")) {
-                v = BI.jsonEncode(v);
+        // O(len(format))
+        var len = format.length, result = '';
+        if (len > 0) {
+            var flagch = format.charAt(0), start = 0, str = flagch;
+            for (var i = 1; i < len; i++) {
+                var ch = format.charAt(i);
+                if (flagch !== ch) {
+                    result += compileJFmt({
+                        'char': flagch,
+                        'str': str,
+                        'len': i - start
+                    }, date);
+                    flagch = ch;
+                    start = i;
+                    str = flagch;
+                } else {
+                    str += ch;
+                }
             }
-            //wei:bug 43338，如果key是中文，cjkencode后o的长度就加了1，ie9以下版本死循环，所以新建对象result。
-            k = BI.cjkEncode(k);
-            result[k] = BI.cjkEncode(v);
-        });
-        return result;
-    }
-    return o;
-};
-
-BI.jsonEncode = function (o) {
-    //james:这个Encode是抄的EXT的
-    var useHasOwn = {}.hasOwnProperty ? true : false;
-
-    // crashes Safari in some instances
-    //var validRE = /^("(\\.|[^"\\\n\r])*?"|[,:{}\[\]0-9.\-+Eaeflnr-u \n\r\t])+?$/;
-
-    var m = {
-        "\b": '\\b',
-        "\t": '\\t',
-        "\n": '\\n',
-        "\f": '\\f',
-        "\r": '\\r',
-        '"': '\\"',
-        "\\": '\\\\'
-    };
-
-    var encodeString = function (s) {
-        if (/["\\\x00-\x1f]/.test(s)) {
-            return '"' + s.replace(/([\x00-\x1f\\"])/g, function (a, b) {
-                    var c = m[b];
-                    if (c) {
-                        return c;
-                    }
-                    c = b.charCodeAt();
-                    return "\\u00" +
-                        Math.floor(c / 16).toString(16) +
-                        (c % 16).toString(16);
-                }) + '"';
+            result += compileJFmt({
+                'char': flagch,
+                'str': str,
+                'len': len - start
+            }, date);
         }
-        return '"' + s + '"';
-    };
+        return result;
 
-    var encodeArray = function (o) {
-        var a = ["["], b, i, l = o.length, v;
-        for (i = 0; i < l; i += 1) {
-            v = o[i];
-            switch (typeof v) {
-                case "undefined":
-                case "function":
-                case "unknown":
+        function compileJFmt(jfmt, date) {
+            var str = jfmt.str, len = jfmt.len, ch = jfmt['char'];
+            switch (ch) {
+                case 'E': //星期
+                    str = Date._DN[date.getDay()];
+                    break;
+                case 'y': //年
+                    if (len <= 3) {
+                        str = (date.getFullYear() + '').slice(2, 4);
+                    } else {
+                        str = date.getFullYear();
+                    }
+                    break;
+                case 'M': //月
+                    if (len > 2) {
+                        str = Date._MN[date.getMonth()];
+                    } else if (len < 2) {
+                        str = date.getMonth() + 1;
+                    } else {
+                        str = String.leftPad(date.getMonth() + 1 + '', 2, '0');
+                    }
+                    break;
+                case 'd': //日
+                    if (len > 1) {
+                        str = String.leftPad(date.getDate() + '', 2, '0');
+                    } else {
+                        str = date.getDate();
+                    }
+                    break;
+                case 'h': //时(12)
+                    var hour = date.getHours() % 12;
+                    if (hour === 0) {
+                        hour = 12;
+                    }
+                    if (len > 1) {
+                        str = String.leftPad(hour + '', 2, '0');
+                    } else {
+                        str = hour;
+                    }
+                    break;
+                case 'H': //时(24)
+                    if (len > 1) {
+                        str = String.leftPad(date.getHours() + '', 2, '0');
+                    } else {
+                        str = date.getHours();
+                    }
+                    break;
+                case 'm':
+                    if (len > 1) {
+                        str = String.leftPad(date.getMinutes() + '', 2, '0');
+                    } else {
+                        str = date.getMinutes();
+                    }
+                    break;
+                case 's':
+                    if (len > 1) {
+                        str = String.leftPad(date.getSeconds() + '', 2, '0');
+                    } else {
+                        str = date.getSeconds();
+                    }
+                    break;
+                case 'a':
+                    str = date.getHours() < 12 ? 'am' : 'pm';
+                    break;
+                case 'z':
+                    str = date.getTimezone();
                     break;
                 default:
-                    if (b) {
-                        a.push(',');
-                    }
-                    a.push(v === null ? "null" : BI.jsonEncode(v));
-                    b = true;
+                    str = jfmt.str;
+                    break;
             }
+            return str;
         }
-        a.push("]");
-        return a.join("");
     };
 
-    if (typeof o == "undefined" || o === null) {
-        return "null";
-    } else if (BI.isArray(o)) {
-        return encodeArray(o);
-    } else if (o instanceof Date) {
-        /*
-         * alex:原来只是把年月日时分秒简单地拼成一个String,无法decode
-         * 现在这么处理就可以decode了,但是JS.jsonDecode和Java.JSONObject也要跟着改一下
-         */
-        return BI.jsonEncode({
-            __time__: o.getTime()
-        })
-    } else if (typeof o == "string") {
-        return encodeString(o);
-    } else if (typeof o == "number") {
-        return isFinite(o) ? String(o) : "null";
-    } else if (typeof o == "boolean") {
-        return String(o);
-    } else if (BI.isFunction(o)) {
-        return String(o);
-    } else {
-        var a = ["{"], b, i, v;
-        for (i in o) {
-            if (!useHasOwn || o.hasOwnProperty(i)) {
+    /**
+     * 数字格式
+     */
+    function _numberFormat(text, format) {
+        var text = text + '';
+        //数字格式，区分正负数
+        var numMod = format.indexOf(';');
+        if (numMod > -1) {
+            if (text >= 0) {
+                return _numberFormat(text + "", format.substring(0, numMod));
+            } else {
+                return _numberFormat((-text) + "", format.substr(numMod + 1));
+            }
+        }
+        var tp = text.split('.'), fp = format.split('.'),
+            tleft = tp[0] || '', fleft = fp[0] || '',
+            tright = tp[1] || '', fright = fp[1] || '';
+        //百分比,千分比的小数点移位处理
+        if (/[%‰]$/.test(format)) {
+            var paddingZero = /[%]$/.test(format) ? '00' : '000';
+            tright += paddingZero;
+            tleft += tright.substr(0, paddingZero.length);
+            tleft = tleft.replace(/^0+/gi, '');
+            tright = tright.substr(paddingZero.length).replace(/0+$/gi, '');
+        }
+        var right = _dealWithRight(tright, fright);
+        if (right.leftPlus) {
+            //小数点后有进位
+            tleft = parseInt(tleft) + 1 + '';
+
+            tleft = isNaN(tleft) ? '1' : tleft;
+        }
+        right = right.num;
+        var left = _dealWithLeft(tleft, fleft);
+        if (!(/[0-9]/.test(left))) {
+            left = left + '0';
+        }
+        if (!(/[0-9]/.test(right))) {
+            return left + right;
+        } else {
+            return left + '.' + right;
+        }
+    };
+    /**
+     * 处理小数点右边小数部分
+     * @param tright 右边内容
+     * @param fright 右边格式
+     * @returns {JSON} 返回处理结果和整数部分是否需要进位
+     * @private
+     */
+    function _dealWithRight(tright, fright) {
+        var right = '', j = 0, i = 0;
+        for (var len = fright.length; i < len; i++) {
+            var ch = fright.charAt(i);
+            var c = tright.charAt(j);
+            switch (ch) {
+                case '0':
+                    if (isEmpty(c)) {
+                        c = '0';
+                    }
+                    right += c;
+                    j++;
+                    break;
+                case '#':
+                    right += c;
+                    j++;
+                    break;
+                default :
+                    right += ch;
+                    break;
+            }
+        }
+        var rll = tright.substr(j);
+        var result = {};
+        if (!isEmpty(rll) && rll.charAt(0) > 4) {
+            //有多余字符，需要四舍五入
+            result.leftPlus = true;
+            var numReg = right.match(/^[0-9]+/);
+            if (numReg) {
+                var num = numReg[0];
+                var orilen = num.length;
+                var newnum = BI.parseInt(num) + 1 + '';
+                //进位到整数部分
+                if (newnum.length > orilen) {
+                    newnum = newnum.substr(1);
+                } else {
+                    newnum = BI.leftPad(newnum, orilen, '0');
+                    result.leftPlus = false;
+                }
+                right = right.replace(/^[0-9]+/, newnum);
+            }
+        }
+        result.num = right;
+        return result;
+    }
+
+    /**
+     * 处理小数点左边整数部分
+     * @param tleft 左边内容
+     * @param fleft 左边格式
+     * @returns {string} 返回处理结果
+     * @private
+     */
+    function _dealWithLeft(tleft, fleft) {
+        var left = '';
+        var j = tleft.length - 1;
+        var combo = -1, last = -1;
+        var i = fleft.length - 1;
+        for (; i >= 0; i--) {
+            var ch = fleft.charAt(i);
+            var c = tleft.charAt(j);
+            switch (ch) {
+                case '0':
+                    if (isEmpty(c)) {
+                        c = '0';
+                    }
+                    last = -1;
+                    left = c + left;
+                    j--;
+                    break;
+                case '#':
+                    last = i;
+                    left = c + left;
+                    j--;
+                    break;
+                case ',':
+                    if (!isEmpty(c)) {
+                        //计算一个,分隔区间的长度
+                        var com = fleft.match(/,[#0]+/);
+                        if (com) {
+                            combo = com[0].length - 1;
+                        }
+                        left = ',' + left;
+                    }
+                    break;
+                default :
+                    left = ch + left;
+                    break;
+            }
+        }
+        if (last > -1) {
+            //处理剩余字符
+            var tll = tleft.substr(0, j + 1);
+            left = left.substr(0, last) + tll + left.substr(last);
+        }
+        if (combo > 0) {
+            //处理,分隔区间
+            var res = left.match(/[0-9]+,/);
+            if (res) {
+                res = res[0];
+                var newstr = '', n = res.length - 1 - combo;
+                for (; n >= 0; n = n - combo) {
+                    newstr = res.substr(n, combo) + ',' + newstr;
+                }
+                var lres = res.substr(0, n + combo);
+                if (!isEmpty(lres)) {
+                    newstr = lres + ',' + newstr;
+                }
+            }
+            left = left.replace(/[0-9]+,/, newstr);
+        }
+        return left;
+    }
+
+    BI.cjkEncode = function (text) {
+        // alex:如果非字符串,返回其本身(cjkEncode(234) 返回 ""是不对的)
+        if (typeof text !== 'string') {
+            return text;
+        }
+
+        var newText = "";
+        for (var i = 0; i < text.length; i++) {
+            var code = text.charCodeAt(i);
+            if (code >= 128 || code === 91 || code === 93) {//91 is "[", 93 is "]".
+                newText += "[" + code.toString(16) + "]";
+            } else {
+                newText += text.charAt(i);
+            }
+        }
+
+        return newText
+    };
+
+    BI.cjkEncodeDO = function (o) {
+        if (BI.isPlainObject(o)) {
+            var result = {};
+            $.each(o, function (k, v) {
+                if (!(typeof v == "string")) {
+                    v = BI.jsonEncode(v);
+                }
+                //wei:bug 43338，如果key是中文，cjkencode后o的长度就加了1，ie9以下版本死循环，所以新建对象result。
+                k = BI.cjkEncode(k);
+                result[k] = BI.cjkEncode(v);
+            });
+            return result;
+        }
+        return o;
+    };
+
+    BI.jsonEncode = function (o) {
+        //james:这个Encode是抄的EXT的
+        var useHasOwn = {}.hasOwnProperty ? true : false;
+
+        // crashes Safari in some instances
+        //var validRE = /^("(\\.|[^"\\\n\r])*?"|[,:{}\[\]0-9.\-+Eaeflnr-u \n\r\t])+?$/;
+
+        var m = {
+            "\b": '\\b',
+            "\t": '\\t',
+            "\n": '\\n',
+            "\f": '\\f',
+            "\r": '\\r',
+            '"': '\\"',
+            "\\": '\\\\'
+        };
+
+        var encodeString = function (s) {
+            if (/["\\\x00-\x1f]/.test(s)) {
+                return '"' + s.replace(/([\x00-\x1f\\"])/g, function (a, b) {
+                        var c = m[b];
+                        if (c) {
+                            return c;
+                        }
+                        c = b.charCodeAt();
+                        return "\\u00" +
+                            Math.floor(c / 16).toString(16) +
+                            (c % 16).toString(16);
+                    }) + '"';
+            }
+            return '"' + s + '"';
+        };
+
+        var encodeArray = function (o) {
+            var a = ["["], b, i, l = o.length, v;
+            for (i = 0; i < l; i += 1) {
                 v = o[i];
                 switch (typeof v) {
                     case "undefined":
+                    case "function":
                     case "unknown":
                         break;
                     default:
                         if (b) {
                             a.push(',');
                         }
-                        a.push(BI.jsonEncode(i), ":",
-                            v === null ? "null" : BI.jsonEncode(v));
+                        a.push(v === null ? "null" : BI.jsonEncode(v));
                         b = true;
                 }
             }
-        }
-        a.push("}");
-        return a.join("");
-    }
-};
+            a.push("]");
+            return a.join("");
+        };
 
-BI.contentFormat = function (cv, fmt) {
-    if (BI.isEmpty(cv)) {
-        //原值为空，返回空字符
-        return '';
-    }
-    var text = cv.toString();
-    if (BI.isEmpty(fmt)) {
-        //格式为空，返回原字符
-        return text;
-    }
-    if (fmt.match(/^T/)) {
-        //T - 文本格式
-        return text;
-    } else if (fmt.match(/^D/)) {
-        //D - 日期(时间)格式
-        if (!(cv instanceof Date)) {
-            if (typeof cv === 'number') {
-                //毫秒数类型
-                cv = new Date(cv);
-            } else {
-                //字符串类型，如yyyyMMdd、MMddyyyy等这样无分隔符的结构
-                cv = Date.parseDate(cv + "", Date.patterns.ISO8601Long);
-            }
-        }
-        if (!BI.isNull(cv)) {
-            var needTrim = fmt.match(/^DT/);
-            text = BI.date2Str(cv, fmt.substring(needTrim ? 2 : 1));
-        }
-    } else if (fmt.match(/E/)) {
-        //科学计数格式
-        text = BI._eFormat(text, fmt);
-    } else {
-        //数字格式
-        text = BI._numberFormat(text, fmt);
-    }
-    //¤ - 货币格式
-    text = text.replace(/¤/g, '￥');
-    return text;
-};
-
-/**
- * 把日期对象按照指定格式转化成字符串
- *
- *      @example
- *      var date = new Date('Thu Dec 12 2013 00:00:00 GMT+0800');
- *      var result = BI.date2Str(date, 'yyyy-MM-dd');//2013-12-12
- *
- * @class BI.date2Str
- * @param date 日期
- * @param format 日期格式
- * @returns {String}
- */
-date2Str = function (date, format) {
-    if (!date) {
-        return '';
-    }
-    // O(len(format))
-    var len = format.length, result = '';
-    if (len > 0) {
-        var flagch = format.charAt(0), start = 0, str = flagch;
-        for (var i = 1; i < len; i++) {
-            var ch = format.charAt(i);
-            if (flagch !== ch) {
-                result += compileJFmt({
-                    'char': flagch,
-                    'str': str,
-                    'len': i - start
-                }, date);
-                flagch = ch;
-                start = i;
-                str = flagch;
-            } else {
-                str += ch;
-            }
-        }
-        result += compileJFmt({
-            'char': flagch,
-            'str': str,
-            'len': len - start
-        }, date);
-    }
-    return result;
-
-    function compileJFmt(jfmt, date) {
-        var str = jfmt.str, len = jfmt.len, ch = jfmt['char'];
-        switch (ch) {
-            case 'E': //星期
-                str = Date._DN[date.getDay()];
-                break;
-            case 'y': //年
-                if (len <= 3) {
-                    str = (date.getFullYear() + '').slice(2, 4);
-                } else {
-                    str = date.getFullYear();
-                }
-                break;
-            case 'M': //月
-                if (len > 2) {
-                    str = Date._MN[date.getMonth()];
-                } else if (len < 2) {
-                    str = date.getMonth() + 1;
-                } else {
-                    str = String.leftPad(date.getMonth() + 1 + '', 2, '0');
-                }
-                break;
-            case 'd': //日
-                if (len > 1) {
-                    str = String.leftPad(date.getDate() + '', 2, '0');
-                } else {
-                    str = date.getDate();
-                }
-                break;
-            case 'h': //时(12)
-                var hour = date.getHours() % 12;
-                if (hour === 0) {
-                    hour = 12;
-                }
-                if (len > 1) {
-                    str = String.leftPad(hour + '', 2, '0');
-                } else {
-                    str = hour;
-                }
-                break;
-            case 'H': //时(24)
-                if (len > 1) {
-                    str = String.leftPad(date.getHours() + '', 2, '0');
-                } else {
-                    str = date.getHours();
-                }
-                break;
-            case 'm':
-                if (len > 1) {
-                    str = String.leftPad(date.getMinutes() + '', 2, '0');
-                } else {
-                    str = date.getMinutes();
-                }
-                break;
-            case 's':
-                if (len > 1) {
-                    str = String.leftPad(date.getSeconds() + '', 2, '0');
-                } else {
-                    str = date.getSeconds();
-                }
-                break;
-            case 'a':
-                str = date.getHours() < 12 ? 'am' : 'pm';
-                break;
-            case 'z':
-                str = date.getTimezone();
-                break;
-            default:
-                str = jfmt.str;
-                break;
-        }
-        return str;
-    }
-};
-
-/**
- * 数字格式
- */
-BI._numberFormat = function (text, format) {
-    var text = text + '';
-    //数字格式，区分正负数
-    var numMod = format.indexOf(';');
-    if (numMod > -1) {
-        if (text >= 0) {
-            return BI._numberFormat(text + "", format.substring(0, numMod));
+        if (typeof o == "undefined" || o === null) {
+            return "null";
+        } else if (BI.isArray(o)) {
+            return encodeArray(o);
+        } else if (o instanceof Date) {
+            /*
+             * alex:原来只是把年月日时分秒简单地拼成一个String,无法decode
+             * 现在这么处理就可以decode了,但是JS.jsonDecode和Java.JSONObject也要跟着改一下
+             */
+            return BI.jsonEncode({
+                __time__: o.getTime()
+            })
+        } else if (typeof o == "string") {
+            return encodeString(o);
+        } else if (typeof o == "number") {
+            return isFinite(o) ? String(o) : "null";
+        } else if (typeof o == "boolean") {
+            return String(o);
+        } else if (BI.isFunction(o)) {
+            return String(o);
         } else {
-            return BI._numberFormat((-text) + "", format.substr(numMod + 1));
-        }
-    }
-    var tp = text.split('.'), fp = format.split('.'),
-        tleft = tp[0] || '', fleft = fp[0] || '',
-        tright = tp[1] || '', fright = fp[1] || '';
-    //百分比,千分比的小数点移位处理
-    if (/[%‰]$/.test(format)) {
-        var paddingZero = /[%]$/.test(format) ? '00' : '000';
-        tright += paddingZero;
-        tleft += tright.substr(0, paddingZero.length);
-        tleft = tleft.replace(/^0+/gi, '');
-        tright = tright.substr(paddingZero.length).replace(/0+$/gi, '');
-    }
-    var right = BI._dealWithRight(tright, fright);
-    if (right.leftPlus) {
-        //小数点后有进位
-        tleft = parseInt(tleft) + 1 + '';
-
-        tleft = isNaN(tleft) ? '1' : tleft;
-    }
-    right = right.num;
-    var left = BI._dealWithLeft(tleft, fleft);
-    if (!(/[0-9]/.test(left))) {
-        left = left + '0';
-    }
-    if (!(/[0-9]/.test(right))) {
-        return left + right;
-    } else {
-        return left + '.' + right;
-    }
-};
-/**
- * 处理小数点右边小数部分
- * @param tright 右边内容
- * @param fright 右边格式
- * @returns {JSON} 返回处理结果和整数部分是否需要进位
- * @private
- */
-BI._dealWithRight = function (tright, fright) {
-    var right = '', j = 0, i = 0;
-    for (var len = fright.length; i < len; i++) {
-        var ch = fright.charAt(i);
-        var c = tright.charAt(j);
-        switch (ch) {
-            case '0':
-                if (BI.isEmpty(c)) {
-                    c = '0';
-                }
-                right += c;
-                j++;
-                break;
-            case '#':
-                right += c;
-                j++;
-                break;
-            default :
-                right += ch;
-                break;
-        }
-    }
-    var rll = tright.substr(j);
-    var result = {};
-    if (!BI.isEmpty(rll) && rll.charAt(0) > 4) {
-        //有多余字符，需要四舍五入
-        result.leftPlus = true;
-        var numReg = right.match(/^[0-9]+/);
-        if (numReg) {
-            var num = numReg[0];
-            var orilen = num.length;
-            var newnum = BI.parseINT(num) + 1 + '';
-            //进位到整数部分
-            if (newnum.length > orilen) {
-                newnum = newnum.substr(1);
-            } else {
-                newnum = BI.leftPad(newnum, orilen, '0');
-                result.leftPlus = false;
-            }
-            right = right.replace(/^[0-9]+/, newnum);
-        }
-    }
-    result.num = right;
-    return result;
-};
-
-BI.parseINT = function (str) {
-    return parseInt(str, 10);
-};
-
-BI.leftPad = function (val, size, ch) {
-    var result = String(val);
-    if (!ch) {
-        ch = " ";
-    }
-    while (result.length < size) {
-        result = ch + result;
-    }
-    return result.toString();
-};
-
-/**
- * 处理小数点左边整数部分
- * @param tleft 左边内容
- * @param fleft 左边格式
- * @returns {string} 返回处理结果
- * @private
- */
-BI._dealWithLeft = function (tleft, fleft) {
-    var left = '';
-    var j = tleft.length - 1;
-    var combo = -1, last = -1;
-    var i = fleft.length - 1;
-    for (; i >= 0; i--) {
-        var ch = fleft.charAt(i);
-        var c = tleft.charAt(j);
-        switch (ch) {
-            case '0':
-                if (BI.isEmpty(c)) {
-                    c = '0';
-                }
-                last = -1;
-                left = c + left;
-                j--;
-                break;
-            case '#':
-                last = i;
-                left = c + left;
-                j--;
-                break;
-            case ',':
-                if (!BI.isEmpty(c)) {
-                    //计算一个,分隔区间的长度
-                    var com = fleft.match(/,[#0]+/);
-                    if (com) {
-                        combo = com[0].length - 1;
+            var a = ["{"], b, i, v;
+            for (i in o) {
+                if (!useHasOwn || o.hasOwnProperty(i)) {
+                    v = o[i];
+                    switch (typeof v) {
+                        case "undefined":
+                        case "unknown":
+                            break;
+                        default:
+                            if (b) {
+                                a.push(',');
+                            }
+                            a.push(BI.jsonEncode(i), ":",
+                                v === null ? "null" : BI.jsonEncode(v));
+                            b = true;
                     }
-                    left = ',' + left;
                 }
-                break;
-            default :
-                left = ch + left;
-                break;
-        }
-    }
-    if (last > -1) {
-        //处理剩余字符
-        var tll = tleft.substr(0, j + 1);
-        left = left.substr(0, last) + tll + left.substr(last);
-    }
-    if (combo > 0) {
-        //处理,分隔区间
-        var res = left.match(/[0-9]+,/);
-        if (res) {
-            res = res[0];
-            var newstr = '', n = res.length - 1 - combo;
-            for (; n >= 0; n = n - combo) {
-                newstr = res.substr(n, combo) + ',' + newstr;
             }
-            var lres = res.substr(0, n + combo);
-            if (!BI.isEmpty(lres)) {
-                newstr = lres + ',' + newstr;
-            }
+            a.push("}");
+            return a.join("");
         }
-        left = left.replace(/[0-9]+,/, newstr);
-    }
-    return left;
-};
+    };
 
-BI.object2Number = function (value) {
-    if (value == null) {
-        return 0;
+    BI.jsonDecode = function (text) {
+
+        try {
+            // 注意0啊
+            //var jo = $.parseJSON(text) || {};
+            var jo = $.parseJSON(text);
+            if (jo == null) {
+                jo = {};
+            }
+        } catch (e) {
+            /*
+             * richie:浏览器只支持标准的JSON字符串转换，而jQuery会默认调用浏览器的window.JSON.parse()函数进行解析
+             * 比如：var str = "{'a':'b'}",这种形式的字符串转换为JSON就会抛异常
+             */
+            try {
+                jo = new Function("return " + text)() || {};
+            } catch (e) {
+                //do nothing
+            }
+            if (jo == null) {
+                jo = [];
+            }
+        }
+        if (!_hasDateInJson(text)) {
+            return jo;
+        }
+
+        function _hasDateInJson(json) {
+            if (!json || typeof json !== "string") {
+                return false;
+            }
+            return json.indexOf("__time__") != -1;
+        }
+
+        return (function (o) {
+            if (typeof o === "string") {
+                return o;
+            }
+            if (o && o.__time__ != null) {
+                return new Date(o.__time__);
+            }
+            for (var a in o) {
+                if (o[a] == o || typeof o[a] == 'object' || $.isFunction(o[a])) {
+                    break;
+                }
+                o[a] = arguments.callee(o[a]);
+            }
+
+            return o;
+        })(jo);
     }
-    if (typeof value == 'number') {
-        return value;
-    } else {
-        var str = value + "";
-        if (str.indexOf(".") === -1) {
-            return parseInt(str);
+
+    BI.contentFormat = function (cv, fmt) {
+        if (isEmpty(cv)) {
+            //原值为空，返回空字符
+            return '';
+        }
+        var text = cv.toString();
+        if (isEmpty(fmt)) {
+            //格式为空，返回原字符
+            return text;
+        }
+        if (fmt.match(/^T/)) {
+            //T - 文本格式
+            return text;
+        } else if (fmt.match(/^D/)) {
+            //D - 日期(时间)格式
+            if (!(cv instanceof Date)) {
+                if (typeof cv === 'number') {
+                    //毫秒数类型
+                    cv = new Date(cv);
+                } else {
+                    //字符串类型，如yyyyMMdd、MMddyyyy等这样无分隔符的结构
+                    cv = Date.parseDate(cv + "", Date.patterns.ISO8601Long);
+                }
+            }
+            if (!BI.isNull(cv)) {
+                var needTrim = fmt.match(/^DT/);
+                text = BI.date2Str(cv, fmt.substring(needTrim ? 2 : 1));
+            }
+        } else if (fmt.match(/E/)) {
+            //科学计数格式
+            text = _eFormat(text, fmt);
         } else {
-            return parseFloat(str);
+            //数字格式
+            text = _numberFormat(text, fmt);
         }
-    }
-};
+        //¤ - 货币格式
+        text = text.replace(/¤/g, '￥');
+        return text;
+    };
 
-BI.object2Date = function (obj) {
-    if (obj == null) {
-        return new Date();
-    }
-    if (obj instanceof Date) {
-        return obj;
-    } else if (typeof obj == 'number') {
-        return new Date(obj);
-    } else {
-        var str = obj + "";
-        str = str.replace(/-/g, '/');
-        var dt = new Date(str);
-        if (!BI.isInvalidDate(dt)) {
-            return dt;
+    BI.leftPad = function (val, size, ch) {
+        var result = String(val);
+        if (!ch) {
+            ch = " ";
         }
-
-        return new Date();
-    }
-};
-
-BI.isArray = function (a) {
-    return Object.prototype.toString.call(a) == '[object Array]';
-};
-
-BI.object2Time = function (obj) {
-    if (obj == null) {
-        return new Date();
-    }
-    if (obj instanceof Date) {
-        return obj;
-    } else {
-        var str = obj + "";
-        str = str.replace(/-/g, '/');
-        var dt = new Date(str);
-        if (!BI.isInvalidDate(dt)) {
-            return dt;
+        while (result.length < size) {
+            result = ch + result;
         }
-        if (str.indexOf('/') === -1 && str.indexOf(':') !== -1) {
-            dt = new Date("1970/01/01 " + str);
-            if (!BI.isInvalidDate(dt)) {
+        return result.toString();
+    };
+
+    BI.object2Number = function (value) {
+        if (value == null) {
+            return 0;
+        }
+        if (typeof value == 'number') {
+            return value;
+        } else {
+            var str = value + "";
+            if (str.indexOf(".") === -1) {
+                return parseInt(str);
+            } else {
+                return parseFloat(str);
+            }
+        }
+    };
+
+    BI.object2Date = function (obj) {
+        if (obj == null) {
+            return new Date();
+        }
+        if (obj instanceof Date) {
+            return obj;
+        } else if (typeof obj == 'number') {
+            return new Date(obj);
+        } else {
+            var str = obj + "";
+            str = str.replace(/-/g, '/');
+            var dt = new Date(str);
+            if (!isInvalidDate(dt)) {
                 return dt;
             }
-        }
-        dt = BI.str2Date(str, "HH:mm:ss");
-        if (!BI.isInvalidDate(dt)) {
-            return dt;
-        }
-        return new Date();
-    }
-};
 
-// 判断是否是无效的日期
-BI.isInvalidDate = function (date) {
-    return date == "Invalid Date" || date == "NaN";
-};
+            return new Date();
+        }
+    };
 
-
-/**
- * 科学计数格式
- */
-BI._eFormat = function (text, fmt) {
-    var e = fmt.indexOf("E");
-    var eleft = fmt.substr(0, e), eright = fmt.substr(e + 1);
-    if (/^[0\.-]+$/.test(text)) {
-        text = BI._numberFormat(0.0, eleft) + 'E' + BI._numberFormat(0, eright)
-    } else {
-        var isNegative = text < 0;
-        if (isNegative) {
-            text = text.substr(1);
+    BI.object2Time = function (obj) {
+        if (obj == null) {
+            return new Date();
         }
-        var elvl = (eleft.split('.')[0] || '').length;
-        var point = text.indexOf(".");
-        if (point < 0) {
-            point = text.length;
-        }
-        var i = 0; //第一个不为0的数的位置
-        text = text.replace('.', '');
-        for (var len = text.length; i < len; i++) {
-            var ech = text.charAt(i);
-            if (ech <= '9' && ech >= '1') {
-                break;
-            }
-        }
-        var right = point - i - elvl;
-        var left = text.substr(i, elvl);
-        var dis = i + elvl - text.length;
-        if (dis > 0) {
-            //末位补全0
-            for (var k = 0; k < dis; k++) {
-                left += '0';
-            }
+        if (obj instanceof Date) {
+            return obj;
         } else {
-            left += '.' + text.substr(i + elvl);
+            var str = obj + "";
+            str = str.replace(/-/g, '/');
+            var dt = new Date(str);
+            if (!isInvalidDate(dt)) {
+                return dt;
+            }
+            if (str.indexOf('/') === -1 && str.indexOf(':') !== -1) {
+                dt = new Date("1970/01/01 " + str);
+                if (!isInvalidDate(dt)) {
+                    return dt;
+                }
+            }
+            dt = BI.str2Date(str, "HH:mm:ss");
+            if (!isInvalidDate(dt)) {
+                return dt;
+            }
+            return new Date();
         }
-        left = left.replace(/^[0]+/, '');
-        if (right < 0 && eright.indexOf('-') < 0) {
-            eright += ';-' + eright;
-        }
-        text = BI._numberFormat(left, eleft) + 'E' + BI._numberFormat(right, eright);
-        if (isNegative) {
-            text = '-' + text;
-        }
-    }
-    return text;
-};/**
+    };
+})();
+/**
  * 事件集合
  * @class BI.Events
  */
@@ -5798,8 +4173,7 @@ BI.OB = function (config) {
 };
 $.extend(BI.OB.prototype, {
     props: {},
-    init: function () {
-    },
+    init: null,
 
     _defaultConfig: function (config) {
         return {};
@@ -5807,7 +4181,7 @@ $.extend(BI.OB.prototype, {
 
     _init: function () {
         this._initListeners();
-        this.init();
+        this.init && this.init();
     },
 
     _initListeners: function () {
@@ -5930,6 +4304,7 @@ $.extend(BI.OB.prototype, {
 BI.Widget = BI.inherit(BI.OB, {
     _defaultConfig: function () {
         return BI.extend(BI.Widget.superclass._defaultConfig.apply(this), {
+            root: false,
             tagName: "div",
             attributes: null,
             data: null,
@@ -5945,41 +4320,31 @@ BI.Widget = BI.inherit(BI.OB, {
     },
 
     //生命周期函数
-    beforeCreate: function () {
+    beforeCreate: null,
 
+    created: null,
+
+    render: null,
+
+    beforeMounted: null,
+
+    mounted: null,
+
+    update: function () {
     },
 
-    created: function () {
-
-    },
-
-    render: function () {
-
-    },
-
-    beforeMounted: function () {
-
-    },
-
-    mounted: function () {
-
-    },
-
-    update: null,
-
-    destroyed: function () {
-    },
+    destroyed: null,
 
     _init: function () {
         BI.Widget.superclass._init.apply(this, arguments);
-        this.beforeCreate();
+        this.beforeCreate && this.beforeCreate();
         this._initRoot();
         this._initElementWidth();
         this._initElementHeight();
         this._initVisualEffects();
         this._initState();
         this._initElement();
-        this.created();
+        this.created && this.created();
     },
 
     /**
@@ -5989,6 +4354,7 @@ BI.Widget = BI.inherit(BI.OB, {
     _initRoot: function () {
         var o = this.options;
         this.widgetName = o.widgetName || BI.uniqueId("widget");
+        this._isRoot = o.root;
         if (BI.isWidget(o.element)) {
             if (o.element instanceof BI.Widget) {
                 this._parent = o.element;
@@ -6052,7 +4418,7 @@ BI.Widget = BI.inherit(BI.OB, {
 
     _initElement: function () {
         var self = this;
-        var els = this.render();
+        var els = this.render && this.render();
         if (BI.isPlainObject(els)) {
             els = [els];
         }
@@ -6086,13 +4452,13 @@ BI.Widget = BI.inherit(BI.OB, {
         if (!isMounted) {
             return;
         }
-        this.beforeMounted();
+        this.beforeMounted && this.beforeMounted();
         this._isMounted = true;
         this._mountChildren();
         BI.each(this._children, function (i, widget) {
             widget._mount && widget._mount();
         });
-        this.mounted();
+        this.mounted && this.mounted();
     },
 
     _mountChildren: function () {
@@ -6118,7 +4484,7 @@ BI.Widget = BI.inherit(BI.OB, {
         this._parent = null;
         this._isMounted = false;
         this.purgeListeners();
-        this.destroyed();
+        this.destroyed && this.destroyed();
     },
 
     setWidth: function (w) {
@@ -6129,14 +4495,6 @@ BI.Widget = BI.inherit(BI.OB, {
     setHeight: function (h) {
         this.options.height = h;
         this._initElementHeight();
-    },
-
-    setElement: function (widget) {
-        if (widget == this) {
-            return;
-        }
-        this.element = BI.isWidget(widget) ? widget.element : $(widget);
-        return this;
     },
 
     setEnable: function (enable) {
@@ -6188,13 +4546,16 @@ BI.Widget = BI.inherit(BI.OB, {
             widget = name;
             name = widget.getName();
         }
+        if (BI.isKey(name)) {
+            name = name + "";
+        }
         name = name || widget.getName() || BI.uniqueId("widget");
         if (this._children[name]) {
             throw new Error("name has already been existed");
         }
         widget._setParent && widget._setParent(this);
         widget.on(BI.Events.DESTROY, function () {
-            delete self._children[name]
+            BI.remove(self._children, this);
         });
         return (this._children[name] = widget);
     },
@@ -6220,8 +4581,13 @@ BI.Widget = BI.inherit(BI.OB, {
         return widget;
     },
 
-    removeWidget: function (name) {
-        delete this._children[name];
+    removeWidget: function (nameOrWidget) {
+        var self = this;
+        if (BI.isWidget(nameOrWidget)) {
+            BI.remove(this._children, nameOrWidget);
+        } else {
+            delete this._children[nameOrWidget];
+        }
     },
 
     hasWidget: function (name) {
@@ -6295,9 +4661,16 @@ BI.Widget = BI.inherit(BI.OB, {
         this.setVisible(true);
     },
 
+    isolate: function () {
+        if (this._parent) {
+            this._parent.removeWidget(this);
+        }
+        BI.DOM.hang([this]);
+    },
+
     empty: function () {
         BI.each(this._children, function (i, widget) {
-            widget._unMount();
+            widget._unMount && widget._unMount();
         });
         this._children = {};
         this.element.empty();
@@ -6310,7 +4683,7 @@ BI.Widget = BI.inherit(BI.OB, {
         this._children = {};
         this._parent = null;
         this._isMounted = false;
-        this.destroyed();
+        this.destroyed && this.destroyed();
         this.element.destroy();
         this.fireEvent(BI.Events.DESTROY);
         this.purgeListeners();
@@ -6499,6 +4872,7 @@ BI.Widget = BI.inherit(BI.OB, {
             !BI.has(self._tmp, keys[0]) && self.parent && self.parent._change(self);
             self.splice.apply(self, newKeys);
             self.trigger("splice", newKeys);
+            BI.remove(self._childs, child);
         }).on("copy", function () {
             var keys = name.split('.');
             var g = self.get(keys[0]), p, c;
@@ -6773,6 +5147,20 @@ BI.Widget = BI.inherit(BI.OB, {
         this._save(null, BI.extend({}, options, {
             patch: true
         }));
+    },
+
+    _destroy: function () {
+        var children = BI.extend({}, this._childs);
+        this._childs = {};
+        BI.each(children, function (i, child) {
+            child._destroy();
+        });
+        this.destroyed && this.destroyed();
+    },
+
+    destroy: function () {
+        this._destroy();
+        BI.Model.superclass.destroy.apply(this, arguments);
     }
 });/**
  * @class BI.View
@@ -6801,9 +5189,9 @@ BI.View = BI.inherit(BI.V, {
             this.model._changing_ = false;
             this.model.actionEnd() && this.actionEnd();
         }).listenTo(this.model, "destroy", function () {
-            this.destroy();
+            this._destroy();
         }).listenTo(this.model, "unset", function () {
-            this.destroy();
+            this._destroy();
         }).listenTo(this.model, "splice", function (arg) {
             this.splice.apply(this, arg);
         }).listenTo(this.model, "duplicate", function (arg) {
@@ -6906,10 +5294,10 @@ BI.View = BI.inherit(BI.V, {
         });
         var vessel = BI.createWidget();
         this._cardLayouts[this.getName()].addCardByName(this.getName(), vessel);
-        return vessel.element;
+        return vessel;
     },
 
-    _render: function (vessel) {
+    render: function (vessel) {
         return this;
     },
 
@@ -6927,7 +5315,6 @@ BI.View = BI.inherit(BI.V, {
         options.isLayer && (vessel = BI.Layers.has(id) ? BI.Layers.get(id) : BI.Layers.create(id, vessel));
         if (this._cardLayouts[key]) {
             options.defaultShowName && this._cardLayouts[key].setDefaultShowName(options.defaultShowName);
-            this._cardLayouts[key].setElement(vessel) && this._cardLayouts[key].resize();
             return this;
         }
         this._cardLayouts[key] = BI.createWidget({
@@ -7021,7 +5408,7 @@ BI.View = BI.inherit(BI.V, {
                     delete self._cards[cardName];
                     self.model.removeChild(modelData, view.model);
                     cardLayout.deleteCardByName(cardName);
-                    view.destroy();
+                    view._destroy();
                     cardLayout.setVisible(false);
                 }
                 action.actionBack(view, null, function () {
@@ -7104,7 +5491,7 @@ BI.View = BI.inherit(BI.V, {
         }
         //采用静默方式读数据,该数据变化不引起data的change事件触发
         var success = options.success;
-        this.read(BI.extend({
+        this.model.read(BI.extend({
             silent: true
         }, options, {
             success: function (data, model) {
@@ -7146,22 +5533,10 @@ BI.View = BI.inherit(BI.V, {
         return this.model.getEditing();
     },
 
-    read: function (options) {
-        this.model.read(options)
-    },
-
-    update: function (options) {
-        this.model.update(options);
-    },
-
-    patch: function (options) {
-        this.model.patch(options);
-    },
-
     reading: function (options) {
         var self = this;
         var name = BI.UUID();
-        this.read(BI.extend({}, options, {
+        this.model.read(BI.extend({}, options, {
             beforeSend: function () {
                 var loading = BI.createWidget({
                     type: 'bi.vertical',
@@ -7184,7 +5559,7 @@ BI.View = BI.inherit(BI.V, {
     updating: function (options) {
         var self = this;
         var name = BI.UUID();
-        this.update(BI.extend({}, options, {
+        this.model.update(BI.extend({}, options, {
             noset: true,
             beforeSend: function () {
                 var loading = BI.createWidget({
@@ -7208,7 +5583,7 @@ BI.View = BI.inherit(BI.V, {
     patching: function (options) {
         var self = this;
         var name = BI.UUID();
-        this.patch(BI.extend({}, options, {
+        this.model.patch(BI.extend({}, options, {
             noset: true,
             beforeSend: function () {
                 var loading = BI.createWidget({
@@ -7278,40 +5653,46 @@ BI.View = BI.inherit(BI.V, {
 
     },
 
-    destroy: function () {
+    _unMount: function () {
         BI.each(this._cardLayouts, function (name, card) {
-            card && card.destroy();
+            card && card._unMount();
         });
         delete this._cardLayouts;
         delete this._cards;
-        this.remove();
         this.destroyed();
+        this.off();
+    },
+
+    _destroy: function () {
+        BI.each(this._cardLayouts, function (name, card) {
+            card && card._unMount();
+        });
+        delete this._cardLayouts;
+        delete this._cards;
+        this.destroyed();
+        this.remove();
+        this.trigger(BI.Events.DESTROY);
+        this.off();
     },
 
     destroyed: function () {
 
     }
-});(function ($) {
+});(function () {
 
     var kv = {}; // alex:键(编辑器简称,如text)值(也是一个字符串,如FR.TextEditor)对
-    $.shortcut = BI.shortcut = function (xtype, cls) {
+    BI.shortcut = function (xtype, cls) {
         if (kv[xtype] != null) {
             throw ("shortcut:[" + xtype + "] has been registed");
         }
         kv[xtype] = cls;
-        $.extend(cls.prototype, {
+        _.extend(cls.prototype, {
             xtype: xtype
         })
     };
 
     // 根据配置属性生成widget
     var createWidget = function (config) {
-        // alex:如果是一个jquery对象,就在外面套一层,变成一个FR.Widget
-        if (config instanceof $) {
-            return new BI.Widget({
-                element: config
-            });
-        }
         if (config['classType']) {
             return new (new Function('return ' + config['classType'] + ';')())(config);
         }
@@ -7349,7 +5730,7 @@ BI.View = BI.inherit(BI.V, {
         throw new Error('无法根据item创建组件');
     }
 
-})(jQuery);BI.Plugin = BI.Plugin || {};
+})();BI.Plugin = BI.Plugin || {};
 ;
 (function () {
     var _WidgetsPlugin = {};
@@ -7808,56 +6189,56 @@ BI.Cache = {
         document.cookie = cookieString;
     }
 };// full day names
-Date._DN = [BI.i18nText("BI-Sunday"),
-    BI.i18nText("BI-Monday"),
-    BI.i18nText("BI-Tuesday"),
-    BI.i18nText("BI-Wednesday"),
-    BI.i18nText("BI-Thursday"),
-    BI.i18nText("BI-Friday"),
-    BI.i18nText("BI-Saturday"),
-    BI.i18nText("BI-Sunday")];
+Date._DN = [BI.i18nText("BI-Basic_Sunday"),
+    BI.i18nText("BI-Basic_Monday"),
+    BI.i18nText("BI-Basic_Tuesday"),
+    BI.i18nText("BI-Basic_Wednesday"),
+    BI.i18nText("BI-Basic_Thursday"),
+    BI.i18nText("BI-Basic_Friday"),
+    BI.i18nText("BI-Basic_Saturday"),
+    BI.i18nText("BI-Basic_Sunday")];
 
 // short day names
-Date._SDN = ['',
-    '',
-    '',
-    '',
-    '',
-    '',
-    '',
-    ''];
+Date._SDN = [BI.i18nText("BI-Day_Ri"),
+    BI.i18nText("BI-Basic_One"),
+    BI.i18nText("BI-Basic_Two"),
+    BI.i18nText("BI-Basic_Three"),
+    BI.i18nText("BI-Basic_Four"),
+    BI.i18nText("BI-Basic_Five"),
+    BI.i18nText("BI-Basic_Six"),
+    BI.i18nText("BI-Day_Ri")];
 
 // Monday first, etc.
 Date._FD = 1;
 
 // full month names
 Date._MN = [
-    '',
-    '',
-    '',
-    '',
-    '',
-    '',
-    '',
-    '',
-    '',
-    '',
-    '',
-    ''];
+    BI.i18nText("BI-Basic_January"),
+    BI.i18nText("BI-Basic_February"),
+    BI.i18nText("BI-Basic_March"),
+    BI.i18nText("BI-Basic_April"),
+    BI.i18nText("BI-Basic_May"),
+    BI.i18nText("BI-Basic_June"),
+    BI.i18nText("BI-Basic_July"),
+    BI.i18nText("BI-Basic_August"),
+    BI.i18nText("BI-Basic_September"),
+    BI.i18nText("BI-Basic_October"),
+    BI.i18nText("BI-Basic_November"),
+    BI.i18nText("BI-Basic_December")];
 
 // short month names
-Date._SMN = ['',
-    '',
-    '',
-    '',
-    '',
-    '',
-    '',
-    '',
-    '',
-    '',
-    '',
-    ''];
+Date._SMN = [0,
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8,
+    9,
+    10,
+    11];
 
 Date._QN = ["", BI.i18nText("BI-Quarter_1"),
     BI.i18nText("BI-Quarter_2"),
@@ -12761,14 +11142,15 @@ BI.Layout = BI.inherit(BI.Widget, {
         var self = this, w;
         if (!this.hasWidget(this._getChildName(i))) {
             w = BI.createWidget(item);
-            this.addWidget(this._getChildName(i), w);
             w.on(BI.Events.DESTROY, function () {
                 BI.each(self._children, function (name, child) {
                     if (child === w) {
+                        BI.remove(self._children, child);
                         self.removeItemAt(name | 0);
                     }
                 });
             });
+            this.addWidget(this._getChildName(i), w);
         } else {
             w = this.getWidgetByName(this._getChildName(i));
         }
@@ -12871,7 +11253,7 @@ BI.Layout = BI.inherit(BI.Widget, {
         for (var i = this.options.items.length; i > index; i--) {
             this._children[this._getChildName(i)] = this._children[this._getChildName(i - 1)];
         }
-        delete this._children[index];
+        delete this._children[this._getChildName(index)];
         this.options.items.splice(index, 0, item);
     },
 
@@ -12879,6 +11261,7 @@ BI.Layout = BI.inherit(BI.Widget, {
         for (var i = index; i < this.options.items.length - 1; i++) {
             this._children[this._getChildName(i)] = this._children[this._getChildName(i + 1)];
         }
+        delete this._children[this._getChildName(this.options.items.length - 1)];
         this.options.items.splice(index, 1);
     },
 
@@ -12909,13 +11292,24 @@ BI.Layout = BI.inherit(BI.Widget, {
         return w;
     },
 
-    removeItemAt: function (index) {
-        if (index < 0 || index > this.options.items.length - 1) {
-            return;
+    removeItemAt: function (indexes) {
+        indexes = BI.isArray(indexes) ? indexes : [indexes];
+        var deleted = [];
+        var newItems = [], newChildren = {};
+        for (var i = 0, len = this.options.items.length; i < len; i++) {
+            var child = this._children[this._getChildName(i)];
+            if (indexes.contains(i)) {
+                child && deleted.push(child);
+            } else {
+                newChildren[this._getChildName(newItems.length)] = child;
+                newItems.push(this.options.items[i]);
+            }
         }
-        var child = this._children[this._getChildName(index)];
-        this._removeItemAt(index);
-        child.destroy();
+        this.options.items = newItems;
+        this._children = newChildren;
+        BI.each(deleted, function (i, c) {
+            c.destroy();
+        });
     },
 
     updateItemAt: function (index, item) {
@@ -12924,9 +11318,9 @@ BI.Layout = BI.inherit(BI.Widget, {
         }
 
         var child = this._children[this._getChildName(index)];
-        if (child.update) {
-            child.update(this._getOptions(item));
-            return true;
+        var updated;
+        if (updated = child.update(this._getOptions(item))) {
+            return updated;
         }
         var del = this._children[this._getChildName(index)];
         delete this._children[this._getChildName(index)];
@@ -12980,33 +11374,39 @@ BI.Layout = BI.inherit(BI.Widget, {
     },
 
     getValue: function () {
-        var self = this, value = [];
+        var self = this, value = [], child;
         BI.each(this.options.items, function (i) {
-            var v = self._children[self._getChildName(i)].getValue();
-            v = BI.isArray(v) ? v : [v];
-            value = value.concat(v);
+            if (child = self._children[self._getChildName(i)]) {
+                var v = child.getValue();
+                v = BI.isArray(v) ? v : [v];
+                value = value.concat(v);
+            }
         });
         return value;
     },
 
     setValue: function (v) {
-        var self = this;
+        var self = this, child;
         BI.each(this.options.items, function (i) {
-            self._children[self._getChildName(i)].setValue(v);
+            if (child = self._children[self._getChildName(i)]) {
+                child.setValue(v);
+            }
         })
     },
 
     setText: function (v) {
-        var self = this;
+        var self = this, child;
         BI.each(this.options.items, function (i) {
-            self._children[self._getChildName(i)].setText(v);
+            if (child = self._children[self._getChildName(i)]) {
+                child.setText(v);
+            }
         })
     },
 
     update: function (item) {
         var o = this.options;
-        var items = item.items;
-        var updated = false, i, len;
+        var items = item.items || [];
+        var updated, i, len;
         for (i = 0, len = Math.min(o.items.length, items.length); i < len; i++) {
             if (!this._compare(o.items[i], items[i])) {
                 updated = this.updateItemAt(i, items[i]) || updated;
@@ -13016,7 +11416,9 @@ BI.Layout = BI.inherit(BI.Widget, {
             var deleted = [];
             for (i = items.length; i < o.items.length; i++) {
                 deleted.push(this._children[this._getChildName(i)]);
+                delete this._children[this._getChildName(i)];
             }
+            o.items.splice(items.length);
             BI.each(deleted, function (i, w) {
                 w.destroy();
             })
@@ -13025,7 +11427,6 @@ BI.Layout = BI.inherit(BI.Widget, {
                 this.addItemAt(i, items[i]);
             }
         }
-        this.options.items = items;
         return updated;
     },
 
@@ -13036,6 +11437,32 @@ BI.Layout = BI.inherit(BI.Widget, {
                 self._addElement(i, item);
             }
         });
+    },
+
+    removeWidget: function (nameOrWidget) {
+        var removeIndex;
+        if (BI.isWidget(nameOrWidget)) {
+            BI.each(this._children, function (name, child) {
+                if (child === nameOrWidget) {
+                    removeIndex = name;
+                }
+            })
+        } else {
+            removeIndex = nameOrWidget;
+        }
+        if (removeIndex) {
+            this._removeItemAt(removeIndex | 0);
+        }
+    },
+
+    empty: function () {
+        BI.Layout.superclass.empty.apply(this, arguments);
+        this.options.items = [];
+    },
+
+    destroy: function () {
+        BI.Layout.superclass.destroy.apply(this, arguments);
+        this.options.items = [];
     },
 
     populate: function (items) {
@@ -13053,7 +11480,7 @@ BI.Layout = BI.inherit(BI.Widget, {
 
     }
 });
-$.shortcut('bi.layout', BI.Layout);/**
+BI.shortcut('bi.layout', BI.Layout);/**
  * absolute实现的居中布局
  * @class BI.AbsoluteCenterLayout
  * @extends BI.Layout
@@ -13099,7 +11526,7 @@ BI.AbsoluteCenterLayout = BI.inherit(BI.Layout, {
         this._mount();
     }
 });
-$.shortcut('bi.absolute_center_adapt', BI.AbsoluteCenterLayout);/**
+BI.shortcut('bi.absolute_center_adapt', BI.AbsoluteCenterLayout);/**
  * absolute实现的居中布局
  * @class BI.AbsoluteHorizontalLayout
  * @extends BI.Layout
@@ -13149,7 +11576,7 @@ BI.AbsoluteHorizontalLayout = BI.inherit(BI.Layout, {
         this._mount();
     }
 });
-$.shortcut('bi.absolute_horizontal_adapt', BI.AbsoluteHorizontalLayout);/**
+BI.shortcut('bi.absolute_horizontal_adapt', BI.AbsoluteHorizontalLayout);/**
  * absolute实现的居中布局
  * @class BI.AbsoluteVerticalLayout
  * @extends BI.Layout
@@ -13201,7 +11628,7 @@ BI.AbsoluteVerticalLayout = BI.inherit(BI.Layout, {
         this._mount();
     }
 });
-$.shortcut('bi.absolute_vertical_adapt', BI.AbsoluteVerticalLayout);/**
+BI.shortcut('bi.absolute_vertical_adapt', BI.AbsoluteVerticalLayout);/**
  * 自适应水平和垂直方向都居中容器
  * @class BI.CenterAdaptLayout
  * @extends BI.Layout
@@ -13319,7 +11746,7 @@ BI.CenterAdaptLayout = BI.inherit(BI.Layout, {
         this._mount();
     }
 });
-$.shortcut('bi.center_adapt', BI.CenterAdaptLayout);/**
+BI.shortcut('bi.center_adapt', BI.CenterAdaptLayout);/**
  * 水平方向居中容器
  * @class BI.HorizontalAdaptLayout
  * @extends BI.Layout
@@ -13436,7 +11863,7 @@ BI.HorizontalAdaptLayout = BI.inherit(BI.Layout, {
         this._mount();
     }
 });
-$.shortcut('bi.horizontal_adapt', BI.HorizontalAdaptLayout);/**
+BI.shortcut('bi.horizontal_adapt', BI.HorizontalAdaptLayout);/**
  * 左右分离，垂直方向居中容器
  *          items:{
                 left: [{el:{type:"bi.button"}}],
@@ -13511,7 +11938,7 @@ BI.LeftRightVerticalAdaptLayout = BI.inherit(BI.Layout, {
         this._mount();
     }
 });
-$.shortcut('bi.left_right_vertical_adapt', BI.LeftRightVerticalAdaptLayout);
+BI.shortcut('bi.left_right_vertical_adapt', BI.LeftRightVerticalAdaptLayout);
 
 
 BI.LeftVerticalAdaptLayout = BI.inherit(BI.Layout, {
@@ -13560,7 +11987,7 @@ BI.LeftVerticalAdaptLayout = BI.inherit(BI.Layout, {
         this._mount();
     }
 });
-$.shortcut('bi.left_vertical_adapt', BI.LeftVerticalAdaptLayout);
+BI.shortcut('bi.left_vertical_adapt', BI.LeftVerticalAdaptLayout);
 
 BI.RightVerticalAdaptLayout = BI.inherit(BI.Layout, {
     props: function () {
@@ -13608,7 +12035,7 @@ BI.RightVerticalAdaptLayout = BI.inherit(BI.Layout, {
         this._mount();
     }
 });
-$.shortcut('bi.right_vertical_adapt', BI.RightVerticalAdaptLayout);/**
+BI.shortcut('bi.right_vertical_adapt', BI.RightVerticalAdaptLayout);/**
  * 垂直方向居中容器
  * @class BI.VerticalAdaptLayout
  * @extends BI.Layout
@@ -13723,7 +12150,7 @@ BI.VerticalAdaptLayout = BI.inherit(BI.Layout, {
         this._mount();
     }
 });
-$.shortcut('bi.vertical_adapt', BI.VerticalAdaptLayout);/**
+BI.shortcut('bi.vertical_adapt', BI.VerticalAdaptLayout);/**
  * 水平方向居中自适应容器
  * @class BI.HorizontalAutoLayout
  * @extends BI.Layout
@@ -13785,7 +12212,7 @@ BI.HorizontalAutoLayout = BI.inherit(BI.Layout, {
         this._mount();
     }
 });
-$.shortcut('bi.horizontal_auto', BI.HorizontalAutoLayout);/**
+BI.shortcut('bi.horizontal_auto', BI.HorizontalAutoLayout);/**
  * 浮动的居中布局
  */
 BI.FloatCenterAdaptLayout = BI.inherit(BI.Layout, {
@@ -13824,7 +12251,7 @@ BI.FloatCenterAdaptLayout = BI.inherit(BI.Layout, {
             element: this,
             items: [this.left]
         });
-        this.removeWidget(this.container.getName());
+        this.removeWidget(this.container);
     },
 
     stroke: function (items) {
@@ -13853,7 +12280,7 @@ BI.FloatCenterAdaptLayout = BI.inherit(BI.Layout, {
         this._mount();
     }
 });
-$.shortcut('bi.float_center_adapt', BI.FloatCenterAdaptLayout);/**
+BI.shortcut('bi.float_center_adapt', BI.FloatCenterAdaptLayout);/**
  * 浮动的水平居中布局
  */
 BI.FloatHorizontalLayout = BI.inherit(BI.Layout, {
@@ -13887,7 +12314,7 @@ BI.FloatHorizontalLayout = BI.inherit(BI.Layout, {
             element: this,
             items: [this.left]
         });
-        this.removeWidget(this.container.getName());
+        this.removeWidget(this.container);
     },
 
     _addElement: function (i, item) {
@@ -13917,7 +12344,7 @@ BI.FloatHorizontalLayout = BI.inherit(BI.Layout, {
         this._mount();
     }
 });
-$.shortcut('bi.horizontal_float', BI.FloatHorizontalLayout);/**
+BI.shortcut('bi.horizontal_float', BI.FloatHorizontalLayout);/**
  * 内联布局
  * @class BI.InlineCenterAdaptLayout
  * @extends BI.Layout
@@ -14014,7 +12441,7 @@ BI.InlineCenterAdaptLayout = BI.inherit(BI.Layout, {
         this._mount();
     }
 });
-$.shortcut('bi.inline_center_adapt', BI.InlineCenterAdaptLayout);/**
+BI.shortcut('bi.inline_center_adapt', BI.InlineCenterAdaptLayout);/**
  * 内联布局
  * @class BI.InlineVerticalAdaptLayout
  * @extends BI.Layout
@@ -14085,7 +12512,7 @@ BI.InlineVerticalAdaptLayout = BI.inherit(BI.Layout, {
         this._mount();
     }
 });
-$.shortcut('bi.inline_vertical_adapt', BI.InlineVerticalAdaptLayout);/**
+BI.shortcut('bi.inline_vertical_adapt', BI.InlineVerticalAdaptLayout);/**
  *自适应水平和垂直方向都居中容器
  * Created by GUY on 2016/12/2.
  *
@@ -14119,7 +12546,7 @@ BI.FlexCenterLayout = BI.inherit(BI.Layout, {
         this._mount();
     }
 });
-$.shortcut('bi.flex_center', BI.FlexCenterLayout);/**
+BI.shortcut('bi.flex_center', BI.FlexCenterLayout);/**
  *自适应水平和垂直方向都居中容器
  * Created by GUY on 2016/12/2.
  *
@@ -14184,7 +12611,7 @@ BI.FlexHorizontalLayout = BI.inherit(BI.Layout, {
         this._mount();
     }
 });
-$.shortcut('bi.flex_horizontal', BI.FlexHorizontalLayout);/**
+BI.shortcut('bi.flex_horizontal', BI.FlexHorizontalLayout);/**
  *自适应水平和垂直方向都居中容器
  * Created by GUY on 2016/12/2.
  *
@@ -14246,7 +12673,7 @@ BI.FlexVerticalCenter = BI.inherit(BI.Layout, {
         this._mount();
     }
 });
-$.shortcut('bi.flex_vertical_center', BI.FlexVerticalCenter);/**
+BI.shortcut('bi.flex_vertical_center', BI.FlexVerticalCenter);/**
  *自适应水平和垂直方向都居中容器
  * Created by GUY on 2016/12/2.
  *
@@ -14301,7 +12728,7 @@ BI.FlexCenterLayout = BI.inherit(BI.Layout, {
         this._mount();
     }
 });
-$.shortcut('bi.flex_wrapper_center', BI.FlexCenterLayout);/**
+BI.shortcut('bi.flex_wrapper_center', BI.FlexCenterLayout);/**
  *自适应水平和垂直方向都居中容器
  * Created by GUY on 2016/12/2.
  *
@@ -14386,7 +12813,7 @@ BI.FlexHorizontalLayout = BI.inherit(BI.Layout, {
         this._mount();
     }
 });
-$.shortcut('bi.flex_wrapper_horizontal', BI.FlexHorizontalLayout);/**
+BI.shortcut('bi.flex_wrapper_horizontal', BI.FlexHorizontalLayout);/**
  *自适应水平和垂直方向都居中容器
  * Created by GUY on 2016/12/2.
  *
@@ -14469,7 +12896,7 @@ BI.FlexVerticalCenter = BI.inherit(BI.Layout, {
         this._mount();
     }
 });
-$.shortcut('bi.flex_wrapper_vertical_center', BI.FlexVerticalCenter);/**
+BI.shortcut('bi.flex_wrapper_vertical_center', BI.FlexVerticalCenter);/**
  * 固定子组件上下左右的布局容器
  * @class BI.AbsoluteLayout
  * @extends BI.Layout
@@ -14575,7 +13002,7 @@ BI.AbsoluteLayout = BI.inherit(BI.Layout, {
         this._mount();
     }
 });
-$.shortcut('bi.absolute', BI.AbsoluteLayout);BI.AdaptiveLayout = BI.inherit(BI.Layout, {
+BI.shortcut('bi.absolute', BI.AbsoluteLayout);BI.AdaptiveLayout = BI.inherit(BI.Layout, {
     props: function () {
         return BI.extend(BI.AdaptiveLayout.superclass.props.apply(this, arguments), {
             baseCls: "bi-adaptive-layout",
@@ -14666,7 +13093,7 @@ $.shortcut('bi.absolute', BI.AbsoluteLayout);BI.AdaptiveLayout = BI.inherit(BI.L
         this._mount();
     }
 });
-$.shortcut('bi.adaptive', BI.AdaptiveLayout);/**
+BI.shortcut('bi.adaptive', BI.AdaptiveLayout);/**
  * 上下的高度固定/左右的宽度固定，中间的高度/宽度自适应
  *
  * @class BI.BorderLayout
@@ -14797,7 +13224,7 @@ BI.BorderLayout = BI.inherit(BI.Layout, {
         this._mount();
     }
 });
-$.shortcut('bi.border', BI.BorderLayout);/**
+BI.shortcut('bi.border', BI.BorderLayout);/**
  * 卡片布局，可以做到当前只显示一个组件，其他的都隐藏
  * @class BI.CardLayout
  * @extends BI.Layout
@@ -14817,27 +13244,28 @@ BI.CardLayout = BI.inherit(BI.Layout, {
         this.populate(this.options.items);
     },
 
-    _getCardName: function (cardName) {
-        return this.getName() + cardName;
-    },
-
     resize: function () {
         // console.log("default布局不需要resize");
     },
 
     stroke: function (items) {
-        var self = this;
+        var self = this, o = this.options;
         this.showIndex = void 0;
         BI.each(items, function (i, item) {
             if (!!item) {
-                if (!self.hasWidget(self._getCardName(item.cardName))) {
+                if (!self.hasWidget(item.cardName)) {
                     var w = BI.createWidget(item);
-                    self.addWidget(self._getCardName(item.cardName), w);
                     w.on(BI.Events.DESTROY, function () {
-                        delete self._children[self._getCardName(item.cardName)];
+                        var index = BI.findIndex(o.items, function (i, tItem) {
+                            return tItem.cardName == item.cardName;
+                        });
+                        if (index > -1) {
+                            o.items.splice(index, 1);
+                        }
                     });
+                    self.addWidget(item.cardName, w);
                 } else {
-                    var w = self.getWidgetByName(self._getCardName(item.cardName));
+                    var w = self.getWidgetByName(item.cardName);
                 }
                 w.element.css({"position": "absolute", "top": "0", "right": "0", "bottom": "0", "left": "0"});
                 w.setVisible(false);
@@ -14848,6 +13276,11 @@ BI.CardLayout = BI.inherit(BI.Layout, {
     update: function () {
     },
 
+    empty: function () {
+        BI.CardLayout.superclass.empty.apply(this, arguments);
+        this.options.items = [];
+    },
+
     populate: function (items) {
         BI.CardLayout.superclass.populate.apply(this, arguments);
         this._mount();
@@ -14855,57 +13288,74 @@ BI.CardLayout = BI.inherit(BI.Layout, {
     },
 
     isCardExisted: function (cardName) {
-        return this.hasWidget(this._getCardName(cardName));
+        return BI.some(this.options.items, function (i, item) {
+            return item.cardName === cardName && item.el;
+        });
     },
 
     getCardByName: function (cardName) {
-        if (!this.hasWidget(this._getCardName(cardName))) {
+        if (!this.isCardExisted(cardName)) {
             throw new Error("cardName is not exist");
         }
-        return this._children[this._getCardName(cardName)];
+        return this._children[cardName];
+    },
+
+    _deleteCardByName: function (cardName) {
+        delete this._children[cardName];
+        var index = BI.findIndex(this.options.items, function (i, item) {
+            return item.cardName == cardName;
+        });
+        if (index > -1) {
+            this.options.items.splice(index, 1);
+        }
     },
 
     deleteCardByName: function (cardName) {
-        if (!this.hasWidget(this._getCardName(cardName))) {
-            return;
+        if (!this.isCardExisted(cardName)) {
+            throw new Error("cardName is not exist");
         }
-        var index = BI.findKey(this.options.items, function (i, item) {
-            return item.cardName == cardName;
-        });
-        this.options.items.splice(index, 1);
-        var child = this.getWidgetByName(this._getCardName(cardName));
-        delete this._children[this._getCardName(cardName)];
-        child.destroy();
+
+        var child = this._children[cardName];
+        this._deleteCardByName(cardName);
+        child && child.destroy();
     },
 
     addCardByName: function (cardName, cardItem) {
-        if (this.hasWidget(this._getCardName(cardName))) {
+        if (this.isCardExisted(cardName)) {
             throw new Error("cardName is already exist");
         }
-        this.options.items.push({el: cardItem, cardName: cardName});
         var widget = BI.createWidget(cardItem);
-        widget.element.css({"position": "relative", "top": "0", "left": "0", "width": "100%", "height": "100%"})
-            .appendTo(this.element);
+        widget.element.css({
+            "position": "relative",
+            "top": "0",
+            "left": "0",
+            "width": "100%",
+            "height": "100%"
+        }).appendTo(this.element);
         widget.invisible();
-        this.addWidget(this._getCardName(cardName), widget);
+        this.addWidget(cardName, widget);
+        this.options.items.push({el: cardItem, cardName: cardName});
         return widget;
     },
 
     showCardByName: function (name, action, callback) {
         var self = this;
         //name不存在的时候全部隐藏
-        var exist = this.hasWidget(this._getCardName(name));
+        var exist = this.isCardExisted(name);
         if (this.showIndex != null) {
             this.lastShowIndex = this.showIndex;
         }
-        this.showIndex = this._getCardName(name);
+        this.showIndex = name;
         var flag = false;
-        BI.each(this._children, function (i, el) {
-            if (self._getCardName(name) != i) {
-                //动画效果只有在全部都隐藏的时候才有意义,且只要执行一次动画操作就够了
-                !flag && !exist && (BI.Action && action instanceof BI.Action) ? (action.actionBack(el), flag = true) : el.invisible();
-            } else {
-                (BI.Action && action instanceof BI.Action) ? action.actionPerformed(void 0, el, callback) : (el.visible(), callback && callback())
+        BI.each(this.options.items, function (i, item) {
+            var el = self._children[item.cardName];
+            if (el) {
+                if (name != item.cardName) {
+                    //动画效果只有在全部都隐藏的时候才有意义,且只要执行一次动画操作就够了
+                    !flag && !exist && (BI.Action && action instanceof BI.Action) ? (action.actionBack(el), flag = true) : el.invisible();
+                } else {
+                    (BI.Action && action instanceof BI.Action) ? action.actionPerformed(void 0, el, callback) : (el.visible(), callback && callback())
+                }
             }
         });
     },
@@ -14913,8 +13363,8 @@ BI.CardLayout = BI.inherit(BI.Layout, {
     showLastCard: function () {
         var self = this;
         this.showIndex = this.lastShowIndex;
-        BI.each(this._children, function (i, el) {
-            el.setVisible(self.showIndex == i);
+        BI.each(this.options.items, function (i, item) {
+            self._children[item.cardName].setVisible(self.showIndex == i);
         })
     },
 
@@ -14948,23 +13398,41 @@ BI.CardLayout = BI.inherit(BI.Layout, {
     },
 
     hideAllCard: function () {
-        BI.each(this._children, function (i, el) {
-            el.invisible();
+        var self = this;
+        BI.each(this.options.items, function (i, item) {
+            self._children[item.cardName].invisible();
         });
     },
 
     isAllCardHide: function () {
+        var self = this;
         var flag = true;
-        BI.some(this._children, function (i, el) {
-            if (el.isVisible()) {
+        BI.some(this.options.items, function (i, item) {
+            if (self._children[item.cardName].isVisible()) {
                 flag = false;
                 return false;
             }
         });
         return flag;
+    },
+
+    removeWidget: function (nameOrWidget) {
+        var removeName;
+        if (BI.isWidget(nameOrWidget)) {
+            BI.each(this._children, function (name, child) {
+                if (child === nameOrWidget) {
+                    removeName = name;
+                }
+            })
+        } else {
+            removeName = nameOrWidget;
+        }
+        if (removeName) {
+            this._deleteCardByName(removeName);
+        }
     }
 });
-$.shortcut('bi.card', BI.CardLayout);/**
+BI.shortcut('bi.card', BI.CardLayout);/**
  * 默认的布局方式
  *
  * @class BI.DefaultLayout
@@ -15022,7 +13490,7 @@ BI.DefaultLayout = BI.inherit(BI.Layout, {
         this._mount();
     }
 });
-$.shortcut('bi.default', BI.DefaultLayout);/**
+BI.shortcut('bi.default', BI.DefaultLayout);/**
  * 分隔容器的控件，按照宽度和高度所占比平分整个容器
  *
  * @class BI.DivisionLayout
@@ -15178,7 +13646,7 @@ BI.DivisionLayout = BI.inherit(BI.Layout, {
         this._mount();
     }
 });
-$.shortcut('bi.division', BI.DivisionLayout);/**
+BI.shortcut('bi.division', BI.DivisionLayout);/**
  * 靠左对齐的自由浮动布局
  * @class BI.FloatLeftLayout
  * @extends BI.Layout
@@ -15241,7 +13709,7 @@ BI.FloatLeftLayout = BI.inherit(BI.Layout, {
         this._mount();
     }
 });
-$.shortcut('bi.left', BI.FloatLeftLayout);
+BI.shortcut('bi.left', BI.FloatLeftLayout);
 
 /**
  * 靠右对齐的自由浮动布局
@@ -15306,7 +13774,7 @@ BI.FloatRightLayout = BI.inherit(BI.Layout, {
         this._mount();
     }
 });
-$.shortcut('bi.right', BI.FloatRightLayout);/**
+BI.shortcut('bi.right', BI.FloatRightLayout);/**
  * 上下的高度固定/左右的宽度固定，中间的高度/宽度自适应
  *
  * @class BI.BorderLayout
@@ -15431,7 +13899,7 @@ BI.GridLayout = BI.inherit(BI.Layout, {
         this._mount();
     }
 });
-$.shortcut('bi.grid', BI.GridLayout);/**
+BI.shortcut('bi.grid', BI.GridLayout);/**
  * 水平布局
  * @class BI.HorizontalLayout
  * @extends BI.Layout
@@ -15549,7 +14017,7 @@ BI.HorizontalLayout = BI.inherit(BI.Layout, {
         this._mount();
     }
 });
-$.shortcut('bi.horizontal', BI.HorizontalLayout);
+BI.shortcut('bi.horizontal', BI.HorizontalLayout);
 
 /**
  * 水平布局
@@ -15611,7 +14079,7 @@ BI.HorizontalCellLayout = BI.inherit(BI.Layout, {
         this._mount();
     }
 });
-$.shortcut('bi.horizontal_cell', BI.HorizontalCellLayout);/**
+BI.shortcut('bi.horizontal_cell', BI.HorizontalCellLayout);/**
  * 内联布局
  * @class BI.InlineLayout
  * @extends BI.Layout
@@ -15673,7 +14141,7 @@ BI.InlineLayout = BI.inherit(BI.Layout, {
         this._mount();
     }
 });
-$.shortcut('bi.inline', BI.InlineLayout);/**
+BI.shortcut('bi.inline', BI.InlineLayout);/**
  * 靠左对齐的自由浮动布局
  * @class BI.LatticeLayout
  * @extends BI.Layout
@@ -15727,7 +14195,7 @@ BI.LatticeLayout = BI.inherit(BI.Layout, {
         this._mount();
     }
 });
-$.shortcut('bi.lattice', BI.LatticeLayout);/**
+BI.shortcut('bi.lattice', BI.LatticeLayout);/**
  * 上下的高度固定/左右的宽度固定，中间的高度/宽度自适应
  *
  * @class BI.TableLayout
@@ -15872,7 +14340,7 @@ BI.TableLayout = BI.inherit(BI.Layout, {
         this._mount();
     }
 });
-$.shortcut('bi.table', BI.TableLayout);/**
+BI.shortcut('bi.table', BI.TableLayout);/**
  * 水平tape布局
  * @class BI.HTapeLayout
  * @extends BI.Layout
@@ -15974,7 +14442,7 @@ BI.HTapeLayout = BI.inherit(BI.Layout, {
         this._mount();
     }
 });
-$.shortcut('bi.htape', BI.HTapeLayout);
+BI.shortcut('bi.htape', BI.HTapeLayout);
 
 /**
  * 垂直tape布局
@@ -16079,7 +14547,7 @@ BI.VTapeLayout = BI.inherit(BI.Layout, {
         this._mount();
     }
 });
-$.shortcut('bi.vtape', BI.VTapeLayout);/**
+BI.shortcut('bi.vtape', BI.VTapeLayout);/**
  * td布局
  * @class BI.TdLayout
  * @extends BI.Layout
@@ -16220,7 +14688,7 @@ BI.TdLayout = BI.inherit(BI.Layout, {
         this._mount();
     }
 });
-$.shortcut('bi.td', BI.TdLayout);/**
+BI.shortcut('bi.td', BI.TdLayout);/**
  * 垂直布局
  * @class BI.VerticalLayout
  * @extends BI.Layout
@@ -16281,7 +14749,7 @@ BI.VerticalLayout = BI.inherit(BI.Layout, {
         this._mount();
     }
 });
-$.shortcut('bi.vertical', BI.VerticalLayout);/**
+BI.shortcut('bi.vertical', BI.VerticalLayout);/**
  *
  * @class BI.WindowLayout
  * @extends BI.Layout
@@ -16468,7 +14936,7 @@ BI.WindowLayout = BI.inherit(BI.Layout, {
         this._mount();
     }
 });
-$.shortcut('bi.window', BI.WindowLayout);/**
+BI.shortcut('bi.window', BI.WindowLayout);/**
  * 水平和垂直方向都居中容器, 非自适应，用于宽度高度固定的面板
  * @class BI.CenterLayout
  * @extends BI.Layout
@@ -16542,7 +15010,7 @@ BI.CenterLayout = BI.inherit(BI.Layout, {
         this._mount();
     }
 });
-$.shortcut('bi.center', BI.CenterLayout);/**
+BI.shortcut('bi.center', BI.CenterLayout);/**
  * 浮动布局实现的居中容器
  * @class BI.FloatCenterLayout
  * @extends BI.Layout
@@ -16615,7 +15083,7 @@ BI.FloatCenterLayout = BI.inherit(BI.Layout, {
         this._mount();
     }
 });
-$.shortcut('bi.float_center', BI.FloatCenterLayout);/**
+BI.shortcut('bi.float_center', BI.FloatCenterLayout);/**
  * 水平和垂直方向都居中容器, 非自适应，用于宽度高度固定的面板
  * @class BI.HorizontalCenterLayout
  * @extends BI.Layout
@@ -16687,7 +15155,7 @@ BI.HorizontalCenterLayout = BI.inherit(BI.Layout, {
         this._mount();
     }
 });
-$.shortcut('bi.horizontal_center', BI.HorizontalCenterLayout);/**
+BI.shortcut('bi.horizontal_center', BI.HorizontalCenterLayout);/**
  * 垂直方向都居中容器, 非自适应，用于高度不固定的面板
  * @class BI.VerticalCenterLayout
  * @extends BI.Layout
@@ -16759,7 +15227,7 @@ BI.VerticalCenterLayout = BI.inherit(BI.Layout, {
         this._mount();
     }
 });
-$.shortcut('bi.vertical_center', BI.VerticalCenterLayout);/**
+BI.shortcut('bi.vertical_center', BI.VerticalCenterLayout);/**
  * guy
  * 由一个元素切换到另一个元素的行为
  * @class BI.Action
@@ -16800,145 +15268,28 @@ BI.ActionFactory = {
 }/**
  * guy
  * 由一个元素切换到另一个元素的行为
- * @class BI.EffectShowAction
- * @extends BI.Action
- */
-BI.EffectShowAction = BI.inherit(BI.Action, {
-    _defaultConfig: function() {
-        return BI.extend(BI.EffectShowAction.superclass._defaultConfig.apply(this, arguments), {
-        });
-    },
-
-    _init : function() {
-        BI.EffectShowAction.superclass._init.apply(this, arguments);
-    },
-
-    _checkBrowser: function(){
-        return false;
-//        return !(BI.isFireFox() && parseInt($.browser.version) < 10);
-    },
-
-    actionPerformed: function(src, tar, callback){
-        src = src || this.options.src ,tar = tar || this.options.tar || "body";
-
-        if(this._checkBrowser()) {
-            var transferEl = BI.createWidget({
-                type: "bi.layout",
-                cls: "bi-transfer-temp-el"
-            })
-
-            BI.createWidget({
-                type: "bi.absolute",
-                element: "body",
-                items: [transferEl]
-            })
-
-            transferEl.element.css({
-                width: tar.element.width(),
-                height: tar.element.height(),
-                top: tar.element.offset().top,
-                left: tar.element.offset().left
-            });
-
-            src.element.effect("transfer", {
-                to: transferEl.element,
-                className: "ui-effects-transfer"
-            }, 400, function () {
-                transferEl.destroy();
-                tar && tar.element.show(0, callback);
-            })
-        } else {
-            tar && tar.element.show(0, callback);
-        }
-    },
-
-    actionBack: function(tar, src, callback){
-        src = src || this.options.src || $("body"),tar = tar || this.options.tar;
-        tar && tar.element.hide();
-        if(this._checkBrowser()) {
-            var transferEl = BI.createWidget({
-                type: "bi.layout",
-                cls: "bi-transfer-temp-el"
-            })
-
-            BI.createWidget({
-                type: "bi.absolute",
-                element: "body",
-                items: [transferEl]
-            })
-            transferEl.element.css({
-                width: src.element.width(),
-                height: src.element.height(),
-                top: src.element.offset().top,
-                left: src.element.offset().left
-            });
-
-            tar.element.effect("transfer", {
-                to: transferEl.element,
-                className: "ui-effects-transfer"
-            }, 400, function () {
-                transferEl.destroy();
-                callback && callback();
-            })
-        } else {
-            callback && callback();
-        }
-    }
-});/**
- * guy
- * 由一个元素切换到另一个元素的行为
  * @class BI.ShowAction
  * @extends BI.Action
  */
 BI.ShowAction = BI.inherit(BI.Action, {
-    _defaultConfig: function() {
-        return BI.extend(BI.ShowAction.superclass._defaultConfig.apply(this, arguments), {
-        });
+    _defaultConfig: function () {
+        return BI.extend(BI.ShowAction.superclass._defaultConfig.apply(this, arguments), {});
     },
 
-    _init : function() {
+    _init: function () {
         BI.ShowAction.superclass._init.apply(this, arguments);
     },
 
-    actionPerformed: function(src, tar, callback){
+    actionPerformed: function (src, tar, callback) {
         tar = tar || this.options.tar;
-        tar && tar.element.show(0, callback);
+        tar.setVisible(true);
+        callback && callback();
     },
 
-    actionBack: function(tar, src, callback){
+    actionBack: function (tar, src, callback) {
         tar = tar || this.options.tar;
-        tar.element.hide(0, callback);
-    }
-});/**
- * guy
- * 由一个元素切换到另一个元素的行为
- * @class BI.ScaleShowAction
- * @extends BI.Action
- * @abstract
- */
-BI.ScaleShowAction = BI.inherit(BI.Action, {
-    _defaultConfig: function() {
-        return BI.extend(BI.ScaleShowAction.superclass._defaultConfig.apply(this, arguments), {
-        });
-    },
-
-    _init : function() {
-        BI.ScaleShowAction.superclass._init.apply(this, arguments);
-    },
-
-    _checkBrowser: function(){
-        return false;
-//        return !(BI.isFireFox() && parseInt($.browser.version) < 10);
-    },
-
-    actionPerformed: function(src, tar, callback){
-        tar = tar || this.options.tar;
-        this._checkBrowser() ? tar.element.show("scale", {percent:110}, 200, callback) : tar.element.show(0,callback);
-    },
-
-    actionBack : function(tar, src, callback){
-        tar = tar || this.options.tar;
-        this._checkBrowser() ? tar.element.hide("scale", {percent:0}, 200, callback) : tar.element.hide(0,callback);
+        tar.setVisible(false);
+        callback && callback();
     }
 });/**
  * @class BI.FloatSection
@@ -17032,7 +15383,7 @@ BI.BroadcastController = BI.inherit(BI.Controller, {
         }
         this._broadcasts[name].push(fn);
         return function () {
-            self._broadcasts[name].remove(fn);
+            self.remove(name, fn);
         }
     },
 
@@ -17046,6 +15397,9 @@ BI.BroadcastController = BI.inherit(BI.Controller, {
     remove: function (name, fn) {
         if (fn) {
             this._broadcasts[name].remove(fn);
+            if (this._broadcasts[name].length === 0) {
+                delete this._broadcasts[name];
+            }
         } else {
             delete this._broadcasts[name];
         }
@@ -17284,6 +15638,7 @@ BI.FloatBoxController = BI.inherit(BI.Controller, {
         this.floatManager = {};
         this.floatLayer = {};
         this.floatContainer = {};
+        this.floatOpened = {};
         this.zindex = BI.zIndex_floatbox;
         this.zindexMap = {};
     },
@@ -17348,28 +15703,31 @@ BI.FloatBoxController = BI.inherit(BI.Controller, {
         if (!this._check(name)) {
             return this;
         }
-        var container = this.floatContainer[name];
-        container.element.css("zIndex", this.zindex++);
-        this.modal && container.element.__hasZIndexMask__(this.zindexMap[name]) && container.element.__releaseZIndexMask__(this.zindexMap[name]);
-        this.zindexMap[name] = this.zindex;
-        this.modal && container.element.__buildZIndexMask__(this.zindex++);
-        this.get(name).setZindex(this.zindex++);
-        this.floatContainer[name].visible();
-        var floatbox = this.get(name);
-        floatbox.show();
-        var W = $(this.options.render).width(), H = $(this.options.render).height();
-        var w = floatbox.element.width(), h = floatbox.element.height();
-        var left = (W - w) / 2, top = (H - h) / 2;
-        if (left < 0) {
-            left = 0;
+        if (!this.floatOpened[name]) {
+            this.floatOpened[name] = true;
+            var container = this.floatContainer[name];
+            container.element.css("zIndex", this.zindex++);
+            this.modal && container.element.__hasZIndexMask__(this.zindexMap[name]) && container.element.__releaseZIndexMask__(this.zindexMap[name]);
+            this.zindexMap[name] = this.zindex;
+            this.modal && container.element.__buildZIndexMask__(this.zindex++);
+            this.get(name).setZindex(this.zindex++);
+            this.floatContainer[name].visible();
+            var floatbox = this.get(name);
+            floatbox.show();
+            var W = $(this.options.render).width(), H = $(this.options.render).height();
+            var w = floatbox.element.width(), h = floatbox.element.height();
+            var left = (W - w) / 2, top = (H - h) / 2;
+            if (left < 0) {
+                left = 0;
+            }
+            if (top < 0) {
+                top = 0;
+            }
+            floatbox.element.css({
+                left: left + "px",
+                top: top + "px"
+            });
         }
-        if (top < 0) {
-            top = 0;
-        }
-        floatbox.element.css({
-            left: left + "px",
-            top: top + "px"
-        });
         return this;
     },
 
@@ -17377,8 +15735,11 @@ BI.FloatBoxController = BI.inherit(BI.Controller, {
         if (!this._check(name)) {
             return this;
         }
-        this.floatContainer[name].invisible();
-        this.modal && this.floatContainer[name].element.__releaseZIndexMask__(this.zindexMap[name]);
+        if (this.floatOpened[name]) {
+            delete this.floatOpened[name];
+            this.floatContainer[name].invisible();
+            this.modal && this.floatContainer[name].element.__releaseZIndexMask__(this.zindexMap[name]);
+        }
         return this;
     },
 
@@ -17628,11 +15989,14 @@ BI.ResizeController = BI.inherit(BI.Controller, {
     },
 
     add: function (name, resizer) {
+        var self = this;
         if (this.has(name)) {
             return this;
         }
         this.resizerManger[name] = resizer;
-        return this;
+        return function () {
+            self.remove(name);
+        };
     },
 
     get: function (name) {

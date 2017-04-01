@@ -76,4 +76,4 @@ BI.Panel = BI.inherit(BI.Widget,{
 });
 BI.Panel.EVENT_CHANGE = "Panel.EVENT_CHANGE";
 
-$.shortcut("bi.panel",BI.Panel);
+BI.shortcut("bi.panel",BI.Panel);

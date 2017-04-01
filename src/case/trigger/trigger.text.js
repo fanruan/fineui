@@ -64,4 +64,4 @@ BI.TextTrigger = BI.inherit(BI.Trigger, {
         this.text.setTitle(text);
     }
 });
-$.shortcut("bi.text_trigger", BI.TextTrigger);
+BI.shortcut("bi.text_trigger", BI.TextTrigger);

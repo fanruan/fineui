@@ -64,4 +64,4 @@ BI.StaticCombo = BI.inherit(BI.Widget, {
     }
 });
 BI.StaticCombo.EVENT_CHANGE = "EVENT_CHANGE";
-$.shortcut("bi.static_combo", BI.StaticCombo);
+BI.shortcut("bi.static_combo", BI.StaticCombo);

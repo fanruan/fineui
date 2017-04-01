@@ -31,6 +31,9 @@ BI.InteractiveArrangement = BI.inherit(BI.Widget, {
             layoutType: o.layoutType,
             items: o.items
         });
+        this.arrangement.on(BI.AdaptiveArrangement.EVENT_SCROLL, function () {
+            self.fireEvent(BI.InteractiveArrangement.EVENT_SCROLL, arguments);
+        });
         this.arrangement.on(BI.AdaptiveArrangement.EVENT_RESIZE, function () {
             self.fireEvent(BI.InteractiveArrangement.EVENT_RESIZE, arguments);
         });
@@ -568,4 +571,5 @@ BI.InteractiveArrangement = BI.inherit(BI.Widget, {
     }
 });
 BI.InteractiveArrangement.EVENT_RESIZE = "InteractiveArrangement.EVENT_RESIZE";
-$.shortcut('bi.interactive_arrangement', BI.InteractiveArrangement);
+BI.InteractiveArrangement.EVENT_SCROLL = "InteractiveArrangement.EVENT_SCROLL";
+BI.shortcut('bi.interactive_arrangement', BI.InteractiveArrangement);

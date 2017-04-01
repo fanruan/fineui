@@ -56,4 +56,4 @@ Demo.TdLayout = BI.inherit(BI.Widget, {
         }
     }
 });
-$.shortcut("demo.td", Demo.TdLayout);
+BI.shortcut("demo.td", Demo.TdLayout);

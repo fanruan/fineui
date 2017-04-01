@@ -37,7 +37,7 @@ BI.FloatCenterAdaptLayout = BI.inherit(BI.Layout, {
             element: this,
             items: [this.left]
         });
-        this.removeWidget(this.container.getName());
+        this.removeWidget(this.container);
     },
 
     stroke: function (items) {
@@ -66,4 +66,4 @@ BI.FloatCenterAdaptLayout = BI.inherit(BI.Layout, {
         this._mount();
     }
 });
-$.shortcut('bi.float_center_adapt', BI.FloatCenterAdaptLayout);
+BI.shortcut('bi.float_center_adapt', BI.FloatCenterAdaptLayout);

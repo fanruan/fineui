@@ -71,4 +71,4 @@ BI.DownListCombo.EVENT_CHANGE = "EVENT_CHANGE";
 BI.DownListCombo.EVENT_SON_VALUE_CHANGE = "EVENT_SON_VALUE_CHANGE";
 BI.DownListCombo.EVENT_BEFORE_POPUPVIEW = "EVENT_BEFORE_POPUPVIEW";
 
-$.shortcut("bi.down_list_combo", BI.DownListCombo);
+BI.shortcut("bi.down_list_combo", BI.DownListCombo);

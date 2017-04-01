@@ -78,4 +78,4 @@ BI.LastPlusGroupNode = BI.inherit(BI.NodeButton, {
     }
 });
 
-$.shortcut("bi.last_plus_group_node", BI.LastPlusGroupNode);
+BI.shortcut("bi.last_plus_group_node", BI.LastPlusGroupNode);

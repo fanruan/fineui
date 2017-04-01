@@ -104,4 +104,4 @@ BI.extend(BI.FileManagerNav, {
     ROOT_CREATE_BY_ME: "-1"
 });
 BI.FileManagerNav.EVENT_CHANGE = "FileManagerNav.EVENT_CHANGE";
-$.shortcut("bi.file_manager_nav", BI.FileManagerNav);
+BI.shortcut("bi.file_manager_nav", BI.FileManagerNav);

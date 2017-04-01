@@ -87,4 +87,4 @@ BI.MultiLayerIconArrowNode = BI.inherit(BI.NodeButton, {
     }
 });
 
-$.shortcut("bi.multilayer_icon_arrow_node", BI.MultiLayerIconArrowNode);
+BI.shortcut("bi.multilayer_icon_arrow_node", BI.MultiLayerIconArrowNode);

@@ -345,4 +345,4 @@ BI.extend(BI.MultiSelectCombo, {
 
 BI.MultiSelectCombo.EVENT_CONFIRM = "EVENT_CONFIRM";
 
-$.shortcut('bi.multi_select_combo', BI.MultiSelectCombo);
+BI.shortcut('bi.multi_select_combo', BI.MultiSelectCombo);

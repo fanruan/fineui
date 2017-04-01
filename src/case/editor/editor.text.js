@@ -167,4 +167,4 @@ BI.TextEditor.EVENT_RESTRICT = "EVENT_RESTRICT";
 BI.TextEditor.EVENT_REMOVE = "EVENT_REMOVE";
 BI.TextEditor.EVENT_EMPTY = "EVENT_EMPTY";
 
-$.shortcut("bi.text_editor", BI.TextEditor);
+BI.shortcut("bi.text_editor", BI.TextEditor);

@@ -44,4 +44,4 @@ BI.AbsoluteCenterLayout = BI.inherit(BI.Layout, {
         this._mount();
     }
 });
-$.shortcut('bi.absolute_center_adapt', BI.AbsoluteCenterLayout);
+BI.shortcut('bi.absolute_center_adapt', BI.AbsoluteCenterLayout);

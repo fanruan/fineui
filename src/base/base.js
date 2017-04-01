@@ -6,6 +6,3 @@ BI.Tooltips = new BI.TooltipsController();
 BI.Popovers = new BI.FloatBoxController();
 BI.Broadcasts = new BI.BroadcastController();
 BI.StyleLoaders = new BI.StyleLoaderManager();
-
-BI.servletURL = "dist/";
-BI.i18n = {};

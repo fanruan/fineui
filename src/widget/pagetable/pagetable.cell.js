@@ -36,4 +36,4 @@ BI.PageTableCell = BI.inherit(BI.Widget, {
     }
 });
 
-$.shortcut("bi.page_table_cell", BI.PageTableCell);
+BI.shortcut("bi.page_table_cell", BI.PageTableCell);

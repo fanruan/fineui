@@ -112,4 +112,4 @@ BI.MultiTreeCheckPane = BI.inherit(BI.Pane, {
 BI.MultiTreeCheckPane.EVENT_CONTINUE_CLICK = "EVENT_CONTINUE_CLICK";
 
 
-$.shortcut("bi.multi_tree_check_pane", BI.MultiTreeCheckPane);
+BI.shortcut("bi.multi_tree_check_pane", BI.MultiTreeCheckPane);

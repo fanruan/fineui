@@ -60,4 +60,4 @@ BI.SingleTreePopup = BI.inherit(BI.Pane, {
 });
 
 BI.SingleTreePopup.EVENT_CHANGE = "EVENT_CHANGE";
-$.shortcut("bi.single_tree_popup", BI.SingleTreePopup);
+BI.shortcut("bi.single_tree_popup", BI.SingleTreePopup);

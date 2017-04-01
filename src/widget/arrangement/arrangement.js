@@ -51,6 +51,14 @@ BI.Arrangement = BI.inherit(BI.Widget, {
             scrollable: true,
             items: [this.container]
         });
+        this.scrollContainer.element.scroll(function () {
+            self.fireEvent(BI.Arrangement.EVENT_SCROLL, {
+                scrollLeft: self.scrollContainer.element.scrollLeft(),
+                scrollTop: self.scrollContainer.element.scrollTop(),
+                clientWidth: self.scrollContainer.element[0].clientWidth,
+                clientHeight: self.scrollContainer.element[0].clientHeight
+            });
+        });
 
         BI.createWidget({
             type: "bi.adaptive",
@@ -2083,7 +2091,7 @@ BI.Arrangement = BI.inherit(BI.Widget, {
 
     _moveElement: function (layout, l, x, y, isUserAction) {
         var self = this;
-        if (l.static) {
+        if (l._static) {
             return layout;
         }
 
@@ -2116,7 +2124,7 @@ BI.Arrangement = BI.inherit(BI.Widget, {
                 continue;
             }
 
-            if (collision.static) {
+            if (collision._static) {
                 layout = this._moveElementAwayFromCollision(layout, collision, l, isUserAction);
             } else {
                 layout = this._moveElementAwayFromCollision(layout, l, collision, isUserAction);
@@ -2209,7 +2217,7 @@ BI.Arrangement = BI.inherit(BI.Widget, {
         for (var i = 0, len = sorted.length; i < len; i++) {
             var l = sorted[i];
 
-            if (!l.static) {
+            if (!l._static) {
                 l = this._compactItem(compareWith, l, verticalCompact);
 
                 compareWith.push(l);
@@ -2223,7 +2231,7 @@ BI.Arrangement = BI.inherit(BI.Widget, {
         return out;
         function getStatics(layout) {
             return BI.filter(layout, function (i, l) {
-                return l.static;
+                return l._static;
             });
         }
     },
@@ -2923,6 +2931,7 @@ BI.Arrangement = BI.inherit(BI.Widget, {
         this._renderRegion();
     }
 });
+BI.Arrangement.EVENT_SCROLL = "EVENT_SCROLL";
 BI.extend(BI.Arrangement, {
     PORTION: 24,
     GRID_HEIGHT: 50,
@@ -2932,4 +2941,4 @@ BI.extend(BI.Arrangement, {
         GRID: 2
     }
 });
-$.shortcut('bi.arrangement', BI.Arrangement);
+BI.shortcut('bi.arrangement', BI.Arrangement);

@@ -236,6 +236,7 @@
   border-bottom: 1px solid #d4dadd;
 }
 .bi-fine-tuning-number-editor .bottom-button {
+  border-top: 1px solid #d4dadd;
   border-left: 1px solid #d4dadd;
 }
 /****添加计算宽度的--运算符直接需要space****/

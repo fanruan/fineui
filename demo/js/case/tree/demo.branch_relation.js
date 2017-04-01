@@ -146,4 +146,4 @@ Demo.Func = BI.inherit(BI.Widget, {
         })
     }
 });
-$.shortcut("demo.branch_relation", Demo.Func);
+BI.shortcut("demo.branch_relation", Demo.Func);

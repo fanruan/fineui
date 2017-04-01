@@ -39,4 +39,4 @@ Demo.Func = BI.inherit(BI.Widget, {
         })
     }
 });
-$.shortcut("demo.zclip", Demo.Func);
+BI.shortcut("demo.zclip", Demo.Func);

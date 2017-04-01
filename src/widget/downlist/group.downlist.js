@@ -47,4 +47,4 @@ BI.DownListGroup = BI.inherit(BI.Widget, {
 
 })
 BI.DownListGroup.EVENT_CHANGE = "EVENT_CHANGE";
-$.shortcut("bi.down_list_group", BI.DownListGroup);
+BI.shortcut("bi.down_list_group", BI.DownListGroup);

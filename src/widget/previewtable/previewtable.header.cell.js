@@ -29,4 +29,4 @@ BI.PreviewTableHeaderCell = BI.inherit(BI.Widget, {
         })
     }
 });
-$.shortcut('bi.preview_table_header_cell', BI.PreviewTableHeaderCell);
+BI.shortcut('bi.preview_table_header_cell', BI.PreviewTableHeaderCell);

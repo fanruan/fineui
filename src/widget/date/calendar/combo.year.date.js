@@ -38,7 +38,7 @@ BI.YearDateCombo = BI.inherit(BI.Trigger, {
         this.combo = BI.createWidget({
             type: "bi.combo",
             offsetStyle: "center",
-            element: this.element,
+            element: this,
             isNeedAdjustHeight: false,
             isNeedAdjustWidth: false,
             el: this.trigger,
@@ -63,4 +63,4 @@ BI.YearDateCombo = BI.inherit(BI.Trigger, {
     }
 });
 BI.YearDateCombo.EVENT_CHANGE = "EVENT_CHANGE";
-$.shortcut('bi.year_date_combo', BI.YearDateCombo);
+BI.shortcut('bi.year_date_combo', BI.YearDateCombo);

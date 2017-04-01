@@ -330,4 +330,4 @@ BI.DynamicSummaryLayerTreeTable = BI.inherit(BI.Widget, {
     }
 });
 
-$.shortcut("bi.dynamic_summary_layer_tree_table", BI.DynamicSummaryLayerTreeTable);
+BI.shortcut("bi.dynamic_summary_layer_tree_table", BI.DynamicSummaryLayerTreeTable);

@@ -56,4 +56,4 @@ BI.SingleTreeTrigger = BI.inherit(BI.Trigger, {
 
 });
 
-$.shortcut("bi.single_tree_trigger", BI.SingleTreeTrigger);
+BI.shortcut("bi.single_tree_trigger", BI.SingleTreeTrigger);

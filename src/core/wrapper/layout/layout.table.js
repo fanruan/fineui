@@ -143,4 +143,4 @@ BI.TableLayout = BI.inherit(BI.Layout, {
         this._mount();
     }
 });
-$.shortcut('bi.table', BI.TableLayout);
+BI.shortcut('bi.table', BI.TableLayout);

@@ -504,4 +504,4 @@ BI.TreeView.EVENT_CHANGE = "EVENT_CHANGE";
 BI.TreeView.EVENT_INIT = BI.Events.INIT;
 BI.TreeView.EVENT_AFTERINIT = BI.Events.AFTERINIT;
 
-$.shortcut("bi.tree_view", BI.TreeView);
+BI.shortcut("bi.tree_view", BI.TreeView);

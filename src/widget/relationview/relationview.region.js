@@ -154,4 +154,4 @@ BI.RelationViewRegion = BI.inherit(BI.BasicButton, {
 BI.RelationViewRegion.EVENT_HOVER_IN = "RelationViewRegion.EVENT_HOVER_IN";
 BI.RelationViewRegion.EVENT_HOVER_OUT = "RelationViewRegion.EVENT_HOVER_OUT";
 BI.RelationViewRegion.EVENT_PREVIEW = "RelationViewRegion.EVENT_PREVIEW";
-$.shortcut('bi.relation_view_region', BI.RelationViewRegion);
+BI.shortcut('bi.relation_view_region', BI.RelationViewRegion);

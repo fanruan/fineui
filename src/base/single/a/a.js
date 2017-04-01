@@ -29,4 +29,4 @@ BI.A = BI.inherit(BI.Text, {
     }
 });
 
-$.shortcut("bi.a", BI.A);
+BI.shortcut("bi.a", BI.A);

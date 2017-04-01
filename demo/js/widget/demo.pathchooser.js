@@ -174,4 +174,4 @@ Demo.PathChooser = BI.inherit(BI.Widget, {
         }
     }
 });
-$.shortcut("demo.path_chooser", Demo.PathChooser);
+BI.shortcut("demo.path_chooser", Demo.PathChooser);

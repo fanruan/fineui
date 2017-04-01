@@ -112,4 +112,4 @@ BI.PathRegion = BI.inherit(BI.Widget, {
     }
 });
 BI.PathRegion.EVENT_CHANGE = "PathRegion.EVENT_CHANGE";
-$.shortcut("bi.path_region", BI.PathRegion);
+BI.shortcut("bi.path_region", BI.PathRegion);

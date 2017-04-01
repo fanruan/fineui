@@ -43,4 +43,4 @@ BI.TableStyleCell = BI.inherit(BI.Single, {
         this._digestStyle();
     }
 });
-$.shortcut('bi.table_style_cell', BI.TableStyleCell);
+BI.shortcut('bi.table_style_cell', BI.TableStyleCell);

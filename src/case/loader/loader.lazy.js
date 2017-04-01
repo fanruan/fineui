@@ -103,4 +103,4 @@ BI.LazyLoader = BI.inherit(BI.Widget, {
     }
 });
 BI.LazyLoader.EVENT_CHANGE = "EVENT_CHANGE";
-$.shortcut("bi.lazy_loader", BI.LazyLoader);
+BI.shortcut("bi.lazy_loader", BI.LazyLoader);

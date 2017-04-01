@@ -316,4 +316,4 @@ BI.LayerTreeTable = BI.inherit(BI.Widget, {
     }
 });
 
-$.shortcut("bi.layer_tree_table", BI.LayerTreeTable);
+BI.shortcut("bi.layer_tree_table", BI.LayerTreeTable);

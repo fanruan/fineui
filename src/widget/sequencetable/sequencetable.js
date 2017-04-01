@@ -248,4 +248,4 @@ BI.SequenceTable = BI.inherit(BI.Widget, {
         BI.SequenceTable.superclass.destroy.apply(this, arguments);
     }
 });
-$.shortcut('bi.sequence_table', BI.SequenceTable);
+BI.shortcut('bi.sequence_table', BI.SequenceTable);

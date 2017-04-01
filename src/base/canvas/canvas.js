@@ -129,4 +129,4 @@ BI.Canvas = BI.inherit(BI.Widget, {
         });
     }
 });
-$.shortcut("bi.canvas", BI.Canvas);
+BI.shortcut("bi.canvas", BI.Canvas);

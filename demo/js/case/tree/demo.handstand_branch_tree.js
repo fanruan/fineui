@@ -100,4 +100,4 @@ Demo.Func = BI.inherit(BI.Widget, {
         })
     }
 });
-$.shortcut("demo.handstand_branch_tree", Demo.Func);
+BI.shortcut("demo.handstand_branch_tree", Demo.Func);

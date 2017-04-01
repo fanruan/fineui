@@ -71,4 +71,4 @@ BI.SingleSelectRadioItem = BI.inherit(BI.BasicButton, {
     }
 });
 
-$.shortcut("bi.single_select_radio_item", BI.SingleSelectRadioItem);
+BI.shortcut("bi.single_select_radio_item", BI.SingleSelectRadioItem);

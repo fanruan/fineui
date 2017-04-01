@@ -93,4 +93,4 @@ Demo.Func = BI.inherit(BI.Widget, {
         })
     }
 });
-$.shortcut("demo.bubble_combo", Demo.Func);
+BI.shortcut("demo.bubble_combo", Demo.Func);

@@ -195,4 +195,4 @@ BI.SearchEditor.EVENT_ENTER = "EVENT_ENTER";
 BI.SearchEditor.EVENT_RESTRICT = "EVENT_RESTRICT";
 BI.SearchEditor.EVENT_REMOVE = "EVENT_REMOVE";
 BI.SearchEditor.EVENT_EMPTY = "EVENT_EMPTY";
-$.shortcut("bi.search_editor", BI.SearchEditor);
+BI.shortcut("bi.search_editor", BI.SearchEditor);

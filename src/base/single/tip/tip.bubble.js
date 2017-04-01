@@ -104,4 +104,4 @@ BI.Bubble = BI.inherit(BI.Tip, {
     }
 });
 
-$.shortcut("bi.bubble", BI.Bubble);
+BI.shortcut("bi.bubble", BI.Bubble);

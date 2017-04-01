@@ -93,4 +93,4 @@ BI.MultiLayerSingleTreeMidTreeLeafItem = BI.inherit(BI.BasicButton, {
     }
 });
 
-$.shortcut("bi.multilayer_single_tree_mid_tree_leaf_item", BI.MultiLayerSingleTreeMidTreeLeafItem);
+BI.shortcut("bi.multilayer_single_tree_mid_tree_leaf_item", BI.MultiLayerSingleTreeMidTreeLeafItem);

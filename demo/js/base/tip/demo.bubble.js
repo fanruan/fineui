@@ -55,4 +55,4 @@ Demo.Bubble = BI.inherit(BI.Widget, {
         }
     }
 });
-$.shortcut("demo.bubble", Demo.Bubble);
+BI.shortcut("demo.bubble", Demo.Bubble);

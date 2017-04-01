@@ -364,4 +364,4 @@ Demo.Func = BI.inherit(BI.Widget, {
         })
     }
 });
-$.shortcut("demo.table_view", Demo.Func);
+BI.shortcut("demo.table_view", Demo.Func);

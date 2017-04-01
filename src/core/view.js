@@ -25,9 +25,9 @@ BI.View = BI.inherit(BI.V, {
             this.model._changing_ = false;
             this.model.actionEnd() && this.actionEnd();
         }).listenTo(this.model, "destroy", function () {
-            this.destroy();
+            this._destroy();
         }).listenTo(this.model, "unset", function () {
-            this.destroy();
+            this._destroy();
         }).listenTo(this.model, "splice", function (arg) {
             this.splice.apply(this, arg);
         }).listenTo(this.model, "duplicate", function (arg) {
@@ -130,10 +130,10 @@ BI.View = BI.inherit(BI.V, {
         });
         var vessel = BI.createWidget();
         this._cardLayouts[this.getName()].addCardByName(this.getName(), vessel);
-        return vessel.element;
+        return vessel;
     },
 
-    _render: function (vessel) {
+    render: function (vessel) {
         return this;
     },
 
@@ -151,7 +151,6 @@ BI.View = BI.inherit(BI.V, {
         options.isLayer && (vessel = BI.Layers.has(id) ? BI.Layers.get(id) : BI.Layers.create(id, vessel));
         if (this._cardLayouts[key]) {
             options.defaultShowName && this._cardLayouts[key].setDefaultShowName(options.defaultShowName);
-            this._cardLayouts[key].setElement(vessel) && this._cardLayouts[key].resize();
             return this;
         }
         this._cardLayouts[key] = BI.createWidget({
@@ -245,7 +244,7 @@ BI.View = BI.inherit(BI.V, {
                     delete self._cards[cardName];
                     self.model.removeChild(modelData, view.model);
                     cardLayout.deleteCardByName(cardName);
-                    view.destroy();
+                    view._destroy();
                     cardLayout.setVisible(false);
                 }
                 action.actionBack(view, null, function () {
@@ -328,7 +327,7 @@ BI.View = BI.inherit(BI.V, {
         }
         //采用静默方式读数据,该数据变化不引起data的change事件触发
         var success = options.success;
-        this.read(BI.extend({
+        this.model.read(BI.extend({
             silent: true
         }, options, {
             success: function (data, model) {
@@ -370,22 +369,10 @@ BI.View = BI.inherit(BI.V, {
         return this.model.getEditing();
     },
 
-    read: function (options) {
-        this.model.read(options)
-    },
-
-    update: function (options) {
-        this.model.update(options);
-    },
-
-    patch: function (options) {
-        this.model.patch(options);
-    },
-
     reading: function (options) {
         var self = this;
         var name = BI.UUID();
-        this.read(BI.extend({}, options, {
+        this.model.read(BI.extend({}, options, {
             beforeSend: function () {
                 var loading = BI.createWidget({
                     type: 'bi.vertical',
@@ -408,7 +395,7 @@ BI.View = BI.inherit(BI.V, {
     updating: function (options) {
         var self = this;
         var name = BI.UUID();
-        this.update(BI.extend({}, options, {
+        this.model.update(BI.extend({}, options, {
             noset: true,
             beforeSend: function () {
                 var loading = BI.createWidget({
@@ -432,7 +419,7 @@ BI.View = BI.inherit(BI.V, {
     patching: function (options) {
         var self = this;
         var name = BI.UUID();
-        this.patch(BI.extend({}, options, {
+        this.model.patch(BI.extend({}, options, {
             noset: true,
             beforeSend: function () {
                 var loading = BI.createWidget({
@@ -502,14 +489,26 @@ BI.View = BI.inherit(BI.V, {
 
     },
 
-    destroy: function () {
+    _unMount: function () {
         BI.each(this._cardLayouts, function (name, card) {
-            card && card.destroy();
+            card && card._unMount();
         });
         delete this._cardLayouts;
         delete this._cards;
-        this.remove();
         this.destroyed();
+        this.off();
+    },
+
+    _destroy: function () {
+        BI.each(this._cardLayouts, function (name, card) {
+            card && card._unMount();
+        });
+        delete this._cardLayouts;
+        delete this._cards;
+        this.destroyed();
+        this.remove();
+        this.trigger(BI.Events.DESTROY);
+        this.off();
     },
 
     destroyed: function () {

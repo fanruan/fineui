@@ -30,4 +30,4 @@ BI.Radio = BI.inherit(BI.IconButton, {
 });
 BI.Radio.EVENT_CHANGE = "Radio.EVENT_CHANGE";
 
-$.shortcut("bi.radio", BI.Radio);
+BI.shortcut("bi.radio", BI.Radio);

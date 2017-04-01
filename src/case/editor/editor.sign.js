@@ -252,4 +252,4 @@ BI.SignEditor.EVENT_RESTRICT = "EVENT_RESTRICT";
 BI.SignEditor.EVENT_SPACE = "EVENT_SPACE";
 BI.SignEditor.EVENT_EMPTY = "EVENT_EMPTY";
 
-$.shortcut("bi.sign_editor", BI.SignEditor);
+BI.shortcut("bi.sign_editor", BI.SignEditor);

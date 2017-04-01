@@ -1,0 +1,15 @@
+/****添加计算宽度的--运算符直接需要space****/
+/****** common color(常用颜色,可用于普遍场景) *****/
+/**** custom color(自定义颜色,用于特定场景) ****/
+.bi-color-picker-editor .color-picker-editor-label {
+  color: #808080;
+}
+.bi-color-picker-editor .color-picker-editor-display {
+  background: #ffffff;
+  -webkit-border-radius: 2px;
+  -moz-border-radius: 2px;
+  border-radius: 2px;
+  box-shadow: 0px 0px 2px 1px #d4dadd inset;
+  -webkit-box-shadow: 0px 0px 2px 1px #d4dadd inset;
+  -moz-box-shadow: 0px 0px 2px 1px #d4dadd inset;
+}

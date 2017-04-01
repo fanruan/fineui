@@ -82,4 +82,4 @@ BI.SelectTreeMidPlusGroupNode = BI.inherit(BI.NodeButton, {
     }
 });
 
-$.shortcut("bi.select_tree_mid_plus_group_node", BI.SelectTreeMidPlusGroupNode);
+BI.shortcut("bi.select_tree_mid_plus_group_node", BI.SelectTreeMidPlusGroupNode);

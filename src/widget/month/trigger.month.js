@@ -108,4 +108,4 @@ BI.MonthTrigger.EVENT_CONFIRM = "EVENT_CONFIRM";
 BI.MonthTrigger.EVENT_START = "EVENT_START";
 BI.MonthTrigger.EVENT_STOP = "EVENT_STOP";
 BI.MonthTrigger.EVENT_CHANGE = "EVENT_CHANGE";
-$.shortcut("bi.month_trigger", BI.MonthTrigger);
+BI.shortcut("bi.month_trigger", BI.MonthTrigger);

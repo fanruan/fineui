@@ -104,4 +104,4 @@ BI.Svg = BI.inherit(BI.Widget, {
         return this.paper.clear.apply(this.paper, arguments);
     }
 });
-$.shortcut("bi.svg", BI.Svg);
+BI.shortcut("bi.svg", BI.Svg);

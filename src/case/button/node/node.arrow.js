@@ -77,4 +77,4 @@ BI.ArrowNode = BI.inherit(BI.NodeButton, {
     }
 });
 
-$.shortcut("bi.arrow_group_node", BI.ArrowNode);
+BI.shortcut("bi.arrow_group_node", BI.ArrowNode);

@@ -141,7 +141,7 @@ if (!window.BI) {
         },
 
         formatEL: function (obj) {
-            if (obj && obj.el) {
+            if (obj && !obj.type && obj.el) {
                 return obj;
             }
             return {
@@ -1076,99 +1076,23 @@ if (!window.BI) {
                 //encode
                 encodeBIParam(option.data);
 
-                var async = true;
-                if (BI.isNotNull(option.async)) {
-                    async = option.async;
-                }
-
-                if (BI.isNull(loading)) {
-                    loading = BI.createWidget({
-                        type: "bi.request_loading"
-                    });
-                }
-
-                if (BI.isNull(timeoutToast)) {
-                    timeoutToast = BI.createWidget({
-                        type: "bi.timeout_toast"
-                    });
-                    timeoutToast.setCallback(function (op) {
-                        decodeBIParam(op.data);
-                        BI.ajax(op);
-                    });
-                }
-                timeoutToast.addReq(option);
-
+                var async = option.async;
 
                 option.data = BI.cjkEncodeDO(option.data);
-                    
-                    
-                
+
+
                 $.ajax({
                     url: option.url,
                     type: "POST",
                     data: option.data,
                     async: async,
-                    error: function () {
-                        if (!timeoutToast.hasReq(option)) {
-                            return;
-                        }
-                        timeoutToast.removeReq(option);
-                        //失败 取消、重新加载
-                        loading.setCallback(function () {
-                            decodeBIParam(option.data);
-                            BI.ajax(option);
-                        });
-                        loading.showError();
-                    },
+                    error: option.error,
                     complete: function (res, status) {
-                        if (!timeoutToast.hasReq(option)) {
-                            return;
-                        }
-                        timeoutToast.removeReq(option);
-                        //登录超时
-                        if (BI.isNotNull(res.responseText) &&
-                            res.responseText.indexOf("fs-login-content") > -1 &&
-                            res.responseText.indexOf("fs-login-input-password-confirm") === -1) {
-                            if (BI.Popovers.isVisible(BI.LoginTimeOut.POPOVER_ID)) {
-                                return;
-                            }
-                            if (BI.isNotNull(BI.Popovers.get(BI.LoginTimeOut.POPOVER_ID))) {
-                                BI.Popovers.open(BI.LoginTimeOut.POPOVER_ID);
-                                return;
-                            }
-                            var loginTimeout = BI.createWidget({
-                                type: "bi.login_timeout"
-                            });
-                            loginTimeout.on(BI.LoginTimeOut.EVENT_LOGIN, function () {
-                                decodeBIParam(option.data);
-                                BI.ajax(option);
-                                BI.Popovers.remove(BI.LoginTimeOut.POPOVER_ID);
-                            });
-                            BI.Popovers.create(BI.LoginTimeOut.POPOVER_ID, loginTimeout, {
-                                width: 600,
-                                height: 400
-                            }).open(BI.LoginTimeOut.POPOVER_ID);
-                        } else if (BI.isNotNull(res.responseText) &&
-                            res.responseText.indexOf("script") > -1 &&
-                            res.responseText.indexOf("Session Timeout...") > -1) {
-                            //登录失效
-                            loading.setCallback(function () {
-                                location.reload();
-                            });
-                            loading.showError();
-
-                        } else if (status === "success" && BI.isFunction(option.success)) {
-                            option.success(BI.jsonDecode(res.responseText));
-                        }
                         if (BI.isFunction(option.complete)) {
                             option.complete(BI.jsonDecode(res.responseText), status);
                         }
                     }
                 });
-
-                return function cancel() {
-                    timeoutToast.removeReq(option);
-                };
 
                 function encodeBIParam(data) {
                     for (var key in data) {
@@ -1189,101 +1113,6 @@ if (!window.BI) {
                     }
                 }
             }
-        })(),
-
-        /**
-         * 异步ajax请求
-         * @param {String} op op参数
-         * @param {String} cmd cmd参数
-         * @param {JSON} data ajax请求的参数
-         * @param {Function} callback 回调函数
-         * @param {Function} complete 回调
-         */
-        requestAsync: function (op, cmd, data, callback, complete) {
-            data = data || {};
-            if (!BI.isKey(op)) {
-                op = 'fr_bi_dezi';
-            }
-            if (op === "fr_bi_dezi" || op === "fr_bi_configure") {
-                data.sessionID = Data.SharingPool.get("sessionID");
-            }
-            var url = BI.servletURL + '?op=' + op + '&cmd=' + cmd + "&_=" + Math.random();
-            return (BI.ajax)({
-                url: url,
-                type: 'POST',
-                data: data,
-                error: function () {
-                    // BI.Msg.toast(BI.i18nText("BI-Ajax_Error"));
-                },
-                success: function (res) {
-                    if (BI.isFunction(callback)) {
-                        callback(res);
-                    }
-                },
-                complete: function (res, status) {
-                    if (BI.isFunction(complete)) {
-                        complete(res);
-                    }
-                }
-            });
-        },
-
-        /**
-         * 同步ajax请求
-         * @param {String} op op参数
-         * @param {String} cmd cmd参数
-         * @param {JSON} data ajax请求的参�?
-         * @returns {Object} ajax同步请求返回的JSON对象
-         */
-        requestSync: function (op, cmd, data) {
-            data = data || {};
-            if (!BI.isKey(op)) {
-                op = 'fr_bi_dezi';
-            }
-            if (op === "fr_bi_dezi") {
-                data.sessionID = Data.SharingPool.get("sessionID");
-            }
-            var url = BI.servletURL + '?op=' + op + '&cmd=' + cmd + "&_=" + Math.random();
-            var result = {};
-            (BI.ajax)({
-                url: url,
-                type: 'POST',
-                async: false,
-                data: data,
-                error: function () {
-                    BI.Msg.toast(BI.i18nText("BI-Ajax_Error"));
-                },
-                complete: function (res, status) {
-                    if (status === 'success') {
-                        result = res;
-                    }
-                }
-            });
-            return result;
-        },
-
-        /**
-         * 请求方法
-         * @param cmd 命令
-         * @param data 数据
-         * @param extend 参数
-         * @returns {*}
-         */
-        request: function (cmd, data, extend) {
-            extend = extend || {};
-            data = data || {};
-            var op = extend.op;
-            if (!BI.isKey(op)) {
-                op = 'fr_bi_dezi';
-            }
-            if (op === "fr_bi_dezi") {
-                data.sessionID = Data.SharingPool.get("sessionID");
-            }
-            if (extend.async === true) {
-                BI.requestAsync(op, cmd, data, extend.complete || extend.success);
-            } else {
-                return BI.requestSync(op, cmd, data);
-            }
-        }
+        })()
     });
 })(jQuery);

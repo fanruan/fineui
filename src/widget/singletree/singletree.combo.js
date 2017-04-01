@@ -71,4 +71,4 @@ BI.SingleTreeCombo = BI.inherit(BI.Widget, {
 
 BI.SingleTreeCombo.EVENT_CHANGE = "SingleTreeCombo.EVENT_CHANGE";
 BI.SingleTreeCombo.EVENT_BEFORE_POPUPVIEW = "EVENT_BEFORE_POPUPVIEW";
-$.shortcut("bi.single_tree_combo", BI.SingleTreeCombo);
+BI.shortcut("bi.single_tree_combo", BI.SingleTreeCombo);

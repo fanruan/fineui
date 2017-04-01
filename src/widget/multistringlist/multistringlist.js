@@ -127,7 +127,7 @@ BI.MultiStringList = BI.inherit(BI.Widget, {
         });
         BI.createWidget({
             type: "bi.vtape",
-            element: this.element,
+            element: this,
             height: "100%",
             width: "100%",
             items: [{
@@ -317,4 +317,4 @@ BI.extend(BI.MultiStringList, {
 });
 
 BI.MultiStringList.EVENT_CHANGE = "BI.MultiStringList.EVENT_CHANGE";
-$.shortcut("bi.multi_string_list", BI.MultiStringList);
+BI.shortcut("bi.multi_string_list", BI.MultiStringList);

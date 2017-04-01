@@ -91,4 +91,4 @@ BI.MultifileEditor.EVENT_UPLOADSTART = "MultifileEditor.EVENT_UPLOADSTART";
 BI.MultifileEditor.EVENT_ERROR = "MultifileEditor.EVENT_ERROR";
 BI.MultifileEditor.EVENT_PROGRESS = "MultifileEditor.EVENT_PROGRESS";
 BI.MultifileEditor.EVENT_UPLOADED = "MultifileEditor.EVENT_UPLOADED";
-$.shortcut("bi.multifile_editor", BI.MultifileEditor);
+BI.shortcut("bi.multifile_editor", BI.MultifileEditor);

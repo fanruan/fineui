@@ -37,4 +37,4 @@ Demo.TreeValueChooser = BI.inherit(BI.Widget, {
         };
     }
 });
-$.shortcut("demo.tree_value_chooser", Demo.TreeValueChooser);
+BI.shortcut("demo.tree_value_chooser", Demo.TreeValueChooser);
