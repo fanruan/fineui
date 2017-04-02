@@ -1904,9 +1904,6 @@ if (!window.BI) {
 }
 ;
 !(function ($, undefined) {
-    _.extend(BI, {
-        version: "2.0"
-    });
     var traverse = function (func, context) {
         return function (value, key, obj) {
             return func.call(context, key, value, obj);

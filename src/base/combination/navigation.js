@@ -99,7 +99,7 @@ BI.Navigation = BI.inherit(BI.Widget, {
         }
     },
 
-    _assertCard: function () {
+    _assertCard: function (v) {
         if (!this.layout.isCardExisted(v)) {
             var card = this.options.cardCreator(v);
             this.cardMap[v] = card;
