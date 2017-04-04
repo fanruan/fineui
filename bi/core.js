@@ -17112,8 +17112,8 @@ $(function () {
                 return false;
             }
             var rgb = this.rgb2json(this.hex2rgb(hex));
-            var grayLevel = (rgb.r * 0.299 + rgb.g * 0.587 + rgb.b * 0.114);
-            if (grayLevel < 192) {
+            var grayLevel = Math.round(rgb.r * 0.299 + rgb.g * 0.587 + rgb.b * 0.114);
+            if (grayLevel < 140) {
                 return true;
             }
             return false;
