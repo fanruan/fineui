@@ -39,7 +39,7 @@ BI.DatePaneWidget = BI.inherit(BI.Widget, {
             direction: "top",
             element: this,
             logic: {
-                dynamic: true
+                dynamic: false
             },
             type: "bi.navigation",
             tab: this.datePicker,
@@ -67,7 +67,7 @@ BI.DatePaneWidget = BI.inherit(BI.Widget, {
         var calendar = BI.createWidget({
             type: "bi.calendar",
             logic: {
-                dynamic: true
+                dynamic: false
             },
             min: this.options.min,
             max: this.options.max,
