@@ -6,23 +6,6 @@ $(function () {
     BI.Func = {};
     var formulas = {};
     BI.extend(BI.Func, {
-        /**
-         * 创建唯一的名字
-         * @param array
-         * @param name
-         * @returns {*}
-         */
-        createDistinctName: function (array, name) {
-            var src = name, idx = 1;
-            name = name || "";
-            while (true) {
-                if (!ArrayUtils.getItemByName(array, name)) {
-                    break;
-                }
-                name = src + (idx++);
-            }
-            return name;
-        },
 
         /**
          * 获取搜索结果
@@ -70,60 +53,6 @@ $(function () {
                 finded: finded
             }
         },
-
-        /**
-         * 公式合法性验证
-         */
-        checkFormulaValidation: function (str) {
-            if (!BI.isEmptyString(str)) {
-                if (BI.has(formulas, str)) {
-                    return formulas[str];
-                }
-                formulas[str] = false;
-                var response = BI.requestSync("fr_bi_base", "check_validation_of_expression", {expression: str});
-                if (response.validation === "invalid") {
-                    formulas[str] = false;
-                } else if (response.validation === "valid") {
-                    formulas[str] = true;
-                }
-                return formulas[str];
-            } else {
-                return true;
-            }
-        },
-
-        getFormulaStringFromFormulaValue: function (formulaValue) {
-            var formulaString = "";
-            var regx = /\$[\{][^\}]*[\}]|\w*\w|\$\{[^\$\(\)\+\-\*\/)\$,]*\w\}|\$\{[^\$\(\)\+\-\*\/]*\w\}|\$\{[^\$\(\)\+\-\*\/]*[\u4e00-\u9fa5]\}|\w|(.)/g;
-            var result = formulaValue.match(regx);
-            BI.each(result, function (i, item) {
-                var fieldRegx = /\$[\{][^\}]*[\}]/;
-                var str = item.match(fieldRegx);
-                if (BI.isNotEmptyArray(str)) {
-                    formulaString = formulaString + str[0].substring(2, item.length - 1);
-                } else {
-                    formulaString = formulaString + item;
-                }
-            });
-            return formulaString;
-        },
-
-        formatAddress: function (address) {
-            var temp = '';
-            var url1 = /[a-zA-z]+:\/\/[^\s]*/;
-            var url2 = /\/[^\s]*/;
-            if (address.match(url1) || address.match(url2)) {
-                temp = address;
-            } else if (BI.isNotEmptyString(address)) {
-                temp = "http://" + address;
-            }
-            return temp;
-        },
-
-        getCompleteImageUrl: function (url) {
-            return BI.servletURL + "?op=fr_bi&cmd=get_uploaded_image&image_id=" + url;
-        }
-
     });
 
     /**
@@ -173,12 +102,6 @@ $(function () {
                 images[i].onerror = function () {
                     complete()
                 };
-            });
-        },
-
-        getImageWidthAndHeight: function (src) {
-            return BI.requestSync("fr_bi_base", "get_image_size", {
-                src: src
             });
         },
 
