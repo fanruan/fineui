@@ -10,12 +10,8 @@ BI.Navigation = BI.inherit(BI.Widget, {
                 dynamic: false
             },
             single: false,
-            defaultShowIndex: 0,
-            tab: {
-                type: "bi.button_group",
-                items: [],
-                layouts: []
-            },
+            defaultShowIndex: false,
+            tab: false,
             cardCreator: function (v) {
                 return BI.createWidget();
             },
@@ -53,7 +49,7 @@ BI.Navigation = BI.inherit(BI.Widget, {
             },
             afterCardCreated: BI.bind(this.afterCardCreated, this),
             afterCardShow: BI.bind(this.afterCardShow, this)
-        })
+        });
     },
 
     mounted: function () {

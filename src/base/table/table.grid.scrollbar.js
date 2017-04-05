@@ -404,6 +404,12 @@ BI.GridTableHorizontalScrollbar = BI.inherit(BI.Widget, {
 
     populate: function () {
         this.scrollbar.populate();
+        var o = this.options;
+        if (o.size < 1 || o.contentSize <= o.size) {
+            this.setVisible(false);
+            return;
+        }
+        this.setVisible(true);
     }
 });
 BI.GridTableHorizontalScrollbar.EVENT_SCROLL = "EVENT_SCROLL";

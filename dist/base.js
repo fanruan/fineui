@@ -3898,12 +3898,8 @@ BI.Navigation = BI.inherit(BI.Widget, {
                 dynamic: false
             },
             single: false,
-            defaultShowIndex: 0,
-            tab: {
-                type: "bi.button_group",
-                items: [],
-                layouts: []
-            },
+            defaultShowIndex: false,
+            tab: false,
             cardCreator: function (v) {
                 return BI.createWidget();
             },
@@ -3941,7 +3937,7 @@ BI.Navigation = BI.inherit(BI.Widget, {
             },
             afterCardCreated: BI.bind(this.afterCardCreated, this),
             afterCardShow: BI.bind(this.afterCardShow, this)
-        })
+        });
     },
 
     mounted: function () {
@@ -30084,6 +30080,12 @@ BI.GridTableHorizontalScrollbar = BI.inherit(BI.Widget, {
 
     populate: function () {
         this.scrollbar.populate();
+        var o = this.options;
+        if (o.size < 1 || o.contentSize <= o.size) {
+            this.setVisible(false);
+            return;
+        }
+        this.setVisible(true);
     }
 });
 BI.GridTableHorizontalScrollbar.EVENT_SCROLL = "EVENT_SCROLL";
