@@ -182,6 +182,7 @@ BI.Model = BI.inherit(BI.M, {
             !BI.has(self._tmp, keys[0]) && self.parent && self.parent._change(self);
             self.splice.apply(self, newKeys);
             self.trigger("splice", newKeys);
+            BI.remove(self._childs, child);
         }).on("copy", function () {
             var keys = name.split('.');
             var g = self.get(keys[0]), p, c;
@@ -456,5 +457,19 @@ BI.Model = BI.inherit(BI.M, {
         this._save(null, BI.extend({}, options, {
             patch: true
         }));
+    },
+
+    _destroy: function () {
+        var children = BI.extend({}, this._childs);
+        this._childs = {};
+        BI.each(children, function (i, child) {
+            child._destroy();
+        });
+        this.destroyed && this.destroyed();
+    },
+
+    destroy: function () {
+        this._destroy();
+        BI.Model.superclass.destroy.apply(this, arguments);
     }
 });

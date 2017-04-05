@@ -25,9 +25,9 @@ BI.View = BI.inherit(BI.V, {
             this.model._changing_ = false;
             this.model.actionEnd() && this.actionEnd();
         }).listenTo(this.model, "destroy", function () {
-            this.destroy();
+            this._destroy();
         }).listenTo(this.model, "unset", function () {
-            this.destroy();
+            this._destroy();
         }).listenTo(this.model, "splice", function (arg) {
             this.splice.apply(this, arg);
         }).listenTo(this.model, "duplicate", function (arg) {
@@ -244,7 +244,7 @@ BI.View = BI.inherit(BI.V, {
                     delete self._cards[cardName];
                     self.model.removeChild(modelData, view.model);
                     cardLayout.deleteCardByName(cardName);
-                    view.destroy();
+                    view._destroy();
                     cardLayout.setVisible(false);
                 }
                 action.actionBack(view, null, function () {
@@ -495,11 +495,11 @@ BI.View = BI.inherit(BI.V, {
         });
         delete this._cardLayouts;
         delete this._cards;
-        this.off();
         this.destroyed();
+        this.off();
     },
 
-    destroy: function () {
+    _destroy: function () {
         BI.each(this._cardLayouts, function (name, card) {
             card && card._unMount();
         });
