@@ -23,8 +23,7 @@ BI.CollectionTable = BI.inherit(BI.Widget, {
         });
     },
 
-    _init: function () {
-        BI.CollectionTable.superclass._init.apply(this, arguments);
+    render: function () {
         var self = this, o = this.options;
         this._width = 0;
         this._height = 0;
@@ -160,6 +159,10 @@ BI.CollectionTable = BI.inherit(BI.Widget, {
         });
         this._width = o.width - BI.GridTableScrollbar.SIZE;
         this._height = o.height - BI.GridTableScrollbar.SIZE;
+    },
+
+    mounted: function () {
+        var o = this.options;
         if (o.items.length > 0 || o.header.length < 0) {
             this._digest();
             this._populate();

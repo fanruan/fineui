@@ -4484,6 +4484,10 @@ BI.Widget = BI.inherit(BI.OB, {
         this.destroyed && this.destroyed();
     },
 
+    isMounted: function () {
+        return this._isMounted;
+    },
+
     setWidth: function (w) {
         this.options.width = w;
         this._initElementWidth();

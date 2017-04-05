@@ -12,8 +12,8 @@ BI.QuickGridTable = BI.inherit(BI.GridTable, {
         });
     },
 
-    _init: function () {
-        BI.QuickGridTable.superclass._init.apply(this, arguments);
+    render: function () {
+        BI.QuickGridTable.superclass.render.apply(this, arguments);
         var self = this, o = this.options;
         this.topLeftGrid.setOverflowX(false);
         this.topLeftGrid.setOverflowY(false);
@@ -23,6 +23,11 @@ BI.QuickGridTable = BI.inherit(BI.GridTable, {
         this.bottomLeftGrid.setOverflowY(false);
         this.bottomRightGrid.setOverflowX(false);
         this.bottomRightGrid.setOverflowY(false);
+    },
+
+    mounted: function () {
+        BI.QuickGridTable.superclass.mounted.apply(this, arguments);
+        var self = this;
         this._leftWheelHandler = new BI.WheelHandler(
             BI.bind(this._onWheelY, this),
             BI.bind(this._shouldHandleX, this),

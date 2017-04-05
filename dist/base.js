@@ -42,9 +42,6 @@
             } else {
                 this.onmousewheel = handler;
             }
-            // Store the line height and page height for this particular element
-            $.data(this, 'mousewheel-line-height', special.getLineHeight(this));
-            $.data(this, 'mousewheel-page-height', special.getPageHeight(this));
         },
 
         teardown: function() {
@@ -55,22 +52,6 @@
             } else {
                 this.onmousewheel = null;
             }
-            // Clean up the data we added to the element
-            $.removeData(this, 'mousewheel-line-height');
-            $.removeData(this, 'mousewheel-page-height');
-        },
-
-        getLineHeight: function(elem) {
-            var $elem = $(elem),
-                $parent = $elem['offsetParent' in $.fn ? 'offsetParent' : 'parent']();
-            if (!$parent.length) {
-                $parent = $('body');
-            }
-            return parseInt($parent.css('fontSize'), 10) || parseInt($elem.css('fontSize'), 10) || 16;
-        },
-
-        getPageHeight: function(elem) {
-            return $(elem).height();
         },
 
         settings: {
@@ -136,12 +117,12 @@
         //   * deltaMode 1 is by lines
         //   * deltaMode 2 is by pages
         if ( orgEvent.deltaMode === 1 ) {
-            var lineHeight = $.data(this, 'mousewheel-line-height');
+            var lineHeight = 40;
             delta  *= lineHeight;
             deltaY *= lineHeight;
             deltaX *= lineHeight;
         } else if ( orgEvent.deltaMode === 2 ) {
-            var pageHeight = $.data(this, 'mousewheel-page-height');
+            var pageHeight = 800;
             delta  *= pageHeight;
             deltaY *= pageHeight;
             deltaX *= pageHeight;
@@ -28329,8 +28310,7 @@ BI.CollectionTable = BI.inherit(BI.Widget, {
         });
     },
 
-    _init: function () {
-        BI.CollectionTable.superclass._init.apply(this, arguments);
+    render: function () {
         var self = this, o = this.options;
         this._width = 0;
         this._height = 0;
@@ -28466,6 +28446,10 @@ BI.CollectionTable = BI.inherit(BI.Widget, {
         });
         this._width = o.width - BI.GridTableScrollbar.SIZE;
         this._height = o.height - BI.GridTableScrollbar.SIZE;
+    },
+
+    mounted: function () {
+        var o = this.options;
         if (o.items.length > 0 || o.header.length < 0) {
             this._digest();
             this._populate();
@@ -28864,8 +28848,8 @@ BI.QuickCollectionTable = BI.inherit(BI.CollectionTable, {
         });
     },
 
-    _init: function () {
-        BI.QuickCollectionTable.superclass._init.apply(this, arguments);
+    render: function () {
+        BI.QuickCollectionTable.superclass.render.apply(this, arguments);
         var self = this, o = this.options;
         this.topLeftCollection.setOverflowX(false);
         this.topLeftCollection.setOverflowY(false);
@@ -28875,6 +28859,11 @@ BI.QuickCollectionTable = BI.inherit(BI.CollectionTable, {
         this.bottomLeftCollection.setOverflowY(false);
         this.bottomRightCollection.setOverflowX(false);
         this.bottomRightCollection.setOverflowY(false);
+    },
+
+    mounted: function () {
+        BI.QuickCollectionTable.superclass.mounted.apply(this, arguments);
+        var self = this;
         this._leftWheelHandler = new BI.WheelHandler(
             BI.bind(this._onWheelY, this),
             BI.bind(this._shouldHandleX, this),
@@ -29069,8 +29058,7 @@ BI.GridTable = BI.inherit(BI.Widget, {
         });
     },
 
-    _init: function () {
-        BI.GridTable.superclass._init.apply(this, arguments);
+    render: function () {
         var self = this, o = this.options;
         this._width = 0;
         this._height = 0;
@@ -29213,6 +29201,10 @@ BI.GridTable = BI.inherit(BI.Widget, {
         this._height = o.height - BI.GridTableScrollbar.SIZE;
         this.header = this._getHeader();
         this.items = this._getItems();
+    },
+
+    mounted: function () {
+        var o = this.options;
         if (o.items.length > 0) {
             this._populate();
         }
@@ -29531,8 +29523,8 @@ BI.QuickGridTable = BI.inherit(BI.GridTable, {
         });
     },
 
-    _init: function () {
-        BI.QuickGridTable.superclass._init.apply(this, arguments);
+    render: function () {
+        BI.QuickGridTable.superclass.render.apply(this, arguments);
         var self = this, o = this.options;
         this.topLeftGrid.setOverflowX(false);
         this.topLeftGrid.setOverflowY(false);
@@ -29542,6 +29534,11 @@ BI.QuickGridTable = BI.inherit(BI.GridTable, {
         this.bottomLeftGrid.setOverflowY(false);
         this.bottomRightGrid.setOverflowX(false);
         this.bottomRightGrid.setOverflowY(false);
+    },
+
+    mounted: function () {
+        BI.QuickGridTable.superclass.mounted.apply(this, arguments);
+        var self = this;
         this._leftWheelHandler = new BI.WheelHandler(
             BI.bind(this._onWheelY, this),
             BI.bind(this._shouldHandleX, this),
@@ -29711,8 +29708,7 @@ BI.GridTableScrollbar = BI.inherit(BI.Widget, {
         })
     },
 
-    _init: function () {
-        BI.GridTableScrollbar.superclass._init.apply(this, arguments);
+    render: function () {
         var self = this, o = this.options;
         this.focused = false;
         this.isDragging = false;
@@ -29730,6 +29726,10 @@ BI.GridTableScrollbar = BI.inherit(BI.Widget, {
                 top: 0
             }]
         });
+    },
+
+    mounted: function () {
+        var self = this, o = this.options;
         var onWheel = o.orientation === 'horizontal' ? this._onWheelX : this._onWheelY;
         this._wheelHandler = new BI.WheelHandler(
             BI.bind(onWheel, this),
