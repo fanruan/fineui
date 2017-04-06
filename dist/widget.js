@@ -12905,7 +12905,7 @@ BI.PageTable = BI.inherit(BI.Widget, {
                 vpage: vpage,
                 hpage: hpage
             }, function (items, header, crossItems, crossHeader) {
-                self.table.setVPage ? self.table.setVPage(vpage) : self.table.setCurrentPage(vpage);
+                self.table.setVPage ? self.table.setVPage(vpage) : self.table.setValue(vpage);
                 self.table.setHPage && self.table.setHPage(hpage);
                 self.populate.apply(self, arguments);
             });
