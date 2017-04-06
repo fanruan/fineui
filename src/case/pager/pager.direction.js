@@ -249,6 +249,7 @@ BI.DirectionPager = BI.inherit(BI.Widget, {
             this.setVPagerVisible(true);
             vShow = true;
         }
+        this.setVisible(hShow || vShow);
         var num = [74, 111, -9, 28];
         var items = this.layout.attr("items");
 

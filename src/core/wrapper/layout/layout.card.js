@@ -63,7 +63,7 @@ BI.CardLayout = BI.inherit(BI.Layout, {
 
     isCardExisted: function (cardName) {
         return BI.some(this.options.items, function (i, item) {
-            return item.cardName === cardName && item.el;
+            return item.cardName == cardName && item.el;
         });
     },
 

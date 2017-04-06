@@ -887,11 +887,9 @@ BI.Table = BI.inherit(BI.Widget, {
         };
 
         this._initNormalScroll();
-        BI.Resizers.add(this.getName(), function (e) {
-            if (self.element.is(":visible") && BI.isWindow(e.target)) {
-                self._resize();
-                self.fireEvent(BI.Table.EVENT_TABLE_RESIZE);
-            }
+        BI.ResizeDetector.addResizeListener(this, function () {
+            self._resize();
+            self.fireEvent(BI.Table.EVENT_TABLE_RESIZE);
         });
         BI.nextTick(function () {
             if (self.element.is(":visible")) {
@@ -1917,7 +1915,6 @@ BI.Table = BI.inherit(BI.Widget, {
     },
 
     empty: function () {
-        BI.Resizers.remove(this.getName());
         BI.Table.superclass.empty.apply(this, arguments);
     },
 

@@ -119,6 +119,8 @@ BI.AllCountPager = BI.inherit(BI.Widget, {
         })
     },
 
+    alwaysShowPager: true,
+
     setAllPages: function (v) {
         this.allPages.setText("/" + v);
         this.allPages.setTitle(v);
@@ -151,10 +153,6 @@ BI.AllCountPager = BI.inherit(BI.Widget, {
         this.editor.setVisible(b);
         this.allPages.setVisible(b);
         this.pager.setVisible(b);
-    },
-
-    getAliasWidth: function () {
-        return this.options.width - 100;
     },
 
     populate: function () {
