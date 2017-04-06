@@ -50,6 +50,11 @@ BI.MultiSelectItem = BI.inherit(BI.BasicButton, {
         }))));
     },
 
+    setEnable: function (v) {
+        BI.MultiSelectItem.superclass.setEnable.apply(this, arguments);
+        this.checkbox.setEnable(v);
+    },
+
     doRedMark: function(){
         this.text.doRedMark.apply(this.text, arguments);
     },
@@ -68,5 +73,5 @@ BI.MultiSelectItem = BI.inherit(BI.BasicButton, {
         this.checkbox.setSelected(v);
     }
 });
-
-$.shortcut("bi.multi_select_item", BI.MultiSelectItem);
+BI.MultiSelectItem.EVENT_CHANGE = "EVENT_CHANGE";
+BI.shortcut("bi.multi_select_item", BI.MultiSelectItem);

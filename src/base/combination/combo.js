@@ -4,14 +4,17 @@
  */
 BI.Combo = BI.inherit(BI.Widget, {
     _defaultConfig: function () {
-        return BI.extend(BI.Combo.superclass._defaultConfig.apply(this, arguments), {
-            baseCls: "bi-combo",
+        var conf = BI.Combo.superclass._defaultConfig.apply(this, arguments);
+        return BI.extend(conf, {
+            baseCls: (conf.baseCls || "") + " bi-combo",
             trigger: "click",
             toggle: true,
             direction: "bottom", //top||bottom||left||right||top,left||top,right||bottom,left||bottom,right
             isDefaultInit: false,
             isNeedAdjustHeight: true,//是否需要高度调整
             isNeedAdjustWidth: true,
+            stopEvent: false,
+            stopPropagation: false,
             adjustLength: 0,//调整的距离
             adjustXOffset: 0,
             adjustYOffset: 0,
@@ -88,6 +91,14 @@ BI.Combo = BI.inherit(BI.Widget, {
     _initPullDownAction: function () {
         var self = this, o = this.options;
         var evs = this.options.trigger.split(",");
+        var st = function (e) {
+            if (o.stopEvent) {
+                e.stopEvent();
+            }
+            if (o.stopPropagation) {
+                e.stopPropagation();
+            }
+        };
         BI.each(evs, function (i, ev) {
             switch (ev) {
                 case "hover":
@@ -107,25 +118,27 @@ BI.Combo = BI.inherit(BI.Widget, {
                     });
                     break;
                 case "click":
-                    if (ev) {
-                        self.element.off(ev + "." + self.getName()).on(ev + "." + self.getName(), BI.debounce(function (e) {
-                            if (self.combo.element.__isMouseInBounds__(e)) {
-                                if (self.isEnabled() && self.combo.isEnabled()) {
-                                    o.toggle ? self._toggle() : self._popupView();
-                                    if (self.isViewVisible()) {
-                                        self.fireEvent(BI.Controller.EVENT_CHANGE, BI.Events.EXPAND, "", self.combo);
-                                        self.fireEvent(BI.Combo.EVENT_EXPAND);
-                                    } else {
-                                        self.fireEvent(BI.Controller.EVENT_CHANGE, BI.Events.COLLAPSE, "", self.combo);
-                                        self.fireEvent(BI.Combo.EVENT_COLLAPSE);
-                                    }
+                    var debounce = BI.debounce(function (e) {
+                        if (self.combo.element.__isMouseInBounds__(e)) {
+                            if (self.isEnabled() && self.combo.isEnabled()) {
+                                o.toggle ? self._toggle() : self._popupView();
+                                if (self.isViewVisible()) {
+                                    self.fireEvent(BI.Controller.EVENT_CHANGE, BI.Events.EXPAND, "", self.combo);
+                                    self.fireEvent(BI.Combo.EVENT_EXPAND);
+                                } else {
+                                    self.fireEvent(BI.Controller.EVENT_CHANGE, BI.Events.COLLAPSE, "", self.combo);
+                                    self.fireEvent(BI.Combo.EVENT_COLLAPSE);
                                 }
                             }
-                        }, BI.EVENT_RESPONSE_TIME, true));
-                    }
+                        }
+                    }, BI.EVENT_RESPONSE_TIME, true);
+                    self.element.off(ev + "." + self.getName()).on(ev + "." + self.getName(), function(e){
+                        debounce(e);
+                        st(e);
+                    });
                     break;
             }
-        })
+        });
     },
 
     _initCombo: function () {
@@ -292,6 +305,7 @@ BI.Combo = BI.inherit(BI.Widget, {
                 top: p.top
             });
         }
+        this.position = p;
         this.popupView.setVisible(isVisible);
     },
 
@@ -315,7 +329,7 @@ BI.Combo = BI.inherit(BI.Widget, {
         BI.Combo.superclass.setEnable.apply(this, arguments);
         this.combo && this.combo.setEnable(arg);
         this.popupView && this.popupView.setEnable(arg);
-        !arg && this._hideView();
+        !arg && this.isViewVisible() && this._hideView();
     },
 
     setValue: function (v) {
@@ -347,6 +361,10 @@ BI.Combo = BI.inherit(BI.Widget, {
         return this.popupView;
     },
 
+    getPopupPosition: function () {
+        return this.position;
+    },
+
     doBehavior: function () {
         this._assertPopupView();
         this.popupView && this.popupView.doBehavior.apply(this.popupView, arguments);
@@ -356,14 +374,14 @@ BI.Combo = BI.inherit(BI.Widget, {
         this._toggle();
     },
 
-    destroyed: function () {
+    destroy: function () {
         $(document).unbind("mousedown." + this.getName())
             .unbind("mousewheel." + this.getName())
             .unbind("mouseenter." + this.getName())
             .unbind("mousemove." + this.getName())
             .unbind("mouseleave." + this.getName());
-        this.popupView && this.popupView.destroy();
         BI.Resizers.remove(this.getName());
+        BI.Combo.superclass.destroy.apply(this, arguments);
     }
 });
 BI.Combo.EVENT_TRIGGER_CHANGE = "EVENT_TRIGGER_CHANGE";
@@ -378,4 +396,4 @@ BI.Combo.EVENT_AFTER_POPUPVIEW = "EVENT_AFTER_POPUPVIEW";
 BI.Combo.EVENT_BEFORE_HIDEVIEW = "EVENT_BEFORE_HIDEVIEW";
 BI.Combo.EVENT_AFTER_HIDEVIEW = "EVENT_AFTER_HIDEVIEW";
 
-$.shortcut("bi.combo", BI.Combo);
+BI.shortcut("bi.combo", BI.Combo);

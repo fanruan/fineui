@@ -19,8 +19,8 @@ BI.FloatLeftLayout = BI.inherit(BI.Layout, {
             bgap: 0
         });
     },
-    created: function () {
-        BI.FloatLeftLayout.superclass.created.apply(this, arguments);
+    render: function () {
+        BI.FloatLeftLayout.superclass.render.apply(this, arguments);
         this.populate(this.options.items);
     },
 
@@ -61,7 +61,7 @@ BI.FloatLeftLayout = BI.inherit(BI.Layout, {
         this._mount();
     }
 });
-$.shortcut('bi.left', BI.FloatLeftLayout);
+BI.shortcut('bi.left', BI.FloatLeftLayout);
 
 /**
  * 靠右对齐的自由浮动布局
@@ -84,8 +84,8 @@ BI.FloatRightLayout = BI.inherit(BI.Layout, {
             bgap: 0
         });
     },
-    created: function () {
-        BI.FloatRightLayout.superclass.created.apply(this, arguments);
+    render: function () {
+        BI.FloatRightLayout.superclass.render.apply(this, arguments);
         this.populate(this.options.items);
     },
 
@@ -126,4 +126,4 @@ BI.FloatRightLayout = BI.inherit(BI.Layout, {
         this._mount();
     }
 });
-$.shortcut('bi.right', BI.FloatRightLayout);
+BI.shortcut('bi.right', BI.FloatRightLayout);

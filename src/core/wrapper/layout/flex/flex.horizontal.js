@@ -20,8 +20,8 @@ BI.FlexHorizontalLayout = BI.inherit(BI.Layout, {
             bgap: 0
         });
     },
-    created: function () {
-        BI.FlexHorizontalLayout.superclass.created.apply(this, arguments);
+    render: function () {
+        BI.FlexHorizontalLayout.superclass.render.apply(this, arguments);
         var o = this.options;
         this.element.addClass(o.verticalAlign);
         this.populate(this.options.items);
@@ -63,4 +63,4 @@ BI.FlexHorizontalLayout = BI.inherit(BI.Layout, {
         this._mount();
     }
 });
-$.shortcut('bi.flex_horizontal', BI.FlexHorizontalLayout);
+BI.shortcut('bi.flex_horizontal', BI.FlexHorizontalLayout);

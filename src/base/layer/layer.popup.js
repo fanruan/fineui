@@ -53,7 +53,14 @@ BI.PopupView = BI.inherit(BI.Widget, {
             "z-index": BI.zIndex_popup,
             "min-width": o.minWidth + "px",
             "max-width": o.maxWidth + "px"
-        }).bind({"click": fn, "mousewheel": fn});
+        }).bind({"click": fn});
+
+        //FIXME IE8下 jquery.mousewheeel.js 第一次执行65行$elem["offsetParent"]()的时候报错：未指明的错误 但是第二次或者调试的时候展开一下$elem内容均能避免上述问题
+        try {
+            this.element.bind("mousewheel", fn);
+        } catch (e) {
+            this.element.bind("mousewheel", fn);
+        }
 
         o.stopPropagation && this.element.bind({"mousedown": fn, "mouseup": fn, "mouseover": fn});
         o.stopEvent && this.element.bind({"mousedown": stop, "mouseup": stop, "mouseover": stop});
@@ -135,6 +142,10 @@ BI.PopupView = BI.inherit(BI.Widget, {
         })
     },
 
+    getView: function () {
+        return this.button_group;
+    },
+
     populate: function (items) {
         this.button_group.populate.apply(this.button_group, arguments);
     },
@@ -145,9 +156,9 @@ BI.PopupView = BI.inherit(BI.Widget, {
     },
 
     resetHeight: function (h) {
-        var tbHeight = 30 * (this.toolbar ? 1 : 0),
-            tabHeight = 25 * (this.tab ? 1 : 0),
-            toolHeight = ((this.tool && this.tool.element.outerHeight()) || 25) * ((this.tool && this.tool.isVisible()) ? 1 : 0);
+        var tbHeight = this.toolbar ? (this.toolbar.attr("height") || 30) : 0,
+            tabHeight = this.tab ? (this.tab.attr("height") || 25) : 0,
+            toolHeight = ((this.tool && this.tool.attr("height")) || 25) * ((this.tool && this.tool.isVisible()) ? 1 : 0);
         this.view.resetHeight ? this.view.resetHeight(h - tbHeight - tabHeight - toolHeight - 2) :
             this.view.element.css({"max-height": (h - tbHeight - tabHeight - toolHeight - 2) + "px"})
     },
@@ -167,4 +178,4 @@ BI.PopupView = BI.inherit(BI.Widget, {
     }
 });
 BI.PopupView.EVENT_CHANGE = "EVENT_CHANGE";
-$.shortcut("bi.popup_view", BI.PopupView);
+BI.shortcut("bi.popup_view", BI.PopupView);

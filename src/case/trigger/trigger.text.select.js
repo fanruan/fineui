@@ -34,7 +34,7 @@ BI.SelectTextTrigger = BI.inherit(BI.Trigger, {
         var result = [];
         var items = BI.Tree.transformToArrayFormat(this.options.items);
         BI.each(items, function (i, item) {
-            if (BI.deepContains(vals, item.value)) {
+            if (BI.deepContains(vals, item.value) && !result.contains(item.text || item.value)) {
                 result.push(item.text || item.value);
             }
         });
@@ -52,4 +52,4 @@ BI.SelectTextTrigger = BI.inherit(BI.Trigger, {
         this.options.items = items;
     }
 });
-$.shortcut("bi.select_text_trigger", BI.SelectTextTrigger);
+BI.shortcut("bi.select_text_trigger", BI.SelectTextTrigger);

@@ -56,4 +56,4 @@ BI.SingleSelectIconTextItem = BI.inherit(BI.Single, {
     }
 });
 
-$.shortcut("bi.single_select_icon_text_item", BI.SingleSelectIconTextItem);
+BI.shortcut("bi.single_select_icon_text_item", BI.SingleSelectIconTextItem);

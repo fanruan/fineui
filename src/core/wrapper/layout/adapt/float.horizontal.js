@@ -14,8 +14,8 @@ BI.FloatHorizontalLayout = BI.inherit(BI.Layout, {
             rgap: 0
         });
     },
-    created: function () {
-        BI.FloatHorizontalLayout.superclass.created.apply(this, arguments);
+    render: function () {
+        BI.FloatHorizontalLayout.superclass.render.apply(this, arguments);
         this.populate(this.options.items);
     },
 
@@ -32,14 +32,14 @@ BI.FloatHorizontalLayout = BI.inherit(BI.Layout, {
             element: this,
             items: [this.left]
         });
-        this.removeWidget(this.container.getName());
+        this.removeWidget(this.container);
     },
 
     _addElement: function (i, item) {
         var self = this, o = this.options;
         this.left = BI.createWidget({
             type: "bi.vertical",
-            items: items,
+            items: [item],
             hgap: o.hgap,
             vgap: o.vgap,
             tgap: o.tgap,
@@ -54,7 +54,7 @@ BI.FloatHorizontalLayout = BI.inherit(BI.Layout, {
             items: [this.left]
         });
 
-        return left;
+        return this.left;
     },
 
     populate: function (items) {
@@ -62,4 +62,4 @@ BI.FloatHorizontalLayout = BI.inherit(BI.Layout, {
         this._mount();
     }
 });
-$.shortcut('bi.horizontal_float', BI.FloatHorizontalLayout);
+BI.shortcut('bi.horizontal_float', BI.FloatHorizontalLayout);

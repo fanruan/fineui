@@ -59,8 +59,9 @@
     };
 
     XML.getNSResolver = function (str) {
-        if (!str)
+        if (!str) {
             return null;
+        }
         var list = str.split(' ');
         var namespaces = {};
         for (var i = 0; i < list.length; i++) {
@@ -112,7 +113,7 @@
 
     XML.eval2 = function (context, xpathExp, resultType, namespaces) {
         if (resultType !== "single" && resultType !== undefined && resultType !== null) {
-            throw new Error("justep.SimpleXML.eval只支持resultType='single', 不支持" + resultType);
+            throw new Error("justep.SimpleXML.eval only be resultType='single', not" + resultType);
         }
 
         if (context === null || context === undefined || xpathExp === null || xpathExp === undefined) {
@@ -275,8 +276,9 @@
 
     XML.setNodeText = function (context, xpathExp, text) {
         var finded = this.eval(context, xpathExp, this.ResultType.single);
-        if (finded === null)
+        if (finded === null) {
             return;
+        }
         if (finded.nodeType == XML.Document.NodeType.ELEMENT) {
             var textNode = this.eval(finded, "./text()", this.ResultType.single);
             if (!textNode) {
@@ -316,26 +318,36 @@
         JUSTEP: "http://www.justep.com/x5#",
         'get': function (type) {
             type = type ? type.toLowerCase() : "string";
-            if ("string" == type)
+            if ("string" == type) {
                 return XML.Namespaces.XMLSCHEMA_STRING;
-            else if ("integer" == type)
+            }
+            else if ("integer" == type) {
                 return XML.Namespaces.XMLSCHEMA_INTEGER;
-            else if ("long" == type)
+            }
+            else if ("long" == type) {
                 return XML.Namespaces.XMLSCHEMA_LONG;
-            else if ("float" == type)
+            }
+            else if ("float" == type) {
                 return XML.Namespaces.XMLSCHEMA_FLOAT;
-            else if ("double" == type)
+            }
+            else if ("double" == type) {
                 return XML.Namespaces.XMLSCHEMA_DOUBLE;
-            else if ("decimal" == type)
+            }
+            else if ("decimal" == type) {
                 return XML.Namespaces.XMLSCHEMA_DECIMAL;
-            else if ("date" == type)
+            }
+            else if ("date" == type) {
                 return XML.Namespaces.XMLSCHEMA_DATE;
-            else if ("time" == type)
+            }
+            else if ("time" == type) {
                 return XML.Namespaces.XMLSCHEMA_TIME;
-            else if ("datetime" == type)
+            }
+            else if ("datetime" == type) {
                 return XML.Namespaces.XMLSCHEMA_DATETIME;
-            else if ("boolean" == type)
+            }
+            else if ("boolean" == type) {
                 return XML.Namespaces.XMLSCHEMA_BOOLEAN;
+            }
         }
     };
 })(BI);

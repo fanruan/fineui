@@ -18,8 +18,8 @@ BI.FlexVerticalCenter = BI.inherit(BI.Layout, {
             bgap: 0
         });
     },
-    created: function () {
-        BI.FlexVerticalCenter.superclass.created.apply(this, arguments);
+    render: function () {
+        BI.FlexVerticalCenter.superclass.render.apply(this, arguments);
         var o = this.options;
         this.$wrapper = $("<div>").addClass("flex-wrapper-vertical-center-wrapper");
         this.populate(this.options.items);
@@ -68,11 +68,8 @@ BI.FlexVerticalCenter = BI.inherit(BI.Layout, {
         }
     },
 
-    addItem: function (item) {
-        var w = this._addElement(this.options.items.length, item);
-        this.options.items.push(item);
-        w.element.appendTo(this.$wrapper);
-        return w;
+    _getWrapper: function(){
+        return this.$wrapper;
     },
 
     resize: function () {
@@ -84,4 +81,4 @@ BI.FlexVerticalCenter = BI.inherit(BI.Layout, {
         this._mount();
     }
 });
-$.shortcut('bi.flex_wrapper_vertical_center', BI.FlexVerticalCenter);
+BI.shortcut('bi.flex_wrapper_vertical_center', BI.FlexVerticalCenter);

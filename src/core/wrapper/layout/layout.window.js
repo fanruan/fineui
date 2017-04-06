@@ -30,8 +30,8 @@ BI.WindowLayout = BI.inherit(BI.Layout, {
             ]]
         });
     },
-    created: function () {
-        BI.WindowLayout.superclass.created.apply(this, arguments);
+    render: function () {
+        BI.WindowLayout.superclass.render.apply(this, arguments);
         this.populate(this.options.items);
     },
 
@@ -41,7 +41,7 @@ BI.WindowLayout = BI.inherit(BI.Layout, {
 
     addItem: function (item) {
         // do nothing
-        throw new Error("不能添加元素")
+        throw new Error("cannot be added")
     },
 
     stroke: function (items) {
@@ -92,7 +92,7 @@ BI.WindowLayout = BI.inherit(BI.Layout, {
         for (var i = 0; i < o.rows; i++) {
             for (var j = 0; j < o.columns; j++) {
                 if (!o.items[i][j]) {
-                    throw new Error("缺少item项");
+                    throw new Error("item be required");
                 }
                 if (!this.hasWidget(this.getName() + i + "_" + j)) {
                     var w = BI.createWidget(o.items[i][j]);
@@ -185,4 +185,4 @@ BI.WindowLayout = BI.inherit(BI.Layout, {
         this._mount();
     }
 });
-$.shortcut('bi.window', BI.WindowLayout);
+BI.shortcut('bi.window', BI.WindowLayout);

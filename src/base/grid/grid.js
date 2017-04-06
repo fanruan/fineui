@@ -8,7 +8,7 @@
 BI.Grid = BI.inherit(BI.Widget, {
     _defaultConfig: function () {
         return BI.extend(BI.Grid.superclass._defaultConfig.apply(this, arguments), {
-            baseCls: "bi-grid",
+            baseCls: "bi-grid-view",
             width: 400,
             height: 300,
             overflowX: true,
@@ -60,13 +60,11 @@ BI.Grid = BI.inherit(BI.Widget, {
         if (o.items.length > 0) {
             this._populate();
         }
-    },
-
-    mounted: function () {
-        var o = this.options;
         if (o.scrollLeft !== 0 || o.scrollTop !== 0) {
-            this.element.scrollTop(o.scrollTop);
-            this.element.scrollLeft(o.scrollLeft);
+            BI.nextTick(function () {
+                self.element.scrollTop(o.scrollTop);
+                self.element.scrollLeft(o.scrollLeft);
+            });
         }
     },
 
@@ -178,11 +176,7 @@ BI.Grid = BI.inherit(BI.Widget, {
             BI.each(addSet, function (index) {
                 addedItems.push(renderedCells[index])
             });
-            BI.createWidget({
-                type: "bi.absolute",
-                element: this.container,
-                items: addedItems
-            });
+            this.container.addItems(addedItems);
             this.renderedCells = renderedCells;
             this.renderedKeys = renderedKeys;
         }
@@ -297,4 +291,4 @@ BI.Grid = BI.inherit(BI.Widget, {
     }
 });
 BI.Grid.EVENT_SCROLL = "EVENT_SCROLL";
-$.shortcut('bi.grid_view', BI.Grid);
+BI.shortcut('bi.grid_view', BI.Grid);

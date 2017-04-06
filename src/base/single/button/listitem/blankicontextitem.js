@@ -108,4 +108,4 @@ BI.BlankIconTextItem = BI.inherit(BI.BasicButton, {
     }
 });
 BI.BlankIconTextItem.EVENT_CHANGE = "EVENT_CHANGE";
-$.shortcut("bi.blank_icon_text_item", BI.BlankIconTextItem);
+BI.shortcut("bi.blank_icon_text_item", BI.BlankIconTextItem);

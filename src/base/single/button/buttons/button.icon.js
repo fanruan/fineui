@@ -7,8 +7,7 @@ BI.IconButton = BI.inherit(BI.BasicButton, {
     _defaultConfig: function () {
         var conf = BI.IconButton.superclass._defaultConfig.apply(this, arguments);
         return BI.extend(conf, {
-            tagName: "a",
-            baseCls: (conf.baseCls || "") + " bi-icon-button horizon-center display-block",
+            baseCls: (conf.baseCls || "") + " bi-icon-button horizon-center",
             iconWidth: null,
             iconHeight: null
         })
@@ -49,4 +48,4 @@ BI.IconButton = BI.inherit(BI.BasicButton, {
     }
 });
 BI.IconButton.EVENT_CHANGE = "IconButton.EVENT_CHANGE";
-$.shortcut("bi.icon_button", BI.IconButton);
+BI.shortcut("bi.icon_button", BI.IconButton);

@@ -16,8 +16,8 @@ BI.CenterLayout = BI.inherit(BI.Layout, {
         });
     },
 
-    created: function () {
-        BI.CenterLayout.superclass.created.apply(this, arguments);
+    render: function () {
+        BI.CenterLayout.superclass.render.apply(this, arguments);
         this.populate(this.options.items);
     },
 
@@ -27,7 +27,7 @@ BI.CenterLayout = BI.inherit(BI.Layout, {
 
     addItem: function (item) {
         //do nothing
-        throw new Error("不能添加元素");
+        throw new Error("cannot be added");
     },
 
     stroke: function (items) {
@@ -72,4 +72,4 @@ BI.CenterLayout = BI.inherit(BI.Layout, {
         this._mount();
     }
 });
-$.shortcut('bi.center', BI.CenterLayout);
+BI.shortcut('bi.center', BI.CenterLayout);

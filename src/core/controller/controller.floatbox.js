@@ -18,6 +18,7 @@ BI.FloatBoxController = BI.inherit(BI.Controller, {
         this.floatManager = {};
         this.floatLayer = {};
         this.floatContainer = {};
+        this.floatOpened = {};
         this.zindex = BI.zIndex_floatbox;
         this.zindexMap = {};
     },
@@ -82,28 +83,31 @@ BI.FloatBoxController = BI.inherit(BI.Controller, {
         if (!this._check(name)) {
             return this;
         }
-        var container = this.floatContainer[name];
-        container.element.css("zIndex", this.zindex++);
-        this.modal && container.element.__hasZIndexMask__(this.zindexMap[name]) && container.element.__releaseZIndexMask__(this.zindexMap[name]);
-        this.zindexMap[name] = this.zindex;
-        this.modal && container.element.__buildZIndexMask__(this.zindex++);
-        this.get(name).setZindex(this.zindex++);
-        this.floatContainer[name].visible();
-        var floatbox = this.get(name);
-        floatbox.show();
-        var W = $(this.options.render).width(), H = $(this.options.render).height();
-        var w = floatbox.element.width(), h = floatbox.element.height();
-        var left = (W - w) / 2, top = (H - h) / 2;
-        if (left < 0) {
-            left = 0;
+        if (!this.floatOpened[name]) {
+            this.floatOpened[name] = true;
+            var container = this.floatContainer[name];
+            container.element.css("zIndex", this.zindex++);
+            this.modal && container.element.__hasZIndexMask__(this.zindexMap[name]) && container.element.__releaseZIndexMask__(this.zindexMap[name]);
+            this.zindexMap[name] = this.zindex;
+            this.modal && container.element.__buildZIndexMask__(this.zindex++);
+            this.get(name).setZindex(this.zindex++);
+            this.floatContainer[name].visible();
+            var floatbox = this.get(name);
+            floatbox.show();
+            var W = $(this.options.render).width(), H = $(this.options.render).height();
+            var w = floatbox.element.width(), h = floatbox.element.height();
+            var left = (W - w) / 2, top = (H - h) / 2;
+            if (left < 0) {
+                left = 0;
+            }
+            if (top < 0) {
+                top = 0;
+            }
+            floatbox.element.css({
+                left: left + "px",
+                top: top + "px"
+            });
         }
-        if (top < 0) {
-            top = 0;
-        }
-        floatbox.element.css({
-            left: left + "px",
-            top: top + "px"
-        });
         return this;
     },
 
@@ -111,8 +115,11 @@ BI.FloatBoxController = BI.inherit(BI.Controller, {
         if (!this._check(name)) {
             return this;
         }
-        this.floatContainer[name].invisible();
-        this.modal && this.floatContainer[name].element.__releaseZIndexMask__(this.zindexMap[name]);
+        if (this.floatOpened[name]) {
+            delete this.floatOpened[name];
+            this.floatContainer[name].invisible();
+            this.modal && this.floatContainer[name].element.__releaseZIndexMask__(this.zindexMap[name]);
+        }
         return this;
     },
 

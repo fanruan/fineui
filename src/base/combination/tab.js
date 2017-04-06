@@ -7,10 +7,11 @@ BI.Tab = BI.inherit(BI.Widget, {
         return BI.extend(BI.Tab.superclass._defaultConfig.apply(this, arguments), {
             baseCls: "bi-tab",
             direction: "top",//top, bottom, left, right, custom
+            single: false, //是不是单页面
             logic: {
                 dynamic: false
             },
-            defaultShowIndex: 0,
+            defaultShowIndex: false,
             tab: false,
             cardCreator: function (v) {
                 return BI.createWidget();
@@ -18,8 +19,7 @@ BI.Tab = BI.inherit(BI.Widget, {
         })
     },
 
-    _init: function () {
-        BI.Tab.superclass._init.apply(this, arguments);
+    render: function () {
         var self = this, o = this.options;
         if (BI.isObject(o.tab)) {
             this.tab = BI.createWidget(this.options.tab, {type: "bi.button_group"});
@@ -47,14 +47,24 @@ BI.Tab = BI.inherit(BI.Widget, {
                 return card;
             },
             afterCardShow: function (v) {
+                self._deleteOtherCards(v);
                 self.curr = v;
             }
         });
         listener.on(BI.ShowListener.EVENT_CHANGE, function (value) {
             self.fireEvent(BI.Tab.EVENT_CHANGE, value, self);
         });
-        if (o.defaultShowIndex !== false) {
-            this.setSelect(o.defaultShowIndex);
+    },
+
+    _deleteOtherCards: function (currCardName) {
+        var self = this, o = this.options;
+        if (o.single === true) {
+            BI.each(this.cardMap, function (name, card) {
+                if (name !== (currCardName + "")) {
+                    self.layout.deleteCardByName(name);
+                    delete self.cardMap[name];
+                }
+            });
         }
     },
 
@@ -66,10 +76,18 @@ BI.Tab = BI.inherit(BI.Widget, {
         }
     },
 
+    mounted: function () {
+        var o = this.options;
+        if (o.defaultShowIndex !== false) {
+            this.setSelect(o.defaultShowIndex);
+        }
+    },
+
     setSelect: function (v) {
         this.tab && this.tab.setValue(v);
         this._assertCard(v);
         this.layout.showCardByName(v);
+        this._deleteOtherCards(v);
         if (this.curr !== v) {
             this.curr = v;
         }
@@ -114,11 +132,11 @@ BI.Tab = BI.inherit(BI.Widget, {
         this.cardMap = {};
     },
 
-    destroyed: function () {
-        this.layout.deleteAllCard();
+    destroy: function () {
         this.cardMap = {};
+        BI.Tab.superclass.destroy.apply(this, arguments);
     }
 });
 BI.Tab.EVENT_CHANGE = "EVENT_CHANGE";
 
-$.shortcut("bi.tab", BI.Tab);
+BI.shortcut("bi.tab", BI.Tab);

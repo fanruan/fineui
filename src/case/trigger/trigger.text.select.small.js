@@ -33,7 +33,7 @@ BI.SmallSelectTextTrigger = BI.inherit(BI.Trigger, {
         var result = [];
         var items = BI.Tree.transformToArrayFormat(this.options.items);
         BI.each(items, function (i, item) {
-            if (BI.deepContains(vals, item.value)) {
+            if (BI.deepContains(vals, item.value) && !result.contains(item.text || item.value)) {
                 result.push(item.text || item.value);
             }
         });
@@ -51,4 +51,4 @@ BI.SmallSelectTextTrigger = BI.inherit(BI.Trigger, {
         this.options.items = items;
     }
 });
-$.shortcut("bi.small_select_text_trigger", BI.SmallSelectTextTrigger);
+BI.shortcut("bi.small_select_text_trigger", BI.SmallSelectTextTrigger);

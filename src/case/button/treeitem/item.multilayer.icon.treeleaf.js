@@ -19,9 +19,6 @@ BI.MultiLayerIconTreeLeafItem = BI.inherit(BI.BasicButton, {
         this.item = BI.createWidget({
             type: "bi.icon_tree_leaf_item",
             iconCls: o.iconCls,
-            logic: {
-                dynamic: true
-            },
             id: o.id,
             pId: o.pId,
             isFront: true,
@@ -96,4 +93,4 @@ BI.MultiLayerIconTreeLeafItem = BI.inherit(BI.BasicButton, {
     }
 });
 
-$.shortcut("bi.multilayer_icon_tree_leaf_item", BI.MultiLayerIconTreeLeafItem);
+BI.shortcut("bi.multilayer_icon_tree_leaf_item", BI.MultiLayerIconTreeLeafItem);

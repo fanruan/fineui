@@ -16,8 +16,9 @@
     var F = (function (item) {
         return function (input) {
             var files = input.files || [input];
-            if (!files.item)
+            if (!files.item) {
                 files.item = item;
+            }
             return files;
         };
     })(function (i) {
@@ -67,8 +68,9 @@
          */
         stop: function (e) {
             if (!e) {
-                if (self.event)
+                if (self.event) {
                     event.returnValue = !(event.cancelBubble = true);
+                }
             } else {
                 e.stopPropagation ? e.stopPropagation() : e.cancelBubble = true;
                 e.preventDefault ? e.preventDefault() : e.returnValue = false;
@@ -99,11 +101,12 @@
             sendFile;
 
         // FireFox 3+, Safari 4 beta (Chrome 2 beta file is buggy and will not work)
-        if (xhr.upload || xhr.sendAsBinary)
+        if (xhr.upload || xhr.sendAsBinary) {
             sendFile = function (handler, maxSize, width, height) {
                 if (-1 < maxSize && maxSize < handler.file.fileSize) {
-                    if (isFunction(handler.onerror))
+                    if (isFunction(handler.onerror)) {
                         handler.onerror();
+                    }
                     return;
                 }
                 for (var
@@ -116,28 +119,32 @@
                          i = 0;
                      i < length;
                      i++
-                )
+                ) {
                     upload.addEventListener(
                         split[i].substring(2),
                         (function (event) {
                             return function (rpe) {
-                                if (isFunction(handler[event]))
+                                if (isFunction(handler[event])) {
                                     handler[event](rpe, xhr);
+                                }
                             };
                         })(split[i]),
                         false
                     );
+                }
                 upload.addEventListener(
                     "load",
                     function (rpe) {
                         if (handler.onreadystatechange === false) {
-                            if (isFunction(handler.onload))
+                            if (isFunction(handler.onload)) {
                                 handler.onload(rpe, xhr);
+                            }
                         } else {
                             setTimeout(function () {
                                 if (xhr.readyState === 4) {
-                                    if (isFunction(handler.onload))
+                                    if (isFunction(handler.onload)) {
                                         handler.onload(rpe, xhr);
+                                    }
                                 } else {
                                     setTimeout(arguments.callee, 15);
                                 }
@@ -146,13 +153,14 @@
                     },
                     false
                 );
-                xhr.open("post", handler.url + '&filename=' + BI.cjkEncode(handler.file.fileName), true);
+                xhr.open("post", handler.url + '&filename=' + window.encodeURIComponent(handler.file.fileName), true);
                 if (!xhr.upload) {
                     var rpe = {loaded: 0, total: handler.file.fileSize || handler.file.size, simulation: true};
                     rpe.interval = setInterval(function () {
                         rpe.loaded += 1024 / 4;
-                        if (rpe.total <= rpe.loaded)
+                        if (rpe.total <= rpe.loaded) {
                             rpe.loaded = rpe.total;
+                        }
                         upload.onprogress(rpe);
                     }, 100);
                     xhr.onabort = function () {
@@ -197,7 +205,7 @@
                                 if (handler.file.type.indexOf('image') != -1) {
                                     attachO.attach_type = "image";
                                 }
-                                attachO.filename = BI.cjkDecode(handler.file.fileName);
+                                attachO.filename = handler.file.fileName;
                                 if (handler.maxlength == 1) {
                                     handler.attach_array[0] = attachO;
                                     //                                   handler.attach_array.push(attachO);
@@ -222,8 +230,9 @@
                 }
                 return handler;
             };
+        }
         // Internet Explorer, Opera, others
-        else
+        else {
             sendFile = function (handler, maxSize, width, height) {
                 var url = handler.url.concat(-1 === handler.url.indexOf("?") ? "?" : "&", "AjaxUploadFrame=true"),
                     rpe = {
@@ -272,13 +281,13 @@
                     iframe.setAttribute("name", iframe.id = target);
                     iframe.setAttribute("src", url);
                 }
-                ;
                 iframe.style.position = "absolute";
                 iframe.style.left = iframe.style.top = "-10000px";
                 iframe.onload = onload;
                 iframe.onerror = function (event) {
-                    if (isFunction(handler.onerror))
+                    if (isFunction(handler.onerror)) {
                         handler.onerror(rpe, event || window.event);
+                    }
                 };
                 iframe.onreadystatechange = function () {
                     if (/loaded|complete/i.test(iframe.readyState)) {
@@ -287,8 +296,9 @@
                         //wei : todo,将附件信息放到handler.attach
                     }
                     else if (isFunction(handler.onloadprogress)) {
-                        if (rpe.loaded < rpe.total)
+                        if (rpe.loaded < rpe.total) {
                             ++rpe.loaded;
+                        }
                         handler.onloadprogress(rpe, {
                             readyState: {
                                 loading: 2,
@@ -299,13 +309,14 @@
                         });
                     }
                 };
-                form.setAttribute("action", handler.url + '&width=' + width + '&height=' + height);
+                form.setAttribute("action", handler.url);
                 form.setAttribute("target", iframe.id);
                 form.setAttribute("method", "post");
                 form.appendChild(handler.file);
                 form.style.display = "none";
-                if (isFunction(handler.onloadstart))
+                if (isFunction(handler.onloadstart)) {
                     handler.onloadstart(rpe, {});
+                }
                 with (document.body || document.documentElement) {
                     appendChild(iframe);
                     appendChild(form);
@@ -314,6 +325,7 @@
                 ;
                 return handler;
             };
+        }
         xhr = null;
         return sendFile;
     })(Object.prototype.toString);
@@ -359,7 +371,6 @@
                         handler.iframe.parentNode.removeChild(handler.iframe);
                         handler.iframe = null;
                     }
-                    ;
                     setTimeout(function () {
                         handler.file = handler.files[handler.current];
                         sendFile(handler, maxSize, width, height).onload = callee;
@@ -484,14 +495,14 @@
                         size = item.fileSize || item.size;
                     if (wrap.fileType && -1 === wrap.fileType.indexOf("*." + ext)) {
                         //文件类型不支持
-                        BI.Msg.toast("文件类型不支持");
+                        BI.Msg.toast(BI.i18nText("BI-Upload_File_Type_Error"));
                         self.fireEvent(BI.File.EVENT_ERROR, {
                             errorType: 0,
                             file: item
                         });
                     } else if (wrap.maxSize !== -1 && size && wrap.maxSize < size) {
                         //文件大小不支持
-                        BI.Msg.toast("文件大小不支持");
+                        BI.Msg.toast(BI.i18nText("BI-Upload_File_Size_Error"));
                         self.fireEvent(BI.File.EVENT_ERROR, {
                             errorType: 1,
                             file: item
@@ -516,7 +527,9 @@
             var self = this, o = this.options;
             // be sure input accept multiple files
             var input = this.element[0];
-            this.element.attr("multiple", "multiple");
+            if (o.multiple === true) {
+                this.element.attr("multiple", "multiple");
+            }
             input.value = "";
 
             // wrap Object
@@ -542,8 +555,9 @@
                 // something like {onload:function(){alert("OK")},onerror:function(){alert("Error")}, etc ...}
                 upload: function (handler) {
                     if (handler) {
-                        for (var key in handler)
+                        for (var key in handler) {
                             this[key] = handler[key];
+                        }
                     }
                     sendFiles(this, this.maxSize);
                     return this;
@@ -588,7 +602,7 @@
         },
 
         setEnable: function (enable) {
-            BI.MultiFile.superclass.setEnable.apply(this, arguments);
+            BI.File.superclass.setEnable.apply(this, arguments);
             if (enable === true) {
                 this.element.attr("disabled", "disabled");
             } else {
@@ -601,5 +615,5 @@
     BI.File.EVENT_ERROR = "EVENT_ERROR";
     BI.File.EVENT_PROGRESS = "EVENT_PROGRESS";
     BI.File.EVENT_UPLOADED = "EVENT_UPLOADED";
-    $.shortcut("bi.file", BI.File);
+    BI.shortcut("bi.file", BI.File);
 })();

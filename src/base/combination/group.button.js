@@ -9,11 +9,7 @@ BI.ButtonGroup = BI.inherit(BI.Widget, {
         return BI.extend(BI.ButtonGroup.superclass._defaultConfig.apply(this, arguments), {
             baseCls: "bi-button-group",
             behaviors: {},
-            items: [
-                {
-                    el: {type: "bi.text_button", text: "", value: ""}
-                }
-            ],
+            items: [],
             chooseType: BI.Selection.Single,
             layouts: [{
                 type: "bi.center",
@@ -61,9 +57,11 @@ BI.ButtonGroup = BI.inherit(BI.Widget, {
                             self.setValue([]);
                             break;
                     }
+                    self.fireEvent(BI.Controller.EVENT_CHANGE, arguments);
                     self.fireEvent(BI.ButtonGroup.EVENT_CHANGE, value, obj);
+                } else {
+                    self.fireEvent(BI.Controller.EVENT_CHANGE, arguments);
                 }
-                self.fireEvent(BI.Controller.EVENT_CHANGE, arguments);
             });
             btn.on(BI.Events.DESTROY, function () {
                 BI.remove(self.buttons, btn);
@@ -75,7 +73,6 @@ BI.ButtonGroup = BI.inherit(BI.Widget, {
 
     _packageBtns: function (btns) {
         var o = this.options;
-
         for (var i = o.layouts.length - 1; i > 0; i--) {
             btns = BI.map(btns, function (k, it) {
                 return BI.extend({}, o.layouts[i], {
@@ -88,6 +85,18 @@ BI.ButtonGroup = BI.inherit(BI.Widget, {
             })
         }
         return btns;
+    },
+
+    _packageSimpleItems: function (btns) {
+        var o = this.options;
+        return BI.map(o.items, function (i, item) {
+            if (BI.stripEL(item) === item) {
+                return btns[i];
+            }
+            return BI.extend({}, item, {
+                el: btns[i]
+            })
+        })
     },
 
     _packageItems: function (items, packBtns) {
@@ -105,6 +114,11 @@ BI.ButtonGroup = BI.inherit(BI.Widget, {
         return layout;
     },
 
+    //如果是一个简单的layout
+    _isSimpleLayout: function () {
+        var o = this.options;
+        return o.layouts.length === 1 && !BI.isArray(o.items[0])
+    },
 
     doBehavior: function () {
         var args = Array.prototype.slice.call(arguments);
@@ -119,15 +133,13 @@ BI.ButtonGroup = BI.inherit(BI.Widget, {
         var btns = this._btnsCreator.apply(this, arguments);
         this.buttons = BI.concat(btns, this.buttons);
 
-        //如果是一个简单的layout
-        if (o.layouts.length === 1 && !BI.isNotEmptyArray(o.layouts[0].items)
-            && this.layouts && this.layouts.prependItems) {
+        if (this._isSimpleLayout() && this.layouts && this.layouts.prependItems) {
             this.layouts.prependItems(btns);
             return;
         }
 
-        var items = this._packageItems(items, this._packageBtns(btns));
-        BI.createWidget(BI.extend(this._packageLayout(items))).element.children().prependTo(this.element);
+        items = this._packageItems(items, this._packageBtns(btns));
+        this.layouts.prependItems(this._packageLayout(items).items);
     },
 
     addItems: function (items) {
@@ -136,45 +148,43 @@ BI.ButtonGroup = BI.inherit(BI.Widget, {
         this.buttons = BI.concat(this.buttons, btns);
 
         //如果是一个简单的layout
-        if (o.layouts.length === 1 && !BI.isNotEmptyArray(o.layouts[0].items)
-            && this.layouts && this.layouts.addItems) {
+        if (this._isSimpleLayout() && this.layouts && this.layouts.addItems) {
             this.layouts.addItems(btns);
             return;
         }
 
-        var items = this._packageItems(items, this._packageBtns(btns));
-        BI.createWidget(BI.extend(this._packageLayout(items))).element.children().appendTo(this.element);
+        items = this._packageItems(items, this._packageBtns(btns));
+        this.layouts.addItems(this._packageLayout(items).items);
     },
 
     removeItemAt: function (indexes) {
-        var self = this;
-        indexes = BI.isArray(indexes) ? indexes : [indexes];
-        var buttons = [];
-        BI.each(indexes, function (i, index) {
-            buttons.push(self.buttons[index]);
-        });
-        BI.each(buttons, function (i, btn) {
-            btn && btn.destroy();
-        })
+        BI.remove(this.buttons, indexes);
+        this.layouts.removeItemAt(indexes);
     },
 
-    removeItems: function (v) {
-        v = BI.isArray(v) ? v : [v];
-        var indexes = [];
-        BI.each(this.buttons, function (i, item) {
-            if (BI.deepContains(v, item.getValue())) {
-                indexes.push(i);
+    removeItems: function (values) {
+        values = BI.isArray(values) ? values : [values];
+        var deleted = [];
+        BI.each(this.buttons, function (i, button) {
+            if (BI.deepContains(values, button.getValue())) {
+                deleted.push(i);
             }
         });
-        this.removeItemAt(indexes);
+        BI.remove(this.buttons, deleted);
+        this.layouts.removeItemAt(deleted);
     },
 
     populate: function (items) {
-        this.options.items = items || [];
+        items = items || [];
         this.empty();
+        this.options.items = items;
 
         this.buttons = this._btnsCreator.apply(this, arguments);
-        var items = this._packageItems(items, this._packageBtns(this.buttons));
+        if (this._isSimpleLayout()) {
+            items = this._packageSimpleItems(this.buttons);
+        } else {
+            items = this._packageItems(items, this._packageBtns(this.buttons));
+        }
 
         this.layouts = BI.createWidget(BI.extend({element: this}, this._packageLayout(items)));
     },
@@ -298,6 +308,16 @@ BI.ButtonGroup = BI.inherit(BI.Widget, {
             }
         });
         return node;
+    },
+
+    empty: function () {
+        BI.ButtonGroup.superclass.empty.apply(this, arguments);
+        this.options.items = [];
+    },
+
+    destroy: function () {
+        BI.ButtonGroup.superclass.destroy.apply(this, arguments);
+        this.options.items = [];
     }
 });
 BI.extend(BI.ButtonGroup, {
@@ -309,4 +329,4 @@ BI.extend(BI.ButtonGroup, {
 });
 BI.ButtonGroup.EVENT_CHANGE = "EVENT_CHANGE";
 
-$.shortcut("bi.button_group", BI.ButtonGroup);
+BI.shortcut("bi.button_group", BI.ButtonGroup);

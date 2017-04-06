@@ -34,4 +34,4 @@ BI.Link = BI.inherit(BI.Label, {
     }
 });
 
-$.shortcut("bi.link", BI.Link);
+BI.shortcut("bi.link", BI.Link);

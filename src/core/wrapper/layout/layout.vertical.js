@@ -16,8 +16,8 @@ BI.VerticalLayout = BI.inherit(BI.Layout, {
             scrolly: true
         });
     },
-    created: function () {
-        BI.VerticalLayout.superclass.created.apply(this, arguments);
+    render: function () {
+        BI.VerticalLayout.superclass.render.apply(this, arguments);
         this.populate(this.options.items);
     },
 
@@ -59,4 +59,4 @@ BI.VerticalLayout = BI.inherit(BI.Layout, {
         this._mount();
     }
 });
-$.shortcut('bi.vertical', BI.VerticalLayout);
+BI.shortcut('bi.vertical', BI.VerticalLayout);

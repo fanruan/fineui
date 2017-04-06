@@ -346,4 +346,4 @@ BI.ResizableTable = BI.inherit(BI.Widget, {
     }
 });
 
-$.shortcut("bi.resizable_table", BI.ResizableTable);
+BI.shortcut("bi.resizable_table", BI.ResizableTable);

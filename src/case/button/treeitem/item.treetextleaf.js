@@ -66,4 +66,4 @@ BI.TreeTextLeafItem = BI.inherit(BI.BasicButton, {
     }
 });
 
-$.shortcut("bi.tree_text_leaf_item", BI.TreeTextLeafItem);
+BI.shortcut("bi.tree_text_leaf_item", BI.TreeTextLeafItem);

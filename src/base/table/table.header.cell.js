@@ -27,4 +27,4 @@ BI.TableHeaderCell = BI.inherit(BI.Widget, {
     }
 });
 
-$.shortcut("bi.table_header_cell", BI.TableHeaderCell);
+BI.shortcut("bi.table_header_cell", BI.TableHeaderCell);

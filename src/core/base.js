@@ -9,9 +9,6 @@ if (!window.BI) {
 }
 ;
 !(function ($, undefined) {
-    _.extend(BI, {
-        version: "4.0"
-    });
     var traverse = function (func, context) {
         return function (value, key, obj) {
             return func.call(context, key, value, obj);
@@ -33,7 +30,7 @@ if (!window.BI) {
     //Utility
     _.extend(BI, {
         i18nText: function (key) {
-            var localeText = key;
+            var localeText = (BI.i18n && BI.i18n[key]) || "";
             if (!localeText) {
                 localeText = key;
             }
@@ -50,7 +47,7 @@ if (!window.BI) {
         assert: function (v, is) {
             if (this.isFunction(is)) {
                 if (!is(v)) {
-                    throw new Error(v + "值不合法");
+                    throw new Error(v + " error");
                 } else {
                     return true;
                 }
@@ -59,7 +56,7 @@ if (!window.BI) {
                 is = [is];
             }
             if (!this.deepContains(is, v)) {
-                throw new Error(v + "值不合法");
+                throw new Error(v + " error");
             }
         },
 
@@ -83,7 +80,7 @@ if (!window.BI) {
 
         createWidgets: function (items, options) {
             if (!BI.isArray(items)) {
-                throw new Error("无法根据items创建组件?")
+                throw new Error("cannot create Widgets")
             }
             return BI.map(BI.flatten(items), function (i, item) {
                 return BI.createWidget(item, BI.deepClone(options));
@@ -141,7 +138,7 @@ if (!window.BI) {
         },
 
         formatEL: function (obj) {
-            if (obj && obj.el) {
+            if (obj && !obj.type && obj.el) {
                 return obj;
             }
             return {
@@ -254,7 +251,9 @@ if (!window.BI) {
         backAny: function (obj, predicate, context) {
             predicate = BI.iteratee(predicate, context);
             for (var index = obj.length - 1; index >= 0; index--) {
-                if (predicate(index, obj[index], obj)) return true;
+                if (predicate(index, obj[index], obj)) {
+                    return true;
+                }
             }
             return false;
         },
@@ -262,7 +261,9 @@ if (!window.BI) {
         backEvery: function (obj, predicate, context) {
             predicate = BI.iteratee(predicate, context);
             for (var index = obj.length - 1; index >= 0; index--) {
-                if (!predicate(index, obj[index], obj)) return false;
+                if (!predicate(index, obj[index], obj)) {
+                    return false;
+                }
             }
             return true;
         },
@@ -388,7 +389,9 @@ if (!window.BI) {
         },
 
         uniq: function (array, isSorted, iteratee, context) {
-            if (array == null) return [];
+            if (array == null) {
+                return [];
+            }
             if (!_.isBoolean(isSorted)) {
                 context = iteratee;
                 iteratee = isSorted;
@@ -550,11 +553,15 @@ if (!window.BI) {
 
         isDeepMatch: function (object, attrs) {
             var keys = BI.keys(attrs), length = keys.length;
-            if (object == null) return !length;
+            if (object == null) {
+                return !length;
+            }
             var obj = Object(object);
             for (var i = 0; i < length; i++) {
                 var key = keys[i];
-                if (!BI.isEqual(attrs[key], obj[key]) || !(key in obj)) return false;
+                if (!BI.isEqual(attrs[key], obj[key]) || !(key in obj)) {
+                    return false;
+                }
             }
             return true;
         },
@@ -580,20 +587,24 @@ if (!window.BI) {
         },
 
         deepRemove: function (obj, target) {
+            var done = false;
             var i;
             if (BI.isArray(obj)) {
                 for (i = 0; i < obj.length; i++) {
                     if (BI.isEqual(target, obj[i])) {
                         obj.splice(i--, 1);
+                        done = true;
                     }
                 }
             } else {
                 BI.each(obj, function (i, v) {
                     if (BI.isEqual(target, obj[i])) {
                         delete obj[i];
+                        done = true;
                     }
                 });
             }
+            return done;
         },
 
         deepWithout: function (obj, target) {
@@ -616,8 +627,14 @@ if (!window.BI) {
             }
         },
 
-        deepUniq: function () {
-
+        deepUnique: function (array) {
+            var result = [];
+            BI.each(array, function (i, item) {
+                if (!BI.deepContains(result, item)) {
+                    result.push(item);
+                }
+            });
+            return result;
         },
 
         //比较两个对象得出不一样的key值
@@ -668,31 +685,54 @@ if (!window.BI) {
                 var copies = callbacks.slice(0);
                 callbacks = [];
                 for (var i = 0; i < copies.length; i++) {
-                    copies[i].func.apply(null, copies[i].args);
+                    copies[i]();
                 }
             }
+
+            if (typeof Promise !== 'undefined') {
+                var p = Promise.resolve();
+                timerFunc = function () {
+                    p.then(nextTickHandler);
+                }
+            } else
 
             /* istanbul ignore if */
             if (typeof MutationObserver !== 'undefined') {
                 var counter = 1;
                 var observer = new MutationObserver(nextTickHandler);
-                var textNode = document.createTextNode(counter);
+                var textNode = document.createTextNode(counter + "");
                 observer.observe(textNode, {
                     characterData: true
                 });
                 timerFunc = function () {
                     counter = (counter + 1) % 2;
-                    textNode.data = counter;
+                    textNode.data = counter + "";
                 }
             } else {
-                timerFunc = setTimeout
+                timerFunc = function () {
+                    setTimeout(nextTickHandler, 0)
+                }
             }
-            return function (cb) {
+            return function queueNextTick(cb) {
+                var _resolve;
                 var args = [].slice.call(arguments, 1);
-                callbacks.push({func: cb, args: args});
-                if (pending) return;
-                pending = true;
-                timerFunc(nextTickHandler, 0);
+                callbacks.push(function () {
+                    if (cb) {
+                        cb.apply(null, args);
+                    }
+                    if (_resolve) {
+                        _resolve.apply(null, args);
+                    }
+                });
+                if (!pending) {
+                    pending = true;
+                    timerFunc();
+                }
+                if (!cb && typeof Promise !== 'undefined') {
+                    return new Promise(function (resolve) {
+                        _resolve = resolve
+                    })
+                }
             }
         })()
     });
@@ -726,7 +766,7 @@ if (!window.BI) {
             try {
                 return parseInt(number, radix);
             } catch (e) {
-                throw new Error("转成int类型失败");
+                throw new Error(number + "parse int error");
                 return NaN;
             }
         },
@@ -735,7 +775,7 @@ if (!window.BI) {
             try {
                 return parseFloat(number);
             } catch (e) {
-                throw new Error("转成float类型失败");
+                throw new Error(number + "parse float error");
                 return NaN;
             }
         },
@@ -797,9 +837,9 @@ if (!window.BI) {
             var sum = 0;
             BI.each(array, function (i, item) {
                 if (iteratee) {
-                    sum += new Number(iteratee.apply(context, [i, item]));
+                    sum += Number(iteratee.apply(context, [i, item]));
                 } else {
-                    sum += new Number(item);
+                    sum += Number(item);
                 }
             });
             return sum;
@@ -823,6 +863,10 @@ if (!window.BI) {
 
         toLowerCase: function (string) {
             return (string + "").toLocaleLowerCase();
+        },
+
+        isEndWithBlank: function (string) {
+            return /(\s|\u00A0)$/.test(string);
         },
 
         isLiteral: function (exp) {
@@ -971,23 +1015,23 @@ if (!window.BI) {
     //浏览器相关方法
     _.extend(BI, {
         isIE: function () {
-            return $.browser.msie;
+            return /(msie|trident)/i.test(navigator.userAgent.toLowerCase());
         },
 
         isChrome: function () {
-            return $.browser.chrome;
+            return /chrome/i.test(navigator.userAgent.toLowerCase());
         },
 
         isFireFox: function () {
-            return $.browser.mozilla;
+            return /firefox/i.test(navigator.userAgent.toLowerCase());
         },
 
         isOpera: function () {
-            return $.browser.opera;
+            return /opera/i.test(navigator.userAgent.toLowerCase());
         },
 
         isSafari: function () {
-            return $.browser.safari;
+            return /safari/i.test(navigator.userAgent.toLowerCase());
         },
 
         isKhtml: function () {
@@ -1021,108 +1065,51 @@ if (!window.BI) {
     //BI请求
     _.extend(BI, {
 
-        /**
-         * 异步ajax请求
-         * @param {String} op op参数
-         * @param {String} cmd cmd参数
-         * @param {JSON} data ajax请求的参数
-         * @param {Function} callback 回调函数
-         * @param {Function} complete 回调
-         */
-        requestAsync: function (op, cmd, data, callback, complete) {
-            // if (BI.isNull(BI.REQUEST_LOADING)) {
-            //     BI.REQUEST_LOADING = BI.createWidget({
-            //         type: "bi.request_loading"
-            //     });
-            // }
-            data = data || {};
-            if (!BI.isKey(op)) {
-                op = 'fr_bi_dezi';
-            }
-            if (op === "fr_bi_dezi") {
-                data.sessionID = Data.SharingPool.get("sessionID");
-            }
-            var url = FR.servletURL + '?op=' + op + '&cmd=' + cmd + "&_=" + Math.random();
-            (BI.ajax || FR.ajax)({
-                url: url,
-                type: 'POST',
-                data: data,
-                error: function () {
-                    // BI.Msg.toast(BI.i18nText("BI-Ajax_Error"));
-                    //失败 取消、重新加载
-                    // BI.REQUEST_LOADING.setCallback(function () {
-                    //     BI.requestAsync(op, cmd, data, callback, complete);
-                    // });
-                    // BI.REQUEST_LOADING.showError();
-                },
-                complete: function (res, status) {
-                    if (BI.isFunction(callback) && status === 'success') {
-                        callback(BI.jsonDecode(res.responseText));
-                        BI.Maskers.hide(BI.RequstLoading.MASK_ID);
+        ajax: (function () {
+            var loading, timeoutToast;
+            return function (option) {
+                option || (option = {});
+                option.data = BI.extend({}, Data.SharingPool.cat("urlParameters"), option.data);
+                //encode
+                encodeBIParam(option.data);
+
+                var async = option.async;
+
+                option.data = BI.cjkEncodeDO(option.data);
+
+
+                $.ajax({
+                    url: option.url,
+                    type: "POST",
+                    data: option.data,
+                    async: async,
+                    error: option.error,
+                    complete: function (res, status) {
+                        if (BI.isFunction(option.complete)) {
+                            option.complete(BI.jsonDecode(res.responseText), status);
+                        }
                     }
-                    if (BI.isFunction(complete)) {
-                        complete();
+                });
+
+                function encodeBIParam(data) {
+                    for (var key in data) {
+                        if (_.isObject(data[key])) {
+                            data[key] = window.encodeURIComponent(BI.jsonEncode(data[key]));
+                        } else {
+                            data[key] = window.encodeURIComponent(data[key]);
+                        }
                     }
                 }
-            });
-        },
 
-        /**
-         * 同步ajax请求
-         * @param {String} op op参数
-         * @param {String} cmd cmd参数
-         * @param {JSON} data ajax请求的参�?
-         * @returns {Object} ajax同步请求返回的JSON对象
-         */
-        requestSync: function (op, cmd, data) {
-            data = data || {};
-            if (!BI.isKey(op)) {
-                op = 'fr_bi_dezi';
-            }
-            if (op === "fr_bi_dezi") {
-                data.sessionID = Data.SharingPool.get("sessionID");
-            }
-            var url = FR.servletURL + '?op=' + op + '&cmd=' + cmd + "&_=" + Math.random();
-            var result = {};
-            (BI.ajax || FR.ajax)({
-                url: url,
-                type: 'POST',
-                async: false,
-                data: data,
-                error: function () {
-                    BI.Msg.toast(BI.i18nText("BI-Ajax_Error"));
-                },
-                complete: function (res, status) {
-                    if (status === 'success') {
-                        result = BI.jsonDecode(res.responseText);
+                function decodeBIParam(data) {
+                    for (var key in data) {
+                        data[key] = window.decodeURIComponent(data[key]);
+                        if (_.isObject(data[key])) {
+                            data[key] = BI.jsonDecode(data[key]);
+                        }
                     }
                 }
-            });
-            return result;
-        },
-
-        /**
-         * 请求方法
-         * @param cmd 命令
-         * @param data 数据
-         * @param extend 参数
-         * @returns {*}
-         */
-        request: function (cmd, data, extend) {
-            extend = extend || {};
-            data = data || {};
-            var op = extend.op;
-            if (!BI.isKey(op)) {
-                op = 'fr_bi_dezi';
             }
-            if (op === "fr_bi_dezi") {
-                data.sessionID = Data.SharingPool.get("sessionID");
-            }
-            if (extend.async === true) {
-                BI.requestAsync(op, cmd, data, extend.complete || extend.success);
-            } else {
-                return BI.requestSync(op, cmd, data);
-            }
-        }
+        })()
     });
 })(jQuery);

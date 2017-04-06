@@ -25,4 +25,4 @@ BI.CheckingMarkNode = BI.inherit(BI.IconButton, {
         }
     }
 });
-$.shortcut("bi.checking_mark_node", BI.CheckingMarkNode);
+BI.shortcut("bi.checking_mark_node", BI.CheckingMarkNode);

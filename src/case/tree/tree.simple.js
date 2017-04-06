@@ -18,7 +18,7 @@ BI.SimpleTreeView = BI.inherit(BI.Widget, {
         var self = this, o = this.options;
         this.structure = new BI.Tree();
         this.tree = BI.createWidget({
-            type: "bi.tree",
+            type: "bi.tree_view",
             element: this,
             itemsCreator: function (op, callback) {
                 var fn = function (items) {
@@ -118,4 +118,4 @@ BI.SimpleTreeView = BI.inherit(BI.Widget, {
     }
 });
 BI.SimpleTreeView.EVENT_CHANGE = "EVENT_CHANGE";
-$.shortcut("bi.simple_tree", BI.SimpleTreeView);
+BI.shortcut("bi.simple_tree", BI.SimpleTreeView);

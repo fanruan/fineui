@@ -207,6 +207,10 @@ BI.ShelterEditor = BI.inherit(BI.Single, {
         return this.editor.getLastValidValue();
     },
 
+    setTextStyle: function (style) {
+        this.text.setStyle(style);
+    },
+
     setValue: function (k) {
         this.editor.setValue(k);
         this._checkText();
@@ -243,4 +247,4 @@ BI.ShelterEditor.EVENT_RESTRICT = "EVENT_RESTRICT";
 BI.ShelterEditor.EVENT_SPACE = "EVENT_SPACE";
 BI.ShelterEditor.EVENT_EMPTY = "EVENT_EMPTY";
 
-$.shortcut("bi.shelter_editor", BI.ShelterEditor);
+BI.shortcut("bi.shelter_editor", BI.ShelterEditor);

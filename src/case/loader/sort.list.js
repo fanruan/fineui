@@ -65,7 +65,7 @@ BI.SortList = BI.inherit(BI.Widget, {
             placeholder: {
                 element: function ($currentItem) {
                     var holder = BI.createWidget({
-                        type: "bi.label",
+                        type: "bi.layout",
                         cls: "bi-sortable-holder",
                         height: $currentItem.outerHeight()
                     });
@@ -174,4 +174,4 @@ BI.SortList = BI.inherit(BI.Widget, {
     }
 });
 BI.SortList.EVENT_CHANGE = "EVENT_CHANGE";
-$.shortcut("bi.sort_list", BI.SortList);
+BI.shortcut("bi.sort_list", BI.SortList);

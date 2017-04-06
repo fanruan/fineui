@@ -23,8 +23,8 @@ BI.TdLayout = BI.inherit(BI.Layout, {
             ]]
         });
     },
-    created: function () {
-        BI.TdLayout.superclass.created.apply(this, arguments);
+    render: function () {
+        BI.TdLayout.superclass.render.apply(this, arguments);
         this.$table = $("<table>").attr({"cellspacing": 0, "cellpadding": 0}).css({
             "position": "relative",
             "width": "100%",
@@ -129,7 +129,7 @@ BI.TdLayout = BI.inherit(BI.Layout, {
 
     addItem: function (arr) {
         if (!BI.isArray(arr)) {
-            throw new Error("item 必须是数组");
+            throw new Error("item must be array");
         }
         return BI.TdLayout.superclass.addItem.apply(this, arguments);
     },
@@ -139,4 +139,4 @@ BI.TdLayout = BI.inherit(BI.Layout, {
         this._mount();
     }
 });
-$.shortcut('bi.td', BI.TdLayout);
+BI.shortcut('bi.td', BI.TdLayout);

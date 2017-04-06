@@ -50,7 +50,9 @@ BI.Editor = BI.inherit(BI.Single, {
                 type: "bi.label",
                 cls: "bi-water-mark",
                 text: this.options.watermark,
+                height: this.options.height,
                 forceCenter: true,
+                height: o.height - 2 * (o.vgap + o.tgap),
                 whiteSpace: "nowrap",
                 textAlign: "left"
             });
@@ -275,7 +277,7 @@ BI.Editor = BI.inherit(BI.Single, {
     },
 
     getLastValidValue: function () {
-        return BI.trim(this.editor.getLastValidValue());
+        return this.editor.getLastValidValue();
     },
 
     resetLastValidValue: function () {
@@ -327,4 +329,4 @@ BI.Editor.EVENT_RESTRICT = "EVENT_RESTRICT";
 BI.Editor.EVENT_REMOVE = "EVENT_REMOVE";
 BI.Editor.EVENT_EMPTY = "EVENT_EMPTY";
 
-$.shortcut("bi.editor", BI.Editor);
+BI.shortcut("bi.editor", BI.Editor);

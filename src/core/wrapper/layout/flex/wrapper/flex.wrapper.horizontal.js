@@ -20,8 +20,8 @@ BI.FlexHorizontalLayout = BI.inherit(BI.Layout, {
             bgap: 0
         });
     },
-    created: function () {
-        BI.FlexHorizontalLayout.superclass.created.apply(this, arguments);
+    render: function () {
+        BI.FlexHorizontalLayout.superclass.render.apply(this, arguments);
         var o = this.options;
         this.$wrapper = $("<div>").addClass("flex-wrapper-horizontal-layout-wrapper " + o.verticalAlign);
         this.populate(this.options.items);
@@ -70,12 +70,8 @@ BI.FlexHorizontalLayout = BI.inherit(BI.Layout, {
         }
     },
 
-    addItem: function (item) {
-        var w = this._addElement(this.options.items.length, item);
-        w._mount();
-        this.options.items.push(item);
-        w.element.appendTo(this.$wrapper);
-        return w;
+    _getWrapper: function(){
+        return this.$wrapper;
     },
 
     resize: function () {
@@ -87,4 +83,4 @@ BI.FlexHorizontalLayout = BI.inherit(BI.Layout, {
         this._mount();
     }
 });
-$.shortcut('bi.flex_wrapper_horizontal', BI.FlexHorizontalLayout);
+BI.shortcut('bi.flex_wrapper_horizontal', BI.FlexHorizontalLayout);

@@ -45,20 +45,11 @@ BI.Pager = BI.inherit(BI.Widget, {
         var self = this;
         this.currPage = BI.result(this.options, "curr");
         //翻页太灵敏
-        this._lock = false;
-        this._debouce = BI.debounce(function () {
-            self._lock = false;
-        }, 300);
+        // this._lock = false;
+        // this._debouce = BI.debounce(function () {
+        //     self._lock = false;
+        // }, 300);
         this._populate();
-    },
-
-    populate: function () {
-        this.currPage = BI.result(this.options, "curr");
-        this._populate();
-    },
-    
-    refresh: function () {
-        this._populate();  
     },
 
     _populate: function () {
@@ -193,11 +184,11 @@ BI.Pager = BI.inherit(BI.Widget, {
             layouts: o.layouts
         });
         this.button_group.on(BI.Controller.EVENT_CHANGE, function (type, value, obj) {
-            if (self._lock === true) {
-                return;
-            }
-            self._lock = true;
-            self._debouce();
+            // if (self._lock === true) {
+            //     return;
+            // }
+            // self._lock = true;
+            // self._debouce();
             if (type === BI.Events.CLICK) {
                 var v = self.button_group.getValue()[0];
                 switch (v) {
@@ -279,8 +270,19 @@ BI.Pager = BI.inherit(BI.Widget, {
             default :
                 return val;
         }
+    },
+
+    attr: function (key, value) {
+        BI.Pager.superclass.attr.apply(this, arguments);
+        if (key === "curr") {
+            this.currPage = BI.result(this.options, "curr");
+        }
+    },
+
+    populate: function () {
+        this._populate();
     }
 });
 BI.Pager.EVENT_CHANGE = "EVENT_CHANGE";
 BI.Pager.EVENT_AFTER_POPULATE = "EVENT_AFTER_POPULATE";
-$.shortcut("bi.pager", BI.Pager);
+BI.shortcut("bi.pager", BI.Pager);

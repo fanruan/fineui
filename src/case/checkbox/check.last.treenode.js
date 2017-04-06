@@ -24,4 +24,4 @@ BI.LastTreeNodeCheckbox = BI.inherit(BI.IconButton, {
         }
     }
 });
-$.shortcut("bi.last_tree_node_checkbox", BI.LastTreeNodeCheckbox);
+BI.shortcut("bi.last_tree_node_checkbox", BI.LastTreeNodeCheckbox);

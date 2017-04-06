@@ -55,4 +55,4 @@ BI.DisplayTree = BI.inherit(BI.TreeView, {
 });
 BI.DisplayTree.EVENT_CHANGE = "EVENT_CHANGE";
 
-$.shortcut("bi.display_tree", BI.DisplayTree);
+BI.shortcut("bi.display_tree", BI.DisplayTree);

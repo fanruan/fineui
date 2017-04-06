@@ -7,7 +7,6 @@ BI.Checkbox = BI.inherit(BI.IconButton, {
     _defaultConfig: function() {
         var conf = BI.Checkbox.superclass._defaultConfig.apply(this,arguments);
         return BI.extend(conf, {
-            tagName: "a",
             baseCls: (conf.baseCls || "") + " bi-checkbox check-box-icon",
             selected: false,
             handler: BI.emptyFn,
@@ -31,4 +30,4 @@ BI.Checkbox = BI.inherit(BI.IconButton, {
 });
 BI.Checkbox.EVENT_CHANGE = "Checkbox.EVENT_CHANGE";
 
-$.shortcut("bi.checkbox", BI.Checkbox);
+BI.shortcut("bi.checkbox", BI.Checkbox);

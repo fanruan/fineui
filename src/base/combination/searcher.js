@@ -90,27 +90,26 @@ BI.Searcher = BI.inherit(BI.Widget, {
                 type: "bi.searcher_view",
                 chooseType: o.chooseType
             });
-            BI.Maskers.create(this.getName(), o.adapter, {
-                offset: o.masker.offset,
+            BI.Maskers.create(this.getName(), o.adapter, BI.extend({
                 container: this,
                 render: this.popupView
-            });
+            }, o.masker));
 
             this.popupView.on(BI.Controller.EVENT_CHANGE, function (type, value, obj) {
                 self.fireEvent(BI.Controller.EVENT_CHANGE, arguments);
                 if (type === BI.Events.CLICK) {
                     if (o.isAutoSync) {
-                        var values = o.adapter.getValue();
+                        var values = o.adapter && o.adapter.getValue();
                         if (!obj.isSelected()) {
-                            o.adapter.setValue(BI.deepWithout(values, obj.getValue()));
+                            o.adapter && o.adapter.setValue(BI.deepWithout(values, obj.getValue()));
                         } else {
                             switch (o.chooseType) {
                                 case BI.ButtonGroup.CHOOSE_TYPE_SINGLE:
-                                    o.adapter.setValue([obj.getValue()]);
+                                    o.adapter && o.adapter.setValue([obj.getValue()]);
                                     break;
                                 case BI.ButtonGroup.CHOOSE_TYPE_MULTI:
                                     values.push(obj.getValue());
-                                    o.adapter.setValue(values);
+                                    o.adapter && o.adapter.setValue(values);
                                     break;
                             }
                         }
@@ -131,7 +130,7 @@ BI.Searcher = BI.inherit(BI.Widget, {
         this.fireEvent(BI.Searcher.EVENT_START);
         this.popupView.startSearch && this.popupView.startSearch();
         //搜索前先清空dom
-        BI.Maskers.get(this.getName()).empty();
+        // BI.Maskers.get(this.getName()).empty();
         BI.nextTick(function (name) {
             BI.Maskers.show(name);
         }, this.getName());
@@ -140,7 +139,9 @@ BI.Searcher = BI.inherit(BI.Widget, {
     _pauseSearch: function () {
         var o = this.options, name = this.getName();
         this._stop = true;
-        BI.Maskers.hide(name);
+        BI.nextTick(function (name) {
+            BI.Maskers.hide(name);
+        }, this.getName());
         if (BI.Maskers.has(name) && this._isSearching === true) {
             this.popupView && this.popupView.pauseSearch && this.popupView.pauseSearch();
             this.fireEvent(BI.Searcher.EVENT_PAUSE);
@@ -154,9 +155,9 @@ BI.Searcher = BI.inherit(BI.Widget, {
         BI.Maskers.hide(name);
         if (BI.Maskers.has(name) && this._isSearching === true) {
             //搜索后清空dom
-            BI.nextTick(function () {
-                BI.Maskers.has(name) && BI.Maskers.get(name).empty();
-            });
+            // BI.nextTick(function () {
+            //     BI.Maskers.has(name) && BI.Maskers.get(name).empty();
+            // });
             this.popupView && this.popupView.stopSearch && this.popupView.stopSearch();
             this.fireEvent(BI.Searcher.EVENT_STOP);
         }
@@ -181,7 +182,7 @@ BI.Searcher = BI.inherit(BI.Widget, {
         o.onSearch({
             times: 1,
             keyword: keyword,
-            selectedValues: o.adapter.getValue()
+            selectedValues: o.adapter && o.adapter.getValue()
         }, function (searchResult, matchResult) {
             if (!self._stop) {
                 var args = [].slice.call(arguments);
@@ -190,7 +191,7 @@ BI.Searcher = BI.inherit(BI.Widget, {
                 }
                 BI.Maskers.show(self.getName());
                 self.popupView.populate.apply(self.popupView, args);
-                o.isAutoSync && self.popupView.setValue(o.adapter.getValue());
+                o.isAutoSync && self.popupView.setValue(o.adapter && o.adapter.getValue());
                 self.popupView.loaded && self.popupView.loaded();
                 self.fireEvent(BI.Searcher.EVENT_SEARCHING);
             }
@@ -258,6 +259,10 @@ BI.Searcher = BI.inherit(BI.Widget, {
         return this.editor.getValue();
     },
 
+    getKeywords: function () {
+        return this.editor.getKeywords();
+    },
+
     getValue: function () {
         var o = this.options;
         if (o.isAutoSync) {
@@ -283,9 +288,9 @@ BI.Searcher = BI.inherit(BI.Widget, {
         this.popupView && this.popupView.empty();
     },
 
-    destroyed: function () {
-        this.popupView && this.popupView.destroy();
+    destroy: function () {
         BI.Maskers.remove(this.getName());
+        BI.Searcher.superclass.destroy.apply(this, arguments);
     }
 });
 BI.Searcher.EVENT_CHANGE = "EVENT_CHANGE";
@@ -295,4 +300,4 @@ BI.Searcher.EVENT_PAUSE = "EVENT_PAUSE";
 BI.Searcher.EVENT_SEARCHING = "EVENT_SEARCHING";
 BI.Searcher.EVENT_AFTER_INIT = "EVENT_AFTER_INIT";
 
-$.shortcut("bi.searcher", BI.Searcher);
+BI.shortcut("bi.searcher", BI.Searcher);

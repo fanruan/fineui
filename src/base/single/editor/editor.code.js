@@ -104,7 +104,7 @@ BI.CodeEditor = BI.inherit(BI.Single, {
                     case "param":
                         var fieldNameLength = i.to - i.from;
                         value = value.substr(0, i.from + num) + "$\{" + value.substr(i.from + num, fieldNameLength) + "\}" + value.substr(i.to + num, value.length);
-                        num += fieldNameLength + 3;
+                        num += 3;
                         break;
                 }
             });
@@ -113,7 +113,7 @@ BI.CodeEditor = BI.inherit(BI.Single, {
     },
 
     _analyzeContent: function (v) {
-        var regx = /\$[\{][^\}]*[\}]|\w*\w|\$\{[^\$\(\)\+\-\*\/)\$,]*\w\}|\$\{[^\$\(\)\+\-\*\/]*\w\}|\$\{[^\$\(\)\+\-\*\/]*[\u4e00-\u9fa5]\}|\w|(.)|\n/g;
+        var regx = /\$[\{][^\}]*[\}]|(\s+)|\w*\w|\$\{[^\$\(\)\+\-\*\/)\$,]*\w\}|\$\{[^\$\(\)\+\-\*\/]*\w\}|\$\{[^\$\(\)\+\-\*\/]*[\u4e00-\u9fa5]\}|\w|(.)|\n/g;
         return v.match(regx);
     },
 
@@ -143,4 +143,4 @@ BI.CodeEditor = BI.inherit(BI.Single, {
 BI.CodeEditor.EVENT_CHANGE = "EVENT_CHANGE";
 BI.CodeEditor.EVENT_BLUR = "EVENT_BLUR";
 BI.CodeEditor.EVENT_FOCUS = "EVENT_FOCUS";
-$.shortcut("bi.code_editor", BI.CodeEditor);
+BI.shortcut("bi.code_editor", BI.CodeEditor);

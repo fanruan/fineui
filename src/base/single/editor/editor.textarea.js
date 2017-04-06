@@ -37,26 +37,96 @@ BI.TextAreaEditor = BI.inherit(BI.Single, {
             }]
         });
 
+        this.content.element.on("input propertychange", function (e) {
+            self._checkWaterMark();
+            self.fireEvent(BI.TextAreaEditor.EVENT_CHANGE);
+        });
+
         this.content.element.focus(function () {
-            self.content.element.addClass("textarea-editor-focus");
-            self.fireEvent(BI.TextAreaEditor.EVENT_FOCUS);
+            if (self.isValid()) {
+                self._focus();
+                self.fireEvent(BI.TextAreaEditor.EVENT_FOCUS);
+            }
+            $(document).bind("mousedown." + self.getName(), function (e) {
+                if (BI.DOM.isExist(self) && !self.element.__isMouseInBounds__(e)) {
+                    $(document).unbind("mousedown." + self.getName());
+                    self.content.element.blur();
+                }
+            });
         });
         this.content.element.blur(function () {
-            self.content.element.removeClass("textarea-editor-focus");
-            self.fireEvent(BI.TextAreaEditor.EVENT_BLUR);
+            if (self.isValid()) {
+                self._blur();
+                self.fireEvent(BI.TextAreaEditor.EVENT_BLUR);
+            }
+            $(document).unbind("mousedown." + self.getName());
         });
         if (BI.isKey(o.value)) {
             self.setValue(o.value);
         }
+        if (BI.isNotNull(o.style)) {
+            self.setValue(o.style);
+        }
+        this._checkWaterMark();
+    },
+
+    _checkWaterMark: function () {
+        var self = this, o = this.options;
+        var val = this.getValue();
+        if (BI.isNotEmptyString(val)) {
+            this.watermark && this.watermark.destroy();
+            this.watermark = null;
+        } else {
+            if (BI.isNotEmptyString(o.watermark)) {
+                if (!this.watermark) {
+                    this.watermark = BI.createWidget({
+                        type: "bi.text_button",
+                        cls: "bi-water-mark",
+                        textAlign: "left",
+                        height: 30,
+                        text: o.watermark,
+                        invalid: o.invalid,
+                        disabled: o.disabled
+                    });
+                    this.watermark.on(BI.TextButton.EVENT_CHANGE, function () {
+                        self.focus();
+                    });
+                    BI.createWidget({
+                        type: 'bi.absolute',
+                        element: this,
+                        items: [{
+                            el: this.watermark,
+                            left: 0,
+                            top: 0,
+                            right: 0
+                        }]
+                    })
+                } else {
+                    this.watermark.setText(o.watermark);
+                    this.watermark.setValid(!o.invalid);
+                    this.watermark.setEnable(!o.disabled);
+                }
+            }
+        }
+    },
+
+    _focus: function () {
+        this.content.element.addClass("textarea-editor-focus");
+        this._checkWaterMark();
+    },
+
+    _blur: function () {
+        this.content.element.removeClass("textarea-editor-focus");
+        this._checkWaterMark();
     },
 
     focus: function () {
-        this.content.element.addClass("textarea-editor-focus");
+        this._focus();
         this.content.element.focus();
     },
 
     blur: function () {
-        this.content.element.removeClass("textarea-editor-focus");
+        this._blur();
         this.content.element.blur();
     },
 
@@ -66,6 +136,7 @@ BI.TextAreaEditor = BI.inherit(BI.Single, {
 
     setValue: function (value) {
         this.content.element.val(value);
+        this._checkWaterMark();
     },
 
     setStyle: function (style) {
@@ -81,13 +152,16 @@ BI.TextAreaEditor = BI.inherit(BI.Single, {
     setValid: function (b) {
         BI.TextAreaEditor.superclass.setValid.apply(this, arguments);
         this.content.setValid(b);
+        this.watermark && this.watermark.setValid(b);
     },
 
     setEnable: function (b) {
         BI.TextAreaEditor.superclass.setEnable.apply(this, arguments);
         this.content.setEnable(b);
+        this.watermark && this.watermark.setEnable(b);
     }
 });
+BI.TextAreaEditor.EVENT_CHANGE = "EVENT_CHANGE";
 BI.TextAreaEditor.EVENT_BLUR = "EVENT_BLUR";
 BI.TextAreaEditor.EVENT_FOCUS = "EVENT_FOCUS";
-$.shortcut("bi.textarea_editor", BI.TextAreaEditor);
+BI.shortcut("bi.textarea_editor", BI.TextAreaEditor);

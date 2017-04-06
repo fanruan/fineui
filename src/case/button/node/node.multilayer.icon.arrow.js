@@ -19,9 +19,9 @@ BI.MultiLayerIconArrowNode = BI.inherit(BI.NodeButton, {
         this.node = BI.createWidget({
             type: "bi.icon_arrow_node",
             iconCls: o.iconCls,
-            logic: {
-                dynamic: true
-            },
+            //logic: {
+            //    dynamic: true
+            //},
             id: o.id,
             pId: o.pId,
             open: o.open,
@@ -87,4 +87,4 @@ BI.MultiLayerIconArrowNode = BI.inherit(BI.NodeButton, {
     }
 });
 
-$.shortcut("bi.multilayer_icon_arrow_node", BI.MultiLayerIconArrowNode);
+BI.shortcut("bi.multilayer_icon_arrow_node", BI.MultiLayerIconArrowNode);

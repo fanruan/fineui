@@ -19,8 +19,8 @@ BI.InlineVerticalAdaptLayout = BI.inherit(BI.Layout, {
             bgap: 0
         });
     },
-    created: function () {
-        BI.InlineVerticalAdaptLayout.superclass.created.apply(this, arguments);
+    render: function () {
+        BI.InlineVerticalAdaptLayout.superclass.render.apply(this, arguments);
         this.element.css({
             whiteSpace: "nowrap"
         });
@@ -69,4 +69,4 @@ BI.InlineVerticalAdaptLayout = BI.inherit(BI.Layout, {
         this._mount();
     }
 });
-$.shortcut('bi.inline_vertical_adapt', BI.InlineVerticalAdaptLayout);
+BI.shortcut('bi.inline_vertical_adapt', BI.InlineVerticalAdaptLayout);

@@ -80,4 +80,4 @@ BI.TriangleGroupNode = BI.inherit(BI.NodeButton, {
     }
 });
 
-$.shortcut("bi.triangle_group_node", BI.TriangleGroupNode);
+BI.shortcut("bi.triangle_group_node", BI.TriangleGroupNode);

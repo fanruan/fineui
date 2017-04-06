@@ -137,7 +137,7 @@ BI.LayerController = BI.inherit(BI.Controller, {
 
     add: function (name, layer, layout) {
         if (this.has(name)) {
-            throw new Error("该弹出面板已经存在了，不能添加该key值");
+            throw new Error("name is already exist");
         }
         layout.setVisible(false);
         this.layerManager[name] = layer;

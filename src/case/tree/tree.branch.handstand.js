@@ -52,4 +52,4 @@ BI.HandStandBranchTree = BI.inherit(BI.Widget, {
     }
 });
 BI.HandStandBranchTree.EVENT_CHANGE = "EVENT_CHANGE";
-$.shortcut("bi.handstand_branch_tree", BI.HandStandBranchTree);
+BI.shortcut("bi.handstand_branch_tree", BI.HandStandBranchTree);

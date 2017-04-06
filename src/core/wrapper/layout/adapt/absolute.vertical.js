@@ -16,8 +16,8 @@ BI.AbsoluteVerticalLayout = BI.inherit(BI.Layout, {
         });
     },
 
-    created: function () {
-        BI.AbsoluteVerticalLayout.superclass.created.apply(this, arguments);
+    render: function () {
+        BI.AbsoluteVerticalLayout.superclass.render.apply(this, arguments);
         this.populate(this.options.items);
     },
 
@@ -50,4 +50,4 @@ BI.AbsoluteVerticalLayout = BI.inherit(BI.Layout, {
         this._mount();
     }
 });
-$.shortcut('bi.absolute_vertical_adapt', BI.AbsoluteVerticalLayout);
+BI.shortcut('bi.absolute_vertical_adapt', BI.AbsoluteVerticalLayout);

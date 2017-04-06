@@ -26,8 +26,8 @@ BI.TableLayout = BI.inherit(BI.Layout, {
             ]]
         });
     },
-    created: function () {
-        BI.TableLayout.superclass.created.apply(this, arguments);
+    render: function () {
+        BI.TableLayout.superclass.render.apply(this, arguments);
         this.rows = 0;
         this.populate(this.options.items);
     },
@@ -98,7 +98,7 @@ BI.TableLayout = BI.inherit(BI.Layout, {
                 }, arr[j]))
                 right += o.columnSize[j] + (o.columnSize[j] < 1 ? 0 : o.hgap);
             } else {
-                throw new Error("只能有一个fill属性的item");
+                throw new Error("item with fill can only be one");
             }
         }
         if (i >= 0 && i < arr.length) {
@@ -133,7 +133,7 @@ BI.TableLayout = BI.inherit(BI.Layout, {
 
     addItem: function (arr) {
         if (!BI.isArray(arr)) {
-            throw new Error("item 必须是数组");
+            throw new Error("item must be array");
         }
         return BI.TableLayout.superclass.addItem.apply(this, arguments);
     },
@@ -143,4 +143,4 @@ BI.TableLayout = BI.inherit(BI.Layout, {
         this._mount();
     }
 });
-$.shortcut('bi.table', BI.TableLayout);
+BI.shortcut('bi.table', BI.TableLayout);

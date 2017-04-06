@@ -134,4 +134,4 @@ BI.LevelTree = BI.inherit(BI.Widget, {
 });
 BI.LevelTree.EVENT_CHANGE = "EVENT_CHANGE";
 
-$.shortcut("bi.level_tree", BI.LevelTree);
+BI.shortcut("bi.level_tree", BI.LevelTree);

@@ -93,4 +93,4 @@ BI.ResizableTableCell = BI.inherit(BI.Widget, {
         this.cell.setHeight(o.height);
     }
 });
-$.shortcut("bi.resizable_table_cell", BI.ResizableTableCell);
+BI.shortcut("bi.resizable_table_cell", BI.ResizableTableCell);

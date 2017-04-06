@@ -10,7 +10,7 @@ BI.MultiPopupView = BI.inherit(BI.PopupView, {
         var conf = BI.MultiPopupView.superclass._defaultConfig.apply(this, arguments);
         return BI.extend(conf, {
             baseCls: (conf.baseCls || "") + " bi-multi-list-view",
-            buttons: [BI.i18nText("BI-Sure")]
+            buttons: [BI.i18nText("BI-Basic_Sure")]
         })
     },
 
@@ -61,4 +61,4 @@ BI.MultiPopupView = BI.inherit(BI.PopupView, {
 BI.MultiPopupView.EVENT_CHANGE = "EVENT_CHANGE";
 BI.MultiPopupView.EVENT_CLICK_TOOLBAR_BUTTON = "EVENT_CLICK_TOOLBAR_BUTTON";
 
-$.shortcut("bi.multi_popup_view", BI.MultiPopupView);
+BI.shortcut("bi.multi_popup_view", BI.MultiPopupView);

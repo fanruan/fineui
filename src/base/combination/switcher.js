@@ -258,8 +258,8 @@ BI.Switcher = BI.inherit(BI.Widget, {
         this.popupView && this.popupView.empty();
     },
 
-    destroyed: function () {
-        this.popupView && this.popupView.destroy();
+    destroy: function () {
+        BI.Switcher.superclass.destroy.apply(this, arguments);
     }
 });
 BI.Switcher.EVENT_EXPAND = "EVENT_EXPAND";
@@ -274,4 +274,4 @@ BI.Switcher.EVENT_AFTER_POPUPVIEW = "EVENT_AFTER_POPUPVIEW";
 BI.Switcher.EVENT_BEFORE_HIDEVIEW = "EVENT_BEFORE_HIDEVIEW";
 BI.Switcher.EVENT_AFTER_HIDEVIEW = "EVENT_AFTER_HIDEVIEW";
 
-$.shortcut("bi.switcher", BI.Switcher);
+BI.shortcut("bi.switcher", BI.Switcher);

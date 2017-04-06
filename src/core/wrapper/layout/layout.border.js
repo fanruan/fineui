@@ -11,8 +11,8 @@ BI.BorderLayout = BI.inherit(BI.Layout, {
             items: {}
         });
     },
-    created: function () {
-        BI.BorderLayout.superclass.created.apply(this, arguments);
+    render: function () {
+        BI.BorderLayout.superclass.render.apply(this, arguments);
         this.populate(this.options.items);
     },
 
@@ -22,7 +22,7 @@ BI.BorderLayout = BI.inherit(BI.Layout, {
 
     addItem: function (item) {
         // do nothing
-        throw new Error("不能添加元素")
+        throw new Error("cannot be added")
     },
 
     stroke: function(regions){
@@ -129,4 +129,4 @@ BI.BorderLayout = BI.inherit(BI.Layout, {
         this._mount();
     }
 });
-$.shortcut('bi.border', BI.BorderLayout);
+BI.shortcut('bi.border', BI.BorderLayout);

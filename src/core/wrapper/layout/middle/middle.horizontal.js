@@ -15,8 +15,8 @@ BI.HorizontalCenterLayout = BI.inherit(BI.Layout, {
             bgap: 0
         });
     },
-    created: function () {
-        BI.HorizontalCenterLayout.superclass.created.apply(this, arguments);
+    render: function () {
+        BI.HorizontalCenterLayout.superclass.render.apply(this, arguments);
         this.populate(this.options.items);
     },
 
@@ -26,7 +26,7 @@ BI.HorizontalCenterLayout = BI.inherit(BI.Layout, {
 
     addItem: function (item) {
         //do nothing
-        throw new Error("不能添加元素")
+        throw new Error("cannot be added")
     },
 
     stroke: function (items) {
@@ -70,4 +70,4 @@ BI.HorizontalCenterLayout = BI.inherit(BI.Layout, {
         this._mount();
     }
 });
-$.shortcut('bi.horizontal_center', BI.HorizontalCenterLayout);
+BI.shortcut('bi.horizontal_center', BI.HorizontalCenterLayout);

@@ -101,4 +101,4 @@ BI.LastTreeLeafItem = BI.inherit(BI.BasicButton, {
     }
 });
 
-$.shortcut("bi.last_tree_leaf_item", BI.LastTreeLeafItem);
+BI.shortcut("bi.last_tree_leaf_item", BI.LastTreeLeafItem);

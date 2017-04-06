@@ -19,8 +19,7 @@ BI.FloatBox = BI.inherit(BI.Widget, {
         });
         this._center = BI.createWidget();
         this._north = BI.createWidget();
-        this.element.draggable({
-            cursor: BICst.cursorUrl,
+        this.element.draggable && this.element.draggable({
             handle: ".bi-message-title",
             drag: function (e, ui) {
                 var W = $("body").width(), H = $("body").height();
@@ -140,7 +139,7 @@ BI.FloatBox = BI.inherit(BI.Widget, {
     }
 });
 
-$.shortcut("bi.float_box", BI.FloatBox);
+BI.shortcut("bi.float_box", BI.FloatBox);
 
 BI.FloatBox.EVENT_FLOAT_BOX_CLOSED = "EVENT_FLOAT_BOX_CLOSED";
 BI.FloatBox.EVENT_FLOAT_BOX_OPEN = "EVENT_FLOAT_BOX_CLOSED";

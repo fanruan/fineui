@@ -15,8 +15,8 @@ BI.AbsoluteLayout = BI.inherit(BI.Layout, {
             bgap: null
         });
     },
-    created: function () {
-        BI.AbsoluteLayout.superclass.created.apply(this, arguments);
+    render: function () {
+        BI.AbsoluteLayout.superclass.render.apply(this, arguments);
         this.populate(this.options.items);
     },
 
@@ -92,7 +92,7 @@ BI.AbsoluteLayout = BI.inherit(BI.Layout, {
         BI.each(items, function (i, item) {
             if (!!item) {
                 if (!BI.isWidget(item) && !item.el) {
-                    throw new Error("absolute布局中el 是必要属性");
+                    throw new Error("el must be exist");
                 }
                 self._addElement(i, item);
             }
@@ -104,4 +104,4 @@ BI.AbsoluteLayout = BI.inherit(BI.Layout, {
         this._mount();
     }
 });
-$.shortcut('bi.absolute', BI.AbsoluteLayout);
+BI.shortcut('bi.absolute', BI.AbsoluteLayout);

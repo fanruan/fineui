@@ -20,8 +20,8 @@ BI.LeftRightVerticalAdaptLayout = BI.inherit(BI.Layout, {
             rhgap: 0
         });
     },
-    created: function () {
-        BI.LeftRightVerticalAdaptLayout.superclass.created.apply(this, arguments);
+    render: function () {
+        BI.LeftRightVerticalAdaptLayout.superclass.render.apply(this, arguments);
         this.populate(this.options.items);
     },
 
@@ -31,7 +31,7 @@ BI.LeftRightVerticalAdaptLayout = BI.inherit(BI.Layout, {
 
     addItem: function () {
         //do nothing
-        throw new Error("不能添加元素")
+        throw new Error("cannot be added")
     },
 
     stroke: function (items) {
@@ -73,7 +73,7 @@ BI.LeftRightVerticalAdaptLayout = BI.inherit(BI.Layout, {
         this._mount();
     }
 });
-$.shortcut('bi.left_right_vertical_adapt', BI.LeftRightVerticalAdaptLayout);
+BI.shortcut('bi.left_right_vertical_adapt', BI.LeftRightVerticalAdaptLayout);
 
 
 BI.LeftVerticalAdaptLayout = BI.inherit(BI.Layout, {
@@ -86,22 +86,21 @@ BI.LeftVerticalAdaptLayout = BI.inherit(BI.Layout, {
             hgap: 0
         });
     },
-    created: function () {
-        BI.LeftVerticalAdaptLayout.superclass.created.apply(this, arguments);
+    render: function () {
+        BI.LeftVerticalAdaptLayout.superclass.render.apply(this, arguments);
         this.populate(this.options.items);
     },
 
     resize: function () {
-        console.log("left_vertical_adapt布局不需要resize");
+        // console.log("left_vertical_adapt布局不需要resize");
     },
 
     addItem: function () {
         //do nothing
-        throw new Error("不能添加元素")
+        throw new Error("cannot be added")
     },
 
-    populate: function (items) {
-        BI.LeftVerticalAdaptLayout.superclass.populate.apply(this, arguments);
+    stroke: function (items) {
         var o = this.options;
         var left = BI.createWidget({
             type: "bi.vertical_adapt",
@@ -116,10 +115,14 @@ BI.LeftVerticalAdaptLayout = BI.inherit(BI.Layout, {
             element: this,
             items: [left]
         });
+    },
+
+    populate: function (items) {
+        BI.LeftVerticalAdaptLayout.superclass.populate.apply(this, arguments);
         this._mount();
     }
 });
-$.shortcut('bi.left_vertical_adapt', BI.LeftVerticalAdaptLayout);
+BI.shortcut('bi.left_vertical_adapt', BI.LeftVerticalAdaptLayout);
 
 BI.RightVerticalAdaptLayout = BI.inherit(BI.Layout, {
     props: function () {
@@ -131,22 +134,21 @@ BI.RightVerticalAdaptLayout = BI.inherit(BI.Layout, {
             hgap: 0
         });
     },
-    created: function () {
-        BI.RightVerticalAdaptLayout.superclass.created.apply(this, arguments);
+    render: function () {
+        BI.RightVerticalAdaptLayout.superclass.render.apply(this, arguments);
         this.populate(this.options.items);
     },
 
     resize: function () {
-        console.log("right_vertical_adapt布局不需要resize");
+
     },
 
     addItem: function () {
         //do nothing
-        throw new Error("不能添加元素")
+        throw new Error("cannot be added")
     },
 
-    populate: function (items) {
-        BI.RightVerticalAdaptLayout.superclass.populate.apply(this, arguments);
+    stroke: function (items) {
         var o = this.options;
         var right = BI.createWidget({
             type: "bi.vertical_adapt",
@@ -161,7 +163,11 @@ BI.RightVerticalAdaptLayout = BI.inherit(BI.Layout, {
             element: this,
             items: [right]
         });
+    },
+
+    populate: function (items) {
+        BI.RightVerticalAdaptLayout.superclass.populate.apply(this, arguments);
         this._mount();
     }
 });
-$.shortcut('bi.right_vertical_adapt', BI.RightVerticalAdaptLayout);
+BI.shortcut('bi.right_vertical_adapt', BI.RightVerticalAdaptLayout);
