@@ -15973,7 +15973,7 @@ BI.SequenceTable = BI.inherit(BI.Widget, {
             headerRowSize: o.headerRowSize,
             rowSize: o.rowSize,
             width: 60,
-            height: o.height - BI.GridTableScrollbar.SIZE,
+            height: o.height && o.height - BI.GridTableScrollbar.SIZE,
 
             headerCellStyleGetter: o.headerCellStyleGetter,
             summaryCellStyleGetter: o.summaryCellStyleGetter,

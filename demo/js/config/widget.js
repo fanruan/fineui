@@ -14,6 +14,14 @@ Demo.WIDGET_CONFIG = [{
     text: "bi.responsive_table",
     value: "demo.responsive_table"
 }, {
+    pId: 401,
+    text: "bi.sequence_table",
+    value: "demo.sequence_table"
+}, {
+    pId: 401,
+    text: "bi.page_table",
+    value: "demo.page_table"
+}, {
     pId: 4,
     text: "bi.multi_select_combo",
     value: "demo.multi_select_combo"

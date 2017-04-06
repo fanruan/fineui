@@ -25,6 +25,8 @@ BI.DynamicSummaryTreeTable = BI.inherit(BI.Widget, {
             mergeRule: BI.emptyFn,
 
             columnSize: [],
+            minColumnSize: [],
+            maxColumnSize: [],
             headerRowSize: 25,
             footerRowSize: 25,
             rowSize: 25,
@@ -74,6 +76,8 @@ BI.DynamicSummaryTreeTable = BI.inherit(BI.Widget, {
             mergeRule: o.mergeRule,
 
             columnSize: o.columnSize,
+            minColumnSize: o.minColumnSize,
+            maxColumnSize: o.maxColumnSize,
             headerRowSize: o.headerRowSize,
             rowSize: o.rowSize,
 
