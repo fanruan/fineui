@@ -210,9 +210,6 @@ BI.DynamicSummaryLayerTreeTable = BI.inherit(BI.Widget, {
             headerRowSize: o.headerRowSize,
             rowSize: o.rowSize,
             regionColumnSize: o.regionColumnSize,
-            headerCellStyleGetter: o.headerCellStyleGetter,
-            summaryCellStyleGetter: o.summaryCellStyleGetter,
-            sequenceCellStyleGetter: o.sequenceCellStyleGetter,
             header: data.header,
             items: data.items
         });

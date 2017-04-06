@@ -9361,10 +9361,6 @@ BI.AdaptiveTable = BI.inherit(BI.Widget, {
 
             regionColumnSize: [],
 
-            headerCellStyleGetter: BI.emptyFn,
-            summaryCellStyleGetter: BI.emptyFn,
-            sequenceCellStyleGetter: BI.emptyFn,
-
             header: [],
             items: [], //二维数组
 
@@ -9400,10 +9396,6 @@ BI.AdaptiveTable = BI.inherit(BI.Widget, {
             rowSize: o.rowSize,
 
             regionColumnSize: data.regionColumnSize,
-
-            headerCellStyleGetter: o.headerCellStyleGetter,
-            summaryCellStyleGetter: o.summaryCellStyleGetter,
-            sequenceCellStyleGetter: o.sequenceCellStyleGetter,
 
             header: o.header,
             items: o.items,
@@ -9771,9 +9763,6 @@ BI.DynamicSummaryLayerTreeTable = BI.inherit(BI.Widget, {
             headerRowSize: o.headerRowSize,
             rowSize: o.rowSize,
             regionColumnSize: o.regionColumnSize,
-            headerCellStyleGetter: o.headerCellStyleGetter,
-            summaryCellStyleGetter: o.summaryCellStyleGetter,
-            sequenceCellStyleGetter: o.sequenceCellStyleGetter,
             header: data.header,
             items: data.items
         });
@@ -9977,10 +9966,6 @@ BI.DynamicSummaryTreeTable = BI.inherit(BI.Widget, {
             rowSize: o.rowSize,
 
             regionColumnSize: o.regionColumnSize,
-
-            headerCellStyleGetter: o.headerCellStyleGetter,
-            summaryCellStyleGetter: o.summaryCellStyleGetter,
-            sequenceCellStyleGetter: o.sequenceCellStyleGetter,
 
             header: data.header,
             items: data.items
@@ -10433,9 +10418,6 @@ BI.LayerTreeTable = BI.inherit(BI.Widget, {
             headerRowSize: o.headerRowSize,
             rowSize: o.rowSize,
             regionColumnSize: o.regionColumnSize,
-            headerCellStyleGetter: o.headerCellStyleGetter,
-            summaryCellStyleGetter: o.summaryCellStyleGetter,
-            sequenceCellStyleGetter: o.sequenceCellStyleGetter,
             header: data.header,
             items: data.items
         });
@@ -10686,10 +10668,6 @@ BI.TableTree = BI.inherit(BI.Widget, {
             rowSize: o.rowSize,
 
             regionColumnSize: o.regionColumnSize,
-
-            headerCellStyleGetter: o.headerCellStyleGetter,
-            summaryCellStyleGetter: o.summaryCellStyleGetter,
-            sequenceCellStyleGetter: o.sequenceCellStyleGetter,
 
             header: data.header,
             items: data.items
