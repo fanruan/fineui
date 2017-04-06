@@ -17960,6 +17960,7 @@ BI.TextAreaEditor = BI.inherit(BI.Single, {
 
     setValue: function (value) {
         this.content.element.val(value);
+        this._checkWaterMark();
     },
 
     setStyle: function (style) {
