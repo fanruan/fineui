@@ -10,3 +10,6 @@
   background-color: #ffffff;
   z-index: 1;
 }
+.bi-theme-dark .bi-multi-select-check-selected-button {
+  background-color: #191a2c;
+}

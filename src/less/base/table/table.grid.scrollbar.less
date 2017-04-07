@@ -7,14 +7,14 @@
   transition-timing-function: ease;
   user-select: none;
   background-color: rgba(0, 0, 0, 0.1);
-  border-radius:5px;
+  border-radius: 5px;
 }
 
 .scrollbar-layout-main-vertical {
   bottom: 0;
   right: 0;
   top: 0;
-  transition-property: background-color ;
+  transition-property: background-color;
   width: 10px;
 }
 
@@ -27,7 +27,7 @@
   bottom: 0;
   height: 10px;
   left: 0;
-  transition-property: background-color ;
+  transition-property: background-color;
   background-color: rgba(0, 0, 0, 0.1);
 }
 
@@ -104,10 +104,24 @@
   background-color: #c2c2c2;
 }
 
+.bi-theme-dark {
+  .public-scrollbar-face:after {
+    background-color: #7d7d7d;
+  }
+}
+
 .public-scrollbar-main:hover .public-scrollbar-face:after,
 .public-scrollbar-main-active .public-scrollbar-face:after,
 .public-scrollbar-faceActive:after {
   background-color: #7d7d7d;
+}
+
+.bi-theme-dark {
+  .public-scrollbar-main:hover .public-scrollbar-face:after,
+  .public-scrollbar-main-active .public-scrollbar-face:after,
+  .public-scrollbar-faceActive:after {
+    background-color: #c2c2c2;
+  }
 }
 
 //horizontalScrollbar

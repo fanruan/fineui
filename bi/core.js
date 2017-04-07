@@ -15830,7 +15830,8 @@ BI.LayerController = BI.inherit(BI.Controller, {
             return this.get(name);
         }
         var widget = BI.createWidget((op.render || {}), {
-            type: "bi.layout"
+            type: "bi.layout",
+            cls: op.cls
         });
         var layout = BI.createWidget({
             type: "bi.absolute",
@@ -17044,6 +17045,14 @@ $(function () {
                 return true;
             }
             return false;
+        },
+
+        //获取对比颜色
+        getContrastColor: function (color) {
+            if (this.isDarkColor(color)) {
+                return "#ffffff";
+            }
+            return "#1a1a1a";
         },
 
         rgb2hex: function (rgbColour) {

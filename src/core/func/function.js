@@ -117,6 +117,14 @@ $(function () {
             return false;
         },
 
+        //获取对比颜色
+        getContrastColor: function (color) {
+            if (this.isDarkColor(color)) {
+                return "#ffffff";
+            }
+            return "#1a1a1a";
+        },
+
         rgb2hex: function (rgbColour) {
             if (!rgbColour || rgbColour.substr(0, 3) != "rgb") {
                 return "";
