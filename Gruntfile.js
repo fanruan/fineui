@@ -103,7 +103,7 @@ module.exports = function (grunt) {
                 dest: "dist/widget.js"
             },
             coreCss: {
-                src: ['src/css/core/**/*.css'],
+                src: ['src/css/core/**/*.css', 'src/css/theme/**/*.css'],
                 dest: 'dist/core.css'
             },
             baseCss: {
@@ -202,7 +202,7 @@ module.exports = function (grunt) {
                 dest: "bi/widget.js"
             },
             bi_coreCss: {
-                src: ['src/css/core/**/*.css'],
+                src: ['src/css/core/**/*.css', 'src/css/theme/**/*.css'],
                 dest: 'bi/core.css'
             },
             bi_baseCss: {

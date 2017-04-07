@@ -4,17 +4,6 @@
 /****添加计算宽度的--运算符直接需要space****/
 /****** common color(常用颜色,可用于普遍场景) *****/
 /**** custom color(自定义颜色,用于特定场景) ****/
-.bi-combine-chart .bi-linkage-list {
-  background-color: #ffffff;
-  border: 1px solid #eaeaea;
-  z-index: 1000000000;
-}
-.bi-combine-chart .bi-linkage-list .bi-linkage-list-item:hover {
-  background-color: #f4f4f4;
-}
-/****添加计算宽度的--运算符直接需要space****/
-/****** common color(常用颜色,可用于普遍场景) *****/
-/**** custom color(自定义颜色,用于特定场景) ****/
 .bi-color-chooser-popup .color-chooser-popup-title {
   background: #f4f4f4;
   border-bottom: 1px solid #d4dadd;
@@ -949,13 +938,6 @@ li.CodeMirror-hint-active {
 /****添加计算宽度的--运算符直接需要space****/
 /****** common color(常用颜色,可用于普遍场景) *****/
 /**** custom color(自定义颜色,用于特定场景) ****/
-.bi-record-editor .record-editor-text {
-  font-size: 12px;
-  background: #f4f4f4;
-}
-/****添加计算宽度的--运算符直接需要space****/
-/****** common color(常用颜色,可用于普遍场景) *****/
-/**** custom color(自定义颜色,用于特定场景) ****/
 .bi-shelter-editor .shelter-editor-text {
   font-size: 12px;
 }
@@ -1020,9 +1002,6 @@ li.CodeMirror-hint-active {
 .bi-input.bi-input-error {
   border: none;
   color: #e85050 !important;
-}
-.bi-input.disabled {
-  background-color: white;
 }
 /****添加计算宽度的--运算符直接需要space****/
 /****** common color(常用颜色,可用于普遍场景) *****/
@@ -1279,10 +1258,18 @@ li.CodeMirror-hint-active {
 .public-scrollbar-face:after {
   background-color: #c2c2c2;
 }
+.bi-theme-dark .public-scrollbar-face:after {
+  background-color: #7d7d7d;
+}
 .public-scrollbar-main:hover .public-scrollbar-face:after,
 .public-scrollbar-main-active .public-scrollbar-face:after,
 .public-scrollbar-faceActive:after {
   background-color: #7d7d7d;
+}
+.bi-theme-dark .public-scrollbar-main:hover .public-scrollbar-face:after,
+.bi-theme-dark .public-scrollbar-main-active .public-scrollbar-face:after,
+.bi-theme-dark .public-scrollbar-faceActive:after {
+  background-color: #c2c2c2;
 }
 .horizontal-scrollbar {
   bottom: 0;
@@ -1436,4 +1423,8 @@ li.CodeMirror-hint-active {
 }
 .bi-list-view .list-view-toolbar > .first-element {
   border-left: none;
+}
+.bi-theme-dark .bi-list-view .list-view-outer {
+  color: #b2b2b2;
+  background: #191a2c;
 }

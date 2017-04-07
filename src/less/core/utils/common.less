@@ -39,33 +39,119 @@
 }
 
 //resize
-.bi-resizer{
-  background:@color-bi-background-virtual-blue;
+.bi-resizer {
+  background: @color-bi-background-virtual-blue;
   .opacity(0.8);
   z-index: @zIndex-tip;
 }
 
-.bi-z-index-mask{
+.bi-z-index-mask {
   background-color: @color-bi-background-black;
   .opacity(0.5);
 }
+@color-list-item-hover: #04070d;
 
 .bi-list-item {
   .list-item();
+}
+
+.bi-theme-dark {
+  .bi-list-item {
+    &:hover, &.hover {
+      background-color: @color-list-item-hover;
+      color: @color-bi-text;
+    }
+    &.disabled {
+      &, &:hover, &:active {
+        background-color: transparent;
+      }
+    }
+  }
 }
 
 .bi-list-item-effect {
   .list-item-effect();
 }
 
+.bi-theme-dark {
+  .bi-list-item-effect {
+    &.active, &:active {
+      color: @color-bi-text-highlight;
+    }
+    &.disabled {
+      &, &:hover, &:active {
+        color: @color-bi-text-disabled;
+      }
+    }
+  }
+}
+
 .bi-list-item-hover {
   .list-item-hover();
+}
+
+.bi-theme-dark {
+  .bi-list-item-hover {
+    &:hover, &.hover {
+      color: @color-bi-text-highlight;
+      background-color: @color-list-item-hover;
+    }
+    &.disabled {
+      &, &:hover, &:active {
+        color: @color-bi-text-disabled;
+        background-color: transparent;
+      }
+    }
+  }
 }
 
 .bi-list-item-active {
   .list-item-active();
 }
 
+.bi-theme-dark {
+  .bi-list-item-active {
+    &:hover, &.hover {
+      background-color: @color-list-item-hover;
+      color: @color-bi-text;
+    }
+    &.active, &:active {
+      color: @color-bi-text-highlight;
+      background-color: @color-list-item-hover;
+    }
+    &.disabled {
+      &, &:hover, &:active {
+        background-color: transparent;
+      }
+    }
+  }
+}
+
 .bi-list-item-select {
   .list-item-select();
+}
+
+.bi-theme-dark {
+  .list-item-select {
+    &:hover, &.hover {
+      color: @color-bi-text-highlight;
+      background-color: @color-list-item-hover;
+    }
+    &:active, &.active {
+      color: @color-bi-text;
+      background-color: @color-bi-background-highlight;
+      & .bi-high-light {
+        color: @color-bi-text;
+      }
+    }
+    &.disabled {
+      &, &:hover, &:active {
+        color: @color-bi-text-disabled !important;
+        background-color: transparent !important;
+        & .bi-high-light {
+          color: @color-bi-text-disabled !important;
+        }
+      }
+    }
+  }
 }

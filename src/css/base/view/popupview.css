@@ -28,3 +28,7 @@
 .bi-list-view .list-view-toolbar > .first-element {
   border-left: none;
 }
+.bi-theme-dark .bi-list-view .list-view-outer {
+  color: #b2b2b2;
+  background: #191a2c;
+}

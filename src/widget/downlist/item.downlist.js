@@ -2,7 +2,7 @@ BI.DownListItem = BI.inherit(BI.Single, {
     _defaultConfig: function () {
         var conf = BI.DownListItem.superclass._defaultConfig.apply(this, arguments);
         return BI.extend(conf, {
-            baseCls: "bi-down-list-item",
+            baseCls: "bi-down-list-item bi-list-item-active",
             cls: "",
             height: 25,
             logic: {

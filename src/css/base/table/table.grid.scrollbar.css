@@ -80,10 +80,18 @@
 .public-scrollbar-face:after {
   background-color: #c2c2c2;
 }
+.bi-theme-dark .public-scrollbar-face:after {
+  background-color: #7d7d7d;
+}
 .public-scrollbar-main:hover .public-scrollbar-face:after,
 .public-scrollbar-main-active .public-scrollbar-face:after,
 .public-scrollbar-faceActive:after {
   background-color: #7d7d7d;
+}
+.bi-theme-dark .public-scrollbar-main:hover .public-scrollbar-face:after,
+.bi-theme-dark .public-scrollbar-main-active .public-scrollbar-face:after,
+.bi-theme-dark .public-scrollbar-faceActive:after {
+  background-color: #c2c2c2;
 }
 .horizontal-scrollbar {
   bottom: 0;
