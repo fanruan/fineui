@@ -5,3 +5,6 @@
   background: #f4f4f4;
   border-bottom: 1px solid #d4dadd;
 }
+.bi-theme-dark .bi-popup-panel .popup-panel-title {
+  background: #191a2c;
+}

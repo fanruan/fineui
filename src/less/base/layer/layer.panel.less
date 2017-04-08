@@ -1,8 +1,16 @@
 @import "../../bibase";
 
-.bi-popup-panel{
-  & .popup-panel-title{
+.bi-popup-panel {
+  & .popup-panel-title {
     background: @color-bi-background-gray;
     border-bottom: 1px solid @color-bi-split-dark;
+  }
+}
+
+.bi-theme-dark {
+  .bi-popup-panel {
+    & .popup-panel-title {
+      background: @color-bi-background-normal-theme-dark;
+    }
   }
 }

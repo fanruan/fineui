@@ -94,7 +94,7 @@ BI.ColorChooserPopup = BI.inherit(BI.Widget, {
             isNeedAdjustHeight: false,
             el: {
                 type: "bi.text_item",
-                cls: "color-chooser-popup-more",
+                cls: "color-chooser-popup-more bi-list-item",
                 textAlign: "center",
                 height: 20,
                 text: BI.i18nText("BI-Basic_More") + "..."

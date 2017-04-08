@@ -17007,6 +17007,24 @@ $(function () {
             });
         },
 
+        isColor: function (color) {
+            return this.isRGBColor(color) || this.isHexColor(color);
+        },
+
+        isRGBColor: function (color) {
+            if (!color) {
+                return false;
+            }
+            return color.substr(0, 3) === "rgb";
+        },
+
+        isHexColor: function (color) {
+            if (!color) {
+                return false;
+            }
+            return color[0] === "#" && color.length === 7;
+        },
+
         isDarkColor: function (hex) {
             if (!hex) {
                 return false;
@@ -17022,7 +17040,7 @@ $(function () {
         //获取对比颜色
         getContrastColor: function (color) {
             if (this.isDarkColor(color)) {
-                return "#ffffff";
+                return "#b2b2b2";
             }
             return "#1a1a1a";
         },

@@ -12,6 +12,10 @@
   font-size: 16px;
   cursor: pointer;
 }
+.bi-theme-dark .bi-message-title {
+  background-color: #191a2c;
+  color: #b2b2b2;
+}
 .bi-message-text {
   font-size: 16px;
   -webkit-user-select: text;
@@ -25,6 +29,10 @@
   background-color: #ffffff;
   color: #808080;
   font-size: 16px;
+}
+.bi-theme-dark .bi-message-content {
+  background-color: #202237;
+  color: #b2b2b2;
 }
 .bi-message-close {
   font-size: 25px;

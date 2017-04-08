@@ -1,9 +1,13 @@
 @import "../../bibase";
-.bi-float-box{
-  background: @color-bi-background-default;
-  & .float-box-button{
-    color: @color-bi-text;
-    background: @color-bi-background-highlight;
-    border: 1px solid @color-bi-border-normal;
+
+.bi-float-box {
+  background-color: @color-bi-background-default;
+  color: @color-bi-text-black;
+}
+
+.bi-theme-dark {
+  .bi-float-box {
+    background-color: @color-bi-background-default-theme-dark;
+    color: @color-bi-text-theme-dark;
   }
 }
