@@ -79,10 +79,6 @@ BI.TableTree = BI.inherit(BI.Widget, {
 
             regionColumnSize: o.regionColumnSize,
 
-            headerCellStyleGetter: o.headerCellStyleGetter,
-            summaryCellStyleGetter: o.summaryCellStyleGetter,
-            sequenceCellStyleGetter: o.sequenceCellStyleGetter,
-
             header: data.header,
             items: data.items
         });

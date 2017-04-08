@@ -28,7 +28,7 @@ module.exports = function (grunt) {
                     'src/data/**/*.js',
                     'src/config.js'
                 ],
-                dest: 'dist/core.js'
+                dest: 'docs/core.js'
             },
             biCoreJs: {
                 src: [
@@ -83,7 +83,7 @@ module.exports = function (grunt) {
                     'src/base/tree/parttree.js',
                     'src/base/**/*.js'
                 ],
-                dest: 'dist/base.js'
+                dest: 'docs/base.js'
             },
             //实现好的一些基础实例
             caseJs: {
@@ -91,7 +91,7 @@ module.exports = function (grunt) {
                     'src/case/combo/popup.bubble.js',
                     'src/case/**/*.js'
                 ],
-                dest: 'dist/case.js'
+                dest: 'docs/case.js'
             },
             widgetJs: {
                 src: [
@@ -100,32 +100,32 @@ module.exports = function (grunt) {
                     'src/widget/**/*.js',
                     'src/component/**/*.js'
                 ],
-                dest: "dist/widget.js"
+                dest: "docs/widget.js"
             },
             coreCss: {
-                src: ['src/css/core/**/*.css'],
-                dest: 'dist/core.css'
+                src: ['src/css/core/**/*.css', 'src/css/theme/**/*.css'],
+                dest: 'docs/core.css'
             },
             baseCss: {
                 src: ['src/css/base/**/*.css'],
-                dest: 'dist/base.css'
+                dest: 'docs/base.css'
             },
             widgetCss: {
                 src: ['src/css/widget/**/*.css'],
-                dest: 'dist/widget.css'
+                dest: 'docs/widget.css'
             },
             resourceCss: {
                 src: ['src/css/resource/**/*.css'],
-                dest: 'dist/resource.css'
+                dest: 'docs/resource.css'
             },
 
             demoJs: {
                 src: ['demo/version.js', 'demo/app.js', 'demo/js/**/*.js', 'demo/config.js'],
-                dest: 'demo/dist/demo.js'
+                dest: 'docs/demo.js'
             },
             demoCss: {
                 src: ['demo/css/**/*.css'],
-                dest: 'demo/dist/demo.css'
+                dest: 'docs/demo.css'
             },
 
             bi_coreJs: {
@@ -202,7 +202,7 @@ module.exports = function (grunt) {
                 dest: "bi/widget.js"
             },
             bi_coreCss: {
-                src: ['src/css/core/**/*.css'],
+                src: ['src/css/core/**/*.css', 'src/css/theme/**/*.css'],
                 dest: 'bi/core.css'
             },
             bi_baseCss: {
@@ -237,9 +237,9 @@ module.exports = function (grunt) {
             },
             dist: {
                 files: {
-                    'dist/core.min.js': ['<%= concat.coreJs.dest %>'],
-                    'dist/base.min.js': ['<%= concat.baseJs.dest %>'],
-                    'dist/case.min.js': ['<%= concat.caseJs.dest %>']
+                    'docs/core.min.js': ['<%= concat.coreJs.dest %>'],
+                    'docs/base.min.js': ['<%= concat.baseJs.dest %>'],
+                    'docs/case.min.js': ['<%= concat.caseJs.dest %>']
                 }
             }
         },
@@ -250,14 +250,14 @@ module.exports = function (grunt) {
 
                 src: '<%= concat.coreCss.dest %>',
 
-                dest: 'dist/core.min.css'
+                dest: 'docs/core.min.css'
 
             },
             baseCss: {
 
                 src: '<%= concat.baseCss.dest %>',
 
-                dest: 'dist/base.min.css'
+                dest: 'docs/base.min.css'
 
             }
 

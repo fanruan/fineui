@@ -28,8 +28,7 @@ BI.GridTableScrollbar = BI.inherit(BI.Widget, {
         })
     },
 
-    _init: function () {
-        BI.GridTableScrollbar.superclass._init.apply(this, arguments);
+    render: function () {
         var self = this, o = this.options;
         this.focused = false;
         this.isDragging = false;
@@ -47,6 +46,10 @@ BI.GridTableScrollbar = BI.inherit(BI.Widget, {
                 top: 0
             }]
         });
+    },
+
+    mounted: function () {
+        var self = this, o = this.options;
         var onWheel = o.orientation === 'horizontal' ? this._onWheelX : this._onWheelY;
         this._wheelHandler = new BI.WheelHandler(
             BI.bind(onWheel, this),
@@ -401,6 +404,12 @@ BI.GridTableHorizontalScrollbar = BI.inherit(BI.Widget, {
 
     populate: function () {
         this.scrollbar.populate();
+        var o = this.options;
+        if (o.size < 1 || o.contentSize <= o.size) {
+            this.setVisible(false);
+            return;
+        }
+        this.setVisible(true);
     }
 });
 BI.GridTableHorizontalScrollbar.EVENT_SCROLL = "EVENT_SCROLL";

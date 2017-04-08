@@ -13046,9 +13046,6 @@ if (!window.BI) {
 }
 ;
 !(function ($, undefined) {
-    _.extend(BI, {
-        version: "2.0"
-    });
     var traverse = function (func, context) {
         return function (value, key, obj) {
             return func.call(context, key, value, obj);
@@ -14480,6 +14477,10 @@ BI.Widget = BI.inherit(BI.OB, {
         this._isMounted = false;
         this.purgeListeners();
         this.destroyed && this.destroyed();
+    },
+
+    isMounted: function () {
+        return this._isMounted;
     },
 
     setWidth: function (w) {
@@ -21028,7 +21029,8 @@ BI.LayerController = BI.inherit(BI.Controller, {
             return this.get(name);
         }
         var widget = BI.createWidget((op.render || {}), {
-            type: "bi.layout"
+            type: "bi.layout",
+            cls: op.cls
         });
         var layout = BI.createWidget({
             type: "bi.absolute",
@@ -22558,23 +22560,6 @@ $(function () {
     BI.Func = {};
     var formulas = {};
     BI.extend(BI.Func, {
-        /**
-         * 创建唯一的名字
-         * @param array
-         * @param name
-         * @returns {*}
-         */
-        createDistinctName: function (array, name) {
-            var src = name, idx = 1;
-            name = name || "";
-            while (true) {
-                if (!ArrayUtils.getItemByName(array, name)) {
-                    break;
-                }
-                name = src + (idx++);
-            }
-            return name;
-        },
 
         /**
          * 获取搜索结果
@@ -22622,60 +22607,6 @@ $(function () {
                 finded: finded
             }
         },
-
-        /**
-         * 公式合法性验证
-         */
-        checkFormulaValidation: function (str) {
-            if (!BI.isEmptyString(str)) {
-                if (BI.has(formulas, str)) {
-                    return formulas[str];
-                }
-                formulas[str] = false;
-                var response = BI.requestSync("fr_bi_base", "check_validation_of_expression", {expression: str});
-                if (response.validation === "invalid") {
-                    formulas[str] = false;
-                } else if (response.validation === "valid") {
-                    formulas[str] = true;
-                }
-                return formulas[str];
-            } else {
-                return true;
-            }
-        },
-
-        getFormulaStringFromFormulaValue: function (formulaValue) {
-            var formulaString = "";
-            var regx = /\$[\{][^\}]*[\}]|\w*\w|\$\{[^\$\(\)\+\-\*\/)\$,]*\w\}|\$\{[^\$\(\)\+\-\*\/]*\w\}|\$\{[^\$\(\)\+\-\*\/]*[\u4e00-\u9fa5]\}|\w|(.)/g;
-            var result = formulaValue.match(regx);
-            BI.each(result, function (i, item) {
-                var fieldRegx = /\$[\{][^\}]*[\}]/;
-                var str = item.match(fieldRegx);
-                if (BI.isNotEmptyArray(str)) {
-                    formulaString = formulaString + str[0].substring(2, item.length - 1);
-                } else {
-                    formulaString = formulaString + item;
-                }
-            });
-            return formulaString;
-        },
-
-        formatAddress: function (address) {
-            var temp = '';
-            var url1 = /[a-zA-z]+:\/\/[^\s]*/;
-            var url2 = /\/[^\s]*/;
-            if (address.match(url1) || address.match(url2)) {
-                temp = address;
-            } else if (BI.isNotEmptyString(address)) {
-                temp = "http://" + address;
-            }
-            return temp;
-        },
-
-        getCompleteImageUrl: function (url) {
-            return BI.servletURL + "?op=fr_bi&cmd=get_uploaded_image&image_id=" + url;
-        }
-
     });
 
     /**
@@ -22728,22 +22659,24 @@ $(function () {
             });
         },
 
-        getImageWidthAndHeight: function (src) {
-            return BI.requestSync("fr_bi_base", "get_image_size", {
-                src: src
-            });
-        },
-
         isDarkColor: function (hex) {
             if (!hex) {
                 return false;
             }
             var rgb = this.rgb2json(this.hex2rgb(hex));
-            var grayLevel = (rgb.r * 0.299 + rgb.g * 0.587 + rgb.b * 0.114);
-            if (grayLevel < 192) {
+            var grayLevel = Math.round(rgb.r * 0.299 + rgb.g * 0.587 + rgb.b * 0.114);
+            if (grayLevel < 140) {
                 return true;
             }
             return false;
+        },
+
+        //获取对比颜色
+        getContrastColor: function (color) {
+            if (this.isDarkColor(color)) {
+                return "#ffffff";
+            }
+            return "#1a1a1a";
         },
 
         rgb2hex: function (rgbColour) {
@@ -25033,7 +24966,7 @@ _.extend(BI, {
         Top: "top",
         Bottom: "bottom"
     }
-});/**
+});BI.version = "2.0";/**
  * absolute实现的居中布局
  * @class BI.AbsoluteCenterLayout
  * @extends BI.Layout
@@ -26842,7 +26775,7 @@ BI.CardLayout = BI.inherit(BI.Layout, {
 
     isCardExisted: function (cardName) {
         return BI.some(this.options.items, function (i, item) {
-            return item.cardName === cardName && item.el;
+            return item.cardName == cardName && item.el;
         });
     },
 

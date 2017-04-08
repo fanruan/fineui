@@ -42,9 +42,6 @@
             } else {
                 this.onmousewheel = handler;
             }
-            // Store the line height and page height for this particular element
-            $.data(this, 'mousewheel-line-height', special.getLineHeight(this));
-            $.data(this, 'mousewheel-page-height', special.getPageHeight(this));
         },
 
         teardown: function() {
@@ -55,22 +52,6 @@
             } else {
                 this.onmousewheel = null;
             }
-            // Clean up the data we added to the element
-            $.removeData(this, 'mousewheel-line-height');
-            $.removeData(this, 'mousewheel-page-height');
-        },
-
-        getLineHeight: function(elem) {
-            var $elem = $(elem),
-                $parent = $elem['offsetParent' in $.fn ? 'offsetParent' : 'parent']();
-            if (!$parent.length) {
-                $parent = $('body');
-            }
-            return parseInt($parent.css('fontSize'), 10) || parseInt($elem.css('fontSize'), 10) || 16;
-        },
-
-        getPageHeight: function(elem) {
-            return $(elem).height();
         },
 
         settings: {
@@ -136,12 +117,12 @@
         //   * deltaMode 1 is by lines
         //   * deltaMode 2 is by pages
         if ( orgEvent.deltaMode === 1 ) {
-            var lineHeight = $.data(this, 'mousewheel-line-height');
+            var lineHeight = 40;
             delta  *= lineHeight;
             deltaY *= lineHeight;
             deltaX *= lineHeight;
         } else if ( orgEvent.deltaMode === 2 ) {
-            var pageHeight = $.data(this, 'mousewheel-page-height');
+            var pageHeight = 800;
             delta  *= pageHeight;
             deltaY *= pageHeight;
             deltaX *= pageHeight;
@@ -1489,10 +1470,6 @@ BI.TreeView = BI.inherit(BI.Pane, {
     },
     _init: function () {
         BI.TreeView.superclass._init.apply(this, arguments);
-        
-        
-        
-
         this._stop = false;
         this.container = BI.createWidget();
 
@@ -1969,10 +1946,10 @@ BI.TreeView = BI.inherit(BI.Pane, {
     }
 });
 BI.extend(BI.TreeView, {
-    REQ_TYPE_INIT_DATA: 1,
-    REQ_TYPE_ADJUST_DATA: 2,
-    REQ_TYPE_CALCULATE_SELECT_DATA: 3,
-    REQ_TYPE_SELECTED_DATA: 4
+    REQ_TYPE_INIT_DATA: 0,
+    REQ_TYPE_ADJUST_DATA: 1,
+    REQ_TYPE_CALCULATE_SELECT_DATA: 2,
+    REQ_TYPE_SELECTED_DATA: 3
 });
 
 BI.TreeView.EVENT_CHANGE = "EVENT_CHANGE";
@@ -3920,12 +3897,9 @@ BI.Navigation = BI.inherit(BI.Widget, {
             logic: {
                 dynamic: false
             },
-            defaultShowIndex: 0,
-            tab: {
-                type: "bi.button_group",
-                items: [],
-                layouts: []
-            },
+            single: false,
+            defaultShowIndex: false,
+            tab: false,
             cardCreator: function (v) {
                 return BI.createWidget();
             },
@@ -3963,13 +3937,25 @@ BI.Navigation = BI.inherit(BI.Widget, {
             },
             afterCardCreated: BI.bind(this.afterCardCreated, this),
             afterCardShow: BI.bind(this.afterCardShow, this)
-        })
+        });
     },
 
     mounted: function () {
         var o = this.options;
         if (o.defaultShowIndex !== false) {
             this.setSelect(o.defaultShowIndex);
+        }
+    },
+
+    _deleteOtherCards: function (currCardName) {
+        var self = this, o = this.options;
+        if (o.single === true) {
+            BI.each(this.cardMap, function (name, card) {
+                if (name !== (currCardName + "")) {
+                    self.layout.deleteCardByName(name);
+                    delete self.cardMap[name];
+                }
+            });
         }
     },
 
@@ -3980,12 +3966,13 @@ BI.Navigation = BI.inherit(BI.Widget, {
             if (type === BI.Events.CLICK) {
                 self.fireEvent(BI.Navigation.EVENT_CHANGE, obj);
             }
-        })
+        });
         this.options.afterCardCreated.apply(this, arguments);
     },
 
     afterCardShow: function (v) {
         this.showIndex = v;
+        this._deleteOtherCards(v);
         this.options.afterCardShow.apply(this, arguments);
     },
 
@@ -3996,16 +3983,23 @@ BI.Navigation = BI.inherit(BI.Widget, {
         }
     },
 
-    setSelect: function (v) {
-        this.showIndex = v;
+    _assertCard: function (v) {
         if (!this.layout.isCardExisted(v)) {
             var card = this.options.cardCreator(v);
             this.cardMap[v] = card;
             this.layout.addCardByName(v, card);
             this.afterCardCreated(v);
         }
+    },
+
+    setSelect: function (v) {
+        this._assertCard();
         this.layout.showCardByName(v);
-        BI.nextTick(BI.bind(this.afterCardShow, this, v));
+        this._deleteOtherCards(v);
+        if (this.showIndex !== v) {
+            this.showIndex = v;
+            BI.nextTick(BI.bind(this.afterCardShow, this, v));
+        }
     },
 
     getSelect: function () {
@@ -4636,6 +4630,7 @@ BI.Tab = BI.inherit(BI.Widget, {
         return BI.extend(BI.Tab.superclass._defaultConfig.apply(this, arguments), {
             baseCls: "bi-tab",
             direction: "top",//top, bottom, left, right, custom
+            single: false, //是不是单页面
             logic: {
                 dynamic: false
             },
@@ -4675,12 +4670,25 @@ BI.Tab = BI.inherit(BI.Widget, {
                 return card;
             },
             afterCardShow: function (v) {
+                self._deleteOtherCards(v);
                 self.curr = v;
             }
         });
         listener.on(BI.ShowListener.EVENT_CHANGE, function (value) {
             self.fireEvent(BI.Tab.EVENT_CHANGE, value, self);
         });
+    },
+
+    _deleteOtherCards: function (currCardName) {
+        var self = this, o = this.options;
+        if (o.single === true) {
+            BI.each(this.cardMap, function (name, card) {
+                if (name !== (currCardName + "")) {
+                    self.layout.deleteCardByName(name);
+                    delete self.cardMap[name];
+                }
+            });
+        }
     },
 
     _assertCard: function (v) {
@@ -4702,6 +4710,7 @@ BI.Tab = BI.inherit(BI.Widget, {
         this.tab && this.tab.setValue(v);
         this._assertCard(v);
         this.layout.showCardByName(v);
+        this._deleteOtherCards(v);
         if (this.curr !== v) {
             this.curr = v;
         }
@@ -17951,6 +17960,7 @@ BI.TextAreaEditor = BI.inherit(BI.Single, {
 
     setValue: function (value) {
         this.content.element.val(value);
+        this._checkWaterMark();
     },
 
     setStyle: function (style) {
@@ -28297,8 +28307,7 @@ BI.CollectionTable = BI.inherit(BI.Widget, {
         });
     },
 
-    _init: function () {
-        BI.CollectionTable.superclass._init.apply(this, arguments);
+    render: function () {
         var self = this, o = this.options;
         this._width = 0;
         this._height = 0;
@@ -28434,6 +28443,10 @@ BI.CollectionTable = BI.inherit(BI.Widget, {
         });
         this._width = o.width - BI.GridTableScrollbar.SIZE;
         this._height = o.height - BI.GridTableScrollbar.SIZE;
+    },
+
+    mounted: function () {
+        var o = this.options;
         if (o.items.length > 0 || o.header.length < 0) {
             this._digest();
             this._populate();
@@ -28832,8 +28845,8 @@ BI.QuickCollectionTable = BI.inherit(BI.CollectionTable, {
         });
     },
 
-    _init: function () {
-        BI.QuickCollectionTable.superclass._init.apply(this, arguments);
+    render: function () {
+        BI.QuickCollectionTable.superclass.render.apply(this, arguments);
         var self = this, o = this.options;
         this.topLeftCollection.setOverflowX(false);
         this.topLeftCollection.setOverflowY(false);
@@ -28843,6 +28856,11 @@ BI.QuickCollectionTable = BI.inherit(BI.CollectionTable, {
         this.bottomLeftCollection.setOverflowY(false);
         this.bottomRightCollection.setOverflowX(false);
         this.bottomRightCollection.setOverflowY(false);
+    },
+
+    mounted: function () {
+        BI.QuickCollectionTable.superclass.mounted.apply(this, arguments);
+        var self = this;
         this._leftWheelHandler = new BI.WheelHandler(
             BI.bind(this._onWheelY, this),
             BI.bind(this._shouldHandleX, this),
@@ -29037,8 +29055,7 @@ BI.GridTable = BI.inherit(BI.Widget, {
         });
     },
 
-    _init: function () {
-        BI.GridTable.superclass._init.apply(this, arguments);
+    render: function () {
         var self = this, o = this.options;
         this._width = 0;
         this._height = 0;
@@ -29181,6 +29198,10 @@ BI.GridTable = BI.inherit(BI.Widget, {
         this._height = o.height - BI.GridTableScrollbar.SIZE;
         this.header = this._getHeader();
         this.items = this._getItems();
+    },
+
+    mounted: function () {
+        var o = this.options;
         if (o.items.length > 0) {
             this._populate();
         }
@@ -29499,8 +29520,8 @@ BI.QuickGridTable = BI.inherit(BI.GridTable, {
         });
     },
 
-    _init: function () {
-        BI.QuickGridTable.superclass._init.apply(this, arguments);
+    render: function () {
+        BI.QuickGridTable.superclass.render.apply(this, arguments);
         var self = this, o = this.options;
         this.topLeftGrid.setOverflowX(false);
         this.topLeftGrid.setOverflowY(false);
@@ -29510,6 +29531,11 @@ BI.QuickGridTable = BI.inherit(BI.GridTable, {
         this.bottomLeftGrid.setOverflowY(false);
         this.bottomRightGrid.setOverflowX(false);
         this.bottomRightGrid.setOverflowY(false);
+    },
+
+    mounted: function () {
+        BI.QuickGridTable.superclass.mounted.apply(this, arguments);
+        var self = this;
         this._leftWheelHandler = new BI.WheelHandler(
             BI.bind(this._onWheelY, this),
             BI.bind(this._shouldHandleX, this),
@@ -29679,8 +29705,7 @@ BI.GridTableScrollbar = BI.inherit(BI.Widget, {
         })
     },
 
-    _init: function () {
-        BI.GridTableScrollbar.superclass._init.apply(this, arguments);
+    render: function () {
         var self = this, o = this.options;
         this.focused = false;
         this.isDragging = false;
@@ -29698,6 +29723,10 @@ BI.GridTableScrollbar = BI.inherit(BI.Widget, {
                 top: 0
             }]
         });
+    },
+
+    mounted: function () {
+        var self = this, o = this.options;
         var onWheel = o.orientation === 'horizontal' ? this._onWheelX : this._onWheelY;
         this._wheelHandler = new BI.WheelHandler(
             BI.bind(onWheel, this),
@@ -30052,6 +30081,12 @@ BI.GridTableHorizontalScrollbar = BI.inherit(BI.Widget, {
 
     populate: function () {
         this.scrollbar.populate();
+        var o = this.options;
+        if (o.size < 1 || o.contentSize <= o.size) {
+            this.setVisible(false);
+            return;
+        }
+        this.setVisible(true);
     }
 });
 BI.GridTableHorizontalScrollbar.EVENT_SCROLL = "EVENT_SCROLL";
@@ -30973,11 +31008,9 @@ BI.Table = BI.inherit(BI.Widget, {
         };
 
         this._initNormalScroll();
-        BI.Resizers.add(this.getName(), function (e) {
-            if (self.element.is(":visible") && BI.isWindow(e.target)) {
-                self._resize();
-                self.fireEvent(BI.Table.EVENT_TABLE_RESIZE);
-            }
+        BI.ResizeDetector.addResizeListener(this, function () {
+            self._resize();
+            self.fireEvent(BI.Table.EVENT_TABLE_RESIZE);
         });
         BI.nextTick(function () {
             if (self.element.is(":visible")) {
@@ -32003,7 +32036,6 @@ BI.Table = BI.inherit(BI.Widget, {
     },
 
     empty: function () {
-        BI.Resizers.remove(this.getName());
         BI.Table.superclass.empty.apply(this, arguments);
     },
 

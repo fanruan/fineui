@@ -9,12 +9,9 @@ BI.Navigation = BI.inherit(BI.Widget, {
             logic: {
                 dynamic: false
             },
-            defaultShowIndex: 0,
-            tab: {
-                type: "bi.button_group",
-                items: [],
-                layouts: []
-            },
+            single: false,
+            defaultShowIndex: false,
+            tab: false,
             cardCreator: function (v) {
                 return BI.createWidget();
             },
@@ -52,13 +49,25 @@ BI.Navigation = BI.inherit(BI.Widget, {
             },
             afterCardCreated: BI.bind(this.afterCardCreated, this),
             afterCardShow: BI.bind(this.afterCardShow, this)
-        })
+        });
     },
 
     mounted: function () {
         var o = this.options;
         if (o.defaultShowIndex !== false) {
             this.setSelect(o.defaultShowIndex);
+        }
+    },
+
+    _deleteOtherCards: function (currCardName) {
+        var self = this, o = this.options;
+        if (o.single === true) {
+            BI.each(this.cardMap, function (name, card) {
+                if (name !== (currCardName + "")) {
+                    self.layout.deleteCardByName(name);
+                    delete self.cardMap[name];
+                }
+            });
         }
     },
 
@@ -69,12 +78,13 @@ BI.Navigation = BI.inherit(BI.Widget, {
             if (type === BI.Events.CLICK) {
                 self.fireEvent(BI.Navigation.EVENT_CHANGE, obj);
             }
-        })
+        });
         this.options.afterCardCreated.apply(this, arguments);
     },
 
     afterCardShow: function (v) {
         this.showIndex = v;
+        this._deleteOtherCards(v);
         this.options.afterCardShow.apply(this, arguments);
     },
 
@@ -85,16 +95,23 @@ BI.Navigation = BI.inherit(BI.Widget, {
         }
     },
 
-    setSelect: function (v) {
-        this.showIndex = v;
+    _assertCard: function (v) {
         if (!this.layout.isCardExisted(v)) {
             var card = this.options.cardCreator(v);
             this.cardMap[v] = card;
             this.layout.addCardByName(v, card);
             this.afterCardCreated(v);
         }
+    },
+
+    setSelect: function (v) {
+        this._assertCard();
         this.layout.showCardByName(v);
-        BI.nextTick(BI.bind(this.afterCardShow, this, v));
+        this._deleteOtherCards(v);
+        if (this.showIndex !== v) {
+            this.showIndex = v;
+            BI.nextTick(BI.bind(this.afterCardShow, this, v));
+        }
     },
 
     getSelect: function () {

@@ -22,7 +22,21 @@ Demo.North = BI.inherit(BI.Widget, {
                 }
             }, {
                 el: {
-                    type: "bi.layout"
+                    type: "bi.right",
+                    hgap: 10,
+                    items: [{
+                        type: "bi.text_button",
+                        text: "星空蓝",
+                        handler: function () {
+                            $("#wrapper").removeClass("bi-theme-default").addClass("bi-theme-dark");
+                        }
+                    }, {
+                        type: "bi.text_button",
+                        text: "典雅白",
+                        handler: function () {
+                            $("#wrapper").removeClass("bi-theme-dark").addClass("bi-theme-default");
+                        }
+                    }]
                 }
             }]
         }

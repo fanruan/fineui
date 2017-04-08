@@ -34,10 +34,6 @@ BI.AdaptiveTable = BI.inherit(BI.Widget, {
 
             regionColumnSize: [],
 
-            headerCellStyleGetter: BI.emptyFn,
-            summaryCellStyleGetter: BI.emptyFn,
-            sequenceCellStyleGetter: BI.emptyFn,
-
             header: [],
             items: [], //二维数组
 
@@ -73,10 +69,6 @@ BI.AdaptiveTable = BI.inherit(BI.Widget, {
             rowSize: o.rowSize,
 
             regionColumnSize: data.regionColumnSize,
-
-            headerCellStyleGetter: o.headerCellStyleGetter,
-            summaryCellStyleGetter: o.summaryCellStyleGetter,
-            sequenceCellStyleGetter: o.sequenceCellStyleGetter,
 
             header: o.header,
             items: o.items,

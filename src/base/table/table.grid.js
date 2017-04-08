@@ -20,8 +20,7 @@ BI.GridTable = BI.inherit(BI.Widget, {
         });
     },
 
-    _init: function () {
-        BI.GridTable.superclass._init.apply(this, arguments);
+    render: function () {
         var self = this, o = this.options;
         this._width = 0;
         this._height = 0;
@@ -164,6 +163,10 @@ BI.GridTable = BI.inherit(BI.Widget, {
         this._height = o.height - BI.GridTableScrollbar.SIZE;
         this.header = this._getHeader();
         this.items = this._getItems();
+    },
+
+    mounted: function () {
+        var o = this.options;
         if (o.items.length > 0) {
             this._populate();
         }

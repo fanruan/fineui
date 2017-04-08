@@ -78,7 +78,7 @@ BI.PageTable = BI.inherit(BI.Widget, {
         this.table = BI.createWidget(o.el, {
             type: "bi.sequence_table",
             width: o.width,
-            height: o.height - 30,
+            height: o.height && o.height - 30,
 
             isNeedResize: true,
             isResizeAdapt: false,
@@ -137,7 +137,7 @@ BI.PageTable = BI.inherit(BI.Widget, {
                 vpage: vpage,
                 hpage: hpage
             }, function (items, header, crossItems, crossHeader) {
-                self.table.setVPage ? self.table.setVPage(vpage) : self.table.setCurrentPage(vpage);
+                self.table.setVPage ? self.table.setVPage(vpage) : self.table.setValue(vpage);
                 self.table.setHPage && self.table.setHPage(hpage);
                 self.populate.apply(self, arguments);
             });
@@ -202,7 +202,23 @@ BI.PageTable = BI.inherit(BI.Widget, {
 
     setHeight: function (height) {
         BI.PageTable.superclass.setHeight.apply(this, arguments);
-        this.table.setHeight(height - 30);
+        var showPager = false;
+        if (this.pager.alwaysShowPager) {
+            showPager = true;
+        } else if (this.pager.hasHNext && this.pager.hasHNext()) {
+            showPager = true;
+        } else if (this.pager.hasHPrev && this.pager.hasHPrev()) {
+            showPager = true;
+        } else if (this.pager.hasVNext && this.pager.hasVNext()) {
+            showPager = true;
+        } else if (this.pager.hasVPrev && this.pager.hasVPrev()) {
+            showPager = true;
+        } else if (this.pager.hasNext && this.pager.hasNext()) {
+            showPager = true;
+        } else if (this.pager.hasPrev && this.pager.hasPrev()) {
+            showPager = true;
+        }
+        this.table.setHeight(height - (showPager ? 30 : 0));
     },
 
     setColumnSize: function (columnSize) {

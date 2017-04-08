@@ -12,8 +12,8 @@ BI.QuickCollectionTable = BI.inherit(BI.CollectionTable, {
         });
     },
 
-    _init: function () {
-        BI.QuickCollectionTable.superclass._init.apply(this, arguments);
+    render: function () {
+        BI.QuickCollectionTable.superclass.render.apply(this, arguments);
         var self = this, o = this.options;
         this.topLeftCollection.setOverflowX(false);
         this.topLeftCollection.setOverflowY(false);
@@ -23,6 +23,11 @@ BI.QuickCollectionTable = BI.inherit(BI.CollectionTable, {
         this.bottomLeftCollection.setOverflowY(false);
         this.bottomRightCollection.setOverflowX(false);
         this.bottomRightCollection.setOverflowY(false);
+    },
+
+    mounted: function () {
+        BI.QuickCollectionTable.superclass.mounted.apply(this, arguments);
+        var self = this;
         this._leftWheelHandler = new BI.WheelHandler(
             BI.bind(this._onWheelY, this),
             BI.bind(this._shouldHandleX, this),

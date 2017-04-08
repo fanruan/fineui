@@ -106,3 +106,17 @@ textarea::-webkit-scrollbar-thumb {
   border-radius: 0;
   background-color: #e2e2e2;
 }
+.bi-theme-dark div::-webkit-scrollbar,
+.bi-theme-dark textarea::-webkit-scrollbar {
+  -webkit-appearance: none;
+  background-color: #191a2c;
+  width: 6px;
+  height: 6px;
+}
+.bi-theme-dark div::-webkit-scrollbar-thumb,
+.bi-theme-dark textarea::-webkit-scrollbar-thumb {
+  -webkit-border-radius: 0;
+  -moz-border-radius: 0;
+  border-radius: 0;
+  background-color: #7d7d7d;
+}
