@@ -19,3 +19,13 @@
 .bi-grid-table-cell.first-col {
   border-left: 1px solid #eaeaea;
 }
+.bi-theme-dark .bi-grid-table-cell {
+  border-right: 1px solid #24273e;
+  border-bottom: 1px solid #24273e;
+}
+.bi-theme-dark .bi-grid-table-cell.first-row {
+  border-top: 1px solid #24273e;
+}
+.bi-theme-dark .bi-grid-table-cell.first-col {
+  border-left: 1px solid #24273e;
+}

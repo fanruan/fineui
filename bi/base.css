@@ -1107,6 +1107,16 @@ li.CodeMirror-hint-active {
 .bi-collection-table-cell.first-col {
   border-left: 1px solid #eaeaea;
 }
+.bi-theme-dark .bi-collection-table-cell {
+  border-right: 1px solid #24273e;
+  border-bottom: 1px solid #24273e;
+}
+.bi-theme-dark .bi-collection-table-cell.first-row {
+  border-top: 1px solid #24273e;
+}
+.bi-theme-dark .bi-collection-table-cell.first-col {
+  border-left: 1px solid #24273e;
+}
 /****添加计算宽度的--运算符直接需要space****/
 /****** common color(常用颜色,可用于普遍场景) *****/
 /**** custom color(自定义颜色,用于特定场景) ****/
@@ -1169,6 +1179,33 @@ li.CodeMirror-hint-active {
   border-top: 1px solid #eaeaea;
   border-left: 1px solid #eaeaea;
 }
+.bi-theme-dark .bi-table > div > div > table {
+  border-bottom: 1px solid #24273e;
+  border-right: 1px solid #24273e;
+}
+.bi-theme-dark .bi-table > div.top-left > div > div > table {
+  border-bottom: 1px solid #24273e;
+  border-right: 1px solid #24273e;
+}
+.bi-theme-dark .bi-table > div.top-right > div > div > table {
+  border-bottom: 1px solid #24273e;
+  border-right: 1px solid #24273e;
+}
+.bi-theme-dark .bi-table > div.bottom-left > div > div > table {
+  border-bottom: 1px solid #24273e;
+  border-right: 1px solid #24273e;
+}
+.bi-theme-dark .bi-table > div.bottom-right > div > div > table {
+  border-right: 1px solid #24273e;
+  border-bottom: 1px solid #24273e;
+}
+.bi-theme-dark .bi-table > div > div > table > tbody > tr > td,
+.bi-theme-dark .bi-table > div > div > div > table > tbody > tr > td,
+.bi-theme-dark .bi-table > div > div > table > thead > tr > td,
+.bi-theme-dark .bi-table > div > div > div > table > thead > tr > td {
+  border-top: 1px solid #24273e;
+  border-left: 1px solid #24273e;
+}
 /****添加计算宽度的--运算符直接需要space****/
 /****** common color(常用颜色,可用于普遍场景) *****/
 /**** custom color(自定义颜色,用于特定场景) ****/
@@ -1189,6 +1226,16 @@ li.CodeMirror-hint-active {
 }
 .bi-grid-table-cell.first-col {
   border-left: 1px solid #eaeaea;
+}
+.bi-theme-dark .bi-grid-table-cell {
+  border-right: 1px solid #24273e;
+  border-bottom: 1px solid #24273e;
+}
+.bi-theme-dark .bi-grid-table-cell.first-row {
+  border-top: 1px solid #24273e;
+}
+.bi-theme-dark .bi-grid-table-cell.first-col {
+  border-left: 1px solid #24273e;
 }
 /****添加计算宽度的--运算符直接需要space****/
 /****** common color(常用颜色,可用于普遍场景) *****/

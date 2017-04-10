@@ -1,12 +1,15 @@
 @import "../../../bibase";
 
-
-.bi-multi-select-check-pane{
-  & .multi-select-continue-select{
-    background-color: @color-bi-background-gray;
-  }
-  & .multi-select-check-selected{
+.bi-multi-select-check-pane {
+  background-color: @color-bi-background-gray;
+  & .multi-select-check-selected {
     color: @color-bi-text-highlight;
     text-decoration: underline;
+  }
+}
+
+.bi-theme-dark {
+  .bi-multi-select-check-pane {
+    background-color: @color-bi-background-normal-theme-dark;
   }
 }
