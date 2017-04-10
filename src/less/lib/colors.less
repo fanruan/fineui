@@ -6,7 +6,7 @@
 //默认字体颜色
 @color-bi-text-black: @font-color-normal;
 //深色主题默认字体颜色
-@color-bi-text-theme-dark: #b2b2b2;
+@color-bi-text-theme-dark: @font-color-normal-theme-dark;
 //深灰色字体颜色
 @color-bi-text-dark: @font-color-dark;
 //灰色字体颜色
@@ -26,12 +26,13 @@
 //标红色
 @color-bi-text-redmark: @font-color-redmark;
 
+//普通背景
+@color-bi-background-normal: @background-color-normal;
+@color-bi-background-normal-theme-dark: @background-color-normal-theme-dark;
 //默认背景
 @color-bi-background-default: @background-color-default;
 //深色主题默认背景
-@color-bi-background-theme-dark: #191A2C;
-//普通背景
-@color-bi-background-normal: @background-color-normal;
+@color-bi-background-default-theme-dark: @background-color-default-theme-dark;
 //黑色背景
 @color-bi-background-black: @background-color-black;
 //深灰色背景
@@ -76,6 +77,8 @@
 @color-bi-border-outline: @border-color-outline;
 //边框线颜色
 @color-bi-border-line: @border-color-line;
+//深色系边框线色
+@color-bi-border-line-theme-dark: @border-color-line-theme-dark;
 //成功边框色
 @color-bi-border-success: @border-color-success;
 //失败边框色

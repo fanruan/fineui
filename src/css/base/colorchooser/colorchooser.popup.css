@@ -8,6 +8,9 @@
 .bi-color-chooser-popup .color-chooser-popup-more {
   background: #f4f4f4;
 }
-.bi-color-chooser-popup .color-chooser-popup-more:hover {
-  background: #d4dadd;
+.bi-theme-dark .bi-color-chooser-popup .color-chooser-popup-title {
+  background: #191a2c;
+}
+.bi-theme-dark .bi-color-chooser-popup .color-chooser-popup-more {
+  background: #191a2c;
 }

@@ -1,3 +1,4 @@
+@import "../../bibase";
 .scrollbar-layout-main {
   box-sizing: border-box;
   outline: none;
@@ -6,9 +7,15 @@
   transition-duration: 250ms;
   transition-timing-function: ease;
   user-select: none;
-  background-color: rgba(0, 0, 0, 0.1);
-  filter:~"progid:DXImageTransform.Microsoft.gradient(startColorstr=#19000000,endColorstr=#19000000)";
+  background-color: @scroll-color;
   border-radius: 5px;
+}
+
+.bi-theme-dark {
+  .scrollbar-layout-main {
+    background-color: @scroll-color-theme-dark;
+    filter:~"progid:DXImageTransform.Microsoft.gradient(startColorstr=#19ffffff,endColorstr=#19ffffff)";
+  }
 }
 
 .scrollbar-layout-main-vertical {
@@ -29,8 +36,14 @@
   height: 10px;
   left: 0;
   transition-property: background-color;
-  background-color: rgba(0, 0, 0, 0.1);
-  filter:~"progid:DXImageTransform.Microsoft.gradient(startColorstr=#19000000,endColorstr=#19000000)";
+  background-color: @scroll-color;
+}
+
+.bi-theme-dark {
+  .scrollbar-layout-main-horizontal {
+    background-color: @scroll-color-theme-dark;
+    filter:~"progid:DXImageTransform.Microsoft.gradient(startColorstr=#19ffffff,endColorstr=#19ffffff)";
+  }
 }
 
 /* Touching the scroll-track directly makes the scroll-track bolder */
@@ -103,26 +116,26 @@
 }
 
 .public-scrollbar-face:after {
-  background-color: #c2c2c2;
+  background-color: @scroll-thumb-color;
 }
 
 .bi-theme-dark {
   .public-scrollbar-face:after {
-    background-color: #7d7d7d;
+    background-color: @scroll-thumb-color-theme-dark;
   }
 }
 
 .public-scrollbar-main:hover .public-scrollbar-face:after,
 .public-scrollbar-main-active .public-scrollbar-face:after,
 .public-scrollbar-faceActive:after {
-  background-color: #7d7d7d;
+  background-color: @scroll-thumb-focus-color;
 }
 
 .bi-theme-dark {
   .public-scrollbar-main:hover .public-scrollbar-face:after,
   .public-scrollbar-main-active .public-scrollbar-face:after,
   .public-scrollbar-faceActive:after {
-    background-color: #c2c2c2;
+    background-color: @scroll-thumb-focus-color-theme-dark;
   }
 }
 
@@ -130,8 +143,5 @@
 .horizontal-scrollbar {
   bottom: 0;
   position: absolute;
-  & .public-scrollbar-main-horizontal {
-    background-color: #fff;
-  }
 }
 

@@ -2960,52 +2960,24 @@ if (!window.BI) {
     //BI请求
     _.extend(BI, {
 
-        ajax: (function () {
-            var loading, timeoutToast;
-            return function (option) {
-                option || (option = {});
-                option.data = BI.extend({}, Data.SharingPool.cat("urlParameters"), option.data);
-                //encode
-                encodeBIParam(option.data);
+        ajax: function (option) {
+            option || (option = {});
+            var async = option.async;
+            option.data = BI.cjkEncodeDO(option.data || {});
 
-                var async = option.async;
-
-                option.data = BI.cjkEncodeDO(option.data);
-
-
-                $.ajax({
-                    url: option.url,
-                    type: "POST",
-                    data: option.data,
-                    async: async,
-                    error: option.error,
-                    complete: function (res, status) {
-                        if (BI.isFunction(option.complete)) {
-                            option.complete(BI.jsonDecode(res.responseText), status);
-                        }
-                    }
-                });
-
-                function encodeBIParam(data) {
-                    for (var key in data) {
-                        if (_.isObject(data[key])) {
-                            data[key] = window.encodeURIComponent(BI.jsonEncode(data[key]));
-                        } else {
-                            data[key] = window.encodeURIComponent(data[key]);
-                        }
+            $.ajax({
+                url: option.url,
+                type: "POST",
+                data: option.data,
+                async: async,
+                error: option.error,
+                complete: function (res, status) {
+                    if (BI.isFunction(option.complete)) {
+                        option.complete(BI.jsonDecode(res.responseText), status);
                     }
                 }
-
-                function decodeBIParam(data) {
-                    for (var key in data) {
-                        data[key] = window.decodeURIComponent(data[key]);
-                        if (_.isObject(data[key])) {
-                            data[key] = BI.jsonDecode(data[key]);
-                        }
-                    }
-                }
-            }
-        })()
+            });
+        }
     });
 })(jQuery);;(function () {
     function isEmpty(value) {
@@ -17035,6 +17007,24 @@ $(function () {
             });
         },
 
+        isColor: function (color) {
+            return this.isRGBColor(color) || this.isHexColor(color);
+        },
+
+        isRGBColor: function (color) {
+            if (!color) {
+                return false;
+            }
+            return color.substr(0, 3) === "rgb";
+        },
+
+        isHexColor: function (color) {
+            if (!color) {
+                return false;
+            }
+            return color[0] === "#" && color.length === 7;
+        },
+
         isDarkColor: function (hex) {
             if (!hex) {
                 return false;
@@ -17050,7 +17040,7 @@ $(function () {
         //获取对比颜色
         getContrastColor: function (color) {
             if (this.isDarkColor(color)) {
-                return "#ffffff";
+                return "#b2b2b2";
             }
             return "#1a1a1a";
         },

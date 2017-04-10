@@ -11,8 +11,11 @@
 .bi-color-chooser-popup .color-chooser-popup-more {
   background: #f4f4f4;
 }
-.bi-color-chooser-popup .color-chooser-popup-more:hover {
-  background: #d4dadd;
+.bi-theme-dark .bi-color-chooser-popup .color-chooser-popup-title {
+  background: #191a2c;
+}
+.bi-theme-dark .bi-color-chooser-popup .color-chooser-popup-more {
+  background: #191a2c;
 }
 /****添加计算宽度的--运算符直接需要space****/
 /****** common color(常用颜色,可用于普遍场景) *****/
@@ -667,6 +670,10 @@ li.CodeMirror-hint-active {
   font-size: 16px;
   cursor: pointer;
 }
+.bi-theme-dark .bi-message-title {
+  background-color: #191a2c;
+  color: #b2b2b2;
+}
 .bi-message-text {
   font-size: 16px;
   -webkit-user-select: text;
@@ -680,6 +687,10 @@ li.CodeMirror-hint-active {
   background-color: #ffffff;
   color: #808080;
   font-size: 16px;
+}
+.bi-theme-dark .bi-message-content {
+  background-color: #202237;
+  color: #b2b2b2;
 }
 .bi-message-close {
   font-size: 25px;
@@ -697,6 +708,9 @@ li.CodeMirror-hint-active {
 .bi-popup-panel .popup-panel-title {
   background: #f4f4f4;
   border-bottom: 1px solid #d4dadd;
+}
+.bi-theme-dark .bi-popup-panel .popup-panel-title {
+  background: #191a2c;
 }
 /****添加计算宽度的--运算符直接需要space****/
 /****** common color(常用颜色,可用于普遍场景) *****/
@@ -1093,6 +1107,16 @@ li.CodeMirror-hint-active {
 .bi-collection-table-cell.first-col {
   border-left: 1px solid #eaeaea;
 }
+.bi-theme-dark .bi-collection-table-cell {
+  border-right: 1px solid #24273e;
+  border-bottom: 1px solid #24273e;
+}
+.bi-theme-dark .bi-collection-table-cell.first-row {
+  border-top: 1px solid #24273e;
+}
+.bi-theme-dark .bi-collection-table-cell.first-col {
+  border-left: 1px solid #24273e;
+}
 /****添加计算宽度的--运算符直接需要space****/
 /****** common color(常用颜色,可用于普遍场景) *****/
 /**** custom color(自定义颜色,用于特定场景) ****/
@@ -1155,6 +1179,33 @@ li.CodeMirror-hint-active {
   border-top: 1px solid #eaeaea;
   border-left: 1px solid #eaeaea;
 }
+.bi-theme-dark .bi-table > div > div > table {
+  border-bottom: 1px solid #24273e;
+  border-right: 1px solid #24273e;
+}
+.bi-theme-dark .bi-table > div.top-left > div > div > table {
+  border-bottom: 1px solid #24273e;
+  border-right: 1px solid #24273e;
+}
+.bi-theme-dark .bi-table > div.top-right > div > div > table {
+  border-bottom: 1px solid #24273e;
+  border-right: 1px solid #24273e;
+}
+.bi-theme-dark .bi-table > div.bottom-left > div > div > table {
+  border-bottom: 1px solid #24273e;
+  border-right: 1px solid #24273e;
+}
+.bi-theme-dark .bi-table > div.bottom-right > div > div > table {
+  border-right: 1px solid #24273e;
+  border-bottom: 1px solid #24273e;
+}
+.bi-theme-dark .bi-table > div > div > table > tbody > tr > td,
+.bi-theme-dark .bi-table > div > div > div > table > tbody > tr > td,
+.bi-theme-dark .bi-table > div > div > table > thead > tr > td,
+.bi-theme-dark .bi-table > div > div > div > table > thead > tr > td {
+  border-top: 1px solid #24273e;
+  border-left: 1px solid #24273e;
+}
 /****添加计算宽度的--运算符直接需要space****/
 /****** common color(常用颜色,可用于普遍场景) *****/
 /**** custom color(自定义颜色,用于特定场景) ****/
@@ -1176,6 +1227,19 @@ li.CodeMirror-hint-active {
 .bi-grid-table-cell.first-col {
   border-left: 1px solid #eaeaea;
 }
+.bi-theme-dark .bi-grid-table-cell {
+  border-right: 1px solid #24273e;
+  border-bottom: 1px solid #24273e;
+}
+.bi-theme-dark .bi-grid-table-cell.first-row {
+  border-top: 1px solid #24273e;
+}
+.bi-theme-dark .bi-grid-table-cell.first-col {
+  border-left: 1px solid #24273e;
+}
+/****添加计算宽度的--运算符直接需要space****/
+/****** common color(常用颜色,可用于普遍场景) *****/
+/**** custom color(自定义颜色,用于特定场景) ****/
 .scrollbar-layout-main {
   box-sizing: border-box;
   outline: none;
@@ -1184,9 +1248,12 @@ li.CodeMirror-hint-active {
   transition-duration: 250ms;
   transition-timing-function: ease;
   user-select: none;
-  background-color: rgba(0, 0, 0, 0.1);
-  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr=#19000000,endColorstr=#19000000);
+  background-color: #f4f4f4;
   border-radius: 5px;
+}
+.bi-theme-dark .scrollbar-layout-main {
+  background-color: rgba(255, 255, 255, 0.1);
+  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr=#19ffffff,endColorstr=#19ffffff);
 }
 .scrollbar-layout-main-vertical {
   bottom: 0;
@@ -1204,8 +1271,11 @@ li.CodeMirror-hint-active {
   height: 10px;
   left: 0;
   transition-property: background-color;
-  background-color: rgba(0, 0, 0, 0.1);
-  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr=#19000000,endColorstr=#19000000);
+  background-color: #f4f4f4;
+}
+.bi-theme-dark .scrollbar-layout-main-horizontal {
+  background-color: rgba(255, 255, 255, 0.1);
+  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr=#19ffffff,endColorstr=#19ffffff);
 }
 /* Touching the scroll-track directly makes the scroll-track bolder */
 .scrollbar-layout-main-horizontal.public-scrollbar-main-active,
@@ -1258,7 +1328,7 @@ li.CodeMirror-hint-active {
  */
 /* Touching the scroll-track directly makes the scroll-track bolder */
 .public-scrollbar-face:after {
-  background-color: #c2c2c2;
+  background-color: #e2e2e2;
 }
 .bi-theme-dark .public-scrollbar-face:after {
   background-color: #7d7d7d;
@@ -1271,14 +1341,11 @@ li.CodeMirror-hint-active {
 .bi-theme-dark .public-scrollbar-main:hover .public-scrollbar-face:after,
 .bi-theme-dark .public-scrollbar-main-active .public-scrollbar-face:after,
 .bi-theme-dark .public-scrollbar-faceActive:after {
-  background-color: #c2c2c2;
+  background-color: #e2e2e2;
 }
 .horizontal-scrollbar {
   bottom: 0;
   position: absolute;
-}
-.horizontal-scrollbar .public-scrollbar-main-horizontal {
-  background-color: #fff;
 }
 /****添加计算宽度的--运算符直接需要space****/
 /****** common color(常用颜色,可用于普遍场景) *****/
@@ -1389,12 +1456,12 @@ li.CodeMirror-hint-active {
 /****** common color(常用颜色,可用于普遍场景) *****/
 /**** custom color(自定义颜色,用于特定场景) ****/
 .bi-float-box {
-  background: #ffffff;
+  background-color: #ffffff;
+  color: #1a1a1a;
 }
-.bi-float-box .float-box-button {
-  color: #ffffff;
-  background: #009de3;
-  border: 1px solid #d4dadd;
+.bi-theme-dark .bi-float-box {
+  background-color: #202237;
+  color: #b2b2b2;
 }
 /****添加计算宽度的--运算符直接需要space****/
 /****** common color(常用颜色,可用于普遍场景) *****/
@@ -1428,5 +1495,5 @@ li.CodeMirror-hint-active {
 }
 .bi-theme-dark .bi-list-view .list-view-outer {
   color: #b2b2b2;
-  background: #191a2c;
+  background: #202237;
 }

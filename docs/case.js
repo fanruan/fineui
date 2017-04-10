@@ -2479,7 +2479,7 @@ BI.ColorChooserPopup = BI.inherit(BI.Widget, {
             isNeedAdjustHeight: false,
             el: {
                 type: "bi.text_item",
-                cls: "color-chooser-popup-more",
+                cls: "color-chooser-popup-more bi-list-item",
                 textAlign: "center",
                 height: 20,
                 text: BI.i18nText("BI-Basic_More") + "..."
@@ -9749,12 +9749,18 @@ BI.DynamicSummaryTreeTable = BI.inherit(BI.Widget, {
         });
         this.table.on(BI.Table.EVENT_TABLE_AFTER_REGION_RESIZE, function () {
             o.regionColumnSize = this.getRegionColumnSize();
-            o.columnSize = this.getColumnSize();
+            var columnSize = this.getColumnSize();
+            var length = o.columnSize.length - columnSize.length;
+            o.columnSize = columnSize.slice();
+            o.columnSize.splice(columnSize.length, length, "");
             self.fireEvent(BI.Table.EVENT_TABLE_AFTER_REGION_RESIZE, arguments);
         });
         this.table.on(BI.Table.EVENT_TABLE_AFTER_COLUMN_RESIZE, function () {
             o.regionColumnSize = this.getRegionColumnSize();
-            o.columnSize = this.getColumnSize();
+            var columnSize = this.getColumnSize();
+            var length = o.columnSize.length - columnSize.length;
+            o.columnSize = columnSize.slice();
+            o.columnSize.splice(columnSize.length, length, "");
             self.fireEvent(BI.Table.EVENT_TABLE_AFTER_COLUMN_RESIZE, arguments);
         });
     },
@@ -9796,7 +9802,7 @@ BI.DynamicSummaryTreeTable = BI.inherit(BI.Widget, {
     },
 
     getColumnSize: function () {
-        return this.table.getColumnSize();
+        return this.options.columnSize;
     },
 
     setRegionColumnSize: function (columnSize) {
@@ -9991,12 +9997,19 @@ BI.extend(BI.DynamicSummaryTreeTable, {
         });
 
         if (cols.length > 0) {
+            var nHeader = [], nItems = [];
             BI.each(header, function (i, node) {
-                BI.removeAt(node, cols);
+                var nNode = node.slice();
+                BI.removeAt(nNode, cols);
+                nHeader.push(nNode);
             });
             BI.each(items, function (i, node) {
-                BI.removeAt(node, cols);
+                var nNode = node.slice();
+                BI.removeAt(nNode, cols);
+                nItems.push(nNode);;
             });
+            header = nHeader;
+            items = nItems;
         }
         return {items: items, header: header, deletedCols: cols};
     }

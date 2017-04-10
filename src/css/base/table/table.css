@@ -52,3 +52,30 @@
   border-top: 1px solid #eaeaea;
   border-left: 1px solid #eaeaea;
 }
+.bi-theme-dark .bi-table > div > div > table {
+  border-bottom: 1px solid #24273e;
+  border-right: 1px solid #24273e;
+}
+.bi-theme-dark .bi-table > div.top-left > div > div > table {
+  border-bottom: 1px solid #24273e;
+  border-right: 1px solid #24273e;
+}
+.bi-theme-dark .bi-table > div.top-right > div > div > table {
+  border-bottom: 1px solid #24273e;
+  border-right: 1px solid #24273e;
+}
+.bi-theme-dark .bi-table > div.bottom-left > div > div > table {
+  border-bottom: 1px solid #24273e;
+  border-right: 1px solid #24273e;
+}
+.bi-theme-dark .bi-table > div.bottom-right > div > div > table {
+  border-right: 1px solid #24273e;
+  border-bottom: 1px solid #24273e;
+}
+.bi-theme-dark .bi-table > div > div > table > tbody > tr > td,
+.bi-theme-dark .bi-table > div > div > div > table > tbody > tr > td,
+.bi-theme-dark .bi-table > div > div > table > thead > tr > td,
+.bi-theme-dark .bi-table > div > div > div > table > thead > tr > td {
+  border-top: 1px solid #24273e;
+  border-left: 1px solid #24273e;
+}

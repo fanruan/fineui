@@ -2,10 +2,10 @@
 /****** common color(常用颜色,可用于普遍场景) *****/
 /**** custom color(自定义颜色,用于特定场景) ****/
 .bi-float-box {
-  background: #ffffff;
+  background-color: #ffffff;
+  color: #1a1a1a;
 }
-.bi-float-box .float-box-button {
-  color: #ffffff;
-  background: #009de3;
-  border: 1px solid #d4dadd;
+.bi-theme-dark .bi-float-box {
+  background-color: #202237;
+  color: #b2b2b2;
 }

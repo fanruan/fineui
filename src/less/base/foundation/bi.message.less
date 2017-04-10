@@ -11,14 +11,30 @@
   font-size: 16px;
   cursor: pointer;
 }
+
+.bi-theme-dark {
+  .bi-message-title {
+    background-color: @color-bi-background-normal-theme-dark;
+    color: @color-bi-text-theme-dark;
+  }
+}
+
 .bi-message-text {
   font-size: 16px;
   .user-select(text);
 }
+
 .bi-message-content {
   background-color: @color-bi-background-default;
   color: @color-bi-text-gray;
   font-size: 16px;
+}
+
+.bi-theme-dark {
+  .bi-message-content {
+    background-color: @color-bi-background-default-theme-dark;
+    color: @color-bi-text-theme-dark;
+  }
 }
 
 .bi-message-close {

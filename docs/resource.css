@@ -109,7 +109,7 @@ textarea::-webkit-scrollbar-thumb {
 .bi-theme-dark div::-webkit-scrollbar,
 .bi-theme-dark textarea::-webkit-scrollbar {
   -webkit-appearance: none;
-  background-color: #191a2c;
+  background-color: rgba(255, 255, 255, 0.1);
   width: 6px;
   height: 6px;
 }
