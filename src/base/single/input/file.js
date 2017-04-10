@@ -185,7 +185,7 @@
                                 if (199 < xhr.status && xhr.status < 400) {
                                     upload["onload"]({});
                                     var attachO = BI.jsonDecode(xhr.responseText);
-                                    attachO.filename = BI.cjkDecode(handler.file.fileName);
+                                    attachO.filename = handler.file.fileName;
                                     if (handler.file.type.indexOf('image') != -1) {
                                         attachO.attach_type = "image";
                                     }
