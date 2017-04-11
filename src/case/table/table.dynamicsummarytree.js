@@ -94,7 +94,7 @@ BI.DynamicSummaryTreeTable = BI.inherit(BI.Widget, {
             var columnSize = this.getColumnSize();
             var length = o.columnSize.length - columnSize.length;
             o.columnSize = columnSize.slice();
-            o.columnSize.splice(columnSize.length, length, "");
+            o.columnSize  = o.columnSize.concat(BI.makeArray(length, 0));
             self.fireEvent(BI.Table.EVENT_TABLE_AFTER_REGION_RESIZE, arguments);
         });
         this.table.on(BI.Table.EVENT_TABLE_AFTER_COLUMN_RESIZE, function () {
@@ -102,7 +102,7 @@ BI.DynamicSummaryTreeTable = BI.inherit(BI.Widget, {
             var columnSize = this.getColumnSize();
             var length = o.columnSize.length - columnSize.length;
             o.columnSize = columnSize.slice();
-            o.columnSize.splice(columnSize.length, length, "");
+            o.columnSize  = o.columnSize.concat(BI.makeArray(length, 0));
             self.fireEvent(BI.Table.EVENT_TABLE_AFTER_COLUMN_RESIZE, arguments);
         });
     },
