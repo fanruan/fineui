@@ -130,7 +130,7 @@ Demo.Face = BI.inherit(BI.Widget, {
     _createBaseConfig: function () {
         return {
             type: "bi.vertical",
-            items: [this._createLabel("--基本配色--"),
+            items: [this._createLabel("--通用配色--"),
                 this._createBackgroundConfig(),
                 this._createFontConfig(),
                 this._createDisableFontConfig(),
