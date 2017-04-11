@@ -1,3 +1,6 @@
+/****添加计算宽度的--运算符直接需要space****/
+/****** common color(常用颜色,可用于普遍场景) *****/
+/**** custom color(自定义颜色,用于特定场景) ****/
 .layout-bg-white {
   background-color: #ffffff;
 }
@@ -38,4 +41,10 @@
 }
 .demo-main .bg1 {
   background-color: #178cdf;
+}
+body {
+  background-color: #f3f3f3;
+}
+body.bi-theme-dark {
+  background-color: #191A2C;
 }

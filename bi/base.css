@@ -659,11 +659,6 @@ li.CodeMirror-hint-active {
 /****添加计算宽度的--运算符直接需要space****/
 /****** common color(常用颜色,可用于普遍场景) *****/
 /**** custom color(自定义颜色,用于特定场景) ****/
-.bi-message-mask {
-  background-color: #1a1a1a;
-  opacity: 0.5;
-  filter: alpha(opacity=50);
-}
 .bi-message-title {
   background-color: #f4f4f4;
   color: #808080;
