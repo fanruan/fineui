@@ -320,14 +320,14 @@ Demo.Face = BI.inherit(BI.Widget, {
                 column: 0,
                 row: 0,
                 el: {
-                    type: "demo.preview",
-                    cls: "face-config"
+                    type: "demo.preview"
                 }
             }, {
                 column: 1,
                 row: 0,
                 el: {
                     type: "bi.vertical",
+                    cls: "face-config",
                     items: [this._createBaseConfig(),
                         this._createCommonConfig()]
                 }

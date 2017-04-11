@@ -2,7 +2,7 @@
 /****** common color(常用颜色,可用于普遍场景) *****/
 /**** custom color(自定义颜色,用于特定场景) ****/
 .demo-face .face-config {
-  border-right: 1px solid #d4dadd;
+  border-left: 1px solid #d4dadd;
 }
 .demo-face .face-config .config-label {
   font-size: 14px;

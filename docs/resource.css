@@ -120,8 +120,6 @@ textarea::-webkit-scrollbar-thumb {
   border-radius: 0;
   background-color: #7d7d7d;
 }
-/****** common color(常用颜色,可用于普遍场景) *****/
-/**** custom color(自定义颜色,用于特定场景) ****/
 .base-line-conn-background {
   background: url('icon/tree-vertical-line-1.png') repeat-y 0 0;
   _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='icon/tree-vertical-line-1.png');
@@ -4121,8 +4119,6 @@ textarea::-webkit-scrollbar-thumb {
   content: "\e600";
   color: #f07d0a;
 }
-/****** common color(常用颜色,可用于普遍场景) *****/
-/**** custom color(自定义颜色,用于特定场景) ****/
 .tree-collapse-icon-type1 .x-icon,
 .tree-collapse-icon-type1:hover .x-icon,
 .tree-collapse-icon-type1:active .x-icon {
