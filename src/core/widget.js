@@ -68,6 +68,9 @@ BI.Widget = BI.inherit(BI.OB, {
             }
             this.element = this.options.element.element;
         } else if (o.element) {
+            // if (o.root !== true) {
+            //     throw new Error("root is a required property");
+            // }
             this.element = $(o.element);
             this._isRoot = true;
         } else {

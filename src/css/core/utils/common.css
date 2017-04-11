@@ -54,17 +54,12 @@
 .bi-list-item.disabled,
 .bi-list-item.disabled:hover,
 .bi-list-item.disabled:active {
-  background-color: #ffffff;
+  background-color: transparent !important;
 }
 .bi-theme-dark .bi-list-item:hover,
 .bi-theme-dark .bi-list-item.hover {
   background-color: #04070d;
   color: #ffffff;
-}
-.bi-theme-dark .bi-list-item.disabled,
-.bi-theme-dark .bi-list-item.disabled:hover,
-.bi-theme-dark .bi-list-item.disabled:active {
-  background-color: transparent;
 }
 .bi-list-item-effect.active,
 .bi-list-item-effect:active {
@@ -73,7 +68,7 @@
 .bi-list-item-effect.disabled,
 .bi-list-item-effect.disabled:hover,
 .bi-list-item-effect.disabled:active {
-  color: #c4c6c6;
+  color: #c4c6c6 !important;
 }
 .bi-theme-dark .bi-list-item-effect.active,
 .bi-theme-dark .bi-list-item-effect:active {
@@ -82,7 +77,7 @@
 .bi-theme-dark .bi-list-item-effect.disabled,
 .bi-theme-dark .bi-list-item-effect.disabled:hover,
 .bi-theme-dark .bi-list-item-effect.disabled:active {
-  color: #c4c6c6;
+  color: #c4c6c6 !important;
 }
 .bi-list-item-hover:hover,
 .bi-list-item-hover.hover {
@@ -92,8 +87,8 @@
 .bi-list-item-hover.disabled,
 .bi-list-item-hover.disabled:hover,
 .bi-list-item-hover.disabled:active {
-  color: #c4c6c6;
-  background-color: #ffffff;
+  color: #c4c6c6 !important;
+  background-color: transparent !important;
 }
 .bi-theme-dark .bi-list-item-hover:hover,
 .bi-theme-dark .bi-list-item-hover.hover {
@@ -103,8 +98,7 @@
 .bi-theme-dark .bi-list-item-hover.disabled,
 .bi-theme-dark .bi-list-item-hover.disabled:hover,
 .bi-theme-dark .bi-list-item-hover.disabled:active {
-  color: #c4c6c6;
-  background-color: transparent;
+  color: #c4c6c6 !important;
 }
 .bi-list-item-active:hover,
 .bi-list-item-active.hover {
@@ -118,7 +112,7 @@
 .bi-list-item-active.disabled,
 .bi-list-item-active.disabled:hover,
 .bi-list-item-active.disabled:active {
-  background-color: #ffffff;
+  background-color: transparent !important;
 }
 .bi-theme-dark .bi-list-item-active:hover,
 .bi-theme-dark .bi-list-item-active.hover {
@@ -129,11 +123,6 @@
 .bi-theme-dark .bi-list-item-active:active {
   color: #009de3;
   background-color: #04070d;
-}
-.bi-theme-dark .bi-list-item-active.disabled,
-.bi-theme-dark .bi-list-item-active.disabled:hover,
-.bi-theme-dark .bi-list-item-active.disabled:active {
-  background-color: transparent;
 }
 .bi-list-item-select:hover,
 .bi-list-item-select.hover {
@@ -153,7 +142,7 @@
 .bi-list-item-select.disabled:hover,
 .bi-list-item-select.disabled:active {
   color: #c4c6c6 !important;
-  background-color: #ffffff !important;
+  background-color: transparent !important;
 }
 .bi-list-item-select.disabled .bi-high-light,
 .bi-list-item-select.disabled:hover .bi-high-light,
@@ -173,15 +162,4 @@
 .bi-theme-dark .bi-list-item-select:active .bi-high-light,
 .bi-theme-dark .bi-list-item-select.active .bi-high-light {
   color: #ffffff;
-}
-.bi-theme-dark .bi-list-item-select.disabled,
-.bi-theme-dark .bi-list-item-select.disabled:hover,
-.bi-theme-dark .bi-list-item-select.disabled:active {
-  color: #c4c6c6 !important;
-  background-color: transparent !important;
-}
-.bi-theme-dark .bi-list-item-select.disabled .bi-high-light,
-.bi-theme-dark .bi-list-item-select.disabled:hover .bi-high-light,
-.bi-theme-dark .bi-list-item-select.disabled:active .bi-high-light {
-  color: #c4c6c6 !important;
 }

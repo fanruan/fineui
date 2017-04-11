@@ -14328,6 +14328,9 @@ BI.Widget = BI.inherit(BI.OB, {
             }
             this.element = this.options.element.element;
         } else if (o.element) {
+            // if (o.root !== true) {
+            //     throw new Error("root is a required property");
+            // }
             this.element = $(o.element);
             this._isRoot = true;
         } else {
@@ -22655,7 +22658,7 @@ $(function () {
             }
             var rgb = this.rgb2json(this.hex2rgb(hex));
             var grayLevel = Math.round(rgb.r * 0.299 + rgb.g * 0.587 + rgb.b * 0.114);
-            if (grayLevel < 140) {
+            if (grayLevel < 192) {
                 return true;
             }
             return false;

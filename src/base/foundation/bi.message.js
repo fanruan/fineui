@@ -48,7 +48,7 @@ $.extend(BI, {
                 })
             },
             _show: function (hasCancel, title, message, callback) {
-                $mask = $('<div class="bi-message-mask">').css({
+                $mask = $('<div class="bi-z-index-mask">').css({
                     position: 'absolute',
                     'zIndex': BI.zIndex_tip - 2,
                     top: 0,

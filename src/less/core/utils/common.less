@@ -49,10 +49,19 @@
   background-color: @color-bi-background-black;
   .opacity(0.5);
 }
+
 @color-list-item-hover: #04070d;
 
+//只有背景变化
 .bi-list-item {
-  .list-item();
+  &:hover, &.hover {
+    background-color: @color-bi-background-gray;
+  }
+  &.disabled {
+    &, &:hover, &:active {
+      background-color: transparent !important;
+    }
+  }
 }
 
 .bi-theme-dark {
@@ -61,16 +70,19 @@
       background-color: @color-list-item-hover;
       color: @color-bi-text;
     }
-    &.disabled {
-      &, &:hover, &:active {
-        background-color: transparent;
-      }
-    }
   }
 }
 
+//文字active时变化
 .bi-list-item-effect {
-  .list-item-effect();
+  &.active, &:active {
+    color: @color-bi-text-highlight;
+  }
+  &.disabled {
+    &, &:hover, &:active {
+      color: @color-bi-text-disabled !important;
+    }
+  }
 }
 
 .bi-theme-dark {
@@ -80,14 +92,24 @@
     }
     &.disabled {
       &, &:hover, &:active {
-        color: @color-bi-text-disabled;
+        color: @color-bi-text-disabled !important;
       }
     }
   }
 }
 
+//文字和背景hover时变化
 .bi-list-item-hover {
-  .list-item-hover();
+  &:hover, &.hover {
+    color: @color-bi-text-highlight;
+    background-color: @color-bi-background-gray;
+  }
+  &.disabled {
+    &, &:hover, &:active {
+      color: @color-bi-text-disabled !important;
+      background-color: transparent !important;
+    }
+  }
 }
 
 .bi-theme-dark {
@@ -98,15 +120,26 @@
     }
     &.disabled {
       &, &:hover, &:active {
-        color: @color-bi-text-disabled;
-        background-color: transparent;
+        color: @color-bi-text-disabled !important;
       }
     }
   }
 }
 
+//文字和背景hover和active时变化
 .bi-list-item-active {
-  .list-item-active();
+  &:hover, &.hover {
+    background-color: @color-bi-background-gray;
+  }
+  &.active, &:active {
+    color: @color-bi-text-highlight;
+    background-color: @color-bi-background-gray;
+  }
+  &.disabled {
+    &, &:hover, &:active {
+      background-color: transparent !important;
+    }
+  }
 }
 
 .bi-theme-dark {
@@ -119,16 +152,31 @@
       color: @color-bi-text-highlight;
       background-color: @color-list-item-hover;
     }
-    &.disabled {
-      &, &:hover, &:active {
-        background-color: transparent;
-      }
-    }
   }
 }
 
+//有选中效果
 .bi-list-item-select {
-  .list-item-select();
+  &:hover, &.hover {
+    color: @color-bi-text-highlight;
+    background-color: @color-bi-background-gray;
+  }
+  &:active, &.active {
+    color: @color-bi-text;
+    background-color: @color-bi-background-highlight;
+    & .bi-high-light {
+      color: @color-bi-text;
+    }
+  }
+  &.disabled {
+    &, &:hover, &:active {
+      color: @color-bi-text-disabled !important;
+      background-color: transparent !important;
+      & .bi-high-light {
+        color: @color-bi-text-disabled !important;
+      }
+    }
+  }
 }
 
 .bi-theme-dark {
@@ -142,15 +190,6 @@
       background-color: @color-bi-background-highlight;
       & .bi-high-light {
         color: @color-bi-text;
-      }
-    }
-    &.disabled {
-      &, &:hover, &:active {
-        color: @color-bi-text-disabled !important;
-        background-color: transparent !important;
-        & .bi-high-light {
-          color: @color-bi-text-disabled !important;
-        }
       }
     }
   }

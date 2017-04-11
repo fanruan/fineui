@@ -279,15 +279,6 @@ BI.GridTable = BI.inherit(BI.Widget, {
             }
         });
 
-        var tlw = regionSize;
-        var tlh = regionSize >= summaryColumnSizeArray[freezeColLength - 1] ? (o.header.length * o.headerRowSize) : (o.header.length * o.headerRowSize + this._scrollBarSize);
-        var trw = this._width - regionSize;
-        var trh = (this._width - regionSize >= totalColumnSize - (summaryColumnSizeArray[freezeColLength - 1] || 0)) ? (o.header.length * o.headerRowSize) : (o.header.length * o.headerRowSize + this._scrollBarSize);
-        var blw = (this._height - o.header.length * o.headerRowSize >= totalRowSize) ? regionSize : (regionSize + this._scrollBarSize);
-        var blh = (regionSize >= (summaryColumnSizeArray[freezeColLength - 1] || 0)) ? (this._height - o.header.length * o.headerRowSize) : (this._height - o.header.length * o.headerRowSize + this._scrollBarSize);
-        var brw = (this._height - o.header.length * o.headerRowSize >= totalRowSize) ? (this._width - regionSize) : (this._width - regionSize + this._scrollBarSize);
-        var brh = (this._width - regionSize >= totalColumnSize - (summaryColumnSizeArray[freezeColLength - 1] || 0)) ? (this._height - o.header.length * o.headerRowSize) : (this._height - o.header.length * o.headerRowSize + this._scrollBarSize);
-
         var otlw = regionSize;
         var otlh = o.header.length * o.headerRowSize;
         var otrw = this._width - regionSize;
@@ -297,32 +288,21 @@ BI.GridTable = BI.inherit(BI.Widget, {
         var obrw = this._width - regionSize;
         var obrh = this._height - o.header.length * o.headerRowSize;
 
-        var digest = function (w, h, tw, th, el) {
-            if (w >= tw && h >= th) {
-                el.element.css({
-                    overflow: "hidden",
-                    overflowX: "hidden",
-                    overflowY: "hidden"
-                })
-            } else if (w >= tw) {
-                el.element.css({
-                    overflow: "hidden",
-                    overflowX: "hidden",
-                    overflowY: "auto"
-                })
-            } else if (h >= th) {
-                el.element.css({
-                    overflow: "hidden",
-                    overflowX: "auto",
-                    overflowY: "hidden"
-                })
-            } else {
-                el.element.css({
-                    overflow: "auto",
-                    overflowX: "auto",
-                    overflowY: "auto"
-                })
-            }
+        var tlw = otlw + this._scrollBarSize;
+        var tlh = otlh + this._scrollBarSize;
+        var trw = otrw + this._scrollBarSize;
+        var trh = otrh + this._scrollBarSize;
+        var blw = oblw + this._scrollBarSize;
+        var blh = oblh + this._scrollBarSize;
+        var brw = obrw+ this._scrollBarSize;
+        var brh = obrh + this._scrollBarSize;
+
+        var digest = function (el) {
+            el.element.css({
+                overflow: "scroll",
+                overflowX: "scroll",
+                overflowY: "scroll"
+            })
         };
 
         this.topLeft.setWidth(otlw);
@@ -343,10 +323,10 @@ BI.GridTable = BI.inherit(BI.Widget, {
         this.bottomRightGrid.setWidth(brw);
         this.bottomRightGrid.setHeight(brh);
 
-        digest(tlw, tlh, totalLeftColumnSize, o.header.length * o.headerRowSize, this.topLeftGrid);
-        digest(trw, trh, totalRightColumnSize, o.header.length * o.headerRowSize, this.topRightGrid);
-        digest(blw, blh, totalLeftColumnSize, o.items.length * o.rowSize, this.bottomLeftGrid);
-        digest(brw, brh, totalRightColumnSize, o.items.length * o.rowSize, this.bottomRightGrid);
+        digest(this.topLeftGrid);
+        digest(this.topRightGrid);
+        digest(this.bottomLeftGrid);
+        digest(this.bottomRightGrid);
 
         this.topLeftGrid.setEstimatedColumnSize(freezeColLength > 0 ? totalLeftColumnSize / freezeColLength : 0);
         this.topLeftGrid.setEstimatedRowSize(o.headerRowSize);
