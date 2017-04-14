@@ -2666,6 +2666,13 @@ if (!window.BI) {
             }
         },
 
+        parseSafeInt: function (value) {
+            var MAX_SAFE_INTEGER = 9007199254740991;
+            return value
+                ? this.clamp(this.parseInt(value), -MAX_SAFE_INTEGER, MAX_SAFE_INTEGER)
+                : (value === 0 ? value : 0);
+        },
+
         parseFloat: function (number) {
             try {
                 return parseFloat(number);
