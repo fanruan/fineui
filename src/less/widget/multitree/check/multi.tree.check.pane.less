@@ -1,12 +1,16 @@
 @import "../../../bibase";
 
-
-.bi-multi-tree-check-pane{
+.bi-multi-tree-check-pane {
   background-color: @color-bi-background-gray;
-  & .multi-tree-continue-select{
-    background-color: @color-bi-background-gray;
+  & .multi-tree-continue-select {
   }
-  & .multi-tree-check-selected{
+  & .multi-tree-check-selected {
     color: @color-bi-text-highlight;
+  }
+}
+
+.bi-theme-dark {
+  .bi-multi-tree-check-pane {
+    background-color: @color-bi-background-normal-theme-dark;
   }
 }

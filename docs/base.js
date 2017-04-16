@@ -15044,12 +15044,7 @@ BI.PopupView = BI.inherit(BI.Widget, {
             "max-width": o.maxWidth + "px"
         }).bind({"click": fn});
 
-        //FIXME IE8下 jquery.mousewheeel.js 第一次执行65行$elem["offsetParent"]()的时候报错：未指明的错误 但是第二次或者调试的时候展开一下$elem内容均能避免上述问题
-        try {
-            this.element.bind("mousewheel", fn);
-        } catch (e) {
-            this.element.bind("mousewheel", fn);
-        }
+        this.element.bind("mousewheel", fn);
 
         o.stopPropagation && this.element.bind({"mousedown": fn, "mouseup": fn, "mouseover": fn});
         o.stopEvent && this.element.bind({"mousedown": stop, "mouseup": stop, "mouseover": stop});
@@ -30824,13 +30819,14 @@ BI.Table = BI.inherit(BI.Widget, {
                     .addClass(c === rows.length - 1 ? "last-col" : "");
                 var w = BI.createWidget(map[r][c], {
                     type: "bi.table_cell",
-                    root: true,
                     textAlign: "left",
                     width: BI.isNumeric(width) ? width : "",
                     height: BI.isNumeric(height) ? height : "",
                     _row: r,
                     _col: c + start
                 });
+                self.addWidget(w.getName(), w);
+                w._mount();
                 w.element.css("position", "relative");
                 td.append(w.element);
                 tr.append(td);

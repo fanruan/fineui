@@ -14421,27 +14421,14 @@ BI.Widget = BI.inherit(BI.OB, {
         }
         this.beforeMounted && this.beforeMounted();
         this._isMounted = true;
-        this._mountChildren();
+        this._mountChildren && this._mountChildren();
         BI.each(this._children, function (i, widget) {
             widget._mount && widget._mount();
         });
         this.mounted && this.mounted();
     },
 
-    _mountChildren: function () {
-        var self = this;
-        var frag = document.createDocumentFragment();
-        var hasChild = false;
-        BI.each(this._children, function (i, widget) {
-            if (widget.element !== self.element) {
-                frag.appendChild(widget.element[0]);
-                hasChild = true;
-            }
-        });
-        if (hasChild === true) {
-            this.element.append(frag);
-        }
-    },
+    _mountChildren: null,
 
     _unMount: function () {
         BI.each(this._children, function (i, widget) {
@@ -19326,6 +19313,21 @@ BI.Layout = BI.inherit(BI.Widget, {
         }
     },
 
+    _mountChildren: function () {
+        var self = this;
+        var frag = document.createDocumentFragment();
+        var hasChild = false;
+        BI.each(this._children, function (i, widget) {
+            if (widget.element !== self.element) {
+                frag.appendChild(widget.element[0]);
+                hasChild = true;
+            }
+        });
+        if (hasChild === true) {
+            this.element.append(frag);
+        }
+    },
+
     _getChildName: function (index) {
         return index + "";
     },
@@ -22658,7 +22660,7 @@ $(function () {
             }
             var rgb = this.rgb2json(this.hex2rgb(hex));
             var grayLevel = Math.round(rgb.r * 0.299 + rgb.g * 0.587 + rgb.b * 0.114);
-            if (grayLevel < 192) {
+            if (grayLevel < 140) {
                 return true;
             }
             return false;

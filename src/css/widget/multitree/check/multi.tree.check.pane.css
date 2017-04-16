@@ -4,9 +4,9 @@
 .bi-multi-tree-check-pane {
   background-color: #f4f4f4;
 }
-.bi-multi-tree-check-pane .multi-tree-continue-select {
-  background-color: #f4f4f4;
-}
 .bi-multi-tree-check-pane .multi-tree-check-selected {
   color: #009de3;
+}
+.bi-theme-dark .bi-multi-tree-check-pane {
+  background-color: #191a2c;
 }
