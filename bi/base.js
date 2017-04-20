@@ -1114,7 +1114,7 @@ BI.ButtonGroup = BI.inherit(BI.Widget, {
                 deleted.push(i);
             }
         });
-        BI.remove(this.buttons, deleted);
+        BI.removeAt(this.buttons, deleted);
         this.layouts.removeItemAt(deleted);
     },
 
