@@ -61,41 +61,6 @@ body {
   overflow-x: hidden;
   overflow-y: hidden;
 }
-a {
-  outline: none;
-  text-decoration: none;
-}
-a:focus {
-  outline: 0;
-}
-input,
-textarea {
-  margin: 0;
-  padding: 0;
-  outline: none;
-  border: 1px solid #d4dadd;
-}
-.bi-theme-dark input,
-.bi-theme-dark textarea {
-  border: 1px solid #525466;
-}
-ul,
-ol {
-  margin: 0;
-  padding: 0;
-}
-ul {
-  list-style: disc;
-}
-li {
-  list-style-type: none;
-}
-i {
-  font-style: normal;
-  -webkit-font-smoothing: antialiased;
-  -webkit-text-stroke-width: 0.2px;
-  -moz-osx-font-smoothing: grayscale;
-}
 div::-webkit-scrollbar,
 textarea::-webkit-scrollbar {
   -webkit-appearance: none;

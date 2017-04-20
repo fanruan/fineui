@@ -128,7 +128,7 @@ BI.TriggerIconButton = BI.inherit(BI.IconButton, {
     _defaultConfig: function () {
         var conf = BI.TriggerIconButton.superclass._defaultConfig.apply(this, arguments);
         return BI.extend(conf, {
-            baseCls: (conf.baseCls || "") + " bi-trigger-icon-button bi-border-left",
+            baseCls: (conf.baseCls || "") + " bi-trigger-icon-button",
             extraCls: "pull-down-font"
         });
     },
