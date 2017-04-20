@@ -117,7 +117,7 @@ BI.ButtonGroup = BI.inherit(BI.Widget, {
     //如果是一个简单的layout
     _isSimpleLayout: function () {
         var o = this.options;
-        return o.layouts.length === 1 && !BI.isArray(o.items[0])
+        return o.layouts.length === 1 && !BI.isArray(o.layouts.items[0])
     },
 
     doBehavior: function () {
