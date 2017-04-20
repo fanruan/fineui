@@ -13,7 +13,6 @@
   /*IE8*/
   box-sizing: border-box;
   /*W3C标准(IE9+，Safari5.1+,Chrome10.0+,Opera10.6+都符合box-sizing的w3c标准语法)*/
-  border: 1px solid #eaeaea;
 }
 .bi-sequence-table-tree-number .sequence-table-number-cell {
   -webkit-box-sizing: border-box;
@@ -24,7 +23,4 @@
   /*IE8*/
   box-sizing: border-box;
   /*W3C标准(IE9+，Safari5.1+,Chrome10.0+,Opera10.6+都符合box-sizing的w3c标准语法)*/
-  border-left: 1px solid #eaeaea;
-  border-right: 1px solid #eaeaea;
-  border-bottom: 1px solid #eaeaea;
 }

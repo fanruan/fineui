@@ -9,7 +9,7 @@
 BI.CollectionTableCell = BI.inherit(BI.Widget, {
     _defaultConfig: function () {
         return BI.extend(BI.CollectionTableCell.superclass._defaultConfig.apply(this, arguments), {
-            baseCls: "bi-collection-table-cell",
+            baseCls: "bi-collection-table-cell bi-border-right bi-border-bottom",
             width: 0,
             height: 0,
             _left: 0,

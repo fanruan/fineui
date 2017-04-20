@@ -4,7 +4,7 @@
 .bi-resizable-table .resizable-table-resizer {
   cursor: ew-resize;
   z-index: 1;
-  background-color: #009de3;
+  background-color: #3f8ce8;
 }
 .bi-resizable-table .resizable-table-region-resizer {
   cursor: ew-resize;
@@ -12,5 +12,5 @@
 }
 .bi-resizable-table .resizable-table-region-resizer:hover .resizable-table-region-resizer-knob,
 .bi-resizable-table .resizable-table-region-resizer.dragging .resizable-table-region-resizer-knob {
-  background-color: #009de3;
+  background-color: #3f8ce8;
 }

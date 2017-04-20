@@ -5,7 +5,7 @@ BI.SearchEditor = BI.inherit(BI.Widget, {
     _defaultConfig: function () {
         var conf = BI.SearchEditor.superclass._defaultConfig.apply(this, arguments);
         return BI.extend(conf, {
-            baseCls: "bi-search-editor",
+            baseCls: "bi-search-editor bi-border",
             height: 30,
             errorText: "",
             watermark: BI.i18nText("BI-Basic_Search"),

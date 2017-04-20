@@ -10,25 +10,23 @@
   cursor: default;
 }
 .bi-list-view .list-view-outer {
-  border: 1px solid #d4dadd;
   -webkit-border-radius: 2px;
   -moz-border-radius: 2px;
   border-radius: 2px;
-  color: #1a1a1a;
-  background: #ffffff;
 }
 .bi-list-view .list-view-toolbar {
-  border-top: 1px solid #eaeaea;
   line-height: 30px;
-  color: #009de3;
+  color: #3f8ce8;
 }
 .bi-list-view .list-view-toolbar > .center-element {
-  border-left: 1px solid #eaeaea;
+  border-left: 1px solid #d4dadd;
 }
 .bi-list-view .list-view-toolbar > .first-element {
   border-left: none;
 }
-.bi-theme-dark .bi-list-view .list-view-outer {
-  color: #b2b2b2;
-  background: #202237;
+.bi-theme-dark .bi-list-view .list-view-toolbar > .center-element {
+  border-left: 1px solid #525466;
+}
+.bi-theme-dark .bi-list-view .list-view-toolbar > .first-element {
+  border-left: none;
 }

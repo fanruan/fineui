@@ -9,12 +9,13 @@
   transition-duration: 250ms;
   transition-timing-function: ease;
   user-select: none;
-  background-color: #f4f4f4;
+  background-color: rgba(102, 102, 102, 0.05);
+  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr=#0D666666,endColorstr=#0D666666);
   border-radius: 5px;
 }
 .bi-theme-dark .scrollbar-layout-main {
-  background-color: rgba(255, 255, 255, 0.1);
-  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr=#19ffffff,endColorstr=#19ffffff);
+  background-color: rgba(204, 204, 204, 0.05);
+  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr=#0Dcccccc,endColorstr=#0Dcccccc);
 }
 .scrollbar-layout-main-vertical {
   bottom: 0;
@@ -32,11 +33,12 @@
   height: 10px;
   left: 0;
   transition-property: background-color;
-  background-color: #f4f4f4;
+  background-color: rgba(102, 102, 102, 0.05);
+  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr=#0D666666,endColorstr=#0D666666);
 }
 .bi-theme-dark .scrollbar-layout-main-horizontal {
-  background-color: rgba(255, 255, 255, 0.1);
-  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr=#19ffffff,endColorstr=#19ffffff);
+  background-color: rgba(204, 204, 204, 0.05);
+  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr=#0Dcccccc,endColorstr=#0Dcccccc);
 }
 /* Touching the scroll-track directly makes the scroll-track bolder */
 .scrollbar-layout-main-horizontal.public-scrollbar-main-active,
@@ -89,20 +91,24 @@
  */
 /* Touching the scroll-track directly makes the scroll-track bolder */
 .public-scrollbar-face:after {
-  background-color: #e2e2e2;
+  background-color: rgba(102, 102, 102, 0.3);
+  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr=#4C666666,endColorstr=#4C666666);
 }
 .bi-theme-dark .public-scrollbar-face:after {
-  background-color: #7d7d7d;
+  background-color: rgba(204, 204, 204, 0.3);
+  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr=#4Ccccccc,endColorstr=#4Ccccccc);
 }
 .public-scrollbar-main:hover .public-scrollbar-face:after,
 .public-scrollbar-main-active .public-scrollbar-face:after,
 .public-scrollbar-faceActive:after {
-  background-color: #7d7d7d;
+  background-color: rgba(102, 102, 102, 0.7);
+  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr=#B2666666,endColorstr=#B2666666);
 }
 .bi-theme-dark .public-scrollbar-main:hover .public-scrollbar-face:after,
 .bi-theme-dark .public-scrollbar-main-active .public-scrollbar-face:after,
 .bi-theme-dark .public-scrollbar-faceActive:after {
-  background-color: #e2e2e2;
+  background-color: rgba(204, 204, 204, 0.7);
+  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr=#B2cccccc,endColorstr=#B2cccccc);
 }
 .horizontal-scrollbar {
   bottom: 0;

@@ -1,6 +1,6 @@
 Demo.Main = BI.inherit(BI.Widget, {
     props: {
-        baseCls: "demo-main"
+        baseCls: "demo-main bi-background"
     },
     render: function () {
         var center;

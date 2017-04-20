@@ -5,8 +5,8 @@
   -webkit-border-radius: 2px;
   -moz-border-radius: 2px;
   border-radius: 2px;
-  border: 1px solid #009de3;
-  background-color: #009de3;
+  border: 1px solid #3f8ce8;
+  background-color: #3f8ce8;
   text-align: center;
   vertical-align: middle;
   cursor: pointer;
@@ -74,10 +74,10 @@
 }
 .bi-button.button-ignore.disabled,
 .bi-button.button-ignore.disabled .b-font {
-  color: #c4c6c6 !important;
+  color: #cccccc !important;
 }
 .bi-button.button-ignore.disabled .b-font:before {
-  color: #c4c6c6 !important;
+  color: #cccccc !important;
 }
 .bi-basic-button.button-common .bi-button-mask,
 .bi-basic-button.button-success .bi-button-mask,

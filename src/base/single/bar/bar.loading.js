@@ -11,7 +11,7 @@ BI.LoadingBar = BI.inherit(BI.Single, {
     _defaultConfig: function() {
         var conf = BI.LoadingBar.superclass._defaultConfig.apply(this, arguments);
         return BI.extend( conf, {
-            baseCls : (conf.baseCls ||"")+' bi-loading-bar',
+            baseCls : (conf.baseCls ||"")+' bi-loading-bar bi-tips',
             height: 30,
             handler: BI.emptyFn
         })
@@ -21,7 +21,7 @@ BI.LoadingBar = BI.inherit(BI.Single, {
         var self = this;
         this.loaded = BI.createWidget({
             type: "bi.text_button",
-            cls: "loading-text",
+            cls: "loading-text bi-list-item-simple",
             text: this.consts.loadedText,
             width: 120,
             handler: this.options.handler

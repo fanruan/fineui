@@ -2,5 +2,8 @@
 /****** common color(常用颜色,可用于普遍场景) *****/
 /**** custom color(自定义颜色,用于特定场景) ****/
 .bi-excel-table > div.bottom-right > div > div > table {
-  border-right: 1px solid #eaeaea;
+  border-right: 1px solid #d4dadd;
+}
+.bi-theme-dark .bi-excel-table > div.bottom-right > div > div > table {
+  border-right: 1px solid #525466;
 }

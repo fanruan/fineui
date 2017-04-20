@@ -41,7 +41,7 @@ body {
   -ms-user-select: none;
   -o-user-select: none;
   user-select: none;
-  color: #1a1a1a;
+  color: #666666;
   font: normal 12px "Microsoft YaHei", "Hiragino Sans GB W3";
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
@@ -73,7 +73,11 @@ textarea {
   margin: 0;
   padding: 0;
   outline: none;
-  border: 1px solid #cccccc;
+  border: 1px solid #d4dadd;
+}
+.bi-theme-dark input,
+.bi-theme-dark textarea {
+  border: 1px solid #525466;
 }
 ul,
 ol {
@@ -95,7 +99,7 @@ i {
 div::-webkit-scrollbar,
 textarea::-webkit-scrollbar {
   -webkit-appearance: none;
-  background-color: #f4f4f4;
+  background-color: rgba(102, 102, 102, 0.05);
   width: 6px;
   height: 6px;
 }
@@ -104,12 +108,12 @@ textarea::-webkit-scrollbar-thumb {
   -webkit-border-radius: 0;
   -moz-border-radius: 0;
   border-radius: 0;
-  background-color: #e2e2e2;
+  background-color: rgba(102, 102, 102, 0.3);
 }
 .bi-theme-dark div::-webkit-scrollbar,
 .bi-theme-dark textarea::-webkit-scrollbar {
   -webkit-appearance: none;
-  background-color: rgba(255, 255, 255, 0.1);
+  background-color: rgba(204, 204, 204, 0.05);
   width: 6px;
   height: 6px;
 }
@@ -118,5 +122,5 @@ textarea::-webkit-scrollbar-thumb {
   -webkit-border-radius: 0;
   -moz-border-radius: 0;
   border-radius: 0;
-  background-color: #7d7d7d;
+  background-color: rgba(204, 204, 204, 0.3);
 }

@@ -8283,11 +8283,14 @@ BI.ScalingCellSizeAndPositionManager.prototype = {
                 element.__resizeTriggers__ = !element.removeChild(element.__resizeTriggers__);
             }
         }
-    }
+    };
 
     BI.ResizeDetector = {
         addResizeListener: function (widget, fn) {
             addResizeListener(widget.element[0], fn);
+            return function () {
+                removeResizeListener(widget.element[0], fn);
+            }
         },
         removeResizeListener: function (widget, fn) {
             removeResizeListener(widget.element[0], fn);
@@ -17052,7 +17055,7 @@ $(function () {
         //获取对比颜色
         getContrastColor: function (color) {
             if (this.isDarkColor(color)) {
-                return "#b2b2b2";
+                return "#ffffff";
             }
             return "#1a1a1a";
         },

@@ -2252,7 +2252,7 @@ BI.Arrangement = BI.inherit(BI.Widget, {
             type: "bi.layout",
             width: 18,
             height: 18,
-            cls: "arrangement-helper"
+            cls: "arrangement-helper bi-border"
         });
         BI.createWidget({
             type: "bi.absolute",

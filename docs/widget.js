@@ -35,7 +35,7 @@ BI.SequenceTableTreeNumber = BI.inherit(BI.Widget, {
 
         this.header = BI.createWidget({
             type: "bi.table_style_cell",
-            cls: "sequence-table-title-cell",
+            cls: "sequence-table-title-cell bi-border",
             styleGetter: o.headerCellStyleGetter,
             text: BI.i18nText("BI-Number_Index")
         });
@@ -251,7 +251,7 @@ BI.SequenceTableTreeNumber = BI.inherit(BI.Widget, {
             } else {
                 var child = BI.createWidget(BI.extend({
                     type: "bi.table_style_cell",
-                    cls: "sequence-table-number-cell",
+                    cls: "sequence-table-number-cell bi-border-left bi-border-right bi-border-bottom",
                     width: 60,
                     styleGetter: numbers[key].isSummary === true ? function () {
                         return o.summaryCellStyleGetter(true);
@@ -3206,7 +3206,7 @@ BI.Arrangement = BI.inherit(BI.Widget, {
             type: "bi.layout",
             width: 18,
             height: 18,
-            cls: "arrangement-helper"
+            cls: "arrangement-helper bi-border"
         });
         BI.createWidget({
             type: "bi.absolute",
@@ -4876,7 +4876,7 @@ BI.shortcut('bi.date_combo', BI.DateCombo);BI.DateTrigger = BI.inherit(BI.Trigge
 
     _defaultConfig: function () {
         return BI.extend(BI.DateTrigger.superclass._defaultConfig.apply(this, arguments), {
-            extraCls: "bi-date-trigger",
+            extraCls: "bi-date-trigger bi-border",
             min: '1900-01-01', //最小日期
             max: '2099-12-31', //最大日期
             height: 25
@@ -6017,7 +6017,7 @@ BI.DownListPopup = BI.inherit(BI.Pane, {
                     items: [{
                         el: {
                             type: "bi.layout",
-                            cls: "bi-down-list-spliter cursor-pointer",
+                            cls: "bi-down-list-spliter bi-border-top cursor-pointer",
                             height: 0
                         }
 
@@ -6137,7 +6137,7 @@ BI.ExcelTableHeaderCell = BI.inherit(BI.Widget, {
 
     _defaultConfig: function () {
         return BI.extend(BI.ExcelTableHeaderCell.superclass._defaultConfig.apply(this, arguments), {
-            baseCls: "bi-excel-table-header-cell",
+            baseCls: "bi-excel-table-header-cell bi-background",
             text: ""
         });
     },
@@ -6564,7 +6564,7 @@ BI.FileManagerFileItem = BI.inherit(BI.Single, {
 
     _defaultConfig: function () {
         return BI.extend(BI.FileManagerFileItem.superclass._defaultConfig.apply(this, arguments), {
-            baseCls: "bi-file-manager-file-item bi-list-item",
+            baseCls: "bi-file-manager-file-item bi-list-item bi-border-bottom",
             height: 30
         })
     },
@@ -6631,7 +6631,7 @@ BI.FileManagerFolderItem = BI.inherit(BI.Single, {
 
     _defaultConfig: function () {
         return BI.extend(BI.FileManagerFolderItem.superclass._defaultConfig.apply(this, arguments), {
-            baseCls: "bi-file-manager-folder-item bi-list-item",
+            baseCls: "bi-file-manager-folder-item bi-list-item bi-border-bottom",
             height: 30
         })
     },
@@ -6855,7 +6855,7 @@ BI.FileManagerNavButton = BI.inherit(BI.Widget, {
         var self = this, o = this.options, c = this._const;
         this.button = BI.createWidget({
             type: "bi.text_button",
-            cls: "file-manager-nav-button-text",
+            cls: "file-manager-nav-button-text bi-card",
             once: true,
             selected: o.selected,
             text: o.text,
@@ -6931,7 +6931,7 @@ BI.FileManagerNav = BI.inherit(BI.Widget, {
 
     _defaultConfig: function () {
         return BI.extend(BI.FileManagerNav.superclass._defaultConfig.apply(this, arguments), {
-            baseCls: "bi-file-manager-nav",
+            baseCls: "bi-file-manager-nav bi-border-left",
             height: 40,
             items: []
         })
@@ -7033,7 +7033,7 @@ BI.shortcut("bi.file_manager_nav", BI.FileManagerNav);/**
 BI.FineTuningNumberEditor = BI.inherit(BI.Widget, {
     _defaultConfig: function () {
         return BI.extend(BI.FineTuningNumberEditor.superclass._defaultConfig.apply(this, arguments), {
-            baseCls: "bi-fine-tuning-number-editor",
+            baseCls: "bi-fine-tuning-number-editor bi-border",
             value: -1
         })
     },
@@ -7055,7 +7055,7 @@ BI.FineTuningNumberEditor = BI.inherit(BI.Widget, {
         });
         this.topBtn = BI.createWidget({
             type: "bi.icon_button",
-            cls: "column-pre-page-h-font top-button"
+            cls: "column-pre-page-h-font top-button bi-border-left bi-border-bottom"
         });
         this.topBtn.on(BI.IconButton.EVENT_CHANGE, function(){
             self._finetuning(1);
@@ -7063,7 +7063,7 @@ BI.FineTuningNumberEditor = BI.inherit(BI.Widget, {
         });
         this.bottomBtn = BI.createWidget({
             type: "bi.icon_button",
-            cls: "column-next-page-h-font bottom-button"
+            cls: "column-next-page-h-font bottom-button bi-border-left bi-border-top"
         });
         this.bottomBtn.on(BI.IconButton.EVENT_CHANGE, function(){
             self._finetuning(-1);
@@ -7869,7 +7869,7 @@ BI.MonthTrigger = BI.inherit(BI.Trigger, {
 
     _defaultConfig: function () {
         return BI.extend(BI.MonthTrigger.superclass._defaultConfig.apply(this, arguments), {
-            extraCls: "bi-month-trigger",
+            extraCls: "bi-month-trigger bi-border",
             height: 25
         });
     },
@@ -9320,7 +9320,7 @@ BI.MultiSelectCheckPane = BI.inherit(BI.Widget, {
 
     _defaultConfig: function () {
         return BI.extend(BI.MultiSelectCheckPane.superclass._defaultConfig.apply(this, arguments), {
-            baseCls: "bi-multi-select-check-pane",
+            baseCls: "bi-multi-select-check-pane bi-background",
             items: [],
             itemsCreator: BI.emptyFn,
             valueFormatter: BI.emptyFn,
@@ -9473,7 +9473,7 @@ BI.DisplaySelectedList = BI.inherit(BI.Pane, {
     _createItems: function (items) {
         return BI.createItems(items, {
             type: 'bi.icon_text_item',
-            cls: 'cursor-default check-font display-list-item',
+            cls: 'cursor-default check-font display-list-item bi-tips',
             once: true,
             invalid: true,
             selected: true,
@@ -9658,7 +9658,7 @@ BI.MultiSelectCombo = BI.inherit(BI.Single, {
             type: "bi.trigger_icon_button",
             width: o.height,
             height: o.height,
-            cls: "multi-select-trigger-icon-button"
+            cls: "multi-select-trigger-icon-button bi-border-left"
         });
         triggerBtn.on(BI.TriggerIconButton.EVENT_CHANGE, function () {
             self.trigger.getCounter().hideView();
@@ -10126,7 +10126,7 @@ BI.MultiSelectTrigger = BI.inherit(BI.Trigger, {
 
     _defaultConfig: function () {
         return BI.extend(BI.MultiSelectTrigger.superclass._defaultConfig.apply(this, arguments), {
-            baseCls: "bi-multi-select-trigger",
+            baseCls: "bi-multi-select-trigger bi-border",
             itemsCreator: BI.emptyFn,
             valueFormatter: BI.emptyFn,
             searcher: {},
@@ -10433,7 +10433,7 @@ BI.MultiSelectSearchPane = BI.inherit(BI.Widget, {
 
     _defaultConfig: function () {
         return BI.extend(BI.MultiSelectSearchPane.superclass._defaultConfig.apply(this, arguments), {
-            baseCls: "bi-multi-select-search-pane",
+            baseCls: "bi-multi-select-search-pane bi-card",
             itemsCreator: BI.emptyFn,
             valueFormatter: BI.emptyFn,
             keywordGetter: BI.emptyFn
@@ -10779,17 +10779,18 @@ BI.MultiSelectSearcher = BI.inherit(BI.Widget, {
     },
 
     setState: function (ob) {
+        var o = this.options;
         ob || (ob = {});
         ob.value || (ob.value = []);
         if (ob.type === BI.Selection.All) {
             if (BI.size(ob.assist) === 1) {
-                this.editor.setState(ob.assist[0] + "");
+                this.editor.setState(o.valueFormatter(ob.assist[0] + "") || ob.assist[0] + "");
             } else {
                 this.editor.setState(BI.size(ob.value) > 0 ? BI.Selection.Multi : BI.Selection.All);
             }
         } else {
             if (BI.size(ob.value) === 1) {
-                this.editor.setState(ob.value[0] + "");
+                this.editor.setState(o.valueFormatter(ob.value[0] + "" || ob.value[0] + ""));
             } else {
                 this.editor.setState(BI.size(ob.value) > 0 ? BI.Selection.Multi : BI.Selection.None);
             }
@@ -10944,7 +10945,7 @@ BI.MultiStringList = BI.inherit(BI.Widget, {
 
         this.popup = BI.createWidget({
             type: "bi.multi_select_loader",
-            cls: "popup-multi-string-list",
+            cls: "popup-multi-string-list bi-border-left bi-border-right bi-border-bottom",
             itemsCreator: o.itemsCreator,
             valueFormatter: o.valueFormatter,
             onLoaded: o.onLoaded,
@@ -11251,7 +11252,7 @@ BI.MultiTreeCheckPane = BI.inherit(BI.Pane, {
 
     _defaultConfig: function () {
         return BI.extend(BI.MultiTreeCheckPane.superclass._defaultConfig.apply(this, arguments), {
-            baseCls: "bi-multi-tree-check-pane",
+            baseCls: "bi-multi-tree-check-pane bi-background",
             onClickContinueSelect: BI.emptyFn
         });
     },
@@ -11546,7 +11547,7 @@ BI.MultiTreeCombo = BI.inherit(BI.Single, {
             type: "bi.trigger_icon_button",
             width: o.height,
             height: o.height,
-            cls: "multi-select-trigger-icon-button"
+            cls: "multi-select-trigger-icon-button bi-border-left"
         });
         triggerBtn.on(BI.TriggerIconButton.EVENT_CHANGE, function () {
             self.trigger.getCounter().hideView();
@@ -11712,7 +11713,7 @@ BI.MultiTreeSearchPane = BI.inherit(BI.Pane, {
 
     _defaultConfig: function () {
         return BI.extend(BI.MultiTreeSearchPane.superclass._defaultConfig.apply(this, arguments), {
-            baseCls: "bi-multi-tree-search-pane",
+            baseCls: "bi-multi-tree-search-pane bi-card",
             itemsCreator: BI.emptyFn,
             keywordGetter: BI.emptyFn
         });
@@ -12157,7 +12158,7 @@ BI.shortcut('bi.multi_tree_list', BI.MultiTreeList);/**
 BI.MultiStringListPopup=BI.inherit(BI.Widget,{
     _defaultConfig:function () {
         return BI.extend(BI.MultiStringListPopup.superclass._defaultConfig.apply(this, arguments), {
-            baseCls: "bi-tree-list-popup",
+            baseCls: "bi-tree-list-popup bi-border-left bi-border-right bi-border-bottom",
             itemsCreator: BI.emptyFn
         });
     },
@@ -12248,7 +12249,7 @@ BI.NumericalInterval = BI.inherit(BI.Single, {
                 }
                 return true;
             },
-            cls: "numerical-interval-small-editor"
+            cls: "numerical-interval-small-editor bi-border-top bi-border-bottom bi-border-left"
         });
 
         this.smallTip = BI.createWidget({
@@ -12285,7 +12286,7 @@ BI.NumericalInterval = BI.inherit(BI.Single, {
                 }
                 return true;
             },
-            cls: "numerical-interval-big-editor"
+            cls: "numerical-interval-big-editor bi-border-top bi-border-bottom bi-border-right"
         });
 
         this.bigTip = BI.createWidget({
@@ -12321,7 +12322,7 @@ BI.NumericalInterval = BI.inherit(BI.Single, {
         //});
         this.smallCombo = BI.createWidget({
             type: "bi.icon_combo",
-            cls: "numerical-interval-small-combo",
+            cls: "numerical-interval-small-combo bi-border",
             height: o.height - 2,
             items: [{
                 text: "(" + BI.i18nText("BI-Less_Than") + ")",
@@ -12340,7 +12341,7 @@ BI.NumericalInterval = BI.inherit(BI.Single, {
         }
         this.bigCombo = BI.createWidget({
             type: "bi.icon_combo",
-            cls: "numerical-interval-big-combo",
+            cls: "numerical-interval-big-combo bi-border",
             height: o.height - 2,
             items: [{
                 text: "(" + BI.i18nText("BI-Less_Than") + ")",
@@ -13536,7 +13537,7 @@ BI.PathRegion = BI.inherit(BI.Widget, {
 
     _defaultConfig: function () {
         return BI.extend(BI.PathRegion.superclass._defaultConfig.apply(this, arguments), {
-            baseCls: "bi-path-region",
+            baseCls: "bi-path-region bi-background",
             width: 80,
             title: ""
         })
@@ -13573,7 +13574,7 @@ BI.PathRegion = BI.inherit(BI.Widget, {
         if (BI.isKey(value)) {
             var label = BI.createWidget({
                 type: "bi.label",
-                cls: "path-region-label",
+                cls: "path-region-label bi-card bi-border bi-list-item-active",
                 text: text,
                 value: value,
                 title: text || value,
@@ -14073,7 +14074,7 @@ BI.QuarterTrigger = BI.inherit(BI.Trigger, {
 
     _defaultConfig: function () {
         return BI.extend(BI.QuarterTrigger.superclass._defaultConfig.apply(this, arguments), {
-            extraCls: "bi-quarter-trigger",
+            extraCls: "bi-quarter-trigger bi-border",
             height: 25
         });
     },
@@ -14171,7 +14172,7 @@ BI.RelationViewItem = BI.inherit(BI.BasicButton, {
 
     _defaultConfig: function () {
         return BI.extend(BI.RelationViewItem.superclass._defaultConfig.apply(this, arguments), {
-            baseCls: "bi-relation-view-item",
+            baseCls: "bi-relation-view-item bi-list-item-active",
             height: 25,
             hoverIn: BI.emptyFn,
             hoverOut: BI.emptyFn
@@ -14542,7 +14543,7 @@ BI.shortcut('bi.relation_view', BI.RelationView);/**
 BI.RelationViewRegionContainer = BI.inherit(BI.Widget, {
     _defaultConfig: function () {
         return BI.extend(BI.RelationViewRegionContainer.superclass._defaultConfig.apply(this, arguments), {
-            baseCls: "bi-relation-view-region-container",
+            baseCls: "bi-relation-view-region-container bi-card bi-border",
             width: 150
         });
     },
@@ -14693,10 +14694,10 @@ BI.RelationViewRegion = BI.inherit(BI.BasicButton, {
             element: this,
             items: [{
                 type: "bi.vertical",
-                cls: "relation-view-region-container " + (o.belongPackage ? "" : "other-package"),
+                cls: "relation-view-region-container bi-card bi-border " + (o.belongPackage ? "" : "other-package"),
                 items: [{
                     type: "bi.vertical_adapt",
-                    cls: "relation-view-region-title",
+                    cls: "relation-view-region-title bi-border",
                     items: [this.preview, this.title]
                 }, this.button_group]
             }],
@@ -15741,7 +15742,7 @@ BI.SequenceTableListNumber = BI.inherit(BI.Widget, {
 
         this.header = BI.createWidget({
             type: "bi.table_style_cell",
-            cls: "sequence-table-title-cell",
+            cls: "sequence-table-title-cell bi-border",
             styleGetter: o.headerCellStyleGetter,
             text: BI.i18nText("BI-Number_Index")
         });
@@ -15808,7 +15809,7 @@ BI.SequenceTableListNumber = BI.inherit(BI.Widget, {
             } else {
                 var child = BI.createWidget(BI.extend({
                     type: "bi.table_style_cell",
-                    cls: "sequence-table-number-cell",
+                    cls: "sequence-table-number-cell bi-border-left bi-border-right bi-border-bottom",
                     width: 60,
                     height: o.rowSize,
                     text: this.start + i,
@@ -16464,159 +16465,6 @@ BI.SwitchTree.SelectType = {
 };
 BI.shortcut('bi.switch_tree', BI.SwitchTree);
 /**
- * web组件
- * Created by GameJian on 2016/3/1.
- */
-BI.WebPage = BI.inherit(BI.Widget, {
-    _defaultConfig: function () {
-        return BI.extend(BI.WebPage.superclass._defaultConfig.apply(this, arguments), {
-            baseCls: "bi-web-page"
-        })
-    },
-
-    _init: function () {
-        BI.WebPage.superclass._init.apply(this, arguments);
-        var self = this, o = this.options;
-
-        this.iframe = BI.createWidget({
-            type: "bi.iframe"
-        });
-
-        this.label = BI.createWidget({
-            type: "bi.label",
-            cls: "web-page-text-button-label",
-            whiteSpace: "normal",
-            text: BI.i18nText("BI-Not_Add_Url")
-        });
-
-        this.del = BI.createWidget({
-            type: "bi.bubble_combo",
-            el: {
-                type: "bi.icon_button",
-                cls: "web-page-button img-shutdown-font",
-                title: BI.i18nText("BI-Basic_Delete"),
-                height: 24,
-                width: 24
-            },
-            popup: {
-                type: "bi.bubble_bar_popup_view",
-                buttons: [{
-                    value: BI.i18nText(BI.i18nText("BI-Basic_Sure")),
-                    handler: function () {
-                        self.fireEvent(BI.WebPage.EVENT_DESTROY)
-                    }
-                }, {
-                    value: BI.i18nText("BI-Basic_Cancel"),
-                    level: "ignore",
-                    handler: function () {
-                        self.del.hideView();
-                    }
-                }],
-                el: {
-                    type: "bi.vertical_adapt",
-                    items: [{
-                        type: "bi.label",
-                        text: BI.i18nText("BI-Sure_Delete_Current_Component"),
-                        cls: "web-page-delete-label",
-                        textAlign: "left",
-                        width: 300
-                    }],
-                    width: 300,
-                    height: 100,
-                    hgap: 20
-                },
-                maxHeight: 140,
-                minWidth: 340
-            },
-            invisible: true,
-            stopPropagation: true
-        });
-
-
-        this.href = BI.createWidget({
-            type: "bi.image_button_href",
-            cls: "web-page-button"
-        });
-
-        this.href.on(BI.ImageButtonHref.EVENT_CHANGE, function () {
-            var url = this.getValue();
-            self.setValue(this.getValue());
-            self._checkUrl(url);
-            self.fireEvent(BI.WebPage.EVENT_VALUE_CHANGE);
-        });
-
-        BI.createWidget({
-            type: "bi.absolute",
-            element: this,
-            items: [{
-                el: this.iframe
-            }, {
-                el: this.del,
-                right: 4,
-                top: 8
-            }, {
-                el: this.href,
-                right: 36,
-                top: 8
-            }, {
-                el: this.label,
-                top: 32,
-                left: 0,
-                bottom: 0,
-                right: 0
-            }]
-        });
-
-        this.setToolbarVisible(false);
-        this._showLabel();
-    },
-
-    _checkUrl: function(url){
-        BI.Bubbles.hide(this.getName());
-        if(BI.isEmptyString(url)){
-            BI.Bubbles.show(this.getName(), BI.i18nText("BI-Click_To_Add_Hyperlink"), this.href, {
-                offsetStyle: "left"
-            });
-        }
-    },
-
-    _hideLabel: function () {
-        this.label.invisible()
-    },
-
-    isSelected: function () {
-        return this.href.isSelected();
-    },
-
-    _showLabel: function () {
-        this.label.visible()
-    },
-
-    setToolbarVisible: function (v) {
-        this.href.setVisible(v);
-        this.del.setVisible(v);
-    },
-
-    getValue: function () {
-        return this.href.getValue()
-    },
-
-    setValue: function (url) {
-        var self = this;
-        if (BI.isNotEmptyString(url)) {
-            self._hideLabel();
-        } else {
-            this.setToolbarVisible(true);
-            this.href.showView();
-        }
-        this.href.setValue(url);
-        this.iframe.setSrc(BI.Func.formatAddress(url))
-    }
-});
-
-BI.WebPage.EVENT_DESTROY = "EVENT_DESTROY";
-BI.WebPage.EVENT_VALUE_CHANGE = "EVENT_VALUE_CHANGE";
-BI.shortcut("bi.web_page", BI.WebPage);/**
  * 年份下拉框
  *
  * Created by GUY on 2015/8/28.
@@ -16773,7 +16621,7 @@ BI.YearPopup = BI.inherit(BI.Widget, {
                 dynamic: true
             },
             tab: {
-                cls: "year-popup-navigation",
+                cls: "year-popup-navigation bi-border-top",
                 height: 25,
                 items: [backBtn, preBtn]
             },
@@ -16831,7 +16679,7 @@ BI.YearTrigger = BI.inherit(BI.Trigger, {
 
     _defaultConfig: function () {
         return BI.extend(BI.YearTrigger.superclass._defaultConfig.apply(this, arguments), {
-            extraCls: "bi-year-trigger",
+            extraCls: "bi-year-trigger bi-border",
             min: '1900-01-01', //最小日期
             max: '2099-12-31', //最大日期
             height: 25

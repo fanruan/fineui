@@ -83,7 +83,7 @@ BI.PopupView = BI.inherit(BI.Widget, {
             hgap: o.hgap,
             items: BI.LogicFactory.createLogicItemsByDirection(o.direction,
                 BI.extend({
-                    cls: "list-view-outer"
+                    cls: "list-view-outer bi-card bi-border"
                 }, BI.LogicFactory.createLogic(BI.LogicFactory.createLogicTypeByDirection(o.direction), BI.extend({}, o.logic, {
                     items: BI.LogicFactory.createLogicItemsByDirection(o.direction, this.tool, this.tab, this.view, this.toolbar)
                 })))
@@ -127,7 +127,7 @@ BI.PopupView = BI.inherit(BI.Widget, {
 
         return BI.createWidget({
             type: "bi.center",
-            cls: "list-view-toolbar",
+            cls: "list-view-toolbar bi-border-top",
             height: 30,
             items: BI.createItems(o.buttons, {
                 once: false,

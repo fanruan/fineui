@@ -573,7 +573,7 @@ BI.Text = BI.inherit(BI.Single, {
     setText: function (text) {
         BI.Text.superclass.setText.apply(this, arguments);
         this.options.text = text;
-        this.text.element.text(text);
+        this.text.element.html(BI.escape(text).replaceAll(" ", "&nbsp;"));
     }
 });
 
@@ -2950,9 +2950,9 @@ BI.Combo = BI.inherit(BI.Widget, {
     },
 
     _hideIf: function (e) {
-        if (this.element.__isMouseInBounds__(e) || (this.popupView && this.popupView.element.__isMouseInBounds__(e))) {
-            return;
-        }
+        // if (this.element.__isMouseInBounds__(e) || (this.popupView && this.popupView.element.__isMouseInBounds__(e))) {
+        //     return;
+        // }
         if (this.element.find(e.target).length > 0) {
             return;
         }
@@ -14478,12 +14478,12 @@ $.extend(BI, {
                     items: [
                         {
                             type: 'bi.border',
-                            cls: 'bi-message-content',
+                            cls: 'bi-message-content bi-card',
                             items: {
                                 'north': {
                                     el: {
                                         type: 'bi.border',
-                                        cls: 'bi-message-title',
+                                        cls: 'bi-message-title bi-background',
                                         items: {
                                             center: {
                                                 el: {
@@ -14850,7 +14850,7 @@ BI.shortcut('bi.grid_view', BI.Grid);/**
 BI.FloatBox = BI.inherit(BI.Widget, {
     _defaultConfig: function () {
         return BI.extend(BI.FloatBox.superclass._defaultConfig.apply(this, arguments), {
-            baseCls: "bi-float-box",
+            baseCls: "bi-float-box bi-card",
             width: 600,
             height: 500
         })
@@ -14889,7 +14889,7 @@ BI.FloatBox = BI.inherit(BI.Widget, {
                 'north': {
                     el: {
                         type: 'bi.border',
-                        cls: 'bi-message-title',
+                        cls: 'bi-message-title bi-background',
                         items: {
                             center: {
                                 el: {
@@ -15072,7 +15072,7 @@ BI.PopupView = BI.inherit(BI.Widget, {
             hgap: o.hgap,
             items: BI.LogicFactory.createLogicItemsByDirection(o.direction,
                 BI.extend({
-                    cls: "list-view-outer"
+                    cls: "list-view-outer bi-card bi-border"
                 }, BI.LogicFactory.createLogic(BI.LogicFactory.createLogicTypeByDirection(o.direction), BI.extend({}, o.logic, {
                     items: BI.LogicFactory.createLogicItemsByDirection(o.direction, this.tool, this.tab, this.view, this.toolbar)
                 })))
@@ -15116,7 +15116,7 @@ BI.PopupView = BI.inherit(BI.Widget, {
 
         return BI.createWidget({
             type: "bi.center",
-            cls: "list-view-toolbar",
+            cls: "list-view-toolbar bi-border-top",
             height: 30,
             items: BI.createItems(o.buttons, {
                 once: false,
@@ -15174,7 +15174,7 @@ BI.SearcherView = BI.inherit(BI.Pane, {
     _defaultConfig: function () {
         var conf = BI.SearcherView.superclass._defaultConfig.apply(this, arguments);
         return BI.extend(conf, {
-            baseCls: (conf.baseCls || "") + " bi-searcher-view",
+            baseCls: (conf.baseCls || "") + " bi-searcher-view bi-card",
             tipText: BI.i18nText("BI-No_Select"),
             chooseType: BI.Selection.Single,
 
@@ -15234,7 +15234,7 @@ BI.SearcherView = BI.inherit(BI.Pane, {
             items: [{
                 type: "bi.layout",
                 height: 1,
-                cls: "searcher-view-spliter"
+                cls: "searcher-view-spliter bi-background"
             }]
         });
         this.searcher = BI.createWidget(o.searcher, {
@@ -15631,7 +15631,7 @@ BI.LoadingBar = BI.inherit(BI.Single, {
     _defaultConfig: function() {
         var conf = BI.LoadingBar.superclass._defaultConfig.apply(this, arguments);
         return BI.extend( conf, {
-            baseCls : (conf.baseCls ||"")+' bi-loading-bar',
+            baseCls : (conf.baseCls ||"")+' bi-loading-bar bi-tips',
             height: 30,
             handler: BI.emptyFn
         })
@@ -15641,7 +15641,7 @@ BI.LoadingBar = BI.inherit(BI.Single, {
         var self = this;
         this.loaded = BI.createWidget({
             type: "bi.text_button",
-            cls: "loading-text",
+            cls: "loading-text bi-list-item-simple",
             text: this.consts.loadedText,
             width: 120,
             handler: this.options.handler
@@ -28232,7 +28232,7 @@ BI.shortcut("bi.table_cell", BI.TableCell);/**
 BI.CollectionTableCell = BI.inherit(BI.Widget, {
     _defaultConfig: function () {
         return BI.extend(BI.CollectionTableCell.superclass._defaultConfig.apply(this, arguments), {
-            baseCls: "bi-collection-table-cell",
+            baseCls: "bi-collection-table-cell bi-border-right bi-border-bottom",
             width: 0,
             height: 0,
             _left: 0,
@@ -28961,7 +28961,7 @@ BI.shortcut('bi.quick_collection_table', BI.QuickCollectionTable);/**
 BI.GridTableCell = BI.inherit(BI.Widget, {
     _defaultConfig: function () {
         return BI.extend(BI.GridTableCell.superclass._defaultConfig.apply(this, arguments), {
-            baseCls: "bi-grid-table-cell",
+            baseCls: "bi-grid-table-cell  bi-border-right bi-border-bottom",
             width: 0,
             height: 0,
             _rowIndex: 0,

@@ -1,15 +1,28 @@
 @import "../../../../bibase";
 
-.bi-file-manager-nav-button{
-  & .file-manager-nav-button-text{
+.bi-file-manager-nav-button {
+  & .file-manager-nav-button-text {
     max-width: 200px;
-    background: @background-color-default;
-    &.active{
-      background-color: @color-bi-background-gray;
+    background: @color-bi-background-default;
+    &.active {
+      background-color: @color-bi-background-normal;
       color: @color-bi-text-gray;
     }
   }
-  & .file-manager-nav-button-triangle{
+  & .file-manager-nav-button-triangle {
     z-index: 1;
   }
+}
+
+.bi-theme-dark {
+  .bi-file-manager-nav-button {
+    & .file-manager-nav-button-text {
+      background: @color-bi-background-default-theme-dark;
+      &.active {
+        background-color: @color-bi-background-normal-theme-dark;
+        color: @color-bi-text-gray;
+      }
+    }
+  }
+
 }

@@ -10,7 +10,7 @@ BI.ColorChooserTrigger = BI.inherit(BI.Trigger, {
     _defaultConfig: function () {
         var conf = BI.ColorChooserTrigger.superclass._defaultConfig.apply(this, arguments);
         return BI.extend(conf, {
-            baseCls: (conf.baseCls || "") + " bi-color-chooser-trigger",
+            baseCls: (conf.baseCls || "") + " bi-color-chooser-trigger bi-card",
             height: 30
         })
     },

@@ -9,7 +9,7 @@
 BI.GridTableCell = BI.inherit(BI.Widget, {
     _defaultConfig: function () {
         return BI.extend(BI.GridTableCell.superclass._defaultConfig.apply(this, arguments), {
-            baseCls: "bi-grid-table-cell",
+            baseCls: "bi-grid-table-cell  bi-border-right bi-border-bottom",
             width: 0,
             height: 0,
             _rowIndex: 0,

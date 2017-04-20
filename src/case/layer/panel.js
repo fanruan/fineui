@@ -57,7 +57,7 @@ BI.Panel = BI.inherit(BI.Widget,{
         return {
             el: {
                 type: "bi.left_right_vertical_adapt",
-                cls: "panel-title",
+                cls: "panel-title bi-tips",
                 height: 30,
                 items: {
                     left: [this.text],

@@ -35,7 +35,7 @@ BI.SequenceTableTreeNumber = BI.inherit(BI.Widget, {
 
         this.header = BI.createWidget({
             type: "bi.table_style_cell",
-            cls: "sequence-table-title-cell",
+            cls: "sequence-table-title-cell bi-border",
             styleGetter: o.headerCellStyleGetter,
             text: BI.i18nText("BI-Number_Index")
         });
@@ -251,7 +251,7 @@ BI.SequenceTableTreeNumber = BI.inherit(BI.Widget, {
             } else {
                 var child = BI.createWidget(BI.extend({
                     type: "bi.table_style_cell",
-                    cls: "sequence-table-number-cell",
+                    cls: "sequence-table-number-cell bi-border-left bi-border-right bi-border-bottom",
                     width: 60,
                     styleGetter: numbers[key].isSummary === true ? function () {
                         return o.summaryCellStyleGetter(true);

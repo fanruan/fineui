@@ -20,7 +20,7 @@ BI.ColorPickerEditor = BI.inherit(BI.Widget, {
         var self = this, o = this.options;
         this.colorShow = BI.createWidget({
             type: "bi.layout",
-            cls: "color-picker-editor-display",
+            cls: "color-picker-editor-display bi-card",
             height: 20
         });
         var RGB = BI.createWidgets(BI.createItems([{text: "R"}, {text: "G"}, {text: "B"}], {

@@ -9,7 +9,7 @@ BI.PathRegion = BI.inherit(BI.Widget, {
 
     _defaultConfig: function () {
         return BI.extend(BI.PathRegion.superclass._defaultConfig.apply(this, arguments), {
-            baseCls: "bi-path-region",
+            baseCls: "bi-path-region bi-background",
             width: 80,
             title: ""
         })
@@ -46,7 +46,7 @@ BI.PathRegion = BI.inherit(BI.Widget, {
         if (BI.isKey(value)) {
             var label = BI.createWidget({
                 type: "bi.label",
-                cls: "path-region-label",
+                cls: "path-region-label bi-card bi-border bi-list-item-active",
                 text: text,
                 value: value,
                 title: text || value,

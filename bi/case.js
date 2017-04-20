@@ -128,7 +128,7 @@ BI.TriggerIconButton = BI.inherit(BI.IconButton, {
     _defaultConfig: function () {
         var conf = BI.TriggerIconButton.superclass._defaultConfig.apply(this, arguments);
         return BI.extend(conf, {
-            baseCls: (conf.baseCls || "") + " bi-trigger-icon-button",
+            baseCls: (conf.baseCls || "") + " bi-trigger-icon-button bi-border-left",
             extraCls: "pull-down-font"
         });
     },
@@ -2509,7 +2509,7 @@ BI.ColorChooserPopup = BI.inherit(BI.Widget, {
             items: [{
                 el: {
                     type: "bi.absolute",
-                    cls: "color-chooser-popup-title",
+                    cls: "bi-background bi-border-bottom",
                     items: [{
                         el: this.colorEditor,
                         left: 0,
@@ -2588,7 +2588,7 @@ BI.ColorChooserTrigger = BI.inherit(BI.Trigger, {
     _defaultConfig: function () {
         var conf = BI.ColorChooserTrigger.superclass._defaultConfig.apply(this, arguments);
         return BI.extend(conf, {
-            baseCls: (conf.baseCls || "") + " bi-color-chooser-trigger",
+            baseCls: (conf.baseCls || "") + " bi-color-chooser-trigger bi-card",
             height: 30
         })
     },
@@ -2645,7 +2645,7 @@ BI.ColorPickerButton = BI.inherit(BI.BasicButton, {
     _defaultConfig: function () {
         var conf = BI.ColorPickerButton.superclass._defaultConfig.apply(this, arguments);
         return BI.extend(conf, {
-            baseCls: (conf.baseCls || "") + " bi-color-picker-button"
+            baseCls: (conf.baseCls || "") + " bi-color-picker-button bi-background bi-border-top bi-border-left"
         })
     },
 
@@ -2902,7 +2902,7 @@ BI.ColorPickerEditor = BI.inherit(BI.Widget, {
         var self = this, o = this.options;
         this.colorShow = BI.createWidget({
             type: "bi.layout",
-            cls: "color-picker-editor-display",
+            cls: "color-picker-editor-display bi-card",
             height: 20
         });
         var RGB = BI.createWidgets(BI.createItems([{text: "R"}, {text: "G"}, {text: "B"}], {
@@ -4315,7 +4315,7 @@ BI.StaticCombo = BI.inherit(BI.Widget, {
         var self = this, o = this.options;
         this.trigger = BI.createWidget(o.el, {
             type: "bi.text_icon_item",
-            cls: "bi-select-text-trigger pull-down-font",
+            cls: "bi-select-text-trigger bi-border pull-down-font",
             text: o.text,
             readonly: true,
             textLgap: 5,
@@ -5231,7 +5231,7 @@ BI.SearchEditor = BI.inherit(BI.Widget, {
     _defaultConfig: function () {
         var conf = BI.SearchEditor.superclass._defaultConfig.apply(this, arguments);
         return BI.extend(conf, {
-            baseCls: "bi-search-editor",
+            baseCls: "bi-search-editor bi-border",
             height: 30,
             errorText: "",
             watermark: BI.i18nText("BI-Basic_Search"),
@@ -6156,7 +6156,7 @@ BI.StateEditor = BI.inherit(BI.Single, {
         });
         this.text = BI.createWidget({
             type: "bi.text_button",
-            cls: "state-editor-infinite-text",
+            cls: "state-editor-infinite-text bi-disabled",
             textAlign: "left",
             height: o.height,
             text: BI.i18nText("BI-Unrestricted"),
@@ -6436,7 +6436,7 @@ BI.SimpleStateEditor = BI.inherit(BI.Single, {
         });
         this.text = BI.createWidget({
             type: "bi.text_button",
-            cls: "state-editor-infinite-text",
+            cls: "state-editor-infinite-text bi-disabled",
             textAlign: "left",
             height: o.height,
             text: BI.i18nText("BI-Unrestricted"),
@@ -6656,7 +6656,7 @@ BI.TextEditor = BI.inherit(BI.Single, {
     _defaultConfig: function () {
         var conf = BI.TextEditor.superclass._defaultConfig.apply(this, arguments);
         return BI.extend(conf, {
-            extraCls: "bi-text-editor",
+            extraCls: "bi-text-editor bi-border",
             hgap: 4,
             vgap: 2,
             lgap: 0,
@@ -6988,7 +6988,7 @@ BI.MultiPopupView = BI.inherit(BI.PopupView, {
 
         this.buttongroup = BI.createWidget({
             type: "bi.button_group",
-            cls: "list-view-toolbar",
+            cls: "list-view-toolbar bi-border-top",
             height: 30,
             items: BI.createItems(text, {
                 type: "bi.text_button",
@@ -7049,7 +7049,7 @@ BI.PopupPanel = BI.inherit(BI.MultiPopupView, {
         });
         return BI.createWidget({
             type: "bi.htape",
-            cls: "popup-panel-title",
+            cls: "popup-panel-title bi-background bi-border",
             height: 25,
             items: [{
                 el: {
@@ -7301,7 +7301,7 @@ BI.Panel = BI.inherit(BI.Widget,{
         return {
             el: {
                 type: "bi.left_right_vertical_adapt",
-                cls: "panel-title",
+                cls: "panel-title bi-tips",
                 height: 30,
                 items: {
                     left: [this.text],
@@ -8625,7 +8625,7 @@ BI.DetailPager = BI.inherit(BI.Widget, {
             type: "bi.button_group",
             element: this,
             items: BI.createItems(view, {
-                cls: "page-item",
+                cls: "page-item bi-border bi-list-item-active",
                 height: 23,
                 hgap: 10
             }),
@@ -8746,7 +8746,7 @@ BI.SegmentButton = BI.inherit(BI.BasicButton, {
     _defaultConfig: function() {
         var conf = BI.SegmentButton.superclass._defaultConfig.apply(this, arguments);
         return BI.extend( conf, {
-            baseCls : (conf.baseCls ||"")+' bi-segment-button',
+            baseCls : (conf.baseCls ||"")+' bi-segment-button bi-list-item-active',
             shadow: true,
             readonly: true,
             hgap: 10
@@ -8804,10 +8804,15 @@ BI.Segment = BI.inherit(BI.Widget, {
         this.buttonGroup = BI.createWidget({
             element: this,
             type: "bi.button_group",
-            items: BI.createItems(o.items, {
-                type: "bi.segment_button",
-                height: o.height - 2,
-                whiteSpace: o.whiteSpace
+            items: BI.map(o.items, function (i, item) {
+                return BI.extend({
+                    type: "bi.segment_button",
+                    height: o.height - 2,
+                    whiteSpace: o.whiteSpace
+                }, item, {
+                    cls: (i === 0 ? "bi-border-left " : "")
+                    + (item.cls || "") + " bi-border-top bi-border-right bi-border-bottom"
+                });
             }),
             layout: [
                 {
@@ -11129,7 +11134,7 @@ BI.EditorTrigger = BI.inherit(BI.Trigger, {
     _defaultConfig: function () {
         var conf = BI.EditorTrigger.superclass._defaultConfig.apply(this, arguments);
         return BI.extend(conf, {
-            baseCls: (conf.baseCls || "") + " bi-editor-trigger",
+            baseCls: (conf.baseCls || "") + " bi-editor-trigger bi-border",
             height: 30,
             validationChecker: BI.emptyFn,
             quitChecker: BI.emptyFn,
@@ -11296,7 +11301,7 @@ BI.SelectTextTrigger = BI.inherit(BI.Trigger, {
 
     _defaultConfig: function () {
         return BI.extend(BI.SelectTextTrigger.superclass._defaultConfig.apply(this, arguments), {
-            baseCls: "bi-select-text-trigger",
+            baseCls: "bi-select-text-trigger bi-border",
             height: 24
         });
     },
@@ -11349,7 +11354,7 @@ BI.SmallSelectTextTrigger = BI.inherit(BI.Trigger, {
 
     _defaultConfig: function () {
         return BI.extend(BI.SmallSelectTextTrigger.superclass._defaultConfig.apply(this, arguments), {
-            baseCls: "bi-small-select-text-trigger",
+            baseCls: "bi-small-select-text-trigger bi-border",
             height: 20
         });
     },

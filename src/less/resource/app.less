@@ -36,7 +36,7 @@ body {
   left: 0;
   background-repeat: repeat;
   .user-select(none);
-  color: #1a1a1a;
+  color: @color-bi-text-normal;
   font: normal 12px "Microsoft YaHei", "Hiragino Sans GB W3";
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
@@ -72,7 +72,14 @@ textarea {
   margin: 0;
   padding: 0;
   outline: none;
-  border: 1px solid #cccccc;
+  border: 1px solid @color-bi-border-line;
+}
+
+.bi-theme-dark {
+  input,
+  textarea {
+    border: 1px solid @color-bi-border-line-theme-dark;
+  }
 }
 
 ul,
@@ -108,7 +115,8 @@ div, textarea {
     background-color: @scroll-thumb-color;
   }
 }
-.bi-theme-dark{
+
+.bi-theme-dark {
   div, textarea {
     &::-webkit-scrollbar {
       -webkit-appearance: none;
