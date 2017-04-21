@@ -8,7 +8,12 @@
   cursor: text;
   width: 100%;
   height: 100%;
-  color: black;
+  color: #1a1a1a;
+  background-color: #ffffff;
+}
+.bi-theme-dark .CodeMirror {
+  color: #ffffff;
+  background-color: #242640;
 }
 /* PADDING */
 .CodeMirror-lines {
@@ -45,7 +50,10 @@
 }
 /* CURSOR */
 .CodeMirror div.CodeMirror-cursor {
-  border-left: 1px solid black;
+  border-left: 1px solid #1a1a1a;
+}
+.bi-theme-dark .CodeMirror div.CodeMirror-cursor {
+  border-left: 1px solid #ffffff;
 }
 /* Shown when moving in bi-directional text */
 .CodeMirror div.CodeMirror-secondarycursor {
@@ -184,7 +192,7 @@
 }
 .cm-s-default span[class*="fieldName"] {
   color: white;
-  padding: 1px ;
+  padding: 1px;
   margin: 1px 0px;
   background: #3f8ce8;
 }
@@ -236,7 +244,6 @@ div.CodeMirror span.CodeMirror-nonmatchingbracket {
 .CodeMirror {
   position: relative;
   overflow: hidden;
-  background: white;
 }
 .CodeMirror-scroll {
   overflow: scroll !important;

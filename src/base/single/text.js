@@ -29,11 +29,15 @@ BI.Text = BI.inherit(BI.Single, {
             type: "bi.layout",
             cls: "bi-text"
         });
-        this.text.element.appendTo(this.element);
+        BI.createWidget({
+            type: "bi.default",
+            element: this,
+            items: [this.text]
+        });
         if (BI.isKey(o.text)) {
-            this.text.element.text(o.text);
+            this.setText(o.text);
         } else if (BI.isKey(o.value)) {
-            this.text.element.text(o.value);
+            this.setText(o.value);
         }
         if (o.hgap + o.lgap > 0) {
             this.text.element.css({
@@ -95,7 +99,7 @@ BI.Text = BI.inherit(BI.Single, {
     setValue: function (text) {
         BI.Text.superclass.setValue.apply(this, arguments);
         if (!this.isReadOnly()) {
-            this.text.element.text(text);
+            this.setText(text);
         }
     },
 

@@ -496,11 +496,15 @@ BI.Text = BI.inherit(BI.Single, {
             type: "bi.layout",
             cls: "bi-text"
         });
-        this.text.element.appendTo(this.element);
+        BI.createWidget({
+            type: "bi.default",
+            element: this,
+            items: [this.text]
+        });
         if (BI.isKey(o.text)) {
-            this.text.element.text(o.text);
+            this.setText(o.text);
         } else if (BI.isKey(o.value)) {
-            this.text.element.text(o.value);
+            this.setText(o.value);
         }
         if (o.hgap + o.lgap > 0) {
             this.text.element.css({
@@ -562,7 +566,7 @@ BI.Text = BI.inherit(BI.Single, {
     setValue: function (text) {
         BI.Text.superclass.setValue.apply(this, arguments);
         if (!this.isReadOnly()) {
-            this.text.element.text(text);
+            this.setText(text);
         }
     },
 
@@ -1061,7 +1065,7 @@ BI.ButtonGroup = BI.inherit(BI.Widget, {
     //如果是一个简单的layout
     _isSimpleLayout: function () {
         var o = this.options;
-        return o.layouts.length === 1 && !BI.isArray(o.layouts.items[0])
+        return o.layouts.length === 1 && !BI.isArray(o.items[0])
     },
 
     doBehavior: function () {
@@ -17838,7 +17842,7 @@ BI.TextAreaEditor = BI.inherit(BI.Single, {
             tagName: "textarea",
             width: "100%",
             height: "100%",
-            cls: "textarea-editor-content display-block"
+            cls: "textarea-editor-content display-block bi-card"
         });
         this.content.element.css({"resize": "none"});
         BI.createWidget({

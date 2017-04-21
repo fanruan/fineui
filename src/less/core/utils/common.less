@@ -141,9 +141,15 @@
 
 //resize
 .bi-resizer {
-  background: @color-bi-background-virtual-blue;
-  .opacity(0.8);
+  background: @color-bi-background-black;
+  .opacity(0.2);
   z-index: @zIndex-tip;
+}
+
+.bi-theme-dark {
+  .bi-resizer {
+    background: @color-bi-background-default;
+  }
 }
 
 .bi-z-index-mask {
@@ -337,7 +343,7 @@
   .bi-list-item-select {
     &:hover, &.hover {
       color: @color-bi-text-highlight;
-      background-color: @color-bi-background-normal;
+      background-color: @color-bi-background-normal-theme-dark;
     }
     &:active, &.active {
       color: @color-bi-text;
@@ -353,6 +359,25 @@
         & .bi-high-light {
           color: @color-bi-text-disabled-theme-dark !important;
         }
+      }
+    }
+  }
+}
+
+.bi-list-item-choose {
+  &:active, &.active {
+    color: @color-bi-text;
+    background-color: @color-bi-background-highlight;
+    & .bi-high-light {
+      color: @color-bi-text;
+    }
+  }
+  &.disabled {
+    &, &:hover, &:active {
+      color: @color-bi-text-disabled !important;
+      background-color: transparent !important;
+      & .bi-high-light {
+        color: @color-bi-text-disabled !important;
       }
     }
   }

@@ -6,7 +6,7 @@
 BI.Panel = BI.inherit(BI.Widget,{
     _defaultConfig : function(){
         return BI.extend(BI.Panel.superclass._defaultConfig.apply(this,arguments),{
-            baseCls: "bi-panel",
+            baseCls: "bi-panel bi-border",
             title:"",
             titleButtons:[],
             el:{},
@@ -57,7 +57,7 @@ BI.Panel = BI.inherit(BI.Widget,{
         return {
             el: {
                 type: "bi.left_right_vertical_adapt",
-                cls: "panel-title bi-tips",
+                cls: "panel-title bi-tips bi-border-bottom bi-background",
                 height: 30,
                 items: {
                     left: [this.text],
