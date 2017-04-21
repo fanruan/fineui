@@ -21125,9 +21125,7 @@ BI.LayerController = BI.inherit(BI.Controller, {
  */
 BI.MaskersController = BI.inherit(BI.LayerController, {
     _defaultConfig: function () {
-        return BI.extend(BI.MaskersController.superclass._defaultConfig.apply(this, arguments), {
-            render: "body"
-        });
+        return BI.extend(BI.MaskersController.superclass._defaultConfig.apply(this, arguments), {});
     },
 
     _init: function () {
