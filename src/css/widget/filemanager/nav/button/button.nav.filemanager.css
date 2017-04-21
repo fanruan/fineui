@@ -3,7 +3,6 @@
 /**** custom color(自定义颜色,用于特定场景) ****/
 .bi-file-manager-nav-button .file-manager-nav-button-text {
   max-width: 200px;
-  background: #ffffff;
 }
 .bi-file-manager-nav-button .file-manager-nav-button-text.active {
   background-color: #eff1f4;
@@ -11,9 +10,6 @@
 }
 .bi-file-manager-nav-button .file-manager-nav-button-triangle {
   z-index: 1;
-}
-.bi-theme-dark .bi-file-manager-nav-button .file-manager-nav-button-text {
-  background: #242640;
 }
 .bi-theme-dark .bi-file-manager-nav-button .file-manager-nav-button-text.active {
   background-color: #191b2b;

@@ -7,7 +7,7 @@ BI.DatePicker = BI.inherit(BI.Widget, {
     _defaultConfig: function () {
         var conf = BI.DatePicker.superclass._defaultConfig.apply(this, arguments);
         return BI.extend(conf, {
-            baseCls: "bi-date-picker",
+            baseCls: "bi-date-picker bi-background",
             height: 25,
             min: '1900-01-01', //最小日期
             max: '2099-12-31' //最大日期

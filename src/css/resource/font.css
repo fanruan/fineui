@@ -2578,12 +2578,12 @@
 }
 .recover-chart-font-hightlight .b-font:before {
   content: "\e6b4";
-  color: #3f8ce8;
+  color: inherit;
 }
 .recover-chart-font-hightlight.native .b-font:before,
 .recover-chart-font-hightlight.disabled .b-font:before {
   content: "\e6b4";
-  color: #3f8ce8;
+  color: inherit;
 }
 .tables-tile-view-font .b-font:before {
   content: "\e685";

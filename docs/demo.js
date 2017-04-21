@@ -5083,15 +5083,15 @@ BI.shortcut("demo.vtape", Demo.VtapeLayout);Demo.Face = BI.inherit(BI.Widget, {
         var maskBackgroundColor = this.maskBackgroundColor.getValue();
 
         this._setStyle({
-            ".bi-background": {
-                "background-color": backgroundColor + "!important",
-                "color": fontColor + "!important"
+            "#wrapper.bi-background, #wrapper .bi-background": {
+                "background-color": backgroundColor,
+                "color": fontColor
             },
-            ".bi-card": {
-                "background-color": cardBackgroundColor + "!important"
+            "#wrapper .bi-card": {
+                "background-color": cardBackgroundColor
             },
-            ".bi-tips": {
-                "color": grayFontColor + "!important"
+            "#wrapper .bi-tips": {
+                "color": grayFontColor
             },
             "div::-webkit-scrollbar,.scrollbar-layout-main": {
                 "background-color": scrollBackgroundColor + "!important"
