@@ -44,9 +44,6 @@
 /****** common color(常用颜色,可用于普遍场景) *****/
 /**** custom color(自定义颜色,用于特定场景) ****/
 .bi-arrangement-droppable {
-  background: #d8f3fe;
-  opacity: 0.8;
-  filter: alpha(opacity=80);
   z-index: 100000;
 }
 /****添加计算宽度的--运算符直接需要space****/
@@ -118,9 +115,6 @@
 /****添加计算宽度的--运算符直接需要space****/
 /****** common color(常用颜色,可用于普遍场景) *****/
 /**** custom color(自定义颜色,用于特定场景) ****/
-.bi-date-picker {
-  background: #f4f4f4;
-}
 /****添加计算宽度的--运算符直接需要space****/
 /****** common color(常用颜色,可用于普遍场景) *****/
 /**** custom color(自定义颜色,用于特定场景) ****/
@@ -170,7 +164,6 @@
 /**** custom color(自定义颜色,用于特定场景) ****/
 .bi-file-manager-nav-button .file-manager-nav-button-text {
   max-width: 200px;
-  background: #ffffff;
 }
 .bi-file-manager-nav-button .file-manager-nav-button-text.active {
   background-color: #eff1f4;
@@ -178,9 +171,6 @@
 }
 .bi-file-manager-nav-button .file-manager-nav-button-triangle {
   z-index: 1;
-}
-.bi-theme-dark .bi-file-manager-nav-button .file-manager-nav-button-text {
-  background: #242640;
 }
 .bi-theme-dark .bi-file-manager-nav-button .file-manager-nav-button-text.active {
   background-color: #191b2b;
