@@ -9,7 +9,7 @@ BI.FileManagerFileItem = BI.inherit(BI.Single, {
 
     _defaultConfig: function () {
         return BI.extend(BI.FileManagerFileItem.superclass._defaultConfig.apply(this, arguments), {
-            baseCls: "bi-file-manager-file-item bi-list-item",
+            baseCls: "bi-file-manager-file-item bi-list-item bi-border-bottom",
             height: 30
         })
     },

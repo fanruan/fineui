@@ -16,7 +16,7 @@ BI.YearTrigger = BI.inherit(BI.Trigger, {
 
     _defaultConfig: function () {
         return BI.extend(BI.YearTrigger.superclass._defaultConfig.apply(this, arguments), {
-            extraCls: "bi-year-trigger",
+            extraCls: "bi-year-trigger bi-border",
             min: '1900-01-01', //最小日期
             max: '2099-12-31', //最大日期
             height: 25

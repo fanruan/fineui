@@ -8,7 +8,7 @@ BI.ExcelTableHeaderCell = BI.inherit(BI.Widget, {
 
     _defaultConfig: function () {
         return BI.extend(BI.ExcelTableHeaderCell.superclass._defaultConfig.apply(this, arguments), {
-            baseCls: "bi-excel-table-header-cell",
+            baseCls: "bi-excel-table-header-cell bi-background",
             text: ""
         });
     },

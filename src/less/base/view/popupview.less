@@ -8,17 +8,13 @@
   overflow: visible !important;
   cursor: default;
   & .list-view-outer {
-    border: 1px solid @color-bi-split-dark;
     .border-radius(2px);
-    color: @color-bi-text-black;
-    background: @color-bi-background-default;
   }
   & .list-view-toolbar {
-    border-top: 1px solid @color-bi-split-light;
     line-height: 30px;
     color: @color-bi-text-highlight;
     & > .center-element {
-      border-left: 1px solid @color-bi-split-light;
+      border-left: 1px solid @color-bi-border-line;
     }
     & > .first-element {
       border-left: none;
@@ -28,9 +24,13 @@
 
 .bi-theme-dark {
   .bi-list-view {
-    & .list-view-outer {
-      color: @color-bi-text-theme-dark;
-      background: @color-bi-background-default-theme-dark;
+    & .list-view-toolbar {
+      & > .center-element {
+        border-left: 1px solid @color-bi-border-line-theme-dark;
+      }
+      & > .first-element {
+        border-left: none;
+      }
     }
   }
 }

@@ -15,7 +15,7 @@ BI.MultiSelectSearchPane = BI.inherit(BI.Widget, {
 
     _defaultConfig: function () {
         return BI.extend(BI.MultiSelectSearchPane.superclass._defaultConfig.apply(this, arguments), {
-            baseCls: "bi-multi-select-search-pane",
+            baseCls: "bi-multi-select-search-pane bi-card",
             itemsCreator: BI.emptyFn,
             valueFormatter: BI.emptyFn,
             keywordGetter: BI.emptyFn

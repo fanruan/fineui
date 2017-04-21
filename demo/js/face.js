@@ -39,7 +39,7 @@ Demo.Face = BI.inherit(BI.Widget, {
         var self = this;
         return {
             type: "bi.htape",
-            cls: "config-item",
+            cls: "config-item bi-border-bottom",
             height: 40,
             items: [this._createLabel("背景色："), this._createColorPicker(function () {
                 self.backgroundColor = this;
@@ -53,10 +53,52 @@ Demo.Face = BI.inherit(BI.Widget, {
         var self = this;
         return {
             type: "bi.htape",
-            cls: "config-item",
+            cls: "config-item bi-border-bottom",
             height: 40,
             items: [this._createLabel("字体颜色："), this._createColorPicker(function () {
                 self.fontColor = this;
+            }, function () {
+                self._runGlobalStyle();
+            })]
+        }
+    },
+
+    _createActiveFontConfig: function () {
+        var self = this;
+        return {
+            type: "bi.htape",
+            cls: "config-item bi-border-bottom",
+            height: 40,
+            items: [this._createLabel("激活状态字体颜色："), this._createColorPicker(function () {
+                self.activeFontColor = this;
+            }, function () {
+                self._runGlobalStyle();
+            })]
+        }
+    },
+
+    _createSelectFontConfig: function () {
+        var self = this;
+        return {
+            type: "bi.htape",
+            cls: "config-item bi-border-bottom",
+            height: 40,
+            items: [this._createLabel("选中状态字体颜色："), this._createColorPicker(function () {
+                self.selectFontColor = this;
+            }, function () {
+                self._runGlobalStyle();
+            })]
+        }
+    },
+
+    _createGrayFontConfig: function () {
+        var self = this;
+        return {
+            type: "bi.htape",
+            cls: "config-item bi-border-bottom",
+            height: 40,
+            items: [this._createLabel("灰色字体颜色(用于Card2)："), this._createColorPicker(function () {
+                self.grayFontColor = this;
             }, function () {
                 self._runGlobalStyle();
             })]
@@ -67,7 +109,7 @@ Demo.Face = BI.inherit(BI.Widget, {
         var self = this;
         return {
             type: "bi.htape",
-            cls: "config-item",
+            cls: "config-item bi-border-bottom",
             height: 40,
             items: [this._createLabel("灰化字体颜色："), this._createColorPicker(function () {
                 self.disabledFontColor = this;
@@ -85,17 +127,26 @@ Demo.Face = BI.inherit(BI.Widget, {
         }
     },
 
-    _createCardBackgroundConfig: function () {
+    _createCard1BackgroundConfig: function () {
         var self = this;
         return {
             type: "bi.htape",
-            cls: "config-item",
+            cls: "config-item bi-border-bottom",
             height: 40,
-            items: [this._createLabel("Card背景颜色："), this._createColorPicker(function () {
+            items: [this._createLabel("Card1背景颜色："), this._createColorPicker(function () {
                 self.cardBackgroundColor = this;
             }, function () {
                 self._runGlobalStyle();
             })]
+        }
+    },
+    _createCard2BackgroundConfig: function () {
+        var self = this;
+        return {
+            type: "bi.htape",
+            cls: "config-item bi-border-bottom",
+            height: 40,
+            items: [this._createLabel("Card2背景颜色：无颜色")]
         }
     },
 
@@ -103,7 +154,7 @@ Demo.Face = BI.inherit(BI.Widget, {
         var self = this;
         return {
             type: "bi.htape",
-            cls: "config-item",
+            cls: "config-item bi-border-bottom",
             height: 40,
             items: [this._createLabel("悬浮状态背景颜色："), this._createColorPicker(function () {
                 self.hoverBackgroundColor = this;
@@ -117,10 +168,38 @@ Demo.Face = BI.inherit(BI.Widget, {
         var self = this;
         return {
             type: "bi.htape",
-            cls: "config-item",
+            cls: "config-item bi-border-bottom",
             height: 40,
             items: [this._createLabel("激活状态背景颜色："), this._createColorPicker(function () {
                 self.activeBackgroundColor = this;
+            }, function () {
+                self._runGlobalStyle();
+            })]
+        }
+    },
+
+    _createSelectBackgroundColor: function () {
+        var self = this;
+        return {
+            type: "bi.htape",
+            cls: "config-item bi-border-bottom",
+            height: 40,
+            items: [this._createLabel("选中状态背景颜色："), this._createColorPicker(function () {
+                self.selectBackgroundColor = this;
+            }, function () {
+                self._runGlobalStyle();
+            })]
+        }
+    },
+
+    _createSlitColor: function () {
+        var self = this;
+        return {
+            type: "bi.htape",
+            cls: "config-item bi-border-bottom",
+            height: 40,
+            items: [this._createLabel("分割线颜色(只对左边的表格有效)："), this._createColorPicker(function () {
+                self.slitColor = this;
             }, function () {
                 self._runGlobalStyle();
             })]
@@ -133,11 +212,121 @@ Demo.Face = BI.inherit(BI.Widget, {
             items: [this._createLabel("--通用配色--"),
                 this._createBackgroundConfig(),
                 this._createFontConfig(),
+                this._createActiveFontConfig(),
+                this._createSelectFontConfig(),
+                this._createGrayFontConfig(),
                 this._createDisableFontConfig(),
-                this._createCardBackgroundConfig(),
+                this._createCard1BackgroundConfig(),
+                this._createCard2BackgroundConfig(),
                 this._createHoverBackgroundColor(),
-                this._createActiveBackgroundColor()
+                this._createActiveBackgroundColor(),
+                this._createSelectBackgroundColor(),
+                this._createSlitColor()
             ]
+        }
+    },
+
+
+    _createButton1BackgroundConfig: function () {
+        var self = this;
+        return {
+            type: "bi.htape",
+            cls: "config-item bi-border-bottom",
+            height: 40,
+            items: [this._createLabel("按钮背景色1："), this._createColorPicker(function () {
+                self.button1BackgroundColor = this;
+            }, function () {
+                self._runGlobalStyle();
+            }), {
+                width: 100,
+                el: {
+                    type: "bi.vertical_adapt",
+                    height: 40,
+                    items: [{
+                        type: "bi.button",
+                        cls: "config-button1",
+                        text: "测试按钮"
+                    }]
+                }
+            }]
+        }
+    },
+
+    _createButton2BackgroundConfig: function () {
+        var self = this;
+        return {
+            type: "bi.htape",
+            cls: "config-item bi-border-bottom",
+            height: 40,
+            items: [this._createLabel("按钮背景色2："), this._createColorPicker(function () {
+                self.button2BackgroundColor = this;
+            }, function () {
+                self._runGlobalStyle();
+            }), {
+                width: 100,
+                el: {
+                    type: "bi.vertical_adapt",
+                    height: 40,
+                    items: [{
+                        type: "bi.button",
+                        level: "success",
+                        cls: "config-button2",
+                        text: "测试按钮"
+                    }]
+                }
+            }]
+        }
+    },
+
+    _createButton3BackgroundConfig: function () {
+        var self = this;
+        return {
+            type: "bi.htape",
+            cls: "config-item bi-border-bottom",
+            height: 40,
+            items: [this._createLabel("按钮背景色3："), this._createColorPicker(function () {
+                self.button3BackgroundColor = this;
+            }, function () {
+                self._runGlobalStyle();
+            }), {
+                width: 100,
+                el: {
+                    type: "bi.vertical_adapt",
+                    height: 40,
+                    items: [{
+                        type: "bi.button",
+                        level: "warning",
+                        cls: "config-button3",
+                        text: "测试按钮"
+                    }]
+                }
+            }]
+        }
+    },
+
+    _createButton4BackgroundConfig: function () {
+        var self = this;
+        return {
+            type: "bi.htape",
+            cls: "config-item bi-border-bottom",
+            height: 40,
+            items: [this._createLabel("按钮背景色4："), this._createColorPicker(function () {
+                self.button4BackgroundColor = this;
+            }, function () {
+                self._runGlobalStyle();
+            }), {
+                width: 100,
+                el: {
+                    type: "bi.vertical_adapt",
+                    height: 40,
+                    items: [{
+                        type: "bi.button",
+                        level: "ignore",
+                        cls: "config-button4",
+                        text: "测试按钮"
+                    }]
+                }
+            }]
         }
     },
 
@@ -145,7 +334,7 @@ Demo.Face = BI.inherit(BI.Widget, {
         var self = this;
         return {
             type: "bi.htape",
-            cls: "config-item",
+            cls: "config-item bi-border-bottom",
             height: 40,
             items: [this._createLabel("滚动条底色："), this._createColorPicker(function () {
                 self.scrollBackgroundColor = this;
@@ -159,7 +348,7 @@ Demo.Face = BI.inherit(BI.Widget, {
         var self = this;
         return {
             type: "bi.htape",
-            cls: "config-item",
+            cls: "config-item bi-border-bottom",
             height: 40,
             items: [this._createLabel("滚动条thumb颜色："), this._createColorPicker(function () {
                 self.scrollThumbColor = this;
@@ -173,7 +362,7 @@ Demo.Face = BI.inherit(BI.Widget, {
         var self = this;
         return {
             type: "bi.htape",
-            cls: "config-item",
+            cls: "config-item bi-border-bottom",
             height: 40,
             items: [this._createLabel("下拉框背景颜色："), this._createColorPicker(function () {
                 self.popupBackgroundColor = this;
@@ -278,7 +467,7 @@ Demo.Face = BI.inherit(BI.Widget, {
         var self = this;
         return {
             type: "bi.htape",
-            cls: "config-item",
+            cls: "config-item bi-border-bottom",
             height: 40,
             items: [this._createLabel("弹出层蒙版颜色："), this._createColorPicker(function () {
                 self.maskBackgroundColor = this;
@@ -304,6 +493,10 @@ Demo.Face = BI.inherit(BI.Widget, {
         return {
             type: "bi.vertical",
             items: [this._createLabel("--一般配色--"),
+                this._createButton1BackgroundConfig(),
+                this._createButton2BackgroundConfig(),
+                this._createButton3BackgroundConfig(),
+                this._createButton4BackgroundConfig(),
                 this._createScrollBackgroundConfig(),
                 this._createScrollThumbConfig(),
                 this._createPopupBackgroundConfig(),
@@ -320,14 +513,14 @@ Demo.Face = BI.inherit(BI.Widget, {
                 column: 0,
                 row: 0,
                 el: {
-                    type: "demo.preview",
-                    cls: "face-config"
+                    type: "demo.preview"
                 }
             }, {
                 column: 1,
                 row: 0,
                 el: {
                     type: "bi.vertical",
+                    cls: "face-config bi-border-left",
                     items: [this._createBaseConfig(),
                         this._createCommonConfig()]
                 }
@@ -350,24 +543,36 @@ Demo.Face = BI.inherit(BI.Widget, {
     _runGlobalStyle: function () {
         var backgroundColor = this.backgroundColor.getValue();
         var fontColor = this.fontColor.getValue();
+        var activeFontColor = this.activeFontColor.getValue();
+        var selectFontColor = this.selectFontColor.getValue();
+        var grayFontColor = this.grayFontColor.getValue();
         var disabledFontColor = this.disabledFontColor.getValue();
         var cardBackgroundColor = this.cardBackgroundColor.getValue();
         var hoverBackgroundColor = this.hoverBackgroundColor.getValue();
         var activeBackgroundColor = this.activeBackgroundColor.getValue();
+        var selectBackgroundColor = this.selectBackgroundColor.getValue();
+        var slitColor = this.slitColor.getValue();
 
+        var button1BackgroundColor = this.button1BackgroundColor.getValue();
+        var button2BackgroundColor = this.button2BackgroundColor.getValue();
+        var button3BackgroundColor = this.button3BackgroundColor.getValue();
+        var button4BackgroundColor = this.button4BackgroundColor.getValue();
         var scrollBackgroundColor = this.scrollBackgroundColor.getValue();
         var scrollThumbColor = this.scrollThumbColor.getValue();
         var popupBackgroundColor = this.popupBackgroundColor.getValue();
         var maskBackgroundColor = this.maskBackgroundColor.getValue();
 
-        $("#wrapper").css({
-            backgroundColor: backgroundColor,
-            color: fontColor
-        });
-        $(".demo-west,.preview-card").css({
-            backgroundColor: cardBackgroundColor
-        });
         this._setStyle({
+            ".bi-background": {
+                "background-color": backgroundColor + "!important",
+                "color": fontColor + "!important"
+            },
+            ".bi-card": {
+                "background-color": cardBackgroundColor + "!important"
+            },
+            ".bi-tips": {
+                "color": grayFontColor + "!important"
+            },
             "div::-webkit-scrollbar,.scrollbar-layout-main": {
                 "background-color": scrollBackgroundColor + "!important"
             },
@@ -387,10 +592,40 @@ Demo.Face = BI.inherit(BI.Widget, {
                 "background-color": maskBackgroundColor + "!important"
             },
             ".bi-list-item:hover,.bi-list-item-hover:hover,.bi-list-item-active:hover,.bi-list-item-select:hover,.bi-list-item-effect:hover": {
-                "background-color": hoverBackgroundColor
+                "background-color": hoverBackgroundColor + "!important"
             },
             ".bi-list-item-active:active,.bi-list-item-select:active,.bi-list-item-effect:active": {
-                "background-color": activeBackgroundColor
+                "background-color": activeBackgroundColor + "!important",
+                "color": activeFontColor + "!important"
+            },
+            ".bi-list-item-active.active,.bi-list-item-select.active,.bi-list-item-effect.active": {
+                "background-color": selectBackgroundColor + "!important",
+                "color": selectFontColor + "!important"
+            },
+            ".bi-button": {
+                "background-color": button1BackgroundColor,
+                "border-color": button1BackgroundColor
+            },
+            ".bi-button.button-success": {
+                "background-color": button2BackgroundColor,
+                "border-color": button2BackgroundColor
+            },
+            ".bi-button.button-warning": {
+                "background-color": button3BackgroundColor,
+                "border-color": button3BackgroundColor
+            },
+            ".bi-button.button-ignore": {
+                "background-color": button4BackgroundColor
+            },
+            ".bi-collection-table-cell": {
+                "border-right-color": slitColor,
+                "border-bottom-color": slitColor
+            },
+            ".bi-collection-table-cell.first-col": {
+                "border-left-color": slitColor
+            },
+            ".bi-collection-table-cell.first-row": {
+                "border-top-color": slitColor
             }
         })
     },
@@ -398,15 +633,24 @@ Demo.Face = BI.inherit(BI.Widget, {
     mounted: function () {
         this.backgroundColor.setValue("");
         this.fontColor.setValue("");
+        this.activeFontColor.setValue("");
+        this.selectFontColor.setValue("");
+        this.grayFontColor.setValue("");
         this.disabledFontColor.setValue("");
         this.cardBackgroundColor.setValue("");
         this.hoverBackgroundColor.setValue("");
         this.activeBackgroundColor.setValue("");
+        this.selectBackgroundColor.setValue("");
 
+        this.button1BackgroundColor.setValue("");
+        this.button2BackgroundColor.setValue("");
+        this.button3BackgroundColor.setValue("");
+        this.button4BackgroundColor.setValue("");
         this.scrollBackgroundColor.setValue("");
         this.scrollThumbColor.setValue("");
         this.popupBackgroundColor.setValue("");
         this.maskBackgroundColor.setValue("");
+        this.slitColor.setValue("");
         this._runGlobalStyle();
     }
 });

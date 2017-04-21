@@ -6,7 +6,7 @@
 BI.FloatBox = BI.inherit(BI.Widget, {
     _defaultConfig: function () {
         return BI.extend(BI.FloatBox.superclass._defaultConfig.apply(this, arguments), {
-            baseCls: "bi-float-box",
+            baseCls: "bi-float-box bi-card",
             width: 600,
             height: 500
         })
@@ -45,7 +45,7 @@ BI.FloatBox = BI.inherit(BI.Widget, {
                 'north': {
                     el: {
                         type: 'bi.border',
-                        cls: 'bi-message-title',
+                        cls: 'bi-message-title bi-background',
                         items: {
                             center: {
                                 el: {

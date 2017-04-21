@@ -15,7 +15,7 @@ BI.MonthTrigger = BI.inherit(BI.Trigger, {
 
     _defaultConfig: function () {
         return BI.extend(BI.MonthTrigger.superclass._defaultConfig.apply(this, arguments), {
-            extraCls: "bi-month-trigger",
+            extraCls: "bi-month-trigger bi-border",
             height: 25
         });
     },

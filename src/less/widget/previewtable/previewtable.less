@@ -3,7 +3,17 @@
 .bi-preview-table {
   & > div > table, & > div > div > div > table {
     & > thead > tr.odd {
-      background-color: @color-bi-background-light;
+      background-color: @color-bi-background-normal;
+    }
+  }
+}
+
+.bi-theme-dark {
+  .bi-preview-table {
+    & > div > table, & > div > div > div > table {
+      & > thead > tr.odd {
+        background-color: @color-bi-background-normal-theme-dark;
+      }
     }
   }
 }

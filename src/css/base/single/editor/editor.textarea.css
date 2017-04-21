@@ -12,6 +12,3 @@
 .bi-textarea-editor .textarea-editor-content {
   border: none;
 }
-.bi-textarea-editor .textarea-editor-content.textarea-editor-focus {
-  border: 1px solid #009de3;
-}

@@ -161,27 +161,14 @@ BI.Widget = BI.inherit(BI.OB, {
         }
         this.beforeMounted && this.beforeMounted();
         this._isMounted = true;
-        this._mountChildren();
+        this._mountChildren && this._mountChildren();
         BI.each(this._children, function (i, widget) {
             widget._mount && widget._mount();
         });
         this.mounted && this.mounted();
     },
 
-    _mountChildren: function () {
-        var self = this;
-        var frag = document.createDocumentFragment();
-        var hasChild = false;
-        BI.each(this._children, function (i, widget) {
-            if (widget.element !== self.element) {
-                frag.appendChild(widget.element[0]);
-                hasChild = true;
-            }
-        });
-        if (hasChild === true) {
-            this.element.append(frag);
-        }
-    },
+    _mountChildren: null,
 
     _unMount: function () {
         BI.each(this._children, function (i, widget) {

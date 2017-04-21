@@ -13,7 +13,7 @@ BI.MultiTreeCheckPane = BI.inherit(BI.Pane, {
 
     _defaultConfig: function () {
         return BI.extend(BI.MultiTreeCheckPane.superclass._defaultConfig.apply(this, arguments), {
-            baseCls: "bi-multi-tree-check-pane",
+            baseCls: "bi-multi-tree-check-pane bi-background",
             onClickContinueSelect: BI.emptyFn
         });
     },

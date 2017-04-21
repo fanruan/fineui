@@ -2666,6 +2666,13 @@ if (!window.BI) {
             }
         },
 
+        parseSafeInt: function (value) {
+            var MAX_SAFE_INTEGER = 9007199254740991;
+            return value
+                ? this.clamp(this.parseInt(value), -MAX_SAFE_INTEGER, MAX_SAFE_INTEGER)
+                : (value === 0 ? value : 0);
+        },
+
         parseFloat: function (number) {
             try {
                 return parseFloat(number);
@@ -4426,27 +4433,14 @@ BI.Widget = BI.inherit(BI.OB, {
         }
         this.beforeMounted && this.beforeMounted();
         this._isMounted = true;
-        this._mountChildren();
+        this._mountChildren && this._mountChildren();
         BI.each(this._children, function (i, widget) {
             widget._mount && widget._mount();
         });
         this.mounted && this.mounted();
     },
 
-    _mountChildren: function () {
-        var self = this;
-        var frag = document.createDocumentFragment();
-        var hasChild = false;
-        BI.each(this._children, function (i, widget) {
-            if (widget.element !== self.element) {
-                frag.appendChild(widget.element[0]);
-                hasChild = true;
-            }
-        });
-        if (hasChild === true) {
-            this.element.append(frag);
-        }
-    },
+    _mountChildren: null,
 
     _unMount: function () {
         BI.each(this._children, function (i, widget) {
@@ -8289,11 +8283,14 @@ BI.ScalingCellSizeAndPositionManager.prototype = {
                 element.__resizeTriggers__ = !element.removeChild(element.__resizeTriggers__);
             }
         }
-    }
+    };
 
     BI.ResizeDetector = {
         addResizeListener: function (widget, fn) {
             addResizeListener(widget.element[0], fn);
+            return function () {
+                removeResizeListener(widget.element[0], fn);
+            }
         },
         removeResizeListener: function (widget, fn) {
             removeResizeListener(widget.element[0], fn);
@@ -11107,6 +11104,21 @@ BI.Layout = BI.inherit(BI.Widget, {
                 "overflow-x": "hidden",
                 "overflow-y": "auto"
             });
+        }
+    },
+
+    _mountChildren: function () {
+        var self = this;
+        var frag = document.createDocumentFragment();
+        var hasChild = false;
+        BI.each(this._children, function (i, widget) {
+            if (widget.element !== self.element) {
+                frag.appendChild(widget.element[0]);
+                hasChild = true;
+            }
+        });
+        if (hasChild === true) {
+            this.element.append(frag);
         }
     },
 
@@ -17034,7 +17046,7 @@ $(function () {
             }
             var rgb = this.rgb2json(this.hex2rgb(hex));
             var grayLevel = Math.round(rgb.r * 0.299 + rgb.g * 0.587 + rgb.b * 0.114);
-            if (grayLevel < 192) {
+            if (grayLevel < 140) {
                 return true;
             }
             return false;
@@ -17043,7 +17055,7 @@ $(function () {
         //获取对比颜色
         getContrastColor: function (color) {
             if (this.isDarkColor(color)) {
-                return "#b2b2b2";
+                return "#ffffff";
             }
             return "#1a1a1a";
         },

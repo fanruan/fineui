@@ -3,5 +3,5 @@
 /**** custom color(自定义颜色,用于特定场景) ****/
 .bi-single-select-icon-text-item:active .b-font:before,
 .bi-single-select-icon-text-item.active .b-font:before {
-  color: #009de3;
+  color: #3f8ce8;
 }

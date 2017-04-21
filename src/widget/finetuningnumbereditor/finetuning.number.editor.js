@@ -5,7 +5,7 @@
 BI.FineTuningNumberEditor = BI.inherit(BI.Widget, {
     _defaultConfig: function () {
         return BI.extend(BI.FineTuningNumberEditor.superclass._defaultConfig.apply(this, arguments), {
-            baseCls: "bi-fine-tuning-number-editor",
+            baseCls: "bi-fine-tuning-number-editor bi-border",
             value: -1
         })
     },
@@ -27,7 +27,7 @@ BI.FineTuningNumberEditor = BI.inherit(BI.Widget, {
         });
         this.topBtn = BI.createWidget({
             type: "bi.icon_button",
-            cls: "column-pre-page-h-font top-button"
+            cls: "column-pre-page-h-font top-button bi-border-left bi-border-bottom"
         });
         this.topBtn.on(BI.IconButton.EVENT_CHANGE, function(){
             self._finetuning(1);
@@ -35,7 +35,7 @@ BI.FineTuningNumberEditor = BI.inherit(BI.Widget, {
         });
         this.bottomBtn = BI.createWidget({
             type: "bi.icon_button",
-            cls: "column-next-page-h-font bottom-button"
+            cls: "column-next-page-h-font bottom-button bi-border-left bi-border-top"
         });
         this.bottomBtn.on(BI.IconButton.EVENT_CHANGE, function(){
             self._finetuning(-1);

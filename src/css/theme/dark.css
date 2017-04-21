@@ -2,8 +2,8 @@
 /****** common color(常用颜色,可用于普遍场景) *****/
 /**** custom color(自定义颜色,用于特定场景) ****/
 .bi-theme-dark {
-  background-color: #191a2c;
-  color: #b2b2b2;
+  background-color: #191b2b;
+  color: #cccccc;
 }
 .bi-theme-dark .bi-input {
   color: #ffffff;

@@ -62,10 +62,10 @@ BI.RelationViewRegion = BI.inherit(BI.BasicButton, {
             element: this,
             items: [{
                 type: "bi.vertical",
-                cls: "relation-view-region-container " + (o.belongPackage ? "" : "other-package"),
+                cls: "relation-view-region-container bi-card bi-border " + (o.belongPackage ? "" : "other-package"),
                 items: [{
                     type: "bi.vertical_adapt",
-                    cls: "relation-view-region-title",
+                    cls: "relation-view-region-title bi-border",
                     items: [this.preview, this.title]
                 }, this.button_group]
             }],

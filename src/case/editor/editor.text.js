@@ -7,7 +7,7 @@ BI.TextEditor = BI.inherit(BI.Single, {
     _defaultConfig: function () {
         var conf = BI.TextEditor.superclass._defaultConfig.apply(this, arguments);
         return BI.extend(conf, {
-            extraCls: "bi-text-editor",
+            extraCls: "bi-text-editor bi-border",
             hgap: 4,
             vgap: 2,
             lgap: 0,

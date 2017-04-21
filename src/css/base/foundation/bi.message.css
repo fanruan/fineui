@@ -2,14 +2,8 @@
 /****** common color(常用颜色,可用于普遍场景) *****/
 /**** custom color(自定义颜色,用于特定场景) ****/
 .bi-message-title {
-  background-color: #f4f4f4;
-  color: #808080;
   font-size: 16px;
   cursor: pointer;
-}
-.bi-theme-dark .bi-message-title {
-  background-color: #191a2c;
-  color: #b2b2b2;
 }
 .bi-message-text {
   font-size: 16px;
@@ -21,13 +15,7 @@
   user-select: text;
 }
 .bi-message-content {
-  background-color: #ffffff;
-  color: #808080;
   font-size: 16px;
-}
-.bi-theme-dark .bi-message-content {
-  background-color: #202237;
-  color: #b2b2b2;
 }
 .bi-message-close {
   font-size: 25px;

@@ -181,9 +181,9 @@ BI.Combo = BI.inherit(BI.Widget, {
     },
 
     _hideIf: function (e) {
-        if (this.element.__isMouseInBounds__(e) || (this.popupView && this.popupView.element.__isMouseInBounds__(e))) {
-            return;
-        }
+        // if (this.element.__isMouseInBounds__(e) || (this.popupView && this.popupView.element.__isMouseInBounds__(e))) {
+        //     return;
+        // }
         if (this.element.find(e.target).length > 0) {
             return;
         }

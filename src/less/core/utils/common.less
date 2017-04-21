@@ -2,10 +2,18 @@
 
 .base-disabled {
   cursor: default !important;
-  color: #c4c6c6 !important;
-  //.opacity(0.5);
+  color: @color-bi-text-disabled !important;
   & .b-font:before {
-    color: #c4c6c6 !important;
+    color: @color-bi-text-disabled !important;
+  }
+}
+
+.bi-theme-dark {
+  .base-disabled {
+    color: @color-bi-text-disabled-theme-dark !important;
+    & .b-font:before {
+      color: @color-bi-text-disabled-theme-dark !important;
+    }
   }
 }
 
@@ -15,6 +23,98 @@
 
 .clearfix {
   .clearfix();
+}
+
+//基本背景色
+.bi-background {
+  background-color: @color-bi-background-normal;
+  color: @color-bi-text-normal;
+}
+
+.bi-theme-dark {
+  .bi-background {
+    background-color: @color-bi-background-normal-theme-dark;
+    color: @color-bi-text-theme-dark;
+  }
+}
+
+//card
+.bi-card {
+  background-color: @color-bi-background-default;
+  color: @color-bi-text-normal;
+}
+
+.bi-theme-dark {
+  .bi-card {
+    background-color: @color-bi-background-default-theme-dark;
+    color: @color-bi-text-theme-dark;
+  }
+}
+
+.bi-disabled {
+  color: @color-bi-text-disabled;
+}
+
+.bi-theme-dark {
+  .bi-disabled {
+    color: @color-bi-text-disabled-theme-dark;
+  }
+}
+
+//提示区域, 灰色字体
+.bi-tips {
+  color: @color-bi-text-tips;
+}
+
+//边框
+.bi-border {
+  border: 1px solid @color-bi-border-line;
+}
+
+.bi-theme-dark {
+  .bi-border {
+    border: 1px solid @color-bi-border-line-theme-dark;
+  }
+}
+
+.bi-border-left {
+  border-left: 1px solid @color-bi-border-line;
+}
+
+.bi-theme-dark {
+  .bi-border-left {
+    border-left: 1px solid @color-bi-border-line-theme-dark;
+  }
+}
+
+.bi-border-right {
+  border-right: 1px solid @color-bi-border-line;
+}
+
+.bi-theme-dark {
+  .bi-border-right {
+    border-right: 1px solid @color-bi-border-line-theme-dark;
+  }
+}
+
+.bi-border-top {
+  border-top: 1px solid @color-bi-border-line;
+}
+
+.bi-theme-dark {
+  .bi-border-top {
+    border-top: 1px solid @color-bi-border-line-theme-dark;
+  }
+}
+
+.bi-border-bottom {
+  border-bottom: 1px solid @color-bi-border-line;
+}
+
+.bi-theme-dark {
+  .bi-border-bottom {
+    border-bottom: 1px solid @color-bi-border-line-theme-dark;
+  }
 }
 
 //标红
@@ -33,16 +133,23 @@
   cursor: text;
 }
 
-//提示文本, 灰色字体
-.bi-tips {
-  color: @color-bi-text-tips;
+.bi-theme-dark {
+  .bi-water-mark {
+    color: @water-mark-color-theme-dark;
+  }
 }
 
 //resize
 .bi-resizer {
-  background: @color-bi-background-virtual-blue;
-  .opacity(0.8);
+  background: @color-bi-background-black;
+  .opacity(0.2);
   z-index: @zIndex-tip;
+}
+
+.bi-theme-dark {
+  .bi-resizer {
+    background: @color-bi-background-default;
+  }
 }
 
 .bi-z-index-mask {
@@ -50,16 +157,22 @@
   .opacity(0.5);
 }
 
-@color-list-item-hover: #04070d;
+.bi-theme-dark {
+  .bi-z-index-mask {
+    background-color: @color-bi-background-default;
+  }
+}
 
 //只有背景变化
 .bi-list-item {
   &:hover, &.hover {
-    background-color: @color-bi-background-gray;
+    background-color: @color-bi-background-normal;
+    color: @color-bi-text-black;
   }
   &.disabled {
     &, &:hover, &:active {
       background-color: transparent !important;
+      color: @color-bi-text-disabled !important;
     }
   }
 }
@@ -67,14 +180,48 @@
 .bi-theme-dark {
   .bi-list-item {
     &:hover, &.hover {
-      background-color: @color-list-item-hover;
+      background-color: @color-bi-background-normal-theme-dark;
       color: @color-bi-text;
+    }
+    &.disabled {
+      &, &:hover, &:active {
+        background-color: transparent !important;
+        color: @color-bi-text-disabled-theme-dark !important;
+      }
+    }
+  }
+}
+
+//极简
+.bi-list-item-simple {
+  &:hover, &.hover {
+    color: @color-bi-text-black;
+  }
+  &.disabled {
+    &, &:hover, &:active {
+      color: @color-bi-text-disabled !important;
+    }
+  }
+}
+
+.bi-theme-dark {
+  .bi-list-item-simple {
+    &:hover, &.hover {
+      color: @color-bi-text;
+    }
+    &.disabled {
+      &, &:hover, &:active {
+        color: @color-bi-text-disabled-theme-dark !important;
+      }
     }
   }
 }
 
 //文字active时变化
 .bi-list-item-effect {
+  &:hover {
+    color: @color-bi-text-black;
+  }
   &.active, &:active {
     color: @color-bi-text-highlight;
   }
@@ -87,12 +234,16 @@
 
 .bi-theme-dark {
   .bi-list-item-effect {
+    &:hover {
+      color: @color-bi-text;
+    }
     &.active, &:active {
       color: @color-bi-text-highlight;
     }
     &.disabled {
       &, &:hover, &:active {
-        color: @color-bi-text-disabled !important;
+        background-color: transparent !important;
+        color: @color-bi-text-disabled-theme-dark !important;
       }
     }
   }
@@ -102,7 +253,7 @@
 .bi-list-item-hover {
   &:hover, &.hover {
     color: @color-bi-text-highlight;
-    background-color: @color-bi-background-gray;
+    background-color: @color-bi-background-normal;
   }
   &.disabled {
     &, &:hover, &:active {
@@ -116,11 +267,12 @@
   .bi-list-item-hover {
     &:hover, &.hover {
       color: @color-bi-text-highlight;
-      background-color: @color-list-item-hover;
+      background-color: @color-bi-background-normal-theme-dark;
     }
     &.disabled {
       &, &:hover, &:active {
-        color: @color-bi-text-disabled !important;
+        background-color: transparent !important;
+        color: @color-bi-text-disabled-theme-dark !important;
       }
     }
   }
@@ -129,15 +281,17 @@
 //文字和背景hover和active时变化
 .bi-list-item-active {
   &:hover, &.hover {
-    background-color: @color-bi-background-gray;
+    color: @color-bi-text-black;
+    background-color: @color-bi-background-normal;
   }
   &.active, &:active {
     color: @color-bi-text-highlight;
-    background-color: @color-bi-background-gray;
+    background-color: @color-bi-background-normal;
   }
   &.disabled {
     &, &:hover, &:active {
       background-color: transparent !important;
+      color: @color-bi-text-disabled !important;
     }
   }
 }
@@ -145,12 +299,18 @@
 .bi-theme-dark {
   .bi-list-item-active {
     &:hover, &.hover {
-      background-color: @color-list-item-hover;
+      background-color: @color-bi-background-normal-theme-dark;
       color: @color-bi-text;
     }
     &.active, &:active {
       color: @color-bi-text-highlight;
-      background-color: @color-list-item-hover;
+      background-color: @color-bi-background-normal-theme-dark;
+    }
+    &.disabled {
+      &, &:hover, &:active {
+        background-color: transparent !important;
+        color: @color-bi-text-disabled-theme-dark !important;
+      }
     }
   }
 }
@@ -159,7 +319,7 @@
 .bi-list-item-select {
   &:hover, &.hover {
     color: @color-bi-text-highlight;
-    background-color: @color-bi-background-gray;
+    background-color: @color-bi-background-normal;
   }
   &:active, &.active {
     color: @color-bi-text;
@@ -183,13 +343,41 @@
   .bi-list-item-select {
     &:hover, &.hover {
       color: @color-bi-text-highlight;
-      background-color: @color-list-item-hover;
+      background-color: @color-bi-background-normal-theme-dark;
     }
     &:active, &.active {
       color: @color-bi-text;
       background-color: @color-bi-background-highlight;
       & .bi-high-light {
         color: @color-bi-text;
+      }
+    }
+    &.disabled {
+      &, &:hover, &:active {
+        background-color: transparent !important;
+        color: @color-bi-text-disabled-theme-dark !important;
+        & .bi-high-light {
+          color: @color-bi-text-disabled-theme-dark !important;
+        }
+      }
+    }
+  }
+}
+
+.bi-list-item-choose {
+  &:active, &.active {
+    color: @color-bi-text;
+    background-color: @color-bi-background-highlight;
+    & .bi-high-light {
+      color: @color-bi-text;
+    }
+  }
+  &.disabled {
+    &, &:hover, &:active {
+      color: @color-bi-text-disabled !important;
+      background-color: transparent !important;
+      & .bi-high-light {
+        color: @color-bi-text-disabled !important;
       }
     }
   }

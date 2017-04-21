@@ -2,8 +2,7 @@
 /****** common color(常用颜色,可用于普遍场景) *****/
 /**** custom color(自定义颜色,用于特定场景) ****/
 .bi-arrangement .arrangement-helper {
-  border: 1px solid #d4dadd;
-  background: #009de3;
+  background: #3f8ce8;
   z-index: 1000000000;
 }
 .bi-arrangement .arrangement-block {
@@ -17,7 +16,7 @@
 }
 .bi-arrangement .arrangement-drop-container .drop-devider {
   z-index: 1000000001;
-  background: #009de3;
+  background: #3f8ce8;
 }
 .bi-arrangement .arrangement-drop-container .top-left,
 .bi-arrangement .arrangement-drop-container .top-right,
@@ -36,5 +35,5 @@
 .bi-arrangement .arrangement-drop-container .left-center-second,
 .bi-arrangement .arrangement-drop-container .right-center-second {
   z-index: 1000000001;
-  background: #009de3;
+  background: #3f8ce8;
 }

@@ -9,7 +9,7 @@ BI.RelationViewItem = BI.inherit(BI.BasicButton, {
 
     _defaultConfig: function () {
         return BI.extend(BI.RelationViewItem.superclass._defaultConfig.apply(this, arguments), {
-            baseCls: "bi-relation-view-item",
+            baseCls: "bi-relation-view-item bi-list-item-active",
             height: 25,
             hoverIn: BI.emptyFn,
             hoverOut: BI.emptyFn

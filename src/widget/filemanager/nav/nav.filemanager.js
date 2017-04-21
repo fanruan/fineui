@@ -9,7 +9,7 @@ BI.FileManagerNav = BI.inherit(BI.Widget, {
 
     _defaultConfig: function () {
         return BI.extend(BI.FileManagerNav.superclass._defaultConfig.apply(this, arguments), {
-            baseCls: "bi-file-manager-nav",
+            baseCls: "bi-file-manager-nav bi-border-left",
             height: 40,
             items: []
         })
