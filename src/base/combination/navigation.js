@@ -105,7 +105,7 @@ BI.Navigation = BI.inherit(BI.Widget, {
     },
 
     setSelect: function (v) {
-        this._assertCard();
+        this._assertCard(v);
         this.layout.showCardByName(v);
         this._deleteOtherCards(v);
         if (this.showIndex !== v) {
