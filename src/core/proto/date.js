@@ -104,6 +104,104 @@ Date.prototype.getOffsetDate = function (offset) {
     return new Date(this.getTime() + offset * 864e5);
 };
 
+Date.prototype.getAfterMulQuarter = function (n) {
+    var dt = new Date(this.getTime());
+    dt.setMonth(dt.getMonth() + n * 3);
+    return dt;
+};
+//获得n个季度前的日期
+Date.prototype.getBeforeMulQuarter = function (n) {
+    var dt = new Date(this.getTime());
+    dt.setMonth(dt.getMonth() - n * 3);
+    return dt;
+};
+//得到本季度的起始月份
+Date.prototype.getQuarterStartMonth = function () {
+    var quarterStartMonth = 0;
+    var nowMonth = this.getMonth();
+    if (nowMonth < 3) {
+        quarterStartMonth = 0;
+    }
+    if (2 < nowMonth && nowMonth < 6) {
+        quarterStartMonth = 3;
+    }
+    if (5 < nowMonth && nowMonth < 9) {
+        quarterStartMonth = 6;
+    }
+    if (nowMonth > 8) {
+        quarterStartMonth = 9;
+    }
+    return quarterStartMonth;
+};
+//获得本季度的起始日期
+Date.prototype.getQuarterStartDate = function () {
+    return new Date(this.getFullYear(), this.getQuarterStartMonth(), 1);
+};
+//得到本季度的结束日期
+Date.prototype.getQuarterEndDate = function () {
+    var quarterEndMonth = this.getQuarterStartMonth() + 2;
+    return new Date(this.getFullYear(), quarterEndMonth, this.getMonthDays(quarterEndMonth));
+};
+Date.prototype.getAfterMultiMonth = function (n) {
+    var dt = new Date(this.getTime());
+    dt.setMonth(dt.getMonth() + n | 0);
+    return dt;
+};
+Date.prototype.getBeforeMultiMonth = function (n) {
+    var dt = new Date(this.getTime());
+    dt.setMonth(dt.getMonth() - n | 0);
+    return dt;
+};
+
+Date.prototype.getAfterMulQuarter = function (n) {
+    var dt = new Date(this.getTime());
+    dt.setMonth(dt.getMonth() + n * 3);
+    return dt;
+};
+//获得n个季度前的日期
+Date.prototype.getBeforeMulQuarter = function (n) {
+    var dt = new Date(this.getTime());
+    dt.setMonth(dt.getMonth() - n * 3);
+    return dt;
+};
+//得到本季度的起始月份
+Date.prototype.getQuarterStartMonth = function () {
+    var quarterStartMonth = 0;
+    var nowMonth = this.getMonth();
+    if (nowMonth < 3) {
+        quarterStartMonth = 0;
+    }
+    if (2 < nowMonth && nowMonth < 6) {
+        quarterStartMonth = 3;
+    }
+    if (5 < nowMonth && nowMonth < 9) {
+        quarterStartMonth = 6;
+    }
+    if (nowMonth > 8) {
+        quarterStartMonth = 9;
+    }
+    return quarterStartMonth;
+};
+//获得本季度的起始日期
+Date.prototype.getQuarterStartDate = function () {
+    return new Date(this.getFullYear(), this.getQuarterStartMonth(), 1);
+};
+//得到本季度的结束日期
+Date.prototype.getQuarterEndDate = function () {
+    var quarterEndMonth = this.getQuarterStartMonth() + 2;
+    return new Date(this.getFullYear(), quarterEndMonth, this.getMonthDays(quarterEndMonth));
+};
+Date.prototype.getAfterMultiMonth = function (n) {
+    var dt = new Date(this.getTime());
+    dt.setMonth(dt.getMonth() + n | 0);
+    return dt;
+};
+Date.prototype.getBeforeMultiMonth = function (n) {
+    var dt = new Date(this.getTime());
+    dt.setMonth(dt.getMonth() - n | 0);
+    return dt;
+};
+
 /** Checks date and time equality */
 Date.prototype.equalsTo = function (date) {
     return ((this.getFullYear() == date.getFullYear()) &&
