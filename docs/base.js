@@ -243,7 +243,7 @@ BI.Pane = BI.inherit(BI.Widget, {
     loading: function () {
         var self = this, o = this.options;
         if (o.overlap === true) {
-            if (!BI.Maskers.has(this.getName())) {
+            if (!BI.Layers.has(this.getName())) {
                 BI.createWidget({
                     type: 'bi.vtape',
                     items: [{
@@ -253,10 +253,10 @@ BI.Pane = BI.inherit(BI.Widget, {
                         },
                         height: 30
                     }],
-                    element: BI.Maskers.make(this.getName(), this)
+                    element: BI.Layers.make(this.getName(), this)
                 });
             }
-            BI.Maskers.show(self.getName());
+            BI.Layers.show(self.getName());
         } else if (BI.isNull(this._loading)) {
             this._loading = BI.createWidget({
                 type: "bi.layout",
@@ -279,7 +279,7 @@ BI.Pane = BI.inherit(BI.Widget, {
 
     loaded: function () {
         var self = this, o = this.options;
-        BI.Maskers.remove(self.getName());
+        BI.Layers.remove(self.getName());
         this._loading && this._loading.destroy();
         this._loading && (this._loading = null);
         o.onLoaded();
