@@ -127,6 +127,11 @@
   color: @color-bi-text-highlight;
 }
 
+.bi-high-light-background {
+  background-color: @color-bi-background-highlight;
+  color: @color-bi-text;
+}
+
 //水印
 .bi-water-mark {
   color: @water-mark-color;
@@ -153,14 +158,8 @@
 }
 
 .bi-z-index-mask {
-  background-color: @color-bi-background-black;
-  .opacity(0.5);
-}
-
-.bi-theme-dark {
-  .bi-z-index-mask {
-    background-color: @color-bi-background-default;
-  }
+  background-color: rgba(26, 26, 26, .5);
+  filter: ~"progid:DXImageTransform.Microsoft.gradient(startColorstr=#7f1a1a1a,endColorstr=#7f1a1a1a)";
 }
 
 //只有背景变化

@@ -3043,6 +3043,10 @@ i {
 .bi-high-light {
   color: #3f8ce8;
 }
+.bi-high-light-background {
+  background-color: #3f8ce8;
+  color: #ffffff;
+}
 .bi-water-mark {
   color: #cccccc;
   cursor: text;
@@ -3060,12 +3064,8 @@ i {
   background: #ffffff;
 }
 .bi-z-index-mask {
-  background-color: #1a1a1a;
-  opacity: 0.5;
-  filter: alpha(opacity=50);
-}
-.bi-theme-dark .bi-z-index-mask {
-  background-color: #ffffff;
+  background-color: rgba(26, 26, 26, 0.5);
+  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr=#7f1a1a1a,endColorstr=#7f1a1a1a);
 }
 .bi-list-item:hover,
 .bi-list-item.hover {
