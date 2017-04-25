@@ -5,7 +5,7 @@
 BI.ComboGroup = BI.inherit(BI.Widget, {
     _defaultConfig: function () {
         return BI.extend(BI.ComboGroup.superclass._defaultConfig.apply(this, arguments), {
-            baseCls: "bi-combo-group",
+            baseCls: "bi-combo-group bi-list-item",
 
             //以下这些属性对每一个combo都是公用的
             trigger: "click,hover",

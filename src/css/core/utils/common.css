@@ -209,38 +209,6 @@
 .bi-theme-dark .bi-list-item-effect.disabled:active .bi-high-light {
   color: #666666 !important;
 }
-.bi-list-item-hover:hover,
-.bi-list-item-hover.hover {
-  color: #3f8ce8;
-  background-color: #eff1f4;
-}
-.bi-list-item-hover.disabled,
-.bi-list-item-hover.disabled:hover,
-.bi-list-item-hover.disabled:active {
-  color: #cccccc !important;
-  background-color: transparent !important;
-}
-.bi-list-item-hover.disabled .bi-high-light,
-.bi-list-item-hover.disabled:hover .bi-high-light,
-.bi-list-item-hover.disabled:active .bi-high-light {
-  color: #cccccc !important;
-}
-.bi-theme-dark .bi-list-item-hover:hover,
-.bi-theme-dark .bi-list-item-hover.hover {
-  color: #3f8ce8;
-  background-color: #191b2b;
-}
-.bi-theme-dark .bi-list-item-hover.disabled,
-.bi-theme-dark .bi-list-item-hover.disabled:hover,
-.bi-theme-dark .bi-list-item-hover.disabled:active {
-  background-color: transparent !important;
-  color: #666666 !important;
-}
-.bi-theme-dark .bi-list-item-hover.disabled .bi-high-light,
-.bi-theme-dark .bi-list-item-hover.disabled:hover .bi-high-light,
-.bi-theme-dark .bi-list-item-hover.disabled:active .bi-high-light {
-  color: #666666 !important;
-}
 .bi-list-item-active:hover,
 .bi-list-item-active.hover {
   color: #1a1a1a;
@@ -333,6 +301,9 @@
 .bi-theme-dark .bi-list-item-select.disabled:active .bi-high-light {
   color: #666666 !important;
 }
+.bi-list-item-choose:hover {
+  color: #1a1a1a;
+}
 .bi-list-item-choose:active,
 .bi-list-item-choose.active {
   color: #ffffff;
@@ -352,4 +323,18 @@
 .bi-list-item-choose.disabled:hover .bi-high-light,
 .bi-list-item-choose.disabled:active .bi-high-light {
   color: #cccccc !important;
+}
+.bi-theme-dark .bi-list-item-choose:hover {
+  color: #ffffff;
+}
+.bi-theme-dark .bi-list-item-choose.disabled,
+.bi-theme-dark .bi-list-item-choose.disabled:hover,
+.bi-theme-dark .bi-list-item-choose.disabled:active {
+  color: #666666 !important;
+  background-color: transparent !important;
+}
+.bi-theme-dark .bi-list-item-choose.disabled .bi-high-light,
+.bi-theme-dark .bi-list-item-choose.disabled:hover .bi-high-light,
+.bi-theme-dark .bi-list-item-choose.disabled:active .bi-high-light {
+  color: #666666 !important;
 }

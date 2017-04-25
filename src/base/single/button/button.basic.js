@@ -130,6 +130,7 @@ BI.BasicButton = BI.inherit(BI.Single, {
                         }
                         mouseDown = false;
                         $(document).unbind("mouseup." + self.getName());
+                        self.fireEvent(BI.BasicButton.EVENT_MOUSE_UP);
                         // }
                     });
                     if (mouseDown === true) {
@@ -142,6 +143,7 @@ BI.BasicButton = BI.inherit(BI.Single, {
                     }
                     mouseDown = true;
                     ev(e);
+                    self.fireEvent(BI.BasicButton.EVENT_MOUSE_DOWN);
                     // }
                 });
                 hand.mouseup(function (e) {
@@ -288,3 +290,5 @@ BI.BasicButton = BI.inherit(BI.Single, {
     }
 });
 BI.BasicButton.EVENT_CHANGE = "BasicButton.EVENT_CHANGE";
+BI.BasicButton.EVENT_MOUSE_DOWN = "BasicButton.EVENT_MOUSE_DOWN";
+BI.BasicButton.EVENT_MOUSE_UP = "BasicButton.EVENT_MOUSE_UP";

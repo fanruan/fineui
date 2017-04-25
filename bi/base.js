@@ -713,6 +713,7 @@ BI.BasicButton = BI.inherit(BI.Single, {
                         }
                         mouseDown = false;
                         $(document).unbind("mouseup." + self.getName());
+                        self.fireEvent(BI.BasicButton.EVENT_MOUSE_UP);
                         // }
                     });
                     if (mouseDown === true) {
@@ -725,6 +726,7 @@ BI.BasicButton = BI.inherit(BI.Single, {
                     }
                     mouseDown = true;
                     ev(e);
+                    self.fireEvent(BI.BasicButton.EVENT_MOUSE_DOWN);
                     // }
                 });
                 hand.mouseup(function (e) {
@@ -870,7 +872,9 @@ BI.BasicButton = BI.inherit(BI.Single, {
         BI.BasicButton.superclass.destroy.apply(this, arguments);
     }
 });
-BI.BasicButton.EVENT_CHANGE = "BasicButton.EVENT_CHANGE";/**
+BI.BasicButton.EVENT_CHANGE = "BasicButton.EVENT_CHANGE";
+BI.BasicButton.EVENT_MOUSE_DOWN = "BasicButton.EVENT_MOUSE_DOWN";
+BI.BasicButton.EVENT_MOUSE_UP = "BasicButton.EVENT_MOUSE_UP";/**
  * 表示一个可以展开的节点, 不仅有选中状态而且有展开状态
  *
  * Created by GUY on 2015/9/9.
@@ -3453,7 +3457,7 @@ BI.shortcut("bi.expander", BI.Expander);/**
 BI.ComboGroup = BI.inherit(BI.Widget, {
     _defaultConfig: function () {
         return BI.extend(BI.ComboGroup.superclass._defaultConfig.apply(this, arguments), {
-            baseCls: "bi-combo-group",
+            baseCls: "bi-combo-group bi-list-item",
 
             //以下这些属性对每一个combo都是公用的
             trigger: "click,hover",
