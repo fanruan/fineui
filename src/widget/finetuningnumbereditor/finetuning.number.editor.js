@@ -27,6 +27,7 @@ BI.FineTuningNumberEditor = BI.inherit(BI.Widget, {
         });
         this.topBtn = BI.createWidget({
             type: "bi.icon_button",
+            trigger: "lclick,",
             cls: "column-pre-page-h-font top-button bi-border-left bi-border-bottom"
         });
         this.topBtn.on(BI.IconButton.EVENT_CHANGE, function(){
@@ -35,6 +36,7 @@ BI.FineTuningNumberEditor = BI.inherit(BI.Widget, {
         });
         this.bottomBtn = BI.createWidget({
             type: "bi.icon_button",
+            trigger: "lclick,",
             cls: "column-next-page-h-font bottom-button bi-border-left bi-border-top"
         });
         this.bottomBtn.on(BI.IconButton.EVENT_CHANGE, function(){
@@ -77,7 +79,7 @@ BI.FineTuningNumberEditor = BI.inherit(BI.Widget, {
     _finetuning: function(add){
         var v = BI.parseInt(this._alertOutEditorValue(this.editor.getValue()));
         this.editor.setValue(this._alertInEditorValue(v + add));
-        this.bottomBtn.setEnable((v + add) !== -1);
+        this.bottomBtn.setEnable((v + add) > -1);
     },
 
     getValue: function () {
