@@ -713,7 +713,6 @@ BI.BasicButton = BI.inherit(BI.Single, {
                         }
                         mouseDown = false;
                         $(document).unbind("mouseup." + self.getName());
-                        self.fireEvent(BI.BasicButton.EVENT_MOUSE_UP);
                         // }
                     });
                     if (mouseDown === true) {
@@ -726,7 +725,6 @@ BI.BasicButton = BI.inherit(BI.Single, {
                     }
                     mouseDown = true;
                     ev(e);
-                    self.fireEvent(BI.BasicButton.EVENT_MOUSE_DOWN);
                     // }
                 });
                 hand.mouseup(function (e) {
@@ -742,6 +740,29 @@ BI.BasicButton = BI.inherit(BI.Single, {
                 break;
             case "dblclick":
                 hand.dblclick(clk);
+                break;
+            case "lclick":
+                var mouseDown = false;
+                var interval;
+                hand.mousedown(function (e) {
+                    $(document).bind("mouseup." + self.getName(), function (e) {
+                        interval && clearInterval(interval);
+                        interval = null;
+                        mouseDown = false;
+                        $(document).unbind("mouseup." + self.getName());
+                    });
+                    if (mouseDown === true) {
+                        return;
+                    }
+                    if (!self.isEnabled() || (self.isOnce() && self.isSelected())) {
+                        return;
+                    }
+                    interval = setInterval(function () {
+                        self.doClick();
+                    }, 100);
+                    mouseDown = true;
+                    ev(e);
+                });
                 break;
             default:
                 hand.mousedown(function (e) {
@@ -872,9 +893,7 @@ BI.BasicButton = BI.inherit(BI.Single, {
         BI.BasicButton.superclass.destroy.apply(this, arguments);
     }
 });
-BI.BasicButton.EVENT_CHANGE = "BasicButton.EVENT_CHANGE";
-BI.BasicButton.EVENT_MOUSE_DOWN = "BasicButton.EVENT_MOUSE_DOWN";
-BI.BasicButton.EVENT_MOUSE_UP = "BasicButton.EVENT_MOUSE_UP";/**
+BI.BasicButton.EVENT_CHANGE = "BasicButton.EVENT_CHANGE";/**
  * 表示一个可以展开的节点, 不仅有选中状态而且有展开状态
  *
  * Created by GUY on 2015/9/9.
