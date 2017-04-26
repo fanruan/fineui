@@ -9,19 +9,19 @@ Date._DN = [BI.i18nText("BI-Basic_Sunday"),
     BI.i18nText("BI-Basic_Sunday")];
 
 // short day names
-Date._SDN = [BI.i18nText("BI-Day_Ri"),
+Date._SDN = [BI.i18nText("BI-Date_Day"),
     BI.i18nText("BI-Basic_One"),
     BI.i18nText("BI-Basic_Two"),
     BI.i18nText("BI-Basic_Three"),
     BI.i18nText("BI-Basic_Four"),
     BI.i18nText("BI-Basic_Five"),
     BI.i18nText("BI-Basic_Six"),
-    BI.i18nText("BI-Day_Ri")];
+    BI.i18nText("BI-Date_Day")];
 
 // Monday first, etc.
 Date._FD = 1;
 
-// full month names
+// full month namesdat
 Date._MN = [
     BI.i18nText("BI-Basic_January"),
     BI.i18nText("BI-Basic_February"),
