@@ -127,6 +127,11 @@
   color: @color-bi-text-highlight;
 }
 
+.bi-high-light-background {
+  background-color: @color-bi-background-highlight;
+  color: @color-bi-text;
+}
+
 //水印
 .bi-water-mark {
   color: @water-mark-color;
@@ -153,14 +158,8 @@
 }
 
 .bi-z-index-mask {
-  background-color: @color-bi-background-black;
-  .opacity(0.5);
-}
-
-.bi-theme-dark {
-  .bi-z-index-mask {
-    background-color: @color-bi-background-default;
-  }
+  background-color: rgba(26, 26, 26, .5);
+  filter: ~"progid:DXImageTransform.Microsoft.gradient(startColorstr=#7f1a1a1a,endColorstr=#7f1a1a1a)";
 }
 
 //只有背景变化
@@ -267,41 +266,6 @@
   }
 }
 
-//文字和背景hover时变化
-.bi-list-item-hover {
-  &:hover, &.hover {
-    color: @color-bi-text-highlight;
-    background-color: @color-bi-background-normal;
-  }
-  &.disabled {
-    &, &:hover, &:active {
-      color: @color-bi-text-disabled !important;
-      background-color: transparent !important;
-      & .bi-high-light {
-        color: @color-bi-text-disabled !important;
-      }
-    }
-  }
-}
-
-.bi-theme-dark {
-  .bi-list-item-hover {
-    &:hover, &.hover {
-      color: @color-bi-text-highlight;
-      background-color: @color-bi-background-normal-theme-dark;
-    }
-    &.disabled {
-      &, &:hover, &:active {
-        background-color: transparent !important;
-        color: @color-bi-text-disabled-theme-dark !important;
-        & .bi-high-light {
-          color: @color-bi-text-disabled-theme-dark !important;
-        }
-      }
-    }
-  }
-}
-
 //文字和背景hover和active时变化
 .bi-list-item-active {
   &:hover, &.hover {
@@ -395,6 +359,9 @@
 }
 
 .bi-list-item-choose {
+  &:hover {
+    color: @color-bi-text-black;
+  }
   &:active, &.active {
     color: @color-bi-text;
     background-color: @color-bi-background-highlight;
@@ -408,6 +375,23 @@
       background-color: transparent !important;
       & .bi-high-light {
         color: @color-bi-text-disabled !important;
+      }
+    }
+  }
+}
+
+.bi-theme-dark {
+  .bi-list-item-choose {
+    &:hover {
+      color: @color-bi-text;
+    }
+    &.disabled {
+      &, &:hover, &:active {
+        color: @color-bi-text-disabled-theme-dark !important;
+        background-color: transparent !important;
+        & .bi-high-light {
+          color: @color-bi-text-disabled-theme-dark !important;
+        }
       }
     }
   }

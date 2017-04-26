@@ -411,7 +411,7 @@
 .dot-ha-font:focus .b-font:before,
 .dot-ha-font.hover .b-font:before {
   content: "\e606";
-  color: #f4f4f4;
+  color: #999999;
 }
 .dot-ha-font:active .b-font:before,
 .dot-ha-font.active .b-font:before {
@@ -431,7 +431,7 @@
 .dot-e-font:focus .b-font:before,
 .dot-e-font.hover .b-font:before {
   content: "\e606";
-  color: #f4f4f4;
+  color: #999999;
 }
 .dot-e-font.active .b-font:before {
   content: "\e606";
@@ -2242,12 +2242,12 @@
 }
 .group-add-font .b-font:before {
   content: "\e649";
-  color: #808080;
+  color: #999999;
 }
 .group-add-font.native .b-font:before,
 .group-add-font.disabled .b-font:before {
   content: "\e649";
-  color: #808080;
+  color: #999999;
 }
 .sortable-font .b-font:before {
   content: "\e63b";
@@ -2642,7 +2642,7 @@
 .data-link-check-font:focus .b-font:before,
 .data-link-check-font.hover .b-font:before {
   content: "\e611";
-  color: #f4f4f4;
+  color: #999999;
 }
 .data-link-check-font:active .b-font:before,
 .data-link-check-font.active .b-font:before {
@@ -2747,7 +2747,7 @@
 .item-check-font:focus .b-font:before,
 .item-check-font.hover .b-font:before {
   content: "\e611";
-  color: #f4f4f4;
+  color: #999999;
 }
 .item-check-font:active .b-font:before,
 .item-check-font.active .b-font:before {

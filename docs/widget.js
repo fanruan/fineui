@@ -15,6 +15,8 @@ BI.SequenceTableTreeNumber = BI.inherit(BI.Widget, {
             headerRowSize: 25,
             rowSize: 25,
 
+            sequenceHeaderCreator: null,
+
             header: [],
             items: [], //二维数组
 
@@ -33,12 +35,12 @@ BI.SequenceTableTreeNumber = BI.inherit(BI.Widget, {
         this.renderedCells = [];
         this.renderedKeys = [];
 
-        this.header = BI.createWidget({
-            type: "bi.table_style_cell",
-            cls: "sequence-table-title-cell bi-border",
-            styleGetter: o.headerCellStyleGetter,
-            text: BI.i18nText("BI-Number_Index")
-        });
+        this.header = BI.createWidget(o.sequenceHeaderCreator || {
+                type: "bi.table_style_cell",
+                cls: "sequence-table-title-cell bi-border",
+                styleGetter: o.headerCellStyleGetter,
+                text: BI.i18nText("BI-Number_Index")
+            });
         this.container = BI.createWidget({
             type: "bi.absolute",
             width: 60,
@@ -320,7 +322,7 @@ BI.SequenceTableTreeNumber = BI.inherit(BI.Widget, {
             task.apply(self);
         });
         this.tasks = [];
-        this.header.populate();
+        this.header.populate && this.header.populate();
         this._layout();
         this._calculateChildrenToRender();
     },
@@ -7055,6 +7057,7 @@ BI.FineTuningNumberEditor = BI.inherit(BI.Widget, {
         });
         this.topBtn = BI.createWidget({
             type: "bi.icon_button",
+            trigger: "lclick,",
             cls: "column-pre-page-h-font top-button bi-border-left bi-border-bottom"
         });
         this.topBtn.on(BI.IconButton.EVENT_CHANGE, function(){
@@ -7063,6 +7066,7 @@ BI.FineTuningNumberEditor = BI.inherit(BI.Widget, {
         });
         this.bottomBtn = BI.createWidget({
             type: "bi.icon_button",
+            trigger: "lclick,",
             cls: "column-next-page-h-font bottom-button bi-border-left bi-border-top"
         });
         this.bottomBtn.on(BI.IconButton.EVENT_CHANGE, function(){
@@ -7105,7 +7109,7 @@ BI.FineTuningNumberEditor = BI.inherit(BI.Widget, {
     _finetuning: function(add){
         var v = BI.parseInt(this._alertOutEditorValue(this.editor.getValue()));
         this.editor.setValue(this._alertInEditorValue(v + add));
-        this.bottomBtn.setEnable((v + add) !== -1);
+        this.bottomBtn.setEnable((v + add) > -1);
     },
 
     getValue: function () {
@@ -15722,6 +15726,8 @@ BI.SequenceTableListNumber = BI.inherit(BI.Widget, {
             headerRowSize: 25,
             rowSize: 25,
 
+            sequenceHeaderCreator: null,
+
             header: [],
             items: [], //二维数组
 
@@ -15740,12 +15746,12 @@ BI.SequenceTableListNumber = BI.inherit(BI.Widget, {
         this.renderedCells = [];
         this.renderedKeys = [];
 
-        this.header = BI.createWidget({
-            type: "bi.table_style_cell",
-            cls: "sequence-table-title-cell bi-border",
-            styleGetter: o.headerCellStyleGetter,
-            text: BI.i18nText("BI-Number_Index")
-        });
+        this.header = BI.createWidget(o.sequenceHeaderCreator || {
+                type: "bi.table_style_cell",
+                cls: "sequence-table-title-cell bi-border",
+                styleGetter: o.headerCellStyleGetter,
+                text: BI.i18nText("BI-Number_Index")
+            });
         this.container = BI.createWidget({
             type: "bi.absolute",
             width: 60,
@@ -15864,7 +15870,7 @@ BI.SequenceTableListNumber = BI.inherit(BI.Widget, {
     },
 
     _populate: function () {
-        this.header.populate();
+        this.header.populate && this.header.populate();
         this._layout();
         this._calculateChildrenToRender();
     },

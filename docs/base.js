@@ -243,7 +243,7 @@ BI.Pane = BI.inherit(BI.Widget, {
     loading: function () {
         var self = this, o = this.options;
         if (o.overlap === true) {
-            if (!BI.Maskers.has(this.getName())) {
+            if (!BI.Layers.has(this.getName())) {
                 BI.createWidget({
                     type: 'bi.vtape',
                     items: [{
@@ -253,10 +253,10 @@ BI.Pane = BI.inherit(BI.Widget, {
                         },
                         height: 30
                     }],
-                    element: BI.Maskers.make(this.getName(), this)
+                    element: BI.Layers.make(this.getName(), this)
                 });
             }
-            BI.Maskers.show(self.getName());
+            BI.Layers.show(self.getName());
         } else if (BI.isNull(this._loading)) {
             this._loading = BI.createWidget({
                 type: "bi.layout",
@@ -279,7 +279,7 @@ BI.Pane = BI.inherit(BI.Widget, {
 
     loaded: function () {
         var self = this, o = this.options;
-        BI.Maskers.remove(self.getName());
+        BI.Layers.remove(self.getName());
         this._loading && this._loading.destroy();
         this._loading && (this._loading = null);
         o.onLoaded();
@@ -685,72 +685,99 @@ BI.BasicButton = BI.inherit(BI.Single, {
             return;
         }
         hand = hand.element;
-        switch (o.trigger) {
-            case "mouseup":
-                var mouseDown = false;
-                hand.mousedown(function () {
-                    mouseDown = true;
-                    ev(e);
-                });
-                hand.mouseup(function (e) {
-                    if (mouseDown === true) {
-                        clk(e);
-                    }
-                    mouseDown = false;
-                    ev(e);
-                });
-                break;
-            case "mousedown":
-                var mouseDown = false;
-                var selected = false;
-                hand.mousedown(function (e) {
-                    // if (e.button === 0) {
-                    $(document).bind("mouseup." + self.getName(), function (e) {
-                        // if (e.button === 0) {
-                        if (BI.DOM.isExist(self) && !hand.__isMouseInBounds__(e) && mouseDown === true && !selected) {
-                            self.setSelected(!self.isSelected());
-                            self._trigger();
+        var triggerArr = (o.trigger || "").split(",");
+        BI.each(triggerArr, function (idx, trigger) {
+            switch (trigger) {
+                case "mouseup":
+                    var mouseDown = false;
+                    hand.mousedown(function () {
+                        mouseDown = true;
+                        ev(e);
+                    });
+                    hand.mouseup(function (e) {
+                        if (mouseDown === true) {
+                            clk(e);
                         }
                         mouseDown = false;
+                        ev(e);
+                    });
+                    break;
+                case "mousedown":
+                    var mouseDown = false;
+                    var selected = false;
+                    hand.mousedown(function (e) {
+                        // if (e.button === 0) {
+                        $(document).bind("mouseup." + self.getName(), function (e) {
+                            // if (e.button === 0) {
+                            if (BI.DOM.isExist(self) && !hand.__isMouseInBounds__(e) && mouseDown === true && !selected) {
+                                self.setSelected(!self.isSelected());
+                                self._trigger();
+                            }
+                            mouseDown = false;
+                            $(document).unbind("mouseup." + self.getName());
+                            // }
+                        });
+                        if (mouseDown === true) {
+                            return;
+                        }
+                        if (self.isSelected()) {
+                            selected = true;
+                        } else {
+                            clk(e);
+                        }
+                        mouseDown = true;
+                        ev(e);
+                        // }
+                    });
+                    hand.mouseup(function (e) {
+                        // if (e.button === 0) {
+                        if (BI.DOM.isExist(self) && mouseDown === true && selected === true) {
+                            clk(e);
+                        }
+                        mouseDown = false;
+                        selected = false;
                         $(document).unbind("mouseup." + self.getName());
                         // }
                     });
-                    if (mouseDown === true) {
-                        return;
-                    }
-                    if (self.isSelected()) {
-                        selected = true;
-                    } else {
-                        clk(e);
-                    }
-                    mouseDown = true;
-                    ev(e);
-                    // }
-                });
-                hand.mouseup(function (e) {
-                    // if (e.button === 0) {
-                    if (BI.DOM.isExist(self) && mouseDown === true && selected === true) {
-                        clk(e);
-                    }
-                    mouseDown = false;
-                    selected = false;
-                    $(document).unbind("mouseup." + self.getName());
-                    // }
-                });
-                break;
-            case "dblclick":
-                hand.dblclick(clk);
-                break;
-            default:
-                hand.mousedown(function (e) {
-                    ev(e);
-                });
-                hand.mouseup(function (e) {
-                    ev(e);
-                });
-                hand.click(clk);
-                break;
-        }
+                    break;
+                case "dblclick":
+                    hand.dblclick(clk);
+                    break;
+                case "lclick":
+                    var mouseDown = false;
+                    var interval;
+                    hand.mousedown(function (e) {
+                        $(document).bind("mouseup." + self.getName(), function (e) {
+                            interval && clearInterval(interval);
+                            interval = null;
+                            mouseDown = false;
+                            $(document).unbind("mouseup." + self.getName());
+                        });
+                        if (mouseDown === true) {
+                            return;
+                        }
+                        if (!self.isEnabled() || (self.isOnce() && self.isSelected())) {
+                            return;
+                        }
+                        interval = setInterval(function () {
+                            self.doClick();
+                        }, 100);
+                        mouseDown = true;
+                        ev(e);
+                    });
+                    break;
+                default:
+                    hand.mousedown(function (e) {
+                        ev(e);
+                    });
+                    hand.mouseup(function (e) {
+                        ev(e);
+                    });
+                    hand.click(clk);
+                    break;
+            }
+        });
+
         //之后的300ms点击无效
         var onClick = BI.debounce(this.doClick, BI.EVENT_RESPONSE_TIME, true);
 
@@ -3453,7 +3480,7 @@ BI.shortcut("bi.expander", BI.Expander);/**
 BI.ComboGroup = BI.inherit(BI.Widget, {
     _defaultConfig: function () {
         return BI.extend(BI.ComboGroup.superclass._defaultConfig.apply(this, arguments), {
-            baseCls: "bi-combo-group",
+            baseCls: "bi-combo-group bi-list-item",
 
             //以下这些属性对每一个combo都是公用的
             trigger: "click,hover",

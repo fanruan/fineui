@@ -15,6 +15,8 @@ BI.SequenceTableListNumber = BI.inherit(BI.Widget, {
             headerRowSize: 25,
             rowSize: 25,
 
+            sequenceHeaderCreator: null,
+
             header: [],
             items: [], //二维数组
 
@@ -33,12 +35,12 @@ BI.SequenceTableListNumber = BI.inherit(BI.Widget, {
         this.renderedCells = [];
         this.renderedKeys = [];
 
-        this.header = BI.createWidget({
-            type: "bi.table_style_cell",
-            cls: "sequence-table-title-cell bi-border",
-            styleGetter: o.headerCellStyleGetter,
-            text: BI.i18nText("BI-Number_Index")
-        });
+        this.header = BI.createWidget(o.sequenceHeaderCreator || {
+                type: "bi.table_style_cell",
+                cls: "sequence-table-title-cell bi-border",
+                styleGetter: o.headerCellStyleGetter,
+                text: BI.i18nText("BI-Number_Index")
+            });
         this.container = BI.createWidget({
             type: "bi.absolute",
             width: 60,
@@ -157,7 +159,7 @@ BI.SequenceTableListNumber = BI.inherit(BI.Widget, {
     },
 
     _populate: function () {
-        this.header.populate();
+        this.header.populate && this.header.populate();
         this._layout();
         this._calculateChildrenToRender();
     },
