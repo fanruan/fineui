@@ -17238,9 +17238,9 @@ $(function () {
             return tempValue;
         },
 
-        rgba2rgb: function (rgbColour, BGcolur) {
-            if (BI.isNull(BGcolur)) {
-                BGcolur = 1;
+        rgba2rgb: function (rgbColour, BGcolor) {
+            if (BI.isNull(BGcolor)) {
+                BGcolor = 1;
             }
             if (rgbColour.substr(0, 4) != "rgba") {
                 return "";
@@ -17254,9 +17254,9 @@ $(function () {
             var B = BI.parseFloat(rgbValues[2]);
             var A = BI.parseFloat(rgbValues[3]);
 
-            return "rgb(" + Math.floor(255 * (BGcolur * (1 - A )) + R * A) + "," +
-                Math.floor(255 * (BGcolur * (1 - A )) + G * A) + "," +
-                Math.floor(255 * (BGcolur * (1 - A )) + B * A) + ")";
+            return "rgb(" + Math.floor(255 * (BGcolor * (1 - A )) + R * A) + "," +
+                Math.floor(255 * (BGcolor * (1 - A )) + G * A) + "," +
+                Math.floor(255 * (BGcolor * (1 - A )) + B * A) + ")";
         },
 
         getTextSizeWidth: function (text, fontSize) {
