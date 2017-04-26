@@ -21,7 +21,7 @@ Date._SDN = [BI.i18nText("BI-Date_Day"),
 // Monday first, etc.
 Date._FD = 1;
 
-// full month names
+// full month namesdat
 Date._MN = [
     BI.i18nText("BI-Basic_January"),
     BI.i18nText("BI-Basic_February"),
