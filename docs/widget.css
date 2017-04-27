@@ -1,17 +1,11 @@
 /****添加计算宽度的--运算符直接需要space****/
 /****** common color(常用颜色,可用于普遍场景) *****/
 /**** custom color(自定义颜色,用于特定场景) ****/
-.bi-arrangement-block {
-  background: #e85050;
-  opacity: 0.8;
-  filter: alpha(opacity=80);
-}
 /****添加计算宽度的--运算符直接需要space****/
 /****** common color(常用颜色,可用于普遍场景) *****/
 /**** custom color(自定义颜色,用于特定场景) ****/
 .bi-arrangement .arrangement-helper {
-  border: 1px solid #d4dadd;
-  background: #009de3;
+  background: #3f8ce8;
   z-index: 1000000000;
 }
 .bi-arrangement .arrangement-block {
@@ -25,7 +19,7 @@
 }
 .bi-arrangement .arrangement-drop-container .drop-devider {
   z-index: 1000000001;
-  background: #009de3;
+  background: #3f8ce8;
 }
 .bi-arrangement .arrangement-drop-container .top-left,
 .bi-arrangement .arrangement-drop-container .top-right,
@@ -44,15 +38,12 @@
 .bi-arrangement .arrangement-drop-container .left-center-second,
 .bi-arrangement .arrangement-drop-container .right-center-second {
   z-index: 1000000001;
-  background: #009de3;
+  background: #3f8ce8;
 }
 /****添加计算宽度的--运算符直接需要space****/
 /****** common color(常用颜色,可用于普遍场景) *****/
 /**** custom color(自定义颜色,用于特定场景) ****/
 .bi-arrangement-droppable {
-  background: #d8f3fe;
-  opacity: 0.8;
-  filter: alpha(opacity=80);
   z-index: 100000;
 }
 /****添加计算宽度的--运算符直接需要space****/
@@ -124,14 +115,10 @@
 /****添加计算宽度的--运算符直接需要space****/
 /****** common color(常用颜色,可用于普遍场景) *****/
 /**** custom color(自定义颜色,用于特定场景) ****/
-.bi-date-picker {
-  background: #f4f4f4;
-}
 /****添加计算宽度的--运算符直接需要space****/
 /****** common color(常用颜色,可用于普遍场景) *****/
 /**** custom color(自定义颜色,用于特定场景) ****/
 .bi-date-trigger {
-  border: 1px solid #d4dadd;
   -webkit-border-radius: 2px;
   -moz-border-radius: 2px;
   border-radius: 2px;
@@ -139,9 +126,6 @@
 /****添加计算宽度的--运算符直接需要space****/
 /****** common color(常用颜色,可用于普遍场景) *****/
 /**** custom color(自定义颜色,用于特定场景) ****/
-.bi-down-list-combo .bi-down-list-spliter {
-  border-top: 1px solid #eaeaea;
-}
 /****添加计算宽度的--运算符直接需要space****/
 /****** common color(常用颜色,可用于普遍场景) *****/
 /**** custom color(自定义颜色,用于特定场景) ****/
@@ -155,14 +139,16 @@
 /****** common color(常用颜色,可用于普遍场景) *****/
 /**** custom color(自定义颜色,用于特定场景) ****/
 .bi-excel-table > div.bottom-right > div > div > table {
-  border-right: 1px solid #eaeaea;
+  border-right: 1px solid #d4dadd;
+}
+.bi-theme-dark .bi-excel-table > div.bottom-right > div > div > table {
+  border-right: 1px solid #525466;
 }
 /****添加计算宽度的--运算符直接需要space****/
 /****** common color(常用颜色,可用于普遍场景) *****/
 /**** custom color(自定义颜色,用于特定场景) ****/
 .bi-excel-table-header-cell {
   font-weight: bold;
-  background-color: #eaeaea;
 }
 /****添加计算宽度的--运算符直接需要space****/
 /****** common color(常用颜色,可用于普遍场景) *****/
@@ -170,51 +156,36 @@
 /****添加计算宽度的--运算符直接需要space****/
 /****** common color(常用颜色,可用于普遍场景) *****/
 /**** custom color(自定义颜色,用于特定场景) ****/
-.bi-file-manager-file-item {
-  border-bottom: 1px solid #d4dadd;
-}
 /****添加计算宽度的--运算符直接需要space****/
 /****** common color(常用颜色,可用于普遍场景) *****/
 /**** custom color(自定义颜色,用于特定场景) ****/
-.bi-file-manager-folder-item {
-  border-bottom: 1px solid #d4dadd;
-}
 /****添加计算宽度的--运算符直接需要space****/
 /****** common color(常用颜色,可用于普遍场景) *****/
 /**** custom color(自定义颜色,用于特定场景) ****/
 .bi-file-manager-nav-button .file-manager-nav-button-text {
   max-width: 200px;
-  background: #ffffff;
 }
 .bi-file-manager-nav-button .file-manager-nav-button-text.active {
-  background-color: #f4f4f4;
-  color: #808080;
+  background-color: #eff1f4;
+  color: #999999;
 }
 .bi-file-manager-nav-button .file-manager-nav-button-triangle {
   z-index: 1;
 }
+.bi-theme-dark .bi-file-manager-nav-button .file-manager-nav-button-text.active {
+  background-color: #191b2b;
+  color: #999999;
+}
 /****添加计算宽度的--运算符直接需要space****/
 /****** common color(常用颜色,可用于普遍场景) *****/
 /**** custom color(自定义颜色,用于特定场景) ****/
-.bi-file-manager-nav {
-  border-left: 1px solid #d4dadd;
-}
 /****添加计算宽度的--运算符直接需要space****/
 /****** common color(常用颜色,可用于普遍场景) *****/
 /**** custom color(自定义颜色,用于特定场景) ****/
 .bi-fine-tuning-number-editor {
-  border: 1px solid #d4dadd;
   -webkit-border-radius: 2px;
   -moz-border-radius: 2px;
   border-radius: 2px;
-}
-.bi-fine-tuning-number-editor .top-button {
-  border-left: 1px solid #d4dadd;
-  border-bottom: 1px solid #d4dadd;
-}
-.bi-fine-tuning-number-editor .bottom-button {
-  border-top: 1px solid #d4dadd;
-  border-left: 1px solid #d4dadd;
 }
 /****添加计算宽度的--运算符直接需要space****/
 /****** common color(常用颜色,可用于普遍场景) *****/
@@ -228,26 +199,20 @@
 /**** custom color(自定义颜色,用于特定场景) ****/
 .bi-image-button-size .image-button-size-button-group {
   font-size: 12px;
-  color: #1a1a1a;
 }
-/****添加计算宽度的--运算符直接需要space****/
-/****** common color(常用颜色,可用于普遍场景) *****/
-/**** custom color(自定义颜色,用于特定场景) ****/
 /****添加计算宽度的--运算符直接需要space****/
 /****** common color(常用颜色,可用于普遍场景) *****/
 /**** custom color(自定义颜色,用于特定场景) ****/
 .bi-upload-image .upload-image-text-button-label {
   font-size: 14px;
-  color: #c4c6c6;
+  color: #999999;
 }
 .bi-upload-image .upload-image-icon-button {
   z-index: 1;
   font-size: 16px;
-  background-color: #ffffff;
 }
 .bi-upload-image .upload-image-delete-label {
   font-size: 14px;
-  color: #1a1a1a;
 }
 /****添加计算宽度的--运算符直接需要space****/
 /****** common color(常用颜色,可用于普遍场景) *****/
@@ -269,7 +234,6 @@
 /****** common color(常用颜色,可用于普遍场景) *****/
 /**** custom color(自定义颜色,用于特定场景) ****/
 .bi-month-trigger {
-  border: 1px solid #d4dadd;
   -webkit-border-radius: 2px;
   -moz-border-radius: 2px;
   border-radius: 2px;
@@ -277,40 +241,26 @@
 /****添加计算宽度的--运算符直接需要space****/
 /****** common color(常用颜色,可用于普遍场景) *****/
 /**** custom color(自定义颜色,用于特定场景) ****/
-.bi-multi-select-check-pane {
-  background-color: #f4f4f4;
-}
 .bi-multi-select-check-pane .multi-select-check-selected {
-  color: #009de3;
+  color: #3f8ce8;
   text-decoration: underline;
-}
-.bi-theme-dark .bi-multi-select-check-pane {
-  background-color: #191a2c;
 }
 /****添加计算宽度的--运算符直接需要space****/
 /****** common color(常用颜色,可用于普遍场景) *****/
 /**** custom color(自定义颜色,用于特定场景) ****/
-.bi-display-list .display-list-item {
-  color: #808080;
-}
 /****添加计算宽度的--运算符直接需要space****/
 /****** common color(常用颜色,可用于普遍场景) *****/
 /**** custom color(自定义颜色,用于特定场景) ****/
 .bi-multi-select-combo .multi-select-trigger-icon-button {
-  border-left: 1px solid #d4dadd;
   font-size: 16px;
 }
 /****添加计算宽度的--运算符直接需要space****/
 /****** common color(常用颜色,可用于普遍场景) *****/
 /**** custom color(自定义颜色,用于特定场景) ****/
-.bi-multi-select-popup-view .multi-select-no-toolbar {
-  color: #c4c6c6;
-}
 /****添加计算宽度的--运算符直接需要space****/
 /****** common color(常用颜色,可用于普遍场景) *****/
 /**** custom color(自定义颜色,用于特定场景) ****/
 .bi-multi-select-trigger {
-  border: 1px solid #d4dadd;
   -webkit-border-radius: 2px 2px 2px 2px;
   -moz-border-radius: 2px 2px 2px 2px;
   border-radius: 2px 2px 2px 2px;
@@ -318,9 +268,6 @@
 /****添加计算宽度的--运算符直接需要space****/
 /****** common color(常用颜色,可用于普遍场景) *****/
 /**** custom color(自定义颜色,用于特定场景) ****/
-.bi-multi-select-search-pane {
-  background: #ffffff;
-}
 .bi-multi-select-search-pane .multi-select-toolbar {
   color: #e85050;
 }
@@ -328,70 +275,25 @@
 /****** common color(常用颜色,可用于普遍场景) *****/
 /**** custom color(自定义颜色,用于特定场景) ****/
 .bi-multi-select-check-selected-button {
-  border: 1px solid #009de3;
-  -webkit-border-radius: 8px 8px 8px 8px;
-  -moz-border-radius: 8px 8px 8px 8px;
-  border-radius: 8px 8px 8px 8px;
-  color: #009de3;
-  background-color: #ffffff;
+  color: #3f8ce8;
   z-index: 1;
 }
-.bi-theme-dark .bi-multi-select-check-selected-button {
-  background-color: #191a2c;
-}
 /****添加计算宽度的--运算符直接需要space****/
 /****** common color(常用颜色,可用于普遍场景) *****/
 /**** custom color(自定义颜色,用于特定场景) ****/
-.bi-multi-string-list .popup-multi-string-list {
-  border-left: 1px solid #d4dadd;
-  border-right: 1px solid #d4dadd;
-  border-bottom: 1px solid #d4dadd;
-}
 /****添加计算宽度的--运算符直接需要space****/
 /****** common color(常用颜色,可用于普遍场景) *****/
 /**** custom color(自定义颜色,用于特定场景) ****/
-.bi-multi-tree-check-pane {
-  background-color: #f4f4f4;
-}
-.bi-multi-tree-check-pane .multi-tree-continue-select {
-  background-color: #f4f4f4;
-}
 .bi-multi-tree-check-pane .multi-tree-check-selected {
-  color: #009de3;
+  color: #3f8ce8;
 }
 /****添加计算宽度的--运算符直接需要space****/
 /****** common color(常用颜色,可用于普遍场景) *****/
 /**** custom color(自定义颜色,用于特定场景) ****/
-.bi-multi-tree-display {
-  background-color: #f4f4f4;
-}
 /****添加计算宽度的--运算符直接需要space****/
 /****** common color(常用颜色,可用于普遍场景) *****/
 /**** custom color(自定义颜色,用于特定场景) ****/
 .bi-multi-tree-combo .multi-select-trigger-icon-button {
-  border-left: 1px solid #d4dadd;
-  font-size: 16px;
-}
-/****添加计算宽度的--运算符直接需要space****/
-/****** common color(常用颜色,可用于普遍场景) *****/
-/**** custom color(自定义颜色,用于特定场景) ****/
-.bi-multi-tree-trigger {
-  border: 1px solid #d4dadd;
-  -webkit-border-radius: 2px 2px 2px 2px;
-  -moz-border-radius: 2px 2px 2px 2px;
-  border-radius: 2px 2px 2px 2px;
-}
-.bi-multi-tree-trigger .trigger-check-selected {
-  border: 1px solid #009de3;
-  -webkit-border-radius: 8px 8px 8px 8px;
-  -moz-border-radius: 8px 8px 8px 8px;
-  border-radius: 8px 8px 8px 8px;
-  color: #009de3;
-  background-color: #ffffff;
-  z-index: 1;
-}
-.bi-multi-tree-trigger .trigger-icon-button {
-  border-left: 1px solid #d4dadd;
   font-size: 16px;
 }
 /****添加计算宽度的--运算符直接需要space****/
@@ -403,58 +305,20 @@
 /****添加计算宽度的--运算符直接需要space****/
 /****** common color(常用颜色,可用于普遍场景) *****/
 /**** custom color(自定义颜色,用于特定场景) ****/
-.bi-multi-tree-search-pane {
-  background: #ffffff;
-}
-/****添加计算宽度的--运算符直接需要space****/
-/****** common color(常用颜色,可用于普遍场景) *****/
-/**** custom color(自定义颜色,用于特定场景) ****/
-.bi-multi-tree-trigger {
-  border: 1px solid #d4dadd;
-  -webkit-border-radius: 2px 2px 2px 2px;
-  -moz-border-radius: 2px 2px 2px 2px;
-  border-radius: 2px 2px 2px 2px;
-}
-.bi-multi-tree-trigger .trigger-check-selected {
-  border: 1px solid #009de3;
-  -webkit-border-radius: 8px 8px 8px 8px;
-  -moz-border-radius: 8px 8px 8px 8px;
-  border-radius: 8px 8px 8px 8px;
-  color: #009de3;
-  background-color: #ffffff;
-  z-index: 1;
-}
-.bi-multi-tree-trigger .trigger-icon-button {
-  border-left: 1px solid #d4dadd;
-  font-size: 16px;
-}
 /****添加计算宽度的--运算符直接需要space****/
 /****** common color(常用颜色,可用于普遍场景) *****/
 /**** custom color(自定义颜色,用于特定场景) ****/
 .bi-multi-tree-check-selected-button .trigger-check-selected {
-  border: 1px solid #009de3;
-  -webkit-border-radius: 8px 8px 8px 8px;
-  -moz-border-radius: 8px 8px 8px 8px;
-  border-radius: 8px 8px 8px 8px;
-  color: #009de3;
-  background-color: #ffffff;
+  color: #3f8ce8;
   z-index: 1;
 }
 /****添加计算宽度的--运算符直接需要space****/
 /****** common color(常用颜色,可用于普遍场景) *****/
 /**** custom color(自定义颜色,用于特定场景) ****/
-.bi-tree-list-popup {
-  border-left: 1px solid #d4dadd;
-  border-right: 1px solid #d4dadd;
-  border-bottom: 1px solid #d4dadd;
-}
 /****添加计算宽度的--运算符直接需要space****/
 /****** common color(常用颜色,可用于普遍场景) *****/
 /**** custom color(自定义颜色,用于特定场景) ****/
 .bi-numerical-interval .numerical-interval-small-editor {
-  border-top: 1px solid #d4dadd;
-  border-bottom: 1px solid #d4dadd;
-  border-left: 1px solid #d4dadd;
   -moz-border-radius-topleft: 2px;
   -webkit-border-top-left-radius: 2px;
   -moz-border-radius-bottomleft: 2px;
@@ -463,9 +327,6 @@
   border-bottom-left-radius: 2px;
 }
 .bi-numerical-interval .numerical-interval-big-editor {
-  border-top: 1px solid #d4dadd;
-  border-bottom: 1px solid #d4dadd;
-  border-right: 1px solid #d4dadd;
   -moz-border-radius-topright: 2px;
   -webkit-border-top-right-radius: 2px;
   -moz-border-radius-bottomright: 2px;
@@ -474,7 +335,6 @@
   border-bottom-right-radius: 2px;
 }
 .bi-numerical-interval .numerical-interval-big-combo {
-  border: 1px solid #d4dadd;
   -moz-border-radius-topleft: 2px;
   -webkit-border-top-left-radius: 2px;
   -moz-border-radius-bottomleft: 2px;
@@ -486,7 +346,6 @@
   font-size: 14px;
 }
 .bi-numerical-interval .numerical-interval-small-combo {
-  border: 1px solid #d4dadd;
   -moz-border-radius-topright: 2px;
   -webkit-border-top-right-radius: 2px;
   -moz-border-radius-bottomright: 2px;
@@ -503,15 +362,6 @@
 /****添加计算宽度的--运算符直接需要space****/
 /****** common color(常用颜色,可用于普遍场景) *****/
 /**** custom color(自定义颜色,用于特定场景) ****/
-.bi-numerical-interval-popup .numerical-interval-popup-item.hover,
-.bi-numerical-interval-popup .numerical-interval-popup-item:hover {
-  background-color: #f4f4f4;
-}
-.bi-numerical-interval-popup .numerical-interval-popup-item.active,
-.bi-numerical-interval-popup .numerical-interval-popup-item:active {
-  background-color: #f4f4f4;
-  color: #009de3;
-}
 /****添加计算宽度的--运算符直接需要space****/
 /****** common color(常用颜色,可用于普遍场景) *****/
 /**** custom color(自定义颜色,用于特定场景) ****/
@@ -535,17 +385,8 @@
 /****添加计算宽度的--运算符直接需要space****/
 /****** common color(常用颜色,可用于普遍场景) *****/
 /**** custom color(自定义颜色,用于特定场景) ****/
-.bi-path-region {
-  background: #eaeaea;
-}
 .bi-path-region .path-region-label {
   z-index: 1;
-  background: #ffffff;
-  border: 1px solid #ffffff;
-}
-.bi-path-region .path-region-label.active {
-  background: #009de3;
-  color: #ffffff;
 }
 /****添加计算宽度的--运算符直接需要space****/
 /****** common color(常用颜色,可用于普遍场景) *****/
@@ -560,7 +401,11 @@
 /**** custom color(自定义颜色,用于特定场景) ****/
 .bi-preview-table > div > table > thead > tr.odd,
 .bi-preview-table > div > div > div > table > thead > tr.odd {
-  background-color: #eaeaea;
+  background-color: #eff1f4;
+}
+.bi-theme-dark .bi-preview-table > div > table > thead > tr.odd,
+.bi-theme-dark .bi-preview-table > div > div > div > table > thead > tr.odd {
+  background-color: #191b2b;
 }
 /****添加计算宽度的--运算符直接需要space****/
 /****** common color(常用颜色,可用于普遍场景) *****/
@@ -581,7 +426,6 @@
 /****** common color(常用颜色,可用于普遍场景) *****/
 /**** custom color(自定义颜色,用于特定场景) ****/
 .bi-quarter-trigger {
-  border: 1px solid #d4dadd;
   -webkit-border-radius: 2px;
   -moz-border-radius: 2px;
   border-radius: 2px;
@@ -589,26 +433,17 @@
 /****添加计算宽度的--运算符直接需要space****/
 /****** common color(常用颜色,可用于普遍场景) *****/
 /**** custom color(自定义颜色,用于特定场景) ****/
-.bi-relation-view-item.active {
-  color: #ffffff;
-  background-color: #009de3;
-}
 /****添加计算宽度的--运算符直接需要space****/
 /****** common color(常用颜色,可用于普遍场景) *****/
 /**** custom color(自定义颜色,用于特定场景) ****/
 .bi-relation-view-region .relation-view-region-container {
-  background: #ffffff;
-  border: 1px solid #d4dadd;
   z-index: 1;
   -webkit-border-radius: 2px;
   -moz-border-radius: 2px;
   border-radius: 2px;
 }
 .bi-relation-view-region .relation-view-region-container.other-package {
-  border: 1px dashed #d4dadd;
-}
-.bi-relation-view-region .relation-view-region-container .relation-view-region-title {
-  border-bottom: 1px solid #d4dadd;
+  border-style: dashed;
 }
 /****添加计算宽度的--运算符直接需要space****/
 /****** common color(常用颜色,可用于普遍场景) *****/
@@ -625,7 +460,6 @@
   /*IE8*/
   box-sizing: border-box;
   /*W3C标准(IE9+，Safari5.1+,Chrome10.0+,Opera10.6+都符合box-sizing的w3c标准语法)*/
-  border: 1px solid #eaeaea;
 }
 .bi-sequence-table-dynamic-number .sequence-table-number-cell {
   -webkit-box-sizing: border-box;
@@ -636,9 +470,6 @@
   /*IE8*/
   box-sizing: border-box;
   /*W3C标准(IE9+，Safari5.1+,Chrome10.0+,Opera10.6+都符合box-sizing的w3c标准语法)*/
-  border-left: 1px solid #eaeaea;
-  border-right: 1px solid #eaeaea;
-  border-bottom: 1px solid #eaeaea;
 }
 /****添加计算宽度的--运算符直接需要space****/
 /****** common color(常用颜色,可用于普遍场景) *****/
@@ -655,7 +486,6 @@
   /*IE8*/
   box-sizing: border-box;
   /*W3C标准(IE9+，Safari5.1+,Chrome10.0+,Opera10.6+都符合box-sizing的w3c标准语法)*/
-  border: 1px solid #eaeaea;
 }
 .bi-sequence-table-list-number .sequence-table-number-cell {
   -webkit-box-sizing: border-box;
@@ -666,9 +496,6 @@
   /*IE8*/
   box-sizing: border-box;
   /*W3C标准(IE9+，Safari5.1+,Chrome10.0+,Opera10.6+都符合box-sizing的w3c标准语法)*/
-  border-left: 1px solid #eaeaea;
-  border-right: 1px solid #eaeaea;
-  border-bottom: 1px solid #eaeaea;
 }
 /****添加计算宽度的--运算符直接需要space****/
 /****** common color(常用颜色,可用于普遍场景) *****/
@@ -688,7 +515,6 @@
   /*IE8*/
   box-sizing: border-box;
   /*W3C标准(IE9+，Safari5.1+,Chrome10.0+,Opera10.6+都符合box-sizing的w3c标准语法)*/
-  border: 1px solid #eaeaea;
 }
 .bi-sequence-table-tree-number .sequence-table-number-cell {
   -webkit-box-sizing: border-box;
@@ -699,38 +525,10 @@
   /*IE8*/
   box-sizing: border-box;
   /*W3C标准(IE9+，Safari5.1+,Chrome10.0+,Opera10.6+都符合box-sizing的w3c标准语法)*/
-  border-left: 1px solid #eaeaea;
-  border-right: 1px solid #eaeaea;
-  border-bottom: 1px solid #eaeaea;
 }
 /****添加计算宽度的--运算符直接需要space****/
 /****** common color(常用颜色,可用于普遍场景) *****/
 /**** custom color(自定义颜色,用于特定场景) ****/
-.bi-singletree-combo .singletree-trigger {
-  border: 1px solid #d4dadd;
-  -webkit-border-radius: 2px;
-  -moz-border-radius: 2px;
-  border-radius: 2px;
-}
-.bi-singletree-combo .bi-singletree-popup .singletree-toolbar {
-  color: #c4c6c6;
-}
-/****添加计算宽度的--运算符直接需要space****/
-/****** common color(常用颜色,可用于普遍场景) *****/
-/**** custom color(自定义颜色,用于特定场景) ****/
-.bi-web-page .web-page-button {
-  z-index: 1;
-  font-size: 14px;
-  background-color: #ffffff;
-}
-.bi-web-page .web-page-text-button-label {
-  font-size: 16px;
-  color: #c4c6c6;
-}
-.bi-web-page .web-page-delete-label {
-  font-size: 14px;
-  color: #1a1a1a;
-}
 /****添加计算宽度的--运算符直接需要space****/
 /****** common color(常用颜色,可用于普遍场景) *****/
 /**** custom color(自定义颜色,用于特定场景) ****/
@@ -738,21 +536,25 @@
 /****** common color(常用颜色,可用于普遍场景) *****/
 /**** custom color(自定义颜色,用于特定场景) ****/
 .bi-year-popup .year-popup-navigation {
-  border-top: 1px solid #eaeaea;
   line-height: 30px;
-  color: #009de3;
+  color: #3f8ce8;
 }
 .bi-year-popup .year-popup-navigation > .center-element {
-  border-left: 1px solid #eaeaea;
+  border-left: 1px solid #d4dadd;
 }
 .bi-year-popup .year-popup-navigation > .first-element {
+  border-left: none;
+}
+.bi-theme-dark .bi-year-popup .year-popup-navigation > .center-element {
+  border-left: 1px solid #525466;
+}
+.bi-theme-dark .bi-year-popup .year-popup-navigation > .first-element {
   border-left: none;
 }
 /****添加计算宽度的--运算符直接需要space****/
 /****** common color(常用颜色,可用于普遍场景) *****/
 /**** custom color(自定义颜色,用于特定场景) ****/
 .bi-year-trigger {
-  border: 1px solid #d4dadd;
   -webkit-border-radius: 2px;
   -moz-border-radius: 2px;
   border-radius: 2px;

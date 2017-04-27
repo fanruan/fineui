@@ -25,7 +25,7 @@ BI.MultiStringList = BI.inherit(BI.Widget, {
 
         this.popup = BI.createWidget({
             type: "bi.multi_select_loader",
-            cls: "popup-multi-string-list",
+            cls: "popup-multi-string-list bi-border-left bi-border-right bi-border-bottom",
             itemsCreator: o.itemsCreator,
             valueFormatter: o.valueFormatter,
             onLoaded: o.onLoaded,

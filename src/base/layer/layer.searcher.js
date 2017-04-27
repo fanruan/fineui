@@ -10,7 +10,7 @@ BI.SearcherView = BI.inherit(BI.Pane, {
     _defaultConfig: function () {
         var conf = BI.SearcherView.superclass._defaultConfig.apply(this, arguments);
         return BI.extend(conf, {
-            baseCls: (conf.baseCls || "") + " bi-searcher-view",
+            baseCls: (conf.baseCls || "") + " bi-searcher-view bi-card",
             tipText: BI.i18nText("BI-No_Select"),
             chooseType: BI.Selection.Single,
 
@@ -70,7 +70,7 @@ BI.SearcherView = BI.inherit(BI.Pane, {
             items: [{
                 type: "bi.layout",
                 height: 1,
-                cls: "searcher-view-spliter"
+                cls: "searcher-view-spliter bi-background"
             }]
         });
         this.searcher = BI.createWidget(o.searcher, {

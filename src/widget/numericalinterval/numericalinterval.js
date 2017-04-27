@@ -48,7 +48,7 @@ BI.NumericalInterval = BI.inherit(BI.Single, {
                 }
                 return true;
             },
-            cls: "numerical-interval-small-editor"
+            cls: "numerical-interval-small-editor bi-border-top bi-border-bottom bi-border-left"
         });
 
         this.smallTip = BI.createWidget({
@@ -85,7 +85,7 @@ BI.NumericalInterval = BI.inherit(BI.Single, {
                 }
                 return true;
             },
-            cls: "numerical-interval-big-editor"
+            cls: "numerical-interval-big-editor bi-border-top bi-border-bottom bi-border-right"
         });
 
         this.bigTip = BI.createWidget({
@@ -121,7 +121,7 @@ BI.NumericalInterval = BI.inherit(BI.Single, {
         //});
         this.smallCombo = BI.createWidget({
             type: "bi.icon_combo",
-            cls: "numerical-interval-small-combo",
+            cls: "numerical-interval-small-combo bi-border",
             height: o.height - 2,
             items: [{
                 text: "(" + BI.i18nText("BI-Less_Than") + ")",
@@ -140,7 +140,7 @@ BI.NumericalInterval = BI.inherit(BI.Single, {
         }
         this.bigCombo = BI.createWidget({
             type: "bi.icon_combo",
-            cls: "numerical-interval-big-combo",
+            cls: "numerical-interval-big-combo bi-border",
             height: o.height - 2,
             items: [{
                 text: "(" + BI.i18nText("BI-Less_Than") + ")",

@@ -24,7 +24,7 @@ BI.FileManagerNavButton = BI.inherit(BI.Widget, {
         var self = this, o = this.options, c = this._const;
         this.button = BI.createWidget({
             type: "bi.text_button",
-            cls: "file-manager-nav-button-text",
+            cls: "file-manager-nav-button-text bi-card",
             once: true,
             selected: o.selected,
             text: o.text,

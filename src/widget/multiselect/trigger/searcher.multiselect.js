@@ -99,13 +99,18 @@ BI.MultiSelectSearcher = BI.inherit(BI.Widget, {
     },
 
     setState: function (ob) {
+        var o = this.options;
         ob || (ob = {});
         ob.value || (ob.value = []);
         if (ob.type === BI.Selection.All) {
-            this.editor.setState(BI.size(ob.value) > 0 ? BI.Selection.Multi : BI.Selection.All);
+            if (BI.size(ob.assist) === 1) {
+                this.editor.setState(o.valueFormatter(ob.assist[0] + "") || ob.assist[0] + "");
+            } else {
+                this.editor.setState(BI.size(ob.value) > 0 ? BI.Selection.Multi : BI.Selection.All);
+            }
         } else {
             if (BI.size(ob.value) === 1) {
-                this.editor.setState(ob.value[0] + "");
+                this.editor.setState(o.valueFormatter(ob.value[0] + "" || ob.value[0] + ""));
             } else {
                 this.editor.setState(BI.size(ob.value) > 0 ? BI.Selection.Multi : BI.Selection.None);
             }

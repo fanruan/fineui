@@ -1,6 +1,6 @@
 Demo.West = BI.inherit(BI.Widget, {
     props: {
-        baseCls: "demo-west"
+        baseCls: "demo-west bi-border-right bi-card"
     },
     render: function () {
         var self = this;

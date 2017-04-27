@@ -9,7 +9,7 @@ BI.MultiTreeSearchPane = BI.inherit(BI.Pane, {
 
     _defaultConfig: function () {
         return BI.extend(BI.MultiTreeSearchPane.superclass._defaultConfig.apply(this, arguments), {
-            baseCls: "bi-multi-tree-search-pane",
+            baseCls: "bi-multi-tree-search-pane bi-card",
             itemsCreator: BI.emptyFn,
             keywordGetter: BI.emptyFn
         });

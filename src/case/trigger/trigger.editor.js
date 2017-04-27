@@ -13,7 +13,7 @@ BI.EditorTrigger = BI.inherit(BI.Trigger, {
     _defaultConfig: function () {
         var conf = BI.EditorTrigger.superclass._defaultConfig.apply(this, arguments);
         return BI.extend(conf, {
-            baseCls: (conf.baseCls || "") + " bi-editor-trigger",
+            baseCls: (conf.baseCls || "") + " bi-editor-trigger bi-border",
             height: 30,
             validationChecker: BI.emptyFn,
             quitChecker: BI.emptyFn,

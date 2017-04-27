@@ -9,7 +9,7 @@
 .font-hover-active(close-ha-font, @font-cross);
 
 //搜索框中的带有hover后颜色变红的图标
-.font-hover(search-close-h-font, @font-cross, @color-bi-font-native, @color-bi-text-warning);
+.font-hover(search-close-h-font, @font-cross, inherit, @color-bi-text-warning);
 
 .font(trigger-font, @font-arrow-down);
 .font-hover(trigger-h-font, @font-arrow-down);
@@ -32,60 +32,60 @@
 
 /**维度/指标 下拉列表图标字体 ~begin~**/
 //删除
-.font(delete-font, @font-delete, @color-bi-text-black);
-.font-hover(delete-h-font, @font-delete, @color-bi-text-black, @color-bi-text-black);
-.font-hover-active(delete-ha-font, @font-delete, @color-bi-text-black, @color-bi-text-black, @color-bi-text-highlight);
-.font-effect(delete-e-font, @font-delete, @color-bi-text-black, @color-bi-text-black, @color-bi-text-highlight);
+.font(delete-font, @font-delete);
+.font-hover(delete-h-font, @font-delete);
+.font-hover-active(delete-ha-font, @font-delete);
+.font-effect(delete-e-font, @font-delete);
 //子菜单选中
 .font(dot-font, @font-dot, @color-bi-text-black);
-.font-hover(dot-h-font, @font-dot, @color-bi-text-black, @color-bi-text-black);
-.font-hover-active(dot-ha-font, @font-dot, @background-color-default, @color-bi-background-gray, @color-bi-text-black);
-.font-effect(dot-e-font, @font-dot, @background-color-default, @color-bi-background-gray, @color-bi-text-highlight, @color-bi-text-black);
+.font-hover(dot-h-font, @font-dot, @color-bi-text-black);
+.font-hover-active(dot-ha-font, @font-dot, @color-bi-text, @color-bi-text-gray, @color-bi-text-black);
+.font-effect(dot-e-font, @font-dot, @color-bi-text, @color-bi-text-gray, @color-bi-text-highlight, @color-bi-text-black);
 
 //向右展开子菜单
-.font(pull-right-font, @font-right-triangle, @color-bi-text-black);
-.font-hover(pull-right-h-font, @font-right-triangle, @color-bi-text-black, @color-bi-text-black);
-.font-hover-active(pull-right-ha-font, @font-right-triangle, @color-bi-text-black, @color-bi-text-black, @color-bi-text-highlight);
-.font-effect(pull-right-e-font, @font-right-triangle, @color-bi-text-black, @color-bi-text-black, @color-bi-text-highlight);
+.font(pull-right-font, @font-right-triangle);
+.font-hover(pull-right-h-font, @font-right-triangle);
+.font-hover-active(pull-right-ha-font, @font-right-triangle);
+.font-effect(pull-right-e-font, @font-right-triangle);
 
 //复制
-.font(copy-font, @font-copy, @color-bi-text-black);
-.font-hover(copy-h-font, @font-copy, @color-bi-text-black, @color-bi-text-black);
-.font-hover-active(copy-ha-font, @font-copy, @color-bi-text-black, @color-bi-text-black, @color-bi-text-highlight);
-.font-effect(copy-e-font, @font-copy, @color-bi-text-black, @color-bi-text-black, @color-bi-text-highlight);
+.font(copy-font, @font-copy);
+.font-hover(copy-h-font, @font-copy, @color-bi-text-black);
+.font-hover-active(copy-ha-font, @font-copy);
+.font-effect(copy-e-font, @font-copy);
 
 //选中的字段
-.font(check-mark-font, @font-check-mark, @color-bi-text-black);
-.font-hover(check-mark-h-font, @font-check-mark, @color-bi-text-black, @color-bi-text-black);
-.font-hover-active(check-mark-ha-font, @font-check-mark, @color-bi-text-black, @color-bi-text-black, @color-bi-text-highlight);
-.font-effect(check-mark-e-font, @font-check-mark, @color-bi-text-black, @color-bi-text-black, @color-bi-text-highlight);
+.font(check-mark-font, @font-check-mark);
+.font-hover(check-mark-h-font, @font-check-mark);
+.font-hover-active(check-mark-ha-font, @font-check-mark);
+.font-effect(check-mark-e-font, @font-check-mark);
 
 //指标来自
-.font(dimension-from-font, @font-dimension-from, @color-bi-text-black);
-.font-hover(dimension-from-h-font, @font-dimension-from, @color-bi-text-black, @color-bi-text-black);
-.font-hover-active(dimension-from-ha-font, @font-dimension-from, @color-bi-text-black, @color-bi-text-black, @color-bi-text-highlight);
-.font-effect(dimension-from-e-font, @font-dimension-from, @color-bi-text-black, @color-bi-text-black, @color-bi-text-highlight);
+.font(dimension-from-font, @font-dimension-from);
+.font-hover(dimension-from-h-font, @font-dimension-from);
+.font-hover-active(dimension-from-ha-font, @font-dimension-from);
+.font-effect(dimension-from-e-font, @font-dimension-from);
 
 //图表类型选择
-.font(chart-type-font, @font-chart-type, @color-bi-text-black);
-.font-hover(chart-type-h-font, @font-chart-type, @color-bi-text-black, @color-bi-text-black);
-.font-hover-active(chart-type-ha-font, @font-chart-type, @color-bi-text-black, @color-bi-text-black, @color-bi-text-highlight);
-.font-effect(chart-type-e-font, @font-chart-type, @color-bi-text-black, @color-bi-text-black, @color-bi-text-highlight);
+.font(chart-type-font, @font-chart-type);
+.font-hover(chart-type-h-font, @font-chart-type);
+.font-hover-active(chart-type-ha-font, @font-chart-type);
+.font-effect(chart-type-e-font, @font-chart-type);
 
 //样式设置
-.font(style-set-font, @font-style-set, @color-bi-text-black);
-.font-hover(style-set-h-font, @font-style-set, @color-bi-text-black, @color-bi-text-black);
-.font-hover-active(style-set-ha-font, @font-style-set, @color-bi-text-black, @color-bi-text-black, @color-bi-text-highlight);
-.font-effect(style-set-e-font, @font-style-set, @color-bi-text-black, @color-bi-text-black, @color-bi-text-highlight);
+.font(style-set-font, @font-style-set);
+.font-hover(style-set-h-font, @font-style-set);
+.font-hover-active(style-set-ha-font, @font-style-set);
+.font-effect(style-set-e-font, @font-style-set);
 
 //超级链接
 .font(hyper-link-font, @font-href);
 
 //过滤
 .font(filter-font, @font-filter);
-.font-hover(filter-h-font, @font-filter, @color-bi-text-black, @color-bi-text-black);
-.font-hover-active(filter-ha-font, @font-filter, @color-bi-text-black, @color-bi-text-black, @color-bi-text-highlight);
-.font-effect(filter-e-font, @font-filter, @color-bi-text-black, @color-bi-text-black, @color-bi-text-highlight);
+.font-hover(filter-h-font, @font-filter);
+.font-hover-active(filter-ha-font, @font-filter);
+.font-effect(filter-e-font, @font-filter);
 
 //维度过滤
 .font(classify-font, @font-classify, @color-bi-text-highlight);
@@ -107,10 +107,10 @@
 .font(tree-node-triangle-collapse-font, @font-right-triangle);
 
 //翻页按钮字体图标
-.font-hover(row-pre-page-h-font, @font-solid-left, @color-bi-text-black, @color-bi-text-black);
-.font-hover(row-next-page-h-font, @font-solid-right, @color-bi-text-black, @color-bi-text-black);
-.font-hover(column-pre-page-h-font, @font-solid-top, @color-bi-text-black, @color-bi-text-black);
-.font-hover(column-next-page-h-font, @font-solid-bottom, @color-bi-text-black, @color-bi-text-black);
+.font-hover(row-pre-page-h-font, @font-solid-left);
+.font-hover(row-next-page-h-font, @font-solid-right);
+.font-hover(column-pre-page-h-font, @font-solid-top);
+.font-hover(column-next-page-h-font, @font-solid-bottom);
 
 //下拉框小小三角
 .font-hover-active(trigger-triangle-font, @font-no-sort-no-filter, @color-bi-text-gray, @color-bi-text-gray, @color-bi-text-highlight);
@@ -183,10 +183,10 @@
 .font(move2group-add-font, @font-add, @color-bi-text-highlight);
 
 //选择字段
-.font-hover-active(select-data-field-calc-font, @font-field-calc, @color-bi-text-black, @color-bi-text-black, @color-bi-text);
-.font-hover-active(select-data-field-string-font, @font-field-string, @color-bi-text-black, @color-bi-text-black, @color-bi-text);
-.font-hover-active(select-data-field-number-font, @font-field-number, @color-bi-text-black, @color-bi-text-black, @color-bi-text);
-.font-hover-active(select-data-field-date-font, @font-field-date, @color-bi-text-black, @color-bi-text-black, @color-bi-text);
+.font-hover-active(select-data-field-calc-font, @font-field-calc, inherit, inherit, @color-bi-text);
+.font-hover-active(select-data-field-string-font, @font-field-string, inherit, inherit, @color-bi-text);
+.font-hover-active(select-data-field-number-font, @font-field-number, inherit, inherit, @color-bi-text);
+.font-hover-active(select-data-field-date-font, @font-field-date, inherit, inherit, @color-bi-text);
 .font(select-data-field-string-group-font, @font-field-string);
 .font(select-data-field-number-group-font, @font-field-number);
 .font(select-data-field-date-group-font, @font-field-date);
@@ -196,9 +196,9 @@
 .font-hover(detail-real-data-warning-font, @font-warning, @color-bi-text-redmark, @color-bi-text-redmark);
 
 //数据配置分组统计中的选择字段
-.font-hover-active(select-group-field-string-font, @font-field-string, @font-color-highlight, @font-color-highlight, @font-color-highlight);
-.font-hover-active(select-group-field-number-font, @font-field-number, @font-color-highlight, @font-color-highlight, @font-color-highlight);
-.font-hover-active(select-group-field-date-font, @font-field-date, @font-color-highlight, @font-color-highlight, @font-color-highlight);
+.font-hover-active(select-group-field-string-font, @font-field-string, @color-bi-text-highlight, @color-bi-text-highlight, @color-bi-text-highlight);
+.font-hover-active(select-group-field-number-font, @font-field-number, @color-bi-text-highlight, @color-bi-text-highlight, @color-bi-text-highlight);
+.font-hover-active(select-group-field-date-font, @font-field-date, @color-bi-text-highlight, @color-bi-text-highlight, @color-bi-text-highlight);
 
 //详细设置
 .font-hover(dashboard-widget-combo-detail-set-font, @font-detail-set);
@@ -209,15 +209,15 @@
 .font(sortable-font, @font-sortable);
 
 //文本控件
-.font(text-bold-font, @font-bold, @font-color-normal);
-.font(text-italic-font, @font-italic, @font-color-normal);
-.font(text-underline-font, @font-underline, @font-color-normal);
-.font(text-color-font, @font-color, @font-color-normal);
-.font(text-background-font, @font-background, @font-color-normal);
-.font(text-color-underline-font, @font-color-underline, "");
-.font(text-align-left-font, @font-align-left, @font-color-normal);
-.font(text-align-center-font, @font-align-center, @font-color-normal);
-.font(text-align-right-font, @font-align-right, @font-color-normal);
+.font(text-bold-font, @font-bold);
+.font(text-italic-font, @font-italic);
+.font(text-underline-font, @font-underline);
+.font(text-color-font, @font-color);
+.font(text-background-font, @font-background);
+.font(text-color-underline-font, @font-color-underline);
+.font(text-align-left-font, @font-align-left);
+.font(text-align-center-font, @font-align-center);
+.font(text-align-right-font, @font-align-right);
 
 //图片控件
 .font(img-upload-font, @font-upload, @icon-color-active);
@@ -244,14 +244,14 @@
 .font-hover-active(sql-table-font, @font-sql-table, @color-bi-text-highlight, @color-bi-text-highlight, @color-bi-text);
 
 .font(refresh-table-font, @font-refresh);
-.font(recover-chart-font-hightlight, @font-recover-chart, @color-bi-text-highlight);
+.font(recover-chart-font-hightlight, @font-recover-chart);
 
-.font-hover-active(tables-tile-view-font, @font-tile-view, @color-bi-font-native, @color-bi-font-hover, @color-bi-text);
-.font-hover-active(tables-relation-view-font, @font-relation-view, @color-bi-font-native, @color-bi-font-hover, @color-bi-text);
+.font-hover-active(tables-tile-view-font, @font-tile-view, inherit, inherit, @color-bi-text);
+.font-hover-active(tables-relation-view-font, @font-relation-view, inherit, inherit, @color-bi-text);
 
 .font(add-new-table-pull-down-font, @font-down, @color-bi-text);
 
-.font-hover-active(data-link-check-font, @font-check-mark, @color-bi-text, @color-bi-background-gray, @color-bi-font-active);
+.font-hover-active(data-link-check-font, @font-check-mark, @color-bi-text, @color-bi-text-gray, @color-bi-text-highlight);
 
 //点击编辑
 .font-hover(edit-set-font, @font-detail-set);
@@ -261,24 +261,24 @@
 .font-hover(data-config-font, @font-database, @color-bi-text, @color-bi-text);
 
 //切换文件夹视图
-.font-hover-active(folder-list-view, @font-classify, @color-bi-font-native, @color-bi-font-native, @color-bi-text);
-.font-hover-active(folder-card-view, @font-tile-view, @color-bi-font-native, @color-bi-font-native, @color-bi-text);
+.font-hover-active(folder-list-view, @font-classify, inherit, inherit, @color-bi-text);
+.font-hover-active(folder-card-view, @font-tile-view, inherit, inherit, @color-bi-text);
 
-.font-hover-active(item-check-font, @font-check-mark, @color-bi-text, @color-bi-background-gray, @color-bi-font-active);
+.font-hover-active(item-check-font, @font-check-mark, @color-bi-text, @color-bi-text-gray, @color-bi-font-active);
 
 //表格上面的相关操作——升序、降序、不排序、过滤
-.font-hover(table-no-sort-no-filter-font, @font-no-sort-no-filter, "", "");
-.font-hover(table-no-sort-filter-font, @font-no-sort-filter, "", "");
-.font-hover(table-descending-filter-font, @font-descending-filter, "", "");
-.font-hover(table-ascending-filter-font, @font-ascending-filter, "", "");
-.font-hover(table-descending-no-filter-font, @font-descending-no-filter, "", "");
-.font-hover(table-ascending-no-filter-font, @font-ascending-no-filter, "", "");
-.font-hover(table-no-sort-font, @font-no-sort, "", "");
+.font-hover(table-no-sort-no-filter-font, @font-no-sort-no-filter);
+.font-hover(table-no-sort-filter-font, @font-no-sort-filter);
+.font-hover(table-descending-filter-font, @font-descending-filter);
+.font-hover(table-ascending-filter-font, @font-ascending-filter);
+.font-hover(table-descending-no-filter-font, @font-descending-no-filter);
+.font-hover(table-ascending-no-filter-font, @font-ascending-no-filter);
+.font-hover(table-no-sort-font, @font-no-sort);
 
-.font-hover(primary-key-font, @font-key, @color-bi-font-native, @color-bi-font-hover);
+.font-hover(primary-key-font, @font-key);
 
-.font-hover-active(table-open-row-style-font, @font-table-row-open, @color-bi-font-native, @color-bi-font-hover, @color-bi-font-active);
-.font-hover-active(table-open-col-style-font, @font-table-col-open, @color-bi-font-native, @color-bi-font-hover, @color-bi-font-active);
+.font-hover-active(table-open-row-style-font, @font-table-row-open);
+.font-hover-active(table-open-col-style-font, @font-table-col-open);
 
 //气泡图计算函数
 .font(calculate-function-font, @font-field-calc,  @font-color-normal);
@@ -309,7 +309,7 @@
 .font(target-style-equal-arrow-font, @font-mark-equal, @color-target-style-equal);
 .font(target-style-more-arrow-font, @font-mark-up-arrow, @color-target-style-more);
 
-.font(calculate-target-font, @font-field-calc, @color-bi-text-black);
+.font(calculate-target-font, @font-field-calc);
 
 .font(task-list-font, @font-classify, @color-bi-text-highlight);
 
@@ -334,13 +334,13 @@
 .font(widget-combo-des-font, @font-des);
 .font(widget-combo-clear-font, @font-clear);
 
-.font-hover(detail-table-popup-font, @font-hellip, @color-bi-font-native, @color-bi-font-active);
+.font-hover(detail-table-popup-font, @font-hellip, inherit, @color-bi-font-active);
 
-.font(chart-drill-up, @font-top-triangle, "");
-.font(chart-drill-down, @font-down-triangle, "");
+.font(chart-drill-up, @font-top-triangle);
+.font(chart-drill-down, @font-down-triangle);
 
-.font(report-filter-open-font, @font-report-filter-open, @color-bi-font-native);
-.font(report-filter-close-font, @font-report-filter-close, @color-bi-font-native);
+.font(report-filter-open-font, @font-report-filter-open);
+.font(report-filter-close-font, @font-report-filter-close);
 
 .font(report-apply-hangout-normal-font, @font-apply-hangout, @color-bi-text-gray);
 .font(report-apply-hangout-ing-font, @font-apply-hangout, @color-bi-text-highlight);
@@ -352,8 +352,8 @@
 .font(delete-font-package, @font-delete, @color-bi-text-warning);
 .font(delete-h-font-package, @font-delete, @color-bi-text-warning);
 .font(rename-font-package, @font-rename, @color-bi-text-highlight);
-.font(package-selected-font, @font-check-box-selected, @color-bi-border-highlight);
-.font(package-not-selected-font, @font-check-box-not-selected, @color-bi-border-highlight);
+.font(package-selected-font, @font-check-box-selected, @color-bi-text-highlight);
+.font(package-not-selected-font, @font-check-box-not-selected, @color-bi-text-highlight);
 
 .font(report-detail-info-font, @font-info, @color-bi-text-redmark);
 .font(report-rename-font, @font-rename-edit, @color-bi-background-success);

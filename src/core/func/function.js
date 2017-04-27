@@ -129,7 +129,7 @@ $(function () {
             }
             var rgb = this.rgb2json(this.hex2rgb(hex));
             var grayLevel = Math.round(rgb.r * 0.299 + rgb.g * 0.587 + rgb.b * 0.114);
-            if (grayLevel < 192) {
+            if (grayLevel < 140) {
                 return true;
             }
             return false;
@@ -138,7 +138,7 @@ $(function () {
         //获取对比颜色
         getContrastColor: function (color) {
             if (this.isDarkColor(color)) {
-                return "#b2b2b2";
+                return "#ffffff";
             }
             return "#1a1a1a";
         },

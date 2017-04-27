@@ -10,7 +10,7 @@ BI.ColorPickerButton = BI.inherit(BI.BasicButton, {
     _defaultConfig: function () {
         var conf = BI.ColorPickerButton.superclass._defaultConfig.apply(this, arguments);
         return BI.extend(conf, {
-            baseCls: (conf.baseCls || "") + " bi-color-picker-button"
+            baseCls: (conf.baseCls || "") + " bi-color-picker-button bi-background bi-border-top bi-border-left"
         })
     },
 

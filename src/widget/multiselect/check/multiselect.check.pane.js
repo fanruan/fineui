@@ -13,7 +13,7 @@ BI.MultiSelectCheckPane = BI.inherit(BI.Widget, {
 
     _defaultConfig: function () {
         return BI.extend(BI.MultiSelectCheckPane.superclass._defaultConfig.apply(this, arguments), {
-            baseCls: "bi-multi-select-check-pane",
+            baseCls: "bi-multi-select-check-pane bi-background",
             items: [],
             itemsCreator: BI.emptyFn,
             valueFormatter: BI.emptyFn,

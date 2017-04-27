@@ -16,7 +16,7 @@ BI.QuarterTrigger = BI.inherit(BI.Trigger, {
 
     _defaultConfig: function () {
         return BI.extend(BI.QuarterTrigger.superclass._defaultConfig.apply(this, arguments), {
-            extraCls: "bi-quarter-trigger",
+            extraCls: "bi-quarter-trigger bi-border",
             height: 25
         });
     },

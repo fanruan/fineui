@@ -5,14 +5,14 @@
   width: 0;
   height: 0;
   border-top: 6px solid transparent;
-  border-left: 6px solid #009de3;
+  border-left: 6px solid #3f8ce8;
   border-bottom: 6px solid transparent;
 }
 .bi-bubble-combo .bubble-combo-triangle-right {
   width: 0;
   height: 0;
   border-top: 6px solid transparent;
-  border-right: 6px solid #009de3;
+  border-right: 6px solid #3f8ce8;
   border-bottom: 6px solid transparent;
 }
 .bi-bubble-combo .bubble-combo-triangle-top {
@@ -20,12 +20,12 @@
   height: 0;
   border-left: 6px solid transparent;
   border-right: 6px solid transparent;
-  border-top: 6px solid #009de3;
+  border-top: 6px solid #3f8ce8;
 }
 .bi-bubble-combo .bubble-combo-triangle-bottom {
   width: 0;
   height: 0;
   border-left: 6px solid transparent;
   border-right: 6px solid transparent;
-  border-bottom: 6px solid #009de3;
+  border-bottom: 6px solid #3f8ce8;
 }

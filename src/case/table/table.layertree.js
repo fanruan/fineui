@@ -33,6 +33,8 @@ BI.LayerTreeTable = BI.inherit(BI.Widget, {
 
             regionColumnSize: [],
 
+            rowHeaderCreator: null,
+
             headerCellStyleGetter: BI.emptyFn,
             summaryCellStyleGetter: BI.emptyFn,
             sequenceCellStyleGetter: BI.emptyFn,
@@ -68,17 +70,17 @@ BI.LayerTreeTable = BI.inherit(BI.Widget, {
             var newHeader = this._formatColumns(header);
             var deep = this._getHDeep();
             if (deep <= 0) {
-                newHeader.unshift({
-                    type: "bi.table_style_cell",
-                    text: BI.i18nText("BI-Row_Header"),
-                    styleGetter: o.headerCellStyleGetter
-                });
+                newHeader.unshift(o.rowHeaderCreator || {
+                        type: "bi.table_style_cell",
+                        text: BI.i18nText("BI-Row_Header"),
+                        styleGetter: o.headerCellStyleGetter
+                    });
             } else {
-                newHeader[0] = {
-                    type: "bi.table_style_cell",
-                    text: BI.i18nText("BI-Row_Header"),
-                    styleGetter: o.headerCellStyleGetter
-                };
+                newHeader[0] = o.rowHeaderCreator || {
+                        type: "bi.table_style_cell",
+                        text: BI.i18nText("BI-Row_Header"),
+                        styleGetter: o.headerCellStyleGetter
+                    };
             }
             result.push(newHeader);
         }

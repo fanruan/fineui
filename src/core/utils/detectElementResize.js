@@ -161,11 +161,14 @@
                 element.__resizeTriggers__ = !element.removeChild(element.__resizeTriggers__);
             }
         }
-    }
+    };
 
     BI.ResizeDetector = {
         addResizeListener: function (widget, fn) {
             addResizeListener(widget.element[0], fn);
+            return function () {
+                removeResizeListener(widget.element[0], fn);
+            }
         },
         removeResizeListener: function (widget, fn) {
             removeResizeListener(widget.element[0], fn);

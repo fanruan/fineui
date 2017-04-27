@@ -15,6 +15,8 @@ BI.SequenceTableTreeNumber = BI.inherit(BI.Widget, {
             headerRowSize: 25,
             rowSize: 25,
 
+            sequenceHeaderCreator: null,
+
             header: [],
             items: [], //二维数组
 
@@ -33,12 +35,12 @@ BI.SequenceTableTreeNumber = BI.inherit(BI.Widget, {
         this.renderedCells = [];
         this.renderedKeys = [];
 
-        this.header = BI.createWidget({
-            type: "bi.table_style_cell",
-            cls: "sequence-table-title-cell",
-            styleGetter: o.headerCellStyleGetter,
-            text: BI.i18nText("BI-Number_Index")
-        });
+        this.header = BI.createWidget(o.sequenceHeaderCreator || {
+                type: "bi.table_style_cell",
+                cls: "sequence-table-title-cell bi-border",
+                styleGetter: o.headerCellStyleGetter,
+                text: BI.i18nText("BI-Number_Index")
+            });
         this.container = BI.createWidget({
             type: "bi.absolute",
             width: 60,
@@ -251,7 +253,7 @@ BI.SequenceTableTreeNumber = BI.inherit(BI.Widget, {
             } else {
                 var child = BI.createWidget(BI.extend({
                     type: "bi.table_style_cell",
-                    cls: "sequence-table-number-cell",
+                    cls: "sequence-table-number-cell bi-border-left bi-border-right bi-border-bottom",
                     width: 60,
                     styleGetter: numbers[key].isSummary === true ? function () {
                         return o.summaryCellStyleGetter(true);
@@ -320,7 +322,7 @@ BI.SequenceTableTreeNumber = BI.inherit(BI.Widget, {
             task.apply(self);
         });
         this.tasks = [];
-        this.header.populate();
+        this.header.populate && this.header.populate();
         this._layout();
         this._calculateChildrenToRender();
     },

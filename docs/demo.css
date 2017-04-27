@@ -1,14 +1,8 @@
 /****添加计算宽度的--运算符直接需要space****/
 /****** common color(常用颜色,可用于普遍场景) *****/
 /**** custom color(自定义颜色,用于特定场景) ****/
-.demo-face .face-config {
-  border-right: 1px solid #d4dadd;
-}
 .demo-face .face-config .config-label {
   font-size: 14px;
-}
-.demo-face .face-config .config-item {
-  border-bottom: 1px solid #d4dadd;
 }
 /****添加计算宽度的--运算符直接需要space****/
 /****** common color(常用颜色,可用于普遍场景) *****/
@@ -58,10 +52,10 @@
   background-color: #178cdf;
 }
 body {
-  background-color: #f3f3f3;
+  background-color: #eff1f4;
 }
 body.bi-theme-dark {
-  background-color: #191A2C;
+  background-color: #191B2B;
 }
 /****添加计算宽度的--运算符直接需要space****/
 /****** common color(常用颜色,可用于普遍场景) *****/
@@ -79,22 +73,6 @@ body.bi-theme-dark {
 /****添加计算宽度的--运算符直接需要space****/
 /****** common color(常用颜色,可用于普遍场景) *****/
 /**** custom color(自定义颜色,用于特定场景) ****/
-.demo-preview .preview-title {
-  border-bottom: 1px solid #d4dadd;
-}
-.demo-preview .preview-card {
-  background-color: #ffffff;
-}
-.bi-theme-dark .demo-preview .preview-card {
-  background-color: #202237;
-}
 /****添加计算宽度的--运算符直接需要space****/
 /****** common color(常用颜色,可用于普遍场景) *****/
 /**** custom color(自定义颜色,用于特定场景) ****/
-.demo-west {
-  background-color: #ffffff;
-  border-right: 1px solid #eaeaea;
-}
-.bi-theme-dark .demo-west {
-  background-color: #202237;
-}

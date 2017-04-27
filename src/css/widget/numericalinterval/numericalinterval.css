@@ -2,9 +2,6 @@
 /****** common color(常用颜色,可用于普遍场景) *****/
 /**** custom color(自定义颜色,用于特定场景) ****/
 .bi-numerical-interval .numerical-interval-small-editor {
-  border-top: 1px solid #d4dadd;
-  border-bottom: 1px solid #d4dadd;
-  border-left: 1px solid #d4dadd;
   -moz-border-radius-topleft: 2px;
   -webkit-border-top-left-radius: 2px;
   -moz-border-radius-bottomleft: 2px;
@@ -13,9 +10,6 @@
   border-bottom-left-radius: 2px;
 }
 .bi-numerical-interval .numerical-interval-big-editor {
-  border-top: 1px solid #d4dadd;
-  border-bottom: 1px solid #d4dadd;
-  border-right: 1px solid #d4dadd;
   -moz-border-radius-topright: 2px;
   -webkit-border-top-right-radius: 2px;
   -moz-border-radius-bottomright: 2px;
@@ -24,7 +18,6 @@
   border-bottom-right-radius: 2px;
 }
 .bi-numerical-interval .numerical-interval-big-combo {
-  border: 1px solid #d4dadd;
   -moz-border-radius-topleft: 2px;
   -webkit-border-top-left-radius: 2px;
   -moz-border-radius-bottomleft: 2px;
@@ -36,7 +29,6 @@
   font-size: 14px;
 }
 .bi-numerical-interval .numerical-interval-small-combo {
-  border: 1px solid #d4dadd;
   -moz-border-radius-topright: 2px;
   -webkit-border-top-right-radius: 2px;
   -moz-border-radius-bottomright: 2px;

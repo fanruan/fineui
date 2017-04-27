@@ -195,16 +195,19 @@ BI.Grid = BI.inherit(BI.Widget, {
         if (o.items.length > 0) {
             this.columnCount = o.items[0].length;
             this.rowCount = o.items.length;
-            this.container.setWidth(this.columnCount * o.estimatedColumnSize);
-            this.container.setHeight(this.rowCount * o.estimatedRowSize);
-
-            this._columnSizeAndPositionManager = new BI.ScalingCellSizeAndPositionManager(this.columnCount, o.columnWidthGetter, o.estimatedColumnSize);
-            this._rowSizeAndPositionManager = new BI.ScalingCellSizeAndPositionManager(this.rowCount, o.rowHeightGetter, o.estimatedRowSize);
-
-            this._calculateChildrenToRender();
-            this.element.scrollTop(o.scrollTop);
-            this.element.scrollLeft(o.scrollLeft);
+        } else {
+            this.rowCount = 0;
+            this.columnCount = 0;
         }
+        this.container.setWidth(this.columnCount * o.estimatedColumnSize);
+        this.container.setHeight(this.rowCount * o.estimatedRowSize);
+
+        this._columnSizeAndPositionManager = new BI.ScalingCellSizeAndPositionManager(this.columnCount, o.columnWidthGetter, o.estimatedColumnSize);
+        this._rowSizeAndPositionManager = new BI.ScalingCellSizeAndPositionManager(this.rowCount, o.rowHeightGetter, o.estimatedRowSize);
+
+        this._calculateChildrenToRender();
+        this.element.scrollTop(o.scrollTop);
+        this.element.scrollLeft(o.scrollLeft);
     },
 
     setScrollLeft: function (scrollLeft) {

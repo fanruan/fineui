@@ -19,10 +19,15 @@ BI.Segment = BI.inherit(BI.Widget, {
         this.buttonGroup = BI.createWidget({
             element: this,
             type: "bi.button_group",
-            items: BI.createItems(o.items, {
-                type: "bi.segment_button",
-                height: o.height - 2,
-                whiteSpace: o.whiteSpace
+            items: BI.map(o.items, function (i, item) {
+                return BI.extend({
+                    type: "bi.segment_button",
+                    height: o.height - 2,
+                    whiteSpace: o.whiteSpace
+                }, item, {
+                    cls: (i === 0 ? "bi-border-left " : "")
+                    + (item.cls || "") + " bi-border-top bi-border-right bi-border-bottom"
+                });
             }),
             layout: [
                 {

@@ -1,11 +1,3 @@
 /****添加计算宽度的--运算符直接需要space****/
 /****** common color(常用颜色,可用于普遍场景) *****/
 /**** custom color(自定义颜色,用于特定场景) ****/
-.bi-float-box {
-  background-color: #ffffff;
-  color: #1a1a1a;
-}
-.bi-theme-dark .bi-float-box {
-  background-color: #202237;
-  color: #b2b2b2;
-}

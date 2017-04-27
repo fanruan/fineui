@@ -4,7 +4,7 @@
 BI.MultiStringListPopup=BI.inherit(BI.Widget,{
     _defaultConfig:function () {
         return BI.extend(BI.MultiStringListPopup.superclass._defaultConfig.apply(this, arguments), {
-            baseCls: "bi-tree-list-popup",
+            baseCls: "bi-tree-list-popup bi-border-left bi-border-right bi-border-bottom",
             itemsCreator: BI.emptyFn
         });
     },

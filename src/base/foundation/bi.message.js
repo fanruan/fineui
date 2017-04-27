@@ -105,12 +105,12 @@ $.extend(BI, {
                     items: [
                         {
                             type: 'bi.border',
-                            cls: 'bi-message-content',
+                            cls: 'bi-message-content bi-card',
                             items: {
                                 'north': {
                                     el: {
                                         type: 'bi.border',
-                                        cls: 'bi-message-title',
+                                        cls: 'bi-message-title bi-background',
                                         items: {
                                             center: {
                                                 el: {

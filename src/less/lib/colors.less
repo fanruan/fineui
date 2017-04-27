@@ -4,7 +4,9 @@
 
 /****** common color(常用颜色,可用于普遍场景) *****/
 //默认字体颜色
-@color-bi-text-black: @font-color-normal;
+@color-bi-text-normal: @font-color-normal;
+//黑色字体颜色
+@color-bi-text-black: @font-color-black;
 //深色主题默认字体颜色
 @color-bi-text-theme-dark: @font-color-normal-theme-dark;
 //深灰色字体颜色
@@ -15,6 +17,8 @@
 @color-bi-text: @font-color-white;
 //灰化字体颜色
 @color-bi-text-disabled: @font-color-disabled;
+//神色主题灰化字体颜色
+@color-bi-text-disabled-theme-dark: @font-color-disabled-theme-dark;
 //提示字体颜色
 @color-bi-text-tips: @font-color-tips;
 //成功字体颜色
@@ -37,10 +41,6 @@
 @color-bi-background-black: @background-color-black;
 //深灰色背景
 @color-bi-background-dark: @background-color-dark;
-//浅灰色背景
-@color-bi-background-gray: @background-color-active;
-//浅色背景
-@color-bi-background-light: @background-color-light;
 //灰化背景
 @color-bi-background-disabled: @background-color-disabled;
 //成功背景色
@@ -67,10 +67,8 @@
 //灰化分割线
 @color-bi-split-disabled: @split-color-disabled;
 
-//基本边框色
+//黑色边框色
 @color-bi-border-black: @border-color-black;
-//基本边框色
-@color-bi-border-normal: @border-color-normal;
 //默认边框色
 @color-bi-border-default: @border-color-default;
 //outline颜色
@@ -111,15 +109,15 @@
 //失败边框
 @color-bi-tooltip-warning-border: @border-color-error;
 
-//dashboard
-@color-dashboard-toolbar-border: @border-color-main;
-@color-dashboard-toolbar-font: @font-color-light-gray;
-
 //dimension
 @color-dimension-background: @background-color-light-blue;
 @color-target-background: @background-color-light-green;
 @color-dimension-region-border: @border-color-light-blue;
 @color-target-region-border: @border-color-light-green;
+@color-dimension-background-theme-dark: @background-color-light-blue-theme-dark;
+@color-target-background-theme-dark: @background-color-light-green-theme-dark;
+@color-dimension-region-border-theme-dark: @border-color-light-blue-theme-dark;
+@color-target-region-border-theme-dark: @border-color-light-green-theme-dark;
 
 //etl operator
 @color-etl-operator: @background-color-light-blue;
@@ -147,8 +145,7 @@
 
 @color-login-info-fields-group-background: @background-color-light-blue;
 //mask颜色
-@color-bi-button-mask : @color-bi-background-black;
-
+@color-bi-button-mask: @color-bi-background-black;
 
 // 数据连接底色 10种 --start--
 @color-bi-data-link-button-color1: @data-link-color1;

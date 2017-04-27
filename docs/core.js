@@ -13808,6 +13808,13 @@ if (!window.BI) {
             }
         },
 
+        parseSafeInt: function (value) {
+            var MAX_SAFE_INTEGER = 9007199254740991;
+            return value
+                ? this.clamp(this.parseInt(value), -MAX_SAFE_INTEGER, MAX_SAFE_INTEGER)
+                : (value === 0 ? value : 0);
+        },
+
         parseFloat: function (number) {
             try {
                 return parseFloat(number);
@@ -14421,27 +14428,14 @@ BI.Widget = BI.inherit(BI.OB, {
         }
         this.beforeMounted && this.beforeMounted();
         this._isMounted = true;
-        this._mountChildren();
+        this._mountChildren && this._mountChildren();
         BI.each(this._children, function (i, widget) {
             widget._mount && widget._mount();
         });
         this.mounted && this.mounted();
     },
 
-    _mountChildren: function () {
-        var self = this;
-        var frag = document.createDocumentFragment();
-        var hasChild = false;
-        BI.each(this._children, function (i, widget) {
-            if (widget.element !== self.element) {
-                frag.appendChild(widget.element[0]);
-                hasChild = true;
-            }
-        });
-        if (hasChild === true) {
-            this.element.append(frag);
-        }
-    },
+    _mountChildren: null,
 
     _unMount: function () {
         BI.each(this._children, function (i, widget) {
@@ -16861,11 +16855,14 @@ BI.ScalingCellSizeAndPositionManager.prototype = {
                 element.__resizeTriggers__ = !element.removeChild(element.__resizeTriggers__);
             }
         }
-    }
+    };
 
     BI.ResizeDetector = {
         addResizeListener: function (widget, fn) {
             addResizeListener(widget.element[0], fn);
+            return function () {
+                removeResizeListener(widget.element[0], fn);
+            }
         },
         removeResizeListener: function (widget, fn) {
             removeResizeListener(widget.element[0], fn);
@@ -19326,6 +19323,21 @@ BI.Layout = BI.inherit(BI.Widget, {
         }
     },
 
+    _mountChildren: function () {
+        var self = this;
+        var frag = document.createDocumentFragment();
+        var hasChild = false;
+        BI.each(this._children, function (i, widget) {
+            if (widget.element !== self.element) {
+                frag.appendChild(widget.element[0]);
+                hasChild = true;
+            }
+        });
+        if (hasChild === true) {
+            this.element.append(frag);
+        }
+    },
+
     _getChildName: function (index) {
         return index + "";
     },
@@ -21113,9 +21125,7 @@ BI.LayerController = BI.inherit(BI.Controller, {
  */
 BI.MaskersController = BI.inherit(BI.LayerController, {
     _defaultConfig: function () {
-        return BI.extend(BI.MaskersController.superclass._defaultConfig.apply(this, arguments), {
-            render: "body"
-        });
+        return BI.extend(BI.MaskersController.superclass._defaultConfig.apply(this, arguments), {});
     },
 
     _init: function () {
@@ -22658,7 +22668,7 @@ $(function () {
             }
             var rgb = this.rgb2json(this.hex2rgb(hex));
             var grayLevel = Math.round(rgb.r * 0.299 + rgb.g * 0.587 + rgb.b * 0.114);
-            if (grayLevel < 192) {
+            if (grayLevel < 140) {
                 return true;
             }
             return false;
@@ -22667,7 +22677,7 @@ $(function () {
         //获取对比颜色
         getContrastColor: function (color) {
             if (this.isDarkColor(color)) {
-                return "#b2b2b2";
+                return "#ffffff";
             }
             return "#1a1a1a";
         },
@@ -23728,6 +23738,104 @@ Date.prototype.getWeekNumber = function () {
 //离当前时间多少天的时间
 Date.prototype.getOffsetDate = function (offset) {
     return new Date(this.getTime() + offset * 864e5);
+};
+
+Date.prototype.getAfterMulQuarter = function (n) {
+    var dt = new Date(this.getTime());
+    dt.setMonth(dt.getMonth() + n * 3);
+    return dt;
+};
+//获得n个季度前的日期
+Date.prototype.getBeforeMulQuarter = function (n) {
+    var dt = new Date(this.getTime());
+    dt.setMonth(dt.getMonth() - n * 3);
+    return dt;
+};
+//得到本季度的起始月份
+Date.prototype.getQuarterStartMonth = function () {
+    var quarterStartMonth = 0;
+    var nowMonth = this.getMonth();
+    if (nowMonth < 3) {
+        quarterStartMonth = 0;
+    }
+    if (2 < nowMonth && nowMonth < 6) {
+        quarterStartMonth = 3;
+    }
+    if (5 < nowMonth && nowMonth < 9) {
+        quarterStartMonth = 6;
+    }
+    if (nowMonth > 8) {
+        quarterStartMonth = 9;
+    }
+    return quarterStartMonth;
+};
+//获得本季度的起始日期
+Date.prototype.getQuarterStartDate = function () {
+    return new Date(this.getFullYear(), this.getQuarterStartMonth(), 1);
+};
+//得到本季度的结束日期
+Date.prototype.getQuarterEndDate = function () {
+    var quarterEndMonth = this.getQuarterStartMonth() + 2;
+    return new Date(this.getFullYear(), quarterEndMonth, this.getMonthDays(quarterEndMonth));
+};
+Date.prototype.getAfterMultiMonth = function (n) {
+    var dt = new Date(this.getTime());
+    dt.setMonth(dt.getMonth() + n | 0);
+    return dt;
+};
+Date.prototype.getBeforeMultiMonth = function (n) {
+    var dt = new Date(this.getTime());
+    dt.setMonth(dt.getMonth() - n | 0);
+    return dt;
+};
+
+Date.prototype.getAfterMulQuarter = function (n) {
+    var dt = new Date(this.getTime());
+    dt.setMonth(dt.getMonth() + n * 3);
+    return dt;
+};
+//获得n个季度前的日期
+Date.prototype.getBeforeMulQuarter = function (n) {
+    var dt = new Date(this.getTime());
+    dt.setMonth(dt.getMonth() - n * 3);
+    return dt;
+};
+//得到本季度的起始月份
+Date.prototype.getQuarterStartMonth = function () {
+    var quarterStartMonth = 0;
+    var nowMonth = this.getMonth();
+    if (nowMonth < 3) {
+        quarterStartMonth = 0;
+    }
+    if (2 < nowMonth && nowMonth < 6) {
+        quarterStartMonth = 3;
+    }
+    if (5 < nowMonth && nowMonth < 9) {
+        quarterStartMonth = 6;
+    }
+    if (nowMonth > 8) {
+        quarterStartMonth = 9;
+    }
+    return quarterStartMonth;
+};
+//获得本季度的起始日期
+Date.prototype.getQuarterStartDate = function () {
+    return new Date(this.getFullYear(), this.getQuarterStartMonth(), 1);
+};
+//得到本季度的结束日期
+Date.prototype.getQuarterEndDate = function () {
+    var quarterEndMonth = this.getQuarterStartMonth() + 2;
+    return new Date(this.getFullYear(), quarterEndMonth, this.getMonthDays(quarterEndMonth));
+};
+Date.prototype.getAfterMultiMonth = function (n) {
+    var dt = new Date(this.getTime());
+    dt.setMonth(dt.getMonth() + n | 0);
+    return dt;
+};
+Date.prototype.getBeforeMultiMonth = function (n) {
+    var dt = new Date(this.getTime());
+    dt.setMonth(dt.getMonth() - n | 0);
+    return dt;
 };
 
 /** Checks date and time equality */

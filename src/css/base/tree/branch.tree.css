@@ -4,9 +4,3 @@
 .bi-branch-tree .bi-branch-tree-view {
   min-width: 300px;
 }
-.bi-click-branch-tree {
-  border: 1px solid #d4dadd;
-}
-.bi-click-branch-tree .bi-empty-view {
-  background: #f4f4f4;
-}
