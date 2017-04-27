@@ -4927,7 +4927,7 @@ BI.shortcut('bi.date_combo', BI.DateCombo);BI.DateTrigger = BI.inherit(BI.Trigge
             hgap: c.hgap,
             vgap: c.vgap,
             allowBlank: true,
-            watermark: BI.i18nText("BI-Unrestricted"),
+            watermark: BI.i18nText("BI-Basic_Unrestricted"),
             errorText: function () {
                 if (self.editor.isEditing()) {
                     return BI.i18nText("BI-Date_Trigger_Error_Text");
@@ -12260,7 +12260,7 @@ BI.NumericalInterval = BI.inherit(BI.Single, {
         this.smallEditor = BI.createWidget({
             type: "bi.sign_editor",
             height: o.height - 2,
-            watermark: BI.i18nText("BI-Unrestricted"),
+            watermark: BI.i18nText("BI-Basic_Unrestricted"),
             allowBlank: true,
             value: o.min,
             level: "warning",
@@ -12297,7 +12297,7 @@ BI.NumericalInterval = BI.inherit(BI.Single, {
         this.bigEditor = BI.createWidget({
             type: "bi.sign_editor",
             height: o.height - 2,
-            watermark: BI.i18nText("BI-Unrestricted"),
+            watermark: BI.i18nText("BI-Basic_Unrestricted"),
             allowBlank: true,
             value: o.max,
             level: "warning",
