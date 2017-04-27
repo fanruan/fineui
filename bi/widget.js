@@ -14569,7 +14569,7 @@ BI.shortcut('bi.relation_view', BI.RelationView);/**
 BI.RelationViewRegionContainer = BI.inherit(BI.Widget, {
     _defaultConfig: function () {
         return BI.extend(BI.RelationViewRegionContainer.superclass._defaultConfig.apply(this, arguments), {
-            baseCls: "bi-relation-view-region-container bi-card bi-border",
+            baseCls: "bi-relation-view-region-container",
             width: 150
         });
     },
@@ -14723,7 +14723,7 @@ BI.RelationViewRegion = BI.inherit(BI.BasicButton, {
                 cls: "relation-view-region-container bi-card bi-border " + (o.belongPackage ? "" : "other-package"),
                 items: [{
                     type: "bi.vertical_adapt",
-                    cls: "relation-view-region-title bi-border",
+                    cls: "relation-view-region-title bi-border-bottom",
                     items: [this.preview, this.title]
                 }, this.button_group]
             }],
