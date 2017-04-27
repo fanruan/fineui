@@ -7,7 +7,7 @@ BI.i18n = {
 };
 
 BI.servletURL = "dist/";
-BI.resourceURL = "dist/resource/";
+BI.resourceURL = "dist/resource";
 BI.i18n = {};$(function () {
     var ref;
     BI.createWidget({
