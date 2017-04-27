@@ -306,14 +306,15 @@ BI.TreeView = BI.inherit(BI.Pane, {
     //处理节点
     _dealWidthNodes: function (nodes) {
         var self = this, o = this.options;
-        //处理标红
-        if (BI.isKey(o.paras.keyword)) {
-            var keyword = o.paras.keyword;
-            var ns = BI.Tree.arrayFormat(nodes);
-            BI.each(ns, function (i, n) {
-                n.text = $("<div>").__textKeywordMarked__(n.text, keyword, n.py).html();
-            });
-        }
+        var ns = BI.Tree.arrayFormat(nodes);
+        BI.each(ns, function (i, n) {
+            //处理标红
+            if (BI.isKey(o.paras.keyword)) {
+                n.text = $("<div>").__textKeywordMarked__(n.text, o.paras.keyword, n.py).html();
+            } else {
+                n.text = (n.text + "").replaceAll(" ", "　");
+            }
+        });
         return nodes;
     },
 
@@ -399,7 +400,8 @@ BI.TreeView = BI.inherit(BI.Pane, {
                 },
                 view: {
                     showIcon: false,
-                    expandSpeed: ""
+                    expandSpeed: "",
+                    nameIsHTML: true
                 },
                 callback: {}
             };

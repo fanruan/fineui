@@ -2436,8 +2436,8 @@ BI.shortcut("demo.center", Demo.Center);Demo.TreeValueChooser = BI.inherit(BI.Wi
         var tree = [];
         for (var i = 0; i < 21; i++) {
             tree.push({
-                value: i + "",
-                text: i + "",
+                value: "  " + i + "",
+                text: "  " + i + "",
                 id: i + "",
                 pId: null
             });

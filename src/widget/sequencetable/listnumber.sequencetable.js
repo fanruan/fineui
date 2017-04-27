@@ -35,12 +35,6 @@ BI.SequenceTableListNumber = BI.inherit(BI.Widget, {
         this.renderedCells = [];
         this.renderedKeys = [];
 
-        this.header = BI.createWidget(o.sequenceHeaderCreator || {
-                type: "bi.table_style_cell",
-                cls: "sequence-table-title-cell bi-border",
-                styleGetter: o.headerCellStyleGetter,
-                text: BI.i18nText("BI-Number_Index")
-            });
         this.container = BI.createWidget({
             type: "bi.absolute",
             width: 60,
@@ -54,12 +48,19 @@ BI.SequenceTableListNumber = BI.inherit(BI.Widget, {
             items: [this.container]
         });
 
+        this.headerContainer = BI.createWidget({
+            type: "bi.absolute",
+            cls: "bi-border",
+            width: 58,
+            scrollable: false
+        });
+
         this.layout = BI.createWidget({
             type: "bi.vtape",
             element: this,
             items: [{
-                el: this.header,
-                height: o.headerRowSize * o.header.length
+                el: this.headerContainer,
+                height: o.headerRowSize * o.header.length - 2
             }, {
                 el: this.scrollContainer
             }]
@@ -80,6 +81,26 @@ BI.SequenceTableListNumber = BI.inherit(BI.Widget, {
         this.layout.resize();
         this.container.setHeight(o.items.length * o.rowSize);
         this.scrollContainer.element.scrollTop(o.scrollTop);
+    },
+
+    _createHeader: function () {
+        var o = this.options;
+        BI.createWidget({
+            type: "bi.absolute",
+            element: this.headerContainer,
+            items: [{
+                el: o.sequenceHeaderCreator || {
+                    type: "bi.table_style_cell",
+                    cls: "sequence-table-title-cell",
+                    styleGetter: o.headerCellStyleGetter,
+                    text: BI.i18nText("BI-Number_Index")
+                },
+                left: 0,
+                top: 0,
+                right: 0,
+                bottom: 0
+            }]
+        });
     },
 
     _calculateChildrenToRender: function () {

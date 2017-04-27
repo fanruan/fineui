@@ -78,7 +78,7 @@ BI.Pane = BI.inherit(BI.Widget, {
 
     loaded: function () {
         var self = this, o = this.options;
-        BI.Layers.remove(self.getName());
+        BI.Maskers.remove(self.getName());
         this._loading && this._loading.destroy();
         this._loading && (this._loading = null);
         o.onLoaded();
