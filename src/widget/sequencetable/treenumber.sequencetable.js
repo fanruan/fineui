@@ -322,7 +322,7 @@ BI.SequenceTableTreeNumber = BI.inherit(BI.Widget, {
             task.apply(self);
         });
         this.tasks = [];
-        this.header.populate && this.header.populate();
+        this.header.populate();
         this._layout();
         this._calculateChildrenToRender();
     },
