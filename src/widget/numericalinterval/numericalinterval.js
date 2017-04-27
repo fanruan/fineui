@@ -33,7 +33,7 @@ BI.NumericalInterval = BI.inherit(BI.Single, {
         this.smallEditor = BI.createWidget({
             type: "bi.sign_editor",
             height: o.height - 2,
-            watermark: BI.i18nText("BI-Unrestricted"),
+            watermark: BI.i18nText("BI-Basic_Unrestricted"),
             allowBlank: true,
             value: o.min,
             level: "warning",
@@ -70,7 +70,7 @@ BI.NumericalInterval = BI.inherit(BI.Single, {
         this.bigEditor = BI.createWidget({
             type: "bi.sign_editor",
             height: o.height - 2,
-            watermark: BI.i18nText("BI-Unrestricted"),
+            watermark: BI.i18nText("BI-Basic_Unrestricted"),
             allowBlank: true,
             value: o.max,
             level: "warning",
