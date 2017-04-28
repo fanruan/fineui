@@ -9365,7 +9365,7 @@ BI.MultiSelectCheckPane = BI.inherit(BI.Widget, {
             items: opts.items,
             itemsCreator: function (op, callback) {
                 op = BI.extend(op || {}, {
-                    selected_values: self.storeValue.value
+                    selectedValues: self.storeValue.value
                 });
                 if (self.storeValue.type === BI.Selection.Multi) {
                     callback({
@@ -9928,7 +9928,7 @@ BI.MultiSelectLoader = BI.inherit(BI.Widget, {
             itemsCreator: function (op, callback) {
                 var startValue = self._startValue;
                 self.storeValue && (op = BI.extend(op || {}, {
-                    selected_values: BI.isKey(startValue) && self.storeValue.type === BI.Selection.Multi
+                    selectedValues: BI.isKey(startValue) && self.storeValue.type === BI.Selection.Multi
                         ? self.storeValue.value.concat(startValue) : self.storeValue.value
                 }));
                 opts.itemsCreator(op, function (ob) {
@@ -10340,7 +10340,7 @@ BI.MultiSelectSearchLoader = BI.inherit(BI.Widget, {
             },
             itemsCreator: function (op, callback) {
                 self.storeValue && (op = BI.extend(op || {}, {
-                    selected_values: self.storeValue.value
+                    selectedValues: self.storeValue.value
                 }));
                 opts.itemsCreator(op, function (ob) {
                     var keyword = ob.keyword = opts.keywordGetter();
@@ -10810,13 +10810,13 @@ BI.MultiSelectSearcher = BI.inherit(BI.Widget, {
         ob.value || (ob.value = []);
         if (ob.type === BI.Selection.All) {
             if (BI.size(ob.assist) === 1) {
-                this.editor.setState(o.valueFormatter(ob.assist[0] + "") || ob.assist[0] + "");
+                this.editor.setState(o.valueFormatter(ob.assist[0] + "") || (ob.assist[0] + ""));
             } else {
                 this.editor.setState(BI.size(ob.value) > 0 ? BI.Selection.Multi : BI.Selection.All);
             }
         } else {
             if (BI.size(ob.value) === 1) {
-                this.editor.setState(o.valueFormatter(ob.value[0] + "" || ob.value[0] + ""));
+                this.editor.setState(o.valueFormatter(ob.value[0] + "") || (ob.value[0] + ""));
             } else {
                 this.editor.setState(BI.size(ob.value) > 0 ? BI.Selection.Multi : BI.Selection.None);
             }
@@ -11288,7 +11288,7 @@ BI.MultiTreeCheckPane = BI.inherit(BI.Pane, {
 
         var self = this, opts = this.options;
 
-        this.selected_values = {};
+        this.selectedValues = {};
 
         var continueSelect = BI.createWidget({
             type: 'bi.text_button',
@@ -11325,7 +11325,7 @@ BI.MultiTreeCheckPane = BI.inherit(BI.Pane, {
             type: "bi.display_tree",
             cls: "bi-multi-tree-display",
             itemsCreator: function (op, callback) {
-                op.type = BI.TreeView.REQ_TYPE_SELECTED_DATA;
+                op.type = BI.TreeView.REQ_TYPE_GET_SELECTED_DATA;
                 opts.itemsCreator(op, callback);
             }
         });
@@ -11650,7 +11650,7 @@ BI.MultiTreePopup = BI.inherit(BI.Pane, {
 
         var self = this, opts = this.options;
 
-        this.selected_values = {};
+        this.selectedValues = {};
 
         this.tree = BI.createWidget({
             type: "bi.sync_tree",
@@ -15913,7 +15913,8 @@ BI.SequenceTableListNumber = BI.inherit(BI.Widget, {
     },
 
     _populate: function () {
-        this.header.populate();
+        this.headerContainer.empty();
+        this._createHeader();
         this._layout();
         this._calculateChildrenToRender();
     },
@@ -17001,8 +17002,8 @@ BI.AllValueChooserCombo = BI.inherit(BI.Widget, {
                 var search = BI.Func.getSearchResult(items, kw);
                 items = search.matched.concat(search.finded);
             });
-            if (options.selected_values) {//过滤
-                var filter = BI.makeObject(options.selected_values, true);
+            if (options.selectedValues) {//过滤
+                var filter = BI.makeObject(options.selectedValues, true);
                 items = BI.filter(items, function (i, ob) {
                     return !filter[ob.value];
                 });
@@ -17129,10 +17130,10 @@ BI.TreeValueChooserCombo = BI.inherit(BI.Widget, {
                 case BI.TreeView.REQ_TYPE_ADJUST_DATA:
                     self._reqAdjustTreeNode(options, callback);
                     break;
-                case BI.TreeView.REQ_TYPE_CALCULATE_SELECT_DATA:
+                case BI.TreeView.REQ_TYPE_SELECT_DATA:
                     self._reqSelectedTreeNode(options, callback);
                     break;
-                case BI.TreeView.REQ_TYPE_SELECTED_DATA:
+                case BI.TreeView.REQ_TYPE_GET_SELECTED_DATA:
                     self._reqDisplayTreeNode(options, callback);
                     break;
                 default :
@@ -17145,27 +17146,27 @@ BI.TreeValueChooserCombo = BI.inherit(BI.Widget, {
     _reqDisplayTreeNode: function (op, callback) {
         var self = this;
         var result = [];
-        var selected_values = op.selected_values;
+        var selectedValues = op.selectedValues;
 
-        if (selected_values == null || BI.isEmpty(selected_values)) {
+        if (selectedValues == null || BI.isEmpty(selectedValues)) {
             callback({});
             return;
         }
 
-        doCheck(0, [], selected_values);
+        doCheck(0, [], selectedValues);
 
         callback({
             items: result
         });
 
-        function doCheck(floor, parent_values, selected) {
+        function doCheck(floor, parentValues, selected) {
             if (floor >= self.floors) {
                 return;
             }
             if (selected == null || BI.isEmpty(selected)) {
-                var children = self._getChildren(parent_values);
+                var children = self._getChildren(parentValues);
                 BI.each(children, function (i, child) {
-                    var newParents = BI.clone(parent_values);
+                    var newParents = BI.clone(parentValues);
                     newParents.push(child.value);
                     var llen = self._getChildCount(newParents);
                     createOneJson(child, llen);
@@ -17175,19 +17176,19 @@ BI.TreeValueChooserCombo = BI.inherit(BI.Widget, {
             }
             BI.each(selected, function (k) {
                 var node = self._getNode(k);
-                var newParents = BI.clone(parent_values);
+                var newParents = BI.clone(parentValues);
                 newParents.push(node.value);
                 createOneJson(node, getCount(selected[k], newParents));
                 doCheck(floor + 1, newParents, selected[k]);
             })
         }
 
-        function getCount(jo, parent_values) {
+        function getCount(jo, parentValues) {
             if (jo == null) {
                 return 0;
             }
             if (BI.isEmpty(jo)) {
-                return self._getChildCount(parent_values);
+                return self._getChildCount(parentValues);
             }
 
             return BI.size(jo);
@@ -17206,30 +17207,30 @@ BI.TreeValueChooserCombo = BI.inherit(BI.Widget, {
 
     _reqSelectedTreeNode: function (op, callback) {
         var self = this;
-        var selected_values = op.selected_values;
-        var not_selected_value = op.not_selected_value || {};
+        var selectedValues = op.selectedValues;
+        var notSelectedValue = op.notSelectedValue || {};
         var keyword = op.keyword || "";
-        var parent_values = op.parent_values || [];
+        var parentValues = op.parentValues || [];
 
-        if (selected_values == null || BI.isEmpty(selected_values)) {
+        if (selectedValues == null || BI.isEmpty(selectedValues)) {
             callback({});
             return;
         }
 
-        dealWithSelectedValues(selected_values);
-        callback(selected_values);
+        dealWithSelectedValues(selectedValues);
+        callback(selectedValues);
 
 
-        function dealWithSelectedValues(selected_values) {
-            var p = BI.clone(parent_values);
-            p.push(not_selected_value);
+        function dealWithSelectedValues(selectedValues) {
+            var p = BI.clone(parentValues);
+            p.push(notSelectedValue);
 
-            if (isChild(selected_values, p)) {
+            if (isChild(selectedValues, p)) {
                 var result = [];
-                var finded = search(parent_values.length + 1, parent_values, not_selected_value, result);
+                var finded = search(parentValues.length + 1, parentValues, notSelectedValue, result);
 
                 if (finded === true) {
-                    var next = selected_values;
+                    var next = selectedValues;
                     BI.each(p, function (i, v) {
                         var t = next[v];
                         if (t == null) {
@@ -17237,7 +17238,7 @@ BI.TreeValueChooserCombo = BI.inherit(BI.Widget, {
                                 var split = p.slice(0, i);
                                 var expanded = self._getChildren(split);
                                 BI.each(expanded, function (m, child) {
-                                    if (i === p.length - 1 && child.value === not_selected_value) {
+                                    if (i === p.length - 1 && child.value === notSelectedValue) {
                                         return true;
                                     }
                                     next[child.value] = {};
@@ -17254,7 +17255,7 @@ BI.TreeValueChooserCombo = BI.inherit(BI.Widget, {
 
                     if (result.length > 0) {
                         BI.each(result, function (i, strs) {
-                            self._buildTree(selected_values, strs);
+                            self._buildTree(selectedValues, strs);
                         })
                     }
                 }
@@ -17294,8 +17295,8 @@ BI.TreeValueChooserCombo = BI.inherit(BI.Widget, {
             return can;
         }
 
-        function isChild(selected_values, parents) {
-            var t = selected_values;
+        function isChild(selectedValues, parents) {
+            var t = selectedValues;
             for (var i = 0; i < parents.length; i++) {
                 var v = parents[i];
                 if (!BI.has(t, v)) {
@@ -17313,16 +17314,16 @@ BI.TreeValueChooserCombo = BI.inherit(BI.Widget, {
     _reqAdjustTreeNode: function (op, callback) {
         var self = this;
         var result = [];
-        var selected_values = op.selected_values;
-        if (selected_values == null || BI.isEmpty(selected_values)) {
+        var selectedValues = op.selectedValues;
+        if (selectedValues == null || BI.isEmpty(selectedValues)) {
             callback({});
             return;
         }
-        BI.each(selected_values, function (k, v) {
+        BI.each(selectedValues, function (k, v) {
             result.push([k]);
         });
 
-        dealWithSelectedValues(selected_values, []);
+        dealWithSelectedValues(selectedValues, []);
 
         var jo = {};
         BI.each(result, function (i, strs) {
@@ -17359,23 +17360,23 @@ BI.TreeValueChooserCombo = BI.inherit(BI.Widget, {
         var self = this;
         var result = [];
         var keyword = op.keyword || "";
-        var selected_values = op.selected_values;
-        var last_search_value = op.last_search_value || "";
+        var selectedValues = op.selectedValues;
+        var lastSearchValue = op.lastSearchValue || "";
         var output = search();
         BI.nextTick(function () {
             callback({
                 hasNext: output.length > self._const.perPage,
                 items: result,
-                last_search_value: BI.last(output)
+                lastSearchValue: BI.last(output)
             })
         });
 
         function search() {
             var children = self._getChildren([]);
             var start = children.length;
-            if (last_search_value !== "") {
+            if (lastSearchValue !== "") {
                 for (var j = 0, len = start; j < len; j++) {
-                    if (children[j].value === last_search_value) {
+                    if (children[j].value === lastSearchValue) {
                         start = j + 1;
                         break;
                     }
@@ -17400,22 +17401,22 @@ BI.TreeValueChooserCombo = BI.inherit(BI.Widget, {
             return output;
         }
 
-        function nodeSearch(deep, parent_values, current, isAllSelect, result) {
+        function nodeSearch(deep, parentValues, current, isAllSelect, result) {
             if (self._isMatch(current, keyword)) {
-                var checked = isAllSelect || isSelected(parent_values, current);
-                createOneJson(parent_values, current, false, checked, !isAllSelect && isHalf(parent_values, current), true, result);
+                var checked = isAllSelect || isSelected(parentValues, current);
+                createOneJson(parentValues, current, false, checked, !isAllSelect && isHalf(parentValues, current), true, result);
                 return [true, checked];
             }
             if (deep >= self.floors) {
                 return [false, false];
             }
-            var newParents = BI.clone(parent_values);
+            var newParents = BI.clone(parentValues);
             newParents.push(current);
             var children = self._getChildren(newParents);
 
             var can = false, checked = false;
 
-            var isCurAllSelected = isAllSelect || isAllSelected(parent_values, current);
+            var isCurAllSelected = isAllSelect || isAllSelected(parentValues, current);
             BI.each(children, function (i, child) {
                 var state = nodeSearch(deep + 1, newParents, child.value, isCurAllSelected, result);
                 if (state[1] === true) {
@@ -17426,13 +17427,13 @@ BI.TreeValueChooserCombo = BI.inherit(BI.Widget, {
                 }
             });
             if (can === true) {
-                checked = isCurAllSelected || (isSelected(parent_values, current) && checked);
-                createOneJson(parent_values, current, true, checked, false, false, result);
+                checked = isCurAllSelected || (isSelected(parentValues, current) && checked);
+                createOneJson(parentValues, current, true, checked, false, false, result);
             }
             return [can, checked];
         }
 
-        function createOneJson(parent_values, value, isOpen, checked, half, flag, result) {
+        function createOneJson(parentValues, value, isOpen, checked, half, flag, result) {
             var node = self.map[value];
             result.push({
                 id: node.id,
@@ -17440,7 +17441,7 @@ BI.TreeValueChooserCombo = BI.inherit(BI.Widget, {
                 text: node.text,
                 value: node.value,
                 title: node.title,
-                isParent: parent_values.length + 1 < self.floors,
+                isParent: parentValues.length + 1 < self.floors,
                 open: isOpen,
                 checked: checked,
                 halfCheck: half,
@@ -17448,8 +17449,8 @@ BI.TreeValueChooserCombo = BI.inherit(BI.Widget, {
             });
         }
 
-        function isHalf(parent_values, value) {
-            var find = findSelectedObj(parent_values);
+        function isHalf(parentValues, value) {
+            var find = findSelectedObj(parentValues);
             if (find == null) {
                 return null;
             }
@@ -17462,8 +17463,8 @@ BI.TreeValueChooserCombo = BI.inherit(BI.Widget, {
             });
         }
 
-        function isAllSelected(parent_values, value) {
-            var find = findSelectedObj(parent_values);
+        function isAllSelected(parentValues, value) {
+            var find = findSelectedObj(parentValues);
             if (find == null) {
                 return null;
             }
@@ -17476,8 +17477,8 @@ BI.TreeValueChooserCombo = BI.inherit(BI.Widget, {
             });
         }
 
-        function isSelected(parent_values, value) {
-            var find = findSelectedObj(parent_values);
+        function isSelected(parentValues, value) {
+            var find = findSelectedObj(parentValues);
             if (find == null) {
                 return false;
             }
@@ -17488,12 +17489,12 @@ BI.TreeValueChooserCombo = BI.inherit(BI.Widget, {
             });
         }
 
-        function findSelectedObj(parent_values) {
-            var find = selected_values;
+        function findSelectedObj(parentValues) {
+            var find = selectedValues;
             if (find == null) {
                 return null;
             }
-            BI.every(parent_values, function (i, v) {
+            BI.every(parentValues, function (i, v) {
                 find = find[v];
                 if (find == null) {
                     return false;
@@ -17508,23 +17509,23 @@ BI.TreeValueChooserCombo = BI.inherit(BI.Widget, {
         var self = this;
         var result = [];
         var times = op.times;
-        var check_state = op.check_state || {};
-        var parent_values = op.parent_values || [];
-        var selected_values = op.selected_values;
+        var checkState = op.checkState || {};
+        var parentValues = op.parentValues || [];
+        var selectedValues = op.selectedValues;
         var valueMap = {};
-        if (judgeState(parent_values, selected_values, check_state)) {
-            valueMap = dealWidthSelectedValue(parent_values, selected_values);
+        if (judgeState(parentValues, selectedValues, checkState)) {
+            valueMap = dealWidthSelectedValue(parentValues, selectedValues);
         }
-        var nodes = this._getChildren(parent_values);
+        var nodes = this._getChildren(parentValues);
         for (var i = (times - 1) * this._const.perPage; nodes[i] && i < times * this._const.perPage; i++) {
-            var state = getCheckState(nodes[i].value, parent_values, valueMap, check_state);
+            var state = getCheckState(nodes[i].value, parentValues, valueMap, checkState);
             result.push({
                 id: nodes[i].id,
                 pId: nodes[i].pId,
                 value: nodes[i].value,
                 text: nodes[i].text,
                 times: 1,
-                isParent: parent_values.length + 1 < this.floors,
+                isParent: parentValues.length + 1 < this.floors,
                 checked: state[0],
                 halfCheck: state[1]
             })
@@ -17536,20 +17537,20 @@ BI.TreeValueChooserCombo = BI.inherit(BI.Widget, {
             });
         });
 
-        function judgeState(parent_values, selected_value, check_state) {
-            var checked = check_state.checked, half = check_state.half;
-            if (parent_values.length > 0 && !checked) {
+        function judgeState(parentValues, selected_value, checkState) {
+            var checked = checkState.checked, half = checkState.half;
+            if (parentValues.length > 0 && !checked) {
                 return false;
             }
-            return (parent_values.length === 0 || (checked && half) && !BI.isEmpty(selected_value));
+            return (parentValues.length === 0 || (checked && half) && !BI.isEmpty(selected_value));
         }
 
-        function dealWidthSelectedValue(parent_values, selected_values) {
+        function dealWidthSelectedValue(parentValues, selectedValues) {
             var valueMap = {};
-            BI.each(parent_values, function (i, v) {
-                selected_values = selected_values[v];
+            BI.each(parentValues, function (i, v) {
+                selectedValues = selectedValues[v];
             });
-            BI.each(selected_values, function (value, obj) {
+            BI.each(selectedValues, function (value, obj) {
                 if (BI.isNull(obj)) {
                     valueMap[value] = [0, 0];
                     return;
@@ -17569,14 +17570,14 @@ BI.TreeValueChooserCombo = BI.inherit(BI.Widget, {
             return valueMap;
         }
 
-        function getCheckState(current, parent_values, valueMap, check_state) {
-            var checked = check_state.checked, half = check_state.half;
-            var hasChild = parent_values.length + 1 < self.floors;
+        function getCheckState(current, parentValues, valueMap, checkState) {
+            var checked = checkState.checked, half = checkState.half;
+            var hasChild = parentValues.length + 1 < self.floors;
             var tempCheck = false, halfCheck = false;
             if (BI.has(valueMap, current)) {
                 //可能是半选
                 if (valueMap[current][0] === 1) {
-                    var values = BI.clone(parent_values);
+                    var values = BI.clone(parentValues);
                     values.push(current);
                     if (hasChild && self._getChildCount(values) != valueMap[current][1]) {
                         halfCheck = true;
@@ -17615,9 +17616,9 @@ BI.TreeValueChooserCombo = BI.inherit(BI.Widget, {
         return this.tree.search(v, "value");
     },
 
-    _getChildren: function (parent_values) {
-        if (parent_values.length > 0) {
-            var value = BI.last(parent_values);
+    _getChildren: function (parentValues) {
+        if (parentValues.length > 0) {
+            var value = BI.last(parentValues);
             var parent = this.tree.search(value, "value");
         } else {
             var parent = this.tree.getRoot();
@@ -17625,8 +17626,8 @@ BI.TreeValueChooserCombo = BI.inherit(BI.Widget, {
         return parent.getChildren();
     },
 
-    _getChildCount: function (parent_values) {
-        return this._getChildren(parent_values).length;
+    _getChildCount: function (parentValues) {
+        return this._getChildren(parentValues).length;
     },
 
     setValue: function (v) {
@@ -17728,8 +17729,8 @@ BI.ValueChooserCombo = BI.inherit(BI.Widget, {
                 var search = BI.Func.getSearchResult(items, kw);
                 items = search.matched.concat(search.finded);
             });
-            if (options.selected_values) {//过滤
-                var filter = BI.makeObject(options.selected_values, true);
+            if (options.selectedValues) {//过滤
+                var filter = BI.makeObject(options.selectedValues, true);
                 items = BI.filter(items, function (i, ob) {
                     return !filter[ob.value];
                 });

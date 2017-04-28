@@ -180,7 +180,8 @@ BI.SequenceTableListNumber = BI.inherit(BI.Widget, {
     },
 
     _populate: function () {
-        this.header.populate();
+        this.headerContainer.empty();
+        this._createHeader();
         this._layout();
         this._calculateChildrenToRender();
     },

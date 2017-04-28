@@ -22,7 +22,7 @@ BI.PartTree = BI.inherit(BI.SyncTree, {
         this.tip.setLoading();
         o.itemsCreator(op, function (d) {
             var hasNext = !!d.hasNext, nodes = d.items || [];
-            o.paras.last_search_value = d.last_search_value;
+            o.paras.lastSearchValue = d.lastSearchValue;
             if (self._stop === true) {
                 return;
             }
@@ -39,35 +39,35 @@ BI.PartTree = BI.inherit(BI.SyncTree, {
 
     _selectTreeNode: function (treeId, treeNode) {
         var self = this, o = this.options;
-        var parent_values = BI.deepClone(treeNode.parentValues || self._getParentValues(treeNode));
+        var parentValues = BI.deepClone(treeNode.parentValues || self._getParentValues(treeNode));
         var name = this._getNodeValue(treeNode)
-//        var values = parent_values.concat([name]);
+//        var values = parentValues.concat([name]);
         if (treeNode.checked === true) {
             BI.SyncTree.superclass._selectTreeNode.apply(self, arguments);
         } else {
             o.itemsCreator(BI.extend({}, o.paras, {
                 type: BI.TreeView.REQ_TYPE_CALCULATE_SELECT_DATA,
-                selected_values: this.selected_values,
-                not_selected_value: name,
-                parent_values: parent_values
+                selectedValues: this.selectedValues,
+                notSelectedValue: name,
+                parentValues: parentValues
             }), function (new_values) {
-                if (BI.isEqual(self.selected_values, new_values)) {
+                if (BI.isEqual(self.selectedValues, new_values)) {
                     var tNode = treeNode;
-                    var pNode = self._getTree(new_values, parent_values);
+                    var pNode = self._getTree(new_values, parentValues);
                     if (pNode[name]) {
                         delete pNode[name];
                     }
                     while (tNode != null && BI.isEmpty(pNode)) {
-                        parent_values = parent_values.slice(0, parent_values.length - 1);
+                        parentValues = parentValues.slice(0, parentValues.length - 1);
                         tNode = tNode.getParentNode();
                         if (tNode != null) {
-                            pNode = self._getTree(new_values, parent_values);
+                            pNode = self._getTree(new_values, parentValues);
                             name = self._getNodeValue(tNode);
                             delete pNode[name];
                         }
                     }
                 }
-                self.selected_values = new_values;
+                self.selectedValues = new_values;
                 BI.SyncTree.superclass._selectTreeNode.apply(self, arguments);
             });
         }
@@ -120,7 +120,7 @@ BI.PartTree = BI.inherit(BI.SyncTree, {
                 return;
             }
             var hasNext = !!d.hasNext, nodes = d.items || [];
-            o.paras.last_search_value = d.last_search_value;
+            o.paras.lastSearchValue = d.lastSearchValue;
             if (nodes.length > 0) {
                 callback(self._dealWidthNodes(nodes));
             }
@@ -151,7 +151,7 @@ BI.PartTree = BI.inherit(BI.SyncTree, {
         var result = BI.PartTree.superclass.getValue.apply(this, arguments);
         o.itemsCreator({
             type: BI.TreeView.REQ_TYPE_ADJUST_DATA,
-            selected_values: result
+            selectedValues: result
         }, function (res) {
             result = res;
         });
@@ -163,10 +163,10 @@ BI.PartTree = BI.inherit(BI.SyncTree, {
         var o = this.options;
         delete o.paras.keyword;
         BI.extend(o.paras, config);
-        delete o.paras.last_search_value;
+        delete o.paras.lastSearchValue;
         //取消选中时使用
-        this.selected_values = BI.deepClone(o.paras.selected_values) || {};
-        //delete this.options.paras.selected_values;
+        this.selectedValues = BI.deepClone(o.paras.selectedValues) || {};
+        //delete this.options.paras.selectedValues;
         var setting = this._configSetting();
         this._initTree(setting, o.paras.keyword);
     }

@@ -51,7 +51,7 @@ BI.MultiSelectSearchLoader = BI.inherit(BI.Widget, {
             },
             itemsCreator: function (op, callback) {
                 self.storeValue && (op = BI.extend(op || {}, {
-                    selected_values: self.storeValue.value
+                    selectedValues: self.storeValue.value
                 }));
                 opts.itemsCreator(op, function (ob) {
                     var keyword = ob.keyword = opts.keywordGetter();

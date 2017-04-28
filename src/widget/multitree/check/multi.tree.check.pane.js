@@ -23,7 +23,7 @@ BI.MultiTreeCheckPane = BI.inherit(BI.Pane, {
 
         var self = this, opts = this.options;
 
-        this.selected_values = {};
+        this.selectedValues = {};
 
         var continueSelect = BI.createWidget({
             type: 'bi.text_button',
@@ -60,7 +60,7 @@ BI.MultiTreeCheckPane = BI.inherit(BI.Pane, {
             type: "bi.display_tree",
             cls: "bi-multi-tree-display",
             itemsCreator: function (op, callback) {
-                op.type = BI.TreeView.REQ_TYPE_SELECTED_DATA;
+                op.type = BI.TreeView.REQ_TYPE_GET_SELECTED_DATA;
                 opts.itemsCreator(op, callback);
             }
         });

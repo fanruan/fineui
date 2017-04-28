@@ -184,12 +184,14 @@ BI.BasicButton = BI.inherit(BI.Single, {
                     });
                     break;
                 default:
-                    hand.mousedown(function (e) {
-                        ev(e);
-                    });
-                    hand.mouseup(function (e) {
-                        ev(e);
-                    });
+                    if (o.stopEvent || o.stopPropagation) {
+                        hand.mousedown(function (e) {
+                            ev(e);
+                        });
+                        hand.mouseup(function (e) {
+                            ev(e);
+                        });
+                    }
                     hand.click(clk);
                     break;
             }

@@ -767,12 +767,14 @@ BI.BasicButton = BI.inherit(BI.Single, {
                     });
                     break;
                 default:
-                    hand.mousedown(function (e) {
-                        ev(e);
-                    });
-                    hand.mouseup(function (e) {
-                        ev(e);
-                    });
+                    if (o.stopEvent || o.stopPropagation) {
+                        hand.mousedown(function (e) {
+                            ev(e);
+                        });
+                        hand.mouseup(function (e) {
+                            ev(e);
+                        });
+                    }
                     hand.click(clk);
                     break;
             }
@@ -1596,8 +1598,8 @@ BI.TreeView = BI.inherit(BI.Pane, {
             treeNode.times = treeNode.times || 1;
             var param = "id=" + treeNode.id
                 + "&times=" + (treeNode.times++)
-                + "&parent_values= " + window.encodeURIComponent(BI.jsonEncode(parentNode))
-                + "&check_state=" + window.encodeURIComponent(BI.jsonEncode(treeNode.getCheckStatus()));
+                + "&parentValues= " + window.encodeURIComponent(BI.jsonEncode(parentNode))
+                + "&checkState=" + window.encodeURIComponent(BI.jsonEncode(treeNode.getCheckStatus()));
 
             return BI.servletURL + '?op=' + self.options.op + '&cmd=' + self.options.cmd + "&" + param;
         }
@@ -1728,7 +1730,7 @@ BI.TreeView = BI.inherit(BI.Pane, {
             this._buildTree(map, path);
             return;
         }
-        var storeValues = BI.deepClone(this.options.paras.selected_values);
+        var storeValues = BI.deepClone(this.options.paras.selectedValues);
         var treeNode = this._getTree(storeValues, path);
         this._addTreeNode(map, parent, this._getNodeValue(node), treeNode);
     },
@@ -1844,8 +1846,7 @@ BI.TreeView = BI.inherit(BI.Pane, {
             self.nodes = $.fn.zTree.init(tree.element, setting, nodes);
         };
         var op = BI.extend({}, o.paras, {
-            times: 1,
-            type: BI.TreeView.REQ_TYPE_INIT_DATA
+            times: 1
         });
 
         o.itemsCreator(op, function (res) {
@@ -1938,8 +1939,8 @@ BI.TreeView = BI.inherit(BI.Pane, {
     },
 
     setSelectedValue: function (value) {
-        this.options.paras.selected_values = value || {};
-        this.selected_values = BI.deepClone(value) || {};
+        this.options.paras.selectedValues = value || {};
+        this.selectedValues = BI.deepClone(value) || {};
     },
 
     updateValue: function (values, param) {
@@ -1979,10 +1980,10 @@ BI.TreeView = BI.inherit(BI.Pane, {
     }
 });
 BI.extend(BI.TreeView, {
-    REQ_TYPE_INIT_DATA: 0,
-    REQ_TYPE_ADJUST_DATA: 1,
-    REQ_TYPE_CALCULATE_SELECT_DATA: 2,
-    REQ_TYPE_SELECTED_DATA: 3
+    REQ_TYPE_INIT_DATA: 1,
+    REQ_TYPE_ADJUST_DATA: 2,
+    REQ_TYPE_SELECT_DATA: 3,
+    REQ_TYPE_GET_SELECTED_DATA: 4
 });
 
 BI.TreeView.EVENT_CHANGE = "EVENT_CHANGE";
@@ -2090,21 +2091,21 @@ BI.SyncTree = BI.inherit(BI.TreeView, {
 
     _selectTreeNode: function (treeId, treeNode) {
         var self = this, o = this.options;
-        var parent_values = BI.deepClone(treeNode.parentValues || self._getParentValues(treeNode));
+        var parentValues = BI.deepClone(treeNode.parentValues || self._getParentValues(treeNode));
         var name = this._getNodeValue(treeNode)
-//        var values = parent_values.concat([name]);
+//        var values = parentValues.concat([name]);
         if (treeNode.checked === true) {
         } else {
             var tNode = treeNode;
-            var pNode = this._getTree(this.selected_values, parent_values);
+            var pNode = this._getTree(this.selectedValues, parentValues);
             if (BI.isNotNull(pNode[name])) {
                 delete pNode[name];
             }
             while (tNode != null && BI.isEmpty(pNode)) {
-                parent_values = parent_values.slice(0, parent_values.length - 1);
+                parentValues = parentValues.slice(0, parentValues.length - 1);
                 tNode = tNode.getParentNode();
                 if (tNode != null) {
-                    pNode = this._getTree(this.selected_values, parent_values);
+                    pNode = this._getTree(this.selectedValues, parentValues);
                     name = this._getNodeValue(tNode);
                     delete pNode[name];
                 }
@@ -2120,8 +2121,8 @@ BI.SyncTree = BI.inherit(BI.TreeView, {
         var op = BI.extend({}, o.paras, {
             "id": treeNode.id,
             "times": 1,
-            "parent_values": parentValues.concat(this._getNodeValue(treeNode)),
-            "check_state": treeNode.getCheckStatus()
+            "parentValues": parentValues.concat(this._getNodeValue(treeNode)),
+            "checkState": treeNode.getCheckStatus()
         });
         var complete = function (d) {
             var nodes = d.items || [];
@@ -2169,7 +2170,7 @@ BI.SyncTree = BI.inherit(BI.TreeView, {
     },
 
     hasChecked: function () {
-        return !BI.isEmpty(this.selected_values) || BI.SyncTree.superclass.hasChecked.apply(this, arguments);
+        return !BI.isEmpty(this.selectedValues) || BI.SyncTree.superclass.hasChecked.apply(this, arguments);
     },
 
     getValue: function () {
@@ -2178,12 +2179,12 @@ BI.SyncTree = BI.inherit(BI.TreeView, {
         }
         var checkedValues = this._getSelectedValues();
         if (BI.isEmpty(checkedValues)) {
-            return this.selected_values;
+            return this.selectedValues;
         }
-        if (BI.isEmpty(this.selected_values)) {
+        if (BI.isEmpty(this.selectedValues)) {
             return checkedValues;
         }
-        return this._join(checkedValues, this.selected_values);
+        return this._join(checkedValues, this.selectedValues);
     },
 
     //生成树方法
@@ -2191,7 +2192,7 @@ BI.SyncTree = BI.inherit(BI.TreeView, {
         delete this.options.keyword;
         BI.extend(this.options.paras, config);
         //取消选中时使用
-        this.selected_values = BI.deepClone(this.options.paras.selected_values) || {};
+        this.selectedValues = BI.deepClone(this.options.paras.selectedValues) || {};
         var setting = this._configSetting();
         this._initTree(setting);
     }
@@ -2221,7 +2222,7 @@ BI.PartTree = BI.inherit(BI.SyncTree, {
         this.tip.setLoading();
         o.itemsCreator(op, function (d) {
             var hasNext = !!d.hasNext, nodes = d.items || [];
-            o.paras.last_search_value = d.last_search_value;
+            o.paras.lastSearchValue = d.lastSearchValue;
             if (self._stop === true) {
                 return;
             }
@@ -2238,35 +2239,35 @@ BI.PartTree = BI.inherit(BI.SyncTree, {
 
     _selectTreeNode: function (treeId, treeNode) {
         var self = this, o = this.options;
-        var parent_values = BI.deepClone(treeNode.parentValues || self._getParentValues(treeNode));
+        var parentValues = BI.deepClone(treeNode.parentValues || self._getParentValues(treeNode));
         var name = this._getNodeValue(treeNode)
-//        var values = parent_values.concat([name]);
+//        var values = parentValues.concat([name]);
         if (treeNode.checked === true) {
             BI.SyncTree.superclass._selectTreeNode.apply(self, arguments);
         } else {
             o.itemsCreator(BI.extend({}, o.paras, {
                 type: BI.TreeView.REQ_TYPE_CALCULATE_SELECT_DATA,
-                selected_values: this.selected_values,
-                not_selected_value: name,
-                parent_values: parent_values
+                selectedValues: this.selectedValues,
+                notSelectedValue: name,
+                parentValues: parentValues
             }), function (new_values) {
-                if (BI.isEqual(self.selected_values, new_values)) {
+                if (BI.isEqual(self.selectedValues, new_values)) {
                     var tNode = treeNode;
-                    var pNode = self._getTree(new_values, parent_values);
+                    var pNode = self._getTree(new_values, parentValues);
                     if (pNode[name]) {
                         delete pNode[name];
                     }
                     while (tNode != null && BI.isEmpty(pNode)) {
-                        parent_values = parent_values.slice(0, parent_values.length - 1);
+                        parentValues = parentValues.slice(0, parentValues.length - 1);
                         tNode = tNode.getParentNode();
                         if (tNode != null) {
-                            pNode = self._getTree(new_values, parent_values);
+                            pNode = self._getTree(new_values, parentValues);
                             name = self._getNodeValue(tNode);
                             delete pNode[name];
                         }
                     }
                 }
-                self.selected_values = new_values;
+                self.selectedValues = new_values;
                 BI.SyncTree.superclass._selectTreeNode.apply(self, arguments);
             });
         }
@@ -2319,7 +2320,7 @@ BI.PartTree = BI.inherit(BI.SyncTree, {
                 return;
             }
             var hasNext = !!d.hasNext, nodes = d.items || [];
-            o.paras.last_search_value = d.last_search_value;
+            o.paras.lastSearchValue = d.lastSearchValue;
             if (nodes.length > 0) {
                 callback(self._dealWidthNodes(nodes));
             }
@@ -2350,7 +2351,7 @@ BI.PartTree = BI.inherit(BI.SyncTree, {
         var result = BI.PartTree.superclass.getValue.apply(this, arguments);
         o.itemsCreator({
             type: BI.TreeView.REQ_TYPE_ADJUST_DATA,
-            selected_values: result
+            selectedValues: result
         }, function (res) {
             result = res;
         });
@@ -2362,10 +2363,10 @@ BI.PartTree = BI.inherit(BI.SyncTree, {
         var o = this.options;
         delete o.paras.keyword;
         BI.extend(o.paras, config);
-        delete o.paras.last_search_value;
+        delete o.paras.lastSearchValue;
         //取消选中时使用
-        this.selected_values = BI.deepClone(o.paras.selected_values) || {};
-        //delete this.options.paras.selected_values;
+        this.selectedValues = BI.deepClone(o.paras.selectedValues) || {};
+        //delete this.options.paras.selectedValues;
         var setting = this._configSetting();
         this._initTree(setting, o.paras.keyword);
     }
@@ -29340,7 +29341,7 @@ BI.GridTable = BI.inherit(BI.Widget, {
         var trh = otrh + this._scrollBarSize;
         var blw = oblw + this._scrollBarSize;
         var blh = oblh + this._scrollBarSize;
-        var brw = obrw+ this._scrollBarSize;
+        var brw = obrw + this._scrollBarSize;
         var brh = obrh + this._scrollBarSize;
 
         var digest = function (el) {
@@ -29376,11 +29377,11 @@ BI.GridTable = BI.inherit(BI.Widget, {
 
         this.topLeftGrid.setEstimatedColumnSize(freezeColLength > 0 ? totalLeftColumnSize / freezeColLength : 0);
         this.topLeftGrid.setEstimatedRowSize(o.headerRowSize);
-        this.topRightGrid.setEstimatedColumnSize(totalRightColumnSize / (o.columnSize.length - freezeColLength));
+        this.topRightGrid.setEstimatedColumnSize((o.columnSize.length - freezeColLength) > 0 ? (totalRightColumnSize / (o.columnSize.length - freezeColLength)) : 0);
         this.topRightGrid.setEstimatedRowSize(o.headerRowSize);
         this.bottomLeftGrid.setEstimatedColumnSize(freezeColLength > 0 ? totalLeftColumnSize / freezeColLength : 0);
         this.bottomLeftGrid.setEstimatedRowSize(o.rowSize);
-        this.bottomRightGrid.setEstimatedColumnSize(totalRightColumnSize / (o.columnSize.length - freezeColLength));
+        this.bottomRightGrid.setEstimatedColumnSize((o.columnSize.length - freezeColLength) > 0 ? (totalRightColumnSize / (o.columnSize.length - freezeColLength)) : 0);
         this.bottomRightGrid.setEstimatedRowSize(o.rowSize);
 
         var items = this.contextLayout.attr("items");
@@ -29614,11 +29615,11 @@ BI.QuickGridTable = BI.inherit(BI.GridTable, {
 
         this.topLeftGrid.setEstimatedColumnSize(freezeColLength > 0 ? totalLeftColumnSize / freezeColLength : 0);
         this.topLeftGrid.setEstimatedRowSize(o.headerRowSize);
-        this.topRightGrid.setEstimatedColumnSize(totalRightColumnSize / (o.columnSize.length - freezeColLength));
+        this.topRightGrid.setEstimatedColumnSize((o.columnSize.length - freezeColLength) > 0 ? (totalRightColumnSize / (o.columnSize.length - freezeColLength)) : 0);
         this.topRightGrid.setEstimatedRowSize(o.headerRowSize);
         this.bottomLeftGrid.setEstimatedColumnSize(freezeColLength > 0 ? totalLeftColumnSize / freezeColLength : 0);
         this.bottomLeftGrid.setEstimatedRowSize(o.rowSize);
-        this.bottomRightGrid.setEstimatedColumnSize(totalRightColumnSize / (o.columnSize.length - freezeColLength));
+        this.bottomRightGrid.setEstimatedColumnSize((o.columnSize.length - freezeColLength) > 0 ? (totalRightColumnSize / (o.columnSize.length - freezeColLength)) : 0);
         this.bottomRightGrid.setEstimatedRowSize(o.rowSize);
 
         var items = this.contextLayout.attr("items");

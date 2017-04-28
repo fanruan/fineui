@@ -32,7 +32,7 @@ BI.MultiSelectCheckPane = BI.inherit(BI.Widget, {
             items: opts.items,
             itemsCreator: function (op, callback) {
                 op = BI.extend(op || {}, {
-                    selected_values: self.storeValue.value
+                    selectedValues: self.storeValue.value
                 });
                 if (self.storeValue.type === BI.Selection.Multi) {
                     callback({

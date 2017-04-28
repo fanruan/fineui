@@ -56,7 +56,7 @@ BI.MultiSelectLoader = BI.inherit(BI.Widget, {
             itemsCreator: function (op, callback) {
                 var startValue = self._startValue;
                 self.storeValue && (op = BI.extend(op || {}, {
-                    selected_values: BI.isKey(startValue) && self.storeValue.type === BI.Selection.Multi
+                    selectedValues: BI.isKey(startValue) && self.storeValue.type === BI.Selection.Multi
                         ? self.storeValue.value.concat(startValue) : self.storeValue.value
                 }));
                 opts.itemsCreator(op, function (ob) {

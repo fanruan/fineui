@@ -109,8 +109,8 @@ BI.TreeView = BI.inherit(BI.Pane, {
             treeNode.times = treeNode.times || 1;
             var param = "id=" + treeNode.id
                 + "&times=" + (treeNode.times++)
-                + "&parent_values= " + window.encodeURIComponent(BI.jsonEncode(parentNode))
-                + "&check_state=" + window.encodeURIComponent(BI.jsonEncode(treeNode.getCheckStatus()));
+                + "&parentValues= " + window.encodeURIComponent(BI.jsonEncode(parentNode))
+                + "&checkState=" + window.encodeURIComponent(BI.jsonEncode(treeNode.getCheckStatus()));
 
             return BI.servletURL + '?op=' + self.options.op + '&cmd=' + self.options.cmd + "&" + param;
         }
@@ -241,7 +241,7 @@ BI.TreeView = BI.inherit(BI.Pane, {
             this._buildTree(map, path);
             return;
         }
-        var storeValues = BI.deepClone(this.options.paras.selected_values);
+        var storeValues = BI.deepClone(this.options.paras.selectedValues);
         var treeNode = this._getTree(storeValues, path);
         this._addTreeNode(map, parent, this._getNodeValue(node), treeNode);
     },
@@ -357,8 +357,7 @@ BI.TreeView = BI.inherit(BI.Pane, {
             self.nodes = $.fn.zTree.init(tree.element, setting, nodes);
         };
         var op = BI.extend({}, o.paras, {
-            times: 1,
-            type: BI.TreeView.REQ_TYPE_INIT_DATA
+            times: 1
         });
 
         o.itemsCreator(op, function (res) {
@@ -451,8 +450,8 @@ BI.TreeView = BI.inherit(BI.Pane, {
     },
 
     setSelectedValue: function (value) {
-        this.options.paras.selected_values = value || {};
-        this.selected_values = BI.deepClone(value) || {};
+        this.options.paras.selectedValues = value || {};
+        this.selectedValues = BI.deepClone(value) || {};
     },
 
     updateValue: function (values, param) {
@@ -492,10 +491,10 @@ BI.TreeView = BI.inherit(BI.Pane, {
     }
 });
 BI.extend(BI.TreeView, {
-    REQ_TYPE_INIT_DATA: 0,
-    REQ_TYPE_ADJUST_DATA: 1,
-    REQ_TYPE_CALCULATE_SELECT_DATA: 2,
-    REQ_TYPE_SELECTED_DATA: 3
+    REQ_TYPE_INIT_DATA: 1,
+    REQ_TYPE_ADJUST_DATA: 2,
+    REQ_TYPE_SELECT_DATA: 3,
+    REQ_TYPE_GET_SELECTED_DATA: 4
 });
 
 BI.TreeView.EVENT_CHANGE = "EVENT_CHANGE";
