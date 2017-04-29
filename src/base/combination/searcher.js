@@ -27,7 +27,6 @@ BI.Searcher = BI.inherit(BI.Widget, {
                 callback([])
             },
 
-
             el: {
                 type: "bi.search_editor"
             },
@@ -85,16 +84,11 @@ BI.Searcher = BI.inherit(BI.Widget, {
 
     _assertPopupView: function () {
         var self = this, o = this.options;
-        if (!BI.Maskers.has(this.getName())) {
+        if ((o.masker && !BI.Maskers.has(this.getName())) || (o.masker === false && !this.popupView)) {
             this.popupView = BI.createWidget(o.popup, {
                 type: "bi.searcher_view",
                 chooseType: o.chooseType
             });
-            BI.Maskers.create(this.getName(), o.adapter, BI.extend({
-                container: this,
-                render: this.popupView
-            }, o.masker));
-
             this.popupView.on(BI.Controller.EVENT_CHANGE, function (type, value, obj) {
                 self.fireEvent(BI.Controller.EVENT_CHANGE, arguments);
                 if (type === BI.Events.CLICK) {
@@ -121,6 +115,12 @@ BI.Searcher = BI.inherit(BI.Widget, {
                 self.fireEvent(BI.Searcher.EVENT_AFTER_INIT);
             });
         }
+        if (o.masker && !BI.Maskers.has(this.getName())) {
+            BI.Maskers.create(this.getName(), o.adapter, BI.extend({
+                container: this,
+                render: this.popupView
+            }, o.masker));
+        }
     },
 
     _startSearch: function () {
@@ -142,7 +142,7 @@ BI.Searcher = BI.inherit(BI.Widget, {
         BI.nextTick(function (name) {
             BI.Maskers.hide(name);
         }, this.getName());
-        if (BI.Maskers.has(name) && this._isSearching === true) {
+        if (this._isSearching === true) {
             this.popupView && this.popupView.pauseSearch && this.popupView.pauseSearch();
             this.fireEvent(BI.Searcher.EVENT_PAUSE);
         }
@@ -153,11 +153,7 @@ BI.Searcher = BI.inherit(BI.Widget, {
         var o = this.options, name = this.getName();
         this._stop = true;
         BI.Maskers.hide(name);
-        if (BI.Maskers.has(name) && this._isSearching === true) {
-            //搜索后清空dom
-            // BI.nextTick(function () {
-            //     BI.Maskers.has(name) && BI.Maskers.get(name).empty();
-            // });
+        if (this._isSearching === true) {
             this.popupView && this.popupView.stopSearch && this.popupView.stopSearch();
             this.fireEvent(BI.Searcher.EVENT_STOP);
         }
@@ -170,11 +166,11 @@ BI.Searcher = BI.inherit(BI.Widget, {
             return;
         }
         if (o.isAutoSearch) {
-            var items = (o.adapter.getItems && o.adapter.getItems()) || o.adapter.attr("items") || [];
+            var items = (o.adapter && ((o.adapter.getItems && o.adapter.getItems()) || o.adapter.attr("items"))) || [];
             var finding = BI.Func.getSearchResult(items, keyword);
             var matched = finding.matched, finded = finding.finded;
             this.popupView.populate(finded, matched, keyword);
-            o.isAutoSync && this.popupView.setValue(o.adapter.getValue());
+            o.isAutoSync && o.adapter && o.adapter.getValue && this.popupView.setValue(o.adapter.getValue());
             self.fireEvent(BI.Searcher.EVENT_SEARCHING);
             return;
         }
@@ -191,7 +187,7 @@ BI.Searcher = BI.inherit(BI.Widget, {
                 }
                 BI.Maskers.show(self.getName());
                 self.popupView.populate.apply(self.popupView, args);
-                o.isAutoSync && self.popupView.setValue(o.adapter && o.adapter.getValue());
+                o.isAutoSync && o.adapter && o.adapter.getValue && self.popupView.setValue(o.adapter.getValue());
                 self.popupView.loaded && self.popupView.loaded();
                 self.fireEvent(BI.Searcher.EVENT_SEARCHING);
             }
@@ -265,13 +261,15 @@ BI.Searcher = BI.inherit(BI.Widget, {
 
     getValue: function () {
         var o = this.options;
-        if (o.isAutoSync) {
+        if (o.isAutoSync && o.adapter && o.adapter.getValue) {
             return o.adapter.getValue();
         }
         if (this.isSearching()) {
             return this.popupView.getValue();
-        } else {
+        } else if (o.adapter && o.adapter.getValue) {
             return o.adapter.getValue();
+        } else {
+            return this.popupView.getValue();
         }
     },
 
@@ -279,7 +277,7 @@ BI.Searcher = BI.inherit(BI.Widget, {
         var o = this.options;
         this._assertPopupView();
         this.popupView.populate.apply(this.popupView, arguments);
-        if (o.isAutoSync) {
+        if (o.isAutoSync && o.adapter && o.adapter.getValue) {
             this.popupView.setValue(o.adapter.getValue());
         }
     },
