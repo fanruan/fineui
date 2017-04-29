@@ -3058,7 +3058,7 @@ i {
   background: #1a1a1a;
   opacity: 0.2;
   filter: alpha(opacity=20);
-  z-index: 1000000000;
+  z-index: 1000000000 !important;
 }
 .bi-theme-dark .bi-resizer {
   background: #ffffff;
