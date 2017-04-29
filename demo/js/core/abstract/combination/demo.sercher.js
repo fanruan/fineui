@@ -34,7 +34,6 @@ Demo.Func = BI.inherit(BI.Widget, {
                             popup.populate(items)
                         }
                     }],
-                    height: 200,
                     adapter: {
                         getItems: function () {
                             return items
