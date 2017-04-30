@@ -2950,7 +2950,7 @@ BI.shortcut("demo.combo", Demo.Func);Demo.Func = BI.inherit(BI.Widget, {
         }];
         var popup = BI.createWidget({
             type: "bi.button_group",
-            cls: "bi-border layout-bg3",
+            cls: "bi-border",
             items: items,
             layouts: [{
                 type: "bi.vertical"
