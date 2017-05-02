@@ -2920,6 +2920,10 @@ if (!window.BI) {
             return /(msie|trident)/i.test(navigator.userAgent.toLowerCase());
         },
 
+        isEdge: function () {
+            return /edge/i.test(navigator.userAgent.toLowerCase());
+        },
+
         isChrome: function () {
             return /chrome/i.test(navigator.userAgent.toLowerCase());
         },
@@ -2938,6 +2942,14 @@ if (!window.BI) {
 
         isKhtml: function () {
             return /Konqueror|Safari|KHTML/i.test(navigator.userAgent);
+        },
+
+        isMac: function () {
+            return /macintosh|mac os x/i.test(navigator.userAgent);
+        },
+
+        isWindows: function () {
+            return /windows|win32/i.test(navigator.userAgent);
         },
 
         isSupportCss3: function (style) {
@@ -17799,16 +17811,16 @@ $(function () {
 
     //注册控件
     BI.Plugin.registerWidget("bi.grid_table", function (ob) {
-        //IE下滚动条滑动效果不好，禁止掉
-        if (BI.isIE() || BI.isFireFox()) {
+        //非chrome下滚动条滑动效果不好，禁止掉
+        if (!(BI.isChrome() && BI.isWindows())) {
             return BI.extend(ob, {type: "bi.quick_grid_table"});
         } else {
             return ob;
         }
     });
     BI.Plugin.registerWidget("bi.collection_table", function (ob) {
-        //IE下滚动条滑动效果不好，禁止掉
-        if (BI.isIE() || BI.isFireFox()) {
+        //非chrome下滚动条滑动效果不好，禁止掉
+        if (!(BI.isChrome() && BI.isWindows())) {
             return BI.extend(ob, {type: "bi.quick_collection_table"});
         } else {
             return ob;

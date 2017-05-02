@@ -1025,6 +1025,10 @@ if (!window.BI) {
             return /(msie|trident)/i.test(navigator.userAgent.toLowerCase());
         },
 
+        isEdge: function () {
+            return /edge/i.test(navigator.userAgent.toLowerCase());
+        },
+
         isChrome: function () {
             return /chrome/i.test(navigator.userAgent.toLowerCase());
         },
@@ -1043,6 +1047,14 @@ if (!window.BI) {
 
         isKhtml: function () {
             return /Konqueror|Safari|KHTML/i.test(navigator.userAgent);
+        },
+
+        isMac: function () {
+            return /macintosh|mac os x/i.test(navigator.userAgent);
+        },
+
+        isWindows: function () {
+            return /windows|win32/i.test(navigator.userAgent);
         },
 
         isSupportCss3: function (style) {
