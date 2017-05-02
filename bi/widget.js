@@ -9665,7 +9665,10 @@ BI.MultiSelectCombo = BI.inherit(BI.Single, {
             toggle: false,
             el: this.trigger,
             adjustLength: 1,
-            popup: this.popup
+            popup: this.popup,
+            hideChecker: function (e) {
+                return triggerBtn.element.find(e.target).length === 0;
+            }
         });
 
         this.combo.on(BI.Combo.EVENT_BEFORE_POPUPVIEW, function () {
