@@ -614,6 +614,9 @@ textarea::-webkit-scrollbar-thumb {
 }
 /****** common color(常用颜色,可用于普遍场景) *****/
 /**** custom color(自定义颜色,用于特定场景) ****/
+.close-font .b-font {
+  *zoom: expression( this.runtimeStyle['zoom'] = '1',this.innerHTML = '&#xe600');
+}
 .close-font .b-font:before {
   content: "\e600";
   color: inherit;
@@ -623,6 +626,9 @@ textarea::-webkit-scrollbar-thumb {
   content: "\e600";
   color: inherit;
 }
+.close-red-font .b-font {
+  *zoom: expression( this.runtimeStyle['zoom'] = '1',this.innerHTML = '&#xe600');
+}
 .close-red-font .b-font:before {
   content: "\e600";
   color: #e85050;
@@ -631,6 +637,9 @@ textarea::-webkit-scrollbar-thumb {
 .close-red-font.disabled .b-font:before {
   content: "\e600";
   color: #e85050;
+}
+.close-h-font .b-font {
+  *zoom: expression( this.runtimeStyle['zoom'] = '1',this.innerHTML = '&#xe600');
 }
 .close-h-font .b-font:before {
   content: "\e600";
@@ -647,6 +656,9 @@ textarea::-webkit-scrollbar-thumb {
   content: "\e600";
   color: inherit;
 }
+.close-e-font .b-font {
+  *zoom: expression( this.runtimeStyle['zoom'] = '1',this.innerHTML = '&#xe600');
+}
 .close-e-font .b-font:before {
   content: "\e600";
   color: inherit;
@@ -659,16 +671,19 @@ textarea::-webkit-scrollbar-thumb {
 }
 .close-e-font.active .b-font:before {
   content: "\e600";
-  color: #009de3;
+  color: #3f8ce8;
 }
 .close-e-font:active .b-font:before {
   content: "\e600";
-  color: #009de3;
+  color: #3f8ce8;
 }
 .close-e-font.native .b-font:before,
 .close-e-font.disabled .b-font:before {
   content: "\e600";
   color: inherit;
+}
+.close-ha-font .b-font {
+  *zoom: expression( this.runtimeStyle['zoom'] = '1',this.innerHTML = '&#xe600');
 }
 .close-ha-font .b-font:before {
   content: "\e600";
@@ -683,12 +698,15 @@ textarea::-webkit-scrollbar-thumb {
 .close-ha-font:active .b-font:before,
 .close-ha-font.active .b-font:before {
   content: "\e600";
-  color: #009de3;
+  color: #3f8ce8;
 }
 .close-ha-font.native .b-font:before,
 .close-ha-font.disabled .b-font:before {
   content: "\e600";
   color: inherit;
+}
+.search-close-h-font .b-font {
+  *zoom: expression( this.runtimeStyle['zoom'] = '1',this.innerHTML = '&#xe600');
 }
 .search-close-h-font .b-font:before {
   content: "\e600";
@@ -705,6 +723,9 @@ textarea::-webkit-scrollbar-thumb {
   content: "\e600";
   color: inherit;
 }
+.trigger-font .b-font {
+  *zoom: expression( this.runtimeStyle['zoom'] = '1',this.innerHTML = '&#xe603');
+}
 .trigger-font .b-font:before {
   content: "\e603";
   color: inherit;
@@ -713,6 +734,9 @@ textarea::-webkit-scrollbar-thumb {
 .trigger-font.disabled .b-font:before {
   content: "\e603";
   color: inherit;
+}
+.trigger-h-font .b-font {
+  *zoom: expression( this.runtimeStyle['zoom'] = '1',this.innerHTML = '&#xe603');
 }
 .trigger-h-font .b-font:before {
   content: "\e603";
@@ -729,6 +753,9 @@ textarea::-webkit-scrollbar-thumb {
   content: "\e603";
   color: inherit;
 }
+.trigger-ha-font .b-font {
+  *zoom: expression( this.runtimeStyle['zoom'] = '1',this.innerHTML = '&#xe603');
+}
 .trigger-ha-font .b-font:before {
   content: "\e603";
   color: inherit;
@@ -742,12 +769,15 @@ textarea::-webkit-scrollbar-thumb {
 .trigger-ha-font:active .b-font:before,
 .trigger-ha-font.active .b-font:before {
   content: "\e603";
-  color: #009de3;
+  color: #3f8ce8;
 }
 .trigger-ha-font.native .b-font:before,
 .trigger-ha-font.disabled .b-font:before {
   content: "\e603";
   color: inherit;
+}
+.pre-page-font .b-font {
+  *zoom: expression( this.runtimeStyle['zoom'] = '1',this.innerHTML = '&#xe601');
 }
 .pre-page-font .b-font:before {
   content: "\e601";
@@ -757,6 +787,9 @@ textarea::-webkit-scrollbar-thumb {
 .pre-page-font.disabled .b-font:before {
   content: "\e601";
   color: inherit;
+}
+.pre-page-h-font .b-font {
+  *zoom: expression( this.runtimeStyle['zoom'] = '1',this.innerHTML = '&#xe601');
 }
 .pre-page-h-font .b-font:before {
   content: "\e601";
@@ -773,6 +806,9 @@ textarea::-webkit-scrollbar-thumb {
   content: "\e601";
   color: inherit;
 }
+.pre-page-ha-font .b-font {
+  *zoom: expression( this.runtimeStyle['zoom'] = '1',this.innerHTML = '&#xe601');
+}
 .pre-page-ha-font .b-font:before {
   content: "\e601";
   color: inherit;
@@ -786,12 +822,15 @@ textarea::-webkit-scrollbar-thumb {
 .pre-page-ha-font:active .b-font:before,
 .pre-page-ha-font.active .b-font:before {
   content: "\e601";
-  color: #009de3;
+  color: #3f8ce8;
 }
 .pre-page-ha-font.native .b-font:before,
 .pre-page-ha-font.disabled .b-font:before {
   content: "\e601";
   color: inherit;
+}
+.next-page-font .b-font {
+  *zoom: expression( this.runtimeStyle['zoom'] = '1',this.innerHTML = '&#xe602');
 }
 .next-page-font .b-font:before {
   content: "\e602";
@@ -801,6 +840,9 @@ textarea::-webkit-scrollbar-thumb {
 .next-page-font.disabled .b-font:before {
   content: "\e602";
   color: inherit;
+}
+.next-page-h-font .b-font {
+  *zoom: expression( this.runtimeStyle['zoom'] = '1',this.innerHTML = '&#xe602');
 }
 .next-page-h-font .b-font:before {
   content: "\e602";
@@ -817,6 +859,9 @@ textarea::-webkit-scrollbar-thumb {
   content: "\e602";
   color: inherit;
 }
+.next-page-ha-font .b-font {
+  *zoom: expression( this.runtimeStyle['zoom'] = '1',this.innerHTML = '&#xe602');
+}
 .next-page-ha-font .b-font:before {
   content: "\e602";
   color: inherit;
@@ -830,12 +875,15 @@ textarea::-webkit-scrollbar-thumb {
 .next-page-ha-font:active .b-font:before,
 .next-page-ha-font.active .b-font:before {
   content: "\e602";
-  color: #009de3;
+  color: #3f8ce8;
 }
 .next-page-ha-font.native .b-font:before,
 .next-page-ha-font.disabled .b-font:before {
   content: "\e602";
   color: inherit;
+}
+.search-font .b-font {
+  *zoom: expression( this.runtimeStyle['zoom'] = '1',this.innerHTML = '&#xe604');
 }
 .search-font .b-font:before {
   content: "\e604";
@@ -845,6 +893,9 @@ textarea::-webkit-scrollbar-thumb {
 .search-font.disabled .b-font:before {
   content: "\e604";
   color: inherit;
+}
+.search-h-font .b-font {
+  *zoom: expression( this.runtimeStyle['zoom'] = '1',this.innerHTML = '&#xe604');
 }
 .search-h-font .b-font:before {
   content: "\e604";
@@ -861,6 +912,9 @@ textarea::-webkit-scrollbar-thumb {
   content: "\e604";
   color: inherit;
 }
+.search-ha-font .b-font {
+  *zoom: expression( this.runtimeStyle['zoom'] = '1',this.innerHTML = '&#xe604');
+}
 .search-ha-font .b-font:before {
   content: "\e604";
   color: inherit;
@@ -874,12 +928,15 @@ textarea::-webkit-scrollbar-thumb {
 .search-ha-font:active .b-font:before,
 .search-ha-font.active .b-font:before {
   content: "\e604";
-  color: #009de3;
+  color: #3f8ce8;
 }
 .search-ha-font.native .b-font:before,
 .search-ha-font.disabled .b-font:before {
   content: "\e604";
   color: inherit;
+}
+.share-font .b-font {
+  *zoom: expression( this.runtimeStyle['zoom'] = '1',this.innerHTML = '&#xe65a');
 }
 .share-font .b-font:before {
   content: "\e65a";
@@ -889,6 +946,9 @@ textarea::-webkit-scrollbar-thumb {
 .share-font.disabled .b-font:before {
   content: "\e65a";
   color: inherit;
+}
+.share-h-font .b-font {
+  *zoom: expression( this.runtimeStyle['zoom'] = '1',this.innerHTML = '&#xe65a');
 }
 .share-h-font .b-font:before {
   content: "\e65a";
@@ -905,6 +965,9 @@ textarea::-webkit-scrollbar-thumb {
   content: "\e65a";
   color: inherit;
 }
+.share-ha-font .b-font {
+  *zoom: expression( this.runtimeStyle['zoom'] = '1',this.innerHTML = '&#xe65a');
+}
 .share-ha-font .b-font:before {
   content: "\e65a";
   color: inherit;
@@ -918,7 +981,7 @@ textarea::-webkit-scrollbar-thumb {
 .share-ha-font:active .b-font:before,
 .share-ha-font.active .b-font:before {
   content: "\e65a";
-  color: #009de3;
+  color: #3f8ce8;
 }
 .share-ha-font.native .b-font:before,
 .share-ha-font.disabled .b-font:before {
@@ -926,6 +989,9 @@ textarea::-webkit-scrollbar-thumb {
   color: inherit;
 }
 /**维度/指标 下拉列表图标字体 ~begin~**/
+.delete-font .b-font {
+  *zoom: expression( this.runtimeStyle['zoom'] = '1',this.innerHTML = '&#xe605');
+}
 .delete-font .b-font:before {
   content: "\e605";
   color: inherit;
@@ -934,6 +1000,9 @@ textarea::-webkit-scrollbar-thumb {
 .delete-font.disabled .b-font:before {
   content: "\e605";
   color: inherit;
+}
+.delete-h-font .b-font {
+  *zoom: expression( this.runtimeStyle['zoom'] = '1',this.innerHTML = '&#xe605');
 }
 .delete-h-font .b-font:before {
   content: "\e605";
@@ -950,6 +1019,9 @@ textarea::-webkit-scrollbar-thumb {
   content: "\e605";
   color: inherit;
 }
+.delete-ha-font .b-font {
+  *zoom: expression( this.runtimeStyle['zoom'] = '1',this.innerHTML = '&#xe605');
+}
 .delete-ha-font .b-font:before {
   content: "\e605";
   color: inherit;
@@ -963,12 +1035,15 @@ textarea::-webkit-scrollbar-thumb {
 .delete-ha-font:active .b-font:before,
 .delete-ha-font.active .b-font:before {
   content: "\e605";
-  color: #009de3;
+  color: #3f8ce8;
 }
 .delete-ha-font.native .b-font:before,
 .delete-ha-font.disabled .b-font:before {
   content: "\e605";
   color: inherit;
+}
+.delete-e-font .b-font {
+  *zoom: expression( this.runtimeStyle['zoom'] = '1',this.innerHTML = '&#xe605');
 }
 .delete-e-font .b-font:before {
   content: "\e605";
@@ -982,16 +1057,19 @@ textarea::-webkit-scrollbar-thumb {
 }
 .delete-e-font.active .b-font:before {
   content: "\e605";
-  color: #009de3;
+  color: #3f8ce8;
 }
 .delete-e-font:active .b-font:before {
   content: "\e605";
-  color: #009de3;
+  color: #3f8ce8;
 }
 .delete-e-font.native .b-font:before,
 .delete-e-font.disabled .b-font:before {
   content: "\e605";
   color: inherit;
+}
+.dot-font .b-font {
+  *zoom: expression( this.runtimeStyle['zoom'] = '1',this.innerHTML = '&#xe606');
 }
 .dot-font .b-font:before {
   content: "\e606";
@@ -1001,6 +1079,9 @@ textarea::-webkit-scrollbar-thumb {
 .dot-font.disabled .b-font:before {
   content: "\e606";
   color: #1a1a1a;
+}
+.dot-h-font .b-font {
+  *zoom: expression( this.runtimeStyle['zoom'] = '1',this.innerHTML = '&#xe606');
 }
 .dot-h-font .b-font:before {
   content: "\e606";
@@ -1016,6 +1097,9 @@ textarea::-webkit-scrollbar-thumb {
 .dot-h-font.disabled .b-font:before {
   content: "\e606";
   color: #1a1a1a;
+}
+.dot-ha-font .b-font {
+  *zoom: expression( this.runtimeStyle['zoom'] = '1',this.innerHTML = '&#xe606');
 }
 .dot-ha-font .b-font:before {
   content: "\e606";
@@ -1036,6 +1120,9 @@ textarea::-webkit-scrollbar-thumb {
 .dot-ha-font.disabled .b-font:before {
   content: "\e606";
   color: #ffffff;
+}
+.dot-e-font .b-font {
+  *zoom: expression( this.runtimeStyle['zoom'] = '1',this.innerHTML = '&#xe606');
 }
 .dot-e-font .b-font:before {
   content: "\e606";
@@ -1060,6 +1147,9 @@ textarea::-webkit-scrollbar-thumb {
   content: "\e606";
   color: #ffffff;
 }
+.pull-right-font .b-font {
+  *zoom: expression( this.runtimeStyle['zoom'] = '1',this.innerHTML = '&#xe607');
+}
 .pull-right-font .b-font:before {
   content: "\e607";
   color: inherit;
@@ -1068,6 +1158,9 @@ textarea::-webkit-scrollbar-thumb {
 .pull-right-font.disabled .b-font:before {
   content: "\e607";
   color: inherit;
+}
+.pull-right-h-font .b-font {
+  *zoom: expression( this.runtimeStyle['zoom'] = '1',this.innerHTML = '&#xe607');
 }
 .pull-right-h-font .b-font:before {
   content: "\e607";
@@ -1084,6 +1177,9 @@ textarea::-webkit-scrollbar-thumb {
   content: "\e607";
   color: inherit;
 }
+.pull-right-ha-font .b-font {
+  *zoom: expression( this.runtimeStyle['zoom'] = '1',this.innerHTML = '&#xe607');
+}
 .pull-right-ha-font .b-font:before {
   content: "\e607";
   color: inherit;
@@ -1097,12 +1193,15 @@ textarea::-webkit-scrollbar-thumb {
 .pull-right-ha-font:active .b-font:before,
 .pull-right-ha-font.active .b-font:before {
   content: "\e607";
-  color: #009de3;
+  color: #3f8ce8;
 }
 .pull-right-ha-font.native .b-font:before,
 .pull-right-ha-font.disabled .b-font:before {
   content: "\e607";
   color: inherit;
+}
+.pull-right-e-font .b-font {
+  *zoom: expression( this.runtimeStyle['zoom'] = '1',this.innerHTML = '&#xe607');
 }
 .pull-right-e-font .b-font:before {
   content: "\e607";
@@ -1116,16 +1215,19 @@ textarea::-webkit-scrollbar-thumb {
 }
 .pull-right-e-font.active .b-font:before {
   content: "\e607";
-  color: #009de3;
+  color: #3f8ce8;
 }
 .pull-right-e-font:active .b-font:before {
   content: "\e607";
-  color: #009de3;
+  color: #3f8ce8;
 }
 .pull-right-e-font.native .b-font:before,
 .pull-right-e-font.disabled .b-font:before {
   content: "\e607";
   color: inherit;
+}
+.copy-font .b-font {
+  *zoom: expression( this.runtimeStyle['zoom'] = '1',this.innerHTML = '&#xe610');
 }
 .copy-font .b-font:before {
   content: "\e610";
@@ -1135,6 +1237,9 @@ textarea::-webkit-scrollbar-thumb {
 .copy-font.disabled .b-font:before {
   content: "\e610";
   color: inherit;
+}
+.copy-h-font .b-font {
+  *zoom: expression( this.runtimeStyle['zoom'] = '1',this.innerHTML = '&#xe610');
 }
 .copy-h-font .b-font:before {
   content: "\e610";
@@ -1151,6 +1256,9 @@ textarea::-webkit-scrollbar-thumb {
   content: "\e610";
   color: #1a1a1a;
 }
+.copy-ha-font .b-font {
+  *zoom: expression( this.runtimeStyle['zoom'] = '1',this.innerHTML = '&#xe610');
+}
 .copy-ha-font .b-font:before {
   content: "\e610";
   color: inherit;
@@ -1164,12 +1272,15 @@ textarea::-webkit-scrollbar-thumb {
 .copy-ha-font:active .b-font:before,
 .copy-ha-font.active .b-font:before {
   content: "\e610";
-  color: #009de3;
+  color: #3f8ce8;
 }
 .copy-ha-font.native .b-font:before,
 .copy-ha-font.disabled .b-font:before {
   content: "\e610";
   color: inherit;
+}
+.copy-e-font .b-font {
+  *zoom: expression( this.runtimeStyle['zoom'] = '1',this.innerHTML = '&#xe610');
 }
 .copy-e-font .b-font:before {
   content: "\e610";
@@ -1183,16 +1294,19 @@ textarea::-webkit-scrollbar-thumb {
 }
 .copy-e-font.active .b-font:before {
   content: "\e610";
-  color: #009de3;
+  color: #3f8ce8;
 }
 .copy-e-font:active .b-font:before {
   content: "\e610";
-  color: #009de3;
+  color: #3f8ce8;
 }
 .copy-e-font.native .b-font:before,
 .copy-e-font.disabled .b-font:before {
   content: "\e610";
   color: inherit;
+}
+.check-mark-font .b-font {
+  *zoom: expression( this.runtimeStyle['zoom'] = '1',this.innerHTML = '&#xe611');
 }
 .check-mark-font .b-font:before {
   content: "\e611";
@@ -1202,6 +1316,9 @@ textarea::-webkit-scrollbar-thumb {
 .check-mark-font.disabled .b-font:before {
   content: "\e611";
   color: inherit;
+}
+.check-mark-h-font .b-font {
+  *zoom: expression( this.runtimeStyle['zoom'] = '1',this.innerHTML = '&#xe611');
 }
 .check-mark-h-font .b-font:before {
   content: "\e611";
@@ -1218,6 +1335,9 @@ textarea::-webkit-scrollbar-thumb {
   content: "\e611";
   color: inherit;
 }
+.check-mark-ha-font .b-font {
+  *zoom: expression( this.runtimeStyle['zoom'] = '1',this.innerHTML = '&#xe611');
+}
 .check-mark-ha-font .b-font:before {
   content: "\e611";
   color: inherit;
@@ -1231,12 +1351,15 @@ textarea::-webkit-scrollbar-thumb {
 .check-mark-ha-font:active .b-font:before,
 .check-mark-ha-font.active .b-font:before {
   content: "\e611";
-  color: #009de3;
+  color: #3f8ce8;
 }
 .check-mark-ha-font.native .b-font:before,
 .check-mark-ha-font.disabled .b-font:before {
   content: "\e611";
   color: inherit;
+}
+.check-mark-e-font .b-font {
+  *zoom: expression( this.runtimeStyle['zoom'] = '1',this.innerHTML = '&#xe611');
 }
 .check-mark-e-font .b-font:before {
   content: "\e611";
@@ -1250,16 +1373,19 @@ textarea::-webkit-scrollbar-thumb {
 }
 .check-mark-e-font.active .b-font:before {
   content: "\e611";
-  color: #009de3;
+  color: #3f8ce8;
 }
 .check-mark-e-font:active .b-font:before {
   content: "\e611";
-  color: #009de3;
+  color: #3f8ce8;
 }
 .check-mark-e-font.native .b-font:before,
 .check-mark-e-font.disabled .b-font:before {
   content: "\e611";
   color: inherit;
+}
+.dimension-from-font .b-font {
+  *zoom: expression( this.runtimeStyle['zoom'] = '1',this.innerHTML = '&#xe612');
 }
 .dimension-from-font .b-font:before {
   content: "\e612";
@@ -1269,6 +1395,9 @@ textarea::-webkit-scrollbar-thumb {
 .dimension-from-font.disabled .b-font:before {
   content: "\e612";
   color: inherit;
+}
+.dimension-from-h-font .b-font {
+  *zoom: expression( this.runtimeStyle['zoom'] = '1',this.innerHTML = '&#xe612');
 }
 .dimension-from-h-font .b-font:before {
   content: "\e612";
@@ -1285,6 +1414,9 @@ textarea::-webkit-scrollbar-thumb {
   content: "\e612";
   color: inherit;
 }
+.dimension-from-ha-font .b-font {
+  *zoom: expression( this.runtimeStyle['zoom'] = '1',this.innerHTML = '&#xe612');
+}
 .dimension-from-ha-font .b-font:before {
   content: "\e612";
   color: inherit;
@@ -1298,12 +1430,15 @@ textarea::-webkit-scrollbar-thumb {
 .dimension-from-ha-font:active .b-font:before,
 .dimension-from-ha-font.active .b-font:before {
   content: "\e612";
-  color: #009de3;
+  color: #3f8ce8;
 }
 .dimension-from-ha-font.native .b-font:before,
 .dimension-from-ha-font.disabled .b-font:before {
   content: "\e612";
   color: inherit;
+}
+.dimension-from-e-font .b-font {
+  *zoom: expression( this.runtimeStyle['zoom'] = '1',this.innerHTML = '&#xe612');
 }
 .dimension-from-e-font .b-font:before {
   content: "\e612";
@@ -1317,16 +1452,19 @@ textarea::-webkit-scrollbar-thumb {
 }
 .dimension-from-e-font.active .b-font:before {
   content: "\e612";
-  color: #009de3;
+  color: #3f8ce8;
 }
 .dimension-from-e-font:active .b-font:before {
   content: "\e612";
-  color: #009de3;
+  color: #3f8ce8;
 }
 .dimension-from-e-font.native .b-font:before,
 .dimension-from-e-font.disabled .b-font:before {
   content: "\e612";
   color: inherit;
+}
+.chart-type-font .b-font {
+  *zoom: expression( this.runtimeStyle['zoom'] = '1',this.innerHTML = '&#xe613');
 }
 .chart-type-font .b-font:before {
   content: "\e613";
@@ -1336,6 +1474,9 @@ textarea::-webkit-scrollbar-thumb {
 .chart-type-font.disabled .b-font:before {
   content: "\e613";
   color: inherit;
+}
+.chart-type-h-font .b-font {
+  *zoom: expression( this.runtimeStyle['zoom'] = '1',this.innerHTML = '&#xe613');
 }
 .chart-type-h-font .b-font:before {
   content: "\e613";
@@ -1352,6 +1493,9 @@ textarea::-webkit-scrollbar-thumb {
   content: "\e613";
   color: inherit;
 }
+.chart-type-ha-font .b-font {
+  *zoom: expression( this.runtimeStyle['zoom'] = '1',this.innerHTML = '&#xe613');
+}
 .chart-type-ha-font .b-font:before {
   content: "\e613";
   color: inherit;
@@ -1365,12 +1509,15 @@ textarea::-webkit-scrollbar-thumb {
 .chart-type-ha-font:active .b-font:before,
 .chart-type-ha-font.active .b-font:before {
   content: "\e613";
-  color: #009de3;
+  color: #3f8ce8;
 }
 .chart-type-ha-font.native .b-font:before,
 .chart-type-ha-font.disabled .b-font:before {
   content: "\e613";
   color: inherit;
+}
+.chart-type-e-font .b-font {
+  *zoom: expression( this.runtimeStyle['zoom'] = '1',this.innerHTML = '&#xe613');
 }
 .chart-type-e-font .b-font:before {
   content: "\e613";
@@ -1384,16 +1531,19 @@ textarea::-webkit-scrollbar-thumb {
 }
 .chart-type-e-font.active .b-font:before {
   content: "\e613";
-  color: #009de3;
+  color: #3f8ce8;
 }
 .chart-type-e-font:active .b-font:before {
   content: "\e613";
-  color: #009de3;
+  color: #3f8ce8;
 }
 .chart-type-e-font.native .b-font:before,
 .chart-type-e-font.disabled .b-font:before {
   content: "\e613";
   color: inherit;
+}
+.style-set-font .b-font {
+  *zoom: expression( this.runtimeStyle['zoom'] = '1',this.innerHTML = '&#xe60c');
 }
 .style-set-font .b-font:before {
   content: "\e60c";
@@ -1403,6 +1553,9 @@ textarea::-webkit-scrollbar-thumb {
 .style-set-font.disabled .b-font:before {
   content: "\e60c";
   color: inherit;
+}
+.style-set-h-font .b-font {
+  *zoom: expression( this.runtimeStyle['zoom'] = '1',this.innerHTML = '&#xe60c');
 }
 .style-set-h-font .b-font:before {
   content: "\e60c";
@@ -1419,6 +1572,9 @@ textarea::-webkit-scrollbar-thumb {
   content: "\e60c";
   color: inherit;
 }
+.style-set-ha-font .b-font {
+  *zoom: expression( this.runtimeStyle['zoom'] = '1',this.innerHTML = '&#xe60c');
+}
 .style-set-ha-font .b-font:before {
   content: "\e60c";
   color: inherit;
@@ -1432,12 +1588,15 @@ textarea::-webkit-scrollbar-thumb {
 .style-set-ha-font:active .b-font:before,
 .style-set-ha-font.active .b-font:before {
   content: "\e60c";
-  color: #009de3;
+  color: #3f8ce8;
 }
 .style-set-ha-font.native .b-font:before,
 .style-set-ha-font.disabled .b-font:before {
   content: "\e60c";
   color: inherit;
+}
+.style-set-e-font .b-font {
+  *zoom: expression( this.runtimeStyle['zoom'] = '1',this.innerHTML = '&#xe60c');
 }
 .style-set-e-font .b-font:before {
   content: "\e60c";
@@ -1451,16 +1610,19 @@ textarea::-webkit-scrollbar-thumb {
 }
 .style-set-e-font.active .b-font:before {
   content: "\e60c";
-  color: #009de3;
+  color: #3f8ce8;
 }
 .style-set-e-font:active .b-font:before {
   content: "\e60c";
-  color: #009de3;
+  color: #3f8ce8;
 }
 .style-set-e-font.native .b-font:before,
 .style-set-e-font.disabled .b-font:before {
   content: "\e60c";
   color: inherit;
+}
+.hyper-link-font .b-font {
+  *zoom: expression( this.runtimeStyle['zoom'] = '1',this.innerHTML = '&#xe688');
 }
 .hyper-link-font .b-font:before {
   content: "\e688";
@@ -1471,6 +1633,9 @@ textarea::-webkit-scrollbar-thumb {
   content: "\e688";
   color: inherit;
 }
+.filter-font .b-font {
+  *zoom: expression( this.runtimeStyle['zoom'] = '1',this.innerHTML = '&#xe60f');
+}
 .filter-font .b-font:before {
   content: "\e60f";
   color: inherit;
@@ -1479,6 +1644,9 @@ textarea::-webkit-scrollbar-thumb {
 .filter-font.disabled .b-font:before {
   content: "\e60f";
   color: inherit;
+}
+.filter-h-font .b-font {
+  *zoom: expression( this.runtimeStyle['zoom'] = '1',this.innerHTML = '&#xe60f');
 }
 .filter-h-font .b-font:before {
   content: "\e60f";
@@ -1495,6 +1663,9 @@ textarea::-webkit-scrollbar-thumb {
   content: "\e60f";
   color: inherit;
 }
+.filter-ha-font .b-font {
+  *zoom: expression( this.runtimeStyle['zoom'] = '1',this.innerHTML = '&#xe60f');
+}
 .filter-ha-font .b-font:before {
   content: "\e60f";
   color: inherit;
@@ -1508,12 +1679,15 @@ textarea::-webkit-scrollbar-thumb {
 .filter-ha-font:active .b-font:before,
 .filter-ha-font.active .b-font:before {
   content: "\e60f";
-  color: #009de3;
+  color: #3f8ce8;
 }
 .filter-ha-font.native .b-font:before,
 .filter-ha-font.disabled .b-font:before {
   content: "\e60f";
   color: inherit;
+}
+.filter-e-font .b-font {
+  *zoom: expression( this.runtimeStyle['zoom'] = '1',this.innerHTML = '&#xe60f');
 }
 .filter-e-font .b-font:before {
   content: "\e60f";
@@ -1527,16 +1701,19 @@ textarea::-webkit-scrollbar-thumb {
 }
 .filter-e-font.active .b-font:before {
   content: "\e60f";
-  color: #009de3;
+  color: #3f8ce8;
 }
 .filter-e-font:active .b-font:before {
   content: "\e60f";
-  color: #009de3;
+  color: #3f8ce8;
 }
 .filter-e-font.native .b-font:before,
 .filter-e-font.disabled .b-font:before {
   content: "\e60f";
   color: inherit;
+}
+.classify-font .b-font {
+  *zoom: expression( this.runtimeStyle['zoom'] = '1',this.innerHTML = '&#xe694');
 }
 .classify-font .b-font:before {
   content: "\e694";
@@ -1546,6 +1723,9 @@ textarea::-webkit-scrollbar-thumb {
 .classify-font.disabled .b-font:before {
   content: "\e694";
   color: #3f8ce8;
+}
+.series-font .b-font {
+  *zoom: expression( this.runtimeStyle['zoom'] = '1',this.innerHTML = '&#xe695');
 }
 .series-font .b-font:before {
   content: "\e695";
@@ -1558,6 +1738,9 @@ textarea::-webkit-scrollbar-thumb {
 }
 /**维度/指标 下拉列表图标字体 ~end~**/
 /** dashboard组件/控件 下拉列表图标字体 ~begin~**/
+.link-to-widget-h-font .b-font {
+  *zoom: expression( this.runtimeStyle['zoom'] = '1',this.innerHTML = '&#xe600');
+}
 .link-to-widget-h-font .b-font:before {
   content: "\e600";
   color: #999999;
@@ -1572,6 +1755,9 @@ textarea::-webkit-scrollbar-thumb {
 .link-to-widget-h-font.disabled .b-font:before {
   content: "\e600";
   color: #999999;
+}
+.link-to-detail-h-font .b-font {
+  *zoom: expression( this.runtimeStyle['zoom'] = '1',this.innerHTML = '&#xe600');
 }
 .link-to-detail-h-font .b-font:before {
   content: "\e600";
@@ -1588,6 +1774,9 @@ textarea::-webkit-scrollbar-thumb {
   content: "\e600";
   color: #999999;
 }
+.detail-setting-h-font .b-font {
+  *zoom: expression( this.runtimeStyle['zoom'] = '1',this.innerHTML = '&#xe600');
+}
 .detail-setting-h-font .b-font:before {
   content: "\e600";
   color: #999999;
@@ -1602,6 +1791,9 @@ textarea::-webkit-scrollbar-thumb {
 .detail-setting-h-font.disabled .b-font:before {
   content: "\e600";
   color: #999999;
+}
+.export-to-excel-h-font .b-font {
+  *zoom: expression( this.runtimeStyle['zoom'] = '1',this.innerHTML = '&#xe600');
 }
 .export-to-excel-h-font .b-font:before {
   content: "\e600";
@@ -1618,6 +1810,9 @@ textarea::-webkit-scrollbar-thumb {
   content: "\e600";
   color: #999999;
 }
+.widget-copy-h-font .b-font {
+  *zoom: expression( this.runtimeStyle['zoom'] = '1',this.innerHTML = '&#xe610');
+}
 .widget-copy-h-font .b-font:before {
   content: "\e610";
   color: #999999;
@@ -1632,6 +1827,9 @@ textarea::-webkit-scrollbar-thumb {
 .widget-copy-h-font.disabled .b-font:before {
   content: "\e610";
   color: #999999;
+}
+.widget-delete-h-font .b-font {
+  *zoom: expression( this.runtimeStyle['zoom'] = '1',this.innerHTML = '&#xe605');
 }
 .widget-delete-h-font .b-font:before {
   content: "\e605";
@@ -1649,6 +1847,9 @@ textarea::-webkit-scrollbar-thumb {
   color: #999999;
 }
 /** dashboard组件/控件 下拉列表图标字体 ~end~**/
+.tree-node-triangle-expand-font .b-font {
+  *zoom: expression( this.runtimeStyle['zoom'] = '1',this.innerHTML = '&#xe608');
+}
 .tree-node-triangle-expand-font .b-font:before {
   content: "\e608";
   color: inherit;
@@ -1658,6 +1859,9 @@ textarea::-webkit-scrollbar-thumb {
   content: "\e608";
   color: inherit;
 }
+.tree-node-triangle-collapse-font .b-font {
+  *zoom: expression( this.runtimeStyle['zoom'] = '1',this.innerHTML = '&#xe607');
+}
 .tree-node-triangle-collapse-font .b-font:before {
   content: "\e607";
   color: inherit;
@@ -1666,6 +1870,9 @@ textarea::-webkit-scrollbar-thumb {
 .tree-node-triangle-collapse-font.disabled .b-font:before {
   content: "\e607";
   color: inherit;
+}
+.row-pre-page-h-font .b-font {
+  *zoom: expression( this.runtimeStyle['zoom'] = '1',this.innerHTML = '&#xe6be');
 }
 .row-pre-page-h-font .b-font:before {
   content: "\e6be";
@@ -1682,6 +1889,9 @@ textarea::-webkit-scrollbar-thumb {
   content: "\e6be";
   color: inherit;
 }
+.row-next-page-h-font .b-font {
+  *zoom: expression( this.runtimeStyle['zoom'] = '1',this.innerHTML = '&#xe6bd');
+}
 .row-next-page-h-font .b-font:before {
   content: "\e6bd";
   color: inherit;
@@ -1696,6 +1906,9 @@ textarea::-webkit-scrollbar-thumb {
 .row-next-page-h-font.disabled .b-font:before {
   content: "\e6bd";
   color: inherit;
+}
+.column-pre-page-h-font .b-font {
+  *zoom: expression( this.runtimeStyle['zoom'] = '1',this.innerHTML = '&#xe6bc');
 }
 .column-pre-page-h-font .b-font:before {
   content: "\e6bc";
@@ -1712,6 +1925,9 @@ textarea::-webkit-scrollbar-thumb {
   content: "\e6bc";
   color: inherit;
 }
+.column-next-page-h-font .b-font {
+  *zoom: expression( this.runtimeStyle['zoom'] = '1',this.innerHTML = '&#xe6bb');
+}
 .column-next-page-h-font .b-font:before {
   content: "\e6bb";
   color: inherit;
@@ -1726,6 +1942,9 @@ textarea::-webkit-scrollbar-thumb {
 .column-next-page-h-font.disabled .b-font:before {
   content: "\e6bb";
   color: inherit;
+}
+.trigger-triangle-font .b-font {
+  *zoom: expression( this.runtimeStyle['zoom'] = '1',this.innerHTML = '&#xe66a');
 }
 .trigger-triangle-font .b-font:before {
   content: "\e66a";
@@ -1747,6 +1966,9 @@ textarea::-webkit-scrollbar-thumb {
   content: "\e66a";
   color: #999999;
 }
+.widget-date-next-h-font .b-font {
+  *zoom: expression( this.runtimeStyle['zoom'] = '1',this.innerHTML = '&#xe62f');
+}
 .widget-date-next-h-font .b-font:before {
   content: "\e62f";
   color: inherit;
@@ -1761,6 +1983,9 @@ textarea::-webkit-scrollbar-thumb {
 .widget-date-next-h-font.disabled .b-font:before {
   content: "\e62f";
   color: inherit;
+}
+.widget-date-pre-h-font .b-font {
+  *zoom: expression( this.runtimeStyle['zoom'] = '1',this.innerHTML = '&#xe62e');
 }
 .widget-date-pre-h-font .b-font:before {
   content: "\e62e";
@@ -1777,6 +2002,9 @@ textarea::-webkit-scrollbar-thumb {
   content: "\e62e";
   color: inherit;
 }
+.widget-date-h-change-font .b-font {
+  *zoom: expression( this.runtimeStyle['zoom'] = '1',this.innerHTML = '&#xe660');
+}
 .widget-date-h-change-font .b-font:before {
   content: "\e660";
   color: inherit;
@@ -1792,6 +2020,9 @@ textarea::-webkit-scrollbar-thumb {
   content: "\e660";
   color: inherit;
 }
+.pull-down-font .b-font {
+  *zoom: expression( this.runtimeStyle['zoom'] = '1',this.innerHTML = '&#xe608');
+}
 .pull-down-font .b-font:before {
   content: "\e608";
   color: inherit;
@@ -1800,6 +2031,9 @@ textarea::-webkit-scrollbar-thumb {
 .pull-down-font.disabled .b-font:before {
   content: "\e608";
   color: inherit;
+}
+.pull-down-h-font .b-font {
+  *zoom: expression( this.runtimeStyle['zoom'] = '1',this.innerHTML = '&#xe608');
 }
 .pull-down-h-font .b-font:before {
   content: "\e608";
@@ -1816,6 +2050,9 @@ textarea::-webkit-scrollbar-thumb {
   content: "\e608";
   color: inherit;
 }
+.pull-down-ha-font .b-font {
+  *zoom: expression( this.runtimeStyle['zoom'] = '1',this.innerHTML = '&#xe608');
+}
 .pull-down-ha-font .b-font:before {
   content: "\e608";
   color: inherit;
@@ -1829,12 +2066,15 @@ textarea::-webkit-scrollbar-thumb {
 .pull-down-ha-font:active .b-font:before,
 .pull-down-ha-font.active .b-font:before {
   content: "\e608";
-  color: #009de3;
+  color: #3f8ce8;
 }
 .pull-down-ha-font.native .b-font:before,
 .pull-down-ha-font.disabled .b-font:before {
   content: "\e608";
   color: inherit;
+}
+.delete-field-font .b-font {
+  *zoom: expression( this.runtimeStyle['zoom'] = '1',this.innerHTML = '&#xe605');
 }
 .delete-field-font .b-font:before {
   content: "\e605";
@@ -1844,6 +2084,9 @@ textarea::-webkit-scrollbar-thumb {
 .delete-field-font.disabled .b-font:before {
   content: "\e605";
   color: inherit;
+}
+.delete-field-h-font .b-font {
+  *zoom: expression( this.runtimeStyle['zoom'] = '1',this.innerHTML = '&#xe605');
 }
 .delete-field-h-font .b-font:before {
   content: "\e605";
@@ -1860,6 +2103,9 @@ textarea::-webkit-scrollbar-thumb {
   content: "\e605";
   color: inherit;
 }
+.delete-field-ha-font .b-font {
+  *zoom: expression( this.runtimeStyle['zoom'] = '1',this.innerHTML = '&#xe605');
+}
 .delete-field-ha-font .b-font:before {
   content: "\e605";
   color: inherit;
@@ -1873,12 +2119,15 @@ textarea::-webkit-scrollbar-thumb {
 .delete-field-ha-font:active .b-font:before,
 .delete-field-ha-font.active .b-font:before {
   content: "\e605";
-  color: #009de3;
+  color: #3f8ce8;
 }
 .delete-field-ha-font.native .b-font:before,
 .delete-field-ha-font.disabled .b-font:before {
   content: "\e605";
   color: inherit;
+}
+.toolbar-save-font .b-font {
+  *zoom: expression( this.runtimeStyle['zoom'] = '1',this.innerHTML = '&#xe617');
 }
 .toolbar-save-font .b-font:before {
   content: "\e617";
@@ -1895,6 +2144,9 @@ textarea::-webkit-scrollbar-thumb {
   content: "\e617";
   color: inherit;
 }
+.toolbar-undo-font .b-font {
+  *zoom: expression( this.runtimeStyle['zoom'] = '1',this.innerHTML = '&#xe619');
+}
 .toolbar-undo-font .b-font:before {
   content: "\e619";
   color: inherit;
@@ -1909,6 +2161,9 @@ textarea::-webkit-scrollbar-thumb {
 .toolbar-undo-font.disabled .b-font:before {
   content: "\e619";
   color: inherit;
+}
+.toolbar-redo-font .b-font {
+  *zoom: expression( this.runtimeStyle['zoom'] = '1',this.innerHTML = '&#xe625');
 }
 .toolbar-redo-font .b-font:before {
   content: "\e625";
@@ -1925,6 +2180,9 @@ textarea::-webkit-scrollbar-thumb {
   content: "\e625";
   color: inherit;
 }
+.toolbar-edit-font .b-font {
+  *zoom: expression( this.runtimeStyle['zoom'] = '1',this.innerHTML = '&#xe631');
+}
 .toolbar-edit-font .b-font:before {
   content: "\e631";
   color: inherit;
@@ -1939,6 +2197,9 @@ textarea::-webkit-scrollbar-thumb {
 .toolbar-edit-font.disabled .b-font:before {
   content: "\e631";
   color: inherit;
+}
+.toolbar-preview-font .b-font {
+  *zoom: expression( this.runtimeStyle['zoom'] = '1',this.innerHTML = '&#xe65f');
 }
 .toolbar-preview-font .b-font:before {
   content: "\e65f";
@@ -1955,6 +2216,9 @@ textarea::-webkit-scrollbar-thumb {
   content: "\e65f";
   color: inherit;
 }
+.chart-table-font .b-font {
+  *zoom: expression( this.runtimeStyle['zoom'] = '1',this.innerHTML = '&#xe60e');
+}
 .chart-table-font .b-font:before {
   content: "\e60e";
   color: inherit;
@@ -1968,12 +2232,15 @@ textarea::-webkit-scrollbar-thumb {
 .chart-table-font:active .b-font:before,
 .chart-table-font.active .b-font:before {
   content: "\e60e";
-  color: #009de3;
+  color: #3f8ce8;
 }
 .chart-table-font.native .b-font:before,
 .chart-table-font.disabled .b-font:before {
   content: "\e60e";
   color: inherit;
+}
+.chart-axis-font .b-font {
+  *zoom: expression( this.runtimeStyle['zoom'] = '1',this.innerHTML = '&#xe626');
 }
 .chart-axis-font .b-font:before {
   content: "\e626";
@@ -1988,12 +2255,15 @@ textarea::-webkit-scrollbar-thumb {
 .chart-axis-font:active .b-font:before,
 .chart-axis-font.active .b-font:before {
   content: "\e626";
-  color: #009de3;
+  color: #3f8ce8;
 }
 .chart-axis-font.native .b-font:before,
 .chart-axis-font.disabled .b-font:before {
   content: "\e626";
   color: inherit;
+}
+.chart-bar-font .b-font {
+  *zoom: expression( this.runtimeStyle['zoom'] = '1',this.innerHTML = '&#xe620');
 }
 .chart-bar-font .b-font:before {
   content: "\e620";
@@ -2008,12 +2278,15 @@ textarea::-webkit-scrollbar-thumb {
 .chart-bar-font:active .b-font:before,
 .chart-bar-font.active .b-font:before {
   content: "\e620";
-  color: #009de3;
+  color: #3f8ce8;
 }
 .chart-bar-font.native .b-font:before,
 .chart-bar-font.disabled .b-font:before {
   content: "\e620";
   color: inherit;
+}
+.chart-accumulate-bar-font .b-font {
+  *zoom: expression( this.runtimeStyle['zoom'] = '1',this.innerHTML = '&#xe60a');
 }
 .chart-accumulate-bar-font .b-font:before {
   content: "\e60a";
@@ -2028,12 +2301,15 @@ textarea::-webkit-scrollbar-thumb {
 .chart-accumulate-bar-font:active .b-font:before,
 .chart-accumulate-bar-font.active .b-font:before {
   content: "\e60a";
-  color: #009de3;
+  color: #3f8ce8;
 }
 .chart-accumulate-bar-font.native .b-font:before,
 .chart-accumulate-bar-font.disabled .b-font:before {
   content: "\e60a";
   color: inherit;
+}
+.chart-pie-font .b-font {
+  *zoom: expression( this.runtimeStyle['zoom'] = '1',this.innerHTML = '&#xe618');
 }
 .chart-pie-font .b-font:before {
   content: "\e618";
@@ -2048,12 +2324,15 @@ textarea::-webkit-scrollbar-thumb {
 .chart-pie-font:active .b-font:before,
 .chart-pie-font.active .b-font:before {
   content: "\e618";
-  color: #009de3;
+  color: #3f8ce8;
 }
 .chart-pie-font.native .b-font:before,
 .chart-pie-font.disabled .b-font:before {
   content: "\e618";
   color: inherit;
+}
+.chart-map-font .b-font {
+  *zoom: expression( this.runtimeStyle['zoom'] = '1',this.innerHTML = '&#xe62c');
 }
 .chart-map-font .b-font:before {
   content: "\e62c";
@@ -2068,12 +2347,15 @@ textarea::-webkit-scrollbar-thumb {
 .chart-map-font:active .b-font:before,
 .chart-map-font.active .b-font:before {
   content: "\e62c";
-  color: #009de3;
+  color: #3f8ce8;
 }
 .chart-map-font.native .b-font:before,
 .chart-map-font.disabled .b-font:before {
   content: "\e62c";
   color: inherit;
+}
+.chart-dashboard-font .b-font {
+  *zoom: expression( this.runtimeStyle['zoom'] = '1',this.innerHTML = '&#xe623');
 }
 .chart-dashboard-font .b-font:before {
   content: "\e623";
@@ -2088,12 +2370,15 @@ textarea::-webkit-scrollbar-thumb {
 .chart-dashboard-font:active .b-font:before,
 .chart-dashboard-font.active .b-font:before {
   content: "\e623";
-  color: #009de3;
+  color: #3f8ce8;
 }
 .chart-dashboard-font.native .b-font:before,
 .chart-dashboard-font.disabled .b-font:before {
   content: "\e623";
   color: inherit;
+}
+.chart-doughnut-font .b-font {
+  *zoom: expression( this.runtimeStyle['zoom'] = '1',this.innerHTML = '&#xe624');
 }
 .chart-doughnut-font .b-font:before {
   content: "\e624";
@@ -2108,12 +2393,15 @@ textarea::-webkit-scrollbar-thumb {
 .chart-doughnut-font:active .b-font:before,
 .chart-doughnut-font.active .b-font:before {
   content: "\e624";
-  color: #009de3;
+  color: #3f8ce8;
 }
 .chart-doughnut-font.native .b-font:before,
 .chart-doughnut-font.disabled .b-font:before {
   content: "\e624";
   color: inherit;
+}
+.chart-detail-font .b-font {
+  *zoom: expression( this.runtimeStyle['zoom'] = '1',this.innerHTML = '&#xe615');
 }
 .chart-detail-font .b-font:before {
   content: "\e615";
@@ -2128,12 +2416,15 @@ textarea::-webkit-scrollbar-thumb {
 .chart-detail-font:active .b-font:before,
 .chart-detail-font.active .b-font:before {
   content: "\e615";
-  color: #009de3;
+  color: #3f8ce8;
 }
 .chart-detail-font.native .b-font:before,
 .chart-detail-font.disabled .b-font:before {
   content: "\e615";
   color: inherit;
+}
+.chart-more-font .b-font {
+  *zoom: expression( this.runtimeStyle['zoom'] = '1',this.innerHTML = '&#xe60d');
 }
 .chart-more-font .b-font:before {
   content: "\e60d";
@@ -2148,12 +2439,15 @@ textarea::-webkit-scrollbar-thumb {
 .chart-more-font:active .b-font:before,
 .chart-more-font.active .b-font:before {
   content: "\e60d";
-  color: #009de3;
+  color: #3f8ce8;
 }
 .chart-more-font.native .b-font:before,
 .chart-more-font.disabled .b-font:before {
   content: "\e60d";
   color: inherit;
+}
+.chart-bubble-font .b-font {
+  *zoom: expression( this.runtimeStyle['zoom'] = '1',this.innerHTML = '&#xe62a');
 }
 .chart-bubble-font .b-font:before {
   content: "\e62a";
@@ -2168,12 +2462,15 @@ textarea::-webkit-scrollbar-thumb {
 .chart-bubble-font:active .b-font:before,
 .chart-bubble-font.active .b-font:before {
   content: "\e62a";
-  color: #009de3;
+  color: #3f8ce8;
 }
 .chart-bubble-font.native .b-font:before,
 .chart-bubble-font.disabled .b-font:before {
   content: "\e62a";
   color: inherit;
+}
+.chart-scatter-font .b-font {
+  *zoom: expression( this.runtimeStyle['zoom'] = '1',this.innerHTML = '&#xe61d');
 }
 .chart-scatter-font .b-font:before {
   content: "\e61d";
@@ -2188,12 +2485,15 @@ textarea::-webkit-scrollbar-thumb {
 .chart-scatter-font:active .b-font:before,
 .chart-scatter-font.active .b-font:before {
   content: "\e61d";
-  color: #009de3;
+  color: #3f8ce8;
 }
 .chart-scatter-font.native .b-font:before,
 .chart-scatter-font.disabled .b-font:before {
   content: "\e61d";
   color: inherit;
+}
+.chart-radar-font .b-font {
+  *zoom: expression( this.runtimeStyle['zoom'] = '1',this.innerHTML = '&#xe614');
 }
 .chart-radar-font .b-font:before {
   content: "\e614";
@@ -2208,12 +2508,15 @@ textarea::-webkit-scrollbar-thumb {
 .chart-radar-font:active .b-font:before,
 .chart-radar-font.active .b-font:before {
   content: "\e614";
-  color: #009de3;
+  color: #3f8ce8;
 }
 .chart-radar-font.native .b-font:before,
 .chart-radar-font.disabled .b-font:before {
   content: "\e614";
   color: inherit;
+}
+.chart-content-font .b-font {
+  *zoom: expression( this.runtimeStyle['zoom'] = '1',this.innerHTML = '&#xe621');
 }
 .chart-content-font .b-font:before {
   content: "\e621";
@@ -2228,12 +2531,15 @@ textarea::-webkit-scrollbar-thumb {
 .chart-content-font:active .b-font:before,
 .chart-content-font.active .b-font:before {
   content: "\e621";
-  color: #009de3;
+  color: #3f8ce8;
 }
 .chart-content-font.native .b-font:before,
 .chart-content-font.disabled .b-font:before {
   content: "\e621";
   color: inherit;
+}
+.chart-image-font .b-font {
+  *zoom: expression( this.runtimeStyle['zoom'] = '1',this.innerHTML = '&#xe68d');
 }
 .chart-image-font .b-font:before {
   content: "\e68d";
@@ -2248,12 +2554,15 @@ textarea::-webkit-scrollbar-thumb {
 .chart-image-font:active .b-font:before,
 .chart-image-font.active .b-font:before {
   content: "\e68d";
-  color: #009de3;
+  color: #3f8ce8;
 }
 .chart-image-font.native .b-font:before,
 .chart-image-font.disabled .b-font:before {
   content: "\e68d";
   color: inherit;
+}
+.chart-web-font .b-font {
+  *zoom: expression( this.runtimeStyle['zoom'] = '1',this.innerHTML = '&#xe68c');
 }
 .chart-web-font .b-font:before {
   content: "\e68c";
@@ -2268,12 +2577,15 @@ textarea::-webkit-scrollbar-thumb {
 .chart-web-font:active .b-font:before,
 .chart-web-font.active .b-font:before {
   content: "\e68c";
-  color: #009de3;
+  color: #3f8ce8;
 }
 .chart-web-font.native .b-font:before,
 .chart-web-font.disabled .b-font:before {
   content: "\e68c";
   color: inherit;
+}
+.chart-string-font .b-font {
+  *zoom: expression( this.runtimeStyle['zoom'] = '1',this.innerHTML = '&#xe622');
 }
 .chart-string-font .b-font:before {
   content: "\e622";
@@ -2288,12 +2600,15 @@ textarea::-webkit-scrollbar-thumb {
 .chart-string-font:active .b-font:before,
 .chart-string-font.active .b-font:before {
   content: "\e622";
-  color: #009de3;
+  color: #3f8ce8;
 }
 .chart-string-font.native .b-font:before,
 .chart-string-font.disabled .b-font:before {
   content: "\e622";
   color: inherit;
+}
+.chart-number-font .b-font {
+  *zoom: expression( this.runtimeStyle['zoom'] = '1',this.innerHTML = '&#xe61f');
 }
 .chart-number-font .b-font:before {
   content: "\e61f";
@@ -2308,12 +2623,15 @@ textarea::-webkit-scrollbar-thumb {
 .chart-number-font:active .b-font:before,
 .chart-number-font.active .b-font:before {
   content: "\e61f";
-  color: #009de3;
+  color: #3f8ce8;
 }
 .chart-number-font.native .b-font:before,
 .chart-number-font.disabled .b-font:before {
   content: "\e61f";
   color: inherit;
+}
+.chart-tree-font .b-font {
+  *zoom: expression( this.runtimeStyle['zoom'] = '1',this.innerHTML = '&#xe61e');
 }
 .chart-tree-font .b-font:before {
   content: "\e61e";
@@ -2328,12 +2646,15 @@ textarea::-webkit-scrollbar-thumb {
 .chart-tree-font:active .b-font:before,
 .chart-tree-font.active .b-font:before {
   content: "\e61e";
-  color: #009de3;
+  color: #3f8ce8;
 }
 .chart-tree-font.native .b-font:before,
 .chart-tree-font.disabled .b-font:before {
   content: "\e61e";
   color: inherit;
+}
+.chart-date-font .b-font {
+  *zoom: expression( this.runtimeStyle['zoom'] = '1',this.innerHTML = '&#xe61b');
 }
 .chart-date-font .b-font:before {
   content: "\e61b";
@@ -2348,12 +2669,15 @@ textarea::-webkit-scrollbar-thumb {
 .chart-date-font:active .b-font:before,
 .chart-date-font.active .b-font:before {
   content: "\e61b";
-  color: #009de3;
+  color: #3f8ce8;
 }
 .chart-date-font.native .b-font:before,
 .chart-date-font.disabled .b-font:before {
   content: "\e61b";
   color: inherit;
+}
+.chart-year-font .b-font {
+  *zoom: expression( this.runtimeStyle['zoom'] = '1',this.innerHTML = '&#xe628');
 }
 .chart-year-font .b-font:before {
   content: "\e628";
@@ -2368,12 +2692,15 @@ textarea::-webkit-scrollbar-thumb {
 .chart-year-font:active .b-font:before,
 .chart-year-font.active .b-font:before {
   content: "\e628";
-  color: #009de3;
+  color: #3f8ce8;
 }
 .chart-year-font.native .b-font:before,
 .chart-year-font.disabled .b-font:before {
   content: "\e628";
   color: inherit;
+}
+.chart-month-font .b-font {
+  *zoom: expression( this.runtimeStyle['zoom'] = '1',this.innerHTML = '&#xe627');
 }
 .chart-month-font .b-font:before {
   content: "\e627";
@@ -2388,12 +2715,15 @@ textarea::-webkit-scrollbar-thumb {
 .chart-month-font:active .b-font:before,
 .chart-month-font.active .b-font:before {
   content: "\e627";
-  color: #009de3;
+  color: #3f8ce8;
 }
 .chart-month-font.native .b-font:before,
 .chart-month-font.disabled .b-font:before {
   content: "\e627";
   color: inherit;
+}
+.chart-quarter-font .b-font {
+  *zoom: expression( this.runtimeStyle['zoom'] = '1',this.innerHTML = '&#xe629');
 }
 .chart-quarter-font .b-font:before {
   content: "\e629";
@@ -2408,12 +2738,15 @@ textarea::-webkit-scrollbar-thumb {
 .chart-quarter-font:active .b-font:before,
 .chart-quarter-font.active .b-font:before {
   content: "\e629";
-  color: #009de3;
+  color: #3f8ce8;
 }
 .chart-quarter-font.native .b-font:before,
 .chart-quarter-font.disabled .b-font:before {
   content: "\e629";
   color: inherit;
+}
+.chart-ymd-font .b-font {
+  *zoom: expression( this.runtimeStyle['zoom'] = '1',this.innerHTML = '&#xe61c');
 }
 .chart-ymd-font .b-font:before {
   content: "\e61c";
@@ -2428,12 +2761,15 @@ textarea::-webkit-scrollbar-thumb {
 .chart-ymd-font:active .b-font:before,
 .chart-ymd-font.active .b-font:before {
   content: "\e61c";
-  color: #009de3;
+  color: #3f8ce8;
 }
 .chart-ymd-font.native .b-font:before,
 .chart-ymd-font.disabled .b-font:before {
   content: "\e61c";
   color: inherit;
+}
+.chart-date-range-font .b-font {
+  *zoom: expression( this.runtimeStyle['zoom'] = '1',this.innerHTML = '&#xe616');
 }
 .chart-date-range-font .b-font:before {
   content: "\e616";
@@ -2448,12 +2784,15 @@ textarea::-webkit-scrollbar-thumb {
 .chart-date-range-font:active .b-font:before,
 .chart-date-range-font.active .b-font:before {
   content: "\e616";
-  color: #009de3;
+  color: #3f8ce8;
 }
 .chart-date-range-font.native .b-font:before,
 .chart-date-range-font.disabled .b-font:before {
   content: "\e616";
   color: inherit;
+}
+.chart-general-query-font .b-font {
+  *zoom: expression( this.runtimeStyle['zoom'] = '1',this.innerHTML = '&#xe62b');
 }
 .chart-general-query-font .b-font:before {
   content: "\e62b";
@@ -2468,12 +2807,15 @@ textarea::-webkit-scrollbar-thumb {
 .chart-general-query-font:active .b-font:before,
 .chart-general-query-font.active .b-font:before {
   content: "\e62b";
-  color: #009de3;
+  color: #3f8ce8;
 }
 .chart-general-query-font.native .b-font:before,
 .chart-general-query-font.disabled .b-font:before {
   content: "\e62b";
   color: inherit;
+}
+.chart-query-font .b-font {
+  *zoom: expression( this.runtimeStyle['zoom'] = '1',this.innerHTML = '&#xe609');
 }
 .chart-query-font .b-font:before {
   content: "\e609";
@@ -2488,12 +2830,15 @@ textarea::-webkit-scrollbar-thumb {
 .chart-query-font:active .b-font:before,
 .chart-query-font.active .b-font:before {
   content: "\e609";
-  color: #009de3;
+  color: #3f8ce8;
 }
 .chart-query-font.native .b-font:before,
 .chart-query-font.disabled .b-font:before {
   content: "\e609";
   color: inherit;
+}
+.chart-reset-font .b-font {
+  *zoom: expression( this.runtimeStyle['zoom'] = '1',this.innerHTML = '&#xe61a');
 }
 .chart-reset-font .b-font:before {
   content: "\e61a";
@@ -2508,12 +2853,15 @@ textarea::-webkit-scrollbar-thumb {
 .chart-reset-font:active .b-font:before,
 .chart-reset-font.active .b-font:before {
   content: "\e61a";
-  color: #009de3;
+  color: #3f8ce8;
 }
 .chart-reset-font.native .b-font:before,
 .chart-reset-font.disabled .b-font:before {
   content: "\e61a";
   color: inherit;
+}
+.chart-textarea-font .b-font {
+  *zoom: expression( this.runtimeStyle['zoom'] = '1',this.innerHTML = '&#xe622');
 }
 .chart-textarea-font .b-font:before {
   content: "\e622";
@@ -2528,12 +2876,15 @@ textarea::-webkit-scrollbar-thumb {
 .chart-textarea-font:active .b-font:before,
 .chart-textarea-font.active .b-font:before {
   content: "\e622";
-  color: #009de3;
+  color: #3f8ce8;
 }
 .chart-textarea-font.native .b-font:before,
 .chart-textarea-font.disabled .b-font:before {
   content: "\e622";
   color: inherit;
+}
+.chart-reuse-font .b-font {
+  *zoom: expression( this.runtimeStyle['zoom'] = '1',this.innerHTML = '&#xe60b');
 }
 .chart-reuse-font .b-font:before {
   content: "\e60b";
@@ -2548,12 +2899,15 @@ textarea::-webkit-scrollbar-thumb {
 .chart-reuse-font:active .b-font:before,
 .chart-reuse-font.active .b-font:before {
   content: "\e60b";
-  color: #009de3;
+  color: #3f8ce8;
 }
 .chart-reuse-font.native .b-font:before,
 .chart-reuse-font.disabled .b-font:before {
   content: "\e60b";
   color: inherit;
+}
+.chart-date-normal-font .b-font {
+  *zoom: expression( this.runtimeStyle['zoom'] = '1',this.innerHTML = '&#xe61b');
 }
 .chart-date-normal-font .b-font:before {
   content: "\e61b";
@@ -2563,6 +2917,9 @@ textarea::-webkit-scrollbar-thumb {
 .chart-date-normal-font.disabled .b-font:before {
   content: "\e61b";
   color: inherit;
+}
+.less-font .b-font {
+  *zoom: expression( this.runtimeStyle['zoom'] = '1',this.innerHTML = '&#xe633');
 }
 .less-font .b-font:before {
   content: "\e633";
@@ -2577,12 +2934,15 @@ textarea::-webkit-scrollbar-thumb {
 .less-font:active .b-font:before,
 .less-font.active .b-font:before {
   content: "\e633";
-  color: #009de3;
+  color: #3f8ce8;
 }
 .less-font.native .b-font:before,
 .less-font.disabled .b-font:before {
   content: "\e633";
   color: inherit;
+}
+.less-equal-font .b-font {
+  *zoom: expression( this.runtimeStyle['zoom'] = '1',this.innerHTML = '&#xe636');
 }
 .less-equal-font .b-font:before {
   content: "\e636";
@@ -2597,12 +2957,15 @@ textarea::-webkit-scrollbar-thumb {
 .less-equal-font:active .b-font:before,
 .less-equal-font.active .b-font:before {
   content: "\e636";
-  color: #009de3;
+  color: #3f8ce8;
 }
 .less-equal-font.native .b-font:before,
 .less-equal-font.disabled .b-font:before {
   content: "\e636";
   color: inherit;
+}
+.check-font .b-font {
+  *zoom: expression( this.runtimeStyle['zoom'] = '1',this.innerHTML = '&#xe611');
 }
 .check-font .b-font:before {
   content: "\e611";
@@ -2613,6 +2976,9 @@ textarea::-webkit-scrollbar-thumb {
   content: "\e611";
   color: #3f8ce8;
 }
+.move2group-add-font .b-font {
+  *zoom: expression( this.runtimeStyle['zoom'] = '1',this.innerHTML = '&#xe649');
+}
 .move2group-add-font .b-font:before {
   content: "\e649";
   color: #3f8ce8;
@@ -2621,6 +2987,9 @@ textarea::-webkit-scrollbar-thumb {
 .move2group-add-font.disabled .b-font:before {
   content: "\e649";
   color: #3f8ce8;
+}
+.select-data-field-calc-font .b-font {
+  *zoom: expression( this.runtimeStyle['zoom'] = '1',this.innerHTML = '&#xe6a3');
 }
 .select-data-field-calc-font .b-font:before {
   content: "\e6a3";
@@ -2642,6 +3011,9 @@ textarea::-webkit-scrollbar-thumb {
   content: "\e6a3";
   color: inherit;
 }
+.select-data-field-string-font .b-font {
+  *zoom: expression( this.runtimeStyle['zoom'] = '1',this.innerHTML = '&#xe642');
+}
 .select-data-field-string-font .b-font:before {
   content: "\e642";
   color: inherit;
@@ -2661,6 +3033,9 @@ textarea::-webkit-scrollbar-thumb {
 .select-data-field-string-font.disabled .b-font:before {
   content: "\e642";
   color: inherit;
+}
+.select-data-field-number-font .b-font {
+  *zoom: expression( this.runtimeStyle['zoom'] = '1',this.innerHTML = '&#xe641');
 }
 .select-data-field-number-font .b-font:before {
   content: "\e641";
@@ -2682,6 +3057,9 @@ textarea::-webkit-scrollbar-thumb {
   content: "\e641";
   color: inherit;
 }
+.select-data-field-date-font .b-font {
+  *zoom: expression( this.runtimeStyle['zoom'] = '1',this.innerHTML = '&#xe640');
+}
 .select-data-field-date-font .b-font:before {
   content: "\e640";
   color: inherit;
@@ -2702,6 +3080,9 @@ textarea::-webkit-scrollbar-thumb {
   content: "\e640";
   color: inherit;
 }
+.select-data-field-string-group-font .b-font {
+  *zoom: expression( this.runtimeStyle['zoom'] = '1',this.innerHTML = '&#xe642');
+}
 .select-data-field-string-group-font .b-font:before {
   content: "\e642";
   color: inherit;
@@ -2710,6 +3091,9 @@ textarea::-webkit-scrollbar-thumb {
 .select-data-field-string-group-font.disabled .b-font:before {
   content: "\e642";
   color: inherit;
+}
+.select-data-field-number-group-font .b-font {
+  *zoom: expression( this.runtimeStyle['zoom'] = '1',this.innerHTML = '&#xe641');
 }
 .select-data-field-number-group-font .b-font:before {
   content: "\e641";
@@ -2720,6 +3104,9 @@ textarea::-webkit-scrollbar-thumb {
   content: "\e641";
   color: inherit;
 }
+.select-data-field-date-group-font .b-font {
+  *zoom: expression( this.runtimeStyle['zoom'] = '1',this.innerHTML = '&#xe640');
+}
 .select-data-field-date-group-font .b-font:before {
   content: "\e640";
   color: inherit;
@@ -2728,6 +3115,9 @@ textarea::-webkit-scrollbar-thumb {
 .select-data-field-date-group-font.disabled .b-font:before {
   content: "\e640";
   color: inherit;
+}
+.select-data-preview-font .b-font {
+  *zoom: expression( this.runtimeStyle['zoom'] = '1',this.innerHTML = '&#xe65f');
 }
 .select-data-preview-font .b-font:before {
   content: "\e65f";
@@ -2749,6 +3139,9 @@ textarea::-webkit-scrollbar-thumb {
   content: "\e65f";
   color: #999999;
 }
+.detail-dimension-set-font .b-font {
+  *zoom: expression( this.runtimeStyle['zoom'] = '1',this.innerHTML = '&#xe678');
+}
 .detail-dimension-set-font .b-font:before {
   content: "\e678";
   color: inherit;
@@ -2764,6 +3157,9 @@ textarea::-webkit-scrollbar-thumb {
   content: "\e678";
   color: inherit;
 }
+.detail-real-data-warning-font .b-font {
+  *zoom: expression( this.runtimeStyle['zoom'] = '1',this.innerHTML = '&#xe64e');
+}
 .detail-real-data-warning-font .b-font:before {
   content: "\e64e";
   color: #f07d0a;
@@ -2778,6 +3174,9 @@ textarea::-webkit-scrollbar-thumb {
 .detail-real-data-warning-font.disabled .b-font:before {
   content: "\e64e";
   color: #f07d0a;
+}
+.select-group-field-string-font .b-font {
+  *zoom: expression( this.runtimeStyle['zoom'] = '1',this.innerHTML = '&#xe642');
 }
 .select-group-field-string-font .b-font:before {
   content: "\e642";
@@ -2799,6 +3198,9 @@ textarea::-webkit-scrollbar-thumb {
   content: "\e642";
   color: #3f8ce8;
 }
+.select-group-field-number-font .b-font {
+  *zoom: expression( this.runtimeStyle['zoom'] = '1',this.innerHTML = '&#xe641');
+}
 .select-group-field-number-font .b-font:before {
   content: "\e641";
   color: #3f8ce8;
@@ -2818,6 +3220,9 @@ textarea::-webkit-scrollbar-thumb {
 .select-group-field-number-font.disabled .b-font:before {
   content: "\e641";
   color: #3f8ce8;
+}
+.select-group-field-date-font .b-font {
+  *zoom: expression( this.runtimeStyle['zoom'] = '1',this.innerHTML = '&#xe640');
 }
 .select-group-field-date-font .b-font:before {
   content: "\e640";
@@ -2839,6 +3244,9 @@ textarea::-webkit-scrollbar-thumb {
   content: "\e640";
   color: #3f8ce8;
 }
+.dashboard-widget-combo-detail-set-font .b-font {
+  *zoom: expression( this.runtimeStyle['zoom'] = '1',this.innerHTML = '&#xe634');
+}
 .dashboard-widget-combo-detail-set-font .b-font:before {
   content: "\e634";
   color: inherit;
@@ -2854,6 +3262,9 @@ textarea::-webkit-scrollbar-thumb {
   content: "\e634";
   color: inherit;
 }
+.group-add-font .b-font {
+  *zoom: expression( this.runtimeStyle['zoom'] = '1',this.innerHTML = '&#xe649');
+}
 .group-add-font .b-font:before {
   content: "\e649";
   color: #999999;
@@ -2862,6 +3273,9 @@ textarea::-webkit-scrollbar-thumb {
 .group-add-font.disabled .b-font:before {
   content: "\e649";
   color: #999999;
+}
+.sortable-font .b-font {
+  *zoom: expression( this.runtimeStyle['zoom'] = '1',this.innerHTML = '&#xe63b');
 }
 .sortable-font .b-font:before {
   content: "\e63b";
@@ -2872,6 +3286,9 @@ textarea::-webkit-scrollbar-thumb {
   content: "\e63b";
   color: inherit;
 }
+.text-bold-font .b-font {
+  *zoom: expression( this.runtimeStyle['zoom'] = '1',this.innerHTML = '&#xe64d');
+}
 .text-bold-font .b-font:before {
   content: "\e64d";
   color: inherit;
@@ -2880,6 +3297,9 @@ textarea::-webkit-scrollbar-thumb {
 .text-bold-font.disabled .b-font:before {
   content: "\e64d";
   color: inherit;
+}
+.text-italic-font .b-font {
+  *zoom: expression( this.runtimeStyle['zoom'] = '1',this.innerHTML = '&#xe656');
 }
 .text-italic-font .b-font:before {
   content: "\e656";
@@ -2890,6 +3310,9 @@ textarea::-webkit-scrollbar-thumb {
   content: "\e656";
   color: inherit;
 }
+.text-underline-font .b-font {
+  *zoom: expression( this.runtimeStyle['zoom'] = '1',this.innerHTML = '&#xe650');
+}
 .text-underline-font .b-font:before {
   content: "\e650";
   color: inherit;
@@ -2898,6 +3321,9 @@ textarea::-webkit-scrollbar-thumb {
 .text-underline-font.disabled .b-font:before {
   content: "\e650";
   color: inherit;
+}
+.text-color-font .b-font {
+  *zoom: expression( this.runtimeStyle['zoom'] = '1',this.innerHTML = '&#xe69c');
 }
 .text-color-font .b-font:before {
   content: "\e69c";
@@ -2908,6 +3334,9 @@ textarea::-webkit-scrollbar-thumb {
   content: "\e69c";
   color: inherit;
 }
+.text-background-font .b-font {
+  *zoom: expression( this.runtimeStyle['zoom'] = '1',this.innerHTML = '&#xe696');
+}
 .text-background-font .b-font:before {
   content: "\e696";
   color: inherit;
@@ -2916,6 +3345,9 @@ textarea::-webkit-scrollbar-thumb {
 .text-background-font.disabled .b-font:before {
   content: "\e696";
   color: inherit;
+}
+.text-color-underline-font .b-font {
+  *zoom: expression( this.runtimeStyle['zoom'] = '1',this.innerHTML = '&#xe69d');
 }
 .text-color-underline-font .b-font:before {
   content: "\e69d";
@@ -2926,6 +3358,9 @@ textarea::-webkit-scrollbar-thumb {
   content: "\e69d";
   color: inherit;
 }
+.text-align-left-font .b-font {
+  *zoom: expression( this.runtimeStyle['zoom'] = '1',this.innerHTML = '&#xe654');
+}
 .text-align-left-font .b-font:before {
   content: "\e654";
   color: inherit;
@@ -2934,6 +3369,9 @@ textarea::-webkit-scrollbar-thumb {
 .text-align-left-font.disabled .b-font:before {
   content: "\e654";
   color: inherit;
+}
+.text-align-center-font .b-font {
+  *zoom: expression( this.runtimeStyle['zoom'] = '1',this.innerHTML = '&#xe64f');
 }
 .text-align-center-font .b-font:before {
   content: "\e64f";
@@ -2944,6 +3382,9 @@ textarea::-webkit-scrollbar-thumb {
   content: "\e64f";
   color: inherit;
 }
+.text-align-right-font .b-font {
+  *zoom: expression( this.runtimeStyle['zoom'] = '1',this.innerHTML = '&#xe651');
+}
 .text-align-right-font .b-font:before {
   content: "\e651";
   color: inherit;
@@ -2952,6 +3393,9 @@ textarea::-webkit-scrollbar-thumb {
 .text-align-right-font.disabled .b-font:before {
   content: "\e651";
   color: inherit;
+}
+.img-upload-font .b-font {
+  *zoom: expression( this.runtimeStyle['zoom'] = '1',this.innerHTML = '&#xe6ba');
 }
 .img-upload-font .b-font:before {
   content: "\e6ba";
@@ -2962,6 +3406,9 @@ textarea::-webkit-scrollbar-thumb {
   content: "\e6ba";
   color: #3f8ce8;
 }
+.img-size-font .b-font {
+  *zoom: expression( this.runtimeStyle['zoom'] = '1',this.innerHTML = '&#xe68b');
+}
 .img-size-font .b-font:before {
   content: "\e68b";
   color: #3f8ce8;
@@ -2970,6 +3417,9 @@ textarea::-webkit-scrollbar-thumb {
 .img-size-font.disabled .b-font:before {
   content: "\e68b";
   color: #3f8ce8;
+}
+.img-href-font .b-font {
+  *zoom: expression( this.runtimeStyle['zoom'] = '1',this.innerHTML = '&#xe688');
 }
 .img-href-font .b-font:before {
   content: "\e688";
@@ -2980,6 +3430,9 @@ textarea::-webkit-scrollbar-thumb {
   content: "\e688";
   color: #3f8ce8;
 }
+.img-shutdown-font .b-font {
+  *zoom: expression( this.runtimeStyle['zoom'] = '1',this.innerHTML = '&#xe689');
+}
 .img-shutdown-font .b-font:before {
   content: "\e689";
   color: #3f8ce8;
@@ -2988,6 +3441,9 @@ textarea::-webkit-scrollbar-thumb {
 .img-shutdown-font.disabled .b-font:before {
   content: "\e689";
   color: #3f8ce8;
+}
+.move-font .b-font {
+  *zoom: expression( this.runtimeStyle['zoom'] = '1',this.innerHTML = '&#xe65e');
 }
 .move-font .b-font:before {
   content: "\e65e";
@@ -2998,6 +3454,9 @@ textarea::-webkit-scrollbar-thumb {
   content: "\e65e";
   color: inherit;
 }
+.share-font .b-font {
+  *zoom: expression( this.runtimeStyle['zoom'] = '1',this.innerHTML = '&#xe65a');
+}
 .share-font .b-font:before {
   content: "\e65a";
   color: inherit;
@@ -3006,6 +3465,9 @@ textarea::-webkit-scrollbar-thumb {
 .share-font.disabled .b-font:before {
   content: "\e65a";
   color: inherit;
+}
+.new-file-font .b-font {
+  *zoom: expression( this.runtimeStyle['zoom'] = '1',this.innerHTML = '&#xe65d');
 }
 .new-file-font .b-font:before {
   content: "\e65d";
@@ -3016,6 +3478,9 @@ textarea::-webkit-scrollbar-thumb {
   content: "\e65d";
   color: inherit;
 }
+.file-font .b-font {
+  *zoom: expression( this.runtimeStyle['zoom'] = '1',this.innerHTML = '&#xe65b');
+}
 .file-font .b-font:before {
   content: "\e65b";
   color: #fcc550;
@@ -3025,6 +3490,9 @@ textarea::-webkit-scrollbar-thumb {
   content: "\e65b";
   color: #fcc550;
 }
+.folder-font .b-font {
+  *zoom: expression( this.runtimeStyle['zoom'] = '1',this.innerHTML = '&#xe65c');
+}
 .folder-font .b-font:before {
   content: "\e65c";
   color: #3f8ce8;
@@ -3033,6 +3501,9 @@ textarea::-webkit-scrollbar-thumb {
 .folder-font.disabled .b-font:before {
   content: "\e65c";
   color: #3f8ce8;
+}
+.letter-font .b-font {
+  *zoom: expression( this.runtimeStyle['zoom'] = '1',this.innerHTML = '&#xe659');
 }
 .letter-font .b-font:before {
   content: "\e659";
@@ -3047,12 +3518,15 @@ textarea::-webkit-scrollbar-thumb {
 .letter-font:active .b-font:before,
 .letter-font.active .b-font:before {
   content: "\e659";
-  color: #009de3;
+  color: #3f8ce8;
 }
 .letter-font.native .b-font:before,
 .letter-font.disabled .b-font:before {
   content: "\e659";
   color: inherit;
+}
+.time-font .b-font {
+  *zoom: expression( this.runtimeStyle['zoom'] = '1',this.innerHTML = '&#xe658');
 }
 .time-font .b-font:before {
   content: "\e658";
@@ -3067,12 +3541,15 @@ textarea::-webkit-scrollbar-thumb {
 .time-font:active .b-font:before,
 .time-font.active .b-font:before {
   content: "\e658";
-  color: #009de3;
+  color: #3f8ce8;
 }
 .time-font.native .b-font:before,
 .time-font.disabled .b-font:before {
   content: "\e658";
   color: inherit;
+}
+.rename-font .b-font {
+  *zoom: expression( this.runtimeStyle['zoom'] = '1',this.innerHTML = '&#xe687');
 }
 .rename-font .b-font:before {
   content: "\e687";
@@ -3083,6 +3560,9 @@ textarea::-webkit-scrollbar-thumb {
   content: "\e687";
   color: inherit;
 }
+.delete-template-font .b-font {
+  *zoom: expression( this.runtimeStyle['zoom'] = '1',this.innerHTML = '&#xe605');
+}
 .delete-template-font .b-font:before {
   content: "\e605";
   color: #999999;
@@ -3092,6 +3572,9 @@ textarea::-webkit-scrollbar-thumb {
   content: "\e605";
   color: #999999;
 }
+.real-time-font .b-font {
+  *zoom: expression( this.runtimeStyle['zoom'] = '1',this.innerHTML = '&#xe6af');
+}
 .real-time-font .b-font:before {
   content: "\e6af";
   color: #fcc550;
@@ -3100,6 +3583,9 @@ textarea::-webkit-scrollbar-thumb {
 .real-time-font.disabled .b-font:before {
   content: "\e6af";
   color: #fcc550;
+}
+.data-source-table-font .b-font {
+  *zoom: expression( this.runtimeStyle['zoom'] = '1',this.innerHTML = '&#xe67b');
 }
 .data-source-table-font .b-font:before {
   content: "\e67b";
@@ -3121,6 +3607,9 @@ textarea::-webkit-scrollbar-thumb {
   content: "\e67b";
   color: #3f8ce8;
 }
+.etl-table-font .b-font {
+  *zoom: expression( this.runtimeStyle['zoom'] = '1',this.innerHTML = '&#xe680');
+}
 .etl-table-font .b-font:before {
   content: "\e680";
   color: #3f8ce8;
@@ -3140,6 +3629,9 @@ textarea::-webkit-scrollbar-thumb {
 .etl-table-font.disabled .b-font:before {
   content: "\e680";
   color: #3f8ce8;
+}
+.excel-table-font .b-font {
+  *zoom: expression( this.runtimeStyle['zoom'] = '1',this.innerHTML = '&#xe682');
 }
 .excel-table-font .b-font:before {
   content: "\e682";
@@ -3161,6 +3653,9 @@ textarea::-webkit-scrollbar-thumb {
   content: "\e682";
   color: #3f8ce8;
 }
+.sql-table-font .b-font {
+  *zoom: expression( this.runtimeStyle['zoom'] = '1',this.innerHTML = '&#xe681');
+}
 .sql-table-font .b-font:before {
   content: "\e681";
   color: #3f8ce8;
@@ -3181,6 +3676,9 @@ textarea::-webkit-scrollbar-thumb {
   content: "\e681";
   color: #3f8ce8;
 }
+.refresh-table-font .b-font {
+  *zoom: expression( this.runtimeStyle['zoom'] = '1',this.innerHTML = '&#xe683');
+}
 .refresh-table-font .b-font:before {
   content: "\e683";
   color: inherit;
@@ -3190,6 +3688,9 @@ textarea::-webkit-scrollbar-thumb {
   content: "\e683";
   color: inherit;
 }
+.recover-chart-font-hightlight .b-font {
+  *zoom: expression( this.runtimeStyle['zoom'] = '1',this.innerHTML = '&#xe6b4');
+}
 .recover-chart-font-hightlight .b-font:before {
   content: "\e6b4";
   color: inherit;
@@ -3198,6 +3699,9 @@ textarea::-webkit-scrollbar-thumb {
 .recover-chart-font-hightlight.disabled .b-font:before {
   content: "\e6b4";
   color: inherit;
+}
+.tables-tile-view-font .b-font {
+  *zoom: expression( this.runtimeStyle['zoom'] = '1',this.innerHTML = '&#xe685');
 }
 .tables-tile-view-font .b-font:before {
   content: "\e685";
@@ -3219,6 +3723,9 @@ textarea::-webkit-scrollbar-thumb {
   content: "\e685";
   color: inherit;
 }
+.tables-relation-view-font .b-font {
+  *zoom: expression( this.runtimeStyle['zoom'] = '1',this.innerHTML = '&#xe684');
+}
 .tables-relation-view-font .b-font:before {
   content: "\e684";
   color: inherit;
@@ -3239,6 +3746,9 @@ textarea::-webkit-scrollbar-thumb {
   content: "\e684";
   color: inherit;
 }
+.add-new-table-pull-down-font .b-font {
+  *zoom: expression( this.runtimeStyle['zoom'] = '1',this.innerHTML = '&#xe62d');
+}
 .add-new-table-pull-down-font .b-font:before {
   content: "\e62d";
   color: #ffffff;
@@ -3247,6 +3757,9 @@ textarea::-webkit-scrollbar-thumb {
 .add-new-table-pull-down-font.disabled .b-font:before {
   content: "\e62d";
   color: #ffffff;
+}
+.data-link-check-font .b-font {
+  *zoom: expression( this.runtimeStyle['zoom'] = '1',this.innerHTML = '&#xe611');
 }
 .data-link-check-font .b-font:before {
   content: "\e611";
@@ -3268,6 +3781,9 @@ textarea::-webkit-scrollbar-thumb {
   content: "\e611";
   color: #ffffff;
 }
+.edit-set-font .b-font {
+  *zoom: expression( this.runtimeStyle['zoom'] = '1',this.innerHTML = '&#xe634');
+}
 .edit-set-font .b-font:before {
   content: "\e634";
   color: inherit;
@@ -3282,6 +3798,9 @@ textarea::-webkit-scrollbar-thumb {
 .edit-set-font.disabled .b-font:before {
   content: "\e634";
   color: inherit;
+}
+.new-analysis-font .b-font {
+  *zoom: expression( this.runtimeStyle['zoom'] = '1',this.innerHTML = '&#xe692');
 }
 .new-analysis-font .b-font:before {
   content: "\e692";
@@ -3298,6 +3817,9 @@ textarea::-webkit-scrollbar-thumb {
   content: "\e692";
   color: #ffffff;
 }
+.data-config-font .b-font {
+  *zoom: expression( this.runtimeStyle['zoom'] = '1',this.innerHTML = '&#xe693');
+}
 .data-config-font .b-font:before {
   content: "\e693";
   color: #ffffff;
@@ -3312,6 +3834,9 @@ textarea::-webkit-scrollbar-thumb {
 .data-config-font.disabled .b-font:before {
   content: "\e693";
   color: #ffffff;
+}
+.folder-list-view .b-font {
+  *zoom: expression( this.runtimeStyle['zoom'] = '1',this.innerHTML = '&#xe694');
 }
 .folder-list-view .b-font:before {
   content: "\e694";
@@ -3333,6 +3858,9 @@ textarea::-webkit-scrollbar-thumb {
   content: "\e694";
   color: inherit;
 }
+.folder-card-view .b-font {
+  *zoom: expression( this.runtimeStyle['zoom'] = '1',this.innerHTML = '&#xe685');
+}
 .folder-card-view .b-font:before {
   content: "\e685";
   color: inherit;
@@ -3353,6 +3881,9 @@ textarea::-webkit-scrollbar-thumb {
   content: "\e685";
   color: inherit;
 }
+.item-check-font .b-font {
+  *zoom: expression( this.runtimeStyle['zoom'] = '1',this.innerHTML = '&#xe611');
+}
 .item-check-font .b-font:before {
   content: "\e611";
   color: #ffffff;
@@ -3366,12 +3897,15 @@ textarea::-webkit-scrollbar-thumb {
 .item-check-font:active .b-font:before,
 .item-check-font.active .b-font:before {
   content: "\e611";
-  color: #009de3;
+  color: #3f8ce8;
 }
 .item-check-font.native .b-font:before,
 .item-check-font.disabled .b-font:before {
   content: "\e611";
   color: #ffffff;
+}
+.table-no-sort-no-filter-font .b-font {
+  *zoom: expression( this.runtimeStyle['zoom'] = '1',this.innerHTML = '&#xe66a');
 }
 .table-no-sort-no-filter-font .b-font:before {
   content: "\e66a";
@@ -3388,6 +3922,9 @@ textarea::-webkit-scrollbar-thumb {
   content: "\e66a";
   color: inherit;
 }
+.table-no-sort-filter-font .b-font {
+  *zoom: expression( this.runtimeStyle['zoom'] = '1',this.innerHTML = '&#xe66b');
+}
 .table-no-sort-filter-font .b-font:before {
   content: "\e66b";
   color: inherit;
@@ -3402,6 +3939,9 @@ textarea::-webkit-scrollbar-thumb {
 .table-no-sort-filter-font.disabled .b-font:before {
   content: "\e66b";
   color: inherit;
+}
+.table-descending-filter-font .b-font {
+  *zoom: expression( this.runtimeStyle['zoom'] = '1',this.innerHTML = '&#xe667');
 }
 .table-descending-filter-font .b-font:before {
   content: "\e667";
@@ -3418,6 +3958,9 @@ textarea::-webkit-scrollbar-thumb {
   content: "\e667";
   color: inherit;
 }
+.table-ascending-filter-font .b-font {
+  *zoom: expression( this.runtimeStyle['zoom'] = '1',this.innerHTML = '&#xe669');
+}
 .table-ascending-filter-font .b-font:before {
   content: "\e669";
   color: inherit;
@@ -3432,6 +3975,9 @@ textarea::-webkit-scrollbar-thumb {
 .table-ascending-filter-font.disabled .b-font:before {
   content: "\e669";
   color: inherit;
+}
+.table-descending-no-filter-font .b-font {
+  *zoom: expression( this.runtimeStyle['zoom'] = '1',this.innerHTML = '&#xe666');
 }
 .table-descending-no-filter-font .b-font:before {
   content: "\e666";
@@ -3448,6 +3994,9 @@ textarea::-webkit-scrollbar-thumb {
   content: "\e666";
   color: inherit;
 }
+.table-ascending-no-filter-font .b-font {
+  *zoom: expression( this.runtimeStyle['zoom'] = '1',this.innerHTML = '&#xe668');
+}
 .table-ascending-no-filter-font .b-font:before {
   content: "\e668";
   color: inherit;
@@ -3462,6 +4011,9 @@ textarea::-webkit-scrollbar-thumb {
 .table-ascending-no-filter-font.disabled .b-font:before {
   content: "\e668";
   color: inherit;
+}
+.table-no-sort-font .b-font {
+  *zoom: expression( this.runtimeStyle['zoom'] = '1',this.innerHTML = '&#xe66c');
 }
 .table-no-sort-font .b-font:before {
   content: "\e66c";
@@ -3478,6 +4030,9 @@ textarea::-webkit-scrollbar-thumb {
   content: "\e66c";
   color: inherit;
 }
+.primary-key-font .b-font {
+  *zoom: expression( this.runtimeStyle['zoom'] = '1',this.innerHTML = '&#xe67d;');
+}
 .primary-key-font .b-font:before {
   content: "\e67d;";
   color: inherit;
@@ -3493,6 +4048,9 @@ textarea::-webkit-scrollbar-thumb {
   content: "\e67d;";
   color: inherit;
 }
+.table-open-row-style-font .b-font {
+  *zoom: expression( this.runtimeStyle['zoom'] = '1',this.innerHTML = '&#xe671');
+}
 .table-open-row-style-font .b-font:before {
   content: "\e671";
   color: inherit;
@@ -3506,12 +4064,15 @@ textarea::-webkit-scrollbar-thumb {
 .table-open-row-style-font:active .b-font:before,
 .table-open-row-style-font.active .b-font:before {
   content: "\e671";
-  color: #009de3;
+  color: #3f8ce8;
 }
 .table-open-row-style-font.native .b-font:before,
 .table-open-row-style-font.disabled .b-font:before {
   content: "\e671";
   color: inherit;
+}
+.table-open-col-style-font .b-font {
+  *zoom: expression( this.runtimeStyle['zoom'] = '1',this.innerHTML = '&#xe672');
 }
 .table-open-col-style-font .b-font:before {
   content: "\e672";
@@ -3526,12 +4087,15 @@ textarea::-webkit-scrollbar-thumb {
 .table-open-col-style-font:active .b-font:before,
 .table-open-col-style-font.active .b-font:before {
   content: "\e672";
-  color: #009de3;
+  color: #3f8ce8;
 }
 .table-open-col-style-font.native .b-font:before,
 .table-open-col-style-font.disabled .b-font:before {
   content: "\e672";
   color: inherit;
+}
+.calculate-function-font .b-font {
+  *zoom: expression( this.runtimeStyle['zoom'] = '1',this.innerHTML = '&#xe6a3');
 }
 .calculate-function-font .b-font:before {
   content: "\e6a3";
@@ -3542,6 +4106,9 @@ textarea::-webkit-scrollbar-thumb {
   content: "\e6a3";
   color: #666666;
 }
+.path-set-doubt .b-font {
+  *zoom: expression( this.runtimeStyle['zoom'] = '1',this.innerHTML = '&#xe69a');
+}
 .path-set-doubt .b-font:before {
   content: "\e69a";
   color: #3f8ce8;
@@ -3550,6 +4117,9 @@ textarea::-webkit-scrollbar-thumb {
 .path-set-doubt.disabled .b-font:before {
   content: "\e69a";
   color: #3f8ce8;
+}
+.rename-report-font .b-font {
+  *zoom: expression( this.runtimeStyle['zoom'] = '1',this.innerHTML = '&#xe687');
 }
 .rename-report-font .b-font:before {
   content: "\e687";
@@ -3560,6 +4130,9 @@ textarea::-webkit-scrollbar-thumb {
   content: "\e687";
   color: #3f8ce8;
 }
+.remove-report-font .b-font {
+  *zoom: expression( this.runtimeStyle['zoom'] = '1',this.innerHTML = '&#xe605');
+}
 .remove-report-font .b-font:before {
   content: "\e605";
   color: #e85050;
@@ -3568,6 +4141,9 @@ textarea::-webkit-scrollbar-thumb {
 .remove-report-font.disabled .b-font:before {
   content: "\e605";
   color: #e85050;
+}
+.excel-upload-tip-font .b-font {
+  *zoom: expression( this.runtimeStyle['zoom'] = '1',this.innerHTML = '&#xe69e');
 }
 .excel-upload-tip-font .b-font:before {
   content: "\e69e";
@@ -3578,6 +4154,9 @@ textarea::-webkit-scrollbar-thumb {
   content: "\e69e";
   color: #3f8ce8;
 }
+.excel-field-type-string-font .b-font {
+  *zoom: expression( this.runtimeStyle['zoom'] = '1',this.innerHTML = '&#xe622');
+}
 .excel-field-type-string-font .b-font:before {
   content: "\e622";
   color: #3f8ce8;
@@ -3586,6 +4165,9 @@ textarea::-webkit-scrollbar-thumb {
 .excel-field-type-string-font.disabled .b-font:before {
   content: "\e622";
   color: #3f8ce8;
+}
+.excel-field-type-number-font .b-font {
+  *zoom: expression( this.runtimeStyle['zoom'] = '1',this.innerHTML = '&#xe61f');
 }
 .excel-field-type-number-font .b-font:before {
   content: "\e61f";
@@ -3596,6 +4178,9 @@ textarea::-webkit-scrollbar-thumb {
   content: "\e61f";
   color: #3f8ce8;
 }
+.excel-field-type-date-font .b-font {
+  *zoom: expression( this.runtimeStyle['zoom'] = '1',this.innerHTML = '&#xe61b');
+}
 .excel-field-type-date-font .b-font:before {
   content: "\e61b";
   color: #3f8ce8;
@@ -3604,6 +4189,9 @@ textarea::-webkit-scrollbar-thumb {
 .excel-field-type-date-font.disabled .b-font:before {
   content: "\e61b";
   color: #3f8ce8;
+}
+.excel-field-type-pull-down-font .b-font {
+  *zoom: expression( this.runtimeStyle['zoom'] = '1',this.innerHTML = '&#xe608');
 }
 .excel-field-type-pull-down-font .b-font:before {
   content: "\e608";
@@ -3614,6 +4202,9 @@ textarea::-webkit-scrollbar-thumb {
   content: "\e608";
   color: #3f8ce8;
 }
+.data-link-set-font .b-font {
+  *zoom: expression( this.runtimeStyle['zoom'] = '1',this.innerHTML = '&#xe678');
+}
 .data-link-set-font .b-font:before {
   content: "\e678";
   color: #3f8ce8;
@@ -3622,6 +4213,9 @@ textarea::-webkit-scrollbar-thumb {
 .data-link-set-font.disabled .b-font:before {
   content: "\e678";
   color: #3f8ce8;
+}
+.data-link-test-font .b-font {
+  *zoom: expression( this.runtimeStyle['zoom'] = '1',this.innerHTML = '&#xe686');
 }
 .data-link-test-font .b-font:before {
   content: "\e686";
@@ -3632,6 +4226,9 @@ textarea::-webkit-scrollbar-thumb {
   content: "\e686";
   color: #3f8ce8;
 }
+.data-link-copy-font .b-font {
+  *zoom: expression( this.runtimeStyle['zoom'] = '1',this.innerHTML = '&#xe610');
+}
 .data-link-copy-font .b-font:before {
   content: "\e610";
   color: #58cc7d;
@@ -3640,6 +4237,9 @@ textarea::-webkit-scrollbar-thumb {
 .data-link-copy-font.disabled .b-font:before {
   content: "\e610";
   color: #58cc7d;
+}
+.data-link-remove-font .b-font {
+  *zoom: expression( this.runtimeStyle['zoom'] = '1',this.innerHTML = '&#xe600');
 }
 .data-link-remove-font .b-font:before {
   content: "\e600";
@@ -3650,6 +4250,9 @@ textarea::-webkit-scrollbar-thumb {
   content: "\e600";
   color: #e85050;
 }
+.cube-path-confirm-font .b-font {
+  *zoom: expression( this.runtimeStyle['zoom'] = '1',this.innerHTML = '&#xe64e');
+}
 .cube-path-confirm-font .b-font:before {
   content: "\e64e";
   color: #fbb03b;
@@ -3658,6 +4261,9 @@ textarea::-webkit-scrollbar-thumb {
 .cube-path-confirm-font.disabled .b-font:before {
   content: "\e64e";
   color: #fbb03b;
+}
+.target-style-less-dot-font .b-font {
+  *zoom: expression( this.runtimeStyle['zoom'] = '1',this.innerHTML = '&#xe6a2');
 }
 .target-style-less-dot-font .b-font:before {
   content: "\e6a2";
@@ -3668,6 +4274,9 @@ textarea::-webkit-scrollbar-thumb {
   content: "\e6a2";
   color: #e85050;
 }
+.target-style-equal-dot-font .b-font {
+  *zoom: expression( this.runtimeStyle['zoom'] = '1',this.innerHTML = '&#xe6a2');
+}
 .target-style-equal-dot-font .b-font:before {
   content: "\e6a2";
   color: #f9a744;
@@ -3676,6 +4285,9 @@ textarea::-webkit-scrollbar-thumb {
 .target-style-equal-dot-font.disabled .b-font:before {
   content: "\e6a2";
   color: #f9a744;
+}
+.target-style-more-dot-font .b-font {
+  *zoom: expression( this.runtimeStyle['zoom'] = '1',this.innerHTML = '&#xe6a2');
 }
 .target-style-more-dot-font .b-font:before {
   content: "\e6a2";
@@ -3686,6 +4298,9 @@ textarea::-webkit-scrollbar-thumb {
   content: "\e6a2";
   color: #58cc7d;
 }
+.target-style-less-arrow-font .b-font {
+  *zoom: expression( this.runtimeStyle['zoom'] = '1',this.innerHTML = '&#xe6a1');
+}
 .target-style-less-arrow-font .b-font:before {
   content: "\e6a1";
   color: #e85050;
@@ -3694,6 +4309,9 @@ textarea::-webkit-scrollbar-thumb {
 .target-style-less-arrow-font.disabled .b-font:before {
   content: "\e6a1";
   color: #e85050;
+}
+.target-style-equal-arrow-font .b-font {
+  *zoom: expression( this.runtimeStyle['zoom'] = '1',this.innerHTML = '&#xe69f');
 }
 .target-style-equal-arrow-font .b-font:before {
   content: "\e69f";
@@ -3704,6 +4322,9 @@ textarea::-webkit-scrollbar-thumb {
   content: "\e69f";
   color: #f9a744;
 }
+.target-style-more-arrow-font .b-font {
+  *zoom: expression( this.runtimeStyle['zoom'] = '1',this.innerHTML = '&#xe6a0');
+}
 .target-style-more-arrow-font .b-font:before {
   content: "\e6a0";
   color: #58cc7d;
@@ -3712,6 +4333,9 @@ textarea::-webkit-scrollbar-thumb {
 .target-style-more-arrow-font.disabled .b-font:before {
   content: "\e6a0";
   color: #58cc7d;
+}
+.calculate-target-font .b-font {
+  *zoom: expression( this.runtimeStyle['zoom'] = '1',this.innerHTML = '&#xe6a3');
 }
 .calculate-target-font .b-font:before {
   content: "\e6a3";
@@ -3722,6 +4346,9 @@ textarea::-webkit-scrollbar-thumb {
   content: "\e6a3";
   color: inherit;
 }
+.task-list-font .b-font {
+  *zoom: expression( this.runtimeStyle['zoom'] = '1',this.innerHTML = '&#xe694');
+}
 .task-list-font .b-font:before {
   content: "\e694";
   color: #3f8ce8;
@@ -3730,6 +4357,9 @@ textarea::-webkit-scrollbar-thumb {
 .task-list-font.disabled .b-font:before {
   content: "\e694";
   color: #3f8ce8;
+}
+.widget-combo-detail-font .b-font {
+  *zoom: expression( this.runtimeStyle['zoom'] = '1',this.innerHTML = '&#xe697');
 }
 .widget-combo-detail-font .b-font:before {
   content: "\e697";
@@ -3740,6 +4370,9 @@ textarea::-webkit-scrollbar-thumb {
   content: "\e697";
   color: #3f8ce8;
 }
+.widget-combo-pull-down-font .b-font {
+  *zoom: expression( this.runtimeStyle['zoom'] = '1',this.innerHTML = '&#xe6ab');
+}
 .widget-combo-pull-down-font .b-font:before {
   content: "\e6ab";
   color: #3f8ce8;
@@ -3748,6 +4381,9 @@ textarea::-webkit-scrollbar-thumb {
 .widget-combo-pull-down-font.disabled .b-font:before {
   content: "\e6ab";
   color: #3f8ce8;
+}
+.widget-tools-filter-font .b-font {
+  *zoom: expression( this.runtimeStyle['zoom'] = '1',this.innerHTML = '&#xe60f');
 }
 .widget-tools-filter-font .b-font:before {
   content: "\e60f";
@@ -3758,6 +4394,9 @@ textarea::-webkit-scrollbar-thumb {
   content: "\e60f";
   color: #3f8ce8;
 }
+.widget-tools-clear-font .b-font {
+  *zoom: expression( this.runtimeStyle['zoom'] = '1',this.innerHTML = '&#xe63d');
+}
 .widget-tools-clear-font .b-font:before {
   content: "\e63d";
   color: #3f8ce8;
@@ -3766,6 +4405,9 @@ textarea::-webkit-scrollbar-thumb {
 .widget-tools-clear-font.disabled .b-font:before {
   content: "\e63d";
   color: #3f8ce8;
+}
+.widget-tools-export-excel-font .b-font {
+  *zoom: expression( this.runtimeStyle['zoom'] = '1',this.innerHTML = '&#xe635');
 }
 .widget-tools-export-excel-font .b-font:before {
   content: "\e635";
@@ -3776,6 +4418,9 @@ textarea::-webkit-scrollbar-thumb {
   content: "\e635";
   color: #3f8ce8;
 }
+.widget-combo-expand-font .b-font {
+  *zoom: expression( this.runtimeStyle['zoom'] = '1',this.innerHTML = '&#xe697');
+}
 .widget-combo-expand-font .b-font:before {
   content: "\e697";
   color: inherit;
@@ -3784,6 +4429,9 @@ textarea::-webkit-scrollbar-thumb {
 .widget-combo-expand-font.disabled .b-font:before {
   content: "\e697";
   color: inherit;
+}
+.widget-combo-linkage-font .b-font {
+  *zoom: expression( this.runtimeStyle['zoom'] = '1',this.innerHTML = '&#xe63c');
 }
 .widget-combo-linkage-font .b-font:before {
   content: "\e63c";
@@ -3794,6 +4442,9 @@ textarea::-webkit-scrollbar-thumb {
   content: "\e63c";
   color: inherit;
 }
+.widget-combo-rename-edit-font .b-font {
+  *zoom: expression( this.runtimeStyle['zoom'] = '1',this.innerHTML = '&#xe670');
+}
 .widget-combo-rename-edit-font .b-font:before {
   content: "\e670";
   color: inherit;
@@ -3802,6 +4453,9 @@ textarea::-webkit-scrollbar-thumb {
 .widget-combo-rename-edit-font.disabled .b-font:before {
   content: "\e670";
   color: inherit;
+}
+.widget-combo-show-title-font .b-font {
+  *zoom: expression( this.runtimeStyle['zoom'] = '1',this.innerHTML = '&#xe64c');
 }
 .widget-combo-show-title-font .b-font:before {
   content: "\e64c";
@@ -3812,6 +4466,9 @@ textarea::-webkit-scrollbar-thumb {
   content: "\e64c";
   color: inherit;
 }
+.widget-combo-title-left-font .b-font {
+  *zoom: expression( this.runtimeStyle['zoom'] = '1',this.innerHTML = '&#xe654');
+}
 .widget-combo-title-left-font .b-font:before {
   content: "\e654";
   color: inherit;
@@ -3820,6 +4477,9 @@ textarea::-webkit-scrollbar-thumb {
 .widget-combo-title-left-font.disabled .b-font:before {
   content: "\e654";
   color: inherit;
+}
+.widget-combo-title-center-font .b-font {
+  *zoom: expression( this.runtimeStyle['zoom'] = '1',this.innerHTML = '&#xe64f');
 }
 .widget-combo-title-center-font .b-font:before {
   content: "\e64f";
@@ -3830,6 +4490,9 @@ textarea::-webkit-scrollbar-thumb {
   content: "\e64f";
   color: inherit;
 }
+.widget-combo-show-filter-font .b-font {
+  *zoom: expression( this.runtimeStyle['zoom'] = '1',this.innerHTML = '&#xe60f');
+}
 .widget-combo-show-filter-font .b-font:before {
   content: "\e60f";
   color: inherit;
@@ -3838,6 +4501,9 @@ textarea::-webkit-scrollbar-thumb {
 .widget-combo-show-filter-font.disabled .b-font:before {
   content: "\e60f";
   color: inherit;
+}
+.widget-combo-export-excel-font .b-font {
+  *zoom: expression( this.runtimeStyle['zoom'] = '1',this.innerHTML = '&#xe635');
 }
 .widget-combo-export-excel-font .b-font:before {
   content: "\e635";
@@ -3848,6 +4514,9 @@ textarea::-webkit-scrollbar-thumb {
   content: "\e635";
   color: inherit;
 }
+.widget-combo-copy .b-font {
+  *zoom: expression( this.runtimeStyle['zoom'] = '1',this.innerHTML = '&#xe610');
+}
 .widget-combo-copy .b-font:before {
   content: "\e610";
   color: inherit;
@@ -3856,6 +4525,9 @@ textarea::-webkit-scrollbar-thumb {
 .widget-combo-copy.disabled .b-font:before {
   content: "\e610";
   color: inherit;
+}
+.widget-combo-delete .b-font {
+  *zoom: expression( this.runtimeStyle['zoom'] = '1',this.innerHTML = '&#xe605');
 }
 .widget-combo-delete .b-font:before {
   content: "\e605";
@@ -3866,6 +4538,9 @@ textarea::-webkit-scrollbar-thumb {
   content: "\e605";
   color: inherit;
 }
+.widget-combo-asc-font .b-font {
+  *zoom: expression( this.runtimeStyle['zoom'] = '1',this.innerHTML = '&#xe63f');
+}
 .widget-combo-asc-font .b-font:before {
   content: "\e63f";
   color: inherit;
@@ -3874,6 +4549,9 @@ textarea::-webkit-scrollbar-thumb {
 .widget-combo-asc-font.disabled .b-font:before {
   content: "\e63f";
   color: inherit;
+}
+.widget-combo-des-font .b-font {
+  *zoom: expression( this.runtimeStyle['zoom'] = '1',this.innerHTML = '&#xe63a');
 }
 .widget-combo-des-font .b-font:before {
   content: "\e63a";
@@ -3884,6 +4562,9 @@ textarea::-webkit-scrollbar-thumb {
   content: "\e63a";
   color: inherit;
 }
+.widget-combo-clear-font .b-font {
+  *zoom: expression( this.runtimeStyle['zoom'] = '1',this.innerHTML = '&#xe63d');
+}
 .widget-combo-clear-font .b-font:before {
   content: "\e63d";
   color: inherit;
@@ -3893,6 +4574,9 @@ textarea::-webkit-scrollbar-thumb {
   content: "\e63d";
   color: inherit;
 }
+.detail-table-popup-font .b-font {
+  *zoom: expression( this.runtimeStyle['zoom'] = '1',this.innerHTML = '&#xe6ac');
+}
 .detail-table-popup-font .b-font:before {
   content: "\e6ac";
   color: inherit;
@@ -3901,12 +4585,15 @@ textarea::-webkit-scrollbar-thumb {
 .detail-table-popup-font:focus .b-font:before,
 .detail-table-popup-font.hover .b-font:before {
   content: "\e6ac";
-  color: #009de3;
+  color: #3f8ce8;
 }
 .detail-table-popup-font.native .b-font:before,
 .detail-table-popup-font.disabled .b-font:before {
   content: "\e6ac";
   color: inherit;
+}
+.chart-drill-up .b-font {
+  *zoom: expression( this.runtimeStyle['zoom'] = '1',this.innerHTML = '&#xe6ad');
 }
 .chart-drill-up .b-font:before {
   content: "\e6ad";
@@ -3917,6 +4604,9 @@ textarea::-webkit-scrollbar-thumb {
   content: "\e6ad";
   color: inherit;
 }
+.chart-drill-down .b-font {
+  *zoom: expression( this.runtimeStyle['zoom'] = '1',this.innerHTML = '&#xe608');
+}
 .chart-drill-down .b-font:before {
   content: "\e608";
   color: inherit;
@@ -3925,6 +4615,9 @@ textarea::-webkit-scrollbar-thumb {
 .chart-drill-down.disabled .b-font:before {
   content: "\e608";
   color: inherit;
+}
+.report-filter-open-font .b-font {
+  *zoom: expression( this.runtimeStyle['zoom'] = '1',this.innerHTML = '&#xe648');
 }
 .report-filter-open-font .b-font:before {
   content: "\e648";
@@ -3935,6 +4628,9 @@ textarea::-webkit-scrollbar-thumb {
   content: "\e648";
   color: inherit;
 }
+.report-filter-close-font .b-font {
+  *zoom: expression( this.runtimeStyle['zoom'] = '1',this.innerHTML = '&#xe645');
+}
 .report-filter-close-font .b-font:before {
   content: "\e645";
   color: inherit;
@@ -3943,6 +4639,9 @@ textarea::-webkit-scrollbar-thumb {
 .report-filter-close-font.disabled .b-font:before {
   content: "\e645";
   color: inherit;
+}
+.report-apply-hangout-normal-font .b-font {
+  *zoom: expression( this.runtimeStyle['zoom'] = '1',this.innerHTML = '&#xe66d');
 }
 .report-apply-hangout-normal-font .b-font:before {
   content: "\e66d";
@@ -3953,6 +4652,9 @@ textarea::-webkit-scrollbar-thumb {
   content: "\e66d";
   color: #999999;
 }
+.report-apply-hangout-ing-font .b-font {
+  *zoom: expression( this.runtimeStyle['zoom'] = '1',this.innerHTML = '&#xe66d');
+}
 .report-apply-hangout-ing-font .b-font:before {
   content: "\e66d";
   color: #3f8ce8;
@@ -3961,6 +4663,9 @@ textarea::-webkit-scrollbar-thumb {
 .report-apply-hangout-ing-font.disabled .b-font:before {
   content: "\e66d";
   color: #3f8ce8;
+}
+.report-hangout-font .b-font {
+  *zoom: expression( this.runtimeStyle['zoom'] = '1',this.innerHTML = '&#xe64b');
 }
 .report-hangout-font .b-font:before {
   content: "\e64b";
@@ -3971,6 +4676,9 @@ textarea::-webkit-scrollbar-thumb {
   content: "\e64b";
   color: #58cc7d;
 }
+.report-cancel-hangout-font .b-font {
+  *zoom: expression( this.runtimeStyle['zoom'] = '1',this.innerHTML = '&#xe64b');
+}
 .report-cancel-hangout-font .b-font:before {
   content: "\e64b";
   color: #999999;
@@ -3979,6 +4687,9 @@ textarea::-webkit-scrollbar-thumb {
 .report-cancel-hangout-font.disabled .b-font:before {
   content: "\e64b";
   color: #999999;
+}
+.report-hangout-ing-mark-font .b-font {
+  *zoom: expression( this.runtimeStyle['zoom'] = '1',this.innerHTML = '&#xe64b');
 }
 .report-hangout-ing-mark-font .b-font:before {
   content: "\e64b";
@@ -3989,6 +4700,9 @@ textarea::-webkit-scrollbar-thumb {
   content: "\e64b";
   color: #3f8ce8;
 }
+.delete-font-package .b-font {
+  *zoom: expression( this.runtimeStyle['zoom'] = '1',this.innerHTML = '&#xe605');
+}
 .delete-font-package .b-font:before {
   content: "\e605";
   color: #e85050;
@@ -3997,6 +4711,9 @@ textarea::-webkit-scrollbar-thumb {
 .delete-font-package.disabled .b-font:before {
   content: "\e605";
   color: #e85050;
+}
+.delete-h-font-package .b-font {
+  *zoom: expression( this.runtimeStyle['zoom'] = '1',this.innerHTML = '&#xe605');
 }
 .delete-h-font-package .b-font:before {
   content: "\e605";
@@ -4007,6 +4724,9 @@ textarea::-webkit-scrollbar-thumb {
   content: "\e605";
   color: #e85050;
 }
+.rename-font-package .b-font {
+  *zoom: expression( this.runtimeStyle['zoom'] = '1',this.innerHTML = '&#xe687');
+}
 .rename-font-package .b-font:before {
   content: "\e687";
   color: #3f8ce8;
@@ -4015,6 +4735,9 @@ textarea::-webkit-scrollbar-thumb {
 .rename-font-package.disabled .b-font:before {
   content: "\e687";
   color: #3f8ce8;
+}
+.package-selected-font .b-font {
+  *zoom: expression( this.runtimeStyle['zoom'] = '1',this.innerHTML = '&#xe6b3');
 }
 .package-selected-font .b-font:before {
   content: "\e6b3";
@@ -4025,6 +4748,9 @@ textarea::-webkit-scrollbar-thumb {
   content: "\e6b3";
   color: #3f8ce8;
 }
+.package-not-selected-font .b-font {
+  *zoom: expression( this.runtimeStyle['zoom'] = '1',this.innerHTML = '&#xe6b2');
+}
 .package-not-selected-font .b-font:before {
   content: "\e6b2";
   color: #3f8ce8;
@@ -4033,6 +4759,9 @@ textarea::-webkit-scrollbar-thumb {
 .package-not-selected-font.disabled .b-font:before {
   content: "\e6b2";
   color: #3f8ce8;
+}
+.report-detail-info-font .b-font {
+  *zoom: expression( this.runtimeStyle['zoom'] = '1',this.innerHTML = '&#xe66e');
 }
 .report-detail-info-font .b-font:before {
   content: "\e66e";
@@ -4043,6 +4772,9 @@ textarea::-webkit-scrollbar-thumb {
   content: "\e66e";
   color: #f07d0a;
 }
+.report-rename-font .b-font {
+  *zoom: expression( this.runtimeStyle['zoom'] = '1',this.innerHTML = '&#xe670');
+}
 .report-rename-font .b-font:before {
   content: "\e670";
   color: #58cc7d;
@@ -4051,6 +4783,9 @@ textarea::-webkit-scrollbar-thumb {
 .report-rename-font.disabled .b-font:before {
   content: "\e670";
   color: #58cc7d;
+}
+.report-cancel-share-font .b-font {
+  *zoom: expression( this.runtimeStyle['zoom'] = '1',this.innerHTML = '&#xe6b5');
 }
 .report-cancel-share-font .b-font:before {
   content: "\e6b5";
@@ -4061,6 +4796,9 @@ textarea::-webkit-scrollbar-thumb {
   content: "\e6b5";
   color: #3f8ce8;
 }
+.drill-push-up-font .b-font {
+  *zoom: expression( this.runtimeStyle['zoom'] = '1',this.innerHTML = '&#xe630');
+}
 .drill-push-up-font .b-font:before {
   content: "\e630";
   color: inherit;
@@ -4070,6 +4808,9 @@ textarea::-webkit-scrollbar-thumb {
   content: "\e630";
   color: inherit;
 }
+.drill-push-down-font .b-font {
+  *zoom: expression( this.runtimeStyle['zoom'] = '1',this.innerHTML = '&#xe62d');
+}
 .drill-push-down-font .b-font:before {
   content: "\e62d";
   color: inherit;
@@ -4078,6 +4819,9 @@ textarea::-webkit-scrollbar-thumb {
 .drill-push-down-font.disabled .b-font:before {
   content: "\e62d";
   color: inherit;
+}
+.drag-tag-font .b-font {
+  *zoom: expression( this.runtimeStyle['zoom'] = '1',this.innerHTML = '&#xe600');
 }
 .drag-tag-font .b-font:before {
   content: "\e600";

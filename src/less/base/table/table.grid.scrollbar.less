@@ -8,14 +8,16 @@
   transition-timing-function: ease;
   user-select: none;
   background-color: @scroll-color;
-  filter:~"progid:DXImageTransform.Microsoft.gradient(startColorstr=#0D666666,endColorstr=#0D666666)";
+  @ieColor: argb(@scroll-color);
+  filter:~"progid:DXImageTransform.Microsoft.gradient(startColorstr=@{ieColor},endColorstr=@{ieColor}";
   border-radius: 5px;
 }
 
 .bi-theme-dark {
   .scrollbar-layout-main {
     background-color: @scroll-color-theme-dark;
-    filter:~"progid:DXImageTransform.Microsoft.gradient(startColorstr=#0Dcccccc,endColorstr=#0Dcccccc)";
+    @ieColor: argb(@scroll-color-theme-dark);
+    filter:~"progid:DXImageTransform.Microsoft.gradient(startColorstr=@{ieColor},endColorstr=@{ieColor}";
   }
 }
 
@@ -38,13 +40,15 @@
   left: 0;
   transition-property: background-color;
   background-color: @scroll-color;
-  filter:~"progid:DXImageTransform.Microsoft.gradient(startColorstr=#0D666666,endColorstr=#0D666666)";
+  @ieColor: argb(@scroll-color);
+  filter:~"progid:DXImageTransform.Microsoft.gradient(startColorstr=@{ieColor},endColorstr=@{ieColor}";
 }
 
 .bi-theme-dark {
   .scrollbar-layout-main-horizontal {
     background-color: @scroll-color-theme-dark;
-    filter:~"progid:DXImageTransform.Microsoft.gradient(startColorstr=#0Dcccccc,endColorstr=#0Dcccccc)";
+    @ieColor: argb(@scroll-color-theme-dark);
+    filter:~"progid:DXImageTransform.Microsoft.gradient(startColorstr=@{ieColor},endColorstr=@{ieColor}";
   }
 }
 
@@ -119,13 +123,15 @@
 
 .public-scrollbar-face:after {
   background-color: @scroll-thumb-color;
-  filter:~"progid:DXImageTransform.Microsoft.gradient(startColorstr=#4C666666,endColorstr=#4C666666)";
+  @ieColor: argb(@scroll-thumb-color);
+  filter:~"progid:DXImageTransform.Microsoft.gradient(startColorstr=@{ieColor},endColorstr=@{ieColor}";
 }
 
 .bi-theme-dark {
   .public-scrollbar-face:after {
     background-color: @scroll-thumb-color-theme-dark;
-    filter:~"progid:DXImageTransform.Microsoft.gradient(startColorstr=#4Ccccccc,endColorstr=#4Ccccccc)";
+    @ieColor: argb(@scroll-thumb-color-theme-dark);
+    filter:~"progid:DXImageTransform.Microsoft.gradient(startColorstr=@{ieColor},endColorstr=@{ieColor}";
   }
 }
 
@@ -133,7 +139,8 @@
 .public-scrollbar-main-active .public-scrollbar-face:after,
 .public-scrollbar-faceActive:after {
   background-color: @scroll-thumb-focus-color;
-  filter:~"progid:DXImageTransform.Microsoft.gradient(startColorstr=#B2666666,endColorstr=#B2666666)";
+  @ieColor: argb(@scroll-thumb-focus-color);
+  filter:~"progid:DXImageTransform.Microsoft.gradient(startColorstr=@{ieColor},endColorstr=@{ieColor}";
 }
 
 .bi-theme-dark {
@@ -141,7 +148,8 @@
   .public-scrollbar-main-active .public-scrollbar-face:after,
   .public-scrollbar-faceActive:after {
     background-color: @scroll-thumb-focus-color-theme-dark;
-    filter:~"progid:DXImageTransform.Microsoft.gradient(startColorstr=#B2cccccc,endColorstr=#B2cccccc)";
+    @ieColor: argb(@scroll-thumb-focus-color-theme-dark);
+    filter:~"progid:DXImageTransform.Microsoft.gradient(startColorstr=@{ieColor},endColorstr=@{ieColor}";
   }
 }
 

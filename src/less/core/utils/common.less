@@ -158,8 +158,9 @@
 }
 
 .bi-z-index-mask {
-  background-color: rgba(26, 26, 26, .5);
-  filter: ~"progid:DXImageTransform.Microsoft.gradient(startColorstr=#7f1a1a1a,endColorstr=#7f1a1a1a)";
+  background-color: fade(@color-bi-background-black, 50%);
+  @ieColor: argb(fade(@color-bi-background-black, 50%));
+  filter: ~"progid:DXImageTransform.Microsoft.gradient(startColorstr=@{ieColor},endColorstr=@{ieColor})";
 }
 
 //只有背景变化
