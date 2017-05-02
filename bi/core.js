@@ -6169,14 +6169,14 @@ Date._DN = [BI.i18nText("BI-Basic_Sunday"),
     BI.i18nText("BI-Basic_Sunday")];
 
 // short day names
-Date._SDN = [BI.i18nText("BI-Date_Day"),
-    BI.i18nText("BI-Basic_One"),
-    BI.i18nText("BI-Basic_Two"),
-    BI.i18nText("BI-Basic_Three"),
-    BI.i18nText("BI-Basic_Four"),
-    BI.i18nText("BI-Basic_Five"),
-    BI.i18nText("BI-Basic_Six"),
-    BI.i18nText("BI-Date_Day")];
+Date._SDN = [BI.i18nText("BI-Basic_Simple_Sunday"),
+    BI.i18nText("BI-Basic_Simple_Monday"),
+    BI.i18nText("BI-Basic_Simple_Tuesday"),
+    BI.i18nText("BI-Basic_Simple_Wednesday"),
+    BI.i18nText("BI-Basic_Simple_Thursday"),
+    BI.i18nText("BI-Basic_Simple_Friday"),
+    BI.i18nText("BI-Basic_Simple_Saturday"),
+    BI.i18nText("BI-Basic_Simple_Sunday")];
 
 // Monday first, etc.
 Date._FD = 1;
