@@ -4023,7 +4023,7 @@ BI.FormulaComboTrigger = BI.inherit(BI.Widget, {
             var str = item.match(fieldRegx);
             if (BI.isNotEmptyArray(str)) {
                 var id = str[0].substring(2, item.length - 1);
-                var item = BI.find(self.options.items, function (i, item) {
+                var item = BI.find(BI.flatten(self.options.items), function (i, item) {
                     return id === item.value;
                 });
                 formulaString = formulaString + item.text;
