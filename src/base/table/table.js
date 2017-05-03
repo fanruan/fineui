@@ -348,10 +348,6 @@ BI.Table = BI.inherit(BI.Widget, {
             }]]
         }))));
 
-        //var scrollElement = isRight ? scrollBottomLeft.element : scrollBottomRight.element;
-        //var scrollTopElement = isRight ? scrollTopLeft.element : scrollTopRight.element;
-        //var otherElement = isRight ? scrollBottomRight.element : scrollBottomLeft.element;
-
         this._initFreezeScroll();
         BI.nextTick(function () {
             if (self.element.is(":visible")) {
@@ -368,268 +364,19 @@ BI.Table = BI.inherit(BI.Widget, {
     _initFreezeScroll: function () {
         var self = this, o = this.options;
         scroll(this.scrollBottomRight.element, this.scrollTopRight.element, this.scrollBottomLeft.element);
-        scroll(this.scrollBottomLeft.element, this.scrollTopLeft.element, this.scrollBottomRight.element);
+        // scroll(this.scrollBottomLeft.element, this.scrollTopLeft.element, this.scrollBottomRight.element);
 
         function scroll(scrollElement, scrollTopElement, otherElement) {
-            var scrolling, scrollingX;
-            var fn = function (event, delta, deltaX, deltaY) {
-                var inf = self._getScrollOffsetAndDur(event);
-                if (deltaY < 0 || deltaY > 0) {
-                    if (scrolling) {
-                        scrollElement[0].scrollTop = scrolling;
-                    }
-                    scrolling = scrollElement[0].scrollTop - delta * inf.offset;
-                    var stopPropagation = false;
-                    var st = scrollElement[0].scrollTop;
-                    scrollElement[0].scrollTop = scrolling;
-                    if (scrollElement[0].scrollTop !== st) {
-                        stopPropagation = true;
-                    }
-                    scrollElement[0].scrollTop = st;
-                    self._animateScrollTo(scrollElement, scrollElement[0].scrollTop, scrolling, inf.dur, "linear", {
-                        onStart: function () {
-                        },
-                        onUpdate: function (top) {
-                            otherElement[0].scrollTop = top;
-                            self.fireEvent(BI.Table.EVENT_TABLE_SCROLL, top);
-                        },
-                        onComplete: function () {
-                            self.fireEvent(BI.Table.EVENT_TABLE_SCROLL, scrolling);
-                            scrolling = null;
-                        }
-                    });
-
-
-                    //otherElement[0].scrollTop = scrollTop;
-                    //scrollElement[0].scrollTop = scrollTop;
-                    //self.fireEvent(BI.Table.EVENT_TABLE_SCROLL, scrollTop);
-                    if (stopPropagation === true) {
-                        event.stopPropagation();
-                        return false;
-                    }
-                    return;
-                }
-                //if (deltaX < 0 || deltaX > 0) {
-                //    if (scrollingX) {
-                //        scrollElement[0].scrollLeft = scrollingX;
-                //    }
-                //    scrollingX = scrollElement[0].scrollLeft + delta * inf.offset;
-                //    var stopPropagation = false;
-                //    var sl = scrollElement[0].scrollLeft;
-                //    scrollElement[0].scrollLeft = scrollingX;
-                //    if (scrollElement[0].scrollLeft !== sl) {
-                //        stopPropagation = true;
-                //    }
-                //    scrollElement[0].scrollLeft = sl;
-                //    self._animateScrollTo(scrollElement, scrollElement[0].scrollLeft, scrollingX, inf.dur, "linear", {
-                //        direction: "left",
-                //        onStart: function () {
-                //        },
-                //        onUpdate: function (left) {
-                //            scrollTopElement[0].scrollLeft = left;
-                //            self.fireEvent(BI.Table.EVENT_TABLE_SCROLL, null, left);
-                //        },
-                //        onComplete: function () {
-                //            self.fireEvent(BI.Table.EVENT_TABLE_SCROLL, null, scrollingX);
-                //            scrollingX = null;
-                //        }
-                //    });
-                //
-                //
-                //    //otherElement[0].scrollTop = scrollTop;
-                //    //scrollElement[0].scrollTop = scrollTop;
-                //    //self.fireEvent(BI.Table.EVENT_TABLE_SCROLL, scrollTop);
-                //    if (stopPropagation === true) {
-                //        event.stopPropagation();
-                //        return false;
-                //    }
-                //}
-            };
-            scrollElement.mousewheel(fn);
-            var scrollTop = 0, scrollLeft = 0;
             scrollElement.scroll(function (e) {
-                var change = false;
-                if (scrollElement.scrollTop() != scrollTop) {
-                    var old = otherElement.scrollTop();
-                    otherElement.scrollTop(scrollElement.scrollTop());
-                    scrollTop = scrollElement.scrollTop();
-                    if (Math.abs(old - otherElement[0].scrollTop) > 0.1) {
-                        e.stopPropagation();
-                        change = true;
-                    }
-                }
-                if (scrollElement.scrollLeft() != scrollLeft) {
-                    var old = scrollTopElement.scrollLeft();
-                    scrollTopElement.scrollLeft(scrollElement.scrollLeft());
-                    scrollLeft = scrollElement.scrollLeft();
-                    if (Math.abs(old - scrollTopElement[0].scrollLeft) > 0.1) {
-                        e.stopPropagation();
-                        change = true;
-                    }
-                }
-                // self.fireEvent(BI.Table.EVENT_TABLE_SCROLL);
-                if (change === true) {
-                    e.stopPropagation();
-                    //return false;
-                }
+                otherElement.scrollTop(scrollElement.scrollTop());
+                scrollTopElement.scrollLeft(scrollElement.scrollLeft());
+                self.fireEvent(BI.Table.EVENT_TABLE_SCROLL);
             });
         }
     },
 
-    _animateScrollTo: function (el, from, to, duration, easing, op) {
-        var self = this;
-        var onStart = op.onStart, onComplete = op.onComplete, onUpdate = op.onUpdate;
-        var startTime = BI.getTime(), _delay, progress = 0, _request;
-        _cancelTween();
-        _startTween();
-        var diff = to - from;
-        el._stop = 0;
-        function _step() {
-            if (el._stop) {
-                return;
-            }
-            if (!progress) {
-                onStart.call();
-            }
-            progress = BI.getTime() - startTime;
-            _tween();
-            if (progress >= el.time) {
-                el.time = (progress > el.time) ? progress + _delay - (progress - el.time) : progress + _delay - 1;
-                if (el.time < progress + 1) {
-                    el.time = progress + 1;
-                }
-            }
-            if (el.time < duration) {
-                el._id = _request(_step);
-            } else {
-                el[op.direction == 'left' ? "scrollLeft" : "scrollTop"](to);
-                onComplete.call();
-            }
-        }
-
-        function _tween() {
-            var top = to;
-            if (duration > 0) {
-                el.currVal = _ease(el.time, from, diff, duration, easing);
-                el[op.direction == 'left' ? "scrollLeft" : "scrollTop"](top = Math.round(el.currVal));
-            } else {
-                el[op.direction == 'left' ? "scrollLeft" : "scrollTop"](to);
-            }
-            onUpdate(top);
-        }
-
-        function _startTween() {
-            _delay = 1000 / 60;
-            el.time = progress + _delay;
-            _request = (!requestAnimationFrame()) ? function (f) {
-                _tween();
-                return setTimeout(f, 0.01);
-            } : requestAnimationFrame();
-            el._id = _request(_step);
-        }
-
-        function requestAnimationFrame() {
-            return window.requestAnimationFrame ||
-                window.webkitRequestAnimationFrame ||
-                window.mozRequestAnimationFrame ||
-                window.msRequestAnimationFrame ||
-                window.oRequestAnimationFrame;
-        }
-
-        function cancelAnimationFrame() {
-            return window.cancelAnimationFrame ||
-                window.webkitCancelAnimationFrame ||
-                window.mozCancelAnimationFrame ||
-                window.msCancelAnimationFrame ||
-                window.oCancelAnimationFrame ||
-                window.cancelRequestAnimationFrame ||
-                window.webkitCancelRequestAnimationFrame ||
-                window.mozCancelRequestAnimationFrame ||
-                window.msCancelRequestAnimationFrame ||
-                window.oCancelRequestAnimationFrame
-        }
-
-        function _cancelTween() {
-            if (el._id == null) {
-                return;
-            }
-            if (!cancelAnimationFrame()) {
-                clearTimeout(el._id);
-            } else {
-                cancelAnimationFrame()(el._id);
-            }
-            el._id = null;
-        }
-
-        function _ease(t, b, c, d, type) {
-            switch (type) {
-                case "linear":
-                    return c * t / d + b;
-                    break;
-                case "mcsLinearOut":
-                    t /= d;
-                    t--;
-                    return c * Math.sqrt(1 - t * t) + b;
-                    break;
-                case "easeInOutSmooth":
-                    t /= d / 2;
-                    if (t < 1) {
-                        return c / 2 * t * t + b;
-                    }
-                    t--;
-                    return -c / 2 * (t * (t - 2) - 1) + b;
-                    break;
-                case "easeInOutStrong":
-                    t /= d / 2;
-                    if (t < 1) {
-                        return c / 2 * Math.pow(2, 10 * (t - 1)) + b;
-                    }
-                    t--;
-                    return c / 2 * ( -Math.pow(2, -10 * t) + 2 ) + b;
-                    break;
-                case "easeInOut":
-                case "mcsEaseInOut":
-                    t /= d / 2;
-                    if (t < 1) {
-                        return c / 2 * t * t * t + b;
-                    }
-                    t -= 2;
-                    return c / 2 * (t * t * t + 2) + b;
-                    break;
-                case "easeOutSmooth":
-                    t /= d;
-                    t--;
-                    return -c * (t * t * t * t - 1) + b;
-                    break;
-                case "easeOutStrong":
-                    return c * ( -Math.pow(2, -10 * t / d) + 1 ) + b;
-                    break;
-                case "easeOut":
-                case "mcsEaseOut":
-                default:
-                    var ts = (t /= d) * t, tc = ts * t;
-                    return b + c * (0.499999999999997 * tc * ts + -2.5 * ts * ts + 5.5 * tc + -6.5 * ts + 4 * t);
-            }
-        }
-    },
-
-    _getScrollOffsetAndDur: function (event) {
-        var offset = 40, dur = 200;
-        if (event.originalEvent.wheelDelta) {
-            offset = Math.abs(event.originalEvent.wheelDelta);
-        }
-        if (event.deltaFactor < 2) {
-            offset = 3;
-            dur = 17;
-        }
-        return {
-            offset: offset,
-            dur: dur
-        };
-    },
-
     resize: function () {
-        this._resize();
+        this._resize && this._resize();
     },
 
     _createCells: function (items, columnSize, mergeCols, TDs, Ws, start, rowSize) {
@@ -881,17 +628,7 @@ BI.Table = BI.inherit(BI.Widget, {
             items: [this.scrollBottomRight]
         });
 
-        this._resize = function () {
-            if (self.element.is(":visible")) {
-                self.setColumnSize(o.columnSize);
-            }
-        };
-
         this._initNormalScroll();
-        BI.ResizeDetector.addResizeListener(this, function () {
-            self._resize();
-            self.fireEvent(BI.Table.EVENT_TABLE_RESIZE);
-        });
         BI.nextTick(function () {
             if (self.element.is(":visible")) {
                 self.fireEvent(BI.Table.EVENT_TABLE_AFTER_INIT);
@@ -901,66 +638,8 @@ BI.Table = BI.inherit(BI.Widget, {
 
     _initNormalScroll: function () {
         var self = this;
-        var scrolling, scrollX;
-        this.scrollBottomRight.element.mousewheel(function (event, delta, deltaX, deltaY) {
-            var inf = self._getScrollOffsetAndDur(event);
-            if (deltaY < 0 || deltaY > 0) {
-                var ele = self.scrollBottomRight.element;
-                if (scrolling) {
-                    ele[0].scrollTop = scrolling;
-                }
-
-                scrolling = ele[0].scrollTop - delta * inf.offset;
-                var stopPropagation = false;
-                var st = ele[0].scrollTop;
-                ele[0].scrollTop = scrolling;
-                if (ele[0].scrollTop !== st) {
-                    stopPropagation = true;
-                }
-                ele[0].scrollTop = st;
-                self._animateScrollTo(ele, ele[0].scrollTop, scrolling, inf.dur, "linear", {
-                    onStart: function () {
-                    },
-                    onUpdate: function (top) {
-                        self.fireEvent(BI.Table.EVENT_TABLE_SCROLL, top);
-                    },
-                    onComplete: function () {
-                        self.fireEvent(BI.Table.EVENT_TABLE_SCROLL, scrolling);
-                        scrolling = null;
-                    }
-                });
-                //var scrollTop = self.scrollBottomRight.element[0].scrollTop = self.scrollBottomRight.element[0].scrollTop - delta * offset;
-                //self.fireEvent(BI.Table.EVENT_TABLE_SCROLL, scrollTop);
-                if (stopPropagation === true) {
-                    event.stopPropagation();
-                    return false;
-                }
-            }
-        });
-        var scrollTop = 0, scrollLeft = 0;
         this.scrollBottomRight.element.scroll(function (e) {
-            var change = false;
-            var scrollElement = self.scrollBottomRight.element;
-            if (scrollElement.scrollTop() != scrollTop) {
-                if (Math.abs(scrollElement.scrollTop() - scrollTop) > 0.1) {
-                    e.stopPropagation();
-                    change = true;
-                }
-                scrollTop = scrollElement.scrollTop();
-            }
-            if (scrollElement.scrollLeft() != scrollLeft) {
-                if (Math.abs(scrollElement.scrollLeft() - scrollLeft) > 0.1) {
-                    e.stopPropagation();
-                    change = true;
-                }
-                scrollLeft = scrollElement.scrollLeft();
-            }
             self.fireEvent(BI.Table.EVENT_TABLE_SCROLL);
-            if (change === true) {
-                e.stopPropagation();
-                //return false;
-            }
-            return false;
         });
     },
 
@@ -1074,7 +753,7 @@ BI.Table = BI.inherit(BI.Widget, {
                 }
                 BI.each(colgroupTds, function (i, colgroup) {
                     var width = colgroup.attr("width") | 0;
-                    if (width !== sizes[i]) {
+                    if (sizes[i] !== "" && width !== sizes[i]) {
                         var w = self._calculateWidth(sizes[i]);
                         colgroup.attr("width", w).css("width", w);
                         BI.each(bodyTds, function (j, items) {
@@ -1181,7 +860,7 @@ BI.Table = BI.inherit(BI.Widget, {
         } else {
             BI.each(this.colgroupTds, function (i, colgroup) {
                 var width = colgroup.attr("width") | 0;
-                if (width !== o.columnSize[i]) {
+                if (o.columnSize[i] !== "" && width !== o.columnSize[i]) {
                     var w = self._calculateWidth(o.columnSize[i]);
                     colgroup.attr("width", w).css("width", w);
                     BI.each(self.bodyTds, function (j, items) {
@@ -1388,7 +1067,9 @@ BI.Table = BI.inherit(BI.Widget, {
             if (w > 1.05) {
                 w += o.columnSize.length;
             }
-            this.tableContainer.element.width(w);
+            if (w > 1.05) {
+                this.tableContainer.element.width(w);
+            }
         }
     },
 
@@ -1913,14 +1594,6 @@ BI.Table = BI.inherit(BI.Widget, {
         } else {
             this._createNormalTable();
         }
-    },
-
-    empty: function () {
-        BI.Table.superclass.empty.apply(this, arguments);
-    },
-
-    destroy: function () {
-        BI.Table.superclass.destroy.apply(this, arguments);
     }
 })
 ;
