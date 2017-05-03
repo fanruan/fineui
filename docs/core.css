@@ -3065,6 +3065,7 @@ i {
 }
 .bi-z-index-mask {
   background-color: rgba(26, 26, 26, 0.5);
+  color: #ffffff;
   filter: progid:DXImageTransform.Microsoft.gradient(startColorstr=#801a1a1a,endColorstr=#801a1a1a);
 }
 .bi-list-item:hover,
