@@ -20,7 +20,7 @@ BI.extend(jQuery.fn, {
      */
     __textKeywordMarked__: function (text, keyword, py) {
         if (!BI.isKey(keyword)) {
-            return this.text(text);
+            return this.text((text + "").replaceAll(" ", "　"));
         }
         keyword = keyword + "";
         keyword = BI.toUpperCase(keyword);
@@ -43,7 +43,7 @@ BI.extend(jQuery.fn, {
             if (tidx >= 0) {
                 this.append(textLeft.substr(0, tidx));
                 this.append($("<span>").addClass("bi-keyword-red-mark")
-                    .text(textLeft.substr(tidx, keyword.length)));
+                    .text(textLeft.substr(tidx, keyword.length).replaceAll(" ", "　")));
 
                 textLeft = textLeft.substr(tidx + keyword.length);
                 if (py != null) {
@@ -52,7 +52,7 @@ BI.extend(jQuery.fn, {
             } else if (pidx != null && pidx >= 0 && Math.floor(pidx / text.length) === Math.floor((pidx + keyword.length - 1) / text.length)) {
                 this.append(textLeft.substr(0, pidx));
                 this.append($("<span>").addClass("bi-keyword-red-mark")
-                    .text(textLeft.substr(pidx, keyword.length)));
+                    .text(textLeft.substr(pidx, keyword.length).replaceAll(" ", "　")));
                 if (py != null) {
                     py = py.substr(pidx + keyword.length);
                 }
@@ -553,8 +553,8 @@ BI.extend(jQuery, {
     getComboPosition: function (combo, popup, extraWidth, extraHeight, needAdaptHeight, directions, offsetStyle) {
         extraWidth || (extraWidth = 0);
         extraHeight || (extraHeight = 0);
-        var maxHeight = $("body").bounds().height - extraHeight;
-        maxHeight = Math.min(popup.attr("maxHeight") || maxHeight, maxHeight);
+        var bodyHeight = $("body").bounds().height - extraHeight;
+        var maxHeight = Math.min(popup.attr("maxHeight") || bodyHeight, bodyHeight);
         popup.resetHeight && popup.resetHeight(maxHeight);
         var position = $.getComboPositionByDirections(combo, popup, extraWidth, extraHeight, needAdaptHeight, directions || ['bottom', 'top', 'right', 'left']);
         switch (offsetStyle) {
@@ -577,6 +577,7 @@ BI.extend(jQuery, {
                 }
                 break;
         }
+        popup.resetHeight && popup.resetHeight(Math.min(bodyHeight - position.top, maxHeight));
         return position;
     }
 });

@@ -20,7 +20,7 @@ BI.MultiTreePopup = BI.inherit(BI.Pane, {
 
         var self = this, opts = this.options;
 
-        this.selected_values = {};
+        this.selectedValues = {};
 
         this.tree = BI.createWidget({
             type: "bi.sync_tree",

@@ -35,12 +35,6 @@ BI.SequenceTableTreeNumber = BI.inherit(BI.Widget, {
         this.renderedCells = [];
         this.renderedKeys = [];
 
-        this.header = BI.createWidget(o.sequenceHeaderCreator || {
-                type: "bi.table_style_cell",
-                cls: "sequence-table-title-cell bi-border",
-                styleGetter: o.headerCellStyleGetter,
-                text: BI.i18nText("BI-Number_Index")
-            });
         this.container = BI.createWidget({
             type: "bi.absolute",
             width: 60,
@@ -54,13 +48,20 @@ BI.SequenceTableTreeNumber = BI.inherit(BI.Widget, {
             items: [this.container]
         });
 
+        this.headerContainer = BI.createWidget({
+            type: "bi.absolute",
+            cls: "bi-border",
+            width: 58,
+            scrollable: false
+        });
+
         this.layout = BI.createWidget({
             type: "bi.vtape",
             element: this,
             items: [{
-                el: this.header,
-                height: this._getHeaderHeight()
-            }, {
+                el: this.headerContainer,
+                height: this._getHeaderHeight() - 2
+            }, {el: {type: "bi.layout"}, height: 2}, {
                 el: this.scrollContainer
             }]
         });
@@ -168,7 +169,7 @@ BI.SequenceTableTreeNumber = BI.inherit(BI.Widget, {
 
     _layout: function () {
         var self = this, o = this.options;
-        var headerHeight = this._getHeaderHeight();
+        var headerHeight = this._getHeaderHeight() - 2;
         var items = this.layout.attr("items");
         if (o.isNeedFreeze === false) {
             items[0].height = 0;
@@ -215,6 +216,26 @@ BI.SequenceTableTreeNumber = BI.inherit(BI.Widget, {
             cnt += number.cnt;
         });
         return Math.max(0, cnt * this.options.rowSize - (this.options.height - this._getHeaderHeight()) + BI.DOM.getScrollWidth());
+    },
+
+    _createHeader: function () {
+        var o = this.options;
+        BI.createWidget({
+            type: "bi.absolute",
+            element: this.headerContainer,
+            items: [{
+                el: o.sequenceHeaderCreator || {
+                    type: "bi.table_style_cell",
+                    cls: "sequence-table-title-cell",
+                    styleGetter: o.headerCellStyleGetter,
+                    text: BI.i18nText("BI-Number_Index")
+                },
+                left: 0,
+                top: 0,
+                right: 0,
+                bottom: 0
+            }]
+        });
     },
 
     _calculateChildrenToRender: function () {
@@ -322,7 +343,8 @@ BI.SequenceTableTreeNumber = BI.inherit(BI.Widget, {
             task.apply(self);
         });
         this.tasks = [];
-        this.header.populate && this.header.populate();
+        this.headerContainer.empty();
+        this._createHeader();
         this._layout();
         this._calculateChildrenToRender();
     },

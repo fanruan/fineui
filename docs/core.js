@@ -14062,6 +14062,10 @@ if (!window.BI) {
             return /(msie|trident)/i.test(navigator.userAgent.toLowerCase());
         },
 
+        isEdge: function () {
+            return /edge/i.test(navigator.userAgent.toLowerCase());
+        },
+
         isChrome: function () {
             return /chrome/i.test(navigator.userAgent.toLowerCase());
         },
@@ -14080,6 +14084,14 @@ if (!window.BI) {
 
         isKhtml: function () {
             return /Konqueror|Safari|KHTML/i.test(navigator.userAgent);
+        },
+
+        isMac: function () {
+            return /macintosh|mac os x/i.test(navigator.userAgent);
+        },
+
+        isWindows: function () {
+            return /windows|win32/i.test(navigator.userAgent);
         },
 
         isSupportCss3: function (style) {
@@ -21978,7 +21990,7 @@ BI.extend(jQuery.fn, {
      */
     __textKeywordMarked__: function (text, keyword, py) {
         if (!BI.isKey(keyword)) {
-            return this.text(text);
+            return this.text((text + "").replaceAll(" ", "　"));
         }
         keyword = keyword + "";
         keyword = BI.toUpperCase(keyword);
@@ -22001,7 +22013,7 @@ BI.extend(jQuery.fn, {
             if (tidx >= 0) {
                 this.append(textLeft.substr(0, tidx));
                 this.append($("<span>").addClass("bi-keyword-red-mark")
-                    .text(textLeft.substr(tidx, keyword.length)));
+                    .text(textLeft.substr(tidx, keyword.length).replaceAll(" ", "　")));
 
                 textLeft = textLeft.substr(tidx + keyword.length);
                 if (py != null) {
@@ -22010,7 +22022,7 @@ BI.extend(jQuery.fn, {
             } else if (pidx != null && pidx >= 0 && Math.floor(pidx / text.length) === Math.floor((pidx + keyword.length - 1) / text.length)) {
                 this.append(textLeft.substr(0, pidx));
                 this.append($("<span>").addClass("bi-keyword-red-mark")
-                    .text(textLeft.substr(pidx, keyword.length)));
+                    .text(textLeft.substr(pidx, keyword.length).replaceAll(" ", "　")));
                 if (py != null) {
                     py = py.substr(pidx + keyword.length);
                 }
@@ -22511,8 +22523,8 @@ BI.extend(jQuery, {
     getComboPosition: function (combo, popup, extraWidth, extraHeight, needAdaptHeight, directions, offsetStyle) {
         extraWidth || (extraWidth = 0);
         extraHeight || (extraHeight = 0);
-        var maxHeight = $("body").bounds().height - extraHeight;
-        maxHeight = Math.min(popup.attr("maxHeight") || maxHeight, maxHeight);
+        var bodyHeight = $("body").bounds().height - extraHeight;
+        var maxHeight = Math.min(popup.attr("maxHeight") || bodyHeight, bodyHeight);
         popup.resetHeight && popup.resetHeight(maxHeight);
         var position = $.getComboPositionByDirections(combo, popup, extraWidth, extraHeight, needAdaptHeight, directions || ['bottom', 'top', 'right', 'left']);
         switch (offsetStyle) {
@@ -22535,6 +22547,7 @@ BI.extend(jQuery, {
                 }
                 break;
         }
+        popup.resetHeight && popup.resetHeight(Math.min(bodyHeight - position.top, maxHeight));
         return position;
     }
 });/**
@@ -22764,9 +22777,9 @@ $(function () {
             return tempValue;
         },
 
-        rgba2rgb: function (rgbColour, BGcolur) {
-            if (BI.isNull(BGcolur)) {
-                BGcolur = 1;
+        rgba2rgb: function (rgbColour, BGcolor) {
+            if (BI.isNull(BGcolor)) {
+                BGcolor = 1;
             }
             if (rgbColour.substr(0, 4) != "rgba") {
                 return "";
@@ -22780,9 +22793,9 @@ $(function () {
             var B = BI.parseFloat(rgbValues[2]);
             var A = BI.parseFloat(rgbValues[3]);
 
-            return "rgb(" + Math.floor(255 * (BGcolur * (1 - A )) + R * A) + "," +
-                Math.floor(255 * (BGcolur * (1 - A )) + G * A) + "," +
-                Math.floor(255 * (BGcolur * (1 - A )) + B * A) + ")";
+            return "rgb(" + Math.floor(255 * (BGcolor * (1 - A )) + R * A) + "," +
+                Math.floor(255 * (BGcolor * (1 - A )) + G * A) + "," +
+                Math.floor(255 * (BGcolor * (1 - A )) + B * A) + ")";
         },
 
         getTextSizeWidth: function (text, fontSize) {
@@ -23645,19 +23658,19 @@ Date._DN = [BI.i18nText("BI-Basic_Sunday"),
     BI.i18nText("BI-Basic_Sunday")];
 
 // short day names
-Date._SDN = [BI.i18nText("BI-Day_Ri"),
-    BI.i18nText("BI-Basic_One"),
-    BI.i18nText("BI-Basic_Two"),
-    BI.i18nText("BI-Basic_Three"),
-    BI.i18nText("BI-Basic_Four"),
-    BI.i18nText("BI-Basic_Five"),
-    BI.i18nText("BI-Basic_Six"),
-    BI.i18nText("BI-Day_Ri")];
+Date._SDN = [BI.i18nText("BI-Basic_Simple_Sunday"),
+    BI.i18nText("BI-Basic_Simple_Monday"),
+    BI.i18nText("BI-Basic_Simple_Tuesday"),
+    BI.i18nText("BI-Basic_Simple_Wednesday"),
+    BI.i18nText("BI-Basic_Simple_Thursday"),
+    BI.i18nText("BI-Basic_Simple_Friday"),
+    BI.i18nText("BI-Basic_Simple_Saturday"),
+    BI.i18nText("BI-Basic_Simple_Sunday")];
 
 // Monday first, etc.
 Date._FD = 1;
 
-// full month names
+// full month namesdat
 Date._MN = [
     BI.i18nText("BI-Basic_January"),
     BI.i18nText("BI-Basic_February"),
@@ -28940,16 +28953,16 @@ $(function () {
 
     //注册控件
     BI.Plugin.registerWidget("bi.grid_table", function (ob) {
-        //IE下滚动条滑动效果不好，禁止掉
-        if (BI.isIE() || BI.isFireFox()) {
+        //非chrome下滚动条滑动效果不好，禁止掉
+        if (!(BI.isChrome() && BI.isWindows() && !BI.isEdge())) {
             return BI.extend(ob, {type: "bi.quick_grid_table"});
         } else {
             return ob;
         }
     });
     BI.Plugin.registerWidget("bi.collection_table", function (ob) {
-        //IE下滚动条滑动效果不好，禁止掉
-        if (BI.isIE() || BI.isFireFox()) {
+        //非chrome下滚动条滑动效果不好，禁止掉
+        if (!(BI.isChrome() && BI.isWindows() && !BI.isEdge())) {
             return BI.extend(ob, {type: "bi.quick_collection_table"});
         } else {
             return ob;

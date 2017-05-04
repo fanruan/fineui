@@ -99,21 +99,21 @@ BI.SyncTree = BI.inherit(BI.TreeView, {
 
     _selectTreeNode: function (treeId, treeNode) {
         var self = this, o = this.options;
-        var parent_values = BI.deepClone(treeNode.parentValues || self._getParentValues(treeNode));
+        var parentValues = BI.deepClone(treeNode.parentValues || self._getParentValues(treeNode));
         var name = this._getNodeValue(treeNode)
-//        var values = parent_values.concat([name]);
+//        var values = parentValues.concat([name]);
         if (treeNode.checked === true) {
         } else {
             var tNode = treeNode;
-            var pNode = this._getTree(this.selected_values, parent_values);
+            var pNode = this._getTree(this.selectedValues, parentValues);
             if (BI.isNotNull(pNode[name])) {
                 delete pNode[name];
             }
             while (tNode != null && BI.isEmpty(pNode)) {
-                parent_values = parent_values.slice(0, parent_values.length - 1);
+                parentValues = parentValues.slice(0, parentValues.length - 1);
                 tNode = tNode.getParentNode();
                 if (tNode != null) {
-                    pNode = this._getTree(this.selected_values, parent_values);
+                    pNode = this._getTree(this.selectedValues, parentValues);
                     name = this._getNodeValue(tNode);
                     delete pNode[name];
                 }
@@ -129,8 +129,8 @@ BI.SyncTree = BI.inherit(BI.TreeView, {
         var op = BI.extend({}, o.paras, {
             "id": treeNode.id,
             "times": 1,
-            "parent_values": parentValues.concat(this._getNodeValue(treeNode)),
-            "check_state": treeNode.getCheckStatus()
+            "parentValues": parentValues.concat(this._getNodeValue(treeNode)),
+            "checkState": treeNode.getCheckStatus()
         });
         var complete = function (d) {
             var nodes = d.items || [];
@@ -178,7 +178,7 @@ BI.SyncTree = BI.inherit(BI.TreeView, {
     },
 
     hasChecked: function () {
-        return !BI.isEmpty(this.selected_values) || BI.SyncTree.superclass.hasChecked.apply(this, arguments);
+        return !BI.isEmpty(this.selectedValues) || BI.SyncTree.superclass.hasChecked.apply(this, arguments);
     },
 
     getValue: function () {
@@ -187,12 +187,12 @@ BI.SyncTree = BI.inherit(BI.TreeView, {
         }
         var checkedValues = this._getSelectedValues();
         if (BI.isEmpty(checkedValues)) {
-            return this.selected_values;
+            return this.selectedValues;
         }
-        if (BI.isEmpty(this.selected_values)) {
+        if (BI.isEmpty(this.selectedValues)) {
             return checkedValues;
         }
-        return this._join(checkedValues, this.selected_values);
+        return this._join(checkedValues, this.selectedValues);
     },
 
     //生成树方法
@@ -200,7 +200,7 @@ BI.SyncTree = BI.inherit(BI.TreeView, {
         delete this.options.keyword;
         BI.extend(this.options.paras, config);
         //取消选中时使用
-        this.selected_values = BI.deepClone(this.options.paras.selected_values) || {};
+        this.selectedValues = BI.deepClone(this.options.paras.selectedValues) || {};
         var setting = this._configSetting();
         this._initTree(setting);
     }

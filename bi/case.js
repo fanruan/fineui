@@ -151,7 +151,7 @@ BI.shortcut("bi.trigger_icon_button", BI.TriggerIconButton);/**
  * @type {*|void|Object}
  */
 BI.MultiSelectItem = BI.inherit(BI.BasicButton, {
-    _defaultConfig: function() {
+    _defaultConfig: function () {
         return BI.extend(BI.MultiSelectItem.superclass._defaultConfig.apply(this, arguments), {
             extraCls: "bi-multi-select-item",
             height: 25,
@@ -160,7 +160,7 @@ BI.MultiSelectItem = BI.inherit(BI.BasicButton, {
             }
         })
     },
-    _init : function() {
+    _init: function () {
         BI.MultiSelectItem.superclass._init.apply(this, arguments);
         var self = this, o = this.options;
         this.checkbox = BI.createWidget({
@@ -180,8 +180,8 @@ BI.MultiSelectItem = BI.inherit(BI.BasicButton, {
             value: o.value,
             py: o.py
         });
-        this.checkbox.on(BI.Controller.EVENT_CHANGE, function(type){
-            if(type ===  BI.Events.CLICK) {
+        this.checkbox.on(BI.Controller.EVENT_CHANGE, function (type) {
+            if (type === BI.Events.CLICK) {
                 self.setSelected(self.isSelected());
             }
         });
@@ -193,7 +193,7 @@ BI.MultiSelectItem = BI.inherit(BI.BasicButton, {
                 type: "bi.center_adapt",
                 items: [this.checkbox],
                 width: 36
-            } ,this.text)
+            }, this.text)
         }))));
     },
 
@@ -202,20 +202,23 @@ BI.MultiSelectItem = BI.inherit(BI.BasicButton, {
         this.checkbox.setEnable(v);
     },
 
-    doRedMark: function(){
+    doRedMark: function () {
         this.text.doRedMark.apply(this.text, arguments);
     },
 
-    unRedMark: function(){
+    unRedMark: function () {
         this.text.unRedMark.apply(this.text, arguments);
     },
 
-    doClick: function(){
+    doClick: function () {
         BI.MultiSelectItem.superclass.doClick.apply(this, arguments);
         this.checkbox.setSelected(this.isSelected());
+        if (this.isValid()) {
+            this.fireEvent(BI.MultiSelectItem.EVENT_CHANGE, this.getValue(), this);
+        }
     },
 
-    setSelected: function(v){
+    setSelected: function (v) {
         BI.MultiSelectItem.superclass.setSelected.apply(this, arguments);
         this.checkbox.setSelected(v);
     }
@@ -4023,7 +4026,7 @@ BI.FormulaComboTrigger = BI.inherit(BI.Widget, {
             var str = item.match(fieldRegx);
             if (BI.isNotEmptyArray(str)) {
                 var id = str[0].substring(2, item.length - 1);
-                var item = BI.find(self.options.items, function (i, item) {
+                var item = BI.find(BI.flatten(self.options.items), function (i, item) {
                     return id === item.value;
                 });
                 formulaString = formulaString + item.text;
@@ -6159,7 +6162,7 @@ BI.StateEditor = BI.inherit(BI.Single, {
             cls: "state-editor-infinite-text bi-disabled",
             textAlign: "left",
             height: o.height,
-            text: BI.i18nText("BI-Unrestricted"),
+            text: BI.i18nText("BI-Basic_Unrestricted"),
             hgap: 4,
             handler: function () {
                 self._showInput();
@@ -6335,7 +6338,7 @@ BI.StateEditor = BI.inherit(BI.Single, {
                 this.text.setTitle("");
                 this.text.element.removeClass("state-editor-infinite-text");
             } else {
-                this.text.setText(BI.i18nText("BI-Unrestricted"));
+                this.text.setText(BI.i18nText("BI-Basic_Unrestricted"));
                 this.text.setTitle("");
                 this.text.element.addClass("state-editor-infinite-text");
             }
@@ -6343,7 +6346,7 @@ BI.StateEditor = BI.inherit(BI.Single, {
         }
         if (BI.isString(v)) {
             if (BI.isEmpty(v)) {
-                this.text.setText(BI.i18nText("BI-Unrestricted"));
+                this.text.setText(BI.i18nText("BI-Basic_Unrestricted"));
                 this.text.setTitle("");
                 this.text.element.addClass("state-editor-infinite-text");
             } else {
@@ -6355,7 +6358,7 @@ BI.StateEditor = BI.inherit(BI.Single, {
         }
         if (BI.isArray(v)) {
             if (BI.isEmpty(v)) {
-                this.text.setText(BI.i18nText("BI-Unrestricted"));
+                this.text.setText(BI.i18nText("BI-Basic_Unrestricted"));
                 this.text.element.addClass("state-editor-infinite-text");
             } else if (v.length === 1) {
                 this.text.setText(v[0]);
@@ -6439,7 +6442,7 @@ BI.SimpleStateEditor = BI.inherit(BI.Single, {
             cls: "state-editor-infinite-text bi-disabled",
             textAlign: "left",
             height: o.height,
-            text: BI.i18nText("BI-Unrestricted"),
+            text: BI.i18nText("BI-Basic_Unrestricted"),
             hgap: 4,
             handler: function () {
                 self._showInput();
@@ -6611,7 +6614,7 @@ BI.SimpleStateEditor = BI.inherit(BI.Single, {
                 this.text.setText(BI.i18nText("BI-Already_Selected"));
                 this.text.element.removeClass("state-editor-infinite-text");
             } else {
-                this.text.setText(BI.i18nText("BI-Unrestricted"));
+                this.text.setText(BI.i18nText("BI-Basic_Unrestricted"));
                 this.text.element.addClass("state-editor-infinite-text");
             }
             return;
@@ -6621,7 +6624,7 @@ BI.SimpleStateEditor = BI.inherit(BI.Single, {
             this.text.setTitle(v);
             this.text.element.removeClass("state-editor-infinite-text");
         } else if (BI.isEmpty(v)) {
-            this.text.setText(BI.i18nText("BI-Unrestricted"));
+            this.text.setText(BI.i18nText("BI-Basic_Unrestricted"));
             this.text.element.addClass("state-editor-infinite-text");
         } else {
             this.text.setText(BI.i18nText("BI-Already_Selected"));
@@ -8804,15 +8807,10 @@ BI.Segment = BI.inherit(BI.Widget, {
         this.buttonGroup = BI.createWidget({
             element: this,
             type: "bi.button_group",
-            items: BI.map(o.items, function (i, item) {
-                return BI.extend({
-                    type: "bi.segment_button",
-                    height: o.height - 2,
-                    whiteSpace: o.whiteSpace
-                }, item, {
-                    cls: (i === 0 ? "bi-border-left " : "")
-                    + (item.cls || "") + " bi-border-top bi-border-right bi-border-bottom"
-                });
+            items: BI.createItems(o.items, {
+                type: "bi.segment_button",
+                height: o.height - 2,
+                whiteSpace: o.whiteSpace
             }),
             layout: [
                 {
@@ -11981,7 +11979,7 @@ BI.ZeroClip = BI.inherit(BI.BasicButton, {
         
         BI.nextTick(function () {
             self.element.zclip({
-                path: BI.resourceURL + "ZeroClipboard.swf",
+                path: BI.resourceURL + "/ZeroClipboard.swf",
                 copy: o.copy,
                 beforeCopy: o.beforeCopy,
                 afterCopy: o.afterCopy

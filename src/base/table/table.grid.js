@@ -294,7 +294,7 @@ BI.GridTable = BI.inherit(BI.Widget, {
         var trh = otrh + this._scrollBarSize;
         var blw = oblw + this._scrollBarSize;
         var blh = oblh + this._scrollBarSize;
-        var brw = obrw+ this._scrollBarSize;
+        var brw = obrw + this._scrollBarSize;
         var brh = obrh + this._scrollBarSize;
 
         var digest = function (el) {
@@ -330,11 +330,11 @@ BI.GridTable = BI.inherit(BI.Widget, {
 
         this.topLeftGrid.setEstimatedColumnSize(freezeColLength > 0 ? totalLeftColumnSize / freezeColLength : 0);
         this.topLeftGrid.setEstimatedRowSize(o.headerRowSize);
-        this.topRightGrid.setEstimatedColumnSize(totalRightColumnSize / (o.columnSize.length - freezeColLength));
+        this.topRightGrid.setEstimatedColumnSize((o.columnSize.length - freezeColLength) > 0 ? (totalRightColumnSize / (o.columnSize.length - freezeColLength)) : 0);
         this.topRightGrid.setEstimatedRowSize(o.headerRowSize);
         this.bottomLeftGrid.setEstimatedColumnSize(freezeColLength > 0 ? totalLeftColumnSize / freezeColLength : 0);
         this.bottomLeftGrid.setEstimatedRowSize(o.rowSize);
-        this.bottomRightGrid.setEstimatedColumnSize(totalRightColumnSize / (o.columnSize.length - freezeColLength));
+        this.bottomRightGrid.setEstimatedColumnSize((o.columnSize.length - freezeColLength) > 0 ? (totalRightColumnSize / (o.columnSize.length - freezeColLength)) : 0);
         this.bottomRightGrid.setEstimatedRowSize(o.rowSize);
 
         var items = this.contextLayout.attr("items");

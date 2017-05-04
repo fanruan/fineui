@@ -57,16 +57,16 @@ $(function () {
 
     //注册控件
     BI.Plugin.registerWidget("bi.grid_table", function (ob) {
-        //IE下滚动条滑动效果不好，禁止掉
-        if (BI.isIE() || BI.isFireFox()) {
+        //非chrome下滚动条滑动效果不好，禁止掉
+        if (!(BI.isChrome() && BI.isWindows() && !BI.isEdge())) {
             return BI.extend(ob, {type: "bi.quick_grid_table"});
         } else {
             return ob;
         }
     });
     BI.Plugin.registerWidget("bi.collection_table", function (ob) {
-        //IE下滚动条滑动效果不好，禁止掉
-        if (BI.isIE() || BI.isFireFox()) {
+        //非chrome下滚动条滑动效果不好，禁止掉
+        if (!(BI.isChrome() && BI.isWindows() && !BI.isEdge())) {
             return BI.extend(ob, {type: "bi.quick_collection_table"});
         } else {
             return ob;

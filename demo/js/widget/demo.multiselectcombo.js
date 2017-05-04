@@ -44,8 +44,8 @@ Demo.MultiSelectCombo = BI.inherit(BI.Widget, {
             var search = BI.Func.getSearchResult(items, kw);
             items = search.matched.concat(search.finded);
         });
-        if (options.selected_values) {//过滤
-            var filter = BI.makeObject(options.selected_values, true);
+        if (options.selectedValues) {//过滤
+            var filter = BI.makeObject(options.selectedValues, true);
             items = BI.filter(items, function (i, ob) {
                 return !filter[ob.value];
             });

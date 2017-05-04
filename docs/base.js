@@ -577,7 +577,7 @@ BI.Text = BI.inherit(BI.Single, {
     setText: function (text) {
         BI.Text.superclass.setText.apply(this, arguments);
         this.options.text = text;
-        this.text.element.html(BI.escape(text).replaceAll(" ", "&nbsp;"));
+        this.text.element.text((text + "").replaceAll(" ", "　"));
     }
 });
 
@@ -767,12 +767,14 @@ BI.BasicButton = BI.inherit(BI.Single, {
                     });
                     break;
                 default:
-                    hand.mousedown(function (e) {
-                        ev(e);
-                    });
-                    hand.mouseup(function (e) {
-                        ev(e);
-                    });
+                    if (o.stopEvent || o.stopPropagation) {
+                        hand.mousedown(function (e) {
+                            ev(e);
+                        });
+                        hand.mouseup(function (e) {
+                            ev(e);
+                        });
+                    }
                     hand.click(clk);
                     break;
             }
@@ -1596,8 +1598,8 @@ BI.TreeView = BI.inherit(BI.Pane, {
             treeNode.times = treeNode.times || 1;
             var param = "id=" + treeNode.id
                 + "&times=" + (treeNode.times++)
-                + "&parent_values= " + window.encodeURIComponent(BI.jsonEncode(parentNode))
-                + "&check_state=" + window.encodeURIComponent(BI.jsonEncode(treeNode.getCheckStatus()));
+                + "&parentValues= " + window.encodeURIComponent(BI.jsonEncode(parentNode))
+                + "&checkState=" + window.encodeURIComponent(BI.jsonEncode(treeNode.getCheckStatus()));
 
             return BI.servletURL + '?op=' + self.options.op + '&cmd=' + self.options.cmd + "&" + param;
         }
@@ -1728,7 +1730,7 @@ BI.TreeView = BI.inherit(BI.Pane, {
             this._buildTree(map, path);
             return;
         }
-        var storeValues = BI.deepClone(this.options.paras.selected_values);
+        var storeValues = BI.deepClone(this.options.paras.selectedValues);
         var treeNode = this._getTree(storeValues, path);
         this._addTreeNode(map, parent, this._getNodeValue(node), treeNode);
     },
@@ -1793,14 +1795,15 @@ BI.TreeView = BI.inherit(BI.Pane, {
     //处理节点
     _dealWidthNodes: function (nodes) {
         var self = this, o = this.options;
-        //处理标红
-        if (BI.isKey(o.paras.keyword)) {
-            var keyword = o.paras.keyword;
-            var ns = BI.Tree.arrayFormat(nodes);
-            BI.each(ns, function (i, n) {
-                n.text = $("<div>").__textKeywordMarked__(n.text, keyword, n.py).html();
-            });
-        }
+        var ns = BI.Tree.arrayFormat(nodes);
+        BI.each(ns, function (i, n) {
+            //处理标红
+            if (BI.isKey(o.paras.keyword)) {
+                n.text = $("<div>").__textKeywordMarked__(n.text, o.paras.keyword, n.py).html();
+            } else {
+                n.text = (n.text + "").replaceAll(" ", "　");
+            }
+        });
         return nodes;
     },
 
@@ -1843,8 +1846,7 @@ BI.TreeView = BI.inherit(BI.Pane, {
             self.nodes = $.fn.zTree.init(tree.element, setting, nodes);
         };
         var op = BI.extend({}, o.paras, {
-            times: 1,
-            type: BI.TreeView.REQ_TYPE_INIT_DATA
+            times: 1
         });
 
         o.itemsCreator(op, function (res) {
@@ -1886,7 +1888,8 @@ BI.TreeView = BI.inherit(BI.Pane, {
                 },
                 view: {
                     showIcon: false,
-                    expandSpeed: ""
+                    expandSpeed: "",
+                    nameIsHTML: true
                 },
                 callback: {}
             };
@@ -1936,8 +1939,8 @@ BI.TreeView = BI.inherit(BI.Pane, {
     },
 
     setSelectedValue: function (value) {
-        this.options.paras.selected_values = value || {};
-        this.selected_values = BI.deepClone(value) || {};
+        this.options.paras.selectedValues = value || {};
+        this.selectedValues = BI.deepClone(value) || {};
     },
 
     updateValue: function (values, param) {
@@ -1977,10 +1980,10 @@ BI.TreeView = BI.inherit(BI.Pane, {
     }
 });
 BI.extend(BI.TreeView, {
-    REQ_TYPE_INIT_DATA: 0,
-    REQ_TYPE_ADJUST_DATA: 1,
-    REQ_TYPE_CALCULATE_SELECT_DATA: 2,
-    REQ_TYPE_SELECTED_DATA: 3
+    REQ_TYPE_INIT_DATA: 1,
+    REQ_TYPE_ADJUST_DATA: 2,
+    REQ_TYPE_SELECT_DATA: 3,
+    REQ_TYPE_GET_SELECTED_DATA: 4
 });
 
 BI.TreeView.EVENT_CHANGE = "EVENT_CHANGE";
@@ -2088,21 +2091,21 @@ BI.SyncTree = BI.inherit(BI.TreeView, {
 
     _selectTreeNode: function (treeId, treeNode) {
         var self = this, o = this.options;
-        var parent_values = BI.deepClone(treeNode.parentValues || self._getParentValues(treeNode));
+        var parentValues = BI.deepClone(treeNode.parentValues || self._getParentValues(treeNode));
         var name = this._getNodeValue(treeNode)
-//        var values = parent_values.concat([name]);
+//        var values = parentValues.concat([name]);
         if (treeNode.checked === true) {
         } else {
             var tNode = treeNode;
-            var pNode = this._getTree(this.selected_values, parent_values);
+            var pNode = this._getTree(this.selectedValues, parentValues);
             if (BI.isNotNull(pNode[name])) {
                 delete pNode[name];
             }
             while (tNode != null && BI.isEmpty(pNode)) {
-                parent_values = parent_values.slice(0, parent_values.length - 1);
+                parentValues = parentValues.slice(0, parentValues.length - 1);
                 tNode = tNode.getParentNode();
                 if (tNode != null) {
-                    pNode = this._getTree(this.selected_values, parent_values);
+                    pNode = this._getTree(this.selectedValues, parentValues);
                     name = this._getNodeValue(tNode);
                     delete pNode[name];
                 }
@@ -2118,8 +2121,8 @@ BI.SyncTree = BI.inherit(BI.TreeView, {
         var op = BI.extend({}, o.paras, {
             "id": treeNode.id,
             "times": 1,
-            "parent_values": parentValues.concat(this._getNodeValue(treeNode)),
-            "check_state": treeNode.getCheckStatus()
+            "parentValues": parentValues.concat(this._getNodeValue(treeNode)),
+            "checkState": treeNode.getCheckStatus()
         });
         var complete = function (d) {
             var nodes = d.items || [];
@@ -2167,7 +2170,7 @@ BI.SyncTree = BI.inherit(BI.TreeView, {
     },
 
     hasChecked: function () {
-        return !BI.isEmpty(this.selected_values) || BI.SyncTree.superclass.hasChecked.apply(this, arguments);
+        return !BI.isEmpty(this.selectedValues) || BI.SyncTree.superclass.hasChecked.apply(this, arguments);
     },
 
     getValue: function () {
@@ -2176,12 +2179,12 @@ BI.SyncTree = BI.inherit(BI.TreeView, {
         }
         var checkedValues = this._getSelectedValues();
         if (BI.isEmpty(checkedValues)) {
-            return this.selected_values;
+            return this.selectedValues;
         }
-        if (BI.isEmpty(this.selected_values)) {
+        if (BI.isEmpty(this.selectedValues)) {
             return checkedValues;
         }
-        return this._join(checkedValues, this.selected_values);
+        return this._join(checkedValues, this.selectedValues);
     },
 
     //生成树方法
@@ -2189,7 +2192,7 @@ BI.SyncTree = BI.inherit(BI.TreeView, {
         delete this.options.keyword;
         BI.extend(this.options.paras, config);
         //取消选中时使用
-        this.selected_values = BI.deepClone(this.options.paras.selected_values) || {};
+        this.selectedValues = BI.deepClone(this.options.paras.selectedValues) || {};
         var setting = this._configSetting();
         this._initTree(setting);
     }
@@ -2219,7 +2222,7 @@ BI.PartTree = BI.inherit(BI.SyncTree, {
         this.tip.setLoading();
         o.itemsCreator(op, function (d) {
             var hasNext = !!d.hasNext, nodes = d.items || [];
-            o.paras.last_search_value = d.last_search_value;
+            o.paras.lastSearchValue = d.lastSearchValue;
             if (self._stop === true) {
                 return;
             }
@@ -2236,35 +2239,35 @@ BI.PartTree = BI.inherit(BI.SyncTree, {
 
     _selectTreeNode: function (treeId, treeNode) {
         var self = this, o = this.options;
-        var parent_values = BI.deepClone(treeNode.parentValues || self._getParentValues(treeNode));
+        var parentValues = BI.deepClone(treeNode.parentValues || self._getParentValues(treeNode));
         var name = this._getNodeValue(treeNode)
-//        var values = parent_values.concat([name]);
+//        var values = parentValues.concat([name]);
         if (treeNode.checked === true) {
             BI.SyncTree.superclass._selectTreeNode.apply(self, arguments);
         } else {
             o.itemsCreator(BI.extend({}, o.paras, {
                 type: BI.TreeView.REQ_TYPE_CALCULATE_SELECT_DATA,
-                selected_values: this.selected_values,
-                not_selected_value: name,
-                parent_values: parent_values
+                selectedValues: this.selectedValues,
+                notSelectedValue: name,
+                parentValues: parentValues
             }), function (new_values) {
-                if (BI.isEqual(self.selected_values, new_values)) {
+                if (BI.isEqual(self.selectedValues, new_values)) {
                     var tNode = treeNode;
-                    var pNode = self._getTree(new_values, parent_values);
+                    var pNode = self._getTree(new_values, parentValues);
                     if (pNode[name]) {
                         delete pNode[name];
                     }
                     while (tNode != null && BI.isEmpty(pNode)) {
-                        parent_values = parent_values.slice(0, parent_values.length - 1);
+                        parentValues = parentValues.slice(0, parentValues.length - 1);
                         tNode = tNode.getParentNode();
                         if (tNode != null) {
-                            pNode = self._getTree(new_values, parent_values);
+                            pNode = self._getTree(new_values, parentValues);
                             name = self._getNodeValue(tNode);
                             delete pNode[name];
                         }
                     }
                 }
-                self.selected_values = new_values;
+                self.selectedValues = new_values;
                 BI.SyncTree.superclass._selectTreeNode.apply(self, arguments);
             });
         }
@@ -2317,7 +2320,7 @@ BI.PartTree = BI.inherit(BI.SyncTree, {
                 return;
             }
             var hasNext = !!d.hasNext, nodes = d.items || [];
-            o.paras.last_search_value = d.last_search_value;
+            o.paras.lastSearchValue = d.lastSearchValue;
             if (nodes.length > 0) {
                 callback(self._dealWidthNodes(nodes));
             }
@@ -2348,7 +2351,7 @@ BI.PartTree = BI.inherit(BI.SyncTree, {
         var result = BI.PartTree.superclass.getValue.apply(this, arguments);
         o.itemsCreator({
             type: BI.TreeView.REQ_TYPE_ADJUST_DATA,
-            selected_values: result
+            selectedValues: result
         }, function (res) {
             result = res;
         });
@@ -2360,10 +2363,10 @@ BI.PartTree = BI.inherit(BI.SyncTree, {
         var o = this.options;
         delete o.paras.keyword;
         BI.extend(o.paras, config);
-        delete o.paras.last_search_value;
+        delete o.paras.lastSearchValue;
         //取消选中时使用
-        this.selected_values = BI.deepClone(o.paras.selected_values) || {};
-        //delete this.options.paras.selected_values;
+        this.selectedValues = BI.deepClone(o.paras.selectedValues) || {};
+        //delete this.options.paras.selectedValues;
         var setting = this._configSetting();
         this._initTree(setting, o.paras.keyword);
     }
@@ -4103,7 +4106,6 @@ BI.Searcher = BI.inherit(BI.Widget, {
                 callback([])
             },
 
-
             el: {
                 type: "bi.search_editor"
             },
@@ -4161,16 +4163,11 @@ BI.Searcher = BI.inherit(BI.Widget, {
 
     _assertPopupView: function () {
         var self = this, o = this.options;
-        if (!BI.Maskers.has(this.getName())) {
+        if ((o.masker && !BI.Maskers.has(this.getName())) || (o.masker === false && !this.popupView)) {
             this.popupView = BI.createWidget(o.popup, {
                 type: "bi.searcher_view",
                 chooseType: o.chooseType
             });
-            BI.Maskers.create(this.getName(), o.adapter, BI.extend({
-                container: this,
-                render: this.popupView
-            }, o.masker));
-
             this.popupView.on(BI.Controller.EVENT_CHANGE, function (type, value, obj) {
                 self.fireEvent(BI.Controller.EVENT_CHANGE, arguments);
                 if (type === BI.Events.CLICK) {
@@ -4197,6 +4194,12 @@ BI.Searcher = BI.inherit(BI.Widget, {
                 self.fireEvent(BI.Searcher.EVENT_AFTER_INIT);
             });
         }
+        if (o.masker && !BI.Maskers.has(this.getName())) {
+            BI.Maskers.create(this.getName(), o.adapter, BI.extend({
+                container: this,
+                render: this.popupView
+            }, o.masker));
+        }
     },
 
     _startSearch: function () {
@@ -4218,7 +4221,7 @@ BI.Searcher = BI.inherit(BI.Widget, {
         BI.nextTick(function (name) {
             BI.Maskers.hide(name);
         }, this.getName());
-        if (BI.Maskers.has(name) && this._isSearching === true) {
+        if (this._isSearching === true) {
             this.popupView && this.popupView.pauseSearch && this.popupView.pauseSearch();
             this.fireEvent(BI.Searcher.EVENT_PAUSE);
         }
@@ -4229,11 +4232,7 @@ BI.Searcher = BI.inherit(BI.Widget, {
         var o = this.options, name = this.getName();
         this._stop = true;
         BI.Maskers.hide(name);
-        if (BI.Maskers.has(name) && this._isSearching === true) {
-            //搜索后清空dom
-            // BI.nextTick(function () {
-            //     BI.Maskers.has(name) && BI.Maskers.get(name).empty();
-            // });
+        if (this._isSearching === true) {
             this.popupView && this.popupView.stopSearch && this.popupView.stopSearch();
             this.fireEvent(BI.Searcher.EVENT_STOP);
         }
@@ -4246,11 +4245,11 @@ BI.Searcher = BI.inherit(BI.Widget, {
             return;
         }
         if (o.isAutoSearch) {
-            var items = (o.adapter.getItems && o.adapter.getItems()) || o.adapter.attr("items") || [];
+            var items = (o.adapter && ((o.adapter.getItems && o.adapter.getItems()) || o.adapter.attr("items"))) || [];
             var finding = BI.Func.getSearchResult(items, keyword);
             var matched = finding.matched, finded = finding.finded;
             this.popupView.populate(finded, matched, keyword);
-            o.isAutoSync && this.popupView.setValue(o.adapter.getValue());
+            o.isAutoSync && o.adapter && o.adapter.getValue && this.popupView.setValue(o.adapter.getValue());
             self.fireEvent(BI.Searcher.EVENT_SEARCHING);
             return;
         }
@@ -4267,7 +4266,7 @@ BI.Searcher = BI.inherit(BI.Widget, {
                 }
                 BI.Maskers.show(self.getName());
                 self.popupView.populate.apply(self.popupView, args);
-                o.isAutoSync && self.popupView.setValue(o.adapter && o.adapter.getValue());
+                o.isAutoSync && o.adapter && o.adapter.getValue && self.popupView.setValue(o.adapter.getValue());
                 self.popupView.loaded && self.popupView.loaded();
                 self.fireEvent(BI.Searcher.EVENT_SEARCHING);
             }
@@ -4341,13 +4340,15 @@ BI.Searcher = BI.inherit(BI.Widget, {
 
     getValue: function () {
         var o = this.options;
-        if (o.isAutoSync) {
+        if (o.isAutoSync && o.adapter && o.adapter.getValue) {
             return o.adapter.getValue();
         }
         if (this.isSearching()) {
             return this.popupView.getValue();
-        } else {
+        } else if (o.adapter && o.adapter.getValue) {
             return o.adapter.getValue();
+        } else {
+            return this.popupView.getValue();
         }
     },
 
@@ -4355,7 +4356,7 @@ BI.Searcher = BI.inherit(BI.Widget, {
         var o = this.options;
         this._assertPopupView();
         this.popupView.populate.apply(this.popupView, arguments);
-        if (o.isAutoSync) {
+        if (o.isAutoSync && o.adapter && o.adapter.getValue) {
             this.popupView.setValue(o.adapter.getValue());
         }
     },
@@ -15512,7 +15513,7 @@ BI.Pager = BI.inherit(BI.Widget, {
             type: "bi.button_group",
             element: this,
             items: BI.createItems(view, {
-                cls: "page-item",
+                cls: "bi-list-item-select",
                 height: 23,
                 hgap: 10
             }),
@@ -29338,7 +29339,7 @@ BI.GridTable = BI.inherit(BI.Widget, {
         var trh = otrh + this._scrollBarSize;
         var blw = oblw + this._scrollBarSize;
         var blh = oblh + this._scrollBarSize;
-        var brw = obrw+ this._scrollBarSize;
+        var brw = obrw + this._scrollBarSize;
         var brh = obrh + this._scrollBarSize;
 
         var digest = function (el) {
@@ -29374,11 +29375,11 @@ BI.GridTable = BI.inherit(BI.Widget, {
 
         this.topLeftGrid.setEstimatedColumnSize(freezeColLength > 0 ? totalLeftColumnSize / freezeColLength : 0);
         this.topLeftGrid.setEstimatedRowSize(o.headerRowSize);
-        this.topRightGrid.setEstimatedColumnSize(totalRightColumnSize / (o.columnSize.length - freezeColLength));
+        this.topRightGrid.setEstimatedColumnSize((o.columnSize.length - freezeColLength) > 0 ? (totalRightColumnSize / (o.columnSize.length - freezeColLength)) : 0);
         this.topRightGrid.setEstimatedRowSize(o.headerRowSize);
         this.bottomLeftGrid.setEstimatedColumnSize(freezeColLength > 0 ? totalLeftColumnSize / freezeColLength : 0);
         this.bottomLeftGrid.setEstimatedRowSize(o.rowSize);
-        this.bottomRightGrid.setEstimatedColumnSize(totalRightColumnSize / (o.columnSize.length - freezeColLength));
+        this.bottomRightGrid.setEstimatedColumnSize((o.columnSize.length - freezeColLength) > 0 ? (totalRightColumnSize / (o.columnSize.length - freezeColLength)) : 0);
         this.bottomRightGrid.setEstimatedRowSize(o.rowSize);
 
         var items = this.contextLayout.attr("items");
@@ -29612,11 +29613,11 @@ BI.QuickGridTable = BI.inherit(BI.GridTable, {
 
         this.topLeftGrid.setEstimatedColumnSize(freezeColLength > 0 ? totalLeftColumnSize / freezeColLength : 0);
         this.topLeftGrid.setEstimatedRowSize(o.headerRowSize);
-        this.topRightGrid.setEstimatedColumnSize(totalRightColumnSize / (o.columnSize.length - freezeColLength));
+        this.topRightGrid.setEstimatedColumnSize((o.columnSize.length - freezeColLength) > 0 ? (totalRightColumnSize / (o.columnSize.length - freezeColLength)) : 0);
         this.topRightGrid.setEstimatedRowSize(o.headerRowSize);
         this.bottomLeftGrid.setEstimatedColumnSize(freezeColLength > 0 ? totalLeftColumnSize / freezeColLength : 0);
         this.bottomLeftGrid.setEstimatedRowSize(o.rowSize);
-        this.bottomRightGrid.setEstimatedColumnSize(totalRightColumnSize / (o.columnSize.length - freezeColLength));
+        this.bottomRightGrid.setEstimatedColumnSize((o.columnSize.length - freezeColLength) > 0 ? (totalRightColumnSize / (o.columnSize.length - freezeColLength)) : 0);
         this.bottomRightGrid.setEstimatedRowSize(o.rowSize);
 
         var items = this.contextLayout.attr("items");
@@ -30458,10 +30459,6 @@ BI.Table = BI.inherit(BI.Widget, {
             }]]
         }))));
 
-        //var scrollElement = isRight ? scrollBottomLeft.element : scrollBottomRight.element;
-        //var scrollTopElement = isRight ? scrollTopLeft.element : scrollTopRight.element;
-        //var otherElement = isRight ? scrollBottomRight.element : scrollBottomLeft.element;
-
         this._initFreezeScroll();
         BI.nextTick(function () {
             if (self.element.is(":visible")) {
@@ -30478,268 +30475,19 @@ BI.Table = BI.inherit(BI.Widget, {
     _initFreezeScroll: function () {
         var self = this, o = this.options;
         scroll(this.scrollBottomRight.element, this.scrollTopRight.element, this.scrollBottomLeft.element);
-        scroll(this.scrollBottomLeft.element, this.scrollTopLeft.element, this.scrollBottomRight.element);
+        // scroll(this.scrollBottomLeft.element, this.scrollTopLeft.element, this.scrollBottomRight.element);
 
         function scroll(scrollElement, scrollTopElement, otherElement) {
-            var scrolling, scrollingX;
-            var fn = function (event, delta, deltaX, deltaY) {
-                var inf = self._getScrollOffsetAndDur(event);
-                if (deltaY < 0 || deltaY > 0) {
-                    if (scrolling) {
-                        scrollElement[0].scrollTop = scrolling;
-                    }
-                    scrolling = scrollElement[0].scrollTop - delta * inf.offset;
-                    var stopPropagation = false;
-                    var st = scrollElement[0].scrollTop;
-                    scrollElement[0].scrollTop = scrolling;
-                    if (scrollElement[0].scrollTop !== st) {
-                        stopPropagation = true;
-                    }
-                    scrollElement[0].scrollTop = st;
-                    self._animateScrollTo(scrollElement, scrollElement[0].scrollTop, scrolling, inf.dur, "linear", {
-                        onStart: function () {
-                        },
-                        onUpdate: function (top) {
-                            otherElement[0].scrollTop = top;
-                            self.fireEvent(BI.Table.EVENT_TABLE_SCROLL, top);
-                        },
-                        onComplete: function () {
-                            self.fireEvent(BI.Table.EVENT_TABLE_SCROLL, scrolling);
-                            scrolling = null;
-                        }
-                    });
-
-
-                    //otherElement[0].scrollTop = scrollTop;
-                    //scrollElement[0].scrollTop = scrollTop;
-                    //self.fireEvent(BI.Table.EVENT_TABLE_SCROLL, scrollTop);
-                    if (stopPropagation === true) {
-                        event.stopPropagation();
-                        return false;
-                    }
-                    return;
-                }
-                //if (deltaX < 0 || deltaX > 0) {
-                //    if (scrollingX) {
-                //        scrollElement[0].scrollLeft = scrollingX;
-                //    }
-                //    scrollingX = scrollElement[0].scrollLeft + delta * inf.offset;
-                //    var stopPropagation = false;
-                //    var sl = scrollElement[0].scrollLeft;
-                //    scrollElement[0].scrollLeft = scrollingX;
-                //    if (scrollElement[0].scrollLeft !== sl) {
-                //        stopPropagation = true;
-                //    }
-                //    scrollElement[0].scrollLeft = sl;
-                //    self._animateScrollTo(scrollElement, scrollElement[0].scrollLeft, scrollingX, inf.dur, "linear", {
-                //        direction: "left",
-                //        onStart: function () {
-                //        },
-                //        onUpdate: function (left) {
-                //            scrollTopElement[0].scrollLeft = left;
-                //            self.fireEvent(BI.Table.EVENT_TABLE_SCROLL, null, left);
-                //        },
-                //        onComplete: function () {
-                //            self.fireEvent(BI.Table.EVENT_TABLE_SCROLL, null, scrollingX);
-                //            scrollingX = null;
-                //        }
-                //    });
-                //
-                //
-                //    //otherElement[0].scrollTop = scrollTop;
-                //    //scrollElement[0].scrollTop = scrollTop;
-                //    //self.fireEvent(BI.Table.EVENT_TABLE_SCROLL, scrollTop);
-                //    if (stopPropagation === true) {
-                //        event.stopPropagation();
-                //        return false;
-                //    }
-                //}
-            };
-            scrollElement.mousewheel(fn);
-            var scrollTop = 0, scrollLeft = 0;
             scrollElement.scroll(function (e) {
-                var change = false;
-                if (scrollElement.scrollTop() != scrollTop) {
-                    var old = otherElement.scrollTop();
-                    otherElement.scrollTop(scrollElement.scrollTop());
-                    scrollTop = scrollElement.scrollTop();
-                    if (Math.abs(old - otherElement[0].scrollTop) > 0.1) {
-                        e.stopPropagation();
-                        change = true;
-                    }
-                }
-                if (scrollElement.scrollLeft() != scrollLeft) {
-                    var old = scrollTopElement.scrollLeft();
-                    scrollTopElement.scrollLeft(scrollElement.scrollLeft());
-                    scrollLeft = scrollElement.scrollLeft();
-                    if (Math.abs(old - scrollTopElement[0].scrollLeft) > 0.1) {
-                        e.stopPropagation();
-                        change = true;
-                    }
-                }
-                // self.fireEvent(BI.Table.EVENT_TABLE_SCROLL);
-                if (change === true) {
-                    e.stopPropagation();
-                    //return false;
-                }
+                otherElement.scrollTop(scrollElement.scrollTop());
+                scrollTopElement.scrollLeft(scrollElement.scrollLeft());
+                self.fireEvent(BI.Table.EVENT_TABLE_SCROLL);
             });
         }
     },
 
-    _animateScrollTo: function (el, from, to, duration, easing, op) {
-        var self = this;
-        var onStart = op.onStart, onComplete = op.onComplete, onUpdate = op.onUpdate;
-        var startTime = BI.getTime(), _delay, progress = 0, _request;
-        _cancelTween();
-        _startTween();
-        var diff = to - from;
-        el._stop = 0;
-        function _step() {
-            if (el._stop) {
-                return;
-            }
-            if (!progress) {
-                onStart.call();
-            }
-            progress = BI.getTime() - startTime;
-            _tween();
-            if (progress >= el.time) {
-                el.time = (progress > el.time) ? progress + _delay - (progress - el.time) : progress + _delay - 1;
-                if (el.time < progress + 1) {
-                    el.time = progress + 1;
-                }
-            }
-            if (el.time < duration) {
-                el._id = _request(_step);
-            } else {
-                el[op.direction == 'left' ? "scrollLeft" : "scrollTop"](to);
-                onComplete.call();
-            }
-        }
-
-        function _tween() {
-            var top = to;
-            if (duration > 0) {
-                el.currVal = _ease(el.time, from, diff, duration, easing);
-                el[op.direction == 'left' ? "scrollLeft" : "scrollTop"](top = Math.round(el.currVal));
-            } else {
-                el[op.direction == 'left' ? "scrollLeft" : "scrollTop"](to);
-            }
-            onUpdate(top);
-        }
-
-        function _startTween() {
-            _delay = 1000 / 60;
-            el.time = progress + _delay;
-            _request = (!requestAnimationFrame()) ? function (f) {
-                _tween();
-                return setTimeout(f, 0.01);
-            } : requestAnimationFrame();
-            el._id = _request(_step);
-        }
-
-        function requestAnimationFrame() {
-            return window.requestAnimationFrame ||
-                window.webkitRequestAnimationFrame ||
-                window.mozRequestAnimationFrame ||
-                window.msRequestAnimationFrame ||
-                window.oRequestAnimationFrame;
-        }
-
-        function cancelAnimationFrame() {
-            return window.cancelAnimationFrame ||
-                window.webkitCancelAnimationFrame ||
-                window.mozCancelAnimationFrame ||
-                window.msCancelAnimationFrame ||
-                window.oCancelAnimationFrame ||
-                window.cancelRequestAnimationFrame ||
-                window.webkitCancelRequestAnimationFrame ||
-                window.mozCancelRequestAnimationFrame ||
-                window.msCancelRequestAnimationFrame ||
-                window.oCancelRequestAnimationFrame
-        }
-
-        function _cancelTween() {
-            if (el._id == null) {
-                return;
-            }
-            if (!cancelAnimationFrame()) {
-                clearTimeout(el._id);
-            } else {
-                cancelAnimationFrame()(el._id);
-            }
-            el._id = null;
-        }
-
-        function _ease(t, b, c, d, type) {
-            switch (type) {
-                case "linear":
-                    return c * t / d + b;
-                    break;
-                case "mcsLinearOut":
-                    t /= d;
-                    t--;
-                    return c * Math.sqrt(1 - t * t) + b;
-                    break;
-                case "easeInOutSmooth":
-                    t /= d / 2;
-                    if (t < 1) {
-                        return c / 2 * t * t + b;
-                    }
-                    t--;
-                    return -c / 2 * (t * (t - 2) - 1) + b;
-                    break;
-                case "easeInOutStrong":
-                    t /= d / 2;
-                    if (t < 1) {
-                        return c / 2 * Math.pow(2, 10 * (t - 1)) + b;
-                    }
-                    t--;
-                    return c / 2 * ( -Math.pow(2, -10 * t) + 2 ) + b;
-                    break;
-                case "easeInOut":
-                case "mcsEaseInOut":
-                    t /= d / 2;
-                    if (t < 1) {
-                        return c / 2 * t * t * t + b;
-                    }
-                    t -= 2;
-                    return c / 2 * (t * t * t + 2) + b;
-                    break;
-                case "easeOutSmooth":
-                    t /= d;
-                    t--;
-                    return -c * (t * t * t * t - 1) + b;
-                    break;
-                case "easeOutStrong":
-                    return c * ( -Math.pow(2, -10 * t / d) + 1 ) + b;
-                    break;
-                case "easeOut":
-                case "mcsEaseOut":
-                default:
-                    var ts = (t /= d) * t, tc = ts * t;
-                    return b + c * (0.499999999999997 * tc * ts + -2.5 * ts * ts + 5.5 * tc + -6.5 * ts + 4 * t);
-            }
-        }
-    },
-
-    _getScrollOffsetAndDur: function (event) {
-        var offset = 40, dur = 200;
-        if (event.originalEvent.wheelDelta) {
-            offset = Math.abs(event.originalEvent.wheelDelta);
-        }
-        if (event.deltaFactor < 2) {
-            offset = 3;
-            dur = 17;
-        }
-        return {
-            offset: offset,
-            dur: dur
-        };
-    },
-
     resize: function () {
-        this._resize();
+        this._resize && this._resize();
     },
 
     _createCells: function (items, columnSize, mergeCols, TDs, Ws, start, rowSize) {
@@ -30991,17 +30739,7 @@ BI.Table = BI.inherit(BI.Widget, {
             items: [this.scrollBottomRight]
         });
 
-        this._resize = function () {
-            if (self.element.is(":visible")) {
-                self.setColumnSize(o.columnSize);
-            }
-        };
-
         this._initNormalScroll();
-        BI.ResizeDetector.addResizeListener(this, function () {
-            self._resize();
-            self.fireEvent(BI.Table.EVENT_TABLE_RESIZE);
-        });
         BI.nextTick(function () {
             if (self.element.is(":visible")) {
                 self.fireEvent(BI.Table.EVENT_TABLE_AFTER_INIT);
@@ -31011,66 +30749,8 @@ BI.Table = BI.inherit(BI.Widget, {
 
     _initNormalScroll: function () {
         var self = this;
-        var scrolling, scrollX;
-        this.scrollBottomRight.element.mousewheel(function (event, delta, deltaX, deltaY) {
-            var inf = self._getScrollOffsetAndDur(event);
-            if (deltaY < 0 || deltaY > 0) {
-                var ele = self.scrollBottomRight.element;
-                if (scrolling) {
-                    ele[0].scrollTop = scrolling;
-                }
-
-                scrolling = ele[0].scrollTop - delta * inf.offset;
-                var stopPropagation = false;
-                var st = ele[0].scrollTop;
-                ele[0].scrollTop = scrolling;
-                if (ele[0].scrollTop !== st) {
-                    stopPropagation = true;
-                }
-                ele[0].scrollTop = st;
-                self._animateScrollTo(ele, ele[0].scrollTop, scrolling, inf.dur, "linear", {
-                    onStart: function () {
-                    },
-                    onUpdate: function (top) {
-                        self.fireEvent(BI.Table.EVENT_TABLE_SCROLL, top);
-                    },
-                    onComplete: function () {
-                        self.fireEvent(BI.Table.EVENT_TABLE_SCROLL, scrolling);
-                        scrolling = null;
-                    }
-                });
-                //var scrollTop = self.scrollBottomRight.element[0].scrollTop = self.scrollBottomRight.element[0].scrollTop - delta * offset;
-                //self.fireEvent(BI.Table.EVENT_TABLE_SCROLL, scrollTop);
-                if (stopPropagation === true) {
-                    event.stopPropagation();
-                    return false;
-                }
-            }
-        });
-        var scrollTop = 0, scrollLeft = 0;
         this.scrollBottomRight.element.scroll(function (e) {
-            var change = false;
-            var scrollElement = self.scrollBottomRight.element;
-            if (scrollElement.scrollTop() != scrollTop) {
-                if (Math.abs(scrollElement.scrollTop() - scrollTop) > 0.1) {
-                    e.stopPropagation();
-                    change = true;
-                }
-                scrollTop = scrollElement.scrollTop();
-            }
-            if (scrollElement.scrollLeft() != scrollLeft) {
-                if (Math.abs(scrollElement.scrollLeft() - scrollLeft) > 0.1) {
-                    e.stopPropagation();
-                    change = true;
-                }
-                scrollLeft = scrollElement.scrollLeft();
-            }
             self.fireEvent(BI.Table.EVENT_TABLE_SCROLL);
-            if (change === true) {
-                e.stopPropagation();
-                //return false;
-            }
-            return false;
         });
     },
 
@@ -31184,7 +30864,7 @@ BI.Table = BI.inherit(BI.Widget, {
                 }
                 BI.each(colgroupTds, function (i, colgroup) {
                     var width = colgroup.attr("width") | 0;
-                    if (width !== sizes[i]) {
+                    if (sizes[i] !== "" && width !== sizes[i]) {
                         var w = self._calculateWidth(sizes[i]);
                         colgroup.attr("width", w).css("width", w);
                         BI.each(bodyTds, function (j, items) {
@@ -31291,7 +30971,7 @@ BI.Table = BI.inherit(BI.Widget, {
         } else {
             BI.each(this.colgroupTds, function (i, colgroup) {
                 var width = colgroup.attr("width") | 0;
-                if (width !== o.columnSize[i]) {
+                if (o.columnSize[i] !== "" && width !== o.columnSize[i]) {
                     var w = self._calculateWidth(o.columnSize[i]);
                     colgroup.attr("width", w).css("width", w);
                     BI.each(self.bodyTds, function (j, items) {
@@ -31498,7 +31178,9 @@ BI.Table = BI.inherit(BI.Widget, {
             if (w > 1.05) {
                 w += o.columnSize.length;
             }
-            this.tableContainer.element.width(w);
+            if (w > 1.05) {
+                this.tableContainer.element.width(w);
+            }
         }
     },
 
@@ -32023,14 +31705,6 @@ BI.Table = BI.inherit(BI.Widget, {
         } else {
             this._createNormalTable();
         }
-    },
-
-    empty: function () {
-        BI.Table.superclass.empty.apply(this, arguments);
-    },
-
-    destroy: function () {
-        BI.Table.superclass.destroy.apply(this, arguments);
     }
 })
 ;

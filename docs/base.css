@@ -74,12 +74,6 @@
 /****添加计算宽度的--运算符直接需要space****/
 /****** common color(常用颜色,可用于普遍场景) *****/
 /**** custom color(自定义颜色,用于特定场景) ****/
-/************hing light*****************/
-.bi-z-index-mask {
-  background-color: #1a1a1a;
-  opacity: 0.5;
-  filter: alpha(opacity=50);
-}
 /****添加计算宽度的--运算符直接需要space****/
 /****** common color(常用颜色,可用于普遍场景) *****/
 /**** custom color(自定义颜色,用于特定场景) ****/
@@ -678,8 +672,13 @@ li.CodeMirror-hint-active {
   overflow: hidden;
   overflow-x: hidden;
   overflow-y: hidden;
+  background: #ffffff;
+  border-right: 1px solid #d4dadd;
+  border-top: 1px solid #d4dadd;
+  border-bottom: 1px solid #d4dadd;
 }
 .bi-segment > .first-element {
+  border-left: 1px solid #d4dadd;
   -webkit-border-radius: 6px 0px 0px 6px;
   -moz-border-radius: 6px 0px 0px 6px;
   border-radius: 6px 0px 0px 6px;
@@ -688,6 +687,18 @@ li.CodeMirror-hint-active {
   -webkit-border-radius: 0px 6px 6px 0px;
   -moz-border-radius: 0px 6px 6px 0px;
   border-radius: 0px 6px 6px 0px;
+}
+.bi-theme-dark .bi-segment > .center-element {
+  overflow: hidden;
+  overflow-x: hidden;
+  overflow-y: hidden;
+  background: #242640;
+  border-right: 1px solid #525466;
+  border-top: 1px solid #525466;
+  border-bottom: 1px solid #525466;
+}
+.bi-theme-dark .bi-segment > .first-element {
+  border-left: 1px solid #242640;
 }
 /****添加计算宽度的--运算符直接需要space****/
 /****** common color(常用颜色,可用于普遍场景) *****/
@@ -746,7 +757,7 @@ li.CodeMirror-hint-active {
 .bi-button.button-common.disabled,
 .bi-button.button-success.disabled,
 .bi-button.button-warning.disabled {
-  background: #c4c6c6 !important;
+  background: #cccccc !important;
   border-color: #c4c6c6 !important;
 }
 .bi-button.button-common.disabled,
@@ -1098,12 +1109,12 @@ li.CodeMirror-hint-active {
   transition-timing-function: ease;
   user-select: none;
   background-color: rgba(102, 102, 102, 0.05);
-  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr=#0D666666,endColorstr=#0D666666);
+  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr=#0d666666,endColorstr=#0d666666);
   border-radius: 5px;
 }
 .bi-theme-dark .scrollbar-layout-main {
   background-color: rgba(204, 204, 204, 0.05);
-  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr=#0Dcccccc,endColorstr=#0Dcccccc);
+  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr=#0dcccccc,endColorstr=#0dcccccc);
 }
 .scrollbar-layout-main-vertical {
   bottom: 0;
@@ -1122,11 +1133,11 @@ li.CodeMirror-hint-active {
   left: 0;
   transition-property: background-color;
   background-color: rgba(102, 102, 102, 0.05);
-  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr=#0D666666,endColorstr=#0D666666);
+  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr=#0d666666,endColorstr=#0d666666);
 }
 .bi-theme-dark .scrollbar-layout-main-horizontal {
   background-color: rgba(204, 204, 204, 0.05);
-  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr=#0Dcccccc,endColorstr=#0Dcccccc);
+  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr=#0dcccccc,endColorstr=#0dcccccc);
 }
 /* Touching the scroll-track directly makes the scroll-track bolder */
 .scrollbar-layout-main-horizontal.public-scrollbar-main-active,
@@ -1180,23 +1191,23 @@ li.CodeMirror-hint-active {
 /* Touching the scroll-track directly makes the scroll-track bolder */
 .public-scrollbar-face:after {
   background-color: rgba(102, 102, 102, 0.3);
-  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr=#4C666666,endColorstr=#4C666666);
+  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr=#4d666666,endColorstr=#4d666666);
 }
 .bi-theme-dark .public-scrollbar-face:after {
   background-color: rgba(204, 204, 204, 0.3);
-  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr=#4Ccccccc,endColorstr=#4Ccccccc);
+  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr=#4dcccccc,endColorstr=#4dcccccc);
 }
 .public-scrollbar-main:hover .public-scrollbar-face:after,
 .public-scrollbar-main-active .public-scrollbar-face:after,
 .public-scrollbar-faceActive:after {
   background-color: rgba(102, 102, 102, 0.7);
-  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr=#B2666666,endColorstr=#B2666666);
+  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr=#b3666666,endColorstr=#b3666666);
 }
 .bi-theme-dark .public-scrollbar-main:hover .public-scrollbar-face:after,
 .bi-theme-dark .public-scrollbar-main-active .public-scrollbar-face:after,
 .bi-theme-dark .public-scrollbar-faceActive:after {
   background-color: rgba(204, 204, 204, 0.7);
-  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr=#B2cccccc,endColorstr=#B2cccccc);
+  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr=#b3cccccc,endColorstr=#b3cccccc);
 }
 .horizontal-scrollbar {
   bottom: 0;
@@ -1237,35 +1248,6 @@ li.CodeMirror-hint-active {
 /**** custom color(自定义颜色,用于特定场景) ****/
 .bi-branch-tree .bi-branch-tree-view {
   min-width: 300px;
-}
-/****添加计算宽度的--运算符直接需要space****/
-/****** common color(常用颜色,可用于普遍场景) *****/
-/**** custom color(自定义颜色,用于特定场景) ****/
-.bi-display-tree .ztree * {
-  color: #808080;
-}
-.bi-display-tree .ztree li span.button.switch.center_open {
-  background-image: url("/icon/tree-vertical-line-3.png");
-}
-.bi-display-tree .ztree li span.button.switch.roots_open {
-  background-image: url("/icon/tree-vertical-line-2.png");
-}
-.bi-display-tree .ztree li span.button.switch.bottom_open {
-  background-image: url("/icon/tree-vertical-line-4.png");
-}
-.bi-display-tree .ztree li a,
-.bi-display-tree .ztree li span {
-  cursor: default !important;
-}
-.bi-display-tree .ztree li a:hover {
-  text-decoration: none;
-}
-.bi-display-tree .ztree li a.curSelectedNode {
-  padding-top: 1px;
-  border: none;
-  background-color: inherit;
-  opacity: 1;
-  filter: alpha(opacity=100);
 }
 /****添加计算宽度的--运算符直接需要space****/
 /****** common color(常用颜色,可用于普遍场景) *****/
