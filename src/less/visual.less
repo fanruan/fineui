@@ -28,6 +28,12 @@
   -moz-box-shadow: @arguments;
 }
 
+.background-color(@color, @alpha) {
+  background-color: fade(@color, @alpha);
+  @ieColor: argb(fade(@color, @alpha));
+  filter: ~"progid:DXImageTransform.Microsoft.gradient(startColorstr=@{ieColor},endColorstr=@{ieColor})";
+}
+
 .opacity(@opa) {
   opacity: @opa;
   @opa-ie: @opa*100;

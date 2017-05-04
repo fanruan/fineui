@@ -4,7 +4,7 @@
  * @type {*|void|Object}
  */
 BI.MultiSelectItem = BI.inherit(BI.BasicButton, {
-    _defaultConfig: function() {
+    _defaultConfig: function () {
         return BI.extend(BI.MultiSelectItem.superclass._defaultConfig.apply(this, arguments), {
             extraCls: "bi-multi-select-item",
             height: 25,
@@ -13,7 +13,7 @@ BI.MultiSelectItem = BI.inherit(BI.BasicButton, {
             }
         })
     },
-    _init : function() {
+    _init: function () {
         BI.MultiSelectItem.superclass._init.apply(this, arguments);
         var self = this, o = this.options;
         this.checkbox = BI.createWidget({
@@ -33,8 +33,8 @@ BI.MultiSelectItem = BI.inherit(BI.BasicButton, {
             value: o.value,
             py: o.py
         });
-        this.checkbox.on(BI.Controller.EVENT_CHANGE, function(type){
-            if(type ===  BI.Events.CLICK) {
+        this.checkbox.on(BI.Controller.EVENT_CHANGE, function (type) {
+            if (type === BI.Events.CLICK) {
                 self.setSelected(self.isSelected());
             }
         });
@@ -46,7 +46,7 @@ BI.MultiSelectItem = BI.inherit(BI.BasicButton, {
                 type: "bi.center_adapt",
                 items: [this.checkbox],
                 width: 36
-            } ,this.text)
+            }, this.text)
         }))));
     },
 
@@ -55,20 +55,23 @@ BI.MultiSelectItem = BI.inherit(BI.BasicButton, {
         this.checkbox.setEnable(v);
     },
 
-    doRedMark: function(){
+    doRedMark: function () {
         this.text.doRedMark.apply(this.text, arguments);
     },
 
-    unRedMark: function(){
+    unRedMark: function () {
         this.text.unRedMark.apply(this.text, arguments);
     },
 
-    doClick: function(){
+    doClick: function () {
         BI.MultiSelectItem.superclass.doClick.apply(this, arguments);
         this.checkbox.setSelected(this.isSelected());
+        if (this.isValid()) {
+            this.fireEvent(BI.MultiSelectItem.EVENT_CHANGE, this.getValue(), this);
+        }
     },
 
-    setSelected: function(v){
+    setSelected: function (v) {
         BI.MultiSelectItem.superclass.setSelected.apply(this, arguments);
         this.checkbox.setSelected(v);
     }

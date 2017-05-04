@@ -757,7 +757,7 @@ li.CodeMirror-hint-active {
 .bi-button.button-common.disabled,
 .bi-button.button-success.disabled,
 .bi-button.button-warning.disabled {
-  background: #c4c6c6 !important;
+  background: #cccccc !important;
   border-color: #c4c6c6 !important;
 }
 .bi-button.button-common.disabled,

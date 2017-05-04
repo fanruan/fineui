@@ -1,4 +1,5 @@
 @import "../../bibase";
+
 .scrollbar-layout-main {
   box-sizing: border-box;
   outline: none;
@@ -7,17 +8,13 @@
   transition-duration: 250ms;
   transition-timing-function: ease;
   user-select: none;
-  background-color: @scroll-color;
-  @ieColor: argb(@scroll-color);
-  filter:~"progid:DXImageTransform.Microsoft.gradient(startColorstr=@{ieColor},endColorstr=@{ieColor})";
+  .background-color(@scroll-color, 5%);
   border-radius: 5px;
 }
 
 .bi-theme-dark {
   .scrollbar-layout-main {
-    background-color: @scroll-color-theme-dark;
-    @ieColor: argb(@scroll-color-theme-dark);
-    filter:~"progid:DXImageTransform.Microsoft.gradient(startColorstr=@{ieColor},endColorstr=@{ieColor})";
+    .background-color(@scroll-color-theme-dark, 5%);
   }
 }
 
@@ -39,16 +36,12 @@
   height: 10px;
   left: 0;
   transition-property: background-color;
-  background-color: @scroll-color;
-  @ieColor: argb(@scroll-color);
-  filter:~"progid:DXImageTransform.Microsoft.gradient(startColorstr=@{ieColor},endColorstr=@{ieColor})";
+  .background-color(@scroll-color, 5%);
 }
 
 .bi-theme-dark {
   .scrollbar-layout-main-horizontal {
-    background-color: @scroll-color-theme-dark;
-    @ieColor: argb(@scroll-color-theme-dark);
-    filter:~"progid:DXImageTransform.Microsoft.gradient(startColorstr=@{ieColor},endColorstr=@{ieColor})";
+    .background-color(@scroll-color-theme-dark, 5%);
   }
 }
 
@@ -122,34 +115,26 @@
 }
 
 .public-scrollbar-face:after {
-  background-color: @scroll-thumb-color;
-  @ieColor: argb(@scroll-thumb-color);
-  filter:~"progid:DXImageTransform.Microsoft.gradient(startColorstr=@{ieColor},endColorstr=@{ieColor})";
+  .background-color(@scroll-color, 30%);
 }
 
 .bi-theme-dark {
   .public-scrollbar-face:after {
-    background-color: @scroll-thumb-color-theme-dark;
-    @ieColor: argb(@scroll-thumb-color-theme-dark);
-    filter:~"progid:DXImageTransform.Microsoft.gradient(startColorstr=@{ieColor},endColorstr=@{ieColor})";
+    .background-color(@scroll-color-theme-dark, 30%);
   }
 }
 
 .public-scrollbar-main:hover .public-scrollbar-face:after,
 .public-scrollbar-main-active .public-scrollbar-face:after,
 .public-scrollbar-faceActive:after {
-  background-color: @scroll-thumb-focus-color;
-  @ieColor: argb(@scroll-thumb-focus-color);
-  filter:~"progid:DXImageTransform.Microsoft.gradient(startColorstr=@{ieColor},endColorstr=@{ieColor})";
+  .background-color(@scroll-color, 70%);
 }
 
 .bi-theme-dark {
   .public-scrollbar-main:hover .public-scrollbar-face:after,
   .public-scrollbar-main-active .public-scrollbar-face:after,
   .public-scrollbar-faceActive:after {
-    background-color: @scroll-thumb-focus-color-theme-dark;
-    @ieColor: argb(@scroll-thumb-focus-color-theme-dark);
-    filter:~"progid:DXImageTransform.Microsoft.gradient(startColorstr=@{ieColor},endColorstr=@{ieColor})";
+    .background-color(@scroll-color-theme-dark, 70%);
   }
 }
 
