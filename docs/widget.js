@@ -966,7 +966,7 @@ BI.ArrangementDroppable = BI.inherit(BI.Widget, {
 
     _defaultConfig: function () {
         return BI.extend(BI.ArrangementDroppable.superclass._defaultConfig.apply(this, arguments), {
-            baseCls: "bi-arrangement-droppable"
+            baseCls: "bi-arrangement-droppable bi-resizer"
         });
     },
 
@@ -9387,7 +9387,7 @@ BI.MultiSelectCheckPane = BI.inherit(BI.Widget, {
         this.continueSelect = BI.createWidget({
             type: 'bi.text_button',
             text: BI.i18nText('BI-Continue_Select'),
-            cls: 'multi-select-check-selected'
+            cls: 'multi-select-check-selected bi-high-light'
         });
 
         this.continueSelect.on(BI.TextButton.EVENT_CHANGE, function () {
@@ -10560,7 +10560,7 @@ BI.MultiSelectCheckSelectedButton = BI.inherit(BI.Single, {
 
     _defaultConfig: function () {
         return BI.extend(BI.MultiSelectCheckSelectedButton.superclass._defaultConfig.apply(this, arguments), {
-            baseCls: 'bi-multi-select-check-selected-button',
+            baseCls: 'bi-multi-select-check-selected-button bi-high-light',
             itemsCreator: BI.emptyFn
         });
     },
@@ -13603,7 +13603,7 @@ BI.PathRegion = BI.inherit(BI.Widget, {
         if (BI.isKey(value)) {
             var label = BI.createWidget({
                 type: "bi.label",
-                cls: "path-region-label bi-card bi-border bi-list-item-active",
+                cls: "path-region-label bi-card bi-border bi-list-item-select",
                 text: text,
                 value: value,
                 title: text || value,
