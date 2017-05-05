@@ -34,6 +34,9 @@ website:	http://code.google.com/p/jquerytree/
 .ztree li ul.line {
   background: url("icon/tree-vertical-line-1.png") 0 0 repeat-y;
 }
+.bi-theme-dark .ztree li ul.line {
+  background: url("icon/dark/tree-vertical-line-1.png") 0 0 repeat-y;
+}
 .ztree li a {
   padding: 1px 3px 0 0;
   margin: 0;
@@ -163,26 +166,50 @@ website:	http://code.google.com/p/jquerytree/
 .ztree li span.button.root_open {
   background-image: url("icon/tree-expand-1.png");
 }
+.bi-theme-dark .ztree li span.button.root_open {
+  background-image: url("icon/dark/tree-expand-1.png");
+}
 .ztree li span.button.root_close {
   background-image: url("icon/tree-collapse-1.png");
+}
+.bi-theme-dark .ztree li span.button.root_close {
+  background-image: url("icon/dark/tree-collapse-1.png");
 }
 .ztree li span.button.roots_open {
   background-image: url("icon/tree-expand-2.png");
 }
+.bi-theme-dark .ztree li span.button.roots_open {
+  background-image: url("icon/dark/tree-expand-2.png");
+}
 .ztree li span.button.roots_close {
   background-image: url("icon/tree-collapse-2.png");
+}
+.bi-theme-dark .ztree li span.button.roots_close {
+  background-image: url("icon/dark/tree-collapse-2.png");
 }
 .ztree li span.button.center_open {
   background-image: url("icon/tree-expand-3.png");
 }
+.bi-theme-dark .ztree li span.button.center_open {
+  background-image: url("icon/dark/tree-expand-3.png");
+}
 .ztree li span.button.center_close {
   background-image: url("icon/tree-collapse-3.png");
+}
+.bi-theme-dark .ztree li span.button.center_close {
+  background-image: url("icon/dark/tree-collapse-3.png");
 }
 .ztree li span.button.bottom_open {
   background-image: url("icon/tree-expand-4.png");
 }
+.bi-theme-dark .ztree li span.button.bottom_open {
+  background-image: url("icon/dark/tree-expand-4.png");
+}
 .ztree li span.button.bottom_close {
   background-image: url("icon/tree-collapse-4.png");
+}
+.bi-theme-dark .ztree li span.button.bottom_close {
+  background-image: url("icon/dark/tree-collapse-4.png");
 }
 .ztree li span.button.noline_open {
   background-position: -92px -72px;
@@ -196,11 +223,20 @@ website:	http://code.google.com/p/jquerytree/
 .ztree li span.button.roots_docu {
   background-image: url("icon/tree-vertical-line-2.png");
 }
+.bi-theme-dark .ztree li span.button.roots_docu {
+  background-image: url("icon/dark/tree-vertical-line-2.png");
+}
 .ztree li span.button.center_docu {
   background-image: url("icon/tree-vertical-line-3.png");
 }
+.bi-theme-dark .ztree li span.button.center_docu {
+  background-image: url("icon/dark/tree-vertical-line-3.png");
+}
 .ztree li span.button.bottom_docu {
   background-image: url("icon/tree-vertical-line-4.png");
+}
+.bi-theme-dark .ztree li span.button.bottom_docu {
+  background-image: url("icon/dark/tree-vertical-line-4.png");
 }
 .ztree li span.button.noline_docu {
   background: none;

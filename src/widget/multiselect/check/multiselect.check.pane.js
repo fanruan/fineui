@@ -54,7 +54,7 @@ BI.MultiSelectCheckPane = BI.inherit(BI.Widget, {
         this.continueSelect = BI.createWidget({
             type: 'bi.text_button',
             text: BI.i18nText('BI-Continue_Select'),
-            cls: 'multi-select-check-selected'
+            cls: 'multi-select-check-selected bi-high-light'
         });
 
         this.continueSelect.on(BI.TextButton.EVENT_CHANGE, function () {

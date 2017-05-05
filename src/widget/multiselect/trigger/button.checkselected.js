@@ -12,7 +12,7 @@ BI.MultiSelectCheckSelectedButton = BI.inherit(BI.Single, {
 
     _defaultConfig: function () {
         return BI.extend(BI.MultiSelectCheckSelectedButton.superclass._defaultConfig.apply(this, arguments), {
-            baseCls: 'bi-multi-select-check-selected-button',
+            baseCls: 'bi-multi-select-check-selected-button bi-high-light',
             itemsCreator: BI.emptyFn
         });
     },
