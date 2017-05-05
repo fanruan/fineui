@@ -13603,7 +13603,7 @@ BI.PathRegion = BI.inherit(BI.Widget, {
         if (BI.isKey(value)) {
             var label = BI.createWidget({
                 type: "bi.label",
-                cls: "path-region-label bi-card bi-border bi-list-item-active",
+                cls: "path-region-label bi-card bi-border bi-list-item-select",
                 text: text,
                 value: value,
                 title: text || value,
