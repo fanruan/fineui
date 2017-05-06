@@ -599,7 +599,7 @@ BI.BasicButton = BI.inherit(BI.Single, {
             stopPropagation: false,
             selected: false,
             once: false, //点击一次选中有效,再点无效
-            forceSelected: false, //点击即选中， 选中了就不会被取消
+            forceSelected: false, //点击即选中, 选中了就不会被取消,与once的区别是forceSelected不影响事件的触发
             forceNotSelected: false, //无论怎么点击都不会被选中
             disableSelected: false, //使能选中
 

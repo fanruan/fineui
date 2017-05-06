@@ -157,6 +157,18 @@
   }
 }
 
+.bi-mask {
+  color: @color-bi-background-default;
+  .background-color(@color-bi-background-black, 20%);
+}
+
+.bi-theme-dark {
+  .bi-mask {
+    color: @color-bi-background-default-theme-dark;
+    .background-color(@color-bi-background-default, 20%);
+  }
+}
+
 .bi-z-index-mask {
   color: @color-bi-background-default;
   .background-color(@color-bi-background-black, 50%);

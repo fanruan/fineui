@@ -3063,6 +3063,16 @@ i {
 .bi-theme-dark .bi-resizer {
   background: #ffffff;
 }
+.bi-mask {
+  color: #ffffff;
+  background-color: rgba(26, 26, 26, 0.2);
+  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr=#331a1a1a,endColorstr=#331a1a1a);
+}
+.bi-theme-dark .bi-mask {
+  color: #242640;
+  background-color: rgba(255, 255, 255, 0.2);
+  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr=#33ffffff,endColorstr=#33ffffff);
+}
 .bi-z-index-mask {
   color: #ffffff;
   background-color: rgba(26, 26, 26, 0.5);
