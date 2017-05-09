@@ -100,13 +100,13 @@
 }
 .public-scrollbar-main:hover .public-scrollbar-face:after,
 .public-scrollbar-main-active .public-scrollbar-face:after,
-.public-scrollbar-faceActive:after {
+.public-scrollbar-face-active:after {
   background-color: rgba(102, 102, 102, 0.7);
   filter: progid:DXImageTransform.Microsoft.gradient(startColorstr=#b3666666,endColorstr=#b3666666);
 }
 .bi-theme-dark .public-scrollbar-main:hover .public-scrollbar-face:after,
 .bi-theme-dark .public-scrollbar-main-active .public-scrollbar-face:after,
-.bi-theme-dark .public-scrollbar-faceActive:after {
+.bi-theme-dark .public-scrollbar-face-active:after {
   background-color: rgba(204, 204, 204, 0.7);
   filter: progid:DXImageTransform.Microsoft.gradient(startColorstr=#b3cccccc,endColorstr=#b3cccccc);
 }

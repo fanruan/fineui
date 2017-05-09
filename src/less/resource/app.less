@@ -2,7 +2,7 @@
 
 @font-face {
   font-family: 'bi';
-  src: url('@{webUrl}font/iconfont.eot?#iefix') format('embedded-opentype'), /* IE6-IE8 */ url('@{webUrl}font/iconfont.woff') format('woff'), /* chrome、firefox */ url('@{webUrl}font/iconfont.ttf') format('truetype'), /* chrome、firefox、opera、Safari, Android, iOS 4.2+*/ url('@{webUrl}font/iconfont.svg#svgFontName') format('svg'); /*  iOS 4.1- */
+  src: url('@{webUrl}font/iconfont.eot'), /* IE6-IE8 */ url('@{webUrl}font/iconfont.woff') format('woff'), /* chrome、firefox */ url('@{webUrl}font/iconfont.ttf') format('truetype'), /* chrome、firefox、opera、Safari, Android, iOS 4.2+*/ url('@{webUrl}font/iconfont.svg#svgFontName') format('svg'); /*  iOS 4.1- */
 }
 
 .b-font {
@@ -47,27 +47,19 @@ body {
   outline: 0 none;
 }
 
-#wrapper {
-  position: absolute;
-  left: 0;
-  right: 0;
-  top: 0;
-  bottom: 0;
-  overflow: hidden;
-  overflow-x: hidden;
-  overflow-y: hidden;
-}
-
 div, textarea {
   &::-webkit-scrollbar {
     -webkit-appearance: none;
-    background-color: @scroll-color;
+    .background-color(@scroll-color, 5%);
     width: 6px;
     height: 6px;
   }
   &::-webkit-scrollbar-thumb {
     .border-radius(0);
-    background-color: @scroll-thumb-color;
+    .background-color(@scroll-color, 30%);
+    &:hover {
+      .background-color(@scroll-color, 70%);
+    }
   }
 }
 
@@ -75,13 +67,16 @@ div, textarea {
   div, textarea {
     &::-webkit-scrollbar {
       -webkit-appearance: none;
-      background-color: @scroll-color-theme-dark;
+      .background-color(@scroll-color-theme-dark, 5%);
       width: 6px;
       height: 6px;
     }
     &::-webkit-scrollbar-thumb {
       .border-radius(0);
-      background-color: @scroll-thumb-color-theme-dark;
+      .background-color(@scroll-color-theme-dark, 30%);
+      &:hover {
+        .background-color(@scroll-color-theme-dark, 70%);
+      }
     }
   }
 }

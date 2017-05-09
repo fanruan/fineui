@@ -80,7 +80,11 @@ BI.SequenceTableListNumber = BI.inherit(BI.Widget, {
         this.layout.attr("items", items);
         this.layout.resize();
         this.container.setHeight(o.items.length * o.rowSize);
-        this.scrollContainer.element.scrollTop(o.scrollTop);
+        try {
+            this.scrollContainer.element.scrollTop(o.scrollTop);
+        } catch (e) {
+
+        }
     },
 
     _createHeader: function () {
@@ -189,7 +193,11 @@ BI.SequenceTableListNumber = BI.inherit(BI.Widget, {
     setVerticalScroll: function (scrollTop) {
         if (this.options.scrollTop !== scrollTop) {
             this.options.scrollTop = scrollTop;
-            this.scrollContainer.element.scrollTop(scrollTop);
+            try {
+                this.scrollContainer.element.scrollTop(scrollTop);
+            } catch (e) {
+
+            }
         }
     },
 

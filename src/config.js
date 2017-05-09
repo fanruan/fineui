@@ -54,6 +54,21 @@ $(function () {
             return ob;
         }
     });
+    //注册滚动条
+    BI.Plugin.registerWidget("bi.grid_table_scrollbar", function (ob) {
+        if (BI.isIE9Below()) {
+            return BI.extend(ob, {type: "bi.native_table_scrollbar"});
+        } else {
+            return ob;
+        }
+    });
+    BI.Plugin.registerWidget("bi.grid_table_horizontal_scrollbar", function (ob) {
+        if (BI.isIE9Below()) {
+            return BI.extend(ob, {type: "bi.native_table_horizontal_scrollbar"});
+        } else {
+            return ob;
+        }
+    });
 
     //注册控件
     BI.Plugin.registerWidget("bi.grid_table", function (ob) {
