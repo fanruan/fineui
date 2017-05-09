@@ -7181,9 +7181,10 @@ BI.ListPane = BI.inherit(BI.Pane, {
         this.check();
     },
 
-    removeItems: function (items) {
-        BI.remove(this.options.items, items);
-        this.button_group.removeItems.apply(this.button_group, arguments);
+    removeItemAt: function (indexes) {
+        indexes = indexes || [];
+        BI.removeAt(this.options.items, indexes);
+        this.button_group.removeItemAt.apply(this.button_group, arguments);
         this.check();
     },
 
