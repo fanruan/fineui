@@ -1135,7 +1135,7 @@ BI.ButtonGroup = BI.inherit(BI.Widget, {
     },
 
     removeItemAt: function (indexes) {
-        BI.remove(this.buttons, indexes);
+        BI.removeAt(this.buttons, indexes);
         this.layouts.removeItemAt(indexes);
     },
 

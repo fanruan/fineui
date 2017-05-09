@@ -7181,6 +7181,12 @@ BI.ListPane = BI.inherit(BI.Pane, {
         this.check();
     },
 
+    removeItems: function (items) {
+        BI.remove(this.options.items, items);
+        this.button_group.removeItems.apply(this.button_group, arguments);
+        this.check();
+    },
+
     populate: function (items) {
         var self = this, o = this.options;
         if (arguments.length === 0 && (BI.isFunction(this.button_group.attr("itemsCreator")))) {//接管loader的populate方法
