@@ -4959,7 +4959,7 @@ BI.shortcut('bi.date_combo', BI.DateCombo);BI.DateTrigger = BI.inherit(BI.Trigge
             self.fireEvent(BI.DateTrigger.EVENT_ERROR);
         });
         this.editor.on(BI.SignEditor.EVENT_CONFIRM, function () {
-            var value = self.editor.getState();
+            var value = self.editor.getValue();
             if (BI.isNotNull(value)) {
                 self.editor.setState(value);
             }
