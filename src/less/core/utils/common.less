@@ -132,6 +132,10 @@
   color: @color-bi-text;
 }
 
+.bi-high-light-border {
+  border-color: @color-bi-border-highlight;
+}
+
 //水印
 .bi-water-mark {
   color: @water-mark-color;
@@ -206,6 +210,12 @@
         }
       }
     }
+  }
+}
+
+.bi-list-item-border {
+  &:active, &.active {
+    border: 1px solid @color-bi-border-highlight;
   }
 }
 
@@ -293,6 +303,49 @@
     &.active, &:active {
       color: @color-bi-text-highlight;
       .background-color(@color-bi-background-default, 5%);
+    }
+    &.disabled {
+      &, &:hover, &:active {
+        background-color: transparent !important;
+        color: @color-bi-text-disabled-theme-dark !important;
+        & .bi-high-light {
+          color: @color-bi-text-disabled-theme-dark !important;
+        }
+      }
+    }
+  }
+}
+
+//文字和背景hover和active时变化
+.bi-list-item-active2 {
+  &:hover, &.hover {
+    color: @color-bi-text-black;
+    background-color: @color-bi-background-default;
+  }
+  &.active, &:active {
+    color: @color-bi-text-highlight;
+    background-color: @color-bi-background-default;
+  }
+  &.disabled {
+    &, &:hover, &:active {
+      background-color: transparent !important;
+      color: @color-bi-text-disabled !important;
+      & .bi-high-light {
+        color: @color-bi-text-disabled !important;
+      }
+    }
+  }
+}
+
+.bi-theme-dark {
+  .bi-list-item-active2 {
+    &:hover, &.hover {
+      color: @color-bi-text;
+      background-color: @color-bi-background-default-theme-dark;
+    }
+    &.active, &:active {
+      color: @color-bi-text-highlight;
+      background-color: @color-bi-background-default-theme-dark;
     }
     &.disabled {
       &, &:hover, &:active {

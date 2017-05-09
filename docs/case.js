@@ -3527,7 +3527,7 @@ BI.BubbleCombo = BI.inherit(BI.Widget, {
             type: "bi.center_adapt",
             items: [{
                 type: "bi.layout",
-                cls: "bubble-combo-triangle-" + direction
+                cls: "bubble-combo-triangle-" + direction + " bi-high-light-border"
             }]
         });
         pos.el = this.triangle;
@@ -3663,7 +3663,7 @@ BI.BubblePopupView = BI.inherit(BI.PopupView, {
         }
         this.line = BI.createWidget(op, {
             type: "bi.layout",
-            cls: "bubble-popup-line"
+            cls: "bubble-popup-line bi-high-light-background"
         });
         pos.el = this.line;
         BI.createWidget({
@@ -7897,8 +7897,8 @@ BI.SortList = BI.inherit(BI.Widget, {
             containment: o.containment || this.element,
             connectWith: o.connectWith || ".bi-sort-list",
             items: ".sort-item",
-            cursor: "drag",
-            tolerance: "intersect",
+            cursor: o.cursor || "drag",
+            tolerance: o.tolerance || "intersect",
             placeholder: {
                 element: function ($currentItem) {
                     var holder = BI.createWidget({

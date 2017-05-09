@@ -137,6 +137,9 @@ $(function () {
 
         //获取对比颜色
         getContrastColor: function (color) {
+            if (!color) {
+                return "";
+            }
             if (this.isDarkColor(color)) {
                 return "#ffffff";
             }

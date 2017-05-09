@@ -21434,7 +21434,7 @@ BI.FloatBoxRouter = BI.inherit(BI.WRouter, {
         if(this.controller){
             this.controller.remove(url);
             delete this.store[url];
-            this.views[url] && this.views[url].destroy();
+            this.views[url] && this.views[url].model.destroy();
             delete this.views[url];
         }
         return this;
@@ -22689,6 +22689,9 @@ $(function () {
 
         //获取对比颜色
         getContrastColor: function (color) {
+            if (!color) {
+                return "";
+            }
             if (this.isDarkColor(color)) {
                 return "#ffffff";
             }
