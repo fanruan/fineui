@@ -243,6 +243,18 @@ BI.PageTable = BI.inherit(BI.Widget, {
         return this.table.getVerticalScroll();
     },
 
+    setLeftHorizontalScroll: function (scrollLeft) {
+        this.table.setLeftHorizontalScroll(scrollLeft);
+    },
+
+    setRightHorizontalScroll: function (scrollLeft) {
+        this.table.setRightHorizontalScroll(scrollLeft);
+    },
+
+    setVerticalScroll: function (scrollTop) {
+        this.table.setVerticalScroll(scrollTop);
+    },
+
     restore: function () {
         this.table.restore();
     },
