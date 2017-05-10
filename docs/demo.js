@@ -75,7 +75,67 @@ BI.i18n = {};$(function () {
                     type: 'bi.button',
                     text: '带图标的按钮',
                     //level: 'ignore',
-                    iconClass: "rename-font",
+                    iconClass: "close-font",
+                    height: 30
+                }
+            }, {
+                el: {
+                    type: 'bi.button',
+                    text: '一般按钮',
+                    clear: true,
+                    level: 'common',
+                    height: 30
+                }
+            }, {
+                el: {
+                    type: 'bi.button',
+                    text: '表示成功状态按钮',
+                    clear: true,
+                    level: 'success',
+                    height: 30
+                }
+            },
+            {
+                el: {
+                    type: 'bi.button',
+                    text: '表示警告状态的按钮',
+                    clear: true,
+                    level: 'warning',
+                    height: 30
+                }
+            }, {
+                el: {
+                    type: 'bi.button',
+                    text: '表示忽略状态的按钮',
+                    clear: true,
+                    level: 'ignore',
+                    height: 30
+                }
+            }, {
+                el: {
+                    type: 'bi.button',
+                    text: '普通灰化按钮',
+                    clear: true,
+                    disabled: true,
+                    level: 'success',
+                    height: 30
+                }
+            }, {
+                el: {
+                    type: 'bi.button',
+                    text: '忽略状态灰化按钮',
+                    clear: true,
+                    disabled: true,
+                    level: 'ignore',
+                    height: 30
+                }
+            }, {
+                el: {
+                    type: 'bi.button',
+                    text: '带图标的按钮',
+                    clear: true,
+                    //level: 'ignore',
+                    iconClass: "close-font",
                     height: 30
                 }
             }
@@ -87,7 +147,7 @@ BI.i18n = {};$(function () {
         });
         return {
             type: "bi.left",
-            vgap: 200,
+            vgap: 100,
             hgap: 20,
             items: items
         }

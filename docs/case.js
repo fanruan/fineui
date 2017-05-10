@@ -6349,15 +6349,15 @@ BI.StateEditor = BI.inherit(BI.Single, {
             return;
         }
         if (BI.isString(v)) {
-            if (BI.isEmpty(v)) {
-                this.text.setText(BI.i18nText("BI-Basic_Unrestricted"));
-                this.text.setTitle("");
-                this.text.element.addClass("state-editor-infinite-text");
-            } else {
-                this.text.setText(v);
-                this.text.setTitle(v);
-                this.text.element.removeClass("state-editor-infinite-text");
-            }
+            // if (BI.isEmpty(v)) {
+            //     this.text.setText(BI.i18nText("BI-Basic_Unrestricted"));
+            //     this.text.setTitle("");
+            //     this.text.element.addClass("state-editor-infinite-text");
+            // } else {
+            this.text.setText(v);
+            this.text.setTitle(v);
+            this.text.element.removeClass("state-editor-infinite-text");
+            // }
             return;
         }
         if (BI.isArray(v)) {

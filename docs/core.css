@@ -3078,8 +3078,8 @@ i {
 }
 .bi-z-index-mask {
   color: #ffffff;
-  background-color: rgba(26, 26, 26, 0.5);
-  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr=#801a1a1a,endColorstr=#801a1a1a);
+  background-color: rgba(26, 26, 26, 0.3);
+  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr=#4d1a1a1a,endColorstr=#4d1a1a1a);
 }
 .bi-list-item:hover,
 .bi-list-item.hover {

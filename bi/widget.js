@@ -9861,7 +9861,6 @@ BI.MultiSelectCombo = BI.inherit(BI.Single, {
         this.storeValue = v || {};
         this._assertValue(this.storeValue);
         this.combo.setValue(this.storeValue);
-        this.trigger.setValue(this.storeValue);
     },
 
     getValue: function () {
