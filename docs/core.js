@@ -22569,7 +22569,9 @@ BI.extend(jQuery, {
                 }
                 break;
         }
-        popup.resetHeight && popup.resetHeight(Math.min(bodyHeight - position.top, maxHeight));
+        if(needAdaptHeight === true) {
+            popup.resetHeight && popup.resetHeight(Math.min(bodyHeight - position.top, maxHeight));
+        }
         return position;
     }
 });/**
