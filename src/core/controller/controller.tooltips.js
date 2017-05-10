@@ -26,6 +26,7 @@ BI.TooltipsController = BI.inherit(BI.Controller, {
             type: "bi.tooltip",
             text: text,
             level: level,
+            stopEvent: true,
             height: this._const.height
         });
     },

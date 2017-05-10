@@ -4512,11 +4512,12 @@ BI.Widget = BI.inherit(BI.OB, {
     setVisible: function (visible) {
         if (visible === true) {
             this.options.invisible = false;
-            this.element.show();
+            //用this.element.show()会把display属性改成block
+            this.element.css("display", "");
             this._mount();
         } else if (visible === false) {
             this.options.invisible = true;
-            this.element.hide();
+            this.element.css("display", "none");
         }
         this.fireEvent(BI.Events.VIEW, visible);
     },
@@ -16173,6 +16174,7 @@ BI.TooltipsController = BI.inherit(BI.Controller, {
             type: "bi.tooltip",
             text: text,
             level: level,
+            stopEvent: true,
             height: this._const.height
         });
     },

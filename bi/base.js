@@ -19759,6 +19759,8 @@ BI.Tooltip = BI.inherit(BI.Tip, {
             extraCls: "bi-tooltip",
             text: "",
             level: "success",//success或warning
+            stopEvent: false,
+            stopPropagation: false,
             height: 20
         })
     },
@@ -19767,9 +19769,8 @@ BI.Tooltip = BI.inherit(BI.Tip, {
         var self = this, o = this.options;
         this.element.addClass("tooltip-" + o.level);
         var fn = function (e) {
-            e.stopPropagation();
-            e.stopEvent();
-            return false;
+            o.stopPropagation && e.stopPropagation();
+            o.stopEvent && e.stopEvent();
         };
         this.element.bind({
             "click": fn,
