@@ -6392,13 +6392,12 @@ Date.prototype.getOffsetMonth = function (n) {
 //获得本周的起始日期
 Date.prototype.getWeekStartDate = function () {
     var w = this.getDay();
-    var offset = (w === 0 ? 7 : w);
-    return this.getOffsetDate(1 - offset);
+    return this.getOffsetDate(-w);
 };
 //得到本周的结束日期
 Date.prototype.getWeekEndDate = function () {
     var w = this.getDay();
-    var offset = (w === 0 ? 0 : 7 - w);
+    var offset = (w === 0 ? 6 : 6 - w);
     return this.getOffsetDate(offset);
 };
 
