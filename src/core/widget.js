@@ -208,6 +208,7 @@ BI.Widget = BI.inherit(BI.OB, {
     setVisible: function (visible) {
         if (visible === true) {
             this.options.invisible = false;
+            //用this.element.show()会把display属性改成block
             this.element.css("display", "");
             this._mount();
         } else if (visible === false) {

@@ -2935,7 +2935,7 @@ BI.Combo = BI.inherit(BI.Widget, {
                             }
                         }
                     }, BI.EVENT_RESPONSE_TIME, true);
-                    self.element.off(ev + "." + self.getName()).on(ev + "." + self.getName(), function(e){
+                    self.element.off(ev + "." + self.getName()).on(ev + "." + self.getName(), function (e) {
                         debounce(e);
                         st(e);
                     });
@@ -3051,7 +3051,7 @@ BI.Combo = BI.inherit(BI.Widget, {
                 break;
             case "top":
             case "top,right":
-                p = $.getComboPosition(this.combo, this.popupView, o.adjustYOffset || o.adjustLength, o.isNeedAdjustHeight, ['top', 'bottom', 'right', 'left'], o.offsetStyle);
+                p = $.getComboPosition(this.combo, this.popupView, o.adjustXOffset, o.adjustYOffset || o.adjustLength, o.isNeedAdjustHeight, ['top', 'bottom', 'right', 'left'], o.offsetStyle);
                 break;
             case "left":
             case "left,bottom":
@@ -19759,6 +19759,8 @@ BI.Tooltip = BI.inherit(BI.Tip, {
             extraCls: "bi-tooltip",
             text: "",
             level: "success",//success或warning
+            stopEvent: false,
+            stopPropagation: false,
             height: 20
         })
     },
@@ -19767,9 +19769,8 @@ BI.Tooltip = BI.inherit(BI.Tip, {
         var self = this, o = this.options;
         this.element.addClass("tooltip-" + o.level);
         var fn = function (e) {
-            e.stopPropagation();
-            e.stopEvent();
-            return false;
+            o.stopPropagation && e.stopPropagation();
+            o.stopEvent && e.stopEvent();
         };
         this.element.bind({
             "click": fn,

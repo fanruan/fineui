@@ -4512,6 +4512,7 @@ BI.Widget = BI.inherit(BI.OB, {
     setVisible: function (visible) {
         if (visible === true) {
             this.options.invisible = false;
+            //用this.element.show()会把display属性改成block
             this.element.css("display", "");
             this._mount();
         } else if (visible === false) {
@@ -16186,6 +16187,7 @@ BI.TooltipsController = BI.inherit(BI.Controller, {
             type: "bi.tooltip",
             text: text,
             level: level,
+            stopEvent: true,
             height: this._const.height
         });
     },
@@ -17068,7 +17070,9 @@ BI.extend(jQuery, {
                 }
                 break;
         }
-        popup.resetHeight && popup.resetHeight(Math.min(bodyHeight - position.top, maxHeight));
+        if(needAdaptHeight === true) {
+            popup.resetHeight && popup.resetHeight(Math.min(bodyHeight - position.top, maxHeight));
+        }
         return position;
     }
 });/**

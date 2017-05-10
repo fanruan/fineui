@@ -132,7 +132,7 @@ BI.Combo = BI.inherit(BI.Widget, {
                             }
                         }
                     }, BI.EVENT_RESPONSE_TIME, true);
-                    self.element.off(ev + "." + self.getName()).on(ev + "." + self.getName(), function(e){
+                    self.element.off(ev + "." + self.getName()).on(ev + "." + self.getName(), function (e) {
                         debounce(e);
                         st(e);
                     });
@@ -248,7 +248,7 @@ BI.Combo = BI.inherit(BI.Widget, {
                 break;
             case "top":
             case "top,right":
-                p = $.getComboPosition(this.combo, this.popupView, o.adjustYOffset || o.adjustLength, o.isNeedAdjustHeight, ['top', 'bottom', 'right', 'left'], o.offsetStyle);
+                p = $.getComboPosition(this.combo, this.popupView, o.adjustXOffset, o.adjustYOffset || o.adjustLength, o.isNeedAdjustHeight, ['top', 'bottom', 'right', 'left'], o.offsetStyle);
                 break;
             case "left":
             case "left,bottom":
