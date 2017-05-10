@@ -190,33 +190,6 @@
 /****添加计算宽度的--运算符直接需要space****/
 /****** common color(常用颜色,可用于普遍场景) *****/
 /**** custom color(自定义颜色,用于特定场景) ****/
-.bi-image-button-href .image-button-href-icon-button {
-  z-index: 1;
-  font-size: 16px;
-}
-/****添加计算宽度的--运算符直接需要space****/
-/****** common color(常用颜色,可用于普遍场景) *****/
-/**** custom color(自定义颜色,用于特定场景) ****/
-.bi-image-button-size .image-button-size-button-group {
-  font-size: 12px;
-}
-/****添加计算宽度的--运算符直接需要space****/
-/****** common color(常用颜色,可用于普遍场景) *****/
-/**** custom color(自定义颜色,用于特定场景) ****/
-.bi-upload-image .upload-image-text-button-label {
-  font-size: 14px;
-  color: #999999;
-}
-.bi-upload-image .upload-image-icon-button {
-  z-index: 1;
-  font-size: 16px;
-}
-.bi-upload-image .upload-image-delete-label {
-  font-size: 14px;
-}
-/****添加计算宽度的--运算符直接需要space****/
-/****** common color(常用颜色,可用于普遍场景) *****/
-/**** custom color(自定义颜色,用于特定场景) ****/
 .bi-interactive-arrangement .interactive-arrangement-dragtag-line {
   z-index: 1000000000;
   background-color: #f07d0a;

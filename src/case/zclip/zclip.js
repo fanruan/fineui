@@ -16,7 +16,7 @@ BI.ZeroClip = BI.inherit(BI.BasicButton, {
     _init: function () {
         BI.ZeroClip.superclass._init.apply(this, arguments);
         var self = this, o = this.options;
-        
+
         BI.nextTick(function () {
             self.element.zclip({
                 path: BI.resourceURL + "/ZeroClipboard.swf",
