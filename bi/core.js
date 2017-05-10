@@ -4512,11 +4512,11 @@ BI.Widget = BI.inherit(BI.OB, {
     setVisible: function (visible) {
         if (visible === true) {
             this.options.invisible = false;
-            this.element.show();
+            this.element.css("display", "");
             this._mount();
         } else if (visible === false) {
             this.options.invisible = true;
-            this.element.hide();
+            this.element.css("display", "none");
         }
         this.fireEvent(BI.Events.VIEW, visible);
     },
