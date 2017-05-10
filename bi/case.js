@@ -11346,10 +11346,8 @@ BI.SelectTextTrigger = BI.inherit(BI.Trigger, {
         });
 
         if (result.length > 0) {
-            this.trigger.element.removeClass("bi-water-mark");
             this.trigger.setText(result.join(","));
         } else {
-            this.trigger.element.addClass("bi-water-mark");
             this.trigger.setText(o.text);
         }
     },
