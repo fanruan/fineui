@@ -715,6 +715,7 @@ li.CodeMirror-hint-active {
   font-size: 14px;
 }
 .bi-button.clear {
+  font-size: inherit;
   border-width: 0;
   background-color: transparent;
 }
