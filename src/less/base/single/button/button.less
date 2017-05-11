@@ -8,6 +8,11 @@
   vertical-align: middle;
   cursor: pointer;
   font-size: 14px;
+  &.block {
+    font-size: inherit;
+    border-width: 0;
+    .border-radius(0px);
+  }
   &.clear {
     font-size: inherit;
     border-width: 0;
@@ -17,16 +22,18 @@
     }
   }
   &.button-common {
-    & {
+    &, & .b-font:before {
       color: @color-bi-text;
     }
-    &.clear {
+    &.clear, &.clear .b-font:before {
       color: @color-bi-text-highlight;
     }
   }
   &.button-ignore {
     & {
-      color: @color-bi-text-black;
+      &, & .b-font:before {
+        color: @color-bi-text-black;
+      }
       background-color: @color-bi-background-default;
       border-color: @color-bi-border-line;
     }
@@ -37,24 +44,32 @@
   }
   &.button-success {
     & {
-      color: @color-bi-text;
+      &, & .b-font:before {
+        color: @color-bi-text;
+      }
       background-color: @color-bi-background-success;
       border-color: @color-bi-border-success;
     }
     &.clear {
-      color: @color-bi-text-success;
+      &, & .b-font:before {
+        color: @color-bi-text-success;
+      }
       background-color: transparent;
       border-width: 0;
     }
   }
   &.button-warning {
     & {
-      color: @color-bi-text;
+      &, & .b-font:before {
+        color: @color-bi-text;
+      }
       background-color: @color-bi-background-delete;
       border-color: @color-bi-border-delete;
     }
     &.clear {
-      color: @color-bi-text-warning;
+      &, & .b-font:before {
+        color: @color-bi-text-warning;
+      }
       background-color: transparent;
       border-width: 0;
     }
@@ -62,12 +77,18 @@
   &.button-common.disabled,
   &.button-success.disabled,
   &.button-warning.disabled {
-    color: @color-bi-text !important;
-    background: @color-bi-background-disabled !important;
-    border-color: @color-bi-border-disabled !important;
+    &, &.base-disabled {
+      &, & .b-font:before {
+        color: @color-bi-text !important;
+      }
+      background: @color-bi-background-disabled !important;
+      border-color: @color-bi-border-disabled !important;
+    }
   }
   &.button-ignore.disabled {
-    color: @color-bi-text-disabled !important;
+    &, & .b-font:before {
+      color: @color-bi-text-disabled !important;
+    }
     background: @color-bi-background-default !important;
     border-color: @color-bi-border-line !important;
   }
@@ -76,7 +97,9 @@
   &.button-warning.disabled,
   &.button-ignore.disabled {
     &.clear {
-      color: @color-bi-text-disabled !important;
+      &, & .b-font:before {
+        color: @color-bi-text-disabled !important;
+      }
       background: transparent !important;
       border-width: 0 !important;
       &:hover, &:active {

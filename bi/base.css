@@ -714,6 +714,13 @@ li.CodeMirror-hint-active {
   cursor: pointer;
   font-size: 14px;
 }
+.bi-button.block {
+  font-size: inherit;
+  border-width: 0;
+  -webkit-border-radius: 0px;
+  -moz-border-radius: 0px;
+  border-radius: 0px;
+}
 .bi-button.clear {
   font-size: inherit;
   border-width: 0;
@@ -724,60 +731,105 @@ li.CodeMirror-hint-active {
   opacity: 0.75;
   filter: alpha(opacity=75);
 }
-.bi-button.button-common {
+.bi-button.button-common,
+.bi-button.button-common .b-font:before {
   color: #ffffff;
 }
-.bi-button.button-common.clear {
+.bi-button.button-common.clear,
+.bi-button.button-common.clear .b-font:before {
   color: #3f8ce8;
 }
 .bi-button.button-ignore {
-  color: #1a1a1a;
   background-color: #ffffff;
   border-color: #d4dadd;
+}
+.bi-button.button-ignore,
+.bi-button.button-ignore .b-font:before {
+  color: #1a1a1a;
 }
 .bi-button.button-ignore.clear {
   background-color: transparent;
   border-width: 0;
 }
 .bi-button.button-success {
-  color: #ffffff;
   background-color: #58cc7d;
   border-color: #58cc7d;
 }
+.bi-button.button-success,
+.bi-button.button-success .b-font:before {
+  color: #ffffff;
+}
 .bi-button.button-success.clear {
-  color: #0c6d23;
   background-color: transparent;
   border-width: 0;
 }
+.bi-button.button-success.clear,
+.bi-button.button-success.clear .b-font:before {
+  color: #0c6d23;
+}
 .bi-button.button-warning {
-  color: #ffffff;
   background-color: #e85050;
   border-color: #e85050;
 }
+.bi-button.button-warning,
+.bi-button.button-warning .b-font:before {
+  color: #ffffff;
+}
 .bi-button.button-warning.clear {
-  color: #e85050;
   background-color: transparent;
   border-width: 0;
 }
+.bi-button.button-warning.clear,
+.bi-button.button-warning.clear .b-font:before {
+  color: #e85050;
+}
 .bi-button.button-common.disabled,
 .bi-button.button-success.disabled,
-.bi-button.button-warning.disabled {
-  color: #ffffff !important;
+.bi-button.button-warning.disabled,
+.bi-button.button-common.disabled.base-disabled,
+.bi-button.button-success.disabled.base-disabled,
+.bi-button.button-warning.disabled.base-disabled {
   background: #cccccc !important;
   border-color: #cccccc !important;
 }
+.bi-button.button-common.disabled,
+.bi-button.button-success.disabled,
+.bi-button.button-warning.disabled,
+.bi-button.button-common.disabled.base-disabled,
+.bi-button.button-success.disabled.base-disabled,
+.bi-button.button-warning.disabled.base-disabled,
+.bi-button.button-common.disabled .b-font:before,
+.bi-button.button-success.disabled .b-font:before,
+.bi-button.button-warning.disabled .b-font:before,
+.bi-button.button-common.disabled.base-disabled .b-font:before,
+.bi-button.button-success.disabled.base-disabled .b-font:before,
+.bi-button.button-warning.disabled.base-disabled .b-font:before {
+  color: #ffffff !important;
+}
 .bi-button.button-ignore.disabled {
-  color: #cccccc !important;
   background: #ffffff !important;
   border-color: #d4dadd !important;
+}
+.bi-button.button-ignore.disabled,
+.bi-button.button-ignore.disabled .b-font:before {
+  color: #cccccc !important;
 }
 .bi-button.button-common.disabled.clear,
 .bi-button.button-success.disabled.clear,
 .bi-button.button-warning.disabled.clear,
 .bi-button.button-ignore.disabled.clear {
-  color: #cccccc !important;
   background: transparent !important;
   border-width: 0 !important;
+}
+.bi-button.button-common.disabled.clear,
+.bi-button.button-success.disabled.clear,
+.bi-button.button-warning.disabled.clear,
+.bi-button.button-ignore.disabled.clear,
+.bi-button.button-common.disabled.clear .b-font:before,
+.bi-button.button-success.disabled.clear .b-font:before,
+.bi-button.button-warning.disabled.clear .b-font:before,
+.bi-button.button-ignore.disabled.clear .b-font:before {
+  color: #cccccc !important;
 }
 .bi-button.button-common.disabled.clear:hover,
 .bi-button.button-success.disabled.clear:hover,

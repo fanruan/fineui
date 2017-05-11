@@ -14,12 +14,13 @@
             var conf = BI.Button.superclass._defaultConfig.apply(this, arguments);
             return BI.extend(conf, {
                 baseCls: (conf.baseCls || "") + ' bi-button',
-                minWidth: props.clear === true ? 0 : 90,
+                minWidth: (props.block === true || props.clear === true) ? 0 : 90,
                 shadow: props.clear !== true,
                 isShadowShowingOnSelected: true,
                 readonly: true,
                 iconClass: "",
                 level: 'common',
+                block: false, //是否块状显示，即不显示边框，没有最小宽度的限制
                 clear: false, //是否去掉边框和背景
                 textAlign: "center",
                 whiteSpace: "nowrap",
@@ -38,8 +39,10 @@
         _init: function () {
             BI.Button.superclass._init.apply(this, arguments);
             var o = this.options, self = this;
-            if (BI.isNumber(o.height)) {
+            if (BI.isNumber(o.height) && !o.clear && !o.block) {
                 this.element.css({height: o.height - 2, lineHeight: (o.height - 2) + 'px'});
+            } else {
+                this.element.css({lineHeight: o.height + 'px'});
             }
             if (BI.isKey(o.iconClass)) {
                 this.icon = BI.createWidget({
@@ -86,6 +89,9 @@
                     value: o.value
                 });
             }
+            if (o.block === true) {
+                this.element.addClass("block");
+            }
             if (o.clear === true) {
                 this.element.addClass("clear");
             }
@@ -115,8 +121,8 @@
 
         setEnable: function (b) {
             BI.Button.superclass.setEnable.apply(this, arguments);
-            this.text.setEnable(b);
-            this.icon && this.icon.setEnable(b);
+            // this.text.setEnable(b);
+            // this.icon && this.icon.setEnable(b);
         },
 
         doRedMark: function () {
