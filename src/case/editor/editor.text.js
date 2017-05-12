@@ -3,7 +3,7 @@
  * @class BI.TextEditor
  * @extends BI.Single
  */
-BI.TextEditor = BI.inherit(BI.Single, {
+BI.TextEditor = BI.inherit(BI.Widget, {
     _defaultConfig: function () {
         var conf = BI.TextEditor.superclass._defaultConfig.apply(this, arguments);
         return BI.extend(conf, {
@@ -96,7 +96,7 @@ BI.TextEditor = BI.inherit(BI.Single, {
             self.fireEvent(BI.TextEditor.EVENT_STOP);
         });
         this.editor.on(BI.Editor.EVENT_ERROR, function () {
-            self.fireEvent(BI.TextEditor.EVENT_ERROR);
+            self.fireEvent(BI.TextEditor.EVENT_ERROR, arguments);
         });
         this.editor.on(BI.Editor.EVENT_ENTER, function () {
             self.fireEvent(BI.TextEditor.EVENT_ENTER);

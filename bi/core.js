@@ -2920,6 +2920,26 @@ if (!window.BI) {
             return /(msie|trident)/i.test(navigator.userAgent.toLowerCase());
         },
 
+        isIE9Below: function () {
+            if (!BI.isIE()) {
+                return false;
+            }
+            var version = 0;
+            var agent = navigator.userAgent.toLowerCase();
+            var v1 = agent.match(/(?:msie\s([\w.]+))/);
+            var v2 = agent.match(/(?:trident.*rv:([\w.]+))/);
+            if (v1 && v2 && v1[1] && v2[1]) {
+                version = Math.max(v1[1] * 1, v2[1] * 1);
+            } else if (v1 && v1[1]) {
+                version = v1[1] * 1;
+            } else if (v2 && v2[1]) {
+                version = v2[1] * 1;
+            } else {
+                version = 0;
+            }
+            return version < 9;
+        },
+
         isEdge: function () {
             return /edge/i.test(navigator.userAgent.toLowerCase());
         },
@@ -4492,11 +4512,12 @@ BI.Widget = BI.inherit(BI.OB, {
     setVisible: function (visible) {
         if (visible === true) {
             this.options.invisible = false;
-            this.element.show();
+            //用this.element.show()会把display属性改成block
+            this.element.css("display", "");
             this._mount();
         } else if (visible === false) {
             this.options.invisible = true;
-            this.element.hide();
+            this.element.css("display", "none");
         }
         this.fireEvent(BI.Events.VIEW, visible);
     },
@@ -6354,6 +6375,32 @@ Date.prototype.getQuarterStartMonth = function () {
     }
     return quarterStartMonth;
 };
+
+//指定日期n个月之前或之后的日期
+Date.prototype.getOffsetMonth = function (n) {
+    var dt = new Date(this.getTime());
+    var day = dt.getDate();
+    var monthDay = new Date(dt.getFullYear(), dt.getMonth() + parseInt(n), 1).getMonthDays();
+    if(day > monthDay){
+        day = monthDay;
+    }
+    dt.setDate(day);
+    dt.setMonth(dt.getMonth() + parseInt(n));
+    return dt;
+};
+
+//获得本周的起始日期
+Date.prototype.getWeekStartDate = function () {
+    var w = this.getDay();
+    return this.getOffsetDate(-w);
+};
+//得到本周的结束日期
+Date.prototype.getWeekEndDate = function () {
+    var w = this.getDay();
+    var offset = (w === 0 ? 6 : 6 - w);
+    return this.getOffsetDate(offset);
+};
+
 //获得本季度的起始日期
 Date.prototype.getQuarterStartDate = function () {
     return new Date(this.getFullYear(), this.getQuarterStartMonth(), 1);
@@ -12443,174 +12490,6 @@ BI.FloatHorizontalLayout = BI.inherit(BI.Layout, {
     }
 });
 BI.shortcut('bi.horizontal_float', BI.FloatHorizontalLayout);/**
- * 内联布局
- * @class BI.InlineCenterAdaptLayout
- * @extends BI.Layout
- *
- * @cfg {JSON} options 配置属性
- * @cfg {Number} [hgap=0] 水平间隙
- * @cfg {Number} [vgap=0] 垂直间隙
- */
-BI.InlineCenterAdaptLayout = BI.inherit(BI.Layout, {
-    props: function () {
-        return BI.extend(BI.InlineCenterAdaptLayout.superclass.props.apply(this, arguments), {
-            baseCls: "bi-inline-center-adapt-layout",
-            hgap: 0,
-            vgap: 0,
-            lgap: 0,
-            rgap: 0,
-            tgap: 0,
-            bgap: 0
-        });
-    },
-    render: function () {
-        BI.InlineCenterAdaptLayout.superclass.render.apply(this, arguments);
-        this.element.css({
-            whiteSpace: "nowrap"
-        });
-        this.populate(this.options.items);
-    },
-
-    _addElement: function (i, item, length) {
-        var o = this.options;
-        if (!this.hasWidget(this.getName() + "-" + i)) {
-            var t = BI.createWidget(item);
-            t.element.css({
-                "position": "relative"
-            });
-            var w = BI.createWidget({
-                type: "bi.horizontal_auto",
-                items: [t]
-            });
-            this.addWidget(this.getName() + "-" + i, w);
-        } else {
-            var w = this.getWidgetByName(this.getName() + "-" + i);
-        }
-        w.element.css({
-            "position": "relative",
-            "display": "inline-block",
-            "vertical-align": "middle",
-            "*display": "inline",
-            "*zoom": 1,
-            "min-width": 100 / length + "%"
-        });
-        if (o.hgap + o.lgap + (item.lgap || 0) > 0) {
-            w.element.css({
-                "margin-left": o.hgap + o.lgap + (item.lgap || 0) + "px"
-            })
-        }
-        if (o.hgap + o.rgap + (item.rgap || 0) > 0) {
-            w.element.css({
-                "margin-right": o.hgap + o.rgap + (item.rgap || 0) + "px"
-            })
-        }
-        if (o.vgap + o.tgap + (item.tgap || 0) > 0) {
-            w.element.css({
-                "margin-top": o.vgap + o.tgap + (item.tgap || 0) + "px"
-            })
-        }
-        if (o.vgap + o.bgap + (item.bgap || 0) > 0) {
-            w.element.css({
-                "margin-bottom": o.vgap + o.bgap + (item.bgap || 0) + "px"
-            })
-        }
-        return w;
-    },
-
-    resize: function () {
-        this.stroke(this.options.items);
-    },
-
-    addItem: function (item) {
-        throw new Error("cannot be added");
-    },
-
-    stroke: function (items) {
-        var self = this;
-        BI.each(items, function (i, item) {
-            if (!!item) {
-                self._addElement(i, item, items.length);
-            }
-        });
-    },
-
-    populate: function (items) {
-        BI.InlineCenterAdaptLayout.superclass.populate.apply(this, arguments);
-        this._mount();
-    }
-});
-BI.shortcut('bi.inline_center_adapt', BI.InlineCenterAdaptLayout);/**
- * 内联布局
- * @class BI.InlineVerticalAdaptLayout
- * @extends BI.Layout
- *
- * @cfg {JSON} options 配置属性
- * @cfg {Number} [hgap=0] 水平间隙
- * @cfg {Number} [vgap=0] 垂直间隙
- */
-BI.InlineVerticalAdaptLayout = BI.inherit(BI.Layout, {
-    props: function () {
-        return BI.extend(BI.InlineVerticalAdaptLayout.superclass.props.apply(this, arguments), {
-            baseCls: "bi-inline-vertical-adapt-layout",
-            hgap: 0,
-            vgap: 0,
-            lgap: 0,
-            rgap: 0,
-            tgap: 0,
-            bgap: 0
-        });
-    },
-    render: function () {
-        BI.InlineVerticalAdaptLayout.superclass.render.apply(this, arguments);
-        this.element.css({
-            whiteSpace: "nowrap"
-        });
-        this.populate(this.options.items);
-    },
-
-    _addElement: function (i, item) {
-        var o = this.options;
-        var w = BI.InlineVerticalAdaptLayout.superclass._addElement.apply(this, arguments);
-        w.element.css({
-            "position": "relative",
-            "display": "inline-block",
-            "vertical-align": "middle",
-            "*display": "inline",
-            "*zoom": 1
-        });
-        if (o.hgap + o.lgap + (item.lgap || 0) > 0) {
-            w.element.css({
-                "margin-left": o.hgap + o.lgap + (item.lgap || 0) + "px"
-            })
-        }
-        if (o.hgap + o.rgap + (item.rgap || 0) > 0) {
-            w.element.css({
-                "margin-right": o.hgap + o.rgap + (item.rgap || 0) + "px"
-            })
-        }
-        if (o.vgap + o.tgap + (item.tgap || 0) > 0) {
-            w.element.css({
-                "margin-top": o.vgap + o.tgap + (item.tgap || 0) + "px"
-            })
-        }
-        if (o.vgap + o.bgap + (item.bgap || 0) > 0) {
-            w.element.css({
-                "margin-bottom": o.vgap + o.bgap + (item.bgap || 0) + "px"
-            })
-        }
-        return w;
-    },
-
-    resize: function () {
-        this.stroke(this.options.items);
-    },
-
-    populate: function (items) {
-        BI.InlineVerticalAdaptLayout.superclass.populate.apply(this, arguments);
-        this._mount();
-    }
-});
-BI.shortcut('bi.inline_vertical_adapt', BI.InlineVerticalAdaptLayout);/**
  *自适应水平和垂直方向都居中容器
  * Created by GUY on 2016/12/2.
  *
@@ -14178,68 +14057,6 @@ BI.HorizontalCellLayout = BI.inherit(BI.Layout, {
     }
 });
 BI.shortcut('bi.horizontal_cell', BI.HorizontalCellLayout);/**
- * 内联布局
- * @class BI.InlineLayout
- * @extends BI.Layout
- *
- * @cfg {JSON} options 配置属性
- * @cfg {Number} [hgap=0] 水平间隙
- * @cfg {Number} [vgap=0] 垂直间隙
- */
-BI.InlineLayout = BI.inherit(BI.Layout, {
-    props: function () {
-        return BI.extend(BI.InlineLayout.superclass.props.apply(this, arguments), {
-            baseCls: "bi-inline-layout",
-            hgap: 0,
-            vgap: 0,
-            lgap: 0,
-            rgap: 0,
-            tgap: 0,
-            bgap: 0
-        });
-    },
-    render: function () {
-        BI.InlineLayout.superclass.render.apply(this, arguments);
-        this.populate(this.options.items);
-    },
-
-    _addElement: function (i, item) {
-        var o = this.options;
-        var w = BI.InlineLayout.superclass._addElement.apply(this, arguments);
-        w.element.css({"position": "relative", display: "inline-block", "*display": "inline", "*zoom": 1});
-        if (o.hgap + o.lgap + (item.lgap || 0) > 0) {
-            w.element.css({
-                "margin-left": o.hgap + o.lgap + (item.lgap || 0) + "px"
-            })
-        }
-        if (o.hgap + o.rgap + (item.rgap || 0) > 0) {
-            w.element.css({
-                "margin-right": o.hgap + o.rgap + (item.rgap || 0) + "px"
-            })
-        }
-        if (o.vgap + o.tgap + (item.tgap || 0) > 0) {
-            w.element.css({
-                "margin-top": o.vgap + o.tgap + (item.tgap || 0) + "px"
-            })
-        }
-        if (o.vgap + o.bgap + (item.bgap || 0) > 0) {
-            w.element.css({
-                "margin-bottom": o.vgap + o.bgap + (item.bgap || 0) + "px"
-            })
-        }
-        return w;
-    },
-
-    resize: function(){
-        this.stroke(this.options.items);
-    },
-
-    populate: function (items) {
-        BI.InlineLayout.superclass.populate.apply(this, arguments);
-        this._mount();
-    }
-});
-BI.shortcut('bi.inline', BI.InlineLayout);/**
  * 靠左对齐的自由浮动布局
  * @class BI.LatticeLayout
  * @extends BI.Layout
@@ -16139,6 +15956,7 @@ BI.TooltipsController = BI.inherit(BI.Controller, {
             type: "bi.tooltip",
             text: text,
             level: level,
+            stopEvent: true,
             height: this._const.height
         });
     },
@@ -16333,7 +16151,7 @@ BI.FloatBoxRouter = BI.inherit(BI.WRouter, {
         if(this.controller){
             this.controller.remove(url);
             delete this.store[url];
-            this.views[url] && this.views[url].destroy();
+            this.views[url] && this.views[url].model.destroy();
             delete this.views[url];
         }
         return this;
@@ -17021,7 +16839,9 @@ BI.extend(jQuery, {
                 }
                 break;
         }
-        popup.resetHeight && popup.resetHeight(Math.min(bodyHeight - position.top, maxHeight));
+        if(needAdaptHeight === true) {
+            popup.resetHeight && popup.resetHeight(Math.min(bodyHeight - position.top, maxHeight));
+        }
         return position;
     }
 });/**
@@ -17163,6 +16983,9 @@ $(function () {
 
         //获取对比颜色
         getContrastColor: function (color) {
+            if (!color) {
+                return "";
+            }
             if (this.isDarkColor(color)) {
                 return "#ffffff";
             }
@@ -17804,6 +17627,21 @@ $(function () {
                 return ob;
             }
             return BI.extend(ob, {type: "bi.flex_center"});
+        } else {
+            return ob;
+        }
+    });
+    //注册滚动条
+    BI.Plugin.registerWidget("bi.grid_table_scrollbar", function (ob) {
+        if (BI.isIE9Below()) {
+            return BI.extend(ob, {type: "bi.native_table_scrollbar"});
+        } else {
+            return ob;
+        }
+    });
+    BI.Plugin.registerWidget("bi.grid_table_horizontal_scrollbar", function (ob) {
+        if (BI.isIE9Below()) {
+            return BI.extend(ob, {type: "bi.native_table_horizontal_scrollbar"});
         } else {
             return ob;
         }

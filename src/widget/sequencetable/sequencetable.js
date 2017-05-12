@@ -195,6 +195,14 @@ BI.SequenceTable = BI.inherit(BI.Widget, {
         return this.table.hasRightHorizontalScroll();
     },
 
+    setLeftHorizontalScroll: function (scrollLeft) {
+        this.table.setLeftHorizontalScroll(scrollLeft);
+    },
+
+    setRightHorizontalScroll: function (scrollLeft) {
+        this.table.setRightHorizontalScroll(scrollLeft);
+    },
+
     setVerticalScroll: function (scrollTop) {
         this.table.setVerticalScroll(scrollTop);
         this.sequence.setVerticalScroll(scrollTop);

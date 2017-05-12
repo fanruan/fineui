@@ -2,9 +2,9 @@
  * 带标记的文本框
  * Created by GUY on 2015/8/28.
  * @class BI.SignEditor
- * @extends BI.Single
+ * @extends BI.Widget
  */
-BI.SignEditor = BI.inherit(BI.Single, {
+BI.SignEditor = BI.inherit(BI.Widget, {
     _defaultConfig: function () {
         var conf = BI.SignEditor.superclass._defaultConfig.apply(this, arguments);
         return BI.extend(conf, {
@@ -48,6 +48,9 @@ BI.SignEditor = BI.inherit(BI.Single, {
         this.text = BI.createWidget({
             type: "bi.text_button",
             cls: "sign-editor-text",
+            title: o.title,
+            warningTitle: o.warningTitle,
+            tipType: o.tipType,
             textAlign: "left",
             height: o.height,
             hgap: 4,
@@ -158,6 +161,14 @@ BI.SignEditor = BI.inherit(BI.Single, {
         this.text.visible();
     },
 
+    setTitle: function (title) {
+        this.text.setTitle(title);
+    },
+
+    setWarningTitle: function (title) {
+        this.text.setWarningTitle(title);
+    },
+
     focus: function () {
         this._showInput();
         this.editor.focus();
@@ -195,7 +206,7 @@ BI.SignEditor = BI.inherit(BI.Single, {
         return this.editor.isValid();
     },
 
-    setValid: function(v){
+    setValid: function (v) {
         BI.SignEditor.superclass.setValid.apply(this, arguments);
         this.editor.setValid(v);
     },

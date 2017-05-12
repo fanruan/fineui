@@ -3527,7 +3527,7 @@ BI.BubbleCombo = BI.inherit(BI.Widget, {
             type: "bi.center_adapt",
             items: [{
                 type: "bi.layout",
-                cls: "bubble-combo-triangle-" + direction
+                cls: "bubble-combo-triangle-" + direction + " bi-high-light-border"
             }]
         });
         pos.el = this.triangle;
@@ -3592,6 +3592,10 @@ BI.BubbleCombo = BI.inherit(BI.Widget, {
 
     showView: function () {
         this.combo && this.combo.showView();
+    },
+
+    hasView: function () {
+        return BI.isNotNull(this.combo.getView());
     }
 });
 
@@ -3663,7 +3667,7 @@ BI.BubblePopupView = BI.inherit(BI.PopupView, {
         }
         this.line = BI.createWidget(op, {
             type: "bi.layout",
-            cls: "bubble-popup-line"
+            cls: "bubble-popup-line bi-high-light-background"
         });
         pos.el = this.line;
         BI.createWidget({
@@ -4899,167 +4903,6 @@ BI.DownListSelectTextTrigger = BI.inherit(BI.Trigger, {
     }
 });
 BI.shortcut("bi.down_list_select_text_trigger", BI.DownListSelectTextTrigger);/**
- * 根据内容自适应长度的输入框
- * @class BI.AdaptiveEditor
- * @extends BI.Single
- */
-BI.AdaptiveEditor = BI.inherit(BI.Single, {
-    _defaultConfig: function () {
-        var conf = BI.AdaptiveEditor.superclass._defaultConfig.apply(this, arguments);
-        return BI.extend(conf, {
-            baseCls: (conf.baseCls || "") + " bi-adapt-editor",
-            hgap: 4,
-            vgap: 2,
-            lgap: 0,
-            rgap: 0,
-            tgap: 0,
-            bgap: 0,
-            validationChecker: BI.emptyFn,
-            quitChecker: BI.emptyFn,
-            mouseOut: false,
-            allowBlank: true,
-            watermark: "",
-            errorText: "",
-            height: 30
-        })
-    },
-
-    _init: function () {
-        BI.AdaptiveEditor.superclass._init.apply(this, arguments);
-        var self = this, o = this.options;
-        this.editor = BI.createWidget({
-            type: "bi.sign_editor",
-            element: this,
-            height: o.height,
-            hgap: o.hgap,
-            vgap: o.vgap,
-            lgap: o.lgap,
-            rgap: o.rgap,
-            tgap: o.tgap,
-            bgap: o.bgap,
-            value: o.value,
-            validationChecker: o.validationChecker,
-            quitChecker: o.quitChecker,
-            mouseOut: o.mouseOut,
-            allowBlank: o.allowBlank,
-            watermark: o.watermark,
-            errorText: o.errorText
-        });
-
-        this.editor.on(BI.Controller.EVENT_CHANGE, function () {
-            self.fireEvent(BI.Controller.EVENT_CHANGE, arguments);
-        });
-        this.editor.on(BI.SignEditor.EVENT_FOCUS, function () {
-            self.fireEvent(BI.AdaptiveEditor.EVENT_FOCUS);
-        });
-        this.editor.on(BI.SignEditor.EVENT_BLUR, function () {
-            self.fireEvent(BI.AdaptiveEditor.EVENT_BLUR);
-        });
-        this.editor.on(BI.SignEditor.EVENT_CLICK, function () {
-            self.fireEvent(BI.AdaptiveEditor.EVENT_CLICK);
-        });
-        this.editor.on(BI.SignEditor.EVENT_CHANGE, function () {
-            self._checkEditorLength();
-            self.fireEvent(BI.AdaptiveEditor.EVENT_CHANGE);
-        });
-        this.editor.on(BI.SignEditor.EVENT_KEY_DOWN, function (v) {
-            self.fireEvent(BI.AdaptiveEditor.EVENT_KEY_DOWN);
-        });
-
-        this.editor.on(BI.SignEditor.EVENT_VALID, function () {
-            self.fireEvent(BI.AdaptiveEditor.EVENT_VALID);
-        });
-        this.editor.on(BI.SignEditor.EVENT_CONFIRM, function () {
-            self.fireEvent(BI.AdaptiveEditor.EVENT_CONFIRM);
-        });
-        this.editor.on(BI.SignEditor.EVENT_START, function () {
-            self.fireEvent(BI.AdaptiveEditor.EVENT_START);
-        });
-        this.editor.on(BI.SignEditor.EVENT_PAUSE, function () {
-            self.fireEvent(BI.AdaptiveEditor.EVENT_PAUSE);
-        });
-        this.editor.on(BI.Editor.EVENT_STOP, function () {
-            self.fireEvent(BI.AdaptiveEditor.EVENT_STOP);
-        });
-        this.editor.on(BI.SignEditor.EVENT_SPACE, function () {
-            self.fireEvent(BI.AdaptiveEditor.EVENT_SPACE);
-        });
-        this.editor.on(BI.SignEditor.EVENT_ERROR, function () {
-            self.fireEvent(BI.AdaptiveEditor.EVENT_ERROR);
-        });
-        this.editor.on(BI.SignEditor.EVENT_ENTER, function () {
-            self.fireEvent(BI.AdaptiveEditor.EVENT_ENTER);
-        });
-        this.editor.on(BI.SignEditor.EVENT_RESTRICT, function () {
-            self.fireEvent(BI.AdaptiveEditor.EVENT_RESTRICT);
-        });
-        this.editor.on(BI.SignEditor.EVENT_EMPTY, function () {
-            self.fireEvent(BI.AdaptiveEditor.EVENT_EMPTY);
-        });
-        this._checkEditorLength();
-    },
-
-    _checkEditorLength: function () {
-        var o = this.options;
-        this.element.width(BI.DOM.getTextSizeWidth(this.getValue(), 14) + 2 * o.hgap + o.lgap + o.rgap);
-    },
-
-    focus: function () {
-        this.editor.focus();
-    },
-
-    blur: function () {
-        this.editor.blur();
-    },
-
-    isValid: function () {
-        return this.editor.isValid();
-    },
-
-    setErrorText: function (text) {
-        this.editor.setErrorText(text);
-    },
-
-    getErrorText: function () {
-        return this.editor.getErrorText();
-    },
-
-    setValue: function (k) {
-        this.editor.setValue(k);
-        this._checkEditorLength();
-    },
-
-    getValue: function () {
-        return this.editor.getValue();
-    },
-
-    getState: function () {
-        return this.editor.getState();
-    },
-
-    setState: function (v) {
-
-    }
-});
-BI.AdaptiveEditor.EVENT_CHANGE = "EVENT_CHANGE";
-BI.AdaptiveEditor.EVENT_FOCUS = "EVENT_FOCUS";
-BI.AdaptiveEditor.EVENT_BLUR = "EVENT_BLUR";
-BI.AdaptiveEditor.EVENT_CLICK = "EVENT_CLICK";
-BI.AdaptiveEditor.EVENT_KEY_DOWN = "EVENT_KEY_DOWN";
-BI.AdaptiveEditor.EVENT_CLICK_LABEL = "EVENT_CLICK_LABEL";
-
-BI.AdaptiveEditor.EVENT_START = "EVENT_START";
-BI.AdaptiveEditor.EVENT_PAUSE = "EVENT_PAUSE";
-BI.AdaptiveEditor.EVENT_STOP = "EVENT_STOP";
-BI.AdaptiveEditor.EVENT_CONFIRM = "EVENT_CONFIRM";
-BI.AdaptiveEditor.EVENT_VALID = "EVENT_VALID";
-BI.AdaptiveEditor.EVENT_ERROR = "EVENT_ERROR";
-BI.AdaptiveEditor.EVENT_ENTER = "EVENT_ENTER";
-BI.AdaptiveEditor.EVENT_RESTRICT = "EVENT_RESTRICT";
-BI.AdaptiveEditor.EVENT_SPACE = "EVENT_SPACE";
-BI.AdaptiveEditor.EVENT_EMPTY = "EVENT_EMPTY";
-
-BI.shortcut("bi.adapt_editor", BI.AdaptiveEditor);/**
  * 有清楚按钮的文本框
  * Created by GUY on 2015/9/29.
  * @class BI.SmallTextEditor
@@ -5402,7 +5245,7 @@ BI.SearchEditor = BI.inherit(BI.Widget, {
     setEnable: function (b) {
         BI.Editor.superclass.setEnable.apply(this, arguments);
         this.editor && this.editor.setEnable(b);
-        this.clear.setEnabled(b);
+        this.clear.setEnable(b);
     }
 });
 BI.SearchEditor.EVENT_CHANGE = "EVENT_CHANGE";
@@ -5447,9 +5290,9 @@ BI.shortcut("bi.small_search_editor", BI.SmallSearchEditor);/**
  * 带标记的文本框
  * Created by GUY on 2016/1/25.
  * @class BI.ShelterEditor
- * @extends BI.Single
+ * @extends BI.Widget
  */
-BI.ShelterEditor = BI.inherit(BI.Single, {
+BI.ShelterEditor = BI.inherit(BI.Widget, {
     _defaultConfig: function () {
         var conf = BI.ShelterEditor.superclass._defaultConfig.apply(this, arguments);
         return BI.extend(conf, {
@@ -5494,6 +5337,9 @@ BI.ShelterEditor = BI.inherit(BI.Single, {
         this.text = BI.createWidget({
             type: "bi.text_button",
             cls: "shelter-editor-text",
+            title: o.title,
+            warningTitle: o.warningTitle,
+            tipType: o.tipType,
             textAlign: o.textAlign,
             height: o.height,
             hgap: 4
@@ -5599,6 +5445,14 @@ BI.ShelterEditor = BI.inherit(BI.Single, {
         this.text.visible();
     },
 
+    setTitle: function (title) {
+        this.text.setTitle(title);
+    },
+
+    setWarningTitle: function (title) {
+        this.text.setWarningTitle(title);
+    },
+
     focus: function () {
         this._showInput();
         this.editor.focus();
@@ -5697,7 +5551,7 @@ BI.shortcut("bi.shelter_editor", BI.ShelterEditor);/**
  * @class BI.SignInitialEditor
  * @extends BI.Single
  */
-BI.SignInitialEditor = BI.inherit(BI.Single, {
+BI.SignInitialEditor = BI.inherit(BI.Widget, {
     _defaultConfig: function () {
         var conf = BI.SignInitialEditor.superclass._defaultConfig.apply(this, arguments);
         return BI.extend(conf, {
@@ -5860,9 +5714,9 @@ BI.shortcut("bi.sign_initial_editor", BI.SignInitialEditor);/**
  * 带标记的文本框
  * Created by GUY on 2015/8/28.
  * @class BI.SignEditor
- * @extends BI.Single
+ * @extends BI.Widget
  */
-BI.SignEditor = BI.inherit(BI.Single, {
+BI.SignEditor = BI.inherit(BI.Widget, {
     _defaultConfig: function () {
         var conf = BI.SignEditor.superclass._defaultConfig.apply(this, arguments);
         return BI.extend(conf, {
@@ -5906,6 +5760,9 @@ BI.SignEditor = BI.inherit(BI.Single, {
         this.text = BI.createWidget({
             type: "bi.text_button",
             cls: "sign-editor-text",
+            title: o.title,
+            warningTitle: o.warningTitle,
+            tipType: o.tipType,
             textAlign: "left",
             height: o.height,
             hgap: 4,
@@ -6016,6 +5873,14 @@ BI.SignEditor = BI.inherit(BI.Single, {
         this.text.visible();
     },
 
+    setTitle: function (title) {
+        this.text.setTitle(title);
+    },
+
+    setWarningTitle: function (title) {
+        this.text.setWarningTitle(title);
+    },
+
     focus: function () {
         this._showInput();
         this.editor.focus();
@@ -6053,7 +5918,7 @@ BI.SignEditor = BI.inherit(BI.Single, {
         return this.editor.isValid();
     },
 
-    setValid: function(v){
+    setValid: function (v) {
         BI.SignEditor.superclass.setValid.apply(this, arguments);
         this.editor.setValid(v);
     },
@@ -6116,7 +5981,7 @@ BI.shortcut("bi.sign_editor", BI.SignEditor);/**
  * @class BI.StateEditor
  * @extends BI.Single
  */
-BI.StateEditor = BI.inherit(BI.Single, {
+BI.StateEditor = BI.inherit(BI.Widget, {
     _defaultConfig: function () {
         var conf = BI.StateEditor.superclass._defaultConfig.apply(this, arguments);
         return BI.extend(conf, {
@@ -6345,15 +6210,15 @@ BI.StateEditor = BI.inherit(BI.Single, {
             return;
         }
         if (BI.isString(v)) {
-            if (BI.isEmpty(v)) {
-                this.text.setText(BI.i18nText("BI-Basic_Unrestricted"));
-                this.text.setTitle("");
-                this.text.element.addClass("state-editor-infinite-text");
-            } else {
-                this.text.setText(v);
-                this.text.setTitle(v);
-                this.text.element.removeClass("state-editor-infinite-text");
-            }
+            // if (BI.isEmpty(v)) {
+            //     this.text.setText(BI.i18nText("BI-Basic_Unrestricted"));
+            //     this.text.setTitle("");
+            //     this.text.element.addClass("state-editor-infinite-text");
+            // } else {
+            this.text.setText(v);
+            this.text.setTitle(v);
+            this.text.element.removeClass("state-editor-infinite-text");
+            // }
             return;
         }
         if (BI.isArray(v)) {
@@ -6396,7 +6261,7 @@ BI.shortcut("bi.state_editor", BI.StateEditor);/**
  * @class BI.SimpleStateEditor
  * @extends BI.Single
  */
-BI.SimpleStateEditor = BI.inherit(BI.Single, {
+BI.SimpleStateEditor = BI.inherit(BI.Widget, {
     _defaultConfig: function () {
         var conf = BI.SimpleStateEditor.superclass._defaultConfig.apply(this, arguments);
         return BI.extend(conf, {
@@ -6655,7 +6520,7 @@ BI.shortcut("bi.simple_state_editor", BI.SimpleStateEditor);/**
  * @class BI.TextEditor
  * @extends BI.Single
  */
-BI.TextEditor = BI.inherit(BI.Single, {
+BI.TextEditor = BI.inherit(BI.Widget, {
     _defaultConfig: function () {
         var conf = BI.TextEditor.superclass._defaultConfig.apply(this, arguments);
         return BI.extend(conf, {
@@ -6748,7 +6613,7 @@ BI.TextEditor = BI.inherit(BI.Single, {
             self.fireEvent(BI.TextEditor.EVENT_STOP);
         });
         this.editor.on(BI.Editor.EVENT_ERROR, function () {
-            self.fireEvent(BI.TextEditor.EVENT_ERROR);
+            self.fireEvent(BI.TextEditor.EVENT_ERROR, arguments);
         });
         this.editor.on(BI.Editor.EVENT_ENTER, function () {
             self.fireEvent(BI.TextEditor.EVENT_ENTER);
@@ -7174,6 +7039,13 @@ BI.ListPane = BI.inherit(BI.Pane, {
     addItems: function (items) {
         this.options.items = this.options.items.concat(items);
         this.button_group.addItems.apply(this.button_group, arguments);
+        this.check();
+    },
+
+    removeItemAt: function (indexes) {
+        indexes = indexes || [];
+        BI.removeAt(this.options.items, indexes);
+        this.button_group.removeItemAt.apply(this.button_group, arguments);
         this.check();
     },
 
@@ -7897,8 +7769,8 @@ BI.SortList = BI.inherit(BI.Widget, {
             containment: o.containment || this.element,
             connectWith: o.connectWith || ".bi-sort-list",
             items: ".sort-item",
-            cursor: "drag",
-            tolerance: "intersect",
+            cursor: o.cursor || "drag",
+            tolerance: o.tolerance || "intersect",
             placeholder: {
                 element: function ($currentItem) {
                     var holder = BI.createWidget({
@@ -11335,10 +11207,8 @@ BI.SelectTextTrigger = BI.inherit(BI.Trigger, {
         });
 
         if (result.length > 0) {
-            this.trigger.element.removeClass("bi-water-mark");
             this.trigger.setText(result.join(","));
         } else {
-            this.trigger.element.addClass("bi-water-mark");
             this.trigger.setText(o.text);
         }
     },
@@ -11976,7 +11846,7 @@ BI.ZeroClip = BI.inherit(BI.BasicButton, {
     _init: function () {
         BI.ZeroClip.superclass._init.apply(this, arguments);
         var self = this, o = this.options;
-        
+
         BI.nextTick(function () {
             self.element.zclip({
                 path: BI.resourceURL + "/ZeroClipboard.swf",

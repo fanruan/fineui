@@ -182,6 +182,32 @@ Date.prototype.getQuarterStartMonth = function () {
     }
     return quarterStartMonth;
 };
+
+//指定日期n个月之前或之后的日期
+Date.prototype.getOffsetMonth = function (n) {
+    var dt = new Date(this.getTime());
+    var day = dt.getDate();
+    var monthDay = new Date(dt.getFullYear(), dt.getMonth() + parseInt(n), 1).getMonthDays();
+    if(day > monthDay){
+        day = monthDay;
+    }
+    dt.setDate(day);
+    dt.setMonth(dt.getMonth() + parseInt(n));
+    return dt;
+};
+
+//获得本周的起始日期
+Date.prototype.getWeekStartDate = function () {
+    var w = this.getDay();
+    return this.getOffsetDate(-w);
+};
+//得到本周的结束日期
+Date.prototype.getWeekEndDate = function () {
+    var w = this.getDay();
+    var offset = (w === 0 ? 6 : 6 - w);
+    return this.getOffsetDate(offset);
+};
+
 //获得本季度的起始日期
 Date.prototype.getQuarterStartDate = function () {
     return new Date(this.getFullYear(), this.getQuarterStartMonth(), 1);

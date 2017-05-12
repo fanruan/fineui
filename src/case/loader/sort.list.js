@@ -60,8 +60,8 @@ BI.SortList = BI.inherit(BI.Widget, {
             containment: o.containment || this.element,
             connectWith: o.connectWith || ".bi-sort-list",
             items: ".sort-item",
-            cursor: "drag",
-            tolerance: "intersect",
+            cursor: o.cursor || "drag",
+            tolerance: o.tolerance || "intersect",
             placeholder: {
                 element: function ($currentItem) {
                     var holder = BI.createWidget({

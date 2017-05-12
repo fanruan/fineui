@@ -9,7 +9,7 @@ BI.ArrangementBlock = BI.inherit(BI.Widget, {
 
     _defaultConfig: function () {
         return BI.extend(BI.ArrangementBlock.superclass._defaultConfig.apply(this, arguments), {
-            baseCls: "bi-arrangement-block bi-resizer"
+            baseCls: "bi-arrangement-block bi-mask"
         });
     },
 

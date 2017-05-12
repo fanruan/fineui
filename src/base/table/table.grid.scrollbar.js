@@ -154,7 +154,11 @@ BI.GridTableScrollbar = BI.inherit(BI.Widget, {
         } else {
             this._mouseMoveTracker.captureMouseMoves(e);
         }
-        this.element[0].focus();
+        try {
+            this.element[0].focus();
+        } catch (e) {
+
+        }
     },
 
     _onMouseMove: function (deltaX, deltaY) {

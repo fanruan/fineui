@@ -599,7 +599,7 @@ BI.BasicButton = BI.inherit(BI.Single, {
             stopPropagation: false,
             selected: false,
             once: false, //点击一次选中有效,再点无效
-            forceSelected: false, //点击即选中， 选中了就不会被取消
+            forceSelected: false, //点击即选中, 选中了就不会被取消,与once的区别是forceSelected不影响事件的触发
             forceNotSelected: false, //无论怎么点击都不会被选中
             disableSelected: false, //使能选中
 
@@ -1135,7 +1135,7 @@ BI.ButtonGroup = BI.inherit(BI.Widget, {
     },
 
     removeItemAt: function (indexes) {
-        BI.remove(this.buttons, indexes);
+        BI.removeAt(this.buttons, indexes);
         this.layouts.removeItemAt(indexes);
     },
 
@@ -2935,7 +2935,7 @@ BI.Combo = BI.inherit(BI.Widget, {
                             }
                         }
                     }, BI.EVENT_RESPONSE_TIME, true);
-                    self.element.off(ev + "." + self.getName()).on(ev + "." + self.getName(), function(e){
+                    self.element.off(ev + "." + self.getName()).on(ev + "." + self.getName(), function (e) {
                         debounce(e);
                         st(e);
                     });
@@ -3051,7 +3051,7 @@ BI.Combo = BI.inherit(BI.Widget, {
                 break;
             case "top":
             case "top,right":
-                p = $.getComboPosition(this.combo, this.popupView, o.adjustYOffset || o.adjustLength, o.isNeedAdjustHeight, ['top', 'bottom', 'right', 'left'], o.offsetStyle);
+                p = $.getComboPosition(this.combo, this.popupView, o.adjustXOffset, o.adjustYOffset || o.adjustLength, o.isNeedAdjustHeight, ['top', 'bottom', 'right', 'left'], o.offsetStyle);
                 break;
             case "left":
             case "left,bottom":
@@ -15883,25 +15883,25 @@ BI.shortcut("bi.image_button", BI.ImageButton);(function ($) {
      * @cfg {'common'/'success'/'warning'/'ignore'} [options.level='common'] 按钮类型，用不同颜色强调不同的场景
      */
     BI.Button = BI.inherit(BI.BasicButton, {
-        _const: {
-            minWidth: 90
-        },
 
-        _defaultConfig: function () {
+        _defaultConfig: function (props) {
             var conf = BI.Button.superclass._defaultConfig.apply(this, arguments);
             return BI.extend(conf, {
                 baseCls: (conf.baseCls || "") + ' bi-button',
-                shadow: true,
+                minWidth: (props.block === true || props.clear === true) ? 0 : 90,
+                shadow: props.clear !== true,
                 isShadowShowingOnSelected: true,
                 readonly: true,
                 iconClass: "",
                 level: 'common',
+                block: false, //是否块状显示，即不显示边框，没有最小宽度的限制
+                clear: false, //是否去掉边框和背景
                 textAlign: "center",
                 whiteSpace: "nowrap",
                 forceCenter: false,
                 textWidth: null,
                 textHeight: null,
-                hgap: 10,
+                hgap: props.clear ? 0 : 10,
                 vgap: 0,
                 tgap: 0,
                 bgap: 0,
@@ -15913,8 +15913,10 @@ BI.shortcut("bi.image_button", BI.ImageButton);(function ($) {
         _init: function () {
             BI.Button.superclass._init.apply(this, arguments);
             var o = this.options, self = this;
-            if (BI.isNumber(o.height)) {
+            if (BI.isNumber(o.height) && !o.clear && !o.block) {
                 this.element.css({height: o.height - 2, lineHeight: (o.height - 2) + 'px'});
+            } else {
+                this.element.css({lineHeight: o.height + 'px'});
             }
             if (BI.isKey(o.iconClass)) {
                 this.icon = BI.createWidget({
@@ -15961,7 +15963,15 @@ BI.shortcut("bi.image_button", BI.ImageButton);(function ($) {
                     value: o.value
                 });
             }
-            this.element.css({"min-width": this._const.minWidth - 2 + "px"});
+            if (o.block === true) {
+                this.element.addClass("block");
+            }
+            if (o.clear === true) {
+                this.element.addClass("clear");
+            }
+            if (o.minWidth > 2) {
+                this.element.css({"min-width": o.minWidth - 2 + "px"});
+            }
         },
 
         doClick: function () {
@@ -15985,8 +15995,8 @@ BI.shortcut("bi.image_button", BI.ImageButton);(function ($) {
 
         setEnable: function (b) {
             BI.Button.superclass.setEnable.apply(this, arguments);
-            this.text.setEnable(b);
-            this.icon && this.icon.setEnable(b);
+            // this.text.setEnable(b);
+            // this.icon && this.icon.setEnable(b);
         },
 
         doRedMark: function () {
@@ -19759,6 +19769,8 @@ BI.Tooltip = BI.inherit(BI.Tip, {
             extraCls: "bi-tooltip",
             text: "",
             level: "success",//success或warning
+            stopEvent: false,
+            stopPropagation: false,
             height: 20
         })
     },
@@ -19767,9 +19779,8 @@ BI.Tooltip = BI.inherit(BI.Tip, {
         var self = this, o = this.options;
         this.element.addClass("tooltip-" + o.level);
         var fn = function (e) {
-            e.stopPropagation();
-            e.stopEvent();
-            return false;
+            o.stopPropagation && e.stopPropagation();
+            o.stopEvent && e.stopEvent();
         };
         this.element.bind({
             "click": fn,
@@ -28226,6 +28237,160 @@ BI.Svg = BI.inherit(BI.Widget, {
 });
 BI.shortcut("bi.svg", BI.Svg);/**
  *
+ * 原生表格滚动条，为了IE8的兼容
+ *
+ * Created by GUY on 2016/1/12.
+ * @class BI.NativeTableScrollbar
+ * @extends BI.Widget
+ */
+BI.NativeTableScrollbar = BI.inherit(BI.Widget, {
+    _defaultConfig: function () {
+        return BI.extend(BI.NativeTableScrollbar.superclass._defaultConfig.apply(this, arguments), {
+            attributes: {
+                tabIndex: 0
+            },
+            contentSize: 0,
+            defaultPosition: 0,
+            position: 0,
+            size: 0
+        })
+    },
+
+    render: function () {
+        var self = this, o = this.options;
+        //把滚动台size改掉
+        BI.GridTableScrollbar.SIZE = 16;
+
+        var throttle = BI.throttle(function () {
+            self.fireEvent(BI.NativeTableScrollbar.EVENT_SCROLL, self.element.scrollTop());
+        }, 150, {leading: false});
+        this.element.scroll(function () {
+            throttle();
+        });
+        return {
+            type: "bi.default",
+            scrolly: true,
+            items: [{
+                type: "bi.layout",
+                width: 1,
+                ref: function (_ref) {
+                    self.inner = _ref;
+                }
+            }]
+        }
+    },
+
+    mounted: function () {
+        this._populate();
+    },
+
+    _populate: function () {
+        var self = this, o = this.options;
+        if (o.size < 1 || o.contentSize <= o.size) {
+            this.setVisible(false);
+            return;
+        }
+        this.setVisible(true);
+        try {
+            this.element.scrollTop(o.position);
+        } catch (e) {
+
+        }
+        this.inner.element.height(o.contentSize);
+    },
+
+    setContentSize: function (contentSize) {
+        this.options.contentSize = contentSize;
+    },
+
+    setPosition: function (position) {
+        this.options.position = position;
+    },
+
+    setSize: function (size) {
+        this.setHeight(size);
+        this.options.size = size;
+    },
+
+    populate: function () {
+        this._populate();
+    }
+});
+BI.NativeTableScrollbar.EVENT_SCROLL = "EVENT_SCROLL";
+BI.shortcut("bi.native_table_scrollbar", BI.NativeTableScrollbar);
+
+
+BI.NativeTableHorizontalScrollbar = BI.inherit(BI.Widget, {
+    _defaultConfig: function () {
+        return BI.extend(BI.NativeTableHorizontalScrollbar.superclass._defaultConfig.apply(this, arguments), {
+            attributes: {
+                tabIndex: 0
+            },
+            contentSize: 0,
+            position: 0,
+            size: 0
+        })
+    },
+
+    render: function () {
+        var self = this, o = this.options;
+        //把滚动台size改掉
+        BI.GridTableScrollbar.SIZE = 16;
+
+        var throttle = BI.throttle(function () {
+            self.fireEvent(BI.NativeTableScrollbar.EVENT_SCROLL, self.element.scrollLeft());
+        }, 150, {leading: false});
+        this.element.scroll(function () {
+            throttle();
+        });
+        return {
+            type: "bi.default",
+            scrollx: true,
+            items: [{
+                type: "bi.layout",
+                height: 1,
+                ref: function (_ref) {
+                    self.inner = _ref;
+                }
+            }]
+        }
+    },
+
+    setContentSize: function (contentSize) {
+        this.options.contentSize = contentSize;
+    },
+
+    setPosition: function (position) {
+        this.options.position = position;
+    },
+
+    setSize: function (size) {
+        this.setWidth(size);
+        this.options.size = size;
+    },
+
+    _populate: function () {
+        var self = this, o = this.options;
+        if (o.size < 1 || o.contentSize <= o.size) {
+            this.setVisible(false);
+            return;
+        }
+        this.setVisible(true);
+        try {
+            this.element.scrollLeft(o.position);
+        } catch (e) {
+
+        }
+        this.inner.element.width(o.contentSize);
+    },
+
+    populate: function () {
+        this._populate();
+    }
+});
+BI.NativeTableHorizontalScrollbar.EVENT_SCROLL = "EVENT_SCROLL";
+BI.shortcut("bi.native_table_horizontal_scrollbar", BI.NativeTableHorizontalScrollbar);/**
+ *
  * 表格
  *
  * Created by GUY on 2015/9/22.
@@ -29821,7 +29986,11 @@ BI.GridTableScrollbar = BI.inherit(BI.Widget, {
         } else {
             this._mouseMoveTracker.captureMouseMoves(e);
         }
-        this.element[0].focus();
+        try {
+            this.element[0].focus();
+        } catch (e) {
+
+        }
     },
 
     _onMouseMove: function (deltaX, deltaY) {

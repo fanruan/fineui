@@ -128,7 +128,7 @@ BI.BubbleCombo = BI.inherit(BI.Widget, {
             type: "bi.center_adapt",
             items: [{
                 type: "bi.layout",
-                cls: "bubble-combo-triangle-" + direction
+                cls: "bubble-combo-triangle-" + direction + " bi-high-light-border"
             }]
         });
         pos.el = this.triangle;
@@ -193,6 +193,10 @@ BI.BubbleCombo = BI.inherit(BI.Widget, {
 
     showView: function () {
         this.combo && this.combo.showView();
+    },
+
+    hasView: function () {
+        return BI.isNotNull(this.combo.getView());
     }
 });
 

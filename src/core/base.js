@@ -1025,6 +1025,26 @@ if (!window.BI) {
             return /(msie|trident)/i.test(navigator.userAgent.toLowerCase());
         },
 
+        isIE9Below: function () {
+            if (!BI.isIE()) {
+                return false;
+            }
+            var version = 0;
+            var agent = navigator.userAgent.toLowerCase();
+            var v1 = agent.match(/(?:msie\s([\w.]+))/);
+            var v2 = agent.match(/(?:trident.*rv:([\w.]+))/);
+            if (v1 && v2 && v1[1] && v2[1]) {
+                version = Math.max(v1[1] * 1, v2[1] * 1);
+            } else if (v1 && v1[1]) {
+                version = v1[1] * 1;
+            } else if (v2 && v2[1]) {
+                version = v2[1] * 1;
+            } else {
+                version = 0;
+            }
+            return version < 9;
+        },
+
         isEdge: function () {
             return /edge/i.test(navigator.userAgent.toLowerCase());
         },

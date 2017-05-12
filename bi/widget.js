@@ -173,12 +173,18 @@ BI.SequenceTableTreeNumber = BI.inherit(BI.Widget, {
         var items = this.layout.attr("items");
         if (o.isNeedFreeze === false) {
             items[0].height = 0;
+            items[1].height = 0;
         } else if (o.isNeedFreeze === true) {
             items[0].height = headerHeight;
+            items[1].height = 2;
         }
         this.layout.attr("items", items);
         this.layout.resize();
-        this.scrollContainer.element.scrollTop(o.scrollTop);
+        try {
+            this.scrollContainer.element.scrollTop(o.scrollTop);
+        } catch (e) {
+
+        }
     },
 
     _getHeaderHeight: function () {
@@ -352,7 +358,11 @@ BI.SequenceTableTreeNumber = BI.inherit(BI.Widget, {
     setVerticalScroll: function (scrollTop) {
         if (this.options.scrollTop !== scrollTop) {
             this.options.scrollTop = scrollTop;
-            this.scrollContainer.element.scrollTop(scrollTop);
+            try {
+                this.scrollContainer.element.scrollTop(scrollTop);
+            } catch (e) {
+
+            }
         }
     },
 
@@ -945,7 +955,7 @@ BI.ArrangementBlock = BI.inherit(BI.Widget, {
 
     _defaultConfig: function () {
         return BI.extend(BI.ArrangementBlock.superclass._defaultConfig.apply(this, arguments), {
-            baseCls: "bi-arrangement-block bi-resizer"
+            baseCls: "bi-arrangement-block bi-mask"
         });
     },
 
@@ -4951,7 +4961,7 @@ BI.shortcut('bi.date_combo', BI.DateCombo);BI.DateTrigger = BI.inherit(BI.Trigge
             self.fireEvent(BI.DateTrigger.EVENT_ERROR);
         });
         this.editor.on(BI.SignEditor.EVENT_CONFIRM, function () {
-            var value = self.editor.getState();
+            var value = self.editor.getValue();
             if (BI.isNotNull(value)) {
                 self.editor.setState(value);
             }
@@ -9853,7 +9863,6 @@ BI.MultiSelectCombo = BI.inherit(BI.Single, {
         this.storeValue = v || {};
         this._assertValue(this.storeValue);
         this.combo.setValue(this.storeValue);
-        this.trigger.setValue(this.storeValue);
     },
 
     getValue: function () {
@@ -12261,7 +12270,7 @@ BI.NumericalInterval = BI.inherit(BI.Single, {
         var self = this, c = this.constants, o = this.options;
         BI.NumericalInterval.superclass._init.apply(this, arguments)
         this.smallEditor = BI.createWidget({
-            type: "bi.sign_editor",
+            type: "bi.editor",
             height: o.height - 2,
             watermark: BI.i18nText("BI-Basic_Unrestricted"),
             allowBlank: true,
@@ -12298,7 +12307,7 @@ BI.NumericalInterval = BI.inherit(BI.Single, {
         });
 
         this.bigEditor = BI.createWidget({
-            type: "bi.sign_editor",
+            type: "bi.editor",
             height: o.height - 2,
             watermark: BI.i18nText("BI-Basic_Unrestricted"),
             allowBlank: true,
@@ -12525,7 +12534,7 @@ BI.NumericalInterval = BI.inherit(BI.Single, {
 
     _setFocusEvent: function (w) {
         var self = this, c = this.constants;
-        w.on(BI.SignEditor.EVENT_FOCUS, function () {
+        w.on(BI.Editor.EVENT_FOCUS, function () {
             self._setTitle("");
             switch (self._checkValidation()) {
                 case c.typeError:
@@ -12551,7 +12560,7 @@ BI.NumericalInterval = BI.inherit(BI.Single, {
     },
     _setBlurEvent: function (w) {
         var c = this.constants, self = this;
-        w.on(BI.SignEditor.EVENT_BLUR, function () {
+        w.on(BI.Editor.EVENT_BLUR, function () {
             BI.Bubbles.hide(c.typeError);
             BI.Bubbles.hide(c.numberError);
             BI.Bubbles.hide(c.signalError);
@@ -12573,7 +12582,7 @@ BI.NumericalInterval = BI.inherit(BI.Single, {
 
     _setErrorEvent: function (w) {
         var c = this.constants, self = this
-        w.on(BI.SignEditor.EVENT_ERROR, function () {
+        w.on(BI.Editor.EVENT_ERROR, function () {
             self._checkValidation();
             BI.Bubbles.show(c.typeError, BI.i18nText("BI-Numerical_Interval_Input_Data"), self, {
                 offsetStyle: "center"
@@ -12585,7 +12594,7 @@ BI.NumericalInterval = BI.inherit(BI.Single, {
 
     _setValidEvent: function (w) {
         var self = this, c = this.constants;
-        w.on(BI.SignEditor.EVENT_VALID, function () {
+        w.on(BI.Editor.EVENT_VALID, function () {
             switch (self._checkValidation()) {
                 case c.numberError:
                     BI.Bubbles.show(c.numberError, BI.i18nText("BI-Numerical_Interval_Number_Value"), self, {
@@ -12608,7 +12617,7 @@ BI.NumericalInterval = BI.inherit(BI.Single, {
 
     _setEditorValueChangedEvent: function (w) {
         var self = this, c = this.constants;
-        w.on(BI.SignEditor.EVENT_CHANGE, function () {
+        w.on(BI.Editor.EVENT_CHANGE, function () {
             switch (self._checkValidation()) {
                 case c.typeError:
                     BI.Bubbles.show(c.typeError, BI.i18nText("BI-Numerical_Interval_Input_Data"), self, {
@@ -13043,6 +13052,18 @@ BI.PageTable = BI.inherit(BI.Widget, {
 
     getVerticalScroll: function () {
         return this.table.getVerticalScroll();
+    },
+
+    setLeftHorizontalScroll: function (scrollLeft) {
+        this.table.setLeftHorizontalScroll(scrollLeft);
+    },
+
+    setRightHorizontalScroll: function (scrollLeft) {
+        this.table.setRightHorizontalScroll(scrollLeft);
+    },
+
+    setVerticalScroll: function (scrollTop) {
+        this.table.setVerticalScroll(scrollTop);
     },
 
     restore: function () {
@@ -15798,6 +15819,9 @@ BI.SequenceTableListNumber = BI.inherit(BI.Widget, {
                 el: this.headerContainer,
                 height: o.headerRowSize * o.header.length - 2
             }, {
+                el: {type: "bi.layout"},
+                height: 2
+            }, {
                 el: this.scrollContainer
             }]
         });
@@ -15806,17 +15830,23 @@ BI.SequenceTableListNumber = BI.inherit(BI.Widget, {
 
     _layout: function () {
         var self = this, o = this.options;
-        var headerHeight = o.headerRowSize * o.header.length;
+        var headerHeight = o.headerRowSize * o.header.length - 2;
         var items = this.layout.attr("items");
         if (o.isNeedFreeze === false) {
             items[0].height = 0;
+            items[1].height = 0;
         } else if (o.isNeedFreeze === true) {
             items[0].height = headerHeight;
+            items[1].height = 2;
         }
         this.layout.attr("items", items);
         this.layout.resize();
         this.container.setHeight(o.items.length * o.rowSize);
-        this.scrollContainer.element.scrollTop(o.scrollTop);
+        try {
+            this.scrollContainer.element.scrollTop(o.scrollTop);
+        } catch (e) {
+
+        }
     },
 
     _createHeader: function () {
@@ -15925,7 +15955,11 @@ BI.SequenceTableListNumber = BI.inherit(BI.Widget, {
     setVerticalScroll: function (scrollTop) {
         if (this.options.scrollTop !== scrollTop) {
             this.options.scrollTop = scrollTop;
-            this.scrollContainer.element.scrollTop(scrollTop);
+            try {
+                this.scrollContainer.element.scrollTop(scrollTop);
+            } catch (e) {
+
+            }
         }
     },
 
@@ -16158,6 +16192,14 @@ BI.SequenceTable = BI.inherit(BI.Widget, {
 
     hasRightHorizontalScroll: function () {
         return this.table.hasRightHorizontalScroll();
+    },
+
+    setLeftHorizontalScroll: function (scrollLeft) {
+        this.table.setLeftHorizontalScroll(scrollLeft);
+    },
+
+    setRightHorizontalScroll: function (scrollLeft) {
+        this.table.setRightHorizontalScroll(scrollLeft);
     },
 
     setVerticalScroll: function (scrollTop) {
@@ -16769,7 +16811,7 @@ BI.YearTrigger = BI.inherit(BI.Trigger, {
                 self.editor.setTitle(value);
             }
             self.fireEvent(BI.YearTrigger.EVENT_CONFIRM);
-        })
+        });
         this.editor.on(BI.SignEditor.EVENT_SPACE, function () {
             if (self.editor.isValid()) {
                 self.editor.blur();

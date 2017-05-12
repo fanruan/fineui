@@ -62,6 +62,9 @@ BI.SequenceTableListNumber = BI.inherit(BI.Widget, {
                 el: this.headerContainer,
                 height: o.headerRowSize * o.header.length - 2
             }, {
+                el: {type: "bi.layout"},
+                height: 2
+            }, {
                 el: this.scrollContainer
             }]
         });
@@ -70,17 +73,23 @@ BI.SequenceTableListNumber = BI.inherit(BI.Widget, {
 
     _layout: function () {
         var self = this, o = this.options;
-        var headerHeight = o.headerRowSize * o.header.length;
+        var headerHeight = o.headerRowSize * o.header.length - 2;
         var items = this.layout.attr("items");
         if (o.isNeedFreeze === false) {
             items[0].height = 0;
+            items[1].height = 0;
         } else if (o.isNeedFreeze === true) {
             items[0].height = headerHeight;
+            items[1].height = 2;
         }
         this.layout.attr("items", items);
         this.layout.resize();
         this.container.setHeight(o.items.length * o.rowSize);
-        this.scrollContainer.element.scrollTop(o.scrollTop);
+        try {
+            this.scrollContainer.element.scrollTop(o.scrollTop);
+        } catch (e) {
+
+        }
     },
 
     _createHeader: function () {
@@ -189,7 +198,11 @@ BI.SequenceTableListNumber = BI.inherit(BI.Widget, {
     setVerticalScroll: function (scrollTop) {
         if (this.options.scrollTop !== scrollTop) {
             this.options.scrollTop = scrollTop;
-            this.scrollContainer.element.scrollTop(scrollTop);
+            try {
+                this.scrollContainer.element.scrollTop(scrollTop);
+            } catch (e) {
+
+            }
         }
     },
 

@@ -68,9 +68,6 @@
   -moz-box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
 }
-.bi-bubble-popup-view .bubble-popup-line {
-  background-color: #3f8ce8;
-}
 /****添加计算宽度的--运算符直接需要space****/
 /****** common color(常用颜色,可用于普遍场景) *****/
 /**** custom color(自定义颜色,用于特定场景) ****/
@@ -717,60 +714,96 @@ li.CodeMirror-hint-active {
   cursor: pointer;
   font-size: 14px;
 }
-.bi-button.button-common,
-.bi-button.button-common .b-font {
-  color: #ffffff;
+.bi-button.block {
+  font-size: inherit;
+  border-width: 0;
+  -webkit-border-radius: 0px;
+  -moz-border-radius: 0px;
+  border-radius: 0px;
 }
+.bi-button.clear {
+  font-size: inherit;
+  border-width: 0;
+  background-color: transparent;
+}
+.bi-button.clear:hover,
+.bi-button.clear:active {
+  opacity: 0.75;
+  filter: alpha(opacity=75);
+}
+.bi-button.button-common,
 .bi-button.button-common .b-font:before {
   color: #ffffff;
+}
+.bi-button.button-common.clear,
+.bi-button.button-common.clear .b-font:before {
+  color: #3f8ce8;
 }
 .bi-button.button-ignore {
   background-color: #ffffff;
   border-color: #d4dadd;
 }
 .bi-button.button-ignore,
-.bi-button.button-ignore .b-font {
+.bi-button.button-ignore .b-font:before {
   color: #1a1a1a;
+}
+.bi-button.button-ignore.clear {
+  background-color: transparent;
+  border-width: 0;
 }
 .bi-button.button-success {
   background-color: #58cc7d;
   border-color: #58cc7d;
 }
 .bi-button.button-success,
-.bi-button.button-success .b-font {
-  color: #ffffff;
-}
 .bi-button.button-success .b-font:before {
   color: #ffffff;
+}
+.bi-button.button-success.clear {
+  background-color: transparent;
+  border-width: 0;
+}
+.bi-button.button-success.clear,
+.bi-button.button-success.clear .b-font:before {
+  color: #0c6d23;
 }
 .bi-button.button-warning {
   background-color: #e85050;
   border-color: #e85050;
 }
 .bi-button.button-warning,
-.bi-button.button-warning .b-font {
-  color: #ffffff;
-}
 .bi-button.button-warning .b-font:before {
   color: #ffffff;
 }
-.bi-button.button-common.disabled,
-.bi-button.button-success.disabled,
-.bi-button.button-warning.disabled {
-  background: #cccccc !important;
-  border-color: #c4c6c6 !important;
+.bi-button.button-warning.clear {
+  background-color: transparent;
+  border-width: 0;
+}
+.bi-button.button-warning.clear,
+.bi-button.button-warning.clear .b-font:before {
+  color: #e85050;
 }
 .bi-button.button-common.disabled,
 .bi-button.button-success.disabled,
 .bi-button.button-warning.disabled,
-.bi-button.button-common.disabled .b-font,
-.bi-button.button-success.disabled .b-font,
-.bi-button.button-warning.disabled .b-font {
-  color: #ffffff !important;
+.bi-button.button-common.disabled.base-disabled,
+.bi-button.button-success.disabled.base-disabled,
+.bi-button.button-warning.disabled.base-disabled {
+  background: #cccccc !important;
+  border-color: #cccccc !important;
 }
+.bi-button.button-common.disabled,
+.bi-button.button-success.disabled,
+.bi-button.button-warning.disabled,
+.bi-button.button-common.disabled.base-disabled,
+.bi-button.button-success.disabled.base-disabled,
+.bi-button.button-warning.disabled.base-disabled,
 .bi-button.button-common.disabled .b-font:before,
 .bi-button.button-success.disabled .b-font:before,
-.bi-button.button-warning.disabled .b-font:before {
+.bi-button.button-warning.disabled .b-font:before,
+.bi-button.button-common.disabled.base-disabled .b-font:before,
+.bi-button.button-success.disabled.base-disabled .b-font:before,
+.bi-button.button-warning.disabled.base-disabled .b-font:before {
   color: #ffffff !important;
 }
 .bi-button.button-ignore.disabled {
@@ -778,11 +811,36 @@ li.CodeMirror-hint-active {
   border-color: #d4dadd !important;
 }
 .bi-button.button-ignore.disabled,
-.bi-button.button-ignore.disabled .b-font {
-  color: #cccccc !important;
-}
 .bi-button.button-ignore.disabled .b-font:before {
   color: #cccccc !important;
+}
+.bi-button.button-common.disabled.clear,
+.bi-button.button-success.disabled.clear,
+.bi-button.button-warning.disabled.clear,
+.bi-button.button-ignore.disabled.clear {
+  background: transparent !important;
+  border-width: 0 !important;
+}
+.bi-button.button-common.disabled.clear,
+.bi-button.button-success.disabled.clear,
+.bi-button.button-warning.disabled.clear,
+.bi-button.button-ignore.disabled.clear,
+.bi-button.button-common.disabled.clear .b-font:before,
+.bi-button.button-success.disabled.clear .b-font:before,
+.bi-button.button-warning.disabled.clear .b-font:before,
+.bi-button.button-ignore.disabled.clear .b-font:before {
+  color: #cccccc !important;
+}
+.bi-button.button-common.disabled.clear:hover,
+.bi-button.button-success.disabled.clear:hover,
+.bi-button.button-warning.disabled.clear:hover,
+.bi-button.button-ignore.disabled.clear:hover,
+.bi-button.button-common.disabled.clear:active,
+.bi-button.button-success.disabled.clear:active,
+.bi-button.button-warning.disabled.clear:active,
+.bi-button.button-ignore.disabled.clear:active {
+  opacity: 1;
+  filter: alpha(opacity=100);
 }
 .bi-basic-button.button-common .bi-button-mask,
 .bi-basic-button.button-success .bi-button-mask,
@@ -861,6 +919,12 @@ li.CodeMirror-hint-active {
 }
 .bi-textarea-editor .textarea-editor-content {
   border: none;
+}
+.bi-textarea-editor .textarea-editor-content.textarea-editor-focus {
+  border: 1px solid #d4dadd;
+}
+.bi-theme-dark .bi-textarea-editor .textarea-editor-content.textarea-editor-focus {
+  border: 1px solid #525466;
 }
 /****添加计算宽度的--运算符直接需要space****/
 /****** common color(常用颜色,可用于普遍场景) *****/
@@ -1199,13 +1263,13 @@ li.CodeMirror-hint-active {
 }
 .public-scrollbar-main:hover .public-scrollbar-face:after,
 .public-scrollbar-main-active .public-scrollbar-face:after,
-.public-scrollbar-faceActive:after {
+.public-scrollbar-face-active:after {
   background-color: rgba(102, 102, 102, 0.7);
   filter: progid:DXImageTransform.Microsoft.gradient(startColorstr=#b3666666,endColorstr=#b3666666);
 }
 .bi-theme-dark .public-scrollbar-main:hover .public-scrollbar-face:after,
 .bi-theme-dark .public-scrollbar-main-active .public-scrollbar-face:after,
-.bi-theme-dark .public-scrollbar-faceActive:after {
+.bi-theme-dark .public-scrollbar-face-active:after {
   background-color: rgba(204, 204, 204, 0.7);
   filter: progid:DXImageTransform.Microsoft.gradient(startColorstr=#b3cccccc,endColorstr=#b3cccccc);
 }

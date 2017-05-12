@@ -55,7 +55,7 @@ BI.BubblePopupView = BI.inherit(BI.PopupView, {
         }
         this.line = BI.createWidget(op, {
             type: "bi.layout",
-            cls: "bubble-popup-line"
+            cls: "bubble-popup-line bi-high-light-background"
         });
         pos.el = this.line;
         BI.createWidget({

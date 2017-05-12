@@ -2,9 +2,9 @@
  * 带标记的文本框
  * Created by GUY on 2016/1/25.
  * @class BI.ShelterEditor
- * @extends BI.Single
+ * @extends BI.Widget
  */
-BI.ShelterEditor = BI.inherit(BI.Single, {
+BI.ShelterEditor = BI.inherit(BI.Widget, {
     _defaultConfig: function () {
         var conf = BI.ShelterEditor.superclass._defaultConfig.apply(this, arguments);
         return BI.extend(conf, {
@@ -49,6 +49,9 @@ BI.ShelterEditor = BI.inherit(BI.Single, {
         this.text = BI.createWidget({
             type: "bi.text_button",
             cls: "shelter-editor-text",
+            title: o.title,
+            warningTitle: o.warningTitle,
+            tipType: o.tipType,
             textAlign: o.textAlign,
             height: o.height,
             hgap: 4
@@ -152,6 +155,14 @@ BI.ShelterEditor = BI.inherit(BI.Single, {
     _showHint: function () {
         this.editor.invisible();
         this.text.visible();
+    },
+
+    setTitle: function (title) {
+        this.text.setTitle(title);
+    },
+
+    setWarningTitle: function (title) {
+        this.text.setWarningTitle(title);
     },
 
     focus: function () {
