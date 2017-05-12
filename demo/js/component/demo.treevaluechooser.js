@@ -7,8 +7,8 @@ Demo.TreeValueChooser = BI.inherit(BI.Widget, {
         var tree = [];
         for (var i = 0; i < 21; i++) {
             tree.push({
-                value: "  " + i + "",
-                text: "  " + i + "",
+                value: "" + i + "",
+                text: "" + i + "",
                 id: i + "",
                 pId: null
             });
