@@ -12270,7 +12270,7 @@ BI.NumericalInterval = BI.inherit(BI.Single, {
         var self = this, c = this.constants, o = this.options;
         BI.NumericalInterval.superclass._init.apply(this, arguments)
         this.smallEditor = BI.createWidget({
-            type: "bi.sign_editor",
+            type: "bi.editor",
             height: o.height - 2,
             watermark: BI.i18nText("BI-Basic_Unrestricted"),
             allowBlank: true,
@@ -12307,7 +12307,7 @@ BI.NumericalInterval = BI.inherit(BI.Single, {
         });
 
         this.bigEditor = BI.createWidget({
-            type: "bi.sign_editor",
+            type: "bi.editor",
             height: o.height - 2,
             watermark: BI.i18nText("BI-Basic_Unrestricted"),
             allowBlank: true,
@@ -12534,7 +12534,7 @@ BI.NumericalInterval = BI.inherit(BI.Single, {
 
     _setFocusEvent: function (w) {
         var self = this, c = this.constants;
-        w.on(BI.SignEditor.EVENT_FOCUS, function () {
+        w.on(BI.Editor.EVENT_FOCUS, function () {
             self._setTitle("");
             switch (self._checkValidation()) {
                 case c.typeError:
@@ -12560,7 +12560,7 @@ BI.NumericalInterval = BI.inherit(BI.Single, {
     },
     _setBlurEvent: function (w) {
         var c = this.constants, self = this;
-        w.on(BI.SignEditor.EVENT_BLUR, function () {
+        w.on(BI.Editor.EVENT_BLUR, function () {
             BI.Bubbles.hide(c.typeError);
             BI.Bubbles.hide(c.numberError);
             BI.Bubbles.hide(c.signalError);
@@ -12582,7 +12582,7 @@ BI.NumericalInterval = BI.inherit(BI.Single, {
 
     _setErrorEvent: function (w) {
         var c = this.constants, self = this
-        w.on(BI.SignEditor.EVENT_ERROR, function () {
+        w.on(BI.Editor.EVENT_ERROR, function () {
             self._checkValidation();
             BI.Bubbles.show(c.typeError, BI.i18nText("BI-Numerical_Interval_Input_Data"), self, {
                 offsetStyle: "center"
@@ -12594,7 +12594,7 @@ BI.NumericalInterval = BI.inherit(BI.Single, {
 
     _setValidEvent: function (w) {
         var self = this, c = this.constants;
-        w.on(BI.SignEditor.EVENT_VALID, function () {
+        w.on(BI.Editor.EVENT_VALID, function () {
             switch (self._checkValidation()) {
                 case c.numberError:
                     BI.Bubbles.show(c.numberError, BI.i18nText("BI-Numerical_Interval_Number_Value"), self, {
@@ -12617,7 +12617,7 @@ BI.NumericalInterval = BI.inherit(BI.Single, {
 
     _setEditorValueChangedEvent: function (w) {
         var self = this, c = this.constants;
-        w.on(BI.SignEditor.EVENT_CHANGE, function () {
+        w.on(BI.Editor.EVENT_CHANGE, function () {
             switch (self._checkValidation()) {
                 case c.typeError:
                     BI.Bubbles.show(c.typeError, BI.i18nText("BI-Numerical_Interval_Input_Data"), self, {
