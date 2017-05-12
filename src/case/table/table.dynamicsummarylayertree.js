@@ -175,18 +175,18 @@ BI.DynamicSummaryLayerTreeTable = BI.inherit(BI.Widget, {
         var vDeep = this._getVDeep();
         var header = this._createHeader(vDeep);
         var data = this._formatItems(o.items, header, deep);
-        // var columnSize = o.columnSize.slice();
-        // var minColumnSize = o.minColumnSize.slice();
-        // var maxColumnSize = o.maxColumnSize.slice();
-        // BI.removeAt(columnSize, data.deletedCols);
-        // BI.removeAt(minColumnSize, data.deletedCols);
-        // BI.removeAt(maxColumnSize, data.deletedCols);
+        var columnSize = o.columnSize.slice();
+        var minColumnSize = o.minColumnSize.slice();
+        var maxColumnSize = o.maxColumnSize.slice();
+        BI.removeAt(columnSize, data.deletedCols);
+        BI.removeAt(minColumnSize, data.deletedCols);
+        BI.removeAt(maxColumnSize, data.deletedCols);
         return {
             header: data.header,
             items: data.items,
-            columnSize: this._formatColumnSize(o.columnSize, deep),
-            minColumnSize: this._formatColumns(o.minColumnSize, deep),
-            maxColumnSize: this._formatColumns(o.maxColumnSize, deep),
+            columnSize: this._formatColumnSize(columnSize, deep),
+            minColumnSize: this._formatColumns(minColumnSize, deep),
+            maxColumnSize: this._formatColumns(maxColumnSize, deep),
             freezeCols: this._formatFreezeCols()
         }
     },
