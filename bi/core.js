@@ -6249,7 +6249,6 @@ Date._QN = ["", BI.i18nText("BI-Quarter_1"),
     BI.i18nText("BI-Quarter_4")];
 
 
-
 /** Adds the number of days array to the Date object. */
 Date._MD = [31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];
 
@@ -6284,12 +6283,19 @@ Date.prototype.getDayOfYear = function () {
 /** Returns the number of the week in year, as defined in ISO 8601. */
 Date.prototype.getWeekNumber = function () {
     var d = new Date(this.getFullYear(), this.getMonth(), this.getDate(), 0, 0, 0);
-    var DoW = d.getDay();
-    d.setDate(d.getDate() - (DoW + 6) % 7 + 3); // Nearest Thu
+    var week = d.getDay();
+    if (this.getMonth() === 0 && this.getDate() <= week) {
+        return 1;
+    }
+    d.setDate(this.getDate() - week);
     var ms = d.valueOf(); // GMT
     d.setMonth(0);
-    d.setDate(4); // Thu in Week 1
-    return Math.round((ms - d.valueOf()) / (7 * 864e5)) + 1;
+    d.setDate(1);
+    var offset = Math.floor((ms - d.valueOf()) / (7 * 864e5)) + 1;
+    if (d.getDay() > 0) {
+        offset++;
+    }
+    return offset;
 };
 
 //离当前时间多少天的时间
@@ -6381,7 +6387,7 @@ Date.prototype.getOffsetMonth = function (n) {
     var dt = new Date(this.getTime());
     var day = dt.getDate();
     var monthDay = new Date(dt.getFullYear(), dt.getMonth() + parseInt(n), 1).getMonthDays();
-    if(day > monthDay){
+    if (day > monthDay) {
         day = monthDay;
     }
     dt.setDate(day);
