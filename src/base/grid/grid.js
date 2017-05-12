@@ -33,7 +33,7 @@ BI.Grid = BI.inherit(BI.Widget, {
         this._scrollLock = false;
         this._debounceRelease = BI.debounce(function () {
             self._scrollLock = false;
-        }, 150);
+        }, 1000 / 60);
         this.container = BI.createWidget({
             type: "bi.absolute"
         });
