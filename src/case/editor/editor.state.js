@@ -4,7 +4,7 @@
  * @class BI.StateEditor
  * @extends BI.Single
  */
-BI.StateEditor = BI.inherit(BI.Single, {
+BI.StateEditor = BI.inherit(BI.Widget, {
     _defaultConfig: function () {
         var conf = BI.StateEditor.superclass._defaultConfig.apply(this, arguments);
         return BI.extend(conf, {

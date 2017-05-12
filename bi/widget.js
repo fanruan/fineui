@@ -16811,7 +16811,7 @@ BI.YearTrigger = BI.inherit(BI.Trigger, {
                 self.editor.setTitle(value);
             }
             self.fireEvent(BI.YearTrigger.EVENT_CONFIRM);
-        })
+        });
         this.editor.on(BI.SignEditor.EVENT_SPACE, function () {
             if (self.editor.isValid()) {
                 self.editor.blur();

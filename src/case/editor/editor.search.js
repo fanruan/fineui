@@ -173,7 +173,7 @@ BI.SearchEditor = BI.inherit(BI.Widget, {
     setEnable: function (b) {
         BI.Editor.superclass.setEnable.apply(this, arguments);
         this.editor && this.editor.setEnable(b);
-        this.clear.setEnabled(b);
+        this.clear.setEnable(b);
     }
 });
 BI.SearchEditor.EVENT_CHANGE = "EVENT_CHANGE";

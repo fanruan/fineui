@@ -3,7 +3,7 @@
  * @class BI.SignInitialEditor
  * @extends BI.Single
  */
-BI.SignInitialEditor = BI.inherit(BI.Single, {
+BI.SignInitialEditor = BI.inherit(BI.Widget, {
     _defaultConfig: function () {
         var conf = BI.SignInitialEditor.superclass._defaultConfig.apply(this, arguments);
         return BI.extend(conf, {

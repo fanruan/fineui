@@ -3,7 +3,7 @@
  * @class BI.TextEditor
  * @extends BI.Single
  */
-BI.TextEditor = BI.inherit(BI.Single, {
+BI.TextEditor = BI.inherit(BI.Widget, {
     _defaultConfig: function () {
         var conf = BI.TextEditor.superclass._defaultConfig.apply(this, arguments);
         return BI.extend(conf, {
