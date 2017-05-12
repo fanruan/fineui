@@ -108,7 +108,7 @@ textarea::-webkit-scrollbar-thumb:hover {
   _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='icon/tree-vertical-line-2.png');
   _background: none;
 }
-.bi-theme-dark .base-line-conn-background {
+.bi-theme-dark .first-line-conn-background {
   background: url('icon/dark/tree-vertical-line-2.png') no-repeat center center;
   _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='icon/dark/tree-vertical-line-2.png');
   _background: none;
@@ -118,7 +118,7 @@ textarea::-webkit-scrollbar-thumb:hover {
   _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='icon/tree-vertical-line-3.png');
   _background: none;
 }
-.bi-theme-dark .base-line-conn-background {
+.bi-theme-dark .mid-line-conn-background {
   background: url('icon/dark/tree-vertical-line-3.png') no-repeat center center;
   _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='icon/dark/tree-vertical-line-3.png');
   _background: none;
@@ -128,7 +128,7 @@ textarea::-webkit-scrollbar-thumb:hover {
   _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='icon/tree-vertical-line-4.png');
   _background: none;
 }
-.bi-theme-dark .base-line-conn-background {
+.bi-theme-dark .last-line-conn-background {
   background: url('icon/dark/tree-vertical-line-4.png') no-repeat center center;
   _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='icon/dark/tree-vertical-line-4.png');
   _background: none;

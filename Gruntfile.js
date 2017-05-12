@@ -102,6 +102,15 @@ module.exports = function (grunt) {
                 ],
                 dest: "docs/widget.js"
             },
+            chartJs: {
+                src: [
+                    'src/addons/chart/chart.js',
+                    'src/addons/chart/chart.combine.js',
+                    'src/addons/chart/factory.charts.js',
+                    'src/addons/chart/**/*.js'
+                ],
+                dest: "docs/chart.js"
+            },
             coreCss: {
                 src: ['src/css/core/**/*.css', 'src/css/theme/**/*.css'],
                 dest: 'docs/core.css'
@@ -200,6 +209,15 @@ module.exports = function (grunt) {
                     'src/component/**/*.js'
                 ],
                 dest: "bi/widget.js"
+            },
+            bi_chartJs: {
+                src: [
+                    'src/addons/chart/chart.js',
+                    'src/addons/chart/chart.combine.js',
+                    'src/addons/chart/factory.charts.js',
+                    'src/addons/chart/**/*.js'
+                ],
+                dest: "bi/chart.js"
             },
             bi_coreCss: {
                 src: ['src/css/core/**/*.css', 'src/css/theme/**/*.css'],
