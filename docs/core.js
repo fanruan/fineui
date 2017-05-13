@@ -13305,6 +13305,29 @@ if (!window.BI) {
             return true;
         },
 
+        backFindKey: function (obj, predicate, context) {
+            predicate = BI.iteratee(predicate, context);
+            var keys = _.keys(obj), key;
+            for (var i = keys.length - 1; i >= 0; i--) {
+                key = keys[i];
+                if (predicate(obj[key], key, obj)) {
+                    return key;
+                }
+            }
+        },
+
+        backFind: function (obj, predicate, context) {
+            var key;
+            if (BI.isArray(obj)) {
+                key = BI.findLastIndex(obj, predicate, context);
+            } else {
+                key = BI.backFindKey(obj, predicate, context);
+            }
+            if (key !== void 0 && key !== -1) {
+                return obj[key];
+            }
+        },
+
         remove: function (obj, target, context) {
             var isFunction = BI.isFunction(target);
             target = isFunction || BI.isArray(target) ? target : [target];
