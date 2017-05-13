@@ -14948,6 +14948,7 @@ BI.Grid = BI.inherit(BI.Widget, {
         });
         this.renderedCells = [];
         this.renderedKeys = [];
+        this.renderRange = {};
         this._scrollLock = false;
     },
 
