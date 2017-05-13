@@ -28,26 +28,54 @@ BI.QuickCollectionTable = BI.inherit(BI.CollectionTable, {
     mounted: function () {
         BI.QuickCollectionTable.superclass.mounted.apply(this, arguments);
         var self = this;
-        this._leftWheelHandler = new BI.WheelHandler(
-            BI.bind(this._onWheelY, this),
-            BI.bind(this._shouldHandleX, this),
+        this._topLeftWheelHandler = new BI.WheelHandler(
+            BI.bind(this._onWheelLeft, this),
+            BI.bind(this._shouldHandleLeftX, this),
             BI.bind(this._shouldHandleY, this)
         );
-        this._rightWheelHandler = new BI.WheelHandler(
-            BI.bind(this._onWheelY, this),
-            BI.bind(this._shouldHandleX, this),
+        this._topRightWheelHandler = new BI.WheelHandler(
+            BI.bind(this._onWheelRight, this),
+            BI.bind(this._shouldHandleRightX, this),
             BI.bind(this._shouldHandleY, this)
         );
+        this._bottomLeftWheelHandler = new BI.WheelHandler(
+            BI.bind(this._onWheelLeft, this),
+            BI.bind(this._shouldHandleLeftX, this),
+            BI.bind(this._shouldHandleY, this)
+        );
+        this._bottomRightWheelHandler = new BI.WheelHandler(
+            BI.bind(this._onWheelRight, this),
+            BI.bind(this._shouldHandleRightX, this),
+            BI.bind(this._shouldHandleY, this)
+        );
+        this.topLeftCollection.element.mousewheel(function (e) {
+            self._topLeftWheelHandler.onWheel(e.originalEvent);
+        });
+        this.topRightCollection.element.mousewheel(function (e) {
+            self._topRightWheelHandler.onWheel(e.originalEvent);
+        });
         this.bottomLeftCollection.element.mousewheel(function (e) {
-            self._leftWheelHandler.onWheel(e.originalEvent);
+            self._bottomLeftWheelHandler.onWheel(e.originalEvent);
         });
         this.bottomRightCollection.element.mousewheel(function (e) {
-            self._rightWheelHandler.onWheel(e.originalEvent);
+            self._bottomRightWheelHandler.onWheel(e.originalEvent);
         });
     },
 
-    _shouldHandleX: function (delta) {
-        return false;
+    _shouldHandleLeftX: function (delta) {
+        if (delta > 0) {
+            return this.bottomLeftCollection.getScrollLeft() < this.bottomLeftCollection.getMaxScrollLeft();
+        } else {
+            return this.bottomLeftCollection.getScrollLeft() > 0;
+        }
+    },
+
+    _shouldHandleRightX: function (delta) {
+        if (delta > 0) {
+            return this.bottomRightCollection.getScrollLeft() < this.bottomRightCollection.getMaxScrollLeft();
+        } else {
+            return this.bottomRightCollection.getScrollLeft() > 0;
+        }
     },
 
     _shouldHandleY: function (delta) {
@@ -58,19 +86,38 @@ BI.QuickCollectionTable = BI.inherit(BI.CollectionTable, {
         }
     },
 
-    _onWheelY: function (deltaX, deltaY) {
+    _onWheelLeft: function (deltaX, deltaY) {
         var self = this;
-        var scrollTop = this.bottomRightCollection.getScrollTop();
+        var scrollTop = this.bottomLeftCollection.getScrollTop();
+        var scrollLeft = this.bottomLeftCollection.getScrollLeft();
         scrollTop += deltaY;
+        scrollLeft += deltaX;
         this.bottomLeftCollection.setScrollTop(scrollTop);
         this.bottomRightCollection.setScrollTop(scrollTop);
+        this.topLeftCollection.setScrollLeft(scrollLeft);
+        this.bottomLeftCollection.setScrollLeft(scrollLeft);
+        self._populateScrollbar();
+        this.fireEvent(BI.Table.EVENT_TABLE_SCROLL, arguments);
+    },
+
+    _onWheelRight: function (deltaX, deltaY) {
+        var self = this;
+        var scrollTop = this.bottomRightCollection.getScrollTop();
+        var scrollLeft = this.bottomRightCollection.getScrollLeft();
+        scrollTop += deltaY;
+        scrollLeft += deltaX;
+        this.bottomLeftCollection.setScrollTop(scrollTop);
+        this.bottomRightCollection.setScrollTop(scrollTop);
+        this.topRightCollection.setScrollLeft(scrollLeft);
+        this.bottomRightCollection.setScrollLeft(scrollLeft);
         self._populateScrollbar();
         this.fireEvent(BI.Table.EVENT_TABLE_SCROLL, arguments);
     },
 
     _populateTable: function () {
         var self = this, o = this.options;
-        var regionSize = this.getRegionSize(), totalLeftColumnSize = 0, totalRightColumnSize = 0, totalColumnSize = 0, summaryColumnSizeArray = [], totalRowSize = o.items.length * o.rowSize;
+        var regionSize = this.getRegionSize(), totalLeftColumnSize = 0, totalRightColumnSize = 0, totalColumnSize = 0,
+            summaryColumnSizeArray = [], totalRowSize = o.items.length * o.rowSize;
         var freezeColLength = this._getFreezeColLength();
         BI.each(o.columnSize, function (i, size) {
             if (o.isNeedFreeze === true && o.freezeCols.contains(i)) {
