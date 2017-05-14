@@ -28,26 +28,54 @@ BI.QuickGridTable = BI.inherit(BI.GridTable, {
     mounted: function () {
         BI.QuickGridTable.superclass.mounted.apply(this, arguments);
         var self = this;
-        this._leftWheelHandler = new BI.WheelHandler(
-            BI.bind(this._onWheelY, this),
-            BI.bind(this._shouldHandleX, this),
+        this._topLeftWheelHandler = new BI.WheelHandler(
+            BI.bind(this._onWheelLeft, this),
+            BI.bind(this._shouldHandleLeftX, this),
             BI.bind(this._shouldHandleY, this)
         );
-        this._rightWheelHandler = new BI.WheelHandler(
-            BI.bind(this._onWheelY, this),
-            BI.bind(this._shouldHandleX, this),
+        this._topRightWheelHandler = new BI.WheelHandler(
+            BI.bind(this._onWheelRight, this),
+            BI.bind(this._shouldHandleRightX, this),
             BI.bind(this._shouldHandleY, this)
         );
+        this._bottomLeftWheelHandler = new BI.WheelHandler(
+            BI.bind(this._onWheelLeft, this),
+            BI.bind(this._shouldHandleLeftX, this),
+            BI.bind(this._shouldHandleY, this)
+        );
+        this._bottomRightWheelHandler = new BI.WheelHandler(
+            BI.bind(this._onWheelRight, this),
+            BI.bind(this._shouldHandleRightX, this),
+            BI.bind(this._shouldHandleY, this)
+        );
+        this.topLeftGrid.element.mousewheel(function (e) {
+            self._topLeftWheelHandler.onWheel(e.originalEvent);
+        });
+        this.topRightGrid.element.mousewheel(function (e) {
+            self._topRightWheelHandler.onWheel(e.originalEvent);
+        });
         this.bottomLeftGrid.element.mousewheel(function (e) {
-            self._leftWheelHandler.onWheel(e.originalEvent);
+            self._bottomLeftWheelHandler.onWheel(e.originalEvent);
         });
         this.bottomRightGrid.element.mousewheel(function (e) {
-            self._rightWheelHandler.onWheel(e.originalEvent);
+            self._bottomRightWheelHandler.onWheel(e.originalEvent);
         });
     },
 
-    _shouldHandleX: function (delta) {
-        return false;
+    _shouldHandleLeftX: function (delta) {
+        if (delta > 0) {
+            return this.bottomLeftGrid.getScrollLeft() < this.bottomLeftGrid.getMaxScrollLeft();
+        } else {
+            return this.bottomLeftGrid.getScrollLeft() > 0;
+        }
+    },
+
+    _shouldHandleRightX: function (delta) {
+        if (delta > 0) {
+            return this.bottomRightGrid.getScrollLeft() < this.bottomRightGrid.getMaxScrollLeft();
+        } else {
+            return this.bottomRightGrid.getScrollLeft() > 0;
+        }
     },
 
     _shouldHandleY: function (delta) {
@@ -58,12 +86,30 @@ BI.QuickGridTable = BI.inherit(BI.GridTable, {
         }
     },
 
-    _onWheelY: function (deltaX, deltaY) {
+    _onWheelLeft: function (deltaX, deltaY) {
         var self = this;
-        var scrollTop = this.bottomRightGrid.getScrollTop();
+        var scrollTop = this.bottomLeftGrid.getScrollTop();
+        var scrollLeft = this.bottomLeftGrid.getScrollLeft();
         scrollTop += deltaY;
+        scrollLeft += deltaX;
         this.bottomLeftGrid.setScrollTop(scrollTop);
         this.bottomRightGrid.setScrollTop(scrollTop);
+        this.topLeftGrid.setScrollLeft(scrollLeft);
+        this.bottomLeftGrid.setScrollLeft(scrollLeft);
+        self._populateScrollbar();
+        this.fireEvent(BI.Table.EVENT_TABLE_SCROLL, arguments);
+    },
+
+    _onWheelRight: function (deltaX, deltaY) {
+        var self = this;
+        var scrollTop = this.bottomRightGrid.getScrollTop();
+        var scrollLeft = this.bottomRightGrid.getScrollLeft();
+        scrollTop += deltaY;
+        scrollLeft += deltaX;
+        this.bottomLeftGrid.setScrollTop(scrollTop);
+        this.bottomRightGrid.setScrollTop(scrollTop);
+        this.topRightGrid.setScrollLeft(scrollLeft);
+        this.bottomRightGrid.setScrollLeft(scrollLeft);
         self._populateScrollbar();
         this.fireEvent(BI.Table.EVENT_TABLE_SCROLL, arguments);
     },

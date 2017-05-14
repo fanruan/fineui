@@ -7,6 +7,10 @@ module.exports = function (grunt) {
             options: {
                 separator: ''
             },
+            polyfillJs: {
+                src: ['src/polyfill/**/*.js'],
+                dest: 'docs/polyfill.js'
+            },
             coreJs: {
                 src: [
                     'src/core/jquery.js',
@@ -30,41 +34,7 @@ module.exports = function (grunt) {
                 ],
                 dest: 'docs/core.js'
             },
-            biCoreJs: {
-                src: [
-                    'src/core/underscore.js',
-                    'src/core/foundation.js',
-                    'src/core/mvc/**/*.js',
-                    'src/core/base.js',
-                    'src/core/alias.js',
-                    'src/core/events.js',
-                    'src/core/var.js',
-                    'src/core/ob.js',
-                    'src/core/widget.js',
-                    'src/core/model.js',
-                    'src/core/view.js',
-                    'src/core/shortcut.js',
-                    'src/core/plugin.js',
-                    'src/core/controller.js',
-                    'src/core/proto/**/*.js',
-                    'src/core/utils/**/*.js',
-                    'src/core/behavior/behavior.js',
-                    'src/core/wrapper/layout.js',
-                    'src/core/action/**/*.js',
-                    'src/core/adapter/**/*.js',
-                    'src/core/controller/**/*.js',
-                    'src/core/event/**/*.js',
-                    'src/core/func/**/*.js',
-                    'src/core/listener/**/*.js',
-                    'src/core/loader/**/*.js',
-                    'src/core/logic/**/*.js',
 
-                    'src/data/data.js',
-                    'src/data/**/*.js',
-                    'src/config.js'
-                ],
-                dest: 'bi/core.js'
-            },
             //最基础的控件
             baseJs: {
                 src: [
@@ -135,6 +105,11 @@ module.exports = function (grunt) {
             demoCss: {
                 src: ['demo/css/**/*.css'],
                 dest: 'docs/demo.css'
+            },
+
+            bi_polyfillJs: {
+                src: ['src/polyfill/**/*.js'],
+                dest: 'bi/polyfill.js'
             },
 
             bi_coreJs: {

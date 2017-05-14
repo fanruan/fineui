@@ -30,10 +30,11 @@ BI.Grid = BI.inherit(BI.Widget, {
         var self = this, o = this.options;
         this.renderedCells = [];
         this.renderedKeys = [];
+        this.renderRange = {};
         this._scrollLock = false;
         this._debounceRelease = BI.debounce(function () {
             self._scrollLock = false;
-        }, 150);
+        }, 1000 / 60);
         this.container = BI.createWidget({
             type: "bi.absolute"
         });
@@ -78,13 +79,17 @@ BI.Grid = BI.inherit(BI.Widget, {
     _calculateChildrenToRender: function () {
         var self = this, o = this.options;
 
-        var width = o.width, height = o.height, scrollLeft = BI.clamp(o.scrollLeft, 0, this._getMaxScrollLeft()), scrollTop = BI.clamp(o.scrollTop, 0, this._getMaxScrollTop()),
+        var width = o.width, height = o.height, scrollLeft = BI.clamp(o.scrollLeft, 0, this._getMaxScrollLeft()),
+            scrollTop = BI.clamp(o.scrollTop, 0, this._getMaxScrollTop()),
             overscanColumnCount = o.overscanColumnCount, overscanRowCount = o.overscanRowCount;
 
         if (height > 0 && width > 0) {
             var visibleColumnIndices = this._columnSizeAndPositionManager.getVisibleCellRange(width, scrollLeft);
             var visibleRowIndices = this._rowSizeAndPositionManager.getVisibleCellRange(height, scrollTop);
 
+            if (BI.isEmpty(visibleColumnIndices) || BI.isEmpty(visibleRowIndices)) {
+                return;
+            }
             var horizontalOffsetAdjustment = this._columnSizeAndPositionManager.getOffsetAdjustment(width, scrollLeft);
             var verticalOffsetAdjustment = this._rowSizeAndPositionManager.getOffsetAdjustment(height, scrollTop);
 
@@ -102,8 +107,22 @@ BI.Grid = BI.inherit(BI.Widget, {
             var rowStartIndex = overscanRowIndices.overscanStartIndex;
             var rowStopIndex = overscanRowIndices.overscanStopIndex;
 
-            var renderedCells = [], renderedKeys = [];
+            //算区间size
+            var minRowDatum = this._rowSizeAndPositionManager.getSizeAndPositionOfCell(rowStartIndex);
+            var minColumnDatum = this._columnSizeAndPositionManager.getSizeAndPositionOfCell(columnStartIndex);
+            var maxRowDatum = this._rowSizeAndPositionManager.getSizeAndPositionOfCell(rowStopIndex);
+            var maxColumnDatum = this._columnSizeAndPositionManager.getSizeAndPositionOfCell(columnStopIndex);
+            var top = minRowDatum.offset + verticalOffsetAdjustment;
+            var left = minColumnDatum.offset + horizontalOffsetAdjustment;
+            var bottom = maxRowDatum.offset + verticalOffsetAdjustment + maxRowDatum.size;
+            var right = maxColumnDatum.offset + horizontalOffsetAdjustment + maxColumnDatum.size;
+            //如果滚动的区间并没有超出渲染的范围
+            if (top >= this.renderRange.minY && bottom <= this.renderRange.maxY && left >= this.renderRange.minX && right <= this.renderRange.maxX) {
+                return;
+            }
 
+            var renderedCells = [], renderedKeys = [];
+            var minX = this._getMaxScrollLeft(), minY = this._getMaxScrollTop(), maxX = 0, maxY = 0;
             for (var rowIndex = rowStartIndex; rowIndex <= rowStopIndex; rowIndex++) {
                 var rowDatum = this._rowSizeAndPositionManager.getSizeAndPositionOfCell(rowIndex);
 
@@ -148,6 +167,10 @@ BI.Grid = BI.inherit(BI.Widget, {
                             _height: rowDatum.size
                         });
                     }
+                    minX = Math.min(minX, columnDatum.offset + horizontalOffsetAdjustment);
+                    maxX = Math.max(maxX, columnDatum.offset + horizontalOffsetAdjustment + columnDatum.size);
+                    minY = Math.min(minY, rowDatum.offset + verticalOffsetAdjustment);
+                    maxY = Math.max(maxY, rowDatum.offset + verticalOffsetAdjustment + rowDatum.size);
                     renderedKeys.push(key);
                 }
             }
@@ -179,6 +202,7 @@ BI.Grid = BI.inherit(BI.Widget, {
             this.container.addItems(addedItems);
             this.renderedCells = renderedCells;
             this.renderedKeys = renderedKeys;
+            this.renderRange = {minX: minX, minY: minY, maxX: maxX, maxY: maxY};
         }
     },
 
@@ -282,6 +306,7 @@ BI.Grid = BI.inherit(BI.Widget, {
         });
         this.renderedCells = [];
         this.renderedKeys = [];
+        this.renderRange = {};
         this._scrollLock = false;
     },
 

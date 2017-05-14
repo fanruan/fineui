@@ -2163,6 +2163,29 @@ if (!window.BI) {
             return true;
         },
 
+        backFindKey: function (obj, predicate, context) {
+            predicate = BI.iteratee(predicate, context);
+            var keys = _.keys(obj), key;
+            for (var i = keys.length - 1; i >= 0; i--) {
+                key = keys[i];
+                if (predicate(obj[key], key, obj)) {
+                    return key;
+                }
+            }
+        },
+
+        backFind: function (obj, predicate, context) {
+            var key;
+            if (BI.isArray(obj)) {
+                key = BI.findLastIndex(obj, predicate, context);
+            } else {
+                key = BI.backFindKey(obj, predicate, context);
+            }
+            if (key !== void 0 && key !== -1) {
+                return obj[key];
+            }
+        },
+
         remove: function (obj, target, context) {
             var isFunction = BI.isFunction(target);
             target = isFunction || BI.isArray(target) ? target : [target];
@@ -5820,34 +5843,6 @@ $.extend(Array.prototype, {
     contains: function (o) {
         return this.indexOf(o) > -1;
     },
-    /**
-     * 检查指定的值是否在数组中
-     * @param {Object} o 要检查的值
-     * @return {Number}  o在数组中的索引（如果不在数组中则返回-1）
-     */
-    indexOf: function (o) {
-        for (var i = 0, len = this.length; i < len; i++) {
-            if (_.isEqual(o, this[i])) {
-                return i;
-            }
-        }
-        return -1;
-    },
-
-    /**
-     * 检查指定的值是否在数组中
-     * ie67不支持数组的这个方法
-     * @param {Object} o 要检查的值
-     * @return {Number}  o在数组中的索引（如果不在数组中则返回-1）
-     */
-    lastIndexOf: function (o) {
-        for (var len = this.length, i = len - 1; i >= 0; i--) {
-            if (_.isEqual(o, this[i])) {
-                return i;
-            }
-        }
-        return -1;
-    },
 
     /**
      * 从数组中移除指定的值，如果值不在数组中，则不产生任何效果
@@ -5856,265 +5851,29 @@ $.extend(Array.prototype, {
      */
     remove: function (o) {
         var index = this.indexOf(o);
-        if (index != -1) {
+        if (index !== -1) {
             this.splice(index, 1);
         }
         return this;
     },
-    /**
-     * 移除数组中的所有元素
-     */
-    clear: function () {
-        while (this.length > 0) {
-            this.pop();
-        }
-    }
-});
 
-/**
- * Array原型拓展
- * Created by wang on 15/6/23.
- */
-!function () {
-    Array.prototype.pushArray = function (array) {
+    pushArray: function (array) {
         for (var i = 0; i < array.length; i++) {
             this.push(array[i]);
         }
-    };
-    Array.prototype.pushDistinct = function (obj) {
+    },
+    pushDistinct: function (obj) {
         if (!this.contains(obj)) {
             this.push(obj);
         }
-    };
-    Array.prototype.pushDistinctArray = function (array) {
+    },
+    pushDistinctArray: function (array) {
         for (var i = 0, len = array.length; i < len; i++) {
             this.pushDistinct(array[i]);
         }
-    };
-}();
-
-/**
- * 规定bi的数组分为两种，其中，value和type值为key值
- * 1、[{"text":1,"value":2,"children":[]}]
- * 2、[{"name":1,"type":2,"children":[]}]
- * guy
- * 对数组的操作
- * @type {{}}
- */
-ArrayUtils = {};
-
-$.extend(ArrayUtils, {
-    /**
-     * 遍历方法
-     * @param array
-     * @param back
-     */
-    traversal: function (array, back) {
-        if (BI.isNull(array)) {
-            return;
-        }
-        var self = this;
-        BI.each(array, function (i, item) {
-            if (back(i, item) === BI.Status.END) {
-                return false;
-            }
-            self.traversal(item.children, back);
-        })
-    },
-
-    getAllChildNames: function (array) {
-        var names = [];
-        this.traversal(array, function (i, item) {
-            if (BI.isNotEmptyArray(item.children)) {
-                return BI.Status.RUNNING;
-            }
-            names.push(item.text || item.name);
-        });
-        return names;
-    },
-
-    /**
-     * 获取第一个子节点
-     * @param array
-     */
-    getFirstChild: function (array) {
-        var first = {};
-        this.traversal(array, function (i, item) {
-            if (BI.isNotEmptyArray(item.children)) {
-                return;
-            }
-            first = item;
-            return BI.Status.END;
-        })
-        return first;
-    },
-
-    /**
-     * 获取最后一个子节点
-     * @param array
-     */
-    getLastChild: function (array) {
-        var first = {};
-        this.traversal(array, function (i, item) {
-            if (item.children && item.children.length > 0) {
-                return;
-            }
-            first = item;
-        })
-        return first;
-    },
-
-    getTextByValue: function (array, value) {
-        if (!array) {
-            return value;
-        }
-        var text = "";
-        this.traversal(array, function (i, item) {
-            if (BI.isEqual(item.value, value)) {
-                text = item.text;
-                return BI.Status.END;
-            }
-        });
-        return text;
-    },
-
-    getNameByType: function (array, type) {
-        if (!array) {
-            return type;
-        }
-        var name = "";
-        this.traversal(array, function (i, item) {
-            if (BI.isEqual(item.type, type)) {
-                name = item.name;
-                return BI.Status.END;
-            }
-        });
-        return name;
-    },
-
-    getItemByText: function (array, text) {
-        var res = void 0;
-        this.traversal(array, function (i, item) {
-            if (BI.isCapitalEqual(item.text, text)) {
-                res = item;
-                return BI.Status.END;
-            }
-        });
-        return res;
-    },
-
-    getIndexByText: function (array, text) {
-        var res = -1;
-        this.traversal(array, function (i, item) {
-            if (BI.isCapitalEqual(item.text, text)) {
-                res = i;
-                return BI.Status.END;
-            }
-        });
-        return res;
-    },
-
-    getItemByValue: function (array, value) {
-        var res = void 0;
-        this.traversal(array, function (i, item) {
-            if (BI.isEqual(item.value, value)) {
-                res = item;
-                return BI.Status.END;
-            }
-        });
-        return res;
-    },
-
-    getIndexByValue: function (array, value) {
-        var res = -1;
-        this.traversal(array, function (i, item) {
-            if (BI.isEqual(item.value, value)) {
-                res = i;
-                return BI.Status.END;
-            }
-        });
-        return res;
-    },
-
-    getItemByName: function (array, name) {
-        var res = void 0;
-        this.traversal(array, function (i, item) {
-            if (BI.isCapitalEqual(item.name, name)) {
-                res = item;
-                return BI.Status.END;
-            }
-        });
-        return res;
-    },
-
-    getIndexByName: function (array, name) {
-        var res = -1;
-        this.traversal(array, function (i, item) {
-            if (BI.isCapitalEqual(item.name, name)) {
-                res = i;
-                return BI.Status.END;
-            }
-        });
-        return res;
-    },
-
-    getItemByType: function (array, type) {
-        var res = void 0;
-        this.traversal(array, function (i, item) {
-            if (BI.isEqual(item.type, type)) {
-                res = item;
-                return BI.Status.END;
-            }
-        });
-        return res;
-    },
-
-    getIndexByType: function (array, type) {
-        var res = -1;
-        this.traversal(array, function (i, item) {
-            if (BI.isEqual(item.type, type)) {
-                res = i;
-                return BI.Status.END;
-            }
-        });
-        return res;
-    },
-
-    deleteItemByType: function (array, type) {
-        var item = this.getItemByType(array, type);
-        array.remove(item);
-    },
-
-    deleteItemByName: function (array, name) {
-        var item = this.getItemByName(array, name);
-        array.remove(item);
-    },
-
-    deleteItemByValue: function (array, value) {
-        var item = this.getItemByValue(array, value);
-        array.remove(item);
-    }
-});/*
- * 前端缓存
- */
-window.localStorage || (window.localStorage = {
-    items: {},
-    setItem: function (k, v) {
-        BI.Cache.addCookie(k, v);
-    },
-    getItem: function (k) {
-        return BI.Cache.getCookie(k);
-    },
-    removeItem: function (k) {
-        BI.Cache.deleteCookie(k);
-    },
-    key: function () {
-
-    },
-    clear: function () {
-        this.items = {};
     }
 });
+
 BI.Cache = {
     _prefix: "bi",
     setUsername: function (username) {
@@ -6249,7 +6008,6 @@ Date._QN = ["", BI.i18nText("BI-Quarter_1"),
     BI.i18nText("BI-Quarter_4")];
 
 
-
 /** Adds the number of days array to the Date object. */
 Date._MD = [31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];
 
@@ -6284,12 +6042,19 @@ Date.prototype.getDayOfYear = function () {
 /** Returns the number of the week in year, as defined in ISO 8601. */
 Date.prototype.getWeekNumber = function () {
     var d = new Date(this.getFullYear(), this.getMonth(), this.getDate(), 0, 0, 0);
-    var DoW = d.getDay();
-    d.setDate(d.getDate() - (DoW + 6) % 7 + 3); // Nearest Thu
+    var week = d.getDay();
+    if (this.getMonth() === 0 && this.getDate() <= week) {
+        return 1;
+    }
+    d.setDate(this.getDate() - week);
     var ms = d.valueOf(); // GMT
     d.setMonth(0);
-    d.setDate(4); // Thu in Week 1
-    return Math.round((ms - d.valueOf()) / (7 * 864e5)) + 1;
+    d.setDate(1);
+    var offset = Math.floor((ms - d.valueOf()) / (7 * 864e5)) + 1;
+    if (d.getDay() > 0) {
+        offset++;
+    }
+    return offset;
 };
 
 //离当前时间多少天的时间
@@ -6381,7 +6146,7 @@ Date.prototype.getOffsetMonth = function (n) {
     var dt = new Date(this.getTime());
     var day = dt.getDate();
     var monthDay = new Date(dt.getFullYear(), dt.getMonth() + parseInt(n), 1).getMonthDays();
-    if(day > monthDay){
+    if (day > monthDay) {
         day = monthDay;
     }
     dt.setDate(day);
@@ -7065,50 +6830,6 @@ function accDiv(arg1, arg2) {
 Number.prototype.div = function (arg) {
     return accDiv(this, arg);
 };/**
- * 特殊情况
- * Created by wang on 15/6/23.
- */
-//解决console未定义问题 guy
-window.console = window.console || (function () {
-        var c = {};
-        c.log = c.warn = c.debug = c.info = c.error = c.time = c.dir = c.profile
-            = c.clear = c.exception = c.trace = c.assert = function () {
-        };
-        return c;
-    })();
-
-
-//修复ie9下sort方法的bug
-!function (window) {
-    var ua = window.navigator.userAgent.toLowerCase(),
-        reg = /msie|applewebkit.+safari/;
-    if (reg.test(ua)) {
-        var _sort = Array.prototype.sort;
-        Array.prototype.sort = function (fn) {
-            if (!!fn && typeof fn === 'function') {
-                if (this.length < 2) {
-                    return this;
-                }
-                var i = 0, j = i + 1, l = this.length, tmp, r = false, t = 0;
-                for (; i < l; i++) {
-                    for (j = i + 1; j < l; j++) {
-                        t = fn.call(this, this[i], this[j]);
-                        r = (typeof t === 'number' ? t :
-                                !!t ? 1 : 0) > 0;
-                        if (r === true) {
-                            tmp = this[i];
-                            this[i] = this[j];
-                            this[j] = tmp;
-                        }
-                    }
-                }
-                return this;
-            } else {
-                return _sort.call(this);
-            }
-        };
-    }
-}(window);/**
  * 对字符串对象的扩展
  * @class String
  */

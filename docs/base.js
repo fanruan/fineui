@@ -2539,10 +2539,11 @@ BI.Collection = BI.inherit(BI.Widget, {
         var self = this, o = this.options;
         this.renderedCells = [];
         this.renderedKeys = [];
+        this.renderRange = {};
         this._scrollLock = false;
         this._debounceRelease = BI.debounce(function () {
             self._scrollLock = false;
-        }, 150);
+        }, 1000 / 60);
         this.container = BI.createWidget({
             type: "bi.absolute"
         });
@@ -2588,12 +2589,10 @@ BI.Collection = BI.inherit(BI.Widget, {
         for (var index = 0, len = o.items.length; index < len; index++) {
             var cellMetadatum = o.cellSizeAndPositionGetter(index);
 
-            if (
-                cellMetadatum.height == null || isNaN(cellMetadatum.height) ||
+            if (cellMetadatum.height == null || isNaN(cellMetadatum.height) ||
                 cellMetadatum.width == null || isNaN(cellMetadatum.width) ||
                 cellMetadatum.x == null || isNaN(cellMetadatum.x) ||
-                cellMetadatum.y == null || isNaN(cellMetadatum.y)
-            ) {
+                cellMetadatum.y == null || isNaN(cellMetadatum.y)) {
                 throw Error();
             }
 
@@ -2634,75 +2633,134 @@ BI.Collection = BI.inherit(BI.Widget, {
         var top = Math.max(0, scrollTop - o.verticalOverscanSize);
         var right = Math.min(this._width, scrollLeft + o.width + o.horizontalOverscanSize);
         var bottom = Math.min(this._height, scrollTop + o.height + o.verticalOverscanSize);
-        var childrenToDisplay = this._cellRenderers(bottom - top, right - left, left, top);
-        var renderedCells = [], renderedKeys = [];
-        for (var i = 0, len = childrenToDisplay.length; i < len; i++) {
-            var datum = childrenToDisplay[i];
-            var index = BI.deepIndexOf(this.renderedKeys, datum.index);
-            if (index > -1) {
-                if (datum.width !== this.renderedCells[index]._width) {
-                    this.renderedCells[index]._width = datum.width;
-                    this.renderedCells[index].el.setWidth(datum.width);
-                }
-                if (datum.height !== this.renderedCells[index]._height) {
-                    this.renderedCells[index]._height = datum.height;
-                    this.renderedCells[index].el.setHeight(datum.height);
-                }
-                if (this.renderedCells[index].left !== datum.x) {
-                    this.renderedCells[index].el.element.css("left", datum.x + "px");
-                }
-                if (this.renderedCells[index].top !== datum.y) {
-                    this.renderedCells[index].el.element.css("top", datum.y + "px");
-                }
-                renderedCells.push(this.renderedCells[index]);
-            } else {
-                var child = BI.createWidget(BI.extend({
-                    type: "bi.label",
-                    width: datum.width,
-                    height: datum.height
-                }, o.items[datum.index], {
-                    cls: (o.items[datum.index].cls || "") + " container-cell" + (datum.y === 0 ? " first-row" : "") + (datum.x === 0 ? " first-col" : ""),
-                    _left: datum.x,
-                    _top: datum.y
-                }));
-                renderedCells.push({
-                    el: child,
-                    left: datum.x,
-                    top: datum.y,
-                    _width: datum.width,
-                    _height: datum.height
-                });
+        if (right > 0 && bottom > 0) {
+            //如果滚动的区间并没有超出渲染的范围
+            if (top >= this.renderRange.minY && bottom <= this.renderRange.maxY && left >= this.renderRange.minX && right <= this.renderRange.maxX) {
+                return;
             }
-            renderedKeys.push(datum.index);
+            var childrenToDisplay = this._cellRenderers(bottom - top, right - left, left, top);
+            var renderedCells = [], renderedKeys = [];
+            //存储所有的left和top
+            var lefts = {}, tops = {};
+            for (var i = 0, len = childrenToDisplay.length; i < len; i++) {
+                var datum = childrenToDisplay[i];
+                lefts[datum.x] = datum.x;
+                lefts[datum.x + datum.width] = datum.x + datum.width;
+                tops[datum.y] = datum.y;
+                tops[datum.y + datum.height] = datum.y + datum.height;
+            }
+            lefts = BI.toArray(lefts);
+            tops = BI.toArray(tops);
+            var leftMap = BI.invert(lefts);
+            var topMap = BI.invert(tops);
+            //存储上下左右四个边界
+            var leftBorder = {}, rightBorder = {}, topBorder = {}, bottomBorder = {};
+            var assertMinBorder = function (border, offset) {
+                if (border[offset] == null) {
+                    border[offset] = Number.MAX_VALUE;
+                }
+            };
+            var assertMaxBorder = function (border, offset) {
+                if (border[offset] == null) {
+                    border[offset] = 0;
+                }
+            };
+            for (var i = 0, len = childrenToDisplay.length; i < len; i++) {
+                var datum = childrenToDisplay[i];
+                var index = BI.deepIndexOf(this.renderedKeys, datum.index);
+                if (index > -1) {
+                    if (datum.width !== this.renderedCells[index]._width) {
+                        this.renderedCells[index]._width = datum.width;
+                        this.renderedCells[index].el.setWidth(datum.width);
+                    }
+                    if (datum.height !== this.renderedCells[index]._height) {
+                        this.renderedCells[index]._height = datum.height;
+                        this.renderedCells[index].el.setHeight(datum.height);
+                    }
+                    if (this.renderedCells[index].left !== datum.x) {
+                        this.renderedCells[index].el.element.css("left", datum.x + "px");
+                    }
+                    if (this.renderedCells[index].top !== datum.y) {
+                        this.renderedCells[index].el.element.css("top", datum.y + "px");
+                    }
+                    renderedCells.push(this.renderedCells[index]);
+                } else {
+                    var child = BI.createWidget(BI.extend({
+                        type: "bi.label",
+                        width: datum.width,
+                        height: datum.height
+                    }, o.items[datum.index], {
+                        cls: (o.items[datum.index].cls || "") + " container-cell" + (datum.y === 0 ? " first-row" : "") + (datum.x === 0 ? " first-col" : ""),
+                        _left: datum.x,
+                        _top: datum.y
+                    }));
+                    renderedCells.push({
+                        el: child,
+                        left: datum.x,
+                        top: datum.y,
+                        _width: datum.width,
+                        _height: datum.height
+                    });
+                }
+                var startTopIndex = topMap[datum.y] | 0;
+                var endTopIndex = topMap[datum.y + datum.height] | 0;
+                for (var k = startTopIndex; k <= endTopIndex; k++) {
+                    var t = tops[k];
+                    assertMinBorder(leftBorder, t);
+                    assertMaxBorder(rightBorder, t);
+                    leftBorder[t] = Math.min(leftBorder[t], datum.x);
+                    rightBorder[t] = Math.max(rightBorder[t], datum.x + datum.width);
+                }
+                var startLeftIndex = leftMap[datum.x] | 0;
+                var endLeftIndex = leftMap[datum.x + datum.width] | 0;
+                for (var k = startLeftIndex; k <= endLeftIndex; k++) {
+                    var l = lefts[k];
+                    assertMinBorder(topBorder, l);
+                    assertMaxBorder(bottomBorder, l);
+                    topBorder[l] = Math.min(topBorder[l], datum.y);
+                    bottomBorder[l] = Math.max(bottomBorder[l], datum.y + datum.height);
+                }
+
+                renderedKeys.push(datum.index);
+            }
+            //已存在的， 需要添加的和需要删除的
+            var existSet = {}, addSet = {}, deleteArray = [];
+            BI.each(renderedKeys, function (i, key) {
+                if (BI.deepContains(self.renderedKeys, key)) {
+                    existSet[i] = key;
+                } else {
+                    addSet[i] = key;
+                }
+            });
+            BI.each(this.renderedKeys, function (i, key) {
+                if (BI.deepContains(existSet, key)) {
+                    return;
+                }
+                if (BI.deepContains(addSet, key)) {
+                    return;
+                }
+                deleteArray.push(i);
+            });
+            BI.each(deleteArray, function (i, index) {
+                self.renderedCells[index].el.destroy();
+            });
+            var addedItems = [];
+            BI.each(addSet, function (index) {
+                addedItems.push(renderedCells[index])
+            });
+            this.container.addItems(addedItems);
+            this.renderedCells = renderedCells;
+            this.renderedKeys = renderedKeys;
+
+            //Todo 左右比较特殊
+            var minX = BI.min(leftBorder);
+            var maxX = BI.max(rightBorder);
+
+            var minY = BI.max(topBorder);
+            var maxY = BI.min(bottomBorder);
+
+            this.renderRange = {minX: minX, minY: minY, maxX: maxX, maxY: maxY};
         }
-        //已存在的， 需要添加的和需要删除的
-        var existSet = {}, addSet = {}, deleteArray = [];
-        BI.each(renderedKeys, function (i, key) {
-            if (BI.deepContains(self.renderedKeys, key)) {
-                existSet[i] = key;
-            } else {
-                addSet[i] = key;
-            }
-        });
-        BI.each(this.renderedKeys, function (i, key) {
-            if (BI.deepContains(existSet, key)) {
-                return;
-            }
-            if (BI.deepContains(addSet, key)) {
-                return;
-            }
-            deleteArray.push(i);
-        });
-        BI.each(deleteArray, function (i, index) {
-            self.renderedCells[index].el.destroy();
-        });
-        var addedItems = [];
-        BI.each(addSet, function (index) {
-            addedItems.push(renderedCells[index])
-        });
-        this.container.addItems(addedItems);
-        this.renderedCells = renderedCells;
-        this.renderedKeys = renderedKeys;
     },
 
     _getMaxScrollLeft: function () {
@@ -2789,6 +2847,7 @@ BI.Collection = BI.inherit(BI.Widget, {
         });
         this.renderedCells = [];
         this.renderedKeys = [];
+        this.renderRange = {};
         this._scrollLock = false;
     },
 
@@ -14613,10 +14672,11 @@ BI.Grid = BI.inherit(BI.Widget, {
         var self = this, o = this.options;
         this.renderedCells = [];
         this.renderedKeys = [];
+        this.renderRange = {};
         this._scrollLock = false;
         this._debounceRelease = BI.debounce(function () {
             self._scrollLock = false;
-        }, 150);
+        }, 1000 / 60);
         this.container = BI.createWidget({
             type: "bi.absolute"
         });
@@ -14661,13 +14721,17 @@ BI.Grid = BI.inherit(BI.Widget, {
     _calculateChildrenToRender: function () {
         var self = this, o = this.options;
 
-        var width = o.width, height = o.height, scrollLeft = BI.clamp(o.scrollLeft, 0, this._getMaxScrollLeft()), scrollTop = BI.clamp(o.scrollTop, 0, this._getMaxScrollTop()),
+        var width = o.width, height = o.height, scrollLeft = BI.clamp(o.scrollLeft, 0, this._getMaxScrollLeft()),
+            scrollTop = BI.clamp(o.scrollTop, 0, this._getMaxScrollTop()),
             overscanColumnCount = o.overscanColumnCount, overscanRowCount = o.overscanRowCount;
 
         if (height > 0 && width > 0) {
             var visibleColumnIndices = this._columnSizeAndPositionManager.getVisibleCellRange(width, scrollLeft);
             var visibleRowIndices = this._rowSizeAndPositionManager.getVisibleCellRange(height, scrollTop);
 
+            if (BI.isEmpty(visibleColumnIndices) || BI.isEmpty(visibleRowIndices)) {
+                return;
+            }
             var horizontalOffsetAdjustment = this._columnSizeAndPositionManager.getOffsetAdjustment(width, scrollLeft);
             var verticalOffsetAdjustment = this._rowSizeAndPositionManager.getOffsetAdjustment(height, scrollTop);
 
@@ -14685,8 +14749,22 @@ BI.Grid = BI.inherit(BI.Widget, {
             var rowStartIndex = overscanRowIndices.overscanStartIndex;
             var rowStopIndex = overscanRowIndices.overscanStopIndex;
 
-            var renderedCells = [], renderedKeys = [];
+            //算区间size
+            var minRowDatum = this._rowSizeAndPositionManager.getSizeAndPositionOfCell(rowStartIndex);
+            var minColumnDatum = this._columnSizeAndPositionManager.getSizeAndPositionOfCell(columnStartIndex);
+            var maxRowDatum = this._rowSizeAndPositionManager.getSizeAndPositionOfCell(rowStopIndex);
+            var maxColumnDatum = this._columnSizeAndPositionManager.getSizeAndPositionOfCell(columnStopIndex);
+            var top = minRowDatum.offset + verticalOffsetAdjustment;
+            var left = minColumnDatum.offset + horizontalOffsetAdjustment;
+            var bottom = maxRowDatum.offset + verticalOffsetAdjustment + maxRowDatum.size;
+            var right = maxColumnDatum.offset + horizontalOffsetAdjustment + maxColumnDatum.size;
+            //如果滚动的区间并没有超出渲染的范围
+            if (top >= this.renderRange.minY && bottom <= this.renderRange.maxY && left >= this.renderRange.minX && right <= this.renderRange.maxX) {
+                return;
+            }
 
+            var renderedCells = [], renderedKeys = [];
+            var minX = this._getMaxScrollLeft(), minY = this._getMaxScrollTop(), maxX = 0, maxY = 0;
             for (var rowIndex = rowStartIndex; rowIndex <= rowStopIndex; rowIndex++) {
                 var rowDatum = this._rowSizeAndPositionManager.getSizeAndPositionOfCell(rowIndex);
 
@@ -14731,6 +14809,10 @@ BI.Grid = BI.inherit(BI.Widget, {
                             _height: rowDatum.size
                         });
                     }
+                    minX = Math.min(minX, columnDatum.offset + horizontalOffsetAdjustment);
+                    maxX = Math.max(maxX, columnDatum.offset + horizontalOffsetAdjustment + columnDatum.size);
+                    minY = Math.min(minY, rowDatum.offset + verticalOffsetAdjustment);
+                    maxY = Math.max(maxY, rowDatum.offset + verticalOffsetAdjustment + rowDatum.size);
                     renderedKeys.push(key);
                 }
             }
@@ -14762,6 +14844,7 @@ BI.Grid = BI.inherit(BI.Widget, {
             this.container.addItems(addedItems);
             this.renderedCells = renderedCells;
             this.renderedKeys = renderedKeys;
+            this.renderRange = {minX: minX, minY: minY, maxX: maxX, maxY: maxY};
         }
     },
 
@@ -14865,6 +14948,7 @@ BI.Grid = BI.inherit(BI.Widget, {
         });
         this.renderedCells = [];
         this.renderedKeys = [];
+        this.renderRange = {};
         this._scrollLock = false;
     },
 
@@ -29036,26 +29120,54 @@ BI.QuickCollectionTable = BI.inherit(BI.CollectionTable, {
     mounted: function () {
         BI.QuickCollectionTable.superclass.mounted.apply(this, arguments);
         var self = this;
-        this._leftWheelHandler = new BI.WheelHandler(
-            BI.bind(this._onWheelY, this),
-            BI.bind(this._shouldHandleX, this),
+        this._topLeftWheelHandler = new BI.WheelHandler(
+            BI.bind(this._onWheelLeft, this),
+            BI.bind(this._shouldHandleLeftX, this),
             BI.bind(this._shouldHandleY, this)
         );
-        this._rightWheelHandler = new BI.WheelHandler(
-            BI.bind(this._onWheelY, this),
-            BI.bind(this._shouldHandleX, this),
+        this._topRightWheelHandler = new BI.WheelHandler(
+            BI.bind(this._onWheelRight, this),
+            BI.bind(this._shouldHandleRightX, this),
             BI.bind(this._shouldHandleY, this)
         );
+        this._bottomLeftWheelHandler = new BI.WheelHandler(
+            BI.bind(this._onWheelLeft, this),
+            BI.bind(this._shouldHandleLeftX, this),
+            BI.bind(this._shouldHandleY, this)
+        );
+        this._bottomRightWheelHandler = new BI.WheelHandler(
+            BI.bind(this._onWheelRight, this),
+            BI.bind(this._shouldHandleRightX, this),
+            BI.bind(this._shouldHandleY, this)
+        );
+        this.topLeftCollection.element.mousewheel(function (e) {
+            self._topLeftWheelHandler.onWheel(e.originalEvent);
+        });
+        this.topRightCollection.element.mousewheel(function (e) {
+            self._topRightWheelHandler.onWheel(e.originalEvent);
+        });
         this.bottomLeftCollection.element.mousewheel(function (e) {
-            self._leftWheelHandler.onWheel(e.originalEvent);
+            self._bottomLeftWheelHandler.onWheel(e.originalEvent);
         });
         this.bottomRightCollection.element.mousewheel(function (e) {
-            self._rightWheelHandler.onWheel(e.originalEvent);
+            self._bottomRightWheelHandler.onWheel(e.originalEvent);
         });
     },
 
-    _shouldHandleX: function (delta) {
-        return false;
+    _shouldHandleLeftX: function (delta) {
+        if (delta > 0) {
+            return this.bottomLeftCollection.getScrollLeft() < this.bottomLeftCollection.getMaxScrollLeft();
+        } else {
+            return this.bottomLeftCollection.getScrollLeft() > 0;
+        }
+    },
+
+    _shouldHandleRightX: function (delta) {
+        if (delta > 0) {
+            return this.bottomRightCollection.getScrollLeft() < this.bottomRightCollection.getMaxScrollLeft();
+        } else {
+            return this.bottomRightCollection.getScrollLeft() > 0;
+        }
     },
 
     _shouldHandleY: function (delta) {
@@ -29066,19 +29178,38 @@ BI.QuickCollectionTable = BI.inherit(BI.CollectionTable, {
         }
     },
 
-    _onWheelY: function (deltaX, deltaY) {
+    _onWheelLeft: function (deltaX, deltaY) {
         var self = this;
-        var scrollTop = this.bottomRightCollection.getScrollTop();
+        var scrollTop = this.bottomLeftCollection.getScrollTop();
+        var scrollLeft = this.bottomLeftCollection.getScrollLeft();
         scrollTop += deltaY;
+        scrollLeft += deltaX;
         this.bottomLeftCollection.setScrollTop(scrollTop);
         this.bottomRightCollection.setScrollTop(scrollTop);
+        this.topLeftCollection.setScrollLeft(scrollLeft);
+        this.bottomLeftCollection.setScrollLeft(scrollLeft);
+        self._populateScrollbar();
+        this.fireEvent(BI.Table.EVENT_TABLE_SCROLL, arguments);
+    },
+
+    _onWheelRight: function (deltaX, deltaY) {
+        var self = this;
+        var scrollTop = this.bottomRightCollection.getScrollTop();
+        var scrollLeft = this.bottomRightCollection.getScrollLeft();
+        scrollTop += deltaY;
+        scrollLeft += deltaX;
+        this.bottomLeftCollection.setScrollTop(scrollTop);
+        this.bottomRightCollection.setScrollTop(scrollTop);
+        this.topRightCollection.setScrollLeft(scrollLeft);
+        this.bottomRightCollection.setScrollLeft(scrollLeft);
         self._populateScrollbar();
         this.fireEvent(BI.Table.EVENT_TABLE_SCROLL, arguments);
     },
 
     _populateTable: function () {
         var self = this, o = this.options;
-        var regionSize = this.getRegionSize(), totalLeftColumnSize = 0, totalRightColumnSize = 0, totalColumnSize = 0, summaryColumnSizeArray = [], totalRowSize = o.items.length * o.rowSize;
+        var regionSize = this.getRegionSize(), totalLeftColumnSize = 0, totalRightColumnSize = 0, totalColumnSize = 0,
+            summaryColumnSizeArray = [], totalRowSize = o.items.length * o.rowSize;
         var freezeColLength = this._getFreezeColLength();
         BI.each(o.columnSize, function (i, size) {
             if (o.isNeedFreeze === true && o.freezeCols.contains(i)) {
@@ -29691,26 +29822,54 @@ BI.QuickGridTable = BI.inherit(BI.GridTable, {
     mounted: function () {
         BI.QuickGridTable.superclass.mounted.apply(this, arguments);
         var self = this;
-        this._leftWheelHandler = new BI.WheelHandler(
-            BI.bind(this._onWheelY, this),
-            BI.bind(this._shouldHandleX, this),
+        this._topLeftWheelHandler = new BI.WheelHandler(
+            BI.bind(this._onWheelLeft, this),
+            BI.bind(this._shouldHandleLeftX, this),
             BI.bind(this._shouldHandleY, this)
         );
-        this._rightWheelHandler = new BI.WheelHandler(
-            BI.bind(this._onWheelY, this),
-            BI.bind(this._shouldHandleX, this),
+        this._topRightWheelHandler = new BI.WheelHandler(
+            BI.bind(this._onWheelRight, this),
+            BI.bind(this._shouldHandleRightX, this),
             BI.bind(this._shouldHandleY, this)
         );
+        this._bottomLeftWheelHandler = new BI.WheelHandler(
+            BI.bind(this._onWheelLeft, this),
+            BI.bind(this._shouldHandleLeftX, this),
+            BI.bind(this._shouldHandleY, this)
+        );
+        this._bottomRightWheelHandler = new BI.WheelHandler(
+            BI.bind(this._onWheelRight, this),
+            BI.bind(this._shouldHandleRightX, this),
+            BI.bind(this._shouldHandleY, this)
+        );
+        this.topLeftGrid.element.mousewheel(function (e) {
+            self._topLeftWheelHandler.onWheel(e.originalEvent);
+        });
+        this.topRightGrid.element.mousewheel(function (e) {
+            self._topRightWheelHandler.onWheel(e.originalEvent);
+        });
         this.bottomLeftGrid.element.mousewheel(function (e) {
-            self._leftWheelHandler.onWheel(e.originalEvent);
+            self._bottomLeftWheelHandler.onWheel(e.originalEvent);
         });
         this.bottomRightGrid.element.mousewheel(function (e) {
-            self._rightWheelHandler.onWheel(e.originalEvent);
+            self._bottomRightWheelHandler.onWheel(e.originalEvent);
         });
     },
 
-    _shouldHandleX: function (delta) {
-        return false;
+    _shouldHandleLeftX: function (delta) {
+        if (delta > 0) {
+            return this.bottomLeftGrid.getScrollLeft() < this.bottomLeftGrid.getMaxScrollLeft();
+        } else {
+            return this.bottomLeftGrid.getScrollLeft() > 0;
+        }
+    },
+
+    _shouldHandleRightX: function (delta) {
+        if (delta > 0) {
+            return this.bottomRightGrid.getScrollLeft() < this.bottomRightGrid.getMaxScrollLeft();
+        } else {
+            return this.bottomRightGrid.getScrollLeft() > 0;
+        }
     },
 
     _shouldHandleY: function (delta) {
@@ -29721,12 +29880,30 @@ BI.QuickGridTable = BI.inherit(BI.GridTable, {
         }
     },
 
-    _onWheelY: function (deltaX, deltaY) {
+    _onWheelLeft: function (deltaX, deltaY) {
         var self = this;
-        var scrollTop = this.bottomRightGrid.getScrollTop();
+        var scrollTop = this.bottomLeftGrid.getScrollTop();
+        var scrollLeft = this.bottomLeftGrid.getScrollLeft();
         scrollTop += deltaY;
+        scrollLeft += deltaX;
         this.bottomLeftGrid.setScrollTop(scrollTop);
         this.bottomRightGrid.setScrollTop(scrollTop);
+        this.topLeftGrid.setScrollLeft(scrollLeft);
+        this.bottomLeftGrid.setScrollLeft(scrollLeft);
+        self._populateScrollbar();
+        this.fireEvent(BI.Table.EVENT_TABLE_SCROLL, arguments);
+    },
+
+    _onWheelRight: function (deltaX, deltaY) {
+        var self = this;
+        var scrollTop = this.bottomRightGrid.getScrollTop();
+        var scrollLeft = this.bottomRightGrid.getScrollLeft();
+        scrollTop += deltaY;
+        scrollLeft += deltaX;
+        this.bottomLeftGrid.setScrollTop(scrollTop);
+        this.bottomRightGrid.setScrollTop(scrollTop);
+        this.topRightGrid.setScrollLeft(scrollLeft);
+        this.bottomRightGrid.setScrollLeft(scrollLeft);
         self._populateScrollbar();
         this.fireEvent(BI.Table.EVENT_TABLE_SCROLL, arguments);
     },

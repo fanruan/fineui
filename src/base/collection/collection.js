@@ -27,10 +27,11 @@ BI.Collection = BI.inherit(BI.Widget, {
         var self = this, o = this.options;
         this.renderedCells = [];
         this.renderedKeys = [];
+        this.renderRange = {};
         this._scrollLock = false;
         this._debounceRelease = BI.debounce(function () {
             self._scrollLock = false;
-        }, 150);
+        }, 1000 / 60);
         this.container = BI.createWidget({
             type: "bi.absolute"
         });
@@ -76,12 +77,10 @@ BI.Collection = BI.inherit(BI.Widget, {
         for (var index = 0, len = o.items.length; index < len; index++) {
             var cellMetadatum = o.cellSizeAndPositionGetter(index);
 
-            if (
-                cellMetadatum.height == null || isNaN(cellMetadatum.height) ||
+            if (cellMetadatum.height == null || isNaN(cellMetadatum.height) ||
                 cellMetadatum.width == null || isNaN(cellMetadatum.width) ||
                 cellMetadatum.x == null || isNaN(cellMetadatum.x) ||
-                cellMetadatum.y == null || isNaN(cellMetadatum.y)
-            ) {
+                cellMetadatum.y == null || isNaN(cellMetadatum.y)) {
                 throw Error();
             }
 
@@ -122,75 +121,134 @@ BI.Collection = BI.inherit(BI.Widget, {
         var top = Math.max(0, scrollTop - o.verticalOverscanSize);
         var right = Math.min(this._width, scrollLeft + o.width + o.horizontalOverscanSize);
         var bottom = Math.min(this._height, scrollTop + o.height + o.verticalOverscanSize);
-        var childrenToDisplay = this._cellRenderers(bottom - top, right - left, left, top);
-        var renderedCells = [], renderedKeys = [];
-        for (var i = 0, len = childrenToDisplay.length; i < len; i++) {
-            var datum = childrenToDisplay[i];
-            var index = BI.deepIndexOf(this.renderedKeys, datum.index);
-            if (index > -1) {
-                if (datum.width !== this.renderedCells[index]._width) {
-                    this.renderedCells[index]._width = datum.width;
-                    this.renderedCells[index].el.setWidth(datum.width);
-                }
-                if (datum.height !== this.renderedCells[index]._height) {
-                    this.renderedCells[index]._height = datum.height;
-                    this.renderedCells[index].el.setHeight(datum.height);
-                }
-                if (this.renderedCells[index].left !== datum.x) {
-                    this.renderedCells[index].el.element.css("left", datum.x + "px");
-                }
-                if (this.renderedCells[index].top !== datum.y) {
-                    this.renderedCells[index].el.element.css("top", datum.y + "px");
-                }
-                renderedCells.push(this.renderedCells[index]);
-            } else {
-                var child = BI.createWidget(BI.extend({
-                    type: "bi.label",
-                    width: datum.width,
-                    height: datum.height
-                }, o.items[datum.index], {
-                    cls: (o.items[datum.index].cls || "") + " container-cell" + (datum.y === 0 ? " first-row" : "") + (datum.x === 0 ? " first-col" : ""),
-                    _left: datum.x,
-                    _top: datum.y
-                }));
-                renderedCells.push({
-                    el: child,
-                    left: datum.x,
-                    top: datum.y,
-                    _width: datum.width,
-                    _height: datum.height
-                });
+        if (right > 0 && bottom > 0) {
+            //如果滚动的区间并没有超出渲染的范围
+            if (top >= this.renderRange.minY && bottom <= this.renderRange.maxY && left >= this.renderRange.minX && right <= this.renderRange.maxX) {
+                return;
             }
-            renderedKeys.push(datum.index);
+            var childrenToDisplay = this._cellRenderers(bottom - top, right - left, left, top);
+            var renderedCells = [], renderedKeys = [];
+            //存储所有的left和top
+            var lefts = {}, tops = {};
+            for (var i = 0, len = childrenToDisplay.length; i < len; i++) {
+                var datum = childrenToDisplay[i];
+                lefts[datum.x] = datum.x;
+                lefts[datum.x + datum.width] = datum.x + datum.width;
+                tops[datum.y] = datum.y;
+                tops[datum.y + datum.height] = datum.y + datum.height;
+            }
+            lefts = BI.toArray(lefts);
+            tops = BI.toArray(tops);
+            var leftMap = BI.invert(lefts);
+            var topMap = BI.invert(tops);
+            //存储上下左右四个边界
+            var leftBorder = {}, rightBorder = {}, topBorder = {}, bottomBorder = {};
+            var assertMinBorder = function (border, offset) {
+                if (border[offset] == null) {
+                    border[offset] = Number.MAX_VALUE;
+                }
+            };
+            var assertMaxBorder = function (border, offset) {
+                if (border[offset] == null) {
+                    border[offset] = 0;
+                }
+            };
+            for (var i = 0, len = childrenToDisplay.length; i < len; i++) {
+                var datum = childrenToDisplay[i];
+                var index = BI.deepIndexOf(this.renderedKeys, datum.index);
+                if (index > -1) {
+                    if (datum.width !== this.renderedCells[index]._width) {
+                        this.renderedCells[index]._width = datum.width;
+                        this.renderedCells[index].el.setWidth(datum.width);
+                    }
+                    if (datum.height !== this.renderedCells[index]._height) {
+                        this.renderedCells[index]._height = datum.height;
+                        this.renderedCells[index].el.setHeight(datum.height);
+                    }
+                    if (this.renderedCells[index].left !== datum.x) {
+                        this.renderedCells[index].el.element.css("left", datum.x + "px");
+                    }
+                    if (this.renderedCells[index].top !== datum.y) {
+                        this.renderedCells[index].el.element.css("top", datum.y + "px");
+                    }
+                    renderedCells.push(this.renderedCells[index]);
+                } else {
+                    var child = BI.createWidget(BI.extend({
+                        type: "bi.label",
+                        width: datum.width,
+                        height: datum.height
+                    }, o.items[datum.index], {
+                        cls: (o.items[datum.index].cls || "") + " container-cell" + (datum.y === 0 ? " first-row" : "") + (datum.x === 0 ? " first-col" : ""),
+                        _left: datum.x,
+                        _top: datum.y
+                    }));
+                    renderedCells.push({
+                        el: child,
+                        left: datum.x,
+                        top: datum.y,
+                        _width: datum.width,
+                        _height: datum.height
+                    });
+                }
+                var startTopIndex = topMap[datum.y] | 0;
+                var endTopIndex = topMap[datum.y + datum.height] | 0;
+                for (var k = startTopIndex; k <= endTopIndex; k++) {
+                    var t = tops[k];
+                    assertMinBorder(leftBorder, t);
+                    assertMaxBorder(rightBorder, t);
+                    leftBorder[t] = Math.min(leftBorder[t], datum.x);
+                    rightBorder[t] = Math.max(rightBorder[t], datum.x + datum.width);
+                }
+                var startLeftIndex = leftMap[datum.x] | 0;
+                var endLeftIndex = leftMap[datum.x + datum.width] | 0;
+                for (var k = startLeftIndex; k <= endLeftIndex; k++) {
+                    var l = lefts[k];
+                    assertMinBorder(topBorder, l);
+                    assertMaxBorder(bottomBorder, l);
+                    topBorder[l] = Math.min(topBorder[l], datum.y);
+                    bottomBorder[l] = Math.max(bottomBorder[l], datum.y + datum.height);
+                }
+
+                renderedKeys.push(datum.index);
+            }
+            //已存在的， 需要添加的和需要删除的
+            var existSet = {}, addSet = {}, deleteArray = [];
+            BI.each(renderedKeys, function (i, key) {
+                if (BI.deepContains(self.renderedKeys, key)) {
+                    existSet[i] = key;
+                } else {
+                    addSet[i] = key;
+                }
+            });
+            BI.each(this.renderedKeys, function (i, key) {
+                if (BI.deepContains(existSet, key)) {
+                    return;
+                }
+                if (BI.deepContains(addSet, key)) {
+                    return;
+                }
+                deleteArray.push(i);
+            });
+            BI.each(deleteArray, function (i, index) {
+                self.renderedCells[index].el.destroy();
+            });
+            var addedItems = [];
+            BI.each(addSet, function (index) {
+                addedItems.push(renderedCells[index])
+            });
+            this.container.addItems(addedItems);
+            this.renderedCells = renderedCells;
+            this.renderedKeys = renderedKeys;
+
+            //Todo 左右比较特殊
+            var minX = BI.min(leftBorder);
+            var maxX = BI.max(rightBorder);
+
+            var minY = BI.max(topBorder);
+            var maxY = BI.min(bottomBorder);
+
+            this.renderRange = {minX: minX, minY: minY, maxX: maxX, maxY: maxY};
         }
-        //已存在的， 需要添加的和需要删除的
-        var existSet = {}, addSet = {}, deleteArray = [];
-        BI.each(renderedKeys, function (i, key) {
-            if (BI.deepContains(self.renderedKeys, key)) {
-                existSet[i] = key;
-            } else {
-                addSet[i] = key;
-            }
-        });
-        BI.each(this.renderedKeys, function (i, key) {
-            if (BI.deepContains(existSet, key)) {
-                return;
-            }
-            if (BI.deepContains(addSet, key)) {
-                return;
-            }
-            deleteArray.push(i);
-        });
-        BI.each(deleteArray, function (i, index) {
-            self.renderedCells[index].el.destroy();
-        });
-        var addedItems = [];
-        BI.each(addSet, function (index) {
-            addedItems.push(renderedCells[index])
-        });
-        this.container.addItems(addedItems);
-        this.renderedCells = renderedCells;
-        this.renderedKeys = renderedKeys;
     },
 
     _getMaxScrollLeft: function () {
@@ -277,6 +335,7 @@ BI.Collection = BI.inherit(BI.Widget, {
         });
         this.renderedCells = [];
         this.renderedKeys = [];
+        this.renderRange = {};
         this._scrollLock = false;
     },
 

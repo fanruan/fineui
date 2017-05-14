@@ -19,7 +19,9 @@ BI.Chart = BI.inherit(BI.Pane, {
         this.vanCharts = VanCharts.init(self.element[0]);
 
         this._resizer = BI.debounce(function () {
-            self.vanCharts.resize();
+            if (self.element.width() > 0 && self.element.height() > 0) {
+                self.vanCharts.resize();
+            }
         }, 30);
         BI.ResizeDetector.addResizeListener(this, function (e) {
             self._resizer();
