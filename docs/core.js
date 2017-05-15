@@ -18862,6 +18862,19 @@ $.extend(BI, {
             } else {
                 return [sNodes];
             }
+        },
+
+        traversal: function (array, callback) {
+            if (BI.isNull(array)) {
+                return;
+            }
+            var self = this;
+            BI.any(array, function (i, item) {
+                if (callback(i, item) === false) {
+                    return true;
+                }
+                self.traversal(item.children, callback);
+            })
         }
     })
 })();//向量操作
