@@ -15,7 +15,6 @@ BI.MultiTreeCombo = BI.inherit(BI.Single, {
         }
     },
 
-
     _defaultConfig: function () {
         return BI.extend(BI.MultiTreeCombo.superclass._defaultConfig.apply(this, arguments), {
             baseCls: 'bi-multi-tree-combo',
@@ -29,31 +28,13 @@ BI.MultiTreeCombo = BI.inherit(BI.Single, {
 
         var self = this, o = this.options;
 
-        this.popup = BI.createWidget({
-            type: 'bi.multi_tree_popup_view',
-            itemsCreator: o.itemsCreator,
-            onLoaded: function () {
-                BI.nextTick(function () {
-                    self.trigger.getCounter().adjustView();
-                    self.trigger.getSearcher().adjustView();
-                });
-            }
-        });
         var isInit = false;
         var want2showCounter = false;
-
-        this.popup.on(BI.MultiTreePopup.EVENT_AFTERINIT, function () {
-            self.trigger.getCounter().adjustView();
-            isInit = true;
-            if (want2showCounter === true) {
-                showCounter();
-            }
-        });
 
         this.trigger = BI.createWidget({
             type: "bi.multi_select_trigger",
             height: o.height,
-            adapter: this.popup,
+            // adapter: this.popup,
             masker: {
                 offset: this.constants.offset
             },
@@ -78,7 +59,53 @@ BI.MultiTreeCombo = BI.inherit(BI.Single, {
             toggle: false,
             el: this.trigger,
             adjustLength: 1,
-            popup: this.popup
+            popup: {
+                type: 'bi.multi_tree_popup_view',
+                ref: function () {
+                    self.popup = this;
+                    self.trigger.setAdapter(this);
+                },
+                listeners: [{
+                    eventName: BI.MultiTreePopup.EVENT_AFTERINIT,
+                    action: function () {
+                        self.trigger.getCounter().adjustView();
+                        isInit = true;
+                        if (want2showCounter === true) {
+                            showCounter();
+                        }
+                    }
+                }, {
+                    eventName: BI.MultiTreePopup.EVENT_CHANGE,
+                    action: function () {
+                        change = true;
+                        var val = {
+                            type: BI.Selection.Multi,
+                            value: this.hasChecked() ? {1: 1} : {}
+                        };
+                        self.trigger.getSearcher().setState(val);
+                        self.trigger.getCounter().setButtonChecked(val);
+                    }
+                }, {
+                    eventName: BI.MultiTreePopup.EVENT_CLICK_CONFIRM,
+                    action: function () {
+                        self._defaultState();
+                    }
+                }, {
+                    eventName: BI.MultiTreePopup.EVENT_CLICK_CLEAR,
+                    action: function () {
+                        clear = true;
+                        self.setValue();
+                        self._defaultState();
+                    }
+                }],
+                itemsCreator: o.itemsCreator,
+                onLoaded: function () {
+                    BI.nextTick(function () {
+                        self.trigger.getCounter().adjustView();
+                        self.trigger.getSearcher().adjustView();
+                    });
+                }
+            }
         });
 
         this.storeValue = {value: {}};
@@ -140,24 +167,6 @@ BI.MultiTreeCombo = BI.inherit(BI.Single, {
             };
             this.getSearcher().setState(val);
             this.getCounter().setButtonChecked(val);
-        });
-        this.popup.on(BI.MultiTreePopup.EVENT_CHANGE, function () {
-            change = true;
-            var val = {
-                type: BI.Selection.Multi,
-                value: this.hasChecked() ? {1: 1} : {}
-            };
-            self.trigger.getSearcher().setState(val);
-            self.trigger.getCounter().setButtonChecked(val);
-        });
-
-        this.popup.on(BI.MultiTreePopup.EVENT_CLICK_CONFIRM, function () {
-            self._defaultState();
-        });
-        this.popup.on(BI.MultiTreePopup.EVENT_CLICK_CLEAR, function () {
-            clear = true;
-            self.setValue();
-            self._defaultState();
         });
 
         this.combo.on(BI.Combo.EVENT_BEFORE_POPUPVIEW, function () {
@@ -227,7 +236,7 @@ BI.MultiTreeCombo = BI.inherit(BI.Single, {
         this.combo.hideView();
     },
 
-    setEnable: function(v){
+    setEnable: function (v) {
         this.combo.setEnable(v);
     },
 

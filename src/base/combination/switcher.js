@@ -204,6 +204,11 @@ BI.Switcher = BI.inherit(BI.Widget, {
         return this.popupView ? this.popupView.getValue() : [];
     },
 
+    setAdapter: function (adapter) {
+        this.options.adapter = adapter;
+        BI.Maskers.remove(this.getName());
+    },
+
     isViewVisible: function () {
         return this.isEnabled() && this.switcher.isEnabled() &&
             (this.options.adapter ? BI.Maskers.isVisible(this.getName()) : (this.popupView && this.popupView.isVisible()));
