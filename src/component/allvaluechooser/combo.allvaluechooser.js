@@ -1,5 +1,5 @@
 /**
- * 简单的复选下拉框控件, 适用于数据量少的情况
+ * 简单的复选下拉框控件, 适用于数据量少的情况， 与valuechooser的区别是allvaluechooser setValue和getValue返回的是所有值
  * 封装了字段处理逻辑
  *
  * Created by GUY on 2015/10/29.
@@ -78,13 +78,13 @@ BI.AllValueChooserCombo = BI.inherit(BI.Widget, {
                     return !filter[ob.value];
                 });
             }
-            if (options.type == BI.MultiSelectCombo.REQ_GET_ALL_DATA) {
+            if (options.type === BI.MultiSelectCombo.REQ_GET_ALL_DATA) {
                 callback({
                     items: items
                 });
                 return;
             }
-            if (options.type == BI.MultiSelectCombo.REQ_GET_DATA_LENGTH) {
+            if (options.type === BI.MultiSelectCombo.REQ_GET_DATA_LENGTH) {
                 callback({count: items.length});
                 return;
             }
