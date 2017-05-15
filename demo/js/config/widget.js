@@ -22,6 +22,14 @@ Demo.WIDGET_CONFIG = [{
     text: "bi.page_table",
     value: "demo.page_table"
 }, {
+    id: 402,
+    pId: 4,
+    text: "tree"
+}, {
+    pId: 402,
+    text: "bi.multilayer_select_tree_combo",
+    value: "demo.multilayer_select_tree_combo"
+}, {
     pId: 4,
     text: "bi.multi_select_combo",
     value: "demo.multi_select_combo"
