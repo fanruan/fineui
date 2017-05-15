@@ -72,6 +72,10 @@ BI.MultiSelectCheckSelectedSwitcher = BI.inherit(BI.Widget, {
         this.switcher.hideView();
     },
 
+    setAdapter: function (adapter) {
+        this.switcher.setAdapter(adapter);
+    },
+
     setValue: function (v) {
         this.switcher.setValue(v);
     },

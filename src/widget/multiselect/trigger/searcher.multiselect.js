@@ -98,6 +98,10 @@ BI.MultiSelectSearcher = BI.inherit(BI.Widget, {
         return this.searcher.getView() && this.searcher.getView().hasChecked();
     },
 
+    setAdapter: function (adapter) {
+        this.searcher.setAdapter(adapter);
+    },
+
     setState: function (ob) {
         var o = this.options;
         ob || (ob = {});

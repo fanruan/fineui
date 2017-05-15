@@ -46,12 +46,9 @@ Demo.MultiSelectCombo = BI.inherit(BI.Widget, {
         var items = BI.deepClone(TREEWITHCHILDREN);
         var combo = BI.createWidget({
             type: "bi.multilayer_select_tree_combo",
-            itemsCreator: function (op, callback) {
-                debugger;
-            }
         });
 
-        combo.populate();
+        combo.populate(items);
         return {
             type: "bi.vertical",
             items: [combo, {
