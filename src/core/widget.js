@@ -260,7 +260,7 @@ BI.Widget = BI.inherit(BI.OB, {
     },
 
     getWidgetByName: function (name) {
-        if (!BI.isKey(name) || name == this.getName()) {
+        if (!BI.isKey(name) || name === this.getName()) {
             return this;
         }
         name = name + "";
@@ -375,7 +375,7 @@ BI.Widget = BI.inherit(BI.OB, {
         this.element.empty();
     },
 
-    destroy: function () {
+    _destroy: function(){
         BI.each(this._children, function (i, widget) {
             widget._unMount && widget._unMount();
         });
@@ -384,6 +384,10 @@ BI.Widget = BI.inherit(BI.OB, {
         this._isMounted = false;
         this.destroyed && this.destroyed();
         this.element.destroy();
+    },
+
+    destroy: function () {
+        this._destroy();
         this.fireEvent(BI.Events.DESTROY);
         this.purgeListeners();
     }

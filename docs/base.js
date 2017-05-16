@@ -2511,15 +2511,15 @@ BI.Canvas = BI.inherit(BI.Widget, {
     }
 });
 BI.shortcut("bi.canvas", BI.Canvas);/**
- * Collection
+ * CollectionView
  *
  * Created by GUY on 2016/1/15.
- * @class BI.Collection
+ * @class BI.CollectionView
  * @extends BI.Widget
  */
-BI.Collection = BI.inherit(BI.Widget, {
+BI.CollectionView = BI.inherit(BI.Widget, {
     _defaultConfig: function () {
-        return BI.extend(BI.Collection.superclass._defaultConfig.apply(this, arguments), {
+        return BI.extend(BI.CollectionView.superclass._defaultConfig.apply(this, arguments), {
             baseCls: "bi-collection",
             width: 400,
             height: 300,
@@ -2535,7 +2535,7 @@ BI.Collection = BI.inherit(BI.Widget, {
     },
 
     _init: function () {
-        BI.Collection.superclass._init.apply(this, arguments);
+        BI.CollectionView.superclass._init.apply(this, arguments);
         var self = this, o = this.options;
         this.renderedCells = [];
         this.renderedKeys = [];
@@ -2554,7 +2554,7 @@ BI.Collection = BI.inherit(BI.Widget, {
             o.scrollLeft = self.element.scrollLeft();
             o.scrollTop = self.element.scrollTop();
             self._calculateChildrenToRender();
-            self.fireEvent(BI.Collection.EVENT_SCROLL, {
+            self.fireEvent(BI.CollectionView.EVENT_SCROLL, {
                 scrollLeft: o.scrollLeft,
                 scrollTop: o.scrollTop
             });
@@ -2742,13 +2742,16 @@ BI.Collection = BI.inherit(BI.Widget, {
                 deleteArray.push(i);
             });
             BI.each(deleteArray, function (i, index) {
-                self.renderedCells[index].el.destroy();
+                //性能优化，不调用destroy方法防止触发destroy事件
+                self.renderedCells[index].el._destroy();
             });
             var addedItems = [];
             BI.each(addSet, function (index) {
                 addedItems.push(renderedCells[index])
             });
             this.container.addItems(addedItems);
+            //拦截父子级关系
+            this.container._children = renderedCells;
             this.renderedCells = renderedCells;
             this.renderedKeys = renderedKeys;
 
@@ -2859,8 +2862,8 @@ BI.Collection = BI.inherit(BI.Widget, {
         this._populate();
     }
 });
-BI.Collection.EVENT_SCROLL = "EVENT_SCROLL";
-BI.shortcut('bi.collection_view', BI.Collection);/**
+BI.CollectionView.EVENT_SCROLL = "EVENT_SCROLL";
+BI.shortcut('bi.collection_view', BI.CollectionView);/**
  * @class BI.Combo
  * @extends BI.Widget
  */
@@ -14646,15 +14649,15 @@ $.extend(BI, {
         };
     }()
 });/**
- * Grid
+ * GridView
  *
  * Created by GUY on 2016/1/11.
- * @class BI.Grid
+ * @class BI.GridView
  * @extends BI.Widget
  */
-BI.Grid = BI.inherit(BI.Widget, {
+BI.GridView = BI.inherit(BI.Widget, {
     _defaultConfig: function () {
-        return BI.extend(BI.Grid.superclass._defaultConfig.apply(this, arguments), {
+        return BI.extend(BI.GridView.superclass._defaultConfig.apply(this, arguments), {
             baseCls: "bi-grid-view",
             width: 400,
             height: 300,
@@ -14673,7 +14676,7 @@ BI.Grid = BI.inherit(BI.Widget, {
     },
 
     _init: function () {
-        BI.Grid.superclass._init.apply(this, arguments);
+        BI.GridView.superclass._init.apply(this, arguments);
         var self = this, o = this.options;
         this.renderedCells = [];
         this.renderedKeys = [];
@@ -14692,7 +14695,7 @@ BI.Grid = BI.inherit(BI.Widget, {
             o.scrollLeft = self.element.scrollLeft();
             o.scrollTop = self.element.scrollTop();
             self._calculateChildrenToRender();
-            self.fireEvent(BI.Grid.EVENT_SCROLL, {
+            self.fireEvent(BI.GridView.EVENT_SCROLL, {
                 scrollLeft: o.scrollLeft,
                 scrollTop: o.scrollTop
             });
@@ -14840,13 +14843,16 @@ BI.Grid = BI.inherit(BI.Widget, {
                 deleteArray.push(i);
             });
             BI.each(deleteArray, function (i, index) {
-                self.renderedCells[index].el.destroy();
+                //性能优化，不调用destroy方法防止触发destroy事件
+                self.renderedCells[index].el._destroy();
             });
             var addedItems = [];
             BI.each(addSet, function (index) {
                 addedItems.push(renderedCells[index])
             });
             this.container.addItems(addedItems);
+            //拦截父子级关系
+            this.container._children = renderedCells;
             this.renderedCells = renderedCells;
             this.renderedKeys = renderedKeys;
             this.renderRange = {minX: minX, minY: minY, maxX: maxX, maxY: maxY};
@@ -14965,8 +14971,8 @@ BI.Grid = BI.inherit(BI.Widget, {
         this._populate();
     }
 });
-BI.Grid.EVENT_SCROLL = "EVENT_SCROLL";
-BI.shortcut('bi.grid_view', BI.Grid);/**
+BI.GridView.EVENT_SCROLL = "EVENT_SCROLL";
+BI.shortcut('bi.grid_view', BI.GridView);/**
  * floatBox弹出层，
  * @class BI.FloatBox
  * @extends BI.Widget
@@ -28603,7 +28609,7 @@ BI.CollectionTable = BI.inherit(BI.Widget, {
                 return self.topLeftItems[index];
             }
         });
-        this.topLeftCollection.on(BI.Collection.EVENT_SCROLL, function (scroll) {
+        this.topLeftCollection.on(BI.CollectionView.EVENT_SCROLL, function (scroll) {
             self.bottomLeftCollection.setScrollLeft(scroll.scrollLeft);
             self._populateScrollbar();
             self.fireEvent(BI.Table.EVENT_TABLE_SCROLL, arguments);
@@ -28614,7 +28620,7 @@ BI.CollectionTable = BI.inherit(BI.Widget, {
                 return self.topRightItems[index];
             }
         });
-        this.topRightCollection.on(BI.Collection.EVENT_SCROLL, function (scroll) {
+        this.topRightCollection.on(BI.CollectionView.EVENT_SCROLL, function (scroll) {
             self.bottomRightCollection.setScrollLeft(scroll.scrollLeft);
             self._populateScrollbar();
             self.fireEvent(BI.Table.EVENT_TABLE_SCROLL, arguments);
@@ -28625,7 +28631,7 @@ BI.CollectionTable = BI.inherit(BI.Widget, {
                 return self.bottomLeftItems[index];
             }
         });
-        this.bottomLeftCollection.on(BI.Collection.EVENT_SCROLL, function (scroll) {
+        this.bottomLeftCollection.on(BI.CollectionView.EVENT_SCROLL, function (scroll) {
             self.bottomRightCollection.setScrollTop(scroll.scrollTop);
             self.topLeftCollection.setScrollLeft(scroll.scrollLeft);
             self._populateScrollbar();
@@ -28637,7 +28643,7 @@ BI.CollectionTable = BI.inherit(BI.Widget, {
                 return self.bottomRightItems[index];
             }
         });
-        this.bottomRightCollection.on(BI.Collection.EVENT_SCROLL, function (scroll) {
+        this.bottomRightCollection.on(BI.CollectionView.EVENT_SCROLL, function (scroll) {
             self.bottomLeftCollection.setScrollTop(scroll.scrollTop);
             self.topRightCollection.setScrollLeft(scroll.scrollLeft);
             self._populateScrollbar();
@@ -29386,7 +29392,7 @@ BI.GridTable = BI.inherit(BI.Widget, {
             rowHeightGetter: rowHeightGetter,
             columnWidthGetter: columnLeftWidthGetter,
         });
-        this.topLeftGrid.on(BI.Grid.EVENT_SCROLL, function (scroll) {
+        this.topLeftGrid.on(BI.GridView.EVENT_SCROLL, function (scroll) {
             self.bottomLeftGrid.setScrollLeft(scroll.scrollLeft);
             self._populateScrollbar();
             self.fireEvent(BI.Table.EVENT_TABLE_SCROLL, arguments);
@@ -29396,7 +29402,7 @@ BI.GridTable = BI.inherit(BI.Widget, {
             rowHeightGetter: rowHeightGetter,
             columnWidthGetter: columnRightWidthGetter,
         });
-        this.topRightGrid.on(BI.Grid.EVENT_SCROLL, function (scroll) {
+        this.topRightGrid.on(BI.GridView.EVENT_SCROLL, function (scroll) {
             self.bottomRightGrid.setScrollLeft(scroll.scrollLeft);
             self._populateScrollbar();
             self.fireEvent(BI.Table.EVENT_TABLE_SCROLL, arguments);
@@ -29406,7 +29412,7 @@ BI.GridTable = BI.inherit(BI.Widget, {
             rowHeightGetter: rowHeightGetter,
             columnWidthGetter: columnLeftWidthGetter,
         });
-        this.bottomLeftGrid.on(BI.Grid.EVENT_SCROLL, function (scroll) {
+        this.bottomLeftGrid.on(BI.GridView.EVENT_SCROLL, function (scroll) {
             self.bottomRightGrid.setScrollTop(scroll.scrollTop);
             self.topLeftGrid.setScrollLeft(scroll.scrollLeft);
             self._populateScrollbar();
@@ -29417,7 +29423,7 @@ BI.GridTable = BI.inherit(BI.Widget, {
             rowHeightGetter: rowHeightGetter,
             columnWidthGetter: columnRightWidthGetter,
         });
-        this.bottomRightGrid.on(BI.Grid.EVENT_SCROLL, function (scroll) {
+        this.bottomRightGrid.on(BI.GridView.EVENT_SCROLL, function (scroll) {
             self.bottomLeftGrid.setScrollTop(scroll.scrollTop);
             self.topRightGrid.setScrollLeft(scroll.scrollLeft);
             self._populateScrollbar();

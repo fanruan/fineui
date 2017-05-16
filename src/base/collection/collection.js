@@ -1,13 +1,13 @@
 /**
- * Collection
+ * CollectionView
  *
  * Created by GUY on 2016/1/15.
- * @class BI.Collection
+ * @class BI.CollectionView
  * @extends BI.Widget
  */
-BI.Collection = BI.inherit(BI.Widget, {
+BI.CollectionView = BI.inherit(BI.Widget, {
     _defaultConfig: function () {
-        return BI.extend(BI.Collection.superclass._defaultConfig.apply(this, arguments), {
+        return BI.extend(BI.CollectionView.superclass._defaultConfig.apply(this, arguments), {
             baseCls: "bi-collection",
             width: 400,
             height: 300,
@@ -23,7 +23,7 @@ BI.Collection = BI.inherit(BI.Widget, {
     },
 
     _init: function () {
-        BI.Collection.superclass._init.apply(this, arguments);
+        BI.CollectionView.superclass._init.apply(this, arguments);
         var self = this, o = this.options;
         this.renderedCells = [];
         this.renderedKeys = [];
@@ -42,7 +42,7 @@ BI.Collection = BI.inherit(BI.Widget, {
             o.scrollLeft = self.element.scrollLeft();
             o.scrollTop = self.element.scrollTop();
             self._calculateChildrenToRender();
-            self.fireEvent(BI.Collection.EVENT_SCROLL, {
+            self.fireEvent(BI.CollectionView.EVENT_SCROLL, {
                 scrollLeft: o.scrollLeft,
                 scrollTop: o.scrollTop
             });
@@ -230,13 +230,16 @@ BI.Collection = BI.inherit(BI.Widget, {
                 deleteArray.push(i);
             });
             BI.each(deleteArray, function (i, index) {
-                self.renderedCells[index].el.destroy();
+                //性能优化，不调用destroy方法防止触发destroy事件
+                self.renderedCells[index].el._destroy();
             });
             var addedItems = [];
             BI.each(addSet, function (index) {
                 addedItems.push(renderedCells[index])
             });
             this.container.addItems(addedItems);
+            //拦截父子级关系
+            this.container._children = renderedCells;
             this.renderedCells = renderedCells;
             this.renderedKeys = renderedKeys;
 
@@ -347,5 +350,5 @@ BI.Collection = BI.inherit(BI.Widget, {
         this._populate();
     }
 });
-BI.Collection.EVENT_SCROLL = "EVENT_SCROLL";
-BI.shortcut('bi.collection_view', BI.Collection);
+BI.CollectionView.EVENT_SCROLL = "EVENT_SCROLL";
+BI.shortcut('bi.collection_view', BI.CollectionView);
