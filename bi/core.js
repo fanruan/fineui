@@ -6018,6 +6018,14 @@ Date.HOUR = 60 * Date.MINUTE;
 Date.DAY = 24 * Date.HOUR;
 Date.WEEK = 7 * Date.DAY;
 
+/**
+ * 获取时区
+ * @returns {String}
+ */
+Date.prototype.getTimezone = function () {
+    return this.toString().replace(/^.* (?:\((.*)\)|([A-Z]{1,4})(?:[\-+][0-9]{4})?(?: -?\d+)?)$/, "$1$2").replace(/[^A-Z]/g, "");
+};
+
 /** Returns the number of days in the current month */
 Date.prototype.getMonthDays = function (month) {
     var year = this.getFullYear();
@@ -16019,7 +16027,7 @@ BI.extend(jQuery.fn, {
         if (!BI.isKey(keyword)) {
             return this.text((text + "").replaceAll(" ", "　"));
         }
-        keyword = keyword + "";
+        keyword = BI.makeFirstPY(keyword + "");
         keyword = BI.toUpperCase(keyword);
         var textLeft = (text || "") + "";
         py = (py || BI.makeFirstPY(text)) + "";
@@ -16264,7 +16272,8 @@ BI.extend(jQuery, {
 
     getTopAlignPosition: function (combo, popup, extraHeight, needAdaptHeight) {
         var comboOffset = combo.element.offset();
-        var comboBounds = combo.element.bounds(), popupBounds = popup.element.bounds(), windowBounds = $("body").bounds();
+        var comboBounds = combo.element.bounds(), popupBounds = popup.element.bounds(),
+            windowBounds = $("body").bounds();
         var top, adaptHeight;
         if ($.isBottomSpaceEnough(combo, popup, -1 * comboBounds.height + extraHeight)) {
             top = comboOffset.top + extraHeight;
@@ -16312,7 +16321,8 @@ BI.extend(jQuery, {
 
     getBottomAlignPosition: function (combo, popup, extraHeight, needAdaptHeight) {
         var comboOffset = combo.element.offset();
-        var comboBounds = combo.element.bounds(), popupBounds = popup.element.bounds(), windowBounds = $("body").bounds();
+        var comboBounds = combo.element.bounds(), popupBounds = popup.element.bounds(),
+            windowBounds = $("body").bounds();
         var top, adaptHeight;
         if ($.isTopSpaceEnough(combo, popup, -1 * comboBounds.height + extraHeight)) {
             top = comboOffset.top + comboBounds.height - popupBounds.height - extraHeight;
@@ -16338,7 +16348,8 @@ BI.extend(jQuery, {
 
     getBottomAdaptPosition: function (combo, popup, extraHeight, needAdaptHeight) {
         var comboOffset = combo.element.offset();
-        var comboBounds = combo.element.bounds(), popupBounds = popup.element.bounds(), windowBounds = $("body").bounds();
+        var comboBounds = combo.element.bounds(), popupBounds = popup.element.bounds(),
+            windowBounds = $("body").bounds();
         if ($.isBottomSpaceEnough(combo, popup, extraHeight)) {
             return $.getBottomPosition(combo, popup, extraHeight);
         }
@@ -16361,7 +16372,8 @@ BI.extend(jQuery, {
 
     getCenterAdaptPosition: function (combo, popup) {
         var comboOffset = combo.element.offset();
-        var comboBounds = combo.element.bounds(), popupBounds = popup.element.bounds(), windowBounds = $("body").bounds();
+        var comboBounds = combo.element.bounds(), popupBounds = popup.element.bounds(),
+            windowBounds = $("body").bounds();
         var left;
         if (comboOffset.left + comboBounds.width / 2 + popupBounds.width / 2 > windowBounds.width) {
             left = windowBounds.width - popupBounds.width;
@@ -16378,7 +16390,8 @@ BI.extend(jQuery, {
 
     getMiddleAdaptPosition: function (combo, popup) {
         var comboOffset = combo.element.offset();
-        var comboBounds = combo.element.bounds(), popupBounds = popup.element.bounds(), windowBounds = $("body").bounds();
+        var comboBounds = combo.element.bounds(), popupBounds = popup.element.bounds(),
+            windowBounds = $("body").bounds();
         var top;
         if (comboOffset.top + comboBounds.height / 2 + popupBounds.height / 2 > windowBounds.height) {
             top = windowBounds.height - popupBounds.height;
@@ -16574,7 +16587,7 @@ BI.extend(jQuery, {
                 }
                 break;
         }
-        if(needAdaptHeight === true) {
+        if (needAdaptHeight === true) {
             popup.resetHeight && popup.resetHeight(Math.min(bodyHeight - position.top, maxHeight));
         }
         return position;
@@ -16605,6 +16618,7 @@ $(function () {
                 };
             }
             var t, text, py;
+            keyword = BI.makeFirstPY(keyword);
             keyword = BI.toUpperCase(keyword);
             var matched = isArray ? [] : {}, finded = isArray ? [] : {};
             BI.each(items, function (i, item) {
