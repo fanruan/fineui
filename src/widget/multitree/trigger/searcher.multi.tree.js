@@ -76,6 +76,10 @@ BI.MultiTreeSearcher = BI.inherit(BI.Widget, {
         this.searcher.adjustView();
     },
 
+    setAdapter: function (adapter) {
+        this.searcher.setAdapter(adapter);
+    },
+
     isSearching: function () {
         return this.searcher.isSearching();
     },

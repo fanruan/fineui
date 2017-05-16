@@ -24,38 +24,11 @@ BI.MultiSelectCombo = BI.inherit(BI.Single, {
             self.trigger.getCounter().setButtonChecked(self.storeValue);
         };
         this.storeValue = {};
-        this.popup = BI.createWidget({
-            type: 'bi.multi_select_popup_view',
-            itemsCreator: o.itemsCreator,
-            valueFormatter: o.valueFormatter,
-            onLoaded: function () {
-                BI.nextTick(function () {
-                    self.combo.adjustWidth();
-                    self.combo.adjustHeight();
-                    self.trigger.getCounter().adjustView();
-                    self.trigger.getSearcher().adjustView();
-                });
-            }
-        });
-
-        this.popup.on(BI.MultiSelectPopupView.EVENT_CHANGE, function () {
-            self.storeValue = this.getValue();
-            self._adjust(function () {
-                assertShowValue();
-            });
-        });
-        this.popup.on(BI.MultiSelectPopupView.EVENT_CLICK_CONFIRM, function () {
-            self._defaultState();
-        });
-        this.popup.on(BI.MultiSelectPopupView.EVENT_CLICK_CLEAR, function () {
-            self.setValue();
-            self._defaultState();
-        });
 
         this.trigger = BI.createWidget({
             type: "bi.multi_select_trigger",
             height: o.height,
-            adapter: this.popup,
+            // adapter: this.popup,
             masker: {
                 offset: {
                     left: 1,
@@ -140,7 +113,43 @@ BI.MultiSelectCombo = BI.inherit(BI.Single, {
             toggle: false,
             el: this.trigger,
             adjustLength: 1,
-            popup: this.popup,
+            popup: {
+                type: 'bi.multi_select_popup_view',
+                ref: function () {
+                    self.popup = this;
+                    self.trigger.setAdapter(this);
+                },
+                listeners: [{
+                    eventName: BI.MultiSelectPopupView.EVENT_CHANGE,
+                    action: function () {
+                        self.storeValue = this.getValue();
+                        self._adjust(function () {
+                            assertShowValue();
+                        });
+                    }
+                }, {
+                    eventName: BI.MultiSelectPopupView.EVENT_CLICK_CONFIRM,
+                    action: function () {
+                        self._defaultState();
+                    }
+                }, {
+                    eventName: BI.MultiSelectPopupView.EVENT_CLICK_CLEAR,
+                    action: function () {
+                        self.setValue();
+                        self._defaultState();
+                    }
+                }],
+                itemsCreator: o.itemsCreator,
+                valueFormatter: o.valueFormatter,
+                onLoaded: function () {
+                    BI.nextTick(function () {
+                        self.combo.adjustWidth();
+                        self.combo.adjustHeight();
+                        self.trigger.getCounter().adjustView();
+                        self.trigger.getSearcher().adjustView();
+                    });
+                }
+            },
             hideChecker: function (e) {
                 return triggerBtn.element.find(e.target).length === 0;
             }

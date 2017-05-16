@@ -90,13 +90,13 @@ BI.ValueChooserCombo = BI.inherit(BI.Widget, {
                     return !filter[ob.value];
                 });
             }
-            if (options.type == BI.MultiSelectCombo.REQ_GET_ALL_DATA) {
+            if (options.type === BI.MultiSelectCombo.REQ_GET_ALL_DATA) {
                 callback({
                     items: items
                 });
                 return;
             }
-            if (options.type == BI.MultiSelectCombo.REQ_GET_DATA_LENGTH) {
+            if (options.type === BI.MultiSelectCombo.REQ_GET_DATA_LENGTH) {
                 callback({count: items.length});
                 return;
             }

@@ -106,24 +106,23 @@ BI.TreeValueChooserCombo = BI.inherit(BI.Widget, {
             return;
         }
 
-        doCheck(0, [], selectedValues);
+        doCheck(0, [], this.tree.getRoot(), selectedValues);
 
         callback({
             items: result
         });
 
-        function doCheck(floor, parentValues, selected) {
+        function doCheck(floor, parentValues, node, selected) {
             if (floor >= self.floors) {
                 return;
             }
             if (selected == null || BI.isEmpty(selected)) {
-                var children = self._getChildren(parentValues);
-                BI.each(children, function (i, child) {
+                BI.each(node.getChildren(), function (i, child) {
                     var newParents = BI.clone(parentValues);
                     newParents.push(child.value);
                     var llen = self._getChildCount(newParents);
-                    createOneJson(child, llen);
-                    doCheck(floor + 1, newParents, {});
+                    createOneJson(child, node.id, llen);
+                    doCheck(floor + 1, newParents, child, {});
                 });
                 return;
             }
@@ -131,8 +130,8 @@ BI.TreeValueChooserCombo = BI.inherit(BI.Widget, {
                 var node = self._getNode(k);
                 var newParents = BI.clone(parentValues);
                 newParents.push(node.value);
-                createOneJson(node, getCount(selected[k], newParents));
-                doCheck(floor + 1, newParents, selected[k]);
+                createOneJson(node, BI.last(parentValues), getCount(selected[k], newParents));
+                doCheck(floor + 1, newParents, node, selected[k]);
             })
         }
 
@@ -147,10 +146,10 @@ BI.TreeValueChooserCombo = BI.inherit(BI.Widget, {
             return BI.size(jo);
         }
 
-        function createOneJson(node, llen) {
+        function createOneJson(node, pId, llen) {
             result.push({
                 id: node.id,
-                pId: node.pId,
+                pId: pId,
                 text: node.text + (llen > 0 ? ("(" + BI.i18nText("BI-Basic_Altogether") + llen + BI.i18nText("BI-Basic_Count") + ")") : ""),
                 value: node.value,
                 open: true
@@ -532,7 +531,7 @@ BI.TreeValueChooserCombo = BI.inherit(BI.Widget, {
                 if (valueMap[current][0] === 1) {
                     var values = BI.clone(parentValues);
                     values.push(current);
-                    if (hasChild && self._getChildCount(values) != valueMap[current][1]) {
+                    if (hasChild && self._getChildCount(values) !== valueMap[current][1]) {
                         halfCheck = true;
                     }
                 } else if (valueMap[current][0] === 2) {

@@ -3113,6 +3113,14 @@ Demo.COMPONENT_CONFIG = [{
     text: "bi.page_table",
     value: "demo.page_table"
 }, {
+    id: 402,
+    pId: 4,
+    text: "tree"
+}, {
+    pId: 402,
+    text: "bi.multilayer_select_tree_combo",
+    value: "demo.multilayer_select_tree_combo"
+}, {
     pId: 4,
     text: "bi.multi_select_combo",
     value: "demo.multi_select_combo"
@@ -6725,7 +6733,72 @@ BI.shortcut("demo.responsive_table", Demo.Func);Demo.Func = BI.inherit(BI.Widget
         })
     }
 });
-BI.shortcut("demo.sequence_table", Demo.Func);Demo.CONFIG = Demo.CORE_CONFIG.concat(Demo.BASE_CONFIG).concat(Demo.CASE_CONFIG).concat(Demo.WIDGET_CONFIG).concat(Demo.COMPONENT_CONFIG).concat(Demo.CHART_CONFIG);
+BI.shortcut("demo.sequence_table", Demo.Func);/**
+ * Created by User on 2017/3/22.
+ */
+Demo.MultiSelectCombo = BI.inherit(BI.Widget, {
+    props: {},
+
+    render: function (vessel) {
+        var TREEWITHCHILDREN = [{
+            id: -1, value: "根目录", text: "根目录", children: [
+                {
+                    id: 1, value: "第一级目录1", text: "第一级目录1", children: [
+                    {id: 11, value: "第二级文件1", text: "第二级文件1"},
+                    {
+                        id: 12, value: "第二级目录2", text: "第二级目录2", children: [
+                        {
+                            id: 121, value: "第三级目录1", text: "第三级目录1", children: [
+                            {
+                                id: 1211, value: "第四级目录1", text: "第四级目录1", children: [
+                                {id: 12111, value: "第五级文件1", text: "第五级文件1"}
+                            ]
+                            }
+                        ]
+                        },
+                        {id: 122, value: "第三级文件1", text: "第三级文件1"}
+                    ]
+                    }
+                ]
+                },
+                {
+                    id: 2, value: "第一级目录2", text: "第一级目录2", children: [
+                    {
+                        id: 21, value: "第二级目录3", text: "第二级目录3", children: [
+                        {
+                            id: 211, value: "第三级目录2", text: "第三级目录2", children: [
+                            {id: 2111, value: "第四级文件1", text: "第四级文件1"}
+                        ]
+                        },
+                        {id: 212, value: "第三级文件2", text: "第三级文件2"}
+                    ]
+                    },
+                    {id: 22, value: "第二级文件2", text: "第二级文件2"}
+                ]
+                }
+            ]
+        }];
+        var items = BI.deepClone(TREEWITHCHILDREN);
+        var combo = BI.createWidget({
+            type: "bi.multilayer_select_tree_combo",
+        });
+
+        combo.populate(items);
+        return {
+            type: "bi.vertical",
+            items: [combo, {
+                type: "bi.button",
+                width: 100,
+                text: "getValue",
+                handler: function () {
+                    BI.Msg.alert("", JSON.stringify(combo.getValue()));
+                }
+            }],
+            vgap: 100
+        }
+    }
+});
+BI.shortcut("demo.multilayer_select_tree_combo", Demo.MultiSelectCombo);Demo.CONFIG = Demo.CORE_CONFIG.concat(Demo.BASE_CONFIG).concat(Demo.CASE_CONFIG).concat(Demo.WIDGET_CONFIG).concat(Demo.COMPONENT_CONFIG).concat(Demo.CHART_CONFIG);
 
 
 Demo.CONSTANTS = {

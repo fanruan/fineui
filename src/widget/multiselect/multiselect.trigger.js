@@ -123,6 +123,11 @@ BI.MultiSelectTrigger = BI.inherit(BI.Trigger, {
         this.numberCounter.hideView();
     },
 
+    setAdapter: function (adapter) {
+        this.searcher.setAdapter(adapter);
+        this.numberCounter.setAdapter(adapter);
+    },
+
     setValue: function (ob) {
         this.searcher.setValue(ob);
         this.numberCounter.setValue(ob);

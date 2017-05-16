@@ -163,7 +163,7 @@ BI.CollectionTable = BI.inherit(BI.Widget, {
 
     mounted: function () {
         var o = this.options;
-        if (o.items.length > 0 || o.header.length < 0) {
+        if (o.items.length > 0 || o.header.length > 0) {
             this._digest();
             this._populate();
         }
