@@ -170,17 +170,6 @@ BI.Widget = BI.inherit(BI.OB, {
 
     _mountChildren: null,
 
-    _unMount: function () {
-        BI.each(this._children, function (i, widget) {
-            widget._unMount && widget._unMount();
-        });
-        this._children = {};
-        this._parent = null;
-        this._isMounted = false;
-        this.purgeListeners();
-        this.destroyed && this.destroyed();
-    },
-
     isMounted: function () {
         return this._isMounted;
     },
@@ -360,6 +349,21 @@ BI.Widget = BI.inherit(BI.OB, {
         this.setVisible(true);
     },
 
+    __d: function () {
+        BI.each(this._children, function (i, widget) {
+            widget._unMount && widget._unMount();
+        });
+        this._children = {};
+        this._parent = null;
+        this._isMounted = false;
+    },
+
+    _unMount: function () {
+        this.__d();
+        this.purgeListeners();
+        this.destroyed && this.destroyed();
+    },
+
     isolate: function () {
         if (this._parent) {
             this._parent.removeWidget(this);
@@ -375,19 +379,17 @@ BI.Widget = BI.inherit(BI.OB, {
         this.element.empty();
     },
 
-    _destroy: function(){
-        BI.each(this._children, function (i, widget) {
-            widget._unMount && widget._unMount();
-        });
-        this._children = {};
-        this._parent = null;
-        this._isMounted = false;
+    _destroy: function () {
+        this.__d();
         this.destroyed && this.destroyed();
         this.element.destroy();
+        this.purgeListeners();
     },
 
     destroy: function () {
-        this._destroy();
+        this.__d();
+        this.destroyed && this.destroyed();
+        this.element.destroy();
         this.fireEvent(BI.Events.DESTROY);
         this.purgeListeners();
     }
