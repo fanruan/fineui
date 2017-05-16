@@ -66,6 +66,14 @@ Date.HOUR = 60 * Date.MINUTE;
 Date.DAY = 24 * Date.HOUR;
 Date.WEEK = 7 * Date.DAY;
 
+/**
+ * 获取时区
+ * @returns {String}
+ */
+Date.prototype.getTimezone = function () {
+    return this.toString().replace(/^.* (?:\((.*)\)|([A-Z]{1,4})(?:[\-+][0-9]{4})?(?: -?\d+)?)$/, "$1$2").replace(/[^A-Z]/g, "");
+};
+
 /** Returns the number of days in the current month */
 Date.prototype.getMonthDays = function (month) {
     var year = this.getFullYear();

@@ -17543,6 +17543,7 @@ BI.Editor = BI.inherit(BI.Single, {
             rgap: 0,
             tgap: 0,
             bgap: 0,
+            //title,warningTitle这两个属性没用
             tipType: "warning",
             inputType: "text",
             validationChecker: BI.emptyFn,
@@ -17560,6 +17561,7 @@ BI.Editor = BI.inherit(BI.Single, {
         this.editor = this.addWidget(BI.createWidget({
             type: "bi.input",
             element: "<input type='" + o.inputType + "'/>",
+            root: true,
             watermark: o.watermark,
             validationChecker: o.validationChecker,
             quitChecker: o.quitChecker,
@@ -17579,7 +17581,6 @@ BI.Editor = BI.inherit(BI.Single, {
                 type: "bi.label",
                 cls: "bi-water-mark",
                 text: this.options.watermark,
-                height: this.options.height,
                 forceCenter: true,
                 height: o.height - 2 * (o.vgap + o.tgap),
                 whiteSpace: "nowrap",
