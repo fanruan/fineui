@@ -199,11 +199,6 @@ BI.SimpleStateEditor = BI.inherit(BI.Widget, {
         this.editor.setValue(k);
     },
 
-    setEnable: function(v){
-        this.text.setEnable(v);
-        this.editor.setEnable(v);
-    },
-
     getValue: function () {
         return this.editor.getValue();
     },

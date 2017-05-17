@@ -325,10 +325,8 @@ BI.Combo = BI.inherit(BI.Widget, {
         this.combo.populate.apply(this.combo, arguments);
     },
 
-    setEnable: function (arg) {
-        BI.Combo.superclass.setEnable.apply(this, arguments);
-        this.combo && this.combo.setEnable(arg);
-        this.popupView && this.popupView.setEnable(arg);
+    _setEnable: function (arg) {
+        BI.Combo.superclass._setEnable.apply(this, arguments);
         !arg && this.isViewVisible() && this._hideView();
     },
 

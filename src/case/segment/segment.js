@@ -46,10 +46,6 @@ BI.Segment = BI.inherit(BI.Widget, {
         this.buttonGroup.setEnabledValue(v);
     },
 
-    setEnable: function (v) {
-        this.buttonGroup.setEnable(v);
-    },
-
     getValue: function () {
         return this.buttonGroup.getValue();
     }

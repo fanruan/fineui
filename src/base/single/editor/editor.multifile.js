@@ -79,11 +79,6 @@ BI.MultifileEditor = BI.inherit(BI.Single, {
 
     reset: function () {
         this.file.reset();
-    },
-
-    setEnable: function (enable) {
-        BI.MultiFile.superclass.setEnable.apply(this, arguments);
-        this.file.setEnable(enable);
     }
 });
 BI.MultifileEditor.EVENT_CHANGE = "MultifileEditor.EVENT_CHANGE";

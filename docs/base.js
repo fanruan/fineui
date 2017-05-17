@@ -881,8 +881,8 @@ BI.BasicButton = BI.inherit(BI.Single, {
         return this.options.text;
     },
 
-    setEnable: function (b) {
-        BI.BasicButton.superclass.setEnable.apply(this, arguments);
+    _setEnable: function (b) {
+        BI.BasicButton.superclass._setEnable.apply(this, arguments);
         if (!b) {
             if (this.options.shadow) {
                 this.$mask && this.$mask.setVisible(false);
@@ -1164,13 +1164,6 @@ BI.ButtonGroup = BI.inherit(BI.Widget, {
         }
 
         this.layouts = BI.createWidget(BI.extend({element: this}, this._packageLayout(items)));
-    },
-
-    setEnable: function (b) {
-        BI.ButtonGroup.superclass.setEnable.apply(this, arguments);
-        BI.each(this.buttons, function (i, item) {
-            item.setEnable(b);
-        });
     },
 
     setNotSelectedValue: function (v) {
@@ -3192,10 +3185,8 @@ BI.Combo = BI.inherit(BI.Widget, {
         this.combo.populate.apply(this.combo, arguments);
     },
 
-    setEnable: function (arg) {
-        BI.Combo.superclass.setEnable.apply(this, arguments);
-        this.combo && this.combo.setEnable(arg);
-        this.popupView && this.popupView.setEnable(arg);
+    _setEnable: function (arg) {
+        BI.Combo.superclass._setEnable.apply(this, arguments);
         !arg && this.isViewVisible() && this._hideView();
     },
 
@@ -3304,7 +3295,7 @@ BI.Expander = BI.inherit(BI.Widget, {
                     self.fireEvent(BI.Controller.EVENT_CHANGE, arguments);
                     self.fireEvent(BI.Expander.EVENT_EXPAND);
                 }
-                if(type === BI.Events.COLLAPSE) {
+                if (type === BI.Events.COLLAPSE) {
                     self.fireEvent(BI.Controller.EVENT_CHANGE, arguments);
                     self.fireEvent(BI.Expander.EVENT_COLLAPSE);
                 }
@@ -3461,11 +3452,9 @@ BI.Expander = BI.inherit(BI.Widget, {
         this.expander.populate.apply(this.expander, arguments);
     },
 
-    setEnable: function (arg) {
-        BI.Expander.superclass.setEnable.apply(this, arguments);
-        this.expander && this.expander.setEnable(arg);
-        this.popupView && this.popupView.setEnable(arg);
-        !arg && this._hideView();
+    _setEnable: function (arg) {
+        BI.Expander.superclass._setEnable.apply(this, arguments);
+        !arg && this.isViewVisible() && this._hideView();
     },
 
     setValue: function (v) {
@@ -3623,11 +3612,6 @@ BI.ComboGroup = BI.inherit(BI.Widget, {
                 self.fireEvent(BI.ComboGroup.EVENT_CHANGE, obj);
             }
         })
-    },
-
-    setEnable: function (b) {
-        BI.ComboGroup.superclass.setEnable.apply(this, arguments);
-        this.combo && this.combo.setEnable(b);
     },
 
     getValue: function () {
@@ -3918,10 +3902,6 @@ BI.Loader = BI.inherit(BI.Widget, {
             }
         }
         this.button_group.populate.apply(this.button_group, arguments);
-    },
-
-    setEnable: function (v) {
-        this.button_group.setEnable(v);
     },
 
     doBehavior: function () {
@@ -4629,11 +4609,9 @@ BI.Switcher = BI.inherit(BI.Widget, {
         this.switcher.populate.apply(this.switcher, arguments);
     },
 
-    setEnable: function (arg) {
-        BI.Switcher.superclass.setEnable.apply(this, arguments);
-        this.switcher && this.switcher.setEnable(arg);
-        this.popupView && this.popupView.setEnable(arg);
-        !arg && this._hideView();
+    _setEnable: function (arg) {
+        BI.Switcher.superclass._setEnable.apply(this, arguments);
+        !arg && this.isViewVisible() && this._hideView();
     },
 
     setValue: function (v) {
@@ -15281,11 +15259,6 @@ BI.PopupView = BI.inherit(BI.Widget, {
             this.view.element.css({"max-height": (h - tbHeight - tabHeight - toolHeight - 2) + "px"})
     },
 
-    setEnable: function (arg) {
-        BI.PopupView.superclass.setEnable.apply(this, arguments);
-        this.view && this.view.setEnable(arg);
-    },
-
     setValue: function (selectedValues) {
         this.tab && this.tab.setValue(selectedValues);
         this.button_group.setValue(selectedValues);
@@ -16090,12 +16063,6 @@ BI.shortcut("bi.image_button", BI.ImageButton);(function ($) {
             if (!this.isReadOnly()) {
                 this.text.setValue(text);
             }
-        },
-
-        setEnable: function (b) {
-            BI.Button.superclass.setEnable.apply(this, arguments);
-            // this.text.setEnable(b);
-            // this.icon && this.icon.setEnable(b);
         },
 
         doRedMark: function () {
@@ -17470,8 +17437,8 @@ BI.CodeEditor = BI.inherit(BI.Single, {
         }
     },
 
-    setEnable: function (b) {
-        BI.CodeEditor.superclass.setEnable.apply(this, arguments);
+    _setEnable: function (b) {
+        BI.CodeEditor.superclass._setEnable.apply(this, arguments);
         this.editor.setOption("readOnly", b === true ? false : "nocursor")
     },
 
@@ -17842,12 +17809,6 @@ BI.Editor = BI.inherit(BI.Single, {
 
     isValid: function () {
         return this.editor.isValid();
-    },
-
-    setEnable: function (b) {
-        BI.Editor.superclass.setEnable.apply(this, arguments);
-        this.editor && this.editor.setEnable(b);
-        this.watermark && this.watermark.setEnable(b);
     }
 });
 BI.Editor.EVENT_CHANGE = "EVENT_CHANGE";
@@ -17950,11 +17911,6 @@ BI.MultifileEditor = BI.inherit(BI.Single, {
 
     reset: function () {
         this.file.reset();
-    },
-
-    setEnable: function (enable) {
-        BI.MultiFile.superclass.setEnable.apply(this, arguments);
-        this.file.setEnable(enable);
     }
 });
 BI.MultifileEditor.EVENT_CHANGE = "MultifileEditor.EVENT_CHANGE";
@@ -18117,12 +18073,6 @@ BI.TextAreaEditor = BI.inherit(BI.Single, {
         BI.TextAreaEditor.superclass.setValid.apply(this, arguments);
         this.content.setValid(b);
         this.watermark && this.watermark.setValid(b);
-    },
-
-    setEnable: function (b) {
-        BI.TextAreaEditor.superclass.setEnable.apply(this, arguments);
-        this.content.setEnable(b);
-        this.watermark && this.watermark.setEnable(b);
     }
 });
 BI.TextAreaEditor.EVENT_CHANGE = "EVENT_CHANGE";
@@ -18857,8 +18807,8 @@ BI.shortcut("bi.checkbox", BI.Checkbox);/**
             this.wrap.attachNum = 0;
         },
 
-        setEnable: function (enable) {
-            BI.File.superclass.setEnable.apply(this, arguments);
+        _setEnable: function (enable) {
+            BI.File.superclass._setEnable.apply(this, arguments);
             if (enable === true) {
                 this.element.attr("disabled", "disabled");
             } else {
@@ -19130,8 +19080,8 @@ BI.Input = BI.inherit(BI.Single, {
         }
     },
 
-    setEnable: function (b) {
-        BI.Input.superclass.setEnable.apply(this, [b]);
+    _setEnable: function (b) {
+        BI.Input.superclass._setEnable.apply(this, [b]);
         this.element[0].disabled = !b;
     }
 });
@@ -32561,11 +32511,6 @@ BI.CustomTree = BI.inherit(BI.Widget, {
     _init: function () {
         BI.CustomTree.superclass._init.apply(this, arguments);
         this.initTree(this.options.items);
-    },
-
-    setEnable: function (v) {
-        BI.CustomTree.superclass.setEnable.apply(this, arguments);
-        this.tree.setEnable(v)
     },
 
     _formatItems: function (nodes) {

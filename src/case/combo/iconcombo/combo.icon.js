@@ -81,11 +81,6 @@ BI.IconCombo = BI.inherit(BI.Widget, {
         this.iconCombo.setValue(v);
     },
 
-    setEnable: function (v) {
-        BI.IconCombo.superclass.setEnable.apply(this, arguments);
-        this.iconCombo.setEnable(v);
-    },
-
     getValue: function () {
         return this.iconCombo.getValue();
     },

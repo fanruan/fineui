@@ -201,10 +201,6 @@ BI.BubbleCombo = BI.inherit(BI.Widget, {
 
     isViewVisible: function () {
         return this.combo.isViewVisible();
-    },
-
-    setEnable: function (v) {
-        this.combo.setEnable(!!v);
     }
 });
 

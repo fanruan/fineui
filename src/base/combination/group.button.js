@@ -189,13 +189,6 @@ BI.ButtonGroup = BI.inherit(BI.Widget, {
         this.layouts = BI.createWidget(BI.extend({element: this}, this._packageLayout(items)));
     },
 
-    setEnable: function (b) {
-        BI.ButtonGroup.superclass.setEnable.apply(this, arguments);
-        BI.each(this.buttons, function (i, item) {
-            item.setEnable(b);
-        });
-    },
-
     setNotSelectedValue: function (v) {
         v = BI.isArray(v) ? v : [v];
         BI.each(this.buttons, function (i, item) {

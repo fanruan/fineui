@@ -236,10 +236,6 @@ BI.MultiTreeCombo = BI.inherit(BI.Single, {
         this.combo.hideView();
     },
 
-    setEnable: function (v) {
-        this.combo.setEnable(v);
-    },
-
     setValue: function (v) {
         this.storeValue.value = v || {};
         this.combo.setValue({

@@ -35,11 +35,6 @@ BI.CustomTree = BI.inherit(BI.Widget, {
         this.initTree(this.options.items);
     },
 
-    setEnable: function (v) {
-        BI.CustomTree.superclass.setEnable.apply(this, arguments);
-        this.tree.setEnable(v)
-    },
-
     _formatItems: function (nodes) {
         var self = this, o = this.options;
         nodes = BI.Tree.transformToTreeFormat(nodes);
