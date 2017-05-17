@@ -77,11 +77,6 @@ BI.IconChangeButton = BI.inherit(BI.Single, {
             this.element.removeClass(o.iconClass).addClass(cls);
             o.iconClass = cls;
         }
-    },
-
-    setEnable: function (b) {
-        BI.IconChangeButton.superclass.setEnable.apply(this, arguments);
-        this.button.setEnable(b);
     }
 });
 BI.IconChangeButton.EVENT_CHANGE = "IconChangeButton.EVENT_CHANGE";
@@ -195,11 +190,6 @@ BI.MultiSelectItem = BI.inherit(BI.BasicButton, {
                 width: 36
             }, this.text)
         }))));
-    },
-
-    setEnable: function (v) {
-        BI.MultiSelectItem.superclass.setEnable.apply(this, arguments);
-        this.checkbox.setEnable(v);
     },
 
     doRedMark: function () {
@@ -2373,10 +2363,6 @@ BI.ColorChooser = BI.inherit(BI.Widget, {
         return this.combo.isViewVisible();
     },
 
-    setEnable: function (v) {
-        this.combo.setEnable(v)
-    },
-
     setValue: function (color) {
         this.combo.setValue(color);
     },
@@ -3600,10 +3586,6 @@ BI.BubbleCombo = BI.inherit(BI.Widget, {
 
     isViewVisible: function () {
         return this.combo.isViewVisible();
-    },
-
-    setEnable: function (v) {
-        this.combo.setEnable(!!v);
     }
 });
 
@@ -3797,11 +3779,6 @@ BI.EditorIconCheckCombo = BI.inherit(BI.Widget, {
 
     setValue: function (v) {
         this.editorIconCheckCombo.setValue(v);
-    },
-
-    setEnable: function (v) {
-        BI.EditorIconCheckCombo.superclass.setEnable.apply(this, arguments);
-        this.editorIconCheckCombo.setEnable(v);
     },
 
     getValue: function () {
@@ -4141,11 +4118,6 @@ BI.IconCombo = BI.inherit(BI.Widget, {
         this.iconCombo.setValue(v);
     },
 
-    setEnable: function (v) {
-        BI.IconCombo.superclass.setEnable.apply(this, arguments);
-        this.iconCombo.setEnable(v);
-    },
-
     getValue: function () {
         return this.iconCombo.getValue();
     },
@@ -4431,11 +4403,6 @@ BI.TextValueCheckCombo = BI.inherit(BI.Widget, {
         this.textIconCheckCombo.setValue(v);
     },
 
-    setEnable: function (v) {
-        BI.TextValueCheckCombo.superclass.setEnable.apply(this, arguments);
-        this.textIconCheckCombo.setEnable(v);
-    },
-
     setWarningTitle: function (title) {
         this.trigger.setWarningTitle(title);
     },
@@ -4501,11 +4468,6 @@ BI.SmallTextValueCheckCombo = BI.inherit(BI.Widget, {
 
     setValue: function (v) {
         this.SmallTextIconCheckCombo.setValue(v);
-    },
-
-    setEnable: function (v) {
-        BI.SmallTextValueCheckCombo.superclass.setEnable.apply(this, arguments);
-        this.SmallTextIconCheckCombo.setEnable(v);
     },
 
     getValue: function () {
@@ -4632,11 +4594,6 @@ BI.TextValueCombo = BI.inherit(BI.Widget, {
         this.textIconCombo.setValue(v);
     },
 
-    setEnable: function (v) {
-        BI.TextValueCombo.superclass.setEnable.apply(this, arguments);
-        this.textIconCombo.setEnable(v);
-    },
-
     getValue: function () {
         return this.textIconCombo.getValue();
     },
@@ -4700,11 +4657,6 @@ BI.SmallTextValueCombo = BI.inherit(BI.Widget, {
 
     setValue: function (v) {
         this.SmallTextValueCombo.setValue(v);
-    },
-
-    setEnable: function (v) {
-        BI.SmallTextValueCombo.superclass.setEnable.apply(this, arguments);
-        this.SmallTextValueCombo.setEnable(v);
     },
 
     getValue: function () {
@@ -4838,11 +4790,6 @@ BI.TextValueDownListCombo = BI.inherit(BI.Widget, {
         v = this.valueMap[v];
         this.combo.setValue([v]);
         this.trigger.setValue(v.childValue || v.value);
-    },
-
-    setEnable: function (v) {
-        BI.TextValueDownListCombo.superclass.setEnable.apply(this, arguments);
-        this.combo.setEnable(v);
     },
 
     getValue: function () {
@@ -5248,12 +5195,6 @@ BI.SearchEditor = BI.inherit(BI.Widget, {
 
     isValid: function () {
         return this.editor.isValid();
-    },
-
-    setEnable: function (b) {
-        BI.Editor.superclass.setEnable.apply(this, arguments);
-        this.editor && this.editor.setEnable(b);
-        this.clear.setEnable(b);
     }
 });
 BI.SearchEditor.EVENT_CHANGE = "EVENT_CHANGE";
@@ -6186,11 +6127,6 @@ BI.StateEditor = BI.inherit(BI.Widget, {
         this.editor.setValue(k);
     },
 
-    setEnable: function (v) {
-        this.text.setEnable(v);
-        this.editor.setEnable(v);
-    },
-
     getValue: function () {
         return this.editor.getValue();
     },
@@ -6464,11 +6400,6 @@ BI.SimpleStateEditor = BI.inherit(BI.Widget, {
         this.editor.setValue(k);
     },
 
-    setEnable: function(v){
-        this.text.setEnable(v);
-        this.editor.setEnable(v);
-    },
-
     getValue: function () {
         return this.editor.getValue();
     },
@@ -6666,11 +6597,6 @@ BI.TextEditor = BI.inherit(BI.Widget, {
 
     getValue: function () {
         return this.editor.getValue();
-    },
-
-    setEnable: function (b) {
-        BI.Editor.superclass.setEnable.apply(this, arguments);
-        this.editor && this.editor.setEnable(b);
     }
 });
 BI.TextEditor.EVENT_CHANGE = "EVENT_CHANGE";
@@ -8714,10 +8640,6 @@ BI.Segment = BI.inherit(BI.Widget, {
         this.buttonGroup.setEnabledValue(v);
     },
 
-    setEnable: function (v) {
-        this.buttonGroup.setEnable(v);
-    },
-
     getValue: function () {
         return this.buttonGroup.getValue();
     }
@@ -10452,13 +10374,6 @@ BI.MultiSelectBar = BI.inherit(BI.BasicButton, {
         var isAllChecked = this.options.isAllCheckedBySelectedValue.apply(this, arguments);
         this.setSelected(isAllChecked);
         !isAllChecked && this.setHalfSelected(this.options.isHalfCheckedBySelectedValue.apply(this, arguments));
-    },
-
-    setEnable: function (b) {
-        BI.MultiSelectBar.superclass.setEnable.apply(this, arguments);
-        this.checkbox.setEnable(b);
-        this.half.setEnable(b);
-        this.text.setEnable(b);
     }
 });
 BI.MultiSelectBar.EVENT_CHANGE = "MultiSelectBar.EVENT_CHANGE";
@@ -11157,12 +11072,6 @@ BI.TextTrigger = BI.inherit(BI.Trigger, {
         });
     },
 
-    setEnable: function (v) {
-        BI.TextTrigger.superclass.setEnable.apply(this, arguments);
-        this.trigerButton.setEnable(v);
-        this.text.setEnable(v);
-    },
-
     setValue: function (value) {
         this.text.setValue(value);
         this.text.setTitle(value);
@@ -11325,12 +11234,6 @@ BI.SmallTextTrigger = BI.inherit(BI.Trigger, {
                 }
             ]
         });
-    },
-
-    setEnable: function (v) {
-        BI.SmallTextTrigger.superclass.setEnable.apply(this, arguments);
-        this.trigerButton.setEnable(v);
-        this.text.setEnable(v);
     },
 
     setValue: function (value) {

@@ -303,12 +303,6 @@ BI.Editor = BI.inherit(BI.Single, {
 
     isValid: function () {
         return this.editor.isValid();
-    },
-
-    setEnable: function (b) {
-        BI.Editor.superclass.setEnable.apply(this, arguments);
-        this.editor && this.editor.setEnable(b);
-        this.watermark && this.watermark.setEnable(b);
     }
 });
 BI.Editor.EVENT_CHANGE = "EVENT_CHANGE";

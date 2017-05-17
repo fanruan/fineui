@@ -430,13 +430,6 @@ BI.NumericalInterval = BI.inherit(BI.Single, {
         return this.options.validation === "valid";
     },
 
-    setEnable: function (b) {
-        this.smallEditor.setEnable(b);
-        this.smallCombo.setEnable(b);
-        this.bigEditor.setEnable(b);
-        this.bigCombo.setEnable(b);
-    },
-
     setMinEnable: function (b) {
         this.smallEditor.setEnable(b);
     },

@@ -56,10 +56,6 @@ BI.MultiSelectEditor = BI.inherit(BI.Widget, {
         this.editor.setValue(v);
     },
 
-    setEnable: function(v){
-        this.editor.setEnable(v);
-    },
-
     getValue: function () {
         var v = this.editor.getState();
         if (BI.isArray(v) && v.length > 0) {

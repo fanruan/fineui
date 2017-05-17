@@ -74,10 +74,6 @@ BI.MultiSelectPopupView = BI.inherit(BI.Widget, {
         this.popupView.populate.apply(this.popupView, arguments);
     },
 
-    setEnable: function (arg) {
-        this.popupView.setEnable(arg);
-    },
-
     resetHeight: function (h) {
         this.popupView.resetHeight(h);
     },

@@ -10048,10 +10048,6 @@ BI.MultiSelectLoader = BI.inherit(BI.Widget, {
         this.button_group.populate.apply(this.button_group, arguments);
     },
 
-    setEnable: function (arg) {
-        this.button_group.setEnable(arg);
-    },
-
     resetHeight: function (h) {
         this.button_group.resetHeight(h);
     },
@@ -10136,10 +10132,6 @@ BI.MultiSelectPopupView = BI.inherit(BI.Widget, {
 
     populate: function (items) {
         this.popupView.populate.apply(this.popupView, arguments);
-    },
-
-    setEnable: function (arg) {
-        this.popupView.setEnable(arg);
     },
 
     resetHeight: function (h) {
@@ -10289,10 +10281,6 @@ BI.MultiSelectTrigger = BI.inherit(BI.Trigger, {
     setValue: function (ob) {
         this.searcher.setValue(ob);
         this.numberCounter.setValue(ob);
-    },
-
-    setEnable: function (v) {
-        this.searcher.setEnable(v);
     },
 
     getKey: function () {
@@ -10452,10 +10440,6 @@ BI.MultiSelectSearchLoader = BI.inherit(BI.Widget, {
 
     populate: function (items) {
         this.button_group.populate.apply(this.button_group, arguments);
-    },
-
-    setEnable: function (arg) {
-        this.button_group.setEnable(arg);
     },
 
     resetHeight: function (h) {
@@ -10703,10 +10687,6 @@ BI.MultiSelectEditor = BI.inherit(BI.Widget, {
         this.editor.setValue(v);
     },
 
-    setEnable: function(v){
-        this.editor.setEnable(v);
-    },
-
     getValue: function () {
         var v = this.editor.getState();
         if (BI.isArray(v) && v.length > 0) {
@@ -10864,10 +10844,6 @@ BI.MultiSelectSearcher = BI.inherit(BI.Widget, {
 
     getValue: function () {
         return this.searcher.getValue();
-    },
-
-    setEnable: function (v) {
-        this.editor.setEnable(v);
     },
 
     populate: function (items) {
@@ -11267,11 +11243,6 @@ BI.MultiStringList = BI.inherit(BI.Widget, {
         this.trigger.getSearcher().adjustView();
     },
 
-    setEnable: function (v) {
-        this.trigger.setEnable(v);
-        this.popup.setEnable(v);
-    },
-
     setValue: function (v) {
         this.storeValue = v || {};
         this._assertValue(this.storeValue);
@@ -11649,10 +11620,6 @@ BI.MultiTreeCombo = BI.inherit(BI.Single, {
         this.combo.hideView();
     },
 
-    setEnable: function (v) {
-        this.combo.setEnable(v);
-    },
-
     setValue: function (v) {
         this.storeValue.value = v || {};
         this.combo.setValue({
@@ -11750,10 +11717,6 @@ BI.MultiTreePopup = BI.inherit(BI.Pane, {
 
     hasChecked: function () {
         return this.tree.hasChecked();
-    },
-
-    setEnable: function (arg) {
-        this.popupView.setEnable(arg);
     },
 
     resetHeight: function (h) {
@@ -12030,10 +11993,6 @@ BI.MultiTreeSearcher = BI.inherit(BI.Widget, {
         return this.editor.getValue();
     },
 
-    setEnable: function(v){
-        this.editor.setEnable(v);
-    },
-
     getValue: function () {
         return this.searcher.getValue();
     },
@@ -12198,11 +12157,6 @@ BI.MultiTreeList = BI.inherit(BI.Widget, {
     resize: function () {
         this.trigger.getCounter().adjustView();
         this.trigger.getSearcher().adjustView();
-    },
-
-    setEnable: function (v) {
-        this.trigger.setEnable(v);
-        this.popup.setEnable(v);
     },
 
     setValue: function (v) {
@@ -12702,13 +12656,6 @@ BI.NumericalInterval = BI.inherit(BI.Single, {
 
     isValid: function () {
         return this.options.validation === "valid";
-    },
-
-    setEnable: function (b) {
-        this.smallEditor.setEnable(b);
-        this.smallCombo.setEnable(b);
-        this.bigEditor.setEnable(b);
-        this.bigCombo.setEnable(b);
     },
 
     setMinEnable: function (b) {

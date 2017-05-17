@@ -14427,17 +14427,18 @@ BI.Widget = BI.inherit(BI.OB, {
     _initVisualEffects: function () {
         var o = this.options;
         if (o.invisible) {
-            this.element.hide();
+            //用display属性做显示和隐藏，否则jquery会在显示时将display设为block会覆盖掉display:flex属性
+            this.element.css("display", "none");
         }
         if (o.disabled || o.invalid) {
-            BI.nextTick(BI.bind(function () {
-                if (this.options.disabled) {
-                    this.setEnable(false);
-                }
-                if (this.options.invalid) {
-                    this.setValid(false);
-                }
-            }, this));
+            // BI.nextTick(BI.bind(function () {
+            if (this.options.disabled) {
+                this.setEnable(false);
+            }
+            if (this.options.invalid) {
+                this.setValid(false);
+            }
+            // }, this));
         }
     },
 
@@ -14485,6 +14486,7 @@ BI.Widget = BI.inherit(BI.OB, {
         this._isMounted = true;
         this._mountChildren && this._mountChildren();
         BI.each(this._children, function (i, widget) {
+            !self.isEnabled() && widget._setEnable(false);
             widget._mount && widget._mount();
         });
         this.mounted && this.mounted();
@@ -14506,12 +14508,23 @@ BI.Widget = BI.inherit(BI.OB, {
         this._initElementHeight();
     },
 
-    setEnable: function (enable) {
+    _setEnable: function (enable) {
         if (enable === true) {
             this.options.disabled = false;
-            this.element.removeClass("base-disabled disabled");
         } else if (enable === false) {
             this.options.disabled = true;
+        }
+        //递归将所有子组件使能
+        BI.each(this._children, function (i, child) {
+            child._setEnable && child._setEnable(enable);
+        });
+    },
+
+    setEnable: function (enable) {
+        this._setEnable(enable);
+        if (enable === true) {
+            this.element.removeClass("base-disabled disabled");
+        } else if (enable === false) {
             this.element.addClass("base-disabled disabled");
         }
     },

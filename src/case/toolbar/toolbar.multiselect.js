@@ -121,13 +121,6 @@ BI.MultiSelectBar = BI.inherit(BI.BasicButton, {
         var isAllChecked = this.options.isAllCheckedBySelectedValue.apply(this, arguments);
         this.setSelected(isAllChecked);
         !isAllChecked && this.setHalfSelected(this.options.isHalfCheckedBySelectedValue.apply(this, arguments));
-    },
-
-    setEnable: function (b) {
-        BI.MultiSelectBar.superclass.setEnable.apply(this, arguments);
-        this.checkbox.setEnable(b);
-        this.half.setEnable(b);
-        this.text.setEnable(b);
     }
 });
 BI.MultiSelectBar.EVENT_CHANGE = "MultiSelectBar.EVENT_CHANGE";

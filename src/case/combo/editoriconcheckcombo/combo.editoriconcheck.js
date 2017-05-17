@@ -62,11 +62,6 @@ BI.EditorIconCheckCombo = BI.inherit(BI.Widget, {
         this.editorIconCheckCombo.setValue(v);
     },
 
-    setEnable: function (v) {
-        BI.EditorIconCheckCombo.superclass.setEnable.apply(this, arguments);
-        this.editorIconCheckCombo.setEnable(v);
-    },
-
     getValue: function () {
         return this.trigger.getValue();
     },

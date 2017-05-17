@@ -141,11 +141,6 @@ BI.TextEditor = BI.inherit(BI.Widget, {
 
     getValue: function () {
         return this.editor.getValue();
-    },
-
-    setEnable: function (b) {
-        BI.Editor.superclass.setEnable.apply(this, arguments);
-        this.editor && this.editor.setEnable(b);
     }
 });
 BI.TextEditor.EVENT_CHANGE = "EVENT_CHANGE";

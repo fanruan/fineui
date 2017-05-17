@@ -150,11 +150,6 @@ BI.MultiTreeList = BI.inherit(BI.Widget, {
         this.trigger.getSearcher().adjustView();
     },
 
-    setEnable: function (v) {
-        this.trigger.setEnable(v);
-        this.popup.setEnable(v);
-    },
-
     setValue: function (v) {
         this.storeValue.value = v || {};
         this.popup.setValue({

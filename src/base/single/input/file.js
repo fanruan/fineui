@@ -601,8 +601,8 @@
             this.wrap.attachNum = 0;
         },
 
-        setEnable: function (enable) {
-            BI.File.superclass.setEnable.apply(this, arguments);
+        _setEnable: function (enable) {
+            BI.File.superclass._setEnable.apply(this, arguments);
             if (enable === true) {
                 this.element.attr("disabled", "disabled");
             } else {

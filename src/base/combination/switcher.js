@@ -186,11 +186,9 @@ BI.Switcher = BI.inherit(BI.Widget, {
         this.switcher.populate.apply(this.switcher, arguments);
     },
 
-    setEnable: function (arg) {
-        BI.Switcher.superclass.setEnable.apply(this, arguments);
-        this.switcher && this.switcher.setEnable(arg);
-        this.popupView && this.popupView.setEnable(arg);
-        !arg && this._hideView();
+    _setEnable: function (arg) {
+        BI.Switcher.superclass._setEnable.apply(this, arguments);
+        !arg && this.isViewVisible() && this._hideView();
     },
 
     setValue: function (v) {

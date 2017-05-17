@@ -53,11 +53,6 @@ BI.SmallTextValueCombo = BI.inherit(BI.Widget, {
         this.SmallTextValueCombo.setValue(v);
     },
 
-    setEnable: function (v) {
-        BI.SmallTextValueCombo.superclass.setEnable.apply(this, arguments);
-        this.SmallTextValueCombo.setEnable(v);
-    },
-
     getValue: function () {
         return this.SmallTextValueCombo.getValue();
     },

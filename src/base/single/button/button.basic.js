@@ -298,8 +298,8 @@ BI.BasicButton = BI.inherit(BI.Single, {
         return this.options.text;
     },
 
-    setEnable: function (b) {
-        BI.BasicButton.superclass.setEnable.apply(this, arguments);
+    _setEnable: function (b) {
+        BI.BasicButton.superclass._setEnable.apply(this, arguments);
         if (!b) {
             if (this.options.shadow) {
                 this.$mask && this.$mask.setVisible(false);

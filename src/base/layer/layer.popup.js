@@ -158,11 +158,6 @@ BI.PopupView = BI.inherit(BI.Widget, {
             this.view.element.css({"max-height": (h - tbHeight - tabHeight - toolHeight - 2) + "px"})
     },
 
-    setEnable: function (arg) {
-        BI.PopupView.superclass.setEnable.apply(this, arguments);
-        this.view && this.view.setEnable(arg);
-    },
-
     setValue: function (selectedValues) {
         this.tab && this.tab.setValue(selectedValues);
         this.button_group.setValue(selectedValues);

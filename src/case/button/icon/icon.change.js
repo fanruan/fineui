@@ -77,11 +77,6 @@ BI.IconChangeButton = BI.inherit(BI.Single, {
             this.element.removeClass(o.iconClass).addClass(cls);
             o.iconClass = cls;
         }
-    },
-
-    setEnable: function (b) {
-        BI.IconChangeButton.superclass.setEnable.apply(this, arguments);
-        this.button.setEnable(b);
     }
 });
 BI.IconChangeButton.EVENT_CHANGE = "IconChangeButton.EVENT_CHANGE";

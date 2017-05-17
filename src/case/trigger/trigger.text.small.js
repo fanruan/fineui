@@ -47,12 +47,6 @@ BI.SmallTextTrigger = BI.inherit(BI.Trigger, {
         });
     },
 
-    setEnable: function (v) {
-        BI.SmallTextTrigger.superclass.setEnable.apply(this, arguments);
-        this.trigerButton.setEnable(v);
-        this.text.setEnable(v);
-    },
-
     setValue: function (value) {
         this.text.setValue(value);
     },

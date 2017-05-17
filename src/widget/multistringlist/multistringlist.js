@@ -287,11 +287,6 @@ BI.MultiStringList = BI.inherit(BI.Widget, {
         this.trigger.getSearcher().adjustView();
     },
 
-    setEnable: function (v) {
-        this.trigger.setEnable(v);
-        this.popup.setEnable(v);
-    },
-
     setValue: function (v) {
         this.storeValue = v || {};
         this._assertValue(this.storeValue);
