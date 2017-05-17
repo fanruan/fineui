@@ -13043,7 +13043,7 @@ BI.CardLayout = BI.inherit(BI.Layout, {
 
         var child = this._children[cardName];
         this._deleteCardByName(cardName);
-        child && child.destroy();
+        child && child._destroy();
     },
 
     addCardByName: function (cardName, cardItem) {

@@ -127,7 +127,7 @@ BI.CollectionView = BI.inherit(BI.Widget, {
                 return;
             }
             var childrenToDisplay = this._cellRenderers(bottom - top, right - left, left, top);
-            var renderedCells = [], renderedKeys = [];
+            var renderedCells = [], renderedKeys = [], renderedWidgets = {};
             //存储所有的left和top
             var lefts = {}, tops = {};
             for (var i = 0, len = childrenToDisplay.length; i < len; i++) {
@@ -210,6 +210,7 @@ BI.CollectionView = BI.inherit(BI.Widget, {
                 }
 
                 renderedKeys.push(datum.index);
+                renderedWidgets[i] = child;
             }
             //已存在的， 需要添加的和需要删除的
             var existSet = {}, addSet = {}, deleteArray = [];
@@ -239,7 +240,8 @@ BI.CollectionView = BI.inherit(BI.Widget, {
             });
             this.container.addItems(addedItems);
             //拦截父子级关系
-            this.container._children = renderedCells;
+            this.container._children = renderedWidgets;
+            this.container.attr("items", renderedCells);
             this.renderedCells = renderedCells;
             this.renderedKeys = renderedKeys;
 

@@ -121,7 +121,7 @@ BI.GridView = BI.inherit(BI.Widget, {
                 return;
             }
 
-            var renderedCells = [], renderedKeys = [];
+            var renderedCells = [], renderedKeys = [], renderedWidgets = {};
             var minX = this._getMaxScrollLeft(), minY = this._getMaxScrollTop(), maxX = 0, maxY = 0;
             for (var rowIndex = rowStartIndex; rowIndex <= rowStopIndex; rowIndex++) {
                 var rowDatum = this._rowSizeAndPositionManager.getSizeAndPositionOfCell(rowIndex);
@@ -172,6 +172,7 @@ BI.GridView = BI.inherit(BI.Widget, {
                     minY = Math.min(minY, rowDatum.offset + verticalOffsetAdjustment);
                     maxY = Math.max(maxY, rowDatum.offset + verticalOffsetAdjustment + rowDatum.size);
                     renderedKeys.push(key);
+                    renderedWidgets[i] = child;
                 }
             }
             //已存在的， 需要添加的和需要删除的
@@ -202,7 +203,8 @@ BI.GridView = BI.inherit(BI.Widget, {
             });
             this.container.addItems(addedItems);
             //拦截父子级关系
-            this.container._children = renderedCells;
+            this.container._children = renderedWidgets;
+            this.container.attr("items", renderedCells);
             this.renderedCells = renderedCells;
             this.renderedKeys = renderedKeys;
             this.renderRange = {minX: minX, minY: minY, maxX: maxX, maxY: maxY};
