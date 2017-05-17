@@ -19587,7 +19587,7 @@ BI.Layout = BI.inherit(BI.Widget, {
         this.options.items = newItems;
         this._children = newChildren;
         BI.each(deleted, function (i, c) {
-            c.destroy();
+            c._destroy();
         });
     },
 
@@ -19612,7 +19612,7 @@ BI.Layout = BI.inherit(BI.Widget, {
         } else {
             w.element.prependTo(this._getWrapper());
         }
-        del.destroy();
+        del._destroy();
         w._mount();
     },
 
@@ -19699,7 +19699,7 @@ BI.Layout = BI.inherit(BI.Widget, {
             }
             o.items.splice(items.length);
             BI.each(deleted, function (i, w) {
-                w.destroy();
+                w._destroy();
             })
         } else if (items.length > o.items.length) {
             for (i = o.items.length; i < items.length; i++) {
