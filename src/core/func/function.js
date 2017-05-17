@@ -24,7 +24,7 @@ $(function () {
                 };
             }
             var t, text, py;
-            keyword = BI.makeFirstPY(keyword);
+            keyword = keyword + "";
             keyword = BI.toUpperCase(keyword);
             var matched = isArray ? [] : {}, finded = isArray ? [] : {};
             BI.each(items, function (i, item) {

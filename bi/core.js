@@ -4497,17 +4497,6 @@ BI.Widget = BI.inherit(BI.OB, {
 
     _mountChildren: null,
 
-    _unMount: function () {
-        BI.each(this._children, function (i, widget) {
-            widget._unMount && widget._unMount();
-        });
-        this._children = {};
-        this._parent = null;
-        this._isMounted = false;
-        this.purgeListeners();
-        this.destroyed && this.destroyed();
-    },
-
     isMounted: function () {
         return this._isMounted;
     },
@@ -4587,7 +4576,7 @@ BI.Widget = BI.inherit(BI.OB, {
     },
 
     getWidgetByName: function (name) {
-        if (!BI.isKey(name) || name == this.getName()) {
+        if (!BI.isKey(name) || name === this.getName()) {
             return this;
         }
         name = name + "";
@@ -4687,6 +4676,21 @@ BI.Widget = BI.inherit(BI.OB, {
         this.setVisible(true);
     },
 
+    __d: function () {
+        BI.each(this._children, function (i, widget) {
+            widget._unMount && widget._unMount();
+        });
+        this._children = {};
+        this._parent = null;
+        this._isMounted = false;
+    },
+
+    _unMount: function () {
+        this.__d();
+        this.purgeListeners();
+        this.destroyed && this.destroyed();
+    },
+
     isolate: function () {
         if (this._parent) {
             this._parent.removeWidget(this);
@@ -4702,13 +4706,15 @@ BI.Widget = BI.inherit(BI.OB, {
         this.element.empty();
     },
 
+    _destroy: function () {
+        this.__d();
+        this.destroyed && this.destroyed();
+        this.element.destroy();
+        this.purgeListeners();
+    },
+
     destroy: function () {
-        BI.each(this._children, function (i, widget) {
-            widget._unMount && widget._unMount();
-        });
-        this._children = {};
-        this._parent = null;
-        this._isMounted = false;
+        this.__d();
         this.destroyed && this.destroyed();
         this.element.destroy();
         this.fireEvent(BI.Events.DESTROY);
@@ -11196,7 +11202,7 @@ BI.Layout = BI.inherit(BI.Widget, {
         this.options.items = newItems;
         this._children = newChildren;
         BI.each(deleted, function (i, c) {
-            c.destroy();
+            c._destroy();
         });
     },
 
@@ -11221,7 +11227,7 @@ BI.Layout = BI.inherit(BI.Widget, {
         } else {
             w.element.prependTo(this._getWrapper());
         }
-        del.destroy();
+        del._destroy();
         w._mount();
     },
 
@@ -11308,7 +11314,7 @@ BI.Layout = BI.inherit(BI.Widget, {
             }
             o.items.splice(items.length);
             BI.each(deleted, function (i, w) {
-                w.destroy();
+                w._destroy();
             })
         } else if (items.length > o.items.length) {
             for (i = o.items.length; i < items.length; i++) {
@@ -13037,7 +13043,7 @@ BI.CardLayout = BI.inherit(BI.Layout, {
 
         var child = this._children[cardName];
         this._deleteCardByName(cardName);
-        child && child.destroy();
+        child && child._destroy();
     },
 
     addCardByName: function (cardName, cardItem) {
@@ -16027,7 +16033,7 @@ BI.extend(jQuery.fn, {
         if (!BI.isKey(keyword)) {
             return this.text((text + "").replaceAll(" ", "　"));
         }
-        keyword = BI.makeFirstPY(keyword + "");
+        keyword = keyword + "";
         keyword = BI.toUpperCase(keyword);
         var textLeft = (text || "") + "";
         py = (py || BI.makeFirstPY(text)) + "";
@@ -16618,7 +16624,7 @@ $(function () {
                 };
             }
             var t, text, py;
-            keyword = BI.makeFirstPY(keyword);
+            keyword = keyword + "";
             keyword = BI.toUpperCase(keyword);
             var matched = isArray ? [] : {}, finded = isArray ? [] : {};
             BI.each(items, function (i, item) {

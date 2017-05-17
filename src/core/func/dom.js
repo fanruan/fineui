@@ -22,7 +22,7 @@ BI.extend(jQuery.fn, {
         if (!BI.isKey(keyword)) {
             return this.text((text + "").replaceAll(" ", "　"));
         }
-        keyword = BI.makeFirstPY(keyword + "");
+        keyword = keyword + "";
         keyword = BI.toUpperCase(keyword);
         var textLeft = (text || "") + "";
         py = (py || BI.makeFirstPY(text)) + "";

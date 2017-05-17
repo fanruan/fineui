@@ -34,7 +34,7 @@ BI.CollectionTable = BI.inherit(BI.Widget, {
                 return self.topLeftItems[index];
             }
         });
-        this.topLeftCollection.on(BI.Collection.EVENT_SCROLL, function (scroll) {
+        this.topLeftCollection.on(BI.CollectionView.EVENT_SCROLL, function (scroll) {
             self.bottomLeftCollection.setScrollLeft(scroll.scrollLeft);
             self._populateScrollbar();
             self.fireEvent(BI.Table.EVENT_TABLE_SCROLL, arguments);
@@ -45,7 +45,7 @@ BI.CollectionTable = BI.inherit(BI.Widget, {
                 return self.topRightItems[index];
             }
         });
-        this.topRightCollection.on(BI.Collection.EVENT_SCROLL, function (scroll) {
+        this.topRightCollection.on(BI.CollectionView.EVENT_SCROLL, function (scroll) {
             self.bottomRightCollection.setScrollLeft(scroll.scrollLeft);
             self._populateScrollbar();
             self.fireEvent(BI.Table.EVENT_TABLE_SCROLL, arguments);
@@ -56,7 +56,7 @@ BI.CollectionTable = BI.inherit(BI.Widget, {
                 return self.bottomLeftItems[index];
             }
         });
-        this.bottomLeftCollection.on(BI.Collection.EVENT_SCROLL, function (scroll) {
+        this.bottomLeftCollection.on(BI.CollectionView.EVENT_SCROLL, function (scroll) {
             self.bottomRightCollection.setScrollTop(scroll.scrollTop);
             self.topLeftCollection.setScrollLeft(scroll.scrollLeft);
             self._populateScrollbar();
@@ -68,7 +68,7 @@ BI.CollectionTable = BI.inherit(BI.Widget, {
                 return self.bottomRightItems[index];
             }
         });
-        this.bottomRightCollection.on(BI.Collection.EVENT_SCROLL, function (scroll) {
+        this.bottomRightCollection.on(BI.CollectionView.EVENT_SCROLL, function (scroll) {
             self.bottomLeftCollection.setScrollTop(scroll.scrollTop);
             self.topRightCollection.setScrollLeft(scroll.scrollLeft);
             self._populateScrollbar();
