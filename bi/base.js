@@ -14807,7 +14807,7 @@ BI.GridView = BI.inherit(BI.Widget, {
                     minY = Math.min(minY, rowDatum.offset + verticalOffsetAdjustment);
                     maxY = Math.max(maxY, rowDatum.offset + verticalOffsetAdjustment + rowDatum.size);
                     renderedKeys.push(key);
-                    renderedWidgets[i] = child;
+                    renderedWidgets[rowIndex] = child;
                 }
             }
             //已存在的， 需要添加的和需要删除的
