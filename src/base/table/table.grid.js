@@ -347,10 +347,10 @@ BI.GridTable = BI.inherit(BI.Widget, {
         this.contextLayout.attr("items", items);
         this.contextLayout.resize();
 
-        this.topLeftGrid.populate(this.header[0]);
-        this.topRightGrid.populate(this.header[1]);
-        this.bottomLeftGrid.populate(this.items[0]);
-        this.bottomRightGrid.populate(this.items[1]);
+        this.topLeftGrid._populate(this.header[0]);
+        this.topRightGrid._populate(this.header[1]);
+        this.bottomLeftGrid._populate(this.items[0]);
+        this.bottomRightGrid._populate(this.items[1]);
     },
 
     _populate: function () {

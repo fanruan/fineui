@@ -2775,8 +2775,12 @@ BI.CollectionView = BI.inherit(BI.Widget, {
         return Math.max(0, this._height - this.options.height + (this.options.overflowY ? BI.DOM.getScrollWidth() : 0));
     },
 
-    _populate: function () {
+    _populate: function (items) {
         var o = this.options;
+        if (items && items !== this.options.items) {
+            this.options.items = items;
+            this._calculateSizeAndPositionData();
+        }
         if (o.items.length > 0) {
             this.container.setWidth(this._width);
             this.container.setHeight(this._height);
@@ -2868,11 +2872,9 @@ BI.CollectionView = BI.inherit(BI.Widget, {
 
     populate: function (items) {
         if (items && items !== this.options.items) {
-            this.options.items = items;
-            this._calculateSizeAndPositionData();
             this.restore();
         }
-        this._populate();
+        this._populate(items);
     }
 });
 BI.CollectionView.EVENT_SCROLL = "EVENT_SCROLL";
@@ -14869,8 +14871,11 @@ BI.GridView = BI.inherit(BI.Widget, {
         return Math.max(0, this._rowSizeAndPositionManager.getTotalSize() - this.options.height + (this.options.overflowY ? BI.DOM.getScrollWidth() : 0));
     },
 
-    _populate: function () {
+    _populate: function (items) {
         var self = this, o = this.options;
+        if (items && items !== this.options.items) {
+            this.options.items = items;
+        }
         if (o.items.length > 0) {
             this.columnCount = o.items[0].length;
             this.rowCount = o.items.length;
@@ -14978,10 +14983,9 @@ BI.GridView = BI.inherit(BI.Widget, {
 
     populate: function (items) {
         if (items && items !== this.options.items) {
-            this.options.items = items;
             this.restore();
         }
-        this._populate();
+        this._populate(items);
     }
 });
 BI.GridView.EVENT_SCROLL = "EVENT_SCROLL";
@@ -28866,10 +28870,10 @@ BI.CollectionTable = BI.inherit(BI.Widget, {
         run(this.bottomLeftItems, o.items, leftItems);
         run(this.bottomRightItems, o.items, rightItems);
 
-        this.topLeftCollection.populate(leftHeader);
-        this.topRightCollection.populate(rightHeader);
-        this.bottomLeftCollection.populate(leftItems);
-        this.bottomRightCollection.populate(rightItems);
+        this.topLeftCollection._populate(leftHeader);
+        this.topRightCollection._populate(rightHeader);
+        this.bottomLeftCollection._populate(leftItems);
+        this.bottomRightCollection._populate(rightItems);
     },
 
     _digest: function () {
@@ -29696,10 +29700,10 @@ BI.GridTable = BI.inherit(BI.Widget, {
         this.contextLayout.attr("items", items);
         this.contextLayout.resize();
 
-        this.topLeftGrid.populate(this.header[0]);
-        this.topRightGrid.populate(this.header[1]);
-        this.bottomLeftGrid.populate(this.items[0]);
-        this.bottomRightGrid.populate(this.items[1]);
+        this.topLeftGrid._populate(this.header[0]);
+        this.topRightGrid._populate(this.header[1]);
+        this.bottomLeftGrid._populate(this.items[0]);
+        this.bottomRightGrid._populate(this.items[1]);
     },
 
     _populate: function () {

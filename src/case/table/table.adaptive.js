@@ -115,7 +115,7 @@ BI.AdaptiveTable = BI.inherit(BI.Widget, {
             freezeCols = [];
         }
         if (!BI.isNumber(columnSize[0])) {
-            columnSize = o.minColumnSize;
+            columnSize = o.minColumnSize.slice();
         }
         var summaryFreezeColumnSize = 0, summaryColumnSize = 0;
         BI.each(columnSize, function (i, size) {

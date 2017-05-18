@@ -221,8 +221,11 @@ BI.GridView = BI.inherit(BI.Widget, {
         return Math.max(0, this._rowSizeAndPositionManager.getTotalSize() - this.options.height + (this.options.overflowY ? BI.DOM.getScrollWidth() : 0));
     },
 
-    _populate: function () {
+    _populate: function (items) {
         var self = this, o = this.options;
+        if (items && items !== this.options.items) {
+            this.options.items = items;
+        }
         if (o.items.length > 0) {
             this.columnCount = o.items[0].length;
             this.rowCount = o.items.length;
@@ -330,10 +333,9 @@ BI.GridView = BI.inherit(BI.Widget, {
 
     populate: function (items) {
         if (items && items !== this.options.items) {
-            this.options.items = items;
             this.restore();
         }
-        this._populate();
+        this._populate(items);
     }
 });
 BI.GridView.EVENT_SCROLL = "EVENT_SCROLL";

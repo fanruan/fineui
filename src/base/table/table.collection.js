@@ -306,10 +306,10 @@ BI.CollectionTable = BI.inherit(BI.Widget, {
         run(this.bottomLeftItems, o.items, leftItems);
         run(this.bottomRightItems, o.items, rightItems);
 
-        this.topLeftCollection.populate(leftHeader);
-        this.topRightCollection.populate(rightHeader);
-        this.bottomLeftCollection.populate(leftItems);
-        this.bottomRightCollection.populate(rightItems);
+        this.topLeftCollection._populate(leftHeader);
+        this.topRightCollection._populate(rightHeader);
+        this.bottomLeftCollection._populate(leftItems);
+        this.bottomRightCollection._populate(rightItems);
     },
 
     _digest: function () {
