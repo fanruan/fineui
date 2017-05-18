@@ -1,15 +1,15 @@
 /**
  * Created by zcf on 2016/12/21.
  */
-BI.MultiStringListPopup=BI.inherit(BI.Widget,{
-    _defaultConfig:function () {
-        return BI.extend(BI.MultiStringListPopup.superclass._defaultConfig.apply(this, arguments), {
+BI.MultiSelectTreePopup = BI.inherit(BI.Widget, {
+    _defaultConfig: function () {
+        return BI.extend(BI.MultiSelectTreePopup.superclass._defaultConfig.apply(this, arguments), {
             baseCls: "bi-tree-list-popup bi-border-left bi-border-right bi-border-bottom",
             itemsCreator: BI.emptyFn
         });
     },
-    _init:function () {
-        BI.MultiStringListPopup.superclass._init.apply(this, arguments);
+    _init: function () {
+        BI.MultiSelectTreePopup.superclass._init.apply(this, arguments);
         var self = this, o = this.options;
         this.popup = BI.createWidget({
             type: "bi.sync_tree",
@@ -18,10 +18,10 @@ BI.MultiStringListPopup=BI.inherit(BI.Widget,{
             itemsCreator: o.itemsCreator
         });
         this.popup.on(BI.TreeView.EVENT_AFTERINIT, function () {
-            self.fireEvent(BI.MultiStringListPopup.EVENT_AFTER_INIT)
+            self.fireEvent(BI.MultiSelectTreePopup.EVENT_AFTER_INIT)
         });
         this.popup.on(BI.TreeView.EVENT_CHANGE, function () {
-            self.fireEvent(BI.MultiStringListPopup.EVENT_CHANGE)
+            self.fireEvent(BI.MultiSelectTreePopup.EVENT_CHANGE)
         });
     },
 
@@ -43,6 +43,6 @@ BI.MultiStringListPopup=BI.inherit(BI.Widget,{
     }
 
 });
-BI.MultiStringListPopup.EVENT_AFTER_INIT="BI.MultiStringListPopup.EVENT_AFTER_INIT";
-BI.MultiStringListPopup.EVENT_CHANGE="BI.MultiStringListPopup.EVENT_CHANGE";
-BI.shortcut("bi.multi_tree_list_popup",BI.MultiStringListPopup);
+BI.MultiSelectTreePopup.EVENT_AFTER_INIT = "BI.MultiSelectTreePopup.EVENT_AFTER_INIT";
+BI.MultiSelectTreePopup.EVENT_CHANGE = "BI.MultiSelectTreePopup.EVENT_CHANGE";
+BI.shortcut("bi.multi_select_tree_popup", BI.MultiSelectTreePopup);

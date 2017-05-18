@@ -1,128 +1,94 @@
 /**
- * Created by zcf on 2016/12/20.
+ * Created by zcf_1 on 2017/5/11.
  */
-BI.MultiTreeList = BI.inherit(BI.Widget, {
-    constants: {
-        offset: {
-            left: 1,
-            top: 0,
-            right: 2,
-            bottom: 1
-        }
-    },
-
+BI.MultiSelectTree = BI.inherit(BI.Widget, {
     _defaultConfig: function () {
-        return BI.extend(BI.MultiTreeList.superclass._defaultConfig.apply(this, arguments), {
+        return BI.extend(BI.MultiSelectTree.superclass._defaultConfig.apply(this, arguments), {
             baseCls: 'bi-multi-tree-combo',
             itemsCreator: BI.emptyFn,
             height: 25
-        });
+        })
     },
 
     _init: function () {
-        BI.MultiTreeList.superclass._init.apply(this, arguments);
-
+        BI.MultiSelectTree.superclass._init.apply(this, arguments);
         var self = this, o = this.options;
-
-        var isInit = false;
-        var want2showCounter = false;
-
-        this.popup = BI.createWidget({
-            type: "bi.multi_tree_list_popup",
-            itemsCreator: o.itemsCreator
-        });
-
-        this.popup.on(BI.MultiStringListPopup.EVENT_AFTER_INIT, function () {
-            self.trigger.getCounter().adjustView();
-            isInit = true;
-            if (want2showCounter === true) {
-                showCounter();
-            }
-        });
-
-        this.trigger = BI.createWidget({
-            type: "bi.multi_select_trigger",
-            height: o.height,
-            adapter: this.popup,
-            masker: {
-                offset: this.constants.offset
-            },
-            searcher: {
-                type: "bi.multi_tree_searcher",
-                itemsCreator: o.itemsCreator
-            },
-            switcher: {
-                el: {
-                    type: "bi.multi_tree_check_selected_button"
-                },
-                popup: {
-                    type: "bi.multi_tree_check_pane",
-                    itemsCreator: o.itemsCreator
-                }
-            }
-        });
-
         this.storeValue = {value: {}};
 
-        var isSearching = function () {
-            return self.trigger.getSearcher().isSearching();
-        };
-
-        this.trigger.on(BI.MultiSelectTrigger.EVENT_START, function () {
-            self.storeValue = {value: self.popup.getValue()};
-            this.setValue(self.storeValue);
+        this.adapter = BI.createWidget({
+            type: "bi.multi_select_tree_popup",
+            itemsCreator: o.itemsCreator
         });
-        this.trigger.on(BI.MultiSelectTrigger.EVENT_STOP, function () {
-            self.storeValue = {value: this.getValue()};
-            self.trigger.setValue(self.storeValue);
-            self.popup.setValue(self.storeValue);
-            BI.nextTick(function () {
-                self.trigger.populate();
-                self.popup.populate();
-            });
-        });
-        function showCounter() {
-            if (isSearching()) {
-                self.storeValue = {value: self.trigger.getValue()};
+        this.adapter.on(BI.MultiSelectTreePopup.EVENT_CHANGE, function () {
+            if (self.trigger.isSearching()) {
+                self.storeValue = {value: self.searcherPane.getValue()};
             } else {
-                self.storeValue = {value: self.popup.getValue()};
+                self.storeValue = {value: self.adapter.getValue()};
             }
-            self.trigger.setValue(self.storeValue);
-        }
+            self.fireEvent(BI.MultiSelectTree.EVENT_CHANGE);
+        });
 
-        this.trigger.on(BI.MultiSelectTrigger.EVENT_BEFORE_COUNTER_POPUPVIEW, function () {
-            if (want2showCounter === false) {
-                want2showCounter = true;
+        this.searcherPane = BI.createWidget({//搜索中的时候用的是parttree，同adapter中的synctree不一样
+            type: "bi.multi_tree_search_pane",
+            cls: "bi-border-left bi-border-right bi-border-bottom",
+            keywordGetter: function () {
+                return self.trigger.getKeyword();
+            },
+            itemsCreator: function (op, callback) {
+                op.keyword = self.trigger.getKeyword();
+                o.itemsCreator(op, callback);
             }
-            if (isInit === true) {
-                want2showCounter = null;
-                showCounter();
-            }
+        });
+        this.searcherPane.setVisible(false);
+
+        this.trigger = BI.createWidget({
+            type: "bi.searcher",
+            isAutoSearch: false,
+            isAutoSync: false,
+            onSearch: function (op, callback) {
+                callback({
+                    keyword: self.trigger.getKeyword()
+                });
+            },
+            adapter: this.adapter,
+            popup: this.searcherPane,
+            height: 200,
+            masker: false,
+            listeners: [{
+                eventName: BI.Searcher.EVENT_START,
+                action: function () {
+                    self._showSearcherPane();
+                    self.storeValue = {value: self.adapter.getValue()};
+                    self.searcherPane.setValue(self.storeValue);
+                }
+            }, {
+                eventName: BI.Searcher.EVENT_STOP,
+                action: function () {
+                    self._showAdapter();
+                    // self.storeValue = {value: self.searcherPane.getValue()};
+                    self.adapter.setValue(self.storeValue);
+                    BI.nextTick(function () {
+                        self.adapter.populate();
+                    });
+                }
+            }, {
+                eventName: BI.Searcher.EVENT_CHANGE,
+                action: function () {
+                    if (self.trigger.isSearching()) {
+                        self.storeValue = {value: self.searcherPane.getValue()};
+                    } else {
+                        self.storeValue = {value: self.adapter.getValue()};
+                    }
+                    self.fireEvent(BI.MultiSelectTree.EVENT_CHANGE);
+                }
+            }, {
+                eventName: BI.Searcher.EVENT_PAUSE,
+                action: function () {
+                    self._showAdapter();
+                }
+            }]
         });
 
-        this.trigger.on(BI.MultiSelectTrigger.EVENT_CHANGE, function () {
-            var val = {
-                type: BI.Selection.Multi,
-                value: this.getSearcher().hasChecked() ? {1: 1} : {}
-            };
-            this.getSearcher().setState(val);
-            this.getCounter().setButtonChecked(val);
-        });
-
-        this.popup.on(BI.MultiStringListPopup.EVENT_CHANGE, function () {
-            showCounter();
-            var val = {
-                type: BI.Selection.Multi,
-                value: this.hasChecked() ? {1: 1} : {}
-            };
-            self.trigger.getSearcher().setState(val);
-            self.trigger.getCounter().setButtonChecked(val);
-            self.fireEvent(BI.MultiTreeList.EVENT_CHANGE);
-        });
-
-        var div = BI.createWidget({
-            type: "bi.layout"
-        });
         BI.createWidget({
             type: "bi.vtape",
             element: this,
@@ -130,29 +96,45 @@ BI.MultiTreeList = BI.inherit(BI.Widget, {
             width: "100%",
             items: [{
                 el: this.trigger,
-                height: 25
+                height: 30
             }, {
-                el: div,
-                height: 2
-            }, {
-                el: this.popup,
+                el: this.adapter,
                 height: "fill"
             }]
+        });
+        BI.createWidget({
+            type: "bi.absolute",
+            element: this,
+            height: "100%",
+            width: "100%",
+            items: [{
+                el: this.searcherPane,
+                top: 30,
+                bottom: 0,
+                left: 0,
+                right: 0
+            }]
         })
+
     },
 
-    _defaultState: function () {
-        this.trigger.stopEditing();
+    _showAdapter: function () {
+        this.adapter.setVisible(true);
+        this.searcherPane.setVisible(false);
+    },
+
+    _showSearcherPane: function () {
+        this.searcherPane.setVisible(true);
+        this.adapter.setVisible(false);
     },
 
     resize: function () {
-        this.trigger.getCounter().adjustView();
-        this.trigger.getSearcher().adjustView();
+
     },
 
     setValue: function (v) {
         this.storeValue.value = v || {};
-        this.popup.setValue({
+        this.adapter.setValue({
             value: v || {}
         });
         this.trigger.setValue({
@@ -166,8 +148,8 @@ BI.MultiTreeList = BI.inherit(BI.Widget, {
 
     populate: function () {
         this.trigger.populate.apply(this.trigger, arguments);
-        this.popup.populate.apply(this.popup, arguments);
+        this.adapter.populate.apply(this.adapter, arguments);
     }
 });
-BI.MultiTreeList.EVENT_CHANGE = "MultiTreeList.EVENT_CHANGE";
-BI.shortcut('bi.multi_tree_list', BI.MultiTreeList);
+BI.MultiSelectTree.EVENT_CHANGE = "BI.MultiSelectTree.EVENT_CHANGE";
+BI.shortcut("bi.multi_select_tree", BI.MultiSelectTree);

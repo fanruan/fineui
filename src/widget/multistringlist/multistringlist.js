@@ -1,5 +1,5 @@
 /**
- * Created by zcf on 2016/12/14.
+ * Created by zcf_1 on 2017/5/2.
  */
 BI.MultiStringList = BI.inherit(BI.Widget, {
     _defaultConfig: function () {
@@ -7,33 +7,30 @@ BI.MultiStringList = BI.inherit(BI.Widget, {
             baseCls: 'bi-multi-string-list',
             itemsCreator: BI.emptyFn,
             valueFormatter: BI.emptyFn,
-            height: 25
+            el: {}
         })
     },
     _init: function () {
         BI.MultiStringList.superclass._init.apply(this, arguments);
 
         var self = this, o = this.options;
+        this.storeValue = {};
 
         var assertShowValue = function () {
             BI.isKey(self._startValue) && self.storeValue.value[self.storeValue.type === BI.Selection.All ? "remove" : "pushDistinct"](self._startValue);
-            self.trigger.getSearcher().setState(self.storeValue);
-            self.trigger.getCounter().setButtonChecked(self.storeValue);
         };
-        this.storeValue = {};
 
-
-        this.popup = BI.createWidget({
+        this.adapter = BI.createWidget({
             type: "bi.multi_select_loader",
             cls: "popup-multi-string-list bi-border-left bi-border-right bi-border-bottom",
             itemsCreator: o.itemsCreator,
             valueFormatter: o.valueFormatter,
-            onLoaded: o.onLoaded,
+            // onLoaded: o.onLoaded,
             el: {
                 height: ""
             }
         });
-        this.popup.on(BI.MultiSelectLoader.EVENT_CHANGE, function () {
+        this.adapter.on(BI.MultiSelectLoader.EVENT_CHANGE, function () {
             self.storeValue = this.getValue();
             self._adjust(function () {
                 assertShowValue();
@@ -41,90 +38,105 @@ BI.MultiStringList = BI.inherit(BI.Widget, {
             });
         });
 
-        this.trigger = BI.createWidget({
-            type: "bi.multi_select_trigger",
-            height: o.height,
-            adapter: this.popup,
-            masker: {
-                offset: {
-                    left: 1,
-                    top: 0,
-                    right: 2,
-                    bottom: 1
-                }
-            },
+        this.searcherPane = BI.createWidget({
+            type: "bi.multi_select_search_pane",
+            cls: "bi-border-left bi-border-right bi-border-bottom",
             valueFormatter: o.valueFormatter,
+            keywordGetter: function () {
+                return self.trigger.getKeyword();
+            },
             itemsCreator: function (op, callback) {
-                o.itemsCreator(op, function (res) {
-                    if (op.times === 1 && BI.isNotNull(op.keyword)) {
-                        self.trigger.setValue(self.getValue());
-                    }
-                    callback.apply(self, arguments);
-                });
+                op.keyword = self.trigger.getKeyword();
+                this.setKeyword(op.keyword);
+                o.itemsCreator(op, callback);
             }
         });
+        this.searcherPane.setVisible(false);
 
-        this.trigger.on(BI.MultiSelectTrigger.EVENT_START, function () {
-            self._setStartValue("");
-            this.getSearcher().setValue(self.storeValue);
-        });
-        this.trigger.on(BI.MultiSelectTrigger.EVENT_STOP, function () {
-            self._setStartValue("");
-        });
-        this.trigger.on(BI.MultiSelectTrigger.EVENT_PAUSE, function () {
-            if (this.getSearcher().hasMatched()) {
-                var keyword = this.getSearcher().getKeyword();
-                self._join({
-                    type: BI.Selection.Multi,
-                    value: [keyword]
-                }, function () {
-                    self.trigger.setValue(self.storeValue);
-                    self.popup.setValue(self.storeValue);
-                    self._setStartValue(keyword);
-                    assertShowValue();
-                    self.populate();
+        this.trigger = BI.createWidget({
+            type: "bi.searcher",
+            isAutoSearch: false,
+            isAutoSync: false,
+            onSearch: function (op, callback) {
+                callback();
+            },
+            adapter: this.adapter,
+            popup: this.searcherPane,
+            height: 200,
+            masker: false,
+            listeners: [{
+                eventName: BI.Searcher.EVENT_START,
+                action: function () {
+                    self._showSearcherPane();
                     self._setStartValue("");
-                    self.fireEvent(BI.MultiStringList.EVENT_CHANGE);
-                })
-            }
-        });
-        this.trigger.on(BI.MultiSelectTrigger.EVENT_SEARCHING, function (keywords) {
-            var last = BI.last(keywords);
-            keywords = BI.initial(keywords || []);
-            if (keywords.length > 0) {
-                self._joinKeywords(keywords, function () {
-                    if (BI.isEndWithBlank(last)) {
-                        self.trigger.setValue(self.storeValue);
-                        self.popup.setValue(self.storeValue);
-                        assertShowValue();
-                        self.popup.populate();
-                        self._setStartValue("");
+                    this.setValue(self.storeValue);
+                }
+            }, {
+                eventName: BI.Searcher.EVENT_STOP,
+                action: function () {
+                    self._showAdapter();
+                    self._setStartValue("");
+                    self.adapter.setValue(self.storeValue);
+                }
+            }, {
+                eventName: BI.Searcher.EVENT_PAUSE,
+                action: function () {
+                    if (this.hasMatched()) {
+                        var keyword = this.getKeyword();
+                        self._join({
+                            type: BI.Selection.Multi,
+                            value: [keyword]
+                        }, function () {
+                            self._showAdapter();
+                            self.trigger.setValue(self.storeValue);
+                            self.adapter.setValue(self.storeValue);
+                            self._setStartValue(keyword);
+                            assertShowValue();
+                            self._setStartValue("");
+                            self.fireEvent(BI.MultiStringList.EVENT_CHANGE);
+                        })
                     } else {
-                        self.trigger.setValue(self.storeValue);
-                        self.popup.setValue(self.storeValue);
-                        assertShowValue();
+                        self._showAdapter();
                     }
-                });
-            }
+                }
+            }, {
+                eventName: BI.Searcher.EVENT_SEARCHING,
+                action: function () {
+                    var keywords = this.getKeyword();
+                    var last = BI.last(keywords);
+                    keywords = BI.initial(keywords || []);
+                    if (keywords.length > 0) {
+                        self._joinKeywords(keywords, function () {
+                            if (BI.isEndWithBlank(last)) {
+                                self.trigger.setValue(self.storeValue);
+                                self.adapter.setValue(self.storeValue);
+                                assertShowValue();
+                                self.adapter.populate();
+                                self._setStartValue("");
+                            } else {
+                                self.trigger.setValue(self.storeValue);
+                                self.adapter.setValue(self.storeValue);
+                                assertShowValue();
+                            }
+                        });
+                    }
+                }
+            }, {
+                eventName: BI.Searcher.EVENT_CHANGE,
+                action: function (value, obj) {
+                    if (obj instanceof BI.MultiSelectBar) {
+                        self._joinAll(this.getValue(), function () {
+                            assertShowValue();
+                        });
+                    } else {
+                        self._join(this.getValue(), function () {//安徽省 北京
+                            assertShowValue();
+                        });
+                    }
+                }
+            }]
         });
 
-        this.trigger.on(BI.MultiSelectTrigger.EVENT_CHANGE, function (value, obj) {
-            if (obj instanceof BI.MultiSelectBar) {
-                self._joinAll(this.getValue(), function () {
-                    assertShowValue();
-                });
-            } else {
-                self._join(this.getValue(), function () {//安徽省 北京
-                    assertShowValue();
-                });
-            }
-        });
-        this.trigger.on(BI.MultiSelectTrigger.EVENT_BEFORE_COUNTER_POPUPVIEW, function () {
-            this.getCounter().setValue(self.storeValue);
-        });
-        var div = BI.createWidget({
-            type: "bi.layout"
-        });
         BI.createWidget({
             type: "bi.vtape",
             element: this,
@@ -132,16 +144,37 @@ BI.MultiStringList = BI.inherit(BI.Widget, {
             width: "100%",
             items: [{
                 el: this.trigger,
-                height: 25
+                height: 30
             }, {
-                el: div,
-                height: 2
-            }, {
-                el: this.popup,
+                el: this.adapter,
                 height: "fill"
             }]
         });
+        BI.createWidget({
+            type: "bi.absolute",
+            element: this,
+            height: "100%",
+            width: "100%",
+            items: [{
+                el: this.searcherPane,
+                top: 30,
+                bottom: 0,
+                left: 0,
+                right: 0
+            }]
+        })
     },
+
+    _showAdapter: function () {
+        this.adapter.setVisible(true);
+        this.searcherPane.setVisible(false);
+    },
+
+    _showSearcherPane: function () {
+        this.searcherPane.setVisible(true);
+        this.adapter.setVisible(false);
+    },
+
     _defaultState: function () {
         this.trigger.stopEditing();
     },
@@ -186,7 +219,7 @@ BI.MultiStringList = BI.inherit(BI.Widget, {
         this._assertValue(res);
         o.itemsCreator({
             type: BI.MultiStringList.REQ_GET_ALL_DATA,
-            keyword: this.trigger.getKey()
+            keyword: self.trigger.getKeyword()
         }, function (ob) {
             var items = BI.pluck(ob.items, "value");
             if (self.storeValue.type === res.type) {
@@ -275,22 +308,21 @@ BI.MultiStringList = BI.inherit(BI.Widget, {
 
     _setStartValue: function (value) {
         this._startValue = value;
-        this.popup.setStartValue(value);
+        this.adapter.setStartValue(value);
     },
 
-    // isAllSelected: function () {
-    //     return this.popup.isAllSelected();
-    // },
+    isAllSelected: function () {
+        return this.adapter.isAllSelected();
+    },
 
     resize: function () {
-        this.trigger.getCounter().adjustView();
-        this.trigger.getSearcher().adjustView();
+        // this.trigger.getCounter().adjustView();
+        // this.trigger.adjustView();
     },
-
     setValue: function (v) {
         this.storeValue = v || {};
         this._assertValue(this.storeValue);
-        this.popup.setValue(this.storeValue);
+        this.adapter.setValue(this.storeValue);
         this.trigger.setValue(this.storeValue);
     },
 
@@ -301,7 +333,7 @@ BI.MultiStringList = BI.inherit(BI.Widget, {
     populate: function () {
         this._count = null;
         this._allData = null;
-        this.popup.populate.apply(this.popup, arguments);
+        this.adapter.populate.apply(this.adapter, arguments);
         this.trigger.populate.apply(this.trigger, arguments);
     }
 });
