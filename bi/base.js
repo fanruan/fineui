@@ -881,9 +881,14 @@ BI.BasicButton = BI.inherit(BI.Single, {
         return this.options.text;
     },
 
-    _setEnable: function (b) {
+    _setEnable: function (enable) {
         BI.BasicButton.superclass._setEnable.apply(this, arguments);
-        if (!b) {
+        if (enable === true) {
+            this.element.removeClass("base-disabled disabled");
+        } else if (enable === false) {
+            this.element.addClass("base-disabled disabled");
+        }
+        if (!enable) {
             if (this.options.shadow) {
                 this.$mask && this.$mask.setVisible(false);
             }

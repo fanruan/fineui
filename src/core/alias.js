@@ -1,4 +1,7 @@
 ;(function () {
+    if (!window.BI) {
+        window.BI = {};
+    }
     function isEmpty(value) {
         // 判断是否为空值
         var result = value === "" || value === null || value === undefined;
@@ -60,124 +63,6 @@
     }
 
     /**
-     * 把日期对象按照指定格式转化成字符串
-     *
-     *      @example
-     *      var date = new Date('Thu Dec 12 2013 00:00:00 GMT+0800');
-     *      var result = BI.date2Str(date, 'yyyy-MM-dd');//2013-12-12
-     *
-     * @class BI.date2Str
-     * @param date 日期
-     * @param format 日期格式
-     * @returns {String}
-     */
-    function date2Str(date, format) {
-        if (!date) {
-            return '';
-        }
-        // O(len(format))
-        var len = format.length, result = '';
-        if (len > 0) {
-            var flagch = format.charAt(0), start = 0, str = flagch;
-            for (var i = 1; i < len; i++) {
-                var ch = format.charAt(i);
-                if (flagch !== ch) {
-                    result += compileJFmt({
-                        'char': flagch,
-                        'str': str,
-                        'len': i - start
-                    }, date);
-                    flagch = ch;
-                    start = i;
-                    str = flagch;
-                } else {
-                    str += ch;
-                }
-            }
-            result += compileJFmt({
-                'char': flagch,
-                'str': str,
-                'len': len - start
-            }, date);
-        }
-        return result;
-
-        function compileJFmt(jfmt, date) {
-            var str = jfmt.str, len = jfmt.len, ch = jfmt['char'];
-            switch (ch) {
-                case 'E': //星期
-                    str = Date._DN[date.getDay()];
-                    break;
-                case 'y': //年
-                    if (len <= 3) {
-                        str = (date.getFullYear() + '').slice(2, 4);
-                    } else {
-                        str = date.getFullYear();
-                    }
-                    break;
-                case 'M': //月
-                    if (len > 2) {
-                        str = Date._MN[date.getMonth()];
-                    } else if (len < 2) {
-                        str = date.getMonth() + 1;
-                    } else {
-                        str = String.leftPad(date.getMonth() + 1 + '', 2, '0');
-                    }
-                    break;
-                case 'd': //日
-                    if (len > 1) {
-                        str = String.leftPad(date.getDate() + '', 2, '0');
-                    } else {
-                        str = date.getDate();
-                    }
-                    break;
-                case 'h': //时(12)
-                    var hour = date.getHours() % 12;
-                    if (hour === 0) {
-                        hour = 12;
-                    }
-                    if (len > 1) {
-                        str = String.leftPad(hour + '', 2, '0');
-                    } else {
-                        str = hour;
-                    }
-                    break;
-                case 'H': //时(24)
-                    if (len > 1) {
-                        str = String.leftPad(date.getHours() + '', 2, '0');
-                    } else {
-                        str = date.getHours();
-                    }
-                    break;
-                case 'm':
-                    if (len > 1) {
-                        str = String.leftPad(date.getMinutes() + '', 2, '0');
-                    } else {
-                        str = date.getMinutes();
-                    }
-                    break;
-                case 's':
-                    if (len > 1) {
-                        str = String.leftPad(date.getSeconds() + '', 2, '0');
-                    } else {
-                        str = date.getSeconds();
-                    }
-                    break;
-                case 'a':
-                    str = date.getHours() < 12 ? 'am' : 'pm';
-                    break;
-                case 'z':
-                    str = date.getTimezone();
-                    break;
-                default:
-                    str = jfmt.str;
-                    break;
-            }
-            return str;
-        }
-    };
-
-    /**
      * 数字格式
      */
     function _numberFormat(text, format) {
@@ -219,7 +104,8 @@
         } else {
             return left + '.' + right;
         }
-    };
+    }
+
     /**
      * 处理小数点右边小数部分
      * @param tright 右边内容
@@ -263,7 +149,7 @@
                 if (newnum.length > orilen) {
                     newnum = newnum.substr(1);
                 } else {
-                    newnum = BI.leftPad(newnum, orilen, '0');
+                    newnum = String.leftPad(newnum, orilen, '0');
                     result.leftPlus = false;
                 }
                 right = right.replace(/^[0-9]+/, newnum);
@@ -524,7 +410,7 @@
 
             return o;
         })(jo);
-    }
+    };
 
     BI.contentFormat = function (cv, fmt) {
         if (isEmpty(cv)) {
@@ -566,15 +452,122 @@
         return text;
     };
 
-    BI.leftPad = function (val, size, ch) {
-        var result = String(val);
-        if (!ch) {
-            ch = " ";
+    /**
+     * 把日期对象按照指定格式转化成字符串
+     *
+     *      @example
+     *      var date = new Date('Thu Dec 12 2013 00:00:00 GMT+0800');
+     *      var result = BI.date2Str(date, 'yyyy-MM-dd');//2013-12-12
+     *
+     * @class BI.date2Str
+     * @param date 日期
+     * @param format 日期格式
+     * @returns {String}
+     */
+    BI.date2Str = function (date, format) {
+        if (!date) {
+            return '';
         }
-        while (result.length < size) {
-            result = ch + result;
+        // O(len(format))
+        var len = format.length, result = '';
+        if (len > 0) {
+            var flagch = format.charAt(0), start = 0, str = flagch;
+            for (var i = 1; i < len; i++) {
+                var ch = format.charAt(i);
+                if (flagch !== ch) {
+                    result += compileJFmt({
+                        'char': flagch,
+                        'str': str,
+                        'len': i - start
+                    }, date);
+                    flagch = ch;
+                    start = i;
+                    str = flagch;
+                } else {
+                    str += ch;
+                }
+            }
+            result += compileJFmt({
+                'char': flagch,
+                'str': str,
+                'len': len - start
+            }, date);
         }
-        return result.toString();
+        return result;
+
+        function compileJFmt(jfmt, date) {
+            var str = jfmt.str, len = jfmt.len, ch = jfmt['char'];
+            switch (ch) {
+                case 'E': //星期
+                    str = Date._DN[date.getDay()];
+                    break;
+                case 'y': //年
+                    if (len <= 3) {
+                        str = (date.getFullYear() + '').slice(2, 4);
+                    } else {
+                        str = date.getFullYear();
+                    }
+                    break;
+                case 'M': //月
+                    if (len > 2) {
+                        str = Date._MN[date.getMonth()];
+                    } else if (len < 2) {
+                        str = date.getMonth() + 1;
+                    } else {
+                        str = String.leftPad(date.getMonth() + 1 + '', 2, '0');
+                    }
+                    break;
+                case 'd': //日
+                    if (len > 1) {
+                        str = String.leftPad(date.getDate() + '', 2, '0');
+                    } else {
+                        str = date.getDate();
+                    }
+                    break;
+                case 'h': //时(12)
+                    var hour = date.getHours() % 12;
+                    if (hour === 0) {
+                        hour = 12;
+                    }
+                    if (len > 1) {
+                        str = String.leftPad(hour + '', 2, '0');
+                    } else {
+                        str = hour;
+                    }
+                    break;
+                case 'H': //时(24)
+                    if (len > 1) {
+                        str = String.leftPad(date.getHours() + '', 2, '0');
+                    } else {
+                        str = date.getHours();
+                    }
+                    break;
+                case 'm':
+                    if (len > 1) {
+                        str = String.leftPad(date.getMinutes() + '', 2, '0');
+                    } else {
+                        str = date.getMinutes();
+                    }
+                    break;
+                case 's':
+                    if (len > 1) {
+                        str = String.leftPad(date.getSeconds() + '', 2, '0');
+                    } else {
+                        str = date.getSeconds();
+                    }
+                    break;
+                case 'a':
+                    str = date.getHours() < 12 ? 'am' : 'pm';
+                    break;
+                case 'z':
+                    str = date.getTimezone();
+                    break;
+                default:
+                    str = jfmt.str;
+                    break;
+            }
+            return str;
+        }
     };
 
     BI.object2Number = function (value) {

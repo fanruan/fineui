@@ -55,7 +55,6 @@ Date._QN = ["", BI.i18nText("BI-Quarter_1"),
     BI.i18nText("BI-Quarter_3"),
     BI.i18nText("BI-Quarter_4")];
 
-
 /** Adds the number of days array to the Date object. */
 Date._MD = [31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];
 
