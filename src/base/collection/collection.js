@@ -156,6 +156,7 @@ BI.CollectionView = BI.inherit(BI.Widget, {
             for (var i = 0, len = childrenToDisplay.length; i < len; i++) {
                 var datum = childrenToDisplay[i];
                 var index = BI.deepIndexOf(this.renderedKeys, datum.index);
+                var child;
                 if (index > -1) {
                     if (datum.width !== this.renderedCells[index]._width) {
                         this.renderedCells[index]._width = datum.width;
@@ -171,9 +172,9 @@ BI.CollectionView = BI.inherit(BI.Widget, {
                     if (this.renderedCells[index].top !== datum.y) {
                         this.renderedCells[index].el.element.css("top", datum.y + "px");
                     }
-                    renderedCells.push(this.renderedCells[index]);
+                    renderedCells.push(child = this.renderedCells[index]);
                 } else {
-                    var child = BI.createWidget(BI.extend({
+                    child = BI.createWidget(BI.extend({
                         type: "bi.label",
                         width: datum.width,
                         height: datum.height
@@ -264,8 +265,12 @@ BI.CollectionView = BI.inherit(BI.Widget, {
         return Math.max(0, this._height - this.options.height + (this.options.overflowY ? BI.DOM.getScrollWidth() : 0));
     },
 
-    _populate: function () {
+    _populate: function (items) {
         var o = this.options;
+        if (items && items !== this.options.items) {
+            this.options.items = items;
+            this._calculateSizeAndPositionData();
+        }
         if (o.items.length > 0) {
             this.container.setWidth(this._width);
             this.container.setHeight(this._height);
@@ -334,10 +339,21 @@ BI.CollectionView = BI.inherit(BI.Widget, {
         return this._getMaxScrollTop();
     },
 
+    //重新计算children
+    reRange: function () {
+        this.renderRange = {};
+    },
+
+    _clearChildren: function () {
+        this.container._children = {};
+        this.container.attr("items", []);
+    },
+
     restore: function () {
         BI.each(this.renderedCells, function (i, cell) {
-            cell.el.destroy();
+            cell.el._destroy();
         });
+        this._clearChildren();
         this.renderedCells = [];
         this.renderedKeys = [];
         this.renderRange = {};
@@ -346,10 +362,9 @@ BI.CollectionView = BI.inherit(BI.Widget, {
 
     populate: function (items) {
         if (items && items !== this.options.items) {
-            this.options.items = items;
-            this._calculateSizeAndPositionData();
+            this.restore();
         }
-        this._populate();
+        this._populate(items);
     }
 });
 BI.CollectionView.EVENT_SCROLL = "EVENT_SCROLL";

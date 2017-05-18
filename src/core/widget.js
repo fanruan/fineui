@@ -165,6 +165,7 @@ BI.Widget = BI.inherit(BI.OB, {
         this._mountChildren && this._mountChildren();
         BI.each(this._children, function (i, widget) {
             !self.isEnabled() && widget._setEnable(false);
+            !self.isValid() && widget._setValid(false);
             widget._mount && widget._mount();
         });
         this.mounted && this.mounted();
@@ -198,6 +199,18 @@ BI.Widget = BI.inherit(BI.OB, {
         });
     },
 
+    _setValid: function (valid) {
+        if (valid === true) {
+            this.options.invalid = false;
+        } else if (valid === false) {
+            this.options.invalid = true;
+        }
+        //递归将所有子组件使有效
+        BI.each(this._children, function (i, child) {
+            child._setValid && child._setValid(valid);
+        });
+    },
+
     setEnable: function (enable) {
         this._setEnable(enable);
         if (enable === true) {
@@ -222,6 +235,7 @@ BI.Widget = BI.inherit(BI.OB, {
 
     setValid: function (valid) {
         this.options.invalid = !valid;
+        this._setValid(valid);
         if (valid === true) {
             this.element.removeClass("base-invalid invalid");
         } else if (valid === false) {

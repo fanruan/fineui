@@ -175,7 +175,8 @@ BI.CollectionTable = BI.inherit(BI.Widget, {
 
     _populateScrollbar: function () {
         var o = this.options;
-        var regionSize = this.getRegionSize(), totalLeftColumnSize = 0, totalRightColumnSize = 0, totalColumnSize = 0, summaryColumnSizeArray = [], totalRowSize = o.items.length * o.rowSize;
+        var regionSize = this.getRegionSize(), totalLeftColumnSize = 0, totalRightColumnSize = 0, totalColumnSize = 0,
+            summaryColumnSizeArray = [], totalRowSize = o.items.length * o.rowSize;
         var freezeColLength = this._getFreezeColLength();
         BI.each(o.columnSize, function (i, size) {
             if (o.isNeedFreeze === true && o.freezeCols.contains(i)) {
@@ -216,7 +217,8 @@ BI.CollectionTable = BI.inherit(BI.Widget, {
 
     _populateTable: function () {
         var self = this, o = this.options;
-        var regionSize = this.getRegionSize(), totalLeftColumnSize = 0, totalRightColumnSize = 0, totalColumnSize = 0, summaryColumnSizeArray = [], totalRowSize = o.items.length * o.rowSize;
+        var regionSize = this.getRegionSize(), totalLeftColumnSize = 0, totalRightColumnSize = 0, totalColumnSize = 0,
+            summaryColumnSizeArray = [], totalRowSize = o.items.length * o.rowSize;
         var freezeColLength = this._getFreezeColLength();
         BI.each(o.columnSize, function (i, size) {
             if (o.isNeedFreeze === true && o.freezeCols.contains(i)) {
@@ -247,7 +249,7 @@ BI.CollectionTable = BI.inherit(BI.Widget, {
         var trh = otrh + this._scrollBarSize;
         var blw = oblw + this._scrollBarSize;
         var blh = oblh + this._scrollBarSize;
-        var brw = obrw+ this._scrollBarSize;
+        var brw = obrw + this._scrollBarSize;
         var brh = obrh + this._scrollBarSize;
 
         var digest = function (el) {
@@ -304,10 +306,10 @@ BI.CollectionTable = BI.inherit(BI.Widget, {
         run(this.bottomLeftItems, o.items, leftItems);
         run(this.bottomRightItems, o.items, rightItems);
 
-        this.topLeftCollection.populate(leftHeader);
-        this.topRightCollection.populate(rightHeader);
-        this.bottomLeftCollection.populate(leftItems);
-        this.bottomRightCollection.populate(rightItems);
+        this.topLeftCollection._populate(leftHeader);
+        this.topRightCollection._populate(rightHeader);
+        this.bottomLeftCollection._populate(leftItems);
+        this.bottomRightCollection._populate(rightItems);
     },
 
     _digest: function () {
@@ -427,8 +429,10 @@ BI.CollectionTable = BI.inherit(BI.Widget, {
             return;
         }
         if (this._isNeedDigest === true) {
+            this._reRange();
             this._digest();
         }
+        this._isNeedDigest = false;
         this._populateTable();
         this._populateScrollbar();
     },
@@ -521,6 +525,13 @@ BI.CollectionTable = BI.inherit(BI.Widget, {
         this.topRightCollection.restore();
         this.bottomLeftCollection.restore();
         this.bottomRightCollection.restore();
+    },
+
+    _reRange: function () {
+        this.topLeftCollection.reRange();
+        this.topRightCollection.reRange();
+        this.bottomLeftCollection.reRange();
+        this.bottomRightCollection.reRange();
     },
 
     restore: function () {

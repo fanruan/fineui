@@ -14487,6 +14487,7 @@ BI.Widget = BI.inherit(BI.OB, {
         this._mountChildren && this._mountChildren();
         BI.each(this._children, function (i, widget) {
             !self.isEnabled() && widget._setEnable(false);
+            !self.isValid() && widget._setValid(false);
             widget._mount && widget._mount();
         });
         this.mounted && this.mounted();
@@ -14520,6 +14521,18 @@ BI.Widget = BI.inherit(BI.OB, {
         });
     },
 
+    _setValid: function (valid) {
+        if (valid === true) {
+            this.options.invalid = false;
+        } else if (valid === false) {
+            this.options.invalid = true;
+        }
+        //递归将所有子组件使有效
+        BI.each(this._children, function (i, child) {
+            child._setValid && child._setValid(valid);
+        });
+    },
+
     setEnable: function (enable) {
         this._setEnable(enable);
         if (enable === true) {
@@ -14544,6 +14557,7 @@ BI.Widget = BI.inherit(BI.OB, {
 
     setValid: function (valid) {
         this.options.invalid = !valid;
+        this._setValid(valid);
         if (valid === true) {
             this.element.removeClass("base-invalid invalid");
         } else if (valid === false) {
@@ -15372,7 +15386,7 @@ BI.View = BI.inherit(BI.V, {
         BI.each(cardNames, function (i, name) {
             delete self._cards[name];
         });
-        this._cardLayouts[key] && this._cardLayouts[key].destroy();
+        this._cardLayouts[key] && this._cardLayouts[key]._destroy();
         return this;
     },
 
@@ -19906,6 +19920,9 @@ BI.PopoverSection = BI.inherit(BI.Widget, {
     }
 });
 BI.PopoverSection.EVENT_CLOSE = "EVENT_CLOSE";;(function () {
+    if (!window.BI) {
+        window.BI = {};
+    }
     function isEmpty(value) {
         // 判断是否为空值
         var result = value === "" || value === null || value === undefined;
@@ -19967,124 +19984,6 @@ BI.PopoverSection.EVENT_CLOSE = "EVENT_CLOSE";;(function () {
     }
 
     /**
-     * 把日期对象按照指定格式转化成字符串
-     *
-     *      @example
-     *      var date = new Date('Thu Dec 12 2013 00:00:00 GMT+0800');
-     *      var result = BI.date2Str(date, 'yyyy-MM-dd');//2013-12-12
-     *
-     * @class BI.date2Str
-     * @param date 日期
-     * @param format 日期格式
-     * @returns {String}
-     */
-    function date2Str(date, format) {
-        if (!date) {
-            return '';
-        }
-        // O(len(format))
-        var len = format.length, result = '';
-        if (len > 0) {
-            var flagch = format.charAt(0), start = 0, str = flagch;
-            for (var i = 1; i < len; i++) {
-                var ch = format.charAt(i);
-                if (flagch !== ch) {
-                    result += compileJFmt({
-                        'char': flagch,
-                        'str': str,
-                        'len': i - start
-                    }, date);
-                    flagch = ch;
-                    start = i;
-                    str = flagch;
-                } else {
-                    str += ch;
-                }
-            }
-            result += compileJFmt({
-                'char': flagch,
-                'str': str,
-                'len': len - start
-            }, date);
-        }
-        return result;
-
-        function compileJFmt(jfmt, date) {
-            var str = jfmt.str, len = jfmt.len, ch = jfmt['char'];
-            switch (ch) {
-                case 'E': //星期
-                    str = Date._DN[date.getDay()];
-                    break;
-                case 'y': //年
-                    if (len <= 3) {
-                        str = (date.getFullYear() + '').slice(2, 4);
-                    } else {
-                        str = date.getFullYear();
-                    }
-                    break;
-                case 'M': //月
-                    if (len > 2) {
-                        str = Date._MN[date.getMonth()];
-                    } else if (len < 2) {
-                        str = date.getMonth() + 1;
-                    } else {
-                        str = String.leftPad(date.getMonth() + 1 + '', 2, '0');
-                    }
-                    break;
-                case 'd': //日
-                    if (len > 1) {
-                        str = String.leftPad(date.getDate() + '', 2, '0');
-                    } else {
-                        str = date.getDate();
-                    }
-                    break;
-                case 'h': //时(12)
-                    var hour = date.getHours() % 12;
-                    if (hour === 0) {
-                        hour = 12;
-                    }
-                    if (len > 1) {
-                        str = String.leftPad(hour + '', 2, '0');
-                    } else {
-                        str = hour;
-                    }
-                    break;
-                case 'H': //时(24)
-                    if (len > 1) {
-                        str = String.leftPad(date.getHours() + '', 2, '0');
-                    } else {
-                        str = date.getHours();
-                    }
-                    break;
-                case 'm':
-                    if (len > 1) {
-                        str = String.leftPad(date.getMinutes() + '', 2, '0');
-                    } else {
-                        str = date.getMinutes();
-                    }
-                    break;
-                case 's':
-                    if (len > 1) {
-                        str = String.leftPad(date.getSeconds() + '', 2, '0');
-                    } else {
-                        str = date.getSeconds();
-                    }
-                    break;
-                case 'a':
-                    str = date.getHours() < 12 ? 'am' : 'pm';
-                    break;
-                case 'z':
-                    str = date.getTimezone();
-                    break;
-                default:
-                    str = jfmt.str;
-                    break;
-            }
-            return str;
-        }
-    };
-
-    /**
      * 数字格式
      */
     function _numberFormat(text, format) {
@@ -20126,7 +20025,8 @@ BI.PopoverSection.EVENT_CLOSE = "EVENT_CLOSE";;(function () {
         } else {
             return left + '.' + right;
         }
-    };
+    }
+
     /**
      * 处理小数点右边小数部分
      * @param tright 右边内容
@@ -20170,7 +20070,7 @@ BI.PopoverSection.EVENT_CLOSE = "EVENT_CLOSE";;(function () {
                 if (newnum.length > orilen) {
                     newnum = newnum.substr(1);
                 } else {
-                    newnum = BI.leftPad(newnum, orilen, '0');
+                    newnum = String.leftPad(newnum, orilen, '0');
                     result.leftPlus = false;
                 }
                 right = right.replace(/^[0-9]+/, newnum);
@@ -20431,7 +20331,7 @@ BI.PopoverSection.EVENT_CLOSE = "EVENT_CLOSE";;(function () {
 
             return o;
         })(jo);
-    }
+    };
 
     BI.contentFormat = function (cv, fmt) {
         if (isEmpty(cv)) {
@@ -20473,15 +20373,122 @@ BI.PopoverSection.EVENT_CLOSE = "EVENT_CLOSE";;(function () {
         return text;
     };
 
-    BI.leftPad = function (val, size, ch) {
-        var result = String(val);
-        if (!ch) {
-            ch = " ";
+    /**
+     * 把日期对象按照指定格式转化成字符串
+     *
+     *      @example
+     *      var date = new Date('Thu Dec 12 2013 00:00:00 GMT+0800');
+     *      var result = BI.date2Str(date, 'yyyy-MM-dd');//2013-12-12
+     *
+     * @class BI.date2Str
+     * @param date 日期
+     * @param format 日期格式
+     * @returns {String}
+     */
+    BI.date2Str = function (date, format) {
+        if (!date) {
+            return '';
         }
-        while (result.length < size) {
-            result = ch + result;
+        // O(len(format))
+        var len = format.length, result = '';
+        if (len > 0) {
+            var flagch = format.charAt(0), start = 0, str = flagch;
+            for (var i = 1; i < len; i++) {
+                var ch = format.charAt(i);
+                if (flagch !== ch) {
+                    result += compileJFmt({
+                        'char': flagch,
+                        'str': str,
+                        'len': i - start
+                    }, date);
+                    flagch = ch;
+                    start = i;
+                    str = flagch;
+                } else {
+                    str += ch;
+                }
+            }
+            result += compileJFmt({
+                'char': flagch,
+                'str': str,
+                'len': len - start
+            }, date);
         }
-        return result.toString();
+        return result;
+
+        function compileJFmt(jfmt, date) {
+            var str = jfmt.str, len = jfmt.len, ch = jfmt['char'];
+            switch (ch) {
+                case 'E': //星期
+                    str = Date._DN[date.getDay()];
+                    break;
+                case 'y': //年
+                    if (len <= 3) {
+                        str = (date.getFullYear() + '').slice(2, 4);
+                    } else {
+                        str = date.getFullYear();
+                    }
+                    break;
+                case 'M': //月
+                    if (len > 2) {
+                        str = Date._MN[date.getMonth()];
+                    } else if (len < 2) {
+                        str = date.getMonth() + 1;
+                    } else {
+                        str = String.leftPad(date.getMonth() + 1 + '', 2, '0');
+                    }
+                    break;
+                case 'd': //日
+                    if (len > 1) {
+                        str = String.leftPad(date.getDate() + '', 2, '0');
+                    } else {
+                        str = date.getDate();
+                    }
+                    break;
+                case 'h': //时(12)
+                    var hour = date.getHours() % 12;
+                    if (hour === 0) {
+                        hour = 12;
+                    }
+                    if (len > 1) {
+                        str = String.leftPad(hour + '', 2, '0');
+                    } else {
+                        str = hour;
+                    }
+                    break;
+                case 'H': //时(24)
+                    if (len > 1) {
+                        str = String.leftPad(date.getHours() + '', 2, '0');
+                    } else {
+                        str = date.getHours();
+                    }
+                    break;
+                case 'm':
+                    if (len > 1) {
+                        str = String.leftPad(date.getMinutes() + '', 2, '0');
+                    } else {
+                        str = date.getMinutes();
+                    }
+                    break;
+                case 's':
+                    if (len > 1) {
+                        str = String.leftPad(date.getSeconds() + '', 2, '0');
+                    } else {
+                        str = date.getSeconds();
+                    }
+                    break;
+                case 'a':
+                    str = date.getHours() < 12 ? 'am' : 'pm';
+                    break;
+                case 'z':
+                    str = date.getTimezone();
+                    break;
+                default:
+                    str = jfmt.str;
+                    break;
+            }
+            return str;
+        }
     };
 
     BI.object2Number = function (value) {
@@ -22638,284 +22645,280 @@ BI.extend(jQuery, {
  * 基本的函数
  * Created by GUY on 2015/6/24.
  */
-$(function () {
-    BI.Func = {};
-    var formulas = {};
-    BI.extend(BI.Func, {
-
-        /**
-         * 获取搜索结果
-         * @param items
-         * @param keyword
-         * @param param  搜索哪个属性
-         */
-        getSearchResult: function (items, keyword, param) {
-            var isArray = BI.isArray(items);
-            items = isArray ? BI.flatten(items) : items;
-            param || (param = "text");
-            if (!BI.isKey(keyword)) {
-                return {
-                    finded: BI.deepClone(items),
-                    matched: isArray ? [] : {}
-                };
-            }
-            var t, text, py;
-            keyword = keyword + "";
-            keyword = BI.toUpperCase(keyword);
-            var matched = isArray ? [] : {}, finded = isArray ? [] : {};
-            BI.each(items, function (i, item) {
-                item = BI.deepClone(item);
-                t = BI.stripEL(item);
-                text = t[param] || t.text || t.value || t.name || t;
-                py = BI.makeFirstPY(text);
-                text = BI.toUpperCase(text);
-                py = BI.toUpperCase(py);
-                var pidx;
-                if (text.indexOf(keyword) > -1) {
-                    if (text === keyword) {
-                        isArray ? matched.push(item) : (matched[i] = item);
-                    } else {
-                        isArray ? finded.push(item) : (finded[i] = item);
-                    }
-                } else if (pidx = py.indexOf(keyword), (pidx > -1 && Math.floor(pidx / text.length) === Math.floor((pidx + keyword.length - 1) / text.length))) {
-                    if (text === keyword || keyword.length === text.length) {
-                        isArray ? matched.push(item) : (matched[i] = item);
-                    } else {
-                        isArray ? finded.push(item) : (finded[i] = item);
-                    }
-                }
-            });
-            return {
-                matched: matched,
-                finded: finded
-            }
-        },
-    });
+BI.Func = {};
+BI.extend(BI.Func, {
 
     /**
-     * 对DOM操作的通用函数
-     * @type {{}}
+     * 获取搜索结果
+     * @param items
+     * @param keyword
+     * @param param  搜索哪个属性
      */
-    BI.DOM = {};
-    BI.extend(BI.DOM, {
-
-        /**
-         * 把dom数组或元素悬挂起来,使其不对html产生影响
-         * @param dom
-         */
-        hang: function (doms) {
-            if (BI.isEmpty(doms)) {
-                return;
-            }
-            var frag = document.createDocumentFragment();
-            BI.each(doms, function (i, dom) {
-                dom instanceof BI.Widget && (dom = dom.element);
-                dom instanceof $ && dom[0] && frag.appendChild(dom[0]);
-            });
-            return frag;
-        },
-
-        isExist: function (obj) {
-            return $("body").find(obj.element).length > 0;
-        },
-
-        //预加载图片
-        preloadImages: function (srcArray, onload) {
-            var count = 0, images = [];
-
-            function complete() {
-                count++;
-                if (count >= srcArray.length) {
-                    onload();
+    getSearchResult: function (items, keyword, param) {
+        var isArray = BI.isArray(items);
+        items = isArray ? BI.flatten(items) : items;
+        param || (param = "text");
+        if (!BI.isKey(keyword)) {
+            return {
+                finded: BI.deepClone(items),
+                matched: isArray ? [] : {}
+            };
+        }
+        var t, text, py;
+        keyword = BI.toUpperCase(keyword);
+        var matched = isArray ? [] : {}, finded = isArray ? [] : {};
+        BI.each(items, function (i, item) {
+            item = BI.deepClone(item);
+            t = BI.stripEL(item);
+            text = t[param] || t.text || t.value || t.name || t;
+            py = BI.makeFirstPY(text);
+            text = BI.toUpperCase(text);
+            py = BI.toUpperCase(py);
+            var pidx;
+            if (text.indexOf(keyword) > -1) {
+                if (text === keyword) {
+                    isArray ? matched.push(item) : (matched[i] = item);
+                } else {
+                    isArray ? finded.push(item) : (finded[i] = item);
+                }
+            } else if (pidx = py.indexOf(keyword), (pidx > -1 && Math.floor(pidx / text.length) === Math.floor((pidx + keyword.length - 1) / text.length))) {
+                if (text === keyword || keyword.length === text.length) {
+                    isArray ? matched.push(item) : (matched[i] = item);
+                } else {
+                    isArray ? finded.push(item) : (finded[i] = item);
                 }
             }
-
-            BI.each(srcArray, function (i, src) {
-                images[i] = new Image();
-                images[i].src = src;
-                images[i].onload = function () {
-                    complete()
-                };
-                images[i].onerror = function () {
-                    complete()
-                };
-            });
-        },
-
-        isColor: function (color) {
-            return this.isRGBColor(color) || this.isHexColor(color);
-        },
-
-        isRGBColor: function (color) {
-            if (!color) {
-                return false;
-            }
-            return color.substr(0, 3) === "rgb";
-        },
-
-        isHexColor: function (color) {
-            if (!color) {
-                return false;
-            }
-            return color[0] === "#" && color.length === 7;
-        },
-
-        isDarkColor: function (hex) {
-            if (!hex) {
-                return false;
-            }
-            var rgb = this.rgb2json(this.hex2rgb(hex));
-            var grayLevel = Math.round(rgb.r * 0.299 + rgb.g * 0.587 + rgb.b * 0.114);
-            if (grayLevel < 140) {
-                return true;
-            }
-            return false;
-        },
-
-        //获取对比颜色
-        getContrastColor: function (color) {
-            if (!color) {
-                return "";
-            }
-            if (this.isDarkColor(color)) {
-                return "#ffffff";
-            }
-            return "#1a1a1a";
-        },
-
-        rgb2hex: function (rgbColour) {
-            if (!rgbColour || rgbColour.substr(0, 3) != "rgb") {
-                return "";
-            }
-            var rgbValues = rgbColour.match(/\d+(\.\d+)?/g);
-            var red = BI.parseInt(rgbValues[0]);
-            var green = BI.parseInt(rgbValues[1]);
-            var blue = BI.parseInt(rgbValues[2]);
-
-            var hexColour = "#" + this.int2hex(red) + this.int2hex(green) + this.int2hex(blue);
-
-            return hexColour;
-        },
-
-        rgb2json: function (rgbColour) {
-            if (!rgbColour) {
-                return {};
-            }
-            var rgbValues = rgbColour.match(/\d+(\.\d+)?/g);
-            return {
-                r: BI.parseInt(rgbValues[0]),
-                g: BI.parseInt(rgbValues[1]),
-                b: BI.parseInt(rgbValues[2])
-            };
-        },
-
-        rgba2json: function (rgbColour) {
-            if (!rgbColour) {
-                return {};
-            }
-            var rgbValues = rgbColour.match(/\d+(\.\d+)?/g);
-            return {
-                r: BI.parseInt(rgbValues[0]),
-                g: BI.parseInt(rgbValues[1]),
-                b: BI.parseInt(rgbValues[2]),
-                a: BI.parseFloat(rgbValues[3])
-            };
-        },
-
-        json2rgb: function (rgb) {
-            if (!BI.isKey(rgb.r) || !BI.isKey(rgb.g) || !BI.isKey(rgb.b)) {
-                return "";
-            }
-            return "rgb(" + rgb.r + "," + rgb.g + "," + rgb.b + ")";
-        },
-
-        json2rgba: function (rgba) {
-            if (!BI.isKey(rgba.r) || !BI.isKey(rgba.g) || !BI.isKey(rgba.b)) {
-                return "";
-            }
-            return "rgba(" + rgba.r + "," + rgba.g + "," + rgba.b + "," + rgba.a + ")";
-        },
-
-        int2hex: function (strNum) {
-            var hexdig = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'a', 'b', 'c', 'd', 'e', 'f'];
-
-            return hexdig[strNum >>> 4] + '' + hexdig[strNum & 15];
-        },
-
-        hex2rgb: function (color) {
-            if (!color) {
-                return "";
-            }
-            var tempValue = "rgb(", colorArray;
-
-            if (color.length === 7) {
-                colorArray = [BI.parseInt('0x' + color.substring(1, 3)),
-                    BI.parseInt('0x' + color.substring(3, 5)),
-                    BI.parseInt('0x' + color.substring(5, 7))];
-            }
-            else if (color.length === 4) {
-                colorArray = [BI.parseInt('0x' + color.substring(1, 2)),
-                    BI.parseInt('0x' + color.substring(2, 3)),
-                    BI.parseInt('0x' + color.substring(3, 4))];
-            }
-            tempValue += colorArray[0] + ",";
-            tempValue += colorArray[1] + ",";
-            tempValue += colorArray[2] + ")";
-
-            return tempValue;
-        },
-
-        rgba2rgb: function (rgbColour, BGcolor) {
-            if (BI.isNull(BGcolor)) {
-                BGcolor = 1;
-            }
-            if (rgbColour.substr(0, 4) != "rgba") {
-                return "";
-            }
-            var rgbValues = rgbColour.match(/\d+(\.\d+)?/g);
-            if (rgbValues.length < 4) {
-                return "";
-            }
-            var R = BI.parseFloat(rgbValues[0]);
-            var G = BI.parseFloat(rgbValues[1]);
-            var B = BI.parseFloat(rgbValues[2]);
-            var A = BI.parseFloat(rgbValues[3]);
-
-            return "rgb(" + Math.floor(255 * (BGcolor * (1 - A )) + R * A) + "," +
-                Math.floor(255 * (BGcolor * (1 - A )) + G * A) + "," +
-                Math.floor(255 * (BGcolor * (1 - A )) + B * A) + ")";
-        },
-
-        getTextSizeWidth: function (text, fontSize) {
-            var span = $("<span></span>").addClass("text-width-span").appendTo($("body"));
-
-            if (fontSize == null) {
-                fontSize = 12;
-            }
-            fontSize = fontSize + "px";
-
-            span.css("font-size", fontSize).text(text);
-
-            var width = span.width();
-            span.remove();
-
-            return width;
-        },
-
-        //获取滚动条的宽度
-        getScrollWidth: function () {
-            if (this._scrollWidth == null) {
-                var ul = $("<div>").width(50).height(50).css({
-                    position: "absolute",
-                    top: "-9999px",
-                    overflow: "scroll"
-                }).appendTo($("body"));
-                this._scrollWidth = ul[0].offsetWidth - ul[0].clientWidth;
-                ul.destroy();
-            }
-            return this._scrollWidth;
+        });
+        return {
+            matched: matched,
+            finded: finded
         }
-    });
+    },
+});
+
+/**
+ * 对DOM操作的通用函数
+ * @type {{}}
+ */
+BI.DOM = {};
+BI.extend(BI.DOM, {
+
+    /**
+     * 把dom数组或元素悬挂起来,使其不对html产生影响
+     * @param dom
+     */
+    hang: function (doms) {
+        if (BI.isEmpty(doms)) {
+            return;
+        }
+        var frag = document.createDocumentFragment();
+        BI.each(doms, function (i, dom) {
+            dom instanceof BI.Widget && (dom = dom.element);
+            dom instanceof $ && dom[0] && frag.appendChild(dom[0]);
+        });
+        return frag;
+    },
+
+    isExist: function (obj) {
+        return $("body").find(obj.element).length > 0;
+    },
+
+    //预加载图片
+    preloadImages: function (srcArray, onload) {
+        var count = 0, images = [];
+
+        function complete() {
+            count++;
+            if (count >= srcArray.length) {
+                onload();
+            }
+        }
+
+        BI.each(srcArray, function (i, src) {
+            images[i] = new Image();
+            images[i].src = src;
+            images[i].onload = function () {
+                complete()
+            };
+            images[i].onerror = function () {
+                complete()
+            };
+        });
+    },
+
+    isColor: function (color) {
+        return this.isRGBColor(color) || this.isHexColor(color);
+    },
+
+    isRGBColor: function (color) {
+        if (!color) {
+            return false;
+        }
+        return color.substr(0, 3) === "rgb";
+    },
+
+    isHexColor: function (color) {
+        if (!color) {
+            return false;
+        }
+        return color[0] === "#" && color.length === 7;
+    },
+
+    isDarkColor: function (hex) {
+        if (!hex) {
+            return false;
+        }
+        var rgb = this.rgb2json(this.hex2rgb(hex));
+        var grayLevel = Math.round(rgb.r * 0.299 + rgb.g * 0.587 + rgb.b * 0.114);
+        if (grayLevel < 140) {
+            return true;
+        }
+        return false;
+    },
+
+    //获取对比颜色
+    getContrastColor: function (color) {
+        if (!color) {
+            return "";
+        }
+        if (this.isDarkColor(color)) {
+            return "#ffffff";
+        }
+        return "#1a1a1a";
+    },
+
+    rgb2hex: function (rgbColour) {
+        if (!rgbColour || rgbColour.substr(0, 3) != "rgb") {
+            return "";
+        }
+        var rgbValues = rgbColour.match(/\d+(\.\d+)?/g);
+        var red = BI.parseInt(rgbValues[0]);
+        var green = BI.parseInt(rgbValues[1]);
+        var blue = BI.parseInt(rgbValues[2]);
+
+        var hexColour = "#" + this.int2hex(red) + this.int2hex(green) + this.int2hex(blue);
+
+        return hexColour;
+    },
+
+    rgb2json: function (rgbColour) {
+        if (!rgbColour) {
+            return {};
+        }
+        var rgbValues = rgbColour.match(/\d+(\.\d+)?/g);
+        return {
+            r: BI.parseInt(rgbValues[0]),
+            g: BI.parseInt(rgbValues[1]),
+            b: BI.parseInt(rgbValues[2])
+        };
+    },
+
+    rgba2json: function (rgbColour) {
+        if (!rgbColour) {
+            return {};
+        }
+        var rgbValues = rgbColour.match(/\d+(\.\d+)?/g);
+        return {
+            r: BI.parseInt(rgbValues[0]),
+            g: BI.parseInt(rgbValues[1]),
+            b: BI.parseInt(rgbValues[2]),
+            a: BI.parseFloat(rgbValues[3])
+        };
+    },
+
+    json2rgb: function (rgb) {
+        if (!BI.isKey(rgb.r) || !BI.isKey(rgb.g) || !BI.isKey(rgb.b)) {
+            return "";
+        }
+        return "rgb(" + rgb.r + "," + rgb.g + "," + rgb.b + ")";
+    },
+
+    json2rgba: function (rgba) {
+        if (!BI.isKey(rgba.r) || !BI.isKey(rgba.g) || !BI.isKey(rgba.b)) {
+            return "";
+        }
+        return "rgba(" + rgba.r + "," + rgba.g + "," + rgba.b + "," + rgba.a + ")";
+    },
+
+    int2hex: function (strNum) {
+        var hexdig = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'a', 'b', 'c', 'd', 'e', 'f'];
+
+        return hexdig[strNum >>> 4] + '' + hexdig[strNum & 15];
+    },
+
+    hex2rgb: function (color) {
+        if (!color) {
+            return "";
+        }
+        var tempValue = "rgb(", colorArray;
+
+        if (color.length === 7) {
+            colorArray = [BI.parseInt('0x' + color.substring(1, 3)),
+                BI.parseInt('0x' + color.substring(3, 5)),
+                BI.parseInt('0x' + color.substring(5, 7))];
+        }
+        else if (color.length === 4) {
+            colorArray = [BI.parseInt('0x' + color.substring(1, 2)),
+                BI.parseInt('0x' + color.substring(2, 3)),
+                BI.parseInt('0x' + color.substring(3, 4))];
+        }
+        tempValue += colorArray[0] + ",";
+        tempValue += colorArray[1] + ",";
+        tempValue += colorArray[2] + ")";
+
+        return tempValue;
+    },
+
+    rgba2rgb: function (rgbColour, BGcolor) {
+        if (BI.isNull(BGcolor)) {
+            BGcolor = 1;
+        }
+        if (rgbColour.substr(0, 4) != "rgba") {
+            return "";
+        }
+        var rgbValues = rgbColour.match(/\d+(\.\d+)?/g);
+        if (rgbValues.length < 4) {
+            return "";
+        }
+        var R = BI.parseFloat(rgbValues[0]);
+        var G = BI.parseFloat(rgbValues[1]);
+        var B = BI.parseFloat(rgbValues[2]);
+        var A = BI.parseFloat(rgbValues[3]);
+
+        return "rgb(" + Math.floor(255 * (BGcolor * (1 - A )) + R * A) + "," +
+            Math.floor(255 * (BGcolor * (1 - A )) + G * A) + "," +
+            Math.floor(255 * (BGcolor * (1 - A )) + B * A) + ")";
+    },
+
+    getTextSizeWidth: function (text, fontSize) {
+        var span = $("<span></span>").addClass("text-width-span").appendTo($("body"));
+
+        if (fontSize == null) {
+            fontSize = 12;
+        }
+        fontSize = fontSize + "px";
+
+        span.css("font-size", fontSize).text(text);
+
+        var width = span.width();
+        span.remove();
+
+        return width;
+    },
+
+    //获取滚动条的宽度
+    getScrollWidth: function () {
+        if (this._scrollWidth == null) {
+            var ul = $("<div>").width(50).height(50).css({
+                position: "absolute",
+                top: "-9999px",
+                overflow: "scroll"
+            }).appendTo($("body"));
+            this._scrollWidth = ul[0].offsetWidth - ul[0].clientWidth;
+            ul.destroy();
+        }
+        return this._scrollWidth;
+    }
 });/**
  * guy
  * 检测某个Widget的EventChange事件然后去show某个card
@@ -23528,7 +23531,6 @@ Date._QN = ["", BI.i18nText("BI-Quarter_1"),
     BI.i18nText("BI-Quarter_3"),
     BI.i18nText("BI-Quarter_4")];
 
-
 /** Adds the number of days array to the Date object. */
 Date._MD = [31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];
 
@@ -24002,7 +24004,8 @@ Date.parseDateTime = function (str, fmt) {
         return new Date(y, m, d, hr, min, sec);
     }
     return today;
-};/*
+};
+/*
  * 给jQuery.Event对象添加的工具方法
  */
 $.extend($.Event.prototype, {

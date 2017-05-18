@@ -123,6 +123,7 @@ BI.GridView = BI.inherit(BI.Widget, {
 
             var renderedCells = [], renderedKeys = [], renderedWidgets = {};
             var minX = this._getMaxScrollLeft(), minY = this._getMaxScrollTop(), maxX = 0, maxY = 0;
+            var count = 0;
             for (var rowIndex = rowStartIndex; rowIndex <= rowStopIndex; rowIndex++) {
                 var rowDatum = this._rowSizeAndPositionManager.getSizeAndPositionOfCell(rowIndex);
 
@@ -131,6 +132,7 @@ BI.GridView = BI.inherit(BI.Widget, {
                     var columnDatum = this._columnSizeAndPositionManager.getSizeAndPositionOfCell(columnIndex);
 
                     var index = BI.deepIndexOf(this.renderedKeys, key);
+                    var child;
                     if (index > -1) {
                         if (columnDatum.size !== this.renderedCells[index]._width) {
                             this.renderedCells[index]._width = columnDatum.size;
@@ -146,9 +148,9 @@ BI.GridView = BI.inherit(BI.Widget, {
                         if (this.renderedCells[index].top !== rowDatum.offset + verticalOffsetAdjustment) {
                             this.renderedCells[index].el.element.css("top", (rowDatum.offset + verticalOffsetAdjustment) + "px");
                         }
-                        renderedCells.push(this.renderedCells[index]);
+                        renderedCells.push(child = this.renderedCells[index]);
                     } else {
-                        var child = BI.createWidget(BI.extend({
+                        child = BI.createWidget(BI.extend({
                             type: "bi.label",
                             width: columnDatum.size,
                             height: rowDatum.size
@@ -172,7 +174,7 @@ BI.GridView = BI.inherit(BI.Widget, {
                     minY = Math.min(minY, rowDatum.offset + verticalOffsetAdjustment);
                     maxY = Math.max(maxY, rowDatum.offset + verticalOffsetAdjustment + rowDatum.size);
                     renderedKeys.push(key);
-                    renderedWidgets[i] = child;
+                    renderedWidgets[count++] = child;
                 }
             }
             //已存在的， 需要添加的和需要删除的
@@ -219,8 +221,11 @@ BI.GridView = BI.inherit(BI.Widget, {
         return Math.max(0, this._rowSizeAndPositionManager.getTotalSize() - this.options.height + (this.options.overflowY ? BI.DOM.getScrollWidth() : 0));
     },
 
-    _populate: function () {
+    _populate: function (items) {
         var self = this, o = this.options;
+        if (items && items !== this.options.items) {
+            this.options.items = items;
+        }
         if (o.items.length > 0) {
             this.columnCount = o.items[0].length;
             this.rowCount = o.items.length;
@@ -305,10 +310,21 @@ BI.GridView = BI.inherit(BI.Widget, {
         this.options.estimatedRowSize = height;
     },
 
+    //重新计算children
+    reRange: function () {
+        this.renderRange = {};
+    },
+
+    _clearChildren: function () {
+        this.container._children = {};
+        this.container.attr("items", []);
+    },
+
     restore: function () {
         BI.each(this.renderedCells, function (i, cell) {
-            cell.el.destroy();
+            cell.el._destroy();
         });
+        this._clearChildren();
         this.renderedCells = [];
         this.renderedKeys = [];
         this.renderRange = {};
@@ -317,10 +333,9 @@ BI.GridView = BI.inherit(BI.Widget, {
 
     populate: function (items) {
         if (items && items !== this.options.items) {
-            this.options.items = items;
             this.restore();
         }
-        this._populate();
+        this._populate(items);
     }
 });
 BI.GridView.EVENT_SCROLL = "EVENT_SCROLL";
