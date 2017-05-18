@@ -881,9 +881,14 @@ BI.BasicButton = BI.inherit(BI.Single, {
         return this.options.text;
     },
 
-    setEnable: function (b) {
-        BI.BasicButton.superclass.setEnable.apply(this, arguments);
-        if (!b) {
+    _setEnable: function (enable) {
+        BI.BasicButton.superclass._setEnable.apply(this, arguments);
+        if (enable === true) {
+            this.element.removeClass("base-disabled disabled");
+        } else if (enable === false) {
+            this.element.addClass("base-disabled disabled");
+        }
+        if (!enable) {
             if (this.options.shadow) {
                 this.$mask && this.$mask.setVisible(false);
             }
@@ -1164,13 +1169,6 @@ BI.ButtonGroup = BI.inherit(BI.Widget, {
         }
 
         this.layouts = BI.createWidget(BI.extend({element: this}, this._packageLayout(items)));
-    },
-
-    setEnable: function (b) {
-        BI.ButtonGroup.superclass.setEnable.apply(this, arguments);
-        BI.each(this.buttons, function (i, item) {
-            item.setEnable(b);
-        });
     },
 
     setNotSelectedValue: function (v) {
@@ -2511,15 +2509,15 @@ BI.Canvas = BI.inherit(BI.Widget, {
     }
 });
 BI.shortcut("bi.canvas", BI.Canvas);/**
- * Collection
+ * CollectionView
  *
  * Created by GUY on 2016/1/15.
- * @class BI.Collection
+ * @class BI.CollectionView
  * @extends BI.Widget
  */
-BI.Collection = BI.inherit(BI.Widget, {
+BI.CollectionView = BI.inherit(BI.Widget, {
     _defaultConfig: function () {
-        return BI.extend(BI.Collection.superclass._defaultConfig.apply(this, arguments), {
+        return BI.extend(BI.CollectionView.superclass._defaultConfig.apply(this, arguments), {
             baseCls: "bi-collection",
             width: 400,
             height: 300,
@@ -2535,7 +2533,7 @@ BI.Collection = BI.inherit(BI.Widget, {
     },
 
     _init: function () {
-        BI.Collection.superclass._init.apply(this, arguments);
+        BI.CollectionView.superclass._init.apply(this, arguments);
         var self = this, o = this.options;
         this.renderedCells = [];
         this.renderedKeys = [];
@@ -2554,7 +2552,7 @@ BI.Collection = BI.inherit(BI.Widget, {
             o.scrollLeft = self.element.scrollLeft();
             o.scrollTop = self.element.scrollTop();
             self._calculateChildrenToRender();
-            self.fireEvent(BI.Collection.EVENT_SCROLL, {
+            self.fireEvent(BI.CollectionView.EVENT_SCROLL, {
                 scrollLeft: o.scrollLeft,
                 scrollTop: o.scrollTop
             });
@@ -2639,7 +2637,7 @@ BI.Collection = BI.inherit(BI.Widget, {
                 return;
             }
             var childrenToDisplay = this._cellRenderers(bottom - top, right - left, left, top);
-            var renderedCells = [], renderedKeys = [];
+            var renderedCells = [], renderedKeys = [], renderedWidgets = {};
             //存储所有的left和top
             var lefts = {}, tops = {};
             for (var i = 0, len = childrenToDisplay.length; i < len; i++) {
@@ -2722,6 +2720,7 @@ BI.Collection = BI.inherit(BI.Widget, {
                 }
 
                 renderedKeys.push(datum.index);
+                renderedWidgets[i] = child;
             }
             //已存在的， 需要添加的和需要删除的
             var existSet = {}, addSet = {}, deleteArray = [];
@@ -2742,13 +2741,17 @@ BI.Collection = BI.inherit(BI.Widget, {
                 deleteArray.push(i);
             });
             BI.each(deleteArray, function (i, index) {
-                self.renderedCells[index].el.destroy();
+                //性能优化，不调用destroy方法防止触发destroy事件
+                self.renderedCells[index].el._destroy();
             });
             var addedItems = [];
             BI.each(addSet, function (index) {
                 addedItems.push(renderedCells[index])
             });
             this.container.addItems(addedItems);
+            //拦截父子级关系
+            this.container._children = renderedWidgets;
+            this.container.attr("items", renderedCells);
             this.renderedCells = renderedCells;
             this.renderedKeys = renderedKeys;
 
@@ -2859,8 +2862,8 @@ BI.Collection = BI.inherit(BI.Widget, {
         this._populate();
     }
 });
-BI.Collection.EVENT_SCROLL = "EVENT_SCROLL";
-BI.shortcut('bi.collection_view', BI.Collection);/**
+BI.CollectionView.EVENT_SCROLL = "EVENT_SCROLL";
+BI.shortcut('bi.collection_view', BI.CollectionView);/**
  * @class BI.Combo
  * @extends BI.Widget
  */
@@ -3187,10 +3190,8 @@ BI.Combo = BI.inherit(BI.Widget, {
         this.combo.populate.apply(this.combo, arguments);
     },
 
-    setEnable: function (arg) {
-        BI.Combo.superclass.setEnable.apply(this, arguments);
-        this.combo && this.combo.setEnable(arg);
-        this.popupView && this.popupView.setEnable(arg);
+    _setEnable: function (arg) {
+        BI.Combo.superclass._setEnable.apply(this, arguments);
         !arg && this.isViewVisible() && this._hideView();
     },
 
@@ -3299,7 +3300,7 @@ BI.Expander = BI.inherit(BI.Widget, {
                     self.fireEvent(BI.Controller.EVENT_CHANGE, arguments);
                     self.fireEvent(BI.Expander.EVENT_EXPAND);
                 }
-                if(type === BI.Events.COLLAPSE) {
+                if (type === BI.Events.COLLAPSE) {
                     self.fireEvent(BI.Controller.EVENT_CHANGE, arguments);
                     self.fireEvent(BI.Expander.EVENT_COLLAPSE);
                 }
@@ -3456,11 +3457,9 @@ BI.Expander = BI.inherit(BI.Widget, {
         this.expander.populate.apply(this.expander, arguments);
     },
 
-    setEnable: function (arg) {
-        BI.Expander.superclass.setEnable.apply(this, arguments);
-        this.expander && this.expander.setEnable(arg);
-        this.popupView && this.popupView.setEnable(arg);
-        !arg && this._hideView();
+    _setEnable: function (arg) {
+        BI.Expander.superclass._setEnable.apply(this, arguments);
+        !arg && this.isViewVisible() && this._hideView();
     },
 
     setValue: function (v) {
@@ -3618,11 +3617,6 @@ BI.ComboGroup = BI.inherit(BI.Widget, {
                 self.fireEvent(BI.ComboGroup.EVENT_CHANGE, obj);
             }
         })
-    },
-
-    setEnable: function (b) {
-        BI.ComboGroup.superclass.setEnable.apply(this, arguments);
-        this.combo && this.combo.setEnable(b);
     },
 
     getValue: function () {
@@ -3913,10 +3907,6 @@ BI.Loader = BI.inherit(BI.Widget, {
             }
         }
         this.button_group.populate.apply(this.button_group, arguments);
-    },
-
-    setEnable: function (v) {
-        this.button_group.setEnable(v);
     },
 
     doBehavior: function () {
@@ -4624,11 +4614,9 @@ BI.Switcher = BI.inherit(BI.Widget, {
         this.switcher.populate.apply(this.switcher, arguments);
     },
 
-    setEnable: function (arg) {
-        BI.Switcher.superclass.setEnable.apply(this, arguments);
-        this.switcher && this.switcher.setEnable(arg);
-        this.popupView && this.popupView.setEnable(arg);
-        !arg && this._hideView();
+    _setEnable: function (arg) {
+        BI.Switcher.superclass._setEnable.apply(this, arguments);
+        !arg && this.isViewVisible() && this._hideView();
     },
 
     setValue: function (v) {
@@ -14646,15 +14634,15 @@ $.extend(BI, {
         };
     }()
 });/**
- * Grid
+ * GridView
  *
  * Created by GUY on 2016/1/11.
- * @class BI.Grid
+ * @class BI.GridView
  * @extends BI.Widget
  */
-BI.Grid = BI.inherit(BI.Widget, {
+BI.GridView = BI.inherit(BI.Widget, {
     _defaultConfig: function () {
-        return BI.extend(BI.Grid.superclass._defaultConfig.apply(this, arguments), {
+        return BI.extend(BI.GridView.superclass._defaultConfig.apply(this, arguments), {
             baseCls: "bi-grid-view",
             width: 400,
             height: 300,
@@ -14673,7 +14661,7 @@ BI.Grid = BI.inherit(BI.Widget, {
     },
 
     _init: function () {
-        BI.Grid.superclass._init.apply(this, arguments);
+        BI.GridView.superclass._init.apply(this, arguments);
         var self = this, o = this.options;
         this.renderedCells = [];
         this.renderedKeys = [];
@@ -14692,7 +14680,7 @@ BI.Grid = BI.inherit(BI.Widget, {
             o.scrollLeft = self.element.scrollLeft();
             o.scrollTop = self.element.scrollTop();
             self._calculateChildrenToRender();
-            self.fireEvent(BI.Grid.EVENT_SCROLL, {
+            self.fireEvent(BI.GridView.EVENT_SCROLL, {
                 scrollLeft: o.scrollLeft,
                 scrollTop: o.scrollTop
             });
@@ -14768,7 +14756,7 @@ BI.Grid = BI.inherit(BI.Widget, {
                 return;
             }
 
-            var renderedCells = [], renderedKeys = [];
+            var renderedCells = [], renderedKeys = [], renderedWidgets = {};
             var minX = this._getMaxScrollLeft(), minY = this._getMaxScrollTop(), maxX = 0, maxY = 0;
             for (var rowIndex = rowStartIndex; rowIndex <= rowStopIndex; rowIndex++) {
                 var rowDatum = this._rowSizeAndPositionManager.getSizeAndPositionOfCell(rowIndex);
@@ -14819,6 +14807,7 @@ BI.Grid = BI.inherit(BI.Widget, {
                     minY = Math.min(minY, rowDatum.offset + verticalOffsetAdjustment);
                     maxY = Math.max(maxY, rowDatum.offset + verticalOffsetAdjustment + rowDatum.size);
                     renderedKeys.push(key);
+                    renderedWidgets[i] = child;
                 }
             }
             //已存在的， 需要添加的和需要删除的
@@ -14840,13 +14829,17 @@ BI.Grid = BI.inherit(BI.Widget, {
                 deleteArray.push(i);
             });
             BI.each(deleteArray, function (i, index) {
-                self.renderedCells[index].el.destroy();
+                //性能优化，不调用destroy方法防止触发destroy事件
+                self.renderedCells[index].el._destroy();
             });
             var addedItems = [];
             BI.each(addSet, function (index) {
                 addedItems.push(renderedCells[index])
             });
             this.container.addItems(addedItems);
+            //拦截父子级关系
+            this.container._children = renderedWidgets;
+            this.container.attr("items", renderedCells);
             this.renderedCells = renderedCells;
             this.renderedKeys = renderedKeys;
             this.renderRange = {minX: minX, minY: minY, maxX: maxX, maxY: maxY};
@@ -14965,8 +14958,8 @@ BI.Grid = BI.inherit(BI.Widget, {
         this._populate();
     }
 });
-BI.Grid.EVENT_SCROLL = "EVENT_SCROLL";
-BI.shortcut('bi.grid_view', BI.Grid);/**
+BI.GridView.EVENT_SCROLL = "EVENT_SCROLL";
+BI.shortcut('bi.grid_view', BI.GridView);/**
  * floatBox弹出层，
  * @class BI.FloatBox
  * @extends BI.Widget
@@ -15269,11 +15262,6 @@ BI.PopupView = BI.inherit(BI.Widget, {
             toolHeight = ((this.tool && this.tool.attr("height")) || 25) * ((this.tool && this.tool.isVisible()) ? 1 : 0);
         this.view.resetHeight ? this.view.resetHeight(h - tbHeight - tabHeight - toolHeight - 2) :
             this.view.element.css({"max-height": (h - tbHeight - tabHeight - toolHeight - 2) + "px"})
-    },
-
-    setEnable: function (arg) {
-        BI.PopupView.superclass.setEnable.apply(this, arguments);
-        this.view && this.view.setEnable(arg);
     },
 
     setValue: function (selectedValues) {
@@ -16080,12 +16068,6 @@ BI.shortcut("bi.image_button", BI.ImageButton);(function ($) {
             if (!this.isReadOnly()) {
                 this.text.setValue(text);
             }
-        },
-
-        setEnable: function (b) {
-            BI.Button.superclass.setEnable.apply(this, arguments);
-            // this.text.setEnable(b);
-            // this.icon && this.icon.setEnable(b);
         },
 
         doRedMark: function () {
@@ -17460,8 +17442,8 @@ BI.CodeEditor = BI.inherit(BI.Single, {
         }
     },
 
-    setEnable: function (b) {
-        BI.CodeEditor.superclass.setEnable.apply(this, arguments);
+    _setEnable: function (b) {
+        BI.CodeEditor.superclass._setEnable.apply(this, arguments);
         this.editor.setOption("readOnly", b === true ? false : "nocursor")
     },
 
@@ -17832,12 +17814,6 @@ BI.Editor = BI.inherit(BI.Single, {
 
     isValid: function () {
         return this.editor.isValid();
-    },
-
-    setEnable: function (b) {
-        BI.Editor.superclass.setEnable.apply(this, arguments);
-        this.editor && this.editor.setEnable(b);
-        this.watermark && this.watermark.setEnable(b);
     }
 });
 BI.Editor.EVENT_CHANGE = "EVENT_CHANGE";
@@ -17940,11 +17916,6 @@ BI.MultifileEditor = BI.inherit(BI.Single, {
 
     reset: function () {
         this.file.reset();
-    },
-
-    setEnable: function (enable) {
-        BI.MultiFile.superclass.setEnable.apply(this, arguments);
-        this.file.setEnable(enable);
     }
 });
 BI.MultifileEditor.EVENT_CHANGE = "MultifileEditor.EVENT_CHANGE";
@@ -18107,12 +18078,6 @@ BI.TextAreaEditor = BI.inherit(BI.Single, {
         BI.TextAreaEditor.superclass.setValid.apply(this, arguments);
         this.content.setValid(b);
         this.watermark && this.watermark.setValid(b);
-    },
-
-    setEnable: function (b) {
-        BI.TextAreaEditor.superclass.setEnable.apply(this, arguments);
-        this.content.setEnable(b);
-        this.watermark && this.watermark.setEnable(b);
     }
 });
 BI.TextAreaEditor.EVENT_CHANGE = "EVENT_CHANGE";
@@ -18847,8 +18812,8 @@ BI.shortcut("bi.checkbox", BI.Checkbox);/**
             this.wrap.attachNum = 0;
         },
 
-        setEnable: function (enable) {
-            BI.File.superclass.setEnable.apply(this, arguments);
+        _setEnable: function (enable) {
+            BI.File.superclass._setEnable.apply(this, arguments);
             if (enable === true) {
                 this.element.attr("disabled", "disabled");
             } else {
@@ -19120,8 +19085,8 @@ BI.Input = BI.inherit(BI.Single, {
         }
     },
 
-    setEnable: function (b) {
-        BI.Input.superclass.setEnable.apply(this, [b]);
+    _setEnable: function (b) {
+        BI.Input.superclass._setEnable.apply(this, [b]);
         this.element[0].disabled = !b;
     }
 });
@@ -28603,7 +28568,7 @@ BI.CollectionTable = BI.inherit(BI.Widget, {
                 return self.topLeftItems[index];
             }
         });
-        this.topLeftCollection.on(BI.Collection.EVENT_SCROLL, function (scroll) {
+        this.topLeftCollection.on(BI.CollectionView.EVENT_SCROLL, function (scroll) {
             self.bottomLeftCollection.setScrollLeft(scroll.scrollLeft);
             self._populateScrollbar();
             self.fireEvent(BI.Table.EVENT_TABLE_SCROLL, arguments);
@@ -28614,7 +28579,7 @@ BI.CollectionTable = BI.inherit(BI.Widget, {
                 return self.topRightItems[index];
             }
         });
-        this.topRightCollection.on(BI.Collection.EVENT_SCROLL, function (scroll) {
+        this.topRightCollection.on(BI.CollectionView.EVENT_SCROLL, function (scroll) {
             self.bottomRightCollection.setScrollLeft(scroll.scrollLeft);
             self._populateScrollbar();
             self.fireEvent(BI.Table.EVENT_TABLE_SCROLL, arguments);
@@ -28625,7 +28590,7 @@ BI.CollectionTable = BI.inherit(BI.Widget, {
                 return self.bottomLeftItems[index];
             }
         });
-        this.bottomLeftCollection.on(BI.Collection.EVENT_SCROLL, function (scroll) {
+        this.bottomLeftCollection.on(BI.CollectionView.EVENT_SCROLL, function (scroll) {
             self.bottomRightCollection.setScrollTop(scroll.scrollTop);
             self.topLeftCollection.setScrollLeft(scroll.scrollLeft);
             self._populateScrollbar();
@@ -28637,7 +28602,7 @@ BI.CollectionTable = BI.inherit(BI.Widget, {
                 return self.bottomRightItems[index];
             }
         });
-        this.bottomRightCollection.on(BI.Collection.EVENT_SCROLL, function (scroll) {
+        this.bottomRightCollection.on(BI.CollectionView.EVENT_SCROLL, function (scroll) {
             self.bottomLeftCollection.setScrollTop(scroll.scrollTop);
             self.topRightCollection.setScrollLeft(scroll.scrollLeft);
             self._populateScrollbar();
@@ -29386,7 +29351,7 @@ BI.GridTable = BI.inherit(BI.Widget, {
             rowHeightGetter: rowHeightGetter,
             columnWidthGetter: columnLeftWidthGetter,
         });
-        this.topLeftGrid.on(BI.Grid.EVENT_SCROLL, function (scroll) {
+        this.topLeftGrid.on(BI.GridView.EVENT_SCROLL, function (scroll) {
             self.bottomLeftGrid.setScrollLeft(scroll.scrollLeft);
             self._populateScrollbar();
             self.fireEvent(BI.Table.EVENT_TABLE_SCROLL, arguments);
@@ -29396,7 +29361,7 @@ BI.GridTable = BI.inherit(BI.Widget, {
             rowHeightGetter: rowHeightGetter,
             columnWidthGetter: columnRightWidthGetter,
         });
-        this.topRightGrid.on(BI.Grid.EVENT_SCROLL, function (scroll) {
+        this.topRightGrid.on(BI.GridView.EVENT_SCROLL, function (scroll) {
             self.bottomRightGrid.setScrollLeft(scroll.scrollLeft);
             self._populateScrollbar();
             self.fireEvent(BI.Table.EVENT_TABLE_SCROLL, arguments);
@@ -29406,7 +29371,7 @@ BI.GridTable = BI.inherit(BI.Widget, {
             rowHeightGetter: rowHeightGetter,
             columnWidthGetter: columnLeftWidthGetter,
         });
-        this.bottomLeftGrid.on(BI.Grid.EVENT_SCROLL, function (scroll) {
+        this.bottomLeftGrid.on(BI.GridView.EVENT_SCROLL, function (scroll) {
             self.bottomRightGrid.setScrollTop(scroll.scrollTop);
             self.topLeftGrid.setScrollLeft(scroll.scrollLeft);
             self._populateScrollbar();
@@ -29417,7 +29382,7 @@ BI.GridTable = BI.inherit(BI.Widget, {
             rowHeightGetter: rowHeightGetter,
             columnWidthGetter: columnRightWidthGetter,
         });
-        this.bottomRightGrid.on(BI.Grid.EVENT_SCROLL, function (scroll) {
+        this.bottomRightGrid.on(BI.GridView.EVENT_SCROLL, function (scroll) {
             self.bottomLeftGrid.setScrollTop(scroll.scrollTop);
             self.topRightGrid.setScrollLeft(scroll.scrollLeft);
             self._populateScrollbar();
@@ -32551,11 +32516,6 @@ BI.CustomTree = BI.inherit(BI.Widget, {
     _init: function () {
         BI.CustomTree.superclass._init.apply(this, arguments);
         this.initTree(this.options.items);
-    },
-
-    setEnable: function (v) {
-        BI.CustomTree.superclass.setEnable.apply(this, arguments);
-        this.tree.setEnable(v)
     },
 
     _formatItems: function (nodes) {

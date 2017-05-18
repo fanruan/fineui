@@ -256,8 +256,8 @@ BI.Input = BI.inherit(BI.Single, {
         }
     },
 
-    setEnable: function (b) {
-        BI.Input.superclass.setEnable.apply(this, [b]);
+    _setEnable: function (b) {
+        BI.Input.superclass._setEnable.apply(this, [b]);
         this.element[0].disabled = !b;
     }
 });

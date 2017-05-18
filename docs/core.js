@@ -14427,17 +14427,18 @@ BI.Widget = BI.inherit(BI.OB, {
     _initVisualEffects: function () {
         var o = this.options;
         if (o.invisible) {
-            this.element.hide();
+            //用display属性做显示和隐藏，否则jquery会在显示时将display设为block会覆盖掉display:flex属性
+            this.element.css("display", "none");
         }
         if (o.disabled || o.invalid) {
-            BI.nextTick(BI.bind(function () {
-                if (this.options.disabled) {
-                    this.setEnable(false);
-                }
-                if (this.options.invalid) {
-                    this.setValid(false);
-                }
-            }, this));
+            // BI.nextTick(BI.bind(function () {
+            if (this.options.disabled) {
+                this.setEnable(false);
+            }
+            if (this.options.invalid) {
+                this.setValid(false);
+            }
+            // }, this));
         }
     },
 
@@ -14485,23 +14486,13 @@ BI.Widget = BI.inherit(BI.OB, {
         this._isMounted = true;
         this._mountChildren && this._mountChildren();
         BI.each(this._children, function (i, widget) {
+            !self.isEnabled() && widget._setEnable(false);
             widget._mount && widget._mount();
         });
         this.mounted && this.mounted();
     },
 
     _mountChildren: null,
-
-    _unMount: function () {
-        BI.each(this._children, function (i, widget) {
-            widget._unMount && widget._unMount();
-        });
-        this._children = {};
-        this._parent = null;
-        this._isMounted = false;
-        this.purgeListeners();
-        this.destroyed && this.destroyed();
-    },
 
     isMounted: function () {
         return this._isMounted;
@@ -14517,12 +14508,23 @@ BI.Widget = BI.inherit(BI.OB, {
         this._initElementHeight();
     },
 
-    setEnable: function (enable) {
+    _setEnable: function (enable) {
         if (enable === true) {
             this.options.disabled = false;
-            this.element.removeClass("base-disabled disabled");
         } else if (enable === false) {
             this.options.disabled = true;
+        }
+        //递归将所有子组件使能
+        BI.each(this._children, function (i, child) {
+            child._setEnable && child._setEnable(enable);
+        });
+    },
+
+    setEnable: function (enable) {
+        this._setEnable(enable);
+        if (enable === true) {
+            this.element.removeClass("base-disabled disabled");
+        } else if (enable === false) {
             this.element.addClass("base-disabled disabled");
         }
     },
@@ -14582,7 +14584,7 @@ BI.Widget = BI.inherit(BI.OB, {
     },
 
     getWidgetByName: function (name) {
-        if (!BI.isKey(name) || name == this.getName()) {
+        if (!BI.isKey(name) || name === this.getName()) {
             return this;
         }
         name = name + "";
@@ -14682,6 +14684,21 @@ BI.Widget = BI.inherit(BI.OB, {
         this.setVisible(true);
     },
 
+    __d: function () {
+        BI.each(this._children, function (i, widget) {
+            widget._unMount && widget._unMount();
+        });
+        this._children = {};
+        this._parent = null;
+        this._isMounted = false;
+    },
+
+    _unMount: function () {
+        this.__d();
+        this.purgeListeners();
+        this.destroyed && this.destroyed();
+    },
+
     isolate: function () {
         if (this._parent) {
             this._parent.removeWidget(this);
@@ -14697,13 +14714,15 @@ BI.Widget = BI.inherit(BI.OB, {
         this.element.empty();
     },
 
+    _destroy: function () {
+        this.__d();
+        this.destroyed && this.destroyed();
+        this.element.destroy();
+        this.purgeListeners();
+    },
+
     destroy: function () {
-        BI.each(this._children, function (i, widget) {
-            widget._unMount && widget._unMount();
-        });
-        this._children = {};
-        this._parent = null;
-        this._isMounted = false;
+        this.__d();
         this.destroyed && this.destroyed();
         this.element.destroy();
         this.fireEvent(BI.Events.DESTROY);
@@ -15353,7 +15372,7 @@ BI.View = BI.inherit(BI.V, {
         BI.each(cardNames, function (i, name) {
             delete self._cards[name];
         });
-        this._cardLayouts[key] && this._cardLayouts[key].destroy();
+        this._cardLayouts[key] && this._cardLayouts[key]._destroy();
         return this;
     },
 
@@ -19581,7 +19600,7 @@ BI.Layout = BI.inherit(BI.Widget, {
         this.options.items = newItems;
         this._children = newChildren;
         BI.each(deleted, function (i, c) {
-            c.destroy();
+            c._destroy();
         });
     },
 
@@ -19606,7 +19625,7 @@ BI.Layout = BI.inherit(BI.Widget, {
         } else {
             w.element.prependTo(this._getWrapper());
         }
-        del.destroy();
+        del._destroy();
         w._mount();
     },
 
@@ -19693,7 +19712,7 @@ BI.Layout = BI.inherit(BI.Widget, {
             }
             o.items.splice(items.length);
             BI.each(deleted, function (i, w) {
-                w.destroy();
+                w._destroy();
             })
         } else if (items.length > o.items.length) {
             for (i = o.items.length; i < items.length; i++) {
@@ -19887,6 +19906,9 @@ BI.PopoverSection = BI.inherit(BI.Widget, {
     }
 });
 BI.PopoverSection.EVENT_CLOSE = "EVENT_CLOSE";;(function () {
+    if (!window.BI) {
+        window.BI = {};
+    }
     function isEmpty(value) {
         // 判断是否为空值
         var result = value === "" || value === null || value === undefined;
@@ -19948,124 +19970,6 @@ BI.PopoverSection.EVENT_CLOSE = "EVENT_CLOSE";;(function () {
     }
 
     /**
-     * 把日期对象按照指定格式转化成字符串
-     *
-     *      @example
-     *      var date = new Date('Thu Dec 12 2013 00:00:00 GMT+0800');
-     *      var result = BI.date2Str(date, 'yyyy-MM-dd');//2013-12-12
-     *
-     * @class BI.date2Str
-     * @param date 日期
-     * @param format 日期格式
-     * @returns {String}
-     */
-    function date2Str(date, format) {
-        if (!date) {
-            return '';
-        }
-        // O(len(format))
-        var len = format.length, result = '';
-        if (len > 0) {
-            var flagch = format.charAt(0), start = 0, str = flagch;
-            for (var i = 1; i < len; i++) {
-                var ch = format.charAt(i);
-                if (flagch !== ch) {
-                    result += compileJFmt({
-                        'char': flagch,
-                        'str': str,
-                        'len': i - start
-                    }, date);
-                    flagch = ch;
-                    start = i;
-                    str = flagch;
-                } else {
-                    str += ch;
-                }
-            }
-            result += compileJFmt({
-                'char': flagch,
-                'str': str,
-                'len': len - start
-            }, date);
-        }
-        return result;
-
-        function compileJFmt(jfmt, date) {
-            var str = jfmt.str, len = jfmt.len, ch = jfmt['char'];
-            switch (ch) {
-                case 'E': //星期
-                    str = Date._DN[date.getDay()];
-                    break;
-                case 'y': //年
-                    if (len <= 3) {
-                        str = (date.getFullYear() + '').slice(2, 4);
-                    } else {
-                        str = date.getFullYear();
-                    }
-                    break;
-                case 'M': //月
-                    if (len > 2) {
-                        str = Date._MN[date.getMonth()];
-                    } else if (len < 2) {
-                        str = date.getMonth() + 1;
-                    } else {
-                        str = String.leftPad(date.getMonth() + 1 + '', 2, '0');
-                    }
-                    break;
-                case 'd': //日
-                    if (len > 1) {
-                        str = String.leftPad(date.getDate() + '', 2, '0');
-                    } else {
-                        str = date.getDate();
-                    }
-                    break;
-                case 'h': //时(12)
-                    var hour = date.getHours() % 12;
-                    if (hour === 0) {
-                        hour = 12;
-                    }
-                    if (len > 1) {
-                        str = String.leftPad(hour + '', 2, '0');
-                    } else {
-                        str = hour;
-                    }
-                    break;
-                case 'H': //时(24)
-                    if (len > 1) {
-                        str = String.leftPad(date.getHours() + '', 2, '0');
-                    } else {
-                        str = date.getHours();
-                    }
-                    break;
-                case 'm':
-                    if (len > 1) {
-                        str = String.leftPad(date.getMinutes() + '', 2, '0');
-                    } else {
-                        str = date.getMinutes();
-                    }
-                    break;
-                case 's':
-                    if (len > 1) {
-                        str = String.leftPad(date.getSeconds() + '', 2, '0');
-                    } else {
-                        str = date.getSeconds();
-                    }
-                    break;
-                case 'a':
-                    str = date.getHours() < 12 ? 'am' : 'pm';
-                    break;
-                case 'z':
-                    str = date.getTimezone();
-                    break;
-                default:
-                    str = jfmt.str;
-                    break;
-            }
-            return str;
-        }
-    };
-
-    /**
      * 数字格式
      */
     function _numberFormat(text, format) {
@@ -20107,7 +20011,8 @@ BI.PopoverSection.EVENT_CLOSE = "EVENT_CLOSE";;(function () {
         } else {
             return left + '.' + right;
         }
-    };
+    }
+
     /**
      * 处理小数点右边小数部分
      * @param tright 右边内容
@@ -20151,7 +20056,7 @@ BI.PopoverSection.EVENT_CLOSE = "EVENT_CLOSE";;(function () {
                 if (newnum.length > orilen) {
                     newnum = newnum.substr(1);
                 } else {
-                    newnum = BI.leftPad(newnum, orilen, '0');
+                    newnum = String.leftPad(newnum, orilen, '0');
                     result.leftPlus = false;
                 }
                 right = right.replace(/^[0-9]+/, newnum);
@@ -20412,7 +20317,7 @@ BI.PopoverSection.EVENT_CLOSE = "EVENT_CLOSE";;(function () {
 
             return o;
         })(jo);
-    }
+    };
 
     BI.contentFormat = function (cv, fmt) {
         if (isEmpty(cv)) {
@@ -20454,15 +20359,122 @@ BI.PopoverSection.EVENT_CLOSE = "EVENT_CLOSE";;(function () {
         return text;
     };
 
-    BI.leftPad = function (val, size, ch) {
-        var result = String(val);
-        if (!ch) {
-            ch = " ";
+    /**
+     * 把日期对象按照指定格式转化成字符串
+     *
+     *      @example
+     *      var date = new Date('Thu Dec 12 2013 00:00:00 GMT+0800');
+     *      var result = BI.date2Str(date, 'yyyy-MM-dd');//2013-12-12
+     *
+     * @class BI.date2Str
+     * @param date 日期
+     * @param format 日期格式
+     * @returns {String}
+     */
+    BI.date2Str = function (date, format) {
+        if (!date) {
+            return '';
         }
-        while (result.length < size) {
-            result = ch + result;
+        // O(len(format))
+        var len = format.length, result = '';
+        if (len > 0) {
+            var flagch = format.charAt(0), start = 0, str = flagch;
+            for (var i = 1; i < len; i++) {
+                var ch = format.charAt(i);
+                if (flagch !== ch) {
+                    result += compileJFmt({
+                        'char': flagch,
+                        'str': str,
+                        'len': i - start
+                    }, date);
+                    flagch = ch;
+                    start = i;
+                    str = flagch;
+                } else {
+                    str += ch;
+                }
+            }
+            result += compileJFmt({
+                'char': flagch,
+                'str': str,
+                'len': len - start
+            }, date);
         }
-        return result.toString();
+        return result;
+
+        function compileJFmt(jfmt, date) {
+            var str = jfmt.str, len = jfmt.len, ch = jfmt['char'];
+            switch (ch) {
+                case 'E': //星期
+                    str = Date._DN[date.getDay()];
+                    break;
+                case 'y': //年
+                    if (len <= 3) {
+                        str = (date.getFullYear() + '').slice(2, 4);
+                    } else {
+                        str = date.getFullYear();
+                    }
+                    break;
+                case 'M': //月
+                    if (len > 2) {
+                        str = Date._MN[date.getMonth()];
+                    } else if (len < 2) {
+                        str = date.getMonth() + 1;
+                    } else {
+                        str = String.leftPad(date.getMonth() + 1 + '', 2, '0');
+                    }
+                    break;
+                case 'd': //日
+                    if (len > 1) {
+                        str = String.leftPad(date.getDate() + '', 2, '0');
+                    } else {
+                        str = date.getDate();
+                    }
+                    break;
+                case 'h': //时(12)
+                    var hour = date.getHours() % 12;
+                    if (hour === 0) {
+                        hour = 12;
+                    }
+                    if (len > 1) {
+                        str = String.leftPad(hour + '', 2, '0');
+                    } else {
+                        str = hour;
+                    }
+                    break;
+                case 'H': //时(24)
+                    if (len > 1) {
+                        str = String.leftPad(date.getHours() + '', 2, '0');
+                    } else {
+                        str = date.getHours();
+                    }
+                    break;
+                case 'm':
+                    if (len > 1) {
+                        str = String.leftPad(date.getMinutes() + '', 2, '0');
+                    } else {
+                        str = date.getMinutes();
+                    }
+                    break;
+                case 's':
+                    if (len > 1) {
+                        str = String.leftPad(date.getSeconds() + '', 2, '0');
+                    } else {
+                        str = date.getSeconds();
+                    }
+                    break;
+                case 'a':
+                    str = date.getHours() < 12 ? 'am' : 'pm';
+                    break;
+                case 'z':
+                    str = date.getTimezone();
+                    break;
+                default:
+                    str = jfmt.str;
+                    break;
+            }
+            return str;
+        }
     };
 
     BI.object2Number = function (value) {
@@ -22295,7 +22307,8 @@ BI.extend(jQuery, {
 
     getTopAlignPosition: function (combo, popup, extraHeight, needAdaptHeight) {
         var comboOffset = combo.element.offset();
-        var comboBounds = combo.element.bounds(), popupBounds = popup.element.bounds(), windowBounds = $("body").bounds();
+        var comboBounds = combo.element.bounds(), popupBounds = popup.element.bounds(),
+            windowBounds = $("body").bounds();
         var top, adaptHeight;
         if ($.isBottomSpaceEnough(combo, popup, -1 * comboBounds.height + extraHeight)) {
             top = comboOffset.top + extraHeight;
@@ -22343,7 +22356,8 @@ BI.extend(jQuery, {
 
     getBottomAlignPosition: function (combo, popup, extraHeight, needAdaptHeight) {
         var comboOffset = combo.element.offset();
-        var comboBounds = combo.element.bounds(), popupBounds = popup.element.bounds(), windowBounds = $("body").bounds();
+        var comboBounds = combo.element.bounds(), popupBounds = popup.element.bounds(),
+            windowBounds = $("body").bounds();
         var top, adaptHeight;
         if ($.isTopSpaceEnough(combo, popup, -1 * comboBounds.height + extraHeight)) {
             top = comboOffset.top + comboBounds.height - popupBounds.height - extraHeight;
@@ -22369,7 +22383,8 @@ BI.extend(jQuery, {
 
     getBottomAdaptPosition: function (combo, popup, extraHeight, needAdaptHeight) {
         var comboOffset = combo.element.offset();
-        var comboBounds = combo.element.bounds(), popupBounds = popup.element.bounds(), windowBounds = $("body").bounds();
+        var comboBounds = combo.element.bounds(), popupBounds = popup.element.bounds(),
+            windowBounds = $("body").bounds();
         if ($.isBottomSpaceEnough(combo, popup, extraHeight)) {
             return $.getBottomPosition(combo, popup, extraHeight);
         }
@@ -22392,7 +22407,8 @@ BI.extend(jQuery, {
 
     getCenterAdaptPosition: function (combo, popup) {
         var comboOffset = combo.element.offset();
-        var comboBounds = combo.element.bounds(), popupBounds = popup.element.bounds(), windowBounds = $("body").bounds();
+        var comboBounds = combo.element.bounds(), popupBounds = popup.element.bounds(),
+            windowBounds = $("body").bounds();
         var left;
         if (comboOffset.left + comboBounds.width / 2 + popupBounds.width / 2 > windowBounds.width) {
             left = windowBounds.width - popupBounds.width;
@@ -22409,7 +22425,8 @@ BI.extend(jQuery, {
 
     getMiddleAdaptPosition: function (combo, popup) {
         var comboOffset = combo.element.offset();
-        var comboBounds = combo.element.bounds(), popupBounds = popup.element.bounds(), windowBounds = $("body").bounds();
+        var comboBounds = combo.element.bounds(), popupBounds = popup.element.bounds(),
+            windowBounds = $("body").bounds();
         var top;
         if (comboOffset.top + comboBounds.height / 2 + popupBounds.height / 2 > windowBounds.height) {
             top = windowBounds.height - popupBounds.height;
@@ -22605,7 +22622,7 @@ BI.extend(jQuery, {
                 }
                 break;
         }
-        if(needAdaptHeight === true) {
+        if (needAdaptHeight === true) {
             popup.resetHeight && popup.resetHeight(Math.min(bodyHeight - position.top, maxHeight));
         }
         return position;
@@ -22636,6 +22653,7 @@ $(function () {
                 };
             }
             var t, text, py;
+            keyword = keyword + "";
             keyword = BI.toUpperCase(keyword);
             var matched = isArray ? [] : {}, finded = isArray ? [] : {};
             BI.each(items, function (i, item) {
@@ -23503,7 +23521,6 @@ Date._QN = ["", BI.i18nText("BI-Quarter_1"),
     BI.i18nText("BI-Quarter_3"),
     BI.i18nText("BI-Quarter_4")];
 
-
 /** Adds the number of days array to the Date object. */
 Date._MD = [31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];
 
@@ -23977,7 +23994,8 @@ Date.parseDateTime = function (str, fmt) {
         return new Date(y, m, d, hr, min, sec);
     }
     return today;
-};/*
+};
+/*
  * 给jQuery.Event对象添加的工具方法
  */
 $.extend($.Event.prototype, {
@@ -26545,7 +26563,7 @@ BI.CardLayout = BI.inherit(BI.Layout, {
 
         var child = this._children[cardName];
         this._deleteCardByName(cardName);
-        child && child.destroy();
+        child && child._destroy();
     },
 
     addCardByName: function (cardName, cardItem) {

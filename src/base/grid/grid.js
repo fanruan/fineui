@@ -1,13 +1,13 @@
 /**
- * Grid
+ * GridView
  *
  * Created by GUY on 2016/1/11.
- * @class BI.Grid
+ * @class BI.GridView
  * @extends BI.Widget
  */
-BI.Grid = BI.inherit(BI.Widget, {
+BI.GridView = BI.inherit(BI.Widget, {
     _defaultConfig: function () {
-        return BI.extend(BI.Grid.superclass._defaultConfig.apply(this, arguments), {
+        return BI.extend(BI.GridView.superclass._defaultConfig.apply(this, arguments), {
             baseCls: "bi-grid-view",
             width: 400,
             height: 300,
@@ -26,7 +26,7 @@ BI.Grid = BI.inherit(BI.Widget, {
     },
 
     _init: function () {
-        BI.Grid.superclass._init.apply(this, arguments);
+        BI.GridView.superclass._init.apply(this, arguments);
         var self = this, o = this.options;
         this.renderedCells = [];
         this.renderedKeys = [];
@@ -45,7 +45,7 @@ BI.Grid = BI.inherit(BI.Widget, {
             o.scrollLeft = self.element.scrollLeft();
             o.scrollTop = self.element.scrollTop();
             self._calculateChildrenToRender();
-            self.fireEvent(BI.Grid.EVENT_SCROLL, {
+            self.fireEvent(BI.GridView.EVENT_SCROLL, {
                 scrollLeft: o.scrollLeft,
                 scrollTop: o.scrollTop
             });
@@ -121,7 +121,7 @@ BI.Grid = BI.inherit(BI.Widget, {
                 return;
             }
 
-            var renderedCells = [], renderedKeys = [];
+            var renderedCells = [], renderedKeys = [], renderedWidgets = {};
             var minX = this._getMaxScrollLeft(), minY = this._getMaxScrollTop(), maxX = 0, maxY = 0;
             for (var rowIndex = rowStartIndex; rowIndex <= rowStopIndex; rowIndex++) {
                 var rowDatum = this._rowSizeAndPositionManager.getSizeAndPositionOfCell(rowIndex);
@@ -172,6 +172,7 @@ BI.Grid = BI.inherit(BI.Widget, {
                     minY = Math.min(minY, rowDatum.offset + verticalOffsetAdjustment);
                     maxY = Math.max(maxY, rowDatum.offset + verticalOffsetAdjustment + rowDatum.size);
                     renderedKeys.push(key);
+                    renderedWidgets[i] = child;
                 }
             }
             //已存在的， 需要添加的和需要删除的
@@ -193,13 +194,17 @@ BI.Grid = BI.inherit(BI.Widget, {
                 deleteArray.push(i);
             });
             BI.each(deleteArray, function (i, index) {
-                self.renderedCells[index].el.destroy();
+                //性能优化，不调用destroy方法防止触发destroy事件
+                self.renderedCells[index].el._destroy();
             });
             var addedItems = [];
             BI.each(addSet, function (index) {
                 addedItems.push(renderedCells[index])
             });
             this.container.addItems(addedItems);
+            //拦截父子级关系
+            this.container._children = renderedWidgets;
+            this.container.attr("items", renderedCells);
             this.renderedCells = renderedCells;
             this.renderedKeys = renderedKeys;
             this.renderRange = {minX: minX, minY: minY, maxX: maxX, maxY: maxY};
@@ -318,5 +323,5 @@ BI.Grid = BI.inherit(BI.Widget, {
         this._populate();
     }
 });
-BI.Grid.EVENT_SCROLL = "EVENT_SCROLL";
-BI.shortcut('bi.grid_view', BI.Grid);
+BI.GridView.EVENT_SCROLL = "EVENT_SCROLL";
+BI.shortcut('bi.grid_view', BI.GridView);

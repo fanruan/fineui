@@ -195,10 +195,6 @@ BI.Loader = BI.inherit(BI.Widget, {
         this.button_group.populate.apply(this.button_group, arguments);
     },
 
-    setEnable: function (v) {
-        this.button_group.setEnable(v);
-    },
-
     doBehavior: function () {
         this.button_group.doBehavior.apply(this.button_group, arguments);
     },

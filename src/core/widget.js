@@ -105,17 +105,18 @@ BI.Widget = BI.inherit(BI.OB, {
     _initVisualEffects: function () {
         var o = this.options;
         if (o.invisible) {
-            this.element.hide();
+            //用display属性做显示和隐藏，否则jquery会在显示时将display设为block会覆盖掉display:flex属性
+            this.element.css("display", "none");
         }
         if (o.disabled || o.invalid) {
-            BI.nextTick(BI.bind(function () {
-                if (this.options.disabled) {
-                    this.setEnable(false);
-                }
-                if (this.options.invalid) {
-                    this.setValid(false);
-                }
-            }, this));
+            // BI.nextTick(BI.bind(function () {
+            if (this.options.disabled) {
+                this.setEnable(false);
+            }
+            if (this.options.invalid) {
+                this.setValid(false);
+            }
+            // }, this));
         }
     },
 
@@ -163,23 +164,13 @@ BI.Widget = BI.inherit(BI.OB, {
         this._isMounted = true;
         this._mountChildren && this._mountChildren();
         BI.each(this._children, function (i, widget) {
+            !self.isEnabled() && widget._setEnable(false);
             widget._mount && widget._mount();
         });
         this.mounted && this.mounted();
     },
 
     _mountChildren: null,
-
-    _unMount: function () {
-        BI.each(this._children, function (i, widget) {
-            widget._unMount && widget._unMount();
-        });
-        this._children = {};
-        this._parent = null;
-        this._isMounted = false;
-        this.purgeListeners();
-        this.destroyed && this.destroyed();
-    },
 
     isMounted: function () {
         return this._isMounted;
@@ -195,12 +186,23 @@ BI.Widget = BI.inherit(BI.OB, {
         this._initElementHeight();
     },
 
-    setEnable: function (enable) {
+    _setEnable: function (enable) {
         if (enable === true) {
             this.options.disabled = false;
-            this.element.removeClass("base-disabled disabled");
         } else if (enable === false) {
             this.options.disabled = true;
+        }
+        //递归将所有子组件使能
+        BI.each(this._children, function (i, child) {
+            child._setEnable && child._setEnable(enable);
+        });
+    },
+
+    setEnable: function (enable) {
+        this._setEnable(enable);
+        if (enable === true) {
+            this.element.removeClass("base-disabled disabled");
+        } else if (enable === false) {
             this.element.addClass("base-disabled disabled");
         }
     },
@@ -260,7 +262,7 @@ BI.Widget = BI.inherit(BI.OB, {
     },
 
     getWidgetByName: function (name) {
-        if (!BI.isKey(name) || name == this.getName()) {
+        if (!BI.isKey(name) || name === this.getName()) {
             return this;
         }
         name = name + "";
@@ -360,6 +362,21 @@ BI.Widget = BI.inherit(BI.OB, {
         this.setVisible(true);
     },
 
+    __d: function () {
+        BI.each(this._children, function (i, widget) {
+            widget._unMount && widget._unMount();
+        });
+        this._children = {};
+        this._parent = null;
+        this._isMounted = false;
+    },
+
+    _unMount: function () {
+        this.__d();
+        this.purgeListeners();
+        this.destroyed && this.destroyed();
+    },
+
     isolate: function () {
         if (this._parent) {
             this._parent.removeWidget(this);
@@ -375,13 +392,15 @@ BI.Widget = BI.inherit(BI.OB, {
         this.element.empty();
     },
 
+    _destroy: function () {
+        this.__d();
+        this.destroyed && this.destroyed();
+        this.element.destroy();
+        this.purgeListeners();
+    },
+
     destroy: function () {
-        BI.each(this._children, function (i, widget) {
-            widget._unMount && widget._unMount();
-        });
-        this._children = {};
-        this._parent = null;
-        this._isMounted = false;
+        this.__d();
         this.destroyed && this.destroyed();
         this.element.destroy();
         this.fireEvent(BI.Events.DESTROY);

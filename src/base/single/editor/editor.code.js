@@ -76,8 +76,8 @@ BI.CodeEditor = BI.inherit(BI.Single, {
         }
     },
 
-    setEnable: function (b) {
-        BI.CodeEditor.superclass.setEnable.apply(this, arguments);
+    _setEnable: function (b) {
+        BI.CodeEditor.superclass._setEnable.apply(this, arguments);
         this.editor.setOption("readOnly", b === true ? false : "nocursor")
     },
 

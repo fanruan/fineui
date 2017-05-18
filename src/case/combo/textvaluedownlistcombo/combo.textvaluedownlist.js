@@ -64,11 +64,6 @@ BI.TextValueDownListCombo = BI.inherit(BI.Widget, {
         this.trigger.setValue(v.childValue || v.value);
     },
 
-    setEnable: function (v) {
-        BI.TextValueDownListCombo.superclass.setEnable.apply(this, arguments);
-        this.combo.setEnable(v);
-    },
-
     getValue: function () {
         var v = this.combo.getValue()[0];
         return [v.childValue || v.value];

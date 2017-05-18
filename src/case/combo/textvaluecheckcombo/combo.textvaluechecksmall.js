@@ -51,11 +51,6 @@ BI.SmallTextValueCheckCombo = BI.inherit(BI.Widget, {
         this.SmallTextIconCheckCombo.setValue(v);
     },
 
-    setEnable: function (v) {
-        BI.SmallTextValueCheckCombo.superclass.setEnable.apply(this, arguments);
-        this.SmallTextIconCheckCombo.setEnable(v);
-    },
-
     getValue: function () {
         return this.SmallTextIconCheckCombo.getValue();
     },

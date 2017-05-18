@@ -119,12 +119,6 @@
             }
         },
 
-        setEnable: function (b) {
-            BI.Button.superclass.setEnable.apply(this, arguments);
-            // this.text.setEnable(b);
-            // this.icon && this.icon.setEnable(b);
-        },
-
         doRedMark: function () {
             this.text.doRedMark.apply(this.text, arguments);
         },

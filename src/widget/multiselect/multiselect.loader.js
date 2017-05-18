@@ -155,10 +155,6 @@ BI.MultiSelectLoader = BI.inherit(BI.Widget, {
         this.button_group.populate.apply(this.button_group, arguments);
     },
 
-    setEnable: function (arg) {
-        this.button_group.setEnable(arg);
-    },
-
     resetHeight: function (h) {
         this.button_group.resetHeight(h);
     },

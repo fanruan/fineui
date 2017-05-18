@@ -133,10 +133,6 @@ BI.MultiSelectTrigger = BI.inherit(BI.Trigger, {
         this.numberCounter.setValue(ob);
     },
 
-    setEnable: function (v) {
-        this.searcher.setEnable(v);
-    },
-
     getKey: function () {
         return this.searcher.getKey();
     },

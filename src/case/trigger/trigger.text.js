@@ -48,12 +48,6 @@ BI.TextTrigger = BI.inherit(BI.Trigger, {
         });
     },
 
-    setEnable: function (v) {
-        BI.TextTrigger.superclass.setEnable.apply(this, arguments);
-        this.trigerButton.setEnable(v);
-        this.text.setEnable(v);
-    },
-
     setValue: function (value) {
         this.text.setValue(value);
         this.text.setTitle(value);

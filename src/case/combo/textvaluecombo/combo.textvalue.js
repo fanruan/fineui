@@ -53,11 +53,6 @@ BI.TextValueCombo = BI.inherit(BI.Widget, {
         this.textIconCombo.setValue(v);
     },
 
-    setEnable: function (v) {
-        BI.TextValueCombo.superclass.setEnable.apply(this, arguments);
-        this.textIconCombo.setEnable(v);
-    },
-
     getValue: function () {
         return this.textIconCombo.getValue();
     },

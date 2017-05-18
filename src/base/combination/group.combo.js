@@ -83,11 +83,6 @@ BI.ComboGroup = BI.inherit(BI.Widget, {
         })
     },
 
-    setEnable: function (b) {
-        BI.ComboGroup.superclass.setEnable.apply(this, arguments);
-        this.combo && this.combo.setEnable(b);
-    },
-
     getValue: function () {
         return this.combo.getValue();
     },

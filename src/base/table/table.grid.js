@@ -39,7 +39,7 @@ BI.GridTable = BI.inherit(BI.Widget, {
             rowHeightGetter: rowHeightGetter,
             columnWidthGetter: columnLeftWidthGetter,
         });
-        this.topLeftGrid.on(BI.Grid.EVENT_SCROLL, function (scroll) {
+        this.topLeftGrid.on(BI.GridView.EVENT_SCROLL, function (scroll) {
             self.bottomLeftGrid.setScrollLeft(scroll.scrollLeft);
             self._populateScrollbar();
             self.fireEvent(BI.Table.EVENT_TABLE_SCROLL, arguments);
@@ -49,7 +49,7 @@ BI.GridTable = BI.inherit(BI.Widget, {
             rowHeightGetter: rowHeightGetter,
             columnWidthGetter: columnRightWidthGetter,
         });
-        this.topRightGrid.on(BI.Grid.EVENT_SCROLL, function (scroll) {
+        this.topRightGrid.on(BI.GridView.EVENT_SCROLL, function (scroll) {
             self.bottomRightGrid.setScrollLeft(scroll.scrollLeft);
             self._populateScrollbar();
             self.fireEvent(BI.Table.EVENT_TABLE_SCROLL, arguments);
@@ -59,7 +59,7 @@ BI.GridTable = BI.inherit(BI.Widget, {
             rowHeightGetter: rowHeightGetter,
             columnWidthGetter: columnLeftWidthGetter,
         });
-        this.bottomLeftGrid.on(BI.Grid.EVENT_SCROLL, function (scroll) {
+        this.bottomLeftGrid.on(BI.GridView.EVENT_SCROLL, function (scroll) {
             self.bottomRightGrid.setScrollTop(scroll.scrollTop);
             self.topLeftGrid.setScrollLeft(scroll.scrollLeft);
             self._populateScrollbar();
@@ -70,7 +70,7 @@ BI.GridTable = BI.inherit(BI.Widget, {
             rowHeightGetter: rowHeightGetter,
             columnWidthGetter: columnRightWidthGetter,
         });
-        this.bottomRightGrid.on(BI.Grid.EVENT_SCROLL, function (scroll) {
+        this.bottomRightGrid.on(BI.GridView.EVENT_SCROLL, function (scroll) {
             self.bottomLeftGrid.setScrollTop(scroll.scrollTop);
             self.topRightGrid.setScrollLeft(scroll.scrollLeft);
             self._populateScrollbar();
