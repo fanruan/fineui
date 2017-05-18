@@ -312,10 +312,16 @@ BI.GridView = BI.inherit(BI.Widget, {
         this.renderRange = {};
     },
 
+    _clearChildren: function () {
+        this.container._children = {};
+        this.container.attr("items", []);
+    },
+
     restore: function () {
         BI.each(this.renderedCells, function (i, cell) {
-            cell.el.destroy();
+            cell.el._destroy();
         });
+        this._clearChildren();
         this.renderedCells = [];
         this.renderedKeys = [];
         this.renderRange = {};
@@ -325,6 +331,7 @@ BI.GridView = BI.inherit(BI.Widget, {
     populate: function (items) {
         if (items && items !== this.options.items) {
             this.options.items = items;
+            this.restore();
         }
         this._populate();
     }
