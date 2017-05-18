@@ -15372,7 +15372,7 @@ BI.View = BI.inherit(BI.V, {
         BI.each(cardNames, function (i, name) {
             delete self._cards[name];
         });
-        this._cardLayouts[key] && this._cardLayouts[key].destroy();
+        this._cardLayouts[key] && this._cardLayouts[key]._destroy();
         return this;
     },
 
