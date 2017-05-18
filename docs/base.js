@@ -2666,6 +2666,7 @@ BI.CollectionView = BI.inherit(BI.Widget, {
             for (var i = 0, len = childrenToDisplay.length; i < len; i++) {
                 var datum = childrenToDisplay[i];
                 var index = BI.deepIndexOf(this.renderedKeys, datum.index);
+                var child;
                 if (index > -1) {
                     if (datum.width !== this.renderedCells[index]._width) {
                         this.renderedCells[index]._width = datum.width;
@@ -2681,9 +2682,9 @@ BI.CollectionView = BI.inherit(BI.Widget, {
                     if (this.renderedCells[index].top !== datum.y) {
                         this.renderedCells[index].el.element.css("top", datum.y + "px");
                     }
-                    renderedCells.push(this.renderedCells[index]);
+                    renderedCells.push(child = this.renderedCells[index]);
                 } else {
-                    var child = BI.createWidget(BI.extend({
+                    child = BI.createWidget(BI.extend({
                         type: "bi.label",
                         width: datum.width,
                         height: datum.height
@@ -14766,6 +14767,7 @@ BI.GridView = BI.inherit(BI.Widget, {
                     var columnDatum = this._columnSizeAndPositionManager.getSizeAndPositionOfCell(columnIndex);
 
                     var index = BI.deepIndexOf(this.renderedKeys, key);
+                    var child;
                     if (index > -1) {
                         if (columnDatum.size !== this.renderedCells[index]._width) {
                             this.renderedCells[index]._width = columnDatum.size;
@@ -14781,9 +14783,9 @@ BI.GridView = BI.inherit(BI.Widget, {
                         if (this.renderedCells[index].top !== rowDatum.offset + verticalOffsetAdjustment) {
                             this.renderedCells[index].el.element.css("top", (rowDatum.offset + verticalOffsetAdjustment) + "px");
                         }
-                        renderedCells.push(this.renderedCells[index]);
+                        renderedCells.push(child = this.renderedCells[index]);
                     } else {
-                        var child = BI.createWidget(BI.extend({
+                        child = BI.createWidget(BI.extend({
                             type: "bi.label",
                             width: columnDatum.size,
                             height: rowDatum.size

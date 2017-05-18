@@ -131,6 +131,7 @@ BI.GridView = BI.inherit(BI.Widget, {
                     var columnDatum = this._columnSizeAndPositionManager.getSizeAndPositionOfCell(columnIndex);
 
                     var index = BI.deepIndexOf(this.renderedKeys, key);
+                    var child;
                     if (index > -1) {
                         if (columnDatum.size !== this.renderedCells[index]._width) {
                             this.renderedCells[index]._width = columnDatum.size;
@@ -146,9 +147,9 @@ BI.GridView = BI.inherit(BI.Widget, {
                         if (this.renderedCells[index].top !== rowDatum.offset + verticalOffsetAdjustment) {
                             this.renderedCells[index].el.element.css("top", (rowDatum.offset + verticalOffsetAdjustment) + "px");
                         }
-                        renderedCells.push(this.renderedCells[index]);
+                        renderedCells.push(child = this.renderedCells[index]);
                     } else {
-                        var child = BI.createWidget(BI.extend({
+                        child = BI.createWidget(BI.extend({
                             type: "bi.label",
                             width: columnDatum.size,
                             height: rowDatum.size
