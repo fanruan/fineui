@@ -219,8 +219,10 @@ BI.ResizableTable = BI.inherit(BI.Widget, {
         };
         var stop = function (j, size) {
             self.resizer.setVisible(false);
-            o.columnSize[j] = size;
-            self.table.setColumnSize(o.columnSize);
+            var columnSize = o.columnSize.slice();
+            columnSize[j] = size;
+            o.columnSize = columnSize;
+            self.table.setColumnSize(columnSize);
             self.table.populate();
             self._populate();
             self.fireEvent(BI.Table.EVENT_TABLE_AFTER_COLUMN_RESIZE);

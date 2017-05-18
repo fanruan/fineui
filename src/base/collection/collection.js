@@ -335,6 +335,11 @@ BI.CollectionView = BI.inherit(BI.Widget, {
         return this._getMaxScrollTop();
     },
 
+    //重新计算children
+    reRange: function () {
+        this.renderRange = {};
+    },
+
     restore: function () {
         BI.each(this.renderedCells, function (i, cell) {
             cell.el.destroy();

@@ -2845,6 +2845,11 @@ BI.CollectionView = BI.inherit(BI.Widget, {
         return this._getMaxScrollTop();
     },
 
+    //重新计算children
+    reRange: function () {
+        this.renderRange = {};
+    },
+
     restore: function () {
         BI.each(this.renderedCells, function (i, cell) {
             cell.el.destroy();
@@ -14759,6 +14764,7 @@ BI.GridView = BI.inherit(BI.Widget, {
 
             var renderedCells = [], renderedKeys = [], renderedWidgets = {};
             var minX = this._getMaxScrollLeft(), minY = this._getMaxScrollTop(), maxX = 0, maxY = 0;
+            var count = 0;
             for (var rowIndex = rowStartIndex; rowIndex <= rowStopIndex; rowIndex++) {
                 var rowDatum = this._rowSizeAndPositionManager.getSizeAndPositionOfCell(rowIndex);
 
@@ -14809,7 +14815,7 @@ BI.GridView = BI.inherit(BI.Widget, {
                     minY = Math.min(minY, rowDatum.offset + verticalOffsetAdjustment);
                     maxY = Math.max(maxY, rowDatum.offset + verticalOffsetAdjustment + rowDatum.size);
                     renderedKeys.push(key);
-                    renderedWidgets[rowIndex] = child;
+                    renderedWidgets[count++] = child;
                 }
             }
             //已存在的， 需要添加的和需要删除的
@@ -14942,6 +14948,11 @@ BI.GridView = BI.inherit(BI.Widget, {
         this.options.estimatedRowSize = height;
     },
 
+    //重新计算children
+    reRange: function () {
+        this.renderRange = {};
+    },
+
     restore: function () {
         BI.each(this.renderedCells, function (i, cell) {
             cell.el.destroy();
@@ -14955,7 +14966,6 @@ BI.GridView = BI.inherit(BI.Widget, {
     populate: function (items) {
         if (items && items !== this.options.items) {
             this.options.items = items;
-            this.restore();
         }
         this._populate();
     }
@@ -28711,7 +28721,8 @@ BI.CollectionTable = BI.inherit(BI.Widget, {
 
     _populateScrollbar: function () {
         var o = this.options;
-        var regionSize = this.getRegionSize(), totalLeftColumnSize = 0, totalRightColumnSize = 0, totalColumnSize = 0, summaryColumnSizeArray = [], totalRowSize = o.items.length * o.rowSize;
+        var regionSize = this.getRegionSize(), totalLeftColumnSize = 0, totalRightColumnSize = 0, totalColumnSize = 0,
+            summaryColumnSizeArray = [], totalRowSize = o.items.length * o.rowSize;
         var freezeColLength = this._getFreezeColLength();
         BI.each(o.columnSize, function (i, size) {
             if (o.isNeedFreeze === true && o.freezeCols.contains(i)) {
@@ -28752,7 +28763,8 @@ BI.CollectionTable = BI.inherit(BI.Widget, {
 
     _populateTable: function () {
         var self = this, o = this.options;
-        var regionSize = this.getRegionSize(), totalLeftColumnSize = 0, totalRightColumnSize = 0, totalColumnSize = 0, summaryColumnSizeArray = [], totalRowSize = o.items.length * o.rowSize;
+        var regionSize = this.getRegionSize(), totalLeftColumnSize = 0, totalRightColumnSize = 0, totalColumnSize = 0,
+            summaryColumnSizeArray = [], totalRowSize = o.items.length * o.rowSize;
         var freezeColLength = this._getFreezeColLength();
         BI.each(o.columnSize, function (i, size) {
             if (o.isNeedFreeze === true && o.freezeCols.contains(i)) {
@@ -28783,7 +28795,7 @@ BI.CollectionTable = BI.inherit(BI.Widget, {
         var trh = otrh + this._scrollBarSize;
         var blw = oblw + this._scrollBarSize;
         var blh = oblh + this._scrollBarSize;
-        var brw = obrw+ this._scrollBarSize;
+        var brw = obrw + this._scrollBarSize;
         var brh = obrh + this._scrollBarSize;
 
         var digest = function (el) {
@@ -28963,8 +28975,10 @@ BI.CollectionTable = BI.inherit(BI.Widget, {
             return;
         }
         if (this._isNeedDigest === true) {
+            this._reRange();
             this._digest();
         }
+        this._isNeedDigest = false;
         this._populateTable();
         this._populateScrollbar();
     },
@@ -29057,6 +29071,13 @@ BI.CollectionTable = BI.inherit(BI.Widget, {
         this.topRightCollection.restore();
         this.bottomLeftCollection.restore();
         this.bottomRightCollection.restore();
+    },
+
+    _reRange: function () {
+        this.topLeftCollection.reRange();
+        this.topRightCollection.reRange();
+        this.bottomLeftCollection.reRange();
+        this.bottomRightCollection.reRange();
     },
 
     restore: function () {
@@ -29671,6 +29692,10 @@ BI.GridTable = BI.inherit(BI.Widget, {
         if (this._width <= 0 || this._height <= 0) {
             return;
         }
+        if (this._isNeedDigest === true) {
+            this._reRange();
+            this._isNeedDigest = false;
+        }
         this._populateTable();
         this._populateScrollbar();
     },
@@ -29728,10 +29753,12 @@ BI.GridTable = BI.inherit(BI.Widget, {
 
     setColumnSize: function (columnSize) {
         this.options.columnSize = columnSize;
+        this._isNeedDigest = true;
     },
 
     setRegionColumnSize: function (regionColumnSize) {
         this.options.regionColumnSize = regionColumnSize;
+        this._isNeedDigest = true;
     },
 
     getColumnSize: function () {
@@ -29744,11 +29771,13 @@ BI.GridTable = BI.inherit(BI.Widget, {
 
     populate: function (items, header) {
         if (items && this.options.items !== items) {
+            this._isNeedDigest = true;
             this.options.items = items;
             this.items = this._getItems();
             this._restore();
         }
         if (header && this.options.header !== header) {
+            this._isNeedDigest = true;
             this.options.header = header;
             this.header = this._getHeader();
             this._restore();
@@ -29761,6 +29790,13 @@ BI.GridTable = BI.inherit(BI.Widget, {
         this.topRightGrid.restore();
         this.bottomLeftGrid.restore();
         this.bottomRightGrid.restore();
+    },
+
+    _reRange: function () {
+        this.topLeftGrid.reRange();
+        this.topRightGrid.reRange();
+        this.bottomLeftGrid.reRange();
+        this.bottomRightGrid.reRange();
     },
 
     restore: function () {
@@ -32356,8 +32392,10 @@ BI.ResizableTable = BI.inherit(BI.Widget, {
         };
         var stop = function (j, size) {
             self.resizer.setVisible(false);
-            o.columnSize[j] = size;
-            self.table.setColumnSize(o.columnSize);
+            var columnSize = o.columnSize.slice();
+            columnSize[j] = size;
+            o.columnSize = columnSize;
+            self.table.setColumnSize(columnSize);
             self.table.populate();
             self._populate();
             self.fireEvent(BI.Table.EVENT_TABLE_AFTER_COLUMN_RESIZE);

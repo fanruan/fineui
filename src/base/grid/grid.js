@@ -123,6 +123,7 @@ BI.GridView = BI.inherit(BI.Widget, {
 
             var renderedCells = [], renderedKeys = [], renderedWidgets = {};
             var minX = this._getMaxScrollLeft(), minY = this._getMaxScrollTop(), maxX = 0, maxY = 0;
+            var count = 0;
             for (var rowIndex = rowStartIndex; rowIndex <= rowStopIndex; rowIndex++) {
                 var rowDatum = this._rowSizeAndPositionManager.getSizeAndPositionOfCell(rowIndex);
 
@@ -173,7 +174,7 @@ BI.GridView = BI.inherit(BI.Widget, {
                     minY = Math.min(minY, rowDatum.offset + verticalOffsetAdjustment);
                     maxY = Math.max(maxY, rowDatum.offset + verticalOffsetAdjustment + rowDatum.size);
                     renderedKeys.push(key);
-                    renderedWidgets[rowIndex] = child;
+                    renderedWidgets[count++] = child;
                 }
             }
             //已存在的， 需要添加的和需要删除的
@@ -306,6 +307,11 @@ BI.GridView = BI.inherit(BI.Widget, {
         this.options.estimatedRowSize = height;
     },
 
+    //重新计算children
+    reRange: function () {
+        this.renderRange = {};
+    },
+
     restore: function () {
         BI.each(this.renderedCells, function (i, cell) {
             cell.el.destroy();
@@ -319,7 +325,6 @@ BI.GridView = BI.inherit(BI.Widget, {
     populate: function (items) {
         if (items && items !== this.options.items) {
             this.options.items = items;
-            this.restore();
         }
         this._populate();
     }
