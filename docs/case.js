@@ -7951,6 +7951,10 @@ BI.AllCountPager = BI.inherit(BI.Widget, {
         this.pager.setValue(v);
     },
 
+    setVPage: function (v) {
+        this.pager.setValue(v);
+    },
+
     setCount: function (count) {
         this.rowCount.setText(count);
         this.rowCount.setTitle(count);

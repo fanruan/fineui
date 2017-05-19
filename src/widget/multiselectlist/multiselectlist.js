@@ -1,17 +1,17 @@
 /**
  * Created by zcf_1 on 2017/5/2.
  */
-BI.MultiStringList = BI.inherit(BI.Widget, {
+BI.MultiSelectList = BI.inherit(BI.Widget, {
     _defaultConfig: function () {
-        return BI.extend(BI.MultiStringList.superclass._defaultConfig.apply(this, arguments), {
-            baseCls: 'bi-multi-string-list',
+        return BI.extend(BI.MultiSelectList.superclass._defaultConfig.apply(this, arguments), {
+            baseCls: 'bi-multi-select-list',
             itemsCreator: BI.emptyFn,
             valueFormatter: BI.emptyFn,
             el: {}
         })
     },
     _init: function () {
-        BI.MultiStringList.superclass._init.apply(this, arguments);
+        BI.MultiSelectList.superclass._init.apply(this, arguments);
 
         var self = this, o = this.options;
         this.storeValue = {};
@@ -22,7 +22,7 @@ BI.MultiStringList = BI.inherit(BI.Widget, {
 
         this.adapter = BI.createWidget({
             type: "bi.multi_select_loader",
-            cls: "popup-multi-string-list bi-border-left bi-border-right bi-border-bottom",
+            cls: "popup-multi-select-list bi-border-left bi-border-right bi-border-bottom",
             itemsCreator: o.itemsCreator,
             valueFormatter: o.valueFormatter,
             // onLoaded: o.onLoaded,
@@ -34,7 +34,7 @@ BI.MultiStringList = BI.inherit(BI.Widget, {
             self.storeValue = this.getValue();
             self._adjust(function () {
                 assertShowValue();
-                self.fireEvent(BI.MultiStringList.EVENT_CHANGE);
+                self.fireEvent(BI.MultiSelectList.EVENT_CHANGE);
             });
         });
 
@@ -93,7 +93,7 @@ BI.MultiStringList = BI.inherit(BI.Widget, {
                             self._setStartValue(keyword);
                             assertShowValue();
                             self._setStartValue("");
-                            self.fireEvent(BI.MultiStringList.EVENT_CHANGE);
+                            self.fireEvent(BI.MultiSelectList.EVENT_CHANGE);
                         })
                     } else {
                         self._showAdapter();
@@ -194,7 +194,7 @@ BI.MultiStringList = BI.inherit(BI.Widget, {
         this._assertValue(this.storeValue);
         if (!this._allData) {
             o.itemsCreator({
-                type: BI.MultiStringList.REQ_GET_ALL_DATA
+                type: BI.MultiSelectList.REQ_GET_ALL_DATA
             }, function (ob) {
                 self._allData = BI.pluck(ob.items, "value");
                 digest(self._allData);
@@ -218,7 +218,7 @@ BI.MultiStringList = BI.inherit(BI.Widget, {
         var self = this, o = this.options;
         this._assertValue(res);
         o.itemsCreator({
-            type: BI.MultiStringList.REQ_GET_ALL_DATA,
+            type: BI.MultiSelectList.REQ_GET_ALL_DATA,
             keyword: self.trigger.getKeyword()
         }, function (ob) {
             var items = BI.pluck(ob.items, "value");
@@ -255,7 +255,7 @@ BI.MultiStringList = BI.inherit(BI.Widget, {
         var self = this, o = this.options;
         if (!this._count) {
             o.itemsCreator({
-                type: BI.MultiStringList.REQ_GET_DATA_LENGTH
+                type: BI.MultiSelectList.REQ_GET_DATA_LENGTH
             }, function (res) {
                 self._count = res.count;
                 adjust();
@@ -338,10 +338,10 @@ BI.MultiStringList = BI.inherit(BI.Widget, {
     }
 });
 
-BI.extend(BI.MultiStringList, {
+BI.extend(BI.MultiSelectList, {
     REQ_GET_DATA_LENGTH: 0,
     REQ_GET_ALL_DATA: -1
 });
 
-BI.MultiStringList.EVENT_CHANGE = "BI.MultiStringList.EVENT_CHANGE";
-BI.shortcut("bi.multi_string_list", BI.MultiStringList);
+BI.MultiSelectList.EVENT_CHANGE = "BI.MultiSelectList.EVENT_CHANGE";
+BI.shortcut("bi.multi_select_list", BI.MultiSelectList);

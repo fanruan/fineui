@@ -10957,17 +10957,17 @@ BI.MultiSelectCheckSelectedSwitcher.EVENT_BEFORE_POPUPVIEW = "MultiSelectCheckSe
 BI.shortcut('bi.multi_select_check_selected_switcher', BI.MultiSelectCheckSelectedSwitcher);/**
  * Created by zcf_1 on 2017/5/2.
  */
-BI.MultiStringList = BI.inherit(BI.Widget, {
+BI.MultiSelectList = BI.inherit(BI.Widget, {
     _defaultConfig: function () {
-        return BI.extend(BI.MultiStringList.superclass._defaultConfig.apply(this, arguments), {
-            baseCls: 'bi-multi-string-list',
+        return BI.extend(BI.MultiSelectList.superclass._defaultConfig.apply(this, arguments), {
+            baseCls: 'bi-multi-select-list',
             itemsCreator: BI.emptyFn,
             valueFormatter: BI.emptyFn,
             el: {}
         })
     },
     _init: function () {
-        BI.MultiStringList.superclass._init.apply(this, arguments);
+        BI.MultiSelectList.superclass._init.apply(this, arguments);
 
         var self = this, o = this.options;
         this.storeValue = {};
@@ -10978,7 +10978,7 @@ BI.MultiStringList = BI.inherit(BI.Widget, {
 
         this.adapter = BI.createWidget({
             type: "bi.multi_select_loader",
-            cls: "popup-multi-string-list bi-border-left bi-border-right bi-border-bottom",
+            cls: "popup-multi-select-list bi-border-left bi-border-right bi-border-bottom",
             itemsCreator: o.itemsCreator,
             valueFormatter: o.valueFormatter,
             // onLoaded: o.onLoaded,
@@ -10990,7 +10990,7 @@ BI.MultiStringList = BI.inherit(BI.Widget, {
             self.storeValue = this.getValue();
             self._adjust(function () {
                 assertShowValue();
-                self.fireEvent(BI.MultiStringList.EVENT_CHANGE);
+                self.fireEvent(BI.MultiSelectList.EVENT_CHANGE);
             });
         });
 
@@ -11049,7 +11049,7 @@ BI.MultiStringList = BI.inherit(BI.Widget, {
                             self._setStartValue(keyword);
                             assertShowValue();
                             self._setStartValue("");
-                            self.fireEvent(BI.MultiStringList.EVENT_CHANGE);
+                            self.fireEvent(BI.MultiSelectList.EVENT_CHANGE);
                         })
                     } else {
                         self._showAdapter();
@@ -11150,7 +11150,7 @@ BI.MultiStringList = BI.inherit(BI.Widget, {
         this._assertValue(this.storeValue);
         if (!this._allData) {
             o.itemsCreator({
-                type: BI.MultiStringList.REQ_GET_ALL_DATA
+                type: BI.MultiSelectList.REQ_GET_ALL_DATA
             }, function (ob) {
                 self._allData = BI.pluck(ob.items, "value");
                 digest(self._allData);
@@ -11174,7 +11174,7 @@ BI.MultiStringList = BI.inherit(BI.Widget, {
         var self = this, o = this.options;
         this._assertValue(res);
         o.itemsCreator({
-            type: BI.MultiStringList.REQ_GET_ALL_DATA,
+            type: BI.MultiSelectList.REQ_GET_ALL_DATA,
             keyword: self.trigger.getKeyword()
         }, function (ob) {
             var items = BI.pluck(ob.items, "value");
@@ -11211,7 +11211,7 @@ BI.MultiStringList = BI.inherit(BI.Widget, {
         var self = this, o = this.options;
         if (!this._count) {
             o.itemsCreator({
-                type: BI.MultiStringList.REQ_GET_DATA_LENGTH
+                type: BI.MultiSelectList.REQ_GET_DATA_LENGTH
             }, function (res) {
                 self._count = res.count;
                 adjust();
@@ -11294,13 +11294,214 @@ BI.MultiStringList = BI.inherit(BI.Widget, {
     }
 });
 
-BI.extend(BI.MultiStringList, {
+BI.extend(BI.MultiSelectList, {
     REQ_GET_DATA_LENGTH: 0,
     REQ_GET_ALL_DATA: -1
 });
 
-BI.MultiStringList.EVENT_CHANGE = "BI.MultiStringList.EVENT_CHANGE";
-BI.shortcut("bi.multi_string_list", BI.MultiStringList);/**
+BI.MultiSelectList.EVENT_CHANGE = "BI.MultiSelectList.EVENT_CHANGE";
+BI.shortcut("bi.multi_select_list", BI.MultiSelectList);/**
+ * Created by zcf_1 on 2017/5/11.
+ */
+BI.MultiSelectTree = BI.inherit(BI.Widget, {
+    _defaultConfig: function () {
+        return BI.extend(BI.MultiSelectTree.superclass._defaultConfig.apply(this, arguments), {
+            baseCls: 'bi-multi-select-tree',
+            itemsCreator: BI.emptyFn,
+            height: 25
+        })
+    },
+
+    _init: function () {
+        BI.MultiSelectTree.superclass._init.apply(this, arguments);
+        var self = this, o = this.options;
+        this.storeValue = {value: {}};
+
+        this.adapter = BI.createWidget({
+            type: "bi.multi_select_tree_popup",
+            itemsCreator: o.itemsCreator
+        });
+        this.adapter.on(BI.MultiSelectTreePopup.EVENT_CHANGE, function () {
+            if (self.trigger.isSearching()) {
+                self.storeValue = {value: self.searcherPane.getValue()};
+            } else {
+                self.storeValue = {value: self.adapter.getValue()};
+            }
+            self.fireEvent(BI.MultiSelectTree.EVENT_CHANGE);
+        });
+
+        this.searcherPane = BI.createWidget({//搜索中的时候用的是parttree，同adapter中的synctree不一样
+            type: "bi.multi_tree_search_pane",
+            cls: "bi-border-left bi-border-right bi-border-bottom",
+            keywordGetter: function () {
+                return self.trigger.getKeyword();
+            },
+            itemsCreator: function (op, callback) {
+                op.keyword = self.trigger.getKeyword();
+                o.itemsCreator(op, callback);
+            }
+        });
+        this.searcherPane.setVisible(false);
+
+        this.trigger = BI.createWidget({
+            type: "bi.searcher",
+            isAutoSearch: false,
+            isAutoSync: false,
+            onSearch: function (op, callback) {
+                callback({
+                    keyword: self.trigger.getKeyword()
+                });
+            },
+            adapter: this.adapter,
+            popup: this.searcherPane,
+            height: 200,
+            masker: false,
+            listeners: [{
+                eventName: BI.Searcher.EVENT_START,
+                action: function () {
+                    self._showSearcherPane();
+                    self.storeValue = {value: self.adapter.getValue()};
+                    self.searcherPane.setValue(self.storeValue);
+                }
+            }, {
+                eventName: BI.Searcher.EVENT_STOP,
+                action: function () {
+                    self._showAdapter();
+                    // self.storeValue = {value: self.searcherPane.getValue()};
+                    self.adapter.setValue(self.storeValue);
+                    BI.nextTick(function () {
+                        self.adapter.populate();
+                    });
+                }
+            }, {
+                eventName: BI.Searcher.EVENT_CHANGE,
+                action: function () {
+                    if (self.trigger.isSearching()) {
+                        self.storeValue = {value: self.searcherPane.getValue()};
+                    } else {
+                        self.storeValue = {value: self.adapter.getValue()};
+                    }
+                    self.fireEvent(BI.MultiSelectTree.EVENT_CHANGE);
+                }
+            }, {
+                eventName: BI.Searcher.EVENT_PAUSE,
+                action: function () {
+                    self._showAdapter();
+                }
+            }]
+        });
+
+        BI.createWidget({
+            type: "bi.vtape",
+            element: this,
+            height: "100%",
+            width: "100%",
+            items: [{
+                el: this.trigger,
+                height: 30
+            }, {
+                el: this.adapter,
+                height: "fill"
+            }]
+        });
+        BI.createWidget({
+            type: "bi.absolute",
+            element: this,
+            height: "100%",
+            width: "100%",
+            items: [{
+                el: this.searcherPane,
+                top: 30,
+                bottom: 0,
+                left: 0,
+                right: 0
+            }]
+        })
+
+    },
+
+    _showAdapter: function () {
+        this.adapter.setVisible(true);
+        this.searcherPane.setVisible(false);
+    },
+
+    _showSearcherPane: function () {
+        this.searcherPane.setVisible(true);
+        this.adapter.setVisible(false);
+    },
+
+    resize: function () {
+
+    },
+
+    setValue: function (v) {
+        this.storeValue.value = v || {};
+        this.adapter.setValue({
+            value: v || {}
+        });
+        this.trigger.setValue({
+            value: v || {}
+        });
+    },
+
+    getValue: function () {
+        return this.storeValue.value;
+    },
+
+    populate: function () {
+        this.trigger.populate.apply(this.trigger, arguments);
+        this.adapter.populate.apply(this.adapter, arguments);
+    }
+});
+BI.MultiSelectTree.EVENT_CHANGE = "BI.MultiSelectTree.EVENT_CHANGE";
+BI.shortcut("bi.multi_select_tree", BI.MultiSelectTree);/**
+ * Created by zcf on 2016/12/21.
+ */
+BI.MultiSelectTreePopup = BI.inherit(BI.Widget, {
+    _defaultConfig: function () {
+        return BI.extend(BI.MultiSelectTreePopup.superclass._defaultConfig.apply(this, arguments), {
+            baseCls: "bi-multi-select-tree-popup bi-border-left bi-border-right bi-border-bottom",
+            itemsCreator: BI.emptyFn
+        });
+    },
+    _init: function () {
+        BI.MultiSelectTreePopup.superclass._init.apply(this, arguments);
+        var self = this, o = this.options;
+        this.popup = BI.createWidget({
+            type: "bi.async_tree",
+            height: 400,
+            element: this,
+            itemsCreator: o.itemsCreator
+        });
+        this.popup.on(BI.TreeView.EVENT_AFTERINIT, function () {
+            self.fireEvent(BI.MultiSelectTreePopup.EVENT_AFTER_INIT)
+        });
+        this.popup.on(BI.TreeView.EVENT_CHANGE, function () {
+            self.fireEvent(BI.MultiSelectTreePopup.EVENT_CHANGE)
+        });
+    },
+
+    hasChecked: function () {
+        return this.popup.hasChecked();
+    },
+
+    getValue: function () {
+        return this.popup.getValue();
+    },
+
+    setValue: function (v) {
+        v || (v = {});
+        this.popup.setValue(v.value);
+    },
+
+    populate: function (config) {
+        this.popup.stroke(config);
+    }
+
+});
+BI.MultiSelectTreePopup.EVENT_AFTER_INIT = "BI.MultiSelectTreePopup.EVENT_AFTER_INIT";
+BI.MultiSelectTreePopup.EVENT_CHANGE = "BI.MultiSelectTreePopup.EVENT_CHANGE";
+BI.shortcut("bi.multi_select_tree_popup", BI.MultiSelectTreePopup);/**
  *
  * @class BI.MultiTreeCheckPane
  * @extends BI.Pane
@@ -11695,7 +11896,7 @@ BI.MultiTreePopup = BI.inherit(BI.Pane, {
         this.selectedValues = {};
 
         this.tree = BI.createWidget({
-            type: "bi.sync_tree",
+            type: "bi.async_tree",
             height: 400,
             cls:"popup-view-tree",
             itemsCreator: opts.itemsCreator,
@@ -12039,208 +12240,7 @@ BI.MultiTreeSearcher.EVENT_CHANGE = "EVENT_CHANGE";
 BI.MultiTreeSearcher.EVENT_START = "EVENT_START";
 BI.MultiTreeSearcher.EVENT_STOP = "EVENT_STOP";
 BI.MultiTreeSearcher.EVENT_PAUSE = "EVENT_PAUSE";
-BI.shortcut('bi.multi_tree_searcher', BI.MultiTreeSearcher);/**
- * Created by zcf_1 on 2017/5/11.
- */
-BI.MultiSelectTree = BI.inherit(BI.Widget, {
-    _defaultConfig: function () {
-        return BI.extend(BI.MultiSelectTree.superclass._defaultConfig.apply(this, arguments), {
-            baseCls: 'bi-multi-tree-combo',
-            itemsCreator: BI.emptyFn,
-            height: 25
-        })
-    },
-
-    _init: function () {
-        BI.MultiSelectTree.superclass._init.apply(this, arguments);
-        var self = this, o = this.options;
-        this.storeValue = {value: {}};
-
-        this.adapter = BI.createWidget({
-            type: "bi.multi_select_tree_popup",
-            itemsCreator: o.itemsCreator
-        });
-        this.adapter.on(BI.MultiSelectTreePopup.EVENT_CHANGE, function () {
-            if (self.trigger.isSearching()) {
-                self.storeValue = {value: self.searcherPane.getValue()};
-            } else {
-                self.storeValue = {value: self.adapter.getValue()};
-            }
-            self.fireEvent(BI.MultiSelectTree.EVENT_CHANGE);
-        });
-
-        this.searcherPane = BI.createWidget({//搜索中的时候用的是parttree，同adapter中的synctree不一样
-            type: "bi.multi_tree_search_pane",
-            cls: "bi-border-left bi-border-right bi-border-bottom",
-            keywordGetter: function () {
-                return self.trigger.getKeyword();
-            },
-            itemsCreator: function (op, callback) {
-                op.keyword = self.trigger.getKeyword();
-                o.itemsCreator(op, callback);
-            }
-        });
-        this.searcherPane.setVisible(false);
-
-        this.trigger = BI.createWidget({
-            type: "bi.searcher",
-            isAutoSearch: false,
-            isAutoSync: false,
-            onSearch: function (op, callback) {
-                callback({
-                    keyword: self.trigger.getKeyword()
-                });
-            },
-            adapter: this.adapter,
-            popup: this.searcherPane,
-            height: 200,
-            masker: false,
-            listeners: [{
-                eventName: BI.Searcher.EVENT_START,
-                action: function () {
-                    self._showSearcherPane();
-                    self.storeValue = {value: self.adapter.getValue()};
-                    self.searcherPane.setValue(self.storeValue);
-                }
-            }, {
-                eventName: BI.Searcher.EVENT_STOP,
-                action: function () {
-                    self._showAdapter();
-                    // self.storeValue = {value: self.searcherPane.getValue()};
-                    self.adapter.setValue(self.storeValue);
-                    BI.nextTick(function () {
-                        self.adapter.populate();
-                    });
-                }
-            }, {
-                eventName: BI.Searcher.EVENT_CHANGE,
-                action: function () {
-                    if (self.trigger.isSearching()) {
-                        self.storeValue = {value: self.searcherPane.getValue()};
-                    } else {
-                        self.storeValue = {value: self.adapter.getValue()};
-                    }
-                    self.fireEvent(BI.MultiSelectTree.EVENT_CHANGE);
-                }
-            }, {
-                eventName: BI.Searcher.EVENT_PAUSE,
-                action: function () {
-                    self._showAdapter();
-                }
-            }]
-        });
-
-        BI.createWidget({
-            type: "bi.vtape",
-            element: this,
-            height: "100%",
-            width: "100%",
-            items: [{
-                el: this.trigger,
-                height: 30
-            }, {
-                el: this.adapter,
-                height: "fill"
-            }]
-        });
-        BI.createWidget({
-            type: "bi.absolute",
-            element: this,
-            height: "100%",
-            width: "100%",
-            items: [{
-                el: this.searcherPane,
-                top: 30,
-                bottom: 0,
-                left: 0,
-                right: 0
-            }]
-        })
-
-    },
-
-    _showAdapter: function () {
-        this.adapter.setVisible(true);
-        this.searcherPane.setVisible(false);
-    },
-
-    _showSearcherPane: function () {
-        this.searcherPane.setVisible(true);
-        this.adapter.setVisible(false);
-    },
-
-    resize: function () {
-
-    },
-
-    setValue: function (v) {
-        this.storeValue.value = v || {};
-        this.adapter.setValue({
-            value: v || {}
-        });
-        this.trigger.setValue({
-            value: v || {}
-        });
-    },
-
-    getValue: function () {
-        return this.storeValue.value;
-    },
-
-    populate: function () {
-        this.trigger.populate.apply(this.trigger, arguments);
-        this.adapter.populate.apply(this.adapter, arguments);
-    }
-});
-BI.MultiSelectTree.EVENT_CHANGE = "BI.MultiSelectTree.EVENT_CHANGE";
-BI.shortcut("bi.multi_select_tree", BI.MultiSelectTree);/**
- * Created by zcf on 2016/12/21.
- */
-BI.MultiSelectTreePopup = BI.inherit(BI.Widget, {
-    _defaultConfig: function () {
-        return BI.extend(BI.MultiSelectTreePopup.superclass._defaultConfig.apply(this, arguments), {
-            baseCls: "bi-tree-list-popup bi-border-left bi-border-right bi-border-bottom",
-            itemsCreator: BI.emptyFn
-        });
-    },
-    _init: function () {
-        BI.MultiSelectTreePopup.superclass._init.apply(this, arguments);
-        var self = this, o = this.options;
-        this.popup = BI.createWidget({
-            type: "bi.sync_tree",
-            height: 400,
-            element: this,
-            itemsCreator: o.itemsCreator
-        });
-        this.popup.on(BI.TreeView.EVENT_AFTERINIT, function () {
-            self.fireEvent(BI.MultiSelectTreePopup.EVENT_AFTER_INIT)
-        });
-        this.popup.on(BI.TreeView.EVENT_CHANGE, function () {
-            self.fireEvent(BI.MultiSelectTreePopup.EVENT_CHANGE)
-        });
-    },
-
-    hasChecked: function () {
-        return this.popup.hasChecked();
-    },
-
-    getValue: function () {
-        return this.popup.getValue();
-    },
-
-    setValue: function (v) {
-        v || (v = {});
-        this.popup.setValue(v.value);
-    },
-
-    populate: function (config) {
-        this.popup.stroke(config);
-    }
-
-});
-BI.MultiSelectTreePopup.EVENT_AFTER_INIT = "BI.MultiSelectTreePopup.EVENT_AFTER_INIT";
-BI.MultiSelectTreePopup.EVENT_CHANGE = "BI.MultiSelectTreePopup.EVENT_CHANGE";
-BI.shortcut("bi.multi_select_tree_popup", BI.MultiSelectTreePopup);//小于号的值为：0，小于等于号的值为:1
+BI.shortcut('bi.multi_tree_searcher', BI.MultiTreeSearcher);//小于号的值为：0，小于等于号的值为:1
 //closeMIn：最小值的符号，closeMax：最大值的符号
 /**
  * Created by roy on 15/9/17.
@@ -15964,6 +15964,7 @@ BI.SequenceTableListNumber = BI.inherit(BI.Widget, {
     },
 
     setVPage: function (v) {
+        v = v < 1 ? 1 : v;
         var o = this.options;
         this.start = (v - 1) * o.pageSize + 1;
     },

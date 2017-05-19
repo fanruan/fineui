@@ -1956,6 +1956,12 @@ BI.TreeView = BI.inherit(BI.Pane, {
         });
     },
 
+    getExpandedValue: function(){
+        if (!this.nodes) {
+            return null;
+        }
+    },
+
     refresh: function () {
         this.nodes && this.nodes.refresh();
     },
@@ -1991,15 +1997,15 @@ BI.TreeView.EVENT_AFTERINIT = BI.Events.AFTERINIT;
 BI.shortcut("bi.tree_view", BI.TreeView);/**
  * guy
  * 同步树
- * @class BI.SyncTree
+ * @class BI.AsyncTree
  * @extends BI.TreeView
  */
-BI.SyncTree = BI.inherit(BI.TreeView, {
+BI.AsyncTree = BI.inherit(BI.TreeView, {
     _defaultConfig: function () {
-        return BI.extend(BI.SyncTree.superclass._defaultConfig.apply(this, arguments), {})
+        return BI.extend(BI.AsyncTree.superclass._defaultConfig.apply(this, arguments), {})
     },
     _init: function () {
-        BI.SyncTree.superclass._init.apply(this, arguments);
+        BI.AsyncTree.superclass._init.apply(this, arguments);
     },
 
     //配置属性
@@ -2069,7 +2075,7 @@ BI.SyncTree = BI.inherit(BI.TreeView, {
         }
 
         function beforeExpand(treeId, treeNode) {
-            self._expandNode(treeId, treeNode);
+            self._beforeExpandNode(treeId, treeNode);
         }
 
         function onCheck(event, treeId, treeNode) {
@@ -2090,7 +2096,7 @@ BI.SyncTree = BI.inherit(BI.TreeView, {
     _selectTreeNode: function (treeId, treeNode) {
         var self = this, o = this.options;
         var parentValues = BI.deepClone(treeNode.parentValues || self._getParentValues(treeNode));
-        var name = this._getNodeValue(treeNode)
+        var name = this._getNodeValue(treeNode);
 //        var values = parentValues.concat([name]);
         if (treeNode.checked === true) {
         } else {
@@ -2109,11 +2115,11 @@ BI.SyncTree = BI.inherit(BI.TreeView, {
                 }
             }
         }
-        BI.SyncTree.superclass._selectTreeNode.apply(self, arguments);
+        BI.AsyncTree.superclass._selectTreeNode.apply(self, arguments);
     },
 
     //展开节点
-    _expandNode: function (treeId, treeNode) {
+    _beforeExpandNode: function (treeId, treeNode) {
         var self = this, o = this.options;
         var parentValues = treeNode.parentValues || self._getParentValues(treeNode);
         var op = BI.extend({}, o.paras, {
@@ -2168,7 +2174,7 @@ BI.SyncTree = BI.inherit(BI.TreeView, {
     },
 
     hasChecked: function () {
-        return !BI.isEmpty(this.selectedValues) || BI.SyncTree.superclass.hasChecked.apply(this, arguments);
+        return !BI.isEmpty(this.selectedValues) || BI.AsyncTree.superclass.hasChecked.apply(this, arguments);
     },
 
     getValue: function () {
@@ -2196,13 +2202,13 @@ BI.SyncTree = BI.inherit(BI.TreeView, {
     }
 });
 
-BI.shortcut("bi.sync_tree", BI.SyncTree);/**
+BI.shortcut("bi.async_tree", BI.AsyncTree);/**
  * guy
  * 局部树，两个请求树， 第一个请求构造树，第二个请求获取节点
  * @class BI.PartTree
- * @extends BI.SyncTree
+ * @extends BI.AsyncTree
  */
-BI.PartTree = BI.inherit(BI.SyncTree, {
+BI.PartTree = BI.inherit(BI.AsyncTree, {
     _defaultConfig: function () {
         return BI.extend(BI.PartTree.superclass._defaultConfig.apply(this, arguments), {})
     },
@@ -2241,7 +2247,7 @@ BI.PartTree = BI.inherit(BI.SyncTree, {
         var name = this._getNodeValue(treeNode)
 //        var values = parentValues.concat([name]);
         if (treeNode.checked === true) {
-            BI.SyncTree.superclass._selectTreeNode.apply(self, arguments);
+            BI.AsyncTree.superclass._selectTreeNode.apply(self, arguments);
         } else {
             o.itemsCreator(BI.extend({}, o.paras, {
                 type: BI.TreeView.REQ_TYPE_CALCULATE_SELECT_DATA,
@@ -2266,7 +2272,7 @@ BI.PartTree = BI.inherit(BI.SyncTree, {
                     }
                 }
                 self.selectedValues = new_values;
-                BI.SyncTree.superclass._selectTreeNode.apply(self, arguments);
+                BI.AsyncTree.superclass._selectTreeNode.apply(self, arguments);
             });
         }
     },

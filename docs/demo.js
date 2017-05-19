@@ -2755,7 +2755,7 @@ BI.shortcut("demo.value_chooser_combo", Demo.ValueChooserCombo);Demo.BASE_CONFIG
     value: "demo.tree_view"
 }, {
     pId: 203,
-    text: "bi.sync_tree",
+    text: "bi.async_tree",
     value: "demo.sync_tree"
 }, {
     pId: 203,

@@ -469,6 +469,12 @@ BI.TreeView = BI.inherit(BI.Pane, {
         });
     },
 
+    getExpandedValue: function(){
+        if (!this.nodes) {
+            return null;
+        }
+    },
+
     refresh: function () {
         this.nodes && this.nodes.refresh();
     },
