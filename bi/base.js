@@ -2777,6 +2777,7 @@ BI.CollectionView = BI.inherit(BI.Widget, {
 
     _populate: function (items) {
         var o = this.options;
+        this._reRange();
         if (items && items !== this.options.items) {
             this.options.items = items;
             this._calculateSizeAndPositionData();
@@ -2850,7 +2851,7 @@ BI.CollectionView = BI.inherit(BI.Widget, {
     },
 
     //重新计算children
-    reRange: function () {
+    _reRange: function () {
         this.renderRange = {};
     },
 
@@ -14873,6 +14874,7 @@ BI.GridView = BI.inherit(BI.Widget, {
 
     _populate: function (items) {
         var self = this, o = this.options;
+        this._reRange();
         if (items && items !== this.options.items) {
             this.options.items = items;
         }
@@ -14961,7 +14963,7 @@ BI.GridView = BI.inherit(BI.Widget, {
     },
 
     //重新计算children
-    reRange: function () {
+    _reRange: function () {
         this.renderRange = {};
     },
 
@@ -28993,7 +28995,6 @@ BI.CollectionTable = BI.inherit(BI.Widget, {
             return;
         }
         if (this._isNeedDigest === true) {
-            this._reRange();
             this._digest();
         }
         this._isNeedDigest = false;
@@ -29089,13 +29090,6 @@ BI.CollectionTable = BI.inherit(BI.Widget, {
         this.topRightCollection.restore();
         this.bottomLeftCollection.restore();
         this.bottomRightCollection.restore();
-    },
-
-    _reRange: function () {
-        this.topLeftCollection.reRange();
-        this.topRightCollection.reRange();
-        this.bottomLeftCollection.reRange();
-        this.bottomRightCollection.reRange();
     },
 
     restore: function () {
@@ -29710,10 +29704,6 @@ BI.GridTable = BI.inherit(BI.Widget, {
         if (this._width <= 0 || this._height <= 0) {
             return;
         }
-        if (this._isNeedDigest === true) {
-            this._reRange();
-            this._isNeedDigest = false;
-        }
         this._populateTable();
         this._populateScrollbar();
     },
@@ -29789,13 +29779,11 @@ BI.GridTable = BI.inherit(BI.Widget, {
 
     populate: function (items, header) {
         if (items && this.options.items !== items) {
-            this._isNeedDigest = true;
             this.options.items = items;
             this.items = this._getItems();
             this._restore();
         }
         if (header && this.options.header !== header) {
-            this._isNeedDigest = true;
             this.options.header = header;
             this.header = this._getHeader();
             this._restore();
@@ -29808,13 +29796,6 @@ BI.GridTable = BI.inherit(BI.Widget, {
         this.topRightGrid.restore();
         this.bottomLeftGrid.restore();
         this.bottomRightGrid.restore();
-    },
-
-    _reRange: function () {
-        this.topLeftGrid.reRange();
-        this.topRightGrid.reRange();
-        this.bottomLeftGrid.reRange();
-        this.bottomRightGrid.reRange();
     },
 
     restore: function () {

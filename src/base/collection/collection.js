@@ -267,6 +267,7 @@ BI.CollectionView = BI.inherit(BI.Widget, {
 
     _populate: function (items) {
         var o = this.options;
+        this._reRange();
         if (items && items !== this.options.items) {
             this.options.items = items;
             this._calculateSizeAndPositionData();
@@ -340,7 +341,7 @@ BI.CollectionView = BI.inherit(BI.Widget, {
     },
 
     //重新计算children
-    reRange: function () {
+    _reRange: function () {
         this.renderRange = {};
     },
 
