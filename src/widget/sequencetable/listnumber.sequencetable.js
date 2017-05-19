@@ -211,6 +211,7 @@ BI.SequenceTableListNumber = BI.inherit(BI.Widget, {
     },
 
     setVPage: function (v) {
+        v = v < 1 ? 1 : v;
         var o = this.options;
         this.start = (v - 1) * o.pageSize + 1;
     },

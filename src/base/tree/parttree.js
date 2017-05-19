@@ -2,9 +2,9 @@
  * guy
  * 局部树，两个请求树， 第一个请求构造树，第二个请求获取节点
  * @class BI.PartTree
- * @extends BI.SyncTree
+ * @extends BI.AsyncTree
  */
-BI.PartTree = BI.inherit(BI.SyncTree, {
+BI.PartTree = BI.inherit(BI.AsyncTree, {
     _defaultConfig: function () {
         return BI.extend(BI.PartTree.superclass._defaultConfig.apply(this, arguments), {})
     },
@@ -43,7 +43,7 @@ BI.PartTree = BI.inherit(BI.SyncTree, {
         var name = this._getNodeValue(treeNode)
 //        var values = parentValues.concat([name]);
         if (treeNode.checked === true) {
-            BI.SyncTree.superclass._selectTreeNode.apply(self, arguments);
+            BI.AsyncTree.superclass._selectTreeNode.apply(self, arguments);
         } else {
             o.itemsCreator(BI.extend({}, o.paras, {
                 type: BI.TreeView.REQ_TYPE_CALCULATE_SELECT_DATA,
@@ -68,7 +68,7 @@ BI.PartTree = BI.inherit(BI.SyncTree, {
                     }
                 }
                 self.selectedValues = new_values;
-                BI.SyncTree.superclass._selectTreeNode.apply(self, arguments);
+                BI.AsyncTree.superclass._selectTreeNode.apply(self, arguments);
             });
         }
     },

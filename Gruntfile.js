@@ -49,7 +49,7 @@ module.exports = function (grunt) {
                     'src/base/combination/tree.button.js',
                     'src/base/combination/map.button.js',
                     'src/base/tree/treeview.js',
-                    'src/base/tree/synctree.js',
+                    'src/base/tree/asynctree.js',
                     'src/base/tree/parttree.js',
                     'src/base/**/*.js'
                 ],
@@ -162,7 +162,7 @@ module.exports = function (grunt) {
                     'src/base/combination/tree.button.js',
                     'src/base/combination/map.button.js',
                     'src/base/tree/treeview.js',
-                    'src/base/tree/synctree.js',
+                    'src/base/tree/asynctree.js',
                     'src/base/tree/parttree.js',
                     'src/base/**/*.js'
                 ],

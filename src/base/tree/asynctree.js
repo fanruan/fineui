@@ -1,15 +1,15 @@
 /**
  * guy
  * 同步树
- * @class BI.SyncTree
+ * @class BI.AsyncTree
  * @extends BI.TreeView
  */
-BI.SyncTree = BI.inherit(BI.TreeView, {
+BI.AsyncTree = BI.inherit(BI.TreeView, {
     _defaultConfig: function () {
-        return BI.extend(BI.SyncTree.superclass._defaultConfig.apply(this, arguments), {})
+        return BI.extend(BI.AsyncTree.superclass._defaultConfig.apply(this, arguments), {})
     },
     _init: function () {
-        BI.SyncTree.superclass._init.apply(this, arguments);
+        BI.AsyncTree.superclass._init.apply(this, arguments);
     },
 
     //配置属性
@@ -79,7 +79,7 @@ BI.SyncTree = BI.inherit(BI.TreeView, {
         }
 
         function beforeExpand(treeId, treeNode) {
-            self._expandNode(treeId, treeNode);
+            self._beforeExpandNode(treeId, treeNode);
         }
 
         function onCheck(event, treeId, treeNode) {
@@ -100,7 +100,7 @@ BI.SyncTree = BI.inherit(BI.TreeView, {
     _selectTreeNode: function (treeId, treeNode) {
         var self = this, o = this.options;
         var parentValues = BI.deepClone(treeNode.parentValues || self._getParentValues(treeNode));
-        var name = this._getNodeValue(treeNode)
+        var name = this._getNodeValue(treeNode);
 //        var values = parentValues.concat([name]);
         if (treeNode.checked === true) {
         } else {
@@ -119,11 +119,11 @@ BI.SyncTree = BI.inherit(BI.TreeView, {
                 }
             }
         }
-        BI.SyncTree.superclass._selectTreeNode.apply(self, arguments);
+        BI.AsyncTree.superclass._selectTreeNode.apply(self, arguments);
     },
 
     //展开节点
-    _expandNode: function (treeId, treeNode) {
+    _beforeExpandNode: function (treeId, treeNode) {
         var self = this, o = this.options;
         var parentValues = treeNode.parentValues || self._getParentValues(treeNode);
         var op = BI.extend({}, o.paras, {
@@ -178,7 +178,7 @@ BI.SyncTree = BI.inherit(BI.TreeView, {
     },
 
     hasChecked: function () {
-        return !BI.isEmpty(this.selectedValues) || BI.SyncTree.superclass.hasChecked.apply(this, arguments);
+        return !BI.isEmpty(this.selectedValues) || BI.AsyncTree.superclass.hasChecked.apply(this, arguments);
     },
 
     getValue: function () {
@@ -206,4 +206,4 @@ BI.SyncTree = BI.inherit(BI.TreeView, {
     }
 });
 
-BI.shortcut("bi.sync_tree", BI.SyncTree);
+BI.shortcut("bi.async_tree", BI.AsyncTree);

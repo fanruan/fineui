@@ -429,7 +429,6 @@ BI.CollectionTable = BI.inherit(BI.Widget, {
             return;
         }
         if (this._isNeedDigest === true) {
-            this._reRange();
             this._digest();
         }
         this._isNeedDigest = false;
@@ -525,13 +524,6 @@ BI.CollectionTable = BI.inherit(BI.Widget, {
         this.topRightCollection.restore();
         this.bottomLeftCollection.restore();
         this.bottomRightCollection.restore();
-    },
-
-    _reRange: function () {
-        this.topLeftCollection.reRange();
-        this.topRightCollection.reRange();
-        this.bottomLeftCollection.reRange();
-        this.bottomRightCollection.reRange();
     },
 
     restore: function () {

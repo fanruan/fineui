@@ -4,7 +4,7 @@ if(![].indexOf){
      * @param {Object} o 要检查的值
      * @return {Number}  o在数组中的索引（如果不在数组中则返回-1）
      */
-    [].indexOf = function (o) {
+    Array.prototype.indexOf = function (o) {
         for (var i = 0, len = this.length; i < len; i++) {
             if (_.isEqual(o, this[i])) {
                 return i;
@@ -20,7 +20,7 @@ if(![].lastIndexOf){
      * @param {Object} o 要检查的值
      * @return {Number}  o在数组中的索引（如果不在数组中则返回-1）
      */
-    [].lastIndexOf = function (o) {
+    Array.prototype.lastIndexOf = function (o) {
         for (var len = this.length, i = len - 1; i >= 0; i--) {
             if (_.isEqual(o, this[i])) {
                 return i;

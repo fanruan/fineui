@@ -4,7 +4,7 @@
 BI.MultiSelectTreePopup = BI.inherit(BI.Widget, {
     _defaultConfig: function () {
         return BI.extend(BI.MultiSelectTreePopup.superclass._defaultConfig.apply(this, arguments), {
-            baseCls: "bi-tree-list-popup bi-border-left bi-border-right bi-border-bottom",
+            baseCls: "bi-multi-select-tree-popup bi-border-left bi-border-right bi-border-bottom",
             itemsCreator: BI.emptyFn
         });
     },
@@ -12,7 +12,7 @@ BI.MultiSelectTreePopup = BI.inherit(BI.Widget, {
         BI.MultiSelectTreePopup.superclass._init.apply(this, arguments);
         var self = this, o = this.options;
         this.popup = BI.createWidget({
-            type: "bi.sync_tree",
+            type: "bi.async_tree",
             height: 400,
             element: this,
             itemsCreator: o.itemsCreator

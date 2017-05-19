@@ -223,6 +223,7 @@ BI.GridView = BI.inherit(BI.Widget, {
 
     _populate: function (items) {
         var self = this, o = this.options;
+        this._reRange();
         if (items && items !== this.options.items) {
             this.options.items = items;
         }
@@ -311,7 +312,7 @@ BI.GridView = BI.inherit(BI.Widget, {
     },
 
     //重新计算children
-    reRange: function () {
+    _reRange: function () {
         this.renderRange = {};
     },
 

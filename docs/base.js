@@ -781,7 +781,7 @@ BI.BasicButton = BI.inherit(BI.Single, {
         });
 
         //之后的300ms点击无效
-        var onClick = BI.debounce(this.doClick, BI.EVENT_RESPONSE_TIME, true);
+        var onClick = BI.debounce(this._doClick, BI.EVENT_RESPONSE_TIME, true);
 
         function ev(e) {
             if (o.stopEvent) {
@@ -803,6 +803,11 @@ BI.BasicButton = BI.inherit(BI.Single, {
 
     _trigger: function () {
         var o = this.options;
+        if (!this.isDisableSelected()) {
+            this.isForceSelected() ? this.setSelected(true) :
+                (this.isForceNotSelected() ? this.setSelected(false) :
+                    this.setSelected(!this.isSelected()));
+        }
         if (this.isValid()) {
             o.handler.call(this, this.getValue(), this);
             var v = this.getValue();
@@ -811,13 +816,15 @@ BI.BasicButton = BI.inherit(BI.Single, {
         }
     },
 
-    doClick: function () {
-        if (!this.isDisableSelected()) {
-            this.isForceSelected() ? this.setSelected(true) :
-                (this.isForceNotSelected() ? this.setSelected(false) :
-                    this.setSelected(!this.isSelected()));
-        }
+    _doClick: function () {
         this._trigger();
+        if (this.isValid()) {
+            this.doClick();
+        }
+    },
+
+    doClick: function () {
+
     },
 
     handle: function () {
@@ -1956,6 +1963,12 @@ BI.TreeView = BI.inherit(BI.Pane, {
         });
     },
 
+    getExpandedValue: function(){
+        if (!this.nodes) {
+            return null;
+        }
+    },
+
     refresh: function () {
         this.nodes && this.nodes.refresh();
     },
@@ -1991,15 +2004,15 @@ BI.TreeView.EVENT_AFTERINIT = BI.Events.AFTERINIT;
 BI.shortcut("bi.tree_view", BI.TreeView);/**
  * guy
  * 同步树
- * @class BI.SyncTree
+ * @class BI.AsyncTree
  * @extends BI.TreeView
  */
-BI.SyncTree = BI.inherit(BI.TreeView, {
+BI.AsyncTree = BI.inherit(BI.TreeView, {
     _defaultConfig: function () {
-        return BI.extend(BI.SyncTree.superclass._defaultConfig.apply(this, arguments), {})
+        return BI.extend(BI.AsyncTree.superclass._defaultConfig.apply(this, arguments), {})
     },
     _init: function () {
-        BI.SyncTree.superclass._init.apply(this, arguments);
+        BI.AsyncTree.superclass._init.apply(this, arguments);
     },
 
     //配置属性
@@ -2069,7 +2082,7 @@ BI.SyncTree = BI.inherit(BI.TreeView, {
         }
 
         function beforeExpand(treeId, treeNode) {
-            self._expandNode(treeId, treeNode);
+            self._beforeExpandNode(treeId, treeNode);
         }
 
         function onCheck(event, treeId, treeNode) {
@@ -2090,7 +2103,7 @@ BI.SyncTree = BI.inherit(BI.TreeView, {
     _selectTreeNode: function (treeId, treeNode) {
         var self = this, o = this.options;
         var parentValues = BI.deepClone(treeNode.parentValues || self._getParentValues(treeNode));
-        var name = this._getNodeValue(treeNode)
+        var name = this._getNodeValue(treeNode);
 //        var values = parentValues.concat([name]);
         if (treeNode.checked === true) {
         } else {
@@ -2109,11 +2122,11 @@ BI.SyncTree = BI.inherit(BI.TreeView, {
                 }
             }
         }
-        BI.SyncTree.superclass._selectTreeNode.apply(self, arguments);
+        BI.AsyncTree.superclass._selectTreeNode.apply(self, arguments);
     },
 
     //展开节点
-    _expandNode: function (treeId, treeNode) {
+    _beforeExpandNode: function (treeId, treeNode) {
         var self = this, o = this.options;
         var parentValues = treeNode.parentValues || self._getParentValues(treeNode);
         var op = BI.extend({}, o.paras, {
@@ -2168,7 +2181,7 @@ BI.SyncTree = BI.inherit(BI.TreeView, {
     },
 
     hasChecked: function () {
-        return !BI.isEmpty(this.selectedValues) || BI.SyncTree.superclass.hasChecked.apply(this, arguments);
+        return !BI.isEmpty(this.selectedValues) || BI.AsyncTree.superclass.hasChecked.apply(this, arguments);
     },
 
     getValue: function () {
@@ -2196,13 +2209,13 @@ BI.SyncTree = BI.inherit(BI.TreeView, {
     }
 });
 
-BI.shortcut("bi.sync_tree", BI.SyncTree);/**
+BI.shortcut("bi.async_tree", BI.AsyncTree);/**
  * guy
  * 局部树，两个请求树， 第一个请求构造树，第二个请求获取节点
  * @class BI.PartTree
- * @extends BI.SyncTree
+ * @extends BI.AsyncTree
  */
-BI.PartTree = BI.inherit(BI.SyncTree, {
+BI.PartTree = BI.inherit(BI.AsyncTree, {
     _defaultConfig: function () {
         return BI.extend(BI.PartTree.superclass._defaultConfig.apply(this, arguments), {})
     },
@@ -2241,7 +2254,7 @@ BI.PartTree = BI.inherit(BI.SyncTree, {
         var name = this._getNodeValue(treeNode)
 //        var values = parentValues.concat([name]);
         if (treeNode.checked === true) {
-            BI.SyncTree.superclass._selectTreeNode.apply(self, arguments);
+            BI.AsyncTree.superclass._selectTreeNode.apply(self, arguments);
         } else {
             o.itemsCreator(BI.extend({}, o.paras, {
                 type: BI.TreeView.REQ_TYPE_CALCULATE_SELECT_DATA,
@@ -2266,7 +2279,7 @@ BI.PartTree = BI.inherit(BI.SyncTree, {
                     }
                 }
                 self.selectedValues = new_values;
-                BI.SyncTree.superclass._selectTreeNode.apply(self, arguments);
+                BI.AsyncTree.superclass._selectTreeNode.apply(self, arguments);
             });
         }
     },
@@ -2777,6 +2790,7 @@ BI.CollectionView = BI.inherit(BI.Widget, {
 
     _populate: function (items) {
         var o = this.options;
+        this._reRange();
         if (items && items !== this.options.items) {
             this.options.items = items;
             this._calculateSizeAndPositionData();
@@ -2850,7 +2864,7 @@ BI.CollectionView = BI.inherit(BI.Widget, {
     },
 
     //重新计算children
-    reRange: function () {
+    _reRange: function () {
         this.renderRange = {};
     },
 
@@ -14873,6 +14887,7 @@ BI.GridView = BI.inherit(BI.Widget, {
 
     _populate: function (items) {
         var self = this, o = this.options;
+        this._reRange();
         if (items && items !== this.options.items) {
             this.options.items = items;
         }
@@ -14961,7 +14976,7 @@ BI.GridView = BI.inherit(BI.Widget, {
     },
 
     //重新计算children
-    reRange: function () {
+    _reRange: function () {
         this.renderRange = {};
     },
 
@@ -28993,7 +29008,6 @@ BI.CollectionTable = BI.inherit(BI.Widget, {
             return;
         }
         if (this._isNeedDigest === true) {
-            this._reRange();
             this._digest();
         }
         this._isNeedDigest = false;
@@ -29089,13 +29103,6 @@ BI.CollectionTable = BI.inherit(BI.Widget, {
         this.topRightCollection.restore();
         this.bottomLeftCollection.restore();
         this.bottomRightCollection.restore();
-    },
-
-    _reRange: function () {
-        this.topLeftCollection.reRange();
-        this.topRightCollection.reRange();
-        this.bottomLeftCollection.reRange();
-        this.bottomRightCollection.reRange();
     },
 
     restore: function () {
@@ -29710,10 +29717,6 @@ BI.GridTable = BI.inherit(BI.Widget, {
         if (this._width <= 0 || this._height <= 0) {
             return;
         }
-        if (this._isNeedDigest === true) {
-            this._reRange();
-            this._isNeedDigest = false;
-        }
         this._populateTable();
         this._populateScrollbar();
     },
@@ -29789,13 +29792,11 @@ BI.GridTable = BI.inherit(BI.Widget, {
 
     populate: function (items, header) {
         if (items && this.options.items !== items) {
-            this._isNeedDigest = true;
             this.options.items = items;
             this.items = this._getItems();
             this._restore();
         }
         if (header && this.options.header !== header) {
-            this._isNeedDigest = true;
             this.options.header = header;
             this.header = this._getHeader();
             this._restore();
@@ -29808,13 +29809,6 @@ BI.GridTable = BI.inherit(BI.Widget, {
         this.topRightGrid.restore();
         this.bottomLeftGrid.restore();
         this.bottomRightGrid.restore();
-    },
-
-    _reRange: function () {
-        this.topLeftGrid.reRange();
-        this.topRightGrid.reRange();
-        this.bottomLeftGrid.reRange();
-        this.bottomRightGrid.reRange();
     },
 
     restore: function () {

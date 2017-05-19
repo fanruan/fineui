@@ -4,7 +4,7 @@
 BI.MultiSelectTree = BI.inherit(BI.Widget, {
     _defaultConfig: function () {
         return BI.extend(BI.MultiSelectTree.superclass._defaultConfig.apply(this, arguments), {
-            baseCls: 'bi-multi-tree-combo',
+            baseCls: 'bi-multi-select-tree',
             itemsCreator: BI.emptyFn,
             height: 25
         })

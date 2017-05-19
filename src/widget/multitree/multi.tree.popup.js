@@ -23,7 +23,7 @@ BI.MultiTreePopup = BI.inherit(BI.Pane, {
         this.selectedValues = {};
 
         this.tree = BI.createWidget({
-            type: "bi.sync_tree",
+            type: "bi.async_tree",
             height: 400,
             cls:"popup-view-tree",
             itemsCreator: opts.itemsCreator,
