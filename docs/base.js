@@ -781,7 +781,7 @@ BI.BasicButton = BI.inherit(BI.Single, {
         });
 
         //之后的300ms点击无效
-        var onClick = BI.debounce(this.doClick, BI.EVENT_RESPONSE_TIME, true);
+        var onClick = BI.debounce(this._doClick, BI.EVENT_RESPONSE_TIME, true);
 
         function ev(e) {
             if (o.stopEvent) {
@@ -803,6 +803,11 @@ BI.BasicButton = BI.inherit(BI.Single, {
 
     _trigger: function () {
         var o = this.options;
+        if (!this.isDisableSelected()) {
+            this.isForceSelected() ? this.setSelected(true) :
+                (this.isForceNotSelected() ? this.setSelected(false) :
+                    this.setSelected(!this.isSelected()));
+        }
         if (this.isValid()) {
             o.handler.call(this, this.getValue(), this);
             var v = this.getValue();
@@ -811,13 +816,15 @@ BI.BasicButton = BI.inherit(BI.Single, {
         }
     },
 
-    doClick: function () {
-        if (!this.isDisableSelected()) {
-            this.isForceSelected() ? this.setSelected(true) :
-                (this.isForceNotSelected() ? this.setSelected(false) :
-                    this.setSelected(!this.isSelected()));
-        }
+    _doClick: function () {
         this._trigger();
+        if (this.isValid()) {
+            this.doClick();
+        }
+    },
+
+    doClick: function () {
+
     },
 
     handle: function () {
