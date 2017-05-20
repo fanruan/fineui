@@ -11433,6 +11433,14 @@ BI.MultiSelectTree = BI.inherit(BI.Widget, {
         });
     },
 
+    stopSearch: function () {
+        this.trigger.stopSearch();
+    },
+
+    updateValue: function (v) {
+        this.adapter.updateValue(v);
+    },
+
     getValue: function () {
         return this.storeValue.value;
     },
@@ -11480,6 +11488,11 @@ BI.MultiSelectTreePopup = BI.inherit(BI.Widget, {
     setValue: function (v) {
         v || (v = {});
         this.popup.setValue(v.value);
+    },
+
+    updateValue: function (v) {
+        this.popup.updateValue(v);
+        this.popup.refresh();
     },
 
     populate: function (config) {
