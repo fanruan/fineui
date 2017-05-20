@@ -1,11 +1,11 @@
 Demo.TreeValueChooser = BI.inherit(BI.Widget, {
     props: {
-        baseCls: "demo-tree-value-chooser"
+        baseCls: "demo-tree-value-chooser-combo"
     },
     render: function () {
 
         var tree = [];
-        for (var i = 0; i < 21; i++) {
+        for (var i = 0; i < 221; i++) {
             tree.push({
                 value: "" + i + "",
                 text: "" + i + "",
@@ -37,4 +37,4 @@ Demo.TreeValueChooser = BI.inherit(BI.Widget, {
         };
     }
 });
-BI.shortcut("demo.tree_value_chooser", Demo.TreeValueChooser);
+BI.shortcut("demo.tree_value_chooser_combo", Demo.TreeValueChooser);

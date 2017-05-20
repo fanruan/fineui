@@ -13,7 +13,6 @@ BI.MultiSelectTreePopup = BI.inherit(BI.Widget, {
         var self = this, o = this.options;
         this.popup = BI.createWidget({
             type: "bi.async_tree",
-            height: 400,
             element: this,
             itemsCreator: o.itemsCreator
         });

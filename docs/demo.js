@@ -2620,12 +2620,12 @@ BI.shortcut("demo.center", Demo.Center);Demo.Func = BI.inherit(BI.Widget, {
 BI.shortcut("demo.axis_chart", Demo.Func);
 Demo.TreeValueChooser = BI.inherit(BI.Widget, {
     props: {
-        baseCls: "demo-tree-value-chooser"
+        baseCls: "demo-tree-value-chooser-combo"
     },
     render: function () {
 
         var tree = [];
-        for (var i = 0; i < 21; i++) {
+        for (var i = 0; i < 221; i++) {
             tree.push({
                 value: "" + i + "",
                 text: "" + i + "",
@@ -2657,7 +2657,41 @@ Demo.TreeValueChooser = BI.inherit(BI.Widget, {
         };
     }
 });
-BI.shortcut("demo.tree_value_chooser", Demo.TreeValueChooser);
+BI.shortcut("demo.tree_value_chooser_combo", Demo.TreeValueChooser);
+Demo.TreeValueChooser = BI.inherit(BI.Widget, {
+    props: {
+        baseCls: "demo-tree-value-chooser"
+    },
+    render: function () {
+
+        var tree = [];
+        for (var i = 0; i < 221; i++) {
+            tree.push({
+                value: "" + i + "",
+                text: "" + i + "",
+                id: i + "",
+                pId: null
+            });
+            for (var j = 0; j < 9; j++) {
+                tree.push({
+                    value: i + "-" + j,
+                    text: j + "",
+                    id: i + "-" + j,
+                    pId: i + ""
+                })
+            }
+        }
+        return {
+            type: "bi.tree_value_chooser_pane",
+            width: 300,
+            items: tree,
+            itemsCreator: function (op, callback) {
+                callback(tree);
+            }
+        };
+    }
+});
+BI.shortcut("demo.tree_value_chooser_pane", Demo.TreeValueChooser);
 Demo.ValueChooserCombo = BI.inherit(BI.Widget, {
     props: {
         baseCls: "demo-value-chooser-combo"
@@ -2677,7 +2711,21 @@ Demo.ValueChooserCombo = BI.inherit(BI.Widget, {
         };
     }
 });
-BI.shortcut("demo.value_chooser_combo", Demo.ValueChooserCombo);Demo.BASE_CONFIG = [{
+BI.shortcut("demo.value_chooser_combo", Demo.ValueChooserCombo);Demo.ValueChooserPane = BI.inherit(BI.Widget, {
+    props: {
+        baseCls: "demo-value-chooser-pane"
+    },
+    render: function () {
+        return {
+            type: "bi.value_chooser_pane",
+            items: BI.deepClone(Demo.CONSTANTS.ITEMS),
+            itemsCreator: function (op, callback) {
+                callback(BI.deepClone(Demo.CONSTANTS.ITEMS));
+            }
+        };
+    }
+});
+BI.shortcut("demo.value_chooser_pane", Demo.ValueChooserPane);Demo.BASE_CONFIG = [{
     id: 2,
     text: "基础控件",
     open: true
@@ -2908,8 +2956,16 @@ Demo.COMPONENT_CONFIG = [{
     value: "demo.value_chooser_combo"
 }, {
     pId: 5,
+    text: "bi.value_chooser_pane",
+    value: "demo.value_chooser_pane"
+}, {
+    pId: 5,
     text: "bi.tree_value_chooser_combo",
-    value: "demo.tree_value_chooser"
+    value: "demo.tree_value_chooser_combo"
+}, {
+    pId: 5,
+    text: "bi.tree_value_chooser_pane",
+    value: "demo.tree_value_chooser_pane"
 }];Demo.CORE_CONFIG = [{
     id: 1,
     text: "核心控件",
