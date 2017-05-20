@@ -1710,7 +1710,7 @@ BI.TreeView = BI.inherit(BI.Pane, {
 
     _getNodeValue: function (node) {
         //去除标红
-        return node.value || node.text.replace(/<[^>]+>/g, "");
+        return node.value == null ? node.text.replace(/<[^>]+>/g, "") : node.value;
     },
 
     //获取半选框值
@@ -1802,6 +1802,7 @@ BI.TreeView = BI.inherit(BI.Pane, {
         var self = this, o = this.options;
         var ns = BI.Tree.arrayFormat(nodes);
         BI.each(ns, function (i, n) {
+            n.title = n.title || n.text || n.value;
             //处理标红
             if (BI.isKey(o.paras.keyword)) {
                 n.text = $("<div>").__textKeywordMarked__(n.text, o.paras.keyword, n.py).html();
@@ -1944,7 +1945,7 @@ BI.TreeView = BI.inherit(BI.Pane, {
     },
 
     setSelectedValue: function (value) {
-        this.options.paras.selectedValues = value || {};
+        this.options.paras.selectedValues = BI.deepClone(value) || {};
         this.selectedValues = BI.deepClone(value) || {};
     },
 
@@ -1963,7 +1964,7 @@ BI.TreeView = BI.inherit(BI.Pane, {
         });
     },
 
-    getExpandedValue: function(){
+    getExpandedValue: function () {
         if (!this.nodes) {
             return null;
         }
@@ -1980,14 +1981,9 @@ BI.TreeView = BI.inherit(BI.Pane, {
         return this._getSelectedValues();
     },
 
-    empty: function () {
-        BI.isNotNull(this.nodes) && this.nodes.destroy();
-    },
-
-    destroy: function () {
+    destroyed: function () {
         this.stop();
         this.nodes && this.nodes.destroy();
-        BI.TreeView.superclass.destroy.apply(this, arguments);
     }
 });
 BI.extend(BI.TreeView, {
@@ -2190,7 +2186,7 @@ BI.AsyncTree = BI.inherit(BI.TreeView, {
         }
         var checkedValues = this._getSelectedValues();
         if (BI.isEmpty(checkedValues)) {
-            return this.selectedValues;
+            return BI.deepClone(this.selectedValues);
         }
         if (BI.isEmpty(this.selectedValues)) {
             return checkedValues;
@@ -2257,7 +2253,7 @@ BI.PartTree = BI.inherit(BI.AsyncTree, {
             BI.AsyncTree.superclass._selectTreeNode.apply(self, arguments);
         } else {
             o.itemsCreator(BI.extend({}, o.paras, {
-                type: BI.TreeView.REQ_TYPE_CALCULATE_SELECT_DATA,
+                type: BI.TreeView.REQ_TYPE_SELECT_DATA,
                 selectedValues: this.selectedValues,
                 notSelectedValue: name,
                 parentValues: parentValues

@@ -216,7 +216,7 @@ BI.TreeView = BI.inherit(BI.Pane, {
 
     _getNodeValue: function (node) {
         //去除标红
-        return node.value || node.text.replace(/<[^>]+>/g, "");
+        return node.value == null ? node.text.replace(/<[^>]+>/g, "") : node.value;
     },
 
     //获取半选框值
@@ -308,6 +308,7 @@ BI.TreeView = BI.inherit(BI.Pane, {
         var self = this, o = this.options;
         var ns = BI.Tree.arrayFormat(nodes);
         BI.each(ns, function (i, n) {
+            n.title = n.title || n.text || n.value;
             //处理标红
             if (BI.isKey(o.paras.keyword)) {
                 n.text = $("<div>").__textKeywordMarked__(n.text, o.paras.keyword, n.py).html();
@@ -450,7 +451,7 @@ BI.TreeView = BI.inherit(BI.Pane, {
     },
 
     setSelectedValue: function (value) {
-        this.options.paras.selectedValues = value || {};
+        this.options.paras.selectedValues = BI.deepClone(value) || {};
         this.selectedValues = BI.deepClone(value) || {};
     },
 
@@ -469,7 +470,7 @@ BI.TreeView = BI.inherit(BI.Pane, {
         });
     },
 
-    getExpandedValue: function(){
+    getExpandedValue: function () {
         if (!this.nodes) {
             return null;
         }
@@ -486,14 +487,9 @@ BI.TreeView = BI.inherit(BI.Pane, {
         return this._getSelectedValues();
     },
 
-    empty: function () {
-        BI.isNotNull(this.nodes) && this.nodes.destroy();
-    },
-
-    destroy: function () {
+    destroyed: function () {
         this.stop();
         this.nodes && this.nodes.destroy();
-        BI.TreeView.superclass.destroy.apply(this, arguments);
     }
 });
 BI.extend(BI.TreeView, {

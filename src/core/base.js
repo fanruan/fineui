@@ -457,15 +457,15 @@ if (!window.BI) {
         },
 
         has: function (obj, keys) {
-            if (BI.isKey(keys)) {
-                return _.has.apply(_, arguments);
+            if (BI.isArray(keys)) {
+                if (keys.length === 0) {
+                    return false;
+                }
+                return BI.every(keys, function (i, key) {
+                    return _.has(obj, key);
+                });
             }
-            if (!keys || BI.isEmpty(keys)) {
-                return false;
-            }
-            return BI.every(keys, function (i, key) {
-                return _.has(obj, key);
-            });
+            return _.has.apply(_, arguments);
         },
 
         //数字和字符串可以作为key

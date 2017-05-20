@@ -6,9 +6,9 @@ Demo.ValueChooserPane = BI.inherit(BI.Widget, {
         return {
             type: "bi.value_chooser_pane",
             items: BI.deepClone(Demo.CONSTANTS.ITEMS),
-            itemsCreator: function (op, callback) {
-                callback(BI.deepClone(Demo.CONSTANTS.ITEMS));
-            }
+            // itemsCreator: function (op, callback) {
+            //     callback(BI.deepClone(Demo.CONSTANTS.ITEMS));
+            // }
         };
     }
 });

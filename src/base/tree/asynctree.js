@@ -187,7 +187,7 @@ BI.AsyncTree = BI.inherit(BI.TreeView, {
         }
         var checkedValues = this._getSelectedValues();
         if (BI.isEmpty(checkedValues)) {
-            return this.selectedValues;
+            return BI.deepClone(this.selectedValues);
         }
         if (BI.isEmpty(this.selectedValues)) {
             return checkedValues;
