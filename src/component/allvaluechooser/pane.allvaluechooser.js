@@ -3,14 +3,14 @@
  * 封装了字段处理逻辑
  *
  * Created by GUY on 2015/10/29.
- * @class BI.AllValueChooserCombo
+ * @class BI.AllValueChooserPane
  * @extends BI.AbstractAllValueChooser
  */
-BI.AllValueChooserCombo = BI.inherit(BI.AbstractAllValueChooser, {
+BI.AllValueChooserPane = BI.inherit(BI.AbstractAllValueChooser, {
 
     _defaultConfig: function () {
-        return BI.extend(BI.AllValueChooserCombo.superclass._defaultConfig.apply(this, arguments), {
-            baseCls: "bi-all-value-chooser-combo",
+        return BI.extend(BI.AllValueChooserPane.superclass._defaultConfig.apply(this, arguments), {
+            baseCls: "bi-all-value-chooser-pane",
             width: 200,
             height: 30,
             items: null,
@@ -20,13 +20,13 @@ BI.AllValueChooserCombo = BI.inherit(BI.AbstractAllValueChooser, {
     },
 
     _init: function () {
-        BI.AllValueChooserCombo.superclass._init.apply(this, arguments);
+        BI.AllValueChooserPane.superclass._init.apply(this, arguments);
         var self = this, o = this.options;
         if (BI.isNotNull(o.items)) {
             this.items = o.items;
         }
-        this.combo = BI.createWidget({
-            type: 'bi.multi_select_combo',
+        this.list = BI.createWidget({
+            type: 'bi.multi_select_list',
             element: this,
             itemsCreator: BI.bind(this._itemsCreator, this),
             valueFormatter: BI.bind(this._valueFormatter, this),
@@ -34,20 +34,20 @@ BI.AllValueChooserCombo = BI.inherit(BI.AbstractAllValueChooser, {
             height: o.height
         });
 
-        this.combo.on(BI.MultiSelectCombo.EVENT_CONFIRM, function () {
-            self.fireEvent(BI.AllValueChooserCombo.EVENT_CONFIRM);
+        this.list.on(BI.MultiSelectList.EVENT_CHANGE, function () {
+            self.fireEvent(BI.AllValueChooserPane.EVENT_CHANGE);
         });
     },
 
     setValue: function (v) {
-        this.combo.setValue({
+        this.list.setValue({
             type: BI.Selection.Multi,
             value: v || []
         });
     },
 
     getValue: function () {
-        var val = this.combo.getValue() || {};
+        var val = this.list.getValue() || {};
         if (val.type === BI.Selection.All) {
             return val.assist;
         }
@@ -55,8 +55,8 @@ BI.AllValueChooserCombo = BI.inherit(BI.AbstractAllValueChooser, {
     },
 
     populate: function () {
-        this.combo.populate.apply(this, arguments);
+        this.list.populate.apply(this.list, arguments);
     }
 });
-BI.AllValueChooserCombo.EVENT_CONFIRM = "AllValueChooserCombo.EVENT_CONFIRM";
-BI.shortcut('bi.all_value_chooser_combo', BI.AllValueChooserCombo);
+BI.AllValueChooserPane.EVENT_CHANGE = "AllValueChooserPane.EVENT_CHANGE";
+BI.shortcut('bi.all_value_chooser_pane', BI.AllValueChooserPane);

@@ -10,6 +10,14 @@ Demo.COMPONENT_CONFIG = [{
     value: "demo.value_chooser_combo"
 }, {
     pId: 5,
+    text: "bi.value_chooser_pane",
+    value: "demo.value_chooser_pane"
+}, {
+    pId: 5,
     text: "bi.tree_value_chooser_combo",
-    value: "demo.tree_value_chooser"
+    value: "demo.tree_value_chooser_combo"
+}, {
+    pId: 5,
+    text: "bi.tree_value_chooser_pane",
+    value: "demo.tree_value_chooser_pane"
 }];
