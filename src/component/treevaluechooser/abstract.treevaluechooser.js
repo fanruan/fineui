@@ -16,16 +16,6 @@ BI.AbstractTreeValueChooser = BI.inherit(BI.Widget, {
         var nodes = BI.Tree.treeFormat(items);
         this.tree = new BI.Tree();
         this.tree.initTree(nodes);
-        this._initFloors();
-    },
-
-    _initFloors: function () {
-        this.floors = -1;
-        var root = this.tree.getRoot();
-        while (root) {
-            this.floors++;
-            root = root.getChildren()[0];
-        }
     },
 
     _itemsCreator: function (options, callback) {
@@ -69,23 +59,20 @@ BI.AbstractTreeValueChooser = BI.inherit(BI.Widget, {
             return;
         }
 
-        doCheck(0, [], this.tree.getRoot(), selectedValues);
+        doCheck([], this.tree.getRoot(), selectedValues);
 
         callback({
             items: result
         });
 
-        function doCheck(floor, parentValues, node, selected) {
-            if (floor >= self.floors) {
-                return;
-            }
+        function doCheck(parentValues, node, selected) {
             if (selected == null || BI.isEmpty(selected)) {
                 BI.each(node.getChildren(), function (i, child) {
                     var newParents = BI.clone(parentValues);
                     newParents.push(child.value);
                     var llen = self._getChildCount(newParents);
                     createOneJson(child, node.id, llen);
-                    doCheck(floor + 1, newParents, child, {});
+                    doCheck(newParents, child, {});
                 });
                 return;
             }
@@ -94,7 +81,7 @@ BI.AbstractTreeValueChooser = BI.inherit(BI.Widget, {
                 var newParents = BI.clone(parentValues);
                 newParents.push(node.value);
                 createOneJson(node, BI.last(parentValues), getCount(selected[k], newParents));
-                doCheck(floor + 1, newParents, node, selected[k]);
+                doCheck(newParents, node, selected[k]);
             })
         }
 
@@ -183,9 +170,6 @@ BI.AbstractTreeValueChooser = BI.inherit(BI.Widget, {
             newParents.push(current);
             if (self._isMatch(current, keyword)) {
                 return true;
-            }
-            if (deep >= self.floors) {
-                return false;
             }
 
             var children = self._getChildren(newParents);
@@ -322,9 +306,6 @@ BI.AbstractTreeValueChooser = BI.inherit(BI.Widget, {
                 createOneJson(parentValues, current, false, checked, !isAllSelect && isHalf(parentValues, current), true, result);
                 return [true, checked];
             }
-            if (deep >= self.floors) {
-                return [false, false];
-            }
             var newParents = BI.clone(parentValues);
             newParents.push(current);
             var children = self._getChildren(newParents);
@@ -356,7 +337,7 @@ BI.AbstractTreeValueChooser = BI.inherit(BI.Widget, {
                 text: node.text,
                 value: node.value,
                 title: node.title,
-                isParent: parentValues.length + 1 < self.floors,
+                isParent: node.getChildrenLength() > 0,
                 open: isOpen,
                 checked: checked,
                 halfCheck: half,
@@ -440,7 +421,7 @@ BI.AbstractTreeValueChooser = BI.inherit(BI.Widget, {
                 value: nodes[i].value,
                 text: nodes[i].text,
                 times: 1,
-                isParent: parentValues.length + 1 < this.floors,
+                isParent: nodes[i].getChildrenLength() > 0,
                 checked: state[0],
                 halfCheck: state[1]
             })
@@ -487,14 +468,14 @@ BI.AbstractTreeValueChooser = BI.inherit(BI.Widget, {
 
         function getCheckState(current, parentValues, valueMap, checkState) {
             var checked = checkState.checked, half = checkState.half;
-            var hasChild = parentValues.length + 1 < self.floors;
             var tempCheck = false, halfCheck = false;
             if (BI.has(valueMap, current)) {
                 //可能是半选
                 if (valueMap[current][0] === 1) {
                     var values = BI.clone(parentValues);
                     values.push(current);
-                    if (hasChild && self._getChildCount(values) !== valueMap[current][1]) {
+                    var childCount = self._getChildCount(values);
+                    if (childCount > 0 && childCount !== valueMap[current][1]) {
                         halfCheck = true;
                     }
                 } else if (valueMap[current][0] === 2) {
