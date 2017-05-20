@@ -10973,6 +10973,7 @@ BI.MultiSelectList = BI.inherit(BI.Widget, {
 
         var assertShowValue = function () {
             BI.isKey(self._startValue) && self.storeValue.value[self.storeValue.type === BI.Selection.All ? "remove" : "pushDistinct"](self._startValue);
+            self.trigger.setValue(self.storeValue);
         };
 
         this.adapter = BI.createWidget({
@@ -11032,6 +11033,8 @@ BI.MultiSelectList = BI.inherit(BI.Widget, {
                     self._showAdapter();
                     self._setStartValue("");
                     self.adapter.setValue(self.storeValue);
+                    //需要刷新回到初始界面，否则搜索的结果不能放在最前面
+                    self.adapter.populate();
                 }
             }, {
                 eventName: BI.Searcher.EVENT_PAUSE,
@@ -11043,7 +11046,6 @@ BI.MultiSelectList = BI.inherit(BI.Widget, {
                             value: [keyword]
                         }, function () {
                             self._showAdapter();
-                            self.trigger.setValue(self.storeValue);
                             self.adapter.setValue(self.storeValue);
                             self._setStartValue(keyword);
                             assertShowValue();
@@ -11063,13 +11065,11 @@ BI.MultiSelectList = BI.inherit(BI.Widget, {
                     if (keywords.length > 0) {
                         self._joinKeywords(keywords, function () {
                             if (BI.isEndWithBlank(last)) {
-                                self.trigger.setValue(self.storeValue);
                                 self.adapter.setValue(self.storeValue);
                                 assertShowValue();
                                 self.adapter.populate();
                                 self._setStartValue("");
                             } else {
-                                self.trigger.setValue(self.storeValue);
                                 self.adapter.setValue(self.storeValue);
                                 assertShowValue();
                             }
