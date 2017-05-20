@@ -142,6 +142,14 @@ BI.MultiSelectTree = BI.inherit(BI.Widget, {
         });
     },
 
+    stopSearch: function () {
+        this.trigger.stopSearch();
+    },
+
+    updateValue: function (v) {
+        this.adapter.updateValue(v);
+    },
+
     getValue: function () {
         return this.storeValue.value;
     },
