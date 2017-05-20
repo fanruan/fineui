@@ -2532,8 +2532,8 @@ BI.CollectionView = BI.inherit(BI.Widget, {
     _defaultConfig: function () {
         return BI.extend(BI.CollectionView.superclass._defaultConfig.apply(this, arguments), {
             baseCls: "bi-collection",
-            width: 400,
-            height: 300,
+            // width: 400,
+            // height: 300,
             overflowX: true,
             overflowY: true,
             cellSizeAndPositionGetter: BI.emptyFn,
@@ -14673,16 +14673,16 @@ BI.GridView = BI.inherit(BI.Widget, {
     _defaultConfig: function () {
         return BI.extend(BI.GridView.superclass._defaultConfig.apply(this, arguments), {
             baseCls: "bi-grid-view",
-            width: 400,
-            height: 300,
+            // width: 400,
+            // height: 300,
             overflowX: true,
             overflowY: true,
             overscanColumnCount: 0,
             overscanRowCount: 0,
             rowHeightGetter: BI.emptyFn,
             columnWidthGetter: BI.emptyFn,
-            estimatedColumnSize: 100,
-            estimatedRowSize: 30,
+            // estimatedColumnSize: 100,
+            // estimatedRowSize: 30,
             scrollLeft: 0,
             scrollTop: 0,
             items: []
