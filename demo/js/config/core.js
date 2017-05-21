@@ -105,6 +105,10 @@ Demo.CORE_CONFIG = [{
     pId: 102,
     text: "bi.collection_view",
     value: "demo.collection_view"
+},{
+    pId: 102,
+    text: "bi.virtual_list",
+    value: "demo.virtual_list"
 }, {
     pId: 102,
     id: 10201,

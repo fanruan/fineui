@@ -3038,6 +3038,10 @@ Demo.COMPONENT_CONFIG = [{
     pId: 102,
     text: "bi.collection_view",
     value: "demo.collection_view"
+},{
+    pId: 102,
+    text: "bi.virtual_list",
+    value: "demo.virtual_list"
 }, {
     pId: 102,
     id: 10201,
@@ -3473,6 +3477,16 @@ Demo.Item = BI.inherit(BI.Widget, {
     }
 });
 BI.shortcut("demo.virtual_group_item", Demo.Item);Demo.Func = BI.inherit(BI.Widget, {
+    props: {
+        baseCls: "demo-func"
+    },
+    render: function () {
+        return {
+            type: "bi.virtual_list"
+        }
+    }
+});
+BI.shortcut("demo.virtual_list", Demo.Func);Demo.Func = BI.inherit(BI.Widget, {
     props: {
         baseCls: "demo-func"
     },

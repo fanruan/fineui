@@ -443,6 +443,7 @@ BI.TreeView = BI.inherit(BI.Pane, {
         this.nodes && this.nodes.expandAll(flag);
     },
 
+    //设置树节点的状态
     setValue: function (value, param) {
         this.setSelectedValue(value);
         this.checkAll(false);
@@ -468,12 +469,6 @@ BI.TreeView = BI.inherit(BI.Pane, {
                 treeObj.updateNode(node);
             })
         });
-    },
-
-    getExpandedValue: function () {
-        if (!this.nodes) {
-            return null;
-        }
     },
 
     refresh: function () {
