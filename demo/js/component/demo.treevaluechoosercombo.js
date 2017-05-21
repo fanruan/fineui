@@ -4,29 +4,12 @@ Demo.TreeValueChooser = BI.inherit(BI.Widget, {
     },
     render: function () {
 
-        var tree = [];
-        for (var i = 0; i < 221; i++) {
-            tree.push({
-                value: "" + i + "",
-                text: "" + i + "",
-                id: i + "",
-                pId: null
-            });
-            for (var j = 0; j < 9; j++) {
-                tree.push({
-                    value: i + "-" + j,
-                    text: j + "",
-                    id: i + "-" + j,
-                    pId: i + ""
-                })
-            }
-        }
         var widget = BI.createWidget({
             type: "bi.tree_value_chooser_combo",
             width: 300,
-            items: tree,
+            // items: BI.deepClone(Demo.CONSTANTS.TREEITEMS),
             itemsCreator: function (op, callback) {
-                callback(tree);
+                callback(BI.deepClone(Demo.CONSTANTS.TREEITEMS));
             }
         });
         return {

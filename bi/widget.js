@@ -10973,6 +10973,7 @@ BI.MultiSelectList = BI.inherit(BI.Widget, {
 
         var assertShowValue = function () {
             BI.isKey(self._startValue) && self.storeValue.value[self.storeValue.type === BI.Selection.All ? "remove" : "pushDistinct"](self._startValue);
+            self.trigger.setValue(self.storeValue);
         };
 
         this.adapter = BI.createWidget({
@@ -11032,6 +11033,8 @@ BI.MultiSelectList = BI.inherit(BI.Widget, {
                     self._showAdapter();
                     self._setStartValue("");
                     self.adapter.setValue(self.storeValue);
+                    //需要刷新回到初始界面，否则搜索的结果不能放在最前面
+                    self.adapter.populate();
                 }
             }, {
                 eventName: BI.Searcher.EVENT_PAUSE,
@@ -11043,7 +11046,6 @@ BI.MultiSelectList = BI.inherit(BI.Widget, {
                             value: [keyword]
                         }, function () {
                             self._showAdapter();
-                            self.trigger.setValue(self.storeValue);
                             self.adapter.setValue(self.storeValue);
                             self._setStartValue(keyword);
                             assertShowValue();
@@ -11063,13 +11065,11 @@ BI.MultiSelectList = BI.inherit(BI.Widget, {
                     if (keywords.length > 0) {
                         self._joinKeywords(keywords, function () {
                             if (BI.isEndWithBlank(last)) {
-                                self.trigger.setValue(self.storeValue);
                                 self.adapter.setValue(self.storeValue);
                                 assertShowValue();
                                 self.adapter.populate();
                                 self._setStartValue("");
                             } else {
-                                self.trigger.setValue(self.storeValue);
                                 self.adapter.setValue(self.storeValue);
                                 assertShowValue();
                             }
@@ -11433,6 +11433,14 @@ BI.MultiSelectTree = BI.inherit(BI.Widget, {
         });
     },
 
+    stopSearch: function () {
+        this.trigger.stopSearch();
+    },
+
+    updateValue: function (v) {
+        this.adapter.updateValue(v);
+    },
+
     getValue: function () {
         return this.storeValue.value;
     },
@@ -11480,6 +11488,11 @@ BI.MultiSelectTreePopup = BI.inherit(BI.Widget, {
     setValue: function (v) {
         v || (v = {});
         this.popup.setValue(v.value);
+    },
+
+    updateValue: function (v) {
+        this.popup.updateValue(v);
+        this.popup.refresh();
     },
 
     populate: function (config) {
@@ -17173,27 +17186,9 @@ BI.shortcut('bi.all_value_chooser_pane', BI.AllValueChooserPane);BI.AbstractTree
 
     _initData: function (items) {
         this.items = items;
-        var nodes = BI.Tree.transformToTreeFormat(items);
+        var nodes = BI.Tree.treeFormat(items);
         this.tree = new BI.Tree();
         this.tree.initTree(nodes);
-        this._initMap();
-        this._initFloors();
-    },
-
-    _initMap: function () {
-        var map = this.map = {};
-        BI.each(this.items, function (i, item) {
-            map[item.value] = item;
-        });
-    },
-
-    _initFloors: function () {
-        this.floors = -1;
-        var root = this.tree.getRoot();
-        while (root) {
-            this.floors++;
-            root = root.getChildren()[0];
-        }
     },
 
     _itemsCreator: function (options, callback) {
@@ -17237,32 +17232,29 @@ BI.shortcut('bi.all_value_chooser_pane', BI.AllValueChooserPane);BI.AbstractTree
             return;
         }
 
-        doCheck(0, [], this.tree.getRoot(), selectedValues);
+        doCheck([], this.tree.getRoot(), selectedValues);
 
         callback({
             items: result
         });
 
-        function doCheck(floor, parentValues, node, selected) {
-            if (floor >= self.floors) {
-                return;
-            }
+        function doCheck(parentValues, node, selected) {
             if (selected == null || BI.isEmpty(selected)) {
                 BI.each(node.getChildren(), function (i, child) {
                     var newParents = BI.clone(parentValues);
                     newParents.push(child.value);
                     var llen = self._getChildCount(newParents);
                     createOneJson(child, node.id, llen);
-                    doCheck(floor + 1, newParents, child, {});
+                    doCheck(newParents, child, {});
                 });
                 return;
             }
             BI.each(selected, function (k) {
-                var node = self._getNode(k);
+                var node = self._getNode(parentValues, k);
                 var newParents = BI.clone(parentValues);
                 newParents.push(node.value);
                 createOneJson(node, BI.last(parentValues), getCount(selected[k], newParents));
-                doCheck(floor + 1, newParents, node, selected[k]);
+                doCheck(newParents, node, selected[k]);
             })
         }
 
@@ -17351,9 +17343,6 @@ BI.shortcut('bi.all_value_chooser_pane', BI.AllValueChooserPane);BI.AbstractTree
             newParents.push(current);
             if (self._isMatch(current, keyword)) {
                 return true;
-            }
-            if (deep >= self.floors) {
-                return false;
             }
 
             var children = self._getChildren(newParents);
@@ -17490,9 +17479,6 @@ BI.shortcut('bi.all_value_chooser_pane', BI.AllValueChooserPane);BI.AbstractTree
                 createOneJson(parentValues, current, false, checked, !isAllSelect && isHalf(parentValues, current), true, result);
                 return [true, checked];
             }
-            if (deep >= self.floors) {
-                return [false, false];
-            }
             var newParents = BI.clone(parentValues);
             newParents.push(current);
             var children = self._getChildren(newParents);
@@ -17517,14 +17503,14 @@ BI.shortcut('bi.all_value_chooser_pane', BI.AllValueChooserPane);BI.AbstractTree
         }
 
         function createOneJson(parentValues, value, isOpen, checked, half, flag, result) {
-            var node = self.map[value];
+            var node = self._getNode(parentValues, value)
             result.push({
                 id: node.id,
                 pId: node.pId,
                 text: node.text,
                 value: node.value,
                 title: node.title,
-                isParent: parentValues.length + 1 < self.floors,
+                isParent: node.getChildrenLength() > 0,
                 open: isOpen,
                 checked: checked,
                 halfCheck: half,
@@ -17608,7 +17594,7 @@ BI.shortcut('bi.all_value_chooser_pane', BI.AllValueChooserPane);BI.AbstractTree
                 value: nodes[i].value,
                 text: nodes[i].text,
                 times: 1,
-                isParent: parentValues.length + 1 < this.floors,
+                isParent: nodes[i].getChildrenLength() > 0,
                 checked: state[0],
                 halfCheck: state[1]
             })
@@ -17655,14 +17641,14 @@ BI.shortcut('bi.all_value_chooser_pane', BI.AllValueChooserPane);BI.AbstractTree
 
         function getCheckState(current, parentValues, valueMap, checkState) {
             var checked = checkState.checked, half = checkState.half;
-            var hasChild = parentValues.length + 1 < self.floors;
             var tempCheck = false, halfCheck = false;
             if (BI.has(valueMap, current)) {
                 //可能是半选
                 if (valueMap[current][0] === 1) {
                     var values = BI.clone(parentValues);
                     values.push(current);
-                    if (hasChild && self._getChildCount(values) !== valueMap[current][1]) {
+                    var childCount = self._getChildCount(values);
+                    if (childCount > 0 && childCount !== valueMap[current][1]) {
                         halfCheck = true;
                     }
                 } else if (valueMap[current][0] === 2) {
@@ -17695,14 +17681,34 @@ BI.shortcut('bi.all_value_chooser_pane', BI.AllValueChooserPane);BI.AbstractTree
         return finded.finded.length > 0 || finded.matched.length > 0;
     },
 
-    _getNode: function (v) {
-        return this.tree.search(v, "value");
+    _getNode: function (parentValues, v) {
+        var self = this;
+        var findedParentNode;
+        var index = 0;
+        this.tree.traverse(function (node) {
+            if (self.tree.isRoot(node)) {
+                return;
+            }
+            if (index > parentValues.length) {
+                return false;
+            }
+            if (index === parentValues.length && node.value === v) {
+                findedParentNode = node;
+                return false;
+            }
+            if (node.value === parentValues[index]) {
+                index++;
+                return;
+            }
+            return true;
+        });
+        return findedParentNode;
     },
 
     _getChildren: function (parentValues) {
         if (parentValues.length > 0) {
             var value = BI.last(parentValues);
-            var parent = this.tree.search(value, "value");
+            var parent = this._getNode(parentValues.slice(0, parentValues.length - 1), value);
         } else {
             var parent = this.tree.getRoot();
         }
@@ -17970,8 +17976,6 @@ BI.ValueChooserPane = BI.inherit(BI.AbstractValueChooser, {
     _defaultConfig: function () {
         return BI.extend(BI.ValueChooserPane.superclass._defaultConfig.apply(this, arguments), {
             baseCls: "bi-value-chooser-pane",
-            width: 200,
-            height: 30,
             items: null,
             itemsCreator: BI.emptyFn,
             cache: true

@@ -11,8 +11,6 @@ BI.ValueChooserPane = BI.inherit(BI.AbstractValueChooser, {
     _defaultConfig: function () {
         return BI.extend(BI.ValueChooserPane.superclass._defaultConfig.apply(this, arguments), {
             baseCls: "bi-value-chooser-pane",
-            width: 200,
-            height: 30,
             items: null,
             itemsCreator: BI.emptyFn,
             cache: true

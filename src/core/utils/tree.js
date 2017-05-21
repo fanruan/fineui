@@ -17,7 +17,7 @@
         },
 
         isRoot: function (node) {
-            return node === this.root || node.id === this.root.id;
+            return node === this.root;
         },
 
         getRoot: function () {
@@ -394,7 +394,7 @@
             if (BI.isArray(nodes)) {
                 for (var i = 0, l = nodes.length; i < l; i++) {
                     var node = BI.clone(nodes[i]);
-                    node.pId = pId;
+                    node.pId = node.pId == null ? pId : node.pId;
                     delete node.children;
                     r.push(node);
                     if (nodes[i]["children"]) {
@@ -403,7 +403,7 @@
                 }
             } else {
                 var newNodes = BI.clone(nodes);
-                newNodes.pId = pId;
+                newNodes.pId = newNodes.pId == null ? pId : newNodes.pId;
                 delete newNodes.children;
                 r.push(newNodes);
                 if (nodes["children"]) {
@@ -414,21 +414,25 @@
         },
 
         arrayFormat: function (nodes, pId) {
-            if (!nodes) return [];
+            if (!nodes) {
+                return [];
+            }
             var r = [];
             if (BI.isArray(nodes)) {
                 for (var i = 0, l = nodes.length; i < l; i++) {
                     var node = nodes[i];
+                    node.pId = node.pId == null ? pId : node.pId;
                     r.push(node);
                     if (nodes[i]["children"]) {
-                        r = r.concat(BI.Tree.transformToArrayFormat(nodes[i]["children"], node.id));
+                        r = r.concat(BI.Tree.arrayFormat(nodes[i]["children"], node.id));
                     }
                 }
             } else {
                 var newNodes = nodes;
+                newNodes.pId = newNodes.pId == null ? pId : newNodes.pId;
                 r.push(newNodes);
                 if (nodes["children"]) {
-                    r = r.concat(BI.Tree.transformToArrayFormat(nodes["children"], newNodes.id));
+                    r = r.concat(BI.Tree.arrayFormat(nodes["children"], newNodes.id));
                 }
             }
             return r;
@@ -444,13 +448,13 @@
                 var r = [];
                 var tmpMap = [];
                 for (i = 0, l = sNodes.length; i < l; i++) {
-                    if(BI.isNull(sNodes[i].id)) {
+                    if (BI.isNull(sNodes[i].id)) {
                         return sNodes;
                     }
                     tmpMap[sNodes[i].id] = BI.clone(sNodes[i]);
                 }
                 for (i = 0, l = sNodes.length; i < l; i++) {
-                    if (tmpMap[sNodes[i].pId] && sNodes[i].id != sNodes[i].pId) {
+                    if (tmpMap[sNodes[i].pId] && sNodes[i].id !== sNodes[i].pId) {
                         if (!tmpMap[sNodes[i].pId].children) {
                             tmpMap[sNodes[i].pId].children = [];
                         }
@@ -459,6 +463,37 @@
                         r.push(tmpMap[sNodes[i].id]);
                     }
                     delete tmpMap[sNodes[i].id].pId;
+                }
+                return r;
+            } else {
+                return [sNodes];
+            }
+        },
+
+        treeFormat: function (sNodes) {
+            var i, l;
+            if (!sNodes) {
+                return [];
+            }
+
+            if (BI.isArray(sNodes)) {
+                var r = [];
+                var tmpMap = [];
+                for (i = 0, l = sNodes.length; i < l; i++) {
+                    if (BI.isNull(sNodes[i].id)) {
+                        return sNodes;
+                    }
+                    tmpMap[sNodes[i].id] = sNodes[i];
+                }
+                for (i = 0, l = sNodes.length; i < l; i++) {
+                    if (tmpMap[sNodes[i].pId] && sNodes[i].id !== sNodes[i].pId) {
+                        if (!tmpMap[sNodes[i].pId].children) {
+                            tmpMap[sNodes[i].pId].children = [];
+                        }
+                        tmpMap[sNodes[i].pId].children.push(tmpMap[sNodes[i].id]);
+                    } else {
+                        r.push(tmpMap[sNodes[i].id]);
+                    }
                 }
                 return r;
             } else {

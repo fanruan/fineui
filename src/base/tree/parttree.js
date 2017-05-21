@@ -46,7 +46,7 @@ BI.PartTree = BI.inherit(BI.AsyncTree, {
             BI.AsyncTree.superclass._selectTreeNode.apply(self, arguments);
         } else {
             o.itemsCreator(BI.extend({}, o.paras, {
-                type: BI.TreeView.REQ_TYPE_CALCULATE_SELECT_DATA,
+                type: BI.TreeView.REQ_TYPE_SELECT_DATA,
                 selectedValues: this.selectedValues,
                 notSelectedValue: name,
                 parentValues: parentValues

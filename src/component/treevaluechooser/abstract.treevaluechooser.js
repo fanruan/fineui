@@ -13,27 +13,9 @@ BI.AbstractTreeValueChooser = BI.inherit(BI.Widget, {
 
     _initData: function (items) {
         this.items = items;
-        var nodes = BI.Tree.transformToTreeFormat(items);
+        var nodes = BI.Tree.treeFormat(items);
         this.tree = new BI.Tree();
         this.tree.initTree(nodes);
-        this._initMap();
-        this._initFloors();
-    },
-
-    _initMap: function () {
-        var map = this.map = {};
-        BI.each(this.items, function (i, item) {
-            map[item.value] = item;
-        });
-    },
-
-    _initFloors: function () {
-        this.floors = -1;
-        var root = this.tree.getRoot();
-        while (root) {
-            this.floors++;
-            root = root.getChildren()[0];
-        }
     },
 
     _itemsCreator: function (options, callback) {
@@ -77,32 +59,29 @@ BI.AbstractTreeValueChooser = BI.inherit(BI.Widget, {
             return;
         }
 
-        doCheck(0, [], this.tree.getRoot(), selectedValues);
+        doCheck([], this.tree.getRoot(), selectedValues);
 
         callback({
             items: result
         });
 
-        function doCheck(floor, parentValues, node, selected) {
-            if (floor >= self.floors) {
-                return;
-            }
+        function doCheck(parentValues, node, selected) {
             if (selected == null || BI.isEmpty(selected)) {
                 BI.each(node.getChildren(), function (i, child) {
                     var newParents = BI.clone(parentValues);
                     newParents.push(child.value);
                     var llen = self._getChildCount(newParents);
                     createOneJson(child, node.id, llen);
-                    doCheck(floor + 1, newParents, child, {});
+                    doCheck(newParents, child, {});
                 });
                 return;
             }
             BI.each(selected, function (k) {
-                var node = self._getNode(k);
+                var node = self._getNode(parentValues, k);
                 var newParents = BI.clone(parentValues);
                 newParents.push(node.value);
                 createOneJson(node, BI.last(parentValues), getCount(selected[k], newParents));
-                doCheck(floor + 1, newParents, node, selected[k]);
+                doCheck(newParents, node, selected[k]);
             })
         }
 
@@ -191,9 +170,6 @@ BI.AbstractTreeValueChooser = BI.inherit(BI.Widget, {
             newParents.push(current);
             if (self._isMatch(current, keyword)) {
                 return true;
-            }
-            if (deep >= self.floors) {
-                return false;
             }
 
             var children = self._getChildren(newParents);
@@ -330,9 +306,6 @@ BI.AbstractTreeValueChooser = BI.inherit(BI.Widget, {
                 createOneJson(parentValues, current, false, checked, !isAllSelect && isHalf(parentValues, current), true, result);
                 return [true, checked];
             }
-            if (deep >= self.floors) {
-                return [false, false];
-            }
             var newParents = BI.clone(parentValues);
             newParents.push(current);
             var children = self._getChildren(newParents);
@@ -357,14 +330,14 @@ BI.AbstractTreeValueChooser = BI.inherit(BI.Widget, {
         }
 
         function createOneJson(parentValues, value, isOpen, checked, half, flag, result) {
-            var node = self.map[value];
+            var node = self._getNode(parentValues, value)
             result.push({
                 id: node.id,
                 pId: node.pId,
                 text: node.text,
                 value: node.value,
                 title: node.title,
-                isParent: parentValues.length + 1 < self.floors,
+                isParent: node.getChildrenLength() > 0,
                 open: isOpen,
                 checked: checked,
                 halfCheck: half,
@@ -448,7 +421,7 @@ BI.AbstractTreeValueChooser = BI.inherit(BI.Widget, {
                 value: nodes[i].value,
                 text: nodes[i].text,
                 times: 1,
-                isParent: parentValues.length + 1 < this.floors,
+                isParent: nodes[i].getChildrenLength() > 0,
                 checked: state[0],
                 halfCheck: state[1]
             })
@@ -495,14 +468,14 @@ BI.AbstractTreeValueChooser = BI.inherit(BI.Widget, {
 
         function getCheckState(current, parentValues, valueMap, checkState) {
             var checked = checkState.checked, half = checkState.half;
-            var hasChild = parentValues.length + 1 < self.floors;
             var tempCheck = false, halfCheck = false;
             if (BI.has(valueMap, current)) {
                 //可能是半选
                 if (valueMap[current][0] === 1) {
                     var values = BI.clone(parentValues);
                     values.push(current);
-                    if (hasChild && self._getChildCount(values) !== valueMap[current][1]) {
+                    var childCount = self._getChildCount(values);
+                    if (childCount > 0 && childCount !== valueMap[current][1]) {
                         halfCheck = true;
                     }
                 } else if (valueMap[current][0] === 2) {
@@ -535,14 +508,34 @@ BI.AbstractTreeValueChooser = BI.inherit(BI.Widget, {
         return finded.finded.length > 0 || finded.matched.length > 0;
     },
 
-    _getNode: function (v) {
-        return this.tree.search(v, "value");
+    _getNode: function (parentValues, v) {
+        var self = this;
+        var findedParentNode;
+        var index = 0;
+        this.tree.traverse(function (node) {
+            if (self.tree.isRoot(node)) {
+                return;
+            }
+            if (index > parentValues.length) {
+                return false;
+            }
+            if (index === parentValues.length && node.value === v) {
+                findedParentNode = node;
+                return false;
+            }
+            if (node.value === parentValues[index]) {
+                index++;
+                return;
+            }
+            return true;
+        });
+        return findedParentNode;
     },
 
     _getChildren: function (parentValues) {
         if (parentValues.length > 0) {
             var value = BI.last(parentValues);
-            var parent = this.tree.search(value, "value");
+            var parent = this._getNode(parentValues.slice(0, parentValues.length - 1), value);
         } else {
             var parent = this.tree.getRoot();
         }
