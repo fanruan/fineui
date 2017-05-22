@@ -5,12 +5,12 @@ Demo.Func = BI.inherit(BI.Widget, {
     render: function () {
         return {
             type: "bi.virtual_list",
-            items: BI.map(BI.makeArray(200, 0), function (i, item) {
-                return {
+            items: BI.map(Demo.CONSTANTS.ITEMS, function (i, item) {
+                return BI.extend({}, item, {
                     type: "bi.label",
                     height: 30,
-                    text: i
-                };
+                    text: (i + 1) + "." + item.text,
+                });
             })
         }
     }
