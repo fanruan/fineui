@@ -159,8 +159,17 @@ BI.VirtualList = BI.inherit(BI.Widget, {
         this.element.scrollTop(o.scrollTop);
     },
 
+    _clearChildren: function () {
+        BI.each(this.container._children, function (i, cell) {
+            cell && cell.el._destroy();
+        });
+        this.container._children = {};
+        this.container.attr("items", []);
+    },
+
     restore: function () {
         this.renderedIndex = -1;
+        this._clearChildren();
         this.cache = {};
     },
 
