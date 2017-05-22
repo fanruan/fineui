@@ -292,11 +292,6 @@ BI.Editor = BI.inherit(BI.Single, {
         return BI.trim(this.editor.getValue());
     },
 
-    setValid: function (b) {
-        BI.Editor.superclass.setValid.apply(this, arguments);
-        this.editor.setValid(b);
-    },
-
     isEditing: function () {
         return this.editor.isEditing();
     },
