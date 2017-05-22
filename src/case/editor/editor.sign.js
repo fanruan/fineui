@@ -206,11 +206,6 @@ BI.SignEditor = BI.inherit(BI.Widget, {
         return this.editor.isValid();
     },
 
-    setValid: function (v) {
-        BI.SignEditor.superclass.setValid.apply(this, arguments);
-        this.editor.setValid(v);
-    },
-
     setErrorText: function (text) {
         this.editor.setErrorText(text);
     },

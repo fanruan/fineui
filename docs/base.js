@@ -18010,11 +18010,6 @@ BI.Editor = BI.inherit(BI.Single, {
         return BI.trim(this.editor.getValue());
     },
 
-    setValid: function (b) {
-        BI.Editor.superclass.setValid.apply(this, arguments);
-        this.editor.setValid(b);
-    },
-
     isEditing: function () {
         return this.editor.isEditing();
     },
@@ -18281,10 +18276,10 @@ BI.TextAreaEditor = BI.inherit(BI.Single, {
         return this.style;
     },
 
-    setValid: function (b) {
-        BI.TextAreaEditor.superclass.setValid.apply(this, arguments);
-        this.content.setValid(b);
-        this.watermark && this.watermark.setValid(b);
+    _setValid: function (b) {
+        BI.TextAreaEditor.superclass._setValid.apply(this, arguments);
+        // this.content.setValid(b);
+        // this.watermark && this.watermark.setValid(b);
     }
 });
 BI.TextAreaEditor.EVENT_CHANGE = "EVENT_CHANGE";
@@ -19277,8 +19272,8 @@ BI.Input = BI.inherit(BI.Single, {
         return this._lastValidValue;
     },
 
-    setValid: function () {
-        BI.Input.superclass.setValid.apply(this, arguments);
+    _setValid: function () {
+        BI.Input.superclass._setValid.apply(this, arguments);
         if (this.isValid()) {
             this._lastValidValue = this.getValue();
             this.element.removeClass("bi-input-error");
