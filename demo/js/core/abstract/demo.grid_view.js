@@ -16,6 +16,10 @@ Demo.Func = BI.inherit(BI.Widget, {
         }
         var grid = BI.createWidget({
             type: "bi.grid_view",
+            width: 400,
+            height: 300,
+            estimatedRowSize: 30,
+            estimatedColumnSize: 100,
             items: items,
             scrollTop: 100,
             rowHeightGetter: function () {

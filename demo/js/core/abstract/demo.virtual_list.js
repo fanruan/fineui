@@ -4,7 +4,14 @@ Demo.Func = BI.inherit(BI.Widget, {
     },
     render: function () {
         return {
-            type: "bi.virtual_list"
+            type: "bi.virtual_list",
+            items: BI.map(BI.makeArray(200, 0), function (i, item) {
+                return {
+                    type: "bi.label",
+                    height: 30,
+                    text: i
+                };
+            })
         }
     }
 });

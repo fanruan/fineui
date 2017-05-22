@@ -3325,6 +3325,8 @@ BI.shortcut("demo.button_tree", Demo.Func);Demo.Func = BI.inherit(BI.Widget, {
         }
         var grid = BI.createWidget({
             type: "bi.collection_view",
+            width: 400,
+            height: 300,
             items: items,
             cellSizeAndPositionGetter: function (index) {
                 return {
@@ -3366,6 +3368,10 @@ BI.shortcut("demo.collection_view", Demo.Func);Demo.Func = BI.inherit(BI.Widget,
         }
         var grid = BI.createWidget({
             type: "bi.grid_view",
+            width: 400,
+            height: 300,
+            estimatedRowSize: 30,
+            estimatedColumnSize: 100,
             items: items,
             scrollTop: 100,
             rowHeightGetter: function () {
@@ -3482,7 +3488,14 @@ BI.shortcut("demo.virtual_group_item", Demo.Item);Demo.Func = BI.inherit(BI.Widg
     },
     render: function () {
         return {
-            type: "bi.virtual_list"
+            type: "bi.virtual_list",
+            items: BI.map(BI.makeArray(200, 0), function (i, item) {
+                return {
+                    type: "bi.label",
+                    height: 30,
+                    text: i
+                };
+            })
         }
     }
 });
