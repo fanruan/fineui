@@ -5184,11 +5184,7 @@ BI.SearchEditor = BI.inherit(BI.Widget, {
             this.clear.visible();
         }
     },
-
-    setValid: function (b) {
-        this.editor.setValid(b);
-    },
-
+    
     isEditing: function () {
         return this.editor.isEditing();
     },
@@ -5865,11 +5861,6 @@ BI.SignEditor = BI.inherit(BI.Widget, {
 
     isValid: function () {
         return this.editor.isValid();
-    },
-
-    setValid: function (v) {
-        BI.SignEditor.superclass.setValid.apply(this, arguments);
-        this.editor.setValid(v);
     },
 
     setErrorText: function (text) {

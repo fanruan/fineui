@@ -149,10 +149,10 @@ BI.TextAreaEditor = BI.inherit(BI.Single, {
         return this.style;
     },
 
-    setValid: function (b) {
-        BI.TextAreaEditor.superclass.setValid.apply(this, arguments);
-        this.content.setValid(b);
-        this.watermark && this.watermark.setValid(b);
+    _setValid: function (b) {
+        BI.TextAreaEditor.superclass._setValid.apply(this, arguments);
+        // this.content.setValid(b);
+        // this.watermark && this.watermark.setValid(b);
     }
 });
 BI.TextAreaEditor.EVENT_CHANGE = "EVENT_CHANGE";

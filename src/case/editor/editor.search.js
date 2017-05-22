@@ -157,11 +157,7 @@ BI.SearchEditor = BI.inherit(BI.Widget, {
             this.clear.visible();
         }
     },
-
-    setValid: function (b) {
-        this.editor.setValid(b);
-    },
-
+    
     isEditing: function () {
         return this.editor.isEditing();
     },
