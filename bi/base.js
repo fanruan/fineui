@@ -817,10 +817,17 @@ BI.BasicButton = BI.inherit(BI.Single, {
     },
 
     _doClick: function () {
+        if (this.isValid()) {
+            this.beforeClick();
+        }
         this._trigger();
         if (this.isValid()) {
             this.doClick();
         }
+    },
+
+    beforeClick: function () {
+
     },
 
     doClick: function () {
