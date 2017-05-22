@@ -21074,6 +21074,7 @@ BI.FloatBoxController = BI.inherit(BI.Controller, {
         delete this.floatLayer[name];
         delete this.zindexMap[name];
         delete this.floatContainer[name];
+        delete this.floatOpened[name];
         return this;
     }
 });/**
