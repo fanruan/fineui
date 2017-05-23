@@ -47,7 +47,7 @@ BI.FloatBoxController = BI.inherit(BI.Controller, {
         }
         this.floatContainer[name] = BI.createWidget({
             type: "bi.absolute",
-            cls: "bi-list-view",
+            cls: "bi-popup-view",
             items: [{
                 el: (this.floatLayer[name] = BI.createWidget({
                     type: 'bi.absolute',

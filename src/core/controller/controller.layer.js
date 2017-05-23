@@ -93,7 +93,7 @@ BI.LayerController = BI.inherit(BI.Controller, {
             }]
         });
         if (w) {
-            layout.element.addClass("bi-list-view");
+            layout.element.addClass("bi-popup-view");
             layout.element.css({
                 left: w.offset().left + (offset.left || 0),
                 top: w.offset().top + (offset.top || 0),

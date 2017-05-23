@@ -3038,7 +3038,11 @@ Demo.COMPONENT_CONFIG = [{
     pId: 102,
     text: "bi.collection_view",
     value: "demo.collection_view"
-},{
+}, {
+    pId: 102,
+    text: "bi.list_view",
+    value: "demo.list_view"
+}, {
     pId: 102,
     text: "bi.virtual_list",
     value: "demo.virtual_list"
@@ -3404,6 +3408,27 @@ BI.shortcut("demo.collection_view", Demo.Func);Demo.Func = BI.inherit(BI.Widget,
     }
 });
 BI.shortcut("demo.grid_view", Demo.Func);Demo.Func = BI.inherit(BI.Widget, {
+    props: {
+        baseCls: "demo-func"
+    },
+    render: function () {
+        return {
+            type: "bi.list_view",
+            el: {
+                type: "bi.left"
+            },
+            items: BI.map(Demo.CONSTANTS.ITEMS, function (i, item) {
+                return BI.extend({}, item, {
+                    type: "bi.label",
+                    width: 200,
+                    height: 200,
+                    text: (i + 1) + "." + item.text,
+                });
+            })
+        }
+    }
+});
+BI.shortcut("demo.list_view", Demo.Func);Demo.Func = BI.inherit(BI.Widget, {
     props: {
         baseCls: "demo-func"
     },
