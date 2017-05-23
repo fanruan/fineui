@@ -4365,9 +4365,10 @@ BI.Widget = BI.inherit(BI.OB, {
         this._initRoot();
         this._initElementWidth();
         this._initElementHeight();
-        this._initVisualEffects();
+        this._initVisual();
         this._initState();
         this._initElement();
+        this._initEffects();
         this.created && this.created();
     },
 
@@ -4422,21 +4423,23 @@ BI.Widget = BI.inherit(BI.OB, {
         }
     },
 
-    _initVisualEffects: function () {
+    _initVisual: function () {
         var o = this.options;
         if (o.invisible) {
             //用display属性做显示和隐藏，否则jquery会在显示时将display设为block会覆盖掉display:flex属性
             this.element.css("display", "none");
         }
+    },
+
+    _initEffects: function () {
+        var o = this.options;
         if (o.disabled || o.invalid) {
-            // BI.nextTick(BI.bind(function () {
             if (this.options.disabled) {
                 this.setEnable(false);
             }
             if (this.options.invalid) {
                 this.setValid(false);
             }
-            // }, this));
         }
     },
 

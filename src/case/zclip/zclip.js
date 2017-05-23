@@ -13,17 +13,18 @@ BI.ZeroClip = BI.inherit(BI.BasicButton, {
             afterCopy: BI.emptyFn
         })
     },
+
     _init: function () {
         BI.ZeroClip.superclass._init.apply(this, arguments);
-        var self = this, o = this.options;
+    },
 
-        BI.nextTick(function () {
-            self.element.zclip({
-                path: BI.resourceURL + "/ZeroClipboard.swf",
-                copy: o.copy,
-                beforeCopy: o.beforeCopy,
-                afterCopy: o.afterCopy
-            });
+    mounted: function () {
+        var self = this, o = this.options;
+        this.element.zclip({
+            path: BI.resourceURL + "/ZeroClipboard.swf",
+            copy: o.copy,
+            beforeCopy: o.beforeCopy,
+            afterCopy: o.afterCopy
         });
     }
 });
