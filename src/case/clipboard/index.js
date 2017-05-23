@@ -8,7 +8,7 @@ BI.ClipBoard = BI.inherit(BI.BasicButton, {
     _defaultConfig: function () {
         return BI.extend(BI.ClipBoard.superclass._defaultConfig.apply(this, arguments), {
             extraCls: "bi-clipboard",
-            text: "",
+            copy: BI.emptyFn,
             afterCopy: BI.emptyFn
         })
     },
@@ -19,18 +19,27 @@ BI.ClipBoard = BI.inherit(BI.BasicButton, {
 
     mounted: function () {
         var self = this, o = this.options;
-        this.clipboard = new Clipboard(this.element[0], {
-            text: function () {
-                return BI.isFunction(o.text) ? o.text() : o.text;
-            }
-        });
-        this.clipboard.on("success", function (e) {
-            o.afterCopy();
-        })
+        if (window.Clipboard) {
+            this.clipboard = new Clipboard(this.element[0], {
+                text: function () {
+                    return BI.isFunction(o.copy) ? o.copy() : o.copy;
+                }
+            });
+            this.clipboard.on("success", function (e) {
+                o.afterCopy();
+            })
+        } else {
+            this.element.zclip({
+                path: BI.resourceURL + "/ZeroClipboard.swf",
+                copy: o.copy,
+                beforeCopy: o.beforeCopy,
+                afterCopy: o.afterCopy
+            });
+        }
     },
 
     destroyed: function () {
-        this.clipboard.destroy();
+        this.clipboard && this.clipboard.destroy();
     }
 });
 

@@ -1750,7 +1750,7 @@ BI.shortcut("demo.calendar", Demo.Func);Demo.Func = BI.inherit(BI.Widget, {
             width: 100,
             height: 100,
             cls: 'layout-bg1',
-            text: function () {
+            copy: function () {
                 return editor.getValue();
             },
 
