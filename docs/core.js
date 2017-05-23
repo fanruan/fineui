@@ -20984,7 +20984,7 @@ BI.FloatBoxController = BI.inherit(BI.Controller, {
         }
         this.floatContainer[name] = BI.createWidget({
             type: "bi.absolute",
-            cls: "bi-list-view",
+            cls: "bi-popup-view",
             items: [{
                 el: (this.floatLayer[name] = BI.createWidget({
                     type: 'bi.absolute',
@@ -21172,7 +21172,7 @@ BI.LayerController = BI.inherit(BI.Controller, {
             }]
         });
         if (w) {
-            layout.element.addClass("bi-list-view");
+            layout.element.addClass("bi-popup-view");
             layout.element.css({
                 left: w.offset().left + (offset.left || 0),
                 top: w.offset().top + (offset.top || 0),

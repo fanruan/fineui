@@ -1,7 +1,7 @@
 /**
  * 表示当前对象
  *
- * Created by GUY on 2015/9/7.
+ * Created by GUY on 2017/5/22.
  * @class BI.VirtualList
  * @extends BI.Widget
  */
@@ -17,12 +17,9 @@ BI.VirtualList = BI.inherit(BI.Widget, {
     },
 
     init: function () {
+        var self = this;
         this.renderedIndex = -1;
         this.cache = {};
-        this._scrollLock = false;
-        this._debounceRelease = BI.debounce(function () {
-            self._scrollLock = false;
-        }, 1000 / 60);
     },
 
     render: function () {
@@ -96,8 +93,6 @@ BI.VirtualList = BI.inherit(BI.Widget, {
         var minContentHeightTo = o.scrollTop + height + o.overscanHeight;
         var start = this.tree.greatestLowerBound(minContentHeightFrom);
         var end = this.tree.leastUpperBound(minContentHeightTo);
-        // this.topBlank.setHeight(0);
-        // this.bottomBlank.setHeight(0);
         var needDestroyed = [];
         for (var i = 0; i < start; i++) {
             var index = this.cache[i].index;
@@ -128,16 +123,12 @@ BI.VirtualList = BI.inherit(BI.Widget, {
             }
             if (this.cache[i].destroyed === true) {
                 for (var j = index; j < index + o.blockSize && j < o.items.length; j++) {
-                    var w = this.container._children[j] = BI.createWidget(BI.extend({
-                        root: true
-                    }, BI.stripEL(o.items[j])));
-                    w.element.css("position", "relative");//vertical布局下position要改成relative
+                    var w = this.container._addElement(j, BI.extend({root: true}, BI.stripEL(o.items[j])));
                     currentFragment.appendChild(w.element[0]);
                 }
                 this.cache[i].destroyed = false;
             }
         }
-        this._scrollLock = true;
         this.container.element.prepend(firstFragment);
         this.container.element.append(lastFragment);
         this.topBlank.setHeight(this.cache[start < 0 ? 0 : start].scrollTop);
@@ -146,7 +137,6 @@ BI.VirtualList = BI.inherit(BI.Widget, {
         BI.each(needDestroyed, function (i, child) {
             child && child._destroy();
         });
-        this._debounceRelease();
     },
 
     _populate: function (items) {
@@ -171,6 +161,7 @@ BI.VirtualList = BI.inherit(BI.Widget, {
         this.renderedIndex = -1;
         this._clearChildren();
         this.cache = {};
+        this.options.scrollTop = 0;
     },
 
     populate: function (items) {

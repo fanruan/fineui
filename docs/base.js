@@ -15155,7 +15155,7 @@ BI.FloatBox.EVENT_FLOAT_BOX_OPEN = "EVENT_FLOAT_BOX_CLOSED";
 BI.PopupView = BI.inherit(BI.Widget, {
     _defaultConfig: function () {
         return BI.extend(BI.PopupView.superclass._defaultConfig.apply(this, arguments), {
-            baseCls: "bi-list-view",
+            baseCls: "bi-popup-view",
             maxWidth: 'auto',
             minWidth: 100,
             //maxHeight: 200,
@@ -15458,7 +15458,117 @@ BI.SearcherView.EVENT_CHANGE = "EVENT_CHANGE";
 BI.shortcut("bi.searcher_view", BI.SearcherView);/**
  * 表示当前对象
  *
- * Created by GUY on 2015/9/7.
+ * Created by GUY on 2017/5/23.
+ * @class BI.ListView
+ * @extends BI.Widget
+ */
+BI.ListView = BI.inherit(BI.Widget, {
+    props: function () {
+        return {
+            baseCls: "bi-list-view",
+            overscanHeight: 100,
+            blockSize: 10,
+            scrollTop: 0,
+            el: {},
+            items: []
+        };
+    },
+
+    init: function () {
+        var self = this;
+        this.renderedIndex = -1;
+        this.cache = {};
+    },
+
+    render: function () {
+        var self = this, o = this.options;
+        return {
+            type: "bi.vertical",
+            items: [BI.extend({
+                type: "bi.vertical",
+                scrolly: false,
+                ref: function () {
+                    self.container = this;
+                }
+            }, o.el)],
+            element: this
+        }
+    },
+
+    mounted: function () {
+        var self = this, o = this.options;
+        this._populate();
+        this.element.scroll(function (e) {
+            o.scrollTop = self.element.scrollTop();
+            self._calculateBlocksToRender();
+        });
+        BI.ResizeDetector.addResizeListener(this, function () {
+            self._calculateBlocksToRender();
+        });
+    },
+
+    _renderMoreIf: function () {
+        var self = this, o = this.options;
+        var height = this.element.height();
+        var minContentHeight = o.scrollTop + height + o.overscanHeight;
+        var index = (this.cache[this.renderedIndex] && (this.cache[this.renderedIndex].index + o.blockSize)) || 0,
+            cnt = this.renderedIndex + 1;
+        var lastHeight;
+        var getElementHeight = function () {
+            return self.container.element.height();
+        };
+        while ((lastHeight = getElementHeight()) < minContentHeight && index < o.items.length) {
+            var items = o.items.slice(index, index + o.blockSize);
+            this.container.addItems(items);
+            var addedHeight = getElementHeight() - lastHeight;
+            this.cache[cnt] = {
+                index: index,
+                scrollTop: lastHeight,
+                height: addedHeight
+            };
+            this.renderedIndex = cnt;
+            cnt++;
+            index += o.blockSize;
+        }
+    },
+
+    _calculateBlocksToRender: function () {
+        var o = this.options;
+        this._renderMoreIf();
+    },
+
+    _populate: function (items) {
+        var o = this.options;
+        if (items && this.options.items !== items) {
+            this.options.items = items;
+        }
+        this._calculateBlocksToRender();
+        this.element.scrollTop(o.scrollTop);
+    },
+
+    restore: function () {
+        this.renderedIndex = -1;
+        this.container.empty();
+        this.cache = {};
+    },
+
+    populate: function (items) {
+        if (items && this.options.items !== items) {
+            this.restore();
+        }
+        this._populate();
+    },
+
+    destroyed: function () {
+        this.restore();
+    }
+});
+BI.shortcut('bi.list_view', BI.ListView);
+
+/**
+ * 表示当前对象
+ *
+ * Created by GUY on 2017/5/22.
  * @class BI.VirtualList
  * @extends BI.Widget
  */
@@ -15474,12 +15584,9 @@ BI.VirtualList = BI.inherit(BI.Widget, {
     },
 
     init: function () {
+        var self = this;
         this.renderedIndex = -1;
         this.cache = {};
-        this._scrollLock = false;
-        this._debounceRelease = BI.debounce(function () {
-            self._scrollLock = false;
-        }, 1000 / 60);
     },
 
     render: function () {
@@ -15553,8 +15660,6 @@ BI.VirtualList = BI.inherit(BI.Widget, {
         var minContentHeightTo = o.scrollTop + height + o.overscanHeight;
         var start = this.tree.greatestLowerBound(minContentHeightFrom);
         var end = this.tree.leastUpperBound(minContentHeightTo);
-        // this.topBlank.setHeight(0);
-        // this.bottomBlank.setHeight(0);
         var needDestroyed = [];
         for (var i = 0; i < start; i++) {
             var index = this.cache[i].index;
@@ -15585,16 +15690,12 @@ BI.VirtualList = BI.inherit(BI.Widget, {
             }
             if (this.cache[i].destroyed === true) {
                 for (var j = index; j < index + o.blockSize && j < o.items.length; j++) {
-                    var w = this.container._children[j] = BI.createWidget(BI.extend({
-                        root: true
-                    }, BI.stripEL(o.items[j])));
-                    w.element.css("position", "relative");//vertical布局下position要改成relative
+                    var w = this.container._addElement(j, BI.extend({root: true}, BI.stripEL(o.items[j])));
                     currentFragment.appendChild(w.element[0]);
                 }
                 this.cache[i].destroyed = false;
             }
         }
-        this._scrollLock = true;
         this.container.element.prepend(firstFragment);
         this.container.element.append(lastFragment);
         this.topBlank.setHeight(this.cache[start < 0 ? 0 : start].scrollTop);
@@ -15603,7 +15704,6 @@ BI.VirtualList = BI.inherit(BI.Widget, {
         BI.each(needDestroyed, function (i, child) {
             child && child._destroy();
         });
-        this._debounceRelease();
     },
 
     _populate: function (items) {
@@ -15628,6 +15728,7 @@ BI.VirtualList = BI.inherit(BI.Widget, {
         this.renderedIndex = -1;
         this._clearChildren();
         this.cache = {};
+        this.options.scrollTop = 0;
     },
 
     populate: function (items) {
