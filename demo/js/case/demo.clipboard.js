@@ -10,8 +10,8 @@ Demo.Func = BI.inherit(BI.Widget, {
             height: 30,
             value: "这是复制的内容"
         });
-        var zclip = BI.createWidget({
-            type: 'bi.zero_clip',
+        var clipboard = BI.createWidget({
+            type: 'bi.clipboard',
             width: 100,
             height: 100,
             cls: 'layout-bg1',
@@ -32,11 +32,11 @@ Demo.Func = BI.inherit(BI.Widget, {
                 left: 100,
                 top: 50,
             }, {
-                el: zclip,
+                el: clipboard,
                 left: 100,
                 top: 100
             }]
         })
     }
 });
-BI.shortcut("demo.zclip", Demo.Func);
+BI.shortcut("demo.clipboard", Demo.Func);

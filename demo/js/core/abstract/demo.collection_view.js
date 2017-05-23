@@ -13,6 +13,8 @@ Demo.Func = BI.inherit(BI.Widget, {
         }
         var grid = BI.createWidget({
             type: "bi.collection_view",
+            width: 400,
+            height: 300,
             items: items,
             cellSizeAndPositionGetter: function (index) {
                 return {

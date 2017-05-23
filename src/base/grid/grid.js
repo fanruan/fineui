@@ -9,16 +9,16 @@ BI.GridView = BI.inherit(BI.Widget, {
     _defaultConfig: function () {
         return BI.extend(BI.GridView.superclass._defaultConfig.apply(this, arguments), {
             baseCls: "bi-grid-view",
-            width: 400,
-            height: 300,
+            // width: 400, //必设
+            // height: 300, //必设
             overflowX: true,
             overflowY: true,
             overscanColumnCount: 0,
             overscanRowCount: 0,
-            rowHeightGetter: BI.emptyFn,
-            columnWidthGetter: BI.emptyFn,
-            estimatedColumnSize: 100,
-            estimatedRowSize: 30,
+            rowHeightGetter: BI.emptyFn, //number类型或function类型
+            columnWidthGetter: BI.emptyFn, //number类型或function类型
+            // estimatedColumnSize: 100, //columnWidthGetter为function时必设
+            // estimatedRowSize: 30, //rowHeightGetter为function时必设
             scrollLeft: 0,
             scrollTop: 0,
             items: []

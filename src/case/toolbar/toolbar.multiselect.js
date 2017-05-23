@@ -12,7 +12,8 @@ BI.MultiSelectBar = BI.inherit(BI.BasicButton, {
             height: 25,
             text: BI.i18nText('BI-Select_All'),
             isAllCheckedBySelectedValue: BI.emptyFn,
-            onCheck: BI.emptyFn,
+            //手动控制选中
+            disableSelected: true,
             isHalfCheckedBySelectedValue: function (selectedValues) {
                 return selectedValues.length > 0;
             }
@@ -26,7 +27,6 @@ BI.MultiSelectBar = BI.inherit(BI.BasicButton, {
             stopPropagation: true,
             handler: function () {
                 self.setSelected(self.isSelected());
-                o.onCheck.call(self, self.isSelected());
             }
         });
         this.half = BI.createWidget({
@@ -34,7 +34,6 @@ BI.MultiSelectBar = BI.inherit(BI.BasicButton, {
             stopPropagation: true,
             handler: function () {
                 self.setSelected(true);
-                o.onCheck.call(self, self.isSelected());
             }
         });
         this.checkbox.on(BI.Controller.EVENT_CHANGE, function () {
@@ -77,18 +76,13 @@ BI.MultiSelectBar = BI.inherit(BI.BasicButton, {
         this.half.invisible();
     },
 
-    doClick: function () {
+    //自己手动控制选中
+    beforeClick: function () {
         var isHalf = this.isHalfSelected(), isSelected = this.isSelected();
         if (isHalf === true) {
             this.setSelected(true);
         } else {
             this.setSelected(!isSelected);
-        }
-
-        if (this.isValid()) {
-            this.fireEvent(BI.Controller.EVENT_CHANGE, BI.Events.CLICK, this.getValue(), this);
-            this.options.onCheck.call(this, this.isSelected());
-            this.fireEvent(BI.MultiSelectBar.EVENT_CHANGE, this.isSelected(), this);
         }
     },
 

@@ -5,8 +5,7 @@ BI.MultiSelectTree = BI.inherit(BI.Widget, {
     _defaultConfig: function () {
         return BI.extend(BI.MultiSelectTree.superclass._defaultConfig.apply(this, arguments), {
             baseCls: 'bi-multi-select-tree',
-            itemsCreator: BI.emptyFn,
-            height: 25
+            itemsCreator: BI.emptyFn
         })
     },
 
@@ -52,7 +51,6 @@ BI.MultiSelectTree = BI.inherit(BI.Widget, {
             },
             adapter: this.adapter,
             popup: this.searcherPane,
-            height: 200,
             masker: false,
             listeners: [{
                 eventName: BI.Searcher.EVENT_START,
@@ -92,8 +90,6 @@ BI.MultiSelectTree = BI.inherit(BI.Widget, {
         BI.createWidget({
             type: "bi.vtape",
             element: this,
-            height: "100%",
-            width: "100%",
             items: [{
                 el: this.trigger,
                 height: 30
@@ -105,8 +101,6 @@ BI.MultiSelectTree = BI.inherit(BI.Widget, {
         BI.createWidget({
             type: "bi.absolute",
             element: this,
-            height: "100%",
-            width: "100%",
             items: [{
                 el: this.searcherPane,
                 top: 30,
@@ -140,6 +134,14 @@ BI.MultiSelectTree = BI.inherit(BI.Widget, {
         this.trigger.setValue({
             value: v || {}
         });
+    },
+
+    stopSearch: function () {
+        this.trigger.stopSearch();
+    },
+
+    updateValue: function (v) {
+        this.adapter.updateValue(v);
     },
 
     getValue: function () {

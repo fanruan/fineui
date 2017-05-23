@@ -79,7 +79,9 @@ BI.SequenceTableTreeNumber = BI.inherit(BI.Widget, {
         var cnt = this.start;
 
         function track(node) {
-            self.cache[node.text || node.value] = cnt++;
+            //如果已经有缓存了就不改计数了，复杂表会出现这种情况
+            self.cache[node.text || node.value] || (self.cache[node.text || node.value] = cnt);
+            cnt++;
         }
 
         BI.each(nodes, function (i, node) {

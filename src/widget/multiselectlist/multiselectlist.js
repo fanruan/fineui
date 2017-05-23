@@ -6,8 +6,7 @@ BI.MultiSelectList = BI.inherit(BI.Widget, {
         return BI.extend(BI.MultiSelectList.superclass._defaultConfig.apply(this, arguments), {
             baseCls: 'bi-multi-select-list',
             itemsCreator: BI.emptyFn,
-            valueFormatter: BI.emptyFn,
-            el: {}
+            valueFormatter: BI.emptyFn
         })
     },
     _init: function () {
@@ -18,6 +17,7 @@ BI.MultiSelectList = BI.inherit(BI.Widget, {
 
         var assertShowValue = function () {
             BI.isKey(self._startValue) && self.storeValue.value[self.storeValue.type === BI.Selection.All ? "remove" : "pushDistinct"](self._startValue);
+            self.trigger.setValue(self.storeValue);
         };
 
         this.adapter = BI.createWidget({
@@ -77,6 +77,8 @@ BI.MultiSelectList = BI.inherit(BI.Widget, {
                     self._showAdapter();
                     self._setStartValue("");
                     self.adapter.setValue(self.storeValue);
+                    //需要刷新回到初始界面，否则搜索的结果不能放在最前面
+                    self.adapter.populate();
                 }
             }, {
                 eventName: BI.Searcher.EVENT_PAUSE,
@@ -88,7 +90,6 @@ BI.MultiSelectList = BI.inherit(BI.Widget, {
                             value: [keyword]
                         }, function () {
                             self._showAdapter();
-                            self.trigger.setValue(self.storeValue);
                             self.adapter.setValue(self.storeValue);
                             self._setStartValue(keyword);
                             assertShowValue();
@@ -108,13 +109,11 @@ BI.MultiSelectList = BI.inherit(BI.Widget, {
                     if (keywords.length > 0) {
                         self._joinKeywords(keywords, function () {
                             if (BI.isEndWithBlank(last)) {
-                                self.trigger.setValue(self.storeValue);
                                 self.adapter.setValue(self.storeValue);
                                 assertShowValue();
                                 self.adapter.populate();
                                 self._setStartValue("");
                             } else {
-                                self.trigger.setValue(self.storeValue);
                                 self.adapter.setValue(self.storeValue);
                                 assertShowValue();
                             }
@@ -140,8 +139,6 @@ BI.MultiSelectList = BI.inherit(BI.Widget, {
         BI.createWidget({
             type: "bi.vtape",
             element: this,
-            height: "100%",
-            width: "100%",
             items: [{
                 el: this.trigger,
                 height: 30
@@ -153,8 +150,6 @@ BI.MultiSelectList = BI.inherit(BI.Widget, {
         BI.createWidget({
             type: "bi.absolute",
             element: this,
-            height: "100%",
-            width: "100%",
             items: [{
                 el: this.searcherPane,
                 top: 30,

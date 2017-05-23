@@ -2352,15 +2352,15 @@ if (!window.BI) {
         },
 
         has: function (obj, keys) {
-            if (BI.isKey(keys)) {
-                return _.has.apply(_, arguments);
+            if (BI.isArray(keys)) {
+                if (keys.length === 0) {
+                    return false;
+                }
+                return BI.every(keys, function (i, key) {
+                    return _.has(obj, key);
+                });
             }
-            if (!keys || BI.isEmpty(keys)) {
-                return false;
-            }
-            return BI.every(keys, function (i, key) {
-                return _.has(obj, key);
-            });
+            return _.has.apply(_, arguments);
         },
 
         //数字和字符串可以作为key
@@ -4365,9 +4365,10 @@ BI.Widget = BI.inherit(BI.OB, {
         this._initRoot();
         this._initElementWidth();
         this._initElementHeight();
-        this._initVisualEffects();
+        this._initVisual();
         this._initState();
         this._initElement();
+        this._initEffects();
         this.created && this.created();
     },
 
@@ -4422,21 +4423,23 @@ BI.Widget = BI.inherit(BI.OB, {
         }
     },
 
-    _initVisualEffects: function () {
+    _initVisual: function () {
         var o = this.options;
         if (o.invisible) {
             //用display属性做显示和隐藏，否则jquery会在显示时将display设为block会覆盖掉display:flex属性
             this.element.css("display", "none");
         }
+    },
+
+    _initEffects: function () {
+        var o = this.options;
         if (o.disabled || o.invalid) {
-            // BI.nextTick(BI.bind(function () {
             if (this.options.disabled) {
                 this.setEnable(false);
             }
             if (this.options.invalid) {
                 this.setValid(false);
             }
-            // }, this));
         }
     },
 
@@ -6544,59 +6547,64 @@ Function.prototype.after = function (func) {
  * All rights reserved.
  */
 if (jQuery) {
-    (function($){
+    (function ($) {
         // richer:容器在其各个边缘留出的空间
-        $.fn.insets = function () {
-            var p = this.padding(),
-                b = this.border();
-            return {
-                'top': p.top,
-                'bottom': p.bottom + b.bottom + b.top,
-                'left': p.left,
-                'right': p.right + b.right + b.left
+        if (!$.fn.insets) {
+            $.fn.insets = function () {
+                var p = this.padding(),
+                    b = this.border();
+                return {
+                    'top': p.top,
+                    'bottom': p.bottom + b.bottom + b.top,
+                    'left': p.left,
+                    'right': p.right + b.right + b.left
+                };
             };
-        };
+        }
 
         // richer:获取 && 设置jQuery元素的边界
-        $.fn.bounds = function (value) {
-            var tmp = {hasIgnoredBounds : true};
+        if (!$.fn.bounds) {
+            $.fn.bounds = function (value) {
+                var tmp = {hasIgnoredBounds: true};
 
-            if (value) {
-                if (!isNaN(value.x)) {
-                    tmp.left = value.x;
+                if (value) {
+                    if (!isNaN(value.x)) {
+                        tmp.left = value.x;
+                    }
+                    if (!isNaN(value.y)) {
+                        tmp.top = value.y;
+                    }
+                    if (value.width != null) {
+                        tmp.width = (value.width - (this.outerWidth(true) - this.width()));
+                        tmp.width = (tmp.width >= 0) ? tmp.width : value.width;
+                        // fix chrome
+                        //tmp.width = (tmp.width >= 0) ? tmp.width : 0;
+                    }
+                    if (value.height != null) {
+                        tmp.height = value.height - (this.outerHeight(true) - this.height());
+                        tmp.height = (tmp.height >= 0) ? tmp.height : value.height;
+                        // fix chrome
+                        //tmp.height = (tmp.height >= 0) ? tmp.height : value.0;
+                    }
+                    this.css(tmp);
+                    return this;
                 }
-                if (!isNaN(value.y)) {
-                    tmp.top = value.y;
+                else {
+                    // richer:注意此方法只对可见元素有效
+                    tmp = this.position();
+                    return {
+                        'x': tmp.left,
+                        'y': tmp.top,
+                        // richer:这里计算外部宽度和高度的时候，都不包括边框
+                        'width': this.outerWidth(),
+                        'height': this.outerHeight()
+                    };
                 }
-                if (value.width != null) {
-                    tmp.width = (value.width - (this.outerWidth(true) - this.width()));
-                    tmp.width = (tmp.width >= 0) ? tmp.width : value.width;
-                    // fix chrome
-                    //tmp.width = (tmp.width >= 0) ? tmp.width : 0;
-                }
-                if (value.height != null) {
-                    tmp.height = value.height - (this.outerHeight(true) - this.height());
-                    tmp.height = (tmp.height >= 0) ? tmp.height : value.height;
-                    // fix chrome
-                    //tmp.height = (tmp.height >= 0) ? tmp.height : value.0;
-                }
-                this.css(tmp);
-                return this;
-            }
-            else {
-                // richer:注意此方法只对可见元素有效
-                tmp = this.position();
-                return {
-                    'x': tmp.left,
-                    'y': tmp.top,
-                    // richer:这里计算外部宽度和高度的时候，都不包括边框
-                    'width': this.outerWidth(),
-                    'height': this.outerHeight()
-                };
-            }
-        };
+            };
+        }
     })(jQuery);
-};if (!Number.prototype.toFixed || (0.00008).toFixed(3) !== '0.000' ||
+}
+;if (!Number.prototype.toFixed || (0.00008).toFixed(3) !== '0.000' ||
     (0.9).toFixed(0) === '0' || (1.255).toFixed(2) !== '1.25' ||
     (1000000000000000128).toFixed(0) !== "1000000000000000128") {
     (function () {
@@ -6857,7 +6865,7 @@ function accDiv(arg1, arg2) {
     with (Math) {
         r1 = Number(arg1.toString().replace(".", ""));
         r2 = Number(arg2.toString().replace(".", ""));
-        return (r1 / r2) * pow(10, t2 - t1);
+        return (t2 > t1) ? (r1 / r2) * pow(10, t2 - t1) : (r1 / r2) / pow(10, t1 - t2);
     }
 }
 
@@ -9657,7 +9665,7 @@ $.extend(BI, {
         return new BI.PrefixIntervalTree(xs);
     };
 
-    BI.PrefixIntervalTree.empty = function () {
+    BI.PrefixIntervalTree.empty = function (size) {
         return BI.PrefixIntervalTree.uniform(size, 0);
     };
 
@@ -9990,7 +9998,7 @@ $.extend(BI, {
         },
 
         isRoot: function (node) {
-            return node === this.root || node.id === this.root.id;
+            return node === this.root;
         },
 
         getRoot: function () {
@@ -10367,7 +10375,7 @@ $.extend(BI, {
             if (BI.isArray(nodes)) {
                 for (var i = 0, l = nodes.length; i < l; i++) {
                     var node = BI.clone(nodes[i]);
-                    node.pId = pId;
+                    node.pId = node.pId == null ? pId : node.pId;
                     delete node.children;
                     r.push(node);
                     if (nodes[i]["children"]) {
@@ -10376,7 +10384,7 @@ $.extend(BI, {
                 }
             } else {
                 var newNodes = BI.clone(nodes);
-                newNodes.pId = pId;
+                newNodes.pId = newNodes.pId == null ? pId : newNodes.pId;
                 delete newNodes.children;
                 r.push(newNodes);
                 if (nodes["children"]) {
@@ -10387,21 +10395,25 @@ $.extend(BI, {
         },
 
         arrayFormat: function (nodes, pId) {
-            if (!nodes) return [];
+            if (!nodes) {
+                return [];
+            }
             var r = [];
             if (BI.isArray(nodes)) {
                 for (var i = 0, l = nodes.length; i < l; i++) {
                     var node = nodes[i];
+                    node.pId = node.pId == null ? pId : node.pId;
                     r.push(node);
                     if (nodes[i]["children"]) {
-                        r = r.concat(BI.Tree.transformToArrayFormat(nodes[i]["children"], node.id));
+                        r = r.concat(BI.Tree.arrayFormat(nodes[i]["children"], node.id));
                     }
                 }
             } else {
                 var newNodes = nodes;
+                newNodes.pId = newNodes.pId == null ? pId : newNodes.pId;
                 r.push(newNodes);
                 if (nodes["children"]) {
-                    r = r.concat(BI.Tree.transformToArrayFormat(nodes["children"], newNodes.id));
+                    r = r.concat(BI.Tree.arrayFormat(nodes["children"], newNodes.id));
                 }
             }
             return r;
@@ -10417,13 +10429,13 @@ $.extend(BI, {
                 var r = [];
                 var tmpMap = [];
                 for (i = 0, l = sNodes.length; i < l; i++) {
-                    if(BI.isNull(sNodes[i].id)) {
+                    if (BI.isNull(sNodes[i].id)) {
                         return sNodes;
                     }
                     tmpMap[sNodes[i].id] = BI.clone(sNodes[i]);
                 }
                 for (i = 0, l = sNodes.length; i < l; i++) {
-                    if (tmpMap[sNodes[i].pId] && sNodes[i].id != sNodes[i].pId) {
+                    if (tmpMap[sNodes[i].pId] && sNodes[i].id !== sNodes[i].pId) {
                         if (!tmpMap[sNodes[i].pId].children) {
                             tmpMap[sNodes[i].pId].children = [];
                         }
@@ -10432,6 +10444,37 @@ $.extend(BI, {
                         r.push(tmpMap[sNodes[i].id]);
                     }
                     delete tmpMap[sNodes[i].id].pId;
+                }
+                return r;
+            } else {
+                return [sNodes];
+            }
+        },
+
+        treeFormat: function (sNodes) {
+            var i, l;
+            if (!sNodes) {
+                return [];
+            }
+
+            if (BI.isArray(sNodes)) {
+                var r = [];
+                var tmpMap = [];
+                for (i = 0, l = sNodes.length; i < l; i++) {
+                    if (BI.isNull(sNodes[i].id)) {
+                        return sNodes;
+                    }
+                    tmpMap[sNodes[i].id] = sNodes[i];
+                }
+                for (i = 0, l = sNodes.length; i < l; i++) {
+                    if (tmpMap[sNodes[i].pId] && sNodes[i].id !== sNodes[i].pId) {
+                        if (!tmpMap[sNodes[i].pId].children) {
+                            tmpMap[sNodes[i].pId].children = [];
+                        }
+                        tmpMap[sNodes[i].pId].children.push(tmpMap[sNodes[i].id]);
+                    } else {
+                        r.push(tmpMap[sNodes[i].id]);
+                    }
                 }
                 return r;
             } else {
@@ -15351,7 +15394,7 @@ BI.FloatBoxController = BI.inherit(BI.Controller, {
         }
         this.floatContainer[name] = BI.createWidget({
             type: "bi.absolute",
-            cls: "bi-list-view",
+            cls: "bi-popup-view",
             items: [{
                 el: (this.floatLayer[name] = BI.createWidget({
                     type: 'bi.absolute',
@@ -15441,6 +15484,7 @@ BI.FloatBoxController = BI.inherit(BI.Controller, {
         delete this.floatLayer[name];
         delete this.zindexMap[name];
         delete this.floatContainer[name];
+        delete this.floatOpened[name];
         return this;
     }
 });/**
@@ -15538,7 +15582,7 @@ BI.LayerController = BI.inherit(BI.Controller, {
             }]
         });
         if (w) {
-            layout.element.addClass("bi-list-view");
+            layout.element.addClass("bi-popup-view");
             layout.element.css({
                 left: w.offset().left + (offset.left || 0),
                 top: w.offset().top + (offset.top || 0),

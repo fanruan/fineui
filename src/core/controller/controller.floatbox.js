@@ -47,7 +47,7 @@ BI.FloatBoxController = BI.inherit(BI.Controller, {
         }
         this.floatContainer[name] = BI.createWidget({
             type: "bi.absolute",
-            cls: "bi-list-view",
+            cls: "bi-popup-view",
             items: [{
                 el: (this.floatLayer[name] = BI.createWidget({
                     type: 'bi.absolute',
@@ -137,6 +137,7 @@ BI.FloatBoxController = BI.inherit(BI.Controller, {
         delete this.floatLayer[name];
         delete this.zindexMap[name];
         delete this.floatContainer[name];
+        delete this.floatOpened[name];
         return this;
     }
 });

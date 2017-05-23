@@ -170,7 +170,7 @@
         return new BI.PrefixIntervalTree(xs);
     };
 
-    BI.PrefixIntervalTree.empty = function () {
+    BI.PrefixIntervalTree.empty = function (size) {
         return BI.PrefixIntervalTree.uniform(size, 0);
     };
 

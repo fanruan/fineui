@@ -79,7 +79,9 @@ BI.SequenceTableTreeNumber = BI.inherit(BI.Widget, {
         var cnt = this.start;
 
         function track(node) {
-            self.cache[node.text || node.value] = cnt++;
+            //如果已经有缓存了就不改计数了，复杂表会出现这种情况
+            self.cache[node.text || node.value] || (self.cache[node.text || node.value] = cnt);
+            cnt++;
         }
 
         BI.each(nodes, function (i, node) {
@@ -10962,8 +10964,7 @@ BI.MultiSelectList = BI.inherit(BI.Widget, {
         return BI.extend(BI.MultiSelectList.superclass._defaultConfig.apply(this, arguments), {
             baseCls: 'bi-multi-select-list',
             itemsCreator: BI.emptyFn,
-            valueFormatter: BI.emptyFn,
-            el: {}
+            valueFormatter: BI.emptyFn
         })
     },
     _init: function () {
@@ -10974,6 +10975,7 @@ BI.MultiSelectList = BI.inherit(BI.Widget, {
 
         var assertShowValue = function () {
             BI.isKey(self._startValue) && self.storeValue.value[self.storeValue.type === BI.Selection.All ? "remove" : "pushDistinct"](self._startValue);
+            self.trigger.setValue(self.storeValue);
         };
 
         this.adapter = BI.createWidget({
@@ -11033,6 +11035,8 @@ BI.MultiSelectList = BI.inherit(BI.Widget, {
                     self._showAdapter();
                     self._setStartValue("");
                     self.adapter.setValue(self.storeValue);
+                    //需要刷新回到初始界面，否则搜索的结果不能放在最前面
+                    self.adapter.populate();
                 }
             }, {
                 eventName: BI.Searcher.EVENT_PAUSE,
@@ -11044,7 +11048,6 @@ BI.MultiSelectList = BI.inherit(BI.Widget, {
                             value: [keyword]
                         }, function () {
                             self._showAdapter();
-                            self.trigger.setValue(self.storeValue);
                             self.adapter.setValue(self.storeValue);
                             self._setStartValue(keyword);
                             assertShowValue();
@@ -11064,13 +11067,11 @@ BI.MultiSelectList = BI.inherit(BI.Widget, {
                     if (keywords.length > 0) {
                         self._joinKeywords(keywords, function () {
                             if (BI.isEndWithBlank(last)) {
-                                self.trigger.setValue(self.storeValue);
                                 self.adapter.setValue(self.storeValue);
                                 assertShowValue();
                                 self.adapter.populate();
                                 self._setStartValue("");
                             } else {
-                                self.trigger.setValue(self.storeValue);
                                 self.adapter.setValue(self.storeValue);
                                 assertShowValue();
                             }
@@ -11096,8 +11097,6 @@ BI.MultiSelectList = BI.inherit(BI.Widget, {
         BI.createWidget({
             type: "bi.vtape",
             element: this,
-            height: "100%",
-            width: "100%",
             items: [{
                 el: this.trigger,
                 height: 30
@@ -11109,8 +11108,6 @@ BI.MultiSelectList = BI.inherit(BI.Widget, {
         BI.createWidget({
             type: "bi.absolute",
             element: this,
-            height: "100%",
-            width: "100%",
             items: [{
                 el: this.searcherPane,
                 top: 30,
@@ -11307,8 +11304,7 @@ BI.MultiSelectTree = BI.inherit(BI.Widget, {
     _defaultConfig: function () {
         return BI.extend(BI.MultiSelectTree.superclass._defaultConfig.apply(this, arguments), {
             baseCls: 'bi-multi-select-tree',
-            itemsCreator: BI.emptyFn,
-            height: 25
+            itemsCreator: BI.emptyFn
         })
     },
 
@@ -11354,7 +11350,6 @@ BI.MultiSelectTree = BI.inherit(BI.Widget, {
             },
             adapter: this.adapter,
             popup: this.searcherPane,
-            height: 200,
             masker: false,
             listeners: [{
                 eventName: BI.Searcher.EVENT_START,
@@ -11394,8 +11389,6 @@ BI.MultiSelectTree = BI.inherit(BI.Widget, {
         BI.createWidget({
             type: "bi.vtape",
             element: this,
-            height: "100%",
-            width: "100%",
             items: [{
                 el: this.trigger,
                 height: 30
@@ -11407,8 +11400,6 @@ BI.MultiSelectTree = BI.inherit(BI.Widget, {
         BI.createWidget({
             type: "bi.absolute",
             element: this,
-            height: "100%",
-            width: "100%",
             items: [{
                 el: this.searcherPane,
                 top: 30,
@@ -11444,6 +11435,14 @@ BI.MultiSelectTree = BI.inherit(BI.Widget, {
         });
     },
 
+    stopSearch: function () {
+        this.trigger.stopSearch();
+    },
+
+    updateValue: function (v) {
+        this.adapter.updateValue(v);
+    },
+
     getValue: function () {
         return this.storeValue.value;
     },
@@ -11469,7 +11468,6 @@ BI.MultiSelectTreePopup = BI.inherit(BI.Widget, {
         var self = this, o = this.options;
         this.popup = BI.createWidget({
             type: "bi.async_tree",
-            height: 400,
             element: this,
             itemsCreator: o.itemsCreator
         });
@@ -11492,6 +11490,11 @@ BI.MultiSelectTreePopup = BI.inherit(BI.Widget, {
     setValue: function (v) {
         v || (v = {});
         this.popup.setValue(v.value);
+    },
+
+    updateValue: function (v) {
+        this.popup.updateValue(v);
+        this.popup.refresh();
     },
 
     populate: function (config) {
@@ -16975,17 +16978,17 @@ BI.shortcut('bi.year_quarter_combo', BI.YearQuarterCombo);/**
  * 封装了字段处理逻辑
  *
  * Created by GUY on 2015/10/29.
- * @class BI.AllValueChooserCombo
+ * @class BI.AbstractAllValueChooser
  * @extends BI.Widget
  */
-BI.AllValueChooserCombo = BI.inherit(BI.Widget, {
+BI.AbstractAllValueChooser = BI.inherit(BI.Widget, {
 
     _const: {
-        perPage: 10
+        perPage: 100
     },
+
     _defaultConfig: function () {
-        return BI.extend(BI.AllValueChooserCombo.superclass._defaultConfig.apply(this, arguments), {
-            baseCls: "bi-all-value-chooser-combo",
+        return BI.extend(BI.AbstractAllValueChooser.superclass._defaultConfig.apply(this, arguments), {
             width: 200,
             height: 30,
             items: null,
@@ -16994,35 +16997,17 @@ BI.AllValueChooserCombo = BI.inherit(BI.Widget, {
         });
     },
 
-    _init: function () {
-        BI.AllValueChooserCombo.superclass._init.apply(this, arguments);
-        var self = this, o = this.options;
-        if (BI.isNotNull(o.items)) {
-            this.items = o.items;
-        }
-        this.combo = BI.createWidget({
-            type: 'bi.multi_select_combo',
-            element: this,
-            itemsCreator: BI.bind(this._itemsCreator, this),
-            valueFormatter: function (v) {
-                var text = v;
-                if (BI.isNotNull(self.items)) {
-                    BI.some(self.items, function (i, item) {
-                        if (item.value === v) {
-                            text = item.text;
-                            return true;
-                        }
-                    });
+    _valueFormatter: function (v) {
+        var text = v;
+        if (BI.isNotNull(this.items)) {
+            BI.some(this.items, function (i, item) {
+                if (item.value === v) {
+                    text = item.text;
+                    return true;
                 }
-                return text;
-            },
-            width: o.width,
-            height: o.height
-        });
-
-        this.combo.on(BI.MultiSelectCombo.EVENT_CONFIRM, function () {
-            self.fireEvent(BI.AllValueChooserCombo.EVENT_CONFIRM);
-        });
+            });
+        }
+        return text;
     },
 
     _itemsCreator: function (options, callback) {
@@ -17065,6 +17050,46 @@ BI.AllValueChooserCombo = BI.inherit(BI.Widget, {
                 hasNext: false
             });
         }
+    }
+});/**
+ * 简单的复选下拉框控件, 适用于数据量少的情况， 与valuechooser的区别是allvaluechooser setValue和getValue返回的是所有值
+ * 封装了字段处理逻辑
+ *
+ * Created by GUY on 2015/10/29.
+ * @class BI.AllValueChooserCombo
+ * @extends BI.AbstractAllValueChooser
+ */
+BI.AllValueChooserCombo = BI.inherit(BI.AbstractAllValueChooser, {
+
+    _defaultConfig: function () {
+        return BI.extend(BI.AllValueChooserCombo.superclass._defaultConfig.apply(this, arguments), {
+            baseCls: "bi-all-value-chooser-combo",
+            width: 200,
+            height: 30,
+            items: null,
+            itemsCreator: BI.emptyFn,
+            cache: true
+        });
+    },
+
+    _init: function () {
+        BI.AllValueChooserCombo.superclass._init.apply(this, arguments);
+        var self = this, o = this.options;
+        if (BI.isNotNull(o.items)) {
+            this.items = o.items;
+        }
+        this.combo = BI.createWidget({
+            type: 'bi.multi_select_combo',
+            element: this,
+            itemsCreator: BI.bind(this._itemsCreator, this),
+            valueFormatter: BI.bind(this._valueFormatter, this),
+            width: o.width,
+            height: o.height
+        });
+
+        this.combo.on(BI.MultiSelectCombo.EVENT_CONFIRM, function () {
+            self.fireEvent(BI.AllValueChooserCombo.EVENT_CONFIRM);
+        });
     },
 
     setValue: function (v) {
@@ -17088,70 +17113,84 @@ BI.AllValueChooserCombo = BI.inherit(BI.Widget, {
 });
 BI.AllValueChooserCombo.EVENT_CONFIRM = "AllValueChooserCombo.EVENT_CONFIRM";
 BI.shortcut('bi.all_value_chooser_combo', BI.AllValueChooserCombo);/**
- * 简单的复选下拉树控件, 适用于数据量少的情况
+ * 简单的复选下拉框控件, 适用于数据量少的情况， 与valuechooser的区别是allvaluechooser setValue和getValue返回的是所有值
+ * 封装了字段处理逻辑
  *
  * Created by GUY on 2015/10/29.
- * @class BI.TreeValueChooserCombo
- * @extends BI.Widget
+ * @class BI.AllValueChooserPane
+ * @extends BI.AbstractAllValueChooser
  */
-BI.TreeValueChooserCombo = BI.inherit(BI.Widget, {
+BI.AllValueChooserPane = BI.inherit(BI.AbstractAllValueChooser, {
+
+    _defaultConfig: function () {
+        return BI.extend(BI.AllValueChooserPane.superclass._defaultConfig.apply(this, arguments), {
+            baseCls: "bi-all-value-chooser-pane",
+            width: 200,
+            height: 30,
+            items: null,
+            itemsCreator: BI.emptyFn,
+            cache: true
+        });
+    },
+
+    _init: function () {
+        BI.AllValueChooserPane.superclass._init.apply(this, arguments);
+        var self = this, o = this.options;
+        if (BI.isNotNull(o.items)) {
+            this.items = o.items;
+        }
+        this.list = BI.createWidget({
+            type: 'bi.multi_select_list',
+            element: this,
+            itemsCreator: BI.bind(this._itemsCreator, this),
+            valueFormatter: BI.bind(this._valueFormatter, this),
+            width: o.width,
+            height: o.height
+        });
+
+        this.list.on(BI.MultiSelectList.EVENT_CHANGE, function () {
+            self.fireEvent(BI.AllValueChooserPane.EVENT_CHANGE);
+        });
+    },
+
+    setValue: function (v) {
+        this.list.setValue({
+            type: BI.Selection.Multi,
+            value: v || []
+        });
+    },
+
+    getValue: function () {
+        var val = this.list.getValue() || {};
+        if (val.type === BI.Selection.All) {
+            return val.assist;
+        }
+        return val.value || [];
+    },
+
+    populate: function () {
+        this.list.populate.apply(this.list, arguments);
+    }
+});
+BI.AllValueChooserPane.EVENT_CHANGE = "AllValueChooserPane.EVENT_CHANGE";
+BI.shortcut('bi.all_value_chooser_pane', BI.AllValueChooserPane);BI.AbstractTreeValueChooser = BI.inherit(BI.Widget, {
 
     _const: {
-        perPage: 10
+        perPage: 100
     },
 
     _defaultConfig: function () {
-        return BI.extend(BI.TreeValueChooserCombo.superclass._defaultConfig.apply(this, arguments), {
-            baseCls: "bi-tree-value-chooser-combo",
-            width: 200,
-            height: 30,
+        return BI.extend(BI.AbstractTreeValueChooser.superclass._defaultConfig.apply(this, arguments), {
             items: null,
             itemsCreator: BI.emptyFn
         });
     },
 
-    _init: function () {
-        BI.TreeValueChooserCombo.superclass._init.apply(this, arguments);
-        var self = this, o = this.options;
-        if (BI.isNotNull(o.items)) {
-            this._initData(o.items);
-        }
-        this.combo = BI.createWidget({
-            type: 'bi.multi_tree_combo',
-            element: this,
-            itemsCreator: BI.bind(this._itemsCreator, this),
-            width: o.width,
-            height: o.height
-        });
-
-        this.combo.on(BI.MultiTreeCombo.EVENT_CONFIRM, function () {
-            self.fireEvent(BI.TreeValueChooserCombo.EVENT_CONFIRM);
-        });
-    },
-
     _initData: function (items) {
         this.items = items;
-        var nodes = BI.Tree.transformToTreeFormat(items);
+        var nodes = BI.Tree.treeFormat(items);
         this.tree = new BI.Tree();
         this.tree.initTree(nodes);
-        this._initMap();
-        this._initFloors();
-    },
-
-    _initMap: function () {
-        var map = this.map = {};
-        BI.each(this.items, function (i, item) {
-            map[item.value] = item;
-        });
-    },
-
-    _initFloors: function () {
-        this.floors = -1;
-        var root = this.tree.getRoot();
-        while (root) {
-            this.floors++;
-            root = root.getChildren()[0];
-        }
     },
 
     _itemsCreator: function (options, callback) {
@@ -17195,32 +17234,29 @@ BI.TreeValueChooserCombo = BI.inherit(BI.Widget, {
             return;
         }
 
-        doCheck(0, [], this.tree.getRoot(), selectedValues);
+        doCheck([], this.tree.getRoot(), selectedValues);
 
         callback({
             items: result
         });
 
-        function doCheck(floor, parentValues, node, selected) {
-            if (floor >= self.floors) {
-                return;
-            }
+        function doCheck(parentValues, node, selected) {
             if (selected == null || BI.isEmpty(selected)) {
                 BI.each(node.getChildren(), function (i, child) {
                     var newParents = BI.clone(parentValues);
                     newParents.push(child.value);
                     var llen = self._getChildCount(newParents);
                     createOneJson(child, node.id, llen);
-                    doCheck(floor + 1, newParents, child, {});
+                    doCheck(newParents, child, {});
                 });
                 return;
             }
             BI.each(selected, function (k) {
-                var node = self._getNode(k);
+                var node = self._getNode(parentValues, k);
                 var newParents = BI.clone(parentValues);
                 newParents.push(node.value);
                 createOneJson(node, BI.last(parentValues), getCount(selected[k], newParents));
-                doCheck(floor + 1, newParents, node, selected[k]);
+                doCheck(newParents, node, selected[k]);
             })
         }
 
@@ -17309,9 +17345,6 @@ BI.TreeValueChooserCombo = BI.inherit(BI.Widget, {
             newParents.push(current);
             if (self._isMatch(current, keyword)) {
                 return true;
-            }
-            if (deep >= self.floors) {
-                return false;
             }
 
             var children = self._getChildren(newParents);
@@ -17448,9 +17481,6 @@ BI.TreeValueChooserCombo = BI.inherit(BI.Widget, {
                 createOneJson(parentValues, current, false, checked, !isAllSelect && isHalf(parentValues, current), true, result);
                 return [true, checked];
             }
-            if (deep >= self.floors) {
-                return [false, false];
-            }
             var newParents = BI.clone(parentValues);
             newParents.push(current);
             var children = self._getChildren(newParents);
@@ -17475,14 +17505,14 @@ BI.TreeValueChooserCombo = BI.inherit(BI.Widget, {
         }
 
         function createOneJson(parentValues, value, isOpen, checked, half, flag, result) {
-            var node = self.map[value];
+            var node = self._getNode(parentValues, value)
             result.push({
                 id: node.id,
                 pId: node.pId,
                 text: node.text,
                 value: node.value,
                 title: node.title,
-                isParent: parentValues.length + 1 < self.floors,
+                isParent: node.getChildrenLength() > 0,
                 open: isOpen,
                 checked: checked,
                 halfCheck: half,
@@ -17566,7 +17596,7 @@ BI.TreeValueChooserCombo = BI.inherit(BI.Widget, {
                 value: nodes[i].value,
                 text: nodes[i].text,
                 times: 1,
-                isParent: parentValues.length + 1 < this.floors,
+                isParent: nodes[i].getChildrenLength() > 0,
                 checked: state[0],
                 halfCheck: state[1]
             })
@@ -17613,14 +17643,14 @@ BI.TreeValueChooserCombo = BI.inherit(BI.Widget, {
 
         function getCheckState(current, parentValues, valueMap, checkState) {
             var checked = checkState.checked, half = checkState.half;
-            var hasChild = parentValues.length + 1 < self.floors;
             var tempCheck = false, halfCheck = false;
             if (BI.has(valueMap, current)) {
                 //可能是半选
                 if (valueMap[current][0] === 1) {
                     var values = BI.clone(parentValues);
                     values.push(current);
-                    if (hasChild && self._getChildCount(values) !== valueMap[current][1]) {
+                    var childCount = self._getChildCount(values);
+                    if (childCount > 0 && childCount !== valueMap[current][1]) {
                         halfCheck = true;
                     }
                 } else if (valueMap[current][0] === 2) {
@@ -17653,14 +17683,34 @@ BI.TreeValueChooserCombo = BI.inherit(BI.Widget, {
         return finded.finded.length > 0 || finded.matched.length > 0;
     },
 
-    _getNode: function (v) {
-        return this.tree.search(v, "value");
+    _getNode: function (parentValues, v) {
+        var self = this;
+        var findedParentNode;
+        var index = 0;
+        this.tree.traverse(function (node) {
+            if (self.tree.isRoot(node)) {
+                return;
+            }
+            if (index > parentValues.length) {
+                return false;
+            }
+            if (index === parentValues.length && node.value === v) {
+                findedParentNode = node;
+                return false;
+            }
+            if (node.value === parentValues[index]) {
+                index++;
+                return;
+            }
+            return true;
+        });
+        return findedParentNode;
     },
 
     _getChildren: function (parentValues) {
         if (parentValues.length > 0) {
             var value = BI.last(parentValues);
-            var parent = this.tree.search(value, "value");
+            var parent = this._getNode(parentValues.slice(0, parentValues.length - 1), value);
         } else {
             var parent = this.tree.getRoot();
         }
@@ -17669,6 +17719,43 @@ BI.TreeValueChooserCombo = BI.inherit(BI.Widget, {
 
     _getChildCount: function (parentValues) {
         return this._getChildren(parentValues).length;
+    }
+});/**
+ * 简单的复选下拉树控件, 适用于数据量少的情况
+ *
+ * Created by GUY on 2015/10/29.
+ * @class BI.TreeValueChooserCombo
+ * @extends BI.Widget
+ */
+BI.TreeValueChooserCombo = BI.inherit(BI.AbstractTreeValueChooser, {
+
+    _defaultConfig: function () {
+        return BI.extend(BI.TreeValueChooserCombo.superclass._defaultConfig.apply(this, arguments), {
+            baseCls: "bi-tree-value-chooser-combo",
+            width: 200,
+            height: 30,
+            items: null,
+            itemsCreator: BI.emptyFn
+        });
+    },
+
+    _init: function () {
+        BI.TreeValueChooserCombo.superclass._init.apply(this, arguments);
+        var self = this, o = this.options;
+        if (BI.isNotNull(o.items)) {
+            this._initData(o.items);
+        }
+        this.combo = BI.createWidget({
+            type: 'bi.multi_tree_combo',
+            element: this,
+            itemsCreator: BI.bind(this._itemsCreator, this),
+            width: o.width,
+            height: o.height
+        });
+
+        this.combo.on(BI.MultiTreeCombo.EVENT_CONFIRM, function () {
+            self.fireEvent(BI.TreeValueChooserCombo.EVENT_CONFIRM);
+        });
     },
 
     setValue: function (v) {
@@ -17680,63 +17767,91 @@ BI.TreeValueChooserCombo = BI.inherit(BI.Widget, {
     },
 
     populate: function () {
-        this.combo.populate.apply(this, arguments);
+        this.combo.populate.apply(this.combo, arguments);
     }
 });
 BI.TreeValueChooserCombo.EVENT_CONFIRM = "TreeValueChooserCombo.EVENT_CONFIRM";
 BI.shortcut('bi.tree_value_chooser_combo', BI.TreeValueChooserCombo);/**
+ * 简单的复选下拉树控件, 适用于数据量少的情况
+ *
+ * Created by GUY on 2015/10/29.
+ * @class BI.TreeValueChooserPane
+ * @extends BI.AbstractTreeValueChooser
+ */
+BI.TreeValueChooserPane = BI.inherit(BI.AbstractTreeValueChooser, {
+
+    _defaultConfig: function () {
+        return BI.extend(BI.TreeValueChooserPane.superclass._defaultConfig.apply(this, arguments), {
+            baseCls: "bi-tree-value-chooser-pane",
+            items: null,
+            itemsCreator: BI.emptyFn
+        });
+    },
+
+    _init: function () {
+        BI.TreeValueChooserPane.superclass._init.apply(this, arguments);
+        var self = this, o = this.options;
+        this.pane = BI.createWidget({
+            type: 'bi.multi_select_tree',
+            element: this,
+            itemsCreator: BI.bind(this._itemsCreator, this)
+        });
+
+        this.pane.on(BI.MultiSelectTree.EVENT_CHANGE, function () {
+            self.fireEvent(BI.TreeValueChooserPane.EVENT_CHANGE);
+        });
+        if (BI.isNotNull(o.items)) {
+            this._initData(o.items);
+            this.populate();
+        }
+    },
+
+    setValue: function (v) {
+        this.pane.setValue(v);
+    },
+
+    getValue: function () {
+        return this.pane.getValue();
+    },
+
+    populate: function () {
+        this.pane.populate.apply(this.pane, arguments);
+    }
+});
+BI.TreeValueChooserPane.EVENT_CHANGE = "TreeValueChooserPane.EVENT_CHANGE";
+BI.shortcut('bi.tree_value_chooser_pane', BI.TreeValueChooserPane);/**
  * 简单的复选下拉框控件, 适用于数据量少的情况
  * 封装了字段处理逻辑
  *
  * Created by GUY on 2015/10/29.
- * @class BI.ValueChooserCombo
+ * @class BI.AbstractValueChooser
  * @extends BI.Widget
  */
-BI.ValueChooserCombo = BI.inherit(BI.Widget, {
+BI.AbstractValueChooser = BI.inherit(BI.Widget, {
 
     _const: {
-        perPage: 10
+        perPage: 100
     },
+
     _defaultConfig: function () {
-        return BI.extend(BI.ValueChooserCombo.superclass._defaultConfig.apply(this, arguments), {
-            baseCls: "bi-value-chooser-combo",
-            width: 200,
-            height: 30,
+        return BI.extend(BI.AbstractValueChooser.superclass._defaultConfig.apply(this, arguments), {
             items: null,
             itemsCreator: BI.emptyFn,
             cache: true
         });
     },
 
-    _init: function () {
-        BI.ValueChooserCombo.superclass._init.apply(this, arguments);
-        var self = this, o = this.options;
-        if (BI.isNotNull(o.items)) {
-            this.items = o.items;
-        }
-        this.combo = BI.createWidget({
-            type: 'bi.multi_select_combo',
-            element: this,
-            itemsCreator: BI.bind(this._itemsCreator, this),
-            valueFormatter: function (v) {
-                var text = v;
-                if (BI.isNotNull(self.items)) {
-                    BI.some(self.items, function (i, item) {
-                        if (item.value === v) {
-                            text = item.text;
-                            return true;
-                        }
-                    });
+    _valueFormatter: function (v) {
+        var text = v;
+        if (BI.isNotNull(this.items)) {
+            BI.some(this.items, function (i, item) {
+                if (item.value === v) {
+                    text = item.text;
+                    return true;
                 }
-                return text;
-            },
-            width: o.width,
-            height: o.height
-        });
-
-        this.combo.on(BI.MultiSelectCombo.EVENT_CONFIRM, function () {
-            self.fireEvent(BI.ValueChooserCombo.EVENT_CONFIRM);
-        });
+            });
+        }
+        return text;
     },
 
     _getItemsByTimes: function (items, times) {
@@ -17791,6 +17906,46 @@ BI.ValueChooserCombo = BI.inherit(BI.Widget, {
                 hasNext: self._hasNextByTimes(items, options.times)
             });
         }
+    }
+});/**
+ * 简单的复选下拉框控件, 适用于数据量少的情况
+ * 封装了字段处理逻辑
+ *
+ * Created by GUY on 2015/10/29.
+ * @class BI.ValueChooserCombo
+ * @extends BI.Widget
+ */
+BI.ValueChooserCombo = BI.inherit(BI.AbstractValueChooser, {
+
+    _defaultConfig: function () {
+        return BI.extend(BI.ValueChooserCombo.superclass._defaultConfig.apply(this, arguments), {
+            baseCls: "bi-value-chooser-combo",
+            width: 200,
+            height: 30,
+            items: null,
+            itemsCreator: BI.emptyFn,
+            cache: true
+        });
+    },
+
+    _init: function () {
+        BI.ValueChooserCombo.superclass._init.apply(this, arguments);
+        var self = this, o = this.options;
+        if (BI.isNotNull(o.items)) {
+            this.items = o.items;
+        }
+        this.combo = BI.createWidget({
+            type: 'bi.multi_select_combo',
+            element: this,
+            itemsCreator: BI.bind(this._itemsCreator, this),
+            valueFormatter: BI.bind(this._valueFormatter, this),
+            width: o.width,
+            height: o.height
+        });
+
+        this.combo.on(BI.MultiSelectCombo.EVENT_CONFIRM, function () {
+            self.fireEvent(BI.ValueChooserCombo.EVENT_CONFIRM);
+        });
     },
 
     setValue: function (v) {
@@ -17810,4 +17965,59 @@ BI.ValueChooserCombo = BI.inherit(BI.Widget, {
     }
 });
 BI.ValueChooserCombo.EVENT_CONFIRM = "ValueChooserCombo.EVENT_CONFIRM";
-BI.shortcut('bi.value_chooser_combo', BI.ValueChooserCombo);
+BI.shortcut('bi.value_chooser_combo', BI.ValueChooserCombo);/**
+ * 简单的复选下拉框控件, 适用于数据量少的情况
+ * 封装了字段处理逻辑
+ *
+ * Created by GUY on 2015/10/29.
+ * @class BI.ValueChooserPane
+ * @extends BI.Widget
+ */
+BI.ValueChooserPane = BI.inherit(BI.AbstractValueChooser, {
+
+    _defaultConfig: function () {
+        return BI.extend(BI.ValueChooserPane.superclass._defaultConfig.apply(this, arguments), {
+            baseCls: "bi-value-chooser-pane",
+            items: null,
+            itemsCreator: BI.emptyFn,
+            cache: true
+        });
+    },
+
+    _init: function () {
+        BI.ValueChooserPane.superclass._init.apply(this, arguments);
+        var self = this, o = this.options;
+        this.list = BI.createWidget({
+            type: 'bi.multi_select_list',
+            element: this,
+            itemsCreator: BI.bind(this._itemsCreator, this),
+            valueFormatter: BI.bind(this._valueFormatter, this)
+        });
+
+        this.list.on(BI.MultiSelectList.EVENT_CHANGE, function () {
+            self.fireEvent(BI.ValueChooserPane.EVENT_CHANGE);
+        });
+        if (BI.isNotNull(o.items)) {
+            this.items = o.items;
+            this.populate();
+        }
+    },
+
+    setValue: function (v) {
+        this.list.setValue(v);
+    },
+
+    getValue: function () {
+        var val = this.list.getValue() || {};
+        return {
+            type: val.type,
+            value: val.value
+        }
+    },
+
+    populate: function () {
+        this.list.populate.apply(this.list, arguments);
+    }
+});
+BI.ValueChooserPane.EVENT_CHANGE = "ValueChooserPane.EVENT_CHANGE";
+BI.shortcut('bi.value_chooser_pane', BI.ValueChooserPane);

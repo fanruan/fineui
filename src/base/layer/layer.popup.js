@@ -6,7 +6,7 @@
 BI.PopupView = BI.inherit(BI.Widget, {
     _defaultConfig: function () {
         return BI.extend(BI.PopupView.superclass._defaultConfig.apply(this, arguments), {
-            baseCls: "bi-list-view",
+            baseCls: "bi-popup-view",
             maxWidth: 'auto',
             minWidth: 100,
             //maxHeight: 200,

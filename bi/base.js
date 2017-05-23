@@ -797,7 +797,7 @@ BI.BasicButton = BI.inherit(BI.Single, {
             if (!self.isEnabled() || (self.isOnce() && self.isSelected())) {
                 return;
             }
-            onClick.apply(self);
+            onClick.apply(self, arguments);
         }
     },
 
@@ -816,11 +816,18 @@ BI.BasicButton = BI.inherit(BI.Single, {
         }
     },
 
-    _doClick: function () {
+    _doClick: function (e) {
+        if (this.isValid()) {
+            this.beforeClick(e);
+        }
         this._trigger();
         if (this.isValid()) {
-            this.doClick();
+            this.doClick(e);
         }
+    },
+
+    beforeClick: function () {
+
     },
 
     doClick: function () {
@@ -1710,7 +1717,7 @@ BI.TreeView = BI.inherit(BI.Pane, {
 
     _getNodeValue: function (node) {
         //去除标红
-        return node.value || node.text.replace(/<[^>]+>/g, "");
+        return node.value == null ? node.text.replace(/<[^>]+>/g, "") : node.value;
     },
 
     //获取半选框值
@@ -1802,6 +1809,7 @@ BI.TreeView = BI.inherit(BI.Pane, {
         var self = this, o = this.options;
         var ns = BI.Tree.arrayFormat(nodes);
         BI.each(ns, function (i, n) {
+            n.title = n.title || n.text || n.value;
             //处理标红
             if (BI.isKey(o.paras.keyword)) {
                 n.text = $("<div>").__textKeywordMarked__(n.text, o.paras.keyword, n.py).html();
@@ -1936,6 +1944,7 @@ BI.TreeView = BI.inherit(BI.Pane, {
         this.nodes && this.nodes.expandAll(flag);
     },
 
+    //设置树节点的状态
     setValue: function (value, param) {
         this.setSelectedValue(value);
         this.checkAll(false);
@@ -1944,7 +1953,7 @@ BI.TreeView = BI.inherit(BI.Pane, {
     },
 
     setSelectedValue: function (value) {
-        this.options.paras.selectedValues = value || {};
+        this.options.paras.selectedValues = BI.deepClone(value) || {};
         this.selectedValues = BI.deepClone(value) || {};
     },
 
@@ -1963,12 +1972,6 @@ BI.TreeView = BI.inherit(BI.Pane, {
         });
     },
 
-    getExpandedValue: function(){
-        if (!this.nodes) {
-            return null;
-        }
-    },
-
     refresh: function () {
         this.nodes && this.nodes.refresh();
     },
@@ -1980,14 +1983,9 @@ BI.TreeView = BI.inherit(BI.Pane, {
         return this._getSelectedValues();
     },
 
-    empty: function () {
-        BI.isNotNull(this.nodes) && this.nodes.destroy();
-    },
-
-    destroy: function () {
+    destroyed: function () {
         this.stop();
         this.nodes && this.nodes.destroy();
-        BI.TreeView.superclass.destroy.apply(this, arguments);
     }
 });
 BI.extend(BI.TreeView, {
@@ -2190,7 +2188,7 @@ BI.AsyncTree = BI.inherit(BI.TreeView, {
         }
         var checkedValues = this._getSelectedValues();
         if (BI.isEmpty(checkedValues)) {
-            return this.selectedValues;
+            return BI.deepClone(this.selectedValues);
         }
         if (BI.isEmpty(this.selectedValues)) {
             return checkedValues;
@@ -2257,7 +2255,7 @@ BI.PartTree = BI.inherit(BI.AsyncTree, {
             BI.AsyncTree.superclass._selectTreeNode.apply(self, arguments);
         } else {
             o.itemsCreator(BI.extend({}, o.paras, {
-                type: BI.TreeView.REQ_TYPE_CALCULATE_SELECT_DATA,
+                type: BI.TreeView.REQ_TYPE_SELECT_DATA,
                 selectedValues: this.selectedValues,
                 notSelectedValue: name,
                 parentValues: parentValues
@@ -2532,8 +2530,8 @@ BI.CollectionView = BI.inherit(BI.Widget, {
     _defaultConfig: function () {
         return BI.extend(BI.CollectionView.superclass._defaultConfig.apply(this, arguments), {
             baseCls: "bi-collection",
-            width: 400,
-            height: 300,
+            // width: 400, //必设
+            // height: 300, //必设
             overflowX: true,
             overflowY: true,
             cellSizeAndPositionGetter: BI.emptyFn,
@@ -14673,16 +14671,16 @@ BI.GridView = BI.inherit(BI.Widget, {
     _defaultConfig: function () {
         return BI.extend(BI.GridView.superclass._defaultConfig.apply(this, arguments), {
             baseCls: "bi-grid-view",
-            width: 400,
-            height: 300,
+            // width: 400, //必设
+            // height: 300, //必设
             overflowX: true,
             overflowY: true,
             overscanColumnCount: 0,
             overscanRowCount: 0,
-            rowHeightGetter: BI.emptyFn,
-            columnWidthGetter: BI.emptyFn,
-            estimatedColumnSize: 100,
-            estimatedRowSize: 30,
+            rowHeightGetter: BI.emptyFn, //number类型或function类型
+            columnWidthGetter: BI.emptyFn, //number类型或function类型
+            // estimatedColumnSize: 100, //columnWidthGetter为function时必设
+            // estimatedRowSize: 30, //rowHeightGetter为function时必设
             scrollLeft: 0,
             scrollTop: 0,
             items: []
@@ -15157,7 +15155,7 @@ BI.FloatBox.EVENT_FLOAT_BOX_OPEN = "EVENT_FLOAT_BOX_CLOSED";
 BI.PopupView = BI.inherit(BI.Widget, {
     _defaultConfig: function () {
         return BI.extend(BI.PopupView.superclass._defaultConfig.apply(this, arguments), {
-            baseCls: "bi-list-view",
+            baseCls: "bi-popup-view",
             maxWidth: 'auto',
             minWidth: 100,
             //maxHeight: 200,
@@ -15458,6 +15456,295 @@ BI.SearcherView = BI.inherit(BI.Pane, {
 BI.SearcherView.EVENT_CHANGE = "EVENT_CHANGE";
 
 BI.shortcut("bi.searcher_view", BI.SearcherView);/**
+ * 表示当前对象
+ *
+ * Created by GUY on 2017/5/23.
+ * @class BI.ListView
+ * @extends BI.Widget
+ */
+BI.ListView = BI.inherit(BI.Widget, {
+    props: function () {
+        return {
+            baseCls: "bi-list-view",
+            overscanHeight: 100,
+            blockSize: 10,
+            scrollTop: 0,
+            el: {},
+            items: []
+        };
+    },
+
+    init: function () {
+        var self = this;
+        this.renderedIndex = -1;
+        this.cache = {};
+    },
+
+    render: function () {
+        var self = this, o = this.options;
+        return {
+            type: "bi.vertical",
+            items: [BI.extend({
+                type: "bi.vertical",
+                scrolly: false,
+                ref: function () {
+                    self.container = this;
+                }
+            }, o.el)],
+            element: this
+        }
+    },
+
+    mounted: function () {
+        var self = this, o = this.options;
+        this._populate();
+        this.element.scroll(function (e) {
+            o.scrollTop = self.element.scrollTop();
+            self._calculateBlocksToRender();
+        });
+        BI.ResizeDetector.addResizeListener(this, function () {
+            self._calculateBlocksToRender();
+        });
+    },
+
+    _renderMoreIf: function () {
+        var self = this, o = this.options;
+        var height = this.element.height();
+        var minContentHeight = o.scrollTop + height + o.overscanHeight;
+        var index = (this.cache[this.renderedIndex] && (this.cache[this.renderedIndex].index + o.blockSize)) || 0,
+            cnt = this.renderedIndex + 1;
+        var lastHeight;
+        var getElementHeight = function () {
+            return self.container.element.height();
+        };
+        while ((lastHeight = getElementHeight()) < minContentHeight && index < o.items.length) {
+            var items = o.items.slice(index, index + o.blockSize);
+            this.container.addItems(items);
+            var addedHeight = getElementHeight() - lastHeight;
+            this.cache[cnt] = {
+                index: index,
+                scrollTop: lastHeight,
+                height: addedHeight
+            };
+            this.renderedIndex = cnt;
+            cnt++;
+            index += o.blockSize;
+        }
+    },
+
+    _calculateBlocksToRender: function () {
+        var o = this.options;
+        this._renderMoreIf();
+    },
+
+    _populate: function (items) {
+        var o = this.options;
+        if (items && this.options.items !== items) {
+            this.options.items = items;
+        }
+        this._calculateBlocksToRender();
+        this.element.scrollTop(o.scrollTop);
+    },
+
+    restore: function () {
+        this.renderedIndex = -1;
+        this.container.empty();
+        this.cache = {};
+    },
+
+    populate: function (items) {
+        if (items && this.options.items !== items) {
+            this.restore();
+        }
+        this._populate();
+    },
+
+    destroyed: function () {
+        this.restore();
+    }
+});
+BI.shortcut('bi.list_view', BI.ListView);
+
+/**
+ * 表示当前对象
+ *
+ * Created by GUY on 2017/5/22.
+ * @class BI.VirtualList
+ * @extends BI.Widget
+ */
+BI.VirtualList = BI.inherit(BI.Widget, {
+    props: function () {
+        return {
+            baseCls: "bi-virtual-list",
+            overscanHeight: 100,
+            blockSize: 10,
+            scrollTop: 0,
+            items: []
+        };
+    },
+
+    init: function () {
+        var self = this;
+        this.renderedIndex = -1;
+        this.cache = {};
+    },
+
+    render: function () {
+        var self = this, o = this.options;
+        return {
+            type: "bi.vertical",
+            items: [{
+                type: "bi.layout",
+                ref: function () {
+                    self.topBlank = this;
+                }
+            }, {
+                type: "bi.vertical",
+                scrolly: false,
+                ref: function () {
+                    self.container = this;
+                }
+            }, {
+                type: "bi.layout",
+                ref: function () {
+                    self.bottomBlank = this;
+                }
+            }],
+            element: this
+        }
+    },
+
+    mounted: function () {
+        var self = this, o = this.options;
+        this._populate();
+        this.element.scroll(function (e) {
+            o.scrollTop = self.element.scrollTop();
+            self._calculateBlocksToRender();
+        });
+        BI.ResizeDetector.addResizeListener(this, function () {
+            self._calculateBlocksToRender();
+        });
+    },
+
+    _renderMoreIf: function () {
+        var self = this, o = this.options;
+        var height = this.element.height();
+        var minContentHeight = o.scrollTop + height + o.overscanHeight;
+        var index = (this.cache[this.renderedIndex] && (this.cache[this.renderedIndex].index + o.blockSize)) || 0,
+            cnt = this.renderedIndex + 1;
+        var lastHeight;
+        var getElementHeight = function () {
+            return self.container.element.height() + self.topBlank.element.height() + self.bottomBlank.element.height();
+        };
+        while ((lastHeight = getElementHeight()) < minContentHeight && index < o.items.length) {
+            var items = o.items.slice(index, index + o.blockSize);
+            this.container.addItems(items);
+            var addedHeight = getElementHeight() - lastHeight;
+            this.cache[cnt] = {
+                index: index,
+                scrollTop: lastHeight,
+                height: addedHeight
+            };
+            this.tree.set(cnt, addedHeight);
+            this.renderedIndex = cnt;
+            cnt++;
+            index += o.blockSize;
+        }
+    },
+
+    _calculateBlocksToRender: function () {
+        var o = this.options;
+        this._renderMoreIf();
+        var height = this.element.height();
+        var minContentHeightFrom = o.scrollTop - o.overscanHeight;
+        var minContentHeightTo = o.scrollTop + height + o.overscanHeight;
+        var start = this.tree.greatestLowerBound(minContentHeightFrom);
+        var end = this.tree.leastUpperBound(minContentHeightTo);
+        var needDestroyed = [];
+        for (var i = 0; i < start; i++) {
+            var index = this.cache[i].index;
+            if (!this.cache[i].destroyed) {
+                for (var j = index; j < index + o.blockSize && j < o.items.length; j++) {
+                    needDestroyed.push(this.container._children[j]);
+                    this.container._children[j] = null;
+                }
+                this.cache[i].destroyed = true;
+            }
+        }
+        for (var i = end + 1; i <= this.renderedIndex; i++) {
+            var index = this.cache[i].index;
+            if (!this.cache[i].destroyed) {
+                for (var j = index; j < index + o.blockSize && j < o.items.length; j++) {
+                    needDestroyed.push(this.container._children[j]);
+                    this.container._children[j] = null;
+                }
+                this.cache[i].destroyed = true;
+            }
+        }
+        var firstFragment = document.createDocumentFragment(), lastFragment = document.createDocumentFragment();
+        var currentFragment = firstFragment;
+        for (var i = (start < 0 ? 0 : start); i <= end && i <= this.renderedIndex; i++) {
+            var index = this.cache[i].index;
+            if (!this.cache[i].destroyed) {
+                currentFragment = lastFragment;
+            }
+            if (this.cache[i].destroyed === true) {
+                for (var j = index; j < index + o.blockSize && j < o.items.length; j++) {
+                    var w = this.container._addElement(j, BI.extend({root: true}, BI.stripEL(o.items[j])));
+                    currentFragment.appendChild(w.element[0]);
+                }
+                this.cache[i].destroyed = false;
+            }
+        }
+        this.container.element.prepend(firstFragment);
+        this.container.element.append(lastFragment);
+        this.topBlank.setHeight(this.cache[start < 0 ? 0 : start].scrollTop);
+        var lastCache = this.cache[Math.min(end, this.renderedIndex)];
+        this.bottomBlank.setHeight(this.tree.sumTo(this.renderedIndex) - lastCache.scrollTop - lastCache.height);
+        BI.each(needDestroyed, function (i, child) {
+            child && child._destroy();
+        });
+    },
+
+    _populate: function (items) {
+        var o = this.options;
+        if (items && this.options.items !== items) {
+            this.options.items = items;
+        }
+        this.tree = BI.PrefixIntervalTree.empty(Math.ceil(o.items.length / o.blockSize));
+        this._calculateBlocksToRender();
+        this.element.scrollTop(o.scrollTop);
+    },
+
+    _clearChildren: function () {
+        BI.each(this.container._children, function (i, cell) {
+            cell && cell.el._destroy();
+        });
+        this.container._children = {};
+        this.container.attr("items", []);
+    },
+
+    restore: function () {
+        this.renderedIndex = -1;
+        this._clearChildren();
+        this.cache = {};
+        this.options.scrollTop = 0;
+    },
+
+    populate: function (items) {
+        if (items && this.options.items !== items) {
+            this.restore();
+        }
+        this._populate();
+    },
+
+    destroyed: function () {
+        this.restore();
+    }
+});
+BI.shortcut('bi.virtual_list', BI.VirtualList);
+
+/**
  * 分页控件
  *
  * Created by GUY on 2015/8/31.
@@ -17848,11 +18135,6 @@ BI.Editor = BI.inherit(BI.Single, {
         return BI.trim(this.editor.getValue());
     },
 
-    setValid: function (b) {
-        BI.Editor.superclass.setValid.apply(this, arguments);
-        this.editor.setValid(b);
-    },
-
     isEditing: function () {
         return this.editor.isEditing();
     },
@@ -18119,10 +18401,10 @@ BI.TextAreaEditor = BI.inherit(BI.Single, {
         return this.style;
     },
 
-    setValid: function (b) {
-        BI.TextAreaEditor.superclass.setValid.apply(this, arguments);
-        this.content.setValid(b);
-        this.watermark && this.watermark.setValid(b);
+    _setValid: function (b) {
+        BI.TextAreaEditor.superclass._setValid.apply(this, arguments);
+        // this.content.setValid(b);
+        // this.watermark && this.watermark.setValid(b);
     }
 });
 BI.TextAreaEditor.EVENT_CHANGE = "EVENT_CHANGE";
@@ -19115,8 +19397,8 @@ BI.Input = BI.inherit(BI.Single, {
         return this._lastValidValue;
     },
 
-    setValid: function () {
-        BI.Input.superclass.setValid.apply(this, arguments);
+    _setValid: function () {
+        BI.Input.superclass._setValid.apply(this, arguments);
         if (this.isValid()) {
             this._lastValidValue = this.getValue();
             this.element.removeClass("bi-input-error");

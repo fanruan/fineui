@@ -13,7 +13,6 @@ BI.MultiSelectTreePopup = BI.inherit(BI.Widget, {
         var self = this, o = this.options;
         this.popup = BI.createWidget({
             type: "bi.async_tree",
-            height: 400,
             element: this,
             itemsCreator: o.itemsCreator
         });
@@ -36,6 +35,11 @@ BI.MultiSelectTreePopup = BI.inherit(BI.Widget, {
     setValue: function (v) {
         v || (v = {});
         this.popup.setValue(v.value);
+    },
+
+    updateValue: function (v) {
+        this.popup.updateValue(v);
+        this.popup.refresh();
     },
 
     populate: function (config) {

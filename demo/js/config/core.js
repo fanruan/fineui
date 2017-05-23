@@ -107,6 +107,14 @@ Demo.CORE_CONFIG = [{
     value: "demo.collection_view"
 }, {
     pId: 102,
+    text: "bi.list_view",
+    value: "demo.list_view"
+}, {
+    pId: 102,
+    text: "bi.virtual_list",
+    value: "demo.virtual_list"
+}, {
+    pId: 102,
     id: 10201,
     text: "组合控件"
 }, {

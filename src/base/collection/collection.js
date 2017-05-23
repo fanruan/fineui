@@ -9,8 +9,8 @@ BI.CollectionView = BI.inherit(BI.Widget, {
     _defaultConfig: function () {
         return BI.extend(BI.CollectionView.superclass._defaultConfig.apply(this, arguments), {
             baseCls: "bi-collection",
-            width: 400,
-            height: 300,
+            // width: 400, //必设
+            // height: 300, //必设
             overflowX: true,
             overflowY: true,
             cellSizeAndPositionGetter: BI.emptyFn,

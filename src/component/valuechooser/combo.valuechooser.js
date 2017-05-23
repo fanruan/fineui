@@ -6,11 +6,8 @@
  * @class BI.ValueChooserCombo
  * @extends BI.Widget
  */
-BI.ValueChooserCombo = BI.inherit(BI.Widget, {
+BI.ValueChooserCombo = BI.inherit(BI.AbstractValueChooser, {
 
-    _const: {
-        perPage: 10
-    },
     _defaultConfig: function () {
         return BI.extend(BI.ValueChooserCombo.superclass._defaultConfig.apply(this, arguments), {
             baseCls: "bi-value-chooser-combo",
@@ -32,18 +29,7 @@ BI.ValueChooserCombo = BI.inherit(BI.Widget, {
             type: 'bi.multi_select_combo',
             element: this,
             itemsCreator: BI.bind(this._itemsCreator, this),
-            valueFormatter: function (v) {
-                var text = v;
-                if (BI.isNotNull(self.items)) {
-                    BI.some(self.items, function (i, item) {
-                        if (item.value === v) {
-                            text = item.text;
-                            return true;
-                        }
-                    });
-                }
-                return text;
-            },
+            valueFormatter: BI.bind(this._valueFormatter, this),
             width: o.width,
             height: o.height
         });
@@ -51,60 +37,6 @@ BI.ValueChooserCombo = BI.inherit(BI.Widget, {
         this.combo.on(BI.MultiSelectCombo.EVENT_CONFIRM, function () {
             self.fireEvent(BI.ValueChooserCombo.EVENT_CONFIRM);
         });
-    },
-
-    _getItemsByTimes: function (items, times) {
-        var res = [];
-        for (var i = (times - 1) * this._const.perPage; items[i] && i < times * this._const.perPage; i++) {
-            res.push(items[i]);
-        }
-        return res;
-    },
-
-    _hasNextByTimes: function (items, times) {
-        return times * this._const.perPage < items.length;
-    },
-
-    _itemsCreator: function (options, callback) {
-        var self = this, o = this.options;
-        if (!o.cache || !this.items) {
-            o.itemsCreator({}, function (items) {
-                self.items = items;
-                call(items);
-            });
-        } else {
-            call(this.items);
-        }
-        function call(items) {
-            var keywords = (options.keywords || []).slice();
-            if (options.keyword) {
-                keywords.push(options.keyword);
-            }
-            BI.each(keywords, function (i, kw) {
-                var search = BI.Func.getSearchResult(items, kw);
-                items = search.matched.concat(search.finded);
-            });
-            if (options.selectedValues) {//过滤
-                var filter = BI.makeObject(options.selectedValues, true);
-                items = BI.filter(items, function (i, ob) {
-                    return !filter[ob.value];
-                });
-            }
-            if (options.type === BI.MultiSelectCombo.REQ_GET_ALL_DATA) {
-                callback({
-                    items: items
-                });
-                return;
-            }
-            if (options.type === BI.MultiSelectCombo.REQ_GET_DATA_LENGTH) {
-                callback({count: items.length});
-                return;
-            }
-            callback({
-                items: self._getItemsByTimes(items, options.times),
-                hasNext: self._hasNextByTimes(items, options.times)
-            });
-        }
     },
 
     setValue: function (v) {
