@@ -16978,7 +16978,7 @@ BI.shortcut('bi.year_quarter_combo', BI.YearQuarterCombo);/**
  * 封装了字段处理逻辑
  *
  * Created by GUY on 2015/10/29.
- * @class BI.AllValueChooserCombo
+ * @class BI.AbstractAllValueChooser
  * @extends BI.Widget
  */
 BI.AbstractAllValueChooser = BI.inherit(BI.Widget, {
@@ -16988,7 +16988,7 @@ BI.AbstractAllValueChooser = BI.inherit(BI.Widget, {
     },
 
     _defaultConfig: function () {
-        return BI.extend(BI.AllValueChooserCombo.superclass._defaultConfig.apply(this, arguments), {
+        return BI.extend(BI.AbstractAllValueChooser.superclass._defaultConfig.apply(this, arguments), {
             width: 200,
             height: 30,
             items: null,
