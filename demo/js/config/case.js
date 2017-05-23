@@ -80,8 +80,8 @@ Demo.CASE_CONFIG = [{
     value: "demo.calendar"
 }, {
     pId: 3,
-    text: "bi.zclip",
-    value: "demo.zclip"
+    text: "bi.clipboard",
+    value: "demo.clipboard"
 }, {
     pId: 3,
     text: "bi.complex_canvas",

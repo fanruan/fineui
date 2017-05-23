@@ -1799,12 +1799,12 @@ BI.shortcut("demo.complex_canvas", Demo.Func);Demo.Func = BI.inherit(BI.Widget, 
             height: 30,
             value: "这是复制的内容"
         });
-        var zclip = BI.createWidget({
-            type: 'bi.zero_clip',
+        var clipboard = BI.createWidget({
+            type: 'bi.clipboard',
             width: 100,
             height: 100,
             cls: 'layout-bg1',
-            copy: function () {
+            text: function () {
                 return editor.getValue();
             },
 
@@ -1821,14 +1821,14 @@ BI.shortcut("demo.complex_canvas", Demo.Func);Demo.Func = BI.inherit(BI.Widget, 
                 left: 100,
                 top: 50,
             }, {
-                el: zclip,
+                el: clipboard,
                 left: 100,
                 top: 100
             }]
         })
     }
 });
-BI.shortcut("demo.zclip", Demo.Func);Demo.Func = BI.inherit(BI.Widget, {
+BI.shortcut("demo.clipboard", Demo.Func);Demo.Func = BI.inherit(BI.Widget, {
     props: {
         baseCls: "demo-func"
     },
@@ -2888,8 +2888,8 @@ BI.shortcut("demo.value_chooser_pane", Demo.ValueChooserPane);Demo.BASE_CONFIG =
     value: "demo.calendar"
 }, {
     pId: 3,
-    text: "bi.zclip",
-    value: "demo.zclip"
+    text: "bi.clipboard",
+    value: "demo.clipboard"
 }, {
     pId: 3,
     text: "bi.complex_canvas",
