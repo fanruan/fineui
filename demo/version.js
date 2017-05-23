@@ -6,6 +6,6 @@ BI.i18n = {
     "BI-Basic_OK": "确定"
 };
 
-BI.servletURL = "docs/";
-BI.resourceURL = "docs/resource/";
+BI.servletURL = "";
+BI.resourceURL = "resource/";
 BI.i18n = {};
