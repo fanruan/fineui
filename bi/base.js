@@ -797,7 +797,7 @@ BI.BasicButton = BI.inherit(BI.Single, {
             if (!self.isEnabled() || (self.isOnce() && self.isSelected())) {
                 return;
             }
-            onClick.apply(self);
+            onClick.apply(self, arguments);
         }
     },
 
@@ -816,13 +816,13 @@ BI.BasicButton = BI.inherit(BI.Single, {
         }
     },
 
-    _doClick: function () {
+    _doClick: function (e) {
         if (this.isValid()) {
-            this.beforeClick();
+            this.beforeClick(e);
         }
         this._trigger();
         if (this.isValid()) {
-            this.doClick();
+            this.doClick(e);
         }
     },
 
