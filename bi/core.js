@@ -4198,6 +4198,7 @@ BI.OB = function (config) {
 $.extend(BI.OB.prototype, {
     props: {},
     init: null,
+    destroyed: null,
 
     _defaultConfig: function (config) {
         return {};
@@ -4317,6 +4318,11 @@ $.extend(BI.OB.prototype, {
             }
         }
         return true;
+    },
+
+    destroy: function () {
+        this.destroyed && this.destroyed();
+        this.purgeListeners();
     }
 });/**
  * Widget超类
