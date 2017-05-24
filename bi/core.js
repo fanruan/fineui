@@ -351,12 +351,9 @@ BI.Factory = {
             return {}
         },
 
-        init: function () {
-        },
         // _init is an empty function by default. Override it with your own
         // initialization logic.
         _init: function () {
-            this.init();
         },
 
         // Return a copy of the model's `attributes` object.
@@ -1204,9 +1201,9 @@ BI.Factory = {
         setVisible: function (visible) {
             this.options.invisible = !visible;
             if (visible) {
-                this.element.show();
+                this.element.css("display", "");
             } else {
-                this.element.hide();
+                this.element.css("display", "none");
             }
         },
 
@@ -4750,11 +4747,15 @@ BI.Widget = BI.inherit(BI.OB, {
         this.purgeListeners();
     }
 });BI.Model = BI.inherit(BI.M, {
+    props: {},
+    init: null,
+    destroyed: null,
+
     _defaultConfig: function () {
-        return {
+        return BI.extend({
             "default": "just a default",
             "current": void 0
-        }
+        }, this.props)
     },
 
     _static: function () {
@@ -4788,6 +4789,7 @@ BI.Widget = BI.inherit(BI.OB, {
         this._read = BI.debounce(BI.bind(this.fetch, this), 30);
         this._save = BI.debounce(BI.bind(this.save, this), 30);
         this._F = [];
+        this.init && this.init();
     },
 
     toJSON: function () {
@@ -5230,8 +5232,16 @@ BI.Widget = BI.inherit(BI.OB, {
  */
 BI.View = BI.inherit(BI.V, {
 
+    //生命周期函数
+    beforeCreate: null,
+
+    created: null,
+
+    destroyed: null,
+
     _init: function () {
         BI.View.superclass._init.apply(this, arguments);
+        this.beforeCreate && this.beforeCreate();
         var self = this;
         this.listenTo(this.model, "change:current", function (obj, val) {
             if (BI.isNotNull(val) && val.length > 0) {
@@ -5275,7 +5285,8 @@ BI.View = BI.inherit(BI.V, {
                     return f.apply(this, arguments);
                 }, self);
             }
-        })
+        });
+        this.created && this.created();
     },
 
     change: function (changed, prev) {
@@ -5720,7 +5731,7 @@ BI.View = BI.inherit(BI.V, {
         });
         delete this._cardLayouts;
         delete this._cards;
-        this.destroyed();
+        this.destroyed && this.destroyed();
         this.off();
     },
 
@@ -5730,14 +5741,10 @@ BI.View = BI.inherit(BI.V, {
         });
         delete this._cardLayouts;
         delete this._cards;
-        this.destroyed();
+        this.destroyed && this.destroyed();
         this.remove();
         this.trigger(BI.Events.DESTROY);
         this.off();
-    },
-
-    destroyed: function () {
-
     }
 });(function () {
 

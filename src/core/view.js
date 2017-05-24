@@ -5,8 +5,16 @@
  */
 BI.View = BI.inherit(BI.V, {
 
+    //生命周期函数
+    beforeCreate: null,
+
+    created: null,
+
+    destroyed: null,
+
     _init: function () {
         BI.View.superclass._init.apply(this, arguments);
+        this.beforeCreate && this.beforeCreate();
         var self = this;
         this.listenTo(this.model, "change:current", function (obj, val) {
             if (BI.isNotNull(val) && val.length > 0) {
@@ -50,7 +58,8 @@ BI.View = BI.inherit(BI.V, {
                     return f.apply(this, arguments);
                 }, self);
             }
-        })
+        });
+        this.created && this.created();
     },
 
     change: function (changed, prev) {
@@ -495,7 +504,7 @@ BI.View = BI.inherit(BI.V, {
         });
         delete this._cardLayouts;
         delete this._cards;
-        this.destroyed();
+        this.destroyed && this.destroyed();
         this.off();
     },
 
@@ -505,13 +514,9 @@ BI.View = BI.inherit(BI.V, {
         });
         delete this._cardLayouts;
         delete this._cards;
-        this.destroyed();
+        this.destroyed && this.destroyed();
         this.remove();
         this.trigger(BI.Events.DESTROY);
         this.off();
-    },
-
-    destroyed: function () {
-
     }
 });

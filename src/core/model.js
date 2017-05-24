@@ -1,9 +1,13 @@
 BI.Model = BI.inherit(BI.M, {
+    props: {},
+    init: null,
+    destroyed: null,
+
     _defaultConfig: function () {
-        return {
+        return BI.extend({
             "default": "just a default",
             "current": void 0
-        }
+        }, this.props)
     },
 
     _static: function () {
@@ -37,6 +41,7 @@ BI.Model = BI.inherit(BI.M, {
         this._read = BI.debounce(BI.bind(this.fetch, this), 30);
         this._save = BI.debounce(BI.bind(this.save, this), 30);
         this._F = [];
+        this.init && this.init();
     },
 
     toJSON: function () {
