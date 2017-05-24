@@ -29684,7 +29684,7 @@ BI.GridTable = BI.inherit(BI.Widget, {
         this.topLeftGrid = BI.createWidget({
             type: "bi.grid_view",
             rowHeightGetter: rowHeightGetter,
-            columnWidthGetter: columnLeftWidthGetter,
+            columnWidthGetter: columnLeftWidthGetter
         });
         this.topLeftGrid.on(BI.GridView.EVENT_SCROLL, function (scroll) {
             self.bottomLeftGrid.setScrollLeft(scroll.scrollLeft);
@@ -29694,7 +29694,7 @@ BI.GridTable = BI.inherit(BI.Widget, {
         this.topRightGrid = BI.createWidget({
             type: "bi.grid_view",
             rowHeightGetter: rowHeightGetter,
-            columnWidthGetter: columnRightWidthGetter,
+            columnWidthGetter: columnRightWidthGetter
         });
         this.topRightGrid.on(BI.GridView.EVENT_SCROLL, function (scroll) {
             self.bottomRightGrid.setScrollLeft(scroll.scrollLeft);
@@ -29704,7 +29704,7 @@ BI.GridTable = BI.inherit(BI.Widget, {
         this.bottomLeftGrid = BI.createWidget({
             type: "bi.grid_view",
             rowHeightGetter: rowHeightGetter,
-            columnWidthGetter: columnLeftWidthGetter,
+            columnWidthGetter: columnLeftWidthGetter
         });
         this.bottomLeftGrid.on(BI.GridView.EVENT_SCROLL, function (scroll) {
             self.bottomRightGrid.setScrollTop(scroll.scrollTop);
@@ -29715,7 +29715,7 @@ BI.GridTable = BI.inherit(BI.Widget, {
         this.bottomRightGrid = BI.createWidget({
             type: "bi.grid_view",
             rowHeightGetter: rowHeightGetter,
-            columnWidthGetter: columnRightWidthGetter,
+            columnWidthGetter: columnRightWidthGetter
         });
         this.bottomRightGrid.on(BI.GridView.EVENT_SCROLL, function (scroll) {
             self.bottomLeftGrid.setScrollTop(scroll.scrollTop);
@@ -29803,7 +29803,7 @@ BI.GridTable = BI.inherit(BI.Widget, {
                 el: this.leftScrollbar,
                 left: 0
             }, {
-                el: this.rightScrollbar,
+                el: this.rightScrollbar
             }]
         });
         this._width = o.width - BI.GridTableScrollbar.SIZE;
