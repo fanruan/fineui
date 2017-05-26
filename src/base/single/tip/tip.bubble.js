@@ -86,7 +86,7 @@ BI.Bubble = BI.inherit(BI.Tip, {
 
     _right: function(){
         return BI.createWidget({
-            type: "bi.inline",
+            type: "bi.left",
             items: [{
                 el: {
                     type: "bi.layout",
