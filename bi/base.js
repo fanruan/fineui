@@ -28841,7 +28841,7 @@ BI.CollectionTableCell = BI.inherit(BI.Widget, {
         this.cell = BI.createWidget(BI.extend({
             type: "bi.label"
         }, o.cell, {
-            cls: (o.cell.cls || "") + "collection-table-cell-wrapper",
+            cls: (o.cell.cls || "") + " collection-table-cell-wrapper",
             width: o.width - (o._left === 0 ? 1 : 0) - 1,
             height: o.height - (o._top === 0 ? 1 : 0) - 1
         }));
