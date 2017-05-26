@@ -2903,6 +2903,7 @@ BI.Combo = BI.inherit(BI.Widget, {
             toggle: true,
             direction: "bottom", //top||bottom||left||right||top,left||top,right||bottom,left||bottom,right
             isDefaultInit: false,
+            destroyWhenHide: false,
             isNeedAdjustHeight: true,//是否需要高度调整
             isNeedAdjustWidth: true,
             stopEvent: false,
@@ -3088,7 +3089,13 @@ BI.Combo = BI.inherit(BI.Widget, {
 
     _hideView: function () {
         this.fireEvent(BI.Combo.EVENT_BEFORE_HIDEVIEW);
-        this.popupView && this.popupView.invisible();
+        if (this.options.destroyWhenHide === true) {
+            this.popupView && this.popupView.destroy();
+            this.popupView = null;
+            this._rendered = false;
+        } else {
+            this.popupView && this.popupView.invisible();
+        }
         this.element.removeClass(this.options.comboClass);
 
         $(document).unbind("mousedown." + this.getName()).unbind("mousewheel." + this.getName());
