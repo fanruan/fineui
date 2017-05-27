@@ -126,6 +126,10 @@ BI.MultiSelectTree = BI.inherit(BI.Widget, {
 
     },
 
+    setSelectedValue: function (v) {
+        this.adapter.setSelectedValue(v);
+    },
+
     setValue: function (v) {
         this.storeValue.value = v || {};
         this.adapter.setValue({
