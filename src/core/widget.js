@@ -214,6 +214,14 @@ BI.Widget = BI.inherit(BI.OB, {
         });
     },
 
+    _setVisible: function (visible) {
+        if (visible === true) {
+            this.options.invisible = false;
+        } else if (visible === false) {
+            this.options.invisible = true;
+        }
+    },
+
     setEnable: function (enable) {
         this._setEnable(enable);
         if (enable === true) {
@@ -224,13 +232,12 @@ BI.Widget = BI.inherit(BI.OB, {
     },
 
     setVisible: function (visible) {
+        this._setVisible(visible);
         if (visible === true) {
-            this.options.invisible = false;
             //用this.element.show()会把display属性改成block
             this.element.css("display", "");
             this._mount();
         } else if (visible === false) {
-            this.options.invisible = true;
             this.element.css("display", "none");
         }
         this.fireEvent(BI.Events.VIEW, visible);
