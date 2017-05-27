@@ -11429,6 +11429,10 @@ BI.MultiSelectTree = BI.inherit(BI.Widget, {
 
     },
 
+    setSelectedValue: function (v) {
+        this.adapter.setSelectedValue(v);
+    },
+
     setValue: function (v) {
         this.storeValue.value = v || {};
         this.adapter.setValue({
@@ -11494,6 +11498,11 @@ BI.MultiSelectTreePopup = BI.inherit(BI.Widget, {
     setValue: function (v) {
         v || (v = {});
         this.popup.setValue(v.value);
+    },
+
+    setSelectedValue: function (v) {
+        v || (v = {});
+        this.popup.setSelectedValue(v);
     },
 
     updateValue: function (v) {
@@ -17586,11 +17595,11 @@ BI.shortcut('bi.all_value_chooser_pane', BI.AllValueChooserPane);BI.AbstractTree
         var times = op.times;
         var checkState = op.checkState || {};
         var parentValues = op.parentValues || [];
-        var selectedValues = op.selectedValues;
+        var selectedValues = op.selectedValues || {};
         var valueMap = {};
-        if (judgeState(parentValues, selectedValues, checkState)) {
+        // if (judgeState(parentValues, selectedValues, checkState)) {
             valueMap = dealWidthSelectedValue(parentValues, selectedValues);
-        }
+        // }
         var nodes = this._getChildren(parentValues);
         for (var i = (times - 1) * this._const.perPage; nodes[i] && i < times * this._const.perPage; i++) {
             var state = getCheckState(nodes[i].value, parentValues, valueMap, checkState);
@@ -17623,7 +17632,7 @@ BI.shortcut('bi.all_value_chooser_pane', BI.AllValueChooserPane);BI.AbstractTree
         function dealWidthSelectedValue(parentValues, selectedValues) {
             var valueMap = {};
             BI.each(parentValues, function (i, v) {
-                selectedValues = selectedValues[v];
+                selectedValues = selectedValues[v] || {};
             });
             BI.each(selectedValues, function (value, obj) {
                 if (BI.isNull(obj)) {
@@ -17808,6 +17817,10 @@ BI.TreeValueChooserPane = BI.inherit(BI.AbstractTreeValueChooser, {
             this._initData(o.items);
             this.populate();
         }
+    },
+
+    setSelectedValue: function (v) {
+        this.pane.setSelectedValue(v);
     },
 
     setValue: function (v) {

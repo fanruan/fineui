@@ -33,6 +33,10 @@ BI.TreeValueChooserPane = BI.inherit(BI.AbstractTreeValueChooser, {
         }
     },
 
+    setSelectedValue: function (v) {
+        this.pane.setSelectedValue(v);
+    },
+
     setValue: function (v) {
         this.pane.setValue(v);
     },

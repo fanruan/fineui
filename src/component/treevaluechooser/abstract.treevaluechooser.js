@@ -407,11 +407,11 @@ BI.AbstractTreeValueChooser = BI.inherit(BI.Widget, {
         var times = op.times;
         var checkState = op.checkState || {};
         var parentValues = op.parentValues || [];
-        var selectedValues = op.selectedValues;
+        var selectedValues = op.selectedValues || {};
         var valueMap = {};
-        if (judgeState(parentValues, selectedValues, checkState)) {
+        // if (judgeState(parentValues, selectedValues, checkState)) {
             valueMap = dealWidthSelectedValue(parentValues, selectedValues);
-        }
+        // }
         var nodes = this._getChildren(parentValues);
         for (var i = (times - 1) * this._const.perPage; nodes[i] && i < times * this._const.perPage; i++) {
             var state = getCheckState(nodes[i].value, parentValues, valueMap, checkState);
@@ -444,7 +444,7 @@ BI.AbstractTreeValueChooser = BI.inherit(BI.Widget, {
         function dealWidthSelectedValue(parentValues, selectedValues) {
             var valueMap = {};
             BI.each(parentValues, function (i, v) {
-                selectedValues = selectedValues[v];
+                selectedValues = selectedValues[v] || {};
             });
             BI.each(selectedValues, function (value, obj) {
                 if (BI.isNull(obj)) {
