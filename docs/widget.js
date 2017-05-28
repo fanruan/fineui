@@ -3924,7 +3924,7 @@ BI.Arrangement = BI.inherit(BI.Widget, {
 BI.Arrangement.EVENT_SCROLL = "EVENT_SCROLL";
 BI.extend(BI.Arrangement, {
     PORTION: 24,
-    GRID_HEIGHT: 50,
+    GRID_HEIGHT: 60,
     LAYOUT_TYPE: {
         ADAPTIVE: 0,
         FREE: 1,
@@ -11721,7 +11721,7 @@ BI.MultiTreeCombo = BI.inherit(BI.Single, {
                 }, {
                     eventName: BI.MultiTreePopup.EVENT_CLICK_CONFIRM,
                     action: function () {
-                        self._defaultState();
+                        self.combo.hideView();
                     }
                 }, {
                     eventName: BI.MultiTreePopup.EVENT_CLICK_CLEAR,

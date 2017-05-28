@@ -40,7 +40,7 @@ BI.PartTree = BI.inherit(BI.AsyncTree, {
     _selectTreeNode: function (treeId, treeNode) {
         var self = this, o = this.options;
         var parentValues = BI.deepClone(treeNode.parentValues || self._getParentValues(treeNode));
-        var name = this._getNodeValue(treeNode)
+        var name = this._getNodeValue(treeNode);
 //        var values = parentValues.concat([name]);
         if (treeNode.checked === true) {
             BI.AsyncTree.superclass._selectTreeNode.apply(self, arguments);

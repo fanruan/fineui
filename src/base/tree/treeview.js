@@ -241,7 +241,7 @@ BI.TreeView = BI.inherit(BI.Pane, {
             this._buildTree(map, path);
             return;
         }
-        var storeValues = BI.deepClone(this.options.paras.selectedValues);
+        var storeValues = BI.deepClone(this.selectedValues);
         var treeNode = this._getTree(storeValues, path);
         this._addTreeNode(map, parent, this._getNodeValue(node), treeNode);
     },
@@ -445,14 +445,13 @@ BI.TreeView = BI.inherit(BI.Pane, {
 
     //设置树节点的状态
     setValue: function (value, param) {
-        this.setSelectedValue(value);
         this.checkAll(false);
         this.updateValue(value, param);
         this.refresh();
     },
 
     setSelectedValue: function (value) {
-        this.options.paras.selectedValues = BI.deepClone(value) || {};
+        this.options.paras.selectedValues = value || {};
         this.selectedValues = BI.deepClone(value) || {};
     },
 

@@ -88,7 +88,7 @@ BI.MultiTreeCombo = BI.inherit(BI.Single, {
                 }, {
                     eventName: BI.MultiTreePopup.EVENT_CLICK_CONFIRM,
                     action: function () {
-                        self._defaultState();
+                        self.combo.hideView();
                     }
                 }, {
                     eventName: BI.MultiTreePopup.EVENT_CLICK_CLEAR,

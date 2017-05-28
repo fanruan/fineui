@@ -2934,7 +2934,7 @@ BI.Arrangement = BI.inherit(BI.Widget, {
 BI.Arrangement.EVENT_SCROLL = "EVENT_SCROLL";
 BI.extend(BI.Arrangement, {
     PORTION: 24,
-    GRID_HEIGHT: 50,
+    GRID_HEIGHT: 60,
     LAYOUT_TYPE: {
         ADAPTIVE: 0,
         FREE: 1,
