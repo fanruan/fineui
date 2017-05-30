@@ -109,7 +109,7 @@ BI.AbstractTreeValueChooser = BI.inherit(BI.Widget, {
 
     _reqSelectedTreeNode: function (op, callback) {
         var self = this;
-        var selectedValues = op.selectedValues;
+        var selectedValues = BI.deepClone(op.selectedValues);
         var notSelectedValue = op.notSelectedValue || {};
         var keyword = op.keyword || "";
         var parentValues = op.parentValues || [];
@@ -124,12 +124,38 @@ BI.AbstractTreeValueChooser = BI.inherit(BI.Widget, {
 
 
         function dealWithSelectedValues(selectedValues) {
-            var p = BI.clone(parentValues);
-            p.push(notSelectedValue);
+            //存储的值中存在这个值就把它删掉
+            if (canFindKey(selectedValues, parentValues.concat(notSelectedValue))) {
+                //如果搜索的值在父亲链中
+                if (isSearchValueInParent(parentValues.concat(notSelectedValue))) {
+                    var name = notSelectedValue;
+                    var p = parentValues;
+                    var pNode = getNode(selectedValues, parentValues);
+                    if (pNode[name]) {
+                        delete pNode[name];
+                        //递归删掉空父节点
+                        while (p.length > 0 && BI.isEmpty(pNode)) {
+                            name = p[p.length - 1];
+                            p = p.slice(0, p.length - 1);
+                            pNode = getNode(selectedValues, p);
+                            delete pNode[name];
+                        }
+                    }
+                }
+            }
 
-            if (isChild(selectedValues, p)) {
-                var result = [];
-                var finded = search(parentValues.length + 1, parentValues, notSelectedValue, result);
+            //存储的值中不存在这个值，但父亲节点是全选的情况
+            if (isChild(selectedValues, parentValues.concat(notSelectedValue))) {
+                var result = [], finded = false;
+                var p = parentValues;
+                //如果parentValues中有匹配的值，说明搜索结果不在当前值下
+                if (isSearchValueInParent(parentValues.concat(notSelectedValue))) {
+                    finded = true;
+                    p = parentValues.concat(notSelectedValue);
+                } else {
+                    //从当前值开始搜
+                    finded = search(parentValues, notSelectedValue, result);
+                }
 
                 if (finded === true) {
                     var next = selectedValues;
@@ -165,7 +191,7 @@ BI.AbstractTreeValueChooser = BI.inherit(BI.Widget, {
 
         }
 
-        function search(deep, parents, current, result) {
+        function search(parents, current, result) {
             var newParents = BI.clone(parents);
             newParents.push(current);
             if (self._isMatch(current, keyword)) {
@@ -178,7 +204,7 @@ BI.AbstractTreeValueChooser = BI.inherit(BI.Widget, {
             var can = false;
 
             BI.each(children, function (i, child) {
-                if (search(deep + 1, newParents, child.value, result)) {
+                if (search(newParents, child.value, result)) {
                     can = true;
                 } else {
                     notSearch.push(child.value);
@@ -194,6 +220,38 @@ BI.AbstractTreeValueChooser = BI.inherit(BI.Widget, {
             return can;
         }
 
+        function isSearchValueInParent(parentValues) {
+            for (var i = 0, len = parentValues.length; i < len; i++) {
+                if (self._isMatch(parentValues[i], keyword)) {
+                    return true;
+                }
+            }
+            return false;
+        }
+
+        function getNode(selectedValues, parentValues) {
+            var pNode = selectedValues;
+            for (var i = 0, len = parentValues.length; i < len; i++) {
+                if (pNode == null) {
+                    return null;
+                }
+                pNode = pNode[parentValues[i]];
+            }
+            return pNode;
+        }
+
+        function canFindKey(selectedValues, parents) {
+            var t = selectedValues;
+            for (var i = 0; i < parents.length; i++) {
+                var v = parents[i];
+                t = t[v];
+                if (t == null) {
+                    return false;
+                }
+            }
+            return true;
+        }
+
         function isChild(selectedValues, parents) {
             var t = selectedValues;
             for (var i = 0; i < parents.length; i++) {
@@ -202,11 +260,11 @@ BI.AbstractTreeValueChooser = BI.inherit(BI.Widget, {
                     return false;
                 }
                 t = t[v];
-                if (t == null || BI.isEmpty(t)) {
+                if (BI.isEmpty(t)) {
                     return true;
                 }
             }
-            return true;
+            return false;
         }
     },
 
@@ -410,7 +468,7 @@ BI.AbstractTreeValueChooser = BI.inherit(BI.Widget, {
         var selectedValues = op.selectedValues || {};
         var valueMap = {};
         // if (judgeState(parentValues, selectedValues, checkState)) {
-            valueMap = dealWidthSelectedValue(parentValues, selectedValues);
+        valueMap = dealWidthSelectedValue(parentValues, selectedValues);
         // }
         var nodes = this._getChildren(parentValues);
         for (var i = (times - 1) * this._const.perPage; nodes[i] && i < times * this._const.perPage; i++) {

@@ -41,32 +41,27 @@ BI.PartTree = BI.inherit(BI.AsyncTree, {
         var self = this, o = this.options;
         var parentValues = BI.deepClone(treeNode.parentValues || self._getParentValues(treeNode));
         var name = this._getNodeValue(treeNode);
-//        var values = parentValues.concat([name]);
         if (treeNode.checked === true) {
             BI.AsyncTree.superclass._selectTreeNode.apply(self, arguments);
         } else {
+            //如果选中的值中不存在该值不处理
+            var t = this.selectedValues;
+            var p = parentValues.concat(name);
+            for (var i = 0, len = p.length; i < len; i++) {
+                t = t[p[i]];
+                if (t == null) {
+                    return;
+                }
+                if (BI.isEmpty(t)) {
+                    break;
+                }
+            }
             o.itemsCreator(BI.extend({}, o.paras, {
                 type: BI.TreeView.REQ_TYPE_SELECT_DATA,
                 selectedValues: this.selectedValues,
                 notSelectedValue: name,
                 parentValues: parentValues
             }), function (new_values) {
-                if (BI.isEqual(self.selectedValues, new_values)) {
-                    var tNode = treeNode;
-                    var pNode = self._getTree(new_values, parentValues);
-                    if (pNode[name]) {
-                        delete pNode[name];
-                    }
-                    while (tNode != null && BI.isEmpty(pNode)) {
-                        parentValues = parentValues.slice(0, parentValues.length - 1);
-                        tNode = tNode.getParentNode();
-                        if (tNode != null) {
-                            pNode = self._getTree(new_values, parentValues);
-                            name = self._getNodeValue(tNode);
-                            delete pNode[name];
-                        }
-                    }
-                }
                 self.selectedValues = new_values;
                 BI.AsyncTree.superclass._selectTreeNode.apply(self, arguments);
             });
