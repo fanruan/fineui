@@ -17265,7 +17265,7 @@ BI.shortcut('bi.all_value_chooser_pane', BI.AllValueChooserPane);BI.AbstractTree
                 return;
             }
             BI.each(selected, function (k) {
-                var node = self._getNode(parentValues, k);
+                var node = self._getTreeNode(parentValues, k);
                 var newParents = BI.clone(parentValues);
                 newParents.push(node.value);
                 createOneJson(node, BI.last(parentValues), getCount(selected[k], newParents));
@@ -17312,37 +17312,33 @@ BI.shortcut('bi.all_value_chooser_pane', BI.AllValueChooserPane);BI.AbstractTree
 
 
         function dealWithSelectedValues(selectedValues) {
+            var p = parentValues.concat(notSelectedValue);
             //存储的值中存在这个值就把它删掉
-            if (canFindKey(selectedValues, parentValues.concat(notSelectedValue))) {
+            if (canFindKey(selectedValues, p)) {
                 //如果搜索的值在父亲链中
-                if (isSearchValueInParent(parentValues.concat(notSelectedValue))) {
-                    var name = notSelectedValue;
-                    var p = parentValues;
-                    var pNode = getNode(selectedValues, parentValues);
-                    if (pNode[name]) {
-                        delete pNode[name];
-                        //递归删掉空父节点
-                        while (p.length > 0 && BI.isEmpty(pNode)) {
-                            name = p[p.length - 1];
-                            p = p.slice(0, p.length - 1);
-                            pNode = getNode(selectedValues, p);
-                            delete pNode[name];
-                        }
+                if (isSearchValueInParent(p)) {
+                    self._deleteNode(selectedValues, p);
+                } else {
+                    var searched = [];
+                    var finded = search(parentValues, notSelectedValue, [], searched);
+                    if (finded && BI.isNotEmptyArray(searched)) {
+                        BI.each(searched, function (i, arr) {
+                            self._deleteNode(selectedValues, arr);
+                        })
                     }
                 }
             }
 
             //存储的值中不存在这个值，但父亲节点是全选的情况
-            if (isChild(selectedValues, parentValues.concat(notSelectedValue))) {
+            if (isChild(selectedValues, p)) {
                 var result = [], finded = false;
-                var p = parentValues;
                 //如果parentValues中有匹配的值，说明搜索结果不在当前值下
-                if (isSearchValueInParent(parentValues.concat(notSelectedValue))) {
+                if (isSearchValueInParent(p)) {
                     finded = true;
-                    p = parentValues.concat(notSelectedValue);
                 } else {
                     //从当前值开始搜
                     finded = search(parentValues, notSelectedValue, result);
+                    p = parentValues;
                 }
 
                 if (finded === true) {
@@ -17379,10 +17375,11 @@ BI.shortcut('bi.all_value_chooser_pane', BI.AllValueChooserPane);BI.AbstractTree
 
         }
 
-        function search(parents, current, result) {
+        function search(parents, current, result, searched) {
             var newParents = BI.clone(parents);
             newParents.push(current);
             if (self._isMatch(current, keyword)) {
+                searched && searched.push(newParents);
                 return true;
             }
 
@@ -17392,7 +17389,7 @@ BI.shortcut('bi.all_value_chooser_pane', BI.AllValueChooserPane);BI.AbstractTree
             var can = false;
 
             BI.each(children, function (i, child) {
-                if (search(newParents, child.value, result)) {
+                if (search(newParents, child.value, result, searched)) {
                     can = true;
                 } else {
                     notSearch.push(child.value);
@@ -17415,17 +17412,6 @@ BI.shortcut('bi.all_value_chooser_pane', BI.AllValueChooserPane);BI.AbstractTree
                 }
             }
             return false;
-        }
-
-        function getNode(selectedValues, parentValues) {
-            var pNode = selectedValues;
-            for (var i = 0, len = parentValues.length; i < len; i++) {
-                if (pNode == null) {
-                    return null;
-                }
-                pNode = pNode[parentValues[i]];
-            }
-            return pNode;
         }
 
         function canFindKey(selectedValues, parents) {
@@ -17576,7 +17562,7 @@ BI.shortcut('bi.all_value_chooser_pane', BI.AllValueChooserPane);BI.AbstractTree
         }
 
         function createOneJson(parentValues, value, isOpen, checked, half, flag, result) {
-            var node = self._getNode(parentValues, value)
+            var node = self._getTreeNode(parentValues, value)
             result.push({
                 id: node.id,
                 pId: node.pId,
@@ -17738,6 +17724,32 @@ BI.shortcut('bi.all_value_chooser_pane', BI.AllValueChooserPane);BI.AbstractTree
         }
     },
 
+    _getNode: function (selectedValues, parentValues) {
+        var pNode = selectedValues;
+        for (var i = 0, len = parentValues.length; i < len; i++) {
+            if (pNode == null) {
+                return null;
+            }
+            pNode = pNode[parentValues[i]];
+        }
+        return pNode;
+    },
+
+    _deleteNode: function (selectedValues, values) {
+        var name = values[values.length - 1];
+        var p = values.slice(0, values.length - 1);
+        var pNode = this._getNode(selectedValues, p);
+        if (pNode[name]) {
+            delete pNode[name];
+            //递归删掉空父节点
+            while (p.length > 0 && BI.isEmpty(pNode)) {
+                name = p[p.length - 1];
+                p = p.slice(0, p.length - 1);
+                pNode = this._getNode(selectedValues, p);
+                delete pNode[name];
+            }
+        }
+    },
 
     _buildTree: function (jo, values) {
         var t = jo;
@@ -17754,7 +17766,7 @@ BI.shortcut('bi.all_value_chooser_pane', BI.AllValueChooserPane);BI.AbstractTree
         return finded.finded.length > 0 || finded.matched.length > 0;
     },
 
-    _getNode: function (parentValues, v) {
+    _getTreeNode: function (parentValues, v) {
         var self = this;
         var findedParentNode;
         var index = 0;
@@ -17781,7 +17793,7 @@ BI.shortcut('bi.all_value_chooser_pane', BI.AllValueChooserPane);BI.AbstractTree
     _getChildren: function (parentValues) {
         if (parentValues.length > 0) {
             var value = BI.last(parentValues);
-            var parent = this._getNode(parentValues.slice(0, parentValues.length - 1), value);
+            var parent = this._getTreeNode(parentValues.slice(0, parentValues.length - 1), value);
         } else {
             var parent = this.tree.getRoot();
         }
