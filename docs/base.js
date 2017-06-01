@@ -1717,7 +1717,7 @@ BI.TreeView = BI.inherit(BI.Pane, {
 
     _getNodeValue: function (node) {
         //去除标红
-        return node.value == null ? node.text.replace(/<[^>]+>/g, "") : node.value;
+        return node.value == null ? node.text.replace(/<[^>]+>/g, "").replaceAll("　", " ") : node.value;
     },
 
     //获取半选框值
