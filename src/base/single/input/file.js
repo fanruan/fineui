@@ -399,7 +399,7 @@
                 url: "",
                 multiple: true,
                 accept: "", /**'*.jpg; *.zip'**/
-                maxSize: 1024 * 1024
+                maxSize: -1 //1024 * 1024
             })
         },
 
@@ -475,7 +475,7 @@
                     }, 1000);
                 };
                 _wrap.url = o.url ? o.url : BI.servletURL
-                + '?op=fr_attach&cmd=ah_upload';
+                    + '?op=fr_attach&cmd=ah_upload';
                 _wrap.fileType = o.accept;   //文件类型限制
                 _wrap.attach_array = [];
                 _wrap.attach_names = [];
