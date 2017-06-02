@@ -57,14 +57,14 @@ BI.MultiSelectTree = BI.inherit(BI.Widget, {
                 action: function () {
                     self._showSearcherPane();
                     self.storeValue = {value: self.adapter.getValue()};
-                    self.searcherPane.setValue(self.storeValue);
+                    self.searcherPane.setSelectedValue(self.storeValue.value);
                 }
             }, {
                 eventName: BI.Searcher.EVENT_STOP,
                 action: function () {
                     self._showAdapter();
                     // self.storeValue = {value: self.searcherPane.getValue()};
-                    self.adapter.setValue(self.storeValue);
+                    self.adapter.setSelectedValue(self.storeValue.value);
                     BI.nextTick(function () {
                         self.adapter.populate();
                     });
@@ -127,15 +127,15 @@ BI.MultiSelectTree = BI.inherit(BI.Widget, {
     },
 
     setSelectedValue: function (v) {
+        this.storeValue.value = v || {};
         this.adapter.setSelectedValue(v);
+        this.trigger.setValue({
+            value: v || {}
+        });
     },
 
     setValue: function (v) {
-        this.storeValue.value = v || {};
         this.adapter.setValue({
-            value: v || {}
-        });
-        this.trigger.setValue({
             value: v || {}
         });
     },

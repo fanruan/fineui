@@ -34,7 +34,7 @@ BI.MultiSelectTreePopup = BI.inherit(BI.Widget, {
 
     setValue: function (v) {
         v || (v = {});
-        this.popup.setValue(v.value);
+        this.popup.setValue(v);
     },
 
     setSelectedValue: function (v) {
