@@ -28,7 +28,7 @@ BI.Switcher = BI.inherit(BI.Widget, {
         this._initSwitcher();
         this._initPullDownAction();
         this.switcher.on(BI.Controller.EVENT_CHANGE, function (type, value, obj) {
-            if (self.isEnabled() && this.isEnabled()) {
+            if (self.isEnabled() && self.isValid()) {
                 if (type === BI.Events.EXPAND) {
                     self._popupView();
                 }

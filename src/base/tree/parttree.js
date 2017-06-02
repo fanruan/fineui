@@ -45,7 +45,7 @@ BI.PartTree = BI.inherit(BI.AsyncTree, {
             BI.AsyncTree.superclass._selectTreeNode.apply(self, arguments);
         } else {
             //如果选中的值中不存在该值不处理
-            var t = this.selectedValues;
+            var t = this.options.paras.selectedValues;
             var p = parentValues.concat(name);
             for (var i = 0, len = p.length; i < len; i++) {
                 t = t[p[i]];
@@ -58,11 +58,10 @@ BI.PartTree = BI.inherit(BI.AsyncTree, {
             }
             o.itemsCreator(BI.extend({}, o.paras, {
                 type: BI.TreeView.REQ_TYPE_SELECT_DATA,
-                selectedValues: this.selectedValues,
                 notSelectedValue: name,
                 parentValues: parentValues
             }), function (new_values) {
-                self.selectedValues = new_values;
+                self.options.paras.selectedValues = new_values;
                 BI.AsyncTree.superclass._selectTreeNode.apply(self, arguments);
             });
         }
@@ -159,9 +158,6 @@ BI.PartTree = BI.inherit(BI.AsyncTree, {
         delete o.paras.keyword;
         BI.extend(o.paras, config);
         delete o.paras.lastSearchValue;
-        //取消选中时使用
-        this.selectedValues = BI.deepClone(o.paras.selectedValues) || {};
-        //delete this.options.paras.selectedValues;
         var setting = this._configSetting();
         this._initTree(setting, o.paras.keyword);
     }

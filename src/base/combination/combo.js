@@ -34,7 +34,7 @@ BI.Combo = BI.inherit(BI.Widget, {
         this._initCombo();
         this._initPullDownAction();
         this.combo.on(BI.Controller.EVENT_CHANGE, function (type, value, obj) {
-            if (self.isEnabled() && this.isEnabled()) {
+            if (self.isEnabled() && self.isValid()) {
                 if (type === BI.Events.EXPAND) {
                     self._popupView();
                 }
@@ -52,12 +52,12 @@ BI.Combo = BI.inherit(BI.Widget, {
         });
 
         self.element.on("mouseenter." + self.getName(), function (e) {
-            if (self.isEnabled() && self.combo.isEnabled()) {
+            if (self.isEnabled() && self.isValid() && self.combo.isEnabled() && self.combo.isValid()) {
                 self.element.addClass(o.hoverClass);
             }
         });
         self.element.on("mouseleave." + self.getName(), function (e) {
-            if (self.isEnabled() && self.combo.isEnabled()) {
+            if (self.isEnabled() && self.isValid() && self.combo.isEnabled() && self.combo.isValid()) {
                 self.element.removeClass(o.hoverClass);
             }
         });
@@ -104,14 +104,14 @@ BI.Combo = BI.inherit(BI.Widget, {
             switch (ev) {
                 case "hover":
                     self.element.on("mouseenter." + self.getName(), function (e) {
-                        if (self.isEnabled() && self.combo.isEnabled()) {
+                        if (self.isEnabled() && self.isValid() && self.combo.isEnabled() && self.combo.isValid()) {
                             self._popupView();
                             self.fireEvent(BI.Controller.EVENT_CHANGE, BI.Events.EXPAND, "", self.combo);
                             self.fireEvent(BI.Combo.EVENT_EXPAND);
                         }
                     });
                     self.element.on("mouseleave." + self.getName(), function (e) {
-                        if (self.isEnabled() && self.combo.isEnabled() && o.toggle === true) {
+                        if (self.isEnabled() && self.isValid() && self.combo.isEnabled() && self.combo.isValid() && o.toggle === true) {
                             self._hideView();
                             self.fireEvent(BI.Controller.EVENT_CHANGE, BI.Events.COLLAPSE, "", self.combo);
                             self.fireEvent(BI.Combo.EVENT_COLLAPSE);
@@ -121,7 +121,7 @@ BI.Combo = BI.inherit(BI.Widget, {
                 case "click":
                     var debounce = BI.debounce(function (e) {
                         if (self.combo.element.__isMouseInBounds__(e)) {
-                            if (self.isEnabled() && self.combo.isEnabled()) {
+                            if (self.isEnabled() && self.isValid() && self.combo.isEnabled() && self.combo.isValid()) {
                                 o.toggle ? self._toggle() : self._popupView();
                                 if (self.isViewVisible()) {
                                     self.fireEvent(BI.Controller.EVENT_CHANGE, BI.Events.EXPAND, "", self.combo);
@@ -334,6 +334,7 @@ BI.Combo = BI.inherit(BI.Widget, {
 
     _setEnable: function (arg) {
         BI.Combo.superclass._setEnable.apply(this, arguments);
+        !arg && this.element.removeClass(this.options.hoverClass);
         !arg && this.isViewVisible() && this._hideView();
     },
 

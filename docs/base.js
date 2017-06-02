@@ -1742,7 +1742,7 @@ BI.TreeView = BI.inherit(BI.Pane, {
             this._buildTree(map, path);
             return;
         }
-        var storeValues = BI.deepClone(this.selectedValues);
+        var storeValues = BI.deepClone(this.options.paras.selectedValues);
         var treeNode = this._getTree(storeValues, path);
         this._addTreeNode(map, parent, this._getNodeValue(node), treeNode);
     },
@@ -1952,8 +1952,7 @@ BI.TreeView = BI.inherit(BI.Pane, {
     },
 
     setSelectedValue: function (value) {
-        this.options.paras.selectedValues = value || {};
-        this.selectedValues = BI.deepClone(value) || {};
+        this.options.paras.selectedValues = BI.deepClone(value || {});
     },
 
     updateValue: function (values, param) {
@@ -2105,7 +2104,7 @@ BI.AsyncTree = BI.inherit(BI.TreeView, {
         if (treeNode.checked === true) {
         } else {
             var tNode = treeNode;
-            var pNode = this._getTree(this.selectedValues, parentValues);
+            var pNode = this._getTree(this.options.paras.selectedValues, parentValues);
             if (BI.isNotNull(pNode[name])) {
                 delete pNode[name];
             }
@@ -2113,7 +2112,7 @@ BI.AsyncTree = BI.inherit(BI.TreeView, {
                 parentValues = parentValues.slice(0, parentValues.length - 1);
                 tNode = tNode.getParentNode();
                 if (tNode != null) {
-                    pNode = this._getTree(this.selectedValues, parentValues);
+                    pNode = this._getTree(this.options.paras.selectedValues, parentValues);
                     name = this._getNodeValue(tNode);
                     delete pNode[name];
                 }
@@ -2127,10 +2126,10 @@ BI.AsyncTree = BI.inherit(BI.TreeView, {
         var self = this, o = this.options;
         var parentValues = treeNode.parentValues || self._getParentValues(treeNode);
         var op = BI.extend({}, o.paras, {
-            "id": treeNode.id,
-            "times": 1,
-            "parentValues": parentValues.concat(this._getNodeValue(treeNode)),
-            "checkState": treeNode.getCheckStatus()
+            id: treeNode.id,
+            times: 1,
+            parentValues: parentValues.concat(this._getNodeValue(treeNode)),
+            checkState: treeNode.getCheckStatus()
         });
         var complete = function (d) {
             var nodes = d.items || [];
@@ -2178,7 +2177,7 @@ BI.AsyncTree = BI.inherit(BI.TreeView, {
     },
 
     hasChecked: function () {
-        return !BI.isEmpty(this.selectedValues) || BI.AsyncTree.superclass.hasChecked.apply(this, arguments);
+        return !BI.isEmpty(this.options.paras.selectedValues) || BI.AsyncTree.superclass.hasChecked.apply(this, arguments);
     },
 
     getValue: function () {
@@ -2187,20 +2186,18 @@ BI.AsyncTree = BI.inherit(BI.TreeView, {
         }
         var checkedValues = this._getSelectedValues();
         if (BI.isEmpty(checkedValues)) {
-            return BI.deepClone(this.selectedValues);
+            return BI.deepClone(this.options.paras.selectedValues);
         }
-        if (BI.isEmpty(this.selectedValues)) {
+        if (BI.isEmpty(this.options.paras.selectedValues)) {
             return checkedValues;
         }
-        return this._join(checkedValues, this.selectedValues);
+        return this._join(checkedValues, this.options.paras.selectedValues);
     },
 
     //生成树方法
     stroke: function (config) {
         delete this.options.keyword;
         BI.extend(this.options.paras, config);
-        //取消选中时使用
-        this.selectedValues = BI.deepClone(this.options.paras.selectedValues) || {};
         var setting = this._configSetting();
         this._initTree(setting);
     }
@@ -2253,7 +2250,7 @@ BI.PartTree = BI.inherit(BI.AsyncTree, {
             BI.AsyncTree.superclass._selectTreeNode.apply(self, arguments);
         } else {
             //如果选中的值中不存在该值不处理
-            var t = this.selectedValues;
+            var t = this.options.paras.selectedValues;
             var p = parentValues.concat(name);
             for (var i = 0, len = p.length; i < len; i++) {
                 t = t[p[i]];
@@ -2266,11 +2263,10 @@ BI.PartTree = BI.inherit(BI.AsyncTree, {
             }
             o.itemsCreator(BI.extend({}, o.paras, {
                 type: BI.TreeView.REQ_TYPE_SELECT_DATA,
-                selectedValues: this.selectedValues,
                 notSelectedValue: name,
                 parentValues: parentValues
             }), function (new_values) {
-                self.selectedValues = new_values;
+                self.options.paras.selectedValues = new_values;
                 BI.AsyncTree.superclass._selectTreeNode.apply(self, arguments);
             });
         }
@@ -2367,9 +2363,6 @@ BI.PartTree = BI.inherit(BI.AsyncTree, {
         delete o.paras.keyword;
         BI.extend(o.paras, config);
         delete o.paras.lastSearchValue;
-        //取消选中时使用
-        this.selectedValues = BI.deepClone(o.paras.selectedValues) || {};
-        //delete this.options.paras.selectedValues;
         var setting = this._configSetting();
         this._initTree(setting, o.paras.keyword);
     }
@@ -2920,7 +2913,7 @@ BI.Combo = BI.inherit(BI.Widget, {
         this._initCombo();
         this._initPullDownAction();
         this.combo.on(BI.Controller.EVENT_CHANGE, function (type, value, obj) {
-            if (self.isEnabled() && this.isEnabled()) {
+            if (self.isEnabled() && self.isValid()) {
                 if (type === BI.Events.EXPAND) {
                     self._popupView();
                 }
@@ -2938,12 +2931,12 @@ BI.Combo = BI.inherit(BI.Widget, {
         });
 
         self.element.on("mouseenter." + self.getName(), function (e) {
-            if (self.isEnabled() && self.combo.isEnabled()) {
+            if (self.isEnabled() && self.isValid() && self.combo.isEnabled() && self.combo.isValid()) {
                 self.element.addClass(o.hoverClass);
             }
         });
         self.element.on("mouseleave." + self.getName(), function (e) {
-            if (self.isEnabled() && self.combo.isEnabled()) {
+            if (self.isEnabled() && self.isValid() && self.combo.isEnabled() && self.combo.isValid()) {
                 self.element.removeClass(o.hoverClass);
             }
         });
@@ -2990,14 +2983,14 @@ BI.Combo = BI.inherit(BI.Widget, {
             switch (ev) {
                 case "hover":
                     self.element.on("mouseenter." + self.getName(), function (e) {
-                        if (self.isEnabled() && self.combo.isEnabled()) {
+                        if (self.isEnabled() && self.isValid() && self.combo.isEnabled() && self.combo.isValid()) {
                             self._popupView();
                             self.fireEvent(BI.Controller.EVENT_CHANGE, BI.Events.EXPAND, "", self.combo);
                             self.fireEvent(BI.Combo.EVENT_EXPAND);
                         }
                     });
                     self.element.on("mouseleave." + self.getName(), function (e) {
-                        if (self.isEnabled() && self.combo.isEnabled() && o.toggle === true) {
+                        if (self.isEnabled() && self.isValid() && self.combo.isEnabled() && self.combo.isValid() && o.toggle === true) {
                             self._hideView();
                             self.fireEvent(BI.Controller.EVENT_CHANGE, BI.Events.COLLAPSE, "", self.combo);
                             self.fireEvent(BI.Combo.EVENT_COLLAPSE);
@@ -3007,7 +3000,7 @@ BI.Combo = BI.inherit(BI.Widget, {
                 case "click":
                     var debounce = BI.debounce(function (e) {
                         if (self.combo.element.__isMouseInBounds__(e)) {
-                            if (self.isEnabled() && self.combo.isEnabled()) {
+                            if (self.isEnabled() && self.isValid() && self.combo.isEnabled() && self.combo.isValid()) {
                                 o.toggle ? self._toggle() : self._popupView();
                                 if (self.isViewVisible()) {
                                     self.fireEvent(BI.Controller.EVENT_CHANGE, BI.Events.EXPAND, "", self.combo);
@@ -3220,6 +3213,7 @@ BI.Combo = BI.inherit(BI.Widget, {
 
     _setEnable: function (arg) {
         BI.Combo.superclass._setEnable.apply(this, arguments);
+        !arg && this.element.removeClass(this.options.hoverClass);
         !arg && this.isViewVisible() && this._hideView();
     },
 
@@ -3317,13 +3311,13 @@ BI.Expander = BI.inherit(BI.Widget, {
         this._initExpander();
         this._initPullDownAction();
         this.expander.on(BI.Controller.EVENT_CHANGE, function (type, value, obj) {
-            if (type === BI.Events.EXPAND) {
-                self._popupView();
-            }
-            if (type === BI.Events.COLLAPSE) {
-                self._hideView();
-            }
-            if (self.isEnabled() && this.isEnabled()) {
+            if (self.isEnabled() && self.isValid()) {
+                if (type === BI.Events.EXPAND) {
+                    self._popupView();
+                }
+                if (type === BI.Events.COLLAPSE) {
+                    self._hideView();
+                }
                 if (type === BI.Events.EXPAND) {
                     self.fireEvent(BI.Controller.EVENT_CHANGE, arguments);
                     self.fireEvent(BI.Expander.EVENT_EXPAND);
@@ -3339,11 +3333,11 @@ BI.Expander = BI.inherit(BI.Widget, {
         });
 
         this.element.hover(function () {
-            if (self.isEnabled() && self.expander.isEnabled()) {
+            if (self.isEnabled() && self.isValid() && self.expander.isEnabled() && self.expander.isValid()) {
                 self.element.addClass(o.hoverClass);
             }
         }, function () {
-            if (self.isEnabled() && self.expander.isEnabled()) {
+            if (self.isEnabled() && self.isValid() && self.expander.isEnabled() && self.expander.isValid()) {
                 self.element.removeClass(o.hoverClass);
             }
         });
@@ -3379,13 +3373,13 @@ BI.Expander = BI.inherit(BI.Widget, {
             switch (e) {
                 case "hover":
                     self.element[e](function (e) {
-                        if (self.isEnabled() && self.expander.isEnabled()) {
+                        if (self.isEnabled() && self.isValid() && self.expander.isEnabled() && self.expander.isValid()) {
                             self._popupView();
                             self.fireEvent(BI.Controller.EVENT_CHANGE, BI.Events.EXPAND, '', self.expander);
                             self.fireEvent(BI.Expander.EVENT_EXPAND);
                         }
                     }, function () {
-                        if (self.isEnabled() && self.expander.isEnabled() && o.toggle) {
+                        if (self.isEnabled() && self.isValid() && self.expander.isEnabled() && self.expander.isValid() && o.toggle) {
                             self._hideView();
                             self.fireEvent(BI.Controller.EVENT_CHANGE, BI.Events.COLLAPSE, '', self.expander);
                             self.fireEvent(BI.Expander.EVENT_COLLAPSE);
@@ -3396,7 +3390,7 @@ BI.Expander = BI.inherit(BI.Widget, {
                     if (e) {
                         self.element.off(e + "." + self.getName()).on(e + "." + self.getName(), BI.debounce(function (e) {
                             if (self.expander.element.__isMouseInBounds__(e)) {
-                                if (self.isEnabled() && self.expander.isEnabled()) {
+                                if (self.isEnabled() && self.isValid() && self.expander.isEnabled() && self.expander.isValid()) {
                                     o.toggle ? self._toggle() : self._popupView();
                                     if (self.isExpanded()) {
                                         self.fireEvent(BI.Controller.EVENT_CHANGE, BI.Events.EXPAND, "", self.expander);
@@ -3487,6 +3481,7 @@ BI.Expander = BI.inherit(BI.Widget, {
 
     _setEnable: function (arg) {
         BI.Expander.superclass._setEnable.apply(this, arguments);
+        !arg && this.element.removeClass(this.options.hoverClass);
         !arg && this.isViewVisible() && this._hideView();
     },
 
@@ -4484,7 +4479,7 @@ BI.Switcher = BI.inherit(BI.Widget, {
         this._initSwitcher();
         this._initPullDownAction();
         this.switcher.on(BI.Controller.EVENT_CHANGE, function (type, value, obj) {
-            if (self.isEnabled() && this.isEnabled()) {
+            if (self.isEnabled() && self.isValid()) {
                 if (type === BI.Events.EXPAND) {
                     self._popupView();
                 }
