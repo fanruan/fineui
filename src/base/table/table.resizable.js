@@ -22,6 +22,8 @@ BI.ResizableTable = BI.inherit(BI.Widget, {
             mergeCols: [],
             mergeRule: BI.emptyFn,
             columnSize: [],
+            minColumnSize: [],
+            maxColumnSize: [],
             freezeCols: [],
             header: [],
             items: [],

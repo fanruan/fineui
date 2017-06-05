@@ -41,7 +41,7 @@ BI.Expander = BI.inherit(BI.Widget, {
                 }
                 if (type === BI.Events.COLLAPSE) {
                     self.fireEvent(BI.Controller.EVENT_CHANGE, arguments);
-                    self.fireEvent(BI.Expander.EVENT_COLLAPSE);
+                    self.isViewVisible() && self.fireEvent(BI.Expander.EVENT_COLLAPSE);
                 }
                 if (type === BI.Events.CLICK) {
                     self.fireEvent(BI.Expander.EVENT_TRIGGER_CHANGE, value, obj);
