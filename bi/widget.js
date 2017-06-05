@@ -11442,9 +11442,7 @@ BI.MultiSelectTree = BI.inherit(BI.Widget, {
     },
 
     setValue: function (v) {
-        this.adapter.setValue({
-            value: v || {}
-        });
+        this.adapter.setValue(v);
     },
 
     stopSearch: function () {
