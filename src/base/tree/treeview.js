@@ -436,6 +436,16 @@ BI.TreeView = BI.inherit(BI.Pane, {
     },
 
     checkAll: function (checked) {
+        function setNode(children) {
+            BI.each(children, function (i, child) {
+                child.halfCheck = false;
+                setNode(child.children);
+            });
+        }
+        BI.each(this.nodes.getNodes(), function (i, node) {
+            node.halfCheck = false;
+            setNode(node.children);
+        });
         this.nodes && this.nodes.checkAllNodes(checked);
     },
 
