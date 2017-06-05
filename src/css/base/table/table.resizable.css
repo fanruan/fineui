@@ -6,6 +6,9 @@
   z-index: 1;
   background-color: #3f8ce8;
 }
+.bi-resizable-table .resizable-table-resizer.suitable {
+  background-color: #58cc7d;
+}
 .bi-resizable-table .resizable-table-region-resizer {
   cursor: ew-resize;
   z-index: 1;

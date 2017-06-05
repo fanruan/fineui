@@ -9,3 +9,6 @@
 .bi-resizable-table-cell .resizable-table-cell-resizer-container.dragging .resizable-table-cell-resizer-knob {
   background-color: #3f8ce8;
 }
+.bi-resizable-table-cell .resizable-table-cell-resizer-container.suitable .resizable-table-cell-resizer-knob {
+  background-color: #58cc7d;
+}

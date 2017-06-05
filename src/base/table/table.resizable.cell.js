@@ -11,6 +11,9 @@ BI.ResizableTableCell = BI.inherit(BI.Widget, {
         return BI.extend(BI.ResizableTableCell.superclass._defaultConfig.apply(this, arguments), {
             baseCls: "bi-resizable-table-cell",
             cell: {},
+            minSize: 15,
+            // suitableSize,
+            maxSize: Number.MAX_VALUE,
             start: BI.emptyFn,
             resize: BI.emptyFn,
             stop: BI.emptyFn
@@ -24,22 +27,37 @@ BI.ResizableTableCell = BI.inherit(BI.Widget, {
 
         var startDrag = false;
         var size = 0, offset = 0, defaultSize = o.width;
+
+        function optimizeSize(size) {
+            size = BI.clamp(size, o.minSize, o.maxSize || Number.MAX_VALUE);
+            if (o.suitableSize) {
+                if (Math.abs(o.suitableSize - size) < 5) {
+                    size = o.suitableSize;
+                    self.handler.element.addClass("suitable");
+                } else {
+                    self.handler.element.removeClass("suitable");
+                }
+            }
+            return size;
+        }
+
         var mouseMoveTracker = new BI.MouseMoveTracker(function (deltaX, deltaY) {
             if (mouseMoveTracker.isDragging()) {
                 startDrag = true;
                 offset += deltaX;
-                size = BI.clamp(defaultSize + offset, 15, Number.MAX_VALUE);
+                size = optimizeSize(defaultSize + offset);
                 self.handler.element.addClass("dragging");
                 o.resize(size);
             }
         }, function () {
             if (startDrag === true) {
-                size = BI.clamp(size, 15, Number.MAX_VALUE);
+                size = optimizeSize(size);
                 o.stop(size);
                 size = 0;
                 offset = 0;
                 defaultSize = o.width;
                 self.handler.element.removeClass("dragging");
+                self.handler.element.removeClass("suitable");
                 startDrag = false;
             }
             mouseMoveTracker.releaseMouseMoves();
