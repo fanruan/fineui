@@ -32420,17 +32420,17 @@ BI.ResizableTableCell = BI.inherit(BI.Widget, {
         var startDrag = false;
         var size = 0, offset = 0, defaultSize = o.width;
 
-        function optimizeSize(size) {
-            size = BI.clamp(size, o.minSize, o.maxSize || Number.MAX_VALUE);
+        function optimizeSize(s) {
+            var optSize = BI.clamp(s, o.minSize, o.maxSize || Number.MAX_VALUE);
             if (o.suitableSize) {
-                if (Math.abs(o.suitableSize - size) < 5) {
-                    size = o.suitableSize;
+                if (Math.abs(o.suitableSize - optSize) < 5) {
+                    optSize = o.suitableSize;
                     self.handler.element.addClass("suitable");
                 } else {
                     self.handler.element.removeClass("suitable");
                 }
             }
-            return size;
+            return optSize;
         }
 
         var mouseMoveTracker = new BI.MouseMoveTracker(function (deltaX, deltaY) {
@@ -32717,12 +32717,12 @@ BI.ResizableTable = BI.inherit(BI.Widget, {
     _formatHeader: function (header) {
         var self = this, o = this.options;
         var result = [];
-        var resize = function (j, i, size) {
+        var resize = function (j, size) {
             self.resizer.setVisible(true);
             var height = o.headerRowSize + self._getRegionRowSize()[1];
             self.resizer.setHeight(height);
-            if (o.minColumnSize[i]) {
-                if (size === o.minColumnSize[i]) {
+            if (o.minColumnSize[j]) {
+                if (size === o.minColumnSize[j]) {
                     self.resizer.element.addClass("suitable");
                 } else {
                     self.resizer.element.removeClass("suitable");
@@ -32730,7 +32730,7 @@ BI.ResizableTable = BI.inherit(BI.Widget, {
             }
             self._setResizerPosition(self._getResizerLeft(j) + size, (o.header.length - 1) * o.headerRowSize);
         };
-        var stop = function (j, i, size) {
+        var stop = function (j, size) {
             self.resizer.setVisible(false);
             var columnSize = o.columnSize.slice();
             columnSize[j] = size;
@@ -32752,8 +32752,8 @@ BI.ResizableTable = BI.inherit(BI.Widget, {
                             cell: col,
                             suitableSize: o.minColumnSize[i],
                             maxSize: o.maxColumnSize[i],
-                            resize: BI.bind(resize, null, j, i),
-                            stop: BI.bind(stop, null, j, i)
+                            resize: BI.bind(resize, null, j),
+                            stop: BI.bind(stop, null, j)
                         };
                         if (o.isNeedMerge) {
                             var r = i;
@@ -32763,8 +32763,8 @@ BI.ResizableTable = BI.inherit(BI.Widget, {
                                     cell: result[r - 1][j],
                                     suitableSize: o.minColumnSize[i],
                                     maxSize: o.maxColumnSize[i],
-                                    resize: BI.bind(resize, null, j, i),
-                                    stop: BI.bind(stop, null, j, i)
+                                    resize: BI.bind(resize, null, j),
+                                    stop: BI.bind(stop, null, j)
                                 };
                                 r--;
                             }

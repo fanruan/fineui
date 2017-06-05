@@ -28,17 +28,17 @@ BI.ResizableTableCell = BI.inherit(BI.Widget, {
         var startDrag = false;
         var size = 0, offset = 0, defaultSize = o.width;
 
-        function optimizeSize(size) {
-            size = BI.clamp(size, o.minSize, o.maxSize || Number.MAX_VALUE);
+        function optimizeSize(s) {
+            var optSize = BI.clamp(s, o.minSize, o.maxSize || Number.MAX_VALUE);
             if (o.suitableSize) {
-                if (Math.abs(o.suitableSize - size) < 5) {
-                    size = o.suitableSize;
+                if (Math.abs(o.suitableSize - optSize) < 5) {
+                    optSize = o.suitableSize;
                     self.handler.element.addClass("suitable");
                 } else {
                     self.handler.element.removeClass("suitable");
                 }
             }
-            return size;
+            return optSize;
         }
 
         var mouseMoveTracker = new BI.MouseMoveTracker(function (deltaX, deltaY) {
