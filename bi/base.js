@@ -32722,7 +32722,7 @@ BI.ResizableTable = BI.inherit(BI.Widget, {
             var height = o.headerRowSize + self._getRegionRowSize()[1];
             self.resizer.setHeight(height);
             if (o.minColumnSize[i]) {
-                if (Math.abs(size - o.minColumnSize[i]) < 5) {
+                if (size === o.minColumnSize[i]) {
                     self.resizer.element.addClass("suitable");
                 } else {
                     self.resizer.element.removeClass("suitable");
