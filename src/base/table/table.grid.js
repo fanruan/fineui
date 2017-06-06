@@ -176,11 +176,26 @@ BI.GridTable = BI.inherit(BI.Widget, {
         return this.options.isNeedFreeze ? this.options.freezeCols.length : 0;
     },
 
+    _getFreezeHeaderHeight: function () {
+        var o = this.options;
+        if (o.header.length * o.headerRowSize >= this._height) {
+            return 0;
+        }
+        return o.header.length * o.headerRowSize;
+    },
+
+    _getActualItems: function () {
+        var o = this.options;
+        if (o.header.length * o.headerRowSize >= this._height) {
+            return o.header.concat(o.items);
+        }
+        return o.items;
+    },
+
     _populateScrollbar: function () {
         var o = this.options;
         var regionSize = this.getRegionSize(), totalLeftColumnSize = 0, totalRightColumnSize = 0, totalColumnSize = 0,
-            summaryColumnSizeArray = [], totalRowSize = o.items.length * o.rowSize;
-        var freezeColLength = this._getFreezeColLength();
+            summaryColumnSizeArray = [];
         BI.each(o.columnSize, function (i, size) {
             if (o.isNeedFreeze === true && o.freezeCols.contains(i)) {
                 totalLeftColumnSize += size;
@@ -194,8 +209,8 @@ BI.GridTable = BI.inherit(BI.Widget, {
                 summaryColumnSizeArray[i] = summaryColumnSizeArray[i - 1] + size;
             }
         });
-        this.topScrollbar.setContentSize(o.items.length * o.rowSize);
-        this.topScrollbar.setSize(this._height - o.header.length * o.headerRowSize);
+        this.topScrollbar.setContentSize(this._getActualItems().length * o.rowSize);
+        this.topScrollbar.setSize(this._height - this._getFreezeHeaderHeight());
         this.topScrollbar.setPosition(Math.min(this.bottomLeftGrid.getScrollTop(), this.bottomRightGrid.getScrollTop()));
         this.topScrollbar.populate();
 
@@ -210,7 +225,7 @@ BI.GridTable = BI.inherit(BI.Widget, {
         this.rightScrollbar.populate();
 
         var items = this.scrollBarLayout.attr("items");
-        items[0].top = o.header.length * o.headerRowSize;
+        items[0].top = this._getFreezeHeaderHeight();
         items[1].top = this._height;
         items[2].top = this._height;
         items[2].left = regionSize;
@@ -244,7 +259,7 @@ BI.GridTable = BI.inherit(BI.Widget, {
         var o = this.options;
         var freezeColLength = this._getFreezeColLength();
         var leftItems = [], rightItems = [];
-        BI.each(o.items, function (i, cols) {
+        BI.each(this._getActualItems(), function (i, cols) {
             leftItems[i] = [];
             rightItems[i] = [];
             BI.each(cols, function (j, col) {
@@ -265,7 +280,7 @@ BI.GridTable = BI.inherit(BI.Widget, {
     _populateTable: function () {
         var self = this, o = this.options;
         var regionSize = this.getRegionSize(), totalLeftColumnSize = 0, totalRightColumnSize = 0, totalColumnSize = 0,
-            summaryColumnSizeArray = [], totalRowSize = o.items.length * o.rowSize;
+            summaryColumnSizeArray = [];
         var freezeColLength = this._getFreezeColLength();
         BI.each(o.columnSize, function (i, size) {
             if (o.isNeedFreeze === true && o.freezeCols.contains(i)) {
@@ -282,13 +297,13 @@ BI.GridTable = BI.inherit(BI.Widget, {
         });
 
         var otlw = regionSize;
-        var otlh = o.header.length * o.headerRowSize;
+        var otlh = this._getFreezeHeaderHeight();
         var otrw = this._width - regionSize;
-        var otrh = o.header.length * o.headerRowSize;
+        var otrh = this._getFreezeHeaderHeight();
         var oblw = regionSize;
-        var oblh = this._height - o.header.length * o.headerRowSize;
+        var oblh = this._height - otlh;
         var obrw = this._width - regionSize;
-        var obrh = this._height - o.header.length * o.headerRowSize;
+        var obrh = this._height - otrh;
 
         var tlw = otlw + this._scrollBarSize;
         var tlh = otlh + this._scrollBarSize;
@@ -341,9 +356,9 @@ BI.GridTable = BI.inherit(BI.Widget, {
 
         var items = this.contextLayout.attr("items");
         items[1].left = regionSize;
-        items[2].top = o.header.length * o.headerRowSize;
+        items[2].top = this._getFreezeHeaderHeight();
         items[3].left = regionSize;
-        items[3].top = o.header.length * o.headerRowSize;
+        items[3].top = this._getFreezeHeaderHeight();
         this.contextLayout.attr("items", items);
         this.contextLayout.resize();
 
