@@ -28,20 +28,20 @@ BI.Expander = BI.inherit(BI.Widget, {
         this._initExpander();
         this._initPullDownAction();
         this.expander.on(BI.Controller.EVENT_CHANGE, function (type, value, obj) {
-            if (type === BI.Events.EXPAND) {
-                self._popupView();
-            }
-            if (type === BI.Events.COLLAPSE) {
-                self._hideView();
-            }
-            if (self.isEnabled() && this.isEnabled()) {
+            if (self.isEnabled() && self.isValid()) {
+                if (type === BI.Events.EXPAND) {
+                    self._popupView();
+                }
+                if (type === BI.Events.COLLAPSE) {
+                    self._hideView();
+                }
                 if (type === BI.Events.EXPAND) {
                     self.fireEvent(BI.Controller.EVENT_CHANGE, arguments);
                     self.fireEvent(BI.Expander.EVENT_EXPAND);
                 }
                 if (type === BI.Events.COLLAPSE) {
                     self.fireEvent(BI.Controller.EVENT_CHANGE, arguments);
-                    self.fireEvent(BI.Expander.EVENT_COLLAPSE);
+                    self.isViewVisible() && self.fireEvent(BI.Expander.EVENT_COLLAPSE);
                 }
                 if (type === BI.Events.CLICK) {
                     self.fireEvent(BI.Expander.EVENT_TRIGGER_CHANGE, value, obj);
@@ -50,11 +50,11 @@ BI.Expander = BI.inherit(BI.Widget, {
         });
 
         this.element.hover(function () {
-            if (self.isEnabled() && self.expander.isEnabled()) {
+            if (self.isEnabled() && self.isValid() && self.expander.isEnabled() && self.expander.isValid()) {
                 self.element.addClass(o.hoverClass);
             }
         }, function () {
-            if (self.isEnabled() && self.expander.isEnabled()) {
+            if (self.isEnabled() && self.isValid() && self.expander.isEnabled() && self.expander.isValid()) {
                 self.element.removeClass(o.hoverClass);
             }
         });
@@ -90,13 +90,13 @@ BI.Expander = BI.inherit(BI.Widget, {
             switch (e) {
                 case "hover":
                     self.element[e](function (e) {
-                        if (self.isEnabled() && self.expander.isEnabled()) {
+                        if (self.isEnabled() && self.isValid() && self.expander.isEnabled() && self.expander.isValid()) {
                             self._popupView();
                             self.fireEvent(BI.Controller.EVENT_CHANGE, BI.Events.EXPAND, '', self.expander);
                             self.fireEvent(BI.Expander.EVENT_EXPAND);
                         }
                     }, function () {
-                        if (self.isEnabled() && self.expander.isEnabled() && o.toggle) {
+                        if (self.isEnabled() && self.isValid() && self.expander.isEnabled() && self.expander.isValid() && o.toggle) {
                             self._hideView();
                             self.fireEvent(BI.Controller.EVENT_CHANGE, BI.Events.COLLAPSE, '', self.expander);
                             self.fireEvent(BI.Expander.EVENT_COLLAPSE);
@@ -107,7 +107,7 @@ BI.Expander = BI.inherit(BI.Widget, {
                     if (e) {
                         self.element.off(e + "." + self.getName()).on(e + "." + self.getName(), BI.debounce(function (e) {
                             if (self.expander.element.__isMouseInBounds__(e)) {
-                                if (self.isEnabled() && self.expander.isEnabled()) {
+                                if (self.isEnabled() && self.isValid() && self.expander.isEnabled() && self.expander.isValid()) {
                                     o.toggle ? self._toggle() : self._popupView();
                                     if (self.isExpanded()) {
                                         self.fireEvent(BI.Controller.EVENT_CHANGE, BI.Events.EXPAND, "", self.expander);
@@ -198,6 +198,7 @@ BI.Expander = BI.inherit(BI.Widget, {
 
     _setEnable: function (arg) {
         BI.Expander.superclass._setEnable.apply(this, arguments);
+        !arg && this.element.removeClass(this.options.hoverClass);
         !arg && this.isViewVisible() && this._hideView();
     },
 

@@ -105,15 +105,16 @@ BI.FloatBox = BI.inherit(BI.Widget, {
 
     populate: function (sectionProvider) {
         var self = this;
+        if (this.currentSectionProvider && this.currentSectionProvider !== sectionProvider) {
+            this.currentSectionProvider.destroy();
+        }
         this.currentSectionProvider = sectionProvider;
         sectionProvider.rebuildNorth(this._north);
         sectionProvider.rebuildCenter(this._center);
         sectionProvider.rebuildSouth(this._south);
-        if (sectionProvider instanceof BI.Widget) {
-            sectionProvider.on(BI.PopoverSection.EVENT_CLOSE, function () {
-                self.close();
-            })
-        }
+        sectionProvider.on(BI.PopoverSection.EVENT_CLOSE, function () {
+            self.close();
+        })
     },
 
     show: function () {
@@ -136,6 +137,10 @@ BI.FloatBox = BI.inherit(BI.Widget, {
 
     setZindex: function (zindex) {
         this.element.css({"z-index": zindex});
+    },
+
+    destroyed: function () {
+        this.currentSectionProvider && this.currentSectionProvider.destroy();
     }
 });
 

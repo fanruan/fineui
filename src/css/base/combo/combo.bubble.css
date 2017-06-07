@@ -1,7 +1,11 @@
 /****添加计算宽度的--运算符直接需要space****/
 /****** common color(常用颜色,可用于普遍场景) *****/
 /**** custom color(自定义颜色,用于特定场景) ****/
+.bi-bubble-combo .button-combo-triangle-wrapper {
+  position: fixed !important;
+}
 .bi-bubble-combo .bubble-combo-triangle-left {
+  z-index: 1;
   width: 0;
   height: 0;
   border-top: 6px solid transparent;
@@ -9,6 +13,7 @@
   border-bottom: 6px solid transparent;
 }
 .bi-bubble-combo .bubble-combo-triangle-right {
+  z-index: 1;
   width: 0;
   height: 0;
   border-top: 6px solid transparent;
@@ -16,6 +21,7 @@
   border-bottom: 6px solid transparent;
 }
 .bi-bubble-combo .bubble-combo-triangle-top {
+  z-index: 1;
   width: 0;
   height: 0;
   border-left: 6px solid transparent;
@@ -23,6 +29,7 @@
   border-top: 6px solid #3f8ce8;
 }
 .bi-bubble-combo .bubble-combo-triangle-bottom {
+  z-index: 1;
   width: 0;
   height: 0;
   border-left: 6px solid transparent;

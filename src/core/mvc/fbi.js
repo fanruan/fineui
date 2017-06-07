@@ -300,12 +300,9 @@
             return {}
         },
 
-        init: function () {
-        },
         // _init is an empty function by default. Override it with your own
         // initialization logic.
         _init: function () {
-            this.init();
         },
 
         // Return a copy of the model's `attributes` object.
@@ -1153,9 +1150,9 @@
         setVisible: function (visible) {
             this.options.invisible = !visible;
             if (visible) {
-                this.element.show();
+                this.element.css("display", "");
             } else {
-                this.element.hide();
+                this.element.css("display", "none");
             }
         },
 

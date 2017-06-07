@@ -2752,7 +2752,7 @@ BI.Arrangement = BI.inherit(BI.Widget, {
             case BI.Arrangement.LAYOUT_TYPE.ADAPTIVE:
                 if (this._isArrangeFine()) {
                     var width = this.getClientWidth(), height = this.getClientHeight();
-                    var isHeightAdjust = height > occupied.top + occupied.height;
+                    var isHeightAdjust = height > occupied.height;
                     var regions = this._cloneRegion();
                     BI.each(regions, function (i, region) {
                         region.width = region.width / occupied.width * width;
@@ -2934,7 +2934,7 @@ BI.Arrangement = BI.inherit(BI.Widget, {
 BI.Arrangement.EVENT_SCROLL = "EVENT_SCROLL";
 BI.extend(BI.Arrangement, {
     PORTION: 24,
-    GRID_HEIGHT: 50,
+    GRID_HEIGHT: 60,
     LAYOUT_TYPE: {
         ADAPTIVE: 0,
         FREE: 1,

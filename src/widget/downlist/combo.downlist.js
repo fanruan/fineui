@@ -56,6 +56,10 @@ BI.DownListCombo = BI.inherit(BI.Widget, {
         });
     },
 
+    hideView: function () {
+        this.downlistcombo.hideView();
+    },
+
     populate: function (items) {
         this.popupview.populate(items);
     },

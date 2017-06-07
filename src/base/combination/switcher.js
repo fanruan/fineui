@@ -28,15 +28,20 @@ BI.Switcher = BI.inherit(BI.Widget, {
         this._initSwitcher();
         this._initPullDownAction();
         this.switcher.on(BI.Controller.EVENT_CHANGE, function (type, value, obj) {
-            if (self.isEnabled() && this.isEnabled()) {
+            if (self.isEnabled() && self.isValid()) {
                 if (type === BI.Events.EXPAND) {
                     self._popupView();
                 }
                 if (type === BI.Events.COLLAPSE) {
                     self._hideView();
                 }
-                if (type === BI.Events.EXPAND || type === BI.Events.COLLAPSE) {
+                if (type === BI.Events.EXPAND) {
                     self.fireEvent(BI.Controller.EVENT_CHANGE, arguments);
+                    self.fireEvent(BI.Switcher.EVENT_EXPAND);
+                }
+                if (type === BI.Events.COLLAPSE) {
+                    self.fireEvent(BI.Controller.EVENT_CHANGE, arguments);
+                    self.isViewVisible() && self.fireEvent(BI.Switcher.EVENT_COLLAPSE);
                 }
                 if (type === BI.Events.CLICK) {
                     self.fireEvent(BI.Switcher.EVENT_TRIGGER_CHANGE, value, obj);

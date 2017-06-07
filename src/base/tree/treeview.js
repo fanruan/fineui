@@ -216,7 +216,7 @@ BI.TreeView = BI.inherit(BI.Pane, {
 
     _getNodeValue: function (node) {
         //去除标红
-        return node.value == null ? node.text.replace(/<[^>]+>/g, "") : node.value;
+        return node.value == null ? node.text.replace(/<[^>]+>/g, "").replaceAll("　", " ") : node.value;
     },
 
     //获取半选框值
@@ -436,6 +436,16 @@ BI.TreeView = BI.inherit(BI.Pane, {
     },
 
     checkAll: function (checked) {
+        function setNode(children) {
+            BI.each(children, function (i, child) {
+                child.halfCheck = false;
+                setNode(child.children);
+            });
+        }
+        BI.each(this.nodes.getNodes(), function (i, node) {
+            node.halfCheck = false;
+            setNode(node.children);
+        });
         this.nodes && this.nodes.checkAllNodes(checked);
     },
 
@@ -445,15 +455,13 @@ BI.TreeView = BI.inherit(BI.Pane, {
 
     //设置树节点的状态
     setValue: function (value, param) {
-        this.setSelectedValue(value);
         this.checkAll(false);
         this.updateValue(value, param);
         this.refresh();
     },
 
     setSelectedValue: function (value) {
-        this.options.paras.selectedValues = BI.deepClone(value) || {};
-        this.selectedValues = BI.deepClone(value) || {};
+        this.options.paras.selectedValues = BI.deepClone(value || {});
     },
 
     updateValue: function (values, param) {

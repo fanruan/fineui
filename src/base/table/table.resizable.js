@@ -22,6 +22,8 @@ BI.ResizableTable = BI.inherit(BI.Widget, {
             mergeCols: [],
             mergeRule: BI.emptyFn,
             columnSize: [],
+            minColumnSize: [],
+            maxColumnSize: [],
             freezeCols: [],
             header: [],
             items: [],
@@ -214,7 +216,13 @@ BI.ResizableTable = BI.inherit(BI.Widget, {
             self.resizer.setVisible(true);
             var height = o.headerRowSize + self._getRegionRowSize()[1];
             self.resizer.setHeight(height);
-
+            if (o.minColumnSize[j]) {
+                if (size === o.minColumnSize[j]) {
+                    self.resizer.element.addClass("suitable");
+                } else {
+                    self.resizer.element.removeClass("suitable");
+                }
+            }
             self._setResizerPosition(self._getResizerLeft(j) + size, (o.header.length - 1) * o.headerRowSize);
         };
         var stop = function (j, size) {
@@ -237,6 +245,8 @@ BI.ResizableTable = BI.inherit(BI.Widget, {
                         result[i][j] = {
                             type: "bi.resizable_table_cell",
                             cell: col,
+                            suitableSize: o.minColumnSize[i],
+                            maxSize: o.maxColumnSize[i],
                             resize: BI.bind(resize, null, j),
                             stop: BI.bind(stop, null, j)
                         };
@@ -246,6 +256,8 @@ BI.ResizableTable = BI.inherit(BI.Widget, {
                                 result[r - 1][j] = {
                                     type: "bi.resizable_table_cell",
                                     cell: result[r - 1][j],
+                                    suitableSize: o.minColumnSize[i],
+                                    maxSize: o.maxColumnSize[i],
                                     resize: BI.bind(resize, null, j),
                                     stop: BI.bind(stop, null, j)
                                 };

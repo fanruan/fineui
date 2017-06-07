@@ -15,6 +15,7 @@ BI.BubbleCombo = BI.inherit(BI.Widget, {
             toggle: true,
             direction: "bottom", //top||bottom||left||right||top,left||top,right||bottom,left||bottom,right
             isDefaultInit: false,
+            destroyWhenHide: false,
             isNeedAdjustHeight: true,//是否需要高度调整
             isNeedAdjustWidth: true,
             stopPropagation: false,
@@ -37,6 +38,7 @@ BI.BubbleCombo = BI.inherit(BI.Widget, {
             toggle: o.toggle,
             direction: o.direction,
             isDefaultInit: o.isDefaultInit,
+            destroyWhenHide: o.destroyWhenHide,
             isNeedAdjustHeight: o.isNeedAdjustHeight,
             isNeedAdjustWidth: o.isNeedAdjustWidth,
             adjustLength: this._getAdjustLength(),
@@ -87,37 +89,40 @@ BI.BubbleCombo = BI.inherit(BI.Widget, {
 
     _createTriangle: function (direction) {
         var pos = {}, op = {};
-        var adjustLength = this._getAdjustLength();
+        var adjustLength = this.options.adjustLength;
+        var offset = this.element.offset();
+        var left = offset.left, right = offset.left + this.element.outerWidth();
+        var top = offset.top, bottom = offset.top + this.element.outerHeight();
         switch (direction) {
             case "left":
                 pos = {
-                    top: 0,
-                    bottom: 0,
-                    left: -adjustLength
+                    top: top,
+                    height: this.element.outerHeight(),
+                    left: left - adjustLength - this._const.TRIANGLE_LENGTH
                 };
                 op = {width: this._const.TRIANGLE_LENGTH};
                 break;
             case "right":
                 pos = {
-                    top: 0,
-                    bottom: 0,
-                    right: -adjustLength
+                    top: top,
+                    height: this.element.outerHeight(),
+                    left: right + adjustLength
                 };
                 op = {width: this._const.TRIANGLE_LENGTH};
                 break;
             case "top":
                 pos = {
-                    left: 0,
-                    right: 0,
-                    top: -adjustLength
+                    left: left,
+                    width: this.element.outerWidth(),
+                    top: top - adjustLength - this._const.TRIANGLE_LENGTH
                 };
                 op = {height: this._const.TRIANGLE_LENGTH};
                 break;
             case "bottom":
                 pos = {
-                    left: 0,
-                    right: 0,
-                    bottom: -adjustLength
+                    left: left,
+                    width: this.element.outerWidth(),
+                    top: bottom + adjustLength
                 };
                 op = {height: this._const.TRIANGLE_LENGTH};
                 break;
@@ -126,6 +131,7 @@ BI.BubbleCombo = BI.inherit(BI.Widget, {
         }
         this.triangle = BI.createWidget(op, {
             type: "bi.center_adapt",
+            cls: "button-combo-triangle-wrapper",
             items: [{
                 type: "bi.layout",
                 cls: "bubble-combo-triangle-" + direction + " bi-high-light-border"
@@ -183,7 +189,7 @@ BI.BubbleCombo = BI.inherit(BI.Widget, {
 
     _hideTriangle: function () {
         this.triangle && this.triangle.destroy();
-        this.combo.getView().hideLine();
+        this.combo.getView() && this.combo.getView().hideLine();
     },
 
     hideView: function () {

@@ -11493,12 +11493,9 @@ BI.Factory = {
             return {}
         },
 
-        init: function () {
-        },
         // _init is an empty function by default. Override it with your own
         // initialization logic.
         _init: function () {
-            this.init();
         },
 
         // Return a copy of the model's `attributes` object.
@@ -12346,9 +12343,9 @@ BI.Factory = {
         setVisible: function (visible) {
             this.options.invisible = !visible;
             if (visible) {
-                this.element.show();
+                this.element.css("display", "");
             } else {
-                this.element.hide();
+                this.element.css("display", "none");
             }
         },
 
@@ -14200,6 +14197,7 @@ BI.OB = function (config) {
 $.extend(BI.OB.prototype, {
     props: {},
     init: null,
+    destroyed: null,
 
     _defaultConfig: function (config) {
         return {};
@@ -14319,6 +14317,11 @@ $.extend(BI.OB.prototype, {
             }
         }
         return true;
+    },
+
+    destroy: function () {
+        this.destroyed && this.destroyed();
+        this.purgeListeners();
     }
 });/**
  * Widget超类
@@ -14520,7 +14523,7 @@ BI.Widget = BI.inherit(BI.OB, {
         }
         //递归将所有子组件使能
         BI.each(this._children, function (i, child) {
-            child._setEnable && child._setEnable(enable);
+            !child._manualSetEnable && child._setEnable && child._setEnable(enable);
         });
     },
 
@@ -14532,11 +14535,20 @@ BI.Widget = BI.inherit(BI.OB, {
         }
         //递归将所有子组件使有效
         BI.each(this._children, function (i, child) {
-            child._setValid && child._setValid(valid);
+            !child._manualSetValid && child._setValid && child._setValid(valid);
         });
     },
 
+    _setVisible: function (visible) {
+        if (visible === true) {
+            this.options.invisible = false;
+        } else if (visible === false) {
+            this.options.invisible = true;
+        }
+    },
+
     setEnable: function (enable) {
+        this._manualSetEnable = true;
         this._setEnable(enable);
         if (enable === true) {
             this.element.removeClass("base-disabled disabled");
@@ -14546,20 +14558,19 @@ BI.Widget = BI.inherit(BI.OB, {
     },
 
     setVisible: function (visible) {
+        this._setVisible(visible);
         if (visible === true) {
-            this.options.invisible = false;
             //用this.element.show()会把display属性改成block
             this.element.css("display", "");
             this._mount();
         } else if (visible === false) {
-            this.options.invisible = true;
             this.element.css("display", "none");
         }
         this.fireEvent(BI.Events.VIEW, visible);
     },
 
     setValid: function (valid) {
-        this.options.invalid = !valid;
+        this._manualSetValid = true;
         this._setValid(valid);
         if (valid === true) {
             this.element.removeClass("base-invalid invalid");
@@ -14746,11 +14757,15 @@ BI.Widget = BI.inherit(BI.OB, {
         this.purgeListeners();
     }
 });BI.Model = BI.inherit(BI.M, {
+    props: {},
+    init: null,
+    destroyed: null,
+
     _defaultConfig: function () {
-        return {
+        return BI.extend({
             "default": "just a default",
             "current": void 0
-        }
+        }, this.props)
     },
 
     _static: function () {
@@ -14784,6 +14799,7 @@ BI.Widget = BI.inherit(BI.OB, {
         this._read = BI.debounce(BI.bind(this.fetch, this), 30);
         this._save = BI.debounce(BI.bind(this.save, this), 30);
         this._F = [];
+        this.init && this.init();
     },
 
     toJSON: function () {
@@ -15226,8 +15242,16 @@ BI.Widget = BI.inherit(BI.OB, {
  */
 BI.View = BI.inherit(BI.V, {
 
+    //生命周期函数
+    beforeCreate: null,
+
+    created: null,
+
+    destroyed: null,
+
     _init: function () {
         BI.View.superclass._init.apply(this, arguments);
+        this.beforeCreate && this.beforeCreate();
         var self = this;
         this.listenTo(this.model, "change:current", function (obj, val) {
             if (BI.isNotNull(val) && val.length > 0) {
@@ -15271,7 +15295,8 @@ BI.View = BI.inherit(BI.V, {
                     return f.apply(this, arguments);
                 }, self);
             }
-        })
+        });
+        this.created && this.created();
     },
 
     change: function (changed, prev) {
@@ -15716,7 +15741,7 @@ BI.View = BI.inherit(BI.V, {
         });
         delete this._cardLayouts;
         delete this._cards;
-        this.destroyed();
+        this.destroyed && this.destroyed();
         this.off();
     },
 
@@ -15726,14 +15751,10 @@ BI.View = BI.inherit(BI.V, {
         });
         delete this._cardLayouts;
         delete this._cards;
-        this.destroyed();
+        this.destroyed && this.destroyed();
         this.remove();
         this.trigger(BI.Events.DESTROY);
         this.off();
-    },
-
-    destroyed: function () {
-
     }
 });(function () {
 

@@ -160,7 +160,7 @@ BI.DynamicSummaryLayerTreeTable = BI.inherit(BI.Widget, {
     _recomputeColumnSize: function () {
         var o = this.options;
         o.regionColumnSize = this.table.getRegionColumnSize();
-        var columnSize = this.table.getColumnSize();
+        var columnSize = this.table.getColumnSize().slice();
         if (o.freezeCols.length > 1) {
             for (var i = 0; i < o.freezeCols.length - 1; i++) {
                 columnSize.splice(1, 0, 0);

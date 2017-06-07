@@ -12,7 +12,7 @@ BI.MultifileEditor = BI.inherit(BI.Single, {
         return BI.extend(conf, {
             baseCls: (conf.baseCls || "") + " bi-multifile-editor",
             multiple: false,
-            maxSize: 1024 * 1024,
+            maxSize: -1,//1024 * 1024
             accept: "",
             url: ""
         })

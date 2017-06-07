@@ -3742,7 +3742,7 @@ BI.Arrangement = BI.inherit(BI.Widget, {
             case BI.Arrangement.LAYOUT_TYPE.ADAPTIVE:
                 if (this._isArrangeFine()) {
                     var width = this.getClientWidth(), height = this.getClientHeight();
-                    var isHeightAdjust = height > occupied.top + occupied.height;
+                    var isHeightAdjust = height > occupied.height;
                     var regions = this._cloneRegion();
                     BI.each(regions, function (i, region) {
                         region.width = region.width / occupied.width * width;
@@ -3924,7 +3924,7 @@ BI.Arrangement = BI.inherit(BI.Widget, {
 BI.Arrangement.EVENT_SCROLL = "EVENT_SCROLL";
 BI.extend(BI.Arrangement, {
     PORTION: 24,
-    GRID_HEIGHT: 50,
+    GRID_HEIGHT: 60,
     LAYOUT_TYPE: {
         ADAPTIVE: 0,
         FREE: 1,
@@ -5638,6 +5638,10 @@ BI.DownListCombo = BI.inherit(BI.Widget, {
         });
     },
 
+    hideView: function () {
+        this.downlistcombo.hideView();
+    },
+
     populate: function (items) {
         this.popupview.populate(items);
     },
@@ -5788,7 +5792,7 @@ BI.shortcut("bi.down_list_item", BI.DownListItem);BI.DownListGroupItem = BI.inhe
             logic: {
                 dynamic: false
             },
-            invalid: true,
+            // invalid: true,
             iconCls1: "dot-e-font",
             iconCls2: "pull-right-e-font"
         })
@@ -5804,26 +5808,26 @@ BI.shortcut("bi.down_list_item", BI.DownListItem);BI.DownListGroupItem = BI.inhe
             text: o.text,
             value: o.value,
             height: o.height
-        })
+        });
 
         this.icon1 = BI.createWidget({
             type: "bi.icon_button",
             cls: o.iconCls1,
             width: 25,
             forceNotSelected: true
-        })
+        });
 
         this.icon2 = BI.createWidget({
             type: "bi.icon_button",
             cls: o.iconCls2,
             width: 25,
             forceNotSelected: true
-        })
+        });
 
         var blank = BI.createWidget({
             type: "bi.layout",
             width: 25
-        })
+        });
         BI.createWidget({
             type: "bi.absolute",
             element: this,
@@ -5833,7 +5837,7 @@ BI.shortcut("bi.down_list_item", BI.DownListItem);BI.DownListGroupItem = BI.inhe
                 bottom: 0,
                 right: 0
             }]
-        })
+        });
 
         BI.createWidget(BI.extend({
             element: this
@@ -5841,19 +5845,11 @@ BI.shortcut("bi.down_list_item", BI.DownListItem);BI.DownListGroupItem = BI.inhe
             items: BI.LogicFactory.createLogicItemsByDirection("left", this.icon1, this.text, blank)
         }))));
 
-        this.element.on("mouseenter." + this.getName(), function (e) {
-            if (self.element.__isMouseInBounds__(e) && self.isEnabled()) {
+        this.element.hover(function () {
+            if (self.isEnabled()) {
                 self.hover();
-            } else {
-                self.dishover();
             }
-        });
-        this.element.on("mousemove." + this.getName(), function (e) {
-            if (!self.element.__isMouseInBounds__(e) && self.isEnabled()) {
-                self.dishover()
-            }
-        });
-        this.element.on("mouseleave." + this.getName(), function () {
+        }, function () {
             if (self.isEnabled()) {
                 self.dishover()
             }
@@ -5891,11 +5887,11 @@ BI.shortcut("bi.down_list_item", BI.DownListItem);BI.DownListGroupItem = BI.inhe
     setValue: function (v) {
         var self = this, o = this.options;
         v = BI.isArray(v) ? v : [v];
-        BI.find(v, function(idx, value){
-            if(BI.contains(o.childValues, value)){
+        BI.find(v, function (idx, value) {
+            if (BI.contains(o.childValues, value)) {
                 self.icon1.setSelected(true);
                 return true;
-            }else{
+            } else {
                 self.icon1.setSelected(false);
             }
         })
@@ -11318,34 +11314,36 @@ BI.MultiSelectTree = BI.inherit(BI.Widget, {
             itemsCreator: o.itemsCreator
         });
         this.adapter.on(BI.MultiSelectTreePopup.EVENT_CHANGE, function () {
-            if (self.trigger.isSearching()) {
+            if (self.searcher.isSearching()) {
                 self.storeValue = {value: self.searcherPane.getValue()};
             } else {
                 self.storeValue = {value: self.adapter.getValue()};
             }
+            self.setSelectedValue(self.storeValue.value);
             self.fireEvent(BI.MultiSelectTree.EVENT_CHANGE);
         });
 
-        this.searcherPane = BI.createWidget({//搜索中的时候用的是parttree，同adapter中的synctree不一样
+        //搜索中的时候用的是parttree，同adapter中的synctree不一样
+        this.searcherPane = BI.createWidget({
             type: "bi.multi_tree_search_pane",
             cls: "bi-border-left bi-border-right bi-border-bottom",
             keywordGetter: function () {
-                return self.trigger.getKeyword();
+                return self.searcher.getKeyword();
             },
             itemsCreator: function (op, callback) {
-                op.keyword = self.trigger.getKeyword();
+                op.keyword = self.searcher.getKeyword();
                 o.itemsCreator(op, callback);
             }
         });
         this.searcherPane.setVisible(false);
 
-        this.trigger = BI.createWidget({
+        this.searcher = BI.createWidget({
             type: "bi.searcher",
             isAutoSearch: false,
             isAutoSync: false,
             onSearch: function (op, callback) {
                 callback({
-                    keyword: self.trigger.getKeyword()
+                    keyword: self.searcher.getKeyword()
                 });
             },
             adapter: this.adapter,
@@ -11355,15 +11353,15 @@ BI.MultiSelectTree = BI.inherit(BI.Widget, {
                 eventName: BI.Searcher.EVENT_START,
                 action: function () {
                     self._showSearcherPane();
-                    self.storeValue = {value: self.adapter.getValue()};
-                    self.searcherPane.setValue(self.storeValue);
+                    // self.storeValue = {value: self.adapter.getValue()};
+                    // self.searcherPane.setSelectedValue(self.storeValue.value);
                 }
             }, {
                 eventName: BI.Searcher.EVENT_STOP,
                 action: function () {
                     self._showAdapter();
                     // self.storeValue = {value: self.searcherPane.getValue()};
-                    self.adapter.setValue(self.storeValue);
+                    // self.adapter.setSelectedValue(self.storeValue.value);
                     BI.nextTick(function () {
                         self.adapter.populate();
                     });
@@ -11371,11 +11369,12 @@ BI.MultiSelectTree = BI.inherit(BI.Widget, {
             }, {
                 eventName: BI.Searcher.EVENT_CHANGE,
                 action: function () {
-                    if (self.trigger.isSearching()) {
+                    if (self.searcher.isSearching()) {
                         self.storeValue = {value: self.searcherPane.getValue()};
                     } else {
                         self.storeValue = {value: self.adapter.getValue()};
                     }
+                    self.setSelectedValue(self.storeValue.value);
                     self.fireEvent(BI.MultiSelectTree.EVENT_CHANGE);
                 }
             }, {
@@ -11390,7 +11389,7 @@ BI.MultiSelectTree = BI.inherit(BI.Widget, {
             type: "bi.vtape",
             element: this,
             items: [{
-                el: this.trigger,
+                el: this.searcher,
                 height: 30
             }, {
                 el: this.adapter,
@@ -11425,18 +11424,21 @@ BI.MultiSelectTree = BI.inherit(BI.Widget, {
 
     },
 
-    setValue: function (v) {
+    setSelectedValue: function (v) {
         this.storeValue.value = v || {};
-        this.adapter.setValue({
-            value: v || {}
-        });
-        this.trigger.setValue({
+        this.adapter.setSelectedValue(v);
+        this.searcherPane.setSelectedValue(v);
+        this.searcher.setValue({
             value: v || {}
         });
     },
 
+    setValue: function (v) {
+        this.adapter.setValue(v);
+    },
+
     stopSearch: function () {
-        this.trigger.stopSearch();
+        this.searcher.stopSearch();
     },
 
     updateValue: function (v) {
@@ -11448,7 +11450,7 @@ BI.MultiSelectTree = BI.inherit(BI.Widget, {
     },
 
     populate: function () {
-        this.trigger.populate.apply(this.trigger, arguments);
+        this.searcher.populate.apply(this.searcher, arguments);
         this.adapter.populate.apply(this.adapter, arguments);
     }
 });
@@ -11489,7 +11491,12 @@ BI.MultiSelectTreePopup = BI.inherit(BI.Widget, {
 
     setValue: function (v) {
         v || (v = {});
-        this.popup.setValue(v.value);
+        this.popup.setValue(v);
+    },
+
+    setSelectedValue: function (v) {
+        v || (v = {});
+        this.popup.setSelectedValue(v);
     },
 
     updateValue: function (v) {
@@ -11708,7 +11715,7 @@ BI.MultiTreeCombo = BI.inherit(BI.Single, {
                 }, {
                     eventName: BI.MultiTreePopup.EVENT_CLICK_CONFIRM,
                     action: function () {
-                        self._defaultState();
+                        self.combo.hideView();
                     }
                 }, {
                     eventName: BI.MultiTreePopup.EVENT_CLICK_CLEAR,
@@ -12016,8 +12023,12 @@ BI.MultiTreeSearchPane = BI.inherit(BI.Pane, {
     },
 
     setValue: function (v) {
+        this.setSelectedValue(v.value);
+    },
+
+    setSelectedValue: function (v) {
         v || (v = {});
-        this.partTree.setSelectedValue(v.value);
+        this.partTree.setSelectedValue(v);
     },
 
     getValue: function () {
@@ -17252,7 +17263,7 @@ BI.shortcut('bi.all_value_chooser_pane', BI.AllValueChooserPane);BI.AbstractTree
                 return;
             }
             BI.each(selected, function (k) {
-                var node = self._getNode(parentValues, k);
+                var node = self._getTreeNode(parentValues, k);
                 var newParents = BI.clone(parentValues);
                 newParents.push(node.value);
                 createOneJson(node, BI.last(parentValues), getCount(selected[k], newParents));
@@ -17284,7 +17295,7 @@ BI.shortcut('bi.all_value_chooser_pane', BI.AllValueChooserPane);BI.AbstractTree
 
     _reqSelectedTreeNode: function (op, callback) {
         var self = this;
-        var selectedValues = op.selectedValues;
+        var selectedValues = BI.deepClone(op.selectedValues);
         var notSelectedValue = op.notSelectedValue || {};
         var keyword = op.keyword || "";
         var parentValues = op.parentValues || [];
@@ -17299,12 +17310,34 @@ BI.shortcut('bi.all_value_chooser_pane', BI.AllValueChooserPane);BI.AbstractTree
 
 
         function dealWithSelectedValues(selectedValues) {
-            var p = BI.clone(parentValues);
-            p.push(notSelectedValue);
+            var p = parentValues.concat(notSelectedValue);
+            //存储的值中存在这个值就把它删掉
+            if (canFindKey(selectedValues, p)) {
+                //如果搜索的值在父亲链中
+                if (isSearchValueInParent(p)) {
+                    self._deleteNode(selectedValues, p);
+                } else {
+                    var searched = [];
+                    var finded = search(parentValues, notSelectedValue, [], searched);
+                    if (finded && BI.isNotEmptyArray(searched)) {
+                        BI.each(searched, function (i, arr) {
+                            self._deleteNode(selectedValues, arr);
+                        })
+                    }
+                }
+            }
 
+            //存储的值中不存在这个值，但父亲节点是全选的情况
             if (isChild(selectedValues, p)) {
-                var result = [];
-                var finded = search(parentValues.length + 1, parentValues, notSelectedValue, result);
+                var result = [], finded = false;
+                //如果parentValues中有匹配的值，说明搜索结果不在当前值下
+                if (isSearchValueInParent(p)) {
+                    finded = true;
+                } else {
+                    //从当前值开始搜
+                    finded = search(parentValues, notSelectedValue, result);
+                    p = parentValues;
+                }
 
                 if (finded === true) {
                     var next = selectedValues;
@@ -17340,10 +17373,11 @@ BI.shortcut('bi.all_value_chooser_pane', BI.AllValueChooserPane);BI.AbstractTree
 
         }
 
-        function search(deep, parents, current, result) {
+        function search(parents, current, result, searched) {
             var newParents = BI.clone(parents);
             newParents.push(current);
             if (self._isMatch(current, keyword)) {
+                searched && searched.push(newParents);
                 return true;
             }
 
@@ -17353,7 +17387,7 @@ BI.shortcut('bi.all_value_chooser_pane', BI.AllValueChooserPane);BI.AbstractTree
             var can = false;
 
             BI.each(children, function (i, child) {
-                if (search(deep + 1, newParents, child.value, result)) {
+                if (search(newParents, child.value, result, searched)) {
                     can = true;
                 } else {
                     notSearch.push(child.value);
@@ -17369,6 +17403,27 @@ BI.shortcut('bi.all_value_chooser_pane', BI.AllValueChooserPane);BI.AbstractTree
             return can;
         }
 
+        function isSearchValueInParent(parentValues) {
+            for (var i = 0, len = parentValues.length; i < len; i++) {
+                if (self._isMatch(parentValues[i], keyword)) {
+                    return true;
+                }
+            }
+            return false;
+        }
+
+        function canFindKey(selectedValues, parents) {
+            var t = selectedValues;
+            for (var i = 0; i < parents.length; i++) {
+                var v = parents[i];
+                t = t[v];
+                if (t == null) {
+                    return false;
+                }
+            }
+            return true;
+        }
+
         function isChild(selectedValues, parents) {
             var t = selectedValues;
             for (var i = 0; i < parents.length; i++) {
@@ -17377,11 +17432,11 @@ BI.shortcut('bi.all_value_chooser_pane', BI.AllValueChooserPane);BI.AbstractTree
                     return false;
                 }
                 t = t[v];
-                if (t == null || BI.isEmpty(t)) {
+                if (BI.isEmpty(t)) {
                     return true;
                 }
             }
-            return true;
+            return false;
         }
     },
 
@@ -17505,7 +17560,7 @@ BI.shortcut('bi.all_value_chooser_pane', BI.AllValueChooserPane);BI.AbstractTree
         }
 
         function createOneJson(parentValues, value, isOpen, checked, half, flag, result) {
-            var node = self._getNode(parentValues, value)
+            var node = self._getTreeNode(parentValues, value)
             result.push({
                 id: node.id,
                 pId: node.pId,
@@ -17582,11 +17637,11 @@ BI.shortcut('bi.all_value_chooser_pane', BI.AllValueChooserPane);BI.AbstractTree
         var times = op.times;
         var checkState = op.checkState || {};
         var parentValues = op.parentValues || [];
-        var selectedValues = op.selectedValues;
+        var selectedValues = op.selectedValues || {};
         var valueMap = {};
-        if (judgeState(parentValues, selectedValues, checkState)) {
-            valueMap = dealWidthSelectedValue(parentValues, selectedValues);
-        }
+        // if (judgeState(parentValues, selectedValues, checkState)) {
+        valueMap = dealWidthSelectedValue(parentValues, selectedValues);
+        // }
         var nodes = this._getChildren(parentValues);
         for (var i = (times - 1) * this._const.perPage; nodes[i] && i < times * this._const.perPage; i++) {
             var state = getCheckState(nodes[i].value, parentValues, valueMap, checkState);
@@ -17619,7 +17674,7 @@ BI.shortcut('bi.all_value_chooser_pane', BI.AllValueChooserPane);BI.AbstractTree
         function dealWidthSelectedValue(parentValues, selectedValues) {
             var valueMap = {};
             BI.each(parentValues, function (i, v) {
-                selectedValues = selectedValues[v];
+                selectedValues = selectedValues[v] || {};
             });
             BI.each(selectedValues, function (value, obj) {
                 if (BI.isNull(obj)) {
@@ -17667,6 +17722,32 @@ BI.shortcut('bi.all_value_chooser_pane', BI.AllValueChooserPane);BI.AbstractTree
         }
     },
 
+    _getNode: function (selectedValues, parentValues) {
+        var pNode = selectedValues;
+        for (var i = 0, len = parentValues.length; i < len; i++) {
+            if (pNode == null) {
+                return null;
+            }
+            pNode = pNode[parentValues[i]];
+        }
+        return pNode;
+    },
+
+    _deleteNode: function (selectedValues, values) {
+        var name = values[values.length - 1];
+        var p = values.slice(0, values.length - 1);
+        var pNode = this._getNode(selectedValues, p);
+        if (pNode[name]) {
+            delete pNode[name];
+            //递归删掉空父节点
+            while (p.length > 0 && BI.isEmpty(pNode)) {
+                name = p[p.length - 1];
+                p = p.slice(0, p.length - 1);
+                pNode = this._getNode(selectedValues, p);
+                delete pNode[name];
+            }
+        }
+    },
 
     _buildTree: function (jo, values) {
         var t = jo;
@@ -17683,7 +17764,7 @@ BI.shortcut('bi.all_value_chooser_pane', BI.AllValueChooserPane);BI.AbstractTree
         return finded.finded.length > 0 || finded.matched.length > 0;
     },
 
-    _getNode: function (parentValues, v) {
+    _getTreeNode: function (parentValues, v) {
         var self = this;
         var findedParentNode;
         var index = 0;
@@ -17710,7 +17791,7 @@ BI.shortcut('bi.all_value_chooser_pane', BI.AllValueChooserPane);BI.AbstractTree
     _getChildren: function (parentValues) {
         if (parentValues.length > 0) {
             var value = BI.last(parentValues);
-            var parent = this._getNode(parentValues.slice(0, parentValues.length - 1), value);
+            var parent = this._getTreeNode(parentValues.slice(0, parentValues.length - 1), value);
         } else {
             var parent = this.tree.getRoot();
         }
@@ -17804,6 +17885,10 @@ BI.TreeValueChooserPane = BI.inherit(BI.AbstractTreeValueChooser, {
             this._initData(o.items);
             this.populate();
         }
+    },
+
+    setSelectedValue: function (v) {
+        this.pane.setSelectedValue(v);
     },
 
     setValue: function (v) {
