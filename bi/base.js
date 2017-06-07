@@ -710,7 +710,7 @@ BI.BasicButton = BI.inherit(BI.Single, {
                         $(document).bind("mouseup." + self.getName(), function (e) {
                             // if (e.button === 0) {
                             if (BI.DOM.isExist(self) && !hand.__isMouseInBounds__(e) && mouseDown === true && !selected) {
-                                self.setSelected(!self.isSelected());
+                                // self.setSelected(!self.isSelected());
                                 self._trigger();
                             }
                             mouseDown = false;
