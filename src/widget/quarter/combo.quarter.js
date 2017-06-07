@@ -9,6 +9,7 @@ BI.QuarterCombo = BI.inherit(BI.Widget, {
     _defaultConfig: function () {
         return BI.extend(BI.QuarterCombo.superclass._defaultConfig.apply(this, arguments), {
             baseCls: "bi-quarter-combo",
+            behaviors: {},
             height: 25
         });
     },
@@ -29,24 +30,25 @@ BI.QuarterCombo = BI.inherit(BI.Widget, {
         this.trigger.on(BI.QuarterTrigger.EVENT_START, function () {
             self.combo.isViewVisible() && self.combo.hideView();
         });
-        this.trigger.on(BI.QuarterTrigger.EVENT_STOP, function(){
+        this.trigger.on(BI.QuarterTrigger.EVENT_STOP, function () {
             if (!self.combo.isViewVisible()) {
                 self.combo.showView();
             }
         });
         this.trigger.on(BI.QuarterTrigger.EVENT_CONFIRM, function () {
-            if(self.combo.isViewVisible()) {
+            if (self.combo.isViewVisible()) {
                 return;
             }
-            if(this.getKey() && this.getKey() !== self.storeValue) {
+            if (this.getKey() && this.getKey() !== self.storeValue) {
                 self.setValue(this.getKey());
-            }else if(!this.getKey()){
+            } else if (!this.getKey()) {
                 self.setValue();
             }
             self.fireEvent(BI.QuarterCombo.EVENT_CONFIRM);
         });
         this.popup = BI.createWidget({
-            type: "bi.quarter_popup"
+            type: "bi.quarter_popup",
+            behaviors: o.behaviors
         });
 
         this.popup.on(BI.QuarterPopup.EVENT_CHANGE, function () {
@@ -66,6 +68,9 @@ BI.QuarterCombo = BI.inherit(BI.Widget, {
                 el: this.popup
             }
         });
+        this.combo.on(BI.Combo.EVENT_BEFORE_POPUPVIEW, function () {
+            self.fireEvent(BI.QuarterCombo.EVENT_BEFORE_POPUPVIEW);
+        });
     },
 
     setValue: function (v) {
@@ -79,4 +84,5 @@ BI.QuarterCombo = BI.inherit(BI.Widget, {
 });
 
 BI.QuarterCombo.EVENT_CONFIRM = "EVENT_CONFIRM";
+BI.QuarterCombo.EVENT_BEFORE_POPUPVIEW = "EVENT_BEFORE_POPUPVIEW";
 BI.shortcut('bi.quarter_combo', BI.QuarterCombo);

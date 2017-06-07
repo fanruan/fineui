@@ -375,11 +375,6 @@ BI.Combo = BI.inherit(BI.Widget, {
         return this.position;
     },
 
-    doBehavior: function () {
-        this._assertPopupView();
-        this.popupView && this.popupView.doBehavior.apply(this.popupView, arguments);
-    },
-
     toggle: function () {
         this._toggle();
     },

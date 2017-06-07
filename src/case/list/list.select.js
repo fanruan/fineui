@@ -164,10 +164,6 @@ BI.SelectList = BI.inherit(BI.Widget, {
             this.list.element.css({"max-height": h - toolHeight + "px"})
     },
 
-    doBehavior: function () {
-        this.list.doBehavior.apply(this.list, arguments);
-    },
-
     setNotSelectedValue: function () {
         this.list.setNotSelectedValue.apply(this.list, arguments);
         this._checkAllSelected();

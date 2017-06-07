@@ -239,11 +239,6 @@ BI.Switcher = BI.inherit(BI.Widget, {
         this.isViewVisible() && BI.Maskers.show(this.getName());
     },
 
-    doBehavior: function () {
-        this._assertPopupView();
-        this.popupView && this.popupView.doBehavior.apply(this.popupView, arguments);
-    },
-
     getAllLeaves: function () {
         return this.popupView && this.popupView.getAllLeaves();
     },

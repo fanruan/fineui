@@ -4577,6 +4577,14 @@ BI.Widget = BI.inherit(BI.OB, {
         }
     },
 
+    doBehavior: function () {
+        var args = arguments;
+        //递归将所有子组件使有效
+        BI.each(this._children, function (i, child) {
+            child.doBehavior && child.doBehavior.apply(child, args);
+        });
+    },
+
     getWidth: function () {
         return this.options.width;
     },
@@ -10973,26 +10981,34 @@ BI.Behavior = BI.inherit(BI.OB, {
  * @extends BI.Behavior
  */
 BI.HighlightBehavior = BI.inherit(BI.Behavior, {
-    _defaultConfig: function() {
-        return BI.extend(BI.HighlightBehavior.superclass._defaultConfig.apply(this, arguments), {
-
-        });
+    _defaultConfig: function () {
+        return BI.extend(BI.HighlightBehavior.superclass._defaultConfig.apply(this, arguments), {});
     },
 
-    _init : function() {
+    _init: function () {
         BI.HighlightBehavior.superclass._init.apply(this, arguments);
 
     },
 
-    doBehavior: function(items){
+    doBehavior: function (items) {
         var args = Array.prototype.slice.call(arguments, 1),
             o = this.options;
-        BI.each(items, function(i, item){
-            if(item instanceof BI.Single) {
-                if (o.rule(item.getValue(), item)) {
-                    item.doHighLight.apply(item, args);
+        BI.each(items, function (i, item) {
+            if (item instanceof BI.Single) {
+                var rule = o.rule(item.getValue(), item);
+
+                function doBe(run) {
+                    if (run === true) {
+                        item.doHighLight.apply(item, args);
+                    } else {
+                        item.unHighLight.apply(item, args);
+                    }
+                }
+
+                if (BI.isFunction(rule)) {
+                    rule(doBe);
                 } else {
-                    item.unHighLight.apply(item, args);
+                    doBe(rule);
                 }
             } else {
                 item.doBehavior.apply(item, args);

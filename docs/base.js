@@ -3264,11 +3264,6 @@ BI.Combo = BI.inherit(BI.Widget, {
         return this.position;
     },
 
-    doBehavior: function () {
-        this._assertPopupView();
-        this.popupView && this.popupView.doBehavior.apply(this.popupView, arguments);
-    },
-
     toggle: function () {
         this._toggle();
     },
@@ -3530,11 +3525,6 @@ BI.Expander = BI.inherit(BI.Widget, {
 
     getView: function () {
         return this.popupView;
-    },
-
-    doBehavior: function () {
-        //this._assertPopupView();
-        this.popupView && this.popupView.doBehavior.apply(this.popupView, arguments);
     },
 
     getAllLeaves: function () {
@@ -3944,10 +3934,6 @@ BI.Loader = BI.inherit(BI.Widget, {
             }
         }
         this.button_group.populate.apply(this.button_group, arguments);
-    },
-
-    doBehavior: function () {
-        this.button_group.doBehavior.apply(this.button_group, arguments);
     },
 
     setNotSelectedValue: function () {
@@ -4702,11 +4688,6 @@ BI.Switcher = BI.inherit(BI.Widget, {
 
     adjustView: function () {
         this.isViewVisible() && BI.Maskers.show(this.getName());
-    },
-
-    doBehavior: function () {
-        this._assertPopupView();
-        this.popupView && this.popupView.doBehavior.apply(this.popupView, arguments);
     },
 
     getAllLeaves: function () {
@@ -19638,7 +19619,7 @@ BI.Label = BI.inherit(BI.Single, {
         }
         if (o.whiteSpace == "normal") {
             this.text = BI.createWidget(json);
-            this.text = BI.createWidget({
+            BI.createWidget({
                 type: "bi.center_adapt",
                 hgap: o.hgap,
                 vgap: o.vgap,
@@ -19836,7 +19817,7 @@ BI.Label = BI.inherit(BI.Single, {
         }
         if (o.whiteSpace == "normal") {
             this.text = BI.createWidget(json)
-            this.text = BI.createWidget({
+            BI.createWidget({
                 type: "bi.vertical_adapt",
                 scrollable: o.whiteSpace === "normal",
                 hgap: o.hgap,
@@ -33017,10 +32998,6 @@ BI.CustomTree = BI.inherit(BI.Widget, {
             args[0] = this._formatItems(nodes);
         }
         this.tree.populate.apply(this.tree, args);
-    },
-
-    doBehavior: function () {
-        this.tree.doBehavior.apply(this.tree, arguments);
     },
 
     setValue: function (v) {

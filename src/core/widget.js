@@ -254,6 +254,14 @@ BI.Widget = BI.inherit(BI.OB, {
         }
     },
 
+    doBehavior: function () {
+        var args = arguments;
+        //递归将所有子组件使有效
+        BI.each(this._children, function (i, child) {
+            child.doBehavior && child.doBehavior.apply(child, args);
+        });
+    },
+
     getWidth: function () {
         return this.options.width;
     },

@@ -10,6 +10,7 @@ BI.YearPopup = BI.inherit(BI.Widget, {
     _defaultConfig: function () {
         return BI.extend(BI.YearPopup.superclass._defaultConfig.apply(this, arguments), {
             baseCls: "bi-year-popup",
+            behaviors: {},
             min: '1900-01-01', //最小日期
             max: '2099-12-31' //最大日期
         });
@@ -20,6 +21,7 @@ BI.YearPopup = BI.inherit(BI.Widget, {
 
         var calendar = BI.createWidget({
             type: "bi.year_calendar",
+            behaviors: o.behaviors,
             min: o.min,
             max: o.max,
             logic: {
@@ -56,11 +58,12 @@ BI.YearPopup = BI.inherit(BI.Widget, {
         this.navigation = BI.createWidget({
             type: "bi.navigation",
             element: this,
+            single: true,
             logic: {
                 dynamic: true
             },
             tab: {
-                cls: "year-popup-navigation bi-border-top",
+                cls: "year-popup-navigation bi-high-light bi-border-top",
                 height: 25,
                 items: [backBtn, preBtn]
             },
