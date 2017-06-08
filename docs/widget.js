@@ -4217,7 +4217,7 @@ BI.BranchRelation = BI.inherit(BI.Widget, {
                             if (end.length > 0) {
                                 path += "M" + BI.first(end).x + "," + split + "L" + BI.last(end).x + "," + split;
                             }
-                            self.svg.path(path).attr("stroke", "gray");
+                            self.svg.path(path).attr("stroke", "#d4dadd");
                         }
                     })
                 });
@@ -4238,7 +4238,7 @@ BI.BranchRelation = BI.inherit(BI.Widget, {
                             if (end.length > 0) {
                                 path += "M" + BI.first(end).x + "," + split + "L" + BI.last(end).x + "," + split;
                             }
-                            self.svg.path(path).attr("stroke", "gray");
+                            self.svg.path(path).attr("stroke", "#d4dadd");
                         }
                     })
                 });
@@ -4259,7 +4259,7 @@ BI.BranchRelation = BI.inherit(BI.Widget, {
                             if (end.length > 0) {
                                 path += "M" + split + "," + BI.first(end).x + "L" + split + "," + BI.last(end).x;
                             }
-                            self.svg.path(path).attr("stroke", "gray");
+                            self.svg.path(path).attr("stroke", "#d4dadd");
                         }
                     })
                 });
@@ -4280,7 +4280,7 @@ BI.BranchRelation = BI.inherit(BI.Widget, {
                             if (end.length > 0) {
                                 path += "M" + split + "," + BI.first(end).x + "L" + split + "," + BI.last(end).x;
                             }
-                            self.svg.path(path).attr("stroke", "gray");
+                            self.svg.path(path).attr("stroke", "#d4dadd");
                         }
                     })
                 });
@@ -13106,8 +13106,8 @@ BI.shortcut('bi.page_table', BI.PageTable);/**
 BI.PathChooser = BI.inherit(BI.Widget, {
 
     _const: {
-        lineColor: "#c4c6c6",
-        selectLineColor: "#009de3"
+        lineColor: "#d4dadd",
+        selectLineColor: "#3f8ce8"
     },
 
     _defaultConfig: function () {

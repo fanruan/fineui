@@ -8,8 +8,8 @@
 BI.PathChooser = BI.inherit(BI.Widget, {
 
     _const: {
-        lineColor: "#c4c6c6",
-        selectLineColor: "#009de3"
+        lineColor: "#d4dadd",
+        selectLineColor: "#3f8ce8"
     },
 
     _defaultConfig: function () {
