@@ -12389,6 +12389,7 @@ BI.TextTrigger = BI.inherit(BI.Trigger, {
         });
         this.trigerButton = BI.createWidget({
             type: "bi.trigger_icon_button",
+            cls: "bi-border-left",
             width: c.triggerWidth
         });
 

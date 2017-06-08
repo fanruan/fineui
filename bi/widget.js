@@ -12279,8 +12279,8 @@ BI.NumericalInterval = BI.inherit(BI.Single, {
         var conf = BI.NumericalInterval.superclass._defaultConfig.apply(this, arguments)
         return BI.extend(conf, {
             extraCls: "bi-numerical-interval",
-            height: 25
-
+            height: 25,
+            validation: "valid"
         })
     },
     _init: function () {
