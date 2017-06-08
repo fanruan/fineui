@@ -144,7 +144,7 @@
             if (numReg) {
                 var num = numReg[0];
                 var orilen = num.length;
-                var newnum = BI.parseInt(num) + 1 + '';
+                var newnum = parseInt(num) + 1 + '';
                 //进位到整数部分
                 if (newnum.length > orilen) {
                     newnum = newnum.substr(1);
