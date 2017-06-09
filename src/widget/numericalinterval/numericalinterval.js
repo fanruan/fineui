@@ -425,8 +425,7 @@ BI.NumericalInterval = BI.inherit(BI.Single, {
         })
     },
 
-
-    isValid: function () {
+    isStateValid: function () {
         return this.options.validation === "valid";
     },
 
