@@ -8,6 +8,8 @@ BI.YearQuarterCombo = BI.inherit(BI.Widget, {
     _defaultConfig: function () {
         return BI.extend(BI.YearQuarterCombo.superclass._defaultConfig.apply(this, arguments), {
             baseCls: "bi-year-quarter-combo",
+            yearBehaviors: {},
+            quarterBehaviors: {},
             height: 25
         });
     },
@@ -16,19 +18,27 @@ BI.YearQuarterCombo = BI.inherit(BI.Widget, {
         var self = this, o = this.options;
 
         this.year = BI.createWidget({
-            type: "bi.year_combo"
+            type: "bi.year_combo",
+            behaviors: o.yearBehaviors
         });
 
         this.quarter = BI.createWidget({
-            type: "bi.quarter_combo"
+            type: "bi.quarter_combo",
+            behaviors: o.quarterBehaviors
         });
 
-        this.year.on(BI.YearCombo.EVENT_CONFIRM, function(){
+        this.year.on(BI.YearCombo.EVENT_CONFIRM, function () {
             self.fireEvent(BI.YearQuarterCombo.EVENT_CONFIRM);
         });
+        this.year.on(BI.YearCombo.EVENT_BEFORE_POPUPVIEW, function () {
+            self.fireEvent(BI.YearQuarterCombo.EVENT_BEFORE_POPUPVIEW);
+        });
 
-        this.quarter.on(BI.QuarterCombo.EVENT_CONFIRM, function(){
+        this.quarter.on(BI.QuarterCombo.EVENT_CONFIRM, function () {
             self.fireEvent(BI.YearQuarterCombo.EVENT_CONFIRM);
+        });
+        this.quarter.on(BI.QuarterCombo.EVENT_BEFORE_POPUPVIEW, function () {
+            self.fireEvent(BI.YearQuarterCombo.EVENT_BEFORE_POPUPVIEW);
         });
 
         BI.createWidget({
@@ -54,4 +64,5 @@ BI.YearQuarterCombo = BI.inherit(BI.Widget, {
     }
 });
 BI.YearQuarterCombo.EVENT_CONFIRM = "EVENT_CONFIRM";
+BI.YearQuarterCombo.EVENT_BEFORE_POPUPVIEW = "EVENT_BEFORE_POPUPVIEW";
 BI.shortcut('bi.year_quarter_combo', BI.YearQuarterCombo);

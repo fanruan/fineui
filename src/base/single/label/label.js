@@ -147,7 +147,7 @@ BI.Label = BI.inherit(BI.Single, {
         }
         if (o.whiteSpace == "normal") {
             this.text = BI.createWidget(json);
-            this.text = BI.createWidget({
+            BI.createWidget({
                 type: "bi.center_adapt",
                 hgap: o.hgap,
                 vgap: o.vgap,
@@ -345,7 +345,7 @@ BI.Label = BI.inherit(BI.Single, {
         }
         if (o.whiteSpace == "normal") {
             this.text = BI.createWidget(json)
-            this.text = BI.createWidget({
+            BI.createWidget({
                 type: "bi.vertical_adapt",
                 scrollable: o.whiteSpace === "normal",
                 hgap: o.hgap,

@@ -235,11 +235,6 @@ BI.Expander = BI.inherit(BI.Widget, {
         return this.popupView;
     },
 
-    doBehavior: function () {
-        //this._assertPopupView();
-        this.popupView && this.popupView.doBehavior.apply(this.popupView, arguments);
-    },
-
     getAllLeaves: function () {
         return this.popupView && this.popupView.getAllLeaves();
     },

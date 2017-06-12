@@ -214,7 +214,8 @@ BI.Arrangement = BI.inherit(BI.Widget, {
                                 findBottomRegions.push(region);
                             }
                         });
-                        var topValid = isRegionsValid(findTopRegions, "top"), bottomValid = isRegionsValid(findBottomRegions, "bottom");
+                        var topValid = isRegionsValid(findTopRegions, "top"),
+                            bottomValid = isRegionsValid(findBottomRegions, "bottom");
                         if (topValid && bottomValid) {
                             BI.each(findTopRegions, function (i, region) {
                                 var clone = BI.clone(region);
@@ -257,7 +258,8 @@ BI.Arrangement = BI.inherit(BI.Widget, {
                                     findRightRegions.push(region);
                                 }
                             });
-                            var leftValid = isRegionsValid(findLeftRegions, "left"), rightValid = isRegionsValid(findRightRegions, "right");
+                            var leftValid = isRegionsValid(findLeftRegions, "left"),
+                                rightValid = isRegionsValid(findRightRegions, "right");
                             if (leftValid && rightValid) {
                                 BI.each(findLeftRegions, function (i, region) {
                                     var clone = BI.clone(region);
@@ -2688,8 +2690,9 @@ BI.Arrangement = BI.inherit(BI.Widget, {
         this.resize();
     },
 
-    scrollTo: function (top) {
-        this.scrollContainer.element.scrollTop(top);
+    scrollTo: function (scroll) {
+        this.scrollContainer.element.scrollTop(scroll.top);
+        this.scrollContainer.element.scrollLeft(scroll.left);
     },
 
     zoom: function (ratio) {
@@ -2700,6 +2703,7 @@ BI.Arrangement = BI.inherit(BI.Widget, {
         var occupied = this._applyContainer();
         switch (this.getLayoutType()) {
             case BI.Arrangement.LAYOUT_TYPE.ADAPTIVE:
+            case BI.Arrangement.LAYOUT_TYPE.FREE:
                 if (this._isArrangeFine()) {
                     var width = this.getClientWidth();
                     var xRatio = (ratio.x || 1) * width / (occupied.left + occupied.width);
@@ -2719,8 +2723,6 @@ BI.Arrangement = BI.inherit(BI.Widget, {
                     // } else {
                     this.relayout();
                 }
-                break;
-            case BI.Arrangement.LAYOUT_TYPE.FREE:
                 break;
             case BI.Arrangement.LAYOUT_TYPE.GRID:
                 if (this._isArrangeFine()) {

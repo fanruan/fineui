@@ -1820,6 +1820,7 @@ BI.YearCalendar = BI.inherit(BI.Widget, {
         var conf = BI.YearCalendar.superclass._defaultConfig.apply(this, arguments);
         return BI.extend(conf, {
             baseCls: "bi-year-calendar",
+            behaviors: {},
             logic: {
                 dynamic: false
             },
@@ -1884,6 +1885,7 @@ BI.YearCalendar = BI.inherit(BI.Widget, {
 
         this.years = BI.createWidget({
             type: "bi.button_group",
+            behaviors: o.behaviors,
             items: BI.createItems(items, {}),
             layouts: [BI.LogicFactory.createLogic("table", BI.extend({}, o.logic, {
                 columns: 2,
@@ -8360,10 +8362,6 @@ BI.ListPane = BI.inherit(BI.Pane, {
         this.button_group.empty();
     },
 
-    doBehavior: function () {
-        this.button_group.doBehavior.apply(this.button_group, arguments);
-    },
-
     setNotSelectedValue: function () {
         this.button_group.setNotSelectedValue.apply(this.button_group, arguments);
     },
@@ -8653,10 +8651,6 @@ BI.SelectList = BI.inherit(BI.Widget, {
             this.list.element.css({"max-height": h - toolHeight + "px"})
     },
 
-    doBehavior: function () {
-        this.list.doBehavior.apply(this.list, arguments);
-    },
-
     setNotSelectedValue: function () {
         this.list.setNotSelectedValue.apply(this.list, arguments);
         this._checkAllSelected();
@@ -8749,10 +8743,6 @@ BI.LazyLoader = BI.inherit(BI.Widget, {
 
     empty: function () {
         this.loader.empty();
-    },
-
-    doBehavior: function () {
-        this.loader.doBehavior();
     },
 
     setNotSelectedValue: function () {
@@ -8950,10 +8940,6 @@ BI.ListLoader = BI.inherit(BI.Widget, {
         });
     },
 
-    doBehavior: function () {
-        this.button_group.doBehavior.apply(this.button_group, arguments);
-    },
-
     setNotSelectedValue: function () {
         this.button_group.setNotSelectedValue.apply(this.button_group, arguments);
     },
@@ -9120,10 +9106,6 @@ BI.SortList = BI.inherit(BI.Widget, {
 
     empty: function () {
         this.loader.empty();
-    },
-
-    doBehavior: function () {
-        this.loader.doBehavior.apply(this.loader, arguments);
     },
 
     setNotSelectedValue: function () {
@@ -12126,10 +12108,6 @@ BI.LevelTree = BI.inherit(BI.Widget, {
         this.tree.populate(items);
     },
 
-    doBehavior: function () {
-        this.tree.doBehavior.apply(this.tree, arguments);
-    },
-
     setValue: function (v) {
         this.tree.setValue(v);
     },
@@ -12411,6 +12389,7 @@ BI.TextTrigger = BI.inherit(BI.Trigger, {
         });
         this.trigerButton = BI.createWidget({
             type: "bi.trigger_icon_button",
+            cls: "bi-border-left",
             width: c.triggerWidth
         });
 

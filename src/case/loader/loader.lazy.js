@@ -54,10 +54,6 @@ BI.LazyLoader = BI.inherit(BI.Widget, {
         this.loader.empty();
     },
 
-    doBehavior: function () {
-        this.loader.doBehavior();
-    },
-
     setNotSelectedValue: function () {
         this.loader.setNotSelectedValue.apply(this.loader, arguments);
     },

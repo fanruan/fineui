@@ -37,6 +37,8 @@ BI.Widget = BI.inherit(BI.OB, {
     update: function () {
     },
 
+    beforeDestroyed: null,
+
     destroyed: null,
 
     _init: function () {
@@ -254,6 +256,14 @@ BI.Widget = BI.inherit(BI.OB, {
         }
     },
 
+    doBehavior: function () {
+        var args = arguments;
+        //递归将所有子组件使有效
+        BI.each(this._children, function (i, child) {
+            child.doBehavior && child.doBehavior.apply(child, args);
+        });
+    },
+
     getWidth: function () {
         return this.options.width;
     },
@@ -388,18 +398,20 @@ BI.Widget = BI.inherit(BI.OB, {
     },
 
     __d: function () {
+        this.beforeDestroyed && this.beforeDestroyed();
         BI.each(this._children, function (i, widget) {
             widget._unMount && widget._unMount();
         });
         this._children = {};
         this._parent = null;
         this._isMounted = false;
+        this.destroyed && this.destroyed();
     },
 
     _unMount: function () {
         this.__d();
+        this.fireEvent(BI.Events.UNMOUNT);
         this.purgeListeners();
-        this.destroyed && this.destroyed();
     },
 
     isolate: function () {
@@ -419,14 +431,12 @@ BI.Widget = BI.inherit(BI.OB, {
 
     _destroy: function () {
         this.__d();
-        this.destroyed && this.destroyed();
         this.element.destroy();
         this.purgeListeners();
     },
 
     destroy: function () {
         this.__d();
-        this.destroyed && this.destroyed();
         this.element.destroy();
         this.fireEvent(BI.Events.DESTROY);
         this.purgeListeners();

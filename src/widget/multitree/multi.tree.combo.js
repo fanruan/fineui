@@ -105,6 +105,9 @@ BI.MultiTreeCombo = BI.inherit(BI.Single, {
                         self.trigger.getSearcher().adjustView();
                     });
                 }
+            },
+            hideChecker: function (e) {
+                return triggerBtn.element.find(e.target).length === 0;
             }
         });
 

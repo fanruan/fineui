@@ -55,6 +55,12 @@ _.extend(BI, {
 
         /**
          * @static
+         * @property 取消挂载事件
+         */
+        UNMOUNT: '_UNMOUNT',
+
+        /**
+         * @static
          * @property 清除选择
          */
         CLEAR: '_CLEAR',

@@ -56,8 +56,8 @@ BI.AdaptiveArrangement = BI.inherit(BI.Widget, {
                         width: ui.size.width,
                         height: height
                     });
-                    self.arrangement.scrollTo(height);
-                }, 500);
+                    self.arrangement.scrollTo({top: height});
+                }, 300);
             };
             this.arrangement.container.element.resizable({
                 handles: "s",
@@ -458,6 +458,10 @@ BI.AdaptiveArrangement = BI.inherit(BI.Widget, {
         var region = this.getRegionByName(name);
         region.el.element.css("zIndex", ++this.zIndex);
         return this.arrangement.setRegionPosition(name, position);
+    },
+
+    scrollTo: function (scroll) {
+        this.arrangement.scrollTo(scroll);
     },
 
     zoom: function (ratio) {

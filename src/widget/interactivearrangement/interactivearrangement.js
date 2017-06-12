@@ -525,6 +525,10 @@ BI.InteractiveArrangement = BI.inherit(BI.Widget, {
         return this.arrangement.setRegionPosition(name, position);
     },
 
+    scrollTo: function (scroll) {
+        this.arrangement.scrollTo(scroll);
+    },
+
     zoom: function (ratio) {
         this.arrangement.zoom(ratio);
     },

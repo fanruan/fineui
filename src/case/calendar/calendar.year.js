@@ -9,6 +9,7 @@ BI.YearCalendar = BI.inherit(BI.Widget, {
         var conf = BI.YearCalendar.superclass._defaultConfig.apply(this, arguments);
         return BI.extend(conf, {
             baseCls: "bi-year-calendar",
+            behaviors: {},
             logic: {
                 dynamic: false
             },
@@ -73,6 +74,7 @@ BI.YearCalendar = BI.inherit(BI.Widget, {
 
         this.years = BI.createWidget({
             type: "bi.button_group",
+            behaviors: o.behaviors,
             items: BI.createItems(items, {}),
             layouts: [BI.LogicFactory.createLogic("table", BI.extend({}, o.logic, {
                 columns: 2,

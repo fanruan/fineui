@@ -121,10 +121,6 @@ BI.SortList = BI.inherit(BI.Widget, {
         this.loader.empty();
     },
 
-    doBehavior: function () {
-        this.loader.doBehavior.apply(this.loader, arguments);
-    },
-
     setNotSelectedValue: function () {
         this.loader.setNotSelectedValue.apply(this.loader, arguments);
     },

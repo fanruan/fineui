@@ -103,12 +103,13 @@ BI.SequenceTableTreeNumber = BI.inherit(BI.Widget, {
     _getStart: function (nodes) {
         var self = this;
         var start = this.start;
-        BI.each(nodes, function (i, node) {
+        BI.some(nodes, function (i, node) {
             if (BI.isNotEmptyArray(node.children)) {
-                BI.each(node.children, function (index, child) {
+                return BI.some(node.children, function (index, child) {
                     if (index === 0) {
                         if (self.cache[child.text || child.value]) {
                             start = self.cache[child.text || child.value];
+                            return true;
                         }
                     }
                 });
@@ -474,8 +475,8 @@ BI.AdaptiveArrangement = BI.inherit(BI.Widget, {
                         width: ui.size.width,
                         height: height
                     });
-                    self.arrangement.scrollTo(height);
-                }, 500);
+                    self.arrangement.scrollTo({top: height});
+                }, 300);
             };
             this.arrangement.container.element.resizable({
                 handles: "s",
@@ -878,6 +879,10 @@ BI.AdaptiveArrangement = BI.inherit(BI.Widget, {
         return this.arrangement.setRegionPosition(name, position);
     },
 
+    scrollTo: function (scroll) {
+        this.arrangement.scrollTo(scroll);
+    },
+
     zoom: function (ratio) {
         this.arrangement.zoom(ratio);
     },
@@ -1204,7 +1209,8 @@ BI.Arrangement = BI.inherit(BI.Widget, {
                                 findBottomRegions.push(region);
                             }
                         });
-                        var topValid = isRegionsValid(findTopRegions, "top"), bottomValid = isRegionsValid(findBottomRegions, "bottom");
+                        var topValid = isRegionsValid(findTopRegions, "top"),
+                            bottomValid = isRegionsValid(findBottomRegions, "bottom");
                         if (topValid && bottomValid) {
                             BI.each(findTopRegions, function (i, region) {
                                 var clone = BI.clone(region);
@@ -1247,7 +1253,8 @@ BI.Arrangement = BI.inherit(BI.Widget, {
                                     findRightRegions.push(region);
                                 }
                             });
-                            var leftValid = isRegionsValid(findLeftRegions, "left"), rightValid = isRegionsValid(findRightRegions, "right");
+                            var leftValid = isRegionsValid(findLeftRegions, "left"),
+                                rightValid = isRegionsValid(findRightRegions, "right");
                             if (leftValid && rightValid) {
                                 BI.each(findLeftRegions, function (i, region) {
                                     var clone = BI.clone(region);
@@ -3678,8 +3685,9 @@ BI.Arrangement = BI.inherit(BI.Widget, {
         this.resize();
     },
 
-    scrollTo: function (top) {
-        this.scrollContainer.element.scrollTop(top);
+    scrollTo: function (scroll) {
+        this.scrollContainer.element.scrollTop(scroll.top);
+        this.scrollContainer.element.scrollLeft(scroll.left);
     },
 
     zoom: function (ratio) {
@@ -3690,6 +3698,7 @@ BI.Arrangement = BI.inherit(BI.Widget, {
         var occupied = this._applyContainer();
         switch (this.getLayoutType()) {
             case BI.Arrangement.LAYOUT_TYPE.ADAPTIVE:
+            case BI.Arrangement.LAYOUT_TYPE.FREE:
                 if (this._isArrangeFine()) {
                     var width = this.getClientWidth();
                     var xRatio = (ratio.x || 1) * width / (occupied.left + occupied.width);
@@ -3709,8 +3718,6 @@ BI.Arrangement = BI.inherit(BI.Widget, {
                     // } else {
                     this.relayout();
                 }
-                break;
-            case BI.Arrangement.LAYOUT_TYPE.FREE:
                 break;
             case BI.Arrangement.LAYOUT_TYPE.GRID:
                 if (this._isArrangeFine()) {
@@ -4217,7 +4224,7 @@ BI.BranchRelation = BI.inherit(BI.Widget, {
                             if (end.length > 0) {
                                 path += "M" + BI.first(end).x + "," + split + "L" + BI.last(end).x + "," + split;
                             }
-                            self.svg.path(path).attr("stroke", "gray");
+                            self.svg.path(path).attr("stroke", "#d4dadd");
                         }
                     })
                 });
@@ -4238,7 +4245,7 @@ BI.BranchRelation = BI.inherit(BI.Widget, {
                             if (end.length > 0) {
                                 path += "M" + BI.first(end).x + "," + split + "L" + BI.last(end).x + "," + split;
                             }
-                            self.svg.path(path).attr("stroke", "gray");
+                            self.svg.path(path).attr("stroke", "#d4dadd");
                         }
                     })
                 });
@@ -4259,7 +4266,7 @@ BI.BranchRelation = BI.inherit(BI.Widget, {
                             if (end.length > 0) {
                                 path += "M" + split + "," + BI.first(end).x + "L" + split + "," + BI.last(end).x;
                             }
-                            self.svg.path(path).attr("stroke", "gray");
+                            self.svg.path(path).attr("stroke", "#d4dadd");
                         }
                     })
                 });
@@ -4280,7 +4287,7 @@ BI.BranchRelation = BI.inherit(BI.Widget, {
                             if (end.length > 0) {
                                 path += "M" + split + "," + BI.first(end).x + "L" + split + "," + BI.last(end).x;
                             }
-                            self.svg.path(path).attr("stroke", "gray");
+                            self.svg.path(path).attr("stroke", "#d4dadd");
                         }
                     })
                 });
@@ -7681,6 +7688,10 @@ BI.InteractiveArrangement = BI.inherit(BI.Widget, {
         return this.arrangement.setRegionPosition(name, position);
     },
 
+    scrollTo: function (scroll) {
+        this.arrangement.scrollTo(scroll);
+    },
+
     zoom: function (ratio) {
         this.arrangement.zoom(ratio);
     },
@@ -7739,6 +7750,7 @@ BI.MonthCombo = BI.inherit(BI.Widget, {
     _defaultConfig: function () {
         return BI.extend(BI.MonthCombo.superclass._defaultConfig.apply(this, arguments), {
             baseCls: "bi-month-combo",
+            behaviors: {},
             height: 25
         });
     },
@@ -7751,9 +7763,9 @@ BI.MonthCombo = BI.inherit(BI.Widget, {
         });
 
         this.trigger.on(BI.MonthTrigger.EVENT_CONFIRM, function (v) {
-            if(this.getKey() && this.getKey() !== self.storeValue) {
+            if (this.getKey() && this.getKey() !== self.storeValue) {
                 self.setValue(this.getValue());
-            }else if(!this.getKey()){
+            } else if (!this.getKey()) {
                 self.setValue();
             }
             self.fireEvent(BI.MonthCombo.EVENT_CONFIRM);
@@ -7774,7 +7786,8 @@ BI.MonthCombo = BI.inherit(BI.Widget, {
         });
 
         this.popup = BI.createWidget({
-            type: "bi.month_popup"
+            type: "bi.month_popup",
+            behaviors: o.behaviors
         });
         this.popup.on(BI.MonthPopup.EVENT_CHANGE, function () {
             self.setValue(self.popup.getValue());
@@ -7792,7 +7805,10 @@ BI.MonthCombo = BI.inherit(BI.Widget, {
                 minWidth: 85,
                 el: this.popup
             }
-        })
+        });
+        this.combo.on(BI.Combo.EVENT_BEFORE_POPUPVIEW, function () {
+            self.fireEvent(BI.MonthCombo.EVENT_BEFORE_POPUPVIEW);
+        });
     },
 
     setValue: function (v) {
@@ -7806,6 +7822,7 @@ BI.MonthCombo = BI.inherit(BI.Widget, {
 });
 
 BI.MonthCombo.EVENT_CONFIRM = "EVENT_CONFIRM";
+BI.MonthCombo.EVENT_BEFORE_POPUPVIEW = "EVENT_BEFORE_POPUPVIEW";
 BI.shortcut('bi.month_combo', BI.MonthCombo);/**
  * 月份展示面板
  *
@@ -7817,13 +7834,14 @@ BI.MonthPopup = BI.inherit(BI.Widget, {
 
     _defaultConfig: function () {
         return BI.extend(BI.MonthPopup.superclass._defaultConfig.apply(this, arguments), {
-            baseCls: "bi-month-popup"
+            baseCls: "bi-month-popup",
+            behaviors: {}
         });
     },
 
     _init: function () {
         BI.MonthPopup.superclass._init.apply(this, arguments);
-        var self = this;
+        var self = this, o = this.options;
 
         //纵向排列月
         var month = [0, 6, 1, 7, 2, 8, 3, 9, 4, 10, 5, 11];
@@ -7854,6 +7872,7 @@ BI.MonthPopup = BI.inherit(BI.Widget, {
         this.month = BI.createWidget({
             type: "bi.button_group",
             element: this,
+            behaviors: o.behaviors,
             items: BI.createItems(items, {}),
             layouts: [BI.LogicFactory.createLogic("table", BI.extend({
                 dynamic: true
@@ -8168,10 +8187,6 @@ BI.MultiLayerSelectLevelTree = BI.inherit(BI.Widget, {
 
     populate: function (nodes) {
         this.tree.populate(this._formatItems(BI.Tree.transformToTreeFormat(nodes), 0));
-    },
-
-    doBehavior: function () {
-        this.tree.doBehavior.apply(this.tree, arguments);
     },
 
     setValue: function (v) {
@@ -8713,10 +8728,6 @@ BI.MultiLayerSingleLevelTree = BI.inherit(BI.Widget, {
 
     populate: function (nodes) {
         this.tree.populate(this._formatItems(BI.Tree.transformToTreeFormat(nodes), 0));
-    },
-
-    doBehavior: function () {
-        this.tree.doBehavior.apply(this.tree, arguments);
     },
 
     setValue: function (v) {
@@ -11614,7 +11625,7 @@ BI.MultiTreeCheckPane = BI.inherit(BI.Pane, {
 
     setValue: function (v) {
         v || (v = {});
-        this.display.setValue(v.value);
+        this.display.setSelectedValue(v.value);
     },
 
     getValue: function () {
@@ -11732,6 +11743,9 @@ BI.MultiTreeCombo = BI.inherit(BI.Single, {
                         self.trigger.getSearcher().adjustView();
                     });
                 }
+            },
+            hideChecker: function (e) {
+                return triggerBtn.element.find(e.target).length === 0;
             }
         });
 
@@ -12279,8 +12293,8 @@ BI.NumericalInterval = BI.inherit(BI.Single, {
         var conf = BI.NumericalInterval.superclass._defaultConfig.apply(this, arguments)
         return BI.extend(conf, {
             extraCls: "bi-numerical-interval",
-            height: 25
-
+            height: 25,
+            validation: "valid"
         })
     },
     _init: function () {
@@ -12681,8 +12695,7 @@ BI.NumericalInterval = BI.inherit(BI.Single, {
         })
     },
 
-
-    isValid: function () {
+    isStateValid: function () {
         return this.options.validation === "valid";
     },
 
@@ -13106,8 +13119,8 @@ BI.shortcut('bi.page_table', BI.PageTable);/**
 BI.PathChooser = BI.inherit(BI.Widget, {
 
     _const: {
-        lineColor: "#c4c6c6",
-        selectLineColor: "#009de3"
+        lineColor: "#d4dadd",
+        selectLineColor: "#3f8ce8"
     },
 
     _defaultConfig: function () {
@@ -13976,6 +13989,7 @@ BI.QuarterCombo = BI.inherit(BI.Widget, {
     _defaultConfig: function () {
         return BI.extend(BI.QuarterCombo.superclass._defaultConfig.apply(this, arguments), {
             baseCls: "bi-quarter-combo",
+            behaviors: {},
             height: 25
         });
     },
@@ -13996,24 +14010,25 @@ BI.QuarterCombo = BI.inherit(BI.Widget, {
         this.trigger.on(BI.QuarterTrigger.EVENT_START, function () {
             self.combo.isViewVisible() && self.combo.hideView();
         });
-        this.trigger.on(BI.QuarterTrigger.EVENT_STOP, function(){
+        this.trigger.on(BI.QuarterTrigger.EVENT_STOP, function () {
             if (!self.combo.isViewVisible()) {
                 self.combo.showView();
             }
         });
         this.trigger.on(BI.QuarterTrigger.EVENT_CONFIRM, function () {
-            if(self.combo.isViewVisible()) {
+            if (self.combo.isViewVisible()) {
                 return;
             }
-            if(this.getKey() && this.getKey() !== self.storeValue) {
+            if (this.getKey() && this.getKey() !== self.storeValue) {
                 self.setValue(this.getKey());
-            }else if(!this.getKey()){
+            } else if (!this.getKey()) {
                 self.setValue();
             }
             self.fireEvent(BI.QuarterCombo.EVENT_CONFIRM);
         });
         this.popup = BI.createWidget({
-            type: "bi.quarter_popup"
+            type: "bi.quarter_popup",
+            behaviors: o.behaviors
         });
 
         this.popup.on(BI.QuarterPopup.EVENT_CHANGE, function () {
@@ -14033,6 +14048,9 @@ BI.QuarterCombo = BI.inherit(BI.Widget, {
                 el: this.popup
             }
         });
+        this.combo.on(BI.Combo.EVENT_BEFORE_POPUPVIEW, function () {
+            self.fireEvent(BI.QuarterCombo.EVENT_BEFORE_POPUPVIEW);
+        });
     },
 
     setValue: function (v) {
@@ -14046,6 +14064,7 @@ BI.QuarterCombo = BI.inherit(BI.Widget, {
 });
 
 BI.QuarterCombo.EVENT_CONFIRM = "EVENT_CONFIRM";
+BI.QuarterCombo.EVENT_BEFORE_POPUPVIEW = "EVENT_BEFORE_POPUPVIEW";
 BI.shortcut('bi.quarter_combo', BI.QuarterCombo);/**
  * 季度展示面板
  *
@@ -14057,13 +14076,14 @@ BI.QuarterPopup = BI.inherit(BI.Widget, {
 
     _defaultConfig: function () {
         return BI.extend(BI.QuarterPopup.superclass._defaultConfig.apply(this, arguments), {
-            baseCls: "bi-quarter-popup"
+            baseCls: "bi-quarter-popup",
+            behaviors: {}
         });
     },
 
     _init: function () {
         BI.QuarterPopup.superclass._init.apply(this, arguments);
-        var self = this;
+        var self = this, o = this.options;
 
         var items = [{
             text: Date._QN[01],
@@ -14093,6 +14113,7 @@ BI.QuarterPopup = BI.inherit(BI.Widget, {
         this.quarter = BI.createWidget({
             type: "bi.button_group",
             element: this,
+            behaviors: o.behaviors,
             items: BI.createItems(items, {}),
             layouts: [{
                 type: "bi.vertical"
@@ -16581,6 +16602,7 @@ BI.YearCombo = BI.inherit(BI.Widget, {
     _defaultConfig: function () {
         return BI.extend(BI.YearCombo.superclass._defaultConfig.apply(this, arguments), {
             baseCls: "bi-year-combo",
+            behaviors: {},
             min: '1900-01-01', //最小日期
             max: '2099-12-31', //最大日期
             height: 25
@@ -16608,7 +16630,7 @@ BI.YearCombo = BI.inherit(BI.Widget, {
             self.combo.isViewVisible() && self.combo.hideView();
         });
         this.trigger.on(BI.YearTrigger.EVENT_CONFIRM, function () {
-            if(self.combo.isViewVisible()) {
+            if (self.combo.isViewVisible()) {
                 return;
             }
             if (this.getKey() && this.getKey() !== self.storeValue) {
@@ -16619,45 +16641,50 @@ BI.YearCombo = BI.inherit(BI.Widget, {
             self.fireEvent(BI.YearCombo.EVENT_CONFIRM);
         });
 
-        this.popup = BI.createWidget({
-            type: "bi.year_popup",
-            min: o.min,
-            max: o.max
-        });
-
-        this.popup.on(BI.YearPopup.EVENT_CHANGE, function () {
-            self.setValue(self.popup.getValue());
-            self.combo.hideView();
-            self.fireEvent(BI.YearCombo.EVENT_CONFIRM);
-        });
-
         this.combo = BI.createWidget({
             type: "bi.combo",
             element: this,
+            destroyWhenHide: true,
             isNeedAdjustHeight: false,
             isNeedAdjustWidth: false,
             el: this.trigger,
             popup: {
                 minWidth: 85,
                 stopPropagation: false,
-                el: this.popup
+                el: {
+                    type: "bi.year_popup",
+                    ref: function () {
+                        self.popup = this;
+                    },
+                    listeners: [{
+                        eventName: BI.YearPopup.EVENT_CHANGE,
+                        action: function () {
+                            self.setValue(self.popup.getValue());
+                            self.combo.hideView();
+                            self.fireEvent(BI.YearCombo.EVENT_CONFIRM);
+                        }
+                    }],
+                    behaviors: o.behaviors,
+                    min: o.min,
+                    max: o.max
+                }
             }
         });
         this.combo.on(BI.Combo.EVENT_BEFORE_POPUPVIEW, function () {
             var value = self.trigger.getKey();
             if (BI.isNotNull(value)) {
                 self.popup.setValue(value);
-            } else if(!value && value !== self.storeValue){
+            } else if (!value && value !== self.storeValue) {
                 self.popup.setValue(self.storeValue);
-            }else {
+            } else {
                 self.setValue();
             }
+            self.fireEvent(BI.YearCombo.EVENT_BEFORE_POPUPVIEW);
         });
     },
 
     setValue: function (v) {
-        this.trigger.setValue(v);
-        this.popup.setValue(v);
+        this.combo.setValue(v);
     },
 
     getValue: function () {
@@ -16665,6 +16692,7 @@ BI.YearCombo = BI.inherit(BI.Widget, {
     }
 });
 BI.YearCombo.EVENT_CONFIRM = "EVENT_CONFIRM";
+BI.YearCombo.EVENT_BEFORE_POPUPVIEW = "EVENT_BEFORE_POPUPVIEW";
 BI.shortcut('bi.year_combo', BI.YearCombo);/**
  * 年份展示面板
  *
@@ -16677,6 +16705,7 @@ BI.YearPopup = BI.inherit(BI.Widget, {
     _defaultConfig: function () {
         return BI.extend(BI.YearPopup.superclass._defaultConfig.apply(this, arguments), {
             baseCls: "bi-year-popup",
+            behaviors: {},
             min: '1900-01-01', //最小日期
             max: '2099-12-31' //最大日期
         });
@@ -16687,6 +16716,7 @@ BI.YearPopup = BI.inherit(BI.Widget, {
 
         var calendar = BI.createWidget({
             type: "bi.year_calendar",
+            behaviors: o.behaviors,
             min: o.min,
             max: o.max,
             logic: {
@@ -16723,11 +16753,12 @@ BI.YearPopup = BI.inherit(BI.Widget, {
         this.navigation = BI.createWidget({
             type: "bi.navigation",
             element: this,
+            single: true,
             logic: {
                 dynamic: true
             },
             tab: {
-                cls: "year-popup-navigation bi-border-top",
+                cls: "year-popup-navigation bi-high-light bi-border-top",
                 height: 25,
                 items: [backBtn, preBtn]
             },
@@ -16882,6 +16913,8 @@ BI.YearMonthCombo = BI.inherit(BI.Widget, {
     _defaultConfig: function () {
         return BI.extend(BI.YearMonthCombo.superclass._defaultConfig.apply(this, arguments), {
             baseCls: "bi-year-month-combo",
+            yearBehaviors: {},
+            monthBehaviors: {},
             height: 25
         });
     },
@@ -16890,19 +16923,27 @@ BI.YearMonthCombo = BI.inherit(BI.Widget, {
         var self = this, o = this.options;
 
         this.year = BI.createWidget({
-            type: "bi.year_combo"
+            type: "bi.year_combo",
+            behaviors: o.yearBehaviors
         });
 
         this.month = BI.createWidget({
-            type: "bi.month_combo"
+            type: "bi.month_combo",
+            behaviors: o.monthBehaviors
         });
 
-        this.year.on(BI.YearCombo.EVENT_CONFIRM, function(){
+        this.year.on(BI.YearCombo.EVENT_CONFIRM, function () {
             self.fireEvent(BI.YearMonthCombo.EVENT_CONFIRM);
         });
+        this.year.on(BI.YearCombo.EVENT_BEFORE_POPUPVIEW, function () {
+            self.fireEvent(BI.YearMonthCombo.EVENT_BEFORE_POPUPVIEW);
+        });
 
-        this.month.on(BI.MonthCombo.EVENT_CONFIRM, function(){
+        this.month.on(BI.MonthCombo.EVENT_CONFIRM, function () {
             self.fireEvent(BI.YearMonthCombo.EVENT_CONFIRM);
+        });
+        this.month.on(BI.MonthCombo.EVENT_BEFORE_POPUPVIEW, function () {
+            self.fireEvent(BI.YearMonthCombo.EVENT_BEFORE_POPUPVIEW);
         });
 
         BI.createWidget({
@@ -16928,6 +16969,7 @@ BI.YearMonthCombo = BI.inherit(BI.Widget, {
     }
 });
 BI.YearMonthCombo.EVENT_CONFIRM = "EVENT_CONFIRM";
+BI.YearMonthCombo.EVENT_BEFORE_POPUPVIEW = "EVENT_BEFORE_POPUPVIEW";
 BI.shortcut('bi.year_month_combo', BI.YearMonthCombo);/**
  * 年份 + 月份下拉框
  *
@@ -16938,6 +16980,8 @@ BI.YearQuarterCombo = BI.inherit(BI.Widget, {
     _defaultConfig: function () {
         return BI.extend(BI.YearQuarterCombo.superclass._defaultConfig.apply(this, arguments), {
             baseCls: "bi-year-quarter-combo",
+            yearBehaviors: {},
+            quarterBehaviors: {},
             height: 25
         });
     },
@@ -16946,19 +16990,27 @@ BI.YearQuarterCombo = BI.inherit(BI.Widget, {
         var self = this, o = this.options;
 
         this.year = BI.createWidget({
-            type: "bi.year_combo"
+            type: "bi.year_combo",
+            behaviors: o.yearBehaviors
         });
 
         this.quarter = BI.createWidget({
-            type: "bi.quarter_combo"
+            type: "bi.quarter_combo",
+            behaviors: o.quarterBehaviors
         });
 
-        this.year.on(BI.YearCombo.EVENT_CONFIRM, function(){
+        this.year.on(BI.YearCombo.EVENT_CONFIRM, function () {
             self.fireEvent(BI.YearQuarterCombo.EVENT_CONFIRM);
         });
+        this.year.on(BI.YearCombo.EVENT_BEFORE_POPUPVIEW, function () {
+            self.fireEvent(BI.YearQuarterCombo.EVENT_BEFORE_POPUPVIEW);
+        });
 
-        this.quarter.on(BI.QuarterCombo.EVENT_CONFIRM, function(){
+        this.quarter.on(BI.QuarterCombo.EVENT_CONFIRM, function () {
             self.fireEvent(BI.YearQuarterCombo.EVENT_CONFIRM);
+        });
+        this.quarter.on(BI.QuarterCombo.EVENT_BEFORE_POPUPVIEW, function () {
+            self.fireEvent(BI.YearQuarterCombo.EVENT_BEFORE_POPUPVIEW);
         });
 
         BI.createWidget({
@@ -16984,6 +17036,7 @@ BI.YearQuarterCombo = BI.inherit(BI.Widget, {
     }
 });
 BI.YearQuarterCombo.EVENT_CONFIRM = "EVENT_CONFIRM";
+BI.YearQuarterCombo.EVENT_BEFORE_POPUPVIEW = "EVENT_BEFORE_POPUPVIEW";
 BI.shortcut('bi.year_quarter_combo', BI.YearQuarterCombo);/**
  * 简单的复选下拉框控件, 适用于数据量少的情况， 与valuechooser的区别是allvaluechooser setValue和getValue返回的是所有值
  * 封装了字段处理逻辑

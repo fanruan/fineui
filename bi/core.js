@@ -3184,7 +3184,7 @@ if (!window.BI) {
             if (numReg) {
                 var num = numReg[0];
                 var orilen = num.length;
-                var newnum = BI.parseInt(num) + 1 + '';
+                var newnum = parseInt(num) + 1 + '';
                 //进位到整数部分
                 if (newnum.length > orilen) {
                     newnum = newnum.substr(1);
@@ -3727,6 +3727,12 @@ _.extend(BI, {
          * @property destroy事件
          */
         DESTROY: '_DESTROY',
+
+        /**
+         * @static
+         * @property 取消挂载事件
+         */
+        UNMOUNT: '_UNMOUNT',
 
         /**
          * @static
@@ -4360,6 +4366,8 @@ BI.Widget = BI.inherit(BI.OB, {
     update: function () {
     },
 
+    beforeDestroyed: null,
+
     destroyed: null,
 
     _init: function () {
@@ -4577,6 +4585,14 @@ BI.Widget = BI.inherit(BI.OB, {
         }
     },
 
+    doBehavior: function () {
+        var args = arguments;
+        //递归将所有子组件使有效
+        BI.each(this._children, function (i, child) {
+            child.doBehavior && child.doBehavior.apply(child, args);
+        });
+    },
+
     getWidth: function () {
         return this.options.width;
     },
@@ -4711,18 +4727,20 @@ BI.Widget = BI.inherit(BI.OB, {
     },
 
     __d: function () {
+        this.beforeDestroyed && this.beforeDestroyed();
         BI.each(this._children, function (i, widget) {
             widget._unMount && widget._unMount();
         });
         this._children = {};
         this._parent = null;
         this._isMounted = false;
+        this.destroyed && this.destroyed();
     },
 
     _unMount: function () {
         this.__d();
+        this.fireEvent(BI.Events.UNMOUNT);
         this.purgeListeners();
-        this.destroyed && this.destroyed();
     },
 
     isolate: function () {
@@ -4742,14 +4760,12 @@ BI.Widget = BI.inherit(BI.OB, {
 
     _destroy: function () {
         this.__d();
-        this.destroyed && this.destroyed();
         this.element.destroy();
         this.purgeListeners();
     },
 
     destroy: function () {
         this.__d();
-        this.destroyed && this.destroyed();
         this.element.destroy();
         this.fireEvent(BI.Events.DESTROY);
         this.purgeListeners();
@@ -5245,6 +5261,8 @@ BI.View = BI.inherit(BI.V, {
 
     created: null,
 
+    beforeDestroyed: null,
+
     destroyed: null,
 
     _init: function () {
@@ -5734,18 +5752,22 @@ BI.View = BI.inherit(BI.V, {
     },
 
     _unMount: function () {
+        this.beforeDestroyed && this.beforeDestroyed();
         BI.each(this._cardLayouts, function (name, card) {
             card && card._unMount();
         });
         delete this._cardLayouts;
         delete this._cards;
         this.destroyed && this.destroyed();
+        this.trigger(BI.Events.UNMOUNT);
         this.off();
     },
 
     _destroy: function () {
+        var self = this;
         BI.each(this._cardLayouts, function (name, card) {
             card && card._unMount();
+            BI.Layers.remove(name + self.cid);
         });
         delete this._cardLayouts;
         delete this._cards;
@@ -10973,26 +10995,34 @@ BI.Behavior = BI.inherit(BI.OB, {
  * @extends BI.Behavior
  */
 BI.HighlightBehavior = BI.inherit(BI.Behavior, {
-    _defaultConfig: function() {
-        return BI.extend(BI.HighlightBehavior.superclass._defaultConfig.apply(this, arguments), {
-
-        });
+    _defaultConfig: function () {
+        return BI.extend(BI.HighlightBehavior.superclass._defaultConfig.apply(this, arguments), {});
     },
 
-    _init : function() {
+    _init: function () {
         BI.HighlightBehavior.superclass._init.apply(this, arguments);
 
     },
 
-    doBehavior: function(items){
+    doBehavior: function (items) {
         var args = Array.prototype.slice.call(arguments, 1),
             o = this.options;
-        BI.each(items, function(i, item){
-            if(item instanceof BI.Single) {
-                if (o.rule(item.getValue(), item)) {
-                    item.doHighLight.apply(item, args);
+        BI.each(items, function (i, item) {
+            if (item instanceof BI.Single) {
+                var rule = o.rule(item.getValue(), item);
+
+                function doBe(run) {
+                    if (run === true) {
+                        item.doHighLight.apply(item, args);
+                    } else {
+                        item.unHighLight.apply(item, args);
+                    }
+                }
+
+                if (BI.isFunction(rule)) {
+                    rule(doBe);
                 } else {
-                    item.unHighLight.apply(item, args);
+                    doBe(rule);
                 }
             } else {
                 item.doBehavior.apply(item, args);
@@ -15943,7 +15973,10 @@ BI.FloatBoxRouter = BI.inherit(BI.WRouter, {
             var view = this.createView(url, data, viewData, context);
             isValid && context.model.addChild(modelData, view.model);
             view.listenTo(view.model, "destroy", function () {
-                self.remove(url);
+                self.remove(url, context);
+            });
+            context.on(BI.Events.UNMOUNT, function () {
+                self.remove(url, context);
             });
             this.store[url].populate(view);
             this.views[url] = view;
@@ -15982,7 +16015,7 @@ BI.FloatBoxRouter = BI.inherit(BI.WRouter, {
 
     remove: function (url, context) {
         url = context.rootURL + "/" + url;
-        if(this.controller){
+        if (this.controller) {
             this.controller.remove(url);
             delete this.store[url];
             this.views[url] && this.views[url].model.destroy();
@@ -16812,7 +16845,7 @@ BI.extend(BI.DOM, {
         }
         var rgb = this.rgb2json(this.hex2rgb(hex));
         var grayLevel = Math.round(rgb.r * 0.299 + rgb.g * 0.587 + rgb.b * 0.114);
-        if (grayLevel < 140) {
+        if (grayLevel < 192/**网上给的是140**/) {
             return true;
         }
         return false;

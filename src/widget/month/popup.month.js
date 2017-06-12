@@ -9,13 +9,14 @@ BI.MonthPopup = BI.inherit(BI.Widget, {
 
     _defaultConfig: function () {
         return BI.extend(BI.MonthPopup.superclass._defaultConfig.apply(this, arguments), {
-            baseCls: "bi-month-popup"
+            baseCls: "bi-month-popup",
+            behaviors: {}
         });
     },
 
     _init: function () {
         BI.MonthPopup.superclass._init.apply(this, arguments);
-        var self = this;
+        var self = this, o = this.options;
 
         //纵向排列月
         var month = [0, 6, 1, 7, 2, 8, 3, 9, 4, 10, 5, 11];
@@ -46,6 +47,7 @@ BI.MonthPopup = BI.inherit(BI.Widget, {
         this.month = BI.createWidget({
             type: "bi.button_group",
             element: this,
+            behaviors: o.behaviors,
             items: BI.createItems(items, {}),
             layouts: [BI.LogicFactory.createLogic("table", BI.extend({
                 dynamic: true

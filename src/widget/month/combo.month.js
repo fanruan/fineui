@@ -9,6 +9,7 @@ BI.MonthCombo = BI.inherit(BI.Widget, {
     _defaultConfig: function () {
         return BI.extend(BI.MonthCombo.superclass._defaultConfig.apply(this, arguments), {
             baseCls: "bi-month-combo",
+            behaviors: {},
             height: 25
         });
     },
@@ -21,9 +22,9 @@ BI.MonthCombo = BI.inherit(BI.Widget, {
         });
 
         this.trigger.on(BI.MonthTrigger.EVENT_CONFIRM, function (v) {
-            if(this.getKey() && this.getKey() !== self.storeValue) {
+            if (this.getKey() && this.getKey() !== self.storeValue) {
                 self.setValue(this.getValue());
-            }else if(!this.getKey()){
+            } else if (!this.getKey()) {
                 self.setValue();
             }
             self.fireEvent(BI.MonthCombo.EVENT_CONFIRM);
@@ -44,7 +45,8 @@ BI.MonthCombo = BI.inherit(BI.Widget, {
         });
 
         this.popup = BI.createWidget({
-            type: "bi.month_popup"
+            type: "bi.month_popup",
+            behaviors: o.behaviors
         });
         this.popup.on(BI.MonthPopup.EVENT_CHANGE, function () {
             self.setValue(self.popup.getValue());
@@ -62,7 +64,10 @@ BI.MonthCombo = BI.inherit(BI.Widget, {
                 minWidth: 85,
                 el: this.popup
             }
-        })
+        });
+        this.combo.on(BI.Combo.EVENT_BEFORE_POPUPVIEW, function () {
+            self.fireEvent(BI.MonthCombo.EVENT_BEFORE_POPUPVIEW);
+        });
     },
 
     setValue: function (v) {
@@ -76,4 +81,5 @@ BI.MonthCombo = BI.inherit(BI.Widget, {
 });
 
 BI.MonthCombo.EVENT_CONFIRM = "EVENT_CONFIRM";
+BI.MonthCombo.EVENT_BEFORE_POPUPVIEW = "EVENT_BEFORE_POPUPVIEW";
 BI.shortcut('bi.month_combo', BI.MonthCombo);
