@@ -2703,6 +2703,7 @@ BI.Arrangement = BI.inherit(BI.Widget, {
         var occupied = this._applyContainer();
         switch (this.getLayoutType()) {
             case BI.Arrangement.LAYOUT_TYPE.ADAPTIVE:
+            case BI.Arrangement.LAYOUT_TYPE.FREE:
                 if (this._isArrangeFine()) {
                     var width = this.getClientWidth();
                     var xRatio = (ratio.x || 1) * width / (occupied.left + occupied.width);
@@ -2722,8 +2723,6 @@ BI.Arrangement = BI.inherit(BI.Widget, {
                     // } else {
                     this.relayout();
                 }
-                break;
-            case BI.Arrangement.LAYOUT_TYPE.FREE:
                 break;
             case BI.Arrangement.LAYOUT_TYPE.GRID:
                 if (this._isArrangeFine()) {
