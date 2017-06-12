@@ -103,12 +103,13 @@ BI.SequenceTableTreeNumber = BI.inherit(BI.Widget, {
     _getStart: function (nodes) {
         var self = this;
         var start = this.start;
-        BI.each(nodes, function (i, node) {
+        BI.some(nodes, function (i, node) {
             if (BI.isNotEmptyArray(node.children)) {
-                BI.each(node.children, function (index, child) {
+                return BI.some(node.children, function (index, child) {
                     if (index === 0) {
                         if (self.cache[child.text || child.value]) {
                             start = self.cache[child.text || child.value];
+                            return true;
                         }
                     }
                 });
@@ -12681,8 +12682,7 @@ BI.NumericalInterval = BI.inherit(BI.Single, {
         })
     },
 
-
-    isValid: function () {
+    isStateValid: function () {
         return this.options.validation === "valid";
     },
 

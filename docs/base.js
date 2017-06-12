@@ -15079,9 +15079,9 @@ BI.FloatBox = BI.inherit(BI.Widget, {
                         type: "bi.absolute",
                         items: [{
                             el: this._center,
-                            left: 20,
+                            left: 10,
                             top: 10,
-                            right: 20,
+                            right: 10,
                             bottom: 10
                         }]
                     }

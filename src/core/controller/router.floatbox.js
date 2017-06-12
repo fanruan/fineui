@@ -45,7 +45,10 @@ BI.FloatBoxRouter = BI.inherit(BI.WRouter, {
             var view = this.createView(url, data, viewData, context);
             isValid && context.model.addChild(modelData, view.model);
             view.listenTo(view.model, "destroy", function () {
-                self.remove(url);
+                self.remove(url, context);
+            });
+            context.on(BI.Events.UNMOUNT, function () {
+                self.remove(url, context);
             });
             this.store[url].populate(view);
             this.views[url] = view;
@@ -84,7 +87,7 @@ BI.FloatBoxRouter = BI.inherit(BI.WRouter, {
 
     remove: function (url, context) {
         url = context.rootURL + "/" + url;
-        if(this.controller){
+        if (this.controller) {
             this.controller.remove(url);
             delete this.store[url];
             this.views[url] && this.views[url].model.destroy();
