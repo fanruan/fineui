@@ -475,8 +475,8 @@ BI.AdaptiveArrangement = BI.inherit(BI.Widget, {
                         width: ui.size.width,
                         height: height
                     });
-                    self.arrangement.scrollTo(height);
-                }, 500);
+                    self.arrangement.scrollTo({top: height});
+                }, 300);
             };
             this.arrangement.container.element.resizable({
                 handles: "s",
@@ -879,6 +879,10 @@ BI.AdaptiveArrangement = BI.inherit(BI.Widget, {
         return this.arrangement.setRegionPosition(name, position);
     },
 
+    scrollTo: function (scroll) {
+        this.arrangement.scrollTo(scroll);
+    },
+
     zoom: function (ratio) {
         this.arrangement.zoom(ratio);
     },
@@ -1205,7 +1209,8 @@ BI.Arrangement = BI.inherit(BI.Widget, {
                                 findBottomRegions.push(region);
                             }
                         });
-                        var topValid = isRegionsValid(findTopRegions, "top"), bottomValid = isRegionsValid(findBottomRegions, "bottom");
+                        var topValid = isRegionsValid(findTopRegions, "top"),
+                            bottomValid = isRegionsValid(findBottomRegions, "bottom");
                         if (topValid && bottomValid) {
                             BI.each(findTopRegions, function (i, region) {
                                 var clone = BI.clone(region);
@@ -1248,7 +1253,8 @@ BI.Arrangement = BI.inherit(BI.Widget, {
                                     findRightRegions.push(region);
                                 }
                             });
-                            var leftValid = isRegionsValid(findLeftRegions, "left"), rightValid = isRegionsValid(findRightRegions, "right");
+                            var leftValid = isRegionsValid(findLeftRegions, "left"),
+                                rightValid = isRegionsValid(findRightRegions, "right");
                             if (leftValid && rightValid) {
                                 BI.each(findLeftRegions, function (i, region) {
                                     var clone = BI.clone(region);
@@ -3679,8 +3685,9 @@ BI.Arrangement = BI.inherit(BI.Widget, {
         this.resize();
     },
 
-    scrollTo: function (top) {
-        this.scrollContainer.element.scrollTop(top);
+    scrollTo: function (scroll) {
+        this.scrollContainer.element.scrollTop(scroll.top);
+        this.scrollContainer.element.scrollLeft(scroll.left);
     },
 
     zoom: function (ratio) {
@@ -7680,6 +7687,10 @@ BI.InteractiveArrangement = BI.inherit(BI.Widget, {
             }
         }
         return this.arrangement.setRegionPosition(name, position);
+    },
+
+    scrollTo: function (scroll) {
+        this.arrangement.scrollTo(scroll);
     },
 
     zoom: function (ratio) {
