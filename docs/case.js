@@ -9896,17 +9896,17 @@ BI.shortcut("bi.detail_pager", BI.DetailPager);/**
  */
 BI.SegmentButton = BI.inherit(BI.BasicButton, {
 
-    _defaultConfig: function() {
+    _defaultConfig: function () {
         var conf = BI.SegmentButton.superclass._defaultConfig.apply(this, arguments);
-        return BI.extend( conf, {
-            baseCls : (conf.baseCls ||"")+' bi-segment-button bi-list-item-active',
+        return BI.extend(conf, {
+            baseCls: (conf.baseCls || "") + ' bi-segment-button bi-list-item-active',
             shadow: true,
             readonly: true,
-            hgap: 10
+            hgap: 5
         })
     },
 
-    _init:function() {
+    _init: function () {
         BI.SegmentButton.superclass._init.apply(this, arguments);
         var opts = this.options, self = this;
         //if (BI.isNumber(opts.height) && BI.isNull(opts.lineHeight)) {
@@ -9915,7 +9915,7 @@ BI.SegmentButton = BI.inherit(BI.BasicButton, {
         this.text = BI.createWidget({
             type: "bi.label",
             element: this,
-            height: opts.height-2,
+            height: opts.height - 2,
             whiteSpace: opts.whiteSpace,
             text: opts.text,
             value: opts.value,
@@ -9923,16 +9923,16 @@ BI.SegmentButton = BI.inherit(BI.BasicButton, {
         })
     },
 
-    setSelected: function(){
+    setSelected: function () {
         BI.SegmentButton.superclass.setSelected.apply(this, arguments);
     },
 
-    setText : function(text) {
+    setText: function (text) {
         BI.SegmentButton.superclass.setText.apply(this, arguments);
         this.text.setText(text);
     },
 
-    destroy : function() {
+    destroy: function () {
         BI.SegmentButton.superclass.destroy.apply(this, arguments);
     }
 });
