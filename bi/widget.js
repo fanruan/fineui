@@ -17790,14 +17790,16 @@ BI.shortcut('bi.all_value_chooser_pane', BI.AllValueChooserPane);BI.AbstractTree
         var name = values[values.length - 1];
         var p = values.slice(0, values.length - 1);
         var pNode = this._getNode(selectedValues, p);
-        if (pNode[name]) {
+        if (pNode != null && pNode[name]) {
             delete pNode[name];
             //递归删掉空父节点
             while (p.length > 0 && BI.isEmpty(pNode)) {
                 name = p[p.length - 1];
                 p = p.slice(0, p.length - 1);
                 pNode = this._getNode(selectedValues, p);
-                delete pNode[name];
+                if (pNode != null) {
+                    delete pNode[name];
+                }
             }
         }
     },
