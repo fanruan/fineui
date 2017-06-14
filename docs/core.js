@@ -22840,7 +22840,7 @@ BI.extend(BI.DOM, {
     },
 
     isColor: function (color) {
-        return this.isRGBColor(color) || this.isHexColor(color);
+        return color && (this.isRGBColor(color) || this.isHexColor(color));
     },
 
     isRGBColor: function (color) {
@@ -22871,7 +22871,7 @@ BI.extend(BI.DOM, {
 
     //获取对比颜色
     getContrastColor: function (color) {
-        if (!color) {
+        if (!color || !this.isColor(color)) {
             return "";
         }
         if (this.isDarkColor(color)) {
