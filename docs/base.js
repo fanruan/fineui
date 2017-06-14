@@ -17785,7 +17785,7 @@ BI.CodeEditor = BI.inherit(BI.Single, {
         this.editor.replaceSelection(param);
         var to = this.editor.getCursor();
         var options = {className: 'param', atomic: true};
-        if(BI.isNotNull(param.match(/<!.*!>/))){
+        if(BI.isNotNull(param.match(/^<!.*!>$/))){
             options.className = 'error-param';
         }
         this.editor.markText(from, to, options);
