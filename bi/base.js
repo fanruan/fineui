@@ -17837,6 +17837,10 @@ BI.CodeEditor = BI.inherit(BI.Single, {
         })
     },
 
+    focus: function () {
+        this.editor.focus();
+    },
+
     setStyle: function (style) {
         this.style = style;
         this.element.css(style);

@@ -4860,7 +4860,7 @@ BI.shortcut('bi.date_triangle_trigger', BI.DateTriangleTrigger);/**
 BI.DateCombo = BI.inherit(BI.Widget, {
     _defaultConfig: function () {
         return BI.extend(BI.DateCombo.superclass._defaultConfig.apply(this, arguments), {
-            baseCls: "bi-date-combo",
+            baseCls: "bi-date-combo bi-border",
             height: 30
         });
     },
@@ -4919,7 +4919,7 @@ BI.shortcut('bi.date_combo', BI.DateCombo);BI.DateTrigger = BI.inherit(BI.Trigge
 
     _defaultConfig: function () {
         return BI.extend(BI.DateTrigger.superclass._defaultConfig.apply(this, arguments), {
-            extraCls: "bi-date-trigger bi-border",
+            extraCls: "bi-date-trigger",
             min: '1900-01-01', //最小日期
             max: '2099-12-31', //最大日期
             height: 25
