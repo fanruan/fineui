@@ -142,10 +142,10 @@ BI.GridView = BI.inherit(BI.Widget, {
                             this.renderedCells[index]._height = rowDatum.size;
                             this.renderedCells[index].el.setHeight(rowDatum.size);
                         }
-                        if (this.renderedCells[index].left !== columnDatum.offset + horizontalOffsetAdjustment) {
+                        if (this.renderedCells[index]._left !== columnDatum.offset + horizontalOffsetAdjustment) {
                             this.renderedCells[index].el.element.css("left", (columnDatum.offset + horizontalOffsetAdjustment) + "px");
                         }
-                        if (this.renderedCells[index].top !== rowDatum.offset + verticalOffsetAdjustment) {
+                        if (this.renderedCells[index]._top !== rowDatum.offset + verticalOffsetAdjustment) {
                             this.renderedCells[index].el.element.css("top", (rowDatum.offset + verticalOffsetAdjustment) + "px");
                         }
                         renderedCells.push(child = this.renderedCells[index]);
@@ -165,6 +165,8 @@ BI.GridView = BI.inherit(BI.Widget, {
                             el: child,
                             left: columnDatum.offset + horizontalOffsetAdjustment,
                             top: rowDatum.offset + verticalOffsetAdjustment,
+                            _left: columnDatum.offset + horizontalOffsetAdjustment,
+                            _top: rowDatum.offset + verticalOffsetAdjustment,
                             _width: columnDatum.size,
                             _height: rowDatum.size
                         });
