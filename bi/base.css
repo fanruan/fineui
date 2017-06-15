@@ -129,12 +129,6 @@
   cursor: text;
   width: 100%;
   height: 100%;
-  color: #1a1a1a;
-  background-color: #ffffff;
-}
-.bi-theme-dark .CodeMirror {
-  color: #ffffff;
-  background-color: #242640;
 }
 /* PADDING */
 .CodeMirror-lines {

@@ -17706,7 +17706,7 @@ BI.shortcut("bi.text_node", BI.TextNode);/**
 BI.CodeEditor = BI.inherit(BI.Single, {
     _defaultConfig: function () {
         return $.extend(BI.CodeEditor.superclass._defaultConfig.apply(), {
-            baseCls: 'bi-code-editor',
+            baseCls: 'bi-code-editor bi-card',
             value: '',
             watermark: ""
         });
@@ -17780,12 +17780,12 @@ BI.CodeEditor = BI.inherit(BI.Single, {
         this.editor.setOption("readOnly", b === true ? false : "nocursor")
     },
 
-    insertParam: function(param){
+    insertParam: function (param) {
         var from = this.editor.getCursor();
         this.editor.replaceSelection(param);
         var to = this.editor.getCursor();
         var options = {className: 'param', atomic: true};
-        if(BI.isNotNull(param.match(/^<!.*!>$/))){
+        if (BI.isNotNull(param.match(/^<!.*!>$/))) {
             options.className = 'error-param';
         }
         this.editor.markText(from, to, options);
@@ -17793,7 +17793,7 @@ BI.CodeEditor = BI.inherit(BI.Single, {
         this.editor.focus();
     },
 
-    insertString: function(str){
+    insertString: function (str) {
         this.editor.replaceSelection(str);
         this.editor.focus();
     },
@@ -17837,7 +17837,16 @@ BI.CodeEditor = BI.inherit(BI.Single, {
         })
     },
 
-    refresh: function(){
+    setStyle: function (style) {
+        this.style = style;
+        this.element.css(style);
+    },
+
+    getStyle: function () {
+        return this.style;
+    },
+
+    refresh: function () {
         var self = this;
         BI.nextTick(function () {
             self.editor.refresh();

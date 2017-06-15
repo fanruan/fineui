@@ -17319,7 +17319,7 @@ BI.shortcut('bi.all_value_chooser_pane', BI.AllValueChooserPane);BI.AbstractTree
                 var node = self._getTreeNode(parentValues, k);
                 var newParents = BI.clone(parentValues);
                 newParents.push(node.value);
-                createOneJson(node, BI.last(parentValues), getCount(selected[k], newParents));
+                createOneJson(node, node.parent && node.parent.id, getCount(selected[k], newParents));
                 doCheck(newParents, node, selected[k]);
             })
         }
