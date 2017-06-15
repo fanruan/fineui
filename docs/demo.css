@@ -54,7 +54,7 @@
 body {
   background-color: #eff1f4;
 }
-body.bi-theme-dark {
+.bi-theme-dark body {
   background-color: #191B2B;
 }
 /****添加计算宽度的--运算符直接需要space****/
