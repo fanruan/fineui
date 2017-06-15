@@ -12,11 +12,11 @@ $.extend(BI, {
             alert: function (title, message, callback) {
                 this._show(false, title, message, callback);
             },
-            confirm: function (title, message, callback, min_width) {
+            confirm: function (title, message, callback) {
                 this._show(true, title, message, callback);
             },
             prompt: function (title, message, value, callback, min_width) {
-                BI.Msg.prompt(title, message, value, callback, min_width);
+                // BI.Msg.prompt(title, message, value, callback, min_width);
             },
             toast: function (message, level, context) {
                 context = context || $("body");

@@ -28,13 +28,13 @@ Demo.North = BI.inherit(BI.Widget, {
                         type: "bi.text_button",
                         text: "星空蓝",
                         handler: function () {
-                            $("body").removeClass("bi-theme-default").addClass("bi-theme-dark");
+                            $("html").removeClass("bi-theme-default").addClass("bi-theme-dark");
                         }
                     }, {
                         type: "bi.text_button",
                         text: "典雅白",
                         handler: function () {
-                            $("body").removeClass("bi-theme-dark").addClass("bi-theme-default");
+                            $("html").removeClass("bi-theme-dark").addClass("bi-theme-default");
                         }
                     }]
                 }

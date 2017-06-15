@@ -4860,7 +4860,7 @@ BI.shortcut('bi.date_triangle_trigger', BI.DateTriangleTrigger);/**
 BI.DateCombo = BI.inherit(BI.Widget, {
     _defaultConfig: function () {
         return BI.extend(BI.DateCombo.superclass._defaultConfig.apply(this, arguments), {
-            baseCls: "bi-date-combo",
+            baseCls: "bi-date-combo bi-border",
             height: 30
         });
     },
@@ -4919,7 +4919,7 @@ BI.shortcut('bi.date_combo', BI.DateCombo);BI.DateTrigger = BI.inherit(BI.Trigge
 
     _defaultConfig: function () {
         return BI.extend(BI.DateTrigger.superclass._defaultConfig.apply(this, arguments), {
-            extraCls: "bi-date-trigger bi-border",
+            extraCls: "bi-date-trigger",
             min: '1900-01-01', //最小日期
             max: '2099-12-31', //最大日期
             height: 25
@@ -17319,7 +17319,7 @@ BI.shortcut('bi.all_value_chooser_pane', BI.AllValueChooserPane);BI.AbstractTree
                 var node = self._getTreeNode(parentValues, k);
                 var newParents = BI.clone(parentValues);
                 newParents.push(node.value);
-                createOneJson(node, BI.last(parentValues), getCount(selected[k], newParents));
+                createOneJson(node, node.parent && node.parent.id, getCount(selected[k], newParents));
                 doCheck(newParents, node, selected[k]);
             })
         }
@@ -17365,22 +17365,34 @@ BI.shortcut('bi.all_value_chooser_pane', BI.AllValueChooserPane);BI.AbstractTree
         function dealWithSelectedValues(selectedValues) {
             var p = parentValues.concat(notSelectedValue);
             //存储的值中存在这个值就把它删掉
+            //例如选中了中国-江苏-南京， 取消中国或江苏或南京
             if (canFindKey(selectedValues, p)) {
                 //如果搜索的值在父亲链中
                 if (isSearchValueInParent(p)) {
+                    //例如选中了 中国-江苏， 搜索江苏， 取消江苏
+                    //例如选中了 中国-江苏， 搜索江苏， 取消中国
                     self._deleteNode(selectedValues, p);
                 } else {
                     var searched = [];
                     var finded = search(parentValues, notSelectedValue, [], searched);
                     if (finded && BI.isNotEmptyArray(searched)) {
                         BI.each(searched, function (i, arr) {
-                            self._deleteNode(selectedValues, arr);
+                            var node = self._getNode(selectedValues, arr);
+                            if (node) {
+                                //例如选中了 中国-江苏-南京，搜索南京，取消中国
+                                self._deleteNode(selectedValues, arr);
+                            } else {
+                                //例如选中了 中国-江苏，搜索南京，取消中国
+                                expandSelectedValue(selectedValues, arr, BI.last(arr));
+                            }
                         })
                     }
                 }
             }
 
             //存储的值中不存在这个值，但父亲节点是全选的情况
+            //例如选中了中国-江苏，取消南京
+            //important 选中了中国-江苏，取消了江苏，但是搜索的是南京
             if (isChild(selectedValues, p)) {
                 var result = [], finded = false;
                 //如果parentValues中有匹配的值，说明搜索结果不在当前值下
@@ -17393,29 +17405,9 @@ BI.shortcut('bi.all_value_chooser_pane', BI.AllValueChooserPane);BI.AbstractTree
                 }
 
                 if (finded === true) {
-                    var next = selectedValues;
-                    BI.each(p, function (i, v) {
-                        var t = next[v];
-                        if (t == null) {
-                            if (BI.isEmpty(next)) {
-                                var split = p.slice(0, i);
-                                var expanded = self._getChildren(split);
-                                BI.each(expanded, function (m, child) {
-                                    if (i === p.length - 1 && child.value === notSelectedValue) {
-                                        return true;
-                                    }
-                                    next[child.value] = {};
-                                });
-                                next = next[v];
-                            } else {
-                                next = {};
-                                next[v] = {};
-                            }
-                        } else {
-                            next = t;
-                        }
-                    });
-
+                    //去掉点击的节点之后的结果集
+                    expandSelectedValue(selectedValues, p, notSelectedValue);
+                    //添加去掉搜索的结果集
                     if (result.length > 0) {
                         BI.each(result, function (i, strs) {
                             self._buildTree(selectedValues, strs);
@@ -17424,6 +17416,32 @@ BI.shortcut('bi.all_value_chooser_pane', BI.AllValueChooserPane);BI.AbstractTree
                 }
             }
 
+        }
+
+        function expandSelectedValue(selectedValues, parents, notSelectedValue) {
+            var next = selectedValues;
+            //去掉点击的节点之后的结果集
+            BI.each(parents, function (i, v) {
+                var t = next[v];
+                if (t == null) {
+                    if (BI.isEmpty(next)) {
+                        var split = parents.slice(0, i);
+                        var expanded = self._getChildren(split);
+                        BI.each(expanded, function (m, child) {
+                            if (i === parents.length - 1 && child.value === notSelectedValue) {
+                                return true;
+                            }
+                            next[child.value] = {};
+                        });
+                        next = next[v];
+                    } else {
+                        next = {};
+                        next[v] = {};
+                    }
+                } else {
+                    next = t;
+                }
+            });
         }
 
         function search(parents, current, result, searched) {
@@ -17790,14 +17808,16 @@ BI.shortcut('bi.all_value_chooser_pane', BI.AllValueChooserPane);BI.AbstractTree
         var name = values[values.length - 1];
         var p = values.slice(0, values.length - 1);
         var pNode = this._getNode(selectedValues, p);
-        if (pNode[name]) {
+        if (pNode != null && pNode[name]) {
             delete pNode[name];
             //递归删掉空父节点
             while (p.length > 0 && BI.isEmpty(pNode)) {
                 name = p[p.length - 1];
                 p = p.slice(0, p.length - 1);
                 pNode = this._getNode(selectedValues, p);
-                delete pNode[name];
+                if (pNode != null) {
+                    delete pNode[name];
+                }
             }
         }
     },

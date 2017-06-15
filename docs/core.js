@@ -22840,7 +22840,7 @@ BI.extend(BI.DOM, {
     },
 
     isColor: function (color) {
-        return this.isRGBColor(color) || this.isHexColor(color);
+        return color && (this.isRGBColor(color) || this.isHexColor(color));
     },
 
     isRGBColor: function (color) {
@@ -22858,7 +22858,7 @@ BI.extend(BI.DOM, {
     },
 
     isDarkColor: function (hex) {
-        if (!hex) {
+        if (!hex || !this.isHexColor(hex)) {
             return false;
         }
         var rgb = this.rgb2json(this.hex2rgb(hex));
@@ -22871,7 +22871,7 @@ BI.extend(BI.DOM, {
 
     //获取对比颜色
     getContrastColor: function (color) {
-        if (!color) {
+        if (!color || !this.isColor(color)) {
             return "";
         }
         if (this.isDarkColor(color)) {
@@ -22896,6 +22896,9 @@ BI.extend(BI.DOM, {
 
     rgb2json: function (rgbColour) {
         if (!rgbColour) {
+            return {};
+        }
+        if (!this.isRGBColor(rgbColour)) {
             return {};
         }
         var rgbValues = rgbColour.match(/\d+(\.\d+)?/g);
@@ -22942,6 +22945,9 @@ BI.extend(BI.DOM, {
     hex2rgb: function (color) {
         if (!color) {
             return "";
+        }
+        if (!this.isHexColor(color)) {
+            return color;
         }
         var tempValue = "rgb(", colorArray;
 

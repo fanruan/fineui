@@ -1,13 +1,10 @@
-/****添加计算宽度的--运算符直接需要space****/
 /****** common color(常用颜色,可用于普遍场景) *****/
 /**** custom color(自定义颜色,用于特定场景) ****/
 .demo-face .face-config .config-label {
   font-size: 14px;
 }
-/****添加计算宽度的--运算符直接需要space****/
 /****** common color(常用颜色,可用于普遍场景) *****/
 /**** custom color(自定义颜色,用于特定场景) ****/
-/****添加计算宽度的--运算符直接需要space****/
 /****** common color(常用颜色,可用于普遍场景) *****/
 /**** custom color(自定义颜色,用于特定场景) ****/
 .layout-bg-white {
@@ -54,10 +51,9 @@
 body {
   background-color: #eff1f4;
 }
-body.bi-theme-dark {
+.bi-theme-dark body {
   background-color: #191B2B;
 }
-/****添加计算宽度的--运算符直接需要space****/
 /****** common color(常用颜色,可用于普遍场景) *****/
 /**** custom color(自定义颜色,用于特定场景) ****/
 .demo-north {
@@ -70,9 +66,7 @@ body.bi-theme-dark {
   font-size: 20px;
   font-weight: 300;
 }
-/****添加计算宽度的--运算符直接需要space****/
 /****** common color(常用颜色,可用于普遍场景) *****/
 /**** custom color(自定义颜色,用于特定场景) ****/
-/****添加计算宽度的--运算符直接需要space****/
 /****** common color(常用颜色,可用于普遍场景) *****/
 /**** custom color(自定义颜色,用于特定场景) ****/

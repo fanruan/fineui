@@ -14254,7 +14254,7 @@ BI.FormulaCollections = ["abs","ABS","acos","ACOS","acosh","ACOSH","add2array","
 BI.FormulaEditor = BI.inherit(BI.Single, {
     _defaultConfig: function () {
         return $.extend(BI.FormulaEditor.superclass._defaultConfig.apply(), {
-            baseCls: 'bi-formula-editor',
+            baseCls: 'bi-formula-editor bi-card',
             watermark: '',
             value: '',
             fieldTextValueMap: {},
@@ -14492,11 +14492,11 @@ $.extend(BI, {
             alert: function (title, message, callback) {
                 this._show(false, title, message, callback);
             },
-            confirm: function (title, message, callback, min_width) {
+            confirm: function (title, message, callback) {
                 this._show(true, title, message, callback);
             },
             prompt: function (title, message, value, callback, min_width) {
-                BI.Msg.prompt(title, message, value, callback, min_width);
+                // BI.Msg.prompt(title, message, value, callback, min_width);
             },
             toast: function (message, level, context) {
                 context = context || $("body");
@@ -17706,7 +17706,7 @@ BI.shortcut("bi.text_node", BI.TextNode);/**
 BI.CodeEditor = BI.inherit(BI.Single, {
     _defaultConfig: function () {
         return $.extend(BI.CodeEditor.superclass._defaultConfig.apply(), {
-            baseCls: 'bi-code-editor',
+            baseCls: 'bi-code-editor bi-card',
             value: '',
             watermark: ""
         });
@@ -17780,16 +17780,20 @@ BI.CodeEditor = BI.inherit(BI.Single, {
         this.editor.setOption("readOnly", b === true ? false : "nocursor")
     },
 
-    insertParam: function(param){
+    insertParam: function (param) {
         var from = this.editor.getCursor();
         this.editor.replaceSelection(param);
         var to = this.editor.getCursor();
-        this.editor.markText(from, to, {className: 'param', atomic: true});
+        var options = {className: 'param', atomic: true};
+        if (BI.isNotNull(param.match(/^<!.*!>$/))) {
+            options.className = 'error-param';
+        }
+        this.editor.markText(from, to, options);
         this.editor.replaceSelection(" ");
         this.editor.focus();
     },
 
-    insertString: function(str){
+    insertString: function (str) {
         this.editor.replaceSelection(str);
         this.editor.focus();
     },
@@ -17801,6 +17805,7 @@ BI.CodeEditor = BI.inherit(BI.Single, {
             _.forEach(line.markedSpans, function (i, ms) {
                 switch (i.marker.className) {
                     case "param":
+                    case "error-param":
                         var fieldNameLength = i.to - i.from;
                         value = value.substr(0, i.from + num) + "$\{" + value.substr(i.from + num, fieldNameLength) + "\}" + value.substr(i.to + num, value.length);
                         num += 3;
@@ -17832,7 +17837,20 @@ BI.CodeEditor = BI.inherit(BI.Single, {
         })
     },
 
-    refresh: function(){
+    focus: function () {
+        this.editor.focus();
+    },
+
+    setStyle: function (style) {
+        this.style = style;
+        this.element.css(style);
+    },
+
+    getStyle: function () {
+        return this.style;
+    },
+
+    refresh: function () {
         var self = this;
         BI.nextTick(function () {
             self.editor.refresh();
@@ -18260,7 +18278,7 @@ BI.shortcut("bi.multifile_editor", BI.MultifileEditor);/**
 BI.TextAreaEditor = BI.inherit(BI.Single, {
     _defaultConfig: function () {
         return $.extend(BI.TextAreaEditor.superclass._defaultConfig.apply(), {
-            baseCls: 'bi-textarea-editor',
+            baseCls: 'bi-textarea-editor bi-card',
             value: ''
         });
     },
@@ -18272,7 +18290,7 @@ BI.TextAreaEditor = BI.inherit(BI.Single, {
             tagName: "textarea",
             width: "100%",
             height: "100%",
-            cls: "textarea-editor-content display-block bi-card"
+            cls: "textarea-editor-content display-block"
         });
         this.content.element.css({"resize": "none"});
         BI.createWidget({
