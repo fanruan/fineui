@@ -14254,7 +14254,7 @@ BI.FormulaCollections = ["abs","ABS","acos","ACOS","acosh","ACOSH","add2array","
 BI.FormulaEditor = BI.inherit(BI.Single, {
     _defaultConfig: function () {
         return $.extend(BI.FormulaEditor.superclass._defaultConfig.apply(), {
-            baseCls: 'bi-formula-editor',
+            baseCls: 'bi-formula-editor bi-card',
             watermark: '',
             value: '',
             fieldTextValueMap: {},
@@ -18274,7 +18274,7 @@ BI.shortcut("bi.multifile_editor", BI.MultifileEditor);/**
 BI.TextAreaEditor = BI.inherit(BI.Single, {
     _defaultConfig: function () {
         return $.extend(BI.TextAreaEditor.superclass._defaultConfig.apply(), {
-            baseCls: 'bi-textarea-editor',
+            baseCls: 'bi-textarea-editor bi-card',
             value: ''
         });
     },
@@ -18286,7 +18286,7 @@ BI.TextAreaEditor = BI.inherit(BI.Single, {
             tagName: "textarea",
             width: "100%",
             height: "100%",
-            cls: "textarea-editor-content display-block bi-card"
+            cls: "textarea-editor-content display-block"
         });
         this.content.element.css({"resize": "none"});
         BI.createWidget({
