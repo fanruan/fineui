@@ -4,6 +4,7 @@ html,
 body,
 div,
 ul,
+ol,
 li,
 img,
 a,
@@ -30,11 +31,6 @@ textarea {
 .bi-theme-dark input,
 .bi-theme-dark textarea {
   border: 1px solid #525466;
-}
-ul,
-ol {
-  margin: 0;
-  padding: 0;
 }
 ul {
   list-style: disc;

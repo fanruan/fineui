@@ -1,5 +1,3 @@
-/****** common color(常用颜色,可用于普遍场景) *****/
-/**** custom color(自定义颜色,用于特定场景) ****/
 /*类似ie6的盒子模型 可以在有百分比的时候加border 支持到ie8*/
 .border-sizing {
   -webkit-box-sizing: border-box;

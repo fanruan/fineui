@@ -1,9 +1,8 @@
-/****** common color(常用颜色,可用于普遍场景) *****/
-/**** custom color(自定义颜色,用于特定场景) ****/
 html,
 body,
 div,
 ul,
+ol,
 li,
 img,
 a,
@@ -30,11 +29,6 @@ textarea {
 .bi-theme-dark input,
 .bi-theme-dark textarea {
   border: 1px solid #525466;
-}
-ul,
-ol {
-  margin: 0;
-  padding: 0;
 }
 ul {
   list-style: disc;
