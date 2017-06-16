@@ -222,7 +222,7 @@ BI.shortcut("demo.button", Demo.Button);Demo.Button = BI.inherit(BI.Widget, {
             {
                 el: {
                     type: 'bi.icon_button',
-                    cls: "rename-font",
+                    cls: "close-ha-font",
                     width: 20,
                     height: 20
                 }
