@@ -182,7 +182,7 @@ BI.AbstractTreeValueChooser = BI.inherit(BI.Widget, {
         function expandSelectedValue(selectedValues, parents, notSelectedValue) {
             var next = selectedValues;
             //去掉点击的节点之后的结果集
-            BI.each(parents, function (i, v) {
+            BI.some(parents, function (i, v) {
                 var t = next[v];
                 if (t == null) {
                     if (BI.isEmpty(next)) {
@@ -196,8 +196,9 @@ BI.AbstractTreeValueChooser = BI.inherit(BI.Widget, {
                         });
                         next = next[v];
                     } else {
-                        next = {};
-                        next[v] = {};
+                        return true;
+                        // next = {};
+                        // next[v] = {};
                     }
                 } else {
                     next = t;
