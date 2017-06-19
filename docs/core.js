@@ -24992,7 +24992,7 @@ _.extend(BI, {
         Horizontal: "horizontal"
     },
     Selection: {
-        Default: -999,
+        Default: -2,
         None: -1,
         Single: 0,
         Multi: 1,
