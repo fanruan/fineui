@@ -17424,6 +17424,9 @@ BI.shortcut('bi.all_value_chooser_pane', BI.AllValueChooserPane);BI.AbstractTree
             BI.some(parents, function (i, v) {
                 var t = next[v];
                 if (t == null) {
+                    if (i === 0) {
+                        return true;
+                    }
                     if (BI.isEmpty(next)) {
                         var split = parents.slice(0, i);
                         var expanded = self._getChildren(split);

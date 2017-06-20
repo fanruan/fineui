@@ -185,6 +185,9 @@ BI.AbstractTreeValueChooser = BI.inherit(BI.Widget, {
             BI.some(parents, function (i, v) {
                 var t = next[v];
                 if (t == null) {
+                    if (i === 0) {
+                        return true;
+                    }
                     if (BI.isEmpty(next)) {
                         var split = parents.slice(0, i);
                         var expanded = self._getChildren(split);
