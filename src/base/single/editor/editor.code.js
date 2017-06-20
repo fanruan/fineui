@@ -141,6 +141,10 @@ BI.CodeEditor = BI.inherit(BI.Single, {
     focus: function () {
         this.editor.focus();
     },
+    
+    blur: function () {
+        this.editor.getInputField().blur();
+    },
 
     setStyle: function (style) {
         this.style = style;
