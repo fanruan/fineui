@@ -274,7 +274,7 @@ BI.BasicButton = BI.inherit(BI.Single, {
     setSelected: function (b) {
         var o = this.options;
         o.selected = b;
-        if (this.isSelected()) {
+        if (b) {
             this.handle().element.addClass("active");
         } else {
             this.handle().element.removeClass("active");

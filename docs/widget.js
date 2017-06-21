@@ -9585,7 +9585,8 @@ BI.MultiSelectCombo = BI.inherit(BI.Single, {
             itemsCreator: function (op, callback) {
                 o.itemsCreator(op, function (res) {
                     if (op.times === 1 && BI.isNotNull(op.keywords)) {
-                        self.trigger.setValue(self.getValue());
+                        //预防trigger内部把当前的storeValue改掉
+                        self.trigger.setValue(BI.deepClone(self.getValue()));
                     }
                     callback.apply(self, arguments);
                 });
@@ -9638,7 +9639,7 @@ BI.MultiSelectCombo = BI.inherit(BI.Single, {
                     assertShowValue();
                 });
             } else {
-                self._join(this.getValue(), function () {//安徽省 北京
+                self._join(this.getValue(), function () {
                     assertShowValue();
                 });
             }
@@ -10431,7 +10432,8 @@ BI.MultiSelectSearchLoader = BI.inherit(BI.Widget, {
     },
 
     setValue: function (v) {
-        this.storeValue = v;
+        //暂存的值一定是新的值，不然v改掉后，storeValue也跟着改了
+        this.storeValue = BI.deepClone(v);
         this.button_group.setValue(v);
     },
 
@@ -10982,7 +10984,7 @@ BI.MultiSelectList = BI.inherit(BI.Widget, {
 
         var assertShowValue = function () {
             BI.isKey(self._startValue) && self.storeValue.value[self.storeValue.type === BI.Selection.All ? "remove" : "pushDistinct"](self._startValue);
-            self.trigger.setValue(self.storeValue);
+            // self.trigger.setValue(self.storeValue);
         };
 
         this.adapter = BI.createWidget({
@@ -11034,7 +11036,7 @@ BI.MultiSelectList = BI.inherit(BI.Widget, {
                 action: function () {
                     self._showSearcherPane();
                     self._setStartValue("");
-                    this.setValue(self.storeValue);
+                    this.setValue(BI.deepClone(self.storeValue));
                 }
             }, {
                 eventName: BI.Searcher.EVENT_STOP,

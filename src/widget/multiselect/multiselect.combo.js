@@ -41,7 +41,8 @@ BI.MultiSelectCombo = BI.inherit(BI.Single, {
             itemsCreator: function (op, callback) {
                 o.itemsCreator(op, function (res) {
                     if (op.times === 1 && BI.isNotNull(op.keywords)) {
-                        self.trigger.setValue(self.getValue());
+                        //预防trigger内部把当前的storeValue改掉
+                        self.trigger.setValue(BI.deepClone(self.getValue()));
                     }
                     callback.apply(self, arguments);
                 });
@@ -94,7 +95,7 @@ BI.MultiSelectCombo = BI.inherit(BI.Single, {
                     assertShowValue();
                 });
             } else {
-                self._join(this.getValue(), function () {//安徽省 北京
+                self._join(this.getValue(), function () {
                     assertShowValue();
                 });
             }
