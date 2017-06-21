@@ -14260,7 +14260,8 @@ BI.FormulaEditor = BI.inherit(BI.Single, {
             watermark: '',
             value: '',
             fieldTextValueMap: {},
-            showHint: true
+            showHint: true,
+            lineHeight: 2
         });
     },
     _init: function () {
@@ -14272,6 +14273,7 @@ BI.FormulaEditor = BI.inherit(BI.Single, {
             lineNumbers: false,
             mode: 'formula'
         });
+        o.lineHeight === 1 ? this.element.addClass("codemirror-low-line-height") : this.element.addClass("codemirror-high-line-height");
         this.editor.on("change", function (cm, change) {
             self._checkWaterMark();
             if (o.showHint) {
@@ -17712,7 +17714,8 @@ BI.CodeEditor = BI.inherit(BI.Single, {
         return $.extend(BI.CodeEditor.superclass._defaultConfig.apply(), {
             baseCls: 'bi-code-editor bi-card',
             value: '',
-            watermark: ""
+            watermark: "",
+            lineHeight: 2
         });
     },
     _init: function () {
@@ -17723,6 +17726,7 @@ BI.CodeEditor = BI.inherit(BI.Single, {
             lineWrapping: true,
             lineNumbers: false
         });
+        o.lineHeight === 1 ? this.element.addClass("codemirror-low-line-height") : this.element.addClass("codemirror-high-line-height");
         this.editor.on("change", function (cm, change) {
             BI.nextTick(function () {
                 self.fireEvent(BI.CodeEditor.EVENT_CHANGE)
