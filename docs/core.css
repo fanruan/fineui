@@ -1,9 +1,8 @@
-/****** common color(常用颜色,可用于普遍场景) *****/
-/**** custom color(自定义颜色,用于特定场景) ****/
 html,
 body,
 div,
 ul,
+ol,
 li,
 img,
 a,
@@ -30,11 +29,6 @@ textarea {
 .bi-theme-dark input,
 .bi-theme-dark textarea {
   border: 1px solid #525466;
-}
-ul,
-ol {
-  margin: 0;
-  padding: 0;
 }
 ul {
   list-style: disc;
@@ -2950,8 +2944,6 @@ i {
   -webkit-animation-name: slideOutUp;
   animation-name: slideOutUp;
 }
-/****** common color(常用颜色,可用于普遍场景) *****/
-/**** custom color(自定义颜色,用于特定场景) ****/
 .base-disabled {
   cursor: default !important;
   color: #cccccc !important;
@@ -3503,8 +3495,6 @@ i {
   cursor: move;
 }
 /*****************cursor*****************/
-/****** common color(常用颜色,可用于普遍场景) *****/
-/**** custom color(自定义颜色,用于特定场景) ****/
 .y-overflow-auto {
   overflow-y: auto;
   overflow-x: hidden;
@@ -3543,8 +3533,6 @@ i {
   overflow-y: hidden;
   white-space: nowrap;
 }
-/****** common color(常用颜色,可用于普遍场景) *****/
-/**** custom color(自定义颜色,用于特定场景) ****/
 .display-block {
   display: block;
 }
@@ -3566,8 +3554,6 @@ i {
 .horizon-left {
   text-align: left;
 }
-/****** common color(常用颜色,可用于普遍场景) *****/
-/**** custom color(自定义颜色,用于特定场景) ****/
 /*类似ie6的盒子模型 可以在有百分比的时候加border 支持到ie8*/
 .border-sizing {
   -webkit-box-sizing: border-box;
@@ -3895,8 +3881,6 @@ i {
   min-height: 100%;
   float: left;
 }
-/****** common color(常用颜色,可用于普遍场景) *****/
-/**** custom color(自定义颜色,用于特定场景) ****/
 .bi-inline-center-adapt-layout:after {
   display: inline-block;
   width: 0;
@@ -3904,8 +3888,6 @@ i {
   vertical-align: middle;
   content: ' ';
 }
-/****** common color(常用颜色,可用于普遍场景) *****/
-/**** custom color(自定义颜色,用于特定场景) ****/
 .bi-inline-vertical-adapt-layout:after {
   display: inline-block;
   width: 0;
@@ -3913,8 +3895,6 @@ i {
   vertical-align: middle;
   content: ' ';
 }
-/****** common color(常用颜色,可用于普遍场景) *****/
-/**** custom color(自定义颜色,用于特定场景) ****/
 .bi-theme-dark {
   background-color: #191b2b;
   color: #cccccc;

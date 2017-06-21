@@ -56,10 +56,10 @@ BI.ResizableTableCell = BI.inherit(BI.Widget, {
                 size = 0;
                 offset = 0;
                 defaultSize = o.width;
-                self.handler.element.removeClass("dragging");
-                self.handler.element.removeClass("suitable");
                 startDrag = false;
             }
+            self.handler.element.removeClass("dragging");
+            self.handler.element.removeClass("suitable");
             mouseMoveTracker.releaseMouseMoves();
         }, document);
         this.handler = BI.createWidget({
@@ -79,6 +79,7 @@ BI.ResizableTableCell = BI.inherit(BI.Widget, {
         });
         this.handler.element.on("mousedown", function (event) {
             defaultSize = o.width;
+            optimizeSize(defaultSize);
             mouseMoveTracker.captureMouseMoves(event);
         });
         BI.createWidget({

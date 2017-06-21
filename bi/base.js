@@ -857,7 +857,7 @@ BI.BasicButton = BI.inherit(BI.Single, {
     setSelected: function (b) {
         var o = this.options;
         o.selected = b;
-        if (this.isSelected()) {
+        if (b) {
             this.handle().element.addClass("active");
         } else {
             this.handle().element.removeClass("active");
@@ -2684,10 +2684,10 @@ BI.CollectionView = BI.inherit(BI.Widget, {
                         this.renderedCells[index]._height = datum.height;
                         this.renderedCells[index].el.setHeight(datum.height);
                     }
-                    if (this.renderedCells[index].left !== datum.x) {
+                    if (this.renderedCells[index]._left !== datum.x) {
                         this.renderedCells[index].el.element.css("left", datum.x + "px");
                     }
-                    if (this.renderedCells[index].top !== datum.y) {
+                    if (this.renderedCells[index]._top !== datum.y) {
                         this.renderedCells[index].el.element.css("top", datum.y + "px");
                     }
                     renderedCells.push(child = this.renderedCells[index]);
@@ -2705,6 +2705,8 @@ BI.CollectionView = BI.inherit(BI.Widget, {
                         el: child,
                         left: datum.x,
                         top: datum.y,
+                        _left: datum.x,
+                        _top: datum.y,
                         _width: datum.width,
                         _height: datum.height
                     });
@@ -14258,7 +14260,8 @@ BI.FormulaEditor = BI.inherit(BI.Single, {
             watermark: '',
             value: '',
             fieldTextValueMap: {},
-            showHint: true
+            showHint: true,
+            lineHeight: 2
         });
     },
     _init: function () {
@@ -14270,6 +14273,7 @@ BI.FormulaEditor = BI.inherit(BI.Single, {
             lineNumbers: false,
             mode: 'formula'
         });
+        o.lineHeight === 1 ? this.element.addClass("codemirror-low-line-height") : this.element.addClass("codemirror-high-line-height");
         this.editor.on("change", function (cm, change) {
             self._checkWaterMark();
             if (o.showHint) {
@@ -14800,10 +14804,10 @@ BI.GridView = BI.inherit(BI.Widget, {
                             this.renderedCells[index]._height = rowDatum.size;
                             this.renderedCells[index].el.setHeight(rowDatum.size);
                         }
-                        if (this.renderedCells[index].left !== columnDatum.offset + horizontalOffsetAdjustment) {
+                        if (this.renderedCells[index]._left !== columnDatum.offset + horizontalOffsetAdjustment) {
                             this.renderedCells[index].el.element.css("left", (columnDatum.offset + horizontalOffsetAdjustment) + "px");
                         }
-                        if (this.renderedCells[index].top !== rowDatum.offset + verticalOffsetAdjustment) {
+                        if (this.renderedCells[index]._top !== rowDatum.offset + verticalOffsetAdjustment) {
                             this.renderedCells[index].el.element.css("top", (rowDatum.offset + verticalOffsetAdjustment) + "px");
                         }
                         renderedCells.push(child = this.renderedCells[index]);
@@ -14823,6 +14827,8 @@ BI.GridView = BI.inherit(BI.Widget, {
                             el: child,
                             left: columnDatum.offset + horizontalOffsetAdjustment,
                             top: rowDatum.offset + verticalOffsetAdjustment,
+                            _left: columnDatum.offset + horizontalOffsetAdjustment,
+                            _top: rowDatum.offset + verticalOffsetAdjustment,
                             _width: columnDatum.size,
                             _height: rowDatum.size
                         });
@@ -17708,7 +17714,8 @@ BI.CodeEditor = BI.inherit(BI.Single, {
         return $.extend(BI.CodeEditor.superclass._defaultConfig.apply(), {
             baseCls: 'bi-code-editor bi-card',
             value: '',
-            watermark: ""
+            watermark: "",
+            lineHeight: 2
         });
     },
     _init: function () {
@@ -17719,6 +17726,7 @@ BI.CodeEditor = BI.inherit(BI.Single, {
             lineWrapping: true,
             lineNumbers: false
         });
+        o.lineHeight === 1 ? this.element.addClass("codemirror-low-line-height") : this.element.addClass("codemirror-high-line-height");
         this.editor.on("change", function (cm, change) {
             BI.nextTick(function () {
                 self.fireEvent(BI.CodeEditor.EVENT_CHANGE)
@@ -17839,6 +17847,10 @@ BI.CodeEditor = BI.inherit(BI.Single, {
 
     focus: function () {
         this.editor.focus();
+    },
+    
+    blur: function () {
+        this.editor.getInputField().blur();
     },
 
     setStyle: function (style) {
@@ -32485,10 +32497,10 @@ BI.ResizableTableCell = BI.inherit(BI.Widget, {
                 size = 0;
                 offset = 0;
                 defaultSize = o.width;
-                self.handler.element.removeClass("dragging");
-                self.handler.element.removeClass("suitable");
                 startDrag = false;
             }
+            self.handler.element.removeClass("dragging");
+            self.handler.element.removeClass("suitable");
             mouseMoveTracker.releaseMouseMoves();
         }, document);
         this.handler = BI.createWidget({
@@ -32508,6 +32520,7 @@ BI.ResizableTableCell = BI.inherit(BI.Widget, {
         });
         this.handler.element.on("mousedown", function (event) {
             defaultSize = o.width;
+            optimizeSize(defaultSize);
             mouseMoveTracker.captureMouseMoves(event);
         });
         BI.createWidget({
@@ -32758,13 +32771,14 @@ BI.ResizableTable = BI.inherit(BI.Widget, {
             self.resizer.setVisible(true);
             var height = o.headerRowSize + self._getRegionRowSize()[1];
             self.resizer.setHeight(height);
-            if (o.minColumnSize[j]) {
-                if (size === o.minColumnSize[j]) {
-                    self.resizer.element.addClass("suitable");
-                } else {
-                    self.resizer.element.removeClass("suitable");
-                }
-            }
+            //TODO 不知道为什么加入这段代码会使得列宽调整出问题
+            // if (o.minColumnSize[j]) {
+            //     if (size === o.minColumnSize[j]) {
+            //         self.resizer.element.addClass("suitable");
+            //     } else {
+            //         self.resizer.element.removeClass("suitable");
+            //     }
+            // }
             self._setResizerPosition(self._getResizerLeft(j) + size, (o.header.length - 1) * o.headerRowSize);
         };
         var stop = function (j, size) {
@@ -32787,8 +32801,8 @@ BI.ResizableTable = BI.inherit(BI.Widget, {
                         result[i][j] = {
                             type: "bi.resizable_table_cell",
                             cell: col,
-                            suitableSize: o.minColumnSize[i],
-                            maxSize: o.maxColumnSize[i],
+                            suitableSize: o.minColumnSize[j],
+                            maxSize: o.maxColumnSize[j],
                             resize: BI.bind(resize, null, j),
                             stop: BI.bind(stop, null, j)
                         };
@@ -32798,8 +32812,8 @@ BI.ResizableTable = BI.inherit(BI.Widget, {
                                 result[r - 1][j] = {
                                     type: "bi.resizable_table_cell",
                                     cell: result[r - 1][j],
-                                    suitableSize: o.minColumnSize[i],
-                                    maxSize: o.maxColumnSize[i],
+                                    suitableSize: o.minColumnSize[j],
+                                    maxSize: o.maxColumnSize[j],
                                     resize: BI.bind(resize, null, j),
                                     stop: BI.bind(stop, null, j)
                                 };

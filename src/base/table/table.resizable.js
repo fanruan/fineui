@@ -216,13 +216,14 @@ BI.ResizableTable = BI.inherit(BI.Widget, {
             self.resizer.setVisible(true);
             var height = o.headerRowSize + self._getRegionRowSize()[1];
             self.resizer.setHeight(height);
-            if (o.minColumnSize[j]) {
-                if (size === o.minColumnSize[j]) {
-                    self.resizer.element.addClass("suitable");
-                } else {
-                    self.resizer.element.removeClass("suitable");
-                }
-            }
+            //TODO 不知道为什么加入这段代码会使得列宽调整出问题
+            // if (o.minColumnSize[j]) {
+            //     if (size === o.minColumnSize[j]) {
+            //         self.resizer.element.addClass("suitable");
+            //     } else {
+            //         self.resizer.element.removeClass("suitable");
+            //     }
+            // }
             self._setResizerPosition(self._getResizerLeft(j) + size, (o.header.length - 1) * o.headerRowSize);
         };
         var stop = function (j, size) {
@@ -245,8 +246,8 @@ BI.ResizableTable = BI.inherit(BI.Widget, {
                         result[i][j] = {
                             type: "bi.resizable_table_cell",
                             cell: col,
-                            suitableSize: o.minColumnSize[i],
-                            maxSize: o.maxColumnSize[i],
+                            suitableSize: o.minColumnSize[j],
+                            maxSize: o.maxColumnSize[j],
                             resize: BI.bind(resize, null, j),
                             stop: BI.bind(stop, null, j)
                         };
@@ -256,8 +257,8 @@ BI.ResizableTable = BI.inherit(BI.Widget, {
                                 result[r - 1][j] = {
                                     type: "bi.resizable_table_cell",
                                     cell: result[r - 1][j],
-                                    suitableSize: o.minColumnSize[i],
-                                    maxSize: o.maxColumnSize[i],
+                                    suitableSize: o.minColumnSize[j],
+                                    maxSize: o.maxColumnSize[j],
                                     resize: BI.bind(resize, null, j),
                                     stop: BI.bind(stop, null, j)
                                 };

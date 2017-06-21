@@ -9585,7 +9585,8 @@ BI.MultiSelectCombo = BI.inherit(BI.Single, {
             itemsCreator: function (op, callback) {
                 o.itemsCreator(op, function (res) {
                     if (op.times === 1 && BI.isNotNull(op.keywords)) {
-                        self.trigger.setValue(self.getValue());
+                        //预防trigger内部把当前的storeValue改掉
+                        self.trigger.setValue(BI.deepClone(self.getValue()));
                     }
                     callback.apply(self, arguments);
                 });
@@ -9638,7 +9639,7 @@ BI.MultiSelectCombo = BI.inherit(BI.Single, {
                     assertShowValue();
                 });
             } else {
-                self._join(this.getValue(), function () {//安徽省 北京
+                self._join(this.getValue(), function () {
                     assertShowValue();
                 });
             }
@@ -10431,7 +10432,8 @@ BI.MultiSelectSearchLoader = BI.inherit(BI.Widget, {
     },
 
     setValue: function (v) {
-        this.storeValue = v;
+        //暂存的值一定是新的值，不然v改掉后，storeValue也跟着改了
+        this.storeValue = BI.deepClone(v);
         this.button_group.setValue(v);
     },
 
@@ -10982,7 +10984,7 @@ BI.MultiSelectList = BI.inherit(BI.Widget, {
 
         var assertShowValue = function () {
             BI.isKey(self._startValue) && self.storeValue.value[self.storeValue.type === BI.Selection.All ? "remove" : "pushDistinct"](self._startValue);
-            self.trigger.setValue(self.storeValue);
+            // self.trigger.setValue(self.storeValue);
         };
 
         this.adapter = BI.createWidget({
@@ -11034,7 +11036,7 @@ BI.MultiSelectList = BI.inherit(BI.Widget, {
                 action: function () {
                     self._showSearcherPane();
                     self._setStartValue("");
-                    this.setValue(self.storeValue);
+                    this.setValue(BI.deepClone(self.storeValue));
                 }
             }, {
                 eventName: BI.Searcher.EVENT_STOP,
@@ -11826,18 +11828,18 @@ BI.MultiTreeCombo = BI.inherit(BI.Single, {
             if (isSearching()) {
                 self.trigger.stopEditing();
                 self.fireEvent(BI.MultiTreeCombo.EVENT_CONFIRM);
-                return;
-            }
-            if (isPopupView()) {
-                self.trigger.stopEditing();
-                self.storeValue = {value: self.combo.getValue()};
-                if (clear === true) {
-                    self.storeValue = {value: {}};
-                    clear = false;
-                    change = false;
+            }else{
+                if (isPopupView()) {
+                    self.trigger.stopEditing();
+                    self.storeValue = {value: self.combo.getValue()};
+                    if (clear === true) {
+                        self.storeValue = {value: {}};
+                    }
+                    self.fireEvent(BI.MultiTreeCombo.EVENT_CONFIRM);
                 }
-                self.fireEvent(BI.MultiTreeCombo.EVENT_CONFIRM);
             }
+            clear = false;
+            change = false;
         });
 
         var triggerBtn = BI.createWidget({
@@ -17420,23 +17422,42 @@ BI.shortcut('bi.all_value_chooser_pane', BI.AllValueChooserPane);BI.AbstractTree
 
         function expandSelectedValue(selectedValues, parents, notSelectedValue) {
             var next = selectedValues;
+            var childrenCount = [];
+            var path = [];
             //去掉点击的节点之后的结果集
-            BI.each(parents, function (i, v) {
+            BI.some(parents, function (i, v) {
                 var t = next[v];
                 if (t == null) {
+                    if (i === 0) {
+                        return true;
+                    }
                     if (BI.isEmpty(next)) {
                         var split = parents.slice(0, i);
                         var expanded = self._getChildren(split);
-                        BI.each(expanded, function (m, child) {
-                            if (i === parents.length - 1 && child.value === notSelectedValue) {
-                                return true;
+                        path.push(split);
+                        childrenCount.push(expanded.length);
+                        //如果只有一个值且取消的就是这个值
+                        if (i === parents.length - 1 && expanded.length === 1 && expanded[0] === notSelectedValue) {
+                            for (var j = childrenCount.length - 1; j >= 0; j--) {
+                                if (childrenCount[j] === 1) {
+                                    self._deleteNode(selectedValues, path[j]);
+                                } else {
+                                    break;
+                                }
                             }
-                            next[child.value] = {};
-                        });
+                        } else {
+                            BI.each(expanded, function (m, child) {
+                                if (i === parents.length - 1 && child.value === notSelectedValue) {
+                                    return true;
+                                }
+                                next[child.value] = {};
+                            });
+                        }
                         next = next[v];
                     } else {
-                        next = {};
-                        next[v] = {};
+                        return true;
+                        // next = {};
+                        // next[v] = {};
                     }
                 } else {
                     next = t;

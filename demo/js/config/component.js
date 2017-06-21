@@ -20,4 +20,8 @@ Demo.COMPONENT_CONFIG = [{
     pId: 5,
     text: "bi.tree_value_chooser_pane",
     value: "demo.tree_value_chooser_pane"
+}, {
+    pId: 5,
+    text: "平台用",
+    value: "demo.platform_level_tree"
 }];

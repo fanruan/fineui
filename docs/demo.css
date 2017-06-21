@@ -1,12 +1,6 @@
-/****** common color(常用颜色,可用于普遍场景) *****/
-/**** custom color(自定义颜色,用于特定场景) ****/
 .demo-face .face-config .config-label {
   font-size: 14px;
 }
-/****** common color(常用颜色,可用于普遍场景) *****/
-/**** custom color(自定义颜色,用于特定场景) ****/
-/****** common color(常用颜色,可用于普遍场景) *****/
-/**** custom color(自定义颜色,用于特定场景) ****/
 .layout-bg-white {
   background-color: #ffffff;
 }
@@ -54,8 +48,6 @@ body {
 .bi-theme-dark body {
   background-color: #191B2B;
 }
-/****** common color(常用颜色,可用于普遍场景) *****/
-/**** custom color(自定义颜色,用于特定场景) ****/
 .demo-north {
   background-color: #3c8dbc;
 }
@@ -66,7 +58,3 @@ body {
   font-size: 20px;
   font-weight: 300;
 }
-/****** common color(常用颜色,可用于普遍场景) *****/
-/**** custom color(自定义颜色,用于特定场景) ****/
-/****** common color(常用颜色,可用于普遍场景) *****/
-/**** custom color(自定义颜色,用于特定场景) ****/
