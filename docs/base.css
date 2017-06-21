@@ -424,12 +424,17 @@ div.CodeMirror span.CodeMirror-nonmatchingbracket {
   margin: 0;
   white-space: pre;
   word-wrap: normal;
-  line-height: inherit;
   color: inherit;
   z-index: 2;
   position: relative;
   overflow: visible;
   -webkit-tap-highlight-color: transparent;
+}
+.codemirror-high-line-height {
+  line-height: 2;
+}
+.codemirror-low-line-height {
+  line-height: 1.4;
 }
 .CodeMirror-wrap pre {
   word-wrap: break-word;
