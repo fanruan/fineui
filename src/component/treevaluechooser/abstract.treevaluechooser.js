@@ -181,6 +181,8 @@ BI.AbstractTreeValueChooser = BI.inherit(BI.Widget, {
 
         function expandSelectedValue(selectedValues, parents, notSelectedValue) {
             var next = selectedValues;
+            var childrenCount = [];
+            var path = [];
             //去掉点击的节点之后的结果集
             BI.some(parents, function (i, v) {
                 var t = next[v];
@@ -191,12 +193,25 @@ BI.AbstractTreeValueChooser = BI.inherit(BI.Widget, {
                     if (BI.isEmpty(next)) {
                         var split = parents.slice(0, i);
                         var expanded = self._getChildren(split);
-                        BI.each(expanded, function (m, child) {
-                            if (i === parents.length - 1 && child.value === notSelectedValue) {
-                                return true;
+                        path.push(split);
+                        childrenCount.push(expanded.length);
+                        //如果只有一个值且取消的就是这个值
+                        if (i === parents.length - 1 && expanded.length === 1 && expanded[0] === notSelectedValue) {
+                            for (var j = childrenCount.length - 1; j >= 0; j--) {
+                                if (childrenCount[j] === 1) {
+                                    self._deleteNode(selectedValues, path[j]);
+                                } else {
+                                    break;
+                                }
                             }
-                            next[child.value] = {};
-                        });
+                        } else {
+                            BI.each(expanded, function (m, child) {
+                                if (i === parents.length - 1 && child.value === notSelectedValue) {
+                                    return true;
+                                }
+                                next[child.value] = {};
+                            });
+                        }
                         next = next[v];
                     } else {
                         return true;
