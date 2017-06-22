@@ -538,3 +538,79 @@
 .bi-theme-dark .bi-list-item-select.disabled:active .bi-high-light {
   color: #666666 !important;
 }
+.bi-list-item-none:hover,
+.bi-list-item-none.hover {
+  color: inherit;
+  background-color: inherit;
+}
+.bi-list-item-none:hover .bi-input,
+.bi-list-item-none.hover .bi-input {
+  color: inherit;
+}
+.bi-list-item-none:active,
+.bi-list-item-none.active {
+  color: inherit;
+  background-color: inherit;
+}
+.bi-list-item-none:active .bi-input,
+.bi-list-item-none.active .bi-input {
+  color: inherit;
+}
+.bi-list-item-none:active .bi-high-light,
+.bi-list-item-none.active .bi-high-light {
+  color: inherit;
+}
+.bi-list-item-none.disabled,
+.bi-list-item-none.disabled:hover,
+.bi-list-item-none.disabled:active {
+  color: #cccccc !important;
+  background-color: transparent !important;
+}
+.bi-list-item-none.disabled .bi-input,
+.bi-list-item-none.disabled:hover .bi-input,
+.bi-list-item-none.disabled:active .bi-input {
+  color: #cccccc !important;
+}
+.bi-list-item-none.disabled .bi-high-light,
+.bi-list-item-none.disabled:hover .bi-high-light,
+.bi-list-item-none.disabled:active .bi-high-light {
+  color: #cccccc !important;
+}
+.bi-theme-dark .bi-list-item-none:hover,
+.bi-theme-dark .bi-list-item-none.hover {
+  color: inherit;
+  background-color: inherit;
+}
+.bi-theme-dark .bi-list-item-none:hover .bi-input,
+.bi-theme-dark .bi-list-item-none.hover .bi-input {
+  color: inherit;
+}
+.bi-theme-dark .bi-list-item-none:active,
+.bi-theme-dark .bi-list-item-none.active {
+  color: inherit;
+  background-color: inherit;
+}
+.bi-theme-dark .bi-list-item-none:active .bi-input,
+.bi-theme-dark .bi-list-item-none.active .bi-input {
+  color: inherit;
+}
+.bi-theme-dark .bi-list-item-none:active .bi-high-light,
+.bi-theme-dark .bi-list-item-none.active .bi-high-light {
+  color: inherit;
+}
+.bi-theme-dark .bi-list-item-none.disabled,
+.bi-theme-dark .bi-list-item-none.disabled:hover,
+.bi-theme-dark .bi-list-item-none.disabled:active {
+  background-color: transparent !important;
+  color: #666666 !important;
+}
+.bi-theme-dark .bi-list-item-none.disabled .bi-input,
+.bi-theme-dark .bi-list-item-none.disabled:hover .bi-input,
+.bi-theme-dark .bi-list-item-none.disabled:active .bi-input {
+  color: #666666 !important;
+}
+.bi-theme-dark .bi-list-item-none.disabled .bi-high-light,
+.bi-theme-dark .bi-list-item-none.disabled:hover .bi-high-light,
+.bi-theme-dark .bi-list-item-none.disabled:active .bi-high-light {
+  color: #666666 !important;
+}

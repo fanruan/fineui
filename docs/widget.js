@@ -8302,6 +8302,7 @@ BI.MultiLayerSelectTreeFirstPlusGroupNode = BI.inherit(BI.NodeButton, {
         var self = this, o = this.options;
         this.node = BI.createWidget({
             type: "bi.select_tree_first_plus_group_node",
+            cls: "bi-list-item-none",
             stopPropagation: true,
             logic: {
                 dynamic: true
@@ -8395,6 +8396,7 @@ BI.MultiLayerSelectTreeLastPlusGroupNode = BI.inherit(BI.NodeButton, {
         var self = this, o = this.options;
         this.node = BI.createWidget({
             type: "bi.select_tree_last_plus_group_node",
+            cls: "bi-list-item-none",
             stopPropagation: true,
             logic: {
                 dynamic: true
@@ -8484,6 +8486,7 @@ BI.MultiLayerSelectTreeMidPlusGroupNode = BI.inherit(BI.NodeButton, {
         var self = this, o = this.options;
         this.node = BI.createWidget({
             type: "bi.select_tree_mid_plus_group_node",
+            cls: "bi-list-item-none",
             stopPropagation: true,
             logic: {
                 dynamic: true
@@ -8843,6 +8846,7 @@ BI.MultiLayerSingleTreeFirstPlusGroupNode = BI.inherit(BI.NodeButton, {
         var self = this, o = this.options;
         this.node = BI.createWidget({
             type: "bi.first_plus_group_node",
+            cls: "bi-list-item-none",
             logic: {
                 dynamic: true
             },
@@ -8925,6 +8929,7 @@ BI.MultiLayerSingleTreeLastPlusGroupNode = BI.inherit(BI.NodeButton, {
         var self = this, o = this.options;
         this.node = BI.createWidget({
             type: "bi.last_plus_group_node",
+            cls: "bi-list-item-none",
             logic: {
                 dynamic: true
             },
@@ -9007,6 +9012,7 @@ BI.MultiLayerSingleTreeMidPlusGroupNode = BI.inherit(BI.NodeButton, {
         var self = this, o = this.options;
         this.node = BI.createWidget({
             type: "bi.mid_plus_group_node",
+            cls: "bi-list-item-none",
             logic: {
                 dynamic: true
             },
@@ -9089,6 +9095,7 @@ BI.MultiLayerSingleTreeFirstTreeLeafItem = BI.inherit(BI.BasicButton, {
         var self = this, o = this.options;
         this.item = BI.createWidget({
             type: "bi.first_tree_leaf_item",
+            cls: "bi-list-item-none",
             logic: {
                 dynamic: true
             },
@@ -9184,6 +9191,7 @@ BI.MultiLayerSingleTreeLastTreeLeafItem = BI.inherit(BI.BasicButton, {
         var self = this, o = this.options;
         this.item = BI.createWidget({
             type: "bi.last_tree_leaf_item",
+            cls: "bi-list-item-none",
             logic: {
                 dynamic: true
             },
@@ -9279,6 +9287,7 @@ BI.MultiLayerSingleTreeMidTreeLeafItem = BI.inherit(BI.BasicButton, {
         var self = this, o = this.options;
         this.item = BI.createWidget({
             type: "bi.mid_tree_leaf_item",
+            cls: "bi-list-item-none",
             logic: {
                 dynamic: true
             },

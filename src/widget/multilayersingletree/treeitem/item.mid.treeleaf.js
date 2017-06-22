@@ -22,6 +22,7 @@ BI.MultiLayerSingleTreeMidTreeLeafItem = BI.inherit(BI.BasicButton, {
         var self = this, o = this.options;
         this.item = BI.createWidget({
             type: "bi.mid_tree_leaf_item",
+            cls: "bi-list-item-none",
             logic: {
                 dynamic: true
             },
