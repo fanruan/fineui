@@ -2998,13 +2998,17 @@ BI.Arrangement = BI.inherit(BI.Widget, {
     _getOneWidthPortion: function () {
         return this.getClientWidth() / BI.Arrangement.PORTION;
     },
+    _getOneHeightPortion: function () {
+        return this.getClientHeight() / BI.Arrangement.H_PORTION;
+    },
 
     _getGridPositionAndSize: function (position) {
         var perWidth = this._getOneWidthPortion();
+        var perHeight = this._getOneHeightPortion();
         var widthPortion = Math.round(position.width / perWidth);
         var leftPortion = Math.round(position.left / perWidth);
-        var topPortion = Math.round(position.top / BI.Arrangement.GRID_HEIGHT);
-        var heightPortion = Math.round(position.height / BI.Arrangement.GRID_HEIGHT);
+        var topPortion = Math.round(position.top / perHeight);
+        var heightPortion = Math.round(position.height / perHeight);
         // if (leftPortion > BI.Arrangement.PORTION) {
         //     leftPortion = BI.Arrangement.PORTION;
         // }
@@ -3030,11 +3034,12 @@ BI.Arrangement = BI.inherit(BI.Widget, {
 
     _getBlockPositionAndSize: function (position) {
         var perWidth = this._getOneWidthPortion();
+        var perHeight = this._getOneHeightPortion();
         return {
             left: position.x * perWidth,
-            top: position.y * BI.Arrangement.GRID_HEIGHT,
+            top: position.y * perHeight,
             width: position.w * perWidth,
-            height: position.h * BI.Arrangement.GRID_HEIGHT
+            height: position.h * perHeight
         };
     },
 
@@ -3721,12 +3726,15 @@ BI.Arrangement = BI.inherit(BI.Widget, {
                 break;
             case BI.Arrangement.LAYOUT_TYPE.GRID:
                 if (this._isArrangeFine()) {
-                    var width = this.getClientWidth();
+                    var width = this.getClientWidth(), height = this.getClientHeight();
                     var xRatio = (ratio.x || 1) * width / (occupied.left + occupied.width);
+                    var yRatio = (ratio.y || 1) * height / (occupied.top + occupied.height);
                     var regions = this._cloneRegion();
                     BI.each(regions, function (i, region) {
                         region.left = region.left * xRatio;
                         region.width = region.width * xRatio;
+                        region.top = region.top * yRatio;
+                        region.height = region.height * yRatio;
                     });
                     if (this._test(regions)) {
                         var layout = this._getLayoutsByRegions(regions);
@@ -3861,6 +3869,7 @@ BI.Arrangement = BI.inherit(BI.Widget, {
             case BI.Arrangement.LAYOUT_TYPE.FREE:
                 break;
             case BI.Arrangement.LAYOUT_TYPE.GRID:
+                var perHeight = this._getOneHeightPortion();
                 var width = this.getClientWidth(), height = this.getClientHeight();
                 var regions = this._cloneRegion();
                 var clone = BI.toArray(regions);
@@ -3877,10 +3886,10 @@ BI.Arrangement = BI.inherit(BI.Widget, {
                 BI.each(clone, function (i, region) {
                     var row = Math.floor(i / 3), col = i % 3;
                     BI.extend(region, {
-                        top: row * 380,
+                        top: row * perHeight * 6,
                         left: col * w,
                         width: w,
-                        height: 380
+                        height: perHeight * 6
                     });
                     if (!store[row]) {
                         store[row] = {};
@@ -3930,8 +3939,8 @@ BI.Arrangement = BI.inherit(BI.Widget, {
 });
 BI.Arrangement.EVENT_SCROLL = "EVENT_SCROLL";
 BI.extend(BI.Arrangement, {
-    PORTION: 24,
-    GRID_HEIGHT: 60,
+    PORTION: 32,
+    H_PORTION: 18,
     LAYOUT_TYPE: {
         ADAPTIVE: 0,
         FREE: 1,
@@ -15027,7 +15036,8 @@ BI.ResponisveTable = BI.inherit(BI.Widget, {
                 }
             });
             //因为有边框，所以加上数组长度的参数调整
-            var sumLeft = BI.sum(columnSizeLeft) + columnSizeLeft.length, sumRight = BI.sum(columnSizeRight) + columnSizeRight.length;
+            var sumLeft = BI.sum(columnSizeLeft) + columnSizeLeft.length,
+                sumRight = BI.sum(columnSizeRight) + columnSizeRight.length;
             return {
                 sumLeft: sumLeft,
                 sumRight: sumRight,
@@ -15231,11 +15241,9 @@ BI.ResponisveTable = BI.inherit(BI.Widget, {
         this.table.populate.apply(this.table, arguments);
         if (o.isNeedFreeze === true) {
             BI.nextTick(function () {
-                if (self.element.is(":visible")) {
-                    self._initRegionSize();
-                    self.table.resize();
-                    self._resizeHeader();
-                }
+                self._initRegionSize();
+                self.table.resize();
+                self._resizeHeader();
             });
         }
     }
