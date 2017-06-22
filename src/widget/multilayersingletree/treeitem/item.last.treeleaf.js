@@ -22,6 +22,7 @@ BI.MultiLayerSingleTreeLastTreeLeafItem = BI.inherit(BI.BasicButton, {
         var self = this, o = this.options;
         this.item = BI.createWidget({
             type: "bi.last_tree_leaf_item",
+            cls: "bi-list-item-none",
             logic: {
                 dynamic: true
             },

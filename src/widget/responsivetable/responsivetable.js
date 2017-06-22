@@ -147,7 +147,8 @@ BI.ResponisveTable = BI.inherit(BI.Widget, {
                 }
             });
             //因为有边框，所以加上数组长度的参数调整
-            var sumLeft = BI.sum(columnSizeLeft) + columnSizeLeft.length, sumRight = BI.sum(columnSizeRight) + columnSizeRight.length;
+            var sumLeft = BI.sum(columnSizeLeft) + columnSizeLeft.length,
+                sumRight = BI.sum(columnSizeRight) + columnSizeRight.length;
             return {
                 sumLeft: sumLeft,
                 sumRight: sumRight,
@@ -351,11 +352,9 @@ BI.ResponisveTable = BI.inherit(BI.Widget, {
         this.table.populate.apply(this.table, arguments);
         if (o.isNeedFreeze === true) {
             BI.nextTick(function () {
-                if (self.element.is(":visible")) {
-                    self._initRegionSize();
-                    self.table.resize();
-                    self._resizeHeader();
-                }
+                self._initRegionSize();
+                self.table.resize();
+                self._resizeHeader();
             });
         }
     }

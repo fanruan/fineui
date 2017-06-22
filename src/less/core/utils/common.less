@@ -551,3 +551,70 @@
     }
   }
 }
+
+//去掉list-item效果
+.bi-list-item-none {
+  &:hover, &.hover {
+    color: inherit;
+    & .bi-input {
+      color: inherit;
+    }
+    background-color: inherit;
+  }
+  &:active, &.active {
+    color: inherit;
+    & .bi-input {
+      color: inherit;
+    }
+    background-color: inherit;
+    & .bi-high-light {
+      color: inherit;
+    }
+  }
+  &.disabled {
+    &, &:hover, &:active {
+      color: @color-bi-text-disabled !important;
+      & .bi-input {
+        color: @color-bi-text-disabled !important;
+      }
+      background-color: transparent !important;
+      & .bi-high-light {
+        color: @color-bi-text-disabled !important;
+      }
+    }
+  }
+}
+
+.bi-theme-dark {
+  .bi-list-item-none {
+    &:hover, &.hover {
+      color: inherit;
+      & .bi-input {
+        color: inherit;
+      }
+      background-color: inherit;
+    }
+    &:active, &.active {
+      color: inherit;
+      & .bi-input {
+        color: inherit;
+      }
+      background-color: inherit;
+      & .bi-high-light {
+        color: inherit;
+      }
+    }
+    &.disabled {
+      &, &:hover, &:active {
+        background-color: transparent !important;
+        color: @color-bi-text-disabled-theme-dark !important;
+        & .bi-input {
+          color: @color-bi-text-disabled-theme-dark !important;
+        }
+        & .bi-high-light {
+          color: @color-bi-text-disabled-theme-dark !important;
+        }
+      }
+    }
+  }
+}

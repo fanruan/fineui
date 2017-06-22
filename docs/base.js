@@ -17715,7 +17715,8 @@ BI.CodeEditor = BI.inherit(BI.Single, {
             baseCls: 'bi-code-editor bi-card',
             value: '',
             watermark: "",
-            lineHeight: 2
+            lineHeight: 2,
+            readOnly: false
         });
     },
     _init: function () {
@@ -17724,7 +17725,8 @@ BI.CodeEditor = BI.inherit(BI.Single, {
         this.editor = CodeMirror(this.element[0], {
             textWrapping: true,
             lineWrapping: true,
-            lineNumbers: false
+            lineNumbers: false,
+            readOnly: o.readOnly
         });
         o.lineHeight === 1 ? this.element.addClass("codemirror-low-line-height") : this.element.addClass("codemirror-high-line-height");
         this.editor.on("change", function (cm, change) {
