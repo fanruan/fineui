@@ -12,9 +12,7 @@ BI.InteractiveArrangement = BI.inherit(BI.Widget, {
         return BI.extend(BI.InteractiveArrangement.superclass._defaultConfig.apply(this, arguments), {
             baseCls: "bi-interactive-arrangement",
             resizable: true,
-            isNeedReLayout: true,
-            isNeedResizeContainer: true,
-            layoutType: BI.Arrangement.LAYOUT_TYPE.FREE,
+            layoutType: BI.Arrangement.LAYOUT_TYPE.GRID,
             items: []
         });
     },
@@ -26,8 +24,6 @@ BI.InteractiveArrangement = BI.inherit(BI.Widget, {
             type: "bi.adaptive_arrangement",
             element: this,
             resizable: o.resizable,
-            isNeedReLayout: o.isNeedReLayout,
-            isNeedResizeContainer: o.isNeedResizeContainer,
             layoutType: o.layoutType,
             items: o.items
         });
@@ -439,7 +435,6 @@ BI.InteractiveArrangement = BI.inherit(BI.Widget, {
         var self = this;
         this.stopDraw();
         switch (this.getLayoutType()) {
-            case BI.Arrangement.LAYOUT_TYPE.ADAPTIVE:
             case BI.Arrangement.LAYOUT_TYPE.FREE:
                 var other = this._getRegionExcept(name);
                 var left = this._leftAlign(position, size, other);
@@ -473,10 +468,6 @@ BI.InteractiveArrangement = BI.inherit(BI.Widget, {
         }
     },
 
-    getDirectRelativeRegions: function (name, direction) {
-        return this.arrangement.getDirectRelativeRegions(name, direction);
-    },
-
     addRegion: function (region, position) {
         this.stopDraw();
         return this.arrangement.addRegion(region, position);
@@ -496,8 +487,6 @@ BI.InteractiveArrangement = BI.inherit(BI.Widget, {
         this.stopDraw();
         if (position.left > 0 && position.top > 0) {
             switch (this.getLayoutType()) {
-                case BI.Arrangement.LAYOUT_TYPE.ADAPTIVE:
-                    break;
                 case BI.Arrangement.LAYOUT_TYPE.FREE:
                     position = this.getPosition(null, position, size);
                     this.draw(position, size);
@@ -513,8 +502,6 @@ BI.InteractiveArrangement = BI.inherit(BI.Widget, {
     setRegionPosition: function (name, position) {
         if (position.left > 0 && position.top > 0) {
             switch (this.getLayoutType()) {
-                case BI.Arrangement.LAYOUT_TYPE.ADAPTIVE:
-                    break;
                 case BI.Arrangement.LAYOUT_TYPE.FREE:
                     position = this.getPosition(name, position);
                     break;
@@ -523,6 +510,18 @@ BI.InteractiveArrangement = BI.inherit(BI.Widget, {
             }
         }
         return this.arrangement.setRegionPosition(name, position);
+    },
+
+    setDropPosition: function (position) {
+        return this.arrangement.setDropPosition(position);
+    },
+
+    scrollInterval: function () {
+        this.arrangement.scrollInterval.apply(this.arrangement, arguments);
+    },
+
+    scrollEnd: function () {
+        this.arrangement.scrollEnd.apply(this.arrangement, arguments);
     },
 
     scrollTo: function (scroll) {

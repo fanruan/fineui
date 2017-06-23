@@ -11,12 +11,6 @@ BI.ArrangementBlock = BI.inherit(BI.Widget, {
         return BI.extend(BI.ArrangementBlock.superclass._defaultConfig.apply(this, arguments), {
             baseCls: "bi-arrangement-block bi-mask"
         });
-    },
-
-    _init: function () {
-        BI.ArrangementBlock.superclass._init.apply(this, arguments);
-        var self = this, o = this.options;
-        
     }
 });
 BI.shortcut('bi.arrangement_block', BI.ArrangementBlock);

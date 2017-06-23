@@ -3379,6 +3379,10 @@ Demo.COMPONENT_CONFIG = [{
     pId: 4,
     text: "bi.relation_view",
     value: "demo.relation_view"
+}, {
+    pId: 4,
+    text: "bi.interactive_arrangement",
+    value: "demo.interactive_arrangement"
 }];Demo.Func = BI.inherit(BI.Widget, {
     props: {
         baseCls: "demo-func"
@@ -5943,6 +5947,18 @@ BI.shortcut("demo.preview", Demo.Preview);Demo.West = BI.inherit(BI.Widget, {
 });
 Demo.West.EVENT_VALUE_CHANGE = "EVENT_VALUE_CHANGE";
 BI.shortcut("demo.west", Demo.West);/**
+ * Created by User on 2017/3/22.
+ */
+Demo.RelationView = BI.inherit(BI.Widget, {
+    props: {
+    },
+    render: function () {
+        return {
+            type: "bi.interactive_arrangement",
+        };
+    }
+});
+BI.shortcut("demo.interactive_arrangement", Demo.RelationView);/**
  * Created by User on 2017/3/22.
  */
 Demo.MultiSelectCombo = BI.inherit(BI.Widget, {

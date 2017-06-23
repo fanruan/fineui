@@ -41,4 +41,8 @@ Demo.WIDGET_CONFIG = [{
     pId: 4,
     text: "bi.relation_view",
     value: "demo.relation_view"
+}, {
+    pId: 4,
+    text: "bi.interactive_arrangement",
+    value: "demo.interactive_arrangement"
 }];
