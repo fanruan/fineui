@@ -870,7 +870,11 @@ BI.Arrangement = BI.inherit(BI.Widget, {
     setDropPosition: function (position, size) {
         var self = this;
         this.arrangement.setVisible(true);
-        this._setArrangeSize(BI.extend({}, position, size));
+        var offset = this._getScrollOffset();
+        this._setArrangeSize(BI.extend({}, size, {
+            left: position.left + offset.left,
+            top: position.top + offset.top
+        }));
         return function () {
             self.arrangement.setVisible(false);
         }
