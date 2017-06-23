@@ -600,8 +600,8 @@ BI.AdaptiveArrangement = BI.inherit(BI.Widget, {
         return this.arrangement.setRegionPosition(name, position);
     },
 
-    setDropPosition: function (position) {
-        return this.arrangement.setDropPosition(position);
+    setDropPosition: function (position, size) {
+        return this.arrangement.setDropPosition(position, size);
     },
 
     scrollInterval: function (e, isBorderScroll, isOverflowScroll, cb) {
@@ -1661,10 +1661,10 @@ BI.Arrangement = BI.inherit(BI.Widget, {
         }
     },
 
-    setDropPosition: function (position) {
+    setDropPosition: function (position, size) {
         var self = this;
         this.arrangement.setVisible(true);
-        this._setArrangeSize(position);
+        this._setArrangeSize(BI.extend({}, position, size));
         return function () {
             self.arrangement.setVisible(false);
         }
@@ -5568,8 +5568,24 @@ BI.InteractiveArrangement = BI.inherit(BI.Widget, {
         return this.arrangement.setRegionPosition(name, position);
     },
 
-    setDropPosition: function (position) {
-        return this.arrangement.setDropPosition(position);
+    setDropPosition: function (position, size) {
+        var self = this;
+        this.stopDraw();
+        if (position.left > 0 && position.top > 0) {
+            switch (this.getLayoutType()) {
+                case BI.Arrangement.LAYOUT_TYPE.FREE:
+                    position = this.getPosition(null, position, size);
+                    this.draw(position, size);
+                    break;
+                case BI.Arrangement.LAYOUT_TYPE.GRID:
+                    break;
+            }
+        }
+        var callback = self.arrangement.setDropPosition(position, size);
+        return function () {
+            callback();
+            self.stopDraw();
+        }
     },
 
     scrollInterval: function () {

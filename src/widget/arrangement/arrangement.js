@@ -867,10 +867,10 @@ BI.Arrangement = BI.inherit(BI.Widget, {
         }
     },
 
-    setDropPosition: function (position) {
+    setDropPosition: function (position, size) {
         var self = this;
         this.arrangement.setVisible(true);
-        this._setArrangeSize(position);
+        this._setArrangeSize(BI.extend({}, position, size));
         return function () {
             self.arrangement.setVisible(false);
         }

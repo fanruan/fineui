@@ -181,8 +181,8 @@ BI.AdaptiveArrangement = BI.inherit(BI.Widget, {
         return this.arrangement.setRegionPosition(name, position);
     },
 
-    setDropPosition: function (position) {
-        return this.arrangement.setDropPosition(position);
+    setDropPosition: function (position, size) {
+        return this.arrangement.setDropPosition(position, size);
     },
 
     scrollInterval: function (e, isBorderScroll, isOverflowScroll, cb) {

@@ -512,8 +512,24 @@ BI.InteractiveArrangement = BI.inherit(BI.Widget, {
         return this.arrangement.setRegionPosition(name, position);
     },
 
-    setDropPosition: function (position) {
-        return this.arrangement.setDropPosition(position);
+    setDropPosition: function (position, size) {
+        var self = this;
+        this.stopDraw();
+        if (position.left > 0 && position.top > 0) {
+            switch (this.getLayoutType()) {
+                case BI.Arrangement.LAYOUT_TYPE.FREE:
+                    position = this.getPosition(null, position, size);
+                    this.draw(position, size);
+                    break;
+                case BI.Arrangement.LAYOUT_TYPE.GRID:
+                    break;
+            }
+        }
+        var callback = self.arrangement.setDropPosition(position, size);
+        return function () {
+            callback();
+            self.stopDraw();
+        }
     },
 
     scrollInterval: function () {
