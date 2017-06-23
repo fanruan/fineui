@@ -39,9 +39,9 @@ BI.AdaptiveArrangement = BI.inherit(BI.Widget, {
             self._initResizable(item.el);
         });
 
-        this.element.mousedown(function (e) {
+        $(document).mousedown(function (e) {
             BI.each(self.getAllRegions(), function (i, region) {
-                if (!region.el.element.__isMouseInBounds__(e)) {
+                if (region.el.element.find(e.target).length === 0) {
                     region.el.element.removeClass("selected");
                 }
             });

@@ -366,15 +366,15 @@ BI.Arrangement = BI.inherit(BI.Widget, {
         var leftPortion = Math.round(position.left / perWidth);
         var topPortion = Math.round(position.top / perHeight);
         var heightPortion = Math.round(position.height / perHeight);
-        if (leftPortion > BI.Arrangement.PORTION) {
-            leftPortion = BI.Arrangement.PORTION;
-        }
-        if (widthPortion > BI.Arrangement.PORTION) {
-            widthPortion = BI.Arrangement.PORTION;
-        }
-        if (leftPortion + widthPortion > BI.Arrangement.PORTION) {
-            leftPortion = BI.Arrangement.PORTION - widthPortion;
-        }
+        // if (leftPortion > BI.Arrangement.PORTION) {
+        //     leftPortion = BI.Arrangement.PORTION;
+        // }
+        // if (widthPortion > BI.Arrangement.PORTION) {
+        //     widthPortion = BI.Arrangement.PORTION;
+        // }
+        // if (leftPortion + widthPortion > BI.Arrangement.PORTION) {
+        //     leftPortion = BI.Arrangement.PORTION - widthPortion;
+        // }
         if (widthPortion === 0) {
             widthPortion = 1;
         }
@@ -941,7 +941,6 @@ BI.Arrangement = BI.inherit(BI.Widget, {
 
     resize: function () {
         var self = this, o = this.options;
-        var occupied = this._applyContainer();
         switch (o.layoutType) {
             case BI.Arrangement.LAYOUT_TYPE.FREE:
                 break;
@@ -1034,7 +1033,7 @@ BI.Arrangement = BI.inherit(BI.Widget, {
 });
 BI.Arrangement.EVENT_SCROLL = "EVENT_SCROLL";
 BI.extend(BI.Arrangement, {
-    PORTION: 32,
+    PORTION: 36,
     H_PORTION: 18,
     LAYOUT_TYPE: {
         GRID: 0,
