@@ -57,19 +57,7 @@ BI.FloatBoxRouter = BI.inherit(BI.WRouter, {
                 BI.nextTick(function () {
                     self.close(url);
 //                    view.end();
-                    var t = void 0, isNew = false, keys;
-                    if (isValid) {
-                        keys = modelData.split('.');
-                        BI.each(keys, function (i, k) {
-                            if (i === 0) {
-                                t = context.model.get(k) || (isNew = true);
-                            } else {
-                                t = t[k] || (isNew = true);
-                            }
-                        })
-                    }
-                    isNew && context.model.removeChild(modelData);
-                    !isNew && (context.listenEnd.apply(context, isValid ? keys : [modelData]) !== false) && context.populate();
+                    (context.listenEnd.apply(context, isValid ? modelData.split('.') : [modelData]) !== false) && context.populate();
                 }, 30)
             }).on("change:" + view.cid, _.bind(context.notifyParent, context))
         }
