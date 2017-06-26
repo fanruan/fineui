@@ -30,14 +30,14 @@ BI.ResizableTableCell = BI.inherit(BI.Widget, {
 
         function optimizeSize(s) {
             var optSize = BI.clamp(s, o.minSize, o.maxSize || Number.MAX_VALUE);
-            if (o.suitableSize) {
-                if (Math.abs(o.suitableSize - optSize) < 5) {
-                    optSize = o.suitableSize;
-                    self.handler.element.addClass("suitable");
-                } else {
-                    self.handler.element.removeClass("suitable");
-                }
-            }
+            // if (o.suitableSize) {
+            //     if (Math.abs(o.suitableSize - optSize) < 5) {
+            //         optSize = o.suitableSize;
+            //         self.handler.element.addClass("suitable");
+            //     } else {
+            //         self.handler.element.removeClass("suitable");
+            //     }
+            // }
             return optSize;
         }
 
