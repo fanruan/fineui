@@ -9138,6 +9138,9 @@ BI.SortList = BI.inherit(BI.Widget, {
     },
 
     populate: function (items) {
+        if (items) {
+            arguments[0] = this._formatItems(items);
+        }
         this.loader.populate.apply(this.loader, arguments);
     },
 
