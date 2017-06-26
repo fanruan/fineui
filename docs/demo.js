@@ -3158,27 +3158,27 @@ Demo.COMPONENT_CONFIG = [{
     text: "布局"
 }, {
     pId: 101,
-    text: "bi.center_adapt",
+    text: "自适应居中bi.center_adapt",
     value: "demo.center_adapt"
 }, {
     pId: 101,
-    text: "bi.vertical_adapt",
+    text: "自适应垂直居中bi.vertical_adapt",
     value: "demo.vertical_adapt"
 }, {
     pId: 101,
-    text: "bi.horizontal_adapt",
+    text: "自适应水平居中bi.horizontal_adapt",
     value: "demo.horizontal_adapt"
 }, {
     pId: 101,
-    text: "bi.horizontal_auto",
+    text: "margin-auto自适应水平居中bi.horizontal_auto",
     value: "demo.horizontal_auto"
 }, {
     pId: 101,
-    text: "bi.horizontal_float",
+    text: "float水平居中bi.horizontal_float",
     value: "demo.horizontal_float"
 }, {
     pId: 101,
-    text: "bi.left_right_vertical_adapt",
+    text: "左右垂直居中bi.left_right_vertical_adapt",
     value: "demo.left_right_vertical_adapt"
 }, {
     pId: 101,
@@ -3190,11 +3190,11 @@ Demo.COMPONENT_CONFIG = [{
     value: "demo.float_center"
 }, {
     pId: 101,
-    text: "bi.vertical",
+    text: "垂直流式bi.vertical",
     value: "demo.vertical"
 }, {
     pId: 101,
-    text: "bi.horizontal",
+    text: "水平流式bi.horizontal",
     value: "demo.horizontal"
 }, {
     pId: 101,
