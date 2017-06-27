@@ -4914,6 +4914,7 @@ BI.BubbleCombo = BI.inherit(BI.Widget, {
             default:
                 break;
         }
+        this.triangle && this.triangle.destroy();
         this.triangle = BI.createWidget(op, {
             type: "bi.center_adapt",
             cls: "button-combo-triangle-wrapper",
@@ -4974,6 +4975,7 @@ BI.BubbleCombo = BI.inherit(BI.Widget, {
 
     _hideTriangle: function () {
         this.triangle && this.triangle.destroy();
+        this.triangle = null;
         this.combo.getView() && this.combo.getView().hideLine();
     },
 
@@ -4984,10 +4986,6 @@ BI.BubbleCombo = BI.inherit(BI.Widget, {
 
     showView: function () {
         this.combo && this.combo.showView();
-    },
-
-    hasView: function () {
-        return BI.isNotNull(this.combo.getView());
     },
 
     isViewVisible: function () {
@@ -12349,6 +12347,7 @@ BI.EditorTrigger = BI.inherit(BI.Trigger, {
                 }, {
                     el: {
                         type: "bi.trigger_icon_button",
+                        cls: "bi-border-left",
                         width: o.triggerWidth
                     },
                     width: o.triggerWidth
