@@ -4825,6 +4825,17 @@ BI.Tab = BI.inherit(BI.Widget, {
         }
     },
 
+    removeTab: function (cardname) {
+        var self = this, o = this.options;
+        BI.any(this.cardMap, function (name, card) {
+            if (BI.isEqual(name, (cardname + ""))) {
+                self.layout.deleteCardByName(name);
+                delete self.cardMap[name];
+                return true;
+            }
+        });
+    },
+
     getSelect: function () {
         return this.curr;
     },
@@ -32473,14 +32484,14 @@ BI.ResizableTableCell = BI.inherit(BI.Widget, {
 
         function optimizeSize(s) {
             var optSize = BI.clamp(s, o.minSize, o.maxSize || Number.MAX_VALUE);
-            if (o.suitableSize) {
-                if (Math.abs(o.suitableSize - optSize) < 5) {
-                    optSize = o.suitableSize;
-                    self.handler.element.addClass("suitable");
-                } else {
-                    self.handler.element.removeClass("suitable");
-                }
-            }
+            // if (o.suitableSize) {
+            //     if (Math.abs(o.suitableSize - optSize) < 5) {
+            //         optSize = o.suitableSize;
+            //         self.handler.element.addClass("suitable");
+            //     } else {
+            //         self.handler.element.removeClass("suitable");
+            //     }
+            // }
             return optSize;
         }
 
