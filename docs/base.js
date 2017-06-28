@@ -4825,6 +4825,17 @@ BI.Tab = BI.inherit(BI.Widget, {
         }
     },
 
+    removeTab: function (cardname) {
+        var self = this, o = this.options;
+        BI.any(this.cardMap, function (name, card) {
+            if (BI.isEqual(name, (cardname + ""))) {
+                self.layout.deleteCardByName(name);
+                delete self.cardMap[name];
+                return true;
+            }
+        });
+    },
+
     getSelect: function () {
         return this.curr;
     },
