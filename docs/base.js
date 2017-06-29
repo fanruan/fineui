@@ -17727,7 +17727,11 @@ BI.CodeEditor = BI.inherit(BI.Single, {
             value: '',
             watermark: "",
             lineHeight: 2,
-            readOnly: false
+            readOnly: false,
+            //参数显示值构造函数
+            paramFormatter: function (v) {
+                return v;
+            }
         });
     },
     _init: function () {
@@ -17811,6 +17815,8 @@ BI.CodeEditor = BI.inherit(BI.Single, {
     },
 
     insertParam: function (param) {
+        var value = param;
+        param = this.options.paramFormatter(param);
         var from = this.editor.getCursor();
         this.editor.replaceSelection(param);
         var to = this.editor.getCursor();
@@ -17818,6 +17824,7 @@ BI.CodeEditor = BI.inherit(BI.Single, {
         if (BI.isNotNull(param.match(/^<!.*!>$/))) {
             options.className = 'error-param';
         }
+        options.value = value;
         this.editor.markText(from, to, options);
         this.editor.replaceSelection(" ");
         this.editor.focus();
@@ -17837,8 +17844,11 @@ BI.CodeEditor = BI.inherit(BI.Single, {
                     case "param":
                     case "error-param":
                         var fieldNameLength = i.to - i.from;
-                        value = value.substr(0, i.from + num) + "$\{" + value.substr(i.from + num, fieldNameLength) + "\}" + value.substr(i.to + num, value.length);
+                        value = value.substr(0, i.from + num) + "$\{" + i.marker.value + "\}" + value.substr(i.to + num, value.length);
+                        //加上${}的偏移
                         num += 3;
+                        //加上实际值和显示值的长度差的偏移
+                        num += (i.marker.value.length - fieldNameLength);
                         break;
                 }
             });
