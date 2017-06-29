@@ -31,12 +31,12 @@ BI.CodeEditor = BI.inherit(BI.Single, {
         });
 
         this.editor.on("focus", function () {
-            watermark.setVisible(false);
+            self.watermark.setVisible(false);
             self.fireEvent(BI.CodeEditor.EVENT_FOCUS);
         });
 
         this.editor.on("blur", function () {
-            watermark.setVisible(BI.isEmptyString(self.getValue()));
+            self.watermark.setVisible(BI.isEmptyString(self.getValue()));
             self.fireEvent(BI.CodeEditor.EVENT_BLUR);
         });
 
@@ -45,21 +45,21 @@ BI.CodeEditor = BI.inherit(BI.Single, {
         // });
 
         //水印
-        var watermark = BI.createWidget({
+        this.watermark = BI.createWidget({
             type: "bi.label",
             text: o.watermark,
             cls: "bi-water-mark",
             whiteSpace: "nowrap",
             textAlign: "left"
         });
-        watermark.element.bind(
+        this.watermark.element.bind(
             "mousedown", function (e) {
                 self.insertString("");
                 self.editor.focus();
                 e.stopEvent();
             }
         );
-        watermark.element.bind("click", function (e) {
+        this.watermark.element.bind("click", function (e) {
             self.editor.focus();
             e.stopEvent();
         });
@@ -67,7 +67,7 @@ BI.CodeEditor = BI.inherit(BI.Single, {
             type: "bi.absolute",
             element: this,
             items: [{
-                el: watermark,
+                el: this.watermark,
                 top: 0,
                 left: 5
             }]
@@ -83,6 +83,15 @@ BI.CodeEditor = BI.inherit(BI.Single, {
     _setEnable: function (b) {
         BI.CodeEditor.superclass._setEnable.apply(this, arguments);
         this.editor.setOption("readOnly", b === true ? false : "nocursor")
+    },
+
+    _checkWaterMark: function () {
+        var o = this.options;
+        if (BI.isEmptyString(this.editor.getValue()) && BI.isKey(o.watermark)) {
+            this.watermark && this.watermark.visible();
+        } else {
+            this.watermark && this.watermark.invisible();
+        }
     },
 
     insertParam: function (param) {
@@ -139,7 +148,8 @@ BI.CodeEditor = BI.inherit(BI.Single, {
             } else {
                 self.insertString(item);
             }
-        })
+        });
+        this._checkWaterMark();
     },
 
     focus: function () {
