@@ -983,9 +983,9 @@ BI.Arrangement = BI.inherit(BI.Widget, {
             case BI.Arrangement.LAYOUT_TYPE.FREE:
                 return true;
             case BI.Arrangement.LAYOUT_TYPE.GRID:
-                if (this._isRegionOverlay()) {
-                    return false;
-                }
+                // if (this._isRegionOverlay()) {
+                //     return false;
+                // }
         }
         return true;
     },
