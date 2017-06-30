@@ -19,7 +19,7 @@ BI.ColorChooserTrigger = BI.inherit(BI.Trigger, {
         BI.ColorChooserTrigger.superclass._init.apply(this, arguments);
         this.colorContainer = BI.createWidget({
             type: "bi.layout",
-            cls: "bi-card"
+            cls: "bi-card color-chooser-trigger-content"
         });
 
         var down = BI.createWidget({
@@ -52,7 +52,11 @@ BI.ColorChooserTrigger = BI.inherit(BI.Trigger, {
 
     setValue: function (color) {
         BI.ColorChooserTrigger.superclass.setValue.apply(this, arguments);
-        this.colorContainer.element.css("background-color", color);
+        if (color === "") {
+            this.colorContainer.element.css("background-color", "").addClass("none-color")
+        } else {
+            this.colorContainer.element.css({"background-color": color}).removeClass("none-color");
+        }
     }
 });
 BI.ColorChooserTrigger.EVENT_CHANGE = "ColorChooserTrigger.EVENT_CHANGE";

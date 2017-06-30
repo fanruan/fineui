@@ -983,9 +983,9 @@ BI.Arrangement = BI.inherit(BI.Widget, {
             case BI.Arrangement.LAYOUT_TYPE.FREE:
                 return true;
             case BI.Arrangement.LAYOUT_TYPE.GRID:
-                // if (this._isRegionOverlay()) {
-                //     return false;
-                // }
+                if (this._isRegionOverlay()) {
+                    return false;
+                }
         }
         return true;
     },
@@ -1416,9 +1416,10 @@ BI.Arrangement = BI.inherit(BI.Widget, {
     },
 
     _start: function () {
-        this.arrangement.setVisible(true);
         if (this.options.layoutType === BI.Arrangement.LAYOUT_TYPE.GRID) {
             this.block.setVisible(true);
+        } else {
+            this.arrangement.setVisible(true);
         }
     },
 
