@@ -3983,9 +3983,11 @@ BI.ColorChooserTrigger = BI.inherit(BI.Trigger, {
     setValue: function (color) {
         BI.ColorChooserTrigger.superclass.setValue.apply(this, arguments);
         if (color === "") {
-            this.colorContainer.element.css("background-color", "").addClass("none-color")
+            this.colorContainer.element.css("background-color", "").removeClass("trans-color-background").addClass("auto-color-background");
+        } else if (color === "transparent") {
+            this.colorContainer.element.css("background-color", "").removeClass("auto-color-background").addClass("trans-color-background")
         } else {
-            this.colorContainer.element.css({"background-color": color}).removeClass("none-color");
+            this.colorContainer.element.css({"background-color": color}).removeClass("auto-color-background").removeClass("trans-color-background");
         }
     }
 });
