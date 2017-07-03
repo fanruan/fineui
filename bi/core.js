@@ -17530,4 +17530,8 @@ $(function () {
             return ob;
         }
     });
+    //IE8下滚动条用原生的
+    if (BI.isIE9Below()) {
+        BI.GridTableScrollbar.SIZE = 18;
+    }
 });
