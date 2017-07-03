@@ -122,6 +122,16 @@ textarea::-webkit-scrollbar-thumb:hover {
   _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='icon/loading.gif');
   _background: none;
 }
+.auto-color-background {
+  background: url('background/auto-color.png') no-repeat center center;
+  _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='background/auto-color.png');
+  _background: none;
+}
+.trans-color-background {
+  background: url('background/trans-color.png') no-repeat center center;
+  _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='background/trans-color.png');
+  _background: none;
+}
 @font-face {
   font-family: 'bi';
   src: url('font/iconfont.eot'), /* IE6-IE8 */ url('font/iconfont.woff') format('woff'), /* chrome、firefox */ url('font/iconfont.ttf') format('truetype'), /* chrome、firefox、opera、Safari, Android, iOS 4.2+*/ url('font/iconfont.svg#svgFontName') format('svg');

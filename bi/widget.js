@@ -983,9 +983,9 @@ BI.Arrangement = BI.inherit(BI.Widget, {
             case BI.Arrangement.LAYOUT_TYPE.FREE:
                 return true;
             case BI.Arrangement.LAYOUT_TYPE.GRID:
-                if (this._isRegionOverlay()) {
-                    return false;
-                }
+            // if (this._isRegionOverlay()) {
+            //     return false;
+            // }
         }
         return true;
     },
@@ -1719,6 +1719,15 @@ BI.Arrangement = BI.inherit(BI.Widget, {
                         region.width = region.width * xRatio;
                         region.top = region.top * yRatio;
                         region.height = region.height * yRatio;
+                        //做一下自适应布局到网格布局的兼容
+                        var perWidth = this._getOneWidthPortion();
+                        var widthPortion = Math.round(region.width / perWidth);
+                        var leftPortion = Math.round(region.left / perWidth);
+                        var comparePortion = Math.round((region.width + region.left) / perWidth);
+                        if (leftPortion + widthPortion !== comparePortion) {
+                            region.left = leftPortion * perWidth;
+                            region.width = comparePortion * perWidth - region.left;
+                        }
                     });
                     if (this._test(regions)) {
                         var layout = this._getLayoutsByRegions(regions);
