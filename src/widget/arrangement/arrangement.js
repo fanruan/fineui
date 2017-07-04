@@ -926,7 +926,7 @@ BI.Arrangement = BI.inherit(BI.Widget, {
                         region.top = region.top * yRatio;
                         region.height = region.height * yRatio;
                         //做一下自适应布局到网格布局的兼容
-                        var perWidth = this._getOneWidthPortion();
+                        var perWidth = self._getOneWidthPortion();
                         var widthPortion = Math.round(region.width / perWidth);
                         var leftPortion = Math.round(region.left / perWidth);
                         var comparePortion = Math.round((region.width + region.left) / perWidth);
