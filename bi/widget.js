@@ -1093,14 +1093,6 @@ BI.Arrangement = BI.inherit(BI.Widget, {
         return this.scrollContainer.element[0].clientHeight;
     },
 
-    getContainerSize: function () {
-        return this.container.element.bounds();
-    },
-
-    setContainerSize: function (bounds) {
-        return this.container.element.bounds(bounds);
-    },
-
     _applyContainer: function () {
         //先掩藏后显示能够明确滚动条是否出现
         this.scrollContainer.element.css("overflow", "hidden");
