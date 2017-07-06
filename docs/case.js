@@ -1477,6 +1477,7 @@ BI.MultiLayerIconTreeLeafItem = BI.inherit(BI.BasicButton, {
         var self = this, o = this.options;
         this.item = BI.createWidget({
             type: "bi.icon_tree_leaf_item",
+            cls: "bi-list-item-none",
             iconCls: o.iconCls,
             id: o.id,
             pId: o.pId,
