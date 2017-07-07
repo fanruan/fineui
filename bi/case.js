@@ -1477,6 +1477,7 @@ BI.MultiLayerIconTreeLeafItem = BI.inherit(BI.BasicButton, {
         var self = this, o = this.options;
         this.item = BI.createWidget({
             type: "bi.icon_tree_leaf_item",
+            cls: "bi-list-item-none",
             iconCls: o.iconCls,
             id: o.id,
             pId: o.pId,
@@ -3949,7 +3950,7 @@ BI.ColorChooserTrigger = BI.inherit(BI.Trigger, {
         BI.ColorChooserTrigger.superclass._init.apply(this, arguments);
         this.colorContainer = BI.createWidget({
             type: "bi.layout",
-            cls: "bi-card"
+            cls: "bi-card color-chooser-trigger-content"
         });
 
         var down = BI.createWidget({
@@ -3982,7 +3983,13 @@ BI.ColorChooserTrigger = BI.inherit(BI.Trigger, {
 
     setValue: function (color) {
         BI.ColorChooserTrigger.superclass.setValue.apply(this, arguments);
-        this.colorContainer.element.css("background-color", color);
+        if (color === "") {
+            this.colorContainer.element.css("background-color", "").removeClass("trans-color-background").addClass("auto-color-background");
+        } else if (color === "transparent") {
+            this.colorContainer.element.css("background-color", "").removeClass("auto-color-background").addClass("trans-color-background")
+        } else {
+            this.colorContainer.element.css({"background-color": color}).removeClass("auto-color-background").removeClass("trans-color-background");
+        }
     }
 });
 BI.ColorChooserTrigger.EVENT_CHANGE = "ColorChooserTrigger.EVENT_CHANGE";

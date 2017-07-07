@@ -22,7 +22,7 @@ BI.NativeTableScrollbar = BI.inherit(BI.Widget, {
     render: function () {
         var self = this, o = this.options;
         //把滚动台size改掉
-        BI.GridTableScrollbar.SIZE = 16;
+        this.element.width(36);
 
         var throttle = BI.throttle(function () {
             self.fireEvent(BI.NativeTableScrollbar.EVENT_SCROLL, self.element.scrollTop());
@@ -98,7 +98,7 @@ BI.NativeTableHorizontalScrollbar = BI.inherit(BI.Widget, {
     render: function () {
         var self = this, o = this.options;
         //把滚动台size改掉
-        BI.GridTableScrollbar.SIZE = 16;
+        this.element.height(36);
 
         var throttle = BI.throttle(function () {
             self.fireEvent(BI.NativeTableScrollbar.EVENT_SCROLL, self.element.scrollLeft());
