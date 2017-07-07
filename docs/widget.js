@@ -3497,6 +3497,7 @@ BI.DownListCombo = BI.inherit(BI.Widget, {
             items: [],
             adjustLength: 0,
             direction: "bottom",
+            trigger: "click",
             el: {}
         })
     },
@@ -3524,6 +3525,7 @@ BI.DownListCombo = BI.inherit(BI.Widget, {
         this.downlistcombo = BI.createWidget({
             element: this,
             type: 'bi.combo',
+            trigger: o.trigger,
             isNeedAdjustWidth: false,
             adjustLength: o.adjustLength,
             direction: o.direction,
