@@ -19,7 +19,7 @@ BI.extend(jQuery.fn, {
      * @private
      */
     __textKeywordMarked__: function (text, keyword, py) {
-        if (!BI.isKey(keyword)) {
+        if (!BI.isKey(keyword) || (text + "").length > 100) {
             return this.text((text + "").replaceAll(" ", "　"));
         }
         keyword = keyword + "";
