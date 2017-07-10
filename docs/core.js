@@ -14971,6 +14971,10 @@ BI.Widget = BI.inherit(BI.OB, {
             var copy = BI.UUID(), newKeys = BI.clone(keys);
             keys.length > 1 ? newKeys.unshift(BI.deepClone(p[keys[keys.length - 1]])) : newKeys.unshift(BI.deepClone(g));
             var backup = self.similar.apply(self, newKeys);
+            if (BI.isKey(backup.id)) {
+                copy = backup.id;
+                delete backup.id;
+            }
             keys.length > 1 ? (p[copy] = backup, self[sset](keys[0], g, {silent: true})) : self[sset](copy, backup, {silent: true});
             keys.unshift(copy);
             !BI.has(self._tmp, keys[0]) && self.parent && self.parent._change(self);
