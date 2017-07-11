@@ -18523,6 +18523,15 @@ BI.Iframe = BI.inherit(BI.Single, {
         return this.options.src;
     },
 
+    setName: function (name) {
+        this.options.name = name;
+        this.element.attr("name", name);
+    },
+
+    getName: function () {
+        return this.options.name;
+    },
+
     getWidth: function () {
         return this.options.width
     },
