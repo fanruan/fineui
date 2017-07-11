@@ -6,6 +6,9 @@
   & .bi-input {
     color: @color-bi-text-disabled !important;
   }
+  & .bi-textarea {
+    color: @color-bi-text-disabled !important;
+  }
   & .b-font:before {
     color: @color-bi-text-disabled !important;
   }
@@ -15,6 +18,9 @@
   .base-disabled {
     color: @color-bi-text-disabled-theme-dark !important;
     & .bi-input {
+      color: @color-bi-text-disabled-theme-dark !important;
+    }
+    & .bi-textarea {
       color: @color-bi-text-disabled-theme-dark !important;
     }
     & .b-font:before {
@@ -38,6 +44,9 @@
   & .bi-input {
     color: @color-bi-text-normal;
   }
+  & .bi-textarea {
+    color: @color-bi-text-normal;
+  }
 }
 
 .bi-theme-dark {
@@ -45,6 +54,9 @@
     background-color: @color-bi-background-normal-theme-dark;
     color: @color-bi-text-theme-dark;
     & .bi-input {
+      color: @color-bi-text-theme-dark;
+    }
+    & .bi-textarea {
       color: @color-bi-text-theme-dark;
     }
   }
@@ -57,6 +69,9 @@
   & .bi-input {
     color: @color-bi-text-normal;
   }
+  & .bi-textarea {
+    color: @color-bi-text-normal;
+  }
 }
 
 .bi-theme-dark {
@@ -64,6 +79,9 @@
     background-color: @color-bi-background-default-theme-dark;
     color: @color-bi-text-theme-dark;
     & .bi-input {
+      color: @color-bi-text-theme-dark;
+    }
+    & .bi-textarea {
       color: @color-bi-text-theme-dark;
     }
   }
@@ -74,12 +92,18 @@
   & .bi-input {
     color: @color-bi-text-disabled;
   }
+  & .bi-textarea {
+    color: @color-bi-text-disabled;
+  }
 }
 
 .bi-theme-dark {
   .bi-disabled {
     color: @color-bi-text-disabled-theme-dark;
     & .bi-input {
+      color: @color-bi-text-disabled-theme-dark;
+    }
+    & .bi-textarea {
       color: @color-bi-text-disabled-theme-dark;
     }
   }
@@ -89,6 +113,9 @@
 .bi-tips {
   color: @color-bi-text-tips;
   & .bi-input {
+    color: @color-bi-text-tips;
+  }
+  & .bi-textarea {
     color: @color-bi-text-tips;
   }
 }
@@ -150,6 +177,9 @@
   & .bi-input {
     color: @color-bi-text-redmark;
   }
+  & .bi-textarea {
+    color: @color-bi-text-redmark;
+  }
 }
 
 //高亮
@@ -158,12 +188,18 @@
   & .bi-input {
     color: @color-bi-text-highlight;
   }
+  & .bi-textarea {
+    color: @color-bi-text-highlight;
+  }
 }
 
 .bi-high-light-background {
   background-color: @color-bi-background-highlight;
   color: @color-bi-text;
   & .bi-input {
+    color: @color-bi-text;
+  }
+  & .bi-textarea {
     color: @color-bi-text;
   }
 }
@@ -179,12 +215,18 @@
   & .bi-input {
     color: @water-mark-color;
   }
+  & .bi-textarea {
+    color: @water-mark-color;
+  }
 }
 
 .bi-theme-dark {
   .bi-water-mark {
     color: @water-mark-color-theme-dark;
     & .bi-input {
+      color: @water-mark-color-theme-dark;
+    }
+    & .bi-textarea {
       color: @water-mark-color-theme-dark;
     }
   }
@@ -208,6 +250,9 @@
   & .bi-input {
     color: @color-bi-background-default;
   }
+  & .bi-textarea {
+    color: @color-bi-background-default;
+  }
   .background-color(@color-bi-background-black, 20%);
 }
 
@@ -217,6 +262,9 @@
     & .bi-input {
       color: @color-bi-background-default-theme-dark;
     }
+    & .bi-textarea {
+      color: @color-bi-background-default-theme-dark;
+    }
     .background-color(@color-bi-background-default, 20%);
   }
 }
@@ -224,6 +272,9 @@
 .bi-z-index-mask {
   color: @color-bi-background-default;
   & .bi-input {
+    color: @color-bi-background-default;
+  }
+  & .bi-textarea {
     color: @color-bi-background-default;
   }
   .background-color(@color-bi-background-black, 50%);
@@ -236,6 +287,9 @@
     & .bi-input {
       color: @color-bi-text-black;
     }
+    & .bi-textarea {
+      color: @color-bi-text-black;
+    }
     .background-color(@color-bi-background-black, 5%);
   }
   &.disabled {
@@ -243,6 +297,9 @@
       background-color: transparent !important;
       color: @color-bi-text-disabled !important;
       & .bi-input {
+        color: @color-bi-text-disabled !important;
+      }
+      & .bi-textarea {
         color: @color-bi-text-disabled !important;
       }
       & .bi-high-light {
@@ -259,6 +316,9 @@
       & .bi-input {
         color: @color-bi-text;
       }
+      & .bi-textarea {
+        color: @color-bi-text;
+      }
       .background-color(@color-bi-background-default, 5%);
     }
     &.disabled {
@@ -266,6 +326,9 @@
         background-color: transparent !important;
         color: @color-bi-text-disabled-theme-dark !important;
         & .bi-input {
+          color: @color-bi-text-disabled-theme-dark !important;
+        }
+        & .bi-textarea {
           color: @color-bi-text-disabled-theme-dark !important;
         }
         & .bi-high-light {
@@ -288,9 +351,15 @@
   & .bi-input {
     color: @color-bi-text-tips;
   }
+  & .bi-textarea {
+    color: @color-bi-text-tips;
+  }
   &:hover, &.hover {
     color: @color-bi-text-highlight;
     & .bi-input {
+      color: @color-bi-text-highlight;
+    }
+    & .bi-textarea {
       color: @color-bi-text-highlight;
     }
   }
@@ -298,6 +367,9 @@
     &, &:hover, &:active {
       color: @color-bi-text-disabled !important;
       & .bi-input {
+        color: @color-bi-text-disabled !important;
+      }
+      & .bi-textarea {
         color: @color-bi-text-disabled !important;
       }
       & .bi-high-light {
@@ -314,10 +386,16 @@
     & .bi-input {
       color: @color-bi-text-black;
     }
+    & .bi-textarea {
+      color: @color-bi-text-black;
+    }
   }
   &.active, &:active {
     color: @color-bi-text-highlight;
     & .bi-input {
+      color: @color-bi-text-highlight;
+    }
+    & .bi-textarea {
       color: @color-bi-text-highlight;
     }
   }
@@ -325,6 +403,9 @@
     &, &:hover, &:active {
       color: @color-bi-text-disabled !important;
       & .bi-input {
+        color: @color-bi-text-disabled !important;
+      }
+      & .bi-textarea {
         color: @color-bi-text-disabled !important;
       }
       & .bi-high-light {
@@ -341,10 +422,16 @@
       & .bi-input {
         color: @color-bi-text;
       }
+      & .bi-textarea {
+        color: @color-bi-text;
+      }
     }
     &.active, &:active {
       color: @color-bi-text-highlight;
       & .bi-input {
+        color: @color-bi-text-highlight;
+      }
+      & .bi-textarea {
         color: @color-bi-text-highlight;
       }
     }
@@ -353,6 +440,9 @@
         background-color: transparent !important;
         color: @color-bi-text-disabled-theme-dark !important;
         & .bi-input {
+          color: @color-bi-text-disabled-theme-dark !important;
+        }
+        & .bi-textarea {
           color: @color-bi-text-disabled-theme-dark !important;
         }
         & .bi-high-light {
@@ -370,11 +460,17 @@
     & .bi-input {
       color: @color-bi-text-black;
     }
+    & .bi-textarea {
+      color: @color-bi-text-black;
+    }
     .background-color(@color-bi-background-black, 5%);
   }
   &.active, &:active {
     color: @color-bi-text-highlight;
     & .bi-input {
+      color: @color-bi-text-highlight;
+    }
+    & .bi-textarea {
       color: @color-bi-text-highlight;
     }
     .background-color(@color-bi-background-black, 5%);
@@ -384,6 +480,9 @@
       background-color: transparent !important;
       color: @color-bi-text-disabled !important;
       & .bi-input {
+        color: @color-bi-text-disabled !important;
+      }
+      & .bi-textarea {
         color: @color-bi-text-disabled !important;
       }
       & .bi-high-light {
@@ -400,11 +499,17 @@
       & .bi-input {
         color: @color-bi-text;
       }
+      & .bi-textarea {
+        color: @color-bi-text;
+      }
       .background-color(@color-bi-background-default, 5%);
     }
     &.active, &:active {
       color: @color-bi-text-highlight;
       & .bi-input {
+        color: @color-bi-text-highlight;
+      }
+      & .bi-textarea {
         color: @color-bi-text-highlight;
       }
       .background-color(@color-bi-background-default, 5%);
@@ -414,6 +519,9 @@
         background-color: transparent !important;
         color: @color-bi-text-disabled-theme-dark !important;
         & .bi-input {
+          color: @color-bi-text-disabled-theme-dark !important;
+        }
+        & .bi-textarea {
           color: @color-bi-text-disabled-theme-dark !important;
         }
         & .bi-high-light {
@@ -431,11 +539,17 @@
     & .bi-input {
       color: @color-bi-text-black;
     }
+    & .bi-textarea {
+      color: @color-bi-text-black;
+    }
     background-color: @color-bi-background-default;
   }
   &.active, &:active {
     color: @color-bi-text-highlight;
     & .bi-input {
+      color: @color-bi-text-highlight;
+    }
+    & .bi-textarea {
       color: @color-bi-text-highlight;
     }
     background-color: @color-bi-background-default;
@@ -445,6 +559,9 @@
       background-color: transparent !important;
       color: @color-bi-text-disabled !important;
       & .bi-input {
+        color: @color-bi-text-disabled !important;
+      }
+      & .bi-textarea {
         color: @color-bi-text-disabled !important;
       }
       & .bi-high-light {
@@ -461,11 +578,17 @@
       & .bi-input {
         color: @color-bi-text;
       }
+      & .bi-textarea {
+        color: @color-bi-text;
+      }
       background-color: @color-bi-background-default-theme-dark;
     }
     &.active, &:active {
       color: @color-bi-text-highlight;
       & .bi-input {
+        color: @color-bi-text-highlight;
+      }
+      & .bi-textarea {
         color: @color-bi-text-highlight;
       }
       background-color: @color-bi-background-default-theme-dark;
@@ -475,6 +598,9 @@
         background-color: transparent !important;
         color: @color-bi-text-disabled-theme-dark !important;
         & .bi-input {
+          color: @color-bi-text-disabled-theme-dark !important;
+        }
+        & .bi-textarea {
           color: @color-bi-text-disabled-theme-dark !important;
         }
         & .bi-high-light {
@@ -492,11 +618,17 @@
     & .bi-input {
       color: @color-bi-text-black;
     }
+    & .bi-textarea {
+      color: @color-bi-text-black;
+    }
     .background-color(@color-bi-background-black, 5%);
   }
   &:active, &.active {
     color: @color-bi-text;
     & .bi-input {
+      color: @color-bi-text;
+    }
+    & .bi-textarea {
       color: @color-bi-text;
     }
     background-color: @color-bi-background-highlight;
@@ -508,6 +640,9 @@
     &, &:hover, &:active {
       color: @color-bi-text-disabled !important;
       & .bi-input {
+        color: @color-bi-text-disabled !important;
+      }
+      & .bi-textarea {
         color: @color-bi-text-disabled !important;
       }
       background-color: transparent !important;
@@ -525,11 +660,17 @@
       & .bi-input {
         color: @color-bi-text;
       }
+      & .bi-textarea {
+        color: @color-bi-text;
+      }
       .background-color(@color-bi-background-default, 5%);
     }
     &:active, &.active {
       color: @color-bi-text;
       & .bi-input {
+        color: @color-bi-text;
+      }
+      & .bi-textarea {
         color: @color-bi-text;
       }
       background-color: @color-bi-background-highlight;
@@ -542,6 +683,9 @@
         background-color: transparent !important;
         color: @color-bi-text-disabled-theme-dark !important;
         & .bi-input {
+          color: @color-bi-text-disabled-theme-dark !important;
+        }
+        & .bi-textarea {
           color: @color-bi-text-disabled-theme-dark !important;
         }
         & .bi-high-light {
@@ -559,11 +703,17 @@
     & .bi-input {
       color: inherit;
     }
+    & .bi-textarea {
+      color: inherit;
+    }
     background-color: inherit;
   }
   &:active, &.active {
     color: inherit;
     & .bi-input {
+      color: inherit;
+    }
+    & .bi-textarea {
       color: inherit;
     }
     background-color: inherit;
@@ -575,6 +725,9 @@
     &, &:hover, &:active {
       color: @color-bi-text-disabled !important;
       & .bi-input {
+        color: @color-bi-text-disabled !important;
+      }
+      & .bi-textarea {
         color: @color-bi-text-disabled !important;
       }
       background-color: transparent !important;
@@ -592,11 +745,17 @@
       & .bi-input {
         color: inherit;
       }
+      & .bi-textarea {
+        color: inherit;
+      }
       background-color: inherit;
     }
     &:active, &.active {
       color: inherit;
       & .bi-input {
+        color: inherit;
+      }
+      & .bi-textarea {
         color: inherit;
       }
       background-color: inherit;
@@ -609,6 +768,9 @@
         background-color: transparent !important;
         color: @color-bi-text-disabled-theme-dark !important;
         & .bi-input {
+          color: @color-bi-text-disabled-theme-dark !important;
+        }
+        & .bi-textarea {
           color: @color-bi-text-disabled-theme-dark !important;
         }
         & .bi-high-light {
