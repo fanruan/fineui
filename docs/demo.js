@@ -6087,7 +6087,139 @@ BI.shortcut("demo.preview", Demo.Preview);Demo.West = BI.inherit(BI.Widget, {
     }
 });
 Demo.West.EVENT_VALUE_CHANGE = "EVENT_VALUE_CHANGE";
-BI.shortcut("demo.west", Demo.West);/**
+BI.shortcut("demo.west", Demo.West);Demo.AdaptiveArrangement = BI.inherit(BI.Widget, {
+
+    _createItem: function () {
+        var self = this;
+        var id = BI.UUID();
+        var item = BI.createWidget({
+            type: "bi.text_button",
+            id: id,
+            cls: "layout-bg" + BI.random(1, 8),
+            handler: function () {
+                self.arrangement.deleteRegion(id);
+            }
+        });
+        item.setValue(item.attr("id"));
+        return item;
+    },
+
+    render: function () {
+        var self = this;
+        this.arrangement = BI.createWidget({
+            type: "bi.adaptive_arrangement",
+            layoutType: BI.Arrangement.LAYOUT_TYPE.ADAPTIVE,
+            cls: "mvc-border",
+            width: 800,
+            height: 400,
+            items: []
+        });
+        var drag = BI.createWidget({
+            type: "bi.label",
+            cls: "mvc-border",
+            width: 100,
+            height: 25,
+            text: "drag me"
+        });
+
+        // drag.element.draggable && 
+        drag.element.draggable({
+            revert: true,
+            cursorAt: {
+                left: 0,
+                top: 0
+            },
+            drag: function (e, ui) {
+                self.arrangement.setPosition({
+                    left: ui.position.left,
+                    top: ui.position.top
+                }, {
+                    width: 300,
+                    height: 200
+                })
+            },
+            stop: function (e, ui) {
+                self.arrangement.addRegion({
+                    el: self._createItem()
+                });
+            },
+            helper: function (e) {
+                var helper = self.arrangement.getHelper();
+                return helper.element;
+            }
+        });
+
+        BI.createWidget({
+            type: "bi.absolute",
+            items: [{
+                el: drag,
+                left: 30,
+                top: 450
+            }, {
+                el: this.arrangement,
+                left: 30,
+                top: 30
+            }, {
+                el: {
+                    type: "bi.button",
+                    text: "回撤",
+                    height: 25,
+                    handler: function () {
+                        //self.arrangement.revoke();
+                    }
+                },
+                left: 130,
+                top: 450
+            }, {
+                el: {
+                    type: "bi.button",
+                    text: "getAllRegions",
+                    height: 25,
+                    handler: function () {
+                        var items = [];
+                        BI.each(self.arrangement.getAllRegions(), function (i, region) {
+                            items.push({
+                                id: region.id,
+                                left: region.left,
+                                top: region.top,
+                                width: region.width,
+                                height: region.height
+                            });
+                        });
+                        BI.Msg.toast(JSON.stringify(items));
+                    }
+                },
+                left: 230,
+                top: 450
+            }, {
+                el: {
+                    type: "bi.button",
+                    text: "relayout",
+                    height: 25,
+                    handler: function () {
+                        self.arrangement.relayout();
+                    }
+                },
+                left: 330,
+                top: 450
+            }]
+        });
+    }
+});
+
+BI.shortcut("demo.adaptive_arrangement", Demo.AdaptiveArrangement);/**
+ * Created by User on 2017/3/22.
+ */
+Demo.RelationView = BI.inherit(BI.Widget, {
+    props: {
+    },
+    render: function () {
+        return {
+            type: "bi.interactive_arrangement",
+        };
+    }
+});
+BI.shortcut("demo.interactive_arrangement", Demo.RelationView);/**
  * Created by Dailer on 2017/7/12.
  */
 Demo.FormulaCombo = BI.inherit(BI.Widget, {
@@ -6344,7 +6476,75 @@ Demo.TextValueCheckCombo = BI.inherit(BI.Widget, {
     }
 })
 
-BI.shortcut("demo.text_value_check_combo", Demo.TextValueCheckCombo);
+BI.shortcut("demo.text_value_check_combo", Demo.TextValueCheckCombo);/**
+ * Created by Dailer on 2017/7/11.
+ */
+Demo.Date = BI.inherit(BI.Widget, {
+    props: {
+        baseCls: "demo-date"
+    },
+
+    _init: function () {
+        Demo.Date.superclass._init.apply(this, arguments);
+    },
+
+    render: function () {
+
+        return {
+            type: "bi.horizontal_auto",
+            vgap: 10,
+            items: [{
+                type: "bi.date_combo",
+                width: 300
+            }, {
+                type: "bi.button",
+                text: "aiyaya",
+                height: 50,
+                width: 300
+            }]
+        }
+    }
+})
+
+BI.shortcut("demo.date", Demo.Date);Demo.DatePane = BI.inherit(BI.Widget, {
+    props: {
+        baseCls: "demo-datepane"
+    },
+    render: function () {
+
+        return {
+            type: "bi.horizontal_auto",
+            items: [{
+                type: "bi.vertical",
+                vgap: 10,
+                items: [{
+                        type: "bi.label",
+                        cls: "layout-bg2",
+                        text: "bi.date_pane_widget"
+                    }, {
+                        type: "bi.date_pane_widget",
+                        selectedTime: {
+                            year: 2017,
+                            month: 12,
+                            day: 11
+                        },
+                        height:300
+                    },
+                    {
+                        type: "bi.button",
+                        text: "getValue",
+                        handler: function () {
+                            BI.Msg.toast("date" + JSON.stringify(datepane.getValue()));
+                        }
+                    }
+                ],
+                width: "50%"
+            }]
+        }
+    }
+})
+
+BI.shortcut("demo.date_pane", Demo.DatePane);
 
 
 Demo.AdaptiveArrangement=BI.inherit(BI.Widget,{
@@ -7071,7 +7271,33 @@ Demo.Year = BI.inherit(BI.Widget, {
     }
 })
 
-BI.shortcut("demo.year", Demo.Year);/**
+BI.shortcut("demo.year", Demo.Year);Demo.DialogView = BI.inherit(BI.Widget, {
+
+    render: function () {
+        var items = [{
+            el: {
+                type: 'bi.button',
+                text: '弹出对话框',
+                level: 'common',
+                height: 30
+            }
+        }];
+        BI.each(items, function (i, item) {
+            item.el.handler = function () {
+                BI.Msg.alert('提示', "这是一段可以换行的文字，为了使它换行我要多写几个字，但是我又凑不够这么多的字，万般焦急下，只能随便写写");
+            }
+        });
+
+        return {
+            type: "bi.left",
+            vgap: 200,
+            hgap: 20,
+            items: items
+        }
+    }
+});
+
+BI.shortcut("demo.dialog", Demo.DialogView);/**
  * Created by Dailer on 2017/7/11.
  */
 Demo.AdaptEditor = BI.inherit(BI.Widget, {
@@ -7321,6 +7547,25 @@ Demo.TextEditor = BI.inherit(BI.Widget, {
 })
 
 BI.shortcut("demo.text_editor", Demo.TextEditor);/**
+ * Created by Dailer on 2017/7/11.
+ */
+Demo.Month = BI.inherit(BI.Widget, {
+    props: {
+        baseCls: "demo-exceltable"
+    },
+    render: function () {
+        return {
+            type: "bi.horizontal_adapt",
+            items: [{
+                type: "bi.month_combo",
+                width: 300
+            }]
+
+        }
+    }
+})
+
+BI.shortcut("demo.month", Demo.Month);/**
  * Created by Dailer on 2017/7/12.
  */
 Demo.MultiSelectCombo = BI.inherit(BI.Widget, {
@@ -7351,6 +7596,46 @@ Demo.MultiSelectCombo = BI.inherit(BI.Widget, {
 })
 
 BI.shortcut("demo.musdflti_select_combo", Demo.MultiSelectCombo);/**
+ * Created by Dailer on 2017/7/13.
+ */
+Demo.MultiTreeCombo = BI.inherit(BI.Widget, {
+    props: {
+        baseCls: ""
+    },
+
+    render: function () {
+        var self = this;
+        var items = BI.deepClone(Demo.CONSTANTS.TREE);
+        return {
+            type: "bi.horizontal_auto",
+            items: [{
+                type: "bi.multi_tree_combo",
+                ref: function (_ref) {
+                    self.tree = _ref;
+                },
+                itemsCreator: function (options, callback) {
+                     console.log(options);
+                    
+                    
+                    callback({
+                        items: items
+                    });
+                },
+                width: 300
+            }, {
+                type: "bi.button",
+                text: "getVlaue",
+                handler: function () {
+                    BI.Msg.toast(JSON.stringify(self.tree.getValue()));
+                },
+                width: 300
+            }],
+            vgap: 20
+        }
+    }
+})
+
+BI.shortcut("demo.multi_tree_combo", Demo.MultiTreeCombo);/**
  * Created by Dailer on 2017/7/12.
  */
 Demo.NumericalInterval = BI.inherit(BI.Widget, {
@@ -7393,7 +7678,810 @@ Demo.NumericalInterval = BI.inherit(BI.Widget, {
     }
 })
 
-BI.shortcut("demo.numberical_interval", Demo.NumericalInterval);Demo.Func = BI.inherit(BI.Widget, {
+BI.shortcut("demo.numberical_interval", Demo.NumericalInterval);
+
+
+Demo.DirectionPathChooser = BI.inherit(BI.Widget, {
+    props: {
+        baseCls: "demo-direction-path-chooser"
+    },
+
+    render: function () {
+        return {
+            type: "bi.center_adapt",
+            items: [
+                {
+                    type: "bi.direction_path_chooser",
+                    items: [[{
+                        "region": "8c4460bc3605685e",
+                        "regionText": "采购订单XXX",
+                        "text": "ID",
+                        "value": "1"
+                    }, {
+                        "region": "0fbd0dc648f41e97",
+                        "regionText": "采购订单",
+                        "text": "学号",
+                        "value": "3"
+                    }, {
+                        "region": "c6d72d6c7e19a667",
+                        "regionText": "供应商基本信息",
+                        "text": "ID",
+                        "value": "5"
+                    }], [{
+                        "region": "ed013e18cc7c8637",
+                        "regionText": "采购订单XXX",
+                        "text": "ID",
+                        "value": "1"
+                    }, {
+                        "region": "153d75878431f8ee",
+                        "regionText": "A3",
+                        "text": "学号",
+                        "value": "2"
+                    }, {
+                        "region": "3861fb024c7d7825",
+                        "regionText": "采购订单",
+                        "text": "学号",
+                        "value": "3"
+                    }, {
+                        "region": "88e3e5071bd10bc5",
+                        "regionText": "供应商",
+                        "text": "ID",
+                        "value": "4"
+                    }, {
+                        "region": "8476c77ab5c147e0",
+                        "regionText": "供应商基本信息",
+                        "text": "ID",
+                        "value": "5"
+                    }], [{
+                        "region": "f00f67fbb9fba6fe",
+                        "regionText": "采购订单XXX",
+                        "text": "ID",
+                        "value": "1"
+                    }, {
+                        "region": "1e8badf5d5793408",
+                        "regionText": "A3",
+                        "text": "学号",
+                        "value": "2"
+                    }, {
+                        "region": "de1ebd3d0986a294",
+                        "regionText": "供应商基本信息",
+                        "text": "ID",
+                        "value": "5"
+                    }]]
+                }
+            ]
+        }
+    }
+})
+
+BI.shortcut("demo.direction_path_chooser",Demo.DirectionPathChooser);/**
+ * Created by User on 2017/3/22.
+ */
+Demo.PathChooser = BI.inherit(BI.Widget, {
+    props: {
+        baseCls: "demo-path-chooser"
+    },
+    render: function () {
+        var pathchooser = BI.createWidget({
+            type: "bi.path_chooser",
+            width: 800,
+            height: 400,
+            items: //    [
+            //    [{region: "区域X", value: "X1"},
+            //        {region: "区域Q", value: "Q"},
+            //        {region: "区域A", value: "A"},
+            //        {region: "区域B", value: "B"},
+            //        {region: "区域D", value: "D"},
+            //        {region: "区域E", value: "E"},
+            //        {region: "区域G", value: "G"},
+            //        {region: "区域I", value: "I"},
+            //        {region: "区域J", value: "J"}],
+            //    [{region: "区域X", value: "X"},
+            //        {region: "区域Q", value: "Q"},
+            //        {region: "区域A", value: "A"},
+            //        {region: "区域B", value: "B"},
+            //        {region: "区域C", value: "C"},
+            //        {region: "区域D", value: "D"},
+            //        {region: "区域E", value: "E"},
+            //        {region: "区域G", value: "G"},
+            //        {region: "区域I", value: "I"},
+            //        {region: "区域J", value: "J"}],
+            //    [{region: "区域X", value: "X"},
+            //        //{region: "区域Q", value: "Q"},
+            //        {region: "区域A", value: "A"},
+            //        {region: "区域C", value: "C"},
+            //        {region: "区域D", value: "D"},
+            //        {region: "区域E", value: "E"},
+            //        {region: "区域G", value: "G"},
+            //        {region: "区域I", value: "I"},
+            //        {region: "区域J", value: "J"}],
+            //    [{region: "区域X", value: "X"},
+            //        {region: "区域Q", value: "Q"},
+            //        {region: "区域A", value: "A"},
+            //        {region: "区域B", value: "B"},
+            //        {region: "区域D", value: "D"},
+            //        {region: "区域E", value: "E1"},
+            //        {region: "区域H", value: "H"},
+            //        {region: "区域I", value: "I"},
+            //        {region: "区域J", value: "J"}],
+            //    [{region: "区域X", value: "X"},
+            //        {region: "区域Q", value: "Q"},
+            //        {region: "区域A", value: "A"},
+            //        {region: "区域B", value: "B"},
+            //        {region: "区域C", value: "C"},
+            //        {region: "区域D", value: "D"},
+            //        {region: "区域E", value: "E1"},
+            //        {region: "区域H", value: "H"},
+            //        {region: "区域I", value: "I"},
+            //        {region: "区域J", value: "J"}],
+            //    [{region: "区域X", value: "X"},
+            //        {region: "区域Q", value: "Q"},
+            //        {region: "区域A", value: "A"},
+            //        {region: "区域C", value: "C"},
+            //        {region: "区域D", value: "D"},
+            //        {region: "区域E", value: "E1"},
+            //        {region: "区域H", value: "H"},
+            //        {region: "区域I", value: "I"},
+            //        {region: "区域J", value: "J"}],
+            //    [{region: "区域X", value: "X"},
+            //        {region: "区域Q", value: "Q"},
+            //        {region: "区域A", value: "A"},
+            //        {region: "区域B", value: "B"},
+            //        {region: "区域D", value: "D"},
+            //        {region: "区域F", value: "F"},
+            //        {region: "区域H", value: "H"},
+            //        {region: "区域I", value: "I"},
+            //        {region: "区域J", value: "J"}],
+            //    [{region: "区域X", value: "X"},
+            //        {region: "区域Q", value: "Q"},
+            //        {region: "区域A", value: "A"},
+            //        {region: "区域B", value: "B"},
+            //        {region: "区域C", value: "C"},
+            //        {region: "区域D", value: "D"},
+            //        {region: "区域F", value: "F"},
+            //        {region: "区域H", value: "H"},
+            //        {region: "区域I", value: "I"},
+            //        {region: "区域J", value: "J"}],
+            //    [{region: "区域X", value: "X", text: "X"},
+            //        {region: "区域Q", value: "Q", text: "Q"},
+            //        {region: "区域A", value: "A", text: "A"},
+            //        {region: "区域C", value: "C", text: "C"},
+            //        {region: "区域D", value: "D", text: "D"},
+            //        {region: "区域F", value: "F", text: "F"},
+            //        {region: "区域H", value: "H", text: "H"},
+            //        {region: "区域I", value: "I", text: "I"},
+            //        {region: "区域J", value: "J", text: "J"}]
+            //]
+                [[{
+                    "region": "8c4460bc3605685e",
+                    "regionText": "采购订单XXX",
+                    "text": "ID",
+                    "value": "1"
+                }, {
+                    "region": "0fbd0dc648f41e97",
+                    "regionText": "采购订单",
+                    "text": "学号",
+                    "value": "3"
+                }, {
+                    "region": "c6d72d6c7e19a667",
+                    "regionText": "供应商基本信息",
+                    "text": "ID",
+                    "value": "5"
+                }], [{
+                    "region": "ed013e18cc7c8637",
+                    "regionText": "采购订单XXX",
+                    "text": "ID",
+                    "value": "1"
+                }, {
+                    "region": "153d75878431f8ee",
+                    "regionText": "A3",
+                    "text": "学号",
+                    "value": "2"
+                }, {
+                    "region": "3861fb024c7d7825",
+                    "regionText": "采购订单",
+                    "text": "学号",
+                    "value": "3"
+                }, {
+                    "region": "88e3e5071bd10bc5",
+                    "regionText": "供应商",
+                    "text": "ID",
+                    "value": "4"
+                }, {
+                    "region": "8476c77ab5c147e0",
+                    "regionText": "供应商基本信息",
+                    "text": "ID",
+                    "value": "5"
+                }], [{
+                    "region": "f00f67fbb9fba6fe",
+                    "regionText": "采购订单XXX",
+                    "text": "ID",
+                    "value": "1"
+                }, {
+                    "region": "1e8badf5d5793408",
+                    "regionText": "A3",
+                    "text": "学号",
+                    "value": "2"
+                }, {
+                    "region": "de1ebd3d0986a294",
+                    "regionText": "供应商基本信息",
+                    "text": "ID",
+                    "value": "5"
+                }]]
+        });
+        pathchooser.setValue();
+        return {
+            type: "bi.absolute",
+            items: [{
+                el: pathchooser,
+                left: 100,
+                top: 100
+            }, {
+                el: {
+                    type: "bi.button",
+                    text: "getValue",
+                    handler: function () {
+                        BI.Msg.toast(JSON.stringify(pathchooser.getValue()));
+                    }
+                },
+                left: 100,
+                bottom: 10
+            }]
+        }
+    }
+});
+BI.shortcut("demo.path_chooser", Demo.PathChooser);/**
+ * Created by Dailer on 2017/7/11.
+ */
+Demo.Quarter = BI.inherit(BI.Widget, {
+    props: {
+        baseCls: "demo-exceltable"
+    },
+    render: function () {
+        return {
+            type: "bi.horizontal_adapt",
+            items: [{
+                type: "bi.quarter_combo",
+                width: 300
+            }]
+
+        }
+    }
+})
+
+BI.shortcut("demo.quarter", Demo.Quarter);/**
+ * Created by User on 2017/3/22.
+ */
+Demo.RelationView = BI.inherit(BI.Widget, {
+    props: {
+        baseCls: "demo-relation-view"
+    },
+    render: function () {
+        var relationview = BI.createWidget({
+            type: "bi.relation_view",
+            items: [
+                {
+                    primary: {
+                        region: "B", regionText: "比", regionTitle: "bbb", regionHandler: function () {
+                            alert("a")
+                        },
+
+
+                        title: "b2...",
+                        value: "b2", text: "b2字段",
+                        handler: function () {
+                            alert("d")
+                        }
+                    },
+                    foreign: {region: "C", value: "c1", text: "c1字段"}
+                },
+                {
+                    primary: {region: "A", value: "a1", text: "a1字段"},
+                    foreign: {region: "C", value: "c2", text: "c2字段"}
+                },
+                {
+                    primary: {region: "C", value: "c3", text: "c3字段"},
+                    foreign: {region: "D", value: "d1", text: "d1字段"}
+                },
+                {
+                    primary: {region: "A", value: "a1", text: "a1字段"},
+                    foreign: {region: "B", value: "b1", text: "b1字段"}
+                },
+
+                {
+                    primary: {region: "X", value: "x1", text: "x1字段"},
+                    foreign: {region: "Y", value: "y1", text: "y1字段"}
+                },
+                {
+                    primary: {region: "X", value: "x2", text: "x2字段"},
+                    foreign: {region: "Z", value: "z1", text: "z1字段"}
+                },
+                {
+                    primary: {region: "X", value: "x2", text: "x2字段"},
+                    foreign: {region: "B", value: "b1", text: "b1字段"}
+                },
+                {
+                    primary: {region: "X33", value: "x233", text: "x233字段"},
+                }
+            ]
+        });
+        return {
+            type: "bi.float_center_adapt",
+            items: [{
+                el: relationview
+            }]
+        }
+    }
+});
+BI.shortcut("demo.relation_view", Demo.RelationView);/**
+ * Created by Dailer on 2017/7/13.
+ */
+Demo.MultiLayerSelectTreeCombo = BI.inherit(BI.Widget, {
+    props: {
+        baseCls: ""
+    },
+
+    render: function () {
+        var self = this;
+        var items = BI.deepClone(Demo.CONSTANTS.TREE);
+        return {
+            type: "bi.horizontal_auto",
+            items: [{
+                type: "bi.multilayer_select_tree_combo",
+                ref: function (_ref) {
+                    self.tree = _ref;
+                },
+                text: "默认值",
+                items: items,
+                width: 300
+            }, {
+                type: "bi.button",
+                text: "getVlaue",
+                handler: function () {
+                    BI.Msg.toast(self.tree.getValue()[0]);
+                },
+                width: 300
+            }],
+            vgap: 20
+        }
+    }
+})
+
+BI.shortcut("demo.multilayer_select_tree_combo", Demo.MultiLayerSelectTreeCombo);/**
+ * Created by Dailer on 2017/7/13.
+ */
+Demo.SelectTreeCombo = BI.inherit(BI.Widget, {
+    props: {
+        baseCls: "demo-exceltable"
+    },
+
+    render: function () {
+        var self = this;
+        var items = [{
+            id: 1,
+            text: "第一项",
+            value: 1,
+            isParent: true,
+            title: "第一项"
+        }, {
+            id: 2,
+            text: "第二项",
+            value: 2,
+            isParent: true,
+            title: "第二项"
+        }, {
+            id: 3,
+            text: "第三项",
+            value: 3,
+            isParent: true,
+            open: true,
+            title: "第三项"
+        }, {
+            id: 4,
+            text: "第四项",
+            value: 4,
+            isParent: true,
+            title: "第四项"
+        }, {
+            id: 5,
+            text: "第五项",
+            value: 5,
+            isParent: true,
+            title: "第五项"
+        }, {
+            id: 6,
+            text: "第六项",
+            value: 6,
+            isParent: true,
+            open: true,
+            title: "第六项"
+        }, {
+            id: 7,
+            text: "第七项",
+            value: 7,
+            isParent: true,
+            open: true,
+            title: "第七项"
+        }, {
+            id: 11,
+            pId: 1,
+            text: "子项1",
+            value: 11,
+            title: "子项1"
+        }, {
+            id: 12,
+            pId: 1,
+            text: "子项2",
+            value: 12,
+            title: "子项2"
+        }, {
+            id: 13,
+            pId: 1,
+            text: "子项3",
+            value: 13,
+            title: "子项3"
+        }, {
+            id: 21,
+            pId: 2,
+            text: "子项1",
+            value: 21,
+            title: "子项1"
+        }, {
+            id: 22,
+            pId: 2,
+            text: "子项2",
+            value: 22,
+            title: "子项2"
+        }, {
+            id: 31,
+            pId: 3,
+            text: "子项1",
+            value: 31,
+            title: "子项1"
+        }, {
+            id: 32,
+            pId: 3,
+            text: "子项2",
+            value: 32,
+            title: "子项2"
+        }, {
+            id: 33,
+            pId: 3,
+            text: "子项3",
+            value: 33,
+            title: "子项3"
+        }, {
+            id: 41,
+            pId: 4,
+            text: "子项1",
+            value: 41,
+            title: "子项1"
+        }, {
+            id: 42,
+            pId: 4,
+            text: "子项2",
+            value: 42,
+            title: "子项2"
+        }, {
+            id: 43,
+            pId: 4,
+            text: "子项3",
+            value: 43,
+            title: "子项3"
+        }, {
+            id: 51,
+            pId: 5,
+            text: "子项1",
+            value: 51,
+            title: "子项1"
+        }, {
+            id: 52,
+            pId: 5,
+            text: "子项2",
+            value: 52,
+            title: "子项2"
+        }, {
+            id: 61,
+            pId: 6,
+            text: "子项1",
+            value: 61,
+            title: "子项1"
+        }, {
+            id: 62,
+            pId: 6,
+            text: "子项2",
+            value: 62,
+            title: "子项2"
+        }, {
+            id: 71,
+            pId: 7,
+            text: "子项1",
+            value: 71,
+            title: "子项1"
+        }, {
+            id: 72,
+            pId: 7,
+            text: "子项2",
+            value: 72,
+            title: "子项2"
+        }];
+        return {
+            type: "bi.horizontal_auto",
+            items: [{
+                type: "bi.select_tree_combo",
+                ref: function (_ref) {
+                    self.tree = _ref;
+                },
+                text: "默认值",
+                items: items,
+                width: 300
+            }, {
+                type: "bi.button",
+                text: "getVlaue",
+                handler: function () {
+                    BI.Msg.toast(self.tree.getValue()[0]);
+                },
+                width: 300
+            }],
+            vgap: 20
+        }
+    }
+})
+
+BI.shortcut("demo.select_tree_combo", Demo.SelectTreeCombo);/**
+ * Created by Dailer on 2017/7/13.
+ */
+Demo.MultiLayerSingleTreeCombo = BI.inherit(BI.Widget, {
+    props: {
+        baseCls: ""
+    },
+
+    render: function () {
+        var self = this;
+        var items = BI.deepClone(Demo.CONSTANTS.TREE);
+        return {
+            type: "bi.horizontal_auto",
+            items: [{
+                type: "bi.multilayer_single_tree_combo",
+                ref: function (_ref) {
+                    self.tree = _ref;
+                },
+                text: "默认值",
+                items: items,
+                width: 300
+            }, {
+                type: "bi.button",
+                text: "getVlaue",
+                handler: function () {
+                    BI.Msg.toast(self.tree.getValue()[0]);
+                },
+                width: 300
+            }],
+            vgap: 20
+        }
+    }
+})
+
+BI.shortcut("demo.multilayer_single_tree_combo", Demo.MultiLayerSingleTreeCombo);/**
+ * Created by Dailer on 2017/7/13.
+ */
+Demo.SingleTreeCombo = BI.inherit(BI.Widget, {
+    props: {
+        baseCls: "demo-exceltable"
+    },
+
+    render: function () {
+        var self = this;
+        return {
+            type: "bi.horizontal_auto",
+            items: [{
+                type: "bi.single_tree_combo",
+                ref: function (_ref) {
+                    self.tree = _ref;
+                },
+                text: "默认值",
+                items: [{
+                    id: 1,
+                    text: "第一项",
+                    value: 1,
+                    isParent: true,
+                    title: "第一项"
+                }, {
+                    id: 2,
+                    text: "第二项",
+                    value: 1,
+                    isParent: true,
+                    title: "第二项"
+                }, {
+                    id: 3,
+                    text: "第三项",
+                    value: 1,
+                    isParent: true,
+                    open: true,
+                    title: "第三项"
+                }, {
+                    id: 4,
+                    text: "第四项",
+                    value: 1,
+                    isParent: true,
+                    title: "第四项"
+                }, {
+                    id: 5,
+                    text: "第五项",
+                    value: 1,
+                    isParent: true,
+                    title: "第五项"
+                }, {
+                    id: 6,
+                    text: "第六项",
+                    value: 1,
+                    isParent: true,
+                    open: true,
+                    title: "第六项"
+                }, {
+                    id: 7,
+                    text: "第七项",
+                    value: 1,
+                    isParent: true,
+                    open: true,
+                    title: "第七项"
+                }, {
+                    id: 11,
+                    pId: 1,
+                    text: "子项1",
+                    value: 11,
+                    title: "子项1"
+                }, {
+                    id: 12,
+                    pId: 1,
+                    text: "子项2",
+                    value: 12,
+                    title: "子项2"
+                }, {
+                    id: 13,
+                    pId: 1,
+                    text: "子项3",
+                    value: 13,
+                    title: "子项3"
+                }, {
+                    id: 21,
+                    pId: 2,
+                    text: "子项1",
+                    value: 21,
+                    title: "子项1"
+                }, {
+                    id: 22,
+                    pId: 2,
+                    text: "子项2",
+                    value: 22,
+                    title: "子项2"
+                }, {
+                    id: 31,
+                    pId: 3,
+                    text: "子项1",
+                    value: 31,
+                    title: "子项1"
+                }, {
+                    id: 32,
+                    pId: 3,
+                    text: "子项2",
+                    value: 32,
+                    title: "子项2"
+                }, {
+                    id: 33,
+                    pId: 3,
+                    text: "子项3",
+                    value: 33,
+                    title: "子项3"
+                }, {
+                    id: 41,
+                    pId: 4,
+                    text: "子项1",
+                    value: 41,
+                    title: "子项1"
+                }, {
+                    id: 42,
+                    pId: 4,
+                    text: "子项2",
+                    value: 42,
+                    title: "子项2"
+                }, {
+                    id: 43,
+                    pId: 4,
+                    text: "子项3",
+                    value: 43,
+                    title: "子项3"
+                }, {
+                    id: 51,
+                    pId: 5,
+                    text: "子项1",
+                    value: 51,
+                    title: "子项1"
+                }, {
+                    id: 52,
+                    pId: 5,
+                    text: "子项2",
+                    value: 52,
+                    title: "子项2"
+                }, {
+                    id: 61,
+                    pId: 6,
+                    text: "子项1",
+                    value: 61,
+                    title: "子项1"
+                }, {
+                    id: 62,
+                    pId: 6,
+                    text: "子项2",
+                    value: 62,
+                    title: "子项2"
+                }, {
+                    id: 71,
+                    pId: 7,
+                    text: "子项1",
+                    value: 71,
+                    title: "子项1"
+                }, {
+                    id: 72,
+                    pId: 7,
+                    text: "子项2",
+                    value: 72,
+                    title: "子项2"
+                }],
+                width: 300
+            }, {
+                type: "bi.button",
+                text: "getVlaue",
+                handler: function () {
+                    BI.Msg.toast(self.tree.getValue()[0]);
+                },
+                width: 300
+            }],
+            vgap: 20
+        }
+    }
+})
+
+BI.shortcut("demo.single_tree_combo", Demo.SingleTreeCombo);/**
+ * Created by Dailer on 2017/7/12.
+ */
+Demo.ExcelTable = BI.inherit(BI.Widget, {
+    props: {
+        baseCls: "demo-exceltable"
+    },
+    render: function () {
+        return {
+            type: "bi.horizontal_auto",
+            items: [{
+                type: "bi.excel_table",
+                columnSize: [200,200,200,200,200],
+                items: [
+                    [{
+                        type: "bi.label",
+                        cls: "layout-bg1",
+                        text: "第一行第一列"
+                    }, {
+                        type: "bi.label",
+                        cls: "layout-bg2",
+                        text: "第一行第二列"
+                    }],
+                    [{
+                        type: "bi.label",
+                        cls: "layout-bg3",
+                        text: "第二行第一列"
+                    }, {
+                        type: "bi.label",
+                        cls: "layout-bg4",
+                        text: "第二行第二列"
+                    }]
+                ]
+            }],
+            width:500
+        }
+    }
+})
+
+BI.shortcut("demo.excel_table", Demo.ExcelTable);Demo.Func = BI.inherit(BI.Widget, {
     props: {
         baseCls: "demo-func"
     },
@@ -8154,6 +9242,38 @@ BI.shortcut("demo.responsive_table", Demo.Func);Demo.Func = BI.inherit(BI.Widget
     }
 });
 BI.shortcut("demo.sequence_table", Demo.Func);/**
+ * Created by Dailer on 2017/7/13.
+ */
+Demo.TimeInterval = BI.inherit(BI.Widget, {
+    props: {
+        baseCls: ""
+    },
+
+    render: function () {
+        var self = this;
+        var items = BI.deepClone(Demo.CONSTANTS.TREE);
+        return {
+            type: "bi.horizontal_auto",
+            items: [{
+                type: "bi.time_interval",
+                ref: function (_ref) {
+                    self.interval = _ref;
+                },
+                width: 300
+            }, {
+                type: "bi.button",
+                text: "getVlaue",
+                handler: function () {
+                    BI.Msg.toast(JSON.stringify(self.interval.getValue()));
+                },
+                width: 300
+            }],
+            vgap: 20
+        }
+    }
+})
+
+BI.shortcut("demo.time_interval", Demo.TimeInterval);/**
  * Created by User on 2017/3/22.
  */
 Demo.MultiSelectCombo = BI.inherit(BI.Widget, {
@@ -8218,7 +9338,111 @@ Demo.MultiSelectCombo = BI.inherit(BI.Widget, {
         }
     }
 });
-BI.shortcut("demo.multilayer_select_tree_combo", Demo.MultiSelectCombo);Demo.CONFIG = Demo.CORE_CONFIG.concat(Demo.BASE_CONFIG).concat(Demo.CASE_CONFIG).concat(Demo.WIDGET_CONFIG).concat(Demo.COMPONENT_CONFIG).concat(Demo.CHART_CONFIG);
+BI.shortcut("demo.multilayer_select_tree_combo", Demo.MultiSelectCombo);/**
+ * Created by Dailer on 2017/7/13.
+ */
+Demo.SwitchTree = BI.inherit(BI.Widget, {
+    props: {
+        baseCls: ""
+    },
+    render: function () {
+
+        var items = BI.deepClone(Demo.CONSTANTS.TREE);
+        return {
+            type: "bi.horizontal_auto",
+            items: [{
+                type: "bi.switch_tree",
+                items: items
+            },{
+                type:"bi.button",
+                text:"getValue"
+            }]
+        }
+    }
+})
+
+BI.shortcut("demo.switch_tree", Demo.SwitchTree);/**
+ * Created by Dailer on 2017/7/11.
+ */
+Demo.Year = BI.inherit(BI.Widget, {
+    props: {
+        baseCls: "demo-exceltable"
+    },
+    render: function () {
+        return {
+            type: "bi.horizontal_adapt",
+            items: [{
+                type: "bi.year_combo",
+                width: 300
+            }]
+        }
+    }
+})
+
+BI.shortcut("demo.year", Demo.Year);/**
+ * Created by Dailer on 2017/7/13.
+ */
+Demo.YearMonthCombo = BI.inherit(BI.Widget, {
+    props: {
+        baseCls: ""
+    },
+    render: function () {
+
+        var self = this;
+        return {
+            type: "bi.horizontal_auto",
+            items: [{
+                type: "bi.year_month_combo",
+                ref: function (_ref) {
+                    self.widget = _ref;
+                },
+                width: 300
+            }, {
+                type: "bi.button",
+                text: "getValue",
+                handler: function () {
+                    BI.Msg.toast(JSON.stringify(self.widget.getValue()))
+                },
+                width: 300
+            }],
+            vgap: 20
+        }
+    }
+})
+
+BI.shortcut("demo.year_month_combo", Demo.YearMonthCombo);/**
+ * Created by Dailer on 2017/7/13.
+ */
+Demo.YearQuarterCombo = BI.inherit(BI.Widget, {
+    props: {
+        baseCls: ""
+    },
+    render: function () {
+        var self=this;
+        return {
+            type: "bi.horizontal_auto",
+            items: [{
+                type: "bi.year_quarter_combo",
+                width: 300,
+                ref:function(_ref){
+                    self.widget=_ref;
+                },
+                yearBehaviors: {},
+                quarterBehaviors: {},
+            }, {
+                type: "bi.button",
+                text: "getValue",
+                handler:function(){
+                    BI.Msg.toast(JSON.stringify(self.widget.getValue()))
+                },
+                width: 300
+            }],
+            vgap: 20
+        }
+    }
+})
+
+BI.shortcut("demo.year_quarter_combo", Demo.YearQuarterCombo);Demo.CONFIG = Demo.CORE_CONFIG.concat(Demo.BASE_CONFIG).concat(Demo.CASE_CONFIG).concat(Demo.WIDGET_CONFIG).concat(Demo.COMPONENT_CONFIG).concat(Demo.CHART_CONFIG);
 
 Demo.CONSTANTS = {
     ITEMS: BI.map("柳州市城贸金属材料有限责任公司 柳州市建福房屋租赁有限公司 柳州市迅昌数码办公设备有限责任公司 柳州市河海贸易有限责任公司 柳州市花篮制衣厂 柳州市兴溪物资有限公司 柳州市针织总厂 柳州市衡管物资有限公司 柳州市琪成机电设备有限公司 柳州市松林工程机械修理厂 柳州市积玉贸易有限公司 柳州市福运来贸易有限责任公司 柳州市钢义物资有限公司 柳州市洋力化工有限公司 柳州市悦盛贸易有限公司 柳州市雁城钢管物资有限公司 柳州市恒瑞钢材经营部 柳州市科拓电子有限公司 柳州市九方电子有限公司 柳州市桂龙汽车配件厂 柳州市制鞋工厂 柳州市炜力科贸有限公司 柳州市希翼贸易有限公司 柳州市兆金物资有限公司 柳州市和润电子科技有限责任公司 柳州市汇凯贸易有限公司 柳州市好机汇商贸有限公司 柳州市泛源商贸经营部 柳州市利汇达物资有限公司 广西全民药业有限责任公司 柳州超凡物资贸易有限责任公司 柳州市贵宏物资有限责任公司 柳州昊恒贸易有限责任公司 柳州市浦联物资有限公司 柳州市广通园林绿化工程有限责任公司 柳州市松发物资贸易有限责任公司 柳州市奥士达办公设备有限责任公司 柳州市海泰物资有限公司 柳州市金三环针织厂 柳州市钢贸物资有限公司 柳州市明阳纺织有限公司 柳州市世科科技发展有限公司 柳州市禄羊贸易有限公司 柳州市金兆阳商贸有限公司 柳州市汇昌物资经营部 柳州市林泰金属物资供应站 柳州市自来水管道材料设备公司 柳州市丹柳铝板有限公司 柳州市桂冶物资有限公司 柳州市宸业物资经营部 柳州市耀成贸易有限公司 柳州奥易自动化科技有限公司 柳州市萃丰科技有限责任公司 柳州市华储贸易有限责任公司 柳州市黄颜钢材有限责任公司 柳州市银盛物资有限责任公司 柳州市新仪化玻供应站 柳州市晶凯化工有限公司 广西柳州市柳江包装纸厂 柳州市志新物资有限责任公司 柳州市兆钢物资有限公司 柳州市友方科技发展有限责任公司 柳州市缝纫机台板家具总厂 柳州市晖海数码办公设备有限责任公司 柳州市富兰特服饰有限责任公司 柳州市柳北区富兴物资经营部 柳州市柳锌福利厂 柳州市海泉印刷有限责任公司 柳州市乾亨贸易有限公司 柳州市悦宁物资贸易有限公司 柳州市昊天贸易有限公司 广西惠字钢铁有限公司 柳州市名青物资有限公司 柳州市林郝物资有限公司 柳州市民政服装厂 柳州市多维劳保用品厂 柳州市轻工物资供应公司 柳州市程源物资有限责任公司 柳州市寿丰物资贸易有限责任公司 柳州市凯凡物资有限公司 柳州市利晖物资经营部 柳州市恒茂金属物资供应站 柳州市中储物资经营部 柳州市第二医疗器械厂 柳州市来鑫物资经营部 柳州市钢鑫物资贸易有限责任公司 柳州市双合袜业有限责任公司 柳州市茂松经贸有限责任公司 柳州市行行物资贸易有限公司 柳州市方一物资有限公司 柳州成异钢管销售有限公司 柳州广惠佳电脑有限公司 桂林市圣泽鑫物资有限公司柳州分公司 柳州市砼基建材贸易有限公司 柳州市海燕针织厂 上海浦光仪表厂柳州销售处 柳州市能电工贸有限责任公司 柳州市广贸物资有限公司 柳州市柳北区大昌电工灯饰经营部 柳州市金龙印务有限公司 柳州市奇缘婚典服务有限公司 柳州市盛博物资经营部 柳州市项元钢铁贸易有限公司 柳州市虞美人化妆品经营部 柳州市俊彦鞋厂 柳州市聚源特钢有限公司 柳州市迅龙科贸有限责任公司 柳州市恒飞电子有限责任公司 柳州市蓝正现代办公设备有限责任公司 柳州地区农业生产资料公司 柳州华菱钢管销售有限公司 柳州融通物资有限公司 柳州市可仁广告策划有限责任公司 柳州市鸟鑫物资有限责任公司 柳州市五丰钢材供应站 柳州市金江不锈钢有限公司 柳州市美日物资设备有限责任公司 柳州市鑫东物资贸易有限责任公司 柳州地区日用杂品公司 柳州市华纳物资贸易有限公司 柳州乾利金虹物资贸易有限责任公司 柳州市新迈计算机有限公司 柳州市富丽实业发展公司 柳州市石钢金属材料有限公司 柳州市力志传真机销售有限公司 广西宝森投资有限公司 柳州市嵘基商贸有限公司 柳州市景民商贸有限责任公司 柳州市银桥化玻有限责任公司 柳州市宏文糖烟店 柳州市科苑电脑网络有限公司 柳州市两面针旅游用品厂 柳州市立早室内装璜有限责任公司 柳州地化建材有限公司 柳州市涛达贸易有限公司 柳州市兰丰档案服务中心 柳州市惠贸物资有限责任公司 柳州市立文物资有限责任公司 柳州市致和商贸经营部 柳州市金色阳光信息咨询有限公司 柳州市赛利钢材经销部 柳州市日用化工厂 柳州市昆廷物资有限责任公司 柳州市邦盛贸易有限公司 柳州市济华贸易有限公司 柳州昕威橡塑化工经营部 柳州市联业贸易有限公司 柳州市兰钢贸易有限公司 柳州市子欣科技有限公司 柳州市狄龙机电设备有限公司 柳州市方真物资贸易有限公司 柳州市银鸥废旧回收中心 柳州市冠宝贸易有限公司 柳州市鑫盛德商务咨询有限责任公司 柳州市泰汇银通经贸有限公司 广西瀚维智测科技有限公司 柳州市钓鱼郎制衣有限责任公司 柳州溪水物资有限公司 柳州市融峰物资有限责任公司 广西新地科技有限责任公司 柳州市纺织装饰公司 柳州市粤翔冶金炉料有限公司 柳州市远腾贸易有限公司 柳州市东鸿城市改造有限公司 广西丛欣实业有限公司 柳州市服装厂 柳州市立安联合刀片有限公司 广西国扬投资有限责任公司 柳州市铭泰办公设备公司 柳州市桂钢物资供应站 柳州市昱升物资有限责任公司 柳州市鹰飞灿科贸有限公司 柳州市先导科贸有限公司 柳州市金秋建材物资经营部 柳州市童装厂 柳州市民泽物资有限公司 柳州市恒先物资贸易有限公司 柳州市银夏冷气工程有限责任公司 柳州粮食批发有限责任公司 柳州市金银华窗纱制造有限责任公司 柳州市三方贸易有限公司 柳州市丰涛商贸有限责任公司 柳州华智企业管理咨询有限责任公司 柳州市诚正建筑工程施工图审查有限公司 柳州市今科电讯设备营销中心 柳州市闽德电子有限公司 柳州市鑫虹针织厂 柳州市畅通通讯器材有限责任公司 柳州市正钢物资经营部 柳州市新柳饲料有限责任公司 柳州市黄村油库 柳州市天泰电力装饰工程有限公司 柳州市兆吉物资有限责任公司 柳州市八龙纸制品有限责任公司 柳州市巨佳电脑网络科技有限公司 ".match(/[^\s]+/g), function (i, v) {
