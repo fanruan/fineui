@@ -14,10 +14,10 @@ Demo.WIDGET_CONFIG = [{
     pId: 401,
     text: "bi.responsive_table",
     value: "demo.responsive_table"
-}, {
-    pId: 4,
-    text: "bi.multi_select_combo",
-    value: "demo.multi_select_combo"
+},{
+    pId: 401,
+    text: "bi.excel_table",
+    value: "demo.excel_table"
 }, {
     pId: 4,
     text: "bi.path_chooser",
@@ -31,10 +31,6 @@ Demo.WIDGET_CONFIG = [{
     text: "bi.date",
     value: "demo.date"
 },{
-    pId: 4,
-    text: "bi.excel_table",
-    value: "demo.excel_table"
-}, {
     pId: 4,
     text: "bi.date_pane_widget",
     value: "demo.date_pane"
@@ -168,8 +164,7 @@ Demo.WIDGET_CONFIG = [{
 },{
     pId:4,
     id:410,
-    text:"数值区间控件",
-    open:true
+    text:"数值区间控件"
 },{
     pId: 410,
     text: "bi.numerical_interval",
@@ -177,11 +172,46 @@ Demo.WIDGET_CONFIG = [{
 },{
     pId:4,
     id:411,
-    text:"下拉复选框有确定按钮",
-    open:true
+    text:"下拉复选框有确定按钮"
 },{
     pId: 411,
     text: "bi.multi_select_combo",
     value:"demo.multi_select_combo"
-}];
+},{
+    pId:4,
+    id:412,
+    text:"简单日期控件"
+},{
+    pId: 412,
+    text: "bi.date_combo",
+    value:"demo.date"
+},{
+    pId: 412,
+    text: "bi.date_pane_widget",
+    value:"demo.date_pane_widget"
+},{
+    pId:4,
+    id:413,
+    text:"简单下拉树"
+},{
+    pId: 413,
+    text: "bi.single_tree_combo",
+    value:"demo.single_tree_combo"
+},{
+    pId: 413,
+    text: "bi.multilayer_single_tree_combo",
+    value:"demo.multilayer_single_tree_combo"
+},{
+    pId:4,
+    id:414,
+    text:"可选下拉树"
+},{
+    pId: 414,
+    text: "bi.select_tree_combo",
+    value:"demo.select_tree_combo"
+},{
+    pId: 414,
+    text: "bi.multilayer_select_tree_combo",
+    value:"demo.multilayer_select_tree_combo"
+},];
 

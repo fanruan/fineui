@@ -20,7 +20,7 @@ Demo.Date = BI.inherit(BI.Widget, {
                 width: 300
             }, {
                 type: "bi.button",
-                text: "aiyaya",
+                text: "getVlaue",
                 height: 50,
                 width: 300
             }]

@@ -36,4 +36,4 @@ Demo.DatePane = BI.inherit(BI.Widget, {
     }
 })
 
-BI.shortcut("demo.date_pane", Demo.DatePane);
+BI.shortcut("demo.date_pane_widget", Demo.DatePane);
