@@ -25766,15 +25766,20 @@ BI.FloatCenterAdaptLayout = BI.inherit(BI.Layout, {
     },
 
     mounted: function () {
+        var self = this;
         var width = this.left.element.outerWidth(),
             height = this.left.element.outerHeight();
         this.left.element.width(width).height(height).css("float", "none");
+        BI.remove(this._children, function (i, wi) {
+            if (wi === self.container) {
+                delete self._children[i];
+            }
+        });
         BI.createWidget({
             type: "bi.center_adapt",
             element: this,
             items: [this.left]
         });
-        this.removeWidget(this.container);
     },
 
     stroke: function (items) {
@@ -25829,15 +25834,20 @@ BI.FloatHorizontalLayout = BI.inherit(BI.Layout, {
     },
 
     mounted: function () {
+        var self = this;
         var width = this.left.element.width(),
             height = this.left.element.height();
         this.left.element.width(width).height(height).css("float", "none");
+        BI.remove(this._children, function (i, wi) {
+            if (wi === self.container) {
+                delete self._children[i];
+            }
+        });
         BI.createWidget({
             type: "bi.horizontal_auto",
             element: this,
             items: [this.left]
         });
-        this.removeWidget(this.container);
     },
 
     _addElement: function (i, item) {
