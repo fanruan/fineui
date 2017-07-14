@@ -10,7 +10,7 @@ Demo.RecordEditor = BI.inherit(BI.Widget, {
             type: "bi.horizontal_auto",
             items: [{
                 type: "bi.record_editor",
-                cls: "demo-editor",
+                cls: "bi-border",
                 width: 300,
                 watermark: "这个是可以记录输入的"
             }],

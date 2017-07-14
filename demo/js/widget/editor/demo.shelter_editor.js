@@ -11,7 +11,7 @@ Demo.ClearEditor = BI.inherit(BI.Widget, {
             type: "bi.horizontal_auto",
             items: [{
                 type: "bi.shelter_editor",
-                cls: "editor",
+                cls: "bi-border",
                 ref:function(_ref){
                     editor=_ref;
                 },

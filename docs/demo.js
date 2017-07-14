@@ -3416,6 +3416,10 @@ Demo.COMPONENT_CONFIG = [{
         value: "demo.search_editor"
     }, {
         pId: 406,
+        text: "bi.sign_editor",
+        value: "demo.sign_editor"
+    }, {
+        pId: 406,
         text: "bi.sign_initial_editor",
         value: "demo.sign_initial_editor"
     }, {
@@ -3584,6 +3588,22 @@ Demo.COMPONENT_CONFIG = [{
         pId: 418,
         text: "bi.dialog",
         value: "demo.dialog"
+    }, {
+        pId: 4,
+        id: 419,
+        text: "单值滑块"
+    }, {
+        pId: 419,
+        text: "bi.single_slider",
+        value: "demo.single_slider"
+    },{
+        pId: 4,
+        id: 420,
+        text: "区间滑块"
+    }, {
+        pId: 420,
+        text: "bi.interval_slider",
+        value: "demo.interval_slider"
     },
 ];Demo.Func = BI.inherit(BI.Widget, {
     props: {
@@ -6823,7 +6843,7 @@ Demo.ClearEditor = BI.inherit(BI.Widget, {
             type: "bi.horizontal_auto",
             items: [{
                 type: "bi.clear_editor",
-                cls: "demo-editor",
+                cls: "bi-border",
                 width: 300,
                 watermark: "这个是带清除按钮的"
             }],
@@ -6844,7 +6864,7 @@ Demo.RecordEditor = BI.inherit(BI.Widget, {
             type: "bi.horizontal_auto",
             items: [{
                 type: "bi.record_editor",
-                cls: "demo-editor",
+                cls: "bi-border",
                 width: 300,
                 watermark: "这个是可以记录输入的"
             }],
@@ -6894,7 +6914,7 @@ Demo.ClearEditor = BI.inherit(BI.Widget, {
             type: "bi.horizontal_auto",
             items: [{
                 type: "bi.shelter_editor",
-                cls: "editor",
+                cls: "bi-border",
                 ref:function(_ref){
                     editor=_ref;
                 },
@@ -6922,6 +6942,29 @@ Demo.ClearEditor = BI.inherit(BI.Widget, {
 })
 
 BI.shortcut("demo.shelter_editor", Demo.ClearEditor);/**
+ * Created by Dailer on 2017/7/14.
+ */
+Demo.SignEditor = BI.inherit(BI.Widget, {
+    props: {
+        baseCls: ""
+    },
+    render: function () {
+        return {
+            type: "bi.horizontal_adapt",
+            items: [{
+                type: "bi.sign_editor",
+                //  cls:"layout-bg5",
+                value: "123",
+                text: "456",
+                width: 300
+            }],
+            vgap: 20
+
+        }
+    }
+})
+
+BI.shortcut("demo.sign_editor", Demo.SignEditor);/**
  * Created by Dailer on 2017/7/11.
  */
 Demo.SignInitialEditor = BI.inherit(BI.Widget, {
@@ -6977,7 +7020,7 @@ Demo.StateEditor = BI.inherit(BI.Widget, {
             type: "bi.horizontal_adapt",
             items: [{
                 type: "bi.state_editor",
-                cls:"editor",
+                cls:"bi-border",
                 value:"123",
                 text:"456",
                 width: 300
@@ -7016,6 +7059,53 @@ Demo.TextEditor = BI.inherit(BI.Widget, {
 })
 
 BI.shortcut("demo.text_editor", Demo.TextEditor);/**
+ * Created by Dailer on 2017/7/14.
+ */
+Demo.IntervalSlider = BI.inherit(BI.Widget, {
+    props: {
+        baseCls: ""
+    },
+
+    render: function () {
+        var self = this;
+
+        return {
+            type: "bi.horizontal_auto",
+            items: [{
+                type: "bi.interval_slider",
+                ref: function (_ref) {
+                    self.slider = _ref;
+                },
+                width: 300,
+                height:90
+            }, {
+                type: "bi.button",
+                text: "populate",
+                handler: function () {
+                    self.slider.setMinAndMax({
+                        min: 1,
+                        max: 100
+                    });
+                    self.slider.populate();
+                },
+                width: 300
+            }, {
+                type: "bi.button",
+                text: "setValue",
+                handler: function () {
+
+                    //既然 setVlaue后要重新 populate 才能生效,为何不直接在 setValue方法的结尾调用 populate 方法呢?
+                    self.slider.setValue({min:20,max:80});
+                    self.slider.populate();
+                },
+                width: 300
+            }],
+            vgap:20
+        }
+    }
+})
+
+BI.shortcut("demo.interval_slider", Demo.IntervalSlider);/**
  * Created by Dailer on 2017/7/11.
  */
 Demo.Month = BI.inherit(BI.Widget, {
@@ -7750,6 +7840,53 @@ Demo.SelectTreeCombo = BI.inherit(BI.Widget, {
 })
 
 BI.shortcut("demo.select_tree_combo", Demo.SelectTreeCombo);/**
+ * Created by Dailer on 2017/7/14.
+ */
+Demo.SingleSlider = BI.inherit(BI.Widget, {
+    props: {
+        baseCls: ""
+    },
+
+    render: function () {
+        var self = this;
+
+        return {
+            type: "bi.horizontal_auto",
+            items: [{
+                type: "bi.single_slider",
+                ref: function (_ref) {
+                    self.slider = _ref;
+                },
+                width: 300,
+                height: 50
+            }, {
+                type: "bi.button",
+                text: "populate",
+                handler: function () {
+                    self.slider.setMinAndMax({
+                        min: 1,
+                        max: 100
+                    });
+                    self.slider.populate();
+                },
+                width: 300
+            }, {
+                type: "bi.button",
+                text: "setValue",
+                handler: function () {
+
+                    //既然 setVlaue后要重新 populate 才能生效,为何不直接在 setValue方法的结尾调用 populate 方法呢?
+                    self.slider.setValue(50);
+                    self.slider.populate();
+                },
+                width: 300
+            }],
+            vgap: 20
+        }
+    }
+})
+
+BI.shortcut("demo.single_slider", Demo.SingleSlider);/**
  * Created by Dailer on 2017/7/13.
  */
 Demo.MultiLayerSingleTreeCombo = BI.inherit(BI.Widget, {
