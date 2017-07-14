@@ -45,3 +45,6 @@ body {
 .bi-theme-dark body {
   background-color: #191B2B;
 }
+.demo-editor {
+  border: 1px solid #cccccc;
+}
