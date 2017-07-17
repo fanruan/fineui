@@ -6040,15 +6040,11 @@ BI.IntervalSlider = BI.inherit(BI.Widget, {
         var sub = this.calculation.accurateSubtraction(this.max, this.min);
         var mul = this.calculation.accurateMultiplication(sub, percent);
         var div = this.calculation.accurateDivisionTenExponent(mul, 2);
-        console.log("precision", this.precision);
-        //     console.log(this.calculation.accurateAddition(div, this.min));
         if (this.precision >= 0) {
             return BI.parseFloat(this.calculation.accurateAddition(div, this.min).toFixed(this.precision));
         } else {
-            console.log(Math.pow(10, (-1) * this.precision));
             return BI.parseFloat(this.calculation.accurateAddition(div, this.min) - this.calculation.accurateAddition(div, this.min) % (Math.pow(10, (-1) * this.precision)));
         }
-        //return BI.parseFloat(this.calculation.accurateAddition(div, this.min).toFixed(this.precision));
     },
 
     _getPercentByValue: function (v) {
@@ -6091,17 +6087,17 @@ BI.IntervalSlider = BI.inherit(BI.Widget, {
             //计算每一份值的精度(最大值和最小值的差值保留4为有效数字后的精度)
             //如果差值的整数位数大于4,toPrecision得到的是科学计数法1234 => 1.2e+3
             var sub = this.calculation.accurateSubtraction(this.max, this.min);
-            var pre = sub.toPrecision(4);
-            console.log("pre", pre);
-            var precisionString = pre.indexOf("e") > -1 ? (BI.parseFloat(sub.toPrecision(4)) + "") : pre;
-            var arr = precisionString.split(".");
-            console.log("arr", arr);
-            if (arr.length > 1) {
-                this.precision = arr[1].length;
-            } else {
+            var pre = sub.toPrecision(4);     
+            if(pre.indexOf("e") > -1 ){
                 this.precision = 3 - pre.charAt(pre.length - 1);
+            }else{
+                 var arr = pre.split(".");
+                if(arr.length>1){
+                    this.precision = arr[1].length;
+                }else{
+                     this.precision=0;
+                }     
             }
-            // this.precision = arr.length > 1 ? arr[1].length : 0;
             this._setDraggableEnable(true);
         }
         if (maxNumber === minNumber) {
