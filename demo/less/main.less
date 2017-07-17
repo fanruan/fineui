@@ -1,5 +1,4 @@
 @import "index";
-
 .layout-bg-white {
   background-color: #ffffff;
 }
@@ -62,51 +61,62 @@ body {
   background-color: @color-bi-background-normal-theme-dark;
 }
 
-.demo-editor{
+.demo-editor {
   border: 1px solid rgb(204, 204, 204);
 }
 
-.bi-slider-track .background-track {
-  background-color: rgba(153, 153, 153, 0);
-  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr=#33999999,endColorstr=#33999999);
-  -webkit-border-radius: 12px;
-  -moz-border-radius: 12px;
-  border-radius: 12px;
-}
-.bi-slider-track .gray-track {
-  background: #cccccc;
-  -webkit-border-radius: 4px;
-  -moz-border-radius: 4px;
-  border-radius: 4px;
-}
-.bi-slider-track .blue-track {
-  -webkit-border-radius: 4px;
-  -moz-border-radius: 4px;
-  border-radius: 4px;
-}
-.bi-single-slider-slider {
-  cursor: url('http://img5.imgtn.bdimg.com/it/u=1821811235,1515479556&fm=26&gp=0.jpg'), auto;
+.bi-slider-track {
+  .background-track {
+    background-color: rgba(153, 153, 153, 0);
+    filter: progid:DXImageTransform.Microsoft.gradient(startColorstr=#33999999, endColorstr=#33999999);
+    -webkit-border-radius: 12px;
+    -moz-border-radius: 12px;
+    border-radius: 12px;
+  }
+  .gray-track {
+    background: #cccccc;
+    -webkit-border-radius: 4px;
+    -moz-border-radius: 4px;
+    border-radius: 4px;
+  }
+  .blue-track {
+    -webkit-border-radius: 4px;
+    -moz-border-radius: 4px;
+    border-radius: 4px;
+  }
 }
 
-.widget-slider-icon .x-icon {
-  display: block;
-  background: url('./icon/slider.png') no-repeat 0 0 ;
-  _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='${remoteServletURL}?op=resource&resource=/com/fr/bi/web/images/icon/slider-normal.png');
-  _background: none;
-  background-size: 100% 100%;
-  //background-position:center center;
+.widget-slider-icon {
+  .x-icon {
+    display: block;
+    background: url('./icon/slider.png') no-repeat;
+    _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='${remoteServletURL}?op=resource&resource=/com/fr/bi/web/images/icon/slider-normal.png');
+    _background: none;
+    background-size: 100% 100%;
+  }
+  &:hover {
+    .x-icon {
+      display: block;
+      background: url('./icon/双向箭头.png') no-repeat;
+      _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='${remoteServletURL}?op=resource&resource=/com/fr/bi/web/images/icon/slider-active.png');
+      _background: none;
+      background-size: 100% 100%;
+    }
+  }
+  &::focus {
+    .x-icon {
+      display: block;
+      background: url('./icon/双向箭头.png') no-repeat;
+      _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='${remoteServletURL}?op=resource&resource=/com/fr/bi/web/images/icon/slider-active.png');
+      _background: none;
+      background-size: 100% 100%;
+    }
+  }
 }
-.widget-slider-icon:hover .x-icon,
-.widget-slider-icon:focus .x-icon,
-.widget-slider-icon.hover .x-icon {
-  display: block;
-  background: url('./icon/slider.png') no-repeat 0 0;
-  _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='${remoteServletURL}?op=resource&resource=/com/fr/bi/web/images/icon/slider-active.png');
-  _background: none;
-   background-size: 100% 100%;
-  // background-position:center center;
-}
-.widget-slider-icon.native .x-icon,
-.widget-slider-icon.disabled .x-icon {
-  display: block;
+
+.widget-slider-icon.native,
+.widget-slider-icon.disabled {
+  .x-icon {
+    display: block;
+  }
 }

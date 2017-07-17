@@ -69,21 +69,23 @@ body {
   -moz-border-radius: 4px;
   border-radius: 4px;
 }
-.bi-single-slider-slider {
-  cursor: url('http://img5.imgtn.bdimg.com/it/u=1821811235,1515479556&fm=26&gp=0.jpg'), auto;
-}
 .widget-slider-icon .x-icon {
   display: block;
-  background: url('icon/slider.png') no-repeat 0 0;
+  background: url('icon/slider.png') no-repeat;
   _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='${remoteServletURL}?op=resource&resource=/com/fr/bi/web/images/icon/slider-normal.png');
   _background: none;
   background-size: 100% 100%;
 }
-.widget-slider-icon:hover .x-icon,
-.widget-slider-icon:focus .x-icon,
-.widget-slider-icon.hover .x-icon {
+.widget-slider-icon:hover .x-icon {
   display: block;
-  background: url('icon/slider.png') no-repeat 0 0;
+  background: url('icon/双向箭头.png') no-repeat;
+  _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='${remoteServletURL}?op=resource&resource=/com/fr/bi/web/images/icon/slider-active.png');
+  _background: none;
+  background-size: 100% 100%;
+}
+.widget-slider-icon::focus .x-icon {
+  display: block;
+  background: url('icon/双向箭头.png') no-repeat;
   _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='${remoteServletURL}?op=resource&resource=/com/fr/bi/web/images/icon/slider-active.png');
   _background: none;
   background-size: 100% 100%;

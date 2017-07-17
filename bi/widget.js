@@ -14940,7 +14940,7 @@ BI.SingleSlider = BI.inherit(BI.Widget, {
             scroll: false,
             drag: function (e, ui) {
                 var percent = (ui.position.left) * 100 / (self._getGrayTrackLength());
-                var significantPercent = BI.parseFloat(percent.toFixed(1));//直接对计算出来的百分数保留到小数点后一位，相当于分成了1000份。
+                var significantPercent = BI.parseFloat(percent.toFixed(1)); //直接对计算出来的百分数保留到小数点后一位，相当于分成了1000份。
                 self._setBlueTrack(significantPercent);
                 self._setLabelPosition(significantPercent);
                 var v = self._getValueByPercent(significantPercent);
@@ -14987,7 +14987,7 @@ BI.SingleSlider = BI.inherit(BI.Widget, {
         });
         this.label = BI.createWidget({
             type: "bi.sign_editor",
-            cls: "slider-editor-button bi-border",
+            cls: "slider-editor-button",
             errorText: "",
             height: c.HEIGHT,
             width: c.EDITOR_WIDTH,
@@ -15004,6 +15004,12 @@ BI.SingleSlider = BI.inherit(BI.Widget, {
             var significantPercent = BI.parseFloat(percent.toFixed(1));
             self._setAllPosition(significantPercent);
             self.fireEvent(BI.SingleSlider.EVENT_CHANGE);
+        });
+        this.label.on(BI.SignEditor.EVENT_FOCUS, function () {
+            self.label.element.addClass("bi-border");
+        });
+        this.label.on(BI.SignEditor.EVENT_BLUR, function () {
+            self.label.element.removeClass("bi-border");
         });
         this._setVisible(false);
         BI.createWidget({
@@ -15038,7 +15044,7 @@ BI.SingleSlider = BI.inherit(BI.Widget, {
                         type: "bi.absolute",
                         items: [this.label]
                     }],
-                    rgap: c.EDITOR_WIDTH/2,
+                    rgap: c.EDITOR_WIDTH / 2,
                     height: c.EDITOR_HEIGHT
                 },
                 top: 0,
@@ -15086,15 +15092,21 @@ BI.SingleSlider = BI.inherit(BI.Widget, {
     },
 
     _setBlueTrack: function (percent) {
-        this.blueTrack.element.css({"width": percent + "%"});
+        this.blueTrack.element.css({
+            "width": percent + "%"
+        });
     },
 
     _setLabelPosition: function (percent) {
-        this.label.element.css({"left": percent + "%"});
+        this.label.element.css({
+            "left": percent + "%"
+        });
     },
 
     _setSliderPosition: function (percent) {
-        this.slider.element.css({"left": percent + "%"});
+        this.slider.element.css({
+            "left": percent + "%"
+        });
     },
 
     _setAllPosition: function (percent) {
@@ -15143,7 +15155,7 @@ BI.SingleSlider = BI.inherit(BI.Widget, {
     setMinAndMax: function (v) {
         var minNumber = BI.parseFloat(v.min);
         var maxNumber = BI.parseFloat(v.max);
-        if ((!isNaN(minNumber)) && (!isNaN(maxNumber)) && (maxNumber > minNumber )) {
+        if ((!isNaN(minNumber)) && (!isNaN(maxNumber)) && (maxNumber > minNumber)) {
             this.min = minNumber;
             this.max = maxNumber;
         }

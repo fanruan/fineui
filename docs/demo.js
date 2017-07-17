@@ -7077,7 +7077,7 @@ Demo.IntervalSlider = BI.inherit(BI.Widget, {
                     self.slider = _ref;
                 },
                 width: 300,
-                height:90
+                height: 90
             }, {
                 type: "bi.button",
                 text: "populate",
@@ -7095,12 +7095,15 @@ Demo.IntervalSlider = BI.inherit(BI.Widget, {
                 handler: function () {
 
                     //既然 setVlaue后要重新 populate 才能生效,为何不直接在 setValue方法的结尾调用 populate 方法呢?
-                    self.slider.setValue({min:20,max:80});
+                    self.slider.setValue({
+                        min: 20,
+                        max: 80
+                    });
                     self.slider.populate();
                 },
                 width: 300
             }],
-            vgap:20
+            vgap: 20
         }
     }
 })
