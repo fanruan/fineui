@@ -1,5 +1,6 @@
 /**
  * Created by zcf on 2016/9/26.
+ * Make some change by dailer on 2017/7/17
  */
 BI.IntervalSlider = BI.inherit(BI.Widget, {
     _constant: {
@@ -48,7 +49,7 @@ BI.IntervalSlider = BI.inherit(BI.Widget, {
 
         this.labelOne = BI.createWidget({
             type: "bi.sign_editor",
-            cls: "slider-editor-button bi-border",
+            cls: "slider-editor-button",
             errorText: "",
             allowBlank: false,
             height: c.HEIGHT,
@@ -61,16 +62,22 @@ BI.IntervalSlider = BI.inherit(BI.Widget, {
             var v = BI.parseFloat(this.getValue());
             self.valueOne = v;
             var percent = self._getPercentByValue(v);
-            var significantPercent = BI.parseFloat(percent.toFixed(1));//分成1000份
+            var significantPercent = BI.parseFloat(percent.toFixed(1)); //分成1000份
             self._setLabelOnePosition(significantPercent);
             self._setSliderOnePosition(significantPercent);
             self._setBlueTrack();
             self.fireEvent(BI.IntervalSlider.EVENT_CHANGE);
         });
+        this.labelOne.on(BI.SignEditor.EVENT_FOCUS, function () {
+            self.labelOne.element.addClass("bi-border");
+        });
+        this.labelOne.on(BI.SignEditor.EVENT_BLUR, function () {
+            self.labelOne.element.removeClass("bi-border");
+        });
 
         this.labelTwo = BI.createWidget({
             type: "bi.sign_editor",
-            cls: "slider-editor-button bi-border",
+            cls: "slider-editor-button",
             errorText: "",
             allowBlank: false,
             height: c.HEIGHT,
@@ -88,6 +95,12 @@ BI.IntervalSlider = BI.inherit(BI.Widget, {
             self._setSliderTwoPosition(significantPercent);
             self._setBlueTrack();
             self.fireEvent(BI.IntervalSlider.EVENT_CHANGE);
+        });
+        this.labelTwo.on(BI.SignEditor.EVENT_FOCUS, function () {
+            self.labelTwo.element.addClass("bi-border");
+        });
+        this.labelTwo.on(BI.SignEditor.EVENT_BLUR, function () {
+            self.labelTwo.element.removeClass("bi-border");
         });
 
         this.sliderOne = BI.createWidget({
@@ -143,23 +156,23 @@ BI.IntervalSlider = BI.inherit(BI.Widget, {
             type: "bi.absolute",
             element: this,
             items: [{
-                el: {
-                    type: "bi.vertical",
-                    items: [{
-                        type: "bi.absolute",
+                    el: {
+                        type: "bi.vertical",
                         items: [{
-                            el: this.track,
-                            width: "100%",
-                            height: c.TRACK_HEIGHT
-                        }]
-                    }],
-                    hgap: 7,
-                    height: c.TRACK_HEIGHT
+                            type: "bi.absolute",
+                            items: [{
+                                el: this.track,
+                                width: "100%",
+                                height: c.TRACK_HEIGHT
+                            }]
+                        }],
+                        hgap: 7,
+                        height: c.TRACK_HEIGHT
+                    },
+                    top: 33,
+                    left: 0,
+                    width: "100%"
                 },
-                top: 33,
-                left: 0,
-                width: "100%"
-            },
                 this._createLabelWrapper(),
                 this._createSliderWrapper()
             ]
@@ -266,43 +279,63 @@ BI.IntervalSlider = BI.inherit(BI.Widget, {
         var labelTwoLeft = this.labelTwo.element[0].offsetLeft;
         if (labelOneLeft <= labelTwoLeft) {
             if ((labelTwoLeft - labelOneLeft) < 90) {
-                this.labelTwo.element.css({"top": 60});
+                this.labelTwo.element.css({
+                    "top": 60
+                });
             } else {
-                this.labelTwo.element.css({"top": 0});
+                this.labelTwo.element.css({
+                    "top": 0
+                });
             }
         } else {
             if ((labelOneLeft - labelTwoLeft) < 90) {
-                this.labelTwo.element.css({"top": 60});
+                this.labelTwo.element.css({
+                    "top": 60
+                });
             } else {
-                this.labelTwo.element.css({"top": 0});
+                this.labelTwo.element.css({
+                    "top": 0
+                });
             }
         }
     },
 
     _setLabelOnePosition: function (percent) {
-        this.labelOne.element.css({"left": percent + "%"});
+        this.labelOne.element.css({
+            "left": percent + "%"
+        });
         this._checkOverlap();
     },
 
     _setLabelTwoPosition: function (percent) {
-        this.labelTwo.element.css({"left": percent + "%"});
+        this.labelTwo.element.css({
+            "left": percent + "%"
+        });
         this._checkOverlap();
     },
 
     _setSliderOnePosition: function (percent) {
-        this.sliderOne.element.css({"left": percent + "%"});
+        this.sliderOne.element.css({
+            "left": percent + "%"
+        });
     },
 
     _setSliderTwoPosition: function (percent) {
-        this.sliderTwo.element.css({"left": percent + "%"});
+        this.sliderTwo.element.css({
+            "left": percent + "%"
+        });
     },
 
     _setBlueTrackLeft: function (percent) {
-        this.blueTrack.element.css({"left": percent + "%"});
+        this.blueTrack.element.css({
+            "left": percent + "%"
+        });
     },
 
     _setBlueTrackWidth: function (percent) {
-        this.blueTrack.element.css({"width": percent + "%"});
+        this.blueTrack.element.css({
+            "width": percent + "%"
+        });
     },
 
     _setBlueTrack: function () {
@@ -343,11 +376,19 @@ BI.IntervalSlider = BI.inherit(BI.Widget, {
     },
 
     //其中取max-min后保留4为有效数字后的值的小数位数为最终value的精度
-    _getValueByPercent: function (percent) {//return (((max-min)*percent)/100+min)
+    _getValueByPercent: function (percent) { //return (((max-min)*percent)/100+min)
         var sub = this.calculation.accurateSubtraction(this.max, this.min);
         var mul = this.calculation.accurateMultiplication(sub, percent);
         var div = this.calculation.accurateDivisionTenExponent(mul, 2);
-        return BI.parseFloat(this.calculation.accurateAddition(div, this.min).toFixed(this.precision));
+        console.log("precision", this.precision);
+        //     console.log(this.calculation.accurateAddition(div, this.min));
+        if (this.precision >= 0) {
+            return BI.parseFloat(this.calculation.accurateAddition(div, this.min).toFixed(this.precision));
+        } else {
+            console.log(Math.pow(10, (-1) * this.precision));
+            return BI.parseFloat(this.calculation.accurateAddition(div, this.min) - this.calculation.accurateAddition(div, this.min) % (Math.pow(10, (-1) * this.precision)));
+        }
+        //return BI.parseFloat(this.calculation.accurateAddition(div, this.min).toFixed(this.precision));
     },
 
     _getPercentByValue: function (v) {
@@ -364,18 +405,25 @@ BI.IntervalSlider = BI.inherit(BI.Widget, {
         }
     },
 
+
     getValue: function () {
         if (this.valueOne <= this.valueTwo) {
-            return {min: this.valueOne, max: this.valueTwo}
+            return {
+                min: this.valueOne,
+                max: this.valueTwo
+            }
         } else {
-            return {min: this.valueTwo, max: this.valueOne}
+            return {
+                min: this.valueTwo,
+                max: this.valueOne
+            }
         }
     },
 
     setMinAndMax: function (v) {
         var minNumber = BI.parseFloat(v.min);
         var maxNumber = BI.parseFloat(v.max);
-        if ((!isNaN(minNumber)) && (!isNaN(maxNumber)) && (maxNumber >= minNumber )) {
+        if ((!isNaN(minNumber)) && (!isNaN(maxNumber)) && (maxNumber >= minNumber)) {
             this.min = minNumber;
             this.max = maxNumber;
             this.valueOne = minNumber;
@@ -384,9 +432,16 @@ BI.IntervalSlider = BI.inherit(BI.Widget, {
             //如果差值的整数位数大于4,toPrecision得到的是科学计数法1234 => 1.2e+3
             var sub = this.calculation.accurateSubtraction(this.max, this.min);
             var pre = sub.toPrecision(4);
+            console.log("pre", pre);
             var precisionString = pre.indexOf("e") > -1 ? (BI.parseFloat(sub.toPrecision(4)) + "") : pre;
             var arr = precisionString.split(".");
-            this.precision = arr.length > 1 ? arr[1] : 0;
+            console.log("arr", arr);
+            if (arr.length > 1) {
+                this.precision = arr[1].length;
+            } else {
+                this.precision = 3 - pre.charAt(pre.length - 1);
+            }
+            // this.precision = arr.length > 1 ? arr[1].length : 0;
             this._setDraggableEnable(true);
         }
         if (maxNumber === minNumber) {

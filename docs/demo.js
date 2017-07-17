@@ -7068,7 +7068,16 @@ Demo.IntervalSlider = BI.inherit(BI.Widget, {
 
     render: function () {
         var self = this;
-
+        var min = BI.createWidget({
+            type: "bi.text_editor",
+            watermark: "min",
+            width: 100
+        });
+        var max = BI.createWidget({
+            type: "bi.text_editor",
+            watermark: "max",
+            width: 100
+        })
         return {
             type: "bi.horizontal_auto",
             items: [{
@@ -7079,12 +7088,22 @@ Demo.IntervalSlider = BI.inherit(BI.Widget, {
                 width: 300,
                 height: 90
             }, {
+                type: "bi.center_adapt",
+                width: 300,
+                items: [{
+                    type: "bi.text",
+                    text: "min"
+                }, min, {
+                    type: "bi.text",
+                    text: "max"
+                }, max]
+            }, {
                 type: "bi.button",
                 text: "populate",
                 handler: function () {
                     self.slider.setMinAndMax({
-                        min: 1,
-                        max: 100
+                        min: min.getValue() || 0,
+                        max: max.getValue() || 100
                     });
                     self.slider.populate();
                 },
