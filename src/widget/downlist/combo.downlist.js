@@ -9,6 +9,8 @@ BI.DownListCombo = BI.inherit(BI.Widget, {
             height: 25,
             items: [],
             adjustLength: 0,
+            direction: "bottom",
+            trigger: "click",
             el: {}
         })
     },
@@ -36,8 +38,10 @@ BI.DownListCombo = BI.inherit(BI.Widget, {
         this.downlistcombo = BI.createWidget({
             element: this,
             type: 'bi.combo',
+            trigger: o.trigger,
             isNeedAdjustWidth: false,
             adjustLength: o.adjustLength,
+            direction: o.direction,
             el: BI.createWidget(o.el, {
                 type: "bi.icon_trigger",
                 extraCls: o.iconCls ? o.iconCls : "pull-down-font",
@@ -58,6 +62,10 @@ BI.DownListCombo = BI.inherit(BI.Widget, {
 
     hideView: function () {
         this.downlistcombo.hideView();
+    },
+
+    showView: function () {
+        this.downlistcombo.showView();
     },
 
     populate: function (items) {

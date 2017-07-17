@@ -710,7 +710,7 @@ BI.BasicButton = BI.inherit(BI.Single, {
                         $(document).bind("mouseup." + self.getName(), function (e) {
                             // if (e.button === 0) {
                             if (BI.DOM.isExist(self) && !hand.__isMouseInBounds__(e) && mouseDown === true && !selected) {
-                                self.setSelected(!self.isSelected());
+                                // self.setSelected(!self.isSelected());
                                 self._trigger();
                             }
                             mouseDown = false;
@@ -857,7 +857,7 @@ BI.BasicButton = BI.inherit(BI.Single, {
     setSelected: function (b) {
         var o = this.options;
         o.selected = b;
-        if (this.isSelected()) {
+        if (b) {
             this.handle().element.addClass("active");
         } else {
             this.handle().element.removeClass("active");
@@ -1717,7 +1717,7 @@ BI.TreeView = BI.inherit(BI.Pane, {
 
     _getNodeValue: function (node) {
         //去除标红
-        return node.value == null ? node.text.replace(/<[^>]+>/g, "") : node.value;
+        return node.value == null ? node.text.replace(/<[^>]+>/g, "").replaceAll("　", " ") : node.value;
     },
 
     //获取半选框值
@@ -1742,7 +1742,7 @@ BI.TreeView = BI.inherit(BI.Pane, {
             this._buildTree(map, path);
             return;
         }
-        var storeValues = BI.deepClone(this.selectedValues);
+        var storeValues = BI.deepClone(this.options.paras.selectedValues);
         var treeNode = this._getTree(storeValues, path);
         this._addTreeNode(map, parent, this._getNodeValue(node), treeNode);
     },
@@ -1937,6 +1937,16 @@ BI.TreeView = BI.inherit(BI.Pane, {
     },
 
     checkAll: function (checked) {
+        function setNode(children) {
+            BI.each(children, function (i, child) {
+                child.halfCheck = false;
+                setNode(child.children);
+            });
+        }
+        BI.each(this.nodes.getNodes(), function (i, node) {
+            node.halfCheck = false;
+            setNode(node.children);
+        });
         this.nodes && this.nodes.checkAllNodes(checked);
     },
 
@@ -1952,8 +1962,7 @@ BI.TreeView = BI.inherit(BI.Pane, {
     },
 
     setSelectedValue: function (value) {
-        this.options.paras.selectedValues = value || {};
-        this.selectedValues = BI.deepClone(value) || {};
+        this.options.paras.selectedValues = BI.deepClone(value || {});
     },
 
     updateValue: function (values, param) {
@@ -2105,7 +2114,7 @@ BI.AsyncTree = BI.inherit(BI.TreeView, {
         if (treeNode.checked === true) {
         } else {
             var tNode = treeNode;
-            var pNode = this._getTree(this.selectedValues, parentValues);
+            var pNode = this._getTree(this.options.paras.selectedValues, parentValues);
             if (BI.isNotNull(pNode[name])) {
                 delete pNode[name];
             }
@@ -2113,7 +2122,7 @@ BI.AsyncTree = BI.inherit(BI.TreeView, {
                 parentValues = parentValues.slice(0, parentValues.length - 1);
                 tNode = tNode.getParentNode();
                 if (tNode != null) {
-                    pNode = this._getTree(this.selectedValues, parentValues);
+                    pNode = this._getTree(this.options.paras.selectedValues, parentValues);
                     name = this._getNodeValue(tNode);
                     delete pNode[name];
                 }
@@ -2127,10 +2136,10 @@ BI.AsyncTree = BI.inherit(BI.TreeView, {
         var self = this, o = this.options;
         var parentValues = treeNode.parentValues || self._getParentValues(treeNode);
         var op = BI.extend({}, o.paras, {
-            "id": treeNode.id,
-            "times": 1,
-            "parentValues": parentValues.concat(this._getNodeValue(treeNode)),
-            "checkState": treeNode.getCheckStatus()
+            id: treeNode.id,
+            times: 1,
+            parentValues: parentValues.concat(this._getNodeValue(treeNode)),
+            checkState: treeNode.getCheckStatus()
         });
         var complete = function (d) {
             var nodes = d.items || [];
@@ -2178,7 +2187,7 @@ BI.AsyncTree = BI.inherit(BI.TreeView, {
     },
 
     hasChecked: function () {
-        return !BI.isEmpty(this.selectedValues) || BI.AsyncTree.superclass.hasChecked.apply(this, arguments);
+        return !BI.isEmpty(this.options.paras.selectedValues) || BI.AsyncTree.superclass.hasChecked.apply(this, arguments);
     },
 
     getValue: function () {
@@ -2187,20 +2196,18 @@ BI.AsyncTree = BI.inherit(BI.TreeView, {
         }
         var checkedValues = this._getSelectedValues();
         if (BI.isEmpty(checkedValues)) {
-            return BI.deepClone(this.selectedValues);
+            return BI.deepClone(this.options.paras.selectedValues);
         }
-        if (BI.isEmpty(this.selectedValues)) {
+        if (BI.isEmpty(this.options.paras.selectedValues)) {
             return checkedValues;
         }
-        return this._join(checkedValues, this.selectedValues);
+        return this._join(checkedValues, this.options.paras.selectedValues);
     },
 
     //生成树方法
     stroke: function (config) {
         delete this.options.keyword;
         BI.extend(this.options.paras, config);
-        //取消选中时使用
-        this.selectedValues = BI.deepClone(this.options.paras.selectedValues) || {};
         var setting = this._configSetting();
         this._initTree(setting);
     }
@@ -2253,7 +2260,7 @@ BI.PartTree = BI.inherit(BI.AsyncTree, {
             BI.AsyncTree.superclass._selectTreeNode.apply(self, arguments);
         } else {
             //如果选中的值中不存在该值不处理
-            var t = this.selectedValues;
+            var t = this.options.paras.selectedValues;
             var p = parentValues.concat(name);
             for (var i = 0, len = p.length; i < len; i++) {
                 t = t[p[i]];
@@ -2266,11 +2273,10 @@ BI.PartTree = BI.inherit(BI.AsyncTree, {
             }
             o.itemsCreator(BI.extend({}, o.paras, {
                 type: BI.TreeView.REQ_TYPE_SELECT_DATA,
-                selectedValues: this.selectedValues,
                 notSelectedValue: name,
                 parentValues: parentValues
             }), function (new_values) {
-                self.selectedValues = new_values;
+                self.options.paras.selectedValues = new_values;
                 BI.AsyncTree.superclass._selectTreeNode.apply(self, arguments);
             });
         }
@@ -2367,9 +2373,6 @@ BI.PartTree = BI.inherit(BI.AsyncTree, {
         delete o.paras.keyword;
         BI.extend(o.paras, config);
         delete o.paras.lastSearchValue;
-        //取消选中时使用
-        this.selectedValues = BI.deepClone(o.paras.selectedValues) || {};
-        //delete this.options.paras.selectedValues;
         var setting = this._configSetting();
         this._initTree(setting, o.paras.keyword);
     }
@@ -2681,10 +2684,10 @@ BI.CollectionView = BI.inherit(BI.Widget, {
                         this.renderedCells[index]._height = datum.height;
                         this.renderedCells[index].el.setHeight(datum.height);
                     }
-                    if (this.renderedCells[index].left !== datum.x) {
+                    if (this.renderedCells[index]._left !== datum.x) {
                         this.renderedCells[index].el.element.css("left", datum.x + "px");
                     }
-                    if (this.renderedCells[index].top !== datum.y) {
+                    if (this.renderedCells[index]._top !== datum.y) {
                         this.renderedCells[index].el.element.css("top", datum.y + "px");
                     }
                     renderedCells.push(child = this.renderedCells[index]);
@@ -2702,6 +2705,8 @@ BI.CollectionView = BI.inherit(BI.Widget, {
                         el: child,
                         left: datum.x,
                         top: datum.y,
+                        _left: datum.x,
+                        _top: datum.y,
                         _width: datum.width,
                         _height: datum.height
                     });
@@ -2920,17 +2925,21 @@ BI.Combo = BI.inherit(BI.Widget, {
         this._initCombo();
         this._initPullDownAction();
         this.combo.on(BI.Controller.EVENT_CHANGE, function (type, value, obj) {
-            if (self.isEnabled() && this.isEnabled()) {
+            if (self.isEnabled() && self.isValid()) {
                 if (type === BI.Events.EXPAND) {
                     self._popupView();
                 }
                 if (type === BI.Events.COLLAPSE) {
                     self._hideView();
                 }
-                if (type === BI.Events.EXPAND || type === BI.Events.COLLAPSE) {
+                if (type === BI.Events.EXPAND) {
                     self.fireEvent(BI.Controller.EVENT_CHANGE, arguments);
+                    self.fireEvent(BI.Combo.EVENT_EXPAND);
                 }
-
+                if (type === BI.Events.COLLAPSE) {
+                    self.fireEvent(BI.Controller.EVENT_CHANGE, arguments);
+                    self.isViewVisible() && self.fireEvent(BI.Combo.EVENT_COLLAPSE);
+                }
                 if (type === BI.Events.CLICK) {
                     self.fireEvent(BI.Combo.EVENT_TRIGGER_CHANGE, obj);
                 }
@@ -2938,12 +2947,12 @@ BI.Combo = BI.inherit(BI.Widget, {
         });
 
         self.element.on("mouseenter." + self.getName(), function (e) {
-            if (self.isEnabled() && self.combo.isEnabled()) {
+            if (self.isEnabled() && self.isValid() && self.combo.isEnabled() && self.combo.isValid()) {
                 self.element.addClass(o.hoverClass);
             }
         });
         self.element.on("mouseleave." + self.getName(), function (e) {
-            if (self.isEnabled() && self.combo.isEnabled()) {
+            if (self.isEnabled() && self.isValid() && self.combo.isEnabled() && self.combo.isValid()) {
                 self.element.removeClass(o.hoverClass);
             }
         });
@@ -2990,14 +2999,14 @@ BI.Combo = BI.inherit(BI.Widget, {
             switch (ev) {
                 case "hover":
                     self.element.on("mouseenter." + self.getName(), function (e) {
-                        if (self.isEnabled() && self.combo.isEnabled()) {
+                        if (self.isEnabled() && self.isValid() && self.combo.isEnabled() && self.combo.isValid()) {
                             self._popupView();
                             self.fireEvent(BI.Controller.EVENT_CHANGE, BI.Events.EXPAND, "", self.combo);
                             self.fireEvent(BI.Combo.EVENT_EXPAND);
                         }
                     });
                     self.element.on("mouseleave." + self.getName(), function (e) {
-                        if (self.isEnabled() && self.combo.isEnabled() && o.toggle === true) {
+                        if (self.isEnabled() && self.isValid() && self.combo.isEnabled() && self.combo.isValid() && o.toggle === true) {
                             self._hideView();
                             self.fireEvent(BI.Controller.EVENT_CHANGE, BI.Events.COLLAPSE, "", self.combo);
                             self.fireEvent(BI.Combo.EVENT_COLLAPSE);
@@ -3007,7 +3016,7 @@ BI.Combo = BI.inherit(BI.Widget, {
                 case "click":
                     var debounce = BI.debounce(function (e) {
                         if (self.combo.element.__isMouseInBounds__(e)) {
-                            if (self.isEnabled() && self.combo.isEnabled()) {
+                            if (self.isEnabled() && self.isValid() && self.combo.isEnabled() && self.combo.isValid()) {
                                 o.toggle ? self._toggle() : self._popupView();
                                 if (self.isViewVisible()) {
                                     self.fireEvent(BI.Controller.EVENT_CHANGE, BI.Events.EXPAND, "", self.combo);
@@ -3220,6 +3229,7 @@ BI.Combo = BI.inherit(BI.Widget, {
 
     _setEnable: function (arg) {
         BI.Combo.superclass._setEnable.apply(this, arguments);
+        !arg && this.element.removeClass(this.options.hoverClass);
         !arg && this.isViewVisible() && this._hideView();
     },
 
@@ -3254,11 +3264,6 @@ BI.Combo = BI.inherit(BI.Widget, {
 
     getPopupPosition: function () {
         return this.position;
-    },
-
-    doBehavior: function () {
-        this._assertPopupView();
-        this.popupView && this.popupView.doBehavior.apply(this.popupView, arguments);
     },
 
     toggle: function () {
@@ -3317,20 +3322,20 @@ BI.Expander = BI.inherit(BI.Widget, {
         this._initExpander();
         this._initPullDownAction();
         this.expander.on(BI.Controller.EVENT_CHANGE, function (type, value, obj) {
-            if (type === BI.Events.EXPAND) {
-                self._popupView();
-            }
-            if (type === BI.Events.COLLAPSE) {
-                self._hideView();
-            }
-            if (self.isEnabled() && this.isEnabled()) {
+            if (self.isEnabled() && self.isValid()) {
+                if (type === BI.Events.EXPAND) {
+                    self._popupView();
+                }
+                if (type === BI.Events.COLLAPSE) {
+                    self._hideView();
+                }
                 if (type === BI.Events.EXPAND) {
                     self.fireEvent(BI.Controller.EVENT_CHANGE, arguments);
                     self.fireEvent(BI.Expander.EVENT_EXPAND);
                 }
                 if (type === BI.Events.COLLAPSE) {
                     self.fireEvent(BI.Controller.EVENT_CHANGE, arguments);
-                    self.fireEvent(BI.Expander.EVENT_COLLAPSE);
+                    self.isViewVisible() && self.fireEvent(BI.Expander.EVENT_COLLAPSE);
                 }
                 if (type === BI.Events.CLICK) {
                     self.fireEvent(BI.Expander.EVENT_TRIGGER_CHANGE, value, obj);
@@ -3339,11 +3344,11 @@ BI.Expander = BI.inherit(BI.Widget, {
         });
 
         this.element.hover(function () {
-            if (self.isEnabled() && self.expander.isEnabled()) {
+            if (self.isEnabled() && self.isValid() && self.expander.isEnabled() && self.expander.isValid()) {
                 self.element.addClass(o.hoverClass);
             }
         }, function () {
-            if (self.isEnabled() && self.expander.isEnabled()) {
+            if (self.isEnabled() && self.isValid() && self.expander.isEnabled() && self.expander.isValid()) {
                 self.element.removeClass(o.hoverClass);
             }
         });
@@ -3379,13 +3384,13 @@ BI.Expander = BI.inherit(BI.Widget, {
             switch (e) {
                 case "hover":
                     self.element[e](function (e) {
-                        if (self.isEnabled() && self.expander.isEnabled()) {
+                        if (self.isEnabled() && self.isValid() && self.expander.isEnabled() && self.expander.isValid()) {
                             self._popupView();
                             self.fireEvent(BI.Controller.EVENT_CHANGE, BI.Events.EXPAND, '', self.expander);
                             self.fireEvent(BI.Expander.EVENT_EXPAND);
                         }
                     }, function () {
-                        if (self.isEnabled() && self.expander.isEnabled() && o.toggle) {
+                        if (self.isEnabled() && self.isValid() && self.expander.isEnabled() && self.expander.isValid() && o.toggle) {
                             self._hideView();
                             self.fireEvent(BI.Controller.EVENT_CHANGE, BI.Events.COLLAPSE, '', self.expander);
                             self.fireEvent(BI.Expander.EVENT_COLLAPSE);
@@ -3396,7 +3401,7 @@ BI.Expander = BI.inherit(BI.Widget, {
                     if (e) {
                         self.element.off(e + "." + self.getName()).on(e + "." + self.getName(), BI.debounce(function (e) {
                             if (self.expander.element.__isMouseInBounds__(e)) {
-                                if (self.isEnabled() && self.expander.isEnabled()) {
+                                if (self.isEnabled() && self.isValid() && self.expander.isEnabled() && self.expander.isValid()) {
                                     o.toggle ? self._toggle() : self._popupView();
                                     if (self.isExpanded()) {
                                         self.fireEvent(BI.Controller.EVENT_CHANGE, BI.Events.EXPAND, "", self.expander);
@@ -3487,6 +3492,7 @@ BI.Expander = BI.inherit(BI.Widget, {
 
     _setEnable: function (arg) {
         BI.Expander.superclass._setEnable.apply(this, arguments);
+        !arg && this.element.removeClass(this.options.hoverClass);
         !arg && this.isViewVisible() && this._hideView();
     },
 
@@ -3521,11 +3527,6 @@ BI.Expander = BI.inherit(BI.Widget, {
 
     getView: function () {
         return this.popupView;
-    },
-
-    doBehavior: function () {
-        //this._assertPopupView();
-        this.popupView && this.popupView.doBehavior.apply(this.popupView, arguments);
     },
 
     getAllLeaves: function () {
@@ -3935,10 +3936,6 @@ BI.Loader = BI.inherit(BI.Widget, {
             }
         }
         this.button_group.populate.apply(this.button_group, arguments);
-    },
-
-    doBehavior: function () {
-        this.button_group.doBehavior.apply(this.button_group, arguments);
     },
 
     setNotSelectedValue: function () {
@@ -4484,15 +4481,20 @@ BI.Switcher = BI.inherit(BI.Widget, {
         this._initSwitcher();
         this._initPullDownAction();
         this.switcher.on(BI.Controller.EVENT_CHANGE, function (type, value, obj) {
-            if (self.isEnabled() && this.isEnabled()) {
+            if (self.isEnabled() && self.isValid()) {
                 if (type === BI.Events.EXPAND) {
                     self._popupView();
                 }
                 if (type === BI.Events.COLLAPSE) {
                     self._hideView();
                 }
-                if (type === BI.Events.EXPAND || type === BI.Events.COLLAPSE) {
+                if (type === BI.Events.EXPAND) {
                     self.fireEvent(BI.Controller.EVENT_CHANGE, arguments);
+                    self.fireEvent(BI.Switcher.EVENT_EXPAND);
+                }
+                if (type === BI.Events.COLLAPSE) {
+                    self.fireEvent(BI.Controller.EVENT_CHANGE, arguments);
+                    self.isViewVisible() && self.fireEvent(BI.Switcher.EVENT_COLLAPSE);
                 }
                 if (type === BI.Events.CLICK) {
                     self.fireEvent(BI.Switcher.EVENT_TRIGGER_CHANGE, value, obj);
@@ -4690,11 +4692,6 @@ BI.Switcher = BI.inherit(BI.Widget, {
         this.isViewVisible() && BI.Maskers.show(this.getName());
     },
 
-    doBehavior: function () {
-        this._assertPopupView();
-        this.popupView && this.popupView.doBehavior.apply(this.popupView, arguments);
-    },
-
     getAllLeaves: function () {
         return this.popupView && this.popupView.getAllLeaves();
     },
@@ -4826,6 +4823,17 @@ BI.Tab = BI.inherit(BI.Widget, {
         if (this.curr !== v) {
             this.curr = v;
         }
+    },
+
+    removeTab: function (cardname) {
+        var self = this, o = this.options;
+        BI.any(this.cardMap, function (name, card) {
+            if (BI.isEqual(name, (cardname + ""))) {
+                self.layout.deleteCardByName(name);
+                delete self.cardMap[name];
+                return true;
+            }
+        });
     },
 
     getSelect: function () {
@@ -14259,11 +14267,12 @@ BI.FormulaCollections = ["abs","ABS","acos","ACOS","acosh","ACOSH","add2array","
 BI.FormulaEditor = BI.inherit(BI.Single, {
     _defaultConfig: function () {
         return $.extend(BI.FormulaEditor.superclass._defaultConfig.apply(), {
-            baseCls: 'bi-formula-editor',
+            baseCls: 'bi-formula-editor bi-card',
             watermark: '',
             value: '',
             fieldTextValueMap: {},
-            showHint: true
+            showHint: true,
+            lineHeight: 2
         });
     },
     _init: function () {
@@ -14275,6 +14284,7 @@ BI.FormulaEditor = BI.inherit(BI.Single, {
             lineNumbers: false,
             mode: 'formula'
         });
+        o.lineHeight === 1 ? this.element.addClass("codemirror-low-line-height") : this.element.addClass("codemirror-high-line-height");
         this.editor.on("change", function (cm, change) {
             self._checkWaterMark();
             if (o.showHint) {
@@ -14497,11 +14507,11 @@ $.extend(BI, {
             alert: function (title, message, callback) {
                 this._show(false, title, message, callback);
             },
-            confirm: function (title, message, callback, min_width) {
+            confirm: function (title, message, callback) {
                 this._show(true, title, message, callback);
             },
             prompt: function (title, message, value, callback, min_width) {
-                BI.Msg.prompt(title, message, value, callback, min_width);
+                // BI.Msg.prompt(title, message, value, callback, min_width);
             },
             toast: function (message, level, context) {
                 context = context || $("body");
@@ -14805,10 +14815,10 @@ BI.GridView = BI.inherit(BI.Widget, {
                             this.renderedCells[index]._height = rowDatum.size;
                             this.renderedCells[index].el.setHeight(rowDatum.size);
                         }
-                        if (this.renderedCells[index].left !== columnDatum.offset + horizontalOffsetAdjustment) {
+                        if (this.renderedCells[index]._left !== columnDatum.offset + horizontalOffsetAdjustment) {
                             this.renderedCells[index].el.element.css("left", (columnDatum.offset + horizontalOffsetAdjustment) + "px");
                         }
-                        if (this.renderedCells[index].top !== rowDatum.offset + verticalOffsetAdjustment) {
+                        if (this.renderedCells[index]._top !== rowDatum.offset + verticalOffsetAdjustment) {
                             this.renderedCells[index].el.element.css("top", (rowDatum.offset + verticalOffsetAdjustment) + "px");
                         }
                         renderedCells.push(child = this.renderedCells[index]);
@@ -14828,6 +14838,8 @@ BI.GridView = BI.inherit(BI.Widget, {
                             el: child,
                             left: columnDatum.offset + horizontalOffsetAdjustment,
                             top: rowDatum.offset + verticalOffsetAdjustment,
+                            _left: columnDatum.offset + horizontalOffsetAdjustment,
+                            _top: rowDatum.offset + verticalOffsetAdjustment,
                             _width: columnDatum.size,
                             _height: rowDatum.size
                         });
@@ -17711,9 +17723,15 @@ BI.shortcut("bi.text_node", BI.TextNode);/**
 BI.CodeEditor = BI.inherit(BI.Single, {
     _defaultConfig: function () {
         return $.extend(BI.CodeEditor.superclass._defaultConfig.apply(), {
-            baseCls: 'bi-code-editor',
+            baseCls: 'bi-code-editor bi-card',
             value: '',
-            watermark: ""
+            watermark: "",
+            lineHeight: 2,
+            readOnly: false,
+            //参数显示值构造函数
+            paramFormatter: function (v) {
+                return v;
+            }
         });
     },
     _init: function () {
@@ -17722,8 +17740,10 @@ BI.CodeEditor = BI.inherit(BI.Single, {
         this.editor = CodeMirror(this.element[0], {
             textWrapping: true,
             lineWrapping: true,
-            lineNumbers: false
+            lineNumbers: false,
+            readOnly: o.readOnly
         });
+        o.lineHeight === 1 ? this.element.addClass("codemirror-low-line-height") : this.element.addClass("codemirror-high-line-height");
         this.editor.on("change", function (cm, change) {
             BI.nextTick(function () {
                 self.fireEvent(BI.CodeEditor.EVENT_CHANGE)
@@ -17731,12 +17751,12 @@ BI.CodeEditor = BI.inherit(BI.Single, {
         });
 
         this.editor.on("focus", function () {
-            watermark.setVisible(false);
+            self.watermark.setVisible(false);
             self.fireEvent(BI.CodeEditor.EVENT_FOCUS);
         });
 
         this.editor.on("blur", function () {
-            watermark.setVisible(BI.isEmptyString(self.getValue()));
+            self.watermark.setVisible(BI.isEmptyString(self.getValue()));
             self.fireEvent(BI.CodeEditor.EVENT_BLUR);
         });
 
@@ -17745,21 +17765,21 @@ BI.CodeEditor = BI.inherit(BI.Single, {
         // });
 
         //水印
-        var watermark = BI.createWidget({
+        this.watermark = BI.createWidget({
             type: "bi.label",
             text: o.watermark,
             cls: "bi-water-mark",
             whiteSpace: "nowrap",
             textAlign: "left"
         });
-        watermark.element.bind(
+        this.watermark.element.bind(
             "mousedown", function (e) {
                 self.insertString("");
                 self.editor.focus();
                 e.stopEvent();
             }
         );
-        watermark.element.bind("click", function (e) {
+        this.watermark.element.bind("click", function (e) {
             self.editor.focus();
             e.stopEvent();
         });
@@ -17767,7 +17787,7 @@ BI.CodeEditor = BI.inherit(BI.Single, {
             type: "bi.absolute",
             element: this,
             items: [{
-                el: watermark,
+                el: this.watermark,
                 top: 0,
                 left: 5
             }]
@@ -17785,16 +17805,32 @@ BI.CodeEditor = BI.inherit(BI.Single, {
         this.editor.setOption("readOnly", b === true ? false : "nocursor")
     },
 
-    insertParam: function(param){
+    _checkWaterMark: function () {
+        var o = this.options;
+        if (BI.isEmptyString(this.editor.getValue()) && BI.isKey(o.watermark)) {
+            this.watermark && this.watermark.visible();
+        } else {
+            this.watermark && this.watermark.invisible();
+        }
+    },
+
+    insertParam: function (param) {
+        var value = param;
+        param = this.options.paramFormatter(param);
         var from = this.editor.getCursor();
         this.editor.replaceSelection(param);
         var to = this.editor.getCursor();
-        this.editor.markText(from, to, {className: 'param', atomic: true});
+        var options = {className: 'param', atomic: true};
+        if (BI.isNotNull(param.match(/^<!.*!>$/))) {
+            options.className = 'error-param';
+        }
+        options.value = value;
+        this.editor.markText(from, to, options);
         this.editor.replaceSelection(" ");
         this.editor.focus();
     },
 
-    insertString: function(str){
+    insertString: function (str) {
         this.editor.replaceSelection(str);
         this.editor.focus();
     },
@@ -17806,9 +17842,13 @@ BI.CodeEditor = BI.inherit(BI.Single, {
             _.forEach(line.markedSpans, function (i, ms) {
                 switch (i.marker.className) {
                     case "param":
+                    case "error-param":
                         var fieldNameLength = i.to - i.from;
-                        value = value.substr(0, i.from + num) + "$\{" + value.substr(i.from + num, fieldNameLength) + "\}" + value.substr(i.to + num, value.length);
+                        value = value.substr(0, i.from + num) + "$\{" + i.marker.value + "\}" + value.substr(i.to + num, value.length);
+                        //加上${}的偏移
                         num += 3;
+                        //加上实际值和显示值的长度差的偏移
+                        num += (i.marker.value.length - fieldNameLength);
                         break;
                 }
             });
@@ -17834,10 +17874,28 @@ BI.CodeEditor = BI.inherit(BI.Single, {
             } else {
                 self.insertString(item);
             }
-        })
+        });
+        this._checkWaterMark();
     },
 
-    refresh: function(){
+    focus: function () {
+        this.editor.focus();
+    },
+    
+    blur: function () {
+        this.editor.getInputField().blur();
+    },
+
+    setStyle: function (style) {
+        this.style = style;
+        this.element.css(style);
+    },
+
+    getStyle: function () {
+        return this.style;
+    },
+
+    refresh: function () {
         var self = this;
         BI.nextTick(function () {
             self.editor.refresh();
@@ -18182,7 +18240,7 @@ BI.MultifileEditor = BI.inherit(BI.Single, {
         return BI.extend(conf, {
             baseCls: (conf.baseCls || "") + " bi-multifile-editor",
             multiple: false,
-            maxSize: 1024 * 1024,
+            maxSize: -1,//1024 * 1024
             accept: "",
             url: ""
         })
@@ -18265,7 +18323,7 @@ BI.shortcut("bi.multifile_editor", BI.MultifileEditor);/**
 BI.TextAreaEditor = BI.inherit(BI.Single, {
     _defaultConfig: function () {
         return $.extend(BI.TextAreaEditor.superclass._defaultConfig.apply(), {
-            baseCls: 'bi-textarea-editor',
+            baseCls: 'bi-textarea-editor bi-card',
             value: ''
         });
     },
@@ -18277,7 +18335,7 @@ BI.TextAreaEditor = BI.inherit(BI.Single, {
             tagName: "textarea",
             width: "100%",
             height: "100%",
-            cls: "textarea-editor-content display-block bi-card"
+            cls: "bi-textarea textarea-editor-content display-block"
         });
         this.content.element.css({"resize": "none"});
         BI.createWidget({
@@ -18463,6 +18521,15 @@ BI.Iframe = BI.inherit(BI.Single, {
 
     getSrc: function () {
         return this.options.src;
+    },
+
+    setName: function (name) {
+        this.options.name = name;
+        this.element.attr("name", name);
+    },
+
+    getName: function () {
+        return this.options.name;
     },
 
     getWidth: function () {
@@ -18943,7 +19010,7 @@ BI.shortcut("bi.checkbox", BI.Checkbox);/**
                 url: "",
                 multiple: true,
                 accept: "", /**'*.jpg; *.zip'**/
-                maxSize: 1024 * 1024
+                maxSize: -1 //1024 * 1024
             })
         },
 
@@ -19019,7 +19086,7 @@ BI.shortcut("bi.checkbox", BI.Checkbox);/**
                     }, 1000);
                 };
                 _wrap.url = o.url ? o.url : BI.servletURL
-                + '?op=fr_attach&cmd=ah_upload';
+                    + '?op=fr_attach&cmd=ah_upload';
                 _wrap.fileType = o.accept;   //文件类型限制
                 _wrap.attach_array = [];
                 _wrap.attach_names = [];
@@ -19624,7 +19691,7 @@ BI.Label = BI.inherit(BI.Single, {
         }
         if (o.whiteSpace == "normal") {
             this.text = BI.createWidget(json);
-            this.text = BI.createWidget({
+            BI.createWidget({
                 type: "bi.center_adapt",
                 hgap: o.hgap,
                 vgap: o.vgap,
@@ -19822,7 +19889,7 @@ BI.Label = BI.inherit(BI.Single, {
         }
         if (o.whiteSpace == "normal") {
             this.text = BI.createWidget(json)
-            this.text = BI.createWidget({
+            BI.createWidget({
                 type: "bi.vertical_adapt",
                 scrollable: o.whiteSpace === "normal",
                 hgap: o.hgap,
@@ -28647,7 +28714,7 @@ BI.NativeTableScrollbar = BI.inherit(BI.Widget, {
     render: function () {
         var self = this, o = this.options;
         //把滚动台size改掉
-        BI.GridTableScrollbar.SIZE = 16;
+        this.element.width(36);
 
         var throttle = BI.throttle(function () {
             self.fireEvent(BI.NativeTableScrollbar.EVENT_SCROLL, self.element.scrollTop());
@@ -28723,7 +28790,7 @@ BI.NativeTableHorizontalScrollbar = BI.inherit(BI.Widget, {
     render: function () {
         var self = this, o = this.options;
         //把滚动台size改掉
-        BI.GridTableScrollbar.SIZE = 16;
+        this.element.height(36);
 
         var throttle = BI.throttle(function () {
             self.fireEvent(BI.NativeTableScrollbar.EVENT_SCROLL, self.element.scrollLeft());
@@ -29040,11 +29107,26 @@ BI.CollectionTable = BI.inherit(BI.Widget, {
         return this.options.isNeedFreeze ? this.options.freezeCols.length : 0;
     },
 
+    _getFreezeHeaderHeight: function () {
+        var o = this.options;
+        if (o.header.length * o.headerRowSize >= this._height) {
+            return 0;
+        }
+        return o.header.length * o.headerRowSize;
+    },
+
+    _getActualItems: function () {
+        var o = this.options;
+        if (o.header.length * o.headerRowSize >= this._height) {
+            return o.header.concat(o.items);
+        }
+        return o.items;
+    },
+
     _populateScrollbar: function () {
         var o = this.options;
         var regionSize = this.getRegionSize(), totalLeftColumnSize = 0, totalRightColumnSize = 0, totalColumnSize = 0,
-            summaryColumnSizeArray = [], totalRowSize = o.items.length * o.rowSize;
-        var freezeColLength = this._getFreezeColLength();
+            summaryColumnSizeArray = [];
         BI.each(o.columnSize, function (i, size) {
             if (o.isNeedFreeze === true && o.freezeCols.contains(i)) {
                 totalLeftColumnSize += size;
@@ -29058,8 +29140,8 @@ BI.CollectionTable = BI.inherit(BI.Widget, {
                 summaryColumnSizeArray[i] = summaryColumnSizeArray[i - 1] + size;
             }
         });
-        this.topScrollbar.setContentSize(o.items.length * o.rowSize);
-        this.topScrollbar.setSize(this._height - o.header.length * o.headerRowSize);
+        this.topScrollbar.setContentSize(this._getActualItems().length * o.rowSize);
+        this.topScrollbar.setSize(this._height - this._getFreezeHeaderHeight());
         this.topScrollbar.setPosition(this.bottomRightCollection.getScrollTop());
         this.topScrollbar.populate();
 
@@ -29074,7 +29156,7 @@ BI.CollectionTable = BI.inherit(BI.Widget, {
         this.rightScrollbar.populate();
 
         var items = this.scrollBarLayout.attr("items");
-        items[0].top = o.header.length * o.headerRowSize;
+        items[0].top = this._getFreezeHeaderHeight();
         items[1].top = this._height;
         items[2].top = this._height;
         items[2].left = regionSize;
@@ -29085,8 +29167,7 @@ BI.CollectionTable = BI.inherit(BI.Widget, {
     _populateTable: function () {
         var self = this, o = this.options;
         var regionSize = this.getRegionSize(), totalLeftColumnSize = 0, totalRightColumnSize = 0, totalColumnSize = 0,
-            summaryColumnSizeArray = [], totalRowSize = o.items.length * o.rowSize;
-        var freezeColLength = this._getFreezeColLength();
+            summaryColumnSizeArray = [];
         BI.each(o.columnSize, function (i, size) {
             if (o.isNeedFreeze === true && o.freezeCols.contains(i)) {
                 totalLeftColumnSize += size;
@@ -29102,13 +29183,13 @@ BI.CollectionTable = BI.inherit(BI.Widget, {
         });
 
         var otlw = regionSize;
-        var otlh = o.header.length * o.headerRowSize;
+        var otlh = this._getFreezeHeaderHeight();
         var otrw = this._width - regionSize;
-        var otrh = o.header.length * o.headerRowSize;
+        var otrh = this._getFreezeHeaderHeight();
         var oblw = regionSize;
-        var oblh = this._height - o.header.length * o.headerRowSize;
+        var oblh = this._height - otlh;
         var obrw = this._width - regionSize;
-        var obrh = this._height - o.header.length * o.headerRowSize;
+        var obrh = this._height - otrh;
 
         var tlw = otlw + this._scrollBarSize;
         var tlh = otlh + this._scrollBarSize;
@@ -29152,9 +29233,9 @@ BI.CollectionTable = BI.inherit(BI.Widget, {
 
         var items = this.contextLayout.attr("items");
         items[1].left = regionSize;
-        items[2].top = o.header.length * o.headerRowSize;
+        items[2].top = this._getFreezeHeaderHeight();
         items[3].left = regionSize;
-        items[3].top = o.header.length * o.headerRowSize;
+        items[3].top = this._getFreezeHeaderHeight();
         this.contextLayout.attr("items", items);
         this.contextLayout.resize();
 
@@ -29170,8 +29251,8 @@ BI.CollectionTable = BI.inherit(BI.Widget, {
         };
         run(this.topLeftItems, o.header, leftHeader);
         run(this.topRightItems, o.header, rightHeader);
-        run(this.bottomLeftItems, o.items, leftItems);
-        run(this.bottomRightItems, o.items, rightItems);
+        run(this.bottomLeftItems, this._getActualItems(), leftItems);
+        run(this.bottomRightItems, this._getActualItems(), rightItems);
 
         this.topLeftCollection._populate(leftHeader);
         this.topRightCollection._populate(rightHeader);
@@ -29182,13 +29263,23 @@ BI.CollectionTable = BI.inherit(BI.Widget, {
     _digest: function () {
         var o = this.options;
         var freezeColLength = this._getFreezeColLength();
-        this.topLeftItems = this._serialize(o.header, 0, freezeColLength, o.headerRowSize, o.columnSize, o.mergeCols);
-        this.topRightItems = this._serialize(o.header, freezeColLength, o.columnSize.length, o.headerRowSize, o.columnSize, true);
-        this.bottomLeftItems = this._serialize(o.items, 0, freezeColLength, o.rowSize, o.columnSize, o.mergeCols);
-        this.bottomRightItems = this._serialize(o.items, freezeColLength, o.columnSize.length, o.rowSize, o.columnSize, o.mergeCols);
+        //如果表头位置不够，取消表头冻结
+        if (this._getFreezeHeaderHeight() <= 0) {
+            this.topLeftItems = [];
+            this.topRightItems = [];
+            this.bottomLeftItems = this._serialize(this._getActualItems(), 0, freezeColLength, o.rowSize, o.columnSize, o.mergeCols, BI.range(o.header.length));
+            this.bottomRightItems = this._serialize(this._getActualItems(), freezeColLength, o.columnSize.length, o.rowSize, o.columnSize, o.mergeCols, BI.range(o.header.length));
+        } else {
+            this.topLeftItems = this._serialize(o.header, 0, freezeColLength, o.headerRowSize, o.columnSize, o.mergeCols);
+            this.topRightItems = this._serialize(o.header, freezeColLength, o.columnSize.length, o.headerRowSize, o.columnSize, true);
+            this.bottomLeftItems = this._serialize(o.items, 0, freezeColLength, o.rowSize, o.columnSize, o.mergeCols);
+            this.bottomRightItems = this._serialize(o.items, freezeColLength, o.columnSize.length, o.rowSize, o.columnSize, o.mergeCols);
+        }
     },
 
-    _serialize: function (items, startCol, endCol, rowHeight, columnSize, mergeCols) {
+    _serialize: function (items, startCol, endCol, rowHeight, columnSize, mergeCols, mergeRows) {
+        mergeCols = mergeCols || [];
+        mergeRows = mergeRows || [];
         var self = this, o = this.options;
         var result = [], cache = {}, preCol = {}, preRow = {}, map = {};
         var summaryColumnSize = [];
@@ -29238,7 +29329,7 @@ BI.CollectionTable = BI.inherit(BI.Widget, {
                 }
                 cache[i][j] = cols[j];
                 map[i][j] = {};
-                if (mergeCols === true || mergeCols.indexOf(j) > -1) {
+                if (mergeCols === true || mergeCols.indexOf(j) > -1 || mergeRows === true || mergeRows.indexOf(i) > -1) {
                     if (i === 0 && j === startCol) {
                         createOneEl(0, startCol);
                     } else if (j === startCol && i > 0) {
@@ -29516,8 +29607,7 @@ BI.QuickCollectionTable = BI.inherit(BI.CollectionTable, {
     _populateTable: function () {
         var self = this, o = this.options;
         var regionSize = this.getRegionSize(), totalLeftColumnSize = 0, totalRightColumnSize = 0, totalColumnSize = 0,
-            summaryColumnSizeArray = [], totalRowSize = o.items.length * o.rowSize;
-        var freezeColLength = this._getFreezeColLength();
+            summaryColumnSizeArray = []
         BI.each(o.columnSize, function (i, size) {
             if (o.isNeedFreeze === true && o.freezeCols.contains(i)) {
                 totalLeftColumnSize += size;
@@ -29533,13 +29623,13 @@ BI.QuickCollectionTable = BI.inherit(BI.CollectionTable, {
         });
 
         var otlw = regionSize;
-        var otlh = o.header.length * o.headerRowSize;
+        var otlh = this._getFreezeHeaderHeight();
         var otrw = this._width - regionSize;
-        var otrh = o.header.length * o.headerRowSize;
+        var otrh = this._getFreezeHeaderHeight();
         var oblw = regionSize;
-        var oblh = this._height - o.header.length * o.headerRowSize;
+        var oblh = this._height - otlh;
         var obrw = this._width - regionSize;
-        var obrh = this._height - o.header.length * o.headerRowSize;
+        var obrh = this._height - otrh;
 
         this.topLeft.setWidth(otlw);
         this.topLeft.setHeight(otlh);
@@ -29561,9 +29651,9 @@ BI.QuickCollectionTable = BI.inherit(BI.CollectionTable, {
 
         var items = this.contextLayout.attr("items");
         items[1].left = regionSize;
-        items[2].top = o.header.length * o.headerRowSize;
+        items[2].top = this._getFreezeHeaderHeight();
         items[3].left = regionSize;
-        items[3].top = o.header.length * o.headerRowSize;
+        items[3].top = this._getFreezeHeaderHeight();
         this.contextLayout.attr("items", items);
         this.contextLayout.resize();
 
@@ -29579,8 +29669,8 @@ BI.QuickCollectionTable = BI.inherit(BI.CollectionTable, {
         };
         run(this.topLeftItems, o.header, leftHeader);
         run(this.topRightItems, o.header, rightHeader);
-        run(this.bottomLeftItems, o.items, leftItems);
-        run(this.bottomRightItems, o.items, rightItems);
+        run(this.bottomLeftItems, this._getActualItems(), leftItems);
+        run(this.bottomRightItems, this._getActualItems(), rightItems);
 
         this.topLeftCollection.populate(leftHeader);
         this.topRightCollection.populate(rightHeader);
@@ -29824,11 +29914,26 @@ BI.GridTable = BI.inherit(BI.Widget, {
         return this.options.isNeedFreeze ? this.options.freezeCols.length : 0;
     },
 
+    _getFreezeHeaderHeight: function () {
+        var o = this.options;
+        if (o.header.length * o.headerRowSize >= this._height) {
+            return 0;
+        }
+        return o.header.length * o.headerRowSize;
+    },
+
+    _getActualItems: function () {
+        var o = this.options;
+        if (o.header.length * o.headerRowSize >= this._height) {
+            return o.header.concat(o.items);
+        }
+        return o.items;
+    },
+
     _populateScrollbar: function () {
         var o = this.options;
         var regionSize = this.getRegionSize(), totalLeftColumnSize = 0, totalRightColumnSize = 0, totalColumnSize = 0,
-            summaryColumnSizeArray = [], totalRowSize = o.items.length * o.rowSize;
-        var freezeColLength = this._getFreezeColLength();
+            summaryColumnSizeArray = [];
         BI.each(o.columnSize, function (i, size) {
             if (o.isNeedFreeze === true && o.freezeCols.contains(i)) {
                 totalLeftColumnSize += size;
@@ -29842,8 +29947,8 @@ BI.GridTable = BI.inherit(BI.Widget, {
                 summaryColumnSizeArray[i] = summaryColumnSizeArray[i - 1] + size;
             }
         });
-        this.topScrollbar.setContentSize(o.items.length * o.rowSize);
-        this.topScrollbar.setSize(this._height - o.header.length * o.headerRowSize);
+        this.topScrollbar.setContentSize(this._getActualItems().length * o.rowSize);
+        this.topScrollbar.setSize(this._height - this._getFreezeHeaderHeight());
         this.topScrollbar.setPosition(Math.min(this.bottomLeftGrid.getScrollTop(), this.bottomRightGrid.getScrollTop()));
         this.topScrollbar.populate();
 
@@ -29858,7 +29963,7 @@ BI.GridTable = BI.inherit(BI.Widget, {
         this.rightScrollbar.populate();
 
         var items = this.scrollBarLayout.attr("items");
-        items[0].top = o.header.length * o.headerRowSize;
+        items[0].top = this._getFreezeHeaderHeight();
         items[1].top = this._height;
         items[2].top = this._height;
         items[2].left = regionSize;
@@ -29892,7 +29997,7 @@ BI.GridTable = BI.inherit(BI.Widget, {
         var o = this.options;
         var freezeColLength = this._getFreezeColLength();
         var leftItems = [], rightItems = [];
-        BI.each(o.items, function (i, cols) {
+        BI.each(this._getActualItems(), function (i, cols) {
             leftItems[i] = [];
             rightItems[i] = [];
             BI.each(cols, function (j, col) {
@@ -29913,7 +30018,7 @@ BI.GridTable = BI.inherit(BI.Widget, {
     _populateTable: function () {
         var self = this, o = this.options;
         var regionSize = this.getRegionSize(), totalLeftColumnSize = 0, totalRightColumnSize = 0, totalColumnSize = 0,
-            summaryColumnSizeArray = [], totalRowSize = o.items.length * o.rowSize;
+            summaryColumnSizeArray = [];
         var freezeColLength = this._getFreezeColLength();
         BI.each(o.columnSize, function (i, size) {
             if (o.isNeedFreeze === true && o.freezeCols.contains(i)) {
@@ -29930,13 +30035,13 @@ BI.GridTable = BI.inherit(BI.Widget, {
         });
 
         var otlw = regionSize;
-        var otlh = o.header.length * o.headerRowSize;
+        var otlh = this._getFreezeHeaderHeight();
         var otrw = this._width - regionSize;
-        var otrh = o.header.length * o.headerRowSize;
+        var otrh = this._getFreezeHeaderHeight();
         var oblw = regionSize;
-        var oblh = this._height - o.header.length * o.headerRowSize;
+        var oblh = this._height - otlh;
         var obrw = this._width - regionSize;
-        var obrh = this._height - o.header.length * o.headerRowSize;
+        var obrh = this._height - otrh;
 
         var tlw = otlw + this._scrollBarSize;
         var tlh = otlh + this._scrollBarSize;
@@ -29989,9 +30094,9 @@ BI.GridTable = BI.inherit(BI.Widget, {
 
         var items = this.contextLayout.attr("items");
         items[1].left = regionSize;
-        items[2].top = o.header.length * o.headerRowSize;
+        items[2].top = this._getFreezeHeaderHeight();
         items[3].left = regionSize;
-        items[3].top = o.header.length * o.headerRowSize;
+        items[3].top = this._getFreezeHeaderHeight();
         this.contextLayout.attr("items", items);
         this.contextLayout.resize();
 
@@ -30221,7 +30326,7 @@ BI.QuickGridTable = BI.inherit(BI.GridTable, {
 
     _populateTable: function () {
         var self = this, o = this.options;
-        var regionSize = this.getRegionSize(), totalLeftColumnSize = 0, totalRightColumnSize = 0, totalColumnSize = 0, summaryColumnSizeArray = [], totalRowSize = o.items.length * o.rowSize;
+        var regionSize = this.getRegionSize(), totalLeftColumnSize = 0, totalRightColumnSize = 0, totalColumnSize = 0, summaryColumnSizeArray = [];
         var freezeColLength = this._getFreezeColLength();
         BI.each(o.columnSize, function (i, size) {
             if (o.isNeedFreeze === true && o.freezeCols.contains(i)) {
@@ -30238,13 +30343,13 @@ BI.QuickGridTable = BI.inherit(BI.GridTable, {
         });
 
         var otlw = regionSize;
-        var otlh = o.header.length * o.headerRowSize;
+        var otlh = this._getFreezeHeaderHeight();
         var otrw = this._width - regionSize;
-        var otrh = o.header.length * o.headerRowSize;
+        var otrh = this._getFreezeHeaderHeight();
         var oblw = regionSize;
-        var oblh = this._height - o.header.length * o.headerRowSize;
+        var oblh = this._height - otlh;
         var obrw = this._width - regionSize;
-        var obrh = this._height - o.header.length * o.headerRowSize;
+        var obrh = this._height - otrh;
 
         this.topLeft.setWidth(otlw);
         this.topLeft.setHeight(otlh);
@@ -30275,9 +30380,9 @@ BI.QuickGridTable = BI.inherit(BI.GridTable, {
 
         var items = this.contextLayout.attr("items");
         items[1].left = regionSize;
-        items[2].top = o.header.length * o.headerRowSize;
+        items[2].top = this._getFreezeHeaderHeight();
         items[3].left = regionSize;
-        items[3].top = o.header.length * o.headerRowSize;
+        items[3].top = this._getFreezeHeaderHeight();
         this.contextLayout.attr("items", items);
         this.contextLayout.resize();
 
@@ -30297,7 +30402,7 @@ BI.QuickGridTable = BI.inherit(BI.GridTable, {
                 }
             });
         });
-        BI.each(o.items, function (i, cols) {
+        BI.each(this._getActualItems(), function (i, cols) {
             leftItems[i] = [];
             rightItems[i] = [];
             BI.each(cols, function (j, col) {
@@ -32389,6 +32494,9 @@ BI.ResizableTableCell = BI.inherit(BI.Widget, {
         return BI.extend(BI.ResizableTableCell.superclass._defaultConfig.apply(this, arguments), {
             baseCls: "bi-resizable-table-cell",
             cell: {},
+            minSize: 15,
+            // suitableSize,
+            maxSize: Number.MAX_VALUE,
             start: BI.emptyFn,
             resize: BI.emptyFn,
             stop: BI.emptyFn
@@ -32402,24 +32510,39 @@ BI.ResizableTableCell = BI.inherit(BI.Widget, {
 
         var startDrag = false;
         var size = 0, offset = 0, defaultSize = o.width;
+
+        function optimizeSize(s) {
+            var optSize = BI.clamp(s, o.minSize, o.maxSize || Number.MAX_VALUE);
+            // if (o.suitableSize) {
+            //     if (Math.abs(o.suitableSize - optSize) < 5) {
+            //         optSize = o.suitableSize;
+            //         self.handler.element.addClass("suitable");
+            //     } else {
+            //         self.handler.element.removeClass("suitable");
+            //     }
+            // }
+            return optSize;
+        }
+
         var mouseMoveTracker = new BI.MouseMoveTracker(function (deltaX, deltaY) {
             if (mouseMoveTracker.isDragging()) {
                 startDrag = true;
                 offset += deltaX;
-                size = BI.clamp(defaultSize + offset, 15, Number.MAX_VALUE);
+                size = optimizeSize(defaultSize + offset);
                 self.handler.element.addClass("dragging");
                 o.resize(size);
             }
         }, function () {
             if (startDrag === true) {
-                size = BI.clamp(size, 15, Number.MAX_VALUE);
+                size = optimizeSize(size);
                 o.stop(size);
                 size = 0;
                 offset = 0;
                 defaultSize = o.width;
-                self.handler.element.removeClass("dragging");
                 startDrag = false;
             }
+            self.handler.element.removeClass("dragging");
+            self.handler.element.removeClass("suitable");
             mouseMoveTracker.releaseMouseMoves();
         }, document);
         this.handler = BI.createWidget({
@@ -32439,6 +32562,7 @@ BI.ResizableTableCell = BI.inherit(BI.Widget, {
         });
         this.handler.element.on("mousedown", function (event) {
             defaultSize = o.width;
+            optimizeSize(defaultSize);
             mouseMoveTracker.captureMouseMoves(event);
         });
         BI.createWidget({
@@ -32495,6 +32619,8 @@ BI.ResizableTable = BI.inherit(BI.Widget, {
             mergeCols: [],
             mergeRule: BI.emptyFn,
             columnSize: [],
+            minColumnSize: [],
+            maxColumnSize: [],
             freezeCols: [],
             header: [],
             items: [],
@@ -32687,7 +32813,14 @@ BI.ResizableTable = BI.inherit(BI.Widget, {
             self.resizer.setVisible(true);
             var height = o.headerRowSize + self._getRegionRowSize()[1];
             self.resizer.setHeight(height);
-
+            //TODO 不知道为什么加入这段代码会使得列宽调整出问题
+            // if (o.minColumnSize[j]) {
+            //     if (size === o.minColumnSize[j]) {
+            //         self.resizer.element.addClass("suitable");
+            //     } else {
+            //         self.resizer.element.removeClass("suitable");
+            //     }
+            // }
             self._setResizerPosition(self._getResizerLeft(j) + size, (o.header.length - 1) * o.headerRowSize);
         };
         var stop = function (j, size) {
@@ -32710,6 +32843,8 @@ BI.ResizableTable = BI.inherit(BI.Widget, {
                         result[i][j] = {
                             type: "bi.resizable_table_cell",
                             cell: col,
+                            suitableSize: o.minColumnSize[j],
+                            maxSize: o.maxColumnSize[j],
                             resize: BI.bind(resize, null, j),
                             stop: BI.bind(stop, null, j)
                         };
@@ -32719,6 +32854,8 @@ BI.ResizableTable = BI.inherit(BI.Widget, {
                                 result[r - 1][j] = {
                                     type: "bi.resizable_table_cell",
                                     cell: result[r - 1][j],
+                                    suitableSize: o.minColumnSize[j],
+                                    maxSize: o.maxColumnSize[j],
                                     resize: BI.bind(resize, null, j),
                                     stop: BI.bind(stop, null, j)
                                 };
@@ -32934,10 +33071,6 @@ BI.CustomTree = BI.inherit(BI.Widget, {
             args[0] = this._formatItems(nodes);
         }
         this.tree.populate.apply(this.tree, args);
-    },
-
-    doBehavior: function () {
-        this.tree.doBehavior.apply(this.tree, arguments);
     },
 
     setValue: function (v) {

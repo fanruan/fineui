@@ -6,7 +6,7 @@ BI.DownListGroupItem = BI.inherit(BI.BasicButton, {
             logic: {
                 dynamic: false
             },
-            invalid: true,
+            // invalid: true,
             iconCls1: "dot-e-font",
             iconCls2: "pull-right-e-font"
         })
@@ -22,26 +22,26 @@ BI.DownListGroupItem = BI.inherit(BI.BasicButton, {
             text: o.text,
             value: o.value,
             height: o.height
-        })
+        });
 
         this.icon1 = BI.createWidget({
             type: "bi.icon_button",
             cls: o.iconCls1,
             width: 25,
             forceNotSelected: true
-        })
+        });
 
         this.icon2 = BI.createWidget({
             type: "bi.icon_button",
             cls: o.iconCls2,
             width: 25,
             forceNotSelected: true
-        })
+        });
 
         var blank = BI.createWidget({
             type: "bi.layout",
             width: 25
-        })
+        });
         BI.createWidget({
             type: "bi.absolute",
             element: this,
@@ -51,7 +51,7 @@ BI.DownListGroupItem = BI.inherit(BI.BasicButton, {
                 bottom: 0,
                 right: 0
             }]
-        })
+        });
 
         BI.createWidget(BI.extend({
             element: this
@@ -59,19 +59,11 @@ BI.DownListGroupItem = BI.inherit(BI.BasicButton, {
             items: BI.LogicFactory.createLogicItemsByDirection("left", this.icon1, this.text, blank)
         }))));
 
-        this.element.on("mouseenter." + this.getName(), function (e) {
-            if (self.element.__isMouseInBounds__(e) && self.isEnabled()) {
+        this.element.hover(function () {
+            if (self.isEnabled()) {
                 self.hover();
-            } else {
-                self.dishover();
             }
-        });
-        this.element.on("mousemove." + this.getName(), function (e) {
-            if (!self.element.__isMouseInBounds__(e) && self.isEnabled()) {
-                self.dishover()
-            }
-        });
-        this.element.on("mouseleave." + this.getName(), function () {
+        }, function () {
             if (self.isEnabled()) {
                 self.dishover()
             }
@@ -109,11 +101,11 @@ BI.DownListGroupItem = BI.inherit(BI.BasicButton, {
     setValue: function (v) {
         var self = this, o = this.options;
         v = BI.isArray(v) ? v : [v];
-        BI.find(v, function(idx, value){
-            if(BI.contains(o.childValues, value)){
+        BI.find(v, function (idx, value) {
+            if (BI.contains(o.childValues, value)) {
                 self.icon1.setSelected(true);
                 return true;
-            }else{
+            } else {
                 self.icon1.setSelected(false);
             }
         })

@@ -17,7 +17,7 @@ BI.MultiSelectList = BI.inherit(BI.Widget, {
 
         var assertShowValue = function () {
             BI.isKey(self._startValue) && self.storeValue.value[self.storeValue.type === BI.Selection.All ? "remove" : "pushDistinct"](self._startValue);
-            self.trigger.setValue(self.storeValue);
+            // self.trigger.setValue(self.storeValue);
         };
 
         this.adapter = BI.createWidget({
@@ -69,7 +69,7 @@ BI.MultiSelectList = BI.inherit(BI.Widget, {
                 action: function () {
                     self._showSearcherPane();
                     self._setStartValue("");
-                    this.setValue(self.storeValue);
+                    this.setValue(BI.deepClone(self.storeValue));
                 }
             }, {
                 eventName: BI.Searcher.EVENT_STOP,

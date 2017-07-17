@@ -7,7 +7,7 @@
 BI.TextAreaEditor = BI.inherit(BI.Single, {
     _defaultConfig: function () {
         return $.extend(BI.TextAreaEditor.superclass._defaultConfig.apply(), {
-            baseCls: 'bi-textarea-editor',
+            baseCls: 'bi-textarea-editor bi-card',
             value: ''
         });
     },
@@ -19,7 +19,7 @@ BI.TextAreaEditor = BI.inherit(BI.Single, {
             tagName: "textarea",
             width: "100%",
             height: "100%",
-            cls: "textarea-editor-content display-block bi-card"
+            cls: "bi-textarea textarea-editor-content display-block"
         });
         this.content.element.css({"resize": "none"});
         BI.createWidget({

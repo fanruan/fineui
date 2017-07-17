@@ -1477,6 +1477,7 @@ BI.MultiLayerIconTreeLeafItem = BI.inherit(BI.BasicButton, {
         var self = this, o = this.options;
         this.item = BI.createWidget({
             type: "bi.icon_tree_leaf_item",
+            cls: "bi-list-item-none",
             iconCls: o.iconCls,
             id: o.id,
             pId: o.pId,
@@ -1820,6 +1821,7 @@ BI.YearCalendar = BI.inherit(BI.Widget, {
         var conf = BI.YearCalendar.superclass._defaultConfig.apply(this, arguments);
         return BI.extend(conf, {
             baseCls: "bi-year-calendar",
+            behaviors: {},
             logic: {
                 dynamic: false
             },
@@ -1884,6 +1886,7 @@ BI.YearCalendar = BI.inherit(BI.Widget, {
 
         this.years = BI.createWidget({
             type: "bi.button_group",
+            behaviors: o.behaviors,
             items: BI.createItems(items, {}),
             layouts: [BI.LogicFactory.createLogic("table", BI.extend({}, o.logic, {
                 columns: 2,
@@ -3938,7 +3941,7 @@ BI.ColorChooserTrigger = BI.inherit(BI.Trigger, {
     _defaultConfig: function () {
         var conf = BI.ColorChooserTrigger.superclass._defaultConfig.apply(this, arguments);
         return BI.extend(conf, {
-            baseCls: (conf.baseCls || "") + " bi-color-chooser-trigger bi-card",
+            baseCls: (conf.baseCls || "") + " bi-color-chooser-trigger",
             height: 30
         })
     },
@@ -3946,7 +3949,8 @@ BI.ColorChooserTrigger = BI.inherit(BI.Trigger, {
     _init: function () {
         BI.ColorChooserTrigger.superclass._init.apply(this, arguments);
         this.colorContainer = BI.createWidget({
-            type: "bi.layout"
+            type: "bi.layout",
+            cls: "bi-card color-chooser-trigger-content"
         });
 
         var down = BI.createWidget({
@@ -3979,7 +3983,13 @@ BI.ColorChooserTrigger = BI.inherit(BI.Trigger, {
 
     setValue: function (color) {
         BI.ColorChooserTrigger.superclass.setValue.apply(this, arguments);
-        this.colorContainer.element.css("background-color", color);
+        if (color === "") {
+            this.colorContainer.element.css("background-color", "").removeClass("trans-color-background").addClass("auto-color-background");
+        } else if (color === "transparent") {
+            this.colorContainer.element.css("background-color", "").removeClass("auto-color-background").addClass("trans-color-background")
+        } else {
+            this.colorContainer.element.css({"background-color": color}).removeClass("auto-color-background").removeClass("trans-color-background");
+        }
     }
 });
 BI.ColorChooserTrigger.EVENT_CHANGE = "ColorChooserTrigger.EVENT_CHANGE";
@@ -4272,7 +4282,7 @@ BI.ColorPickerEditor = BI.inherit(BI.Widget, {
             errorText: BI.i18nText("BI-Color_Picker_Error_Text"),
             allowBlank: true,
             value: 255,
-            width: 35,
+            width: 32,
             height: 20
         });
         BI.each(Ws, function (i, w) {
@@ -4288,12 +4298,30 @@ BI.ColorPickerEditor = BI.inherit(BI.Widget, {
         this.B = Ws[2];
 
         this.none = BI.createWidget({
-            type: "bi.checkbox"
+            type: "bi.checkbox",
+            title: BI.i18nText("BI-Basic_Auto")
         });
         this.none.on(BI.Checkbox.EVENT_CHANGE, function () {
             if (this.isSelected()) {
                 self.lastColor = self.getValue();
                 self.setValue("");
+            } else {
+                self.setValue(self.lastColor || "#000000");
+            }
+            if (self.R.isValid() && self.G.isValid() && self.B.isValid()) {
+                self.colorShow.element.css("background-color", self.getValue());
+                self.fireEvent(BI.ColorPickerEditor.EVENT_CHANGE);
+            }
+        });
+
+        this.transparent = BI.createWidget({
+            type: "bi.checkbox",
+            title: BI.i18nText("BI-Transparent_Color")
+        });
+        this.transparent.on(BI.Checkbox.EVENT_CHANGE, function () {
+            if (this.isSelected()) {
+                self.lastColor = self.getValue();
+                self.setValue("transparent");
             } else {
                 self.setValue(self.lastColor || "#000000");
             }
@@ -4312,21 +4340,21 @@ BI.ColorPickerEditor = BI.inherit(BI.Widget, {
             }, {
                 el: RGB[0],
                 lgap: 10,
-                width: 20
+                width: 16
             }, {
                 el: this.R,
                 width: 32
             }, {
                 el: RGB[1],
                 lgap: 10,
-                width: 20
+                width: 16
             }, {
                 el: this.G,
                 width: 32
             }, {
                 el: RGB[2],
                 lgap: 10,
-                width: 20
+                width: 16
             }, {
                 el: this.B,
                 width: 32
@@ -4335,18 +4363,33 @@ BI.ColorPickerEditor = BI.inherit(BI.Widget, {
                     type: "bi.center_adapt",
                     items: [this.none]
                 },
-                width: 20
+                width: 18
+            }, {
+                el: {
+                    type: "bi.center_adapt",
+                    items: [this.transparent]
+                },
+                width: 18
             }]
         })
     },
 
     setValue: function (color) {
+        if (color === "transparent") {
+            this.transparent.setSelected(true);
+            this.none.setSelected(false);
+            this.R.setValue("");
+            this.G.setValue("");
+            this.B.setValue("");
+            return;
+        }
         if (!color) {
             color = "";
             this.none.setSelected(true);
         } else {
             this.none.setSelected(false);
         }
+        this.transparent.setSelected(false);
         this.colorShow.element.css("background-color", color);
         var json = BI.DOM.rgb2json(BI.DOM.hex2rgb(color));
         this.R.setValue(BI.isNull(json.r) ? "" : json.r);
@@ -4355,6 +4398,9 @@ BI.ColorPickerEditor = BI.inherit(BI.Widget, {
     },
 
     getValue: function () {
+        if (this.transparent.isSelected()) {
+            return "transparent";
+        }
         return BI.DOM.rgb2hex(BI.DOM.json2rgb({
             r: this.R.getValue(),
             g: this.G.getValue(),
@@ -4875,6 +4921,7 @@ BI.BubbleCombo = BI.inherit(BI.Widget, {
             default:
                 break;
         }
+        this.triangle && this.triangle.destroy();
         this.triangle = BI.createWidget(op, {
             type: "bi.center_adapt",
             cls: "button-combo-triangle-wrapper",
@@ -4935,6 +4982,7 @@ BI.BubbleCombo = BI.inherit(BI.Widget, {
 
     _hideTriangle: function () {
         this.triangle && this.triangle.destroy();
+        this.triangle = null;
         this.combo.getView() && this.combo.getView().hideLine();
     },
 
@@ -4945,10 +4993,6 @@ BI.BubbleCombo = BI.inherit(BI.Widget, {
 
     showView: function () {
         this.combo && this.combo.showView();
-    },
-
-    hasView: function () {
-        return BI.isNotNull(this.combo.getView());
     },
 
     isViewVisible: function () {
@@ -8360,10 +8404,6 @@ BI.ListPane = BI.inherit(BI.Pane, {
         this.button_group.empty();
     },
 
-    doBehavior: function () {
-        this.button_group.doBehavior.apply(this.button_group, arguments);
-    },
-
     setNotSelectedValue: function () {
         this.button_group.setNotSelectedValue.apply(this.button_group, arguments);
     },
@@ -8653,10 +8693,6 @@ BI.SelectList = BI.inherit(BI.Widget, {
             this.list.element.css({"max-height": h - toolHeight + "px"})
     },
 
-    doBehavior: function () {
-        this.list.doBehavior.apply(this.list, arguments);
-    },
-
     setNotSelectedValue: function () {
         this.list.setNotSelectedValue.apply(this.list, arguments);
         this._checkAllSelected();
@@ -8749,10 +8785,6 @@ BI.LazyLoader = BI.inherit(BI.Widget, {
 
     empty: function () {
         this.loader.empty();
-    },
-
-    doBehavior: function () {
-        this.loader.doBehavior();
     },
 
     setNotSelectedValue: function () {
@@ -8950,10 +8982,6 @@ BI.ListLoader = BI.inherit(BI.Widget, {
         });
     },
 
-    doBehavior: function () {
-        this.button_group.doBehavior.apply(this.button_group, arguments);
-    },
-
     setNotSelectedValue: function () {
         this.button_group.setNotSelectedValue.apply(this.button_group, arguments);
     },
@@ -9115,15 +9143,14 @@ BI.SortList = BI.inherit(BI.Widget, {
     },
 
     populate: function (items) {
+        if (items) {
+            arguments[0] = this._formatItems(items);
+        }
         this.loader.populate.apply(this.loader, arguments);
     },
 
     empty: function () {
         this.loader.empty();
-    },
-
-    doBehavior: function () {
-        this.loader.doBehavior.apply(this.loader, arguments);
     },
 
     setNotSelectedValue: function () {
@@ -9203,9 +9230,10 @@ BI.AllCountPager = BI.inherit(BI.Widget, {
             vgap: 0,
             value: o.curr,
             errorText: BI.i18nText("BI-Please_Input_Positive_Integer"),
-            width: 30,
+            width: 35,
             height: 20
         });
+
         this.pager = BI.createWidget({
             type: "bi.pager",
             width: 36,
@@ -9291,7 +9319,7 @@ BI.AllCountPager = BI.inherit(BI.Widget, {
         BI.createWidget({
             type: "bi.center_adapt",
             element: this,
-            columnSize: ["", 30, 40, 36],
+            columnSize: ["", 35, 40, 36],
             items: [count, this.editor, this.allPages, this.pager]
         })
     },
@@ -9914,17 +9942,17 @@ BI.shortcut("bi.detail_pager", BI.DetailPager);/**
  */
 BI.SegmentButton = BI.inherit(BI.BasicButton, {
 
-    _defaultConfig: function() {
+    _defaultConfig: function () {
         var conf = BI.SegmentButton.superclass._defaultConfig.apply(this, arguments);
-        return BI.extend( conf, {
-            baseCls : (conf.baseCls ||"")+' bi-segment-button bi-list-item-active',
+        return BI.extend(conf, {
+            baseCls: (conf.baseCls || "") + ' bi-segment-button bi-list-item-active',
             shadow: true,
             readonly: true,
-            hgap: 10
+            hgap: 5
         })
     },
 
-    _init:function() {
+    _init: function () {
         BI.SegmentButton.superclass._init.apply(this, arguments);
         var opts = this.options, self = this;
         //if (BI.isNumber(opts.height) && BI.isNull(opts.lineHeight)) {
@@ -9933,7 +9961,7 @@ BI.SegmentButton = BI.inherit(BI.BasicButton, {
         this.text = BI.createWidget({
             type: "bi.label",
             element: this,
-            height: opts.height-2,
+            height: opts.height - 2,
             whiteSpace: opts.whiteSpace,
             text: opts.text,
             value: opts.value,
@@ -9941,16 +9969,16 @@ BI.SegmentButton = BI.inherit(BI.BasicButton, {
         })
     },
 
-    setSelected: function(){
+    setSelected: function () {
         BI.SegmentButton.superclass.setSelected.apply(this, arguments);
     },
 
-    setText : function(text) {
+    setText: function (text) {
         BI.SegmentButton.superclass.setText.apply(this, arguments);
         this.text.setText(text);
     },
 
-    destroy : function() {
+    destroy: function () {
         BI.SegmentButton.superclass.destroy.apply(this, arguments);
     }
 });
@@ -10395,7 +10423,7 @@ BI.DynamicSummaryLayerTreeTable = BI.inherit(BI.Widget, {
     _recomputeColumnSize: function () {
         var o = this.options;
         o.regionColumnSize = this.table.getRegionColumnSize();
-        var columnSize = this.table.getColumnSize();
+        var columnSize = this.table.getColumnSize().slice();
         if (o.freezeCols.length > 1) {
             for (var i = 0; i < o.freezeCols.length - 1; i++) {
                 columnSize.splice(1, 0, 0);
@@ -12126,10 +12154,6 @@ BI.LevelTree = BI.inherit(BI.Widget, {
         this.tree.populate(items);
     },
 
-    doBehavior: function () {
-        this.tree.doBehavior.apply(this.tree, arguments);
-    },
-
     setValue: function (v) {
         this.tree.setValue(v);
     },
@@ -12330,6 +12354,7 @@ BI.EditorTrigger = BI.inherit(BI.Trigger, {
                 }, {
                     el: {
                         type: "bi.trigger_icon_button",
+                        cls: "bi-border-left",
                         width: o.triggerWidth
                     },
                     width: o.triggerWidth
@@ -12411,6 +12436,7 @@ BI.TextTrigger = BI.inherit(BI.Trigger, {
         });
         this.trigerButton = BI.createWidget({
             type: "bi.trigger_icon_button",
+            cls: "bi-border-left",
             width: c.triggerWidth
         });
 

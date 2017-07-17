@@ -23,6 +23,7 @@ BI.MultiLayerSelectTreeFirstPlusGroupNode = BI.inherit(BI.NodeButton, {
         var self = this, o = this.options;
         this.node = BI.createWidget({
             type: "bi.select_tree_first_plus_group_node",
+            cls: "bi-list-item-none",
             stopPropagation: true,
             logic: {
                 dynamic: true

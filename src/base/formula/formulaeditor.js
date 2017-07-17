@@ -6,11 +6,12 @@
 BI.FormulaEditor = BI.inherit(BI.Single, {
     _defaultConfig: function () {
         return $.extend(BI.FormulaEditor.superclass._defaultConfig.apply(), {
-            baseCls: 'bi-formula-editor',
+            baseCls: 'bi-formula-editor bi-card',
             watermark: '',
             value: '',
             fieldTextValueMap: {},
-            showHint: true
+            showHint: true,
+            lineHeight: 2
         });
     },
     _init: function () {
@@ -22,6 +23,7 @@ BI.FormulaEditor = BI.inherit(BI.Single, {
             lineNumbers: false,
             mode: 'formula'
         });
+        o.lineHeight === 1 ? this.element.addClass("codemirror-low-line-height") : this.element.addClass("codemirror-high-line-height");
         this.editor.on("change", function (cm, change) {
             self._checkWaterMark();
             if (o.showHint) {

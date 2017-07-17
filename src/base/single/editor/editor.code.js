@@ -7,9 +7,15 @@
 BI.CodeEditor = BI.inherit(BI.Single, {
     _defaultConfig: function () {
         return $.extend(BI.CodeEditor.superclass._defaultConfig.apply(), {
-            baseCls: 'bi-code-editor',
+            baseCls: 'bi-code-editor bi-card',
             value: '',
-            watermark: ""
+            watermark: "",
+            lineHeight: 2,
+            readOnly: false,
+            //参数显示值构造函数
+            paramFormatter: function (v) {
+                return v;
+            }
         });
     },
     _init: function () {
@@ -18,8 +24,10 @@ BI.CodeEditor = BI.inherit(BI.Single, {
         this.editor = CodeMirror(this.element[0], {
             textWrapping: true,
             lineWrapping: true,
-            lineNumbers: false
+            lineNumbers: false,
+            readOnly: o.readOnly
         });
+        o.lineHeight === 1 ? this.element.addClass("codemirror-low-line-height") : this.element.addClass("codemirror-high-line-height");
         this.editor.on("change", function (cm, change) {
             BI.nextTick(function () {
                 self.fireEvent(BI.CodeEditor.EVENT_CHANGE)
@@ -27,12 +35,12 @@ BI.CodeEditor = BI.inherit(BI.Single, {
         });
 
         this.editor.on("focus", function () {
-            watermark.setVisible(false);
+            self.watermark.setVisible(false);
             self.fireEvent(BI.CodeEditor.EVENT_FOCUS);
         });
 
         this.editor.on("blur", function () {
-            watermark.setVisible(BI.isEmptyString(self.getValue()));
+            self.watermark.setVisible(BI.isEmptyString(self.getValue()));
             self.fireEvent(BI.CodeEditor.EVENT_BLUR);
         });
 
@@ -41,21 +49,21 @@ BI.CodeEditor = BI.inherit(BI.Single, {
         // });
 
         //水印
-        var watermark = BI.createWidget({
+        this.watermark = BI.createWidget({
             type: "bi.label",
             text: o.watermark,
             cls: "bi-water-mark",
             whiteSpace: "nowrap",
             textAlign: "left"
         });
-        watermark.element.bind(
+        this.watermark.element.bind(
             "mousedown", function (e) {
                 self.insertString("");
                 self.editor.focus();
                 e.stopEvent();
             }
         );
-        watermark.element.bind("click", function (e) {
+        this.watermark.element.bind("click", function (e) {
             self.editor.focus();
             e.stopEvent();
         });
@@ -63,7 +71,7 @@ BI.CodeEditor = BI.inherit(BI.Single, {
             type: "bi.absolute",
             element: this,
             items: [{
-                el: watermark,
+                el: this.watermark,
                 top: 0,
                 left: 5
             }]
@@ -81,16 +89,32 @@ BI.CodeEditor = BI.inherit(BI.Single, {
         this.editor.setOption("readOnly", b === true ? false : "nocursor")
     },
 
-    insertParam: function(param){
+    _checkWaterMark: function () {
+        var o = this.options;
+        if (BI.isEmptyString(this.editor.getValue()) && BI.isKey(o.watermark)) {
+            this.watermark && this.watermark.visible();
+        } else {
+            this.watermark && this.watermark.invisible();
+        }
+    },
+
+    insertParam: function (param) {
+        var value = param;
+        param = this.options.paramFormatter(param);
         var from = this.editor.getCursor();
         this.editor.replaceSelection(param);
         var to = this.editor.getCursor();
-        this.editor.markText(from, to, {className: 'param', atomic: true});
+        var options = {className: 'param', atomic: true};
+        if (BI.isNotNull(param.match(/^<!.*!>$/))) {
+            options.className = 'error-param';
+        }
+        options.value = value;
+        this.editor.markText(from, to, options);
         this.editor.replaceSelection(" ");
         this.editor.focus();
     },
 
-    insertString: function(str){
+    insertString: function (str) {
         this.editor.replaceSelection(str);
         this.editor.focus();
     },
@@ -102,9 +126,13 @@ BI.CodeEditor = BI.inherit(BI.Single, {
             _.forEach(line.markedSpans, function (i, ms) {
                 switch (i.marker.className) {
                     case "param":
+                    case "error-param":
                         var fieldNameLength = i.to - i.from;
-                        value = value.substr(0, i.from + num) + "$\{" + value.substr(i.from + num, fieldNameLength) + "\}" + value.substr(i.to + num, value.length);
+                        value = value.substr(0, i.from + num) + "$\{" + i.marker.value + "\}" + value.substr(i.to + num, value.length);
+                        //加上${}的偏移
                         num += 3;
+                        //加上实际值和显示值的长度差的偏移
+                        num += (i.marker.value.length - fieldNameLength);
                         break;
                 }
             });
@@ -130,10 +158,28 @@ BI.CodeEditor = BI.inherit(BI.Single, {
             } else {
                 self.insertString(item);
             }
-        })
+        });
+        this._checkWaterMark();
     },
 
-    refresh: function(){
+    focus: function () {
+        this.editor.focus();
+    },
+    
+    blur: function () {
+        this.editor.getInputField().blur();
+    },
+
+    setStyle: function (style) {
+        this.style = style;
+        this.element.css(style);
+    },
+
+    getStyle: function () {
+        return this.style;
+    },
+
+    refresh: function () {
         var self = this;
         BI.nextTick(function () {
             self.editor.refresh();

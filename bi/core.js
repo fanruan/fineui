@@ -3184,7 +3184,7 @@ if (!window.BI) {
             if (numReg) {
                 var num = numReg[0];
                 var orilen = num.length;
-                var newnum = BI.parseInt(num) + 1 + '';
+                var newnum = parseInt(num) + 1 + '';
                 //进位到整数部分
                 if (newnum.length > orilen) {
                     newnum = newnum.substr(1);
@@ -3730,6 +3730,12 @@ _.extend(BI, {
 
         /**
          * @static
+         * @property 取消挂载事件
+         */
+        UNMOUNT: '_UNMOUNT',
+
+        /**
+         * @static
          * @property 清除选择
          */
         CLEAR: '_CLEAR',
@@ -4162,7 +4168,7 @@ _.extend(BI, {
         Horizontal: "horizontal"
     },
     Selection: {
-        Default: -999,
+        Default: -2,
         None: -1,
         Single: 0,
         Multi: 1,
@@ -4360,6 +4366,8 @@ BI.Widget = BI.inherit(BI.OB, {
     update: function () {
     },
 
+    beforeDestroyed: null,
+
     destroyed: null,
 
     _init: function () {
@@ -4521,7 +4529,7 @@ BI.Widget = BI.inherit(BI.OB, {
         }
         //递归将所有子组件使能
         BI.each(this._children, function (i, child) {
-            child._setEnable && child._setEnable(enable);
+            !child._manualSetEnable && child._setEnable && child._setEnable(enable);
         });
     },
 
@@ -4533,7 +4541,7 @@ BI.Widget = BI.inherit(BI.OB, {
         }
         //递归将所有子组件使有效
         BI.each(this._children, function (i, child) {
-            child._setValid && child._setValid(valid);
+            !child._manualSetValid && child._setValid && child._setValid(valid);
         });
     },
 
@@ -4546,6 +4554,7 @@ BI.Widget = BI.inherit(BI.OB, {
     },
 
     setEnable: function (enable) {
+        this._manualSetEnable = true;
         this._setEnable(enable);
         if (enable === true) {
             this.element.removeClass("base-disabled disabled");
@@ -4567,13 +4576,21 @@ BI.Widget = BI.inherit(BI.OB, {
     },
 
     setValid: function (valid) {
-        this.options.invalid = !valid;
+        this._manualSetValid = true;
         this._setValid(valid);
         if (valid === true) {
             this.element.removeClass("base-invalid invalid");
         } else if (valid === false) {
             this.element.addClass("base-invalid invalid");
         }
+    },
+
+    doBehavior: function () {
+        var args = arguments;
+        //递归将所有子组件使有效
+        BI.each(this._children, function (i, child) {
+            child.doBehavior && child.doBehavior.apply(child, args);
+        });
     },
 
     getWidth: function () {
@@ -4710,18 +4727,20 @@ BI.Widget = BI.inherit(BI.OB, {
     },
 
     __d: function () {
+        this.beforeDestroyed && this.beforeDestroyed();
         BI.each(this._children, function (i, widget) {
             widget._unMount && widget._unMount();
         });
         this._children = {};
         this._parent = null;
         this._isMounted = false;
+        this.destroyed && this.destroyed();
     },
 
     _unMount: function () {
         this.__d();
+        this.fireEvent(BI.Events.UNMOUNT);
         this.purgeListeners();
-        this.destroyed && this.destroyed();
     },
 
     isolate: function () {
@@ -4741,14 +4760,12 @@ BI.Widget = BI.inherit(BI.OB, {
 
     _destroy: function () {
         this.__d();
-        this.destroyed && this.destroyed();
         this.element.destroy();
         this.purgeListeners();
     },
 
     destroy: function () {
         this.__d();
-        this.destroyed && this.destroyed();
         this.element.destroy();
         this.fireEvent(BI.Events.DESTROY);
         this.purgeListeners();
@@ -4958,6 +4975,10 @@ BI.Widget = BI.inherit(BI.OB, {
             var copy = BI.UUID(), newKeys = BI.clone(keys);
             keys.length > 1 ? newKeys.unshift(BI.deepClone(p[keys[keys.length - 1]])) : newKeys.unshift(BI.deepClone(g));
             var backup = self.similar.apply(self, newKeys);
+            if (BI.isKey(backup.id)) {
+                copy = backup.id;
+                delete backup.id;
+            }
             keys.length > 1 ? (p[copy] = backup, self[sset](keys[0], g, {silent: true})) : self[sset](copy, backup, {silent: true});
             keys.unshift(copy);
             !BI.has(self._tmp, keys[0]) && self.parent && self.parent._change(self);
@@ -5243,6 +5264,8 @@ BI.View = BI.inherit(BI.V, {
     beforeCreate: null,
 
     created: null,
+
+    beforeDestroyed: null,
 
     destroyed: null,
 
@@ -5733,18 +5756,22 @@ BI.View = BI.inherit(BI.V, {
     },
 
     _unMount: function () {
+        this.beforeDestroyed && this.beforeDestroyed();
         BI.each(this._cardLayouts, function (name, card) {
             card && card._unMount();
         });
         delete this._cardLayouts;
         delete this._cards;
         this.destroyed && this.destroyed();
+        this.trigger(BI.Events.UNMOUNT);
         this.off();
     },
 
     _destroy: function () {
+        var self = this;
         BI.each(this._cardLayouts, function (name, card) {
             card && card._unMount();
+            BI.Layers.remove(name + self.cid);
         });
         delete this._cardLayouts;
         delete this._cards;
@@ -8081,10 +8108,10 @@ BI.ScalingCellSizeAndPositionManager.prototype = {
         _window = this
     }
 
-    var attachEvent = typeof document !== 'undefined' && document.attachEvent;
+    var addEventListener = typeof document !== 'undefined' && document.addEventListener;
     var stylesCreated = false;
 
-    if (!attachEvent) {
+    if (addEventListener) {
         var requestFrame = (function () {
             var raf = _window.requestAnimationFrame || _window.mozRequestAnimationFrame || _window.webkitRequestAnimationFrame ||
                 function (fn) {
@@ -8191,8 +8218,7 @@ BI.ScalingCellSizeAndPositionManager.prototype = {
     }
 
     var addResizeListener = function (element, fn) {
-        if (attachEvent) element.attachEvent('onresize', fn);
-        else {
+        if (addEventListener){
             if (!element.__resizeTriggers__) {
                 if (getComputedStyle(element).position === 'static') element.style.position = 'relative';
                 createStyles();
@@ -8212,17 +8238,21 @@ BI.ScalingCellSizeAndPositionManager.prototype = {
                 });
             }
             element.__resizeListeners__.push(fn);
+
+        } else {
+            element.attachEvent('onresize', fn);
         }
     };
 
     var removeResizeListener = function (element, fn) {
-        if (attachEvent) element.detachEvent('onresize', fn);
-        else {
+        if (addEventListener) {
             element.__resizeListeners__.splice(element.__resizeListeners__.indexOf(fn), 1);
             if (!element.__resizeListeners__.length) {
                 element.removeEventListener('scroll', scrollListener, true);
                 element.__resizeTriggers__ = !element.removeChild(element.__resizeTriggers__);
             }
+        } else {
+            element.detachEvent('onresize', fn);
         }
     };
 
@@ -10972,26 +11002,34 @@ BI.Behavior = BI.inherit(BI.OB, {
  * @extends BI.Behavior
  */
 BI.HighlightBehavior = BI.inherit(BI.Behavior, {
-    _defaultConfig: function() {
-        return BI.extend(BI.HighlightBehavior.superclass._defaultConfig.apply(this, arguments), {
-
-        });
+    _defaultConfig: function () {
+        return BI.extend(BI.HighlightBehavior.superclass._defaultConfig.apply(this, arguments), {});
     },
 
-    _init : function() {
+    _init: function () {
         BI.HighlightBehavior.superclass._init.apply(this, arguments);
 
     },
 
-    doBehavior: function(items){
+    doBehavior: function (items) {
         var args = Array.prototype.slice.call(arguments, 1),
             o = this.options;
-        BI.each(items, function(i, item){
-            if(item instanceof BI.Single) {
-                if (o.rule(item.getValue(), item)) {
-                    item.doHighLight.apply(item, args);
+        BI.each(items, function (i, item) {
+            if (item instanceof BI.Single) {
+                var rule = o.rule(item.getValue(), item);
+
+                function doBe(run) {
+                    if (run === true) {
+                        item.doHighLight.apply(item, args);
+                    } else {
+                        item.unHighLight.apply(item, args);
+                    }
+                }
+
+                if (BI.isFunction(rule)) {
+                    rule(doBe);
                 } else {
-                    item.unHighLight.apply(item, args);
+                    doBe(rule);
                 }
             } else {
                 item.doBehavior.apply(item, args);
@@ -12220,15 +12258,20 @@ BI.FloatCenterAdaptLayout = BI.inherit(BI.Layout, {
     },
 
     mounted: function () {
+        var self = this;
         var width = this.left.element.outerWidth(),
             height = this.left.element.outerHeight();
         this.left.element.width(width).height(height).css("float", "none");
+        BI.remove(this._children, function (i, wi) {
+            if (wi === self.container) {
+                delete self._children[i];
+            }
+        });
         BI.createWidget({
             type: "bi.center_adapt",
             element: this,
             items: [this.left]
         });
-        this.removeWidget(this.container);
     },
 
     stroke: function (items) {
@@ -12283,15 +12326,20 @@ BI.FloatHorizontalLayout = BI.inherit(BI.Layout, {
     },
 
     mounted: function () {
+        var self = this;
         var width = this.left.element.width(),
             height = this.left.element.height();
         this.left.element.width(width).height(height).css("float", "none");
+        BI.remove(this._children, function (i, wi) {
+            if (wi === self.container) {
+                delete self._children[i];
+            }
+        });
         BI.createWidget({
             type: "bi.horizontal_auto",
             element: this,
             items: [this.left]
         });
-        this.removeWidget(this.container);
     },
 
     _addElement: function (i, item) {
@@ -15942,7 +15990,10 @@ BI.FloatBoxRouter = BI.inherit(BI.WRouter, {
             var view = this.createView(url, data, viewData, context);
             isValid && context.model.addChild(modelData, view.model);
             view.listenTo(view.model, "destroy", function () {
-                self.remove(url);
+                self.remove(url, context);
+            });
+            context.on(BI.Events.UNMOUNT, function () {
+                self.remove(url, context);
             });
             this.store[url].populate(view);
             this.views[url] = view;
@@ -15951,19 +16002,7 @@ BI.FloatBoxRouter = BI.inherit(BI.WRouter, {
                 BI.nextTick(function () {
                     self.close(url);
 //                    view.end();
-                    var t = void 0, isNew = false, keys;
-                    if (isValid) {
-                        keys = modelData.split('.');
-                        BI.each(keys, function (i, k) {
-                            if (i === 0) {
-                                t = context.model.get(k) || (isNew = true);
-                            } else {
-                                t = t[k] || (isNew = true);
-                            }
-                        })
-                    }
-                    isNew && context.model.removeChild(modelData);
-                    !isNew && (context.listenEnd.apply(context, isValid ? keys : [modelData]) !== false) && context.populate();
+                    (context.listenEnd.apply(context, isValid ? modelData.split('.') : [modelData]) !== false) && context.populate();
                 }, 30)
             }).on("change:" + view.cid, _.bind(context.notifyParent, context))
         }
@@ -15981,7 +16020,7 @@ BI.FloatBoxRouter = BI.inherit(BI.WRouter, {
 
     remove: function (url, context) {
         url = context.rootURL + "/" + url;
-        if(this.controller){
+        if (this.controller) {
             this.controller.remove(url);
             delete this.store[url];
             this.views[url] && this.views[url].model.destroy();
@@ -16114,7 +16153,7 @@ BI.extend(jQuery.fn, {
      * @private
      */
     __textKeywordMarked__: function (text, keyword, py) {
-        if (!BI.isKey(keyword)) {
+        if (!BI.isKey(keyword) || (text + "").length > 100) {
             return this.text((text + "").replaceAll(" ", "　"));
         }
         keyword = keyword + "";
@@ -16788,7 +16827,7 @@ BI.extend(BI.DOM, {
     },
 
     isColor: function (color) {
-        return this.isRGBColor(color) || this.isHexColor(color);
+        return color && (this.isRGBColor(color) || this.isHexColor(color));
     },
 
     isRGBColor: function (color) {
@@ -16806,12 +16845,12 @@ BI.extend(BI.DOM, {
     },
 
     isDarkColor: function (hex) {
-        if (!hex) {
+        if (!hex || !this.isHexColor(hex)) {
             return false;
         }
         var rgb = this.rgb2json(this.hex2rgb(hex));
         var grayLevel = Math.round(rgb.r * 0.299 + rgb.g * 0.587 + rgb.b * 0.114);
-        if (grayLevel < 140) {
+        if (grayLevel < 192/**网上给的是140**/) {
             return true;
         }
         return false;
@@ -16819,7 +16858,7 @@ BI.extend(BI.DOM, {
 
     //获取对比颜色
     getContrastColor: function (color) {
-        if (!color) {
+        if (!color || !this.isColor(color)) {
             return "";
         }
         if (this.isDarkColor(color)) {
@@ -16844,6 +16883,9 @@ BI.extend(BI.DOM, {
 
     rgb2json: function (rgbColour) {
         if (!rgbColour) {
+            return {};
+        }
+        if (!this.isRGBColor(rgbColour)) {
             return {};
         }
         var rgbValues = rgbColour.match(/\d+(\.\d+)?/g);
@@ -16890,6 +16932,9 @@ BI.extend(BI.DOM, {
     hex2rgb: function (color) {
         if (!color) {
             return "";
+        }
+        if (!this.isHexColor(color)) {
+            return color;
         }
         var tempValue = "rgb(", colorArray;
 
@@ -17499,4 +17544,8 @@ $(function () {
             return ob;
         }
     });
+    //IE8下滚动条用原生的
+    if (BI.isIE9Below()) {
+        BI.GridTableScrollbar.SIZE = 18;
+    }
 });

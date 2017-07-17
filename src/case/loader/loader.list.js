@@ -148,10 +148,6 @@ BI.ListLoader = BI.inherit(BI.Widget, {
         });
     },
 
-    doBehavior: function () {
-        this.button_group.doBehavior.apply(this.button_group, arguments);
-    },
-
     setNotSelectedValue: function () {
         this.button_group.setNotSelectedValue.apply(this.button_group, arguments);
     },

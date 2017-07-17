@@ -40,7 +40,7 @@ BI.ColorPickerEditor = BI.inherit(BI.Widget, {
             errorText: BI.i18nText("BI-Color_Picker_Error_Text"),
             allowBlank: true,
             value: 255,
-            width: 35,
+            width: 32,
             height: 20
         });
         BI.each(Ws, function (i, w) {
@@ -56,12 +56,30 @@ BI.ColorPickerEditor = BI.inherit(BI.Widget, {
         this.B = Ws[2];
 
         this.none = BI.createWidget({
-            type: "bi.checkbox"
+            type: "bi.checkbox",
+            title: BI.i18nText("BI-Basic_Auto")
         });
         this.none.on(BI.Checkbox.EVENT_CHANGE, function () {
             if (this.isSelected()) {
                 self.lastColor = self.getValue();
                 self.setValue("");
+            } else {
+                self.setValue(self.lastColor || "#000000");
+            }
+            if (self.R.isValid() && self.G.isValid() && self.B.isValid()) {
+                self.colorShow.element.css("background-color", self.getValue());
+                self.fireEvent(BI.ColorPickerEditor.EVENT_CHANGE);
+            }
+        });
+
+        this.transparent = BI.createWidget({
+            type: "bi.checkbox",
+            title: BI.i18nText("BI-Transparent_Color")
+        });
+        this.transparent.on(BI.Checkbox.EVENT_CHANGE, function () {
+            if (this.isSelected()) {
+                self.lastColor = self.getValue();
+                self.setValue("transparent");
             } else {
                 self.setValue(self.lastColor || "#000000");
             }
@@ -80,21 +98,21 @@ BI.ColorPickerEditor = BI.inherit(BI.Widget, {
             }, {
                 el: RGB[0],
                 lgap: 10,
-                width: 20
+                width: 16
             }, {
                 el: this.R,
                 width: 32
             }, {
                 el: RGB[1],
                 lgap: 10,
-                width: 20
+                width: 16
             }, {
                 el: this.G,
                 width: 32
             }, {
                 el: RGB[2],
                 lgap: 10,
-                width: 20
+                width: 16
             }, {
                 el: this.B,
                 width: 32
@@ -103,18 +121,33 @@ BI.ColorPickerEditor = BI.inherit(BI.Widget, {
                     type: "bi.center_adapt",
                     items: [this.none]
                 },
-                width: 20
+                width: 18
+            }, {
+                el: {
+                    type: "bi.center_adapt",
+                    items: [this.transparent]
+                },
+                width: 18
             }]
         })
     },
 
     setValue: function (color) {
+        if (color === "transparent") {
+            this.transparent.setSelected(true);
+            this.none.setSelected(false);
+            this.R.setValue("");
+            this.G.setValue("");
+            this.B.setValue("");
+            return;
+        }
         if (!color) {
             color = "";
             this.none.setSelected(true);
         } else {
             this.none.setSelected(false);
         }
+        this.transparent.setSelected(false);
         this.colorShow.element.css("background-color", color);
         var json = BI.DOM.rgb2json(BI.DOM.hex2rgb(color));
         this.R.setValue(BI.isNull(json.r) ? "" : json.r);
@@ -123,6 +156,9 @@ BI.ColorPickerEditor = BI.inherit(BI.Widget, {
     },
 
     getValue: function () {
+        if (this.transparent.isSelected()) {
+            return "transparent";
+        }
         return BI.DOM.rgb2hex(BI.DOM.json2rgb({
             r: this.R.getValue(),
             g: this.G.getValue(),

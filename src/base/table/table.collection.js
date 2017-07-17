@@ -173,11 +173,26 @@ BI.CollectionTable = BI.inherit(BI.Widget, {
         return this.options.isNeedFreeze ? this.options.freezeCols.length : 0;
     },
 
+    _getFreezeHeaderHeight: function () {
+        var o = this.options;
+        if (o.header.length * o.headerRowSize >= this._height) {
+            return 0;
+        }
+        return o.header.length * o.headerRowSize;
+    },
+
+    _getActualItems: function () {
+        var o = this.options;
+        if (o.header.length * o.headerRowSize >= this._height) {
+            return o.header.concat(o.items);
+        }
+        return o.items;
+    },
+
     _populateScrollbar: function () {
         var o = this.options;
         var regionSize = this.getRegionSize(), totalLeftColumnSize = 0, totalRightColumnSize = 0, totalColumnSize = 0,
-            summaryColumnSizeArray = [], totalRowSize = o.items.length * o.rowSize;
-        var freezeColLength = this._getFreezeColLength();
+            summaryColumnSizeArray = [];
         BI.each(o.columnSize, function (i, size) {
             if (o.isNeedFreeze === true && o.freezeCols.contains(i)) {
                 totalLeftColumnSize += size;
@@ -191,8 +206,8 @@ BI.CollectionTable = BI.inherit(BI.Widget, {
                 summaryColumnSizeArray[i] = summaryColumnSizeArray[i - 1] + size;
             }
         });
-        this.topScrollbar.setContentSize(o.items.length * o.rowSize);
-        this.topScrollbar.setSize(this._height - o.header.length * o.headerRowSize);
+        this.topScrollbar.setContentSize(this._getActualItems().length * o.rowSize);
+        this.topScrollbar.setSize(this._height - this._getFreezeHeaderHeight());
         this.topScrollbar.setPosition(this.bottomRightCollection.getScrollTop());
         this.topScrollbar.populate();
 
@@ -207,7 +222,7 @@ BI.CollectionTable = BI.inherit(BI.Widget, {
         this.rightScrollbar.populate();
 
         var items = this.scrollBarLayout.attr("items");
-        items[0].top = o.header.length * o.headerRowSize;
+        items[0].top = this._getFreezeHeaderHeight();
         items[1].top = this._height;
         items[2].top = this._height;
         items[2].left = regionSize;
@@ -218,8 +233,7 @@ BI.CollectionTable = BI.inherit(BI.Widget, {
     _populateTable: function () {
         var self = this, o = this.options;
         var regionSize = this.getRegionSize(), totalLeftColumnSize = 0, totalRightColumnSize = 0, totalColumnSize = 0,
-            summaryColumnSizeArray = [], totalRowSize = o.items.length * o.rowSize;
-        var freezeColLength = this._getFreezeColLength();
+            summaryColumnSizeArray = [];
         BI.each(o.columnSize, function (i, size) {
             if (o.isNeedFreeze === true && o.freezeCols.contains(i)) {
                 totalLeftColumnSize += size;
@@ -235,13 +249,13 @@ BI.CollectionTable = BI.inherit(BI.Widget, {
         });
 
         var otlw = regionSize;
-        var otlh = o.header.length * o.headerRowSize;
+        var otlh = this._getFreezeHeaderHeight();
         var otrw = this._width - regionSize;
-        var otrh = o.header.length * o.headerRowSize;
+        var otrh = this._getFreezeHeaderHeight();
         var oblw = regionSize;
-        var oblh = this._height - o.header.length * o.headerRowSize;
+        var oblh = this._height - otlh;
         var obrw = this._width - regionSize;
-        var obrh = this._height - o.header.length * o.headerRowSize;
+        var obrh = this._height - otrh;
 
         var tlw = otlw + this._scrollBarSize;
         var tlh = otlh + this._scrollBarSize;
@@ -285,9 +299,9 @@ BI.CollectionTable = BI.inherit(BI.Widget, {
 
         var items = this.contextLayout.attr("items");
         items[1].left = regionSize;
-        items[2].top = o.header.length * o.headerRowSize;
+        items[2].top = this._getFreezeHeaderHeight();
         items[3].left = regionSize;
-        items[3].top = o.header.length * o.headerRowSize;
+        items[3].top = this._getFreezeHeaderHeight();
         this.contextLayout.attr("items", items);
         this.contextLayout.resize();
 
@@ -303,8 +317,8 @@ BI.CollectionTable = BI.inherit(BI.Widget, {
         };
         run(this.topLeftItems, o.header, leftHeader);
         run(this.topRightItems, o.header, rightHeader);
-        run(this.bottomLeftItems, o.items, leftItems);
-        run(this.bottomRightItems, o.items, rightItems);
+        run(this.bottomLeftItems, this._getActualItems(), leftItems);
+        run(this.bottomRightItems, this._getActualItems(), rightItems);
 
         this.topLeftCollection._populate(leftHeader);
         this.topRightCollection._populate(rightHeader);
@@ -315,13 +329,23 @@ BI.CollectionTable = BI.inherit(BI.Widget, {
     _digest: function () {
         var o = this.options;
         var freezeColLength = this._getFreezeColLength();
-        this.topLeftItems = this._serialize(o.header, 0, freezeColLength, o.headerRowSize, o.columnSize, o.mergeCols);
-        this.topRightItems = this._serialize(o.header, freezeColLength, o.columnSize.length, o.headerRowSize, o.columnSize, true);
-        this.bottomLeftItems = this._serialize(o.items, 0, freezeColLength, o.rowSize, o.columnSize, o.mergeCols);
-        this.bottomRightItems = this._serialize(o.items, freezeColLength, o.columnSize.length, o.rowSize, o.columnSize, o.mergeCols);
+        //如果表头位置不够，取消表头冻结
+        if (this._getFreezeHeaderHeight() <= 0) {
+            this.topLeftItems = [];
+            this.topRightItems = [];
+            this.bottomLeftItems = this._serialize(this._getActualItems(), 0, freezeColLength, o.rowSize, o.columnSize, o.mergeCols, BI.range(o.header.length));
+            this.bottomRightItems = this._serialize(this._getActualItems(), freezeColLength, o.columnSize.length, o.rowSize, o.columnSize, o.mergeCols, BI.range(o.header.length));
+        } else {
+            this.topLeftItems = this._serialize(o.header, 0, freezeColLength, o.headerRowSize, o.columnSize, o.mergeCols);
+            this.topRightItems = this._serialize(o.header, freezeColLength, o.columnSize.length, o.headerRowSize, o.columnSize, true);
+            this.bottomLeftItems = this._serialize(o.items, 0, freezeColLength, o.rowSize, o.columnSize, o.mergeCols);
+            this.bottomRightItems = this._serialize(o.items, freezeColLength, o.columnSize.length, o.rowSize, o.columnSize, o.mergeCols);
+        }
     },
 
-    _serialize: function (items, startCol, endCol, rowHeight, columnSize, mergeCols) {
+    _serialize: function (items, startCol, endCol, rowHeight, columnSize, mergeCols, mergeRows) {
+        mergeCols = mergeCols || [];
+        mergeRows = mergeRows || [];
         var self = this, o = this.options;
         var result = [], cache = {}, preCol = {}, preRow = {}, map = {};
         var summaryColumnSize = [];
@@ -371,7 +395,7 @@ BI.CollectionTable = BI.inherit(BI.Widget, {
                 }
                 cache[i][j] = cols[j];
                 map[i][j] = {};
-                if (mergeCols === true || mergeCols.indexOf(j) > -1) {
+                if (mergeCols === true || mergeCols.indexOf(j) > -1 || mergeRows === true || mergeRows.indexOf(i) > -1) {
                     if (i === 0 && j === startCol) {
                         createOneEl(0, startCol);
                     } else if (j === startCol && i > 0) {

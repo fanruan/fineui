@@ -216,7 +216,7 @@ BI.TreeView = BI.inherit(BI.Pane, {
 
     _getNodeValue: function (node) {
         //去除标红
-        return node.value == null ? node.text.replace(/<[^>]+>/g, "") : node.value;
+        return node.value == null ? node.text.replace(/<[^>]+>/g, "").replaceAll("　", " ") : node.value;
     },
 
     //获取半选框值
@@ -241,7 +241,7 @@ BI.TreeView = BI.inherit(BI.Pane, {
             this._buildTree(map, path);
             return;
         }
-        var storeValues = BI.deepClone(this.selectedValues);
+        var storeValues = BI.deepClone(this.options.paras.selectedValues);
         var treeNode = this._getTree(storeValues, path);
         this._addTreeNode(map, parent, this._getNodeValue(node), treeNode);
     },
@@ -436,6 +436,16 @@ BI.TreeView = BI.inherit(BI.Pane, {
     },
 
     checkAll: function (checked) {
+        function setNode(children) {
+            BI.each(children, function (i, child) {
+                child.halfCheck = false;
+                setNode(child.children);
+            });
+        }
+        BI.each(this.nodes.getNodes(), function (i, node) {
+            node.halfCheck = false;
+            setNode(node.children);
+        });
         this.nodes && this.nodes.checkAllNodes(checked);
     },
 
@@ -451,8 +461,7 @@ BI.TreeView = BI.inherit(BI.Pane, {
     },
 
     setSelectedValue: function (value) {
-        this.options.paras.selectedValues = value || {};
-        this.selectedValues = BI.deepClone(value) || {};
+        this.options.paras.selectedValues = BI.deepClone(value || {});
     },
 
     updateValue: function (values, param) {

@@ -8,15 +8,6 @@
   cursor: text;
   //  .border-radius(4px);
   .size(100%, 100%);
-  color: @color-bi-text-black;
-  background-color: @color-bi-background-default;
-}
-
-.bi-theme-dark {
-  .CodeMirror {
-    color: @color-bi-text;
-    background-color: @color-bi-background-default-theme-dark;
-  }
 }
 
 /* PADDING */
@@ -418,13 +409,21 @@ div.CodeMirror span.CodeMirror-nonmatchingbracket {
   margin: 0;
   white-space: pre;
   word-wrap: normal;
-  line-height: 2em;
   color: inherit;
   z-index: 2;
   position: relative;
   overflow: visible;
   -webkit-tap-highlight-color: transparent;
 }
+
+.codemirror-high-line-height {
+  line-height: 2;
+}
+
+.codemirror-low-line-height {
+  line-height: 1.4;
+}
+
 
 .CodeMirror-wrap pre {
   word-wrap: break-word;

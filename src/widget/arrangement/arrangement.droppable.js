@@ -11,12 +11,6 @@ BI.ArrangementDroppable = BI.inherit(BI.Widget, {
         return BI.extend(BI.ArrangementDroppable.superclass._defaultConfig.apply(this, arguments), {
             baseCls: "bi-arrangement-droppable bi-resizer"
         });
-    },
-
-    _init: function () {
-        BI.ArrangementDroppable.superclass._init.apply(this, arguments);
-        var self = this, o = this.options;
-        
     }
 });
 BI.shortcut('bi.arrangement_droppable', BI.ArrangementDroppable);

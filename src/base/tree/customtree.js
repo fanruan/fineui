@@ -113,10 +113,6 @@ BI.CustomTree = BI.inherit(BI.Widget, {
         this.tree.populate.apply(this.tree, args);
     },
 
-    doBehavior: function () {
-        this.tree.doBehavior.apply(this.tree, arguments);
-    },
-
     setValue: function (v) {
         this.tree && this.tree.setValue(v);
     },

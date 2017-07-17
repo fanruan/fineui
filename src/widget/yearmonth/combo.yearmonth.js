@@ -8,6 +8,8 @@ BI.YearMonthCombo = BI.inherit(BI.Widget, {
     _defaultConfig: function () {
         return BI.extend(BI.YearMonthCombo.superclass._defaultConfig.apply(this, arguments), {
             baseCls: "bi-year-month-combo",
+            yearBehaviors: {},
+            monthBehaviors: {},
             height: 25
         });
     },
@@ -16,19 +18,27 @@ BI.YearMonthCombo = BI.inherit(BI.Widget, {
         var self = this, o = this.options;
 
         this.year = BI.createWidget({
-            type: "bi.year_combo"
+            type: "bi.year_combo",
+            behaviors: o.yearBehaviors
         });
 
         this.month = BI.createWidget({
-            type: "bi.month_combo"
+            type: "bi.month_combo",
+            behaviors: o.monthBehaviors
         });
 
-        this.year.on(BI.YearCombo.EVENT_CONFIRM, function(){
+        this.year.on(BI.YearCombo.EVENT_CONFIRM, function () {
             self.fireEvent(BI.YearMonthCombo.EVENT_CONFIRM);
         });
+        this.year.on(BI.YearCombo.EVENT_BEFORE_POPUPVIEW, function () {
+            self.fireEvent(BI.YearMonthCombo.EVENT_BEFORE_POPUPVIEW);
+        });
 
-        this.month.on(BI.MonthCombo.EVENT_CONFIRM, function(){
+        this.month.on(BI.MonthCombo.EVENT_CONFIRM, function () {
             self.fireEvent(BI.YearMonthCombo.EVENT_CONFIRM);
+        });
+        this.month.on(BI.MonthCombo.EVENT_BEFORE_POPUPVIEW, function () {
+            self.fireEvent(BI.YearMonthCombo.EVENT_BEFORE_POPUPVIEW);
         });
 
         BI.createWidget({
@@ -54,4 +64,5 @@ BI.YearMonthCombo = BI.inherit(BI.Widget, {
     }
 });
 BI.YearMonthCombo.EVENT_CONFIRM = "EVENT_CONFIRM";
+BI.YearMonthCombo.EVENT_BEFORE_POPUPVIEW = "EVENT_BEFORE_POPUPVIEW";
 BI.shortcut('bi.year_month_combo', BI.YearMonthCombo);

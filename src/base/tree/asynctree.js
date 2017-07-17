@@ -105,7 +105,7 @@ BI.AsyncTree = BI.inherit(BI.TreeView, {
         if (treeNode.checked === true) {
         } else {
             var tNode = treeNode;
-            var pNode = this._getTree(this.selectedValues, parentValues);
+            var pNode = this._getTree(this.options.paras.selectedValues, parentValues);
             if (BI.isNotNull(pNode[name])) {
                 delete pNode[name];
             }
@@ -113,7 +113,7 @@ BI.AsyncTree = BI.inherit(BI.TreeView, {
                 parentValues = parentValues.slice(0, parentValues.length - 1);
                 tNode = tNode.getParentNode();
                 if (tNode != null) {
-                    pNode = this._getTree(this.selectedValues, parentValues);
+                    pNode = this._getTree(this.options.paras.selectedValues, parentValues);
                     name = this._getNodeValue(tNode);
                     delete pNode[name];
                 }
@@ -127,10 +127,10 @@ BI.AsyncTree = BI.inherit(BI.TreeView, {
         var self = this, o = this.options;
         var parentValues = treeNode.parentValues || self._getParentValues(treeNode);
         var op = BI.extend({}, o.paras, {
-            "id": treeNode.id,
-            "times": 1,
-            "parentValues": parentValues.concat(this._getNodeValue(treeNode)),
-            "checkState": treeNode.getCheckStatus()
+            id: treeNode.id,
+            times: 1,
+            parentValues: parentValues.concat(this._getNodeValue(treeNode)),
+            checkState: treeNode.getCheckStatus()
         });
         var complete = function (d) {
             var nodes = d.items || [];
@@ -178,7 +178,7 @@ BI.AsyncTree = BI.inherit(BI.TreeView, {
     },
 
     hasChecked: function () {
-        return !BI.isEmpty(this.selectedValues) || BI.AsyncTree.superclass.hasChecked.apply(this, arguments);
+        return !BI.isEmpty(this.options.paras.selectedValues) || BI.AsyncTree.superclass.hasChecked.apply(this, arguments);
     },
 
     getValue: function () {
@@ -187,20 +187,18 @@ BI.AsyncTree = BI.inherit(BI.TreeView, {
         }
         var checkedValues = this._getSelectedValues();
         if (BI.isEmpty(checkedValues)) {
-            return BI.deepClone(this.selectedValues);
+            return BI.deepClone(this.options.paras.selectedValues);
         }
-        if (BI.isEmpty(this.selectedValues)) {
+        if (BI.isEmpty(this.options.paras.selectedValues)) {
             return checkedValues;
         }
-        return this._join(checkedValues, this.selectedValues);
+        return this._join(checkedValues, this.options.paras.selectedValues);
     },
 
     //生成树方法
     stroke: function (config) {
         delete this.options.keyword;
         BI.extend(this.options.paras, config);
-        //取消选中时使用
-        this.selectedValues = BI.deepClone(this.options.paras.selectedValues) || {};
         var setting = this._configSetting();
         this._initTree(setting);
     }

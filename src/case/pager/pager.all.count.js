@@ -26,9 +26,10 @@ BI.AllCountPager = BI.inherit(BI.Widget, {
             vgap: 0,
             value: o.curr,
             errorText: BI.i18nText("BI-Please_Input_Positive_Integer"),
-            width: 30,
+            width: 35,
             height: 20
         });
+
         this.pager = BI.createWidget({
             type: "bi.pager",
             width: 36,
@@ -114,7 +115,7 @@ BI.AllCountPager = BI.inherit(BI.Widget, {
         BI.createWidget({
             type: "bi.center_adapt",
             element: this,
-            columnSize: ["", 30, 40, 36],
+            columnSize: ["", 35, 40, 36],
             items: [count, this.editor, this.allPages, this.pager]
         })
     },

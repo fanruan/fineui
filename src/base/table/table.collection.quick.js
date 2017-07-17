@@ -117,8 +117,7 @@ BI.QuickCollectionTable = BI.inherit(BI.CollectionTable, {
     _populateTable: function () {
         var self = this, o = this.options;
         var regionSize = this.getRegionSize(), totalLeftColumnSize = 0, totalRightColumnSize = 0, totalColumnSize = 0,
-            summaryColumnSizeArray = [], totalRowSize = o.items.length * o.rowSize;
-        var freezeColLength = this._getFreezeColLength();
+            summaryColumnSizeArray = []
         BI.each(o.columnSize, function (i, size) {
             if (o.isNeedFreeze === true && o.freezeCols.contains(i)) {
                 totalLeftColumnSize += size;
@@ -134,13 +133,13 @@ BI.QuickCollectionTable = BI.inherit(BI.CollectionTable, {
         });
 
         var otlw = regionSize;
-        var otlh = o.header.length * o.headerRowSize;
+        var otlh = this._getFreezeHeaderHeight();
         var otrw = this._width - regionSize;
-        var otrh = o.header.length * o.headerRowSize;
+        var otrh = this._getFreezeHeaderHeight();
         var oblw = regionSize;
-        var oblh = this._height - o.header.length * o.headerRowSize;
+        var oblh = this._height - otlh;
         var obrw = this._width - regionSize;
-        var obrh = this._height - o.header.length * o.headerRowSize;
+        var obrh = this._height - otrh;
 
         this.topLeft.setWidth(otlw);
         this.topLeft.setHeight(otlh);
@@ -162,9 +161,9 @@ BI.QuickCollectionTable = BI.inherit(BI.CollectionTable, {
 
         var items = this.contextLayout.attr("items");
         items[1].left = regionSize;
-        items[2].top = o.header.length * o.headerRowSize;
+        items[2].top = this._getFreezeHeaderHeight();
         items[3].left = regionSize;
-        items[3].top = o.header.length * o.headerRowSize;
+        items[3].top = this._getFreezeHeaderHeight();
         this.contextLayout.attr("items", items);
         this.contextLayout.resize();
 
@@ -180,8 +179,8 @@ BI.QuickCollectionTable = BI.inherit(BI.CollectionTable, {
         };
         run(this.topLeftItems, o.header, leftHeader);
         run(this.topRightItems, o.header, rightHeader);
-        run(this.bottomLeftItems, o.items, leftItems);
-        run(this.bottomRightItems, o.items, rightItems);
+        run(this.bottomLeftItems, this._getActualItems(), leftItems);
+        run(this.bottomRightItems, this._getActualItems(), rightItems);
 
         this.topLeftCollection.populate(leftHeader);
         this.topRightCollection.populate(rightHeader);

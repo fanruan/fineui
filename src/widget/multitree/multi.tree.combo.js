@@ -105,6 +105,9 @@ BI.MultiTreeCombo = BI.inherit(BI.Single, {
                         self.trigger.getSearcher().adjustView();
                     });
                 }
+            },
+            hideChecker: function (e) {
+                return triggerBtn.element.find(e.target).length === 0;
             }
         });
 
@@ -185,18 +188,18 @@ BI.MultiTreeCombo = BI.inherit(BI.Single, {
             if (isSearching()) {
                 self.trigger.stopEditing();
                 self.fireEvent(BI.MultiTreeCombo.EVENT_CONFIRM);
-                return;
-            }
-            if (isPopupView()) {
-                self.trigger.stopEditing();
-                self.storeValue = {value: self.combo.getValue()};
-                if (clear === true) {
-                    self.storeValue = {value: {}};
-                    clear = false;
-                    change = false;
+            }else{
+                if (isPopupView()) {
+                    self.trigger.stopEditing();
+                    self.storeValue = {value: self.combo.getValue()};
+                    if (clear === true) {
+                        self.storeValue = {value: {}};
+                    }
+                    self.fireEvent(BI.MultiTreeCombo.EVENT_CONFIRM);
                 }
-                self.fireEvent(BI.MultiTreeCombo.EVENT_CONFIRM);
             }
+            clear = false;
+            change = false;
         });
 
         var triggerBtn = BI.createWidget({

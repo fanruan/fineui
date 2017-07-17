@@ -18,10 +18,10 @@
         _window = this
     }
 
-    var attachEvent = typeof document !== 'undefined' && document.attachEvent;
+    var addEventListener = typeof document !== 'undefined' && document.addEventListener;
     var stylesCreated = false;
 
-    if (!attachEvent) {
+    if (addEventListener) {
         var requestFrame = (function () {
             var raf = _window.requestAnimationFrame || _window.mozRequestAnimationFrame || _window.webkitRequestAnimationFrame ||
                 function (fn) {
@@ -128,8 +128,7 @@
     }
 
     var addResizeListener = function (element, fn) {
-        if (attachEvent) element.attachEvent('onresize', fn);
-        else {
+        if (addEventListener){
             if (!element.__resizeTriggers__) {
                 if (getComputedStyle(element).position === 'static') element.style.position = 'relative';
                 createStyles();
@@ -149,17 +148,21 @@
                 });
             }
             element.__resizeListeners__.push(fn);
+
+        } else {
+            element.attachEvent('onresize', fn);
         }
     };
 
     var removeResizeListener = function (element, fn) {
-        if (attachEvent) element.detachEvent('onresize', fn);
-        else {
+        if (addEventListener) {
             element.__resizeListeners__.splice(element.__resizeListeners__.indexOf(fn), 1);
             if (!element.__resizeListeners__.length) {
                 element.removeEventListener('scroll', scrollListener, true);
                 element.__resizeTriggers__ = !element.removeChild(element.__resizeTriggers__);
             }
+        } else {
+            element.detachEvent('onresize', fn);
         }
     };
 

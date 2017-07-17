@@ -127,10 +127,6 @@ BI.ListPane = BI.inherit(BI.Pane, {
         this.button_group.empty();
     },
 
-    doBehavior: function () {
-        this.button_group.doBehavior.apply(this.button_group, arguments);
-    },
-
     setNotSelectedValue: function () {
         this.button_group.setNotSelectedValue.apply(this.button_group, arguments);
     },

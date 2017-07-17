@@ -119,7 +119,8 @@ BI.MultiSelectSearchLoader = BI.inherit(BI.Widget, {
     },
 
     setValue: function (v) {
-        this.storeValue = v;
+        //暂存的值一定是新的值，不然v改掉后，storeValue也跟着改了
+        this.storeValue = BI.deepClone(v);
         this.button_group.setValue(v);
     },
 

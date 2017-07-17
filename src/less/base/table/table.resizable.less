@@ -1,10 +1,13 @@
 @import "../../bibase";
 
 .bi-resizable-table {
-  & .resizable-table-resizer{
+  & .resizable-table-resizer {
     cursor: ew-resize;
     z-index: 1;
     background-color: @color-bi-background-highlight;
+    &.suitable {
+      background-color: @color-bi-background-success;
+    }
   }
   & .resizable-table-region-resizer {
     cursor: ew-resize;

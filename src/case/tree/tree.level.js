@@ -108,10 +108,6 @@ BI.LevelTree = BI.inherit(BI.Widget, {
         this.tree.populate(items);
     },
 
-    doBehavior: function () {
-        this.tree.doBehavior.apply(this.tree, arguments);
-    },
-
     setValue: function (v) {
         this.tree.setValue(v);
     },

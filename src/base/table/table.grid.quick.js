@@ -116,7 +116,7 @@ BI.QuickGridTable = BI.inherit(BI.GridTable, {
 
     _populateTable: function () {
         var self = this, o = this.options;
-        var regionSize = this.getRegionSize(), totalLeftColumnSize = 0, totalRightColumnSize = 0, totalColumnSize = 0, summaryColumnSizeArray = [], totalRowSize = o.items.length * o.rowSize;
+        var regionSize = this.getRegionSize(), totalLeftColumnSize = 0, totalRightColumnSize = 0, totalColumnSize = 0, summaryColumnSizeArray = [];
         var freezeColLength = this._getFreezeColLength();
         BI.each(o.columnSize, function (i, size) {
             if (o.isNeedFreeze === true && o.freezeCols.contains(i)) {
@@ -133,13 +133,13 @@ BI.QuickGridTable = BI.inherit(BI.GridTable, {
         });
 
         var otlw = regionSize;
-        var otlh = o.header.length * o.headerRowSize;
+        var otlh = this._getFreezeHeaderHeight();
         var otrw = this._width - regionSize;
-        var otrh = o.header.length * o.headerRowSize;
+        var otrh = this._getFreezeHeaderHeight();
         var oblw = regionSize;
-        var oblh = this._height - o.header.length * o.headerRowSize;
+        var oblh = this._height - otlh;
         var obrw = this._width - regionSize;
-        var obrh = this._height - o.header.length * o.headerRowSize;
+        var obrh = this._height - otrh;
 
         this.topLeft.setWidth(otlw);
         this.topLeft.setHeight(otlh);
@@ -170,9 +170,9 @@ BI.QuickGridTable = BI.inherit(BI.GridTable, {
 
         var items = this.contextLayout.attr("items");
         items[1].left = regionSize;
-        items[2].top = o.header.length * o.headerRowSize;
+        items[2].top = this._getFreezeHeaderHeight();
         items[3].left = regionSize;
-        items[3].top = o.header.length * o.headerRowSize;
+        items[3].top = this._getFreezeHeaderHeight();
         this.contextLayout.attr("items", items);
         this.contextLayout.resize();
 
@@ -192,7 +192,7 @@ BI.QuickGridTable = BI.inherit(BI.GridTable, {
                 }
             });
         });
-        BI.each(o.items, function (i, cols) {
+        BI.each(this._getActualItems(), function (i, cols) {
             leftItems[i] = [];
             rightItems[i] = [];
             BI.each(cols, function (j, col) {

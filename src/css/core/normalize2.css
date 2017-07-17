@@ -1,48 +1,41 @@
-@import "../bibase";
-
-html, body, div, ul, li, img, a, span, p, * {
+html,
+body,
+div,
+ul,
+ol,
+li,
+img,
+a,
+span,
+p,
+* {
   margin: 0;
   padding: 0;
 }
-
 a {
   outline: none;
   text-decoration: none;
 }
-
 a:focus {
   outline: 0;
 }
-
 input,
 textarea {
   margin: 0;
   padding: 0;
   outline: none;
-  border: 1px solid @color-bi-border-line;
+  border: 1px solid #d4dadd;
 }
-
-.bi-theme-dark {
-  input,
-  textarea {
-    border: 1px solid @color-bi-border-line-theme-dark;
-  }
+.bi-theme-dark input,
+.bi-theme-dark textarea {
+  border: 1px solid #525466;
 }
-
-ul,
-ol {
-  margin: 0;
-  padding: 0;
-}
-
 ul {
   list-style: disc;
 }
-
 li {
   list-style-type: none;
 }
-
 i {
   font-style: normal;
   -webkit-font-smoothing: antialiased;

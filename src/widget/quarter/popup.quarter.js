@@ -9,13 +9,14 @@ BI.QuarterPopup = BI.inherit(BI.Widget, {
 
     _defaultConfig: function () {
         return BI.extend(BI.QuarterPopup.superclass._defaultConfig.apply(this, arguments), {
-            baseCls: "bi-quarter-popup"
+            baseCls: "bi-quarter-popup",
+            behaviors: {}
         });
     },
 
     _init: function () {
         BI.QuarterPopup.superclass._init.apply(this, arguments);
-        var self = this;
+        var self = this, o = this.options;
 
         var items = [{
             text: Date._QN[01],
@@ -45,6 +46,7 @@ BI.QuarterPopup = BI.inherit(BI.Widget, {
         this.quarter = BI.createWidget({
             type: "bi.button_group",
             element: this,
+            behaviors: o.behaviors,
             items: BI.createItems(items, {}),
             layouts: [{
                 type: "bi.vertical"

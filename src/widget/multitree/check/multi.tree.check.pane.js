@@ -101,7 +101,7 @@ BI.MultiTreeCheckPane = BI.inherit(BI.Pane, {
 
     setValue: function (v) {
         v || (v = {});
-        this.display.setValue(v.value);
+        this.display.setSelectedValue(v.value);
     },
 
     getValue: function () {
