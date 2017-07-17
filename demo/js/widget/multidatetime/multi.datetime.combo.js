@@ -41,20 +41,11 @@ BI.MultiDateTimeCombo = BI.inherit(BI.Single, {
             min: this.constants.DATE_MIN_VALUE,
             max: this.constants.DATE_MAX_VALUE
         });
+        self.setValue(this.storeValue);
 
         this.popup.on(BI.MultiDateTimePopup.BUTTON_CANCEL_EVENT_CHANGE, function () {
-            self.setValue({
-                value: {
-                    year: date.getFullYear(),
-                    month: date.getMonth(),
-                    day: date.getDate(),
-                    hour: date.getHours(),
-                    minute: date.getMinutes(),
-                    second: date.getSeconds()
-                }
-            });
             self.combo.hideView();
-            self.fireEvent(BI.MultiDateTimeCombo.EVENT_CONFIRM);
+            self.fireEvent(BI.MultiDateTimeCombo.EVENT_CANCEL);
         });
         this.popup.on(BI.MultiDateTimePopup.BUTTON_OK_EVENT_CHANGE, function () {
             self.setValue(self.popup.getValue());
@@ -124,15 +115,11 @@ BI.MultiDateTimeCombo = BI.inherit(BI.Single, {
     },
     getValue: function () {
         return this.storeValue;
-    },
-
-    hidePopupView: function () {
-        this.combo.hideView();
     }
 });
 
+BI.MultiDateTimeCombo.EVENT_CANCEL = "EVENT_CANCEL";
 BI.MultiDateTimeCombo.EVENT_CONFIRM = "EVENT_CONFIRM";
 BI.MultiDateTimeCombo.EVENT_CHANGE = "EVENT_CHANGE";
 BI.MultiDateTimeCombo.EVENT_BEFORE_POPUPVIEW = "BI.MultiDateTimeCombo.EVENT_BEFORE_POPUPVIEW";
 BI.shortcut('bi.multi_date_time_combo', BI.MultiDateTimeCombo);
-

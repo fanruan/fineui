@@ -19,7 +19,6 @@ BI.DateTimeTrigger = BI.inherit(BI.Trigger, {
     _init: function () {
         BI.DateTimeTrigger.superclass._init.apply(this, arguments);
         var self = this, o = this.options, c = this._const;
-        var date = new Date();
         this.editor = BI.createWidget({
             type: "bi.sign_editor",
             height: o.height,
@@ -27,8 +26,6 @@ BI.DateTimeTrigger = BI.inherit(BI.Trigger, {
             vgap: c.vgap,
             disabled: true
         });
-        this.editor.setValue(date.getFullYear() + "-" + self._printTime(date.getMonth() + 1) + "-" + self._printTime(date.getDate())
-            + " " + self._printTime(date.getHours()) + ":" + self._printTime(date.getMinutes()) + ":" + self._printTime(date.getSeconds()));
 
         BI.createWidget({
             type: "bi.htape",

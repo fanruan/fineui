@@ -111,16 +111,6 @@ BI.MultiDateTimePopup = BI.inherit(BI.Widget, {
             }]
         });
 
-        var date = new Date();
-        self.dateCombo.setValue({
-            year: date.getFullYear(),
-            month: date.getMonth(),
-            day: date.getDate()
-        });
-        self.hour.setValue(date.getHours());
-        self.minute.setValue(date.getMinutes());
-        self.second.setValue(date.getSeconds());
-
         this.dateButton = BI.createWidget({
             type: "bi.grid",
             items: [[this.cancelButton, this.okButton]]

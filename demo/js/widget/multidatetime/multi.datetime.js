@@ -15,8 +15,12 @@ BI.CustomMultiDateTimeCombo = BI.inherit(BI.Widget, {
             type: "bi.multi_date_time_combo",
             element: this
         });
+        this.multiDateTime.on(BI.MultiDateTimeCombo.EVENT_CANCEL, function () {
+            self.fireEvent(BI.CustomMultiDateTimeCombo.EVENT_CANCEL);
+        });
+
         this.multiDateTime.on(BI.MultiDateTimeCombo.EVENT_CONFIRM, function () {
-            self.fireEvent(BI.CustomMultiDateTimeCombo.EVENT_CHANGE);
+            self.fireEvent(BI.CustomMultiDateTimeCombo.EVENT_CONFIRM);
         });
     },
 
@@ -25,13 +29,10 @@ BI.CustomMultiDateTimeCombo = BI.inherit(BI.Widget, {
     },
 
     setValue: function (v) {
-        if (BI.isEmpty(v)) {
-            this.multiDateTime.setValue();
-            return;
-        }
         this.multiDateTime.setValue(v);
     }
 });
 BI.CustomMultiDateTimeCombo.EVENT_CHANGE = "EVENT_CHANGE";
+BI.CustomMultiDateTimeCombo.EVENT_CANCEL = "EVENT_CANCEL";
+BI.CustomMultiDateTimeCombo.EVENT_CONFIRM = "EVENT_CONFIRM";
 BI.shortcut("bi.custom_multi_date_time_combo", BI.CustomMultiDateTimeCombo);
-
