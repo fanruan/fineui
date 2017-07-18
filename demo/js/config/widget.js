@@ -181,11 +181,11 @@ Demo.WIDGET_CONFIG = [{
         pId: 412,
         text: "bi.year_month_combo",
         value: "demo.year_month_combo"
-    },{
+    }, {
         pId: 412,
         text: "bi.year_quarter_combo",
         value: "demo.year_quarter_combo"
-    },{
+    }, {
         pId: 4,
         id: 413,
         text: "简单下拉树"
@@ -249,5 +249,9 @@ Demo.WIDGET_CONFIG = [{
         pId: 418,
         text: "bi.dialog",
         value: "demo.dialog"
+    }, {
+        id: 7,
+        text: '数值微调器',
+        value: "demo.test_editor"
     }
 ];

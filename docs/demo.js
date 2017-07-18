@@ -3520,11 +3520,11 @@ Demo.COMPONENT_CONFIG = [{
         pId: 412,
         text: "bi.year_month_combo",
         value: "demo.year_month_combo"
-    },{
+    }, {
         pId: 412,
         text: "bi.year_quarter_combo",
         value: "demo.year_quarter_combo"
-    },{
+    }, {
         pId: 4,
         id: 413,
         text: "简单下拉树"
@@ -3588,6 +3588,10 @@ Demo.COMPONENT_CONFIG = [{
         pId: 418,
         text: "bi.dialog",
         value: "demo.dialog"
+    }, {
+        id: 7,
+        text: '数值微调器',
+        value: "demo.test_editor"
     }
 ];Demo.Func = BI.inherit(BI.Widget, {
     props: {
@@ -9299,6 +9303,71 @@ BI.shortcut("demo.responsive_table", Demo.Func);Demo.Func = BI.inherit(BI.Widget
     }
 });
 BI.shortcut("demo.sequence_table", Demo.Func);/**
+ * Created by Dailer on 2017/7/18.
+ */
+Demo.TestEditor = BI.inherit(BI.Widget, {
+    props: {
+        baseCls: ""
+    },
+    render: function () {
+        var editor = BI.createWidget({
+            type: "bi.sign_editor",
+            cls: "bi-border",
+            formatter: function (v) {
+                return 20;
+            },
+            width: 90,
+            height: 28,
+        });
+
+        var test = BI.createWidget({
+            type: "bi.test_editor",
+            value: 12,
+            width: 90,
+            height: 28,
+            step: 0.1
+        });
+
+        var enable = 1;
+
+        return {
+            type: "bi.vertical",
+            items: [{
+                    el: test
+                }, {
+                    type: "bi.left",
+                    items: [{
+                        el: editor
+                    }, {
+                        type: "bi.button",
+                        text: "设置step",
+                        width: 90,
+                        height: 28,
+                        handler: function () {
+                            test.setStep(editor.getValue());
+                            BI.Msg.toast("设置成功")
+                        }
+                    }, {
+                        type: "bi.button",
+                        text: "toggle disabled",
+                        height: 28,
+                        handler: function () {
+                            enable *= -1;
+                            test.setEnable(Boolean(1 + enable));
+                            BI.Msg.toast("设置成功")
+                        },
+                        lgap: 20
+                    }]
+                },
+
+            ],
+            vgap: 20,
+            hgap: 10
+        }
+    }
+})
+
+BI.shortcut("demo.test_editor", Demo.TestEditor);/**
  * Created by Dailer on 2017/7/13.
  */
 Demo.TimeInterval = BI.inherit(BI.Widget, {

@@ -14523,6 +14523,117 @@ BI.SwitchTree.SelectType = {
 };
 BI.shortcut('bi.switch_tree', BI.SwitchTree);
 /**
+ * Created by dailer on 2017/7/18.
+ * 数值微调器练习
+ */
+BI.FineTuningNumberEditor = BI.inherit(BI.Widget, {
+    _defaultConfig: function () {
+        return BI.extend(BI.FineTuningNumberEditor.superclass._defaultConfig.apply(this, arguments), {
+            baseCls: "bi-fine-tuning-number-editor bi-border",
+            value: 0,
+            disabled: false,
+            min: 0,
+            max: 100,
+            step: 1,
+            formatter: BI.emptyFn,
+            parser: BI.emptyFn
+        })
+    },
+
+    _init: function () {
+        BI.FineTuningNumberEditor.superclass._init.apply(this, arguments);
+        var self = this,
+            o = this.options;
+        this.formatter = o.formatter;
+        this.step = this.options.step;
+        console.log(this.options.value);
+        this.editor = BI.createWidget({
+            type: "bi.sign_editor",
+            value: o.value,
+            errorText: BI.i18nText("BI-Please_Input_Natural_Number"),
+            // validationChecker: function (v) {
+            //     //   return BI.isNaturalNumber(v);
+            // }
+        });
+        this.editor.on(BI.TextEditor.EVENT_CONFIRM, function () {
+            self._finetuning(1);
+            self.fireEvent(BI.FineTuningNumberEditor.EVENT_CONFIRM);
+        });
+
+
+        this.topBtn = BI.createWidget({
+            type: "bi.icon_button",
+            trigger: "lclick,",
+            cls: "column-pre-page-h-font top-button bi-border-left bi-border-bottom",
+            handler: function () {
+                self._finetuning(1);
+                self.fireEvent(BI.FineTuningNumberEditor.EVENT_CONFIRM);
+            }
+        });
+
+        this.bottomBtn = BI.createWidget({
+            type: "bi.icon_button",
+            trigger: "lclick,",
+            cls: "column-next-page-h-font bottom-button bi-border-left bi-border-top",
+            handler: function () {
+                self._finetuning(-1);
+                self.fireEvent(BI.FineTuningNumberEditor.EVENT_CONFIRM);
+            }
+        });
+
+        this._finetuning(0);
+        BI.createWidget({
+            type: "bi.htape",
+            element: this,
+            items: [this.editor, {
+                el: {
+                    type: "bi.grid",
+                    columns: 1,
+                    rows: 2,
+                    items: [{
+                        column: 0,
+                        row: 0,
+                        el: this.topBtn
+                    }, {
+                        column: 0,
+                        row: 1,
+                        el: this.bottomBtn
+                    }]
+                },
+                width: 30
+            }]
+        });
+    },
+
+    //微调
+    _finetuning: function (add) {
+
+        //窝是在不值该如何处理精度损失问题,所以迫不得已采取了这个方法
+        var v = BI.parseFloat(this.editor.getValue()) * 1000000000000;
+        var addend = add * this.step * 1000000000000;
+        var result = (v + addend) / 1000000000000;
+        console.log(this.options.formatter.toString());
+        this.editor.setValue(this.formatter(result));
+    },
+
+
+
+
+    getMinAndMax: function () {},
+
+    getStep: function () {},
+
+    getValue: function () {},
+
+    setStep: function (step) {
+        this.step = step || this.step;
+    },
+
+    setValue: function (v) {}
+
+});
+BI.FineTuningNumberEditor.EVENT_CONFIRM = "EVENT_CONFIRM";
+BI.shortcut("bi.test_editor", BI.FineTuningNumberEditor);/**
  * 年份下拉框
  *
  * Created by GUY on 2015/8/28.
