@@ -18335,7 +18335,7 @@ BI.TextAreaEditor = BI.inherit(BI.Single, {
             tagName: "textarea",
             width: "100%",
             height: "100%",
-            cls: "textarea-editor-content display-block"
+            cls: "bi-textarea textarea-editor-content display-block"
         });
         this.content.element.css({"resize": "none"});
         BI.createWidget({
@@ -18521,6 +18521,15 @@ BI.Iframe = BI.inherit(BI.Single, {
 
     getSrc: function () {
         return this.options.src;
+    },
+
+    setName: function (name) {
+        this.options.name = name;
+        this.element.attr("name", name);
+    },
+
+    getName: function () {
+        return this.options.name;
     },
 
     getWidth: function () {
