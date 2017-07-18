@@ -7498,6 +7498,8 @@ BI.MultiSelectCombo = BI.inherit(BI.Single, {
             self.trigger.getCounter().setButtonChecked(self.storeValue);
         };
         this.storeValue = {};
+        //标记正在请求数据
+        this.requesting = false;
 
         this.trigger = BI.createWidget({
             type: "bi.multi_select_trigger",
@@ -7636,10 +7638,16 @@ BI.MultiSelectCombo = BI.inherit(BI.Single, {
                 self.populate();
             });
         });
+        //当退出的时候如果还在处理请求，则等请求结束后再对外发确定事件
+        this.wants2Quit = false;
         this.combo.on(BI.Combo.EVENT_AFTER_HIDEVIEW, function () {
             //important:关闭弹出时又可能没有退出编辑状态
             self.trigger.stopEditing();
-            self.fireEvent(BI.MultiSelectCombo.EVENT_CONFIRM);
+            if (self.requesting === true) {
+                self.wants2Quit = true;
+            } else {
+                self.fireEvent(BI.MultiSelectCombo.EVENT_CONFIRM);
+            }
         });
 
         var triggerBtn = BI.createWidget({
@@ -7692,6 +7700,7 @@ BI.MultiSelectCombo = BI.inherit(BI.Single, {
     _joinKeywords: function (keywords, callback) {
         var self = this, o = this.options;
         this._assertValue(this.storeValue);
+        this.requesting = true;
         o.itemsCreator({
             type: BI.MultiSelectCombo.REQ_GET_ALL_DATA,
             keywords: keywords
@@ -7714,6 +7723,7 @@ BI.MultiSelectCombo = BI.inherit(BI.Single, {
     _joinAll: function (res, callback) {
         var self = this, o = this.options;
         this._assertValue(res);
+        this.requesting = true;
         o.itemsCreator({
             type: BI.MultiSelectCombo.REQ_GET_ALL_DATA,
             keywords: [this.trigger.getKey()]
@@ -7774,6 +7784,11 @@ BI.MultiSelectCombo = BI.inherit(BI.Single, {
                     value: []
                 }
             }
+            if (self.wants2Quit === true) {
+                self.fireEvent(BI.MultiSelectCombo.EVENT_CONFIRM);
+                self.wants2Quit = false;
+            }
+            self.requesting = false;
         }
     },
 
@@ -15397,7 +15412,7 @@ BI.shortcut('bi.all_value_chooser_pane', BI.AllValueChooserPane);BI.AbstractTree
         function search(parents, current, result, searched) {
             var newParents = BI.clone(parents);
             newParents.push(current);
-            if (self._isMatch(current, keyword)) {
+            if (self._isMatch(parents, current, keyword)) {
                 searched && searched.push(newParents);
                 return true;
             }
@@ -15426,7 +15441,7 @@ BI.shortcut('bi.all_value_chooser_pane', BI.AllValueChooserPane);BI.AbstractTree
 
         function isSearchValueInParent(parentValues) {
             for (var i = 0, len = parentValues.length; i < len; i++) {
-                if (self._isMatch(parentValues[i], keyword)) {
+                if (self._isMatch(parentValues.slice(0, parentValues.length - 1), parentValues[i], keyword)) {
                     return true;
                 }
             }
@@ -15552,7 +15567,7 @@ BI.shortcut('bi.all_value_chooser_pane', BI.AllValueChooserPane);BI.AbstractTree
         }
 
         function nodeSearch(deep, parentValues, current, isAllSelect, result) {
-            if (self._isMatch(current, keyword)) {
+            if (self._isMatch(parentValues, current, keyword)) {
                 var checked = isAllSelect || isSelected(parentValues, current);
                 createOneJson(parentValues, current, false, checked, !isAllSelect && isHalf(parentValues, current), true, result);
                 return [true, checked];
@@ -15782,8 +15797,9 @@ BI.shortcut('bi.all_value_chooser_pane', BI.AllValueChooserPane);BI.AbstractTree
         });
     },
 
-    _isMatch: function (value, keyword) {
-        var finded = BI.Func.getSearchResult([value], keyword);
+    _isMatch: function (parentValues, value, keyword) {
+        var node = this._getTreeNode(parentValues, value);
+        var finded = BI.Func.getSearchResult([node.text || node.value], keyword);
         return finded.finded.length > 0 || finded.matched.length > 0;
     },
 
