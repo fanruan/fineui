@@ -4975,6 +4975,10 @@ BI.Widget = BI.inherit(BI.OB, {
             var copy = BI.UUID(), newKeys = BI.clone(keys);
             keys.length > 1 ? newKeys.unshift(BI.deepClone(p[keys[keys.length - 1]])) : newKeys.unshift(BI.deepClone(g));
             var backup = self.similar.apply(self, newKeys);
+            if (BI.isKey(backup.id)) {
+                copy = backup.id;
+                delete backup.id;
+            }
             keys.length > 1 ? (p[copy] = backup, self[sset](keys[0], g, {silent: true})) : self[sset](copy, backup, {silent: true});
             keys.unshift(copy);
             !BI.has(self._tmp, keys[0]) && self.parent && self.parent._change(self);
@@ -12254,15 +12258,20 @@ BI.FloatCenterAdaptLayout = BI.inherit(BI.Layout, {
     },
 
     mounted: function () {
+        var self = this;
         var width = this.left.element.outerWidth(),
             height = this.left.element.outerHeight();
         this.left.element.width(width).height(height).css("float", "none");
+        BI.remove(this._children, function (i, wi) {
+            if (wi === self.container) {
+                delete self._children[i];
+            }
+        });
         BI.createWidget({
             type: "bi.center_adapt",
             element: this,
             items: [this.left]
         });
-        this.removeWidget(this.container);
     },
 
     stroke: function (items) {
@@ -12317,15 +12326,20 @@ BI.FloatHorizontalLayout = BI.inherit(BI.Layout, {
     },
 
     mounted: function () {
+        var self = this;
         var width = this.left.element.width(),
             height = this.left.element.height();
         this.left.element.width(width).height(height).css("float", "none");
+        BI.remove(this._children, function (i, wi) {
+            if (wi === self.container) {
+                delete self._children[i];
+            }
+        });
         BI.createWidget({
             type: "bi.horizontal_auto",
             element: this,
             items: [this.left]
         });
-        this.removeWidget(this.container);
     },
 
     _addElement: function (i, item) {
@@ -16139,7 +16153,7 @@ BI.extend(jQuery.fn, {
      * @private
      */
     __textKeywordMarked__: function (text, keyword, py) {
-        if (!BI.isKey(keyword)) {
+        if (!BI.isKey(keyword) || (text + "").length > 100) {
             return this.text((text + "").replaceAll(" ", "　"));
         }
         keyword = keyword + "";
