@@ -1,7 +1,7 @@
 Demo.BASE_CONFIG = [{
     id: 2,
     text: "基础控件",
-    open: true
+    open: false
 }, {
     pId: 2,
     text: "bi.label",
