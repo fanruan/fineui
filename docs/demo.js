@@ -7043,75 +7043,6 @@ Demo.TextEditor = BI.inherit(BI.Widget, {
 })
 
 BI.shortcut("demo.text_editor", Demo.TextEditor);/**
- * Created by Dailer on 2017/7/14.
- */
-Demo.IntervalSlider = BI.inherit(BI.Widget, {
-    props: {
-        baseCls: ""
-    },
-
-    render: function () {
-        var self = this;
-        var min = BI.createWidget({
-            type: "bi.text_editor",
-            watermark: "min",
-            width: 100
-        });
-        var max = BI.createWidget({
-            type: "bi.text_editor",
-            watermark: "max",
-            width: 100
-        })
-        return {
-            type: "bi.horizontal_auto",
-            items: [{
-                type: "bi.interval_slider",
-                ref: function (_ref) {
-                    self.slider = _ref;
-                },
-                width: 300,
-                height: 90
-            }, {
-                type: "bi.center_adapt",
-                width: 300,
-                items: [{
-                    type: "bi.text",
-                    text: "min"
-                }, min, {
-                    type: "bi.text",
-                    text: "max"
-                }, max]
-            }, {
-                type: "bi.button",
-                text: "populate",
-                handler: function () {
-                    self.slider.setMinAndMax({
-                        min: min.getValue() || 0,
-                        max: max.getValue() || 100
-                    });
-                    self.slider.populate();
-                },
-                width: 300
-            }, {
-                type: "bi.button",
-                text: "setValue",
-                handler: function () {
-
-                    //既然 setVlaue后要重新 populate 才能生效,为何不直接在 setValue方法的结尾调用 populate 方法呢?
-                    self.slider.setValue({
-                        min: 20,
-                        max: 80
-                    });
-                    self.slider.populate();
-                },
-                width: 300
-            }],
-            vgap: 20
-        }
-    }
-})
-
-BI.shortcut("demo.interval_slider", Demo.IntervalSlider);/**
  * Created by Dailer on 2017/7/11.
  */
 Demo.Month = BI.inherit(BI.Widget, {
@@ -7131,6 +7062,515 @@ Demo.Month = BI.inherit(BI.Widget, {
 })
 
 BI.shortcut("demo.month", Demo.Month);/**
+ * Created by Urthur on 2017/7/14.
+ */
+BI.MultiDateTimeCombo = BI.inherit(BI.Single, {
+    constants: {
+        popupHeight: 290,
+        popupWidth: 270,
+        comboAdjustHeight: 1,
+        border: 1,
+        DATE_MIN_VALUE: "1900-01-01",
+        DATE_MAX_VALUE: "2099-12-31"
+    },
+    _defaultConfig: function () {
+        return BI.extend(BI.MultiDateTimeCombo.superclass._defaultConfig.apply(this, arguments), {
+            baseCls: 'bi-multi-date-time-combo bi-border',
+            height: 24
+        });
+    },
+    _init: function () {
+        BI.MultiDateTimeCombo.superclass._init.apply(this, arguments);
+        var self = this, opts = this.options;
+        var date = new Date();
+        this.storeValue = {
+            value: {
+                year: date.getFullYear(),
+                month: date.getMonth(),
+                day: date.getDate(),
+                hour: date.getHours(),
+                minute: date.getMinutes(),
+                second: date.getSeconds()
+            }
+        };
+        this.trigger = BI.createWidget({
+            type: 'bi.date_time_trigger',
+            min: this.constants.DATE_MIN_VALUE,
+            max: this.constants.DATE_MAX_VALUE
+        });
+
+        this.popup = BI.createWidget({
+            type: "bi.multi_date_time_popup",
+            min: this.constants.DATE_MIN_VALUE,
+            max: this.constants.DATE_MAX_VALUE
+        });
+        self.setValue(this.storeValue);
+
+        this.popup.on(BI.MultiDateTimePopup.BUTTON_CANCEL_EVENT_CHANGE, function () {
+            self.combo.hideView();
+            self.fireEvent(BI.MultiDateTimeCombo.EVENT_CANCEL);
+        });
+        this.popup.on(BI.MultiDateTimePopup.BUTTON_OK_EVENT_CHANGE, function () {
+            self.setValue(self.popup.getValue());
+            self.combo.hideView();
+            self.fireEvent(BI.MultiDateTimeCombo.EVENT_CONFIRM);
+        });
+        this.popup.on(BI.MultiDateTimePopup.CALENDAR_EVENT_CHANGE, function () {
+            self.setValue(self.popup.getValue());
+        });
+        this.combo = BI.createWidget({
+            type: 'bi.combo',
+            toggle: false,
+            isNeedAdjustHeight: false,
+            isNeedAdjustWidth: false,
+            el: this.trigger,
+            adjustLength: this.constants.comboAdjustHeight,
+            popup: {
+                el: this.popup,
+                maxHeight: this.constants.popupHeight,
+                width: this.constants.popupWidth,
+                stopPropagation: false
+            }
+        });
+        this.combo.on(BI.Combo.EVENT_BEFORE_POPUPVIEW, function () {
+            self.popup.setValue(self.storeValue);
+            self.fireEvent(BI.MultiDateTimeCombo.EVENT_BEFORE_POPUPVIEW);
+        });
+
+        var triggerBtn = BI.createWidget({
+            type: "bi.trigger_icon_button",
+            cls: "bi-trigger-date-button chart-date-normal-font bi-border-right",
+            width: 30,
+            height: 24
+        });
+        triggerBtn.on(BI.TriggerIconButton.EVENT_CHANGE, function () {
+            if (self.combo.isViewVisible()) {
+                self.combo.hideView();
+            } else {
+                self.combo.showView();
+            }
+        });
+
+        BI.createWidget({
+            type: "bi.htape",
+            element: this,
+            items: [{
+                type: "bi.absolute",
+                items: [{
+                    el: this.combo,
+                    top: 0,
+                    left: 0,
+                    right: 0,
+                    bottom: 0
+                }, {
+                    el: triggerBtn,
+                    top: 0,
+                    left: 0
+                }]
+            }]
+        })
+    },
+
+    setValue: function (v) {
+        this.storeValue = v;
+        this.popup.setValue(v);
+        this.trigger.setValue(v);
+    },
+    getValue: function () {
+        return this.storeValue;
+    }
+});
+
+BI.MultiDateTimeCombo.EVENT_CANCEL = "EVENT_CANCEL";
+BI.MultiDateTimeCombo.EVENT_CONFIRM = "EVENT_CONFIRM";
+BI.MultiDateTimeCombo.EVENT_CHANGE = "EVENT_CHANGE";
+BI.MultiDateTimeCombo.EVENT_BEFORE_POPUPVIEW = "BI.MultiDateTimeCombo.EVENT_BEFORE_POPUPVIEW";
+BI.shortcut('bi.multi_date_time_combo', BI.MultiDateTimeCombo);
+/**
+ * Created by Urthur on 2017/7/14.
+ */
+BI.CustomMultiDateTimeCombo = BI.inherit(BI.Widget, {
+    _defaultConfig: function () {
+        return BI.extend(BI.CustomMultiDateTimeCombo.superclass._defaultConfig.apply(this, arguments), {
+            baseCls: "bi-custom-multi-date-time-combo"
+        })
+    },
+
+    _init: function () {
+        BI.CustomMultiDateTimeCombo.superclass._init.apply(this, arguments);
+        var self = this;
+        this.multiDateTime = BI.createWidget({
+            type: "bi.multi_date_time_combo",
+            element: this
+        });
+        this.multiDateTime.on(BI.MultiDateTimeCombo.EVENT_CANCEL, function () {
+            self.fireEvent(BI.CustomMultiDateTimeCombo.EVENT_CANCEL);
+        });
+
+        this.multiDateTime.on(BI.MultiDateTimeCombo.EVENT_CONFIRM, function () {
+            self.fireEvent(BI.CustomMultiDateTimeCombo.EVENT_CONFIRM);
+        });
+    },
+
+    getValue: function () {
+        return this.multiDateTime.getValue();
+    },
+
+    setValue: function (v) {
+        this.multiDateTime.setValue(v);
+    }
+});
+BI.CustomMultiDateTimeCombo.EVENT_CHANGE = "EVENT_CHANGE";
+BI.CustomMultiDateTimeCombo.EVENT_CANCEL = "EVENT_CANCEL";
+BI.CustomMultiDateTimeCombo.EVENT_CONFIRM = "EVENT_CONFIRM";
+BI.shortcut("bi.custom_multi_date_time_combo", BI.CustomMultiDateTimeCombo);
+/**
+ * Created by Urthur on 2017/7/14.
+ */
+BI.MultiDateTimePopup = BI.inherit(BI.Widget, {
+    constants: {
+        tabHeight: 30,
+        tabWidth: 42,
+        titleHeight: 27,
+        itemHeight: 30,
+        triggerHeight: 24,
+        buttonWidth: 90,
+        buttonHeight: 25,
+        popupHeight: 290,
+        popupWidth: 270,
+        comboAdjustHeight: 1,
+        lgap: 2,
+        border: 1
+    },
+    _defaultConfig: function () {
+        return BI.extend(BI.MultiDateTimePopup.superclass._defaultConfig.apply(this, arguments), {
+            baseCls: 'bi-multi-date-time-popup',
+            width: 268,
+            height: 290
+        });
+    },
+    _init: function () {
+        BI.MultiDateTimePopup.superclass._init.apply(this, arguments);
+        var self = this, opts = this.options;
+        this.cancelButton = BI.createWidget({
+            type: 'bi.text_button',
+            forceCenter: true,
+            cls: 'bi-multidate-popup-button bi-border-top bi-border-right',
+            shadow: true,
+            text: BI.i18nText("BI-Basic_Cancel")
+        });
+        this.cancelButton.on(BI.TextButton.EVENT_CHANGE, function () {
+            self.fireEvent(BI.MultiDateTimePopup.BUTTON_CANCEL_EVENT_CHANGE);
+        });
+
+        this.okButton = BI.createWidget({
+            type: "bi.text_button",
+            forceCenter: true,
+            cls: 'bi-multidate-popup-button bi-border-top',
+            shadow: true,
+            text: BI.i18nText("BI-Basic_OK")
+        });
+        this.okButton.on(BI.TextButton.EVENT_CHANGE, function () {
+            self.fireEvent(BI.MultiDateTimePopup.BUTTON_OK_EVENT_CHANGE);
+        });
+
+        this.dateCombo = BI.createWidget({
+            type: "bi.date_calendar_popup",
+            min: self.options.min,
+            max: self.options.max
+        });
+        self.dateCombo.on(BI.DateCalendarPopup.EVENT_CHANGE, function () {
+            self.fireEvent(BI.MultiDateTimePopup.CALENDAR_EVENT_CHANGE);
+        });
+
+        this.dateSelect = BI.createWidget({
+            type: "bi.horizontal",
+            cls: "bi-border-top",
+            items: [{
+                type: "bi.label",
+                text: BI.i18nText("BI-Basic_Time"),
+                width: 45
+            },{
+                type: "bi.multi_date_time_select",
+                max: 23,
+                min: 0,
+                width: 60,
+                height: 30,
+                ref: function (_ref) {
+                    self.hour = _ref;
+                    self.hour.on(BI.MultiDateTimeSelect.EVENT_CONFIRM, function () {
+                        self.fireEvent(BI.MultiDateTimePopup.CALENDAR_EVENT_CHANGE);
+                    });
+                }
+            },{
+                type: "bi.label",
+                text: ":",
+                width: 15
+            },{
+                type: "bi.multi_date_time_select",
+                max: 59,
+                min: 0,
+                width: 60,
+                height: 30,
+                ref: function (_ref) {
+                    self.minute = _ref;
+                    self.minute.on(BI.MultiDateTimeSelect.EVENT_CONFIRM, function () {
+                        self.fireEvent(BI.MultiDateTimePopup.CALENDAR_EVENT_CHANGE);
+                    });
+                }
+            },{
+                type: "bi.label",
+                text: ":",
+                width: 15
+            },{
+                type: "bi.multi_date_time_select",
+                max: 59,
+                min: 0,
+                width: 60,
+                height: 30,
+                ref: function (_ref) {
+                    self.second = _ref;
+                    self.second.on(BI.MultiDateTimeSelect.EVENT_CONFIRM, function () {
+                        self.fireEvent(BI.MultiDateTimePopup.CALENDAR_EVENT_CHANGE);
+                    });
+                }
+            }]
+        });
+
+        this.dateButton = BI.createWidget({
+            type: "bi.grid",
+            items: [[this.cancelButton, this.okButton]]
+        });
+        BI.createWidget({
+            element: this,
+            type: "bi.vtape",
+            items: [{
+                el: this.dateCombo
+            }, {
+                el: this.dateSelect,
+                height: 50
+            },{
+                el: this.dateButton,
+                height: 30
+            }]
+        });
+    },
+
+    setValue: function (v) {
+        var value, date;
+        if (BI.isNotNull(v)) {
+            value = v.value;
+            if(BI.isNull(value)){
+                date = new Date();
+                this.dateCombo.setValue({
+                    year: date.getFullYear(),
+                    month: date.getMonth(),
+                    day: date.getDate()
+                });
+                this.hour.setValue(date.getHours());
+                this.minute.setValue(date.getMinutes());
+                this.second.setValue(date.getSeconds());
+            } else {
+                this.dateCombo.setValue({
+                    year: value.year,
+                    month: value.month,
+                    day: value.day
+                });
+                this.hour.setValue(value.hour);
+                this.minute.setValue(value.minute);
+                this.second.setValue(value.second);
+            }
+        }
+    },
+
+    getValue: function () {
+        return {
+            value: {
+                year: this.dateCombo.getValue().year,
+                month: this.dateCombo.getValue().month,
+                day: this.dateCombo.getValue().day,
+                hour: this.hour.getValue(),
+                minute: this.minute.getValue(),
+                second: this.second.getValue()
+            }
+        }
+    }
+});
+BI.MultiDateTimePopup.BUTTON_OK_EVENT_CHANGE = "BUTTON_OK_EVENT_CHANGE";
+BI.MultiDateTimePopup.BUTTON_CANCEL_EVENT_CHANGE = "BUTTON_CANCEL_EVENT_CHANGE";
+BI.MultiDateTimePopup.CALENDAR_EVENT_CHANGE = "CALENDAR_EVENT_CHANGE";
+BI.shortcut('bi.multi_date_time_popup', BI.MultiDateTimePopup);
+
+/**
+ * Created by Urthur on 2017/7/14.
+ */
+BI.MultiDateTimeSelect = BI.inherit(BI.Widget, {
+    _defaultConfig: function () {
+        return BI.extend(BI.MultiDateTimeSelect.superclass._defaultConfig.apply(this, arguments), {
+            baseCls: "bi-multi-date-time-select bi-border",
+            max: 23,
+            min: 0
+        })
+    },
+
+    _init: function () {
+        BI.MultiDateTimeSelect.superclass._init.apply(this, arguments);
+        var self = this, o = this.options;
+        this.editor = BI.createWidget({
+            type: "bi.sign_editor",
+            value: this._alertInEditorValue(o.min),
+            errorText: BI.i18nText("BI-Please_Input_Natural_Number"),
+            validationChecker: function(v){
+                return BI.isNaturalNumber(v);
+            }
+        });
+        this.editor.on(BI.TextEditor.EVENT_CONFIRM, function(){
+            self._finetuning(0);
+            self.fireEvent(BI.MultiDateTimeSelect.EVENT_CONFIRM);
+        });
+        this.topBtn = BI.createWidget({
+            type: "bi.icon_button",
+            cls: "column-pre-page-h-font top-button bi-border-left bi-border-bottom"
+        });
+        this.topBtn.on(BI.IconButton.EVENT_CHANGE, function(){
+            self._finetuning(1);
+            self.fireEvent(BI.MultiDateTimeSelect.EVENT_CONFIRM);
+        });
+        this.bottomBtn = BI.createWidget({
+            type: "bi.icon_button",
+            cls: "column-next-page-h-font bottom-button bi-border-left"
+        });
+        this.bottomBtn.on(BI.IconButton.EVENT_CHANGE, function(){
+            self._finetuning(-1);
+            self.fireEvent(BI.MultiDateTimeSelect.EVENT_CONFIRM);
+        });
+        this._finetuning(0);
+        BI.createWidget({
+            type: "bi.htape",
+            element: this,
+            items: [this.editor, {
+                el: {
+                    type: "bi.grid",
+                    columns: 1,
+                    rows: 2,
+                    items: [{
+                        column: 0,
+                        row: 0,
+                        el: this.topBtn
+                    }, {
+                        column: 0,
+                        row: 1,
+                        el: this.bottomBtn
+                    }]
+                },
+                width: 30
+            }]
+        });
+    },
+
+    _alertOutEditorValue: function(v){
+        if (v > this.options.max){
+            v = this.options.min;
+        }
+        if (v < this.options.min){
+            v = this.options.max
+        }
+        return BI.parseInt(v);
+    },
+
+    _alertInEditorValue: function(v){
+        if (v > this.options.max){
+            v = this.options.min;
+        }
+        if (v < this.options.min){
+            v = this.options.max;
+        }
+        v = v < 10 ? "0" + v : v;
+        return v;
+    },
+
+    _finetuning: function(add){
+        var v = BI.parseInt(this._alertOutEditorValue(this.editor.getValue()));
+        this.editor.setValue(this._alertInEditorValue(v + add));
+    },
+
+    getValue: function () {
+        var v = this.editor.getValue();
+        return this._alertOutEditorValue(v);
+    },
+
+    setValue: function (v) {
+        this.editor.setValue(this._alertInEditorValue(v));
+        this._finetuning(0);
+    }
+
+});
+BI.MultiDateTimeSelect.EVENT_CONFIRM = "EVENT_CONFIRM";
+BI.shortcut("bi.multi_date_time_select", BI.MultiDateTimeSelect);
+/**
+ * Created by Urthur on 2017/7/14.
+ */
+BI.DateTimeTrigger = BI.inherit(BI.Trigger, {
+    _const: {
+        hgap: 4,
+        vgap: 2,
+        triggerWidth: 30
+    },
+
+    _defaultConfig: function () {
+        return BI.extend(BI.DateTimeTrigger.superclass._defaultConfig.apply(this, arguments), {
+            extraCls: "bi-date-time-trigger",
+            min: '1900-01-01', //最小日期
+            max: '2099-12-31', //最大日期
+            height: 25
+        });
+    },
+    _init: function () {
+        BI.DateTimeTrigger.superclass._init.apply(this, arguments);
+        var self = this, o = this.options, c = this._const;
+        this.editor = BI.createWidget({
+            type: "bi.sign_editor",
+            height: o.height,
+            hgap: c.hgap,
+            vgap: c.vgap,
+            disabled: true
+        });
+
+        BI.createWidget({
+            type: "bi.htape",
+            element: this,
+            items: [{
+                el: BI.createWidget(),
+                width: 30
+            }, {
+                el: this.editor
+            }]
+        })
+    },
+
+    _printTime: function (v) {
+        return v < 10 ? "0" + v : v;
+    },
+
+    setValue: function (v) {
+        var self = this;
+        if (BI.isNotNull(v)) {
+            var value = v.value, dateStr;
+            if(BI.isNull(value)){
+                value = new Date();
+                dateStr = value.getFullYear() + "-" + self._printTime(value.getMonth() + 1) + "-" + self._printTime(value.getDate())
+                    + " " + self._printTime(value.getHours()) + ":" + self._printTime(value.getMinutes()) + ":" + self._printTime(value.getSeconds());
+            } else {
+                dateStr = value.year + "-" + self._printTime(value.month + 1) + "-" + self._printTime(value.day)
+                    + " " + self._printTime(value.hour) + ":" + self._printTime(value.minute) + ":" + self._printTime(value.second);
+            }
+            this.editor.setValue(dateStr);
+        }
+    }
+
+});
+BI.shortcut("bi.date_time_trigger", BI.DateTimeTrigger);
+/**
  * Created by User on 2017/3/22.
  */
 Demo.MultiSelectCombo = BI.inherit(BI.Widget, {
@@ -7846,53 +8286,6 @@ Demo.SelectTreeCombo = BI.inherit(BI.Widget, {
 })
 
 BI.shortcut("demo.select_tree_combo", Demo.SelectTreeCombo);/**
- * Created by Dailer on 2017/7/14.
- */
-Demo.SingleSlider = BI.inherit(BI.Widget, {
-    props: {
-        baseCls: ""
-    },
-
-    render: function () {
-        var self = this;
-
-        return {
-            type: "bi.horizontal_auto",
-            items: [{
-                type: "bi.single_slider",
-                ref: function (_ref) {
-                    self.slider = _ref;
-                },
-                width: 300,
-                height: 50
-            }, {
-                type: "bi.button",
-                text: "populate",
-                handler: function () {
-                    self.slider.setMinAndMax({
-                        min: 1,
-                        max: 100
-                    });
-                    self.slider.populate();
-                },
-                width: 300
-            }, {
-                type: "bi.button",
-                text: "setValue",
-                handler: function () {
-
-                    //既然 setVlaue后要重新 populate 才能生效,为何不直接在 setValue方法的结尾调用 populate 方法呢?
-                    self.slider.setValue(50);
-                    self.slider.populate();
-                },
-                width: 300
-            }],
-            vgap: 20
-        }
-    }
-})
-
-BI.shortcut("demo.single_slider", Demo.SingleSlider);/**
  * Created by Dailer on 2017/7/13.
  */
 Demo.MultiLayerSingleTreeCombo = BI.inherit(BI.Widget, {
