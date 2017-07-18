@@ -249,21 +249,5 @@ Demo.WIDGET_CONFIG = [{
         pId: 418,
         text: "bi.dialog",
         value: "demo.dialog"
-    }, {
-        pId: 4,
-        id: 419,
-        text: "单值滑块"
-    }, {
-        pId: 419,
-        text: "bi.single_slider",
-        value: "demo.single_slider"
-    },{
-        pId: 4,
-        id: 420,
-        text: "区间滑块"
-    }, {
-        pId: 420,
-        text: "bi.interval_slider",
-        value: "demo.interval_slider"
-    },
+    }
 ];
