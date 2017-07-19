@@ -1,7 +1,7 @@
 Demo.CASE_CONFIG = [{
     id: 3,
     text: "实例控件",
-    open: true,
+    open: false
 }, {
     pId: 3,
     id: 301,

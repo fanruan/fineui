@@ -44,6 +44,19 @@ BI.DisplayTree = BI.inherit(BI.TreeView, {
         return setting;
     },
 
+    _dealWidthNodes: function (nodes) {
+        nodes = BI.DisplayTree.superclass._dealWidthNodes.apply(this, arguments);
+        var self = this, o = this.options;
+        BI.each(nodes, function (i, node) {
+            if (node.count > 0) {
+                node.text = node.value + "(" + BI.i18nText("BI-Basic_Altogether") + node.count + BI.i18nText("BI-Basic_Count") + ")";
+            } else {
+                node.text = node.value;
+            }
+        });
+        return nodes;
+    },
+
     initTree: function (nodes, setting) {
         var setting = setting || this._configSetting();
         this.nodes = $.fn.zTree.init(this.tree.element, setting, nodes);
