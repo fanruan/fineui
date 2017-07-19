@@ -14,7 +14,8 @@ BI.DateCombo = BI.inherit(BI.Widget, {
     },
     _init: function () {
         BI.DateCombo.superclass._init.apply(this, arguments);
-        var self = this, o = this.options;
+        var self = this,
+            o = this.options;
 
         this.trigger = BI.createWidget({
             type: "bi.date_trigger"

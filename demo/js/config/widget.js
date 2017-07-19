@@ -253,5 +253,9 @@ Demo.WIDGET_CONFIG = [{
         id: 7,
         text: '数值微调器',
         value: "demo.test_editor"
+    }, {
+        id: 8,
+        text: '所有日期控件',
+        value: "demo.all_date_widget"
     }
 ];

@@ -3,9 +3,9 @@
  * @class BI.DateCalendarPopup
  * @extends BI.Widget
  */
-BI.DateCalendarPopup = BI.inherit(BI.Widget, {
+BI.DateTimePopup = BI.inherit(BI.Widget, {
     _defaultConfig: function () {
-        var conf = BI.DateCalendarPopup.superclass._defaultConfig.apply(this, arguments);
+        var conf = BI.DateTimePopup.superclass._defaultConfig.apply(this, arguments);
         return BI.extend(conf, {
             baseCls: "bi-date-calendar-popup",
             min: '1900-01-01', //最小日期
@@ -31,7 +31,7 @@ BI.DateCalendarPopup = BI.inherit(BI.Widget, {
     },
 
     _init: function () {
-        BI.DateCalendarPopup.superclass._init.apply(this, arguments);
+        BI.DateTimePopup.superclass._init.apply(this, arguments);
         var self = this,
             o = this.options;
         this.today = new Date();
@@ -52,7 +52,7 @@ BI.DateCalendarPopup = BI.inherit(BI.Widget, {
 
         this.calendar = BI.createWidget({
             direction: "top",
-            element: this,
+            // element: this,
             logic: {
                 dynamic: true
             },
@@ -67,6 +67,32 @@ BI.DateCalendarPopup = BI.inherit(BI.Widget, {
             afterCardShow: function () {
                 this.setValue(self.selectedTime);
             }
+        });
+
+        this.timeTunning = BI.createWidget({
+            type: "bi.time_tunning"
+        });
+
+        this.buttons = BI.createWidget({
+            type: "bi.button_group",
+            items: [{
+                type: "bi.text_button",
+                text: BI.i18nText('BI-Basic_Clears')
+            }, {
+                type: "bi.text_button",
+                text: BI.i18nText("BI-Basic_Sure")
+            }],
+            chooseType: 0,
+            behaviors: {},
+            layouts: [{
+                type: "bi.center_adapt"
+            }]
+        });
+
+        this.dateTime = BI.createWidget({
+            type: "bi.vertical",
+            element: this,
+            items: [this.calendar, this.timeTunning, this.buttons]
         });
 
         this.datePicker.on(BI.DatePicker.EVENT_CHANGE, function () {
@@ -93,5 +119,5 @@ BI.DateCalendarPopup = BI.inherit(BI.Widget, {
         return this.selectedTime;
     }
 });
-BI.DateCalendarPopup.EVENT_CHANGE = "EVENT_CHANGE";
-BI.shortcut("bi.date_calendar_popup", BI.DateCalendarPopup);
+BI.DateTimePopup.EVENT_CHANGE = "EVENT_CHANGE";
+BI.shortcut("bi.date_time_popup", BI.DateTimePopup);
