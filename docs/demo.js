@@ -8,7 +8,16 @@ BI.resourceURL = "resource/";
 BI.i18n = {
     "BI-Basic_OK": "确定",
     "BI-Basic_Sure": "确定",
-    "BI-Basic_Clears": "清空"
+    "BI-Basic_Clears": "清空",
+    "BI-Basic_Cancel": "取消",
+    "BI-Basic_Time": "时间",
+    "BI-Basic_Simple_Sunday": "日",
+    "BI-Basic_Simple_Monday": "一",
+    "BI-Basic_Simple_Tuesday": "二",
+    "BI-Basic_Simple_Wednesday": "三",
+    "BI-Basic_Simple_Thursday": "四",
+    "BI-Basic_Simple_Friday": "五",
+    "BI-Basic_Simple_Saturday": "六",
 };$(function () {
     var ref;
     BI.createWidget({
@@ -3384,6 +3393,10 @@ Demo.COMPONENT_CONFIG = [{
     pId: 4,
     text: "bi.interactive_arrangement",
     value: "demo.interactive_arrangement"
+}, {
+    pId: 4,
+    text: "bi.custom_date_time",
+    value: "demo.custom_date_time"
 }];Demo.Func = BI.inherit(BI.Widget, {
     props: {
         baseCls: "demo-func"
@@ -5948,6 +5961,18 @@ BI.shortcut("demo.preview", Demo.Preview);Demo.West = BI.inherit(BI.Widget, {
 });
 Demo.West.EVENT_VALUE_CHANGE = "EVENT_VALUE_CHANGE";
 BI.shortcut("demo.west", Demo.West);/**
+ * Created by Urthur on 2017/7/18.
+ */
+Demo.CustomDateTime = BI.inherit(BI.Widget, {
+    props: {
+    },
+    render: function () {
+        return {
+            type: "bi.custom_date_time_combo",
+        };
+    }
+});
+BI.shortcut("demo.custom_date_time", Demo.CustomDateTime);/**
  * Created by User on 2017/3/22.
  */
 Demo.RelationView = BI.inherit(BI.Widget, {

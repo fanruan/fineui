@@ -818,6 +818,19 @@ textarea::-webkit-scrollbar-thumb:hover {
   content: "\e600";
   color: #f07d0a;
 }
+
+.chart-date-normal-font .b-font {
+  *zoom: expression( this.runtimeStyle['zoom'] = '1',this.innerHTML = '&#xe61b;');
+}
+.chart-date-normal-font .b-font:before {
+  content: "\e61b";
+  color: inherit;
+}
+.chart-date-normal-font.native .b-font:before,
+.chart-date-normal-font.disabled .b-font:before {
+  content: "\e61b";
+  color: inherit;
+}
 .tree-collapse-icon-type1 .x-icon,
 .tree-collapse-icon-type1:hover .x-icon,
 .tree-collapse-icon-type1:active .x-icon {

@@ -45,4 +45,8 @@ Demo.WIDGET_CONFIG = [{
     pId: 4,
     text: "bi.interactive_arrangement",
     value: "demo.interactive_arrangement"
+}, {
+    pId: 4,
+    text: "bi.custom_date_time",
+    value: "demo.custom_date_time"
 }];
