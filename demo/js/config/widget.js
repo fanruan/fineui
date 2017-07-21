@@ -250,12 +250,12 @@ Demo.WIDGET_CONFIG = [{
         text: "bi.dialog",
         value: "demo.dialog"
     }, {
-        id: 7,
-        text: '数值微调器',
-        value: "demo.test_editor"
+        pId: 4,
+        id: 419,
+        text: '文件管理',
     }, {
-        id: 8,
-        text: '所有日期控件',
-        value: "demo.all_date_widget"
-    }
+        pId: 419,
+        text: "bi.file_manager",
+        value: "demo.file_manager"
+    },
 ];

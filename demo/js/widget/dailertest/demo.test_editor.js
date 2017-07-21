@@ -35,7 +35,7 @@ Demo.TestEditor = BI.inherit(BI.Widget, {
 
         var dateTimeCombo = BI.createWidget({
             type: "bi.date_time_combo",
-            width: 300
+            width: 200
         });
 
         var enable = 1;
