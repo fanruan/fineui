@@ -49,7 +49,9 @@ BI.TimeTuning = BI.inherit(BI.Widget, {
             width: 60,
             height: 30
         });
-        this.h.on(BI.FineTuningNumberEditor.EVENT_CONFIRM, function () {});
+        this.h.on(BI.FineTuningNumberEditor.EVENT_CONFIRM, function () {
+            self.fireEvent(BI.TimeTuning.EVENT_CHANGE);
+        });
 
         //分
         this.m = BI.createWidget({
@@ -62,6 +64,7 @@ BI.TimeTuning = BI.inherit(BI.Widget, {
         })
         this.m.on(BI.FineTuningNumberEditor.EVENT_CONFIRM, function () {
             self._reviseHour();
+            self.fireEvent(BI.TimeTuning.EVENT_CHANGE);
         });
 
         //秒
@@ -75,6 +78,7 @@ BI.TimeTuning = BI.inherit(BI.Widget, {
         })
         this.s.on(BI.FineTuningNumberEditor.EVENT_CONFIRM, function () {
             self._reviseMinute();
+            self.fireEvent(BI.TimeTuning.EVENT_CHANGE);
         });
 
 
@@ -107,7 +111,7 @@ BI.TimeTuning = BI.inherit(BI.Widget, {
 
         BI.createWidget({
             type: "bi.htape",
-            cls: "bi-border demo-clolor",
+            cls: "demo-clolor",
             element: this,
             items: [this.editor],
             width: 270,
@@ -116,12 +120,12 @@ BI.TimeTuning = BI.inherit(BI.Widget, {
     },
 
     _reviseMinute: function () {
-        this.m._finetuning(this.s.isNeedRevise);
+        this.m._finetuning(this.s.getIsNeedRevise());
         this._reviseHour();
     },
 
     _reviseHour: function () {
-        this.h._finetuning(this.m.isNeedRevise);
+        this.h._finetuning(this.m.getIsNeedRevise());
     },
 
     getCurrentTime: function () {
@@ -140,15 +144,24 @@ BI.TimeTuning = BI.inherit(BI.Widget, {
         return this._format(this.h.getValue()) + ':' + this._format(this.m.getValue()) + ':' + this._format(this.s.getValue())
     },
 
+    getValue: function () {
+        return {
+            hour: this.h.getValue(),
+            minute: this.m.getValue(),
+            second: this.s.getValue()
+        }
+    },
+
     setStep: function (step) {
         this.step = step || this.step;
     },
 
-    setValue: function (v) {
-        this.value = v;
-        this.editor.setValue();
+    setValue: function (timeObj) {
+        this.h.setValue(timeObj.hour);
+        this.m.setValue(timeObj.minute);
+        this.s.setValue(timeObj.second);
     }
 
 });
-BI.TimeTuning.EVENT_CONFIRM = "EVENT_CONFIRM";
+BI.TimeTuning.EVENT_CHANGE = "EVENT_CHANGE";
 BI.shortcut("bi.time_tunning", BI.TimeTuning);

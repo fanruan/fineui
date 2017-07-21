@@ -2,12 +2,11 @@
  * Created by dailer on 2017/7/18.
  * 数值微调器练习
  */
-BI.FineTuningNumberEditor = BI.inherit(BI.Widget, {
+BI.NumberSpinner = BI.inherit(BI.Widget, {
     _defaultConfig: function () {
-        return BI.extend(BI.FineTuningNumberEditor.superclass._defaultConfig.apply(this, arguments), {
+        return BI.extend(BI.NumberSpinner.superclass._defaultConfig.apply(this, arguments), {
             baseCls: "bi-fine-tuning-number-editor bi-border",
             value: 0,
-            disabled: false,
             min: 0,
             max: 100000,
             step: 1,
@@ -17,7 +16,7 @@ BI.FineTuningNumberEditor = BI.inherit(BI.Widget, {
     },
 
     _init: function () {
-        BI.FineTuningNumberEditor.superclass._init.apply(this, arguments);
+        BI.NumberSpinner.superclass._init.apply(this, arguments);
         var self = this,
             o = this.options;
         if (o.formatter == BI.emptyFn) {
@@ -42,7 +41,7 @@ BI.FineTuningNumberEditor = BI.inherit(BI.Widget, {
         });
         this.editor.on(BI.TextEditor.EVENT_CONFIRM, function () {
             self.setValue(self.editor.getValue());
-            self.fireEvent(BI.FineTuningNumberEditor.EVENT_CONFIRM);
+            self.fireEvent(BI.NumberSpinner.EVENT_CONFIRM);
         });
 
 
@@ -52,11 +51,10 @@ BI.FineTuningNumberEditor = BI.inherit(BI.Widget, {
             cls: "column-pre-page-h-font top-button bi-border-left bi-border-bottom",
         });
         this.topBtn.on(BI.IconButton.EVENT_CHANGE, function () {
-            self._isNeedRevise();
 
             self._finetuning(1);
 
-            self.fireEvent(BI.FineTuningNumberEditor.EVENT_CONFIRM);
+            self.fireEvent(BI.NumberSpinner.EVENT_CONFIRM);
         });
 
         this.bottomBtn = BI.createWidget({
@@ -66,7 +64,7 @@ BI.FineTuningNumberEditor = BI.inherit(BI.Widget, {
         });
         this.bottomBtn.on(BI.IconButton.EVENT_CHANGE, function () {
             self._finetuning(-1);
-            self.fireEvent(BI.FineTuningNumberEditor.EVENT_CONFIRM);
+            self.fireEvent(BI.NumberSpinner.EVENT_CONFIRM);
         });
 
         this._finetuning(0);
@@ -119,8 +117,8 @@ BI.FineTuningNumberEditor = BI.inherit(BI.Widget, {
 
     },
 
-    _isNeedRevise: function () {
-        // console.log(this.editor.getValue() - this.value);
+    getIsNeedRevise: function () {
+        return this.isNeedRevise;
     },
 
     getMinAndMax: function () {
@@ -148,5 +146,5 @@ BI.FineTuningNumberEditor = BI.inherit(BI.Widget, {
     }
 
 });
-BI.FineTuningNumberEditor.EVENT_CONFIRM = "EVENT_CONFIRM";
-BI.shortcut("bi.test_editor", BI.FineTuningNumberEditor);
+BI.NumberSpinner.EVENT_CONFIRM = "EVENT_CONFIRM";
+BI.shortcut("bi.test_editor", BI.NumberSpinner);

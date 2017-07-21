@@ -25,7 +25,7 @@ BI.DateTimeCombo = BI.inherit(BI.Widget, {
             o = this.options;
 
         this.trigger = BI.createWidget({
-            type: "bi.date_trigger"
+            type: "bi.date_time_trigger1"
         });
 
         this.trigger.on(BI.DateTrigger.EVENT_TRIGGER_CLICK, function () {
@@ -36,13 +36,21 @@ BI.DateTimeCombo = BI.inherit(BI.Widget, {
             type: "bi.date_time_popup"
         });
 
-        this.popup.on(BI.DateCalendarPopup.EVENT_CHANGE, function () {
-            self.setValue(self.popup.getValue());
+        this.popup.on(BI.DateTimePopup.EVENT_CHANGE, function () {
+            //self.setValue(self.popup.getValue());
+        });
+        this.popup.on(BI.DateTimePopup.EVENT_CLICK_CONFIRM, function () {
+            //do something here
+            self.setValue();
+            self.combo.hideView();
+        });
+        this.popup.on(BI.DateTimePopup.EVENT_CLICK_CANCEL, function () {
+            self.combo.hideView();
         });
 
         this.combo = BI.createWidget({
             type: "bi.combo",
-            toggle: false,
+            toggle: true,
             element: this,
             isNeedAdjustHeight: false,
             isNeedAdjustWidth: false,
@@ -56,29 +64,8 @@ BI.DateTimeCombo = BI.inherit(BI.Widget, {
     },
 
 
-    _reviseMinute: function () {
-        this.m._finetuning(this.s.isNeedRevise);
-        this._reviseHour();
-    },
-
-    _reviseHour: function () {
-        this.h._finetuning(this.m.isNeedRevise);
-    },
-
-    getCurrentTime: function () {
-        return {
-            hour: this.h.getValue(),
-            minute: this.m.getValue(),
-            second: this.s.getValue()
-        };
-    },
-
-    _format: function (p) {
-        return p < 10 ? ('0' + p) : p
-    },
-
-    getCurrentTimeStr: function () {
-        return this._format(this.h.getValue()) + ':' + this._format(this.m.getValue()) + ':' + this._format(this.s.getValue())
+    getValue: function () {
+        return this.popup.getValue();
     },
 
     setStep: function (step) {
@@ -86,7 +73,7 @@ BI.DateTimeCombo = BI.inherit(BI.Widget, {
     },
 
     setValue: function (v) {
-
+        this.trigger.setValue(this.popup.getValue());
     }
 
 });
