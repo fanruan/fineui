@@ -3,7 +3,7 @@
  */
 Demo.COMPONENT_CONFIG = [{
     id: 5,
-    text: "部件"
+    text: "部件+服务"
 }, {
     pId: 5,
     text: "bi.value_chooser_combo",

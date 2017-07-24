@@ -2360,7 +2360,7 @@ BI.DateTimeCombo = BI.inherit(BI.Widget, {
             o = this.options;
 
         this.trigger = BI.createWidget({
-            type: "bi.date_trigger"
+            type: "bi.date_time_trigger1"
         });
 
         this.trigger.on(BI.DateTrigger.EVENT_TRIGGER_CLICK, function () {
@@ -2371,13 +2371,21 @@ BI.DateTimeCombo = BI.inherit(BI.Widget, {
             type: "bi.date_time_popup"
         });
 
-        this.popup.on(BI.DateCalendarPopup.EVENT_CHANGE, function () {
-            self.setValue(self.popup.getValue());
+        this.popup.on(BI.DateTimePopup.EVENT_CHANGE, function () {
+            //self.setValue(self.popup.getValue());
+        });
+        this.popup.on(BI.DateTimePopup.EVENT_CLICK_CONFIRM, function () {
+            //do something here
+            self.setValue();
+            self.combo.hideView();
+        });
+        this.popup.on(BI.DateTimePopup.EVENT_CLICK_CANCEL, function () {
+            self.combo.hideView();
         });
 
         this.combo = BI.createWidget({
             type: "bi.combo",
-            toggle: false,
+            toggle: true,
             element: this,
             isNeedAdjustHeight: false,
             isNeedAdjustWidth: false,
@@ -2391,29 +2399,8 @@ BI.DateTimeCombo = BI.inherit(BI.Widget, {
     },
 
 
-    _reviseMinute: function () {
-        this.m._finetuning(this.s.isNeedRevise);
-        this._reviseHour();
-    },
-
-    _reviseHour: function () {
-        this.h._finetuning(this.m.isNeedRevise);
-    },
-
-    getCurrentTime: function () {
-        return {
-            hour: this.h.getValue(),
-            minute: this.m.getValue(),
-            second: this.s.getValue()
-        };
-    },
-
-    _format: function (p) {
-        return p < 10 ? ('0' + p) : p
-    },
-
-    getCurrentTimeStr: function () {
-        return this._format(this.h.getValue()) + ':' + this._format(this.m.getValue()) + ':' + this._format(this.s.getValue())
+    getValue: function () {
+        return this.popup.getValue();
     },
 
     setStep: function (step) {
@@ -2421,296 +2408,20 @@ BI.DateTimeCombo = BI.inherit(BI.Widget, {
     },
 
     setValue: function (v) {
-
+        this.trigger.setValue(this.popup.getValue());
     }
 
 });
 BI.DateTimeCombo.EVENT_CONFIRM = "EVENT_CONFIRM";
 BI.shortcut("bi.date_time_combo", BI.DateTimeCombo);/**
- * Created by GUY on 2015/9/7.
- * @class BI.DateCalendarPopup
- * @extends BI.Widget
- */
-BI.DateTimePopup = BI.inherit(BI.Widget, {
-    _defaultConfig: function () {
-        var conf = BI.DateTimePopup.superclass._defaultConfig.apply(this, arguments);
-        return BI.extend(conf, {
-            baseCls: "bi-date-calendar-popup",
-            min: '1900-01-01', //最小日期
-            max: '2099-12-31', //最大日期
-            selectedTime: null
-        })
-    },
-
-    _createNav: function (v) {
-        var date = BI.Calendar.getDateJSONByPage(v);
-        var calendar = BI.createWidget({
-            type: "bi.calendar",
-            logic: {
-                dynamic: true
-            },
-            min: this.options.min,
-            max: this.options.max,
-            year: date.year,
-            month: date.month,
-            day: this.selectedTime.day
-        });
-        return calendar
-    },
-
-    _init: function () {
-        BI.DateTimePopup.superclass._init.apply(this, arguments);
-        var self = this,
-            o = this.options;
-        this.today = new Date();
-        this._year = this.today.getFullYear();
-        this._month = this.today.getMonth();
-        this._day = this.today.getDate();
-
-        this.selectedTime = o.selectedTime || {
-            year: this._year,
-            month: this._month,
-            day: this._day
-        };
-        this.datePicker = BI.createWidget({
-            type: "bi.date_picker",
-            min: o.min,
-            max: o.max
-        });
-
-        this.calendar = BI.createWidget({
-            direction: "top",
-            // element: this,
-            logic: {
-                dynamic: true
-            },
-            type: "bi.navigation",
-            tab: this.datePicker,
-            cardCreator: BI.bind(this._createNav, this),
-
-            afterCardCreated: function () {
-
-            },
-
-            afterCardShow: function () {
-                this.setValue(self.selectedTime);
-            }
-        });
-
-        this.timeTunning = BI.createWidget({
-            type: "bi.time_tunning"
-        });
-
-        this.buttons = BI.createWidget({
-            type: "bi.button_group",
-            items: [{
-                type: "bi.text_button",
-                text: BI.i18nText('BI-Basic_Clears')
-            }, {
-                type: "bi.text_button",
-                text: BI.i18nText("BI-Basic_Sure")
-            }],
-            chooseType: 0,
-            behaviors: {},
-            layouts: [{
-                type: "bi.center_adapt"
-            }]
-        });
-
-        this.dateTime = BI.createWidget({
-            type: "bi.vertical",
-            element: this,
-            items: [this.calendar, this.timeTunning, this.buttons]
-        });
-
-        this.datePicker.on(BI.DatePicker.EVENT_CHANGE, function () {
-            self.selectedTime = self.datePicker.getValue();
-            self.selectedTime.day = 1;
-            self.calendar.setSelect(BI.Calendar.getPageByDateJSON(self.selectedTime));
-        });
-
-        this.calendar.on(BI.Navigation.EVENT_CHANGE, function () {
-            self.selectedTime = self.calendar.getValue();
-            self.setValue(self.selectedTime);
-            self.fireEvent(BI.DateCalendarPopup.EVENT_CHANGE);
-        });
-    },
-
-    setValue: function (timeOb) {
-        this.datePicker.setValue(timeOb);
-        this.calendar.setSelect(BI.Calendar.getPageByDateJSON(timeOb));
-        this.calendar.setValue(timeOb);
-        this.selectedTime = timeOb;
-    },
-
-    getValue: function () {
-        return this.selectedTime;
-    }
-});
-BI.DateTimePopup.EVENT_CHANGE = "EVENT_CHANGE";
-BI.shortcut("bi.date_time_popup", BI.DateTimePopup);/**
- * Created by dailer on 2017/7/19.
- * 时间微调器练习
- */
-
-BI.TimeTuning = BI.inherit(BI.Widget, {
-    _defaultConfig: function () {
-        return BI.extend(BI.TimeTuning.superclass._defaultConfig.apply(this, arguments), {
-            baseCls: "bi-fine-tuning-number-editor bi-border",
-            disabled: false,
-            currentTime: {
-                hour: 0,
-                minute: 0,
-                second: 0
-            }
-        })
-    },
-
-    _init: function () {
-        BI.TimeTuning.superclass._init.apply(this, arguments);
-        var self = this,
-            o = this.options;
-        if (o.formatter == BI.emptyFn) {
-            this.formatter = function (v) {
-                return v;
-            }
-        } else {
-            this.formatter = o.formatter;
-        }
-
-        this.parser = o.parser;
-        this.step = o.step;
-        this.min = o.min;
-        this.max = o.max;
-        this.currentTime = BI.deepClone(o.currentTime);
-        this.last = {
-            lastH: o.currentTime.hour,
-            lastM: o.currentTime.minute,
-            lastS: o.currentTime.second
-        }
-
-
-        //时
-        this.h = BI.createWidget({
-            type: "bi.test_editor",
-            value: this.currentTime.hour,
-            min: 0,
-            max: 23,
-            width: 60,
-            height: 30
-        });
-        this.h.on(BI.FineTuningNumberEditor.EVENT_CONFIRM, function () {});
-
-        //分
-        this.m = BI.createWidget({
-            type: "bi.test_editor",
-            value: this.currentTime.minute,
-            min: 0,
-            max: 59,
-            width: 60,
-            height: 30
-        })
-        this.m.on(BI.FineTuningNumberEditor.EVENT_CONFIRM, function () {
-            self._reviseHour();
-        });
-
-        //秒
-        this.s = BI.createWidget({
-            type: "bi.test_editor",
-            value: this.currentTime.second,
-            min: 0,
-            max: 59,
-            width: 60,
-            height: 30
-        })
-        this.s.on(BI.FineTuningNumberEditor.EVENT_CONFIRM, function () {
-            self._reviseMinute();
-        });
-
-
-
-        this.editor = BI.createWidget({
-            type: "bi.horizontal",
-            items: [{
-                    type: "bi.label",
-                    text: "时间",
-                    width: 45,
-                    height: 30
-                },
-                this.h,
-                {
-                    type: "bi.text",
-                    text: ":",
-                    textAlign: "center",
-                    width: 15
-                },
-                this.m,
-                {
-                    type: "bi.text",
-                    text: ":",
-                    textAlign: "center",
-                    width: 15
-                },
-                this.s
-            ]
-        });
-
-        BI.createWidget({
-            type: "bi.htape",
-            cls: "bi-border demo-clolor",
-            element: this,
-            items: [this.editor],
-            width: 270,
-            height: 50
-        });
-    },
-
-    _reviseMinute: function () {
-        this.m._finetuning(this.s.isNeedRevise);
-        this._reviseHour();
-    },
-
-    _reviseHour: function () {
-        this.h._finetuning(this.m.isNeedRevise);
-    },
-
-    getCurrentTime: function () {
-        return {
-            hour: this.h.getValue(),
-            minute: this.m.getValue(),
-            second: this.s.getValue()
-        };
-    },
-
-    _format: function (p) {
-        return p < 10 ? ('0' + p) : p
-    },
-
-    getCurrentTimeStr: function () {
-        return this._format(this.h.getValue()) + ':' + this._format(this.m.getValue()) + ':' + this._format(this.s.getValue())
-    },
-
-    setStep: function (step) {
-        this.step = step || this.step;
-    },
-
-    setValue: function (v) {
-        this.value = v;
-        this.editor.setValue();
-    }
-
-});
-BI.TimeTuning.EVENT_CONFIRM = "EVENT_CONFIRM";
-BI.shortcut("bi.time_tunning", BI.TimeTuning);/**
  * Created by dailer on 2017/7/18.
  * 数值微调器练习
  */
-BI.FineTuningNumberEditor = BI.inherit(BI.Widget, {
+BI.NumberSpinner = BI.inherit(BI.Widget, {
     _defaultConfig: function () {
-        return BI.extend(BI.FineTuningNumberEditor.superclass._defaultConfig.apply(this, arguments), {
+        return BI.extend(BI.NumberSpinner.superclass._defaultConfig.apply(this, arguments), {
             baseCls: "bi-fine-tuning-number-editor bi-border",
             value: 0,
-            disabled: false,
             min: 0,
             max: 100000,
             step: 1,
@@ -2720,7 +2431,7 @@ BI.FineTuningNumberEditor = BI.inherit(BI.Widget, {
     },
 
     _init: function () {
-        BI.FineTuningNumberEditor.superclass._init.apply(this, arguments);
+        BI.NumberSpinner.superclass._init.apply(this, arguments);
         var self = this,
             o = this.options;
         if (o.formatter == BI.emptyFn) {
@@ -2745,7 +2456,7 @@ BI.FineTuningNumberEditor = BI.inherit(BI.Widget, {
         });
         this.editor.on(BI.TextEditor.EVENT_CONFIRM, function () {
             self.setValue(self.editor.getValue());
-            self.fireEvent(BI.FineTuningNumberEditor.EVENT_CONFIRM);
+            self.fireEvent(BI.NumberSpinner.EVENT_CONFIRM);
         });
 
 
@@ -2755,11 +2466,10 @@ BI.FineTuningNumberEditor = BI.inherit(BI.Widget, {
             cls: "column-pre-page-h-font top-button bi-border-left bi-border-bottom",
         });
         this.topBtn.on(BI.IconButton.EVENT_CHANGE, function () {
-            self._isNeedRevise();
 
             self._finetuning(1);
 
-            self.fireEvent(BI.FineTuningNumberEditor.EVENT_CONFIRM);
+            self.fireEvent(BI.NumberSpinner.EVENT_CONFIRM);
         });
 
         this.bottomBtn = BI.createWidget({
@@ -2769,7 +2479,7 @@ BI.FineTuningNumberEditor = BI.inherit(BI.Widget, {
         });
         this.bottomBtn.on(BI.IconButton.EVENT_CHANGE, function () {
             self._finetuning(-1);
-            self.fireEvent(BI.FineTuningNumberEditor.EVENT_CONFIRM);
+            self.fireEvent(BI.NumberSpinner.EVENT_CONFIRM);
         });
 
         this._finetuning(0);
@@ -2822,8 +2532,8 @@ BI.FineTuningNumberEditor = BI.inherit(BI.Widget, {
 
     },
 
-    _isNeedRevise: function () {
-        // console.log(this.editor.getValue() - this.value);
+    getIsNeedRevise: function () {
+        return this.isNeedRevise;
     },
 
     getMinAndMax: function () {
@@ -2851,8 +2561,399 @@ BI.FineTuningNumberEditor = BI.inherit(BI.Widget, {
     }
 
 });
-BI.FineTuningNumberEditor.EVENT_CONFIRM = "EVENT_CONFIRM";
-BI.shortcut("bi.test_editor", BI.FineTuningNumberEditor);/**
+BI.NumberSpinner.EVENT_CONFIRM = "EVENT_CONFIRM";
+BI.shortcut("bi.test_editor", BI.NumberSpinner);/**
+ * Created by GUY on 2015/9/7.
+ * @class BI.DateCalendarPopup
+ * @extends BI.Widget
+ */
+BI.DateTimePopup = BI.inherit(BI.Widget, {
+    _defaultConfig: function () {
+        var conf = BI.DateTimePopup.superclass._defaultConfig.apply(this, arguments);
+        return BI.extend(conf, {
+            baseCls: "bi-date-calendar-popup demo-clolor",
+            min: '1900-01-01', //最小日期
+            max: '2099-12-31', //最大日期
+            selectedTime: null
+        })
+    },
+
+    _createNav: function (v) {
+        var date = BI.Calendar.getDateJSONByPage(v);
+        var calendar = BI.createWidget({
+            type: "bi.calendar",
+            logic: {
+                dynamic: true
+            },
+            min: this.options.min,
+            max: this.options.max,
+            year: date.year,
+            month: date.month,
+            day: this.selectedTime.day
+        });
+        return calendar
+    },
+
+    _init: function () {
+        BI.DateTimePopup.superclass._init.apply(this, arguments);
+        var self = this,
+            o = this.options;
+        this.today = new Date();
+        this._year = this.today.getFullYear();
+        this._month = this.today.getMonth();
+        this._day = this.today.getDate();
+        this._hour = this.today.getHours();
+        this._minute = this.today.getMinutes();
+        this._second = this.today.getSeconds();
+
+        this.selectedTime = o.selectedTime || {
+            year: this._year,
+            month: this._month,
+            day: this._day,
+            hour: this._hour,
+            minute: this._minute,
+            second: this._second
+        };
+        this.datePicker = BI.createWidget({
+            type: "bi.date_picker",
+            min: o.min,
+            max: o.max,
+            cls: "demo-clolor",
+        });
+
+        this.calendar = BI.createWidget({
+            direction: "top",
+            // element: this,
+            logic: {
+                dynamic: true
+            },
+            type: "bi.navigation",
+            tab: this.datePicker,
+            cardCreator: BI.bind(this._createNav, this),
+
+            afterCardCreated: function () {
+
+            },
+
+            afterCardShow: function () {
+                this.setValue(self.selectedTime);
+                self.calendar.setSelect(BI.Calendar.getPageByDateJSON(self.selectedTime));
+            }
+        });
+
+        this.timeTunning = BI.createWidget({
+            type: "bi.time_tunning",
+            currentTime: {
+                hour: this._hour,
+                minute: this._minute,
+                second: this._second
+            }
+        });
+        this.timeTunning.on(BI.TimeTuning.EVENT_CHANGE, function () {
+            self.selectedTime = self.timeTunning.getValue();
+        });
+
+        this.buttons = BI.createWidget({
+            type: "bi.button_group",
+            items: [{
+                type: "bi.button",
+                textHeight: 30,
+                clear: true,
+                text: "取消",
+                handler: function () {
+                    self.fireEvent(BI.DateTimePopup.EVENT_CLICK_CANCEL);
+                }
+            }, {
+                text: "|"
+            }, {
+                type: "bi.button",
+                textHeight: 30,
+                clear: true,
+                text: BI.i18nText("BI-Basic_Sure"),
+                handler: function () {
+                    self.fireEvent(BI.DateTimePopup.EVENT_CLICK_CONFIRM);
+                }
+            }],
+            chooseType: 0,
+            behaviors: {},
+            layouts: [{
+                type: "bi.center_adapt"
+            }]
+        });
+
+        this.dateTime = BI.createWidget({
+            type: "bi.vertical",
+            element: this,
+            items: [this.calendar, this.timeTunning, this.buttons]
+        });
+
+        this.datePicker.on(BI.DatePicker.EVENT_CHANGE, function () {
+            self.selectedTime = self.datePicker.getValue();
+            self.selectedTime.day = 1;
+            self.calendar.setSelect(BI.Calendar.getPageByDateJSON(self.selectedTime));
+        });
+
+        this.calendar.on(BI.Navigation.EVENT_CHANGE, function () {
+            self.selectedTime = self.calendar.getValue();
+            self.fireEvent(BI.DateTimePopup.EVENT_CHANGE);
+        });
+
+        self.calendar.setSelect(BI.Calendar.getPageByDateJSON(self.selectedTime));
+        this.calendar.setValue(this.selectedTime);
+    },
+
+    setValue: function (timeOb) {
+        this.datePicker.setValue(timeOb);
+        this.calendar.setSelect(BI.Calendar.getPageByDateJSON(timeOb));
+        this.calendar.setValue(timeOb);
+        this.timeTunning.setValue(timeOb);
+        this.selectedTime = timeOb;
+    },
+
+    getValue: function () {
+        return $.extend({}, this.calendar.getValue(), this.timeTunning.getValue());
+    }
+});
+BI.DateTimePopup.EVENT_CHANGE = "EVENT_CHANGE";
+BI.DateTimePopup.EVENT_CLICK_CONFIRM = "EVENT_CLICK_CONFIRM";
+BI.DateTimePopup.EVENT_CLICK_CANCEL = "EVENT_CLICK_CANCEL";
+BI.shortcut("bi.date_time_popup", BI.DateTimePopup);/**
+ * Created by dailer on 2017/7/19.
+ * 时间微调器练习
+ */
+
+BI.TimeTuning = BI.inherit(BI.Widget, {
+    _defaultConfig: function () {
+        return BI.extend(BI.TimeTuning.superclass._defaultConfig.apply(this, arguments), {
+            baseCls: "bi-fine-tuning-number-editor bi-border",
+            disabled: false,
+            currentTime: {
+                hour: 0,
+                minute: 0,
+                second: 0
+            }
+        })
+    },
+
+    _init: function () {
+        BI.TimeTuning.superclass._init.apply(this, arguments);
+        var self = this,
+            o = this.options;
+        if (o.formatter == BI.emptyFn) {
+            this.formatter = function (v) {
+                return v;
+            }
+        } else {
+            this.formatter = o.formatter;
+        }
+
+        this.parser = o.parser;
+        this.step = o.step;
+        this.min = o.min;
+        this.max = o.max;
+        this.currentTime = BI.deepClone(o.currentTime);
+        this.last = {
+            lastH: o.currentTime.hour,
+            lastM: o.currentTime.minute,
+            lastS: o.currentTime.second
+        }
+
+
+        //时
+        this.h = BI.createWidget({
+            type: "bi.test_editor",
+            value: this.currentTime.hour,
+            min: 0,
+            max: 23,
+            width: 60,
+            height: 30
+        });
+        this.h.on(BI.FineTuningNumberEditor.EVENT_CONFIRM, function () {
+            self.fireEvent(BI.TimeTuning.EVENT_CHANGE);
+        });
+
+        //分
+        this.m = BI.createWidget({
+            type: "bi.test_editor",
+            value: this.currentTime.minute,
+            min: 0,
+            max: 59,
+            width: 60,
+            height: 30
+        })
+        this.m.on(BI.FineTuningNumberEditor.EVENT_CONFIRM, function () {
+            self._reviseHour();
+            self.fireEvent(BI.TimeTuning.EVENT_CHANGE);
+        });
+
+        //秒
+        this.s = BI.createWidget({
+            type: "bi.test_editor",
+            value: this.currentTime.second,
+            min: 0,
+            max: 59,
+            width: 60,
+            height: 30
+        })
+        this.s.on(BI.FineTuningNumberEditor.EVENT_CONFIRM, function () {
+            self._reviseMinute();
+            self.fireEvent(BI.TimeTuning.EVENT_CHANGE);
+        });
+
+
+
+        this.editor = BI.createWidget({
+            type: "bi.horizontal",
+            items: [{
+                    type: "bi.label",
+                    text: "时间",
+                    width: 45,
+                    height: 30
+                },
+                this.h,
+                {
+                    type: "bi.text",
+                    text: ":",
+                    textAlign: "center",
+                    width: 15
+                },
+                this.m,
+                {
+                    type: "bi.text",
+                    text: ":",
+                    textAlign: "center",
+                    width: 15
+                },
+                this.s
+            ]
+        });
+
+        BI.createWidget({
+            type: "bi.htape",
+            cls: "demo-clolor",
+            element: this,
+            items: [this.editor],
+            width: 270,
+            height: 50
+        });
+    },
+
+    _reviseMinute: function () {
+        this.m._finetuning(this.s.getIsNeedRevise());
+        this._reviseHour();
+    },
+
+    _reviseHour: function () {
+        this.h._finetuning(this.m.getIsNeedRevise());
+    },
+
+    getCurrentTime: function () {
+        return {
+            hour: this.h.getValue(),
+            minute: this.m.getValue(),
+            second: this.s.getValue()
+        };
+    },
+
+    _format: function (p) {
+        return p < 10 ? ('0' + p) : p
+    },
+
+    getCurrentTimeStr: function () {
+        return this._format(this.h.getValue()) + ':' + this._format(this.m.getValue()) + ':' + this._format(this.s.getValue())
+    },
+
+    getValue: function () {
+        return {
+            hour: this.h.getValue(),
+            minute: this.m.getValue(),
+            second: this.s.getValue()
+        }
+    },
+
+    setStep: function (step) {
+        this.step = step || this.step;
+    },
+
+    setValue: function (timeObj) {
+        this.h.setValue(timeObj.hour);
+        this.m.setValue(timeObj.minute);
+        this.s.setValue(timeObj.second);
+    }
+
+});
+BI.TimeTuning.EVENT_CHANGE = "EVENT_CHANGE";
+BI.shortcut("bi.time_tunning", BI.TimeTuning);BI.DateTimeTrigger = BI.inherit(BI.Trigger, {
+
+    _defaultConfig: function () {
+        return BI.extend(BI.DateTimeTrigger.superclass._defaultConfig.apply(this, arguments), {
+            extraCls: "bi-date-trigger",
+            min: '1900-01-01', //最小日期
+            max: '2099-12-31', //最大日期
+            height: 32
+        });
+    },
+    _init: function () {
+        BI.DateTimeTrigger.superclass._init.apply(this, arguments);
+        var self = this,
+            o = this.options;
+        this.label = BI.createWidget({
+            type: "bi.label",
+            textAlign: "left",
+            text: "",
+            height: o.height
+        });
+
+        BI.createWidget({
+            type: "bi.htape",
+            element: this,
+            items: [{
+                el: BI.createWidget({
+                    type: "bi.icon_button",
+                    cls: "search-font"
+                }),
+                width: 30
+            }, {
+                el: this.label
+            }]
+        })
+
+        var today = new Date(),
+            timeObj = {
+                year: today.getFullYear(),
+                month: today.getMonth(),
+                day: today.getDate(),
+                hour: today.getHours(),
+                minute: today.getMinutes(),
+                second: today.getSeconds()
+            };
+        this.setValue(timeObj);
+    },
+
+
+
+    _parseTimeObjToStr: function (timeObj) {
+        var _format = function (p) {
+            return p < 10 ? ('0' + p) : p
+        };
+        BI.each(timeObj, function (key, val) {
+            timeObj[key] = _format(timeObj[key]);
+        });
+        return timeObj.year + "-" + (1 + BI.parseInt(timeObj.month)) + "-" + timeObj.day + " " + timeObj.hour + ":" + timeObj.minute + ":" + timeObj.second;
+    },
+
+    setValue: function (v) {
+        this.label.setValue(this._parseTimeObjToStr(v));
+
+    },
+
+    getValue: function () {
+
+    }
+
+});
+
+BI.shortcut("bi.date_time_trigger1", BI.DateTimeTrigger);/**
  * 日期控件中的月份下拉框
  *
  * Created by GUY on 2015/9/7.

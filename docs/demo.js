@@ -3129,7 +3129,7 @@ BI.shortcut("demo.value_chooser_pane", Demo.ValueChooserPane);Demo.BASE_CONFIG =
  */
 Demo.COMPONENT_CONFIG = [{
     id: 5,
-    text: "部件"
+    text: "部件+服务"
 }, {
     pId: 5,
     text: "bi.value_chooser_combo",
@@ -3589,14 +3589,14 @@ Demo.COMPONENT_CONFIG = [{
         text: "bi.dialog",
         value: "demo.dialog"
     }, {
-        id: 7,
-        text: '数值微调器',
-        value: "demo.test_editor"
+        pId: 4,
+        id: 419,
+        text: '文件管理',
     }, {
-        id: 8,
-        text: '所有日期控件',
-        value: "demo.all_date_widget"
-    }
+        pId: 419,
+        text: "bi.file_manager",
+        value: "demo.file_manager"
+    },
 ];Demo.Func = BI.inherit(BI.Widget, {
     props: {
         baseCls: "demo-func"
@@ -6562,179 +6562,34 @@ Demo.Date = BI.inherit(BI.Widget, {
     },
 
     render: function () {
-
+        var self = this;
         return {
             type: "bi.horizontal_auto",
             vgap: 10,
             items: [{
                 type: "bi.date_combo",
-                width: 300
-            }, {
-                type: "bi.date_picker",
-                width: 300
-            }, {
-                type: "bi.date_trigger",
-                width: 300
-            }, {
-                type: "bi.date_calendar_popup",
-                width: 300
-            }, {
-                type: "bi.date_triangle_trigger",
-                width: 300
-            }, {
-                type: "bi.calendar",
-                logic: {
-                    dynamic: true
+                ref: function () {
+                    self.datecombo = this;
                 },
-                width: 300
-            }]
-        }
-    }
-})
-
-BI.shortcut("demo.all_date_widget", Demo.Date);/**
- * Created by Dailer on 2017/7/18.
- */
-Demo.TestEditor = BI.inherit(BI.Widget, {
-    props: {
-        baseCls: ""
-    },
-    render: function () {
-        var editor = BI.createWidget({
-            type: "bi.sign_editor",
-            cls: "bi-border",
-            width: 90,
-            height: 28,
-        });
-
-        var test = BI.createWidget({
-            type: "bi.test_editor",
-            // formatter: function (v) {
-            //     return v + "%";
-            // },
-            value: 12,
-            width: 90,
-            height: 28,
-            step: 1
-        });
-
-        var timetunning = BI.createWidget({
-            type: "bi.time_tunning",
-            currentTime: {
-                hour: 13,
-                minute: 45,
-                second: 50
-            }
-        });
-
-        var dateTimeCombo = BI.createWidget({
-            type: "bi.date_time_combo",
-            width: 300
-        });
-
-        var enable = 1;
-
-        return {
-            type: "bi.horizontal_auto",
-            items: [{
-                    el: test
-                },
-                {
-                    type: "bi.left",
-                    items: [{
-                        el: editor
-                    }, {
-                        type: "bi.button",
-                        text: "设置step",
-                        width: 90,
-                        height: 28,
-                        handler: function () {
-                            test.setStep(editor.getValue());
-                            BI.Msg.toast("设置成功")
-                        },
-                        lgap: 5
-                    }, {
-                        type: "bi.button",
-                        text: "toggle disabled",
-                        height: 28,
-                        handler: function () {
-                            enable *= -1;
-                            test.setEnable(Boolean(1 + enable));
-                            BI.Msg.toast("设置成功")
-                        },
-                        lgap: 20
-                    }]
-                },
-                {
-                    type: "bi.left",
-                    items: [
-                        timetunning,
-                        {
-                            type: "bi.label",
-                            text: "时间选择控件,自动进位与退位,返回数据自动对小于10的数补0",
-                            whiteSpace: "normal",
-                            cls: "layout-bg3",
-                            height: 50,
-                            width: 400,
-                            lgap: 10
-                        }
-                    ],
-                },
-                {
-                    type: "bi.left",
-                    items: [{
-                        type: "bi.button",
-                        text: "getCurrentTime",
-                        cls: "layout-bg1",
-                        handler: function () {
-                            BI.Msg.alert("JSON 形式", JSON.stringify(timetunning.getCurrentTime()));
-                        }
-                    }, {
-                        type: "bi.button",
-                        text: "getCurrentTimeStr",
-                        cls: "layout-bg1",
-                        handler: function () {
-                            BI.Msg.alert("字符串形式", timetunning.getCurrentTimeStr());
-                        }
-                    }],
-                    hgap: 10
-                },
-                {
-                    type: "bi.left",
-                    items: [dateTimeCombo]
-                }
-            ],
-            vgap: 20,
-            hgap: 10
-        }
-    }
-});
-
-BI.shortcut("demo.test_editor", Demo.TestEditor);/**
- * Created by Dailer on 2017/7/11.
- */
-Demo.Date = BI.inherit(BI.Widget, {
-    props: {
-        baseCls: "demo-date"
-    },
-
-    _init: function () {
-        Demo.Date.superclass._init.apply(this, arguments);
-    },
-
-    render: function () {
-
-        return {
-            type: "bi.horizontal_auto",
-            vgap: 10,
-            items: [{
-                type: "bi.date_combo",
                 width: 300
             }, {
                 type: "bi.button",
                 text: "getVlaue",
-                height: 50,
-                width: 300
+                width: 300,
+                handler: function () {
+                    BI.Msg.alert("date", JSON.stringify(self.datecombo.getValue()));
+                }
+            }, {
+                type: "bi.button",
+                text: "setVlaue '2017-12-31'",
+                width: 300,
+                handler: function () {
+                    self.datecombo.setValue({
+                        year: 2017,
+                        month: 11,
+                        day: 31
+                    })
+                }
             }]
         }
     }
@@ -6745,7 +6600,7 @@ BI.shortcut("demo.date", Demo.Date);Demo.DatePane = BI.inherit(BI.Widget, {
         baseCls: "demo-datepane"
     },
     render: function () {
-
+        var self = this;
         return {
             type: "bi.horizontal_auto",
             items: [{
@@ -6762,13 +6617,26 @@ BI.shortcut("demo.date", Demo.Date);Demo.DatePane = BI.inherit(BI.Widget, {
                             month: 12,
                             day: 11
                         },
-                        height:300
+                        ref: function (_ref) {
+                            self.datepane = _ref;
+                        },
+                        height: 300
                     },
                     {
                         type: "bi.button",
                         text: "getValue",
                         handler: function () {
-                            BI.Msg.toast("date" + JSON.stringify(datepane.getValue()));
+                            BI.Msg.toast("date" + JSON.stringify(self.datepane.getValue()));
+                        }
+                    }, {
+                        type: "bi.button",
+                        text: "setVlaue '2017-12-31'",
+                        handler: function () {
+                            self.datepane.setValue({
+                                year: 2017,
+                                month: 11,
+                                day: 31
+                            })
                         }
                     }
                 ],
@@ -7211,7 +7079,74 @@ Demo.TextEditor = BI.inherit(BI.Widget, {
     }
 })
 
-BI.shortcut("demo.text_editor", Demo.TextEditor);/**
+BI.shortcut("demo.text_editor", Demo.TextEditor);/* 文件管理导航
+    Created by dailer on 2017 / 7 / 21. 
+   */
+Demo.FileManager = BI.inherit(BI.Widget, {
+    props: {
+        baseCls: ""
+    },
+
+    render: function () {
+        var items = [{
+            id: "1",
+            value: "1",
+            text: "根目录",
+            lastModify: 1454316355142
+        }, {
+            id: "11",
+            pId: "1",
+            value: "11",
+            text: "第一级子目录1",
+            lastModify: 1454316355142
+        }, {
+            id: "12",
+            pId: "1",
+            value: "12",
+            text: "第一级子目录2",
+            lastModify: 1454316355142
+        }, {
+            id: "111",
+            pId: "11",
+            value: "111",
+            text: "第二级子目录",
+            lastModify: 1454316355142
+        }, {
+            id: "121",
+            pId: "111",
+            buildUrl: "www.baidu.com",
+            value: "121",
+            text: "文件1",
+            lastModify: 1454316355142
+        }, {
+            id: "122",
+            pId: "111",
+            buildUrl: "www.baidu.com",
+            value: "122",
+            text: "文件2",
+            lastModify: 1454316355142
+        }];
+        var filemanager = BI.createWidget({
+            type: "bi.file_manager",
+            items: items
+        });
+        return {
+            type: "bi.vtape",
+            items: [{
+                el: filemanager,
+                height: "fill"
+            }, {
+                type: "bi.button",
+                text: "getValue",
+                handler: function () {
+                    BI.Msg.alert("", JSON.stringify(filemanager.getValue()));
+                },
+                height: 25
+            }]
+        }
+    }
+});
+BI.shortcut("demo.file_manager", Demo.FileManager);/**
  * Created by Dailer on 2017/7/11.
  */
 Demo.Month = BI.inherit(BI.Widget, {
@@ -7219,13 +7154,35 @@ Demo.Month = BI.inherit(BI.Widget, {
         baseCls: "demo-exceltable"
     },
     render: function () {
+        var self = this;
         return {
-            type: "bi.horizontal_adapt",
+            type: "bi.horizontal_auto",
             items: [{
                 type: "bi.month_combo",
+                width: 300,
+                ref: function () {
+                    self.monthcombo = this;
+                }
+            }, {
+                type: "bi.button",
+                text: "getValue",
+                handler: function () {
+                    BI.Msg.toast(JSON.stringify(self.monthcombo.getValue()));
+                },
                 width: 300
-            }]
-
+            }, {
+                type: "bi.button",
+                text: "setValue : 11",
+                handler: function () {
+                    self.monthcombo.setValue(11);
+                },
+                width: 300
+            }, {
+                type: "bi.label",
+                text: "月份value 范围为0-11,显示范围为1-12",
+                width: 300
+            }],
+            vgap: 10
         }
     }
 })
@@ -8164,13 +8121,31 @@ Demo.Quarter = BI.inherit(BI.Widget, {
         baseCls: "demo-exceltable"
     },
     render: function () {
+        var self = this;
         return {
-            type: "bi.horizontal_adapt",
+            type: "bi.horizontal_auto",
             items: [{
                 type: "bi.quarter_combo",
+                width: 300,
+                ref: function () {
+                    self.quartercombo = this;
+                }
+            }, {
+                type: "bi.button",
+                text: "getValue",
+                handler: function () {
+                    BI.Msg.toast(JSON.stringify(self.quartercombo.getValue()));
+                },
                 width: 300
-            }]
-
+            }, {
+                type: "bi.button",
+                text: "setValue : 3",
+                handler: function () {
+                    self.quartercombo.setValue(3);
+                },
+                width: 300
+            }],
+            vgap: 10
         }
     }
 })
@@ -9530,12 +9505,31 @@ Demo.Year = BI.inherit(BI.Widget, {
         baseCls: "demo-exceltable"
     },
     render: function () {
+        var self = this;
         return {
-            type: "bi.horizontal_adapt",
+            type: "bi.horizontal_auto",
             items: [{
                 type: "bi.year_combo",
+                width: 300,
+                ref: function () {
+                    self.yearcombo = this;
+                }
+            }, {
+                type: "bi.button",
+                text: "getValue",
+                handler: function () {
+                    BI.Msg.toast(JSON.stringify(self.yearcombo.getValue()));
+                },
                 width: 300
-            }]
+            }, {
+                type: "bi.button",
+                text: "setValue : 2018",
+                handler: function () {
+                    self.yearcombo.setValue(2018);
+                },
+                width: 300
+            }],
+            vgap: 10
         }
     }
 })
@@ -9565,6 +9559,16 @@ Demo.YearMonthCombo = BI.inherit(BI.Widget, {
                     BI.Msg.toast(JSON.stringify(self.widget.getValue()))
                 },
                 width: 300
+            }, {
+                type: "bi.button",
+                text: "setVlaue '2017-12'",
+                width: 300,
+                handler: function () {
+                    self.widget.setValue({
+                        year: 2017,
+                        month: 11
+                    })
+                }
             }],
             vgap: 20
         }
@@ -9579,24 +9583,34 @@ Demo.YearQuarterCombo = BI.inherit(BI.Widget, {
         baseCls: ""
     },
     render: function () {
-        var self=this;
+        var self = this;
         return {
             type: "bi.horizontal_auto",
             items: [{
                 type: "bi.year_quarter_combo",
                 width: 300,
-                ref:function(_ref){
-                    self.widget=_ref;
+                ref: function (_ref) {
+                    self.widget = _ref;
                 },
                 yearBehaviors: {},
                 quarterBehaviors: {},
             }, {
                 type: "bi.button",
                 text: "getValue",
-                handler:function(){
+                handler: function () {
                     BI.Msg.toast(JSON.stringify(self.widget.getValue()))
                 },
                 width: 300
+            }, {
+                type: "bi.button",
+                text: "setVlaue '2017 季度3'",
+                width: 300,
+                handler: function () {
+                    self.widget.setValue({
+                        year: 2017,
+                        quarter: 3
+                    })
+                }
             }],
             vgap: 20
         }

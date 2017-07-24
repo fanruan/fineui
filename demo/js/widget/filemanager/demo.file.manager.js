@@ -34,20 +34,34 @@ Demo.FileManager = BI.inherit(BI.Widget, {
             id: "121",
             pId: "111",
             buildUrl: "www.baidu.com",
-            value: "111",
-            text: "文件2",
+            value: "121",
+            text: "文件1",
             lastModify: 1454316355142
         }, {
             id: "122",
             pId: "111",
             buildUrl: "www.baidu.com",
-            value: "112",
-            text: "文件3",
+            value: "122",
+            text: "文件2",
             lastModify: 1454316355142
         }];
-        return {
+        var filemanager = BI.createWidget({
             type: "bi.file_manager",
             items: items
+        });
+        return {
+            type: "bi.vtape",
+            items: [{
+                el: filemanager,
+                height: "fill"
+            }, {
+                type: "bi.button",
+                text: "getValue",
+                handler: function () {
+                    BI.Msg.alert("", JSON.stringify(filemanager.getValue()));
+                },
+                height: 25
+            }]
         }
     }
 });

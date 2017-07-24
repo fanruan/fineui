@@ -11,18 +11,34 @@ Demo.Date = BI.inherit(BI.Widget, {
     },
 
     render: function () {
-
+        var self = this;
         return {
             type: "bi.horizontal_auto",
             vgap: 10,
             items: [{
                 type: "bi.date_combo",
+                ref: function () {
+                    self.datecombo = this;
+                },
                 width: 300
             }, {
                 type: "bi.button",
                 text: "getVlaue",
-                height: 50,
-                width: 300
+                width: 300,
+                handler: function () {
+                    BI.Msg.alert("date", JSON.stringify(self.datecombo.getValue()));
+                }
+            }, {
+                type: "bi.button",
+                text: "setVlaue '2017-12-31'",
+                width: 300,
+                handler: function () {
+                    self.datecombo.setValue({
+                        year: 2017,
+                        month: 11,
+                        day: 31
+                    })
+                }
             }]
         }
     }

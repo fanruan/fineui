@@ -6,24 +6,34 @@ Demo.YearQuarterCombo = BI.inherit(BI.Widget, {
         baseCls: ""
     },
     render: function () {
-        var self=this;
+        var self = this;
         return {
             type: "bi.horizontal_auto",
             items: [{
                 type: "bi.year_quarter_combo",
                 width: 300,
-                ref:function(_ref){
-                    self.widget=_ref;
+                ref: function (_ref) {
+                    self.widget = _ref;
                 },
                 yearBehaviors: {},
                 quarterBehaviors: {},
             }, {
                 type: "bi.button",
                 text: "getValue",
-                handler:function(){
+                handler: function () {
                     BI.Msg.toast(JSON.stringify(self.widget.getValue()))
                 },
                 width: 300
+            }, {
+                type: "bi.button",
+                text: "setVlaue '2017 季度3'",
+                width: 300,
+                handler: function () {
+                    self.widget.setValue({
+                        year: 2017,
+                        quarter: 3
+                    })
+                }
             }],
             vgap: 20
         }
