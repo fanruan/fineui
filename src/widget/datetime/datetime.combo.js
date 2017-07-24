@@ -12,7 +12,7 @@ BI.DateTimeCombo = BI.inherit(BI.Single, {
     },
     _defaultConfig: function () {
         return BI.extend(BI.DateTimeCombo.superclass._defaultConfig.apply(this, arguments), {
-            baseCls: 'bi-date-time-combo bi-border',
+            baseCls: 'bi-date-time-combo',
             height: 24
         });
     },
@@ -46,17 +46,19 @@ BI.DateTimeCombo = BI.inherit(BI.Single, {
         self.setValue(this.storeValue);
 
         this.popup.on(BI.DateTimePopup.BUTTON_CANCEL_EVENT_CHANGE, function () {
+            self.setValue(self.storeValue);
             self.combo.hideView();
             self.fireEvent(BI.DateTimeCombo.EVENT_CANCEL);
         });
         this.popup.on(BI.DateTimePopup.BUTTON_OK_EVENT_CHANGE, function () {
-            self.setValue(self.popup.getValue());
+            self.storeValue = self.popup.getValue();
+            self.setValue(self.storeValue);
             self.combo.hideView();
             self.fireEvent(BI.DateTimeCombo.EVENT_CONFIRM);
         });
         this.popup.on(BI.DateTimePopup.CALENDAR_EVENT_CHANGE, function () {
-            self.setValue(self.popup.getValue());
-        });
+            self.trigger.setValue(self.popup.getValue());
+    });
         this.combo = BI.createWidget({
             type: 'bi.combo',
             toggle: false,
@@ -78,7 +80,7 @@ BI.DateTimeCombo = BI.inherit(BI.Single, {
 
         var triggerBtn = BI.createWidget({
             type: "bi.trigger_icon_button",
-            cls: "bi-trigger-date-button chart-date-normal-font bi-border-left bi-border-top bi-border-bottom",
+            cls: "chart-date-normal-font bi-border-left bi-border-top bi-border-bottom",
             width: 30,
             height: 25
         });
@@ -116,7 +118,10 @@ BI.DateTimeCombo = BI.inherit(BI.Single, {
         this.trigger.setValue(v);
     },
     getValue: function () {
-        return this.storeValue;
+        return {
+            value: this.storeValue,
+            text: this.trigger.getValue()
+        };
     }
 });
 

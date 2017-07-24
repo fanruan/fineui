@@ -1,57 +1,4 @@
 Demo.WIDGET_CONFIG = [{
-<<<<<<< HEAD
-    id: 4,
-    text: "详细控件"
-}, {
-    id: 401,
-    pId: 4,
-    text: "table"
-}, {
-    pId: 401,
-    text: "bi.preview_table",
-    value: "demo.preview_table"
-}, {
-    pId: 401,
-    text: "bi.responsive_table",
-    value: "demo.responsive_table"
-}, {
-    pId: 401,
-    text: "bi.sequence_table",
-    value: "demo.sequence_table"
-}, {
-    pId: 401,
-    text: "bi.page_table",
-    value: "demo.page_table"
-}, {
-    id: 402,
-    pId: 4,
-    text: "tree"
-}, {
-    pId: 402,
-    text: "bi.multilayer_select_tree_combo",
-    value: "demo.multilayer_select_tree_combo"
-}, {
-    pId: 4,
-    text: "bi.multi_select_combo",
-    value: "demo.multi_select_combo"
-}, {
-    pId: 4,
-    text: "bi.path_chooser",
-    value: "demo.path_chooser"
-}, {
-    pId: 4,
-    text: "bi.relation_view",
-    value: "demo.relation_view"
-}, {
-    pId: 4,
-    text: "bi.interactive_arrangement",
-    value: "demo.interactive_arrangement"
-}, {
-    pId: 4,
-    text: "bi.custom_date_time",
-    value: "demo.custom_date_time"
-}];
-=======
         id: 4,
         text: "详细控件",
         open: true
@@ -239,6 +186,10 @@ Demo.WIDGET_CONFIG = [{
         text: "bi.year_quarter_combo",
         value: "demo.year_quarter_combo"
     },{
+        pId: 412,
+        text: "bi.custom_date_time",
+        value: "demo.custom_date_time"
+    },{
         pId: 4,
         id: 413,
         text: "简单下拉树"
@@ -304,4 +255,3 @@ Demo.WIDGET_CONFIG = [{
         value: "demo.dialog"
     }
 ];
->>>>>>> 3903ca444e161ac208f69ba22c0a3136d7a0fa81

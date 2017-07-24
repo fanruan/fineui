@@ -56,7 +56,11 @@ BI.DateTimeTrigger = BI.inherit(BI.Trigger, {
                     + " " + self._printTime(value.hour) + ":" + self._printTime(value.minute) + ":" + self._printTime(value.second);
             }
             this.text.setText(dateStr);
+            this.text.setTitle(dateStr);
         }
+    },
+    getValue: function () {
+        return this.text.getText();
     }
 
 });
