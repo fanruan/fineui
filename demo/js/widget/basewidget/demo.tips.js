@@ -49,6 +49,7 @@ Demo.Tips = BI.inherit(BI.Widget, {
                     type: 'bi.button',
                     text: '隐藏所有 bubble',
                     height: 30,
+                    cls: "layout-bg2",
                     handler: function () {
                         BI.each(btns, function (index, value) {
                             BI.Bubbles.hide(value);

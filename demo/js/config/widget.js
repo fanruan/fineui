@@ -3,6 +3,34 @@ Demo.WIDGET_CONFIG = [{
         text: "详细控件",
         open: true
     }, {
+        pId: 4,
+        id: 420,
+        text: '各种小控件',
+    }, {
+        pId: 420,
+        text: "各种通用按钮",
+        value: "demo.buttons"
+    }, {
+        pId: 420,
+        text: "各种提示性信息",
+        value: "demo.tips"
+    }, {
+        pId: 420,
+        text: "各种items",
+        value: "demo.items"
+    }, {
+        pId: 420,
+        text: "各种节点node",
+        value: "demo.nodes"
+    }, {
+        pId: 420,
+        text: "各种segment",
+        value: "demo.segments"
+    }, {
+        pId: 420,
+        text: "可以切换的树",
+        value: "demo.switch_tree"
+    }, {
         id: 400,
         pId: 4,
         text: "tree"
@@ -10,6 +38,10 @@ Demo.WIDGET_CONFIG = [{
         pId: 400,
         text: "bi.multi_tree_combo",
         value: "demo.multi_tree_combo"
+    }, {
+        pId: 400,
+        text: "bi.switch_tree",
+        value: "demo.switch_tree"
     }, {
         id: 401,
         pId: 4,
@@ -253,5 +285,13 @@ Demo.WIDGET_CONFIG = [{
         pId: 418,
         text: "bi.dialog",
         value: "demo.dialog"
+    }, {
+        pId: 4,
+        id: 419,
+        text: "文件管理"
+    }, {
+        pId: 419,
+        text: "demo.file_manager",
+        value: "demo.file_manager"
     }
 ];
