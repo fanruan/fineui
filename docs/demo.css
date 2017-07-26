@@ -54,6 +54,30 @@ body {
 .demo-clolor {
   color: #1a1a1a;
 }
+.bi-progress-bar-processor {
+  transition: all 0.5s ease;
+  -webkit-transition: all 0.5s ease;
+  -moz-transition: all 0.5s ease;
+  -o-transition: all 0.5s ease;
+  background: #3f8ce8;
+  -webkit-border-radius: 20px;
+  -moz-border-radius: 20px;
+  border-radius: 20px;
+  overflow: hidden;
+  overflow-x: hidden;
+  overflow-y: hidden;
+}
+.bi-progress-text-bar-processor {
+  transition: all 0.5s ease;
+  -webkit-transition: all 0.5s ease;
+  -moz-transition: all 0.5s ease;
+  -o-transition: all 0.5s ease;
+}
+.bi-progress-bar-bar {
+  -webkit-border-radius: 20px;
+  -moz-border-radius: 20px;
+  border-radius: 20px;
+}
 .demo-north {
   background-color: #3c8dbc;
 }

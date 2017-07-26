@@ -17,31 +17,31 @@ Demo.WIDGET_CONFIG = [{
     }, {
         pId: 420,
         text: "各种items",
-        value: "items"
+        value: "demo.items"
     }, {
         pId: 420,
         text: "各种节点node",
-        value: "nodes"
+        value: "demo.nodes"
     }, {
         pId: 420,
         text: "各种segment",
-        value: "segments"
+        value: "demo.segments"
     }, {
         pId: 420,
         text: "各种面板",
-        value: "panes"
+        value: "demo.panes"
     }, {
         pId: 420,
         text: "bi.loading_mask",
-        value: "loadingmask"
+        value: "demo.loading_mask"
     }, {
         pId: 420,
         text: "可以切换的树",
-        value: "switch_tree"
+        value: "demo.switch_tree"
     }, {
         pId: 420,
         text: "进度条",
-        value: "progressbar"
+        value: "demo.progress_bar"
     }, {
         pId: 1,
         text: "bi.text_editor",
@@ -54,6 +54,10 @@ Demo.WIDGET_CONFIG = [{
         pId: 400,
         text: "bi.multi_tree_combo",
         value: "demo.multi_tree_combo"
+    }, {
+        pId: 400,
+        text: "bi.switch_tree",
+        value: "demo.switch_tree"
     }, {
         id: 401,
         pId: 4,

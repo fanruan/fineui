@@ -134,11 +134,23 @@ Demo.Tips = BI.inherit(BI.Widget, {
             vgap: 20
         });
 
+        var helper = BI.createWidget({
+            type: "bi.left",
+            items: [{
+                el: {
+                    type: 'bi.helper',
+                    text: '拖拽提示',
+                    value: "拖拽提示",
+                    height: 30,
+                }
+            }]
+        });
+
         return {
             type: "bi.horizontal_auto",
             vgap: 20,
             hgap: 20,
-            items: [bubble, title, toast]
+            items: [bubble, title, toast, helper]
         }
     }
 });
