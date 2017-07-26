@@ -28,20 +28,8 @@ Demo.WIDGET_CONFIG = [{
         value: "demo.segments"
     }, {
         pId: 420,
-        text: "各种面板",
-        value: "demo.panes"
-    }, {
-        pId: 420,
-        text: "bi.loading_mask",
-        value: "demo.loading_mask"
-    }, {
-        pId: 420,
         text: "可以切换的树",
         value: "demo.switch_tree"
-    }, {
-        pId: 420,
-        text: "进度条",
-        value: "demo.progress_bar"
     }, {
         pId: 1,
         text: "bi.text_editor",

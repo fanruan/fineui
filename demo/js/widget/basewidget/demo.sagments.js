@@ -25,20 +25,6 @@ Demo.Segments = BI.inherit(BI.Widget, {
                     disabled: true,
                     value: 3
                 }]
-            }, {
-                type: "bi.label",
-                height: 30,
-                text: "风格1"
-            }, {
-                type: "bi.line_segment",
-                items: [{
-                    text: "tab1",
-                    value: 1,
-                    selected: true
-                }, {
-                    text: "tab2",
-                    value: 2
-                }]
             }],
             hgap: 50,
             vgap: 20
