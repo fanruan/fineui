@@ -24,6 +24,8 @@ BI.MultiSelectCombo = BI.inherit(BI.Single, {
             self.trigger.getCounter().setButtonChecked(self.storeValue);
         };
         this.storeValue = {};
+        //标记正在请求数据
+        this.requesting = false;
 
         this.trigger = BI.createWidget({
             type: "bi.multi_select_trigger",
@@ -162,10 +164,16 @@ BI.MultiSelectCombo = BI.inherit(BI.Single, {
                 self.populate();
             });
         });
+        //当退出的时候如果还在处理请求，则等请求结束后再对外发确定事件
+        this.wants2Quit = false;
         this.combo.on(BI.Combo.EVENT_AFTER_HIDEVIEW, function () {
             //important:关闭弹出时又可能没有退出编辑状态
             self.trigger.stopEditing();
-            self.fireEvent(BI.MultiSelectCombo.EVENT_CONFIRM);
+            if (self.requesting === true) {
+                self.wants2Quit = true;
+            } else {
+                self.fireEvent(BI.MultiSelectCombo.EVENT_CONFIRM);
+            }
         });
 
         var triggerBtn = BI.createWidget({
@@ -218,6 +226,7 @@ BI.MultiSelectCombo = BI.inherit(BI.Single, {
     _joinKeywords: function (keywords, callback) {
         var self = this, o = this.options;
         this._assertValue(this.storeValue);
+        this.requesting = true;
         o.itemsCreator({
             type: BI.MultiSelectCombo.REQ_GET_ALL_DATA,
             keywords: keywords
@@ -240,6 +249,7 @@ BI.MultiSelectCombo = BI.inherit(BI.Single, {
     _joinAll: function (res, callback) {
         var self = this, o = this.options;
         this._assertValue(res);
+        this.requesting = true;
         o.itemsCreator({
             type: BI.MultiSelectCombo.REQ_GET_ALL_DATA,
             keywords: [this.trigger.getKey()]
@@ -300,6 +310,11 @@ BI.MultiSelectCombo = BI.inherit(BI.Single, {
                     value: []
                 }
             }
+            if (self.wants2Quit === true) {
+                self.fireEvent(BI.MultiSelectCombo.EVENT_CONFIRM);
+                self.wants2Quit = false;
+            }
+            self.requesting = false;
         }
     },
 

@@ -227,7 +227,7 @@ BI.AbstractTreeValueChooser = BI.inherit(BI.Widget, {
         function search(parents, current, result, searched) {
             var newParents = BI.clone(parents);
             newParents.push(current);
-            if (self._isMatch(current, keyword)) {
+            if (self._isMatch(parents, current, keyword)) {
                 searched && searched.push(newParents);
                 return true;
             }
@@ -256,7 +256,7 @@ BI.AbstractTreeValueChooser = BI.inherit(BI.Widget, {
 
         function isSearchValueInParent(parentValues) {
             for (var i = 0, len = parentValues.length; i < len; i++) {
-                if (self._isMatch(parentValues[i], keyword)) {
+                if (self._isMatch(parentValues.slice(0, parentValues.length - 1), parentValues[i], keyword)) {
                     return true;
                 }
             }
@@ -382,7 +382,7 @@ BI.AbstractTreeValueChooser = BI.inherit(BI.Widget, {
         }
 
         function nodeSearch(deep, parentValues, current, isAllSelect, result) {
-            if (self._isMatch(current, keyword)) {
+            if (self._isMatch(parentValues, current, keyword)) {
                 var checked = isAllSelect || isSelected(parentValues, current);
                 createOneJson(parentValues, current, false, checked, !isAllSelect && isHalf(parentValues, current), true, result);
                 return [true, checked];
@@ -612,8 +612,9 @@ BI.AbstractTreeValueChooser = BI.inherit(BI.Widget, {
         });
     },
 
-    _isMatch: function (value, keyword) {
-        var finded = BI.Func.getSearchResult([value], keyword);
+    _isMatch: function (parentValues, value, keyword) {
+        var node = this._getTreeNode(parentValues, value);
+        var finded = BI.Func.getSearchResult([node.text || node.value], keyword);
         return finded.finded.length > 0 || finded.matched.length > 0;
     },
 

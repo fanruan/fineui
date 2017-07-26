@@ -8,7 +8,16 @@ BI.resourceURL = "resource/";
 BI.i18n = {
     "BI-Basic_OK": "确定",
     "BI-Basic_Sure": "确定",
-    "BI-Basic_Clears": "清空"
+    "BI-Basic_Clears": "清空",
+    "BI-Basic_Cancel": "取消",
+    "BI-Basic_Time": "时间",
+    "BI-Basic_Simple_Sunday": "日",
+    "BI-Basic_Simple_Monday": "一",
+    "BI-Basic_Simple_Tuesday": "二",
+    "BI-Basic_Simple_Wednesday": "三",
+    "BI-Basic_Simple_Thursday": "四",
+    "BI-Basic_Simple_Friday": "五",
+    "BI-Basic_Simple_Saturday": "六",
 };$(function () {
     var ref;
     BI.createWidget({
@@ -3342,38 +3351,6 @@ Demo.COMPONENT_CONFIG = [{
         text: "详细控件",
         open: true
     }, {
-        pId: 4,
-        id: 420,
-        text: '各种小控件',
-    }, {
-        pId: 420,
-        text: "各种通用按钮",
-        value: "demo.buttons"
-    }, {
-        pId: 420,
-        text: "各种提示性信息",
-        value: "demo.tips"
-    }, {
-        pId: 420,
-        text: "各种items",
-        value: "demo.items"
-    }, {
-        pId: 420,
-        text: "各种节点node",
-        value: "demo.nodes"
-    }, {
-        pId: 420,
-        text: "各种segment",
-        value: "demo.segments"
-    }, {
-        pId: 420,
-        text: "可以切换的树",
-        value: "demo.switch_tree"
-    }, {
-        pId: 1,
-        text: "bi.text_editor",
-        value: "text_editor"
-    }, {
         id: 400,
         pId: 4,
         text: "tree"
@@ -3381,10 +3358,6 @@ Demo.COMPONENT_CONFIG = [{
         pId: 400,
         text: "bi.multi_tree_combo",
         value: "demo.multi_tree_combo"
-    }, {
-        pId: 400,
-        text: "bi.switch_tree",
-        value: "demo.switch_tree"
     }, {
         id: 401,
         pId: 4,
@@ -3556,11 +3529,15 @@ Demo.COMPONENT_CONFIG = [{
         pId: 412,
         text: "bi.year_month_combo",
         value: "demo.year_month_combo"
-    }, {
+    },{
         pId: 412,
         text: "bi.year_quarter_combo",
         value: "demo.year_quarter_combo"
-    }, {
+    },{
+        pId: 412,
+        text: "bi.custom_date_time",
+        value: "demo.custom_date_time"
+    },{
         pId: 4,
         id: 413,
         text: "简单下拉树"
@@ -3624,16 +3601,9 @@ Demo.COMPONENT_CONFIG = [{
         pId: 418,
         text: "bi.dialog",
         value: "demo.dialog"
-    }, {
-        pId: 4,
-        id: 419,
-        text: '文件管理',
-    }, {
-        pId: 419,
-        text: "bi.file_manager",
-        value: "demo.file_manager"
-    },
-];Demo.Func = BI.inherit(BI.Widget, {
+    }
+];
+Demo.Func = BI.inherit(BI.Widget, {
     props: {
         baseCls: "demo-func"
     },
@@ -7185,7 +7155,36 @@ BI.shortcut("demo.date", Demo.Date);Demo.DatePane = BI.inherit(BI.Widget, {
     }
 })
 
-BI.shortcut("demo.date_pane_widget", Demo.DatePane);Demo.DialogView = BI.inherit(BI.Widget, {
+BI.shortcut("demo.date_pane_widget", Demo.DatePane);/**
+ * Created by Urthur on 2017/7/18.
+ */
+Demo.CustomDateTime = BI.inherit(BI.Widget, {
+    props: {
+    },
+    render: function () {
+        var self = this;
+        return {
+            type: "bi.absolute",
+            items: [{
+                el: {
+                    type: "bi.custom_date_time_combo",
+                    ref: function (_ref) {
+                        self.customDateTime =  _ref;
+                        self.customDateTime.on(BI.CustomDateTimeCombo.EVENT_CONFIRM, function () {
+                            BI.Msg.alert("日期", this.getValue().text);
+                        });
+                        self.customDateTime.on(BI.CustomDateTimeCombo.EVENT_CANCEL, function () {
+                            BI.Msg.alert("日期", this.getValue().text);
+                        });
+                    }
+                },
+                top: 200,
+                left: 200
+            }]
+        };
+    }
+});
+BI.shortcut("demo.custom_date_time", Demo.CustomDateTime);Demo.DialogView = BI.inherit(BI.Widget, {
 
     render: function () {
         var items = [{

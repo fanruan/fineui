@@ -3900,7 +3900,7 @@ i {
 .bi-list-item-none:hover,
 .bi-list-item-none.hover {
   color: inherit;
-  background-color: inherit;
+  background-color: transparent;
 }
 .bi-list-item-none:hover .bi-input,
 .bi-list-item-none.hover .bi-input {
@@ -3913,7 +3913,7 @@ i {
 .bi-list-item-none:active,
 .bi-list-item-none.active {
   color: inherit;
-  background-color: inherit;
+  background-color: transparent;
 }
 .bi-list-item-none:active .bi-input,
 .bi-list-item-none.active .bi-input {
@@ -3951,7 +3951,7 @@ i {
 .bi-theme-dark .bi-list-item-none:hover,
 .bi-theme-dark .bi-list-item-none.hover {
   color: inherit;
-  background-color: inherit;
+  background-color: transparent;
 }
 .bi-theme-dark .bi-list-item-none:hover .bi-input,
 .bi-theme-dark .bi-list-item-none.hover .bi-input {
@@ -3964,7 +3964,7 @@ i {
 .bi-theme-dark .bi-list-item-none:active,
 .bi-theme-dark .bi-list-item-none.active {
   color: inherit;
-  background-color: inherit;
+  background-color: transparent;
 }
 .bi-theme-dark .bi-list-item-none:active .bi-input,
 .bi-theme-dark .bi-list-item-none.active .bi-input {
