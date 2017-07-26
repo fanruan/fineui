@@ -8,7 +8,16 @@ BI.resourceURL = "resource/";
 BI.i18n = {
     "BI-Basic_OK": "确定",
     "BI-Basic_Sure": "确定",
-    "BI-Basic_Clears": "清空"
+    "BI-Basic_Clears": "清空",
+    "BI-Basic_Cancel": "取消",
+    "BI-Basic_Time": "时间",
+    "BI-Basic_Simple_Sunday": "日",
+    "BI-Basic_Simple_Monday": "一",
+    "BI-Basic_Simple_Tuesday": "二",
+    "BI-Basic_Simple_Wednesday": "三",
+    "BI-Basic_Simple_Thursday": "四",
+    "BI-Basic_Simple_Friday": "五",
+    "BI-Basic_Simple_Saturday": "六",
 };$(function () {
     var ref;
     BI.createWidget({
@@ -3525,6 +3534,10 @@ Demo.COMPONENT_CONFIG = [{
         text: "bi.year_quarter_combo",
         value: "demo.year_quarter_combo"
     },{
+        pId: 412,
+        text: "bi.custom_date_time",
+        value: "demo.custom_date_time"
+    },{
         pId: 4,
         id: 413,
         text: "简单下拉树"
@@ -3589,7 +3602,8 @@ Demo.COMPONENT_CONFIG = [{
         text: "bi.dialog",
         value: "demo.dialog"
     }
-];Demo.Func = BI.inherit(BI.Widget, {
+];
+Demo.Func = BI.inherit(BI.Widget, {
     props: {
         baseCls: "demo-func"
     },
@@ -6609,7 +6623,36 @@ BI.shortcut("demo.date", Demo.Date);Demo.DatePane = BI.inherit(BI.Widget, {
     }
 })
 
-BI.shortcut("demo.date_pane_widget", Demo.DatePane);Demo.DialogView = BI.inherit(BI.Widget, {
+BI.shortcut("demo.date_pane_widget", Demo.DatePane);/**
+ * Created by Urthur on 2017/7/18.
+ */
+Demo.CustomDateTime = BI.inherit(BI.Widget, {
+    props: {
+    },
+    render: function () {
+        var self = this;
+        return {
+            type: "bi.absolute",
+            items: [{
+                el: {
+                    type: "bi.custom_date_time_combo",
+                    ref: function (_ref) {
+                        self.customDateTime =  _ref;
+                        self.customDateTime.on(BI.CustomDateTimeCombo.EVENT_CONFIRM, function () {
+                            BI.Msg.alert("日期", this.getValue().text);
+                        });
+                        self.customDateTime.on(BI.CustomDateTimeCombo.EVENT_CANCEL, function () {
+                            BI.Msg.alert("日期", this.getValue().text);
+                        });
+                    }
+                },
+                top: 200,
+                left: 200
+            }]
+        };
+    }
+});
+BI.shortcut("demo.custom_date_time", Demo.CustomDateTime);Demo.DialogView = BI.inherit(BI.Widget, {
 
     render: function () {
         var items = [{

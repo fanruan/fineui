@@ -11,18 +11,30 @@
   _background: none;
 }
 
+.image2xPath(@path, @top:center, @left:center, @repeat: no-repeat) when not (@path = none) {
+  background: url('@{image2xUrl}@{path}') @repeat @left @top;
+  _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='@{image2xUrl}@{path}');
+  _background: none;
+}
+
 .icon(@class, @iconPath, @top:0px, @left:0px) {
   .@{class} {
     & .x-icon,
     &:hover .x-icon,
     &:active .x-icon {
       display: block;
-      .imagePath(@iconPath, -@top, -@left);
+      .image2xPath(@iconPath, -@top, -@left);
+      &.hack {
+        .imagePath(@iconPath, -@top, -@left);
+      }
     }
     &.native .x-icon,
     &.disabled .x-icon {
       display: block;
-      .imagePath(@iconPath, -@top, -@left);
+      .image2xPath(@iconPath, -@top, -@left);
+      &.hack {
+        .imagePath(@iconPath, -@top, -@left);
+      }
     }
   }
 }
@@ -31,7 +43,10 @@
   .@{class} {
     & .x-icon {
       display: block;
-      .imagePath(@iconPath, -@top, -@left);
+      .image2xPath(@iconPath, -@top, -@left);
+      &.hack {
+        .imagePath(@iconPath, -@top, -@left);
+      }
     }
     &:hover .x-icon,
     &:focus .x-icon,
@@ -39,12 +54,18 @@
     &:active .x-icon,
     &.active .x-icon {
       display: block;
-      .imagePath(@iconPath, -@top, -(@left + @distance));
+      .image2xPath(@iconPath, -@top, -(@left + @distance));
+      &.hack {
+        .imagePath(@iconPath, -@top, -(@left + @distance));
+      }
     }
     &.native .x-icon,
     &.disabled .x-icon {
       display: block;
-      .imagePath(@iconPath, -@top, -@left);
+      .image2xPath(@iconPath, -@top, -@left);
+      &.hack {
+        .imagePath(@iconPath, -@top, -@left);
+      }
     }
   }
 }
@@ -56,17 +77,26 @@
     &:focus .x-icon,
     &.hover .x-icon {
       display: block;
-      .imagePath(@iconPath, -@top, -@left);
+      .image2xPath(@iconPath, -@top, -@left);
+      &.hack {
+        .imagePath(@iconPath, -@top, -@left);
+      }
     }
     &:active .x-icon,
     &.active .x-icon {
       display: block;
-      .imagePath(@iconPath, -@top, -(@left + @distance));
+      .image2xPath(@iconPath, -@top, -(@left + @distance));
+      &.hack {
+        .imagePath(@iconPath, -@top, -(@left + @distance));
+      }
     }
     &.native .x-icon,
     &.disabled .x-icon {
       display: block;
-      .imagePath(@iconPath, -@top, -@left);
+      .image2xPath(@iconPath, -@top, -@left);
+      &.hack {
+        .imagePath(@iconPath, -@top, -@left);
+      }
     }
   }
 }
@@ -75,24 +105,36 @@
   .@{class} {
     & .x-icon {
       display: block;
-      .imagePath(@iconPath, -@top, -@left);
+      .image2xPath(@iconPath, -@top, -@left);
+      &.hack {
+        .imagePath(@iconPath, -@top, -@left);
+      }
     }
     &:hover .x-icon,
     &:focus .x-icon,
     &.hover .x-icon {
       display: block;
-      .imagePath(@iconPath, -@top, -(@left+@distance));
+      .image2xPath(@iconPath, -@top, -(@left+@distance));
+      &.hack {
+        .imagePath(@iconPath, -@top, -(@left+@distance));
+      }
     }
 
     &:active .x-icon,
     &.active .x-icon {
       display: block;
-      .imagePath(@iconPath, -@top, -(@left+@distance*2));
+      .image2xPath(@iconPath, -@top, -(@left+@distance*2));
+      &.hack {
+        .imagePath(@iconPath, -@top, -(@left+@distance*2));
+      }
     }
     &.native .x-icon,
     &.disabled .x-icon {
       display: block;
-      .imagePath(@iconPath, -@top, -@left);
+      .image2xPath(@iconPath, -@top, -@left);
+      &.hack {
+        .imagePath(@iconPath, -@top, -@left);
+      }
     }
   }
 }
@@ -101,16 +143,25 @@
   .@{class} {
     & .x-icon {
       display: block;
-      .imagePath(@iconPath, -@top, -@left);
+      .image2xPath(@iconPath, -@top, -@left);
+      &.hack {
+        .imagePath(@iconPath, -@top, -@left);
+      }
     }
     &.active .x-icon {
       display: block;
-      .imagePath(@iconPath, -@top, -(@left+@distance));
+      .image2xPath(@iconPath, -@top, -(@left+@distance));
+      &.hack {
+        .imagePath(@iconPath, -@top, -(@left+@distance));
+      }
     }
     &.native .x-icon,
     &.disabled .x-icon {
       display: block;
-      .imagePath(@iconPath, -@top, -@left);
+      .image2xPath(@iconPath, -@top, -@left);
+      &.hack {
+        .imagePath(@iconPath, -@top, -@left);
+      }
     }
   }
 }
@@ -119,29 +170,44 @@
   .@{class} {
     & .x-icon {
       display: block;
-      .imagePath(@iconPath, 0, 0);
+      .image2xPath(@iconPath, 0, 0);
+      &.hack {
+        .imagePath(@iconPath, 0, 0);
+      }
     }
     &:hover .x-icon,
     &:focus .x-icon,
     &.hover .x-icon {
       display: block;
-      .imagePath(@hoverPath, 0, 0);
+      .image2xPath(@hoverPath, 0, 0);
+      &.hack {
+        .imagePath(@hoverPath, 0, 0);
+      }
     }
 
     &:active .x-icon,
     &.active .x-icon {
       display: block;
-      .imagePath(@activePath, 0, 0);
+      .image2xPath(@activePath, 0, 0);
+      &.hack {
+        .imagePath(@activePath, 0, 0);
+      }
     }
     &.native .x-icon,
     &.disabled .x-icon {
       display: block;
-      .imagePath(@disablePath, 0, 0);
+      .image2xPath(@disablePath, 0, 0);
+      &.hack {
+        .imagePath(@disablePath, 0, 0);
+      }
     }
     &.native .x-icon,
     &.disabled.active .x-icon {
       display: block;
-      .imagePath(@activeDisablePath, 0, 0);
+      .image2xPath(@activeDisablePath, 0, 0);
+      &.hack {
+        .imagePath(@activeDisablePath, 0, 0);
+      }
     }
   }
 }
@@ -150,19 +216,28 @@
   .@{class} {
     & .x-icon {
       display: block;
-      .imagePath(@iconPath, 0, 0);
+      .image2xPath(@iconPath, 0, 0);
+      &.hack {
+        .imagePath(@iconPath, 0, 0);
+      }
     }
     &:hover .x-icon,
     &:focus .x-icon,
     &.hover .x-icon {
       display: block;
-      .imagePath(@hoverPath, 0, 0);
+      .image2xPath(@hoverPath, 0, 0);
+      &.hack {
+        .imagePath(@hoverPath, 0, 0);
+      }
     }
 
     &.native .x-icon,
     &.disabled .x-icon {
       display: block;
-      .imagePath(@disablePath, 0, 0);
+      .image2xPath(@disablePath, 0, 0);
+      &.hack {
+        .imagePath(@disablePath, 0, 0);
+      }
     }
   }
 }
@@ -177,8 +252,8 @@
 .font(@class,@content, @color: @color-bi-font-native) {
   @fc: "\@{content}";
   .@{class} {
-    & .b-font{
-      *zoom: ~"expression( this.runtimeStyle['zoom'] = '1',this.innerHTML = '&#x@{content}')";
+    & .b-font {
+      *zoom: ~"expression( this.runtimeStyle['zoom'] = '1',this.innerHTML = '&#x@{content};')";
     }
     & .b-font:before {
       content: @fc;
@@ -195,8 +270,8 @@
 .font-hover(@class,@content,@color-native: @color-bi-font-native, @color-hover: @color-bi-font-hover) {
   @fc: "\@{content}";
   .@{class} {
-    & .b-font{
-      *zoom: ~"expression( this.runtimeStyle['zoom'] = '1',this.innerHTML = '&#x@{content}')";
+    & .b-font {
+      *zoom: ~"expression( this.runtimeStyle['zoom'] = '1',this.innerHTML = '&#x@{content};')";
     }
     & .b-font:before {
       content: @fc;
@@ -219,8 +294,8 @@
 .font-effect(@class,@content,@color-native: @color-bi-font-native, @color-hover: @color-bi-font-hover, @color-active: @color-bi-font-active, @color-selected: @color-bi-font-active) {
   @fc: "\@{content}";
   .@{class} {
-    & .b-font{
-      *zoom: ~"expression( this.runtimeStyle['zoom'] = '1',this.innerHTML = '&#x@{content}')";
+    & .b-font {
+      *zoom: ~"expression( this.runtimeStyle['zoom'] = '1',this.innerHTML = '&#x@{content};')";
     }
     & .b-font:before {
       content: @fc;
@@ -251,8 +326,8 @@
 .font-hover-active(@class,@content,@color-native: @color-bi-font-native, @color-hover: @color-bi-font-hover, @color-active: @color-bi-font-active) {
   @fc: "\@{content}";
   .@{class} {
-    & .b-font{
-      *zoom: ~"expression( this.runtimeStyle['zoom'] = '1',this.innerHTML = '&#x@{content}')";
+    & .b-font {
+      *zoom: ~"expression( this.runtimeStyle['zoom'] = '1',this.innerHTML = '&#x@{content};')";
     }
     & .b-font:before {
       content: @fc;

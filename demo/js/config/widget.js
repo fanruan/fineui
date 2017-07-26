@@ -186,6 +186,10 @@ Demo.WIDGET_CONFIG = [{
         text: "bi.year_quarter_combo",
         value: "demo.year_quarter_combo"
     },{
+        pId: 412,
+        text: "bi.custom_date_time",
+        value: "demo.custom_date_time"
+    },{
         pId: 4,
         id: 413,
         text: "简单下拉树"
