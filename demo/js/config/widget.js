@@ -3,6 +3,50 @@ Demo.WIDGET_CONFIG = [{
         text: "详细控件",
         open: true
     }, {
+        pId: 4,
+        id: 420,
+        text: '各种小控件',
+    }, {
+        pId: 420,
+        text: "各种通用按钮",
+        value: "demo.buttons"
+    }, {
+        pId: 420,
+        text: "各种提示性信息",
+        value: "demo.tips"
+    }, {
+        pId: 420,
+        text: "各种items",
+        value: "items"
+    }, {
+        pId: 420,
+        text: "各种节点node",
+        value: "nodes"
+    }, {
+        pId: 420,
+        text: "各种segment",
+        value: "segments"
+    }, {
+        pId: 420,
+        text: "各种面板",
+        value: "panes"
+    }, {
+        pId: 420,
+        text: "bi.loading_mask",
+        value: "loadingmask"
+    }, {
+        pId: 420,
+        text: "可以切换的树",
+        value: "switch_tree"
+    }, {
+        pId: 420,
+        text: "进度条",
+        value: "progressbar"
+    }, {
+        pId: 1,
+        text: "bi.text_editor",
+        value: "text_editor"
+    }, {
         id: 400,
         pId: 4,
         text: "tree"
