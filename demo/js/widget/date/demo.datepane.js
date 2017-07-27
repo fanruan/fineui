@@ -3,7 +3,7 @@ Demo.DatePane = BI.inherit(BI.Widget, {
         baseCls: "demo-datepane"
     },
     render: function () {
-
+        var self = this;
         return {
             type: "bi.horizontal_auto",
             items: [{
@@ -20,13 +20,26 @@ Demo.DatePane = BI.inherit(BI.Widget, {
                             month: 12,
                             day: 11
                         },
-                        height:300
+                        ref: function (_ref) {
+                            self.datepane = _ref;
+                        },
+                        height: 300
                     },
                     {
                         type: "bi.button",
                         text: "getValue",
                         handler: function () {
-                            BI.Msg.toast("date" + JSON.stringify(datepane.getValue()));
+                            BI.Msg.toast("date" + JSON.stringify(self.datepane.getValue()));
+                        }
+                    }, {
+                        type: "bi.button",
+                        text: "setVlaue '2017-12-31'",
+                        handler: function () {
+                            self.datepane.setValue({
+                                year: 2017,
+                                month: 11,
+                                day: 31
+                            })
                         }
                     }
                 ],

@@ -26,6 +26,13 @@ Demo.MultiLayerSelectTreeCombo = BI.inherit(BI.Widget, {
                     BI.Msg.toast(self.tree.getValue()[0]);
                 },
                 width: 300
+            }, {
+                type: "bi.button",
+                text: "setVlaue (第二级文件1)",
+                handler: function () {
+                    self.tree.setValue(["第二级文件1"]);
+                },
+                width: 300
             }],
             vgap: 20
         }

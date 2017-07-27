@@ -3138,7 +3138,7 @@ BI.shortcut("demo.value_chooser_pane", Demo.ValueChooserPane);Demo.BASE_CONFIG =
  */
 Demo.COMPONENT_CONFIG = [{
     id: 5,
-    text: "部件"
+    text: "部件+服务"
 }, {
     pId: 5,
     text: "bi.value_chooser_combo",
@@ -3351,6 +3351,34 @@ Demo.COMPONENT_CONFIG = [{
         text: "详细控件",
         open: true
     }, {
+        pId: 4,
+        id: 420,
+        text: '各种小控件',
+    }, {
+        pId: 420,
+        text: "各种通用按钮",
+        value: "demo.buttons"
+    }, {
+        pId: 420,
+        text: "各种提示性信息",
+        value: "demo.tips"
+    }, {
+        pId: 420,
+        text: "各种items",
+        value: "demo.items"
+    }, {
+        pId: 420,
+        text: "各种节点node",
+        value: "demo.nodes"
+    }, {
+        pId: 420,
+        text: "各种segment",
+        value: "demo.segments"
+    }, {
+        pId: 420,
+        text: "可以切换的树",
+        value: "demo.switch_tree"
+    }, {
         id: 400,
         pId: 4,
         text: "tree"
@@ -3358,6 +3386,10 @@ Demo.COMPONENT_CONFIG = [{
         pId: 400,
         text: "bi.multi_tree_combo",
         value: "demo.multi_tree_combo"
+    }, {
+        pId: 400,
+        text: "bi.switch_tree",
+        value: "demo.switch_tree"
     }, {
         id: 401,
         pId: 4,
@@ -3529,15 +3561,15 @@ Demo.COMPONENT_CONFIG = [{
         pId: 412,
         text: "bi.year_month_combo",
         value: "demo.year_month_combo"
-    },{
+    }, {
         pId: 412,
         text: "bi.year_quarter_combo",
         value: "demo.year_quarter_combo"
-    },{
+    }, {
         pId: 412,
         text: "bi.custom_date_time",
         value: "demo.custom_date_time"
-    },{
+    }, {
         pId: 4,
         id: 413,
         text: "简单下拉树"
@@ -3601,9 +3633,16 @@ Demo.COMPONENT_CONFIG = [{
         pId: 418,
         text: "bi.dialog",
         value: "demo.dialog"
+    }, {
+        pId: 4,
+        id: 419,
+        text: "文件管理"
+    }, {
+        pId: 419,
+        text: "demo.file_manager",
+        value: "demo.file_manager"
     }
-];
-Demo.Func = BI.inherit(BI.Widget, {
+];Demo.Func = BI.inherit(BI.Widget, {
     props: {
         baseCls: "demo-func"
     },
@@ -6299,6 +6338,510 @@ Demo.RelationView = BI.inherit(BI.Widget, {
     }
 });
 BI.shortcut("demo.interactive_arrangement", Demo.RelationView);/**
+ * Created by Dailer on 2017/7/25.
+ */
+
+
+Demo.Buttons = BI.inherit(BI.Widget, {
+    props: {
+        baseCls: "demo-button"
+    },
+    render: function () {
+        var items = [{
+                el: {
+                    type: 'bi.button',
+                    text: '一般按钮',
+                    level: 'common',
+                    height: 30
+                }
+            }, {
+                el: {
+                    type: 'bi.button',
+                    text: '表示成功状态按钮',
+                    level: 'success',
+                    height: 30
+                }
+            },
+            {
+                el: {
+                    type: 'bi.button',
+                    text: '表示警告状态的按钮',
+                    level: 'warning',
+                    height: 30
+                }
+            }, {
+                el: {
+                    type: 'bi.button',
+                    text: '表示忽略状态的按钮',
+                    level: 'ignore',
+                    height: 30
+                }
+            }, {
+                el: {
+                    type: 'bi.button',
+                    text: '普通灰化按钮',
+                    disabled: true,
+                    level: 'success',
+                    height: 30
+                }
+            }, {
+                el: {
+                    type: 'bi.button',
+                    text: '忽略状态灰化按钮',
+                    disabled: true,
+                    level: 'ignore',
+                    height: 30
+                }
+            }, {
+                el: {
+                    type: 'bi.button',
+                    text: '带图标的按钮',
+                    //level: 'ignore',
+                    iconClass: "close-font",
+                    height: 30
+                }
+            }, {
+                el: {
+                    type: 'bi.button',
+                    text: '一般按钮',
+                    block: true,
+                    level: 'common',
+                    height: 30
+                }
+            }, {
+                el: {
+                    type: 'bi.button',
+                    text: '表示成功状态按钮',
+                    block: true,
+                    level: 'success',
+                    height: 30
+                }
+            },
+            {
+                el: {
+                    type: 'bi.button',
+                    text: '表示警告状态的按钮',
+                    block: true,
+                    level: 'warning',
+                    height: 30
+                }
+            }, {
+                el: {
+                    type: 'bi.button',
+                    text: '表示忽略状态的按钮',
+                    block: true,
+                    level: 'ignore',
+                    height: 30
+                }
+            }, {
+                el: {
+                    type: 'bi.button',
+                    text: '普通灰化按钮',
+                    block: true,
+                    disabled: true,
+                    level: 'success',
+                    height: 30
+                }
+            }, {
+                el: {
+                    type: 'bi.button',
+                    text: '忽略状态灰化按钮',
+                    block: true,
+                    disabled: true,
+                    level: 'ignore',
+                    height: 30
+                }
+            }, {
+                el: {
+                    type: 'bi.button',
+                    text: '带图标的按钮',
+                    block: true,
+                    //level: 'ignore',
+                    iconClass: "close-font",
+                    height: 30
+                }
+            }, {
+                el: {
+                    type: 'bi.button',
+                    text: '一般按钮',
+                    clear: true,
+                    level: 'common',
+                    height: 30
+                }
+            }, {
+                el: {
+                    type: 'bi.button',
+                    text: '表示成功状态按钮',
+                    clear: true,
+                    level: 'success',
+                    height: 30
+                }
+            },
+            {
+                el: {
+                    type: 'bi.button',
+                    text: '表示警告状态的按钮',
+                    clear: true,
+                    level: 'warning',
+                    height: 30
+                }
+            }, {
+                el: {
+                    type: 'bi.button',
+                    text: '表示忽略状态的按钮',
+                    clear: true,
+                    level: 'ignore',
+                    height: 30
+                }
+            }, {
+                el: {
+                    type: 'bi.button',
+                    text: '普通灰化按钮',
+                    clear: true,
+                    disabled: true,
+                    level: 'success',
+                    height: 30
+                }
+            }, {
+                el: {
+                    type: 'bi.button',
+                    text: '忽略状态灰化按钮',
+                    clear: true,
+                    disabled: true,
+                    level: 'ignore',
+                    height: 30
+                }
+            }, {
+                el: {
+                    type: 'bi.button',
+                    text: '带图标的按钮',
+                    clear: true,
+                    //level: 'ignore',
+                    iconClass: "close-font",
+                    height: 30
+                }
+            }, {
+                el: {
+                    type: 'bi.text_button',
+                    text: '文字按钮',
+                    height: 30
+                }
+            }
+        ];
+        BI.each(items, function (i, item) {
+            item.el.handler = function () {
+                BI.Msg.alert('按钮', this.options.text);
+            }
+        });
+        return {
+            type: "bi.left",
+            vgap: 100,
+            hgap: 20,
+            items: items
+        }
+    }
+});
+BI.shortcut("demo.buttons", Demo.Buttons);/**
+ * Created by Dailer on 2017/7/25.
+ */
+
+Demo.Items = BI.inherit(BI.Widget, {
+
+    render: function () {
+
+        return {
+            type: "bi.vertical",
+            items: [{
+                type: "bi.label",
+                height: 30,
+                text: "单选item"
+            }, {
+                type: "bi.single_select_item",
+                text: "单选项"
+            }, {
+                type: "bi.label",
+                height: 30,
+                text: "复选item"
+            }, {
+                type: "bi.multi_select_item",
+                text: "复选项"
+            }],
+            hgap: 300
+        }
+    }
+});
+
+
+BI.shortcut("demo.items", Demo.Items);/**
+ * Created by Dailer on 2017/7/25.
+ */
+
+Demo.LoadingMask = BI.inherit(BI.Widget, {
+
+    render: function () {
+        var vessel = this;
+        var self = this;
+        var left = BI.createWidget({
+            type: "bi.center_adapt",
+            items: [{
+                type: "bi.button",
+                text: "LoadingMask",
+                height: 30,
+                handler: function () {
+                    var mask = BI.createWidget({
+                        type: "bi.loading_mask",
+                        masker: vessel,
+                        text: "加载中...3s后结束"
+                    });
+                    setTimeout(function () {
+                        mask.destroy();
+                    }, 3000);
+                }
+            }]
+        });
+        var right = BI.createWidget({
+            type: "bi.center_adapt",
+            items: [{
+                type: "bi.button",
+                text: "CancelLoadingMask",
+                height: 30,
+                handler: function () {
+                    var mask = BI.createWidget({
+                        type: "bi.loading_cancel_mask",
+                        masker: vessel,
+                        text: "正在加载数据"
+                    });
+                    mask.on(BI.LoadingCancelMask.EVENT_VALUE_CANCEL, function () {
+                        mask.destroy();
+                        BI.Msg.toast("取消加载了...");
+                    });
+                }
+            }]
+        });
+        BI.createWidget({
+            type: "bi.center_adapt",
+            element: vessel,
+            items: [left, right],
+            hgap: 20
+        })
+    }
+});
+
+BI.shortcut("demo.loading_mask", Demo.LoadingMask);/**
+ * Created by Dailer on 2017/7/25.
+ */
+
+Demo.Nodes = BI.inherit(BI.Widget, {
+
+    render: function (vessel) {
+        return {
+            type: "bi.vertical",
+            items: [{
+                type: "bi.label",
+                height: 30,
+                text: "十字形的节点"
+            }, {
+                type: "bi.plus_group_node",
+                text: "十字形的节点"
+            }, {
+                type: "bi.label",
+                height: 30,
+                text: "三角形的节点"
+            }, {
+                type: "bi.triangle_group_node",
+                text: "三角形的节点"
+            }, {
+                type: "bi.label",
+                height: 30,
+                text: "箭头节点"
+            }, {
+                type: "bi.arrow_group_node",
+                text: "箭头节点"
+            }]
+        }
+    }
+});
+
+BI.shortcut("demo.nodes", Demo.Nodes);/**
+ * Created by Dailer on 2017/7/25.
+ */
+
+Demo.Segments = BI.inherit(BI.Widget, {
+
+    render: function () {
+        return {
+            type: "bi.vertical",
+            items: [{
+                type: "bi.label",
+                height: 30,
+                text: "默认风格"
+            }, {
+                type: "bi.segment",
+                items: [{
+                    text: "tab1",
+                    value: 1,
+                    selected: true
+                }, {
+                    text: "tab2",
+                    value: 2
+                }, {
+                    text: "tab3 disabled",
+                    disabled: true,
+                    value: 3
+                }]
+            }],
+            hgap: 50,
+            vgap: 20
+        }
+    }
+});
+
+BI.shortcut("demo.segments", Demo.Segments);/**
+ * Created by Dailer on 2017/7/25.
+ */
+
+Demo.Tips = BI.inherit(BI.Widget, {
+    props: {
+        baseCls: "demo-tips"
+    },
+    render: function () {
+        var btns = [];
+        var bubble = BI.createWidget({
+            type: "bi.left",
+            items: [{
+                el: {
+                    type: 'bi.button',
+                    text: 'bubble测试',
+                    height: 30,
+                    handler: function () {
+                        BI.Bubbles.show("singleBubble1", "bubble测试", this);
+                        btns.push("singleBubble1");
+                    }
+                }
+            }, {
+                el: {
+                    type: 'bi.button',
+                    text: 'bubble测试(居中显示)',
+                    height: 30,
+                    handler: function () {
+                        BI.Bubbles.show("singleBubble2", "bubble测试", this, {
+                            offsetStyle: "center"
+                        });
+                        btns.push("singleBubble2");
+                    }
+                }
+            }, {
+                el: {
+                    type: 'bi.button',
+                    text: 'bubble测试(右边显示)',
+                    height: 30,
+                    handler: function () {
+                        BI.Bubbles.show("singleBubble3", "bubble测试", this, {
+                            offsetStyle: "right"
+                        });
+                        btns.push("singleBubble3");
+                    }
+                }
+            }, {
+                el: {
+                    type: 'bi.button',
+                    text: '隐藏所有 bubble',
+                    height: 30,
+                    cls: "layout-bg2",
+                    handler: function () {
+                        BI.each(btns, function (index, value) {
+                            BI.Bubbles.hide(value);
+                        })
+                    }
+                }
+            }],
+            hgap: 20
+        });
+
+        var title = BI.createWidget({
+            type: "bi.vertical",
+            items: [{
+                type: "bi.label",
+                cls: "layout-bg1",
+                height: 50,
+                title: "title提示",
+                text: "移上去有title提示",
+                textAlign: "center"
+            }, {
+                type: "bi.label",
+                cls: "layout-bg6",
+                height: 50,
+                disabled: true,
+                warningTitle: "title错误提示",
+                text: "移上去有title错误提示",
+                textAlign: "center"
+            }, {
+                type: "bi.label",
+                cls: "layout-bg2",
+                height: 50,
+                disabled: true,
+                tipType: "success",
+                title: "自定义title提示效果",
+                warningTitle: "自定义title提示效果",
+                text: "自定义title提示效果",
+                textAlign: "center"
+            }],
+            hgap: 20,
+            vgap: 20
+        });
+
+        var toast = BI.createWidget({
+            type: "bi.vertical",
+            items: [{
+                el: {
+                    type: 'bi.button',
+                    text: '简单Toast测试',
+                    height: 30,
+                    handler: function () {
+                        BI.Msg.toast("这是一条简单的数据");
+                    }
+                }
+            }, {
+                el: {
+                    type: 'bi.button',
+                    text: '很长的Toast测试',
+                    height: 30,
+                    handler: function () {
+                        BI.Msg.toast("这是一条很长很长很长很长很长很长很长很长很长很长很长很长很长很长很长很长很长很长很长很长很长很长很长很长很长很长很长很长很长很长很长很长很长很长很长很长很长很长很长很长很长很长很长很长很长很长很长很长的数据")
+                    }
+                }
+            }, {
+                el: {
+                    type: 'bi.button',
+                    text: '非常长的Toast测试',
+                    height: 30,
+                    handler: function () {
+                        BI.Msg.toast("这是一条非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长的数据")
+                    }
+                }
+            }, {
+                el: {
+                    type: 'bi.button',
+                    text: '错误提示Toast测试',
+                    level: "warning",
+                    height: 30,
+                    handler: function () {
+                        BI.Msg.toast("错误提示Toast测试", "warning");
+                    }
+                }
+            }],
+            vgap: 20
+        });
+
+        return {
+            type: "bi.horizontal_auto",
+            vgap: 20,
+            hgap: 20,
+            items: [bubble, title, toast]
+        }
+    }
+});
+BI.shortcut("demo.tips", Demo.Tips);/**
  * Created by Dailer on 2017/7/12.
  */
 Demo.FormulaCombo = BI.inherit(BI.Widget, {
@@ -6568,18 +7111,34 @@ Demo.Date = BI.inherit(BI.Widget, {
     },
 
     render: function () {
-
+        var self = this;
         return {
             type: "bi.horizontal_auto",
             vgap: 10,
             items: [{
                 type: "bi.date_combo",
+                ref: function () {
+                    self.datecombo = this;
+                },
                 width: 300
             }, {
                 type: "bi.button",
                 text: "getVlaue",
-                height: 50,
-                width: 300
+                width: 300,
+                handler: function () {
+                    BI.Msg.alert("date", JSON.stringify(self.datecombo.getValue()));
+                }
+            }, {
+                type: "bi.button",
+                text: "setVlaue '2017-12-31'",
+                width: 300,
+                handler: function () {
+                    self.datecombo.setValue({
+                        year: 2017,
+                        month: 11,
+                        day: 31
+                    })
+                }
             }]
         }
     }
@@ -6590,7 +7149,7 @@ BI.shortcut("demo.date", Demo.Date);Demo.DatePane = BI.inherit(BI.Widget, {
         baseCls: "demo-datepane"
     },
     render: function () {
-
+        var self = this;
         return {
             type: "bi.horizontal_auto",
             items: [{
@@ -6607,13 +7166,26 @@ BI.shortcut("demo.date", Demo.Date);Demo.DatePane = BI.inherit(BI.Widget, {
                             month: 12,
                             day: 11
                         },
-                        height:300
+                        ref: function (_ref) {
+                            self.datepane = _ref;
+                        },
+                        height: 300
                     },
                     {
                         type: "bi.button",
                         text: "getValue",
                         handler: function () {
-                            BI.Msg.toast("date" + JSON.stringify(datepane.getValue()));
+                            BI.Msg.toast("date" + JSON.stringify(self.datepane.getValue()));
+                        }
+                    }, {
+                        type: "bi.button",
+                        text: "setVlaue '2017-12-31'",
+                        handler: function () {
+                            self.datepane.setValue({
+                                year: 2017,
+                                month: 11,
+                                day: 31
+                            })
                         }
                     }
                 ],
@@ -6627,8 +7199,7 @@ BI.shortcut("demo.date_pane_widget", Demo.DatePane);/**
  * Created by Urthur on 2017/7/18.
  */
 Demo.CustomDateTime = BI.inherit(BI.Widget, {
-    props: {
-    },
+    props: {},
     render: function () {
         var self = this;
         return {
@@ -6637,7 +7208,7 @@ Demo.CustomDateTime = BI.inherit(BI.Widget, {
                 el: {
                     type: "bi.custom_date_time_combo",
                     ref: function (_ref) {
-                        self.customDateTime =  _ref;
+                        self.customDateTime = _ref;
                         self.customDateTime.on(BI.CustomDateTimeCombo.EVENT_CONFIRM, function () {
                             BI.Msg.alert("日期", this.getValue().text);
                         });
@@ -7085,7 +7656,74 @@ Demo.TextEditor = BI.inherit(BI.Widget, {
     }
 })
 
-BI.shortcut("demo.text_editor", Demo.TextEditor);/**
+BI.shortcut("demo.text_editor", Demo.TextEditor);/* 文件管理导航
+    Created by dailer on 2017 / 7 / 21. 
+   */
+Demo.FileManager = BI.inherit(BI.Widget, {
+    props: {
+        baseCls: ""
+    },
+
+    render: function () {
+        var items = [{
+            id: "1",
+            value: "1",
+            text: "根目录",
+            lastModify: 1454316355142
+        }, {
+            id: "11",
+            pId: "1",
+            value: "11",
+            text: "第一级子目录1",
+            lastModify: 1454316355142
+        }, {
+            id: "12",
+            pId: "1",
+            value: "12",
+            text: "第一级子目录2",
+            lastModify: 1454316355142
+        }, {
+            id: "111",
+            pId: "11",
+            value: "111",
+            text: "第二级子目录",
+            lastModify: 1454316355142
+        }, {
+            id: "121",
+            pId: "111",
+            buildUrl: "www.baidu.com",
+            value: "121",
+            text: "文件1",
+            lastModify: 1454316355142
+        }, {
+            id: "122",
+            pId: "111",
+            buildUrl: "www.baidu.com",
+            value: "122",
+            text: "文件2",
+            lastModify: 1454316355142
+        }];
+        var filemanager = BI.createWidget({
+            type: "bi.file_manager",
+            items: items
+        });
+        return {
+            type: "bi.vtape",
+            items: [{
+                el: filemanager,
+                height: "fill"
+            }, {
+                type: "bi.button",
+                text: "getValue",
+                handler: function () {
+                    BI.Msg.alert("", JSON.stringify(filemanager.getValue()));
+                },
+                height: 25
+            }]
+        }
+    }
+});
+BI.shortcut("demo.file_manager", Demo.FileManager);/**
  * Created by Dailer on 2017/7/11.
  */
 Demo.Month = BI.inherit(BI.Widget, {
@@ -7093,527 +7731,40 @@ Demo.Month = BI.inherit(BI.Widget, {
         baseCls: "demo-exceltable"
     },
     render: function () {
+        var self = this;
         return {
-            type: "bi.horizontal_adapt",
+            type: "bi.horizontal_auto",
             items: [{
                 type: "bi.month_combo",
+                width: 300,
+                ref: function () {
+                    self.monthcombo = this;
+                }
+            }, {
+                type: "bi.button",
+                text: "getValue",
+                handler: function () {
+                    BI.Msg.toast(JSON.stringify(self.monthcombo.getValue()));
+                },
                 width: 300
-            }]
-
+            }, {
+                type: "bi.button",
+                text: "setValue : 11",
+                handler: function () {
+                    self.monthcombo.setValue(11);
+                },
+                width: 300
+            }, {
+                type: "bi.label",
+                text: "月份value 范围为0-11,显示范围为1-12",
+                width: 300
+            }],
+            vgap: 10
         }
     }
 })
 
 BI.shortcut("demo.month", Demo.Month);/**
- * Created by Urthur on 2017/7/14.
- */
-BI.MultiDateTimeCombo = BI.inherit(BI.Single, {
-    constants: {
-        popupHeight: 290,
-        popupWidth: 270,
-        comboAdjustHeight: 1,
-        border: 1,
-        DATE_MIN_VALUE: "1900-01-01",
-        DATE_MAX_VALUE: "2099-12-31"
-    },
-    _defaultConfig: function () {
-        return BI.extend(BI.MultiDateTimeCombo.superclass._defaultConfig.apply(this, arguments), {
-            baseCls: 'bi-multi-date-time-combo bi-border',
-            height: 24
-        });
-    },
-    _init: function () {
-        BI.MultiDateTimeCombo.superclass._init.apply(this, arguments);
-        var self = this, opts = this.options;
-        var date = new Date();
-        this.storeValue = {
-            value: {
-                year: date.getFullYear(),
-                month: date.getMonth(),
-                day: date.getDate(),
-                hour: date.getHours(),
-                minute: date.getMinutes(),
-                second: date.getSeconds()
-            }
-        };
-        this.trigger = BI.createWidget({
-            type: 'bi.date_time_trigger',
-            min: this.constants.DATE_MIN_VALUE,
-            max: this.constants.DATE_MAX_VALUE
-        });
-
-        this.popup = BI.createWidget({
-            type: "bi.multi_date_time_popup",
-            min: this.constants.DATE_MIN_VALUE,
-            max: this.constants.DATE_MAX_VALUE
-        });
-        self.setValue(this.storeValue);
-
-        this.popup.on(BI.MultiDateTimePopup.BUTTON_CANCEL_EVENT_CHANGE, function () {
-            self.combo.hideView();
-            self.fireEvent(BI.MultiDateTimeCombo.EVENT_CANCEL);
-        });
-        this.popup.on(BI.MultiDateTimePopup.BUTTON_OK_EVENT_CHANGE, function () {
-            self.setValue(self.popup.getValue());
-            self.combo.hideView();
-            self.fireEvent(BI.MultiDateTimeCombo.EVENT_CONFIRM);
-        });
-        this.popup.on(BI.MultiDateTimePopup.CALENDAR_EVENT_CHANGE, function () {
-            self.setValue(self.popup.getValue());
-        });
-        this.combo = BI.createWidget({
-            type: 'bi.combo',
-            toggle: false,
-            isNeedAdjustHeight: false,
-            isNeedAdjustWidth: false,
-            el: this.trigger,
-            adjustLength: this.constants.comboAdjustHeight,
-            popup: {
-                el: this.popup,
-                maxHeight: this.constants.popupHeight,
-                width: this.constants.popupWidth,
-                stopPropagation: false
-            }
-        });
-        this.combo.on(BI.Combo.EVENT_BEFORE_POPUPVIEW, function () {
-            self.popup.setValue(self.storeValue);
-            self.fireEvent(BI.MultiDateTimeCombo.EVENT_BEFORE_POPUPVIEW);
-        });
-
-        var triggerBtn = BI.createWidget({
-            type: "bi.trigger_icon_button",
-            cls: "bi-trigger-date-button chart-date-normal-font bi-border-right",
-            width: 30,
-            height: 24
-        });
-        triggerBtn.on(BI.TriggerIconButton.EVENT_CHANGE, function () {
-            if (self.combo.isViewVisible()) {
-                self.combo.hideView();
-            } else {
-                self.combo.showView();
-            }
-        });
-
-        BI.createWidget({
-            type: "bi.htape",
-            element: this,
-            items: [{
-                type: "bi.absolute",
-                items: [{
-                    el: this.combo,
-                    top: 0,
-                    left: 0,
-                    right: 0,
-                    bottom: 0
-                }, {
-                    el: triggerBtn,
-                    top: 0,
-                    left: 0
-                }]
-            }]
-        })
-    },
-
-    setValue: function (v) {
-        this.storeValue = v;
-        this.popup.setValue(v);
-        this.trigger.setValue(v);
-    },
-    getValue: function () {
-        return this.storeValue;
-    }
-});
-
-BI.MultiDateTimeCombo.EVENT_CANCEL = "EVENT_CANCEL";
-BI.MultiDateTimeCombo.EVENT_CONFIRM = "EVENT_CONFIRM";
-BI.MultiDateTimeCombo.EVENT_CHANGE = "EVENT_CHANGE";
-BI.MultiDateTimeCombo.EVENT_BEFORE_POPUPVIEW = "BI.MultiDateTimeCombo.EVENT_BEFORE_POPUPVIEW";
-BI.shortcut('bi.multi_date_time_combo', BI.MultiDateTimeCombo);
-/**
- * Created by Urthur on 2017/7/14.
- */
-BI.CustomMultiDateTimeCombo = BI.inherit(BI.Widget, {
-    _defaultConfig: function () {
-        return BI.extend(BI.CustomMultiDateTimeCombo.superclass._defaultConfig.apply(this, arguments), {
-            baseCls: "bi-custom-multi-date-time-combo"
-        })
-    },
-
-    _init: function () {
-        BI.CustomMultiDateTimeCombo.superclass._init.apply(this, arguments);
-        var self = this;
-        this.multiDateTime = BI.createWidget({
-            type: "bi.multi_date_time_combo",
-            element: this
-        });
-        this.multiDateTime.on(BI.MultiDateTimeCombo.EVENT_CANCEL, function () {
-            self.fireEvent(BI.CustomMultiDateTimeCombo.EVENT_CANCEL);
-        });
-
-        this.multiDateTime.on(BI.MultiDateTimeCombo.EVENT_CONFIRM, function () {
-            self.fireEvent(BI.CustomMultiDateTimeCombo.EVENT_CONFIRM);
-        });
-    },
-
-    getValue: function () {
-        return this.multiDateTime.getValue();
-    },
-
-    setValue: function (v) {
-        this.multiDateTime.setValue(v);
-    }
-});
-BI.CustomMultiDateTimeCombo.EVENT_CHANGE = "EVENT_CHANGE";
-BI.CustomMultiDateTimeCombo.EVENT_CANCEL = "EVENT_CANCEL";
-BI.CustomMultiDateTimeCombo.EVENT_CONFIRM = "EVENT_CONFIRM";
-BI.shortcut("bi.custom_multi_date_time_combo", BI.CustomMultiDateTimeCombo);
-/**
- * Created by Urthur on 2017/7/14.
- */
-BI.MultiDateTimePopup = BI.inherit(BI.Widget, {
-    constants: {
-        tabHeight: 30,
-        tabWidth: 42,
-        titleHeight: 27,
-        itemHeight: 30,
-        triggerHeight: 24,
-        buttonWidth: 90,
-        buttonHeight: 25,
-        popupHeight: 290,
-        popupWidth: 270,
-        comboAdjustHeight: 1,
-        lgap: 2,
-        border: 1
-    },
-    _defaultConfig: function () {
-        return BI.extend(BI.MultiDateTimePopup.superclass._defaultConfig.apply(this, arguments), {
-            baseCls: 'bi-multi-date-time-popup',
-            width: 268,
-            height: 290
-        });
-    },
-    _init: function () {
-        BI.MultiDateTimePopup.superclass._init.apply(this, arguments);
-        var self = this, opts = this.options;
-        this.cancelButton = BI.createWidget({
-            type: 'bi.text_button',
-            forceCenter: true,
-            cls: 'bi-multidate-popup-button bi-border-top bi-border-right',
-            shadow: true,
-            text: BI.i18nText("BI-Basic_Cancel")
-        });
-        this.cancelButton.on(BI.TextButton.EVENT_CHANGE, function () {
-            self.fireEvent(BI.MultiDateTimePopup.BUTTON_CANCEL_EVENT_CHANGE);
-        });
-
-        this.okButton = BI.createWidget({
-            type: "bi.text_button",
-            forceCenter: true,
-            cls: 'bi-multidate-popup-button bi-border-top',
-            shadow: true,
-            text: BI.i18nText("BI-Basic_OK")
-        });
-        this.okButton.on(BI.TextButton.EVENT_CHANGE, function () {
-            self.fireEvent(BI.MultiDateTimePopup.BUTTON_OK_EVENT_CHANGE);
-        });
-
-        this.dateCombo = BI.createWidget({
-            type: "bi.date_calendar_popup",
-            min: self.options.min,
-            max: self.options.max
-        });
-        self.dateCombo.on(BI.DateCalendarPopup.EVENT_CHANGE, function () {
-            self.fireEvent(BI.MultiDateTimePopup.CALENDAR_EVENT_CHANGE);
-        });
-
-        this.dateSelect = BI.createWidget({
-            type: "bi.horizontal",
-            cls: "bi-border-top",
-            items: [{
-                type: "bi.label",
-                text: BI.i18nText("BI-Basic_Time"),
-                width: 45
-            },{
-                type: "bi.multi_date_time_select",
-                max: 23,
-                min: 0,
-                width: 60,
-                height: 30,
-                ref: function (_ref) {
-                    self.hour = _ref;
-                    self.hour.on(BI.MultiDateTimeSelect.EVENT_CONFIRM, function () {
-                        self.fireEvent(BI.MultiDateTimePopup.CALENDAR_EVENT_CHANGE);
-                    });
-                }
-            },{
-                type: "bi.label",
-                text: ":",
-                width: 15
-            },{
-                type: "bi.multi_date_time_select",
-                max: 59,
-                min: 0,
-                width: 60,
-                height: 30,
-                ref: function (_ref) {
-                    self.minute = _ref;
-                    self.minute.on(BI.MultiDateTimeSelect.EVENT_CONFIRM, function () {
-                        self.fireEvent(BI.MultiDateTimePopup.CALENDAR_EVENT_CHANGE);
-                    });
-                }
-            },{
-                type: "bi.label",
-                text: ":",
-                width: 15
-            },{
-                type: "bi.multi_date_time_select",
-                max: 59,
-                min: 0,
-                width: 60,
-                height: 30,
-                ref: function (_ref) {
-                    self.second = _ref;
-                    self.second.on(BI.MultiDateTimeSelect.EVENT_CONFIRM, function () {
-                        self.fireEvent(BI.MultiDateTimePopup.CALENDAR_EVENT_CHANGE);
-                    });
-                }
-            }]
-        });
-
-        this.dateButton = BI.createWidget({
-            type: "bi.grid",
-            items: [[this.cancelButton, this.okButton]]
-        });
-        BI.createWidget({
-            element: this,
-            type: "bi.vtape",
-            items: [{
-                el: this.dateCombo
-            }, {
-                el: this.dateSelect,
-                height: 50
-            },{
-                el: this.dateButton,
-                height: 30
-            }]
-        });
-    },
-
-    setValue: function (v) {
-        var value, date;
-        if (BI.isNotNull(v)) {
-            value = v.value;
-            if(BI.isNull(value)){
-                date = new Date();
-                this.dateCombo.setValue({
-                    year: date.getFullYear(),
-                    month: date.getMonth(),
-                    day: date.getDate()
-                });
-                this.hour.setValue(date.getHours());
-                this.minute.setValue(date.getMinutes());
-                this.second.setValue(date.getSeconds());
-            } else {
-                this.dateCombo.setValue({
-                    year: value.year,
-                    month: value.month,
-                    day: value.day
-                });
-                this.hour.setValue(value.hour);
-                this.minute.setValue(value.minute);
-                this.second.setValue(value.second);
-            }
-        }
-    },
-
-    getValue: function () {
-        return {
-            value: {
-                year: this.dateCombo.getValue().year,
-                month: this.dateCombo.getValue().month,
-                day: this.dateCombo.getValue().day,
-                hour: this.hour.getValue(),
-                minute: this.minute.getValue(),
-                second: this.second.getValue()
-            }
-        }
-    }
-});
-BI.MultiDateTimePopup.BUTTON_OK_EVENT_CHANGE = "BUTTON_OK_EVENT_CHANGE";
-BI.MultiDateTimePopup.BUTTON_CANCEL_EVENT_CHANGE = "BUTTON_CANCEL_EVENT_CHANGE";
-BI.MultiDateTimePopup.CALENDAR_EVENT_CHANGE = "CALENDAR_EVENT_CHANGE";
-BI.shortcut('bi.multi_date_time_popup', BI.MultiDateTimePopup);
-
-/**
- * Created by Urthur on 2017/7/14.
- */
-BI.MultiDateTimeSelect = BI.inherit(BI.Widget, {
-    _defaultConfig: function () {
-        return BI.extend(BI.MultiDateTimeSelect.superclass._defaultConfig.apply(this, arguments), {
-            baseCls: "bi-multi-date-time-select bi-border",
-            max: 23,
-            min: 0
-        })
-    },
-
-    _init: function () {
-        BI.MultiDateTimeSelect.superclass._init.apply(this, arguments);
-        var self = this, o = this.options;
-        this.editor = BI.createWidget({
-            type: "bi.sign_editor",
-            value: this._alertInEditorValue(o.min),
-            errorText: BI.i18nText("BI-Please_Input_Natural_Number"),
-            validationChecker: function(v){
-                return BI.isNaturalNumber(v);
-            }
-        });
-        this.editor.on(BI.TextEditor.EVENT_CONFIRM, function(){
-            self._finetuning(0);
-            self.fireEvent(BI.MultiDateTimeSelect.EVENT_CONFIRM);
-        });
-        this.topBtn = BI.createWidget({
-            type: "bi.icon_button",
-            cls: "column-pre-page-h-font top-button bi-border-left bi-border-bottom"
-        });
-        this.topBtn.on(BI.IconButton.EVENT_CHANGE, function(){
-            self._finetuning(1);
-            self.fireEvent(BI.MultiDateTimeSelect.EVENT_CONFIRM);
-        });
-        this.bottomBtn = BI.createWidget({
-            type: "bi.icon_button",
-            cls: "column-next-page-h-font bottom-button bi-border-left"
-        });
-        this.bottomBtn.on(BI.IconButton.EVENT_CHANGE, function(){
-            self._finetuning(-1);
-            self.fireEvent(BI.MultiDateTimeSelect.EVENT_CONFIRM);
-        });
-        this._finetuning(0);
-        BI.createWidget({
-            type: "bi.htape",
-            element: this,
-            items: [this.editor, {
-                el: {
-                    type: "bi.grid",
-                    columns: 1,
-                    rows: 2,
-                    items: [{
-                        column: 0,
-                        row: 0,
-                        el: this.topBtn
-                    }, {
-                        column: 0,
-                        row: 1,
-                        el: this.bottomBtn
-                    }]
-                },
-                width: 30
-            }]
-        });
-    },
-
-    _alertOutEditorValue: function(v){
-        if (v > this.options.max){
-            v = this.options.min;
-        }
-        if (v < this.options.min){
-            v = this.options.max
-        }
-        return BI.parseInt(v);
-    },
-
-    _alertInEditorValue: function(v){
-        if (v > this.options.max){
-            v = this.options.min;
-        }
-        if (v < this.options.min){
-            v = this.options.max;
-        }
-        v = v < 10 ? "0" + v : v;
-        return v;
-    },
-
-    _finetuning: function(add){
-        var v = BI.parseInt(this._alertOutEditorValue(this.editor.getValue()));
-        this.editor.setValue(this._alertInEditorValue(v + add));
-    },
-
-    getValue: function () {
-        var v = this.editor.getValue();
-        return this._alertOutEditorValue(v);
-    },
-
-    setValue: function (v) {
-        this.editor.setValue(this._alertInEditorValue(v));
-        this._finetuning(0);
-    }
-
-});
-BI.MultiDateTimeSelect.EVENT_CONFIRM = "EVENT_CONFIRM";
-BI.shortcut("bi.multi_date_time_select", BI.MultiDateTimeSelect);
-/**
- * Created by Urthur on 2017/7/14.
- */
-BI.DateTimeTrigger = BI.inherit(BI.Trigger, {
-    _const: {
-        hgap: 4,
-        vgap: 2,
-        triggerWidth: 30
-    },
-
-    _defaultConfig: function () {
-        return BI.extend(BI.DateTimeTrigger.superclass._defaultConfig.apply(this, arguments), {
-            extraCls: "bi-date-time-trigger",
-            min: '1900-01-01', //最小日期
-            max: '2099-12-31', //最大日期
-            height: 25
-        });
-    },
-    _init: function () {
-        BI.DateTimeTrigger.superclass._init.apply(this, arguments);
-        var self = this, o = this.options, c = this._const;
-        this.editor = BI.createWidget({
-            type: "bi.sign_editor",
-            height: o.height,
-            hgap: c.hgap,
-            vgap: c.vgap,
-            disabled: true
-        });
-
-        BI.createWidget({
-            type: "bi.htape",
-            element: this,
-            items: [{
-                el: BI.createWidget(),
-                width: 30
-            }, {
-                el: this.editor
-            }]
-        })
-    },
-
-    _printTime: function (v) {
-        return v < 10 ? "0" + v : v;
-    },
-
-    setValue: function (v) {
-        var self = this;
-        if (BI.isNotNull(v)) {
-            var value = v.value, dateStr;
-            if(BI.isNull(value)){
-                value = new Date();
-                dateStr = value.getFullYear() + "-" + self._printTime(value.getMonth() + 1) + "-" + self._printTime(value.getDate())
-                    + " " + self._printTime(value.getHours()) + ":" + self._printTime(value.getMinutes()) + ":" + self._printTime(value.getSeconds());
-            } else {
-                dateStr = value.year + "-" + self._printTime(value.month + 1) + "-" + self._printTime(value.day)
-                    + " " + self._printTime(value.hour) + ":" + self._printTime(value.minute) + ":" + self._printTime(value.second);
-            }
-            this.editor.setValue(dateStr);
-        }
-    }
-
-});
-BI.shortcut("bi.date_time_trigger", BI.DateTimeTrigger);
-/**
  * Created by User on 2017/3/22.
  */
 Demo.MultiSelectCombo = BI.inherit(BI.Widget, {
@@ -8038,13 +8189,31 @@ Demo.Quarter = BI.inherit(BI.Widget, {
         baseCls: "demo-exceltable"
     },
     render: function () {
+        var self = this;
         return {
-            type: "bi.horizontal_adapt",
+            type: "bi.horizontal_auto",
             items: [{
                 type: "bi.quarter_combo",
+                width: 300,
+                ref: function () {
+                    self.quartercombo = this;
+                }
+            }, {
+                type: "bi.button",
+                text: "getValue",
+                handler: function () {
+                    BI.Msg.toast(JSON.stringify(self.quartercombo.getValue()));
+                },
                 width: 300
-            }]
-
+            }, {
+                type: "bi.button",
+                text: "setValue : 3",
+                handler: function () {
+                    self.quartercombo.setValue(3);
+                },
+                width: 300
+            }],
+            vgap: 10
         }
     }
 })
@@ -8141,6 +8310,13 @@ Demo.MultiLayerSelectTreeCombo = BI.inherit(BI.Widget, {
                     BI.Msg.toast(self.tree.getValue()[0]);
                 },
                 width: 300
+            }, {
+                type: "bi.button",
+                text: "setVlaue (第二级文件1)",
+                handler: function () {
+                    self.tree.setValue(["第二级文件1"]);
+                },
+                width: 300
             }],
             vgap: 20
         }
@@ -8157,154 +8333,7 @@ Demo.SelectTreeCombo = BI.inherit(BI.Widget, {
 
     render: function () {
         var self = this;
-        var items = [{
-            id: 1,
-            text: "第一项",
-            value: 1,
-            isParent: true,
-            title: "第一项"
-        }, {
-            id: 2,
-            text: "第二项",
-            value: 2,
-            isParent: true,
-            title: "第二项"
-        }, {
-            id: 3,
-            text: "第三项",
-            value: 3,
-            isParent: true,
-            open: true,
-            title: "第三项"
-        }, {
-            id: 4,
-            text: "第四项",
-            value: 4,
-            isParent: true,
-            title: "第四项"
-        }, {
-            id: 5,
-            text: "第五项",
-            value: 5,
-            isParent: true,
-            title: "第五项"
-        }, {
-            id: 6,
-            text: "第六项",
-            value: 6,
-            isParent: true,
-            open: true,
-            title: "第六项"
-        }, {
-            id: 7,
-            text: "第七项",
-            value: 7,
-            isParent: true,
-            open: true,
-            title: "第七项"
-        }, {
-            id: 11,
-            pId: 1,
-            text: "子项1",
-            value: 11,
-            title: "子项1"
-        }, {
-            id: 12,
-            pId: 1,
-            text: "子项2",
-            value: 12,
-            title: "子项2"
-        }, {
-            id: 13,
-            pId: 1,
-            text: "子项3",
-            value: 13,
-            title: "子项3"
-        }, {
-            id: 21,
-            pId: 2,
-            text: "子项1",
-            value: 21,
-            title: "子项1"
-        }, {
-            id: 22,
-            pId: 2,
-            text: "子项2",
-            value: 22,
-            title: "子项2"
-        }, {
-            id: 31,
-            pId: 3,
-            text: "子项1",
-            value: 31,
-            title: "子项1"
-        }, {
-            id: 32,
-            pId: 3,
-            text: "子项2",
-            value: 32,
-            title: "子项2"
-        }, {
-            id: 33,
-            pId: 3,
-            text: "子项3",
-            value: 33,
-            title: "子项3"
-        }, {
-            id: 41,
-            pId: 4,
-            text: "子项1",
-            value: 41,
-            title: "子项1"
-        }, {
-            id: 42,
-            pId: 4,
-            text: "子项2",
-            value: 42,
-            title: "子项2"
-        }, {
-            id: 43,
-            pId: 4,
-            text: "子项3",
-            value: 43,
-            title: "子项3"
-        }, {
-            id: 51,
-            pId: 5,
-            text: "子项1",
-            value: 51,
-            title: "子项1"
-        }, {
-            id: 52,
-            pId: 5,
-            text: "子项2",
-            value: 52,
-            title: "子项2"
-        }, {
-            id: 61,
-            pId: 6,
-            text: "子项1",
-            value: 61,
-            title: "子项1"
-        }, {
-            id: 62,
-            pId: 6,
-            text: "子项2",
-            value: 62,
-            title: "子项2"
-        }, {
-            id: 71,
-            pId: 7,
-            text: "子项1",
-            value: 71,
-            title: "子项1"
-        }, {
-            id: 72,
-            pId: 7,
-            text: "子项2",
-            value: 72,
-            title: "子项2"
-        }];
+        var items = BI.deepClone(Demo.CONSTANTS.TREE);
         return {
             type: "bi.horizontal_auto",
             items: [{
@@ -8320,6 +8349,13 @@ Demo.SelectTreeCombo = BI.inherit(BI.Widget, {
                 text: "getVlaue",
                 handler: function () {
                     BI.Msg.toast(self.tree.getValue()[0]);
+                },
+                width: 300
+            }, {
+                type: "bi.button",
+                text: "setVlaue (第二级文件1)",
+                handler: function () {
+                    self.tree.setValue(["第二级文件1"]);
                 },
                 width: 300
             }],
@@ -8356,6 +8392,13 @@ Demo.MultiLayerSingleTreeCombo = BI.inherit(BI.Widget, {
                     BI.Msg.toast(self.tree.getValue()[0]);
                 },
                 width: 300
+            }, {
+                type: "bi.button",
+                text: "setVlaue (第二级文件1)",
+                handler: function () {
+                    self.tree.setValue(["第二级文件1"]);
+                },
+                width: 300
             }],
             vgap: 20
         }
@@ -8372,6 +8415,7 @@ Demo.SingleTreeCombo = BI.inherit(BI.Widget, {
 
     render: function () {
         var self = this;
+        var items = BI.deepClone(Demo.CONSTANTS.TREE);
         return {
             type: "bi.horizontal_auto",
             items: [{
@@ -8380,160 +8424,20 @@ Demo.SingleTreeCombo = BI.inherit(BI.Widget, {
                     self.tree = _ref;
                 },
                 text: "默认值",
-                items: [{
-                    id: 1,
-                    text: "第一项",
-                    value: 1,
-                    isParent: true,
-                    title: "第一项"
-                }, {
-                    id: 2,
-                    text: "第二项",
-                    value: 1,
-                    isParent: true,
-                    title: "第二项"
-                }, {
-                    id: 3,
-                    text: "第三项",
-                    value: 1,
-                    isParent: true,
-                    open: true,
-                    title: "第三项"
-                }, {
-                    id: 4,
-                    text: "第四项",
-                    value: 1,
-                    isParent: true,
-                    title: "第四项"
-                }, {
-                    id: 5,
-                    text: "第五项",
-                    value: 1,
-                    isParent: true,
-                    title: "第五项"
-                }, {
-                    id: 6,
-                    text: "第六项",
-                    value: 1,
-                    isParent: true,
-                    open: true,
-                    title: "第六项"
-                }, {
-                    id: 7,
-                    text: "第七项",
-                    value: 1,
-                    isParent: true,
-                    open: true,
-                    title: "第七项"
-                }, {
-                    id: 11,
-                    pId: 1,
-                    text: "子项1",
-                    value: 11,
-                    title: "子项1"
-                }, {
-                    id: 12,
-                    pId: 1,
-                    text: "子项2",
-                    value: 12,
-                    title: "子项2"
-                }, {
-                    id: 13,
-                    pId: 1,
-                    text: "子项3",
-                    value: 13,
-                    title: "子项3"
-                }, {
-                    id: 21,
-                    pId: 2,
-                    text: "子项1",
-                    value: 21,
-                    title: "子项1"
-                }, {
-                    id: 22,
-                    pId: 2,
-                    text: "子项2",
-                    value: 22,
-                    title: "子项2"
-                }, {
-                    id: 31,
-                    pId: 3,
-                    text: "子项1",
-                    value: 31,
-                    title: "子项1"
-                }, {
-                    id: 32,
-                    pId: 3,
-                    text: "子项2",
-                    value: 32,
-                    title: "子项2"
-                }, {
-                    id: 33,
-                    pId: 3,
-                    text: "子项3",
-                    value: 33,
-                    title: "子项3"
-                }, {
-                    id: 41,
-                    pId: 4,
-                    text: "子项1",
-                    value: 41,
-                    title: "子项1"
-                }, {
-                    id: 42,
-                    pId: 4,
-                    text: "子项2",
-                    value: 42,
-                    title: "子项2"
-                }, {
-                    id: 43,
-                    pId: 4,
-                    text: "子项3",
-                    value: 43,
-                    title: "子项3"
-                }, {
-                    id: 51,
-                    pId: 5,
-                    text: "子项1",
-                    value: 51,
-                    title: "子项1"
-                }, {
-                    id: 52,
-                    pId: 5,
-                    text: "子项2",
-                    value: 52,
-                    title: "子项2"
-                }, {
-                    id: 61,
-                    pId: 6,
-                    text: "子项1",
-                    value: 61,
-                    title: "子项1"
-                }, {
-                    id: 62,
-                    pId: 6,
-                    text: "子项2",
-                    value: 62,
-                    title: "子项2"
-                }, {
-                    id: 71,
-                    pId: 7,
-                    text: "子项1",
-                    value: 71,
-                    title: "子项1"
-                }, {
-                    id: 72,
-                    pId: 7,
-                    text: "子项2",
-                    value: 72,
-                    title: "子项2"
-                }],
+                items: items,
                 width: 300
             }, {
                 type: "bi.button",
                 text: "getVlaue",
                 handler: function () {
                     BI.Msg.toast(self.tree.getValue()[0]);
+                },
+                width: 300
+            }, {
+                type: "bi.button",
+                text: "setVlaue (第二级文件1)",
+                handler: function () {
+                    self.tree.setValue(["第二级文件1"]);
                 },
                 width: 300
             }],
@@ -9374,27 +9278,59 @@ Demo.TimeInterval = BI.inherit(BI.Widget, {
 })
 
 BI.shortcut("demo.time_interval", Demo.TimeInterval);/**
- * Created by Dailer on 2017/7/13.
+ * Created by Dailer on 2017/7/26.
  */
-Demo.SwitchTree = BI.inherit(BI.Widget, {
-    props: {
-        baseCls: ""
-    },
-    render: function () {
 
-        var items = BI.deepClone(Demo.CONSTANTS.TREE);
+
+Demo.SwitchTree = BI.inherit(BI.Widget, {
+
+    render: function () {
+        var self = this;
+        var tree = BI.createWidget({
+            type: "bi.switch_tree",
+            items: BI.deepClone(Demo.CONSTANTS.TREE)
+        });
+
         return {
-            type: "bi.horizontal_auto",
+            type: "bi.vtape",
             items: [{
-                type: "bi.switch_tree",
-                items: items
-            },{
-                type:"bi.button",
-                text:"getValue"
-            }]
+                el: tree
+            }, {
+                el: {
+                    type: "bi.button",
+                    height: 25,
+                    text: "点击切换",
+                    handler: function () {
+                        tree.switchSelect();
+                    }
+                },
+                height: 25
+            }, {
+                el: {
+                    type: "bi.button",
+                    height: 25,
+                    text: "getValue",
+                    handler: function () {
+                        BI.Msg.alert("", JSON.stringify(tree.getValue()));
+                    }
+                },
+                height: 25
+            }, {
+                el: {
+                    type: "bi.button",
+                    height: 25,
+                    text: "setValue (第二级文件1)",
+                    handler: function () {
+                        tree.setValue(["第二级文件1"]);
+                    }
+                },
+                height: 25
+            }],
+            width: 500,
+            hgap: 300
         }
     }
-})
+});
 
 BI.shortcut("demo.switch_tree", Demo.SwitchTree);/**
  * Created by Dailer on 2017/7/11.
@@ -9404,12 +9340,31 @@ Demo.Year = BI.inherit(BI.Widget, {
         baseCls: "demo-exceltable"
     },
     render: function () {
+        var self = this;
         return {
-            type: "bi.horizontal_adapt",
+            type: "bi.horizontal_auto",
             items: [{
                 type: "bi.year_combo",
+                width: 300,
+                ref: function () {
+                    self.yearcombo = this;
+                }
+            }, {
+                type: "bi.button",
+                text: "getValue",
+                handler: function () {
+                    BI.Msg.toast(JSON.stringify(self.yearcombo.getValue()));
+                },
                 width: 300
-            }]
+            }, {
+                type: "bi.button",
+                text: "setValue : 2018",
+                handler: function () {
+                    self.yearcombo.setValue(2018);
+                },
+                width: 300
+            }],
+            vgap: 10
         }
     }
 })
@@ -9439,6 +9394,16 @@ Demo.YearMonthCombo = BI.inherit(BI.Widget, {
                     BI.Msg.toast(JSON.stringify(self.widget.getValue()))
                 },
                 width: 300
+            }, {
+                type: "bi.button",
+                text: "setVlaue '2017-12'",
+                width: 300,
+                handler: function () {
+                    self.widget.setValue({
+                        year: 2017,
+                        month: 11
+                    })
+                }
             }],
             vgap: 20
         }
@@ -9453,24 +9418,34 @@ Demo.YearQuarterCombo = BI.inherit(BI.Widget, {
         baseCls: ""
     },
     render: function () {
-        var self=this;
+        var self = this;
         return {
             type: "bi.horizontal_auto",
             items: [{
                 type: "bi.year_quarter_combo",
                 width: 300,
-                ref:function(_ref){
-                    self.widget=_ref;
+                ref: function (_ref) {
+                    self.widget = _ref;
                 },
                 yearBehaviors: {},
                 quarterBehaviors: {},
             }, {
                 type: "bi.button",
                 text: "getValue",
-                handler:function(){
+                handler: function () {
                     BI.Msg.toast(JSON.stringify(self.widget.getValue()))
                 },
                 width: 300
+            }, {
+                type: "bi.button",
+                text: "setVlaue '2017 季度3'",
+                width: 300,
+                handler: function () {
+                    self.widget.setValue({
+                        year: 2017,
+                        quarter: 3
+                    })
+                }
             }],
             vgap: 20
         }

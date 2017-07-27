@@ -2613,22 +2613,23 @@ BI.DateCalendarPopup = BI.inherit(BI.Widget, {
             month: date.month,
             day: this.selectedTime.day
         });
-        return calendar;
+        return calendar
     },
 
     _init: function () {
         BI.DateCalendarPopup.superclass._init.apply(this, arguments);
-        var self = this, o = this.options;
+        var self = this,
+            o = this.options;
         this.today = new Date();
         this._year = this.today.getFullYear();
         this._month = this.today.getMonth();
         this._day = this.today.getDate();
 
         this.selectedTime = o.selectedTime || {
-                year: this._year,
-                month: this._month,
-                day: this._day
-            };
+            year: this._year,
+            month: this._month,
+            day: this._day
+        };
         this.datePicker = BI.createWidget({
             type: "bi.date_picker",
             min: o.min,
@@ -2764,7 +2765,8 @@ BI.DateCombo = BI.inherit(BI.Widget, {
     },
     _init: function () {
         BI.DateCombo.superclass._init.apply(this, arguments);
-        var self = this, o = this.options;
+        var self = this,
+            o = this.options;
 
         this.trigger = BI.createWidget({
             type: "bi.date_trigger"
