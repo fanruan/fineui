@@ -42,6 +42,8 @@ BI.SignInitialEditor = BI.inherit(BI.Widget, {
             value: o.value || o.text,
             validationChecker: o.validationChecker,
             quitChecker: o.quitChecker,
+            title: o.title,
+            warningTitle: o.warningTitle,
             mouseOut: o.mouseOut,
             allowBlank: o.allowBlank,
             watermark: o.watermark,
@@ -112,6 +114,14 @@ BI.SignInitialEditor = BI.inherit(BI.Widget, {
 
     isValid: function () {
         return this.editor.isValid();
+    },
+
+    setTitle: function (title) {
+        this.editor.setTitle(title);
+    },
+
+    setWarningTitle: function (title) {
+        this.editor.setWarningTitle(title);
     },
 
     setErrorText: function (text) {
