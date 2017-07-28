@@ -9,7 +9,7 @@ BI.FileManagerNavButton = BI.inherit(BI.Widget, {
 
     _const: {
         normal_color: "#ffffff",
-        select_color: "#f4f4f4"
+        select_color: "#eff1f4"
     },
     _defaultConfig: function () {
         return BI.extend(BI.FileManagerNavButton.superclass._defaultConfig.apply(this, arguments), {

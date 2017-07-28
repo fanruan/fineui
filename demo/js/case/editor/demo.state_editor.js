@@ -10,12 +10,11 @@ Demo.StateEditor = BI.inherit(BI.Widget, {
             type: "bi.horizontal_adapt",
             items: [{
                 type: "bi.state_editor",
-                cls:"bi-border",
-                value:"123",
-                text:"456",
+                value: "123",
+                text: "456",
                 width: 300
             }],
-            vgap:20
+            vgap: 20
 
         }
     }
