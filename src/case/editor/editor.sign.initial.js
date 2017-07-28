@@ -5,7 +5,7 @@ BI.SignInitialEditor = BI.inherit(BI.Widget, {
     _defaultConfig: function () {
         var conf = BI.SignInitialEditor.superclass._defaultConfig.apply(this, arguments);
         return BI.extend(conf, {
-            baseCls: (conf.baseCls || "") + " bi-sign-editor",
+            baseCls: (conf.baseCls || "") + " bi-sign-initial-editor",
             hgap: 4,
             vgap: 2,
             lgap: 0,
