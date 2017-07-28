@@ -611,7 +611,6 @@ BI.shortcut("demo.svg", Demo.Func);Demo.CodeEditor = BI.inherit(BI.Widget, {
             width: 600,
             height: 400
         });
-        editor.setValue("select * from ${123} where ${456} = sdsds");
         BI.createWidget({
             type: "bi.vertical",
             element: this,
