@@ -6922,6 +6922,8 @@ BI.SignInitialEditor = BI.inherit(BI.Widget, {
             allowBlank: true,
             watermark: "",
             errorText: "",
+            value: "",
+            text: "",
             height: 30
         })
     },
