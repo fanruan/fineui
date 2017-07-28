@@ -5,17 +5,26 @@ Demo.SignInitialEditor = BI.inherit(BI.Widget, {
     props: {
         baseCls: ""
     },
+    mounted: function () {
+        this.editor.setValue({
+            value: "123",
+            text: "sdga"
+        })
+    },
     render: function () {
+        var self = this;
         return {
             type: "bi.horizontal_adapt",
             items: [{
                 type: "bi.sign_initial_editor",
-                cls:"layout-bg5",
-                value:"123",
-                text:"456",
+                ref: function () {
+                    self.editor = this;
+                },
+                cls: "layout-bg5",
+                text: "原始值",
                 width: 300
             }],
-            vgap:20
+            vgap: 20
 
         }
     }

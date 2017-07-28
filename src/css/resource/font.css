@@ -684,3 +684,49 @@
   content: "\e600";
   color: #f07d0a;
 }
+.less-font .b-font {
+  *zoom: expression( this.runtimeStyle['zoom'] = '1',this.innerHTML = '&#xe633;');
+}
+.less-font .b-font:before {
+  content: "\e633";
+  color: inherit;
+}
+.less-font:hover .b-font:before,
+.less-font:focus .b-font:before,
+.less-font.hover .b-font:before {
+  content: "\e633";
+  color: inherit;
+}
+.less-font:active .b-font:before,
+.less-font.active .b-font:before {
+  content: "\e633";
+  color: #3f8ce8;
+}
+.less-font.native .b-font:before,
+.less-font.disabled .b-font:before {
+  content: "\e633";
+  color: inherit;
+}
+.less-equal-font .b-font {
+  *zoom: expression( this.runtimeStyle['zoom'] = '1',this.innerHTML = '&#xe636;');
+}
+.less-equal-font .b-font:before {
+  content: "\e636";
+  color: inherit;
+}
+.less-equal-font:hover .b-font:before,
+.less-equal-font:focus .b-font:before,
+.less-equal-font.hover .b-font:before {
+  content: "\e636";
+  color: inherit;
+}
+.less-equal-font:active .b-font:before,
+.less-equal-font.active .b-font:before {
+  content: "\e636";
+  color: #3f8ce8;
+}
+.less-equal-font.native .b-font:before,
+.less-equal-font.disabled .b-font:before {
+  content: "\e636";
+  color: inherit;
+}
