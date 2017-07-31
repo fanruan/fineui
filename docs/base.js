@@ -14351,15 +14351,15 @@ BI.FormulaEditor = BI.inherit(BI.Single, {
 
     _checkWaterMark: function () {
         var o = this.options;
-        if (!this.disabledWarterMark && BI.isEmptyString(this.editor.getValue()) && BI.isKey(o.watermark)) {
+        if (!this.disabledWaterMark && BI.isEmptyString(this.editor.getValue()) && BI.isKey(o.watermark)) {
             this.watermark && this.watermark.visible();
         } else {
             this.watermark && this.watermark.invisible();
         }
     },
 
-    disableWarterMark: function () {
-        this.disabledWarterMark = true;
+    disableWaterMark: function () {
+        this.disabledWaterMark = true;
         this._checkWaterMark();
     },
 
@@ -18111,7 +18111,7 @@ BI.Editor = BI.inherit(BI.Single, {
 
     _checkWaterMark: function () {
         var o = this.options;
-        if (!this.disabledWarterMark && this.editor.getValue() === "" && BI.isKey(o.watermark)) {
+        if (!this.disabledWaterMark && this.editor.getValue() === "" && BI.isKey(o.watermark)) {
             this.watermark && this.watermark.visible();
         } else {
             this.watermark && this.watermark.invisible();
@@ -18149,13 +18149,13 @@ BI.Editor = BI.inherit(BI.Single, {
         this._checkError();
     },
 
-    disableWarterMark: function () {
-        this.disabledWarterMark = true;
+    disableWaterMark: function () {
+        this.disabledWaterMark = true;
         this._checkWaterMark();
     },
 
-    enableWarterMark: function () {
-        this.disabledWarterMark = false;
+    enableWaterMark: function () {
+        this.disabledWaterMark = false;
         this._checkWaterMark();
     },
 
