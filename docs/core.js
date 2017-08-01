@@ -14082,10 +14082,7 @@ if (!window.BI) {
             return /(msie|trident)/i.test(navigator.userAgent.toLowerCase());
         },
 
-        isIE9Below: function () {
-            if (!BI.isIE()) {
-                return false;
-            }
+        getIEVersion: function () {
             var version = 0;
             var agent = navigator.userAgent.toLowerCase();
             var v1 = agent.match(/(?:msie\s([\w.]+))/);
@@ -14099,7 +14096,18 @@ if (!window.BI) {
             } else {
                 version = 0;
             }
-            return version < 9;
+            return version;
+        },
+
+        isIE9Below: function () {
+            if (!BI.isIE()) {
+                return false;
+            }
+            return this.getIEVersion() < 9;
+        },
+
+        isIE9: function () {
+            return this.getIEVersion() === 9;
         },
 
         isEdge: function () {
@@ -14668,6 +14676,13 @@ BI.Widget = BI.inherit(BI.OB, {
     },
 
     attr: function (key, value) {
+        var self = this;
+        if (BI.isPlainObject(key)) {
+            BI.each(key, function (k, v) {
+                self.attr(k, v);
+            })
+            return;
+        }
         if (BI.isNotNull(value)) {
             return this.options[key] = value;
         }
