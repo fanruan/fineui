@@ -629,7 +629,12 @@ BI.AdaptiveArrangement = BI.inherit(BI.Widget, {
                     clearInterval(self._scrollInterval);
                     self._scrollInterval = null;
                 }
+                var count = 0;
                 self._scrollInterval = setInterval(function () {
+                    count++;
+                    if (count <= 3) {
+                        return;
+                    }
                     var offset = self._getScrollOffset();
                     var t = offset.top + map[direction][0] * 40;
                     var l = offset.left + map[direction][1] * 40;
