@@ -7146,6 +7146,7 @@ BI.SignInitialEditor = BI.inherit(BI.Widget, {
     },
 
     setState: function (v) {
+        var o = this.options;
         this._showHint();
         v = (BI.isEmpty(v) || v == o.text) ? o.text : v + "(" + o.text + ")";
         this.text.setValue(v);
@@ -8788,6 +8789,11 @@ BI.SelectList = BI.inherit(BI.Widget, {
         this.toolbar.setEnable(!BI.isEmptyArray(items));
         this.list.populate.apply(this.list, arguments);
         this._checkAllSelected();
+    },
+
+    _setEnable: function () {
+        BI.SelectList.superclass._setEnable.apply(this, arguments);
+        this.toolbar.setEnable(arguments);
     },
 
     resetHeight: function (h) {

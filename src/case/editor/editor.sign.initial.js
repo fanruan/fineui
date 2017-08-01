@@ -242,6 +242,7 @@ BI.SignInitialEditor = BI.inherit(BI.Widget, {
     },
 
     setState: function (v) {
+        var o = this.options;
         this._showHint();
         v = (BI.isEmpty(v) || v == o.text) ? o.text : v + "(" + o.text + ")";
         this.text.setValue(v);
