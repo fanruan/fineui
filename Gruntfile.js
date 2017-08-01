@@ -127,7 +127,6 @@ module.exports = function (grunt) {
                     'src/core/shortcut.js',
                     'src/core/plugin.js',
                     'src/core/controller.js',
-                    'src/core/load.js',
                     'src/core/proto/**/*.js',
                     'src/core/utils/**/*.js',
                     'src/core/behavior/behavior.js',
