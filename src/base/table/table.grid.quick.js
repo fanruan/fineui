@@ -116,7 +116,8 @@ BI.QuickGridTable = BI.inherit(BI.GridTable, {
 
     _populateTable: function () {
         var self = this, o = this.options;
-        var regionSize = this.getRegionSize(), totalLeftColumnSize = 0, totalRightColumnSize = 0, totalColumnSize = 0, summaryColumnSizeArray = [];
+        var regionSize = this.getRegionSize(), totalLeftColumnSize = 0, totalRightColumnSize = 0, totalColumnSize = 0,
+            summaryColumnSizeArray = [];
         var freezeColLength = this._getFreezeColLength();
         BI.each(o.columnSize, function (i, size) {
             if (o.isNeedFreeze === true && o.freezeCols.contains(i)) {
@@ -207,6 +208,42 @@ BI.QuickGridTable = BI.inherit(BI.GridTable, {
                 }
             });
         });
+
+        this.topLeftGrid.attr({
+            overscanColumnCount: 0,
+            overscanRowCount: 0
+        });
+        this.topRightGrid.attr({
+            overscanColumnCount: 0,
+            overscanRowCount: 0
+        });
+        this.bottomLeftGrid.attr({
+            overscanColumnCount: 0,
+            overscanRowCount: 0
+        });
+        this.bottomRightGrid.attr({
+            overscanColumnCount: 0,
+            overscanRowCount: 0
+        });
+
+        function overscan(grid, w, h, rSize, cSize) {
+            var rCount = h / rSize;
+            var cCount = w / cSize;
+            if (cCount * (120 / rSize) >= 60 || rCount * (120 / cSize) >= 60) {
+                grid.attr("overscanRowCount", 100);
+                grid.attr("overscanColumnCount", 100);
+            }
+        }
+
+        if (freezeColLength > 0) {
+            overscan(this.topLeftGrid, otlw, otlh, o.headerRowSize, totalLeftColumnSize / freezeColLength);
+            overscan(this.bottomLeftGrid, oblw, oblh, o.rowSize, totalLeftColumnSize / freezeColLength);
+        }
+        if (o.columnSize.length - freezeColLength > 0) {
+            overscan(this.topRight, otrw, otrh, o.headerRowSize, totalRightColumnSize / (o.columnSize.length - freezeColLength));
+            overscan(this.bottomRightGrid, obrw, obrh, o.rowSize, totalRightColumnSize / (o.columnSize.length - freezeColLength));
+        }
+
         this.topLeftGrid.populate(leftHeader);
         this.topRightGrid.populate(rightHeader);
         this.bottomLeftGrid.populate(leftItems);

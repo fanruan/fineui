@@ -343,6 +343,13 @@ BI.Widget = BI.inherit(BI.OB, {
     },
 
     attr: function (key, value) {
+        var self = this;
+        if (BI.isPlainObject(key)) {
+            BI.each(key, function (k, v) {
+                self.attr(k, v);
+            })
+            return;
+        }
         if (BI.isNotNull(value)) {
             return this.options[key] = value;
         }
