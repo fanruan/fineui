@@ -31366,8 +31366,8 @@ BI.Table = BI.inherit(BI.Widget, {
                         var isNeedMergeCol = o.mergeRule(map[i][j], map[i][j - 1]);
                         if (isNeedMergeCol === true) {
                             mergeCol(i, j);
-                            preCol[j] = preRow[j - 1];
-                            preCW[j] = preRW[j - 1];
+                            preCol[j] = preRow[i];
+                            preCW[j] = preRW[i];
                         } else {
                             createOneEl(i, j);
                         }
