@@ -8791,9 +8791,9 @@ BI.SelectList = BI.inherit(BI.Widget, {
         this._checkAllSelected();
     },
 
-    _setEnable: function () {
+    _setEnable: function (enable) {
         BI.SelectList.superclass._setEnable.apply(this, arguments);
-        this.toolbar.setEnable(arguments);
+        this.toolbar.setEnable(enable);
     },
 
     resetHeight: function (h) {
