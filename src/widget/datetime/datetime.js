@@ -16,11 +16,17 @@ BI.CustomDateTimeCombo = BI.inherit(BI.Widget, {
             element: this
         });
         this.DateTime.on(BI.DateTimeCombo.EVENT_CANCEL, function () {
+            self.fireEvent(BI.CustomDateTimeCombo.EVENT_CHANGE);
             self.fireEvent(BI.CustomDateTimeCombo.EVENT_CANCEL);
         });
 
         this.DateTime.on(BI.DateTimeCombo.EVENT_CONFIRM, function () {
+            self.fireEvent(BI.CustomDateTimeCombo.EVENT_CHANGE);
             self.fireEvent(BI.CustomDateTimeCombo.EVENT_CONFIRM);
+        });
+
+        this.DateTime.on(BI.DateTimeCombo.EVENT_CHANGE, function () {
+            self.fireEvent(BI.CustomDateTimeCombo.EVENT_CHANGE);
         });
     },
 

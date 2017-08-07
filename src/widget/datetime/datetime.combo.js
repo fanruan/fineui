@@ -12,30 +12,26 @@ BI.DateTimeCombo = BI.inherit(BI.Single, {
     },
     _defaultConfig: function () {
         return BI.extend(BI.DateTimeCombo.superclass._defaultConfig.apply(this, arguments), {
-            baseCls: 'bi-date-time-combo',
+            baseCls: 'bi-date-time-combo bi-border',
             height: 24
         });
     },
     _init: function () {
         BI.DateTimeCombo.superclass._init.apply(this, arguments);
-        var self = this;
+        var self = this, opts = this.options;
         var date = new Date();
         this.storeValue = {
-            value: {
-                year: date.getFullYear(),
-                month: date.getMonth(),
-                day: date.getDate(),
-                hour: date.getHours(),
-                minute: date.getMinutes(),
-                second: date.getSeconds()
-            }
+            year: date.getFullYear(),
+            month: date.getMonth(),
+            day: date.getDate(),
+            hour: date.getHours(),
+            minute: date.getMinutes(),
+            second: date.getSeconds()
         };
         this.trigger = BI.createWidget({
-            type: 'bi.date_time_trigger'
-        });
-
-        this.trigger.on(BI.DateTrigger.EVENT_TRIGGER_CLICK, function () {
-            self.combo.toggle();
+            type: 'bi.date_time_trigger',
+            min: this.constants.DATE_MIN_VALUE,
+            max: this.constants.DATE_MAX_VALUE
         });
 
         this.popup = BI.createWidget({
@@ -47,18 +43,19 @@ BI.DateTimeCombo = BI.inherit(BI.Single, {
 
         this.popup.on(BI.DateTimePopup.BUTTON_CANCEL_EVENT_CHANGE, function () {
             self.setValue(self.storeValue);
-            self.combo.hideView();
+            self.hidePopupView();
             self.fireEvent(BI.DateTimeCombo.EVENT_CANCEL);
         });
         this.popup.on(BI.DateTimePopup.BUTTON_OK_EVENT_CHANGE, function () {
             self.storeValue = self.popup.getValue();
             self.setValue(self.storeValue);
-            self.combo.hideView();
+            self.hidePopupView();
             self.fireEvent(BI.DateTimeCombo.EVENT_CONFIRM);
         });
         this.popup.on(BI.DateTimePopup.CALENDAR_EVENT_CHANGE, function () {
             self.trigger.setValue(self.popup.getValue());
-    });
+            self.fireEvent(BI.DateTimeCombo.EVENT_CHANGE);
+        });
         this.combo = BI.createWidget({
             type: 'bi.combo',
             toggle: false,
@@ -80,9 +77,9 @@ BI.DateTimeCombo = BI.inherit(BI.Single, {
 
         var triggerBtn = BI.createWidget({
             type: "bi.trigger_icon_button",
-            cls: "chart-date-normal-font bi-border-left bi-border-top bi-border-bottom",
+            cls: "bi-trigger-date-button chart-date-normal-font bi-border-right",
             width: 30,
-            height: 25
+            height: 24
         });
         triggerBtn.on(BI.TriggerIconButton.EVENT_CHANGE, function () {
             if (self.combo.isViewVisible()) {
@@ -118,10 +115,11 @@ BI.DateTimeCombo = BI.inherit(BI.Single, {
         this.trigger.setValue(v);
     },
     getValue: function () {
-        return {
-            value: this.storeValue,
-            text: this.trigger.getValue()
-        };
+        return this.storeValue;
+    },
+
+    hidePopupView: function () {
+        this.combo.hideView();
     }
 });
 

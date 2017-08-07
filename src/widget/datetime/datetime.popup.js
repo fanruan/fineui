@@ -2,18 +2,6 @@
  * Created by Urthur on 2017/7/14.
  */
 BI.DateTimePopup = BI.inherit(BI.Widget, {
-    constants: {
-
-
-        triggerHeight: 24,
-        buttonWidth: 90,
-        buttonHeight: 25,
-        popupHeight: 290,
-        popupWidth: 270,
-        comboAdjustHeight: 1,
-        lgap: 2,
-        border: 1
-    },
     _defaultConfig: function () {
         return BI.extend(BI.DateTimePopup.superclass._defaultConfig.apply(this, arguments), {
             baseCls: 'bi-date-time-popup',
@@ -23,7 +11,7 @@ BI.DateTimePopup = BI.inherit(BI.Widget, {
     },
     _init: function () {
         BI.DateTimePopup.superclass._init.apply(this, arguments);
-        var self = this;
+        var self = this, opts = this.options;
         this.cancelButton = BI.createWidget({
             type: 'bi.text_button',
             forceCenter: true,
@@ -109,6 +97,16 @@ BI.DateTimePopup = BI.inherit(BI.Widget, {
             }]
         });
 
+        var date = new Date();
+        this.dateCombo.setValue({
+            year: date.getFullYear(),
+            month: date.getMonth(),
+            day: date.getDate()
+        });
+        this.hour.setValue(date.getHours());
+        this.minute.setValue(date.getMinutes());
+        this.second.setValue(date.getSeconds());
+
         this.dateButton = BI.createWidget({
             type: "bi.grid",
             items: [[this.cancelButton, this.okButton]]
@@ -129,42 +127,37 @@ BI.DateTimePopup = BI.inherit(BI.Widget, {
     },
 
     setValue: function (v) {
-        var value, date;
-        if (BI.isNotNull(v)) {
-            value = v.value;
-            if(BI.isNull(value)){
-                date = new Date();
-                this.dateCombo.setValue({
-                    year: date.getFullYear(),
-                    month: date.getMonth(),
-                    day: date.getDate()
-                });
-                this.hour.setValue(date.getHours());
-                this.minute.setValue(date.getMinutes());
-                this.second.setValue(date.getSeconds());
-            } else {
-                this.dateCombo.setValue({
-                    year: value.year,
-                    month: value.month,
-                    day: value.day
-                });
-                this.hour.setValue(value.hour);
-                this.minute.setValue(value.minute);
-                this.second.setValue(value.second);
-            }
+        var value = v, date;
+        if (BI.isNull(value)) {
+            date = new Date();
+            this.dateCombo.setValue({
+                year: date.getFullYear(),
+                month: date.getMonth(),
+                day: date.getDate()
+            });
+            this.hour.setValue(date.getHours());
+            this.minute.setValue(date.getMinutes());
+            this.second.setValue(date.getSeconds());
+        } else {
+            this.dateCombo.setValue({
+                year: value.year,
+                month: value.month,
+                day: value.day
+            });
+            this.hour.setValue(value.hour);
+            this.minute.setValue(value.minute);
+            this.second.setValue(value.second);
         }
     },
 
     getValue: function () {
         return {
-            value: {
-                year: this.dateCombo.getValue().year,
-                month: this.dateCombo.getValue().month,
-                day: this.dateCombo.getValue().day,
-                hour: this.hour.getValue(),
-                minute: this.minute.getValue(),
-                second: this.second.getValue()
-            }
+            year: this.dateCombo.getValue().year,
+            month: this.dateCombo.getValue().month,
+            day: this.dateCombo.getValue().day,
+            hour: this.hour.getValue(),
+            minute: this.minute.getValue(),
+            second: this.second.getValue()
         }
     }
 });
@@ -172,4 +165,3 @@ BI.DateTimePopup.BUTTON_OK_EVENT_CHANGE = "BUTTON_OK_EVENT_CHANGE";
 BI.DateTimePopup.BUTTON_CANCEL_EVENT_CHANGE = "BUTTON_CANCEL_EVENT_CHANGE";
 BI.DateTimePopup.CALENDAR_EVENT_CHANGE = "CALENDAR_EVENT_CHANGE";
 BI.shortcut('bi.date_time_popup', BI.DateTimePopup);
-
