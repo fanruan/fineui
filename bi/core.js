@@ -9178,12 +9178,12 @@ $.extend(BI, {
             must: false
         }, options);
         config.url = BI.servletURL + '?op=' + config.op + '&resource=' + config.path;
-        this.$import(config.url, config.type,config.must);
+        this.$import(config.url, config.type, config.must);
     },
     $import: function () {
         var _LOADED = {}; // alex:保存加载过的
         function loadReady(src, must) {
-            var $scripts = $("head script");
+            var $scripts = $("head script, body script");
             $.each($scripts, function (i, item) {
                 if (item.src.indexOf(src) != -1) {
                     _LOADED[src] = true;
