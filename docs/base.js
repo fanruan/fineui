@@ -14351,15 +14351,15 @@ BI.FormulaEditor = BI.inherit(BI.Single, {
 
     _checkWaterMark: function () {
         var o = this.options;
-        if (!this.disabledWarterMark && BI.isEmptyString(this.editor.getValue()) && BI.isKey(o.watermark)) {
+        if (!this.disabledWaterMark && BI.isEmptyString(this.editor.getValue()) && BI.isKey(o.watermark)) {
             this.watermark && this.watermark.visible();
         } else {
             this.watermark && this.watermark.invisible();
         }
     },
 
-    disableWarterMark: function () {
-        this.disabledWarterMark = true;
+    disableWaterMark: function () {
+        this.disabledWaterMark = true;
         this._checkWaterMark();
     },
 
@@ -18111,7 +18111,7 @@ BI.Editor = BI.inherit(BI.Single, {
 
     _checkWaterMark: function () {
         var o = this.options;
-        if (!this.disabledWarterMark && this.editor.getValue() === "" && BI.isKey(o.watermark)) {
+        if (!this.disabledWaterMark && this.editor.getValue() === "" && BI.isKey(o.watermark)) {
             this.watermark && this.watermark.visible();
         } else {
             this.watermark && this.watermark.invisible();
@@ -18149,13 +18149,13 @@ BI.Editor = BI.inherit(BI.Single, {
         this._checkError();
     },
 
-    disableWarterMark: function () {
-        this.disabledWarterMark = true;
+    disableWaterMark: function () {
+        this.disabledWaterMark = true;
         this._checkWaterMark();
     },
 
-    enableWarterMark: function () {
-        this.disabledWarterMark = false;
+    enableWaterMark: function () {
+        this.disabledWaterMark = false;
         this._checkWaterMark();
     },
 
@@ -18489,6 +18489,9 @@ BI.Icon = BI.inherit(BI.Single, {
     },
     _init: function () {
         BI.Icon.superclass._init.apply(this, arguments);
+        if (BI.isIE9Below()) {
+            this.element.addClass("hack");
+        }
     }
 });
 BI.shortcut("bi.icon", BI.Icon);/**
@@ -30100,6 +30103,41 @@ BI.GridTable = BI.inherit(BI.Widget, {
         this.contextLayout.attr("items", items);
         this.contextLayout.resize();
 
+        this.topLeftGrid.attr({
+            overscanColumnCount: 0,
+            overscanRowCount: 0
+        });
+        this.topRightGrid.attr({
+            overscanColumnCount: 0,
+            overscanRowCount: 0
+        });
+        this.bottomLeftGrid.attr({
+            overscanColumnCount: 0,
+            overscanRowCount: 0
+        });
+        this.bottomRightGrid.attr({
+            overscanColumnCount: 0,
+            overscanRowCount: 0
+        });
+
+        function overscan(grid, w, h, rSize, cSize) {
+            var rCount = h / rSize;
+            var cCount = w / cSize;
+            if (cCount * (120 / rSize) >= 60 || rCount * (120 / cSize) >= 60) {
+                grid.attr("overscanRowCount", 100);
+                grid.attr("overscanColumnCount", 100);
+            }
+        }
+
+        if (freezeColLength > 0) {
+            overscan(this.topLeftGrid, tlw, tlh, o.headerRowSize, totalLeftColumnSize / freezeColLength);
+            overscan(this.bottomLeftGrid, blw, blh, o.rowSize, totalLeftColumnSize / freezeColLength);
+        }
+        if (o.columnSize.length - freezeColLength > 0) {
+            overscan(this.topRight, trw, trh, o.headerRowSize, totalRightColumnSize / (o.columnSize.length - freezeColLength));
+            overscan(this.bottomRightGrid, brw, brh, o.rowSize, totalRightColumnSize / (o.columnSize.length - freezeColLength));
+        }
+
         this.topLeftGrid._populate(this.header[0]);
         this.topRightGrid._populate(this.header[1]);
         this.bottomLeftGrid._populate(this.items[0]);
@@ -30326,7 +30364,8 @@ BI.QuickGridTable = BI.inherit(BI.GridTable, {
 
     _populateTable: function () {
         var self = this, o = this.options;
-        var regionSize = this.getRegionSize(), totalLeftColumnSize = 0, totalRightColumnSize = 0, totalColumnSize = 0, summaryColumnSizeArray = [];
+        var regionSize = this.getRegionSize(), totalLeftColumnSize = 0, totalRightColumnSize = 0, totalColumnSize = 0,
+            summaryColumnSizeArray = [];
         var freezeColLength = this._getFreezeColLength();
         BI.each(o.columnSize, function (i, size) {
             if (o.isNeedFreeze === true && o.freezeCols.contains(i)) {
@@ -30417,6 +30456,42 @@ BI.QuickGridTable = BI.inherit(BI.GridTable, {
                 }
             });
         });
+
+        this.topLeftGrid.attr({
+            overscanColumnCount: 0,
+            overscanRowCount: 0
+        });
+        this.topRightGrid.attr({
+            overscanColumnCount: 0,
+            overscanRowCount: 0
+        });
+        this.bottomLeftGrid.attr({
+            overscanColumnCount: 0,
+            overscanRowCount: 0
+        });
+        this.bottomRightGrid.attr({
+            overscanColumnCount: 0,
+            overscanRowCount: 0
+        });
+
+        function overscan(grid, w, h, rSize, cSize) {
+            var rCount = h / rSize;
+            var cCount = w / cSize;
+            if (cCount * (120 / rSize) >= 60 || rCount * (120 / cSize) >= 60) {
+                grid.attr("overscanRowCount", 100);
+                grid.attr("overscanColumnCount", 100);
+            }
+        }
+
+        if (freezeColLength > 0) {
+            overscan(this.topLeftGrid, otlw, otlh, o.headerRowSize, totalLeftColumnSize / freezeColLength);
+            overscan(this.bottomLeftGrid, oblw, oblh, o.rowSize, totalLeftColumnSize / freezeColLength);
+        }
+        if (o.columnSize.length - freezeColLength > 0) {
+            overscan(this.topRight, otrw, otrh, o.headerRowSize, totalRightColumnSize / (o.columnSize.length - freezeColLength));
+            overscan(this.bottomRightGrid, obrw, obrh, o.rowSize, totalRightColumnSize / (o.columnSize.length - freezeColLength));
+        }
+
         this.topLeftGrid.populate(leftHeader);
         this.topRightGrid.populate(rightHeader);
         this.bottomLeftGrid.populate(leftItems);
@@ -31291,8 +31366,8 @@ BI.Table = BI.inherit(BI.Widget, {
                         var isNeedMergeCol = o.mergeRule(map[i][j], map[i][j - 1]);
                         if (isNeedMergeCol === true) {
                             mergeCol(i, j);
-                            preCol[j] = preRow[j - 1];
-                            preCW[j] = preRW[j - 1];
+                            preCol[j] = preRow[i];
+                            preCW[j] = preRW[i];
                         } else {
                             createOneEl(i, j);
                         }

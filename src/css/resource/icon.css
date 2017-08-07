@@ -6,9 +6,22 @@
   _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='icon/tree-collapse-1.png');
   _background: none;
 }
+.tree-collapse-icon-type1 .x-icon.hack,
+.tree-collapse-icon-type1:hover .x-icon.hack,
+.tree-collapse-icon-type1:active .x-icon.hack {
+  background: url('icon/tree-collapse-1.png') no-repeat 0px 0px;
+  _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='icon/tree-collapse-1.png');
+  _background: none;
+}
 .tree-collapse-icon-type1.native .x-icon,
 .tree-collapse-icon-type1.disabled .x-icon {
   display: block;
+  background: url('icon/tree-collapse-1.png') no-repeat 0px 0px;
+  _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='icon/tree-collapse-1.png');
+  _background: none;
+}
+.tree-collapse-icon-type1.native .x-icon.hack,
+.tree-collapse-icon-type1.disabled .x-icon.hack {
   background: url('icon/tree-collapse-1.png') no-repeat 0px 0px;
   _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='icon/tree-collapse-1.png');
   _background: none;
@@ -21,9 +34,22 @@
   _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='icon/tree-collapse-2.png');
   _background: none;
 }
+.tree-collapse-icon-type2 .x-icon.hack,
+.tree-collapse-icon-type2:hover .x-icon.hack,
+.tree-collapse-icon-type2:active .x-icon.hack {
+  background: url('icon/tree-collapse-2.png') no-repeat 0px 0px;
+  _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='icon/tree-collapse-2.png');
+  _background: none;
+}
 .tree-collapse-icon-type2.native .x-icon,
 .tree-collapse-icon-type2.disabled .x-icon {
   display: block;
+  background: url('icon/tree-collapse-2.png') no-repeat 0px 0px;
+  _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='icon/tree-collapse-2.png');
+  _background: none;
+}
+.tree-collapse-icon-type2.native .x-icon.hack,
+.tree-collapse-icon-type2.disabled .x-icon.hack {
   background: url('icon/tree-collapse-2.png') no-repeat 0px 0px;
   _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='icon/tree-collapse-2.png');
   _background: none;
@@ -36,9 +62,22 @@
   _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='icon/tree-collapse-3.png');
   _background: none;
 }
+.tree-collapse-icon-type3 .x-icon.hack,
+.tree-collapse-icon-type3:hover .x-icon.hack,
+.tree-collapse-icon-type3:active .x-icon.hack {
+  background: url('icon/tree-collapse-3.png') no-repeat 0px 0px;
+  _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='icon/tree-collapse-3.png');
+  _background: none;
+}
 .tree-collapse-icon-type3.native .x-icon,
 .tree-collapse-icon-type3.disabled .x-icon {
   display: block;
+  background: url('icon/tree-collapse-3.png') no-repeat 0px 0px;
+  _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='icon/tree-collapse-3.png');
+  _background: none;
+}
+.tree-collapse-icon-type3.native .x-icon.hack,
+.tree-collapse-icon-type3.disabled .x-icon.hack {
   background: url('icon/tree-collapse-3.png') no-repeat 0px 0px;
   _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='icon/tree-collapse-3.png');
   _background: none;
@@ -51,9 +90,22 @@
   _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='icon/tree-collapse-4.png');
   _background: none;
 }
+.tree-collapse-icon-type4 .x-icon.hack,
+.tree-collapse-icon-type4:hover .x-icon.hack,
+.tree-collapse-icon-type4:active .x-icon.hack {
+  background: url('icon/tree-collapse-4.png') no-repeat 0px 0px;
+  _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='icon/tree-collapse-4.png');
+  _background: none;
+}
 .tree-collapse-icon-type4.native .x-icon,
 .tree-collapse-icon-type4.disabled .x-icon {
   display: block;
+  background: url('icon/tree-collapse-4.png') no-repeat 0px 0px;
+  _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='icon/tree-collapse-4.png');
+  _background: none;
+}
+.tree-collapse-icon-type4.native .x-icon.hack,
+.tree-collapse-icon-type4.disabled .x-icon.hack {
   background: url('icon/tree-collapse-4.png') no-repeat 0px 0px;
   _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='icon/tree-collapse-4.png');
   _background: none;
@@ -66,9 +118,22 @@
   _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='icon/tree-expand-1.png');
   _background: none;
 }
+.tree-expand-icon-type1 .x-icon.hack,
+.tree-expand-icon-type1:hover .x-icon.hack,
+.tree-expand-icon-type1:active .x-icon.hack {
+  background: url('icon/tree-expand-1.png') no-repeat 0px 0px;
+  _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='icon/tree-expand-1.png');
+  _background: none;
+}
 .tree-expand-icon-type1.native .x-icon,
 .tree-expand-icon-type1.disabled .x-icon {
   display: block;
+  background: url('icon/tree-expand-1.png') no-repeat 0px 0px;
+  _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='icon/tree-expand-1.png');
+  _background: none;
+}
+.tree-expand-icon-type1.native .x-icon.hack,
+.tree-expand-icon-type1.disabled .x-icon.hack {
   background: url('icon/tree-expand-1.png') no-repeat 0px 0px;
   _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='icon/tree-expand-1.png');
   _background: none;
@@ -81,9 +146,22 @@
   _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='icon/tree-expand-2.png');
   _background: none;
 }
+.tree-expand-icon-type2 .x-icon.hack,
+.tree-expand-icon-type2:hover .x-icon.hack,
+.tree-expand-icon-type2:active .x-icon.hack {
+  background: url('icon/tree-expand-2.png') no-repeat 0px 0px;
+  _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='icon/tree-expand-2.png');
+  _background: none;
+}
 .tree-expand-icon-type2.native .x-icon,
 .tree-expand-icon-type2.disabled .x-icon {
   display: block;
+  background: url('icon/tree-expand-2.png') no-repeat 0px 0px;
+  _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='icon/tree-expand-2.png');
+  _background: none;
+}
+.tree-expand-icon-type2.native .x-icon.hack,
+.tree-expand-icon-type2.disabled .x-icon.hack {
   background: url('icon/tree-expand-2.png') no-repeat 0px 0px;
   _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='icon/tree-expand-2.png');
   _background: none;
@@ -96,9 +174,22 @@
   _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='icon/tree-expand-3.png');
   _background: none;
 }
+.tree-expand-icon-type3 .x-icon.hack,
+.tree-expand-icon-type3:hover .x-icon.hack,
+.tree-expand-icon-type3:active .x-icon.hack {
+  background: url('icon/tree-expand-3.png') no-repeat 0px 0px;
+  _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='icon/tree-expand-3.png');
+  _background: none;
+}
 .tree-expand-icon-type3.native .x-icon,
 .tree-expand-icon-type3.disabled .x-icon {
   display: block;
+  background: url('icon/tree-expand-3.png') no-repeat 0px 0px;
+  _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='icon/tree-expand-3.png');
+  _background: none;
+}
+.tree-expand-icon-type3.native .x-icon.hack,
+.tree-expand-icon-type3.disabled .x-icon.hack {
   background: url('icon/tree-expand-3.png') no-repeat 0px 0px;
   _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='icon/tree-expand-3.png');
   _background: none;
@@ -111,9 +202,22 @@
   _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='icon/tree-expand-4.png');
   _background: none;
 }
+.tree-expand-icon-type4 .x-icon.hack,
+.tree-expand-icon-type4:hover .x-icon.hack,
+.tree-expand-icon-type4:active .x-icon.hack {
+  background: url('icon/tree-expand-4.png') no-repeat 0px 0px;
+  _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='icon/tree-expand-4.png');
+  _background: none;
+}
 .tree-expand-icon-type4.native .x-icon,
 .tree-expand-icon-type4.disabled .x-icon {
   display: block;
+  background: url('icon/tree-expand-4.png') no-repeat 0px 0px;
+  _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='icon/tree-expand-4.png');
+  _background: none;
+}
+.tree-expand-icon-type4.native .x-icon.hack,
+.tree-expand-icon-type4.disabled .x-icon.hack {
   background: url('icon/tree-expand-4.png') no-repeat 0px 0px;
   _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='icon/tree-expand-4.png');
   _background: none;
@@ -126,9 +230,22 @@
   _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='icon/tree-vertical-line-2.png');
   _background: none;
 }
+.tree-vertical-line-type2 .x-icon.hack,
+.tree-vertical-line-type2:hover .x-icon.hack,
+.tree-vertical-line-type2:active .x-icon.hack {
+  background: url('icon/tree-vertical-line-2.png') no-repeat 0px 0px;
+  _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='icon/tree-vertical-line-2.png');
+  _background: none;
+}
 .tree-vertical-line-type2.native .x-icon,
 .tree-vertical-line-type2.disabled .x-icon {
   display: block;
+  background: url('icon/tree-vertical-line-2.png') no-repeat 0px 0px;
+  _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='icon/tree-vertical-line-2.png');
+  _background: none;
+}
+.tree-vertical-line-type2.native .x-icon.hack,
+.tree-vertical-line-type2.disabled .x-icon.hack {
   background: url('icon/tree-vertical-line-2.png') no-repeat 0px 0px;
   _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='icon/tree-vertical-line-2.png');
   _background: none;
@@ -141,9 +258,22 @@
   _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='icon/tree-vertical-line-3.png');
   _background: none;
 }
+.tree-vertical-line-type3 .x-icon.hack,
+.tree-vertical-line-type3:hover .x-icon.hack,
+.tree-vertical-line-type3:active .x-icon.hack {
+  background: url('icon/tree-vertical-line-3.png') no-repeat 0px 0px;
+  _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='icon/tree-vertical-line-3.png');
+  _background: none;
+}
 .tree-vertical-line-type3.native .x-icon,
 .tree-vertical-line-type3.disabled .x-icon {
   display: block;
+  background: url('icon/tree-vertical-line-3.png') no-repeat 0px 0px;
+  _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='icon/tree-vertical-line-3.png');
+  _background: none;
+}
+.tree-vertical-line-type3.native .x-icon.hack,
+.tree-vertical-line-type3.disabled .x-icon.hack {
   background: url('icon/tree-vertical-line-3.png') no-repeat 0px 0px;
   _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='icon/tree-vertical-line-3.png');
   _background: none;
@@ -156,9 +286,22 @@
   _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='icon/tree-vertical-line-4.png');
   _background: none;
 }
+.tree-vertical-line-type4 .x-icon.hack,
+.tree-vertical-line-type4:hover .x-icon.hack,
+.tree-vertical-line-type4:active .x-icon.hack {
+  background: url('icon/tree-vertical-line-4.png') no-repeat 0px 0px;
+  _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='icon/tree-vertical-line-4.png');
+  _background: none;
+}
 .tree-vertical-line-type4.native .x-icon,
 .tree-vertical-line-type4.disabled .x-icon {
   display: block;
+  background: url('icon/tree-vertical-line-4.png') no-repeat 0px 0px;
+  _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='icon/tree-vertical-line-4.png');
+  _background: none;
+}
+.tree-vertical-line-type4.native .x-icon.hack,
+.tree-vertical-line-type4.disabled .x-icon.hack {
   background: url('icon/tree-vertical-line-4.png') no-repeat 0px 0px;
   _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='icon/tree-vertical-line-4.png');
   _background: none;
@@ -171,9 +314,22 @@
   _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='icon/dark/tree-collapse-1.png');
   _background: none;
 }
+.bi-theme-dark .tree-collapse-icon-type1 .x-icon.hack,
+.bi-theme-dark .tree-collapse-icon-type1:hover .x-icon.hack,
+.bi-theme-dark .tree-collapse-icon-type1:active .x-icon.hack {
+  background: url('icon/dark/tree-collapse-1.png') no-repeat 0px 0px;
+  _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='icon/dark/tree-collapse-1.png');
+  _background: none;
+}
 .bi-theme-dark .tree-collapse-icon-type1.native .x-icon,
 .bi-theme-dark .tree-collapse-icon-type1.disabled .x-icon {
   display: block;
+  background: url('icon/dark/tree-collapse-1.png') no-repeat 0px 0px;
+  _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='icon/dark/tree-collapse-1.png');
+  _background: none;
+}
+.bi-theme-dark .tree-collapse-icon-type1.native .x-icon.hack,
+.bi-theme-dark .tree-collapse-icon-type1.disabled .x-icon.hack {
   background: url('icon/dark/tree-collapse-1.png') no-repeat 0px 0px;
   _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='icon/dark/tree-collapse-1.png');
   _background: none;
@@ -186,9 +342,22 @@
   _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='icon/dark/tree-collapse-2.png');
   _background: none;
 }
+.bi-theme-dark .tree-collapse-icon-type2 .x-icon.hack,
+.bi-theme-dark .tree-collapse-icon-type2:hover .x-icon.hack,
+.bi-theme-dark .tree-collapse-icon-type2:active .x-icon.hack {
+  background: url('icon/dark/tree-collapse-2.png') no-repeat 0px 0px;
+  _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='icon/dark/tree-collapse-2.png');
+  _background: none;
+}
 .bi-theme-dark .tree-collapse-icon-type2.native .x-icon,
 .bi-theme-dark .tree-collapse-icon-type2.disabled .x-icon {
   display: block;
+  background: url('icon/dark/tree-collapse-2.png') no-repeat 0px 0px;
+  _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='icon/dark/tree-collapse-2.png');
+  _background: none;
+}
+.bi-theme-dark .tree-collapse-icon-type2.native .x-icon.hack,
+.bi-theme-dark .tree-collapse-icon-type2.disabled .x-icon.hack {
   background: url('icon/dark/tree-collapse-2.png') no-repeat 0px 0px;
   _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='icon/dark/tree-collapse-2.png');
   _background: none;
@@ -201,9 +370,22 @@
   _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='icon/dark/tree-collapse-3.png');
   _background: none;
 }
+.bi-theme-dark .tree-collapse-icon-type3 .x-icon.hack,
+.bi-theme-dark .tree-collapse-icon-type3:hover .x-icon.hack,
+.bi-theme-dark .tree-collapse-icon-type3:active .x-icon.hack {
+  background: url('icon/dark/tree-collapse-3.png') no-repeat 0px 0px;
+  _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='icon/dark/tree-collapse-3.png');
+  _background: none;
+}
 .bi-theme-dark .tree-collapse-icon-type3.native .x-icon,
 .bi-theme-dark .tree-collapse-icon-type3.disabled .x-icon {
   display: block;
+  background: url('icon/dark/tree-collapse-3.png') no-repeat 0px 0px;
+  _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='icon/dark/tree-collapse-3.png');
+  _background: none;
+}
+.bi-theme-dark .tree-collapse-icon-type3.native .x-icon.hack,
+.bi-theme-dark .tree-collapse-icon-type3.disabled .x-icon.hack {
   background: url('icon/dark/tree-collapse-3.png') no-repeat 0px 0px;
   _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='icon/dark/tree-collapse-3.png');
   _background: none;
@@ -216,9 +398,22 @@
   _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='icon/dark/tree-collapse-4.png');
   _background: none;
 }
+.bi-theme-dark .tree-collapse-icon-type4 .x-icon.hack,
+.bi-theme-dark .tree-collapse-icon-type4:hover .x-icon.hack,
+.bi-theme-dark .tree-collapse-icon-type4:active .x-icon.hack {
+  background: url('icon/dark/tree-collapse-4.png') no-repeat 0px 0px;
+  _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='icon/dark/tree-collapse-4.png');
+  _background: none;
+}
 .bi-theme-dark .tree-collapse-icon-type4.native .x-icon,
 .bi-theme-dark .tree-collapse-icon-type4.disabled .x-icon {
   display: block;
+  background: url('icon/dark/tree-collapse-4.png') no-repeat 0px 0px;
+  _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='icon/dark/tree-collapse-4.png');
+  _background: none;
+}
+.bi-theme-dark .tree-collapse-icon-type4.native .x-icon.hack,
+.bi-theme-dark .tree-collapse-icon-type4.disabled .x-icon.hack {
   background: url('icon/dark/tree-collapse-4.png') no-repeat 0px 0px;
   _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='icon/dark/tree-collapse-4.png');
   _background: none;
@@ -231,9 +426,22 @@
   _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='icon/dark/tree-expand-1.png');
   _background: none;
 }
+.bi-theme-dark .tree-expand-icon-type1 .x-icon.hack,
+.bi-theme-dark .tree-expand-icon-type1:hover .x-icon.hack,
+.bi-theme-dark .tree-expand-icon-type1:active .x-icon.hack {
+  background: url('icon/dark/tree-expand-1.png') no-repeat 0px 0px;
+  _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='icon/dark/tree-expand-1.png');
+  _background: none;
+}
 .bi-theme-dark .tree-expand-icon-type1.native .x-icon,
 .bi-theme-dark .tree-expand-icon-type1.disabled .x-icon {
   display: block;
+  background: url('icon/dark/tree-expand-1.png') no-repeat 0px 0px;
+  _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='icon/dark/tree-expand-1.png');
+  _background: none;
+}
+.bi-theme-dark .tree-expand-icon-type1.native .x-icon.hack,
+.bi-theme-dark .tree-expand-icon-type1.disabled .x-icon.hack {
   background: url('icon/dark/tree-expand-1.png') no-repeat 0px 0px;
   _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='icon/dark/tree-expand-1.png');
   _background: none;
@@ -246,9 +454,22 @@
   _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='icon/dark/tree-expand-2.png');
   _background: none;
 }
+.bi-theme-dark .tree-expand-icon-type2 .x-icon.hack,
+.bi-theme-dark .tree-expand-icon-type2:hover .x-icon.hack,
+.bi-theme-dark .tree-expand-icon-type2:active .x-icon.hack {
+  background: url('icon/dark/tree-expand-2.png') no-repeat 0px 0px;
+  _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='icon/dark/tree-expand-2.png');
+  _background: none;
+}
 .bi-theme-dark .tree-expand-icon-type2.native .x-icon,
 .bi-theme-dark .tree-expand-icon-type2.disabled .x-icon {
   display: block;
+  background: url('icon/dark/tree-expand-2.png') no-repeat 0px 0px;
+  _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='icon/dark/tree-expand-2.png');
+  _background: none;
+}
+.bi-theme-dark .tree-expand-icon-type2.native .x-icon.hack,
+.bi-theme-dark .tree-expand-icon-type2.disabled .x-icon.hack {
   background: url('icon/dark/tree-expand-2.png') no-repeat 0px 0px;
   _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='icon/dark/tree-expand-2.png');
   _background: none;
@@ -261,9 +482,22 @@
   _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='icon/dark/tree-expand-3.png');
   _background: none;
 }
+.bi-theme-dark .tree-expand-icon-type3 .x-icon.hack,
+.bi-theme-dark .tree-expand-icon-type3:hover .x-icon.hack,
+.bi-theme-dark .tree-expand-icon-type3:active .x-icon.hack {
+  background: url('icon/dark/tree-expand-3.png') no-repeat 0px 0px;
+  _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='icon/dark/tree-expand-3.png');
+  _background: none;
+}
 .bi-theme-dark .tree-expand-icon-type3.native .x-icon,
 .bi-theme-dark .tree-expand-icon-type3.disabled .x-icon {
   display: block;
+  background: url('icon/dark/tree-expand-3.png') no-repeat 0px 0px;
+  _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='icon/dark/tree-expand-3.png');
+  _background: none;
+}
+.bi-theme-dark .tree-expand-icon-type3.native .x-icon.hack,
+.bi-theme-dark .tree-expand-icon-type3.disabled .x-icon.hack {
   background: url('icon/dark/tree-expand-3.png') no-repeat 0px 0px;
   _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='icon/dark/tree-expand-3.png');
   _background: none;
@@ -276,9 +510,22 @@
   _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='icon/dark/tree-expand-4.png');
   _background: none;
 }
+.bi-theme-dark .tree-expand-icon-type4 .x-icon.hack,
+.bi-theme-dark .tree-expand-icon-type4:hover .x-icon.hack,
+.bi-theme-dark .tree-expand-icon-type4:active .x-icon.hack {
+  background: url('icon/dark/tree-expand-4.png') no-repeat 0px 0px;
+  _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='icon/dark/tree-expand-4.png');
+  _background: none;
+}
 .bi-theme-dark .tree-expand-icon-type4.native .x-icon,
 .bi-theme-dark .tree-expand-icon-type4.disabled .x-icon {
   display: block;
+  background: url('icon/dark/tree-expand-4.png') no-repeat 0px 0px;
+  _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='icon/dark/tree-expand-4.png');
+  _background: none;
+}
+.bi-theme-dark .tree-expand-icon-type4.native .x-icon.hack,
+.bi-theme-dark .tree-expand-icon-type4.disabled .x-icon.hack {
   background: url('icon/dark/tree-expand-4.png') no-repeat 0px 0px;
   _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='icon/dark/tree-expand-4.png');
   _background: none;
@@ -291,9 +538,22 @@
   _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='icon/dark/tree-vertical-line-2.png');
   _background: none;
 }
+.bi-theme-dark .tree-vertical-line-type2 .x-icon.hack,
+.bi-theme-dark .tree-vertical-line-type2:hover .x-icon.hack,
+.bi-theme-dark .tree-vertical-line-type2:active .x-icon.hack {
+  background: url('icon/dark/tree-vertical-line-2.png') no-repeat 0px 0px;
+  _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='icon/dark/tree-vertical-line-2.png');
+  _background: none;
+}
 .bi-theme-dark .tree-vertical-line-type2.native .x-icon,
 .bi-theme-dark .tree-vertical-line-type2.disabled .x-icon {
   display: block;
+  background: url('icon/dark/tree-vertical-line-2.png') no-repeat 0px 0px;
+  _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='icon/dark/tree-vertical-line-2.png');
+  _background: none;
+}
+.bi-theme-dark .tree-vertical-line-type2.native .x-icon.hack,
+.bi-theme-dark .tree-vertical-line-type2.disabled .x-icon.hack {
   background: url('icon/dark/tree-vertical-line-2.png') no-repeat 0px 0px;
   _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='icon/dark/tree-vertical-line-2.png');
   _background: none;
@@ -306,9 +566,22 @@
   _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='icon/dark/tree-vertical-line-3.png');
   _background: none;
 }
+.bi-theme-dark .tree-vertical-line-type3 .x-icon.hack,
+.bi-theme-dark .tree-vertical-line-type3:hover .x-icon.hack,
+.bi-theme-dark .tree-vertical-line-type3:active .x-icon.hack {
+  background: url('icon/dark/tree-vertical-line-3.png') no-repeat 0px 0px;
+  _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='icon/dark/tree-vertical-line-3.png');
+  _background: none;
+}
 .bi-theme-dark .tree-vertical-line-type3.native .x-icon,
 .bi-theme-dark .tree-vertical-line-type3.disabled .x-icon {
   display: block;
+  background: url('icon/dark/tree-vertical-line-3.png') no-repeat 0px 0px;
+  _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='icon/dark/tree-vertical-line-3.png');
+  _background: none;
+}
+.bi-theme-dark .tree-vertical-line-type3.native .x-icon.hack,
+.bi-theme-dark .tree-vertical-line-type3.disabled .x-icon.hack {
   background: url('icon/dark/tree-vertical-line-3.png') no-repeat 0px 0px;
   _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='icon/dark/tree-vertical-line-3.png');
   _background: none;
@@ -321,6 +594,13 @@
   _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='icon/dark/tree-vertical-line-4.png');
   _background: none;
 }
+.bi-theme-dark .tree-vertical-line-type4 .x-icon.hack,
+.bi-theme-dark .tree-vertical-line-type4:hover .x-icon.hack,
+.bi-theme-dark .tree-vertical-line-type4:active .x-icon.hack {
+  background: url('icon/dark/tree-vertical-line-4.png') no-repeat 0px 0px;
+  _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='icon/dark/tree-vertical-line-4.png');
+  _background: none;
+}
 .bi-theme-dark .tree-vertical-line-type4.native .x-icon,
 .bi-theme-dark .tree-vertical-line-type4.disabled .x-icon {
   display: block;
@@ -328,8 +608,19 @@
   _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='icon/dark/tree-vertical-line-4.png');
   _background: none;
 }
+.bi-theme-dark .tree-vertical-line-type4.native .x-icon.hack,
+.bi-theme-dark .tree-vertical-line-type4.disabled .x-icon.hack {
+  background: url('icon/dark/tree-vertical-line-4.png') no-repeat 0px 0px;
+  _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='icon/dark/tree-vertical-line-4.png');
+  _background: none;
+}
 .check-box-icon .x-icon {
   display: block;
+  background: url('icon/check-box-normal.png') no-repeat 0 0;
+  _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='icon/check-box-normal.png');
+  _background: none;
+}
+.check-box-icon .x-icon.hack {
   background: url('icon/check-box-normal.png') no-repeat 0 0;
   _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='icon/check-box-normal.png');
   _background: none;
@@ -342,9 +633,22 @@
   _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='icon/check-box-normal.png');
   _background: none;
 }
+.check-box-icon:hover .x-icon.hack,
+.check-box-icon:focus .x-icon.hack,
+.check-box-icon.hover .x-icon.hack {
+  background: url('icon/check-box-normal.png') no-repeat 0 0;
+  _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='icon/check-box-normal.png');
+  _background: none;
+}
 .check-box-icon:active .x-icon,
 .check-box-icon.active .x-icon {
   display: block;
+  background: url('icon/check-box-active.png') no-repeat 0 0;
+  _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='icon/check-box-active.png');
+  _background: none;
+}
+.check-box-icon:active .x-icon.hack,
+.check-box-icon.active .x-icon.hack {
   background: url('icon/check-box-active.png') no-repeat 0 0;
   _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='icon/check-box-active.png');
   _background: none;
@@ -356,6 +660,12 @@
   _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='icon/check-box-disable.png');
   _background: none;
 }
+.check-box-icon.native .x-icon.hack,
+.check-box-icon.disabled .x-icon.hack {
+  background: url('icon/check-box-disable.png') no-repeat 0 0;
+  _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='icon/check-box-disable.png');
+  _background: none;
+}
 .check-box-icon.native .x-icon,
 .check-box-icon.disabled.active .x-icon {
   display: block;
@@ -363,8 +673,19 @@
   _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='icon/check-box-disable2.png');
   _background: none;
 }
+.check-box-icon.native .x-icon.hack,
+.check-box-icon.disabled.active .x-icon.hack {
+  background: url('icon/check-box-disable2.png') no-repeat 0 0;
+  _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='icon/check-box-disable2.png');
+  _background: none;
+}
 .radio-icon .x-icon {
   display: block;
+  background: url('icon/radio-normal.png') no-repeat 0 0;
+  _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='icon/radio-normal.png');
+  _background: none;
+}
+.radio-icon .x-icon.hack {
   background: url('icon/radio-normal.png') no-repeat 0 0;
   _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='icon/radio-normal.png');
   _background: none;
@@ -377,9 +698,22 @@
   _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='icon/radio-normal.png');
   _background: none;
 }
+.radio-icon:hover .x-icon.hack,
+.radio-icon:focus .x-icon.hack,
+.radio-icon.hover .x-icon.hack {
+  background: url('icon/radio-normal.png') no-repeat 0 0;
+  _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='icon/radio-normal.png');
+  _background: none;
+}
 .radio-icon:active .x-icon,
 .radio-icon.active .x-icon {
   display: block;
+  background: url('icon/radio-active.png') no-repeat 0 0;
+  _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='icon/radio-active.png');
+  _background: none;
+}
+.radio-icon:active .x-icon.hack,
+.radio-icon.active .x-icon.hack {
   background: url('icon/radio-active.png') no-repeat 0 0;
   _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='icon/radio-active.png');
   _background: none;
@@ -391,9 +725,21 @@
   _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='icon/radio-disable.png');
   _background: none;
 }
+.radio-icon.native .x-icon.hack,
+.radio-icon.disabled .x-icon.hack {
+  background: url('icon/radio-disable.png') no-repeat 0 0;
+  _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='icon/radio-disable.png');
+  _background: none;
+}
 .radio-icon.native .x-icon,
 .radio-icon.disabled.active .x-icon {
   display: block;
+  background: url('icon/radio-disable2.png') no-repeat 0 0;
+  _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='icon/radio-disable2.png');
+  _background: none;
+}
+.radio-icon.native .x-icon.hack,
+.radio-icon.disabled.active .x-icon.hack {
   background: url('icon/radio-disable2.png') no-repeat 0 0;
   _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='icon/radio-disable2.png');
   _background: none;
@@ -406,9 +752,22 @@
   _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='icon/half_selected.png');
   _background: none;
 }
+.check-half-select-icon .x-icon.hack,
+.check-half-select-icon:hover .x-icon.hack,
+.check-half-select-icon:active .x-icon.hack {
+  background: url('icon/half_selected.png') no-repeat 0px 0px;
+  _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='icon/half_selected.png');
+  _background: none;
+}
 .check-half-select-icon.native .x-icon,
 .check-half-select-icon.disabled .x-icon {
   display: block;
+  background: url('icon/half_selected.png') no-repeat 0px 0px;
+  _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='icon/half_selected.png');
+  _background: none;
+}
+.check-half-select-icon.native .x-icon.hack,
+.check-half-select-icon.disabled .x-icon.hack {
   background: url('icon/half_selected.png') no-repeat 0px 0px;
   _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='icon/half_selected.png');
   _background: none;

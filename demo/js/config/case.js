@@ -8,16 +8,16 @@ Demo.CASE_CONFIG = [{
     text: "editors"
 }, {
     pId: 301,
-    text: "bi.record_editor",
-    value: "demo.record_editor"
-}, {
-    pId: 301,
     text: "bi.shelter_editor",
     value: "demo.shelter_editor"
 }, {
     pId: 301,
     text: "bi.sign_editor",
     value: "demo.sign_editor"
+}, {
+    pId: 301,
+    text: "bi.sign_initial_editor",
+    value: "demo.sign_initial_editor"
 }, {
     pId: 301,
     text: "bi.state_editor",

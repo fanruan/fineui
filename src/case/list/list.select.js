@@ -158,6 +158,11 @@ BI.SelectList = BI.inherit(BI.Widget, {
         this._checkAllSelected();
     },
 
+    _setEnable: function (enable) {
+        BI.SelectList.superclass._setEnable.apply(this, arguments);
+        this.toolbar.setEnable(enable);
+    },
+
     resetHeight: function (h) {
         var toolHeight = ( this.toolbar.element.outerHeight() || 25) * ( this.toolbar.isVisible() ? 1 : 0);
         this.list.resetHeight ? this.list.resetHeight(h - toolHeight) :
