@@ -11,6 +11,7 @@ BI.Text = BI.inherit(BI.Single, {
             textAlign: "left",
             whiteSpace: "normal",
             lineHeight: null,
+            handler: null,//如果传入handler,表示处理文字的点击事件，不是区域的
             hgap: 0,
             vgap: 0,
             lgap: 0,
@@ -24,39 +25,25 @@ BI.Text = BI.inherit(BI.Single, {
 
     _init: function () {
         BI.Text.superclass._init.apply(this, arguments);
-        var o = this.options;
-        this.text = BI.createWidget({
-            type: "bi.layout",
-            cls: "bi-text"
-        });
-        BI.createWidget({
-            type: "bi.default",
-            element: this,
-            items: [this.text]
-        });
-        if (BI.isKey(o.text)) {
-            this.setText(o.text);
-        } else if (BI.isKey(o.value)) {
-            this.setText(o.value);
-        }
+        var self = this, o = this.options;
         if (o.hgap + o.lgap > 0) {
-            this.text.element.css({
-                "margin-left": o.hgap + o.lgap + "px"
+            this.element.css({
+                "padding-left": o.hgap + o.lgap + "px"
             })
         }
         if (o.hgap + o.rgap > 0) {
-            this.text.element.css({
-                "margin-right": o.hgap + o.rgap + "px"
+            this.element.css({
+                "padding-right": o.hgap + o.rgap + "px"
             })
         }
         if (o.vgap + o.tgap > 0) {
-            this.text.element.css({
-                "margin-top": o.vgap + o.tgap + "px"
+            this.element.css({
+                "padding-top": o.vgap + o.tgap + "px"
             })
         }
         if (o.vgap + o.bgap > 0) {
-            this.text.element.css({
-                "margin-bottom": o.vgap + o.bgap + "px"
+            this.element.css({
+                "padding-bottom": o.vgap + o.bgap + "px"
             })
         }
         if (BI.isNumber(o.height)) {
@@ -65,16 +52,33 @@ BI.Text = BI.inherit(BI.Single, {
         if (BI.isNumber(o.lineHeight)) {
             this.element.css({"lineHeight": o.lineHeight + "px"});
         }
-        this.text.element.css({
-            "textAlign": o.textAlign,
-            "whiteSpace": o.whiteSpace
-        });
         this.element.css({
             "textAlign": o.textAlign,
             "whiteSpace": o.whiteSpace
         });
+        if (o.handler) {
+            this.text = BI.createWidget({
+                type: "bi.layout",
+                tagName: 'span'
+            });
+            this.text.element.click(function () {
+                o.handler(self.getValue());
+            });
+            BI.createWidget({
+                type: "bi.default",
+                element: this,
+                items: [this.text]
+            });
+        } else {
+            this.text = this;
+        }
+        if (BI.isKey(o.text)) {
+            this.setText(o.text);
+        } else if (BI.isKey(o.value)) {
+            this.setText(o.value);
+        }
         if (BI.isKey(o.keyword)) {
-            this.text.element.__textKeywordMarked__(o.text, o.keyword, o.py);
+            this.element.__textKeywordMarked__(o.text, o.keyword, o.py);
         }
     },
 
