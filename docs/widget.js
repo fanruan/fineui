@@ -3264,30 +3264,26 @@ BI.DateTimeCombo = BI.inherit(BI.Single, {
     },
     _defaultConfig: function () {
         return BI.extend(BI.DateTimeCombo.superclass._defaultConfig.apply(this, arguments), {
-            baseCls: 'bi-date-time-combo',
+            baseCls: 'bi-date-time-combo bi-border',
             height: 24
         });
     },
     _init: function () {
         BI.DateTimeCombo.superclass._init.apply(this, arguments);
-        var self = this;
+        var self = this, opts = this.options;
         var date = new Date();
         this.storeValue = {
-            value: {
-                year: date.getFullYear(),
-                month: date.getMonth(),
-                day: date.getDate(),
-                hour: date.getHours(),
-                minute: date.getMinutes(),
-                second: date.getSeconds()
-            }
+            year: date.getFullYear(),
+            month: date.getMonth(),
+            day: date.getDate(),
+            hour: date.getHours(),
+            minute: date.getMinutes(),
+            second: date.getSeconds()
         };
         this.trigger = BI.createWidget({
-            type: 'bi.date_time_trigger'
-        });
-
-        this.trigger.on(BI.DateTrigger.EVENT_TRIGGER_CLICK, function () {
-            self.combo.toggle();
+            type: 'bi.date_time_trigger',
+            min: this.constants.DATE_MIN_VALUE,
+            max: this.constants.DATE_MAX_VALUE
         });
 
         this.popup = BI.createWidget({
@@ -3299,18 +3295,19 @@ BI.DateTimeCombo = BI.inherit(BI.Single, {
 
         this.popup.on(BI.DateTimePopup.BUTTON_CANCEL_EVENT_CHANGE, function () {
             self.setValue(self.storeValue);
-            self.combo.hideView();
+            self.hidePopupView();
             self.fireEvent(BI.DateTimeCombo.EVENT_CANCEL);
         });
         this.popup.on(BI.DateTimePopup.BUTTON_OK_EVENT_CHANGE, function () {
             self.storeValue = self.popup.getValue();
             self.setValue(self.storeValue);
-            self.combo.hideView();
+            self.hidePopupView();
             self.fireEvent(BI.DateTimeCombo.EVENT_CONFIRM);
         });
         this.popup.on(BI.DateTimePopup.CALENDAR_EVENT_CHANGE, function () {
             self.trigger.setValue(self.popup.getValue());
-    });
+            self.fireEvent(BI.DateTimeCombo.EVENT_CHANGE);
+        });
         this.combo = BI.createWidget({
             type: 'bi.combo',
             toggle: false,
@@ -3332,9 +3329,9 @@ BI.DateTimeCombo = BI.inherit(BI.Single, {
 
         var triggerBtn = BI.createWidget({
             type: "bi.trigger_icon_button",
-            cls: "chart-date-normal-font bi-border-left bi-border-top bi-border-bottom",
+            cls: "bi-trigger-date-button chart-date-normal-font bi-border-right",
             width: 30,
-            height: 25
+            height: 24
         });
         triggerBtn.on(BI.TriggerIconButton.EVENT_CHANGE, function () {
             if (self.combo.isViewVisible()) {
@@ -3370,10 +3367,11 @@ BI.DateTimeCombo = BI.inherit(BI.Single, {
         this.trigger.setValue(v);
     },
     getValue: function () {
-        return {
-            value: this.storeValue,
-            text: this.trigger.getValue()
-        };
+        return this.storeValue;
+    },
+
+    hidePopupView: function () {
+        this.combo.hideView();
     }
 });
 
@@ -3400,11 +3398,17 @@ BI.CustomDateTimeCombo = BI.inherit(BI.Widget, {
             element: this
         });
         this.DateTime.on(BI.DateTimeCombo.EVENT_CANCEL, function () {
+            self.fireEvent(BI.CustomDateTimeCombo.EVENT_CHANGE);
             self.fireEvent(BI.CustomDateTimeCombo.EVENT_CANCEL);
         });
 
         this.DateTime.on(BI.DateTimeCombo.EVENT_CONFIRM, function () {
+            self.fireEvent(BI.CustomDateTimeCombo.EVENT_CHANGE);
             self.fireEvent(BI.CustomDateTimeCombo.EVENT_CONFIRM);
+        });
+
+        this.DateTime.on(BI.DateTimeCombo.EVENT_CHANGE, function () {
+            self.fireEvent(BI.CustomDateTimeCombo.EVENT_CHANGE);
         });
     },
 
@@ -3424,18 +3428,6 @@ BI.shortcut("bi.custom_date_time_combo", BI.CustomDateTimeCombo);
  * Created by Urthur on 2017/7/14.
  */
 BI.DateTimePopup = BI.inherit(BI.Widget, {
-    constants: {
-
-
-        triggerHeight: 24,
-        buttonWidth: 90,
-        buttonHeight: 25,
-        popupHeight: 290,
-        popupWidth: 270,
-        comboAdjustHeight: 1,
-        lgap: 2,
-        border: 1
-    },
     _defaultConfig: function () {
         return BI.extend(BI.DateTimePopup.superclass._defaultConfig.apply(this, arguments), {
             baseCls: 'bi-date-time-popup',
@@ -3445,7 +3437,7 @@ BI.DateTimePopup = BI.inherit(BI.Widget, {
     },
     _init: function () {
         BI.DateTimePopup.superclass._init.apply(this, arguments);
-        var self = this;
+        var self = this, opts = this.options;
         this.cancelButton = BI.createWidget({
             type: 'bi.text_button',
             forceCenter: true,
@@ -3531,6 +3523,16 @@ BI.DateTimePopup = BI.inherit(BI.Widget, {
             }]
         });
 
+        var date = new Date();
+        this.dateCombo.setValue({
+            year: date.getFullYear(),
+            month: date.getMonth(),
+            day: date.getDate()
+        });
+        this.hour.setValue(date.getHours());
+        this.minute.setValue(date.getMinutes());
+        this.second.setValue(date.getSeconds());
+
         this.dateButton = BI.createWidget({
             type: "bi.grid",
             items: [[this.cancelButton, this.okButton]]
@@ -3551,42 +3553,37 @@ BI.DateTimePopup = BI.inherit(BI.Widget, {
     },
 
     setValue: function (v) {
-        var value, date;
-        if (BI.isNotNull(v)) {
-            value = v.value;
-            if(BI.isNull(value)){
-                date = new Date();
-                this.dateCombo.setValue({
-                    year: date.getFullYear(),
-                    month: date.getMonth(),
-                    day: date.getDate()
-                });
-                this.hour.setValue(date.getHours());
-                this.minute.setValue(date.getMinutes());
-                this.second.setValue(date.getSeconds());
-            } else {
-                this.dateCombo.setValue({
-                    year: value.year,
-                    month: value.month,
-                    day: value.day
-                });
-                this.hour.setValue(value.hour);
-                this.minute.setValue(value.minute);
-                this.second.setValue(value.second);
-            }
+        var value = v, date;
+        if (BI.isNull(value)) {
+            date = new Date();
+            this.dateCombo.setValue({
+                year: date.getFullYear(),
+                month: date.getMonth(),
+                day: date.getDate()
+            });
+            this.hour.setValue(date.getHours());
+            this.minute.setValue(date.getMinutes());
+            this.second.setValue(date.getSeconds());
+        } else {
+            this.dateCombo.setValue({
+                year: value.year,
+                month: value.month,
+                day: value.day
+            });
+            this.hour.setValue(value.hour);
+            this.minute.setValue(value.minute);
+            this.second.setValue(value.second);
         }
     },
 
     getValue: function () {
         return {
-            value: {
-                year: this.dateCombo.getValue().year,
-                month: this.dateCombo.getValue().month,
-                day: this.dateCombo.getValue().day,
-                hour: this.hour.getValue(),
-                minute: this.minute.getValue(),
-                second: this.second.getValue()
-            }
+            year: this.dateCombo.getValue().year,
+            month: this.dateCombo.getValue().month,
+            day: this.dateCombo.getValue().day,
+            hour: this.hour.getValue(),
+            minute: this.minute.getValue(),
+            second: this.second.getValue()
         }
     }
 });
@@ -3594,7 +3591,6 @@ BI.DateTimePopup.BUTTON_OK_EVENT_CHANGE = "BUTTON_OK_EVENT_CHANGE";
 BI.DateTimePopup.BUTTON_CANCEL_EVENT_CHANGE = "BUTTON_CANCEL_EVENT_CHANGE";
 BI.DateTimePopup.CALENDAR_EVENT_CHANGE = "CALENDAR_EVENT_CHANGE";
 BI.shortcut('bi.date_time_popup', BI.DateTimePopup);
-
 /**
  * Created by Urthur on 2017/7/14.
  */
@@ -3700,22 +3696,22 @@ BI.DateTimeSelect = BI.inherit(BI.Widget, {
 
 });
 BI.DateTimeSelect.EVENT_CONFIRM = "EVENT_CONFIRM";
-BI.shortcut("bi.date_time_select", BI.DateTimeSelect);
-/**
+BI.shortcut("bi.date_time_select", BI.DateTimeSelect);/**
  * Created by Urthur on 2017/7/14.
  */
 BI.DateTimeTrigger = BI.inherit(BI.Trigger, {
     _const: {
         hgap: 4,
-        vgap: 2,
         triggerWidth: 30
     },
 
     _defaultConfig: function () {
         return BI.extend(BI.DateTimeTrigger.superclass._defaultConfig.apply(this, arguments), {
             extraCls: "bi-date-time-trigger",
-            height: 25,
-            width: 180
+            min: '1900-01-01', //最小日期
+            max: '2099-12-31', //最大日期
+            height: 24,
+            width: 200
         });
     },
     _init: function () {
@@ -3723,19 +3719,18 @@ BI.DateTimeTrigger = BI.inherit(BI.Trigger, {
         var self = this, o = this.options, c = this._const;
         this.text = BI.createWidget({
             type: "bi.label",
-            cls: "bi-border",
             textAlign: "left",
             height: o.height,
             width: o.width,
-            hgap: c.hgap,
-            vgap: c.vgap
+            hgap: c.hgap
         });
+
         BI.createWidget({
             type: "bi.htape",
             element: this,
             items: [{
                 el: BI.createWidget(),
-                width: 30
+                width: c.triggerWidth
             }, {
                 el: this.text
             }]
@@ -3748,28 +3743,21 @@ BI.DateTimeTrigger = BI.inherit(BI.Trigger, {
 
     setValue: function (v) {
         var self = this;
-        if (BI.isNotNull(v)) {
-            var value = v.value, dateStr;
-            if(BI.isNull(value)){
-                value = new Date();
-                dateStr = value.getFullYear() + "-" + self._printTime(value.getMonth() + 1) + "-" + self._printTime(value.getDate())
-                    + " " + self._printTime(value.getHours()) + ":" + self._printTime(value.getMinutes()) + ":" + self._printTime(value.getSeconds());
-            } else {
-                dateStr = value.year + "-" + self._printTime(value.month + 1) + "-" + self._printTime(value.day)
-                    + " " + self._printTime(value.hour) + ":" + self._printTime(value.minute) + ":" + self._printTime(value.second);
-            }
-            this.text.setText(dateStr);
-            this.text.setTitle(dateStr);
+        var value = v, dateStr;
+        if(BI.isNull(value)){
+            value = new Date();
+            dateStr = value.print("%Y-%X-%d %H:%M:%S");
+        } else {
+            var date = new Date(value.year,value.month,value.day,value.hour,value.minute,value.second);
+            dateStr = date.print("%Y-%X-%d %H:%M:%S");
+
         }
-    },
-    getValue: function () {
-        return this.text.getText();
+        this.text.setText(dateStr);
+        this.text.setTitle(dateStr);
     }
 
 });
-BI.DateTrigger.EVENT_TRIGGER_CLICK = "EVENT_TRIGGER_CLICK";
-BI.shortcut("bi.date_time_trigger", BI.DateTimeTrigger);
-/**
+BI.shortcut("bi.date_time_trigger", BI.DateTimeTrigger);/**
  * 带有方向的pathchooser
  *
  * Created by GUY on 2016/4/21.

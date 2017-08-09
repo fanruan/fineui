@@ -14900,7 +14900,41 @@ BI.Widget = BI.inherit(BI.OB, {
     },
 
     _change: function (child) {
-        this.set(this._map(child));
+        var self = this;
+        var childMap = this._map(child);
+        //this.set(childMap);
+        var changes = [];
+        var changing = this._changing;
+        var changed;
+        var options = {};
+        this._changing = true;
+        if (!changing) {
+            this._previousAttributes = _.clone(this.attributes);
+            this.changed = {};
+        }
+        var current = this.attributes, prev = this._previousAttributes, val;
+        for (var attr in childMap) {
+            val = childMap[attr];
+            changes.push(attr);
+            this.changed[attr] = val;
+            current[attr] = val;
+        }
+        if (changes.length) this._pending = options;
+        for (var i = 0, length = changes.length; i < length; i++) {
+            this.trigger('change:' + changes[i], this, current[changes[i]], options);
+        }
+        if (changing) return this;
+        changed = BI.clone(this.changed);
+        while (this._pending) {
+            options = this._pending;
+            this._pending = false;
+            this.trigger('change', changed, prev, this, options);
+        }
+        this._pending = false;
+        this._changing = false;
+        if (changes.length) {
+            this.trigger("changed", changed, prev, this, options);
+        }
         return this;
     },
 
@@ -17625,12 +17659,12 @@ $.extend(BI, {
             must: false
         }, options);
         config.url = BI.servletURL + '?op=' + config.op + '&resource=' + config.path;
-        this.$import(config.url, config.type,config.must);
+        this.$import(config.url, config.type, config.must);
     },
     $import: function () {
         var _LOADED = {}; // alex:保存加载过的
         function loadReady(src, must) {
-            var $scripts = $("head script");
+            var $scripts = $("head script, body script");
             $.each($scripts, function (i, item) {
                 if (item.src.indexOf(src) != -1) {
                     _LOADED[src] = true;

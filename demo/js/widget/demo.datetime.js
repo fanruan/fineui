@@ -2,7 +2,8 @@
  * Created by Urthur on 2017/7/18.
  */
 Demo.CustomDateTime = BI.inherit(BI.Widget, {
-    props: {},
+    props: {
+    },
     render: function () {
         var self = this;
         return {
@@ -11,12 +12,19 @@ Demo.CustomDateTime = BI.inherit(BI.Widget, {
                 el: {
                     type: "bi.custom_date_time_combo",
                     ref: function (_ref) {
-                        self.customDateTime = _ref;
+                        self.customDateTime =  _ref;
+                        var value, date, dateStr;
                         self.customDateTime.on(BI.CustomDateTimeCombo.EVENT_CONFIRM, function () {
-                            BI.Msg.alert("日期", this.getValue().text);
+                            value = this.getValue();
+                            date = new Date(value.year,value.month,value.day,value.hour,value.minute,value.second);
+                            dateStr = date.print("%Y-%X-%d %H:%M:%S");
+                            BI.Msg.alert("日期", dateStr);
                         });
                         self.customDateTime.on(BI.CustomDateTimeCombo.EVENT_CANCEL, function () {
-                            BI.Msg.alert("日期", this.getValue().text);
+                            value = this.getValue();
+                            date = new Date(value.year,value.month,value.day,value.hour,value.minute,value.second);
+                            dateStr = date.print("%Y-%X-%d %H:%M:%S");
+                            BI.Msg.alert("日期", dateStr);
                         });
                     }
                 },
