@@ -545,7 +545,7 @@ BI.Text = BI.inherit(BI.Single, {
             this.setText(o.value);
         }
         if (BI.isKey(o.keyword)) {
-            this.element.__textKeywordMarked__(o.text, o.keyword, o.py);
+            this.text.element.__textKeywordMarked__(o.text, o.keyword, o.py);
         }
     },
 
@@ -16345,9 +16345,9 @@ BI.shortcut("bi.image_button", BI.ImageButton);(function ($) {
             BI.Button.superclass._init.apply(this, arguments);
             var o = this.options, self = this;
             if (BI.isNumber(o.height) && !o.clear && !o.block) {
-                this.element.css({height: o.height - 2, lineHeight: (o.height - 2) + 'px'});
+                this.element.css({height: o.height + "px", lineHeight: o.height + "px"});
             } else {
-                this.element.css({lineHeight: o.height + 'px'});
+                this.element.css({lineHeight: o.height + "px"});
             }
             if (BI.isKey(o.iconClass)) {
                 this.icon = BI.createWidget({
@@ -16400,8 +16400,8 @@ BI.shortcut("bi.image_button", BI.ImageButton);(function ($) {
             if (o.clear === true) {
                 this.element.addClass("clear");
             }
-            if (o.minWidth > 2) {
-                this.element.css({"min-width": o.minWidth - 2 + "px"});
+            if (o.minWidth > 0) {
+                this.element.css({"min-width": o.minWidth + "px"});
             }
         },
 

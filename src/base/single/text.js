@@ -78,7 +78,7 @@ BI.Text = BI.inherit(BI.Single, {
             this.setText(o.value);
         }
         if (BI.isKey(o.keyword)) {
-            this.element.__textKeywordMarked__(o.text, o.keyword, o.py);
+            this.text.element.__textKeywordMarked__(o.text, o.keyword, o.py);
         }
     },
 
