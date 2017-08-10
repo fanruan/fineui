@@ -15,7 +15,6 @@ BI.TreeView = BI.inherit(BI.Pane, {
     _init: function () {
         BI.TreeView.superclass._init.apply(this, arguments);
         this._stop = false;
-        this.container = BI.createWidget();
 
         this._createTree();
         this.tip = BI.createWidget({
@@ -28,7 +27,7 @@ BI.TreeView = BI.inherit(BI.Pane, {
             scrollable: true,
             scrolly: false,
             element: this,
-            items: [this.container, this.tip]
+            items: [this.tip]
         });
 
     },
@@ -47,7 +46,7 @@ BI.TreeView = BI.inherit(BI.Pane, {
         });
         BI.createWidget({
             type: "bi.default",
-            element: this.container,
+            element: this.element,
             items: [this.tree]
         });
     },
@@ -442,6 +441,7 @@ BI.TreeView = BI.inherit(BI.Pane, {
                 setNode(child.children);
             });
         }
+
         BI.each(this.nodes.getNodes(), function (i, node) {
             node.halfCheck = false;
             setNode(node.children);
