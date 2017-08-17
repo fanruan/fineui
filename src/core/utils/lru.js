@@ -79,4 +79,8 @@
             ? entry
             : entry.value
     };
+
+    p.has = function (key) {
+        return this._keymap[key] != null;
+    }
 })();
