@@ -5502,6 +5502,7 @@ BI.FineTuningNumberEditor = BI.inherit(BI.Widget, {
         var self = this, o = this.options;
         this.editor = BI.createWidget({
             type: "bi.sign_editor",
+            height: o.height,
             value: this._alertInEditorValue(o.value),
             errorText: BI.i18nText("BI-Please_Input_Natural_Number"),
             validationChecker: function(v){
@@ -5549,7 +5550,7 @@ BI.FineTuningNumberEditor = BI.inherit(BI.Widget, {
                         el: this.bottomBtn
                     }]
                 },
-                width: 30
+                width: 23
             }]
         });
     },
