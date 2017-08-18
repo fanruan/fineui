@@ -807,6 +807,9 @@ BI.BasicButton = BI.inherit(BI.Single, {
 
     _trigger: function () {
         var o = this.options;
+        if(!this.isEnabled()){
+            return;
+        }
         if (!this.isDisableSelected()) {
             this.isForceSelected() ? this.setSelected(true) :
                 (this.isForceNotSelected() ? this.setSelected(false) :
