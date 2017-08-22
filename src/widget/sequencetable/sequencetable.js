@@ -141,12 +141,6 @@ BI.SequenceTable = BI.inherit(BI.Widget, {
 
     _populate: function () {
         var o = this.options;
-        this.sequence.attr({
-            items: o.items,
-            header: o.header,
-            crossItems: o.crossItems,
-            crossHeader: o.crossHeader
-        });
         if (o.showSequence === true) {
             this.sequence.setVisible(true);
             this.table.element.css("left", "60px");
