@@ -15833,9 +15833,6 @@ BI.View = BI.inherit(BI.V, {
             throw ("shortcut:[" + xtype + "] has been registed");
         }
         kv[xtype] = cls;
-        _.extend(cls.prototype, {
-            xtype: xtype
-        })
     };
 
     // 根据配置属性生成widget
