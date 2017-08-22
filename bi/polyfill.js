@@ -60,8 +60,23 @@ window.localStorage || (window.localStorage = {
     clear: function () {
         this.items = {};
     }
-});//修复ie9下sort方法的bug
-!function (window) {
+});if (typeof Set !== 'undefined' && Set.toString().match(/native code/)) {
+
+} else {
+    Set = function () {
+        this.set = {}
+    };
+    Set.prototype.has = function (key) {
+        return this.set[key] !== undefined;
+    };
+    Set.prototype.add = function (key) {
+        this.set[key] = 1
+    };
+    Set.prototype.clear = function () {
+        this.set = {}
+    };
+}//修复ie9下sort方法的bug
+;!function (window) {
     var ua = window.navigator.userAgent.toLowerCase(),
         reg = /msie|applewebkit.+safari/;
     if (reg.test(ua)) {
