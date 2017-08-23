@@ -5830,7 +5830,6 @@ BI.View = BI.inherit(BI.V, {
         this.off();
     }
 });(function () {
-
     var kv = {};
     BI.shortcut = function (xtype, cls) {
         if (kv[xtype] != null) {
