@@ -14,9 +14,6 @@
             return new (new Function('return ' + config['classType'] + ';')())(config);
         }
 
-        if (!config.type) {
-
-        }
         var xtype = config.type.toLowerCase();
         var cls = kv[xtype];
         return new cls(config);
