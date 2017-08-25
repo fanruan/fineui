@@ -17,7 +17,8 @@
   },
   "scripts": {
     "grunt": "grunt",
-    "start": "node server.js"
+    "start": "node server.js",
+    "uglify": "grunt min"
   },
   "author": "",
   "license": "MIT"
