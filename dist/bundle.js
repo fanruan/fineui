@@ -93660,8 +93660,8 @@ BI.ValueChooserPane = BI.inherit(BI.AbstractValueChooser, {
     }
 });
 BI.ValueChooserPane.EVENT_CHANGE = "ValueChooserPane.EVENT_CHANGE";
-BI.shortcut('bi.value_chooser_pane', BI.ValueChooserPane);BI.servletURL = "http://fanruan.coding.me/fineui/dist/";
-BI.resourceURL = "http://fanruan.coding.me/fineui/dist/resource/";
+BI.shortcut('bi.value_chooser_pane', BI.ValueChooserPane);BI.servletURL = "https://fanruan.coding.me/fineui/dist/";
+BI.resourceURL = "https://fanruan.coding.me/fineui/dist/resource/";
 BI.i18n = {
     "BI-Basic_OK": "确定",
     "BI-Basic_Sure": "确定",

@@ -234,7 +234,7 @@ module.exports = function (grunt) {
             }
         },
 
-        jsmin: {
+        uglify: {
             options: {
                 banner: '/*! <%= pkg.name %> <%= grunt.template.today("dd-mm-yyyy") %> */\n'
             },
@@ -287,5 +287,5 @@ module.exports = function (grunt) {
     grunt.loadNpmTasks('grunt-contrib-cssmin');
 
     grunt.registerTask('default', ['less', 'concat', 'watch']);
-    grunt.registerTask('uglify', ['less', 'concat', 'jsmin', 'cssmin']);
+    grunt.registerTask('min', ['less', 'concat', 'uglify', 'cssmin']);
 };
