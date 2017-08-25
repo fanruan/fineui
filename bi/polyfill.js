@@ -94,7 +94,8 @@ if (!Array.prototype.lastIndexOf) {
         }
         return -1;
     };
-}/**
+}
+/**
  * 特殊情况
  * Created by wang on 15/6/23.
  */
