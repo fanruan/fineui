@@ -14,6 +14,7 @@
 .image2xPath(@path, @top:center, @left:center, @repeat: no-repeat) when not (@path = none) {
   background: url('@{image2xUrl}@{path}') @repeat @left @top;
   _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='@{image2xUrl}@{path}');
+  background-size: contain;
   _background: none;
 }
 
