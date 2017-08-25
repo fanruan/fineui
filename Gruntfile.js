@@ -9,7 +9,7 @@ module.exports = function (grunt) {
             },
             polyfillJs: {
                 src: ['src/polyfill/**/*.js'],
-                dest: 'docs/polyfill.js'
+                dest: 'dist/polyfill.js'
             },
             coreJs: {
                 src: [
@@ -32,7 +32,7 @@ module.exports = function (grunt) {
                     'src/data/**/*.js',
                     'src/config.js'
                 ],
-                dest: 'docs/core.js'
+                dest: 'dist/core.js'
             },
 
             //最基础的控件
@@ -53,7 +53,7 @@ module.exports = function (grunt) {
                     'src/base/tree/parttree.js',
                     'src/base/**/*.js'
                 ],
-                dest: 'docs/base.js'
+                dest: 'dist/base.js'
             },
             //实现好的一些基础实例
             caseJs: {
@@ -61,7 +61,7 @@ module.exports = function (grunt) {
                     'src/case/combo/popup.bubble.js',
                     'src/case/**/*.js'
                 ],
-                dest: 'docs/case.js'
+                dest: 'dist/case.js'
             },
             widgetJs: {
                 src: [
@@ -70,7 +70,7 @@ module.exports = function (grunt) {
                     'src/widget/**/*.js',
                     'src/component/**/*.js'
                 ],
-                dest: "docs/widget.js"
+                dest: "dist/widget.js"
             },
             chartJs: {
                 src: [
@@ -79,42 +79,42 @@ module.exports = function (grunt) {
                     'src/addons/chart/factory.charts.js',
                     'src/addons/chart/**/*.js'
                 ],
-                dest: "docs/chart.js"
+                dest: "dist/chart.js"
             },
             coreCss: {
                 src: ['src/css/core/**/*.css', 'src/css/theme/**/*.css'],
-                dest: 'docs/core.css'
+                dest: 'dist/core.css'
             },
             baseCss: {
                 src: ['src/css/base/**/*.css'],
-                dest: 'docs/base.css'
+                dest: 'dist/base.css'
             },
             widgetCss: {
                 src: ['src/css/widget/**/*.css'],
-                dest: 'docs/widget.css'
+                dest: 'dist/widget.css'
             },
             resourceCss: {
                 src: ['src/css/resource/**/*.css'],
-                dest: 'docs/resource.css'
+                dest: 'dist/resource.css'
             },
 
-            bundleJs:{
-                src: ['docs/core.js','docs/base.js','docs/case.js','docs/widget.js'],
-                dest: 'docs/bundle.js'
+            bundleJs: {
+                src: ['dist/core.js', 'dist/base.js', 'dist/case.js', 'dist/widget.js'],
+                dest: 'dist/bundle.js'
             },
 
-            bundleCss:{
-                src: ['docs/core.css','docs/base.css','docs/widget.css'],
-                dest: 'docs/bundle.css'
+            bundleCss: {
+                src: ['dist/core.css', 'dist/base.css', 'dist/widget.css', 'public/css/app.css', 'public/css/**/*.css'],
+                dest: 'dist/bundle.css'
             },
 
             demoJs: {
                 src: ['demo/version.js', 'demo/app.js', 'demo/js/**/*.js', 'demo/config.js'],
-                dest: 'docs/demo.js'
+                dest: 'dist/demo.js'
             },
             demoCss: {
                 src: ['demo/css/**/*.css'],
-                dest: 'docs/demo.css'
+                dest: 'dist/demo.css'
             },
 
             bi_polyfillJs: {
@@ -240,9 +240,9 @@ module.exports = function (grunt) {
             },
             dist: {
                 files: {
-                    'docs/core.min.js': ['<%= concat.coreJs.dest %>'],
-                    'docs/base.min.js': ['<%= concat.baseJs.dest %>'],
-                    'docs/case.min.js': ['<%= concat.caseJs.dest %>']
+                    'dist/core.min.js': ['<%= concat.coreJs.dest %>'],
+                    'dist/base.min.js': ['<%= concat.baseJs.dest %>'],
+                    'dist/case.min.js': ['<%= concat.caseJs.dest %>']
                 }
             }
         },
@@ -253,14 +253,14 @@ module.exports = function (grunt) {
 
                 src: '<%= concat.coreCss.dest %>',
 
-                dest: 'docs/core.min.css'
+                dest: 'dist/core.min.css'
 
             },
             baseCss: {
 
                 src: '<%= concat.baseCss.dest %>',
 
-                dest: 'docs/base.min.css'
+                dest: 'dist/base.min.css'
 
             }
 

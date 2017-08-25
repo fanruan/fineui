@@ -1,55 +1,55 @@
 .base-line-conn-background {
-  background: url('icon/tree-vertical-line-1.png') repeat-y 0 0;
-  _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='icon/tree-vertical-line-1.png');
+  background: url('images/1x/icon/tree-vertical-line-1.png') repeat-y 0 0;
+  _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='images/1x/icon/tree-vertical-line-1.png');
   _background: none;
 }
 .bi-theme-dark .base-line-conn-background {
-  background: url('icon/dark/tree-vertical-line-1.png') repeat-y 0 0;
-  _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='icon/dark/tree-vertical-line-1.png');
+  background: url('images/1x/icon/dark/tree-vertical-line-1.png') repeat-y 0 0;
+  _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='images/1x/icon/dark/tree-vertical-line-1.png');
   _background: none;
 }
 .first-line-conn-background {
-  background: url('icon/tree-vertical-line-2.png') no-repeat center center;
-  _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='icon/tree-vertical-line-2.png');
+  background: url('images/1x/icon/tree-vertical-line-2.png') no-repeat center center;
+  _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='images/1x/icon/tree-vertical-line-2.png');
   _background: none;
 }
 .bi-theme-dark .first-line-conn-background {
-  background: url('icon/dark/tree-vertical-line-2.png') no-repeat center center;
-  _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='icon/dark/tree-vertical-line-2.png');
+  background: url('images/1x/icon/dark/tree-vertical-line-2.png') no-repeat center center;
+  _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='images/1x/icon/dark/tree-vertical-line-2.png');
   _background: none;
 }
 .mid-line-conn-background {
-  background: url('icon/tree-vertical-line-3.png') no-repeat center center;
-  _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='icon/tree-vertical-line-3.png');
+  background: url('images/1x/icon/tree-vertical-line-3.png') no-repeat center center;
+  _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='images/1x/icon/tree-vertical-line-3.png');
   _background: none;
 }
 .bi-theme-dark .mid-line-conn-background {
-  background: url('icon/dark/tree-vertical-line-3.png') no-repeat center center;
-  _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='icon/dark/tree-vertical-line-3.png');
+  background: url('images/1x/icon/dark/tree-vertical-line-3.png') no-repeat center center;
+  _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='images/1x/icon/dark/tree-vertical-line-3.png');
   _background: none;
 }
 .last-line-conn-background {
-  background: url('icon/tree-vertical-line-4.png') no-repeat center center;
-  _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='icon/tree-vertical-line-4.png');
+  background: url('images/1x/icon/tree-vertical-line-4.png') no-repeat center center;
+  _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='images/1x/icon/tree-vertical-line-4.png');
   _background: none;
 }
 .bi-theme-dark .last-line-conn-background {
-  background: url('icon/dark/tree-vertical-line-4.png') no-repeat center center;
-  _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='icon/dark/tree-vertical-line-4.png');
+  background: url('images/1x/icon/dark/tree-vertical-line-4.png') no-repeat center center;
+  _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='images/1x/icon/dark/tree-vertical-line-4.png');
   _background: none;
 }
 .loading-background {
-  background: url('icon/loading.gif') no-repeat center center;
-  _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='icon/loading.gif');
+  background: url('images/1x/icon/loading.gif') no-repeat center center;
+  _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='images/1x/icon/loading.gif');
   _background: none;
 }
 .auto-color-background {
-  background: url('background/auto-color.png') no-repeat center center;
-  _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='background/auto-color.png');
+  background: url('images/1x/background/auto-color.png') no-repeat center center;
+  _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='images/1x/background/auto-color.png');
   _background: none;
 }
 .trans-color-background {
-  background: url('background/trans-color.png') no-repeat center center;
-  _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='background/trans-color.png');
+  background: url('images/1x/background/trans-color.png') no-repeat center center;
+  _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='images/1x/background/trans-color.png');
   _background: none;
 }
