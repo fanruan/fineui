@@ -234,36 +234,26 @@ module.exports = function (grunt) {
             }
         },
 
-        uglify: {
+        jsmin: {
             options: {
                 banner: '/*! <%= pkg.name %> <%= grunt.template.today("dd-mm-yyyy") %> */\n'
             },
             dist: {
                 files: {
-                    'dist/core.min.js': ['<%= concat.coreJs.dest %>'],
-                    'dist/base.min.js': ['<%= concat.baseJs.dest %>'],
-                    'dist/case.min.js': ['<%= concat.caseJs.dest %>']
+                    'dist/bundle.min.js': ['<%= concat.bundleJs.dest %>'],
                 }
             }
         },
 
         cssmin: {
 
-            coreCss: {
+            bundleCss: {
 
-                src: '<%= concat.coreCss.dest %>',
+                src: '<%= concat.bundleCss.dest %>',
 
-                dest: 'dist/core.min.css'
+                dest: 'dist/bundle.min.css'
 
             },
-            baseCss: {
-
-                src: '<%= concat.baseCss.dest %>',
-
-                dest: 'dist/base.min.css'
-
-            }
-
         },
 
         jshint: {
@@ -297,4 +287,5 @@ module.exports = function (grunt) {
     grunt.loadNpmTasks('grunt-contrib-cssmin');
 
     grunt.registerTask('default', ['less', 'concat', 'watch']);
+    grunt.registerTask('uglify', ['less', 'concat', 'jsmin', 'cssmin']);
 };
