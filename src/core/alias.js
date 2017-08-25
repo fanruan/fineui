@@ -75,6 +75,11 @@
             } else {
                 return _numberFormat((-text) + "", format.substr(numMod + 1));
             }
+        } else {
+            //兼容格式处理负数的情况(copy:fr-jquery.format.js)
+            if (+text < 0 && format.charAt(0) !== '-') {
+                return _numberFormat((-text) + "", '-' + format);
+            }
         }
         var tp = text.split('.'), fp = format.split('.'),
             tleft = tp[0] || '', fleft = fp[0] || '',
