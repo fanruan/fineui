@@ -8,7 +8,6 @@ For more details, see the website [http://www.fanruan.com](http://www.fanruan.co
 Documentation
 =============
 ## Demo
-在线示例
 
 GithubPages: [https://fanruan.github.io/fineui](https://fanruan.github.io/fineui)
 
