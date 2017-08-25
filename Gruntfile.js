@@ -98,6 +98,16 @@ module.exports = function (grunt) {
                 dest: 'docs/resource.css'
             },
 
+            bundleJs:{
+                src: ['docs/core.js','docs/base.js','docs/case.js','docs/widget.js'],
+                dest: 'docs/bundle.js'
+            },
+
+            bundleCss:{
+                src: ['docs/core.css','docs/base.css','docs/widget.css'],
+                dest: 'docs/bundle.css'
+            },
+
             demoJs: {
                 src: ['demo/version.js', 'demo/app.js', 'demo/js/**/*.js', 'demo/config.js'],
                 dest: 'docs/demo.js'

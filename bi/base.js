@@ -478,6 +478,7 @@ BI.Text = BI.inherit(BI.Single, {
             textAlign: "left",
             whiteSpace: "normal",
             lineHeight: null,
+            handler: null,//如果传入handler,表示处理文字的点击事件，不是区域的
             hgap: 0,
             vgap: 0,
             lgap: 0,
@@ -491,39 +492,25 @@ BI.Text = BI.inherit(BI.Single, {
 
     _init: function () {
         BI.Text.superclass._init.apply(this, arguments);
-        var o = this.options;
-        this.text = BI.createWidget({
-            type: "bi.layout",
-            cls: "bi-text"
-        });
-        BI.createWidget({
-            type: "bi.default",
-            element: this,
-            items: [this.text]
-        });
-        if (BI.isKey(o.text)) {
-            this.setText(o.text);
-        } else if (BI.isKey(o.value)) {
-            this.setText(o.value);
-        }
+        var self = this, o = this.options;
         if (o.hgap + o.lgap > 0) {
-            this.text.element.css({
-                "margin-left": o.hgap + o.lgap + "px"
+            this.element.css({
+                "padding-left": o.hgap + o.lgap + "px"
             })
         }
         if (o.hgap + o.rgap > 0) {
-            this.text.element.css({
-                "margin-right": o.hgap + o.rgap + "px"
+            this.element.css({
+                "padding-right": o.hgap + o.rgap + "px"
             })
         }
         if (o.vgap + o.tgap > 0) {
-            this.text.element.css({
-                "margin-top": o.vgap + o.tgap + "px"
+            this.element.css({
+                "padding-top": o.vgap + o.tgap + "px"
             })
         }
         if (o.vgap + o.bgap > 0) {
-            this.text.element.css({
-                "margin-bottom": o.vgap + o.bgap + "px"
+            this.element.css({
+                "padding-bottom": o.vgap + o.bgap + "px"
             })
         }
         if (BI.isNumber(o.height)) {
@@ -532,14 +519,31 @@ BI.Text = BI.inherit(BI.Single, {
         if (BI.isNumber(o.lineHeight)) {
             this.element.css({"lineHeight": o.lineHeight + "px"});
         }
-        this.text.element.css({
-            "textAlign": o.textAlign,
-            "whiteSpace": o.whiteSpace
-        });
         this.element.css({
             "textAlign": o.textAlign,
             "whiteSpace": o.whiteSpace
         });
+        if (o.handler) {
+            this.text = BI.createWidget({
+                type: "bi.layout",
+                tagName: 'span'
+            });
+            this.text.element.click(function () {
+                o.handler(self.getValue());
+            });
+            BI.createWidget({
+                type: "bi.default",
+                element: this,
+                items: [this.text]
+            });
+        } else {
+            this.text = this;
+        }
+        if (BI.isKey(o.text)) {
+            this.setText(o.text);
+        } else if (BI.isKey(o.value)) {
+            this.setText(o.value);
+        }
         if (BI.isKey(o.keyword)) {
             this.text.element.__textKeywordMarked__(o.text, o.keyword, o.py);
         }
@@ -803,6 +807,9 @@ BI.BasicButton = BI.inherit(BI.Single, {
 
     _trigger: function () {
         var o = this.options;
+        if(!this.isEnabled()){
+            return;
+        }
         if (!this.isDisableSelected()) {
             this.isForceSelected() ? this.setSelected(true) :
                 (this.isForceNotSelected() ? this.setSelected(false) :
@@ -1516,7 +1523,6 @@ BI.TreeView = BI.inherit(BI.Pane, {
     _init: function () {
         BI.TreeView.superclass._init.apply(this, arguments);
         this._stop = false;
-        this.container = BI.createWidget();
 
         this._createTree();
         this.tip = BI.createWidget({
@@ -1529,7 +1535,7 @@ BI.TreeView = BI.inherit(BI.Pane, {
             scrollable: true,
             scrolly: false,
             element: this,
-            items: [this.container, this.tip]
+            items: [this.tip]
         });
 
     },
@@ -1548,7 +1554,7 @@ BI.TreeView = BI.inherit(BI.Pane, {
         });
         BI.createWidget({
             type: "bi.default",
-            element: this.container,
+            element: this.element,
             items: [this.tree]
         });
     },
@@ -1943,6 +1949,7 @@ BI.TreeView = BI.inherit(BI.Pane, {
                 setNode(child.children);
             });
         }
+
         BI.each(this.nodes.getNodes(), function (i, node) {
             node.halfCheck = false;
             setNode(node.children);
@@ -16341,9 +16348,9 @@ BI.shortcut("bi.image_button", BI.ImageButton);(function ($) {
             BI.Button.superclass._init.apply(this, arguments);
             var o = this.options, self = this;
             if (BI.isNumber(o.height) && !o.clear && !o.block) {
-                this.element.css({height: o.height - 2, lineHeight: (o.height - 2) + 'px'});
+                this.element.css({height: o.height + "px", lineHeight: o.height + "px"});
             } else {
-                this.element.css({lineHeight: o.height + 'px'});
+                this.element.css({lineHeight: o.height + "px"});
             }
             if (BI.isKey(o.iconClass)) {
                 this.icon = BI.createWidget({
@@ -16396,8 +16403,8 @@ BI.shortcut("bi.image_button", BI.ImageButton);(function ($) {
             if (o.clear === true) {
                 this.element.addClass("clear");
             }
-            if (o.minWidth > 2) {
-                this.element.css({"min-width": o.minWidth - 2 + "px"});
+            if (o.minWidth > 0) {
+                this.element.css({"min-width": o.minWidth + "px"});
             }
         },
 

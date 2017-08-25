@@ -1,14 +1,10 @@
 (function () {
-
-    var kv = {}; // alex:键(编辑器简称,如text)值(也是一个字符串,如FR.TextEditor)对
+    var kv = {};
     BI.shortcut = function (xtype, cls) {
         if (kv[xtype] != null) {
             throw ("shortcut:[" + xtype + "] has been registed");
         }
         kv[xtype] = cls;
-        _.extend(cls.prototype, {
-            xtype: xtype
-        })
     };
 
     // 根据配置属性生成widget
@@ -17,9 +13,6 @@
             return new (new Function('return ' + config['classType'] + ';')())(config);
         }
 
-        if (!config.type) {
-
-        }
         var xtype = config.type.toLowerCase();
         var cls = kv[xtype];
         return new cls(config);
