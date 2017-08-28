@@ -6,7 +6,8 @@
   "scripts": {
     "init": "gitbook init",
     "serve": "gitbook serve",
-    "build": "gitbook build"
+    "build": "gitbook build",
+    "gh": "gitbook build && node gh"
   },
   "repository": {
     "type": "git",
@@ -19,8 +20,11 @@
   },
   "homepage": "https://github.com/gittz/FineUIdocs#readme",
   "devDependencies": {
+    "gh-pages": "^1.0.0",
     "gitbook-cli": "^2.3.2",
     "gitbook-plugin-jsfiddle": "^1.0.0",
-    "gitbook-plugin-splitter": "0.0.8"
+    "gitbook-plugin-splitter": "0.0.8",
+    "gitbook-plugin-theme-api": "^1.1.2",
+    "gitbook-plugin-toggle-chapters": "0.0.3"
   }
 }
