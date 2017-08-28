@@ -7,7 +7,7 @@ Demo.StaticCombo = BI.inherit(BI.Widget, {
     },
 
 
-    beforeMounted: function () {
+    beforeMount: function () {
         this.refs.setValue(2);
     },
 
