@@ -1,0 +1,23 @@
+{
+    "plugins": [
+        "jsfiddle",
+        "splitter",
+        "theme-api"
+    ],
+    "pluginsConfig": {
+        "theme-default": {
+            "showLevel": true
+        },
+        "jsfiddle": {
+            "type": "script",
+            "tabs": [
+                "result",
+                "js",
+                "html"
+            ],
+            "height": "100",
+            "width": "500",
+            "fontColor": "00FF00"
+        }
+    }
+}
