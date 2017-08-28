@@ -9,7 +9,7 @@ Demo.AdaptEditor = BI.inherit(BI.Widget, {
 
 
     //这东西好奇怪,不支持设置宽度,那么渲染出来宽度几乎没有,无奈之下只能假装给他个默认值了
-    beforeMounted: function () {
+    beforeMount: function () {
         this.refs.setValue("Winter is coming !")
     },
 

@@ -14363,14 +14363,14 @@ BI.Widget = BI.inherit(BI.OB, {
 
     render: null,
 
-    beforeMounted: null,
+    beforeMount: null,
 
     mounted: null,
 
     update: function () {
     },
 
-    beforeDestroyed: null,
+    beforeDestroy: null,
 
     destroyed: null,
 
@@ -14498,7 +14498,7 @@ BI.Widget = BI.inherit(BI.OB, {
         if (!isMounted) {
             return;
         }
-        this.beforeMounted && this.beforeMounted();
+        this.beforeMount && this.beforeMount();
         this._isMounted = true;
         this._mountChildren && this._mountChildren();
         BI.each(this._children, function (i, widget) {
@@ -14738,7 +14738,7 @@ BI.Widget = BI.inherit(BI.OB, {
     },
 
     __d: function () {
-        this.beforeDestroyed && this.beforeDestroyed();
+        this.beforeDestroy && this.beforeDestroy();
         BI.each(this._children, function (i, widget) {
             widget._unMount && widget._unMount();
         });
@@ -15310,7 +15310,7 @@ BI.View = BI.inherit(BI.V, {
 
     created: null,
 
-    beforeDestroyed: null,
+    beforeDestroy: null,
 
     destroyed: null,
 
@@ -15801,7 +15801,7 @@ BI.View = BI.inherit(BI.V, {
     },
 
     _unMount: function () {
-        this.beforeDestroyed && this.beforeDestroyed();
+        this.beforeDestroy && this.beforeDestroy();
         BI.each(this._cardLayouts, function (name, card) {
             card && card._unMount();
         });

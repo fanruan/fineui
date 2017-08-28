@@ -10,7 +10,7 @@ BI.View = BI.inherit(BI.V, {
 
     created: null,
 
-    beforeDestroyed: null,
+    beforeDestroy: null,
 
     destroyed: null,
 
@@ -501,7 +501,7 @@ BI.View = BI.inherit(BI.V, {
     },
 
     _unMount: function () {
-        this.beforeDestroyed && this.beforeDestroyed();
+        this.beforeDestroy && this.beforeDestroy();
         BI.each(this._cardLayouts, function (name, card) {
             card && card._unMount();
         });
