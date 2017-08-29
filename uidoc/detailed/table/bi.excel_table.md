@@ -12,7 +12,6 @@ for (var i = 0; i < 8; i++) {
 	for (var j = 0; j < 6; j++) {
   	var obj = {
     	type: "bi.label",
-      cls: "layout-bg1",
       text: "第" + (i+1) + "行第" + (j+1) + "列"
     };
     temp.push(obj);
