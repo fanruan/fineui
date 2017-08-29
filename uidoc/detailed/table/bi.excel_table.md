@@ -5,26 +5,30 @@
 
 {% common %}
 ```javascript
-var items = [];
-
-for (var i = 0; i < 8; i++) {
-	var temp = [];
-	for (var j = 0; j < 6; j++) {
-  	var obj = {
-    	type: "bi.label",
-      text: "第" + (i+1) + "行第" + (j+1) + "列"
-    };
-    temp.push(obj);
-  }
-  items.push(temp);
-}
-
 BI.createWidget({
   type: "bi.excel_table",
-  element: "#wrapper",
-  width: 500,
-  columnSize: [200,200,200,200,200],
-  items: items,
+  element: "body",
+  columnSize: [200,200],
+  items: [
+    [{
+      type: "bi.label",
+      cls: "layout-bg1",
+      text: "第一行第一列"
+    }, {
+      type: "bi.label",
+      cls: "layout-bg2",
+      text: "第一行第二列"
+    }],
+    [{
+      type: "bi.label",
+      cls: "layout-bg3",
+      text: "第二行第一列"
+    }, {
+      type: "bi.label",
+      cls: "layout-bg4",
+      text: "第二行第二列"
+    }]
+  ] 
 });
 ```
 
