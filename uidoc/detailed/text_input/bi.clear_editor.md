@@ -38,5 +38,5 @@ BI.createWidget({
 | width    |   文本框宽度    |    number   |   |     |
 | height    |   文本框高度    |    number   |  |  30    |
 
-#
+--- ---
 

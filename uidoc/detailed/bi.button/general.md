@@ -1,2 +1,167 @@
-# 通用按钮
+# bi.button
+
+##通用按钮
+
+{% method %}
+[source](https://jsfiddle.net/fineui/txqwwzLm/)
+
+{% common %}
+```javascript
+Demo = {};
+Demo.Buttons = BI.inherit(BI.Widget, {
+    props: {
+        baseCls: "demo-button"
+    },
+    render: function () {
+        var items = [{
+                el: {
+                    type: 'bi.button',
+                    text: '一般按钮',
+                    level: 'common',
+                    height: 30
+                }
+            },
+             {
+                el: {
+                    type: 'bi.button',
+                    text: '普通灰化按钮',
+                    disabled: true,
+                    level: 'success',
+                    height: 30
+                }
+            },  {
+                el: {
+                    type: 'bi.button',
+                    text: '带图标的按钮',
+                    //level: 'ignore',
+                    iconClass: "close-font",
+                    height: 30
+                }
+            }, {
+                el: {
+                    type: 'bi.button',
+                    text: '一般按钮',
+                    block: true,
+                    level: 'common',
+                    height: 30
+                }
+            }, 
+           {
+                el: {
+                    type: 'bi.button',
+                    text: '普通灰化按钮',
+                    block: true,
+                    disabled: true,
+                    level: 'success',
+                    height: 30
+                }
+            },  {
+                el: {
+                    type: 'bi.button',
+                    text: '带图标的按钮',
+                    block: true,
+                    //level: 'ignore',
+                    iconClass: "close-font",
+                    height: 30
+                }
+            }, {
+                el: {
+                    type: 'bi.button',
+                    text: '一般按钮',
+                    clear: true,
+                    level: 'common',
+                    height: 30
+                }
+            }, 
+           {
+                el: {
+                    type: 'bi.button',
+                    text: '普通灰化按钮',
+                    clear: true,
+                    disabled: true,
+                    level: 'success',
+                    height: 30
+                }
+            },  {
+                el: {
+                    type: 'bi.button',
+                    text: '带图标的按钮',
+                    clear: true,
+                    //level: 'ignore',
+                    iconClass: "close-font",
+                    height: 30
+                }
+            }, {
+                el: {
+                    type: 'bi.text_button',
+                    text: '文字按钮',
+                    height: 30
+                }
+            }
+        ];
+        BI.each(items, function (i, item) {
+            item.el.handler = function () {
+                BI.Msg.alert('按钮', this.options.text);
+            }
+        });
+        return {
+            type: "bi.left",
+            vgap: 100,
+            hgap: 20,
+            items: items
+        }
+    }
+});
+BI.shortcut("demo.buttons", Demo.Buttons);
+BI.createWidget({
+  type: 'demo.buttons',
+  element: "#wrapper",
+  text: '一般按钮',
+  level: 'common',
+  height: 30
+});
+
+
+```
+
+{% endmethod %}
+
+## API
+##### 基础属性
+| 参数    | 说明           | 类型  | 可选值 | 默认值
+| :------ |:-------------  | :-----| :----|:----
+| hgap    | 效果相当于文本框左右padding值，如果clear属性为true,该属性值置0 |  number  |     |     10   |
+| vgap    | 效果相当于文本框上下padding值 |  number  |  |      0  |
+| lgap    | 效果相当于文本框left-padding值     |    number   |        |  0    |
+| rgap    | 效果相当于文本框right-padding值     |    number  |       |  0    |
+| tgap    |效果相当于文本框top-padding值     |    number   |  |  0    |
+| bgap    |  效果相当于文本框bottom-padding值     |    number  |   |  0    |
+| items | 子控件数组     |    array |  |  |
+| width    |   宽度    |    number   |   |     |
+| height    |   高度    |    number   |  |      |
+
+
+##### 高级属性
+| 参数    | 说明           | 类型  | 可选值 | 默认值
+| :------ |:-------------  | :-----| :----|:----
+| level |按钮类型     |    string| common,success,warning,ignore |  common |
+| text|按钮文本内容     |    string|  |  |
+| disabled|灰化     |    boolean| true,false |  |
+| minWidth    | 最小宽度，如果block/clear中某一项为true，此项值为0，否则为90 |  number  |     |     90   |
+| shadow    | |  boolean| true,false |      |
+| isShadowShowingOnSelected| |  boolean| true,false |      true  |
+| readonly    | 是否只读     |    boolean   |   true,false     |  true   |
+| iconClass    | 图标类型     |    string|       | " "|
+| block|  是否块状显示，即不显示边框，没有最小宽度的限制    |    boolean| true,false  |  false    |
+| clear| 是否去掉边框和背景      |boolean| true,false   |  false    |
+| textAlign | 文字布局      |   string    | left,center,right |   cneter    |
+| whiteSpace | 元素内的空白处理方式  |    string | normal,pre,nowrap,pre-wrap,pre-line,inherit  |  nowrap| 
+| forceCenter |       |    boolean    | true,false |  false    |
+| textWidth| 按钮文本宽度  |   number|   |  null    |
+| textHeight    |   按钮文本高度    |    number|    | null |
+
+
+
+---
+
 
