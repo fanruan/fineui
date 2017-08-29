@@ -1,5 +1,7 @@
 # bi.excel_table
 
+### 类似excel式的表格
+
 {% method %}
 [source](https://jsfiddle.net/fineui/cbmv07g4/)
 
@@ -34,6 +36,7 @@ BI.createWidget({
 
 {% endmethod %}
 
+## 参数设置
 | 参数               | 说明            | 类型                   | 默认值               |
 | ---------------- | ------------- | -------------------- | ----------------- |
 | isNeedResize     | 是否需要调整大小      | bool                 | false             |
@@ -48,7 +51,8 @@ BI.createWidget({
 | regionColumnSize |               | bool                 | false             |
 | items            | 子组件           | array                | []                |
 
-
+## 方法
+### 参见[Table](#)方法
 
 
 
