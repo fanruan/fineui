@@ -127,7 +127,7 @@ BI.createWidget({
 | width    |   宽度    |    number   |   |     |
 | height    |   高度    |    number   |  |      |
 
-
+------
 --- ---
 
 
