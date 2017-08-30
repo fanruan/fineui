@@ -1,39 +1,30 @@
-
 # bi.float_center
 
 #### 浮动布局实现的居中容器
 
 {% method %}
-[source](https://jsfiddle.net/fineui/8fd2nvkm/)
+[source](https://jsfiddle.net/fineui/1vgn555m/)
 
 {% common %}
 ```javascript
 Demo = {};
-Demo.CenterLayout = BI.inherit(BI.Widget, {
+Demo.FloatCenterLayout = BI.inherit(BI.Widget, {
     props: {
-        baseCls: "demo-center"
+        baseCls: "demo-float-center"
     },
     render: function () {
         return {
-            type: "bi.center",
+            type: "bi.float_center",
             items: [{
                 type: "bi.label",
-                text: "Center 1，这里虽然设置label的高度30，但是最终影响高度的是center布局",
+                text: "floatCenter与center的不同在于，它可以控制最小宽度和最大宽度",
                 cls: "layout-bg1",
                 whiteSpace: "normal"
-            },{
+            }, {
                 type: "bi.label",
-                text: "Center 2，为了演示label是占满整个的，用了一个whiteSpace:normal",
+                text: "floatCenter与center的不同在于，它可以控制最小宽度和最大宽度",
                 cls: "layout-bg2",
                 whiteSpace: "normal"
-            },{
-                type: "bi.label",
-                text: "Center 3",
-                cls: "layout-bg3"
-            },{
-                type: "bi.label",
-                text: "Center 4",
-                cls: "layout-bg5"
             }],
             height: 300,
             hgap: 20,
@@ -41,9 +32,9 @@ Demo.CenterLayout = BI.inherit(BI.Widget, {
         }
     }
 });
-BI.shortcut("demo.center_layout", Demo.CenterLayout);
+BI.shortcut("demo.float_center", Demo.FloatCenterLayout);
 BI.createWidget({
-  type: 'demo.center_layout',
+  type: 'demo.float_center',
   element: "#wrapper",
 });
 
@@ -63,6 +54,6 @@ BI.createWidget({
 | rgap    | 效果相当于容器right-padding值  |    number  |  |  0  |
 | tgap    | 效果相当于容器top-padding值    |    number  |  |  0  |
 | bgap    | 效果相当于容器bottom-padding值 |    number  |  |  0  |
-| items | 子控件数组     |    array |  |  | 
+| items | 子控件数组     |    array |  |  |
 
 ---
