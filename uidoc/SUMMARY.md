@@ -66,10 +66,6 @@
     * [multifile_editor](base/editor/multifile_editor.md)
     * [textarea_editor](base/editor/textarea_editor.md)
     * [formula_editor](base/editor/formula_editor.md)
-* 树
-    * [tree_view](base/tree/tree_view.md)
-    * [async_tree](base/tree/async_tree.md)
-    * [part_tree](base/tree/part_tree.md)
 * 表格
     * [table_view](base/table/table_view.md)
     * [grid_table](base/table/grid_table.md)

@@ -20,5 +20,8 @@ BI.i18n = {
     "BI-Quarter_1": "第1季度",
     "BI-Quarter_2": "第2季度",
     "BI-Quarter_3": "第3季度",
-    "BI-Quarter_4": "第4季度"
+    "BI-Quarter_4": "第4季度",
+    "BI-Basic_Value": "值",
+    "BI-Load_More": "加载更多",
+    "BI-Select_All": "全选"
 };
