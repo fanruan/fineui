@@ -174,6 +174,3 @@
 * [dialog](detailed/dialog.md)
 * [file_manager](detailed/file_manager.md)
 
-
-
-
