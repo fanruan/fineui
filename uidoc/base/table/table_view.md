@@ -26,15 +26,16 @@ BI.createWidget({
 | 参数               | 说明            | 类型                   | 默认值               |
 | ---------------- | ------------- | -------------------- | ----------------- |
 | isNeedResize     | 是否需要调整大小      | bool                 | false             |
-| isResizeAdapt    | 是否调整时自适应      | bool                 | true              |
 | isNeedMerge      | 是否需要合并单元格     | bool                 | false             |
 | mergeCols        | 合并的单元格列号      | array                | []                |
 | mergeRule        | 合并规则, 默认相等时合并 | function(row1, row2) | 默认row1 = row2 时合并 |
 | columnSize       | 单元格宽度集合       | array                | []                |
-| headerRowSize    | 表头高度          | number               | 37                |
-| footerRowSize    | 表尾高度          | number               | 37                |
-| rowSize          | 普通单元格高度       | number               | 37                |
-| regionColumnSize | 列项间的          | array                | [82, ""]          |
+| headerRowSize    | 表头高度          | number               | 25                |
+| footerRowSize    | 表尾高度          | number               | 25                |
+| rowSize          | 普通单元格高度       | number               | 25                |
+| regionColumnSize | 列项间的          | array                | false             |
+| header           | 表头            | array                | []                |
+| footer           | 表尾            | array                | false             |
 | items            | 子组件           | array                | []                |
 
 ## 方法
@@ -60,7 +61,4 @@ BI.createWidget({
 | getLeftHorizontalScroll      | 获取左到右横向滚动距离      | getLeftHorizontalScroll()            |
 | getRightHorizontalScroll     | 获取右往左横向滚动距离      | getRightHorizontalScroll()           |
 | getColumns                   | 获取列项             | getColumns()                         |
-| resizeHeader                 | 调整表头             | resizeHeader()                       |
-| attr                         | 设置属性             | attr(key, value)                     |
 | populate                     | 增加行              | populate(rows)                       |
-| destroy                      | 摧毁表              | destroy()                            |
