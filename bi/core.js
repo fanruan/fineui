@@ -17474,7 +17474,7 @@ Data.Constant = BI.Constant = BICst = {};
             var args = Array.prototype.slice.call(arguments, 0),
                 copy = _Shared;
             for (var i = 0; i < args.length; i++) {
-                copy = copy[args[i]];
+                copy = copy && copy[args[i]];
             }
             return copy;
         },
