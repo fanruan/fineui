@@ -7,7 +7,7 @@
     ],
     "pluginsConfig": {
         "theme-default": {
-            "showLevel": true
+            "showLevel": false
         },
         "jsfiddle": {
             "type": "script",
