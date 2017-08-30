@@ -8,51 +8,40 @@
 
 {% common %}
 ```javascript
-Demo = {};
-Demo.LeftRightVerticalAdaptLayout = BI.inherit(BI.Widget, {
-    props: {
-        baseCls: "demo-left-right-vertical-adapt"
-    },
-    render: function () {
-        return {
-            type: "bi.left_right_vertical_adapt",
-            lhgap: 10,
-            rhgap: 10,
-            items: {
-                left: [{
-                    type: "bi.label",
-                    text: "左边的垂直居中",
-                    cls: "layout-bg1",
-                    width: 100,
-                    height: 30
-                }, {
-                    type: "bi.label",
-                    text: "左边的垂直居中",
-                    cls: "layout-bg2",
-                    width: 100,
-                    height: 30
-                }],
-                right: [{
-                    type: "bi.label",
-                    text: "右边的垂直居中",
-                    cls: "layout-bg1",
-                    width: 100,
-                    height: 30
-                }, {
-                    type: "bi.label",
-                    text: "右边的垂直居中",
-                    cls: "layout-bg2",
-                    width: 100,
-                    height: 30
-                }]
-            }
-        }
-    }
-});
-BI.shortcut("demo.left_right_vertical_adapt", Demo.LeftRightVerticalAdaptLayout);
+
 BI.createWidget({
-  type: 'demo.left_right_vertical_adapt',
-  element: "#wrapper",
+    type: 'demo.left_right_vertical_adapt',
+    element: "#wrapper",
+    lhgap: 10,
+    rhgap: 10,
+    items: {
+        left: [{
+            type: "bi.label",
+            text: "左边的垂直居中",
+            cls: "layout-bg1",
+            width: 100,
+            height: 30
+        }, {
+            type: "bi.label",
+            text: "左边的垂直居中",
+            cls: "layout-bg2",
+            width: 100,
+            height: 30
+        }],
+        right: [{
+            type: "bi.label",
+            text: "右边的垂直居中",
+            cls: "layout-bg1",
+            width: 100,
+            height: 30
+        }, {
+            type: "bi.label",
+            text: "右边的垂直居中",
+            cls: "layout-bg2",
+            width: 100,
+            height: 30
+        }]
+    }
 });
 
 
