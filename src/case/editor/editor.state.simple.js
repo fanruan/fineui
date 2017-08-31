@@ -40,7 +40,6 @@ BI.SimpleStateEditor = BI.inherit(BI.Widget, {
             value: o.value,
             validationChecker: o.validationChecker,
             quitChecker: o.quitChecker,
-            mouseOut: o.mouseOut,
             allowBlank: o.allowBlank,
             watermark: o.watermark,
             errorText: o.errorText

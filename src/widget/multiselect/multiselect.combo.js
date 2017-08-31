@@ -356,7 +356,7 @@ BI.MultiSelectCombo = BI.inherit(BI.Single, {
     },
 
     getValue: function () {
-        return this.storeValue;
+        return BI.deepClone(this.storeValue);
     },
 
     populate: function () {
