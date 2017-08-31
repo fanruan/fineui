@@ -7,112 +7,7 @@
 
 {% common %}
 ```javascript
-Demo = {};
-Demo.Buttons = BI.inherit(BI.Widget, {
-    props: {
-        baseCls: "demo-button"
-    },
-    render: function () {
-        var items = [{
-                el: {
-                    type: 'bi.button',
-                    text: '一般按钮',
-                    level: 'common',
-                    height: 30
-                }
-            },
-             {
-                el: {
-                    type: 'bi.button',
-                    text: '普通灰化按钮',
-                    disabled: true,
-                    level: 'success',
-                    height: 30
-                }
-            },  {
-                el: {
-                    type: 'bi.button',
-                    text: '带图标的按钮',
-                    //level: 'ignore',
-                    iconClass: "close-font",
-                    height: 30
-                }
-            }, {
-                el: {
-                    type: 'bi.button',
-                    text: '一般按钮',
-                    block: true,
-                    level: 'common',
-                    height: 30
-                }
-            }, 
-           {
-                el: {
-                    type: 'bi.button',
-                    text: '普通灰化按钮',
-                    block: true,
-                    disabled: true,
-                    level: 'success',
-                    height: 30
-                }
-            },  {
-                el: {
-                    type: 'bi.button',
-                    text: '带图标的按钮',
-                    block: true,
-                    //level: 'ignore',
-                    iconClass: "close-font",
-                    height: 30
-                }
-            }, {
-                el: {
-                    type: 'bi.button',
-                    text: '一般按钮',
-                    clear: true,
-                    level: 'common',
-                    height: 30
-                }
-            }, 
-           {
-                el: {
-                    type: 'bi.button',
-                    text: '普通灰化按钮',
-                    clear: true,
-                    disabled: true,
-                    level: 'success',
-                    height: 30
-                }
-            },  {
-                el: {
-                    type: 'bi.button',
-                    text: '带图标的按钮',
-                    clear: true,
-                    //level: 'ignore',
-                    iconClass: "close-font",
-                    height: 30
-                }
-            }, {
-                el: {
-                    type: 'bi.text_button',
-                    text: '文字按钮',
-                    height: 30
-                }
-            }
-        ];
-        BI.each(items, function (i, item) {
-            item.el.handler = function () {
-                BI.Msg.alert('按钮', this.options.text);
-            }
-        });
-        return {
-            type: "bi.left",
-            vgap: 100,
-            hgap: 20,
-            items: items
-        }
-    }
-});
-BI.shortcut("demo.buttons", Demo.Buttons);
+
 BI.createWidget({
   type: 'demo.buttons',
   element: "#wrapper",
@@ -155,8 +50,8 @@ BI.createWidget({
 | block|  是否块状显示，即不显示边框，没有最小宽度的限制    |    boolean| true,false  |  false    |
 | clear| 是否去掉边框和背景      |boolean| true,false   |  false    |
 | textAlign | 文字布局      |   string    | left,center,right |   cneter    |
-| whiteSpace | 元素内的空白处理方式  |    string | normal,pre,nowrap,pre-wrap,pre-line,inherit  |  nowrap| 
-| forceCenter |       |    boolean    | true,false |  false    |
+| whiteSpace | 元素内的空白处理方式  |    string | normal,nowrap  |  nowrap| 
+| forceCenter | 是否无论如何都要居中, 不考虑超出边界的情况, 在未知宽度和高度时有效      |    boolean    | true,false |  false    |
 | textWidth| 按钮文本宽度  |   number|   |  null    |
 | textHeight    |   按钮文本高度    |    number|    | null |
 

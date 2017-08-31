@@ -66,10 +66,6 @@
     * [multifile_editor](base/editor/multifile_editor.md)
     * [textarea_editor](base/editor/textarea_editor.md)
     * [formula_editor](base/editor/formula_editor.md)
-* 树
-    * [tree_view](base/tree/tree_view.md)
-    * [async_tree](base/tree/async_tree.md)
-    * [part_tree](base/tree/part_tree.md)
 * 表格
     * [table_view](base/table/table_view.md)
     * [grid_table](base/table/grid_table.md)
@@ -138,14 +134,39 @@
     * [各种节点nodes](detailed/bi.button/node.md)
     * [各种segment](detailed/bi.button/segment.md)
 * 树形结构
-    * [bi.multi_tree_combo](detailed/tree/bi.multi_tree_combo.md)
-    * [bi.switch_tree](detailed/tree/bi.switch_tree.md)
+    * [multi_tree_combo](detailed/tree/bi.multi_tree_combo.md)
+    * [switch_tree](detailed/tree/bi.switch_tree.md)
 * 表格
-    * [bi.preview_table](detailed/table/bi.preview_table.md)
-    * [bi.responsive_table](detailed/table/bi.responsive_table.md)
-    * [bi.excel_table](detailed/table/bi.excel_table.md)
+    * [preview_table](detailed/table/bi.preview_table.md)
+    * [responsive_table](detailed/table/bi.responsive_table.md)
+    * [excel_table](detailed/table/bi.excel_table.md)
+    * [page_table](detailed/table/bi.page_table.md)
 * 文本框控件
     * [bi.text_editor](detailed/text_input/bi.text_editor.md)
     * [bi.search_editor](detailed/text_input/bi.search_editor.md)
     * [bi.clear_editor](detailed/text_input/bi.clear_editor.md)
+    * [finetuning_number_editor](detailed/text_input/finetuning_number_editor.md)
+* [year_combo](detailed/year_combo.md)
+* [month_combo](detailed/month_combo.md)
+* [quarter_combo](detailed/quarter_combo.md)
+* [down_list_combo](detailed/down_list_combo.md)
+* [numeric_interval](detailed/numeric_interval.md)
+* [multi_select_combo](detailed/multi_select_combo.md)
+* 简单日期控件
+    * [date_combo](detailed/date/date_combo.md)
+    * [date_pane_widget](detailed/date/date_pane_widget.md)
+    * [year_month_combo](detailed/date/year_month_combo.md)
+    * [year_quarter_combo](detailed/date/year_quarter_combo.md)
+    * [custom_date_time](detailed/date/custom_date_time.md)
+* 简单下拉树
+    * [single_tree_combo](detailed/combo/single_tree_combo.md)
+    * [multilayer_single_tree_combo](detailed/combo/multilayer_single_tree_combo.md)
+    * [select_tree_combo](detailed/combo/select_tree_combo.md)
+    * [multilayer_select_tree_combo](detailed/combo/multilayer_select_tree_combo.md)
+* 路径选择
+    * [path_chooser](detailed/path/path_chooser.md)
+    * [direction_path_chooser](detailed/path/direction_path_chooser.md)
+* [relation_view](detailed/relation_view.md)
+* [dialog](detailed/dialog.md)
+* [file_manager](detailed/file_manager.md)
 

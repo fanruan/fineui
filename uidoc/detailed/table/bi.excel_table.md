@@ -1,6 +1,6 @@
 # bi.excel_table
 
-### 类似excel式的表格
+### 类似excel式的表格，继承BI.Widget
 
 {% method %}
 [source](https://jsfiddle.net/fineui/cbmv07g4/)
@@ -48,11 +48,36 @@ BI.createWidget({
 | headerRowSize    | 表头高度          | number               | 37                |
 | footerRowSize    | 表尾高度          | number               | 37                |
 | rowSize          | 普通单元格高度       | number               | 37                |
-| regionColumnSize |               | bool                 | false             |
+| regionColumnSize | 列项间的          | array                | [82, ""]          |
 | items            | 子组件           | array                | []                |
 
 ## 方法
-### 参见[Table](#)方法
+| 方法名                          | 说明               | 用法                                   |
+| ---------------------------- | ---------------- | ------------------------------------ |
+| resize                       | 调整表格             | resize()                             |
+| setColumnSize                | 设置列宽             | setColumnSize(columnSize)            |
+| getColumnSize                | 得到列宽             | getColumnSize()                      |
+| getCalculateColumnSize       | 获得计算后的列宽         | getCalculateColumnSize()             |
+| setHeaderColumnSize          | 设置表头的列宽          | setHeaderColumnSize(columnSize)      |
+| setRegionColumnSize          | 设置列项之间的间隙        | setRegionColumnSize(columnSize)      |
+| getRegionColumnSize          | 获得列项之间的间隙        | getRegionColumnSize()                |
+| getCalculateRegionColumnSize | 获取计算后的列项之间的间隙    | getCalculateRegionColumnSize()       |
+| getCalculateRegionRowSize    | 获取计算后的列项上下之间的间隙  | getCalculateRegionRowSize()          |
+| getClientRegionColumnSize    | 获取浏览器中显示的列项之间的间隙 | getClientRegionColumnSize()          |
+| getScrollRegionColumnSize    | 获取横向滚动条宽度        | getScrollRegionColumnSize()          |
+| getScrollRegionRowSize       | 获取纵向滚动条宽度        | getScrollRegionRowSize()             |
+| hasVerticalScroll            | 是否含有数值滚动条        | hasVerticalScroll()                  |
+| setVerticalScroll            | 设置纵向滚动距离         | setVerticalScroll(scrollTop)         |
+| setLeftHorizontalScroll      | 设置左到右横向滚动距离      | setLeftHorizontalScroll(scrollLeft)  |
+| setRightHorizontalScroll     | 设置右往左横向滚动距离      | setRightHorizontalScroll(scrollLeft) |
+| getVerticalScroll            | 获取纵向滚动距离         | getVerticalScroll()                  |
+| getLeftHorizontalScroll      | 获取左到右横向滚动距离      | getLeftHorizontalScroll()            |
+| getRightHorizontalScroll     | 获取右往左横向滚动距离      | getRightHorizontalScroll()           |
+| getColumns                   | 获取列项             | getColumns()                         |
+| resizeHeader                 | 调整表头             | resizeHeader()                       |
+| attr                         | 设置属性             | attr(key, value)                     |
+| populate                     | 增加行              | populate(rows)                       |
+| destroy                      | 摧毁表              | destroy()                            |
 
 
 

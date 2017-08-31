@@ -142,7 +142,9 @@ BI.TextAreaEditor = BI.inherit(BI.Single, {
     setStyle: function (style) {
         this.style = style;
         this.element.css(style);
-        this.content.element.css(style)
+        this.content.element.css(BI.extend({}, style, {
+            color: style.color || BI.DOM.getContrastColor(BI.DOM.isRGBColor(style.backgroundColor) ? BI.DOM.rgb2hex(style.backgroundColor) : style.backgroundColor)
+        }))
     },
 
     getStyle: function () {

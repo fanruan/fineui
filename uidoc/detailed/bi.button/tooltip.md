@@ -5,107 +5,72 @@
 
 {% common %}
 ```javascript
-Demo = {};
-Demo.Tips = BI.inherit(BI.Widget, {
-    props: {
-        baseCls: "demo-tips"
-    },
-    render: function () {
-        var btns = [];
-        var bubble = BI.createWidget({
-            type: "bi.left",
-            items: [{
-                el: {
-                    type: 'bi.button',
-                    text: 'bubble测试',
-                    height: 30,
-                    handler: function () {
-                        BI.Bubbles.show("singleBubble1", "bubble测试", this);
-                        btns.push("singleBubble1");
-                    }
-                }
-            }, {
-                el: {
-                    type: 'bi.button',
-                    text: 'bubble测试(居中显示)',
-                    height: 30,
-                    handler: function () {
-                        BI.Bubbles.show("singleBubble2", "bubble测试", this, {
-                            offsetStyle: "center"
-                        });
-                        btns.push("singleBubble2");
-                    }
-                }
-            }, {
-                el: {
-                    type: 'bi.button',
-                    text: 'bubble测试(右边显示)',
-                    height: 30,
-                    handler: function () {
-                        BI.Bubbles.show("singleBubble3", "bubble测试", this, {
-                            offsetStyle: "right"
-                        });
-                        btns.push("singleBubble3");
-                    }
-                }
-            }, {
-                el: {
-                    type: 'bi.button',
-                    text: '隐藏所有 bubble',
-                    height: 30,
-                    cls: "layout-bg2",
-                    handler: function () {
-                        BI.each(btns, function (index, value) {
-                            BI.Bubbles.hide(value);
-                        })
-                    }
-                }
-            }],
-            hgap: 20,
-            vgap: 20
-        });
 
-        var title = BI.createWidget({
-            type: "bi.vertical",
-            items: [{
-                type: "bi.label",
-                cls: "layout-bg1",
-                height: 50,
-                title: "title提示",
-                text: "移上去有title提示",
-                textAlign: "center"
-            }],
-            hgap: 20,
-            vgap: 20
-        });
-
-        var toast = BI.createWidget({
-            type: "bi.vertical",
-            items: [{
-                el: {
-                    type: 'bi.button',
-                    text: '简单Toast测试',
-                    height: 30,
-                    handler: function () {
-                        BI.Msg.toast("这是一条简单的数据");
-                    }
-                }
-            }],
-            vgap: 20
-        });
-
-        return {
-            type: "bi.horizontal_auto",
-            vgap: 20,
-            hgap: 20,
-            items: [bubble, title, toast]
+var bubble = BI.createWidget({
+    type: "bi.left",
+    items: [{
+        el: {
+            type: 'bi.button',
+            text: 'bubble测试',
+            height: 30,
+            handler: function () {
+                BI.Bubbles.show("singleBubble1", "bubble测试", this);
+                btns.push("singleBubble1");
+            }
         }
-    }
+    },{
+        el: {
+            type: 'bi.button',
+            text: '隐藏所有 bubble',
+            height: 30,
+            cls: "layout-bg2",
+            handler: function () {
+                BI.each(btns, function (index, value) {
+                    BI.Bubbles.hide(value);
+                })
+            }
+        }
+    }],
+    hgap: 20,
+    vgap: 20
 });
-BI.shortcut("demo.tips", Demo.Tips);
+
+var title = BI.createWidget({
+    type: "bi.vertical",
+    items: [{
+        type: "bi.label",
+        cls: "layout-bg1",
+        height: 50,
+        title: "title提示",
+        text: "移上去有title提示",
+        textAlign: "center"
+    }],
+    hgap: 20,
+    vgap: 20
+});
+
+var toast = BI.createWidget({
+    type: "bi.vertical",
+    items: [{
+        el: {
+            type: 'bi.button',
+            text: '简单Toast测试',
+            height: 30,
+            handler: function () {
+                BI.Msg.toast("这是一条简单的数据");
+            }
+        }
+    }],
+    vgap: 20
+});
+
+
 BI.createWidget({
-  type: 'demo.tips',
-  element: "#wrapper",
+    type: "bi.horizontal_auto",
+    element: "#wrapper",
+    vgap: 20,
+    hgap: 20,
+    items: [bubble, title, toast]
 });
 
 

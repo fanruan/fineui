@@ -17933,7 +17933,6 @@ BI.Editor = BI.inherit(BI.Single, {
             inputType: "text",
             validationChecker: BI.emptyFn,
             quitChecker: BI.emptyFn,
-            mouseOut: false,
             allowBlank: false,
             watermark: "",
             errorText: ""
@@ -17950,7 +17949,6 @@ BI.Editor = BI.inherit(BI.Single, {
             watermark: o.watermark,
             validationChecker: o.validationChecker,
             quitChecker: o.quitChecker,
-            mouseOut: o.mouseOut,
             allowBlank: o.allowBlank
         }));
         this.editor.element.css({
@@ -18465,7 +18463,9 @@ BI.TextAreaEditor = BI.inherit(BI.Single, {
     setStyle: function (style) {
         this.style = style;
         this.element.css(style);
-        this.content.element.css(style)
+        this.content.element.css(BI.extend({}, style, {
+            color: style.color || BI.DOM.getContrastColor(BI.DOM.isRGBColor(style.backgroundColor) ? BI.DOM.rgb2hex(style.backgroundColor) : style.backgroundColor)
+        }))
     },
 
     getStyle: function () {
@@ -19251,7 +19251,6 @@ BI.Input = BI.inherit(BI.Single, {
             element: "<input/>",
             validationChecker: BI.emptyFn,
             quitChecker: BI.emptyFn,//按确定键能否退出编辑
-            mouseOut: false,
             allowBlank: false
         })
     },

@@ -5,42 +5,32 @@
 
 {% common %}
 ```javascript
-Demo = {};
-Demo.Nodes = BI.inherit(BI.Widget, {
 
-    render: function (vessel) {
-        return {
-            type: "bi.vertical",
-            items: [{
-                type: "bi.label",
-                height: 30,
-                text: "十字形的节点"
-            }, {
-                type: "bi.plus_group_node",
-                text: "十字形的节点"
-            }, {
-                type: "bi.label",
-                height: 30,
-                text: "三角形的节点"
-            }, {
-                type: "bi.triangle_group_node",
-                text: "三角形的节点"
-            }, {
-                type: "bi.label",
-                height: 30,
-                text: "箭头节点"
-            }, {
-                type: "bi.arrow_group_node",
-                text: "箭头节点"
-            }]
-        }
-    }
-});
-
-BI.shortcut("demo.nodes", Demo.Nodes);
 BI.createWidget({
-  type: 'demo.nodes',
-  element: "#wrapper",
+    type: 'bi.vertical',
+    element: "#wrapper",
+    items: [{
+        type: "bi.label",
+        height: 30,
+        text: "十字形的节点"
+    }, {
+        type: "bi.plus_group_node",
+        text: "十字形的节点"
+    }, {
+        type: "bi.label",
+        height: 30,
+        text: "三角形的节点"
+    }, {
+        type: "bi.triangle_group_node",
+        text: "三角形的节点"
+    }, {
+        type: "bi.label",
+        height: 30,
+        text: "箭头节点"
+    }, {
+        type: "bi.arrow_group_node",
+        text: "箭头节点"
+    }]
 });
 
 
