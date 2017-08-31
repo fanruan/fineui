@@ -7,96 +7,37 @@
 
 {% common %}
 ```javascript
-
-Demo = {};
-Demo._createNorth = function(){
-    return BI.createWidget({
-        type: "bi.label",
-        text: "North",
-        cls: "layout-bg1",
-        height: 30
-    })
-};
-Demo._createWest = function(){
-    return BI.createWidget({
-        type: "bi.center",
-        cls: "layout-bg2",
-        items:[{
-            type: "bi.label",
-            text: "West",
-            whiteSpace: "normal"
-        }]
-    })
-};
-
-Demo._createCenter = function(){
-    return BI.createWidget({
-        type: "bi.center",
-        cls: "layout-bg3",
-        items: [{
-            type: "bi.label",
-            text: "Center",
-            whiteSpace: "normal"
-        }]
-    })
-};
-
-Demo._createEast =  function(){
-    return BI.createWidget({
-        type: "bi.center",
-        cls: "layout-bg5",
-        items: [{
-            type: "bi.label",
-            text: "East",
-            whiteSpace: "normal"
-        }]
-    })
-};
-
-Demo._createSouth = function(){
-    return BI.createWidget({
-        type: "bi.label",
-        text: "South",
-        cls: "layout-bg6",
-        height: 50
-    })
-};
-
 BI.createWidget({
     type: 'bi.border',
     element: "#wrapper",
-    cls: "",
     items: {
         north: {
-            el: Demo._createNorth(),
+            el: {type: "bi.label"},
             height: 30,
             top: 20,
             left: 20,
             right: 20
         },
         south: {
-            el: Demo._createSouth(),
+            el: {type: "bi.label"},
             height: 50,
             bottom: 20,
             left: 20,
             right: 20
         },
         west: {
-            el: Demo._createWest(),
+            el: {type: "bi.label"},
             width: 200,
             left: 20
         },
         east: {
-            el: Demo._createEast(),
+            el: {type: "bi.label"},
             width: 300,
             right: 20
         },
-        center: Demo._createCenter()
+        center: {el: {type: "bi.label"}}
     }
 });
-
-
-
 
 ```
 
@@ -109,6 +50,5 @@ BI.createWidget({
 | 参数    | 说明                           | 类型       | 可选值 | 默认值
 | :------ |:-------------                  | :-----     | :----|:----
 | items | 子控件对象     |    object | north,east,west,south,center |  | |
-
 
 ---

@@ -21,23 +21,11 @@ BI.createWidget({
             cls: "layout-bg1",
             width: 100,
             height: 30
-        }, {
-            type: "bi.label",
-            text: "左边的垂直居中",
-            cls: "layout-bg2",
-            width: 100,
-            height: 30
         }],
         right: [{
             type: "bi.label",
             text: "右边的垂直居中",
             cls: "layout-bg1",
-            width: 100,
-            height: 30
-        }, {
-            type: "bi.label",
-            text: "右边的垂直居中",
-            cls: "layout-bg2",
             width: 100,
             height: 30
         }]
