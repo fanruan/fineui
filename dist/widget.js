@@ -8345,7 +8345,7 @@ BI.MultiSelectCombo = BI.inherit(BI.Single, {
     },
 
     getValue: function () {
-        return this.storeValue;
+        return BI.deepClone(this.storeValue);
     },
 
     populate: function () {
@@ -9749,7 +9749,7 @@ BI.MultiSelectList = BI.inherit(BI.Widget, {
     },
 
     getValue: function () {
-        return this.storeValue;
+        return BI.deepClone(this.storeValue);
     },
 
     populate: function () {

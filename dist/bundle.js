@@ -46662,7 +46662,6 @@ BI.Editor = BI.inherit(BI.Single, {
             inputType: "text",
             validationChecker: BI.emptyFn,
             quitChecker: BI.emptyFn,
-            mouseOut: false,
             allowBlank: false,
             watermark: "",
             errorText: ""
@@ -46679,7 +46678,6 @@ BI.Editor = BI.inherit(BI.Single, {
             watermark: o.watermark,
             validationChecker: o.validationChecker,
             quitChecker: o.quitChecker,
-            mouseOut: o.mouseOut,
             allowBlank: o.allowBlank
         }));
         this.editor.element.css({
@@ -47982,7 +47980,6 @@ BI.Input = BI.inherit(BI.Single, {
             element: "<input/>",
             validationChecker: BI.emptyFn,
             quitChecker: BI.emptyFn,//按确定键能否退出编辑
-            mouseOut: false,
             allowBlank: false
         })
     },
@@ -70920,7 +70917,6 @@ BI.ShelterEditor = BI.inherit(BI.Widget, {
             bgap: 0,
             validationChecker: BI.emptyFn,
             quitChecker: BI.emptyFn,
-            mouseOut: false,
             allowBlank: true,
             watermark: "",
             errorText: "",
@@ -70944,7 +70940,6 @@ BI.ShelterEditor = BI.inherit(BI.Widget, {
             value: o.value,
             validationChecker: o.validationChecker,
             quitChecker: o.quitChecker,
-            mouseOut: o.mouseOut,
             allowBlank: o.allowBlank,
             watermark: o.watermark,
             errorText: o.errorText
@@ -71177,7 +71172,6 @@ BI.SignInitialEditor = BI.inherit(BI.Widget, {
             bgap: 0,
             validationChecker: BI.emptyFn,
             quitChecker: BI.emptyFn,
-            mouseOut: false,
             allowBlank: true,
             watermark: "",
             errorText: "",
@@ -71202,7 +71196,6 @@ BI.SignInitialEditor = BI.inherit(BI.Widget, {
             value: o.value,
             validationChecker: o.validationChecker,
             quitChecker: o.quitChecker,
-            mouseOut: o.mouseOut,
             allowBlank: o.allowBlank,
             watermark: o.watermark,
             errorText: o.errorText
@@ -71448,7 +71441,6 @@ BI.SignEditor = BI.inherit(BI.Widget, {
             bgap: 0,
             validationChecker: BI.emptyFn,
             quitChecker: BI.emptyFn,
-            mouseOut: false,
             allowBlank: true,
             watermark: "",
             errorText: "",
@@ -71471,7 +71463,6 @@ BI.SignEditor = BI.inherit(BI.Widget, {
             value: o.value,
             validationChecker: o.validationChecker,
             quitChecker: o.quitChecker,
-            mouseOut: o.mouseOut,
             allowBlank: o.allowBlank,
             watermark: o.watermark,
             errorText: o.errorText
@@ -71708,7 +71699,6 @@ BI.StateEditor = BI.inherit(BI.Widget, {
             bgap: 0,
             validationChecker: BI.emptyFn,
             quitChecker: BI.emptyFn,
-            mouseOut: false,
             allowBlank: true,
             watermark: "",
             errorText: "",
@@ -71731,7 +71721,6 @@ BI.StateEditor = BI.inherit(BI.Widget, {
             value: o.value,
             validationChecker: o.validationChecker,
             quitChecker: o.quitChecker,
-            mouseOut: o.mouseOut,
             allowBlank: o.allowBlank,
             watermark: o.watermark,
             errorText: o.errorText
@@ -72006,7 +71995,6 @@ BI.SimpleStateEditor = BI.inherit(BI.Widget, {
             value: o.value,
             validationChecker: o.validationChecker,
             quitChecker: o.quitChecker,
-            mouseOut: o.mouseOut,
             allowBlank: o.allowBlank,
             watermark: o.watermark,
             errorText: o.errorText
@@ -72237,7 +72225,6 @@ BI.TextEditor = BI.inherit(BI.Widget, {
             bgap: 0,
             validationChecker: BI.emptyFn,
             quitChecker: BI.emptyFn,
-            mouseOut: false,
             allowBlank: false,
             watermark: "",
             errorText: "",
@@ -72266,7 +72253,6 @@ BI.TextEditor = BI.inherit(BI.Widget, {
             value: o.value,
             validationChecker: o.validationChecker,
             quitChecker: o.quitChecker,
-            mouseOut: o.mouseOut,
             allowBlank: o.allowBlank,
             watermark: o.watermark,
             errorText: o.errorText
@@ -76714,7 +76700,6 @@ BI.EditorTrigger = BI.inherit(BI.Trigger, {
             value: o.value,
             validationChecker: o.validationChecker,
             quitChecker: o.quitChecker,
-            mouseOut: false,
             allowBlank: o.allowBlank,
             watermark: o.watermark,
             errorText: o.errorText
@@ -85354,7 +85339,7 @@ BI.MultiSelectCombo = BI.inherit(BI.Single, {
     },
 
     getValue: function () {
-        return this.storeValue;
+        return BI.deepClone(this.storeValue);
     },
 
     populate: function () {
@@ -86758,7 +86743,7 @@ BI.MultiSelectList = BI.inherit(BI.Widget, {
     },
 
     getValue: function () {
-        return this.storeValue;
+        return BI.deepClone(this.storeValue);
     },
 
     populate: function () {
@@ -93677,4 +93662,15 @@ BI.i18n = {
     "BI-Basic_Simple_Thursday": "四",
     "BI-Basic_Simple_Friday": "五",
     "BI-Basic_Simple_Saturday": "六",
+    "BI-Multi_Date_Year": "年",
+    "BI-Multi_Date_Month": "月",
+    "BI-Multi_Date_Quarter": "季度",
+    "BI-Basic_Unrestricted": "无限制",
+    "BI-Quarter_1": "第1季度",
+    "BI-Quarter_2": "第2季度",
+    "BI-Quarter_3": "第3季度",
+    "BI-Quarter_4": "第4季度",
+    "BI-Basic_Value": "值",
+    "BI-Load_More": "加载更多",
+    "BI-Select_All": "全选"
 };

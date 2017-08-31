@@ -12,7 +12,6 @@ BI.Input = BI.inherit(BI.Single, {
             element: "<input/>",
             validationChecker: BI.emptyFn,
             quitChecker: BI.emptyFn,//按确定键能否退出编辑
-            mouseOut: false,
             allowBlank: false
         })
     },

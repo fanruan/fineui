@@ -34,7 +34,6 @@ BI.EditorTrigger = BI.inherit(BI.Trigger, {
             value: o.value,
             validationChecker: o.validationChecker,
             quitChecker: o.quitChecker,
-            mouseOut: false,
             allowBlank: o.allowBlank,
             watermark: o.watermark,
             errorText: o.errorText

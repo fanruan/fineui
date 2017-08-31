@@ -19,7 +19,6 @@ BI.Editor = BI.inherit(BI.Single, {
             inputType: "text",
             validationChecker: BI.emptyFn,
             quitChecker: BI.emptyFn,
-            mouseOut: false,
             allowBlank: false,
             watermark: "",
             errorText: ""
@@ -36,7 +35,6 @@ BI.Editor = BI.inherit(BI.Single, {
             watermark: o.watermark,
             validationChecker: o.validationChecker,
             quitChecker: o.quitChecker,
-            mouseOut: o.mouseOut,
             allowBlank: o.allowBlank
         }));
         this.editor.element.css({
