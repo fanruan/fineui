@@ -14,7 +14,6 @@ BI.SignInitialEditor = BI.inherit(BI.Widget, {
             bgap: 0,
             validationChecker: BI.emptyFn,
             quitChecker: BI.emptyFn,
-            mouseOut: false,
             allowBlank: true,
             watermark: "",
             errorText: "",
@@ -39,7 +38,6 @@ BI.SignInitialEditor = BI.inherit(BI.Widget, {
             value: o.value,
             validationChecker: o.validationChecker,
             quitChecker: o.quitChecker,
-            mouseOut: o.mouseOut,
             allowBlank: o.allowBlank,
             watermark: o.watermark,
             errorText: o.errorText

@@ -322,7 +322,7 @@ BI.MultiSelectList = BI.inherit(BI.Widget, {
     },
 
     getValue: function () {
-        return this.storeValue;
+        return BI.deepClone(this.storeValue);
     },
 
     populate: function () {
