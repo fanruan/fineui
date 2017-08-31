@@ -3,7 +3,7 @@
 ### 可调整列宽的grid表格，继承BI.Widget
 
 {% method %}
-[source]()
+[source](https://jsfiddle.net/fineui/0e7p2ezc/)
 
 {% common %}
 ```javascript

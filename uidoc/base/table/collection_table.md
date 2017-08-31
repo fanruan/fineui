@@ -8,7 +8,7 @@
 {% common %}
 ```javascript
 BI.createWidget({
-  type: "bi.excel_table",
+  type: "bi.collection_table",
   element: "body",
   columnSize: [200,200],
   items: [
