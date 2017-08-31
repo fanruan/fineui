@@ -2,6 +2,16 @@
 
 ### 树状结构的表格
 
+{% method %}
+[source](https://jsfiddle.net/fineui/pqyuLoay/)
+
+{% common %}
+```javascript
+// More coming...
+```
+
+{% endmethod %}
+
 ## 参数设置
 | 参数                      | 说明                       | 类型                   | 默认值               |
 | ----------------------- | ------------------------ | -------------------- | ----------------- |
