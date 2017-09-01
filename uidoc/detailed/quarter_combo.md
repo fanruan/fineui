@@ -20,6 +20,6 @@ BI.createWidget({
 
 | 参数    | 说明           | 类型  | 可选值 | 默认值
 | :------ |:-------------  | :-----| :----|:----|
-| behaviors    | 自定义下拉列表中item项的行为，如高亮，标红等 |  object |     |     {}   |
+| behaviors    | 自定义下拉列表中item项的行为，如高亮，标红等(详见[button_group](../core/abstract/button_group.md)) |  object |     |     {}   |
 
 --- ---

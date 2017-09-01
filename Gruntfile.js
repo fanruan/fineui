@@ -99,7 +99,7 @@ module.exports = function (grunt) {
             },
 
             bundleJs: {
-                src: ['dist/core.js', 'dist/base.js', 'dist/case.js', 'dist/widget.js', 'public/js/**/*.js'],
+                src: ['public/js/index.js', 'dist/core.js', 'dist/base.js', 'dist/case.js', 'dist/widget.js', 'public/js/**/*.js'],
                 dest: 'dist/bundle.js'
             },
 
