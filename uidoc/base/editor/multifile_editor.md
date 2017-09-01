@@ -3,7 +3,7 @@
 ## 多文件,基类[BI.Single](/core/single.md)
 
 {% method %}
-[source](https://jsfiddle.net/fineui/txqwwzLm/)
+[source](https://jsfiddle.net/fineui/25r3r5fq/)
 
 {% common %}
 ```javascript

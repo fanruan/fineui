@@ -3,16 +3,16 @@
 ## svg绘图,基类[BI.Widget](/core/widget.md)
 
 {% method %}
-[source](https://jsfiddle.net/fineui/txqwwzLm/)
+[source](https://jsfiddle.net/fineui/1xn8snp3/)
 
 {% common %}
 ```javascript
 
 var svg = BI.createWidget({
-	    type: "bi.svg",
-	        width: 500,
-	        height: 600
-	    });
+    type: "bi.svg",
+    width: 500,
+    height: 600
+});
 	
 var circle = svg.circle(100, 100, 10);
 circle.animate({fill: "#223fa3", stroke: "#000", "stroke-width": 80, "stroke-opacity": 0.5}, 2000);

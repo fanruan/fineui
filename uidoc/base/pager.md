@@ -3,7 +3,7 @@
 ## 分页控件,基类[BI.Widget](/core/widget.md)
 
 {% method %}
-[source](https://jsfiddle.net/fineui/txqwwzLm/)
+[source](https://jsfiddle.net/fineui/rhhte9b3/)
 
 {% common %}
 ```javascript

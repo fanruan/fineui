@@ -3,7 +3,7 @@
 ## 文本框,基类[BI.Single](/core/single.md)
 
 {% method %}
-[source](https://jsfiddle.net/fineui/txqwwzLm/)
+[source](https://jsfiddle.net/fineui/4eLytgve/)
 
 {% common %}
 ```javascript

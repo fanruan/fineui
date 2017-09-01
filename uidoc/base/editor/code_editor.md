@@ -1,9 +1,9 @@
 # bi.code_editor
 
-## 文本框,基类[BI.Single](/core/single.md)
+## 代码文本框,基类[BI.Single](/core/single.md)
 
 {% method %}
-[source](https://jsfiddle.net/fineui/txqwwzLm/)
+[source](https://jsfiddle.net/fineui/fx86hLgm/)
 
 {% common %}
 ```javascript
