@@ -3,7 +3,7 @@
 ### 多层级下拉可选节点树
 
 {% method %}
-[source](https://jsfiddle.net/fineui/conjw6dL/)
+[source](https://jsfiddle.net/fineui/ryo1cnrL/)
 
 {% common %}
 ```javascript
