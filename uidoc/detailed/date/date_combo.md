@@ -20,6 +20,4 @@ BI.createWidget({
 
 | 参数    | 说明           | 类型  | 可选值 | 默认值
 | :------ |:-------------  | :-----| :----|:----|
-| yearBehaviors |自定义年份选择的行为(详见[button_group](../../base/abstract/button_group.md))  | object| |  |
-| monthBehaviors |自定义年份选择的行为(详见[button_group](../../base/abstract/button_group.md))  | object| |  |
 --- ---
