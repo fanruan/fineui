@@ -1,14 +1,15 @@
 # bi.branch_tree
-### 横向分支的树
+### 纵向分支的树
 
 {% method %}
-[source](https://jsfiddle.net/fineui/mLq3e170/)
+[source](https://jsfiddle.net/fineui/c2kaoc7x/)
 
 {% common %}
 ```javascript
 BI.createWidget({
-  type: "bi.branch_tree",
+  type: "bi.handstand_branch_tree",
   element: 'body',
+  el: {},
   items: [{
     el: {},
     children: [{
@@ -40,4 +41,6 @@ BI.createWidget({
 | -------- | ------ | ---- |
 | populate | 去掉所有内容 | —    |
 | getValue | 获取所选项值 | —    |
+
+
 
