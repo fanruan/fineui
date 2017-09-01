@@ -1,4 +1,30 @@
-/*!
+BI.servletURL = "https://fanruan.coding.me/fineui/dist/";
+BI.resourceURL = "https://fanruan.coding.me/fineui/dist/resource/";
+BI.i18n = {
+    "BI-Basic_OK": "确定",
+    "BI-Basic_Sure": "确定",
+    "BI-Basic_Clears": "清空",
+    "BI-Basic_Cancel": "取消",
+    "BI-Basic_Time": "时间",
+    "BI-Basic_Simple_Sunday": "日",
+    "BI-Basic_Simple_Monday": "一",
+    "BI-Basic_Simple_Tuesday": "二",
+    "BI-Basic_Simple_Wednesday": "三",
+    "BI-Basic_Simple_Thursday": "四",
+    "BI-Basic_Simple_Friday": "五",
+    "BI-Basic_Simple_Saturday": "六",
+    "BI-Multi_Date_Year": "年",
+    "BI-Multi_Date_Month": "月",
+    "BI-Multi_Date_Quarter": "季度",
+    "BI-Basic_Unrestricted": "无限制",
+    "BI-Quarter_1": "第1季度",
+    "BI-Quarter_2": "第2季度",
+    "BI-Quarter_3": "第3季度",
+    "BI-Quarter_4": "第4季度",
+    "BI-Basic_Value": "值",
+    "BI-Load_More": "加载更多",
+    "BI-Select_All": "全选"
+};/*!
  * jQuery JavaScript Library v1.9.1
  * http://jquery.com/
  *
@@ -93647,30 +93673,4 @@ BI.ValueChooserPane = BI.inherit(BI.AbstractValueChooser, {
     }
 });
 BI.ValueChooserPane.EVENT_CHANGE = "ValueChooserPane.EVENT_CHANGE";
-BI.shortcut('bi.value_chooser_pane', BI.ValueChooserPane);BI.servletURL = "https://fanruan.coding.me/fineui/dist/";
-BI.resourceURL = "https://fanruan.coding.me/fineui/dist/resource/";
-BI.i18n = {
-    "BI-Basic_OK": "确定",
-    "BI-Basic_Sure": "确定",
-    "BI-Basic_Clears": "清空",
-    "BI-Basic_Cancel": "取消",
-    "BI-Basic_Time": "时间",
-    "BI-Basic_Simple_Sunday": "日",
-    "BI-Basic_Simple_Monday": "一",
-    "BI-Basic_Simple_Tuesday": "二",
-    "BI-Basic_Simple_Wednesday": "三",
-    "BI-Basic_Simple_Thursday": "四",
-    "BI-Basic_Simple_Friday": "五",
-    "BI-Basic_Simple_Saturday": "六",
-    "BI-Multi_Date_Year": "年",
-    "BI-Multi_Date_Month": "月",
-    "BI-Multi_Date_Quarter": "季度",
-    "BI-Basic_Unrestricted": "无限制",
-    "BI-Quarter_1": "第1季度",
-    "BI-Quarter_2": "第2季度",
-    "BI-Quarter_3": "第3季度",
-    "BI-Quarter_4": "第4季度",
-    "BI-Basic_Value": "值",
-    "BI-Load_More": "加载更多",
-    "BI-Select_All": "全选"
-};
+BI.shortcut('bi.value_chooser_pane', BI.ValueChooserPane);
