@@ -36,8 +36,3 @@ BI.createWidget({
 | :------ |:-------------  | :-----| :----|:----|
 | items |二维数组,每个元素代表一条路径,相较于[path_chooser](path_chooser.md)多一个属性direction来指定方向  | array| |  |
 --- ---
-type: "bi.year_month_combo",
-                ref: function (_ref) {
-                    self.widget = _ref;
-                },
-                width: 300
