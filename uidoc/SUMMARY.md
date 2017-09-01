@@ -108,7 +108,7 @@
     * [text_value_downlist_combo](case/combo/text_value_downlist_combo.md)
 * 树
     * [branch_tree](case/tree/branch_tree.md)
-    * [handstand_branch_editor](case/tree/handstand_branch_editor.md)
+    * [handstand_branch_tree](case/tree/handstand_branch_tree.md)
     * [display_tree](case/tree/display_tree.md)
     * [simple_tree](case/tree/simple_tree.md)
     * [level_tree](case/tree/level_tree.md)
