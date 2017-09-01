@@ -26,5 +26,5 @@ BI.createWidget({
 
 ##事件
 | 事件    | 说明           |
-|BI.YearMonthCombo.EVENT_CONFIRM| 选中日期或者退出编辑状态触发 |
-|BI.YearMonthCombo.EVENT_BEFORE_POPUPVIEW| 选中日期或者退出编辑状态触发 |
+|BI.QuarterCombo.EVENT_CONFIRM| 选中日期或者退出编辑状态触发 |
+|BI.QuarterCombo.EVENT_BEFORE_POPUPVIEW| 选中日期或者退出编辑状态触发 |
