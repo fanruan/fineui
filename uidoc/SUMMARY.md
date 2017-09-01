@@ -19,7 +19,6 @@
     * [horizontal_float](core/layout/horizontal_float.md)
     * [float_center](core/layout/float_center.md)
     * [border](core/layout/border.md)
-    * [inline](core/layout/inline.md)
     * [grid](core/layout/grid.md)
     * [table](core/layout/table.md)
     * [td](core/layout/td.md)

@@ -20,7 +20,7 @@ BI.createWidget({
 
 | 参数    | 说明           | 类型  | 可选值 | 默认值
 | :------ |:-------------  | :-----| :----|:----|
-| behaviors    | 自定义下拉列表中item项的行为，如高亮，标红等(详见[button_group](../base/abstract/button_group.md)) |  object |     |     {}   |
+| behaviors    | 自定义下拉列表中item项的行为，如高亮，标红等(详见[button_group](../core/abstract/button_group.md)) |  object |     |     {}   |
 | min    | 限定可选日期的下限 |  string  |  |      '1900-01-01'  |
 | max    | 限定可选日期的上限     |    string   |        |  '2099-12-31'    |
 
