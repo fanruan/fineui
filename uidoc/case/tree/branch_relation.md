@@ -8,7 +8,7 @@
 {% common %}
 ```javascript
 var tree = BI.createWidget({
-  type: "bi.simple_tree",
+  type: "bi.branch_relation",
   element: 'body',
   items: [],
   direction: BI.Direction.Right,
