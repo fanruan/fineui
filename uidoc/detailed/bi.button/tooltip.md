@@ -5,52 +5,9 @@
 
 {% common %}
 ```javascript
-
-var bubble = BI.createWidget({
-    type: "bi.left",
-    items: [{
-        el: {
-            type: 'bi.button',
-            text: 'bubble测试',
-            height: 30,
-            handler: function () {
-                BI.Bubbles.show("singleBubble1", "bubble测试", this);
-                btns.push("singleBubble1");
-            }
-        }
-    },{
-        el: {
-            type: 'bi.button',
-            text: '隐藏所有 bubble',
-            height: 30,
-            cls: "layout-bg2",
-            handler: function () {
-                BI.each(btns, function (index, value) {
-                    BI.Bubbles.hide(value);
-                })
-            }
-        }
-    }],
-    hgap: 20,
-    vgap: 20
-});
-
-var title = BI.createWidget({
-    type: "bi.vertical",
-    items: [{
-        type: "bi.label",
-        cls: "layout-bg1",
-        height: 50,
-        title: "title提示",
-        text: "移上去有title提示",
-        textAlign: "center"
-    }],
-    hgap: 20,
-    vgap: 20
-});
-
 var toast = BI.createWidget({
     type: "bi.vertical",
+    element: "#wrapper",
     items: [{
         el: {
             type: 'bi.button',
@@ -63,16 +20,6 @@ var toast = BI.createWidget({
     }],
     vgap: 20
 });
-
-
-BI.createWidget({
-    type: "bi.horizontal_auto",
-    element: "#wrapper",
-    vgap: 20,
-    hgap: 20,
-    items: [bubble, title, toast]
-});
-
 
 ```
 
