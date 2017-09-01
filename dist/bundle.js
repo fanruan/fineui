@@ -1,3 +1,6 @@
+if (!window.BI) {
+    window.BI = {};
+}
 BI.servletURL = "https://fanruan.coding.me/fineui/dist/";
 BI.resourceURL = "https://fanruan.coding.me/fineui/dist/resource/";
 BI.i18n = {
