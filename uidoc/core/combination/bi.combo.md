@@ -3,7 +3,7 @@
 ## combo,基类[BI.Widget](/core/widget.md)
 
 {% method %}
-[source]()
+[source](https://jsfiddle.net/fineui/wxykkjou/)
 
 {% common %}
 ```javascript
@@ -17,20 +17,7 @@ BI.createWidget({
        text: "测试",
        height: 25
 	},
-   popup: {
-       el: {
-	      type: "bi.button_group",
-          items: BI.makeArray(100, {
-              type: "bi.text_item",
-              height: 25,
-              text: "item"
-          }),
-          layouts: [{
-              type: "bi.vertical"
-          }]
-       },
-       maxHeight: 300
-   }
+   popup: {}
 });
 
 
@@ -46,7 +33,7 @@ BI.createWidget({
 | trigger | 事件类型 | string |  | "click" |
 | toggle | 切换状态 | boolean | true,false | true |
 | direction | combo弹出层位置 | string | top,bottom,left,right,(top,left),(top,right),(bottom,left),(bottom,right) | "bottom"|
-| isDefaultInit | 是否默认初始化 |boolean | true,false | false |
+| isDefaultInit | 是否默认初始化子节点 |boolean | true,false | false |
 | destroyWhenHide | 隐藏弹窗层是否销毁 | boolean | true,false | false |
 | isNeedAdjustHeight | 是否需要高度调整 | boolean | true,false | true |
 | isNeedAdjustWidth | 是否需要宽度调整 | boolean | true,false | true |
