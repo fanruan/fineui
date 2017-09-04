@@ -10,7 +10,7 @@
 
 BI.createWidget({
    type: "bi.combo",
-   element: “body”,
+   element: "body",
    adjustLength: 2,
    el: {
 	   type: "bi.button",
