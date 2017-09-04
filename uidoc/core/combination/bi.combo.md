@@ -69,7 +69,18 @@ BI.createWidget({
 | toggle |||
 |destroy |||
 
-
+## 事件
+| 名称     | 说明                |
+| :------ |:------------- |
+|BI.Combo.EVENT_TRIGGER_CHANGE | trigger发生改变触发   |
+|BI.Combo.EVENT_CHANGE |  弹出层点击触发          |
+|BI.Combo.EVENT_EXPAND |  下拉框展开触发   |
+|BI.Combo.EVENT_COLLAPSE |    下拉框收起触发
+|BI.Combo.EVENT_AFTER_INIT |  下拉框初始化后触发 |
+|BI.Combo.EVENT_BEFORE_POPUPVIEW | 下拉列表弹出前触发 |
+|BI.Combo.EVENT_AFTER_POPUPVIEW | 下拉列表弹出后触发 |
+|BI.Combo.EVENT_BEFORE_HIDEVIEW | 下拉列表收起前触发 |
+|BI.Combo.EVENT_AFTER_HIDEVIEW | 下拉列表收起后触发 |
 ---
 
 

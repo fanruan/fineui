@@ -8,42 +8,25 @@
 {% common %}
 ```javascript
 
-var items = [{
-    type: "bi.label",
-    value: "张三"
-  }, {
-    type: "bi.label",
-    value: "李四"
-  }];
-  var popup = BI.createWidget({
-    type: "bi.button_group",
-    cls: "bi-border",
-    items: items,
-    layouts: [{
-      type: "bi.vertical"
-    }]
-  });
-
 BI.createWidget({
     type: "bi.searcher",
     element:"#wrapper",
-    listeners: [{
-      eventName: BI.Searcher.EVENT_STOP,
-      action: function () {
-        popup.populate(items)
-      }
-    }, {
-      eventName: BI.Searcher.EVENT_PAUSE,
-      action: function () {
-        popup.populate(items)
-      }
-    }],
     adapter: {
       getItems: function () {
-        return items
+        return [{
+                   type: "bi.label",
+                   value: "张三"
+                 }]
       }
     },
-    popup: popup,
+    popup: {
+               type: "bi.button_group",
+               cls: "bi-border",
+               items: items,
+               layouts: [{
+                 type: "bi.vertical"
+               }],
+    },
     masker: false
   })
 
@@ -104,7 +87,15 @@ BI.createWidget({
 | EVENT_SEARCHING | 搜索中| —|
 | EVENT_AFTER_INIT | 初始化之后 | —|
 
-
+## 事件
+| 事件     | 说明                |
+| :------ |:------------- |
+|BI.Searcher.EVENT_CHANGE | 搜索结果面板发生改变触发   |
+|BI.Searcher.EVENT_START |  开始搜索触发          |
+|BI.Searcher.EVENT_STOP |  停止搜索触发(搜索框为空)   |
+|BI.Searcher.EVENT_PAUSE |  搜索暂停触发(搜索文本以空白字符结尾)  |
+|BI.Searcher.EVENT_SEARCHING |  正在搜索时触发 |
+|BI.Searcher.EVENT_AFTER_INIT | 搜索结果面板初始化完成后触发 |
 
 ---
 
