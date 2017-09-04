@@ -19,52 +19,6 @@ BI.createWidget({
 
 {% endmethod %}
 
-## 不可为空输入框
-
-{% method %}
-[source](https://jsfiddle.net/fineui/d7td9tfr/)
-
-{% common %}
-```javascript
-BI.createWidget({
-  type: "bi.text_editor",
-  element: "#wrapper",
-  width: 200,
-  height: 30,
-  watermark:"这个不予许空",
-  value: "这是一个不可为空的输入框",
-  allowBlank: false,
-  errorText:  "不允许为空"      
-});
-```
-
-{% endmethod %}
-
-## 可为空输入框
-
-{% method %}
-[source](https://jsfiddle.net/fineui/kjmyg9ps/)
-
-{% common %}
-```javascript
-BI.createWidget({
-  type: "bi.text_editor",
-  element: "#wrapper",
-  width: 200,
-  height: 30,
-  allowBlank: true,
-  errorText: "不能输入只输入a!",
-  validationChecker: function (v) {
-    if (v == "a") {
-      return false;
-    }
-    return true;
-  },
-});
-```
-
-{% endmethod %}
-
 ##API
 
 | 参数    | 说明           | 类型  | 可选值 | 默认值
@@ -87,3 +41,8 @@ BI.createWidget({
 
 --- ---
 
+## 事件
+| 事件    | 说明           |
+| :------ |:------------- |
+---
+其他事件详见[Editor](../../base/editor/editor.md)

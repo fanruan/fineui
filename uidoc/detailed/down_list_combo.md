@@ -69,6 +69,7 @@ BI.createWidget({
 
 ##事件
 | 事件    | 说明           |
+| :------ |:------------- |
 |BI.DownListCombo.EVENT_CHANGE| 点击一级节点触发 |
 |BI.DownListCombo.EVENT_SON_VALUE_CHANGE| 点击二级节点触发 |
 |BI.DownListCombo.EVENT_BEFORE_POPUPVIEW| 下拉列表弹出前触发 |

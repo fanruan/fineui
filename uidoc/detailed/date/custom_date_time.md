@@ -20,3 +20,11 @@ BI.createWidget({
 | 参数    | 说明           | 类型  | 可选值 | 默认值
 | :------ |:-------------  | :-----| :----|:----|
 --- ---
+
+##事件
+| 事件    |  说明  |
+| :------ |:------------- |
+| BI.CustomDateTimeCombo.EVENT_CANCEL|   点击取消触发   |
+| BI.CustomDateTimeCombo.EVENT_CONFIRM|   点击确认触发   |
+
+---
