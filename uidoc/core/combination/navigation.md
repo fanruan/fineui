@@ -3,30 +3,36 @@
 ## 导航栏控件,[BI.Widget](/core/widget.md)
 
 {% method %}
-[source](https://jsfiddle.net/fineui/kau5pjm8/)
+[source](https://jsfiddle.net/fineui/ubsren48/)
 
 {% common %}
 ```javascript
 
+
 BI.createWidget({
+  element: "#wrapper",
   type: "bi.navigation",
-  element: "body",
-  height:30,
   tab: {
-      height: 30,
-      items: [{
-          once: false,
-          text: "后退",
-          value: -1,
-          cls: "mvc-button layout-bg3"
-      },{
-          once: false,
-          text: "前进",
-          value: 1,
-          cls: "mvc-button layout-bg4"
-      }]
+    height: 30,
+    items: [{
+      once: false,
+      text: "后退",
+      value: -1
+    }, {
+      once: false,
+      text: "前进",
+      value: 1
+    }]
   },
+  cardCreator: function(v) {
+    return BI.createWidget({
+      type: "bi.label",
+      cls: "layout-bg" + BI.random(1, 8),
+      text: "第" + v + "页"
+    })
+  }
 })
+
 
 
 
@@ -39,14 +45,14 @@ BI.createWidget({
 | 参数    | 说明           | 类型  | 可选值 | 默认值
 | :------ |:-------------  | :-----| :----|:----
 | direction | 控件位置 | string | top,bottom,left,right,custom | "bottom"|
-| single |  | boolean | true,false | true |
-| defaultShowIndex | |boolean | true,false | true |
-| tab | |boolean | true,false | true |
-| defaultShowIndex |||||
+| single | 是否为单页 | boolean | true,false | true |
+| defaultShowIndex | 是否默认显示 |boolean | true,false | true |
+| tab | tab页元素 | boolean | true,false | true |
+| defaultShowIndex | 是否默认显示 | boolean | true,false | false |
 | logic | | object | | {dynamic:true} |
-| cardCreator | | function | | v |
-| afterCardCreated | | | | — |
-| afterCardShow | | | | — |
+| cardCreator | 面板构造器 | function | — | v |
+| afterCardCreated | 面板构造之后 | function | — | — |
+| afterCardShow | 面板显示之后 | function | - | — |
 
 
 
