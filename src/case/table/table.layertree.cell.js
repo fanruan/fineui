@@ -29,4 +29,4 @@ BI.LayerTreeTableCell = BI.inherit(BI.Widget, {
     }
 });
 
-$.shortcut("bi.layer_tree_table_cell", BI.LayerTreeTableCell);
+BI.shortcut("bi.layer_tree_table_cell", BI.LayerTreeTableCell);
