@@ -70,8 +70,8 @@ BI.createWidget({
 | onSearch | isAutoSearch为false时启用 | function(op.callback) | | |
 | el | 开启弹出层的元素 | object | —  | {type: "bi.search_editor"}|
 | popup | 弹出层 | object | — |{type: "bi.searcher_view"}|
-| adapter | | | | null| 
-| masker | masker层 | | — | {offset: {}}|
+| adapter | 弹出层显示的位置元素 | object | - | null| 
+| masker | masker层 |  object | — | {offset: {}}|
 
 ## 对外方法
 | 名称     | 说明                           |  回调参数     
@@ -81,6 +81,28 @@ BI.createWidget({
 | getValue | 获取被选中的值 |—|
 | empty| 清空组件|—|
 | destroy| 销毁组件|—|
+| adapter | | |
+| doSearch | 开始搜索 | — | 
+| stopSearch | 停止搜索  | —|
+| isSearching | 是否正在搜索 | —|
+| isViewVisible | 组件是否可见 | —|
+| getView | 获取搜索列表栏 | —|
+| hasMatched | 是否匹配 | —|
+| adjustHeight | 调整高度 | —|
+| adjustView| 调整搜索列表栏| —|
+| getKeyword | 获取搜索关键词| —|
+| getKeywords | 获取搜索关键词数组| —|
+
+
+## 事件方法
+
+| 事件名称| 说明| 回调参数 | 
+| :------ |:-------------  | :-----
+| EVENT_START | 开始搜索 | —|
+| EVENT_STOP | 停止搜索 |  —|
+| EVENT_PAUSE | 暂停搜索 | —|
+| EVENT_SEARCHING | 搜索中| —|
+| EVENT_AFTER_INIT | 初始化之后 | —|
 
 
 
