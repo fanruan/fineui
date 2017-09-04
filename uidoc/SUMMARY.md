@@ -120,7 +120,7 @@
     * [all_count_pager](case/pager/all_count_pager.md)
     * [direction_pager](case/pager/direction_pager.md)
 * [calendar](case/calendar.md)
-* [clipboard](case/shelter_editor.md)
+* [clipboard](case/clipboard.md)
 * [complex_canvas](case/complex_canvas.md)
 * [color_chooser](case/color_chooser.md)
 * [segment](case/segment.md)
