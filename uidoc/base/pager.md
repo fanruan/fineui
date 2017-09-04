@@ -58,8 +58,10 @@ BI.createWidget({
 | attr | 设置属性 | key,value |
 | populate | | —|
 
- 
-
+## 事件
+| 名称     | 说明          |
+| :------ |:------------- |
+| BI.Pager.EVENT_AFTER_POPULATE   |  pager刷新完成事件   |
 
 ---
 

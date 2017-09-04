@@ -52,6 +52,9 @@ BI.createWidget({
 | getValue | 获取文本框值  | getValue()      |
 | populate | 更改树结构内容 | populate(items) |
 
-##
-BI.MultiTreeCombo.EVENT_CONFIRM
+## 事件
+| 事件    | 说明           |
+| :------ |:------------- |
+|BI.MultiTreeCombo.EVENT_CONFIRM| 点击一级节点触发 |
+---
 

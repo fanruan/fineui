@@ -62,3 +62,12 @@ BI.createWidget({
 | getRightHorizontalScroll     | 获取右往左横向滚动距离      | getRightHorizontalScroll()           |
 | getColumns                   | 获取列项             | getColumns()                         |
 | populate                     | 增加行              | populate(rows)                       |
+
+## 事件
+| 事件     | 说明                |
+| :------ |:------------- |
+|BI.Table.EVENT_TABLE_AFTER_INIT | table初始化完成后触发   |
+|BI.Table.EVENT_TABLE_RESIZE |  table大小调整时触发（窗口变化等）          |
+|BI.Table.EVENT_TABLE_SCROLL |  滚动事件   |
+
+---

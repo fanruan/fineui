@@ -8,7 +8,7 @@
 {% common %}
 ```javascript
 var tree = BI.createWidget({
-  type: "bi.simple_tree_combo",
+  type: "bi.single_tree_combo",
   element: 'body',
   items: [],
   text: "默认值",
@@ -38,4 +38,13 @@ var tree = BI.createWidget({
 | populate | 刷新内容 | items: 子项数组 |
 | setValue | 设置值  | setValue    |
 | getValue | 获取值  | getValue    |
+
+
+## 事件
+| 事件    | 说明           |
+| :------ |:------------- |
+|BI.SingleTreeCombo.EVENT_BEFORE_POPUPVIEW| 下拉框弹出前触发 |
+其他事件详见[Input](../../base/editor/editor.md)
+
+---
 

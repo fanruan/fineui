@@ -7,21 +7,6 @@
 
 {% common %}
 ```javascript
-var items = [[{
-  text: "第一行第一列"
-}, {
-  text: "第一行第二列"
-}, {
-  text: "第一行第三列"
-}]];
-
-var header = [[{
-  text: "表头1"
-}, {
-  text: "表头2"
-}, {
-  text: "表头3"
-}]];
 
 BI.createWidget({
   type: "bi.responsive_table",
@@ -29,8 +14,20 @@ BI.createWidget({
   isNeedFreeze: true,
   mergeCols: [0, 1],
   columnSize: ["", "", ""],
-  items: items,
-  header: header,
+  items: [[{
+           text: "第一行第一列"
+         }, {
+           text: "第一行第二列"
+         }, {
+           text: "第一行第三列"
+         }]],
+  header: [[{
+            text: "表头1"
+          }, {
+            text: "表头2"
+          }, {
+            text: "表头3"
+          }]],
   element: 'body'
 });
 ```

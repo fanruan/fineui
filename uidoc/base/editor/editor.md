@@ -63,7 +63,26 @@ BI.createWidget({
 | isEditing | 文本框是否处于编辑状态|—|
 | isValid | 文本框值是否有效|—|
 
- 
+## 事件
+| 事件     | 说明                |
+| :------ |:------------- |
+|BI.Editor.EVENT_CHANGE | editor的value发生改变触发   |
+|BI.Editor.EVENT_FOCUS |  focus事件          |
+|BI.Editor.EVENT_BLUR |  blur事件   |
+|BI.Editor.EVENT_CLICK |    点击编辑框触发(不在编辑状态时)     |
+|BI.Editor.EVENT_KEY_DOWN |  keyDown时触发 |
+|BI.Editor.EVENT_SPACE | 按下空格触发 |
+|BI.Editor.EVENT_BACKSPACE | 按下Backspace触发 |
+|BI.Editor.EVENT_START | 开始输入触发 |
+|BI.Editor.EVENT_PAUSE | 暂停输入触发(输入空白字符) |
+|BI.Editor.EVENT_STOP | 停止输入触发 |
+|BI.Editor.EVENT_CONFIRM | 确定输入触发（blur时且输入值有效） |
+|BI.Editor.EVENT_VALID | 输入值有效的状态事件 |
+|BI.Editor.EVENT_ERROR | 输入值无效的状态事件 |
+|BI.Editor.EVENT_ENTER | 回车事件 |
+|BI.Editor.EVENT_RESTRICT | 回车但是值不合法 |
+|BI.Editor.EVENT_REMOVE | 输入为空时按下backspace |
+|BI.Editor.EVENT_EMPTY | 输入框为空时触发 |
 
 
 ---

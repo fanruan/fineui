@@ -14,8 +14,6 @@ BI.createWidget({
   chooseType: BI.ButtonGroup.CHOOSE_TYPE_MULTI,
   layouts: [{
       type: "bi.vertical"
-  }, {
-      type: "bi.center_adapt",
   }],
   items: [{
       type: "bi.label",
@@ -23,11 +21,6 @@ BI.createWidget({
       value: "label1",
       height:50,
       vgap:10
-  }, {
-      type: "bi.button",
-      text: "1",
-      value: "按钮1",
-      height:30
   }]
 })
 ```

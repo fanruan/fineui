@@ -38,7 +38,12 @@ BI.createWidget({
 | upload | 文件上传| —|
 | reset | 重置| —|
 
- 
+## 事件
+| 事件     | 说明                |
+| :------ |:------------- |
+|BI.MultifileEditor.EVENT_UPLOADSTART | 开始上传时触发   |
+|BI.MultifileEditor.EVENT_PROGRESS |  上传过程中触发          |
+|BI.MultifileEditor.EVENT_UPLOADED |  上传结束后触发   |
 
 
 ---
