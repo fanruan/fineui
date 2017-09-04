@@ -64,7 +64,7 @@ BI.createWidget({
 | resetHeight |  重置高度  | height|
 | setValue | 设置value 值 | value |
 | getValue| 获取value值 | —|
-| setZindex | 设置z-inex| z-index | 
+| setZindex | 设置z-index| z-index | 
 | getView | 获取弹出层 | —|
 
 

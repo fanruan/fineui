@@ -103,7 +103,7 @@
     * [formula_combo](case/combo/formula_combo.md)
     * [icon_combo](case/combo/icon_combo.md)
     * [static_combo](case/combo/static_combo.md)
-    * [text_value_combo](case/combo/static_combo.md)
+    * [text_value_combo](case/combo/text_value_combo.md)
     * [text_value_downlist_combo](case/combo/text_value_downlist_combo.md)
 * 树
     * [branch_tree](case/tree/branch_tree.md)

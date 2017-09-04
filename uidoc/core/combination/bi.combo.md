@@ -37,7 +37,7 @@ BI.createWidget({
 | destroyWhenHide | 隐藏弹窗层是否销毁 | boolean | true,false | false |
 | isNeedAdjustHeight | 是否需要高度调整 | boolean | true,false | true |
 | isNeedAdjustWidth | 是否需要宽度调整 | boolean | true,false | true |
-| stopEvent | 阻止事件冒泡 | boolean | true,false | false |
+| stopEvent | 是否阻止事件 | boolean | true,false | false |
 | stopPropagation | 阻止事件冒泡 | boolean | true,false | false |
 | adjustLength | 调整的距离 | number | — | 0 |
 | adjustXOffset | 调整横向偏移 | number | — | 0 |
@@ -62,12 +62,12 @@ BI.createWidget({
 | setValue |设置combo value值| v |
 | getValue | 获取combo value值 | —|
 | isViewVisible | 弹窗层是否可见 | —|
-| showView | ||
-| hideView |||
-| getView |||
-| getPopupPosition |||
-| toggle |||
-|destroy |||
+| showView | 显示弹出层 | —|
+| hideView | 隐藏弹出层 |—|
+| getView | 获取弹出层 | —|
+| getPopupPosition | 获取弹出层的位置 | —|
+| toggle | 开启或者隐藏弹出层 | —|
+| destroy | 销毁组件 | —|
 
 ## 事件
 | 名称     | 说明                |
@@ -81,6 +81,8 @@ BI.createWidget({
 |BI.Combo.EVENT_AFTER_POPUPVIEW | 下拉列表弹出后触发 |
 |BI.Combo.EVENT_BEFORE_HIDEVIEW | 下拉列表收起前触发 |
 |BI.Combo.EVENT_AFTER_HIDEVIEW | 下拉列表收起后触发 |
+
+
 ---
 
 
