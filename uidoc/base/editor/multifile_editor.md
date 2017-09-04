@@ -3,7 +3,7 @@
 ## 多文件,基类[BI.Single](/core/single.md)
 
 {% method %}
-[source](https://jsfiddle.net/fineui/txqwwzLm/)
+[source](https://jsfiddle.net/fineui/25r3r5fq/)
 
 {% common %}
 ```javascript
@@ -38,7 +38,12 @@ BI.createWidget({
 | upload | 文件上传| —|
 | reset | 重置| —|
 
- 
+## 事件
+| 事件     | 说明                |
+| :------ |:------------- |
+|BI.MultifileEditor.EVENT_UPLOADSTART | 开始上传时触发   |
+|BI.MultifileEditor.EVENT_PROGRESS |  上传过程中触发          |
+|BI.MultifileEditor.EVENT_UPLOADED |  上传结束后触发   |
 
 
 ---

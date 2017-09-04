@@ -3,16 +3,18 @@
 ## 公式编辑控件,基类[BI.Single](/core/single.md)
 
 {% method %}
-[source](https://jsfiddle.net/fineui/txqwwzLm/)
+[source](https://jsfiddle.net/fineui/qnquz4o0/)
 
 {% common %}
 ```javascript
 
 BI.createWidget({
-  type : 'bi.formula_editor',
-  width : 300,
-  height : 200,
-  value : 'SUM(C5, 16, 26)'
+  type: "bi.formula_editor",
+  cls: "bi-border",
+  watermark:'请输入公式',
+  value: 'SUM(C5, 16, 26)',
+  width: "100%",
+  height: "100%"
 });
 
 
