@@ -67,7 +67,10 @@ BI.createWidget({
 | restore | 还原列表设置 | — |
 | populate | 刷新列表 | items |
 
-
+## 事件
+| 事件     | 说明                           |  回调参数
+| :------ |:------------- |:----------|
+|BI.CollectionView.EVENT_SCROLL|    滚动时触发的事件 | {scrollLeft: scrollLeft, scrollTop: scrollTop} |
 
 ---
 

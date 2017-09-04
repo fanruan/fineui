@@ -7,28 +7,25 @@
 
 {% common %}
 ```javascript
-var items = [[{
-  text: "第一行第一列"
-}, {
-  text: "第一行第二列"
-}, {
-  text: "第一行第三列"
-}]];
-
-var header = [[{
-  text: "表头1"
-}, {
-  text: "表头2"
-}, {
-  text: "表头3"
-}]];
 
 BI.createWidget({
   type: "bi.preview_table",
-  header: header,
+  header: [[{
+            text: "表头1"
+          }, {
+            text: "表头2"
+          }, {
+            text: "表头3"
+          }]],
   element: 'body',
   columnSize: [100, "", 50],
-  items: items
+  items: [[{
+           text: "第一行第一列"
+         }, {
+           text: "第一行第二列"
+         }, {
+           text: "第一行第三列"
+         }]]
 });
 ```
 

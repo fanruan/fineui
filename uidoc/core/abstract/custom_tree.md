@@ -8,28 +8,6 @@
 {% common %}
 ```javascript
 
-var TREEITEMS=[{
-	id: -1,
-	pId: -2,
-	value: "根目录",
-	open: true,
-	type: "bi.plus_group_node",
-	height: 25
-},
-{
-	id: 1,
-	pId: -1,
-	value: "第一级目录1",
-	type: "bi.plus_group_node",
-	height: 25
-},
-{
-	id: 11,
-	pId: 1,
-	value: "第二级文件1",
-	type: "bi.single_select_item",
-	height: 25
-}];
 BI.createWidget({
 	type: "bi.custom_tree",
 	el: {
@@ -40,7 +18,28 @@ BI.createWidget({
 			hgap: 30
 		}]
 	},
-	items: BI.deepClone(TREEITEMS)
+	items: [{
+           	id: -1,
+           	pId: -2,
+           	value: "根目录",
+           	open: true,
+           	type: "bi.plus_group_node",
+           	height: 25
+           },
+           {
+           	id: 1,
+           	pId: -1,
+           	value: "第一级目录1",
+           	type: "bi.plus_group_node",
+           	height: 25
+           },
+           {
+           	id: 11,
+           	pId: 1,
+           	value: "第二级文件1",
+           	type: "bi.single_select_item",
+           	height: 25
+           }]
 });
 
 

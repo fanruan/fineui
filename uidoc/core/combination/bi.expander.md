@@ -34,6 +34,18 @@
 | isExpanded |  节点是否展开 | |
 | destroy | 销毁组件| — |
 
+## 事件
+| 名称     | 说明                |
+| :------ |:------------- |
+|BI.Expander.EVENT_TRIGGER_CHANGE | trigger发生改变触发   |
+|BI.Expander.EVENT_CHANGE |  弹出层点击触发          |
+|BI.Expander.EVENT_EXPAND |  Expander展开触发   |
+|BI.Expander.EVENT_COLLAPSE |    Expander收起触发
+|BI.Expander.EVENT_AFTER_INIT |  Expander初始化后触发 |
+|BI.Expander.EVENT_BEFORE_POPUPVIEW | 下拉列表弹出前触发 |
+|BI.Expander.EVENT_AFTER_POPUPVIEW | 下拉列表弹出后触发 |
+|BI.Expander.EVENT_BEFORE_HIDEVIEW | 下拉列表收起前触发 |
+|BI.Expander.EVENT_AFTER_HIDEVIEW | 下拉列表收起后触发 |
 
 ---
 

@@ -37,5 +37,6 @@ BI.createWidget({
 
 ##事件
 | 事件    | 说明           |
+| :------ |:------------- |
 |BI.NumericalInterval.EVENT_VALID| 区间合法的状态事件 |
 |BI.NumericalInterval.EVENT_ERROR| 区间不合法的状态事件 |

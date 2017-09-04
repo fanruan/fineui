@@ -26,5 +26,6 @@ BI.i18n = {
     "BI-Quarter_4": "第4季度",
     "BI-Basic_Value": "值",
     "BI-Load_More": "加载更多",
-    "BI-Select_All": "全选"
+    "BI-Select_All": "全选",
+    "BI-Basic_Auto": "自动"
 };

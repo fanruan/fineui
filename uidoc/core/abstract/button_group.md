@@ -9,18 +9,11 @@
 ```javascript
 
 BI.createWidget({
-	  element: "#wrapper",
+	element: "#wrapper",
     type: "bi.button_group",
-    ref: function (_ref) {
-      ref = _ref;
-    },
     chooseType: BI.ButtonGroup.CHOOSE_TYPE_SINGLE,
     layouts: [{
-      type: "bi.vertical",
-      items: [{
-        type: "bi.vtape",
-        height: 150,
-      }]
+      type: "bi.vertical"
     }],
     items: [{
       el: {
