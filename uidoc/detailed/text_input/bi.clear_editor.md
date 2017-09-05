@@ -40,3 +40,12 @@ BI.createWidget({
 
 --- ---
 
+## 事件
+| 事件    | 说明           |
+| :------ |:------------- |
+|BI.ClearEditor.EVENT_CLEAR| 点击清空按钮触发 |
+---
+
+其他事件详见[Input](../../base/editor/editor.md)
+
+

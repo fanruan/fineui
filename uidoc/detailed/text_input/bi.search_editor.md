@@ -17,24 +17,6 @@ BI.createWidget({
 
 {% endmethod %}
 
-## bi.small_search_editor 
-### 小一号的搜索框
-##### height默认为24
-
-{% method %}
-[source](https://jsfiddle.net/fineui/wwzza22k/)
-
-{% common %}
-```javascript
-BI.createWidget({
-	type: 'bi.search_editor',
-	element: '#wrapper',
-	width: 300,
-	watermark:"搜索",
-});
-```
-
-{% endmethod %}
 ##API
 
 | 参数    | 说明           | 类型  | 可选值 | 默认值
@@ -56,5 +38,12 @@ BI.createWidget({
 | height    |   文本框高度    |    number   |  |  30    |
 
 --- ---
+
+## 事件
+| 事件    | 说明           |
+| :------ |:------------- |
+|BI.SearchEditor.EVENT_CLEAR| 点击清空按钮触发 |
+---
+其他事件详见[Editor](../../base/editor/editor.md)
 
 

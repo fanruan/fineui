@@ -25,11 +25,19 @@
   overflow-y: hidden;
   white-space:nowrap;
 }
-.user-select(@select){
-  -webkit-user-select: @select;
-  -khtml-user-select: @select;
-  -moz-user-select: @select;
-  -ms-user-select: @select;
-  -o-user-select: @select;
-  user-select: @select;
+.user-select-disable(){
+  -webkit-user-select: none;
+  -khtml-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  -o-user-select: none;
+  user-select: none;
+}
+.user-select-enable(){
+  -webkit-user-select: text;
+  -khtml-user-select: text;
+  -moz-user-select: text;
+  -ms-user-select: text;
+  -o-user-select: text;
+  user-select: text;
 }

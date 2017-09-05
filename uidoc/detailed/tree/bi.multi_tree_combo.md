@@ -25,29 +25,13 @@ var items = [{
 }];
 
 BI.createWidget({
-  type: "bi.horizontal_auto",
-  element: "body",
-  items: [{
-  	type: "bi.multi_tree_combo",
-    ref: function (_ref) {
-      self.tree = _ref;
-    },
-    itemsCreator: function (options, callback) {
-      console.log(options);
-      
-      callback({
-        items: items
-      });
-    },
-    width: 300
-  }, {
-  	type: "bi.button",
-    text: "getVlaue",
-    handler: function () {
-      BI.Msg.toast(JSON.stringify(self.tree.getValue()));
-    },
-    width: 300
-  }]
+  type: "bi.multi_tree_combo",
+  itemsCreator: function (options, callback) {
+        callback({
+          items: items
+        });
+  },
+  width: 300
 })
 ```
 
@@ -67,4 +51,10 @@ BI.createWidget({
 | setValue | 设置文本框值  | setValue(v)     |
 | getValue | 获取文本框值  | getValue()      |
 | populate | 更改树结构内容 | populate(items) |
+
+## 事件
+| 事件    | 说明           |
+| :------ |:------------- |
+|BI.MultiTreeCombo.EVENT_CONFIRM| 点击一级节点触发 |
+---
 

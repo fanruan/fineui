@@ -1,4 +1,35 @@
-/*!
+if (!window.BI) {
+    window.BI = {};
+}
+BI.servletURL = "https://fanruan.coding.me/fineui/dist/";
+BI.resourceURL = "https://fanruan.coding.me/fineui/dist/resource/";
+BI.i18n = {
+    "BI-Basic_OK": "确定",
+    "BI-Basic_Sure": "确定",
+    "BI-Basic_Clears": "清空",
+    "BI-Basic_Cancel": "取消",
+    "BI-Basic_Time": "时间",
+    "BI-Basic_Simple_Sunday": "日",
+    "BI-Basic_Simple_Monday": "一",
+    "BI-Basic_Simple_Tuesday": "二",
+    "BI-Basic_Simple_Wednesday": "三",
+    "BI-Basic_Simple_Thursday": "四",
+    "BI-Basic_Simple_Friday": "五",
+    "BI-Basic_Simple_Saturday": "六",
+    "BI-Multi_Date_Year": "年",
+    "BI-Multi_Date_Month": "月",
+    "BI-Multi_Date_Quarter": "季度",
+    "BI-Basic_Unrestricted": "无限制",
+    "BI-Quarter_1": "第1季度",
+    "BI-Quarter_2": "第2季度",
+    "BI-Quarter_3": "第3季度",
+    "BI-Quarter_4": "第4季度",
+    "BI-Basic_Value": "值",
+    "BI-Load_More": "加载更多",
+    "BI-Select_All": "全选",
+    "BI-Basic_Auto": "自动",
+    "BI-No_More_Data": "无更多数据"
+};/*!
  * jQuery JavaScript Library v1.9.1
  * http://jquery.com/
  *
@@ -75309,6 +75340,37 @@ BI.extend(BI.DynamicSummaryTreeTable, {
 });
 
 BI.shortcut("bi.dynamic_summary_tree_table", BI.DynamicSummaryTreeTable);/**
+ * Created by GUY on 2016/5/7.
+ * @class BI.LayerTreeTableCell
+ * @extends BI.Single
+ */
+BI.LayerTreeTableCell = BI.inherit(BI.Widget, {
+    _defaultConfig: function () {
+        return BI.extend(BI.LayerTreeTableCell.superclass._defaultConfig.apply(this, arguments), {
+            baseCls: "bi-layer-tree-table-cell",
+            layer: 0,
+            text: ""
+        })
+    },
+
+    _init: function () {
+        BI.LayerTreeTableCell.superclass._init.apply(this, arguments);
+        var o = this.options;
+        BI.createWidget({
+            type: "bi.label",
+            element: this.element,
+            textAlign: "left",
+            whiteSpace: "nowrap",
+            height: o.height,
+            text: o.text,
+            value: o.value,
+            lgap: 5 + 30 * o.layer,
+            rgap: 5
+        })
+    }
+});
+
+BI.shortcut("bi.layer_tree_table_cell", BI.LayerTreeTableCell);/**
  *
  * 层级树状结构的表格
  *
@@ -82480,6 +82542,105 @@ BI.extend(BI.FileManagerNav, {
 });
 BI.FileManagerNav.EVENT_CHANGE = "FileManagerNav.EVENT_CHANGE";
 BI.shortcut("bi.file_manager_nav", BI.FileManagerNav);/**
+ * Created by User on 2017/9/5.
+ */
+BI.CustomFineTuningNumberEditor = BI.inherit(BI.Widget, {
+    _defaultConfig: function () {
+        return BI.extend(BI.CustomFineTuningNumberEditor.superclass._defaultConfig.apply(this, arguments), {
+            baseCls: "bi-fine-tuning-number-editor bi-border",
+            value: 0,
+            validationChecker: function () {
+                return true;
+            },
+            errorText: ""
+        })
+    },
+
+    _init: function () {
+        BI.CustomFineTuningNumberEditor.superclass._init.apply(this, arguments);
+        var self = this, o = this.options;
+        this.editor = BI.createWidget({
+            type: "bi.sign_editor",
+            height: o.height,
+            value: o.value,
+            validationChecker: o.validationChecker,
+            errorText: o.errorText
+        });
+        this.editor.on(BI.TextEditor.EVENT_CHANGE, function () {
+            self.fireEvent(BI.CustomFineTuningNumberEditor.EVENT_CHANGE);
+        });
+        this.editor.on(BI.TextEditor.EVENT_CONFIRM, function(){
+            self.fireEvent(BI.CustomFineTuningNumberEditor.EVENT_CONFIRM);
+        });
+        this.topBtn = BI.createWidget({
+            type: "bi.icon_button",
+            trigger: "lclick,",
+            cls: "column-pre-page-h-font top-button bi-border-left bi-border-bottom"
+        });
+        this.topBtn.on(BI.IconButton.EVENT_CHANGE, function(){
+            self._finetuning(1);
+            self.fireEvent(BI.CustomFineTuningNumberEditor.EVENT_CHANGE);
+            self.fireEvent(BI.CustomFineTuningNumberEditor.EVENT_CONFIRM);
+        });
+        this.bottomBtn = BI.createWidget({
+            type: "bi.icon_button",
+            trigger: "lclick,",
+            cls: "column-next-page-h-font bottom-button bi-border-left bi-border-top"
+        });
+        this.bottomBtn.on(BI.IconButton.EVENT_CHANGE, function(){
+            self._finetuning(-1);
+            self.fireEvent(BI.CustomFineTuningNumberEditor.EVENT_CHANGE);
+            self.fireEvent(BI.CustomFineTuningNumberEditor.EVENT_CONFIRM);
+        });
+        BI.createWidget({
+            type: "bi.htape",
+            element: this,
+            items: [this.editor, {
+                el: {
+                    type: "bi.grid",
+                    columns: 1,
+                    rows: 2,
+                    items: [{
+                        column: 0,
+                        row: 0,
+                        el: this.topBtn
+                    }, {
+                        column: 0,
+                        row: 1,
+                        el: this.bottomBtn
+                    }]
+                },
+                width: 23
+            }]
+        });
+    },
+
+    //微调
+    _finetuning: function(add){
+        var v = BI.parseFloat(this.editor.getValue());
+        this.editor.setValue(v.add(add));
+    },
+
+    setUpEnable: function (v) {
+        this.topBtn.setEnable(!!v);
+    },
+
+    setBottomEnable: function (v) {
+        this.bottomBtn.setEnable(!!v);
+    },
+
+    getValue: function () {
+        return this.editor.getValue();
+    },
+
+    setValue: function (v) {
+        this.editor.setValue(v);
+    }
+
+});
+BI.CustomFineTuningNumberEditor.EVENT_CHANGE = "EVENT_CHANGE";
+BI.CustomFineTuningNumberEditor.EVENT_CONFIRM = "EVENT_CONFIRM";
+BI.shortcut("bi.custom_fine_tuning_number_editor", BI.CustomFineTuningNumberEditor);/**
  * Created by windy on 2017/3/13.
  * 数值微调器
  */
@@ -93890,30 +94051,4 @@ BI.ValueChooserPane = BI.inherit(BI.AbstractValueChooser, {
     }
 });
 BI.ValueChooserPane.EVENT_CHANGE = "ValueChooserPane.EVENT_CHANGE";
-BI.shortcut('bi.value_chooser_pane', BI.ValueChooserPane);BI.servletURL = "https://fanruan.coding.me/fineui/dist/";
-BI.resourceURL = "https://fanruan.coding.me/fineui/dist/resource/";
-BI.i18n = {
-    "BI-Basic_OK": "确定",
-    "BI-Basic_Sure": "确定",
-    "BI-Basic_Clears": "清空",
-    "BI-Basic_Cancel": "取消",
-    "BI-Basic_Time": "时间",
-    "BI-Basic_Simple_Sunday": "日",
-    "BI-Basic_Simple_Monday": "一",
-    "BI-Basic_Simple_Tuesday": "二",
-    "BI-Basic_Simple_Wednesday": "三",
-    "BI-Basic_Simple_Thursday": "四",
-    "BI-Basic_Simple_Friday": "五",
-    "BI-Basic_Simple_Saturday": "六",
-    "BI-Multi_Date_Year": "年",
-    "BI-Multi_Date_Month": "月",
-    "BI-Multi_Date_Quarter": "季度",
-    "BI-Basic_Unrestricted": "无限制",
-    "BI-Quarter_1": "第1季度",
-    "BI-Quarter_2": "第2季度",
-    "BI-Quarter_3": "第3季度",
-    "BI-Quarter_4": "第4季度",
-    "BI-Basic_Value": "值",
-    "BI-Load_More": "加载更多",
-    "BI-Select_All": "全选"
-};
+BI.shortcut('bi.value_chooser_pane', BI.ValueChooserPane);
