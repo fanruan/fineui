@@ -30,3 +30,4 @@ BI.createWidget({
 | copy      | 获取需要拷贝的值   | function | BI.emptyFn |
 | afterCopy | 完成拷贝后执行的方法 | function | BI.emptyFn |
 
+------

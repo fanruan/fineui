@@ -45,3 +45,4 @@ BI.createWidget({
 | setPagerVisible | 设置页码是否可见 | true/false |
 | populate        | 清空内容     | —          |
 
+------

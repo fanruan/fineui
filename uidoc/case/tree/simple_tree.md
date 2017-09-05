@@ -30,10 +30,11 @@ tree.populate(items);
 
 ### 方法
 
-| 方法名      | 说明   | 回调参数                           |
+| 方法名      | 说明   | 参数                           |
 | -------- | ---- | ------------------------------ |
-| populate | 刷新内容 | items: 子项数组 keywords: 关键字标红字符串 |
+| populate | 去掉所有内容 | items: 子项数组 keywords: 关键字标红字符串 |
 | setValue | 设置值  | v                              |
 | getValue | 获得值  | —                              |
 | empty    | 清空树  | —                              |
 
+------

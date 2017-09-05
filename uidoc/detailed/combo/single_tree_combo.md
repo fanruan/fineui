@@ -33,7 +33,7 @@ var tree = BI.createWidget({
 
 ### 方法
 
-| 方法名      | 说明   | 回调参数        |
+| 方法名      | 说明   | 参数        |
 | -------- | ---- | ----------- |
 | populate | 刷新内容 | items: 子项数组 |
 | setValue | 设置值  | setValue    |

@@ -29,14 +29,15 @@ var tree = BI.createWidget({
 
 ### 方法
 
-| 方法名            | 说明       | 回调参数        |
+| 方法名            | 说明       | 参数        |
 | -------------- | -------- | ----------- |
 | initTree       | 构造树结构    | nodes       |
 | stroke         | 生成树方法    | nodes       |
-| populate       | 刷新内容     | items: 子项数组 |
+| populate       | 去掉所有内容     | items: 子项数组 |
 | setValue       | 设置值      | v           |
 | getValue       | 获得值      | —           |
 | getAllLeaves   | 获取所有叶节点  | —           |
 | getNodeById    | 根据Id获取节点 | id          |
 | getNodeByValue | 根据值获取节点  | id          |
 
+------

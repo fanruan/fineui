@@ -38,3 +38,5 @@ var tree = BI.createWidget({
 | populate | 刷新内容 | items: 子项数组 |
 | setValue | 设置值  | setValue    |
 | getValue | 获取值  | getValue    |
+
+------
