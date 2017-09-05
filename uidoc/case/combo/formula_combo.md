@@ -3,7 +3,7 @@
 ## 基类[BI.Widget](/core/widget.md)
 
 {% method %}
-[source](https://jsfiddle.net/fineui/urvt04so/)
+[source]()
 
 {% common %}
 ```javascript
@@ -19,7 +19,7 @@
 | 参数    | 说明           | 类型  | 可选值 | 默认值
 | :------ |:-------------  | :-----| :----|:----
 | height | 高度 | number | —| 30
-| items | 子组件 | array | [ ]|
+| items | 子组件 | array | — |[ ]|
  
 
 

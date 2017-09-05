@@ -53,9 +53,9 @@ BI.createWidget({
 ##### 基础属性
 | 参数    | 说明           | 类型  | 可选值 | 默认值
 | :------ |:-------------  | :-----| :----|:----
-| items | 子组件数组 | array |   | [ ] |
-| itemsCreator|  |  |   |  |
-| expander | | object |   | {el: {},popup: {type: "bi.custom_tree"}}|
+| items | 子组件数组 | array |  — | [ ] |
+| itemsCreator| 子组件构造器 | object | —  | { } |
+| expander |  | object |   | {el: {},popup: {type: "bi.custom_tree"}}|
 | el |  | object | | {type: "bi.button_tree",chooseType: 0,layouts: [{type: "bi.vertical"}]}|
 
 
@@ -68,7 +68,7 @@ BI.createWidget({
 | prependItems | 内部前插入 | items |
 | addItems | 内部后插入 | items |
 | populate | 刷新列表 | nodes|
-| render | 渲染列表 |  |
+| render | 渲染列表 | — |
 | setValue | 设置value值 | value,可以是单个值也可以是个数组 |
 | getValue | 获取被选中的值 |—|
 | getAllButtons | 获取所有button |—|

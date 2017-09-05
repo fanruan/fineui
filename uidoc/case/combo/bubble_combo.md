@@ -41,8 +41,8 @@ BI.createWidget({
 ##### 基础属性
 | 参数    | 说明           | 类型  | 可选值 | 默认值
 | :------ |:-------------  | :-----| :----|:----
-| text | | string | | "" |
-| value | 组件value值 | string | |""|
+| text |  组件text值 | string | —| "" |
+| value | 组件value值 | string |— |""|
 | stopEvent | 阻止事件 |boolean | true,false | false |
 | stopPropagation | 阻止冒泡 | boolean | true,false| false |
 | selected | button的选中状态 | boolean | true,false |false |
@@ -53,7 +53,7 @@ BI.createWidget({
 | shadow | 是否显示阴影 | boolean| true,false| false|
 | isShadowShowingOnSelected| 选中状态下是否显示阴影|boolean|  true,false | false|
 | trigger | 被选元素要触发的事件 | string | mousedown, mouseup, click, dblclick, lclick | null|
-| handler | 点击事件回调 | function | | BI.emptyFn |
+| handler | 点击事件回调 | function | —| BI.emptyFn |
  
 
 

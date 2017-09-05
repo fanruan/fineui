@@ -29,8 +29,8 @@ BI.createWidget({
 ##### 基础属性
 | 参数    | 说明           | 类型  | 可选值 | 默认值
 | :------ |:-------------  | :-----| :----|:----
-| items | 子组件数组 | array |   | [ ] |
-| layouts | 布局 | array |   | [{type: "bi.center",hgap: 0,vgap: 0}] |
+| items | 子组件数组 | array |  — | [ ] |
+| layouts | 布局 | array |  — | [{type: "bi.center",hgap: 0,vgap: 0}] |
 
 
 
@@ -42,7 +42,7 @@ BI.createWidget({
 | prependItems | 内部前插入 | items |
 | addItems | 内部后插入 | items |
 | populate | 刷新列表 | items |
-| render | 渲染列表 |  |
+| render | 渲染列表 | —|
 
 
 

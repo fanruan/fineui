@@ -26,15 +26,15 @@ BI.createWidget({
 
 | 参数    | 说明                           | 类型       | 可选值 | 默认值
 | :------ |:-------------                  | :-----     | :----|:----
-| hgap    | 效果相当于容器左右padding值    |    number  |  |  0  |
-| vgap    | 效果相当于容器上下padding值    |    number  |  |  0  |
-| lgap    | 效果相当于容器left-padding值   |    number  |  |  0  |
-| rgap    | 效果相当于容器right-padding值  |    number  |  |  0  |
-| tgap    | 效果相当于容器top-padding值    |    number  |  |  0  |
-| bgap    | 效果相当于容器bottom-padding值 |    number  |  |  0  |
-| textWidth   | 文本标签宽度     |    number|   | null    |
-| textHeight  | 文本标签宽度     |    number|   | null    |
-| text    | 文本内容        |    string |  | " " |
+| hgap    | 效果相当于容器左右padding值    |    number  |  —|  0  |
+| vgap    | 效果相当于容器上下padding值    |    number  |  —|  0  |
+| lgap    | 效果相当于容器left-padding值   |    number  | — |  0  |
+| rgap    | 效果相当于容器right-padding值  |    number  |  —|  0  |
+| tgap    | 效果相当于容器top-padding值    |    number  | — |  0  |
+| bgap    | 效果相当于容器bottom-padding值 |    number  | — |  0  |
+| textWidth   | 文本标签宽度     |    number| —  | null    |
+| textHeight  | 文本标签宽度     |    number| —  | null    |
+| text    | 文本内容        |    string | — | " " |
 
 
 ##### 高级属性
@@ -44,11 +44,11 @@ BI.createWidget({
 | textAlign  | 文本对齐方式     |    string  |  left,center,right | center |
 | whiteSpace | 元素内空白处理方式    |    string| normal,nowrap | nowrap|
 | forceCenter | 是否无论如何都要居中, 不考虑超出边界的情况, 在未知宽度和高度时有效    |    boolean | true,false |  true |
-| py      |      |    string |  | 空 |
-| keyword |      |    string |  | 空 |
+| py      |      |    string | — | 空 |
+| keyword |      |    string |  —| 空 |
 | disabled | 灰化     |    boolean| true,false | 无 |
-| title  | 提示title     |    string |  | 空 |
-| warningTitle | 错误提示title     |    string |  | 空 |
+| title  | 提示title     |    string | — | 空 |
+| warningTitle | 错误提示title     |    string | — | 空 |
 
 ## 对外方法
 | 名称     | 说明                           |  回调参数     
@@ -62,10 +62,6 @@ BI.createWidget({
 | setStyle | 设置文本样式 |需要设置的文本标签样式,例{"color":"#000"} |
 | setValue | 设置文本值 | 需要设置的文本值text |
 | populate| | —|
-
-
-
-
 
 
 ---

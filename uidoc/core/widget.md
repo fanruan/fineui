@@ -6,16 +6,16 @@
 ##### 基础属性
 | 参数    | 说明           | 类型  | 可选值 | 默认值
 | :------ |:-------------  | :-----| :----|:----
-| root | | boolean | true,false | false |
-| tagName | | string| | "div" |
-| attributes | | | | null |
-| data | | | | null |
+| root | 根组件 | boolean | true,false | false |
+| tagName |  html标签 | string| —| "div" |
+| attributes |  属性| object | —| null |
+| data | 数据 | object | — | null |
 | disabled | 是否可用 |  boolean |true,false | false |
-| invisible | | boolean | true,false | false|
+| invisible | 是否可见 | boolean | true,false | false|
 | invalid | 是否有效 | boolean | true,false |false |
-| baseCls | 基础class类 | string | | " "|
-| extraCls | 扩展class类 | string|  | " "|
-| cls | class类名 | string | | " "|
+| baseCls | 基础class类 | string | —| " "|
+| extraCls | 扩展class类 | string| — | " "|
+| cls | class类名 | string |— | " "|
 
 ## 生命周期函数
 | 名称     | 说明                           |  回调参数     

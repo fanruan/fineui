@@ -9,7 +9,7 @@
 | :------ |:-------------  | :-----| :----|:----
 | tipText | title文本 | string | — | BI.i18nText("BI-No_Selected_Item") |
 | overlap| | boolean | true,false | true |
-| onLoaded | | function | — | — |
+| onLoaded |  | function | — | — |
 
 
 ## 对外方法

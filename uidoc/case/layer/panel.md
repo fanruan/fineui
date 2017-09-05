@@ -3,7 +3,7 @@
 ## 带有标题栏的panel，基类[BI.Widget](/core/widget.md)
 
 {% method %}
-[source](https://jsfiddle.net/fineui/p68bwkmv/)
+[source]()
 
 {% common %}
 ```javascript

@@ -3,7 +3,7 @@
 ## 单选combo,基类[BI.Widget](/core/widget.md)
 
 {% method %}
-[source](https://jsfiddle.net/fineui/urvt04so/)
+[source]()
 
 {% common %}
 ```javascript
@@ -20,10 +20,10 @@
 | 参数    | 说明           | 类型  | 可选值 | 默认值
 | :------ |:-------------  | :-----| :----|:----
 | height | 高度 | number | — | 24
-| el | 开启弹出层的元素| object | { } |
+| el | 自定义下拉框trigger| object | —|{ } |
 | items | 子组件 | array | — | [ ]
 | text | 文本内容 | string | — | " " |
-| chooseType | 选择类型 | const | | BI.ButtonGroup.CHOOSE_TYPE_SINGLE |
+| chooseType | 选择类型 | const |参考button_group | BI.ButtonGroup.CHOOSE_TYPE_SINGLE |
  
 
 

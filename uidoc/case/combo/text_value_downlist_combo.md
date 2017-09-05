@@ -3,7 +3,7 @@
 ## 基类[BI.Widget](/core/widget.md)
 
 {% method %}
-[source](https://jsfiddle.net/fineui/urvt04so/)
+[source]()
 
 {% common %}
 ```javascript

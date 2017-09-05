@@ -3,7 +3,7 @@
 ## list面板，基类[BI.Widget](/core/widget.md)
 
 {% method %}
-[source](https://jsfiddle.net/fineui/p68bwkmv/)
+[source]()
 
 {% common %}
 ```javascript
@@ -24,12 +24,12 @@
 | onLoad | 正在加载 | function | —| — 
 | el | 开启panel的元素 | object | —|{type: "bi.button_group" }|
 | logic | | object |— | { dynamic:true}
-| hgap    | 效果相当于容器左右padding值    |    number  |  |  0  |
-| vgap    | 效果相当于容器上下padding值    |    number  |  |  0  |
-| lgap    | 效果相当于容器left-padding值   |    number  |  |  0  |
-| rgap    | 效果相当于容器right-padding值  |    number  |  |  0  |
-| tgap    | 效果相当于容器top-padding值    |    number  |  |  0  |
-| bgap    | 效果相当于容器bottom-padding值 |    number  |  |  0  |
+| hgap    | 效果相当于容器左右padding值    |    number  | — |  0  |
+| vgap    | 效果相当于容器上下padding值    |    number  |  —|  0  |
+| lgap    | 效果相当于容器left-padding值   |    number  |  —|  0  |
+| rgap    | 效果相当于容器right-padding值  |    number  | — |  0  |
+| tgap    | 效果相当于容器top-padding值    |    number  | — |  0  |
+| bgap    | 效果相当于容器bottom-padding值 |    number  | — |  0  |
 
 
 

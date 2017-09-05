@@ -24,9 +24,9 @@ BI.createWidget({
 | 参数    | 说明           | 类型  | 可选值 | 默认值
 | :------ |:-------------  | :-----| :----|:----
 | multiple | 是否支持多选 | boolean | true,false| false |
-| maxSize | 最大可选数量 | number | | -1 |
-| accept | | string | | " "|
-| url | 文件路径 | string | | " "|
+| maxSize | 最大可选数量 | number |— | -1 |
+| accept | | string | —| " "|
+| url | 文件路径 | string | —| " "|
 
 
 

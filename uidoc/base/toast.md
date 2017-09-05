@@ -3,7 +3,7 @@
 #### toast提示
 
 {% method %}
-[source]()
+[source](https://jsfiddle.net/fineui/wop751sg/)
 
 {% common %}
 ```javascript
@@ -28,8 +28,8 @@ BI.createWidget({
 | 参数        | 说明            | 类型    | 可选值 | 默认值
 | :------     |:-------------   | :-----  | :----  |:----
 | level       | 提示类型    |    string | success,warning |  "success"  |
-| height      | 高度        | number  |        | 30      |
-| text        | 显示内容    | string  |        | " "     |
+| height      | 高度        | number  |   —     | 30      |
+| text        | 显示内容    | string  |   —     | " "     |
 
 
 

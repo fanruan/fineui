@@ -3,7 +3,7 @@
 ## 切换显示或隐藏面板,[BI.Widget](/core/widget.md)
 
 {% method %}
-[source](https://jsfiddle.net/fineui/72gp1n0p/)
+[source](https://jsfiddle.net/fineui/pdo5s8pq/)
 
 {% common %}
 ```javascript
@@ -57,9 +57,8 @@ BI.createWidget({
 | single | 是否为单页 | boolean | true,false | false |
 | defaultShowIndex | 是否默认显示tab页 | boolean | true,false | false |
 | tab | tab标签页 | object | — | { } |
-| defaultShowIndex ||boolean | true,false | false |
-| logic | | object | | {dynamic:false} |
-| cardCreator | 面板构造器| function | | function (v) {return BI.createWidget();} |
+| logic | | object | — | {dynamic:false} |
+| cardCreator | 面板构造器| function | — | function (v) {return BI.createWidget();} |
 
 ## 对外方法
 | 名称     | 说明                           |  回调参数     

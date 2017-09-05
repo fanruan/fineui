@@ -34,14 +34,14 @@ BI.createWidget({
 ##### 基础属性
 | 参数    | 说明           | 类型  | 可选值 | 默认值
 | :------ |:-------------  | :-----| :----|:----
-| items | 子组件数组 | array |   | [ ] |
+| items | 子组件数组 | array |  — | [ ] |
 | overflowX | 是否显示横向滚动条| boolean | true,false | true |
 | overflowY | 是否显示纵向滚动条 | boolean | true,false | true |
-| cellSizeAndPositionGetter |设置每个单元格的位置坐标和宽高 | function| | — |
-| horizontalOverscanSize | | number |  | 0 |
-| verticalOverscanSize | | number |  | 0 |
-| width | 行宽，必设 |number| | —  |
-| height | 列宽，必设 | number | | — |
+| cellSizeAndPositionGetter |设置每个单元格的位置坐标和宽高 | function|— | — |
+| horizontalOverscanSize | | number | — | 0 |
+| verticalOverscanSize | | number | — | 0 |
+| width | 行宽，必设 |number| —ßß | —  |
+| height | 列宽，必设 | number | —| — |
 | scrollLeft | 滚动条相对于左边的偏移 | number | — | 0 |
 | scrollTop |  滚动条相对于顶部的偏移 | number | — | 0 |
 

@@ -8,10 +8,10 @@
 | 参数    | 说明           | 类型  | 可选值 | 默认值
 | :------ |:-------------  | :-----| :----|:----
 | readonly | 是否只读 | boolean |  true,false| false |
-| title | title | string | | null |
-| warningTitle | 错误title | string | | null|
+| title | title | string |— | null |
+| warningTitle | 错误title | string | —| null|
 | tipType | title类型 | string | success,warning | null |
-| value | 组件value值 | string | | null |
+| value | 组件value值 | string |— | null |
 
 
 
@@ -20,7 +20,7 @@
 | :------ |:-------------                  | :-----   
 | enableHover | 恢复hover可用| opt |
 | disabledHover | 取消hover事件 | —|
-| populate | | —|
+| populate | 刷新或者清空列表 | items |
 | setTitle | 设置title| title,opt |
 | setWarningTitle | 设置错误title | title,opt|
 | getTipType | 获取tipType|—|
