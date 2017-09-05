@@ -27,7 +27,7 @@ BI.createWidget({
 ## 参数设置
 | 参数               | 说明      | 类型     | 默认值   |
 | ---------------- | ------- | ------ | ----- |
-| isNeedFreeze     | 是否需要冻结  | bool   | false |
+| isNeedFreeze     | 是否需要冻结  | boolean   | false |
 | freezeCols       | 冻结列     | array  | []    |
 | columnSize       | 单元格宽度集合 | array  | []    |
 | headerRowSize    | 表头高度    | number | 25    |
@@ -40,7 +40,7 @@ BI.createWidget({
 | 方法名                      | 说明          | 用法                                   |
 | ------------------------ | ----------- | ------------------------------------ |
 | setWidth                  | 设置宽度        | setWidth(width)                      |
-| setHeight                 | 设置高度        | setHeight(height)                    |
+| setHeight                 | 设置高度        | setHeight(height)                    |w
 | getRegionSize            | 获取间隙大小      | getRegionSize()                      |
 | setColumnSize            | 设置列宽        | setColumnSize(columnSize)            |
 | getColumnSize            | 得到列宽        | getColumnSize()                      |

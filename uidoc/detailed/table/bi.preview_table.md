@@ -35,7 +35,7 @@ BI.createWidget({
 
 | 参数            | 说明   | 类型           | 默认值   |
 | ------------- | ---- | ------------ | ----- |
-| isNeedFreeze  | 是否冻结 | bool         | false |
+| isNeedFreeze  | 是否冻结 | boolean         | false |
 | freezeCols    | 冻结的列 | array        | []    |
 | rowSize       | 行高   | array/number | null  |
 | columnSize    | 列宽   | array        | []    |

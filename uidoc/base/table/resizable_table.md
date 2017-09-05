@@ -39,11 +39,11 @@ BI.createWidget({
 ## 参数设置
 | 参数               | 说明        | 类型     | 默认值   |
 | ---------------- | --------- | ------ | ----- |
-| isNeedFreeze     | 是否需要冻结列   | bool   | false |
+| isNeedFreeze     | 是否需要冻结列   | boolean   | false |
 | freezeCols       | 冻结的列      | array  | []    |
-| isNeedResize     | 是否需要调整大小  | bool   | false |
-| isResizeAdapt    | 是否调整时自适应  | bool   | true  |
-| isNeedMerge      | 是否需要合并单元格 | bool   | false |
+| isNeedResize     | 是否需要调整大小  | boolean   | false |
+| isResizeAdapt    | 是否调整时自适应  | boolean   | true  |
+| isNeedMerge      | 是否需要合并单元格 | boolean   | false |
 | mergeCols        | 合并的单元格列号  | array  | []    |
 | columnSize       | 单元格宽度集合   | array  | []    |
 | minColumnSize    | 最小列宽      | array  | []    |

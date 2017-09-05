@@ -38,18 +38,18 @@ BI.createWidget({
 
 | 参数               | 说明                                   | 类型       | 默认值      |
 | ---------------- | ------------------------------------ | -------- | -------- |
-| isNeedFreeze     | 是否需要冻结单元格                            | bool     | false    |
+| isNeedFreeze     | 是否需要冻结单元格                            | boolean     | false    |
 | freezeCols       | 冻结的列号,从0开始,isNeedFreeze为true时生效      | array    | []       |
-| isNeedMerge      | 是否需要合并单元格                            | bool     | false    |
+| isNeedMerge      | 是否需要合并单元格                            | boolean     | false    |
 | mergeRule        | function (row1, row2)  合并规则, 默认相等时合并 | function | function |
 | columnSize       | 列宽                                   | array    | []       |
 | headerRowSize    | 表头行高                                 | number   | 25       |
 | footerRowSize    | 表尾行高                                 | number   | 25       |
 | rowSize          | 行高                                   | number   | 25       |
 | columnSize       | 列宽                                   | array    | []       |
-| regionColumnSize |                                      | bool     | false    |
+| regionColumnSize |                                      | boolean     | false    |
 | header           | 表头内容                                 | array    | []       |
-| footer           | 是否需要表尾                               | bool     | false    |
+| footer           | 是否需要表尾                               | boolean     | false    |
 | items            | 子组件二维数组                              | array    | []       |
 | crossHeader      | 交叉表头                                 | array    | []       |
 | crossItems       | 交叉表内容二维数组                            | array    | []       |

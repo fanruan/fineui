@@ -36,7 +36,7 @@ var pager = BI.createWidget({
 | ---------- | --------- | ---------------------- | --------------- | ---------- |
 | height     |           | 控件高度                   | number          | 30         |
 | horizontal |           | 横向翻页设置                 | object          | —          |
-|            | pages     | 总页数                    | number/bool     | false      |
+|            | pages     | 总页数                    | number/boolean     | false      |
 |            | curr      | 当前页， pages为数字时可用       | number          | 1          |
 |            | hasPrev   | 判断是否有前一页的方法            | function        | BI.emptyFn |
 |            | hasNext   | 判断是否有后一页的方法            | function        | BI.emptyFn |
