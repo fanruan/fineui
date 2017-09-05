@@ -9,8 +9,12 @@
 ```javascript
 
 BI.createWidget({
-  type: "bi.editor_trigger",
-  element: "body",
+    type: "bi.select_list",
+    items: [{
+        text: '1',
+    }, {
+        text: '2',
+    }]
 });
 
 ```
@@ -19,18 +23,35 @@ BI.createWidget({
 
 ### 参数
 
-| 参数                | 说明      | 类型       | 默认值        |
-| ----------------- | ------- | -------- | ---------- |
-| validationChecker | 验证函数    | function | BI.emptyFn |
-| quitChecker       | 退出时验证函数 | function | BI.emptyFn |
-| allowBlank        | 是否允许为空  | bool     | false      |
-| watermark         | 水印      | string   | ""         |
-| errorText         | 错误信息    | string   | ""         |
-| triggerWidth      | 触发器宽度   | number   | 30         |
+| 参数           | 说明              | 类型       | 默认值              |
+| ------------ | --------------- | -------- | ---------------- |
+| direction    | toolbar位置       | string   | BI.Direction.Top |
+| onLoaded     | 加载完成的回调（测试了无效果） | function | BI.emptyFn       |
+| items        | 子项              | array    | []               |
+| itemsCreator | 元素创造器           | function | BI.emptyFn       |
 
 ### 方法
 
-| 方法名      | 说明   | 参数    |
-| -------- | ---- | ----- |
-| setValue | 设置值  | value |
-| getVlaue | 获得值  | —     |
+| 方法名                   | 说明            | 参数      |
+| --------------------- | ------------- | ------- |
+| setAllSelected        | 设置全选          | v: boolean |
+| setToolBarVisible     | 设置toolbar是否可见 | b: boolean |
+| isAllSelected         | 是否全选中         | —       |
+| hasPrev               | 是否有上一页        | —       |
+| hasNext               | 是否有下一页        | —       |
+| prependItems          | 列表最前添加元素      | items   |
+| addItems              | 列表最后添加元素      | items   |
+| setValue              | 设置值           | data    |
+| getVlaue              | 获得值           | —       |
+| empty                 | 清空            | —       |
+| populate              | 替换内容          | items   |
+| resetHeight           | 重新设置高度        | h       |
+| setNotSelectedValue   | 设置未选中值        | —       |
+| getNotSelectedValue   | 获取未选中植        | —       |
+| getAllButtons         | 获得所以根节点       | —       |
+| getAllLeaves          | 获得所有叶节点       | —       |
+| getSelectedButtons    | 获取选中的根节点      | —       |
+| getNotSelectedButtons | 获取未选中的根节点     | —       |
+| getIndexByValue       | 根据值获取索引       | value   |
+| getNodeById           | 根据id获取node    | id      |
+| getNodeByValue        | 根据值获取node     | value   |
