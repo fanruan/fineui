@@ -8435,7 +8435,7 @@ Demo.Slider = BI.inherit(BI.Widget, {
         });
         this.slider.setValue("30");
 
-        this.slider.on(BI.Slider.EVENT_CHANGE, function () {
+        this.slider.on(BI.SliderNormal.EVENT_CHANGE, function () {
             console.log(this.getValue());
         })
     }

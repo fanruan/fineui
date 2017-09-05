@@ -1,7 +1,7 @@
 /**
  * Created by Urthur on 2017/9/4.
  */
-BI.Slider = BI.inherit(BI.Widget, {
+BI.SliderNormal = BI.inherit(BI.Widget, {
     _constant: {
         HEIGHT: 28,
         SLIDER_WIDTH_HALF: 10,
@@ -11,7 +11,7 @@ BI.Slider = BI.inherit(BI.Widget, {
     },
 
     _defaultConfig: function () {
-        return BI.extend(BI.Slider.superclass._defaultConfig.apply(this, arguments), {
+        return BI.extend(BI.SliderNormal.superclass._defaultConfig.apply(this, arguments), {
             baseCls: "bi-slider",
             min: 10,
             max: 50
@@ -19,7 +19,7 @@ BI.Slider = BI.inherit(BI.Widget, {
     },
 
     _init: function () {
-        BI.Slider.superclass._init.apply(this, arguments);
+        BI.SliderNormal.superclass._init.apply(this, arguments);
         var self = this;
         var c = this._constant, o = this.options;
         this.enable = false;
@@ -48,13 +48,13 @@ BI.Slider = BI.inherit(BI.Widget, {
                 var v = self._getValueByPercent(significantPercent);
                 self.value = BI.parseInt(v) + 1;
                 self.slider.setValue(self.getValue());
-                self.fireEvent(BI.Slider.EVENT_CHANGE);
+                self.fireEvent(BI.SliderNormal.EVENT_CHANGE);
             },
             stop: function (e, ui) {
                 var percent = (ui.position.left) * 100 / (self._getRightTrackLength());
                 var significantPercent = BI.parseFloat(percent.toFixed(1));
                 self._setSliderPosition(significantPercent);
-                self.fireEvent(BI.Slider.EVENT_CHANGE);
+                self.fireEvent(BI.SliderNormal.EVENT_CHANGE);
             }
         });
         var sliderVertical = BI.createWidget({
@@ -88,7 +88,7 @@ BI.Slider = BI.inherit(BI.Widget, {
                 var v = self._getValueByPercent(significantPercent);
                 self.value = BI.parseInt(v);
                 self.slider.setValue(self.getValue());
-                self.fireEvent(BI.Slider.EVENT_CHANGE);
+                self.fireEvent(BI.SliderNormal.EVENT_CHANGE);
             }
         });
 
@@ -197,5 +197,5 @@ BI.Slider = BI.inherit(BI.Widget, {
     }
 });
 
-BI.Slider.EVENT_CHANGE = "EVENT_CHANGE";
-BI.shortcut("bi.slider", BI.Slider);
+BI.SliderNormal.EVENT_CHANGE = "EVENT_CHANGE";
+BI.shortcut("bi.slider", BI.SliderNormal);
