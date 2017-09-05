@@ -38,16 +38,16 @@ var tree = BI.createWidget({
 | items | 子项，pId代表父节点ID | array | []   |
 
 ## 方法
-| 方法名          | 说明        | 用法           |
+| 方法名          | 说明        | 参数           |
 | ------------ | --------- | ------------ |
-| switchSelect | 切换树结构     | switchSelect |
-| setSelect    | 设置选中项     | setSelect(v) |
-| getSelect    | 获取选中项     | getSelect()  |
-| setValue     | 设置当前选中项内容 | setValue(v)  |
-| getValue     | 获取当前选中项内容 | getValue(v)  |
-| populate     | 更新内容      | populate(items)  |
+| switchSelect | 切换树结构     | — |
+| setSelect    | 设置选中项     | v |
+| getSelect    | 获取选中项     | —  |
+| setValue     | 设置当前选中项内容 | v  |
+| getValue     | 获取当前选中项内容 | v  |
+| populate     | 更改树结构内容      | items  |
 
-
+------
 
 
 

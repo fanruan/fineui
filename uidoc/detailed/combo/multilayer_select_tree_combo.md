@@ -38,3 +38,4 @@ var tree = BI.createWidget({
 | setValue | 设置值  | setValue    |
 | getValue | 获取值  | getValue    |
 
+------
