@@ -25,7 +25,7 @@ BI.createWidget({
 | ----------------- | ------- | -------- | ---------- |
 | validationChecker | 验证函数    | function | BI.emptyFn |
 | quitChecker       | 退出时验证函数 | function | BI.emptyFn |
-| allowBlank        | 是否允许为空  | boolean     | false      |
+| allowBlank        | 是否允许为空  | boolean  | false      |
 | watermark         | 水印      | string   | ""         |
 | errorText         | 错误信息    | string   | ""         |
 | triggerWidth      | 触发器宽度   | number   | 30         |
@@ -39,4 +39,6 @@ BI.createWidget({
 | setValue | 设置值  | value |
 | getVlaue | 获得值  | —     |
 | setText  |      | text  |
+
+------
 

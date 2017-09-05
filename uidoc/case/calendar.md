@@ -44,3 +44,4 @@ BI.createWidget({
 | setValue    | 设置日期    | object: {year, month, day} |
 | getVlaue    | 获得日期    | —                          |
 
+------

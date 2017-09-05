@@ -47,7 +47,7 @@ BI.createWidget({
 
 
 ## 方法
-| 方法名                      | 说明          | 回调参数               |
+| 方法名                      | 说明          | 参数               |
 | ------------------------ | ----------- | ------------------ |
 | setWidth                 | 设置宽度        | width: 宽度          |
 | setHeight                | 设置高度        | height: 高度         |
@@ -66,3 +66,4 @@ BI.createWidget({
 | populate                 | 增加项         | items: array       |
 | destroy                  | 摧毁表         | —                  |
 
+------

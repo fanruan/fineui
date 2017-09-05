@@ -62,3 +62,4 @@ var pager = BI.createWidget({
 | setVPagerVisible | 设置纵向分页键可见  | —    |
 | populate         | 清空内容       | —    |
 
+------

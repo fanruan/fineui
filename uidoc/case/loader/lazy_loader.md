@@ -39,3 +39,5 @@ BI.createWidget({
 | getIndexByValue       | 根据值获取索引    | value |
 | getNodeById           | 根据id获取node | id    |
 | getNodeByValue        | 根据值获取node  | value |
+
+------

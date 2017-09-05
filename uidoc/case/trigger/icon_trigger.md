@@ -16,3 +16,6 @@ BI.createWidget({
 ```
 
 {% endmethod %}
+
+------
+

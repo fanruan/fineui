@@ -24,5 +24,5 @@ BI.createWidget({
 | setValue | 设置值  | value |
 | getVlaue | 获得值  | —     |
 
-
+------
 
