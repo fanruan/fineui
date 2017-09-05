@@ -1,6 +1,6 @@
 # bi.table_view
 
-### 表格展示控件
+### 能处理静态宽度以及动态宽度的表
 
 {% method %}
 [source](https://jsfiddle.net/fineui/mbazb80a/)
@@ -25,7 +25,6 @@ BI.createWidget({
 ## 参数设置
 | 参数               | 说明            | 类型                   | 默认值               |
 | ---------------- | ------------- | -------------------- | ----------------- |
-| isNeedResize     | 是否需要调整大小      | boolean                 | false             |
 | isNeedMerge      | 是否需要合并单元格     | boolean                 | false             |
 | mergeCols        | 合并的单元格列号      | array                | []                |
 | mergeRule        | 合并规则, 默认相等时合并 | function(row1, row2) | 默认row1 = row2 时合并 |

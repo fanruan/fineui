@@ -29,7 +29,7 @@ BI.createWidget({
 | 参数       | 说明                   | 类型     | 默认值  |
 | -------- | -------------------- | ------ | ---- |
 | expander | branch_expander组件配置项 | object | {}   |
-| el       |                      | object | {}   |
+| el       | 基础元素                     | object | {}   |
 | items    | 子项                   | array  | []   |
 
 

@@ -3,7 +3,7 @@
 ### 继承BI.Widget
 
 {% method %}
-[source](https://jsfiddle.net/fineui/0e7p2ezc/)
+[source](https://jsfiddle.net/fineui/x2zxfzhp/)
 
 {% common %}
 ```javascript

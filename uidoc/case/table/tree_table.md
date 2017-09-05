@@ -3,11 +3,22 @@
 ### 树状结构的表格
 
 {% method %}
-[source](https://jsfiddle.net/fineui/pqyuLoay/)
+[source](https://jsfiddle.net/fineui/a0m21ozk/)
 
 {% common %}
 ```javascript
-// More coming...
+var table = BI.createWidget({
+    type: "bi.tree_table",
+    width: 600,
+    height: 400,
+    columnSize: [100, 100, 100, 100, 100, 100, 100, 100, 100, 100],
+    minColumnSize: [100, 100, 100, 100, 100, 100, 100, 100, 100, 100],
+    header: header,
+    items: items,
+    crossHeader: crossHeader,
+    crossItems: crossItems,
+    element: 'body',
+});
 ```
 
 {% endmethod %}

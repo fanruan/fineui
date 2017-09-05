@@ -7,7 +7,18 @@
 
 {% common %}
 ```javascript
-// More coming...
+var table = BI.createWidget({
+    type: "bi.layer_tree_table",
+    width: 600,
+    height: 400,
+    columnSize: [100, 100, 100, 100, 100, 100, 100, 100, 100, 100],
+    minColumnSize: [100, 100, 100, 100, 100, 100, 100, 100, 100, 100],
+    header: header,
+    items: items,
+    crossHeader: crossHeader,
+    crossItems: crossItems,
+    element: 'body',
+});
 ```
 
 {% endmethod %}
