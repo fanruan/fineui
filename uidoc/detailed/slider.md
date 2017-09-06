@@ -8,8 +8,9 @@
 {% common %}
 ```javascript
 BI.createWidget({
-    type: "bi.multi_select_combo",
-    items: [],
+    type: "bi.slider",
+    min: 16,
+    max: 50,
 });
 ```
 

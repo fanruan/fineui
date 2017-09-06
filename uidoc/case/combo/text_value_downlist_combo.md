@@ -1,6 +1,6 @@
 # bi.text_value_down_list_combo
 
-## 基类[BI.Widget](/core/widget.md)
+## 有二级下拉菜单的combo 基类[BI.Widget](/core/widget.md)
 
 {% method %}
 [source](https://jsfiddle.net/fineui/xtxmfgx1/)

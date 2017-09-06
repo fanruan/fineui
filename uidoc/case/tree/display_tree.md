@@ -1,6 +1,6 @@
 # bi.display_tree
 
-### 异步树控件
+### 树展示控件
 
 {% method %}
 [source](https://jsfiddle.net/fineui/cfL6fpa1/)
