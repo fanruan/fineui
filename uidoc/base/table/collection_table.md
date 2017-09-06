@@ -1,6 +1,6 @@
 # bi.collection_table
 
-### 继承BI.Widget
+### 基本的表格 继承BI.Widget
 
 {% method %}
 [source](https://jsfiddle.net/fineui/x2zxfzhp/)

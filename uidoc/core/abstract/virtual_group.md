@@ -1,9 +1,9 @@
 # bi.virtual_group
 
-## 一组具有相同属性的元素集合,基类[BI.Widget](/core/widget.md)
+## 优化过的buttonGroup,删除看不见的元素 基类[BI.Widget](/core/widget.md)
 
 {% method %}
-[source](https://jsfiddle.net/fineui/gesh31xg/)
+[source](https://jsfiddle.net/fineui/9pd0dct0/)
 
 {% common %}
 ```javascript

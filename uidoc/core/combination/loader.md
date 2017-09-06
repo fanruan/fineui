@@ -2,6 +2,28 @@
 
 ## 加载控件,[BI.Widget](/core/widget.md)
 
+{% method %}
+[source](https://jsfiddle.net/fineui/qgLtctnx/)
+
+{% common %}
+```javascript
+
+BI.createWidget({
+  element: "#wrapper",
+  type: "bi.loader",
+  itemsCreator: function(options, populate) {
+    populate();
+  },
+  hasNext: function(option) {
+    return option.count < 10;
+  }
+});
+
+
+
+```
+
+{% endmethod %}
 
 ## API
 ##### 基础属性
