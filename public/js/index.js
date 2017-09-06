@@ -28,5 +28,6 @@ BI.i18n = {
     "BI-Load_More": "加载更多",
     "BI-Select_All": "全选",
     "BI-Basic_Auto": "自动",
-    "BI-No_More_Data": "无更多数据"
+    "BI-No_More_Data": "无更多数据",
+    "BI-No_Selected_Value": "没有可选项"
 };
