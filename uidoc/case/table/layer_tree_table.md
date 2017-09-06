@@ -7,7 +7,18 @@
 
 {% common %}
 ```javascript
-// More coming...
+var table = BI.createWidget({
+    type: "bi.layer_tree_table",
+    width: 600,
+    height: 400,
+    columnSize: [100, 100, 100, 100, 100, 100, 100, 100, 100, 100],
+    minColumnSize: [100, 100, 100, 100, 100, 100, 100, 100, 100, 100],
+    header: header,
+    items: items,
+    crossHeader: crossHeader,
+    crossItems: crossItems,
+    element: 'body',
+});
 ```
 
 {% endmethod %}
@@ -15,11 +26,11 @@
 ## 参数设置
 | 参数                      | 说明                       | 类型                   | 默认值               |
 | ----------------------- | ------------------------ | -------------------- | ----------------- |
-| isNeedResize            | 是否需要调整列宽                 | bool                 | false             |
-| isResizeAdapt           | 是否需要在调整列宽或区域宽度的时候它们自适应变化 | bool                 | true              |
-| isNeedFreeze            | 是否需要冻结表头                 | bool                 | false             |
+| isNeedResize            | 是否需要调整列宽                 | boolean                 | false             |
+| isResizeAdapt           | 是否需要在调整列宽或区域宽度的时候它们自适应变化 | boolean                 | true              |
+| isNeedFreeze            | 是否需要冻结表头                 | boolean                 | false             |
 | freezeCols              | 冻结的列                     | array                | []                |
-| isNeedMerge             | 是否需要合并单元格                | bool                 | false             |
+| isNeedMerge             | 是否需要合并单元格                | boolean                 | false             |
 | mergeCols               | 合并的单元格列号                 | array                | []                |
 | mergeRule               | 合并规则, 默认相等时合并            | function(row1, row2) | 默认row1 = row2 时合并 |
 | columnSize              | 单元格宽度集合                  | array                | []                |
@@ -39,7 +50,7 @@
 
 
 ## 方法
-| 方法名                      | 说明          | 回调参数               |
+| 方法名                      | 说明          | 参数               |
 | ------------------------ | ----------- | ------------------ |
 | setWidth                 | 设置宽度        | width: 宽度          |
 | setHeight                | 设置高度        | height: 高度         |
@@ -58,5 +69,4 @@
 | populate                 | 增加项         | items: array       |
 | destroy                  | 摧毁表         | —                  |
 
-
-
+------

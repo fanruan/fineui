@@ -30,17 +30,18 @@ BI.createWidget({
 
 ## API
 ##### 基础属性
+###### chooseType可选值为 CHOOSE_TYPE_SINGLE,CHOOSE_TYPE_MULTI,CHOOSE_TYPE_ALL,CHOOSE_TYPE_NONE,CHOOSE_TYPE_DEFAULT
 | 参数    | 说明           | 类型  | 可选值 | 默认值
 | :------ |:-------------  | :-----| :----|:----
-| behaviors | |object | |{ }|
-| items | 子组件数组 | array |   | [ ] |
-| chooseType | 选择类型 | const |CHOOSE_TYPE_SINGLE,CHOOSE_TYPE_MULTI,CHOOSE_TYPE_ALL,CHOOSE_TYPE_NONE,CHOOSE_TYPE_DEFAULT | CHOOSE_TYPE_SINGLE |
-| layouts | 布局 | array |   | [{type: "bi.center",hgap: 0,vgap: 0}] |
+| behaviors | 自定义列表中item项的行为，如高亮，标红等 |object | — |{ }|
+| items | 子组件数组 | array | —  | [ ] |
+| chooseType | 选择类型 | const | 见上| BI.ButtonGroup.CHOOSE_TYPE_SINGLE |
+| layouts | 布局 | array | —  | [{type: "bi.center",hgap: 0,vgap: 0}] |
 
 ## 对外方法
 | 名称     | 说明                           |  回调参数     
 | :------ |:-------------                  | :-----   
-| doBehavior | | —|
+| doBehavior |  自定义列表中item项的行为，如高亮，标红等 | — |
 | prependItems | 内部前插入 | items |
 | addItems | 内部后插入 | items |
 | removeItemAt | 移除指定索引处的item | indexs |

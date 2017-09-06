@@ -3,7 +3,7 @@
 #### 消息提示
 
 {% method %}
-[source]()
+[source](https://jsfiddle.net/fineui/feu8kf4u/)
 
 {% common %}
 ```javascript

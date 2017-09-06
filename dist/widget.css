@@ -392,6 +392,13 @@
 }
 /****** common color(常用颜色,可用于普遍场景) *****/
 /**** custom color(自定义颜色,用于特定场景) ****/
+.bi-slider .bi-slider-track {
+  background-color: rgba(153, 153, 153, 0.3);
+  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr=#4d999999,endColorstr=#4d999999);
+  -webkit-border-radius: 3px;
+  -moz-border-radius: 3px;
+  border-radius: 3px;
+}
 /****** common color(常用颜色,可用于普遍场景) *****/
 /**** custom color(自定义颜色,用于特定场景) ****/
 .bi-year-popup .year-popup-navigation {

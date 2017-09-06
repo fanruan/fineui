@@ -30,24 +30,24 @@ BI.createWidget({
 ##### 基础属性
 | 参数    | 说明           | 类型  | 可选值 | 默认值
 | :------ |:-------------  | :-----| :----|:----
-| trigger | 事件类型 | string |  | "click" |
+| el | 自定义下拉框trigger | object | — |{ }|
+| trigger | 下拉列表的弹出方式  | string |  click,hover | "click" |
+| adjustLength | 弹出列表和trigger的距离 | number | — | 0 |
 | toggle | 切换状态 | boolean | true,false | true |
-| direction | combo弹出层位置 | string | top,bottom,left,right,(top,left),(top,right),(bottom,left),(bottom,right) | "bottom"|
+| direction | 弹出列表和trigger的位置关系 | string | top &#124; bottom &#124; left &#124; right &#124; top,left &#124; top,right &#124; bottom,left &#124; bottom,right  | "bottom"|
 | isDefaultInit | 是否默认初始化子节点 |boolean | true,false | false |
 | destroyWhenHide | 隐藏弹窗层是否销毁 | boolean | true,false | false |
 | isNeedAdjustHeight | 是否需要高度调整 | boolean | true,false | true |
 | isNeedAdjustWidth | 是否需要宽度调整 | boolean | true,false | true |
-| stopEvent | 阻止事件冒泡 | boolean | true,false | false |
+| stopEvent | 是否阻止事件 | boolean | true,false | false |
 | stopPropagation | 阻止事件冒泡 | boolean | true,false | false |
-| adjustLength | 调整的距离 | number | — | 0 |
 | adjustXOffset | 调整横向偏移 | number | — | 0 |
 | adjustYOffset |调整纵向偏移 | number | — | 0 |
-| hideChecker | | function | | —|
+| hideChecker | | function | — | —|
 | offsetStyle | 弹出层显示位置 | string | left,right,center | "left,right,center"|
-| el | 开启弹出层的元素 | object | — |{ }|
 | popup | 弹出层 | object | — | { }|
-| comboClass | | string | | "bi-combo-popup" |
-| hoverClass | | string | | "bi-combo-hover" |
+| comboClass | combo类 | string | — | "bi-combo-popup" |
+| hoverClass | hover类 | string | — | "bi-combo-hover" |
 
 
 
@@ -62,12 +62,12 @@ BI.createWidget({
 | setValue |设置combo value值| v |
 | getValue | 获取combo value值 | —|
 | isViewVisible | 弹窗层是否可见 | —|
-| showView | ||
-| hideView |||
-| getView |||
-| getPopupPosition |||
-| toggle |||
-|destroy |||
+| showView | 显示弹出层 | —|
+| hideView | 隐藏弹出层 |—|
+| getView | 获取弹出层 | —|
+| getPopupPosition | 获取弹出层的位置 | —|
+| toggle | 开启或者隐藏弹出层 | —|
+| destroy | 销毁组件 | —|
 
 ## 事件
 | 名称     | 说明                |
@@ -81,6 +81,8 @@ BI.createWidget({
 |BI.Combo.EVENT_AFTER_POPUPVIEW | 下拉列表弹出后触发 |
 |BI.Combo.EVENT_BEFORE_HIDEVIEW | 下拉列表收起前触发 |
 |BI.Combo.EVENT_AFTER_HIDEVIEW | 下拉列表收起后触发 |
+
+
 ---
 
 

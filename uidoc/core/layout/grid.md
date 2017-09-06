@@ -1,6 +1,6 @@
 # bi.grid
 
-#### 上下的高度固定/左右的宽度固定，中间的高度/宽度自适应
+#### 网格布局
 
 {% method %}
 [source](https://jsfiddle.net/fineui/1gwjbpL6/)
@@ -62,9 +62,9 @@ BI.createWidget({
 
 | 参数    | 说明                           | 类型       | 可选值 | 默认值
 | :------ |:-------------                  | :-----     | :----|:----
-| columns | 列的数量    |    number  |  |  null  |
-| rows | 行的数量    |    number  |  |  null  |
-| items | 子控件数组     |    array |  | [] |
+| columns | 列数    |    number  | — |  null  |
+| rows | 行数  |    number  | — |  null  |
+| items | 子控件数组     |    array | — | [] |
 
 
 

@@ -11,21 +11,21 @@
 BI.createWidget({
   type: "bi.preview_table",
   header: [[{
-            text: "表头1"
-          }, {
-            text: "表头2"
-          }, {
-            text: "表头3"
-          }]],
+    text: "表头1"
+  }, {
+    text: "表头2"
+  }, {
+    text: "表头3"
+  }]],
   element: 'body',
   columnSize: [100, "", 50],
   items: [[{
-           text: "第一行第一列"
-         }, {
-           text: "第一行第二列"
-         }, {
-           text: "第一行第三列"
-         }]]
+    text: "第一行第一列"
+  }, {
+    text: "第一行第二列"
+  }, {
+    text: "第一行第三列"
+  }]]
 });
 ```
 
@@ -35,7 +35,7 @@ BI.createWidget({
 
 | 参数            | 说明   | 类型           | 默认值   |
 | ------------- | ---- | ------------ | ----- |
-| isNeedFreeze  | 是否冻结 | bool         | false |
+| isNeedFreeze  | 是否冻结 | boolean      | false |
 | freezeCols    | 冻结的列 | array        | []    |
 | rowSize       | 行高   | array/number | null  |
 | columnSize    | 列宽   | array        | []    |
@@ -44,29 +44,32 @@ BI.createWidget({
 | items         | 子组件  | array        | []    |
 
 ## 方法
-| 方法名                          | 说明               | 用法                                   |
-| ---------------------------- | ---------------- | ------------------------------------ |
-| resize                       | 调整表格             | resize()                             |
-| setColumnSize                | 设置列宽             | setColumnSize(columnSize)            |
-| getColumnSize                | 得到列宽             | getColumnSize()                      |
-| getCalculateColumnSize       | 获得计算后的列宽         | getCalculateColumnSize()             |
-| setHeaderColumnSize          | 设置表头的列宽          | setHeaderColumnSize(columnSize)      |
-| setRegionColumnSize          | 设置列项之间的间隙        | setRegionColumnSize(columnSize)      |
-| getRegionColumnSize          | 获得列项之间的间隙        | getRegionColumnSize()                |
-| getCalculateRegionColumnSize | 获取计算后的列项之间的间隙    | getCalculateRegionColumnSize()       |
-| getCalculateRegionRowSize    | 获取计算后的列项上下之间的间隙  | getCalculateRegionRowSize()          |
-| getClientRegionColumnSize    | 获取浏览器中显示的列项之间的间隙 | getClientRegionColumnSize()          |
-| getScrollRegionColumnSize    | 获取横向滚动条宽度        | getScrollRegionColumnSize()          |
-| getScrollRegionRowSize       | 获取纵向滚动条宽度        | getScrollRegionRowSize()             |
-| hasVerticalScroll            | 是否含有数值滚动条        | hasVerticalScroll()                  |
-| setVerticalScroll            | 设置纵向滚动距离         | setVerticalScroll(scrollTop)         |
-| setLeftHorizontalScroll      | 设置左到右横向滚动距离      | setLeftHorizontalScroll(scrollLeft)  |
-| setRightHorizontalScroll     | 设置右往左横向滚动距离      | setRightHorizontalScroll(scrollLeft) |
-| getVerticalScroll            | 获取纵向滚动距离         | getVerticalScroll()                  |
-| getLeftHorizontalScroll      | 获取左到右横向滚动距离      | getLeftHorizontalScroll()            |
-| getRightHorizontalScroll     | 获取右往左横向滚动距离      | getRightHorizontalScroll()           |
-| getColumns                   | 获取列项             | getColumns()                         |
-| resizeHeader                 | 调整表头             | resizeHeader()                       |
-| attr                         | 设置属性             | attr(key, value)                     |
-| populate                     | 增加行              | populate(rows)                       |
-| destroy                      | 摧毁表              | destroy()                            |
+| 方法名                          | 说明               | 参数            |
+| ---------------------------- | ---------------- | ------------- |
+| resize                       | 调整表格             | —             |
+| setColumnSize                | 设置列宽             | columnSize    |
+| getColumnSize                | 得到列宽             | —             |
+| getCalculateColumnSize       | 获得计算后的列宽         | —             |
+| setHeaderColumnSize          | 设置表头的列宽          | columnSize    |
+| setRegionColumnSize          | 设置列项之间的间隙        | columnSize    |
+| getRegionColumnSize          | 获得列项之间的间隙        | —             |
+| getCalculateRegionColumnSize | 获取计算后的列项之间的间隙    | —             |
+| getCalculateRegionRowSize    | 获取计算后的列项上下之间的间隙  | —             |
+| getClientRegionColumnSize    | 获取浏览器中显示的列项之间的间隙 | —             |
+| getScrollRegionColumnSize    | 获取横向滚动条宽度        | —             |
+| getScrollRegionRowSize       | 获取纵向滚动条宽度        | —             |
+| hasVerticalScroll            | 是否含有数值滚动条        | —             |
+| setVerticalScroll            | 设置纵向滚动距离         | scrollTop     |
+| setLeftHorizontalScroll      | 设置左到右横向滚动距离      | scrollLeft    |
+| setRightHorizontalScroll     | 设置右往左横向滚动距离      | scrollLeft    |
+| getVerticalScroll            | 获取纵向滚动距离         | —             |
+| getLeftHorizontalScroll      | 获取左到右横向滚动距离      | —             |
+| getRightHorizontalScroll     | 获取右往左横向滚动距离      | —             |
+| getColumns                   | 获取列项             | —             |
+| resizeHeader                 | 调整表头             | —             |
+| attr                         | 设置属性             | key：键，value：值 |
+| populate                     | 替换为新的内容              | rows          |
+| destroy                      | 摧毁表              | —             |
+
+------
+

@@ -6,7 +6,10 @@ BI.FineTuningNumberEditor = BI.inherit(BI.Widget, {
     _defaultConfig: function () {
         return BI.extend(BI.FineTuningNumberEditor.superclass._defaultConfig.apply(this, arguments), {
             baseCls: "bi-fine-tuning-number-editor bi-border",
-            value: -1
+            validationChecker: function () {return true;},
+            valueFormatter: function (v) {return v;},
+            value: 0,
+            errorText: ""
         })
     },
 
@@ -16,14 +19,15 @@ BI.FineTuningNumberEditor = BI.inherit(BI.Widget, {
         this.editor = BI.createWidget({
             type: "bi.sign_editor",
             height: o.height,
-            value: this._alertInEditorValue(o.value),
-            errorText: BI.i18nText("BI-Please_Input_Natural_Number"),
-            validationChecker: function(v){
-                return BI.isNaturalNumber(v) || self._alertOutEditorValue(v) === -1;
-            }
+            value: o.valueFormatter(o.value),
+            validationChecker: o.validationChecker,
+            errorText: o.errorText
+        });
+        this.editor.on(BI.TextEditor.EVENT_CHANGE, function () {
+            o.value = this.getValue();
+            self.fireEvent(BI.FineTuningNumberEditor.EVENT_CHANGE);
         });
         this.editor.on(BI.TextEditor.EVENT_CONFIRM, function(){
-            self._finetuning(0);
             self.fireEvent(BI.FineTuningNumberEditor.EVENT_CONFIRM);
         });
         this.topBtn = BI.createWidget({
@@ -33,6 +37,7 @@ BI.FineTuningNumberEditor = BI.inherit(BI.Widget, {
         });
         this.topBtn.on(BI.IconButton.EVENT_CHANGE, function(){
             self._finetuning(1);
+            self.fireEvent(BI.FineTuningNumberEditor.EVENT_CHANGE);
             self.fireEvent(BI.FineTuningNumberEditor.EVENT_CONFIRM);
         });
         this.bottomBtn = BI.createWidget({
@@ -42,9 +47,9 @@ BI.FineTuningNumberEditor = BI.inherit(BI.Widget, {
         });
         this.bottomBtn.on(BI.IconButton.EVENT_CHANGE, function(){
             self._finetuning(-1);
+            self.fireEvent(BI.FineTuningNumberEditor.EVENT_CHANGE);
             self.fireEvent(BI.FineTuningNumberEditor.EVENT_CONFIRM);
         });
-        this._finetuning(0);
         BI.createWidget({
             type: "bi.htape",
             element: this,
@@ -68,31 +73,31 @@ BI.FineTuningNumberEditor = BI.inherit(BI.Widget, {
         });
     },
 
-    _alertOutEditorValue: function(v){
-        return v === BI.i18nText("BI-Basic_Auto") ? -1 : v;
-    },
-
-    _alertInEditorValue: function(v){
-        return BI.parseInt(v) === -1 ? BI.i18nText("BI-Basic_Auto") : v;
-    },
-
     //微调
     _finetuning: function(add){
-        var v = BI.parseInt(this._alertOutEditorValue(this.editor.getValue()));
-        this.editor.setValue(this._alertInEditorValue(v + add));
-        this.bottomBtn.setEnable((v + add) > -1);
+        var v = BI.parseFloat(this.getValue());
+        this.setValue(v.add(add));
+    },
+
+    setUpEnable: function (v) {
+        this.topBtn.setEnable(!!v);
+    },
+
+    setBottomEnable: function (v) {
+        this.bottomBtn.setEnable(!!v);
     },
 
     getValue: function () {
-        var v = this.editor.getValue();
-        return this._alertOutEditorValue(v);
+        return this.options.value;
     },
 
     setValue: function (v) {
-        this.editor.setValue(this._alertInEditorValue(v));
-        this._finetuning(0);
+        var o = this.options;
+        o.value = v;
+        this.editor.setValue(o.valueFormatter(v));
     }
 
 });
 BI.FineTuningNumberEditor.EVENT_CONFIRM = "EVENT_CONFIRM";
+BI.FineTuningNumberEditor.EVENT_CHANGE = "EVENT_CHANGE";
 BI.shortcut("bi.fine_tuning_number_editor", BI.FineTuningNumberEditor);

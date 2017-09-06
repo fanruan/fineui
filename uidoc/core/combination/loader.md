@@ -9,15 +9,15 @@
 | :------ |:-------------  | :-----| :----|:----
 | direction | combo弹出层位置 | string | top,bottom,left,right,(top,left),(top,right),(bottom,left),(bottom,right) | "top"|
 | isDefaultInit | 是否默认初始化子数据 |boolean | true,false | true |
-| logic | | object | | {dynamic:true,scrolly:true} |
-| items| | array | | []|
-| itemsCreator | | function | | — |
-| onLoaded | | function | | — |
+| logic | | object | —| {dynamic:true,scrolly:true} |
+| items| 子组件 | array | — | []|
+| itemsCreator | 子组件构造器 | function | — | — |
+| onLoaded | 加载中 | function | — | — |
 | count | 是否显示总页数 | boolean| true,false|boolean|
 | prev | 上一页 | boolean | true,false | boolean |
 | next | 下一页 | boolean | true,false | boolean |
-| hasPrev | 判断是否有上一页 | function | | — |
-| hasNext | 判断是否有下一页 | function | | — |
+| hasPrev | 判断是否有上一页 | function | — | — |
+| hasNext | 判断是否有下一页 | function | — | — |
 
 
 

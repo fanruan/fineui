@@ -48,11 +48,10 @@ BI.createWidget({
 | single | 是否为单页 | boolean | true,false | true |
 | defaultShowIndex | 是否默认显示 |boolean | true,false | true |
 | tab | tab页元素 | boolean | true,false | true |
-| defaultShowIndex | 是否默认显示 | boolean | true,false | false |
 | logic | | object | | {dynamic:true} |
 | cardCreator | 面板构造器 | function | — | v |
 | afterCardCreated | 面板构造之后 | function | — | — |
-| afterCardShow | 面板显示之后 | function | - | — |
+| afterCardShow | 面板显示之后 | function | —| — |
 
 
 
@@ -61,11 +60,11 @@ BI.createWidget({
 | :------ |:-------------                  | :-----   
 | render | 渲染组件  | — |
 | mounted | 挂载组件 | —|
-| afterCardCreated | | v |
-| afterCardShow | | v |
+| afterCardCreated | 创建卡导航页页之后 | v |
+| afterCardShow | 导航页展示之后 | v |
 | setSelect | 设置选中的index | v |
 | getSelect | 获取选中的index| —|
-| getSelectedCard | | —|
+| getSelectedCard | 获取选中的导航页| —|
 | populate | 刷新列表 | items |
 | setValue | 设置value值 | value |
 | getValue | 获取被选中的值 |—|

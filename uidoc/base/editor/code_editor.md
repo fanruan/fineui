@@ -24,11 +24,11 @@ BI.createWidget({
 ##### 基础属性
 | 参数    | 说明           | 类型  | 可选值 | 默认值
 | :------ |:-------------  | :-----| :----|:----
-| watermark    |   文本框placeholder    |   string   |   |  " "    |
+| watermark    |   文本框placeholder    |   string   | —  |  " "    |
 | readOnly |  是否只读     |   boolean    | true,false | false|
 | lineHeight | 行高 | number|— | 2|
-| value | 文本框值| string| | " "|
-| paramFormatter|  参数显示值构造函数    |    function|  |  value   |
+| value | 文本框值| string| —| " "|
+| paramFormatter|  参数显示值构造函数    |    function| — |  value   |
 
 
 

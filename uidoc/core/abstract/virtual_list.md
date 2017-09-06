@@ -30,9 +30,9 @@ BI.createWidget({
 ##### 基础属性
 | 参数    | 说明           | 类型  | 可选值 | 默认值
 | :------ |:-------------  | :-----| :----|:----
-| items | 子组件数组 | array |   | [ ] |
-| blockSize | | number |  | 10 |
-| overscanHeight | | number |  | 100 |
+| items | 子组件数组 | array | —  | [ ] |
+| blockSize | | number | — | 10 |
+| overscanHeight | | number | — | 100 |
 | scrollTop |  滚动条相对于顶部的偏移 | number | — | 0 |
 
 

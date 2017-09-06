@@ -23,12 +23,12 @@ BI.createWidget({
 ##### 基础属性
 | 参数    | 说明           | 类型  | 可选值 | 默认值
 | :------ |:-------------  | :-----| :----|:----
-| hgap    | 效果相当于文本框左右padding值，如果clear属性为true,该属性值置0 |  number  |     |     10   |
-| lgap    | 效果相当于文本框left-padding值     |    number   |        |  0    |
-| rgap    | 效果相当于文本框right-padding值     |    number  |       |  0    |
-| text|按钮文本内容     |    string|  |  |
-| textWidth| 按钮文本宽度  |   number|   |  null    |
-| textHeight    |   按钮文本高度    |    number|    | null |
+| hgap    | 效果相当于文本框左右padding值，如果clear属性为true,该属性值置0 |  number  |  —   |     10   |
+| lgap    | 效果相当于文本框left-padding值     |    number   |   —    |  0    |
+| rgap    | 效果相当于文本框right-padding值     |    number  |   —    |  0    |
+| text|按钮文本内容     |    string| — | — |
+| textWidth| 按钮文本宽度  |   number|  — |  null    |
+| textHeight    |   按钮文本高度    |    number|  —  | null |
 
 
 ##### 高级属性

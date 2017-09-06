@@ -1,13 +1,27 @@
 # bi.searcher_view
 
-## 搜索面板, [BI.Widget](/core/widget.md)
+## 搜索面板, 基类[BI.Widget](/core/widget.md)
 
 {% method %}
-[source](https://jsfiddle.net/fineui/k6s24et1/)
+[source](https://jsfiddle.net/fineui/qkfns6wm/)
 
 {% common %}
 ```javascript
 
+var searcher = BI.createWidget({
+  element: "#wrapper",
+  type: "bi.searcher_view",
+});
+searcher.populate([{
+	text: "aba",
+  value: "aba"
+},{
+	text: "acc",
+  value: "acc"
+}], [{
+	text: "a",
+  value: "a"
+}], "a");
 
 
 

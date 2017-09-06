@@ -34,17 +34,17 @@ BI.createWidget({
 ##### 基础属性
 | 参数    | 说明           | 类型  | 可选值 | 默认值
 | :------ |:-------------  | :-----| :----|:----
-| items | 子组件数组 | array |   | [ ] |
+| items | 子组件数组 | array | —  | [ ] |
 | overflowX | 是否显示横向滚动条| boolean | true,false | true |
 | overflowY | 是否显示纵向滚动条 | boolean | true,false | true |
-| overscanColumnCount| | number| | 0 |
-| overscanRowCount| | number |  | 0 |
-| width | 行宽，必设 |number| | —  |
-| height | 列宽，必设 | number | | — |
-| rowHeightGetter| 每格行宽 |number,function | | function  |
-| columnWidthGetter| 每格列宽 | number,function | | function |
-| estimatedColumnSize| 每格行宽，columnWidthGetter为function时必设 |number,function | | function  |
-| estimatedRowSize | 每格列宽，rowHeightGetter为function时必设 | number,function | | function |
+| overscanColumnCount| | number|— | 0 |
+| overscanRowCount| | number | — | 0 |
+| width | 行宽，必设 |number| — | —  |
+| height | 列宽，必设 | number | —| — |
+| rowHeightGetter| 每格行宽 |number,function | —| function  |
+| columnWidthGetter| 每格列宽 | number,function |— | function |
+| estimatedColumnSize| 每格行宽，columnWidthGetter为function时必设 |number,function |— | function  |
+| estimatedRowSize | 每格列宽，rowHeightGetter为function时必设 | number,function | —| function |
 | scrollLeft | 滚动条相对于左边的偏移 | number | — | 0 |
 | scrollTop |  滚动条相对于顶部的偏移 | number |  —|0 |
 
@@ -71,6 +71,7 @@ BI.createWidget({
 | 事件     | 说明                           |  回调参数
 | :------ |:------------- |:----------|
 |BI.CollectionView.EVENT_SCROLL|    滚动时触发的事件 | {scrollLeft: scrollLeft, scrollTop: scrollTop} |
+
 
 ---
 

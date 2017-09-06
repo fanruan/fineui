@@ -27,10 +27,10 @@ BI.createWidget({
 ## 参数设置
 | 参数               | 说明            | 类型                   | 默认值               |
 | ---------------- | ------------- | -------------------- | ----------------- |
-| isNeedResize     | 是否可改变列大小      | bool                 | true              |
-| isNeedFreeze     | 是否需要冻结表头      | bool                 | false             |
+| isNeedResize     | 是否可改变列大小      | boolean                 | true              |
+| isNeedFreeze     | 是否需要冻结表头      | boolean                 | false             |
 | freezeCols       | 冻结的列          | array                | []                |
-| isNeedMerge      | 是否需要合并单元格     | bool                 | false             |
+| isNeedMerge      | 是否需要合并单元格     | boolean                 | false             |
 | mergeCols        | 合并的单元格列号      | array                | []                |
 | mergeRule        | 合并规则, 默认相等时合并 | function(row1, row2) | 默认row1 = row2 时合并 |
 | columnSize       | 单元格宽度集合       | array                | []                |
@@ -47,7 +47,7 @@ BI.createWidget({
 
 
 ## 方法
-| 方法名                      | 说明          | 回调参数               |
+| 方法名                      | 说明          | 参数               |
 | ------------------------ | ----------- | ------------------ |
 | setWidth                 | 设置宽度        | width: 宽度          |
 | setHeight                | 设置高度        | height: 高度         |
@@ -66,3 +66,4 @@ BI.createWidget({
 | populate                 | 增加项         | items: array       |
 | destroy                  | 摧毁表         | —                  |
 
+------

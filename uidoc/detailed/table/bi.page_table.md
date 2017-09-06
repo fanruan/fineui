@@ -26,7 +26,7 @@ BI.createWidget({
 | ----------------------- | ---------- | --------- | ------------------ | -------------------- | ----------------- |
 | pager                   |            |           | 分页选项               | object               | —                 |
 |                         | horizontal |           | 水平分页选项             | object               | —                 |
-|                         |            | pages     | 显示总页数              | bool                 | false             |
+|                         |            | pages     | 显示总页数              | boolean                 | false             |
 |                         |            | curr      | 当前页                | number               | 1                 |
 |                         |            | hasPrev   | 判断是否有前一页的函数        | function             | BI.emptyFn        |
 |                         |            | hasNext   | 是否有下一页             | function             | BI.emptyFn        |
@@ -34,9 +34,9 @@ BI.createWidget({
 |                         |            | lastPage  | 最后一页               | number/function      | BI.emptyFn        |
 |                         | vertical   |           | 纵向分页，参数与horizontal | object               | —                 |
 | itemsCreator            |            |           | 元素创造器              | function             | BI.emptyFn        |
-| isNeedFreeze            |            |           | 是否需要冻结表头           | bool                 | false             |
+| isNeedFreeze            |            |           | 是否需要冻结表头           | boolean                 | false             |
 | freezeCols              |            |           | 冻结的列               | array                | []                |
-| isNeedMerge             |            |           | 是否需要合并单元格          | bool                 | false             |
+| isNeedMerge             |            |           | 是否需要合并单元格          | boolean                 | false             |
 | mergeCols               |            |           | 合并的单元格列号           | array                | []                |
 | mergeRule               |            |           | 合并规则, 默认相等时合并      | function(row1, row2) | 默认row1 = row2 时合并 |
 | columnSize              |            |           | 单元格宽度集合            | array                | []                |
@@ -56,7 +56,7 @@ BI.createWidget({
 
 
 ## 方法
-| 方法名                      | 说明          | 回调参数               |
+| 方法名                      | 说明          | 参数               |
 | ------------------------ | ----------- | ------------------ |
 | setHPage                 | 设置水平页数      | v: 页码              |
 | setVpage                 | 设置纵向页数      | v: 页码              |
@@ -78,3 +78,4 @@ BI.createWidget({
 | populate                 | 增加          | —                  |
 | destroy                  | 摧毁表         | —                  |
 
+------

@@ -22,7 +22,7 @@ BI.createWidget({
 ## 参数设置
 | 参数         | 说明        | 类型           | 默认值                                      |
 | ---------- | --------- | ------------ | ---------------------------------------- |
-| scrolly    | 是否出现滚动条   | bool         | true                                     |
+| scrolly    | 是否出现滚动条   | boolean         | true                                     |
 | columnSize | 列项宽度      | array/number | [200, 200, 'fill']                       |
 | rowSize    | 行高        | array/number | 30                                       |
 | hgap       | 内部元素间纵向距离 | number       | 0                                        |

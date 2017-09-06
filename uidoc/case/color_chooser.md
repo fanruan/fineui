@@ -29,3 +29,4 @@ BI.createWidget({
 | setValue      | 设置颜色值  | color |
 | getValue      | 获取颜色值  | —     |
 
+------

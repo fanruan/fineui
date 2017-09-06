@@ -40,17 +40,17 @@ BI.createWidget({
 | minWidth | 弹出层最小宽度 | number | — | 100 |
 | maxHeight | 弹出层最大高度 | number/string | — | — |
 | minHeight | 弹出层最小高度 | number | — | 25 |
-| hgap    | 效果相当于容器左右padding值    |    number  |  |  0  |
-| vgap    | 效果相当于容器上下padding值    |    number  |  |  0  |
-| lgap    | 效果相当于容器left-padding值   |    number  |  |  0  |
-| rgap    | 效果相当于容器right-padding值  |    number  |  |  0  |
-| tgap    | 效果相当于容器top-padding值    |    number  |  |  0  |
-| bgap    | 效果相当于容器bottom-padding值 |    number  |  |  0  |
+| hgap    | 效果相当于容器左右padding值    |    number  | — |  0  |
+| vgap    | 效果相当于容器上下padding值    |    number  |  —|  0  |
+| lgap    | 效果相当于容器left-padding值   |    number  | — |  0  |
+| rgap    | 效果相当于容器right-padding值  |    number  |  —|  0  |
+| tgap    | 效果相当于容器top-padding值    |    number  |  —|  0  |
+| bgap    | 效果相当于容器bottom-padding值 |    number  | — |  0  |
 | direction| 工具栏的方向| const | | BI.Direction.Top |
 | stopEvent | 是否停止mousedown、mouseup事件 | boolean | true,false | false |
 | stopPropagation | 是否停止mousedown、mouseup向上冒泡 | boolean | true,false | false |
 | tabs | 导航栏 | array | — | [] |
-| logic | | object | | {dynamic:true} |
+| logic | | object | — | {dynamic:true} |
 | tools | 自定义工具栏 |boolean | true,false | false |
 | buttons | toolbar栏 | array | — | [] |
 | el | 子组件 | object | — |{ type: "bi.button_group",items: [], chooseType: 0,behaviors: {},layouts: [{type: "bi.vertical"}]} |
@@ -64,7 +64,7 @@ BI.createWidget({
 | resetHeight |  重置高度  | height|
 | setValue | 设置value 值 | value |
 | getValue| 获取value值 | —|
-| setZindex | 设置z-inex| z-index | 
+| setZindex | 设置z-index| z-index | 
 | getView | 获取弹出层 | —|
 
 

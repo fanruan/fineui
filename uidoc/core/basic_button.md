@@ -6,7 +6,7 @@
 ##### 基础属性
 | 参数    | 说明           | 类型  | 可选值 | 默认值
 | :------ |:-------------  | :-----| :----|:----
-| value | 组件value值 | string | | null|
+| value | 组件value值 | string | —| null|
 | stopEvent | 阻止事件 |boolean | true,false | false |
 | stopPropagation | 阻止冒泡 | boolean | true,false| false |
 | selected | button的选中状态 | boolean | true,false |false |
@@ -17,7 +17,7 @@
 | shadow | 是否显示阴影 | boolean| true,false| false|
 | isShadowShowingOnSelected| 选中状态下是否显示阴影|boolean|  true,false | false|
 | trigger | 被选元素要触发的事件 | string | mousedown, mouseup, click, dblclick, lclick | null|
-| handler | 点击事件回调 | function | | BI.emptyFn |
+| handler | 点击事件回调 | function | —| BI.emptyFn |
 
 
 ## 对外方法

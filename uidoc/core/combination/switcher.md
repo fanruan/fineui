@@ -35,15 +35,15 @@ BI.createWidget({
 ##### 基础属性
 | 参数    | 说明           | 类型  | 可选值 | 默认值
 | :------ |:-------------  | :-----| :----|:----
-| trigger | 事件类型 | string |  | "click" |
+| trigger | 下拉列表的弹出方式 | string |  click,hover | "click" |
 | toggle | 切换状态 | boolean | true,false | true |
 | direction | 面板显示的位置 | string | — | BI.Direction.Top |
-| el | 开启弹出层的元素 | object | —  | { }|
+| el | 自定义下拉框trigger | object | —  | { }|
 | popup | 弹出层 | object | — |{ }|
 | adapter | 弹出层的位置 | object | — | null| 
-| masker | masker层 | | — | { }|
-| switcherClass | — | string| —| "bi-switcher-popup" |
-| hoverClass | - | string | - | "bi-switcher-hover" |
+| masker | masker层 | obejct | — | { }|
+| switcherClass | 切换类 | string| —| "bi-switcher-popup" |
+| hoverClass | hover类 | string | — | "bi-switcher-hover" |
 
 ## 对外方法
 | 名称     | 说明                           |  回调参数     

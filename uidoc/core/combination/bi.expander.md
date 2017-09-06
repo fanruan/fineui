@@ -7,14 +7,15 @@
 ##### 基础属性
 | 参数    | 说明           | 类型  | 可选值 | 默认值
 | :------ |:-------------  | :-----| :----|:----
-| trigger | 事件类型 | string |  | "click" |
+| el | 自定义下拉框trigger | object | — |{ }|
+| trigger | 下拉列表的弹出方式  | string |  click,hover | "click" |
+| adjustLength | 弹出列表和trigger的距离 | number | — | 0 |
 | toggle | 切换状态 | boolean | true,false | true |
-| direction | combo弹出层位置 | string | top,bottom,left,right,(top,left),(top,right),(bottom,left),(bottom,right) | "bottom"|
+| direction | 弹出列表和trigger的位置关系 | string | top &#124; bottom &#124; left &#124; right &#124; top,left &#124; top,right &#124; bottom,left &#124; bottom,right  | "bottom"|
 | isDefaultInit | 是否默认初始化子节点 |boolean | true,false | false |
-| el | 开启弹出层的元素 | object | — |{ }|
 | popup | 弹出层 | object | — | { }|
-| expanderClass | | string | | "bi-expander-popup" |
-| hoverClass | | string | | "bi-expander-hover" |
+| expanderClass | 展开类 | string | —| "bi-expander-popup" |
+| hoverClass | hover类| string | — | "bi-expander-hover" |
 
 
 
@@ -25,13 +26,13 @@
 | setValue | 设置combo value值| v |
 | getValue | 获取combo value值 | —|
 | isViewVisible | 弹窗层是否可见 | —|
-| showView | ||
-| hideView |||
-| getView |||
+| showView | 显示弹出层| —|
+| hideView | 隐藏弹出层| —|
+| getView | 获取弹出层| —|
 | getAllLeaves | 获取所有的叶子节点 | —|
 | getNodeById | 根据id获取节点 | id |
 | getNodeByValue | 根据value值获取节点 | value |
-| isExpanded |  节点是否展开 | |
+| isExpanded |  节点是否展开 | — |
 | destroy | 销毁组件| — |
 
 ## 事件

@@ -10,7 +10,7 @@
 ```javascript
 
 BI.createWidget({
-    type: 'demo.left_right_vertical_adapt',
+    type: 'bi.left_right_vertical_adapt',
     element: "#wrapper",
     lhgap: 10,
     rhgap: 10,
@@ -43,13 +43,13 @@ BI.createWidget({
 ##### 基础属性
 | 参数    | 说明                           | 类型       | 可选值 | 默认值
 | :------ |:-------------                  | :-----     | :----|:----
-| lhgap | 左边容器左右padding值    |    number  |  |  0  |
-| lrgap | 左边容器right-padding值    |    number  |  |  0  |
-| llgap | 左边容器left-padding值   |    number  |  |  0  |
-| rhgap | 右边容器左右padding值  |    number  |  |  0  |
-| rrgap | 右边容器right-padding值    |    number  |  |  0  |
-| rhgap | 右边容器left-padding值 |    number  |  |  0  |
-| items | 子控件数组     |    array |  |  |
-| columnSize | 每列宽度所组成的数组     |    array |  |  | |
+| lhgap | 左边容器左右padding值    |    number  | — |  0  |
+| lrgap | 左边容器right-padding值    |    number  | — |  0  |
+| llgap | 左边容器left-padding值   |    number  | — |  0  |
+| rhgap | 右边容器左右padding值  |    number  | — |  0  |
+| rrgap | 右边容器right-padding值    |    number  | — |  0  |
+| rhgap | 右边容器left-padding值 |    number  | — |  0  |
+| items | 子控件数组     |    array | — | [ ] |
+
 
 ---

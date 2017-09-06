@@ -26,11 +26,11 @@ BI.createWidget({
 ##### 基础属性
 | 参数    | 说明           | 类型  | 可选值 | 默认值
 | :------ |:-------------  | :-----| :----|:----
-| value | 文本域的值 | string  |  | " "|
-| watermark | 文本框placeholder| string | | " " |
-| fieldTextValueMap | | string| | {}|
-| showHint | | | | 2 |
-| lineHeight | 行高 | number | | 2|
+| value | 文本域的值 | string  | — | " "|
+| watermark | 文本框placeholder| string | —| " " |
+| fieldTextValueMap | | string| —| {}|
+| showHint | | | —| 2 |
+| lineHeight | 行高 | number | —| 2|
 
 
 
@@ -40,12 +40,12 @@ BI.createWidget({
 | disableWaterMark |  设置文本框placeholder不可用 | — |
 | focus | 文本框获取焦点| — |
 | insertField | 添加字段 | field |
-| insertFunction | | fn |
-| insertOperator | | op|
-| setFunction | | v|
+| insertFunction |  插入函数 | fn |
+| insertOperator |  插入操作符| op|
+| setFunction | 设置函数 | v|
 | insertString | 插入字符串 | str|
-| getFormulaString | |— |
-| getUsedFields | | — |
+| getFormulaString | 获取公式 |— |
+| getUsedFields | 获取可用字段 | — |
 | getCheckString |   | — |
 | getValue | 获取文本框值|—|
 | setValue | 设置文本框值|value|

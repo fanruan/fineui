@@ -24,8 +24,8 @@ BI.createWidget({
 ##### 基础属性
 | 参数    | 说明           | 类型  | 可选值 | 默认值
 | :------ |:-------------  | :-----| :----|:----
-| iconWidth | 图标宽度  |   number|   |  null    |
-| iconHeight    |   图标高度    |    number|    | null |
+| iconWidth | 图标宽度  |   number|  — |  null    |
+| iconHeight    |   图标高度    |    number|  —  | null |
 
 
 ## 对外方法
