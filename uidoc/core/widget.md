@@ -42,7 +42,7 @@
 | setEnable | 设置组件是否可用 | enable |
 | setVisible | 设置组件是否可见 | visible |
 | setValid | 设置组件是否有效 | valid|
-| doBehavior | | —|
+| doBehavior | 自定义下拉列表中item项的行为，如高亮，标红等 | —|
 | getWidth | 获取组件宽度 | —|
 | getHeight| 获取组件高度| —|
 | isValid | 判断是否有效 | —|

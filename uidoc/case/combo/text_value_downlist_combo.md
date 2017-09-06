@@ -3,10 +3,35 @@
 ## 基类[BI.Widget](/core/widget.md)
 
 {% method %}
-[source]()
+[source](https://jsfiddle.net/fineui/xtxmfgx1/)
 
 {% common %}
 ```javascript
+
+BI.createWidget({
+  type: "bi.text_value_down_list_combo",
+  element: "#wrapper",
+  text: "text",
+  items: [
+    [{
+      el: {
+        text: "1",
+        value: 1
+      },
+      children: [{
+        text: "11",
+        value: 11
+      }]
+    }],
+    [{
+      text: "2",
+      value: 2
+    }, {
+      text: "3",
+      value: 3
+    }]
+  ]
+});
 
 
 

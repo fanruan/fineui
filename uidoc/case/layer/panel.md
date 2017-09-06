@@ -3,10 +3,24 @@
 ## 带有标题栏的panel，基类[BI.Widget](/core/widget.md)
 
 {% method %}
-[source]()
+[source](https://jsfiddle.net/fineui/3m1q3857/)
 
 {% common %}
 ```javascript
+
+BI.createWidget({
+  element: "#wrapper",
+  type: "bi.panel",
+  title: "标题",
+  titleButtons: [{
+  	type: "bi.button",
+    text: "+"
+  }],
+  el: this.button_group,
+  logic: {
+    dynamic: true
+  }
+});
 
 
 

@@ -3,11 +3,17 @@
 ## list面板，基类[BI.Widget](/core/widget.md)
 
 {% method %}
-[source]()
+[source](https://jsfiddle.net/fineui/7Lv8q9p9/)
 
 {% common %}
 ```javascript
 
+BI.createWidget({
+  type: 'bi.list_pane',
+  element: "#wrapper",
+  cls: "bi-border",
+  items: []
+});
 
 
 ```

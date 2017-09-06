@@ -3,11 +3,26 @@
 ## 基类[BI.Widget](/core/widget.md)
 
 {% method %}
-[source]()
+[source](https://jsfiddle.net/fineui/z02vzvtb/)
 
 {% common %}
 ```javascript
 
+BI.createWidget({
+  type: "bi.icon_combo",
+  element: "#wrapper",
+  iconClass: "rename-font",
+  items: [{
+    value: "第一项",
+    iconClass: "delete-font"
+  }, {
+    value: "第二项",
+    iconClass: "rename-font"
+  }, {
+    value: "第三项",
+    iconClass: "move-font"
+  }]
+});
 
 
 

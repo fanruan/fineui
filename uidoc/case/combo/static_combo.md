@@ -3,11 +3,26 @@
 ## 单选combo,基类[BI.Widget](/core/widget.md)
 
 {% method %}
-[source]()
+[source](https://jsfiddle.net/fineui/kn64gfzn/)
 
 {% common %}
 ```javascript
 
+BI.createWidget({
+    type: "bi.static_combo",
+    element: "#wrapper",
+    text: "Value 不变",
+    items: [{
+      text: "1",
+      value: 1
+    }, {
+      text: "2",
+      value: 2
+    }, {
+      text: "3",
+      value: 3
+    }]
+  });
 
 
 
