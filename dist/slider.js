@@ -45,7 +45,7 @@ BI.SingleSlider = BI.inherit(BI.Widget, {
     },
     _defaultConfig: function () {
         return BI.extend(BI.SingleSlider.superclass._defaultConfig.apply(this, arguments), {
-            baseCls: "bi-single-button bi-button-track"
+            baseCls: "bi-single-slider bi-slider-track"
         });
     },
     _init: function () {
@@ -124,7 +124,7 @@ BI.SingleSlider = BI.inherit(BI.Widget, {
         });
         this.label = BI.createWidget({
             type: "bi.sign_editor",
-            cls: "button-editor-button bi-border",
+            cls: "slider-editor-button bi-border",
             errorText: "",
             height: c.HEIGHT,
             width: c.EDITOR_WIDTH,
@@ -216,7 +216,7 @@ BI.SingleSlider = BI.inherit(BI.Widget, {
     },
 
     _checkValidation: function (v) {
-        return !(BI.isNull(v) || v < this.min || v > this.max)
+        return BI.isNumeric(v) && !(BI.isNull(v) || v < this.min || v > this.max)
     },
 
     _setBlueTrack: function (percent) {

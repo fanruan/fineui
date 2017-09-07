@@ -1,10 +1,11 @@
-@webUrl: '';
-@imageUrl: 'images/1x/'; //图片的基本地址
-@image2xUrl: 'images/2x/'; //图片的基本地址
+@webUrl: '${remoteServletURL}?op=resource&resource=/com/fr/bi/web/';
+@imageUrl: '${remoteServletURL}?op=resource&resource=/com/fr/bi/web/images/1x/'; //图片的基本地址
+@image2xUrl: '${remoteServletURL}?op=resource&resource=/com/fr/bi/web/images/2x/'; //2x图片的基本地址
 
-@cursor: '@{webUrl}cursor/cursor_hand.cur';
-@dragCursor: '@{webUrl}cursor/cursor_drag_hand.cur';
-@leftRightCursor:'@{webUrl}cursor/cursor_left_right.cur';
+@cursor: '@{webUrl}images/cursor/cursor_hand.cur';
+@dragCursor: '@{webUrl}images/cursor/cursor_drag_hand.cur';
+@leftRightCursor: '@{webUrl}images/cursor/cursor_left_right.cur';
+@sliderDragCursor: '@{imageUrl}cursor/cursor_drag_slider.cur';
 
 @zIndex-layer:    100000;
 @zIndex-floatbox: 1000000;
