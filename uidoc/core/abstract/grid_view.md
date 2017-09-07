@@ -70,7 +70,7 @@ BI.createWidget({
 ## 事件
 | 事件     | 说明                           |  回调参数
 | :------ |:------------- |:----------|
-|BI.CollectionView.EVENT_SCROLL|    滚动时触发的事件 | {scrollLeft: scrollLeft, scrollTop: scrollTop} |
+|BI.GridView.EVENT_SCROLL|    滚动时触发的事件 | {scrollLeft: scrollLeft, scrollTop: scrollTop} |
 
 
 ---
