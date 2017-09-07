@@ -2940,6 +2940,45 @@ li.CodeMirror-hint-active {
   -moz-border-radius: 2px;
   border-radius: 2px;
 }
+.bi-multidate-combo {
+  -webkit-border-radius: 2px;
+  -moz-border-radius: 2px;
+  border-radius: 2px;
+}
+/****添加计算宽度的--运算符直接需要space****/
+/****** common color(常用颜色,可用于普遍场景) *****/
+/**** custom color(自定义颜色,用于特定场景) ****/
+/****添加计算宽度的--运算符直接需要space****/
+/****** common color(常用颜色,可用于普遍场景) *****/
+/**** custom color(自定义颜色,用于特定场景) ****/
+.bi-multidate-popup .bi-multidate-popup-label {
+  color: #3f8ce8;
+  font-size: 14px;
+}
+.bi-multidate-popup .bi-multidate-popup-item:active,
+.bi-multidate-popup .bi-multidate-popup-item.active {
+  background-color: #3f8ce8;
+  color: #ffffff;
+  -webkit-border-radius: 2px 2px 0 0;
+  -moz-border-radius: 2px 2px 0 0;
+  border-radius: 2px 2px 0 0;
+}
+.bi-multidate-popup .bi-multidate-popup-button {
+  color: #3f8ce8;
+  font-size: 14px;
+}
+/****添加计算宽度的--运算符直接需要space****/
+/****** common color(常用颜色,可用于普遍场景) *****/
+/**** custom color(自定义颜色,用于特定场景) ****/
+.bi-multidate-segment .bi-multidate-editor {
+  font-size: 14px;
+}
+/****添加计算宽度的--运算符直接需要space****/
+/****** common color(常用颜色,可用于普遍场景) *****/
+/**** custom color(自定义颜色,用于特定场景) ****/
+/****添加计算宽度的--运算符直接需要space****/
+/****** common color(常用颜色,可用于普遍场景) *****/
+/**** custom color(自定义颜色,用于特定场景) ****/
 .bi-multi-select-check-pane .multi-select-check-selected {
   text-decoration: underline;
 }
@@ -3159,6 +3198,30 @@ li.CodeMirror-hint-active {
   box-sizing: border-box;
   /*W3C标准(IE9+，Safari5.1+,Chrome10.0+,Opera10.6+都符合box-sizing的w3c标准语法)*/
 }
+/****添加计算宽度的--运算符直接需要space****/
+/****** common color(常用颜色,可用于普遍场景) *****/
+/**** custom color(自定义颜色,用于特定场景) ****/
+.bi-single-slider-slider .slider-button {
+  cursor: url('${remoteServletURL}?op=resource&resource=/com/fr/bi/web/images/1x/cursor/cursor_drag_slider.cur'), auto;
+  -webkit-box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+  -moz-box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+  -webkit-border-radius: 7px;
+  -moz-border-radius: 7px;
+  border-radius: 7px;
+}
+.bi-slider-track .gray-track {
+  background-color: rgba(153, 153, 153, 0.3);
+  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr=#4d999999,endColorstr=#4d999999);
+  -webkit-border-radius: 3px;
+  -moz-border-radius: 3px;
+  border-radius: 3px;
+}
+.bi-slider-track .blue-track {
+  -webkit-border-radius: 3px;
+  -moz-border-radius: 3px;
+  border-radius: 3px;
+}
 /****** common color(常用颜色,可用于普遍场景) *****/
 /**** custom color(自定义颜色,用于特定场景) ****/
 .bi-slider .bi-slider-track {
@@ -3167,6 +3230,12 @@ li.CodeMirror-hint-active {
   -webkit-border-radius: 3px;
   -moz-border-radius: 3px;
   border-radius: 3px;
+}
+.bi-param-time-interval.time-error .bi-input {
+  color: #e85050;
+}
+.bi-param-time-interval.time-error .sign-editor-text {
+  color: #e85050;
 }
 /****** common color(常用颜色,可用于普遍场景) *****/
 /**** custom color(自定义颜色,用于特定场景) ****/

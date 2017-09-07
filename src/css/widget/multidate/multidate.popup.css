@@ -1,0 +1,16 @@
+.bi-multidate-popup .bi-multidate-popup-label {
+  color: #3f8ce8;
+  font-size: 14px;
+}
+.bi-multidate-popup .bi-multidate-popup-item:active,
+.bi-multidate-popup .bi-multidate-popup-item.active {
+  background-color: #3f8ce8;
+  color: #ffffff;
+  -webkit-border-radius: 2px 2px 0 0;
+  -moz-border-radius: 2px 2px 0 0;
+  border-radius: 2px 2px 0 0;
+}
+.bi-multidate-popup .bi-multidate-popup-button {
+  color: #3f8ce8;
+  font-size: 14px;
+}
