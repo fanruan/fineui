@@ -12,33 +12,17 @@ BI.createWidget({
     type: 'bi.horizontal',
     element: "#wrapper",
     items: [{
-        type: "bi.absolute",
-        items: [{
-            el: {
-                type: "bi.text_button",
-                cls: "layout-bg1",
-                text: "这里设置了lgap,rgap,tgap,bgap",
-                height: 30
-            },
-            left: 0,
-            right: 0
-        }],
-        width: 100,
-        height: 30
+        type: "bi.text_button",
+        cls: "layout-bg1",
+        text: "这里设置了lgap,rgap,tgap,bgap",
+        height: 30,
+        width: 200
     }, {
-        type: "bi.absolute",
-        items: [{
-            el: {
-                type: "bi.text_button",
-                cls: "layout-bg2",
-                text: "这里设置了lgap,rgap,tgap,bgap",
-                height: 30
-            },
-            left: 0,
-            right: 0
-        }],
-        width: 200,
-        height: 30
+        type: "bi.text_button",
+        cls: "layout-bg2",
+        text: "这里设置了lgap,rgap,tgap,bgap",
+        height: 30,
+        width: 200
     }]
 });
 

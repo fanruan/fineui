@@ -122,6 +122,7 @@
 * [clipboard](case/clipboard.md)
 * [complex_canvas](case/complex_canvas.md)
 * [color_chooser](case/color_chooser.md)
+* [color_chooser_popup](case/color_chooser_popup.md)
 * [segment](case/segment.md)
 
 ## 详细控件
@@ -167,4 +168,5 @@
 * [relation_view](detailed/relation_view.md)
 * [dialog](detailed/dialog.md)
 * [file_manager](detailed/file_manager.md)
+* [slider](detailed/slider.md)
 

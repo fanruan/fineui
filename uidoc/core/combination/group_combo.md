@@ -2,6 +2,37 @@
 
 ## 基类[BI.Widget](/core/widget.md)
 
+{% method %}
+[source](https://jsfiddle.net/fineui/x32ue8xv/)
+
+{% common %}
+```javascript
+
+BI.createWidget({
+  element: "#wrapper",
+  type: "bi.combo_group",
+  el: {
+    type: "bi.icon_text_icon_item",
+    text: "2010年",
+    value: 2010,
+    height: 25,
+    iconCls: "close-ha-font"
+  },
+  children: [{
+    type: "bi.single_select_item",
+    height: 25,
+    text: "一月",
+    value: 11
+  }]
+});
+
+
+
+
+```
+
+{% endmethod %}
+
 
 ## API
 ##### 基础属性

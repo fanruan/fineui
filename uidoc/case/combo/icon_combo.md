@@ -1,6 +1,6 @@
 # bi.icon_combo
 
-## 基类[BI.Widget](/core/widget.md)
+## 切换trigger图标的combo 基类[BI.Widget](/core/widget.md)
 
 {% method %}
 [source](https://jsfiddle.net/fineui/z02vzvtb/)

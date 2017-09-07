@@ -25,7 +25,7 @@ BI.createWidget({
 | :------ |:-------------  | :-----| :----|:----
 | multiple | 是否支持多选 | boolean | true,false| false |
 | maxSize | 最大可选数量 | number |— | -1 |
-| accept | | string | —| " "|
+| accept | 允许上传的文件类型 | string | —| " "|
 | url | 文件路径 | string | —| " "|
 
 

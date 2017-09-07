@@ -1,6 +1,6 @@
 # bi.sign_initial_editor
 
-## 基类[BI.Widget](/core/widget.md)
+## 指定初始值 之后初始值会一直显示的editor 基类[BI.Widget](/core/widget.md)
 
 {% method %}
 [source](https://jsfiddle.net/fineui/9vjghevp/)

@@ -1,6 +1,6 @@
 # bi.virtual_list
 
-## VirtualList,基类[BI.Widget](/core/widget.md)
+## 看不见的元素全部删除的list,基类[BI.Widget](/core/widget.md)
 
 {% method %}
 [source](https://jsfiddle.net/fineui/L995LrL9/)
@@ -31,8 +31,8 @@ BI.createWidget({
 | 参数    | 说明           | 类型  | 可选值 | 默认值
 | :------ |:-------------  | :-----| :----|:----
 | items | 子组件数组 | array | —  | [ ] |
-| blockSize | | number | — | 10 |
-| overscanHeight | | number | — | 100 |
+| blockSize | 滚动加载的个数 | number | — | 10 |
+| overscanHeight | 超出可视范围区域的高度 | number | — | 100 |
 | scrollTop |  滚动条相对于顶部的偏移 | number | — | 0 |
 
 

@@ -20,11 +20,10 @@
   },
   "homepage": "https://github.com/gittz/FineUIdocs#readme",
   "devDependencies": {
-    "gh-pages": "^1.0.0",
     "gitbook-cli": "^2.3.2",
+    "gitbook-plugin-expandable-chapters": "^0.2.0",
     "gitbook-plugin-jsfiddle": "^1.0.0",
     "gitbook-plugin-splitter": "0.0.8",
-    "gitbook-plugin-theme-api": "^1.1.2",
-    "gitbook-plugin-toggle-chapters": "0.0.3"
+    "gitbook-plugin-theme-api": "^1.1.2"
   }
 }

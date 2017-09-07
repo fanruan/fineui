@@ -34,7 +34,7 @@ BI.createWidget({
 ##### 高级属性
 | 参数    | 说明           | 类型  | 可选值 | 默认值
 | :------ |:-------------  | :-----| :----|:----
-| py |     |    string|  | " "  |
+| py |  拼音   |    string|  | " "  |
 | textAlign | 文字布局      |   string    | left,center,right |   cneter    |
 | whiteSpace | 元素内的空白处理方式  |    string | normal,nowrap  |  nowrap| 
 | forceCenter | 是否无论如何都要居中, 不考虑超出边界的情况, 在未知宽度和高度时有效      |    boolean    | true,false |  false    |

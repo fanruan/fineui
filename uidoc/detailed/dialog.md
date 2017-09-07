@@ -16,7 +16,9 @@ BI.Msg.alert(title, content)
 
 | 参数    | 说明           | 类型  | 可选值 | 默认值
 | :------ |:-------------  | :-----| :----|:----|
-| title    | 对话框标题 |  string |     |        |
-| content    | 对话框内容 |  string |     |        |
+| title    | 对话框标题 |  string |   —  |     " "   |
+| content    | 对话框内容 |  string |  —   |  " " |
 
---- ---
+
+
+---

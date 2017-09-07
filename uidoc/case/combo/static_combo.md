@@ -1,6 +1,6 @@
 # bi.static_combo
 
-## 单选combo,基类[BI.Widget](/core/widget.md)
+## 单选combo,trigger显示项不会改变 基类[BI.Widget](/core/widget.md)
 
 {% method %}
 [source](https://jsfiddle.net/fineui/kn64gfzn/)

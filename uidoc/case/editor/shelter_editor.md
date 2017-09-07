@@ -1,6 +1,6 @@
 # bi.shelter_editor
 
-## 带标记的文本框,基类[BI.Widget](/core/widget.md)
+## 带标记的文本框,需手动控制进入编辑状态 基类[BI.Widget](/core/widget.md)
 
 {% method %}
 [source](https://jsfiddle.net/fineui/9Lbx6kga/)
@@ -12,9 +12,6 @@ BI.createWidget({
     element: "#wrapper",
     type: "bi.shelter_editor",
     cls: "bi-border",
-    ref:function(_ref){
-      editor=_ref;
-    },
     width: 300,
     watermark: "这个是带标记的"
 });

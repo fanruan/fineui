@@ -50,7 +50,7 @@
 | getWidgetByName | 根据组件名称获取组件| name |
 | removeWidget | 移除组件 | nameOrWidget |
 | hasWidget | 判断是否有该组件 | name |
-| getName | 获取组件名称 | | 
+| getName | 获取组件名称 | —| 
 | setTag | 设置tag | tag |
 | getTag | 获取tag | —|
 | attr | 设置组件属性 | key,value |
@@ -66,7 +66,7 @@
 |invalid | 设置组件无效 | —|
 | invisible | 设置组件不可见 | —|
 | visible | 设置组件可见 | —|
-| isolate | | —|
+| isolate | 组件不在页面展示，组件事件和内容都在 | —|
 | empty | 清空组件 | —|
 | destroy | 销毁组件| —|
 

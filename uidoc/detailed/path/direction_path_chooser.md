@@ -34,5 +34,7 @@ BI.createWidget({
 
 | 参数    | 说明           | 类型  | 可选值 | 默认值
 | :------ |:-------------  | :-----| :----|:----|
-| items |二维数组,每个元素代表一条路径,相较于[path_chooser](path_chooser.md)多一个属性direction来指定方向  | array| |  |
---- ---
+| items |二维数组,每个元素代表一条路径,相较于[path_chooser](path_chooser.md)多一个属性direction来指定方向  | array|  — |  [ ]| 
+
+
+---

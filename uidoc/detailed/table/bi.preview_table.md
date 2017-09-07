@@ -71,5 +71,5 @@ BI.createWidget({
 | populate                     | 替换为新的内容              | rows          |
 | destroy                      | 摧毁表              | —             |
 
-------
+---
 

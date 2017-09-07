@@ -33,9 +33,9 @@ BI.createWidget({
 | 参数    | 说明           | 类型  | 可选值 | 默认值
 | :------ |:-------------  | :-----| :----|:----
 | title | 标题 | string | — | " "
-| titleButton | | array | —| [ ]
+| titleButton | 标题后的按钮组 | array | —| [ ]
 | el | 开启panel的元素 | object | —|{ }|
-| logic | | object |— | { dynamic:false}
+| logic | 布局逻辑  | object |— | { dynamic:false}
 
 
 
