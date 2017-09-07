@@ -29,7 +29,8 @@ BI.i18n = {
     "BI-Basic_Value": "值",
     "BI-Load_More": "加载更多",
     "BI-Select_All": "全选",
-    "BI-No_More_Data": "无更多数据"
+    "BI-No_More_Data": "无更多数据",
+    "BI-No_Selected_Value": "没有可选项"
 };$(function () {
     var ref;
     BI.createWidget({
@@ -7657,21 +7658,26 @@ Demo.FileManager = BI.inherit(BI.Widget, {
             lastModify: 1454316355142
         }];
         var filemanager = BI.createWidget({
-            type: "bi.file_manager",
-            items: items
+            type: "bi.fine_tuning_number_editor",
+            validationChecker: function (v) {
+                return BI.parseFloat(v) <= 100 && BI.parseFloat(v) >= 0
+            },
+            height: 24,
+            width: 150,
+            errorText: "hahah"
+        });
+        filemanager.on(BI.FineTuningNumberEditor.EVENT_CHANGE, function () {
+            if(BI.parseFloat(this.getValue()) < 1){
+                filemanager.setBottomEnable(false);
+            }else{
+                filemanager.setBottomEnable(true);
+            }
         });
         return {
-            type: "bi.vtape",
+            type: "bi.vertical",
             items: [{
                 el: filemanager,
-                height: "fill"
-            }, {
-                type: "bi.button",
-                text: "getValue",
-                handler: function () {
-                    BI.Msg.alert("", JSON.stringify(filemanager.getValue()));
-                },
-                height: 25
+                height: 24
             }]
         }
     }

@@ -1,6 +1,6 @@
 # bi.single_select_item
 
-## 复选框item,基类[BI.BasicButton](/core/basic_button.md)
+## 可以点击的label,基类[BI.BasicButton](/core/basic_button.md)
 
 {% method %}
 [source](https://jsfiddle.net/fineui/19qqcej4/)

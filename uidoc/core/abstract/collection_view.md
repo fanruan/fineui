@@ -1,6 +1,6 @@
 # bi.collection_view
 
-## CollectionView,基类[BI.Widget](/core/widget.md)
+## CollectionView,指定行列可以删除看不见的元素 基类[BI.Widget](/core/widget.md)
 
 {% method %}
 [source](https://jsfiddle.net/fineui/cmq0b3v0/)

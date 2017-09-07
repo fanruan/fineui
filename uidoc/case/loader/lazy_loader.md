@@ -1,6 +1,6 @@
 # bi.lazy_loader
 
-### 懒加载
+### 懒加载loader
 
 {% method %}
 [source](https://jsfiddle.net/fineui/n710yphc/)

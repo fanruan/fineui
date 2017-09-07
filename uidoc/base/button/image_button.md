@@ -9,7 +9,7 @@
 ```javascript
 
 BI.createWidget({
-	type: 'bi.image_button',
+  type: 'bi.image_button',
   src: "http://www.easyicon.net/api/resizeApi.php?id=1206741&size=128",
   width: 100,
   height: 100

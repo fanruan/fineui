@@ -1,6 +1,6 @@
 # bi.grid_view
 
-## GridView,基类[BI.Widget](/core/widget.md)
+## 可以合并单元格，指定行列可以删除看不见的元素,基类[BI.Widget](/core/widget.md)
 
 {% method %}
 [source](https://jsfiddle.net/fineui/fkntzLq5/)

@@ -2,6 +2,41 @@
 
 ## 某个可以展开的节点,基类[BI.Widget](/core/widget.md)
 
+{% method %}
+[source](https://jsfiddle.net/fineui/2xavqk4k/)
+
+{% common %}
+```javascript
+
+BI.createWidget({
+  type: "bi.expander",
+  element: "#wrapper",
+  el: {
+    type: "bi.icon_text_node",
+    cls: "pull-right-ha-font",
+    height: 25,
+    text: "Expander"
+  },
+  popup: {
+    items: [{
+      type: "bi.single_select_item",
+      height: 25,
+      text: "项目1",
+      value: 1
+    }, {
+      type: "bi.single_select_item",
+      height: 25,
+      text: "项目2",
+      value: 2
+    }]
+  }
+});
+
+
+
+```
+
+{% endmethod %}
 
 ## API
 ##### 基础属性

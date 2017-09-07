@@ -8,8 +8,9 @@
 {% common %}
 ```javascript
 BI.createWidget({
-    type: "bi.multi_select_combo",
-    items: [],
+    type: "bi.slider",
+    min: 16,
+    max: 50,
 });
 ```
 
@@ -21,8 +22,8 @@ BI.createWidget({
 
 | 参数   | 说明   | 类型     | 默认值  |
 | ---- | ---- | ------ | ---- |
-| min  |      | number | 10   |
-| max  |      | number | 50   |
+| min  | 最小值     | number | 10   |
+| max  | 最大值     | number | 50   |
 
 
 
@@ -30,8 +31,8 @@ BI.createWidget({
 
 | 方法名      | 说明   | 参数    |
 | -------- | ---- | ----- |
-| getValue |      | —     |
-| setValue |      | value |
+| getValue | 获得当前值     | —     |
+| setValue | 设置当前值     | value |
 |          |      |       |
 
 ------
