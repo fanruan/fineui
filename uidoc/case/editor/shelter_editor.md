@@ -12,9 +12,6 @@ BI.createWidget({
     element: "#wrapper",
     type: "bi.shelter_editor",
     cls: "bi-border",
-    ref:function(_ref){
-      editor=_ref;
-    },
     width: 300,
     watermark: "这个是带标记的"
 });
