@@ -1,6 +1,6 @@
 # bi.virtual_list
 
-## VirtualList,基类[BI.Widget](/core/widget.md)
+## 看不见的元素全部删除的list,基类[BI.Widget](/core/widget.md)
 
 {% method %}
 [source](https://jsfiddle.net/fineui/L995LrL9/)

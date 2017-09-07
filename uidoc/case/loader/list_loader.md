@@ -1,6 +1,6 @@
 # bi.list_loader
 
-### 恶心的加载控件， 为解决排序问题引入的控件
+### 为解决排序问题引入的控件
 
 {% method %}
 [source](https://jsfiddle.net/fineui/8wa7rvcd/)
