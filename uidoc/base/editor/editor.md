@@ -33,7 +33,6 @@ BI.createWidget({
 | bgap    |  效果相当于文本框bottom-padding值     |    number  | —  |  0    |
 | validationChecker    | 输入较验函数      |function|  —  |    —  |
 | quitChecker    | 是否允许退出编辑函数      |   function    | — |    —   |
-| mouseOut    |       |    boolean   | true,false  |  false | 
 | allowBlank    |  是否允许空值     |    boolean    | true,false |  false    |
 | watermark    |   文本框placeholder    |   string   |  — |  " "    |
 | errorText    |  错误提示     |  string/function     | —| " "|

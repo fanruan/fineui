@@ -44,8 +44,8 @@ BI.createWidget({
 | textAlign  | 文本对齐方式     |    string  |  left,center,right | center |
 | whiteSpace | 元素内空白处理方式    |    string| normal,nowrap | nowrap|
 | forceCenter | 是否无论如何都要居中, 不考虑超出边界的情况, 在未知宽度和高度时有效    |    boolean | true,false |  true |
-| py      |      |    string | — | 空 |
-| keyword |      |    string |  —| 空 |
+| py      |  拼音   |    string | — | 空 |
+| keyword |   设置标红的关键词   |    string |  —| 空 |
 | disabled | 灰化     |    boolean| true,false | 无 |
 | title  | 提示title     |    string | — | 空 |
 | warningTitle | 错误提示title     |    string | — | 空 |
@@ -61,7 +61,7 @@ BI.createWidget({
 | getText| 获取文本值 | —|
 | setStyle | 设置文本样式 |需要设置的文本标签样式,例{"color":"#000"} |
 | setValue | 设置文本值 | 需要设置的文本值text |
-| populate| | —|
+| populate| 清空label | —|
 
 
 ---

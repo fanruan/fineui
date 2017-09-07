@@ -24,7 +24,7 @@ var tree = BI.createWidget({
 
 | 参数      | 说明   | 类型     | 默认值  |
 | ------- | ---- | ------ | ---- |
-| trigger |      | object | {}   |
+| trigger | 下拉列表的弹出方式  | object | {}   |
 | height  | 高度   | number | 30   |
 | text    | 文本框值 | string | ''   |
 | items   | 元素   | array  | null |
@@ -45,6 +45,7 @@ var tree = BI.createWidget({
 | :------ |:------------- |
 |BI.SingleTreeCombo.EVENT_BEFORE_POPUPVIEW| 下拉框弹出前触发 |
 其他事件详见[Input](../../base/editor/editor.md)
+
 
 ---
 

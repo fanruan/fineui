@@ -28,8 +28,8 @@ BI.createWidget({
 | :------ |:-------------  | :-----| :----|:----
 | value | 文本域的值 | string  | — | " "|
 | watermark | 文本框placeholder| string | —| " " |
-| fieldTextValueMap | | string| —| {}|
-| showHint | | | —| 2 |
+| fieldTextValueMap |  字段集合 | onject | —| {}|
+| showHint | 是否显示提示信息 | boolean | true,false | true |
 | lineHeight | 行高 | number | —| 2|
 
 
@@ -44,12 +44,12 @@ BI.createWidget({
 | insertOperator |  插入操作符| op|
 | setFunction | 设置函数 | v|
 | insertString | 插入字符串 | str|
-| getFormulaString | 获取公式 |— |
+| getFormulaString | 获取公式框内容 |— |
 | getUsedFields | 获取可用字段 | — |
-| getCheckString |   | — |
+| getCheckString |  获取校验内容 | — |
 | getValue | 获取文本框值|—|
 | setValue | 设置文本框值|value|
-| setFieldTextValueMap | | fieldTextValueMap |
+| setFieldTextValueMap | 设置字段集合 | fieldTextValueMap |
 | refresh | 刷新文本框 | —|
  
 

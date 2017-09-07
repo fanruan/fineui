@@ -34,9 +34,9 @@ searcher.populate([{
 | 参数    | 说明           | 类型  | 可选值 | 默认值
 | :------ |:-------------  | :-----| :----|:----
 | tipText | title文本 | string | — | BI.i18nText("BI-No_Select") |
-| chooseType | 选择类型 | const | | BI.Selection.Single |
+| chooseType | 选择类型 | const | 参考button_group | BI.Selection.Single |
 | matcher | 完全匹配的构造器 | object | — | {type: "bi.button_group",behaviors: { redmark: function () { return true;} },items: [], layouts: [{ type: "bi.vertical"}]} |
-| searcher | | object| — | {type: "bi.button_group",behaviors: {redmark: function () {return true;}}, items: [], layouts: [{  type: "bi.vertical" }]}|
+| searcher | 搜索到的元素 | object| — | {type: "bi.button_group",behaviors: {redmark: function () {return true;}}, items: [], layouts: [{  type: "bi.vertical" }]}|
 
 ## 对外方法
 | 名称     | 说明                           |  回调参数     

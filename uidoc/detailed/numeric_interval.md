@@ -33,10 +33,13 @@ BI.createWidget({
 | setCloseMinEnable(boolean)                       | 设置左区间开闭combo的disable状态             |    |
 | setMaxEnable(boolean)                       | 设置右区间输入框disable状态             |    |
 | setCloseMaxEnable(boolean)                       | 设置右区间开闭combo的disable状态             |    |
-| setNumTip(string)                       | 设置数值区间的tip提示             |    |
+| setNumTip(string)                       | 设置数值区间的tip提示             |  —  |
 
 ##事件
 | 事件    | 说明           |
 | :------ |:------------- |
 |BI.NumericalInterval.EVENT_VALID| 区间合法的状态事件 |
 |BI.NumericalInterval.EVENT_ERROR| 区间不合法的状态事件 |
+
+
+---

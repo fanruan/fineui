@@ -37,14 +37,14 @@ BI.createWidget({
 | items | 子组件数组 | array | —  | [ ] |
 | overflowX | 是否显示横向滚动条| boolean | true,false | true |
 | overflowY | 是否显示纵向滚动条 | boolean | true,false | true |
-| overscanColumnCount| | number|— | 0 |
-| overscanRowCount| | number | — | 0 |
+| overscanColumnCount| 超出可视范围区域预加载多少列 | number|— | 0 |
+| overscanRowCount| 超出可视范围区域预加载多少行 | number | — | 0 |
 | width | 行宽，必设 |number| — | —  |
 | height | 列宽，必设 | number | —| — |
 | rowHeightGetter| 每格行宽 |number,function | —| function  |
 | columnWidthGetter| 每格列宽 | number,function |— | function |
-| estimatedColumnSize| 每格行宽，columnWidthGetter为function时必设 |number,function |— | function  |
-| estimatedRowSize | 每格列宽，rowHeightGetter为function时必设 | number,function | —| function |
+| estimatedColumnSize| 预估行宽，columnWidthGetter为function时必设 |number,function |— | function  |
+| estimatedRowSize | 预估列宽，rowHeightGetter为function时必设 | number,function | —| function |
 | scrollLeft | 滚动条相对于左边的偏移 | number | — | 0 |
 | scrollTop |  滚动条相对于顶部的偏移 | number |  —|0 |
 

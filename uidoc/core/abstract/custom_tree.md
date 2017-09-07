@@ -55,8 +55,8 @@ BI.createWidget({
 | :------ |:-------------  | :-----| :----|:----
 | items | 子组件数组 | array |  — | [ ] |
 | itemsCreator| 子组件构造器 | object | —  | { } |
-| expander |  | object |   | {el: {},popup: {type: "bi.custom_tree"}}|
-| el |  | object | | {type: "bi.button_tree",chooseType: 0,layouts: [{type: "bi.vertical"}]}|
+| expander | popup组件 | object | —  | {el: {},popup: {type: "bi.custom_tree"}}|
+| el | 开启popup元素 | object | — | {type: "bi.button_tree",chooseType: 0,layouts: [{type: "bi.vertical"}]}|
 
 
 

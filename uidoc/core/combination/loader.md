@@ -12,7 +12,17 @@ BI.createWidget({
   element: "#wrapper",
   type: "bi.loader",
   itemsCreator: function(options, populate) {
-    populate();
+    populate(BI.map(BI.map(BI.makeArray(3, null), function(idx, value){
+    	return {
+     		text: faker.name.findName(),
+        value: BI.UUID()
+      };
+    }), function(i, v) {
+        return BI.extend(v, {
+          type: "bi.single_select_item",
+          height: 25
+        })
+      }))
   },
   hasNext: function(option) {
     return option.count < 10;
@@ -21,9 +31,11 @@ BI.createWidget({
 
 
 
+
 ```
 
 {% endmethod %}
+
 
 ## API
 ##### 基础属性
@@ -31,7 +43,7 @@ BI.createWidget({
 | :------ |:-------------  | :-----| :----|:----
 | direction | combo弹出层位置 | string | top,bottom,left,right,(top,left),(top,right),(bottom,left),(bottom,right) | "top"|
 | isDefaultInit | 是否默认初始化子数据 |boolean | true,false | true |
-| logic | | object | —| {dynamic:true,scrolly:true} |
+| logic | 布局逻辑 | object | —| {dynamic:true,scrolly:true} |
 | items| 子组件 | array | — | []|
 | itemsCreator | 子组件构造器 | function | — | — |
 | onLoaded | 加载中 | function | — | — |

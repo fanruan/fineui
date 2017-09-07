@@ -48,7 +48,7 @@ BI.createWidget({
 | single | 是否为单页 | boolean | true,false | true |
 | defaultShowIndex | 是否默认显示 |boolean | true,false | true |
 | tab | tab页元素 | boolean | true,false | true |
-| logic | | object | | {dynamic:true} |
+| logic | 布局逻辑 | object | — | {dynamic:true} |
 | cardCreator | 面板构造器 | function | — | v |
 | afterCardCreated | 面板构造之后 | function | — | — |
 | afterCardShow | 面板显示之后 | function | —| — |

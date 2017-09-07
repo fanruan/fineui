@@ -30,7 +30,31 @@ BI.i18n = {
     "BI-Load_More": "加载更多",
     "BI-Select_All": "全选",
     "BI-No_More_Data": "无更多数据",
-    "BI-No_Selected_Value": "没有可选项"
+    "BI-No_Selected_Value": "没有可选项",
+    "BI-Basic_Clear": "清除",
+    "BI-Multi_Date_Relative_Current_Time": "相对当前时间",
+    "BI-Multi_Date_Year_Prev": "年前",
+    "BI-Multi_Date_Year_Next": "年后",
+    "BI-Multi_Date_Year_Begin": "年初",
+    "BI-Multi_Date_Year_End": "年末",
+    "BI-Multi_Date_Quarter_Prev": "个季度前",
+    "BI-Multi_Date_Quarter_Next": "个季度后",
+    "BI-Multi_Date_Quarter_Begin": "季度初",
+    "BI-Multi_Date_Quarter_End": "季度末",
+    "BI-Multi_Date_Month_Prev": "个月前",
+    "BI-Multi_Date_Month_Next": "个月后",
+    "BI-Multi_Date_Month_Begin": "月初",
+    "BI-Multi_Date_Month_End": "月末",
+    "BI-Multi_Date_Week_Prev": "周前",
+    "BI-Multi_Date_Week_Next": "周后",
+    "BI-Multi_Date_Day_Prev": "天前",
+    "BI-Multi_Date_Day_Next": "天后",
+    "BI-Multi_Date_Today": "今天",
+    "BI-Date_Trigger_Error_Text": "日期格式示例\\:2015-3-11",
+    "BI-Year_Trigger_Invalid_Text": "请输入有效时间",
+    "BI-Multi_Date_YMD": "年/月/日",
+    "BI-Multi_Date_Week": "周",
+    "BI-Multi_Date_Day": "天"
 };$(function () {
     var ref;
     BI.createWidget({
@@ -3291,7 +3315,7 @@ Demo.COMPONENT_CONFIG = [{
     value: "demo.platform_level_tree"
 }];Demo.CORE_CONFIG = [{
     id: 1,
-    text: "核心控件",
+    text: "核心控件"
 }, {
     id: 101,
     pId: 1,
@@ -3483,7 +3507,7 @@ Demo.COMPONENT_CONFIG = [{
 }, {
     pId: 4,
     id: 420,
-    text: '各种小控件',
+    text: '各种小控件'
 }, {
     pId: 420,
     text: "各种通用按钮",
@@ -3738,8 +3762,11 @@ Demo.COMPONENT_CONFIG = [{
     pId: 421,
     text: "bi.slider",
     value: "demo.slider"
-}
-];Demo.Func = BI.inherit(BI.Widget, {
+}, {
+    pId: 4,
+    text: '时间间隔',
+    value: 'demo.time_interval'
+}];Demo.Func = BI.inherit(BI.Widget, {
     props: {
         baseCls: "demo-func"
     },
@@ -9275,7 +9302,7 @@ Demo.TimeInterval = BI.inherit(BI.Widget, {
             vgap: 20
         }
     }
-})
+});
 
 BI.shortcut("demo.time_interval", Demo.TimeInterval);/**
  * Created by Dailer on 2017/7/26.

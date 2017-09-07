@@ -1,6 +1,6 @@
 # bi.combo_group
 
-## 有子级的combo 基类[BI.Widget](/core/widget.md)
+## 基类[BI.Widget](/core/widget.md)
 
 {% method %}
 [source](https://jsfiddle.net/fineui/x32ue8xv/)
@@ -23,25 +23,16 @@ BI.createWidget({
     height: 25,
     text: "一月",
     value: 11
-  }, {
-    type: "bi.icon_text_icon_item",
-    height: 25,
-    text: "二月",
-    value: 12,
-    children: [{
-      type: "bi.single_select_item",
-      text: "一号",
-      value: 101,
-      height: 25
-    }]
   }]
 });
+
 
 
 
 ```
 
 {% endmethod %}
+
 
 ## API
 ##### 基础属性

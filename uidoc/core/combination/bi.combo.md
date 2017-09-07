@@ -43,7 +43,7 @@ BI.createWidget({
 | stopPropagation | 阻止事件冒泡 | boolean | true,false | false |
 | adjustXOffset | 调整横向偏移 | number | — | 0 |
 | adjustYOffset |调整纵向偏移 | number | — | 0 |
-| hideChecker | | function | — | —|
+| hideChecker | 是否隐藏弹出层检测 | function | — | —|
 | offsetStyle | 弹出层显示位置 | string | left,right,center | "left,right,center"|
 | popup | 弹出层 | object | — | { }|
 | comboClass | combo类 | string | — | "bi-combo-popup" |

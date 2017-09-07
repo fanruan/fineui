@@ -1,6 +1,6 @@
 Demo.CORE_CONFIG = [{
     id: 1,
-    text: "核心控件",
+    text: "核心控件"
 }, {
     id: 101,
     pId: 1,

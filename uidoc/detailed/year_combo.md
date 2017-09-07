@@ -24,7 +24,7 @@ BI.createWidget({
 | min    | 限定可选日期的下限 |  string  |  |      '1900-01-01'  |
 | max    | 限定可选日期的上限     |    string   |        |  '2099-12-31'    |
 
---- ---
+
 
 ##事件
 | 事件    | 说明           |
@@ -32,3 +32,6 @@ BI.createWidget({
 |BI.YearCombo.EVENT_CONFIRM| 选中日期或者退出编辑状态触发 |
 |BI.YearCombo.EVENT_BEFORE_POPUPVIEW| 选中日期或者退出编辑状态触发 |
 
+
+
+---
