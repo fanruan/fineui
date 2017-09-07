@@ -21,14 +21,6 @@ BI.createWidget({
         text: "Center 2，为了演示label是占满整个的，用了一个whiteSpace:normal",
         cls: "layout-bg2",
         whiteSpace: "normal"
-    },{
-        type: "bi.label",
-        text: "Center 3",
-        cls: "layout-bg3"
-    },{
-        type: "bi.label",
-        text: "Center 4",
-        cls: "layout-bg5"
     }],
     hgap: 20,
     vgap: 20
