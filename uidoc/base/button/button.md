@@ -41,7 +41,7 @@ BI.createWidget({
 | :------ |:-------------  | :-----| :----|:----
 | level |按钮类型     |    string| common,success,warning,ignore |  common |
 | minWidth    | 最小宽度，如果block/clear中某一项为true，此项值为0，否则为90 |  number  |  —   |     90   |
-| shadow    |  |  boolean| true,false |      |
+| shadow    | 是否显示阴影 |  boolean| true,false |   props.clear !== true   |
 | isShadowShowingOnSelected|选中状态下是否显示阴影 |  boolean| true,false |      true  |
 | readonly    | 是否只读     |    boolean   |   true,false     |  true   |
 | iconClass    | 图标类型     |    string|     —  | " "|

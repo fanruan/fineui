@@ -8,8 +8,8 @@
 | 参数    | 说明           | 类型  | 可选值 | 默认值
 | :------ |:-------------  | :-----| :----|:----
 | tipText | title文本 | string | — | BI.i18nText("BI-No_Selected_Item") |
-| overlap| | boolean | true,false | true |
-| onLoaded |  | function | — | — |
+| overlap|  是否含有遮罩层 | boolean | true,false | true |
+| onLoaded | 已经加载 | function | — | — |
 
 
 ## 对外方法

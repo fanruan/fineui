@@ -79,6 +79,6 @@ BI.createWidget({
 | populate                     | 增加行              | rows          |
 | destroy                      | 摧毁表              | —             |
 
-------
+---
 
 

@@ -29,7 +29,7 @@ BI.createWidget({
 | hasNext | 是否有下一页 | function | —| —
 | onLoad | 正在加载 | function | —| — 
 | el | 开启panel的元素 | object | —|{type: "bi.button_group" }|
-| logic | | object |— | { dynamic:true}
+| logic | 布局逻辑 | object |— | { dynamic:true}
 | hgap    | 效果相当于容器左右padding值    |    number  | — |  0  |
 | vgap    | 效果相当于容器上下padding值    |    number  |  —|  0  |
 | lgap    | 效果相当于容器left-padding值   |    number  |  —|  0  |

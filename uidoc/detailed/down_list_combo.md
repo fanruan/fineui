@@ -65,7 +65,6 @@ BI.createWidget({
 | direction    | 弹出列表和trigger的位置关系 |   string    |  top &#124; bottom &#124; left &#124; right &#124; top,left &#124; top,right &#124; bottom,left &#124; bottom,right   |   bottom     |
 | adjustLength    | 弹出列表和trigger的距离 |  number |     |    0    |
 
---- ---
 
 ##事件
 | 事件    | 说明           |
@@ -75,3 +74,7 @@ BI.createWidget({
 |BI.DownListCombo.EVENT_BEFORE_POPUPVIEW| 下拉列表弹出前触发 |
 
 ##具体配置方法见[Combo](../core/combination/bi.combo.md)
+
+
+
+---

@@ -22,5 +22,7 @@ BI.createWidget({
 | :------ |:-------------  | :-----| :----|:----|
 | min    | 限定可选日期的下限 |  string  |  |      '1900-01-01'  |
 | max    | 限定可选日期的上限     |    string   |        |  '2099-12-31'    |
-| selectedTime    | 选中的初始年月     |    obj({year: y, month: m})   |        |      |
---- ---
+| selectedTime    | 选中的初始年月     |    obj({year: y, month: m})   |   —     |  —    |
+
+
+---

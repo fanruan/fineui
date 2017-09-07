@@ -46,11 +46,11 @@ BI.createWidget({
 | rgap    | 效果相当于容器right-padding值  |    number  |  —|  0  |
 | tgap    | 效果相当于容器top-padding值    |    number  |  —|  0  |
 | bgap    | 效果相当于容器bottom-padding值 |    number  | — |  0  |
-| direction| 工具栏的方向| const | | BI.Direction.Top |
+| direction| 工具栏的方向| const | 参考button_group | BI.Direction.Top |
 | stopEvent | 是否停止mousedown、mouseup事件 | boolean | true,false | false |
 | stopPropagation | 是否停止mousedown、mouseup向上冒泡 | boolean | true,false | false |
 | tabs | 导航栏 | array | — | [] |
-| logic | | object | — | {dynamic:true} |
+| logic | 布局逻辑| object | — | {dynamic:true} |
 | tools | 自定义工具栏 |boolean | true,false | false |
 | buttons | toolbar栏 | array | — | [] |
 | el | 子组件 | object | — |{ type: "bi.button_group",items: [], chooseType: 0,behaviors: {},layouts: [{type: "bi.vertical"}]} |

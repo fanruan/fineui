@@ -30,7 +30,7 @@ BI.createWidget({
 | 参数    | 说明           | 类型  | 可选值 | 默认值
 | :------ |:-------------  | :-----| :----|:----
 | height | 高度 | number | — | 30
-| logic | | object | | {dynamic:false} |
+| logic | 布局逻辑 | object |  — | {dynamic:false} |
 
 
  
