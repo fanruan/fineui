@@ -2,13 +2,13 @@
   color: #999999;
 }
 .bi-display-tree .ztree li span.button.switch.center_open {
-  background-image: url("images/1x//icon/tree-vertical-line-3.png");
+  background-image: url("${remoteServletURL}?op=resource&resource=/com/fr/bi/web/images/1x//icon/tree-vertical-line-3.png");
 }
 .bi-display-tree .ztree li span.button.switch.roots_open {
-  background-image: url("images/1x//icon/tree-vertical-line-2.png");
+  background-image: url("${remoteServletURL}?op=resource&resource=/com/fr/bi/web/images/1x//icon/tree-vertical-line-2.png");
 }
 .bi-display-tree .ztree li span.button.switch.bottom_open {
-  background-image: url("images/1x//icon/tree-vertical-line-4.png");
+  background-image: url("${remoteServletURL}?op=resource&resource=/com/fr/bi/web/images/1x//icon/tree-vertical-line-4.png");
 }
 .bi-display-tree .ztree li a,
 .bi-display-tree .ztree li span {
