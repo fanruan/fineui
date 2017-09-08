@@ -1,0 +1,9 @@
+.bi-single-slider-slider .slider-button {
+  cursor: url('${remoteServletURL}?op=resource&resource=/com/fr/bi/web/images/1x/cursor/cursor_drag_slider.cur'), auto;
+  -webkit-box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+  -moz-box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+  -webkit-border-radius: 7px;
+  -moz-border-radius: 7px;
+  border-radius: 7px;
+}

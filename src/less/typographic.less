@@ -25,6 +25,16 @@
   overflow-y: hidden;
   white-space:nowrap;
 }
+
+.user-select(@select) {
+  -webkit-user-select: @select;
+  -khtml-user-select: @select;
+  -moz-user-select: @select;
+  -ms-user-select: @select;
+  -o-user-select: @select;
+  user-select: @select;
+}
+
 .user-select-disable(){
   -webkit-user-select: none;
   -khtml-user-select: none;
