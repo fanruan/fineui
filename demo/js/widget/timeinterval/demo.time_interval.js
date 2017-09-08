@@ -28,6 +28,6 @@ Demo.TimeInterval = BI.inherit(BI.Widget, {
             vgap: 20
         }
     }
-})
+});
 
 BI.shortcut("demo.time_interval", Demo.TimeInterval);

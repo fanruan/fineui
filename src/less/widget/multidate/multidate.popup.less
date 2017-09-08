@@ -1,0 +1,23 @@
+@import "../../bibase";
+
+.bi-multidate-popup{
+
+  & .bi-multidate-popup-label {
+    color:@color-bi-text-highlight;
+    font-size:@font-size-14;
+  }
+  & .bi-multidate-popup-tab {
+  }
+  & .bi-multidate-popup-item{
+    &:active,&.active{
+      background-color: @color-bi-text-highlight;
+      color: @color-bi-background-default;
+      .border-corner-radius(@radius-2,@radius-2,0,0);
+    }
+  }
+
+  & .bi-multidate-popup-button{
+    color:@color-bi-text-highlight;
+    font-size:@font-size-14;
+  }
+}
