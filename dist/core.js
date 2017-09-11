@@ -23693,6 +23693,14 @@ Date.prototype.getMonthDays = function (month) {
     }
 };
 
+/**
+ * 获取每月的最后一天
+ * @returns {Date}
+ */
+Date.prototype.getLastDateOfMonth = function () {
+    return new Date(this.getFullYear(), this.getMonth(), this.getMonthDays());
+};
+
 /** Returns the number of day in the year. */
 Date.prototype.getDayOfYear = function () {
     var now = new Date(this.getFullYear(), this.getMonth(), this.getDate(), 0, 0, 0);

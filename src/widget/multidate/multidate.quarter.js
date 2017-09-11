@@ -19,29 +19,29 @@ BI.QuarterCard = BI.inherit(BI.MultiDateCard, {
     dateConfig: function () {
         return [{
             selected: true,
-            value: BICst.DATE_TYPE.MULTI_DATE_QUARTER_PREV,
+            value: BI.MultiDateCombo.DATE_TYPE.MULTI_DATE_QUARTER_PREV,
             isEditorExist: true,
             text: BI.i18nText("BI-Multi_Date_Quarter_Prev")
         },
             {
-                value: BICst.DATE_TYPE.MULTI_DATE_QUARTER_AFTER,
+                value: BI.MultiDateCombo.DATE_TYPE.MULTI_DATE_QUARTER_AFTER,
                 isEditorExist: true,
                 text: BI.i18nText("BI-Multi_Date_Quarter_Next")
             },
             {
-                value: BICst.DATE_TYPE.MULTI_DATE_QUARTER_BEGIN,
+                value: BI.MultiDateCombo.DATE_TYPE.MULTI_DATE_QUARTER_BEGIN,
                 isEditorExist: false,
                 text: BI.i18nText("BI-Multi_Date_Quarter_Begin")
             },
             {
-                value: BICst.DATE_TYPE.MULTI_DATE_QUARTER_END,
+                value: BI.MultiDateCombo.DATE_TYPE.MULTI_DATE_QUARTER_END,
                 isEditorExist: false,
                 text: BI.i18nText("BI-Multi_Date_Quarter_End")
             }]
     },
 
     defaultSelectedItem: function () {
-        return BICst.DATE_TYPE.MULTI_DATE_QUARTER_PREV;
+        return BI.MultiDateCombo.DATE_TYPE.MULTI_DATE_QUARTER_PREV;
     }
 });
 BI.QuarterCard.EVENT_CHANGE = "EVENT_CHANGE";
