@@ -20,17 +20,17 @@ BI.WeekCard = BI.inherit(BI.MultiDateCard, {
             selected: true,
             isEditorExist: true,
             text: BI.i18nText("BI-Multi_Date_Week_Prev"),
-            value: BICst.DATE_TYPE.MULTI_DATE_WEEK_PREV
+            value: BI.MultiDateCombo.DATE_TYPE.MULTI_DATE_WEEK_PREV
         },
             {
                 isEditorExist: true,
                 text: BI.i18nText("BI-Multi_Date_Week_Next"),
-                value: BICst.DATE_TYPE.MULTI_DATE_WEEK_AFTER
+                value: BI.MultiDateCombo.DATE_TYPE.MULTI_DATE_WEEK_AFTER
             }];
     },
 
     defaultSelectedItem: function () {
-        return BICst.DATE_TYPE.MULTI_DATE_WEEK_PREV;
+        return BI.MultiDateCombo.DATE_TYPE.MULTI_DATE_WEEK_PREV;
     }
 });
 BI.WeekCard.EVENT_CHANGE = "EVENT_CHANGE";

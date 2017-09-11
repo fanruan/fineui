@@ -219,52 +219,52 @@ BI.MultiDatePopup = BI.inherit(BI.Widget, {
         var self = this, date;
         var type, value;
         if (BI.isNotNull(v)) {
-            type = v.type || BICst.DATE_TYPE.MULTI_DATE_CALENDAR;
+            type = v.type || BI.MultiDateCombo.DATE_TYPE.MULTI_DATE_CALENDAR;
             value = v.value;
             if (BI.isNull(value)) {
                 value = v;
             }
         }
         switch (type) {
-            case BICst.DATE_TYPE.MULTI_DATE_YEAR_PREV:
-            case BICst.DATE_TYPE.MULTI_DATE_YEAR_AFTER:
-            case BICst.DATE_TYPE.MULTI_DATE_YEAR_BEGIN:
-            case BICst.DATE_TYPE.MULTI_DATE_YEAR_END:
-                this.dateTab.setSelect(BICst.MULTI_DATE_YEAR_CARD);
+            case BI.MultiDateCombo.DATE_TYPE.MULTI_DATE_YEAR_PREV:
+            case BI.MultiDateCombo.DATE_TYPE.MULTI_DATE_YEAR_AFTER:
+            case BI.MultiDateCombo.DATE_TYPE.MULTI_DATE_YEAR_BEGIN:
+            case BI.MultiDateCombo.DATE_TYPE.MULTI_DATE_YEAR_END:
+                this.dateTab.setSelect(BI.MultiDateCombo.MULTI_DATE_YEAR_CARD);
                 this.year.setValue({type: type, value: value});
-                this.cur = BICst.MULTI_DATE_YEAR_CARD;
+                this.cur = BI.MultiDateCombo.MULTI_DATE_YEAR_CARD;
                 self._setInnerValue(this.year);
                 break;
-            case BICst.DATE_TYPE.MULTI_DATE_QUARTER_PREV:
-            case BICst.DATE_TYPE.MULTI_DATE_QUARTER_AFTER:
-            case BICst.DATE_TYPE.MULTI_DATE_QUARTER_BEGIN:
-            case BICst.DATE_TYPE.MULTI_DATE_QUARTER_END:
-                this.dateTab.setSelect(BICst.MULTI_DATE_QUARTER_CARD);
-                this.cur = BICst.MULTI_DATE_QUARTER_CARD;
+            case BI.MultiDateCombo.DATE_TYPE.MULTI_DATE_QUARTER_PREV:
+            case BI.MultiDateCombo.DATE_TYPE.MULTI_DATE_QUARTER_AFTER:
+            case BI.MultiDateCombo.DATE_TYPE.MULTI_DATE_QUARTER_BEGIN:
+            case BI.MultiDateCombo.DATE_TYPE.MULTI_DATE_QUARTER_END:
+                this.dateTab.setSelect(BI.MultiDateCombo.MULTI_DATE_QUARTER_CARD);
+                this.cur = BI.MultiDateCombo.MULTI_DATE_QUARTER_CARD;
                 this.quarter.setValue({type: type, value: value});
                 self._setInnerValue(this.quarter);
                 break;
-            case BICst.DATE_TYPE.MULTI_DATE_MONTH_PREV:
-            case BICst.DATE_TYPE.MULTI_DATE_MONTH_AFTER:
-            case BICst.DATE_TYPE.MULTI_DATE_MONTH_BEGIN:
-            case BICst.DATE_TYPE.MULTI_DATE_MONTH_END:
-                this.dateTab.setSelect(BICst.MULTI_DATE_MONTH_CARD);
-                this.cur = BICst.MULTI_DATE_MONTH_CARD;
+            case BI.MultiDateCombo.DATE_TYPE.MULTI_DATE_MONTH_PREV:
+            case BI.MultiDateCombo.DATE_TYPE.MULTI_DATE_MONTH_AFTER:
+            case BI.MultiDateCombo.DATE_TYPE.MULTI_DATE_MONTH_BEGIN:
+            case BI.MultiDateCombo.DATE_TYPE.MULTI_DATE_MONTH_END:
+                this.dateTab.setSelect(BI.MultiDateCombo.MULTI_DATE_MONTH_CARD);
+                this.cur = BI.MultiDateCombo.MULTI_DATE_MONTH_CARD;
                 this.month.setValue({type: type, value: value});
                 self._setInnerValue(this.month);
                 break;
-            case BICst.DATE_TYPE.MULTI_DATE_WEEK_PREV:
-            case BICst.DATE_TYPE.MULTI_DATE_WEEK_AFTER:
-                this.dateTab.setSelect(BICst.MULTI_DATE_WEEK_CARD);
-                this.cur = BICst.MULTI_DATE_WEEK_CARD;
+            case BI.MultiDateCombo.DATE_TYPE.MULTI_DATE_WEEK_PREV:
+            case BI.MultiDateCombo.DATE_TYPE.MULTI_DATE_WEEK_AFTER:
+                this.dateTab.setSelect(BI.MultiDateCombo.MULTI_DATE_WEEK_CARD);
+                this.cur = BI.MultiDateCombo.MULTI_DATE_WEEK_CARD;
                 this.week.setValue({type: type, value: value});
                 self._setInnerValue(this.week);
                 break;
-            case BICst.DATE_TYPE.MULTI_DATE_DAY_PREV:
-            case BICst.DATE_TYPE.MULTI_DATE_DAY_AFTER:
-            case BICst.DATE_TYPE.MULTI_DATE_DAY_TODAY:
-                this.dateTab.setSelect(BICst.MULTI_DATE_DAY_CARD);
-                this.cur = BICst.MULTI_DATE_DAY_CARD;
+            case BI.MultiDateCombo.DATE_TYPE.MULTI_DATE_DAY_PREV:
+            case BI.MultiDateCombo.DATE_TYPE.MULTI_DATE_DAY_AFTER:
+            case BI.MultiDateCombo.DATE_TYPE.MULTI_DATE_DAY_TODAY:
+                this.dateTab.setSelect(BI.MultiDateCombo.MULTI_DATE_DAY_CARD);
+                this.cur = BI.MultiDateCombo.MULTI_DATE_DAY_CARD;
                 this.day.setValue({type: type, value: value});
                 self._setInnerValue(this.day);
                 break;
