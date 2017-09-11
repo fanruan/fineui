@@ -7691,7 +7691,8 @@ Demo.FileManager = BI.inherit(BI.Widget, {
             },
             height: 24,
             width: 150,
-            errorText: "hahah"
+            errorText: "hahah",
+            step: 0.5
         });
         filemanager.on(BI.FineTuningNumberEditor.EVENT_CHANGE, function () {
             if(BI.parseFloat(this.getValue()) < 1){

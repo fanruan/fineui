@@ -82572,7 +82572,8 @@ BI.FineTuningNumberEditor = BI.inherit(BI.Widget, {
             validationChecker: function () {return true;},
             valueFormatter: function (v) {return v;},
             value: 0,
-            errorText: ""
+            errorText: "",
+            step: 1
         })
     },
 
@@ -82599,7 +82600,7 @@ BI.FineTuningNumberEditor = BI.inherit(BI.Widget, {
             cls: "column-pre-page-h-font top-button bi-border-left bi-border-bottom"
         });
         this.topBtn.on(BI.IconButton.EVENT_CHANGE, function(){
-            self._finetuning(1);
+            self._finetuning(o.step);
             self.fireEvent(BI.FineTuningNumberEditor.EVENT_CHANGE);
             self.fireEvent(BI.FineTuningNumberEditor.EVENT_CONFIRM);
         });
@@ -82609,7 +82610,7 @@ BI.FineTuningNumberEditor = BI.inherit(BI.Widget, {
             cls: "column-next-page-h-font bottom-button bi-border-left bi-border-top"
         });
         this.bottomBtn.on(BI.IconButton.EVENT_CHANGE, function(){
-            self._finetuning(-1);
+            self._finetuning(-o.step);
             self.fireEvent(BI.FineTuningNumberEditor.EVENT_CHANGE);
             self.fireEvent(BI.FineTuningNumberEditor.EVENT_CONFIRM);
         });
