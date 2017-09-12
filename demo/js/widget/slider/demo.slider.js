@@ -14,6 +14,7 @@ Demo.Slider = BI.inherit(BI.Widget, {
 
         var singleSlider = BI.createWidget({
             type: "bi.single_slider",
+            digit: 0,
             width: 300,
             height: 50
         });
@@ -23,21 +24,36 @@ Demo.Slider = BI.inherit(BI.Widget, {
             max: 100
         });
 
+        singleSlider.setValue(30);
         singleSlider.populate();
+        singleSlider.on(BI.SingleSlider.EVENT_CHANGE, function () {
+            console.log(this.getValue());
+        });
+
+        var singleSliderLabel = BI.createWidget({
+            type: "bi.single_slider_label",
+            height: 30,
+            width: 300,
+            digit: 0,
+            unit: "个"
+        });
+        singleSliderLabel.setMinAndMax({
+            min: 0,
+            max: 100
+        });
+        singleSliderLabel.setValue(10);
+        singleSliderLabel.populate();
 
         var normalSingleSlider = BI.createWidget({
             type: "bi.single_slider_normal",
             height: 30,
             width: 300
         });
-
         normalSingleSlider.setMinAndMax({
             min: 0,
             max: 100
         });
-
         normalSingleSlider.setValue(10);
-
         normalSingleSlider.populate();
 
         BI.createWidget({
@@ -56,6 +72,14 @@ Demo.Slider = BI.inherit(BI.Widget, {
                     type: "bi.center_adapt",
                     items: [{
                         el: normalSingleSlider
+                    }]
+                },
+                height: 200
+            }, {
+                el: {
+                    type: "bi.center_adapt",
+                    items: [{
+                        el: singleSliderLabel
                     }]
                 },
                 height: 200

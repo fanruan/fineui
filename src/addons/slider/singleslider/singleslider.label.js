@@ -1,7 +1,7 @@
 /**
- * Created by zcf on 2016/9/22.
+ * Created by Urthur on 2017/9/12.
  */
-BI.SingleSlider = BI.inherit(BI.Widget, {
+BI.SingleSliderLabel = BI.inherit(BI.Widget, {
     _constant: {
         EDITOR_WIDTH: 90,
         EDITOR_HEIGHT: 30,
@@ -12,13 +12,14 @@ BI.SingleSlider = BI.inherit(BI.Widget, {
         TRACK_HEIGHT: 24
     },
     _defaultConfig: function () {
-        return BI.extend(BI.SingleSlider.superclass._defaultConfig.apply(this, arguments), {
+        return BI.extend(BI.SingleSliderLabel.superclass._defaultConfig.apply(this, arguments), {
             baseCls: "bi-single-slider bi-slider-track",
-            digit: ""
+            digit: "",
+            unit: ""
         });
     },
     _init: function () {
-        BI.SingleSlider.superclass._init.apply(this, arguments);
+        BI.SingleSliderLabel.superclass._init.apply(this, arguments);
 
         var self = this, o = this.options;
         var digitExist = (o.digit === "") ? false : true;
@@ -52,15 +53,15 @@ BI.SingleSlider = BI.inherit(BI.Widget, {
                 self._setLabelPosition(significantPercent);
                 var v = self._getValueByPercent(significantPercent);
                 v = digitExist ? v.toFixed(o.digit) : v;
-                self.label.setValue(v);
+                self.label.setText(v + o.unit);
                 self.value = v;
-                self.fireEvent(BI.SingleSlider.EVENT_CHANGE);
+                self.fireEvent(BI.SingleSliderLabel.EVENT_CHANGE);
             },
             stop: function (e, ui) {
                 var percent = (ui.position.left) * 100 / (self._getGrayTrackLength());
                 var significantPercent = BI.parseFloat(percent.toFixed(1));
                 self._setSliderPosition(significantPercent);
-                self.fireEvent(BI.SingleSlider.EVENT_CHANGE);
+                self.fireEvent(BI.SingleSliderLabel.EVENT_CHANGE);
             }
         });
         var sliderVertical = BI.createWidget({
@@ -90,35 +91,17 @@ BI.SingleSlider = BI.inherit(BI.Widget, {
                 self._setAllPosition(significantPercent);
                 var v = self._getValueByPercent(significantPercent);
                 v = digitExist ? v.toFixed(o.digit) : v;
-                self.label.setValue(v);
+                self.label.setText(v + o.unit);
                 self.value = v;
-                self.fireEvent(BI.SingleSlider.EVENT_CHANGE);
+                self.fireEvent(BI.SingleSliderLabel.EVENT_CHANGE);
             }
         });
         this.label = BI.createWidget({
-            type: "bi.sign_editor",
-            cls: "slider-editor-button bi-border",
-            errorText: "",
+            type: "bi.label",
             height: c.HEIGHT,
-            width: c.EDITOR_WIDTH - 2,
-            allowBlank: false,
-            validationChecker: function (v) {
-                return self._checkValidation(v);
-            },
-            quitChecker: function (v) {
-                return self._checkValidation(v);
-            }
+            width: c.EDITOR_WIDTH - 2
         });
-        this.label.on(BI.SignEditor.EVENT_CONFIRM, function () {
-            var v = BI.parseFloat(this.getValue());
-            var percent = self._getPercentByValue(v);
-            var significantPercent = BI.parseFloat(percent.toFixed(1));
-            self._setAllPosition(significantPercent);
-            v = digitExist ? v.toFixed(o.digit) : v;
-            this.setValue(v);
-            self.value = v;
-            self.fireEvent(BI.SingleSlider.EVENT_CHANGE);
-        });
+
         this._setVisible(false);
         BI.createWidget({
             type: "bi.absolute",
@@ -155,7 +138,7 @@ BI.SingleSlider = BI.inherit(BI.Widget, {
                     rgap: c.EDITOR_WIDTH,
                     height: c.EDITOR_HEIGHT
                 },
-                top: 0,
+                top: 10,
                 left: 0,
                 width: "100%"
             }]
@@ -273,19 +256,19 @@ BI.SingleSlider = BI.inherit(BI.Widget, {
     },
 
     populate: function () {
+        var o = this.options;
         if (!isNaN(this.min) && !isNaN(this.max)) {
             this._setVisible(true);
             this.enable = true;
-            this.label.setErrorText(BI.i18nText("BI-Please_Enter") + this.min + "-" + this.max + BI.i18nText("BI-Basic_De") + BI.i18nText("BI-Basic_Number"));
             if (BI.isNumeric(this.value) || BI.isNotEmptyString(this.value)) {
-                this.label.setValue(this.value);
+                this.label.setValue(this.value + o.unit);
                 this._setAllPosition(this._getPercentByValue(this.value));
             } else {
-                this.label.setValue(this.max);
+                this.label.setValue(this.max + o.unit);
                 this._setAllPosition(100);
             }
         }
     }
 });
-BI.SingleSlider.EVENT_CHANGE = "EVENT_CHANGE";
-BI.shortcut("bi.single_slider", BI.SingleSlider);
+BI.SingleSliderLabel.EVENT_CHANGE = "EVENT_CHANGE";
+BI.shortcut("bi.single_slider_label", BI.SingleSliderLabel);
