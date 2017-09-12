@@ -23744,6 +23744,14 @@ Date.prototype.getMonthDays = function (month) {
     }
 };
 
+/**
+ * 获取每月的最后一天
+ * @returns {Date}
+ */
+Date.prototype.getLastDateOfMonth = function () {
+    return new Date(this.getFullYear(), this.getMonth(), this.getMonthDays());
+};
+
 /** Returns the number of day in the year. */
 Date.prototype.getDayOfYear = function () {
     var now = new Date(this.getFullYear(), this.getMonth(), this.getDate(), 0, 0, 0);
@@ -82572,7 +82580,8 @@ BI.FineTuningNumberEditor = BI.inherit(BI.Widget, {
             validationChecker: function () {return true;},
             valueFormatter: function (v) {return v;},
             value: 0,
-            errorText: ""
+            errorText: "",
+            step: 1
         })
     },
 
@@ -82599,7 +82608,7 @@ BI.FineTuningNumberEditor = BI.inherit(BI.Widget, {
             cls: "column-pre-page-h-font top-button bi-border-left bi-border-bottom"
         });
         this.topBtn.on(BI.IconButton.EVENT_CHANGE, function(){
-            self._finetuning(1);
+            self._finetuning(o.step);
             self.fireEvent(BI.FineTuningNumberEditor.EVENT_CHANGE);
             self.fireEvent(BI.FineTuningNumberEditor.EVENT_CONFIRM);
         });
@@ -82609,7 +82618,7 @@ BI.FineTuningNumberEditor = BI.inherit(BI.Widget, {
             cls: "column-next-page-h-font bottom-button bi-border-left bi-border-top"
         });
         this.bottomBtn.on(BI.IconButton.EVENT_CHANGE, function(){
-            self._finetuning(-1);
+            self._finetuning(-o.step);
             self.fireEvent(BI.FineTuningNumberEditor.EVENT_CHANGE);
             self.fireEvent(BI.FineTuningNumberEditor.EVENT_CONFIRM);
         });
@@ -83645,39 +83654,39 @@ BI.MultiDateCard = BI.inherit(BI.Widget, {
         var valueObject = this.getValue();
         var type = valueObject.type, value = valueObject.value;
         switch (type) {
-            case BICst.DATE_TYPE.MULTI_DATE_DAY_PREV:
+            case BI.MultiDateCombo.DATE_TYPE.MULTI_DATE_DAY_PREV:
                 return new Date().getOffsetDate(-1 * value);
-            case BICst.DATE_TYPE.MULTI_DATE_DAY_AFTER:
+            case BI.MultiDateCombo.DATE_TYPE.MULTI_DATE_DAY_AFTER:
                 return new Date().getOffsetDate(value);
-            case BICst.DATE_TYPE.MULTI_DATE_DAY_TODAY:
+            case BI.MultiDateCombo.DATE_TYPE.MULTI_DATE_DAY_TODAY:
                 return new Date();
-            case BICst.DATE_TYPE.MULTI_DATE_MONTH_PREV:
+            case BI.MultiDateCombo.DATE_TYPE.MULTI_DATE_MONTH_PREV:
                 return new Date().getBeforeMultiMonth(value);
-            case BICst.DATE_TYPE.MULTI_DATE_MONTH_AFTER:
+            case BI.MultiDateCombo.DATE_TYPE.MULTI_DATE_MONTH_AFTER:
                 return new Date().getAfterMultiMonth(value);
-            case BICst.DATE_TYPE.MULTI_DATE_MONTH_BEGIN:
+            case BI.MultiDateCombo.DATE_TYPE.MULTI_DATE_MONTH_BEGIN:
                 return new Date(new Date().getFullYear(), new Date().getMonth(), 1);
-            case BICst.DATE_TYPE.MULTI_DATE_MONTH_END:
+            case BI.MultiDateCombo.DATE_TYPE.MULTI_DATE_MONTH_END:
                 return new Date(new Date().getFullYear(), new Date().getMonth(), (new Date().getLastDateOfMonth()).getDate());
-            case BICst.DATE_TYPE.MULTI_DATE_QUARTER_PREV:
+            case BI.MultiDateCombo.DATE_TYPE.MULTI_DATE_QUARTER_PREV:
                 return new Date().getBeforeMulQuarter(value);
-            case BICst.DATE_TYPE.MULTI_DATE_QUARTER_AFTER:
+            case BI.MultiDateCombo.DATE_TYPE.MULTI_DATE_QUARTER_AFTER:
                 return new Date().getAfterMulQuarter(value);
-            case BICst.DATE_TYPE.MULTI_DATE_QUARTER_BEGIN:
+            case BI.MultiDateCombo.DATE_TYPE.MULTI_DATE_QUARTER_BEGIN:
                 return new Date().getQuarterStartDate();
-            case BICst.DATE_TYPE.MULTI_DATE_QUARTER_END:
+            case BI.MultiDateCombo.DATE_TYPE.MULTI_DATE_QUARTER_END:
                 return new Date().getQuarterEndDate();
-            case BICst.DATE_TYPE.MULTI_DATE_WEEK_PREV:
+            case BI.MultiDateCombo.DATE_TYPE.MULTI_DATE_WEEK_PREV:
                 return new Date().getOffsetDate(-7 * value);
-            case BICst.DATE_TYPE.MULTI_DATE_WEEK_AFTER:
+            case BI.MultiDateCombo.DATE_TYPE.MULTI_DATE_WEEK_AFTER:
                 return new Date().getOffsetDate(7 * value);
-            case BICst.DATE_TYPE.MULTI_DATE_YEAR_PREV:
+            case BI.MultiDateCombo.DATE_TYPE.MULTI_DATE_YEAR_PREV:
                 return new Date((new Date().getFullYear() - 1 * value), new Date().getMonth(), new Date().getDate());
-            case BICst.DATE_TYPE.MULTI_DATE_YEAR_AFTER:
+            case BI.MultiDateCombo.DATE_TYPE.MULTI_DATE_YEAR_AFTER:
                 return new Date((new Date().getFullYear() + 1 * value), new Date().getMonth(), new Date().getDate());
-            case BICst.DATE_TYPE.MULTI_DATE_YEAR_BEGIN:
+            case BI.MultiDateCombo.DATE_TYPE.MULTI_DATE_YEAR_BEGIN:
                 return new Date(new Date().getFullYear(), 0, 1);
-            case BICst.DATE_TYPE.MULTI_DATE_YEAR_END:
+            case BI.MultiDateCombo.DATE_TYPE.MULTI_DATE_YEAR_END:
                 return new Date(new Date().getFullYear(), 11, 31);
         }
     }
@@ -83868,23 +83877,23 @@ BI.MultiDateCombo = BI.inherit(BI.Single, {
             type = v.type
         }
         switch (type) {
-            case BICst.DATE_TYPE.MULTI_DATE_YEAR_PREV:
-            case BICst.DATE_TYPE.MULTI_DATE_YEAR_AFTER:
-            case BICst.DATE_TYPE.MULTI_DATE_YEAR_BEGIN:
-            case BICst.DATE_TYPE.MULTI_DATE_YEAR_END:
-            case BICst.DATE_TYPE.MULTI_DATE_QUARTER_PREV:
-            case BICst.DATE_TYPE.MULTI_DATE_QUARTER_AFTER:
-            case BICst.DATE_TYPE.MULTI_DATE_QUARTER_BEGIN:
-            case BICst.DATE_TYPE.MULTI_DATE_QUARTER_END:
-            case BICst.DATE_TYPE.MULTI_DATE_MONTH_PREV:
-            case BICst.DATE_TYPE.MULTI_DATE_MONTH_AFTER:
-            case BICst.DATE_TYPE.MULTI_DATE_MONTH_BEGIN:
-            case BICst.DATE_TYPE.MULTI_DATE_MONTH_END:
-            case BICst.DATE_TYPE.MULTI_DATE_WEEK_PREV:
-            case BICst.DATE_TYPE.MULTI_DATE_WEEK_AFTER:
-            case BICst.DATE_TYPE.MULTI_DATE_DAY_PREV:
-            case BICst.DATE_TYPE.MULTI_DATE_DAY_AFTER:
-            case BICst.DATE_TYPE.MULTI_DATE_DAY_TODAY:
+            case BI.MultiDateCombo.DATE_TYPE.MULTI_DATE_YEAR_PREV:
+            case BI.MultiDateCombo.DATE_TYPE.MULTI_DATE_YEAR_AFTER:
+            case BI.MultiDateCombo.DATE_TYPE.MULTI_DATE_YEAR_BEGIN:
+            case BI.MultiDateCombo.DATE_TYPE.MULTI_DATE_YEAR_END:
+            case BI.MultiDateCombo.DATE_TYPE.MULTI_DATE_QUARTER_PREV:
+            case BI.MultiDateCombo.DATE_TYPE.MULTI_DATE_QUARTER_AFTER:
+            case BI.MultiDateCombo.DATE_TYPE.MULTI_DATE_QUARTER_BEGIN:
+            case BI.MultiDateCombo.DATE_TYPE.MULTI_DATE_QUARTER_END:
+            case BI.MultiDateCombo.DATE_TYPE.MULTI_DATE_MONTH_PREV:
+            case BI.MultiDateCombo.DATE_TYPE.MULTI_DATE_MONTH_AFTER:
+            case BI.MultiDateCombo.DATE_TYPE.MULTI_DATE_MONTH_BEGIN:
+            case BI.MultiDateCombo.DATE_TYPE.MULTI_DATE_MONTH_END:
+            case BI.MultiDateCombo.DATE_TYPE.MULTI_DATE_WEEK_PREV:
+            case BI.MultiDateCombo.DATE_TYPE.MULTI_DATE_WEEK_AFTER:
+            case BI.MultiDateCombo.DATE_TYPE.MULTI_DATE_DAY_PREV:
+            case BI.MultiDateCombo.DATE_TYPE.MULTI_DATE_DAY_AFTER:
+            case BI.MultiDateCombo.DATE_TYPE.MULTI_DATE_DAY_TODAY:
                 this.changeIcon.setVisible(true);
                 this.comboWrapper.attr("items")[1].width = 30;
                 this.comboWrapper.resize();
@@ -83930,6 +83939,39 @@ BI.extend(BI.MultiDateCombo, {
     MULTI_DATE_WEEK_CARD: 5,
     MULTI_DATE_DAY_CARD: 6
 });
+
+BI.extend(BI.MultiDateCombo, {
+    DATE_TYPE: {
+        MULTI_DATE_YEAR_PREV: 1,
+        MULTI_DATE_YEAR_AFTER: 2,
+        MULTI_DATE_YEAR_BEGIN: 3,
+        MULTI_DATE_YEAR_END: 4,
+        MULTI_DATE_MONTH_PREV: 5,
+        MULTI_DATE_MONTH_AFTER: 6,
+        MULTI_DATE_MONTH_BEGIN: 7,
+        MULTI_DATE_MONTH_END: 8,
+        MULTI_DATE_QUARTER_PREV: 9,
+        MULTI_DATE_QUARTER_AFTER: 10,
+        MULTI_DATE_QUARTER_BEGIN: 11,
+        MULTI_DATE_QUARTER_END: 12,
+        MULTI_DATE_WEEK_PREV: 13,
+        MULTI_DATE_WEEK_AFTER: 14,
+        MULTI_DATE_DAY_PREV: 15,
+        MULTI_DATE_DAY_AFTER: 16,
+        MULTI_DATE_DAY_TODAY: 17,
+        MULTI_DATE_PARAM: 18,
+        MULTI_DATE_CALENDAR: 19,
+        YEAR_QUARTER: 20,
+        YEAR_MONTH: 21,
+        YEAR_WEEK: 22,
+        YEAR_DAY: 23,
+        MONTH_WEEK: 24,
+        MONTH_DAY: 25,
+        YEAR: 26,
+        SAME_PERIOD: 27,
+        LAST_SAME_PERIOD: 28
+    }
+});
 /**
  * 普通控件
  *
@@ -83953,22 +83995,22 @@ BI.DayCard = BI.inherit(BI.MultiDateCard, {
             isEditorExist: true,
             selected: true,
             text: BI.i18nText("BI-Multi_Date_Day_Prev"),
-            value: BICst.DATE_TYPE.MULTI_DATE_DAY_PREV
+            value: BI.MultiDateCombo.DATE_TYPE.MULTI_DATE_DAY_PREV
         },
             {
                 isEditorExist: true,
                 text: BI.i18nText("BI-Multi_Date_Day_Next"),
-                value: BICst.DATE_TYPE.MULTI_DATE_DAY_AFTER
+                value: BI.MultiDateCombo.DATE_TYPE.MULTI_DATE_DAY_AFTER
             },
             {
                 isEditorExist: false,
-                value: BICst.DATE_TYPE.MULTI_DATE_DAY_TODAY,
+                value: BI.MultiDateCombo.DATE_TYPE.MULTI_DATE_DAY_TODAY,
                 text: BI.i18nText("BI-Multi_Date_Today")
             }];
     },
 
     defaultSelectedItem: function () {
-        return BICst.DATE_TYPE.MULTI_DATE_DAY_PREV
+        return BI.MultiDateCombo.DATE_TYPE.MULTI_DATE_DAY_PREV
     }
 });
 BI.DayCard.EVENT_CHANGE = "EVENT_CHANGE";
@@ -83994,28 +84036,28 @@ BI.MonthCard = BI.inherit(BI.MultiDateCard, {
         return [{
             selected: true,
             isEditorExist: true,
-            value: BICst.DATE_TYPE.MULTI_DATE_MONTH_PREV,
+            value: BI.MultiDateCombo.DATE_TYPE.MULTI_DATE_MONTH_PREV,
             text: BI.i18nText("BI-Multi_Date_Month_Prev")
         },
             {
                 isEditorExist: true,
-                value: BICst.DATE_TYPE.MULTI_DATE_MONTH_AFTER,
+                value: BI.MultiDateCombo.DATE_TYPE.MULTI_DATE_MONTH_AFTER,
                 text: BI.i18nText("BI-Multi_Date_Month_Next")
             },
             {
-                value: BICst.DATE_TYPE.MULTI_DATE_MONTH_BEGIN,
+                value: BI.MultiDateCombo.DATE_TYPE.MULTI_DATE_MONTH_BEGIN,
                 isEditorExist: false,
                 text: BI.i18nText("BI-Multi_Date_Month_Begin")
             },
             {
-                value: BICst.DATE_TYPE.MULTI_DATE_MONTH_END,
+                value: BI.MultiDateCombo.DATE_TYPE.MULTI_DATE_MONTH_END,
                 isEditorExist: false,
                 text: BI.i18nText("BI-Multi_Date_Month_End")
             }];
     },
 
     defaultSelectedItem: function () {
-        return BICst.DATE_TYPE.MULTI_DATE_MONTH_PREV;
+        return BI.MultiDateCombo.DATE_TYPE.MULTI_DATE_MONTH_PREV;
     }
 });
 BI.MonthCard.EVENT_CHANGE = "EVENT_CHANGE";
@@ -84241,52 +84283,52 @@ BI.MultiDatePopup = BI.inherit(BI.Widget, {
         var self = this, date;
         var type, value;
         if (BI.isNotNull(v)) {
-            type = v.type || BICst.DATE_TYPE.MULTI_DATE_CALENDAR;
+            type = v.type || BI.MultiDateCombo.DATE_TYPE.MULTI_DATE_CALENDAR;
             value = v.value;
             if (BI.isNull(value)) {
                 value = v;
             }
         }
         switch (type) {
-            case BICst.DATE_TYPE.MULTI_DATE_YEAR_PREV:
-            case BICst.DATE_TYPE.MULTI_DATE_YEAR_AFTER:
-            case BICst.DATE_TYPE.MULTI_DATE_YEAR_BEGIN:
-            case BICst.DATE_TYPE.MULTI_DATE_YEAR_END:
-                this.dateTab.setSelect(BICst.MULTI_DATE_YEAR_CARD);
+            case BI.MultiDateCombo.DATE_TYPE.MULTI_DATE_YEAR_PREV:
+            case BI.MultiDateCombo.DATE_TYPE.MULTI_DATE_YEAR_AFTER:
+            case BI.MultiDateCombo.DATE_TYPE.MULTI_DATE_YEAR_BEGIN:
+            case BI.MultiDateCombo.DATE_TYPE.MULTI_DATE_YEAR_END:
+                this.dateTab.setSelect(BI.MultiDateCombo.MULTI_DATE_YEAR_CARD);
                 this.year.setValue({type: type, value: value});
-                this.cur = BICst.MULTI_DATE_YEAR_CARD;
+                this.cur = BI.MultiDateCombo.MULTI_DATE_YEAR_CARD;
                 self._setInnerValue(this.year);
                 break;
-            case BICst.DATE_TYPE.MULTI_DATE_QUARTER_PREV:
-            case BICst.DATE_TYPE.MULTI_DATE_QUARTER_AFTER:
-            case BICst.DATE_TYPE.MULTI_DATE_QUARTER_BEGIN:
-            case BICst.DATE_TYPE.MULTI_DATE_QUARTER_END:
-                this.dateTab.setSelect(BICst.MULTI_DATE_QUARTER_CARD);
-                this.cur = BICst.MULTI_DATE_QUARTER_CARD;
+            case BI.MultiDateCombo.DATE_TYPE.MULTI_DATE_QUARTER_PREV:
+            case BI.MultiDateCombo.DATE_TYPE.MULTI_DATE_QUARTER_AFTER:
+            case BI.MultiDateCombo.DATE_TYPE.MULTI_DATE_QUARTER_BEGIN:
+            case BI.MultiDateCombo.DATE_TYPE.MULTI_DATE_QUARTER_END:
+                this.dateTab.setSelect(BI.MultiDateCombo.MULTI_DATE_QUARTER_CARD);
+                this.cur = BI.MultiDateCombo.MULTI_DATE_QUARTER_CARD;
                 this.quarter.setValue({type: type, value: value});
                 self._setInnerValue(this.quarter);
                 break;
-            case BICst.DATE_TYPE.MULTI_DATE_MONTH_PREV:
-            case BICst.DATE_TYPE.MULTI_DATE_MONTH_AFTER:
-            case BICst.DATE_TYPE.MULTI_DATE_MONTH_BEGIN:
-            case BICst.DATE_TYPE.MULTI_DATE_MONTH_END:
-                this.dateTab.setSelect(BICst.MULTI_DATE_MONTH_CARD);
-                this.cur = BICst.MULTI_DATE_MONTH_CARD;
+            case BI.MultiDateCombo.DATE_TYPE.MULTI_DATE_MONTH_PREV:
+            case BI.MultiDateCombo.DATE_TYPE.MULTI_DATE_MONTH_AFTER:
+            case BI.MultiDateCombo.DATE_TYPE.MULTI_DATE_MONTH_BEGIN:
+            case BI.MultiDateCombo.DATE_TYPE.MULTI_DATE_MONTH_END:
+                this.dateTab.setSelect(BI.MultiDateCombo.MULTI_DATE_MONTH_CARD);
+                this.cur = BI.MultiDateCombo.MULTI_DATE_MONTH_CARD;
                 this.month.setValue({type: type, value: value});
                 self._setInnerValue(this.month);
                 break;
-            case BICst.DATE_TYPE.MULTI_DATE_WEEK_PREV:
-            case BICst.DATE_TYPE.MULTI_DATE_WEEK_AFTER:
-                this.dateTab.setSelect(BICst.MULTI_DATE_WEEK_CARD);
-                this.cur = BICst.MULTI_DATE_WEEK_CARD;
+            case BI.MultiDateCombo.DATE_TYPE.MULTI_DATE_WEEK_PREV:
+            case BI.MultiDateCombo.DATE_TYPE.MULTI_DATE_WEEK_AFTER:
+                this.dateTab.setSelect(BI.MultiDateCombo.MULTI_DATE_WEEK_CARD);
+                this.cur = BI.MultiDateCombo.MULTI_DATE_WEEK_CARD;
                 this.week.setValue({type: type, value: value});
                 self._setInnerValue(this.week);
                 break;
-            case BICst.DATE_TYPE.MULTI_DATE_DAY_PREV:
-            case BICst.DATE_TYPE.MULTI_DATE_DAY_AFTER:
-            case BICst.DATE_TYPE.MULTI_DATE_DAY_TODAY:
-                this.dateTab.setSelect(BICst.MULTI_DATE_DAY_CARD);
-                this.cur = BICst.MULTI_DATE_DAY_CARD;
+            case BI.MultiDateCombo.DATE_TYPE.MULTI_DATE_DAY_PREV:
+            case BI.MultiDateCombo.DATE_TYPE.MULTI_DATE_DAY_AFTER:
+            case BI.MultiDateCombo.DATE_TYPE.MULTI_DATE_DAY_TODAY:
+                this.dateTab.setSelect(BI.MultiDateCombo.MULTI_DATE_DAY_CARD);
+                this.cur = BI.MultiDateCombo.MULTI_DATE_DAY_CARD;
                 this.day.setValue({type: type, value: value});
                 self._setInnerValue(this.day);
                 break;
@@ -84353,29 +84395,29 @@ BI.QuarterCard = BI.inherit(BI.MultiDateCard, {
     dateConfig: function () {
         return [{
             selected: true,
-            value: BICst.DATE_TYPE.MULTI_DATE_QUARTER_PREV,
+            value: BI.MultiDateCombo.DATE_TYPE.MULTI_DATE_QUARTER_PREV,
             isEditorExist: true,
             text: BI.i18nText("BI-Multi_Date_Quarter_Prev")
         },
             {
-                value: BICst.DATE_TYPE.MULTI_DATE_QUARTER_AFTER,
+                value: BI.MultiDateCombo.DATE_TYPE.MULTI_DATE_QUARTER_AFTER,
                 isEditorExist: true,
                 text: BI.i18nText("BI-Multi_Date_Quarter_Next")
             },
             {
-                value: BICst.DATE_TYPE.MULTI_DATE_QUARTER_BEGIN,
+                value: BI.MultiDateCombo.DATE_TYPE.MULTI_DATE_QUARTER_BEGIN,
                 isEditorExist: false,
                 text: BI.i18nText("BI-Multi_Date_Quarter_Begin")
             },
             {
-                value: BICst.DATE_TYPE.MULTI_DATE_QUARTER_END,
+                value: BI.MultiDateCombo.DATE_TYPE.MULTI_DATE_QUARTER_END,
                 isEditorExist: false,
                 text: BI.i18nText("BI-Multi_Date_Quarter_End")
             }]
     },
 
     defaultSelectedItem: function () {
-        return BICst.DATE_TYPE.MULTI_DATE_QUARTER_PREV;
+        return BI.MultiDateCombo.DATE_TYPE.MULTI_DATE_QUARTER_PREV;
     }
 });
 BI.QuarterCard.EVENT_CHANGE = "EVENT_CHANGE";
@@ -84528,17 +84570,17 @@ BI.WeekCard = BI.inherit(BI.MultiDateCard, {
             selected: true,
             isEditorExist: true,
             text: BI.i18nText("BI-Multi_Date_Week_Prev"),
-            value: BICst.DATE_TYPE.MULTI_DATE_WEEK_PREV
+            value: BI.MultiDateCombo.DATE_TYPE.MULTI_DATE_WEEK_PREV
         },
             {
                 isEditorExist: true,
                 text: BI.i18nText("BI-Multi_Date_Week_Next"),
-                value: BICst.DATE_TYPE.MULTI_DATE_WEEK_AFTER
+                value: BI.MultiDateCombo.DATE_TYPE.MULTI_DATE_WEEK_AFTER
             }];
     },
 
     defaultSelectedItem: function () {
-        return BICst.DATE_TYPE.MULTI_DATE_WEEK_PREV;
+        return BI.MultiDateCombo.DATE_TYPE.MULTI_DATE_WEEK_PREV;
     }
 });
 BI.WeekCard.EVENT_CHANGE = "EVENT_CHANGE";
@@ -84565,27 +84607,27 @@ BI.YearCard = BI.inherit(BI.MultiDateCard, {
             selected: true,
             isEditorExist: true,
             text: BI.i18nText("BI-Multi_Date_Year_Prev"),
-            value: BICst.DATE_TYPE.MULTI_DATE_YEAR_PREV
+            value: BI.MultiDateCombo.DATE_TYPE.MULTI_DATE_YEAR_PREV
         },
             {
                 isEditorExist: true,
                 text: BI.i18nText("BI-Multi_Date_Year_Next"),
-                value: BICst.DATE_TYPE.MULTI_DATE_YEAR_AFTER
+                value: BI.MultiDateCombo.DATE_TYPE.MULTI_DATE_YEAR_AFTER
             },
             {
                 isEditorExist: false,
-                value: BICst.DATE_TYPE.MULTI_DATE_YEAR_BEGIN,
+                value: BI.MultiDateCombo.DATE_TYPE.MULTI_DATE_YEAR_BEGIN,
                 text: BI.i18nText("BI-Multi_Date_Year_Begin")
             },
             {
                 isEditorExist: false,
-                value: BICst.DATE_TYPE.MULTI_DATE_YEAR_END,
+                value: BI.MultiDateCombo.DATE_TYPE.MULTI_DATE_YEAR_END,
                 text: BI.i18nText("BI-Multi_Date_Year_End")
             }]
     },
 
     defaultSelectedItem: function () {
-        return BICst.DATE_TYPE.MULTI_DATE_YEAR_PREV;
+        return BI.MultiDateCombo.DATE_TYPE.MULTI_DATE_YEAR_PREV;
     }
 });
 BI.YearCard.EVENT_CHANGE = "EVENT_CHANGE";
