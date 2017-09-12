@@ -1,9 +1,7 @@
 /**
- * normal single slider
- * Created by Young on 2017/6/21.
+ * Created by zcf on 2016/9/22.
  */
-BI.SingleSliderNormal = BI.inherit(BI.Widget, {
-
+BI.SingleSlider = BI.inherit(BI.Widget, {
     _constant: {
         EDITOR_WIDTH: 90,
         EDITOR_HEIGHT: 30,
@@ -13,22 +11,35 @@ BI.SingleSliderNormal = BI.inherit(BI.Widget, {
         SLIDER_HEIGHT: 30,
         TRACK_HEIGHT: 24
     },
-
-    props: {
-        baseCls: "bi-single-button bi-button-track",
-        minMax: {
-            min: 0,
-            max: 100
-        },
-        color: "#3f8ce8"
+    _defaultConfig: function () {
+        return BI.extend(BI.SingleSlider.superclass._defaultConfig.apply(this, arguments), {
+            baseCls: "bi-single-slider bi-slider-track",
+            digit: ""
+        });
     },
+    _init: function () {
+        BI.SingleSlider.superclass._init.apply(this, arguments);
 
-    render: function () {
-        var self = this;
+        var self = this, o = this.options;
+        var digitExist = (o.digit === "") ? false : true;
         var c = this._constant;
-        var track = this._createTrack();
+        this.enable = false;
+        this.value = "";
+
+        this.grayTrack = BI.createWidget({
+            type: "bi.layout",
+            cls: "gray-track",
+            height: 6
+        });
+        this.blueTrack = BI.createWidget({
+            type: "bi.layout",
+            cls: "blue-track bi-high-light-background",
+            height: 6
+        });
+        this.track = this._createTrackWrapper();
+
         this.slider = BI.createWidget({
-            type: "bi.single_slider_slider"
+            type: "bi.single_slider_button"
         });
         this.slider.element.draggable({
             axis: "x",
@@ -38,9 +49,12 @@ BI.SingleSliderNormal = BI.inherit(BI.Widget, {
                 var percent = (ui.position.left) * 100 / (self._getGrayTrackLength());
                 var significantPercent = BI.parseFloat(percent.toFixed(1));//直接对计算出来的百分数保留到小数点后一位，相当于分成了1000份。
                 self._setBlueTrack(significantPercent);
+                self._setLabelPosition(significantPercent);
                 var v = self._getValueByPercent(significantPercent);
+                v = digitExist ? v.toFixed(o.digit) : v;
+                self.label.setValue(v);
                 self.value = v;
-                self.fireEvent(BI.SingleSliderNormal.EVENT_DRAG, v);
+                self.fireEvent(BI.SingleSlider.EVENT_CHANGE);
             },
             stop: function (e, ui) {
                 var percent = (ui.position.left) * 100 / (self._getGrayTrackLength());
@@ -49,7 +63,6 @@ BI.SingleSliderNormal = BI.inherit(BI.Widget, {
                 self.fireEvent(BI.SingleSlider.EVENT_CHANGE);
             }
         });
-
         var sliderVertical = BI.createWidget({
             type: "bi.vertical",
             items: [{
@@ -76,12 +89,38 @@ BI.SingleSliderNormal = BI.inherit(BI.Widget, {
                 var significantPercent = BI.parseFloat(percent.toFixed(1));
                 self._setAllPosition(significantPercent);
                 var v = self._getValueByPercent(significantPercent);
+                v = digitExist ? v.toFixed(o.digit) : v;
+                self.label.setValue(v);
                 self.value = v;
                 self.fireEvent(BI.SingleSlider.EVENT_CHANGE);
             }
         });
-
-        return {
+        this.label = BI.createWidget({
+            type: "bi.sign_editor",
+            cls: "slider-editor-button bi-border",
+            errorText: "",
+            height: c.HEIGHT,
+            width: c.EDITOR_WIDTH - 2,
+            allowBlank: false,
+            validationChecker: function (v) {
+                return self._checkValidation(v);
+            },
+            quitChecker: function (v) {
+                return self._checkValidation(v);
+            }
+        });
+        this.label.on(BI.SignEditor.EVENT_CONFIRM, function () {
+            var v = BI.parseFloat(this.getValue());
+            var percent = self._getPercentByValue(v);
+            var significantPercent = BI.parseFloat(percent.toFixed(1));
+            self._setAllPosition(significantPercent);
+            v = digitExist ? v.toFixed(o.digit) : v;
+            this.setValue(v);
+            self.value = v;
+            self.fireEvent(BI.SingleSlider.EVENT_CHANGE);
+        });
+        this._setVisible(false);
+        BI.createWidget({
             type: "bi.absolute",
             element: this,
             items: [{
@@ -90,7 +129,7 @@ BI.SingleSliderNormal = BI.inherit(BI.Widget, {
                     items: [{
                         type: "bi.absolute",
                         items: [{
-                            el: track,
+                            el: this.track,
                             width: "100%",
                             height: c.TRACK_HEIGHT
                         }]
@@ -98,34 +137,33 @@ BI.SingleSliderNormal = BI.inherit(BI.Widget, {
                     hgap: 7,
                     height: c.TRACK_HEIGHT
                 },
-                top: 3,
+                top: 33,
                 left: 0,
                 width: "100%"
             }, {
                 el: sliderVertical,
+                top: 30,
+                left: 0,
+                width: "100%"
+            }, {
+                el: {
+                    type: "bi.vertical",
+                    items: [{
+                        type: "bi.absolute",
+                        items: [this.label]
+                    }],
+                    rgap: c.EDITOR_WIDTH,
+                    height: c.EDITOR_HEIGHT
+                },
                 top: 0,
                 left: 0,
                 width: "100%"
             }]
-        }
+        })
     },
 
-    _createTrack: function () {
-        var self = this;
-        var c = this._constant;
-        this.grayTrack = BI.createWidget({
-            type: "bi.layout",
-            cls: "gray-track",
-            height: 6
-        });
-        this.blueTrack = BI.createWidget({
-            type: "bi.layout",
-            cls: "blue-track",
-            height: 6
-        });
-        this.blueTrack.element.css({"background-color": this.options.color});
-
-        return {
+    _createTrackWrapper: function () {
+        return BI.createWidget({
             type: "bi.absolute",
             items: [{
                 el: {
@@ -150,19 +188,20 @@ BI.SingleSliderNormal = BI.inherit(BI.Widget, {
                 top: 8,
                 left: 0,
                 width: "100%"
-            }],
-            ref: function (ref) {
-                self.track = ref;
-            }
-        }
+            }]
+        })
     },
 
     _checkValidation: function (v) {
-        return !(BI.isNull(v) || v < this.min || v > this.max)
+        return BI.isNumeric(v) && !(BI.isNull(v) || v < this.min || v > this.max)
     },
 
     _setBlueTrack: function (percent) {
         this.blueTrack.element.css({"width": percent + "%"});
+    },
+
+    _setLabelPosition: function (percent) {
+        this.label.element.css({"left": percent + "%"});
     },
 
     _setSliderPosition: function (percent) {
@@ -171,11 +210,13 @@ BI.SingleSliderNormal = BI.inherit(BI.Widget, {
 
     _setAllPosition: function (percent) {
         this._setSliderPosition(percent);
+        this._setLabelPosition(percent);
         this._setBlueTrack(percent);
     },
 
     _setVisible: function (visible) {
         this.slider.setVisible(visible);
+        this.label.setVisible(visible);
     },
 
     _getGrayTrackLength: function () {
@@ -196,7 +237,10 @@ BI.SingleSliderNormal = BI.inherit(BI.Widget, {
     },
 
     setValue: function (v) {
+        var o = this.options;
+        var digitExist = (o.digit === "") ? false : true;
         var value = BI.parseFloat(v);
+        value = digitExist ? value.toFixed(o.digit) : value;
         if ((!isNaN(value))) {
             if (this._checkValidation(value)) {
                 this.value = value;
@@ -232,13 +276,16 @@ BI.SingleSliderNormal = BI.inherit(BI.Widget, {
         if (!isNaN(this.min) && !isNaN(this.max)) {
             this._setVisible(true);
             this.enable = true;
+            this.label.setErrorText(BI.i18nText("BI-Please_Enter") + this.min + "-" + this.max + BI.i18nText("BI-Basic_De") + BI.i18nText("BI-Basic_Number"));
             if (BI.isNumeric(this.value) || BI.isNotEmptyString(this.value)) {
+                this.label.setValue(this.value);
                 this._setAllPosition(this._getPercentByValue(this.value));
             } else {
+                this.label.setValue(this.max);
                 this._setAllPosition(100);
             }
         }
     }
 });
-BI.SingleSliderNormal.EVENT_DRAG = "EVENT_DRAG";
-BI.shortcut("bi.single_slider_normal", BI.SingleSliderNormal);
+BI.SingleSlider.EVENT_CHANGE = "EVENT_CHANGE";
+BI.shortcut("bi.single_slider", BI.SingleSlider);

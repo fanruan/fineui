@@ -31812,6 +31812,9 @@ BI.Combo = BI.inherit(BI.Widget, {
                     var debounce = BI.debounce(function (e) {
                         if (self.combo.element.__isMouseInBounds__(e)) {
                             if (self.isEnabled() && self.isValid() && self.combo.isEnabled() && self.combo.isValid()) {
+                                if (!o.toggle && self.isViewVisible()) {
+                                    return;
+                                }
                                 o.toggle ? self._toggle() : self._popupView();
                                 if (self.isViewVisible()) {
                                     self.fireEvent(BI.Controller.EVENT_CHANGE, BI.Events.EXPAND, "", self.combo);
@@ -31826,6 +31829,33 @@ BI.Combo = BI.inherit(BI.Widget, {
                     self.element.off(ev + "." + self.getName()).on(ev + "." + self.getName(), function (e) {
                         debounce(e);
                         st(e);
+                    });
+                    break;
+                case "click-hover":
+                    var debounce = BI.debounce(function (e) {
+                        if (self.combo.element.__isMouseInBounds__(e)) {
+                            if (self.isEnabled() && self.isValid() && self.combo.isEnabled() && self.combo.isValid()) {
+                                if (self.isViewVisible()) {
+                                    return;
+                                }
+                                self._popupView();
+                                if (self.isViewVisible()) {
+                                    self.fireEvent(BI.Controller.EVENT_CHANGE, BI.Events.EXPAND, "", self.combo);
+                                    self.fireEvent(BI.Combo.EVENT_EXPAND);
+                                }
+                            }
+                        }
+                    }, BI.EVENT_RESPONSE_TIME, true);
+                    self.element.off(ev + "." + self.getName()).on(ev + "." + self.getName(), function (e) {
+                        debounce(e);
+                        st(e);
+                    });
+                    self.element.on("mouseleave." + self.getName(), function (e) {
+                        if (self.isEnabled() && self.isValid() && self.combo.isEnabled() && self.combo.isValid() && o.toggle === true) {
+                            self._hideView();
+                            self.fireEvent(BI.Controller.EVENT_CHANGE, BI.Events.COLLAPSE, "", self.combo);
+                            self.fireEvent(BI.Combo.EVENT_COLLAPSE);
+                        }
                     });
                     break;
             }
@@ -76860,6 +76890,81 @@ BI.IconTrigger = BI.inherit(BI.Trigger, {
     }
 });
 BI.shortcut('bi.icon_trigger', BI.IconTrigger);/**
+ * 文字trigger
+ *
+ * Created by GUY on 2015/9/15.
+ * @class BI.IconTextTrigger
+ * @extends BI.Trigger
+ */
+BI.IconTextTrigger = BI.inherit(BI.Trigger, {
+    _const: {
+        hgap: 4,
+        triggerWidth: 30
+    },
+
+    _defaultConfig: function () {
+        var conf = BI.IconTextTrigger.superclass._defaultConfig.apply(this, arguments);
+        return BI.extend(conf, {
+            baseCls: (conf.baseCls || "") + " bi-text-trigger",
+            height: 30
+        });
+    },
+
+    _init: function () {
+        BI.IconTextTrigger.superclass._init.apply(this, arguments);
+        var self = this, o = this.options, c = this._const;
+        this.text = BI.createWidget({
+            type: "bi.label",
+            textAlign: "left",
+            height: o.height,
+            text: o.text,
+            hgap: c.hgap
+        });
+        this.trigerButton = BI.createWidget({
+            type: "bi.trigger_icon_button",
+            cls: "bi-border-left",
+            width: c.triggerWidth
+        });
+
+        BI.createWidget({
+            element: this,
+            type: 'bi.htape',
+            items: [{
+                el: {
+                    type: "bi.icon_change_button",
+                    cls: "icon-combo-trigger-icon " + o.iconClass,
+                    ref: function (_ref) {
+                        self.icon = _ref;
+                    },
+                    disableSelected: true
+                },
+                width: 24
+            },
+                {
+                    el: this.text
+                }, {
+                    el: this.trigerButton,
+                    width: c.triggerWidth
+                }
+            ]
+        });
+    },
+
+    setValue: function (value) {
+        this.text.setValue(value);
+        this.text.setTitle(value);
+    },
+
+    setIcon: function (iconCls) {
+        this.icon.setIcon(iconCls);
+    },
+
+    setText: function (text) {
+        this.text.setText(text);
+        this.text.setTitle(text);
+    }
+});
+BI.shortcut("bi.icon_text_trigger", BI.IconTextTrigger);/**
  * 文字trigger
  *
  * Created by GUY on 2015/9/15.

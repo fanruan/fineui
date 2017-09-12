@@ -3024,6 +3024,9 @@ BI.Combo = BI.inherit(BI.Widget, {
                     var debounce = BI.debounce(function (e) {
                         if (self.combo.element.__isMouseInBounds__(e)) {
                             if (self.isEnabled() && self.isValid() && self.combo.isEnabled() && self.combo.isValid()) {
+                                if (!o.toggle && self.isViewVisible()) {
+                                    return;
+                                }
                                 o.toggle ? self._toggle() : self._popupView();
                                 if (self.isViewVisible()) {
                                     self.fireEvent(BI.Controller.EVENT_CHANGE, BI.Events.EXPAND, "", self.combo);
@@ -3038,6 +3041,33 @@ BI.Combo = BI.inherit(BI.Widget, {
                     self.element.off(ev + "." + self.getName()).on(ev + "." + self.getName(), function (e) {
                         debounce(e);
                         st(e);
+                    });
+                    break;
+                case "click-hover":
+                    var debounce = BI.debounce(function (e) {
+                        if (self.combo.element.__isMouseInBounds__(e)) {
+                            if (self.isEnabled() && self.isValid() && self.combo.isEnabled() && self.combo.isValid()) {
+                                if (self.isViewVisible()) {
+                                    return;
+                                }
+                                self._popupView();
+                                if (self.isViewVisible()) {
+                                    self.fireEvent(BI.Controller.EVENT_CHANGE, BI.Events.EXPAND, "", self.combo);
+                                    self.fireEvent(BI.Combo.EVENT_EXPAND);
+                                }
+                            }
+                        }
+                    }, BI.EVENT_RESPONSE_TIME, true);
+                    self.element.off(ev + "." + self.getName()).on(ev + "." + self.getName(), function (e) {
+                        debounce(e);
+                        st(e);
+                    });
+                    self.element.on("mouseleave." + self.getName(), function (e) {
+                        if (self.isEnabled() && self.isValid() && self.combo.isEnabled() && self.combo.isValid() && o.toggle === true) {
+                            self._hideView();
+                            self.fireEvent(BI.Controller.EVENT_CHANGE, BI.Events.COLLAPSE, "", self.combo);
+                            self.fireEvent(BI.Combo.EVENT_COLLAPSE);
+                        }
                     });
                     break;
             }
