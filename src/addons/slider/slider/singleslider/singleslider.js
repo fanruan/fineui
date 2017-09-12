@@ -37,7 +37,7 @@ BI.SingleSlider = BI.inherit(BI.Widget, {
         this.track = this._createTrackWrapper();
 
         this.slider = BI.createWidget({
-            type: "bi.single_slider_slider"
+            type: "bi.single_slider_button"
         });
         this.slider.element.draggable({
             axis: "x",

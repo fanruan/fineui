@@ -1,17 +1,17 @@
 /**
  * Created by zcf on 2016/9/22.
  */
-BI.Slider = BI.inherit(BI.Widget, {
+BI.SliderButton = BI.inherit(BI.Widget, {
     _defaultConfig: function () {
         return BI.extend(BI.Slider.superclass._defaultConfig.apply(this, arguments), {
-            baseCls: "bi-single-button-button"
+            baseCls: "bi-single-slider-button"
         });
     },
     _init: function () {
         BI.extend(BI.Slider.superclass._init.apply(this, arguments));
         this.slider = BI.createWidget({
             type: "bi.icon_button",
-            cls: "widget-button-icon button-button",
+            cls: "widget-slider-icon slider-button",
             iconWidth: 14,
             iconHeight: 14,
             height: 14,
@@ -30,7 +30,7 @@ BI.Slider = BI.inherit(BI.Widget, {
         });
     }
 });
-BI.shortcut("bi.single_slider_slider", BI.Slider);/**
+BI.shortcut("bi.single_slider_button", BI.SliderButton);/**
  * Created by zcf on 2016/9/22.
  */
 BI.SingleSlider = BI.inherit(BI.Widget, {
@@ -69,7 +69,7 @@ BI.SingleSlider = BI.inherit(BI.Widget, {
         this.track = this._createTrackWrapper();
 
         this.slider = BI.createWidget({
-            type: "bi.single_slider_slider"
+            type: "bi.single_slider_button"
         });
         this.slider.element.draggable({
             axis: "x",
@@ -338,7 +338,7 @@ BI.SingleSliderNormal = BI.inherit(BI.Widget, {
         var c = this._constant;
         var track = this._createTrack();
         this.slider = BI.createWidget({
-            type: "bi.single_slider_slider"
+            type: "bi.single_slider_button"
         });
         this.slider.element.draggable({
             axis: "x",
