@@ -37,7 +37,7 @@ BI.SingleSlider = BI.inherit(BI.Widget, {
         this.track = this._createTrackWrapper();
 
         this.slider = BI.createWidget({
-            type: "bi.single_slider_slider"
+            type: "bi.single_slider_button"
         });
         this.slider.element.draggable({
             axis: "x",
@@ -95,7 +95,7 @@ BI.SingleSlider = BI.inherit(BI.Widget, {
             cls: "slider-editor-button bi-border",
             errorText: "",
             height: c.HEIGHT,
-            width: c.EDITOR_WIDTH,
+            width: c.EDITOR_WIDTH - 2,
             allowBlank: false,
             validationChecker: function (v) {
                 return self._checkValidation(v);
