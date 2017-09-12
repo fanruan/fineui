@@ -21,22 +21,22 @@ BI.DayCard = BI.inherit(BI.MultiDateCard, {
             isEditorExist: true,
             selected: true,
             text: BI.i18nText("BI-Multi_Date_Day_Prev"),
-            value: BICst.DATE_TYPE.MULTI_DATE_DAY_PREV
+            value: BI.MultiDateCombo.DATE_TYPE.MULTI_DATE_DAY_PREV
         },
             {
                 isEditorExist: true,
                 text: BI.i18nText("BI-Multi_Date_Day_Next"),
-                value: BICst.DATE_TYPE.MULTI_DATE_DAY_AFTER
+                value: BI.MultiDateCombo.DATE_TYPE.MULTI_DATE_DAY_AFTER
             },
             {
                 isEditorExist: false,
-                value: BICst.DATE_TYPE.MULTI_DATE_DAY_TODAY,
+                value: BI.MultiDateCombo.DATE_TYPE.MULTI_DATE_DAY_TODAY,
                 text: BI.i18nText("BI-Multi_Date_Today")
             }];
     },
 
     defaultSelectedItem: function () {
-        return BICst.DATE_TYPE.MULTI_DATE_DAY_PREV
+        return BI.MultiDateCombo.DATE_TYPE.MULTI_DATE_DAY_PREV
     }
 });
 BI.DayCard.EVENT_CHANGE = "EVENT_CHANGE";

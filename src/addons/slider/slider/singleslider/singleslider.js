@@ -105,7 +105,9 @@ BI.SingleSlider = BI.inherit(BI.Widget, {
             }
         });
         this.label.on(BI.SignEditor.EVENT_CONFIRM, function () {
-            var percent = self._getPercentByValue(this.getValue());
+            var v = BI.parseFloat(this.getValue());
+            self.value = v;
+            var percent = self._getPercentByValue(v);
             var significantPercent = BI.parseFloat(percent.toFixed(1));
             self._setAllPosition(significantPercent);
             self.fireEvent(BI.SingleSlider.EVENT_CHANGE);

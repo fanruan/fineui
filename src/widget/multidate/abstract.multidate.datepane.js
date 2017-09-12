@@ -111,39 +111,39 @@ BI.MultiDateCard = BI.inherit(BI.Widget, {
         var valueObject = this.getValue();
         var type = valueObject.type, value = valueObject.value;
         switch (type) {
-            case BICst.DATE_TYPE.MULTI_DATE_DAY_PREV:
+            case BI.MultiDateCombo.DATE_TYPE.MULTI_DATE_DAY_PREV:
                 return new Date().getOffsetDate(-1 * value);
-            case BICst.DATE_TYPE.MULTI_DATE_DAY_AFTER:
+            case BI.MultiDateCombo.DATE_TYPE.MULTI_DATE_DAY_AFTER:
                 return new Date().getOffsetDate(value);
-            case BICst.DATE_TYPE.MULTI_DATE_DAY_TODAY:
+            case BI.MultiDateCombo.DATE_TYPE.MULTI_DATE_DAY_TODAY:
                 return new Date();
-            case BICst.DATE_TYPE.MULTI_DATE_MONTH_PREV:
+            case BI.MultiDateCombo.DATE_TYPE.MULTI_DATE_MONTH_PREV:
                 return new Date().getBeforeMultiMonth(value);
-            case BICst.DATE_TYPE.MULTI_DATE_MONTH_AFTER:
+            case BI.MultiDateCombo.DATE_TYPE.MULTI_DATE_MONTH_AFTER:
                 return new Date().getAfterMultiMonth(value);
-            case BICst.DATE_TYPE.MULTI_DATE_MONTH_BEGIN:
+            case BI.MultiDateCombo.DATE_TYPE.MULTI_DATE_MONTH_BEGIN:
                 return new Date(new Date().getFullYear(), new Date().getMonth(), 1);
-            case BICst.DATE_TYPE.MULTI_DATE_MONTH_END:
+            case BI.MultiDateCombo.DATE_TYPE.MULTI_DATE_MONTH_END:
                 return new Date(new Date().getFullYear(), new Date().getMonth(), (new Date().getLastDateOfMonth()).getDate());
-            case BICst.DATE_TYPE.MULTI_DATE_QUARTER_PREV:
+            case BI.MultiDateCombo.DATE_TYPE.MULTI_DATE_QUARTER_PREV:
                 return new Date().getBeforeMulQuarter(value);
-            case BICst.DATE_TYPE.MULTI_DATE_QUARTER_AFTER:
+            case BI.MultiDateCombo.DATE_TYPE.MULTI_DATE_QUARTER_AFTER:
                 return new Date().getAfterMulQuarter(value);
-            case BICst.DATE_TYPE.MULTI_DATE_QUARTER_BEGIN:
+            case BI.MultiDateCombo.DATE_TYPE.MULTI_DATE_QUARTER_BEGIN:
                 return new Date().getQuarterStartDate();
-            case BICst.DATE_TYPE.MULTI_DATE_QUARTER_END:
+            case BI.MultiDateCombo.DATE_TYPE.MULTI_DATE_QUARTER_END:
                 return new Date().getQuarterEndDate();
-            case BICst.DATE_TYPE.MULTI_DATE_WEEK_PREV:
+            case BI.MultiDateCombo.DATE_TYPE.MULTI_DATE_WEEK_PREV:
                 return new Date().getOffsetDate(-7 * value);
-            case BICst.DATE_TYPE.MULTI_DATE_WEEK_AFTER:
+            case BI.MultiDateCombo.DATE_TYPE.MULTI_DATE_WEEK_AFTER:
                 return new Date().getOffsetDate(7 * value);
-            case BICst.DATE_TYPE.MULTI_DATE_YEAR_PREV:
+            case BI.MultiDateCombo.DATE_TYPE.MULTI_DATE_YEAR_PREV:
                 return new Date((new Date().getFullYear() - 1 * value), new Date().getMonth(), new Date().getDate());
-            case BICst.DATE_TYPE.MULTI_DATE_YEAR_AFTER:
+            case BI.MultiDateCombo.DATE_TYPE.MULTI_DATE_YEAR_AFTER:
                 return new Date((new Date().getFullYear() + 1 * value), new Date().getMonth(), new Date().getDate());
-            case BICst.DATE_TYPE.MULTI_DATE_YEAR_BEGIN:
+            case BI.MultiDateCombo.DATE_TYPE.MULTI_DATE_YEAR_BEGIN:
                 return new Date(new Date().getFullYear(), 0, 1);
-            case BICst.DATE_TYPE.MULTI_DATE_YEAR_END:
+            case BI.MultiDateCombo.DATE_TYPE.MULTI_DATE_YEAR_END:
                 return new Date(new Date().getFullYear(), 11, 31);
         }
     }

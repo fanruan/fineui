@@ -183,23 +183,23 @@ BI.MultiDateCombo = BI.inherit(BI.Single, {
             type = v.type
         }
         switch (type) {
-            case BICst.DATE_TYPE.MULTI_DATE_YEAR_PREV:
-            case BICst.DATE_TYPE.MULTI_DATE_YEAR_AFTER:
-            case BICst.DATE_TYPE.MULTI_DATE_YEAR_BEGIN:
-            case BICst.DATE_TYPE.MULTI_DATE_YEAR_END:
-            case BICst.DATE_TYPE.MULTI_DATE_QUARTER_PREV:
-            case BICst.DATE_TYPE.MULTI_DATE_QUARTER_AFTER:
-            case BICst.DATE_TYPE.MULTI_DATE_QUARTER_BEGIN:
-            case BICst.DATE_TYPE.MULTI_DATE_QUARTER_END:
-            case BICst.DATE_TYPE.MULTI_DATE_MONTH_PREV:
-            case BICst.DATE_TYPE.MULTI_DATE_MONTH_AFTER:
-            case BICst.DATE_TYPE.MULTI_DATE_MONTH_BEGIN:
-            case BICst.DATE_TYPE.MULTI_DATE_MONTH_END:
-            case BICst.DATE_TYPE.MULTI_DATE_WEEK_PREV:
-            case BICst.DATE_TYPE.MULTI_DATE_WEEK_AFTER:
-            case BICst.DATE_TYPE.MULTI_DATE_DAY_PREV:
-            case BICst.DATE_TYPE.MULTI_DATE_DAY_AFTER:
-            case BICst.DATE_TYPE.MULTI_DATE_DAY_TODAY:
+            case BI.MultiDateCombo.DATE_TYPE.MULTI_DATE_YEAR_PREV:
+            case BI.MultiDateCombo.DATE_TYPE.MULTI_DATE_YEAR_AFTER:
+            case BI.MultiDateCombo.DATE_TYPE.MULTI_DATE_YEAR_BEGIN:
+            case BI.MultiDateCombo.DATE_TYPE.MULTI_DATE_YEAR_END:
+            case BI.MultiDateCombo.DATE_TYPE.MULTI_DATE_QUARTER_PREV:
+            case BI.MultiDateCombo.DATE_TYPE.MULTI_DATE_QUARTER_AFTER:
+            case BI.MultiDateCombo.DATE_TYPE.MULTI_DATE_QUARTER_BEGIN:
+            case BI.MultiDateCombo.DATE_TYPE.MULTI_DATE_QUARTER_END:
+            case BI.MultiDateCombo.DATE_TYPE.MULTI_DATE_MONTH_PREV:
+            case BI.MultiDateCombo.DATE_TYPE.MULTI_DATE_MONTH_AFTER:
+            case BI.MultiDateCombo.DATE_TYPE.MULTI_DATE_MONTH_BEGIN:
+            case BI.MultiDateCombo.DATE_TYPE.MULTI_DATE_MONTH_END:
+            case BI.MultiDateCombo.DATE_TYPE.MULTI_DATE_WEEK_PREV:
+            case BI.MultiDateCombo.DATE_TYPE.MULTI_DATE_WEEK_AFTER:
+            case BI.MultiDateCombo.DATE_TYPE.MULTI_DATE_DAY_PREV:
+            case BI.MultiDateCombo.DATE_TYPE.MULTI_DATE_DAY_AFTER:
+            case BI.MultiDateCombo.DATE_TYPE.MULTI_DATE_DAY_TODAY:
                 this.changeIcon.setVisible(true);
                 this.comboWrapper.attr("items")[1].width = 30;
                 this.comboWrapper.resize();
@@ -244,4 +244,37 @@ BI.extend(BI.MultiDateCombo, {
     MULTI_DATE_MONTH_CARD: 4,
     MULTI_DATE_WEEK_CARD: 5,
     MULTI_DATE_DAY_CARD: 6
+});
+
+BI.extend(BI.MultiDateCombo, {
+    DATE_TYPE: {
+        MULTI_DATE_YEAR_PREV: 1,
+        MULTI_DATE_YEAR_AFTER: 2,
+        MULTI_DATE_YEAR_BEGIN: 3,
+        MULTI_DATE_YEAR_END: 4,
+        MULTI_DATE_MONTH_PREV: 5,
+        MULTI_DATE_MONTH_AFTER: 6,
+        MULTI_DATE_MONTH_BEGIN: 7,
+        MULTI_DATE_MONTH_END: 8,
+        MULTI_DATE_QUARTER_PREV: 9,
+        MULTI_DATE_QUARTER_AFTER: 10,
+        MULTI_DATE_QUARTER_BEGIN: 11,
+        MULTI_DATE_QUARTER_END: 12,
+        MULTI_DATE_WEEK_PREV: 13,
+        MULTI_DATE_WEEK_AFTER: 14,
+        MULTI_DATE_DAY_PREV: 15,
+        MULTI_DATE_DAY_AFTER: 16,
+        MULTI_DATE_DAY_TODAY: 17,
+        MULTI_DATE_PARAM: 18,
+        MULTI_DATE_CALENDAR: 19,
+        YEAR_QUARTER: 20,
+        YEAR_MONTH: 21,
+        YEAR_WEEK: 22,
+        YEAR_DAY: 23,
+        MONTH_WEEK: 24,
+        MONTH_DAY: 25,
+        YEAR: 26,
+        SAME_PERIOD: 27,
+        LAST_SAME_PERIOD: 28
+    }
 });
