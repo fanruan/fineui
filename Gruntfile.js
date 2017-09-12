@@ -83,7 +83,7 @@ module.exports = function (grunt) {
             },
             sliderJs: {
                 src: [
-                    'src/addons/slider/slider/**/*.js'
+                    'src/addons/slider/singleslider/**/*.js'
                 ],
                 dest: 'dist/slider.js'
             },
@@ -226,7 +226,7 @@ module.exports = function (grunt) {
             },
             bi_sliderJs: {
                 src: [
-                    'src/addons/slider/slider/**/*.js'
+                    'src/addons/slider/singleslider/**/*.js'
                 ],
                 dest: 'bi/slider.js'
             },
