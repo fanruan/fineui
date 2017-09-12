@@ -12,33 +12,31 @@ Demo.Slider = BI.inherit(BI.Widget, {
     _init: function () {
         Demo.Slider.superclass._init.apply(this, arguments);
 
-        var slider = BI.createWidget({
-            type: "bi.slider",
-            min: 16,
-            max: 50,
-            width: 100,
+        var singleSlider = BI.createWidget({
+            type: "bi.single_slider",
+            width: 300,
             height: 50
         });
 
-        slider.setValue("30");
-
-        slider.on(BI.SliderNormal.EVENT_CHANGE, function () {
-            console.log(this.getValue());
-        });
-
-        var singleSlider = BI.createWidget({
-            type: "bi.single_slider",
-            min: 16,
-            max: 50
+        singleSlider.setMinAndMax({
+            min: 10,
+            max: 100
         });
 
         singleSlider.populate();
 
         var normalSingleSlider = BI.createWidget({
             type: "bi.single_slider_normal",
-            min: 16,
-            max: 50
+            height: 30,
+            width: 300
         });
+
+        normalSingleSlider.setMinAndMax({
+            min: 0,
+            max: 100
+        });
+
+        normalSingleSlider.setValue(10);
 
         normalSingleSlider.populate();
 
@@ -46,14 +44,6 @@ Demo.Slider = BI.inherit(BI.Widget, {
             type: "bi.vtape",
             element: this,
             items: [{
-                el: {
-                    type: "bi.center_adapt",
-                    items: [{
-                        el: slider
-                    }]
-                },
-                height: 200
-            }, {
                 el: {
                     type: "bi.center_adapt",
                     items: [{

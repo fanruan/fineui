@@ -1,14 +1,14 @@
 /**
  * Created by zcf on 2016/9/22.
  */
-BI.SliderButton = BI.inherit(BI.Widget, {
+BI.SliderIconButton = BI.inherit(BI.Widget, {
     _defaultConfig: function () {
-        return BI.extend(BI.Slider.superclass._defaultConfig.apply(this, arguments), {
+        return BI.extend(BI.SliderIconButton.superclass._defaultConfig.apply(this, arguments), {
             baseCls: "bi-single-slider-button"
         });
     },
     _init: function () {
-        BI.extend(BI.Slider.superclass._init.apply(this, arguments));
+        BI.extend(BI.SliderIconButton.superclass._init.apply(this, arguments));
         this.slider = BI.createWidget({
             type: "bi.icon_button",
             cls: "widget-slider-icon slider-button",
@@ -30,4 +30,4 @@ BI.SliderButton = BI.inherit(BI.Widget, {
         });
     }
 });
-BI.shortcut("bi.single_slider_button", BI.SliderButton);
+BI.shortcut("bi.single_slider_button", BI.SliderIconButton);
