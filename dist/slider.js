@@ -11,7 +11,7 @@ BI.SliderIconButton = BI.inherit(BI.Widget, {
         BI.extend(BI.SliderIconButton.superclass._init.apply(this, arguments));
         this.slider = BI.createWidget({
             type: "bi.icon_button",
-            cls: "widget-slider-icon slider-button",
+            cls: "widget-slider-icon slider-button cursor-drag",
             iconWidth: 14,
             iconHeight: 14,
             height: 14,
