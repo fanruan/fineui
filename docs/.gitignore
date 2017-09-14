@@ -10,5 +10,5 @@ dist
 archive
 archive.zip
 *.log
-#_book
+_book
 test
