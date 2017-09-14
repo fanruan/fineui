@@ -10650,10 +10650,12 @@ BI.MultiSelectList = BI.inherit(BI.Widget, {
                     if (obj instanceof BI.MultiSelectBar) {
                         self._joinAll(this.getValue(), function () {
                             assertShowValue();
+                            self.fireEvent(BI.MultiSelectList.EVENT_CHANGE);
                         });
                     } else {
                         self._join(this.getValue(), function () {//安徽省 北京
                             assertShowValue();
+                            self.fireEvent(BI.MultiSelectList.EVENT_CHANGE);
                         });
                     }
                 }
