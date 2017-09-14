@@ -1306,29 +1306,29 @@ i {
   display: flex;
   /* NEW, Spec - Opera 12.1, Firefox 20+ */
   /* 09版 */
-  -webkit-box-orient: horizontal;
+  -webkit-box-orient: vertical;
   /* 12版 */
-  -webkit-flex-direction: row;
-  -moz-flex-direction: row;
-  -ms-flex-direction: row;
-  -o-flex-direction: row;
-  flex-direction: row;
+  -webkit-flex-direction: column;
+  -moz-flex-direction: column;
+  -ms-flex-direction: column;
+  -o-flex-direction: column;
+  flex-direction: column;
   /* 09版 */
-  -webkit-box-pack: flex-start;
+  -webkit-box-pack: center;
   /* 12版 */
-  -webkit-justify-content: flex-start;
-  -moz-justify-content: flex-start;
-  -ms-justify-content: flex-start;
-  -o-justify-content: flex-start;
-  justify-content: flex-start;
+  -webkit-justify-content: center;
+  -moz-justify-content: center;
+  -ms-justify-content: center;
+  -o-justify-content: center;
+  justify-content: center;
   /* 09版 */
-  -webkit-box-align: center;
+  -webkit-box-align: flex-start;
   /* 12版 */
-  -webkit-align-items: center;
-  -moz-align-items: center;
-  -ms-align-items: center;
-  -o-align-items: center;
-  align-items: center;
+  -webkit-align-items: flex-start;
+  -moz-align-items: flex-start;
+  -ms-align-items: flex-start;
+  -o-align-items: flex-start;
+  align-items: flex-start;
   /* 09版 */
   /*-webkit-box-lines: multiple;*/
   /* 12版 */
@@ -1337,6 +1337,16 @@ i {
   -ms-flex-wrap: nowrap;
   -o-flex-wrap: nowrap;
   flex-wrap: nowrap;
+}
+.bi-flex-vertical-center.stretch {
+  /* 09版 */
+  -webkit-box-align: stretch;
+  /* 12版 */
+  -webkit-align-items: stretch;
+  -moz-align-items: stretch;
+  -ms-align-items: stretch;
+  -o-align-items: stretch;
+  align-items: stretch;
 }
 .bi-flex-wrapper-center-layout .flex-wrapper-center-layout-wrapper {
   display: box;
@@ -1460,29 +1470,29 @@ i {
   display: flex;
   /* NEW, Spec - Opera 12.1, Firefox 20+ */
   /* 09版 */
-  -webkit-box-orient: horizontal;
+  -webkit-box-orient: vertical;
   /* 12版 */
-  -webkit-flex-direction: row;
-  -moz-flex-direction: row;
-  -ms-flex-direction: row;
-  -o-flex-direction: row;
-  flex-direction: row;
+  -webkit-flex-direction: column;
+  -moz-flex-direction: column;
+  -ms-flex-direction: column;
+  -o-flex-direction: column;
+  flex-direction: column;
   /* 09版 */
-  -webkit-box-pack: flex-start;
+  -webkit-box-pack: center;
   /* 12版 */
-  -webkit-justify-content: flex-start;
-  -moz-justify-content: flex-start;
-  -ms-justify-content: flex-start;
-  -o-justify-content: flex-start;
-  justify-content: flex-start;
+  -webkit-justify-content: center;
+  -moz-justify-content: center;
+  -ms-justify-content: center;
+  -o-justify-content: center;
+  justify-content: center;
   /* 09版 */
-  -webkit-box-align: center;
+  -webkit-box-align: flex-start;
   /* 12版 */
-  -webkit-align-items: center;
-  -moz-align-items: center;
-  -ms-align-items: center;
-  -o-align-items: center;
-  align-items: center;
+  -webkit-align-items: flex-start;
+  -moz-align-items: flex-start;
+  -ms-align-items: flex-start;
+  -o-align-items: flex-start;
+  align-items: flex-start;
   /* 09版 */
   /*-webkit-box-lines: multiple;*/
   /* 12版 */
@@ -1493,6 +1503,17 @@ i {
   flex-wrap: nowrap;
   min-height: 100%;
   float: left;
+}
+.bi-flex-wrapper-vertical-center .flex-wrapper-vertical-center-wrapper.stretch {
+  width: 100%;
+  /* 09版 */
+  -webkit-box-align: stretch;
+  /* 12版 */
+  -webkit-align-items: stretch;
+  -moz-align-items: stretch;
+  -ms-align-items: stretch;
+  -o-align-items: stretch;
+  align-items: stretch;
 }
 .bi-inline-center-adapt-layout:after {
   display: inline-block;
