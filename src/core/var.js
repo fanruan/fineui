@@ -71,11 +71,13 @@ _.extend(BI, {
     HorizontalAlign: {
         Left: "left",
         Right: "right",
-        Center: "center"
+        Center: "center",
+        Stretch: "stretch"
     },
     VerticalAlign: {
         Middle: "middle",
         Top: "top",
-        Bottom: "bottom"
+        Bottom: "bottom",
+        Stretch: "stretch"
     }
 });

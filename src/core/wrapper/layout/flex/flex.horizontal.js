@@ -9,7 +9,7 @@ BI.FlexHorizontalLayout = BI.inherit(BI.Layout, {
     props: function () {
         return BI.extend(BI.FlexHorizontalLayout.superclass.props.apply(this, arguments), {
             baseCls: "bi-flex-horizontal-layout",
-            verticalAlign: "middle",
+            verticalAlign: BI.VerticalAlign.Middle,
             columnSize: [],
             scrollx: true,
             hgap: 0,
