@@ -71291,7 +71291,7 @@ BI.SignInitialEditor = BI.inherit(BI.Widget, {
             rgap: o.rgap,
             tgap: o.tgap,
             bgap: o.bgap,
-            value: o.value,
+            value: o.value || o.text,
             validationChecker: o.validationChecker,
             quitChecker: o.quitChecker,
             allowBlank: o.allowBlank,
