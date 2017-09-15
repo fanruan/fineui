@@ -31864,7 +31864,7 @@ BI.Combo = BI.inherit(BI.Widget, {
                             }
                         }
                     }, BI.EVENT_RESPONSE_TIME, true);
-                    self.element.off(ev + "." + self.getName()).on(ev + "." + self.getName(), function (e) {
+                    self.element.off("click." + self.getName()).on("click." + self.getName(), function (e) {
                         debounce(e);
                         st(e);
                     });
