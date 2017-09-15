@@ -1,7 +1,7 @@
 {
   "name": "fineuidocs",
   "version": "1.0.0",
-  "description": "FineUI文档",
+  "description": "FineUI的交互、前端以及视觉文档规范",
   "main": "index.js",
   "scripts": {
     "init": "gitbook init",
