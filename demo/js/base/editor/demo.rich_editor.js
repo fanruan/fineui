@@ -3,7 +3,7 @@ Demo.RichEditor = BI.inherit(BI.Widget, {
         baseCls: "demo-rich-editor"
     },
     render: function () {
-        var editor = BI.createWidget({
+        this.editor = BI.createWidget({
             type: "bi.rich_editor",
             cls: "mvc-border",
             width: 600,
@@ -14,8 +14,12 @@ Demo.RichEditor = BI.inherit(BI.Widget, {
             element: this,
             hgap: 30,
             vgap: 20,
-            items: [editor]
+            items: [this.editor]
         })
+    },
+
+    mounted: function(){
+        this.editor.setValue('这是一条<font size="4" color="#009de3">测试</font>数据')
     }
 });
 BI.shortcut("demo.rich_editor", Demo.RichEditor);

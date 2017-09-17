@@ -34,9 +34,11 @@ BI.RichEditor = BI.inherit(BI.Widget, {
     },
 
     setValue: function (v) {
+        this.ne.nicInstances[0].setContent(v);
     },
 
     getValue: function () {
+        return this.ne.nicInstances[0].getContent();
     }
 });
 BI.shortcut('bi.rich_editor', BI.RichEditor);
