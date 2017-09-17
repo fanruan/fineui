@@ -809,7 +809,27 @@ BI.shortcut("demo.formula_editor", Demo.CodeEditor);Demo.CodeEditor = BI.inherit
         }
     }
 });
-BI.shortcut("demo.multifile_editor", Demo.CodeEditor);Demo.CodeEditor = BI.inherit(BI.Widget, {
+BI.shortcut("demo.multifile_editor", Demo.CodeEditor);Demo.RichEditor = BI.inherit(BI.Widget, {
+    props: {
+        baseCls: "demo-rich-editor"
+    },
+    render: function () {
+        var editor = BI.createWidget({
+            type: "bi.rich_editor",
+            cls: "mvc-border",
+            width: 600,
+            height: 400
+        });
+        BI.createWidget({
+            type: "bi.vertical",
+            element: this,
+            hgap: 30,
+            vgap: 20,
+            items: [editor]
+        })
+    }
+});
+BI.shortcut("demo.rich_editor", Demo.RichEditor);Demo.CodeEditor = BI.inherit(BI.Widget, {
     props: {
         baseCls: "demo-editor"
     },
@@ -3136,6 +3156,10 @@ BI.shortcut("demo.value_chooser_pane", Demo.ValueChooserPane);Demo.BASE_CONFIG =
     pId: 202,
     text: "bi.formula_editor",
     value: "demo.formula_editor"
+}, {
+    pId: 202,
+    text: "bi.rich_editor",
+    value: "demo.rich_editor"
 }, {
     pId: 2,
     id: 203,
