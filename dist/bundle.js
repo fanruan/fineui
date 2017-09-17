@@ -17695,14 +17695,23 @@ BI.IntegerBufferSet.prototype = {
 })();window.BI = window.BI || {};
 
 $.extend(BI, {
-    $defaultImport: function (options) {
-        var config = $.extend({
-            op: 'resource',
-            path: null,
-            type: null,
-            must: false
-        }, options);
-        config.url = BI.servletURL + '?op=' + config.op + '&resource=' + config.path;
+    $defaultImport: function (options, type) {
+        var config;
+        if (BI.isObject(options)) {
+            config = $.extend({
+                op: 'resource',
+                path: null,
+                type: null,
+                must: false
+            }, options);
+            config.url = BI.servletURL + '?op=' + config.op + '&resource=' + config.path;
+        } else {
+            config = {
+                url: BI.servletURL + "?op=resource&resource=" + options,
+                type: arguments[1],
+                must: arguments[2]
+            }
+        }
         this.$import(config.url, config.type, config.must);
     },
     $import: function () {
@@ -31855,7 +31864,7 @@ BI.Combo = BI.inherit(BI.Widget, {
                             }
                         }
                     }, BI.EVENT_RESPONSE_TIME, true);
-                    self.element.off(ev + "." + self.getName()).on(ev + "." + self.getName(), function (e) {
+                    self.element.off("click." + self.getName()).on("click." + self.getName(), function (e) {
                         debounce(e);
                         st(e);
                     });
@@ -71291,7 +71300,7 @@ BI.SignInitialEditor = BI.inherit(BI.Widget, {
             rgap: o.rgap,
             tgap: o.tgap,
             bgap: o.bgap,
-            value: o.value,
+            value: o.value || o.text,
             validationChecker: o.validationChecker,
             quitChecker: o.quitChecker,
             allowBlank: o.allowBlank,

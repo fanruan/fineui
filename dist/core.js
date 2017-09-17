@@ -17644,14 +17644,23 @@ BI.IntegerBufferSet.prototype = {
 })();window.BI = window.BI || {};
 
 $.extend(BI, {
-    $defaultImport: function (options) {
-        var config = $.extend({
-            op: 'resource',
-            path: null,
-            type: null,
-            must: false
-        }, options);
-        config.url = BI.servletURL + '?op=' + config.op + '&resource=' + config.path;
+    $defaultImport: function (options, type) {
+        var config;
+        if (BI.isObject(options)) {
+            config = $.extend({
+                op: 'resource',
+                path: null,
+                type: null,
+                must: false
+            }, options);
+            config.url = BI.servletURL + '?op=' + config.op + '&resource=' + config.path;
+        } else {
+            config = {
+                url: BI.servletURL + "?op=resource&resource=" + options,
+                type: arguments[1],
+                must: arguments[2]
+            }
+        }
         this.$import(config.url, config.type, config.must);
     },
     $import: function () {
