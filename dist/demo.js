@@ -2522,65 +2522,42 @@ BI.shortcut("demo.handstand_branch_tree", Demo.Func);Demo.Func = BI.inherit(BI.W
     },
 
     render: function () {
+        var self = this;
         var tree = BI.createWidget({
-            type: "bi.level_tree",
-            chooseType: 0,
-            items: [{
-                id: 1,
-                text: "第一项",
-                value: 1,
-                isParent: true
-            }, {
-                id: 2,
-                text: "第二项",
-                value: 2,
-                isParent: true
-            }, {
-                id: 3,
-                text: "第三项",
-                value: 1,
-                isParent: true,
-                open: true
-            }, {
-                id: 4,
-                text: "第四项",
-                value: 1
-            }, {
-                id: 11,
-                pId: 1,
-                text: "子项1",
-                value: 11
-            }, {
-                id: 12,
-                pId: 1,
-                text: "子项2",
-                value: 12
-            }, {
-                id: 13,
-                pId: 1,
-                text: "子项3",
-                value: 13
-            }, {
-                id: 21,
-                pId: 2,
-                text: "子项1",
-                value: 21
-            }, {
-                id: 31,
-                pId: 3,
-                text: "子项1",
-                value: 31
-            }, {
-                id: 32,
-                pId: 3,
-                text: "子项2",
-                value: 32
-            }, {
-                id: 33,
-                pId: 3,
-                text: "子项3",
-                value: 33
-            }]
+
+            type: "bi.platform_level_tree",
+            ref: function () {
+                self.tree = this;
+            },
+            itemsCreator: function (op, callback) {
+
+                callback([
+
+                    {"id": 21, "pId": -1, "text": "销售管理", layer: 1, value: 21,
+                        expander: {
+                            type: "bi.expander",
+                            adjustLength: 20,
+                            direction: "right",
+                            popup: {
+                                items: [{
+                                    type: "bi.single_select_item",
+                                    height: 25,
+                                    text: "项目1",
+                                    value: 1
+                                }, {
+                                    type: "bi.single_select_item",
+                                    height: 25,
+                                    text: "项目2",
+                                    value: 2
+                                }]
+                            }
+                        }
+                    }
+                ])
+            },
+
+            width: 200
+
         })
 
         BI.createWidget({
