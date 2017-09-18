@@ -182,10 +182,11 @@
   color: #00c;
 }
 .cm-s-default span[class*="fieldName"] {
+  display: inline-block;
   color: white;
-  padding: 1px;
-  margin: 1px 0px;
   background: #3f8ce8;
+  padding: 0 5px;
+  margin: 1px 1px;
 }
 .cm-s-default span[class*="start"] {
   -webkit-border-radius: 3px 0px 0px 3px;
