@@ -20,6 +20,15 @@
     "start": "node server.js",
     "uglify": "grunt min"
   },
-  "author": "",
+  "repository": {
+    "type": "git",
+    "url": "https://git.coding.net/fanruan/fineui.git"
+  },
+  "keywords": [
+    "ui",
+    "fineui",
+    "finebi"
+  ],
+  "author": "fanruan",
   "license": "MIT"
 }
