@@ -290,7 +290,7 @@ BI.Model = BI.inherit(BI.M, {
             return this.attributes[attr];
         }
         var sta = _.result(this, "_static");
-        return BI.isFunction(sta[attr]) ? sta[attr].apply(this, BI.values(arguments).slice(1)) : sta[attr];
+        return BI.isFunction(sta[attr]) ? sta[attr].apply(this, Array.prototype.slice.apply(arguments, [1])) : sta[attr];
     },
 
     get: function () {
