@@ -13,32 +13,53 @@ BI.RichEditor = BI.inherit(BI.Widget, {
     },
     _init: function () {
         BI.RichEditor.superclass._init.apply(this, arguments);
-        var o = this.options;
+        var self = this, o = this.options;
         this.editor = BI.createWidget({
-            type: "bi.layout",
-            tagName: "textarea",
-            width: o.width || "100%",
-            height: o.height || "100%"
+            type: "bi.nic_editor",
+            width: o.width,
+            height: o.height
         });
-        BI.createWidget({
-            type: "bi.default",
-            element: this,
-            items: [this.editor]
-        })
-    },
 
-    mounted: function () {
-        this.ne = new BI.nicEditor({
-            maxHeight: this.options.height
-        }).panelInstance(this.editor.element[0]);
+        this.editor.on(BI.NicEditor.EVENT_BLUR, function () {
+            self.fireEvent(BI.RichEditor.EVENT_CONFIRM);
+        });
+
+        this.toolbar = BI.createWidget({
+            type: "bi.text_toolbar",
+            editor: this.editor
+        });
+
+        this.toolbar.on(BI.TextToolbar.EVENT_CHANGE, function () {
+            var style = this.getValue();
+        });
+
+        this.combo = BI.createWidget({
+            type: "bi.combo",
+            element: this,
+            toggle: false,
+            direction: "top",
+            isNeedAdjustWidth: false,
+            isNeedAdjustHeight: false,
+            adjustLength: 1,
+            el: this.editor,
+            popup: {
+                el: this.toolbar,
+                height: 30,
+                stopEvent: true
+            }
+        });
+
+        this.combo.on(BI.Combo.EVENT_AFTER_HIDEVIEW, function () {
+        });
     },
 
     setValue: function (v) {
-        this.ne.nicInstances[0].setContent(v);
+        this.editor.setValue(v);
     },
 
     getValue: function () {
-        return this.ne.nicInstances[0].getContent();
+        return this.editor.getValue();
     }
 });
+BI.RichEditor.EVENT_CONFIRM = "EVENT_CONFIRM";
 BI.shortcut('bi.rich_editor', BI.RichEditor);

@@ -61,7 +61,6 @@ BI.createWidget({
 | getText| 获取文本值 | —|
 | setStyle | 设置文本样式 |需要设置的文本标签样式,例{"color":"#000"} |
 | setValue | 设置文本值 | 需要设置的文本值text |
-| populate| 清空label | —|
 
 
 ---

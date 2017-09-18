@@ -730,3 +730,111 @@
   content: "\e636";
   color: inherit;
 }
+.text-bold-font .b-font {
+  *zoom: expression( this.runtimeStyle['zoom'] = '1',this.innerHTML = '&#xe64d;');
+}
+.text-bold-font .b-font:before {
+  content: "\e64d";
+  color: inherit;
+}
+.text-bold-font.native .b-font:before,
+.text-bold-font.disabled .b-font:before {
+  content: "\e64d";
+  color: inherit;
+}
+.text-italic-font .b-font {
+  *zoom: expression( this.runtimeStyle['zoom'] = '1',this.innerHTML = '&#xe656;');
+}
+.text-italic-font .b-font:before {
+  content: "\e656";
+  color: inherit;
+}
+.text-italic-font.native .b-font:before,
+.text-italic-font.disabled .b-font:before {
+  content: "\e656";
+  color: inherit;
+}
+.text-underline-font .b-font {
+  *zoom: expression( this.runtimeStyle['zoom'] = '1',this.innerHTML = '&#xe650;');
+}
+.text-underline-font .b-font:before {
+  content: "\e650";
+  color: inherit;
+}
+.text-underline-font.native .b-font:before,
+.text-underline-font.disabled .b-font:before {
+  content: "\e650";
+  color: inherit;
+}
+.text-color-font .b-font {
+  *zoom: expression( this.runtimeStyle['zoom'] = '1',this.innerHTML = '&#xe69c;');
+}
+.text-color-font .b-font:before {
+  content: "\e69c";
+  color: inherit;
+}
+.text-color-font.native .b-font:before,
+.text-color-font.disabled .b-font:before {
+  content: "\e69c";
+  color: inherit;
+}
+.text-background-font .b-font {
+  *zoom: expression( this.runtimeStyle['zoom'] = '1',this.innerHTML = '&#xe696;');
+}
+.text-background-font .b-font:before {
+  content: "\e696";
+  color: inherit;
+}
+.text-background-font.native .b-font:before,
+.text-background-font.disabled .b-font:before {
+  content: "\e696";
+  color: inherit;
+}
+.text-color-underline-font .b-font {
+  *zoom: expression( this.runtimeStyle['zoom'] = '1',this.innerHTML = '&#xe69d;');
+}
+.text-color-underline-font .b-font:before {
+  content: "\e69d";
+  color: inherit;
+}
+.text-color-underline-font.native .b-font:before,
+.text-color-underline-font.disabled .b-font:before {
+  content: "\e69d";
+  color: inherit;
+}
+.text-align-left-font .b-font {
+  *zoom: expression( this.runtimeStyle['zoom'] = '1',this.innerHTML = '&#xe654;');
+}
+.text-align-left-font .b-font:before {
+  content: "\e654";
+  color: inherit;
+}
+.text-align-left-font.native .b-font:before,
+.text-align-left-font.disabled .b-font:before {
+  content: "\e654";
+  color: inherit;
+}
+.text-align-center-font .b-font {
+  *zoom: expression( this.runtimeStyle['zoom'] = '1',this.innerHTML = '&#xe64f;');
+}
+.text-align-center-font .b-font:before {
+  content: "\e64f";
+  color: inherit;
+}
+.text-align-center-font.native .b-font:before,
+.text-align-center-font.disabled .b-font:before {
+  content: "\e64f";
+  color: inherit;
+}
+.text-align-right-font .b-font {
+  *zoom: expression( this.runtimeStyle['zoom'] = '1',this.innerHTML = '&#xe651;');
+}
+.text-align-right-font .b-font:before {
+  content: "\e651";
+  color: inherit;
+}
+.text-align-right-font.native .b-font:before,
+.text-align-right-font.disabled .b-font:before {
+  content: "\e651";
+  color: inherit;
+}
