@@ -2,12 +2,12 @@
  * 颜色选择
  *
  * Created by GUY on 2015/11/26.
- * @class BI.TextToolbar
+ * @class BI.RichEditorTextToolbar
  * @extends BI.Widget
  */
-BI.TextToolbar = BI.inherit(BI.Widget, {
+BI.RichEditorTextToolbar = BI.inherit(BI.Widget, {
     _defaultConfig: function () {
-        return BI.extend(BI.TextToolbar.superclass._defaultConfig.apply(this, arguments), {
+        return BI.extend(BI.RichEditorTextToolbar.superclass._defaultConfig.apply(this, arguments), {
             baseCls: "bi-text-toolbar bi-background",
             buttons: [
                 {type: "bi.rich_editor_size_chooser"},
@@ -25,7 +25,7 @@ BI.TextToolbar = BI.inherit(BI.Widget, {
     },
 
     _init: function () {
-        BI.TextToolbar.superclass._init.apply(this, arguments);
+        BI.RichEditorTextToolbar.superclass._init.apply(this, arguments);
         var self = this, o = this.options;
         BI.createWidget({
             type: "bi.left",
@@ -40,5 +40,4 @@ BI.TextToolbar = BI.inherit(BI.Widget, {
         })
     },
 });
-BI.TextToolbar.EVENT_CHANGE = "BI.TextToolbar.EVENT_CHANGE";
-BI.shortcut('bi.text_toolbar', BI.TextToolbar);
+BI.shortcut('bi.rich_editor_text_toolbar', BI.RichEditorTextToolbar);

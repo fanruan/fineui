@@ -44919,6 +44919,7 @@ BI.RichEditorAction = BI.inherit(BI.Widget, {
         o.editor.on(BI.NicEditor.EVENT_BLUR, function () {
             self.setEnable(false);
         });
+        o.editor.on(BI.NicEditor.EVENT_KEY, BI.bind(this.key, this));
     },
 
     checkNodes: function (e) {
@@ -44948,6 +44949,10 @@ BI.RichEditorAction = BI.inherit(BI.Widget, {
         return false;
     },
 
+    key: function () {
+
+    },
+
     activate: function () {
     },
 
@@ -44964,12 +44969,12 @@ BI.RichEditorAction = BI.inherit(BI.Widget, {
  * 颜色选择
  *
  * Created by GUY on 2015/11/26.
- * @class BI.TextToolbar
+ * @class BI.RichEditorTextToolbar
  * @extends BI.Widget
  */
-BI.TextToolbar = BI.inherit(BI.Widget, {
+BI.RichEditorTextToolbar = BI.inherit(BI.Widget, {
     _defaultConfig: function () {
-        return BI.extend(BI.TextToolbar.superclass._defaultConfig.apply(this, arguments), {
+        return BI.extend(BI.RichEditorTextToolbar.superclass._defaultConfig.apply(this, arguments), {
             baseCls: "bi-text-toolbar bi-background",
             buttons: [
                 {type: "bi.rich_editor_size_chooser"},
@@ -44987,7 +44992,7 @@ BI.TextToolbar = BI.inherit(BI.Widget, {
     },
 
     _init: function () {
-        BI.TextToolbar.superclass._init.apply(this, arguments);
+        BI.RichEditorTextToolbar.superclass._init.apply(this, arguments);
         var self = this, o = this.options;
         BI.createWidget({
             type: "bi.left",
@@ -45002,8 +45007,7 @@ BI.TextToolbar = BI.inherit(BI.Widget, {
         })
     },
 });
-BI.TextToolbar.EVENT_CHANGE = "BI.TextToolbar.EVENT_CHANGE";
-BI.shortcut('bi.text_toolbar', BI.TextToolbar);/**
+BI.shortcut('bi.rich_editor_text_toolbar', BI.RichEditorTextToolbar);/**
  * 富文本编辑器
  *
  * Created by GUY on 2017/9/15.
@@ -45077,6 +45081,7 @@ BI.shortcut('bi.text_toolbar', BI.TextToolbar);/**
     });
     BI.NicEditor.EVENT_SELECTED = "selected";
     BI.NicEditor.EVENT_BLUR = "blur";
+    BI.NicEditor.EVENT_KEY = "key";
     BI.shortcut('bi.nic_editor', BI.NicEditor);
 
     var prefix = "niceditor-";
@@ -45843,12 +45848,8 @@ BI.RichEditor = BI.inherit(BI.Widget, {
         });
 
         this.toolbar = BI.createWidget({
-            type: "bi.text_toolbar",
+            type: "bi.rich_editor_text_toolbar",
             editor: this.editor
-        });
-
-        this.toolbar.on(BI.TextToolbar.EVENT_CHANGE, function () {
-            var style = this.getValue();
         });
 
         this.combo = BI.createWidget({
@@ -45863,6 +45864,7 @@ BI.RichEditor = BI.inherit(BI.Widget, {
             popup: {
                 el: this.toolbar,
                 height: 30,
+                stopPropagation: true,
                 stopEvent: true
             }
         });

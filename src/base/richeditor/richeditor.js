@@ -25,12 +25,8 @@ BI.RichEditor = BI.inherit(BI.Widget, {
         });
 
         this.toolbar = BI.createWidget({
-            type: "bi.text_toolbar",
+            type: "bi.rich_editor_text_toolbar",
             editor: this.editor
-        });
-
-        this.toolbar.on(BI.TextToolbar.EVENT_CHANGE, function () {
-            var style = this.getValue();
         });
 
         this.combo = BI.createWidget({
@@ -45,6 +41,7 @@ BI.RichEditor = BI.inherit(BI.Widget, {
             popup: {
                 el: this.toolbar,
                 height: 30,
+                stopPropagation: true,
                 stopEvent: true
             }
         });

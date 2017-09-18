@@ -25,6 +25,7 @@ BI.RichEditorAction = BI.inherit(BI.Widget, {
         o.editor.on(BI.NicEditor.EVENT_BLUR, function () {
             self.setEnable(false);
         });
+        o.editor.on(BI.NicEditor.EVENT_KEY, BI.bind(this.key, this));
     },
 
     checkNodes: function (e) {
@@ -52,6 +53,10 @@ BI.RichEditorAction = BI.inherit(BI.Widget, {
         }
         this.deactivate();
         return false;
+    },
+
+    key: function () {
+
     },
 
     activate: function () {

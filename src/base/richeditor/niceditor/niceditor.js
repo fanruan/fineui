@@ -72,6 +72,7 @@
     });
     BI.NicEditor.EVENT_SELECTED = "selected";
     BI.NicEditor.EVENT_BLUR = "blur";
+    BI.NicEditor.EVENT_KEY = "key";
     BI.shortcut('bi.nic_editor', BI.NicEditor);
 
     var prefix = "niceditor-";
