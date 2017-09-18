@@ -16200,6 +16200,25 @@ BI.RichEditorTextToolbar = BI.inherit(BI.Widget, {
             vgap: 3
         })
     },
+
+    mounted: function () {
+        var self = this;
+        if (BI.isIE9Below()) {//IE8下必须要设置unselectable才能不blur输入框
+            this.element.mousedown(function () {
+                self._noSelect(self.element[0]);
+            });
+            this._noSelect(this.element[0]);
+        }
+    },
+
+    _noSelect: function (element) {
+        if (element.setAttribute && element.nodeName.toLowerCase() != 'input' && element.nodeName.toLowerCase() != 'textarea') {
+            element.setAttribute('unselectable', 'on');
+        }
+        for (var i = 0; i < element.childNodes.length; i++) {
+            this._noSelect(element.childNodes[i]);
+        }
+    }
 });
 BI.shortcut('bi.rich_editor_text_toolbar', BI.RichEditorTextToolbar);/**
  * 富文本编辑器

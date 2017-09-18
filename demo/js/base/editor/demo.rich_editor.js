@@ -13,7 +13,7 @@ Demo.RichEditor = BI.inherit(BI.Widget, {
             type: "bi.vertical",
             element: this,
             hgap: 30,
-            vgap: 20,
+            vgap: 50,
             items: [this.editor]
         })
     },
