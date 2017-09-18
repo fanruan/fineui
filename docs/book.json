@@ -1,0 +1,25 @@
+{
+    "plugins": [
+        "jsfiddle",
+        "splitter",
+        "theme-api",
+        "expandable-chapters"
+    ],
+    "pluginsConfig": {
+        "theme-default": {
+            "showLevel": false
+        },
+        "jsfiddle": {
+            "type": "script",
+            "tabs": [
+                "result",
+                "js",
+                "html"
+            ],
+            "height": "100",
+            "width": "500",
+            "fontColor": "00FF00"
+        },
+        "expandable-chapters":{}
+    }
+}

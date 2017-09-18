@@ -809,7 +809,31 @@ BI.shortcut("demo.formula_editor", Demo.CodeEditor);Demo.CodeEditor = BI.inherit
         }
     }
 });
-BI.shortcut("demo.multifile_editor", Demo.CodeEditor);Demo.CodeEditor = BI.inherit(BI.Widget, {
+BI.shortcut("demo.multifile_editor", Demo.CodeEditor);Demo.RichEditor = BI.inherit(BI.Widget, {
+    props: {
+        baseCls: "demo-rich-editor"
+    },
+    render: function () {
+        this.editor = BI.createWidget({
+            type: "bi.rich_editor",
+            cls: "mvc-border",
+            width: 600,
+            height: 400
+        });
+        BI.createWidget({
+            type: "bi.vertical",
+            element: this,
+            hgap: 30,
+            vgap: 20,
+            items: [this.editor]
+        })
+    },
+
+    mounted: function(){
+        this.editor.setValue('这是一条<font size="4" color="#009de3">测试</font>数据')
+    }
+});
+BI.shortcut("demo.rich_editor", Demo.RichEditor);Demo.CodeEditor = BI.inherit(BI.Widget, {
     props: {
         baseCls: "demo-editor"
     },
@@ -2522,42 +2546,65 @@ BI.shortcut("demo.handstand_branch_tree", Demo.Func);Demo.Func = BI.inherit(BI.W
     },
 
     render: function () {
-        var self = this;
         var tree = BI.createWidget({
-
-            type: "bi.platform_level_tree",
-            ref: function () {
-                self.tree = this;
-            },
-            itemsCreator: function (op, callback) {
-
-                callback([
-
-                    {"id": 21, "pId": -1, "text": "销售管理", layer: 1, value: 21,
-                        expander: {
-                            type: "bi.expander",
-                            adjustLength: 20,
-                            direction: "right",
-                            popup: {
-                                items: [{
-                                    type: "bi.single_select_item",
-                                    height: 25,
-                                    text: "项目1",
-                                    value: 1
-                                }, {
-                                    type: "bi.single_select_item",
-                                    height: 25,
-                                    text: "项目2",
-                                    value: 2
-                                }]
-                            }
-                        }
-                    }
-                ])
-            },
-
-            width: 200
-
+            type: "bi.level_tree",
+            chooseType: 0,
+            items: [{
+                id: 1,
+                text: "第一项",
+                value: 1,
+                isParent: true
+            }, {
+                id: 2,
+                text: "第二项",
+                value: 2,
+                isParent: true
+            }, {
+                id: 3,
+                text: "第三项",
+                value: 1,
+                isParent: true,
+                open: true
+            }, {
+                id: 4,
+                text: "第四项",
+                value: 1
+            }, {
+                id: 11,
+                pId: 1,
+                text: "子项1",
+                value: 11
+            }, {
+                id: 12,
+                pId: 1,
+                text: "子项2",
+                value: 12
+            }, {
+                id: 13,
+                pId: 1,
+                text: "子项3",
+                value: 13
+            }, {
+                id: 21,
+                pId: 2,
+                text: "子项1",
+                value: 21
+            }, {
+                id: 31,
+                pId: 3,
+                text: "子项1",
+                value: 31
+            }, {
+                id: 32,
+                pId: 3,
+                text: "子项2",
+                value: 32
+            }, {
+                id: 33,
+                pId: 3,
+                text: "子项3",
+                value: 33
+            }]
         })
 
         BI.createWidget({
@@ -3113,6 +3160,10 @@ BI.shortcut("demo.value_chooser_pane", Demo.ValueChooserPane);Demo.BASE_CONFIG =
     pId: 202,
     text: "bi.formula_editor",
     value: "demo.formula_editor"
+}, {
+    pId: 202,
+    text: "bi.rich_editor",
+    value: "demo.rich_editor"
 }, {
     pId: 2,
     id: 203,
