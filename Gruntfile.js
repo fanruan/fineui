@@ -128,8 +128,12 @@ module.exports = function (grunt) {
                 dest: 'dist/bundle.css'
             },
 
+            configJs: {
+                src: ['demo/version.js'],
+                dest: 'dist/config.js'
+            },
             demoJs: {
-                src: ['demo/version.js', 'demo/app.js', 'demo/js/**/*.js', 'demo/config.js'],
+                src: ['demo/app.js', 'demo/js/**/*.js',' demo/config.js'],
                 dest: 'dist/demo.js'
             },
             demoCss: {

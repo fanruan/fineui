@@ -16258,7 +16258,7 @@ BI.shortcut('bi.rich_editor_text_toolbar', BI.RichEditorTextToolbar);/**
             if (this.element[0].contentEditable || !!window.opera) {
                 var newInstance = new nicEditorInstance(conf);
             } else {
-                var newInstance = new nicEditorIFrameInstance(conf);
+                console.error("不支持此浏览器");
             }
             return newInstance;
         },
@@ -16466,83 +16466,6 @@ BI.shortcut('bi.rich_editor_text_toolbar', BI.RichEditorTextToolbar);/**
             document.execCommand(cmd, false, args);
         }
     });
-
-    var nicEditorIFrameInstance = BI.inherit(nicEditorInstance, {
-        savedStyles: [],
-
-        start: function () {
-            var o = this.options;
-            var c = this.elm.element.html().replace(/^\s+|\s+$/g, '');
-            this.elm.element.html("");
-            (!c) ? c = "<br />" : c;
-            this.initialContent = c;
-
-            this.elmFrame = $('iframe').attr({
-                'src': 'javascript:;',
-                'frameBorder': 0,
-                'allowTransparency': 'true',
-                'scrolling': 'no'
-            }).css({height: '100px', width: '100%'}).addClass(prefix + 'frame').appendTo(this.elm.element);
-
-            this.elmFrame.css({width: (o.width - 4) + 'px'});
-
-            var styleList = ['font-size', 'font-family', 'font-weight', 'color'];
-            for (var item in styleList) {
-                this.savedStyles[BI.camelize(item)] = this.elm.element.css(item);
-            }
-
-            setTimeout(BI.bind(this.initFrame, this), 50);
-        },
-
-        disable: function () {
-            this.elm.element.html(this.getContent());
-        },
-
-        initFrame: function () {
-            var fd = $(this.elmFrame.contentWindow.document)[0];
-            fd.designMode = "on";
-            fd.open();
-            var css = this.ne.options.externalCSS;
-            fd.write('<html><head>' + ((css) ? '<link href="' + css + '" rel="stylesheet" type="text/css" />' : '') + '</head><body id="nicEditContent" style="margin: 0 !important; background-color: transparent !important;">' + this.initialContent + '</body></html>');
-            fd.close();
-            this.frameDoc = $(fd);
-
-            this.frameWin = $(this.elmFrame[0].contentWindow);
-            this.frameContent = $(this.frameWin[0].document.body).css(this.savedStyles);
-            this.instanceDoc = this.frameWin[0].document.defaultView;
-
-            this.heightUpdate();
-            this.frameDoc.on('mousedown', BI.bind(this.selected, this));
-            this.frameDoc.on('keyup', BI.bind(this.heightUpdate, this));
-            this.frameDoc.on('keydown', BI.bind(this.keyDown, this));
-            this.frameDoc.on('keyup', BI.bind(this.selected, this));
-            this.ne.fireEvent('add', this);
-        },
-
-        getElm: function () {
-            return this.frameContent;
-        },
-
-        setContent: function (c) {
-            this.content = c;
-            this.ne.fireEvent('set', this);
-            this.frameContent.html(this.content);
-            this.heightUpdate();
-        },
-
-        getSel: function () {
-            return (this.frameWin[0]) ? this.frameWin[0].getSelection() : this.frameDoc[0].selection;
-        },
-
-        heightUpdate: function () {
-            this.elmFrame[0].style.height = Math.max(this.frameContent[0].offsetHeight, this.options.height - 8) + 'px';
-        },
-
-        nicCommand: function (cmd, args) {
-            this.frameDoc.execCommand(cmd, false, args);
-            setTimeout(BI.bind(this.heightUpdate, this), 100);
-        }
-    })
 }());
 /**
  * 颜色选择trigger
