@@ -824,7 +824,7 @@ BI.shortcut("demo.multifile_editor", Demo.CodeEditor);Demo.RichEditor = BI.inher
             type: "bi.vertical",
             element: this,
             hgap: 30,
-            vgap: 20,
+            vgap: 50,
             items: [this.editor]
         })
     },
