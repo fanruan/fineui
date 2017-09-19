@@ -19,6 +19,7 @@ BI.RichEditorTextToolbar = BI.inherit(BI.Widget, {
                 {type: "bi.rich_editor_align_left_button"},
                 {type: "bi.rich_editor_align_center_button"},
                 {type: "bi.rich_editor_align_right_button"},
+                {type: "bi.rich_editor_param_button"},
             ],
             height: 28
         });

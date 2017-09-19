@@ -206,12 +206,12 @@
                 var selInstance = this.ne.selectedInstance;
                 if (selInstance != this) {
                     if (selInstance) {
-                        this.ne.fireEvent('blur', selInstance, t);
+                        this.ne.fireEvent('blur', selInstance, e);
                     }
                     this.ne.selectedInstance = this;
-                    this.ne.fireEvent('focus', selInstance, t);
+                    this.ne.fireEvent('focus', selInstance, e);
                 }
-                this.ne.fireEvent('selected', selInstance, t);
+                this.ne.fireEvent('selected', selInstance, e);
                 this.isFocused = true;
                 this.elm.element.addClass(prefix + 'selected');
             }
