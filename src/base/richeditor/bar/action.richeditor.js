@@ -1,7 +1,6 @@
 /**
- * 颜色选择
  *
- * Created by GUY on 2015/11/26.
+ * Created by GUY on 2017/09/18.
  * @class BI.TextToolbar
  * @extends BI.Widget
  */
@@ -17,14 +16,15 @@ BI.RichEditorAction = BI.inherit(BI.Widget, {
     _init: function () {
         BI.RichEditorAction.superclass._init.apply(this, arguments);
         var self = this, o = this.options;
-        o.editor.on(BI.NicEditor.EVENT_SELECTED, function (ins, e) {
+        o.editor.on(BI.NicEditor.EVENT_SELECTED, function (e) {
             self.setEnable(true);
             self.checkNodes(e.target);
-            self.key(e)
+            self.key(e);
         });
         o.editor.on(BI.NicEditor.EVENT_BLUR, function () {
             self.setEnable(false);
         });
+        o.editor.on(BI.NicEditor.EVENT_KEYDOWN, BI.bind(this.keydown, this));
     },
 
     checkNodes: function (e) {
@@ -56,6 +56,9 @@ BI.RichEditorAction = BI.inherit(BI.Widget, {
 
     key: function () {
 
+    },
+
+    keydown: function () {
     },
 
     activate: function () {

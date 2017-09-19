@@ -56,7 +56,7 @@
                     // return false;
                 }
             } while (t = t.parentNode);
-            this.fireEvent('blur', this.selectedInstance, t);
+            this.fireEvent('blur', t);
             this.lastSelectedInstance = this.selectedInstance;
             this.selectedInstance = null;
             // return false;
@@ -76,7 +76,7 @@
     });
     BI.NicEditor.EVENT_SELECTED = "selected";
     BI.NicEditor.EVENT_BLUR = "blur";
-    BI.NicEditor.EVENT_KEY = "key";
+    BI.NicEditor.EVENT_KEYDOWN = "keydown";
     BI.shortcut('bi.nic_editor', BI.NicEditor);
 
     var prefix = "niceditor-";
@@ -129,7 +129,7 @@
             this.elm.element.on('focus', BI.bind(this.selected, this));
             this.elm.element.on('blur', BI.bind(this.blur, this));
             this.elm.element.on('keyup', BI.bind(this.selected, this));
-            this.ne.fireEvent('add', this);
+            this.ne.fireEvent('add');
         },
 
         disable: function () {
@@ -223,9 +223,7 @@
         },
 
         keyDown: function (e, t) {
-            if (e.ctrlKey) {
-                this.ne.fireEvent('key', this, e);
-            }
+            this.ne.fireEvent('keydown', e);
         },
 
         selected: function (e) {
@@ -237,12 +235,12 @@
                 var selInstance = this.ne.selectedInstance;
                 if (selInstance != this) {
                     if (selInstance) {
-                        this.ne.fireEvent('blur', selInstance, e);
+                        this.ne.fireEvent('blur', e);
                     }
                     this.ne.selectedInstance = this;
-                    this.ne.fireEvent('focus', selInstance, e);
+                    this.ne.fireEvent('focus', e);
                 }
-                this.ne.fireEvent('selected', selInstance, e);
+                this.ne.fireEvent('selected', e);
                 this.isFocused = true;
                 this.elm.element.addClass(prefix + 'selected');
             }
@@ -255,7 +253,7 @@
         },
 
         saveContent: function () {
-            this.ne.fireEvent('save', this);
+            this.ne.fireEvent('save');
             this.e.element.value(this.getContent());
         },
 
@@ -265,13 +263,13 @@
 
         getContent: function () {
             this.content = this.getElm().element.html();
-            this.ne.fireEvent('get', this);
+            this.ne.fireEvent('get');
             return this.content;
         },
 
         setContent: function (e) {
             this.content = e;
-            this.ne.fireEvent('set', this);
+            this.ne.fireEvent('set');
             this.elm.element.html(this.content);
         },
 
