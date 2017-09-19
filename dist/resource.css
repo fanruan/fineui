@@ -133,7 +133,7 @@ textarea::-webkit-scrollbar-thumb:hover {
   _background: none;
 }
 .cursor-drag {
-  cursor: url('images/1x/cursor/cursor_drag_slider.cur'), auto;
+  cursor: url('cursor/cursor_drag_hand.cur'), auto;
 }
 @font-face {
   font-family: 'bi';
