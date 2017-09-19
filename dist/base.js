@@ -16169,7 +16169,7 @@ BI.RichEditorAction = BI.inherit(BI.Widget, {
 BI.RichEditorTextToolbar = BI.inherit(BI.Widget, {
     _defaultConfig: function () {
         return BI.extend(BI.RichEditorTextToolbar.superclass._defaultConfig.apply(this, arguments), {
-            baseCls: "bi-text-toolbar bi-background",
+            baseCls: "bi-rich-editor-text-toolbar bi-background",
             buttons: [
                 {type: "bi.rich_editor_size_chooser"},
                 {type: "bi.rich_editor_bold_button"},
@@ -16237,7 +16237,7 @@ BI.shortcut('bi.rich_editor_text_toolbar', BI.RichEditorTextToolbar);/**
         _init: function () {
             BI.NicEditor.superclass._init.apply(this, arguments);
             var o = this.options;
-            $(document.body).mousedown(BI.bind(this.selectCheck, this));
+            $(document).bind("mousedown." + this.getName(), BI.bind(this.selectCheck, this));
             BI.createWidget({
                 type: "bi.vertical",
                 element: this,
@@ -16273,7 +16273,7 @@ BI.shortcut('bi.rich_editor_text_toolbar', BI.RichEditorTextToolbar);/**
             var t = e.target;
             var found = false;
             do {
-                if (t.className && t.className.indexOf(prefix) != -1) {
+                if (t.nodeName !== "svg" && t.className && t.className.indexOf(prefix) != -1) {
                     return;
                     // return false;
                 }
@@ -16290,6 +16290,10 @@ BI.shortcut('bi.rich_editor_text_toolbar', BI.RichEditorTextToolbar);/**
 
         getValue: function () {
             return this.instance.getContent();
+        },
+
+        destroyed: function () {
+            $(document).unbind("mousedown." + this.getName());
         }
     });
     BI.NicEditor.EVENT_SELECTED = "selected";
@@ -16936,8 +16940,8 @@ BI.RichEditorSizeChooser = BI.inherit(BI.RichEditorAction, {
             el: this.trigger,
             adjustLength: 1,
             popup: {
-                maxWidth: o.width,
-                minWidth: o.width,
+                maxWidth: 70,
+                minWidth: 70,
                 el: {
                     type: "bi.button_group",
                     items: BI.createItems(this._items, {
@@ -16967,7 +16971,8 @@ BI.shortcut('bi.rich_editor_size_chooser', BI.RichEditorSizeChooser);/**
 BI.RichEditor = BI.inherit(BI.Widget, {
     _defaultConfig: function () {
         return BI.extend(BI.RichEditor.superclass._defaultConfig.apply(this, arguments), {
-            baseCls: "bi-rich-editor bi-card"
+            baseCls: "bi-rich-editor bi-card",
+            toolbar: {}
         });
     },
     _init: function () {
@@ -16983,11 +16988,6 @@ BI.RichEditor = BI.inherit(BI.Widget, {
             self.fireEvent(BI.RichEditor.EVENT_CONFIRM);
         });
 
-        this.toolbar = BI.createWidget({
-            type: "bi.rich_editor_text_toolbar",
-            editor: this.editor
-        });
-
         this.combo = BI.createWidget({
             type: "bi.combo",
             element: this,
@@ -16998,7 +16998,10 @@ BI.RichEditor = BI.inherit(BI.Widget, {
             adjustLength: 1,
             el: this.editor,
             popup: {
-                el: this.toolbar,
+                el: BI.extend({
+                    type: "bi.rich_editor_text_toolbar",
+                    editor: this.editor
+                }, o.toolbar),
                 height: 30,
                 stopPropagation: true,
                 stopEvent: true

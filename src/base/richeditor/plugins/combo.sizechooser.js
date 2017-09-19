@@ -52,8 +52,8 @@ BI.RichEditorSizeChooser = BI.inherit(BI.RichEditorAction, {
             el: this.trigger,
             adjustLength: 1,
             popup: {
-                maxWidth: o.width,
-                minWidth: o.width,
+                maxWidth: 70,
+                minWidth: 70,
                 el: {
                     type: "bi.button_group",
                     items: BI.createItems(this._items, {

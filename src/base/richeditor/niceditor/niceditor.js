@@ -15,7 +15,7 @@
         _init: function () {
             BI.NicEditor.superclass._init.apply(this, arguments);
             var o = this.options;
-            $(document.body).mousedown(BI.bind(this.selectCheck, this));
+            $(document).bind("mousedown." + this.getName(), BI.bind(this.selectCheck, this));
             BI.createWidget({
                 type: "bi.vertical",
                 element: this,
@@ -51,7 +51,7 @@
             var t = e.target;
             var found = false;
             do {
-                if (t.className && t.className.indexOf(prefix) != -1) {
+                if (t.nodeName !== "svg" && t.className && t.className.indexOf(prefix) != -1) {
                     return;
                     // return false;
                 }
@@ -68,6 +68,10 @@
 
         getValue: function () {
             return this.instance.getContent();
+        },
+
+        destroyed: function () {
+            $(document).unbind("mousedown." + this.getName());
         }
     });
     BI.NicEditor.EVENT_SELECTED = "selected";
