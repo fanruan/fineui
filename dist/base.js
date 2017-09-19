@@ -16098,8 +16098,7 @@ BI.RichEditorAction = BI.inherit(BI.Widget, {
         return BI.extend(BI.RichEditorAction.superclass._defaultConfig.apply(this, arguments), {
             width: 20,
             height: 20,
-            command: "",
-            disabled: true
+            command: ""
         });
     },
 
