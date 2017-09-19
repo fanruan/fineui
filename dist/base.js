@@ -16106,14 +16106,14 @@ BI.RichEditorAction = BI.inherit(BI.Widget, {
     _init: function () {
         BI.RichEditorAction.superclass._init.apply(this, arguments);
         var self = this, o = this.options;
-        o.editor.on(BI.NicEditor.EVENT_SELECTED, function (ins, target) {
+        o.editor.on(BI.NicEditor.EVENT_SELECTED, function (ins, e) {
             self.setEnable(true);
-            self.checkNodes(target);
+            self.checkNodes(e.target);
+            self.key(e)
         });
         o.editor.on(BI.NicEditor.EVENT_BLUR, function () {
             self.setEnable(false);
         });
-        o.editor.on(BI.NicEditor.EVENT_KEY, BI.bind(this.key, this));
     },
 
     checkNodes: function (e) {
@@ -16157,7 +16157,6 @@ BI.RichEditorAction = BI.inherit(BI.Widget, {
         if (this.options.command) {
             this.options.editor.nicCommand(this.options.command, args);
         }
-        this.options.editor.fireEvent("buttonClick", this);
     }
 });/**
  * 颜色选择
@@ -16169,7 +16168,7 @@ BI.RichEditorAction = BI.inherit(BI.Widget, {
 BI.RichEditorTextToolbar = BI.inherit(BI.Widget, {
     _defaultConfig: function () {
         return BI.extend(BI.RichEditorTextToolbar.superclass._defaultConfig.apply(this, arguments), {
-            baseCls: "bi-text-toolbar bi-background",
+            baseCls: "bi-rich-editor-text-toolbar bi-background",
             buttons: [
                 {type: "bi.rich_editor_size_chooser"},
                 {type: "bi.rich_editor_bold_button"},
@@ -16180,6 +16179,7 @@ BI.RichEditorTextToolbar = BI.inherit(BI.Widget, {
                 {type: "bi.rich_editor_align_left_button"},
                 {type: "bi.rich_editor_align_center_button"},
                 {type: "bi.rich_editor_align_right_button"},
+                {type: "bi.rich_editor_param_button"},
             ],
             height: 28
         });
@@ -16237,7 +16237,7 @@ BI.shortcut('bi.rich_editor_text_toolbar', BI.RichEditorTextToolbar);/**
         _init: function () {
             BI.NicEditor.superclass._init.apply(this, arguments);
             var o = this.options;
-            $(document.body).mousedown(BI.bind(this.selectCheck, this));
+            $(document).bind("mousedown." + this.getName(), BI.bind(this.selectCheck, this));
             BI.createWidget({
                 type: "bi.vertical",
                 element: this,
@@ -16258,7 +16258,7 @@ BI.shortcut('bi.rich_editor_text_toolbar', BI.RichEditorTextToolbar);/**
             if (this.element[0].contentEditable || !!window.opera) {
                 var newInstance = new nicEditorInstance(conf);
             } else {
-                var newInstance = new nicEditorIFrameInstance(conf);
+                console.error("不支持此浏览器");
             }
             return newInstance;
         },
@@ -16273,7 +16273,7 @@ BI.shortcut('bi.rich_editor_text_toolbar', BI.RichEditorTextToolbar);/**
             var t = e.target;
             var found = false;
             do {
-                if (t.className && t.className.indexOf(prefix) != -1) {
+                if (t.nodeName !== "svg" && t.className && t.className.indexOf(prefix) != -1) {
                     return;
                     // return false;
                 }
@@ -16290,6 +16290,10 @@ BI.shortcut('bi.rich_editor_text_toolbar', BI.RichEditorTextToolbar);/**
 
         getValue: function () {
             return this.instance.getContent();
+        },
+
+        destroyed: function () {
+            $(document).unbind("mousedown." + this.getName());
         }
     });
     BI.NicEditor.EVENT_SELECTED = "selected";
@@ -16424,12 +16428,12 @@ BI.shortcut('bi.rich_editor_text_toolbar', BI.RichEditorTextToolbar);/**
                 var selInstance = this.ne.selectedInstance;
                 if (selInstance != this) {
                     if (selInstance) {
-                        this.ne.fireEvent('blur', selInstance, t);
+                        this.ne.fireEvent('blur', selInstance, e);
                     }
                     this.ne.selectedInstance = this;
-                    this.ne.fireEvent('focus', selInstance, t);
+                    this.ne.fireEvent('focus', selInstance, e);
                 }
-                this.ne.fireEvent('selected', selInstance, t);
+                this.ne.fireEvent('selected', selInstance, e);
                 this.isFocused = true;
                 this.elm.element.addClass(prefix + 'selected');
             }
@@ -16466,83 +16470,6 @@ BI.shortcut('bi.rich_editor_text_toolbar', BI.RichEditorTextToolbar);/**
             document.execCommand(cmd, false, args);
         }
     });
-
-    var nicEditorIFrameInstance = BI.inherit(nicEditorInstance, {
-        savedStyles: [],
-
-        start: function () {
-            var o = this.options;
-            var c = this.elm.element.html().replace(/^\s+|\s+$/g, '');
-            this.elm.element.html("");
-            (!c) ? c = "<br />" : c;
-            this.initialContent = c;
-
-            this.elmFrame = $('iframe').attr({
-                'src': 'javascript:;',
-                'frameBorder': 0,
-                'allowTransparency': 'true',
-                'scrolling': 'no'
-            }).css({height: '100px', width: '100%'}).addClass(prefix + 'frame').appendTo(this.elm.element);
-
-            this.elmFrame.css({width: (o.width - 4) + 'px'});
-
-            var styleList = ['font-size', 'font-family', 'font-weight', 'color'];
-            for (var item in styleList) {
-                this.savedStyles[BI.camelize(item)] = this.elm.element.css(item);
-            }
-
-            setTimeout(BI.bind(this.initFrame, this), 50);
-        },
-
-        disable: function () {
-            this.elm.element.html(this.getContent());
-        },
-
-        initFrame: function () {
-            var fd = $(this.elmFrame.contentWindow.document)[0];
-            fd.designMode = "on";
-            fd.open();
-            var css = this.ne.options.externalCSS;
-            fd.write('<html><head>' + ((css) ? '<link href="' + css + '" rel="stylesheet" type="text/css" />' : '') + '</head><body id="nicEditContent" style="margin: 0 !important; background-color: transparent !important;">' + this.initialContent + '</body></html>');
-            fd.close();
-            this.frameDoc = $(fd);
-
-            this.frameWin = $(this.elmFrame[0].contentWindow);
-            this.frameContent = $(this.frameWin[0].document.body).css(this.savedStyles);
-            this.instanceDoc = this.frameWin[0].document.defaultView;
-
-            this.heightUpdate();
-            this.frameDoc.on('mousedown', BI.bind(this.selected, this));
-            this.frameDoc.on('keyup', BI.bind(this.heightUpdate, this));
-            this.frameDoc.on('keydown', BI.bind(this.keyDown, this));
-            this.frameDoc.on('keyup', BI.bind(this.selected, this));
-            this.ne.fireEvent('add', this);
-        },
-
-        getElm: function () {
-            return this.frameContent;
-        },
-
-        setContent: function (c) {
-            this.content = c;
-            this.ne.fireEvent('set', this);
-            this.frameContent.html(this.content);
-            this.heightUpdate();
-        },
-
-        getSel: function () {
-            return (this.frameWin[0]) ? this.frameWin[0].getSelection() : this.frameDoc[0].selection;
-        },
-
-        heightUpdate: function () {
-            this.elmFrame[0].style.height = Math.max(this.frameContent[0].offsetHeight, this.options.height - 8) + 'px';
-        },
-
-        nicCommand: function (cmd, args) {
-            this.frameDoc.execCommand(cmd, false, args);
-            setTimeout(BI.bind(this.heightUpdate, this), 100);
-        }
-    })
 }());
 /**
  * 颜色选择trigger
@@ -16789,6 +16716,61 @@ BI.RichEditorItalicButton = BI.inherit(BI.RichEditorAction, {
 BI.shortcut("bi.rich_editor_italic_button", BI.RichEditorItalicButton)/**
  *
  * Created by GUY on 2015/11/26.
+ * @class BI.RichEditorParamButton
+ * @extends BI.RichEditorAction
+ */
+BI.RichEditorParamButton = BI.inherit(BI.RichEditorAction, {
+    _defaultConfig: function () {
+        return BI.extend(BI.RichEditorParamButton.superclass._defaultConfig.apply(this, arguments), {
+            width: 20,
+            height: 20,
+        });
+    },
+
+    _init: function () {
+        BI.RichEditorParamButton.superclass._init.apply(this, arguments);
+        var self = this, o = this.options;
+        this.param = BI.createWidget({
+            type: "bi.button",
+            element: this,
+            level: "ignore",
+            minWidth: 0,
+            text: BI.i18nText("BI-Formula_Insert"),
+            height: 20,
+            width: 30
+        });
+        this.param.on(BI.Button.EVENT_CHANGE, function () {
+            var sel = $(o.editor.selectedInstance.selElm());
+            var param = "<span data-type='param' style='background-color: #009de3;color:white;padding:0 5px;'>参数</span>"
+            if (o.editor.instance.getElm().element.find(sel).length <= 0) {
+                o.editor.instance.getElm().element.append(param);
+                return;
+            }
+            var ln = sel.closest("a");
+            if (ln.length === 0) {
+                sel.after(param)
+            }
+        });
+    },
+    activate: function () {
+    },
+
+    deactivate: function () {
+    },
+
+    key: function (e) {
+        var o = this.options;
+        if (e.keyCode === BI.KeyCode.BACKSPACE) {
+            var sel = $(o.editor.selectedInstance.selElm()).parent();
+            if (sel.attr("data-type") === "param") {
+                sel.destroy();
+            }
+        }
+    }
+});
+BI.shortcut("bi.rich_editor_param_button", BI.RichEditorParamButton)/**
+ *
+ * Created by GUY on 2015/11/26.
  * @class BI.RichEditorItalicButton
  * @extends BI.RichEditorAction
  */
@@ -17013,8 +16995,8 @@ BI.RichEditorSizeChooser = BI.inherit(BI.RichEditorAction, {
             el: this.trigger,
             adjustLength: 1,
             popup: {
-                maxWidth: o.width,
-                minWidth: o.width,
+                maxWidth: 70,
+                minWidth: 70,
                 el: {
                     type: "bi.button_group",
                     items: BI.createItems(this._items, {
@@ -17044,7 +17026,8 @@ BI.shortcut('bi.rich_editor_size_chooser', BI.RichEditorSizeChooser);/**
 BI.RichEditor = BI.inherit(BI.Widget, {
     _defaultConfig: function () {
         return BI.extend(BI.RichEditor.superclass._defaultConfig.apply(this, arguments), {
-            baseCls: "bi-rich-editor bi-card"
+            baseCls: "bi-rich-editor bi-card",
+            toolbar: {}
         });
     },
     _init: function () {
@@ -17060,11 +17043,6 @@ BI.RichEditor = BI.inherit(BI.Widget, {
             self.fireEvent(BI.RichEditor.EVENT_CONFIRM);
         });
 
-        this.toolbar = BI.createWidget({
-            type: "bi.rich_editor_text_toolbar",
-            editor: this.editor
-        });
-
         this.combo = BI.createWidget({
             type: "bi.combo",
             element: this,
@@ -17075,7 +17053,10 @@ BI.RichEditor = BI.inherit(BI.Widget, {
             adjustLength: 1,
             el: this.editor,
             popup: {
-                el: this.toolbar,
+                el: BI.extend({
+                    type: "bi.rich_editor_text_toolbar",
+                    editor: this.editor
+                }, o.toolbar),
                 height: 30,
                 stopPropagation: true,
                 stopEvent: true

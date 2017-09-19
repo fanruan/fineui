@@ -8,7 +8,8 @@
 BI.RichEditor = BI.inherit(BI.Widget, {
     _defaultConfig: function () {
         return BI.extend(BI.RichEditor.superclass._defaultConfig.apply(this, arguments), {
-            baseCls: "bi-rich-editor bi-card"
+            baseCls: "bi-rich-editor bi-card",
+            toolbar: {}
         });
     },
     _init: function () {
@@ -24,11 +25,6 @@ BI.RichEditor = BI.inherit(BI.Widget, {
             self.fireEvent(BI.RichEditor.EVENT_CONFIRM);
         });
 
-        this.toolbar = BI.createWidget({
-            type: "bi.rich_editor_text_toolbar",
-            editor: this.editor
-        });
-
         this.combo = BI.createWidget({
             type: "bi.combo",
             element: this,
@@ -39,7 +35,10 @@ BI.RichEditor = BI.inherit(BI.Widget, {
             adjustLength: 1,
             el: this.editor,
             popup: {
-                el: this.toolbar,
+                el: BI.extend({
+                    type: "bi.rich_editor_text_toolbar",
+                    editor: this.editor
+                }, o.toolbar),
                 height: 30,
                 stopPropagation: true,
                 stopEvent: true

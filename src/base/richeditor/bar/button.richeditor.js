@@ -18,14 +18,14 @@ BI.RichEditorAction = BI.inherit(BI.Widget, {
     _init: function () {
         BI.RichEditorAction.superclass._init.apply(this, arguments);
         var self = this, o = this.options;
-        o.editor.on(BI.NicEditor.EVENT_SELECTED, function (ins, target) {
+        o.editor.on(BI.NicEditor.EVENT_SELECTED, function (ins, e) {
             self.setEnable(true);
-            self.checkNodes(target);
+            self.checkNodes(e.target);
+            self.key(e)
         });
         o.editor.on(BI.NicEditor.EVENT_BLUR, function () {
             self.setEnable(false);
         });
-        o.editor.on(BI.NicEditor.EVENT_KEY, BI.bind(this.key, this));
     },
 
     checkNodes: function (e) {
@@ -69,6 +69,5 @@ BI.RichEditorAction = BI.inherit(BI.Widget, {
         if (this.options.command) {
             this.options.editor.nicCommand(this.options.command, args);
         }
-        this.options.editor.fireEvent("buttonClick", this);
     }
 });

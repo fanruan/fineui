@@ -15,7 +15,7 @@
         _init: function () {
             BI.NicEditor.superclass._init.apply(this, arguments);
             var o = this.options;
-            $(document.body).mousedown(BI.bind(this.selectCheck, this));
+            $(document).bind("mousedown." + this.getName(), BI.bind(this.selectCheck, this));
             BI.createWidget({
                 type: "bi.vertical",
                 element: this,
@@ -36,7 +36,7 @@
             if (this.element[0].contentEditable || !!window.opera) {
                 var newInstance = new nicEditorInstance(conf);
             } else {
-                var newInstance = new nicEditorIFrameInstance(conf);
+                console.error("不支持此浏览器");
             }
             return newInstance;
         },
@@ -51,7 +51,7 @@
             var t = e.target;
             var found = false;
             do {
-                if (t.className && t.className.indexOf(prefix) != -1) {
+                if (t.nodeName !== "svg" && t.className && t.className.indexOf(prefix) != -1) {
                     return;
                     // return false;
                 }
@@ -68,6 +68,10 @@
 
         getValue: function () {
             return this.instance.getContent();
+        },
+
+        destroyed: function () {
+            $(document).unbind("mousedown." + this.getName());
         }
     });
     BI.NicEditor.EVENT_SELECTED = "selected";
@@ -202,12 +206,12 @@
                 var selInstance = this.ne.selectedInstance;
                 if (selInstance != this) {
                     if (selInstance) {
-                        this.ne.fireEvent('blur', selInstance, t);
+                        this.ne.fireEvent('blur', selInstance, e);
                     }
                     this.ne.selectedInstance = this;
-                    this.ne.fireEvent('focus', selInstance, t);
+                    this.ne.fireEvent('focus', selInstance, e);
                 }
-                this.ne.fireEvent('selected', selInstance, t);
+                this.ne.fireEvent('selected', selInstance, e);
                 this.isFocused = true;
                 this.elm.element.addClass(prefix + 'selected');
             }
@@ -244,81 +248,4 @@
             document.execCommand(cmd, false, args);
         }
     });
-
-    var nicEditorIFrameInstance = BI.inherit(nicEditorInstance, {
-        savedStyles: [],
-
-        start: function () {
-            var o = this.options;
-            var c = this.elm.element.html().replace(/^\s+|\s+$/g, '');
-            this.elm.element.html("");
-            (!c) ? c = "<br />" : c;
-            this.initialContent = c;
-
-            this.elmFrame = $('iframe').attr({
-                'src': 'javascript:;',
-                'frameBorder': 0,
-                'allowTransparency': 'true',
-                'scrolling': 'no'
-            }).css({height: '100px', width: '100%'}).addClass(prefix + 'frame').appendTo(this.elm.element);
-
-            this.elmFrame.css({width: (o.width - 4) + 'px'});
-
-            var styleList = ['font-size', 'font-family', 'font-weight', 'color'];
-            for (var item in styleList) {
-                this.savedStyles[BI.camelize(item)] = this.elm.element.css(item);
-            }
-
-            setTimeout(BI.bind(this.initFrame, this), 50);
-        },
-
-        disable: function () {
-            this.elm.element.html(this.getContent());
-        },
-
-        initFrame: function () {
-            var fd = $(this.elmFrame.contentWindow.document)[0];
-            fd.designMode = "on";
-            fd.open();
-            var css = this.ne.options.externalCSS;
-            fd.write('<html><head>' + ((css) ? '<link href="' + css + '" rel="stylesheet" type="text/css" />' : '') + '</head><body id="nicEditContent" style="margin: 0 !important; background-color: transparent !important;">' + this.initialContent + '</body></html>');
-            fd.close();
-            this.frameDoc = $(fd);
-
-            this.frameWin = $(this.elmFrame[0].contentWindow);
-            this.frameContent = $(this.frameWin[0].document.body).css(this.savedStyles);
-            this.instanceDoc = this.frameWin[0].document.defaultView;
-
-            this.heightUpdate();
-            this.frameDoc.on('mousedown', BI.bind(this.selected, this));
-            this.frameDoc.on('keyup', BI.bind(this.heightUpdate, this));
-            this.frameDoc.on('keydown', BI.bind(this.keyDown, this));
-            this.frameDoc.on('keyup', BI.bind(this.selected, this));
-            this.ne.fireEvent('add', this);
-        },
-
-        getElm: function () {
-            return this.frameContent;
-        },
-
-        setContent: function (c) {
-            this.content = c;
-            this.ne.fireEvent('set', this);
-            this.frameContent.html(this.content);
-            this.heightUpdate();
-        },
-
-        getSel: function () {
-            return (this.frameWin[0]) ? this.frameWin[0].getSelection() : this.frameDoc[0].selection;
-        },
-
-        heightUpdate: function () {
-            this.elmFrame[0].style.height = Math.max(this.frameContent[0].offsetHeight, this.options.height - 8) + 'px';
-        },
-
-        nicCommand: function (cmd, args) {
-            this.frameDoc.execCommand(cmd, false, args);
-            setTimeout(BI.bind(this.heightUpdate, this), 100);
-        }
-    })
 }());

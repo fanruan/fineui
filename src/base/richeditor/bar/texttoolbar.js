@@ -8,7 +8,7 @@
 BI.RichEditorTextToolbar = BI.inherit(BI.Widget, {
     _defaultConfig: function () {
         return BI.extend(BI.RichEditorTextToolbar.superclass._defaultConfig.apply(this, arguments), {
-            baseCls: "bi-text-toolbar bi-background",
+            baseCls: "bi-rich-editor-text-toolbar bi-background",
             buttons: [
                 {type: "bi.rich_editor_size_chooser"},
                 {type: "bi.rich_editor_bold_button"},
@@ -19,6 +19,7 @@ BI.RichEditorTextToolbar = BI.inherit(BI.Widget, {
                 {type: "bi.rich_editor_align_left_button"},
                 {type: "bi.rich_editor_align_center_button"},
                 {type: "bi.rich_editor_align_right_button"},
+                {type: "bi.rich_editor_param_button"},
             ],
             height: 28
         });
