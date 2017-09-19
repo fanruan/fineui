@@ -125,7 +125,7 @@
             }
             this.instanceDoc = document.defaultView;
             this.elm.element.on('mousedown', BI.bind(this.selected, this));
-            this.elm.element.on('keypress', BI.bind(this.keyDown, this));
+            this.elm.element.on('keydown', BI.bind(this.keyDown, this));
             this.elm.element.on('focus', BI.bind(this.selected, this));
             this.elm.element.on('blur', BI.bind(this.blur, this));
             this.elm.element.on('keyup', BI.bind(this.selected, this));
@@ -183,6 +183,37 @@
         saveRng: function () {
             this.savedRange = this.getRng();
             this.savedSel = this.getSel();
+        },
+
+        setFocus: function (el) {
+            try {
+                el.focus();
+            } catch (e) {
+
+            }
+            if (!window.getSelection) {
+                var rng;
+                try {
+                    el.focus();
+                } catch (e) {
+
+                }
+                rng = document.selection.createRange();
+                rng.moveStart('character', -el.innerText.length);
+                var text = rng.text;
+                for (var i = 0; i < el.innerText.length; i++) {
+                    if (el.innerText.substring(0, i + 1) == text.substring(text.length - i - 1, text.length)) {
+                        result = i + 1;
+                    }
+                }
+            } else {
+                var range = document.createRange();
+                range.selectNodeContents(el);
+                range.collapse(false);
+                var sel = window.getSelection();
+                sel.removeAllRanges();
+                sel.addRange(range);
+            }
         },
 
         restoreRng: function () {

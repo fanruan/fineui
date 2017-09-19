@@ -25045,6 +25045,59 @@ _.extend(BI, {
     emptyFn: function () {
     },
     empty: null,
+    Key: {
+        "48": "0",
+        "49": "1",
+        "50": "2",
+        "51": "3",
+        "52": "4",
+        "53": "5",
+        "54": "6",
+        "55": "7",
+        "56": "8",
+        "57": "9",
+        "65": "a",
+        "66": "b",
+        "67": "c",
+        "68": "d",
+        "69": "e",
+        "70": "f",
+        "71": "g",
+        "72": "h",
+        "73": "i",
+        "74": "j",
+        "75": "k",
+        "76": "l",
+        "77": "m",
+        "78": "n",
+        "79": "o",
+        "80": "p",
+        "81": "q",
+        "82": "r",
+        "83": "s",
+        "84": "t",
+        "85": "u",
+        "86": "v",
+        "87": "w",
+        "88": "x",
+        "89": "y",
+        "90": "z",
+        "96": "0",
+        "97": "1",
+        "98": "2",
+        "99": "3",
+        "100": "4",
+        "101": "5",
+        "102": "6",
+        "103": "7",
+        "104": "8",
+        "105": "9",
+        "106": "*",
+        "107": "+",
+        "109": "-",
+        "110": ".",
+        "111": "/"
+    },
     KeyCode: {
         BACKSPACE: 8,
         COMMA: 188,
@@ -45152,7 +45205,7 @@ BI.shortcut('bi.rich_editor_text_toolbar', BI.RichEditorTextToolbar);/**
             }
             this.instanceDoc = document.defaultView;
             this.elm.element.on('mousedown', BI.bind(this.selected, this));
-            this.elm.element.on('keypress', BI.bind(this.keyDown, this));
+            this.elm.element.on('keydown', BI.bind(this.keyDown, this));
             this.elm.element.on('focus', BI.bind(this.selected, this));
             this.elm.element.on('blur', BI.bind(this.blur, this));
             this.elm.element.on('keyup', BI.bind(this.selected, this));
@@ -45210,6 +45263,37 @@ BI.shortcut('bi.rich_editor_text_toolbar', BI.RichEditorTextToolbar);/**
         saveRng: function () {
             this.savedRange = this.getRng();
             this.savedSel = this.getSel();
+        },
+
+        setFocus: function (el) {
+            try {
+                el.focus();
+            } catch (e) {
+
+            }
+            if (!window.getSelection) {
+                var rng;
+                try {
+                    el.focus();
+                } catch (e) {
+
+                }
+                rng = document.selection.createRange();
+                rng.moveStart('character', -el.innerText.length);
+                var text = rng.text;
+                for (var i = 0; i < el.innerText.length; i++) {
+                    if (el.innerText.substring(0, i + 1) == text.substring(text.length - i - 1, text.length)) {
+                        result = i + 1;
+                    }
+                }
+            } else {
+                var range = document.createRange();
+                range.selectNodeContents(el);
+                range.collapse(false);
+                var sel = window.getSelection();
+                sel.removeAllRanges();
+                sel.addRange(range);
+            }
         },
 
         restoreRng: function () {
@@ -45546,14 +45630,22 @@ BI.RichEditorParamButton = BI.inherit(BI.RichEditorAction, {
         });
         this.param.on(BI.Button.EVENT_CHANGE, function () {
             var sel = $(o.editor.selectedInstance.selElm());
-            var param = "<span data-type='param' style='background-color: #009de3;color:white;padding:0 5px;'>参数</span>"
-            if (o.editor.instance.getElm().element.find(sel).length <= 0) {
-                o.editor.instance.getElm().element.append(param);
+            var param = $("<span data-type='param' data-value='参数' style='background-color: #009de3;color:white;padding:0 5px;'>参数</span>").mousedown(function (e) {
+                e.stopEvent();
+                return false;
+            });
+            var wrapper = o.editor.instance.getElm().element;
+            if (wrapper.find(sel).length <= 0) {
+                wrapper.append(param);
                 return;
             }
             var ln = sel.closest("a");
             if (ln.length === 0) {
-                sel.after(param)
+                if (sel[0].nodeType === 3 && wrapper.find(sel.parent()).length > 0) {
+                    sel.parent().after(param)
+                } else {
+                    sel.after(param)
+                }
             }
         });
     },
@@ -45565,10 +45657,30 @@ BI.RichEditorParamButton = BI.inherit(BI.RichEditorAction, {
 
     key: function (e) {
         var o = this.options;
-        if (e.keyCode === BI.KeyCode.BACKSPACE) {
-            var sel = $(o.editor.selectedInstance.selElm()).parent();
+        var instance = o.editor.selectedInstance;
+        var wrapper = instance.getElm().element;
+        var sel = $(instance.selElm());
+        if (sel[0].nodeType === 3 && wrapper.find(sel.parent()).length > 0) {
+            sel = sel.parent();
+        }
+        if (BI.Key[e.keyCode]) {
             if (sel.attr("data-type") === "param") {
-                sel.destroy();
+                var span = $("<span></span>").text(BI.Key[e.keyCode]);
+                if (sel.text() !== BI.Key[e.keyCode]) {
+                    sel.after(span);
+                    sel.text(sel.attr("data-value"));
+                } else {
+                    sel.after(span);
+                    sel.destroy();
+                }
+                instance.setFocus(span[0]);
+            }
+        }
+        if (e.keyCode === BI.KeyCode.BACKSPACE) {
+            if (sel.attr("data-type") === "param") {
+                if (sel.text() !== sel.attr("data-value")) {
+                    sel.destroy();
+                }
             }
         }
     }

@@ -26,14 +26,22 @@ BI.RichEditorParamButton = BI.inherit(BI.RichEditorAction, {
         });
         this.param.on(BI.Button.EVENT_CHANGE, function () {
             var sel = $(o.editor.selectedInstance.selElm());
-            var param = "<span data-type='param' style='background-color: #009de3;color:white;padding:0 5px;'>参数</span>"
-            if (o.editor.instance.getElm().element.find(sel).length <= 0) {
-                o.editor.instance.getElm().element.append(param);
+            var param = $("<span data-type='param' data-value='参数' style='background-color: #009de3;color:white;padding:0 5px;'>参数</span>").mousedown(function (e) {
+                e.stopEvent();
+                return false;
+            });
+            var wrapper = o.editor.instance.getElm().element;
+            if (wrapper.find(sel).length <= 0) {
+                wrapper.append(param);
                 return;
             }
             var ln = sel.closest("a");
             if (ln.length === 0) {
-                sel.after(param)
+                if (sel[0].nodeType === 3 && wrapper.find(sel.parent()).length > 0) {
+                    sel.parent().after(param)
+                } else {
+                    sel.after(param)
+                }
             }
         });
     },
@@ -45,10 +53,30 @@ BI.RichEditorParamButton = BI.inherit(BI.RichEditorAction, {
 
     key: function (e) {
         var o = this.options;
-        if (e.keyCode === BI.KeyCode.BACKSPACE) {
-            var sel = $(o.editor.selectedInstance.selElm()).parent();
+        var instance = o.editor.selectedInstance;
+        var wrapper = instance.getElm().element;
+        var sel = $(instance.selElm());
+        if (sel[0].nodeType === 3 && wrapper.find(sel.parent()).length > 0) {
+            sel = sel.parent();
+        }
+        if (BI.Key[e.keyCode]) {
             if (sel.attr("data-type") === "param") {
-                sel.destroy();
+                var span = $("<span></span>").text(BI.Key[e.keyCode]);
+                if (sel.text() !== BI.Key[e.keyCode]) {
+                    sel.after(span);
+                    sel.text(sel.attr("data-value"));
+                } else {
+                    sel.after(span);
+                    sel.destroy();
+                }
+                instance.setFocus(span[0]);
+            }
+        }
+        if (e.keyCode === BI.KeyCode.BACKSPACE) {
+            if (sel.attr("data-type") === "param") {
+                if (sel.text() !== sel.attr("data-value")) {
+                    sel.destroy();
+                }
             }
         }
     }
