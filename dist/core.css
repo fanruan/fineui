@@ -220,6 +220,13 @@ input::-moz-focus-inner {
   border: 0;
   padding: 0;
 }
+input::-webkit-contacts-auto-fill-button {
+  visibility: hidden;
+  display: none !important;
+  pointer-events: none;
+  position: absolute;
+  right: 0;
+}
 textarea {
   overflow: auto;
   vertical-align: top;
@@ -267,7 +274,6 @@ li {
   list-style-type: none;
 }
 i {
-  font-style: normal;
   -webkit-font-smoothing: antialiased;
   -webkit-text-stroke-width: 0.2px;
   -moz-osx-font-smoothing: grayscale;
@@ -1338,6 +1344,32 @@ i {
   -o-flex-wrap: nowrap;
   flex-wrap: nowrap;
 }
+.bi-flex-vertical-center.stretch {
+  /* 09版 */
+  -webkit-box-orient: vertical;
+  /* 12版 */
+  -webkit-flex-direction: column;
+  -moz-flex-direction: column;
+  -ms-flex-direction: column;
+  -o-flex-direction: column;
+  flex-direction: column;
+  /* 09版 */
+  -webkit-box-pack: center;
+  /* 12版 */
+  -webkit-justify-content: center;
+  -moz-justify-content: center;
+  -ms-justify-content: center;
+  -o-justify-content: center;
+  justify-content: center;
+  /* 09版 */
+  -webkit-box-align: stretch;
+  /* 12版 */
+  -webkit-align-items: stretch;
+  -moz-align-items: stretch;
+  -ms-align-items: stretch;
+  -o-align-items: stretch;
+  align-items: stretch;
+}
 .bi-flex-wrapper-center-layout .flex-wrapper-center-layout-wrapper {
   display: box;
   /* OLD - Android 4.4- */
@@ -1493,6 +1525,33 @@ i {
   flex-wrap: nowrap;
   min-height: 100%;
   float: left;
+}
+.bi-flex-wrapper-vertical-center .flex-wrapper-vertical-center-wrapper.stretch {
+  width: 100%;
+  /* 09版 */
+  -webkit-box-orient: vertical;
+  /* 12版 */
+  -webkit-flex-direction: column;
+  -moz-flex-direction: column;
+  -ms-flex-direction: column;
+  -o-flex-direction: column;
+  flex-direction: column;
+  /* 09版 */
+  -webkit-box-pack: center;
+  /* 12版 */
+  -webkit-justify-content: center;
+  -moz-justify-content: center;
+  -ms-justify-content: center;
+  -o-justify-content: center;
+  justify-content: center;
+  /* 09版 */
+  -webkit-box-align: stretch;
+  /* 12版 */
+  -webkit-align-items: stretch;
+  -moz-align-items: stretch;
+  -ms-align-items: stretch;
+  -o-align-items: stretch;
+  align-items: stretch;
 }
 .bi-inline-center-adapt-layout:after {
   display: inline-block;

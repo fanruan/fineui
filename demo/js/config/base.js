@@ -67,6 +67,10 @@ Demo.BASE_CONFIG = [{
     text: "bi.formula_editor",
     value: "demo.formula_editor"
 }, {
+    pId: 202,
+    text: "bi.rich_editor",
+    value: "demo.rich_editor"
+}, {
     pId: 2,
     id: 203,
     text: "tree"

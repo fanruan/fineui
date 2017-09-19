@@ -4190,12 +4190,14 @@ _.extend(BI, {
     HorizontalAlign: {
         Left: "left",
         Right: "right",
-        Center: "center"
+        Center: "center",
+        Stretch: "stretch"
     },
     VerticalAlign: {
         Middle: "middle",
         Top: "top",
-        Bottom: "bottom"
+        Bottom: "bottom",
+        Stretch: "stretch"
     }
 });/**
  * 客户端观察者，主要处理事件的添加、删除、执行等
@@ -5082,7 +5084,7 @@ BI.Widget = BI.inherit(BI.OB, {
             return this.attributes[attr];
         }
         var sta = _.result(this, "_static");
-        return BI.isFunction(sta[attr]) ? sta[attr].apply(this, BI.values(arguments).slice(1)) : sta[attr];
+        return BI.isFunction(sta[attr]) ? sta[attr].apply(this, Array.prototype.slice.apply(arguments, [1])) : sta[attr];
     },
 
     get: function () {
@@ -9210,14 +9212,23 @@ BI.IntegerBufferSet.prototype = {
 })();window.BI = window.BI || {};
 
 $.extend(BI, {
-    $defaultImport: function (options) {
-        var config = $.extend({
-            op: 'resource',
-            path: null,
-            type: null,
-            must: false
-        }, options);
-        config.url = BI.servletURL + '?op=' + config.op + '&resource=' + config.path;
+    $defaultImport: function (options, type) {
+        var config;
+        if (BI.isObject(options)) {
+            config = $.extend({
+                op: 'resource',
+                path: null,
+                type: null,
+                must: false
+            }, options);
+            config.url = BI.servletURL + '?op=' + config.op + '&resource=' + config.path;
+        } else {
+            config = {
+                url: BI.servletURL + "?op=resource&resource=" + options,
+                type: arguments[1],
+                must: arguments[2]
+            }
+        }
         this.$import(config.url, config.type, config.must);
     },
     $import: function () {
@@ -12104,6 +12115,7 @@ BI.VerticalAdaptLayout = BI.inherit(BI.Layout, {
     props: {
         baseCls: "bi-vertical-adapt-layout",
         columnSize: [],
+        horizontalAlign: BI.HorizontalAlign.Left,
         hgap: 0,
         vgap: 0,
         lgap: 0,
@@ -12113,8 +12125,10 @@ BI.VerticalAdaptLayout = BI.inherit(BI.Layout, {
     },
     render: function () {
         BI.VerticalAdaptLayout.superclass.render.apply(this, arguments);
+        var o = this.options;
         this.$table = $("<table>").attr({"cellspacing": 0, "cellpadding": 0}).css({
             "position": "relative",
+            "width": o.horizontalAlign === BI.HorizontalAlign.Stretch ? "100%" : "auto",
             "height": "100%",
             "white-space": "nowrap",
             "border-spacing": "0px",
@@ -12197,7 +12211,7 @@ BI.VerticalAdaptLayout = BI.inherit(BI.Layout, {
         }
     },
 
-    _getWrapper: function(){
+    _getWrapper: function () {
         return this.$tr;
     },
 
@@ -12459,7 +12473,7 @@ BI.FlexHorizontalLayout = BI.inherit(BI.Layout, {
     props: function () {
         return BI.extend(BI.FlexHorizontalLayout.superclass.props.apply(this, arguments), {
             baseCls: "bi-flex-horizontal-layout",
-            verticalAlign: "middle",
+            verticalAlign: BI.VerticalAlign.Middle,
             columnSize: [],
             scrollx: true,
             hgap: 0,
@@ -12524,6 +12538,7 @@ BI.FlexVerticalCenter = BI.inherit(BI.Layout, {
     props: function () {
         return BI.extend(BI.FlexVerticalCenter.superclass.props.apply(this, arguments), {
             baseCls: "bi-flex-vertical-center",
+            horizontalAlign: BI.HorizontalAlign.Left,
             columnSize: [],
             hgap: 0,
             vgap: 0,
@@ -12536,6 +12551,7 @@ BI.FlexVerticalCenter = BI.inherit(BI.Layout, {
     render: function () {
         BI.FlexVerticalCenter.superclass.render.apply(this, arguments);
         var o = this.options;
+        this.element.addClass(o.horizontalAlign);
         this.populate(this.options.items);
     },
 
@@ -12641,9 +12657,9 @@ BI.FlexHorizontalLayout = BI.inherit(BI.Layout, {
     props: function () {
         return BI.extend(BI.FlexHorizontalLayout.superclass.props.apply(this, arguments), {
             baseCls: "bi-flex-wrapper-horizontal-layout clearfix",
-            verticalAlign: "middle",
+            verticalAlign: BI.VerticalAlign.Middle,
             columnSize: [],
-            scrollx: true,
+            // scrollable: true,
             hgap: 0,
             vgap: 0,
             lgap: 0,
@@ -12726,7 +12742,9 @@ BI.FlexVerticalCenter = BI.inherit(BI.Layout, {
     props: function () {
         return BI.extend(BI.FlexVerticalCenter.superclass.props.apply(this, arguments), {
             baseCls: "bi-flex-wrapper-vertical-center clearfix",
+            horizontalAlign: BI.HorizontalAlign.Middle,
             columnSize: [],
+            // scrollable: true,
             hgap: 0,
             vgap: 0,
             lgap: 0,
@@ -12738,7 +12756,7 @@ BI.FlexVerticalCenter = BI.inherit(BI.Layout, {
     render: function () {
         BI.FlexVerticalCenter.superclass.render.apply(this, arguments);
         var o = this.options;
-        this.$wrapper = $("<div>").addClass("flex-wrapper-vertical-center-wrapper");
+        this.$wrapper = $("<div>").addClass("flex-wrapper-vertical-center-wrapper " + o.horizontalAlign);
         this.populate(this.options.items);
     },
 
@@ -12785,7 +12803,7 @@ BI.FlexVerticalCenter = BI.inherit(BI.Layout, {
         }
     },
 
-    _getWrapper: function(){
+    _getWrapper: function () {
         return this.$wrapper;
     },
 

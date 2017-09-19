@@ -87,6 +87,12 @@ module.exports = function (grunt) {
                 ],
                 dest: 'dist/slider.js'
             },
+            sliderCss: {
+                src: [
+                    'src/addons/slider/**/*.css'
+                ],
+                dest: 'dist/slider.css'
+            },
             jqueryuiJs: {
                 src: [
                     'src/addons/slider/lib/jquery.ui.core.js',
@@ -128,8 +134,12 @@ module.exports = function (grunt) {
                 dest: 'dist/bundle.css'
             },
 
+            configJs: {
+                src: ['demo/version.js'],
+                dest: 'dist/config.js'
+            },
             demoJs: {
-                src: ['demo/version.js', 'demo/app.js', 'demo/js/**/*.js', 'demo/config.js'],
+                src: ['demo/app.js', 'demo/js/**/*.js',' demo/config.js'],
                 dest: 'dist/demo.js'
             },
             demoCss: {
@@ -229,6 +239,12 @@ module.exports = function (grunt) {
                     'src/addons/slider/singleslider/**/*.js'
                 ],
                 dest: 'bi/slider.js'
+            },
+            bi_sliderCss: {
+                src: [
+                    'src/addons/slider/**/*.css'
+                ],
+                dest: 'bi/slider.css'
             },
             bi_jqueryuiJs: {
                 src: [

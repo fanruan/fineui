@@ -7,6 +7,7 @@ BI.VerticalAdaptLayout = BI.inherit(BI.Layout, {
     props: {
         baseCls: "bi-vertical-adapt-layout",
         columnSize: [],
+        horizontalAlign: BI.HorizontalAlign.Left,
         hgap: 0,
         vgap: 0,
         lgap: 0,
@@ -16,8 +17,10 @@ BI.VerticalAdaptLayout = BI.inherit(BI.Layout, {
     },
     render: function () {
         BI.VerticalAdaptLayout.superclass.render.apply(this, arguments);
+        var o = this.options;
         this.$table = $("<table>").attr({"cellspacing": 0, "cellpadding": 0}).css({
             "position": "relative",
+            "width": o.horizontalAlign === BI.HorizontalAlign.Stretch ? "100%" : "auto",
             "height": "100%",
             "white-space": "nowrap",
             "border-spacing": "0px",
@@ -100,7 +103,7 @@ BI.VerticalAdaptLayout = BI.inherit(BI.Layout, {
         }
     },
 
-    _getWrapper: function(){
+    _getWrapper: function () {
         return this.$tr;
     },
 

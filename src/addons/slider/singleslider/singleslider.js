@@ -13,13 +13,15 @@ BI.SingleSlider = BI.inherit(BI.Widget, {
     },
     _defaultConfig: function () {
         return BI.extend(BI.SingleSlider.superclass._defaultConfig.apply(this, arguments), {
-            baseCls: "bi-single-slider bi-slider-track"
+            baseCls: "bi-single-slider bi-slider-track",
+            digit: ""
         });
     },
     _init: function () {
         BI.SingleSlider.superclass._init.apply(this, arguments);
 
-        var self = this;
+        var self = this, o = this.options;
+        var digitExist = (o.digit === "") ? false : true;
         var c = this._constant;
         this.enable = false;
         this.value = "";
@@ -49,8 +51,10 @@ BI.SingleSlider = BI.inherit(BI.Widget, {
                 self._setBlueTrack(significantPercent);
                 self._setLabelPosition(significantPercent);
                 var v = self._getValueByPercent(significantPercent);
+                v = digitExist ? v.toFixed(o.digit) : v;
                 self.label.setValue(v);
                 self.value = v;
+                self.fireEvent(BI.SingleSlider.EVENT_CHANGE);
             },
             stop: function (e, ui) {
                 var percent = (ui.position.left) * 100 / (self._getGrayTrackLength());
@@ -85,6 +89,7 @@ BI.SingleSlider = BI.inherit(BI.Widget, {
                 var significantPercent = BI.parseFloat(percent.toFixed(1));
                 self._setAllPosition(significantPercent);
                 var v = self._getValueByPercent(significantPercent);
+                v = digitExist ? v.toFixed(o.digit) : v;
                 self.label.setValue(v);
                 self.value = v;
                 self.fireEvent(BI.SingleSlider.EVENT_CHANGE);
@@ -106,10 +111,12 @@ BI.SingleSlider = BI.inherit(BI.Widget, {
         });
         this.label.on(BI.SignEditor.EVENT_CONFIRM, function () {
             var v = BI.parseFloat(this.getValue());
-            self.value = v;
             var percent = self._getPercentByValue(v);
             var significantPercent = BI.parseFloat(percent.toFixed(1));
             self._setAllPosition(significantPercent);
+            v = digitExist ? v.toFixed(o.digit) : v;
+            this.setValue(v);
+            self.value = v;
             self.fireEvent(BI.SingleSlider.EVENT_CHANGE);
         });
         this._setVisible(false);
@@ -230,7 +237,10 @@ BI.SingleSlider = BI.inherit(BI.Widget, {
     },
 
     setValue: function (v) {
+        var o = this.options;
+        var digitExist = (o.digit === "") ? false : true;
         var value = BI.parseFloat(v);
+        value = digitExist ? value.toFixed(o.digit) : value;
         if ((!isNaN(value))) {
             if (this._checkValidation(value)) {
                 this.value = value;

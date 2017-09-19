@@ -12628,15 +12628,15 @@ BI.shortcut("bi.icon_text_trigger", BI.IconTextTrigger);/**
  */
 BI.TextTrigger = BI.inherit(BI.Trigger, {
     _const: {
-        hgap: 4,
-        triggerWidth: 30
+        hgap: 4
     },
 
     _defaultConfig: function () {
         var conf = BI.TextTrigger.superclass._defaultConfig.apply(this, arguments);
         return BI.extend(conf, {
             baseCls: (conf.baseCls || "") + " bi-text-trigger",
-            height: 30
+            height: 30,
+            triggerWidth: 30
         });
     },
 
@@ -12648,12 +12648,13 @@ BI.TextTrigger = BI.inherit(BI.Trigger, {
             textAlign: "left",
             height: o.height,
             text: o.text,
-            hgap: c.hgap
+            hgap: c.hgap,
+            readonly: o.readonly
         });
         this.trigerButton = BI.createWidget({
             type: "bi.trigger_icon_button",
             cls: "bi-border-left",
-            width: c.triggerWidth
+            width: o.triggerWidth
         });
 
         BI.createWidget({
@@ -12664,7 +12665,7 @@ BI.TextTrigger = BI.inherit(BI.Trigger, {
                     el: this.text
                 }, {
                     el: this.trigerButton,
-                    width: c.triggerWidth
+                    width: o.triggerWidth
                 }
             ]
         });
@@ -12794,14 +12795,14 @@ BI.shortcut("bi.small_select_text_trigger", BI.SmallSelectTextTrigger);/**
 BI.SmallTextTrigger = BI.inherit(BI.Trigger, {
     _const: {
         hgap: 4,
-        triggerWidth: 20
     },
 
     _defaultConfig: function () {
         var conf = BI.SmallTextTrigger.superclass._defaultConfig.apply(this, arguments);
         return BI.extend(conf, {
             baseCls: (conf.baseCls || "") + " bi-text-trigger",
-            height: 20
+            height: 20,
+            triggerWidth: 20
         });
     },
 
@@ -12817,7 +12818,7 @@ BI.SmallTextTrigger = BI.inherit(BI.Trigger, {
         });
         this.trigerButton = BI.createWidget({
             type: "bi.trigger_icon_button",
-            width: c.triggerWidth
+            width: o.triggerWidth
         });
 
         BI.createWidget({
@@ -12828,7 +12829,7 @@ BI.SmallTextTrigger = BI.inherit(BI.Trigger, {
                     el: this.text
                 }, {
                     el: this.trigerButton,
-                    width: c.triggerWidth
+                    width: o.triggerWidth
                 }
             ]
         });

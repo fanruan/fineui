@@ -1,61 +1,4 @@
-Demo = {
-    version: 1.0
-};
-
-
-BI.servletURL = "";
-BI.resourceURL = "resource/";
-BI.i18n = {
-    "BI-Basic_OK": "确定",
-    "BI-Basic_Sure": "确定",
-    "BI-Basic_Clears": "清空",
-    "BI-Basic_Cancel": "取消",
-    "BI-Basic_Time": "时间",
-    "BI-Basic_Simple_Sunday": "日",
-    "BI-Basic_Simple_Monday": "一",
-    "BI-Basic_Simple_Tuesday": "二",
-    "BI-Basic_Simple_Wednesday": "三",
-    "BI-Basic_Simple_Thursday": "四",
-    "BI-Basic_Simple_Friday": "五",
-    "BI-Basic_Simple_Saturday": "六",
-    "BI-Multi_Date_Year": "年",
-    "BI-Multi_Date_Month": "月",
-    "BI-Multi_Date_Quarter": "季度",
-    "BI-Basic_Unrestricted": "无限制",
-    "BI-Quarter_1": "第1季度",
-    "BI-Quarter_2": "第2季度",
-    "BI-Quarter_3": "第3季度",
-    "BI-Quarter_4": "第4季度",
-    "BI-Basic_Value": "值",
-    "BI-Load_More": "加载更多",
-    "BI-Select_All": "全选",
-    "BI-No_More_Data": "无更多数据",
-    "BI-No_Selected_Value": "没有可选项",
-    "BI-Basic_Clear": "清除",
-    "BI-Multi_Date_Relative_Current_Time": "相对当前时间",
-    "BI-Multi_Date_Year_Prev": "年前",
-    "BI-Multi_Date_Year_Next": "年后",
-    "BI-Multi_Date_Year_Begin": "年初",
-    "BI-Multi_Date_Year_End": "年末",
-    "BI-Multi_Date_Quarter_Prev": "个季度前",
-    "BI-Multi_Date_Quarter_Next": "个季度后",
-    "BI-Multi_Date_Quarter_Begin": "季度初",
-    "BI-Multi_Date_Quarter_End": "季度末",
-    "BI-Multi_Date_Month_Prev": "个月前",
-    "BI-Multi_Date_Month_Next": "个月后",
-    "BI-Multi_Date_Month_Begin": "月初",
-    "BI-Multi_Date_Month_End": "月末",
-    "BI-Multi_Date_Week_Prev": "周前",
-    "BI-Multi_Date_Week_Next": "周后",
-    "BI-Multi_Date_Day_Prev": "天前",
-    "BI-Multi_Date_Day_Next": "天后",
-    "BI-Multi_Date_Today": "今天",
-    "BI-Date_Trigger_Error_Text": "日期格式示例\\:2015-3-11",
-    "BI-Year_Trigger_Invalid_Text": "请输入有效时间",
-    "BI-Multi_Date_YMD": "年/月/日",
-    "BI-Multi_Date_Week": "周",
-    "BI-Multi_Date_Day": "天"
-};$(function () {
+$(function () {
     var ref;
     BI.createWidget({
         type: "demo.main",
@@ -809,7 +752,31 @@ BI.shortcut("demo.formula_editor", Demo.CodeEditor);Demo.CodeEditor = BI.inherit
         }
     }
 });
-BI.shortcut("demo.multifile_editor", Demo.CodeEditor);Demo.CodeEditor = BI.inherit(BI.Widget, {
+BI.shortcut("demo.multifile_editor", Demo.CodeEditor);Demo.RichEditor = BI.inherit(BI.Widget, {
+    props: {
+        baseCls: "demo-rich-editor"
+    },
+    render: function () {
+        this.editor = BI.createWidget({
+            type: "bi.rich_editor",
+            cls: "mvc-border",
+            width: 600,
+            height: 400
+        });
+        BI.createWidget({
+            type: "bi.vertical",
+            element: this,
+            hgap: 30,
+            vgap: 50,
+            items: [this.editor]
+        })
+    },
+
+    mounted: function(){
+        this.editor.setValue('这是一条<font size="4" color="#009de3">测试</font>数据')
+    }
+});
+BI.shortcut("demo.rich_editor", Demo.RichEditor);Demo.CodeEditor = BI.inherit(BI.Widget, {
     props: {
         baseCls: "demo-editor"
     },
@@ -3137,6 +3104,10 @@ BI.shortcut("demo.value_chooser_pane", Demo.ValueChooserPane);Demo.BASE_CONFIG =
     text: "bi.formula_editor",
     value: "demo.formula_editor"
 }, {
+    pId: 202,
+    text: "bi.rich_editor",
+    value: "demo.rich_editor"
+}, {
     pId: 2,
     id: 203,
     text: "tree"
@@ -4487,41 +4458,7 @@ Demo.BorderLayout = BI.inherit(BI.Widget, {
         }
     }
 });
-BI.shortcut("demo.border", Demo.BorderLayout);/**
- * Created by User on 2017/3/22.
- */
-Demo.CenterLayout = BI.inherit(BI.Widget, {
-    props: {
-        baseCls: "demo-center"
-    },
-    render: function () {
-        return {
-            type: "bi.center",
-            items: [{
-                type: "bi.label",
-                text: "Center 1，这里虽然设置label的高度30，但是最终影响高度的是center布局",
-                cls: "layout-bg1",
-                whiteSpace: "normal"
-            },{
-                type: "bi.label",
-                text: "Center 2，为了演示label是占满整个的，用了一个whiteSpace:normal",
-                cls: "layout-bg2",
-                whiteSpace: "normal"
-            },{
-                type: "bi.label",
-                text: "Center 3",
-                cls: "layout-bg3"
-            },{
-                type: "bi.label",
-                text: "Center 4",
-                cls: "layout-bg5"
-            }],
-            hgap: 20,
-            vgap: 20
-        }
-    }
-});
-BI.shortcut("demo.center_layout", Demo.CenterLayout);Demo.CenterAdapt = BI.inherit(BI.Widget, {
+BI.shortcut("demo.border", Demo.BorderLayout);Demo.CenterAdapt = BI.inherit(BI.Widget, {
     props: {
         baseCls: "demo-absolute"
     },
@@ -4602,6 +4539,40 @@ BI.shortcut("demo.center_layout", Demo.CenterLayout);Demo.CenterAdapt = BI.inher
     },
 });
 BI.shortcut("demo.center_adapt", Demo.CenterAdapt);/**
+ * Created by User on 2017/3/22.
+ */
+Demo.CenterLayout = BI.inherit(BI.Widget, {
+    props: {
+        baseCls: "demo-center"
+    },
+    render: function () {
+        return {
+            type: "bi.center",
+            items: [{
+                type: "bi.label",
+                text: "Center 1，这里虽然设置label的高度30，但是最终影响高度的是center布局",
+                cls: "layout-bg1",
+                whiteSpace: "normal"
+            },{
+                type: "bi.label",
+                text: "Center 2，为了演示label是占满整个的，用了一个whiteSpace:normal",
+                cls: "layout-bg2",
+                whiteSpace: "normal"
+            },{
+                type: "bi.label",
+                text: "Center 3",
+                cls: "layout-bg3"
+            },{
+                type: "bi.label",
+                text: "Center 4",
+                cls: "layout-bg5"
+            }],
+            hgap: 20,
+            vgap: 20
+        }
+    }
+});
+BI.shortcut("demo.center_layout", Demo.CenterLayout);/**
  * Created by User on 2017/3/22.
  */
 Demo.FloatCenterLayout = BI.inherit(BI.Widget, {
@@ -4848,55 +4819,6 @@ Demo.GridLayout = BI.inherit(BI.Widget, {
     }
 });
 BI.shortcut("demo.grid", Demo.GridLayout);/**
- * Created by User on 2017/3/21.
- */
-Demo.Horizontal = BI.inherit(BI.Widget, {
-    props: {
-        baseCls: "demo-horizontal"
-    },
-    render: function () {
-        return {
-            type: "bi.vertical",
-            items: [{
-                type: "bi.horizontal",
-                items: [{
-                    type: "bi.absolute",
-                    items: [{
-                        el: {
-                            type: "bi.text_button",
-                            cls: "layout-bg1",
-                            text: "这里设置了lgap(左边距)，rgap(右边距)，tgap(上边距)，bgap(下边距)这里设置了lgap(左边距)，rgap(右边距)，tgap(上边距)，bgap(下边距)",
-                            height: 30
-                        },
-                        left: 0,
-                        right: 0
-                    }],
-                    width: 100,
-                    height: 30
-                }, {
-                    type: "bi.absolute",
-                    items: [{
-                        el: {
-                            type: "bi.text_button",
-                            cls: "layout-bg2",
-                            text: "这里设置了lgap(左边距)，rgap(右边距)，tgap(上边距)，bgap(下边距)这里设置了lgap(左边距)，rgap(右边距)，tgap(上边距)，bgap(下边距)",
-                            height: 30
-                        },
-                        left: 0,
-                        right: 0
-                    }],
-                    width: 200,
-                    height: 30
-                }]
-            }],
-            lgap: 20,
-            rgap: 80,
-            tgap: 80,
-            bgap: 50
-        }
-    }
-});
-BI.shortcut("demo.horizontal", Demo.Horizontal);/**
  * Created by User on 2017/3/22.
  */
 Demo.HorizontalAdapt = BI.inherit(BI.Widget, {
@@ -5013,6 +4935,55 @@ Demo.HorizontalFloat = BI.inherit(BI.Widget, {
     }
 });
 BI.shortcut("demo.horizontal_float", Demo.HorizontalFloat);/**
+ * Created by User on 2017/3/21.
+ */
+Demo.Horizontal = BI.inherit(BI.Widget, {
+    props: {
+        baseCls: "demo-horizontal"
+    },
+    render: function () {
+        return {
+            type: "bi.vertical",
+            items: [{
+                type: "bi.horizontal",
+                items: [{
+                    type: "bi.absolute",
+                    items: [{
+                        el: {
+                            type: "bi.text_button",
+                            cls: "layout-bg1",
+                            text: "这里设置了lgap(左边距)，rgap(右边距)，tgap(上边距)，bgap(下边距)这里设置了lgap(左边距)，rgap(右边距)，tgap(上边距)，bgap(下边距)",
+                            height: 30
+                        },
+                        left: 0,
+                        right: 0
+                    }],
+                    width: 100,
+                    height: 30
+                }, {
+                    type: "bi.absolute",
+                    items: [{
+                        el: {
+                            type: "bi.text_button",
+                            cls: "layout-bg2",
+                            text: "这里设置了lgap(左边距)，rgap(右边距)，tgap(上边距)，bgap(下边距)这里设置了lgap(左边距)，rgap(右边距)，tgap(上边距)，bgap(下边距)",
+                            height: 30
+                        },
+                        left: 0,
+                        right: 0
+                    }],
+                    width: 200,
+                    height: 30
+                }]
+            }],
+            lgap: 20,
+            rgap: 80,
+            tgap: 80,
+            bgap: 50
+        }
+    }
+});
+BI.shortcut("demo.horizontal", Demo.Horizontal);/**
  * Created by User on 2017/3/22.
  */
 Demo.HtapeLayout = BI.inherit(BI.Widget, {
@@ -5358,30 +5329,6 @@ Demo.TdLayout = BI.inherit(BI.Widget, {
     }
 });
 BI.shortcut("demo.td", Demo.TdLayout);/**
- * Created by User on 2017/3/21.
- */
-Demo.VerticalLayout = BI.inherit(BI.Widget, {
-    props: {
-        baseCls: "demo-vertical"
-    },
-    render: function () {
-        return {
-            type: "bi.vertical",
-            items: [{
-                type: "bi.label",
-                cls: "layout-bg1",
-                text: "这里设置了hgap(水平间距)，vgap(垂直间距)",
-                height: 30
-            }, {
-                type: "bi.label",
-                cls: "layout-bg2",
-                text: "这里设置了hgap(水平间距)，vgap(垂直间距)",
-                height: 30
-            }]
-        }
-    }
-});
-BI.shortcut("demo.vertical", Demo.VerticalLayout);/**
  * Created by User on 2017/3/22.
  */
 Demo.VerticalAdaptLayout = BI.inherit(BI.Widget, {
@@ -5423,6 +5370,30 @@ Demo.VerticalAdaptLayout = BI.inherit(BI.Widget, {
     }
 });
 BI.shortcut("demo.vertical_adapt", Demo.VerticalAdaptLayout);/**
+ * Created by User on 2017/3/21.
+ */
+Demo.VerticalLayout = BI.inherit(BI.Widget, {
+    props: {
+        baseCls: "demo-vertical"
+    },
+    render: function () {
+        return {
+            type: "bi.vertical",
+            items: [{
+                type: "bi.label",
+                cls: "layout-bg1",
+                text: "这里设置了hgap(水平间距)，vgap(垂直间距)",
+                height: 30
+            }, {
+                type: "bi.label",
+                cls: "layout-bg2",
+                text: "这里设置了hgap(水平间距)，vgap(垂直间距)",
+                height: 30
+            }]
+        }
+    }
+});
+BI.shortcut("demo.vertical", Demo.VerticalLayout);/**
  * Created by User on 2017/3/22.
  */
 Demo.VtapeLayout = BI.inherit(BI.Widget, {
@@ -8448,6 +8419,7 @@ Demo.Slider = BI.inherit(BI.Widget, {
 
         var singleSlider = BI.createWidget({
             type: "bi.single_slider",
+            digit: 0,
             width: 300,
             height: 50
         });
@@ -8457,21 +8429,36 @@ Demo.Slider = BI.inherit(BI.Widget, {
             max: 100
         });
 
+        singleSlider.setValue(30);
         singleSlider.populate();
+        singleSlider.on(BI.SingleSlider.EVENT_CHANGE, function () {
+            console.log(this.getValue());
+        });
+
+        var singleSliderLabel = BI.createWidget({
+            type: "bi.single_slider_label",
+            height: 30,
+            width: 300,
+            digit: 0,
+            unit: "个"
+        });
+        singleSliderLabel.setMinAndMax({
+            min: 0,
+            max: 100
+        });
+        singleSliderLabel.setValue(10);
+        singleSliderLabel.populate();
 
         var normalSingleSlider = BI.createWidget({
             type: "bi.single_slider_normal",
             height: 30,
             width: 300
         });
-
         normalSingleSlider.setMinAndMax({
             min: 0,
             max: 100
         });
-
         normalSingleSlider.setValue(10);
-
         normalSingleSlider.populate();
 
         BI.createWidget({
@@ -8490,6 +8477,14 @@ Demo.Slider = BI.inherit(BI.Widget, {
                     type: "bi.center_adapt",
                     items: [{
                         el: normalSingleSlider
+                    }]
+                },
+                height: 200
+            }, {
+                el: {
+                    type: "bi.center_adapt",
+                    items: [{
+                        el: singleSliderLabel
                     }]
                 },
                 height: 200

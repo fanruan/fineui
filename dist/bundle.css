@@ -220,6 +220,13 @@ input::-moz-focus-inner {
   border: 0;
   padding: 0;
 }
+input::-webkit-contacts-auto-fill-button {
+  visibility: hidden;
+  display: none !important;
+  pointer-events: none;
+  position: absolute;
+  right: 0;
+}
 textarea {
   overflow: auto;
   vertical-align: top;
@@ -267,7 +274,6 @@ li {
   list-style-type: none;
 }
 i {
-  font-style: normal;
   -webkit-font-smoothing: antialiased;
   -webkit-text-stroke-width: 0.2px;
   -moz-osx-font-smoothing: grayscale;
@@ -1338,6 +1344,32 @@ i {
   -o-flex-wrap: nowrap;
   flex-wrap: nowrap;
 }
+.bi-flex-vertical-center.stretch {
+  /* 09版 */
+  -webkit-box-orient: vertical;
+  /* 12版 */
+  -webkit-flex-direction: column;
+  -moz-flex-direction: column;
+  -ms-flex-direction: column;
+  -o-flex-direction: column;
+  flex-direction: column;
+  /* 09版 */
+  -webkit-box-pack: center;
+  /* 12版 */
+  -webkit-justify-content: center;
+  -moz-justify-content: center;
+  -ms-justify-content: center;
+  -o-justify-content: center;
+  justify-content: center;
+  /* 09版 */
+  -webkit-box-align: stretch;
+  /* 12版 */
+  -webkit-align-items: stretch;
+  -moz-align-items: stretch;
+  -ms-align-items: stretch;
+  -o-align-items: stretch;
+  align-items: stretch;
+}
 .bi-flex-wrapper-center-layout .flex-wrapper-center-layout-wrapper {
   display: box;
   /* OLD - Android 4.4- */
@@ -1493,6 +1525,33 @@ i {
   flex-wrap: nowrap;
   min-height: 100%;
   float: left;
+}
+.bi-flex-wrapper-vertical-center .flex-wrapper-vertical-center-wrapper.stretch {
+  width: 100%;
+  /* 09版 */
+  -webkit-box-orient: vertical;
+  /* 12版 */
+  -webkit-flex-direction: column;
+  -moz-flex-direction: column;
+  -ms-flex-direction: column;
+  -o-flex-direction: column;
+  flex-direction: column;
+  /* 09版 */
+  -webkit-box-pack: center;
+  /* 12版 */
+  -webkit-justify-content: center;
+  -moz-justify-content: center;
+  -ms-justify-content: center;
+  -o-justify-content: center;
+  justify-content: center;
+  /* 09版 */
+  -webkit-box-align: stretch;
+  /* 12版 */
+  -webkit-align-items: stretch;
+  -moz-align-items: stretch;
+  -ms-align-items: stretch;
+  -o-align-items: stretch;
+  align-items: stretch;
 }
 .bi-inline-center-adapt-layout:after {
   display: inline-block;
@@ -1796,10 +1855,11 @@ i {
   color: #00c;
 }
 .cm-s-default span[class*="fieldName"] {
+  display: inline-block;
   color: white;
-  padding: 1px;
-  margin: 1px 0px;
   background: #3f8ce8;
+  padding: 0 5px;
+  margin: 1px 1px;
 }
 .cm-s-default span[class*="start"] {
   -webkit-border-radius: 3px 0px 0px 3px;
@@ -2137,6 +2197,9 @@ li.CodeMirror-hint-active {
 .bi-direction-pager .direction-pager-next {
   font-size: 16px;
 }
+.bi-rich-editor-text-toolbar .text-toolbar-button {
+  font-size: 16px;
+}
 /****** common color(常用颜色,可用于普遍场景) *****/
 /**** custom color(自定义颜色,用于特定场景) ****/
 .bi-segment > .center-element {
@@ -2336,6 +2399,22 @@ li.CodeMirror-hint-active {
 /**** custom color(自定义颜色,用于特定场景) ****/
 /****** common color(常用颜色,可用于普遍场景) *****/
 /**** custom color(自定义颜色,用于特定场景) ****/
+.bi-code-editor .param {
+  color: #ffffff;
+  padding: 0 5px;
+  margin: 1px 1px;
+  -webkit-border-radius: 2px;
+  -moz-border-radius: 2px;
+  border-radius: 2px;
+  background: #3f8ce8;
+  display: inline-block;
+}
+.bi-code-editor .error-param {
+  color: #e85050;
+  padding: 0 5px;
+  margin: 1px 1px;
+  display: inline-block;
+}
 .bi-editor {
   font-size: 12px;
 }
@@ -3206,38 +3285,8 @@ li.CodeMirror-hint-active {
   box-sizing: border-box;
   /*W3C标准(IE9+，Safari5.1+,Chrome10.0+,Opera10.6+都符合box-sizing的w3c标准语法)*/
 }
-/****添加计算宽度的--运算符直接需要space****/
 /****** common color(常用颜色,可用于普遍场景) *****/
 /**** custom color(自定义颜色,用于特定场景) ****/
-.bi-single-slider-button .slider-button {
-  -webkit-box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
-  -moz-box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
-  -webkit-border-radius: 7px;
-  -moz-border-radius: 7px;
-  border-radius: 7px;
-}
-.bi-slider-track .gray-track {
-  background-color: rgba(153, 153, 153, 0.3);
-  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr=#4d999999,endColorstr=#4d999999);
-  -webkit-border-radius: 3px;
-  -moz-border-radius: 3px;
-  border-radius: 3px;
-}
-.bi-slider-track .blue-track {
-  -webkit-border-radius: 3px;
-  -moz-border-radius: 3px;
-  border-radius: 3px;
-}
-/****** common color(常用颜色,可用于普遍场景) *****/
-/**** custom color(自定义颜色,用于特定场景) ****/
-.bi-slider .bi-slider-track {
-  background-color: rgba(153, 153, 153, 0.3);
-  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr=#4d999999,endColorstr=#4d999999);
-  -webkit-border-radius: 3px;
-  -moz-border-radius: 3px;
-  border-radius: 3px;
-}
 .bi-param-time-interval.time-error .bi-input {
   color: #e85050;
 }
@@ -3405,6 +3454,10 @@ textarea::-webkit-scrollbar-thumb:hover {
   src: url('https://fanruan.coding.me/fineui/dist/font/iconfont.eot'), /* IE6-IE8 */ url('https://fanruan.coding.me/fineui/dist/font/iconfont.woff') format('woff'), /* chrome、firefox */ url('https://fanruan.coding.me/fineui/dist/font/iconfont.ttf') format('truetype'), /* chrome、firefox、opera、Safari, Android, iOS 4.2+*/ url('https://fanruan.coding.me/fineui/dist/font/iconfont.svg#svgFontName') format('svg');
   
   /*  iOS 4.1- */
+}
+@font-face {
+  font-family: 'bi';
+  src: url('https://fanruan.coding.me/fineui/dist/font/iconfont.eot') /* IE6-IE8 */;
 }
 .b-font {
   font-family: "bi";
@@ -4130,6 +4183,114 @@ textarea::-webkit-scrollbar-thumb:hover {
 .less-equal-font.native .b-font:before,
 .less-equal-font.disabled .b-font:before {
   content: "\e636";
+  color: inherit;
+}
+.text-bold-font .b-font {
+  *zoom: expression( this.runtimeStyle['zoom'] = '1',this.innerHTML = '&#xe64d;');
+}
+.text-bold-font .b-font:before {
+  content: "\e64d";
+  color: inherit;
+}
+.text-bold-font.native .b-font:before,
+.text-bold-font.disabled .b-font:before {
+  content: "\e64d";
+  color: inherit;
+}
+.text-italic-font .b-font {
+  *zoom: expression( this.runtimeStyle['zoom'] = '1',this.innerHTML = '&#xe656;');
+}
+.text-italic-font .b-font:before {
+  content: "\e656";
+  color: inherit;
+}
+.text-italic-font.native .b-font:before,
+.text-italic-font.disabled .b-font:before {
+  content: "\e656";
+  color: inherit;
+}
+.text-underline-font .b-font {
+  *zoom: expression( this.runtimeStyle['zoom'] = '1',this.innerHTML = '&#xe650;');
+}
+.text-underline-font .b-font:before {
+  content: "\e650";
+  color: inherit;
+}
+.text-underline-font.native .b-font:before,
+.text-underline-font.disabled .b-font:before {
+  content: "\e650";
+  color: inherit;
+}
+.text-color-font .b-font {
+  *zoom: expression( this.runtimeStyle['zoom'] = '1',this.innerHTML = '&#xe69c;');
+}
+.text-color-font .b-font:before {
+  content: "\e69c";
+  color: inherit;
+}
+.text-color-font.native .b-font:before,
+.text-color-font.disabled .b-font:before {
+  content: "\e69c";
+  color: inherit;
+}
+.text-background-font .b-font {
+  *zoom: expression( this.runtimeStyle['zoom'] = '1',this.innerHTML = '&#xe696;');
+}
+.text-background-font .b-font:before {
+  content: "\e696";
+  color: inherit;
+}
+.text-background-font.native .b-font:before,
+.text-background-font.disabled .b-font:before {
+  content: "\e696";
+  color: inherit;
+}
+.text-color-underline-font .b-font {
+  *zoom: expression( this.runtimeStyle['zoom'] = '1',this.innerHTML = '&#xe69d;');
+}
+.text-color-underline-font .b-font:before {
+  content: "\e69d";
+  color: inherit;
+}
+.text-color-underline-font.native .b-font:before,
+.text-color-underline-font.disabled .b-font:before {
+  content: "\e69d";
+  color: inherit;
+}
+.text-align-left-font .b-font {
+  *zoom: expression( this.runtimeStyle['zoom'] = '1',this.innerHTML = '&#xe654;');
+}
+.text-align-left-font .b-font:before {
+  content: "\e654";
+  color: inherit;
+}
+.text-align-left-font.native .b-font:before,
+.text-align-left-font.disabled .b-font:before {
+  content: "\e654";
+  color: inherit;
+}
+.text-align-center-font .b-font {
+  *zoom: expression( this.runtimeStyle['zoom'] = '1',this.innerHTML = '&#xe64f;');
+}
+.text-align-center-font .b-font:before {
+  content: "\e64f";
+  color: inherit;
+}
+.text-align-center-font.native .b-font:before,
+.text-align-center-font.disabled .b-font:before {
+  content: "\e64f";
+  color: inherit;
+}
+.text-align-right-font .b-font {
+  *zoom: expression( this.runtimeStyle['zoom'] = '1',this.innerHTML = '&#xe651;');
+}
+.text-align-right-font .b-font:before {
+  content: "\e651";
+  color: inherit;
+}
+.text-align-right-font.native .b-font:before,
+.text-align-right-font.disabled .b-font:before {
+  content: "\e651";
   color: inherit;
 }
 .tree-collapse-icon-type1 .x-icon,
