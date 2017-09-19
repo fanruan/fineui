@@ -200,6 +200,150 @@
     }
 
 }));/**
+ * jQuery "splendid textchange" plugin
+ * http://benalpert.com/2013/06/18/a-near-perfect-oninput-shim-for-ie-8-and-9.html
+ *
+ * (c) 2013 Ben Alpert, released under the MIT license
+ */
+
+(function($) {
+
+    var testNode = document.createElement("input");
+    var isInputSupported = "oninput" in testNode &&
+        (!("documentMode" in document) || document.documentMode > 9);
+
+    var hasInputCapabilities = function(elem) {
+        // The HTML5 spec lists many more types than `text` and `password` on
+        // which the input event is triggered but none of them exist in IE 8 or
+        // 9, so we don't check them here.
+        // TODO: <textarea> should be supported too but IE seems to reset the
+        // selection when changing textarea contents during a selectionchange
+        // event so it's not listed here for now.
+        return elem.nodeName === "INPUT" &&
+            (elem.type === "text" || elem.type === "password");
+    };
+
+    var activeElement = null;
+    var activeElementValue = null;
+    var activeElementValueProp = null;
+
+    /**
+     * (For old IE.) Replacement getter/setter for the `value` property that
+     * gets set on the active element.
+     */
+    var newValueProp =  {
+        get: function() {
+            return activeElementValueProp.get.call(this);
+        },
+        set: function(val) {
+            activeElementValue = val;
+            activeElementValueProp.set.call(this, val);
+        }
+    };
+
+    /**
+     * (For old IE.) Starts tracking propertychange events on the passed-in element
+     * and override the value property so that we can distinguish user events from
+     * value changes in JS.
+     */
+    var startWatching = function(target) {
+        activeElement = target;
+        activeElementValue = target.value;
+        activeElementValueProp = Object.getOwnPropertyDescriptor(
+            target.constructor.prototype, "value");
+
+        Object.defineProperty(activeElement, "value", newValueProp);
+        activeElement.attachEvent("onpropertychange", handlePropertyChange);
+    };
+
+    /**
+     * (For old IE.) Removes the event listeners from the currently-tracked
+     * element, if any exists.
+     */
+    var stopWatching = function() {
+        if (!activeElement) return;
+
+        // delete restores the original property definition
+        delete activeElement.value;
+        activeElement.detachEvent("onpropertychange", handlePropertyChange);
+
+        activeElement = null;
+        activeElementValue = null;
+        activeElementValueProp = null;
+    };
+
+    /**
+     * (For old IE.) Handles a propertychange event, sending a textChange event if
+     * the value of the active element has changed.
+     */
+    var handlePropertyChange = function(nativeEvent) {
+        if (nativeEvent.propertyName !== "value") return;
+
+        var value = nativeEvent.srcElement.value;
+        if (value === activeElementValue) return;
+        activeElementValue = value;
+
+        $(activeElement).trigger("textchange");
+    };
+
+    if (isInputSupported) {
+        $(document)
+            .on("input", function(e) {
+                // In modern browsers (i.e., not IE 8 or 9), the input event is
+                // exactly what we want so fall through here and trigger the
+                // event...
+                if (e.target.nodeName !== "TEXTAREA") {
+                    // ...unless it's a textarea, in which case we don't fire an
+                    // event (so that we have consistency with our old-IE shim).
+                    $(e.target).trigger("textchange");
+                }
+            });
+    } else {
+        $(document)
+            .on("focusin", function(e) {
+                // In IE 8, we can capture almost all .value changes by adding a
+                // propertychange handler and looking for events with propertyName
+                // equal to 'value'.
+                // In IE 9, propertychange fires for most input events but is buggy
+                // and doesn't fire when text is deleted, but conveniently,
+                // selectionchange appears to fire in all of the remaining cases so
+                // we catch those and forward the event if the value has changed.
+                // In either case, we don't want to call the event handler if the
+                // value is changed from JS so we redefine a setter for `.value`
+                // that updates our activeElementValue variable, allowing us to
+                // ignore those changes.
+                if (hasInputCapabilities(e.target)) {
+                    // stopWatching() should be a noop here but we call it just in
+                    // case we missed a blur event somehow.
+                    stopWatching();
+                    startWatching(e.target);
+                }
+            })
+
+            .on("focusout", function() {
+                stopWatching();
+            })
+
+            .on("selectionchange keyup keydown", function() {
+                // On the selectionchange event, e.target is just document which
+                // isn't helpful for us so just check activeElement instead.
+                //
+                // 90% of the time, keydown and keyup aren't necessary. IE 8 fails
+                // to fire propertychange on the first input event after setting
+                // `value` from a script and fires only keydown, keypress, keyup.
+                // Catching keyup usually gets it and catching keydown lets us fire
+                // an event for the first keystroke if user does a key repeat
+                // (it'll be a little delayed: right before the second keystroke).
+                // Other input methods (e.g., paste) seem to fire selectionchange
+                // normally.
+                if (activeElement && activeElement.value !== activeElementValue) {
+                    activeElementValue = activeElement.value;
+                    $(activeElement).trigger("textchange");
+                }
+            });
+    }
+
+})(jQuery);/**
  * 当没有元素时有提示信息的view
  *
  * Created by GUY on 2015/9/8.
@@ -16087,9 +16231,8 @@ BI.Pager = BI.inherit(BI.Widget, {
 BI.Pager.EVENT_CHANGE = "EVENT_CHANGE";
 BI.Pager.EVENT_AFTER_POPULATE = "EVENT_AFTER_POPULATE";
 BI.shortcut("bi.pager", BI.Pager);/**
- * 颜色选择
  *
- * Created by GUY on 2015/11/26.
+ * Created by GUY on 2017/09/18.
  * @class BI.TextToolbar
  * @extends BI.Widget
  */
@@ -16105,14 +16248,15 @@ BI.RichEditorAction = BI.inherit(BI.Widget, {
     _init: function () {
         BI.RichEditorAction.superclass._init.apply(this, arguments);
         var self = this, o = this.options;
-        o.editor.on(BI.NicEditor.EVENT_SELECTED, function (ins, e) {
+        o.editor.on(BI.NicEditor.EVENT_SELECTED, function (e) {
             self.setEnable(true);
             self.checkNodes(e.target);
-            self.key(e)
+            self.key(e);
         });
         o.editor.on(BI.NicEditor.EVENT_BLUR, function () {
             self.setEnable(false);
         });
+        o.editor.on(BI.NicEditor.EVENT_KEYDOWN, BI.bind(this.keydown, this));
     },
 
     checkNodes: function (e) {
@@ -16146,6 +16290,9 @@ BI.RichEditorAction = BI.inherit(BI.Widget, {
 
     },
 
+    keydown: function () {
+    },
+
     activate: function () {
     },
 
@@ -16156,6 +16303,116 @@ BI.RichEditorAction = BI.inherit(BI.Widget, {
         if (this.options.command) {
             this.options.editor.nicCommand(this.options.command, args);
         }
+    }
+});/**
+ *
+ * Created by GUY on 2017/09/18.
+ * @class BI.RichEditorParamAction
+ * @extends BI.Widget
+ */
+BI.RichEditorParamAction = BI.inherit(BI.RichEditorAction, {
+    _defaultConfig: function () {
+        return BI.extend(BI.RichEditorParamAction.superclass._defaultConfig.apply(this, arguments), {});
+    },
+
+    _init: function () {
+        BI.RichEditorParamAction.superclass._init.apply(this, arguments);
+        this.options.editor.instance.getElm().element.on("textchange", BI.bind(this._checkParam, this));
+    },
+
+    _checkParam: function (e) {
+        var o = this.options;
+        var instance = o.editor.selectedInstance;
+        var wrapper = instance.getElm().element;
+        var sel = $(instance.selElm());
+        if (sel[0].nodeType === 3 && wrapper.find(sel.parent()).length > 0) {
+            sel = sel.parent();
+        }
+        var value = sel.attr("data-value");
+        var text = sel.text();
+        text = BI.trim(text.replaceAll("　", ""));
+        //检查光标前一个元素
+        if (sel.attr("data-type") === "param" && text !== value) {
+            if (text.indexOf(value) === 0) {
+                var extra = sel.text().slice(value.length);
+                if (extra.length > 0) {
+                    var span = $("<span>").text(extra);
+                    sel.after(span);
+                    sel.text(sel.attr("data-value"));
+                    instance.setFocus(span[0]);
+                }
+            } else {
+                sel.text(sel.attr("data-value"));
+            }
+        }
+        //检查光标后一个元素
+        if (sel.next().attr("data-type") === "param" && sel.next().text() !== sel.next().attr("data-value")) {
+            sel.next().destroy();
+        }
+    },
+
+    addParam: function (param) {
+        var o = this.options;
+        var instance = o.editor.selectedInstance;
+        var sel = $(instance.selElm());
+        var $param = $("<span>").attr({
+            "data-type": "param",
+            "data-value": param
+        }).css({
+            color: "white",
+            backgroundColor: "#009de3",
+            padding: "0 5px"
+        }).text(param).mousedown(function (e) {
+            e.stopEvent();
+            return false;
+        });
+        var wrapper = o.editor.instance.getElm().element;
+        if (wrapper.find(sel).length <= 0) {
+            wrapper.append($param);
+            instance.setFocus($param[0]);
+            return;
+        }
+        var ln = sel.closest("a");
+        if (ln.length === 0) {
+            if (sel[0].nodeType === 3 && wrapper.find(sel.parent()).length > 0) {
+                sel.parent().after($param);
+            } else {
+                sel.after($param)
+            }
+            instance.setFocus($param[0]);
+        }
+    },
+
+    keydown: function (e) {
+        var o = this.options;
+        var instance = o.editor.selectedInstance;
+        var wrapper = instance.getElm().element;
+        var sel = $(instance.selElm());
+        if (sel[0].nodeType === 3 && wrapper.find(sel.parent()).length > 0) {
+            sel = sel.parent();
+        }
+        if (BI.Key[e.keyCode]) {
+            if (sel.attr("data-type") === "param") {
+                var key = BI.Key[e.keyCode];
+                key = e.shiftKey ? key.toUpperCase() : key;
+                var span = $("<span>").text(key);
+                sel.after(span);
+                sel.text(sel.attr("data-value"));
+                instance.setFocus(span[0]);
+                e.stopEvent();
+                return false;
+            }
+        }
+        if (e.keyCode === BI.KeyCode.BACKSPACE) {
+            if (sel.attr("data-type") === "param") {//删除后鼠标停留在参数中间
+                sel.destroy();
+                e.stopEvent();
+                return false;
+            }
+        }
+    },
+
+    key: function (e) {
     }
 });/**
  * 颜色选择
@@ -16277,7 +16534,7 @@ BI.shortcut('bi.rich_editor_text_toolbar', BI.RichEditorTextToolbar);/**
                     // return false;
                 }
             } while (t = t.parentNode);
-            this.fireEvent('blur', this.selectedInstance, t);
+            this.fireEvent('blur', t);
             this.lastSelectedInstance = this.selectedInstance;
             this.selectedInstance = null;
             // return false;
@@ -16297,7 +16554,7 @@ BI.shortcut('bi.rich_editor_text_toolbar', BI.RichEditorTextToolbar);/**
     });
     BI.NicEditor.EVENT_SELECTED = "selected";
     BI.NicEditor.EVENT_BLUR = "blur";
-    BI.NicEditor.EVENT_KEY = "key";
+    BI.NicEditor.EVENT_KEYDOWN = "keydown";
     BI.shortcut('bi.nic_editor', BI.NicEditor);
 
     var prefix = "niceditor-";
@@ -16346,11 +16603,11 @@ BI.shortcut('bi.rich_editor_text_toolbar', BI.RichEditorTextToolbar);/**
             }
             this.instanceDoc = document.defaultView;
             this.elm.element.on('mousedown', BI.bind(this.selected, this));
-            this.elm.element.on('keypress', BI.bind(this.keyDown, this));
+            this.elm.element.on('keydown', BI.bind(this.keyDown, this));
             this.elm.element.on('focus', BI.bind(this.selected, this));
             this.elm.element.on('blur', BI.bind(this.blur, this));
             this.elm.element.on('keyup', BI.bind(this.selected, this));
-            this.ne.fireEvent('add', this);
+            this.ne.fireEvent('add');
         },
 
         disable: function () {
@@ -16406,6 +16663,37 @@ BI.shortcut('bi.rich_editor_text_toolbar', BI.RichEditorTextToolbar);/**
             this.savedSel = this.getSel();
         },
 
+        setFocus: function (el) {
+            try {
+                el.focus();
+            } catch (e) {
+
+            }
+            if (!window.getSelection) {
+                var rng;
+                try {
+                    el.focus();
+                } catch (e) {
+
+                }
+                rng = document.selection.createRange();
+                rng.moveStart('character', -el.innerText.length);
+                var text = rng.text;
+                for (var i = 0; i < el.innerText.length; i++) {
+                    if (el.innerText.substring(0, i + 1) == text.substring(text.length - i - 1, text.length)) {
+                        result = i + 1;
+                    }
+                }
+            } else {
+                var range = document.createRange();
+                range.selectNodeContents(el);
+                range.collapse(false);
+                var sel = window.getSelection();
+                sel.removeAllRanges();
+                sel.addRange(range);
+            }
+        },
+
         restoreRng: function () {
             if (this.savedRange) {
                 this.selRng(this.savedRange, this.savedSel);
@@ -16413,9 +16701,7 @@ BI.shortcut('bi.rich_editor_text_toolbar', BI.RichEditorTextToolbar);/**
         },
 
         keyDown: function (e, t) {
-            if (e.ctrlKey) {
-                this.ne.fireEvent('key', this, e);
-            }
+            this.ne.fireEvent('keydown', e);
         },
 
         selected: function (e) {
@@ -16427,12 +16713,12 @@ BI.shortcut('bi.rich_editor_text_toolbar', BI.RichEditorTextToolbar);/**
                 var selInstance = this.ne.selectedInstance;
                 if (selInstance != this) {
                     if (selInstance) {
-                        this.ne.fireEvent('blur', selInstance, e);
+                        this.ne.fireEvent('blur', e);
                     }
                     this.ne.selectedInstance = this;
-                    this.ne.fireEvent('focus', selInstance, e);
+                    this.ne.fireEvent('focus', e);
                 }
-                this.ne.fireEvent('selected', selInstance, e);
+                this.ne.fireEvent('selected', e);
                 this.isFocused = true;
                 this.elm.element.addClass(prefix + 'selected');
             }
@@ -16445,7 +16731,7 @@ BI.shortcut('bi.rich_editor_text_toolbar', BI.RichEditorTextToolbar);/**
         },
 
         saveContent: function () {
-            this.ne.fireEvent('save', this);
+            this.ne.fireEvent('save');
             this.e.element.value(this.getContent());
         },
 
@@ -16455,13 +16741,13 @@ BI.shortcut('bi.rich_editor_text_toolbar', BI.RichEditorTextToolbar);/**
 
         getContent: function () {
             this.content = this.getElm().element.html();
-            this.ne.fireEvent('get', this);
+            this.ne.fireEvent('get');
             return this.content;
         },
 
         setContent: function (e) {
             this.content = e;
-            this.ne.fireEvent('set', this);
+            this.ne.fireEvent('set');
             this.elm.element.html(this.content);
         },
 
@@ -16716,9 +17002,9 @@ BI.shortcut("bi.rich_editor_italic_button", BI.RichEditorItalicButton)/**
  *
  * Created by GUY on 2015/11/26.
  * @class BI.RichEditorParamButton
- * @extends BI.RichEditorAction
+ * @extends BI.RichEditorParamAction
  */
-BI.RichEditorParamButton = BI.inherit(BI.RichEditorAction, {
+BI.RichEditorParamButton = BI.inherit(BI.RichEditorParamAction, {
     _defaultConfig: function () {
         return BI.extend(BI.RichEditorParamButton.superclass._defaultConfig.apply(this, arguments), {
             width: 20,
@@ -16739,32 +17025,13 @@ BI.RichEditorParamButton = BI.inherit(BI.RichEditorAction, {
             width: 30
         });
         this.param.on(BI.Button.EVENT_CHANGE, function () {
-            var sel = $(o.editor.selectedInstance.selElm());
-            var param = "<span data-type='param' style='background-color: #009de3;color:white;padding:0 5px;'>参数</span>"
-            if (o.editor.instance.getElm().element.find(sel).length <= 0) {
-                o.editor.instance.getElm().element.append(param);
-                return;
-            }
-            var ln = sel.closest("a");
-            if (ln.length === 0) {
-                sel.after(param)
-            }
+            self.addParam("参数")
         });
     },
     activate: function () {
     },
 
     deactivate: function () {
-    },
-
-    key: function (e) {
-        var o = this.options;
-        if (e.keyCode === BI.KeyCode.BACKSPACE) {
-            var sel = $(o.editor.selectedInstance.selElm()).parent();
-            if (sel.attr("data-type") === "param") {
-                sel.destroy();
-            }
-        }
     }
 });
 BI.shortcut("bi.rich_editor_param_button", BI.RichEditorParamButton)/**
