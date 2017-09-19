@@ -429,8 +429,38 @@
   box-sizing: border-box;
   /*W3C标准(IE9+，Safari5.1+,Chrome10.0+,Opera10.6+都符合box-sizing的w3c标准语法)*/
 }
+/****添加计算宽度的--运算符直接需要space****/
 /****** common color(常用颜色,可用于普遍场景) *****/
 /**** custom color(自定义颜色,用于特定场景) ****/
+.bi-single-slider-button .slider-button {
+  -webkit-box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+  -moz-box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+  -webkit-border-radius: 7px;
+  -moz-border-radius: 7px;
+  border-radius: 7px;
+}
+.bi-slider-track .gray-track {
+  background-color: rgba(153, 153, 153, 0.3);
+  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr=#4d999999,endColorstr=#4d999999);
+  -webkit-border-radius: 3px;
+  -moz-border-radius: 3px;
+  border-radius: 3px;
+}
+.bi-slider-track .blue-track {
+  -webkit-border-radius: 3px;
+  -moz-border-radius: 3px;
+  border-radius: 3px;
+}
+/****** common color(常用颜色,可用于普遍场景) *****/
+/**** custom color(自定义颜色,用于特定场景) ****/
+.bi-slider .bi-slider-track {
+  background-color: rgba(153, 153, 153, 0.3);
+  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr=#4d999999,endColorstr=#4d999999);
+  -webkit-border-radius: 3px;
+  -moz-border-radius: 3px;
+  border-radius: 3px;
+}
 .bi-param-time-interval.time-error .bi-input {
   color: #e85050;
 }
