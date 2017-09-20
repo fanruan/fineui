@@ -2470,20 +2470,6 @@ BI.createWidget({
 </thead>
 <tbody>
 <tr>
-<td style="text-align:left">behaviors</td>
-<td style="text-align:left">&#x81EA;&#x5B9A;&#x4E49;&#x5217;&#x8868;&#x4E2D;item&#x9879;&#x7684;&#x884C;&#x4E3A;&#xFF0C;&#x5982;&#x9AD8;&#x4EAE;&#xFF0C;&#x6807;&#x7EA2;&#x7B49;</td>
-<td style="text-align:left">object</td>
-<td style="text-align:left">&#x2014;</td>
-<td style="text-align:left">{}</td>
-</tr>
-<tr>
-<td style="text-align:left">layouts</td>
-<td style="text-align:left">&#x5E03;&#x5C40;</td>
-<td style="text-align:left">array</td>
-<td style="text-align:left">&#x2014;</td>
-<td style="text-align:left">{type:&quot;bi.horizontal&quot;,hgap:10,vgap:0}</td>
-</tr>
-<tr>
 <td style="text-align:left">dynamicShow</td>
 <td style="text-align:left">&#x662F;&#x5426;&#x52A8;&#x6001;&#x663E;&#x793A;&#x4E0A;&#x4E00;&#x9875;&#x3001;&#x4E0B;&#x4E00;&#x9875;&#x3001;&#x9996;&#x9875;&#x3001;&#x5C3E;&#x9875;&#xFF0C; &#x82E5;&#x4E3A;false&#xFF0C;&#x5219;&#x6307;&#x5BF9;&#x5176;&#x8BBE;&#x7F6E;&#x4F7F;&#x80FD;&#x72B6;&#x6001;</td>
 <td style="text-align:left">boolean</td>
@@ -2507,8 +2493,8 @@ BI.createWidget({
 <tr>
 <td style="text-align:left">pages</td>
 <td style="text-align:left">&#x662F;&#x5426;&#x663E;&#x793A;&#x603B;&#x9875;&#x6570;</td>
-<td style="text-align:left">boolean</td>
-<td style="text-align:left">true,false</td>
+<td style="text-align:left">boolean/number</td>
+<td style="text-align:left">true,false,number</td>
 <td style="text-align:left">false</td>
 </tr>
 <tr>
@@ -2691,7 +2677,7 @@ BI.createWidget({
     <script>
         var gitbook = gitbook || [];
         gitbook.push(function() {
-            gitbook.page.hasChanged({"page":{"title":"pager","level":"4.8","depth":1,"next":{"title":"svg","level":"4.9","depth":1,"path":"base/svg.md","ref":"base/svg.md","articles":[]},"previous":{"title":"resizable_table","level":"4.7.4","depth":2,"path":"base/table/resizable_table.md","ref":"base/table/resizable_table.md","articles":[]},"dir":"ltr"},"config":{"gitbook":"*","theme":"default","variables":{},"plugins":["jsfiddle","splitter","theme-api","expandable-chapters","livereload"],"pluginsConfig":{"livereload":{},"jsfiddle":{"type":"script","tabs":["result","js","html"],"height":"100","width":"500","fontColor":"00FF00"},"splitter":{},"search":{},"lunr":{"maxIndexSize":1000000,"ignoreSpecialCharacters":false},"fontsettings":{"theme":"white","family":"sans","size":2},"highlight":{},"theme-api":{"languages":[],"split":true,"theme":"light"},"sharing":{"facebook":true,"twitter":true,"google":false,"weibo":false,"instapaper":false,"vk":false,"all":["facebook","google","twitter","weibo","instapaper"]},"theme-default":{"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"showLevel":false},"expandable-chapters":{}},"structure":{"langs":"LANGS.md","readme":"README.md","glossary":"GLOSSARY.md","summary":"SUMMARY.md"},"pdf":{"pageNumbers":true,"fontSize":12,"fontFamily":"Arial","paperSize":"a4","chapterMark":"pagebreak","pageBreaksBefore":"/","margin":{"right":62,"left":62,"top":56,"bottom":56}},"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"}},"file":{"path":"base/pager.md","mtime":"2017-09-17T09:27:52.475Z","type":"markdown"},"gitbook":{"version":"3.2.3","time":"2017-09-20T08:46:20.890Z"},"basePath":"..","book":{"language":""}});
+            gitbook.page.hasChanged({"page":{"title":"pager","level":"4.8","depth":1,"next":{"title":"svg","level":"4.9","depth":1,"path":"base/svg.md","ref":"base/svg.md","articles":[]},"previous":{"title":"resizable_table","level":"4.7.4","depth":2,"path":"base/table/resizable_table.md","ref":"base/table/resizable_table.md","articles":[]},"dir":"ltr"},"config":{"gitbook":"*","theme":"default","variables":{},"plugins":["jsfiddle","splitter","theme-api","expandable-chapters","livereload"],"pluginsConfig":{"livereload":{},"jsfiddle":{"type":"script","tabs":["result","js","html"],"height":"100","width":"500","fontColor":"00FF00"},"splitter":{},"search":{},"lunr":{"maxIndexSize":1000000,"ignoreSpecialCharacters":false},"fontsettings":{"theme":"white","family":"sans","size":2},"highlight":{},"theme-api":{"languages":[],"split":true,"theme":"light"},"sharing":{"facebook":true,"twitter":true,"google":false,"weibo":false,"instapaper":false,"vk":false,"all":["facebook","google","twitter","weibo","instapaper"]},"theme-default":{"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"showLevel":false},"expandable-chapters":{}},"structure":{"langs":"LANGS.md","readme":"README.md","glossary":"GLOSSARY.md","summary":"SUMMARY.md"},"pdf":{"pageNumbers":true,"fontSize":12,"fontFamily":"Arial","paperSize":"a4","chapterMark":"pagebreak","pageBreaksBefore":"/","margin":{"right":62,"left":62,"top":56,"bottom":56}},"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"}},"file":{"path":"base/pager.md","mtime":"2017-09-20T09:23:34.456Z","type":"markdown"},"gitbook":{"version":"3.2.3","time":"2017-09-20T08:46:20.890Z"},"basePath":"..","book":{"language":""}});
         });
     </script>
 </div>
