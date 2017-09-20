@@ -7,11 +7,15 @@ For more details, see the website [http://www.fanruan.com](http://www.fanruan.co
 
 Documentation
 =============
-## Demo
 
 GithubPages: [https://fanruan.github.io/fineui](https://fanruan.github.io/fineui)
 
 CodingPages: [http://fanruan.coding.me/fineui](http://fanruan.coding.me/fineui)
+
+Demo
+=============
+
+CodingPages: [http://fanruan.coding.me/fineui/dist/index.html](http://fanruan.coding.me/fineui/dist/index.html)
 
 
 License

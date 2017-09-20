@@ -45176,10 +45176,26 @@ BI.RichEditorParamAction = BI.inherit(BI.RichEditorAction, {
 
     _init: function () {
         BI.RichEditorParamAction.superclass._init.apply(this, arguments);
-        this.options.editor.instance.getElm().element.on("textchange", BI.bind(this._checkParam, this));
     },
 
-    _checkParam: function (e) {
+    _isParam: function (sel) {
+        return sel.attr("data-type") === "param";
+    },
+
+    _addBlank: function ($param) {
+        var o = this.options;
+        var instance = o.editor.selectedInstance;
+        var next = $param.next();
+        if (next.length === 0 || this._isParam(next)) {
+            var node = $("<span>").html("&nbsp;")[0];
+            $param.after(node);
+            instance.setFocus(node);
+        } else {
+            instance.setFocus(next[0]);
+        }
+    },
+
+    _get$Sel: function () {
         var o = this.options;
         var instance = o.editor.selectedInstance;
         var wrapper = instance.getElm().element;
@@ -45187,33 +45203,12 @@ BI.RichEditorParamAction = BI.inherit(BI.RichEditorAction, {
         if (sel[0].nodeType === 3 && wrapper.find(sel.parent()).length > 0) {
             sel = sel.parent();
         }
-        var value = sel.attr("data-value");
-        var text = sel.text();
-        text = BI.trim(text.replaceAll("　", ""));
-        //检查光标前一个元素
-        if (sel.attr("data-type") === "param" && text !== value) {
-            if (text.indexOf(value) === 0) {
-                var extra = sel.text().slice(value.length);
-                if (extra.length > 0) {
-                    var span = $("<span>").text(extra);
-                    sel.after(span);
-                    sel.text(sel.attr("data-value"));
-                    instance.setFocus(span[0]);
-                }
-            } else {
-                sel.text(sel.attr("data-value"));
-            }
-        }
-        //检查光标后一个元素
-        if (sel.next().attr("data-type") === "param" && sel.next().text() !== sel.next().attr("data-value")) {
-            sel.next().destroy();
-        }
+        return sel;
     },
 
     addParam: function (param) {
         var o = this.options;
-        var instance = o.editor.selectedInstance;
-        var sel = $(instance.selElm());
+        var sel = this._get$Sel();
         var $param = $("<span>").attr({
             "data-type": "param",
             "data-value": param
@@ -45228,44 +45223,32 @@ BI.RichEditorParamAction = BI.inherit(BI.RichEditorAction, {
         var wrapper = o.editor.instance.getElm().element;
         if (wrapper.find(sel).length <= 0) {
             wrapper.append($param);
-            instance.setFocus($param[0]);
-            return;
+        } else {
+            sel.after($param);
         }
-        var ln = sel.closest("a");
-        if (ln.length === 0) {
-            if (sel[0].nodeType === 3 && wrapper.find(sel.parent()).length > 0) {
-                sel.parent().after($param);
-            } else {
-                sel.after($param)
-            }
-            instance.setFocus($param[0]);
-        }
+        this._addBlank($param);
     },
 
     keydown: function (e) {
         var o = this.options;
-        var instance = o.editor.selectedInstance;
-        var wrapper = instance.getElm().element;
-        var sel = $(instance.selElm());
-        if (sel[0].nodeType === 3 && wrapper.find(sel.parent()).length > 0) {
-            sel = sel.parent();
+        var sel = this._get$Sel();
+        if (e.keyCode === 229) {//中文输入法
+            if (this._isParam(sel)) {
+                this._addBlank(sel);
+                e.stopEvent();
+                return false;
+            }
         }
-        if (BI.Key[e.keyCode]) {
-            if (sel.attr("data-type") === "param") {
-                var key = BI.Key[e.keyCode];
-                key = e.shiftKey ? key.toUpperCase() : key;
-                var span = $("<span>").text(key);
-                sel.after(span);
-                sel.text(sel.attr("data-value"));
-                instance.setFocus(span[0]);
+        if (BI.Key[e.keyCode] || e.keyCode === BI.KeyCode.TAB || e.keyCode === BI.KeyCode.ENTER || e.keyCode === BI.KeyCode.SPACE) {
+            if (this._isParam(sel)) {
                 e.stopEvent();
                 return false;
             }
         }
         if (e.keyCode === BI.KeyCode.BACKSPACE) {
-            if (sel.attr("data-type") === "param") {//删除后鼠标停留在参数中间
+            if (this._isParam(sel)) {
                 sel.destroy();
-                e.stopEvent();
+                e.preventDefault();
                 return false;
             }
         }
