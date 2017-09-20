@@ -27,12 +27,10 @@ BI.createWidget({
 ##### 基础属性
 | 参数    | 说明           | 类型  | 可选值 | 默认值
 | :------ |:-------------  | :-----| :----|:----
-| behaviors | 自定义列表中item项的行为，如高亮，标红等 | object| — | {}|
-| layouts | 布局| array |— | {type:"bi.horizontal",hgap:10,vgap:0} |
 | dynamicShow | 是否动态显示上一页、下一页、首页、尾页， 若为false，则指对其设置使能状态 | boolean| true,false | true|
 | dynamicShowFirstLast | 是否动态显示首页、尾页,dynamicShow为false时生效| boolean| true,false | false |
 | dynamicShowPrevNext | 是否动态显示上一页、下一页,dynamicShow为false时生效 | boolean| true,false | false|
-| pages | 是否显示总页数 | boolean| true,false|false|
+| pages | 是否显示总页数 | boolean/number| false,number|false|
 | curr | 初始化当前页 | function | —| function(){return 1;}|
 | groups | 连续显示分页数 | number | — | 0 |
 | jump | 页数跳转| function |— | —|

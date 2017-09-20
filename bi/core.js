@@ -14545,6 +14545,18 @@ BI.TdLayout = BI.inherit(BI.Layout, {
         for (var i = 0; i < arr.length; i++) {
             var w = BI.createWidget(arr[i]);
             w.element.css({"position": "relative", "top": "0", "left": "0", "margin": "0px auto"});
+            if (arr[i].lgap) {
+                w.element.css({"margin-left": arr[i].lgap + "px"});
+            }
+            if (arr[i].rgap) {
+                w.element.css({"margin-right": arr[i].rgap + "px"});
+            }
+            if (arr[i].tgap) {
+                w.element.css({"margin-top": arr[i].tgap + "px"});
+            }
+            if (arr[i].bgap) {
+                w.element.css({"margin-bottom": arr[i].bgap + "px"});
+            }
             first(w, this.rows++, i);
             var td = BI.createWidget({
                 type: 'bi.default',
