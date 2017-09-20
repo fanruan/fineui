@@ -30,7 +30,7 @@ BI.createWidget({
 | dynamicShow | 是否动态显示上一页、下一页、首页、尾页， 若为false，则指对其设置使能状态 | boolean| true,false | true|
 | dynamicShowFirstLast | 是否动态显示首页、尾页,dynamicShow为false时生效| boolean| true,false | false |
 | dynamicShowPrevNext | 是否动态显示上一页、下一页,dynamicShow为false时生效 | boolean| true,false | false|
-| pages | 是否显示总页数 | boolean/number| true,false,number|false|
+| pages | 是否显示总页数 | boolean/number| false,number|false|
 | curr | 初始化当前页 | function | —| function(){return 1;}|
 | groups | 连续显示分页数 | number | — | 0 |
 | jump | 页数跳转| function |— | —|
