@@ -1574,10 +1574,6 @@ i {
 .bi-theme-dark .bi-input {
   color: #ffffff;
 }
-/****** common color(常用颜色,可用于普遍场景) *****/
-/**** custom color(自定义颜色,用于特定场景) ****/
-/****** common color(常用颜色,可用于普遍场景) *****/
-/**** custom color(自定义颜色,用于特定场景) ****/
 .bi-color-chooser-trigger {
   -webkit-border-radius: 2px;
   -moz-border-radius: 2px;
@@ -1640,8 +1636,6 @@ i {
   -moz-box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
 }
-/****** common color(常用颜色,可用于普遍场景) *****/
-/**** custom color(自定义颜色,用于特定场景) ****/
 .bi-adapt-editor .adapt-editor-text {
   font-size: 14px;
 }
@@ -2200,8 +2194,6 @@ li.CodeMirror-hint-active {
 .bi-rich-editor-text-toolbar .text-toolbar-button {
   font-size: 16px;
 }
-/****** common color(常用颜色,可用于普遍场景) *****/
-/**** custom color(自定义颜色,用于特定场景) ****/
 .bi-segment > .center-element {
   overflow: hidden;
   overflow-x: hidden;
@@ -2234,8 +2226,6 @@ li.CodeMirror-hint-active {
 .bi-theme-dark .bi-segment > .first-element {
   border-left: 1px solid #242640;
 }
-/****** common color(常用颜色,可用于普遍场景) *****/
-/**** custom color(自定义颜色,用于特定场景) ****/
 .bi-button {
   -webkit-border-radius: 2px;
   -moz-border-radius: 2px;
@@ -2387,18 +2377,10 @@ li.CodeMirror-hint-active {
   filter: alpha(opacity=20);
   background-color: #1a1a1a;
 }
-/****** common color(常用颜色,可用于普遍场景) *****/
-/**** custom color(自定义颜色,用于特定场景) ****/
 .bi-single-select-icon-text-item:active .b-font:before,
 .bi-single-select-icon-text-item.active .b-font:before {
   color: #3f8ce8;
 }
-/****** common color(常用颜色,可用于普遍场景) *****/
-/**** custom color(自定义颜色,用于特定场景) ****/
-/****** common color(常用颜色,可用于普遍场景) *****/
-/**** custom color(自定义颜色,用于特定场景) ****/
-/****** common color(常用颜色,可用于普遍场景) *****/
-/**** custom color(自定义颜色,用于特定场景) ****/
 .bi-code-editor .param {
   color: #ffffff;
   padding: 0 5px;
@@ -2430,10 +2412,6 @@ li.CodeMirror-hint-active {
 .bi-sign-editor .sign-editor-text {
   font-size: 12px;
 }
-/****** common color(常用颜色,可用于普遍场景) *****/
-/**** custom color(自定义颜色,用于特定场景) ****/
-/****** common color(常用颜色,可用于普遍场景) *****/
-/**** custom color(自定义颜色,用于特定场景) ****/
 .bi-textarea-editor {
   overflow: hidden;
   overflow-x: hidden;
@@ -2473,8 +2451,6 @@ li.CodeMirror-hint-active {
   white-space: nowrap;
   word-break: break-all;
 }
-/****** common color(常用颜色,可用于普遍场景) *****/
-/**** custom color(自定义颜色,用于特定场景) ****/
 .bi-text {
   text-overflow: ellipsis;
   overflow-x: hidden;
@@ -2802,18 +2778,12 @@ li.CodeMirror-hint-active {
 .bi-resizable-table .resizable-table-region-resizer.dragging .resizable-table-region-resizer-knob {
   background-color: #3f8ce8;
 }
-/****** common color(常用颜色,可用于普遍场景) *****/
-/**** custom color(自定义颜色,用于特定场景) ****/
 .bi-branch-tree .bi-branch-tree-view {
   min-width: 300px;
 }
 .bi-trigger .bi-trigger-icon-button {
   font-size: 16px;
 }
-/****** common color(常用颜色,可用于普遍场景) *****/
-/**** custom color(自定义颜色,用于特定场景) ****/
-/****** common color(常用颜色,可用于普遍场景) *****/
-/**** custom color(自定义颜色,用于特定场景) ****/
 .bi-select-text-trigger {
   -webkit-border-radius: 2px;
   -moz-border-radius: 2px;
@@ -2824,8 +2794,6 @@ li.CodeMirror-hint-active {
   -moz-border-radius: 2px;
   border-radius: 2px;
 }
-/****** common color(常用颜色,可用于普遍场景) *****/
-/**** custom color(自定义颜色,用于特定场景) ****/
 /**********BI.BIListView*************/
 .bi-popup-view {
   position: fixed !important;
@@ -2854,8 +2822,6 @@ li.CodeMirror-hint-active {
 .bi-theme-dark .bi-popup-view .list-view-toolbar > .first-element {
   border-left: none;
 }
-/****** common color(常用颜色,可用于普遍场景) *****/
-/**** custom color(自定义颜色,用于特定场景) ****/
 .bi-arrangement .arrangement-helper {
   background: #3f8ce8;
   z-index: 1000000000;
@@ -2895,86 +2861,14 @@ li.CodeMirror-hint-active {
 .bi-arrangement-droppable {
   z-index: 100000;
 }
-/****添加计算宽度的--运算符直接需要space****/
-/****** common color(常用颜色,可用于普遍场景) *****/
-/**** custom color(自定义颜色,用于特定场景) ****/
-.bi-adapt-editor .adapt-editor-text {
-  font-size: 14px;
-}
-/****添加计算宽度的--运算符直接需要space****/
-/****** common color(常用颜色,可用于普遍场景) *****/
-/**** custom color(自定义颜色,用于特定场景) ****/
-/*************BI.SearchEditor******************/
-.bi-search-editor {
-  border: 1px solid #d4dadd;
-}
-.bi-search-editor .close-font {
-  font-size: 20px;
-}
-.bi-search-editor .search-font {
-  font-size: 20px;
-}
-/****添加计算宽度的--运算符直接需要space****/
-/****** common color(常用颜色,可用于普遍场景) *****/
-/**** custom color(自定义颜色,用于特定场景) ****/
-/*************BI.SearchEditor******************/
-.bi-small-search-editor .bi-editor {
-  font-size: 12px;
-}
-.bi-small-search-editor .bi-editor .bi-input {
-  font-size: 12px;
-}
-.bi-small-search-editor .bi-editor .bi-label {
-  font-size: 12px;
-}
-.bi-small-search-editor .close-font {
-  font-size: 18px;
-}
-.bi-small-search-editor .search-font {
-  font-size: 18px;
-}
-/****添加计算宽度的--运算符直接需要space****/
-/****** common color(常用颜色,可用于普遍场景) *****/
-/**** custom color(自定义颜色,用于特定场景) ****/
-.bi-sign-initial-editor .sign-initial-editor-text {
-  font-size: 14px;
-}
-/****添加计算宽度的--运算符直接需要space****/
-/****** common color(常用颜色,可用于普遍场景) *****/
-/**** custom color(自定义颜色,用于特定场景) ****/
-.bi-sign-style-editor .sign-style-editor-text {
-  max-width: 100%;
-  font-size: 12px;
-}
-.bi-sign-style-editor .sign-style-editor-tip {
-  max-width: 100%;
-  font-size: 12px;
-  color: #808080;
-}
-/****添加计算宽度的--运算符直接需要space****/
-/****** common color(常用颜色,可用于普遍场景) *****/
-/**** custom color(自定义颜色,用于特定场景) ****/
-.bi-text-editor {
-  border: 1px solid #d4dadd;
-}
-/****添加计算宽度的--运算符直接需要space****/
-/****** common color(常用颜色,可用于普遍场景) *****/
-/**** custom color(自定义颜色,用于特定场景) ****/
-/*************BI.SearchEditor******************/
-/****** common color(常用颜色,可用于普遍场景) *****/
-/**** custom color(自定义颜色,用于特定场景) ****/
 .bi-date-trigger {
   -webkit-border-radius: 2px;
   -moz-border-radius: 2px;
   border-radius: 2px;
 }
-/****** common color(常用颜色,可用于普遍场景) *****/
-/**** custom color(自定义颜色,用于特定场景) ****/
 .bi-down-list-popup .bi-down-list-item .list-item-text {
   max-width: 203px;
 }
-/****** common color(常用颜色,可用于普遍场景) *****/
-/**** custom color(自定义颜色,用于特定场景) ****/
 .bi-excel-table > div.bottom-right > div > div > table {
   border-right: 1px solid #d4dadd;
 }
@@ -2984,12 +2878,6 @@ li.CodeMirror-hint-active {
 .bi-excel-table-header-cell {
   font-weight: bold;
 }
-/****** common color(常用颜色,可用于普遍场景) *****/
-/**** custom color(自定义颜色,用于特定场景) ****/
-/****** common color(常用颜色,可用于普遍场景) *****/
-/**** custom color(自定义颜色,用于特定场景) ****/
-/****** common color(常用颜色,可用于普遍场景) *****/
-/**** custom color(自定义颜色,用于特定场景) ****/
 .bi-file-manager-nav-button .file-manager-nav-button-text {
   max-width: 200px;
 }
@@ -3004,8 +2892,6 @@ li.CodeMirror-hint-active {
   background-color: #191b2b;
   color: #999999;
 }
-/****** common color(常用颜色,可用于普遍场景) *****/
-/**** custom color(自定义颜色,用于特定场景) ****/
 .bi-fine-tuning-number-editor {
   -webkit-border-radius: 2px;
   -moz-border-radius: 2px;
@@ -3018,10 +2904,6 @@ li.CodeMirror-hint-active {
 .bi-interactive-arrangement .interactive-arrangement-dragtag-icon {
   z-index: 1000000000;
 }
-/****** common color(常用颜色,可用于普遍场景) *****/
-/**** custom color(自定义颜色,用于特定场景) ****/
-/****** common color(常用颜色,可用于普遍场景) *****/
-/**** custom color(自定义颜色,用于特定场景) ****/
 .bi-month-trigger {
   -webkit-border-radius: 2px;
   -moz-border-radius: 2px;
@@ -3032,12 +2914,6 @@ li.CodeMirror-hint-active {
   -moz-border-radius: 2px;
   border-radius: 2px;
 }
-/****添加计算宽度的--运算符直接需要space****/
-/****** common color(常用颜色,可用于普遍场景) *****/
-/**** custom color(自定义颜色,用于特定场景) ****/
-/****添加计算宽度的--运算符直接需要space****/
-/****** common color(常用颜色,可用于普遍场景) *****/
-/**** custom color(自定义颜色,用于特定场景) ****/
 .bi-multidate-popup .bi-multidate-popup-label {
   color: #3f8ce8;
   font-size: 14px;
@@ -3054,28 +2930,15 @@ li.CodeMirror-hint-active {
   color: #3f8ce8;
   font-size: 14px;
 }
-/****添加计算宽度的--运算符直接需要space****/
-/****** common color(常用颜色,可用于普遍场景) *****/
-/**** custom color(自定义颜色,用于特定场景) ****/
 .bi-multidate-segment .bi-multidate-editor {
   font-size: 14px;
 }
-/****添加计算宽度的--运算符直接需要space****/
-/****** common color(常用颜色,可用于普遍场景) *****/
-/**** custom color(自定义颜色,用于特定场景) ****/
-/****添加计算宽度的--运算符直接需要space****/
-/****** common color(常用颜色,可用于普遍场景) *****/
-/**** custom color(自定义颜色,用于特定场景) ****/
 .bi-multi-select-check-pane .multi-select-check-selected {
   text-decoration: underline;
 }
-/****** common color(常用颜色,可用于普遍场景) *****/
-/**** custom color(自定义颜色,用于特定场景) ****/
 .bi-multi-select-combo .multi-select-trigger-icon-button {
   font-size: 16px;
 }
-/****** common color(常用颜色,可用于普遍场景) *****/
-/**** custom color(自定义颜色,用于特定场景) ****/
 .bi-multi-select-trigger {
   -webkit-border-radius: 2px 2px 2px 2px;
   -moz-border-radius: 2px 2px 2px 2px;
@@ -3087,27 +2950,19 @@ li.CodeMirror-hint-active {
 .bi-multi-select-check-selected-button {
   z-index: 1;
 }
-/****** common color(常用颜色,可用于普遍场景) *****/
-/**** custom color(自定义颜色,用于特定场景) ****/
 .bi-multi-tree-check-pane .multi-tree-check-selected {
   color: #3f8ce8;
 }
-/****** common color(常用颜色,可用于普遍场景) *****/
-/**** custom color(自定义颜色,用于特定场景) ****/
 .bi-multi-tree-combo .multi-select-trigger-icon-button {
   font-size: 16px;
 }
 .bi-multi-tree-popup .popup-view-tree {
   min-height: 170px;
 }
-/****** common color(常用颜色,可用于普遍场景) *****/
-/**** custom color(自定义颜色,用于特定场景) ****/
 .bi-multi-tree-check-selected-button .trigger-check-selected {
   color: #3f8ce8;
   z-index: 1;
 }
-/****** common color(常用颜色,可用于普遍场景) *****/
-/**** custom color(自定义颜色,用于特定场景) ****/
 .bi-numerical-interval .numerical-interval-small-editor {
   -moz-border-radius-topleft: 2px;
   -webkit-border-top-left-radius: 2px;
@@ -3149,8 +3004,6 @@ li.CodeMirror-hint-active {
 .bi-numerical-interval.number-error .bi-input {
   color: #e85050;
 }
-/****** common color(常用颜色,可用于普遍场景) *****/
-/**** custom color(自定义颜色,用于特定场景) ****/
 .bi-page-table-cell {
   -webkit-user-select: text;
   -khtml-user-select: text;
@@ -3159,8 +3012,6 @@ li.CodeMirror-hint-active {
   -o-user-select: text;
   user-select: text;
 }
-/****** common color(常用颜色,可用于普遍场景) *****/
-/**** custom color(自定义颜色,用于特定场景) ****/
 .bi-path-chooser .path-chooser-radio {
   z-index: 1;
 }
@@ -3194,17 +3045,11 @@ li.CodeMirror-hint-active {
   min-width: 80px;
   max-width: 220px;
 }
-/****** common color(常用颜色,可用于普遍场景) *****/
-/**** custom color(自定义颜色,用于特定场景) ****/
-/****** common color(常用颜色,可用于普遍场景) *****/
-/**** custom color(自定义颜色,用于特定场景) ****/
 .bi-quarter-trigger {
   -webkit-border-radius: 2px;
   -moz-border-radius: 2px;
   border-radius: 2px;
 }
-/****** common color(常用颜色,可用于普遍场景) *****/
-/**** custom color(自定义颜色,用于特定场景) ****/
 .bi-relation-view-region .relation-view-region-container {
   z-index: 1;
   -webkit-border-radius: 2px;
@@ -3260,8 +3105,6 @@ li.CodeMirror-hint-active {
   box-sizing: border-box;
   /*W3C标准(IE9+，Safari5.1+,Chrome10.0+,Opera10.6+都符合box-sizing的w3c标准语法)*/
 }
-/****** common color(常用颜色,可用于普遍场景) *****/
-/**** custom color(自定义颜色,用于特定场景) ****/
 .bi-sequence-table-tree-number .sequence-table-title-cell {
   overflow: hidden;
   overflow-x: hidden;
@@ -3285,16 +3128,12 @@ li.CodeMirror-hint-active {
   box-sizing: border-box;
   /*W3C标准(IE9+，Safari5.1+,Chrome10.0+,Opera10.6+都符合box-sizing的w3c标准语法)*/
 }
-/****** common color(常用颜色,可用于普遍场景) *****/
-/**** custom color(自定义颜色,用于特定场景) ****/
 .bi-param-time-interval.time-error .bi-input {
   color: #e85050;
 }
 .bi-param-time-interval.time-error .sign-editor-text {
   color: #e85050;
 }
-/****** common color(常用颜色,可用于普遍场景) *****/
-/**** custom color(自定义颜色,用于特定场景) ****/
 .bi-year-popup .year-popup-navigation {
   line-height: 30px;
 }
