@@ -83,27 +83,27 @@ module.exports = function (grunt) {
             },
             sliderJs: {
                 src: [
-                    'src/addons/slider/singleslider/**/*.js'
+                    'src/addons/sliders/singleslider/**/*.js'
                 ],
-                dest: 'dist/slider.js'
+                dest: 'dist/sliders.js'
             },
             sliderCss: {
                 src: [
-                    'src/addons/slider/**/*.css'
+                    'src/addons/sliders/**/*.css'
                 ],
-                dest: 'dist/slider.css'
+                dest: 'dist/sliders.css'
             },
             jqueryuiJs: {
                 src: [
-                    'src/addons/slider/lib/jquery.ui.core.js',
-                    'src/addons/slider/lib/jquery.ui.core.js',
-                    'src/addons/slider/lib/jquery.ui.widget.js',
-                    'src/addons/slider/lib/jquery.ui.mouse.js',
-                    'src/addons/slider/lib/jquery.ui.position.js',
-                    'src/addons/slider/lib/jquery.ui.resizable.js',
-                    'src/addons/slider/lib/jquery.ui.draggable.js',
-                    'src/addons/slider/lib/jquery.ui.droppable.js',
-                    'src/addons/slider/lib/jquery.ui.sortable.js'
+                    'src/addons/sliders/lib/jquery.ui.core.js',
+                    'src/addons/sliders/lib/jquery.ui.core.js',
+                    'src/addons/sliders/lib/jquery.ui.widget.js',
+                    'src/addons/sliders/lib/jquery.ui.mouse.js',
+                    'src/addons/sliders/lib/jquery.ui.position.js',
+                    'src/addons/sliders/lib/jquery.ui.resizable.js',
+                    'src/addons/sliders/lib/jquery.ui.draggable.js',
+                    'src/addons/sliders/lib/jquery.ui.droppable.js',
+                    'src/addons/sliders/lib/jquery.ui.sortable.js'
                 ],
                 dest: 'dist/jqueryui.js'
             },
@@ -236,27 +236,27 @@ module.exports = function (grunt) {
             },
             bi_sliderJs: {
                 src: [
-                    'src/addons/slider/singleslider/**/*.js'
+                    'src/addons/sliders/singleslider/**/*.js'
                 ],
-                dest: 'bi/slider.js'
+                dest: 'bi/sliders.js'
             },
             bi_sliderCss: {
                 src: [
-                    'src/addons/slider/**/*.css'
+                    'src/addons/sliders/**/*.css'
                 ],
-                dest: 'bi/slider.css'
+                dest: 'bi/sliders.css'
             },
             bi_jqueryuiJs: {
                 src: [
-                    'src/addons/slider/lib/jquery.ui.core.js',
-                    'src/addons/slider/lib/jquery.ui.core.js',
-                    'src/addons/slider/lib/jquery.ui.widget.js',
-                    'src/addons/slider/lib/jquery.ui.mouse.js',
-                    'src/addons/slider/lib/jquery.ui.position.js',
-                    'src/addons/slider/lib/jquery.ui.resizable.js',
-                    'src/addons/slider/lib/jquery.ui.draggable.js',
-                    'src/addons/slider/lib/jquery.ui.droppable.js',
-                    'src/addons/slider/lib/jquery.ui.sortable.js'
+                    'src/addons/sliders/lib/jquery.ui.core.js',
+                    'src/addons/sliders/lib/jquery.ui.core.js',
+                    'src/addons/sliders/lib/jquery.ui.widget.js',
+                    'src/addons/sliders/lib/jquery.ui.mouse.js',
+                    'src/addons/sliders/lib/jquery.ui.position.js',
+                    'src/addons/sliders/lib/jquery.ui.resizable.js',
+                    'src/addons/sliders/lib/jquery.ui.draggable.js',
+                    'src/addons/sliders/lib/jquery.ui.droppable.js',
+                    'src/addons/sliders/lib/jquery.ui.sortable.js'
                 ],
                 dest: 'bi/jqueryui.js'
             },
