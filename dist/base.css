@@ -562,6 +562,9 @@ span.CodeMirror-selectedtext {
   color: black;
   cursor: pointer;
 }
+.CodeMirror-hints {
+  z-index: 1000000000;
+}
 li.CodeMirror-hint-active {
   background: #08f;
   color: white;
