@@ -16360,7 +16360,10 @@ BI.RichEditorParamAction = BI.inherit(BI.RichEditorAction, {
             color: "white",
             backgroundColor: "#009de3",
             padding: "0 5px"
-        }).text(param).mousedown(function (e) {
+        }).text(param).keydown(function (e) {
+            if (e.keyCode === BI.KeyCode.BACKSPACE || e.keyCode === BI.KeyCode.DELETE) {
+                $param.destroy();
+            }
             e.stopEvent();
             return false;
         });
@@ -16389,7 +16392,7 @@ BI.RichEditorParamAction = BI.inherit(BI.RichEditorAction, {
                 return false;
             }
         }
-        if (e.keyCode === BI.KeyCode.BACKSPACE) {
+        if (e.keyCode === BI.KeyCode.BACKSPACE || e.keyCode === BI.KeyCode.DELETE) {
             if (this._isParam(sel)) {
                 sel.destroy();
                 e.preventDefault();
