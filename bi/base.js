@@ -16323,14 +16323,18 @@ BI.RichEditorParamAction = BI.inherit(BI.RichEditorAction, {
         return sel.attr("data-type") === "param";
     },
 
+    _createBlankNode: function () {
+        return $("<span>").html("&nbsp;");
+    },
+
     _addBlank: function ($param) {
         var o = this.options;
         var instance = o.editor.selectedInstance;
         var next = $param.next();
         if (next.length === 0 || this._isParam(next)) {
-            var node = $("<span>").html("&nbsp;")[0];
+            var node = this._createBlankNode();
             $param.after(node);
-            instance.setFocus(node);
+            instance.setFocus(node[0]);
         } else {
             instance.setFocus(next[0]);
         }
@@ -16339,9 +16343,8 @@ BI.RichEditorParamAction = BI.inherit(BI.RichEditorAction, {
     _get$Sel: function () {
         var o = this.options;
         var instance = o.editor.selectedInstance;
-        var wrapper = instance.getElm().element;
         var sel = $(instance.selElm());
-        if (sel[0].nodeType === 3 && wrapper.find(sel.parent()).length > 0) {
+        if (sel[0].nodeType === 3 && this._isParam(sel.parent())) {
             sel = sel.parent();
         }
         return sel;
