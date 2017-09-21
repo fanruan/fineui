@@ -6437,212 +6437,6 @@ BI.ClearEditor.EVENT_RESTRICT = "EVENT_RESTRICT";
 BI.ClearEditor.EVENT_REMOVE = "EVENT_REMOVE";
 BI.ClearEditor.EVENT_EMPTY = "EVENT_EMPTY";
 BI.shortcut("bi.clear_editor", BI.ClearEditor);/**
- * Created by roy on 15/9/14.
- */
-BI.SearchEditor = BI.inherit(BI.Widget, {
-    _defaultConfig: function () {
-        var conf = BI.SearchEditor.superclass._defaultConfig.apply(this, arguments);
-        return BI.extend(conf, {
-            baseCls: "bi-search-editor bi-border",
-            height: 30,
-            errorText: "",
-            watermark: BI.i18nText("BI-Basic_Search"),
-            validationChecker: BI.emptyFn,
-            quitChecker: BI.emptyFn
-        });
-    },
-    _init: function () {
-        this.options.height -= 2;
-        BI.SearchEditor.superclass._init.apply(this, arguments);
-        var self = this, o = this.options;
-        this.editor = BI.createWidget({
-            type: "bi.editor",
-            height: o.height,
-            watermark: o.watermark,
-            allowBlank: true,
-            errorText: o.errorText,
-            validationChecker: o.validationChecker,
-            quitChecker: o.quitChecker
-        });
-        this.clear = BI.createWidget({
-            type: "bi.icon_button",
-            stopEvent: true,
-            cls: "search-close-h-font"
-        });
-        this.clear.on(BI.IconButton.EVENT_CHANGE, function () {
-            self.setValue("");
-            self.fireEvent(BI.Controller.EVENT_CHANGE, BI.Events.STOPEDIT);
-            self.fireEvent(BI.SearchEditor.EVENT_CLEAR);
-        });
-        BI.createWidget({
-            element: this,
-            type: "bi.htape",
-            items: [
-                {
-                    el: {
-                        type: "bi.center_adapt",
-                        cls: "search-font",
-                        items: [{
-                            el: {
-                                type: "bi.icon"
-                            }
-                        }]
-                    },
-                    width: 25
-                },
-                {
-                    el: self.editor
-                },
-                {
-                    el: this.clear,
-                    width: 25
-                }
-            ]
-        });
-        this.editor.on(BI.Controller.EVENT_CHANGE, function () {
-            self.fireEvent(BI.Controller.EVENT_CHANGE, arguments);
-        });
-
-        this.editor.on(BI.Editor.EVENT_FOCUS, function () {
-            self.fireEvent(BI.SearchEditor.EVENT_FOCUS);
-        });
-        this.editor.on(BI.Editor.EVENT_BLUR, function () {
-            self.fireEvent(BI.SearchEditor.EVENT_BLUR);
-        });
-        this.editor.on(BI.Editor.EVENT_CLICK, function () {
-            self.fireEvent(BI.SearchEditor.EVENT_CLICK);
-        });
-        this.editor.on(BI.Editor.EVENT_CHANGE, function () {
-            self._checkClear();
-            self.fireEvent(BI.SearchEditor.EVENT_CHANGE);
-        });
-        this.editor.on(BI.Editor.EVENT_KEY_DOWN, function (v) {
-            self.fireEvent(BI.SearchEditor.EVENT_KEY_DOWN, v);
-        });
-        this.editor.on(BI.Editor.EVENT_SPACE, function () {
-            self.fireEvent(BI.SearchEditor.EVENT_SPACE)
-        });
-        this.editor.on(BI.Editor.EVENT_BACKSPACE, function () {
-            self.fireEvent(BI.SearchEditor.EVENT_BACKSPACE)
-        });
-
-
-        this.editor.on(BI.Editor.EVENT_VALID, function () {
-            self.fireEvent(BI.SearchEditor.EVENT_VALID)
-        });
-        this.editor.on(BI.Editor.EVENT_ERROR, function () {
-            self.fireEvent(BI.SearchEditor.EVENT_ERROR)
-        });
-        this.editor.on(BI.Editor.EVENT_ENTER, function () {
-            self.fireEvent(BI.SearchEditor.EVENT_ENTER);
-        });
-        this.editor.on(BI.Editor.EVENT_RESTRICT, function () {
-            self.fireEvent(BI.SearchEditor.EVENT_RESTRICT)
-        });
-        this.editor.on(BI.Editor.EVENT_EMPTY, function () {
-            self._checkClear();
-            self.fireEvent(BI.SearchEditor.EVENT_EMPTY)
-        });
-        this.editor.on(BI.Editor.EVENT_REMOVE, function () {
-            self.fireEvent(BI.SearchEditor.EVENT_REMOVE)
-        });
-        this.editor.on(BI.Editor.EVENT_CONFIRM, function () {
-            self.fireEvent(BI.SearchEditor.EVENT_CONFIRM)
-        });
-        this.editor.on(BI.Editor.EVENT_START, function () {
-            self.fireEvent(BI.SearchEditor.EVENT_START);
-        });
-        this.editor.on(BI.Editor.EVENT_PAUSE, function () {
-            self.fireEvent(BI.SearchEditor.EVENT_PAUSE);
-        });
-        this.editor.on(BI.Editor.EVENT_STOP, function () {
-            self.fireEvent(BI.SearchEditor.EVENT_STOP);
-        });
-
-        this.clear.invisible();
-    },
-
-    _checkClear: function () {
-        if (!this.getValue()) {
-            this.clear.invisible();
-        } else {
-            this.clear.visible();
-        }
-    },
-
-    focus: function () {
-        this.editor.focus();
-    },
-
-    blur: function () {
-        this.editor.blur();
-    },
-
-    getValue: function () {
-        if (this.isValid()) {
-            var res = this.editor.getValue().match(/[\S]+/g);
-            return BI.isNull(res) ? "" : res[res.length - 1];
-        }
-    },
-
-    getLastValidValue: function () {
-        return this.editor.getLastValidValue();
-    },
-
-    setValue: function (v) {
-        this.editor.setValue(v);
-        if (BI.isKey(v)) {
-            this.clear.visible();
-        }
-    },
-    
-    isEditing: function () {
-        return this.editor.isEditing();
-    },
-
-    isValid: function () {
-        return this.editor.isValid();
-    }
-});
-BI.SearchEditor.EVENT_CHANGE = "EVENT_CHANGE";
-BI.SearchEditor.EVENT_FOCUS = "EVENT_FOCUS";
-BI.SearchEditor.EVENT_BLUR = "EVENT_BLUR";
-BI.SearchEditor.EVENT_CLICK = "EVENT_CLICK";
-BI.SearchEditor.EVENT_KEY_DOWN = "EVENT_KEY_DOWN";
-BI.SearchEditor.EVENT_SPACE = "EVENT_SPACE";
-BI.SearchEditor.EVENT_BACKSPACE = "EVENT_BACKSPACE";
-BI.SearchEditor.EVENT_CLEAR = "EVENT_CLEAR";
-
-BI.SearchEditor.EVENT_START = "EVENT_START";
-BI.SearchEditor.EVENT_PAUSE = "EVENT_PAUSE";
-BI.SearchEditor.EVENT_STOP = "EVENT_STOP";
-BI.SearchEditor.EVENT_CONFIRM = "EVENT_CONFIRM";
-BI.SearchEditor.EVENT_VALID = "EVENT_VALID";
-BI.SearchEditor.EVENT_ERROR = "EVENT_ERROR";
-BI.SearchEditor.EVENT_ENTER = "EVENT_ENTER";
-BI.SearchEditor.EVENT_RESTRICT = "EVENT_RESTRICT";
-BI.SearchEditor.EVENT_REMOVE = "EVENT_REMOVE";
-BI.SearchEditor.EVENT_EMPTY = "EVENT_EMPTY";
-BI.shortcut("bi.search_editor", BI.SearchEditor);/**
- * 小号搜索框
- * Created by GUY on 2015/9/29.
- * @class BI.SmallSearchEditor
- * @extends BI.SearchEditor
- */
-BI.SmallSearchEditor = BI.inherit(BI.SearchEditor, {
-    _defaultConfig: function () {
-        var conf = BI.SmallSearchEditor.superclass._defaultConfig.apply(this, arguments);
-        return BI.extend(conf, {
-            baseCls: (conf.baseCls || "") + " bi-small-search-editor",
-            height: 24
-        });
-    },
-
-    _init: function () {
-        BI.SmallSearchEditor.superclass._init.apply(this, arguments);
-    }
-});
-BI.shortcut("bi.small_search_editor", BI.SmallSearchEditor);/**
  * 带标记的文本框
  * Created by GUY on 2016/1/25.
  * @class BI.ShelterEditor
@@ -7952,187 +7746,6 @@ BI.SimpleStateEditor.EVENT_SPACE = "EVENT_SPACE";
 BI.SimpleStateEditor.EVENT_EMPTY = "EVENT_EMPTY";
 
 BI.shortcut("bi.simple_state_editor", BI.SimpleStateEditor);/**
- * guy
- * @class BI.TextEditor
- * @extends BI.Single
- */
-BI.TextEditor = BI.inherit(BI.Widget, {
-    _defaultConfig: function () {
-        var conf = BI.TextEditor.superclass._defaultConfig.apply(this, arguments);
-        return BI.extend(conf, {
-            extraCls: "bi-text-editor bi-border",
-            hgap: 4,
-            vgap: 2,
-            lgap: 0,
-            rgap: 0,
-            tgap: 0,
-            bgap: 0,
-            validationChecker: BI.emptyFn,
-            quitChecker: BI.emptyFn,
-            allowBlank: false,
-            watermark: "",
-            errorText: "",
-            height: 30
-        })
-    },
-
-    _init: function () {
-        BI.TextEditor.superclass._init.apply(this, arguments);
-        var self = this, o = this.options;
-        if (BI.isNumber(o.height)) {
-            this.element.css({height: o.height - 2});
-        }
-        if (BI.isNumber(o.width)) {
-            this.element.css({width: o.width - 2});
-        }
-        this.editor = BI.createWidget({
-            type: "bi.editor",
-            height: o.height - 2,
-            hgap: o.hgap,
-            vgap: o.vgap,
-            lgap: o.lgap,
-            rgap: o.rgap,
-            tgap: o.tgap,
-            bgap: o.bgap,
-            value: o.value,
-            validationChecker: o.validationChecker,
-            quitChecker: o.quitChecker,
-            allowBlank: o.allowBlank,
-            watermark: o.watermark,
-            errorText: o.errorText
-        });
-        this.editor.on(BI.Controller.EVENT_CHANGE, function () {
-            self.fireEvent(BI.Controller.EVENT_CHANGE, arguments);
-        });
-
-        this.editor.on(BI.Editor.EVENT_FOCUS, function () {
-            self.fireEvent(BI.TextEditor.EVENT_FOCUS);
-        });
-        this.editor.on(BI.Editor.EVENT_BLUR, function () {
-            self.fireEvent(BI.TextEditor.EVENT_BLUR);
-        });
-        this.editor.on(BI.Editor.EVENT_CLICK, function () {
-            self.fireEvent(BI.TextEditor.EVENT_CLICK);
-        });
-        this.editor.on(BI.Editor.EVENT_CHANGE, function () {
-            self.fireEvent(BI.TextEditor.EVENT_CHANGE);
-        });
-        this.editor.on(BI.Editor.EVENT_KEY_DOWN, function (v) {
-            self.fireEvent(BI.TextEditor.EVENT_KEY_DOWN);
-        });
-        this.editor.on(BI.Editor.EVENT_SPACE, function (v) {
-            self.fireEvent(BI.TextEditor.EVENT_SPACE);
-        });
-        this.editor.on(BI.Editor.EVENT_BACKSPACE, function (v) {
-            self.fireEvent(BI.TextEditor.EVENT_BACKSPACE);
-        });
-
-
-        this.editor.on(BI.Editor.EVENT_VALID, function () {
-            self.fireEvent(BI.TextEditor.EVENT_VALID);
-        });
-        this.editor.on(BI.Editor.EVENT_CONFIRM, function () {
-            self.fireEvent(BI.TextEditor.EVENT_CONFIRM);
-        });
-        this.editor.on(BI.Editor.EVENT_REMOVE, function (v) {
-            self.fireEvent(BI.TextEditor.EVENT_REMOVE);
-        });
-        this.editor.on(BI.Editor.EVENT_START, function () {
-            self.fireEvent(BI.TextEditor.EVENT_START);
-        });
-        this.editor.on(BI.Editor.EVENT_PAUSE, function () {
-            self.fireEvent(BI.TextEditor.EVENT_PAUSE);
-        });
-        this.editor.on(BI.Editor.EVENT_STOP, function () {
-            self.fireEvent(BI.TextEditor.EVENT_STOP);
-        });
-        this.editor.on(BI.Editor.EVENT_ERROR, function () {
-            self.fireEvent(BI.TextEditor.EVENT_ERROR, arguments);
-        });
-        this.editor.on(BI.Editor.EVENT_ENTER, function () {
-            self.fireEvent(BI.TextEditor.EVENT_ENTER);
-        });
-        this.editor.on(BI.Editor.EVENT_RESTRICT, function () {
-            self.fireEvent(BI.TextEditor.EVENT_RESTRICT);
-        });
-        this.editor.on(BI.Editor.EVENT_EMPTY, function () {
-            self.fireEvent(BI.TextEditor.EVENT_EMPTY);
-        });
-        BI.createWidget({
-            type: "bi.vertical",
-            scrolly: false,
-            element: this,
-            items: [this.editor]
-        });
-    },
-
-    focus: function () {
-        this.editor.focus();
-    },
-
-    blur: function () {
-        this.editor.blur();
-    },
-
-    setErrorText: function (text) {
-        this.editor.setErrorText(text);
-    },
-
-    getErrorText: function () {
-        return this.editor.getErrorText();
-    },
-
-    isValid: function () {
-        return this.editor.isValid();
-    },
-
-    setValue: function (v) {
-        this.editor.setValue(v);
-    },
-
-    getValue: function () {
-        return this.editor.getValue();
-    }
-});
-BI.TextEditor.EVENT_CHANGE = "EVENT_CHANGE";
-BI.TextEditor.EVENT_FOCUS = "EVENT_FOCUS";
-BI.TextEditor.EVENT_BLUR = "EVENT_BLUR";
-BI.TextEditor.EVENT_CLICK = "EVENT_CLICK";
-BI.TextEditor.EVENT_KEY_DOWN = "EVENT_KEY_DOWN";
-BI.TextEditor.EVENT_SPACE = "EVENT_SPACE";
-BI.TextEditor.EVENT_BACKSPACE = "EVENT_BACKSPACE";
-
-BI.TextEditor.EVENT_START = "EVENT_START";
-BI.TextEditor.EVENT_PAUSE = "EVENT_PAUSE";
-BI.TextEditor.EVENT_STOP = "EVENT_STOP";
-BI.TextEditor.EVENT_CONFIRM = "EVENT_CONFIRM";
-BI.TextEditor.EVENT_VALID = "EVENT_VALID";
-BI.TextEditor.EVENT_ERROR = "EVENT_ERROR";
-BI.TextEditor.EVENT_ENTER = "EVENT_ENTER";
-BI.TextEditor.EVENT_RESTRICT = "EVENT_RESTRICT";
-BI.TextEditor.EVENT_REMOVE = "EVENT_REMOVE";
-BI.TextEditor.EVENT_EMPTY = "EVENT_EMPTY";
-
-BI.shortcut("bi.text_editor", BI.TextEditor);/**
- * 小号搜索框
- * Created by GUY on 2015/9/29.
- * @class BI.SmallTextEditor
- * @extends BI.SearchEditor
- */
-BI.SmallTextEditor = BI.inherit(BI.TextEditor, {
-    _defaultConfig: function () {
-        var conf = BI.SmallTextEditor.superclass._defaultConfig.apply(this, arguments);
-        return BI.extend(conf, {
-            baseCls: (conf.baseCls || "") + " bi-small-text-editor",
-            height: 25
-        });
-    },
-
-    _init: function () {
-        BI.SmallTextEditor.superclass._init.apply(this, arguments);
-    }
-});
-BI.shortcut("bi.small_text_editor", BI.SmallTextEditor);/**
  * 有确定取消按钮的弹出层
  * @class BI.BarFloatSection
  * @extends BI.FloatSection
@@ -11891,6 +11504,503 @@ BI.MultiSelectBar = BI.inherit(BI.BasicButton, {
 });
 BI.MultiSelectBar.EVENT_CHANGE = "MultiSelectBar.EVENT_CHANGE";
 BI.shortcut("bi.multi_select_bar", BI.MultiSelectBar);/**
+ * 表关联树
+ *
+ * Created by GUY on 2015/12/15.
+ * @class BI.BranchRelation
+ * @extends BI.Widget
+ */
+BI.BranchRelation = BI.inherit(BI.Widget, {
+
+    _defaultConfig: function () {
+        return BI.extend(BI.BranchRelation.superclass._defaultConfig.apply(this, arguments), {
+            baseCls: "bi-branch-relation-tree",
+            items: [],
+
+            centerOffset: 0,//重心偏移量
+            direction: BI.Direction.Bottom,
+            align: BI.VerticalAlign.Top
+        })
+    },
+
+    _init: function () {
+        BI.BranchRelation.superclass._init.apply(this, arguments);
+        this.populate(this.options.items);
+    },
+
+    //树分层
+    _stratification: function () {
+        var levels = [];
+        this.tree.recursion(function (node, route) {
+            //node.isRoot = route.length <= 1;
+            node.leaf = node.isLeaf();
+            if (!levels[route.length - 1]) {
+                levels[route.length - 1] = [];
+            }
+            levels[route.length - 1].push(node);
+        });
+        return levels;
+    },
+
+    //计算所有节点的叶子结点个数
+    _calculateLeaves: function () {
+        var count = 0;
+
+        function track(node) {
+            var c = 0;
+            if (node.isLeaf()) {
+                return 1;
+            }
+            BI.each(node.getChildren(), function (i, child) {
+                c += track(child);
+            });
+            node.set("leaves", c);
+            return c;
+        }
+
+        count = track(this.tree.getRoot());
+        return count;
+    },
+
+    //树平移
+    _translate: function (levels) {
+        var adjust = [];
+        var maxLevel = levels.length;
+        BI.each(levels, function (i, nodes) {
+            if (!adjust[i]) {
+                adjust[i] = [];
+            }
+            BI.each(nodes, function (j, node) {
+                if (node.isLeaf() && i < maxLevel - 1) {
+                    var newNode = new BI.Node(BI.UUID());
+                    //newNode.isEmptyRoot = node.isRoot || node.isEmptyRoot;
+                    newNode.isNew = true;
+                    //把node向下一层移
+                    var tar = 0;
+                    if (j > 0) {
+                        var c = nodes[j - 1].getLastChild();
+                        tar = levels[i + 1].indexOf(c) + 1;
+                    }
+                    levels[i + 1].splice(tar, 0, node);
+                    //新增一个临时树节点
+                    var index = node.parent.getChildIndex(node.id);
+                    node.parent.removeChildByIndex(index);
+                    node.parent.addChild(newNode, index);
+                    newNode.addChild(node);
+                    adjust[i].push(newNode);
+                    nodes[j] = newNode;
+                } else {
+                    adjust[i].push(node);
+                }
+            })
+        });
+        return adjust;
+    },
+
+    //树补白
+    _fill: function (levels) {
+        var adjust = [];
+        var maxLevel = levels.length;
+        BI.each(levels, function (i, nodes) {
+            if (!adjust[i]) {
+                adjust[i] = [];
+            }
+            BI.each(nodes, function (j, node) {
+                if (node.isLeaf() && i < maxLevel - 1) {
+                    var newNode = new BI.Node(BI.UUID());
+                    newNode.leaf = true;
+                    newNode.width = node.width;
+                    newNode.height = node.height;
+                    newNode.isNew = true;
+                    //把node向下一层移
+                    var tar = 0;
+                    if (j > 0) {
+                        var c = nodes[j - 1].getLastChild();
+                        tar = levels[i + 1].indexOf(c) + 1;
+                    }
+                    levels[i + 1].splice(tar, 0, newNode);
+                    //新增一个临时树节点
+                    node.addChild(newNode);
+                }
+                adjust[i].push(node);
+            })
+        });
+        return adjust;
+    },
+
+    //树调整
+    _adjust: function (adjust) {
+        while (true) {
+            var isAllNeedAjust = false;
+            BI.backEach(adjust, function (i, nodes) {
+                BI.each(nodes, function (j, node) {
+                    if (!node.isNew) {
+                        var needAdjust = true;
+                        BI.any(node.getChildren(), function (k, n) {
+                            if (!n.isNew) {
+                                needAdjust = false;
+                                return true;
+                            }
+                        });
+                        if (!node.isLeaf() && needAdjust === true) {
+                            var allChilds = [];
+                            BI.each(node.getChildren(), function (k, n) {
+                                allChilds = allChilds.concat(n.getChildren());
+                            });
+                            node.removeAllChilds();
+                            BI.each(allChilds, function (k, c) {
+                                node.addChild(c);
+                            });
+                            var newNode = new BI.Node(BI.UUID());
+                            //newNode.isEmptyRoot = node.isRoot || node.isEmptyRoot;
+                            newNode.isNew = true;
+                            var index = node.parent.getChildIndex(node.id);
+                            node.parent.removeChildByIndex(index);
+                            node.parent.addChild(newNode, index);
+                            newNode.addChild(node);
+                            isAllNeedAjust = true;
+                        }
+                    }
+                })
+            });
+            if (isAllNeedAjust === false) {
+                break;
+            } else {//树重构
+                adjust = this._stratification();
+            }
+        }
+        return adjust;
+    },
+
+    _calculateWidth: function () {
+        var o = this.options;
+        var width = 0;
+
+        function track1(node) {
+            var w = 0;
+            if (node.isLeaf()) {
+                return node.width;
+            }
+            BI.each(node.getChildren(), function (i, child) {
+                w += track1(child);
+            });
+            return w;
+        }
+
+        function track2(node) {
+            var w = 0;
+            if (node.isLeaf()) {
+                return node.height;
+            }
+            BI.each(node.getChildren(), function (i, child) {
+                w += track2(child);
+            });
+            return w;
+        }
+
+        if (this._isVertical()) {
+            width = track1(this.tree.getRoot());
+        } else {
+            width = track2(this.tree.getRoot());
+        }
+
+        return width;
+    },
+
+    _isVertical: function () {
+        var o = this.options;
+        return o.direction === BI.Direction.Top || o.direction === BI.Direction.Bottom;
+    },
+
+    _calculateHeight: function () {
+        var o = this.options;
+        var height = 0;
+
+        function track1(node) {
+            var h = 0;
+            BI.each(node.getChildren(), function (i, child) {
+                h = Math.max(h, track1(child));
+            });
+            return h + (node.height || 0);
+        }
+
+        function track2(node) {
+            var h = 0;
+            BI.each(node.getChildren(), function (i, child) {
+                h = Math.max(h, track2(child));
+            });
+            return h + (node.width || 0);
+        }
+
+        if (this._isVertical()) {
+            height = track1(this.tree.getRoot());
+        } else {
+            height = track2(this.tree.getRoot());
+        }
+        return height;
+    },
+
+    _calculateXY: function (levels) {
+        var o = this.options;
+        var width = this._calculateWidth();
+        var height = this._calculateHeight();
+        var levelCount = levels.length;
+        var allLeavesCount = this._calculateLeaves();
+        //计算坐标
+        var xy = {};
+        var levelHeight = height / levelCount;
+        BI.each(levels, function (i, nodes) {
+            //计算权重
+            var weights = [];
+            BI.each(nodes, function (j, node) {
+                weights[j] = (node.get("leaves") || 1) / allLeavesCount;
+            });
+            BI.each(nodes, function (j, node) {
+                //求前j个元素的权重
+                var weight = BI.sum(weights.slice(0, j));
+                //求坐标
+                var x = weight * width + weights[j] * width / 2;
+                var y = i * levelHeight + levelHeight / 2;
+                xy[node.id] = {x: x, y: y};
+            })
+        });
+        return xy;
+    },
+
+    _stroke: function (levels, xy) {
+        var height = this._calculateHeight();
+        var levelCount = levels.length;
+        var levelHeight = height / levelCount;
+        var self = this, o = this.options;
+        switch (o.direction) {
+            case BI.Direction.Top:
+                BI.each(levels, function (i, nodes) {
+                    BI.each(nodes, function (j, node) {
+                        if (node.getChildrenLength() > 0 && !node.leaf) {
+                            var path = "";
+                            var start = xy[node.id];
+                            var split = start.y + levelHeight / 2;
+                            path += "M" + start.x + "," + (start.y + o.centerOffset) + "L" + start.x + "," + split;
+                            var end = [];
+                            BI.each(node.getChildren(), function (t, c) {
+                                var e = end[t] = xy[c.id];
+                                path += "M" + e.x + "," + (e.y + o.centerOffset) + "L" + e.x + "," + split;
+                            });
+                            if (end.length > 0) {
+                                path += "M" + BI.first(end).x + "," + split + "L" + BI.last(end).x + "," + split;
+                            }
+                            self.svg.path(path).attr("stroke", "#d4dadd");
+                        }
+                    })
+                });
+                break;
+            case BI.Direction.Bottom:
+                BI.each(levels, function (i, nodes) {
+                    BI.each(nodes, function (j, node) {
+                        if (node.getChildrenLength() > 0 && !node.leaf) {
+                            var path = "";
+                            var start = xy[node.id];
+                            var split = start.y - levelHeight / 2;
+                            path += "M" + start.x + "," + (start.y - o.centerOffset) + "L" + start.x + "," + split;
+                            var end = [];
+                            BI.each(node.getChildren(), function (t, c) {
+                                var e = end[t] = xy[c.id];
+                                path += "M" + e.x + "," + (e.y - o.centerOffset) + "L" + e.x + "," + split;
+                            });
+                            if (end.length > 0) {
+                                path += "M" + BI.first(end).x + "," + split + "L" + BI.last(end).x + "," + split;
+                            }
+                            self.svg.path(path).attr("stroke", "#d4dadd");
+                        }
+                    })
+                });
+                break;
+            case BI.Direction.Left:
+                BI.each(levels, function (i, nodes) {
+                    BI.each(nodes, function (j, node) {
+                        if (node.getChildrenLength() > 0 && !node.leaf) {
+                            var path = "";
+                            var start = xy[node.id];
+                            var split = start.y + levelHeight / 2;
+                            path += "M" + (start.y + o.centerOffset) + "," + start.x + "L" + split + "," + start.x;
+                            var end = [];
+                            BI.each(node.getChildren(), function (t, c) {
+                                var e = end[t] = xy[c.id];
+                                path += "M" + (e.y + o.centerOffset) + "," + e.x + "L" + split + "," + e.x;
+                            });
+                            if (end.length > 0) {
+                                path += "M" + split + "," + BI.first(end).x + "L" + split + "," + BI.last(end).x;
+                            }
+                            self.svg.path(path).attr("stroke", "#d4dadd");
+                        }
+                    })
+                });
+                break;
+            case BI.Direction.Right:
+                BI.each(levels, function (i, nodes) {
+                    BI.each(nodes, function (j, node) {
+                        if (node.getChildrenLength() > 0 && !node.leaf) {
+                            var path = "";
+                            var start = xy[node.id];
+                            var split = start.y - levelHeight / 2;
+                            path += "M" + (start.y - o.centerOffset) + "," + start.x + "L" + split + "," + start.x;
+                            var end = [];
+                            BI.each(node.getChildren(), function (t, c) {
+                                var e = end[t] = xy[c.id];
+                                path += "M" + (e.y - o.centerOffset) + "," + e.x + "L" + split + "," + e.x;
+                            });
+                            if (end.length > 0) {
+                                path += "M" + split + "," + BI.first(end).x + "L" + split + "," + BI.last(end).x;
+                            }
+                            self.svg.path(path).attr("stroke", "#d4dadd");
+                        }
+                    })
+                });
+                break;
+        }
+    },
+
+    _createBranches: function (levels) {
+        var self = this, o = this.options;
+        if (o.direction === BI.Direction.Bottom || o.direction === BI.Direction.Right) {
+            levels = levels.reverse();
+        }
+        var xy = this._calculateXY(levels);
+        //画图
+        this._stroke(levels, xy);
+    },
+
+    _isNeedAdjust: function () {
+        var o = this.options;
+        return o.direction === BI.Direction.Top && o.align === BI.VerticalAlign.Bottom || o.direction === BI.Direction.Bottom && o.align === BI.VerticalAlign.Top
+            || o.direction === BI.Direction.Left && o.align === BI.HorizontalAlign.Right || o.direction === BI.Direction.Right && o.align === BI.HorizontalAlign.Left
+    },
+
+    setValue: function (value) {
+
+    },
+
+    getValue: function () {
+
+    },
+
+    _transformToTreeFormat: function (sNodes) {
+        var i, l;
+        if (!sNodes) {
+            return [];
+        }
+
+        if (BI.isArray(sNodes)) {
+            var r = [];
+            var tmpMap = [];
+            for (i = 0, l = sNodes.length; i < l; i++) {
+                tmpMap[sNodes[i].id] = sNodes[i];
+            }
+            for (i = 0, l = sNodes.length; i < l; i++) {
+                if (tmpMap[sNodes[i].pId] && sNodes[i].id != sNodes[i].pId) {
+                    if (!tmpMap[sNodes[i].pId].children) {
+                        tmpMap[sNodes[i].pId].children = [];
+                    }
+                    tmpMap[sNodes[i].pId].children.push(sNodes[i]);
+                } else {
+                    r.push(sNodes[i]);
+                }
+            }
+            return r;
+        } else {
+            return [sNodes];
+        }
+    },
+
+    populate: function (items) {
+        var self = this, o = this.options;
+        o.items = items || [];
+        this.empty();
+        items = this._transformToTreeFormat(o.items);
+        this.tree = new BI.Tree();
+        this.tree.initTree(items);
+
+        this.svg = BI.createWidget({
+            type: "bi.svg"
+        });
+
+        //树分层
+        var levels = this._stratification();
+
+        if (this._isNeedAdjust()) {
+            //树平移
+            var adjust = this._translate(levels);
+            //树调整
+            adjust = this._adjust(adjust);
+
+            this._createBranches(adjust);
+        } else {
+            var adjust = this._fill(levels);
+
+            this._createBranches(adjust);
+        }
+
+        var container = BI.createWidget({
+            type: "bi.layout",
+            width: this._isVertical() ? this._calculateWidth() : this._calculateHeight(),
+            height: this._isVertical() ? this._calculateHeight() : this._calculateWidth()
+        });
+        BI.createWidget({
+            type: "bi.absolute",
+            element: container,
+            items: [{
+                el: this.svg,
+                top: 0,
+                left: 0,
+                right: 0,
+                bottom: 0
+            }]
+        });
+        if (this._isVertical()) {
+            items = [{
+                type: "bi.handstand_branch_tree",
+                expander: {
+                    direction: o.direction
+                },
+                el: {
+                    layouts: [{
+                        type: "bi.horizontal_adapt",
+                        verticalAlign: o.align
+                    }]
+                },
+                items: items
+            }]
+        } else {
+            items = [{
+                type: "bi.branch_tree",
+                expander: {
+                    direction: o.direction
+                },
+                el: {
+                    layouts: [{
+                        type: "bi.vertical"
+                    }, {
+                        type: o.align === BI.HorizontalAlign.Left ? "bi.left" : "bi.right"
+                    }]
+                },
+                items: items
+            }]
+        }
+        BI.createWidget({
+            type: "bi.adaptive",
+            element: container,
+            items: items
+        });
+        BI.createWidget({
+            type: "bi.center_adapt",
+            scrollable: true,
+            element: this,
+            items: [container]
+        });
+    }
+});
+BI.BranchRelation.EVENT_CHANGE = "BranchRelation.EVENT_CHANGE";
+BI.shortcut("bi.branch_relation", BI.BranchRelation);/**
  * 倒立的Branch
  * @class BI.HandStandBranchExpander
  * @extend BI.Widget

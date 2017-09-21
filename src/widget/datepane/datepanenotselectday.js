@@ -119,4 +119,4 @@ BI.DatePaneWidget = BI.inherit(BI.Widget, {
     }
 
 });
-BI.shortcut("bi.date_pane_widget", BI.DatePaneWidget);
+BI.shortcut("bi.date_pane", BI.DatePaneWidget);
