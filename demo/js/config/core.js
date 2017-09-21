@@ -163,8 +163,8 @@ Demo.CORE_CONFIG = [{
     value: "demo.layer_popup"
 }, {
     pId: 10202,
-    text: "bi.layer_searcher",
-    value: "demo.layer_searcher"
+    text: "bi.searcher_view",
+    value: "demo.searcher_view"
 }, {
     pId: 1,
     text: "widget",

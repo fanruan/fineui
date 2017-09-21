@@ -129,8 +129,8 @@ BI.MultiDateCombo = BI.inherit(BI.Single, {
         });
 
         var triggerBtn = BI.createWidget({
-            type: "bi.trigger_icon_button",
-            cls: "bi-trigger-date-button chart-date-normal-font",
+            type: "bi.icon_button",
+            cls: "bi-trigger-icon-button date-font",
             width: 30,
             height: 23
         });
@@ -143,7 +143,7 @@ BI.MultiDateCombo = BI.inherit(BI.Single, {
         });
         this.changeIcon = BI.createWidget({
             type: "bi.icon_button",
-            cls: "bi-trigger-date-change widget-date-h-change-font",
+            cls: "bi-trigger-icon-button date-change-h-font",
             width: 30,
             height: 23
         });

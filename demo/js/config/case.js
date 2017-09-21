@@ -4,6 +4,22 @@ Demo.CASE_CONFIG = [{
     open: false
 }, {
     pId: 3,
+    id: 300,
+    text: "按钮"
+}, {
+    pId: 300,
+    text: "bi.multi_select_item",
+    value: "demo.multi_select_item"
+}, {
+    pId: 300,
+    text: "bi.single_select_item",
+    value: "demo.single_select_item"
+}, {
+    pId: 300,
+    text: "bi.single_select_radio_item",
+    value: "demo.single_select_radio_item"
+}, {
+    pId: 3,
     id: 301,
     text: "editors"
 }, {
@@ -23,57 +39,161 @@ Demo.CASE_CONFIG = [{
     text: "bi.state_editor",
     value: "demo.state_editor"
 }, {
+    pId: 301,
+    text: "bi.simple_state_editor",
+    value: "demo.simple_state_editor"
+}, {
+    pId: 301,
+    text: "bi.clear_editor",
+    value: "demo.clear_editor"
+}, {
     pId: 3,
     id: 302,
-    text: "combo"
+    text: "列表"
 }, {
     pId: 302,
-    text: "bi.bubble_combo",
-    value: "demo.bubble_combo"
+    text: "bi.select_list",
+    value: "demo.select_list"
+}, {
+    pId: 302,
+    text: "bi.lazy_loader",
+    value: "demo.lazy_loader"
+}, {
+    pId: 302,
+    text: "bi.list_loader",
+    value: "demo.list_loader"
+}, {
+    pId: 302,
+    text: "bi.sort_list",
+    value: "demo.sort_list"
 }, {
     pId: 3,
     id: 303,
-    text: "tree"
+    text: "面板"
 }, {
     pId: 303,
+    text: "bi.pane_list",
+    value: "demo.pane_list"
+}, {
+    pId: 303,
+    text: "bi.panel",
+    value: "demo.panel"
+}, {
+    pId: 3,
+    id: 304,
+    text: "popup弹出层"
+}, {
+    pId: 304,
+    text: "bi.multi_popup_view",
+    value: "demo.multi_popup_view"
+}, {
+    pId: 304,
+    text: "bi.popup_panel",
+    value: "demo.popup_panel"
+}, {
+    pId: 3,
+    id: 305,
+    text: "触发器trigger"
+}, {
+    pId: 305,
+    text: "bi.editor_trigger",
+    value: "demo.editor_trigger"
+}, {
+    pId: 305,
+    text: "bi.icon_trigger",
+    value: "demo.icon_trigger"
+}, {
+    pId: 305,
+    text: "bi.text_trigger",
+    value: "demo.text_trigger"
+}, {
+    pId: 305,
+    text: "bi.select_text_trigger",
+    value: "demo.select_text_trigger"
+}, {
+    pId: 3,
+    id: 306,
+    text: "combo"
+}, {
+    pId: 306,
+    text: "bi.bubble_combo",
+    value: "demo.bubble_combo"
+}, {
+    pId: 306,
+    text: "bi.icon_combo",
+    value: "demo.icon_combo"
+}, {
+    pId: 306,
+    text: "bi.static_combo",
+    value: "demo.static_combo"
+}, {
+    pId: 306,
+    text: "bi.text_value_combo",
+    value: "demo.text_value_combo"
+}, {
+    pId: 306,
+    text: "bi.text_value_check_combo",
+    value: "demo.text_value_check_combo"
+}, {
+    pId: 306,
+    text: "bi.text_value_down_list_combo",
+    value: "demo.text_value_down_list_combo"
+}, {
+    pId: 3,
+    id: 307,
+    text: "tree"
+}, {
+    pId: 307,
     text: "bi.branch_tree",
     value: "demo.branch_tree"
 }, {
-    pId: 303,
+    pId: 307,
     text: "bi.handstand_branch_tree",
     value: "demo.handstand_branch_tree"
 }, {
-    pId: 303,
+    pId: 307,
     text: "bi.display_tree",
     value: "demo.display_tree"
 }, {
-    pId: 303,
+    pId: 307,
     text: "bi.simple_tree",
     value: "demo.simple_tree"
 }, {
-    pId: 303,
+    pId: 307,
     text: "bi.level_tree",
     value: "demo.level_tree"
 }, {
-    pId: 303,
+    pId: 307,
     text: "bi.branch_relation",
     value: "demo.branch_relation"
 }, {
     pId: 3,
-    id: 304,
+    id: 308,
     text: "table"
 }, {
-    pId: 304,
+    pId: 308,
     text: "bi.adaptive_table",
     value: "demo.adaptive_table"
 }, {
-    pId: 304,
+    pId: 308,
     text: "bi.tree_table",
     value: "demo.tree_table"
 }, {
-    pId: 304,
+    pId: 308,
     text: "bi.layer_tree_table",
     value: "demo.layer_tree_table"
+}, {
+    pId: 3,
+    id: 309,
+    text: "pager"
+}, {
+    pId: 309,
+    text: "bi.all_count_pager",
+    value: "demo.all_count_pager"
+}, {
+    pId: 309,
+    text: "bi.direction_pager",
+    value: "demo.direction_pager"
 }, {
     pId: 3,
     text: "bi.calendar",
@@ -90,6 +210,10 @@ Demo.CASE_CONFIG = [{
     pId: 3,
     text: "bi.color_chooser",
     value: "demo.color_chooser"
+}, {
+    pId: 3,
+    text: "bi.color_chooser_popup",
+    value: "demo.color_chooser_popup"
 }, {
     pId: 3,
     text: "bi.segment",

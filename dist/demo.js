@@ -3035,7 +3035,33 @@ BI.shortcut("demo.value_chooser_combo", Demo.ValueChooserCombo);Demo.ValueChoose
         };
     }
 });
-BI.shortcut("demo.value_chooser_pane", Demo.ValueChooserPane);Demo.BASE_CONFIG = [{
+BI.shortcut("demo.value_chooser_pane", Demo.ValueChooserPane);Demo.ADDONS_CONFIG = [{
+    id: 6,
+    text: "addons"
+}, {
+    pId: 6,
+    id: 601,
+    text: "拓展图表控件"
+}, {
+    pId: 601,
+    text: "柱状图",
+    value: "demo.axis_chart"
+}, {
+    pId: 6,
+    id: 602,
+    text: "sliders"
+}, {
+    pId: 602,
+    text: "bi.single_slider"
+}, {
+    id: 100000,
+    text: "小demo",
+    value: "demo.platform_level_tree"
+}, {
+    pId: 100000,
+    text: "平台用",
+    value: "demo.platform_level_tree"
+}];Demo.BASE_CONFIG = [{
     id: 2,
     text: "基础控件",
     open: false
@@ -3155,10 +3181,30 @@ BI.shortcut("demo.value_chooser_pane", Demo.ValueChooserPane);Demo.BASE_CONFIG =
     pId: 2,
     text: "bi.svg",
     value: "demo.svg"
+}, {
+    pId: 2,
+    text: "bi.canvas",
+    value: "demo.canvas"
 }];Demo.CASE_CONFIG = [{
     id: 3,
     text: "实例控件",
     open: false
+}, {
+    pId: 3,
+    id: 300,
+    text: "按钮"
+}, {
+    pId: 300,
+    text: "bi.multi_select_item",
+    value: "demo.multi_select_item"
+}, {
+    pId: 300,
+    text: "bi.single_select_item",
+    value: "demo.single_select_item"
+}, {
+    pId: 300,
+    text: "bi.single_select_radio_item",
+    value: "demo.single_select_radio_item"
 }, {
     pId: 3,
     id: 301,
@@ -3180,57 +3226,161 @@ BI.shortcut("demo.value_chooser_pane", Demo.ValueChooserPane);Demo.BASE_CONFIG =
     text: "bi.state_editor",
     value: "demo.state_editor"
 }, {
+    pId: 301,
+    text: "bi.simple_state_editor",
+    value: "demo.simple_state_editor"
+}, {
+    pId: 301,
+    text: "bi.clear_editor",
+    value: "demo.clear_editor"
+}, {
     pId: 3,
     id: 302,
-    text: "combo"
+    text: "列表"
 }, {
     pId: 302,
-    text: "bi.bubble_combo",
-    value: "demo.bubble_combo"
+    text: "bi.select_list",
+    value: "demo.select_list"
+}, {
+    pId: 302,
+    text: "bi.lazy_loader",
+    value: "demo.lazy_loader"
+}, {
+    pId: 302,
+    text: "bi.list_loader",
+    value: "demo.list_loader"
+}, {
+    pId: 302,
+    text: "bi.sort_list",
+    value: "demo.sort_list"
 }, {
     pId: 3,
     id: 303,
-    text: "tree"
+    text: "面板"
 }, {
     pId: 303,
+    text: "bi.pane_list",
+    value: "demo.pane_list"
+}, {
+    pId: 303,
+    text: "bi.panel",
+    value: "demo.panel"
+}, {
+    pId: 3,
+    id: 304,
+    text: "popup弹出层"
+}, {
+    pId: 304,
+    text: "bi.multi_popup_view",
+    value: "demo.multi_popup_view"
+}, {
+    pId: 304,
+    text: "bi.popup_panel",
+    value: "demo.popup_panel"
+}, {
+    pId: 3,
+    id: 305,
+    text: "触发器trigger"
+}, {
+    pId: 305,
+    text: "bi.editor_trigger",
+    value: "demo.editor_trigger"
+}, {
+    pId: 305,
+    text: "bi.icon_trigger",
+    value: "demo.icon_trigger"
+}, {
+    pId: 305,
+    text: "bi.text_trigger",
+    value: "demo.text_trigger"
+}, {
+    pId: 305,
+    text: "bi.select_text_trigger",
+    value: "demo.select_text_trigger"
+}, {
+    pId: 3,
+    id: 306,
+    text: "combo"
+}, {
+    pId: 306,
+    text: "bi.bubble_combo",
+    value: "demo.bubble_combo"
+}, {
+    pId: 306,
+    text: "bi.icon_combo",
+    value: "demo.icon_combo"
+}, {
+    pId: 306,
+    text: "bi.static_combo",
+    value: "demo.static_combo"
+}, {
+    pId: 306,
+    text: "bi.text_value_combo",
+    value: "demo.text_value_combo"
+}, {
+    pId: 306,
+    text: "bi.text_value_check_combo",
+    value: "demo.text_value_check_combo"
+}, {
+    pId: 306,
+    text: "bi.text_value_down_list_combo",
+    value: "demo.text_value_down_list_combo"
+}, {
+    pId: 3,
+    id: 307,
+    text: "tree"
+}, {
+    pId: 307,
     text: "bi.branch_tree",
     value: "demo.branch_tree"
 }, {
-    pId: 303,
+    pId: 307,
     text: "bi.handstand_branch_tree",
     value: "demo.handstand_branch_tree"
 }, {
-    pId: 303,
+    pId: 307,
     text: "bi.display_tree",
     value: "demo.display_tree"
 }, {
-    pId: 303,
+    pId: 307,
     text: "bi.simple_tree",
     value: "demo.simple_tree"
 }, {
-    pId: 303,
+    pId: 307,
     text: "bi.level_tree",
     value: "demo.level_tree"
 }, {
-    pId: 303,
+    pId: 307,
     text: "bi.branch_relation",
     value: "demo.branch_relation"
 }, {
     pId: 3,
-    id: 304,
+    id: 308,
     text: "table"
 }, {
-    pId: 304,
+    pId: 308,
     text: "bi.adaptive_table",
     value: "demo.adaptive_table"
 }, {
-    pId: 304,
+    pId: 308,
     text: "bi.tree_table",
     value: "demo.tree_table"
 }, {
-    pId: 304,
+    pId: 308,
     text: "bi.layer_tree_table",
     value: "demo.layer_tree_table"
+}, {
+    pId: 3,
+    id: 309,
+    text: "pager"
+}, {
+    pId: 309,
+    text: "bi.all_count_pager",
+    value: "demo.all_count_pager"
+}, {
+    pId: 309,
+    text: "bi.direction_pager",
+    value: "demo.direction_pager"
 }, {
     pId: 3,
     text: "bi.calendar",
@@ -3249,15 +3399,12 @@ BI.shortcut("demo.value_chooser_pane", Demo.ValueChooserPane);Demo.BASE_CONFIG =
     value: "demo.color_chooser"
 }, {
     pId: 3,
+    text: "bi.color_chooser_popup",
+    value: "demo.color_chooser_popup"
+}, {
+    pId: 3,
     text: "bi.segment",
     value: "demo.segment"
-}];Demo.CHART_CONFIG = [{
-    id: 6,
-    text: "图表控件"
-}, {
-    pId: 6,
-    text: "柱状图",
-    value: "demo.axis_chart"
 }];/**
  * Created by User on 2017/3/22.
  */
@@ -3280,10 +3427,6 @@ Demo.COMPONENT_CONFIG = [{
     pId: 5,
     text: "bi.tree_value_chooser_pane",
     value: "demo.tree_value_chooser_pane"
-}, {
-    pId: 5,
-    text: "平台用",
-    value: "demo.platform_level_tree"
 }];Demo.CORE_CONFIG = [{
     id: 1,
     text: "核心控件"
@@ -3449,8 +3592,8 @@ Demo.COMPONENT_CONFIG = [{
     value: "demo.layer_popup"
 }, {
     pId: 10202,
-    text: "bi.layer_searcher",
-    value: "demo.layer_searcher"
+    text: "bi.searcher_view",
+    value: "demo.searcher_view"
 }, {
     pId: 1,
     text: "widget",
@@ -9499,7 +9642,7 @@ Demo.YearQuarterCombo = BI.inherit(BI.Widget, {
     }
 })
 
-BI.shortcut("demo.year_quarter_combo", Demo.YearQuarterCombo);Demo.CONFIG = Demo.CORE_CONFIG.concat(Demo.BASE_CONFIG).concat(Demo.CASE_CONFIG).concat(Demo.WIDGET_CONFIG).concat(Demo.COMPONENT_CONFIG).concat(Demo.CHART_CONFIG);
+BI.shortcut("demo.year_quarter_combo", Demo.YearQuarterCombo);Demo.CONFIG = Demo.CORE_CONFIG.concat(Demo.BASE_CONFIG).concat(Demo.CASE_CONFIG).concat(Demo.WIDGET_CONFIG).concat(Demo.COMPONENT_CONFIG).concat(Demo.ADDONS_CONFIG);
 
 Demo.CONSTANTS = {
     ITEMS: BI.map("柳州市城贸金属材料有限责任公司 柳州市建福房屋租赁有限公司 柳州市迅昌数码办公设备有限责任公司 柳州市河海贸易有限责任公司 柳州市花篮制衣厂 柳州市兴溪物资有限公司 柳州市针织总厂 柳州市衡管物资有限公司 柳州市琪成机电设备有限公司 柳州市松林工程机械修理厂 柳州市积玉贸易有限公司 柳州市福运来贸易有限责任公司 柳州市钢义物资有限公司 柳州市洋力化工有限公司 柳州市悦盛贸易有限公司 柳州市雁城钢管物资有限公司 柳州市恒瑞钢材经营部 柳州市科拓电子有限公司 柳州市九方电子有限公司 柳州市桂龙汽车配件厂 柳州市制鞋工厂 柳州市炜力科贸有限公司 柳州市希翼贸易有限公司 柳州市兆金物资有限公司 柳州市和润电子科技有限责任公司 柳州市汇凯贸易有限公司 柳州市好机汇商贸有限公司 柳州市泛源商贸经营部 柳州市利汇达物资有限公司 广西全民药业有限责任公司 柳州超凡物资贸易有限责任公司 柳州市贵宏物资有限责任公司 柳州昊恒贸易有限责任公司 柳州市浦联物资有限公司 柳州市广通园林绿化工程有限责任公司 柳州市松发物资贸易有限责任公司 柳州市奥士达办公设备有限责任公司 柳州市海泰物资有限公司 柳州市金三环针织厂 柳州市钢贸物资有限公司 柳州市明阳纺织有限公司 柳州市世科科技发展有限公司 柳州市禄羊贸易有限公司 柳州市金兆阳商贸有限公司 柳州市汇昌物资经营部 柳州市林泰金属物资供应站 柳州市自来水管道材料设备公司 柳州市丹柳铝板有限公司 柳州市桂冶物资有限公司 柳州市宸业物资经营部 柳州市耀成贸易有限公司 柳州奥易自动化科技有限公司 柳州市萃丰科技有限责任公司 柳州市华储贸易有限责任公司 柳州市黄颜钢材有限责任公司 柳州市银盛物资有限责任公司 柳州市新仪化玻供应站 柳州市晶凯化工有限公司 广西柳州市柳江包装纸厂 柳州市志新物资有限责任公司 柳州市兆钢物资有限公司 柳州市友方科技发展有限责任公司 柳州市缝纫机台板家具总厂 柳州市晖海数码办公设备有限责任公司 柳州市富兰特服饰有限责任公司 柳州市柳北区富兴物资经营部 柳州市柳锌福利厂 柳州市海泉印刷有限责任公司 柳州市乾亨贸易有限公司 柳州市悦宁物资贸易有限公司 柳州市昊天贸易有限公司 广西惠字钢铁有限公司 柳州市名青物资有限公司 柳州市林郝物资有限公司 柳州市民政服装厂 柳州市多维劳保用品厂 柳州市轻工物资供应公司 柳州市程源物资有限责任公司 柳州市寿丰物资贸易有限责任公司 柳州市凯凡物资有限公司 柳州市利晖物资经营部 柳州市恒茂金属物资供应站 柳州市中储物资经营部 柳州市第二医疗器械厂 柳州市来鑫物资经营部 柳州市钢鑫物资贸易有限责任公司 柳州市双合袜业有限责任公司 柳州市茂松经贸有限责任公司 柳州市行行物资贸易有限公司 柳州市方一物资有限公司 柳州成异钢管销售有限公司 柳州广惠佳电脑有限公司 桂林市圣泽鑫物资有限公司柳州分公司 柳州市砼基建材贸易有限公司 柳州市海燕针织厂 上海浦光仪表厂柳州销售处 柳州市能电工贸有限责任公司 柳州市广贸物资有限公司 柳州市柳北区大昌电工灯饰经营部 柳州市金龙印务有限公司 柳州市奇缘婚典服务有限公司 柳州市盛博物资经营部 柳州市项元钢铁贸易有限公司 柳州市虞美人化妆品经营部 柳州市俊彦鞋厂 柳州市聚源特钢有限公司 柳州市迅龙科贸有限责任公司 柳州市恒飞电子有限责任公司 柳州市蓝正现代办公设备有限责任公司 柳州地区农业生产资料公司 柳州华菱钢管销售有限公司 柳州融通物资有限公司 柳州市可仁广告策划有限责任公司 柳州市鸟鑫物资有限责任公司 柳州市五丰钢材供应站 柳州市金江不锈钢有限公司 柳州市美日物资设备有限责任公司 柳州市鑫东物资贸易有限责任公司 柳州地区日用杂品公司 柳州市华纳物资贸易有限公司 柳州乾利金虹物资贸易有限责任公司 柳州市新迈计算机有限公司 柳州市富丽实业发展公司 柳州市石钢金属材料有限公司 柳州市力志传真机销售有限公司 广西宝森投资有限公司 柳州市嵘基商贸有限公司 柳州市景民商贸有限责任公司 柳州市银桥化玻有限责任公司 柳州市宏文糖烟店 柳州市科苑电脑网络有限公司 柳州市两面针旅游用品厂 柳州市立早室内装璜有限责任公司 柳州地化建材有限公司 柳州市涛达贸易有限公司 柳州市兰丰档案服务中心 柳州市惠贸物资有限责任公司 柳州市立文物资有限责任公司 柳州市致和商贸经营部 柳州市金色阳光信息咨询有限公司 柳州市赛利钢材经销部 柳州市日用化工厂 柳州市昆廷物资有限责任公司 柳州市邦盛贸易有限公司 柳州市济华贸易有限公司 柳州昕威橡塑化工经营部 柳州市联业贸易有限公司 柳州市兰钢贸易有限公司 柳州市子欣科技有限公司 柳州市狄龙机电设备有限公司 柳州市方真物资贸易有限公司 柳州市银鸥废旧回收中心 柳州市冠宝贸易有限公司 柳州市鑫盛德商务咨询有限责任公司 柳州市泰汇银通经贸有限公司 广西瀚维智测科技有限公司 柳州市钓鱼郎制衣有限责任公司 柳州溪水物资有限公司 柳州市融峰物资有限责任公司 广西新地科技有限责任公司 柳州市纺织装饰公司 柳州市粤翔冶金炉料有限公司 柳州市远腾贸易有限公司 柳州市东鸿城市改造有限公司 广西丛欣实业有限公司 柳州市服装厂 柳州市立安联合刀片有限公司 广西国扬投资有限责任公司 柳州市铭泰办公设备公司 柳州市桂钢物资供应站 柳州市昱升物资有限责任公司 柳州市鹰飞灿科贸有限公司 柳州市先导科贸有限公司 柳州市金秋建材物资经营部 柳州市童装厂 柳州市民泽物资有限公司 柳州市恒先物资贸易有限公司 柳州市银夏冷气工程有限责任公司 柳州粮食批发有限责任公司 柳州市金银华窗纱制造有限责任公司 柳州市三方贸易有限公司 柳州市丰涛商贸有限责任公司 柳州华智企业管理咨询有限责任公司 柳州市诚正建筑工程施工图审查有限公司 柳州市今科电讯设备营销中心 柳州市闽德电子有限公司 柳州市鑫虹针织厂 柳州市畅通通讯器材有限责任公司 柳州市正钢物资经营部 柳州市新柳饲料有限责任公司 柳州市黄村油库 柳州市天泰电力装饰工程有限公司 柳州市兆吉物资有限责任公司 柳州市八龙纸制品有限责任公司 柳州市巨佳电脑网络科技有限公司 ".match(/[^\s]+/g), function (i, v) {

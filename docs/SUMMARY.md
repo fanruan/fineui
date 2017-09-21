@@ -46,8 +46,8 @@
     * [tab](core/combination/tab.md)
 * 弹出层
     * [float_box](core/layer/layer_float_box.md)
-    * [popup](core/layer/layer_popup.md)
-    * [searcher](core/layer/layer_searcher.md)
+    * [popup_view](core/layer/layer_popup.md)
+    * [searcher_view](core/layer/layer_searcher.md)
 * [widget](core/widget.md)
 * [single](core/single.md)
 * [basic_button](core/basic_button.md)
@@ -70,6 +70,7 @@
     * [multifile_editor](base/editor/multifile_editor.md)
     * [textarea_editor](base/editor/textarea_editor.md)
     * [formula_editor](base/editor/formula_editor.md)
+    * [rich_editor](base/editor/rich_editor.md)
 * 表格
     * [table_view](base/table/table_view.md)
     * [grid_table](base/table/grid_table.md)
@@ -84,21 +85,24 @@
     * [multi_select_item](case/button/multi_select_item.md)
     * [single_select_item](case/button/single_select_item.md)
     * [single_select_radio_item](case/button/single_select_radio_item.md)
-* 编辑框
+* 文本框
     * [shelter_editor](case/editor/shelter_editor.md)
     * [sign_editor](case/editor/sign_editor.md)
     * [sign_initial_editor](case/editor/sign_initial_editor.md)
     * [state_editor](case/editor/state_editor.md)
-* 弹出层
-    * [multi_popup_layer](case/layer/multi_popup_layer.md)
-    * [layer_panel](case/layer/layer_panel.md)
-    * [pane_list](case/layer/pane_list.md)
-    * [panel](case/layer/panel.md)
+    * [simple_state_editor](case/editor/simple_state_editor.md)
+    * [clear_editor](detailed/text_input/bi.clear_editor.md)
 * 列表
     * [select_list](case/list/list.select.md)
     * [lazy_loader](case/loader/lazy_loader.md)
     * [list_loader](case/loader/list_loader.md)
-    * [sort_list](case/loader/sort_list.md)
+    * [sort_list(jquery-sortable封装)](case/loader/sort_list.md)
+* 面板
+    * [pane_list](case/layer/pane_list.md)
+    * [panel](case/layer/panel.md)
+* popup弹出层
+    * [multi_popup_view](case/layer/multi_popup_layer.md)
+    * [popup_panel](case/layer/layer_panel.md)
 * 触发器
     * [editor_trigger](case/trigger/editor_trigger.md)
     * [icon_trigger](case/trigger/icon_trigger.md)
@@ -108,7 +112,8 @@
     * [icon_combo](case/combo/icon_combo.md)
     * [static_combo](case/combo/static_combo.md)
     * [text_value_combo](case/combo/text_value_combo.md)
-    * [text_value_downlist_combo](case/combo/text_value_downlist_combo.md)
+    * [text_value_check_combo](case/combo/text_value_check_combo.md)
+    * [text_value_down_list_combo](case/combo/text_value_down_list_combo.md)
 * 树
     * [branch_tree](case/tree/branch_tree.md)
     * [handstand_branch_tree](case/tree/handstand_branch_tree.md)
@@ -137,18 +142,18 @@
     * [各种items](detailed/bi.button/items.md)
     * [各种节点nodes](detailed/bi.button/node.md)
     * [各种segment](detailed/bi.button/segment.md)
-* 树形结构
+* 树
     * [multi_tree_combo](detailed/tree/bi.multi_tree_combo.md)
     * [switch_tree](detailed/tree/bi.switch_tree.md)
 * 表格
     * [preview_table](detailed/table/bi.preview_table.md)
     * [responsive_table](detailed/table/bi.responsive_table.md)
     * [excel_table](detailed/table/bi.excel_table.md)
+    * [sequence_table](detailed/table/bi.sequence_table.md)
     * [page_table](detailed/table/bi.page_table.md)
 * 文本框控件
-    * [bi.text_editor](detailed/text_input/bi.text_editor.md)
-    * [bi.search_editor](detailed/text_input/bi.search_editor.md)
-    * [bi.clear_editor](detailed/text_input/bi.clear_editor.md)
+    * [text_editor](detailed/text_input/bi.text_editor.md)
+    * [search_editor](detailed/text_input/bi.search_editor.md)
     * [finetuning_number_editor](detailed/text_input/finetuning_number_editor.md)
 * [year_combo](detailed/year_combo.md)
 * [month_combo](detailed/month_combo.md)
@@ -158,7 +163,7 @@
 * [multi_select_combo](detailed/multi_select_combo.md)
 * 简单日期控件
     * [date_combo](detailed/date/date_combo.md)
-    * [date_pane_widget](detailed/date/date_pane_widget.md)
+    * [date_pane](detailed/date/date_pane_widget.md)
     * [year_month_combo](detailed/date/year_month_combo.md)
     * [year_quarter_combo](detailed/date/year_quarter_combo.md)
     * [custom_date_time](detailed/date/custom_date_time.md)
@@ -173,5 +178,13 @@
 * [relation_view](detailed/relation_view.md)
 * [dialog](detailed/dialog.md)
 * [file_manager](detailed/file_manager.md)
-* [slider](detailed/slider.md)
+## 部件
+* [value_chooser_combo](components/value_chooser_combo.md)
+* [value_chooser_pane](components/value_chooser_pane.md)
+* [all_value_chooser_combo](components/all_value_chooser_combo.md)
+* [tree_value_chooser_combo](components/tree_value_chooser_combo.md)
+* [tree_value_chooser_pane](components/tree_value_chooser_pane.md)
+* addons
+    * sliders
+        * [single_slider](detailed/single_slider.md)
 

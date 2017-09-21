@@ -118,4 +118,8 @@ Demo.BASE_CONFIG = [{
     pId: 2,
     text: "bi.svg",
     value: "demo.svg"
+}, {
+    pId: 2,
+    text: "bi.canvas",
+    value: "demo.canvas"
 }];
