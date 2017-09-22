@@ -16,7 +16,8 @@ Demo.Slider = BI.inherit(BI.Widget, {
             type: "bi.single_slider",
             digit: 0,
             width: 300,
-            height: 50
+            height: 50,
+            cls: "layout-bg-white"
         });
 
         singleSlider.setMinAndMax({
@@ -32,10 +33,11 @@ Demo.Slider = BI.inherit(BI.Widget, {
 
         var singleSliderLabel = BI.createWidget({
             type: "bi.single_slider_label",
-            height: 30,
+            height: 50,
             width: 300,
             digit: 0,
-            unit: "个"
+            unit: "个",
+            cls: "layout-bg-white"
         });
         singleSliderLabel.setMinAndMax({
             min: 0,
@@ -47,7 +49,8 @@ Demo.Slider = BI.inherit(BI.Widget, {
         var normalSingleSlider = BI.createWidget({
             type: "bi.single_slider_normal",
             height: 30,
-            width: 300
+            width: 300,
+            cls: "layout-bg-white"
         });
         normalSingleSlider.setMinAndMax({
             min: 0,
@@ -56,35 +59,68 @@ Demo.Slider = BI.inherit(BI.Widget, {
         normalSingleSlider.setValue(10);
         normalSingleSlider.populate();
 
+
+        var intervalSlider = BI.createWidget({
+            type: "bi.interval_slider",
+            width: 300,
+            cls: "layout-bg-white"
+        });
+        intervalSlider.setMinAndMax({
+            min: 0,
+            max: 120
+        });
+        intervalSlider.setValue({
+            min: 10,
+            max: 120
+        });
+        intervalSlider.populate();
+
+        var intervalSliderLabel = BI.createWidget({
+            type: "bi.interval_slider_label",
+            width: 300,
+            cls: "layout-bg-white"
+        });
+        intervalSliderLabel.setMinAndMax({
+            min: 0,
+            max: 120
+        });
+        intervalSliderLabel.setValue({
+            min: 10,
+            max: 120
+        });
+        intervalSliderLabel.populate();
+
+
         BI.createWidget({
-            type: "bi.vtape",
+            type: "bi.vertical",
             element: this,
             items: [{
-                el: {
-                    type: "bi.center_adapt",
-                    items: [{
-                        el: singleSlider
-                    }]
-                },
-                height: 200
+                type: "bi.center_adapt",
+                items: [{
+                    el: singleSlider
+                }]
             }, {
-                el: {
-                    type: "bi.center_adapt",
-                    items: [{
-                        el: normalSingleSlider
-                    }]
-                },
-                height: 200
+                type: "bi.center_adapt",
+                items: [{
+                    el: normalSingleSlider
+                }]
             }, {
-                el: {
-                    type: "bi.center_adapt",
-                    items: [{
-                        el: singleSliderLabel
-                    }]
-                },
-                height: 200
+                type: "bi.center_adapt",
+                items: [{
+                    el: singleSliderLabel
+                }]
+            }, {
+                type: "bi.center_adapt",
+                items: [{
+                    el: intervalSlider
+                }]
+            }, {
+                type: "bi.center_adapt",
+                items: [{
+                    el: intervalSliderLabel
+                }]
             }],
-            hgap: 20
+            vgap: 20
         });
     }
 });

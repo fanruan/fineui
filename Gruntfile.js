@@ -83,7 +83,7 @@ module.exports = function (grunt) {
             },
             sliderJs: {
                 src: [
-                    'src/addons/sliders/singleslider/**/*.js'
+                    'src/addons/sliders/js/**/*.js'
                 ],
                 dest: 'dist/sliders.js'
             },
@@ -236,7 +236,7 @@ module.exports = function (grunt) {
             },
             bi_sliderJs: {
                 src: [
-                    'src/addons/sliders/singleslider/**/*.js'
+                    'src/addons/sliders/js/**/*.js'
                 ],
                 dest: 'bi/sliders.js'
             },
@@ -275,7 +275,14 @@ module.exports = function (grunt) {
         },
 
         less: {
-            main: {
+            sliders: {
+                expand: true,
+                cwd: 'src/addons/sliders/less',
+                src: ['**/*.less'],
+                dest: 'src/addons/sliders/css/',
+                ext: '.css'
+            },
+            demo: {
                 expand: true,
                 cwd: 'demo/less',
                 src: ['**/*.less'],

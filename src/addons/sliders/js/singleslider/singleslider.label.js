@@ -4,8 +4,8 @@
 BI.SingleSliderLabel = BI.inherit(BI.Widget, {
     _constant: {
         EDITOR_WIDTH: 90,
-        EDITOR_HEIGHT: 30,
-        HEIGHT: 28,
+        EDITOR_HEIGHT: 20,
+        HEIGHT: 20,
         SLIDER_WIDTH_HALF: 15,
         SLIDER_WIDTH: 30,
         SLIDER_HEIGHT: 30,
@@ -13,7 +13,7 @@ BI.SingleSliderLabel = BI.inherit(BI.Widget, {
     },
     _defaultConfig: function () {
         return BI.extend(BI.SingleSliderLabel.superclass._defaultConfig.apply(this, arguments), {
-            baseCls: "bi-single-slider bi-slider-track",
+            baseCls: "bi-single-slider-label bi-slider-track",
             digit: "",
             unit: ""
         });
@@ -120,12 +120,12 @@ BI.SingleSliderLabel = BI.inherit(BI.Widget, {
                     hgap: 7,
                     height: c.TRACK_HEIGHT
                 },
-                top: 33,
+                top: 13,
                 left: 0,
                 width: "100%"
             }, {
                 el: sliderVertical,
-                top: 30,
+                top: 10,
                 left: 0,
                 width: "100%"
             }, {
@@ -138,7 +138,7 @@ BI.SingleSliderLabel = BI.inherit(BI.Widget, {
                     rgap: c.EDITOR_WIDTH,
                     height: c.EDITOR_HEIGHT
                 },
-                top: 10,
+                top: 0,
                 left: 0,
                 width: "100%"
             }]
