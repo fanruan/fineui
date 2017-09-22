@@ -828,3 +828,35 @@
   _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='images/1x/icon/half_selected.png');
   _background: none;
 }
+.slider-icon .x-icon {
+  display: block;
+  background: url('images/2x/icon/slider-normal-small.png') no-repeat 0 0;
+  _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='images/2x/icon/slider-normal-small.png');
+  background-size: contain;
+  _background: none;
+}
+.slider-icon .x-icon.hack {
+  background: url('images/1x/icon/slider-normal-small.png') no-repeat 0 0;
+  _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='images/1x/icon/slider-normal-small.png');
+  _background: none;
+}
+.slider-icon:hover .x-icon,
+.slider-icon:focus .x-icon,
+.slider-icon.hover .x-icon {
+  display: block;
+  background: url('images/2x/icon/slider-active-small.png') no-repeat 0 0;
+  _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='images/2x/icon/slider-active-small.png');
+  background-size: contain;
+  _background: none;
+}
+.slider-icon:hover .x-icon.hack,
+.slider-icon:focus .x-icon.hack,
+.slider-icon.hover .x-icon.hack {
+  background: url('images/1x/icon/slider-active-small.png') no-repeat 0 0;
+  _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='images/1x/icon/slider-active-small.png');
+  _background: none;
+}
+.slider-icon.native .x-icon,
+.slider-icon.disabled .x-icon {
+  display: block;
+}

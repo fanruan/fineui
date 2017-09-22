@@ -327,9 +327,6 @@ textarea::-webkit-scrollbar-thumb:hover {
   _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='images/1x/background/trans-color.png');
   _background: none;
 }
-.cursor-drag {
-  cursor: url('cursor/cursor_drag_hand.cur'), auto;
-}
 @font-face {
   font-family: 'bi';
   src: url('font/iconfont.eot'), /* IE6-IE8 */ url('font/iconfont.woff') format('woff'), /* chrome、firefox */ url('font/iconfont.ttf') format('truetype'), /* chrome、firefox、opera、Safari, Android, iOS 4.2+*/ url('font/iconfont.svg#svgFontName') format('svg');
@@ -2033,4 +2030,36 @@ textarea::-webkit-scrollbar-thumb:hover {
   background: url('images/1x/icon/half_selected.png') no-repeat 0px 0px;
   _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='images/1x/icon/half_selected.png');
   _background: none;
+}
+.slider-icon .x-icon {
+  display: block;
+  background: url('images/2x/icon/slider-normal-small.png') no-repeat 0 0;
+  _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='images/2x/icon/slider-normal-small.png');
+  background-size: contain;
+  _background: none;
+}
+.slider-icon .x-icon.hack {
+  background: url('images/1x/icon/slider-normal-small.png') no-repeat 0 0;
+  _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='images/1x/icon/slider-normal-small.png');
+  _background: none;
+}
+.slider-icon:hover .x-icon,
+.slider-icon:focus .x-icon,
+.slider-icon.hover .x-icon {
+  display: block;
+  background: url('images/2x/icon/slider-active-small.png') no-repeat 0 0;
+  _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='images/2x/icon/slider-active-small.png');
+  background-size: contain;
+  _background: none;
+}
+.slider-icon:hover .x-icon.hack,
+.slider-icon:focus .x-icon.hack,
+.slider-icon.hover .x-icon.hack {
+  background: url('images/1x/icon/slider-active-small.png') no-repeat 0 0;
+  _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='images/1x/icon/slider-active-small.png');
+  _background: none;
+}
+.slider-icon.native .x-icon,
+.slider-icon.disabled .x-icon {
+  display: block;
 }
