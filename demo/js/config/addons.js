@@ -12,10 +12,8 @@ Demo.ADDONS_CONFIG = [{
 }, {
     pId: 6,
     id: 602,
-    text: "sliders"
-}, {
-    pId: 602,
-    text: "bi.single_slider"
+    text: "滚动sliders",
+    value: "demo.slider"
 }, {
     id: 100000,
     text: "小demo",
