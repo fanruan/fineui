@@ -8,7 +8,7 @@
 {% common %}
 ```javascript
 BI.createWidget({
-    type: "bi.numerical_interval",
+    type: "bi.number_interval",
     element: '#wrapper',
     width: 500
 });

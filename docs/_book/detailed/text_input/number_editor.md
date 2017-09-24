@@ -8,7 +8,7 @@
 {% common %}
 ```javascript
 BI.createWidget({
-    type: 'bi.fine_tuning_number_editor',
+    type: 'bi.number_editor',
     element: '#wrapper',
     width: 300
 });

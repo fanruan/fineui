@@ -2,10 +2,10 @@
  * Created by windy on 2017/3/13.
  * 数值微调器
  */
-BI.FineTuningNumberEditor = BI.inherit(BI.Widget, {
+BI.NumberEditor = BI.inherit(BI.Widget, {
     _defaultConfig: function () {
-        return BI.extend(BI.FineTuningNumberEditor.superclass._defaultConfig.apply(this, arguments), {
-            baseCls: "bi-fine-tuning-number-editor bi-border",
+        return BI.extend(BI.NumberEditor.superclass._defaultConfig.apply(this, arguments), {
+            baseCls: "bi-number-editor bi-border",
             validationChecker: function () {return true;},
             valueFormatter: function (v) {return v;},
             value: 0,
@@ -15,7 +15,7 @@ BI.FineTuningNumberEditor = BI.inherit(BI.Widget, {
     },
 
     _init: function () {
-        BI.FineTuningNumberEditor.superclass._init.apply(this, arguments);
+        BI.NumberEditor.superclass._init.apply(this, arguments);
         var self = this, o = this.options;
         this.editor = BI.createWidget({
             type: "bi.sign_editor",
@@ -26,10 +26,10 @@ BI.FineTuningNumberEditor = BI.inherit(BI.Widget, {
         });
         this.editor.on(BI.TextEditor.EVENT_CHANGE, function () {
             o.value = this.getValue();
-            self.fireEvent(BI.FineTuningNumberEditor.EVENT_CHANGE);
+            self.fireEvent(BI.NumberEditor.EVENT_CHANGE);
         });
         this.editor.on(BI.TextEditor.EVENT_CONFIRM, function(){
-            self.fireEvent(BI.FineTuningNumberEditor.EVENT_CONFIRM);
+            self.fireEvent(BI.NumberEditor.EVENT_CONFIRM);
         });
         this.topBtn = BI.createWidget({
             type: "bi.icon_button",
@@ -38,8 +38,8 @@ BI.FineTuningNumberEditor = BI.inherit(BI.Widget, {
         });
         this.topBtn.on(BI.IconButton.EVENT_CHANGE, function(){
             self._finetuning(o.step);
-            self.fireEvent(BI.FineTuningNumberEditor.EVENT_CHANGE);
-            self.fireEvent(BI.FineTuningNumberEditor.EVENT_CONFIRM);
+            self.fireEvent(BI.NumberEditor.EVENT_CHANGE);
+            self.fireEvent(BI.NumberEditor.EVENT_CONFIRM);
         });
         this.bottomBtn = BI.createWidget({
             type: "bi.icon_button",
@@ -48,8 +48,8 @@ BI.FineTuningNumberEditor = BI.inherit(BI.Widget, {
         });
         this.bottomBtn.on(BI.IconButton.EVENT_CHANGE, function(){
             self._finetuning(-o.step);
-            self.fireEvent(BI.FineTuningNumberEditor.EVENT_CHANGE);
-            self.fireEvent(BI.FineTuningNumberEditor.EVENT_CONFIRM);
+            self.fireEvent(BI.NumberEditor.EVENT_CHANGE);
+            self.fireEvent(BI.NumberEditor.EVENT_CONFIRM);
         });
         BI.createWidget({
             type: "bi.htape",
@@ -99,6 +99,6 @@ BI.FineTuningNumberEditor = BI.inherit(BI.Widget, {
     }
 
 });
-BI.FineTuningNumberEditor.EVENT_CONFIRM = "EVENT_CONFIRM";
-BI.FineTuningNumberEditor.EVENT_CHANGE = "EVENT_CHANGE";
-BI.shortcut("bi.fine_tuning_number_editor", BI.FineTuningNumberEditor);
+BI.NumberEditor.EVENT_CONFIRM = "EVENT_CONFIRM";
+BI.NumberEditor.EVENT_CHANGE = "EVENT_CHANGE";
+BI.shortcut("bi.number_editor", BI.NumberEditor);
