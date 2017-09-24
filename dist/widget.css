@@ -68,11 +68,6 @@
   background-color: #191b2b;
   color: #999999;
 }
-.bi-fine-tuning-number-editor {
-  -webkit-border-radius: 2px;
-  -moz-border-radius: 2px;
-  border-radius: 2px;
-}
 .bi-interactive-arrangement .interactive-arrangement-dragtag-line {
   z-index: 1000000000;
   background-color: #f07d0a;
@@ -139,7 +134,12 @@
   color: #3f8ce8;
   z-index: 1;
 }
-.bi-numerical-interval .numerical-interval-small-editor {
+.bi-number-editor {
+  -webkit-border-radius: 2px;
+  -moz-border-radius: 2px;
+  border-radius: 2px;
+}
+.bi-number-interval .number-interval-small-editor {
   -moz-border-radius-topleft: 2px;
   -webkit-border-top-left-radius: 2px;
   -moz-border-radius-bottomleft: 2px;
@@ -147,7 +147,7 @@
   border-top-left-radius: 2px;
   border-bottom-left-radius: 2px;
 }
-.bi-numerical-interval .numerical-interval-big-editor {
+.bi-number-interval .number-interval-big-editor {
   -moz-border-radius-topright: 2px;
   -webkit-border-top-right-radius: 2px;
   -moz-border-radius-bottomright: 2px;
@@ -155,7 +155,7 @@
   border-top-right-radius: 2px;
   border-bottom-right-radius: 2px;
 }
-.bi-numerical-interval .numerical-interval-big-combo {
+.bi-number-interval .number-interval-big-combo {
   -moz-border-radius-topleft: 2px;
   -webkit-border-top-left-radius: 2px;
   -moz-border-radius-bottomleft: 2px;
@@ -163,10 +163,10 @@
   border-top-left-radius: 2px;
   border-bottom-left-radius: 2px;
 }
-.bi-numerical-interval .numerical-interval-big-combo .bi-icon-combo-trigger .icon-combo-trigger-icon {
+.bi-number-interval .number-interval-big-combo .bi-icon-combo-trigger .icon-combo-trigger-icon {
   font-size: 14px;
 }
-.bi-numerical-interval .numerical-interval-small-combo {
+.bi-number-interval .number-interval-small-combo {
   -moz-border-radius-topright: 2px;
   -webkit-border-top-right-radius: 2px;
   -moz-border-radius-bottomright: 2px;
@@ -174,10 +174,10 @@
   border-top-right-radius: 2px;
   border-bottom-right-radius: 2px;
 }
-.bi-numerical-interval .numerical-interval-small-combo .bi-icon-combo-trigger .icon-combo-trigger-icon {
+.bi-number-interval .number-interval-small-combo .bi-icon-combo-trigger .icon-combo-trigger-icon {
   font-size: 14px;
 }
-.bi-numerical-interval.number-error .bi-input {
+.bi-number-interval.number-error .bi-input {
   color: #e85050;
 }
 .bi-page-table-cell {

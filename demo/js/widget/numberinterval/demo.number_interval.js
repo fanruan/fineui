@@ -24,7 +24,7 @@ Demo.NumericalInterval = BI.inherit(BI.Widget, {
         return {
             type: "bi.horizontal_auto",
             items: [{
-                type: "bi.numerical_interval",
+                type: "bi.number_interval",
                 ref: function (_ref) {
                     self.numerical = _ref;
                 },

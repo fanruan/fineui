@@ -4,7 +4,7 @@
  * Created by roy on 15/9/17.
  *
  */
-BI.NumericalInterval = BI.inherit(BI.Single, {
+BI.NumberInterval = BI.inherit(BI.Single, {
     constants: {
         typeError: "typeBubble",
         numberError: "numberBubble",
@@ -20,16 +20,16 @@ BI.NumericalInterval = BI.inherit(BI.Single, {
         numTip: ""
     },
     _defaultConfig: function () {
-        var conf = BI.NumericalInterval.superclass._defaultConfig.apply(this, arguments)
+        var conf = BI.NumberInterval.superclass._defaultConfig.apply(this, arguments)
         return BI.extend(conf, {
-            extraCls: "bi-numerical-interval",
+            extraCls: "bi-number-interval",
             height: 25,
             validation: "valid"
         })
     },
     _init: function () {
         var self = this, c = this.constants, o = this.options;
-        BI.NumericalInterval.superclass._init.apply(this, arguments)
+        BI.NumberInterval.superclass._init.apply(this, arguments)
         this.smallEditor = BI.createWidget({
             type: "bi.editor",
             height: o.height - 2,
@@ -48,7 +48,7 @@ BI.NumericalInterval = BI.inherit(BI.Single, {
                 }
                 return true;
             },
-            cls: "numerical-interval-small-editor bi-border-top bi-border-bottom bi-border-left"
+            cls: "number-interval-small-editor bi-border-top bi-border-bottom bi-border-left"
         });
 
         this.smallTip = BI.createWidget({
@@ -85,7 +85,7 @@ BI.NumericalInterval = BI.inherit(BI.Single, {
                 }
                 return true;
             },
-            cls: "numerical-interval-big-editor bi-border-top bi-border-bottom bi-border-right"
+            cls: "number-interval-big-editor bi-border-top bi-border-bottom bi-border-right"
         });
 
         this.bigTip = BI.createWidget({
@@ -105,23 +105,23 @@ BI.NumericalInterval = BI.inherit(BI.Single, {
         });
 
         //this.smallCombo = BI.createWidget({
-        //    type: "bi.numerical_interval_combo",
-        //    cls: "numerical-interval-small-combo",
+        //    type: "bi.number_interval_combo",
+        //    cls: "number-interval-small-combo",
         //    height: o.height,
         //    value: o.closemin ? 1 : 0,
         //    offsetStyle: "left"
         //});
         //
         //this.bigCombo = BI.createWidget({
-        //    type: "bi.numerical_interval_combo",
-        //    cls: "numerical-interval-big-combo",
+        //    type: "bi.number_interval_combo",
+        //    cls: "number-interval-big-combo",
         //    height: o.height,
         //    value: o.closemax ? 1 : 0,
         //    offsetStyle: "left"
         //});
         this.smallCombo = BI.createWidget({
             type: "bi.icon_combo",
-            cls: "numerical-interval-small-combo bi-border",
+            cls: "number-interval-small-combo bi-border",
             height: o.height - 2,
             items: [{
                 text: "(" + BI.i18nText("BI-Less_Than") + ")",
@@ -140,7 +140,7 @@ BI.NumericalInterval = BI.inherit(BI.Single, {
         }
         this.bigCombo = BI.createWidget({
             type: "bi.icon_combo",
-            cls: "numerical-interval-big-combo bi-border",
+            cls: "number-interval-big-combo bi-border",
             height: o.height - 2,
             items: [{
                 text: "(" + BI.i18nText("BI-Less_Than") + ")",
@@ -348,7 +348,7 @@ BI.NumericalInterval = BI.inherit(BI.Single, {
             BI.Bubbles.show(c.typeError, BI.i18nText("BI-Numerical_Interval_Input_Data"), self, {
                 offsetStyle: "center"
             });
-            self.fireEvent(BI.NumericalInterval.EVENT_ERROR);
+            self.fireEvent(BI.NumberInterval.EVENT_ERROR);
         })
     },
 
@@ -361,16 +361,16 @@ BI.NumericalInterval = BI.inherit(BI.Single, {
                     BI.Bubbles.show(c.numberError, BI.i18nText("BI-Numerical_Interval_Number_Value"), self, {
                         offsetStyle: "center"
                     });
-                    self.fireEvent(BI.NumericalInterval.EVENT_ERROR);
+                    self.fireEvent(BI.NumberInterval.EVENT_ERROR);
                     break;
                 case c.signalError:
                     BI.Bubbles.show(c.signalError, BI.i18nText("BI-Numerical_Interval_Signal_Value"), self, {
                         offsetStyle: "center"
                     });
-                    self.fireEvent(BI.NumericalInterval.EVENT_ERROR);
+                    self.fireEvent(BI.NumberInterval.EVENT_ERROR);
                     break;
                 default:
-                    self.fireEvent(BI.NumericalInterval.EVENT_VALID);
+                    self.fireEvent(BI.NumberInterval.EVENT_VALID);
             }
         })
     },
@@ -398,7 +398,7 @@ BI.NumericalInterval = BI.inherit(BI.Single, {
                 default :
                     break;
             }
-            self.fireEvent(BI.NumericalInterval.EVENT_CHANGE);
+            self.fireEvent(BI.NumberInterval.EVENT_CHANGE);
         });
     },
 
@@ -408,19 +408,19 @@ BI.NumericalInterval = BI.inherit(BI.Single, {
             switch (self._checkValidation()) {
                 case c.typeError:
                     self._setTitle(BI.i18nText("BI-Numerical_Interval_Input_Data"));
-                    self.fireEvent(BI.NumericalInterval.EVENT_ERROR);
+                    self.fireEvent(BI.NumberInterval.EVENT_ERROR);
                     break;
                 case c.numberError:
                     self._setTitle(BI.i18nText("BI-Numerical_Interval_Number_Value"));
-                    self.fireEvent(BI.NumericalInterval.EVENT_ERROR);
+                    self.fireEvent(BI.NumberInterval.EVENT_ERROR);
                     break;
                 case c.signalError:
                     self._setTitle(BI.i18nText("BI-Numerical_Interval_Signal_Value"));
-                    self.fireEvent(BI.NumericalInterval.EVENT_ERROR);
+                    self.fireEvent(BI.NumberInterval.EVENT_ERROR);
                     break;
                 default :
-                    self.fireEvent(BI.NumericalInterval.EVENT_CHANGE);
-                    self.fireEvent(BI.NumericalInterval.EVENT_VALID);
+                    self.fireEvent(BI.NumberInterval.EVENT_CHANGE);
+                    self.fireEvent(BI.NumberInterval.EVENT_VALID);
             }
         })
     },
@@ -521,7 +521,7 @@ BI.NumericalInterval = BI.inherit(BI.Single, {
         return value;
     }
 });
-BI.NumericalInterval.EVENT_CHANGE = "EVENT_CHANGE";
-BI.NumericalInterval.EVENT_VALID = "EVENT_VALID";
-BI.NumericalInterval.EVENT_ERROR = "EVENT_ERROR";
-BI.shortcut("bi.numerical_interval", BI.NumericalInterval);
+BI.NumberInterval.EVENT_CHANGE = "EVENT_CHANGE";
+BI.NumberInterval.EVENT_VALID = "EVENT_VALID";
+BI.NumberInterval.EVENT_ERROR = "EVENT_ERROR";
+BI.shortcut("bi.number_interval", BI.NumberInterval);

@@ -5376,109 +5376,6 @@ BI.extend(BI.FileManagerNav, {
 });
 BI.FileManagerNav.EVENT_CHANGE = "FileManagerNav.EVENT_CHANGE";
 BI.shortcut("bi.file_manager_nav", BI.FileManagerNav);/**
- * Created by windy on 2017/3/13.
- * 数值微调器
- */
-BI.FineTuningNumberEditor = BI.inherit(BI.Widget, {
-    _defaultConfig: function () {
-        return BI.extend(BI.FineTuningNumberEditor.superclass._defaultConfig.apply(this, arguments), {
-            baseCls: "bi-fine-tuning-number-editor bi-border",
-            validationChecker: function () {return true;},
-            valueFormatter: function (v) {return v;},
-            value: 0,
-            errorText: "",
-            step: 1
-        })
-    },
-
-    _init: function () {
-        BI.FineTuningNumberEditor.superclass._init.apply(this, arguments);
-        var self = this, o = this.options;
-        this.editor = BI.createWidget({
-            type: "bi.sign_editor",
-            height: o.height,
-            value: o.valueFormatter(o.value),
-            validationChecker: o.validationChecker,
-            errorText: o.errorText
-        });
-        this.editor.on(BI.TextEditor.EVENT_CHANGE, function () {
-            o.value = this.getValue();
-            self.fireEvent(BI.FineTuningNumberEditor.EVENT_CHANGE);
-        });
-        this.editor.on(BI.TextEditor.EVENT_CONFIRM, function(){
-            self.fireEvent(BI.FineTuningNumberEditor.EVENT_CONFIRM);
-        });
-        this.topBtn = BI.createWidget({
-            type: "bi.icon_button",
-            trigger: "lclick,",
-            cls: "column-pre-page-h-font top-button bi-border-left bi-border-bottom"
-        });
-        this.topBtn.on(BI.IconButton.EVENT_CHANGE, function(){
-            self._finetuning(o.step);
-            self.fireEvent(BI.FineTuningNumberEditor.EVENT_CHANGE);
-            self.fireEvent(BI.FineTuningNumberEditor.EVENT_CONFIRM);
-        });
-        this.bottomBtn = BI.createWidget({
-            type: "bi.icon_button",
-            trigger: "lclick,",
-            cls: "column-next-page-h-font bottom-button bi-border-left bi-border-top"
-        });
-        this.bottomBtn.on(BI.IconButton.EVENT_CHANGE, function(){
-            self._finetuning(-o.step);
-            self.fireEvent(BI.FineTuningNumberEditor.EVENT_CHANGE);
-            self.fireEvent(BI.FineTuningNumberEditor.EVENT_CONFIRM);
-        });
-        BI.createWidget({
-            type: "bi.htape",
-            element: this,
-            items: [this.editor, {
-                el: {
-                    type: "bi.grid",
-                    columns: 1,
-                    rows: 2,
-                    items: [{
-                        column: 0,
-                        row: 0,
-                        el: this.topBtn
-                    }, {
-                        column: 0,
-                        row: 1,
-                        el: this.bottomBtn
-                    }]
-                },
-                width: 23
-            }]
-        });
-    },
-
-    //微调
-    _finetuning: function(add){
-        var v = BI.parseFloat(this.getValue());
-        this.setValue(v.add(add));
-    },
-
-    setUpEnable: function (v) {
-        this.topBtn.setEnable(!!v);
-    },
-
-    setBottomEnable: function (v) {
-        this.bottomBtn.setEnable(!!v);
-    },
-
-    getValue: function () {
-        return this.options.value;
-    },
-
-    setValue: function (v) {
-        var o = this.options;
-        o.value = v;
-        this.editor.setValue(o.valueFormatter(v));
-    }
-
-});
-BI.FineTuningNumberEditor.EVENT_CONFIRM = "EVENT_CONFIRM";
-BI.FineTuningNumberEditor.EVENT_CHANGE = "EVENT_CHANGE";
-BI.shortcut("bi.fine_tuning_number_editor", BI.FineTuningNumberEditor);/**
  * 交互行为布局
  *
  *
@@ -11719,13 +11616,116 @@ BI.MultiTreeSearcher.EVENT_CHANGE = "EVENT_CHANGE";
 BI.MultiTreeSearcher.EVENT_START = "EVENT_START";
 BI.MultiTreeSearcher.EVENT_STOP = "EVENT_STOP";
 BI.MultiTreeSearcher.EVENT_PAUSE = "EVENT_PAUSE";
-BI.shortcut('bi.multi_tree_searcher', BI.MultiTreeSearcher);//小于号的值为：0，小于等于号的值为:1
+BI.shortcut('bi.multi_tree_searcher', BI.MultiTreeSearcher);/**
+ * Created by windy on 2017/3/13.
+ * 数值微调器
+ */
+BI.NumberEditor = BI.inherit(BI.Widget, {
+    _defaultConfig: function () {
+        return BI.extend(BI.NumberEditor.superclass._defaultConfig.apply(this, arguments), {
+            baseCls: "bi-number-editor bi-border",
+            validationChecker: function () {return true;},
+            valueFormatter: function (v) {return v;},
+            value: 0,
+            errorText: "",
+            step: 1
+        })
+    },
+
+    _init: function () {
+        BI.NumberEditor.superclass._init.apply(this, arguments);
+        var self = this, o = this.options;
+        this.editor = BI.createWidget({
+            type: "bi.sign_editor",
+            height: o.height,
+            value: o.valueFormatter(o.value),
+            validationChecker: o.validationChecker,
+            errorText: o.errorText
+        });
+        this.editor.on(BI.TextEditor.EVENT_CHANGE, function () {
+            o.value = this.getValue();
+            self.fireEvent(BI.NumberEditor.EVENT_CHANGE);
+        });
+        this.editor.on(BI.TextEditor.EVENT_CONFIRM, function(){
+            self.fireEvent(BI.NumberEditor.EVENT_CONFIRM);
+        });
+        this.topBtn = BI.createWidget({
+            type: "bi.icon_button",
+            trigger: "lclick,",
+            cls: "column-pre-page-h-font top-button bi-border-left bi-border-bottom"
+        });
+        this.topBtn.on(BI.IconButton.EVENT_CHANGE, function(){
+            self._finetuning(o.step);
+            self.fireEvent(BI.NumberEditor.EVENT_CHANGE);
+            self.fireEvent(BI.NumberEditor.EVENT_CONFIRM);
+        });
+        this.bottomBtn = BI.createWidget({
+            type: "bi.icon_button",
+            trigger: "lclick,",
+            cls: "column-next-page-h-font bottom-button bi-border-left bi-border-top"
+        });
+        this.bottomBtn.on(BI.IconButton.EVENT_CHANGE, function(){
+            self._finetuning(-o.step);
+            self.fireEvent(BI.NumberEditor.EVENT_CHANGE);
+            self.fireEvent(BI.NumberEditor.EVENT_CONFIRM);
+        });
+        BI.createWidget({
+            type: "bi.htape",
+            element: this,
+            items: [this.editor, {
+                el: {
+                    type: "bi.grid",
+                    columns: 1,
+                    rows: 2,
+                    items: [{
+                        column: 0,
+                        row: 0,
+                        el: this.topBtn
+                    }, {
+                        column: 0,
+                        row: 1,
+                        el: this.bottomBtn
+                    }]
+                },
+                width: 23
+            }]
+        });
+    },
+
+    //微调
+    _finetuning: function(add){
+        var v = BI.parseFloat(this.getValue());
+        this.setValue(v.add(add));
+    },
+
+    setUpEnable: function (v) {
+        this.topBtn.setEnable(!!v);
+    },
+
+    setBottomEnable: function (v) {
+        this.bottomBtn.setEnable(!!v);
+    },
+
+    getValue: function () {
+        return this.options.value;
+    },
+
+    setValue: function (v) {
+        var o = this.options;
+        o.value = v;
+        this.editor.setValue(o.valueFormatter(v));
+    }
+
+});
+BI.NumberEditor.EVENT_CONFIRM = "EVENT_CONFIRM";
+BI.NumberEditor.EVENT_CHANGE = "EVENT_CHANGE";
+BI.shortcut("bi.number_editor", BI.NumberEditor);//小于号的值为：0，小于等于号的值为:1
 //closeMIn：最小值的符号，closeMax：最大值的符号
 /**
  * Created by roy on 15/9/17.
  *
  */
-BI.NumericalInterval = BI.inherit(BI.Single, {
+BI.NumberInterval = BI.inherit(BI.Single, {
     constants: {
         typeError: "typeBubble",
         numberError: "numberBubble",
@@ -11741,16 +11741,16 @@ BI.NumericalInterval = BI.inherit(BI.Single, {
         numTip: ""
     },
     _defaultConfig: function () {
-        var conf = BI.NumericalInterval.superclass._defaultConfig.apply(this, arguments)
+        var conf = BI.NumberInterval.superclass._defaultConfig.apply(this, arguments)
         return BI.extend(conf, {
-            extraCls: "bi-numerical-interval",
+            extraCls: "bi-number-interval",
             height: 25,
             validation: "valid"
         })
     },
     _init: function () {
         var self = this, c = this.constants, o = this.options;
-        BI.NumericalInterval.superclass._init.apply(this, arguments)
+        BI.NumberInterval.superclass._init.apply(this, arguments)
         this.smallEditor = BI.createWidget({
             type: "bi.editor",
             height: o.height - 2,
@@ -11769,7 +11769,7 @@ BI.NumericalInterval = BI.inherit(BI.Single, {
                 }
                 return true;
             },
-            cls: "numerical-interval-small-editor bi-border-top bi-border-bottom bi-border-left"
+            cls: "number-interval-small-editor bi-border-top bi-border-bottom bi-border-left"
         });
 
         this.smallTip = BI.createWidget({
@@ -11806,7 +11806,7 @@ BI.NumericalInterval = BI.inherit(BI.Single, {
                 }
                 return true;
             },
-            cls: "numerical-interval-big-editor bi-border-top bi-border-bottom bi-border-right"
+            cls: "number-interval-big-editor bi-border-top bi-border-bottom bi-border-right"
         });
 
         this.bigTip = BI.createWidget({
@@ -11826,23 +11826,23 @@ BI.NumericalInterval = BI.inherit(BI.Single, {
         });
 
         //this.smallCombo = BI.createWidget({
-        //    type: "bi.numerical_interval_combo",
-        //    cls: "numerical-interval-small-combo",
+        //    type: "bi.number_interval_combo",
+        //    cls: "number-interval-small-combo",
         //    height: o.height,
         //    value: o.closemin ? 1 : 0,
         //    offsetStyle: "left"
         //});
         //
         //this.bigCombo = BI.createWidget({
-        //    type: "bi.numerical_interval_combo",
-        //    cls: "numerical-interval-big-combo",
+        //    type: "bi.number_interval_combo",
+        //    cls: "number-interval-big-combo",
         //    height: o.height,
         //    value: o.closemax ? 1 : 0,
         //    offsetStyle: "left"
         //});
         this.smallCombo = BI.createWidget({
             type: "bi.icon_combo",
-            cls: "numerical-interval-small-combo bi-border",
+            cls: "number-interval-small-combo bi-border",
             height: o.height - 2,
             items: [{
                 text: "(" + BI.i18nText("BI-Less_Than") + ")",
@@ -11861,7 +11861,7 @@ BI.NumericalInterval = BI.inherit(BI.Single, {
         }
         this.bigCombo = BI.createWidget({
             type: "bi.icon_combo",
-            cls: "numerical-interval-big-combo bi-border",
+            cls: "number-interval-big-combo bi-border",
             height: o.height - 2,
             items: [{
                 text: "(" + BI.i18nText("BI-Less_Than") + ")",
@@ -12069,7 +12069,7 @@ BI.NumericalInterval = BI.inherit(BI.Single, {
             BI.Bubbles.show(c.typeError, BI.i18nText("BI-Numerical_Interval_Input_Data"), self, {
                 offsetStyle: "center"
             });
-            self.fireEvent(BI.NumericalInterval.EVENT_ERROR);
+            self.fireEvent(BI.NumberInterval.EVENT_ERROR);
         })
     },
 
@@ -12082,16 +12082,16 @@ BI.NumericalInterval = BI.inherit(BI.Single, {
                     BI.Bubbles.show(c.numberError, BI.i18nText("BI-Numerical_Interval_Number_Value"), self, {
                         offsetStyle: "center"
                     });
-                    self.fireEvent(BI.NumericalInterval.EVENT_ERROR);
+                    self.fireEvent(BI.NumberInterval.EVENT_ERROR);
                     break;
                 case c.signalError:
                     BI.Bubbles.show(c.signalError, BI.i18nText("BI-Numerical_Interval_Signal_Value"), self, {
                         offsetStyle: "center"
                     });
-                    self.fireEvent(BI.NumericalInterval.EVENT_ERROR);
+                    self.fireEvent(BI.NumberInterval.EVENT_ERROR);
                     break;
                 default:
-                    self.fireEvent(BI.NumericalInterval.EVENT_VALID);
+                    self.fireEvent(BI.NumberInterval.EVENT_VALID);
             }
         })
     },
@@ -12119,7 +12119,7 @@ BI.NumericalInterval = BI.inherit(BI.Single, {
                 default :
                     break;
             }
-            self.fireEvent(BI.NumericalInterval.EVENT_CHANGE);
+            self.fireEvent(BI.NumberInterval.EVENT_CHANGE);
         });
     },
 
@@ -12129,19 +12129,19 @@ BI.NumericalInterval = BI.inherit(BI.Single, {
             switch (self._checkValidation()) {
                 case c.typeError:
                     self._setTitle(BI.i18nText("BI-Numerical_Interval_Input_Data"));
-                    self.fireEvent(BI.NumericalInterval.EVENT_ERROR);
+                    self.fireEvent(BI.NumberInterval.EVENT_ERROR);
                     break;
                 case c.numberError:
                     self._setTitle(BI.i18nText("BI-Numerical_Interval_Number_Value"));
-                    self.fireEvent(BI.NumericalInterval.EVENT_ERROR);
+                    self.fireEvent(BI.NumberInterval.EVENT_ERROR);
                     break;
                 case c.signalError:
                     self._setTitle(BI.i18nText("BI-Numerical_Interval_Signal_Value"));
-                    self.fireEvent(BI.NumericalInterval.EVENT_ERROR);
+                    self.fireEvent(BI.NumberInterval.EVENT_ERROR);
                     break;
                 default :
-                    self.fireEvent(BI.NumericalInterval.EVENT_CHANGE);
-                    self.fireEvent(BI.NumericalInterval.EVENT_VALID);
+                    self.fireEvent(BI.NumberInterval.EVENT_CHANGE);
+                    self.fireEvent(BI.NumberInterval.EVENT_VALID);
             }
         })
     },
@@ -12242,10 +12242,10 @@ BI.NumericalInterval = BI.inherit(BI.Single, {
         return value;
     }
 });
-BI.NumericalInterval.EVENT_CHANGE = "EVENT_CHANGE";
-BI.NumericalInterval.EVENT_VALID = "EVENT_VALID";
-BI.NumericalInterval.EVENT_ERROR = "EVENT_ERROR";
-BI.shortcut("bi.numerical_interval", BI.NumericalInterval);/**
+BI.NumberInterval.EVENT_CHANGE = "EVENT_CHANGE";
+BI.NumberInterval.EVENT_VALID = "EVENT_VALID";
+BI.NumberInterval.EVENT_ERROR = "EVENT_ERROR";
+BI.shortcut("bi.number_interval", BI.NumberInterval);/**
  *
  * 表格
  *

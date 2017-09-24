@@ -7789,7 +7789,7 @@ Demo.FileManager = BI.inherit(BI.Widget, {
             lastModify: 1454316355142
         }];
         var filemanager = BI.createWidget({
-            type: "bi.fine_tuning_number_editor",
+            type: "bi.number_editor",
             validationChecker: function (v) {
                 return BI.parseFloat(v) <= 100 && BI.parseFloat(v) >= 0
             },
@@ -8002,7 +8002,7 @@ Demo.NumericalInterval = BI.inherit(BI.Widget, {
         return {
             type: "bi.horizontal_auto",
             items: [{
-                type: "bi.numerical_interval",
+                type: "bi.number_interval",
                 ref: function (_ref) {
                     self.numerical = _ref;
                 },

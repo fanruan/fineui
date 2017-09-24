@@ -154,7 +154,7 @@
 * 文本框控件
     * [text_editor](detailed/text_input/bi.text_editor.md)
     * [search_editor](detailed/text_input/bi.search_editor.md)
-    * [finetuning_number_editor](detailed/text_input/finetuning_number_editor.md)
+    * [number_editor](detailed/text_input/number_editor.md)
 * [year_combo](detailed/year_combo.md)
 * [month_combo](detailed/month_combo.md)
 * [quarter_combo](detailed/quarter_combo.md)
