@@ -159,7 +159,7 @@
 * [month_combo](detailed/month_combo.md)
 * [quarter_combo](detailed/quarter_combo.md)
 * [down_list_combo](detailed/down_list_combo.md)
-* [numeric_interval](detailed/numeric_interval.md)
+* [number_interval](detailed/number_interval.md)
 * [multi_select_combo](detailed/multi_select_combo.md)
 * 简单日期控件
     * [date_combo](detailed/date/date_combo.md)
@@ -178,7 +178,6 @@
 * [relation_view](detailed/relation_view.md)
 * [dialog](detailed/dialog.md)
 * [file_manager](detailed/file_manager.md)
-## 部件
 * [value_chooser_combo](components/value_chooser_combo.md)
 * [value_chooser_pane](components/value_chooser_pane.md)
 * [all_value_chooser_combo](components/all_value_chooser_combo.md)
