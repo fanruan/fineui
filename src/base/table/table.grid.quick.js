@@ -229,7 +229,7 @@ BI.QuickGridTable = BI.inherit(BI.GridTable, {
         function overscan(grid, w, h, rSize, cSize) {
             var rCount = h / rSize;
             var cCount = w / cSize;
-            if (cCount * (120 / rSize) >= 60 || rCount * (120 / cSize) >= 60) {
+            if (cCount * (120 / rSize) >= 80 || rCount * (120 / cSize) >= 80) {
                 grid.attr("overscanRowCount", 100);
                 grid.attr("overscanColumnCount", 100);
             }
