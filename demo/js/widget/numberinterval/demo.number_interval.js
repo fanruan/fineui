@@ -9,14 +9,12 @@ Demo.NumericalInterval = BI.inherit(BI.Widget, {
     mounted: function () {
         var numerical = this.numerical;
         var label = this.label;
-        numerical.on(BI.NumericalInterval.EVENT_CHANGE, function () {
+        numerical.on(BI.NumberInterval.EVENT_CHANGE, function () {
             var temp = numerical.getValue();
             var res = "大于" + (temp.closemin ? "等于 " : " ") + temp.min + " 小于" + (temp.closemax ? "等于 " : " ") + temp.max;
             label.setValue(res);
         })
     },
-
-
 
 
     render: function () {
@@ -41,4 +39,4 @@ Demo.NumericalInterval = BI.inherit(BI.Widget, {
     }
 })
 
-BI.shortcut("demo.numberical_interval", Demo.NumericalInterval);
+BI.shortcut("demo.number_interval", Demo.NumericalInterval);
