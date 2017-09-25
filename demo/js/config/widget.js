@@ -4,92 +4,88 @@ Demo.WIDGET_CONFIG = [{
     open: true
 }, {
     pId: 4,
-    id: 420,
+    id: 401,
     text: '各种小控件'
 }, {
-    pId: 420,
+    pId: 401,
     text: "各种通用按钮",
     value: "demo.buttons"
 }, {
-    pId: 420,
+    pId: 401,
     text: "各种提示性信息",
     value: "demo.tips"
 }, {
-    pId: 420,
+    pId: 401,
     text: "各种items",
     value: "demo.items"
 }, {
-    pId: 420,
+    pId: 401,
     text: "各种节点node",
     value: "demo.nodes"
 }, {
-    pId: 420,
+    pId: 401,
     text: "各种segment",
     value: "demo.segments"
 }, {
-    pId: 420,
-    text: "可以切换的树",
-    value: "demo.switch_tree"
-}, {
-    id: 400,
     pId: 4,
+    id: 402,
+    text: "文本框控件"
+}, {
+    pId: 402,
+    text: "bi.text_editor",
+    value: "demo.text_editor"
+}, {
+    pId: 402,
+    text: "bi.search_editor",
+    value: "demo.search_editor"
+}, {
+    pId: 402,
+    text: "bi.number_editor",
+    value: "demo.number_editor"
+}, {
+    pId: 4,
+    id: 403,
     text: "tree"
 }, {
-    pId: 400,
-    text: "bi.multi_tree_combo",
-    value: "demo.multi_tree_combo"
+    pId: 403,
+    text: "bi.single_level_tree",
+    value: "demo.single_level_tree"
 }, {
-    pId: 400,
+    pId: 403,
+    text: "bi.select_level_tree",
+    value: "demo.select_level_tree"
+}, {
+    pId: 403,
+    text: "bi.multilayer_single_level_tree",
+    value: "demo.multilayer_single_level_tree"
+}, {
+    pId: 403,
+    text: "bi.multilayer_select_level_tree",
+    value: "demo.multilayer_select_level_tree"
+}, {
+    pId: 403,
     text: "bi.switch_tree",
     value: "demo.switch_tree"
 }, {
-    id: 401,
     pId: 4,
+    id: 404,
     text: "table"
 }, {
-    pId: 401,
+    pId: 404,
     text: "bi.preview_table",
     value: "demo.preview_table"
 }, {
-    pId: 401,
+    pId: 404,
     text: "bi.responsive_table",
     value: "demo.responsive_table"
 }, {
-    pId: 401,
+    pId: 404,
     text: "bi.excel_table",
     value: "demo.excel_table"
 }, {
     pId: 4,
-    id: 402,
-    text: "年份控件",
-    open: false
-}, {
-    pId: 402,
-    text: "bi.year_combo",
-    value: "demo.year"
-}, {
-    pId: 4,
-    id: 403,
-    text: "月份控件",
-    open: false
-}, {
-    pId: 403,
-    text: "bi.month_combo",
-    value: "demo.month"
-}, {
-    pId: 4,
-    id: 404,
-    text: "季度控件",
-    open: false
-}, {
-    pId: 404,
-    text: "bi.quarter_combo",
-    value: "demo.quarter"
-}, {
-    pId: 4,
     id: 405,
-    text: "下拉列表",
-    open: false
+    text: "下拉列表"
 }, {
     pId: 405,
     text: "bi.down_list_combo",
@@ -97,77 +93,75 @@ Demo.WIDGET_CONFIG = [{
 }, {
     pId: 4,
     id: 406,
-    text: "文本框控件",
-    open: false
+    text: "复选下拉框"
 }, {
     pId: 406,
-    text: "bi.text_editor",
-    value: "demo.text_editor"
-}, {
-    pId: 406,
-    text: "bi.search_editor",
-    value: "demo.search_editor"
-}, {
-    pId: 406,
-    text: "bi.clear_editor",
-    value: "demo.clear_editor"
-}, {
-    pId: 4,
-    id: 407,
-    text: "下拉框控件",
-    open: false
-}, {
-    pId: 407,
-    text: "bi.text_value_combo",
-    value: "demo.text_value_combo"
-}, {
-    pId: 407,
-    text: "bi.text_value_check_combo",
-    value: "demo.text_value_check_combo"
-}, {
-    pId: 407,
-    text: "bi.text_value_down_list_combo",
-    value: "demo.text_value_down_list_combo"
-}, {
-    pId: 407,
-    text: "bi.static_combo",
-    value: "demo.static_combo"
-}, {
-    pId: 407,
-    text: "bi.icon_combo",
-    value: "demo.icon_combo"
-}, {
-    pId: 407,
-    text: "bi.formula_combo",
-    value: "demo.formula_combo"
-}, {
-    pId: 4,
-    id: 410,
-    text: "数值区间控件"
-}, {
-    pId: 410,
-    text: "bi.numerical_interval",
-    value: "demo.numberical_interval"
-}, {
-    pId: 4,
-    id: 411,
-    text: "下拉复选框有确定按钮"
-}, {
-    pId: 411,
     text: "bi.multi_select_combo",
     value: "demo.multi_select_combo"
 }, {
     pId: 4,
+    id: 407,
+    text: "简单下拉树"
+}, {
+    pId: 407,
+    text: "bi.single_tree_combo",
+    value: "demo.single_tree_combo"
+}, {
+    pId: 4,
+    id: 408,
+    text: "多层级下拉树"
+}, {
+    pId: 408,
+    text: "bi.multilayer_single_tree_combo",
+    value: "demo.multilayer_single_tree_combo"
+}, {
+    pId: 4,
+    id: 409,
+    text: "可选下拉树"
+}, {
+    pId: 409,
+    text: "bi.select_tree_combo",
+    value: "demo.select_tree_combo"
+}, {
+    pId: 4,
+    id: 410,
+    text: "多层级可选下拉树"
+}, {
+    pId: 410,
+    text: "bi.multilayer_select_tree_combo",
+    value: "demo.multilayer_select_tree_combo"
+}, {
+    pId: 4,
+    id: 411,
+    text: "复选下拉树"
+}, {
+    pId: 411,
+    text: "bi.multi_tree_combo",
+    value: "demo.multi_tree_combo"
+}, {
+    pId: 4,
     id: 412,
-    text: "简单日期控件"
+    text: "日期相关控件"
+}, {
+    pId: 412,
+    text: "bi.year_combo",
+    value: "demo.year"
+}, {
+    pId: 412,
+    text: "bi.month_combo",
+    value: "demo.month"
+}, {
+    pId: 412,
+    text: "bi.quarter_combo",
+    value: "demo.quarter"
 }, {
     pId: 412,
     text: "bi.date_combo",
     value: "demo.date"
 }, {
     pId: 412,
-    text: "bi.date_pane_widget",
-    value: "demo.date_pane_widget"
+    text: "bi.date_pane",
+    value: "demo.date_pane"
 }, {
     pId: 412,
     text: "bi.year_month_combo",
@@ -181,29 +175,25 @@ Demo.WIDGET_CONFIG = [{
     text: "bi.custom_date_time",
     value: "demo.custom_date_time"
 }, {
+    pId: 412,
+    text: '时间间隔',
+    value: 'demo.time_interval'
+}, {
     pId: 4,
     id: 413,
-    text: "简单下拉树"
+    text: "数值区间控件"
 }, {
     pId: 413,
-    text: "bi.single_tree_combo",
-    value: "demo.single_tree_combo"
-}, {
-    pId: 413,
-    text: "bi.multilayer_single_tree_combo",
-    value: "demo.multilayer_single_tree_combo"
+    text: "bi.number_interval",
+    value: "demo.number_interval"
 }, {
     pId: 4,
     id: 414,
-    text: "可选下拉树"
+    text: "公式下拉框"
 }, {
     pId: 414,
-    text: "bi.select_tree_combo",
-    value: "demo.select_tree_combo"
-}, {
-    pId: 414,
-    text: "bi.multilayer_select_tree_combo",
-    value: "demo.multilayer_select_tree_combo"
+    text: "bi.formula_combo",
+    value: "demo.formula_combo"
 }, {
     pId: 4,
     id: 415,
@@ -252,8 +242,4 @@ Demo.WIDGET_CONFIG = [{
     pId: 419,
     text: "bi.file_manager",
     value: "demo.file_manager"
-}, {
-    pId: 4,
-    text: '时间间隔',
-    value: 'demo.time_interval'
 }];

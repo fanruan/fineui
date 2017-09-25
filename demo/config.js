@@ -23,6 +23,50 @@ Demo.CONSTANTS = {
     {id: 22, pId: 2, value: "第二级文件2", text: "第二级文件2"},
     {id: 211, pId: 21, value: "第三级目录2", text: "第三级目录2"},
     {id: 212, pId: 21, value: "第三级文件2", text: "第三级文件2"},
-    {id: 2111, pId: 211, value: "第四级文件1", text: "第四级文件1"}]
+    {id: 2111, pId: 211, value: "第四级文件1", text: "第四级文件1"}],
+    LEVELTREE: [{
+        id: 1,
+        text: "第一项",
+        value: "1"
+    }, {
+        id: 2,
+        text: "第二项",
+        value: "2"
+    }, {
+        id: 3,
+        text: "第三项",
+        value: "3",
+        open: true
+    }, {
+        id: 11,
+        pId: 1,
+        text: "子项1",
+        value: "11"
+    }, {
+        id: 12,
+        pId: 1,
+        text: "子项2",
+        value: "12"
+    }, {
+        id: 13,
+        pId: 1,
+        text: "子项3",
+        value: "13"
+    }, {
+        id: 31,
+        pId: 3,
+        text: "子项1",
+        value: "31"
+    }, {
+        id: 32,
+        pId: 3,
+        text: "子项2",
+        value: "32"
+    }, {
+        id: 33,
+        pId: 3,
+        text: "子项3",
+        value: "33"
+    }]
 };
 

@@ -1,6 +1,6 @@
 /* 文件管理导航
-    Created by dailer on 2017 / 7 / 21. 
-   */
+ Created by dailer on 2017 / 7 / 21.
+ */
 Demo.FileManager = BI.inherit(BI.Widget, {
     props: {
         baseCls: ""
@@ -45,28 +45,9 @@ Demo.FileManager = BI.inherit(BI.Widget, {
             text: "文件2",
             lastModify: 1454316355142
         }];
-        var filemanager = BI.createWidget({
-            type: "bi.number_editor",
-            validationChecker: function (v) {
-                return BI.parseFloat(v) <= 100 && BI.parseFloat(v) >= 0
-            },
-            height: 24,
-            width: 150,
-            errorText: "hahah"
-        });
-        filemanager.on(BI.FineTuningNumberEditor.EVENT_CHANGE, function () {
-            if(BI.parseFloat(this.getValue()) < 1){
-                filemanager.setBottomEnable(false);
-            }else{
-                filemanager.setBottomEnable(true);
-            }
-        });
         return {
-            type: "bi.vertical",
-            items: [{
-                el: filemanager,
-                height: 24
-            }]
+            type: "bi.file_manager",
+            items: items
         }
     }
 });

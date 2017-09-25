@@ -7,7 +7,7 @@ BI.SelectTreePopup = BI.inherit(BI.Pane, {
 
     _defaultConfig: function () {
         return BI.extend(BI.SelectTreePopup.superclass._defaultConfig.apply(this, arguments), {
-            baseCls: "bi-select-tree-popup",
+            baseCls: "bi-select-level-tree",
             tipText: BI.i18nText("BI-No_Selected_Item"),
             items: []
         });
@@ -94,4 +94,4 @@ BI.SelectTreePopup = BI.inherit(BI.Pane, {
 });
 
 BI.SelectTreePopup.EVENT_CHANGE = "EVENT_CHANGE";
-BI.shortcut("bi.select_tree_popup", BI.SelectTreePopup);
+BI.shortcut("bi.select_level_tree", BI.SelectTreePopup);

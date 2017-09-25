@@ -9,7 +9,133 @@ $(function () {
         element: '#wrapper'
     });
     // ref.destroy();
-});Demo.Button = BI.inherit(BI.Widget, {
+});/**
+ * Created by Urthur on 2017/9/4.
+ */
+Demo.Slider = BI.inherit(BI.Widget, {
+    _defaultConfig: function () {
+        return BI.extend(Demo.Slider.superclass._defaultConfig.apply(this, arguments), {
+            baseCls: "demo-slider",
+            min: 10,
+            max: 50
+        })
+    },
+    _init: function () {
+        Demo.Slider.superclass._init.apply(this, arguments);
+
+        var singleSlider = BI.createWidget({
+            type: "bi.single_slider",
+            digit: 0,
+            width: 300,
+            height: 50,
+            cls: "layout-bg-white"
+        });
+
+        singleSlider.setMinAndMax({
+            min: 10,
+            max: 100
+        });
+
+        singleSlider.setValue(30);
+        singleSlider.populate();
+        singleSlider.on(BI.SingleSlider.EVENT_CHANGE, function () {
+            console.log(this.getValue());
+        });
+
+        var singleSliderLabel = BI.createWidget({
+            type: "bi.single_slider_label",
+            height: 50,
+            width: 300,
+            digit: 0,
+            unit: "个",
+            cls: "layout-bg-white"
+        });
+        singleSliderLabel.setMinAndMax({
+            min: 0,
+            max: 100
+        });
+        singleSliderLabel.setValue(10);
+        singleSliderLabel.populate();
+
+        var normalSingleSlider = BI.createWidget({
+            type: "bi.single_slider_normal",
+            height: 30,
+            width: 300,
+            cls: "layout-bg-white"
+        });
+        normalSingleSlider.setMinAndMax({
+            min: 0,
+            max: 100
+        });
+        normalSingleSlider.setValue(10);
+        normalSingleSlider.populate();
+
+
+        var intervalSlider = BI.createWidget({
+            type: "bi.interval_slider",
+            width: 300,
+            cls: "layout-bg-white"
+        });
+        intervalSlider.setMinAndMax({
+            min: 0,
+            max: 120
+        });
+        intervalSlider.setValue({
+            min: 10,
+            max: 120
+        });
+        intervalSlider.populate();
+
+        var intervalSliderLabel = BI.createWidget({
+            type: "bi.interval_slider_label",
+            width: 300,
+            cls: "layout-bg-white"
+        });
+        intervalSliderLabel.setMinAndMax({
+            min: 0,
+            max: 120
+        });
+        intervalSliderLabel.setValue({
+            min: 10,
+            max: 120
+        });
+        intervalSliderLabel.populate();
+
+
+        BI.createWidget({
+            type: "bi.vertical",
+            element: this,
+            items: [{
+                type: "bi.center_adapt",
+                items: [{
+                    el: singleSlider
+                }]
+            }, {
+                type: "bi.center_adapt",
+                items: [{
+                    el: normalSingleSlider
+                }]
+            }, {
+                type: "bi.center_adapt",
+                items: [{
+                    el: singleSliderLabel
+                }]
+            }, {
+                type: "bi.center_adapt",
+                items: [{
+                    el: intervalSlider
+                }]
+            }, {
+                type: "bi.center_adapt",
+                items: [{
+                    el: intervalSliderLabel
+                }]
+            }],
+            vgap: 20
+        });
+    }
+});
+BI.shortcut("demo.slider", Demo.Slider);Demo.Button = BI.inherit(BI.Widget, {
     props: {
         baseCls: "demo-button"
     },
@@ -1664,7 +1790,234 @@ BI.shortcut("demo.tree_view", Demo.Func);Demo.Func = BI.inherit(BI.Widget, {
         })
     }
 });
-BI.shortcut("demo.bubble_combo", Demo.Func);Demo.Func = BI.inherit(BI.Widget, {
+BI.shortcut("demo.bubble_combo", Demo.Func);/**
+ * Created by Dailer on 2017/7/12.
+ */
+Demo.IconCombo = BI.inherit(BI.Widget, {
+    props: {
+        baseCls: ""
+    },
+
+    render: function () {
+
+        var self = this;
+
+
+        return {
+            type: "bi.horizontal_auto",
+            items: [{
+                type: "bi.icon_combo",
+                ref:function(_ref){
+                    self.refs=_ref;
+                },
+               // iconClass: "pull-down-ha-font",
+                items: [{
+                    value: "第一项",
+                    iconClass: "delete-font"
+                }, {
+                    value: "第二项",
+                    iconClass: "rename-font"
+                }, {
+                    value: "第三项",
+                    iconClass: "move-font"
+                }]
+            }],
+            vgap: 20
+        }
+    }
+})
+
+BI.shortcut("demo.icon_combo", Demo.IconCombo);/**
+ * Created by Dailer on 2017/7/11.
+ */
+Demo.StaticCombo = BI.inherit(BI.Widget, {
+    props: {
+        baseCls: ""
+    },
+
+
+    beforeMount: function () {
+        this.refs.setValue(2);
+    },
+
+    render: function () {
+
+        var self = this;
+
+        return {
+            type: "bi.horizontal_auto",
+            items: [{
+                type: "bi.static_combo",
+                text: "Value 不变",
+                width: 300,
+                ref: function (_ref) {
+                    self.refs = _ref;
+                },
+                items: [
+                    {
+                        text: "MVC-1",
+                        value: 1
+                    }, {
+                        text: "MVC-2",
+                        value: 2
+                    }, {
+                        text: "MVC-3",
+                        value: 3
+                    }
+                ]
+            }],
+            vgap: 20
+        }
+    }
+})
+
+BI.shortcut("demo.static_combo", Demo.StaticCombo);/**
+ * Created by Dailer on 2017/7/11.
+ */
+Demo.TextValueCombo = BI.inherit(BI.Widget, {
+    props: {
+        baseCls: ""
+    },
+    render: function () {
+
+        return {
+            type: "bi.horizontal_auto",
+            items: [{
+                type: "bi.text_value_combo",
+                text: "天气热死了",
+                width: 300,
+                items: [{
+                    text: "MVC-1",
+                    value: 1
+                }, {
+                    text: "MVC-2",
+                    value: 2
+                }, {
+                    text: "MVC-3",
+                    value: 3
+                }]
+            },{
+                type: "bi.text_value_check_combo",
+                text: "天气热死了",
+                width: 300,
+                items: [{
+                    text: "MVC-1",
+                    value: 1
+                }, {
+                    text: "MVC-2",
+                    value: 2
+                }, {
+                    text: "MVC-3",
+                    value: 3
+                }]
+            },{
+                type: "bi.text_value_combo",
+                text: "天气热死了",
+                width: 300,
+                items: [{
+                    text: "MVC-1",
+                    value: 1
+                }, {
+                    text: "MVC-2",
+                    value: 2
+                }, {
+                    text: "MVC-3",
+                    value: 3
+                }]
+            }],
+            vgap: 20
+        }
+    }
+})
+
+BI.shortcut("demo.text_value_combo", Demo.TextValueCombo);/**
+ * Created by Dailer on 2017/7/11.
+ */
+Demo.TextValueDownListCombo = BI.inherit(BI.Widget, {
+    props: {
+        baseCls: ""
+    },
+
+
+    beforeMount:function(){
+        this.refs.setValue(2);
+    },
+
+    render: function () {
+
+        var self = this;
+
+        return {
+            type: "bi.horizontal_auto",
+            items: [{
+                type: "bi.label",
+                cls: "layout-bg2",
+                text: "分组+二级",
+                width: 300
+            }, {
+                type: "bi.text_value_down_list_combo",
+                text: "天气热死了",
+                width: 300,
+                ref: function (_ref) {
+                    self.refs = _ref;
+                },
+                items: [
+                    [{
+                        el: {
+                            text: "MVC-1",
+                            value: 1
+                        },
+                        children: [{
+                            text: "MVC-1-1",
+                            value: 11
+                        }]
+                    }],
+                    [{
+                        text: "MVC-2",
+                        value: 2
+                    }, {
+                        text: "MVC-3",
+                        value: 3
+                    }]
+                ]
+            }],
+            vgap: 20
+        }
+    }
+})
+
+BI.shortcut("demo.text_value_down_list_combo", Demo.TextValueDownListCombo);/**
+ * Created by Dailer on 2017/7/11.
+ */
+Demo.TextValueCheckCombo = BI.inherit(BI.Widget, {
+    props: {
+        baseCls: ""
+    },
+    render: function () {
+
+        return {
+            type: "bi.horizontal_auto",
+            items: [{
+                type: "bi.text_value_check_combo",
+                text: "天气热死了",
+                width: 300,
+                items: [{
+                    text: "MVC-1",
+                    value: 1
+                }, {
+                    text: "MVC-2",
+                    value: 2
+                }, {
+                    text: "MVC-3",
+                    value: 3
+                }]
+            }],
+            vgap: 20
+        }
+    }
+})
+
+BI.shortcut("demo.text_value_check_combo", Demo.TextValueCheckCombo);Demo.Func = BI.inherit(BI.Widget, {
     props: {
         baseCls: "demo-func"
     },
@@ -1843,6 +2196,27 @@ BI.shortcut("demo.color_chooser", Demo.Func);Demo.Func = BI.inherit(BI.Widget, {
     }
 });
 BI.shortcut("demo.complex_canvas", Demo.Func);/**
+ * Created by Dailer on 2017/7/11.
+ */
+Demo.ClearEditor = BI.inherit(BI.Widget, {
+    props: {
+        baseCls: ""
+    },
+    render: function () {
+        return {
+            type: "bi.horizontal_auto",
+            items: [{
+                type: "bi.clear_editor",
+                cls: "bi-border",
+                width: 300,
+                watermark: "这个是带清除按钮的"
+            }],
+            vgap: 20
+        }
+    }
+})
+
+BI.shortcut("demo.clear_editor", Demo.ClearEditor);/**
  * Created by Dailer on 2017/7/11.
  */
 Demo.ClearEditor = BI.inherit(BI.Widget, {
@@ -3618,92 +3992,88 @@ Demo.COMPONENT_CONFIG = [{
     open: true
 }, {
     pId: 4,
-    id: 420,
+    id: 401,
     text: '各种小控件'
 }, {
-    pId: 420,
+    pId: 401,
     text: "各种通用按钮",
     value: "demo.buttons"
 }, {
-    pId: 420,
+    pId: 401,
     text: "各种提示性信息",
     value: "demo.tips"
 }, {
-    pId: 420,
+    pId: 401,
     text: "各种items",
     value: "demo.items"
 }, {
-    pId: 420,
+    pId: 401,
     text: "各种节点node",
     value: "demo.nodes"
 }, {
-    pId: 420,
+    pId: 401,
     text: "各种segment",
     value: "demo.segments"
 }, {
-    pId: 420,
-    text: "可以切换的树",
-    value: "demo.switch_tree"
-}, {
-    id: 400,
     pId: 4,
+    id: 402,
+    text: "文本框控件"
+}, {
+    pId: 402,
+    text: "bi.text_editor",
+    value: "demo.text_editor"
+}, {
+    pId: 402,
+    text: "bi.search_editor",
+    value: "demo.search_editor"
+}, {
+    pId: 402,
+    text: "bi.number_editor",
+    value: "demo.number_editor"
+}, {
+    pId: 4,
+    id: 403,
     text: "tree"
 }, {
-    pId: 400,
-    text: "bi.multi_tree_combo",
-    value: "demo.multi_tree_combo"
+    pId: 403,
+    text: "bi.single_level_tree",
+    value: "demo.single_level_tree"
 }, {
-    pId: 400,
+    pId: 403,
+    text: "bi.select_level_tree",
+    value: "demo.select_level_tree"
+}, {
+    pId: 403,
+    text: "bi.multilayer_single_level_tree",
+    value: "demo.multilayer_single_level_tree"
+}, {
+    pId: 403,
+    text: "bi.multilayer_select_level_tree",
+    value: "demo.multilayer_select_level_tree"
+}, {
+    pId: 403,
     text: "bi.switch_tree",
     value: "demo.switch_tree"
 }, {
-    id: 401,
     pId: 4,
+    id: 404,
     text: "table"
 }, {
-    pId: 401,
+    pId: 404,
     text: "bi.preview_table",
     value: "demo.preview_table"
 }, {
-    pId: 401,
+    pId: 404,
     text: "bi.responsive_table",
     value: "demo.responsive_table"
 }, {
-    pId: 401,
+    pId: 404,
     text: "bi.excel_table",
     value: "demo.excel_table"
 }, {
     pId: 4,
-    id: 402,
-    text: "年份控件",
-    open: false
-}, {
-    pId: 402,
-    text: "bi.year_combo",
-    value: "demo.year"
-}, {
-    pId: 4,
-    id: 403,
-    text: "月份控件",
-    open: false
-}, {
-    pId: 403,
-    text: "bi.month_combo",
-    value: "demo.month"
-}, {
-    pId: 4,
-    id: 404,
-    text: "季度控件",
-    open: false
-}, {
-    pId: 404,
-    text: "bi.quarter_combo",
-    value: "demo.quarter"
-}, {
-    pId: 4,
     id: 405,
-    text: "下拉列表",
-    open: false
+    text: "下拉列表"
 }, {
     pId: 405,
     text: "bi.down_list_combo",
@@ -3711,77 +4081,75 @@ Demo.COMPONENT_CONFIG = [{
 }, {
     pId: 4,
     id: 406,
-    text: "文本框控件",
-    open: false
+    text: "复选下拉框"
 }, {
     pId: 406,
-    text: "bi.text_editor",
-    value: "demo.text_editor"
-}, {
-    pId: 406,
-    text: "bi.search_editor",
-    value: "demo.search_editor"
-}, {
-    pId: 406,
-    text: "bi.clear_editor",
-    value: "demo.clear_editor"
-}, {
-    pId: 4,
-    id: 407,
-    text: "下拉框控件",
-    open: false
-}, {
-    pId: 407,
-    text: "bi.text_value_combo",
-    value: "demo.text_value_combo"
-}, {
-    pId: 407,
-    text: "bi.text_value_check_combo",
-    value: "demo.text_value_check_combo"
-}, {
-    pId: 407,
-    text: "bi.text_value_down_list_combo",
-    value: "demo.text_value_down_list_combo"
-}, {
-    pId: 407,
-    text: "bi.static_combo",
-    value: "demo.static_combo"
-}, {
-    pId: 407,
-    text: "bi.icon_combo",
-    value: "demo.icon_combo"
-}, {
-    pId: 407,
-    text: "bi.formula_combo",
-    value: "demo.formula_combo"
-}, {
-    pId: 4,
-    id: 410,
-    text: "数值区间控件"
-}, {
-    pId: 410,
-    text: "bi.numerical_interval",
-    value: "demo.numberical_interval"
-}, {
-    pId: 4,
-    id: 411,
-    text: "下拉复选框有确定按钮"
-}, {
-    pId: 411,
     text: "bi.multi_select_combo",
     value: "demo.multi_select_combo"
 }, {
     pId: 4,
+    id: 407,
+    text: "简单下拉树"
+}, {
+    pId: 407,
+    text: "bi.single_tree_combo",
+    value: "demo.single_tree_combo"
+}, {
+    pId: 4,
+    id: 408,
+    text: "多层级下拉树"
+}, {
+    pId: 408,
+    text: "bi.multilayer_single_tree_combo",
+    value: "demo.multilayer_single_tree_combo"
+}, {
+    pId: 4,
+    id: 409,
+    text: "可选下拉树"
+}, {
+    pId: 409,
+    text: "bi.select_tree_combo",
+    value: "demo.select_tree_combo"
+}, {
+    pId: 4,
+    id: 410,
+    text: "多层级可选下拉树"
+}, {
+    pId: 410,
+    text: "bi.multilayer_select_tree_combo",
+    value: "demo.multilayer_select_tree_combo"
+}, {
+    pId: 4,
+    id: 411,
+    text: "复选下拉树"
+}, {
+    pId: 411,
+    text: "bi.multi_tree_combo",
+    value: "demo.multi_tree_combo"
+}, {
+    pId: 4,
     id: 412,
-    text: "简单日期控件"
+    text: "日期相关控件"
+}, {
+    pId: 412,
+    text: "bi.year_combo",
+    value: "demo.year"
+}, {
+    pId: 412,
+    text: "bi.month_combo",
+    value: "demo.month"
+}, {
+    pId: 412,
+    text: "bi.quarter_combo",
+    value: "demo.quarter"
 }, {
     pId: 412,
     text: "bi.date_combo",
     value: "demo.date"
 }, {
     pId: 412,
-    text: "bi.date_pane_widget",
-    value: "demo.date_pane_widget"
+    text: "bi.date_pane",
+    value: "demo.date_pane"
 }, {
     pId: 412,
     text: "bi.year_month_combo",
@@ -3795,29 +4163,25 @@ Demo.COMPONENT_CONFIG = [{
     text: "bi.custom_date_time",
     value: "demo.custom_date_time"
 }, {
+    pId: 412,
+    text: '时间间隔',
+    value: 'demo.time_interval'
+}, {
     pId: 4,
     id: 413,
-    text: "简单下拉树"
+    text: "数值区间控件"
 }, {
     pId: 413,
-    text: "bi.single_tree_combo",
-    value: "demo.single_tree_combo"
-}, {
-    pId: 413,
-    text: "bi.multilayer_single_tree_combo",
-    value: "demo.multilayer_single_tree_combo"
+    text: "bi.number_interval",
+    value: "demo.number_interval"
 }, {
     pId: 4,
     id: 414,
-    text: "可选下拉树"
+    text: "公式下拉框"
 }, {
     pId: 414,
-    text: "bi.select_tree_combo",
-    value: "demo.select_tree_combo"
-}, {
-    pId: 414,
-    text: "bi.multilayer_select_tree_combo",
-    value: "demo.multilayer_select_tree_combo"
+    text: "bi.formula_combo",
+    value: "demo.formula_combo"
 }, {
     pId: 4,
     id: 415,
@@ -3866,10 +4230,6 @@ Demo.COMPONENT_CONFIG = [{
     pId: 419,
     text: "bi.file_manager",
     value: "demo.file_manager"
-}, {
-    pId: 4,
-    text: '时间间隔',
-    value: 'demo.time_interval'
 }];Demo.Func = BI.inherit(BI.Widget, {
     props: {
         baseCls: "demo-func"
@@ -7100,233 +7460,6 @@ Demo.FormulaCombo = BI.inherit(BI.Widget, {
 })
 
 BI.shortcut("demo.formula_combo", Demo.FormulaCombo);/**
- * Created by Dailer on 2017/7/12.
- */
-Demo.IconCombo = BI.inherit(BI.Widget, {
-    props: {
-        baseCls: ""
-    },
-
-    render: function () {
-
-        var self = this;
-
-
-        return {
-            type: "bi.horizontal_auto",
-            items: [{
-                type: "bi.icon_combo",
-                ref:function(_ref){
-                    self.refs=_ref;
-                },
-               // iconClass: "pull-down-ha-font",
-                items: [{
-                    value: "第一项",
-                    iconClass: "delete-font"
-                }, {
-                    value: "第二项",
-                    iconClass: "rename-font"
-                }, {
-                    value: "第三项",
-                    iconClass: "move-font"
-                }]
-            }],
-            vgap: 20
-        }
-    }
-})
-
-BI.shortcut("demo.icon_combo", Demo.IconCombo);/**
- * Created by Dailer on 2017/7/11.
- */
-Demo.StaticCombo = BI.inherit(BI.Widget, {
-    props: {
-        baseCls: ""
-    },
-
-
-    beforeMount: function () {
-        this.refs.setValue(2);
-    },
-
-    render: function () {
-
-        var self = this;
-
-        return {
-            type: "bi.horizontal_auto",
-            items: [{
-                type: "bi.static_combo",
-                text: "Value 不变",
-                width: 300,
-                ref: function (_ref) {
-                    self.refs = _ref;
-                },
-                items: [
-                    {
-                        text: "MVC-1",
-                        value: 1
-                    }, {
-                        text: "MVC-2",
-                        value: 2
-                    }, {
-                        text: "MVC-3",
-                        value: 3
-                    }
-                ]
-            }],
-            vgap: 20
-        }
-    }
-})
-
-BI.shortcut("demo.static_combo", Demo.StaticCombo);/**
- * Created by Dailer on 2017/7/11.
- */
-Demo.TextValueCombo = BI.inherit(BI.Widget, {
-    props: {
-        baseCls: ""
-    },
-    render: function () {
-
-        return {
-            type: "bi.horizontal_auto",
-            items: [{
-                type: "bi.text_value_combo",
-                text: "天气热死了",
-                width: 300,
-                items: [{
-                    text: "MVC-1",
-                    value: 1
-                }, {
-                    text: "MVC-2",
-                    value: 2
-                }, {
-                    text: "MVC-3",
-                    value: 3
-                }]
-            },{
-                type: "bi.text_value_check_combo",
-                text: "天气热死了",
-                width: 300,
-                items: [{
-                    text: "MVC-1",
-                    value: 1
-                }, {
-                    text: "MVC-2",
-                    value: 2
-                }, {
-                    text: "MVC-3",
-                    value: 3
-                }]
-            },{
-                type: "bi.text_value_combo",
-                text: "天气热死了",
-                width: 300,
-                items: [{
-                    text: "MVC-1",
-                    value: 1
-                }, {
-                    text: "MVC-2",
-                    value: 2
-                }, {
-                    text: "MVC-3",
-                    value: 3
-                }]
-            }],
-            vgap: 20
-        }
-    }
-})
-
-BI.shortcut("demo.text_value_combo", Demo.TextValueCombo);/**
- * Created by Dailer on 2017/7/11.
- */
-Demo.TextValueDownListCombo = BI.inherit(BI.Widget, {
-    props: {
-        baseCls: ""
-    },
-
-
-    beforeMount:function(){
-        this.refs.setValue(2);
-    },
-
-    render: function () {
-
-        var self = this;
-
-        return {
-            type: "bi.horizontal_auto",
-            items: [{
-                type: "bi.label",
-                cls: "layout-bg2",
-                text: "分组+二级",
-                width: 300
-            }, {
-                type: "bi.text_value_down_list_combo",
-                text: "天气热死了",
-                width: 300,
-                ref: function (_ref) {
-                    self.refs = _ref;
-                },
-                items: [
-                    [{
-                        el: {
-                            text: "MVC-1",
-                            value: 1
-                        },
-                        children: [{
-                            text: "MVC-1-1",
-                            value: 11
-                        }]
-                    }],
-                    [{
-                        text: "MVC-2",
-                        value: 2
-                    }, {
-                        text: "MVC-3",
-                        value: 3
-                    }]
-                ]
-            }],
-            vgap: 20
-        }
-    }
-})
-
-BI.shortcut("demo.text_value_down_list_combo", Demo.TextValueDownListCombo);/**
- * Created by Dailer on 2017/7/11.
- */
-Demo.TextValueCheckCombo = BI.inherit(BI.Widget, {
-    props: {
-        baseCls: ""
-    },
-    render: function () {
-
-        return {
-            type: "bi.horizontal_auto",
-            items: [{
-                type: "bi.text_value_check_combo",
-                text: "天气热死了",
-                width: 300,
-                items: [{
-                    text: "MVC-1",
-                    value: 1
-                }, {
-                    text: "MVC-2",
-                    value: 2
-                }, {
-                    text: "MVC-3",
-                    value: 3
-                }]
-            }],
-            vgap: 20
-        }
-    }
-})
-
-BI.shortcut("demo.text_value_check_combo", Demo.TextValueCheckCombo);/**
  * Created by Dailer on 2017/7/11.
  */
 Demo.Date = BI.inherit(BI.Widget, {
@@ -7623,72 +7756,6 @@ BI.shortcut("demo.dialog", Demo.DialogView);Demo.Downlist = BI.inherit(BI.Widget
 BI.shortcut("demo.down_list", Demo.Downlist);/**
  * Created by Dailer on 2017/7/11.
  */
-Demo.AdaptEditor = BI.inherit(BI.Widget, {
-    props: {
-        baseCls: ""
-    },
-
-
-
-    //这东西好奇怪,不支持设置宽度,那么渲染出来宽度几乎没有,无奈之下只能假装给他个默认值了
-    beforeMount: function () {
-        this.refs.setValue("Winter is coming !")
-    },
-
-    render: function () {
-        var self = this;
-        var editor = BI.createWidget({
-            type: "bi.adapt_editor",
-            cls: "layout-bg5",
-            ref: function (_ref) {
-                self.refs = _ref;
-            }
-        })
-
-        var text=["You know nothing! Jon Snow","A Lannister always pays his debts.","Power is a curious thing."]
-
-        return {
-            type: "bi.horizontal_auto",
-            items: [{
-                el: editor
-            }, {
-                type: "bi.button",
-                text: "为了展示长度真的是可变的,每点一下就换一行字",
-                handler: function () {
-                    var temp=text.shift();
-                    editor.setValue(temp);
-                    text.push(temp);
-                }
-            }],
-            vgap: 20
-        }
-    }
-})
-
-BI.shortcut("demo.adapt_editor", Demo.AdaptEditor);/**
- * Created by Dailer on 2017/7/11.
- */
-Demo.ClearEditor = BI.inherit(BI.Widget, {
-    props: {
-        baseCls: ""
-    },
-    render: function () {
-        return {
-            type: "bi.horizontal_auto",
-            items: [{
-                type: "bi.clear_editor",
-                cls: "bi-border",
-                width: 300,
-                watermark: "这个是带清除按钮的"
-            }],
-            vgap: 20
-        }
-    }
-})
-
-BI.shortcut("demo.clear_editor", Demo.ClearEditor);/**
- * Created by Dailer on 2017/7/11.
- */
 Demo.SearchEditor = BI.inherit(BI.Widget, {
     props: {
         baseCls: "demo-exceltable"
@@ -7742,8 +7809,8 @@ Demo.TextEditor = BI.inherit(BI.Widget, {
 })
 
 BI.shortcut("demo.text_editor", Demo.TextEditor);/* 文件管理导航
-    Created by dailer on 2017 / 7 / 21. 
-   */
+ Created by dailer on 2017 / 7 / 21.
+ */
 Demo.FileManager = BI.inherit(BI.Widget, {
     props: {
         baseCls: ""
@@ -7788,28 +7855,9 @@ Demo.FileManager = BI.inherit(BI.Widget, {
             text: "文件2",
             lastModify: 1454316355142
         }];
-        var filemanager = BI.createWidget({
-            type: "bi.number_editor",
-            validationChecker: function (v) {
-                return BI.parseFloat(v) <= 100 && BI.parseFloat(v) >= 0
-            },
-            height: 24,
-            width: 150,
-            errorText: "hahah"
-        });
-        filemanager.on(BI.FineTuningNumberEditor.EVENT_CHANGE, function () {
-            if(BI.parseFloat(this.getValue()) < 1){
-                filemanager.setBottomEnable(false);
-            }else{
-                filemanager.setBottomEnable(true);
-            }
-        });
         return {
-            type: "bi.vertical",
-            items: [{
-                el: filemanager,
-                height: 24
-            }]
+            type: "bi.file_manager",
+            items: items
         }
     }
 });
@@ -7879,14 +7927,14 @@ Demo.MultiSelectCombo = BI.inherit(BI.Widget, {
 
     _getItemsByTimes: function (items, times) {
         var res = [];
-        for (var i = (times - 1) * 3; items[i] && i < times * 3; i++) {
+        for (var i = (times - 1) * 10; items[i] && i < times * 10; i++) {
             res.push(items[i]);
         }
         return res;
     },
 
     _hasNextByTimes: function (items, times) {
-        return times * 3 < items.length;
+        return times * 10 < items.length;
     },
 
     _itemsCreator: function (options, callback) {
@@ -7900,8 +7948,8 @@ Demo.MultiSelectCombo = BI.inherit(BI.Widget, {
             var search = BI.Func.getSearchResult(items, kw);
             items = search.matched.concat(search.finded);
         });
-        if (options.selected_values) {//过滤
-            var filter = BI.makeObject(options.selected_values, true);
+        if (options.selectedValues) {//过滤
+            var filter = BI.makeObject(options.selectedValues, true);
             items = BI.filter(items, function (i, ob) {
                 return !filter[ob.value];
             });
@@ -7955,9 +8003,20 @@ Demo.MultiTreeCombo = BI.inherit(BI.Widget, {
                     self.tree = _ref;
                 },
                 itemsCreator: function (options, callback) {
-                     console.log(options);
-                    
-                    
+                    console.log(options);
+                    //根据不同的类型处理相应的结果
+                    switch (options.type) {
+                        case BI.TreeView.REQ_TYPE_INIT_DATA:
+                            break;
+                        case BI.TreeView.REQ_TYPE_ADJUST_DATA:
+                            break;
+                        case BI.TreeView.REQ_TYPE_SELECT_DATA:
+                            break;
+                        case BI.TreeView.REQ_TYPE_GET_SELECTED_DATA:
+                            break;
+                        default :
+                            break;
+                    }
                     callback({
                         items: items
                     });
@@ -7965,7 +8024,7 @@ Demo.MultiTreeCombo = BI.inherit(BI.Widget, {
                 width: 300
             }, {
                 type: "bi.button",
-                text: "getVlaue",
+                text: "getValue",
                 handler: function () {
                     BI.Msg.toast(JSON.stringify(self.tree.getValue()));
                 },
@@ -7976,7 +8035,41 @@ Demo.MultiTreeCombo = BI.inherit(BI.Widget, {
     }
 })
 
-BI.shortcut("demo.multi_tree_combo", Demo.MultiTreeCombo);/**
+BI.shortcut("demo.multi_tree_combo", Demo.MultiTreeCombo);/* 文件管理导航
+ Created by dailer on 2017 / 7 / 21.
+ */
+Demo.FileManager = BI.inherit(BI.Widget, {
+    props: {
+        baseCls: ""
+    },
+
+    render: function () {
+        var editor = BI.createWidget({
+            type: "bi.number_editor",
+            validationChecker: function (v) {
+                return BI.parseFloat(v) <= 100 && BI.parseFloat(v) >= 0
+            },
+            height: 24,
+            width: 150,
+            errorText: "hahah"
+        });
+        editor.on(BI.NumberEditor.EVENT_CHANGE, function () {
+            if (BI.parseFloat(this.getValue()) < 1) {
+                editor.setDownEnable(false);
+            } else {
+                editor.setDownEnable(true);
+            }
+        });
+        return {
+            type: "bi.vertical",
+            items: [{
+                el: editor,
+                height: 24
+            }]
+        }
+    }
+});
+BI.shortcut("demo.number_editor", Demo.FileManager);/**
  * Created by Dailer on 2017/7/12.
  */
 Demo.NumericalInterval = BI.inherit(BI.Widget, {
@@ -8423,7 +8516,7 @@ Demo.SelectTreeCombo = BI.inherit(BI.Widget, {
 
     render: function () {
         var self = this;
-        var items = BI.deepClone(Demo.CONSTANTS.TREE);
+        var items = BI.deepClone(Demo.CONSTANTS.LEVELTREE);
         return {
             type: "bi.horizontal_auto",
             items: [{
@@ -8505,7 +8598,7 @@ Demo.SingleTreeCombo = BI.inherit(BI.Widget, {
 
     render: function () {
         var self = this;
-        var items = BI.deepClone(Demo.CONSTANTS.TREE);
+        var items = BI.deepClone(Demo.CONSTANTS.LEVELTREE);
         return {
             type: "bi.horizontal_auto",
             items: [{
@@ -8537,132 +8630,6 @@ Demo.SingleTreeCombo = BI.inherit(BI.Widget, {
 })
 
 BI.shortcut("demo.single_tree_combo", Demo.SingleTreeCombo);/**
- * Created by Urthur on 2017/9/4.
- */
-Demo.Slider = BI.inherit(BI.Widget, {
-    _defaultConfig: function () {
-        return BI.extend(Demo.Slider.superclass._defaultConfig.apply(this, arguments), {
-            baseCls: "demo-slider",
-            min: 10,
-            max: 50
-        })
-    },
-    _init: function () {
-        Demo.Slider.superclass._init.apply(this, arguments);
-
-        var singleSlider = BI.createWidget({
-            type: "bi.single_slider",
-            digit: 0,
-            width: 300,
-            height: 50,
-            cls: "layout-bg-white"
-        });
-
-        singleSlider.setMinAndMax({
-            min: 10,
-            max: 100
-        });
-
-        singleSlider.setValue(30);
-        singleSlider.populate();
-        singleSlider.on(BI.SingleSlider.EVENT_CHANGE, function () {
-            console.log(this.getValue());
-        });
-
-        var singleSliderLabel = BI.createWidget({
-            type: "bi.single_slider_label",
-            height: 50,
-            width: 300,
-            digit: 0,
-            unit: "个",
-            cls: "layout-bg-white"
-        });
-        singleSliderLabel.setMinAndMax({
-            min: 0,
-            max: 100
-        });
-        singleSliderLabel.setValue(10);
-        singleSliderLabel.populate();
-
-        var normalSingleSlider = BI.createWidget({
-            type: "bi.single_slider_normal",
-            height: 30,
-            width: 300,
-            cls: "layout-bg-white"
-        });
-        normalSingleSlider.setMinAndMax({
-            min: 0,
-            max: 100
-        });
-        normalSingleSlider.setValue(10);
-        normalSingleSlider.populate();
-
-
-        var intervalSlider = BI.createWidget({
-            type: "bi.interval_slider",
-            width: 300,
-            cls: "layout-bg-white"
-        });
-        intervalSlider.setMinAndMax({
-            min: 0,
-            max: 120
-        });
-        intervalSlider.setValue({
-            min: 10,
-            max: 120
-        });
-        intervalSlider.populate();
-
-        var intervalSliderLabel = BI.createWidget({
-            type: "bi.interval_slider_label",
-            width: 300,
-            cls: "layout-bg-white"
-        });
-        intervalSliderLabel.setMinAndMax({
-            min: 0,
-            max: 120
-        });
-        intervalSliderLabel.setValue({
-            min: 10,
-            max: 120
-        });
-        intervalSliderLabel.populate();
-
-
-        BI.createWidget({
-            type: "bi.vertical",
-            element: this,
-            items: [{
-                type: "bi.center_adapt",
-                items: [{
-                    el: singleSlider
-                }]
-            }, {
-                type: "bi.center_adapt",
-                items: [{
-                    el: normalSingleSlider
-                }]
-            }, {
-                type: "bi.center_adapt",
-                items: [{
-                    el: singleSliderLabel
-                }]
-            }, {
-                type: "bi.center_adapt",
-                items: [{
-                    el: intervalSlider
-                }]
-            }, {
-                type: "bi.center_adapt",
-                items: [{
-                    el: intervalSliderLabel
-                }]
-            }],
-            vgap: 20
-        });
-    }
-});
-BI.shortcut("demo.slider", Demo.Slider);/**
  * Created by Dailer on 2017/7/12.
  */
 Demo.ExcelTable = BI.inherit(BI.Widget, {
@@ -9498,6 +9465,186 @@ BI.shortcut("demo.time_interval", Demo.TimeInterval);/**
  */
 
 
+Demo.MultiLayerSelectLevelTree = BI.inherit(BI.Widget, {
+
+    render: function () {
+        var self = this;
+        var tree = BI.createWidget({
+            type: "bi.multilayer_select_level_tree",
+            items: BI.deepClone(Demo.CONSTANTS.TREE)
+        });
+
+        return {
+            type: "bi.vtape",
+            items: [{
+                el: tree
+            }, {
+                el: {
+                    type: "bi.button",
+                    height: 25,
+                    text: "getValue",
+                    handler: function () {
+                        BI.Msg.alert("", JSON.stringify(tree.getValue()));
+                    }
+                },
+                height: 25
+            }, {
+                el: {
+                    type: "bi.button",
+                    height: 25,
+                    text: "setValue (第二级文件1)",
+                    handler: function () {
+                        tree.setValue(["第二级文件1"]);
+                    }
+                },
+                height: 25
+            }],
+            width: 500,
+            hgap: 300
+        }
+    }
+});
+
+BI.shortcut("demo.multilayer_select_level_tree", Demo.MultiLayerSelectLevelTree);/**
+ * Created by Dailer on 2017/7/26.
+ */
+
+
+Demo.MultiLayerSingleLevelTree = BI.inherit(BI.Widget, {
+
+    render: function () {
+        var self = this;
+        var tree = BI.createWidget({
+            type: "bi.multilayer_single_level_tree",
+            items: BI.deepClone(Demo.CONSTANTS.TREE)
+        });
+
+        return {
+            type: "bi.vtape",
+            items: [{
+                el: tree
+            }, {
+                el: {
+                    type: "bi.button",
+                    height: 25,
+                    text: "getValue",
+                    handler: function () {
+                        BI.Msg.alert("", JSON.stringify(tree.getValue()));
+                    }
+                },
+                height: 25
+            }, {
+                el: {
+                    type: "bi.button",
+                    height: 25,
+                    text: "setValue (第二级文件1)",
+                    handler: function () {
+                        tree.setValue(["第二级文件1"]);
+                    }
+                },
+                height: 25
+            }],
+            width: 500,
+            hgap: 300
+        }
+    }
+});
+
+BI.shortcut("demo.multilayer_single_level_tree", Demo.MultiLayerSingleLevelTree);/**
+ * Created by Dailer on 2017/7/26.
+ */
+
+
+Demo.SelectLevelTree = BI.inherit(BI.Widget, {
+
+    render: function () {
+        var self = this;
+        var tree = BI.createWidget({
+            type: "bi.select_level_tree",
+            items: BI.deepClone(Demo.CONSTANTS.LEVELTREE)
+        });
+
+        return {
+            type: "bi.vtape",
+            items: [{
+                el: tree
+            }, {
+                el: {
+                    type: "bi.button",
+                    height: 25,
+                    text: "getValue",
+                    handler: function () {
+                        BI.Msg.alert("", JSON.stringify(tree.getValue()));
+                    }
+                },
+                height: 25
+            }, {
+                el: {
+                    type: "bi.button",
+                    height: 25,
+                    text: "setValue (第二级文件1)",
+                    handler: function () {
+                        tree.setValue(["第二级文件1"]);
+                    }
+                },
+                height: 25
+            }],
+            width: 500,
+            hgap: 300
+        }
+    }
+});
+
+BI.shortcut("demo.select_level_tree", Demo.SelectLevelTree);/**
+ * Created by Dailer on 2017/7/26.
+ */
+
+
+Demo.SingleLevelTree = BI.inherit(BI.Widget, {
+
+    render: function () {
+        var self = this;
+        var tree = BI.createWidget({
+            type: "bi.single_level_tree",
+            items: BI.deepClone(Demo.CONSTANTS.LEVELTREE)
+        });
+
+        return {
+            type: "bi.vtape",
+            items: [{
+                el: tree
+            }, {
+                el: {
+                    type: "bi.button",
+                    height: 25,
+                    text: "getValue",
+                    handler: function () {
+                        BI.Msg.alert("", JSON.stringify(tree.getValue()));
+                    }
+                },
+                height: 25
+            }, {
+                el: {
+                    type: "bi.button",
+                    height: 25,
+                    text: "setValue (第二级文件1)",
+                    handler: function () {
+                        tree.setValue(["第二级文件1"]);
+                    }
+                },
+                height: 25
+            }],
+            width: 500,
+            hgap: 300
+        }
+    }
+});
+
+BI.shortcut("demo.single_level_tree", Demo.SingleLevelTree);/**
+ * Created by Dailer on 2017/7/26.
+ */
+
+
 Demo.SwitchTree = BI.inherit(BI.Widget, {
 
     render: function () {
@@ -9693,6 +9840,50 @@ Demo.CONSTANTS = {
     {id: 22, pId: 2, value: "第二级文件2", text: "第二级文件2"},
     {id: 211, pId: 21, value: "第三级目录2", text: "第三级目录2"},
     {id: 212, pId: 21, value: "第三级文件2", text: "第三级文件2"},
-    {id: 2111, pId: 211, value: "第四级文件1", text: "第四级文件1"}]
+    {id: 2111, pId: 211, value: "第四级文件1", text: "第四级文件1"}],
+    LEVELTREE: [{
+        id: 1,
+        text: "第一项",
+        value: "1"
+    }, {
+        id: 2,
+        text: "第二项",
+        value: "2"
+    }, {
+        id: 3,
+        text: "第三项",
+        value: "3",
+        open: true
+    }, {
+        id: 11,
+        pId: 1,
+        text: "子项1",
+        value: "11"
+    }, {
+        id: 12,
+        pId: 1,
+        text: "子项2",
+        value: "12"
+    }, {
+        id: 13,
+        pId: 1,
+        text: "子项3",
+        value: "13"
+    }, {
+        id: 31,
+        pId: 3,
+        text: "子项1",
+        value: "31"
+    }, {
+        id: 32,
+        pId: 3,
+        text: "子项2",
+        value: "32"
+    }, {
+        id: 33,
+        pId: 3,
+        text: "子项3",
+        value: "33"
+    }]
 };
 

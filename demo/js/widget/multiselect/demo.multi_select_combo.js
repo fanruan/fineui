@@ -23,14 +23,14 @@ Demo.MultiSelectCombo = BI.inherit(BI.Widget, {
 
     _getItemsByTimes: function (items, times) {
         var res = [];
-        for (var i = (times - 1) * 3; items[i] && i < times * 3; i++) {
+        for (var i = (times - 1) * 10; items[i] && i < times * 10; i++) {
             res.push(items[i]);
         }
         return res;
     },
 
     _hasNextByTimes: function (items, times) {
-        return times * 3 < items.length;
+        return times * 10 < items.length;
     },
 
     _itemsCreator: function (options, callback) {
@@ -44,8 +44,8 @@ Demo.MultiSelectCombo = BI.inherit(BI.Widget, {
             var search = BI.Func.getSearchResult(items, kw);
             items = search.matched.concat(search.finded);
         });
-        if (options.selected_values) {//过滤
-            var filter = BI.makeObject(options.selected_values, true);
+        if (options.selectedValues) {//过滤
+            var filter = BI.makeObject(options.selectedValues, true);
             items = BI.filter(items, function (i, ob) {
                 return !filter[ob.value];
             });

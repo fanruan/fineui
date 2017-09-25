@@ -11624,8 +11624,12 @@ BI.NumberEditor = BI.inherit(BI.Widget, {
     _defaultConfig: function () {
         return BI.extend(BI.NumberEditor.superclass._defaultConfig.apply(this, arguments), {
             baseCls: "bi-number-editor bi-border",
-            validationChecker: function () {return true;},
-            valueFormatter: function (v) {return v;},
+            validationChecker: function () {
+                return true;
+            },
+            valueFormatter: function (v) {
+                return v;
+            },
             value: 0,
             errorText: "",
             step: 1
@@ -11646,7 +11650,7 @@ BI.NumberEditor = BI.inherit(BI.Widget, {
             o.value = this.getValue();
             self.fireEvent(BI.NumberEditor.EVENT_CHANGE);
         });
-        this.editor.on(BI.TextEditor.EVENT_CONFIRM, function(){
+        this.editor.on(BI.TextEditor.EVENT_CONFIRM, function () {
             self.fireEvent(BI.NumberEditor.EVENT_CONFIRM);
         });
         this.topBtn = BI.createWidget({
@@ -11654,7 +11658,7 @@ BI.NumberEditor = BI.inherit(BI.Widget, {
             trigger: "lclick,",
             cls: "column-pre-page-h-font top-button bi-border-left bi-border-bottom"
         });
-        this.topBtn.on(BI.IconButton.EVENT_CHANGE, function(){
+        this.topBtn.on(BI.IconButton.EVENT_CHANGE, function () {
             self._finetuning(o.step);
             self.fireEvent(BI.NumberEditor.EVENT_CHANGE);
             self.fireEvent(BI.NumberEditor.EVENT_CONFIRM);
@@ -11664,7 +11668,7 @@ BI.NumberEditor = BI.inherit(BI.Widget, {
             trigger: "lclick,",
             cls: "column-next-page-h-font bottom-button bi-border-left bi-border-top"
         });
-        this.bottomBtn.on(BI.IconButton.EVENT_CHANGE, function(){
+        this.bottomBtn.on(BI.IconButton.EVENT_CHANGE, function () {
             self._finetuning(-o.step);
             self.fireEvent(BI.NumberEditor.EVENT_CHANGE);
             self.fireEvent(BI.NumberEditor.EVENT_CONFIRM);
@@ -11693,7 +11697,7 @@ BI.NumberEditor = BI.inherit(BI.Widget, {
     },
 
     //微调
-    _finetuning: function(add){
+    _finetuning: function (add) {
         var v = BI.parseFloat(this.getValue());
         this.setValue(v.add(add));
     },
@@ -11702,7 +11706,7 @@ BI.NumberEditor = BI.inherit(BI.Widget, {
         this.topBtn.setEnable(!!v);
     },
 
-    setBottomEnable: function (v) {
+    setDownEnable: function (v) {
         this.bottomBtn.setEnable(!!v);
     },
 
@@ -14958,7 +14962,7 @@ BI.SelectTreeCombo = BI.inherit(BI.Widget, {
         });
 
         this.popup = BI.createWidget({
-            type: "bi.select_tree_popup",
+            type: "bi.select_level_tree",
             items: o.items
         });
 
@@ -15079,7 +15083,7 @@ BI.SelectTreePopup = BI.inherit(BI.Pane, {
 
     _defaultConfig: function () {
         return BI.extend(BI.SelectTreePopup.superclass._defaultConfig.apply(this, arguments), {
-            baseCls: "bi-select-tree-popup",
+            baseCls: "bi-select-level-tree",
             tipText: BI.i18nText("BI-No_Selected_Item"),
             items: []
         });
@@ -15166,7 +15170,7 @@ BI.SelectTreePopup = BI.inherit(BI.Pane, {
 });
 
 BI.SelectTreePopup.EVENT_CHANGE = "EVENT_CHANGE";
-BI.shortcut("bi.select_tree_popup", BI.SelectTreePopup);/**
+BI.shortcut("bi.select_level_tree", BI.SelectTreePopup);/**
  *
  * Created by GUY on 2016/8/10.
  * @class BI.SequenceTableDynamicNumber
@@ -15759,7 +15763,7 @@ BI.SingleTreeCombo = BI.inherit(BI.Widget, {
         }, o.trigger));
 
         this.popup = BI.createWidget({
-            type: "bi.single_tree_popup",
+            type: "bi.single_level_tree",
             items: o.items
         });
 
@@ -15813,7 +15817,7 @@ BI.SingleTreePopup = BI.inherit(BI.Pane, {
 
     _defaultConfig: function () {
         return BI.extend(BI.SingleTreePopup.superclass._defaultConfig.apply(this, arguments), {
-            baseCls: "bi-single-tree-popup",
+            baseCls: "bi-single-level-tree",
             tipText: BI.i18nText("BI-No_Selected_Item"),
             items: []
         });
@@ -15866,7 +15870,7 @@ BI.SingleTreePopup = BI.inherit(BI.Pane, {
 });
 
 BI.SingleTreePopup.EVENT_CHANGE = "EVENT_CHANGE";
-BI.shortcut("bi.single_tree_popup", BI.SingleTreePopup);/**
+BI.shortcut("bi.single_level_tree", BI.SingleTreePopup);/**
  * @class BI.SingleTreeTrigger
  * @extends BI.Trigger
  */

@@ -26,7 +26,7 @@ BI.SingleTreeCombo = BI.inherit(BI.Widget, {
         }, o.trigger));
 
         this.popup = BI.createWidget({
-            type: "bi.single_tree_popup",
+            type: "bi.single_level_tree",
             items: o.items
         });
 

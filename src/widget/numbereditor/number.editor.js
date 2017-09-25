@@ -6,8 +6,12 @@ BI.NumberEditor = BI.inherit(BI.Widget, {
     _defaultConfig: function () {
         return BI.extend(BI.NumberEditor.superclass._defaultConfig.apply(this, arguments), {
             baseCls: "bi-number-editor bi-border",
-            validationChecker: function () {return true;},
-            valueFormatter: function (v) {return v;},
+            validationChecker: function () {
+                return true;
+            },
+            valueFormatter: function (v) {
+                return v;
+            },
             value: 0,
             errorText: "",
             step: 1
@@ -28,7 +32,7 @@ BI.NumberEditor = BI.inherit(BI.Widget, {
             o.value = this.getValue();
             self.fireEvent(BI.NumberEditor.EVENT_CHANGE);
         });
-        this.editor.on(BI.TextEditor.EVENT_CONFIRM, function(){
+        this.editor.on(BI.TextEditor.EVENT_CONFIRM, function () {
             self.fireEvent(BI.NumberEditor.EVENT_CONFIRM);
         });
         this.topBtn = BI.createWidget({
@@ -36,7 +40,7 @@ BI.NumberEditor = BI.inherit(BI.Widget, {
             trigger: "lclick,",
             cls: "column-pre-page-h-font top-button bi-border-left bi-border-bottom"
         });
-        this.topBtn.on(BI.IconButton.EVENT_CHANGE, function(){
+        this.topBtn.on(BI.IconButton.EVENT_CHANGE, function () {
             self._finetuning(o.step);
             self.fireEvent(BI.NumberEditor.EVENT_CHANGE);
             self.fireEvent(BI.NumberEditor.EVENT_CONFIRM);
@@ -46,7 +50,7 @@ BI.NumberEditor = BI.inherit(BI.Widget, {
             trigger: "lclick,",
             cls: "column-next-page-h-font bottom-button bi-border-left bi-border-top"
         });
-        this.bottomBtn.on(BI.IconButton.EVENT_CHANGE, function(){
+        this.bottomBtn.on(BI.IconButton.EVENT_CHANGE, function () {
             self._finetuning(-o.step);
             self.fireEvent(BI.NumberEditor.EVENT_CHANGE);
             self.fireEvent(BI.NumberEditor.EVENT_CONFIRM);
@@ -75,7 +79,7 @@ BI.NumberEditor = BI.inherit(BI.Widget, {
     },
 
     //微调
-    _finetuning: function(add){
+    _finetuning: function (add) {
         var v = BI.parseFloat(this.getValue());
         this.setValue(v.add(add));
     },
@@ -84,7 +88,7 @@ BI.NumberEditor = BI.inherit(BI.Widget, {
         this.topBtn.setEnable(!!v);
     },
 
-    setBottomEnable: function (v) {
+    setDownEnable: function (v) {
         this.bottomBtn.setEnable(!!v);
     },
 
