@@ -81023,7 +81023,7 @@ BI.DatePaneWidget = BI.inherit(BI.Widget, {
     _defaultConfig: function () {
         var conf = BI.DatePaneWidget.superclass._defaultConfig.apply(this, arguments);
         return BI.extend(conf, {
-            baseCls: "bi-date-pane-widget",
+            baseCls: "bi-date-pane",
             min: '1900-01-01', //最小日期
             max: '2099-12-31', //最大日期
             selectedTime: null

@@ -2021,83 +2021,31 @@ BI.shortcut("demo.text_value_check_combo", Demo.TextValueCheckCombo);Demo.Func =
     props: {
         baseCls: "demo-func"
     },
-    _createNav: function(v){
-        var m = this.MONTH, y = this.YEAR;
-        m += v;
-        while(m < 0){
-            y--;
-            m += 12;
-        }
-        while(m > 11){
-            y++;
-            m -= 12;
-        }
-        var calendar = BI.createWidget({
+
+    render: function () {
+        var self = this;
+        var date = new Date();
+        return {
             type: "bi.calendar",
+            ref: function () {
+                self.calendar = this;
+            },
             logic: {
                 dynamic: false
             },
-            year: y,
-            month: m,
-            day: this.DAY
-        })
-        calendar.setValue(this.selectedTime);
-        return calendar;
+            year: date.getFullYear(),
+            month: date.getMonth(),
+            day: date.getDate()
+        }
     },
 
-    _stringfyTimeObject: function(timeOb){
-        return timeOb.year + "-" + (timeOb.month + 1) + "-" + timeOb.day;
-    },
-
-    render: function () {
-        var self = this, d = new Date();
-        this.YEAR = d.getFullYear();
-        this.MONTH = d.getMonth();
-        this.DAY = d.getDate();
-
-        this.selectedTime = {
-            year: this.YEAR,
-            month: this.MONTH,
-            day: this.DAY
-        };
-
-        var tip = BI.createWidget({
-            type: "bi.label"
-        });
-
-        var nav = BI.createWidget({
-            type: "bi.navigation",
-            element: this,
-            tab: {
-                height: 30,
-                items: [{
-                    once: false,
-                    text: "后退",
-                    value: -1,
-                    cls: "mvc-button layout-bg3"
-                },tip, {
-                    once: false,
-                    text: "前进",
-                    value: 1,
-                    cls: "mvc-button layout-bg4"
-                }]
-            },
-            cardCreator: BI.bind(this._createNav, this),
-
-            afterCardCreated: function(){
-
-            },
-
-            afterCardShow: function(){
-                this.setValue(self.selectedTime);
-            }
+    mounted: function () {
+        var date = new Date();
+        this.calendar.setValue({
+            year: date.getFullYear(),
+            month: date.getMonth(),
+            day: date.getDate()
         })
-
-        nav.on(BI.Navigation.EVENT_CHANGE, function(){
-            self.selectedTime = nav.getValue();
-            tip.setText(self._stringfyTimeObject(self.selectedTime));
-        });
-        tip.setText(this._stringfyTimeObject(this.selectedTime));
     }
 });
 BI.shortcut("demo.calendar", Demo.Func);Demo.Func = BI.inherit(BI.Widget, {
@@ -7479,46 +7427,49 @@ BI.shortcut("demo.date", Demo.Date);Demo.DatePane = BI.inherit(BI.Widget, {
                 type: "bi.vertical",
                 vgap: 10,
                 items: [{
-                        type: "bi.label",
-                        cls: "layout-bg2",
-                        text: "bi.date_pane_widget"
-                    }, {
-                        type: "bi.date_pane_widget",
-                        selectedTime: {
-                            year: 2017,
-                            month: 12,
-                            day: 11
-                        },
-                        ref: function (_ref) {
-                            self.datepane = _ref;
-                        },
-                        height: 300
+                    type: "bi.label",
+                    cls: "layout-bg2",
+                    text: "bi.date_pane"
+                }, {
+                    type: "bi.date_pane",
+                    selectedTime: {
+                        year: 2017,
+                        month: 12,
+                        day: 11
                     },
-                    {
-                        type: "bi.button",
-                        text: "getValue",
-                        handler: function () {
-                            BI.Msg.toast("date" + JSON.stringify(self.datepane.getValue()));
-                        }
-                    }, {
-                        type: "bi.button",
-                        text: "setVlaue '2017-12-31'",
-                        handler: function () {
-                            self.datepane.setValue({
-                                year: 2017,
-                                month: 11,
-                                day: 31
-                            })
-                        }
+                    ref: function (_ref) {
+                        self.datepane = _ref;
+                    },
+                    height: 300
+                }, {
+                    type: "bi.button",
+                    text: "getValue",
+                    handler: function () {
+                        BI.Msg.toast("date" + JSON.stringify(self.datepane.getValue()));
                     }
+                }, {
+                    type: "bi.button",
+                    text: "setValue '2017-12-31'",
+                    handler: function () {
+                        self.datepane.setValue({
+                            year: 2017,
+                            month: 11,
+                            day: 31
+                        })
+                    }
+                }
                 ],
                 width: "50%"
             }]
         }
+    },
+
+    mounted: function () {
+        this.datepane.setValue();//不设value值表示当前时间
     }
 })
 
-BI.shortcut("demo.date_pane_widget", Demo.DatePane);/**
+BI.shortcut("demo.date_pane", Demo.DatePane);/**
  * Created by Urthur on 2017/7/18.
  */
 Demo.CustomDateTime = BI.inherit(BI.Widget, {
