@@ -188,14 +188,6 @@ Demo.WIDGET_CONFIG = [{
     value: "demo.number_interval"
 }, {
     pId: 4,
-    id: 414,
-    text: "公式下拉框"
-}, {
-    pId: 414,
-    text: "bi.formula_combo",
-    value: "demo.formula_combo"
-}, {
-    pId: 4,
     id: 415,
     text: "路径选择"
 }, {
