@@ -50,7 +50,7 @@ BI.PathRegion = BI.inherit(BI.Widget, {
                 text: text,
                 value: value,
                 title: text || value,
-                height: 22
+                height: 24
             });
         } else {
             var label = BI.createWidget({
