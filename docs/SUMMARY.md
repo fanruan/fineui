@@ -178,12 +178,15 @@
 * [relation_view](detailed/relation_view.md)
 * [dialog](detailed/dialog.md)
 * [file_manager](detailed/file_manager.md)
+
+## 部件
 * [value_chooser_combo](components/value_chooser_combo.md)
 * [value_chooser_pane](components/value_chooser_pane.md)
 * [all_value_chooser_combo](components/all_value_chooser_combo.md)
 * [tree_value_chooser_combo](components/tree_value_chooser_combo.md)
 * [tree_value_chooser_pane](components/tree_value_chooser_pane.md)
-* addons
-    * sliders
-        * [single_slider](detailed/single_slider.md)
+
+## addons
+* sliders
+    * [single_slider](detailed/single_slider.md)
 
