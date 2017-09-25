@@ -3491,10 +3491,6 @@ BI.shortcut("demo.value_chooser_pane", Demo.ValueChooserPane);Demo.ADDONS_CONFIG
     value: "demo.resizable_table"
 }, {
     pId: 2,
-    text: "bi.canvas",
-    value: "demo.canvas"
-}, {
-    pId: 2,
     text: "bi.pager",
     value: "demo.pager"
 }, {
@@ -3756,27 +3752,31 @@ Demo.COMPONENT_CONFIG = [{
     text: "布局"
 }, {
     pId: 101,
-    text: "自适应居中bi.center_adapt",
+    text: "bi.absolute",
+    value: "demo.absolute"
+}, {
+    pId: 101,
+    text: "bi.center_adapt",
     value: "demo.center_adapt"
 }, {
     pId: 101,
-    text: "自适应垂直居中bi.vertical_adapt",
+    text: "bi.vertical_adapt",
     value: "demo.vertical_adapt"
 }, {
     pId: 101,
-    text: "自适应水平居中bi.horizontal_adapt",
+    text: "bi.horizontal_adapt",
     value: "demo.horizontal_adapt"
 }, {
     pId: 101,
-    text: "margin-auto自适应水平居中bi.horizontal_auto",
+    text: "bi.horizontal_auto",
     value: "demo.horizontal_auto"
 }, {
     pId: 101,
-    text: "float水平居中bi.horizontal_float",
+    text: "bi.horizontal_float",
     value: "demo.horizontal_float"
 }, {
     pId: 101,
-    text: "左右垂直居中bi.left_right_vertical_adapt",
+    text: "bi.left_right_vertical_adapt",
     value: "demo.left_right_vertical_adapt"
 }, {
     pId: 101,
@@ -3788,11 +3788,11 @@ Demo.COMPONENT_CONFIG = [{
     value: "demo.float_center"
 }, {
     pId: 101,
-    text: "垂直流式bi.vertical",
+    text: "bi.vertical",
     value: "demo.vertical"
 }, {
     pId: 101,
-    text: "水平流式bi.horizontal",
+    text: "bi.horizontal",
     value: "demo.horizontal"
 }, {
     pId: 101,
@@ -3802,10 +3802,6 @@ Demo.COMPONENT_CONFIG = [{
     pId: 101,
     text: "bi.left, bi.right",
     value: "demo.flow"
-}, {
-    pId: 101,
-    text: "bi.inline",
-    value: "demo.inline"
 }, {
     pId: 101,
     text: "bi.htape",
@@ -3826,6 +3822,9 @@ Demo.COMPONENT_CONFIG = [{
     pId: 101,
     text: "bi.td",
     value: "demo.td"
+}, {
+    pId: 101,
+    text: "..."
 }, {
     pId: 1,
     id: 102,
@@ -4786,8 +4785,11 @@ BI.shortcut("demo.custom_tree", Demo.Func);Demo.AbsoluteLayout = BI.inherit(BI.W
             type: "bi.absolute",
             items: [{
                 el: {
-                    type: "bi.button",
-                    text: "absolute"
+                    type: "bi.label",
+                    text: "绝对布局",
+                    cls: "layout-bg1",
+                    width: 300,
+                    height: 200
                 },
                 left: 100,
                 top: 100
@@ -4897,78 +4899,15 @@ BI.shortcut("demo.border", Demo.BorderLayout);Demo.CenterAdapt = BI.inherit(BI.W
     },
     render: function () {
         return {
-            type: "bi.grid",
-            columns: 1,
-            rows: 2,
+            type: "bi.center_adapt",
             items: [{
-                column: 0,
-                row: 0,
-                el: this._createNoWidth()
-            }, {
-                column: 0,
-                row: 1,
-                el: this._createBottom()
+                type: "bi.label",
+                text: "水平垂直居中",
+                width: 300,
+                height: 200,
+                cls: "layout-bg1"
             }]
         }
-    },
-
-    _createNoWidth: function () {
-        return BI.createWidget({
-            type: "bi.center_adapt",
-            hgap: 10,
-            items: [{
-                type: "bi.label",
-                text: "Center Adapt 1，center adapt布局只会影响容器内部的位置（水平和垂直居中）而不会影响到内部控件本身属性",
-                cls: "layout-bg1",
-                height: 30
-            }, {
-                type: "bi.label",
-                text: "Center Adapt 2，根据内部控件的宽度的比例来计算",
-                cls: "layout-bg2",
-                height: 30
-            }, {
-                type: "bi.label",
-                text: "Center Adapt 3，这些label都是没有宽度的",
-                cls: "layout-bg3",
-                height: 30
-            }, {
-                type: "bi.label",
-                text: "Center Adapt 4",
-                cls: "layout-bg5",
-                height: 30
-            }]
-        })
-    },
-
-    _createBottom: function () {
-        return BI.createWidget({
-            type: "bi.center_adapt",
-            items: [{
-                type: "bi.text_button",
-                text: "这个是有宽度和高度的按钮-1",
-                height: "100%",
-                width: 160,
-                cls: "layout-bg1"
-            }, {
-                type: "bi.text_button",
-                text: "这个是有宽度和高度的按钮-2",
-                height: 30,
-                width: 160,
-                cls: "layout-bg2"
-            }, {
-                type: "bi.text_button",
-                text: "这个是有宽度和高度的按钮-3",
-                height: 30,
-                width: 160,
-                cls: "layout-bg3"
-            }, {
-                type: "bi.text_button",
-                text: "这个是有宽度和高度的按钮-4",
-                height: 30,
-                width: 160,
-                cls: "layout-bg5"
-            }]
-        })
     },
 });
 BI.shortcut("demo.center_adapt", Demo.CenterAdapt);/**
@@ -4983,7 +4922,7 @@ Demo.CenterLayout = BI.inherit(BI.Widget, {
             type: "bi.center",
             items: [{
                 type: "bi.label",
-                text: "Center 1，这里虽然设置label的高度30，但是最终影响高度的是center布局",
+                text: "其实是一个grid嵌套absolute的实现",
                 cls: "layout-bg1",
                 whiteSpace: "normal"
             },{
@@ -5022,7 +4961,7 @@ Demo.FloatCenterLayout = BI.inherit(BI.Widget, {
                 whiteSpace: "normal"
             }, {
                 type: "bi.label",
-                text: "floatCenter与center的不同在于，它可以控制最小宽度和最大宽度",
+                text: "浮动式的中间布局",
                 cls: "layout-bg2",
                 whiteSpace: "normal"
             }],
@@ -5262,23 +5201,34 @@ Demo.HorizontalAdapt = BI.inherit(BI.Widget, {
     _createLayout: function () {
         return BI.createWidget({
             type: "bi.horizontal_adapt",
-            vgap: 10,
             items: [{
                 type: "bi.label",
-                text: "Horizontal Adapt左右自适应",
+                text: "例子1:可用做水平居中",
                 cls: "layout-bg1",
                 width: 300,
-                height: 30
-            }, {
-                type: "bi.label",
-                text: "Horizontal Adapt左右自适应",
-                cls: "layout-bg2",
-                //width: 300,
                 height: 30
             }]
         })
     },
-    
+
+    _createAdaptLayout: function () {
+        return BI.createWidget({
+            type: "bi.horizontal_adapt",
+            columnSize: [300, 'fill'],
+            items: [{
+                type: "bi.label",
+                text: "例子2:用于水平适应布局",
+                cls: "layout-bg1",
+                height: 30
+            }, {
+                type: "bi.label",
+                text: "水平自适应列",
+                cls: "layout-bg2",
+                height: 30
+            }]
+        })
+    },
+
     render: function () {
         return {
             type: "bi.grid",
@@ -5288,6 +5238,10 @@ Demo.HorizontalAdapt = BI.inherit(BI.Widget, {
                 column: 0,
                 row: 0,
                 el: this._createLayout()
+            }, {
+                column: 0,
+                row: 1,
+                el: this._createAdaptLayout()
             }]
         }
     }
@@ -5303,16 +5257,15 @@ Demo.HorizontalAuto = BI.inherit(BI.Widget, {
     _createLayout: function () {
         return BI.createWidget({
             type: "bi.horizontal_auto",
-            vgap: 10,
             items: [{
                 type: "bi.label",
-                text: "Horizontal Auto左右自适应",
+                text: "水平居中",
                 cls: "layout-bg1",
                 width: 300,
                 height: 30
             }, {
                 type: "bi.label",
-                text: "Horizontal Auto左右自适应",
+                text: "水平居中优先使用该布局",
                 cls: "layout-bg2",
                 width: 300,
                 height: 30
@@ -5341,28 +5294,14 @@ Demo.HorizontalFloat = BI.inherit(BI.Widget, {
         baseCls: "demo-horizontal-float"
     },
 
-    _createLayout: function () {
-        return BI.createWidget({
-            type: "bi.horizontal_float",
-            vgap: 10,
-            items: [{
-                type: "bi.label",
-                text: "Horizontal Float左右自适应",
-                cls: "layout-bg1",
-                width: 100
-            }]
-        })
-    },
-    
     render: function () {
         return {
-            type: "bi.grid",
-            columns: 1,
-            rows: 2,
+            type: "bi.horizontal_float",
             items: [{
-                column: 0,
-                row: 0,
-                el: this._createLayout()
+                type: "bi.label",
+                text: "浮动式水平居中布局方案，用于宽度未知的情况",
+                cls: "layout-bg1",
+                height: 30
             }]
         }
     }
@@ -5376,43 +5315,20 @@ Demo.Horizontal = BI.inherit(BI.Widget, {
     },
     render: function () {
         return {
-            type: "bi.vertical",
+            type: "bi.horizontal",
             items: [{
-                type: "bi.horizontal",
-                items: [{
-                    type: "bi.absolute",
-                    items: [{
-                        el: {
-                            type: "bi.text_button",
-                            cls: "layout-bg1",
-                            text: "这里设置了lgap(左边距)，rgap(右边距)，tgap(上边距)，bgap(下边距)这里设置了lgap(左边距)，rgap(右边距)，tgap(上边距)，bgap(下边距)",
-                            height: 30
-                        },
-                        left: 0,
-                        right: 0
-                    }],
-                    width: 100,
-                    height: 30
-                }, {
-                    type: "bi.absolute",
-                    items: [{
-                        el: {
-                            type: "bi.text_button",
-                            cls: "layout-bg2",
-                            text: "这里设置了lgap(左边距)，rgap(右边距)，tgap(上边距)，bgap(下边距)这里设置了lgap(左边距)，rgap(右边距)，tgap(上边距)，bgap(下边距)",
-                            height: 30
-                        },
-                        left: 0,
-                        right: 0
-                    }],
-                    width: 200,
-                    height: 30
-                }]
-            }],
-            lgap: 20,
-            rgap: 80,
-            tgap: 80,
-            bgap: 50
+                type: "bi.label",
+                text: "水平布局",
+                cls: "layout-bg3",
+                width: 300,
+                height: 30
+            }, {
+                type: "bi.label",
+                text: "水平布局",
+                cls: "layout-bg4",
+                width: 300,
+                height: 30
+            }]
         }
     }
 });
@@ -5454,52 +5370,6 @@ Demo.HtapeLayout = BI.inherit(BI.Widget, {
     }
 });
 BI.shortcut("demo.htape", Demo.HtapeLayout);/**
- * Created by User on 2017/3/22.
- */
-Demo.InlineLayout = BI.inherit(BI.Widget, {
-    props: {
-        baseCls: "demo-inline"
-    },
-    render: function () {
-        return {
-            type: "bi.inline",
-            items: [{
-                type: "bi.label",
-                height: 30,
-                text: "Left-1",
-                cls: "layout-bg1",
-                hgap: 200
-            }, {
-                type: "bi.label",
-                height: 30,
-                text: "Left-2",
-                cls: "layout-bg2",
-                hgap: 200
-            }, {
-                type: "bi.label",
-                height: 30,
-                text: "Left-3",
-                cls: "layout-bg3",
-                hgap: 200
-            }, {
-                type: "bi.label",
-                height: 30,
-                text: "Left-4",
-                cls: "layout-bg4",
-                hgap: 200
-            }, {
-                type: "bi.label",
-                height: 30,
-                text: "Left-5",
-                cls: "layout-bg5",
-                hgap: 200
-            }],
-            hgap: 20,
-            vgap: 20
-        }
-    }
-});
-BI.shortcut("demo.inline", Demo.InlineLayout);/**
  * Created by User on 2017/3/22.
  */
 Demo.LeftRightVerticalAdaptLayout = BI.inherit(BI.Widget, {
@@ -5682,7 +5552,7 @@ Demo.TableLayout = BI.inherit(BI.Widget, {
             vgap: 10
         }
     },
-    
+
     render: function () {
         return {
             type: "bi.grid",
@@ -5775,13 +5645,13 @@ Demo.VerticalAdaptLayout = BI.inherit(BI.Widget, {
             vgap: 10,
             items: [{
                 type: "bi.label",
-                text: "Vertical Adapt上下自适应",
+                text: "垂直居中",
                 cls: "layout-bg1",
                 width: 300,
                 height: 30
             }, {
                 type: "bi.label",
-                text: "Vertical Adapt上下自适应",
+                text: "垂直居中",
                 cls: "layout-bg2",
                 width: 300,
                 height: 30
@@ -5814,13 +5684,13 @@ Demo.VerticalLayout = BI.inherit(BI.Widget, {
             type: "bi.vertical",
             items: [{
                 type: "bi.label",
-                cls: "layout-bg1",
-                text: "这里设置了hgap(水平间距)，vgap(垂直间距)",
+                cls: "layout-bg3",
+                text: "垂直布局",
                 height: 30
             }, {
                 type: "bi.label",
-                cls: "layout-bg2",
-                text: "这里设置了hgap(水平间距)，vgap(垂直间距)",
+                cls: "layout-bg4",
+                text: "垂直布局",
                 height: 30
             }]
         }

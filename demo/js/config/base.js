@@ -108,10 +108,6 @@ Demo.BASE_CONFIG = [{
     value: "demo.resizable_table"
 }, {
     pId: 2,
-    text: "bi.canvas",
-    value: "demo.canvas"
-}, {
-    pId: 2,
     text: "bi.pager",
     value: "demo.pager"
 }, {

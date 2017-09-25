@@ -9,16 +9,15 @@ Demo.HorizontalAuto = BI.inherit(BI.Widget, {
     _createLayout: function () {
         return BI.createWidget({
             type: "bi.horizontal_auto",
-            vgap: 10,
             items: [{
                 type: "bi.label",
-                text: "Horizontal Auto左右自适应",
+                text: "水平居中",
                 cls: "layout-bg1",
                 width: 300,
                 height: 30
             }, {
                 type: "bi.label",
-                text: "Horizontal Auto左右自适应",
+                text: "水平居中优先使用该布局",
                 cls: "layout-bg2",
                 width: 300,
                 height: 30

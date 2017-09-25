@@ -9,23 +9,34 @@ Demo.HorizontalAdapt = BI.inherit(BI.Widget, {
     _createLayout: function () {
         return BI.createWidget({
             type: "bi.horizontal_adapt",
-            vgap: 10,
             items: [{
                 type: "bi.label",
-                text: "Horizontal Adapt左右自适应",
+                text: "例子1:可用做水平居中",
                 cls: "layout-bg1",
                 width: 300,
-                height: 30
-            }, {
-                type: "bi.label",
-                text: "Horizontal Adapt左右自适应",
-                cls: "layout-bg2",
-                //width: 300,
                 height: 30
             }]
         })
     },
-    
+
+    _createAdaptLayout: function () {
+        return BI.createWidget({
+            type: "bi.horizontal_adapt",
+            columnSize: [300, 'fill'],
+            items: [{
+                type: "bi.label",
+                text: "例子2:用于水平适应布局",
+                cls: "layout-bg1",
+                height: 30
+            }, {
+                type: "bi.label",
+                text: "水平自适应列",
+                cls: "layout-bg2",
+                height: 30
+            }]
+        })
+    },
+
     render: function () {
         return {
             type: "bi.grid",
@@ -35,6 +46,10 @@ Demo.HorizontalAdapt = BI.inherit(BI.Widget, {
                 column: 0,
                 row: 0,
                 el: this._createLayout()
+            }, {
+                column: 0,
+                row: 1,
+                el: this._createAdaptLayout()
             }]
         }
     }

@@ -10,13 +10,13 @@ Demo.VerticalLayout = BI.inherit(BI.Widget, {
             type: "bi.vertical",
             items: [{
                 type: "bi.label",
-                cls: "layout-bg1",
-                text: "这里设置了hgap(水平间距)，vgap(垂直间距)",
+                cls: "layout-bg3",
+                text: "垂直布局",
                 height: 30
             }, {
                 type: "bi.label",
-                cls: "layout-bg2",
-                text: "这里设置了hgap(水平间距)，vgap(垂直间距)",
+                cls: "layout-bg4",
+                text: "垂直布局",
                 height: 30
             }]
         }

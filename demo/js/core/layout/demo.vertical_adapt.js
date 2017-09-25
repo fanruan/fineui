@@ -12,13 +12,13 @@ Demo.VerticalAdaptLayout = BI.inherit(BI.Widget, {
             vgap: 10,
             items: [{
                 type: "bi.label",
-                text: "Vertical Adapt上下自适应",
+                text: "垂直居中",
                 cls: "layout-bg1",
                 width: 300,
                 height: 30
             }, {
                 type: "bi.label",
-                text: "Vertical Adapt上下自适应",
+                text: "垂直居中",
                 cls: "layout-bg2",
                 width: 300,
                 height: 30

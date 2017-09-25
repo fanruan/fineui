@@ -7,8 +7,11 @@ Demo.AbsoluteLayout = BI.inherit(BI.Widget, {
             type: "bi.absolute",
             items: [{
                 el: {
-                    type: "bi.button",
-                    text: "absolute"
+                    type: "bi.label",
+                    text: "绝对布局",
+                    cls: "layout-bg1",
+                    width: 300,
+                    height: 200
                 },
                 left: 100,
                 top: 100

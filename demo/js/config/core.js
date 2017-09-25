@@ -7,27 +7,31 @@ Demo.CORE_CONFIG = [{
     text: "布局"
 }, {
     pId: 101,
-    text: "自适应居中bi.center_adapt",
+    text: "bi.absolute",
+    value: "demo.absolute"
+}, {
+    pId: 101,
+    text: "bi.center_adapt",
     value: "demo.center_adapt"
 }, {
     pId: 101,
-    text: "自适应垂直居中bi.vertical_adapt",
+    text: "bi.vertical_adapt",
     value: "demo.vertical_adapt"
 }, {
     pId: 101,
-    text: "自适应水平居中bi.horizontal_adapt",
+    text: "bi.horizontal_adapt",
     value: "demo.horizontal_adapt"
 }, {
     pId: 101,
-    text: "margin-auto自适应水平居中bi.horizontal_auto",
+    text: "bi.horizontal_auto",
     value: "demo.horizontal_auto"
 }, {
     pId: 101,
-    text: "float水平居中bi.horizontal_float",
+    text: "bi.horizontal_float",
     value: "demo.horizontal_float"
 }, {
     pId: 101,
-    text: "左右垂直居中bi.left_right_vertical_adapt",
+    text: "bi.left_right_vertical_adapt",
     value: "demo.left_right_vertical_adapt"
 }, {
     pId: 101,
@@ -39,11 +43,11 @@ Demo.CORE_CONFIG = [{
     value: "demo.float_center"
 }, {
     pId: 101,
-    text: "垂直流式bi.vertical",
+    text: "bi.vertical",
     value: "demo.vertical"
 }, {
     pId: 101,
-    text: "水平流式bi.horizontal",
+    text: "bi.horizontal",
     value: "demo.horizontal"
 }, {
     pId: 101,
@@ -53,10 +57,6 @@ Demo.CORE_CONFIG = [{
     pId: 101,
     text: "bi.left, bi.right",
     value: "demo.flow"
-}, {
-    pId: 101,
-    text: "bi.inline",
-    value: "demo.inline"
 }, {
     pId: 101,
     text: "bi.htape",
@@ -77,6 +77,9 @@ Demo.CORE_CONFIG = [{
     pId: 101,
     text: "bi.td",
     value: "demo.td"
+}, {
+    pId: 101,
+    text: "..."
 }, {
     pId: 1,
     id: 102,

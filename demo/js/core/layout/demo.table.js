@@ -138,7 +138,7 @@ Demo.TableLayout = BI.inherit(BI.Widget, {
             vgap: 10
         }
     },
-    
+
     render: function () {
         return {
             type: "bi.grid",
