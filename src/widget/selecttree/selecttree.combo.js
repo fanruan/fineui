@@ -25,7 +25,7 @@ BI.SelectTreeCombo = BI.inherit(BI.Widget, {
         });
 
         this.popup = BI.createWidget({
-            type: "bi.select_tree_popup",
+            type: "bi.select_level_tree",
             items: o.items
         });
 

@@ -8,7 +8,7 @@ Demo.SingleTreeCombo = BI.inherit(BI.Widget, {
 
     render: function () {
         var self = this;
-        var items = BI.deepClone(Demo.CONSTANTS.TREE);
+        var items = BI.deepClone(Demo.CONSTANTS.LEVELTREE);
         return {
             type: "bi.horizontal_auto",
             items: [{

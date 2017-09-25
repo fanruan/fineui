@@ -154,12 +154,12 @@
 * 文本框控件
     * [text_editor](detailed/text_input/bi.text_editor.md)
     * [search_editor](detailed/text_input/bi.search_editor.md)
-    * [finetuning_number_editor](detailed/text_input/finetuning_number_editor.md)
+    * [number_editor](detailed/text_input/number_editor.md)
 * [year_combo](detailed/year_combo.md)
 * [month_combo](detailed/month_combo.md)
 * [quarter_combo](detailed/quarter_combo.md)
 * [down_list_combo](detailed/down_list_combo.md)
-* [numeric_interval](detailed/numeric_interval.md)
+* [number_interval](detailed/number_interval.md)
 * [multi_select_combo](detailed/multi_select_combo.md)
 * 简单日期控件
     * [date_combo](detailed/date/date_combo.md)
@@ -178,13 +178,15 @@
 * [relation_view](detailed/relation_view.md)
 * [dialog](detailed/dialog.md)
 * [file_manager](detailed/file_manager.md)
+
 ## 部件
 * [value_chooser_combo](components/value_chooser_combo.md)
 * [value_chooser_pane](components/value_chooser_pane.md)
 * [all_value_chooser_combo](components/all_value_chooser_combo.md)
 * [tree_value_chooser_combo](components/tree_value_chooser_combo.md)
 * [tree_value_chooser_pane](components/tree_value_chooser_pane.md)
-* addons
-    * sliders
-        * [single_slider](detailed/single_slider.md)
+
+## addons
+* sliders
+    * [single_slider](detailed/single_slider.md)
 
