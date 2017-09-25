@@ -4176,14 +4176,6 @@ Demo.COMPONENT_CONFIG = [{
     value: "demo.number_interval"
 }, {
     pId: 4,
-    id: 414,
-    text: "公式下拉框"
-}, {
-    pId: 414,
-    text: "bi.formula_combo",
-    value: "demo.formula_combo"
-}, {
-    pId: 4,
     id: 415,
     text: "路径选择"
 }, {
@@ -7430,36 +7422,6 @@ Demo.Tips = BI.inherit(BI.Widget, {
     }
 });
 BI.shortcut("demo.tips", Demo.Tips);/**
- * Created by Dailer on 2017/7/12.
- */
-Demo.FormulaCombo = BI.inherit(BI.Widget, {
-    props: {
-        baseCls: ""
-    },
-
-    render: function () {
-
-        var self = this;
-
-
-        return {
-            type: "bi.horizontal_auto",
-            items: [{
-                type: "bi.formula_combo",
-                fieldItems: [{
-                    text: "A",
-                    value: "A",
-                    fieldType: 16
-                }],
-                width: 200,
-                height: 30
-            }],
-            vgap: 20
-        }
-    }
-})
-
-BI.shortcut("demo.formula_combo", Demo.FormulaCombo);/**
  * Created by Dailer on 2017/7/11.
  */
 Demo.Date = BI.inherit(BI.Widget, {
