@@ -42,6 +42,9 @@
   -moz-border-radius: 2px;
   border-radius: 2px;
 }
+.bi-down-list-popup .bi-down-list-item .list-group-item-text {
+  max-width: 203px;
+}
 .bi-down-list-popup .bi-down-list-item .list-item-text {
   max-width: 203px;
 }
