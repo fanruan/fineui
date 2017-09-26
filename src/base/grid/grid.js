@@ -121,19 +121,19 @@ BI.GridView = BI.inherit(BI.Widget, {
                 return;
             }
 
-            var renderedCells = [], renderedKeys = [], renderedWidgets = {};
+            var renderedCells = [], renderedKeys = {}, renderedWidgets = {};
             var minX = this._getMaxScrollLeft(), minY = this._getMaxScrollTop(), maxX = 0, maxY = 0;
             var count = 0;
             for (var rowIndex = rowStartIndex; rowIndex <= rowStopIndex; rowIndex++) {
                 var rowDatum = this._rowSizeAndPositionManager.getSizeAndPositionOfCell(rowIndex);
 
                 for (var columnIndex = columnStartIndex; columnIndex <= columnStopIndex; columnIndex++) {
-                    var key = [rowIndex, columnIndex];
+                    var key = rowIndex + "-" + columnIndex;
                     var columnDatum = this._columnSizeAndPositionManager.getSizeAndPositionOfCell(columnIndex);
 
-                    var index = BI.deepIndexOf(this.renderedKeys, key);
+                    var index = this.renderedKeys[key] && this.renderedKeys[key][2];
                     var child;
-                    if (index > -1) {
+                    if (index >= 0) {
                         if (columnDatum.size !== this.renderedCells[index]._width) {
                             this.renderedCells[index]._width = columnDatum.size;
                             this.renderedCells[index].el.setWidth(columnDatum.size);
@@ -175,35 +175,36 @@ BI.GridView = BI.inherit(BI.Widget, {
                     maxX = Math.max(maxX, columnDatum.offset + horizontalOffsetAdjustment + columnDatum.size);
                     minY = Math.min(minY, rowDatum.offset + verticalOffsetAdjustment);
                     maxY = Math.max(maxY, rowDatum.offset + verticalOffsetAdjustment + rowDatum.size);
-                    renderedKeys.push(key);
-                    renderedWidgets[count++] = child;
+                    renderedKeys[key] = [rowIndex, columnIndex, count];
+                    renderedWidgets[count] = child;
+                    count++;
                 }
             }
             //已存在的， 需要添加的和需要删除的
             var existSet = {}, addSet = {}, deleteArray = [];
             BI.each(renderedKeys, function (i, key) {
-                if (BI.deepContains(self.renderedKeys, key)) {
+                if (self.renderedKeys[i]) {
                     existSet[i] = key;
                 } else {
                     addSet[i] = key;
                 }
             });
             BI.each(this.renderedKeys, function (i, key) {
-                if (BI.deepContains(existSet, key)) {
+                if (existSet[i]) {
                     return;
                 }
-                if (BI.deepContains(addSet, key)) {
+                if (addSet[i]) {
                     return;
                 }
-                deleteArray.push(i);
+                deleteArray.push(key[2]);
             });
             BI.each(deleteArray, function (i, index) {
                 //性能优化，不调用destroy方法防止触发destroy事件
                 self.renderedCells[index].el._destroy();
             });
             var addedItems = [];
-            BI.each(addSet, function (index) {
-                addedItems.push(renderedCells[index])
+            BI.each(addSet, function (index, key) {
+                addedItems.push(renderedCells[key[2]])
             });
             this.container.addItems(addedItems);
             //拦截父子级关系
