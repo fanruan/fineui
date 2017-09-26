@@ -14,12 +14,4 @@ Demo.ADDONS_CONFIG = [{
     id: 602,
     text: "滚动sliders",
     value: "demo.slider"
-}, {
-    id: 100000,
-    text: "小demo",
-    value: "demo.platform_level_tree"
-}, {
-    pId: 100000,
-    text: "平台用",
-    value: "demo.platform_level_tree"
 }];
