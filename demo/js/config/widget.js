@@ -80,8 +80,12 @@ Demo.WIDGET_CONFIG = [{
     value: "demo.responsive_table"
 }, {
     pId: 404,
-    text: "bi.excel_table",
-    value: "demo.excel_table"
+    text: "bi.sequence_table",
+    value: "demo.sequence_table"
+}, {
+    pId: 404,
+    text: "bi.page_table",
+    value: "demo.page_table"
 }, {
     pId: 4,
     id: 405,
@@ -156,14 +160,6 @@ Demo.WIDGET_CONFIG = [{
     value: "demo.quarter"
 }, {
     pId: 412,
-    text: "bi.date_combo",
-    value: "demo.date"
-}, {
-    pId: 412,
-    text: "bi.date_pane",
-    value: "demo.date_pane"
-}, {
-    pId: 412,
     text: "bi.year_month_combo",
     value: "demo.year_month_combo"
 }, {
@@ -172,11 +168,19 @@ Demo.WIDGET_CONFIG = [{
     value: "demo.year_quarter_combo"
 }, {
     pId: 412,
-    text: "bi.custom_date_time",
-    value: "demo.custom_date_time"
+    text: "bi.date_pane",
+    value: "demo.date_pane"
 }, {
     pId: 412,
-    text: '时间间隔',
+    text: "bi.multidate_combo",
+    value: "demo.multidate_combo"
+}, {
+    pId: 412,
+    text: "bi.date_time",
+    value: "demo.date_time"
+}, {
+    pId: 412,
+    text: 'bi.time_interval',
     value: 'demo.time_interval'
 }, {
     pId: 4,
@@ -218,14 +222,6 @@ Demo.WIDGET_CONFIG = [{
     pId: 417,
     text: "bi.interactive_arrangement",
     value: "demo.interactive_arrangement"
-}, {
-    pId: 4,
-    id: 418,
-    text: "提示对话框"
-}, {
-    pId: 418,
-    text: "bi.dialog",
-    value: "demo.dialog"
 }, {
     pId: 4,
     id: 419,

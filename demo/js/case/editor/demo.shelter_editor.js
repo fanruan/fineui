@@ -6,35 +6,40 @@ Demo.ClearEditor = BI.inherit(BI.Widget, {
         baseCls: ""
     },
     render: function () {
-        var editor;
-        return {
-            type: "bi.horizontal_auto",
+        var editor = BI.createWidget({
+            type: "bi.shelter_editor",
+            cls: "bi-border",
+            validationChecker: function (v) {
+                return v != "a";
+            },
+            watermark: "可以设置标记的输入框",
+            text: "这是一个遮罩"
+        })
+        BI.createWidget({
+            type: "bi.vertical",
+            element: this,
+            hgap: 30,
+            vgap: 20,
+            bgap: 50,
+            items: [editor]
+        })
+        BI.createWidget({
+            type: "bi.absolute",
+            element: this,
             items: [{
-                type: "bi.shelter_editor",
-                cls: "bi-border",
-                ref:function(_ref){
-                    editor=_ref;
+                el: {
+                    type: "bi.button",
+                    text: "focus",
+                    height: 25,
+                    handler: function () {
+                        editor.focus();
+                    }
                 },
-                width: 300,
-                watermark: "这个是带标记的"
-            },{
-                type:"bi.button",
-                text:"setValue",
-                width:300,
-                handler:function(){
-                    editor.setValue("凛冬将至");
-                }
-            },{
-                type:"bi.button",
-                text:"doHighLight",
-                width:300,
-                handler:function(){
-                    editor.doHighLight();
-                    console.log(editor.getState());
-                }
-            }],
-            vgap: 20
-        }
+                right: 10,
+                left: 10,
+                bottom: 10
+            }]
+        })
     }
 })
 

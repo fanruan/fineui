@@ -13,6 +13,8 @@ BI.i18n = {
     "BI-Basic_Clears": "清空",
     "BI-Basic_Cancel": "取消",
     "BI-Basic_Time": "时间",
+    "BI-Basic_Total": "总",
+    "BI-Tiao_Data": "条数据",
     "BI-Basic_Simple_Sunday": "日",
     "BI-Basic_Simple_Monday": "一",
     "BI-Basic_Simple_Tuesday": "二",

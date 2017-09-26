@@ -11,35 +11,7 @@ Demo.TextValueCombo = BI.inherit(BI.Widget, {
             type: "bi.horizontal_auto",
             items: [{
                 type: "bi.text_value_combo",
-                text: "天气热死了",
-                width: 300,
-                items: [{
-                    text: "MVC-1",
-                    value: 1
-                }, {
-                    text: "MVC-2",
-                    value: 2
-                }, {
-                    text: "MVC-3",
-                    value: 3
-                }]
-            },{
-                type: "bi.text_value_check_combo",
-                text: "天气热死了",
-                width: 300,
-                items: [{
-                    text: "MVC-1",
-                    value: 1
-                }, {
-                    text: "MVC-2",
-                    value: 2
-                }, {
-                    text: "MVC-3",
-                    value: 3
-                }]
-            },{
-                type: "bi.text_value_combo",
-                text: "天气热死了",
+                text: "默认值",
                 width: 300,
                 items: [{
                     text: "MVC-1",

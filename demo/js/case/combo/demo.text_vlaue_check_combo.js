@@ -11,7 +11,7 @@ Demo.TextValueCheckCombo = BI.inherit(BI.Widget, {
             type: "bi.horizontal_auto",
             items: [{
                 type: "bi.text_value_check_combo",
-                text: "天气热死了",
+                text: "默认值",
                 width: 300,
                 items: [{
                     text: "MVC-1",

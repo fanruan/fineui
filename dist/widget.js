@@ -2268,7 +2268,7 @@ BI.DateCombo = BI.inherit(BI.Widget, {
     _defaultConfig: function () {
         return BI.extend(BI.DateCombo.superclass._defaultConfig.apply(this, arguments), {
             baseCls: "bi-date-combo bi-border",
-            height: 30
+            height: 25
         });
     },
     _init: function () {
@@ -2768,6 +2768,7 @@ BI.DateTimeCombo = BI.inherit(BI.Single, {
     _defaultConfig: function () {
         return BI.extend(BI.DateTimeCombo.superclass._defaultConfig.apply(this, arguments), {
             baseCls: 'bi-date-time-combo bi-border',
+            width: 200,
             height: 24
         });
     },
@@ -2886,50 +2887,6 @@ BI.shortcut('bi.date_time_combo', BI.DateTimeCombo);
 /**
  * Created by Urthur on 2017/7/14.
  */
-BI.CustomDateTimeCombo = BI.inherit(BI.Widget, {
-    _defaultConfig: function () {
-        return BI.extend(BI.CustomDateTimeCombo.superclass._defaultConfig.apply(this, arguments), {
-            baseCls: "bi-custom-date-time-combo"
-        })
-    },
-
-    _init: function () {
-        BI.CustomDateTimeCombo.superclass._init.apply(this, arguments);
-        var self = this;
-        this.DateTime = BI.createWidget({
-            type: "bi.date_time_combo",
-            element: this
-        });
-        this.DateTime.on(BI.DateTimeCombo.EVENT_CANCEL, function () {
-            self.fireEvent(BI.CustomDateTimeCombo.EVENT_CHANGE);
-            self.fireEvent(BI.CustomDateTimeCombo.EVENT_CANCEL);
-        });
-
-        this.DateTime.on(BI.DateTimeCombo.EVENT_CONFIRM, function () {
-            self.fireEvent(BI.CustomDateTimeCombo.EVENT_CHANGE);
-            self.fireEvent(BI.CustomDateTimeCombo.EVENT_CONFIRM);
-        });
-
-        this.DateTime.on(BI.DateTimeCombo.EVENT_CHANGE, function () {
-            self.fireEvent(BI.CustomDateTimeCombo.EVENT_CHANGE);
-        });
-    },
-
-    getValue: function () {
-        return this.DateTime.getValue();
-    },
-
-    setValue: function (v) {
-        this.DateTime.setValue(v);
-    }
-});
-BI.CustomDateTimeCombo.EVENT_CHANGE = "EVENT_CHANGE";
-BI.CustomDateTimeCombo.EVENT_CANCEL = "EVENT_CANCEL";
-BI.CustomDateTimeCombo.EVENT_CONFIRM = "EVENT_CONFIRM";
-BI.shortcut("bi.custom_date_time_combo", BI.CustomDateTimeCombo);
-/**
- * Created by Urthur on 2017/7/14.
- */
 BI.DateTimePopup = BI.inherit(BI.Widget, {
     _defaultConfig: function () {
         return BI.extend(BI.DateTimePopup.superclass._defaultConfig.apply(this, arguments), {
@@ -2944,7 +2901,7 @@ BI.DateTimePopup = BI.inherit(BI.Widget, {
         this.cancelButton = BI.createWidget({
             type: 'bi.text_button',
             forceCenter: true,
-            cls: 'bi-multidate-popup-button bi-border-top bi-border-right',
+            cls: 'multidate-popup-button bi-border-top bi-border-right',
             shadow: true,
             text: BI.i18nText("BI-Basic_Cancel")
         });
@@ -2955,7 +2912,7 @@ BI.DateTimePopup = BI.inherit(BI.Widget, {
         this.okButton = BI.createWidget({
             type: "bi.text_button",
             forceCenter: true,
-            cls: 'bi-multidate-popup-button bi-border-top',
+            cls: 'multidate-popup-button bi-border-top',
             shadow: true,
             text: BI.i18nText("BI-Basic_OK")
         });
@@ -2973,55 +2930,64 @@ BI.DateTimePopup = BI.inherit(BI.Widget, {
         });
 
         this.dateSelect = BI.createWidget({
-            type: "bi.horizontal",
+            type: "bi.vertical_adapt",
             cls: "bi-border-top",
             items: [{
                 type: "bi.label",
                 text: BI.i18nText("BI-Basic_Time"),
                 width: 45
-            },{
+            }, {
                 type: "bi.date_time_select",
                 max: 23,
                 min: 0,
                 width: 60,
                 height: 30,
+                listeners: [{
+                    eventName: BI.DateTimeSelect.EVENT_CONFIRM,
+                    action: function () {
+                        self.fireEvent(BI.DateTimePopup.CALENDAR_EVENT_CHANGE);
+                    }
+                }],
                 ref: function (_ref) {
                     self.hour = _ref;
-                    self.hour.on(BI.DateTimeSelect.EVENT_CONFIRM, function () {
-                        self.fireEvent(BI.DateTimePopup.CALENDAR_EVENT_CHANGE);
-                    });
                 }
-            },{
+            }, {
                 type: "bi.label",
                 text: ":",
                 width: 15
-            },{
+            }, {
                 type: "bi.date_time_select",
                 max: 59,
                 min: 0,
                 width: 60,
                 height: 30,
+                listeners: [{
+                    eventName: BI.DateTimeSelect.EVENT_CONFIRM,
+                    action: function () {
+                        self.fireEvent(BI.DateTimePopup.CALENDAR_EVENT_CHANGE);
+                    }
+                }],
                 ref: function (_ref) {
                     self.minute = _ref;
-                    self.minute.on(BI.DateTimeSelect.EVENT_CONFIRM, function () {
-                        self.fireEvent(BI.DateTimePopup.CALENDAR_EVENT_CHANGE);
-                    });
                 }
-            },{
+            }, {
                 type: "bi.label",
                 text: ":",
                 width: 15
-            },{
+            }, {
                 type: "bi.date_time_select",
                 max: 59,
                 min: 0,
                 width: 60,
                 height: 30,
+                listeners: [{
+                    eventName: BI.DateTimeSelect.EVENT_CONFIRM,
+                    action: function () {
+                        self.fireEvent(BI.DateTimePopup.CALENDAR_EVENT_CHANGE);
+                    }
+                }],
                 ref: function (_ref) {
                     self.second = _ref;
-                    self.second.on(BI.DateTimeSelect.EVENT_CONFIRM, function () {
-                        self.fireEvent(BI.DateTimePopup.CALENDAR_EVENT_CHANGE);
-                    });
                 }
             }]
         });
@@ -3048,7 +3014,7 @@ BI.DateTimePopup = BI.inherit(BI.Widget, {
             }, {
                 el: this.dateSelect,
                 height: 50
-            },{
+            }, {
                 el: this.dateButton,
                 height: 30
             }]
@@ -4447,270 +4413,6 @@ BI.SmallTextEditor = BI.inherit(BI.TextEditor, {
     }
 });
 BI.shortcut("bi.small_text_editor", BI.SmallTextEditor);/**
- *
- * Created by GUY on 2016/3/28.
- * @class BI.ExcelTableCell
- * @extends BI.Widget
- */
-BI.ExcelTableCell = BI.inherit(BI.Widget, {
-
-    _defaultConfig: function () {
-        return BI.extend(BI.ExcelTableCell.superclass._defaultConfig.apply(this, arguments), {
-            baseCls: "bi-excel-table-cell",
-            text: ""
-        });
-    },
-
-    _init: function () {
-        BI.ExcelTableCell.superclass._init.apply(this, arguments);
-        var self = this, o = this.options;
-
-        BI.createWidget({
-            type: "bi.label",
-            element: this,
-            textAlign: "left",
-            whiteSpace: "normal",
-            height: this.options.height,
-            text: this.options.text,
-            value: this.options.value
-        })
-    }
-});
-BI.shortcut('bi.excel_table_cell', BI.ExcelTableCell);/**
- *
- * Created by GUY on 2016/3/28.
- * @class BI.ExcelTableHeaderCell
- * @extends BI.Widget
- */
-BI.ExcelTableHeaderCell = BI.inherit(BI.Widget, {
-
-    _defaultConfig: function () {
-        return BI.extend(BI.ExcelTableHeaderCell.superclass._defaultConfig.apply(this, arguments), {
-            baseCls: "bi-excel-table-header-cell bi-background",
-            text: ""
-        });
-    },
-
-    _init: function () {
-        BI.ExcelTableHeaderCell.superclass._init.apply(this, arguments);
-        var self = this, o = this.options;
-
-        BI.createWidget({
-            type: "bi.label",
-            element: this,
-            textAlign: BI.HorizontalAlign.Center,
-            whiteSpace: "normal",
-            height: this.options.height,
-            text: this.options.text,
-            value: this.options.value
-        })
-    }
-});
-BI.shortcut('bi.excel_table_header_cell', BI.ExcelTableHeaderCell);/**
- * Excel表格
- *
- * Created by GUY on 2016/3/28.
- * @class BI.ExcelTable
- * @extends BI.Widget
- */
-BI.ExcelTable = BI.inherit(BI.Widget, {
-
-    _defaultConfig: function () {
-        return BI.extend(BI.ExcelTable.superclass._defaultConfig.apply(this, arguments), {
-            baseCls: "bi-excel-table",
-            el: {
-                type: "bi.responsive_table"
-            },
-
-            isNeedResize: false,
-            isResizeAdapt: true,
-
-            isNeedMerge: false,//是否需要合并单元格
-            mergeCols: [], //合并的单元格列号
-            mergeRule: function (row1, row2) { //合并规则, 默认相等时合并
-                return BI.isEqual(row1, row2);
-            },
-
-            columnSize: [],
-            headerRowSize: 37,
-            footerRowSize: 37,
-            rowSize: 37,
-
-            regionColumnSize: false,
-
-            items: [] //二维数组
-        });
-    },
-
-    _init: function () {
-        BI.ExcelTable.superclass._init.apply(this, arguments);
-        var self = this, o = this.options;
-
-        var mergeCols = [];
-        BI.each(o.mergeCols, function (i, col) {
-            mergeCols.push(col + 1);
-        });
-        this.table = BI.createWidget(o.el, {
-            type: "bi.table_view",
-            element: this,
-
-            isNeedFreeze: false,
-
-            isNeedMerge: o.isNeedMerge,
-            mergeCols: mergeCols,
-            mergeRule: o.mergeRule,
-
-            columnSize: [""].concat(o.columnSize),
-            headerRowSize: 18,
-            rowSize: o.rowSize,
-
-            regionColumnSize: o.regionColumnSize || [82, ""]
-        });
-
-        if (BI.isNotEmptyArray(o.items)) {
-            this.populate(o.items);
-        }
-        BI.nextTick(function () {
-            self.setRegionColumnSize(o.regionColumnSize || [82, ""]);
-        });
-    },
-
-    resize: function () {
-        this.table.resize();
-    },
-
-    setColumnSize: function (columnSize) {
-        this.table.setColumnSize(columnSize);
-    },
-
-    getColumnSize: function () {
-        return this.table.getColumnSize();
-    },
-
-    getCalculateColumnSize: function () {
-        return this.table.getCalculateColumnSize();
-    },
-
-    setHeaderColumnSize: function (columnSize) {
-        this.table.setHeaderColumnSize(columnSize);
-    },
-
-    setRegionColumnSize: function (columnSize) {
-        this.table.setRegionColumnSize(columnSize);
-    },
-
-    getRegionColumnSize: function () {
-        return this.table.getRegionColumnSize();
-    },
-
-    getCalculateRegionColumnSize: function () {
-        return this.table.getCalculateRegionColumnSize();
-    },
-
-    getCalculateRegionRowSize: function () {
-        return this.table.getCalculateRegionRowSize();
-    },
-
-    getClientRegionColumnSize: function () {
-        return this.table.getClientRegionColumnSize();
-    },
-
-    getScrollRegionColumnSize: function () {
-        return this.table.getScrollRegionColumnSize();
-    },
-
-    getScrollRegionRowSize: function () {
-        return this.table.getScrollRegionRowSize();
-    },
-
-    hasVerticalScroll: function () {
-        return this.table.hasVerticalScroll();
-    },
-
-    setVerticalScroll: function (scrollTop) {
-        this.table.setVerticalScroll(scrollTop);
-    },
-
-    setLeftHorizontalScroll: function (scrollLeft) {
-        this.table.setLeftHorizontalScroll(scrollLeft);
-    },
-
-    setRightHorizontalScroll: function (scrollLeft) {
-        this.table.setRightHorizontalScroll(scrollLeft);
-    },
-
-    getVerticalScroll: function () {
-        return this.table.getVerticalScroll();
-    },
-
-    getLeftHorizontalScroll: function () {
-        return this.table.getLeftHorizontalScroll();
-    },
-
-    getRightHorizontalScroll: function () {
-        return this.table.getRightHorizontalScroll();
-    },
-
-    getColumns: function () {
-        return this.table.getColumns();
-    },
-
-    resizeHeader: function () {
-        this.table.resize();
-        this.table._resizeHeader && this.table._resizeHeader();
-    },
-
-    attr: function (key,value) {
-        var self = this;
-        if (BI.isObject(key)) {
-            BI.each(key, function (k, v) {
-                self.attr(k, v);
-            });
-            return;
-        }
-        BI.ExcelTable.superclass.attr.apply(this, arguments);
-        switch (key){
-            case "mergeCols":
-                var mCols = [];
-                BI.each(value, function (i, col) {
-                    mCols.push(col + 1);
-                });
-                value=mCols;
-                break;
-        }
-        this.table.attr.apply(this.table, arguments);
-    },
-
-    populate: function (rows) {
-        var self = this;
-        var columnSize = this.getColumnSize();
-        var items = [];
-        var header = [{
-            type: "bi.excel_table_header_cell"
-        }];
-        if (BI.isNotNull(rows)) {
-            BI.each(columnSize, function (i, size) {
-                header.push({
-                    type: "bi.excel_table_header_cell",
-                    text: BI.int2Abc(i + 1)
-                });
-            });
-            BI.each(rows, function (i, row) {
-                items.push([{
-                    type: "bi.excel_table_header_cell",
-                    text: (i + 1)
-                }].concat(row));
-            });
-        }
-        this.table.populate(items, [header]);
-    },
-
-    destroy: function () {
-        this.table.destroy();
-        BI.ExcelTable.superclass.destroy.apply(this, arguments);
-    }
-});
-BI.shortcut('bi.excel_table', BI.ExcelTable);/**
  * 文件管理控件组
  *
  * Created by GUY on 2015/12/11.

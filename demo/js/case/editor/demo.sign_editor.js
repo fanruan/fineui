@@ -6,18 +6,23 @@ Demo.SignEditor = BI.inherit(BI.Widget, {
         baseCls: ""
     },
     render: function () {
-        return {
-            type: "bi.horizontal_adapt",
-            items: [{
-                type: "bi.sign_editor",
-                //  cls:"layout-bg5",
-                value: "123",
-                text: "456",
-                width: 300
-            }],
-            vgap: 20
-
-        }
+        var editor = BI.createWidget({
+            type: "bi.sign_editor",
+            cls: "bi-border",
+            validationChecker: function (v) {
+                return v != "a";
+            },
+            watermark: "可以设置标记的输入框",
+            text: "这是一个标记，点击它即可进行输入"
+        })
+        editor.setValue(2);
+        BI.createWidget({
+            type: "bi.vertical",
+            element: this,
+            hgap: 30,
+            vgap: 20,
+            items: [editor]
+        })
     }
 })
 

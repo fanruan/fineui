@@ -126,12 +126,16 @@ Demo.CORE_CONFIG = [{
     value: "demo.combo"
 }, {
     pId: 10201,
+    text: "bi.combo(各种位置)",
+    value: "demo.combo2"
+}, {
+    pId: 10201,
     text: "bi.expander",
     value: "demo.expander"
 }, {
     pId: 10201,
-    text: "bi.group_combo",
-    value: "demo.group_combo"
+    text: "bi.combo_group",
+    value: "demo.combo_group"
 }, {
     pId: 10201,
     text: "bi.loader",
@@ -158,23 +162,23 @@ Demo.CORE_CONFIG = [{
     text: "弹出层"
 }, {
     pId: 10202,
-    text: "bi.layer_float_box",
-    value: "demo.layer_float_box"
+    text: "bi.float_box",
+    value: "demo.float_box"
 }, {
     pId: 10202,
-    text: "bi.layer_popup",
-    value: "demo.layer_popup"
+    text: "bi.popup_view",
+    value: "demo.popup_view"
 }, {
     pId: 10202,
     text: "bi.searcher_view",
     value: "demo.searcher_view"
 }, {
     pId: 1,
-    text: "widget",
+    text: "Widget",
     value: "demo.widget"
 }, {
     pId: 1,
-    text: "single",
+    text: "Single",
     value: "demo.single"
 }, {
     pId: 1,
@@ -186,6 +190,6 @@ Demo.CORE_CONFIG = [{
     value: "demo.node_button"
 }, {
     pId: 1,
-    text: "pane",
+    text: "Pane",
     value: "demo.pane"
 }];

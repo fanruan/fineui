@@ -9,7 +9,7 @@ BI.DateCombo = BI.inherit(BI.Widget, {
     _defaultConfig: function () {
         return BI.extend(BI.DateCombo.superclass._defaultConfig.apply(this, arguments), {
             baseCls: "bi-date-combo bi-border",
-            height: 30
+            height: 25
         });
     },
     _init: function () {

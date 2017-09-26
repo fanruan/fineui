@@ -10,6 +10,7 @@ BI.ColorChooserPopup = BI.inherit(BI.Widget, {
     _defaultConfig: function () {
         return BI.extend(BI.ColorChooserPopup.superclass._defaultConfig.apply(this, arguments), {
             baseCls: "bi-color-chooser-popup",
+            width: 200,
             height: 145
         })
     },

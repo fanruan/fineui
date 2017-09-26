@@ -60,20 +60,20 @@ Demo.CASE_CONFIG = [{
     value: "demo.lazy_loader"
 }, {
     pId: 302,
-    text: "bi.list_loader",
-    value: "demo.list_loader"
+    text: "bi.sort_list(排序)",
+    value: "demo.sort_list"
 }, {
     pId: 302,
-    text: "bi.sort_list",
-    value: "demo.sort_list"
+    text: "bi.list_loader(排序)",
+    value: "demo.list_loader"
 }, {
     pId: 3,
     id: 303,
     text: "面板"
 }, {
     pId: 303,
-    text: "bi.pane_list",
-    value: "demo.pane_list"
+    text: "bi.list_pane",
+    value: "demo.list_pane"
 }, {
     pId: 303,
     text: "bi.panel",
@@ -134,6 +134,10 @@ Demo.CASE_CONFIG = [{
     pId: 306,
     text: "bi.text_value_check_combo",
     value: "demo.text_value_check_combo"
+}, {
+    pId: 306,
+    text: "bi.editor_icon_check_combo",
+    value: "demo.editor_icon_check_combo"
 }, {
     pId: 306,
     text: "bi.text_value_down_list_combo",

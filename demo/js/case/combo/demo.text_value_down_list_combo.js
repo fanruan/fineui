@@ -6,25 +6,12 @@ Demo.TextValueDownListCombo = BI.inherit(BI.Widget, {
         baseCls: ""
     },
 
-
-    beforeMount:function(){
-        this.refs.setValue(2);
-    },
-
     render: function () {
-
         var self = this;
-
         return {
             type: "bi.horizontal_auto",
             items: [{
-                type: "bi.label",
-                cls: "layout-bg2",
-                text: "分组+二级",
-                width: 300
-            }, {
                 type: "bi.text_value_down_list_combo",
-                text: "天气热死了",
                 width: 300,
                 ref: function (_ref) {
                     self.refs = _ref;
@@ -32,25 +19,29 @@ Demo.TextValueDownListCombo = BI.inherit(BI.Widget, {
                 items: [
                     [{
                         el: {
-                            text: "MVC-1",
+                            text: "层级1",
                             value: 1
                         },
                         children: [{
-                            text: "MVC-1-1",
+                            text: "层级1-1",
                             value: 11
                         }]
                     }],
                     [{
-                        text: "MVC-2",
+                        text: "层级2",
                         value: 2
                     }, {
-                        text: "MVC-3",
+                        text: "层级3",
                         value: 3
                     }]
                 ]
             }],
             vgap: 20
         }
+    },
+
+    mounted: function () {
+        this.refs.setValue(2);
     }
 })
 
