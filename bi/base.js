@@ -3261,7 +3261,7 @@ BI.Combo = BI.inherit(BI.Widget, {
         // if (this.element.__isMouseInBounds__(e) || (this.popupView && this.popupView.element.__isMouseInBounds__(e))) {
         //     return;
         // }
-        if (this.element.find(e.target).length > 0) {
+        if (this.element.find(e.target).length > 0 || $(e.target).closest(".CodeMirror-hints").length > 0) {//BI-9887 CodeMirror的公式弹框需要特殊处理下
             return;
         }
         var isHide = this.options.hideChecker.apply(this, [e]);
@@ -31384,40 +31384,40 @@ BI.GridTable = BI.inherit(BI.Widget, {
         this.contextLayout.attr("items", items);
         this.contextLayout.resize();
 
-        this.topLeftGrid.attr({
-            overscanColumnCount: 0,
-            overscanRowCount: 0
-        });
-        this.topRightGrid.attr({
-            overscanColumnCount: 0,
-            overscanRowCount: 0
-        });
-        this.bottomLeftGrid.attr({
-            overscanColumnCount: 0,
-            overscanRowCount: 0
-        });
-        this.bottomRightGrid.attr({
-            overscanColumnCount: 0,
-            overscanRowCount: 0
-        });
-
-        function overscan(grid, w, h, rSize, cSize) {
-            var rCount = h / rSize;
-            var cCount = w / cSize;
-            if (cCount * (120 / rSize) >= 80 || rCount * (120 / cSize) >= 80) {
-                grid.attr("overscanRowCount", 100);
-                grid.attr("overscanColumnCount", 100);
-            }
-        }
-
-        if (freezeColLength > 0) {
-            overscan(this.topLeftGrid, tlw, tlh, o.headerRowSize, totalLeftColumnSize / freezeColLength);
-            overscan(this.bottomLeftGrid, blw, blh, o.rowSize, totalLeftColumnSize / freezeColLength);
-        }
-        if (o.columnSize.length - freezeColLength > 0) {
-            overscan(this.topRight, trw, trh, o.headerRowSize, totalRightColumnSize / (o.columnSize.length - freezeColLength));
-            overscan(this.bottomRightGrid, brw, brh, o.rowSize, totalRightColumnSize / (o.columnSize.length - freezeColLength));
-        }
+        // this.topLeftGrid.attr({
+        //     overscanColumnCount: 0,
+        //     overscanRowCount: 0
+        // });
+        // this.topRightGrid.attr({
+        //     overscanColumnCount: 0,
+        //     overscanRowCount: 0
+        // });
+        // this.bottomLeftGrid.attr({
+        //     overscanColumnCount: 0,
+        //     overscanRowCount: 0
+        // });
+        // this.bottomRightGrid.attr({
+        //     overscanColumnCount: 0,
+        //     overscanRowCount: 0
+        // });
+        //
+        // function overscan(grid, w, h, rSize, cSize) {
+        //     var rCount = h / rSize;
+        //     var cCount = w / cSize;
+        //     if (cCount * (120 / rSize) >= 80 || rCount * (120 / cSize) >= 80) {
+        //         grid.attr("overscanRowCount", 100);
+        //         grid.attr("overscanColumnCount", 100);
+        //     }
+        // }
+        //
+        // if (freezeColLength > 0) {
+        //     overscan(this.topLeftGrid, tlw, tlh, o.headerRowSize, totalLeftColumnSize / freezeColLength);
+        //     overscan(this.bottomLeftGrid, blw, blh, o.rowSize, totalLeftColumnSize / freezeColLength);
+        // }
+        // if (o.columnSize.length - freezeColLength > 0) {
+        //     overscan(this.topRight, trw, trh, o.headerRowSize, totalRightColumnSize / (o.columnSize.length - freezeColLength));
+        //     overscan(this.bottomRightGrid, brw, brh, o.rowSize, totalRightColumnSize / (o.columnSize.length - freezeColLength));
+        // }
 
         this.topLeftGrid._populate(this.header[0]);
         this.topRightGrid._populate(this.header[1]);
@@ -31738,40 +31738,40 @@ BI.QuickGridTable = BI.inherit(BI.GridTable, {
             });
         });
 
-        this.topLeftGrid.attr({
-            overscanColumnCount: 0,
-            overscanRowCount: 0
-        });
-        this.topRightGrid.attr({
-            overscanColumnCount: 0,
-            overscanRowCount: 0
-        });
-        this.bottomLeftGrid.attr({
-            overscanColumnCount: 0,
-            overscanRowCount: 0
-        });
-        this.bottomRightGrid.attr({
-            overscanColumnCount: 0,
-            overscanRowCount: 0
-        });
-
-        function overscan(grid, w, h, rSize, cSize) {
-            var rCount = h / rSize;
-            var cCount = w / cSize;
-            if (cCount * (120 / rSize) >= 80 || rCount * (120 / cSize) >= 80) {
-                grid.attr("overscanRowCount", 100);
-                grid.attr("overscanColumnCount", 100);
-            }
-        }
-
-        if (freezeColLength > 0) {
-            overscan(this.topLeftGrid, otlw, otlh, o.headerRowSize, totalLeftColumnSize / freezeColLength);
-            overscan(this.bottomLeftGrid, oblw, oblh, o.rowSize, totalLeftColumnSize / freezeColLength);
-        }
-        if (o.columnSize.length - freezeColLength > 0) {
-            overscan(this.topRight, otrw, otrh, o.headerRowSize, totalRightColumnSize / (o.columnSize.length - freezeColLength));
-            overscan(this.bottomRightGrid, obrw, obrh, o.rowSize, totalRightColumnSize / (o.columnSize.length - freezeColLength));
-        }
+        // this.topLeftGrid.attr({
+        //     overscanColumnCount: 0,
+        //     overscanRowCount: 0
+        // });
+        // this.topRightGrid.attr({
+        //     overscanColumnCount: 0,
+        //     overscanRowCount: 0
+        // });
+        // this.bottomLeftGrid.attr({
+        //     overscanColumnCount: 0,
+        //     overscanRowCount: 0
+        // });
+        // this.bottomRightGrid.attr({
+        //     overscanColumnCount: 0,
+        //     overscanRowCount: 0
+        // });
+        //
+        // function overscan(grid, w, h, rSize, cSize) {
+        //     var rCount = h / rSize;
+        //     var cCount = w / cSize;
+        //     if (cCount * (120 / rSize) >= 80 || rCount * (120 / cSize) >= 80) {
+        //         grid.attr("overscanRowCount", 100);
+        //         grid.attr("overscanColumnCount", 100);
+        //     }
+        // }
+        //
+        // if (freezeColLength > 0) {
+        //     overscan(this.topLeftGrid, otlw, otlh, o.headerRowSize, totalLeftColumnSize / freezeColLength);
+        //     overscan(this.bottomLeftGrid, oblw, oblh, o.rowSize, totalLeftColumnSize / freezeColLength);
+        // }
+        // if (o.columnSize.length - freezeColLength > 0) {
+        //     overscan(this.topRight, otrw, otrh, o.headerRowSize, totalRightColumnSize / (o.columnSize.length - freezeColLength));
+        //     overscan(this.bottomRightGrid, obrw, obrh, o.rowSize, totalRightColumnSize / (o.columnSize.length - freezeColLength));
+        // }
 
         this.topLeftGrid.populate(leftHeader);
         this.topRightGrid.populate(rightHeader);
