@@ -127,7 +127,7 @@ BI.CollectionView = BI.inherit(BI.Widget, {
                 return;
             }
             var childrenToDisplay = this._cellRenderers(bottom - top, right - left, left, top);
-            var renderedCells = [], renderedKeys = [], renderedWidgets = {};
+            var renderedCells = [], renderedKeys = {}, renderedWidgets = {};
             //存储所有的left和top
             var lefts = {}, tops = {};
             for (var i = 0, len = childrenToDisplay.length; i < len; i++) {
@@ -155,9 +155,9 @@ BI.CollectionView = BI.inherit(BI.Widget, {
             };
             for (var i = 0, len = childrenToDisplay.length; i < len; i++) {
                 var datum = childrenToDisplay[i];
-                var index = BI.deepIndexOf(this.renderedKeys, datum.index);
+                var index = this.renderedKeys[datum.index] && this.renderedKeys[datum.index][1];
                 var child;
-                if (index > -1) {
+                if (index >= 0) {
                     if (datum.width !== this.renderedCells[index]._width) {
                         this.renderedCells[index]._width = datum.width;
                         this.renderedCells[index].el.setWidth(datum.width);
@@ -212,34 +212,34 @@ BI.CollectionView = BI.inherit(BI.Widget, {
                     bottomBorder[l] = Math.max(bottomBorder[l], datum.y + datum.height);
                 }
 
-                renderedKeys.push(datum.index);
+                renderedKeys[datum.index] = [datum.index, i];
                 renderedWidgets[i] = child;
             }
             //已存在的， 需要添加的和需要删除的
             var existSet = {}, addSet = {}, deleteArray = [];
             BI.each(renderedKeys, function (i, key) {
-                if (BI.deepContains(self.renderedKeys, key)) {
+                if (self.renderedKeys[i]) {
                     existSet[i] = key;
                 } else {
                     addSet[i] = key;
                 }
             });
             BI.each(this.renderedKeys, function (i, key) {
-                if (BI.deepContains(existSet, key)) {
+                if (existSet[i]) {
                     return;
                 }
-                if (BI.deepContains(addSet, key)) {
+                if (addSet[i]) {
                     return;
                 }
-                deleteArray.push(i);
+                deleteArray.push(key[1]);
             });
             BI.each(deleteArray, function (i, index) {
                 //性能优化，不调用destroy方法防止触发destroy事件
                 self.renderedCells[index].el._destroy();
             });
             var addedItems = [];
-            BI.each(addSet, function (index) {
-                addedItems.push(renderedCells[index])
+            BI.each(addSet, function (index, key) {
+                addedItems.push(renderedCells[key[1]])
             });
             this.container.addItems(addedItems);
             //拦截父子级关系
