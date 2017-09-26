@@ -13,6 +13,7 @@ BI.DateTimeCombo = BI.inherit(BI.Single, {
     _defaultConfig: function () {
         return BI.extend(BI.DateTimeCombo.superclass._defaultConfig.apply(this, arguments), {
             baseCls: 'bi-date-time-combo bi-border',
+            width: 200,
             height: 24
         });
     },

@@ -18,16 +18,16 @@ Demo.IconCombo = BI.inherit(BI.Widget, {
                 ref:function(_ref){
                     self.refs=_ref;
                 },
-               // iconClass: "pull-down-ha-font",
+               iconClass: "search-font",
                 items: [{
                     value: "第一项",
-                    iconClass: "delete-font"
+                    iconClass: "close-font"
                 }, {
                     value: "第二项",
-                    iconClass: "rename-font"
+                    iconClass: "search-font"
                 }, {
                     value: "第三项",
-                    iconClass: "move-font"
+                    iconClass: "copy-font"
                 }]
             }],
             vgap: 20

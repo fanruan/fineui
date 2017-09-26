@@ -29,8 +29,6 @@
     </body>
 </html>
 ```
-#### 源码集成配置
-[http://www.finedevelop.com/pages/viewpage.action?pageId=16056735](http://www.finedevelop.com/pages/viewpage.action?pageId=16056735)
 
 #### 源码集成Demo
 BI的组件就是集成的fineui进行开发的

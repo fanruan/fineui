@@ -15,7 +15,7 @@ Demo.FloatCenterLayout = BI.inherit(BI.Widget, {
                 whiteSpace: "normal"
             }, {
                 type: "bi.label",
-                text: "floatCenter与center的不同在于，它可以控制最小宽度和最大宽度",
+                text: "浮动式的中间布局",
                 cls: "layout-bg2",
                 whiteSpace: "normal"
             }],

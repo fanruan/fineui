@@ -3,7 +3,6 @@
 ## 总览
 * [概览](README.md)
 * [起步](START.md)
-* [高级教程](COURSE.md)
 
 ## 通用规范
 * [通用规范](OVERVIEW.md)

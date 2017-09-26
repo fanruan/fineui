@@ -17,7 +17,7 @@ Demo.Downlist = BI.inherit(BI.Widget, {
 
 
     render: function () {
-        self = this;
+        var self = this;
         return {
             type: "bi.horizontal_adapt",
             items: [{
@@ -25,7 +25,7 @@ Demo.Downlist = BI.inherit(BI.Widget, {
                 ref: function (_ref) {
                     self.downlist = _ref;
                 },
-                cls:"layout-bg3",
+                cls: "layout-bg3",
                 height: 30,
                 width: 100,
                 items: [
@@ -68,11 +68,11 @@ Demo.Downlist = BI.inherit(BI.Widget, {
                         }]
                     }],
                     [{
-                            text: "column 8",
-                            value: 18,
-                            cls: "dot-e-font",
-                            selected: true
-                        },
+                        text: "column 8",
+                        value: 18,
+                        cls: "dot-e-font",
+                        selected: true
+                    },
                         {
 
                             text: "column 9",
@@ -81,11 +81,11 @@ Demo.Downlist = BI.inherit(BI.Widget, {
                         }
                     ],
                     [{
-                            text: "column 10",
-                            value: 20,
-                            cls: "dot-e-font",
-                            selected: true
-                        },
+                        text: "column 10",
+                        value: 20,
+                        cls: "dot-e-font",
+                        selected: true
+                    },
                         {
 
                             text: "column 11",
@@ -122,8 +122,8 @@ Demo.Downlist = BI.inherit(BI.Widget, {
             }, {
                 type: "bi.label",
                 text: "显示选择值",
-                width:500,
-                cls:"layout-bg4",
+                width: 500,
+                cls: "layout-bg4",
                 ref: function (_ref) {
                     self.label = _ref;
                 }

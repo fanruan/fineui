@@ -13,8 +13,3 @@ CodingPages: [http://fanruan.coding.me/fineui](http://fanruan.coding.me/fineui)
 
 CodingPages: [http://fanruan.coding.me/fineui/dist/index.html](http://fanruan.coding.me/fineui/dist/index.html)
 
-
-#### 代码设计文档
-
-KMS: [http://www.finedevelop.com/display/DR/FineUI](http://www.finedevelop.com/display/DR/FineUI)
-

@@ -16,7 +16,7 @@ Demo.Date = BI.inherit(BI.Widget, {
             type: "bi.horizontal_auto",
             vgap: 10,
             items: [{
-                type: "bi.date_combo",
+                type: "bi.multidate_combo",
                 ref: function () {
                     self.datecombo = this;
                 },
@@ -44,4 +44,4 @@ Demo.Date = BI.inherit(BI.Widget, {
     }
 })
 
-BI.shortcut("demo.date", Demo.Date);
+BI.shortcut("demo.multidate_combo", Demo.Date);

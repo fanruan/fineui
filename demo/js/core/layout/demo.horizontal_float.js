@@ -6,28 +6,14 @@ Demo.HorizontalFloat = BI.inherit(BI.Widget, {
         baseCls: "demo-horizontal-float"
     },
 
-    _createLayout: function () {
-        return BI.createWidget({
-            type: "bi.horizontal_float",
-            vgap: 10,
-            items: [{
-                type: "bi.label",
-                text: "Horizontal Float左右自适应",
-                cls: "layout-bg1",
-                width: 100
-            }]
-        })
-    },
-    
     render: function () {
         return {
-            type: "bi.grid",
-            columns: 1,
-            rows: 2,
+            type: "bi.horizontal_float",
             items: [{
-                column: 0,
-                row: 0,
-                el: this._createLayout()
+                type: "bi.label",
+                text: "浮动式水平居中布局方案，用于宽度未知的情况",
+                cls: "layout-bg1",
+                height: 30
             }]
         }
     }

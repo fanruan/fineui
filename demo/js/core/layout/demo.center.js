@@ -10,7 +10,7 @@ Demo.CenterLayout = BI.inherit(BI.Widget, {
             type: "bi.center",
             items: [{
                 type: "bi.label",
-                text: "Center 1，这里虽然设置label的高度30，但是最终影响高度的是center布局",
+                text: "其实是一个grid嵌套absolute的实现",
                 cls: "layout-bg1",
                 whiteSpace: "normal"
             },{
