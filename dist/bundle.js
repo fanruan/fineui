@@ -46720,7 +46720,8 @@ BI.BlankIconIconTextItem = BI.inherit(BI.BasicButton, {
         var o = this.options, c = this._const;
         var blank = BI.createWidget({
             type: "bi.layout",
-            width: o.blankWidth
+            width: o.blankWidth,
+            height: o.height
         })
         this.text = BI.createWidget({
             type: "bi.label",
@@ -46739,13 +46740,15 @@ BI.BlankIconIconTextItem = BI.inherit(BI.BasicButton, {
             type: "bi.icon_button",
             cls: o.iconCls1,
             forceNotSelected: true,
-            width: c.commonWidth
+            width: c.commonWidth,
+            height: o.height
         });
         this.icon2 = BI.createWidget({
             type: "bi.icon_button",
             cls: o.iconCls2,
             forceNotSelected: true,
-            width: c.commonWidth
+            width: c.commonWidth,
+            height: o.height
         });
 
         BI.createWidget(BI.extend({
@@ -46854,6 +46857,7 @@ BI.BlankIconTextIconItem = BI.inherit(BI.BasicButton, {
             type: "bi.center_adapt",
             cls: o.iconCls1,
             width: c.commonWidth,
+            height: o.height,
             items: [{
                 el: {
                     type: "bi.icon",
@@ -46870,6 +46874,7 @@ BI.BlankIconTextIconItem = BI.inherit(BI.BasicButton, {
                     type: "bi.center_adapt",
                     cls: o.iconCls2,
                     width: c.commonWidth,
+                    height: o.height,
                     items: [{
                         el: {
                             type: "bi.icon",
@@ -46991,6 +46996,7 @@ BI.BlankIconTextItem = BI.inherit(BI.BasicButton, {
         this.icon = BI.createWidget({
             type: "bi.center_adapt",
             width: c.commonWidth,
+            height: o.height,
             items: [{
                 el: {
                     type: "bi.icon",
@@ -47099,6 +47105,7 @@ BI.IconTextIconItem = BI.inherit(BI.BasicButton, {
             type: "bi.center_adapt",
             cls: o.iconCls1,
             width: c.commonWidth,
+            height: o.height,
             items: [{
                 el: {
                     type: "bi.icon",
@@ -47229,6 +47236,7 @@ BI.IconTextItem = BI.inherit(BI.BasicButton, {
         this.icon = BI.createWidget({
             type: "bi.center_adapt",
             width: c.commonWidth,
+            height: o.height,
             items: [{
                 el: {
                     type: "bi.icon",
@@ -47335,6 +47343,7 @@ BI.TextIconItem = BI.inherit(BI.BasicButton, {
         this.icon = BI.createWidget({
             type: "bi.center_adapt",
             width: c.commonWidth,
+            height: o.height,
             items: [{
                 el: {
                     type: "bi.icon",
@@ -47526,6 +47535,7 @@ BI.IconTextIconNode = BI.inherit(BI.NodeButton, {
             type: "bi.center_adapt",
             cls: o.iconCls1,
             width: c.commonWidth,
+            height: o.height,
             items: [{
                 el: {
                     type: "bi.icon",
@@ -47536,7 +47546,8 @@ BI.IconTextIconNode = BI.inherit(BI.NodeButton, {
         })
         var blank = BI.createWidget({
             type: "bi.layout",
-            width: c.commonWidth
+            width: c.commonWidth,
+            height: o.height
         })
         BI.createWidget({
             type: "bi.absolute",
@@ -47647,6 +47658,7 @@ BI.IconTextNode = BI.inherit(BI.NodeButton, {
         this.icon = BI.createWidget({
             type: "bi.center_adapt",
             width: c.commonWidth,
+            height: o.height,
             items: [{
                 el: {
                     type: "bi.icon",
@@ -47742,6 +47754,7 @@ BI.TextIconNode = BI.inherit(BI.NodeButton, {
         this.icon = BI.createWidget({
             type: "bi.center_adapt",
             width: c.commonWidth,
+            height: o.height,
             items: [{
                 el: {
                     type: "bi.icon",

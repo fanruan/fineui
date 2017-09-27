@@ -46,6 +46,7 @@ BI.IconTextIconNode = BI.inherit(BI.NodeButton, {
             type: "bi.center_adapt",
             cls: o.iconCls1,
             width: c.commonWidth,
+            height: o.height,
             items: [{
                 el: {
                     type: "bi.icon",
@@ -56,7 +57,8 @@ BI.IconTextIconNode = BI.inherit(BI.NodeButton, {
         })
         var blank = BI.createWidget({
             type: "bi.layout",
-            width: c.commonWidth
+            width: c.commonWidth,
+            height: o.height
         })
         BI.createWidget({
             type: "bi.absolute",
