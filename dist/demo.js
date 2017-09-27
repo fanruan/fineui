@@ -2142,6 +2142,25 @@ BI.shortcut("demo.clipboard", Demo.Func);Demo.Func = BI.inherit(BI.Widget, {
             type: "bi.absolute",
             items: [{
                 el: {
+                    type: "bi.color_chooser_popup",
+                    cls: "bi-card"
+                },
+                left: 100,
+                top: 250
+            }]
+        }
+    }
+});
+BI.shortcut("demo.color_chooser_popup", Demo.Func);Demo.Func = BI.inherit(BI.Widget, {
+    props: {
+        baseCls: "demo-func"
+    },
+
+    render: function () {
+        return {
+            type: "bi.absolute",
+            items: [{
+                el: {
                     type: "bi.color_chooser",
                     width: 30,
                     height: 30
@@ -2153,25 +2172,6 @@ BI.shortcut("demo.clipboard", Demo.Func);Demo.Func = BI.inherit(BI.Widget, {
     }
 });
 BI.shortcut("demo.color_chooser", Demo.Func);Demo.Func = BI.inherit(BI.Widget, {
-    props: {
-        baseCls: "demo-func"
-    },
-
-    render: function () {
-        return {
-            type: "bi.absolute",
-            items: [{
-                el: {
-                    type: "bi.color_chooser_popup",
-                    cls: "bi-card"
-                },
-                left: 100,
-                top: 250
-            }]
-        }
-    }
-});
-BI.shortcut("demo.color_chooser_popup", Demo.Func);Demo.Func = BI.inherit(BI.Widget, {
     props: {
         baseCls: "demo-func"
     },
@@ -5380,6 +5380,92 @@ Demo.COMPONENT_CONFIG = [{
     props: {
         baseCls: "demo-func"
     },
+
+    child: [{
+        type: "bi.combo_group",
+        el: {
+            type: "bi.icon_text_icon_item",
+            text: "2010年",
+            value: 2010,
+            height: 25,
+            iconCls: "close-ha-font"
+        },
+        children: [{
+            type: "bi.single_select_item",
+            height: 25,
+            text: "一月",
+            value: 11
+        }, {
+            type: "bi.icon_text_icon_item",
+            height: 25,
+            text: "二月",
+            value: 12,
+            children: [{type: "bi.single_select_item", text: "一号", value: 101, height: 25}]
+        }]
+    }, {
+        text: "2011年", value: 2011
+    }, {
+        text: "2012年", value: 2012, iconCls: "close-ha-font"
+    }, {
+        text: "2013年", value: 2013
+    }, {
+        text: "2014年", value: 2014, iconCls: "close-ha-font"
+    }, {
+        text: "2015年", value: 2015, iconCls: "close-ha-font"
+    }],
+
+    _createBottom: function () {
+        var childCombo = BI.createWidget({
+            type: "bi.combo",
+            el: {
+                type: "bi.text_button",
+                cls: "button-combo",
+                height: 30
+            },
+            popup: {
+                el: {
+                    type: "bi.button_tree",
+                    items: BI.createItems(BI.deepClone(this.child), {
+                        type: "bi.single_select_item",
+                        height: 25,
+                        handler: function (v) {
+
+                        }
+                    }),
+                    layouts: [{
+                        type: "bi.vertical"
+                    }]
+                }
+            },
+            width: 200
+        });
+        childCombo.setValue(BI.deepClone(this.child)[0].children[0].value);
+
+        return BI.createWidget({
+            type: "bi.left",
+            items: [childCombo],
+            hgap: 20,
+            vgap: 20
+        })
+    },
+
+    render: function () {
+        return {
+            type: "bi.grid",
+            columns: 1,
+            rows: 1,
+            items: [{
+                column: 0,
+                row: 0,
+                el: this._createBottom()
+            }]
+        }
+    }
+});
+BI.shortcut("demo.combo_group", Demo.Func);Demo.Func = BI.inherit(BI.Widget, {
+    props: {
+        baseCls: "demo-func"
+    },
     years: [{
         text: "2010年", value: 2010, iconCls: "close-ha-font"
     }, {
@@ -6031,92 +6117,6 @@ BI.shortcut("demo.combo", Demo.Func);Demo.Func = BI.inherit(BI.Widget, {
     }
 });
 BI.shortcut("demo.combo2", Demo.Func);Demo.Func = BI.inherit(BI.Widget, {
-    props: {
-        baseCls: "demo-func"
-    },
-
-    child: [{
-        type: "bi.combo_group",
-        el: {
-            type: "bi.icon_text_icon_item",
-            text: "2010年",
-            value: 2010,
-            height: 25,
-            iconCls: "close-ha-font"
-        },
-        children: [{
-            type: "bi.single_select_item",
-            height: 25,
-            text: "一月",
-            value: 11
-        }, {
-            type: "bi.icon_text_icon_item",
-            height: 25,
-            text: "二月",
-            value: 12,
-            children: [{type: "bi.single_select_item", text: "一号", value: 101, height: 25}]
-        }]
-    }, {
-        text: "2011年", value: 2011
-    }, {
-        text: "2012年", value: 2012, iconCls: "close-ha-font"
-    }, {
-        text: "2013年", value: 2013
-    }, {
-        text: "2014年", value: 2014, iconCls: "close-ha-font"
-    }, {
-        text: "2015年", value: 2015, iconCls: "close-ha-font"
-    }],
-
-    _createBottom: function () {
-        var childCombo = BI.createWidget({
-            type: "bi.combo",
-            el: {
-                type: "bi.text_button",
-                cls: "button-combo",
-                height: 30
-            },
-            popup: {
-                el: {
-                    type: "bi.button_tree",
-                    items: BI.createItems(BI.deepClone(this.child), {
-                        type: "bi.single_select_item",
-                        height: 25,
-                        handler: function (v) {
-
-                        }
-                    }),
-                    layouts: [{
-                        type: "bi.vertical"
-                    }]
-                }
-            },
-            width: 200
-        });
-        childCombo.setValue(BI.deepClone(this.child)[0].children[0].value);
-
-        return BI.createWidget({
-            type: "bi.left",
-            items: [childCombo],
-            hgap: 20,
-            vgap: 20
-        })
-    },
-
-    render: function () {
-        return {
-            type: "bi.grid",
-            columns: 1,
-            rows: 1,
-            items: [{
-                column: 0,
-                row: 0,
-                el: this._createBottom()
-            }]
-        }
-    }
-});
-BI.shortcut("demo.combo_group", Demo.Func);Demo.Func = BI.inherit(BI.Widget, {
     props: {
         baseCls: "demo-func"
     },
@@ -7082,7 +7082,24 @@ Demo.BorderLayout = BI.inherit(BI.Widget, {
         }
     }
 });
-BI.shortcut("demo.border", Demo.BorderLayout);/**
+BI.shortcut("demo.border", Demo.BorderLayout);Demo.CenterAdapt = BI.inherit(BI.Widget, {
+    props: {
+        baseCls: "demo-absolute"
+    },
+    render: function () {
+        return {
+            type: "bi.center_adapt",
+            items: [{
+                type: "bi.label",
+                text: "水平垂直居中",
+                width: 300,
+                height: 200,
+                cls: "layout-bg1"
+            }]
+        }
+    },
+});
+BI.shortcut("demo.center_adapt", Demo.CenterAdapt);/**
  * Created by User on 2017/3/22.
  */
 Demo.CenterLayout = BI.inherit(BI.Widget, {
@@ -7116,24 +7133,7 @@ Demo.CenterLayout = BI.inherit(BI.Widget, {
         }
     }
 });
-BI.shortcut("demo.center_layout", Demo.CenterLayout);Demo.CenterAdapt = BI.inherit(BI.Widget, {
-    props: {
-        baseCls: "demo-absolute"
-    },
-    render: function () {
-        return {
-            type: "bi.center_adapt",
-            items: [{
-                type: "bi.label",
-                text: "水平垂直居中",
-                width: 300,
-                height: 200,
-                cls: "layout-bg1"
-            }]
-        }
-    },
-});
-BI.shortcut("demo.center_adapt", Demo.CenterAdapt);/**
+BI.shortcut("demo.center_layout", Demo.CenterLayout);/**
  * Created by User on 2017/3/22.
  */
 Demo.FloatCenterLayout = BI.inherit(BI.Widget, {
@@ -7380,32 +7380,6 @@ Demo.GridLayout = BI.inherit(BI.Widget, {
     }
 });
 BI.shortcut("demo.grid", Demo.GridLayout);/**
- * Created by User on 2017/3/21.
- */
-Demo.Horizontal = BI.inherit(BI.Widget, {
-    props: {
-        baseCls: "demo-horizontal"
-    },
-    render: function () {
-        return {
-            type: "bi.horizontal",
-            items: [{
-                type: "bi.label",
-                text: "水平布局",
-                cls: "layout-bg3",
-                width: 300,
-                height: 30
-            }, {
-                type: "bi.label",
-                text: "水平布局",
-                cls: "layout-bg4",
-                width: 300,
-                height: 30
-            }]
-        }
-    }
-});
-BI.shortcut("demo.horizontal", Demo.Horizontal);/**
  * Created by User on 2017/3/22.
  */
 Demo.HorizontalAdapt = BI.inherit(BI.Widget, {
@@ -7522,6 +7496,32 @@ Demo.HorizontalFloat = BI.inherit(BI.Widget, {
     }
 });
 BI.shortcut("demo.horizontal_float", Demo.HorizontalFloat);/**
+ * Created by User on 2017/3/21.
+ */
+Demo.Horizontal = BI.inherit(BI.Widget, {
+    props: {
+        baseCls: "demo-horizontal"
+    },
+    render: function () {
+        return {
+            type: "bi.horizontal",
+            items: [{
+                type: "bi.label",
+                text: "水平布局",
+                cls: "layout-bg3",
+                width: 300,
+                height: 30
+            }, {
+                type: "bi.label",
+                text: "水平布局",
+                cls: "layout-bg4",
+                width: 300,
+                height: 30
+            }]
+        }
+    }
+});
+BI.shortcut("demo.horizontal", Demo.Horizontal);/**
  * Created by User on 2017/3/22.
  */
 Demo.HtapeLayout = BI.inherit(BI.Widget, {
@@ -7821,30 +7821,6 @@ Demo.TdLayout = BI.inherit(BI.Widget, {
     }
 });
 BI.shortcut("demo.td", Demo.TdLayout);/**
- * Created by User on 2017/3/21.
- */
-Demo.VerticalLayout = BI.inherit(BI.Widget, {
-    props: {
-        baseCls: "demo-vertical"
-    },
-    render: function () {
-        return {
-            type: "bi.vertical",
-            items: [{
-                type: "bi.label",
-                cls: "layout-bg3",
-                text: "垂直布局",
-                height: 30
-            }, {
-                type: "bi.label",
-                cls: "layout-bg4",
-                text: "垂直布局",
-                height: 30
-            }]
-        }
-    }
-});
-BI.shortcut("demo.vertical", Demo.VerticalLayout);/**
  * Created by User on 2017/3/22.
  */
 Demo.VerticalAdaptLayout = BI.inherit(BI.Widget, {
@@ -7886,6 +7862,30 @@ Demo.VerticalAdaptLayout = BI.inherit(BI.Widget, {
     }
 });
 BI.shortcut("demo.vertical_adapt", Demo.VerticalAdaptLayout);/**
+ * Created by User on 2017/3/21.
+ */
+Demo.VerticalLayout = BI.inherit(BI.Widget, {
+    props: {
+        baseCls: "demo-vertical"
+    },
+    render: function () {
+        return {
+            type: "bi.vertical",
+            items: [{
+                type: "bi.label",
+                cls: "layout-bg3",
+                text: "垂直布局",
+                height: 30
+            }, {
+                type: "bi.label",
+                cls: "layout-bg4",
+                text: "垂直布局",
+                height: 30
+            }]
+        }
+    }
+});
+BI.shortcut("demo.vertical", Demo.VerticalLayout);/**
  * Created by User on 2017/3/22.
  */
 Demo.VtapeLayout = BI.inherit(BI.Widget, {
