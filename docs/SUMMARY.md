@@ -26,6 +26,7 @@
     * [grid](core/layout/grid.md)
     * [table](core/layout/table.md)
     * [td](core/layout/td.md)
+    * ...
 * 抽象控件
     * [button_group](core/abstract/button_group.md)
     * [button_tree](core/abstract/button_tree.md)
@@ -33,11 +34,12 @@
     * [custom_tree](core/abstract/custom_tree.md)
     * [grid_view](core/abstract/grid_view.md)
     * [collection_view](core/abstract/collection_view.md)
+    * [list_view](core/abstract/list_view.md)
     * [virtual_list](core/abstract/virtual_list.md)
 * 组合控件
     * [combo](core/combination/bi.combo.md)
     * [expander](core/combination/bi.expander.md)
-    * [group_combo](core/combination/group_combo.md)
+    * [combo_group](core/combination/combo_group.md)
     * [loader](core/combination/loader.md)
     * [navigation](core/combination/navigation.md)
     * [searcher](core/combination/searcher.md)
@@ -47,11 +49,11 @@
     * [float_box](core/layer/layer_float_box.md)
     * [popup_view](core/layer/layer_popup.md)
     * [searcher_view](core/layer/layer_searcher.md)
-* [widget](core/widget.md)
-* [single](core/single.md)
-* [basic_button](core/basic_button.md)
-* [node_button](core/node_button.md)
-* [pane](core/pane.md)
+* [Widget](core/widget.md)
+* [Single](core/single.md)
+* [BasicButton](core/basic_button.md)
+* [NodeButton](core/node_button.md)
+* [Pane](core/pane.md)
 
 ## 基础控件
 * [label](base/label.md)
@@ -106,12 +108,14 @@
     * [editor_trigger](case/trigger/editor_trigger.md)
     * [icon_trigger](case/trigger/icon_trigger.md)
     * [text_trigger](case/trigger/text_trigger.md)
+    * [select_text_trigger](case/trigger/select_text_trigger.md)
 * 下拉框
     * [bubble_combo](case/combo/bubble_combo.md)
     * [icon_combo](case/combo/icon_combo.md)
     * [static_combo](case/combo/static_combo.md)
     * [text_value_combo](case/combo/text_value_combo.md)
     * [text_value_check_combo](case/combo/text_value_check_combo.md)
+    * [editor_icon_check_combo](case/combo/editor_icon_check_combo.md)
     * [text_value_down_list_combo](case/combo/text_value_down_list_combo.md)
 * 树
     * [branch_tree](case/tree/branch_tree.md)
@@ -141,42 +145,55 @@
     * [各种items](detailed/bi.button/items.md)
     * [各种节点nodes](detailed/bi.button/node.md)
     * [各种segment](detailed/bi.button/segment.md)
-* 树
-    * [multi_tree_combo](detailed/tree/bi.multi_tree_combo.md)
-    * [switch_tree](detailed/tree/bi.switch_tree.md)
-* 表格
-    * [preview_table](detailed/table/bi.preview_table.md)
-    * [responsive_table](detailed/table/bi.responsive_table.md)
-    * [excel_table](detailed/table/bi.excel_table.md)
-    * [sequence_table](detailed/table/bi.sequence_table.md)
-    * [page_table](detailed/table/bi.page_table.md)
 * 文本框控件
     * [text_editor](detailed/text_input/bi.text_editor.md)
     * [search_editor](detailed/text_input/bi.search_editor.md)
     * [number_editor](detailed/text_input/number_editor.md)
-* [year_combo](detailed/year_combo.md)
-* [month_combo](detailed/month_combo.md)
-* [quarter_combo](detailed/quarter_combo.md)
-* [down_list_combo](detailed/down_list_combo.md)
-* [number_interval](detailed/number_interval.md)
-* [multi_select_combo](detailed/multi_select_combo.md)
-* 简单日期控件
-    * [date_combo](detailed/date/date_combo.md)
-    * [date_pane](detailed/date/date_pane_widget.md)
+* 树
+    * [single_level_tree](detailed/tree/single_level_tree.md)
+    * [select_level_tree](detailed/tree/select_level_tree.md)
+    * [multi_single_level_tree](detailed/tree/multi_single_level_tree.md)
+    * [multi_select_level_tree](detailed/tree/multi_select_level_tree.md)
+    * [switch_tree](detailed/tree/bi.switch_tree.md)
+* 表格
+    * [preview_table](detailed/table/bi.preview_table.md)
+    * [responsive_table](detailed/table/bi.responsive_table.md)
+    * [sequence_table](detailed/table/bi.sequence_table.md)
+    * [page_table](detailed/table/bi.page_table.md)
+* 下拉列表
+    * [down_list_combo](detailed/down_list_combo.md)
+* 复选下拉框
+    * [multi_select_combo](detailed/multi_select_combo.md)
+* 简单下拉树
+    * [single_tree_combo](detailed/tree/single_tree_combo.md)
+* 多层级下拉树
+    * [multilayer_single_tree_combo](detailed/tree/multilayer_single_tree_combo.md)
+* 可选下拉树
+    * [select_tree_combo](detailed/tree/select_tree_combo.md)
+* 多层级可选下拉树
+    * [multilayer_select_tree_combo](detailed/tree/multilayer_select_tree_combo.md)
+* 复选下拉树
+    * [multi_tree_combo](detailed/tree/bi.multi_tree_combo.md)
+* 日期相关控件
+    * [year_combo](detailed/year_combo.md)
+    * [month_combo](detailed/month_combo.md)
+    * [quarter_combo](detailed/quarter_combo.md)
     * [year_month_combo](detailed/date/year_month_combo.md)
     * [year_quarter_combo](detailed/date/year_quarter_combo.md)
-    * [custom_date_time](detailed/date/custom_date_time.md)
-* 简单下拉树
-    * [single_tree_combo](detailed/combo/single_tree_combo.md)
-    * [multilayer_single_tree_combo](detailed/combo/multilayer_single_tree_combo.md)
-    * [select_tree_combo](detailed/combo/select_tree_combo.md)
-    * [multilayer_select_tree_combo](detailed/combo/multilayer_select_tree_combo.md)
+    * [date_pane](detailed/date/date_pane.md)
+    * [date_combo](detailed/date/date_combo.md)
+    * [multidate_combo](detailed/date/multidate_combo.md)
+    * [date_time](detailed/date/date_time.md)
+    * [time_interval](detailed/date/time_interval.md)
+* 数值区间控件
+    * [number_interval](detailed/number_interval.md)
 * 路径选择
     * [path_chooser](detailed/path/path_chooser.md)
     * [direction_path_chooser](detailed/path/direction_path_chooser.md)
-* [relation_view](detailed/relation_view.md)
-* [dialog](detailed/dialog.md)
-* [file_manager](detailed/file_manager.md)
+* 关联视图
+    * [relation_view](detailed/relation_view.md)
+* 文件管理
+    * [file_manager](detailed/file_manager.md)
 
 ## 部件
 * [value_chooser_combo](components/value_chooser_combo.md)

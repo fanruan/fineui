@@ -6,16 +6,16 @@
 ##### 基础属性
 | 参数    | 说明           | 类型  | 可选值 | 默认值
 | :------ |:-------------  | :-----| :----|:----
-| root | 根组件 | boolean | true,false | false |
+| root | 是否是根组件 | boolean | true,false | false |
 | tagName |  html标签 | string| —| "div" |
-| attributes |  属性| object | —| null |
+| attributes |  属性 | object | —| null |
 | data | 数据 | object | — | null |
 | disabled | 是否可用 |  boolean |true,false | false |
 | invisible | 是否可见 | boolean | true,false | false|
 | invalid | 是否有效 | boolean | true,false |false |
 | baseCls | 基础class类 | string | —| " "|
-| extraCls | 扩展class类 | string| — | " "|
-| cls | class类名 | string |— | " "|
+| extraCls | 扩展class类,用于继承类中 | string| — | " "|
+| cls | class,用于对外调用 | string |— | " "|
 
 ## 生命周期函数
 | 名称     | 说明                           |  回调参数     
@@ -23,10 +23,10 @@
 | beforeCreate | 组件实例刚被创建 |— |
 | created | 组件实例创建完成 | —|
 | render | 渲染组件 | — |
-| beforeMounted | 组件挂载之前| —|
+| beforeMount | 组件挂载之前| —|
 | mounted | 组件挂载 |—|
 | update | 组件更新 | —|
-| beforeDestroyed | 组件销毁前调用| —|
+| beforeDestroy | 组件销毁前调用| —|
 | destroyed | 组件销毁后调用 | —|
 
 
@@ -42,7 +42,7 @@
 | setEnable | 设置组件是否可用 | enable |
 | setVisible | 设置组件是否可见 | visible |
 | setValid | 设置组件是否有效 | valid|
-| doBehavior | 自定义下拉列表中item项的行为，如高亮，标红等 | —|
+| doBehavior | 行为,如高亮,标红等 | —|
 | getWidth | 获取组件宽度 | —|
 | getHeight| 获取组件高度| —|
 | isValid | 判断是否有效 | —|
@@ -57,16 +57,16 @@
 | getText | 获取text值 | —|
 | setText | 设置text值 | text|
 | getValue | 获取value值 | —|
-|setValue| 设置value值| value|
+| setValue| 设置value值| value|
 | isEnabled | 是否可用 | —|
 | isVisible | 是否可见 | —|
 | disable | 设置组件不可用 | —|
 | enable | 设置组件可用| —|
 | valid | 设置组件有效| —|
-|invalid | 设置组件无效 | —|
+| invalid | 设置组件无效 | —|
 | invisible | 设置组件不可见 | —|
 | visible | 设置组件可见 | —|
-| isolate | 组件不在页面展示，组件事件和内容都在 | —|
+| isolate | 类似于destroy,但元素并不会被销毁,只是被挂载起来了 | —|
 | empty | 清空组件 | —|
 | destroy | 销毁组件| —|
 

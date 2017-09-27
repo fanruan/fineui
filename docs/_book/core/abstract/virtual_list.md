@@ -1,6 +1,6 @@
 # bi.virtual_list
 
-## 看不见的元素全部删除的list,基类[BI.Widget](/core/widget.md)
+## 一个动态加载的列表项，事先可以不知道列表项高度，可以处理大列表,基类[BI.Widget](/core/widget.md)
 
 {% method %}
 [source](https://jsfiddle.net/fineui/L995LrL9/)

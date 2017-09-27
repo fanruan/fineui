@@ -1,6 +1,6 @@
 # bi.grid_view
 
-## 可以合并单元格，指定行列可以删除看不见的元素,基类[BI.Widget](/core/widget.md)
+## 网格视图集合,高性能组件,可以处理网格状的大集合，实现需要知道每一个视图的高度信息,基类[BI.Widget](/core/widget.md)
 
 {% method %}
 [source](https://jsfiddle.net/fineui/fkntzLq5/)

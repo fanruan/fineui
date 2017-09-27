@@ -1,6 +1,6 @@
 # bi.collection_view
 
-## CollectionView,指定行列可以删除看不见的元素 基类[BI.Widget](/core/widget.md)
+## 视图集合,高性能容器,可处理大集合，事先需要知道每一个视图的宽度、高度位置等信息 基类[BI.Widget](/core/widget.md)
 
 {% method %}
 [source](https://jsfiddle.net/fineui/cmq0b3v0/)

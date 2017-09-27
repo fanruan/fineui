@@ -1,6 +1,6 @@
 # bi.NodeButton
 
-## 表示一个可以展开的节点, 不仅有选中状态而且有展开状态, [BI.BasicButton](/core/basic_button.md)
+## 表示一个可以展开的节点,用于树状结构的节点元素， 不仅有选中状态而且有展开状态, [BI.BasicButton](/core/basic_button.md)
 
 
 ## API
@@ -13,12 +13,10 @@
 ## 对外方法
 | 名称     | 说明                           |  回调参数     
 | :------ |:-------------                  | :-----   
-| doClick | 点击展开| —
-| isOnce | 点击一次后失效 | —
 | isOpened | 判断节点是否展开| —
 | setOpened | 设置节点展开状态| b
-| triggerCollapse | 节点收起 | —
-| triggerExpand | 节点展开| —
+| triggerCollapse | 触发节点收起 | —
+| triggerExpand | 触发节点展开| —
 
 
 

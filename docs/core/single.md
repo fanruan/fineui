@@ -11,7 +11,7 @@
 | title | title | string |— | null |
 | warningTitle | 错误title | string | —| null|
 | tipType | title类型 | string | success,warning | null |
-| value | 组件value值 | string |— | null |
+| value | value值 | string |— | null |
 
 
 
@@ -26,9 +26,9 @@
 | getTipType | 获取tipType|—|
 | isReadOnly | 是否只读| —|
 | getTitle | 获取title|—|
-| getWarningTitle | 获取warningtitle| —|
+| getWarningTitle | 获取warningTitle| —|
 | setValue | 设置value值| value|
-|getValue| 获取value值| —|
+| getValue| 获取value值| —|
 
 
 

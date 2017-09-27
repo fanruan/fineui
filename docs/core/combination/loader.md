@@ -73,8 +73,6 @@ BI.createWidget({
 | getIndexByValue | 根据value值获取value在数组中的索引 | value|
 | getNodeById | 根据id获取节点 | id |
 | getNodeByValue | 根据value值获取节点 | value |
-| empty| 清空组件|—|
-| destroy| 销毁组件|—|
 
 
 

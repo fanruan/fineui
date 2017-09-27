@@ -38,7 +38,7 @@ BI.createWidget({
 ##### 基础属性
 | 参数    | 说明           | 类型  | 可选值 | 默认值
 | :------ |:-------------  | :-----| :----|:----
-| childern | 子组件 | array | — | [ ] |
+| children | 子组件配置 | array | — | [ ] |
 | popup | 弹出层 | object | — |{el: {type: "bi.button_tree",chooseType: 0,layouts: [{type: "bi.vertical"}]}}|
 | isDefaultInit | 是否默认初始化子节点 |boolean | true,false | false |
 | isNeedAdjustHeight | 是否需要高度调整 | boolean | true,false | false |
