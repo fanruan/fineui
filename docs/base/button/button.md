@@ -42,7 +42,6 @@ BI.createWidget({
 | minWidth    | 最小宽度，如果block/clear中某一项为true，此项值为0，否则为90 |  number  |  —   |     90   |
 | shadow    | 是否显示阴影 |  boolean| true,false |   props.clear !== true   |
 | isShadowShowingOnSelected|选中状态下是否显示阴影 |  boolean| true,false |      true  |
-| readonly    | 是否只读     |    boolean   |   true,false     |  true   |
 | iconClass    | 图标类型     |    string|     —  | " "|
 | block|  是否块状显示，即不显示边框，没有最小宽度的限制    |    boolean| true,false  |  false    |
 | clear| 是否去掉边框和背景      |boolean| true,false   |  false    |
@@ -60,8 +59,6 @@ BI.createWidget({
 | doHighLight | 文本高亮 | —|
 | unHighLight | 取消文本高亮 | —|
 | setText| 设置文本值 | 需要设置的文本值text|
-| doClick | 点击事件 | —|
-| destroy | 销毁事件 |— |
 | setValue | 设置文本值 | 需要设置的文本值text |
 
 ---

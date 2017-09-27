@@ -76,6 +76,5 @@ BI.createWidget({
 | getRightHorizontalScroll | 获取右往左横向滚动距离 | —                  |
 | attr                     | 设置属性        | key: 键   value: 值  |
 | populate                 | 增加          | —                  |
-| destroy                  | 摧毁表         | —                  |
 
 ------

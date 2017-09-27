@@ -1,6 +1,6 @@
 # bi.grid_table
 
-### 列表展示的table，继承BI.Widget
+### 网格式的表格，继承BI.Widget
 
 {% method %}
 [source](https://jsfiddle.net/fineui/a936vcvj/)

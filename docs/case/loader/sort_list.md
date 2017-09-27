@@ -38,7 +38,6 @@ BI.createWidget({
 | addItems              | 列表最后添加元素   | items |
 | setValue              | 设置值        | data  |
 | getVlaue              | 获得值        | —     |
-| empty                 | 清空         | —     |
 | populate              | 替换内容       | items |
 | resetHeight           | 重新设置高度     | h     |
 | setNotSelectedValue   | 设置未选中值     | —     |

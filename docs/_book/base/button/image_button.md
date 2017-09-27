@@ -32,9 +32,6 @@ BI.createWidget({
 ## 对外方法
 | 名称     | 说明                           |  回调参数     
 | :------ |:-------------                  | :-----   
-| doClick | 点击事件 | —|
-| setWidth | 设置按钮宽度| 宽度width |
-| setHeight | 设置按钮高度 | 高度height|
 | setImageWidth | 设置图片宽度| 宽度width |
 | setImageHeight| 设置图片高度| 高度height|
 | getImageWidth | 获取图片宽度| —|

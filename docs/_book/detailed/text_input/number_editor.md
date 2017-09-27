@@ -1,4 +1,4 @@
-# finetuning_number_editor
+# number_editor
 
 ## 数值微调器
 
@@ -27,7 +27,7 @@ BI.createWidget({
 ## 事件
 | 事件    | 说明           |
 | :------ |:-------------  |
-|BI.FineTuningNumberEditor.EVENT_CONFIRM| 点击增加/减少按钮或者编辑框确定时触发 |
+|BI.NumberEditor.EVENT_CONFIRM| 点击增加/减少按钮或者编辑框确定时触发 |
 
 
 

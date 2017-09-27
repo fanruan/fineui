@@ -1,6 +1,6 @@
 # bi.single
 
-## 这仅仅只是一个超类, 所有简单控件的基类,类的控制,title的控制,文字超过边界显示3个点,cursor默认pointor,基类[BI.Widget](/core/widget.md)
+## 这仅仅只是一个超类, 所有简单控件的基类,title的控制,文字超过边界显示3个点,基类[BI.Widget](/core/widget.md)
 
 
 ## API

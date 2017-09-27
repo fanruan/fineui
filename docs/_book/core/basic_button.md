@@ -16,6 +16,7 @@
 | shadow | 是否显示阴影 | boolean| true,false| false|
 | isShadowShowingOnSelected| 选中状态下是否显示阴影|boolean|  true,false | false|
 | trigger | 被选元素要触发的事件 | string | mousedown, mouseup, click, dblclick, lclick | null|
+| text | 文本 | string | —| "" |
 | handler | 点击事件回调 | function | —| BI.emptyFn |
 
 

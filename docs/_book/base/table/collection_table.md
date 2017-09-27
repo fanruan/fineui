@@ -1,6 +1,6 @@
 # bi.collection_table
 
-### 基本的表格 继承BI.Widget
+### 可以合并单元格的表格 继承BI.Widget
 
 {% method %}
 [source](https://jsfiddle.net/fineui/x2zxfzhp/)

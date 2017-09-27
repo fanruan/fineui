@@ -67,7 +67,6 @@ var table = BI.createWidget({
 | attr                     | 设置属性        | key: 键   value: 值  |
 | restore                  | 存储          | —                  |
 | populate                 | 增加项         | items: array       |
-| destroy                  | 摧毁表         | —                  |
 
 ------
 

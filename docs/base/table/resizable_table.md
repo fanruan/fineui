@@ -1,6 +1,6 @@
 # bi.resizable_table
 
-### 可调整列宽的grid表格，继承BI.Widget
+### 可调整列宽的表格，继承BI.Widget
 
 {% method %}
 [source](https://jsfiddle.net/fineui/0e7p2ezc/)

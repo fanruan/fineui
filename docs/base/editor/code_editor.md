@@ -43,7 +43,7 @@ BI.createWidget({
 | blur | 文本框失焦|—|
 | setStyle | 设置文本样式 |需要设置的文本标签样式style,例{"color":"#000"} |
 | getStyle | 获取文本样式 |— |
-| refresh | 刷新文本框 | —|
+| refresh | 刷新文本框,codeMirror需要用到 | —|
 
  
 

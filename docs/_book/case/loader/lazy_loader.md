@@ -27,8 +27,7 @@ BI.createWidget({
 | --------------------- | ---------- | ----- |
 | addItems              | 列表最后添加元素   | items |
 | setValue              | 设置值        | data  |
-| getVlaue              | 获得值        | —     |
-| empty                 | 清空         | —     |
+| getValue              | 获得值        | —     |
 | populate              | 替换内容       | items |
 | setNotSelectedValue   | 设置未选中值     | —     |
 | getNotSelectedValue   | 获取未选中植     | —     |
