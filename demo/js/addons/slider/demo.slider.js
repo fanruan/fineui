@@ -2,16 +2,13 @@
  * Created by Urthur on 2017/9/4.
  */
 Demo.Slider = BI.inherit(BI.Widget, {
-    _defaultConfig: function () {
-        return BI.extend(Demo.Slider.superclass._defaultConfig.apply(this, arguments), {
-            baseCls: "demo-slider",
-            min: 10,
-            max: 50
-        })
+    _props: {
+        baseCls: "demo-slider",
+        min: 10,
+        max: 50
     },
-    _init: function () {
-        Demo.Slider.superclass._init.apply(this, arguments);
 
+    render: function () {
         var singleSlider = BI.createWidget({
             type: "bi.single_slider",
             digit: 0,
@@ -92,7 +89,7 @@ Demo.Slider = BI.inherit(BI.Widget, {
         intervalSliderLabel.populate();
 
 
-        BI.createWidget({
+        return {
             type: "bi.vertical",
             element: this,
             items: [{
@@ -122,7 +119,7 @@ Demo.Slider = BI.inherit(BI.Widget, {
                 }]
             }],
             vgap: 20
-        });
+        };
     }
 });
 BI.shortcut("demo.slider", Demo.Slider);
