@@ -44,7 +44,6 @@ searcher.populate([{
 | populate | 刷新列表 | searchResult, matchResult, keyword |
 | setValue | 设置value 值 | value |
 | getValue| 获取value值 | —|
-| empty | 清空组件 | —|
 | hasMatched | 是否有匹配的元素 | —|
 
 

@@ -68,8 +68,6 @@ BI.createWidget({
 | populate | 刷新列表 | items |
 | setValue | 设置value值 | value |
 | getValue | 获取被选中的值 |—|
-| empty| 清空组件|—|
-| destroy| 销毁组件|—|
 
 
 

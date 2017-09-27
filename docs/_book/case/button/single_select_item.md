@@ -31,7 +31,7 @@ BI.createWidget({
 | :------ |:-------------  | :-----| :----|:----
 | height | 高度 | number | — | 25
 | hgap | 效果相当于文本框左右padding值 |number | —| 10 |
-|textAlign	|文本对齐方式	|string	|left,center,right	|"left"
+| textAlign	|文本对齐方式	|string	|left,center,right	|"left"
 
  
 
@@ -42,7 +42,6 @@ BI.createWidget({
 | setSelected| 设置选中值| v |
 | doRedMark | 标红 |—|
 | unRedMark | 取消标红 | — |
-| doClick | 点击事件| —
 
 
 

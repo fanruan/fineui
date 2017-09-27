@@ -42,7 +42,6 @@ BI.createWidget({
 | setSelected| 设置选中值| v |
 | doRedMark | 标红 |—|
 | unRedMark | 取消标红 | — |
-| doClick | 点击事件| —
 
 
 

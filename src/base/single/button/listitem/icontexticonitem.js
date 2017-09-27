@@ -48,6 +48,7 @@ BI.IconTextIconItem = BI.inherit(BI.BasicButton, {
             type: "bi.center_adapt",
             cls: o.iconCls1,
             width: c.commonWidth,
+            height: o.height,
             items: [{
                 el: {
                     type: "bi.icon",

@@ -60,13 +60,12 @@ BI.createWidget({
 ## 对外方法
 | 名称     | 说明                           |  回调参数     
 | :------ |:-------------                  | :-----   
-| bindEvent | 绑定事件| —|
 | beforeClick | 点击事件之前 | —|
 | doClick | 点击事件 | — |
 | handle | 返回该对象 | —|
 | hover | hover事件| —|
 | dishover | 取消hover事件| —|
-|setSelected | 设置选中的文本| b|
+| setSelected | 设置选中的文本| b|
 | isSelected | 是否被选中| —|
 | isOnce | 是否只允许点击一次| —|
 | isForceSelected| 判断是否点击即选中| —|
@@ -74,9 +73,6 @@ BI.createWidget({
 | isDisableSelected| 判断是否让选中|—|
 | setText| 设置文本值|—|
 | getText| 获取文本值|—|
-| empty| 清空组件|—|
-| destroy| 销毁组件|—|
-
 
 
 

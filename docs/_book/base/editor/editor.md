@@ -54,7 +54,6 @@ BI.createWidget({
 | focus | 文本框获取焦点| — |
 | blur | 文本框失焦|—|
 | selectAll | 选中文本框文本| —|
-| onKeyDown |按键事件|key|
 | setValue | 设置文本框值|value|
 | getLastValidValue | 获取文本框最后一次输入的有效值| —|
 | resetLastValidValue| 重置文本框最后一次输入的有效值|value|

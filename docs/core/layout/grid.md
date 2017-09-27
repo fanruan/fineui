@@ -64,7 +64,7 @@ BI.createWidget({
 | :------ |:-------------                  | :-----     | :----|:----
 | columns | 列数    |    number  | — |  null  |
 | rows | 行数  |    number  | — |  null  |
-| items | 子控件数组     |    array | — | [] |
+| items | 子控件数组,二维数组的时候行和列个数就表示了rows和columns     |    array | — | []或[[]] |
 
 
 

@@ -42,6 +42,6 @@ BI.createWidget({
 | isFrontDate | 是否为最小日期 | —                          |
 | isFinalDate | 是否为最大日期 | —                          |
 | setValue    | 设置日期    | object: {year, month, day} |
-| getVlaue    | 获得日期    | —                          |
+| getValue    | 获得日期    | —                          |
 
 ------

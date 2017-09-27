@@ -46720,7 +46720,8 @@ BI.BlankIconIconTextItem = BI.inherit(BI.BasicButton, {
         var o = this.options, c = this._const;
         var blank = BI.createWidget({
             type: "bi.layout",
-            width: o.blankWidth
+            width: o.blankWidth,
+            height: o.height
         })
         this.text = BI.createWidget({
             type: "bi.label",
@@ -46739,13 +46740,15 @@ BI.BlankIconIconTextItem = BI.inherit(BI.BasicButton, {
             type: "bi.icon_button",
             cls: o.iconCls1,
             forceNotSelected: true,
-            width: c.commonWidth
+            width: c.commonWidth,
+            height: o.height
         });
         this.icon2 = BI.createWidget({
             type: "bi.icon_button",
             cls: o.iconCls2,
             forceNotSelected: true,
-            width: c.commonWidth
+            width: c.commonWidth,
+            height: o.height
         });
 
         BI.createWidget(BI.extend({
@@ -46854,6 +46857,7 @@ BI.BlankIconTextIconItem = BI.inherit(BI.BasicButton, {
             type: "bi.center_adapt",
             cls: o.iconCls1,
             width: c.commonWidth,
+            height: o.height,
             items: [{
                 el: {
                     type: "bi.icon",
@@ -46870,6 +46874,7 @@ BI.BlankIconTextIconItem = BI.inherit(BI.BasicButton, {
                     type: "bi.center_adapt",
                     cls: o.iconCls2,
                     width: c.commonWidth,
+                    height: o.height,
                     items: [{
                         el: {
                             type: "bi.icon",
@@ -46991,6 +46996,7 @@ BI.BlankIconTextItem = BI.inherit(BI.BasicButton, {
         this.icon = BI.createWidget({
             type: "bi.center_adapt",
             width: c.commonWidth,
+            height: o.height,
             items: [{
                 el: {
                     type: "bi.icon",
@@ -47099,6 +47105,7 @@ BI.IconTextIconItem = BI.inherit(BI.BasicButton, {
             type: "bi.center_adapt",
             cls: o.iconCls1,
             width: c.commonWidth,
+            height: o.height,
             items: [{
                 el: {
                     type: "bi.icon",
@@ -47229,6 +47236,7 @@ BI.IconTextItem = BI.inherit(BI.BasicButton, {
         this.icon = BI.createWidget({
             type: "bi.center_adapt",
             width: c.commonWidth,
+            height: o.height,
             items: [{
                 el: {
                     type: "bi.icon",
@@ -47335,6 +47343,7 @@ BI.TextIconItem = BI.inherit(BI.BasicButton, {
         this.icon = BI.createWidget({
             type: "bi.center_adapt",
             width: c.commonWidth,
+            height: o.height,
             items: [{
                 el: {
                     type: "bi.icon",
@@ -47526,6 +47535,7 @@ BI.IconTextIconNode = BI.inherit(BI.NodeButton, {
             type: "bi.center_adapt",
             cls: o.iconCls1,
             width: c.commonWidth,
+            height: o.height,
             items: [{
                 el: {
                     type: "bi.icon",
@@ -47536,7 +47546,8 @@ BI.IconTextIconNode = BI.inherit(BI.NodeButton, {
         })
         var blank = BI.createWidget({
             type: "bi.layout",
-            width: c.commonWidth
+            width: c.commonWidth,
+            height: o.height
         })
         BI.createWidget({
             type: "bi.absolute",
@@ -47647,6 +47658,7 @@ BI.IconTextNode = BI.inherit(BI.NodeButton, {
         this.icon = BI.createWidget({
             type: "bi.center_adapt",
             width: c.commonWidth,
+            height: o.height,
             items: [{
                 el: {
                     type: "bi.icon",
@@ -47742,6 +47754,7 @@ BI.TextIconNode = BI.inherit(BI.NodeButton, {
         this.icon = BI.createWidget({
             type: "bi.center_adapt",
             width: c.commonWidth,
+            height: o.height,
             items: [{
                 el: {
                     type: "bi.icon",
@@ -60256,41 +60269,6 @@ BI.GridTable = BI.inherit(BI.Widget, {
         this.contextLayout.attr("items", items);
         this.contextLayout.resize();
 
-        // this.topLeftGrid.attr({
-        //     overscanColumnCount: 0,
-        //     overscanRowCount: 0
-        // });
-        // this.topRightGrid.attr({
-        //     overscanColumnCount: 0,
-        //     overscanRowCount: 0
-        // });
-        // this.bottomLeftGrid.attr({
-        //     overscanColumnCount: 0,
-        //     overscanRowCount: 0
-        // });
-        // this.bottomRightGrid.attr({
-        //     overscanColumnCount: 0,
-        //     overscanRowCount: 0
-        // });
-        //
-        // function overscan(grid, w, h, rSize, cSize) {
-        //     var rCount = h / rSize;
-        //     var cCount = w / cSize;
-        //     if (cCount * (120 / rSize) >= 80 || rCount * (120 / cSize) >= 80) {
-        //         grid.attr("overscanRowCount", 100);
-        //         grid.attr("overscanColumnCount", 100);
-        //     }
-        // }
-        //
-        // if (freezeColLength > 0) {
-        //     overscan(this.topLeftGrid, tlw, tlh, o.headerRowSize, totalLeftColumnSize / freezeColLength);
-        //     overscan(this.bottomLeftGrid, blw, blh, o.rowSize, totalLeftColumnSize / freezeColLength);
-        // }
-        // if (o.columnSize.length - freezeColLength > 0) {
-        //     overscan(this.topRight, trw, trh, o.headerRowSize, totalRightColumnSize / (o.columnSize.length - freezeColLength));
-        //     overscan(this.bottomRightGrid, brw, brh, o.rowSize, totalRightColumnSize / (o.columnSize.length - freezeColLength));
-        // }
-
         this.topLeftGrid._populate(this.header[0]);
         this.topRightGrid._populate(this.header[1]);
         this.bottomLeftGrid._populate(this.items[0]);
@@ -60609,41 +60587,6 @@ BI.QuickGridTable = BI.inherit(BI.GridTable, {
                 }
             });
         });
-
-        // this.topLeftGrid.attr({
-        //     overscanColumnCount: 0,
-        //     overscanRowCount: 0
-        // });
-        // this.topRightGrid.attr({
-        //     overscanColumnCount: 0,
-        //     overscanRowCount: 0
-        // });
-        // this.bottomLeftGrid.attr({
-        //     overscanColumnCount: 0,
-        //     overscanRowCount: 0
-        // });
-        // this.bottomRightGrid.attr({
-        //     overscanColumnCount: 0,
-        //     overscanRowCount: 0
-        // });
-        //
-        // function overscan(grid, w, h, rSize, cSize) {
-        //     var rCount = h / rSize;
-        //     var cCount = w / cSize;
-        //     if (cCount * (120 / rSize) >= 80 || rCount * (120 / cSize) >= 80) {
-        //         grid.attr("overscanRowCount", 100);
-        //         grid.attr("overscanColumnCount", 100);
-        //     }
-        // }
-        //
-        // if (freezeColLength > 0) {
-        //     overscan(this.topLeftGrid, otlw, otlh, o.headerRowSize, totalLeftColumnSize / freezeColLength);
-        //     overscan(this.bottomLeftGrid, oblw, oblh, o.rowSize, totalLeftColumnSize / freezeColLength);
-        // }
-        // if (o.columnSize.length - freezeColLength > 0) {
-        //     overscan(this.topRight, otrw, otrh, o.headerRowSize, totalRightColumnSize / (o.columnSize.length - freezeColLength));
-        //     overscan(this.bottomRightGrid, obrw, obrh, o.rowSize, totalRightColumnSize / (o.columnSize.length - freezeColLength));
-        // }
 
         this.topLeftGrid.populate(leftHeader);
         this.topRightGrid.populate(rightHeader);

@@ -43,6 +43,7 @@ BI.TextIconNode = BI.inherit(BI.NodeButton, {
         this.icon = BI.createWidget({
             type: "bi.center_adapt",
             width: c.commonWidth,
+            height: o.height,
             items: [{
                 el: {
                     type: "bi.icon",

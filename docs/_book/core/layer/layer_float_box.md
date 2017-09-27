@@ -41,7 +41,6 @@ BI.createWidget({
 | 名称     | 说明                           |  回调参数     
 | :------ |:-------------                  | :-----   
 | populate | 刷新列表 | sectionProvider |
-| destroyed| 销毁组件|—|
 | show | 显示 | —|
 | hide |  隐藏 | —|
 | open | 打开弹出层 | —|

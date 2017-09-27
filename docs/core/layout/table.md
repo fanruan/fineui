@@ -1,6 +1,6 @@
 # bi.table
 
-### table作为一个列表集合存在，继承BI.Widget
+### htape与vertical混合形成的布局，用于二维表结构的布局
 {% method %}
 [source](https://jsfiddle.net/fineui/8t2en619/)
 
@@ -33,5 +33,5 @@ BI.createWidget({
 | 方法名      | 说明     | 用法               |
 | :------- | ------ | ---------------- |
 | addItem  | 增加内容   | addItem(arr)     |
-| populate | 更换新的内容 | poplulate(items) |
+| populate | 刷新 | populate(items) |
 

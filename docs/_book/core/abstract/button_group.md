@@ -33,7 +33,7 @@ BI.createWidget({
 ###### chooseType可选值为 CHOOSE_TYPE_SINGLE,CHOOSE_TYPE_MULTI,CHOOSE_TYPE_ALL,CHOOSE_TYPE_NONE,CHOOSE_TYPE_DEFAULT
 | 参数    | 说明           | 类型  | 可选值 | 默认值
 | :------ |:-------------  | :-----| :----|:----
-| behaviors | 自定义列表中item项的行为，如高亮，标红等 |object | — |{ }|
+| behaviors | 行为,如高亮，标红等 |object | — |{ }|
 | items | 子组件数组 | array | —  | [ ] |
 | chooseType | 选择类型 | const | 见上| BI.ButtonGroup.CHOOSE_TYPE_SINGLE |
 | layouts | 布局 | array | —  | [{type: "bi.center",hgap: 0,vgap: 0}] |
@@ -41,9 +41,9 @@ BI.createWidget({
 ## 对外方法
 | 名称     | 说明                           |  回调参数     
 | :------ |:-------------                  | :-----   
-| doBehavior |  自定义列表中item项的行为，如高亮，标红等 | — |
-| prependItems | 内部前插入 | items |
-| addItems | 内部后插入 | items |
+| doBehavior |  执行行为，一般不会手动调用 | — |
+| prependItems | prepend元素 | items |
+| addItems | append元素 | items |
 | removeItemAt | 移除指定索引处的item | indexs |
 | removeItems | 移除制定元素 | values |
 | populate | 刷新列表 | items |
@@ -59,8 +59,6 @@ BI.createWidget({
 | getIndexByValue | 根据value值获取value在数组中的索引 | value|
 | getNodeById | 根据id获取节点 | id |
 | getNodeByValue | 根据value值获取节点 | value |
-| empty| 清空组件|—|
-| destroy| 销毁组件|—|
 
 
 ---

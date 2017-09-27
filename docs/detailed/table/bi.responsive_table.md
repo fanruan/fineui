@@ -80,7 +80,6 @@ BI.createWidget({
 | resizeHeader                 | 调整表头             | —             |
 | attr                         | 设置属性             | key：键，value：值 |
 | populate                     | 替换为新内容           | rows          |
-| destroy                      | 摧毁表              | —             |
 
 ------
 

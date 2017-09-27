@@ -67,7 +67,6 @@ BI.createWidget({
 | getView | 获取弹出层 | —|
 | getPopupPosition | 获取弹出层的位置 | —|
 | toggle | 开启或者隐藏弹出层 | —|
-| destroy | 销毁组件 | —|
 
 ## 事件
 | 名称     | 说明                |

@@ -1,6 +1,6 @@
 # bi.expander
 
-## 某个可以展开的节点,基类[BI.Widget](/core/widget.md)
+## 可以实现展开收起的面板,基类[BI.Widget](/core/widget.md)
 
 {% method %}
 [source](https://jsfiddle.net/fineui/2xavqk4k/)
@@ -68,7 +68,6 @@ BI.createWidget({
 | getNodeById | 根据id获取节点 | id |
 | getNodeByValue | 根据value值获取节点 | value |
 | isExpanded |  节点是否展开 | — |
-| destroy | 销毁组件| — |
 
 ## 事件
 | 名称     | 说明                |

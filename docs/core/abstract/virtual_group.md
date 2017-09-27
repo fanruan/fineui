@@ -1,6 +1,6 @@
 # bi.virtual_group
 
-## 优化过的buttonGroup,删除看不见的元素 基类[BI.Widget](/core/widget.md)
+## 优化过的buttonGroup,刷新不会删掉所有元素 基类[BI.Widget](/core/widget.md)
 
 {% method %}
 [source](https://jsfiddle.net/fineui/9pd0dct0/)

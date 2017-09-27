@@ -1,6 +1,6 @@
-# bi.switcher
+# bi.tab
 
-## 切换显示或隐藏面板,[BI.Widget](/core/widget.md)
+## tab面板,[BI.Widget](/core/widget.md)
 
 {% method %}
 [source](https://jsfiddle.net/fineui/pdo5s8pq/)
@@ -63,9 +63,7 @@ BI.createWidget({
 ## 对外方法
 | 名称     | 说明                           |  回调参数     
 | :------ |:-------------                  | :-----   
-| render | 渲染组件  | — |
-| mounted | 挂载组件 | —|
-| removeTab | 移除tab面板页 | cardname |
+| removeTab | 移除tab面板页 | tabName |
 | getTab | 获取tab面板页 | v |
 | setSelect | 设置选中的index | v |
 | getSelect | 获取选中的index| —|
@@ -73,9 +71,6 @@ BI.createWidget({
 | populate | 刷新列表 | items |
 | setValue | 设置value值 | value |
 | getValue | 获取被选中的值 |—|
-| empty| 清空组件|—|
-| destroy| 销毁组件|—|
-
 
 
 

@@ -33,7 +33,8 @@ BI.BlankIconIconTextItem = BI.inherit(BI.BasicButton, {
         var o = this.options, c = this._const;
         var blank = BI.createWidget({
             type: "bi.layout",
-            width: o.blankWidth
+            width: o.blankWidth,
+            height: o.height
         })
         this.text = BI.createWidget({
             type: "bi.label",
@@ -52,13 +53,15 @@ BI.BlankIconIconTextItem = BI.inherit(BI.BasicButton, {
             type: "bi.icon_button",
             cls: o.iconCls1,
             forceNotSelected: true,
-            width: c.commonWidth
+            width: c.commonWidth,
+            height: o.height
         });
         this.icon2 = BI.createWidget({
             type: "bi.icon_button",
             cls: o.iconCls2,
             forceNotSelected: true,
-            width: c.commonWidth
+            width: c.commonWidth,
+            height: o.height
         });
 
         BI.createWidget(BI.extend({

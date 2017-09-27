@@ -22,7 +22,7 @@ BI.createWidget({
 | 方法名      | 说明   | 参数    |
 | -------- | ---- | ----- |
 | setValue | 设置值  | value |
-| getVlaue | 获得值  | —     |
+| getValue | 获得值  | —     |
 
 ------
 

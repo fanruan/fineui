@@ -62,9 +62,7 @@ BI.createWidget({
 | populate | 刷新列表 | result, searchResult, keyword |
 | setValue | 设置value值 | value |
 | getValue | 获取被选中的值 |—|
-| empty| 清空组件|—|
-| destroy| 销毁组件|—|
-| adapter | 搜索列表位置 | — |
+| adapter | 适配器 | — |
 | doSearch | 开始搜索 | — | 
 | stopSearch | 停止搜索  | —|
 | isSearching | 是否正在搜索 | —|
