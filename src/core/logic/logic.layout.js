@@ -79,7 +79,7 @@ BI.HorizontalLayoutLogic = BI.inherit(BI.Logic, {
     createLogic: function () {
         var layout, o = this.options;
         if (o.dynamic) {
-            layout = "bi.horizontal";
+            layout = "bi.vertical_adapt";
         } else {
             layout = "bi.htape";
         }
