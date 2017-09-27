@@ -552,6 +552,7 @@ BI.IntervalSliderLabel = BI.inherit(BI.Widget, {
                 var v = self._getValueByPercent(significantPercent);
                 v = self._assertValue(v);
                 v = o.digit === false ? v : v.toFixed(o.digit);
+                self.labelOne.setValue(v);
                 self.labelOne.setText(v + o.unit);
                 self.valueOne = v;
                 self._setBlueTrack();
@@ -578,6 +579,7 @@ BI.IntervalSliderLabel = BI.inherit(BI.Widget, {
                 var v = self._getValueByPercent(significantPercent);
                 v = self._assertValue(v);
                 v = o.digit === false ? v : v.toFixed(o.digit);
+                self.labelTwo.setValue(v);
                 self.labelTwo.setText(v + o.unit);
                 self.valueTwo = v;
                 self._setBlueTrack();
@@ -901,16 +903,21 @@ BI.IntervalSliderLabel = BI.inherit(BI.Widget, {
     },
 
     populate: function () {
+        var o = this.options;
         if (!isNaN(this.min) && !isNaN(this.max)) {
             this.enable = true;
             this._setVisible(true);
             if ((BI.isNumeric(this.valueOne) || BI.isNotEmptyString(this.valueOne)) && (BI.isNumeric(this.valueTwo) || BI.isNotEmptyString(this.valueTwo))) {
                 this.labelOne.setValue(this.valueOne);
                 this.labelTwo.setValue(this.valueTwo);
+                this.labelOne.setText(this.valueOne + o.unit);
+                this.labelTwo.setText(this.valueTwo + o.unit);
                 this._setAllPosition(this._getPercentByValue(this.valueOne), this._getPercentByValue(this.valueTwo));
             } else {
                 this.labelOne.setValue(this.min);
                 this.labelTwo.setValue(this.max);
+                this.labelOne.setText(this.min + o.unit);
+                this.labelTwo.setText(this.max + o.unit);
                 this._setAllPosition(0, 100)
             }
         }
