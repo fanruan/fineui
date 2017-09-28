@@ -82604,6 +82604,8 @@ BI.TextEditor = BI.inherit(BI.Widget, {
             tgap: o.tgap,
             bgap: o.bgap,
             value: o.value,
+            title: o.title,
+            tipType: o.tipType,
             validationChecker: o.validationChecker,
             quitChecker: o.quitChecker,
             allowBlank: o.allowBlank,
@@ -85199,6 +85201,7 @@ BI.MultiDateSegment = BI.inherit(BI.Single, {
             title: function () {
                 return self.textEditor.getValue();
             },
+            tipType: "success",
             cls: 'bi-multidate-editor',
             width: this.constants.textWidth,
             height: this.constants.itemHeight
