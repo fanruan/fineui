@@ -42,6 +42,8 @@ BI.TextEditor = BI.inherit(BI.Widget, {
             tgap: o.tgap,
             bgap: o.bgap,
             value: o.value,
+            title: o.title,
+            tipType: o.tipType,
             validationChecker: o.validationChecker,
             quitChecker: o.quitChecker,
             allowBlank: o.allowBlank,
