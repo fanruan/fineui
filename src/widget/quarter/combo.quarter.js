@@ -24,9 +24,6 @@ BI.QuarterCombo = BI.inherit(BI.Widget, {
         this.trigger.on(BI.QuarterTrigger.EVENT_FOCUS, function () {
             self.storeValue = this.getKey();
         });
-        this.trigger.on(BI.QuarterTrigger.EVENT_CHANGE, function () {
-            self.combo.isViewVisible() && self.combo.hideView();
-        });
         this.trigger.on(BI.QuarterTrigger.EVENT_START, function () {
             self.combo.isViewVisible() && self.combo.hideView();
         });
