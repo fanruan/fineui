@@ -272,6 +272,7 @@ BI.SingleSlider = BI.inherit(BI.Widget, {
         this.min = 0;
         this.max = 0;
         this._setBlueTrack(0);
+        
     },
 
     populate: function () {
