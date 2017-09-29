@@ -11527,31 +11527,192 @@ BI.Layout = BI.inherit(BI.Widget, {
         })
     },
 
+    patchItem: function (oldVnode, vnode, index) {
+        if (!this._compare(oldVnode, vnode)) {
+            return this.updateItemAt(index, vnode);
+        }
+    },
+
+    updateChildren: function (oldCh, newCh) {
+        var self = this;
+        var oldStartIdx = 0, newStartIdx = 0;
+        var oldEndIdx = oldCh.length - 1;
+        var oldStartVnode = oldCh[0];
+        var oldEndVnode = oldCh[oldEndIdx];
+        var newEndIdx = newCh.length - 1;
+        var newStartVnode = newCh[0];
+        var newEndVnode = newCh[newEndIdx];
+        var oldKeyToIdx;
+        var idxInOld;
+        var elmToMove;
+        var before;
+        var updated;
+        var children = {};
+        BI.each(oldCh, function (i, child) {
+            child = self._getOptions(child);
+            var key = child.key == null ? i : child.key;
+            if (BI.isKey(key)) {
+                children[key] = self._children[self._getChildName(i)];
+            }
+        });
+
+        while (oldStartIdx <= oldEndIdx && newStartIdx <= newEndIdx) {
+            if (BI.isNull(oldStartVnode)) {
+                oldStartVnode = oldCh[++oldStartIdx];
+            } else if (BI.isNull(oldEndVnode)) {
+                oldEndVnode = oldCh[--oldEndIdx];
+            } else if (sameVnode(oldStartVnode, newStartVnode, oldStartIdx, newStartIdx)) {
+                updated = this.patchItem(oldStartVnode, newStartVnode, oldStartIdx) || updated;
+                oldStartVnode = oldCh[++oldStartIdx];
+                newStartVnode = newCh[++newStartIdx];
+            } else if (sameVnode(oldEndVnode, newEndVnode, oldEndIdx, newEndIdx)) {
+                updated = this.patchItem(oldEndVnode, newEndVnode, oldEndIdx) || updated;
+                oldEndVnode = oldCh[--oldEndIdx];
+                newEndVnode = newCh[--newEndIdx];
+            } else if (sameVnode(oldStartVnode, newEndVnode)) {
+                updated = this.patchItem(oldStartVnode, newEndVnode, oldStartIdx) || updated;
+                insertBefore(oldStartVnode, oldEndVnode, true);
+                oldStartVnode = oldCh[++oldStartIdx];
+                newEndVnode = newCh[--newEndIdx];
+            } else if (sameVnode(oldEndVnode, newStartVnode)) {
+                updated = this.patchItem(oldEndVnode, newStartVnode, oldEndIdx) || updated;
+                insertBefore(oldEndVnode, oldStartVnode);
+                oldEndVnode = oldCh[--oldEndIdx];
+                newStartVnode = newCh[++newStartIdx];
+            } else {
+                if (oldKeyToIdx === undefined) {
+                    oldKeyToIdx = createKeyToOldIdx(oldCh, oldStartIdx, oldEndIdx);
+                }
+                idxInOld = oldKeyToIdx[newStartVnode.key];
+                if (BI.isNull(idxInOld)) {
+                    var node = addNode(newStartVnode);
+                    insertBefore(node, oldStartVnode);
+                    newStartVnode = newCh[++newStartIdx];
+                } else {
+                    elmToMove = oldCh[idxInOld];
+                    var node = addNode(newStartVnode);
+                    insertBefore(node, oldStartVnode);
+                    // if (elmToMove.sel !== newStartVnode.sel) {
+                    //     api.insertBefore(parentElm, createElm(newStartVnode), oldStartVnode.elm);
+                    // } else {
+                    //     updated = this.patchItem(elmToMove, newStartVnode, idxInOld) || updated;
+                    //     oldCh[idxInOld] = undefined;
+                    //     api.insertBefore(parentElm, (elmToMove.elm), oldStartVnode.elm);
+                    // }
+                    newStartVnode = newCh[++newStartIdx];
+                }
+            }
+        }
+        if (oldStartIdx > oldEndIdx) {
+            before = BI.isNull(newCh[newEndIdx + 1]) ? null : newCh[newEndIdx + 1].elm;
+            addVnodes(before, newCh, newStartIdx, newEndIdx);
+        } else if (newStartIdx > newEndIdx) {
+            removeVnodes(oldCh, oldStartIdx, oldEndIdx);
+        }
+
+        this._children = {};
+        BI.each(newCh, function (i, child) {
+            var node = self._getOptions(child);
+            var key = node.key == null ? i : node.key;
+            self._children[self._getChildName(i)] = children[key];
+        });
+
+        function sameVnode(vnode1, vnode2, oldIndex, newIndex) {
+            vnode1 = self._getOptions(vnode1);
+            vnode2 = self._getOptions(vnode2);
+            if (BI.isKey(vnode1.key)) {
+                return vnode1.key === vnode2.key;
+            }
+            if (oldIndex >= 0) {
+                return oldIndex === newIndex
+            }
+        }
+
+        function addNode(vnode, index) {
+            var opt = self._getOptions(vnode);
+            var key = opt.key == null ? i : opt.key;
+            return children[key] = self._addElement(key, vnode);
+        }
+
+        function addVnodes(before, vnodes, startIdx, endIdx) {
+            for (; startIdx <= endIdx; ++startIdx) {
+                var node = addNode(vnodes[startIdx], startIdx);
+                insertBefore(node, before);
+            }
+        }
+
+        function removeVnodes(vnodes, startIdx, endIdx) {
+            for (; startIdx <= endIdx; ++startIdx) {
+                var node = self._getOptions(vnodes[startIdx]);
+                var key = node.key == null ? startIdx : node.key;
+                children[key]._destroy();
+            }
+        }
+
+        function insertBefore(insert, before, isNext) {
+            insert = self._getOptions(insert);
+            before = before && self._getOptions(before);
+            if (BI.isKey(insert.key)) {
+                if (before && children[before.key]) {
+                    var next;
+                    if (isNext) {
+                        next = children[before.key].element.next();
+                    } else {
+                        next = children[before.key].element;
+                    }
+                    if (next.length > 0) {
+                        next.before(children[insert.key].element);
+                    } else {
+                        self._getWrapper().append(children[insert.key].element);
+                    }
+                } else {
+                    self._getWrapper().append(children[insert.key].element);
+                }
+            } else {
+                throw "key is not defined";
+            }
+        }
+
+        function createKeyToOldIdx(children, beginIdx, endIdx) {
+            var i, map = {}, key;
+            for (i = beginIdx; i <= endIdx; ++i) {
+                key = children[i].key;
+                if (key !== undefined) map[key] = i;
+            }
+            return map;
+        }
+
+        return updated;
+    },
+
     update: function (opt) {
         var o = this.options;
         var items = opt.items || [];
-        var updated, i, len;
-        for (i = 0, len = Math.min(o.items.length, items.length); i < len; i++) {
-            if (!this._compare(o.items[i], items[i])) {
-                updated = this.updateItemAt(i, items[i]) || updated;
-            }
-        }
-        if (o.items.length > items.length) {
-            var deleted = [];
-            for (i = items.length; i < o.items.length; i++) {
-                deleted.push(this._children[this._getChildName(i)]);
-                delete this._children[this._getChildName(i)];
-            }
-            o.items.splice(items.length);
-            BI.each(deleted, function (i, w) {
-                w._destroy();
-            })
-        } else if (items.length > o.items.length) {
-            for (i = o.items.length; i < items.length; i++) {
-                this.addItemAt(i, items[i]);
-            }
-        }
+        var updated = this.updateChildren(o.items, items);
+        this.options.items = items;
         return updated;
+        // var updated, i, len;
+        // for (i = 0, len = Math.min(o.items.length, items.length); i < len; i++) {
+        //     if (!this._compare(o.items[i], items[i])) {
+        //         updated = this.updateItemAt(i, items[i]) || updated;
+        //     }
+        // }
+        // if (o.items.length > items.length) {
+        //     var deleted = [];
+        //     for (i = items.length; i < o.items.length; i++) {
+        //         deleted.push(this._children[this._getChildName(i)]);
+        //         delete this._children[this._getChildName(i)];
+        //     }
+        //     o.items.splice(items.length);
+        //     BI.each(deleted, function (i, w) {
+        //         w._destroy();
+        //     })
+        // } else if (items.length > o.items.length) {
+        //     for (i = o.items.length; i < items.length; i++) {
+        //         this.addItemAt(i, items[i]);
+        //     }
+        // }
+        // return updated;
     },
 
     stroke: function (items) {
