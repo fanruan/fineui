@@ -1862,7 +1862,7 @@ BI.SingleSliderNormal = BI.inherit(BI.Widget, {
         });
         this.blueTrack = BI.createWidget({
             type: "bi.layout",
-            cls: "blue-track",
+            cls: "blue-track bi-high-light-background",
             height: 6
         });
         if (this.options.color) {
