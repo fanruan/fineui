@@ -14740,7 +14740,7 @@ BI.Widget = BI.inherit(BI.OB, {
     __d: function () {
         this.beforeDestroy && this.beforeDestroy();
         BI.each(this._children, function (i, widget) {
-            widget._unMount && widget._unMount();
+            widget && widget._unMount && widget._unMount();
         });
         this._children = {};
         this._parent = null;
@@ -14763,7 +14763,7 @@ BI.Widget = BI.inherit(BI.OB, {
 
     empty: function () {
         BI.each(this._children, function (i, widget) {
-            widget._unMount && widget._unMount();
+            widget && widget._unMount && widget._unMount();
         });
         this._children = {};
         this.element.empty();
