@@ -5932,9 +5932,9 @@ BI.MonthTrigger = BI.inherit(BI.Trigger, {
             this.editor.setTitle(v + 1);
             return;
         }
-        this.editor.setState();
-        this.editor.setValue();
-        this.editor.setTitle();
+        this.editor.setState("");
+        this.editor.setValue("");
+        this.editor.setTitle("");
     },
     getKey: function () {
         return this.editor.getValue() | 0;
@@ -13385,6 +13385,7 @@ BI.QuarterTrigger = BI.inherit(BI.Trigger, {
     },
 
     setValue: function (v) {
+        v = v || "";
         this.editor.setState(v);
         this.editor.setValue(v);
         this.editor.setTitle(v);
@@ -16022,7 +16023,7 @@ BI.YearCombo = BI.inherit(BI.Widget, {
     },
 
     setValue: function (v) {
-        this.combo.setValue(v);
+        this.combo.setValue(v || "");
     },
 
     getValue: function () {

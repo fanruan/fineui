@@ -89,6 +89,7 @@ BI.QuarterTrigger = BI.inherit(BI.Trigger, {
     },
 
     setValue: function (v) {
+        v = v || "";
         this.editor.setState(v);
         this.editor.setValue(v);
         this.editor.setTitle(v);
