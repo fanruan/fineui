@@ -4275,6 +4275,8 @@ BI.TextEditor = BI.inherit(BI.Widget, {
             tgap: o.tgap,
             bgap: o.bgap,
             value: o.value,
+            title: o.title,
+            tipType: o.tipType,
             validationChecker: o.validationChecker,
             quitChecker: o.quitChecker,
             allowBlank: o.allowBlank,
@@ -5930,9 +5932,9 @@ BI.MonthTrigger = BI.inherit(BI.Trigger, {
             this.editor.setTitle(v + 1);
             return;
         }
-        this.editor.setState();
-        this.editor.setValue();
-        this.editor.setTitle();
+        this.editor.setState("");
+        this.editor.setValue("");
+        this.editor.setTitle("");
     },
     getKey: function () {
         return this.editor.getValue() | 0;
@@ -6870,6 +6872,7 @@ BI.MultiDateSegment = BI.inherit(BI.Single, {
             title: function () {
                 return self.textEditor.getValue();
             },
+            tipType: "success",
             cls: 'bi-multidate-editor',
             width: this.constants.textWidth,
             height: this.constants.itemHeight
@@ -13382,6 +13385,7 @@ BI.QuarterTrigger = BI.inherit(BI.Trigger, {
     },
 
     setValue: function (v) {
+        v = v || "";
         this.editor.setState(v);
         this.editor.setValue(v);
         this.editor.setTitle(v);
@@ -16019,7 +16023,7 @@ BI.YearCombo = BI.inherit(BI.Widget, {
     },
 
     setValue: function (v) {
-        this.combo.setValue(v);
+        this.combo.setValue(v || "");
     },
 
     getValue: function () {

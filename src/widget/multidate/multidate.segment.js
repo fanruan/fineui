@@ -41,6 +41,7 @@ BI.MultiDateSegment = BI.inherit(BI.Single, {
             title: function () {
                 return self.textEditor.getValue();
             },
+            tipType: "success",
             cls: 'bi-multidate-editor',
             width: this.constants.textWidth,
             height: this.constants.itemHeight

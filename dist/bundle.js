@@ -19883,9 +19883,9 @@ BI.Layout = BI.inherit(BI.Widget, {
         })
     },
 
-    update: function (item) {
+    update: function (opt) {
         var o = this.options;
-        var items = item.items || [];
+        var items = opt.items || [];
         var updated, i, len;
         for (i = 0, len = Math.min(o.items.length, items.length); i < len; i++) {
             if (!this._compare(o.items[i], items[i])) {
@@ -27440,7 +27440,7 @@ BI.HorizontalLayout = BI.inherit(BI.Layout, {
     props: function () {
         return BI.extend(BI.HorizontalLayout.superclass.props.apply(this, arguments), {
             baseCls: "bi-horizontal-layout",
-            verticalAlign: "middle",
+            verticalAlign: BI.VerticalAlign.Top,
             columnSize: [],
             scrollx: true,
             hgap: 0,
@@ -32773,10 +32773,6 @@ BI.shortcut("bi.combo_group", BI.ComboGroup);BI.VirtualGroup = BI.inherit(BI.Wid
 
     getValue: function () {
         return this.layouts.getValue();
-    },
-
-    empty: function () {
-        this.layouts.empty();
     },
 
     populate: function (items) {
@@ -82604,6 +82600,8 @@ BI.TextEditor = BI.inherit(BI.Widget, {
             tgap: o.tgap,
             bgap: o.bgap,
             value: o.value,
+            title: o.title,
+            tipType: o.tipType,
             validationChecker: o.validationChecker,
             quitChecker: o.quitChecker,
             allowBlank: o.allowBlank,
@@ -84259,9 +84257,9 @@ BI.MonthTrigger = BI.inherit(BI.Trigger, {
             this.editor.setTitle(v + 1);
             return;
         }
-        this.editor.setState();
-        this.editor.setValue();
-        this.editor.setTitle();
+        this.editor.setState("");
+        this.editor.setValue("");
+        this.editor.setTitle("");
     },
     getKey: function () {
         return this.editor.getValue() | 0;
@@ -85199,6 +85197,7 @@ BI.MultiDateSegment = BI.inherit(BI.Single, {
             title: function () {
                 return self.textEditor.getValue();
             },
+            tipType: "success",
             cls: 'bi-multidate-editor',
             width: this.constants.textWidth,
             height: this.constants.itemHeight
@@ -91711,6 +91710,7 @@ BI.QuarterTrigger = BI.inherit(BI.Trigger, {
     },
 
     setValue: function (v) {
+        v = v || "";
         this.editor.setState(v);
         this.editor.setValue(v);
         this.editor.setTitle(v);
@@ -94348,7 +94348,7 @@ BI.YearCombo = BI.inherit(BI.Widget, {
     },
 
     setValue: function (v) {
-        this.combo.setValue(v);
+        this.combo.setValue(v || "");
     },
 
     getValue: function () {

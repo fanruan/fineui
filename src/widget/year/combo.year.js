@@ -91,7 +91,7 @@ BI.YearCombo = BI.inherit(BI.Widget, {
     },
 
     setValue: function (v) {
-        this.combo.setValue(v);
+        this.combo.setValue(v || "");
     },
 
     getValue: function () {

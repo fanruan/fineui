@@ -11527,9 +11527,9 @@ BI.Layout = BI.inherit(BI.Widget, {
         })
     },
 
-    update: function (item) {
+    update: function (opt) {
         var o = this.options;
-        var items = item.items || [];
+        var items = opt.items || [];
         var updated, i, len;
         for (i = 0, len = Math.min(o.items.length, items.length); i < len; i++) {
             if (!this._compare(o.items[i], items[i])) {
@@ -13881,7 +13881,7 @@ BI.HorizontalLayout = BI.inherit(BI.Layout, {
     props: function () {
         return BI.extend(BI.HorizontalLayout.superclass.props.apply(this, arguments), {
             baseCls: "bi-horizontal-layout",
-            verticalAlign: "middle",
+            verticalAlign: BI.VerticalAlign.Top,
             columnSize: [],
             scrollx: true,
             hgap: 0,
