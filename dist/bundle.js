@@ -18934,7 +18934,7 @@ $.extend(BI, {
             }
             child.setParent(this);
             if (cur >= 0) {
-                this.getChild(cur).setRight(child);
+                this.getChild(cur) && this.getChild(cur).setRight(child);
                 child.setLeft(this.getChild(cur));
             }
             if (BI.isUndefined(index)) {
@@ -19968,7 +19968,7 @@ BI.Layout = BI.inherit(BI.Widget, {
 
         function addNode(vnode, index) {
             var opt = self._getOptions(vnode);
-            var key = opt.key == null ? i : opt.key;
+            var key = opt.key == null ? index : opt.key;
             return children[key] = self._addElement(key, vnode);
         }
 
@@ -32902,7 +32902,7 @@ BI.shortcut("bi.combo_group", BI.ComboGroup);BI.VirtualGroup = BI.inherit(BI.Wid
     },
 
     setValue: function (v) {
-        this.layouts.setValue(v);
+        // this.layouts.setValue(v);
     },
 
     getValue: function () {

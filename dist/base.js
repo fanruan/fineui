@@ -3897,7 +3897,7 @@ BI.shortcut("bi.combo_group", BI.ComboGroup);BI.VirtualGroup = BI.inherit(BI.Wid
     },
 
     setValue: function (v) {
-        this.layouts.setValue(v);
+        // this.layouts.setValue(v);
     },
 
     getValue: function () {

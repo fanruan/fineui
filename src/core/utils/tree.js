@@ -365,7 +365,7 @@
             }
             child.setParent(this);
             if (cur >= 0) {
-                this.getChild(cur).setRight(child);
+                this.getChild(cur) && this.getChild(cur).setRight(child);
                 child.setLeft(this.getChild(cur));
             }
             if (BI.isUndefined(index)) {
