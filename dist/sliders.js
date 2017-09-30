@@ -1485,7 +1485,7 @@ BI.SingleSliderLabel = BI.inherit(BI.Widget, {
     _defaultConfig: function () {
         return BI.extend(BI.SingleSliderLabel.superclass._defaultConfig.apply(this, arguments), {
             baseCls: "bi-single-slider-label bi-slider-track",
-            digit: "",
+            digit: false,
             unit: ""
         });
     },
@@ -1493,7 +1493,6 @@ BI.SingleSliderLabel = BI.inherit(BI.Widget, {
         BI.SingleSliderLabel.superclass._init.apply(this, arguments);
 
         var self = this, o = this.options;
-        var digitExist = (o.digit === "") ? false : true;
         var c = this._constant;
         this.enable = false;
         this.value = "";
@@ -1523,7 +1522,7 @@ BI.SingleSliderLabel = BI.inherit(BI.Widget, {
                 self._setBlueTrack(significantPercent);
                 self._setLabelPosition(significantPercent);
                 var v = self._getValueByPercent(significantPercent);
-                v = digitExist ? v.toFixed(o.digit) : v;
+                v = o.digit === false ? v : v.toFixed(o.digit);
                 self.label.setText(v + o.unit);
                 self.value = v;
                 self.fireEvent(BI.SingleSliderLabel.EVENT_CHANGE);
@@ -1561,7 +1560,7 @@ BI.SingleSliderLabel = BI.inherit(BI.Widget, {
                 var significantPercent = BI.parseFloat(percent.toFixed(1));
                 self._setAllPosition(significantPercent);
                 var v = self._getValueByPercent(significantPercent);
-                v = digitExist ? v.toFixed(o.digit) : v;
+                v = o.digit === false ? v : v.toFixed(o.digit);
                 self.label.setText(v + o.unit);
                 self.value = v;
                 self.fireEvent(BI.SingleSliderLabel.EVENT_CHANGE);
@@ -1692,17 +1691,16 @@ BI.SingleSliderLabel = BI.inherit(BI.Widget, {
 
     setValue: function (v) {
         var o = this.options;
-        var digitExist = (o.digit === "") ? false : true;
-        var value = BI.parseFloat(v);
-        value = digitExist ? value.toFixed(o.digit) : value;
-        if ((!isNaN(value))) {
-            if (this._checkValidation(value)) {
-                this.value = value;
+        v = BI.parseFloat(v);
+        v = o.digit === false ? v : v.toFixed(o.digit);
+        if ((!isNaN(v))) {
+            if (this._checkValidation(v)) {
+                this.value = v;
             }
-            if (value > this.max) {
+            if (v > this.max) {
                 this.value = this.max;
             }
-            if (value < this.min) {
+            if (v < this.min) {
                 this.value = this.min;
             }
         }
@@ -1862,7 +1860,7 @@ BI.SingleSliderNormal = BI.inherit(BI.Widget, {
         });
         this.blueTrack = BI.createWidget({
             type: "bi.layout",
-            cls: "blue-track",
+            cls: "blue-track bi-high-light-background",
             height: 6
         });
         if (this.options.color) {

@@ -7,6 +7,7 @@ Demo.Func = BI.inherit(BI.Widget, {
         var items = BI.map(BI.range(1000), function (i) {
             return {
                 type: "demo.virtual_group_item",
+                value: i,
                 key: i + 1
             }
         });
@@ -24,7 +25,7 @@ Demo.Func = BI.inherit(BI.Widget, {
                 type: "bi.label",
                 cls: "layout-bg5",
                 height: 50,
-                text: "共1000个元素，演示button_group和virtual_group每次删除第一个元素"
+                text: "共1000个元素,演示button_group和virtual_group每次删除第一个元素,打开控制台看输出"
             }, {
                 type: "bi.button_group",
                 width: 500,
