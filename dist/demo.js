@@ -6872,19 +6872,29 @@ BI.shortcut("demo.list_view", Demo.Func);Demo.Func = BI.inherit(BI.Widget, {
     },
 
     _createItems: function () {
-        var items = BI.makeArray(1000, {
-            type: "demo.virtual_group_item"
+        var items = BI.map(BI.range(1000), function (i) {
+            return {
+                type: "demo.virtual_group_item",
+                value: i,
+                key: i + 1
+            }
         });
-        items[0].value = BI.UUID();
         return items;
     },
 
     render: function () {
         var self = this;
+        var buttonGroupItems = self._createItems();
+        var virtualGroupItems = self._createItems();
         return {
             type: "bi.vertical",
             vgap: 20,
             items: [{
+                type: "bi.label",
+                cls: "layout-bg5",
+                height: 50,
+                text: "共1000个元素,演示button_group和virtual_group每次删除第一个元素,打开控制台看输出"
+            }, {
                 type: "bi.button_group",
                 width: 500,
                 height: 300,
@@ -6894,17 +6904,14 @@ BI.shortcut("demo.list_view", Demo.Func);Demo.Func = BI.inherit(BI.Widget, {
                 chooseType: BI.ButtonGroup.CHOOSE_TYPE_MULTI,
                 layouts: [{
                     type: "bi.vertical"
-                }, {
-                    type: "bi.center_adapt",
                 }],
                 items: this._createItems()
             }, {
                 type: "bi.button",
                 text: "演示button_group的刷新",
                 handler: function () {
-                    var items = self._createItems();
-                    items.pop();
-                    self.buttonGroup.populate(items);
+                    buttonGroupItems.shift();
+                    self.buttonGroup.populate(BI.deepClone(buttonGroupItems));
                 }
             }, {
                 type: "bi.virtual_group",
@@ -6916,17 +6923,14 @@ BI.shortcut("demo.list_view", Demo.Func);Demo.Func = BI.inherit(BI.Widget, {
                 chooseType: BI.ButtonGroup.CHOOSE_TYPE_MULTI,
                 layouts: [{
                     type: "bi.vertical"
-                }, {
-                    type: "bi.center_adapt",
                 }],
                 items: this._createItems()
             }, {
                 type: "bi.button",
                 text: "演示virtual_group的刷新",
                 handler: function () {
-                    var items = self._createItems();
-                    items.pop();
-                    self.virtualGroup.populate(items);
+                    virtualGroupItems.shift();
+                    self.virtualGroup.populate(BI.deepClone(virtualGroupItems));
                 }
             }]
 
@@ -6942,14 +6946,14 @@ Demo.Item = BI.inherit(BI.Widget, {
     },
 
     render: function () {
-        var self = this;
+        var self = this, o = this.options;
         return {
             type: "bi.label",
             ref: function () {
                 self.label = this;
             },
             height: this.options.height,
-            text: "这是一个测试项" + BI.UUID()
+            text: "key:" + o.key + ",随机数" + BI.UUID()
         }
     },
 
