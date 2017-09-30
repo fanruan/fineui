@@ -16329,9 +16329,11 @@ BI.RichEditorParamAction = BI.inherit(BI.RichEditorAction, {
         var instance = o.editor.selectedInstance;
         var next = $param.next();
         if (next.length === 0 || this._isParam(next)) {
-            var node = this._createBlankNode();
-            $param.after(node);
-            instance.setFocus(node[0]);
+            var preNode = this._createBlankNode();
+            var nextNode = this._createBlankNode();
+            $param.before(preNode);
+            $param.after(nextNode);
+            instance.setFocus(nextNode[0]);
         } else {
             instance.setFocus(next[0]);
         }
@@ -16585,7 +16587,7 @@ BI.shortcut('bi.rich_editor_text_toolbar', BI.RichEditorTextToolbar);/**
         start: function () {
             this.elm.element.attr("contentEditable", true);
             if (this.getContent() == "") {
-                this.setContent("<br />");
+                // this.setContent("<br />");
             }
             this.instanceDoc = document.defaultView;
             this.elm.element.on('mousedown', BI.bind(this.selected, this));
