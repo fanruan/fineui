@@ -121,7 +121,7 @@
         start: function () {
             this.elm.element.attr("contentEditable", true);
             if (this.getContent() == "") {
-                this.setContent("<br />");
+                // this.setContent("<br />");
             }
             this.instanceDoc = document.defaultView;
             this.elm.element.on('mousedown', BI.bind(this.selected, this));
