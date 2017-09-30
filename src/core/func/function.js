@@ -4,7 +4,25 @@
  */
 BI.Func = {};
 BI.extend(BI.Func, {
-
+    /**
+     * 创建唯一的名字
+     * @param array
+     * @param name
+     * @returns {*}
+     */
+    createDistinctName: function (array, name) {
+        var src = name, idx = 1;
+        name = name || "";
+        while (true) {
+            if (BI.every(array, function (i, item) {
+                    return item.name !== name;
+                })) {
+                break;
+            }
+            name = src + (idx++);
+        }
+        return name;
+    },
     /**
      * 获取搜索结果
      * @param items

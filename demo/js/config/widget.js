@@ -216,6 +216,10 @@ Demo.WIDGET_CONFIG = [{
     text: "布局"
 }, {
     pId: 417,
+    text: "bi.arrangement",
+    value: "demo.arrangement"
+}, {
+    pId: 417,
     text: "bi.adaptive_arrangement",
     value: "demo.adaptive_arrangement"
 }, {

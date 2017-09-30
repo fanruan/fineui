@@ -183,8 +183,8 @@ BI.View = BI.inherit(BI.V, {
         return this;
     },
 
-    createView: function (url, modelData, viewData) {
-        return BI.Factory.createView(url, this.get(url), modelData, viewData);
+    createView: function (url, modelData, viewData, context) {
+        return BI.Factory.createView(url, this.get(url), modelData, viewData, context);
     },
 
     /**
@@ -222,7 +222,7 @@ BI.View = BI.inherit(BI.V, {
         }
         cardLayout.setVisible(true);
         if (BI.isKey(cardName) && !cardLayout.isCardExisted(cardName)) {
-            var view = this.createView(this.rootURL + "/" + cardName, data, viewData);
+            var view = this.createView(this.rootURL + "/" + cardName, data, viewData, this);
             isValid && this.model.addChild(modelData, view.model);
             view.listenTo(view.model, "destroy", function () {
                 delete self._cards[cardName];
@@ -348,6 +348,7 @@ BI.View = BI.inherit(BI.V, {
                 success && success(data, model);
             }
         }));
+
         function callback(data) {
             self.model.load(data);
             self.load(data);
@@ -526,3 +527,10 @@ BI.View = BI.inherit(BI.V, {
         this.off();
     }
 });
+
+BI.View.registerVMRouter = function (viewRouter, modelRouter) {
+    //配置View
+    BI.View.createView = BI.View.prototype.createView = function (url, modelData, viewData, context) {
+        return BI.Factory.createView(url, viewRouter.get(url), _.extend({}, modelRouter.get(url), modelData), viewData || {}, context);
+    };
+};
