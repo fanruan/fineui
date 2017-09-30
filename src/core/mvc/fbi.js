@@ -1131,9 +1131,6 @@
         // manipulation API.
         _removeElement: function () {
             this.$el.remove();
-            if ($.browser.msie === true) {
-                this.el.outerHTML = '';
-            }
         },
 
         // Change the view's element (`this.el` property) and re-delegate the
@@ -1174,7 +1171,7 @@
         // alternative DOM manipulation API and are only required to set the
         // `this.el` property.
         _setElement: function (el) {
-            this.$el = el instanceof BI.$ ? el : BI.$(el);
+            this.$el = el instanceof BI.$ ? el : (BI.isWidget(el) ? el.element : BI.$(el));
             this.element = this.$el;
             this.el = this.$el[0];
         },
@@ -1585,8 +1582,8 @@
 
             // Add a cross-platform `addEventListener` shim for older browsers.
             var addEventListener = window.addEventListener || function (eventName, listener) {
-                    return attachEvent('on' + eventName, listener);
-                };
+                return attachEvent('on' + eventName, listener);
+            };
 
             // Depending on whether we're using pushState or hashes, and whether
             // 'onhashchange' is supported, determine how we check the URL state.
@@ -1606,8 +1603,8 @@
         stop: function () {
             // Add a cross-platform `removeEventListener` shim for older browsers.
             var removeEventListener = window.removeEventListener || function (eventName, listener) {
-                    return detachEvent('on' + eventName, listener);
-                };
+                return detachEvent('on' + eventName, listener);
+            };
 
             // Remove window listeners.
             if (this._hasPushState) {

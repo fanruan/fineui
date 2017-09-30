@@ -12375,9 +12375,6 @@ BI.Factory = {
         // manipulation API.
         _removeElement: function () {
             this.$el.remove();
-            if ($.browser.msie === true) {
-                this.el.outerHTML = '';
-            }
         },
 
         // Change the view's element (`this.el` property) and re-delegate the
@@ -12418,7 +12415,7 @@ BI.Factory = {
         // alternative DOM manipulation API and are only required to set the
         // `this.el` property.
         _setElement: function (el) {
-            this.$el = el instanceof BI.$ ? el : BI.$(el);
+            this.$el = el instanceof BI.$ ? el : (BI.isWidget(el) ? el.element : BI.$(el));
             this.element = this.$el;
             this.el = this.$el[0];
         },
@@ -12829,8 +12826,8 @@ BI.Factory = {
 
             // Add a cross-platform `addEventListener` shim for older browsers.
             var addEventListener = window.addEventListener || function (eventName, listener) {
-                    return attachEvent('on' + eventName, listener);
-                };
+                return attachEvent('on' + eventName, listener);
+            };
 
             // Depending on whether we're using pushState or hashes, and whether
             // 'onhashchange' is supported, determine how we check the URL state.
@@ -12850,8 +12847,8 @@ BI.Factory = {
         stop: function () {
             // Add a cross-platform `removeEventListener` shim for older browsers.
             var removeEventListener = window.removeEventListener || function (eventName, listener) {
-                    return detachEvent('on' + eventName, listener);
-                };
+                return detachEvent('on' + eventName, listener);
+            };
 
             // Remove window listeners.
             if (this._hasPushState) {
@@ -15534,8 +15531,8 @@ BI.View = BI.inherit(BI.V, {
         return this;
     },
 
-    createView: function (url, modelData, viewData) {
-        return BI.Factory.createView(url, this.get(url), modelData, viewData);
+    createView: function (url, modelData, viewData, context) {
+        return BI.Factory.createView(url, this.get(url), modelData, viewData, context);
     },
 
     /**
@@ -15573,7 +15570,7 @@ BI.View = BI.inherit(BI.V, {
         }
         cardLayout.setVisible(true);
         if (BI.isKey(cardName) && !cardLayout.isCardExisted(cardName)) {
-            var view = this.createView(this.rootURL + "/" + cardName, data, viewData);
+            var view = this.createView(this.rootURL + "/" + cardName, data, viewData, this);
             isValid && this.model.addChild(modelData, view.model);
             view.listenTo(view.model, "destroy", function () {
                 delete self._cards[cardName];
@@ -15699,6 +15696,7 @@ BI.View = BI.inherit(BI.V, {
                 success && success(data, model);
             }
         }));
+
         function callback(data) {
             self.model.load(data);
             self.load(data);
@@ -15876,7 +15874,14 @@ BI.View = BI.inherit(BI.V, {
         this.trigger(BI.Events.DESTROY);
         this.off();
     }
-});(function () {
+});
+
+BI.View.registerVMRouter = function (viewRouter, modelRouter) {
+    //配置View
+    BI.View.createView = BI.View.prototype.createView = function (url, modelData, viewData, context) {
+        return BI.Factory.createView(url, viewRouter.get(url), _.extend({}, modelRouter.get(url), modelData), viewData || {}, context);
+    };
+};(function () {
     var kv = {};
     BI.shortcut = function (xtype, cls) {
         if (kv[xtype] != null) {
@@ -15891,8 +15896,7 @@ BI.View = BI.inherit(BI.V, {
             return new (new Function('return ' + config['classType'] + ';')())(config);
         }
 
-        var xtype = config.type.toLowerCase();
-        var cls = kv[xtype];
+        var cls = kv[config.type];
         return new cls(config);
     };
 
@@ -22966,7 +22970,25 @@ BI.extend(jQuery, {
  */
 BI.Func = {};
 BI.extend(BI.Func, {
-
+    /**
+     * 创建唯一的名字
+     * @param array
+     * @param name
+     * @returns {*}
+     */
+    createDistinctName: function (array, name) {
+        var src = name, idx = 1;
+        name = name || "";
+        while (true) {
+            if (BI.every(array, function (i, item) {
+                    return item.name !== name;
+                })) {
+                break;
+            }
+            name = src + (idx++);
+        }
+        return name;
+    },
     /**
      * 获取搜索结果
      * @param items

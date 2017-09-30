@@ -4667,19 +4667,19 @@ BI.shortcut("demo.value_chooser_combo", Demo.ValueChooserCombo);Demo.ValueChoose
     }
 });
 BI.shortcut("demo.value_chooser_pane", Demo.ValueChooserPane);Demo.ADDONS_CONFIG = [{
-    id: 6,
+    id: 7,
     text: "addons"
 }, {
-    pId: 6,
-    id: 601,
+    pId: 7,
+    id: 701,
     text: "拓展图表控件"
 }, {
-    pId: 601,
+    pId: 701,
     text: "柱状图",
     value: "demo.axis_chart"
 }, {
-    pId: 6,
-    id: 602,
+    pId: 7,
+    id: 702,
     text: "滚动sliders",
     value: "demo.slider"
 }];Demo.BASE_CONFIG = [{
@@ -5257,6 +5257,88 @@ Demo.COMPONENT_CONFIG = [{
     pId: 1,
     text: "Pane",
     value: "demo.pane"
+}];//定义Model路由
+var modelRouter = new (BI.inherit(BI.WRouter, {
+    routes: {
+        "": "index"
+    },
+
+    index: function () {
+        return {};
+    }
+}));
+//定义View路由
+var viewRouter = new (BI.inherit(BI.WRouter, {
+    routes: {
+        "": "TestView",
+        "/setget": "SetGetView",
+        "/local": "LocalView",
+        "/skipTo": "SkipToView",
+        "/skipTo/:child": "getSkipToView",
+        "/change": "ChangeView",
+        "/change/inner": "ChangeInnerView",
+        "/static": "StaticView",
+        "/event": "EventView",
+        "/layer": "LayerView",
+        "/masker": "MaskerView",
+        "/floatbox": "FloatBoxView",
+
+        "/spliceDuplicate": "SpliceDuplicateView",
+        "/spliceDuplicate/sdSub": "SDSubView",
+
+        "/tmp": "TmpView",
+        "/tmp/child": "TmpChildView",
+        "/tmp/child/child": "TmpChildChildView",
+    },
+
+    getSkipToView: function (v) {
+        switch (v) {
+            case "red":
+                return "SkipToRedView";
+            case "blue":
+                return "SkipToBlueView";
+            case "green":
+                return "SkipToGreenView";
+            case "yellow":
+                return "SkipToYellowView";
+            default :
+                return "SkipToRedView";
+        }
+
+    }
+}));
+
+//注册路由
+BI.View.registerVMRouter(viewRouter, modelRouter);
+
+
+Demo.VM_CONFIG = [{
+    id: 6,
+    text: "数据流框架"
+}, {
+    pId: 6,
+    text: "set,get方法",
+    value: "demo.setget"
+}, {
+    pId: 6,
+    text: "local函数",
+    value: "demo.local"
+}, {
+    pId: 6,
+    text: "skipTo函数",
+    value: "demo.skipTo"
+}, {
+    pId: 6,
+    text: "change函数",
+    value: "demo.change"
+}, {
+    pId: 6,
+    text: "splice和duplicate函数",
+    value: "demo.spliceDuplicate"
+}, {
+    pId: 6,
+    text: "tmp方法",
+    value: "demo.tmp"
 }];Demo.WIDGET_CONFIG = [{
     id: 4,
     text: "详细控件",
@@ -5473,6 +5555,10 @@ Demo.COMPONENT_CONFIG = [{
     pId: 4,
     id: 417,
     text: "布局"
+}, {
+    pId: 417,
+    text: "bi.arrangement",
+    value: "demo.arrangement"
 }, {
     pId: 417,
     text: "bi.adaptive_arrangement",
@@ -8922,7 +9008,1212 @@ BI.shortcut("demo.north", Demo.North);Demo.Preview = BI.inherit(BI.Widget, {
     mounted: function () {
     }
 });
-BI.shortcut("demo.preview", Demo.Preview);Demo.West = BI.inherit(BI.Widget, {
+BI.shortcut("demo.preview", Demo.Preview);//change函数
+ChangeView = BI.inherit(BI.View, {
+    _defaultConfig: function(){
+        return BI.extend(ChangeView.superclass._defaultConfig.apply(this, arguments),{
+            baseCls: "bi-change"
+        })
+    },
+
+    _init: function(){
+        ChangeView.superclass._init.apply(this, arguments);
+    },
+
+    change: function(changed){
+        if(changed.child){
+            this._showModelData();
+        }
+        if(changed.superiors){
+            this._showModelData();
+        }
+    },
+
+    _showModelData: function(){
+        this.outerText.setText("父级Model层数据: " + JSON.stringify(this.model.toJSON()));
+    },
+
+    _createOuter: function(){
+        this.outerText = BI.createWidget({
+            type: "bi.label",
+            cls: "outer-text",
+            whiteSpace: "normal"
+        });
+
+        return BI.createWidget({
+            type: "bi.border",
+            items: {
+                north: {
+                    el: this.outerText,
+                    height: 50
+                },
+                center: this._createInner()
+            }
+        });
+    },
+
+    _createInner: function(){
+        var innerPane = BI.createWidget({
+            type: "bi.absolute",
+            cls: "inner"
+        });
+        this.addSubVessel("innerPane", innerPane, {
+            defaultShowName: "inner"
+        });
+        return innerPane;
+    },
+
+    render: function(vessel){
+        BI.createWidget({
+            type: "bi.center",
+            element: vessel,
+            items: [this._createOuter()],
+            hgap: 100,
+            vgap: 100
+        });
+
+        this._showModelData();
+    },
+
+    refresh: function(){
+        this.skipTo("inner", "innerPane", "superiors");
+    }
+});
+
+ChangeModel = BI.inherit(BI.Model, {
+    _defaultConfig: function(){
+        return BI.extend(ChangeModel.superclass._defaultConfig.apply(this, arguments),{
+            superiors: {
+                child: "default"
+            },
+            child: "default"
+        })
+    },
+
+    _init: function(){
+        ChangeModel.superclass._init.apply(this, arguments);
+    },
+
+    change: function(changed){
+        if(changed.superiors){
+            this.set("child", changed.superiors.child);
+        }
+    }
+});
+
+//ChangeView 的子级
+ChangeInnerView = BI.inherit(BI.View, {
+    _init: function(){
+        ChangeInnerView.superclass._init.apply(this, arguments);
+    },
+
+    change: function(changed){
+        if(changed.child){
+            this._showModelData();
+        }
+    },
+
+    _createOuter: function(){
+        var self = this;
+        this.text = BI.createWidget({
+            type: "bi.label",
+            height: 26
+        });
+
+        this.buttons = BI.createWidget({
+            type: "bi.button_group",
+            items: BI.createItems(this.model.get("items"), {
+                type: "bi.text_button",
+                height: 30,
+                textAlign: "center",
+                hgap: 20
+            })
+        });
+
+        this.buttons.on(BI.ButtonGroup.EVENT_CHANGE, function(){
+            self.model.set("child", this.getValue()[0]);
+        });
+
+        return BI.createWidget({
+            type: "bi.vertical",
+            vgap: 20,
+            items: [{
+                type: "bi.center",
+                items: [this.buttons],
+                height: 30
+            }, this.text]
+        });
+    },
+
+    _showModelData: function(){
+        this.text.setText("子级Model层数据: " + JSON.stringify(this.model.toJSON()));
+    },
+
+    render: function(vessel){
+        BI.createWidget({
+            type: "bi.center",
+            element: vessel,
+            items: [this._createOuter()]
+        });
+        this._showModelData();
+    }
+});
+
+
+ChangeInnerModel = BI.inherit(BI.Model, {
+    _defaultConfig: function(){
+        return BI.extend(ChangeInnerModel.superclass._defaultConfig.apply(this, arguments),{
+
+        })
+    },
+
+    _static: function(){
+        return {
+            items: [{
+                text: "Type-1",
+                value: "First",
+                cls: "type-first mvc-button"
+            }, {
+                text: "Type-2",
+                value: "Second",
+                cls: "type-second mvc-button"
+            }, {
+                text: "Type-3",
+                value: "third",
+                cls: "type-third mvc-button"
+            }]
+        }
+    },
+
+    _init: function(){
+        ChangeInnerModel.superclass._init.apply(this, arguments);
+    }
+
+});
+
+Demo.Func = BI.inherit(BI.Widget, {
+    render: function () {
+        var view = BI.View.createView("/change", {}, {
+            element: this
+        });
+        view.populate();
+    },
+
+    mounted: function () {
+    }
+});
+BI.shortcut("demo.change", Demo.Func);//local函数
+LocalView = BI.inherit(BI.View, {
+    _defaultConfig: function(){
+        return BI.extend(LocalView.superclass._defaultConfig.apply(this, arguments),{
+            baseCls: "bi-local"
+        })
+    },
+
+    _init: function(){
+        LocalView.superclass._init.apply(this, arguments);
+        this.buttons = {};
+    },
+
+    _addElement2Vessel: function(id){
+        var self = this;
+        this.buttons[id] = this.elementVessel.addItem({
+            type: "bi.text_button",
+            text: "Button:" + id,
+            width: 180,
+            height: 22,
+            cls: "delete-button button",
+            handler: function(){
+                self.set("delete", id);
+            }
+        })
+    },
+
+    _deleteElement: function(id){
+        this.buttons[id] && this.buttons[id].destroy();
+        delete this.buttons[id];
+    },
+
+    _createTop: function(){
+        var self = this;
+        this.elementVessel = BI.createWidget({
+            type: "bi.left",
+            height: 200,
+            cls: "vessel-border",
+            scrollable: true,
+            vgap: 10,
+            hgap: 10
+        });
+
+        return BI.createWidget({
+            type: "bi.vertical",
+            items: [
+                {
+                    el: {
+                        type: "bi.text_button",
+                        text: "点击添加元素",
+                        cls: "top-button",
+                        handler: function(){
+                            self.model.set("add", true);
+                        },
+                        height: 30
+                    }
+                },
+                this.elementVessel
+            ]
+        })
+    },
+
+    _showModelData: function(){
+        this.text.setText(JSON.stringify(this.model.toJSON()));
+    },
+
+    _createCenter: function(){
+        var modelData = BI.createWidget({
+            type: "bi.center",
+            vgap: 10,
+            hgap: 10,
+            cls: "vessel-border",
+            height: 200,
+            items: [{
+                el: this.text = BI.createWidget({
+                    type: "bi.label",
+                    hgap: 30,
+                    textHeight: 30,
+                    whiteSpace: "normal"
+                })
+            }]
+        });
+
+        return BI.createWidget({
+            type: "bi.vertical",
+            items: [
+                {
+                    el: {
+                        type: "bi.label",
+                        cls: "bottom-label",
+                        text: "Model层数据",
+                        height: 30
+                    }
+                },
+                modelData
+            ]
+        })
+    },
+
+    render: function(vessel){
+        BI.createWidget({
+            type: "bi.vertical",
+            element: vessel,
+            items: [{
+                el :this._createTop()
+            },{
+                el : this._createCenter()
+            }],
+            hgap: 50,
+            vgap: 20
+        });
+
+        this._showModelData();
+    },
+
+    local: function(){
+        if(this.model.has("add")){
+            var add = this.model.get("add");
+            this._addElement2Vessel(this.model.getEditing());
+            this._showModelData();
+            return true;
+        }
+        if(this.model.has("delete")){
+            var id = this.model.get("delete");
+            this._deleteElement(id);
+            this._showModelData();
+            return true;
+        }
+        return false;
+    }
+});
+
+LocalModel = BI.inherit(BI.Model, {
+    _defaultConfig: function(){
+        return BI.extend(LocalModel.superclass._defaultConfig.apply(this, arguments),{
+
+        })
+    },
+
+    _init: function(){
+        LocalModel.superclass._init.apply(this, arguments);
+    },
+
+    local: function(){
+        if(this.has("add")){
+            this.get("add");
+            var id = BI.UUID();
+            this.set(id, "这是新增的属性:"+id);
+            this.setEditing(id);
+            return true;
+        }
+        if(this.has("delete")){
+            var id = this.get("delete");
+            this.unset(id);
+            return true;
+        }
+        return false;
+    }
+
+});
+
+Demo.Func = BI.inherit(BI.Widget, {
+    render: function () {
+        var view = BI.View.createView("/local", {}, {
+            element: this
+        });
+        view.populate();
+    },
+
+    mounted: function () {
+    }
+});
+BI.shortcut("demo.local", Demo.Func);//set、get函数
+SetGetView = BI.inherit(BI.View, {
+    _defaultConfig: function () {
+        return BI.extend(SetGetView.superclass._defaultConfig.apply(this, arguments), {
+            baseCls: "bi-set-get"
+        })
+    },
+
+    _init: function () {
+        SetGetView.superclass._init.apply(this, arguments);
+    },
+
+    change: function (changed) {
+        this._showModelData();
+    },
+
+    _createLeft: function () {
+        var self = this;
+        return (this.left = BI.createWidget({
+            type: "bi.border",
+            items: {
+                north: {
+                    el: {
+                        type: "bi.label",
+                        cls: "left-title",
+                        text: "get、set用法:",
+                        height: 30
+                    },
+                    height: 30
+                },
+                center: {
+                    el: {
+                        type: "bi.button_group",
+                        items: BI.createItems(this.model.get("arr"), {
+                            type: "bi.text_button",
+                            cls: "left-nav",
+                            height: 30,
+                            handler: function (v) {
+                                self.model.set("click", v);
+                            }
+                        }),
+                        layouts: [{
+                            type: "bi.vertical"
+                        }]
+                    }
+                }
+            }
+        }))
+    },
+
+    _showModelData: function () {
+        this.text.setText(JSON.stringify(this.model.toJSON()));
+    },
+
+    _createRight: function () {
+        return (this.right = BI.createWidget({
+            type: "bi.border",
+            items: {
+                north: {
+                    el: {
+                        type: "bi.label",
+                        cls: "right-title",
+                        text: "Model层数据",
+                        height: 30
+                    },
+                    height: 30
+                },
+                center: {
+                    el: this.text = BI.createWidget({
+                        type: "bi.label",
+                        whiteSpace: "normal",
+                        textHeight: 50
+                    })
+                }
+            }
+        }))
+    },
+
+    render: function (vessel) {
+        BI.createWidget({
+            type: "bi.center",
+            element: vessel,
+            items: [{
+                el: this._createLeft()
+            }, {
+                el: this._createRight()
+            }],
+            hgap: 50,
+            vgap: 100
+        })
+        this._showModelData();
+    }
+})
+
+SetGetModel = BI.inherit(BI.Model, {
+    _defaultConfig: function () {
+        return BI.extend(SetGetModel.superclass._defaultConfig.apply(this, arguments), {
+            arr: [
+                {text: "item1", value: 1},
+                {text: "item2", value: 2},
+                {text: "item3", value: 3},
+                {text: "item4", value: 4},
+                {text: "item5", value: 5},
+                {text: "item6", value: 6},
+                {text: "item7", value: 7},
+                {text: "item8", value: 8}
+            ]
+        })
+    },
+
+    _init: function () {
+        SetGetModel.superclass._init.apply(this, arguments);
+    }
+
+})
+
+
+Demo.Func = BI.inherit(BI.Widget, {
+    render: function () {
+        var view = BI.View.createView("/setget", {}, {
+            element: this
+        });
+        view.populate();
+    },
+
+    mounted: function () {
+    }
+});
+BI.shortcut("demo.setget", Demo.Func);//skipTo 函数
+SkipToView = BI.inherit(BI.View, {
+    _defaultConfig: function(){
+        return BI.extend(SkipToView.superclass._defaultConfig.apply(this, arguments),{
+            baseCls: "bi-skip-to"
+        })
+    },
+
+    _init: function(){
+        SkipToView.superclass._init.apply(this, arguments);
+    },
+
+    _createNav: function(){
+        var self = this;
+        var nav = BI.createWidget({
+            type: "bi.button_group",
+            cls: "top-nav",
+            items: BI.createItems(this.model.get("items"), {
+                type: "bi.text_button",
+                height: 30,
+                textAlign: "center",
+                hgap: 20
+            }),
+            layouts: [{
+                type: "bi.left",
+                height: 40,
+                vgap: 5,
+                hgap: 3
+            }]
+        });
+        nav.on(BI.ButtonGroup.EVENT_CHANGE, function(){
+            self.skipTo(this.getValue()[0], "pane", this.getValue()[0]);
+        });
+        return nav;
+    },
+
+    _createPane: function(){
+        var pane = BI.createWidget({
+            type:"bi.center",
+            cls: "center-pane",
+            height: 200
+        });
+        this.addSubVessel("pane", pane, {
+            defaultShowName: "green"
+        });
+        return pane;
+    },
+
+    render: function(vessel){
+        BI.createWidget({
+            type: "bi.vertical",
+            element: vessel,
+            items: [this._createNav(), this._createPane()],
+            vgap: 10,
+            hgap: 10
+        })
+    },
+
+    refresh: function(){
+        this.skipTo("green", "pane", "green");
+    }
+});
+
+SkipToModel = BI.inherit(BI.Model, {
+    _defaultConfig: function(){
+        return BI.extend(SkipToModel.superclass._defaultConfig.apply(this, arguments),{
+            "red": {
+                text: "hotpink"
+            },"blue": {
+                text: "cornflowerblue"
+            },"green": {
+                text: "darkcyan"
+            },"yellow": {
+                text: "darkgoldenrod"
+            }
+        })
+    },
+    _static: function(){
+        return {
+            items: [{
+                text: "hotpink",
+                value: "red",
+                cls: "red-pane mvc-button"
+            }, {
+                text: "cornflowerblue",
+                value: "blue",
+                cls: "blue-pane mvc-button"
+            }, {
+                text: "darkcyan",
+                value: "green",
+                cls: "green-pane mvc-button",
+                selected: true
+            }, {
+                text: "darkgoldenrod",
+                value: "yellow",
+                cls: "yellow-pane mvc-button"
+            }]
+        }
+    },
+
+    _init: function(){
+        SkipToModel.superclass._init.apply(this, arguments);
+    }
+});
+
+//Red pane #FF69B4
+SkipToRedView = BI.inherit(BI.View, {
+    _init: function(){
+        SkipToRedView.superclass._init.apply(this, arguments);
+    },
+
+    render: function(vessel){
+        BI.createWidget({
+            type: "bi.absolute",
+            element: vessel,
+            cls: "red-pane",
+            items: [{
+                el: {
+                    type: "bi.label",
+                    text: "Model Data: " + JSON.stringify(this.model.toJSON()),
+                    hgap: 20,
+                    height: 26
+                }
+            }]
+        })
+    }
+
+});
+
+SkipToRedModel = BI.inherit(BI.Model, {
+    _defaultConfig: function(){
+        return BI.extend(SetGetModel.superclass._defaultConfig.apply(this, arguments),{
+
+        })
+    },
+
+    _init: function(){
+        SkipToRedModel.superclass._init.apply(this, arguments);
+    }
+});
+
+//Blue pane #6495ED
+SkipToBlueView = BI.inherit(BI.View, {
+    _init: function(){
+        SkipToBlueView.superclass._init.apply(this, arguments);
+    },
+
+    render: function(vessel){
+        BI.createWidget({
+            type: "bi.absolute",
+            element: vessel,
+            cls: "blue-pane",
+            items: [{
+                el: {
+                    type: "bi.label",
+                    text: "Model Data: " + JSON.stringify(this.model.toJSON()),
+                    hgap: 20,
+                    height: 26
+                },
+                left: 0,
+                right: 0,
+                top: 0,
+                bottom: 0
+            }]
+        })
+    }
+});
+
+SkipToBlueModel = BI.inherit(BI.Model, {
+    _defaultConfig: function(){
+        return BI.extend(SetGetModel.superclass._defaultConfig.apply(this, arguments),{
+        })
+    },
+
+    _init: function(){
+        SkipToGreenModel.superclass._init.apply(this, arguments);
+    }
+});
+
+//Dark green pane #008B8B
+SkipToGreenView = BI.inherit(BI.View, {
+    _init: function(){
+        SkipToGreenView.superclass._init.apply(this, arguments);
+    },
+
+    render: function(vessel){
+        BI.createWidget({
+            type: "bi.absolute",
+            element: vessel,
+            cls: "green-pane",
+            items: [{
+                el:{
+                    type: "bi.label",
+                    text: "Model Data: " + JSON.stringify(this.model.toJSON()),
+                    hgap: 20,
+                    height: 26
+                },
+                left: 0,
+                right: 0,
+                top: 0,
+                bottom: 0
+            }]
+        })
+    }
+});
+
+SkipToGreenModel = BI.inherit(BI.Model, {
+    _defaultConfig: function(){
+        return BI.extend(SetGetModel.superclass._defaultConfig.apply(this, arguments),{
+        })
+    },
+
+    _init: function(){
+        SkipToGreenModel.superclass._init.apply(this, arguments);
+    }
+});
+
+//Dark yellow pane #B8860B
+SkipToYellowView = BI.inherit(BI.View, {
+    _init: function(){
+        SkipToYellowView.superclass._init.apply(this, arguments);
+    },
+
+    render: function(vessel){
+        BI.createWidget({
+            type: "bi.absolute",
+            element: vessel,
+            cls: "yellow-pane",
+            items: [{
+                el:{
+                    type: "bi.label",
+                    text: "Model Data: " + JSON.stringify(this.model.toJSON()),
+                    hgap: 20,
+                    height: 26
+                },
+                left: 0,
+                right: 0,
+                top: 0,
+                bottom: 0
+            }]
+        })
+    }
+});
+
+SkipToYellowModel = BI.inherit(BI.Model, {
+    _defaultConfig: function(){
+        return BI.extend(SetGetModel.superclass._defaultConfig.apply(this, arguments),{
+        })
+    },
+
+    _init: function(){
+        SkipToYellowModel.superclass._init.apply(this, arguments);
+    }
+});
+
+Demo.Func = BI.inherit(BI.Widget, {
+    render: function () {
+        var view = BI.View.createView("/skipTo", {}, {
+            element: this
+        });
+        view.populate();
+    },
+
+    mounted: function () {
+    }
+});
+BI.shortcut("demo.skipTo", Demo.Func);
+//splice和duplicate函数
+SpliceDuplicateView = BI.inherit(BI.View, {
+    _defaultConfig: function () {
+        return BI.extend(SpliceDuplicateView.superclass._defaultConfig.apply(this, arguments), {
+            baseCls: "bi-splice-duplicate"
+        })
+    },
+
+    _init: function () {
+        SpliceDuplicateView.superclass._init.apply(this, arguments);
+        this.children = {};
+    },
+
+    splice: function (old, key1, key2) {
+        this.children[key1].destroy();
+        delete this.children[key1];
+        this._showModelData();
+    },
+
+    duplicate: function (copy, key1, key2) {
+        this.add(copy);
+        this._showModelData();
+    },
+
+    _showModelData: function () {
+        //这里只是为了输出this.model.data   原则上是不允许这么调用的
+        this.text.setText("父级数据：" + JSON.stringify(this.model.data));
+    },
+
+    render: function (vessel) {
+        this.text = BI.createWidget({
+            type: "bi.label",
+            height: 50,
+            cls: "superiors-label"
+        });
+        this.container = BI.createWidget({
+            type: "bi.vertical",
+            element: vessel,
+            items: [this.text],
+            hgap: 100,
+            vgap: 10
+        });
+        this._showModelData();
+    },
+
+    add: function (id) {
+        this.children[id] = BI.createWidget({
+            type: "bi.center",
+            hgap: 10,
+            vgap: 10
+        });
+        this.addSubVessel(id, this.children[id], {
+            defaultShowName: "sdSub"
+        });
+        this.skipTo("sdSub", id, id);
+        this.container.addItem(this.children[id]);
+    },
+
+    refresh: function () {
+        var self = this;
+        BI.each(this.model.toJSON(), function (key, value) {
+            if (!self.children[key]) {
+                self.add(key);
+            }
+        })
+    }
+});
+
+SpliceDuplicateModel = BI.inherit(BI.Model, {
+    _defaultConfig: function () {
+        return BI.extend(SpliceDuplicateModel.superclass._defaultConfig.apply(this, arguments), {
+            "1": {
+                name: "名字"
+            }
+        })
+    },
+
+    splice: function (key1) {
+        delete this.data[key1];
+    },
+
+    similar: function (value, key1) {
+        value.name = BI.Func.createDistinctName(this.data, this.get(key1).name);
+        return value;
+    },
+
+    duplicate: function (copy, key1) {
+        this.data[copy] = this.get(copy);
+    },
+
+    _init: function () {
+        SpliceDuplicateModel.superclass._init.apply(this, arguments);
+    },
+
+    refresh: function () {
+        this.data = BI.deepClone(this.toJSON());
+    }
+});
+
+SDSubView = BI.inherit(BI.View, {
+    _defaultConfig: function () {
+        return SDSubView.superclass._defaultConfig.apply(this, arguments);
+    },
+
+    _init: function () {
+        SDSubView.superclass._init.apply(this, arguments);
+    },
+
+    render: function (vessel) {
+        var self = this;
+        BI.createWidget({
+            type: "bi.center",
+            element: vessel,
+            cls: "sd-child",
+            height: 30,
+            items: [{
+                type: "bi.text_button",
+                height: 30,
+                text: "复制  " + this.model.get("name") + " , 数据：" + JSON.stringify(this.model.toJSON()),
+                cls: "right-button-add",
+                handler: function () {
+                    self.model.copy();
+                }
+            }, {
+                type: "bi.text_button",
+                height: 30,
+                text: "删除",
+                cls: "right-button-del",
+                handler: function () {
+                    self.model.destroy();
+                }
+            }]
+        })
+    }
+});
+
+SDSubModel = BI.inherit(BI.Model, {
+    _defaultConfig: function () {
+        return BI.extend(SDSubModel.superclass._defaultConfig.apply(this, arguments), {});
+    },
+
+    _init: function () {
+        SDSubModel.superclass._init.apply(this, arguments);
+    }
+});
+
+Demo.Func = BI.inherit(BI.Widget, {
+    render: function () {
+        var view = BI.View.createView("/spliceDuplicate", {}, {
+            element: this
+        });
+        view.populate();
+    },
+
+    mounted: function () {
+    }
+});
+BI.shortcut("demo.spliceDuplicate", Demo.Func);
+TmpView = BI.inherit(BI.View, {
+    _defaultConfig: function(){
+        return BI.extend(TmpView.superclass._defaultConfig.apply(this, arguments),{
+            baseCls: "bi-tmp"
+        })
+    },
+
+    _init: function(){
+        TmpView.superclass._init.apply(this, arguments);
+    },
+
+    change: function(changed){
+        if(changed.data1){
+            this._showModelData();
+        }
+    },
+
+    _showModelData: function(){
+        this.text.setText("父级Model层数据为："+JSON.stringify(this.model.toJSON()));
+    },
+
+    _createMain: function(){
+        var self = this;
+        return BI.createWidget({
+            type: "bi.border",
+            items: {
+                west: {
+                    el: {
+                        type: "bi.vertical",
+                        vgap: 10,
+                        items: [{
+                            el: (this.text = BI.createWidget({
+                                type: "bi.label",
+                                whiteSpace: "normal"
+                            }))
+                        }, {
+                            el: {
+                                type: "bi.text_button",
+                                cls: "tmp-button mvc-button",
+                                text: "点击触发事件tmp('data1', {child: {type: {value: \"临时数据\"}}})",
+                                height: 30,
+                                handler: function(){
+                                    self.model.tmp("data1", {
+                                        child: {
+                                            type: {
+                                                value: "临时数据"
+                                            }
+                                        }
+                                    })
+                                }
+                            }
+                        }, {
+                            el: {
+                                type: "bi.text_button",
+                                cls: "tmp-button mvc-button",
+                                text: "点击触发事件submit",
+                                height: 30,
+                                handler: function(){
+                                    self.model.submit();
+                                }
+                            }
+                        }, {
+                            el: {
+                                type: "bi.text_button",
+                                cls: "tmp-button mvc-button",
+                                text: "点击跳转到右方",
+                                height: 30,
+                                handler: function(){
+                                    self.addSubVessel("test", self.center).skipTo("child", "test", "data1");
+                                }
+                            }
+                        }]
+                    },
+                    width: 200
+                },
+                center: {
+                    el: (this.center = BI.createWidget())
+                }
+            }
+        })
+    },
+
+    render: function(vessel){
+        BI.createWidget({
+            type: "bi.center",
+            element: vessel,
+            items: [{
+                el: this._createMain()
+            }],
+            hgap: 50,
+            vgap: 100
+        })
+    },
+
+    refresh: function(){
+        this._showModelData();
+    }
+})
+
+TmpModel = BI.inherit(BI.Model, {
+    _defaultConfig: function(){
+        return BI.extend(TmpModel.superclass._defaultConfig.apply(this, arguments),{
+            data1: {
+                child: {
+                    type: {
+                        value: "这是一个测试数据"
+                    }
+                }
+            },
+            data2: "test"
+        })
+    },
+
+    _init: function(){
+        TmpModel.superclass._init.apply(this, arguments);
+    }
+
+})
+
+TmpChildView = BI.inherit(BI.View, {
+    _defaultConfig: function(){
+        return BI.extend(TmpChildView.superclass._defaultConfig.apply(this, arguments),{
+            baseCls: "bi-tmp-child"
+        })
+    },
+
+    _init: function(){
+        TmpChildView.superclass._init.apply(this, arguments);
+    },
+
+    change: function(changed){
+        if(changed.child){
+            this._showModelData();
+        }
+    },
+
+    _showModelData: function(){
+        this.text.setText("子级Model层数据为："+JSON.stringify(this.model.toJSON()));
+    },
+
+    _createMain: function(){
+        var self = this;
+        return BI.createWidget({
+            type: "bi.border",
+            items: {
+                west: {
+                    el: {
+                        type: "bi.vertical",
+                        vgap: 10,
+                        items: [{
+                            el: (this.text = BI.createWidget({
+                                type: "bi.label",
+                                whiteSpace: "normal"
+                            }))
+                        }, {
+                            el: {
+                                type: "bi.text_button",
+                                cls: "tmp-button mvc-button",
+                                text: "点击触发事件set",
+                                height: 30,
+                                handler: function(){
+                                    self.set("child", {
+                                        type: {
+                                            value: "值改变了"
+                                        }
+                                    })
+                                }
+                            }
+                        }, {
+                            el: {
+                                type: "bi.text_button",
+                                cls: "tmp-button mvc-button",
+                                text: "点击跳转到右方",
+                                height: 30,
+                                handler: function(){
+                                    self.addSubVessel("test", self.center).skipTo("child", "test", "child");
+                                }
+                            }
+                        }]
+                    },
+                    width: 200
+                },
+                center: {
+                    el: (this.center = BI.createWidget())
+                }
+            }
+        })
+    },
+
+    render: function(vessel){
+        BI.createWidget({
+            type: "bi.center",
+            element: vessel,
+            items: [{
+                el: this._createMain()
+            }],
+            hgap: 50
+        })
+    },
+
+    refresh: function(){
+        this._showModelData();
+    }
+})
+
+TmpChildModel = BI.inherit(BI.Model, {
+    _defaultConfig: function(){
+        return BI.extend(TmpChildModel.superclass._defaultConfig.apply(this, arguments),{
+
+        })
+    },
+
+    _init: function(){
+        TmpChildModel.superclass._init.apply(this, arguments);
+    }
+
+})
+TmpChildChildView = BI.inherit(BI.View, {
+    _defaultConfig: function(){
+        return BI.extend(TmpChildChildView.superclass._defaultConfig.apply(this, arguments),{
+            baseCls: "bi-tmp-child-child"
+        })
+    },
+
+    _init: function(){
+        TmpChildChildView.superclass._init.apply(this, arguments);
+    },
+
+    change: function(changed){
+        if(changed.type){
+            this._showModelData();
+        }
+    },
+
+    _showModelData: function(){
+        this.text.setText("叶节点数据为："+JSON.stringify(this.model.toJSON()));
+    },
+
+    _createMain: function(){
+        return (this.text = BI.createWidget({
+            type: "bi.label",
+            whiteSpace: "normal"
+        }))
+    },
+
+    render: function(vessel){
+        BI.createWidget({
+            type: "bi.center",
+            element: vessel,
+            items: [{
+                el: this._createMain()
+            }],
+            hgap: 50
+        })
+    },
+
+    refresh: function(){
+        this._showModelData();
+    }
+})
+
+TmpChildChildModel = BI.inherit(BI.Model, {
+    _defaultConfig: function(){
+        return BI.extend(TmpChildChildModel.superclass._defaultConfig.apply(this, arguments),{
+
+        })
+    },
+
+    _init: function(){
+        TmpChildChildModel.superclass._init.apply(this, arguments);
+    }
+
+})
+
+Demo.Func = BI.inherit(BI.Widget, {
+    render: function () {
+        var view = BI.View.createView("/tmp", {}, {
+            element: this
+        });
+        view.populate();
+    },
+
+    mounted: function () {
+    }
+});
+BI.shortcut("demo.tmp", Demo.Func);
+Demo.West = BI.inherit(BI.Widget, {
     props: {
         baseCls: "demo-west bi-border-right bi-card"
     },
@@ -8953,11 +10244,11 @@ BI.shortcut("demo.west", Demo.West);Demo.AdaptiveArrangement = BI.inherit(BI.Wid
             type: "bi.text_button",
             id: id,
             cls: "layout-bg" + BI.random(1, 8),
+            value: "点我我就在最上面了",
             handler: function () {
-                self.arrangement.deleteRegion(id);
+                // self.arrangement.deleteRegion(id);
             }
         });
-        item.setValue(item.attr("id"));
         return item;
     },
 
@@ -8965,27 +10256,23 @@ BI.shortcut("demo.west", Demo.West);Demo.AdaptiveArrangement = BI.inherit(BI.Wid
         var self = this;
         this.arrangement = BI.createWidget({
             type: "bi.adaptive_arrangement",
-            layoutType: BI.Arrangement.LAYOUT_TYPE.ADAPTIVE,
-            cls: "mvc-border",
+            layoutType: BI.Arrangement.LAYOUT_TYPE.FREE,
+            cls: "bi-border",
             width: 800,
             height: 400,
             items: []
         });
         var drag = BI.createWidget({
             type: "bi.label",
-            cls: "mvc-border",
-            width: 100,
+            cls: "bi-border",
+            width: 70,
             height: 25,
             text: "drag me"
         });
 
-        // drag.element.draggable && 
         drag.element.draggable({
             revert: true,
-            cursorAt: {
-                left: 0,
-                top: 0
-            },
+            cursorAt: {left: 0, top: 0},
             drag: function (e, ui) {
                 self.arrangement.setPosition({
                     left: ui.position.left,
@@ -9008,6 +10295,7 @@ BI.shortcut("demo.west", Demo.West);Demo.AdaptiveArrangement = BI.inherit(BI.Wid
 
         BI.createWidget({
             type: "bi.absolute",
+            element: this,
             items: [{
                 el: drag,
                 left: 30,
@@ -9016,17 +10304,6 @@ BI.shortcut("demo.west", Demo.West);Demo.AdaptiveArrangement = BI.inherit(BI.Wid
                 el: this.arrangement,
                 left: 30,
                 top: 30
-            }, {
-                el: {
-                    type: "bi.button",
-                    text: "回撤",
-                    height: 25,
-                    handler: function () {
-                        //self.arrangement.revoke();
-                    }
-                },
-                left: 130,
-                top: 450
             }, {
                 el: {
                     type: "bi.button",
@@ -9064,16 +10341,210 @@ BI.shortcut("demo.west", Demo.West);Demo.AdaptiveArrangement = BI.inherit(BI.Wid
     }
 });
 
-BI.shortcut("demo.adaptive_arrangement", Demo.AdaptiveArrangement);/**
+BI.shortcut("demo.adaptive_arrangement", Demo.AdaptiveArrangement);Demo.Arrangement = BI.inherit(BI.Widget, {
+
+    beforeCreate: function () {
+        this.index = 0;
+    },
+
+    _createItem: function () {
+        var self = this;
+        var item = BI.createWidget({
+            type: "bi.text_button",
+            id: this.index,
+            text: "点我删掉",
+            cls: "layout-bg" + BI.random(1, 8),
+            handler: function () {
+                self.arrangement.deleteRegion(this.attr("id"));
+            }
+        });
+        this.index++;
+        return item;
+    },
+
+    render: function () {
+        var self = this;
+        this.arrangement = BI.createWidget({
+            type: "bi.arrangement",
+            layoutType: BI.Arrangement.LAYOUT_TYPE.GRID,
+            cls: "bi-border",
+            width: 800,
+            height: 400,
+            items: []
+        });
+        var drag = BI.createWidget({
+            type: "bi.label",
+            cls: "bi-border",
+            width: 70,
+            height: 25,
+            text: "drag me"
+        });
+
+        drag.element.draggable({
+            revert: true,
+            cursorAt: {left: 0, top: 0},
+            drag: function (e, ui) {
+                self.arrangement.setPosition({
+                    left: ui.position.left,
+                    top: ui.position.top
+                }, {
+                    width: 300,
+                    height: 200
+                })
+            },
+            stop: function (e, ui) {
+                self.arrangement.addRegion({
+                    el: self._createItem()
+                });
+            },
+            helper: function (e) {
+                var helper = self.arrangement.getHelper();
+                return helper.element;
+            }
+        });
+
+        BI.createWidget({
+            type: "bi.absolute",
+            element: this,
+            items: [{
+                el: drag,
+                left: 30,
+                top: 450
+            }, {
+                el: this.arrangement,
+                left: 30,
+                top: 30
+            }, {
+                el: {
+                    type: "bi.button",
+                    text: "getAllRegions",
+                    height: 25,
+                    handler: function () {
+                        var items = [];
+                        BI.each(self.arrangement.getAllRegions(), function (i, region) {
+                            items.push({
+                                id: region.id,
+                                left: region.left,
+                                top: region.top,
+                                width: region.width,
+                                height: region.height
+                            });
+                        });
+                        BI.Msg.toast(JSON.stringify(items));
+                    }
+                },
+                left: 230,
+                top: 450
+            }]
+        });
+    }
+});
+
+BI.shortcut("demo.arrangement", Demo.Arrangement);/**
  * Created by User on 2017/3/22.
  */
 Demo.RelationView = BI.inherit(BI.Widget, {
-    props: {
+    _createItem: function () {
+        var self = this;
+        var id = BI.UUID();
+        var item = BI.createWidget({
+            type: "bi.text_button",
+            id: id,
+            text: "对齐的时候是不是有根线？",
+            cls: "layout-bg" + BI.random(1, 8),
+            handler: function () {
+                self.arrangement.deleteRegion(id);
+            }
+        });
+        return item;
     },
+
     render: function () {
-        return {
+        var self = this;
+        this.arrangement = BI.createWidget({
             type: "bi.interactive_arrangement",
-        };
+            layoutType: BI.Arrangement.LAYOUT_TYPE.FREE,
+            cls: "bi-border",
+            width: 800,
+            height: 400,
+            items: []
+        });
+        var drag = BI.createWidget({
+            type: "bi.label",
+            cls: "bi-border",
+            width: 70,
+            height: 25,
+            text: "drag me"
+        });
+
+        drag.element.draggable({
+            revert: true,
+            cursorAt: {left: 0, top: 0},
+            drag: function (e, ui) {
+                self.arrangement.setPosition({
+                    left: ui.position.left,
+                    top: ui.position.top
+                }, {
+                    width: 300,
+                    height: 200
+                })
+            },
+            stop: function (e, ui) {
+                self.arrangement.addRegion({
+                    el: self._createItem()
+                });
+            },
+            helper: function (e) {
+                var helper = self.arrangement.getHelper();
+                return helper.element;
+            }
+        });
+
+        BI.createWidget({
+            type: "bi.absolute",
+            element: this,
+            items: [{
+                el: drag,
+                left: 30,
+                top: 450
+            }, {
+                el: this.arrangement,
+                left: 30,
+                top: 30
+            }, {
+                el: {
+                    type: "bi.button",
+                    text: "getAllRegions",
+                    height: 25,
+                    handler: function () {
+                        var items = [];
+                        BI.each(self.arrangement.getAllRegions(), function (i, region) {
+                            items.push({
+                                id: region.id,
+                                left: region.left,
+                                top: region.top,
+                                width: region.width,
+                                height: region.height
+                            });
+                        });
+                        BI.Msg.toast(JSON.stringify(items));
+                    }
+                },
+                left: 230,
+                top: 450
+            }, {
+                el: {
+                    type: "bi.button",
+                    text: "relayout",
+                    height: 25,
+                    handler: function () {
+                        self.arrangement.relayout();
+                    }
+                },
+                left: 330,
+                top: 450
+            }]
+        });
     }
 });
 BI.shortcut("demo.interactive_arrangement", Demo.RelationView);/**
@@ -11871,7 +13342,7 @@ Demo.YearQuarterCombo = BI.inherit(BI.Widget, {
     }
 })
 
-BI.shortcut("demo.year_quarter_combo", Demo.YearQuarterCombo);Demo.CONFIG = Demo.CORE_CONFIG.concat(Demo.BASE_CONFIG).concat(Demo.CASE_CONFIG).concat(Demo.WIDGET_CONFIG).concat(Demo.COMPONENT_CONFIG).concat(Demo.ADDONS_CONFIG).concat(Demo.CATEGORY_CONFIG);
+BI.shortcut("demo.year_quarter_combo", Demo.YearQuarterCombo);Demo.CONFIG = Demo.CORE_CONFIG.concat(Demo.BASE_CONFIG).concat(Demo.CASE_CONFIG).concat(Demo.WIDGET_CONFIG).concat(Demo.COMPONENT_CONFIG).concat(Demo.VM_CONFIG).concat(Demo.ADDONS_CONFIG).concat(Demo.CATEGORY_CONFIG);
 
 Demo.CONSTANTS = {
     SIMPLE_ITEMS: BI.map("柳州市城贸金属材料有限责任公司 柳州市建福房屋租赁有限公司 柳州市迅昌数码办公设备有限责任公司 柳州市河海贸易有限责任公司 柳州市花篮制衣厂 柳州市兴溪物资有限公司 柳州市针织总厂 柳州市衡管物资有限公司 柳州市琪成机电设备有限公司 柳州市松林工程机械修理厂".match(/[^\s]+/g), function (i, v) {

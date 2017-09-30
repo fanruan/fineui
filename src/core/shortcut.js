@@ -13,8 +13,7 @@
             return new (new Function('return ' + config['classType'] + ';')())(config);
         }
 
-        var xtype = config.type.toLowerCase();
-        var cls = kv[xtype];
+        var cls = kv[config.type];
         return new cls(config);
     };
 
