@@ -19902,9 +19902,6 @@ BI.Layout = BI.inherit(BI.Widget, {
         var newEndIdx = newCh.length - 1;
         var newStartVnode = newCh[0];
         var newEndVnode = newCh[newEndIdx];
-        var oldKeyToIdx;
-        var idxInOld;
-        var elmToMove;
         var before;
         var updated;
         var children = {};
@@ -19956,6 +19953,7 @@ BI.Layout = BI.inherit(BI.Widget, {
         BI.each(newCh, function (i, child) {
             var node = self._getOptions(child);
             var key = node.key == null ? i : node.key;
+            children[key]._mount();
             self._children[self._getChildName(i)] = children[key];
         });
 
@@ -19979,7 +19977,7 @@ BI.Layout = BI.inherit(BI.Widget, {
         function addVnodes(before, vnodes, startIdx, endIdx) {
             for (; startIdx <= endIdx; ++startIdx) {
                 var node = addNode(vnodes[startIdx], startIdx);
-                insertBefore(node, before);
+                insertBefore(node, before, false, startIdx);
             }
         }
 
@@ -19991,27 +19989,25 @@ BI.Layout = BI.inherit(BI.Widget, {
             }
         }
 
-        function insertBefore(insert, before, isNext) {
+        function insertBefore(insert, before, isNext, index) {
             insert = self._getOptions(insert);
             before = before && self._getOptions(before);
-            if (BI.isKey(insert.key)) {
-                if (before && children[before.key]) {
-                    var next;
-                    if (isNext) {
-                        next = children[before.key].element.next();
-                    } else {
-                        next = children[before.key].element;
-                    }
-                    if (next.length > 0) {
-                        next.before(children[insert.key].element);
-                    } else {
-                        self._getWrapper().append(children[insert.key].element);
-                    }
+            var insertKey = BI.isKey(insert.key) ? insert.key : index;
+            if (before && children[before.key]) {
+                var beforeKey = BI.isKey(before.key) ? before.key : index;
+                var next;
+                if (isNext) {
+                    next = children[beforeKey].element.next();
                 } else {
-                    self._getWrapper().append(children[insert.key].element);
+                    next = children[beforeKey].element;
+                }
+                if (next.length > 0) {
+                    next.before(children[insert].element);
+                } else {
+                    self._getWrapper().append(children[insertKey].element);
                 }
             } else {
-                throw "key is not defined";
+                self._getWrapper().append(children[insertKey].element);
             }
         }
 
