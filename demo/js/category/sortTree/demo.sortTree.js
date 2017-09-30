@@ -1,3 +1,23 @@
+Demo.Expander = BI.inherit(BI.Widget, {
+    render: function () {
+        var self = this, o = this.options;
+        return {
+            type: "bi.expander",
+            ref: function () {
+                self.expander = this;
+            },
+            el: o.el,
+            popup: o.popup
+        }
+    },
+
+    update: function (opt) {
+        this.expander.populate(opt.items);
+        return true;
+    }
+});
+BI.shortcut("demo.sort_tree_expander", Demo.Expander)
+
 /**
  * guy
  * 二级树
@@ -13,7 +33,9 @@ Demo.SortTree = BI.inherit(BI.Widget, {
         this.tree = BI.createWidget({
             type: "bi.custom_tree",
             element: this,
-            expander: {},
+            expander: {
+                type: "demo.sort_tree_expander"
+            },
 
             items: this._formatItems(0, tree.toJSON()),
 
@@ -71,6 +93,7 @@ Demo.SortTree = BI.inherit(BI.Widget, {
                 }
                 findTheNode.getParent().removeChild(node.id);
                 parentNode.addChild(findTheNode, currentIndex);
+                console.log(tree.toJSON());
                 self.tree.populate(self._formatItems(0, tree.toJSON()));
             },
             start: function (event, ui) {

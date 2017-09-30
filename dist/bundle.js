@@ -20002,7 +20002,7 @@ BI.Layout = BI.inherit(BI.Widget, {
                     next = children[beforeKey].element;
                 }
                 if (next.length > 0) {
-                    next.before(children[insert].element);
+                    next.before(children[insertKey].element);
                 } else {
                     self._getWrapper().append(children[insertKey].element);
                 }
