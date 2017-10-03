@@ -10041,9 +10041,11 @@ BI.MultiSelectList = BI.inherit(BI.Widget, {
             cls: "popup-multi-select-list bi-border-left bi-border-right bi-border-bottom",
             itemsCreator: o.itemsCreator,
             valueFormatter: o.valueFormatter,
+            logic: {
+                dynamic: false
+            },
             // onLoaded: o.onLoaded,
             el: {
-                height: ""
             }
         });
         this.adapter.on(BI.MultiSelectLoader.EVENT_CHANGE, function () {
