@@ -5932,9 +5932,9 @@ BI.MonthTrigger = BI.inherit(BI.Trigger, {
             this.editor.setTitle(v + 1);
             return;
         }
-        this.editor.setState();
-        this.editor.setValue();
-        this.editor.setTitle();
+        this.editor.setState("");
+        this.editor.setValue("");
+        this.editor.setTitle("");
     },
     getKey: function () {
         return this.editor.getValue() | 0;
@@ -10041,9 +10041,11 @@ BI.MultiSelectList = BI.inherit(BI.Widget, {
             cls: "popup-multi-select-list bi-border-left bi-border-right bi-border-bottom",
             itemsCreator: o.itemsCreator,
             valueFormatter: o.valueFormatter,
+            logic: {
+                dynamic: false
+            },
             // onLoaded: o.onLoaded,
             el: {
-                height: ""
             }
         });
         this.adapter.on(BI.MultiSelectLoader.EVENT_CHANGE, function () {
@@ -13385,6 +13387,7 @@ BI.QuarterTrigger = BI.inherit(BI.Trigger, {
     },
 
     setValue: function (v) {
+        v = v || "";
         this.editor.setState(v);
         this.editor.setValue(v);
         this.editor.setTitle(v);
@@ -16022,7 +16025,7 @@ BI.YearCombo = BI.inherit(BI.Widget, {
     },
 
     setValue: function (v) {
-        this.combo.setValue(v);
+        this.combo.setValue(v || "");
     },
 
     getValue: function () {

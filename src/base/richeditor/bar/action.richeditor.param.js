@@ -26,9 +26,11 @@ BI.RichEditorParamAction = BI.inherit(BI.RichEditorAction, {
         var instance = o.editor.selectedInstance;
         var next = $param.next();
         if (next.length === 0 || this._isParam(next)) {
-            var node = this._createBlankNode();
-            $param.after(node);
-            instance.setFocus(node[0]);
+            var preNode = this._createBlankNode();
+            var nextNode = this._createBlankNode();
+            $param.before(preNode);
+            $param.after(nextNode);
+            instance.setFocus(nextNode[0]);
         } else {
             instance.setFocus(next[0]);
         }

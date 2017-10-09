@@ -1182,9 +1182,6 @@ BI.Factory = {
         // manipulation API.
         _removeElement: function () {
             this.$el.remove();
-            if ($.browser.msie === true) {
-                this.el.outerHTML = '';
-            }
         },
 
         // Change the view's element (`this.el` property) and re-delegate the
@@ -1225,7 +1222,7 @@ BI.Factory = {
         // alternative DOM manipulation API and are only required to set the
         // `this.el` property.
         _setElement: function (el) {
-            this.$el = el instanceof BI.$ ? el : BI.$(el);
+            this.$el = el instanceof BI.$ ? el : (BI.isWidget(el) ? el.element : BI.$(el));
             this.element = this.$el;
             this.el = this.$el[0];
         },
@@ -1636,8 +1633,8 @@ BI.Factory = {
 
             // Add a cross-platform `addEventListener` shim for older browsers.
             var addEventListener = window.addEventListener || function (eventName, listener) {
-                    return attachEvent('on' + eventName, listener);
-                };
+                return attachEvent('on' + eventName, listener);
+            };
 
             // Depending on whether we're using pushState or hashes, and whether
             // 'onhashchange' is supported, determine how we check the URL state.
@@ -1657,8 +1654,8 @@ BI.Factory = {
         stop: function () {
             // Add a cross-platform `removeEventListener` shim for older browsers.
             var removeEventListener = window.removeEventListener || function (eventName, listener) {
-                    return detachEvent('on' + eventName, listener);
-                };
+                return detachEvent('on' + eventName, listener);
+            };
 
             // Remove window listeners.
             if (this._hasPushState) {
@@ -4804,7 +4801,7 @@ BI.Widget = BI.inherit(BI.OB, {
     __d: function () {
         this.beforeDestroy && this.beforeDestroy();
         BI.each(this._children, function (i, widget) {
-            widget._unMount && widget._unMount();
+            widget && widget._unMount && widget._unMount();
         });
         this._children = {};
         this._parent = null;
@@ -4827,7 +4824,7 @@ BI.Widget = BI.inherit(BI.OB, {
 
     empty: function () {
         BI.each(this._children, function (i, widget) {
-            widget._unMount && widget._unMount();
+            widget && widget._unMount && widget._unMount();
         });
         this._children = {};
         this.element.empty();
@@ -5547,8 +5544,8 @@ BI.View = BI.inherit(BI.V, {
         return this;
     },
 
-    createView: function (url, modelData, viewData) {
-        return BI.Factory.createView(url, this.get(url), modelData, viewData);
+    createView: function (url, modelData, viewData, context) {
+        return BI.Factory.createView(url, this.get(url), modelData, viewData, context);
     },
 
     /**
@@ -5586,7 +5583,7 @@ BI.View = BI.inherit(BI.V, {
         }
         cardLayout.setVisible(true);
         if (BI.isKey(cardName) && !cardLayout.isCardExisted(cardName)) {
-            var view = this.createView(this.rootURL + "/" + cardName, data, viewData);
+            var view = this.createView(this.rootURL + "/" + cardName, data, viewData, this);
             isValid && this.model.addChild(modelData, view.model);
             view.listenTo(view.model, "destroy", function () {
                 delete self._cards[cardName];
@@ -5712,6 +5709,7 @@ BI.View = BI.inherit(BI.V, {
                 success && success(data, model);
             }
         }));
+
         function callback(data) {
             self.model.load(data);
             self.load(data);
@@ -5889,7 +5887,14 @@ BI.View = BI.inherit(BI.V, {
         this.trigger(BI.Events.DESTROY);
         this.off();
     }
-});(function () {
+});
+
+BI.View.registerVMRouter = function (viewRouter, modelRouter) {
+    //配置View
+    BI.View.createView = BI.View.prototype.createView = function (url, modelData, viewData, context) {
+        return BI.Factory.createView(url, viewRouter.get(url), _.extend({}, modelRouter.get(url), modelData), viewData || {}, context);
+    };
+};(function () {
     var kv = {};
     BI.shortcut = function (xtype, cls) {
         if (kv[xtype] != null) {
@@ -5904,8 +5909,7 @@ BI.View = BI.inherit(BI.V, {
             return new (new Function('return ' + config['classType'] + ';')())(config);
         }
 
-        var xtype = config.type.toLowerCase();
-        var cls = kv[xtype];
+        var cls = kv[config.type];
         return new cls(config);
     };
 
@@ -10504,7 +10508,7 @@ $.extend(BI, {
             }
             child.setParent(this);
             if (cur >= 0) {
-                this.getChild(cur).setRight(child);
+                this.getChild(cur) && this.getChild(cur).setRight(child);
                 child.setLeft(this.getChild(cur));
             }
             if (BI.isUndefined(index)) {
@@ -11527,31 +11531,161 @@ BI.Layout = BI.inherit(BI.Widget, {
         })
     },
 
-    update: function (item) {
-        var o = this.options;
-        var items = item.items || [];
-        var updated, i, len;
-        for (i = 0, len = Math.min(o.items.length, items.length); i < len; i++) {
-            if (!this._compare(o.items[i], items[i])) {
-                updated = this.updateItemAt(i, items[i]) || updated;
+    patchItem: function (oldVnode, vnode, index) {
+        if (!this._compare(oldVnode, vnode)) {
+            return this.updateItemAt(index, vnode);
+        }
+    },
+
+    updateChildren: function (oldCh, newCh) {
+        var self = this;
+        var oldStartIdx = 0, newStartIdx = 0;
+        var oldEndIdx = oldCh.length - 1;
+        var oldStartVnode = oldCh[0];
+        var oldEndVnode = oldCh[oldEndIdx];
+        var newEndIdx = newCh.length - 1;
+        var newStartVnode = newCh[0];
+        var newEndVnode = newCh[newEndIdx];
+        var before;
+        var updated;
+        var children = {};
+        BI.each(oldCh, function (i, child) {
+            child = self._getOptions(child);
+            var key = child.key == null ? i : child.key;
+            if (BI.isKey(key)) {
+                children[key] = self._children[self._getChildName(i)];
+            }
+        });
+
+        while (oldStartIdx <= oldEndIdx && newStartIdx <= newEndIdx) {
+            if (BI.isNull(oldStartVnode)) {
+                oldStartVnode = oldCh[++oldStartIdx];
+            } else if (BI.isNull(oldEndVnode)) {
+                oldEndVnode = oldCh[--oldEndIdx];
+            } else if (sameVnode(oldStartVnode, newStartVnode, oldStartIdx, newStartIdx)) {
+                updated = this.patchItem(oldStartVnode, newStartVnode, oldStartIdx) || updated;
+                oldStartVnode = oldCh[++oldStartIdx];
+                newStartVnode = newCh[++newStartIdx];
+            } else if (sameVnode(oldEndVnode, newEndVnode, oldEndIdx, newEndIdx)) {
+                updated = this.patchItem(oldEndVnode, newEndVnode, oldEndIdx) || updated;
+                oldEndVnode = oldCh[--oldEndIdx];
+                newEndVnode = newCh[--newEndIdx];
+            } else if (sameVnode(oldStartVnode, newEndVnode)) {
+                updated = this.patchItem(oldStartVnode, newEndVnode, oldStartIdx) || updated;
+                insertBefore(oldStartVnode, oldEndVnode, true);
+                oldStartVnode = oldCh[++oldStartIdx];
+                newEndVnode = newCh[--newEndIdx];
+            } else if (sameVnode(oldEndVnode, newStartVnode)) {
+                updated = this.patchItem(oldEndVnode, newStartVnode, oldEndIdx) || updated;
+                insertBefore(oldEndVnode, oldStartVnode);
+                oldEndVnode = oldCh[--oldEndIdx];
+                newStartVnode = newCh[++newStartIdx];
+            } else {
+                var node = addNode(newStartVnode);
+                insertBefore(node, oldStartVnode);
+                newStartVnode = newCh[++newStartIdx];
             }
         }
-        if (o.items.length > items.length) {
-            var deleted = [];
-            for (i = items.length; i < o.items.length; i++) {
-                deleted.push(this._children[this._getChildName(i)]);
-                delete this._children[this._getChildName(i)];
+        if (oldStartIdx > oldEndIdx) {
+            before = BI.isNull(newCh[newEndIdx + 1]) ? null : newCh[newEndIdx + 1].elm;
+            addVnodes(before, newCh, newStartIdx, newEndIdx);
+        } else if (newStartIdx > newEndIdx) {
+            removeVnodes(oldCh, oldStartIdx, oldEndIdx);
+        }
+
+        this._children = {};
+        BI.each(newCh, function (i, child) {
+            var node = self._getOptions(child);
+            var key = node.key == null ? i : node.key;
+            children[key]._mount();
+            self._children[self._getChildName(i)] = children[key];
+        });
+
+        function sameVnode(vnode1, vnode2, oldIndex, newIndex) {
+            vnode1 = self._getOptions(vnode1);
+            vnode2 = self._getOptions(vnode2);
+            if (BI.isKey(vnode1.key)) {
+                return vnode1.key === vnode2.key;
             }
-            o.items.splice(items.length);
-            BI.each(deleted, function (i, w) {
-                w._destroy();
-            })
-        } else if (items.length > o.items.length) {
-            for (i = o.items.length; i < items.length; i++) {
-                this.addItemAt(i, items[i]);
+            if (oldIndex >= 0) {
+                return oldIndex === newIndex
             }
         }
+
+        function addNode(vnode, index) {
+            var opt = self._getOptions(vnode);
+            var key = opt.key == null ? index : opt.key;
+            return children[key] = self._addElement(key, vnode);
+        }
+
+        function addVnodes(before, vnodes, startIdx, endIdx) {
+            for (; startIdx <= endIdx; ++startIdx) {
+                var node = addNode(vnodes[startIdx], startIdx);
+                insertBefore(node, before, false, startIdx);
+            }
+        }
+
+        function removeVnodes(vnodes, startIdx, endIdx) {
+            for (; startIdx <= endIdx; ++startIdx) {
+                var node = self._getOptions(vnodes[startIdx]);
+                var key = node.key == null ? startIdx : node.key;
+                children[key]._destroy();
+            }
+        }
+
+        function insertBefore(insert, before, isNext, index) {
+            insert = self._getOptions(insert);
+            before = before && self._getOptions(before);
+            var insertKey = BI.isKey(insert.key) ? insert.key : index;
+            if (before && children[before.key]) {
+                var beforeKey = BI.isKey(before.key) ? before.key : index;
+                var next;
+                if (isNext) {
+                    next = children[beforeKey].element.next();
+                } else {
+                    next = children[beforeKey].element;
+                }
+                if (next.length > 0) {
+                    next.before(children[insertKey].element);
+                } else {
+                    self._getWrapper().append(children[insertKey].element);
+                }
+            } else {
+                self._getWrapper().append(children[insertKey].element);
+            }
+        }
+
         return updated;
+    },
+
+    update: function (opt) {
+        var o = this.options;
+        var items = opt.items || [];
+        var updated = this.updateChildren(o.items, items);
+        this.options.items = items;
+        return updated;
+        // var updated, i, len;
+        // for (i = 0, len = Math.min(o.items.length, items.length); i < len; i++) {
+        //     if (!this._compare(o.items[i], items[i])) {
+        //         updated = this.updateItemAt(i, items[i]) || updated;
+        //     }
+        // }
+        // if (o.items.length > items.length) {
+        //     var deleted = [];
+        //     for (i = items.length; i < o.items.length; i++) {
+        //         deleted.push(this._children[this._getChildName(i)]);
+        //         delete this._children[this._getChildName(i)];
+        //     }
+        //     o.items.splice(items.length);
+        //     BI.each(deleted, function (i, w) {
+        //         w._destroy();
+        //     })
+        // } else if (items.length > o.items.length) {
+        //     for (i = o.items.length; i < items.length; i++) {
+        //         this.addItemAt(i, items[i]);
+        //     }
+        // }
+        // return updated;
     },
 
     stroke: function (items) {
@@ -13881,7 +14015,7 @@ BI.HorizontalLayout = BI.inherit(BI.Layout, {
     props: function () {
         return BI.extend(BI.HorizontalLayout.superclass.props.apply(this, arguments), {
             baseCls: "bi-horizontal-layout",
-            verticalAlign: "middle",
+            verticalAlign: BI.VerticalAlign.Top,
             columnSize: [],
             scrollx: true,
             hgap: 0,
@@ -16855,7 +16989,25 @@ BI.extend(jQuery, {
  */
 BI.Func = {};
 BI.extend(BI.Func, {
-
+    /**
+     * 创建唯一的名字
+     * @param array
+     * @param name
+     * @returns {*}
+     */
+    createDistinctName: function (array, name) {
+        var src = name, idx = 1;
+        name = name || "";
+        while (true) {
+            if (BI.every(array, function (i, item) {
+                    return item.name !== name;
+                })) {
+                break;
+            }
+            name = src + (idx++);
+        }
+        return name;
+    },
     /**
      * 获取搜索结果
      * @param items

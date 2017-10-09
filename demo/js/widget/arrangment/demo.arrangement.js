@@ -1,25 +1,29 @@
-Demo.AdaptiveArrangement = BI.inherit(BI.Widget, {
+Demo.Arrangement = BI.inherit(BI.Widget, {
+
+    beforeCreate: function () {
+        this.index = 0;
+    },
 
     _createItem: function () {
         var self = this;
-        var id = BI.UUID();
         var item = BI.createWidget({
             type: "bi.text_button",
-            id: id,
+            id: this.index,
+            text: "点我删掉",
             cls: "layout-bg" + BI.random(1, 8),
-            value: "点我我就在最上面了",
             handler: function () {
-                // self.arrangement.deleteRegion(id);
+                self.arrangement.deleteRegion(this.attr("id"));
             }
         });
+        this.index++;
         return item;
     },
 
     render: function () {
         var self = this;
         this.arrangement = BI.createWidget({
-            type: "bi.adaptive_arrangement",
-            layoutType: BI.Arrangement.LAYOUT_TYPE.FREE,
+            type: "bi.arrangement",
+            layoutType: BI.Arrangement.LAYOUT_TYPE.GRID,
             cls: "bi-border",
             width: 800,
             height: 400,
@@ -88,20 +92,9 @@ Demo.AdaptiveArrangement = BI.inherit(BI.Widget, {
                 },
                 left: 230,
                 top: 450
-            }, {
-                el: {
-                    type: "bi.button",
-                    text: "relayout",
-                    height: 25,
-                    handler: function () {
-                        self.arrangement.relayout();
-                    }
-                },
-                left: 330,
-                top: 450
             }]
         });
     }
 });
 
-BI.shortcut("demo.adaptive_arrangement", Demo.AdaptiveArrangement);
+BI.shortcut("demo.arrangement", Demo.Arrangement);
