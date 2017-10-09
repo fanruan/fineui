@@ -2,24 +2,27 @@
  * Created by Urthur on 2017/9/4.
  */
 Demo.Slider = BI.inherit(BI.Widget, {
-    _props: {
-        baseCls: "demo-slider",
-        min: 10,
-        max: 50
+    props: {
+            baseCls: "demo-slider",
+            width: 300,
+            height: 50,
+            min: 0,
+            max: 100
     },
 
     render: function () {
+        var self = this, o = this.options;
         var singleSlider = BI.createWidget({
             type: "bi.single_slider",
             digit: 0,
-            width: 300,
-            height: 50,
+            width: o.width,
+            height: o.height,
             cls: "layout-bg-white"
         });
 
         singleSlider.setMinAndMax({
             min: 10,
-            max: 100
+            max: o.max
         });
 
         singleSlider.setValue(30);
@@ -28,43 +31,42 @@ Demo.Slider = BI.inherit(BI.Widget, {
             console.log(this.getValue());
         });
 
+        var normalSingleSlider = BI.createWidget({
+            type: "bi.single_slider_normal",
+            width: o.width,
+            height: 30,
+            cls: "layout-bg-white"
+        });
+        normalSingleSlider.setMinAndMax({
+            min: o.min,
+            max: o.max
+        });
+        normalSingleSlider.setValue(10);
+        normalSingleSlider.populate();
+
         var singleSliderLabel = BI.createWidget({
             type: "bi.single_slider_label",
-            height: 50,
-            width: 300,
+            width: o.width,
+            height: o.height,
             digit: 0,
             unit: "个",
             cls: "layout-bg-white"
         });
         singleSliderLabel.setMinAndMax({
-            min: 0,
-            max: 100
+            min: o.min,
+            max: o.max
         });
         singleSliderLabel.setValue(10);
         singleSliderLabel.populate();
 
-        var normalSingleSlider = BI.createWidget({
-            type: "bi.single_slider_normal",
-            height: 30,
-            width: 300,
-            cls: "layout-bg-white"
-        });
-        normalSingleSlider.setMinAndMax({
-            min: 0,
-            max: 100
-        });
-        normalSingleSlider.setValue(10);
-        normalSingleSlider.populate();
-
-
         var intervalSlider = BI.createWidget({
             type: "bi.interval_slider",
-            width: 300,
+            width: o.width,
             cls: "layout-bg-white"
         });
         intervalSlider.setMinAndMax({
-            min: 0,
-            max: 120
+            min: o.min,
+            max: o.max
         });
         intervalSlider.setValue({
             min: 10,
@@ -74,7 +76,7 @@ Demo.Slider = BI.inherit(BI.Widget, {
 
         var intervalSliderLabel = BI.createWidget({
             type: "bi.interval_slider_label",
-            width: 300,
+            width: o.width,
             unit: "个",
             cls: "layout-bg-white"
         });
