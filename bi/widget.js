@@ -8637,19 +8637,23 @@ BI.MultiSelectCombo = BI.inherit(BI.Single, {
             self._setStartValue("");
         });
         this.trigger.on(BI.MultiSelectTrigger.EVENT_PAUSE, function () {
-            if (this.getSearcher().hasMatched()) {
-                var keyword = this.getSearcher().getKeyword();
-                self._join({
-                    type: BI.Selection.Multi,
-                    value: [keyword]
-                }, function () {
-                    self.combo.setValue(self.storeValue);
-                    self._setStartValue(keyword);
-                    assertShowValue();
-                    self.populate();
-                    self._setStartValue("");
-                })
-            }
+            // if (this.getSearcher().hasMatched()) {
+            var keyword = this.getSearcher().getKeyword();
+            self._join({
+                type: BI.Selection.Multi,
+                value: [keyword]
+            }, function () {
+                //如果在不选的状态下直接把该值添加进来
+                if (self.storeValue.type === BI.Selection.Multi) {
+                    self.storeValue.value.pushDistinct(keyword);
+                }
+                self.combo.setValue(self.storeValue);
+                self._setStartValue(keyword);
+                assertShowValue();
+                self.populate();
+                self._setStartValue("");
+            })
+            // }
         });
         this.trigger.on(BI.MultiSelectTrigger.EVENT_SEARCHING, function (keywords) {
             var last = BI.last(keywords);
@@ -8864,30 +8868,32 @@ BI.MultiSelectCombo = BI.inherit(BI.Single, {
 
     _adjust: function (callback) {
         var self = this, o = this.options;
-        if (!this._count) {
-            o.itemsCreator({
-                type: BI.MultiSelectCombo.REQ_GET_DATA_LENGTH
-            }, function (res) {
-                self._count = res.count;
-                adjust();
-                callback();
-            });
-        } else {
-            adjust();
-            callback();
-        }
+        // if (!this._count) {
+        //     o.itemsCreator({
+        //         type: BI.MultiSelectCombo.REQ_GET_DATA_LENGTH
+        //     }, function (res) {
+        //         self._count = res.count;
+        //         adjust();
+        //         callback();
+        //     });
+        // } else {
+        adjust();
+        callback();
+
+        // }
+
         function adjust() {
-            if (self.storeValue.type === BI.Selection.All && self.storeValue.value.length >= self._count) {
-                self.storeValue = {
-                    type: BI.Selection.Multi,
-                    value: []
-                }
-            } else if (self.storeValue.type === BI.Selection.Multi && self.storeValue.value.length >= self._count) {
-                self.storeValue = {
-                    type: BI.Selection.All,
-                    value: []
-                }
-            }
+            // if (self.storeValue.type === BI.Selection.All && self.storeValue.value.length >= self._count) {
+            //     self.storeValue = {
+            //         type: BI.Selection.Multi,
+            //         value: []
+            //     }
+            // } else if (self.storeValue.type === BI.Selection.Multi && self.storeValue.value.length >= self._count) {
+            //     self.storeValue = {
+            //         type: BI.Selection.All,
+            //         value: []
+            //     }
+            // }
             if (self.wants2Quit === true) {
                 self.fireEvent(BI.MultiSelectCombo.EVENT_CONFIRM);
                 self.wants2Quit = false;
