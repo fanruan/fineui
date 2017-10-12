@@ -88530,8 +88530,7 @@ BI.MultiSelectList = BI.inherit(BI.Widget, {
                 dynamic: false
             },
             // onLoaded: o.onLoaded,
-            el: {
-            }
+            el: {}
         });
         this.adapter.on(BI.MultiSelectLoader.EVENT_CHANGE, function () {
             self.storeValue = this.getValue();
@@ -88586,21 +88585,33 @@ BI.MultiSelectList = BI.inherit(BI.Widget, {
             }, {
                 eventName: BI.Searcher.EVENT_PAUSE,
                 action: function () {
+                    var keyword = this.getKeyword();
                     if (this.hasMatched()) {
-                        var keyword = this.getKeyword();
                         self._join({
                             type: BI.Selection.Multi,
                             value: [keyword]
                         }, function () {
+                            if (self.storeValue.type === BI.Selection.Multi) {
+                                self.storeValue.value.pushDistinct(keyword)
+                            }
                             self._showAdapter();
                             self.adapter.setValue(self.storeValue);
                             self._setStartValue(keyword);
                             assertShowValue();
+                            self.adapter.populate();
                             self._setStartValue("");
                             self.fireEvent(BI.MultiSelectList.EVENT_CHANGE);
                         })
                     } else {
+                        if (self.storeValue.type === BI.Selection.Multi) {
+                            self.storeValue.value.pushDistinct(keyword)
+                        }
                         self._showAdapter();
+                        self.adapter.setValue(self.storeValue);
+                        self.adapter.populate();
+                        if (self.storeValue.type === BI.Selection.Multi) {
+                            self.fireEvent(BI.MultiSelectList.EVENT_CHANGE);
+                        }
                     }
                 }
             }, {
@@ -88632,7 +88643,7 @@ BI.MultiSelectList = BI.inherit(BI.Widget, {
                             self.fireEvent(BI.MultiSelectList.EVENT_CHANGE);
                         });
                     } else {
-                        self._join(this.getValue(), function () {//安徽省 北京
+                        self._join(this.getValue(), function () {
                             assertShowValue();
                             self.fireEvent(BI.MultiSelectList.EVENT_CHANGE);
                         });
@@ -88753,30 +88764,32 @@ BI.MultiSelectList = BI.inherit(BI.Widget, {
 
     _adjust: function (callback) {
         var self = this, o = this.options;
-        if (!this._count) {
-            o.itemsCreator({
-                type: BI.MultiSelectList.REQ_GET_DATA_LENGTH
-            }, function (res) {
-                self._count = res.count;
-                adjust();
-                callback();
-            });
-        } else {
-            adjust();
-            callback();
-        }
+        // if (!this._count) {
+        //     o.itemsCreator({
+        //         type: BI.MultiSelectList.REQ_GET_DATA_LENGTH
+        //     }, function (res) {
+        //         self._count = res.count;
+        //         adjust();
+        //         callback();
+        //     });
+        // } else {
+        adjust();
+        callback();
+
+        // }
+
         function adjust() {
-            if (self.storeValue.type === BI.Selection.All && self.storeValue.value.length >= self._count) {
-                self.storeValue = {
-                    type: BI.Selection.Multi,
-                    value: []
-                }
-            } else if (self.storeValue.type === BI.Selection.Multi && self.storeValue.value.length >= self._count) {
-                self.storeValue = {
-                    type: BI.Selection.All,
-                    value: []
-                }
-            }
+            // if (self.storeValue.type === BI.Selection.All && self.storeValue.value.length >= self._count) {
+            //     self.storeValue = {
+            //         type: BI.Selection.Multi,
+            //         value: []
+            //     }
+            // } else if (self.storeValue.type === BI.Selection.Multi && self.storeValue.value.length >= self._count) {
+            //     self.storeValue = {
+            //         type: BI.Selection.All,
+            //         value: []
+            //     }
+            // }
         }
     },
 
