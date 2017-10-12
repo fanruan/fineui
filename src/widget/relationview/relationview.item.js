@@ -35,7 +35,8 @@ BI.RelationViewItem = BI.inherit(BI.BasicButton, {
             value: o.value,
             height: o.height,
             textAlign: "left",
-            width: o.isPrimary ? 70 : 90
+            width: o.isPrimary ? 70 : 90,
+            lgap: o.isPrimary ? 0 : 10
         });
         BI.createWidget({
             type: "bi.vertical_adapt",
