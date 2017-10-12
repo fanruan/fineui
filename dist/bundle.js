@@ -48174,7 +48174,7 @@ BI.CodeEditor = BI.inherit(BI.Single, {
     },
 
     _analyzeContent: function (v) {
-        var regx = /\$[\{][^\}]*[\}]|(\s+)|\w*\w|\$\{[^\$\(\)\+\-\*\/)\$,]*\w\}|\$\{[^\$\(\)\+\-\*\/]*\w\}|\$\{[^\$\(\)\+\-\*\/]*[\u4e00-\u9fa5]\}|\w|(.)|\n/g;
+        var regx = /\$[\{][^\}]*[\}]|[^\$\{]*[^\$\{]/g;
         return v.match(regx);
     },
 
@@ -81557,6 +81557,7 @@ BI.DateTimeSelect = BI.inherit(BI.Widget, {
         this.editor = BI.createWidget({
             type: "bi.sign_editor",
             value: this._alertInEditorValue(o.min),
+            allowBlank: false,
             errorText: BI.i18nText("BI-Please_Input_Natural_Number"),
             validationChecker: function(v){
                 return BI.isNaturalNumber(v);
@@ -91937,7 +91938,8 @@ BI.RelationViewItem = BI.inherit(BI.BasicButton, {
             value: o.value,
             height: o.height,
             textAlign: "left",
-            width: o.isPrimary ? 70 : 90
+            width: o.isPrimary ? 70 : 90,
+            lgap: o.isPrimary ? 0 : 10
         });
         BI.createWidget({
             type: "bi.vertical_adapt",
