@@ -170,12 +170,12 @@ jQuery._farbtastic = function (container, callback) {
   /**
    * Mousedown handler
    */
-  fb.mousedown = function (event) {
+  fb.click = function (event) {
     // Capture mouse
-    if (!document.dragging) {
-      $(document).bind('mousemove', fb.mousemove).bind('mouseup', fb.mouseup);
-      document.dragging = true;
-    }
+    // if (!document.dragging) {
+    //   $(document).bind('mousemove', fb.mousemove).bind('mouseup', fb.mouseup);
+    //   document.dragging = true;
+    // }
 
     // Check which area is being dragged
     var pos = fb.widgetCoords(event);
@@ -210,12 +210,12 @@ jQuery._farbtastic = function (container, callback) {
   /**
    * Mouseup handler
    */
-  fb.mouseup = function () {
-    // Uncapture mouse
-    $(document).unbind('mousemove', fb.mousemove);
-    $(document).unbind('mouseup', fb.mouseup);
-    document.dragging = false;
-  }
+  // fb.mouseup = function () {
+  //   // Uncapture mouse
+  //   $(document).unbind('mousemove', fb.mousemove);
+  //   $(document).unbind('mouseup', fb.mouseup);
+  //   document.dragging = false;
+  // }
 
   /**
    * Update the markers and styles
@@ -333,7 +333,7 @@ jQuery._farbtastic = function (container, callback) {
   }
 
   // Install mousedown handler (the others are set on the document on-demand)
-  $('*', e).mousedown(fb.mousedown);
+  $('*', e).click(fb.click);
 
     // Init color
   fb.setColor('#000000');
