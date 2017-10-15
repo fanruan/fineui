@@ -19054,6 +19054,14 @@ BI.CodeEditor = BI.inherit(BI.Single, {
             self.fireEvent(BI.CodeEditor.EVENT_BLUR);
         });
 
+        this.editor.on("mousedown", function (cm, e) {
+            //IE下mousedown之后会触发blur,所以nextTick后再做focus
+            BI.nextTick(function () {
+                self.fireEvent(BI.CodeEditor.EVENT_FOCUS);
+            });
+            e.stopPropagation();
+        });
+
         // this.editor.on("blur", function () {
         //     self.editor.execCommand("goLineEnd");
         // });
