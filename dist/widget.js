@@ -828,6 +828,7 @@ BI.Arrangement = BI.inherit(BI.Widget, {
         });
         this.container = BI.createWidget({
             type: "bi.absolute",
+            cls: "arrangement-container",
             items: o.items.concat([this.block, this.arrangement])
         });
 
