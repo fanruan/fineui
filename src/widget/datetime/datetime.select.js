@@ -16,6 +16,7 @@ BI.DateTimeSelect = BI.inherit(BI.Widget, {
         this.editor = BI.createWidget({
             type: "bi.sign_editor",
             value: this._alertInEditorValue(o.min),
+            allowBlank: false,
             errorText: BI.i18nText("BI-Please_Input_Natural_Number"),
             validationChecker: function(v){
                 return BI.isNaturalNumber(v);

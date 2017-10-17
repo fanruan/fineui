@@ -828,6 +828,7 @@ BI.Arrangement = BI.inherit(BI.Widget, {
         });
         this.container = BI.createWidget({
             type: "bi.absolute",
+            cls: "arrangement-container",
             items: o.items.concat([this.block, this.arrangement])
         });
 
@@ -3078,6 +3079,7 @@ BI.DateTimeSelect = BI.inherit(BI.Widget, {
         this.editor = BI.createWidget({
             type: "bi.sign_editor",
             value: this._alertInEditorValue(o.min),
+            allowBlank: false,
             errorText: BI.i18nText("BI-Please_Input_Natural_Number"),
             validationChecker: function(v){
                 return BI.isNaturalNumber(v);
@@ -8637,19 +8639,23 @@ BI.MultiSelectCombo = BI.inherit(BI.Single, {
             self._setStartValue("");
         });
         this.trigger.on(BI.MultiSelectTrigger.EVENT_PAUSE, function () {
-            if (this.getSearcher().hasMatched()) {
-                var keyword = this.getSearcher().getKeyword();
-                self._join({
-                    type: BI.Selection.Multi,
-                    value: [keyword]
-                }, function () {
-                    self.combo.setValue(self.storeValue);
-                    self._setStartValue(keyword);
-                    assertShowValue();
-                    self.populate();
-                    self._setStartValue("");
-                })
-            }
+            // if (this.getSearcher().hasMatched()) {
+            var keyword = this.getSearcher().getKeyword();
+            self._join({
+                type: BI.Selection.Multi,
+                value: [keyword]
+            }, function () {
+                //如果在不选的状态下直接把该值添加进来
+                if (self.storeValue.type === BI.Selection.Multi) {
+                    self.storeValue.value.pushDistinct(keyword);
+                }
+                self.combo.setValue(self.storeValue);
+                self._setStartValue(keyword);
+                assertShowValue();
+                self.populate();
+                self._setStartValue("");
+            })
+            // }
         });
         this.trigger.on(BI.MultiSelectTrigger.EVENT_SEARCHING, function (keywords) {
             var last = BI.last(keywords);
@@ -8864,30 +8870,32 @@ BI.MultiSelectCombo = BI.inherit(BI.Single, {
 
     _adjust: function (callback) {
         var self = this, o = this.options;
-        if (!this._count) {
-            o.itemsCreator({
-                type: BI.MultiSelectCombo.REQ_GET_DATA_LENGTH
-            }, function (res) {
-                self._count = res.count;
-                adjust();
-                callback();
-            });
-        } else {
-            adjust();
-            callback();
-        }
+        // if (!this._count) {
+        //     o.itemsCreator({
+        //         type: BI.MultiSelectCombo.REQ_GET_DATA_LENGTH
+        //     }, function (res) {
+        //         self._count = res.count;
+        //         adjust();
+        //         callback();
+        //     });
+        // } else {
+        adjust();
+        callback();
+
+        // }
+
         function adjust() {
-            if (self.storeValue.type === BI.Selection.All && self.storeValue.value.length >= self._count) {
-                self.storeValue = {
-                    type: BI.Selection.Multi,
-                    value: []
-                }
-            } else if (self.storeValue.type === BI.Selection.Multi && self.storeValue.value.length >= self._count) {
-                self.storeValue = {
-                    type: BI.Selection.All,
-                    value: []
-                }
-            }
+            // if (self.storeValue.type === BI.Selection.All && self.storeValue.value.length >= self._count) {
+            //     self.storeValue = {
+            //         type: BI.Selection.Multi,
+            //         value: []
+            //     }
+            // } else if (self.storeValue.type === BI.Selection.Multi && self.storeValue.value.length >= self._count) {
+            //     self.storeValue = {
+            //         type: BI.Selection.All,
+            //         value: []
+            //     }
+            // }
             if (self.wants2Quit === true) {
                 self.fireEvent(BI.MultiSelectCombo.EVENT_CONFIRM);
                 self.wants2Quit = false;
@@ -10045,8 +10053,7 @@ BI.MultiSelectList = BI.inherit(BI.Widget, {
                 dynamic: false
             },
             // onLoaded: o.onLoaded,
-            el: {
-            }
+            el: {}
         });
         this.adapter.on(BI.MultiSelectLoader.EVENT_CHANGE, function () {
             self.storeValue = this.getValue();
@@ -10101,21 +10108,33 @@ BI.MultiSelectList = BI.inherit(BI.Widget, {
             }, {
                 eventName: BI.Searcher.EVENT_PAUSE,
                 action: function () {
+                    var keyword = this.getKeyword();
                     if (this.hasMatched()) {
-                        var keyword = this.getKeyword();
                         self._join({
                             type: BI.Selection.Multi,
                             value: [keyword]
                         }, function () {
+                            if (self.storeValue.type === BI.Selection.Multi) {
+                                self.storeValue.value.pushDistinct(keyword)
+                            }
                             self._showAdapter();
                             self.adapter.setValue(self.storeValue);
                             self._setStartValue(keyword);
                             assertShowValue();
+                            self.adapter.populate();
                             self._setStartValue("");
                             self.fireEvent(BI.MultiSelectList.EVENT_CHANGE);
                         })
                     } else {
+                        if (self.storeValue.type === BI.Selection.Multi) {
+                            self.storeValue.value.pushDistinct(keyword)
+                        }
                         self._showAdapter();
+                        self.adapter.setValue(self.storeValue);
+                        self.adapter.populate();
+                        if (self.storeValue.type === BI.Selection.Multi) {
+                            self.fireEvent(BI.MultiSelectList.EVENT_CHANGE);
+                        }
                     }
                 }
             }, {
@@ -10147,7 +10166,7 @@ BI.MultiSelectList = BI.inherit(BI.Widget, {
                             self.fireEvent(BI.MultiSelectList.EVENT_CHANGE);
                         });
                     } else {
-                        self._join(this.getValue(), function () {//安徽省 北京
+                        self._join(this.getValue(), function () {
                             assertShowValue();
                             self.fireEvent(BI.MultiSelectList.EVENT_CHANGE);
                         });
@@ -10268,30 +10287,32 @@ BI.MultiSelectList = BI.inherit(BI.Widget, {
 
     _adjust: function (callback) {
         var self = this, o = this.options;
-        if (!this._count) {
-            o.itemsCreator({
-                type: BI.MultiSelectList.REQ_GET_DATA_LENGTH
-            }, function (res) {
-                self._count = res.count;
-                adjust();
-                callback();
-            });
-        } else {
-            adjust();
-            callback();
-        }
+        // if (!this._count) {
+        //     o.itemsCreator({
+        //         type: BI.MultiSelectList.REQ_GET_DATA_LENGTH
+        //     }, function (res) {
+        //         self._count = res.count;
+        //         adjust();
+        //         callback();
+        //     });
+        // } else {
+        adjust();
+        callback();
+
+        // }
+
         function adjust() {
-            if (self.storeValue.type === BI.Selection.All && self.storeValue.value.length >= self._count) {
-                self.storeValue = {
-                    type: BI.Selection.Multi,
-                    value: []
-                }
-            } else if (self.storeValue.type === BI.Selection.Multi && self.storeValue.value.length >= self._count) {
-                self.storeValue = {
-                    type: BI.Selection.All,
-                    value: []
-                }
-            }
+            // if (self.storeValue.type === BI.Selection.All && self.storeValue.value.length >= self._count) {
+            //     self.storeValue = {
+            //         type: BI.Selection.Multi,
+            //         value: []
+            //     }
+            // } else if (self.storeValue.type === BI.Selection.Multi && self.storeValue.value.length >= self._count) {
+            //     self.storeValue = {
+            //         type: BI.Selection.All,
+            //         value: []
+            //     }
+            // }
         }
     },
 
@@ -13439,7 +13460,8 @@ BI.RelationViewItem = BI.inherit(BI.BasicButton, {
             value: o.value,
             height: o.height,
             textAlign: "left",
-            width: o.isPrimary ? 70 : 90
+            width: o.isPrimary ? 70 : 90,
+            lgap: o.isPrimary ? 0 : 10
         });
         BI.createWidget({
             type: "bi.vertical_adapt",

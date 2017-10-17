@@ -3268,7 +3268,7 @@ ul.ztree.zTreeDragUL {
   font-size: 14px;
 }
 .bi-number-interval.number-error .bi-input {
-  color: #e85050;
+  color: #e85050 !important;
 }
 .bi-page-table-cell {
   -webkit-user-select: text;
