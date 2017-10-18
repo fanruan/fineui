@@ -13947,6 +13947,10 @@ BI.shortcut('bi.el', BI.EL);// CodeMirror, copyright (c) by Marijn Haverbeke and
                 nextUntilUnescaped(stream, ch);
                 return "string";
             }
+            if (ch === '\u200b') {
+                nextUntilUnescaped(stream, ch);
+                return "field";
+            }
             if (/[\[\],\(\)]/.test(ch)) {
                 return 'bracket';
             }
@@ -19035,7 +19039,8 @@ BI.CodeEditor = BI.inherit(BI.Single, {
             textWrapping: true,
             lineWrapping: true,
             lineNumbers: false,
-            readOnly: o.readOnly
+            readOnly: o.readOnly,
+            specialChars: /[\u0000-\u001f\u007f\u00ad\u200c-\u200f\u2028\u2029\ufeff]/
         });
         o.lineHeight === 1 ? this.element.addClass("codemirror-low-line-height") : this.element.addClass("codemirror-high-line-height");
         this.editor.on("change", function (cm, change) {
@@ -19120,7 +19125,7 @@ BI.CodeEditor = BI.inherit(BI.Single, {
         var value = param;
         param = this.options.paramFormatter(param);
         var from = this.editor.getCursor();
-        this.editor.replaceSelection(param);
+        this.editor.replaceSelection('\u200b' + param + '\u200b');
         var to = this.editor.getCursor();
         var options = {className: 'param', atomic: true};
         if (BI.isNotNull(param.match(/^<!.*!>$/))) {
@@ -19128,7 +19133,6 @@ BI.CodeEditor = BI.inherit(BI.Single, {
         }
         options.value = value;
         this.editor.markText(from, to, options);
-        this.editor.replaceSelection(" ");
         this.editor.focus();
     },
 
