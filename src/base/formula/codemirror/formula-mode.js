@@ -23,6 +23,10 @@
                 nextUntilUnescaped(stream, ch);
                 return "string";
             }
+            if (ch === '\u200b') {
+                nextUntilUnescaped(stream, ch);
+                return "field";
+            }
             if (/[\[\],\(\)]/.test(ch)) {
                 return 'bracket';
             }
