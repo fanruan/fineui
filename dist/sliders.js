@@ -641,7 +641,7 @@ BI.IntervalSliderLabel = BI.inherit(BI.Widget, {
                     }]
                 }],
                 rgap: c.EDITOR_R_GAP,
-                height: 70
+                height: 50
             },
             top: 0,
             left: 0,
@@ -874,7 +874,6 @@ BI.IntervalSliderLabel = BI.inherit(BI.Widget, {
         var o = this.options;
         var valueOne = BI.parseFloat(v.min);
         var valueTwo = BI.parseFloat(v.max);
-        valueOne = o.digit === false ? valueOne : valueOne.toFixed(o.digit);
         valueOne = o.digit === false ? valueOne : valueOne.toFixed(o.digit);
         if (!isNaN(valueOne) && !isNaN(valueTwo)) {
             if (this._checkValidation(valueOne)) {
