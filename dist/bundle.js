@@ -32195,9 +32195,9 @@ BI.Combo = BI.inherit(BI.Widget, {
                     var debounce = BI.debounce(function (e) {
                         if (self.combo.element.__isMouseInBounds__(e)) {
                             if (self.isEnabled() && self.isValid() && self.combo.isEnabled() && self.combo.isValid()) {
-                                if (!o.toggle && self.isViewVisible()) {
-                                    return;
-                                }
+                                // if (!o.toggle && self.isViewVisible()) {
+                                //     return;
+                                // }
                                 o.toggle ? self._toggle() : self._popupView();
                                 if (self.isViewVisible()) {
                                     self.fireEvent(BI.Controller.EVENT_CHANGE, BI.Events.EXPAND, "", self.combo);
@@ -32218,9 +32218,9 @@ BI.Combo = BI.inherit(BI.Widget, {
                     var debounce = BI.debounce(function (e) {
                         if (self.combo.element.__isMouseInBounds__(e)) {
                             if (self.isEnabled() && self.isValid() && self.combo.isEnabled() && self.combo.isValid()) {
-                                if (self.isViewVisible()) {
-                                    return;
-                                }
+                                // if (self.isViewVisible()) {
+                                //     return;
+                                // }
                                 self._popupView();
                                 if (self.isViewVisible()) {
                                     self.fireEvent(BI.Controller.EVENT_CHANGE, BI.Events.EXPAND, "", self.combo);
@@ -32322,6 +32322,7 @@ BI.Combo = BI.inherit(BI.Widget, {
         this.adjustHeight();
 
         this.element.addClass(this.options.comboClass);
+        $(document).unbind("mousedown." + this.getName()).unbind("mousewheel." + this.getName());
         $(document).bind("mousedown." + this.getName(), BI.bind(this._hideIf, this)).bind("mousewheel." + this.getName(), BI.bind(this._hideIf, this));
         this.fireEvent(BI.Combo.EVENT_AFTER_POPUPVIEW);
     },
