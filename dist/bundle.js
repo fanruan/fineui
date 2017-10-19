@@ -32195,9 +32195,9 @@ BI.Combo = BI.inherit(BI.Widget, {
                     var debounce = BI.debounce(function (e) {
                         if (self.combo.element.__isMouseInBounds__(e)) {
                             if (self.isEnabled() && self.isValid() && self.combo.isEnabled() && self.combo.isValid()) {
-                                if (!o.toggle && self.isViewVisible()) {
-                                    return;
-                                }
+                                // if (!o.toggle && self.isViewVisible()) {
+                                //     return;
+                                // }
                                 o.toggle ? self._toggle() : self._popupView();
                                 if (self.isViewVisible()) {
                                     self.fireEvent(BI.Controller.EVENT_CHANGE, BI.Events.EXPAND, "", self.combo);
@@ -32218,9 +32218,9 @@ BI.Combo = BI.inherit(BI.Widget, {
                     var debounce = BI.debounce(function (e) {
                         if (self.combo.element.__isMouseInBounds__(e)) {
                             if (self.isEnabled() && self.isValid() && self.combo.isEnabled() && self.combo.isValid()) {
-                                if (self.isViewVisible()) {
-                                    return;
-                                }
+                                // if (self.isViewVisible()) {
+                                //     return;
+                                // }
                                 self._popupView();
                                 if (self.isViewVisible()) {
                                     self.fireEvent(BI.Controller.EVENT_CHANGE, BI.Events.EXPAND, "", self.combo);
@@ -32322,6 +32322,7 @@ BI.Combo = BI.inherit(BI.Widget, {
         this.adjustHeight();
 
         this.element.addClass(this.options.comboClass);
+        $(document).unbind("mousedown." + this.getName()).unbind("mousewheel." + this.getName());
         $(document).bind("mousedown." + this.getName(), BI.bind(this._hideIf, this)).bind("mousewheel." + this.getName(), BI.bind(this._hideIf, this));
         this.fireEvent(BI.Combo.EVENT_AFTER_POPUPVIEW);
     },
@@ -42974,6 +42975,10 @@ BI.shortcut('bi.el', BI.EL);// CodeMirror, copyright (c) by Marijn Haverbeke and
                 nextUntilUnescaped(stream, ch);
                 return "string";
             }
+            if (ch === '\u200b') {
+                nextUntilUnescaped(stream, ch);
+                return "field";
+            }
             if (/[\[\],\(\)]/.test(ch)) {
                 return 'bracket';
             }
@@ -48062,7 +48067,8 @@ BI.CodeEditor = BI.inherit(BI.Single, {
             textWrapping: true,
             lineWrapping: true,
             lineNumbers: false,
-            readOnly: o.readOnly
+            readOnly: o.readOnly,
+            specialChars: /[\u0000-\u001f\u007f\u00ad\u200c-\u200f\u2028\u2029\ufeff]/
         });
         o.lineHeight === 1 ? this.element.addClass("codemirror-low-line-height") : this.element.addClass("codemirror-high-line-height");
         this.editor.on("change", function (cm, change) {
@@ -48147,7 +48153,7 @@ BI.CodeEditor = BI.inherit(BI.Single, {
         var value = param;
         param = this.options.paramFormatter(param);
         var from = this.editor.getCursor();
-        this.editor.replaceSelection(param);
+        this.editor.replaceSelection('\u200b' + param + '\u200b');
         var to = this.editor.getCursor();
         var options = {className: 'param', atomic: true};
         if (BI.isNotNull(param.match(/^<!.*!>$/))) {
@@ -48155,7 +48161,6 @@ BI.CodeEditor = BI.inherit(BI.Single, {
         }
         options.value = value;
         this.editor.markText(from, to, options);
-        this.editor.replaceSelection(" ");
         this.editor.focus();
     },
 
@@ -48218,6 +48223,10 @@ BI.CodeEditor = BI.inherit(BI.Single, {
     setStyle: function (style) {
         this.style = style;
         this.element.css(style);
+        var wrapperStyle = this.editor.getWrapperElement().style;
+        BI.extend(wrapperStyle, style, {
+                color: style.color || BI.DOM.getContrastColor(BI.DOM.isRGBColor(style.backgroundColor) ? BI.DOM.rgb2hex(style.backgroundColor) : style.backgroundColor)
+        });
     },
 
     getStyle: function () {
@@ -80498,6 +80507,8 @@ BI.DatePicker = BI.inherit(BI.Widget, {
                 })
             }
             self.fireEvent(BI.DatePicker.EVENT_CHANGE);
+            self._checkLeftValid();
+            self._checkRightValid();
         });
 
         this.right = BI.createWidget({
@@ -80520,6 +80531,8 @@ BI.DatePicker = BI.inherit(BI.Widget, {
                 })
             }
             self.fireEvent(BI.DatePicker.EVENT_CHANGE);
+            self._checkLeftValid();
+            self._checkRightValid();
         });
 
         this.year = BI.createWidget({
@@ -80569,11 +80582,29 @@ BI.DatePicker = BI.inherit(BI.Widget, {
         })
     },
 
+    _checkLeftValid: function () {
+        var o = this.options;
+        var valid = !(this._month === 0 && this._year === Date.parseDateTime(o.min, "%Y-%X-%d").getFullYear());
+        this.left.setEnable(valid);
+        return valid;
+    },
+
+    _checkRightValid: function () {
+        var o = this.options;
+        var valid = !(this._month === 11 && this._year === Date.parseDateTime(o.max, "%Y-%X-%d").getFullYear());
+        this.right.setEnable(valid);
+        return valid;
+    },
+
+
+
     setValue: function (ob) {
         this._year = ob.year;
         this._month = ob.month;
         this.year.setValue(ob.year);
         this.month.setValue(ob.month);
+        this._checkLeftValid();
+        this._checkRightValid();
     },
 
     getValue: function () {
