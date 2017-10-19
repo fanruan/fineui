@@ -154,6 +154,8 @@ module.exports = function (grunt) {
 
             bi_coreJs: {
                 src: [
+                    'src/core/jquery.js',
+                    'src/core/underscore.js',
                     'src/core/foundation.js',
                     'src/core/mvc/**/*.js',
                     'src/core/base.js',
