@@ -1083,12 +1083,21 @@ BI.Arrangement = BI.inherit(BI.Widget, {
     },
 
     _renderRegion: function () {
-        var self = this;
-        BI.createWidget({
-            type: "bi.absolute",
-            element: this.container,
-            items: BI.toArray(this.regions)
+        var items = BI.toArray(this.regions);
+        BI.each(items, function (i, item) {
+            if (BI.isNotNull(item.el)) {
+                item.el.options.key = item.id;
+            } else {
+                item.key = item.id;
+            }
         });
+        if (BI.isNull(this.wrapper)) {
+            this.wrapper = BI.createWidget({
+                type: "bi.absolute",
+                element: this.container
+            });
+        }
+        this.wrapper.populate(items);
     },
 
     getClientWidth: function () {
@@ -1380,6 +1389,7 @@ BI.Arrangement = BI.inherit(BI.Widget, {
         }
 
         return out;
+
         function getStatics(layout) {
             return BI.filter(layout, function (i, l) {
                 return l._static;
@@ -1824,11 +1834,7 @@ BI.Arrangement = BI.inherit(BI.Widget, {
     },
 
     populate: function (items) {
-        var self = this;
-        BI.each(this.regions, function (name, region) {
-            self.regions[name].el.setVisible(false);
-            delete self.regions[name];
-        });
+        this.regions = {};
         this._populate(items);
         this._renderRegion();
     }
