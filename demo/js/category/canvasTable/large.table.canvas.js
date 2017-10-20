@@ -72,8 +72,13 @@ Demo.CanvasTable = BI.inherit(BI.Widget, {
 
     mounted: function () {
         var self = this;
-        var tableItems = this._expandData(TABLE_ITEMS, 3),
-            headItems = this._expandHeadData(TABLE_HEADER, 3);
+        if (BI.isNull(BI.isExpanded)) {
+            BI.isExpanded = false;
+        } else if (!BI.isExpanded) {
+            TABLE_ITEMS = this._expandData(TABLE_ITEMS, 3);
+            TABLE_HEADER = this._expandHeadData(TABLE_HEADER, 3);
+            BI.isExpanded = true;
+        }
         this._resizeHandler = BI.debounce(function () {
             var width = self.element.width(), height = self.element.height();
             if (self.table.getWidth() !== width || self.table.getHeight() !== height) {
@@ -87,14 +92,14 @@ Demo.CanvasTable = BI.inherit(BI.Widget, {
         });
         this.table.setWidth(this.element.width());
         this.table.setHeight(this.element.height());
-        this.table.attr("columnSize", BI.makeArray(headItems[0].length, ""));
-        this.table.attr("minColumnSize", BI.makeArray(headItems[0].length, 60));
+        this.table.attr("columnSize", BI.makeArray(TABLE_HEADER[0].length, ""));
+        this.table.attr("minColumnSize", BI.makeArray(TABLE_HEADER[0].length, 60));
         this.table.attr("isNeedFreeze", true);
         this.table.attr("freezeCols", []);
         this.table.attr("showSequence", true);
         this.table.attr("headerRowSize", 15);
         this.table.attr("rowSize", 15);
-        this.table.populate(tableItems, headItems);
+        this.table.populate(TABLE_ITEMS, TABLE_HEADER);
     },
 
     _expandData: function (items, times) {
