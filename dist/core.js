@@ -15850,7 +15850,7 @@ BI.View.registerVMRouter = function (viewRouter, modelRouter) {
     };
 
     BI.createWidget = function (item, options) {
-        var el;
+        var el, w;
         options || (options = {});
         if (BI.isEmpty(item) && BI.isEmpty(options)) {
             return BI.createWidget({
@@ -15862,11 +15862,13 @@ BI.View.registerVMRouter = function (viewRouter, modelRouter) {
         }
         if (item && (item.type || options.type)) {
             el = BI.extend({}, options, item);
-            return BI.Plugin.getObject(el.type, createWidget(BI.Plugin.getWidget(el.type, el)));
+            w = BI.Plugin.getWidget(el.type, el);
+            return BI.Plugin.getObject(el.type, w.type === el.type ? createWidget(w) : BI.createWidget(BI.extend({}, item, {type: w.type}, options)));
         }
         if (item && item.el && (item.el.type || options.type)) {
             el = BI.extend({}, options, item.el);
-            return BI.Plugin.getObject(el.type, createWidget(BI.Plugin.getWidget(el.type, el)));
+            w = BI.Plugin.getWidget(el.type, el);
+            return BI.Plugin.getObject(el.type, w.type === el.type ? createWidget(w) : BI.createWidget(BI.extend({}, item, {type: w.type}, options)));
         }
         if (item && BI.isWidget(item.el)) {
             return item.el;

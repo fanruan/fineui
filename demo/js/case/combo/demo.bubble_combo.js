@@ -2,38 +2,12 @@ Demo.Func = BI.inherit(BI.Widget, {
     props: {
         baseCls: "demo-func"
     },
-    _createNav: function(v){
-        var m = this.MONTH, y = this.YEAR;
-        m += v;
-        while(m < 0){
-            y--;
-            m += 12;
-        }
-        while(m > 11){
-            y++;
-            m -= 12;
-        }
-        var calendar = BI.createWidget({
-            type: "bi.calendar",
-            logic: {
-                dynamic: false
-            },
-            year: y,
-            month: m,
-            day: this.DAY
-        })
-        calendar.setValue(this.selectedTime);
-        return calendar;
-    },
-
-    _stringfyTimeObject: function(timeOb){
-        return timeOb.year + "-" + (timeOb.month + 1) + "-" + timeOb.day;
-    },
 
     render: function () {
         var self = this;
         var combo1 = BI.createWidget({
             type: "bi.bubble_combo",
+            trigger: "click,hover",
             el: {
                 type: "bi.button",
                 text: "测试",

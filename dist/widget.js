@@ -1849,6 +1849,894 @@ BI.extend(BI.Arrangement, {
     }
 });
 BI.shortcut('bi.arrangement', BI.Arrangement);/**
+ * Created By Shichao on 2017/10/17
+ * @class BI.CanvasCollectionView
+ * @extends BI.Widget
+ */
+BI.CanvasCollectionView = BI.inherit(BI.Widget, {
+    _defaultConfig: function () {
+        return BI.extend(BI.CanvasCollectionView.superclass._defaultConfig.apply(this, arguments), {
+            baseCls: "bi-canvas-collection",
+            overflowX: true,
+            overflowY: true,
+            cellSizeAndPositionGetter: BI.emptyFn,
+            horizontalOverscanSize: 0,
+            verticalOverscanSize: 0,
+            scrollLeft: 0,
+            scrollTop: 0,
+            items: []
+        })
+    },
+
+    _init: function () {
+        BI.CanvasCollectionView.superclass._init.apply(this, arguments);
+        var self = this, o = this.options;
+        this.renderedCells = [];
+        this.renderedKeys = [];
+        this._scrollLock = false;
+        this.scrollTop = this.scrollLeft = 0;
+        this.summaryScrollTop = this.summaryScrollLeft = 0;
+        this._debounceRelease = BI.debounce(function () {
+            self._scrollLock = false;
+        }, 1000 / 60);
+        this.canvas = BI.createWidget({
+            type: "bi.canvas_new"
+        });
+        $(document).keydown(BI.bind(this._onResize, this)); // 防止在使用ctrl + 滚轮调整窗口大小时触发mousewheel事件
+        $(document).keyup(BI.bind(this._onResizeRelease, this))
+        this.element.mousewheel(BI.bind(this._onMouseWheel, this))
+        BI.createWidget({
+            type: "bi.vertical",
+            element: this,
+            scrollable: false,
+            scrolly: false,
+            scrollx: false,
+            items: [this.canvas]
+        });
+        if (o.items.length > 0) {
+            this._calculateSizeAndPositionData();
+            this._populate();
+        }
+        if (o.scrollLeft !== 0 || o.scrollTop !== 0) {
+            BI.nextTick(function () {
+                self.element.scrollTop(o.scrollTop);
+                self.element.scrollLeft(o.scrollLeft);
+            });
+        }
+    },
+
+    _onMouseWheel: function (e) {
+        var o = this.options;
+        if (this._scrollLock) {
+            return;
+        }
+        if (!this._isCtrlPressed) {
+            o.scrollTop += -e.originalEvent.wheelDelta;
+            o.scrollTop = BI.clamp(o.scrollTop, 0, this.maxScrollTop);
+            this._calculateChildrenToRender();
+            this.fireEvent(BI.CanvasCollectionView.EVENT_SCROLL, {
+                scrollLeft: o.scrollLeft,
+                scrollTop: o.scrollTop
+            });
+        }
+    },
+
+    _onResize: function (e) {
+        if (e.ctrlKey) {
+            this._isCtrlPressed = true;
+        } else {
+            this._isCtrlPressed = false;
+        }
+    },
+
+    _onResizeRelease: function (e) {
+        var Keys = {
+            CTRL: 17
+        };
+        var keyCode = e.keyCode;
+
+        if (keyCode === Keys.CTRL) {
+            this._isCtrlPressed = false;
+        }
+    },
+
+    _getMaxScrollTop: function () {
+        return this._height - this.options.height
+    },
+
+    _calculateSizeAndPositionData: function () {
+        var o = this.options;
+        var cellMetadata = [];
+        var sectionManager = new BI.SectionManager();
+        var height = 0;
+        var width = 0;
+
+        for (var index = 0, len = o.items.length; index < len; index++) {
+            var cellMetadatum = o.cellSizeAndPositionGetter(index);
+
+            if (cellMetadatum.height == null || isNaN(cellMetadatum.height) ||
+                cellMetadatum.width == null || isNaN(cellMetadatum.width) ||
+                cellMetadatum.x == null || isNaN(cellMetadatum.x) ||
+                cellMetadatum.y == null || isNaN(cellMetadatum.y)) {
+                throw Error();
+            }
+
+            height = Math.max(height, cellMetadatum.y + cellMetadatum.height);
+            width = Math.max(width, cellMetadatum.x + cellMetadatum.width);
+
+            cellMetadatum.index = index;
+            cellMetadata[index] = cellMetadatum;
+            sectionManager.registerCell(cellMetadatum, index);
+        }
+
+        this._cellMetadata = cellMetadata;
+        this._sectionManager = sectionManager;
+        if (this._height === height && this._width === width) {
+            this._isNeedReset = false;
+        } else {
+            this._height = height;
+            this._width = width;
+            this._isNeedReset = true;
+        }
+        this.maxScrollTop = this._getMaxScrollTop();
+    },
+
+    _cellRenderers: function (height, width, x, y) {
+        this._lastRenderedCellIndices = this._sectionManager.getCellIndices(height, width, x, y);
+        return this._cellGroupRenderer();
+    },
+
+    _cellGroupRenderer: function () {
+        var self = this, o = this.options;
+        var rendered = [];
+        BI.each(this._lastRenderedCellIndices, function (i, index) {
+            var cellMetadata = self._sectionManager.getCellMetadata(index);
+            rendered.push(cellMetadata);
+        });
+        return rendered;
+    },
+
+    _calculateChildrenToRender: function () {
+        var x, y, cellWidth, cellHeight, cellRow, cellCol, value, self = this, o = this.options;
+        var scrollLeft = o.scrollLeft;
+        var scrollTop = o.scrollTop;
+        var left = Math.max(0, scrollLeft - o.horizontalOverscanSize);
+        var top = Math.max(0, scrollTop - o.verticalOverscanSize);
+        var right = Math.min(this._width, scrollLeft + o.width + o.horizontalOverscanSize);
+        var bottom = Math.min(this._height, scrollTop + o.height + o.verticalOverscanSize);
+        if (right > 0 && bottom > 0) {
+            var childrenToDisplay = this._cellRenderers(bottom - top, right - left, left, top);
+            this.canvas.remove(this.scrollLeft, this.scrollTop, o.width, o.height);
+            for (var i = 0; i < childrenToDisplay.length; i++) {
+                var datum = childrenToDisplay[i];
+                var index = this.renderedKeys[datum.index] && this.renderedKeys[datum.index][1];
+                var rect_tl_x = datum.x,
+                    rect_tl_y = datum.y,
+                    rect_tr_x = rect_tl_x + datum.width,
+                    rect_bl_y = rect_tl_y + datum.height,
+                    cell = o.items[datum.index].cell || o.items[datum.index],
+                    background, color, fontWeight, text;
+                while (BI.isNull(cell.styles) && !BI.isFunction(cell.styleGetter)) {
+                    cell = cell.cell;
+                }
+                if (BI.isNull(cell.styles) && BI.isFunction(cell.styleGetter)) {
+                    background = cell.styleGetter().background;
+                    color = cell.styleGetter().color;
+                    fontWeight = cell.styleGetter().fontWeight;
+                } else if (!BI.isNull(cell.styles)) {
+                    background = cell.styles.background;
+                    color = cell.styles.color;
+                    fontWeight = cell.styles.fontWeight;
+                }
+                if (BI.isNull(cell.text)) {
+                    text = "";
+                } else {
+                    text = cell.text;
+                }
+                if (!BI.isString(text)) {
+                    text = text.toString();
+                }
+                if (this.scrollLeft !== o.scrollLeft) {
+                    this.canvas.translate(this.scrollLeft - o.scrollLeft, 0);
+                    this.scrollLeft = o.scrollLeft;
+                }
+                if (this.scrollTop !== o.scrollTop) {
+                    this.canvas.translate(0, this.scrollTop - o.scrollTop);
+                    this.scrollTop = o.scrollTop;
+                }
+                if (datum.x === 0 && datum.y === 0) {
+                    this.canvas.solid(rect_tl_x, rect_tl_y, rect_tl_x, rect_bl_y, rect_tr_x, rect_bl_y, rect_tr_x, rect_tl_y, rect_tl_x, rect_tl_y, {
+                        strokeStyle: "rgb(212, 218, 221)",
+                        fillStyle: background
+                    });
+                } else if (datum.x === 0) {
+                    this.canvas.solid(rect_tl_x, rect_tl_y, rect_tl_x, rect_bl_y, rect_tr_x, rect_bl_y, rect_tr_x, rect_tl_y, {
+                        strokeStyle: "rgb(212, 218, 221)",
+                        fillStyle: background
+                    });
+                } else if (datum.y === 0) {
+                    this.canvas.solid(rect_tl_x, rect_tl_y, rect_tr_x, rect_tl_y, rect_tr_x, rect_bl_y, rect_tl_x, rect_bl_y, {
+                        strokeStyle: "rgb(212, 218, 221)",
+                        fillStyle: background
+                    });
+                } else {
+                    this.canvas.solid(rect_tr_x, rect_tl_y, rect_tl_x, rect_tl_y, rect_tl_x, rect_bl_y, rect_tr_x, rect_bl_y, {
+                        strokeStyle: "rgb(212, 218, 221)",
+                        fillStyle: background
+                    });
+                }
+                this.canvas.setFontWeight(fontWeight);
+                this.canvas.setFont();
+                var font = this.canvas.getContext().font,
+                    textSize = this._getTextPixel(font),
+                    textHeight = textSize,
+                    textWidth = this.canvas.getContext().measureText(text).width,
+                    dotsWidth = this.canvas.getContext().measureText("...").width;
+                var offsetX = this._calcOffsetX(textWidth, datum.width, "center"),
+                    offsetY = this._calcOffsetY(textHeight, datum.height, "center");
+                if (textHeight > datum.height) {
+                    this.canvas.text(datum.x + offsetX, datum.y + offsetY, "...", color);
+                } else if (textWidth + 4 > datum.width) {
+                    var sliceIndex = Math.floor((datum.width - dotsWidth - 4) / textWidth * text.length);
+                    this.canvas.text(datum.x + offsetX, datum.y + offsetY, text.slice(0, sliceIndex) + "...", color);
+                } else {
+                    this.canvas.text(datum.x + offsetX, datum.y + offsetY, text, color);
+                }
+                this.canvas.stroke();
+            }
+        }
+    },
+
+    _getTextPixel: function (font) {
+        var p = font.split("px")[0],
+            s = p.split(" ");
+        for (var c in s) {
+            var num;
+            num = BI.parseInt(s[c]);
+            if (!BI.isNaN(num)) {
+                return num;
+            }
+        }
+    },
+
+    _calcOffsetX: function (textWidth, cellWidth, position) {
+        switch (position) {
+            case "center":
+                if (textWidth >= cellWidth) {
+                    return 4;
+                } else {
+                    return (cellWidth - textWidth) / 2;
+                }
+            case "right":
+                if (textWidth >= cellWidth) {
+                    return 0;
+                } else {
+                    return cellWidth - textWidth;
+                }
+            default:
+                return 0;
+        }
+    },
+
+    _calcOffsetY: function (textHeight, cellHeight, position) {
+        switch (position) {
+            case "center":
+                if (textHeight >= cellHeight) {
+                    return textHeight;
+                } else {
+                    return (cellHeight + textHeight) / 2;
+                }
+            case "bottom":
+                if (textHeight >= cellHeight) {
+                    return cellHeight;
+                } else {
+                    return cellHeight + textHeight;
+                }
+            default:
+                return textHeight;
+        }
+    },
+
+    _populate: function (items) {
+        var o = this.options;
+        if (items && items !== this.options.items) {
+            this.options.items = items;
+            this._calculateSizeAndPositionData();
+        }
+        if (o.items.length > 0) {
+            this.canvas.setBlock();
+            this.canvas.setWidth(o.width);
+            this.canvas.setHeight(o.height);
+            this.restore();
+            this._calculateChildrenToRender();
+            this.element.scrollTop(o.scrollTop);
+            this.element.scrollLeft(o.scrollLeft);
+        }
+    },
+
+    populate: function (items) {
+        if (items && items !== this.options.items) {
+            this.restore();
+        }
+        this._populate(items);
+    },
+
+    setWidth: function (width) {
+        BI.CanvasCollectionView.superclass.setWidth.apply(this, arguments);
+        this.options.width = width;
+    },
+
+    setHeight: function (height) {
+        BI.CanvasCollectionView.superclass.setHeight.apply(this, arguments);
+        this.options.height = height;
+    },
+
+    restore: function () {
+        this.canvas.remove(this.scrollLeft, this.scrollTop, this.options.width, this.options.height);
+        this.renderedKeys = [];
+        this._scrollLock = false;
+    },
+
+    setScrollLeft: function (scrollLeft) {
+        if (this.options.scrollLeft === scrollLeft) {
+            return;
+        }
+        this._scrollLock = true;
+        this.options.scrollLeft = scrollLeft;
+        this._debounceRelease();
+        this._calculateChildrenToRender();
+        this.element.scrollLeft(this.options.scrollLeft);
+    },
+
+    setScrollTop: function (scrollTop) {
+        if (this.options.scrollTop === scrollTop) {
+            return;
+        }
+        this._scrollLock = true;
+        this.options.scrollTop = scrollTop;
+        this._debounceRelease();
+        this._calculateChildrenToRender();
+        this.element.scrollTop(this.options.scrollTop);
+    },
+
+    getScrollLeft: function () {
+        return this.options.scrollLeft;
+    },
+
+    getScrollTop: function () {
+        return this.options.scrollTop;
+    }
+})
+BI.CanvasCollectionView.EVENT_SCROLL = "EVENT_SCROLL";
+BI.shortcut("bi.canvas_collection_view", BI.CanvasCollectionView);/**
+ * Created by Shichao on 2017/10/18
+ * @class BI.CanvasTable
+ * @extends BI.Widget
+ */
+BI.CanvasTable = BI.inherit(BI.Widget, {
+    _defaultConfig: function () {
+        return BI.extend(BI.CanvasTable.superclass._defaultConfig.apply(this, arguments), {
+            baseCls: "bi-canvas-collection-table",
+            headerRowSize: 25,
+            rowSize: 25,
+            columnSize: [],
+            isNeedFreeze: false,
+            freezeCols: [],
+            isNeedMerge: false,
+            mergeCols: [],
+            mergeRule: BI.emptyFn,
+            header: [],
+            items: [],
+            regionColumnSize: []
+        });
+    },
+
+    _init: function () {
+        BI.CanvasTable.superclass._init.apply(this, arguments);
+        var self = this, o = this.options;
+        this._scrollBarSize = BI.DOM.getScrollWidth();
+        this.topLeftCollection = BI.createWidget({
+            type: "bi.canvas_collection_view",
+            cellSizeAndPositionGetter: function (index) {
+                return self.topLeftItems[index];
+            }
+        });
+        this.topRightCollection = BI.createWidget({
+            type: "bi.canvas_collection_view",
+            cellSizeAndPositionGetter: function (index) {
+                return self.topRightItems[index];
+            }
+        });
+        this.topRightCollection.on(BI.CanvasCollectionView.EVENT_SCROLL, function (scroll) {
+            self.bottomRightCollection.setScrollLeft(scroll.scrollLeft);
+            self._populateScrollbar();
+            self.fireEvent(BI.Table.EVENT_TABLE_SCROLL, arguments);
+        });
+        this.bottomLeftCollection = BI.createWidget({
+            type: "bi.canvas_collection_view",
+            cellSizeAndPositionGetter: function (index) {
+                return self.bottomLeftItems[index];
+            }
+        });
+        this.bottomLeftCollection.on(BI.CanvasCollectionView.EVENT_SCROLL, function (scroll) {
+            self.bottomRightCollection.setScrollTop(scroll.scrollTop);
+            self.topLeftCollection.setScrollLeft(scroll.scrollLeft);
+            self._populateScrollbar();
+            self.fireEvent(BI.Table.EVENT_TABLE_SCROLL, arguments);
+        });
+        this.bottomRightCollection = BI.createWidget({
+            type: "bi.canvas_collection_view",
+            cellSizeAndPositionGetter: function (index) {
+                return self.bottomRightItems[index];
+            }
+        });
+        this.bottomRightCollection.on(BI.CanvasCollectionView.EVENT_SCROLL, function (scroll) {
+            self.bottomLeftCollection.setScrollTop(scroll.scrollTop);
+            self.topRightCollection.setScrollLeft(scroll.scrollLeft);
+            self._populateScrollbar();
+            self.fireEvent(BI.Table.EVENT_TABLE_SCROLL, arguments);
+        });
+        this.topLeft = BI.createWidget({
+            type: "bi.vertical",
+            scrollable: false,
+            scrolly: false,
+            items: [this.topLeftCollection]
+        });
+        this.topRight = BI.createWidget({
+            type: "bi.vertical",
+            scrollable: false,
+            scrolly: false,
+            items: [this.topRightCollection]
+        });
+        this.bottomLeft = BI.createWidget({
+            type: "bi.vertical",
+            scrollable: false,
+            scrolly: false,
+            items: [this.bottomLeftCollection]
+        });
+        this.bottomRight = BI.createWidget({
+            type: "bi.vertical",
+            scrollable: false,
+            scrolly: false,
+            items: [this.bottomRightCollection]
+        });
+        this.contextLayout = BI.createWidget({
+            type: "bi.absolute",
+            element: this,
+            items: [{
+                el: this.topLeft,
+                top: 0,
+                left: 0,
+            }, {
+                el: this.topRight,
+                top: 0
+            }, {
+                el: this.bottomLeft,
+                left: 0
+            }, {
+                el: this.bottomRight,
+            }]
+        });
+
+        this.topScrollbar = BI.createWidget({
+            type: "bi.grid_table_scrollbar",
+            width: BI.GridTableScrollbar.SIZE
+        });
+        this.topScrollbar.on(BI.GridTableScrollbar.EVENT_SCROLL, function (scrollTop) {
+            self.bottomLeftCollection.setScrollTop(scrollTop);
+            self.bottomRightCollection.setScrollTop(scrollTop);
+            self.fireEvent(BI.Table.EVENT_TABLE_SCROLL, arguments);
+        });
+        this.leftScrollbar = BI.createWidget({
+            type: "bi.grid_table_horizontal_scrollbar",
+            height: BI.GridTableScrollbar.SIZE
+        });
+        this.leftScrollbar.on(BI.GridTableScrollbar.EVENT_SCROLL, function (scrollLeft) {
+            self.topLeftCollection.setScrollLeft(scrollLeft);
+            self.bottomLeftCollection.setScrollLeft(scrollLeft);
+            self.fireEvent(BI.Table.EVENT_TABLE_SCROLL, arguments);
+        });
+        this.rightScrollbar = BI.createWidget({
+            type: "bi.grid_table_horizontal_scrollbar",
+            height: BI.GridTableScrollbar.SIZE
+        });
+        this.rightScrollbar.on(BI.GridTableScrollbar.EVENT_SCROLL, function (scrollLeft) {
+            self.topRightCollection.setScrollLeft(scrollLeft);
+            self.bottomRightCollection.setScrollLeft(scrollLeft);
+            self.fireEvent(BI.Table.EVENT_TABLE_SCROLL, arguments);
+        });
+        this.scrollBarLayout = BI.createWidget({
+            type: "bi.absolute",
+            element: this,
+            items: [{
+                el: this.topScrollbar,
+                right: 0,
+                top: 0
+            }, {
+                el: this.leftScrollbar,
+                left: 0,
+            }, {
+                el: this.rightScrollbar,
+            }]
+        });
+        this._width = o.width - BI.GridTableScrollbar.SIZE;
+        this._height = o.height - BI.GridTableScrollbar.SIZE;
+    },
+
+    mounted: function () {
+        var o = this.options;
+        if (o.items.length > 0 || o.header.length > 0) {
+            this._digest();
+            this._populate();
+        }
+    },
+
+    attr: function () {
+        BI.CanvasTable.superclass.attr.apply(this, arguments);
+    },
+
+    _getFreezeColLength: function () {
+        return this.options.isNeedFreeze ? this.options.freezeCols.length : 0;
+    },
+
+    getRegionSize: function () {
+        var o = this.options;
+        var regionSize = o.regionColumnSize[0] || 0;
+        if (o.isNeedFreeze === false || o.freezeCols.length === 0) {
+            return 0;
+        }
+        if (!regionSize) {
+            BI.each(o.freezeCols, function (i, col) {
+                regionSize += o.columnSize[col];
+            });
+        }
+        return regionSize;
+    },
+
+    _getFreezeHeaderHeight: function () {
+        var o = this.options;
+        if (o.header.length * o.headerRowSize >= this._height) {
+            return 0;
+        }
+        return o.header.length * o.headerRowSize;
+    },
+
+    _getActualItems: function () {
+        var o = this.options;
+        if (o.header.length * o.headerRowSize >= this._height) {
+            return o.header.concat(o.items);
+        }
+        return o.items;
+    },
+
+    _digest: function () {
+        var o = this.options;
+        var freezeColLength = this._getFreezeColLength();
+        //如果表头位置不够，取消表头冻结
+        if (this._getFreezeHeaderHeight() <= 0) {
+            this.topLeftItems = [];
+            this.topRightItems = [];
+            this.bottomLeftItems = this._serialize(this._getActualItems(), 0, freezeColLength, o.rowSize, o.columnSize, o.mergeCols, BI.range(o.header.length));
+            this.bottomRightItems = this._serialize(this._getActualItems(), freezeColLength, o.columnSize.length, o.rowSize, o.columnSize, o.mergeCols, BI.range(o.header.length));
+        } else {
+            this.topLeftItems = this._serialize(o.header, 0, freezeColLength, o.headerRowSize, o.columnSize, o.mergeCols);
+            this.topRightItems = this._serialize(o.header, freezeColLength, o.columnSize.length, o.headerRowSize, o.columnSize, true);
+            this.bottomLeftItems = this._serialize(o.items, 0, freezeColLength, o.rowSize, o.columnSize, o.mergeCols);
+            this.bottomRightItems = this._serialize(o.items, freezeColLength, o.columnSize.length, o.rowSize, o.columnSize, o.mergeCols);
+        }
+    },
+
+    _populateScrollbar: function () {
+        var o = this.options;
+        var regionSize = this.getRegionSize(), totalLeftColumnSize = 0, totalRightColumnSize = 0, totalColumnSize = 0,
+            summaryColumnSizeArray = [];
+        BI.each(o.columnSize, function (i, size) {
+            if (o.isNeedFreeze === true && o.freezeCols.contains(i)) {
+                totalLeftColumnSize += size;
+            } else {
+                totalRightColumnSize += size;
+            }
+            totalColumnSize += size;
+            if (i === 0) {
+                summaryColumnSizeArray[i] = size;
+            } else {
+                summaryColumnSizeArray[i] = summaryColumnSizeArray[i - 1] + size;
+            }
+        });
+        this.topScrollbar.setContentSize(this._getActualItems().length * o.rowSize);
+        this.topScrollbar.setSize(this._height - this._getFreezeHeaderHeight());
+        this.topScrollbar.setPosition(this.bottomRightCollection.getScrollTop());
+        this.topScrollbar.populate();
+
+        this.leftScrollbar.setContentSize(totalLeftColumnSize);
+        this.leftScrollbar.setSize(regionSize);
+        this.leftScrollbar.setPosition(this.bottomLeftCollection.getScrollLeft());
+        this.leftScrollbar.populate();
+
+        this.rightScrollbar.setContentSize(totalRightColumnSize);
+        this.rightScrollbar.setSize(this._width - regionSize);
+        this.rightScrollbar.setPosition(this.bottomRightCollection.getScrollLeft());
+        this.rightScrollbar.populate();
+
+        var items = this.scrollBarLayout.attr("items");
+        items[0].top = this._getFreezeHeaderHeight();
+        items[1].top = this._height;
+        items[2].top = this._height;
+        items[2].left = regionSize;
+        this.scrollBarLayout.attr("items", items);
+        this.scrollBarLayout.resize();
+    },
+
+    _populateTable: function () {
+        var self = this, o = this.options;
+        var regionSize = this.getRegionSize(), totalLeftColumnSize = 0, totalRightColumnSize = 0, totalColumnSize = 0,
+            summaryColumnSizeArray = [];
+        var freezeColLength = this._getFreezeColLength();
+        var otlw = regionSize;
+        var otlh = this._getFreezeHeaderHeight();
+        var otrw = this._width - regionSize;
+        var otrh = this._getFreezeHeaderHeight();
+        var oblw = regionSize;
+        var oblh = this._height - otlh;
+        var obrw = this._width - regionSize;
+        var obrh = this._height - otrh;
+
+        var tlw = otlw + this._scrollBarSize;
+        var tlh = otlh + this._scrollBarSize;
+        var trw = otrw + this._scrollBarSize;
+        var trh = otrh + this._scrollBarSize;
+        var blw = oblw + this._scrollBarSize;
+        var blh = oblh + this._scrollBarSize;
+        var brw = obrw + this._scrollBarSize;
+        var brh = obrh + this._scrollBarSize;
+
+        this.topLeft.setWidth(otlw);
+        this.topLeft.setHeight(otlh);
+        this.topRight.setWidth(otrw);
+        this.topRight.setHeight(otrh);
+        this.bottomLeft.setWidth(oblw);
+        this.bottomLeft.setHeight(oblh);
+        this.bottomRight.setWidth(obrw);
+        this.bottomRight.setHeight(obrh);
+
+        this.topLeftCollection.setWidth(tlw);
+        this.topLeftCollection.setHeight(tlh);
+        this.topRightCollection.setWidth(trw);
+        this.topRightCollection.setHeight(trh);
+        this.bottomLeftCollection.setWidth(blw);
+        this.bottomLeftCollection.setHeight(blh);
+        this.bottomRightCollection.setWidth(brw);
+        this.bottomRightCollection.setHeight(brh);
+
+        var items = this.contextLayout.attr("items");
+        items[1].left = regionSize;
+        //items[2].top = this._getFreezeHeaderHeight();
+        items[2].top = otrh;
+        items[3].left = regionSize;
+        //items[3].top = this._getFreezeHeaderHeight();
+        items[3].top = otrh;
+        this.contextLayout.attr("items", items);
+        this.contextLayout.resize();
+        
+        var leftHeader = [], rightHeader = [], leftItems = [], rightItems = [];
+        var run = function (positions, items, rendered) {
+            BI.each(positions, function (i, item) {
+                if (BI.isNull(items[item.row][item.col])) {
+                    debugger
+                }
+                rendered.push(items[item.row][item.col]);
+            });
+        };
+        run(this.topLeftItems, o.header, leftHeader);
+        run(this.topRightItems, o.header, rightHeader);
+        run(this.bottomLeftItems, o.items, leftItems);
+        run(this.bottomRightItems, o.items, rightItems);
+        
+        this.topLeftCollection._populate(leftHeader);
+        this.topRightCollection._populate(rightHeader);
+        this.bottomLeftCollection._populate(leftItems);
+        this.bottomRightCollection._populate(rightItems);
+    },
+
+    _populate: function () {
+        if (this._width <= 0 || this._height <= 0) {
+            return;
+        }
+        if (this._isNeedDigest === true) {
+            this._digest();
+        }
+        this._isNeedDigest = false;
+        this._populateTable();
+        this._populateScrollbar();
+    },
+
+    _serialize: function (items, startCol, endCol, rowHeight, columnSize, mergeCols, mergeRows) {
+        mergeCols = mergeCols || [];
+        mergeRows = mergeRows || [];
+        var self = this, o = this.options;
+        var result = [], cache = {}, preCol = {}, preRow = {}, map = {};
+        var summaryColumnSize = [];
+        for (var i = startCol; i < endCol; i++) {
+            if (i === startCol) {
+                summaryColumnSize[i] = columnSize[i];
+            } else {
+                summaryColumnSize[i] = summaryColumnSize[i - 1] + columnSize[i];
+            }
+        }
+        var mergeRow = function (i, j) {
+            preCol[j]._height += rowHeight;
+            preCol[j].__mergeRows.push(i);
+        };
+
+        var mergeCol = function (i, j) {
+            preRow[i]._width += columnSize[j];
+            preRow[i].__mergeCols.push(j);
+        };
+
+        var createOneEl = function (r, c) {
+            var width = columnSize[c];
+            var height = rowHeight;
+            map[r][c]._row = r;
+            map[r][c]._col = c;
+            map[r][c]._width = width;
+            map[r][c]._height = height;
+            preCol[c] = map[r][c];
+            preCol[c].__mergeRows = [r];
+            preRow[r] = map[r][c];
+            preRow[r].__mergeCols = [c];
+
+            result.push({
+                x: summaryColumnSize[c] - columnSize[c],
+                y: +r * rowHeight,
+                item: map[r][c]
+            });
+        };
+
+        BI.each(items, function (i, cols) {
+            for (var j = startCol; j < endCol; j++) {
+                if (!cache[i]) {
+                    cache[i] = {};
+                }
+                if (!map[i]) {
+                    map[i] = {};
+                }
+                cache[i][j] = cols[j];
+                map[i][j] = {};
+                if (mergeCols === true || mergeCols.indexOf(j) > -1 || mergeRows === true || mergeRows.indexOf(i) > -1) {
+                    if (i === 0 && j === startCol) {
+                        createOneEl(0, startCol);
+                    } else if (j === startCol && i > 0) {
+                        var isNeedMergeRow = o.mergeRule(cache[i][j], cache[i - 1][j]);
+                        if (isNeedMergeRow === true) {
+                            mergeRow(i, j);
+                            preRow[i] = preCol[j];
+                        } else {
+                            createOneEl(i, j);
+                        }
+                    } else if (i === 0 && j > startCol) {
+                        var isNeedMergeCol = o.mergeRule(cache[i][j], cache[i][j - 1]);
+                        if (isNeedMergeCol === true) {
+                            mergeCol(i, j);
+                            preCol[j] = preRow[i];
+                        } else {
+                            createOneEl(i, j);
+                        }
+                    } else {
+                        var isNeedMergeRow = o.mergeRule(cache[i][j], cache[i - 1][j]);
+                        var isNeedMergeCol = o.mergeRule(cache[i][j], cache[i][j - 1]);
+                        if (isNeedMergeCol && isNeedMergeRow) {
+                            continue;
+                            //mergeRow(i, j);//优先合并列
+                        }
+                        if (isNeedMergeCol) {
+                            mergeCol(i, j);
+                        }
+                        if (isNeedMergeRow) {
+                            mergeRow(i, j);
+                        }
+                        if (!isNeedMergeCol && !isNeedMergeRow) {
+                            createOneEl(i, j);
+                        }
+                    }
+                } else {
+                    createOneEl(i, j);
+                }
+            }
+        });
+        return BI.map(result, function (i, item) {
+            return {
+                x: item.x,
+                y: item.y,
+                row: item.item._row,
+                col: item.item._col,
+                width: item.item._width,
+                height: item.item._height
+            }
+        });
+    },
+
+    populate: function (items, header) {
+        if (items && this.options.items !== items) {
+            this._isNeedDigest = true;
+            this.options.items = items;
+            this._restore();
+        }
+        if (header && this.options.header !== header) {
+            this._isNeedDigest = true;
+            this.options.header = header;
+            this._restore();
+        }
+        this._populate();
+    },
+
+    _restore: function () {
+        this.topLeftCollection.restore();
+        this.topRightCollection.restore();
+        this.bottomLeftCollection.restore();
+        this.bottomRightCollection.restore();
+    },
+
+    restore: function () {
+        this._restore();
+    },
+
+    setWidth: function (width) {
+        BI.CanvasTable.superclass.setWidth.apply(this, arguments);
+        this._width = width - BI.GridTableScrollbar.SIZE;
+    },
+
+    setHeight: function (height) {
+        BI.CanvasTable.superclass.setHeight.apply(this, arguments);
+        this._height = height - BI.GridTableScrollbar.SIZE;
+    },
+
+    setVerticalScroll: function (scrollTop) {
+        this.bottomLeftCollection.setScrollTop(scrollTop);
+        this.bottomRightCollection.setScrollTop(scrollTop);
+    },
+
+    setLeftHorizontalScroll: function (scrollLeft) {
+        this.topLeftCollection.setScrollLeft(scrollLeft);
+        this.bottomLeftCollection.setScrollLeft(scrollLeft);
+    },
+
+    setRightHorizontalScroll: function (scrollLeft) {
+        this.topRightCollection.setScrollLeft(scrollLeft);
+        this.bottomRightCollection.setScrollLeft(scrollLeft);
+    },
+
+    getVerticalScroll: function () {
+        return this.bottomRightCollection.getScrollTop();
+    },
+
+    getLeftHorizontalScroll: function () {
+        return this.bottomLeftCollection.getScrollLeft();
+    },
+
+    getRightHorizontalScroll: function () {
+        return this.bottomRightCollection.getScrollLeft();
+    },
+
+    setColumnSize: function (columnSize) {
+        this._isNeedDigest = true;
+        this.options.columnSize = columnSize;
+    },
+
+    setRegionColumnSize: function (regionColumnSize) {
+        this._isNeedDigest = true;
+        this.options.regionColumnSize = regionColumnSize;
+    },
+
+    getColumnSize: function () {
+        return this.options.columnSize;
+    },
+
+    getRegionColumnSize: function () {
+        return this.options.regionColumnSize;
+    },
+});
+
+BI.shortcut("bi.canvas_table", BI.CanvasTable);/**
  * 日期控件中的月份下拉框
  *
  * Created by GUY on 2015/9/7.

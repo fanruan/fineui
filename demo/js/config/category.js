@@ -11,6 +11,10 @@ Demo.CATEGORY_CONFIG = [{
     value: "demo.large_table"
 }, {
     pId: 100000,
+    text: "Canvas大表格",
+    value: "demo.canvas_table"
+}, {
+    pId: 100000,
     text: "可以排序的树",
     value: "demo.sort_tree"
 }];

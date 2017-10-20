@@ -1746,38 +1746,12 @@ BI.shortcut("demo.tree_view", Demo.Func);Demo.Func = BI.inherit(BI.Widget, {
     props: {
         baseCls: "demo-func"
     },
-    _createNav: function(v){
-        var m = this.MONTH, y = this.YEAR;
-        m += v;
-        while(m < 0){
-            y--;
-            m += 12;
-        }
-        while(m > 11){
-            y++;
-            m -= 12;
-        }
-        var calendar = BI.createWidget({
-            type: "bi.calendar",
-            logic: {
-                dynamic: false
-            },
-            year: y,
-            month: m,
-            day: this.DAY
-        })
-        calendar.setValue(this.selectedTime);
-        return calendar;
-    },
-
-    _stringfyTimeObject: function(timeOb){
-        return timeOb.year + "-" + (timeOb.month + 1) + "-" + timeOb.day;
-    },
 
     render: function () {
         var self = this;
         var combo1 = BI.createWidget({
             type: "bi.bubble_combo",
+            trigger: "click,hover",
             el: {
                 type: "bi.button",
                 text: "测试",
@@ -3955,7 +3929,364 @@ BI.shortcut("demo.select_text_trigger", Demo.Func);Demo.Func = BI.inherit(BI.Wid
         })
     }
 });
-BI.shortcut("demo.text_trigger", Demo.Func);/**
+BI.shortcut("demo.text_trigger", Demo.Func);Demo.CanvasTable = BI.inherit(BI.Widget, {
+    props: {
+        baseCls: "demo-face"
+    },
+
+    render: function () {
+        var self = this;
+        return {
+            type: "bi.absolute",
+            items: [{
+                el: {
+                    type: "bi.sequence_table",
+                    ref: function () {
+                        self.table = this;
+                    },
+                    isNeedFreeze: null,
+                    isNeedMerge: false,
+                    summaryCellStyleGetter: function (isLast) {
+                        return {
+                            background: "rgb(4, 177, 194)",
+                            color: "#ffffff",
+                            fontWeight: "bold"
+                        };
+                    },
+                    sequenceCellStyleGetter: function (index) {
+                        return {
+                            background: "rgb(4, 177, 194)",
+                            color: "#ffffff",
+                            fontWeight: "bold"
+                        };
+                    },
+                    headerCellStyleGetter: function () {
+                        return {
+                            background: "rgb(4, 177, 194)",
+                            color: "#ffffff",
+                            fontWeight: "bold"
+                        };
+                    },
+                    el: {
+                        type: "bi.adaptive_table",
+                        el: {
+                            type: "bi.resizable_table",
+                            el: {
+                                type: "bi.canvas_table"
+                            }
+                        }
+                    },
+                    sequence: {
+                        type: "bi.sequence_table_list_number",
+                        pageSize: 100,
+                        sequenceHeaderCreator: {
+                            type: "bi.normal_sequence_header_cell",
+                            styleGetter: function () {
+                                return {
+                                    background: "rgb(4, 177, 194)",
+                                    color: "#ffffff",
+                                    fontWeight: "bold"
+                                };
+                            }
+                        }
+                    },
+                    itemsCreator: function (op, populate) {
+                    }
+                },
+                left: 0,
+                right: 0,
+                top: 0,
+                bottom: 0
+            }]
+        };
+    },
+
+    mounted: function () {
+        var self = this;
+        var tableItems = this._expandData(TABLE_ITEMS, 3),
+            headItems = this._expandHeadData(TABLE_HEADER, 3);
+        this._resizeHandler = BI.debounce(function () {
+            var width = self.element.width(), height = self.element.height();
+            if (self.table.getWidth() !== width || self.table.getHeight() !== height) {
+                self.table.setWidth(width);
+                self.table.setHeight(height);
+                self.table.populate();
+            }
+        }, 0);
+        BI.ResizeDetector.addResizeListener(this, function () {
+            self._resizeHandler();
+        });
+        this.table.setWidth(this.element.width());
+        this.table.setHeight(this.element.height());
+        this.table.attr("columnSize", BI.makeArray(headItems[0].length, ""));
+        this.table.attr("minColumnSize", BI.makeArray(headItems[0].length, 60));
+        this.table.attr("isNeedFreeze", true);
+        this.table.attr("freezeCols", []);
+        this.table.attr("showSequence", true);
+        this.table.attr("headerRowSize", 15);
+        this.table.attr("rowSize", 15);
+        this.table.populate(tableItems, headItems);
+    },
+
+    _expandData: function (items, times) {
+        var copy = BI.deepClone(items);
+        for (var m = 0; m < times - 1; m++) {
+            BI.each(items, function (i, row) {
+                copy.push(row);
+            });
+        }
+        
+        for (var n = 0; n < copy.length; n++) {
+            for (var m = 0; m < times - 1; m++) {
+                BI.each(items[n % 100], function (j, item) {
+                    copy[n].push(item);
+                })
+            }
+        }
+        return copy;
+    },
+
+    _expandHeadData: function (items, times) {
+        var copy = BI.deepClone(items);
+        for (var n = 0; n < copy.length; n++) {
+            for (var m = 0; m < times - 1; m++) {
+                BI.each(items[n], function (j, item) {
+                    copy[n].push(item);
+                })
+            }
+        }
+        return copy;
+    }
+});
+
+BI.shortcut("demo.canvas_table", Demo.CanvasTable);/**
+ * canvas绘图
+ *
+ * Created by Shichao on 2017/09/29.
+ * @class BI.CanvasNew
+ * @extends BI.Widget
+ */
+BI.CanvasNew = BI.inherit(BI.Widget, {
+    
+        _defaultConfig: function () {
+            return BI.extend(BI.CanvasNew.superclass._defaultConfig.apply(this, arguments), {
+                baseCls: "bi-canvas-new"
+            })
+        },
+    
+        _init: function () {
+            BI.CanvasNew.superclass._init.apply(this, arguments);
+            var self = this, o = this.options;
+            var canvas = this._createHiDPICanvas(o.width, o.height);
+            this.element.append(canvas);
+            this.canvas = canvas;
+            this._queue = [];
+        },
+    
+        _getContext: function () {
+            if (!this.ctx) {
+                this.ctx = this.canvas.getContext('2d');
+            }
+            return this.ctx;
+        },
+    
+        getContext: function () {
+            return this._getContext();
+        },
+    
+        _getPixelRatio: function () {
+            var ctx = document.createElement("canvas").getContext("2d"),
+            dpr = window.devicePixelRatio || 1,
+                bsr = ctx.webkitBackingStorePixelRatio ||
+                ctx.mozBackingStorePixelRatio ||
+                ctx.msBackingStorePixelRatio ||
+                ctx.oBackingStorePixelRatio ||
+                ctx.backingStorePixelRatio || 1;
+            return dpr / bsr;
+        },
+    
+        getPixelRatio: function () {
+            return this._getPixelRatio();
+        },
+    
+        _createHiDPICanvas: function (w, h, ratio) {
+            if (!ratio) {
+                ratio = this._getPixelRatio();
+            }
+            this.ratio = ratio;
+            var canvas = document.createElement("canvas");
+            if (!document.createElement('canvas').getContext) {
+                canvas = window.G_vmlCanvasManager.initElement(canvas);
+            }
+            canvas.width = w * ratio;
+            canvas.height = h * ratio;
+            canvas.style.width = w + "px";
+            canvas.style.height = h + "px";
+            canvas.getContext("2d").setTransform(ratio, 0, 0, ratio, 0, 0);
+            return canvas;
+        },
+    
+        _attr: function (key, value) {
+            var self = this;
+            if (BI.isNull(key)) {
+                return;
+            }
+            if (BI.isObject(key)) {
+                BI.each(key, function (k, v) {
+                    self._queue.push({ k: k, v: v });
+                });
+                return;
+            }
+            this._queue.push({ k: key, v: value });
+        },
+    
+        _line: function (x0, y0) {
+            var self = this;
+            var args = [].slice.call(arguments, 2);
+            if (BI.isOdd(args.length)) {
+                this._attr(BI.last(args));
+                args = BI.initial(args);
+            }
+            this._attr("moveTo", [x0, y0]);
+            var odd = BI.filter(args, function (i) {
+                return i % 2 === 0;
+            });
+            var even = BI.filter(args, function (i) {
+                return i % 2 !== 0;
+            });
+            args = BI.zip(odd, even);
+            BI.each(args, function (i, point) {
+                self._attr("lineTo", point);
+            });
+        },
+    
+        line: function (x0, y0, x1, y1) {
+            this._line.apply(this, arguments);
+            this._attr("stroke", []);
+        },
+    
+        rect: function (x, y, w, h, color) {
+            this._attr("fillStyle", color);
+            this._attr("fillRect", [x, y, w, h]);
+        },
+    
+        circle: function (x, y, radius, color) {
+            this._attr({
+                fillStyle: color,
+                beginPath: [],
+                arc: [x, y, radius, 0, Math.PI * 2, true],
+                closePath: [],
+                fill: []
+            });
+        },
+    
+        hollow: function () {
+            this._attr("beginPath", []);
+            this._line.apply(this, arguments);
+            this._attr("closePath", []);
+            this._attr("stroke", []);
+        },
+    
+        solid: function () {
+            this.hollow.apply(this, arguments);
+            this._attr("fill", []);
+        },
+    
+        text: function (x, y, text, fillStyle) {
+            this._attr("fillStyle", BI.isNull(fillStyle) ? "rgb(102, 102, 102)" : fillStyle);
+            this._attr("fillText", [text, x, y]);
+        },
+    
+        setFontStyle: function (fontStyle) {
+            this.fontStyle = fontStyle;
+        },
+    
+        setFontVariant: function (fontVariant) {
+            this.fontVariant = fontVariant;
+        },
+    
+        setFontWeight: function (fontWeight) {
+            this.fontWeight = fontWeight;
+        },
+    
+        setFontSize: function (fontSize) {
+            this.fontSize = fontSize;
+        },
+    
+        setFontFamily: function (fontFamily) {
+            this.fontFamily = fontFamily;
+        },
+    
+        setFont: function () {
+            var fontStyle = this.fontStyle || "",
+                fontVariant = this.fontVariant || "",
+                fontWeight = this.fontWeight || "",
+                fontSize = this.fontSize || "12px",
+                fontFamily = this.fontFamily || "sans-serif",
+                font = fontStyle + " " + fontVariant + " " + fontWeight + " " + fontSize + " " + fontFamily;
+            this._getContext().font = font;
+        },
+    
+        gradient: function (x0, y0, x1, y1, start, end) {
+            var grd = this._getContext().createLinearGradient(x0, y0, x1, y1);
+            grd.addColorStop(0, start);
+            grd.addColorStop(1, end);
+            return grd;
+        },
+    
+        reset: function (x, y) {
+            this._getContext().clearRect(x, y, this.canvas.width, this.canvas.height);
+        },
+    
+        remove: function (x, y, width, height) {
+            this._getContext().clearRect(x, y, width, height);
+        },
+    
+        stroke: function (callback) {
+            var self = this;
+            BI.nextTick(function () {
+                var ctx = self._getContext();
+                BI.each(self._queue, function (i, q) {
+                    if (BI.isFunction(ctx[q.k])) {
+                        ctx[q.k].apply(ctx, q.v);
+                    } else {
+                        ctx[q.k] = q.v;
+                    }
+                });
+                self._queue = [];
+                callback && callback();
+            });
+        },
+    
+        setWidth: function (width) {
+            BI.CanvasNew.superclass.setWidth.apply(this, arguments);
+            this.ratio = this._getPixelRatio();
+            this.canvas.width = width * this.ratio;
+            this.canvas.style.width = width + "px";
+            this.canvas.getContext("2d").setTransform(this.ratio, 0, 0, this.ratio, 0, 0);
+        },
+    
+        setHeight: function (height) {
+            BI.CanvasNew.superclass.setHeight.apply(this, arguments);
+            this.ratio = this._getPixelRatio();
+            this.canvas.height = height * this.ratio;
+            this.canvas.style.height = height + "px";
+            this.canvas.getContext("2d").setTransform(this.ratio, 0, 0, this.ratio, 0, 0);
+        },
+    
+        setBlock: function () {
+            this.canvas.style.display = "block";
+        },
+    
+        transform: function (a, b, c, d, e, f) {
+            this._attr("transform", [a, b, c, d, e, f]);
+        },
+    
+        translate: function (x, y) {
+            this._attr("translate", [x, y]);
+        }
+    });
+    BI.shortcut("bi.canvas_new", BI.CanvasNew);/**
  * guy
  * 二级树
  * @class BI.PlatformLevelTree
@@ -4326,6 +4657,8 @@ BI.shortcut("bi.detail_table_header", BI.DetailTableHeader);Demo.Face = BI.inher
 
     mounted: function () {
         var self = this;
+        var tableItems = this._expandData(TABLE_ITEMS, 3),
+            headItems = this._expandHeadData(TABLE_HEADER, 3);
         this._resizeHandler = BI.debounce(function () {
             var width = self.element.width(), height = self.element.height();
             if (self.table.getWidth() !== width || self.table.getHeight() !== height) {
@@ -4339,14 +4672,44 @@ BI.shortcut("bi.detail_table_header", BI.DetailTableHeader);Demo.Face = BI.inher
         });
         this.table.setWidth(this.element.width());
         this.table.setHeight(this.element.height());
-        this.table.attr("columnSize", BI.makeArray(26, ""));
-        this.table.attr("minColumnSize", BI.makeArray(26, 80));
+        this.table.attr("columnSize", BI.makeArray(headItems[0].length, ""));
+        this.table.attr("minColumnSize", BI.makeArray(headItems[0].length, 60));
         this.table.attr("isNeedFreeze", true);
         this.table.attr("freezeCols", []);
         this.table.attr("showSequence", true);
-        this.table.attr("headerRowSize", 25);
-        this.table.attr("rowSize", 25);
-        this.table.populate(TABLE_ITEMS, TABLE_HEADER);
+        this.table.attr("headerRowSize", 15);
+        this.table.attr("rowSize", 15);
+        this.table.populate(tableItems, headItems);
+    },
+    
+    _expandData: function (items, times) {
+        var copy = BI.deepClone(items);
+        for (var m = 0; m < times - 1; m++) {
+            BI.each(items, function (i, row) {
+                copy.push(row);
+            });
+        }
+        
+        for (var n = 0; n < copy.length; n++) {
+            for (var m = 0; m < times - 1; m++) {
+                BI.each(items[n % 100], function (j, item) {
+                    copy[n].push(item);
+                })
+            }
+        }
+        return copy;
+    },
+
+    _expandHeadData: function (items, times) {
+        var copy = BI.deepClone(items);
+        for (var n = 0; n < copy.length; n++) {
+            for (var m = 0; m < times - 1; m++) {
+                BI.each(items[n], function (j, item) {
+                    copy[n].push(item);
+                })
+            }
+        }
+        return copy;
     }
 });
 BI.shortcut("demo.large_table", Demo.Face);/**
@@ -5062,6 +5425,10 @@ BI.shortcut("demo.value_chooser_pane", Demo.ValueChooserPane);Demo.ADDONS_CONFIG
     pId: 100000,
     text: "大表格",
     value: "demo.large_table"
+}, {
+    pId: 100000,
+    text: "Canvas大表格",
+    value: "demo.canvas_table"
 }, {
     pId: 100000,
     text: "可以排序的树",
