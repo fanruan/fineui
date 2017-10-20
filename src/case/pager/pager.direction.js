@@ -69,7 +69,8 @@ BI.DirectionPager = BI.inherit(BI.Widget, {
             width: 24,
             height: 20,
             value: v.curr,
-            title: v.curr
+            title: v.curr,
+            invisible: true
         });
         this.vpager = BI.createWidget({
             type: "bi.pager",
@@ -80,6 +81,7 @@ BI.DirectionPager = BI.inherit(BI.Widget, {
                 rgap: 24,
                 vgap: 1
             }],
+            invisible: true,
 
             dynamicShow: false,
             pages: v.pages,
@@ -132,7 +134,8 @@ BI.DirectionPager = BI.inherit(BI.Widget, {
             width: 24,
             height: 20,
             value: h.curr,
-            title: h.curr
+            title: h.curr,
+            invisible: true
         });
         this.hpager = BI.createWidget({
             type: "bi.pager",
@@ -143,6 +146,7 @@ BI.DirectionPager = BI.inherit(BI.Widget, {
                 rgap: 24,
                 vgap: 1
             }],
+            invisible: true,
 
             dynamicShow: false,
             pages: h.pages,
