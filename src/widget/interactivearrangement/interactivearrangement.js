@@ -115,11 +115,14 @@ BI.InteractiveArrangement = BI.inherit(BI.Widget, {
         } else if (vs.right.length > 0) {
             var temp = this._getRegionClientPosition(vs.right[0].id);
             l = temp.left + temp.width;
+        } else if (vs.center.length > 0) {
+            var temp = this._getRegionClientPosition(vs.center[0].id);
+            l = temp.left + temp.width / 2;
         }
-        var rs = vs.left.concat(vs.right);
+        var rs = vs.left.concat(vs.right).concat(vs.center);
         BI.each(rs, function (i, region) {
             var p = self._getRegionClientPosition(region.id);
-            if (self._isEqual(p.left, l) || self._isEqual(p.left + p.width, l)) {
+            if (self._isEqual(p.left, l) || self._isEqual(p.left + p.width, l) || self._isEqual(p.left + p.width / 2, l)) {
                 var topPoint = {
                     top: p.top + p.height / 2,
                     left: l
@@ -164,11 +167,14 @@ BI.InteractiveArrangement = BI.inherit(BI.Widget, {
         } else if (hs.bottom.length > 0) {
             var temp = this._getRegionClientPosition(hs.bottom[0].id);
             t = temp.top + temp.height;
+        } else if (hs.middle.length > 0) {
+            var temp = this._getRegionClientPosition(hs.middle[0].id);
+            t = temp.top + temp.height / 2;
         }
-        var rs = hs.top.concat(hs.bottom);
+        var rs = hs.top.concat(hs.bottom).concat(hs.middle);
         BI.each(rs, function (i, region) {
             var p = self._getRegionClientPosition(region.id);
-            if (self._isEqual(p.top, t) || self._isEqual(p.top + p.height, t)) {
+            if (self._isEqual(p.top, t) || self._isEqual(p.top + p.height, t) || self._isEqual(p.top + p.height / 2, t)) {
                 var leftPoint = {
                     top: t,
                     left: p.left + p.width / 2
@@ -204,66 +210,18 @@ BI.InteractiveArrangement = BI.inherit(BI.Widget, {
 
     _centerAlign: function (position, size, regions) {
         var self = this;
-        var cs = this._positionAt({
+        return this._vAlign({
             left: position.left + size.width / 2,
             top: position.top + size.height / 2
         }, regions);
-        var positions = [];
-        var l;
-        if (cs.center.length > 0) {
-            var temp = this._getRegionClientPosition(cs.center[0].id);
-            l = temp.left + temp.width / 2;
-        }
-        BI.each(cs.center, function (i, region) {
-            var p = self._getRegionClientPosition(region.id);
-            if (self._isEqual(p.left + p.width / 2, l)) {
-                var topPoint = {
-                    top: p.top + p.height / 2,
-                    left: p.left + p.width / 2
-                };
-                positions.push({
-                    id: p.id,
-                    start: topPoint,
-                    end: {
-                        left: l,
-                        top: position.top + size.height / 2
-                    }
-                });
-            }
-        });
-        return positions;
     },
 
     _middleAlign: function (position, size, regions) {
         var self = this;
-        var cs = this._positionAt({
+        return this._hAlign({
             left: position.left + size.width / 2,
             top: position.top + size.height / 2
         }, regions);
-        var positions = [];
-        var t;
-        if (cs.middle.length > 0) {
-            var temp = this._getRegionClientPosition(cs.middle[0].id);
-            t = temp.top + temp.height / 2;
-        }
-        BI.each(cs.middle, function (i, region) {
-            var p = self._getRegionClientPosition(region.id);
-            if (self._isEqual(p.top + p.height / 2, t)) {
-                var topPoint = {
-                    top: p.top + p.height / 2,
-                    left: p.left + p.width / 2
-                };
-                positions.push({
-                    id: p.id,
-                    start: topPoint,
-                    end: {
-                        left: position.left + size.width / 2,
-                        top: t
-                    }
-                });
-            }
-        });
-        return positions;
     },
 
 
@@ -354,13 +312,13 @@ BI.InteractiveArrangement = BI.inherit(BI.Widget, {
         }
         var other = this._getRegionExcept(name, regions);
         position = position || {
-                left: me.left,
-                top: me.top
-            };
+            left: me.left,
+            top: me.top
+        };
         size = size || {
-                width: me.width,
-                height: me.height
-            };
+            width: me.width,
+            height: me.height
+        };
         var left = this._leftAlign(position, size, other);
         var right = this._rightAlign(position, size, other);
         var top = this._topAlign(position, size, other, other);
@@ -398,13 +356,13 @@ BI.InteractiveArrangement = BI.inherit(BI.Widget, {
         }
         var other = this._getRegionExcept(name, regions);
         position = position || {
-                left: me.left,
-                top: me.top
-            };
+            left: me.left,
+            top: me.top
+        };
         size = size || {
-                width: me.width,
-                height: me.height
-            };
+            width: me.width,
+            height: me.height
+        };
         var left = this._leftAlign(position, size, other);
         var right = this._rightAlign(position, size, other);
         var top = this._topAlign(position, size, other, other);
