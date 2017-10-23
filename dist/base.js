@@ -19023,7 +19023,7 @@ BI.shortcut("bi.text_node", BI.TextNode);/**
 BI.CodeEditor = BI.inherit(BI.Single, {
     _defaultConfig: function () {
         return $.extend(BI.CodeEditor.superclass._defaultConfig.apply(), {
-            baseCls: 'bi-code-editor bi-card',
+            baseCls: 'bi-code-editor',
             value: '',
             watermark: "",
             lineHeight: 2,
