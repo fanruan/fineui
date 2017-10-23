@@ -3262,7 +3262,8 @@ BI.Combo = BI.inherit(BI.Widget, {
         // if (this.element.__isMouseInBounds__(e) || (this.popupView && this.popupView.element.__isMouseInBounds__(e))) {
         //     return;
         // }
-        if (this.element.find(e.target).length > 0 || e.target.className === "CodeMirror-cursor" || $(e.target).closest(".CodeMirror-hints").length > 0) {//BI-9887 CodeMirror的公式弹框需要特殊处理下
+        //BI-10290 公式combo双击公式内容会收起
+        if (this.element.find(e.target).length > 0 || $(e.target).closest(".CodeMirror").length > 0 || e.target.className === "CodeMirror-cursor" || $(e.target).closest(".CodeMirror-hints").length > 0) {//BI-9887 CodeMirror的公式弹框需要特殊处理下
             return;
         }
         var isHide = this.options.hideChecker.apply(this, [e]);
@@ -19066,7 +19067,7 @@ BI.CodeEditor = BI.inherit(BI.Single, {
             BI.nextTick(function () {
                 self.fireEvent(BI.CodeEditor.EVENT_FOCUS);
             });
-            e.stopPropagation();
+            //e.stopPropagation();
         });
 
         // this.editor.on("blur", function () {
