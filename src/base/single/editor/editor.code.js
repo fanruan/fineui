@@ -50,7 +50,7 @@ BI.CodeEditor = BI.inherit(BI.Single, {
             BI.nextTick(function () {
                 self.fireEvent(BI.CodeEditor.EVENT_FOCUS);
             });
-            e.stopPropagation();
+            //e.stopPropagation();
         });
 
         // this.editor.on("blur", function () {
