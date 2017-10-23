@@ -1849,894 +1849,6 @@ BI.extend(BI.Arrangement, {
     }
 });
 BI.shortcut('bi.arrangement', BI.Arrangement);/**
- * Created By Shichao on 2017/10/17
- * @class BI.CanvasCollectionView
- * @extends BI.Widget
- */
-BI.CanvasCollectionView = BI.inherit(BI.Widget, {
-    _defaultConfig: function () {
-        return BI.extend(BI.CanvasCollectionView.superclass._defaultConfig.apply(this, arguments), {
-            baseCls: "bi-canvas-collection",
-            overflowX: true,
-            overflowY: true,
-            cellSizeAndPositionGetter: BI.emptyFn,
-            horizontalOverscanSize: 0,
-            verticalOverscanSize: 0,
-            scrollLeft: 0,
-            scrollTop: 0,
-            items: []
-        })
-    },
-
-    _init: function () {
-        BI.CanvasCollectionView.superclass._init.apply(this, arguments);
-        var self = this, o = this.options;
-        this.renderedCells = [];
-        this.renderedKeys = [];
-        this._scrollLock = false;
-        this.scrollTop = this.scrollLeft = 0;
-        this.summaryScrollTop = this.summaryScrollLeft = 0;
-        this._debounceRelease = BI.debounce(function () {
-            self._scrollLock = false;
-        }, 1000 / 60);
-        this.canvas = BI.createWidget({
-            type: "bi.canvas_new"
-        });
-        $(document).keydown(BI.bind(this._onResize, this)); // 防止在使用ctrl + 滚轮调整窗口大小时触发mousewheel事件
-        $(document).keyup(BI.bind(this._onResizeRelease, this))
-        this.element.mousewheel(BI.bind(this._onMouseWheel, this))
-        BI.createWidget({
-            type: "bi.vertical",
-            element: this,
-            scrollable: false,
-            scrolly: false,
-            scrollx: false,
-            items: [this.canvas]
-        });
-        if (o.items.length > 0) {
-            this._calculateSizeAndPositionData();
-            this._populate();
-        }
-        if (o.scrollLeft !== 0 || o.scrollTop !== 0) {
-            BI.nextTick(function () {
-                self.element.scrollTop(o.scrollTop);
-                self.element.scrollLeft(o.scrollLeft);
-            });
-        }
-    },
-
-    _onMouseWheel: function (e) {
-        var o = this.options;
-        if (this._scrollLock) {
-            return;
-        }
-        if (!this._isCtrlPressed) {
-            o.scrollTop += -e.originalEvent.wheelDelta;
-            o.scrollTop = BI.clamp(o.scrollTop, 0, this.maxScrollTop);
-            this._calculateChildrenToRender();
-            this.fireEvent(BI.CanvasCollectionView.EVENT_SCROLL, {
-                scrollLeft: o.scrollLeft,
-                scrollTop: o.scrollTop
-            });
-        }
-    },
-
-    _onResize: function (e) {
-        if (e.ctrlKey) {
-            this._isCtrlPressed = true;
-        } else {
-            this._isCtrlPressed = false;
-        }
-    },
-
-    _onResizeRelease: function (e) {
-        var Keys = {
-            CTRL: 17
-        };
-        var keyCode = e.keyCode;
-
-        if (keyCode === Keys.CTRL) {
-            this._isCtrlPressed = false;
-        }
-    },
-
-    _getMaxScrollTop: function () {
-        return this._height - this.options.height
-    },
-
-    _calculateSizeAndPositionData: function () {
-        var o = this.options;
-        var cellMetadata = [];
-        var sectionManager = new BI.SectionManager();
-        var height = 0;
-        var width = 0;
-
-        for (var index = 0, len = o.items.length; index < len; index++) {
-            var cellMetadatum = o.cellSizeAndPositionGetter(index);
-
-            if (cellMetadatum.height == null || isNaN(cellMetadatum.height) ||
-                cellMetadatum.width == null || isNaN(cellMetadatum.width) ||
-                cellMetadatum.x == null || isNaN(cellMetadatum.x) ||
-                cellMetadatum.y == null || isNaN(cellMetadatum.y)) {
-                throw Error();
-            }
-
-            height = Math.max(height, cellMetadatum.y + cellMetadatum.height);
-            width = Math.max(width, cellMetadatum.x + cellMetadatum.width);
-
-            cellMetadatum.index = index;
-            cellMetadata[index] = cellMetadatum;
-            sectionManager.registerCell(cellMetadatum, index);
-        }
-
-        this._cellMetadata = cellMetadata;
-        this._sectionManager = sectionManager;
-        if (this._height === height && this._width === width) {
-            this._isNeedReset = false;
-        } else {
-            this._height = height;
-            this._width = width;
-            this._isNeedReset = true;
-        }
-        this.maxScrollTop = this._getMaxScrollTop();
-    },
-
-    _cellRenderers: function (height, width, x, y) {
-        this._lastRenderedCellIndices = this._sectionManager.getCellIndices(height, width, x, y);
-        return this._cellGroupRenderer();
-    },
-
-    _cellGroupRenderer: function () {
-        var self = this, o = this.options;
-        var rendered = [];
-        BI.each(this._lastRenderedCellIndices, function (i, index) {
-            var cellMetadata = self._sectionManager.getCellMetadata(index);
-            rendered.push(cellMetadata);
-        });
-        return rendered;
-    },
-
-    _calculateChildrenToRender: function () {
-        var x, y, cellWidth, cellHeight, cellRow, cellCol, value, self = this, o = this.options;
-        var scrollLeft = o.scrollLeft;
-        var scrollTop = o.scrollTop;
-        var left = Math.max(0, scrollLeft - o.horizontalOverscanSize);
-        var top = Math.max(0, scrollTop - o.verticalOverscanSize);
-        var right = Math.min(this._width, scrollLeft + o.width + o.horizontalOverscanSize);
-        var bottom = Math.min(this._height, scrollTop + o.height + o.verticalOverscanSize);
-        if (right > 0 && bottom > 0) {
-            var childrenToDisplay = this._cellRenderers(bottom - top, right - left, left, top);
-            this.canvas.remove(this.scrollLeft, this.scrollTop, o.width, o.height);
-            for (var i = 0; i < childrenToDisplay.length; i++) {
-                var datum = childrenToDisplay[i];
-                var index = this.renderedKeys[datum.index] && this.renderedKeys[datum.index][1];
-                var rect_tl_x = datum.x,
-                    rect_tl_y = datum.y,
-                    rect_tr_x = rect_tl_x + datum.width,
-                    rect_bl_y = rect_tl_y + datum.height,
-                    cell = o.items[datum.index].cell || o.items[datum.index],
-                    background, color, fontWeight, text;
-                while (BI.isNull(cell.styles) && !BI.isFunction(cell.styleGetter)) {
-                    cell = cell.cell;
-                }
-                if (BI.isNull(cell.styles) && BI.isFunction(cell.styleGetter)) {
-                    background = cell.styleGetter().background;
-                    color = cell.styleGetter().color;
-                    fontWeight = cell.styleGetter().fontWeight;
-                } else if (!BI.isNull(cell.styles)) {
-                    background = cell.styles.background;
-                    color = cell.styles.color;
-                    fontWeight = cell.styles.fontWeight;
-                }
-                if (BI.isNull(cell.text)) {
-                    text = "";
-                } else {
-                    text = cell.text;
-                }
-                if (!BI.isString(text)) {
-                    text = text.toString();
-                }
-                if (this.scrollLeft !== o.scrollLeft) {
-                    this.canvas.translate(this.scrollLeft - o.scrollLeft, 0);
-                    this.scrollLeft = o.scrollLeft;
-                }
-                if (this.scrollTop !== o.scrollTop) {
-                    this.canvas.translate(0, this.scrollTop - o.scrollTop);
-                    this.scrollTop = o.scrollTop;
-                }
-                if (datum.x === 0 && datum.y === 0) {
-                    this.canvas.solid(rect_tl_x, rect_tl_y, rect_tl_x, rect_bl_y, rect_tr_x, rect_bl_y, rect_tr_x, rect_tl_y, rect_tl_x, rect_tl_y, {
-                        strokeStyle: "rgb(212, 218, 221)",
-                        fillStyle: background
-                    });
-                } else if (datum.x === 0) {
-                    this.canvas.solid(rect_tl_x, rect_tl_y, rect_tl_x, rect_bl_y, rect_tr_x, rect_bl_y, rect_tr_x, rect_tl_y, {
-                        strokeStyle: "rgb(212, 218, 221)",
-                        fillStyle: background
-                    });
-                } else if (datum.y === 0) {
-                    this.canvas.solid(rect_tl_x, rect_tl_y, rect_tr_x, rect_tl_y, rect_tr_x, rect_bl_y, rect_tl_x, rect_bl_y, {
-                        strokeStyle: "rgb(212, 218, 221)",
-                        fillStyle: background
-                    });
-                } else {
-                    this.canvas.solid(rect_tr_x, rect_tl_y, rect_tl_x, rect_tl_y, rect_tl_x, rect_bl_y, rect_tr_x, rect_bl_y, {
-                        strokeStyle: "rgb(212, 218, 221)",
-                        fillStyle: background
-                    });
-                }
-                this.canvas.setFontWeight(fontWeight);
-                this.canvas.setFont();
-                var font = this.canvas.getContext().font,
-                    textSize = this._getTextPixel(font),
-                    textHeight = textSize,
-                    textWidth = this.canvas.getContext().measureText(text).width,
-                    dotsWidth = this.canvas.getContext().measureText("...").width;
-                var offsetX = this._calcOffsetX(textWidth, datum.width, "center"),
-                    offsetY = this._calcOffsetY(textHeight, datum.height, "center");
-                if (textHeight > datum.height) {
-                    this.canvas.text(datum.x + offsetX, datum.y + offsetY, "...", color);
-                } else if (textWidth + 4 > datum.width) {
-                    var sliceIndex = Math.floor((datum.width - dotsWidth - 4) / textWidth * text.length);
-                    this.canvas.text(datum.x + offsetX, datum.y + offsetY, text.slice(0, sliceIndex) + "...", color);
-                } else {
-                    this.canvas.text(datum.x + offsetX, datum.y + offsetY, text, color);
-                }
-                this.canvas.stroke();
-            }
-        }
-    },
-
-    _getTextPixel: function (font) {
-        var p = font.split("px")[0],
-            s = p.split(" ");
-        for (var c in s) {
-            var num;
-            num = BI.parseInt(s[c]);
-            if (!BI.isNaN(num)) {
-                return num;
-            }
-        }
-    },
-
-    _calcOffsetX: function (textWidth, cellWidth, position) {
-        switch (position) {
-            case "center":
-                if (textWidth >= cellWidth) {
-                    return 4;
-                } else {
-                    return (cellWidth - textWidth) / 2;
-                }
-            case "right":
-                if (textWidth >= cellWidth) {
-                    return 0;
-                } else {
-                    return cellWidth - textWidth;
-                }
-            default:
-                return 0;
-        }
-    },
-
-    _calcOffsetY: function (textHeight, cellHeight, position) {
-        switch (position) {
-            case "center":
-                if (textHeight >= cellHeight) {
-                    return textHeight;
-                } else {
-                    return (cellHeight + textHeight) / 2;
-                }
-            case "bottom":
-                if (textHeight >= cellHeight) {
-                    return cellHeight;
-                } else {
-                    return cellHeight + textHeight;
-                }
-            default:
-                return textHeight;
-        }
-    },
-
-    _populate: function (items) {
-        var o = this.options;
-        if (items && items !== this.options.items) {
-            this.options.items = items;
-            this._calculateSizeAndPositionData();
-        }
-        if (o.items.length > 0) {
-            this.canvas.setBlock();
-            this.canvas.setWidth(o.width);
-            this.canvas.setHeight(o.height);
-            this.restore();
-            this._calculateChildrenToRender();
-            this.element.scrollTop(o.scrollTop);
-            this.element.scrollLeft(o.scrollLeft);
-        }
-    },
-
-    populate: function (items) {
-        if (items && items !== this.options.items) {
-            this.restore();
-        }
-        this._populate(items);
-    },
-
-    setWidth: function (width) {
-        BI.CanvasCollectionView.superclass.setWidth.apply(this, arguments);
-        this.options.width = width;
-    },
-
-    setHeight: function (height) {
-        BI.CanvasCollectionView.superclass.setHeight.apply(this, arguments);
-        this.options.height = height;
-    },
-
-    restore: function () {
-        this.canvas.remove(this.scrollLeft, this.scrollTop, this.options.width, this.options.height);
-        this.renderedKeys = [];
-        this._scrollLock = false;
-    },
-
-    setScrollLeft: function (scrollLeft) {
-        if (this.options.scrollLeft === scrollLeft) {
-            return;
-        }
-        this._scrollLock = true;
-        this.options.scrollLeft = scrollLeft;
-        this._debounceRelease();
-        this._calculateChildrenToRender();
-        this.element.scrollLeft(this.options.scrollLeft);
-    },
-
-    setScrollTop: function (scrollTop) {
-        if (this.options.scrollTop === scrollTop) {
-            return;
-        }
-        this._scrollLock = true;
-        this.options.scrollTop = scrollTop;
-        this._debounceRelease();
-        this._calculateChildrenToRender();
-        this.element.scrollTop(this.options.scrollTop);
-    },
-
-    getScrollLeft: function () {
-        return this.options.scrollLeft;
-    },
-
-    getScrollTop: function () {
-        return this.options.scrollTop;
-    }
-})
-BI.CanvasCollectionView.EVENT_SCROLL = "EVENT_SCROLL";
-BI.shortcut("bi.canvas_collection_view", BI.CanvasCollectionView);/**
- * Created by Shichao on 2017/10/18
- * @class BI.CanvasTable
- * @extends BI.Widget
- */
-BI.CanvasTable = BI.inherit(BI.Widget, {
-    _defaultConfig: function () {
-        return BI.extend(BI.CanvasTable.superclass._defaultConfig.apply(this, arguments), {
-            baseCls: "bi-canvas-collection-table",
-            headerRowSize: 25,
-            rowSize: 25,
-            columnSize: [],
-            isNeedFreeze: false,
-            freezeCols: [],
-            isNeedMerge: false,
-            mergeCols: [],
-            mergeRule: BI.emptyFn,
-            header: [],
-            items: [],
-            regionColumnSize: []
-        });
-    },
-
-    _init: function () {
-        BI.CanvasTable.superclass._init.apply(this, arguments);
-        var self = this, o = this.options;
-        this._scrollBarSize = BI.DOM.getScrollWidth();
-        this.topLeftCollection = BI.createWidget({
-            type: "bi.canvas_collection_view",
-            cellSizeAndPositionGetter: function (index) {
-                return self.topLeftItems[index];
-            }
-        });
-        this.topRightCollection = BI.createWidget({
-            type: "bi.canvas_collection_view",
-            cellSizeAndPositionGetter: function (index) {
-                return self.topRightItems[index];
-            }
-        });
-        this.topRightCollection.on(BI.CanvasCollectionView.EVENT_SCROLL, function (scroll) {
-            self.bottomRightCollection.setScrollLeft(scroll.scrollLeft);
-            self._populateScrollbar();
-            self.fireEvent(BI.Table.EVENT_TABLE_SCROLL, arguments);
-        });
-        this.bottomLeftCollection = BI.createWidget({
-            type: "bi.canvas_collection_view",
-            cellSizeAndPositionGetter: function (index) {
-                return self.bottomLeftItems[index];
-            }
-        });
-        this.bottomLeftCollection.on(BI.CanvasCollectionView.EVENT_SCROLL, function (scroll) {
-            self.bottomRightCollection.setScrollTop(scroll.scrollTop);
-            self.topLeftCollection.setScrollLeft(scroll.scrollLeft);
-            self._populateScrollbar();
-            self.fireEvent(BI.Table.EVENT_TABLE_SCROLL, arguments);
-        });
-        this.bottomRightCollection = BI.createWidget({
-            type: "bi.canvas_collection_view",
-            cellSizeAndPositionGetter: function (index) {
-                return self.bottomRightItems[index];
-            }
-        });
-        this.bottomRightCollection.on(BI.CanvasCollectionView.EVENT_SCROLL, function (scroll) {
-            self.bottomLeftCollection.setScrollTop(scroll.scrollTop);
-            self.topRightCollection.setScrollLeft(scroll.scrollLeft);
-            self._populateScrollbar();
-            self.fireEvent(BI.Table.EVENT_TABLE_SCROLL, arguments);
-        });
-        this.topLeft = BI.createWidget({
-            type: "bi.vertical",
-            scrollable: false,
-            scrolly: false,
-            items: [this.topLeftCollection]
-        });
-        this.topRight = BI.createWidget({
-            type: "bi.vertical",
-            scrollable: false,
-            scrolly: false,
-            items: [this.topRightCollection]
-        });
-        this.bottomLeft = BI.createWidget({
-            type: "bi.vertical",
-            scrollable: false,
-            scrolly: false,
-            items: [this.bottomLeftCollection]
-        });
-        this.bottomRight = BI.createWidget({
-            type: "bi.vertical",
-            scrollable: false,
-            scrolly: false,
-            items: [this.bottomRightCollection]
-        });
-        this.contextLayout = BI.createWidget({
-            type: "bi.absolute",
-            element: this,
-            items: [{
-                el: this.topLeft,
-                top: 0,
-                left: 0,
-            }, {
-                el: this.topRight,
-                top: 0
-            }, {
-                el: this.bottomLeft,
-                left: 0
-            }, {
-                el: this.bottomRight,
-            }]
-        });
-
-        this.topScrollbar = BI.createWidget({
-            type: "bi.grid_table_scrollbar",
-            width: BI.GridTableScrollbar.SIZE
-        });
-        this.topScrollbar.on(BI.GridTableScrollbar.EVENT_SCROLL, function (scrollTop) {
-            self.bottomLeftCollection.setScrollTop(scrollTop);
-            self.bottomRightCollection.setScrollTop(scrollTop);
-            self.fireEvent(BI.Table.EVENT_TABLE_SCROLL, arguments);
-        });
-        this.leftScrollbar = BI.createWidget({
-            type: "bi.grid_table_horizontal_scrollbar",
-            height: BI.GridTableScrollbar.SIZE
-        });
-        this.leftScrollbar.on(BI.GridTableScrollbar.EVENT_SCROLL, function (scrollLeft) {
-            self.topLeftCollection.setScrollLeft(scrollLeft);
-            self.bottomLeftCollection.setScrollLeft(scrollLeft);
-            self.fireEvent(BI.Table.EVENT_TABLE_SCROLL, arguments);
-        });
-        this.rightScrollbar = BI.createWidget({
-            type: "bi.grid_table_horizontal_scrollbar",
-            height: BI.GridTableScrollbar.SIZE
-        });
-        this.rightScrollbar.on(BI.GridTableScrollbar.EVENT_SCROLL, function (scrollLeft) {
-            self.topRightCollection.setScrollLeft(scrollLeft);
-            self.bottomRightCollection.setScrollLeft(scrollLeft);
-            self.fireEvent(BI.Table.EVENT_TABLE_SCROLL, arguments);
-        });
-        this.scrollBarLayout = BI.createWidget({
-            type: "bi.absolute",
-            element: this,
-            items: [{
-                el: this.topScrollbar,
-                right: 0,
-                top: 0
-            }, {
-                el: this.leftScrollbar,
-                left: 0,
-            }, {
-                el: this.rightScrollbar,
-            }]
-        });
-        this._width = o.width - BI.GridTableScrollbar.SIZE;
-        this._height = o.height - BI.GridTableScrollbar.SIZE;
-    },
-
-    mounted: function () {
-        var o = this.options;
-        if (o.items.length > 0 || o.header.length > 0) {
-            this._digest();
-            this._populate();
-        }
-    },
-
-    attr: function () {
-        BI.CanvasTable.superclass.attr.apply(this, arguments);
-    },
-
-    _getFreezeColLength: function () {
-        return this.options.isNeedFreeze ? this.options.freezeCols.length : 0;
-    },
-
-    getRegionSize: function () {
-        var o = this.options;
-        var regionSize = o.regionColumnSize[0] || 0;
-        if (o.isNeedFreeze === false || o.freezeCols.length === 0) {
-            return 0;
-        }
-        if (!regionSize) {
-            BI.each(o.freezeCols, function (i, col) {
-                regionSize += o.columnSize[col];
-            });
-        }
-        return regionSize;
-    },
-
-    _getFreezeHeaderHeight: function () {
-        var o = this.options;
-        if (o.header.length * o.headerRowSize >= this._height) {
-            return 0;
-        }
-        return o.header.length * o.headerRowSize;
-    },
-
-    _getActualItems: function () {
-        var o = this.options;
-        if (o.header.length * o.headerRowSize >= this._height) {
-            return o.header.concat(o.items);
-        }
-        return o.items;
-    },
-
-    _digest: function () {
-        var o = this.options;
-        var freezeColLength = this._getFreezeColLength();
-        //如果表头位置不够，取消表头冻结
-        if (this._getFreezeHeaderHeight() <= 0) {
-            this.topLeftItems = [];
-            this.topRightItems = [];
-            this.bottomLeftItems = this._serialize(this._getActualItems(), 0, freezeColLength, o.rowSize, o.columnSize, o.mergeCols, BI.range(o.header.length));
-            this.bottomRightItems = this._serialize(this._getActualItems(), freezeColLength, o.columnSize.length, o.rowSize, o.columnSize, o.mergeCols, BI.range(o.header.length));
-        } else {
-            this.topLeftItems = this._serialize(o.header, 0, freezeColLength, o.headerRowSize, o.columnSize, o.mergeCols);
-            this.topRightItems = this._serialize(o.header, freezeColLength, o.columnSize.length, o.headerRowSize, o.columnSize, true);
-            this.bottomLeftItems = this._serialize(o.items, 0, freezeColLength, o.rowSize, o.columnSize, o.mergeCols);
-            this.bottomRightItems = this._serialize(o.items, freezeColLength, o.columnSize.length, o.rowSize, o.columnSize, o.mergeCols);
-        }
-    },
-
-    _populateScrollbar: function () {
-        var o = this.options;
-        var regionSize = this.getRegionSize(), totalLeftColumnSize = 0, totalRightColumnSize = 0, totalColumnSize = 0,
-            summaryColumnSizeArray = [];
-        BI.each(o.columnSize, function (i, size) {
-            if (o.isNeedFreeze === true && o.freezeCols.contains(i)) {
-                totalLeftColumnSize += size;
-            } else {
-                totalRightColumnSize += size;
-            }
-            totalColumnSize += size;
-            if (i === 0) {
-                summaryColumnSizeArray[i] = size;
-            } else {
-                summaryColumnSizeArray[i] = summaryColumnSizeArray[i - 1] + size;
-            }
-        });
-        this.topScrollbar.setContentSize(this._getActualItems().length * o.rowSize);
-        this.topScrollbar.setSize(this._height - this._getFreezeHeaderHeight());
-        this.topScrollbar.setPosition(this.bottomRightCollection.getScrollTop());
-        this.topScrollbar.populate();
-
-        this.leftScrollbar.setContentSize(totalLeftColumnSize);
-        this.leftScrollbar.setSize(regionSize);
-        this.leftScrollbar.setPosition(this.bottomLeftCollection.getScrollLeft());
-        this.leftScrollbar.populate();
-
-        this.rightScrollbar.setContentSize(totalRightColumnSize);
-        this.rightScrollbar.setSize(this._width - regionSize);
-        this.rightScrollbar.setPosition(this.bottomRightCollection.getScrollLeft());
-        this.rightScrollbar.populate();
-
-        var items = this.scrollBarLayout.attr("items");
-        items[0].top = this._getFreezeHeaderHeight();
-        items[1].top = this._height;
-        items[2].top = this._height;
-        items[2].left = regionSize;
-        this.scrollBarLayout.attr("items", items);
-        this.scrollBarLayout.resize();
-    },
-
-    _populateTable: function () {
-        var self = this, o = this.options;
-        var regionSize = this.getRegionSize(), totalLeftColumnSize = 0, totalRightColumnSize = 0, totalColumnSize = 0,
-            summaryColumnSizeArray = [];
-        var freezeColLength = this._getFreezeColLength();
-        var otlw = regionSize;
-        var otlh = this._getFreezeHeaderHeight();
-        var otrw = this._width - regionSize;
-        var otrh = this._getFreezeHeaderHeight();
-        var oblw = regionSize;
-        var oblh = this._height - otlh;
-        var obrw = this._width - regionSize;
-        var obrh = this._height - otrh;
-
-        var tlw = otlw + this._scrollBarSize;
-        var tlh = otlh + this._scrollBarSize;
-        var trw = otrw + this._scrollBarSize;
-        var trh = otrh + this._scrollBarSize;
-        var blw = oblw + this._scrollBarSize;
-        var blh = oblh + this._scrollBarSize;
-        var brw = obrw + this._scrollBarSize;
-        var brh = obrh + this._scrollBarSize;
-
-        this.topLeft.setWidth(otlw);
-        this.topLeft.setHeight(otlh);
-        this.topRight.setWidth(otrw);
-        this.topRight.setHeight(otrh);
-        this.bottomLeft.setWidth(oblw);
-        this.bottomLeft.setHeight(oblh);
-        this.bottomRight.setWidth(obrw);
-        this.bottomRight.setHeight(obrh);
-
-        this.topLeftCollection.setWidth(tlw);
-        this.topLeftCollection.setHeight(tlh);
-        this.topRightCollection.setWidth(trw);
-        this.topRightCollection.setHeight(trh);
-        this.bottomLeftCollection.setWidth(blw);
-        this.bottomLeftCollection.setHeight(blh);
-        this.bottomRightCollection.setWidth(brw);
-        this.bottomRightCollection.setHeight(brh);
-
-        var items = this.contextLayout.attr("items");
-        items[1].left = regionSize;
-        //items[2].top = this._getFreezeHeaderHeight();
-        items[2].top = otrh;
-        items[3].left = regionSize;
-        //items[3].top = this._getFreezeHeaderHeight();
-        items[3].top = otrh;
-        this.contextLayout.attr("items", items);
-        this.contextLayout.resize();
-        
-        var leftHeader = [], rightHeader = [], leftItems = [], rightItems = [];
-        var run = function (positions, items, rendered) {
-            BI.each(positions, function (i, item) {
-                if (BI.isNull(items[item.row][item.col])) {
-                    debugger
-                }
-                rendered.push(items[item.row][item.col]);
-            });
-        };
-        run(this.topLeftItems, o.header, leftHeader);
-        run(this.topRightItems, o.header, rightHeader);
-        run(this.bottomLeftItems, o.items, leftItems);
-        run(this.bottomRightItems, o.items, rightItems);
-        
-        this.topLeftCollection._populate(leftHeader);
-        this.topRightCollection._populate(rightHeader);
-        this.bottomLeftCollection._populate(leftItems);
-        this.bottomRightCollection._populate(rightItems);
-    },
-
-    _populate: function () {
-        if (this._width <= 0 || this._height <= 0) {
-            return;
-        }
-        if (this._isNeedDigest === true) {
-            this._digest();
-        }
-        this._isNeedDigest = false;
-        this._populateTable();
-        this._populateScrollbar();
-    },
-
-    _serialize: function (items, startCol, endCol, rowHeight, columnSize, mergeCols, mergeRows) {
-        mergeCols = mergeCols || [];
-        mergeRows = mergeRows || [];
-        var self = this, o = this.options;
-        var result = [], cache = {}, preCol = {}, preRow = {}, map = {};
-        var summaryColumnSize = [];
-        for (var i = startCol; i < endCol; i++) {
-            if (i === startCol) {
-                summaryColumnSize[i] = columnSize[i];
-            } else {
-                summaryColumnSize[i] = summaryColumnSize[i - 1] + columnSize[i];
-            }
-        }
-        var mergeRow = function (i, j) {
-            preCol[j]._height += rowHeight;
-            preCol[j].__mergeRows.push(i);
-        };
-
-        var mergeCol = function (i, j) {
-            preRow[i]._width += columnSize[j];
-            preRow[i].__mergeCols.push(j);
-        };
-
-        var createOneEl = function (r, c) {
-            var width = columnSize[c];
-            var height = rowHeight;
-            map[r][c]._row = r;
-            map[r][c]._col = c;
-            map[r][c]._width = width;
-            map[r][c]._height = height;
-            preCol[c] = map[r][c];
-            preCol[c].__mergeRows = [r];
-            preRow[r] = map[r][c];
-            preRow[r].__mergeCols = [c];
-
-            result.push({
-                x: summaryColumnSize[c] - columnSize[c],
-                y: +r * rowHeight,
-                item: map[r][c]
-            });
-        };
-
-        BI.each(items, function (i, cols) {
-            for (var j = startCol; j < endCol; j++) {
-                if (!cache[i]) {
-                    cache[i] = {};
-                }
-                if (!map[i]) {
-                    map[i] = {};
-                }
-                cache[i][j] = cols[j];
-                map[i][j] = {};
-                if (mergeCols === true || mergeCols.indexOf(j) > -1 || mergeRows === true || mergeRows.indexOf(i) > -1) {
-                    if (i === 0 && j === startCol) {
-                        createOneEl(0, startCol);
-                    } else if (j === startCol && i > 0) {
-                        var isNeedMergeRow = o.mergeRule(cache[i][j], cache[i - 1][j]);
-                        if (isNeedMergeRow === true) {
-                            mergeRow(i, j);
-                            preRow[i] = preCol[j];
-                        } else {
-                            createOneEl(i, j);
-                        }
-                    } else if (i === 0 && j > startCol) {
-                        var isNeedMergeCol = o.mergeRule(cache[i][j], cache[i][j - 1]);
-                        if (isNeedMergeCol === true) {
-                            mergeCol(i, j);
-                            preCol[j] = preRow[i];
-                        } else {
-                            createOneEl(i, j);
-                        }
-                    } else {
-                        var isNeedMergeRow = o.mergeRule(cache[i][j], cache[i - 1][j]);
-                        var isNeedMergeCol = o.mergeRule(cache[i][j], cache[i][j - 1]);
-                        if (isNeedMergeCol && isNeedMergeRow) {
-                            continue;
-                            //mergeRow(i, j);//优先合并列
-                        }
-                        if (isNeedMergeCol) {
-                            mergeCol(i, j);
-                        }
-                        if (isNeedMergeRow) {
-                            mergeRow(i, j);
-                        }
-                        if (!isNeedMergeCol && !isNeedMergeRow) {
-                            createOneEl(i, j);
-                        }
-                    }
-                } else {
-                    createOneEl(i, j);
-                }
-            }
-        });
-        return BI.map(result, function (i, item) {
-            return {
-                x: item.x,
-                y: item.y,
-                row: item.item._row,
-                col: item.item._col,
-                width: item.item._width,
-                height: item.item._height
-            }
-        });
-    },
-
-    populate: function (items, header) {
-        if (items && this.options.items !== items) {
-            this._isNeedDigest = true;
-            this.options.items = items;
-            this._restore();
-        }
-        if (header && this.options.header !== header) {
-            this._isNeedDigest = true;
-            this.options.header = header;
-            this._restore();
-        }
-        this._populate();
-    },
-
-    _restore: function () {
-        this.topLeftCollection.restore();
-        this.topRightCollection.restore();
-        this.bottomLeftCollection.restore();
-        this.bottomRightCollection.restore();
-    },
-
-    restore: function () {
-        this._restore();
-    },
-
-    setWidth: function (width) {
-        BI.CanvasTable.superclass.setWidth.apply(this, arguments);
-        this._width = width - BI.GridTableScrollbar.SIZE;
-    },
-
-    setHeight: function (height) {
-        BI.CanvasTable.superclass.setHeight.apply(this, arguments);
-        this._height = height - BI.GridTableScrollbar.SIZE;
-    },
-
-    setVerticalScroll: function (scrollTop) {
-        this.bottomLeftCollection.setScrollTop(scrollTop);
-        this.bottomRightCollection.setScrollTop(scrollTop);
-    },
-
-    setLeftHorizontalScroll: function (scrollLeft) {
-        this.topLeftCollection.setScrollLeft(scrollLeft);
-        this.bottomLeftCollection.setScrollLeft(scrollLeft);
-    },
-
-    setRightHorizontalScroll: function (scrollLeft) {
-        this.topRightCollection.setScrollLeft(scrollLeft);
-        this.bottomRightCollection.setScrollLeft(scrollLeft);
-    },
-
-    getVerticalScroll: function () {
-        return this.bottomRightCollection.getScrollTop();
-    },
-
-    getLeftHorizontalScroll: function () {
-        return this.bottomLeftCollection.getScrollLeft();
-    },
-
-    getRightHorizontalScroll: function () {
-        return this.bottomRightCollection.getScrollLeft();
-    },
-
-    setColumnSize: function (columnSize) {
-        this._isNeedDigest = true;
-        this.options.columnSize = columnSize;
-    },
-
-    setRegionColumnSize: function (regionColumnSize) {
-        this._isNeedDigest = true;
-        this.options.regionColumnSize = regionColumnSize;
-    },
-
-    getColumnSize: function () {
-        return this.options.columnSize;
-    },
-
-    getRegionColumnSize: function () {
-        return this.options.regionColumnSize;
-    },
-});
-
-BI.shortcut("bi.canvas_table", BI.CanvasTable);/**
  * 日期控件中的月份下拉框
  *
  * Created by GUY on 2015/9/7.
@@ -9454,14 +8566,14 @@ BI.DisplaySelectedList = BI.inherit(BI.Pane, {
 
 BI.shortcut('bi.display_selected_list', BI.DisplaySelectedList);/**
  *
- * @class BI.MultiSelectCombo
+ * @class BI.MultiSelectInsertCombo
  * @extends BI.Single
  */
-BI.MultiSelectCombo = BI.inherit(BI.Single, {
+BI.MultiSelectInsertCombo = BI.inherit(BI.Single, {
 
     _defaultConfig: function () {
-        return BI.extend(BI.MultiSelectCombo.superclass._defaultConfig.apply(this, arguments), {
-            baseCls: 'bi-multi-select-combo',
+        return BI.extend(BI.MultiSelectInsertCombo.superclass._defaultConfig.apply(this, arguments), {
+            baseCls: 'bi-multi-select-insert-combo',
             itemsCreator: BI.emptyFn,
             valueFormatter: BI.emptyFn,
             height: 28
@@ -9469,7 +8581,7 @@ BI.MultiSelectCombo = BI.inherit(BI.Single, {
     },
 
     _init: function () {
-        BI.MultiSelectCombo.superclass._init.apply(this, arguments);
+        BI.MultiSelectInsertCombo.superclass._init.apply(this, arguments);
         var self = this, o = this.options;
 
         var assertShowValue = function () {
@@ -9530,6 +8642,358 @@ BI.MultiSelectCombo = BI.inherit(BI.Single, {
                 self._setStartValue("");
             })
             // }
+        });
+        this.trigger.on(BI.MultiSelectTrigger.EVENT_SEARCHING, function (keywords) {
+            var last = BI.last(keywords);
+            keywords = BI.initial(keywords || []);
+            if (keywords.length > 0) {
+                self._joinKeywords(keywords, function () {
+                    if (BI.isEndWithBlank(last)) {
+                        self.combo.setValue(self.storeValue);
+                        assertShowValue();
+                        self.combo.populate();
+                        self._setStartValue("");
+                    } else {
+                        self.combo.setValue(self.storeValue);
+                        assertShowValue();
+                    }
+                });
+            }
+        });
+
+        this.trigger.on(BI.MultiSelectTrigger.EVENT_CHANGE, function (value, obj) {
+            if (obj instanceof BI.MultiSelectBar) {
+                self._joinAll(this.getValue(), function () {
+                    assertShowValue();
+                });
+            } else {
+                self._join(this.getValue(), function () {
+                    assertShowValue();
+                });
+            }
+        });
+        this.trigger.on(BI.MultiSelectTrigger.EVENT_BEFORE_COUNTER_POPUPVIEW, function () {
+            this.getCounter().setValue(self.storeValue);
+        });
+        this.trigger.on(BI.MultiSelectTrigger.EVENT_COUNTER_CLICK, function () {
+            if (!self.combo.isViewVisible()) {
+                self.combo.showView();
+            }
+        });
+
+        this.combo = BI.createWidget({
+            type: "bi.combo",
+            toggle: false,
+            el: this.trigger,
+            adjustLength: 1,
+            popup: {
+                type: 'bi.multi_select_popup_view',
+                ref: function () {
+                    self.popup = this;
+                    self.trigger.setAdapter(this);
+                },
+                listeners: [{
+                    eventName: BI.MultiSelectPopupView.EVENT_CHANGE,
+                    action: function () {
+                        self.storeValue = this.getValue();
+                        self._adjust(function () {
+                            assertShowValue();
+                        });
+                    }
+                }, {
+                    eventName: BI.MultiSelectPopupView.EVENT_CLICK_CONFIRM,
+                    action: function () {
+                        self._defaultState();
+                    }
+                }, {
+                    eventName: BI.MultiSelectPopupView.EVENT_CLICK_CLEAR,
+                    action: function () {
+                        self.setValue();
+                        self._defaultState();
+                    }
+                }],
+                itemsCreator: o.itemsCreator,
+                valueFormatter: o.valueFormatter,
+                onLoaded: function () {
+                    BI.nextTick(function () {
+                        self.combo.adjustWidth();
+                        self.combo.adjustHeight();
+                        self.trigger.getCounter().adjustView();
+                        self.trigger.getSearcher().adjustView();
+                    });
+                }
+            },
+            hideChecker: function (e) {
+                return triggerBtn.element.find(e.target).length === 0;
+            }
+        });
+
+        this.combo.on(BI.Combo.EVENT_BEFORE_POPUPVIEW, function () {
+            this.setValue(self.storeValue);
+            BI.nextTick(function () {
+                self.populate();
+            });
+        });
+        //当退出的时候如果还在处理请求，则等请求结束后再对外发确定事件
+        this.wants2Quit = false;
+        this.combo.on(BI.Combo.EVENT_AFTER_HIDEVIEW, function () {
+            //important:关闭弹出时又可能没有退出编辑状态
+            self.trigger.stopEditing();
+            if (self.requesting === true) {
+                self.wants2Quit = true;
+            } else {
+                self.fireEvent(BI.MultiSelectInsertCombo.EVENT_CONFIRM);
+            }
+        });
+
+        var triggerBtn = BI.createWidget({
+            type: "bi.trigger_icon_button",
+            width: o.height,
+            height: o.height,
+            cls: "multi-select-trigger-icon-button bi-border-left"
+        });
+        triggerBtn.on(BI.TriggerIconButton.EVENT_CHANGE, function () {
+            self.trigger.getCounter().hideView();
+            if (self.combo.isViewVisible()) {
+                self.combo.hideView();
+            } else {
+                self.combo.showView();
+            }
+        });
+        BI.createWidget({
+            type: "bi.absolute",
+            element: this,
+            items: [{
+                el: this.combo,
+                left: 0,
+                right: 0,
+                top: 0,
+                bottom: 0
+            }, {
+                el: triggerBtn,
+                right: 0,
+                top: 0,
+                bottom: 0
+            }]
+        })
+    },
+
+    _defaultState: function () {
+        this.trigger.stopEditing();
+        this.combo.hideView();
+    },
+
+    _assertValue: function (val) {
+        val || (val = {});
+        val.type || (val.type = BI.Selection.Multi);
+        val.value || (val.value = []);
+    },
+
+    _makeMap: function (values) {
+        return BI.makeObject(values || []);
+    },
+
+    _joinKeywords: function (keywords, callback) {
+        var self = this, o = this.options;
+        this._assertValue(this.storeValue);
+        this.requesting = true;
+        o.itemsCreator({
+            type: BI.MultiSelectInsertCombo.REQ_GET_ALL_DATA,
+            keywords: keywords
+        }, function (ob) {
+            var values = BI.pluck(ob.items, "value");
+            digest(values);
+        });
+
+        function digest(items) {
+            var selectedMap = self._makeMap(items);
+            BI.each(keywords, function (i, val) {
+                if (BI.isNotNull(selectedMap[val])) {
+                    self.storeValue.value[self.storeValue.type === BI.Selection.Multi ? "pushDistinct" : "remove"](val);
+                }
+            });
+            self._adjust(callback);
+        }
+    },
+
+    _joinAll: function (res, callback) {
+        var self = this, o = this.options;
+        this._assertValue(res);
+        this.requesting = true;
+        o.itemsCreator({
+            type: BI.MultiSelectInsertCombo.REQ_GET_ALL_DATA,
+            keywords: [this.trigger.getKey()]
+        }, function (ob) {
+            var items = BI.pluck(ob.items, "value");
+            if (self.storeValue.type === res.type) {
+                var change = false;
+                var map = self._makeMap(self.storeValue.value);
+                BI.each(items, function (i, v) {
+                    if (BI.isNotNull(map[v])) {
+                        change = true;
+                        delete map[v];
+                    }
+                });
+                change && (self.storeValue.value = BI.values(map));
+                self._adjust(callback);
+                return;
+            }
+            var selectedMap = self._makeMap(self.storeValue.value);
+            var notSelectedMap = self._makeMap(res.value);
+            var newItems = [];
+            BI.each(items, function (i, item) {
+                if (BI.isNotNull(selectedMap[items[i]])) {
+                    delete selectedMap[items[i]];
+                }
+                if (BI.isNull(notSelectedMap[items[i]])) {
+                    newItems.push(item);
+                }
+            });
+            self.storeValue.value = newItems.concat(BI.values(selectedMap));
+            self._adjust(callback);
+        })
+    },
+
+    _adjust: function (callback) {
+        var self = this, o = this.options;
+        adjust();
+        callback();
+        function adjust() {
+            if (self.wants2Quit === true) {
+                self.fireEvent(BI.MultiSelectInsertCombo.EVENT_CONFIRM);
+                self.wants2Quit = false;
+            }
+            self.requesting = false;
+        }
+    },
+
+    _join: function (res, callback) {
+        var self = this, o = this.options;
+        this._assertValue(res);
+        this._assertValue(this.storeValue);
+        if (this.storeValue.type === res.type) {
+            var map = this._makeMap(this.storeValue.value);
+            BI.each(res.value, function (i, v) {
+                if (!map[v]) {
+                    self.storeValue.value.push(v);
+                    map[v] = v;
+                }
+            });
+            var change = false;
+            BI.each(res.assist, function (i, v) {
+                if (BI.isNotNull(map[v])) {
+                    change = true;
+                    delete map[v];
+                }
+            });
+            change && (this.storeValue.value = BI.values(map));
+            self._adjust(callback);
+            return;
+        }
+        this._joinAll(res, callback);
+    },
+
+    _setStartValue: function (value) {
+        this._startValue = value;
+        this.popup.setStartValue(value);
+    },
+
+    setValue: function (v) {
+        this.storeValue = v || {};
+        this._assertValue(this.storeValue);
+        this.combo.setValue(this.storeValue);
+    },
+
+    getValue: function () {
+        return BI.deepClone(this.storeValue);
+    },
+
+    populate: function () {
+        this.combo.populate.apply(this.combo, arguments);
+    }
+});
+
+BI.extend(BI.MultiSelectInsertCombo, {
+    REQ_GET_DATA_LENGTH: 0,
+    REQ_GET_ALL_DATA: -1
+});
+
+BI.MultiSelectInsertCombo.EVENT_CONFIRM = "EVENT_CONFIRM";
+
+BI.shortcut('bi.multi_select_insert_combo', BI.MultiSelectInsertCombo);/**
+ *
+ * @class BI.MultiSelectCombo
+ * @extends BI.Single
+ */
+BI.MultiSelectCombo = BI.inherit(BI.Single, {
+
+    _defaultConfig: function () {
+        return BI.extend(BI.MultiSelectCombo.superclass._defaultConfig.apply(this, arguments), {
+            baseCls: 'bi-multi-select-combo',
+            itemsCreator: BI.emptyFn,
+            valueFormatter: BI.emptyFn,
+            height: 28
+        });
+    },
+
+    _init: function () {
+        BI.MultiSelectCombo.superclass._init.apply(this, arguments);
+        var self = this, o = this.options;
+
+        var assertShowValue = function () {
+            BI.isKey(self._startValue) && self.storeValue.value[self.storeValue.type === BI.Selection.All ? "remove" : "pushDistinct"](self._startValue);
+            self.trigger.getSearcher().setState(self.storeValue);
+            self.trigger.getCounter().setButtonChecked(self.storeValue);
+        };
+        this.storeValue = {};
+        //标记正在请求数据
+        this.requesting = false;
+
+        this.trigger = BI.createWidget({
+            type: "bi.multi_select_trigger",
+            height: o.height,
+            // adapter: this.popup,
+            masker: {
+                offset: {
+                    left: 1,
+                    top: 1,
+                    right: 2,
+                    bottom: 33
+                }
+            },
+            valueFormatter: o.valueFormatter,
+            itemsCreator: function (op, callback) {
+                o.itemsCreator(op, function (res) {
+                    if (op.times === 1 && BI.isNotNull(op.keywords)) {
+                        //预防trigger内部把当前的storeValue改掉
+                        self.trigger.setValue(BI.deepClone(self.getValue()));
+                    }
+                    callback.apply(self, arguments);
+                });
+            }
+        });
+
+        this.trigger.on(BI.MultiSelectTrigger.EVENT_START, function () {
+            self._setStartValue("");
+            this.getSearcher().setValue(self.storeValue);
+        });
+        this.trigger.on(BI.MultiSelectTrigger.EVENT_STOP, function () {
+            self._setStartValue("");
+        });
+        this.trigger.on(BI.MultiSelectTrigger.EVENT_PAUSE, function () {
+            if (this.getSearcher().hasMatched()) {
+                var keyword = this.getSearcher().getKeyword();
+                self._join({
+                    type: BI.Selection.Multi,
+                    value: [keyword]
+                }, function () {
+                    self.combo.setValue(self.storeValue);
+                    self._setStartValue(keyword);
+                    assertShowValue();
+                    self.populate();
+                    self._setStartValue("");
+                })
+            }
         });
         this.trigger.on(BI.MultiSelectTrigger.EVENT_SEARCHING, function (keywords) {
             var last = BI.last(keywords);
@@ -9744,32 +9208,32 @@ BI.MultiSelectCombo = BI.inherit(BI.Single, {
 
     _adjust: function (callback) {
         var self = this, o = this.options;
-        // if (!this._count) {
-        //     o.itemsCreator({
-        //         type: BI.MultiSelectCombo.REQ_GET_DATA_LENGTH
-        //     }, function (res) {
-        //         self._count = res.count;
-        //         adjust();
-        //         callback();
-        //     });
-        // } else {
-        adjust();
-        callback();
+        if (!this._count) {
+            o.itemsCreator({
+                type: BI.MultiSelectCombo.REQ_GET_DATA_LENGTH
+            }, function (res) {
+                self._count = res.count;
+                adjust();
+                callback();
+            });
+        } else {
+            adjust();
+            callback();
 
-        // }
+        }
 
         function adjust() {
-            // if (self.storeValue.type === BI.Selection.All && self.storeValue.value.length >= self._count) {
-            //     self.storeValue = {
-            //         type: BI.Selection.Multi,
-            //         value: []
-            //     }
-            // } else if (self.storeValue.type === BI.Selection.Multi && self.storeValue.value.length >= self._count) {
-            //     self.storeValue = {
-            //         type: BI.Selection.All,
-            //         value: []
-            //     }
-            // }
+            if (self.storeValue.type === BI.Selection.All && self.storeValue.value.length >= self._count) {
+                self.storeValue = {
+                    type: BI.Selection.Multi,
+                    value: []
+                }
+            } else if (self.storeValue.type === BI.Selection.Multi && self.storeValue.value.length >= self._count) {
+                self.storeValue = {
+                    type: BI.Selection.All,
+                    value: []
+                }
+            }
             if (self.wants2Quit === true) {
                 self.fireEvent(BI.MultiSelectCombo.EVENT_CONFIRM);
                 self.wants2Quit = false;
@@ -10899,6 +10363,331 @@ BI.MultiSelectCheckSelectedSwitcher.EVENT_BEFORE_POPUPVIEW = "MultiSelectCheckSe
 BI.shortcut('bi.multi_select_check_selected_switcher', BI.MultiSelectCheckSelectedSwitcher);/**
  * Created by zcf_1 on 2017/5/2.
  */
+BI.MultiSelectInsertList = BI.inherit(BI.Widget, {
+    _defaultConfig: function () {
+        return BI.extend(BI.MultiSelectInsertList.superclass._defaultConfig.apply(this, arguments), {
+            baseCls: 'bi-multi-select-insert-list',
+            itemsCreator: BI.emptyFn,
+            valueFormatter: BI.emptyFn
+        })
+    },
+    _init: function () {
+        BI.MultiSelectInsertList.superclass._init.apply(this, arguments);
+
+        var self = this, o = this.options;
+        this.storeValue = {};
+
+        var assertShowValue = function () {
+            BI.isKey(self._startValue) && self.storeValue.value[self.storeValue.type === BI.Selection.All ? "remove" : "pushDistinct"](self._startValue);
+            // self.trigger.setValue(self.storeValue);
+        };
+
+        this.adapter = BI.createWidget({
+            type: "bi.multi_select_loader",
+            cls: "popup-multi-select-list bi-border-left bi-border-right bi-border-bottom",
+            itemsCreator: o.itemsCreator,
+            valueFormatter: o.valueFormatter,
+            logic: {
+                dynamic: false
+            },
+            // onLoaded: o.onLoaded,
+            el: {}
+        });
+        this.adapter.on(BI.MultiSelectLoader.EVENT_CHANGE, function () {
+            self.storeValue = this.getValue();
+                assertShowValue();
+                self.fireEvent(BI.MultiSelectInsertList.EVENT_CHANGE);
+        });
+
+        this.searcherPane = BI.createWidget({
+            type: "bi.multi_select_search_pane",
+            cls: "bi-border-left bi-border-right bi-border-bottom",
+            valueFormatter: o.valueFormatter,
+            keywordGetter: function () {
+                return self.trigger.getKeyword();
+            },
+            itemsCreator: function (op, callback) {
+                op.keyword = self.trigger.getKeyword();
+                this.setKeyword(op.keyword);
+                o.itemsCreator(op, callback);
+            }
+        });
+        this.searcherPane.setVisible(false);
+
+        this.trigger = BI.createWidget({
+            type: "bi.searcher",
+            isAutoSearch: false,
+            isAutoSync: false,
+            onSearch: function (op, callback) {
+                callback();
+            },
+            adapter: this.adapter,
+            popup: this.searcherPane,
+            height: 200,
+            masker: false,
+            listeners: [{
+                eventName: BI.Searcher.EVENT_START,
+                action: function () {
+                    self._showSearcherPane();
+                    self._setStartValue("");
+                    this.setValue(BI.deepClone(self.storeValue));
+                }
+            }, {
+                eventName: BI.Searcher.EVENT_STOP,
+                action: function () {
+                    self._showAdapter();
+                    self._setStartValue("");
+                    self.adapter.setValue(self.storeValue);
+                    //需要刷新回到初始界面，否则搜索的结果不能放在最前面
+                    self.adapter.populate();
+                }
+            }, {
+                eventName: BI.Searcher.EVENT_PAUSE,
+                action: function () {
+                    var keyword = this.getKeyword();
+                    if (this.hasMatched()) {
+                        self._join({
+                            type: BI.Selection.Multi,
+                            value: [keyword]
+                        }, function () {
+                            if (self.storeValue.type === BI.Selection.Multi) {
+                                self.storeValue.value.pushDistinct(keyword)
+                            }
+                            self._showAdapter();
+                            self.adapter.setValue(self.storeValue);
+                            self._setStartValue(keyword);
+                            assertShowValue();
+                            self.adapter.populate();
+                            self._setStartValue("");
+                            self.fireEvent(BI.MultiSelectInsertList.EVENT_CHANGE);
+                        })
+                    } else {
+                        if (self.storeValue.type === BI.Selection.Multi) {
+                            self.storeValue.value.pushDistinct(keyword)
+                        }
+                        self._showAdapter();
+                        self.adapter.setValue(self.storeValue);
+                        self.adapter.populate();
+                        if (self.storeValue.type === BI.Selection.Multi) {
+                            self.fireEvent(BI.MultiSelectInsertList.EVENT_CHANGE);
+                        }
+                    }
+                }
+            }, {
+                eventName: BI.Searcher.EVENT_SEARCHING,
+                action: function () {
+                    var keywords = this.getKeyword();
+                    var last = BI.last(keywords);
+                    keywords = BI.initial(keywords || []);
+                    if (keywords.length > 0) {
+                        self._joinKeywords(keywords, function () {
+                            if (BI.isEndWithBlank(last)) {
+                                self.adapter.setValue(self.storeValue);
+                                assertShowValue();
+                                self.adapter.populate();
+                                self._setStartValue("");
+                            } else {
+                                self.adapter.setValue(self.storeValue);
+                                assertShowValue();
+                            }
+                        });
+                    }
+                }
+            }, {
+                eventName: BI.Searcher.EVENT_CHANGE,
+                action: function (value, obj) {
+                    if (obj instanceof BI.MultiSelectBar) {
+                        self._joinAll(this.getValue(), function () {
+                            assertShowValue();
+                            self.fireEvent(BI.MultiSelectInsertList.EVENT_CHANGE);
+                        });
+                    } else {
+                        self._join(this.getValue(), function () {
+                            assertShowValue();
+                            self.fireEvent(BI.MultiSelectInsertList.EVENT_CHANGE);
+                        });
+                    }
+                }
+            }]
+        });
+
+        BI.createWidget({
+            type: "bi.vtape",
+            element: this,
+            items: [{
+                el: this.trigger,
+                height: 30
+            }, {
+                el: this.adapter,
+                height: "fill"
+            }]
+        });
+        BI.createWidget({
+            type: "bi.absolute",
+            element: this,
+            items: [{
+                el: this.searcherPane,
+                top: 30,
+                bottom: 0,
+                left: 0,
+                right: 0
+            }]
+        })
+    },
+
+    _showAdapter: function () {
+        this.adapter.setVisible(true);
+        this.searcherPane.setVisible(false);
+    },
+
+    _showSearcherPane: function () {
+        this.searcherPane.setVisible(true);
+        this.adapter.setVisible(false);
+    },
+
+    _defaultState: function () {
+        this.trigger.stopEditing();
+    },
+
+    _assertValue: function (val) {
+        val || (val = {});
+        val.type || (val.type = BI.Selection.Multi);
+        val.value || (val.value = []);
+    },
+
+    _makeMap: function (values) {
+        return BI.makeObject(values || []);
+    },
+
+    _joinKeywords: function (keywords, callback) {
+        var self = this, o = this.options;
+        this._assertValue(this.storeValue);
+        if (!this._allData) {
+            o.itemsCreator({
+                type: BI.MultiSelectInsertList.REQ_GET_ALL_DATA
+            }, function (ob) {
+                self._allData = BI.pluck(ob.items, "value");
+                digest(self._allData);
+            })
+        } else {
+            digest(this._allData)
+        }
+
+        function digest(items) {
+            var selectedMap = self._makeMap(items);
+            BI.each(keywords, function (i, val) {
+                if (BI.isNotNull(selectedMap[val])) {
+                    self.storeValue.value[self.storeValue.type === BI.Selection.Multi ? "pushDistinct" : "remove"](val);
+                }
+            });
+            callback();
+        }
+    },
+
+    _joinAll: function (res, callback) {
+        var self = this, o = this.options;
+        this._assertValue(res);
+        o.itemsCreator({
+            type: BI.MultiSelectInsertList.REQ_GET_ALL_DATA,
+            keyword: self.trigger.getKeyword()
+        }, function (ob) {
+            var items = BI.pluck(ob.items, "value");
+            if (self.storeValue.type === res.type) {
+                var change = false;
+                var map = self._makeMap(self.storeValue.value);
+                BI.each(items, function (i, v) {
+                    if (BI.isNotNull(map[v])) {
+                        change = true;
+                        delete map[v];
+                    }
+                });
+                change && (self.storeValue.value = BI.values(map));
+                callback();
+                return;
+            }
+            var selectedMap = self._makeMap(self.storeValue.value);
+            var notSelectedMap = self._makeMap(res.value);
+            var newItems = [];
+            BI.each(items, function (i, item) {
+                if (BI.isNotNull(selectedMap[items[i]])) {
+                    delete selectedMap[items[i]];
+                }
+                if (BI.isNull(notSelectedMap[items[i]])) {
+                    newItems.push(item);
+                }
+            });
+            self.storeValue.value = newItems.concat(BI.values(selectedMap));
+            callback();
+        })
+    },
+
+    _join: function (res, callback) {
+        var self = this, o = this.options;
+        this._assertValue(res);
+        this._assertValue(this.storeValue);
+        if (this.storeValue.type === res.type) {
+            var map = this._makeMap(this.storeValue.value);
+            BI.each(res.value, function (i, v) {
+                if (!map[v]) {
+                    self.storeValue.value.push(v);
+                    map[v] = v;
+                }
+            });
+            var change = false;
+            BI.each(res.assist, function (i, v) {
+                if (BI.isNotNull(map[v])) {
+                    change = true;
+                    delete map[v];
+                }
+            });
+            change && (this.storeValue.value = BI.values(map));
+            callback();
+            return;
+        }
+        this._joinAll(res, callback);
+    },
+
+    _setStartValue: function (value) {
+        this._startValue = value;
+        this.adapter.setStartValue(value);
+    },
+
+    isAllSelected: function () {
+        return this.adapter.isAllSelected();
+    },
+
+    resize: function () {
+        // this.trigger.getCounter().adjustView();
+        // this.trigger.adjustView();
+    },
+    setValue: function (v) {
+        this.storeValue = v || {};
+        this._assertValue(this.storeValue);
+        this.adapter.setValue(this.storeValue);
+        this.trigger.setValue(this.storeValue);
+    },
+
+    getValue: function () {
+        return BI.deepClone(this.storeValue);
+    },
+
+    populate: function () {
+        this._count = null;
+        this._allData = null;
+        this.adapter.populate.apply(this.adapter, arguments);
+        this.trigger.populate.apply(this.trigger, arguments);
+    }
+});
+
+BI.extend(BI.MultiSelectInsertList, {
+    REQ_GET_DATA_LENGTH: 0,
+    REQ_GET_ALL_DATA: -1
+});
+
+BI.MultiSelectInsertList.EVENT_CHANGE = "BI.MultiSelectInsertList.EVENT_CHANGE";
+BI.shortcut("bi.multi_select_insert_list", BI.MultiSelectInsertList);/**
+ * Created by zcf_1 on 2017/5/2.
+ */
 BI.MultiSelectList = BI.inherit(BI.Widget, {
     _defaultConfig: function () {
         return BI.extend(BI.MultiSelectList.superclass._defaultConfig.apply(this, arguments), {
@@ -10988,9 +10777,6 @@ BI.MultiSelectList = BI.inherit(BI.Widget, {
                             type: BI.Selection.Multi,
                             value: [keyword]
                         }, function () {
-                            if (self.storeValue.type === BI.Selection.Multi) {
-                                self.storeValue.value.pushDistinct(keyword)
-                            }
                             self._showAdapter();
                             self.adapter.setValue(self.storeValue);
                             self._setStartValue(keyword);
@@ -10999,16 +10785,6 @@ BI.MultiSelectList = BI.inherit(BI.Widget, {
                             self._setStartValue("");
                             self.fireEvent(BI.MultiSelectList.EVENT_CHANGE);
                         })
-                    } else {
-                        if (self.storeValue.type === BI.Selection.Multi) {
-                            self.storeValue.value.pushDistinct(keyword)
-                        }
-                        self._showAdapter();
-                        self.adapter.setValue(self.storeValue);
-                        self.adapter.populate();
-                        if (self.storeValue.type === BI.Selection.Multi) {
-                            self.fireEvent(BI.MultiSelectList.EVENT_CHANGE);
-                        }
                     }
                 }
             }, {
@@ -11161,32 +10937,31 @@ BI.MultiSelectList = BI.inherit(BI.Widget, {
 
     _adjust: function (callback) {
         var self = this, o = this.options;
-        // if (!this._count) {
-        //     o.itemsCreator({
-        //         type: BI.MultiSelectList.REQ_GET_DATA_LENGTH
-        //     }, function (res) {
-        //         self._count = res.count;
-        //         adjust();
-        //         callback();
-        //     });
-        // } else {
-        adjust();
-        callback();
-
-        // }
+        if (!this._count) {
+            o.itemsCreator({
+                type: BI.MultiSelectList.REQ_GET_DATA_LENGTH
+            }, function (res) {
+                self._count = res.count;
+                adjust();
+                callback();
+            });
+        } else {
+            adjust();
+            callback();
+        }
 
         function adjust() {
-            // if (self.storeValue.type === BI.Selection.All && self.storeValue.value.length >= self._count) {
-            //     self.storeValue = {
-            //         type: BI.Selection.Multi,
-            //         value: []
-            //     }
-            // } else if (self.storeValue.type === BI.Selection.Multi && self.storeValue.value.length >= self._count) {
-            //     self.storeValue = {
-            //         type: BI.Selection.All,
-            //         value: []
-            //     }
-            // }
+            if (self.storeValue.type === BI.Selection.All && self.storeValue.value.length >= self._count) {
+                self.storeValue = {
+                    type: BI.Selection.Multi,
+                    value: []
+                }
+            } else if (self.storeValue.type === BI.Selection.Multi && self.storeValue.value.length >= self._count) {
+                self.storeValue = {
+                    type: BI.Selection.All,
+                    value: []
+                }
+            }
         }
     },
 
