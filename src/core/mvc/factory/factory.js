@@ -31,7 +31,7 @@ BI.Factory = {
 //
 //        }
 //        try {
-        var view = new (eval(viewFunc))(_.extend({}, vData, {
+        var view = new (this.parsePath(viewFunc)(window))(_.extend({}, vData, {
             model: model,
             parent: context,
             rootURL: url
