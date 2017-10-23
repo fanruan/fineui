@@ -41,11 +41,9 @@ BI.NumberEditor = BI.inherit(BI.Widget, {
             cls: "column-pre-page-h-font top-button bi-border-left bi-border-bottom"
         });
         this.topBtn.on(BI.IconButton.EVENT_CHANGE, function () {
-            if(this.isEnabled()){
-                self._finetuning(o.step);
-                self.fireEvent(BI.NumberEditor.EVENT_CHANGE);
-                self.fireEvent(BI.NumberEditor.EVENT_CONFIRM);
-            }
+            self._finetuning(o.step);
+            self.fireEvent(BI.NumberEditor.EVENT_CHANGE);
+            self.fireEvent(BI.NumberEditor.EVENT_CONFIRM);
         });
         this.bottomBtn = BI.createWidget({
             type: "bi.icon_button",
@@ -53,11 +51,9 @@ BI.NumberEditor = BI.inherit(BI.Widget, {
             cls: "column-next-page-h-font bottom-button bi-border-left bi-border-top"
         });
         this.bottomBtn.on(BI.IconButton.EVENT_CHANGE, function () {
-            if(this.isEnabled()){
-                self._finetuning(-o.step);
-                self.fireEvent(BI.NumberEditor.EVENT_CHANGE);
-                self.fireEvent(BI.NumberEditor.EVENT_CONFIRM);
-            }
+            self._finetuning(-o.step);
+            self.fireEvent(BI.NumberEditor.EVENT_CHANGE);
+            self.fireEvent(BI.NumberEditor.EVENT_CONFIRM);
         });
         BI.createWidget({
             type: "bi.htape",
