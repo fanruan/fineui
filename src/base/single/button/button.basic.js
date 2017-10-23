@@ -177,7 +177,9 @@ BI.BasicButton = BI.inherit(BI.Single, {
                             return;
                         }
                         interval = setInterval(function () {
-                            self.doClick();
+                            if(self.isEnabled()){
+                                self.doClick();
+                            }
                         }, 100);
                         mouseDown = true;
                         ev(e);
