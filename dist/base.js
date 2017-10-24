@@ -908,7 +908,9 @@ BI.BasicButton = BI.inherit(BI.Single, {
                             return;
                         }
                         interval = setInterval(function () {
-                            self.doClick();
+                            if(self.isEnabled()){
+                                self.doClick();
+                            }
                         }, 100);
                         mouseDown = true;
                         ev(e);
@@ -3052,6 +3054,7 @@ BI.Combo = BI.inherit(BI.Widget, {
             trigger: "click",
             toggle: true,
             direction: "bottom", //top||bottom||left||right||top,left||top,right||bottom,left||bottom,right
+            container: null,//popupview放置的容器，默认为this.element
             isDefaultInit: false,
             destroyWhenHide: false,
             isNeedAdjustHeight: true,//是否需要高度调整
@@ -3248,7 +3251,7 @@ BI.Combo = BI.inherit(BI.Widget, {
             BI.createWidget({
                 type: "bi.vertical",
                 scrolly: false,
-                element: this,
+                element: this.options.container || this,
                 items: [
                     {el: this.popupView}
                 ]
@@ -3261,6 +3264,7 @@ BI.Combo = BI.inherit(BI.Widget, {
         // if (this.element.__isMouseInBounds__(e) || (this.popupView && this.popupView.element.__isMouseInBounds__(e))) {
         //     return;
         // }
+        //BI-10290 公式combo双击公式内容会收起
         if (this.element.find(e.target).length > 0 || e.target.className === "CodeMirror-cursor" || $(e.target).closest(".CodeMirror-hints").length > 0) {//BI-9887 CodeMirror的公式弹框需要特殊处理下
             return;
         }
@@ -19060,13 +19064,13 @@ BI.CodeEditor = BI.inherit(BI.Single, {
             self.fireEvent(BI.CodeEditor.EVENT_BLUR);
         });
 
-        this.editor.on("mousedown", function (cm, e) {
-            //IE下mousedown之后会触发blur,所以nextTick后再做focus
-            BI.nextTick(function () {
-                self.fireEvent(BI.CodeEditor.EVENT_FOCUS);
-            });
-            e.stopPropagation();
-        });
+        // this.editor.on("mousedown", function (cm, e) {
+        //     //IE下mousedown之后会触发blur,所以nextTick后再做focus
+        //     BI.nextTick(function () {
+        //         self.fireEvent(BI.CodeEditor.EVENT_FOCUS);
+        //     });
+        //     //e.stopPropagation();
+        // });
 
         // this.editor.on("blur", function () {
         //     self.editor.execCommand("goLineEnd");

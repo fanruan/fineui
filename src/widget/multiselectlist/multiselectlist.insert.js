@@ -1,16 +1,16 @@
 /**
  * Created by zcf_1 on 2017/5/2.
  */
-BI.MultiSelectList = BI.inherit(BI.Widget, {
+BI.MultiSelectInsertList = BI.inherit(BI.Widget, {
     _defaultConfig: function () {
-        return BI.extend(BI.MultiSelectList.superclass._defaultConfig.apply(this, arguments), {
-            baseCls: 'bi-multi-select-list',
+        return BI.extend(BI.MultiSelectInsertList.superclass._defaultConfig.apply(this, arguments), {
+            baseCls: 'bi-multi-select-insert-list',
             itemsCreator: BI.emptyFn,
             valueFormatter: BI.emptyFn
         })
     },
     _init: function () {
-        BI.MultiSelectList.superclass._init.apply(this, arguments);
+        BI.MultiSelectInsertList.superclass._init.apply(this, arguments);
 
         var self = this, o = this.options;
         this.storeValue = {};
@@ -33,10 +33,8 @@ BI.MultiSelectList = BI.inherit(BI.Widget, {
         });
         this.adapter.on(BI.MultiSelectLoader.EVENT_CHANGE, function () {
             self.storeValue = this.getValue();
-            self._adjust(function () {
                 assertShowValue();
-                self.fireEvent(BI.MultiSelectList.EVENT_CHANGE);
-            });
+                self.fireEvent(BI.MultiSelectInsertList.EVENT_CHANGE);
         });
 
         this.searcherPane = BI.createWidget({
@@ -90,14 +88,27 @@ BI.MultiSelectList = BI.inherit(BI.Widget, {
                             type: BI.Selection.Multi,
                             value: [keyword]
                         }, function () {
+                            if (self.storeValue.type === BI.Selection.Multi) {
+                                self.storeValue.value.pushDistinct(keyword)
+                            }
                             self._showAdapter();
                             self.adapter.setValue(self.storeValue);
                             self._setStartValue(keyword);
                             assertShowValue();
                             self.adapter.populate();
                             self._setStartValue("");
-                            self.fireEvent(BI.MultiSelectList.EVENT_CHANGE);
+                            self.fireEvent(BI.MultiSelectInsertList.EVENT_CHANGE);
                         })
+                    } else {
+                        if (self.storeValue.type === BI.Selection.Multi) {
+                            self.storeValue.value.pushDistinct(keyword)
+                        }
+                        self._showAdapter();
+                        self.adapter.setValue(self.storeValue);
+                        self.adapter.populate();
+                        if (self.storeValue.type === BI.Selection.Multi) {
+                            self.fireEvent(BI.MultiSelectInsertList.EVENT_CHANGE);
+                        }
                     }
                 }
             }, {
@@ -126,12 +137,12 @@ BI.MultiSelectList = BI.inherit(BI.Widget, {
                     if (obj instanceof BI.MultiSelectBar) {
                         self._joinAll(this.getValue(), function () {
                             assertShowValue();
-                            self.fireEvent(BI.MultiSelectList.EVENT_CHANGE);
+                            self.fireEvent(BI.MultiSelectInsertList.EVENT_CHANGE);
                         });
                     } else {
                         self._join(this.getValue(), function () {
                             assertShowValue();
-                            self.fireEvent(BI.MultiSelectList.EVENT_CHANGE);
+                            self.fireEvent(BI.MultiSelectInsertList.EVENT_CHANGE);
                         });
                     }
                 }
@@ -191,7 +202,7 @@ BI.MultiSelectList = BI.inherit(BI.Widget, {
         this._assertValue(this.storeValue);
         if (!this._allData) {
             o.itemsCreator({
-                type: BI.MultiSelectList.REQ_GET_ALL_DATA
+                type: BI.MultiSelectInsertList.REQ_GET_ALL_DATA
             }, function (ob) {
                 self._allData = BI.pluck(ob.items, "value");
                 digest(self._allData);
@@ -207,7 +218,7 @@ BI.MultiSelectList = BI.inherit(BI.Widget, {
                     self.storeValue.value[self.storeValue.type === BI.Selection.Multi ? "pushDistinct" : "remove"](val);
                 }
             });
-            self._adjust(callback);
+            callback();
         }
     },
 
@@ -215,7 +226,7 @@ BI.MultiSelectList = BI.inherit(BI.Widget, {
         var self = this, o = this.options;
         this._assertValue(res);
         o.itemsCreator({
-            type: BI.MultiSelectList.REQ_GET_ALL_DATA,
+            type: BI.MultiSelectInsertList.REQ_GET_ALL_DATA,
             keyword: self.trigger.getKeyword()
         }, function (ob) {
             var items = BI.pluck(ob.items, "value");
@@ -229,7 +240,7 @@ BI.MultiSelectList = BI.inherit(BI.Widget, {
                     }
                 });
                 change && (self.storeValue.value = BI.values(map));
-                self._adjust(callback);
+                callback();
                 return;
             }
             var selectedMap = self._makeMap(self.storeValue.value);
@@ -244,38 +255,8 @@ BI.MultiSelectList = BI.inherit(BI.Widget, {
                 }
             });
             self.storeValue.value = newItems.concat(BI.values(selectedMap));
-            self._adjust(callback);
-        })
-    },
-
-    _adjust: function (callback) {
-        var self = this, o = this.options;
-        if (!this._count) {
-            o.itemsCreator({
-                type: BI.MultiSelectList.REQ_GET_DATA_LENGTH
-            }, function (res) {
-                self._count = res.count;
-                adjust();
-                callback();
-            });
-        } else {
-            adjust();
             callback();
-        }
-
-        function adjust() {
-            if (self.storeValue.type === BI.Selection.All && self.storeValue.value.length >= self._count) {
-                self.storeValue = {
-                    type: BI.Selection.Multi,
-                    value: []
-                }
-            } else if (self.storeValue.type === BI.Selection.Multi && self.storeValue.value.length >= self._count) {
-                self.storeValue = {
-                    type: BI.Selection.All,
-                    value: []
-                }
-            }
-        }
+        })
     },
 
     _join: function (res, callback) {
@@ -298,7 +279,7 @@ BI.MultiSelectList = BI.inherit(BI.Widget, {
                 }
             });
             change && (this.storeValue.value = BI.values(map));
-            self._adjust(callback);
+            callback();
             return;
         }
         this._joinAll(res, callback);
@@ -336,10 +317,10 @@ BI.MultiSelectList = BI.inherit(BI.Widget, {
     }
 });
 
-BI.extend(BI.MultiSelectList, {
+BI.extend(BI.MultiSelectInsertList, {
     REQ_GET_DATA_LENGTH: 0,
     REQ_GET_ALL_DATA: -1
 });
 
-BI.MultiSelectList.EVENT_CHANGE = "BI.MultiSelectList.EVENT_CHANGE";
-BI.shortcut("bi.multi_select_list", BI.MultiSelectList);
+BI.MultiSelectInsertList.EVENT_CHANGE = "BI.MultiSelectInsertList.EVENT_CHANGE";
+BI.shortcut("bi.multi_select_insert_list", BI.MultiSelectInsertList);
