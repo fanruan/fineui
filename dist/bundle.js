@@ -48074,6 +48074,7 @@ BI.CodeEditor = BI.inherit(BI.Single, {
             lineWrapping: true,
             lineNumbers: false,
             readOnly: o.readOnly,
+            //解决插入字段由括号或其他特殊字符包围时分裂的bug
             specialChars: /[\u0000-\u001f\u007f\u00ad\u200c-\u200f\u2028\u2029\ufeff]/
         });
         o.lineHeight === 1 ? this.element.addClass("codemirror-low-line-height") : this.element.addClass("codemirror-high-line-height");
@@ -48159,6 +48160,7 @@ BI.CodeEditor = BI.inherit(BI.Single, {
         var value = param;
         param = this.options.paramFormatter(param);
         var from = this.editor.getCursor();
+        //解决插入字段由括号或其他特殊字符包围时分裂的bug,在两端以不可见字符包裹一下
         this.editor.replaceSelection('\u200b' + param + '\u200b');
         var to = this.editor.getCursor();
         var options = {className: 'param', atomic: true};
@@ -48179,7 +48181,8 @@ BI.CodeEditor = BI.inherit(BI.Single, {
         return this.editor.getValue("\n", function (line) {
             var rawText = line.text, value = line.text, num = 0;
             value.text = rawText;
-            _.forEach(line.markedSpans, function (i, ms) {
+            //根据插入位置不同，line.markedSpan可能是乱序的
+            _.forEach(_.sortBy(line.markedSpans, "from"), function (i, ms) {
                 switch (i.marker.className) {
                     case "param":
                     case "error-param":
