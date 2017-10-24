@@ -29937,7 +29937,9 @@ BI.BasicButton = BI.inherit(BI.Single, {
                             return;
                         }
                         interval = setInterval(function () {
-                            self.doClick();
+                            if(self.isEnabled()){
+                                self.doClick();
+                            }
                         }, 100);
                         mouseDown = true;
                         ev(e);
@@ -32292,7 +32294,7 @@ BI.Combo = BI.inherit(BI.Widget, {
         //     return;
         // }
         //BI-10290 公式combo双击公式内容会收起
-        if (this.element.find(e.target).length > 0 || $(e.target).closest(".CodeMirror").length > 0 || e.target.className === "CodeMirror-cursor" || $(e.target).closest(".CodeMirror-hints").length > 0) {//BI-9887 CodeMirror的公式弹框需要特殊处理下
+        if (this.element.find(e.target).length > 0 || e.target.className === "CodeMirror-cursor" || $(e.target).closest(".CodeMirror-hints").length > 0) {//BI-9887 CodeMirror的公式弹框需要特殊处理下
             return;
         }
         var isHide = this.options.hideChecker.apply(this, [e]);
@@ -48091,13 +48093,13 @@ BI.CodeEditor = BI.inherit(BI.Single, {
             self.fireEvent(BI.CodeEditor.EVENT_BLUR);
         });
 
-        this.editor.on("mousedown", function (cm, e) {
-            //IE下mousedown之后会触发blur,所以nextTick后再做focus
-            BI.nextTick(function () {
-                self.fireEvent(BI.CodeEditor.EVENT_FOCUS);
-            });
-            //e.stopPropagation();
-        });
+        // this.editor.on("mousedown", function (cm, e) {
+        //     //IE下mousedown之后会触发blur,所以nextTick后再做focus
+        //     BI.nextTick(function () {
+        //         self.fireEvent(BI.CodeEditor.EVENT_FOCUS);
+        //     });
+        //     //e.stopPropagation();
+        // });
 
         // this.editor.on("blur", function () {
         //     self.editor.execCommand("goLineEnd");
@@ -90544,11 +90546,9 @@ BI.NumberEditor = BI.inherit(BI.Widget, {
             cls: "column-pre-page-h-font top-button bi-border-left bi-border-bottom"
         });
         this.topBtn.on(BI.IconButton.EVENT_CHANGE, function () {
-            if(this.isEnabled()){
-                self._finetuning(o.step);
-                self.fireEvent(BI.NumberEditor.EVENT_CHANGE);
-                self.fireEvent(BI.NumberEditor.EVENT_CONFIRM);
-            }
+            self._finetuning(o.step);
+            self.fireEvent(BI.NumberEditor.EVENT_CHANGE);
+            self.fireEvent(BI.NumberEditor.EVENT_CONFIRM);
         });
         this.bottomBtn = BI.createWidget({
             type: "bi.icon_button",
@@ -90556,11 +90556,9 @@ BI.NumberEditor = BI.inherit(BI.Widget, {
             cls: "column-next-page-h-font bottom-button bi-border-left bi-border-top"
         });
         this.bottomBtn.on(BI.IconButton.EVENT_CHANGE, function () {
-            if(this.isEnabled()){
-                self._finetuning(-o.step);
-                self.fireEvent(BI.NumberEditor.EVENT_CHANGE);
-                self.fireEvent(BI.NumberEditor.EVENT_CONFIRM);
-            }
+            self._finetuning(-o.step);
+            self.fireEvent(BI.NumberEditor.EVENT_CHANGE);
+            self.fireEvent(BI.NumberEditor.EVENT_CONFIRM);
         });
         BI.createWidget({
             type: "bi.htape",
