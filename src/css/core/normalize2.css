@@ -19,6 +19,14 @@ a {
 a:focus {
   outline: 0;
 }
+input::-webkit-contacts-auto-fill-button,
+input::-ms-clear {
+  visibility: hidden;
+  display: none !important;
+  pointer-events: none;
+  position: absolute;
+  right: 0;
+}
 input,
 textarea {
   margin: 0;
