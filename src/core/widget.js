@@ -34,6 +34,8 @@ BI.Widget = BI.inherit(BI.OB, {
 
     mounted: null,
 
+    shouldUpdate: null,
+
     update: function () {
     },
 

@@ -15570,6 +15570,8 @@ BI.Widget = BI.inherit(BI.OB, {
 
     mounted: null,
 
+    shouldUpdate: null,
+
     update: function () {
     },
 
@@ -22584,6 +22586,17 @@ BI.Layout = BI.inherit(BI.Widget, {
         });
     },
 
+    shouldUpdateItem: function (index, item) {
+        if (index < 0 || index > this.options.items.length - 1) {
+            return false;
+        }
+        var child = this._children[this._getChildName(index)];
+        if (!child.shouldUpdate) {
+            return null;
+        }
+        return child.shouldUpdate(this._getOptions(item)) === true;
+    },
+
     updateItemAt: function (index, item) {
         if (index < 0 || index > this.options.items.length - 1) {
             return;
@@ -22676,7 +22689,8 @@ BI.Layout = BI.inherit(BI.Widget, {
     },
 
     patchItem: function (oldVnode, vnode, index) {
-        if (!this._compare(oldVnode, vnode)) {
+        var shouldUpdate = this.shouldUpdateItem(index, vnode);
+        if (shouldUpdate === true || (shouldUpdate === null && !this._compare(oldVnode, vnode))) {
             return this.updateItemAt(index, vnode);
         }
     },
