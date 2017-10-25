@@ -19936,23 +19936,23 @@ BI.Layout = BI.inherit(BI.Widget, {
                 oldEndVnode = oldCh[--oldEndIdx];
             } else if (sameVnode(oldStartVnode, newStartVnode, oldStartIdx, newStartIdx)) {
                 updated = this.patchItem(oldStartVnode, newStartVnode, oldStartIdx) || updated;
-                children[this._getChildName(oldStartIdx)] = this._children[this._getChildName(oldStartIdx)];
+                children[oldStartVnode.key == null ? this._getChildName(oldStartIdx) : oldStartVnode.key] = this._children[this._getChildName(oldStartIdx)];
                 oldStartVnode = oldCh[++oldStartIdx];
                 newStartVnode = newCh[++newStartIdx];
             } else if (sameVnode(oldEndVnode, newEndVnode, oldEndIdx, newEndIdx)) {
                 updated = this.patchItem(oldEndVnode, newEndVnode, oldEndIdx) || updated;
-                children[this._getChildName(oldEndIdx)] = this._children[this._getChildName(oldEndIdx)];
+                children[oldEndVnode.key == null ? this._getChildName(oldEndIdx) : oldEndVnode.key] = this._children[this._getChildName(oldEndIdx)];
                 oldEndVnode = oldCh[--oldEndIdx];
                 newEndVnode = newCh[--newEndIdx];
             } else if (sameVnode(oldStartVnode, newEndVnode)) {
                 updated = this.patchItem(oldStartVnode, newEndVnode, oldStartIdx) || updated;
-                children[this._getChildName(oldStartIdx)] = this._children[this._getChildName(oldStartIdx)];
+                children[oldStartVnode.key == null ? this._getChildName(oldStartIdx) : oldStartVnode.key] = this._children[this._getChildName(oldStartIdx)];
                 insertBefore(oldStartVnode, oldEndVnode, true);
                 oldStartVnode = oldCh[++oldStartIdx];
                 newEndVnode = newCh[--newEndIdx];
             } else if (sameVnode(oldEndVnode, newStartVnode)) {
                 updated = this.patchItem(oldEndVnode, newStartVnode, oldEndIdx) || updated;
-                children[this._getChildName(oldEndIdx)] = this._children[this._getChildName(oldEndIdx)];
+                children[oldEndVnode.key == null ? this._getChildName(oldEndIdx) : oldEndVnode.key] = this._children[this._getChildName(oldEndIdx)];
                 insertBefore(oldEndVnode, oldStartVnode);
                 oldEndVnode = oldCh[--oldEndIdx];
                 newStartVnode = newCh[++newStartIdx];
