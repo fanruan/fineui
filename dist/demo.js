@@ -7561,6 +7561,11 @@ Demo.Item = BI.inherit(BI.Widget, {
         }
     },
 
+    shouldUpdate: function (nextProps) {
+        var o = this.options;
+        return o.type !== nextProps.type || o.key !== nextProps.key || o.value !== nextProps.value;
+    },
+
     update: function (item) {
         this.label.setText(item.value);
         console.log("更新了一项");
