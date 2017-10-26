@@ -612,7 +612,8 @@ BI.AdaptiveArrangement = BI.inherit(BI.Widget, {
             left: [0, -1],
             right: [0, 1]
         };
-        var clientSize = this.element.bounds();
+        var clientWidth = this.arrangement.getClientWidth();
+        var clientHeight = this.arrangement.getClientHeight();
 
         function scrollTo(direction, callback) {
             if (direction === "") {
@@ -667,7 +668,7 @@ BI.AdaptiveArrangement = BI.inherit(BI.Widget, {
             scrollTo("top", cb)
         }
         //向下滚
-        else if (isBorderScroll && p.top >= clientSize.height - 30 && p.top <= clientSize.height) {
+        else if (isBorderScroll && p.top >= clientHeight - 30 && p.top <= clientHeight) {
             scrollTo("bottom", cb)
         }
         //向左滚
@@ -675,20 +676,20 @@ BI.AdaptiveArrangement = BI.inherit(BI.Widget, {
             scrollTo("left", cb)
         }
         //向右滚
-        else if (isBorderScroll && p.left >= clientSize.width - 30 && p.left <= clientSize.width) {
+        else if (isBorderScroll && p.left >= clientWidth - 30 && p.left <= clientWidth) {
             scrollTo("right", cb)
         } else {
             if (isOverflowScroll === true) {
                 if (p.top < 0) {
                     scrollTo("top", cb);
                 }
-                else if (p.top > clientSize.height) {
+                else if (p.top > clientHeight) {
                     scrollTo("bottom", cb);
                 }
                 else if (p.left < 0) {
                     scrollTo("left", cb);
                 }
-                else if (p.left > clientSize.width) {
+                else if (p.left > clientWidth) {
                     scrollTo("right", cb);
                 } else {
                     scrollTo("", cb);
@@ -1071,12 +1072,30 @@ BI.Arrangement = BI.inherit(BI.Widget, {
     _applyRegion: function (regions) {
         var self = this, o = this.options;
         BI.each(regions || this.regions, function (i, region) {
-            region.el.element.css({
-                left: region.left,
-                top: region.top,
-                width: region.width,
-                height: region.height
-            });
+            if (region.el._left !== region.left) {
+                region.el.element.css({
+                    left: region.left
+                });
+                region.el._left = region.left;
+            }
+            if (region.el._top !== region.top) {
+                region.el.element.css({
+                    top: region.top
+                });
+                region.el._top = region.top;
+            }
+            if (region.el._width !== region.width) {
+                region.el.element.css({
+                    width: region.width
+                });
+                region.el._width = region.left;
+            }
+            if (region.el._height !== region.height) {
+                region.el.element.css({
+                    height: region.height
+                });
+                region.el._height = region.height;
+            }
         });
         this._applyContainer();
         this.ratio = this.getLayoutRatio();
@@ -1112,7 +1131,14 @@ BI.Arrangement = BI.inherit(BI.Widget, {
         //先掩藏后显示能够明确滚动条是否出现
         this.scrollContainer.element.css("overflow", "hidden");
         var occupied = this._getRegionOccupied();
-        this.container.element.width(occupied.left + occupied.width).height(occupied.top + occupied.height);
+        if (this.container._width !== occupied.left + occupied.width) {
+            this.container.element.width(occupied.left + occupied.width);
+            this.container._width = occupied.left + occupied.width;
+        }
+        if (this.container._height !== occupied.top + occupied.height) {
+            this.container.element.height(occupied.top + occupied.height);
+            this.container._height = occupied.top + occupied.height;
+        }
         this.scrollContainer.element.css("overflow", "auto");
         return occupied;
     },
