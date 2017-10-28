@@ -38,9 +38,9 @@
         _init.apply(this, arguments);
     };
 
-    var destroy = BI.Widget.prototype.destroy;
-    BI.Widget.prototype.destroy = function () {
-        destroy.apply(this, arguments);
+    var unMount = BI.Widget.prototype._unMount;
+    BI.Widget.prototype._unMount = function () {
+        unMount.apply(this, arguments);
         this.store && this.store.destroy();
         BI.each(this._watchers, function (i, unwatch) {
             unwatch();
