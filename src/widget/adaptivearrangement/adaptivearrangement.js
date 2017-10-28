@@ -193,7 +193,8 @@ BI.AdaptiveArrangement = BI.inherit(BI.Widget, {
             left: [0, -1],
             right: [0, 1]
         };
-        var clientSize = this.element.bounds();
+        var clientWidth = this.arrangement.getClientWidth();
+        var clientHeight = this.arrangement.getClientHeight();
 
         function scrollTo(direction, callback) {
             if (direction === "") {
@@ -248,7 +249,7 @@ BI.AdaptiveArrangement = BI.inherit(BI.Widget, {
             scrollTo("top", cb)
         }
         //向下滚
-        else if (isBorderScroll && p.top >= clientSize.height - 30 && p.top <= clientSize.height) {
+        else if (isBorderScroll && p.top >= clientHeight - 30 && p.top <= clientHeight) {
             scrollTo("bottom", cb)
         }
         //向左滚
@@ -256,20 +257,20 @@ BI.AdaptiveArrangement = BI.inherit(BI.Widget, {
             scrollTo("left", cb)
         }
         //向右滚
-        else if (isBorderScroll && p.left >= clientSize.width - 30 && p.left <= clientSize.width) {
+        else if (isBorderScroll && p.left >= clientWidth - 30 && p.left <= clientWidth) {
             scrollTo("right", cb)
         } else {
             if (isOverflowScroll === true) {
                 if (p.top < 0) {
                     scrollTo("top", cb);
                 }
-                else if (p.top > clientSize.height) {
+                else if (p.top > clientHeight) {
                     scrollTo("bottom", cb);
                 }
                 else if (p.left < 0) {
                     scrollTo("left", cb);
                 }
-                else if (p.left > clientSize.width) {
+                else if (p.left > clientWidth) {
                     scrollTo("right", cb);
                 } else {
                     scrollTo("", cb);

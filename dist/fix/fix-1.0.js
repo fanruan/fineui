@@ -1,26 +1,57 @@
-(function (root, factory) {
+/**
+ * MVC工厂
+ * guy
+ * @class BI.Factory
+ */
+BI.Factory = {
+    parsePath: function parsePath (path) {
+        var segments = path.split('.');
+        return function (obj) {
+            for (var i = 0; i < segments.length; i++) {
+                if (!obj) {
+                    return;
+                }
+                obj = obj[segments[i]];
+            }
+            return obj;
+        }
+    },
+    createView : function(url, viewFunc, mData, vData, context){
+        var modelFunc = viewFunc.replace(/View/, "Model");
+        modelFunc = this.parsePath(modelFunc)(window);
+        if(!_.isFunction(modelFunc)){
+            modelFunc = BI.Model;
+        }
+//        try {
+            var model = new (modelFunc)(_.extend({}, mData, {
+                    parent: context && context.model,
+                    rootURL: url
+            }), {silent: true});
+//        } catch (e) {
+//
+//        }
+//        try {
+        var view = new (this.parsePath(viewFunc)(window))(_.extend({}, vData, {
+            model: model,
+            parent: context,
+            rootURL: url
+        }));
+//        } catch (e) {
+//
+//        }
+        return view;
+    }
+};(function (root, factory) {
     root.BI = factory(root, root.BI || {}, root._, (root.jQuery || root.$));
 }(this, function (root, BI, _, $) {
-
-    var previousBI = root.BI;
 
     // Create local references to array methods we'll want to use later.
     var array = [];
     var slice = array.slice;
 
-    // Current version of the library. Keep in sync with `package.json`.
-    BI.VERSION = '1.0.0';
-
     // For BI's purposes, jQuery, Zepto, Ender, or My Library (kidding) owns
     // the `$` variable.
     BI.$ = $;
-
-    // Runs BI.js in *noConflict* mode, returning the `BI` variable
-    // to its previous owner. Returns a reference to this BI object.
-    BI.noConflict = function () {
-        root.BI = previousBI;
-        return this;
-    };
 
     // Turn on `emulateHTTP` to support legacy HTTP servers. Setting this option
     // will fake `"PATCH"`, `"PUT"` and `"DELETE"` requests via the `_method` parameter and
@@ -46,7 +77,7 @@
     //     object.on('expand', function(){ alert('expanded'); });
     //     object.trigger('expand');
     //
-    var Events = BI.Events = {
+    var Events = {
 
         // Bind an event to a `callback` function. Passing `"all"` will bind
         // the callback to all events fired.
@@ -252,10 +283,6 @@
     // Aliases for backwards compatibility.
     Events.bind = Events.on;
     Events.unbind = Events.off;
-
-    // Allow the `BI` object to serve as a global event bus, for folks who
-    // want global "pubsub" in a convenient place.
-    _.extend(BI, Events);
 
     // BI.M
     // --------------
@@ -1344,7 +1371,7 @@
 
     // Set the default implementation of `BI.ajax` to proxy through to `$`.
     // Override this if you'd like to use a different library.
-    BI.ajax = $.ajax;
+    BI.ajax = BI.ajax || $.ajax;
 
     // BI.Router
     // ---------------
@@ -1789,4 +1816,1400 @@
 
     return BI;
 
-}));
+}));/**
+ * MVC路由
+ * @class BI.WRouter
+ * @extends BI.Router
+ * @type {*|void|Object}
+ */
+BI.WRouter = BI.Router.extend({
+    add: function(route, callback){
+        this.handlers || (this.handlers=[]);
+        this.handlers.unshift({route: route, callback: callback})
+    },
+
+    route: function(route, name, callback) {
+        if (!_.isRegExp(route)) route = this._routeToRegExp(route);
+        if (_.isFunction(name)) {
+            callback = name;
+            name = '';
+        }
+        if (!callback) callback = this[name];
+        var self = this;
+        this.add(route, function(fragment) {
+            var args = self._extractParameters(route, fragment);
+            var result = self.execute(callback, args, name)
+            if (result !== false) {
+                self.trigger.apply(self, ['route:' + name].concat(args));
+                self.trigger('route', name, args);
+            }
+            return result;
+        });
+        return this;
+    },
+
+    execute: function(callback, args, name) {
+        if (callback) return callback.apply(this, args);
+        return name;
+    },
+
+    get: function(fragment){
+        var result = null;
+        _.any(this.handlers, function(handler) {
+            if (handler.route.test(fragment)) {
+                result = handler.callback(fragment);
+                return true;
+            }
+        });
+        return result;
+    }
+});BI.Model = BI.inherit(BI.M, {
+    props: {},
+    init: null,
+    destroyed: null,
+
+    _defaultConfig: function () {
+        return BI.extend({
+            "default": "just a default",
+            "current": void 0
+        }, this.props)
+    },
+
+    _static: function () {
+        return {};
+    },
+
+    _init: function () {
+        BI.Model.superclass._init.apply(this, arguments);
+        this.on("change:current", function (obj, val) {
+            BI.isNotNull(val) && this.refresh(val);
+        }).on("change", function (changed, prev, context, options) {
+            if (this._start === true || BI.has(changed, "current")) {
+                return;
+            }
+            this.actionStart();
+            if (!this.local()) {
+                !BI.has(this._tmp, BI.keys(changed)) && this.parent && this.parent._change(this);
+                this._changing_ = true;
+                this.change(changed, prev, context, options);
+                this._changing_ = false;
+            }
+        });
+
+        this._tmp = {};//过渡属性
+
+        this._hass = {};
+        this._gets = [];//记录交互行为
+        this._start = false;
+        this._changing_ = false;
+
+        this._read = BI.debounce(BI.bind(this.fetch, this), 30);
+        this._save = BI.debounce(BI.bind(this.save, this), 30);
+        this._F = [];
+        this.init && this.init();
+    },
+
+    toJSON: function () {
+        var json = BI.Model.superclass.toJSON.apply(this, arguments);
+        delete json["baseCls"];
+        delete json["current"];
+        delete json["default"];
+        delete json["parent"];
+        delete json["rootURL"];
+        delete json["id"];
+        delete json["tag"];
+        BI.each(this._gets, function (i, action) {
+            delete json[action];
+        });
+        return json;
+    },
+
+    copy: function () {
+        if (this._start === true || this._changing_ === true) {
+            this._F.push({f: this.copy, arg: arguments});
+            return;
+        }
+        this.trigger("copy");
+    },
+    //子节点的一个类似副本
+    similar: function (value, key1, key2, key3) {
+        return value;
+    },
+
+    _map: function (child) {
+        var self = this;
+        var map = {}, current = {};
+        var mapping = function (key, ch) {
+            key = key + "";
+            if (key === "") {
+                return;
+            }
+            var keys = key.split('.');
+            if (!map[keys[0]]) {
+                map[keys[0]] = self.get(keys[0]);
+            }
+            var parent = map, last = void 0;
+            BI.each(keys, function (i, k) {
+                last && (parent = parent[last] || (parent[last] = {}));
+                last = k;
+            });
+            parent[last] = ch.toJSON();
+        };
+        BI.each(this._childs, function (key, chs) {
+            if (!BI.isArray(chs)) {
+                chs = [chs];
+            }
+            BI.each(chs, function (i, ch) {
+                if (ch === child) {
+                    current[key] = child;
+                    return;
+                }
+                //mapping(key, ch);
+            })
+        });
+        BI.each(current, function (key, ch) {
+            mapping(key, ch);
+        });
+        var tmp = {};
+        BI.each(this._tmp, function (k) {
+            if (map[k]) {
+                tmp[k] = map[k];
+                delete map[k];
+            }
+        });
+        this.tmp(tmp);
+        return map;
+    },
+
+    _change: function (child) {
+        var self = this;
+        var childMap = this._map(child);
+        //this.set(childMap);
+        var changes = [];
+        var changing = this._changing;
+        var changed;
+        var options = {};
+        this._changing = true;
+        if (!changing) {
+            this._previousAttributes = _.clone(this.attributes);
+            this.changed = {};
+        }
+        var current = this.attributes, prev = this._previousAttributes, val;
+        for (var attr in childMap) {
+            val = childMap[attr];
+            changes.push(attr);
+            this.changed[attr] = val;
+            current[attr] = val;
+        }
+        if (changes.length) this._pending = options;
+        for (var i = 0, length = changes.length; i < length; i++) {
+            this.trigger('change:' + changes[i], this, current[changes[i]], options);
+        }
+        if (changing) return this;
+        changed = BI.clone(this.changed);
+        while (this._pending) {
+            options = this._pending;
+            this._pending = false;
+            this.trigger('change', changed, prev, this, options);
+        }
+        this._pending = false;
+        this._changing = false;
+        if (changes.length) {
+            this.trigger("changed", changed, prev, this, options);
+        }
+        return this;
+    },
+
+    splice: function (old, key1, key2, key3) {
+
+    },
+
+    duplicate: function (copy, key1, key2, key3) {
+
+    },
+
+    change: function (changed, prev) {
+
+    },
+
+    actionStart: function () {
+        this._start = true;
+        return this;
+    },
+
+    actionEnd: function () {
+        var self = this;
+        this._start = false;
+        var _gets = this._gets.slice(0), _F = this._F.slice(0);
+        this._gets = [];
+        this._hass = {};
+        this._F = [];
+        BI.each(_gets, function (i, action) {
+            self.unset(action, {silent: true});
+        });
+        BI.each(_F, function (i, fn) {
+            fn.f.apply(self, fn.arg);
+        });
+        return this;
+    },
+
+    addChild: function (name, child) {
+        name = name + "";
+        var self = this;
+        this._childs || (this._childs = {});
+        if (this._childs[name]) {
+            if (BI.isArray(this._childs[name])) {
+                this._childs[name].push(child);
+            } else {
+                this._childs[name] = [this._childs[name]].concat(child)
+            }
+        } else {
+            this._childs[name] = child;
+        }
+        child && child.on("destroy", function () {
+            var keys = name.split('.');
+            var g = self.get(keys[0]), p, c;
+            var sset = !!self._tmp[keys[0]] ? "tmp" : "set", unset = "un" + sset;
+
+            BI.each(keys, function (i, k) {
+                if (i === 0) {
+                    c = g;
+                    return;
+                }
+                p = c;
+                c = c[k];
+            });
+            self.removeChild(name, child);
+            var newKeys = BI.clone(keys);
+            keys.length > 1 ? newKeys.unshift(BI.deepClone(p[keys[keys.length - 1]])) : newKeys.unshift(BI.deepClone(g));
+            keys.length > 1 ? (delete p[keys[keys.length - 1]], self[sset](keys[0], g, {silent: true})) : self[unset](name, {silent: true});
+            !BI.has(self._tmp, keys[0]) && self.parent && self.parent._change(self);
+            self.splice.apply(self, newKeys);
+            self.trigger("splice", newKeys);
+            BI.remove(self._childs, child);
+        }).on("copy", function () {
+            var keys = name.split('.');
+            var g = self.get(keys[0]), p, c;
+            var sset = !!self._tmp[keys[0]] ? "tmp" : "set";
+            BI.each(keys, function (i, k) {
+                if (i === 0) {
+                    c = g;
+                    return;
+                }
+                p = c;
+                c = c[k];
+            });
+            var copy = BI.UUID(), newKeys = BI.clone(keys);
+            keys.length > 1 ? newKeys.unshift(BI.deepClone(p[keys[keys.length - 1]])) : newKeys.unshift(BI.deepClone(g));
+            var backup = self.similar.apply(self, newKeys);
+            if (BI.isKey(backup.id)) {
+                copy = backup.id;
+                delete backup.id;
+            }
+            keys.length > 1 ? (p[copy] = backup, self[sset](keys[0], g, {silent: true})) : self[sset](copy, backup, {silent: true});
+            keys.unshift(copy);
+            !BI.has(self._tmp, keys[0]) && self.parent && self.parent._change(self);
+            self.duplicate.apply(self, keys);
+            self.trigger("duplicate", keys);
+        });
+    },
+
+    removeChild: function (name, child) {
+        if (BI.isArray(this._childs[name])) {
+            BI.remove(this._childs[name], child);
+            if (BI.isEmpty(this._childs[name])) {
+                delete this._childs[name];
+            }
+            return;
+        }
+        delete this._childs[name];
+    },
+
+    has: function (attr, istemp) {
+        if (istemp === true) {
+            return _.has(this.tmp, attr);
+        }
+        if (this._start === true && this._changing_ === false) {
+            this._hass[attr] = true;
+        }
+        return BI.Model.superclass.has.apply(this, arguments);
+    },
+
+    cat: function (attr) {
+        if (_.has(this._tmp, attr)) {
+            return this._tmp[attr];
+        }
+        if (this._start === true && this._hass[attr]) {
+            delete this._hass[attr];
+            switch (attr) {
+                case "default":
+                    break;
+                case "current":
+                    break;
+                default :
+                    this._gets.push(attr);
+                    break;
+            }
+        }
+        if (_.has(this.attributes, attr)) {
+            return this.attributes[attr];
+        }
+        var sta = _.result(this, "_static");
+        return BI.isFunction(sta[attr]) ? sta[attr].apply(this, Array.prototype.slice.apply(arguments, [1])) : sta[attr];
+    },
+
+    get: function () {
+        return BI.deepClone(this.cat.apply(this, arguments));
+    },
+
+    set: function (key, val, options) {
+        if (this._start === true || this._changing_ === true) {
+            this._F.push({f: this.set, arg: arguments});
+            return this;
+        }
+        return BI.Model.superclass.set.apply(this, arguments);
+    },
+
+    unset: function (attr, options) {
+        var self = this;
+        BI.each(this._childs, function (key, model) {
+            key = key + "";
+            var keys = key.split('.');
+            if (_.isEqual(attr, keys[0])) {
+                delete self._childs[attr];
+                if (!BI.isArray(model)) {
+                    model = [model];
+                }
+                BI.each(model, function (i, m) {
+                    m.trigger("unset");
+                });
+            }
+        });
+        return BI.Model.superclass.unset.apply(this, arguments);
+    },
+
+    tmp: function (key, val, options) {
+        if (this._start === true || this._changing_ === true) {
+            this._F.push({f: this.tmp, arg: arguments});
+            return this;
+        }
+        var attr, attrs, unset, changes, silent, changing, changed, prev, current;
+        if (key == null) return this;
+        if (typeof key === 'object') {
+            attrs = key;
+            options = val;
+        } else {
+            (attrs = {})[key] = val;
+        }
+        options || (options = {});
+
+        unset = options.unset;
+        silent = options.silent;
+        changes = [];
+        changing = this._changingTmp;
+        this._changingTmp = true;
+
+        if (!changing) {
+            this._previousTmp = _.clone(this._tmp);
+            this.changedTmp = {};
+        }
+        if (!this._previousTmp) {
+            this._previousTmp = _.clone(this._tmp);
+        }
+        current = this._tmp, prev = this._previousTmp;
+
+        for (attr in attrs) {
+            val = attrs[attr];
+            if (!_.isEqual(current[attr], val)) changes.push(attr);
+            if (!_.isEqual(prev[attr], val)) {
+                this.changedTmp[attr] = val;
+            } else {
+                delete this.changedTmp[attr];
+            }
+            unset ? delete current[attr] : current[attr] = val;
+        }
+
+        if (!silent) {
+            if (changes.length) this._pendingTmp = options;
+            for (var i = 0, length = changes.length; i < length; i++) {
+                this.trigger('change:' + changes[i], this, current[changes[i]], options);
+            }
+        }
+
+        if (changing) return this;
+        changed = BI.clone(this.changedTmp);
+        if (!silent) {
+            while (this._pendingTmp) {
+                options = this._pendingTmp;
+                this._pendingTmp = false;
+                this.trigger('change', changed, prev, this, options);
+            }
+        }
+        this._pendingTmp = false;
+        this._changingTmp = false;
+        if (!silent && changes.length) this.trigger("changed", changed, prev, this, options);
+        return this;
+    },
+
+    untmp: function (attr, options) {
+        var self = this;
+        BI.each(this._childs, function (key, model) {
+            key = key + "";
+            var keys = key.split('.');
+            if (_.isEqual(attr, keys[0])) {
+                delete self._childs[attr];
+                if (!BI.isArray(model)) {
+                    model = [model];
+                }
+                BI.each(model, function (i, m) {
+                    m.trigger("unset");
+                });
+            }
+        });
+        return this.tmp(attr, void 0, _.extend({}, options, {unset: true}));
+    },
+
+    cancel: function (options) {
+        var self = this;
+        var tmp = BI.clone(this._tmp);
+        this._tmp = {};
+        BI.each(tmp, function (k) {
+            self.untmp(k, options);
+        });
+    },
+
+    submit: function () {
+        var tmp = BI.clone(this._tmp);
+        this._tmp = {};
+        this.set(tmp);
+        return this;
+    },
+
+    urlRoot: function () {
+        return BI.servletURL;
+    },
+
+    parse: function (data) {
+        return data;
+    },
+
+    setEditing: function (edit) {
+        this._editing = edit;
+    },
+
+    getEditing: function () {
+        if (this._start !== true) {
+            throw new Error("getEditing函数只允许在local中调用");
+        }
+        return this._editing;
+    },
+
+    local: function () {
+
+    },
+
+    load: function (data) {
+
+    },
+
+    refresh: function () {
+
+    },
+
+    /**
+     * 更新整个model
+     */
+    updateURL: function () {
+
+    },
+    /**
+     * 添加一个元素或删除一个元素或修改一个元素
+     */
+    patchURL: function () {
+
+    },
+    /**
+     * 删除整个model, destroy方法调用
+     */
+    deleteURL: function () {
+
+    },
+    /**
+     * 读取model
+     */
+    readURL: function () {
+
+    },
+
+    read: function (options) {
+        if (this._start == true || this._changing_ === true) {
+            this._F.push({f: this.read, arg: arguments});
+            return;
+        }
+        this._read(options);
+    },
+
+    update: function (options) {
+        if (this._start == true || this._changing_ === true) {
+            this._F.push({f: this.update, arg: arguments});
+            return;
+        }
+        this._save(null, options);
+    },
+
+    patch: function (options) {
+        if (this._start == true || this._changing_ === true) {
+            this._F.push({f: this.patch, arg: arguments});
+            return;
+        }
+        this._save(null, BI.extend({}, options, {
+            patch: true
+        }));
+    },
+
+    _destroy: function () {
+        var children = BI.extend({}, this._childs);
+        this._childs = {};
+        BI.each(children, function (i, child) {
+            child._destroy();
+        });
+        this.destroyed && this.destroyed();
+    },
+
+    destroy: function () {
+        this._destroy();
+        BI.Model.superclass.destroy.apply(this, arguments);
+    }
+});/**
+ * @class BI.View
+ * @extends BI.V
+ * @type {*|void|Object}
+ */
+BI.View = BI.inherit(BI.V, {
+
+    //生命周期函数
+    beforeCreate: null,
+
+    created: null,
+
+    beforeDestroy: null,
+
+    destroyed: null,
+
+    _init: function () {
+        BI.View.superclass._init.apply(this, arguments);
+        this.beforeCreate && this.beforeCreate();
+        var self = this;
+        this.listenTo(this.model, "change:current", function (obj, val) {
+            if (BI.isNotNull(val) && val.length > 0) {
+                this.refresh(val);
+            }
+        }).listenTo(this.model, "change", function (changed) {
+            this.delegateEvents();
+        }).listenTo(this.model, "changed", function (changed, prev, context, options) {
+            if (BI.has(changed, "current") && BI.size(changed) > 1) {
+                throw new Error("refresh操作不能调用set操作");
+            }
+            var notLocal = !BI.has(changed, "current") && !this.local() && this.notifyParent().notify();
+            this.model.actionEnd() && this.actionEnd();
+            this.model._changing_ = true;
+            notLocal && !BI.isEmpty(changed) && this.change(changed, prev, context, options);
+            this.model._changing_ = false;
+            this.model.actionEnd() && this.actionEnd();
+        }).listenTo(this.model, "destroy", function () {
+            this._destroy();
+        }).listenTo(this.model, "unset", function () {
+            this._destroy();
+        }).listenTo(this.model, "splice", function (arg) {
+            this.splice.apply(this, arg);
+        }).listenTo(this.model, "duplicate", function (arg) {
+            this.duplicate.apply(this, arg);
+        });
+        this._F = [];
+        var flatten = ["_init", "_defaultConfig", "_vessel", "_render", "getName", "listenEnd", "local", "refresh", "load", "change"];
+        flatten = BI.makeObject(flatten, true);
+        BI.each(this.constructor.caller.caller.prototype, function (key) {
+            if (flatten[key]) {
+                return;
+            }
+            var f = self[key];
+            if (BI.isFunction(f)) {
+                self[key] = BI.bind(function () {
+                    if (this.model._start === true) {
+                        this._F.push({f: f, arg: arguments});
+                        return;
+                    }
+                    return f.apply(this, arguments);
+                }, self);
+            }
+        });
+        this.created && this.created();
+    },
+
+    change: function (changed, prev) {
+
+    },
+
+    actionEnd: function () {
+        var self = this;
+        var _F = this._F.slice(0);
+        this._F = [];
+        BI.each(_F, function (i, f) {
+            f.f.apply(self, f.arg);
+        });
+        return this;
+    },
+
+    delegateEvents: function (events) {
+        if (!(events || (events = BI.deepClone(_.result(this, 'events'))))) return this;
+        var delegateEventSplitter = /^(\S+)\s*(.*)$/;
+        for (var key in events) {
+            var method = events[key];
+            if (!_.isFunction(method)) method = this[events[key]];
+            if (!method) continue;
+            var match = key.match(delegateEventSplitter);
+            var ev = true;
+            switch (match[1]) {
+                case "draggable":
+                    break;
+                case "droppable":
+                    break;
+                case "sortable":
+                    break;
+                case "resizable":
+                    break;
+                case "hover":
+                    break;
+                default :
+                    ev = false;
+                    break;
+            }
+
+            var off = new BI.OffList({
+                event: match[1] + '.delegateEvents' + this.cid
+            });
+
+            var keys = match[2].split('.');
+            var handle = keys[1];
+            var bind = ev ? new BI.EventList({
+                event: match[1],
+                handle: handle,
+                callback: BI.bind(method, this)
+            }) : new BI.ListenerList({
+                event: match[1] + '.delegateEvents' + this.cid,
+                handle: handle,
+                callback: BI.bind(method, this),
+                context: this
+            });
+
+            var list = [];
+            if (this[keys[0]] && (this[keys[0]] instanceof $ || this[keys[0]].element instanceof $)) {
+                list = [this[keys[0]]]
+                delete events[key];
+            } else if (BI.isArray(this[keys[0]]) || BI.isPlainObject(this[keys[0]])) {
+                list = this[keys[0]]
+                delete events[key];
+            }
+            off.populate(list);
+            bind.populate(list);
+        }
+        return BI.View.superclass.delegateEvents.apply(this, [events]);
+    },
+
+    _vessel: function () {
+        this._cardLayouts = {};
+        this._cardLayouts[this.getName()] = new BI.CardLayout({
+            element: this
+        });
+        var vessel = BI.createWidget();
+        this._cardLayouts[this.getName()].addCardByName(this.getName(), vessel);
+        return vessel;
+    },
+
+    render: function (vessel) {
+        return this;
+    },
+
+    /**
+     * 创建儿子所在容器
+     * @param key
+     * @param vessel
+     * @param options  isLayer:是否是弹出层, defaultShowName:默认显示项
+     * @returns {BI.View}
+     */
+    addSubVessel: function (key, vessel, options) {
+        options || (options = {});
+        this._cardLayouts || (this._cardLayouts = {});
+        var id = key + this.cid;
+        options.isLayer && (vessel = BI.Layers.has(id) ? BI.Layers.get(id) : BI.Layers.create(id, vessel));
+        if (this._cardLayouts[key]) {
+            options.defaultShowName && this._cardLayouts[key].setDefaultShowName(options.defaultShowName);
+            return this;
+        }
+        this._cardLayouts[key] = BI.createWidget({
+            type: "bi.card",
+            element: vessel,
+            defaultShowName: options.defaultShowName
+        });
+        return this;
+    },
+
+    removeSubVessel: function (key) {
+        var self = this, id = key + this.cid;
+        BI.Layers.remove(id);
+        var cardNames = this._cardLayouts[key] && this._cardLayouts[key].getAllCardNames();
+        BI.each(cardNames, function (i, name) {
+            delete self._cards[name];
+        });
+        this._cardLayouts[key] && this._cardLayouts[key]._destroy();
+        return this;
+    },
+
+    createView: function (url, modelData, viewData, context) {
+        return BI.Factory.createView(url, this.get(url), modelData, viewData, context);
+    },
+
+    /**
+     * 跳转到指定的card
+     * @param cardName
+     */
+    skipTo: function (cardName, layout, modelData, viewData, options) {
+        if (this.model._start === true || this._changing_ === true) {
+            this._F.push({f: this.skipTo, arg: arguments});
+            return this;
+        }
+        var self = this, isValid = BI.isKey(modelData), data = void 0;
+        BI.isKey(layout) && (layout = layout + "");
+        layout = layout || this.getName();
+        options || (options = {});
+        if (isValid) {
+            modelData = modelData + "";//避免modelData是数字
+            var keys = modelData.split('.');
+            BI.each(keys, function (i, k) {
+                if (i === 0) {
+                    data = self.model.get(k) || {};
+                } else {
+                    data = data[k] || {};
+                }
+            });
+            data.id = options.id || keys[keys.length - 1];
+        } else {
+            data = modelData;
+        }
+        BI.extend(data, options.data);
+        var action = options.action || new BI.ShowAction();
+        var cardLayout = this._cardLayouts[layout];
+        if (!cardLayout) {
+            return this;
+        }
+        cardLayout.setVisible(true);
+        if (BI.isKey(cardName) && !cardLayout.isCardExisted(cardName)) {
+            var view = this.createView(this.rootURL + "/" + cardName, data, viewData, this);
+            isValid && this.model.addChild(modelData, view.model);
+            view.listenTo(view.model, "destroy", function () {
+                delete self._cards[cardName];
+                cardLayout.deleteCardByName(cardName);
+                if (cardLayout.isAllCardHide()) {
+                    cardLayout.setVisible(false);
+                    BI.Layers.hide(layout + self.cid);
+                }
+            }).listenTo(view.model, "unset", function () {
+                delete self._cards[cardName];
+                cardLayout.deleteCardByName(cardName);
+            });
+            cardLayout.addCardByName(cardName, view);
+            this._cards || (this._cards = {});
+            this._cards[cardName] = view;
+            data = {};
+            this.on("end:" + view.cid, function () {
+                var isNew = false, t, keys;
+                if (isValid) {
+                    keys = modelData.split('.');
+                    BI.each(keys, function (i, k) {
+                        if (i === 0) {
+                            t = self.model.get(k) || (isNew = true);
+                        } else {
+                            t = t[k] || (isNew = true);
+                        }
+                    });
+                }
+                if (isNew) {
+                    delete self._cards[cardName];
+                    self.model.removeChild(modelData, view.model);
+                    cardLayout.deleteCardByName(cardName);
+                    view._destroy();
+                    cardLayout.setVisible(false);
+                }
+                action.actionBack(view, null, function () {
+                    if (cardLayout.isAllCardHide()) {
+                        cardLayout.setVisible(false);
+                        BI.Layers.hide(layout + self.cid);
+                    }
+                    !isNew && (self.listenEnd.apply(self, isValid ? keys : [modelData]) !== false) && self.populate();
+                })
+            }).on("change:" + view.cid, _.bind(this.notifyParent, this));
+        }
+        BI.isKey(cardName) && BI.Layers.show(layout + this.cid);
+        cardLayout.showCardByName(cardName, action, function () {
+            BI.isKey(cardName) && self._cards[cardName].populate(data, options);
+        });
+        !BI.isKey(cardName) && BI.Layers.hide(layout + this.cid);
+        return this._cards[cardName];
+    },
+
+    listenEnd: function (key1, key2, key3) {
+        return this;
+    },
+
+    /**
+     * 告诉父亲我的操作结束了，后面的事情任由父亲处置
+     * @param force 强制下次再次进入该节点时不进行刷新操作， 默认执行刷新
+     * @returns {BI.View}
+     */
+    notifyParentEnd: function (force) {
+        this.parent && this.parent.trigger("end:" + this.cid);
+        this.trigger("end");
+        !force && this.notify();
+        return this;
+    },
+
+    /**
+     * 通知父亲我的数据发生了变化
+     */
+    notifyParent: function () {
+        this.parent && this.parent.notify().trigger("change:" + this.cid);
+        return this;
+    },
+
+    /**
+     * 告诉Model数据改变了
+     */
+    notify: function () {
+        this.model.unset("current", {silent: true});
+        return this;
+    },
+
+    getName: function () {
+        return "VIEW"
+    },
+
+    /**
+     * 全局刷新
+     * @param current
+     */
+    refresh: function (current) {
+    },
+    /**
+     * 局部刷新
+     */
+    local: function () {
+        return false;
+    },
+
+    load: function (data) {
+
+    },
+
+    readData: function (force, options) {
+        options || (options = {});
+        var self = this;
+        var args = [].slice.call(arguments, 2);
+        if (!force && this._readed === true) {//只从后台获取一次数据
+            callback(this.model.toJSON());
+            return;
+        }
+        //采用静默方式读数据,该数据变化不引起data的change事件触发
+        var success = options.success;
+        this.model.read(BI.extend({
+            silent: true
+        }, options, {
+            success: function (data, model) {
+                callback(data);
+                !force && (self._readed = true);
+                self.delegateEvents();
+                success && success(data, model);
+            }
+        }));
+
+        function callback(data) {
+            self.model.load(data);
+            self.load(data);
+            BI.each(args, function (i, arg) {
+                if (BI.isFunction(arg)) {
+                    arg.apply(self, [data]);
+                }
+            })
+        }
+    },
+
+    //处理model的通用方法
+    cat: function () {
+        return this.model.cat.apply(this.model, arguments);
+    },
+
+    get: function () {
+        return this.model.get.apply(this.model, arguments);
+    },
+
+    set: function () {
+        return this.model.set.apply(this.model, arguments);
+    },
+
+    has: function () {
+        return this.model.has.apply(this.model, arguments);
+    },
+
+    getEditing: function () {
+        return this.model.getEditing();
+    },
+
+    reading: function (options) {
+        var self = this;
+        var name = BI.UUID();
+        this.model.read(BI.extend({}, options, {
+            beforeSend: function () {
+                var loading = BI.createWidget({
+                    type: 'bi.vertical',
+                    items: [{
+                        type: "bi.layout",
+                        height: 30,
+                        cls: "loading-background"
+                    }],
+                    element: BI.Maskers.make(name, self)
+                });
+                loading.setVisible(true);
+            },
+            complete: function (data) {
+                options.complete && options.complete(data);
+                BI.Maskers.remove(name);
+            }
+        }));
+    },
+
+    updating: function (options) {
+        var self = this;
+        var name = BI.UUID();
+        this.model.update(BI.extend({}, options, {
+            noset: true,
+            beforeSend: function () {
+                var loading = BI.createWidget({
+                    type: 'bi.vertical',
+                    items: [{
+                        type: "bi.layout",
+                        height: 30,
+                        cls: "loading-background"
+                    }],
+                    element: BI.Maskers.make(name, self)
+                });
+                loading.setVisible(true);
+            },
+            complete: function (data) {
+                options.complete && options.complete(data);
+                BI.Maskers.remove(name);
+            }
+        }));
+    },
+
+    patching: function (options) {
+        var self = this;
+        var name = BI.UUID();
+        this.model.patch(BI.extend({}, options, {
+            noset: true,
+            beforeSend: function () {
+                var loading = BI.createWidget({
+                    type: 'bi.vertical',
+                    items: [{
+                        type: "bi.layout",
+                        height: 30,
+                        cls: "loading-background"
+                    }],
+                    element: BI.Maskers.make(name, self)
+                });
+                loading.setVisible(true);
+            },
+            complete: function (data) {
+                options.complete && options.complete(data);
+                BI.Maskers.remove(name);
+            }
+        }));
+    },
+
+    populate: function (modelData, options) {
+        var self = this;
+        options || (options = {});
+        if (options.force === true) {
+            this.notify();
+        }
+        if (this._cardLayouts && this._cardLayouts[this.getName()]) {
+            this._cardLayouts[this.getName()].showCardByName(this.getName());
+        }
+        //BI.each(this._cardLayouts, function (key, layout) {
+        //    layout.showCardByName(layout.getDefaultShowName() || self.getName());
+        //});
+        //BI.each(this._cards, function (i, card) {
+        //    card.notify && card.notify();
+        //});
+        if (this._F.length > 0) {
+            throw new Error("流程错误");
+        }
+        if (options.force === true) {
+            this.model.set(modelData, options).set({current: this.model.get("default")});
+            return;
+        }
+        if (options.force === false) {
+            this.model.set(modelData);
+            return;
+        }
+        var filter = BI.clone(modelData || {});
+        delete filter.id;
+        var contains = BI.has(this.model.toJSON(), _.keys(filter));
+        var match = BI.isEmpty(filter) || (contains && this.model.matches(modelData));
+        if (match === true) {
+            this.model.set({current: this.model.get("default")});
+        } else if (contains === false) {
+            this.model.set(modelData);
+        } else {
+            this.model.set(modelData, options).set({current: this.model.get("default")});
+        }
+    },
+
+    //删除子节点触发
+    splice: function (old, key1, key2, key3) {
+
+    },
+
+    //复制子节点触发
+    duplicate: function (copy, key1, key2, key3) {
+
+    },
+
+    _unMount: function () {
+        this.beforeDestroy && this.beforeDestroy();
+        BI.each(this._cardLayouts, function (name, card) {
+            card && card._unMount();
+        });
+        delete this._cardLayouts;
+        delete this._cards;
+        this.destroyed && this.destroyed();
+        this.trigger(BI.Events.UNMOUNT);
+        this.off();
+    },
+
+    _destroy: function () {
+        var self = this;
+        BI.each(this._cardLayouts, function (name, card) {
+            card && card._unMount();
+            BI.Layers.remove(name + self.cid);
+        });
+        delete this._cardLayouts;
+        delete this._cards;
+        this.destroyed && this.destroyed();
+        this.remove();
+        this.trigger(BI.Events.DESTROY);
+        this.off();
+    }
+});
+
+BI.View.registerVMRouter = function (viewRouter, modelRouter) {
+    //配置View
+    BI.View.createView = BI.View.prototype.createView = function (url, modelData, viewData, context) {
+        return BI.Factory.createView(url, viewRouter.get(url), _.extend({}, modelRouter.get(url), modelData), viewData || {}, context);
+    };
+};/**
+ * @class BI.FloatSection
+ * @extends BI.View
+ * @abstract
+ */
+BI.FloatSection = BI.inherit(BI.View, {
+    _init : function() {
+        BI.FloatSection.superclass._init.apply(this, arguments);
+        var self = this;
+        var flatten = ["_init", "_defaultConfig", "_vessel", "_render", "getName", "listenEnd", "local", "refresh", "load", "change"];
+        flatten = BI.makeObject(flatten, true);
+        BI.each(this.constructor.caller.caller.caller.prototype, function (key) {
+            if (flatten[key]) {
+                return;
+            }
+            var f = self[key];
+            if (BI.isFunction(f)) {
+                self[key] = BI.bind(function () {
+                    if (this.model._start === true) {
+                        this._F.push({f: f, arg: arguments});
+                        return;
+                    }
+                    return f.apply(this, arguments);
+                }, self);
+            }
+        })
+    },
+
+    rebuildNorth : function(north) {
+        return true;
+    },
+    rebuildCenter : function(center) {},
+    rebuildSouth : function(south) {
+        return false;
+    },
+    close: function(){
+        this.notifyParentEnd();
+        this.trigger(BI.PopoverSection.EVENT_CLOSE);
+    },
+    end: function(){
+
+    }
+});
+/**
+ * 统一绑定事件
+ * @type {*|void|Object}
+ */
+BI.EventList = BI.inherit(BI.OB, {
+    _defaultConfig: function() {
+        return BI.extend(BI.EventList.superclass._defaultConfig.apply(this, arguments), {
+            event: "click",
+            callback: BI.emptyFn,
+            handle: "",
+            items:[]
+        });
+    },
+
+    _init : function() {
+        BI.EventList.superclass._init.apply(this, arguments);
+        this.populate(this.options.items);
+    },
+
+    _getHandle: function(item){
+        var handle = this.options.handle ? _.result(item, this.options.handle) : item;
+        return handle.element || handle;
+    },
+
+    populate: function(items){
+        var self    = this,
+            event   = this.options.event,
+            callback = this.options.callback;
+        BI.nextTick(function(){
+            BI.each(items, function(i, item){
+                var fn  = callback(item);
+                BI.isFunction(fn) && (fn = BI.debounce(fn, BI.EVENT_RESPONSE_TIME, true));
+                self._getHandle(item)[event](fn);
+            })
+        })
+
+    }
+});/**
+ * 统一监听jquery事件
+ * @type {*|void|Object}
+ */
+BI.ListenerList = BI.inherit(BI.OB, {
+    _defaultConfig: function() {
+        return BI.extend(BI.ListenerList.superclass._defaultConfig.apply(this, arguments), {
+            event: "click",
+            callback: BI.emptyFn,
+            items:[]
+        });
+    },
+
+    _init : function() {
+        BI.ListenerList.superclass._init.apply(this, arguments);
+        this.populate(this.options.items);
+    },
+
+    _getHandle: function(item){
+        var handle = this.options.handle ? _.result(item, this.options.handle) : item;
+        return handle.element || handle;
+    },
+
+    populate: function(items){
+        var self     = this,
+            event    = this.options.event,
+            callback = this.options.callback;
+        BI.nextTick(function(){
+            BI.each(items, function(i, item){
+                var fn  = callback(item);
+                BI.isFunction(fn) && (fn = BI.debounce(fn, BI.EVENT_RESPONSE_TIME, true));
+                self._getHandle(item).on(event, fn);
+            })
+        })
+    }
+});/**
+ * Created by GUY on 2015/6/25.
+ */
+/**
+ * 统一监听jquery事件
+ * @type {*|void|Object}
+ */
+BI.OffList = BI.inherit(BI.OB, {
+    _defaultConfig: function() {
+        return BI.extend(BI.OffList.superclass._defaultConfig.apply(this, arguments), {
+            event: "click",
+            items:[]
+        });
+    },
+
+    _init : function() {
+        BI.OffList.superclass._init.apply(this, arguments);
+        this.populate(this.options.items);
+    },
+
+    _getHandle: function(item){
+        var handle = this.options.handle ? _.result(item, this.options.handle) : item;
+        return handle.element || handle;
+    },
+
+    populate: function(items){
+        var self   = this,
+            event  = this.options.event;
+        BI.each(items, function(i, item){
+            self._getHandle(item).off(event);
+        })
+    }
+});/**
+ * 有确定取消按钮的弹出层
+ * @class BI.BarFloatSection
+ * @extends BI.FloatSection
+ * @abstract
+ */
+BI.BarFloatSection = BI.inherit(BI.FloatSection, {
+    _defaultConfig: function () {
+        return BI.extend(BI.BarFloatSection.superclass._defaultConfig.apply(this, arguments), {
+            btns: [BI.i18nText(BI.i18nText("BI-Basic_Sure")), BI.i18nText("BI-Basic_Cancel")]
+        })
+    },
+
+    _init: function () {
+        BI.BarFloatSection.superclass._init.apply(this, arguments);
+        var self = this;
+        var flatten = ["_init", "_defaultConfig", "_vessel", "_render", "getName", "listenEnd", "local", "refresh", "load", "change"];
+        flatten = BI.makeObject(flatten, true);
+        BI.each(this.constructor.caller.caller.caller.caller.prototype, function (key) {
+            if (flatten[key]) {
+                return;
+            }
+            var f = self[key];
+            if (BI.isFunction(f)) {
+                self[key] = BI.bind(function () {
+                    if (this.model._start === true) {
+                        this._F.push({f: f, arg: arguments});
+                        return;
+                    }
+                    return f.apply(this, arguments);
+                }, self);
+            }
+        })
+    },
+
+    rebuildSouth: function (south) {
+        var self = this, o = this.options;
+        this.sure = BI.createWidget({
+            type: 'bi.button',
+            text: this.options.btns[0],
+            height: 30,
+            value: 0,
+            handler: function (v) {
+                self.end();
+                self.close(v);
+            }
+        });
+        this.cancel = BI.createWidget({
+            type: 'bi.button',
+            text: this.options.btns[1],
+            height: 30,
+            value: 1,
+            level: 'ignore',
+            handler: function (v) {
+                self.close(v);
+            }
+        });
+        BI.createWidget({
+            type: 'bi.right_vertical_adapt',
+            element: south,
+            hgap: 5,
+            items: [this.cancel, this.sure]
+        });
+    }
+});
+/**
+ *
+ * @class BI.FloatBoxRouter
+ * @extends BI.WRouter
+ */
+BI.FloatBoxRouter = BI.inherit(BI.WRouter, {
+    routes: {},
+
+    _init: function () {
+        this.store = {};
+        this.views = {};
+    },
+
+    createView: function (url, modelData, viewData, context) {
+        return BI.Factory.createView(url, this.get(url), modelData || {}, viewData || {}, context)
+    },
+
+    open: function (url, modelData, viewData, context, options) {
+        var self = this, isValid = BI.isKey(modelData);
+        options || (options = {});
+        url = context.rootURL + "/" + url;
+        var data = void 0;
+        if (isValid) {
+            modelData = modelData + "";//避免modelData是数字
+            var keys = modelData.split('.');
+            BI.each(keys, function (i, k) {
+                if (i === 0) {
+                    data = context.model.get(k) || {};
+                } else {
+                    data = data[k] || {};
+                }
+            });
+            data.id = options.id || keys[keys.length - 1];
+        } else {
+            data = modelData;
+        }
+        BI.extend(data, options.data);
+        if (!this.controller) {
+            this.controller = new BI.FloatBoxController();
+        }
+        if (!this.store[url]) {
+            this.store[url] = BI.createWidget({
+                type: "bi.float_box"
+            }, options);
+            var view = this.createView(url, data, viewData, context);
+            isValid && context.model.addChild(modelData, view.model);
+            view.listenTo(view.model, "destroy", function () {
+                self.remove(url, context);
+            });
+            context.on(BI.Events.UNMOUNT, function () {
+                self.remove(url, context);
+            });
+            this.store[url].populate(view);
+            this.views[url] = view;
+            this.controller.add(url, this.store[url]);
+            context && context.on("end:" + view.cid, function () {
+                BI.nextTick(function () {
+                    self.close(url);
+//                    view.end();
+                    (context.listenEnd.apply(context, isValid ? modelData.split('.') : [modelData]) !== false) && context.populate();
+                }, 30)
+            }).on("change:" + view.cid, _.bind(context.notifyParent, context))
+        }
+        this.controller.open(url);
+        this.views[url].populate(data, options.force || true);
+        return this;
+    },
+
+    close: function (url) {
+        if (this.controller) {
+            this.controller.close(url);
+        }
+        return this;
+    },
+
+    remove: function (url, context) {
+        url = context.rootURL + "/" + url;
+        if (this.controller) {
+            this.controller.remove(url);
+            delete this.store[url];
+            this.views[url] && this.views[url].model.destroy();
+            delete this.views[url];
+        }
+        return this;
+    }
+});

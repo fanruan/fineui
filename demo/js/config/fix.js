@@ -53,9 +53,9 @@ var viewRouter = new (BI.inherit(BI.WRouter, {
 BI.View.registerVMRouter(viewRouter, modelRouter);
 
 
-Demo.VM_CONFIG = [{
+Demo.FIX_CONFIG = [{
     id: 6,
-    text: "数据流框架"
+    text: "数据流框架fix-1.0"
 }, {
     pId: 6,
     text: "set,get方法",
@@ -80,4 +80,12 @@ Demo.VM_CONFIG = [{
     pId: 6,
     text: "tmp方法",
     value: "demo.tmp"
+}, {
+    id: 7,
+    text: "数据流框架fix-2.0"
+}, {
+    id: 71,
+    pId: 7,
+    text: "fix框架",
+    value: "demo.fix"
 }];
