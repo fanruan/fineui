@@ -1,10 +1,3 @@
-/*!
- * jLayout JQuery Plugin v0.11
- *
- * Licensed under the revised BSD License.
- * Copyright 2008, Bram Stein
- * All rights reserved.
- */
 if (jQuery) {
     (function ($) {
         // richer:容器在其各个边缘留出的空间

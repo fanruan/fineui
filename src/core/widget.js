@@ -81,6 +81,7 @@ BI.Widget = BI.inherit(BI.OB, {
         } else {
             this.element = $(document.createElement(o.tagName));
         }
+        this.element._isWidget = true;
         if (o.baseCls || o.extraCls || o.cls) {
             this.element.addClass((o.baseCls || "") + " " + (o.extraCls || "") + " " + (o.cls || ""));
         }

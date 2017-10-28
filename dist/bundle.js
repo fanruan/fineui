@@ -12581,6 +12581,7 @@ BI.Widget = BI.inherit(BI.OB, {
         } else {
             this.element = $(document.createElement(o.tagName));
         }
+        this.element._isWidget = true;
         if (o.baseCls || o.extraCls || o.cls) {
             this.element.addClass((o.baseCls || "") + " " + (o.extraCls || "") + " " + (o.cls || ""));
         }
@@ -21239,14 +21240,51 @@ Function.prototype.after = function (func) {
         func.apply(this, arguments);
         return ret;
     }
-};/*!
- * jLayout JQuery Plugin v0.11
- *
- * Licensed under the revised BSD License.
- * Copyright 2008, Bram Stein
- * All rights reserved.
- */
+};//缓存this.element的操作数据
 if (jQuery) {
+    function wrap(prefix, name) {
+        return "_bi-widget" + prefix + name;
+    }
+
+    (function ($) {
+        var css = $.fn.css;
+        $.fn.css = function (name, value) {
+            if (this._isWidget === true) {
+                var key;
+                //this.element不允许get样式
+                if (BI.isPlainObject(name)) {
+                    for (key in name) {
+                        this.css(key, name[key]);
+                    }
+                    return this;
+                }
+                key = wrap("css", name);
+                if (this[key] !== value) {
+                    css.apply(this, arguments);
+                    this[key] = value;
+                    return this;
+                }
+                return this;
+            }
+            return css.apply(this, arguments);
+        };
+        $.each(["width", "height", "innerWidth", "innerHeight", "outerWidth", "outerHeight"], function (index, name) {
+            var fn = $.fn[name];
+            $.fn[name] = function (value) {
+                if (this._isWidget === true && arguments.length === 1) {
+                    var key = wrap("", name);
+                    if (this[key] !== value) {
+                        fn.apply(this, arguments);
+                        this[key] = value;
+                        return this;
+                    }
+                    return this;
+                }
+                return fn.apply(this, arguments);
+            }
+        })
+    })(jQuery);
+}if (jQuery) {
     (function ($) {
         // richer:容器在其各个边缘留出的空间
         if (!$.fn.insets) {

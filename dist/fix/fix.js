@@ -874,13 +874,17 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
             _classCallCheck(this, VM);
 
             var vm = this;
-            if (model instanceof Observer) {
+            if (model instanceof Observer || model instanceof VM) {
                 model = model.model;
             }
-            this.$$model = model;
+            if (_.has(model, '__ob__')) {
+                this.$$model = model;
+            } else {
+                this.options = model || {};
+            }
             initComputed(this, this.computed);
             initMethods(this, this.methods);
-            var keys = _.keys(model).concat(_.keys(this.computed));
+            var keys = _.keys(this.$$model).concat(_.keys(this.computed));
             var props = {};
 
             var _loop = function _loop(i, len) {
@@ -890,10 +894,13 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
                         enumerable: true,
                         configurable: true,
                         get: function get() {
-                            return key in vm.$$model ? vm.$$model[key] : vm.$$computed[key];
+                            return key in vm.$$computed ? vm.$$computed[key] : vm.$$model[key];
                         },
                         set: function set(val) {
-                            return key in vm.$$model ? vm.$$model[key] = val : vm.$$computed[key] = val;
+                            if (!vm.$$model || !(key in vm.$$model)) {
+                                return;
+                            }
+                            return vm.$$model[key] = val;
                         }
                     };
                 }
@@ -903,7 +910,7 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
                 _loop(i, len);
             }
             this.model = createViewModel$1({}, props);
-            this.model.__ob__ = this.$$model.__ob__;
+            this.$$model && (this.model.__ob__ = this.$$model.__ob__);
             this._init();
         }
 
