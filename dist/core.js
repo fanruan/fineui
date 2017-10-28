@@ -21217,7 +21217,7 @@ if (jQuery) {
             }
             return css.apply(this, arguments);
         };
-        $.each(["width", "height", "innerWidth", "innerHeight", "outerWidth", "outerHeight"], function (index, name) {
+        $.each(["width", "height"], function (index, name) {
             var fn = $.fn[name];
             $.fn[name] = function (value) {
                 if (this._isWidget === true && arguments.length === 1) {
