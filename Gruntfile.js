@@ -29,8 +29,7 @@ module.exports = function (grunt) {
                     'src/core/**/*.js',
 
                     'src/data/data.js',
-                    'src/data/**/*.js',
-                    'src/config.js'
+                    'src/data/**/*.js'
                 ],
                 dest: 'dist/core.js'
             },

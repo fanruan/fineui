@@ -5065,19 +5065,19 @@ BI.shortcut("demo.value_chooser_combo", Demo.ValueChooserCombo);Demo.ValueChoose
     }
 });
 BI.shortcut("demo.value_chooser_pane", Demo.ValueChooserPane);Demo.ADDONS_CONFIG = [{
-    id: 7,
+    id: 1000,
     text: "addons"
 }, {
-    pId: 7,
-    id: 701,
+    pId: 1000,
+    id: 1001,
     text: "拓展图表控件"
 }, {
-    pId: 701,
+    pId: 1001,
     text: "柱状图",
     value: "demo.axis_chart"
 }, {
-    pId: 7,
-    id: 702,
+    pId: 1000,
+    id: 1002,
     text: "滚动sliders",
     value: "demo.slider"
 }];Demo.BASE_CONFIG = [{
@@ -5714,9 +5714,9 @@ var viewRouter = new (BI.inherit(BI.WRouter, {
 BI.View.registerVMRouter(viewRouter, modelRouter);
 
 
-Demo.VM_CONFIG = [{
+Demo.FIX_CONFIG = [{
     id: 6,
-    text: "数据流框架"
+    text: "数据流框架fix-1.0"
 }, {
     pId: 6,
     text: "set,get方法",
@@ -5741,6 +5741,14 @@ Demo.VM_CONFIG = [{
     pId: 6,
     text: "tmp方法",
     value: "demo.tmp"
+}, {
+    id: 7,
+    text: "数据流框架fix-2.0"
+}, {
+    id: 71,
+    pId: 7,
+    text: "fix框架",
+    value: "demo.fix"
 }];Demo.WIDGET_CONFIG = [{
     id: 4,
     text: "详细控件",
@@ -9223,199 +9231,7 @@ BI.shortcut("demo.vtape", Demo.VtapeLayout);Demo.Face = BI.inherit(BI.Widget, {
         this._runGlobalStyle();
     }
 });
-BI.shortcut("demo.face", Demo.Face);Demo.Main = BI.inherit(BI.Widget, {
-    props: {
-        baseCls: "demo-main bi-background"
-    },
-    render: function () {
-        var center;
-        return {
-            type: "bi.border",
-            items: {
-                north: {
-                    height: 50,
-                    el: {
-                        type: "demo.north",
-                        listeners: [{
-                            eventName: Demo.North.EVENT_VALUE_CHANGE,
-                            action: function (v) {
-                                center.setValue(v);
-                            }
-                        }]
-                    }
-                },
-                west: {
-                    width: 230,
-                    el: {
-                        type: "demo.west",
-                        listeners: [{
-                            eventName: Demo.West.EVENT_VALUE_CHANGE,
-                            action: function (v) {
-                                center.setValue(v);
-                            }
-                        }]
-                    }
-                },
-                center: {
-                    el: {
-                        type: "demo.center",
-                        ref: function (_ref) {
-                            center = _ref;
-                        }
-                    }
-                }
-            }
-        }
-    }
-});
-BI.shortcut("demo.main", Demo.Main);Demo.North = BI.inherit(BI.Widget, {
-    props: {
-        baseCls: "demo-north"
-    },
-    render: function () {
-        var self = this;
-        return {
-            type: "bi.htape",
-            items: [{
-                width: 230,
-                el: {
-                    type: "bi.text_button",
-                    listeners: [{
-                        eventName: BI.Button.EVENT_CHANGE,
-                        action: function () {
-                            self.fireEvent(Demo.North.EVENT_VALUE_CHANGE, "demo.face")
-                        }
-                    }],
-                    cls: "logo",
-                    height: 50,
-                    text: "FineUI2.0"
-                }
-            }, {
-                el: {
-                    type: "bi.right",
-                    hgap: 10,
-                    items: [{
-                        type: "bi.text_button",
-                        text: "星空蓝",
-                        handler: function () {
-                            $("html").removeClass("bi-theme-default").addClass("bi-theme-dark");
-                        }
-                    }, {
-                        type: "bi.text_button",
-                        text: "典雅白",
-                        handler: function () {
-                            $("html").removeClass("bi-theme-dark").addClass("bi-theme-default");
-                        }
-                    }]
-                }
-            }]
-        }
-    }
-});
-Demo.North.EVENT_VALUE_CHANGE = "EVENT_VALUE_CHANGE";
-BI.shortcut("demo.north", Demo.North);Demo.Preview = BI.inherit(BI.Widget, {
-    props: {
-        baseCls: "demo-preview"
-    },
-    render: function () {
-        var self = this;
-        var items = [], header = [], columnSize = [];
-
-        var rowCount = 100, columnCount = 100;
-        for (var i = 0; i < 1; i++) {
-            header[i] = [];
-            for (var j = 0; j < columnCount; j++) {
-                header[i][j] = {
-                    type: "bi.label",
-                    text: "表头" + i + "-" + j
-                }
-                columnSize[j] = 100;
-            }
-        }
-        for (var i = 0; i < rowCount; i++) {
-            items[i] = [];
-            for (var j = 0; j < columnCount; j++) {
-                items[i][j] = {
-                    type: "bi.label",
-                    text: (i < 3 ? 0 : i) + "-" + j
-                }
-            }
-        }
-        return {
-            type: "bi.absolute",
-            cls: "preview-background",
-            items: [{
-                el: {
-                    type: "bi.left",
-                    cls: "preview-header bi-tips",
-                    height: 40,
-                    items: [{
-                        type: "bi.label",
-                        height: 40,
-                        text: "Card2",
-                        hgap: 10,
-                        textAlign: "left"
-                    }, {
-                        type: "bi.icon_text_item",
-                        cls: "filter-font",
-                        text: "测试图标",
-                        width: 100,
-                        height: 40
-                    }]
-                },
-                left: 60,
-                right: 60,
-                top: 60
-            }, {
-                el: {
-                    type: "bi.vtape",
-                    cls: "preview-card bi-card",
-                    items: [{
-                        el: {
-                            type: "bi.label",
-                            cls: "preview-title bi-border-bottom",
-                            height: 40,
-                            text: "Card1",
-                            hgap: 10,
-                            textAlign: "left"
-                        },
-                        height: 40
-                    }, {
-                        type: "bi.center_adapt",
-                        scrollable: true,
-                        items: [{
-                            type: "bi.resizable_table",
-                            el: {
-                                type: "bi.collection_table"
-                            },
-                            width: 500,
-                            height: 400,
-                            isResizeAdapt: true,
-                            isNeedResize: true,
-                            isNeedMerge: true,
-                            mergeCols: [0, 1],
-                            mergeRule: function (col1, col2) {
-                                return BI.isEqual(col1, col2);
-                            },
-                            isNeedFreeze: true,
-                            freezeCols: [0, 1],
-                            columnSize: columnSize,
-                            items: items,
-                            header: header
-                        }]
-                    }]
-                },
-                left: 60,
-                right: 60,
-                top: 160,
-                bottom: 60
-            }]
-        }
-    },
-    mounted: function () {
-    }
-});
-BI.shortcut("demo.preview", Demo.Preview);//change函数
+BI.shortcut("demo.face", Demo.Face);//change函数
 ChangeView = BI.inherit(BI.View, {
     _defaultConfig: function(){
         return BI.extend(ChangeView.superclass._defaultConfig.apply(this, arguments),{
@@ -10620,7 +10436,236 @@ Demo.Func = BI.inherit(BI.Widget, {
     }
 });
 BI.shortcut("demo.tmp", Demo.Func);
-Demo.West = BI.inherit(BI.Widget, {
+Demo.Store = BI.inherit(Fix.VM, {
+    computed: {
+        b: function () {
+            return this.model.name + 1
+        },
+        c: function () {
+            return this.model.name + this.model.b
+        }
+    },
+    methods: {
+        run: function () {
+            this.model.name = 2;
+        }
+    }
+});
+var model = new Fix.Observer({
+    name: 1,
+    arr: [{
+        n: 'a'
+    }, {
+        n: 'b'
+    }]
+}).model;
+Demo.Fix = BI.inherit(BI.Widget, {
+    _store: function () {
+        return new Demo.Store(model);
+    },
+    watch: {
+        b: function () {
+            debugger;
+        }
+    },
+    mounted: function () {
+        this.store.run()
+    }
+});
+
+BI.shortcut("demo.fix", Demo.Fix);Demo.Main = BI.inherit(BI.Widget, {
+    props: {
+        baseCls: "demo-main bi-background"
+    },
+    render: function () {
+        var center;
+        return {
+            type: "bi.border",
+            items: {
+                north: {
+                    height: 50,
+                    el: {
+                        type: "demo.north",
+                        listeners: [{
+                            eventName: Demo.North.EVENT_VALUE_CHANGE,
+                            action: function (v) {
+                                center.setValue(v);
+                            }
+                        }]
+                    }
+                },
+                west: {
+                    width: 230,
+                    el: {
+                        type: "demo.west",
+                        listeners: [{
+                            eventName: Demo.West.EVENT_VALUE_CHANGE,
+                            action: function (v) {
+                                center.setValue(v);
+                            }
+                        }]
+                    }
+                },
+                center: {
+                    el: {
+                        type: "demo.center",
+                        ref: function (_ref) {
+                            center = _ref;
+                        }
+                    }
+                }
+            }
+        }
+    }
+});
+BI.shortcut("demo.main", Demo.Main);Demo.North = BI.inherit(BI.Widget, {
+    props: {
+        baseCls: "demo-north"
+    },
+    render: function () {
+        var self = this;
+        return {
+            type: "bi.htape",
+            items: [{
+                width: 230,
+                el: {
+                    type: "bi.text_button",
+                    listeners: [{
+                        eventName: BI.Button.EVENT_CHANGE,
+                        action: function () {
+                            self.fireEvent(Demo.North.EVENT_VALUE_CHANGE, "demo.face")
+                        }
+                    }],
+                    cls: "logo",
+                    height: 50,
+                    text: "FineUI2.0"
+                }
+            }, {
+                el: {
+                    type: "bi.right",
+                    hgap: 10,
+                    items: [{
+                        type: "bi.text_button",
+                        text: "星空蓝",
+                        handler: function () {
+                            $("html").removeClass("bi-theme-default").addClass("bi-theme-dark");
+                        }
+                    }, {
+                        type: "bi.text_button",
+                        text: "典雅白",
+                        handler: function () {
+                            $("html").removeClass("bi-theme-dark").addClass("bi-theme-default");
+                        }
+                    }]
+                }
+            }]
+        }
+    }
+});
+Demo.North.EVENT_VALUE_CHANGE = "EVENT_VALUE_CHANGE";
+BI.shortcut("demo.north", Demo.North);Demo.Preview = BI.inherit(BI.Widget, {
+    props: {
+        baseCls: "demo-preview"
+    },
+    render: function () {
+        var self = this;
+        var items = [], header = [], columnSize = [];
+
+        var rowCount = 100, columnCount = 100;
+        for (var i = 0; i < 1; i++) {
+            header[i] = [];
+            for (var j = 0; j < columnCount; j++) {
+                header[i][j] = {
+                    type: "bi.label",
+                    text: "表头" + i + "-" + j
+                }
+                columnSize[j] = 100;
+            }
+        }
+        for (var i = 0; i < rowCount; i++) {
+            items[i] = [];
+            for (var j = 0; j < columnCount; j++) {
+                items[i][j] = {
+                    type: "bi.label",
+                    text: (i < 3 ? 0 : i) + "-" + j
+                }
+            }
+        }
+        return {
+            type: "bi.absolute",
+            cls: "preview-background",
+            items: [{
+                el: {
+                    type: "bi.left",
+                    cls: "preview-header bi-tips",
+                    height: 40,
+                    items: [{
+                        type: "bi.label",
+                        height: 40,
+                        text: "Card2",
+                        hgap: 10,
+                        textAlign: "left"
+                    }, {
+                        type: "bi.icon_text_item",
+                        cls: "filter-font",
+                        text: "测试图标",
+                        width: 100,
+                        height: 40
+                    }]
+                },
+                left: 60,
+                right: 60,
+                top: 60
+            }, {
+                el: {
+                    type: "bi.vtape",
+                    cls: "preview-card bi-card",
+                    items: [{
+                        el: {
+                            type: "bi.label",
+                            cls: "preview-title bi-border-bottom",
+                            height: 40,
+                            text: "Card1",
+                            hgap: 10,
+                            textAlign: "left"
+                        },
+                        height: 40
+                    }, {
+                        type: "bi.center_adapt",
+                        scrollable: true,
+                        items: [{
+                            type: "bi.resizable_table",
+                            el: {
+                                type: "bi.collection_table"
+                            },
+                            width: 500,
+                            height: 400,
+                            isResizeAdapt: true,
+                            isNeedResize: true,
+                            isNeedMerge: true,
+                            mergeCols: [0, 1],
+                            mergeRule: function (col1, col2) {
+                                return BI.isEqual(col1, col2);
+                            },
+                            isNeedFreeze: true,
+                            freezeCols: [0, 1],
+                            columnSize: columnSize,
+                            items: items,
+                            header: header
+                        }]
+                    }]
+                },
+                left: 60,
+                right: 60,
+                top: 160,
+                bottom: 60
+            }]
+        }
+    },
+    mounted: function () {
+    }
+});
+BI.shortcut("demo.preview", Demo.Preview);Demo.West = BI.inherit(BI.Widget, {
     props: {
         baseCls: "demo-west bi-border-right bi-card"
     },
@@ -13749,7 +13794,7 @@ Demo.YearQuarterCombo = BI.inherit(BI.Widget, {
     }
 })
 
-BI.shortcut("demo.year_quarter_combo", Demo.YearQuarterCombo);Demo.CONFIG = Demo.CORE_CONFIG.concat(Demo.BASE_CONFIG).concat(Demo.CASE_CONFIG).concat(Demo.WIDGET_CONFIG).concat(Demo.COMPONENT_CONFIG).concat(Demo.VM_CONFIG).concat(Demo.ADDONS_CONFIG).concat(Demo.CATEGORY_CONFIG);
+BI.shortcut("demo.year_quarter_combo", Demo.YearQuarterCombo);Demo.CONFIG = Demo.CORE_CONFIG.concat(Demo.BASE_CONFIG).concat(Demo.CASE_CONFIG).concat(Demo.WIDGET_CONFIG).concat(Demo.COMPONENT_CONFIG).concat(Demo.FIX_CONFIG).concat(Demo.ADDONS_CONFIG).concat(Demo.CATEGORY_CONFIG);
 
 Demo.CONSTANTS = {
     SIMPLE_ITEMS: BI.map("柳州市城贸金属材料有限责任公司 柳州市建福房屋租赁有限公司 柳州市迅昌数码办公设备有限责任公司 柳州市河海贸易有限责任公司 柳州市花篮制衣厂 柳州市兴溪物资有限公司 柳州市针织总厂 柳州市衡管物资有限公司 柳州市琪成机电设备有限公司 柳州市松林工程机械修理厂".match(/[^\s]+/g), function (i, v) {
