@@ -212,6 +212,42 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
         Dep.target = targetStack.pop();
     }
 
+    var arrayProto = Array.prototype;
+    var arrayMethods = [];
+    _.each(['push', 'pop', 'shift', 'unshift', 'splice', 'sort', 'reverse'], function (method) {
+        var original = arrayProto[method];
+        arrayMethods[method] = function mutator() {
+            for (var _len = arguments.length, args = Array(_len), _key = 0; _key < _len; _key++) {
+                args[_key] = arguments[_key];
+            }
+
+            var ob = this.__ob__;
+            var inserted = void 0;
+            switch (method) {
+                case 'push':
+                case 'unshift':
+                    inserted = args;
+                    break;
+                case 'splice':
+                    inserted = args.slice(2);
+                    break;
+            }
+            if (inserted) inserted = ob.observeArray(inserted);
+            switch (method) {
+                case 'push':
+                case 'unshift':
+                    args = inserted;
+                    break;
+                case 'splice':
+                    args = [args[0], args[1]].concat(inserted ? inserted : []);
+                    break;
+            }
+            var result = original.apply(this, args);
+            ob.dep.notify();
+            return result;
+        };
+    });
+
     //如果浏览器不支持ecma262v5的Object.defineProperties或者存在BUG，比如IE8
     //标准浏览器使用__defineGetter__, __defineSetter__实现
     var canHideProperty = true;
@@ -327,6 +363,184 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
     }
 
     var createViewModel$1 = createViewModel;
+
+    var arrayKeys = _.keys(arrayMethods);
+
+    var observerState = {
+        shouldConvert: true
+    };
+
+    /**
+     * Observer class that are attached to each observed
+     * object. Once attached, the observer converts target
+     * object's property keys into getter/setters that
+     * collect dependencies and dispatches updates.
+     */
+
+    var Observer = function () {
+        function Observer(value) {
+            _classCallCheck(this, Observer);
+
+            this.value = value;
+            this.dep = new Dep();
+            this.vmCount = 0;
+            if (_.isArray(value)) {
+                var augment = hasProto ? protoAugment : copyAugment;
+                augment(value, arrayMethods, arrayKeys);
+                this.model = this.observeArray(value);
+            } else {
+                this.model = this.walk(value);
+            }
+            this.model['__ob__'] = this;
+        }
+
+        Observer.prototype.walk = function walk(obj) {
+            return defineReactive(obj);
+        };
+
+        Observer.prototype.observeArray = function observeArray(items) {
+            for (var i = 0, l = items.length; i < l; i++) {
+                items[i] = observe(items[i]).model;
+            }
+            return items;
+        };
+
+        return Observer;
+    }();
+
+    function protoAugment(target, src, keys) {
+        /* eslint-disable no-proto */
+        target.__proto__ = src;
+        /* eslint-enable no-proto */
+    }
+
+    /* istanbul ignore next */
+    function copyAugment(target, src, keys) {
+        for (var i = 0, l = keys.length; i < l; i++) {
+            var key = keys[i];
+            target[key] = src[key];
+        }
+    }
+
+    function observe(value, asRootData) {
+        if (!_.isObject(value)) {
+            return;
+        }
+        var ob = void 0;
+        if (_.has(value, '__ob__') && value.__ob__ instanceof Observer) {
+            ob = value.__ob__;
+        } else if (observerState.shouldConvert && (_.isArray(value) || isPlainObject(value)) && !value._isVue) {
+            ob = new Observer(value);
+        }
+        if (asRootData && ob) {
+            ob.vmCount++;
+        }
+        return ob;
+    }
+
+    function defineReactive(obj, shallow) {
+
+        var props = {};
+        _.each(obj, function (val, key) {
+            if (key in $$skipArray) {
+                return;
+            }
+            var dep = new Dep();
+            var childOb = !shallow && observe(val);
+            props[key] = {
+                enumerable: true,
+                configurable: true,
+                get: function reactiveGetter() {
+                    var value = val;
+                    if (Dep.target) {
+                        dep.depend();
+                        if (childOb) {
+                            childOb.dep.depend();
+                            if (_.isArray(value)) {
+                                dependArray(value);
+                            }
+                        }
+                    }
+                    return value;
+                },
+                set: function reactiveSetter(newVal) {
+                    var value = val;
+                    if (newVal === value || newVal !== newVal && value !== value) {
+                        return;
+                    }
+                    val = newVal;
+                    childOb = !shallow && observe(newVal);
+                    obj[key] = childOb ? childOb.model : newVal;
+                    dep.notify();
+                }
+            };
+        });
+        return createViewModel$1(obj, props);
+    }
+
+    /**
+     * Set a property on an object. Adds the new property and
+     * triggers change notification if the property doesn't
+     * already exist.
+     */
+    function set(target, key, val) {
+        if (_.isArray(target)) {
+            target.length = Math.max(target.length, key);
+            target.splice(key, 1, val);
+            return val;
+        }
+        if (_.has(target, key)) {
+            target[key] = val;
+            return val;
+        }
+        var ob = target.__ob__;
+        if (target._isVue || ob && ob.vmCount) {
+            return val;
+        }
+        if (!ob) {
+            target[key] = val;
+            return val;
+        }
+        defineReactive(ob.value, key, val);
+        ob.dep.notify();
+        return val;
+    }
+
+    /**
+     * Delete a property and trigger change if necessary.
+     */
+    function del(target, key) {
+        if (_.isArray(target)) {
+            target.splice(key, 1);
+            return;
+        }
+        var ob = target.__ob__;
+        if (target._isVue || ob && ob.vmCount) {
+            return;
+        }
+        if (!_.has(target, key)) {
+            return;
+        }
+        delete target[key];
+        if (!ob) {
+            return;
+        }
+        ob.dep.notify();
+    }
+
+    /**
+     * Collect dependencies on array elements when the array is touched, since
+     * we cannot intercept array element access like property getters.
+     */
+    function dependArray(value) {
+        for (var e, i = 0, l = value.length; i < l; i++) {
+            e = value[i];
+            e && e.__ob__ && e.__ob__.dep.depend();
+            if (_.isArray(e)) {
+                dependArray(e);
+            }
+        }
+    }
 
     var queue = [];
     var activatedChildren = [];
@@ -582,220 +796,6 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
         }
     }
 
-    var arrayProto = Array.prototype;
-    var arrayMethods = [];
-    _.each(['push', 'pop', 'shift', 'unshift', 'splice', 'sort', 'reverse'], function (method) {
-        var original = arrayProto[method];
-        arrayMethods[method] = function mutator() {
-            for (var _len = arguments.length, args = Array(_len), _key = 0; _key < _len; _key++) {
-                args[_key] = arguments[_key];
-            }
-
-            var ob = this.__ob__;
-            var inserted = void 0;
-            switch (method) {
-                case 'push':
-                case 'unshift':
-                    inserted = args;
-                    break;
-                case 'splice':
-                    inserted = args.slice(2);
-                    break;
-            }
-            if (inserted) inserted = ob.observeArray(inserted);
-            switch (method) {
-                case 'push':
-                case 'unshift':
-                    args = inserted;
-                    break;
-                case 'splice':
-                    args = [args[0], args[1]].concat(inserted ? inserted : []);
-                    break;
-            }
-            var result = original.apply(this, args);
-            ob.dep.notify();
-            return result;
-        };
-    });
-
-    var arrayKeys = _.keys(arrayMethods);
-
-    var observerState = {
-        shouldConvert: true
-    };
-
-    /**
-     * Observer class that are attached to each observed
-     * object. Once attached, the observer converts target
-     * object's property keys into getter/setters that
-     * collect dependencies and dispatches updates.
-     */
-
-    var Observer = function () {
-        function Observer(value) {
-            _classCallCheck(this, Observer);
-
-            this.value = value;
-            this.dep = new Dep();
-            this.vmCount = 0;
-            if (_.isArray(value)) {
-                var augment = hasProto ? protoAugment : copyAugment;
-                augment(value, arrayMethods, arrayKeys);
-                this.model = this.observeArray(value);
-            } else {
-                this.model = this.walk(value);
-            }
-            this.model['__ob__'] = this;
-        }
-
-        Observer.prototype.walk = function walk(obj) {
-            return defineReactive(obj);
-        };
-
-        Observer.prototype.observeArray = function observeArray(items) {
-            for (var i = 0, l = items.length; i < l; i++) {
-                items[i] = observe(items[i]).model;
-            }
-            return items;
-        };
-
-        return Observer;
-    }();
-
-    function protoAugment(target, src, keys) {
-        /* eslint-disable no-proto */
-        target.__proto__ = src;
-        /* eslint-enable no-proto */
-    }
-
-    /* istanbul ignore next */
-    function copyAugment(target, src, keys) {
-        for (var i = 0, l = keys.length; i < l; i++) {
-            var key = keys[i];
-            target[key] = src[key];
-        }
-    }
-
-    function observe(value, asRootData) {
-        if (!_.isObject(value)) {
-            return;
-        }
-        var ob = void 0;
-        if (_.has(value, '__ob__') && value.__ob__ instanceof Observer) {
-            ob = value.__ob__;
-        } else if (observerState.shouldConvert && (_.isArray(value) || isPlainObject(value)) && !value._isVue) {
-            ob = new Observer(value);
-        }
-        if (asRootData && ob) {
-            ob.vmCount++;
-        }
-        return ob;
-    }
-
-    function defineReactive(obj, shallow) {
-
-        var props = {};
-        _.each(obj, function (val, key) {
-            if (key in $$skipArray) {
-                return;
-            }
-            var dep = new Dep();
-            var childOb = !shallow && observe(val);
-            props[key] = {
-                enumerable: true,
-                configurable: true,
-                get: function reactiveGetter() {
-                    var value = val;
-                    if (Dep.target) {
-                        dep.depend();
-                        if (childOb) {
-                            childOb.dep.depend();
-                            if (_.isArray(value)) {
-                                dependArray(value);
-                            }
-                        }
-                    }
-                    return value;
-                },
-                set: function reactiveSetter(newVal) {
-                    var value = val;
-                    if (newVal === value || newVal !== newVal && value !== value) {
-                        return;
-                    }
-                    val = newVal;
-                    childOb = !shallow && observe(newVal);
-                    obj[key] = childOb ? childOb.model : newVal;
-                    dep.notify();
-                }
-            };
-        });
-        return createViewModel$1(obj, props);
-    }
-
-    /**
-     * Set a property on an object. Adds the new property and
-     * triggers change notification if the property doesn't
-     * already exist.
-     */
-    function set(target, key, val) {
-        if (_.isArray(target)) {
-            target.length = Math.max(target.length, key);
-            target.splice(key, 1, val);
-            return val;
-        }
-        if (_.has(target, key)) {
-            target[key] = val;
-            return val;
-        }
-        var ob = target.__ob__;
-        if (target._isVue || ob && ob.vmCount) {
-            return val;
-        }
-        if (!ob) {
-            target[key] = val;
-            return val;
-        }
-        defineReactive(ob.value, key, val);
-        ob.dep.notify();
-        return val;
-    }
-
-    /**
-     * Delete a property and trigger change if necessary.
-     */
-    function del(target, key) {
-        if (_.isArray(target)) {
-            target.splice(key, 1);
-            return;
-        }
-        var ob = target.__ob__;
-        if (target._isVue || ob && ob.vmCount) {
-            return;
-        }
-        if (!_.has(target, key)) {
-            return;
-        }
-        delete target[key];
-        if (!ob) {
-            return;
-        }
-        ob.dep.notify();
-    }
-
-    /**
-     * Collect dependencies on array elements when the array is touched, since
-     * we cannot intercept array element access like property getters.
-     */
-    function dependArray(value) {
-        for (var e, i = 0, l = value.length; i < l; i++) {
-            e = value[i];
-            e && e.__ob__ && e.__ob__.dep.depend();
-            if (_.isArray(e)) {
-                dependArray(e);
-            }
-        }
-    }
-
     var computedWatcherOptions = { lazy: true };
 
     function initComputed(vm, computed) {
@@ -804,8 +804,9 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
         defineComputed(vm, computed);
 
         for (var key in computed) {
-            var userDef = computed[key];
-            var getter = typeof userDef === 'function' ? _.bind(userDef, vm) : _.bind(userDef.get, vm);
+            var userDef = computed[key],
+                context = vm.$$model ? vm.model : vm;
+            var getter = typeof userDef === 'function' ? _.bind(userDef, context) : _.bind(userDef.get, context);
 
             watchers[key] = new Watcher(vm.$$computed, getter || noop, noop, computedWatcherOptions);
         }
@@ -854,7 +855,7 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 
     function initMethods(vm, methods) {
         for (var key in methods) {
-            vm[key] = methods[key] == null ? noop : _.bind(methods[key], vm);
+            vm[key] = methods[key] == null ? noop : _.bind(methods[key], vm.$$model ? vm.model : vm);
         }
     }
 
@@ -882,8 +883,6 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
             } else {
                 this.options = model || {};
             }
-            initComputed(this, this.computed);
-            initMethods(this, this.methods);
             var keys = _.keys(this.$$model).concat(_.keys(this.computed));
             var props = {};
 
@@ -911,6 +910,8 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
             }
             this.model = createViewModel$1({}, props);
             this.$$model && (this.model.__ob__ = this.$$model.__ob__);
+            initComputed(this, this.computed);
+            initMethods(this, this.methods);
             this._init();
         }
 
@@ -941,8 +942,12 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
         return VM;
     }();
 
+    function define(model) {
+        return new Observer(model).model;
+    }
     var version = '2.0';
 
+    exports.define = define;
     exports.version = version;
     exports.$$skipArray = $$skipArray;
     exports.VM = VM;

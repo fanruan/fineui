@@ -10070,23 +10070,23 @@ Demo.Func = BI.inherit(BI.Widget, {
     }
 });
 BI.shortcut("demo.tmp", Demo.Func);
-var model = new Fix.Observer({
+var model = Fix.define({
     name: 1,
     arr: [{
         n: 'a'
     }, {
         n: 'b'
     }]
-}).model;
+});
 Demo.Computed = BI.inherit(Fix.VM, {
     computed: {
         b: function () {
-            return this.model.name + 1
+            return this.name + 1
         },
         c: function () {
-            return this.model.name + this.model.b
+            return this.name + this.b
         }
-    },
+    }
 })
 
 Demo.Store = BI.inherit(Fix.VM, {
