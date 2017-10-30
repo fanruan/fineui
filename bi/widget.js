@@ -1088,7 +1088,7 @@ BI.Arrangement = BI.inherit(BI.Widget, {
                 region.el.element.css({
                     width: region.width
                 });
-                region.el._width = region.left;
+                region.el._width = region.width;
             }
             if (region.el._height !== region.height) {
                 region.el.element.css({
