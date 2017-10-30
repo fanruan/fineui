@@ -21240,51 +21240,7 @@ Function.prototype.after = function (func) {
         func.apply(this, arguments);
         return ret;
     }
-};//缓存this.element的操作数据
-if (jQuery) {
-    function wrap(prefix, name) {
-        return "_bi-widget" + prefix + name;
-    }
-
-    (function ($) {
-        var css = $.fn.css;
-        $.fn.css = function (name, value) {
-            if (this._isWidget === true) {
-                var key;
-                //this.element不允许get样式
-                if (BI.isPlainObject(name)) {
-                    for (key in name) {
-                        this.css(key, name[key]);
-                    }
-                    return this;
-                }
-                key = wrap("css", name);
-                if (this[key] !== value) {
-                    css.apply(this, arguments);
-                    this[key] = value;
-                    return this;
-                }
-                return this;
-            }
-            return css.apply(this, arguments);
-        };
-        $.each(["width", "height"], function (index, name) {
-            var fn = $.fn[name];
-            $.fn[name] = function (value) {
-                if (this._isWidget === true && arguments.length === 1) {
-                    var key = wrap("", name);
-                    if (this[key] !== value) {
-                        fn.apply(this, arguments);
-                        this[key] = value;
-                        return this;
-                    }
-                    return this;
-                }
-                return fn.apply(this, arguments);
-            }
-        })
-    })(jQuery);
-}if (jQuery) {
+};if (jQuery) {
     (function ($) {
         // richer:容器在其各个边缘留出的空间
         if (!$.fn.insets) {
@@ -76168,30 +76124,12 @@ BI.Arrangement = BI.inherit(BI.Widget, {
     _applyRegion: function (regions) {
         var self = this, o = this.options;
         BI.each(regions || this.regions, function (i, region) {
-            if (region.el._left !== region.left) {
-                region.el.element.css({
-                    left: region.left
-                });
-                region.el._left = region.left;
-            }
-            if (region.el._top !== region.top) {
-                region.el.element.css({
-                    top: region.top
-                });
-                region.el._top = region.top;
-            }
-            if (region.el._width !== region.width) {
-                region.el.element.css({
-                    width: region.width
-                });
-                region.el._width = region.width;
-            }
-            if (region.el._height !== region.height) {
-                region.el.element.css({
-                    height: region.height
-                });
-                region.el._height = region.height;
-            }
+            region.el.element.css({
+                left: region.left,
+                top: region.top,
+                width: region.width,
+                height: region.height
+            });
         });
         this._applyContainer();
         this.ratio = this.getLayoutRatio();
