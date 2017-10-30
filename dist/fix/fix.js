@@ -911,7 +911,7 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
             this.model = createViewModel$1({}, props);
             this.$$model && (this.model.__ob__ = this.$$model.__ob__);
             initComputed(this, this.computed);
-            initMethods(this, this.methods);
+            initMethods(this, this.actions);
             this._init();
         }
 
