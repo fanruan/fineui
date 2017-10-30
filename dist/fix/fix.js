@@ -438,14 +438,15 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
         return ob;
     }
 
-    function defineReactive(obj, shallow) {
+    function defineReactive(obj, observer, shallow) {
 
         var props = {};
         _.each(obj, function (val, key) {
             if (key in $$skipArray) {
                 return;
             }
-            var dep = new Dep();
+            var dep = observer && observer['__dep' + key] || new Dep();
+            observer && (observer['__dep' + key] = dep);
             var childOb = !shallow && observe(val);
             props[key] = {
                 enumerable: true,
@@ -501,9 +502,10 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
             target[key] = val;
             return val;
         }
-        defineReactive(ob.value, key, val);
+        ob.value[key] = val;
+        target = defineReactive(ob.value, ob);
         ob.dep.notify();
-        return val;
+        return target;
     }
 
     /**
@@ -521,11 +523,14 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
         if (!_.has(target, key)) {
             return;
         }
-        delete target[key];
         if (!ob) {
-            return;
+            delete target[key];
+            return target;
         }
+        delete ob.value[key];
+        target = defineReactive(ob.value, ob);
         ob.dep.notify();
+        return target;
     }
 
     /**
@@ -870,6 +875,26 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
         return vm.$watch(keyOrFn, handler, options);
     }
 
+    var falsy$1;
+    var operators = {
+        '||': falsy$1,
+        '&&': falsy$1,
+        '(': falsy$1,
+        ')': falsy$1
+    };
+
+    function runBinaryFunction(binarys) {
+        var expr = '';
+        for (var i = 0, len = binarys.length; i < len; i++) {
+            if (_.isBoolean(binarys[i]) || _.has(operators, binarys[i])) {
+                expr += binarys[i];
+            } else {
+                expr += 'false';
+            }
+        }
+        return new Function('return ' + expr)();
+    }
+
     var VM = function () {
         function VM(model) {
             _classCallCheck(this, VM);
@@ -922,13 +947,42 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
             }
             options = options || {};
             options.user = true;
-            var watcher = new Watcher(vm.model, expOrFn, _.bind(cb, vm), options);
-            if (options.immediate) {
-                cb.call(vm, watcher.value);
+            var exps = void 0;
+            if (_.isFunction(expOrFn) || !(exps = expOrFn.match(/[a-zA-Z0-9_.]+|[|][|]|[&][&]|[(]|[)]/g)) || exps.length === 1) {
+                var watcher = new Watcher(vm.model, expOrFn, _.bind(cb, vm), options);
+                if (options.immediate) {
+                    cb.call(vm, watcher.value);
+                }
+                return function unwatchFn() {
+                    watcher.teardown();
+                };
             }
-            return function unwatchFn() {
-                watcher.teardown();
-            };
+            var watchers = [];
+            var fns = exps.slice();
+            var complete = false;
+            _.each(exps, function (exp, i) {
+                if (_.has(operators, exp)) {
+                    return;
+                }
+                var watcher = new Watcher(vm.model, exp, function () {
+                    if (complete === true) {
+                        return;
+                    }
+                    fns[i] = true;
+                    if (runBinaryFunction(fns)) {
+                        complete = true;
+                        cb.call(vm);
+                        fns = exps.slice();
+                        nextTick(function () {
+                            complete = false;
+                        });
+                    }
+                }, options);
+                watchers.push(function unwatchFn() {
+                    watcher.teardown();
+                });
+            });
+            return watchers;
         };
 
         VM.prototype._init = function _init() {};

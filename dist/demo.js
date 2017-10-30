@@ -5381,7 +5381,27 @@ Demo.FIX_CONFIG = [{
 }, {
     id: 71,
     pId: 7,
-    text: "fix框架",
+    text: "定义响应式数据",
+    value: "demo.fix1"
+}, {
+    id: 72,
+    pId: 7,
+    text: "计算属性",
+    value: "demo.fix2"
+}, {
+    id: 73,
+    pId: 7,
+    text: "store",
+    value: "demo.fix3"
+}, {
+    id: 74,
+    pId: 7,
+    text: "watcher表达式",
+    value: "demo.fix4"
+}, {
+    id: 75,
+    pId: 7,
+    text: "一个混合的例子",
     value: "demo.fix"
 }];Demo.WIDGET_CONFIG = [{
     id: 4,
@@ -10070,58 +10090,286 @@ Demo.Func = BI.inherit(BI.Widget, {
     }
 });
 BI.shortcut("demo.tmp", Demo.Func);
-var model = Fix.define({
-    name: 1,
-    arr: [{
-        n: 'a'
-    }, {
-        n: 'b'
-    }]
-});
-Demo.Computed = BI.inherit(Fix.VM, {
-    computed: {
-        b: function () {
-            return this.name + 1
+;(function(){
+    var model = Fix.define({
+        name: "原始属性",
+        arr: [{
+            n: 'a'
+        }, {
+            n: 'b'
+        }]
+    });
+    var Computed = BI.inherit(Fix.VM, {
+        computed: {
+            b: function () {
+                return this.name + "-计算属性"
+            }
+        }
+    })
+
+    Demo.Fix = BI.inherit(BI.Widget, {
+        _store: function () {
+            return new Computed(model);
         },
-        c: function () {
-            return this.arr[1].n + this.b
-        }
-    }
-})
+        watch: {
+            b: function () {
+                this.button.setText(this.model.b)
+            }
+        },
+        render: function () {
+            var self = this;
+            return {
+                type: "bi.absolute",
+                items: [{
+                    el: {
+                        type: "bi.button",
+                        ref: function () {
+                            self.button = this;
+                        },
+                        handler: function () {
+                            self.model.name = "这是改变后的属性"
+                        },
+                        text: this.model.b
+                    }
+                }]
+            }
+        },
+        mounted: function () {
 
-Demo.Store = BI.inherit(Fix.VM, {
-    _init: function () {
-        this.comp = new Demo.Computed(model).model;
-    },
-    computed: {
-        b: function () {
-            return this.comp.c + 1
-        }
-    },
-    actions: {
-        run: function () {
-            this.comp.name = 2;
-            this.comp.arr[1].n = "c"
-        }
-    }
-});
 
-Demo.Fix = BI.inherit(BI.Widget, {
-    _store: function () {
-        return new Demo.Store();
-    },
-    watch: {
-        b: function () {
-            debugger;
         }
-    },
-    mounted: function () {
+    });
 
-        this.store.run()
-    }
-});
+    BI.shortcut("demo.fix2", Demo.Fix);
+}());;(function () {
+    var model = Fix.define({
+        name: "原始属性",
+        arr: [{
+            n: 'a'
+        }, {
+            n: 'b'
+        }]
+    });
 
-BI.shortcut("demo.fix", Demo.Fix);Demo.Main = BI.inherit(BI.Widget, {
+    Demo.Fix = BI.inherit(BI.Widget, {
+        _store: function () {
+            return model;
+        },
+        watch: {
+            name: function () {
+                this.button.setText(this.model.name)
+            }
+        },
+        render: function () {
+            var self = this;
+            return {
+                type: "bi.absolute",
+                items: [{
+                    el: {
+                        type: "bi.button",
+                        ref: function () {
+                            self.button = this;
+                        },
+                        handler: function () {
+                            self.model.name = "这是改变后的属性"
+                        },
+                        text: this.model.name
+                    }
+                }]
+            }
+        },
+        mounted: function () {
+
+
+        }
+    });
+
+    BI.shortcut("demo.fix1", Demo.Fix);
+}());
+;(function () {
+    var model = Fix.define({
+        name: 1,
+        arr: [{
+            n: 'a'
+        }, {
+            n: 0
+        }]
+    });
+    var Computed = BI.inherit(Fix.VM, {
+        computed: {
+            b: function () {
+                return this.name + 1
+            },
+            c: function () {
+                return this.arr[1].n + this.b
+            }
+        }
+    })
+
+    var Store = BI.inherit(Fix.VM, {
+        _init: function () {
+            this.comp = new Computed(model).model;
+        },
+        computed: {
+            b: function () {
+                return this.comp.c + 1
+            },
+            c: function () {
+                return this.comp.arr[1].n & 1;
+            }
+        },
+        actions: {
+            run: function () {
+                this.comp.name++;
+                this.comp.arr[1].n++;
+            }
+        }
+    });
+
+    Demo.Fix = BI.inherit(BI.Widget, {
+        _store: function () {
+            return new Store();
+        },
+        watch: {
+            "b&&(c||b)": function () {
+                this.button.setText(this.model.b)
+            }
+        },
+        render: function () {
+            var self = this;
+            return {
+                type: "bi.absolute",
+                items: [{
+                    el: {
+                        type: "bi.button",
+                        ref: function () {
+                            self.button = this;
+                        },
+                        handler: function () {
+                            self.store.run()
+                        },
+                        text: this.model.b
+                    }
+                }]
+            }
+        },
+        mounted: function () {
+
+
+        }
+    });
+
+    BI.shortcut("demo.fix", Demo.Fix);
+}());;(function(){
+    var model = Fix.define({
+        name: "原始属性",
+        arr: [{
+            n: 'a'
+        }, {
+            n: 'b'
+        }]
+    });
+
+    var Store = BI.inherit(Fix.VM, {
+        _init: function () {
+        },
+        computed: {
+            b: function () {
+                return model.name + '-计算属性'
+            }
+        },
+        actions: {
+            run: function () {
+                model.name = "这是改变后的属性";
+            }
+        }
+    });
+
+    Demo.Fix = BI.inherit(BI.Widget, {
+        _store: function () {
+            return new Store();
+        },
+        watch: {
+            b: function () {
+                this.button.setText(this.model.b)
+            }
+        },
+        render: function () {
+            var self = this;
+            return {
+                type: "bi.absolute",
+                items: [{
+                    el: {
+                        type: "bi.button",
+                        ref: function () {
+                            self.button = this;
+                        },
+                        handler: function () {
+                            self.store.run()
+                        },
+                        text: this.model.b
+                    }
+                }]
+            }
+        },
+        mounted: function () {
+
+
+        }
+    });
+
+    BI.shortcut("demo.fix3", Demo.Fix);
+}());;(function () {
+    var model = Fix.define({
+        name: "原始属性",
+        arr: [{
+            n: 'a'
+        }, {
+            n: 0
+        }]
+    });
+
+    Demo.Fix = BI.inherit(BI.Widget, {
+        _store: function () {
+            return model;
+        },
+        watch: {
+            "name||arr.1.n": function () {
+                this.button.setText(this.model.name + "-" + this.model.arr[1].n)
+            }
+        },
+        render: function () {
+            var self = this;
+            var cnt = 0;
+            return {
+                type: "bi.absolute",
+                items: [{
+                    el: {
+                        type: "bi.button",
+                        ref: function () {
+                            self.button = this;
+                        },
+                        handler: function () {
+                            if (cnt & 1) {
+                                self.model.name += 1;
+                            } else {
+                                self.model.arr[1].n += 1;
+                            }
+                            cnt++;
+                        },
+                        text: this.model.name + "-" + this.model.arr[1].n
+                    }
+                }]
+            }
+        },
+        mounted: function () {
+
+
+        }
+    });
+
+    BI.shortcut("demo.fix4", Demo.Fix);
+}());Demo.Main = BI.inherit(BI.Widget, {
     props: {
         baseCls: "demo-main bi-background"
     },

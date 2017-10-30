@@ -18734,7 +18734,9 @@ BI.TooltipsController = BI.inherit(BI.Controller, {
 
         var offset = context.element.offset();
         var bounds = context.element.bounds();
-
+        if(bounds.height === 0 || bounds.width === 0) {
+            return;
+        }
         var top = offset.top + bounds.height + 5;
         var tooltip = this.get(name);
         tooltip.setText(text);
