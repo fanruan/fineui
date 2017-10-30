@@ -875,10 +875,18 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
         return vm.$watch(keyOrFn, handler, options);
     }
 
+    var falsy$1;
+    var operators = {
+        '||': falsy$1,
+        '&&': falsy$1,
+        '(': falsy$1,
+        ')': falsy$1
+    };
+
     function runBinaryFunction(binarys) {
         var expr = '';
         for (var i = 0, len = binarys.length; i < len; i++) {
-            if (_.isBoolean(binarys[i]) || binarys[i] === '||' || binarys[i] === '&&' || binarys[i] === '(' || binarys[i] === ')') {
+            if (_.isBoolean(binarys[i]) || _.has(operators, binarys[i])) {
                 expr += binarys[i];
             } else {
                 expr += 'false';
@@ -940,7 +948,7 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
             options = options || {};
             options.user = true;
             var exps = void 0;
-            if (_.isFunction(expOrFn) || (exps = expOrFn.match(/[a-zA-Z0-9_.]+|[|][|]|[&][&]|[(]|[)]/g)) && exps.length === 1) {
+            if (_.isFunction(expOrFn) || !(exps = expOrFn.match(/[a-zA-Z0-9_.]+|[|][|]|[&][&]|[(]|[)]/g)) || exps.length === 1) {
                 var watcher = new Watcher(vm.model, expOrFn, _.bind(cb, vm), options);
                 if (options.immediate) {
                     cb.call(vm, watcher.value);
@@ -953,7 +961,7 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
             var fns = exps.slice();
             var complete = false;
             _.each(exps, function (exp, i) {
-                if (exp === '||' || exp === '&&' || exp === '(' || exp === ')') {
+                if (_.has(operators, exp)) {
                     return;
                 }
                 var watcher = new Watcher(vm.model, exp, function () {
