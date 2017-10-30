@@ -24,6 +24,9 @@ Demo.Store = BI.inherit(Fix.VM, {
     computed: {
         b: function () {
             return this.comp.c + 1
+        },
+        c: function () {
+            return this.comp.name
         }
     },
     actions: {
@@ -39,7 +42,7 @@ Demo.Fix = BI.inherit(BI.Widget, {
         return new Demo.Store();
     },
     watch: {
-        b: function () {
+        "b&&c||b": function () {
             debugger;
         }
     },

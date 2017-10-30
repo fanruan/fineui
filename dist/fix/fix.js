@@ -875,6 +875,18 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
         return vm.$watch(keyOrFn, handler, options);
     }
 
+    function runBinaryFunction(binarys) {
+        var expr = '';
+        for (var i = 0, len = binarys.length; i < len; i++) {
+            if (_.isBoolean(binarys[i]) || binarys[i] === '||' || binarys[i] === '&&' || binarys[i] === '(' || binarys[i] === ')') {
+                expr += binarys[i];
+            } else {
+                expr += 'false';
+            }
+        }
+        return new Function('return ' + expr)();
+    }
+
     var VM = function () {
         function VM(model) {
             _classCallCheck(this, VM);
@@ -927,13 +939,42 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
             }
             options = options || {};
             options.user = true;
-            var watcher = new Watcher(vm.model, expOrFn, _.bind(cb, vm), options);
-            if (options.immediate) {
-                cb.call(vm, watcher.value);
+            var exps = void 0;
+            if (_.isFunction(expOrFn) || (exps = expOrFn.match(/[a-zA-Z0-9_.]+|[|][|]|[&][&]|[(]|[)]/g)) && exps.length === 1) {
+                var watcher = new Watcher(vm.model, expOrFn, _.bind(cb, vm), options);
+                if (options.immediate) {
+                    cb.call(vm, watcher.value);
+                }
+                return function unwatchFn() {
+                    watcher.teardown();
+                };
             }
-            return function unwatchFn() {
-                watcher.teardown();
-            };
+            var watchers = [];
+            var fns = exps.slice();
+            var complete = false;
+            _.each(exps, function (exp, i) {
+                if (exp === '||' || exp === '&&' || exp === '(' || exp === ')') {
+                    return;
+                }
+                var watcher = new Watcher(vm.model, exp, function () {
+                    if (complete === true) {
+                        return;
+                    }
+                    fns[i] = true;
+                    if (runBinaryFunction(fns)) {
+                        complete = true;
+                        cb.call(vm);
+                        fns = exps.slice();
+                        nextTick(function () {
+                            complete = true;
+                        });
+                    }
+                }, options);
+                watchers.push(function unwatchFn() {
+                    watcher.teardown();
+                });
+            });
+            return watchers;
         };
 
         VM.prototype._init = function _init() {};
