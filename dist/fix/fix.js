@@ -974,7 +974,7 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
                         cb.call(vm);
                         fns = exps.slice();
                         nextTick(function () {
-                            complete = true;
+                            complete = false;
                         });
                     }
                 }, options);

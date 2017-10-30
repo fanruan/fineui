@@ -86,6 +86,26 @@ Demo.FIX_CONFIG = [{
 }, {
     id: 71,
     pId: 7,
-    text: "fix框架",
+    text: "定义响应式数据",
+    value: "demo.fix1"
+}, {
+    id: 72,
+    pId: 7,
+    text: "计算属性",
+    value: "demo.fix2"
+}, {
+    id: 73,
+    pId: 7,
+    text: "store",
+    value: "demo.fix3"
+}, {
+    id: 74,
+    pId: 7,
+    text: "watcher表达式",
+    value: "demo.fix4"
+}, {
+    id: 75,
+    pId: 7,
+    text: "一个混合的例子",
     value: "demo.fix"
 }];

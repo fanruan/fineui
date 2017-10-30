@@ -1,39 +1,24 @@
-;(function () {
+;(function(){
     var model = Fix.define({
-        name: 1,
+        name: "原始属性",
         arr: [{
             n: 'a'
         }, {
-            n: 0
+            n: 'b'
         }]
     });
-    var Computed = BI.inherit(Fix.VM, {
-        computed: {
-            b: function () {
-                return this.name + 1
-            },
-            c: function () {
-                return this.arr[1].n + this.b
-            }
-        }
-    })
 
     var Store = BI.inherit(Fix.VM, {
         _init: function () {
-            this.comp = new Computed(model).model;
         },
         computed: {
             b: function () {
-                return this.comp.c + 1
-            },
-            c: function () {
-                return this.comp.arr[1].n & 1;
+                return model.name + '-计算属性'
             }
         },
         actions: {
             run: function () {
-                this.comp.name++;
-                this.comp.arr[1].n++;
+                model.name = "这是改变后的属性";
             }
         }
     });
@@ -43,7 +28,7 @@
             return new Store();
         },
         watch: {
-            "b&&(c||b)": function () {
+            b: function () {
                 this.button.setText(this.model.b)
             }
         },
@@ -71,5 +56,5 @@
         }
     });
 
-    BI.shortcut("demo.fix", Demo.Fix);
+    BI.shortcut("demo.fix3", Demo.Fix);
 }());
