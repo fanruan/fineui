@@ -76184,7 +76184,7 @@ BI.Arrangement = BI.inherit(BI.Widget, {
                 region.el.element.css({
                     width: region.width
                 });
-                region.el._width = region.left;
+                region.el._width = region.width;
             }
             if (region.el._height !== region.height) {
                 region.el.element.css({
@@ -87132,6 +87132,7 @@ BI.NumberEditor = BI.inherit(BI.Widget, {
                 return v;
             },
             value: 0,
+            allowBlank: false,
             errorText: "",
             step: 1
         })
@@ -87143,6 +87144,7 @@ BI.NumberEditor = BI.inherit(BI.Widget, {
         this.editor = BI.createWidget({
             type: "bi.sign_editor",
             height: o.height,
+            allowBlank: o.allowBlank,
             value: o.valueFormatter(o.value),
             validationChecker: o.validationChecker,
             errorText: o.errorText
