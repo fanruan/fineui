@@ -438,14 +438,15 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
         return ob;
     }
 
-    function defineReactive(obj, shallow) {
+    function defineReactive(obj, observer, shallow) {
 
         var props = {};
         _.each(obj, function (val, key) {
             if (key in $$skipArray) {
                 return;
             }
-            var dep = new Dep();
+            var dep = observer && observer['__dep' + key] || new Dep();
+            observer && (observer['__dep' + key] = dep);
             var childOb = !shallow && observe(val);
             props[key] = {
                 enumerable: true,
@@ -501,9 +502,10 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
             target[key] = val;
             return val;
         }
-        defineReactive(ob.value, key, val);
+        ob.value[key] = val;
+        target = defineReactive(ob.value, ob);
         ob.dep.notify();
-        return val;
+        return target;
     }
 
     /**
@@ -521,11 +523,14 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
         if (!_.has(target, key)) {
             return;
         }
-        delete target[key];
         if (!ob) {
-            return;
+            delete target[key];
+            return target;
         }
+        delete ob.value[key];
+        target = defineReactive(ob.value, ob);
         ob.dep.notify();
+        return target;
     }
 
     /**
