@@ -1072,30 +1072,12 @@ BI.Arrangement = BI.inherit(BI.Widget, {
     _applyRegion: function (regions) {
         var self = this, o = this.options;
         BI.each(regions || this.regions, function (i, region) {
-            if (region.el._left !== region.left) {
-                region.el.element.css({
-                    left: region.left
-                });
-                region.el._left = region.left;
-            }
-            if (region.el._top !== region.top) {
-                region.el.element.css({
-                    top: region.top
-                });
-                region.el._top = region.top;
-            }
-            if (region.el._width !== region.width) {
-                region.el.element.css({
-                    width: region.width
-                });
-                region.el._width = region.width;
-            }
-            if (region.el._height !== region.height) {
-                region.el.element.css({
-                    height: region.height
-                });
-                region.el._height = region.height;
-            }
+            region.el.element.css({
+                left: region.left,
+                top: region.top,
+                width: region.width,
+                height: region.height
+            });
         });
         this._applyContainer();
         this.ratio = this.getLayoutRatio();
