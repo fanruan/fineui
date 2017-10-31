@@ -938,6 +938,9 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
             initComputed(this, this.computed);
             initMethods(this, this.actions);
             this._init();
+            if (this.$$model) {
+                return this.model;
+            }
         }
 
         VM.prototype.$watch = function $watch(expOrFn, cb, options) {
@@ -959,7 +962,8 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
             }
             var watchers = [];
             var fns = exps.slice();
-            var complete = false;
+            var complete = false,
+                running = false;
             _.each(exps, function (exp, i) {
                 if (_.has(operators, exp)) {
                     return;
@@ -972,9 +976,13 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
                     if (runBinaryFunction(fns)) {
                         complete = true;
                         cb.call(vm);
-                        fns = exps.slice();
+                    }
+                    if (!running) {
+                        running = true;
                         nextTick(function () {
                             complete = false;
+                            running = false;
+                            fns = exps.slice();
                         });
                     }
                 }, options);

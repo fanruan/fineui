@@ -20,7 +20,7 @@
 
     var Store = BI.inherit(Fix.VM, {
         _init: function () {
-            this.comp = new Computed(model).model;
+            this.comp = new Computed(model);
         },
         computed: {
             b: function () {
