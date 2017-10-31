@@ -938,6 +938,9 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
             initComputed(this, this.computed);
             initMethods(this, this.actions);
             this._init();
+            if (this.$$model) {
+                return this.model;
+            }
         }
 
         VM.prototype.$watch = function $watch(expOrFn, cb, options) {

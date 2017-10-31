@@ -442,7 +442,7 @@ if (!window.BI) {
                 overrides = sp;
                 sp = sb;
                 sb = function () {
-                    sp.apply(this, arguments);
+                    return sp.apply(this, arguments);
                 };
             }
             var F = function () {
