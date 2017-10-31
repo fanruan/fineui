@@ -2,9 +2,6 @@ Demo = {
     version: 1.0
 };
 
-if (!window.BI) {
-    window.BI = {};
-}
 BI.servletURL = "";
 BI.resourceURL = "resource/";
 BI.i18n = {
