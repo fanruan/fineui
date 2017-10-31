@@ -124,7 +124,7 @@ module.exports = function (grunt) {
             },
 
             bundleJs: {
-                src: ['public/js/index.js', 'dist/core.js', 'dist/base.js', 'dist/case.js', 'dist/widget.js', 'public/js/**/*.js'],
+                src: ['dist/core.js', 'dist/base.js', 'dist/case.js', 'dist/widget.js', 'public/js/**/*.js', 'public/js/index.js'],
                 dest: 'dist/bundle.js'
             },
 
@@ -138,7 +138,7 @@ module.exports = function (grunt) {
                 dest: 'dist/config.js'
             },
             demoJs: {
-                src: ['demo/app.js', 'demo/js/**/*.js',' demo/config.js'],
+                src: ['demo/app.js', 'demo/js/**/*.js', ' demo/config.js'],
                 dest: 'dist/demo.js'
             },
             demoCss: {
