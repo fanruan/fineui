@@ -72,60 +72,7 @@ BI.AdaptiveArrangement = BI.inherit(BI.Widget, {
         item.element.mousedown(function () {
             self._setSelect(item)
         });
-        // o.resizable && item.element.resizable({
-        //     handles: "e, s, se",
-        //     minWidth: 20,
-        //     minHeight: 20,
-        //     autoHide: true,
-        //     helper: "bi-resizer",
-        //     start: function () {
-        //         item.element.css("zIndex", ++self.zIndex);
-        //         self.fireEvent(BI.AdaptiveArrangement.EVENT_ELEMENT_START_RESIZE);
-        //     },
-        //     resize: function (e, ui) {
-        //         // self._resize(item.attr("id"), ui.size);
-        //         self._resize(item.attr("id"), e, ui.size, ui.position);
-        //     },
-        //     stop: function (e, ui) {
-        //         self._stopResize(item.attr("id"), ui.size);
-        //         self.fireEvent(BI.AdaptiveArrangement.EVENT_ELEMENT_STOP_RESIZE, item.attr("id"), ui.size);
-        //         self.fireEvent(BI.AdaptiveArrangement.EVENT_RESIZE);
-        //     }
-        // });
     },
-
-    // _resize: function (name, e, size, position) {
-    //     var self = this;
-    //     this.scrollInterval(e, false, true, function (changedSize) {
-    //         size.width += changedSize.offsetX;
-    //         size.height += changedSize.offsetY;
-    //         var containerWidth = self.arrangement.container.element.width();
-    //         var containerHeight = self.arrangement.container.element.height();
-    //         self.arrangement.container.element.width(containerWidth + changedSize.offsetX);
-    //         self.arrangement.container.element.height(containerHeight + changedSize.offsetY);
-    //         switch (self.getLayoutType()) {
-    //             case BI.Arrangement.LAYOUT_TYPE.FREE:
-    //                 break;
-    //             case BI.Arrangement.LAYOUT_TYPE.GRID:
-    //                 self.setRegionSize(name, size);
-    //                 break;
-    //         }
-    //         self.fireEvent(BI.AdaptiveArrangement.EVENT_ELEMENT_RESIZE, name, size);
-    //     });
-    // },
-    //
-    // _stopResize: function (name, size) {
-    //     var self = this;
-    //     this.scrollEnd();
-    //     switch (this.getLayoutType()) {
-    //         case BI.Arrangement.LAYOUT_TYPE.FREE:
-    //             this.setRegionSize(name, size);
-    //             break;
-    //         case BI.Arrangement.LAYOUT_TYPE.GRID:
-    //             this.setRegionSize(name, size);
-    //             break;
-    //     }
-    // },
 
     _getScrollOffset: function () {
         return this.arrangement._getScrollOffset();
@@ -186,99 +133,99 @@ BI.AdaptiveArrangement = BI.inherit(BI.Widget, {
     },
 
     scrollInterval: function (e, isBorderScroll, isOverflowScroll, cb) {
-        var self = this;
-        var map = {
-            top: [-1, 0],
-            bottom: [1, 0],
-            left: [0, -1],
-            right: [0, 1]
-        };
-        var clientWidth = this.arrangement.getClientWidth();
-        var clientHeight = this.arrangement.getClientHeight();
-
-        function scrollTo(direction, callback) {
-            if (direction === "") {
-                self.lastActiveRegion = "";
-                if (self._scrollInterval) {
-                    clearInterval(self._scrollInterval);
-                    self._scrollInterval = null;
-                }
-                return;
-            }
-            if (self.lastActiveRegion !== direction) {
-                self.lastActiveRegion = direction;
-                if (self._scrollInterval) {
-                    clearInterval(self._scrollInterval);
-                    self._scrollInterval = null;
-                }
-                var count = 0;
-                self._scrollInterval = setInterval(function () {
-                    count++;
-                    if (count <= 3) {
-                        return;
-                    }
-                    var offset = self._getScrollOffset();
-                    var t = offset.top + map[direction][0] * 40;
-                    var l = offset.left + map[direction][1] * 40;
-                    if (t < 0 || l < 0) {
-                        return;
-                    }
-                    callback({
-                        offsetX: map[direction][1] * 40,
-                        offsetY: map[direction][0] * 40
-                    });
-                    self.scrollTo({
-                        top: t,
-                        left: l
-                    });
-                }, 300);
-            }
-        }
+        // var self = this;
+        // var map = {
+        //     top: [-1, 0],
+        //     bottom: [1, 0],
+        //     left: [0, -1],
+        //     right: [0, 1]
+        // };
+        // var clientWidth = this.arrangement.getClientWidth();
+        // var clientHeight = this.arrangement.getClientHeight();
+        //
+        // function scrollTo(direction, callback) {
+        //     if (direction === "") {
+        //         self.lastActiveRegion = "";
+        //         if (self._scrollInterval) {
+        //             clearInterval(self._scrollInterval);
+        //             self._scrollInterval = null;
+        //         }
+        //         return;
+        //     }
+        //     if (self.lastActiveRegion !== direction) {
+        //         self.lastActiveRegion = direction;
+        //         if (self._scrollInterval) {
+        //             clearInterval(self._scrollInterval);
+        //             self._scrollInterval = null;
+        //         }
+        //         var count = 0;
+        //         self._scrollInterval = setInterval(function () {
+        //             count++;
+        //             if (count <= 3) {
+        //                 return;
+        //             }
+        //             var offset = self._getScrollOffset();
+        //             var t = offset.top + map[direction][0] * 40;
+        //             var l = offset.left + map[direction][1] * 40;
+        //             if (t < 0 || l < 0) {
+        //                 return;
+        //             }
+        //             callback({
+        //                 offsetX: map[direction][1] * 40,
+        //                 offsetY: map[direction][0] * 40
+        //             });
+        //             self.scrollTo({
+        //                 top: t,
+        //                 left: l
+        //             });
+        //         }, 300);
+        //     }
+        // }
 
         cb({
             offsetX: 0,
             offsetY: 0
         });
-        var offset = this.element.offset();
-        var p = {
-            left: e.pageX - offset.left,
-            top: e.pageY - offset.top
-        };
-        //向上滚
-        if (isBorderScroll && p.top >= 0 && p.top <= 30) {
-            scrollTo("top", cb)
-        }
-        //向下滚
-        else if (isBorderScroll && p.top >= clientHeight - 30 && p.top <= clientHeight) {
-            scrollTo("bottom", cb)
-        }
-        //向左滚
-        else if (isBorderScroll && p.left >= 0 && p.left <= 30) {
-            scrollTo("left", cb)
-        }
-        //向右滚
-        else if (isBorderScroll && p.left >= clientWidth - 30 && p.left <= clientWidth) {
-            scrollTo("right", cb)
-        } else {
-            if (isOverflowScroll === true) {
-                if (p.top < 0) {
-                    scrollTo("top", cb);
-                }
-                else if (p.top > clientHeight) {
-                    scrollTo("bottom", cb);
-                }
-                else if (p.left < 0) {
-                    scrollTo("left", cb);
-                }
-                else if (p.left > clientWidth) {
-                    scrollTo("right", cb);
-                } else {
-                    scrollTo("", cb);
-                }
-            } else {
-                scrollTo("", cb);
-            }
-        }
+        // var offset = this.element.offset();
+        // var p = {
+        //     left: e.pageX - offset.left,
+        //     top: e.pageY - offset.top
+        // };
+        // //向上滚
+        // if (isBorderScroll && p.top >= 0 && p.top <= 30) {
+        //     scrollTo("top", cb)
+        // }
+        // //向下滚
+        // else if (isBorderScroll && p.top >= clientHeight - 30 && p.top <= clientHeight) {
+        //     scrollTo("bottom", cb)
+        // }
+        // //向左滚
+        // else if (isBorderScroll && p.left >= 0 && p.left <= 30) {
+        //     scrollTo("left", cb)
+        // }
+        // //向右滚
+        // else if (isBorderScroll && p.left >= clientWidth - 30 && p.left <= clientWidth) {
+        //     scrollTo("right", cb)
+        // } else {
+        //     if (isOverflowScroll === true) {
+        //         if (p.top < 0) {
+        //             scrollTo("top", cb);
+        //         }
+        //         else if (p.top > clientHeight) {
+        //             scrollTo("bottom", cb);
+        //         }
+        //         else if (p.left < 0) {
+        //             scrollTo("left", cb);
+        //         }
+        //         else if (p.left > clientWidth) {
+        //             scrollTo("right", cb);
+        //         } else {
+        //             scrollTo("", cb);
+        //         }
+        //     } else {
+        //         scrollTo("", cb);
+        //     }
+        // }
     },
 
     scrollEnd: function () {
