@@ -7958,10 +7958,11 @@ BI.SelectList = BI.inherit(BI.Widget, {
 
         //全选
         this.toolbar = BI.createWidget(o.toolbar);
+        this.allSelected = false;
         this.toolbar.on(BI.Controller.EVENT_CHANGE, function (type, value, obj) {
-            var isAllSelected = this.isSelected();
+            self.allSelected = this.isSelected();
             if (type === BI.Events.CLICK) {
-                self.setAllSelected(isAllSelected);
+                self.setAllSelected(self.allSelected);
                 self.fireEvent(BI.SelectList.EVENT_CHANGE, value, obj);
             }
             self.fireEvent(BI.Controller.EVENT_CHANGE, arguments);
@@ -8022,6 +8023,7 @@ BI.SelectList = BI.inherit(BI.Widget, {
         BI.each(this.getAllButtons(), function (i, btn) {
             (btn.setSelected || btn.setAllSelected).apply(btn, [v]);
         });
+        this.allSelected = !!v;
         this.toolbar.setSelected(v);
         this.toolbar.setHalfSelected(false);
     },
@@ -8031,7 +8033,8 @@ BI.SelectList = BI.inherit(BI.Widget, {
     },
 
     isAllSelected: function () {
-        return this.toolbar.isSelected();
+        return this.allSelected;
+        // return this.toolbar.isSelected();
     },
 
     hasPrev: function () {
