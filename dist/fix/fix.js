@@ -887,21 +887,21 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
         }
         return new Function('return ' + expr)();
     }
-    function watch(vm, expOrFn, cb, options) {
+    function watch(model, expOrFn, cb, options) {
         if (isPlainObject(cb)) {
             options = cb;
             cb = cb.handler;
         }
         if (typeof cb === 'string') {
-            cb = vm[cb];
+            cb = model[cb];
         }
         options = options || {};
         options.user = true;
         var exps = void 0;
         if (_.isFunction(expOrFn) || !(exps = expOrFn.match(/[a-zA-Z0-9_.*]+|[|][|]|[&][&]|[(]|[)]/g)) || exps.length === 1 && !/\*/.test(expOrFn)) {
-            var watcher = new Watcher(vm.model, expOrFn, _.bind(cb, vm), options);
+            var watcher = new Watcher(model, expOrFn, cb, options);
             if (options.immediate) {
-                cb.call(vm, watcher.value);
+                cb(watcher.value);
             }
             return function unwatchFn() {
                 watcher.teardown();
@@ -925,17 +925,17 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
                     exp = exp.replace(".*", "");
                 }
                 var getter = parsePath(exp);
-                var v = getter.call(vm.model, vm.model);
+                var v = getter.call(model, model);
                 var dep = new Dep();
                 if (isGlobal) {
                     (v.__ob__._globalDeps || (v.__ob__._globalDeps = [])).push(dep);
                 } else {
                     (v.__ob__._deps || (v.__ob__._deps = [])).push(dep);
                 }
-                var w = new Watcher(vm.model, function () {
+                var w = new Watcher(model, function () {
                     dep.depend();
                     return NaN;
-                }, _.bind(cb, vm));
+                }, cb);
                 watchers.push(function unwatchFn() {
                     w.teardown();
                     v.__ob__._globalDeps && remove(v.__ob__._globalDeps, dep);
@@ -943,14 +943,14 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
                 });
                 return;
             }
-            var watcher = new Watcher(vm.model, exp, function () {
+            var watcher = new Watcher(model, exp, function () {
                 if (complete === true) {
                     return;
                 }
                 fns[i] = true;
                 if (runBinaryFunction(fns)) {
                     complete = true;
-                    cb.call(vm);
+                    cb();
                 }
                 if (!running) {
                     running = true;
