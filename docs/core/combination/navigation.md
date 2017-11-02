@@ -46,9 +46,9 @@ BI.createWidget({
 | :------ |:-------------  | :-----| :----|:----
 | direction | 控件位置 | string | top,bottom,left,right,custom | "bottom"|
 | single | 是否为单页 | boolean | true,false | true |
-| defaultShowIndex | 是否默认显示 |boolean | true,false | true |
-| tab | tab页元素 | boolean | true,false | true |
-| logic | 布局逻辑 | object | — | {dynamic:true} |
+| defaultShowIndex | 默认显示页码 |number,false | number,false | false |
+| tab | tab页元素 | object | — | — |
+| logic | 布局逻辑 | object | — | {dynamic:false} |
 | cardCreator | 面板构造器 | function | — | v |
 | afterCardCreated | 面板构造之后 | function | — | — |
 | afterCardShow | 面板显示之后 | function | —| — |

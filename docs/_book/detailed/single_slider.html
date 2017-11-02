@@ -2275,9 +2275,9 @@
             <ul class="articles">
                 
     
-        <li class="chapter " data-level="6.7.1" data-path="tree/single_tree_combo.html">
+        <li class="chapter " data-level="6.7.1" data-path="combo/single_tree_combo.html">
             
-                <a href="tree/single_tree_combo.html">
+                <a href="combo/single_tree_combo.html">
             
                     
                     single_tree_combo
@@ -2307,9 +2307,9 @@
             <ul class="articles">
                 
     
-        <li class="chapter " data-level="6.8.1" data-path="tree/multilayer_single_tree_combo.html">
+        <li class="chapter " data-level="6.8.1" data-path="combo/multilayer_single_tree_combo.html">
             
-                <a href="tree/multilayer_single_tree_combo.html">
+                <a href="combo/multilayer_single_tree_combo.html">
             
                     
                     multilayer_single_tree_combo
@@ -2339,9 +2339,9 @@
             <ul class="articles">
                 
     
-        <li class="chapter " data-level="6.9.1" data-path="tree/select_tree_combo.html">
+        <li class="chapter " data-level="6.9.1" data-path="combo/select_tree_combo.html">
             
-                <a href="tree/select_tree_combo.html">
+                <a href="combo/select_tree_combo.html">
             
                     
                     select_tree_combo
@@ -2371,9 +2371,9 @@
             <ul class="articles">
                 
     
-        <li class="chapter " data-level="6.10.1" data-path="tree/multilayer_select_tree_combo.html">
+        <li class="chapter " data-level="6.10.1" data-path="combo/multilayer_select_tree_combo.html">
             
-                <a href="tree/multilayer_select_tree_combo.html">
+                <a href="combo/multilayer_select_tree_combo.html">
             
                     
                     multilayer_select_tree_combo
@@ -2867,14 +2867,23 @@
     
                                 <section class="normal markdown-section">
                                 
-                                <h1 id="bislider">bi.slider</h1>
-<h3 id="slider&#x63D2;&#x4EF6;">slider&#x63D2;&#x4EF6;</h3>
+                                <h1 id="bisingleslider">bi.single_slider</h1>
+<h2 id="&#x6570;&#x503C;&#x6ED1;&#x5757;">&#x6570;&#x503C;&#x6ED1;&#x5757;</h2>
 <div class="api-method"><div class="api-method-definition"><p><a href="https://jsfiddle.net/fineui/k6svamdz/" target="_blank">source</a></p>
-</div><div class="api-method-code"><div class="api-method-example"><pre><code class="lang-javascript">BI.createWidget({
-    type: <span class="hljs-string">&quot;bi.slider&quot;</span>,
-    min: <span class="hljs-number">16</span>,
-    max: <span class="hljs-number">50</span>,
+</div><div class="api-method-code"><div class="api-method-example"><pre><code class="lang-javascript"><span class="hljs-keyword">var</span> singleSlider = BI.createWidget({
+    type: <span class="hljs-string">&quot;bi.single_slider&quot;</span>,
+    element: <span class="hljs-string">&quot;body&quot;</span>,
+    width: <span class="hljs-number">200</span>,
+    height: <span class="hljs-number">50</span>,
+    cls: <span class="hljs-string">&quot;demo-slider&quot;</span>
 });
+
+singleSlider.setMinAndMax({
+    min: <span class="hljs-number">10</span>,
+    max: <span class="hljs-number">100</span>
+});
+singleSlider.setValue(<span class="hljs-number">30</span>);
+singleSlider.populate();
 </code></pre>
 </div></div></div>
 
@@ -2892,16 +2901,7 @@
 </thead>
 <tbody>
 <tr>
-<td>min</td>
-<td>&#x6700;&#x5C0F;&#x503C;</td>
-<td>number</td>
-<td>10</td>
-</tr>
-<tr>
-<td>max</td>
-<td>&#x6700;&#x5927;&#x503C;</td>
-<td>number</td>
-<td>50</td>
+<td></td>
 </tr>
 </tbody>
 </table>
@@ -2916,6 +2916,11 @@
 </thead>
 <tbody>
 <tr>
+<td>setMinAndMax</td>
+<td>&#x8BBE;&#x7F6E;&#x6700;&#x5927;&#x503C;&#x6700;&#x5C0F;&#x503C;</td>
+<td>{min: number, max: number}</td>
+</tr>
+<tr>
 <td>getValue</td>
 <td>&#x83B7;&#x5F97;&#x5F53;&#x524D;&#x503C;</td>
 <td>&#x2014;</td>
@@ -2926,8 +2931,9 @@
 <td>value</td>
 </tr>
 <tr>
-<td></td>
-<td></td>
+<td>populate</td>
+<td>&#x52A0;&#x8F7D;&#x8BBE;&#x7F6E;&#x540E;&#x7684;&#x63A7;&#x4EF6;</td>
+<td>&#x2014;</td>
 </tr>
 </tbody>
 </table>
@@ -2965,7 +2971,7 @@
     <script>
         var gitbook = gitbook || [];
         gitbook.push(function() {
-            gitbook.page.hasChanged({"page":{"title":"single_slider","level":"8.1.1","depth":2,"previous":{"title":"sliders","level":"8.1","depth":1,"ref":"","articles":[{"title":"single_slider","level":"8.1.1","depth":2,"path":"detailed/single_slider.md","ref":"detailed/single_slider.md","articles":[]}]},"dir":"ltr"},"config":{"gitbook":"*","theme":"default","variables":{},"plugins":["jsfiddle","splitter","theme-api","expandable-chapters"],"pluginsConfig":{"jsfiddle":{"type":"script","tabs":["result","js","html"],"height":"100","width":"500","fontColor":"00FF00"},"splitter":{},"search":{},"lunr":{"maxIndexSize":1000000,"ignoreSpecialCharacters":false},"fontsettings":{"theme":"white","family":"sans","size":2},"highlight":{},"theme-api":{"languages":[],"split":true,"theme":"light"},"sharing":{"facebook":true,"twitter":true,"google":false,"weibo":false,"instapaper":false,"vk":false,"all":["facebook","google","twitter","weibo","instapaper"]},"theme-default":{"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"showLevel":false},"expandable-chapters":{}},"structure":{"langs":"LANGS.md","readme":"README.md","glossary":"GLOSSARY.md","summary":"SUMMARY.md"},"pdf":{"pageNumbers":true,"fontSize":12,"fontFamily":"Arial","paperSize":"a4","chapterMark":"pagebreak","pageBreaksBefore":"/","margin":{"right":62,"left":62,"top":56,"bottom":56}},"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"}},"file":{"path":"detailed/single_slider.md","mtime":"2017-09-22T01:58:44.356Z","type":"markdown"},"gitbook":{"version":"3.2.3","time":"2017-10-31T08:30:18.926Z"},"basePath":"..","book":{"language":""}});
+            gitbook.page.hasChanged({"page":{"title":"single_slider","level":"8.1.1","depth":2,"previous":{"title":"sliders","level":"8.1","depth":1,"ref":"","articles":[{"title":"single_slider","level":"8.1.1","depth":2,"path":"detailed/single_slider.md","ref":"detailed/single_slider.md","articles":[]}]},"dir":"ltr"},"config":{"gitbook":"*","theme":"default","variables":{},"plugins":["jsfiddle","splitter","theme-api","expandable-chapters"],"pluginsConfig":{"jsfiddle":{"type":"script","tabs":["result","js","html"],"height":"100","width":"500","fontColor":"00FF00"},"splitter":{},"search":{},"lunr":{"maxIndexSize":1000000,"ignoreSpecialCharacters":false},"fontsettings":{"theme":"white","family":"sans","size":2},"highlight":{},"theme-api":{"languages":[],"split":true,"theme":"light"},"sharing":{"facebook":true,"twitter":true,"google":false,"weibo":false,"instapaper":false,"vk":false,"all":["facebook","google","twitter","weibo","instapaper"]},"theme-default":{"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"showLevel":false},"expandable-chapters":{}},"structure":{"langs":"LANGS.md","readme":"README.md","glossary":"GLOSSARY.md","summary":"SUMMARY.md"},"pdf":{"pageNumbers":true,"fontSize":12,"fontFamily":"Arial","paperSize":"a4","chapterMark":"pagebreak","pageBreaksBefore":"/","margin":{"right":62,"left":62,"top":56,"bottom":56}},"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"}},"file":{"path":"detailed/single_slider.md","mtime":"2017-11-02T08:29:28.595Z","type":"markdown"},"gitbook":{"version":"3.2.3","time":"2017-11-02T10:45:31.931Z"},"basePath":"..","book":{"language":""}});
         });
     </script>
 </div>
