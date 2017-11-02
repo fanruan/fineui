@@ -1027,6 +1027,26 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
         return VM;
     }();
 
+    function toJSON(model) {
+        var result = void 0;
+        if (_.isArray(model)) {
+            result = [];
+            for (var i = 0, len = model.length; i < len; i++) {
+                result[i] = toJSON(model[i]);
+            }
+        } else if (isPlainObject(model)) {
+            result = {};
+            for (var _key3 in model) {
+                if (!_.has($$skipArray, _key3)) {
+                    result[_key3] = toJSON(model[_key3]);
+                }
+            }
+        } else {
+            result = model;
+        }
+        return result;
+    }
+
     function define(model) {
         return new Observer(model).model;
     }
@@ -1044,6 +1064,7 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
     exports.set = set;
     exports.del = del;
     exports.Watcher = Watcher;
+    exports.toJSON = toJSON;
 
     exports.__esModule = true;
 });
