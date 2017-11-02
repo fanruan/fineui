@@ -33904,7 +33904,7 @@ BI.ResizableTable = BI.inherit(BI.Widget, {
                     o.columnSize[self._getFreezeColLength() - 1] += o.regionColumnSize[0] - freezeColumnSize;
                     self.table.setColumnSize(o.columnSize);
                 }
-                self.table.populate();
+                // self.table.populate();
                 self._populate();
                 self.regionResizerHandler.element.removeClass("dragging");
                 self.fireEvent(BI.Table.EVENT_TABLE_AFTER_REGION_RESIZE);
@@ -34007,7 +34007,7 @@ BI.ResizableTable = BI.inherit(BI.Widget, {
             columnSize[j] = size;
             o.columnSize = columnSize;
             self.table.setColumnSize(columnSize);
-            self.table.populate();
+            // self.table.populate();
             self._populate();
             self.fireEvent(BI.Table.EVENT_TABLE_AFTER_COLUMN_RESIZE);
         };
