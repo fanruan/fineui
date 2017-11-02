@@ -14,13 +14,6 @@
     }
 
     function createWatcher(vm, keyOrFn, handler, options) {
-        if (BI.isPlainObject(handler)) {
-            options = handler
-            handler = handler.handler
-        }
-        if (typeof handler === 'string') {
-            handler = vm[handler]
-        }
         return Fix.watch(vm, keyOrFn, handler, options)
     }
 
