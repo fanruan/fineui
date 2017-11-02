@@ -868,17 +868,6 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
         }
     }
 
-    function createWatcher(vm, keyOrFn, handler, options) {
-        if (isPlainObject(handler)) {
-            options = handler;
-            handler = handler.handler;
-        }
-        if (typeof handler === 'string') {
-            handler = vm[handler];
-        }
-        return vm.$watch(keyOrFn, handler, options);
-    }
-
     var falsy$1;
     var operators = {
         '||': falsy$1,
@@ -897,6 +886,86 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
             }
         }
         return new Function('return ' + expr)();
+    }
+    function watch(vm, expOrFn, cb, options) {
+        if (isPlainObject(cb)) {
+            options = cb;
+            cb = cb.handler;
+        }
+        if (typeof cb === 'string') {
+            cb = vm[cb];
+        }
+        options = options || {};
+        options.user = true;
+        var exps = void 0;
+        if (_.isFunction(expOrFn) || !(exps = expOrFn.match(/[a-zA-Z0-9_.*]+|[|][|]|[&][&]|[(]|[)]/g)) || exps.length === 1 && !/\*/.test(expOrFn)) {
+            var watcher = new Watcher(vm.model, expOrFn, _.bind(cb, vm), options);
+            if (options.immediate) {
+                cb.call(vm, watcher.value);
+            }
+            return function unwatchFn() {
+                watcher.teardown();
+            };
+        }
+        var watchers = [];
+        var fns = exps.slice();
+        var complete = false,
+            running = false;
+        _.each(exps, function (exp, i) {
+            if (_.has(operators, exp)) {
+                return;
+            }
+            if (/\*\*$|\*$/.test(exp)) {
+                var isGlobal = /\*\*$/.test(exp);
+                if (isGlobal) {
+                    //a.**的形式
+                    exp = exp.replace(".**", "");
+                } else {
+                    //a.*的形式
+                    exp = exp.replace(".*", "");
+                }
+                var getter = parsePath(exp);
+                var v = getter.call(vm.model, vm.model);
+                var dep = new Dep();
+                if (isGlobal) {
+                    (v.__ob__._globalDeps || (v.__ob__._globalDeps = [])).push(dep);
+                } else {
+                    (v.__ob__._deps || (v.__ob__._deps = [])).push(dep);
+                }
+                var w = new Watcher(vm.model, function () {
+                    dep.depend();
+                    return NaN;
+                }, _.bind(cb, vm));
+                watchers.push(function unwatchFn() {
+                    w.teardown();
+                    v.__ob__._globalDeps && remove(v.__ob__._globalDeps, dep);
+                    v.__ob__._deps && remove(v.__ob__._deps, dep);
+                });
+                return;
+            }
+            var watcher = new Watcher(vm.model, exp, function () {
+                if (complete === true) {
+                    return;
+                }
+                fns[i] = true;
+                if (runBinaryFunction(fns)) {
+                    complete = true;
+                    cb.call(vm);
+                }
+                if (!running) {
+                    running = true;
+                    nextTick(function () {
+                        complete = false;
+                        running = false;
+                        fns = exps.slice();
+                    });
+                }
+            }, options);
+            watchers.push(function unwatchFn() {
+                watcher.teardown();
+            });
+        });
+        return watchers;
     }
 
     var VM = function () {
@@ -947,84 +1016,6 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
             }
         }
 
-        VM.prototype.$watch = function $watch(expOrFn, cb, options) {
-            var vm = this;
-            if (isPlainObject(cb)) {
-                return createWatcher(vm, expOrFn, cb, options);
-            }
-            options = options || {};
-            options.user = true;
-            var exps = void 0;
-            if (_.isFunction(expOrFn) || !(exps = expOrFn.match(/[a-zA-Z0-9_.*]+|[|][|]|[&][&]|[(]|[)]/g)) || exps.length === 1 && !/\*/.test(expOrFn)) {
-                var watcher = new Watcher(vm.model, expOrFn, _.bind(cb, vm), options);
-                if (options.immediate) {
-                    cb.call(vm, watcher.value);
-                }
-                return function unwatchFn() {
-                    watcher.teardown();
-                };
-            }
-            var watchers = [];
-            var fns = exps.slice();
-            var complete = false,
-                running = false;
-            _.each(exps, function (exp, i) {
-                if (_.has(operators, exp)) {
-                    return;
-                }
-                if (/\*\*$|\*$/.test(exp)) {
-                    var isGlobal = /\*\*$/.test(exp);
-                    if (isGlobal) {
-                        //a.**的形式
-                        exp = exp.replace(".**", "");
-                    } else {
-                        //a.*的形式
-                        exp = exp.replace(".*", "");
-                    }
-                    var getter = parsePath(exp);
-                    var v = getter.call(vm.model, vm.model);
-                    var dep = new Dep();
-                    if (isGlobal) {
-                        (v.__ob__._globalDeps || (v.__ob__._globalDeps = [])).push(dep);
-                    } else {
-                        (v.__ob__._deps || (v.__ob__._deps = [])).push(dep);
-                    }
-                    var w = new Watcher(vm.model, function () {
-                        dep.depend();
-                        return NaN;
-                    }, _.bind(cb, vm));
-                    watchers.push(function unwatchFn() {
-                        w.teardown();
-                        v.__ob__._globalDeps && remove(v.__ob__._globalDeps, dep);
-                        v.__ob__._deps && remove(v.__ob__._deps, dep);
-                    });
-                    return;
-                }
-                var watcher = new Watcher(vm.model, exp, function () {
-                    if (complete === true) {
-                        return;
-                    }
-                    fns[i] = true;
-                    if (runBinaryFunction(fns)) {
-                        complete = true;
-                        cb.call(vm);
-                    }
-                    if (!running) {
-                        running = true;
-                        nextTick(function () {
-                            complete = false;
-                            running = false;
-                            fns = exps.slice();
-                        });
-                    }
-                }, options);
-                watchers.push(function unwatchFn() {
-                    watcher.teardown();
-                });
-            });
-            return watchers;
-        };
-
         VM.prototype._init = function _init() {};
 
         VM.prototype.destroy = function destroy() {
@@ -1044,6 +1035,7 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
     exports.define = define;
     exports.version = version;
     exports.$$skipArray = $$skipArray;
+    exports.watch = watch;
     exports.VM = VM;
     exports.observerState = observerState;
     exports.Observer = Observer;

@@ -21,7 +21,7 @@
         if (typeof handler === 'string') {
             handler = vm[handler]
         }
-        return Fix.VM.prototype.$watch.call(vm, keyOrFn, handler, options)
+        return Fix.watch(vm, keyOrFn, handler, options)
     }
 
     var _init = BI.Widget.prototype._init;
