@@ -53,7 +53,6 @@ BI.createWidget({
 ## 对外方法
 | 名称     | 说明                           |  回调参数     
 | :------ |:-------------                  | :-----   
-| populate | 刷新列表 | items  |
 | setValue | 设置combo value值| v |
 | getValue | 获取combo value值 | — |
 

@@ -11,16 +11,16 @@
 BI.createWidget({
   type: "bi.icon_combo",
   element: "#wrapper",
-  iconClass: "rename-font",
+  iconClass: "close-font",
   items: [{
     value: "第一项",
-    iconClass: "delete-font"
+    iconClass: "search-font"
   }, {
     value: "第二项",
-    iconClass: "rename-font"
+    iconClass: "close-font"
   }, {
     value: "第三项",
-    iconClass: "move-font"
+    iconClass: "copy-font"
   }]
 });
 
