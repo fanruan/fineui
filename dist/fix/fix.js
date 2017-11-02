@@ -995,6 +995,8 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
                     }, _.bind(cb, vm));
                     watchers.push(function unwatchFn() {
                         w.teardown();
+                        v.__ob__._globalDeps && remove(v.__ob__._globalDeps, dep);
+                        v.__ob__._deps && remove(v.__ob__._deps, dep);
                     });
                     return;
                 }
