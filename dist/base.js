@@ -17104,7 +17104,7 @@ BI.RichEditorSizeChooser = BI.inherit(BI.RichEditorAction, {
             type: "bi.text_trigger",
             readonly: true,
             height: o.height,
-            triggerWidth: 12,
+            triggerWidth: 16,
             text: BI.i18nText("BI-Font_Size")
         });
 
