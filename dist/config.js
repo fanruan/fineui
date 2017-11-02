@@ -122,6 +122,7 @@ BI.i18n = {
     "BI-Time_Interval_Error_Text": "请保证前面时间小于/等于后面的时间",
     "BI-Basic_Time": "时间",
     "BI-Basic_OK": "确定",
+    "BI-Basic_Sure": "确定",
     "BI-Basic_Simple_Thursday": "四",
     "BI-Multi_Date_Year_Prev": "年前",
     "BI-Tiao_Data": "条数据",

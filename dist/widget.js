@@ -491,60 +491,7 @@ BI.AdaptiveArrangement = BI.inherit(BI.Widget, {
         item.element.mousedown(function () {
             self._setSelect(item)
         });
-        // o.resizable && item.element.resizable({
-        //     handles: "e, s, se",
-        //     minWidth: 20,
-        //     minHeight: 20,
-        //     autoHide: true,
-        //     helper: "bi-resizer",
-        //     start: function () {
-        //         item.element.css("zIndex", ++self.zIndex);
-        //         self.fireEvent(BI.AdaptiveArrangement.EVENT_ELEMENT_START_RESIZE);
-        //     },
-        //     resize: function (e, ui) {
-        //         // self._resize(item.attr("id"), ui.size);
-        //         self._resize(item.attr("id"), e, ui.size, ui.position);
-        //     },
-        //     stop: function (e, ui) {
-        //         self._stopResize(item.attr("id"), ui.size);
-        //         self.fireEvent(BI.AdaptiveArrangement.EVENT_ELEMENT_STOP_RESIZE, item.attr("id"), ui.size);
-        //         self.fireEvent(BI.AdaptiveArrangement.EVENT_RESIZE);
-        //     }
-        // });
     },
-
-    // _resize: function (name, e, size, position) {
-    //     var self = this;
-    //     this.scrollInterval(e, false, true, function (changedSize) {
-    //         size.width += changedSize.offsetX;
-    //         size.height += changedSize.offsetY;
-    //         var containerWidth = self.arrangement.container.element.width();
-    //         var containerHeight = self.arrangement.container.element.height();
-    //         self.arrangement.container.element.width(containerWidth + changedSize.offsetX);
-    //         self.arrangement.container.element.height(containerHeight + changedSize.offsetY);
-    //         switch (self.getLayoutType()) {
-    //             case BI.Arrangement.LAYOUT_TYPE.FREE:
-    //                 break;
-    //             case BI.Arrangement.LAYOUT_TYPE.GRID:
-    //                 self.setRegionSize(name, size);
-    //                 break;
-    //         }
-    //         self.fireEvent(BI.AdaptiveArrangement.EVENT_ELEMENT_RESIZE, name, size);
-    //     });
-    // },
-    //
-    // _stopResize: function (name, size) {
-    //     var self = this;
-    //     this.scrollEnd();
-    //     switch (this.getLayoutType()) {
-    //         case BI.Arrangement.LAYOUT_TYPE.FREE:
-    //             this.setRegionSize(name, size);
-    //             break;
-    //         case BI.Arrangement.LAYOUT_TYPE.GRID:
-    //             this.setRegionSize(name, size);
-    //             break;
-    //     }
-    // },
 
     _getScrollOffset: function () {
         return this.arrangement._getScrollOffset();
@@ -605,99 +552,99 @@ BI.AdaptiveArrangement = BI.inherit(BI.Widget, {
     },
 
     scrollInterval: function (e, isBorderScroll, isOverflowScroll, cb) {
-        var self = this;
-        var map = {
-            top: [-1, 0],
-            bottom: [1, 0],
-            left: [0, -1],
-            right: [0, 1]
-        };
-        var clientWidth = this.arrangement.getClientWidth();
-        var clientHeight = this.arrangement.getClientHeight();
-
-        function scrollTo(direction, callback) {
-            if (direction === "") {
-                self.lastActiveRegion = "";
-                if (self._scrollInterval) {
-                    clearInterval(self._scrollInterval);
-                    self._scrollInterval = null;
-                }
-                return;
-            }
-            if (self.lastActiveRegion !== direction) {
-                self.lastActiveRegion = direction;
-                if (self._scrollInterval) {
-                    clearInterval(self._scrollInterval);
-                    self._scrollInterval = null;
-                }
-                var count = 0;
-                self._scrollInterval = setInterval(function () {
-                    count++;
-                    if (count <= 3) {
-                        return;
-                    }
-                    var offset = self._getScrollOffset();
-                    var t = offset.top + map[direction][0] * 40;
-                    var l = offset.left + map[direction][1] * 40;
-                    if (t < 0 || l < 0) {
-                        return;
-                    }
-                    callback({
-                        offsetX: map[direction][1] * 40,
-                        offsetY: map[direction][0] * 40
-                    });
-                    self.scrollTo({
-                        top: t,
-                        left: l
-                    });
-                }, 300);
-            }
-        }
+        // var self = this;
+        // var map = {
+        //     top: [-1, 0],
+        //     bottom: [1, 0],
+        //     left: [0, -1],
+        //     right: [0, 1]
+        // };
+        // var clientWidth = this.arrangement.getClientWidth();
+        // var clientHeight = this.arrangement.getClientHeight();
+        //
+        // function scrollTo(direction, callback) {
+        //     if (direction === "") {
+        //         self.lastActiveRegion = "";
+        //         if (self._scrollInterval) {
+        //             clearInterval(self._scrollInterval);
+        //             self._scrollInterval = null;
+        //         }
+        //         return;
+        //     }
+        //     if (self.lastActiveRegion !== direction) {
+        //         self.lastActiveRegion = direction;
+        //         if (self._scrollInterval) {
+        //             clearInterval(self._scrollInterval);
+        //             self._scrollInterval = null;
+        //         }
+        //         var count = 0;
+        //         self._scrollInterval = setInterval(function () {
+        //             count++;
+        //             if (count <= 3) {
+        //                 return;
+        //             }
+        //             var offset = self._getScrollOffset();
+        //             var t = offset.top + map[direction][0] * 40;
+        //             var l = offset.left + map[direction][1] * 40;
+        //             if (t < 0 || l < 0) {
+        //                 return;
+        //             }
+        //             callback({
+        //                 offsetX: map[direction][1] * 40,
+        //                 offsetY: map[direction][0] * 40
+        //             });
+        //             self.scrollTo({
+        //                 top: t,
+        //                 left: l
+        //             });
+        //         }, 300);
+        //     }
+        // }
 
         cb({
             offsetX: 0,
             offsetY: 0
         });
-        var offset = this.element.offset();
-        var p = {
-            left: e.pageX - offset.left,
-            top: e.pageY - offset.top
-        };
-        //向上滚
-        if (isBorderScroll && p.top >= 0 && p.top <= 30) {
-            scrollTo("top", cb)
-        }
-        //向下滚
-        else if (isBorderScroll && p.top >= clientHeight - 30 && p.top <= clientHeight) {
-            scrollTo("bottom", cb)
-        }
-        //向左滚
-        else if (isBorderScroll && p.left >= 0 && p.left <= 30) {
-            scrollTo("left", cb)
-        }
-        //向右滚
-        else if (isBorderScroll && p.left >= clientWidth - 30 && p.left <= clientWidth) {
-            scrollTo("right", cb)
-        } else {
-            if (isOverflowScroll === true) {
-                if (p.top < 0) {
-                    scrollTo("top", cb);
-                }
-                else if (p.top > clientHeight) {
-                    scrollTo("bottom", cb);
-                }
-                else if (p.left < 0) {
-                    scrollTo("left", cb);
-                }
-                else if (p.left > clientWidth) {
-                    scrollTo("right", cb);
-                } else {
-                    scrollTo("", cb);
-                }
-            } else {
-                scrollTo("", cb);
-            }
-        }
+        // var offset = this.element.offset();
+        // var p = {
+        //     left: e.pageX - offset.left,
+        //     top: e.pageY - offset.top
+        // };
+        // //向上滚
+        // if (isBorderScroll && p.top >= 0 && p.top <= 30) {
+        //     scrollTo("top", cb)
+        // }
+        // //向下滚
+        // else if (isBorderScroll && p.top >= clientHeight - 30 && p.top <= clientHeight) {
+        //     scrollTo("bottom", cb)
+        // }
+        // //向左滚
+        // else if (isBorderScroll && p.left >= 0 && p.left <= 30) {
+        //     scrollTo("left", cb)
+        // }
+        // //向右滚
+        // else if (isBorderScroll && p.left >= clientWidth - 30 && p.left <= clientWidth) {
+        //     scrollTo("right", cb)
+        // } else {
+        //     if (isOverflowScroll === true) {
+        //         if (p.top < 0) {
+        //             scrollTo("top", cb);
+        //         }
+        //         else if (p.top > clientHeight) {
+        //             scrollTo("bottom", cb);
+        //         }
+        //         else if (p.left < 0) {
+        //             scrollTo("left", cb);
+        //         }
+        //         else if (p.left > clientWidth) {
+        //             scrollTo("right", cb);
+        //         } else {
+        //             scrollTo("", cb);
+        //         }
+        //     } else {
+        //         scrollTo("", cb);
+        //     }
+        // }
     },
 
     scrollEnd: function () {
@@ -829,30 +776,30 @@ BI.Arrangement = BI.inherit(BI.Widget, {
         });
         this.container = BI.createWidget({
             type: "bi.absolute",
+            scrollable: true,
             cls: "arrangement-container",
             items: o.items.concat([this.block, this.arrangement])
         });
 
-        this.scrollContainer = BI.createWidget({
-            type: "bi.adaptive",
-            width: "100%",
-            height: "100%",
-            scrollable: true,
-            items: [this.container]
-        });
-        this.scrollContainer.element.scroll(function () {
+        this.container.element.scroll(function () {
             self.fireEvent(BI.Arrangement.EVENT_SCROLL, {
-                scrollLeft: self.scrollContainer.element.scrollLeft(),
-                scrollTop: self.scrollContainer.element.scrollTop(),
-                clientWidth: self.scrollContainer.element[0].clientWidth,
-                clientHeight: self.scrollContainer.element[0].clientHeight
+                scrollLeft: self.container.element.scrollLeft(),
+                scrollTop: self.container.element.scrollTop(),
+                clientWidth: self.container.element[0].clientWidth,
+                clientHeight: self.container.element[0].clientHeight
             });
         });
 
         BI.createWidget({
-            type: "bi.adaptive",
+            type: "bi.absolute",
             element: this,
-            items: [this.scrollContainer]
+            items: [{
+                el: this.container,
+                left: 0,
+                right: 0,
+                top: 0,
+                bottom: 0
+            }]
         });
         this.regions = {};
         if (o.items.length > 0) {
@@ -1050,8 +997,8 @@ BI.Arrangement = BI.inherit(BI.Widget, {
 
     _getScrollOffset: function () {
         return {
-            left: this.scrollContainer.element[0].scrollLeft,
-            top: this.scrollContainer.element[0].scrollTop
+            left: this.container.element[0].scrollLeft,
+            top: this.container.element[0].scrollTop
         }
     },
 
@@ -1102,26 +1049,15 @@ BI.Arrangement = BI.inherit(BI.Widget, {
     },
 
     getClientWidth: function () {
-        return this.scrollContainer.element[0].clientWidth;
+        return this.container.element[0].clientWidth;
     },
 
     getClientHeight: function () {
-        return this.scrollContainer.element[0].clientHeight;
+        return this.container.element[0].clientHeight;
     },
 
     _applyContainer: function () {
-        //先掩藏后显示能够明确滚动条是否出现
-        this.scrollContainer.element.css("overflow", "hidden");
         var occupied = this._getRegionOccupied();
-        if (this.container._width !== occupied.left + occupied.width) {
-            this.container.element.width(occupied.left + occupied.width);
-            this.container._width = occupied.left + occupied.width;
-        }
-        if (this.container._height !== occupied.top + occupied.height) {
-            this.container.element.height(occupied.top + occupied.height);
-            this.container._height = occupied.top + occupied.height;
-        }
-        this.scrollContainer.element.css("overflow", "auto");
         return occupied;
     },
 
@@ -1692,8 +1628,8 @@ BI.Arrangement = BI.inherit(BI.Widget, {
     },
 
     scrollTo: function (scroll) {
-        this.scrollContainer.element.scrollTop(scroll.top);
-        this.scrollContainer.element.scrollLeft(scroll.left);
+        this.container.element.scrollTop(scroll.top);
+        this.container.element.scrollLeft(scroll.left);
     },
 
     zoom: function (ratio) {
@@ -2357,7 +2293,6 @@ BI.shortcut('bi.date_combo', BI.DateCombo);BI.DateTrigger = BI.inherit(BI.Trigge
     _const: {
         hgap: 4,
         vgap: 2,
-        triggerWidth: 30,
         yearLength: 4,
         yearMonthLength: 7
     },
@@ -2367,7 +2302,7 @@ BI.shortcut('bi.date_combo', BI.DateCombo);BI.DateTrigger = BI.inherit(BI.Trigge
             extraCls: "bi-date-trigger",
             min: '1900-01-01', //最小日期
             max: '2099-12-31', //最大日期
-            height: 25
+            height: 24
         });
     },
     _init: function () {
@@ -2871,7 +2806,7 @@ BI.DateTimeCombo = BI.inherit(BI.Single, {
         var triggerBtn = BI.createWidget({
             type: "bi.icon_button",
             cls: "bi-trigger-icon-button date-font bi-border-right",
-            width: 30,
+            width: 24,
             height: 24
         });
         triggerBtn.on(BI.TriggerIconButton.EVENT_CHANGE, function () {
@@ -3209,7 +3144,6 @@ BI.shortcut("bi.date_time_select", BI.DateTimeSelect);/**
 BI.DateTimeTrigger = BI.inherit(BI.Trigger, {
     _const: {
         hgap: 4,
-        triggerWidth: 30
     },
 
     _defaultConfig: function () {
@@ -3237,7 +3171,7 @@ BI.DateTimeTrigger = BI.inherit(BI.Trigger, {
             element: this,
             items: [{
                 el: BI.createWidget(),
-                width: c.triggerWidth
+                width: o.height
             }, {
                 el: this.text
             }]
@@ -4073,7 +4007,7 @@ BI.SearchEditor = BI.inherit(BI.Widget, {
         var conf = BI.SearchEditor.superclass._defaultConfig.apply(this, arguments);
         return BI.extend(conf, {
             baseCls: "bi-search-editor bi-border",
-            height: 30,
+            height: 24,
             errorText: "",
             watermark: BI.i18nText("BI-Basic_Search"),
             validationChecker: BI.emptyFn,
@@ -4292,7 +4226,7 @@ BI.TextEditor = BI.inherit(BI.Widget, {
             allowBlank: false,
             watermark: "",
             errorText: "",
-            height: 30
+            height: 24
         })
     },
 
@@ -5847,14 +5781,13 @@ BI.MonthTrigger = BI.inherit(BI.Trigger, {
     _const: {
         hgap: 4,
         vgap: 2,
-        triggerWidth: 25,
         errorText: BI.i18nText("BI-Month_Trigger_Error_Text")
     },
 
     _defaultConfig: function () {
         return BI.extend(BI.MonthTrigger.superclass._defaultConfig.apply(this, arguments), {
             extraCls: "bi-month-trigger bi-border",
-            height: 25
+            height: 24
         });
     },
     _init: function () {
@@ -5910,15 +5843,15 @@ BI.MonthTrigger = BI.inherit(BI.Trigger, {
                         type: "bi.text_button",
                         text: BI.i18nText("BI-Multi_Date_Month"),
                         baseCls: "bi-trigger-month-text",
-                        width: c.triggerWidth
+                        width: o.height
                     },
-                    width: c.triggerWidth
+                    width: o.height
                 }, {
                     el: {
                         type: "bi.trigger_icon_button",
-                        width: c.triggerWidth
+                        width: o.height
                     },
-                    width: c.triggerWidth
+                    width: o.height
                 }
             ]
         });
@@ -6230,8 +6163,8 @@ BI.MultiDateCombo = BI.inherit(BI.Single, {
         var triggerBtn = BI.createWidget({
             type: "bi.icon_button",
             cls: "bi-trigger-icon-button date-font",
-            width: 30,
-            height: 23
+            width: 24,
+            height: 24
         });
         triggerBtn.on(BI.TriggerIconButton.EVENT_CHANGE, function () {
             if (self.combo.isViewVisible()) {
@@ -6243,8 +6176,8 @@ BI.MultiDateCombo = BI.inherit(BI.Single, {
         this.changeIcon = BI.createWidget({
             type: "bi.icon_button",
             cls: "bi-trigger-icon-button date-change-h-font",
-            width: 30,
-            height: 23
+            width: 24,
+            height: 24
         });
 
 
@@ -13989,7 +13922,6 @@ BI.QuarterTrigger = BI.inherit(BI.Trigger, {
     _const: {
         hgap: 4,
         vgap: 2,
-        triggerWidth: 30,
         textWidth: 40,
         errorText: BI.i18nText("BI-Quarter_Trigger_Error_Text")
     },
@@ -13997,7 +13929,7 @@ BI.QuarterTrigger = BI.inherit(BI.Trigger, {
     _defaultConfig: function () {
         return BI.extend(BI.QuarterTrigger.superclass._defaultConfig.apply(this, arguments), {
             extraCls: "bi-quarter-trigger bi-border",
-            height: 25
+            height: 24
         });
     },
     _init: function () {
@@ -14060,9 +13992,9 @@ BI.QuarterTrigger = BI.inherit(BI.Trigger, {
                 }, {
                     el: {
                         type: "bi.trigger_icon_button",
-                        width: c.triggerWidth
+                        width: o.height
                     },
-                    width: c.triggerWidth
+                    width: o.height
                 }
             ]
         });
@@ -16133,7 +16065,7 @@ BI.SingleTreeCombo = BI.inherit(BI.Widget, {
         return BI.extend(BI.SingleTreeCombo.superclass._defaultConfig.apply(this, arguments), {
             baseCls: "bi-single-tree-combo",
             trigger: {},
-            height: 30,
+            height: 24,
             text: "",
             items: []
         });
@@ -16268,7 +16200,7 @@ BI.SingleTreeTrigger = BI.inherit(BI.Trigger, {
     _defaultConfig: function () {
         return BI.extend(BI.SingleTreeTrigger.superclass._defaultConfig.apply(this, arguments), {
             baseCls: "bi-single-tree-trigger",
-            height: 30,
+            height: 24,
             text: "",
             items: []
         });
@@ -16833,7 +16765,6 @@ BI.YearTrigger = BI.inherit(BI.Trigger, {
     _const: {
         hgap: 4,
         vgap: 2,
-        triggerWidth: 25,
         errorText: BI.i18nText("BI-Please_Input_Positive_Integer"),
         errorTextInvalid: BI.i18nText("BI-Year_Trigger_Invalid_Text")
     },
@@ -16843,7 +16774,7 @@ BI.YearTrigger = BI.inherit(BI.Trigger, {
             extraCls: "bi-year-trigger bi-border",
             min: '1900-01-01', //最小日期
             max: '2099-12-31', //最大日期
-            height: 25
+            height: 24
         });
     },
     _init: function () {
@@ -16900,15 +16831,15 @@ BI.YearTrigger = BI.inherit(BI.Trigger, {
                         type: "bi.text_button",
                         baseCls: "bi-trigger-year-text",
                         text: BI.i18nText("BI-Multi_Date_Year"),
-                        width: c.triggerWidth
+                        width: o.height
                     },
-                    width: c.triggerWidth
+                    width: o.height
                 }, {
                     el: {
                         type: "bi.trigger_icon_button",
-                        width: c.triggerWidth
+                        width: o.height
                     },
-                    width: c.triggerWidth
+                    width: o.height
                 }
             ]
         });

@@ -9,7 +9,6 @@ BI.QuarterTrigger = BI.inherit(BI.Trigger, {
     _const: {
         hgap: 4,
         vgap: 2,
-        triggerWidth: 30,
         textWidth: 40,
         errorText: BI.i18nText("BI-Quarter_Trigger_Error_Text")
     },
@@ -17,7 +16,7 @@ BI.QuarterTrigger = BI.inherit(BI.Trigger, {
     _defaultConfig: function () {
         return BI.extend(BI.QuarterTrigger.superclass._defaultConfig.apply(this, arguments), {
             extraCls: "bi-quarter-trigger bi-border",
-            height: 25
+            height: 24
         });
     },
     _init: function () {
@@ -80,9 +79,9 @@ BI.QuarterTrigger = BI.inherit(BI.Trigger, {
                 }, {
                     el: {
                         type: "bi.trigger_icon_button",
-                        width: c.triggerWidth
+                        width: o.height
                     },
-                    width: c.triggerWidth
+                    width: o.height
                 }
             ]
         });

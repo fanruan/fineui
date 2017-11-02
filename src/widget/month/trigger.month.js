@@ -9,14 +9,13 @@ BI.MonthTrigger = BI.inherit(BI.Trigger, {
     _const: {
         hgap: 4,
         vgap: 2,
-        triggerWidth: 25,
         errorText: BI.i18nText("BI-Month_Trigger_Error_Text")
     },
 
     _defaultConfig: function () {
         return BI.extend(BI.MonthTrigger.superclass._defaultConfig.apply(this, arguments), {
             extraCls: "bi-month-trigger bi-border",
-            height: 25
+            height: 24
         });
     },
     _init: function () {
@@ -72,15 +71,15 @@ BI.MonthTrigger = BI.inherit(BI.Trigger, {
                         type: "bi.text_button",
                         text: BI.i18nText("BI-Multi_Date_Month"),
                         baseCls: "bi-trigger-month-text",
-                        width: c.triggerWidth
+                        width: o.height
                     },
-                    width: c.triggerWidth
+                    width: o.height
                 }, {
                     el: {
                         type: "bi.trigger_icon_button",
-                        width: c.triggerWidth
+                        width: o.height
                     },
-                    width: c.triggerWidth
+                    width: o.height
                 }
             ]
         });

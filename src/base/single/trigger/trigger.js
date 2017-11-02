@@ -9,7 +9,7 @@ BI.Trigger = BI.inherit(BI.Single, {
         var conf = BI.Trigger.superclass._defaultConfig.apply(this, arguments);
         return BI.extend(conf, {
             baseCls: (conf.baseCls || "") + " bi-trigger cursor-pointer",
-            height: 30
+            height: 24
         })
     },
 

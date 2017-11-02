@@ -29,30 +29,30 @@ BI.Arrangement = BI.inherit(BI.Widget, {
         });
         this.container = BI.createWidget({
             type: "bi.absolute",
+            scrollable: true,
             cls: "arrangement-container",
             items: o.items.concat([this.block, this.arrangement])
         });
 
-        this.scrollContainer = BI.createWidget({
-            type: "bi.adaptive",
-            width: "100%",
-            height: "100%",
-            scrollable: true,
-            items: [this.container]
-        });
-        this.scrollContainer.element.scroll(function () {
+        this.container.element.scroll(function () {
             self.fireEvent(BI.Arrangement.EVENT_SCROLL, {
-                scrollLeft: self.scrollContainer.element.scrollLeft(),
-                scrollTop: self.scrollContainer.element.scrollTop(),
-                clientWidth: self.scrollContainer.element[0].clientWidth,
-                clientHeight: self.scrollContainer.element[0].clientHeight
+                scrollLeft: self.container.element.scrollLeft(),
+                scrollTop: self.container.element.scrollTop(),
+                clientWidth: self.container.element[0].clientWidth,
+                clientHeight: self.container.element[0].clientHeight
             });
         });
 
         BI.createWidget({
-            type: "bi.adaptive",
+            type: "bi.absolute",
             element: this,
-            items: [this.scrollContainer]
+            items: [{
+                el: this.container,
+                left: 0,
+                right: 0,
+                top: 0,
+                bottom: 0
+            }]
         });
         this.regions = {};
         if (o.items.length > 0) {
@@ -250,8 +250,8 @@ BI.Arrangement = BI.inherit(BI.Widget, {
 
     _getScrollOffset: function () {
         return {
-            left: this.scrollContainer.element[0].scrollLeft,
-            top: this.scrollContainer.element[0].scrollTop
+            left: this.container.element[0].scrollLeft,
+            top: this.container.element[0].scrollTop
         }
     },
 
@@ -302,26 +302,15 @@ BI.Arrangement = BI.inherit(BI.Widget, {
     },
 
     getClientWidth: function () {
-        return this.scrollContainer.element[0].clientWidth;
+        return this.container.element[0].clientWidth;
     },
 
     getClientHeight: function () {
-        return this.scrollContainer.element[0].clientHeight;
+        return this.container.element[0].clientHeight;
     },
 
     _applyContainer: function () {
-        //先掩藏后显示能够明确滚动条是否出现
-        this.scrollContainer.element.css("overflow", "hidden");
         var occupied = this._getRegionOccupied();
-        if (this.container._width !== occupied.left + occupied.width) {
-            this.container.element.width(occupied.left + occupied.width);
-            this.container._width = occupied.left + occupied.width;
-        }
-        if (this.container._height !== occupied.top + occupied.height) {
-            this.container.element.height(occupied.top + occupied.height);
-            this.container._height = occupied.top + occupied.height;
-        }
-        this.scrollContainer.element.css("overflow", "auto");
         return occupied;
     },
 
@@ -892,8 +881,8 @@ BI.Arrangement = BI.inherit(BI.Widget, {
     },
 
     scrollTo: function (scroll) {
-        this.scrollContainer.element.scrollTop(scroll.top);
-        this.scrollContainer.element.scrollLeft(scroll.left);
+        this.container.element.scrollTop(scroll.top);
+        this.container.element.scrollLeft(scroll.left);
     },
 
     zoom: function (ratio) {

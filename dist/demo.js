@@ -5396,10 +5396,15 @@ Demo.FIX_CONFIG = [{
 }, {
     id: 74,
     pId: 7,
-    text: "watcher表达式",
+    text: "watcher且或表达式",
     value: "demo.fix4"
 }, {
     id: 75,
+    pId: 7,
+    text: "watcher星号表达式",
+    value: "demo.fix5"
+}, {
+    id: 76,
     pId: 7,
     text: "一个混合的例子",
     value: "demo.fix"
@@ -10260,6 +10265,54 @@ BI.shortcut("demo.tmp", Demo.Func);
     });
 
     BI.shortcut("demo.fix", Demo.Fix);
+}());;(function () {
+    var model = Fix.define({
+        name: "原始属性",
+        arr: [{
+            n: 'a'
+        }, {
+            n: 0
+        }]
+    });
+
+    Demo.Fix = BI.inherit(BI.Widget, {
+        _store: function () {
+            return model;
+        },
+        watch: {
+            "arr.**": function () {
+                debugger
+            },
+            "arr.1.*": function () {
+                this.button.setText(this.model.name + "-" + this.model.arr[1].n)
+            }
+        },
+        render: function () {
+            var self = this;
+            return {
+                type: "bi.absolute",
+                items: [{
+                    el: {
+                        type: "bi.button",
+                        ref: function () {
+                            self.button = this;
+                        },
+                        handler: function () {
+                            self.model.arr[0].n += 1;
+                            self.model.arr[1].n += 1;
+                        },
+                        text: this.model.name + "-" + this.model.arr[1].n
+                    }
+                }]
+            }
+        },
+        mounted: function () {
+
+
+        }
+    });
+
+    BI.shortcut("demo.fix5", Demo.Fix);
 }());;(function(){
     var model = Fix.define({
         name: "原始属性",

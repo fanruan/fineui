@@ -32,10 +32,10 @@ BI.ComboGroup = BI.inherit(BI.Widget, {
 
     _init: function () {
         BI.ComboGroup.superclass._init.apply(this, arguments);
-        this.populate(this.options.el);
+        this._populate(this.options.el);
     },
 
-    populate: function (item) {
+    _populate: function (item) {
         var self = this, o = this.options;
         var children = o.children;
         if (BI.isEmpty(children)) {

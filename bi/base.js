@@ -3639,10 +3639,10 @@ BI.ComboGroup = BI.inherit(BI.Widget, {
 
     _init: function () {
         BI.ComboGroup.superclass._init.apply(this, arguments);
-        this.populate(this.options.el);
+        this._populate(this.options.el);
     },
 
-    populate: function (item) {
+    _populate: function (item) {
         var self = this, o = this.options;
         var children = o.children;
         if (BI.isEmpty(children)) {
@@ -17104,7 +17104,7 @@ BI.RichEditorSizeChooser = BI.inherit(BI.RichEditorAction, {
             type: "bi.text_trigger",
             readonly: true,
             height: o.height,
-            triggerWidth: 12,
+            triggerWidth: 16,
             text: BI.i18nText("BI-Font_Size")
         });
 
@@ -21477,7 +21477,7 @@ BI.Trigger = BI.inherit(BI.Single, {
         var conf = BI.Trigger.superclass._defaultConfig.apply(this, arguments);
         return BI.extend(conf, {
             baseCls: (conf.baseCls || "") + " bi-trigger cursor-pointer",
-            height: 30
+            height: 24
         })
     },
 

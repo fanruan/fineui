@@ -11,7 +11,7 @@ BI.IconTrigger = BI.inherit(BI.Trigger, {
         return BI.extend(BI.IconTrigger.superclass._defaultConfig.apply(this, arguments), {
             extraCls: "bi-icon-trigger",
             el: {},
-            height: 30
+            height: 24
         });
     },
     _init: function () {

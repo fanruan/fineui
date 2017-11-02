@@ -8,7 +8,7 @@ BI.TextValueCheckCombo = BI.inherit(BI.Widget, {
         return BI.extend(BI.TextValueCheckCombo.superclass._defaultConfig.apply(this, arguments), {
             baseClass: "bi-text-value-check-combo",
             width: 100,
-            height: 30,
+            height: 24,
             chooseType: BI.ButtonGroup.CHOOSE_TYPE_SINGLE,
             text: ""
         })

@@ -20877,6 +20877,15 @@ Date.prototype.getBeforeMultiMonth = function (n) {
     return dt;
 };
 
+//获得当前时区对应指定时区的时间
+Date.prototype.getTimeZoneTimeByTimezoneOffset = function (offset) {
+    var dt = new Date(this.getTime());
+    var localTime = dt.getTime();
+    var localOffset = dt.getTimezoneOffset() * 60000; //获得当地时间偏移的毫秒数
+    var utc = localTime + localOffset; //utc即GMT时间标准时区
+    return new Date(utc + offset);
+};
+
 /** Checks date and time equality */
 Date.prototype.equalsTo = function (date) {
     return ((this.getFullYear() == date.getFullYear()) &&

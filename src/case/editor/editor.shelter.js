@@ -20,7 +20,7 @@ BI.ShelterEditor = BI.inherit(BI.Widget, {
             allowBlank: true,
             watermark: "",
             errorText: "",
-            height: 30,
+            height: 24,
             textAlign: "left"
         })
     },

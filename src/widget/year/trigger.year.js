@@ -9,7 +9,6 @@ BI.YearTrigger = BI.inherit(BI.Trigger, {
     _const: {
         hgap: 4,
         vgap: 2,
-        triggerWidth: 25,
         errorText: BI.i18nText("BI-Please_Input_Positive_Integer"),
         errorTextInvalid: BI.i18nText("BI-Year_Trigger_Invalid_Text")
     },
@@ -19,7 +18,7 @@ BI.YearTrigger = BI.inherit(BI.Trigger, {
             extraCls: "bi-year-trigger bi-border",
             min: '1900-01-01', //最小日期
             max: '2099-12-31', //最大日期
-            height: 25
+            height: 24
         });
     },
     _init: function () {
@@ -76,15 +75,15 @@ BI.YearTrigger = BI.inherit(BI.Trigger, {
                         type: "bi.text_button",
                         baseCls: "bi-trigger-year-text",
                         text: BI.i18nText("BI-Multi_Date_Year"),
-                        width: c.triggerWidth
+                        width: o.height
                     },
-                    width: c.triggerWidth
+                    width: o.height
                 }, {
                     el: {
                         type: "bi.trigger_icon_button",
-                        width: c.triggerWidth
+                        width: o.height
                     },
-                    width: c.triggerWidth
+                    width: o.height
                 }
             ]
         });
