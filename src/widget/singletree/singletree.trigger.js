@@ -8,7 +8,7 @@ BI.SingleTreeTrigger = BI.inherit(BI.Trigger, {
     _defaultConfig: function () {
         return BI.extend(BI.SingleTreeTrigger.superclass._defaultConfig.apply(this, arguments), {
             baseCls: "bi-single-tree-trigger",
-            height: 30,
+            height: 24,
             text: "",
             items: []
         });

@@ -4,7 +4,6 @@
 BI.DateTimeTrigger = BI.inherit(BI.Trigger, {
     _const: {
         hgap: 4,
-        triggerWidth: 30
     },
 
     _defaultConfig: function () {
@@ -32,7 +31,7 @@ BI.DateTimeTrigger = BI.inherit(BI.Trigger, {
             element: this,
             items: [{
                 el: BI.createWidget(),
-                width: c.triggerWidth
+                width: o.height
             }, {
                 el: this.text
             }]

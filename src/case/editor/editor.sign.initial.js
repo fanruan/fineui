@@ -19,7 +19,7 @@ BI.SignInitialEditor = BI.inherit(BI.Widget, {
             errorText: "",
             value: "",
             text: "",
-            height: 30
+            height: 24
         })
     },
 

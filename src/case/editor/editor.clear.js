@@ -9,7 +9,7 @@ BI.ClearEditor = BI.inherit(BI.Widget, {
         var conf = BI.ClearEditor.superclass._defaultConfig.apply(this, arguments);
         return BI.extend(conf, {
             baseCls: "bi-clear-editor",
-            height: 30,
+            height: 24,
             errorText: "",
             watermark: "",
             validationChecker: BI.emptyFn,

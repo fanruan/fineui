@@ -2,7 +2,6 @@ BI.DateTrigger = BI.inherit(BI.Trigger, {
     _const: {
         hgap: 4,
         vgap: 2,
-        triggerWidth: 30,
         yearLength: 4,
         yearMonthLength: 7
     },
@@ -12,7 +11,7 @@ BI.DateTrigger = BI.inherit(BI.Trigger, {
             extraCls: "bi-date-trigger",
             min: '1900-01-01', //最小日期
             max: '2099-12-31', //最大日期
-            height: 25
+            height: 24
         });
     },
     _init: function () {

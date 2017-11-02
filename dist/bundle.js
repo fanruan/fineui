@@ -47218,7 +47218,7 @@ BI.Trigger = BI.inherit(BI.Single, {
         var conf = BI.Trigger.superclass._defaultConfig.apply(this, arguments);
         return BI.extend(conf, {
             baseCls: (conf.baseCls || "") + " bi-trigger cursor-pointer",
-            height: 30
+            height: 24
         })
     },
 
@@ -67502,7 +67502,7 @@ BI.EditorIconCheckCombo = BI.inherit(BI.Widget, {
         return BI.extend(BI.EditorIconCheckCombo.superclass._defaultConfig.apply(this, arguments), {
             baseClass: "bi-check-editor-combo",
             width: 100,
-            height: 30,
+            height: 24,
             chooseType: BI.ButtonGroup.CHOOSE_TYPE_SINGLE,
             validationChecker: BI.emptyFn,
             quitChecker: BI.emptyFn,
@@ -67822,7 +67822,7 @@ BI.StaticCombo = BI.inherit(BI.Widget, {
     _defaultConfig: function () {
         return BI.extend(BI.StaticCombo.superclass._defaultConfig.apply(this, arguments), {
             baseCls: "bi-static-combo",
-            height: 30,
+            height: 24,
             text: "",
             el: {},
             items: [],
@@ -67888,7 +67888,7 @@ BI.TextValueCheckCombo = BI.inherit(BI.Widget, {
         return BI.extend(BI.TextValueCheckCombo.superclass._defaultConfig.apply(this, arguments), {
             baseClass: "bi-text-value-check-combo",
             width: 100,
-            height: 30,
+            height: 24,
             chooseType: BI.ButtonGroup.CHOOSE_TYPE_SINGLE,
             text: ""
         })
@@ -68401,7 +68401,7 @@ BI.ClearEditor = BI.inherit(BI.Widget, {
         var conf = BI.ClearEditor.superclass._defaultConfig.apply(this, arguments);
         return BI.extend(conf, {
             baseCls: "bi-clear-editor",
-            height: 30,
+            height: 24,
             errorText: "",
             watermark: "",
             validationChecker: BI.emptyFn,
@@ -68580,7 +68580,7 @@ BI.ShelterEditor = BI.inherit(BI.Widget, {
             allowBlank: true,
             watermark: "",
             errorText: "",
-            height: 30,
+            height: 24,
             textAlign: "left"
         })
     },
@@ -68837,7 +68837,7 @@ BI.SignInitialEditor = BI.inherit(BI.Widget, {
             errorText: "",
             value: "",
             text: "",
-            height: 30
+            height: 24
         })
     },
 
@@ -69104,7 +69104,7 @@ BI.SignEditor = BI.inherit(BI.Widget, {
             allowBlank: true,
             watermark: "",
             errorText: "",
-            height: 30
+            height: 24
         })
     },
 
@@ -69362,7 +69362,7 @@ BI.StateEditor = BI.inherit(BI.Widget, {
             allowBlank: true,
             watermark: "",
             errorText: "",
-            height: 30
+            height: 24
         })
     },
 
@@ -69636,7 +69636,7 @@ BI.SimpleStateEditor = BI.inherit(BI.Widget, {
             allowBlank: true,
             watermark: "",
             errorText: "",
-            height: 30
+            height: 24
         })
     },
 
@@ -71768,7 +71768,7 @@ BI.Segment = BI.inherit(BI.Widget, {
         return BI.extend(BI.Segment.superclass._defaultConfig.apply(this, arguments), {
             baseCls: "bi-segment",
             items: [],
-            height: 30
+            height: 24
         });
     },
     _init: function () {
@@ -74628,13 +74628,12 @@ BI.EditorTrigger = BI.inherit(BI.Trigger, {
         var conf = BI.EditorTrigger.superclass._defaultConfig.apply(this, arguments);
         return BI.extend(conf, {
             baseCls: (conf.baseCls || "") + " bi-editor-trigger bi-border",
-            height: 30,
+            height: 24,
             validationChecker: BI.emptyFn,
             quitChecker: BI.emptyFn,
             allowBlank: false,
             watermark: "",
-            errorText: "",
-            triggerWidth: 30
+            errorText: ""
         });
     },
 
@@ -74669,9 +74668,9 @@ BI.EditorTrigger = BI.inherit(BI.Trigger, {
                     el: {
                         type: "bi.trigger_icon_button",
                         cls: "bi-border-left",
-                        width: o.triggerWidth
+                        width: o.triggerWidth || o.height
                     },
-                    width: o.triggerWidth
+                    width: o.triggerWidth || o.height
                 }
             ]
         });
@@ -74703,7 +74702,7 @@ BI.IconTrigger = BI.inherit(BI.Trigger, {
         return BI.extend(BI.IconTrigger.superclass._defaultConfig.apply(this, arguments), {
             extraCls: "bi-icon-trigger",
             el: {},
-            height: 30
+            height: 24
         });
     },
     _init: function () {
@@ -74726,15 +74725,14 @@ BI.shortcut('bi.icon_trigger', BI.IconTrigger);/**
  */
 BI.IconTextTrigger = BI.inherit(BI.Trigger, {
     _const: {
-        hgap: 4,
-        triggerWidth: 30
+        hgap: 4
     },
 
     _defaultConfig: function () {
         var conf = BI.IconTextTrigger.superclass._defaultConfig.apply(this, arguments);
         return BI.extend(conf, {
             baseCls: (conf.baseCls || "") + " bi-text-trigger",
-            height: 30
+            height: 24
         });
     },
 
@@ -74751,7 +74749,7 @@ BI.IconTextTrigger = BI.inherit(BI.Trigger, {
         this.trigerButton = BI.createWidget({
             type: "bi.trigger_icon_button",
             cls: "bi-border-left",
-            width: c.triggerWidth
+            width: o.triggerWidth || o.height
         });
 
         BI.createWidget({
@@ -74766,13 +74764,13 @@ BI.IconTextTrigger = BI.inherit(BI.Trigger, {
                     },
                     disableSelected: true
                 },
-                width: 24
+                width: o.triggerWidth || o.height
             },
                 {
                     el: this.text
                 }, {
                     el: this.trigerButton,
-                    width: c.triggerWidth
+                    width: o.triggerWidth || o.height
                 }
             ]
         });
@@ -74808,8 +74806,7 @@ BI.TextTrigger = BI.inherit(BI.Trigger, {
         var conf = BI.TextTrigger.superclass._defaultConfig.apply(this, arguments);
         return BI.extend(conf, {
             baseCls: (conf.baseCls || "") + " bi-text-trigger",
-            height: 30,
-            triggerWidth: 30
+            height: 24
         });
     },
 
@@ -74827,7 +74824,7 @@ BI.TextTrigger = BI.inherit(BI.Trigger, {
         this.trigerButton = BI.createWidget({
             type: "bi.trigger_icon_button",
             cls: "bi-border-left",
-            width: o.triggerWidth
+            width: o.triggerWidth || o.height
         });
 
         BI.createWidget({
@@ -74838,7 +74835,7 @@ BI.TextTrigger = BI.inherit(BI.Trigger, {
                     el: this.text
                 }, {
                     el: this.trigerButton,
-                    width: o.triggerWidth
+                    width: o.triggerWidth || o.height
                 }
             ]
         });
@@ -74974,8 +74971,7 @@ BI.SmallTextTrigger = BI.inherit(BI.Trigger, {
         var conf = BI.SmallTextTrigger.superclass._defaultConfig.apply(this, arguments);
         return BI.extend(conf, {
             baseCls: (conf.baseCls || "") + " bi-text-trigger",
-            height: 20,
-            triggerWidth: 20
+            height: 20
         });
     },
 
@@ -74991,7 +74987,7 @@ BI.SmallTextTrigger = BI.inherit(BI.Trigger, {
         });
         this.trigerButton = BI.createWidget({
             type: "bi.trigger_icon_button",
-            width: o.triggerWidth
+            width: o.triggerWidth || o.height
         });
 
         BI.createWidget({
@@ -75002,7 +74998,7 @@ BI.SmallTextTrigger = BI.inherit(BI.Trigger, {
                     el: this.text
                 }, {
                     el: this.trigerButton,
-                    width: o.triggerWidth
+                    width: o.triggerWidth || o.height
                 }
             ]
         });
@@ -77311,7 +77307,6 @@ BI.shortcut('bi.date_combo', BI.DateCombo);BI.DateTrigger = BI.inherit(BI.Trigge
     _const: {
         hgap: 4,
         vgap: 2,
-        triggerWidth: 30,
         yearLength: 4,
         yearMonthLength: 7
     },
@@ -77321,7 +77316,7 @@ BI.shortcut('bi.date_combo', BI.DateCombo);BI.DateTrigger = BI.inherit(BI.Trigge
             extraCls: "bi-date-trigger",
             min: '1900-01-01', //最小日期
             max: '2099-12-31', //最大日期
-            height: 25
+            height: 24
         });
     },
     _init: function () {
@@ -77825,7 +77820,7 @@ BI.DateTimeCombo = BI.inherit(BI.Single, {
         var triggerBtn = BI.createWidget({
             type: "bi.icon_button",
             cls: "bi-trigger-icon-button date-font bi-border-right",
-            width: 30,
+            width: 24,
             height: 24
         });
         triggerBtn.on(BI.TriggerIconButton.EVENT_CHANGE, function () {
@@ -78163,7 +78158,6 @@ BI.shortcut("bi.date_time_select", BI.DateTimeSelect);/**
 BI.DateTimeTrigger = BI.inherit(BI.Trigger, {
     _const: {
         hgap: 4,
-        triggerWidth: 30
     },
 
     _defaultConfig: function () {
@@ -78191,7 +78185,7 @@ BI.DateTimeTrigger = BI.inherit(BI.Trigger, {
             element: this,
             items: [{
                 el: BI.createWidget(),
-                width: c.triggerWidth
+                width: o.height
             }, {
                 el: this.text
             }]
@@ -79027,7 +79021,7 @@ BI.SearchEditor = BI.inherit(BI.Widget, {
         var conf = BI.SearchEditor.superclass._defaultConfig.apply(this, arguments);
         return BI.extend(conf, {
             baseCls: "bi-search-editor bi-border",
-            height: 30,
+            height: 24,
             errorText: "",
             watermark: BI.i18nText("BI-Basic_Search"),
             validationChecker: BI.emptyFn,
@@ -79246,7 +79240,7 @@ BI.TextEditor = BI.inherit(BI.Widget, {
             allowBlank: false,
             watermark: "",
             errorText: "",
-            height: 30
+            height: 24
         })
     },
 
@@ -80801,14 +80795,13 @@ BI.MonthTrigger = BI.inherit(BI.Trigger, {
     _const: {
         hgap: 4,
         vgap: 2,
-        triggerWidth: 25,
         errorText: BI.i18nText("BI-Month_Trigger_Error_Text")
     },
 
     _defaultConfig: function () {
         return BI.extend(BI.MonthTrigger.superclass._defaultConfig.apply(this, arguments), {
             extraCls: "bi-month-trigger bi-border",
-            height: 25
+            height: 24
         });
     },
     _init: function () {
@@ -80864,15 +80857,15 @@ BI.MonthTrigger = BI.inherit(BI.Trigger, {
                         type: "bi.text_button",
                         text: BI.i18nText("BI-Multi_Date_Month"),
                         baseCls: "bi-trigger-month-text",
-                        width: c.triggerWidth
+                        width: o.height
                     },
-                    width: c.triggerWidth
+                    width: o.height
                 }, {
                     el: {
                         type: "bi.trigger_icon_button",
-                        width: c.triggerWidth
+                        width: o.height
                     },
-                    width: c.triggerWidth
+                    width: o.height
                 }
             ]
         });
@@ -81184,8 +81177,8 @@ BI.MultiDateCombo = BI.inherit(BI.Single, {
         var triggerBtn = BI.createWidget({
             type: "bi.icon_button",
             cls: "bi-trigger-icon-button date-font",
-            width: 30,
-            height: 23
+            width: 24,
+            height: 24
         });
         triggerBtn.on(BI.TriggerIconButton.EVENT_CHANGE, function () {
             if (self.combo.isViewVisible()) {
@@ -81197,8 +81190,8 @@ BI.MultiDateCombo = BI.inherit(BI.Single, {
         this.changeIcon = BI.createWidget({
             type: "bi.icon_button",
             cls: "bi-trigger-icon-button date-change-h-font",
-            width: 30,
-            height: 23
+            width: 24,
+            height: 24
         });
 
 
@@ -88943,7 +88936,6 @@ BI.QuarterTrigger = BI.inherit(BI.Trigger, {
     _const: {
         hgap: 4,
         vgap: 2,
-        triggerWidth: 30,
         textWidth: 40,
         errorText: BI.i18nText("BI-Quarter_Trigger_Error_Text")
     },
@@ -88951,7 +88943,7 @@ BI.QuarterTrigger = BI.inherit(BI.Trigger, {
     _defaultConfig: function () {
         return BI.extend(BI.QuarterTrigger.superclass._defaultConfig.apply(this, arguments), {
             extraCls: "bi-quarter-trigger bi-border",
-            height: 25
+            height: 24
         });
     },
     _init: function () {
@@ -89014,9 +89006,9 @@ BI.QuarterTrigger = BI.inherit(BI.Trigger, {
                 }, {
                     el: {
                         type: "bi.trigger_icon_button",
-                        width: c.triggerWidth
+                        width: o.height
                     },
-                    width: c.triggerWidth
+                    width: o.height
                 }
             ]
         });
@@ -91087,7 +91079,7 @@ BI.SingleTreeCombo = BI.inherit(BI.Widget, {
         return BI.extend(BI.SingleTreeCombo.superclass._defaultConfig.apply(this, arguments), {
             baseCls: "bi-single-tree-combo",
             trigger: {},
-            height: 30,
+            height: 24,
             text: "",
             items: []
         });
@@ -91222,7 +91214,7 @@ BI.SingleTreeTrigger = BI.inherit(BI.Trigger, {
     _defaultConfig: function () {
         return BI.extend(BI.SingleTreeTrigger.superclass._defaultConfig.apply(this, arguments), {
             baseCls: "bi-single-tree-trigger",
-            height: 30,
+            height: 24,
             text: "",
             items: []
         });
@@ -91787,7 +91779,6 @@ BI.YearTrigger = BI.inherit(BI.Trigger, {
     _const: {
         hgap: 4,
         vgap: 2,
-        triggerWidth: 25,
         errorText: BI.i18nText("BI-Please_Input_Positive_Integer"),
         errorTextInvalid: BI.i18nText("BI-Year_Trigger_Invalid_Text")
     },
@@ -91797,7 +91788,7 @@ BI.YearTrigger = BI.inherit(BI.Trigger, {
             extraCls: "bi-year-trigger bi-border",
             min: '1900-01-01', //最小日期
             max: '2099-12-31', //最大日期
-            height: 25
+            height: 24
         });
     },
     _init: function () {
@@ -91854,15 +91845,15 @@ BI.YearTrigger = BI.inherit(BI.Trigger, {
                         type: "bi.text_button",
                         baseCls: "bi-trigger-year-text",
                         text: BI.i18nText("BI-Multi_Date_Year"),
-                        width: c.triggerWidth
+                        width: o.height
                     },
-                    width: c.triggerWidth
+                    width: o.height
                 }, {
                     el: {
                         type: "bi.trigger_icon_button",
-                        width: c.triggerWidth
+                        width: o.height
                     },
-                    width: c.triggerWidth
+                    width: o.height
                 }
             ]
         });

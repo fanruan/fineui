@@ -19,7 +19,7 @@ BI.TextEditor = BI.inherit(BI.Widget, {
             allowBlank: false,
             watermark: "",
             errorText: "",
-            height: 30
+            height: 24
         })
     },
 
