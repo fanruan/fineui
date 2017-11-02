@@ -6,7 +6,6 @@ BI.IntervalSlider = BI.inherit(BI.Widget, {
         EDITOR_WIDTH: 58,
         EDITOR_R_GAP: 60,
         EDITOR_HEIGHT: 30,
-        HEIGHT: 28,
         SLIDER_WIDTH_HALF: 15,
         SLIDER_WIDTH: 30,
         SLIDER_HEIGHT: 30,
@@ -51,7 +50,6 @@ BI.IntervalSlider = BI.inherit(BI.Widget, {
             cls: "slider-editor-button",
             errorText: "",
             allowBlank: false,
-            height: c.HEIGHT,
             width: c.EDITOR_WIDTH,
             validationChecker: function (v) {
                 return self._checkValidation(v);
@@ -78,7 +76,6 @@ BI.IntervalSlider = BI.inherit(BI.Widget, {
             cls: "slider-editor-button",
             errorText: "",
             allowBlank: false,
-            height: c.HEIGHT,
             width: c.EDITOR_WIDTH,
             validationChecker: function (v) {
                 return self._checkValidation(v);
@@ -122,6 +119,10 @@ BI.IntervalSlider = BI.inherit(BI.Widget, {
                 var significantPercent = BI.parseFloat(percent.toFixed(1));
                 self._setSliderOnePosition(significantPercent);
                 self.fireEvent(BI.IntervalSlider.EVENT_CHANGE);
+                ui.helper.removeClass("dragging");
+            },
+            start: function (e, ui) {
+                ui.helper.removeClass("dragging").addClass("dragging");
             }
         });
 
