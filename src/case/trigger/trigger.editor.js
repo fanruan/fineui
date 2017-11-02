@@ -14,13 +14,12 @@ BI.EditorTrigger = BI.inherit(BI.Trigger, {
         var conf = BI.EditorTrigger.superclass._defaultConfig.apply(this, arguments);
         return BI.extend(conf, {
             baseCls: (conf.baseCls || "") + " bi-editor-trigger bi-border",
-            height: 30,
+            height: 24,
             validationChecker: BI.emptyFn,
             quitChecker: BI.emptyFn,
             allowBlank: false,
             watermark: "",
-            errorText: "",
-            triggerWidth: 30
+            errorText: ""
         });
     },
 
@@ -55,9 +54,9 @@ BI.EditorTrigger = BI.inherit(BI.Trigger, {
                     el: {
                         type: "bi.trigger_icon_button",
                         cls: "bi-border-left",
-                        width: o.triggerWidth
+                        width: o.triggerWidth || o.height
                     },
-                    width: o.triggerWidth
+                    width: o.triggerWidth || o.height
                 }
             ]
         });

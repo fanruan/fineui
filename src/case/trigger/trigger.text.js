@@ -14,8 +14,7 @@ BI.TextTrigger = BI.inherit(BI.Trigger, {
         var conf = BI.TextTrigger.superclass._defaultConfig.apply(this, arguments);
         return BI.extend(conf, {
             baseCls: (conf.baseCls || "") + " bi-text-trigger",
-            height: 30,
-            triggerWidth: 30
+            height: 24
         });
     },
 
@@ -33,7 +32,7 @@ BI.TextTrigger = BI.inherit(BI.Trigger, {
         this.trigerButton = BI.createWidget({
             type: "bi.trigger_icon_button",
             cls: "bi-border-left",
-            width: o.triggerWidth
+            width: o.triggerWidth || o.height
         });
 
         BI.createWidget({
@@ -44,7 +43,7 @@ BI.TextTrigger = BI.inherit(BI.Trigger, {
                     el: this.text
                 }, {
                     el: this.trigerButton,
-                    width: o.triggerWidth
+                    width: o.triggerWidth || o.height
                 }
             ]
         });

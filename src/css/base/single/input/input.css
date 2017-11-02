@@ -1,4 +1,5 @@
-.bi-input {
+.bi-input,
+.bi-textarea {
   border: none;
   outline: none;
   background-color: transparent;
@@ -7,10 +8,12 @@
   width: 100%;
   height: 100%;
 }
-.bi-input.bi-input-focus {
+.bi-input.bi-input-focus,
+.bi-textarea.bi-input-focus {
   border: none;
 }
-.bi-input.bi-input-error {
+.bi-input.bi-input-error,
+.bi-textarea.bi-input-error {
   border: none;
   color: #e85050 !important;
 }

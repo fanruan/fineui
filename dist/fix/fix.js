@@ -395,12 +395,12 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
         }
 
         Observer.prototype.walk = function walk(obj) {
-            return defineReactive(obj);
+            return defineReactive(obj, this);
         };
 
         Observer.prototype.observeArray = function observeArray(items) {
             for (var i = 0, l = items.length; i < l; i++) {
-                items[i] = observe(items[i]).model;
+                items[i] = observe(items[i], this).model;
             }
             return items;
         };
@@ -422,32 +422,30 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
         }
     }
 
-    function observe(value, asRootData) {
+    function observe(value, parentObserver) {
         if (!_.isObject(value)) {
             return;
         }
         var ob = void 0;
         if (_.has(value, '__ob__') && value.__ob__ instanceof Observer) {
             ob = value.__ob__;
-        } else if (observerState.shouldConvert && (_.isArray(value) || isPlainObject(value)) && !value._isVue) {
+        } else if (observerState.shouldConvert && (_.isArray(value) || isPlainObject(value))) {
             ob = new Observer(value);
         }
-        if (asRootData && ob) {
-            ob.vmCount++;
-        }
+        ob.parent = parentObserver || ob.parent;
         return ob;
     }
 
     function defineReactive(obj, observer, shallow) {
-
         var props = {};
+        var model = void 0;
         _.each(obj, function (val, key) {
             if (key in $$skipArray) {
                 return;
             }
             var dep = observer && observer['__dep' + key] || new Dep();
             observer && (observer['__dep' + key] = dep);
-            var childOb = !shallow && observe(val);
+            var childOb = !shallow && observe(val, observer);
             props[key] = {
                 enumerable: true,
                 configurable: true,
@@ -470,13 +468,25 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
                         return;
                     }
                     val = newVal;
-                    childOb = !shallow && observe(newVal);
+                    childOb = !shallow && observe(newVal, observer);
                     obj[key] = childOb ? childOb.model : newVal;
                     dep.notify();
+                    //触发a.*绑定的hooks
+                    _.each(model.__ob__._deps, function (dep) {
+                        dep.notify();
+                    });
+                    //触发a.**绑定的hooks
+                    var parent = model.__ob__;
+                    while (parent) {
+                        _.each(parent._globalDeps, function (dep) {
+                            dep.notify();
+                        });
+                        parent = parent.parent;
+                    }
                 }
             };
         });
-        return createViewModel$1(obj, props);
+        return model = createViewModel$1(obj, props);
     }
 
     /**
@@ -495,9 +505,6 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
             return val;
         }
         var ob = target.__ob__;
-        if (target._isVue || ob && ob.vmCount) {
-            return val;
-        }
         if (!ob) {
             target[key] = val;
             return val;
@@ -517,9 +524,6 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
             return;
         }
         var ob = target.__ob__;
-        if (target._isVue || ob && ob.vmCount) {
-            return;
-        }
         if (!_.has(target, key)) {
             return;
         }
@@ -951,7 +955,7 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
             options = options || {};
             options.user = true;
             var exps = void 0;
-            if (_.isFunction(expOrFn) || !(exps = expOrFn.match(/[a-zA-Z0-9_.]+|[|][|]|[&][&]|[(]|[)]/g)) || exps.length === 1) {
+            if (_.isFunction(expOrFn) || !(exps = expOrFn.match(/[a-zA-Z0-9_.*]+|[|][|]|[&][&]|[(]|[)]/g)) || exps.length === 1 && !/\*/.test(expOrFn)) {
                 var watcher = new Watcher(vm.model, expOrFn, _.bind(cb, vm), options);
                 if (options.immediate) {
                     cb.call(vm, watcher.value);
@@ -966,6 +970,34 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
                 running = false;
             _.each(exps, function (exp, i) {
                 if (_.has(operators, exp)) {
+                    return;
+                }
+                if (/\*\*$|\*$/.test(exp)) {
+                    var isGlobal = /\*\*$/.test(exp);
+                    if (isGlobal) {
+                        //a.**的形式
+                        exp = exp.replace(".**", "");
+                    } else {
+                        //a.*的形式
+                        exp = exp.replace(".*", "");
+                    }
+                    var getter = parsePath(exp);
+                    var v = getter.call(vm.model, vm.model);
+                    var dep = new Dep();
+                    if (isGlobal) {
+                        (v.__ob__._globalDeps || (v.__ob__._globalDeps = [])).push(dep);
+                    } else {
+                        (v.__ob__._deps || (v.__ob__._deps = [])).push(dep);
+                    }
+                    var w = new Watcher(vm.model, function () {
+                        dep.depend();
+                        return NaN;
+                    }, _.bind(cb, vm));
+                    watchers.push(function unwatchFn() {
+                        w.teardown();
+                        v.__ob__._globalDeps && remove(v.__ob__._globalDeps, dep);
+                        v.__ob__._deps && remove(v.__ob__._deps, dep);
+                    });
                     return;
                 }
                 var watcher = new Watcher(vm.model, exp, function () {

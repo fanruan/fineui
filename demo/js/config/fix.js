@@ -101,10 +101,15 @@ Demo.FIX_CONFIG = [{
 }, {
     id: 74,
     pId: 7,
-    text: "watcher表达式",
+    text: "watcher且或表达式",
     value: "demo.fix4"
 }, {
     id: 75,
+    pId: 7,
+    text: "watcher星号表达式",
+    value: "demo.fix5"
+}, {
+    id: 76,
     pId: 7,
     text: "一个混合的例子",
     value: "demo.fix"

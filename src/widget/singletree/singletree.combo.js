@@ -8,7 +8,7 @@ BI.SingleTreeCombo = BI.inherit(BI.Widget, {
         return BI.extend(BI.SingleTreeCombo.superclass._defaultConfig.apply(this, arguments), {
             baseCls: "bi-single-tree-combo",
             trigger: {},
-            height: 30,
+            height: 24,
             text: "",
             items: []
         });

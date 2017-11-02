@@ -131,8 +131,8 @@ BI.MultiDateCombo = BI.inherit(BI.Single, {
         var triggerBtn = BI.createWidget({
             type: "bi.icon_button",
             cls: "bi-trigger-icon-button date-font",
-            width: 30,
-            height: 23
+            width: 24,
+            height: 24
         });
         triggerBtn.on(BI.TriggerIconButton.EVENT_CHANGE, function () {
             if (self.combo.isViewVisible()) {
@@ -144,8 +144,8 @@ BI.MultiDateCombo = BI.inherit(BI.Single, {
         this.changeIcon = BI.createWidget({
             type: "bi.icon_button",
             cls: "bi-trigger-icon-button date-change-h-font",
-            width: 30,
-            height: 23
+            width: 24,
+            height: 24
         });
 
 
