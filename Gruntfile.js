@@ -80,32 +80,6 @@ module.exports = function (grunt) {
                 ],
                 dest: 'dist/chart.js'
             },
-            sliderJs: {
-                src: [
-                    'src/addons/sliders/js/**/*.js'
-                ],
-                dest: 'dist/sliders.js'
-            },
-            sliderCss: {
-                src: [
-                    'src/addons/sliders/**/*.css'
-                ],
-                dest: 'dist/sliders.css'
-            },
-            jqueryuiJs: {
-                src: [
-                    'src/addons/sliders/lib/jquery.ui.core.js',
-                    'src/addons/sliders/lib/jquery.ui.core.js',
-                    'src/addons/sliders/lib/jquery.ui.widget.js',
-                    'src/addons/sliders/lib/jquery.ui.mouse.js',
-                    'src/addons/sliders/lib/jquery.ui.position.js',
-                    'src/addons/sliders/lib/jquery.ui.resizable.js',
-                    'src/addons/sliders/lib/jquery.ui.draggable.js',
-                    'src/addons/sliders/lib/jquery.ui.droppable.js',
-                    'src/addons/sliders/lib/jquery.ui.sortable.js'
-                ],
-                dest: 'dist/jqueryui.js'
-            },
             coreCss: {
                 src: ['src/css/core/**/*.css', 'src/css/theme/**/*.css'],
                 dest: 'dist/core.css'
@@ -220,32 +194,6 @@ module.exports = function (grunt) {
                 ],
                 dest: 'bi/chart.js'
             },
-            bi_sliderJs: {
-                src: [
-                    'src/addons/sliders/js/**/*.js'
-                ],
-                dest: 'bi/sliders.js'
-            },
-            bi_sliderCss: {
-                src: [
-                    'src/addons/sliders/**/*.css'
-                ],
-                dest: 'bi/sliders.css'
-            },
-            bi_jqueryuiJs: {
-                src: [
-                    'src/addons/sliders/lib/jquery.ui.core.js',
-                    'src/addons/sliders/lib/jquery.ui.core.js',
-                    'src/addons/sliders/lib/jquery.ui.widget.js',
-                    'src/addons/sliders/lib/jquery.ui.mouse.js',
-                    'src/addons/sliders/lib/jquery.ui.position.js',
-                    'src/addons/sliders/lib/jquery.ui.resizable.js',
-                    'src/addons/sliders/lib/jquery.ui.draggable.js',
-                    'src/addons/sliders/lib/jquery.ui.droppable.js',
-                    'src/addons/sliders/lib/jquery.ui.sortable.js'
-                ],
-                dest: 'bi/jqueryui.js'
-            },
             bi_coreCss: {
                 src: ['src/css/core/**/*.css', 'src/css/theme/**/*.css'],
                 dest: 'bi/core.css'
@@ -261,13 +209,6 @@ module.exports = function (grunt) {
         },
 
         less: {
-            sliders: {
-                expand: true,
-                cwd: 'src/addons/sliders/less',
-                src: ['**/*.less'],
-                dest: 'src/addons/sliders/css/',
-                ext: '.css'
-            },
             demo: {
                 expand: true,
                 cwd: 'demo/less',
