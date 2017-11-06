@@ -9,9 +9,4 @@ Demo.ADDONS_CONFIG = [{
     pId: 1001,
     text: "柱状图",
     value: "demo.axis_chart"
-}, {
-    pId: 1000,
-    id: 1002,
-    text: "滚动sliders",
-    value: "demo.slider"
 }];
