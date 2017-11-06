@@ -121,6 +121,7 @@ BI.CodeEditor = BI.inherit(BI.Single, {
         }
         options.value = value;
         this.editor.markText(from, to, options);
+        this.editor.replaceSelection(" ");
         this.editor.focus();
     },
 

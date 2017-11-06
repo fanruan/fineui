@@ -28166,6 +28166,10 @@ BI.Canvas = BI.inherit(BI.Widget, {
         this._queue = [];
     },
 
+    mounted: function () {
+        this.stroke();
+    },
+
     _getContext: function () {
         if (!this.ctx) {
             this.ctx = this.canvas.getContext('2d');
@@ -28180,11 +28184,11 @@ BI.Canvas = BI.inherit(BI.Widget, {
         }
         if (BI.isObject(key)) {
             BI.each(key, function (k, v) {
-                self._queue.push({k: k, v: v});
+                self._queue.push({ k: k, v: v });
             });
             return;
         }
-        this._queue.push({k: key, v: value});
+        this._queue.push({ k: key, v: value });
     },
 
     _line: function (x0, y0) {
@@ -28250,20 +28254,19 @@ BI.Canvas = BI.inherit(BI.Widget, {
         this._getContext().clearRect(0, 0, this.canvas.width, this.canvas.height);
     },
 
-    stroke: function (callback) {
-        var self = this;
-        BI.nextTick(function () {
-            var ctx = self._getContext();
-            BI.each(self._queue, function (i, q) {
-                if (BI.isFunction(ctx[q.k])) {
-                    ctx[q.k].apply(ctx, q.v);
-                } else {
-                    ctx[q.k] = q.v;
-                }
-            });
-            self._queue = [];
-            callback && callback();
+    stroke: function () {
+        var ctx = this._getContext();
+        if(!ctx){
+            return false;
+        }
+        BI.each(this._queue, function (i, q) {
+            if (BI.isFunction(ctx[q.k])) {
+                ctx[q.k].apply(ctx, q.v);
+            } else {
+                ctx[q.k] = q.v;
+            }
         });
+        this._queue = [];
     }
 });
 BI.shortcut("bi.canvas", BI.Canvas);/**
@@ -40880,10 +40883,10 @@ BI.FloatBox = BI.inherit(BI.Widget, {
                         type: "bi.absolute",
                         items: [{
                             el: this._center,
-                            left: 10,
-                            top: 10,
-                            right: 10,
-                            bottom: 10
+                            left: 20,
+                            top: 20,
+                            right: 20,
+                            bottom: 0
                         }]
                     }
                 },
@@ -40892,9 +40895,9 @@ BI.FloatBox = BI.inherit(BI.Widget, {
                         type: "bi.absolute",
                         items: [{
                             el: this._south,
-                            left: 10,
+                            left: 20,
                             top: 0,
-                            right: 10,
+                            right: 20,
                             bottom: 0
                         }]
                     },
@@ -44737,6 +44740,7 @@ BI.CodeEditor = BI.inherit(BI.Single, {
         }
         options.value = value;
         this.editor.markText(from, to, options);
+        this.editor.replaceSelection(" ");
         this.editor.focus();
     },
 
@@ -58141,16 +58145,15 @@ BI.Table = BI.inherit(BI.Widget, {
         }))));
 
         this._initFreezeScroll();
-        BI.nextTick(function () {
-            if (self.element.is(":visible")) {
-                self._resize();
-                self.fireEvent(BI.Table.EVENT_TABLE_AFTER_INIT);
-            }
-        });
         BI.ResizeDetector.addResizeListener(this, function () {
             self._resize();
             self.fireEvent(BI.Table.EVENT_TABLE_RESIZE);
         });
+    },
+
+    mounted: function () {
+        this._resize();
+        this.fireEvent(BI.Table.EVENT_TABLE_AFTER_INIT);
     },
 
     _initFreezeScroll: function () {

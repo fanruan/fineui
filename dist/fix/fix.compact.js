@@ -14,14 +14,7 @@
     }
 
     function createWatcher(vm, keyOrFn, handler, options) {
-        if (BI.isPlainObject(handler)) {
-            options = handler
-            handler = handler.handler
-        }
-        if (typeof handler === 'string') {
-            handler = vm[handler]
-        }
-        return Fix.VM.prototype.$watch.call(vm, keyOrFn, handler, options)
+        return Fix.watch(vm.model, keyOrFn, _.bind(handler, vm), options)
     }
 
     var _init = BI.Widget.prototype._init;

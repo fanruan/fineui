@@ -400,7 +400,7 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 
         Observer.prototype.observeArray = function observeArray(items) {
             for (var i = 0, l = items.length; i < l; i++) {
-                items[i] = observe(items[i], this).model;
+                items[i] = observe(items[i], this, i).model;
             }
             return items;
         };
@@ -422,7 +422,7 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
         }
     }
 
-    function observe(value, parentObserver) {
+    function observe(value, parentObserver, parentKey) {
         if (!_.isObject(value)) {
             return;
         }
@@ -433,6 +433,7 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
             ob = new Observer(value);
         }
         ob.parent = parentObserver || ob.parent;
+        ob.parentKey = parentKey;
         return ob;
     }
 
@@ -445,7 +446,7 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
             }
             var dep = observer && observer['__dep' + key] || new Dep();
             observer && (observer['__dep' + key] = dep);
-            var childOb = !shallow && observe(val, observer);
+            var childOb = !shallow && observe(val, observer, key);
             props[key] = {
                 enumerable: true,
                 configurable: true,
@@ -468,20 +469,32 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
                         return;
                     }
                     val = newVal;
-                    childOb = !shallow && observe(newVal, observer);
+                    childOb = !shallow && observe(newVal, observer, key);
                     obj[key] = childOb ? childOb.model : newVal;
                     dep.notify();
-                    //触发a.*绑定的hooks
+                    //触发a.*绑定的依赖
                     _.each(model.__ob__._deps, function (dep) {
                         dep.notify();
                     });
-                    //触发a.**绑定的hooks
-                    var parent = model.__ob__;
+                    //触发a.**绑定的依赖
+                    var parent = model.__ob__,
+                        root = model.__ob__,
+                        route = key;
                     while (parent) {
-                        _.each(parent._globalDeps, function (dep) {
+                        _.each(parent._scopeDeps, function (dep) {
                             dep.notify();
                         });
+                        if (parent.parentKey != null) {
+                            route = parent.parentKey + '.' + route;
+                        }
+                        root = parent;
                         parent = parent.parent;
+                    }
+                    for (var _key2 in root._globalDeps) {
+                        var reg = new RegExp(_key2);
+                        if (reg.test(route)) {
+                            root._globalDeps[_key2].notify();
+                        }
                     }
                 }
             };
@@ -868,37 +881,6 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
         }
     }
 
-    function createWatcher(vm, keyOrFn, handler, options) {
-        if (isPlainObject(handler)) {
-            options = handler;
-            handler = handler.handler;
-        }
-        if (typeof handler === 'string') {
-            handler = vm[handler];
-        }
-        return vm.$watch(keyOrFn, handler, options);
-    }
-
-    var falsy$1;
-    var operators = {
-        '||': falsy$1,
-        '&&': falsy$1,
-        '(': falsy$1,
-        ')': falsy$1
-    };
-
-    function runBinaryFunction(binarys) {
-        var expr = '';
-        for (var i = 0, len = binarys.length; i < len; i++) {
-            if (_.isBoolean(binarys[i]) || _.has(operators, binarys[i])) {
-                expr += binarys[i];
-            } else {
-                expr += 'false';
-            }
-        }
-        return new Function('return ' + expr)();
-    }
-
     var VM = function () {
         function VM(model) {
             _classCallCheck(this, VM);
@@ -947,94 +929,171 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
             }
         }
 
-        VM.prototype.$watch = function $watch(expOrFn, cb, options) {
-            var vm = this;
-            if (isPlainObject(cb)) {
-                return createWatcher(vm, expOrFn, cb, options);
-            }
-            options = options || {};
-            options.user = true;
-            var exps = void 0;
-            if (_.isFunction(expOrFn) || !(exps = expOrFn.match(/[a-zA-Z0-9_.*]+|[|][|]|[&][&]|[(]|[)]/g)) || exps.length === 1 && !/\*/.test(expOrFn)) {
-                var watcher = new Watcher(vm.model, expOrFn, _.bind(cb, vm), options);
-                if (options.immediate) {
-                    cb.call(vm, watcher.value);
-                }
-                return function unwatchFn() {
-                    watcher.teardown();
-                };
-            }
-            var watchers = [];
-            var fns = exps.slice();
-            var complete = false,
-                running = false;
-            _.each(exps, function (exp, i) {
-                if (_.has(operators, exp)) {
-                    return;
-                }
-                if (/\*\*$|\*$/.test(exp)) {
-                    var isGlobal = /\*\*$/.test(exp);
-                    if (isGlobal) {
-                        //a.**的形式
-                        exp = exp.replace(".**", "");
-                    } else {
-                        //a.*的形式
-                        exp = exp.replace(".*", "");
-                    }
-                    var getter = parsePath(exp);
-                    var v = getter.call(vm.model, vm.model);
-                    var dep = new Dep();
-                    if (isGlobal) {
-                        (v.__ob__._globalDeps || (v.__ob__._globalDeps = [])).push(dep);
-                    } else {
-                        (v.__ob__._deps || (v.__ob__._deps = [])).push(dep);
-                    }
-                    var w = new Watcher(vm.model, function () {
-                        dep.depend();
-                        return NaN;
-                    }, _.bind(cb, vm));
-                    watchers.push(function unwatchFn() {
-                        w.teardown();
-                        v.__ob__._globalDeps && remove(v.__ob__._globalDeps, dep);
-                        v.__ob__._deps && remove(v.__ob__._deps, dep);
-                    });
-                    return;
-                }
-                var watcher = new Watcher(vm.model, exp, function () {
-                    if (complete === true) {
-                        return;
-                    }
-                    fns[i] = true;
-                    if (runBinaryFunction(fns)) {
-                        complete = true;
-                        cb.call(vm);
-                    }
-                    if (!running) {
-                        running = true;
-                        nextTick(function () {
-                            complete = false;
-                            running = false;
-                            fns = exps.slice();
-                        });
-                    }
-                }, options);
-                watchers.push(function unwatchFn() {
-                    watcher.teardown();
-                });
-            });
-            return watchers;
-        };
-
         VM.prototype._init = function _init() {};
 
         VM.prototype.destroy = function destroy() {
-            for (var _key2 in this._computedWatchers) {
-                this._computedWatchers[_key2].teardown();
+            for (var _key3 in this._computedWatchers) {
+                this._computedWatchers[_key3].teardown();
             }
         };
 
         return VM;
     }();
+
+    var falsy$1;
+    var operators = {
+        '||': falsy$1,
+        '&&': falsy$1,
+        '(': falsy$1,
+        ')': falsy$1
+    };
+
+    function runBinaryFunction(binarys) {
+        var expr = '';
+        for (var i = 0, len = binarys.length; i < len; i++) {
+            if (_.isBoolean(binarys[i]) || _.has(operators, binarys[i])) {
+                expr += binarys[i];
+            } else {
+                expr += 'false';
+            }
+        }
+        return new Function('return ' + expr)();
+    }
+
+    function routeToRegExp(route) {
+        route = route.replace(/\*./g, '[a-zA-Z0-9_]+.');
+        return '^' + route + '$';
+    }
+
+    function watch(model, expOrFn, cb, options) {
+        if (isPlainObject(cb)) {
+            options = cb;
+            cb = cb.handler;
+        }
+        if (typeof cb === 'string') {
+            cb = model[cb];
+        }
+        options = options || {};
+        options.user = true;
+        var exps = void 0;
+        if (_.isFunction(expOrFn) || !(exps = expOrFn.match(/[a-zA-Z0-9_.*]+|[|][|]|[&][&]|[(]|[)]/g)) || exps.length === 1 && !/\*/.test(expOrFn)) {
+            var watcher = new Watcher(model, expOrFn, cb, options);
+            if (options.immediate) {
+                cb(watcher.value);
+            }
+            return function unwatchFn() {
+                watcher.teardown();
+            };
+        }
+        var watchers = [];
+        var fns = exps.slice();
+        var complete = false,
+            running = false;
+        _.each(exps, function (exp, i) {
+            if (_.has(operators, exp)) {
+                return;
+            }
+            //a.**或a.*形式
+            if (/^[1-9a-zA-Z.]+(\*\*$|\*$)/.test(exp)) {
+                var isGlobal = /\*\*$/.test(exp);
+                if (isGlobal) {
+                    //a.**的形式
+                    exp = exp.replace(".**", "");
+                } else {
+                    //a.*的形式
+                    exp = exp.replace(".*", "");
+                }
+                var getter = parsePath(exp);
+                var v = getter.call(model, model);
+                var dep = new Dep();
+                if (isGlobal) {
+                    (v.__ob__._scopeDeps || (v.__ob__._scopeDeps = [])).push(dep);
+                } else {
+                    (v.__ob__._deps || (v.__ob__._deps = [])).push(dep);
+                }
+                var w = new Watcher(model, function () {
+                    dep.depend();
+                    return NaN;
+                }, cb);
+                watchers.push(function unwatchFn() {
+                    w.teardown();
+                    v.__ob__._scopeDeps && remove(v.__ob__._scopeDeps, dep);
+                    v.__ob__._deps && remove(v.__ob__._deps, dep);
+                });
+                return;
+            }
+            if (/\*\*|\*$/.test(exp)) {
+                throw new Error('not support');
+            }
+            //其他含有*的情况，如*.a,*.*.a,a.*.a.*
+            if (/\*/.test(exp)) {
+                //补全路径
+                var parent = model.__ob__.parent,
+                    root = model.__ob__;
+                while (parent) {
+                    exp = '*.' + exp;
+                    root = parent;
+                    parent = parent.parent;
+                }
+                var regStr = routeToRegExp(exp);
+                var _dep = new Dep();
+                root._globalDeps || (root._globalDeps = {});
+                root._globalDeps[regStr] = _dep;
+
+                var _w = new Watcher(model, function () {
+                    _dep.depend();
+                    return NaN;
+                }, cb);
+                watchers.push(function unwatchFn() {
+                    _w.teardown();
+                    root._globalDeps && delete root._globalDeps[regStr];
+                });
+                return;
+            }
+            var watcher = new Watcher(model, exp, function () {
+                if (complete === true) {
+                    return;
+                }
+                fns[i] = true;
+                if (runBinaryFunction(fns)) {
+                    complete = true;
+                    cb();
+                }
+                if (!running) {
+                    running = true;
+                    nextTick(function () {
+                        complete = false;
+                        running = false;
+                        fns = exps.slice();
+                    });
+                }
+            }, options);
+            watchers.push(function unwatchFn() {
+                watcher.teardown();
+            });
+        });
+        return watchers;
+    }
+
+    function toJSON(model) {
+        var result = void 0;
+        if (_.isArray(model)) {
+            result = [];
+            for (var i = 0, len = model.length; i < len; i++) {
+                result[i] = toJSON(model[i]);
+            }
+        } else if (isPlainObject(model)) {
+            result = {};
+            for (var _key4 in model) {
+                if (!_.has($$skipArray, _key4)) {
+                    result[_key4] = toJSON(model[_key4]);
+                }
+            }
+        } else {
+            result = model;
+        }
+        return result;
+    }
 
     function define(model) {
         return new Observer(model).model;
@@ -1052,6 +1111,8 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
     exports.set = set;
     exports.del = del;
     exports.Watcher = Watcher;
+    exports.watch = watch;
+    exports.toJSON = toJSON;
 
     exports.__esModule = true;
 });

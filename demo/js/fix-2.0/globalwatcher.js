@@ -13,6 +13,9 @@
             return model;
         },
         watch: {
+            "*.*.n": function () {
+                debugger
+            },
             "arr.**": function () {
                 debugger
             },
