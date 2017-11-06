@@ -356,7 +356,7 @@ BI.Table = BI.inherit(BI.Widget, {
     },
 
     mounted: function () {
-        this._resize();
+        this._resize && this._resize();
         this.fireEvent(BI.Table.EVENT_TABLE_AFTER_INIT);
     },
 
@@ -701,9 +701,7 @@ BI.Table = BI.inherit(BI.Widget, {
         });
     },
 
-    _init: function () {
-        BI.Table.superclass._init.apply(this, arguments);
-
+    render: function () {
         this.populate(this.options.items);
     },
 

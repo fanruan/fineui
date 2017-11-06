@@ -58152,7 +58152,7 @@ BI.Table = BI.inherit(BI.Widget, {
     },
 
     mounted: function () {
-        this._resize();
+        this._resize && this._resize();
         this.fireEvent(BI.Table.EVENT_TABLE_AFTER_INIT);
     },
 
@@ -58497,9 +58497,7 @@ BI.Table = BI.inherit(BI.Widget, {
         });
     },
 
-    _init: function () {
-        BI.Table.superclass._init.apply(this, arguments);
-
+    render: function () {
         this.populate(this.options.items);
     },
 
@@ -78303,7 +78301,7 @@ BI.DirectionPathChooser = BI.inherit(BI.Widget, {
         var self = this, o = this.options;
         var routes = this.pathChooser.routes;
         var pathes = this.pathChooser.pathes;
-        var store = this.pathChooser.store;
+        var cache = this.pathChooser.cache;
         this.arrows = {};
         BI.each(routes, function (region, ps) {
             self.arrows[region] = [];
@@ -78315,7 +78313,7 @@ BI.DirectionPathChooser = BI.inherit(BI.Widget, {
                         var arrow;
                         if (dot.y === dots[i - 1].y) {
                             if (dots[i + 1].y != dot.y) {
-                                if (store[path[path.length - 2]].direction === -1) {
+                                if (cache[path[path.length - 2]].direction === -1) {
                                     if (i - 1 > 0) {
                                         arrow = self._drawOneArrow(dots[i - 1], 3);
                                     }
@@ -78325,13 +78323,13 @@ BI.DirectionPathChooser = BI.inherit(BI.Widget, {
                             }
                         } else if (dot.x === dots[i - 1].x) {
                             if (dot.y > dots[i - 1].y) {
-                                if (store[BI.first(path)].direction === -1) {
+                                if (cache[BI.first(path)].direction === -1) {
                                     arrow = self._drawOneArrow(dots[i - 1], 0);
                                 } else {
                                     arrow = self._drawOneArrow(dot, 2);
                                 }
                             } else {
-                                if (store[path[path.length - 2]].direction === -1) {
+                                if (cache[path[path.length - 2]].direction === -1) {
                                     arrow = self._drawOneArrow(dots[i - 1], 2);
                                 } else {
                                     arrow = self._drawOneArrow(dot, 0);
@@ -78347,7 +78345,7 @@ BI.DirectionPathChooser = BI.inherit(BI.Widget, {
                     if (i !== 0) {
                         var arrow;
                         var from = path[i - 1];
-                        if (store[from].direction === -1) {
+                        if (cache[from].direction === -1) {
                             var regionIndex = self.pathChooser.getRegionIndexById(from);
                             var x = getXoffsetByRegionIndex(regionIndex, -1);
                             var y = getYByXoffset(dots, x);
@@ -87959,7 +87957,7 @@ BI.PathChooser = BI.inherit(BI.Widget, {
     },
 
     getRegionIndexById: function (id) {
-        var node = this.store[id];
+        var node = this.cache[id];
         var regionType = node.get("region");
         return this.regionMap[regionType];
     },
@@ -88176,7 +88174,7 @@ BI.PathChooser = BI.inherit(BI.Widget, {
 
     _createNodes: function () {
         var self = this, o = this.options;
-        this.store = {};
+        this.cache = {};
         this.texts = {};
         this.start = [];
         this.end = [];
@@ -88200,10 +88198,10 @@ BI.PathChooser = BI.inherit(BI.Widget, {
                 if (j > 0) {
                     prev = items[j - 1];
                 }
-                var parent = self.store[prev.value || ""];
-                var node = self.store[item.value] || new BI.Node(item.value);
+                var parent = self.cache[prev.value || ""];
+                var node = self.cache[item.value] || new BI.Node(item.value);
                 node.set(item);
-                self.store[item.value] = node;
+                self.cache[item.value] = node;
                 self.texts[item.value] = item.text;
                 self.texts[item.region] = item.regionText;
                 parent = BI.isNull(parent) ? tree.getRoot() : parent;
