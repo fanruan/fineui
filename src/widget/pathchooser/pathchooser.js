@@ -54,7 +54,7 @@ BI.PathChooser = BI.inherit(BI.Widget, {
     },
 
     getRegionIndexById: function (id) {
-        var node = this.store[id];
+        var node = this.cache[id];
         var regionType = node.get("region");
         return this.regionMap[regionType];
     },
@@ -271,7 +271,7 @@ BI.PathChooser = BI.inherit(BI.Widget, {
 
     _createNodes: function () {
         var self = this, o = this.options;
-        this.store = {};
+        this.cache = {};
         this.texts = {};
         this.start = [];
         this.end = [];
@@ -295,10 +295,10 @@ BI.PathChooser = BI.inherit(BI.Widget, {
                 if (j > 0) {
                     prev = items[j - 1];
                 }
-                var parent = self.store[prev.value || ""];
-                var node = self.store[item.value] || new BI.Node(item.value);
+                var parent = self.cache[prev.value || ""];
+                var node = self.cache[item.value] || new BI.Node(item.value);
                 node.set(item);
-                self.store[item.value] = node;
+                self.cache[item.value] = node;
                 self.texts[item.value] = item.text;
                 self.texts[item.region] = item.regionText;
                 parent = BI.isNull(parent) ? tree.getRoot() : parent;

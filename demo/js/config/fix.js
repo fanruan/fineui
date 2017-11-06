@@ -113,4 +113,9 @@ Demo.FIX_CONFIG = [{
     pId: 7,
     text: "一个混合的例子",
     value: "demo.fix"
+}, {
+    id: 77,
+    pId: 7,
+    text: "场景",
+    value: "demo.fix_scene"
 }];

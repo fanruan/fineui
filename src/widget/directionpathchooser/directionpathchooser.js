@@ -86,7 +86,7 @@ BI.DirectionPathChooser = BI.inherit(BI.Widget, {
         var self = this, o = this.options;
         var routes = this.pathChooser.routes;
         var pathes = this.pathChooser.pathes;
-        var store = this.pathChooser.store;
+        var cache = this.pathChooser.cache;
         this.arrows = {};
         BI.each(routes, function (region, ps) {
             self.arrows[region] = [];
@@ -98,7 +98,7 @@ BI.DirectionPathChooser = BI.inherit(BI.Widget, {
                         var arrow;
                         if (dot.y === dots[i - 1].y) {
                             if (dots[i + 1].y != dot.y) {
-                                if (store[path[path.length - 2]].direction === -1) {
+                                if (cache[path[path.length - 2]].direction === -1) {
                                     if (i - 1 > 0) {
                                         arrow = self._drawOneArrow(dots[i - 1], 3);
                                     }
@@ -108,13 +108,13 @@ BI.DirectionPathChooser = BI.inherit(BI.Widget, {
                             }
                         } else if (dot.x === dots[i - 1].x) {
                             if (dot.y > dots[i - 1].y) {
-                                if (store[BI.first(path)].direction === -1) {
+                                if (cache[BI.first(path)].direction === -1) {
                                     arrow = self._drawOneArrow(dots[i - 1], 0);
                                 } else {
                                     arrow = self._drawOneArrow(dot, 2);
                                 }
                             } else {
-                                if (store[path[path.length - 2]].direction === -1) {
+                                if (cache[path[path.length - 2]].direction === -1) {
                                     arrow = self._drawOneArrow(dots[i - 1], 2);
                                 } else {
                                     arrow = self._drawOneArrow(dot, 0);
@@ -130,7 +130,7 @@ BI.DirectionPathChooser = BI.inherit(BI.Widget, {
                     if (i !== 0) {
                         var arrow;
                         var from = path[i - 1];
-                        if (store[from].direction === -1) {
+                        if (cache[from].direction === -1) {
                             var regionIndex = self.pathChooser.getRegionIndexById(from);
                             var x = getXoffsetByRegionIndex(regionIndex, -1);
                             var y = getYByXoffset(dots, x);
