@@ -40880,10 +40880,10 @@ BI.FloatBox = BI.inherit(BI.Widget, {
                         type: "bi.absolute",
                         items: [{
                             el: this._center,
-                            left: 10,
-                            top: 10,
-                            right: 10,
-                            bottom: 10
+                            left: 20,
+                            top: 20,
+                            right: 20,
+                            bottom: 0
                         }]
                     }
                 },
@@ -40892,9 +40892,9 @@ BI.FloatBox = BI.inherit(BI.Widget, {
                         type: "bi.absolute",
                         items: [{
                             el: this._south,
-                            left: 10,
+                            left: 20,
                             top: 0,
-                            right: 10,
+                            right: 20,
                             bottom: 0
                         }]
                     },
@@ -44737,6 +44737,7 @@ BI.CodeEditor = BI.inherit(BI.Single, {
         }
         options.value = value;
         this.editor.markText(from, to, options);
+        this.editor.replaceSelection(" ");
         this.editor.focus();
     },
 
