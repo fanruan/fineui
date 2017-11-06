@@ -3929,369 +3929,7 @@ BI.shortcut("demo.select_text_trigger", Demo.Func);Demo.Func = BI.inherit(BI.Wid
         })
     }
 });
-BI.shortcut("demo.text_trigger", Demo.Func);Demo.CanvasTable = BI.inherit(BI.Widget, {
-    props: {
-        baseCls: "demo-face"
-    },
-
-    render: function () {
-        var self = this;
-        return {
-            type: "bi.absolute",
-            items: [{
-                el: {
-                    type: "bi.sequence_table",
-                    ref: function () {
-                        self.table = this;
-                    },
-                    isNeedFreeze: null,
-                    isNeedMerge: false,
-                    summaryCellStyleGetter: function (isLast) {
-                        return {
-                            background: "rgb(4, 177, 194)",
-                            color: "#ffffff",
-                            fontWeight: "bold"
-                        };
-                    },
-                    sequenceCellStyleGetter: function (index) {
-                        return {
-                            background: "rgb(4, 177, 194)",
-                            color: "#ffffff",
-                            fontWeight: "bold"
-                        };
-                    },
-                    headerCellStyleGetter: function () {
-                        return {
-                            background: "rgb(4, 177, 194)",
-                            color: "#ffffff",
-                            fontWeight: "bold"
-                        };
-                    },
-                    el: {
-                        type: "bi.adaptive_table",
-                        el: {
-                            type: "bi.resizable_table",
-                            el: {
-                                type: "bi.canvas_table"
-                            }
-                        }
-                    },
-                    sequence: {
-                        type: "bi.sequence_table_list_number",
-                        pageSize: 100,
-                        sequenceHeaderCreator: {
-                            type: "bi.normal_sequence_header_cell",
-                            styleGetter: function () {
-                                return {
-                                    background: "rgb(4, 177, 194)",
-                                    color: "#ffffff",
-                                    fontWeight: "bold"
-                                };
-                            }
-                        }
-                    },
-                    itemsCreator: function (op, populate) {
-                    }
-                },
-                left: 0,
-                right: 0,
-                top: 0,
-                bottom: 0
-            }]
-        };
-    },
-
-    mounted: function () {
-        var self = this;
-        if (BI.isNull(BI.isExpanded)) {
-            BI.isExpanded = false;
-        } else if (!BI.isExpanded) {
-            TABLE_ITEMS = this._expandData(TABLE_ITEMS, 3);
-            TABLE_HEADER = this._expandHeadData(TABLE_HEADER, 3);
-            BI.isExpanded = true;
-        }
-        this._resizeHandler = BI.debounce(function () {
-            var width = self.element.width(), height = self.element.height();
-            if (self.table.getWidth() !== width || self.table.getHeight() !== height) {
-                self.table.setWidth(width);
-                self.table.setHeight(height);
-                self.table.populate();
-            }
-        }, 0);
-        BI.ResizeDetector.addResizeListener(this, function () {
-            self._resizeHandler();
-        });
-        this.table.setWidth(this.element.width());
-        this.table.setHeight(this.element.height());
-        this.table.attr("columnSize", BI.makeArray(TABLE_HEADER[0].length, ""));
-        this.table.attr("minColumnSize", BI.makeArray(TABLE_HEADER[0].length, 60));
-        this.table.attr("isNeedFreeze", true);
-        this.table.attr("freezeCols", []);
-        this.table.attr("showSequence", true);
-        this.table.attr("headerRowSize", 15);
-        this.table.attr("rowSize", 15);
-        this.table.populate(TABLE_ITEMS, TABLE_HEADER);
-    },
-
-    _expandData: function (items, times) {
-        var copy = BI.deepClone(items);
-        for (var m = 0; m < times - 1; m++) {
-            BI.each(items, function (i, row) {
-                copy.push(row);
-            });
-        }
-        
-        for (var n = 0; n < copy.length; n++) {
-            for (var m = 0; m < times - 1; m++) {
-                BI.each(items[n % 100], function (j, item) {
-                    copy[n].push(item);
-                })
-            }
-        }
-        return copy;
-    },
-
-    _expandHeadData: function (items, times) {
-        var copy = BI.deepClone(items);
-        for (var n = 0; n < copy.length; n++) {
-            for (var m = 0; m < times - 1; m++) {
-                BI.each(items[n], function (j, item) {
-                    copy[n].push(item);
-                })
-            }
-        }
-        return copy;
-    }
-});
-
-BI.shortcut("demo.canvas_table", Demo.CanvasTable);/**
- * canvas绘图
- *
- * Created by Shichao on 2017/09/29.
- * @class BI.CanvasNew
- * @extends BI.Widget
- */
-BI.CanvasNew = BI.inherit(BI.Widget, {
-    
-        _defaultConfig: function () {
-            return BI.extend(BI.CanvasNew.superclass._defaultConfig.apply(this, arguments), {
-                baseCls: "bi-canvas-new"
-            })
-        },
-    
-        _init: function () {
-            BI.CanvasNew.superclass._init.apply(this, arguments);
-            var self = this, o = this.options;
-            var canvas = this._createHiDPICanvas(o.width, o.height);
-            this.element.append(canvas);
-            this.canvas = canvas;
-            this._queue = [];
-        },
-    
-        _getContext: function () {
-            if (!this.ctx) {
-                this.ctx = this.canvas.getContext('2d');
-            }
-            return this.ctx;
-        },
-    
-        getContext: function () {
-            return this._getContext();
-        },
-    
-        _getPixelRatio: function () {
-            var ctx = document.createElement("canvas").getContext("2d"),
-            dpr = window.devicePixelRatio || 1,
-                bsr = ctx.webkitBackingStorePixelRatio ||
-                ctx.mozBackingStorePixelRatio ||
-                ctx.msBackingStorePixelRatio ||
-                ctx.oBackingStorePixelRatio ||
-                ctx.backingStorePixelRatio || 1;
-            return dpr / bsr;
-        },
-    
-        getPixelRatio: function () {
-            return this._getPixelRatio();
-        },
-    
-        _createHiDPICanvas: function (w, h, ratio) {
-            if (!ratio) {
-                ratio = this._getPixelRatio();
-            }
-            this.ratio = ratio;
-            var canvas = document.createElement("canvas");
-            if (!document.createElement('canvas').getContext) {
-                canvas = window.G_vmlCanvasManager.initElement(canvas);
-            }
-            canvas.width = w * ratio;
-            canvas.height = h * ratio;
-            canvas.style.width = w + "px";
-            canvas.style.height = h + "px";
-            canvas.getContext("2d").setTransform(ratio, 0, 0, ratio, 0, 0);
-            return canvas;
-        },
-    
-        _attr: function (key, value) {
-            var self = this;
-            if (BI.isNull(key)) {
-                return;
-            }
-            if (BI.isObject(key)) {
-                BI.each(key, function (k, v) {
-                    self._queue.push({ k: k, v: v });
-                });
-                return;
-            }
-            this._queue.push({ k: key, v: value });
-        },
-    
-        _line: function (x0, y0) {
-            var self = this;
-            var args = [].slice.call(arguments, 2);
-            if (BI.isOdd(args.length)) {
-                this._attr(BI.last(args));
-                args = BI.initial(args);
-            }
-            this._attr("moveTo", [x0, y0]);
-            var odd = BI.filter(args, function (i) {
-                return i % 2 === 0;
-            });
-            var even = BI.filter(args, function (i) {
-                return i % 2 !== 0;
-            });
-            args = BI.zip(odd, even);
-            BI.each(args, function (i, point) {
-                self._attr("lineTo", point);
-            });
-        },
-    
-        line: function (x0, y0, x1, y1) {
-            this._line.apply(this, arguments);
-            this._attr("stroke", []);
-        },
-    
-        rect: function (x, y, w, h, color) {
-            this._attr("fillStyle", color);
-            this._attr("fillRect", [x, y, w, h]);
-        },
-    
-        circle: function (x, y, radius, color) {
-            this._attr({
-                fillStyle: color,
-                beginPath: [],
-                arc: [x, y, radius, 0, Math.PI * 2, true],
-                closePath: [],
-                fill: []
-            });
-        },
-    
-        hollow: function () {
-            this._attr("beginPath", []);
-            this._line.apply(this, arguments);
-            this._attr("closePath", []);
-            this._attr("stroke", []);
-        },
-    
-        solid: function () {
-            this.hollow.apply(this, arguments);
-            this._attr("fill", []);
-        },
-    
-        text: function (x, y, text, fillStyle) {
-            this._attr("fillStyle", BI.isNull(fillStyle) ? "rgb(102, 102, 102)" : fillStyle);
-            this._attr("fillText", [text, x, y]);
-        },
-    
-        setFontStyle: function (fontStyle) {
-            this.fontStyle = fontStyle;
-        },
-    
-        setFontVariant: function (fontVariant) {
-            this.fontVariant = fontVariant;
-        },
-    
-        setFontWeight: function (fontWeight) {
-            this.fontWeight = fontWeight;
-        },
-    
-        setFontSize: function (fontSize) {
-            this.fontSize = fontSize;
-        },
-    
-        setFontFamily: function (fontFamily) {
-            this.fontFamily = fontFamily;
-        },
-    
-        setFont: function () {
-            var fontStyle = this.fontStyle || "",
-                fontVariant = this.fontVariant || "",
-                fontWeight = this.fontWeight || "",
-                fontSize = this.fontSize || "12px",
-                fontFamily = this.fontFamily || "sans-serif",
-                font = fontStyle + " " + fontVariant + " " + fontWeight + " " + fontSize + " " + fontFamily;
-            this._getContext().font = font;
-        },
-    
-        gradient: function (x0, y0, x1, y1, start, end) {
-            var grd = this._getContext().createLinearGradient(x0, y0, x1, y1);
-            grd.addColorStop(0, start);
-            grd.addColorStop(1, end);
-            return grd;
-        },
-    
-        reset: function (x, y) {
-            this._getContext().clearRect(x, y, this.canvas.width, this.canvas.height);
-        },
-    
-        remove: function (x, y, width, height) {
-            this._getContext().clearRect(x, y, width, height);
-        },
-    
-        stroke: function (callback) {
-            var self = this;
-            BI.nextTick(function () {
-                var ctx = self._getContext();
-                BI.each(self._queue, function (i, q) {
-                    if (BI.isFunction(ctx[q.k])) {
-                        ctx[q.k].apply(ctx, q.v);
-                    } else {
-                        ctx[q.k] = q.v;
-                    }
-                });
-                self._queue = [];
-                callback && callback();
-            });
-        },
-    
-        setWidth: function (width) {
-            BI.CanvasNew.superclass.setWidth.apply(this, arguments);
-            this.ratio = this._getPixelRatio();
-            this.canvas.width = width * this.ratio;
-            this.canvas.style.width = width + "px";
-            this.canvas.getContext("2d").setTransform(this.ratio, 0, 0, this.ratio, 0, 0);
-        },
-    
-        setHeight: function (height) {
-            BI.CanvasNew.superclass.setHeight.apply(this, arguments);
-            this.ratio = this._getPixelRatio();
-            this.canvas.height = height * this.ratio;
-            this.canvas.style.height = height + "px";
-            this.canvas.getContext("2d").setTransform(this.ratio, 0, 0, this.ratio, 0, 0);
-        },
-    
-        setBlock: function () {
-            this.canvas.style.display = "block";
-        },
-    
-        transform: function (a, b, c, d, e, f) {
-            this._attr("transform", [a, b, c, d, e, f]);
-        },
-    
-        translate: function (x, y) {
-            this._attr("translate", [x, y]);
-        }
-    });
-    BI.shortcut("bi.canvas_new", BI.CanvasNew);/**
+BI.shortcut("demo.text_trigger", Demo.Func);/**
  * guy
  * 二级树
  * @class BI.PlatformLevelTree
@@ -5065,19 +4703,19 @@ BI.shortcut("demo.value_chooser_combo", Demo.ValueChooserCombo);Demo.ValueChoose
     }
 });
 BI.shortcut("demo.value_chooser_pane", Demo.ValueChooserPane);Demo.ADDONS_CONFIG = [{
-    id: 7,
+    id: 1000,
     text: "addons"
 }, {
-    pId: 7,
-    id: 701,
+    pId: 1000,
+    id: 1001,
     text: "拓展图表控件"
 }, {
-    pId: 701,
+    pId: 1001,
     text: "柱状图",
     value: "demo.axis_chart"
 }, {
-    pId: 7,
-    id: 702,
+    pId: 1000,
+    id: 1002,
     text: "滚动sliders",
     value: "demo.slider"
 }];Demo.BASE_CONFIG = [{
@@ -5437,10 +5075,6 @@ BI.shortcut("demo.value_chooser_pane", Demo.ValueChooserPane);Demo.ADDONS_CONFIG
     value: "demo.large_table"
 }, {
     pId: 100000,
-    text: "Canvas大表格",
-    value: "demo.canvas_table"
-}, {
-    pId: 100000,
     text: "可以排序的树",
     value: "demo.sort_tree"
 }];/**
@@ -5714,9 +5348,9 @@ var viewRouter = new (BI.inherit(BI.WRouter, {
 BI.View.registerVMRouter(viewRouter, modelRouter);
 
 
-Demo.VM_CONFIG = [{
+Demo.FIX_CONFIG = [{
     id: 6,
-    text: "数据流框架"
+    text: "数据流框架fix-1.0"
 }, {
     pId: 6,
     text: "set,get方法",
@@ -5741,6 +5375,39 @@ Demo.VM_CONFIG = [{
     pId: 6,
     text: "tmp方法",
     value: "demo.tmp"
+}, {
+    id: 7,
+    text: "数据流框架fix-2.0"
+}, {
+    id: 71,
+    pId: 7,
+    text: "定义响应式数据",
+    value: "demo.fix1"
+}, {
+    id: 72,
+    pId: 7,
+    text: "计算属性",
+    value: "demo.fix2"
+}, {
+    id: 73,
+    pId: 7,
+    text: "store",
+    value: "demo.fix3"
+}, {
+    id: 74,
+    pId: 7,
+    text: "watcher且或表达式",
+    value: "demo.fix4"
+}, {
+    id: 75,
+    pId: 7,
+    text: "watcher星号表达式",
+    value: "demo.fix5"
+}, {
+    id: 76,
+    pId: 7,
+    text: "一个混合的例子",
+    value: "demo.fix"
 }];Demo.WIDGET_CONFIG = [{
     id: 4,
     text: "详细控件",
@@ -7561,6 +7228,11 @@ Demo.Item = BI.inherit(BI.Widget, {
         }
     },
 
+    shouldUpdate: function (nextProps) {
+        var o = this.options;
+        return o.type !== nextProps.type || o.key !== nextProps.key || o.value !== nextProps.value;
+    },
+
     update: function (item) {
         this.label.setText(item.value);
         console.log("更新了一项");
@@ -9218,199 +8890,7 @@ BI.shortcut("demo.vtape", Demo.VtapeLayout);Demo.Face = BI.inherit(BI.Widget, {
         this._runGlobalStyle();
     }
 });
-BI.shortcut("demo.face", Demo.Face);Demo.Main = BI.inherit(BI.Widget, {
-    props: {
-        baseCls: "demo-main bi-background"
-    },
-    render: function () {
-        var center;
-        return {
-            type: "bi.border",
-            items: {
-                north: {
-                    height: 50,
-                    el: {
-                        type: "demo.north",
-                        listeners: [{
-                            eventName: Demo.North.EVENT_VALUE_CHANGE,
-                            action: function (v) {
-                                center.setValue(v);
-                            }
-                        }]
-                    }
-                },
-                west: {
-                    width: 230,
-                    el: {
-                        type: "demo.west",
-                        listeners: [{
-                            eventName: Demo.West.EVENT_VALUE_CHANGE,
-                            action: function (v) {
-                                center.setValue(v);
-                            }
-                        }]
-                    }
-                },
-                center: {
-                    el: {
-                        type: "demo.center",
-                        ref: function (_ref) {
-                            center = _ref;
-                        }
-                    }
-                }
-            }
-        }
-    }
-});
-BI.shortcut("demo.main", Demo.Main);Demo.North = BI.inherit(BI.Widget, {
-    props: {
-        baseCls: "demo-north"
-    },
-    render: function () {
-        var self = this;
-        return {
-            type: "bi.htape",
-            items: [{
-                width: 230,
-                el: {
-                    type: "bi.text_button",
-                    listeners: [{
-                        eventName: BI.Button.EVENT_CHANGE,
-                        action: function () {
-                            self.fireEvent(Demo.North.EVENT_VALUE_CHANGE, "demo.face")
-                        }
-                    }],
-                    cls: "logo",
-                    height: 50,
-                    text: "FineUI2.0"
-                }
-            }, {
-                el: {
-                    type: "bi.right",
-                    hgap: 10,
-                    items: [{
-                        type: "bi.text_button",
-                        text: "星空蓝",
-                        handler: function () {
-                            $("html").removeClass("bi-theme-default").addClass("bi-theme-dark");
-                        }
-                    }, {
-                        type: "bi.text_button",
-                        text: "典雅白",
-                        handler: function () {
-                            $("html").removeClass("bi-theme-dark").addClass("bi-theme-default");
-                        }
-                    }]
-                }
-            }]
-        }
-    }
-});
-Demo.North.EVENT_VALUE_CHANGE = "EVENT_VALUE_CHANGE";
-BI.shortcut("demo.north", Demo.North);Demo.Preview = BI.inherit(BI.Widget, {
-    props: {
-        baseCls: "demo-preview"
-    },
-    render: function () {
-        var self = this;
-        var items = [], header = [], columnSize = [];
-
-        var rowCount = 100, columnCount = 100;
-        for (var i = 0; i < 1; i++) {
-            header[i] = [];
-            for (var j = 0; j < columnCount; j++) {
-                header[i][j] = {
-                    type: "bi.label",
-                    text: "表头" + i + "-" + j
-                }
-                columnSize[j] = 100;
-            }
-        }
-        for (var i = 0; i < rowCount; i++) {
-            items[i] = [];
-            for (var j = 0; j < columnCount; j++) {
-                items[i][j] = {
-                    type: "bi.label",
-                    text: (i < 3 ? 0 : i) + "-" + j
-                }
-            }
-        }
-        return {
-            type: "bi.absolute",
-            cls: "preview-background",
-            items: [{
-                el: {
-                    type: "bi.left",
-                    cls: "preview-header bi-tips",
-                    height: 40,
-                    items: [{
-                        type: "bi.label",
-                        height: 40,
-                        text: "Card2",
-                        hgap: 10,
-                        textAlign: "left"
-                    }, {
-                        type: "bi.icon_text_item",
-                        cls: "filter-font",
-                        text: "测试图标",
-                        width: 100,
-                        height: 40
-                    }]
-                },
-                left: 60,
-                right: 60,
-                top: 60
-            }, {
-                el: {
-                    type: "bi.vtape",
-                    cls: "preview-card bi-card",
-                    items: [{
-                        el: {
-                            type: "bi.label",
-                            cls: "preview-title bi-border-bottom",
-                            height: 40,
-                            text: "Card1",
-                            hgap: 10,
-                            textAlign: "left"
-                        },
-                        height: 40
-                    }, {
-                        type: "bi.center_adapt",
-                        scrollable: true,
-                        items: [{
-                            type: "bi.resizable_table",
-                            el: {
-                                type: "bi.collection_table"
-                            },
-                            width: 500,
-                            height: 400,
-                            isResizeAdapt: true,
-                            isNeedResize: true,
-                            isNeedMerge: true,
-                            mergeCols: [0, 1],
-                            mergeRule: function (col1, col2) {
-                                return BI.isEqual(col1, col2);
-                            },
-                            isNeedFreeze: true,
-                            freezeCols: [0, 1],
-                            columnSize: columnSize,
-                            items: items,
-                            header: header
-                        }]
-                    }]
-                },
-                left: 60,
-                right: 60,
-                top: 160,
-                bottom: 60
-            }]
-        }
-    },
-    mounted: function () {
-    }
-});
-BI.shortcut("demo.preview", Demo.Preview);//change函数
+BI.shortcut("demo.face", Demo.Face);//change函数
 ChangeView = BI.inherit(BI.View, {
     _defaultConfig: function(){
         return BI.extend(ChangeView.superclass._defaultConfig.apply(this, arguments),{
@@ -10615,7 +10095,529 @@ Demo.Func = BI.inherit(BI.Widget, {
     }
 });
 BI.shortcut("demo.tmp", Demo.Func);
-Demo.West = BI.inherit(BI.Widget, {
+;(function(){
+    var model = Fix.define({
+        name: "原始属性",
+        arr: [{
+            n: 'a'
+        }, {
+            n: 'b'
+        }]
+    });
+    var Computed = BI.inherit(Fix.VM, {
+        computed: {
+            b: function () {
+                return this.name + "-计算属性"
+            }
+        }
+    })
+
+    Demo.Fix = BI.inherit(BI.Widget, {
+        _store: function () {
+            return new Computed(model);
+        },
+        watch: {
+            b: function () {
+                this.button.setText(this.model.b)
+            }
+        },
+        render: function () {
+            var self = this;
+            return {
+                type: "bi.absolute",
+                items: [{
+                    el: {
+                        type: "bi.button",
+                        ref: function () {
+                            self.button = this;
+                        },
+                        handler: function () {
+                            self.model.name = "这是改变后的属性"
+                        },
+                        text: this.model.b
+                    }
+                }]
+            }
+        },
+        mounted: function () {
+
+
+        }
+    });
+
+    BI.shortcut("demo.fix2", Demo.Fix);
+}());;(function () {
+    var model = Fix.define({
+        name: "原始属性",
+        arr: [{
+            n: 'a'
+        }, {
+            n: 'b'
+        }]
+    });
+
+    Demo.Fix = BI.inherit(BI.Widget, {
+        _store: function () {
+            return model;
+        },
+        watch: {
+            name: function () {
+                this.button.setText(this.model.name)
+            }
+        },
+        render: function () {
+            var self = this;
+            return {
+                type: "bi.absolute",
+                items: [{
+                    el: {
+                        type: "bi.button",
+                        ref: function () {
+                            self.button = this;
+                        },
+                        handler: function () {
+                            self.model.name = "这是改变后的属性"
+                        },
+                        text: this.model.name
+                    }
+                }]
+            }
+        },
+        mounted: function () {
+
+
+        }
+    });
+
+    BI.shortcut("demo.fix1", Demo.Fix);
+}());
+;(function () {
+    var model = Fix.define({
+        name: 1,
+        arr: [{
+            n: 'a'
+        }, {
+            n: 0
+        }]
+    });
+    var Computed = BI.inherit(Fix.VM, {
+        computed: {
+            b: function () {
+                return this.name + 1
+            },
+            c: function () {
+                return this.arr[1].n + this.b
+            }
+        }
+    })
+
+    var Store = BI.inherit(Fix.VM, {
+        _init: function () {
+            this.comp = new Computed(model);
+        },
+        computed: {
+            b: function () {
+                return this.comp.c + 1
+            },
+            c: function () {
+                return this.comp.arr[1].n & 1;
+            }
+        },
+        actions: {
+            run: function () {
+                this.comp.name++;
+                this.comp.arr[1].n++;
+            }
+        }
+    });
+
+    Demo.Fix = BI.inherit(BI.Widget, {
+        _store: function () {
+            return new Store();
+        },
+        watch: {
+            "b&&(c||b)": function () {
+                this.button.setText(this.model.b)
+            }
+        },
+        render: function () {
+            var self = this;
+            return {
+                type: "bi.absolute",
+                items: [{
+                    el: {
+                        type: "bi.button",
+                        ref: function () {
+                            self.button = this;
+                        },
+                        handler: function () {
+                            self.store.run()
+                        },
+                        text: this.model.b
+                    }
+                }]
+            }
+        },
+        mounted: function () {
+
+
+        }
+    });
+
+    BI.shortcut("demo.fix", Demo.Fix);
+}());;(function () {
+    var model = Fix.define({
+        name: "原始属性",
+        arr: [{
+            n: 'a'
+        }, {
+            n: 0
+        }]
+    });
+
+    Demo.Fix = BI.inherit(BI.Widget, {
+        _store: function () {
+            return model;
+        },
+        watch: {
+            "*.*.n": function () {
+                debugger
+            },
+            "arr.**": function () {
+                debugger
+            },
+            "arr.1.*": function () {
+                this.button.setText(this.model.name + "-" + this.model.arr[1].n)
+            }
+        },
+        render: function () {
+            var self = this;
+            return {
+                type: "bi.absolute",
+                items: [{
+                    el: {
+                        type: "bi.button",
+                        ref: function () {
+                            self.button = this;
+                        },
+                        handler: function () {
+                            self.model.arr[0].n += 1;
+                            self.model.arr[1].n += 1;
+                        },
+                        text: this.model.name + "-" + this.model.arr[1].n
+                    }
+                }]
+            }
+        },
+        mounted: function () {
+
+
+        }
+    });
+
+    BI.shortcut("demo.fix5", Demo.Fix);
+}());;(function(){
+    var model = Fix.define({
+        name: "原始属性",
+        arr: [{
+            n: 'a'
+        }, {
+            n: 'b'
+        }]
+    });
+
+    var Store = BI.inherit(Fix.VM, {
+        _init: function () {
+        },
+        computed: {
+            b: function () {
+                return model.name + '-计算属性'
+            }
+        },
+        actions: {
+            run: function () {
+                model.name = "这是改变后的属性";
+            }
+        }
+    });
+
+    Demo.Fix = BI.inherit(BI.Widget, {
+        _store: function () {
+            return new Store();
+        },
+        watch: {
+            b: function () {
+                this.button.setText(this.model.b)
+            }
+        },
+        render: function () {
+            var self = this;
+            return {
+                type: "bi.absolute",
+                items: [{
+                    el: {
+                        type: "bi.button",
+                        ref: function () {
+                            self.button = this;
+                        },
+                        handler: function () {
+                            self.store.run()
+                        },
+                        text: this.model.b
+                    }
+                }]
+            }
+        },
+        mounted: function () {
+
+
+        }
+    });
+
+    BI.shortcut("demo.fix3", Demo.Fix);
+}());;(function () {
+    var model = Fix.define({
+        name: "原始属性",
+        arr: [{
+            n: 'a'
+        }, {
+            n: 0
+        }]
+    });
+
+    Demo.Fix = BI.inherit(BI.Widget, {
+        _store: function () {
+            return model;
+        },
+        watch: {
+            "name||arr.1.n": function () {
+                this.button.setText(this.model.name + "-" + this.model.arr[1].n)
+            }
+        },
+        render: function () {
+            var self = this;
+            var cnt = 0;
+            return {
+                type: "bi.absolute",
+                items: [{
+                    el: {
+                        type: "bi.button",
+                        ref: function () {
+                            self.button = this;
+                        },
+                        handler: function () {
+                            if (cnt & 1) {
+                                self.model.name += 1;
+                            } else {
+                                self.model.arr[1].n += 1;
+                            }
+                            cnt++;
+                        },
+                        text: this.model.name + "-" + this.model.arr[1].n
+                    }
+                }]
+            }
+        },
+        mounted: function () {
+
+
+        }
+    });
+
+    BI.shortcut("demo.fix4", Demo.Fix);
+}());Demo.Main = BI.inherit(BI.Widget, {
+    props: {
+        baseCls: "demo-main bi-background"
+    },
+    render: function () {
+        var center;
+        return {
+            type: "bi.border",
+            items: {
+                north: {
+                    height: 50,
+                    el: {
+                        type: "demo.north",
+                        listeners: [{
+                            eventName: Demo.North.EVENT_VALUE_CHANGE,
+                            action: function (v) {
+                                center.setValue(v);
+                            }
+                        }]
+                    }
+                },
+                west: {
+                    width: 230,
+                    el: {
+                        type: "demo.west",
+                        listeners: [{
+                            eventName: Demo.West.EVENT_VALUE_CHANGE,
+                            action: function (v) {
+                                center.setValue(v);
+                            }
+                        }]
+                    }
+                },
+                center: {
+                    el: {
+                        type: "demo.center",
+                        ref: function (_ref) {
+                            center = _ref;
+                        }
+                    }
+                }
+            }
+        }
+    }
+});
+BI.shortcut("demo.main", Demo.Main);Demo.North = BI.inherit(BI.Widget, {
+    props: {
+        baseCls: "demo-north"
+    },
+    render: function () {
+        var self = this;
+        return {
+            type: "bi.htape",
+            items: [{
+                width: 230,
+                el: {
+                    type: "bi.text_button",
+                    listeners: [{
+                        eventName: BI.Button.EVENT_CHANGE,
+                        action: function () {
+                            self.fireEvent(Demo.North.EVENT_VALUE_CHANGE, "demo.face")
+                        }
+                    }],
+                    cls: "logo",
+                    height: 50,
+                    text: "FineUI2.0"
+                }
+            }, {
+                el: {
+                    type: "bi.right",
+                    hgap: 10,
+                    items: [{
+                        type: "bi.text_button",
+                        text: "星空蓝",
+                        handler: function () {
+                            $("html").removeClass("bi-theme-default").addClass("bi-theme-dark");
+                        }
+                    }, {
+                        type: "bi.text_button",
+                        text: "典雅白",
+                        handler: function () {
+                            $("html").removeClass("bi-theme-dark").addClass("bi-theme-default");
+                        }
+                    }]
+                }
+            }]
+        }
+    }
+});
+Demo.North.EVENT_VALUE_CHANGE = "EVENT_VALUE_CHANGE";
+BI.shortcut("demo.north", Demo.North);Demo.Preview = BI.inherit(BI.Widget, {
+    props: {
+        baseCls: "demo-preview"
+    },
+    render: function () {
+        var self = this;
+        var items = [], header = [], columnSize = [];
+
+        var rowCount = 100, columnCount = 100;
+        for (var i = 0; i < 1; i++) {
+            header[i] = [];
+            for (var j = 0; j < columnCount; j++) {
+                header[i][j] = {
+                    type: "bi.label",
+                    text: "表头" + i + "-" + j
+                }
+                columnSize[j] = 100;
+            }
+        }
+        for (var i = 0; i < rowCount; i++) {
+            items[i] = [];
+            for (var j = 0; j < columnCount; j++) {
+                items[i][j] = {
+                    type: "bi.label",
+                    text: (i < 3 ? 0 : i) + "-" + j
+                }
+            }
+        }
+        return {
+            type: "bi.absolute",
+            cls: "preview-background",
+            items: [{
+                el: {
+                    type: "bi.left",
+                    cls: "preview-header bi-tips",
+                    height: 40,
+                    items: [{
+                        type: "bi.label",
+                        height: 40,
+                        text: "Card2",
+                        hgap: 10,
+                        textAlign: "left"
+                    }, {
+                        type: "bi.icon_text_item",
+                        cls: "filter-font",
+                        text: "测试图标",
+                        width: 100,
+                        height: 40
+                    }]
+                },
+                left: 60,
+                right: 60,
+                top: 60
+            }, {
+                el: {
+                    type: "bi.vtape",
+                    cls: "preview-card bi-card",
+                    items: [{
+                        el: {
+                            type: "bi.label",
+                            cls: "preview-title bi-border-bottom",
+                            height: 40,
+                            text: "Card1",
+                            hgap: 10,
+                            textAlign: "left"
+                        },
+                        height: 40
+                    }, {
+                        type: "bi.center_adapt",
+                        scrollable: true,
+                        items: [{
+                            type: "bi.resizable_table",
+                            el: {
+                                type: "bi.collection_table"
+                            },
+                            width: 500,
+                            height: 400,
+                            isResizeAdapt: true,
+                            isNeedResize: true,
+                            isNeedMerge: true,
+                            mergeCols: [0, 1],
+                            mergeRule: function (col1, col2) {
+                                return BI.isEqual(col1, col2);
+                            },
+                            isNeedFreeze: true,
+                            freezeCols: [0, 1],
+                            columnSize: columnSize,
+                            items: items,
+                            header: header
+                        }]
+                    }]
+                },
+                left: 60,
+                right: 60,
+                top: 160,
+                bottom: 60
+            }]
+        }
+    },
+    mounted: function () {
+    }
+});
+BI.shortcut("demo.preview", Demo.Preview);Demo.West = BI.inherit(BI.Widget, {
     props: {
         baseCls: "demo-west bi-border-right bi-card"
     },
@@ -13744,7 +13746,7 @@ Demo.YearQuarterCombo = BI.inherit(BI.Widget, {
     }
 })
 
-BI.shortcut("demo.year_quarter_combo", Demo.YearQuarterCombo);Demo.CONFIG = Demo.CORE_CONFIG.concat(Demo.BASE_CONFIG).concat(Demo.CASE_CONFIG).concat(Demo.WIDGET_CONFIG).concat(Demo.COMPONENT_CONFIG).concat(Demo.VM_CONFIG).concat(Demo.ADDONS_CONFIG).concat(Demo.CATEGORY_CONFIG);
+BI.shortcut("demo.year_quarter_combo", Demo.YearQuarterCombo);Demo.CONFIG = Demo.CORE_CONFIG.concat(Demo.BASE_CONFIG).concat(Demo.CASE_CONFIG).concat(Demo.WIDGET_CONFIG).concat(Demo.COMPONENT_CONFIG).concat(Demo.FIX_CONFIG).concat(Demo.ADDONS_CONFIG).concat(Demo.CATEGORY_CONFIG);
 
 Demo.CONSTANTS = {
     SIMPLE_ITEMS: BI.map("柳州市城贸金属材料有限责任公司 柳州市建福房屋租赁有限公司 柳州市迅昌数码办公设备有限责任公司 柳州市河海贸易有限责任公司 柳州市花篮制衣厂 柳州市兴溪物资有限公司 柳州市针织总厂 柳州市衡管物资有限公司 柳州市琪成机电设备有限公司 柳州市松林工程机械修理厂".match(/[^\s]+/g), function (i, v) {

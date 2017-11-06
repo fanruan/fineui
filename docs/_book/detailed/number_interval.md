@@ -1,15 +1,15 @@
-# numeric_interval
+# bi.number_interval
 
 ## 数值区间控件
 
 {% method %}
-[source](https://jsfiddle.net/fineui/oskypvLe/)
+[source](https://jsfiddle.net/fineui/5mmj70j5/)
 
 {% common %}
 ```javascript
 BI.createWidget({
     type: "bi.number_interval",
-    element: '#wrapper',
+    element: 'body',
     width: 500
 });
 ```
@@ -38,8 +38,8 @@ BI.createWidget({
 ##事件
 | 事件    | 说明           |
 | :------ |:------------- |
-|BI.NumericalInterval.EVENT_VALID| 区间合法的状态事件 |
-|BI.NumericalInterval.EVENT_ERROR| 区间不合法的状态事件 |
+|BI.NumberInterval.EVENT_VALID| 区间合法的状态事件 |
+|BI.NumberInterval.EVENT_ERROR| 区间不合法的状态事件 |
 
 
 ---

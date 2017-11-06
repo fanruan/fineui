@@ -7,15 +7,14 @@
  */
 BI.IconTextTrigger = BI.inherit(BI.Trigger, {
     _const: {
-        hgap: 4,
-        triggerWidth: 30
+        hgap: 4
     },
 
     _defaultConfig: function () {
         var conf = BI.IconTextTrigger.superclass._defaultConfig.apply(this, arguments);
         return BI.extend(conf, {
             baseCls: (conf.baseCls || "") + " bi-text-trigger",
-            height: 30
+            height: 24
         });
     },
 
@@ -32,7 +31,7 @@ BI.IconTextTrigger = BI.inherit(BI.Trigger, {
         this.trigerButton = BI.createWidget({
             type: "bi.trigger_icon_button",
             cls: "bi-border-left",
-            width: c.triggerWidth
+            width: o.triggerWidth || o.height
         });
 
         BI.createWidget({
@@ -47,13 +46,13 @@ BI.IconTextTrigger = BI.inherit(BI.Trigger, {
                     },
                     disableSelected: true
                 },
-                width: 24
+                width: o.triggerWidth || o.height
             },
                 {
                     el: this.text
                 }, {
                     el: this.trigerButton,
-                    width: c.triggerWidth
+                    width: o.triggerWidth || o.height
                 }
             ]
         });

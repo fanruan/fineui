@@ -200,150 +200,6 @@
     }
 
 }));/**
- * jQuery "splendid textchange" plugin
- * http://benalpert.com/2013/06/18/a-near-perfect-oninput-shim-for-ie-8-and-9.html
- *
- * (c) 2013 Ben Alpert, released under the MIT license
- */
-
-(function($) {
-
-    var testNode = document.createElement("input");
-    var isInputSupported = "oninput" in testNode &&
-        (!("documentMode" in document) || document.documentMode > 9);
-
-    var hasInputCapabilities = function(elem) {
-        // The HTML5 spec lists many more types than `text` and `password` on
-        // which the input event is triggered but none of them exist in IE 8 or
-        // 9, so we don't check them here.
-        // TODO: <textarea> should be supported too but IE seems to reset the
-        // selection when changing textarea contents during a selectionchange
-        // event so it's not listed here for now.
-        return elem.nodeName === "INPUT" &&
-            (elem.type === "text" || elem.type === "password");
-    };
-
-    var activeElement = null;
-    var activeElementValue = null;
-    var activeElementValueProp = null;
-
-    /**
-     * (For old IE.) Replacement getter/setter for the `value` property that
-     * gets set on the active element.
-     */
-    var newValueProp =  {
-        get: function() {
-            return activeElementValueProp.get.call(this);
-        },
-        set: function(val) {
-            activeElementValue = val;
-            activeElementValueProp.set.call(this, val);
-        }
-    };
-
-    /**
-     * (For old IE.) Starts tracking propertychange events on the passed-in element
-     * and override the value property so that we can distinguish user events from
-     * value changes in JS.
-     */
-    var startWatching = function(target) {
-        activeElement = target;
-        activeElementValue = target.value;
-        activeElementValueProp = Object.getOwnPropertyDescriptor(
-            target.constructor.prototype, "value");
-
-        Object.defineProperty(activeElement, "value", newValueProp);
-        activeElement.attachEvent("onpropertychange", handlePropertyChange);
-    };
-
-    /**
-     * (For old IE.) Removes the event listeners from the currently-tracked
-     * element, if any exists.
-     */
-    var stopWatching = function() {
-        if (!activeElement) return;
-
-        // delete restores the original property definition
-        delete activeElement.value;
-        activeElement.detachEvent("onpropertychange", handlePropertyChange);
-
-        activeElement = null;
-        activeElementValue = null;
-        activeElementValueProp = null;
-    };
-
-    /**
-     * (For old IE.) Handles a propertychange event, sending a textChange event if
-     * the value of the active element has changed.
-     */
-    var handlePropertyChange = function(nativeEvent) {
-        if (nativeEvent.propertyName !== "value") return;
-
-        var value = nativeEvent.srcElement.value;
-        if (value === activeElementValue) return;
-        activeElementValue = value;
-
-        $(activeElement).trigger("textchange");
-    };
-
-    if (isInputSupported) {
-        $(document)
-            .on("input", function(e) {
-                // In modern browsers (i.e., not IE 8 or 9), the input event is
-                // exactly what we want so fall through here and trigger the
-                // event...
-                if (e.target.nodeName !== "TEXTAREA") {
-                    // ...unless it's a textarea, in which case we don't fire an
-                    // event (so that we have consistency with our old-IE shim).
-                    $(e.target).trigger("textchange");
-                }
-            });
-    } else {
-        $(document)
-            .on("focusin", function(e) {
-                // In IE 8, we can capture almost all .value changes by adding a
-                // propertychange handler and looking for events with propertyName
-                // equal to 'value'.
-                // In IE 9, propertychange fires for most input events but is buggy
-                // and doesn't fire when text is deleted, but conveniently,
-                // selectionchange appears to fire in all of the remaining cases so
-                // we catch those and forward the event if the value has changed.
-                // In either case, we don't want to call the event handler if the
-                // value is changed from JS so we redefine a setter for `.value`
-                // that updates our activeElementValue variable, allowing us to
-                // ignore those changes.
-                if (hasInputCapabilities(e.target)) {
-                    // stopWatching() should be a noop here but we call it just in
-                    // case we missed a blur event somehow.
-                    stopWatching();
-                    startWatching(e.target);
-                }
-            })
-
-            .on("focusout", function() {
-                stopWatching();
-            })
-
-            .on("selectionchange keyup keydown", function() {
-                // On the selectionchange event, e.target is just document which
-                // isn't helpful for us so just check activeElement instead.
-                //
-                // 90% of the time, keydown and keyup aren't necessary. IE 8 fails
-                // to fire propertychange on the first input event after setting
-                // `value` from a script and fires only keydown, keypress, keyup.
-                // Catching keyup usually gets it and catching keydown lets us fire
-                // an event for the first keystroke if user does a key repeat
-                // (it'll be a little delayed: right before the second keystroke).
-                // Other input methods (e.g., paste) seem to fire selectionchange
-                // normally.
-                if (activeElement && activeElement.value !== activeElementValue) {
-                    activeElementValue = activeElement.value;
-                    $(activeElement).trigger("textchange");
-                }
-            });
-    }
-
-})(jQuery);/**
  * 当没有元素时有提示信息的view
  *
  * Created by GUY on 2015/9/8.
@@ -908,7 +764,9 @@ BI.BasicButton = BI.inherit(BI.Single, {
                             return;
                         }
                         interval = setInterval(function () {
-                            self.doClick();
+                            if(self.isEnabled()){
+                                self.doClick();
+                            }
                         }, 100);
                         mouseDown = true;
                         ev(e);
@@ -3052,6 +2910,7 @@ BI.Combo = BI.inherit(BI.Widget, {
             trigger: "click",
             toggle: true,
             direction: "bottom", //top||bottom||left||right||top,left||top,right||bottom,left||bottom,right
+            container: null,//popupview放置的容器，默认为this.element
             isDefaultInit: false,
             destroyWhenHide: false,
             isNeedAdjustHeight: true,//是否需要高度调整
@@ -3248,7 +3107,7 @@ BI.Combo = BI.inherit(BI.Widget, {
             BI.createWidget({
                 type: "bi.vertical",
                 scrolly: false,
-                element: this,
+                element: this.options.container || this,
                 items: [
                     {el: this.popupView}
                 ]
@@ -3261,6 +3120,7 @@ BI.Combo = BI.inherit(BI.Widget, {
         // if (this.element.__isMouseInBounds__(e) || (this.popupView && this.popupView.element.__isMouseInBounds__(e))) {
         //     return;
         // }
+        //BI-10290 公式combo双击公式内容会收起
         if (this.element.find(e.target).length > 0 || e.target.className === "CodeMirror-cursor" || $(e.target).closest(".CodeMirror-hints").length > 0) {//BI-9887 CodeMirror的公式弹框需要特殊处理下
             return;
         }
@@ -3779,10 +3639,10 @@ BI.ComboGroup = BI.inherit(BI.Widget, {
 
     _init: function () {
         BI.ComboGroup.superclass._init.apply(this, arguments);
-        this.populate(this.options.el);
+        this._populate(this.options.el);
     },
 
-    populate: function (item) {
+    _populate: function (item) {
         var self = this, o = this.options;
         var children = o.children;
         if (BI.isEmpty(children)) {
@@ -17244,7 +17104,7 @@ BI.RichEditorSizeChooser = BI.inherit(BI.RichEditorAction, {
             type: "bi.text_trigger",
             readonly: true,
             height: o.height,
-            triggerWidth: 12,
+            triggerWidth: 16,
             text: BI.i18nText("BI-Font_Size")
         });
 
@@ -19022,7 +18882,7 @@ BI.shortcut("bi.text_node", BI.TextNode);/**
 BI.CodeEditor = BI.inherit(BI.Single, {
     _defaultConfig: function () {
         return $.extend(BI.CodeEditor.superclass._defaultConfig.apply(), {
-            baseCls: 'bi-code-editor bi-card',
+            baseCls: 'bi-code-editor',
             value: '',
             watermark: "",
             lineHeight: 2,
@@ -19041,6 +18901,7 @@ BI.CodeEditor = BI.inherit(BI.Single, {
             lineWrapping: true,
             lineNumbers: false,
             readOnly: o.readOnly,
+            //解决插入字段由括号或其他特殊字符包围时分裂的bug
             specialChars: /[\u0000-\u001f\u007f\u00ad\u200c-\u200f\u2028\u2029\ufeff]/
         });
         o.lineHeight === 1 ? this.element.addClass("codemirror-low-line-height") : this.element.addClass("codemirror-high-line-height");
@@ -19060,13 +18921,13 @@ BI.CodeEditor = BI.inherit(BI.Single, {
             self.fireEvent(BI.CodeEditor.EVENT_BLUR);
         });
 
-        this.editor.on("mousedown", function (cm, e) {
-            //IE下mousedown之后会触发blur,所以nextTick后再做focus
-            BI.nextTick(function () {
-                self.fireEvent(BI.CodeEditor.EVENT_FOCUS);
-            });
-            e.stopPropagation();
-        });
+        // this.editor.on("mousedown", function (cm, e) {
+        //     //IE下mousedown之后会触发blur,所以nextTick后再做focus
+        //     BI.nextTick(function () {
+        //         self.fireEvent(BI.CodeEditor.EVENT_FOCUS);
+        //     });
+        //     //e.stopPropagation();
+        // });
 
         // this.editor.on("blur", function () {
         //     self.editor.execCommand("goLineEnd");
@@ -19126,6 +18987,7 @@ BI.CodeEditor = BI.inherit(BI.Single, {
         var value = param;
         param = this.options.paramFormatter(param);
         var from = this.editor.getCursor();
+        //解决插入字段由括号或其他特殊字符包围时分裂的bug,在两端以不可见字符包裹一下
         this.editor.replaceSelection('\u200b' + param + '\u200b');
         var to = this.editor.getCursor();
         var options = {className: 'param', atomic: true};
@@ -19146,7 +19008,8 @@ BI.CodeEditor = BI.inherit(BI.Single, {
         return this.editor.getValue("\n", function (line) {
             var rawText = line.text, value = line.text, num = 0;
             value.text = rawText;
-            _.forEach(line.markedSpans, function (i, ms) {
+            //根据插入位置不同，line.markedSpan可能是乱序的
+            _.forEach(_.sortBy(line.markedSpans, "from"), function (i, ms) {
                 switch (i.marker.className) {
                     case "param":
                     case "error-param":
@@ -21614,7 +21477,7 @@ BI.Trigger = BI.inherit(BI.Single, {
         var conf = BI.Trigger.superclass._defaultConfig.apply(this, arguments);
         return BI.extend(conf, {
             baseCls: (conf.baseCls || "") + " bi-trigger cursor-pointer",
-            height: 30
+            height: 24
         })
     },
 
@@ -34041,7 +33904,7 @@ BI.ResizableTable = BI.inherit(BI.Widget, {
                     o.columnSize[self._getFreezeColLength() - 1] += o.regionColumnSize[0] - freezeColumnSize;
                     self.table.setColumnSize(o.columnSize);
                 }
-                self.table.populate();
+                // self.table.populate();
                 self._populate();
                 self.regionResizerHandler.element.removeClass("dragging");
                 self.fireEvent(BI.Table.EVENT_TABLE_AFTER_REGION_RESIZE);
@@ -34144,7 +34007,7 @@ BI.ResizableTable = BI.inherit(BI.Widget, {
             columnSize[j] = size;
             o.columnSize = columnSize;
             self.table.setColumnSize(columnSize);
-            self.table.populate();
+            // self.table.populate();
             self._populate();
             self.fireEvent(BI.Table.EVENT_TABLE_AFTER_COLUMN_RESIZE);
         };

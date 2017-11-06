@@ -6,7 +6,6 @@ BI.IntervalSlider = BI.inherit(BI.Widget, {
         EDITOR_WIDTH: 58,
         EDITOR_R_GAP: 60,
         EDITOR_HEIGHT: 30,
-        HEIGHT: 28,
         SLIDER_WIDTH_HALF: 15,
         SLIDER_WIDTH: 30,
         SLIDER_HEIGHT: 30,
@@ -51,7 +50,6 @@ BI.IntervalSlider = BI.inherit(BI.Widget, {
             cls: "slider-editor-button",
             errorText: "",
             allowBlank: false,
-            height: c.HEIGHT,
             width: c.EDITOR_WIDTH,
             validationChecker: function (v) {
                 return self._checkValidation(v);
@@ -78,7 +76,6 @@ BI.IntervalSlider = BI.inherit(BI.Widget, {
             cls: "slider-editor-button",
             errorText: "",
             allowBlank: false,
-            height: c.HEIGHT,
             width: c.EDITOR_WIDTH,
             validationChecker: function (v) {
                 return self._checkValidation(v);
@@ -103,52 +100,11 @@ BI.IntervalSlider = BI.inherit(BI.Widget, {
         this.sliderOne = BI.createWidget({
             type: "bi.single_slider_button"
         });
-        this.sliderOne.element.draggable({
-            axis: "x",
-            containment: this.grayTrack.element,
-            scroll: false,
-            drag: function (e, ui) {
-                var percent = (ui.position.left) * 100 / (self._getGrayTrackLength());
-                var significantPercent = BI.parseFloat(percent.toFixed(1));
-                self._setLabelOnePosition(significantPercent);
-                var v = self._getValueByPercent(significantPercent);
-                v = self._assertValue(v);
-                self.labelOne.setValue(v);
-                self.valueOne = v;
-                self._setBlueTrack();
-            },
-            stop: function (e, ui) {
-                var percent = (ui.position.left) * 100 / (self._getGrayTrackLength());
-                var significantPercent = BI.parseFloat(percent.toFixed(1));
-                self._setSliderOnePosition(significantPercent);
-                self.fireEvent(BI.IntervalSlider.EVENT_CHANGE);
-            }
-        });
-
         this.sliderTwo = BI.createWidget({
             type: "bi.single_slider_button"
         });
-        this.sliderTwo.element.draggable({
-            axis: "x",
-            containment: this.grayTrack.element,
-            scroll: false,
-            drag: function (e, ui) {
-                var percent = (ui.position.left) * 100 / (self._getGrayTrackLength());
-                var significantPercent = BI.parseFloat(percent.toFixed(1));
-                self._setLabelTwoPosition(significantPercent);
-                var v = self._getValueByPercent(significantPercent);
-                v = self._assertValue(v);
-                self.labelTwo.setValue(v);
-                self.valueTwo = v;
-                self._setBlueTrack();
-            },
-            stop: function (e, ui) {
-                var percent = (ui.position.left) * 100 / (self._getGrayTrackLength());
-                var significantPercent = BI.parseFloat(percent.toFixed(1));
-                self._setSliderTwoPosition(significantPercent);
-                self.fireEvent(BI.IntervalSlider.EVENT_CHANGE);
-            }
-        });
+        this._draggable(this.sliderOne, true);
+        this._draggable(this.sliderTwo, false);
         this._setVisible(false);
 
         BI.createWidget({
@@ -176,6 +132,70 @@ BI.IntervalSlider = BI.inherit(BI.Widget, {
                 this._createSliderWrapper()
             ]
         })
+    },
+
+    _rePosBySizeAfterMove: function (size, isLeft) {
+        var percent = size * 100 / (this._getGrayTrackLength());
+        var significantPercent = BI.parseFloat(percent.toFixed(1));
+        var v = this._getValueByPercent(significantPercent);
+        v = this._assertValue(v);
+        if(isLeft){
+            this._setLabelOnePosition(significantPercent);
+            this._setSliderOnePosition(significantPercent);
+            this.labelOne.setValue(v);
+            this.valueOne = v;
+        }else{
+            this._setLabelTwoPosition(significantPercent);
+            this._setSliderTwoPosition(significantPercent);
+            this.labelTwo.setValue(v);
+            this.valueTwo = v;
+        }
+        this._setBlueTrack();
+    },
+
+    _rePosBySizeAfterStop: function (size, isLeft) {
+        var percent = size * 100 / (this._getGrayTrackLength());
+        var significantPercent = BI.parseFloat(percent.toFixed(1));
+        isLeft ? this._setSliderOnePosition(significantPercent) : this._setSliderTwoPosition(significantPercent);
+    },
+
+    _draggable: function (widget, isLeft) {
+        var self = this, o = this.options;
+        var startDrag = false;
+        var size = 0, offset = 0, defaultSize = 0;
+        var mouseMoveTracker = new BI.MouseMoveTracker(function (deltaX) {
+            if (mouseMoveTracker.isDragging()) {
+                startDrag = true;
+                offset += deltaX;
+                size = optimizeSize(defaultSize + offset);
+                widget.element.addClass("dragging");
+                self._rePosBySizeAfterMove(size, isLeft);
+            }
+        }, function () {
+            if (startDrag === true) {
+                size = optimizeSize(size);
+                self._rePosBySizeAfterStop(size, isLeft);
+                size = 0;
+                offset = 0;
+                defaultSize = size;
+                startDrag = false;
+            }
+            widget.element.removeClass("dragging");
+            mouseMoveTracker.releaseMouseMoves();
+            self.fireEvent(BI.IntervalSlider.EVENT_CHANGE);
+        }, document);
+        widget.element.on("mousedown", function (event) {
+            if(!widget.isEnabled()){
+                return;
+            }
+            defaultSize = this.offsetLeft;
+            optimizeSize(defaultSize);
+            mouseMoveTracker.captureMouseMoves(event);
+        });
+
+        function optimizeSize(s) {
+            return BI.clamp(s, 0, o.width);
+        }
     },
 
     _createLabelWrapper: function () {
@@ -370,13 +390,8 @@ BI.IntervalSlider = BI.inherit(BI.Widget, {
     },
 
     _setDraggableEnable: function (enable) {
-        if (enable) {
-            this.sliderOne.element.draggable("enable");
-            this.sliderTwo.element.draggable("enable")
-        } else {
-            this.sliderOne.element.draggable("disable");
-            this.sliderTwo.element.draggable("disable")
-        }
+        this.sliderOne.setEnable(enable);
+        this.sliderTwo.setEnable(enable);
     },
 
     _getPrecision: function () {

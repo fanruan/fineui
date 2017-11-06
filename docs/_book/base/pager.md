@@ -31,11 +31,11 @@ BI.createWidget({
 | dynamicShowFirstLast | 是否动态显示首页、尾页,dynamicShow为false时生效| boolean| true,false | false |
 | dynamicShowPrevNext | 是否动态显示上一页、下一页,dynamicShow为false时生效 | boolean| true,false | false|
 | pages | 是否显示总页数 | boolean/number| false,number|false|
-| curr | 初始化当前页 | function | —| function(){return 1;}|
+| curr | 初始化当前页 | function/number | —| function(){return 1;}|
 | groups | 连续显示分页数 | number | — | 0 |
 | jump | 页数跳转| function |— | —|
-| first | 是否显示首页 | boolean | true,false| false|
-| last | 是否显示尾页 | boolean | true,false| false|
+| first | 是否显示首页 | boolean/string | true,false,string| false|
+| last | 是否显示尾页 | boolean/string | true,false,string| false|
 | prev | 上一页 | string,object —| — |"上一页" |
 | next | 下一页 | sting,object| —| "下一页" |
 | firstPage | 第一页 | number|— | 1 |

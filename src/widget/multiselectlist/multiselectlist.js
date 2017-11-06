@@ -90,9 +90,6 @@ BI.MultiSelectList = BI.inherit(BI.Widget, {
                             type: BI.Selection.Multi,
                             value: [keyword]
                         }, function () {
-                            if (self.storeValue.type === BI.Selection.Multi) {
-                                self.storeValue.value.pushDistinct(keyword)
-                            }
                             self._showAdapter();
                             self.adapter.setValue(self.storeValue);
                             self._setStartValue(keyword);
@@ -101,16 +98,6 @@ BI.MultiSelectList = BI.inherit(BI.Widget, {
                             self._setStartValue("");
                             self.fireEvent(BI.MultiSelectList.EVENT_CHANGE);
                         })
-                    } else {
-                        if (self.storeValue.type === BI.Selection.Multi) {
-                            self.storeValue.value.pushDistinct(keyword)
-                        }
-                        self._showAdapter();
-                        self.adapter.setValue(self.storeValue);
-                        self.adapter.populate();
-                        if (self.storeValue.type === BI.Selection.Multi) {
-                            self.fireEvent(BI.MultiSelectList.EVENT_CHANGE);
-                        }
                     }
                 }
             }, {
@@ -263,32 +250,31 @@ BI.MultiSelectList = BI.inherit(BI.Widget, {
 
     _adjust: function (callback) {
         var self = this, o = this.options;
-        // if (!this._count) {
-        //     o.itemsCreator({
-        //         type: BI.MultiSelectList.REQ_GET_DATA_LENGTH
-        //     }, function (res) {
-        //         self._count = res.count;
-        //         adjust();
-        //         callback();
-        //     });
-        // } else {
-        adjust();
-        callback();
-
-        // }
+        if (!this._count) {
+            o.itemsCreator({
+                type: BI.MultiSelectList.REQ_GET_DATA_LENGTH
+            }, function (res) {
+                self._count = res.count;
+                adjust();
+                callback();
+            });
+        } else {
+            adjust();
+            callback();
+        }
 
         function adjust() {
-            // if (self.storeValue.type === BI.Selection.All && self.storeValue.value.length >= self._count) {
-            //     self.storeValue = {
-            //         type: BI.Selection.Multi,
-            //         value: []
-            //     }
-            // } else if (self.storeValue.type === BI.Selection.Multi && self.storeValue.value.length >= self._count) {
-            //     self.storeValue = {
-            //         type: BI.Selection.All,
-            //         value: []
-            //     }
-            // }
+            if (self.storeValue.type === BI.Selection.All && self.storeValue.value.length >= self._count) {
+                self.storeValue = {
+                    type: BI.Selection.Multi,
+                    value: []
+                }
+            } else if (self.storeValue.type === BI.Selection.Multi && self.storeValue.value.length >= self._count) {
+                self.storeValue = {
+                    type: BI.Selection.All,
+                    value: []
+                }
+            }
         }
     },
 

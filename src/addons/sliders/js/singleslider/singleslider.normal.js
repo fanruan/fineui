@@ -28,25 +28,7 @@ BI.SingleSliderNormal = BI.inherit(BI.Widget, {
         this.slider = BI.createWidget({
             type: "bi.single_slider_button"
         });
-        this.slider.element.draggable({
-            axis: "x",
-            containment: this.grayTrack.element,
-            scroll: false,
-            drag: function (e, ui) {
-                var percent = (ui.position.left) * 100 / (self._getGrayTrackLength());
-                var significantPercent = BI.parseFloat(percent.toFixed(1));//直接对计算出来的百分数保留到小数点后一位，相当于分成了1000份。
-                self._setBlueTrack(significantPercent);
-                var v = self._getValueByPercent(significantPercent);
-                self.value = v;
-                self.fireEvent(BI.SingleSliderNormal.EVENT_DRAG, v);
-            },
-            stop: function (e, ui) {
-                var percent = (ui.position.left) * 100 / (self._getGrayTrackLength());
-                var significantPercent = BI.parseFloat(percent.toFixed(1));
-                self._setSliderPosition(significantPercent);
-                self.fireEvent(BI.SingleSlider.EVENT_CHANGE);
-            }
-        });
+        this._draggable(this.slider);
 
         var sliderVertical = BI.createWidget({
             type: "bi.vertical",
@@ -105,6 +87,54 @@ BI.SingleSliderNormal = BI.inherit(BI.Widget, {
                 left: 0,
                 width: "100%"
             }]
+        }
+    },
+
+    _draggable: function (widget) {
+        var self = this, o = this.options;
+        var startDrag = false;
+        var size = 0, offset = 0, defaultSize = 0;
+        var mouseMoveTracker = new BI.MouseMoveTracker(function (deltaX) {
+            if (mouseMoveTracker.isDragging()) {
+                startDrag = true;
+                offset += deltaX;
+                size = optimizeSize(defaultSize + offset);
+                widget.element.addClass("dragging");
+                var percent = size * 100 / (self._getGrayTrackLength());
+                var significantPercent = BI.parseFloat(percent.toFixed(1));//直接对计算出来的百分数保留到小数点后一位，相当于分成了1000份。
+                self._setBlueTrack(significantPercent);
+                self._setSliderPosition(significantPercent);
+                var v = self._getValueByPercent(significantPercent);
+                v = o.digit === false ? v : v.toFixed(o.digit);
+                self.value = v;
+                self.fireEvent(BI.SingleSliderNormal.EVENT_DRAG, v);
+            }
+        }, function () {
+            if (startDrag === true) {
+                size = optimizeSize(size);
+                var percent = size * 100 / (self._getGrayTrackLength());
+                var significantPercent = BI.parseFloat(percent.toFixed(1));
+                self._setSliderPosition(significantPercent);
+                size = 0;
+                offset = 0;
+                defaultSize = size;
+                startDrag = false;
+            }
+            widget.element.removeClass("dragging");
+            mouseMoveTracker.releaseMouseMoves();
+            self.fireEvent(BI.SingleSlider.EVENT_CHANGE);
+        }, document);
+        widget.element.on("mousedown", function (event) {
+            if(!widget.isEnabled()){
+                return;
+            }
+            defaultSize = this.offsetLeft;
+            optimizeSize(defaultSize);
+            mouseMoveTracker.captureMouseMoves(event);
+        });
+
+        function optimizeSize(s) {
+            return BI.clamp(s, 0, o.width);
         }
     },
 

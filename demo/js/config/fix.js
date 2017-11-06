@@ -53,9 +53,9 @@ var viewRouter = new (BI.inherit(BI.WRouter, {
 BI.View.registerVMRouter(viewRouter, modelRouter);
 
 
-Demo.VM_CONFIG = [{
+Demo.FIX_CONFIG = [{
     id: 6,
-    text: "数据流框架"
+    text: "数据流框架fix-1.0"
 }, {
     pId: 6,
     text: "set,get方法",
@@ -80,4 +80,37 @@ Demo.VM_CONFIG = [{
     pId: 6,
     text: "tmp方法",
     value: "demo.tmp"
+}, {
+    id: 7,
+    text: "数据流框架fix-2.0"
+}, {
+    id: 71,
+    pId: 7,
+    text: "定义响应式数据",
+    value: "demo.fix1"
+}, {
+    id: 72,
+    pId: 7,
+    text: "计算属性",
+    value: "demo.fix2"
+}, {
+    id: 73,
+    pId: 7,
+    text: "store",
+    value: "demo.fix3"
+}, {
+    id: 74,
+    pId: 7,
+    text: "watcher且或表达式",
+    value: "demo.fix4"
+}, {
+    id: 75,
+    pId: 7,
+    text: "watcher星号表达式",
+    value: "demo.fix5"
+}, {
+    id: 76,
+    pId: 7,
+    text: "一个混合的例子",
+    value: "demo.fix"
 }];

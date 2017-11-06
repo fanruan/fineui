@@ -10,7 +10,7 @@ BI.Segment = BI.inherit(BI.Widget, {
         return BI.extend(BI.Segment.superclass._defaultConfig.apply(this, arguments), {
             baseCls: "bi-segment",
             items: [],
-            height: 30
+            height: 24
         });
     },
     _init: function () {

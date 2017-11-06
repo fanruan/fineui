@@ -20,7 +20,7 @@ BI.StateEditor = BI.inherit(BI.Widget, {
             allowBlank: true,
             watermark: "",
             errorText: "",
-            height: 30
+            height: 24
         })
     },
 

@@ -1,55 +1,4 @@
-if (!window.BI) {
-    window.BI = {};
-}
-BI.servletURL = "https://fanruan.coding.me/fineui/dist/";
-BI.resourceURL = "https://fanruan.coding.me/fineui/dist/resource/";
-BI.i18n = {
-    "BI-Basic_OK": "确定",
-    "BI-Basic_Sure": "确定",
-    "BI-Basic_Clears": "清空",
-    "BI-Basic_Cancel": "取消",
-    "BI-Basic_Time": "时间",
-    "BI-Basic_Simple_Sunday": "日",
-    "BI-Basic_Simple_Monday": "一",
-    "BI-Basic_Simple_Tuesday": "二",
-    "BI-Basic_Simple_Wednesday": "三",
-    "BI-Basic_Simple_Thursday": "四",
-    "BI-Basic_Simple_Friday": "五",
-    "BI-Basic_Simple_Saturday": "六",
-    "BI-Multi_Date_Year": "年",
-    "BI-Multi_Date_Month": "月",
-    "BI-Multi_Date_Quarter": "季度",
-    "BI-Basic_Unrestricted": "无限制",
-    "BI-Quarter_1": "第1季度",
-    "BI-Quarter_2": "第2季度",
-    "BI-Quarter_3": "第3季度",
-    "BI-Quarter_4": "第4季度",
-    "BI-Basic_Value": "值",
-    "BI-Load_More": "加载更多",
-    "BI-Select_All": "全选",
-    "BI-Basic_Auto": "自动",
-    "BI-No_More_Data": "无更多数据",
-    "BI-No_Selected_Value": "没有可选项",
-    "BI-Basic_Clear": "清除",
-    "BI-Multi_Date_Relative_Current_Time": "相对当前时间",
-    "BI-Multi_Date_Year_Prev": "年前",
-    "BI-Multi_Date_Year_Next": "年后",
-    "BI-Multi_Date_Year_Begin": "年初",
-    "BI-Multi_Date_Year_End": "年末",
-    "BI-Multi_Date_Quarter_Prev": "个季度前",
-    "BI-Multi_Date_Quarter_Next": "个季度后",
-    "BI-Multi_Date_Quarter_Begin": "季度初",
-    "BI-Multi_Date_Quarter_End": "季度末",
-    "BI-Multi_Date_Month_Prev": "个月前",
-    "BI-Multi_Date_Month_Next": "个月后",
-    "BI-Multi_Date_Month_Begin": "月初",
-    "BI-Multi_Date_Month_End": "月末",
-    "BI-Multi_Date_Week_Prev": "周前",
-    "BI-Multi_Date_Week_Next": "周后",
-    "BI-Multi_Date_Day_Prev": "天前",
-    "BI-Multi_Date_Day_Next": "天后",
-    "BI-Multi_Date_Today": "今天"
-};/*!
+/*!
  * jQuery JavaScript Library v1.9.1
  * http://jquery.com/
  *
@@ -11200,1887 +11149,6 @@ if ( typeof define === "function" && define.amd && define.amd.jQuery ) {
 if (window.BI == null) {
     window.BI = {};
 }/**
- * MVC工厂
- * guy
- * @class BI.Factory
- */
-BI.Factory = {
-    parsePath: function parsePath (path) {
-        var segments = path.split('.');
-        return function (obj) {
-            for (var i = 0; i < segments.length; i++) {
-                if (!obj) {
-                    return;
-                }
-                obj = obj[segments[i]];
-            }
-            return obj;
-        }
-    },
-    createView : function(url, viewFunc, mData, vData, context){
-        var modelFunc = viewFunc.replace(/View/, "Model");
-        modelFunc = this.parsePath(modelFunc)(window);
-        if(!_.isFunction(modelFunc)){
-            modelFunc = BI.Model;
-        }
-//        try {
-            var model = new (modelFunc)(_.extend({}, mData, {
-                    parent: context && context.model,
-                    rootURL: url
-            }), {silent: true});
-//        } catch (e) {
-//
-//        }
-//        try {
-        var view = new (eval(viewFunc))(_.extend({}, vData, {
-            model: model,
-            parent: context,
-            rootURL: url
-        }));
-//        } catch (e) {
-//
-//        }
-        return view;
-    }
-};(function (root, factory) {
-    root.BI = factory(root, root.BI || {}, root._, (root.jQuery || root.$));
-}(this, function (root, BI, _, $) {
-
-    var previousBI = root.BI;
-
-    // Create local references to array methods we'll want to use later.
-    var array = [];
-    var slice = array.slice;
-
-    // Current version of the library. Keep in sync with `package.json`.
-    BI.VERSION = '1.0.0';
-
-    // For BI's purposes, jQuery, Zepto, Ender, or My Library (kidding) owns
-    // the `$` variable.
-    BI.$ = $;
-
-    // Runs BI.js in *noConflict* mode, returning the `BI` variable
-    // to its previous owner. Returns a reference to this BI object.
-    BI.noConflict = function () {
-        root.BI = previousBI;
-        return this;
-    };
-
-    // Turn on `emulateHTTP` to support legacy HTTP servers. Setting this option
-    // will fake `"PATCH"`, `"PUT"` and `"DELETE"` requests via the `_method` parameter and
-    // set a `X-Http-Method-Override` header.
-    BI.emulateHTTP = true;
-
-    // Turn on `emulateJSON` to support legacy servers that can't deal with direct
-    // `application/json` requests ... this will encode the body as
-    // `application/x-www-form-urlencoded` instead and will send the model in a
-    // form param named `model`.
-    BI.emulateJSON = true;
-
-    // BI.Events
-    // ---------------
-
-    // A module that can be mixed in to *any object* in order to provide it with
-    // custom events. You may bind with `on` or remove with `off` callback
-    // functions to an event; `trigger`-ing an event fires all callbacks in
-    // succession.
-    //
-    //     var object = {};
-    //     _.extend(object, BI.Events);
-    //     object.on('expand', function(){ alert('expanded'); });
-    //     object.trigger('expand');
-    //
-    var Events = BI.Events = {
-
-        // Bind an event to a `callback` function. Passing `"all"` will bind
-        // the callback to all events fired.
-        on: function (name, callback, context) {
-            if (!eventsApi(this, 'on', name, [callback, context]) || !callback) return this;
-            this._events || (this._events = {});
-            var events = this._events[name] || (this._events[name] = []);
-            events.push({callback: callback, context: context, ctx: context || this});
-            return this;
-        },
-
-        // Bind an event to only be triggered a single time. After the first time
-        // the callback is invoked, it will be removed.
-        once: function (name, callback, context) {
-            if (!eventsApi(this, 'once', name, [callback, context]) || !callback) return this;
-            var self = this;
-            var once = _.once(function () {
-                self.off(name, once);
-                callback.apply(this, arguments);
-            });
-            once._callback = callback;
-            return this.on(name, once, context);
-        },
-
-        // Remove one or many callbacks. If `context` is null, removes all
-        // callbacks with that function. If `callback` is null, removes all
-        // callbacks for the event. If `name` is null, removes all bound
-        // callbacks for all events.
-        off: function (name, callback, context) {
-            if (!this._events || !eventsApi(this, 'off', name, [callback, context])) return this;
-
-            // Remove all callbacks for all events.
-            if (!name && !callback && !context) {
-                this._events = void 0;
-                return this;
-            }
-
-            var names = name ? [name] : _.keys(this._events);
-            for (var i = 0, length = names.length; i < length; i++) {
-                name = names[i];
-
-                // Bail out if there are no events stored.
-                var events = this._events[name];
-                if (!events) continue;
-
-                // Remove all callbacks for this event.
-                if (!callback && !context) {
-                    delete this._events[name];
-                    continue;
-                }
-
-                // Find any remaining events.
-                var remaining = [];
-                for (var j = 0, k = events.length; j < k; j++) {
-                    var event = events[j];
-                    if (
-                        callback && callback !== event.callback &&
-                        callback !== event.callback._callback ||
-                        context && context !== event.context
-                    ) {
-                        remaining.push(event);
-                    }
-                }
-
-                // Replace events if there are any remaining.  Otherwise, clean up.
-                if (remaining.length) {
-                    this._events[name] = remaining;
-                } else {
-                    delete this._events[name];
-                }
-            }
-
-            return this;
-        },
-
-        un: function () {
-            this.off.apply(this, arguments);
-        },
-
-        // Trigger one or many events, firing all bound callbacks. Callbacks are
-        // passed the same arguments as `trigger` is, apart from the event name
-        // (unless you're listening on `"all"`, which will cause your callback to
-        // receive the true name of the event as the first argument).
-        trigger: function (name) {
-            if (!this._events) return this;
-            var args = slice.call(arguments, 1);
-            if (!eventsApi(this, 'trigger', name, args)) return this;
-            var events = this._events[name];
-            var allEvents = this._events.all;
-            if (events) triggerEvents(events, args);
-            if (allEvents) triggerEvents(allEvents, arguments);
-            return this;
-        },
-
-        fireEvent: function () {
-            this.trigger.apply(this, arguments);
-        },
-
-        // Inversion-of-control versions of `on` and `once`. Tell *this* object to
-        // listen to an event in another object ... keeping track of what it's
-        // listening to.
-        listenTo: function (obj, name, callback) {
-            var listeningTo = this._listeningTo || (this._listeningTo = {});
-            var id = obj._listenId || (obj._listenId = _.uniqueId('l'));
-            listeningTo[id] = obj;
-            if (!callback && typeof name === 'object') callback = this;
-            obj.on(name, callback, this);
-            return this;
-        },
-
-        listenToOnce: function (obj, name, callback) {
-            if (typeof name === 'object') {
-                for (var event in name) this.listenToOnce(obj, event, name[event]);
-                return this;
-            }
-            if (eventSplitter.test(name)) {
-                var names = name.split(eventSplitter);
-                for (var i = 0, length = names.length; i < length; i++) {
-                    this.listenToOnce(obj, names[i], callback);
-                }
-                return this;
-            }
-            if (!callback) return this;
-            var once = _.once(function () {
-                this.stopListening(obj, name, once);
-                callback.apply(this, arguments);
-            });
-            once._callback = callback;
-            return this.listenTo(obj, name, once);
-        },
-
-        // Tell this object to stop listening to either specific events ... or
-        // to every object it's currently listening to.
-        stopListening: function (obj, name, callback) {
-            var listeningTo = this._listeningTo;
-            if (!listeningTo) return this;
-            var remove = !name && !callback;
-            if (!callback && typeof name === 'object') callback = this;
-            if (obj) (listeningTo = {})[obj._listenId] = obj;
-            for (var id in listeningTo) {
-                obj = listeningTo[id];
-                obj.off(name, callback, this);
-                if (remove || _.isEmpty(obj._events)) delete this._listeningTo[id];
-            }
-            return this;
-        }
-
-    };
-
-    // Regular expression used to split event strings.
-    var eventSplitter = /\s+/;
-
-    // Implement fancy features of the Events API such as multiple event
-    // names `"change blur"` and jQuery-style event maps `{change: action}`
-    // in terms of the existing API.
-    var eventsApi = function (obj, action, name, rest) {
-        if (!name) return true;
-
-        // Handle event maps.
-        if (typeof name === 'object') {
-            for (var key in name) {
-                obj[action].apply(obj, [key, name[key]].concat(rest));
-            }
-            return false;
-        }
-
-        // Handle space separated event names.
-        if (eventSplitter.test(name)) {
-            var names = name.split(eventSplitter);
-            for (var i = 0, length = names.length; i < length; i++) {
-                obj[action].apply(obj, [names[i]].concat(rest));
-            }
-            return false;
-        }
-
-        return true;
-    };
-
-    // A difficult-to-believe, but optimized internal dispatch function for
-    // triggering events. Tries to keep the usual cases speedy (most internal
-    // BI events have 3 arguments).
-    var triggerEvents = function (events, args) {
-        var ev, i = -1, l = events.length, a1 = args[0], a2 = args[1], a3 = args[2];
-        switch (args.length) {
-            case 0:
-                while (++i < l) (ev = events[i]).callback.call(ev.ctx);
-                return;
-            case 1:
-                while (++i < l) (ev = events[i]).callback.call(ev.ctx, a1);
-                return;
-            case 2:
-                while (++i < l) (ev = events[i]).callback.call(ev.ctx, a1, a2);
-                return;
-            case 3:
-                while (++i < l) (ev = events[i]).callback.call(ev.ctx, a1, a2, a3);
-                return;
-            default:
-                while (++i < l) (ev = events[i]).callback.apply(ev.ctx, args);
-                return;
-        }
-    };
-
-    // Aliases for backwards compatibility.
-    Events.bind = Events.on;
-    Events.unbind = Events.off;
-
-    // Allow the `BI` object to serve as a global event bus, for folks who
-    // want global "pubsub" in a convenient place.
-    _.extend(BI, Events);
-
-    // BI.M
-    // --------------
-
-    // BI **Models** are the basic data object in the framework --
-    // frequently representing a row in a table in a database on your server.
-    // A discrete chunk of data and a bunch of useful, related methods for
-    // performing computations and transformations on that data.
-
-    // Create a new model with the specified attributes. A client id (`cid`)
-    // is automatically generated and assigned for you.
-    var M = BI.M = function (attributes, options) {
-        var attrs = attributes || {};
-        options = options || {};
-        this.cid = _.uniqueId('c');
-        this.attributes = {};
-        if (options.collection) this.collection = options.collection;
-        if (options.parse) attrs = this.parse(attrs, options) || {};
-        this.options = attrs = _.defaults({}, attrs, _.result(this, '_defaultConfig'));
-        _.extend(this, _.pick(this.options, modelOptions));
-        this.set(attrs, options);
-        this.changed = {};
-        this._init.apply(this, arguments);
-    };
-
-    var modelOptions = ['rootURL', 'parent', 'data', 'id'];
-
-    // Attach all inheritable methods to the M prototype.
-    _.extend(M.prototype, Events, {
-
-        // A hash of attributes whose current and previous value differ.
-        changed: null,
-
-        // The value returned during the last failed validation.
-        validationError: null,
-
-        // The default name for the JSON `id` attribute is `"id"`. MongoDB and
-        // CouchDB users may want to set this to `"_id"`.
-        idAttribute: 'ID',
-
-        _defaultConfig: function () {
-            return {}
-        },
-
-        // _init is an empty function by default. Override it with your own
-        // initialization logic.
-        _init: function () {
-        },
-
-        // Return a copy of the model's `attributes` object.
-        toJSON: function (options) {
-            return _.clone(this.attributes);
-        },
-
-        // Proxy `BI.sync` by default -- but override this if you need
-        // custom syncing semantics for *this* particular model.
-        sync: function () {
-            return BI.sync.apply(this, arguments);
-        },
-
-        // Get the value of an attribute.
-        get: function (attr) {
-            return this.attributes[attr];
-        },
-
-        // Get the HTML-escaped value of an attribute.
-        escape: function (attr) {
-            return _.escape(this.get(attr));
-        },
-
-        // Returns `true` if the attribute contains a value that is not null
-        // or undefined.
-        has: function (attr) {
-            return _.has(this.attributes, attr);
-        },
-
-        // Special-cased proxy to underscore's `_.matches` method.
-        matches: function (attrs) {
-            var keys = _.keys(attrs), length = keys.length;
-            var obj = Object(this.attributes);
-            for (var i = 0; i < length; i++) {
-                var key = keys[i];
-                if (!_.isEqual(attrs[key], obj[key]) || !(key in obj)) return false;
-            }
-            return true;
-        },
-
-        // Set a hash of model attributes on the object, firing `"change"`. This is
-        // the core primitive operation of a model, updating the data and notifying
-        // anyone who needs to know about the change in state. The heart of the beast.
-        set: function (key, val, options) {
-            var attr, attrs, unset, changes, silent, changing, changed, prev, current;
-            if (key == null) return this;
-
-            // Handle both `"key", value` and `{key: value}` -style arguments.
-            if (typeof key === 'object') {
-                attrs = key;
-                options = val;
-            } else {
-                (attrs = {})[key] = val;
-            }
-
-            options || (options = {});
-
-            // Run validation.
-            if (!this._validate(attrs, options)) return false;
-
-            // Extract attributes and options.
-            unset = options.unset;
-            silent = options.silent;
-            changes = [];
-            changing = this._changing;
-            this._changing = true;
-
-            if (!changing) {
-                this._previousAttributes = _.clone(this.attributes);
-                this.changed = {};
-            }
-            current = this.attributes, prev = this._previousAttributes;
-
-            // Check for changes of `id`.
-            if (this.idAttribute in attrs) this.id = attrs[this.idAttribute];
-
-            // For each `set` attribute, update or delete the current value.
-            for (attr in attrs) {
-                val = attrs[attr];
-                if (!_.isEqual(current[attr], val)) changes.push(attr);
-                if (!_.isEqual(prev[attr], val)) {
-                    this.changed[attr] = val;
-                } else {
-                    delete this.changed[attr];
-                }
-                unset ? delete current[attr] : current[attr] = val;
-            }
-
-            // Trigger all relevant attribute changes.
-            if (!silent) {
-                if (changes.length) this._pending = options;
-                for (var i = 0, length = changes.length; i < length; i++) {
-                    this.trigger('change:' + changes[i], this, current[changes[i]], options);
-                }
-            }
-
-            // You might be wondering why there's a `while` loop here. Changes can
-            // be recursively nested within `"change"` events.
-            if (changing) return this;
-            changed = BI.clone(this.changed);
-            if (!silent) {
-                while (this._pending) {
-                    options = this._pending;
-                    this._pending = false;
-                    this.trigger('change', changed, prev, this, options);
-                }
-            }
-            this._pending = false;
-            this._changing = false;
-            if (!silent && changes.length) this.trigger("changed", changed, prev, this, options);
-            return this;
-        },
-
-        // Remove an attribute from the model, firing `"change"`. `unset` is a noop
-        // if the attribute doesn't exist.
-        unset: function (attr, options) {
-            return this.set(attr, void 0, _.extend({}, options, {unset: true}));
-        },
-
-        // Clear all attributes on the model, firing `"change"`.
-        clear: function (options) {
-            var attrs = {};
-            for (var key in this.attributes) attrs[key] = void 0;
-            return this.set(attrs, _.extend({}, options, {unset: true}));
-        },
-
-        // Determine if the model has changed since the last `"change"` event.
-        // If you specify an attribute name, determine if that attribute has changed.
-        hasChanged: function (attr) {
-            if (attr == null) return !_.isEmpty(this.changed);
-            return _.has(this.changed, attr);
-        },
-
-        // Return an object containing all the attributes that have changed, or
-        // false if there are no changed attributes. Useful for determining what
-        // parts of a view need to be updated and/or what attributes need to be
-        // persisted to the server. Unset attributes will be set to undefined.
-        // You can also pass an attributes object to diff against the model,
-        // determining if there *would be* a change.
-        changedAttributes: function (diff) {
-            if (!diff) return this.hasChanged() ? _.clone(this.changed) : false;
-            var val, changed = false;
-            var old = this._changing ? this._previousAttributes : this.attributes;
-            for (var attr in diff) {
-                if (_.isEqual(old[attr], (val = diff[attr]))) continue;
-                (changed || (changed = {}))[attr] = val;
-            }
-            return changed;
-        },
-
-        // Get the previous value of an attribute, recorded at the time the last
-        // `"change"` event was fired.
-        previous: function (attr) {
-            if (attr == null || !this._previousAttributes) return null;
-            return this._previousAttributes[attr];
-        },
-
-        // Get all of the attributes of the model at the time of the previous
-        // `"change"` event.
-        previousAttributes: function () {
-            return _.clone(this._previousAttributes);
-        },
-
-        // Fetch the model from the server. If the server's representation of the
-        // model differs from its current attributes, they will be overridden,
-        // triggering a `"change"` event.
-        fetch: function (options) {
-            options = options ? _.clone(options) : {};
-            if (options.parse === void 0) options.parse = true;
-            var model = this;
-            var success = options.success;
-            options.success = function (resp) {
-                if (!options.noset) {
-                    if (!model.set(model.parse(resp, options), options)) return false;
-                }
-                if (success) success(resp, model, options);
-                model.trigger('sync', resp, model, options).trigger('read', resp, model, options);
-            };
-            wrapError(this, options);
-            return this.sync('read', this, options);
-        },
-
-        // Set a hash of model attributes, and sync the model to the server.
-        // If the server returns an attributes hash that differs, the model's
-        // state will be `set` again.
-        save: function (key, val, options) {
-            var attrs, method, xhr, attributes = this.attributes;
-
-            // Handle both `"key", value` and `{key: value}` -style arguments.
-            if (key == null || typeof key === 'object') {
-                attrs = key;
-                options = val;
-            } else {
-                (attrs = {})[key] = val;
-            }
-
-            options = _.extend({validate: true}, options);
-
-            // If we're not waiting and attributes exist, save acts as
-            // `set(attr).save(null, opts)` with validation. Otherwise, check if
-            // the model will be valid when the attributes, if any, are set.
-            if (attrs && !options.wait) {
-                if (!this.set(attrs, options)) return false;
-            } else {
-                if (!this._validate(attrs, options)) return false;
-            }
-
-            // Set temporary attributes if `{wait: true}`.
-            if (attrs && options.wait) {
-                this.attributes = _.extend({}, attributes, attrs);
-            }
-
-            // After a successful server-side save, the client is (optionally)
-            // updated with the server-side state.
-            if (options.parse === void 0) options.parse = true;
-            var model = this;
-            var success = options.success;
-            options.success = function (resp) {
-                // Ensure attributes are restored during synchronous saves.
-                model.attributes = attributes;
-                var serverAttrs = model.parse(resp, options);
-                if (options.wait) serverAttrs = _.extend(attrs || {}, serverAttrs);
-                if (_.isObject(serverAttrs) && !options.noset && !model.set(serverAttrs, options)) {
-                    return false;
-                }
-                if (success) success(resp, model, options);
-                model.trigger('sync', resp, model, options)
-                    .trigger((options.patch ? 'patch' : 'update'), resp, model, options);
-            };
-            wrapError(this, options);
-
-            method = /**this.isNew() ? 'create' :**/ (options.patch ? 'patch' : 'update');
-            if (method === 'patch' && !options.attrs) options.attrs = attrs;
-            xhr = this.sync(method, this, options);
-
-            // Restore attributes.
-            if (attrs && options.wait) this.attributes = attributes;
-
-            return xhr;
-        },
-
-        // Destroy this model on the server if it was already persisted.
-        // Optimistically removes the model from its collection, if it has one.
-        // If `wait: true` is passed, waits for the server to respond before removal.
-        destroy: function (options) {
-            options = options ? _.clone(options) : {};
-            var model = this;
-            var success = options.success;
-
-            var destroy = function () {
-                model.stopListening();
-                model.trigger('destroy', model.collection, model, options);
-            };
-
-            options.success = function (resp) {
-                if (options.wait || model.isNew()) destroy();
-                if (success) success(resp, model, options);
-                if (!model.isNew()) model.trigger('sync', resp, model, options).trigger('delete', resp, model, options);
-            };
-
-            if (this.isNew()) {
-                options.success();
-                return false;
-            }
-            wrapError(this, options);
-
-            var xhr = this.sync('delete', this, options);
-            if (!options.wait) destroy();
-            return xhr;
-        },
-
-        // Default URL for the model's representation on the server -- if you're
-        // using BI's restful methods, override this to change the endpoint
-        // that will be called.
-        url: function () {
-            var base =
-                _.result(this.collection, 'url');
-            if (this.isNew()) return base;
-            return base.replace(/([^\/])$/, '$1/') + encodeURIComponent(this.id);
-        },
-
-        // **parse** converts a response into the hash of attributes to be `set` on
-        // the model. The default implementation is just to pass the response along.
-        parse: function (resp, options) {
-            return resp;
-        },
-
-        // Create a new model with identical attributes to this one.
-        clone: function () {
-            return new this.constructor(this.attributes);
-        },
-
-        // A model is new if it has never been saved to the server, and lacks an id.
-        isNew: function () {
-            return !this.has(this.idAttribute);
-        },
-
-        // Check if the model is currently in a valid state.
-        isValid: function (options) {
-            return this._validate({}, _.extend(options || {}, {validate: true}));
-        },
-
-        // Run validation against the next complete set of model attributes,
-        // returning `true` if all is well. Otherwise, fire an `"invalid"` event.
-        _validate: function (attrs, options) {
-            if (!options.validate || !this.validate) return true;
-            attrs = _.extend({}, this.attributes, attrs);
-            var error = this.validationError = this.validate(attrs, options) || null;
-            if (!error) return true;
-            this.trigger('invalid', error, this, _.extend(options, {validationError: error}));
-            return false;
-        }
-
-    });
-
-    // Underscore methods that we want to implement on the M.
-    var modelMethods = ['keys', 'values', 'pairs', 'invert', 'pick', 'omit', 'chain', 'isEmpty'];
-
-    // Mix in each Underscore method as a proxy to `M#attributes`.
-    _.each(modelMethods, function (method) {
-        if (!_[method]) return;
-        M.prototype[method] = function () {
-            var args = slice.call(arguments);
-            args.unshift(this.attributes);
-            return _[method].apply(_, args);
-        };
-    });
-
-    // BI.Collection
-    // -------------------
-
-    // If models tend to represent a single row of data, a BI Collection is
-    // more analogous to a table full of data ... or a small slice or page of that
-    // table, or a collection of rows that belong together for a particular reason
-    // -- all of the messages in this particular folder, all of the documents
-    // belonging to this particular author, and so on. Collections maintain
-    // indexes of their models, both in order, and for lookup by `id`.
-
-    // Create a new **Collection**, perhaps to contain a specific type of `model`.
-    // If a `comparator` is specified, the Collection will maintain
-    // its models in sort order, as they're added and removed.
-    var Collection = BI.Collection = function (models, options) {
-        this.options = options = options || {};
-        if (options.model) this.model = options.model;
-        if (options.comparator !== void 0) this.comparator = options.comparator;
-        this._reset();
-        this._init.apply(this, arguments);
-        if (models) this.reset(models, _.extend({silent: true}, options));
-    };
-
-    // Default options for `Collection#set`.
-    var setOptions = {add: true, remove: true, merge: true};
-    var addOptions = {add: true, remove: false};
-
-    // Define the Collection's inheritable methods.
-    _.extend(Collection.prototype, Events, {
-
-        // The default model for a collection is just a **BI.M**.
-        // This should be overridden in most cases.
-        model: M,
-
-        // _init is an empty function by default. Override it with your own
-        // initialization logic.
-        _init: function () {
-        },
-
-        // The JSON representation of a Collection is an array of the
-        // models' attributes.
-        toJSON: function (options) {
-            return this.map(function (model) {
-                return model.toJSON(options);
-            });
-        },
-
-        // Proxy `BI.sync` by default.
-        sync: function () {
-            return BI.sync.apply(this, arguments);
-        },
-
-        // Add a model, or list of models to the set.
-        add: function (models, options) {
-            return this.set(models, _.extend({merge: false}, options, addOptions));
-        },
-
-        // Remove a model, or a list of models from the set.
-        remove: function (models, options) {
-            var singular = !_.isArray(models);
-            models = singular ? [models] : _.clone(models);
-            options || (options = {});
-            for (var i = 0, length = models.length; i < length; i++) {
-                var model = models[i] = this.get(models[i]);
-                if (!model) continue;
-                var id = this.modelId(model.attributes);
-                if (id != null) delete this._byId[id];
-                delete this._byId[model.cid];
-                var index = this.indexOf(model);
-                this.models.splice(index, 1);
-                this.length--;
-                if (!options.silent) {
-                    options.index = index;
-                    model.trigger('remove', model, this, options);
-                }
-                this._removeReference(model, options);
-            }
-            return singular ? models[0] : models;
-        },
-
-        // Update a collection by `set`-ing a new list of models, adding new ones,
-        // removing models that are no longer present, and merging models that
-        // already exist in the collection, as necessary. Similar to **M#set**,
-        // the core operation for updating the data contained by the collection.
-        set: function (models, options) {
-            options = _.defaults({}, options, setOptions);
-            if (options.parse) models = this.parse(models, options);
-            var singular = !_.isArray(models);
-            models = singular ? (models ? [models] : []) : models.slice();
-            var id, model, attrs, existing, sort;
-            var at = options.at;
-            if (at != null) at = +at;
-            if (at < 0) at += this.length + 1;
-            var sortable = this.comparator && (at == null) && options.sort !== false;
-            var sortAttr = _.isString(this.comparator) ? this.comparator : null;
-            var toAdd = [], toRemove = [], modelMap = {};
-            var add = options.add, merge = options.merge, remove = options.remove;
-            var order = !sortable && add && remove ? [] : false;
-            var orderChanged = false;
-
-            // Turn bare objects into model references, and prevent invalid models
-            // from being added.
-            for (var i = 0, length = models.length; i < length; i++) {
-                attrs = models[i];
-
-                // If a duplicate is found, prevent it from being added and
-                // optionally merge it into the existing model.
-                if (existing = this.get(attrs)) {
-                    if (remove) modelMap[existing.cid] = true;
-                    if (merge && attrs !== existing) {
-                        attrs = this._isModel(attrs) ? attrs.attributes : attrs;
-                        if (options.parse) attrs = existing.parse(attrs, options);
-                        existing.set(attrs, options);
-                        if (sortable && !sort && existing.hasChanged(sortAttr)) sort = true;
-                    }
-                    models[i] = existing;
-
-                    // If this is a new, valid model, push it to the `toAdd` list.
-                } else if (add) {
-                    model = models[i] = this._prepareModel(attrs, options);
-                    if (!model) continue;
-                    toAdd.push(model);
-                    this._addReference(model, options);
-                }
-
-                // Do not add multiple models with the same `id`.
-                model = existing || model;
-                if (!model) continue;
-                id = this.modelId(model.attributes);
-                if (order && (model.isNew() || !modelMap[id])) {
-                    order.push(model);
-
-                    // Check to see if this is actually a new model at this index.
-                    orderChanged = orderChanged || !this.models[i] || model.cid !== this.models[i].cid;
-                }
-
-                modelMap[id] = true;
-            }
-
-            // Remove nonexistent models if appropriate.
-            if (remove) {
-                for (var i = 0, length = this.length; i < length; i++) {
-                    if (!modelMap[(model = this.models[i]).cid]) toRemove.push(model);
-                }
-                if (toRemove.length) this.remove(toRemove, options);
-            }
-
-            // See if sorting is needed, update `length` and splice in new models.
-            if (toAdd.length || orderChanged) {
-                if (sortable) sort = true;
-                this.length += toAdd.length;
-                if (at != null) {
-                    for (var i = 0, length = toAdd.length; i < length; i++) {
-                        this.models.splice(at + i, 0, toAdd[i]);
-                    }
-                } else {
-                    if (order) this.models.length = 0;
-                    var orderedModels = order || toAdd;
-                    for (var i = 0, length = orderedModels.length; i < length; i++) {
-                        this.models.push(orderedModels[i]);
-                    }
-                }
-            }
-
-            // Silently sort the collection if appropriate.
-            if (sort) this.sort({silent: true});
-
-            // Unless silenced, it's time to fire all appropriate add/sort events.
-            if (!options.silent) {
-                var addOpts = at != null ? _.clone(options) : options;
-                for (var i = 0, length = toAdd.length; i < length; i++) {
-                    if (at != null) addOpts.index = at + i;
-                    (model = toAdd[i]).trigger('add', model, this, addOpts);
-                }
-                if (sort || orderChanged) this.trigger('sort', this, options);
-            }
-
-            // Return the added (or merged) model (or models).
-            return singular ? models[0] : models;
-        },
-
-        // When you have more items than you want to add or remove individually,
-        // you can reset the entire set with a new list of models, without firing
-        // any granular `add` or `remove` events. Fires `reset` when finished.
-        // Useful for bulk operations and optimizations.
-        reset: function (models, options) {
-            options = options ? _.clone(options) : {};
-            for (var i = 0, length = this.models.length; i < length; i++) {
-                this._removeReference(this.models[i], options);
-            }
-            options.previousModels = this.models;
-            this._reset();
-            models = this.add(models, _.extend({silent: true}, options));
-            if (!options.silent) this.trigger('reset', this, options);
-            return models;
-        },
-
-        // Add a model to the end of the collection.
-        push: function (model, options) {
-            return this.add(model, _.extend({at: this.length}, options));
-        },
-
-        // Remove a model from the end of the collection.
-        pop: function (options) {
-            var model = this.at(this.length - 1);
-            this.remove(model, options);
-            return model;
-        },
-
-        // Add a model to the beginning of the collection.
-        unshift: function (model, options) {
-            return this.add(model, _.extend({at: 0}, options));
-        },
-
-        // Remove a model from the beginning of the collection.
-        shift: function (options) {
-            var model = this.at(0);
-            this.remove(model, options);
-            return model;
-        },
-
-        // Slice out a sub-array of models from the collection.
-        slice: function () {
-            return slice.apply(this.models, arguments);
-        },
-
-        // Get a model from the set by id.
-        get: function (obj) {
-            if (obj == null) return void 0;
-            var id = this.modelId(this._isModel(obj) ? obj.attributes : obj);
-            return this._byId[obj] || this._byId[id] || this._byId[obj.cid];
-        },
-
-        // Get the model at the given index.
-        at: function (index) {
-            if (index < 0) index += this.length;
-            return this.models[index];
-        },
-
-        // Return models with matching attributes. Useful for simple cases of
-        // `filter`.
-        where: function (attrs, first) {
-            var matches = _.matches(attrs);
-            return this[first ? 'find' : 'filter'](function (model) {
-                return matches(model.attributes);
-            });
-        },
-
-        // Return the first model with matching attributes. Useful for simple cases
-        // of `find`.
-        findWhere: function (attrs) {
-            return this.where(attrs, true);
-        },
-
-        // Force the collection to re-sort itself. You don't need to call this under
-        // normal circumstances, as the set will maintain sort order as each item
-        // is added.
-        sort: function (options) {
-            if (!this.comparator) throw new Error('Cannot sort a set without a comparator');
-            options || (options = {});
-
-            // Run sort based on type of `comparator`.
-            if (_.isString(this.comparator) || this.comparator.length === 1) {
-                this.models = this.sortBy(this.comparator, this);
-            } else {
-                this.models.sort(_.bind(this.comparator, this));
-            }
-
-            if (!options.silent) this.trigger('sort', this, options);
-            return this;
-        },
-
-        // Pluck an attribute from each model in the collection.
-        pluck: function (attr) {
-            return _.invoke(this.models, 'get', attr);
-        },
-
-        // Fetch the default set of models for this collection, resetting the
-        // collection when they arrive. If `reset: true` is passed, the response
-        // data will be passed through the `reset` method instead of `set`.
-        fetch: function (options) {
-            options = options ? _.clone(options) : {};
-            if (options.parse === void 0) options.parse = true;
-            var success = options.success;
-            var collection = this;
-            options.success = function (resp) {
-                var method = options.reset ? 'reset' : 'set';
-                collection[method](resp, options);
-                if (success) success(collection, resp, options);
-                collection.trigger('sync', collection, resp, options);
-            };
-            wrapError(this, options);
-            return this.sync('read', this, options);
-        },
-
-        // Create a new instance of a model in this collection. Add the model to the
-        // collection immediately, unless `wait: true` is passed, in which case we
-        // wait for the server to agree.
-        create: function (model, options) {
-            options = options ? _.clone(options) : {};
-            if (!(model = this._prepareModel(model, options))) return false;
-            if (!options.wait) this.add(model, options);
-            var collection = this;
-            var success = options.success;
-            options.success = function (model, resp) {
-                if (options.wait) collection.add(model, options);
-                if (success) success(model, resp, options);
-            };
-            model.save(null, options);
-            return model;
-        },
-
-        // **parse** converts a response into a list of models to be added to the
-        // collection. The default implementation is just to pass it through.
-        parse: function (resp, options) {
-            return resp;
-        },
-
-        // Create a new collection with an identical list of models as this one.
-        clone: function () {
-            return new this.constructor(this.models, {
-                model: this.model,
-                comparator: this.comparator
-            });
-        },
-
-        // Define how to uniquely identify models in the collection.
-        modelId: function (attrs) {
-            return attrs[this.model.prototype.idAttribute || 'id'];
-        },
-
-        // Private method to reset all internal state. Called when the collection
-        // is first _initd or reset.
-        _reset: function () {
-            this.length = 0;
-            this.models = [];
-            this._byId = {};
-        },
-
-        // Prepare a hash of attributes (or other model) to be added to this
-        // collection.
-        _prepareModel: function (attrs, options) {
-            if (this._isModel(attrs)) {
-                if (!attrs.collection) attrs.collection = this;
-                return attrs;
-            }
-            options = options ? _.clone(options) : {};
-            options.collection = this;
-            var model = new this.model(attrs, options);
-            if (!model.validationError) return model;
-            this.trigger('invalid', this, model.validationError, options);
-            return false;
-        },
-
-        // Method for checking whether an object should be considered a model for
-        // the purposes of adding to the collection.
-        _isModel: function (model) {
-            return model instanceof M;
-        },
-
-        // Internal method to create a model's ties to a collection.
-        _addReference: function (model, options) {
-            this._byId[model.cid] = model;
-            var id = this.modelId(model.attributes);
-            if (id != null) this._byId[id] = model;
-            model.on('all', this._onModelEvent, this);
-        },
-
-        // Internal method to sever a model's ties to a collection.
-        _removeReference: function (model, options) {
-            if (this === model.collection) delete model.collection;
-            model.off('all', this._onModelEvent, this);
-        },
-
-        // Internal method called every time a model in the set fires an event.
-        // Sets need to update their indexes when models change ids. All other
-        // events simply proxy through. "add" and "remove" events that originate
-        // in other collections are ignored.
-        _onModelEvent: function (event, model, collection, options) {
-            if ((event === 'add' || event === 'remove') && collection !== this) return;
-            if (event === 'destroy') this.remove(model, options);
-            if (event === 'change') {
-                var prevId = this.modelId(model.previousAttributes());
-                var id = this.modelId(model.attributes);
-                if (prevId !== id) {
-                    if (prevId != null) delete this._byId[prevId];
-                    if (id != null) this._byId[id] = model;
-                }
-            }
-            this.trigger.apply(this, arguments);
-        }
-
-    });
-
-    // Underscore methods that we want to implement on the Collection.
-    // 90% of the core usefulness of BI Collections is actually implemented
-    // right here:
-    var methods = ['forEach', 'each', 'map', 'collect', 'reduce', 'foldl',
-        'inject', 'reduceRight', 'foldr', 'find', 'detect', 'filter', 'select',
-        'reject', 'every', 'all', 'some', 'any', 'include', 'contains', 'invoke',
-        'max', 'min', 'toArray', 'size', 'first', 'head', 'take', 'initial', 'rest',
-        'tail', 'drop', 'last', 'without', 'difference', 'indexOf', 'shuffle',
-        'lastIndexOf', 'isEmpty', 'chain', 'sample', 'partition'];
-
-    // Mix in each Underscore method as a proxy to `Collection#models`.
-    _.each(methods, function (method) {
-        if (!_[method]) return;
-        Collection.prototype[method] = function () {
-            var args = slice.call(arguments);
-            args.unshift(this.models);
-            return _[method].apply(_, args);
-        };
-    });
-
-    // Underscore methods that take a property name as an argument.
-    var attributeMethods = ['groupBy', 'countBy', 'sortBy', 'indexBy'];
-
-    // Use attributes instead of properties.
-    _.each(attributeMethods, function (method) {
-        if (!_[method]) return;
-        Collection.prototype[method] = function (value, context) {
-            var iterator = _.isFunction(value) ? value : function (model) {
-                return model.get(value);
-            };
-            return _[method](this.models, iterator, context);
-        };
-    });
-
-    // BI.V
-    // -------------
-
-    // BI Views are almost more convention than they are actual code. A V
-    // is simply a JavaScript object that represents a logical chunk of UI in the
-    // DOM. This might be a single item, an entire list, a sidebar or panel, or
-    // even the surrounding frame which wraps your whole app. Defining a chunk of
-    // UI as a **V** allows you to define your DOM events declaratively, without
-    // having to worry about render order ... and makes it easy for the view to
-    // react to specific changes in the state of your models.
-
-    // Creating a BI.V creates its initial element outside of the DOM,
-    // if an existing element is not provided...
-    var V = BI.V = function (options) {
-        this.cid = _.uniqueId('view');
-        options = options || {};
-        this.options = _.defaults(options, _.result(this, '_defaultConfig'));
-        _.extend(this, _.pick(this.options, viewOptions));
-        this._ensureElement();
-        this._init.apply(this, arguments);
-    };
-
-    // Cached regex to split keys for `delegate`.
-    var delegateEventSplitter = /^(\S+)\s*(.*)$/;
-
-    // List of view options to be merged as properties.
-    var viewOptions = ['rootURL', 'model', 'parent', 'collection', 'element', 'id', 'attributes', 'baseCls', 'tagName', 'events'];
-
-    // Set up all inheritable **BI.V** properties and methods.
-    _.extend(V.prototype, Events, {
-
-        // The default `tagName` of a V's element is `"div"`.
-        tagName: 'div',
-
-        // jQuery delegate for element lookup, scoped to DOM elements within the
-        // current view. This should be preferred to global lookups where possible.
-        $: function (selector) {
-            return this.$el.find(selector);
-        },
-
-        _defaultConfig: function () {
-            return {}
-        },
-
-        // _init is an empty function by default. Override it with your own
-        // initialization logic.
-        _init: function () {
-        },
-
-        //容器，默认放在this.element上
-        _vessel: function () {
-            return this
-        },
-        // **render** is the core function that your view should override, in order
-        // to populate its element (`this.el`), with the appropriate HTML. The
-        // convention is for **render** to always return `this`.
-        render: function (vessel) {
-            return this;
-        },
-
-        // Remove this view by taking the element out of the DOM, and removing any
-        // applicable BI.Events listeners.
-        remove: function () {
-            this._removeElement();
-            this.stopListening();
-            return this;
-        },
-
-        // Remove this view's element from the document and all event listeners
-        // attached to it. Exposed for subclasses using an alternative DOM
-        // manipulation API.
-        _removeElement: function () {
-            this.$el.remove();
-        },
-
-        // Change the view's element (`this.el` property) and re-delegate the
-        // view's events on the new element.
-        setElement: function (element) {
-            this.undelegateEvents();
-            this._setElement(element);
-            this.vessel = this._vessel();
-            this.render(this.vessel);
-            this.delegateEvents();
-            return this;
-        },
-
-        setVisible: function (visible) {
-            this.options.invisible = !visible;
-            if (visible) {
-                this.element.css("display", "");
-            } else {
-                this.element.css("display", "none");
-            }
-        },
-
-        isVisible: function () {
-            return !this.options.invisible;
-        },
-
-        visible: function () {
-            this.setVisible(true);
-        },
-
-        invisible: function () {
-            this.setVisible(false);
-        },
-
-        // Creates the `this.el` and `this.$el` references for this view using the
-        // given `el`. `el` can be a CSS selector or an HTML string, a jQuery
-        // context or an element. Subclasses can override this to utilize an
-        // alternative DOM manipulation API and are only required to set the
-        // `this.el` property.
-        _setElement: function (el) {
-            this.$el = el instanceof BI.$ ? el : (BI.isWidget(el) ? el.element : BI.$(el));
-            this.element = this.$el;
-            this.el = this.$el[0];
-        },
-
-        // Set callbacks, where `this.events` is a hash of
-        //
-        // *{"event selector": "callback"}*
-        //
-        //     {
-        //       'mousedown .title':  'edit',
-        //       'click .button':     'save',
-        //       'click .open':       function(e) { ... }
-        //     }
-        //
-        // pairs. Callbacks will be bound to the view, with `this` set properly.
-        // Uses event delegation for efficiency.
-        // Omitting the selector binds the event to `this.el`.
-        delegateEvents: function (events) {
-            if (!(events || (events = _.result(this, 'events')))) return this;
-            this.undelegateEvents();
-            for (var key in events) {
-                var method = events[key];
-                if (!_.isFunction(method)) method = this[events[key]];
-                if (!method) continue;
-                var match = key.match(delegateEventSplitter);
-                this.delegate(match[1], match[2], _.bind(method, this));
-            }
-            return this;
-        },
-
-        // Add a single event listener to the view's element (or a child element
-        // using `selector`). This only works for delegate-able events: not `focus`,
-        // `blur`, and not `change`, `submit`, and `reset` in Internet Explorer.
-        delegate: function (eventName, selector, listener) {
-            this.vessel.element.on(eventName + '.delegateEvents' + this.cid, selector, listener);
-        },
-
-        // Clears all callbacks previously bound to the view by `delegateEvents`.
-        // You usually don't need to use this, but may wish to if you have multiple
-        // BI views attached to the same DOM element.
-        undelegateEvents: function () {
-            if (this.vessel) this.vessel.element.off('.delegateEvents' + this.cid);
-            return this;
-        },
-
-        // A finer-grained `undelegateEvents` for removing a single delegated event.
-        // `selector` and `listener` are both optional.
-        undelegate: function (eventName, selector, listener) {
-            this.vessel.element.off(eventName + '.delegateEvents' + this.cid, selector, listener);
-        },
-
-        // Produces a DOM element to be assigned to your view. Exposed for
-        // subclasses using an alternative DOM manipulation API.
-        _createElement: function (tagName) {
-            return document.createElement(tagName);
-        },
-
-        // Ensure that the V has a DOM element to render into.
-        // If `this.el` is a string, pass it through `$()`, take the first
-        // matching element, and re-assign it to `el`. Otherwise, create
-        // an element from the `id`, `className` and `tagName` properties.
-        _ensureElement: function () {
-            var attrs = _.extend({}, _.result(this, 'attributes'));
-            if (this.baseCls) attrs['class'] = _.result(this, 'baseCls');
-            if (!this.element) {
-                this.setElement(this._createElement(_.result(this, 'tagName')));
-            } else {
-                this.setElement(_.result(this, 'element'));
-            }
-            this._setAttributes(attrs);
-        },
-
-        // Set attributes from a hash on this view's element.  Exposed for
-        // subclasses using an alternative DOM manipulation API.
-        _setAttributes: function (attributes) {
-            this.$el.attr(attributes);
-        }
-
-    });
-
-    // BI.sync
-    // -------------
-
-    // Override this function to change the manner in which BI persists
-    // models to the server. You will be passed the type of request, and the
-    // model in question. By default, makes a RESTful Ajax request
-    // to the model's `url()`. Some possible customizations could be:
-    //
-    // * Use `setTimeout` to batch rapid-fire updates into a single request.
-    // * Send up the models as XML instead of JSON.
-    // * Persist models via WebSockets instead of Ajax.
-    //
-    // Turn on `BI.emulateHTTP` in order to send `PUT` and `DELETE` requests
-    // as `POST`, with a `_method` parameter containing the true HTTP method,
-    // as well as all requests with the body as `application/x-www-form-urlencoded`
-    // instead of `application/json` with the model in a param named `model`.
-    // Useful when interfacing with server-side languages like **PHP** that make
-    // it difficult to read the body of `PUT` requests.
-    BI.sync = function (method, model, options) {
-        var type = methodMap[method];
-
-        // Default options, unless specified.
-        _.defaults(options || (options = {}), {
-            emulateHTTP: BI.emulateHTTP,
-            emulateJSON: BI.emulateJSON
-        });
-
-        // Default JSON-request options.
-        var params = {type: type, dataType: 'json'};
-
-        // Ensure that we have a URL.
-        if (!options.url) {
-            params.url = _.result(model, method + "URL") || _.result(model, 'url');
-            if (!params.url) {
-                return;
-            }
-        }
-
-        // Ensure that we have the appropriate request data.
-        if (options.data == null && model && (method === 'create' || method === 'update' || method === 'patch')) {
-            params.contentType = 'application/json';
-            params.data = _.extend({id: model.id}, model.toJSON(options), options.attrs);
-        }
-
-        // For older servers, emulate JSON by encoding the request into an HTML-form.
-        if (options.emulateJSON) {
-            params.contentType = 'application/x-www-form-urlencoded';
-            params.data = options.data ? options.data : params.data;
-        }
-
-        // For older servers, emulate HTTP by mimicking the HTTP method with `_method`
-        // And an `X-HTTP-Method-Override` header.
-        if (options.emulateHTTP && (type === 'PUT' || type === 'DELETE' || type === 'PATCH')) {
-            params.type = 'POST';
-            if (options.emulateJSON) params.data._method = type;
-            var beforeSend = options.beforeSend;
-            options.beforeSend = function (xhr) {
-                xhr.setRequestHeader('X-HTTP-Method-Override', type);
-                if (beforeSend) return beforeSend.apply(this, arguments);
-            };
-        }
-
-        // Don't process data on a non-GET request.
-        if (params.type !== 'GET' && !options.emulateJSON) {
-            params.processData = false;
-        }
-
-        // Pass along `textStatus` and `errorThrown` from jQuery.
-        var error = options.error;
-        options.error = function (xhr, textStatus, errorThrown) {
-            options.textStatus = textStatus;
-            options.errorThrown = errorThrown;
-            if (error) error.apply(this, arguments);
-        };
-
-        // Make the request, allowing the user to override any Ajax options.
-        var xhr = options.xhr = BI.ajax(_.extend(params, options));
-        model.trigger('request', xhr, model, options);
-        return xhr;
-    };
-
-    // Map from CRUD to HTTP for our default `BI.sync` implementation.
-    var methodMap = {
-        'create': 'POST',
-        'update': 'PUT',
-        'patch': 'PATCH',
-        'delete': 'DELETE',
-        'read': 'GET'
-    };
-
-    // Set the default implementation of `BI.ajax` to proxy through to `$`.
-    // Override this if you'd like to use a different library.
-    BI.ajax = $.ajax;
-
-    // BI.Router
-    // ---------------
-
-    // Routers map faux-URLs to actions, and fire events when routes are
-    // matched. Creating a new one sets its `routes` hash, if not set statically.
-    var Router = BI.Router = function (options) {
-        options || (options = {});
-        if (options.routes) this.routes = options.routes;
-        this._bindRoutes();
-        this._init.apply(this, arguments);
-    };
-
-    // Cached regular expressions for matching named param parts and splatted
-    // parts of route strings.
-    var optionalParam = /\((.*?)\)/g;
-    var namedParam = /(\(\?)?:\w+/g;
-    var splatParam = /\*\w+/g;
-    var escapeRegExp = /[\-{}\[\]+?.,\\\^$|#\s]/g;
-
-    // Set up all inheritable **BI.Router** properties and methods.
-    _.extend(Router.prototype, Events, {
-
-        // _init is an empty function by default. Override it with your own
-        // initialization logic.
-        _init: function () {
-        },
-
-        // Manually bind a single named route to a callback. For example:
-        //
-        //     this.route('search/:query/p:num', 'search', function(query, num) {
-        //       ...
-        //     });
-        //
-        route: function (route, name, callback) {
-            if (!_.isRegExp(route)) route = this._routeToRegExp(route);
-            if (_.isFunction(name)) {
-                callback = name;
-                name = '';
-            }
-            if (!callback) callback = this[name];
-            var router = this;
-            BI.history.route(route, function (fragment) {
-                var args = router._extractParameters(route, fragment);
-                if (router.execute(callback, args, name) !== false) {
-                    router.trigger.apply(router, ['route:' + name].concat(args));
-                    router.trigger('route', name, args);
-                    BI.history.trigger('route', router, name, args);
-                }
-            });
-            return this;
-        },
-
-        // Execute a route handler with the provided parameters.  This is an
-        // excellent place to do pre-route setup or post-route cleanup.
-        execute: function (callback, args, name) {
-            if (callback) callback.apply(this, args);
-        },
-
-        // Simple proxy to `BI.history` to save a fragment into the history.
-        navigate: function (fragment, options) {
-            BI.history.navigate(fragment, options);
-            return this;
-        },
-
-        // Bind all defined routes to `BI.history`. We have to reverse the
-        // order of the routes here to support behavior where the most general
-        // routes can be defined at the bottom of the route map.
-        _bindRoutes: function () {
-            if (!this.routes) return;
-            this.routes = _.result(this, 'routes');
-            var route, routes = _.keys(this.routes);
-            while ((route = routes.pop()) != null) {
-                this.route(route, this.routes[route]);
-            }
-        },
-
-        // Convert a route string into a regular expression, suitable for matching
-        // against the current location hash.
-        _routeToRegExp: function (route) {
-            route = route.replace(escapeRegExp, '\\$&')
-                .replace(optionalParam, '(?:$1)?')
-                .replace(namedParam, function (match, optional) {
-                    return optional ? match : '([^/?]+)';
-                })
-                .replace(splatParam, '([^?]*?)');
-            return new RegExp('^' + route + '(?:\\?([\\s\\S]*))?$');
-        },
-
-        // Given a route, and a URL fragment that it matches, return the array of
-        // extracted decoded parameters. Empty or unmatched parameters will be
-        // treated as `null` to normalize cross-browser behavior.
-        _extractParameters: function (route, fragment) {
-            var params = route.exec(fragment).slice(1);
-            return _.map(params, function (param, i) {
-                // Don't decode the search params.
-                if (i === params.length - 1) return param || null;
-                return param ? decodeURIComponent(param) : null;
-            });
-        }
-
-    });
-
-    // BI.History
-    // ----------------
-
-    // Handles cross-browser history management, based on either
-    // [pushState](http://diveintohtml5.info/history.html) and real URLs, or
-    // [onhashchange](https://developer.mozilla.org/en-US/docs/DOM/window.onhashchange)
-    // and URL fragments. If the browser supports neither (old IE, natch),
-    // falls back to polling.
-    var History = BI.History = function () {
-        this.handlers = [];
-        _.bindAll(this, 'checkUrl');
-
-        // Ensure that `History` can be used outside of the browser.
-        if (typeof window !== 'undefined') {
-            this.location = window.location;
-            this.history = window.history;
-        }
-    };
-
-    // Cached regex for stripping a leading hash/slash and trailing space.
-    var routeStripper = /^[#\/]|\s+$/g;
-
-    // Cached regex for stripping leading and trailing slashes.
-    var rootStripper = /^\/+|\/+$/g;
-
-    // Cached regex for stripping urls of hash.
-    var pathStripper = /#.*$/;
-
-    // Has the history handling already been started?
-    History.started = false;
-
-    // Set up all inheritable **BI.History** properties and methods.
-    _.extend(History.prototype, Events, {
-
-        // The default interval to poll for hash changes, if necessary, is
-        // twenty times a second.
-        interval: 50,
-
-        // Are we at the app root?
-        atRoot: function () {
-            var path = this.location.pathname.replace(/[^\/]$/, '$&/');
-            return path === this.root && !this.getSearch();
-        },
-
-        // In IE6, the hash fragment and search params are incorrect if the
-        // fragment contains `?`.
-        getSearch: function () {
-            var match = this.location.href.replace(/#.*/, '').match(/\?.+/);
-            return match ? match[0] : '';
-        },
-
-        // Gets the true hash value. Cannot use location.hash directly due to bug
-        // in Firefox where location.hash will always be decoded.
-        getHash: function (window) {
-            var match = (window || this).location.href.match(/#(.*)$/);
-            return match ? match[1] : '';
-        },
-
-        // Get the pathname and search params, without the root.
-        getPath: function () {
-            var path = decodeURI(this.location.pathname + this.getSearch());
-            var root = this.root.slice(0, -1);
-            if (!path.indexOf(root)) path = path.slice(root.length);
-            return path.charAt(0) === '/' ? path.slice(1) : path;
-        },
-
-        // Get the cross-browser normalized URL fragment from the path or hash.
-        getFragment: function (fragment) {
-            if (fragment == null) {
-                if (this._hasPushState || !this._wantsHashChange) {
-                    fragment = this.getPath();
-                } else {
-                    fragment = this.getHash();
-                }
-            }
-            return fragment.replace(routeStripper, '');
-        },
-
-        // Start the hash change handling, returning `true` if the current URL matches
-        // an existing route, and `false` otherwise.
-        start: function (options) {
-            if (History.started) throw new Error('BI.history has already been started');
-            History.started = true;
-
-            // Figure out the initial configuration. Do we need an iframe?
-            // Is pushState desired ... is it available?
-            this.options = _.extend({root: '/'}, this.options, options);
-            this.root = this.options.root;
-            this._wantsHashChange = this.options.hashChange !== false;
-            this._hasHashChange = 'onhashchange' in window;
-            this._wantsPushState = !!this.options.pushState;
-            this._hasPushState = !!(this.options.pushState && this.history && this.history.pushState);
-            this.fragment = this.getFragment();
-
-            // Normalize root to always include a leading and trailing slash.
-            this.root = ('/' + this.root + '/').replace(rootStripper, '/');
-
-            // Transition from hashChange to pushState or vice versa if both are
-            // requested.
-            if (this._wantsHashChange && this._wantsPushState) {
-
-                // If we've started off with a route from a `pushState`-enabled
-                // browser, but we're currently in a browser that doesn't support it...
-                if (!this._hasPushState && !this.atRoot()) {
-                    var root = this.root.slice(0, -1) || '/';
-                    this.location.replace(root + '#' + this.getPath());
-                    // Return immediately as browser will do redirect to new url
-                    return true;
-
-                    // Or if we've started out with a hash-based route, but we're currently
-                    // in a browser where it could be `pushState`-based instead...
-                } else if (this._hasPushState && this.atRoot()) {
-                    this.navigate(this.getHash(), {replace: true});
-                }
-
-            }
-
-            // Proxy an iframe to handle location events if the browser doesn't
-            // support the `hashchange` event, HTML5 history, or the user wants
-            // `hashChange` but not `pushState`.
-            if (!this._hasHashChange && this._wantsHashChange && (!this._wantsPushState || !this._hasPushState)) {
-                var iframe = document.createElement('iframe');
-                iframe.src = 'javascript:0';
-                iframe.style.display = 'none';
-                iframe.tabIndex = -1;
-                var body = document.body;
-                // Using `appendChild` will throw on IE < 9 if the document is not ready.
-                this.iframe = body.insertBefore(iframe, body.firstChild).contentWindow;
-                this.iframe.document.open().close();
-                this.iframe.location.hash = '#' + this.fragment;
-            }
-
-            // Add a cross-platform `addEventListener` shim for older browsers.
-            var addEventListener = window.addEventListener || function (eventName, listener) {
-                return attachEvent('on' + eventName, listener);
-            };
-
-            // Depending on whether we're using pushState or hashes, and whether
-            // 'onhashchange' is supported, determine how we check the URL state.
-            if (this._hasPushState) {
-                addEventListener('popstate', this.checkUrl, false);
-            } else if (this._wantsHashChange && this._hasHashChange && !this.iframe) {
-                addEventListener('hashchange', this.checkUrl, false);
-            } else if (this._wantsHashChange) {
-                this._checkUrlInterval = setInterval(this.checkUrl, this.interval);
-            }
-
-            if (!this.options.silent) return this.loadUrl();
-        },
-
-        // Disable BI.history, perhaps temporarily. Not useful in a real app,
-        // but possibly useful for unit testing Routers.
-        stop: function () {
-            // Add a cross-platform `removeEventListener` shim for older browsers.
-            var removeEventListener = window.removeEventListener || function (eventName, listener) {
-                return detachEvent('on' + eventName, listener);
-            };
-
-            // Remove window listeners.
-            if (this._hasPushState) {
-                removeEventListener('popstate', this.checkUrl, false);
-            } else if (this._wantsHashChange && this._hasHashChange && !this.iframe) {
-                removeEventListener('hashchange', this.checkUrl, false);
-            }
-
-            // Clean up the iframe if necessary.
-            if (this.iframe) {
-                document.body.removeChild(this.iframe.frameElement);
-                this.iframe = null;
-            }
-
-            // Some environments will throw when clearing an undefined interval.
-            if (this._checkUrlInterval) clearInterval(this._checkUrlInterval);
-            History.started = false;
-        },
-
-        // Add a route to be tested when the fragment changes. Routes added later
-        // may override previous routes.
-        route: function (route, callback) {
-            this.handlers.unshift({route: route, callback: callback});
-        },
-
-        // Checks the current URL to see if it has changed, and if it has,
-        // calls `loadUrl`, normalizing across the hidden iframe.
-        checkUrl: function (e) {
-            var current = this.getFragment();
-
-            // If the user pressed the back button, the iframe's hash will have
-            // changed and we should use that for comparison.
-            if (current === this.fragment && this.iframe) {
-                current = this.getHash(this.iframe);
-            }
-
-            if (current === this.fragment) return false;
-            if (this.iframe) this.navigate(current);
-            this.loadUrl();
-        },
-
-        // Attempt to load the current URL fragment. If a route succeeds with a
-        // match, returns `true`. If no defined routes matches the fragment,
-        // returns `false`.
-        loadUrl: function (fragment) {
-            fragment = this.fragment = this.getFragment(fragment);
-            return _.any(this.handlers, function (handler) {
-                if (handler.route.test(fragment)) {
-                    handler.callback(fragment);
-                    return true;
-                }
-            });
-        },
-
-        // Save a fragment into the hash history, or replace the URL state if the
-        // 'replace' option is passed. You are responsible for properly URL-encoding
-        // the fragment in advance.
-        //
-        // The options object can contain `trigger: true` if you wish to have the
-        // route callback be fired (not usually desirable), or `replace: true`, if
-        // you wish to modify the current URL without adding an entry to the history.
-        navigate: function (fragment, options) {
-            if (!History.started) return false;
-            if (!options || options === true) options = {trigger: !!options};
-
-            // Normalize the fragment.
-            fragment = this.getFragment(fragment || '');
-
-            // Don't include a trailing slash on the root.
-            var root = this.root;
-            if (fragment === '' || fragment.charAt(0) === '?') {
-                root = root.slice(0, -1) || '/';
-            }
-            var url = root + fragment;
-
-            // Strip the hash and decode for matching.
-            fragment = decodeURI(fragment.replace(pathStripper, ''));
-
-            if (this.fragment === fragment) return;
-            this.fragment = fragment;
-
-            // If pushState is available, we use it to set the fragment as a real URL.
-            if (this._hasPushState) {
-                this.history[options.replace ? 'replaceState' : 'pushState']({}, document.title, url);
-
-                // If hash changes haven't been explicitly disabled, update the hash
-                // fragment to store history.
-            } else if (this._wantsHashChange) {
-                this._updateHash(this.location, fragment, options.replace);
-                if (this.iframe && (fragment !== this.getHash(this.iframe))) {
-                    // Opening and closing the iframe tricks IE7 and earlier to push a
-                    // history entry on hash-tag change.  When replace is true, we don't
-                    // want this.
-                    if (!options.replace) this.iframe.document.open().close();
-                    this._updateHash(this.iframe.location, fragment, options.replace);
-                }
-
-                // If you've told us that you explicitly don't want fallback hashchange-
-                // based history, then `navigate` becomes a page refresh.
-            } else {
-                return this.location.assign(url);
-            }
-            if (options.trigger) return this.loadUrl(fragment);
-        },
-
-        // Update the hash location, either replacing the current entry, or adding
-        // a new one to the browser history.
-        _updateHash: function (location, fragment, replace) {
-            if (replace) {
-                var href = location.href.replace(/(javascript:|#).*$/, '');
-                location.replace(href + '#' + fragment);
-            } else {
-                // Some browsers require that `hash` contains a leading #.
-                location.hash = '#' + fragment;
-            }
-        }
-
-    });
-
-    // Create the default BI.history.
-    BI.history = new History;
-
-    // Helpers
-    // -------
-
-    // Helper function to correctly set up the prototype chain, for subclasses.
-    // Similar to `goog.inherits`, but uses a hash of prototype properties and
-    // class properties to be extended.
-    var extend = function (protoProps, staticProps) {
-        var parent = this;
-        var child;
-
-        // The constructor function for the new subclass is either defined by you
-        // (the "constructor" property in your `extend` definition), or defaulted
-        // by us to simply call the parent's constructor.
-        if (protoProps && _.has(protoProps, 'constructor')) {
-            child = protoProps.constructor;
-        } else {
-            child = function () {
-                return parent.apply(this, arguments);
-            };
-        }
-
-        // Add static properties to the constructor function, if supplied.
-        _.extend(child, parent, staticProps);
-
-        // Set the prototype chain to inherit from `parent`, without calling
-        // `parent`'s constructor function.
-        var Surrogate = function () {
-            this.constructor = child;
-        };
-        Surrogate.prototype = parent.prototype;
-        child.prototype = new Surrogate;
-
-        // Add prototype properties (instance properties) to the subclass,
-        // if supplied.
-        if (protoProps) _.extend(child.prototype, protoProps);
-
-        // Set a convenience property in case the parent's prototype is needed
-        // later.
-        child.__super__ = parent.prototype;
-
-        return child;
-    };
-
-    // Set up inheritance for the model, collection, router, view and history.
-    M.extend = Collection.extend = Router.extend = V.extend = History.extend = extend;
-
-    // Throw an error when a URL is needed, and none is supplied.
-    var urlError = function () {
-        throw new Error('A "url" property or function must be specified');
-    };
-
-    // Wrap an optional error callback with a fallback error event.
-    var wrapError = function (model, options) {
-        var error = options.error;
-        options.error = function (resp) {
-            if (error) error(model, resp, options);
-            model.trigger('error', model, resp, options);
-        };
-    };
-
-    return BI;
-
-}));/**
- * MVC路由
- * @class BI.WRouter
- * @extends BI.Router
- * @type {*|void|Object}
- */
-BI.WRouter = BI.Router.extend({
-    add: function(route, callback){
-        this.handlers || (this.handlers=[]);
-        this.handlers.unshift({route: route, callback: callback})
-    },
-
-    route: function(route, name, callback) {
-        if (!_.isRegExp(route)) route = this._routeToRegExp(route);
-        if (_.isFunction(name)) {
-            callback = name;
-            name = '';
-        }
-        if (!callback) callback = this[name];
-        var self = this;
-        this.add(route, function(fragment) {
-            var args = self._extractParameters(route, fragment);
-            var result = self.execute(callback, args, name)
-            if (result !== false) {
-                self.trigger.apply(self, ['route:' + name].concat(args));
-                self.trigger('route', name, args);
-            }
-            return result;
-        });
-        return this;
-    },
-
-    execute: function(callback, args, name) {
-        if (callback) return callback.apply(this, args);
-        return name;
-    },
-
-    get: function(fragment){
-        var result = null;
-        _.any(this.handlers, function(handler) {
-            if (handler.route.test(fragment)) {
-                result = handler.callback(fragment);
-                return true;
-            }
-        });
-        return result;
-    }
-});/**
  * 基本函数
  * Create By GUY 2014\11\17
  *
@@ -13524,7 +11592,7 @@ if (!window.BI) {
                 overrides = sp;
                 sp = sb;
                 sb = function () {
-                    sp.apply(this, arguments);
+                    return sp.apply(this, arguments);
                 };
             }
             var F = function () {
@@ -14415,6 +12483,8 @@ BI.Widget = BI.inherit(BI.OB, {
 
     mounted: null,
 
+    shouldUpdate: null,
+
     update: function () {
     },
 
@@ -14460,6 +12530,7 @@ BI.Widget = BI.inherit(BI.OB, {
         } else {
             this.element = $(document.createElement(o.tagName));
         }
+        this.element._isWidget = true;
         if (o.baseCls || o.extraCls || o.cls) {
             this.element.addClass((o.baseCls || "") + " " + (o.extraCls || "") + " " + (o.cls || ""));
         }
@@ -14829,1059 +12900,7 @@ BI.Widget = BI.inherit(BI.OB, {
         this.fireEvent(BI.Events.DESTROY);
         this.purgeListeners();
     }
-});BI.Model = BI.inherit(BI.M, {
-    props: {},
-    init: null,
-    destroyed: null,
-
-    _defaultConfig: function () {
-        return BI.extend({
-            "default": "just a default",
-            "current": void 0
-        }, this.props)
-    },
-
-    _static: function () {
-        return {};
-    },
-
-    _init: function () {
-        BI.Model.superclass._init.apply(this, arguments);
-        this.on("change:current", function (obj, val) {
-            BI.isNotNull(val) && this.refresh(val);
-        }).on("change", function (changed, prev, context, options) {
-            if (this._start === true || BI.has(changed, "current")) {
-                return;
-            }
-            this.actionStart();
-            if (!this.local()) {
-                !BI.has(this._tmp, BI.keys(changed)) && this.parent && this.parent._change(this);
-                this._changing_ = true;
-                this.change(changed, prev, context, options);
-                this._changing_ = false;
-            }
-        });
-
-        this._tmp = {};//过渡属性
-
-        this._hass = {};
-        this._gets = [];//记录交互行为
-        this._start = false;
-        this._changing_ = false;
-
-        this._read = BI.debounce(BI.bind(this.fetch, this), 30);
-        this._save = BI.debounce(BI.bind(this.save, this), 30);
-        this._F = [];
-        this.init && this.init();
-    },
-
-    toJSON: function () {
-        var json = BI.Model.superclass.toJSON.apply(this, arguments);
-        delete json["baseCls"];
-        delete json["current"];
-        delete json["default"];
-        delete json["parent"];
-        delete json["rootURL"];
-        delete json["id"];
-        delete json["tag"];
-        BI.each(this._gets, function (i, action) {
-            delete json[action];
-        });
-        return json;
-    },
-
-    copy: function () {
-        if (this._start === true || this._changing_ === true) {
-            this._F.push({f: this.copy, arg: arguments});
-            return;
-        }
-        this.trigger("copy");
-    },
-    //子节点的一个类似副本
-    similar: function (value, key1, key2, key3) {
-        return value;
-    },
-
-    _map: function (child) {
-        var self = this;
-        var map = {}, current = {};
-        var mapping = function (key, ch) {
-            key = key + "";
-            if (key === "") {
-                return;
-            }
-            var keys = key.split('.');
-            if (!map[keys[0]]) {
-                map[keys[0]] = self.get(keys[0]);
-            }
-            var parent = map, last = void 0;
-            BI.each(keys, function (i, k) {
-                last && (parent = parent[last] || (parent[last] = {}));
-                last = k;
-            });
-            parent[last] = ch.toJSON();
-        };
-        BI.each(this._childs, function (key, chs) {
-            if (!BI.isArray(chs)) {
-                chs = [chs];
-            }
-            BI.each(chs, function (i, ch) {
-                if (ch === child) {
-                    current[key] = child;
-                    return;
-                }
-                //mapping(key, ch);
-            })
-        });
-        BI.each(current, function (key, ch) {
-            mapping(key, ch);
-        });
-        var tmp = {};
-        BI.each(this._tmp, function (k) {
-            if (map[k]) {
-                tmp[k] = map[k];
-                delete map[k];
-            }
-        });
-        this.tmp(tmp);
-        return map;
-    },
-
-    _change: function (child) {
-        var self = this;
-        var childMap = this._map(child);
-        //this.set(childMap);
-        var changes = [];
-        var changing = this._changing;
-        var changed;
-        var options = {};
-        this._changing = true;
-        if (!changing) {
-            this._previousAttributes = _.clone(this.attributes);
-            this.changed = {};
-        }
-        var current = this.attributes, prev = this._previousAttributes, val;
-        for (var attr in childMap) {
-            val = childMap[attr];
-            changes.push(attr);
-            this.changed[attr] = val;
-            current[attr] = val;
-        }
-        if (changes.length) this._pending = options;
-        for (var i = 0, length = changes.length; i < length; i++) {
-            this.trigger('change:' + changes[i], this, current[changes[i]], options);
-        }
-        if (changing) return this;
-        changed = BI.clone(this.changed);
-        while (this._pending) {
-            options = this._pending;
-            this._pending = false;
-            this.trigger('change', changed, prev, this, options);
-        }
-        this._pending = false;
-        this._changing = false;
-        if (changes.length) {
-            this.trigger("changed", changed, prev, this, options);
-        }
-        return this;
-    },
-
-    splice: function (old, key1, key2, key3) {
-
-    },
-
-    duplicate: function (copy, key1, key2, key3) {
-
-    },
-
-    change: function (changed, prev) {
-
-    },
-
-    actionStart: function () {
-        this._start = true;
-        return this;
-    },
-
-    actionEnd: function () {
-        var self = this;
-        this._start = false;
-        var _gets = this._gets.slice(0), _F = this._F.slice(0);
-        this._gets = [];
-        this._hass = {};
-        this._F = [];
-        BI.each(_gets, function (i, action) {
-            self.unset(action, {silent: true});
-        });
-        BI.each(_F, function (i, fn) {
-            fn.f.apply(self, fn.arg);
-        });
-        return this;
-    },
-
-    addChild: function (name, child) {
-        name = name + "";
-        var self = this;
-        this._childs || (this._childs = {});
-        if (this._childs[name]) {
-            if (BI.isArray(this._childs[name])) {
-                this._childs[name].push(child);
-            } else {
-                this._childs[name] = [this._childs[name]].concat(child)
-            }
-        } else {
-            this._childs[name] = child;
-        }
-        child && child.on("destroy", function () {
-            var keys = name.split('.');
-            var g = self.get(keys[0]), p, c;
-            var sset = !!self._tmp[keys[0]] ? "tmp" : "set", unset = "un" + sset;
-
-            BI.each(keys, function (i, k) {
-                if (i === 0) {
-                    c = g;
-                    return;
-                }
-                p = c;
-                c = c[k];
-            });
-            self.removeChild(name, child);
-            var newKeys = BI.clone(keys);
-            keys.length > 1 ? newKeys.unshift(BI.deepClone(p[keys[keys.length - 1]])) : newKeys.unshift(BI.deepClone(g));
-            keys.length > 1 ? (delete p[keys[keys.length - 1]], self[sset](keys[0], g, {silent: true})) : self[unset](name, {silent: true});
-            !BI.has(self._tmp, keys[0]) && self.parent && self.parent._change(self);
-            self.splice.apply(self, newKeys);
-            self.trigger("splice", newKeys);
-            BI.remove(self._childs, child);
-        }).on("copy", function () {
-            var keys = name.split('.');
-            var g = self.get(keys[0]), p, c;
-            var sset = !!self._tmp[keys[0]] ? "tmp" : "set";
-            BI.each(keys, function (i, k) {
-                if (i === 0) {
-                    c = g;
-                    return;
-                }
-                p = c;
-                c = c[k];
-            });
-            var copy = BI.UUID(), newKeys = BI.clone(keys);
-            keys.length > 1 ? newKeys.unshift(BI.deepClone(p[keys[keys.length - 1]])) : newKeys.unshift(BI.deepClone(g));
-            var backup = self.similar.apply(self, newKeys);
-            if (BI.isKey(backup.id)) {
-                copy = backup.id;
-                delete backup.id;
-            }
-            keys.length > 1 ? (p[copy] = backup, self[sset](keys[0], g, {silent: true})) : self[sset](copy, backup, {silent: true});
-            keys.unshift(copy);
-            !BI.has(self._tmp, keys[0]) && self.parent && self.parent._change(self);
-            self.duplicate.apply(self, keys);
-            self.trigger("duplicate", keys);
-        });
-    },
-
-    removeChild: function (name, child) {
-        if (BI.isArray(this._childs[name])) {
-            BI.remove(this._childs[name], child);
-            if (BI.isEmpty(this._childs[name])) {
-                delete this._childs[name];
-            }
-            return;
-        }
-        delete this._childs[name];
-    },
-
-    has: function (attr, istemp) {
-        if (istemp === true) {
-            return _.has(this.tmp, attr);
-        }
-        if (this._start === true && this._changing_ === false) {
-            this._hass[attr] = true;
-        }
-        return BI.Model.superclass.has.apply(this, arguments);
-    },
-
-    cat: function (attr) {
-        if (_.has(this._tmp, attr)) {
-            return this._tmp[attr];
-        }
-        if (this._start === true && this._hass[attr]) {
-            delete this._hass[attr];
-            switch (attr) {
-                case "default":
-                    break;
-                case "current":
-                    break;
-                default :
-                    this._gets.push(attr);
-                    break;
-            }
-        }
-        if (_.has(this.attributes, attr)) {
-            return this.attributes[attr];
-        }
-        var sta = _.result(this, "_static");
-        return BI.isFunction(sta[attr]) ? sta[attr].apply(this, Array.prototype.slice.apply(arguments, [1])) : sta[attr];
-    },
-
-    get: function () {
-        return BI.deepClone(this.cat.apply(this, arguments));
-    },
-
-    set: function (key, val, options) {
-        if (this._start === true || this._changing_ === true) {
-            this._F.push({f: this.set, arg: arguments});
-            return this;
-        }
-        return BI.Model.superclass.set.apply(this, arguments);
-    },
-
-    unset: function (attr, options) {
-        var self = this;
-        BI.each(this._childs, function (key, model) {
-            key = key + "";
-            var keys = key.split('.');
-            if (_.isEqual(attr, keys[0])) {
-                delete self._childs[attr];
-                if (!BI.isArray(model)) {
-                    model = [model];
-                }
-                BI.each(model, function (i, m) {
-                    m.trigger("unset");
-                });
-            }
-        });
-        return BI.Model.superclass.unset.apply(this, arguments);
-    },
-
-    tmp: function (key, val, options) {
-        if (this._start === true || this._changing_ === true) {
-            this._F.push({f: this.tmp, arg: arguments});
-            return this;
-        }
-        var attr, attrs, unset, changes, silent, changing, changed, prev, current;
-        if (key == null) return this;
-        if (typeof key === 'object') {
-            attrs = key;
-            options = val;
-        } else {
-            (attrs = {})[key] = val;
-        }
-        options || (options = {});
-
-        unset = options.unset;
-        silent = options.silent;
-        changes = [];
-        changing = this._changingTmp;
-        this._changingTmp = true;
-
-        if (!changing) {
-            this._previousTmp = _.clone(this._tmp);
-            this.changedTmp = {};
-        }
-        if (!this._previousTmp) {
-            this._previousTmp = _.clone(this._tmp);
-        }
-        current = this._tmp, prev = this._previousTmp;
-
-        for (attr in attrs) {
-            val = attrs[attr];
-            if (!_.isEqual(current[attr], val)) changes.push(attr);
-            if (!_.isEqual(prev[attr], val)) {
-                this.changedTmp[attr] = val;
-            } else {
-                delete this.changedTmp[attr];
-            }
-            unset ? delete current[attr] : current[attr] = val;
-        }
-
-        if (!silent) {
-            if (changes.length) this._pendingTmp = options;
-            for (var i = 0, length = changes.length; i < length; i++) {
-                this.trigger('change:' + changes[i], this, current[changes[i]], options);
-            }
-        }
-
-        if (changing) return this;
-        changed = BI.clone(this.changedTmp);
-        if (!silent) {
-            while (this._pendingTmp) {
-                options = this._pendingTmp;
-                this._pendingTmp = false;
-                this.trigger('change', changed, prev, this, options);
-            }
-        }
-        this._pendingTmp = false;
-        this._changingTmp = false;
-        if (!silent && changes.length) this.trigger("changed", changed, prev, this, options);
-        return this;
-    },
-
-    untmp: function (attr, options) {
-        var self = this;
-        BI.each(this._childs, function (key, model) {
-            key = key + "";
-            var keys = key.split('.');
-            if (_.isEqual(attr, keys[0])) {
-                delete self._childs[attr];
-                if (!BI.isArray(model)) {
-                    model = [model];
-                }
-                BI.each(model, function (i, m) {
-                    m.trigger("unset");
-                });
-            }
-        });
-        return this.tmp(attr, void 0, _.extend({}, options, {unset: true}));
-    },
-
-    cancel: function (options) {
-        var self = this;
-        var tmp = BI.clone(this._tmp);
-        this._tmp = {};
-        BI.each(tmp, function (k) {
-            self.untmp(k, options);
-        });
-    },
-
-    submit: function () {
-        var tmp = BI.clone(this._tmp);
-        this._tmp = {};
-        this.set(tmp);
-        return this;
-    },
-
-    urlRoot: function () {
-        return BI.servletURL;
-    },
-
-    parse: function (data) {
-        return data;
-    },
-
-    setEditing: function (edit) {
-        this._editing = edit;
-    },
-
-    getEditing: function () {
-        if (this._start !== true) {
-            throw new Error("getEditing函数只允许在local中调用");
-        }
-        return this._editing;
-    },
-
-    local: function () {
-
-    },
-
-    load: function (data) {
-
-    },
-
-    refresh: function () {
-
-    },
-
-    /**
-     * 更新整个model
-     */
-    updateURL: function () {
-
-    },
-    /**
-     * 添加一个元素或删除一个元素或修改一个元素
-     */
-    patchURL: function () {
-
-    },
-    /**
-     * 删除整个model, destroy方法调用
-     */
-    deleteURL: function () {
-
-    },
-    /**
-     * 读取model
-     */
-    readURL: function () {
-
-    },
-
-    read: function (options) {
-        if (this._start == true || this._changing_ === true) {
-            this._F.push({f: this.read, arg: arguments});
-            return;
-        }
-        this._read(options);
-    },
-
-    update: function (options) {
-        if (this._start == true || this._changing_ === true) {
-            this._F.push({f: this.update, arg: arguments});
-            return;
-        }
-        this._save(null, options);
-    },
-
-    patch: function (options) {
-        if (this._start == true || this._changing_ === true) {
-            this._F.push({f: this.patch, arg: arguments});
-            return;
-        }
-        this._save(null, BI.extend({}, options, {
-            patch: true
-        }));
-    },
-
-    _destroy: function () {
-        var children = BI.extend({}, this._childs);
-        this._childs = {};
-        BI.each(children, function (i, child) {
-            child._destroy();
-        });
-        this.destroyed && this.destroyed();
-    },
-
-    destroy: function () {
-        this._destroy();
-        BI.Model.superclass.destroy.apply(this, arguments);
-    }
-});/**
- * @class BI.View
- * @extends BI.V
- * @type {*|void|Object}
- */
-BI.View = BI.inherit(BI.V, {
-
-    //生命周期函数
-    beforeCreate: null,
-
-    created: null,
-
-    beforeDestroy: null,
-
-    destroyed: null,
-
-    _init: function () {
-        BI.View.superclass._init.apply(this, arguments);
-        this.beforeCreate && this.beforeCreate();
-        var self = this;
-        this.listenTo(this.model, "change:current", function (obj, val) {
-            if (BI.isNotNull(val) && val.length > 0) {
-                this.refresh(val);
-            }
-        }).listenTo(this.model, "change", function (changed) {
-            this.delegateEvents();
-        }).listenTo(this.model, "changed", function (changed, prev, context, options) {
-            if (BI.has(changed, "current") && BI.size(changed) > 1) {
-                throw new Error("refresh操作不能调用set操作");
-            }
-            var notLocal = !BI.has(changed, "current") && !this.local() && this.notifyParent().notify();
-            this.model.actionEnd() && this.actionEnd();
-            this.model._changing_ = true;
-            notLocal && !BI.isEmpty(changed) && this.change(changed, prev, context, options);
-            this.model._changing_ = false;
-            this.model.actionEnd() && this.actionEnd();
-        }).listenTo(this.model, "destroy", function () {
-            this._destroy();
-        }).listenTo(this.model, "unset", function () {
-            this._destroy();
-        }).listenTo(this.model, "splice", function (arg) {
-            this.splice.apply(this, arg);
-        }).listenTo(this.model, "duplicate", function (arg) {
-            this.duplicate.apply(this, arg);
-        });
-        this._F = [];
-        var flatten = ["_init", "_defaultConfig", "_vessel", "_render", "getName", "listenEnd", "local", "refresh", "load", "change"];
-        flatten = BI.makeObject(flatten, true);
-        BI.each(this.constructor.caller.caller.prototype, function (key) {
-            if (flatten[key]) {
-                return;
-            }
-            var f = self[key];
-            if (BI.isFunction(f)) {
-                self[key] = BI.bind(function () {
-                    if (this.model._start === true) {
-                        this._F.push({f: f, arg: arguments});
-                        return;
-                    }
-                    return f.apply(this, arguments);
-                }, self);
-            }
-        });
-        this.created && this.created();
-    },
-
-    change: function (changed, prev) {
-
-    },
-
-    actionEnd: function () {
-        var self = this;
-        var _F = this._F.slice(0);
-        this._F = [];
-        BI.each(_F, function (i, f) {
-            f.f.apply(self, f.arg);
-        });
-        return this;
-    },
-
-    delegateEvents: function (events) {
-        if (!(events || (events = BI.deepClone(_.result(this, 'events'))))) return this;
-        var delegateEventSplitter = /^(\S+)\s*(.*)$/;
-        for (var key in events) {
-            var method = events[key];
-            if (!_.isFunction(method)) method = this[events[key]];
-            if (!method) continue;
-            var match = key.match(delegateEventSplitter);
-            var ev = true;
-            switch (match[1]) {
-                case "draggable":
-                    break;
-                case "droppable":
-                    break;
-                case "sortable":
-                    break;
-                case "resizable":
-                    break;
-                case "hover":
-                    break;
-                default :
-                    ev = false;
-                    break;
-            }
-
-            var off = new BI.OffList({
-                event: match[1] + '.delegateEvents' + this.cid
-            });
-
-            var keys = match[2].split('.');
-            var handle = keys[1];
-            var bind = ev ? new BI.EventList({
-                event: match[1],
-                handle: handle,
-                callback: BI.bind(method, this)
-            }) : new BI.ListenerList({
-                event: match[1] + '.delegateEvents' + this.cid,
-                handle: handle,
-                callback: BI.bind(method, this),
-                context: this
-            });
-
-            var list = [];
-            if (this[keys[0]] && (this[keys[0]] instanceof $ || this[keys[0]].element instanceof $)) {
-                list = [this[keys[0]]]
-                delete events[key];
-            } else if (BI.isArray(this[keys[0]]) || BI.isPlainObject(this[keys[0]])) {
-                list = this[keys[0]]
-                delete events[key];
-            }
-            off.populate(list);
-            bind.populate(list);
-        }
-        return BI.View.superclass.delegateEvents.apply(this, [events]);
-    },
-
-    _vessel: function () {
-        this._cardLayouts = {};
-        this._cardLayouts[this.getName()] = new BI.CardLayout({
-            element: this
-        });
-        var vessel = BI.createWidget();
-        this._cardLayouts[this.getName()].addCardByName(this.getName(), vessel);
-        return vessel;
-    },
-
-    render: function (vessel) {
-        return this;
-    },
-
-    /**
-     * 创建儿子所在容器
-     * @param key
-     * @param vessel
-     * @param options  isLayer:是否是弹出层, defaultShowName:默认显示项
-     * @returns {BI.View}
-     */
-    addSubVessel: function (key, vessel, options) {
-        options || (options = {});
-        this._cardLayouts || (this._cardLayouts = {});
-        var id = key + this.cid;
-        options.isLayer && (vessel = BI.Layers.has(id) ? BI.Layers.get(id) : BI.Layers.create(id, vessel));
-        if (this._cardLayouts[key]) {
-            options.defaultShowName && this._cardLayouts[key].setDefaultShowName(options.defaultShowName);
-            return this;
-        }
-        this._cardLayouts[key] = BI.createWidget({
-            type: "bi.card",
-            element: vessel,
-            defaultShowName: options.defaultShowName
-        });
-        return this;
-    },
-
-    removeSubVessel: function (key) {
-        var self = this, id = key + this.cid;
-        BI.Layers.remove(id);
-        var cardNames = this._cardLayouts[key] && this._cardLayouts[key].getAllCardNames();
-        BI.each(cardNames, function (i, name) {
-            delete self._cards[name];
-        });
-        this._cardLayouts[key] && this._cardLayouts[key]._destroy();
-        return this;
-    },
-
-    createView: function (url, modelData, viewData, context) {
-        return BI.Factory.createView(url, this.get(url), modelData, viewData, context);
-    },
-
-    /**
-     * 跳转到指定的card
-     * @param cardName
-     */
-    skipTo: function (cardName, layout, modelData, viewData, options) {
-        if (this.model._start === true || this._changing_ === true) {
-            this._F.push({f: this.skipTo, arg: arguments});
-            return this;
-        }
-        var self = this, isValid = BI.isKey(modelData), data = void 0;
-        BI.isKey(layout) && (layout = layout + "");
-        layout = layout || this.getName();
-        options || (options = {});
-        if (isValid) {
-            modelData = modelData + "";//避免modelData是数字
-            var keys = modelData.split('.');
-            BI.each(keys, function (i, k) {
-                if (i === 0) {
-                    data = self.model.get(k) || {};
-                } else {
-                    data = data[k] || {};
-                }
-            });
-            data.id = options.id || keys[keys.length - 1];
-        } else {
-            data = modelData;
-        }
-        BI.extend(data, options.data);
-        var action = options.action || new BI.ShowAction();
-        var cardLayout = this._cardLayouts[layout];
-        if (!cardLayout) {
-            return this;
-        }
-        cardLayout.setVisible(true);
-        if (BI.isKey(cardName) && !cardLayout.isCardExisted(cardName)) {
-            var view = this.createView(this.rootURL + "/" + cardName, data, viewData, this);
-            isValid && this.model.addChild(modelData, view.model);
-            view.listenTo(view.model, "destroy", function () {
-                delete self._cards[cardName];
-                cardLayout.deleteCardByName(cardName);
-                if (cardLayout.isAllCardHide()) {
-                    cardLayout.setVisible(false);
-                    BI.Layers.hide(layout + self.cid);
-                }
-            }).listenTo(view.model, "unset", function () {
-                delete self._cards[cardName];
-                cardLayout.deleteCardByName(cardName);
-            });
-            cardLayout.addCardByName(cardName, view);
-            this._cards || (this._cards = {});
-            this._cards[cardName] = view;
-            data = {};
-            this.on("end:" + view.cid, function () {
-                var isNew = false, t, keys;
-                if (isValid) {
-                    keys = modelData.split('.');
-                    BI.each(keys, function (i, k) {
-                        if (i === 0) {
-                            t = self.model.get(k) || (isNew = true);
-                        } else {
-                            t = t[k] || (isNew = true);
-                        }
-                    });
-                }
-                if (isNew) {
-                    delete self._cards[cardName];
-                    self.model.removeChild(modelData, view.model);
-                    cardLayout.deleteCardByName(cardName);
-                    view._destroy();
-                    cardLayout.setVisible(false);
-                }
-                action.actionBack(view, null, function () {
-                    if (cardLayout.isAllCardHide()) {
-                        cardLayout.setVisible(false);
-                        BI.Layers.hide(layout + self.cid);
-                    }
-                    !isNew && (self.listenEnd.apply(self, isValid ? keys : [modelData]) !== false) && self.populate();
-                })
-            }).on("change:" + view.cid, _.bind(this.notifyParent, this));
-        }
-        BI.isKey(cardName) && BI.Layers.show(layout + this.cid);
-        cardLayout.showCardByName(cardName, action, function () {
-            BI.isKey(cardName) && self._cards[cardName].populate(data, options);
-        });
-        !BI.isKey(cardName) && BI.Layers.hide(layout + this.cid);
-        return this._cards[cardName];
-    },
-
-    listenEnd: function (key1, key2, key3) {
-        return this;
-    },
-
-    /**
-     * 告诉父亲我的操作结束了，后面的事情任由父亲处置
-     * @param force 强制下次再次进入该节点时不进行刷新操作， 默认执行刷新
-     * @returns {BI.View}
-     */
-    notifyParentEnd: function (force) {
-        this.parent && this.parent.trigger("end:" + this.cid);
-        this.trigger("end");
-        !force && this.notify();
-        return this;
-    },
-
-    /**
-     * 通知父亲我的数据发生了变化
-     */
-    notifyParent: function () {
-        this.parent && this.parent.notify().trigger("change:" + this.cid);
-        return this;
-    },
-
-    /**
-     * 告诉Model数据改变了
-     */
-    notify: function () {
-        this.model.unset("current", {silent: true});
-        return this;
-    },
-
-    getName: function () {
-        return "VIEW"
-    },
-
-    /**
-     * 全局刷新
-     * @param current
-     */
-    refresh: function (current) {
-    },
-    /**
-     * 局部刷新
-     */
-    local: function () {
-        return false;
-    },
-
-    load: function (data) {
-
-    },
-
-    readData: function (force, options) {
-        options || (options = {});
-        var self = this;
-        var args = [].slice.call(arguments, 2);
-        if (!force && this._readed === true) {//只从后台获取一次数据
-            callback(this.model.toJSON());
-            return;
-        }
-        //采用静默方式读数据,该数据变化不引起data的change事件触发
-        var success = options.success;
-        this.model.read(BI.extend({
-            silent: true
-        }, options, {
-            success: function (data, model) {
-                callback(data);
-                !force && (self._readed = true);
-                self.delegateEvents();
-                success && success(data, model);
-            }
-        }));
-
-        function callback(data) {
-            self.model.load(data);
-            self.load(data);
-            BI.each(args, function (i, arg) {
-                if (BI.isFunction(arg)) {
-                    arg.apply(self, [data]);
-                }
-            })
-        }
-    },
-
-    //处理model的通用方法
-    cat: function () {
-        return this.model.cat.apply(this.model, arguments);
-    },
-
-    get: function () {
-        return this.model.get.apply(this.model, arguments);
-    },
-
-    set: function () {
-        return this.model.set.apply(this.model, arguments);
-    },
-
-    has: function () {
-        return this.model.has.apply(this.model, arguments);
-    },
-
-    getEditing: function () {
-        return this.model.getEditing();
-    },
-
-    reading: function (options) {
-        var self = this;
-        var name = BI.UUID();
-        this.model.read(BI.extend({}, options, {
-            beforeSend: function () {
-                var loading = BI.createWidget({
-                    type: 'bi.vertical',
-                    items: [{
-                        type: "bi.layout",
-                        height: 30,
-                        cls: "loading-background"
-                    }],
-                    element: BI.Maskers.make(name, self)
-                });
-                loading.setVisible(true);
-            },
-            complete: function (data) {
-                options.complete && options.complete(data);
-                BI.Maskers.remove(name);
-            }
-        }));
-    },
-
-    updating: function (options) {
-        var self = this;
-        var name = BI.UUID();
-        this.model.update(BI.extend({}, options, {
-            noset: true,
-            beforeSend: function () {
-                var loading = BI.createWidget({
-                    type: 'bi.vertical',
-                    items: [{
-                        type: "bi.layout",
-                        height: 30,
-                        cls: "loading-background"
-                    }],
-                    element: BI.Maskers.make(name, self)
-                });
-                loading.setVisible(true);
-            },
-            complete: function (data) {
-                options.complete && options.complete(data);
-                BI.Maskers.remove(name);
-            }
-        }));
-    },
-
-    patching: function (options) {
-        var self = this;
-        var name = BI.UUID();
-        this.model.patch(BI.extend({}, options, {
-            noset: true,
-            beforeSend: function () {
-                var loading = BI.createWidget({
-                    type: 'bi.vertical',
-                    items: [{
-                        type: "bi.layout",
-                        height: 30,
-                        cls: "loading-background"
-                    }],
-                    element: BI.Maskers.make(name, self)
-                });
-                loading.setVisible(true);
-            },
-            complete: function (data) {
-                options.complete && options.complete(data);
-                BI.Maskers.remove(name);
-            }
-        }));
-    },
-
-    populate: function (modelData, options) {
-        var self = this;
-        options || (options = {});
-        if (options.force === true) {
-            this.notify();
-        }
-        if (this._cardLayouts && this._cardLayouts[this.getName()]) {
-            this._cardLayouts[this.getName()].showCardByName(this.getName());
-        }
-        //BI.each(this._cardLayouts, function (key, layout) {
-        //    layout.showCardByName(layout.getDefaultShowName() || self.getName());
-        //});
-        //BI.each(this._cards, function (i, card) {
-        //    card.notify && card.notify();
-        //});
-        if (this._F.length > 0) {
-            throw new Error("流程错误");
-        }
-        if (options.force === true) {
-            this.model.set(modelData, options).set({current: this.model.get("default")});
-            return;
-        }
-        if (options.force === false) {
-            this.model.set(modelData);
-            return;
-        }
-        var filter = BI.clone(modelData || {});
-        delete filter.id;
-        var contains = BI.has(this.model.toJSON(), _.keys(filter));
-        var match = BI.isEmpty(filter) || (contains && this.model.matches(modelData));
-        if (match === true) {
-            this.model.set({current: this.model.get("default")});
-        } else if (contains === false) {
-            this.model.set(modelData);
-        } else {
-            this.model.set(modelData, options).set({current: this.model.get("default")});
-        }
-    },
-
-    //删除子节点触发
-    splice: function (old, key1, key2, key3) {
-
-    },
-
-    //复制子节点触发
-    duplicate: function (copy, key1, key2, key3) {
-
-    },
-
-    _unMount: function () {
-        this.beforeDestroy && this.beforeDestroy();
-        BI.each(this._cardLayouts, function (name, card) {
-            card && card._unMount();
-        });
-        delete this._cardLayouts;
-        delete this._cards;
-        this.destroyed && this.destroyed();
-        this.trigger(BI.Events.UNMOUNT);
-        this.off();
-    },
-
-    _destroy: function () {
-        var self = this;
-        BI.each(this._cardLayouts, function (name, card) {
-            card && card._unMount();
-            BI.Layers.remove(name + self.cid);
-        });
-        delete this._cardLayouts;
-        delete this._cards;
-        this.destroyed && this.destroyed();
-        this.remove();
-        this.trigger(BI.Events.DESTROY);
-        this.off();
-    }
-});
-
-BI.View.registerVMRouter = function (viewRouter, modelRouter) {
-    //配置View
-    BI.View.createView = BI.View.prototype.createView = function (url, modelData, viewData, context) {
-        return BI.Factory.createView(url, viewRouter.get(url), _.extend({}, modelRouter.get(url), modelData), viewData || {}, context);
-    };
-};(function () {
+});(function () {
     var kv = {};
     BI.shortcut = function (xtype, cls) {
         if (kv[xtype] != null) {
@@ -19798,6 +16817,17 @@ BI.Layout = BI.inherit(BI.Widget, {
         });
     },
 
+    shouldUpdateItem: function (index, item) {
+        if (index < 0 || index > this.options.items.length - 1) {
+            return false;
+        }
+        var child = this._children[this._getChildName(index)];
+        if (!child.shouldUpdate) {
+            return null;
+        }
+        return child.shouldUpdate(this._getOptions(item)) === true;
+    },
+
     updateItemAt: function (index, item) {
         if (index < 0 || index > this.options.items.length - 1) {
             return;
@@ -19890,7 +16920,8 @@ BI.Layout = BI.inherit(BI.Widget, {
     },
 
     patchItem: function (oldVnode, vnode, index) {
-        if (!this._compare(oldVnode, vnode)) {
+        var shouldUpdate = this.shouldUpdateItem(index, vnode);
+        if (shouldUpdate === true || (shouldUpdate === null && !this._compare(oldVnode, vnode))) {
             return this.updateItemAt(index, vnode);
         }
     },
@@ -19922,23 +16953,23 @@ BI.Layout = BI.inherit(BI.Widget, {
                 oldEndVnode = oldCh[--oldEndIdx];
             } else if (sameVnode(oldStartVnode, newStartVnode, oldStartIdx, newStartIdx)) {
                 updated = this.patchItem(oldStartVnode, newStartVnode, oldStartIdx) || updated;
-                children[this._getChildName(oldStartIdx)] = this._children[this._getChildName(oldStartIdx)];
+                children[oldStartVnode.key == null ? this._getChildName(oldStartIdx) : oldStartVnode.key] = this._children[this._getChildName(oldStartIdx)];
                 oldStartVnode = oldCh[++oldStartIdx];
                 newStartVnode = newCh[++newStartIdx];
             } else if (sameVnode(oldEndVnode, newEndVnode, oldEndIdx, newEndIdx)) {
                 updated = this.patchItem(oldEndVnode, newEndVnode, oldEndIdx) || updated;
-                children[this._getChildName(oldEndIdx)] = this._children[this._getChildName(oldEndIdx)];
+                children[oldEndVnode.key == null ? this._getChildName(oldEndIdx) : oldEndVnode.key] = this._children[this._getChildName(oldEndIdx)];
                 oldEndVnode = oldCh[--oldEndIdx];
                 newEndVnode = newCh[--newEndIdx];
             } else if (sameVnode(oldStartVnode, newEndVnode)) {
                 updated = this.patchItem(oldStartVnode, newEndVnode, oldStartIdx) || updated;
-                children[this._getChildName(oldStartIdx)] = this._children[this._getChildName(oldStartIdx)];
+                children[oldStartVnode.key == null ? this._getChildName(oldStartIdx) : oldStartVnode.key] = this._children[this._getChildName(oldStartIdx)];
                 insertBefore(oldStartVnode, oldEndVnode, true);
                 oldStartVnode = oldCh[++oldStartIdx];
                 newEndVnode = newCh[--newEndIdx];
             } else if (sameVnode(oldEndVnode, newStartVnode)) {
                 updated = this.patchItem(oldEndVnode, newStartVnode, oldEndIdx) || updated;
-                children[this._getChildName(oldEndIdx)] = this._children[this._getChildName(oldEndIdx)];
+                children[oldEndVnode.key == null ? this._getChildName(oldEndIdx) : oldEndVnode.key] = this._children[this._getChildName(oldEndIdx)];
                 insertBefore(oldEndVnode, oldStartVnode);
                 oldEndVnode = oldCh[--oldEndIdx];
                 newStartVnode = newCh[++newStartIdx];
@@ -20165,50 +17196,6 @@ BI.ShowAction = BI.inherit(BI.Action, {
         callback && callback();
     }
 });/**
- * @class BI.FloatSection
- * @extends BI.View
- * @abstract
- */
-BI.FloatSection = BI.inherit(BI.View, {
-    _init : function() {
-        BI.FloatSection.superclass._init.apply(this, arguments);
-        var self = this;
-        var flatten = ["_init", "_defaultConfig", "_vessel", "_render", "getName", "listenEnd", "local", "refresh", "load", "change"];
-        flatten = BI.makeObject(flatten, true);
-        BI.each(this.constructor.caller.caller.caller.prototype, function (key) {
-            if (flatten[key]) {
-                return;
-            }
-            var f = self[key];
-            if (BI.isFunction(f)) {
-                self[key] = BI.bind(function () {
-                    if (this.model._start === true) {
-                        this._F.push({f: f, arg: arguments});
-                        return;
-                    }
-                    return f.apply(this, arguments);
-                }, self);
-            }
-        })
-    },
-
-    rebuildNorth : function(north) {
-        return true;
-    },
-    rebuildCenter : function(center) {},
-    rebuildSouth : function(south) {
-        return false;
-    },
-    close: function(){
-        this.notifyParentEnd();
-        this.trigger(BI.PopoverSection.EVENT_CLOSE);
-    },
-    end: function(){
-
-    }
-});
-
-/**
  * 弹出层
  * @class BI.PopoverSection
  * @extends BI.Widget
@@ -21696,7 +18683,9 @@ BI.TooltipsController = BI.inherit(BI.Controller, {
 
         var offset = context.element.offset();
         var bounds = context.element.bounds();
-
+        if(bounds.height === 0 || bounds.width === 0) {
+            return;
+        }
         var top = offset.top + bounds.height + 5;
         var tooltip = this.get(name);
         tooltip.setText(text);
@@ -21756,195 +18745,6 @@ BI.TooltipsController = BI.inherit(BI.Controller, {
         this.tooltipsManager[name].destroy();
         delete this.tooltipsManager[name];
         return this;
-    }
-});/**
- *
- * @class BI.FloatBoxRouter
- * @extends BI.WRouter
- */
-BI.FloatBoxRouter = BI.inherit(BI.WRouter, {
-    routes: {},
-
-    _init: function () {
-        this.store = {};
-        this.views = {};
-    },
-
-    createView: function (url, modelData, viewData, context) {
-        return BI.Factory.createView(url, this.get(url), modelData || {}, viewData || {}, context)
-    },
-
-    open: function (url, modelData, viewData, context, options) {
-        var self = this, isValid = BI.isKey(modelData);
-        options || (options = {});
-        url = context.rootURL + "/" + url;
-        var data = void 0;
-        if (isValid) {
-            modelData = modelData + "";//避免modelData是数字
-            var keys = modelData.split('.');
-            BI.each(keys, function (i, k) {
-                if (i === 0) {
-                    data = context.model.get(k) || {};
-                } else {
-                    data = data[k] || {};
-                }
-            });
-            data.id = options.id || keys[keys.length - 1];
-        } else {
-            data = modelData;
-        }
-        BI.extend(data, options.data);
-        if (!this.controller) {
-            this.controller = new BI.FloatBoxController();
-        }
-        if (!this.store[url]) {
-            this.store[url] = BI.createWidget({
-                type: "bi.float_box"
-            }, options);
-            var view = this.createView(url, data, viewData, context);
-            isValid && context.model.addChild(modelData, view.model);
-            view.listenTo(view.model, "destroy", function () {
-                self.remove(url, context);
-            });
-            context.on(BI.Events.UNMOUNT, function () {
-                self.remove(url, context);
-            });
-            this.store[url].populate(view);
-            this.views[url] = view;
-            this.controller.add(url, this.store[url]);
-            context && context.on("end:" + view.cid, function () {
-                BI.nextTick(function () {
-                    self.close(url);
-//                    view.end();
-                    (context.listenEnd.apply(context, isValid ? modelData.split('.') : [modelData]) !== false) && context.populate();
-                }, 30)
-            }).on("change:" + view.cid, _.bind(context.notifyParent, context))
-        }
-        this.controller.open(url);
-        this.views[url].populate(data, options.force || true);
-        return this;
-    },
-
-    close: function (url) {
-        if (this.controller) {
-            this.controller.close(url);
-        }
-        return this;
-    },
-
-    remove: function (url, context) {
-        url = context.rootURL + "/" + url;
-        if (this.controller) {
-            this.controller.remove(url);
-            delete this.store[url];
-            this.views[url] && this.views[url].model.destroy();
-            delete this.views[url];
-        }
-        return this;
-    }
-});/**
- * 统一绑定事件
- * @type {*|void|Object}
- */
-BI.EventList = BI.inherit(BI.OB, {
-    _defaultConfig: function() {
-        return BI.extend(BI.EventList.superclass._defaultConfig.apply(this, arguments), {
-            event: "click",
-            callback: BI.emptyFn,
-            handle: "",
-            items:[]
-        });
-    },
-
-    _init : function() {
-        BI.EventList.superclass._init.apply(this, arguments);
-        this.populate(this.options.items);
-    },
-
-    _getHandle: function(item){
-        var handle = this.options.handle ? _.result(item, this.options.handle) : item;
-        return handle.element || handle;
-    },
-
-    populate: function(items){
-        var self    = this,
-            event   = this.options.event,
-            callback = this.options.callback;
-        BI.nextTick(function(){
-            BI.each(items, function(i, item){
-                var fn  = callback(item);
-                BI.isFunction(fn) && (fn = BI.debounce(fn, BI.EVENT_RESPONSE_TIME, true));
-                self._getHandle(item)[event](fn);
-            })
-        })
-
-    }
-});/**
- * 统一监听jquery事件
- * @type {*|void|Object}
- */
-BI.ListenerList = BI.inherit(BI.OB, {
-    _defaultConfig: function() {
-        return BI.extend(BI.ListenerList.superclass._defaultConfig.apply(this, arguments), {
-            event: "click",
-            callback: BI.emptyFn,
-            items:[]
-        });
-    },
-
-    _init : function() {
-        BI.ListenerList.superclass._init.apply(this, arguments);
-        this.populate(this.options.items);
-    },
-
-    _getHandle: function(item){
-        var handle = this.options.handle ? _.result(item, this.options.handle) : item;
-        return handle.element || handle;
-    },
-
-    populate: function(items){
-        var self     = this,
-            event    = this.options.event,
-            callback = this.options.callback;
-        BI.nextTick(function(){
-            BI.each(items, function(i, item){
-                var fn  = callback(item);
-                BI.isFunction(fn) && (fn = BI.debounce(fn, BI.EVENT_RESPONSE_TIME, true));
-                self._getHandle(item).on(event, fn);
-            })
-        })
-    }
-});/**
- * Created by GUY on 2015/6/25.
- */
-/**
- * 统一监听jquery事件
- * @type {*|void|Object}
- */
-BI.OffList = BI.inherit(BI.OB, {
-    _defaultConfig: function() {
-        return BI.extend(BI.OffList.superclass._defaultConfig.apply(this, arguments), {
-            event: "click",
-            items:[]
-        });
-    },
-
-    _init : function() {
-        BI.OffList.superclass._init.apply(this, arguments);
-        this.populate(this.options.items);
-    },
-
-    _getHandle: function(item){
-        var handle = this.options.handle ? _.result(item, this.options.handle) : item;
-        return handle.element || handle;
-    },
-
-    populate: function(items){
-        var self   = this,
-            event  = this.options.event;
-        BI.each(items, function(i, item){
-            self._getHandle(item).off(event);
-        })
     }
 });/**
  * 事件集合
@@ -23823,65 +20623,68 @@ BI.Cache = {
         }
         document.cookie = cookieString;
     }
-};// full day names
-Date._DN = [BI.i18nText("BI-Basic_Sunday"),
-    BI.i18nText("BI-Basic_Monday"),
-    BI.i18nText("BI-Basic_Tuesday"),
-    BI.i18nText("BI-Basic_Wednesday"),
-    BI.i18nText("BI-Basic_Thursday"),
-    BI.i18nText("BI-Basic_Friday"),
-    BI.i18nText("BI-Basic_Saturday"),
-    BI.i18nText("BI-Basic_Sunday")];
+};$(function () {
+    //牵扯到国际化这些常量在页面加载后再生效
+    // full day names
+    Date._DN = [BI.i18nText("BI-Basic_Sunday"),
+        BI.i18nText("BI-Basic_Monday"),
+        BI.i18nText("BI-Basic_Tuesday"),
+        BI.i18nText("BI-Basic_Wednesday"),
+        BI.i18nText("BI-Basic_Thursday"),
+        BI.i18nText("BI-Basic_Friday"),
+        BI.i18nText("BI-Basic_Saturday"),
+        BI.i18nText("BI-Basic_Sunday")];
 
-// short day names
-Date._SDN = [BI.i18nText("BI-Basic_Simple_Sunday"),
-    BI.i18nText("BI-Basic_Simple_Monday"),
-    BI.i18nText("BI-Basic_Simple_Tuesday"),
-    BI.i18nText("BI-Basic_Simple_Wednesday"),
-    BI.i18nText("BI-Basic_Simple_Thursday"),
-    BI.i18nText("BI-Basic_Simple_Friday"),
-    BI.i18nText("BI-Basic_Simple_Saturday"),
-    BI.i18nText("BI-Basic_Simple_Sunday")];
+    // short day names
+    Date._SDN = [BI.i18nText("BI-Basic_Simple_Sunday"),
+        BI.i18nText("BI-Basic_Simple_Monday"),
+        BI.i18nText("BI-Basic_Simple_Tuesday"),
+        BI.i18nText("BI-Basic_Simple_Wednesday"),
+        BI.i18nText("BI-Basic_Simple_Thursday"),
+        BI.i18nText("BI-Basic_Simple_Friday"),
+        BI.i18nText("BI-Basic_Simple_Saturday"),
+        BI.i18nText("BI-Basic_Simple_Sunday")];
 
-// Monday first, etc.
-Date._FD = 1;
+    // Monday first, etc.
+    Date._FD = 1;
 
-// full month namesdat
-Date._MN = [
-    BI.i18nText("BI-Basic_January"),
-    BI.i18nText("BI-Basic_February"),
-    BI.i18nText("BI-Basic_March"),
-    BI.i18nText("BI-Basic_April"),
-    BI.i18nText("BI-Basic_May"),
-    BI.i18nText("BI-Basic_June"),
-    BI.i18nText("BI-Basic_July"),
-    BI.i18nText("BI-Basic_August"),
-    BI.i18nText("BI-Basic_September"),
-    BI.i18nText("BI-Basic_October"),
-    BI.i18nText("BI-Basic_November"),
-    BI.i18nText("BI-Basic_December")];
+    // full month namesdat
+    Date._MN = [
+        BI.i18nText("BI-Basic_January"),
+        BI.i18nText("BI-Basic_February"),
+        BI.i18nText("BI-Basic_March"),
+        BI.i18nText("BI-Basic_April"),
+        BI.i18nText("BI-Basic_May"),
+        BI.i18nText("BI-Basic_June"),
+        BI.i18nText("BI-Basic_July"),
+        BI.i18nText("BI-Basic_August"),
+        BI.i18nText("BI-Basic_September"),
+        BI.i18nText("BI-Basic_October"),
+        BI.i18nText("BI-Basic_November"),
+        BI.i18nText("BI-Basic_December")];
 
-// short month names
-Date._SMN = [0,
-    1,
-    2,
-    3,
-    4,
-    5,
-    6,
-    7,
-    8,
-    9,
-    10,
-    11];
+    // short month names
+    Date._SMN = [0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11];
 
-Date._QN = ["", BI.i18nText("BI-Quarter_1"),
-    BI.i18nText("BI-Quarter_2"),
-    BI.i18nText("BI-Quarter_3"),
-    BI.i18nText("BI-Quarter_4")];
+    Date._QN = ["", BI.i18nText("BI-Quarter_1"),
+        BI.i18nText("BI-Quarter_2"),
+        BI.i18nText("BI-Quarter_3"),
+        BI.i18nText("BI-Quarter_4")];
 
-/** Adds the number of days array to the Date object. */
-Date._MD = [31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];
+    /** Adds the number of days array to the Date object. */
+    Date._MD = [31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];
+})
 
 /** Constants used for time computations */
 Date.SECOND = 1000 /* milliseconds */;
@@ -24072,6 +20875,15 @@ Date.prototype.getBeforeMultiMonth = function (n) {
     var dt = new Date(this.getTime());
     dt.setMonth(dt.getMonth() - n | 0);
     return dt;
+};
+
+//获得当前时区对应指定时区的时间
+Date.prototype.getTimeZoneTimeByTimezoneOffset = function (offset) {
+    var dt = new Date(this.getTime());
+    var localTime = dt.getTime();
+    var localOffset = dt.getTimezoneOffset() * 60000; //获得当地时间偏移的毫秒数
+    var utc = localTime + localOffset; //utc即GMT时间标准时区
+    return new Date(utc + offset);
 };
 
 /** Checks date and time equality */
@@ -24391,14 +21203,7 @@ Function.prototype.after = function (func) {
         func.apply(this, arguments);
         return ret;
     }
-};/*!
- * jLayout JQuery Plugin v0.11
- *
- * Licensed under the revised BSD License.
- * Copyright 2008, Bram Stein
- * All rights reserved.
- */
-if (jQuery) {
+};if (jQuery) {
     (function ($) {
         // richer:容器在其各个边缘留出的空间
         if (!$.fn.insets) {
@@ -28934,100 +25739,7 @@ Data.Constant = BI.Constant = BICst = {};
 };
 Data.Source = BISource = {
 
-};//工程配置
-$(function () {
-    //注册布局
-    var isSupportFlex = BI.isSupportCss3("flex");
-    BI.Plugin.registerWidget("bi.horizontal", function (ob) {
-        if (isSupportFlex) {
-            return BI.extend(ob, {type: "bi.flex_horizontal"});
-        } else {
-            return ob;
-        }
-    });
-    BI.Plugin.registerWidget("bi.center_adapt", function (ob) {
-        if (isSupportFlex && ob.items && ob.items.length <= 1) {
-            //有滚动条的情况下需要用到flex_wrapper_center布局
-            if (ob.scrollable === true || ob.scrollx === true || ob.scrolly === true) {
-                //不是IE用flex_wrapper_center布局
-                if (!BI.isIE()) {
-                    return BI.extend(ob, {type: "bi.flex_wrapper_center"});
-                }
-                return ob;
-            }
-            return BI.extend(ob, {type: "bi.flex_center"});
-        } else {
-            return ob;
-        }
-    });
-    BI.Plugin.registerWidget("bi.vertical_adapt", function (ob) {
-        if (isSupportFlex) {
-            //有滚动条的情况下需要用到flex_wrapper_center布局
-            if (ob.scrollable === true || ob.scrollx === true || ob.scrolly === true) {
-                //不是IE用flex_wrapper_center布局
-                if (!BI.isIE()) {
-                    return BI.extend({}, ob, {type: "bi.flex_wrapper_vertical_center"});
-                }
-                return ob;
-            }
-            return BI.extend(ob, {type: "bi.flex_vertical_center"});
-        } else {
-            return ob;
-        }
-    });
-    BI.Plugin.registerWidget("bi.float_center_adapt", function (ob) {
-        if (isSupportFlex) {
-            //有滚动条的情况下需要用到flex_wrapper_center布局
-            if (ob.scrollable === true || ob.scrollx === true || ob.scrolly === true) {
-                //不是IE用flex_wrapper_center布局
-                if (!BI.isIE()) {
-                    return BI.extend({}, ob, {type: "bi.flex_wrapper_center"});
-                }
-                return ob;
-            }
-            return BI.extend(ob, {type: "bi.flex_center"});
-        } else {
-            return ob;
-        }
-    });
-    //注册滚动条
-    BI.Plugin.registerWidget("bi.grid_table_scrollbar", function (ob) {
-        if (BI.isIE9Below()) {
-            return BI.extend(ob, {type: "bi.native_table_scrollbar"});
-        } else {
-            return ob;
-        }
-    });
-    BI.Plugin.registerWidget("bi.grid_table_horizontal_scrollbar", function (ob) {
-        if (BI.isIE9Below()) {
-            return BI.extend(ob, {type: "bi.native_table_horizontal_scrollbar"});
-        } else {
-            return ob;
-        }
-    });
-
-    //注册控件
-    BI.Plugin.registerWidget("bi.grid_table", function (ob) {
-        //非chrome下滚动条滑动效果不好，禁止掉
-        if (!(BI.isChrome() && BI.isWindows() && !BI.isEdge())) {
-            return BI.extend(ob, {type: "bi.quick_grid_table"});
-        } else {
-            return ob;
-        }
-    });
-    BI.Plugin.registerWidget("bi.collection_table", function (ob) {
-        //非chrome下滚动条滑动效果不好，禁止掉
-        if (!(BI.isChrome() && BI.isWindows() && !BI.isEdge())) {
-            return BI.extend(ob, {type: "bi.quick_collection_table"});
-        } else {
-            return ob;
-        }
-    });
-    //IE8下滚动条用原生的
-    if (BI.isIE9Below()) {
-        BI.GridTableScrollbar.SIZE = 18;
-    }
-});/*!
+};/*!
  * jQuery Mousewheel 3.1.13
  *
  * Copyright jQuery Foundation and other contributors
@@ -29229,150 +25941,6 @@ $(function () {
     }
 
 }));/**
- * jQuery "splendid textchange" plugin
- * http://benalpert.com/2013/06/18/a-near-perfect-oninput-shim-for-ie-8-and-9.html
- *
- * (c) 2013 Ben Alpert, released under the MIT license
- */
-
-(function($) {
-
-    var testNode = document.createElement("input");
-    var isInputSupported = "oninput" in testNode &&
-        (!("documentMode" in document) || document.documentMode > 9);
-
-    var hasInputCapabilities = function(elem) {
-        // The HTML5 spec lists many more types than `text` and `password` on
-        // which the input event is triggered but none of them exist in IE 8 or
-        // 9, so we don't check them here.
-        // TODO: <textarea> should be supported too but IE seems to reset the
-        // selection when changing textarea contents during a selectionchange
-        // event so it's not listed here for now.
-        return elem.nodeName === "INPUT" &&
-            (elem.type === "text" || elem.type === "password");
-    };
-
-    var activeElement = null;
-    var activeElementValue = null;
-    var activeElementValueProp = null;
-
-    /**
-     * (For old IE.) Replacement getter/setter for the `value` property that
-     * gets set on the active element.
-     */
-    var newValueProp =  {
-        get: function() {
-            return activeElementValueProp.get.call(this);
-        },
-        set: function(val) {
-            activeElementValue = val;
-            activeElementValueProp.set.call(this, val);
-        }
-    };
-
-    /**
-     * (For old IE.) Starts tracking propertychange events on the passed-in element
-     * and override the value property so that we can distinguish user events from
-     * value changes in JS.
-     */
-    var startWatching = function(target) {
-        activeElement = target;
-        activeElementValue = target.value;
-        activeElementValueProp = Object.getOwnPropertyDescriptor(
-            target.constructor.prototype, "value");
-
-        Object.defineProperty(activeElement, "value", newValueProp);
-        activeElement.attachEvent("onpropertychange", handlePropertyChange);
-    };
-
-    /**
-     * (For old IE.) Removes the event listeners from the currently-tracked
-     * element, if any exists.
-     */
-    var stopWatching = function() {
-        if (!activeElement) return;
-
-        // delete restores the original property definition
-        delete activeElement.value;
-        activeElement.detachEvent("onpropertychange", handlePropertyChange);
-
-        activeElement = null;
-        activeElementValue = null;
-        activeElementValueProp = null;
-    };
-
-    /**
-     * (For old IE.) Handles a propertychange event, sending a textChange event if
-     * the value of the active element has changed.
-     */
-    var handlePropertyChange = function(nativeEvent) {
-        if (nativeEvent.propertyName !== "value") return;
-
-        var value = nativeEvent.srcElement.value;
-        if (value === activeElementValue) return;
-        activeElementValue = value;
-
-        $(activeElement).trigger("textchange");
-    };
-
-    if (isInputSupported) {
-        $(document)
-            .on("input", function(e) {
-                // In modern browsers (i.e., not IE 8 or 9), the input event is
-                // exactly what we want so fall through here and trigger the
-                // event...
-                if (e.target.nodeName !== "TEXTAREA") {
-                    // ...unless it's a textarea, in which case we don't fire an
-                    // event (so that we have consistency with our old-IE shim).
-                    $(e.target).trigger("textchange");
-                }
-            });
-    } else {
-        $(document)
-            .on("focusin", function(e) {
-                // In IE 8, we can capture almost all .value changes by adding a
-                // propertychange handler and looking for events with propertyName
-                // equal to 'value'.
-                // In IE 9, propertychange fires for most input events but is buggy
-                // and doesn't fire when text is deleted, but conveniently,
-                // selectionchange appears to fire in all of the remaining cases so
-                // we catch those and forward the event if the value has changed.
-                // In either case, we don't want to call the event handler if the
-                // value is changed from JS so we redefine a setter for `.value`
-                // that updates our activeElementValue variable, allowing us to
-                // ignore those changes.
-                if (hasInputCapabilities(e.target)) {
-                    // stopWatching() should be a noop here but we call it just in
-                    // case we missed a blur event somehow.
-                    stopWatching();
-                    startWatching(e.target);
-                }
-            })
-
-            .on("focusout", function() {
-                stopWatching();
-            })
-
-            .on("selectionchange keyup keydown", function() {
-                // On the selectionchange event, e.target is just document which
-                // isn't helpful for us so just check activeElement instead.
-                //
-                // 90% of the time, keydown and keyup aren't necessary. IE 8 fails
-                // to fire propertychange on the first input event after setting
-                // `value` from a script and fires only keydown, keypress, keyup.
-                // Catching keyup usually gets it and catching keydown lets us fire
-                // an event for the first keystroke if user does a key repeat
-                // (it'll be a little delayed: right before the second keystroke).
-                // Other input methods (e.g., paste) seem to fire selectionchange
-                // normally.
-                if (activeElement && activeElement.value !== activeElementValue) {
-                    activeElementValue = activeElement.value;
-                    $(activeElement).trigger("textchange");
-                }
-            });
-    }
-
-})(jQuery);/**
  * 当没有元素时有提示信息的view
  *
  * Created by GUY on 2015/9/8.
@@ -29937,7 +26505,9 @@ BI.BasicButton = BI.inherit(BI.Single, {
                             return;
                         }
                         interval = setInterval(function () {
-                            self.doClick();
+                            if(self.isEnabled()){
+                                self.doClick();
+                            }
                         }, 100);
                         mouseDown = true;
                         ev(e);
@@ -32081,6 +28651,7 @@ BI.Combo = BI.inherit(BI.Widget, {
             trigger: "click",
             toggle: true,
             direction: "bottom", //top||bottom||left||right||top,left||top,right||bottom,left||bottom,right
+            container: null,//popupview放置的容器，默认为this.element
             isDefaultInit: false,
             destroyWhenHide: false,
             isNeedAdjustHeight: true,//是否需要高度调整
@@ -32277,7 +28848,7 @@ BI.Combo = BI.inherit(BI.Widget, {
             BI.createWidget({
                 type: "bi.vertical",
                 scrolly: false,
-                element: this,
+                element: this.options.container || this,
                 items: [
                     {el: this.popupView}
                 ]
@@ -32290,6 +28861,7 @@ BI.Combo = BI.inherit(BI.Widget, {
         // if (this.element.__isMouseInBounds__(e) || (this.popupView && this.popupView.element.__isMouseInBounds__(e))) {
         //     return;
         // }
+        //BI-10290 公式combo双击公式内容会收起
         if (this.element.find(e.target).length > 0 || e.target.className === "CodeMirror-cursor" || $(e.target).closest(".CodeMirror-hints").length > 0) {//BI-9887 CodeMirror的公式弹框需要特殊处理下
             return;
         }
@@ -32808,10 +29380,10 @@ BI.ComboGroup = BI.inherit(BI.Widget, {
 
     _init: function () {
         BI.ComboGroup.superclass._init.apply(this, arguments);
-        this.populate(this.options.el);
+        this._populate(this.options.el);
     },
 
-    populate: function (item) {
+    _populate: function (item) {
         var self = this, o = this.options;
         var children = o.children;
         if (BI.isEmpty(children)) {
@@ -46273,7 +42845,7 @@ BI.RichEditorSizeChooser = BI.inherit(BI.RichEditorAction, {
             type: "bi.text_trigger",
             readonly: true,
             height: o.height,
-            triggerWidth: 12,
+            triggerWidth: 16,
             text: BI.i18nText("BI-Font_Size")
         });
 
@@ -48051,7 +44623,7 @@ BI.shortcut("bi.text_node", BI.TextNode);/**
 BI.CodeEditor = BI.inherit(BI.Single, {
     _defaultConfig: function () {
         return $.extend(BI.CodeEditor.superclass._defaultConfig.apply(), {
-            baseCls: 'bi-code-editor bi-card',
+            baseCls: 'bi-code-editor',
             value: '',
             watermark: "",
             lineHeight: 2,
@@ -48070,6 +44642,7 @@ BI.CodeEditor = BI.inherit(BI.Single, {
             lineWrapping: true,
             lineNumbers: false,
             readOnly: o.readOnly,
+            //解决插入字段由括号或其他特殊字符包围时分裂的bug
             specialChars: /[\u0000-\u001f\u007f\u00ad\u200c-\u200f\u2028\u2029\ufeff]/
         });
         o.lineHeight === 1 ? this.element.addClass("codemirror-low-line-height") : this.element.addClass("codemirror-high-line-height");
@@ -48089,13 +44662,13 @@ BI.CodeEditor = BI.inherit(BI.Single, {
             self.fireEvent(BI.CodeEditor.EVENT_BLUR);
         });
 
-        this.editor.on("mousedown", function (cm, e) {
-            //IE下mousedown之后会触发blur,所以nextTick后再做focus
-            BI.nextTick(function () {
-                self.fireEvent(BI.CodeEditor.EVENT_FOCUS);
-            });
-            e.stopPropagation();
-        });
+        // this.editor.on("mousedown", function (cm, e) {
+        //     //IE下mousedown之后会触发blur,所以nextTick后再做focus
+        //     BI.nextTick(function () {
+        //         self.fireEvent(BI.CodeEditor.EVENT_FOCUS);
+        //     });
+        //     //e.stopPropagation();
+        // });
 
         // this.editor.on("blur", function () {
         //     self.editor.execCommand("goLineEnd");
@@ -48155,6 +44728,7 @@ BI.CodeEditor = BI.inherit(BI.Single, {
         var value = param;
         param = this.options.paramFormatter(param);
         var from = this.editor.getCursor();
+        //解决插入字段由括号或其他特殊字符包围时分裂的bug,在两端以不可见字符包裹一下
         this.editor.replaceSelection('\u200b' + param + '\u200b');
         var to = this.editor.getCursor();
         var options = {className: 'param', atomic: true};
@@ -48175,7 +44749,8 @@ BI.CodeEditor = BI.inherit(BI.Single, {
         return this.editor.getValue("\n", function (line) {
             var rawText = line.text, value = line.text, num = 0;
             value.text = rawText;
-            _.forEach(line.markedSpans, function (i, ms) {
+            //根据插入位置不同，line.markedSpan可能是乱序的
+            _.forEach(_.sortBy(line.markedSpans, "from"), function (i, ms) {
                 switch (i.marker.className) {
                     case "param":
                     case "error-param":
@@ -50643,7 +47218,7 @@ BI.Trigger = BI.inherit(BI.Single, {
         var conf = BI.Trigger.superclass._defaultConfig.apply(this, arguments);
         return BI.extend(conf, {
             baseCls: (conf.baseCls || "") + " bi-trigger cursor-pointer",
-            height: 30
+            height: 24
         })
     },
 
@@ -63070,7 +59645,7 @@ BI.ResizableTable = BI.inherit(BI.Widget, {
                     o.columnSize[self._getFreezeColLength() - 1] += o.regionColumnSize[0] - freezeColumnSize;
                     self.table.setColumnSize(o.columnSize);
                 }
-                self.table.populate();
+                // self.table.populate();
                 self._populate();
                 self.regionResizerHandler.element.removeClass("dragging");
                 self.fireEvent(BI.Table.EVENT_TABLE_AFTER_REGION_RESIZE);
@@ -63173,7 +59748,7 @@ BI.ResizableTable = BI.inherit(BI.Widget, {
             columnSize[j] = size;
             o.columnSize = columnSize;
             self.table.setColumnSize(columnSize);
-            self.table.populate();
+            // self.table.populate();
             self._populate();
             self.fireEvent(BI.Table.EVENT_TABLE_AFTER_COLUMN_RESIZE);
         };
@@ -70927,7 +67502,7 @@ BI.EditorIconCheckCombo = BI.inherit(BI.Widget, {
         return BI.extend(BI.EditorIconCheckCombo.superclass._defaultConfig.apply(this, arguments), {
             baseClass: "bi-check-editor-combo",
             width: 100,
-            height: 30,
+            height: 24,
             chooseType: BI.ButtonGroup.CHOOSE_TYPE_SINGLE,
             validationChecker: BI.emptyFn,
             quitChecker: BI.emptyFn,
@@ -71247,7 +67822,7 @@ BI.StaticCombo = BI.inherit(BI.Widget, {
     _defaultConfig: function () {
         return BI.extend(BI.StaticCombo.superclass._defaultConfig.apply(this, arguments), {
             baseCls: "bi-static-combo",
-            height: 30,
+            height: 24,
             text: "",
             el: {},
             items: [],
@@ -71313,7 +67888,7 @@ BI.TextValueCheckCombo = BI.inherit(BI.Widget, {
         return BI.extend(BI.TextValueCheckCombo.superclass._defaultConfig.apply(this, arguments), {
             baseClass: "bi-text-value-check-combo",
             width: 100,
-            height: 30,
+            height: 24,
             chooseType: BI.ButtonGroup.CHOOSE_TYPE_SINGLE,
             text: ""
         })
@@ -71826,7 +68401,7 @@ BI.ClearEditor = BI.inherit(BI.Widget, {
         var conf = BI.ClearEditor.superclass._defaultConfig.apply(this, arguments);
         return BI.extend(conf, {
             baseCls: "bi-clear-editor",
-            height: 30,
+            height: 24,
             errorText: "",
             watermark: "",
             validationChecker: BI.emptyFn,
@@ -72005,7 +68580,7 @@ BI.ShelterEditor = BI.inherit(BI.Widget, {
             allowBlank: true,
             watermark: "",
             errorText: "",
-            height: 30,
+            height: 24,
             textAlign: "left"
         })
     },
@@ -72262,7 +68837,7 @@ BI.SignInitialEditor = BI.inherit(BI.Widget, {
             errorText: "",
             value: "",
             text: "",
-            height: 30
+            height: 24
         })
     },
 
@@ -72529,7 +69104,7 @@ BI.SignEditor = BI.inherit(BI.Widget, {
             allowBlank: true,
             watermark: "",
             errorText: "",
-            height: 30
+            height: 24
         })
     },
 
@@ -72787,7 +69362,7 @@ BI.StateEditor = BI.inherit(BI.Widget, {
             allowBlank: true,
             watermark: "",
             errorText: "",
-            height: 30
+            height: 24
         })
     },
 
@@ -73061,7 +69636,7 @@ BI.SimpleStateEditor = BI.inherit(BI.Widget, {
             allowBlank: true,
             watermark: "",
             errorText: "",
-            height: 30
+            height: 24
         })
     },
 
@@ -73293,72 +69868,6 @@ BI.SimpleStateEditor.EVENT_SPACE = "EVENT_SPACE";
 BI.SimpleStateEditor.EVENT_EMPTY = "EVENT_EMPTY";
 
 BI.shortcut("bi.simple_state_editor", BI.SimpleStateEditor);/**
- * 有确定取消按钮的弹出层
- * @class BI.BarFloatSection
- * @extends BI.FloatSection
- * @abstract
- */
-BI.BarFloatSection = BI.inherit(BI.FloatSection, {
-    _defaultConfig: function () {
-        return BI.extend(BI.BarFloatSection.superclass._defaultConfig.apply(this, arguments), {
-            btns: [BI.i18nText(BI.i18nText("BI-Basic_Sure")), BI.i18nText("BI-Basic_Cancel")]
-        })
-    },
-
-    _init: function () {
-        BI.BarFloatSection.superclass._init.apply(this, arguments);
-        var self = this;
-        var flatten = ["_init", "_defaultConfig", "_vessel", "_render", "getName", "listenEnd", "local", "refresh", "load", "change"];
-        flatten = BI.makeObject(flatten, true);
-        BI.each(this.constructor.caller.caller.caller.caller.prototype, function (key) {
-            if (flatten[key]) {
-                return;
-            }
-            var f = self[key];
-            if (BI.isFunction(f)) {
-                self[key] = BI.bind(function () {
-                    if (this.model._start === true) {
-                        this._F.push({f: f, arg: arguments});
-                        return;
-                    }
-                    return f.apply(this, arguments);
-                }, self);
-            }
-        })
-    },
-
-    rebuildSouth: function (south) {
-        var self = this, o = this.options;
-        this.sure = BI.createWidget({
-            type: 'bi.button',
-            text: this.options.btns[0],
-            height: 30,
-            value: 0,
-            handler: function (v) {
-                self.end();
-                self.close(v);
-            }
-        });
-        this.cancel = BI.createWidget({
-            type: 'bi.button',
-            text: this.options.btns[1],
-            height: 30,
-            value: 1,
-            level: 'ignore',
-            handler: function (v) {
-                self.close(v);
-            }
-        });
-        BI.createWidget({
-            type: 'bi.right_vertical_adapt',
-            element: south,
-            hgap: 5,
-            items: [this.cancel, this.sure]
-        });
-    }
-});
-
-/**
  * 有确定取消按钮的弹出层
  * @class BI.BarPopoverSection
  * @extends BI.PopoverSection
@@ -73814,10 +70323,11 @@ BI.SelectList = BI.inherit(BI.Widget, {
 
         //全选
         this.toolbar = BI.createWidget(o.toolbar);
+        this.allSelected = false;
         this.toolbar.on(BI.Controller.EVENT_CHANGE, function (type, value, obj) {
-            var isAllSelected = this.isSelected();
+            self.allSelected = this.isSelected();
             if (type === BI.Events.CLICK) {
-                self.setAllSelected(isAllSelected);
+                self.setAllSelected(self.allSelected);
                 self.fireEvent(BI.SelectList.EVENT_CHANGE, value, obj);
             }
             self.fireEvent(BI.Controller.EVENT_CHANGE, arguments);
@@ -73878,6 +70388,7 @@ BI.SelectList = BI.inherit(BI.Widget, {
         BI.each(this.getAllButtons(), function (i, btn) {
             (btn.setSelected || btn.setAllSelected).apply(btn, [v]);
         });
+        this.allSelected = !!v;
         this.toolbar.setSelected(v);
         this.toolbar.setHalfSelected(false);
     },
@@ -73887,7 +70398,8 @@ BI.SelectList = BI.inherit(BI.Widget, {
     },
 
     isAllSelected: function () {
-        return this.toolbar.isSelected();
+        return this.allSelected;
+        // return this.toolbar.isSelected();
     },
 
     hasPrev: function () {
@@ -75256,7 +71768,7 @@ BI.Segment = BI.inherit(BI.Widget, {
         return BI.extend(BI.Segment.superclass._defaultConfig.apply(this, arguments), {
             baseCls: "bi-segment",
             items: [],
-            height: 30
+            height: 24
         });
     },
     _init: function () {
@@ -78116,13 +74628,12 @@ BI.EditorTrigger = BI.inherit(BI.Trigger, {
         var conf = BI.EditorTrigger.superclass._defaultConfig.apply(this, arguments);
         return BI.extend(conf, {
             baseCls: (conf.baseCls || "") + " bi-editor-trigger bi-border",
-            height: 30,
+            height: 24,
             validationChecker: BI.emptyFn,
             quitChecker: BI.emptyFn,
             allowBlank: false,
             watermark: "",
-            errorText: "",
-            triggerWidth: 30
+            errorText: ""
         });
     },
 
@@ -78157,9 +74668,9 @@ BI.EditorTrigger = BI.inherit(BI.Trigger, {
                     el: {
                         type: "bi.trigger_icon_button",
                         cls: "bi-border-left",
-                        width: o.triggerWidth
+                        width: o.triggerWidth || o.height
                     },
-                    width: o.triggerWidth
+                    width: o.triggerWidth || o.height
                 }
             ]
         });
@@ -78191,7 +74702,7 @@ BI.IconTrigger = BI.inherit(BI.Trigger, {
         return BI.extend(BI.IconTrigger.superclass._defaultConfig.apply(this, arguments), {
             extraCls: "bi-icon-trigger",
             el: {},
-            height: 30
+            height: 24
         });
     },
     _init: function () {
@@ -78214,15 +74725,14 @@ BI.shortcut('bi.icon_trigger', BI.IconTrigger);/**
  */
 BI.IconTextTrigger = BI.inherit(BI.Trigger, {
     _const: {
-        hgap: 4,
-        triggerWidth: 30
+        hgap: 4
     },
 
     _defaultConfig: function () {
         var conf = BI.IconTextTrigger.superclass._defaultConfig.apply(this, arguments);
         return BI.extend(conf, {
             baseCls: (conf.baseCls || "") + " bi-text-trigger",
-            height: 30
+            height: 24
         });
     },
 
@@ -78239,7 +74749,7 @@ BI.IconTextTrigger = BI.inherit(BI.Trigger, {
         this.trigerButton = BI.createWidget({
             type: "bi.trigger_icon_button",
             cls: "bi-border-left",
-            width: c.triggerWidth
+            width: o.triggerWidth || o.height
         });
 
         BI.createWidget({
@@ -78254,13 +74764,13 @@ BI.IconTextTrigger = BI.inherit(BI.Trigger, {
                     },
                     disableSelected: true
                 },
-                width: 24
+                width: o.triggerWidth || o.height
             },
                 {
                     el: this.text
                 }, {
                     el: this.trigerButton,
-                    width: c.triggerWidth
+                    width: o.triggerWidth || o.height
                 }
             ]
         });
@@ -78296,8 +74806,7 @@ BI.TextTrigger = BI.inherit(BI.Trigger, {
         var conf = BI.TextTrigger.superclass._defaultConfig.apply(this, arguments);
         return BI.extend(conf, {
             baseCls: (conf.baseCls || "") + " bi-text-trigger",
-            height: 30,
-            triggerWidth: 30
+            height: 24
         });
     },
 
@@ -78315,7 +74824,7 @@ BI.TextTrigger = BI.inherit(BI.Trigger, {
         this.trigerButton = BI.createWidget({
             type: "bi.trigger_icon_button",
             cls: "bi-border-left",
-            width: o.triggerWidth
+            width: o.triggerWidth || o.height
         });
 
         BI.createWidget({
@@ -78326,7 +74835,7 @@ BI.TextTrigger = BI.inherit(BI.Trigger, {
                     el: this.text
                 }, {
                     el: this.trigerButton,
-                    width: o.triggerWidth
+                    width: o.triggerWidth || o.height
                 }
             ]
         });
@@ -78462,8 +74971,7 @@ BI.SmallTextTrigger = BI.inherit(BI.Trigger, {
         var conf = BI.SmallTextTrigger.superclass._defaultConfig.apply(this, arguments);
         return BI.extend(conf, {
             baseCls: (conf.baseCls || "") + " bi-text-trigger",
-            height: 20,
-            triggerWidth: 20
+            height: 20
         });
     },
 
@@ -78479,7 +74987,7 @@ BI.SmallTextTrigger = BI.inherit(BI.Trigger, {
         });
         this.trigerButton = BI.createWidget({
             type: "bi.trigger_icon_button",
-            width: o.triggerWidth
+            width: o.triggerWidth || o.height
         });
 
         BI.createWidget({
@@ -78490,7 +74998,7 @@ BI.SmallTextTrigger = BI.inherit(BI.Trigger, {
                     el: this.text
                 }, {
                     el: this.trigerButton,
-                    width: o.triggerWidth
+                    width: o.triggerWidth || o.height
                 }
             ]
         });
@@ -78997,60 +75505,7 @@ BI.AdaptiveArrangement = BI.inherit(BI.Widget, {
         item.element.mousedown(function () {
             self._setSelect(item)
         });
-        // o.resizable && item.element.resizable({
-        //     handles: "e, s, se",
-        //     minWidth: 20,
-        //     minHeight: 20,
-        //     autoHide: true,
-        //     helper: "bi-resizer",
-        //     start: function () {
-        //         item.element.css("zIndex", ++self.zIndex);
-        //         self.fireEvent(BI.AdaptiveArrangement.EVENT_ELEMENT_START_RESIZE);
-        //     },
-        //     resize: function (e, ui) {
-        //         // self._resize(item.attr("id"), ui.size);
-        //         self._resize(item.attr("id"), e, ui.size, ui.position);
-        //     },
-        //     stop: function (e, ui) {
-        //         self._stopResize(item.attr("id"), ui.size);
-        //         self.fireEvent(BI.AdaptiveArrangement.EVENT_ELEMENT_STOP_RESIZE, item.attr("id"), ui.size);
-        //         self.fireEvent(BI.AdaptiveArrangement.EVENT_RESIZE);
-        //     }
-        // });
     },
-
-    // _resize: function (name, e, size, position) {
-    //     var self = this;
-    //     this.scrollInterval(e, false, true, function (changedSize) {
-    //         size.width += changedSize.offsetX;
-    //         size.height += changedSize.offsetY;
-    //         var containerWidth = self.arrangement.container.element.width();
-    //         var containerHeight = self.arrangement.container.element.height();
-    //         self.arrangement.container.element.width(containerWidth + changedSize.offsetX);
-    //         self.arrangement.container.element.height(containerHeight + changedSize.offsetY);
-    //         switch (self.getLayoutType()) {
-    //             case BI.Arrangement.LAYOUT_TYPE.FREE:
-    //                 break;
-    //             case BI.Arrangement.LAYOUT_TYPE.GRID:
-    //                 self.setRegionSize(name, size);
-    //                 break;
-    //         }
-    //         self.fireEvent(BI.AdaptiveArrangement.EVENT_ELEMENT_RESIZE, name, size);
-    //     });
-    // },
-    //
-    // _stopResize: function (name, size) {
-    //     var self = this;
-    //     this.scrollEnd();
-    //     switch (this.getLayoutType()) {
-    //         case BI.Arrangement.LAYOUT_TYPE.FREE:
-    //             this.setRegionSize(name, size);
-    //             break;
-    //         case BI.Arrangement.LAYOUT_TYPE.GRID:
-    //             this.setRegionSize(name, size);
-    //             break;
-    //     }
-    // },
 
     _getScrollOffset: function () {
         return this.arrangement._getScrollOffset();
@@ -79111,98 +75566,99 @@ BI.AdaptiveArrangement = BI.inherit(BI.Widget, {
     },
 
     scrollInterval: function (e, isBorderScroll, isOverflowScroll, cb) {
-        var self = this;
-        var map = {
-            top: [-1, 0],
-            bottom: [1, 0],
-            left: [0, -1],
-            right: [0, 1]
-        };
-        var clientSize = this.element.bounds();
-
-        function scrollTo(direction, callback) {
-            if (direction === "") {
-                self.lastActiveRegion = "";
-                if (self._scrollInterval) {
-                    clearInterval(self._scrollInterval);
-                    self._scrollInterval = null;
-                }
-                return;
-            }
-            if (self.lastActiveRegion !== direction) {
-                self.lastActiveRegion = direction;
-                if (self._scrollInterval) {
-                    clearInterval(self._scrollInterval);
-                    self._scrollInterval = null;
-                }
-                var count = 0;
-                self._scrollInterval = setInterval(function () {
-                    count++;
-                    if (count <= 3) {
-                        return;
-                    }
-                    var offset = self._getScrollOffset();
-                    var t = offset.top + map[direction][0] * 40;
-                    var l = offset.left + map[direction][1] * 40;
-                    if (t < 0 || l < 0) {
-                        return;
-                    }
-                    callback({
-                        offsetX: map[direction][1] * 40,
-                        offsetY: map[direction][0] * 40
-                    });
-                    self.scrollTo({
-                        top: t,
-                        left: l
-                    });
-                }, 300);
-            }
-        }
+        // var self = this;
+        // var map = {
+        //     top: [-1, 0],
+        //     bottom: [1, 0],
+        //     left: [0, -1],
+        //     right: [0, 1]
+        // };
+        // var clientWidth = this.arrangement.getClientWidth();
+        // var clientHeight = this.arrangement.getClientHeight();
+        //
+        // function scrollTo(direction, callback) {
+        //     if (direction === "") {
+        //         self.lastActiveRegion = "";
+        //         if (self._scrollInterval) {
+        //             clearInterval(self._scrollInterval);
+        //             self._scrollInterval = null;
+        //         }
+        //         return;
+        //     }
+        //     if (self.lastActiveRegion !== direction) {
+        //         self.lastActiveRegion = direction;
+        //         if (self._scrollInterval) {
+        //             clearInterval(self._scrollInterval);
+        //             self._scrollInterval = null;
+        //         }
+        //         var count = 0;
+        //         self._scrollInterval = setInterval(function () {
+        //             count++;
+        //             if (count <= 3) {
+        //                 return;
+        //             }
+        //             var offset = self._getScrollOffset();
+        //             var t = offset.top + map[direction][0] * 40;
+        //             var l = offset.left + map[direction][1] * 40;
+        //             if (t < 0 || l < 0) {
+        //                 return;
+        //             }
+        //             callback({
+        //                 offsetX: map[direction][1] * 40,
+        //                 offsetY: map[direction][0] * 40
+        //             });
+        //             self.scrollTo({
+        //                 top: t,
+        //                 left: l
+        //             });
+        //         }, 300);
+        //     }
+        // }
 
         cb({
             offsetX: 0,
             offsetY: 0
         });
-        var offset = this.element.offset();
-        var p = {
-            left: e.pageX - offset.left,
-            top: e.pageY - offset.top
-        };
-        //向上滚
-        if (isBorderScroll && p.top >= 0 && p.top <= 30) {
-            scrollTo("top", cb)
-        }
-        //向下滚
-        else if (isBorderScroll && p.top >= clientSize.height - 30 && p.top <= clientSize.height) {
-            scrollTo("bottom", cb)
-        }
-        //向左滚
-        else if (isBorderScroll && p.left >= 0 && p.left <= 30) {
-            scrollTo("left", cb)
-        }
-        //向右滚
-        else if (isBorderScroll && p.left >= clientSize.width - 30 && p.left <= clientSize.width) {
-            scrollTo("right", cb)
-        } else {
-            if (isOverflowScroll === true) {
-                if (p.top < 0) {
-                    scrollTo("top", cb);
-                }
-                else if (p.top > clientSize.height) {
-                    scrollTo("bottom", cb);
-                }
-                else if (p.left < 0) {
-                    scrollTo("left", cb);
-                }
-                else if (p.left > clientSize.width) {
-                    scrollTo("right", cb);
-                } else {
-                    scrollTo("", cb);
-                }
-            } else {
-                scrollTo("", cb);
-            }
-        }
+        // var offset = this.element.offset();
+        // var p = {
+        //     left: e.pageX - offset.left,
+        //     top: e.pageY - offset.top
+        // };
+        // //向上滚
+        // if (isBorderScroll && p.top >= 0 && p.top <= 30) {
+        //     scrollTo("top", cb)
+        // }
+        // //向下滚
+        // else if (isBorderScroll && p.top >= clientHeight - 30 && p.top <= clientHeight) {
+        //     scrollTo("bottom", cb)
+        // }
+        // //向左滚
+        // else if (isBorderScroll && p.left >= 0 && p.left <= 30) {
+        //     scrollTo("left", cb)
+        // }
+        // //向右滚
+        // else if (isBorderScroll && p.left >= clientWidth - 30 && p.left <= clientWidth) {
+        //     scrollTo("right", cb)
+        // } else {
+        //     if (isOverflowScroll === true) {
+        //         if (p.top < 0) {
+        //             scrollTo("top", cb);
+        //         }
+        //         else if (p.top > clientHeight) {
+        //             scrollTo("bottom", cb);
+        //         }
+        //         else if (p.left < 0) {
+        //             scrollTo("left", cb);
+        //         }
+        //         else if (p.left > clientWidth) {
+        //             scrollTo("right", cb);
+        //         } else {
+        //             scrollTo("", cb);
+        //         }
+        //     } else {
+        //         scrollTo("", cb);
+        //     }
+        // }
     },
 
     scrollEnd: function () {
@@ -79334,30 +75790,30 @@ BI.Arrangement = BI.inherit(BI.Widget, {
         });
         this.container = BI.createWidget({
             type: "bi.absolute",
+            scrollable: true,
             cls: "arrangement-container",
             items: o.items.concat([this.block, this.arrangement])
         });
 
-        this.scrollContainer = BI.createWidget({
-            type: "bi.adaptive",
-            width: "100%",
-            height: "100%",
-            scrollable: true,
-            items: [this.container]
-        });
-        this.scrollContainer.element.scroll(function () {
+        this.container.element.scroll(function () {
             self.fireEvent(BI.Arrangement.EVENT_SCROLL, {
-                scrollLeft: self.scrollContainer.element.scrollLeft(),
-                scrollTop: self.scrollContainer.element.scrollTop(),
-                clientWidth: self.scrollContainer.element[0].clientWidth,
-                clientHeight: self.scrollContainer.element[0].clientHeight
+                scrollLeft: self.container.element.scrollLeft(),
+                scrollTop: self.container.element.scrollTop(),
+                clientWidth: self.container.element[0].clientWidth,
+                clientHeight: self.container.element[0].clientHeight
             });
         });
 
         BI.createWidget({
-            type: "bi.adaptive",
+            type: "bi.absolute",
             element: this,
-            items: [this.scrollContainer]
+            items: [{
+                el: this.container,
+                left: 0,
+                right: 0,
+                top: 0,
+                bottom: 0
+            }]
         });
         this.regions = {};
         if (o.items.length > 0) {
@@ -79555,8 +76011,8 @@ BI.Arrangement = BI.inherit(BI.Widget, {
 
     _getScrollOffset: function () {
         return {
-            left: this.scrollContainer.element[0].scrollLeft,
-            top: this.scrollContainer.element[0].scrollTop
+            left: this.container.element[0].scrollLeft,
+            top: this.container.element[0].scrollTop
         }
     },
 
@@ -79607,19 +76063,15 @@ BI.Arrangement = BI.inherit(BI.Widget, {
     },
 
     getClientWidth: function () {
-        return this.scrollContainer.element[0].clientWidth;
+        return this.container.element[0].clientWidth;
     },
 
     getClientHeight: function () {
-        return this.scrollContainer.element[0].clientHeight;
+        return this.container.element[0].clientHeight;
     },
 
     _applyContainer: function () {
-        //先掩藏后显示能够明确滚动条是否出现
-        this.scrollContainer.element.css("overflow", "hidden");
         var occupied = this._getRegionOccupied();
-        this.container.element.width(occupied.left + occupied.width).height(occupied.top + occupied.height);
-        this.scrollContainer.element.css("overflow", "auto");
         return occupied;
     },
 
@@ -80190,8 +76642,8 @@ BI.Arrangement = BI.inherit(BI.Widget, {
     },
 
     scrollTo: function (scroll) {
-        this.scrollContainer.element.scrollTop(scroll.top);
-        this.scrollContainer.element.scrollLeft(scroll.left);
+        this.container.element.scrollTop(scroll.top);
+        this.container.element.scrollLeft(scroll.left);
     },
 
     zoom: function (ratio) {
@@ -80355,894 +76807,6 @@ BI.extend(BI.Arrangement, {
     }
 });
 BI.shortcut('bi.arrangement', BI.Arrangement);/**
- * Created By Shichao on 2017/10/17
- * @class BI.CanvasCollectionView
- * @extends BI.Widget
- */
-BI.CanvasCollectionView = BI.inherit(BI.Widget, {
-    _defaultConfig: function () {
-        return BI.extend(BI.CanvasCollectionView.superclass._defaultConfig.apply(this, arguments), {
-            baseCls: "bi-canvas-collection",
-            overflowX: true,
-            overflowY: true,
-            cellSizeAndPositionGetter: BI.emptyFn,
-            horizontalOverscanSize: 0,
-            verticalOverscanSize: 0,
-            scrollLeft: 0,
-            scrollTop: 0,
-            items: []
-        })
-    },
-
-    _init: function () {
-        BI.CanvasCollectionView.superclass._init.apply(this, arguments);
-        var self = this, o = this.options;
-        this.renderedCells = [];
-        this.renderedKeys = [];
-        this._scrollLock = false;
-        this.scrollTop = this.scrollLeft = 0;
-        this.summaryScrollTop = this.summaryScrollLeft = 0;
-        this._debounceRelease = BI.debounce(function () {
-            self._scrollLock = false;
-        }, 1000 / 60);
-        this.canvas = BI.createWidget({
-            type: "bi.canvas_new"
-        });
-        $(document).keydown(BI.bind(this._onResize, this)); // 防止在使用ctrl + 滚轮调整窗口大小时触发mousewheel事件
-        $(document).keyup(BI.bind(this._onResizeRelease, this))
-        this.element.mousewheel(BI.bind(this._onMouseWheel, this))
-        BI.createWidget({
-            type: "bi.vertical",
-            element: this,
-            scrollable: false,
-            scrolly: false,
-            scrollx: false,
-            items: [this.canvas]
-        });
-        if (o.items.length > 0) {
-            this._calculateSizeAndPositionData();
-            this._populate();
-        }
-        if (o.scrollLeft !== 0 || o.scrollTop !== 0) {
-            BI.nextTick(function () {
-                self.element.scrollTop(o.scrollTop);
-                self.element.scrollLeft(o.scrollLeft);
-            });
-        }
-    },
-
-    _onMouseWheel: function (e) {
-        var o = this.options;
-        if (this._scrollLock) {
-            return;
-        }
-        if (!this._isCtrlPressed) {
-            o.scrollTop += -e.originalEvent.wheelDelta;
-            o.scrollTop = BI.clamp(o.scrollTop, 0, this.maxScrollTop);
-            this._calculateChildrenToRender();
-            this.fireEvent(BI.CanvasCollectionView.EVENT_SCROLL, {
-                scrollLeft: o.scrollLeft,
-                scrollTop: o.scrollTop
-            });
-        }
-    },
-
-    _onResize: function (e) {
-        if (e.ctrlKey) {
-            this._isCtrlPressed = true;
-        } else {
-            this._isCtrlPressed = false;
-        }
-    },
-
-    _onResizeRelease: function (e) {
-        var Keys = {
-            CTRL: 17
-        };
-        var keyCode = e.keyCode;
-
-        if (keyCode === Keys.CTRL) {
-            this._isCtrlPressed = false;
-        }
-    },
-
-    _getMaxScrollTop: function () {
-        return this._height - this.options.height
-    },
-
-    _calculateSizeAndPositionData: function () {
-        var o = this.options;
-        var cellMetadata = [];
-        var sectionManager = new BI.SectionManager();
-        var height = 0;
-        var width = 0;
-
-        for (var index = 0, len = o.items.length; index < len; index++) {
-            var cellMetadatum = o.cellSizeAndPositionGetter(index);
-
-            if (cellMetadatum.height == null || isNaN(cellMetadatum.height) ||
-                cellMetadatum.width == null || isNaN(cellMetadatum.width) ||
-                cellMetadatum.x == null || isNaN(cellMetadatum.x) ||
-                cellMetadatum.y == null || isNaN(cellMetadatum.y)) {
-                throw Error();
-            }
-
-            height = Math.max(height, cellMetadatum.y + cellMetadatum.height);
-            width = Math.max(width, cellMetadatum.x + cellMetadatum.width);
-
-            cellMetadatum.index = index;
-            cellMetadata[index] = cellMetadatum;
-            sectionManager.registerCell(cellMetadatum, index);
-        }
-
-        this._cellMetadata = cellMetadata;
-        this._sectionManager = sectionManager;
-        if (this._height === height && this._width === width) {
-            this._isNeedReset = false;
-        } else {
-            this._height = height;
-            this._width = width;
-            this._isNeedReset = true;
-        }
-        this.maxScrollTop = this._getMaxScrollTop();
-    },
-
-    _cellRenderers: function (height, width, x, y) {
-        this._lastRenderedCellIndices = this._sectionManager.getCellIndices(height, width, x, y);
-        return this._cellGroupRenderer();
-    },
-
-    _cellGroupRenderer: function () {
-        var self = this, o = this.options;
-        var rendered = [];
-        BI.each(this._lastRenderedCellIndices, function (i, index) {
-            var cellMetadata = self._sectionManager.getCellMetadata(index);
-            rendered.push(cellMetadata);
-        });
-        return rendered;
-    },
-
-    _calculateChildrenToRender: function () {
-        var x, y, cellWidth, cellHeight, cellRow, cellCol, value, self = this, o = this.options;
-        var scrollLeft = o.scrollLeft;
-        var scrollTop = o.scrollTop;
-        var left = Math.max(0, scrollLeft - o.horizontalOverscanSize);
-        var top = Math.max(0, scrollTop - o.verticalOverscanSize);
-        var right = Math.min(this._width, scrollLeft + o.width + o.horizontalOverscanSize);
-        var bottom = Math.min(this._height, scrollTop + o.height + o.verticalOverscanSize);
-        if (right > 0 && bottom > 0) {
-            var childrenToDisplay = this._cellRenderers(bottom - top, right - left, left, top);
-            this.canvas.remove(this.scrollLeft, this.scrollTop, o.width, o.height);
-            for (var i = 0; i < childrenToDisplay.length; i++) {
-                var datum = childrenToDisplay[i];
-                var index = this.renderedKeys[datum.index] && this.renderedKeys[datum.index][1];
-                var rect_tl_x = datum.x,
-                    rect_tl_y = datum.y,
-                    rect_tr_x = rect_tl_x + datum.width,
-                    rect_bl_y = rect_tl_y + datum.height,
-                    cell = o.items[datum.index].cell || o.items[datum.index],
-                    background, color, fontWeight, text;
-                while (BI.isNull(cell.styles) && !BI.isFunction(cell.styleGetter)) {
-                    cell = cell.cell;
-                }
-                if (BI.isNull(cell.styles) && BI.isFunction(cell.styleGetter)) {
-                    background = cell.styleGetter().background;
-                    color = cell.styleGetter().color;
-                    fontWeight = cell.styleGetter().fontWeight;
-                } else if (!BI.isNull(cell.styles)) {
-                    background = cell.styles.background;
-                    color = cell.styles.color;
-                    fontWeight = cell.styles.fontWeight;
-                }
-                if (BI.isNull(cell.text)) {
-                    text = "";
-                } else {
-                    text = cell.text;
-                }
-                if (!BI.isString(text)) {
-                    text = text.toString();
-                }
-                if (this.scrollLeft !== o.scrollLeft) {
-                    this.canvas.translate(this.scrollLeft - o.scrollLeft, 0);
-                    this.scrollLeft = o.scrollLeft;
-                }
-                if (this.scrollTop !== o.scrollTop) {
-                    this.canvas.translate(0, this.scrollTop - o.scrollTop);
-                    this.scrollTop = o.scrollTop;
-                }
-                if (datum.x === 0 && datum.y === 0) {
-                    this.canvas.solid(rect_tl_x, rect_tl_y, rect_tl_x, rect_bl_y, rect_tr_x, rect_bl_y, rect_tr_x, rect_tl_y, rect_tl_x, rect_tl_y, {
-                        strokeStyle: "rgb(212, 218, 221)",
-                        fillStyle: background
-                    });
-                } else if (datum.x === 0) {
-                    this.canvas.solid(rect_tl_x, rect_tl_y, rect_tl_x, rect_bl_y, rect_tr_x, rect_bl_y, rect_tr_x, rect_tl_y, {
-                        strokeStyle: "rgb(212, 218, 221)",
-                        fillStyle: background
-                    });
-                } else if (datum.y === 0) {
-                    this.canvas.solid(rect_tl_x, rect_tl_y, rect_tr_x, rect_tl_y, rect_tr_x, rect_bl_y, rect_tl_x, rect_bl_y, {
-                        strokeStyle: "rgb(212, 218, 221)",
-                        fillStyle: background
-                    });
-                } else {
-                    this.canvas.solid(rect_tr_x, rect_tl_y, rect_tl_x, rect_tl_y, rect_tl_x, rect_bl_y, rect_tr_x, rect_bl_y, {
-                        strokeStyle: "rgb(212, 218, 221)",
-                        fillStyle: background
-                    });
-                }
-                this.canvas.setFontWeight(fontWeight);
-                this.canvas.setFont();
-                var font = this.canvas.getContext().font,
-                    textSize = this._getTextPixel(font),
-                    textHeight = textSize,
-                    textWidth = this.canvas.getContext().measureText(text).width,
-                    dotsWidth = this.canvas.getContext().measureText("...").width;
-                var offsetX = this._calcOffsetX(textWidth, datum.width, "center"),
-                    offsetY = this._calcOffsetY(textHeight, datum.height, "center");
-                if (textHeight > datum.height) {
-                    this.canvas.text(datum.x + offsetX, datum.y + offsetY, "...", color);
-                } else if (textWidth + 4 > datum.width) {
-                    var sliceIndex = Math.floor((datum.width - dotsWidth - 4) / textWidth * text.length);
-                    this.canvas.text(datum.x + offsetX, datum.y + offsetY, text.slice(0, sliceIndex) + "...", color);
-                } else {
-                    this.canvas.text(datum.x + offsetX, datum.y + offsetY, text, color);
-                }
-                this.canvas.stroke();
-            }
-        }
-    },
-
-    _getTextPixel: function (font) {
-        var p = font.split("px")[0],
-            s = p.split(" ");
-        for (var c in s) {
-            var num;
-            num = BI.parseInt(s[c]);
-            if (!BI.isNaN(num)) {
-                return num;
-            }
-        }
-    },
-
-    _calcOffsetX: function (textWidth, cellWidth, position) {
-        switch (position) {
-            case "center":
-                if (textWidth >= cellWidth) {
-                    return 4;
-                } else {
-                    return (cellWidth - textWidth) / 2;
-                }
-            case "right":
-                if (textWidth >= cellWidth) {
-                    return 0;
-                } else {
-                    return cellWidth - textWidth;
-                }
-            default:
-                return 0;
-        }
-    },
-
-    _calcOffsetY: function (textHeight, cellHeight, position) {
-        switch (position) {
-            case "center":
-                if (textHeight >= cellHeight) {
-                    return textHeight;
-                } else {
-                    return (cellHeight + textHeight) / 2;
-                }
-            case "bottom":
-                if (textHeight >= cellHeight) {
-                    return cellHeight;
-                } else {
-                    return cellHeight + textHeight;
-                }
-            default:
-                return textHeight;
-        }
-    },
-
-    _populate: function (items) {
-        var o = this.options;
-        if (items && items !== this.options.items) {
-            this.options.items = items;
-            this._calculateSizeAndPositionData();
-        }
-        if (o.items.length > 0) {
-            this.canvas.setBlock();
-            this.canvas.setWidth(o.width);
-            this.canvas.setHeight(o.height);
-            this.restore();
-            this._calculateChildrenToRender();
-            this.element.scrollTop(o.scrollTop);
-            this.element.scrollLeft(o.scrollLeft);
-        }
-    },
-
-    populate: function (items) {
-        if (items && items !== this.options.items) {
-            this.restore();
-        }
-        this._populate(items);
-    },
-
-    setWidth: function (width) {
-        BI.CanvasCollectionView.superclass.setWidth.apply(this, arguments);
-        this.options.width = width;
-    },
-
-    setHeight: function (height) {
-        BI.CanvasCollectionView.superclass.setHeight.apply(this, arguments);
-        this.options.height = height;
-    },
-
-    restore: function () {
-        this.canvas.remove(this.scrollLeft, this.scrollTop, this.options.width, this.options.height);
-        this.renderedKeys = [];
-        this._scrollLock = false;
-    },
-
-    setScrollLeft: function (scrollLeft) {
-        if (this.options.scrollLeft === scrollLeft) {
-            return;
-        }
-        this._scrollLock = true;
-        this.options.scrollLeft = scrollLeft;
-        this._debounceRelease();
-        this._calculateChildrenToRender();
-        this.element.scrollLeft(this.options.scrollLeft);
-    },
-
-    setScrollTop: function (scrollTop) {
-        if (this.options.scrollTop === scrollTop) {
-            return;
-        }
-        this._scrollLock = true;
-        this.options.scrollTop = scrollTop;
-        this._debounceRelease();
-        this._calculateChildrenToRender();
-        this.element.scrollTop(this.options.scrollTop);
-    },
-
-    getScrollLeft: function () {
-        return this.options.scrollLeft;
-    },
-
-    getScrollTop: function () {
-        return this.options.scrollTop;
-    }
-})
-BI.CanvasCollectionView.EVENT_SCROLL = "EVENT_SCROLL";
-BI.shortcut("bi.canvas_collection_view", BI.CanvasCollectionView);/**
- * Created by Shichao on 2017/10/18
- * @class BI.CanvasTable
- * @extends BI.Widget
- */
-BI.CanvasTable = BI.inherit(BI.Widget, {
-    _defaultConfig: function () {
-        return BI.extend(BI.CanvasTable.superclass._defaultConfig.apply(this, arguments), {
-            baseCls: "bi-canvas-collection-table",
-            headerRowSize: 25,
-            rowSize: 25,
-            columnSize: [],
-            isNeedFreeze: false,
-            freezeCols: [],
-            isNeedMerge: false,
-            mergeCols: [],
-            mergeRule: BI.emptyFn,
-            header: [],
-            items: [],
-            regionColumnSize: []
-        });
-    },
-
-    _init: function () {
-        BI.CanvasTable.superclass._init.apply(this, arguments);
-        var self = this, o = this.options;
-        this._scrollBarSize = BI.DOM.getScrollWidth();
-        this.topLeftCollection = BI.createWidget({
-            type: "bi.canvas_collection_view",
-            cellSizeAndPositionGetter: function (index) {
-                return self.topLeftItems[index];
-            }
-        });
-        this.topRightCollection = BI.createWidget({
-            type: "bi.canvas_collection_view",
-            cellSizeAndPositionGetter: function (index) {
-                return self.topRightItems[index];
-            }
-        });
-        this.topRightCollection.on(BI.CanvasCollectionView.EVENT_SCROLL, function (scroll) {
-            self.bottomRightCollection.setScrollLeft(scroll.scrollLeft);
-            self._populateScrollbar();
-            self.fireEvent(BI.Table.EVENT_TABLE_SCROLL, arguments);
-        });
-        this.bottomLeftCollection = BI.createWidget({
-            type: "bi.canvas_collection_view",
-            cellSizeAndPositionGetter: function (index) {
-                return self.bottomLeftItems[index];
-            }
-        });
-        this.bottomLeftCollection.on(BI.CanvasCollectionView.EVENT_SCROLL, function (scroll) {
-            self.bottomRightCollection.setScrollTop(scroll.scrollTop);
-            self.topLeftCollection.setScrollLeft(scroll.scrollLeft);
-            self._populateScrollbar();
-            self.fireEvent(BI.Table.EVENT_TABLE_SCROLL, arguments);
-        });
-        this.bottomRightCollection = BI.createWidget({
-            type: "bi.canvas_collection_view",
-            cellSizeAndPositionGetter: function (index) {
-                return self.bottomRightItems[index];
-            }
-        });
-        this.bottomRightCollection.on(BI.CanvasCollectionView.EVENT_SCROLL, function (scroll) {
-            self.bottomLeftCollection.setScrollTop(scroll.scrollTop);
-            self.topRightCollection.setScrollLeft(scroll.scrollLeft);
-            self._populateScrollbar();
-            self.fireEvent(BI.Table.EVENT_TABLE_SCROLL, arguments);
-        });
-        this.topLeft = BI.createWidget({
-            type: "bi.vertical",
-            scrollable: false,
-            scrolly: false,
-            items: [this.topLeftCollection]
-        });
-        this.topRight = BI.createWidget({
-            type: "bi.vertical",
-            scrollable: false,
-            scrolly: false,
-            items: [this.topRightCollection]
-        });
-        this.bottomLeft = BI.createWidget({
-            type: "bi.vertical",
-            scrollable: false,
-            scrolly: false,
-            items: [this.bottomLeftCollection]
-        });
-        this.bottomRight = BI.createWidget({
-            type: "bi.vertical",
-            scrollable: false,
-            scrolly: false,
-            items: [this.bottomRightCollection]
-        });
-        this.contextLayout = BI.createWidget({
-            type: "bi.absolute",
-            element: this,
-            items: [{
-                el: this.topLeft,
-                top: 0,
-                left: 0,
-            }, {
-                el: this.topRight,
-                top: 0
-            }, {
-                el: this.bottomLeft,
-                left: 0
-            }, {
-                el: this.bottomRight,
-            }]
-        });
-
-        this.topScrollbar = BI.createWidget({
-            type: "bi.grid_table_scrollbar",
-            width: BI.GridTableScrollbar.SIZE
-        });
-        this.topScrollbar.on(BI.GridTableScrollbar.EVENT_SCROLL, function (scrollTop) {
-            self.bottomLeftCollection.setScrollTop(scrollTop);
-            self.bottomRightCollection.setScrollTop(scrollTop);
-            self.fireEvent(BI.Table.EVENT_TABLE_SCROLL, arguments);
-        });
-        this.leftScrollbar = BI.createWidget({
-            type: "bi.grid_table_horizontal_scrollbar",
-            height: BI.GridTableScrollbar.SIZE
-        });
-        this.leftScrollbar.on(BI.GridTableScrollbar.EVENT_SCROLL, function (scrollLeft) {
-            self.topLeftCollection.setScrollLeft(scrollLeft);
-            self.bottomLeftCollection.setScrollLeft(scrollLeft);
-            self.fireEvent(BI.Table.EVENT_TABLE_SCROLL, arguments);
-        });
-        this.rightScrollbar = BI.createWidget({
-            type: "bi.grid_table_horizontal_scrollbar",
-            height: BI.GridTableScrollbar.SIZE
-        });
-        this.rightScrollbar.on(BI.GridTableScrollbar.EVENT_SCROLL, function (scrollLeft) {
-            self.topRightCollection.setScrollLeft(scrollLeft);
-            self.bottomRightCollection.setScrollLeft(scrollLeft);
-            self.fireEvent(BI.Table.EVENT_TABLE_SCROLL, arguments);
-        });
-        this.scrollBarLayout = BI.createWidget({
-            type: "bi.absolute",
-            element: this,
-            items: [{
-                el: this.topScrollbar,
-                right: 0,
-                top: 0
-            }, {
-                el: this.leftScrollbar,
-                left: 0,
-            }, {
-                el: this.rightScrollbar,
-            }]
-        });
-        this._width = o.width - BI.GridTableScrollbar.SIZE;
-        this._height = o.height - BI.GridTableScrollbar.SIZE;
-    },
-
-    mounted: function () {
-        var o = this.options;
-        if (o.items.length > 0 || o.header.length > 0) {
-            this._digest();
-            this._populate();
-        }
-    },
-
-    attr: function () {
-        BI.CanvasTable.superclass.attr.apply(this, arguments);
-    },
-
-    _getFreezeColLength: function () {
-        return this.options.isNeedFreeze ? this.options.freezeCols.length : 0;
-    },
-
-    getRegionSize: function () {
-        var o = this.options;
-        var regionSize = o.regionColumnSize[0] || 0;
-        if (o.isNeedFreeze === false || o.freezeCols.length === 0) {
-            return 0;
-        }
-        if (!regionSize) {
-            BI.each(o.freezeCols, function (i, col) {
-                regionSize += o.columnSize[col];
-            });
-        }
-        return regionSize;
-    },
-
-    _getFreezeHeaderHeight: function () {
-        var o = this.options;
-        if (o.header.length * o.headerRowSize >= this._height) {
-            return 0;
-        }
-        return o.header.length * o.headerRowSize;
-    },
-
-    _getActualItems: function () {
-        var o = this.options;
-        if (o.header.length * o.headerRowSize >= this._height) {
-            return o.header.concat(o.items);
-        }
-        return o.items;
-    },
-
-    _digest: function () {
-        var o = this.options;
-        var freezeColLength = this._getFreezeColLength();
-        //如果表头位置不够，取消表头冻结
-        if (this._getFreezeHeaderHeight() <= 0) {
-            this.topLeftItems = [];
-            this.topRightItems = [];
-            this.bottomLeftItems = this._serialize(this._getActualItems(), 0, freezeColLength, o.rowSize, o.columnSize, o.mergeCols, BI.range(o.header.length));
-            this.bottomRightItems = this._serialize(this._getActualItems(), freezeColLength, o.columnSize.length, o.rowSize, o.columnSize, o.mergeCols, BI.range(o.header.length));
-        } else {
-            this.topLeftItems = this._serialize(o.header, 0, freezeColLength, o.headerRowSize, o.columnSize, o.mergeCols);
-            this.topRightItems = this._serialize(o.header, freezeColLength, o.columnSize.length, o.headerRowSize, o.columnSize, true);
-            this.bottomLeftItems = this._serialize(o.items, 0, freezeColLength, o.rowSize, o.columnSize, o.mergeCols);
-            this.bottomRightItems = this._serialize(o.items, freezeColLength, o.columnSize.length, o.rowSize, o.columnSize, o.mergeCols);
-        }
-    },
-
-    _populateScrollbar: function () {
-        var o = this.options;
-        var regionSize = this.getRegionSize(), totalLeftColumnSize = 0, totalRightColumnSize = 0, totalColumnSize = 0,
-            summaryColumnSizeArray = [];
-        BI.each(o.columnSize, function (i, size) {
-            if (o.isNeedFreeze === true && o.freezeCols.contains(i)) {
-                totalLeftColumnSize += size;
-            } else {
-                totalRightColumnSize += size;
-            }
-            totalColumnSize += size;
-            if (i === 0) {
-                summaryColumnSizeArray[i] = size;
-            } else {
-                summaryColumnSizeArray[i] = summaryColumnSizeArray[i - 1] + size;
-            }
-        });
-        this.topScrollbar.setContentSize(this._getActualItems().length * o.rowSize);
-        this.topScrollbar.setSize(this._height - this._getFreezeHeaderHeight());
-        this.topScrollbar.setPosition(this.bottomRightCollection.getScrollTop());
-        this.topScrollbar.populate();
-
-        this.leftScrollbar.setContentSize(totalLeftColumnSize);
-        this.leftScrollbar.setSize(regionSize);
-        this.leftScrollbar.setPosition(this.bottomLeftCollection.getScrollLeft());
-        this.leftScrollbar.populate();
-
-        this.rightScrollbar.setContentSize(totalRightColumnSize);
-        this.rightScrollbar.setSize(this._width - regionSize);
-        this.rightScrollbar.setPosition(this.bottomRightCollection.getScrollLeft());
-        this.rightScrollbar.populate();
-
-        var items = this.scrollBarLayout.attr("items");
-        items[0].top = this._getFreezeHeaderHeight();
-        items[1].top = this._height;
-        items[2].top = this._height;
-        items[2].left = regionSize;
-        this.scrollBarLayout.attr("items", items);
-        this.scrollBarLayout.resize();
-    },
-
-    _populateTable: function () {
-        var self = this, o = this.options;
-        var regionSize = this.getRegionSize(), totalLeftColumnSize = 0, totalRightColumnSize = 0, totalColumnSize = 0,
-            summaryColumnSizeArray = [];
-        var freezeColLength = this._getFreezeColLength();
-        var otlw = regionSize;
-        var otlh = this._getFreezeHeaderHeight();
-        var otrw = this._width - regionSize;
-        var otrh = this._getFreezeHeaderHeight();
-        var oblw = regionSize;
-        var oblh = this._height - otlh;
-        var obrw = this._width - regionSize;
-        var obrh = this._height - otrh;
-
-        var tlw = otlw + this._scrollBarSize;
-        var tlh = otlh + this._scrollBarSize;
-        var trw = otrw + this._scrollBarSize;
-        var trh = otrh + this._scrollBarSize;
-        var blw = oblw + this._scrollBarSize;
-        var blh = oblh + this._scrollBarSize;
-        var brw = obrw + this._scrollBarSize;
-        var brh = obrh + this._scrollBarSize;
-
-        this.topLeft.setWidth(otlw);
-        this.topLeft.setHeight(otlh);
-        this.topRight.setWidth(otrw);
-        this.topRight.setHeight(otrh);
-        this.bottomLeft.setWidth(oblw);
-        this.bottomLeft.setHeight(oblh);
-        this.bottomRight.setWidth(obrw);
-        this.bottomRight.setHeight(obrh);
-
-        this.topLeftCollection.setWidth(tlw);
-        this.topLeftCollection.setHeight(tlh);
-        this.topRightCollection.setWidth(trw);
-        this.topRightCollection.setHeight(trh);
-        this.bottomLeftCollection.setWidth(blw);
-        this.bottomLeftCollection.setHeight(blh);
-        this.bottomRightCollection.setWidth(brw);
-        this.bottomRightCollection.setHeight(brh);
-
-        var items = this.contextLayout.attr("items");
-        items[1].left = regionSize;
-        //items[2].top = this._getFreezeHeaderHeight();
-        items[2].top = otrh;
-        items[3].left = regionSize;
-        //items[3].top = this._getFreezeHeaderHeight();
-        items[3].top = otrh;
-        this.contextLayout.attr("items", items);
-        this.contextLayout.resize();
-        
-        var leftHeader = [], rightHeader = [], leftItems = [], rightItems = [];
-        var run = function (positions, items, rendered) {
-            BI.each(positions, function (i, item) {
-                if (BI.isNull(items[item.row][item.col])) {
-                    debugger
-                }
-                rendered.push(items[item.row][item.col]);
-            });
-        };
-        run(this.topLeftItems, o.header, leftHeader);
-        run(this.topRightItems, o.header, rightHeader);
-        run(this.bottomLeftItems, o.items, leftItems);
-        run(this.bottomRightItems, o.items, rightItems);
-        
-        this.topLeftCollection._populate(leftHeader);
-        this.topRightCollection._populate(rightHeader);
-        this.bottomLeftCollection._populate(leftItems);
-        this.bottomRightCollection._populate(rightItems);
-    },
-
-    _populate: function () {
-        if (this._width <= 0 || this._height <= 0) {
-            return;
-        }
-        if (this._isNeedDigest === true) {
-            this._digest();
-        }
-        this._isNeedDigest = false;
-        this._populateTable();
-        this._populateScrollbar();
-    },
-
-    _serialize: function (items, startCol, endCol, rowHeight, columnSize, mergeCols, mergeRows) {
-        mergeCols = mergeCols || [];
-        mergeRows = mergeRows || [];
-        var self = this, o = this.options;
-        var result = [], cache = {}, preCol = {}, preRow = {}, map = {};
-        var summaryColumnSize = [];
-        for (var i = startCol; i < endCol; i++) {
-            if (i === startCol) {
-                summaryColumnSize[i] = columnSize[i];
-            } else {
-                summaryColumnSize[i] = summaryColumnSize[i - 1] + columnSize[i];
-            }
-        }
-        var mergeRow = function (i, j) {
-            preCol[j]._height += rowHeight;
-            preCol[j].__mergeRows.push(i);
-        };
-
-        var mergeCol = function (i, j) {
-            preRow[i]._width += columnSize[j];
-            preRow[i].__mergeCols.push(j);
-        };
-
-        var createOneEl = function (r, c) {
-            var width = columnSize[c];
-            var height = rowHeight;
-            map[r][c]._row = r;
-            map[r][c]._col = c;
-            map[r][c]._width = width;
-            map[r][c]._height = height;
-            preCol[c] = map[r][c];
-            preCol[c].__mergeRows = [r];
-            preRow[r] = map[r][c];
-            preRow[r].__mergeCols = [c];
-
-            result.push({
-                x: summaryColumnSize[c] - columnSize[c],
-                y: +r * rowHeight,
-                item: map[r][c]
-            });
-        };
-
-        BI.each(items, function (i, cols) {
-            for (var j = startCol; j < endCol; j++) {
-                if (!cache[i]) {
-                    cache[i] = {};
-                }
-                if (!map[i]) {
-                    map[i] = {};
-                }
-                cache[i][j] = cols[j];
-                map[i][j] = {};
-                if (mergeCols === true || mergeCols.indexOf(j) > -1 || mergeRows === true || mergeRows.indexOf(i) > -1) {
-                    if (i === 0 && j === startCol) {
-                        createOneEl(0, startCol);
-                    } else if (j === startCol && i > 0) {
-                        var isNeedMergeRow = o.mergeRule(cache[i][j], cache[i - 1][j]);
-                        if (isNeedMergeRow === true) {
-                            mergeRow(i, j);
-                            preRow[i] = preCol[j];
-                        } else {
-                            createOneEl(i, j);
-                        }
-                    } else if (i === 0 && j > startCol) {
-                        var isNeedMergeCol = o.mergeRule(cache[i][j], cache[i][j - 1]);
-                        if (isNeedMergeCol === true) {
-                            mergeCol(i, j);
-                            preCol[j] = preRow[i];
-                        } else {
-                            createOneEl(i, j);
-                        }
-                    } else {
-                        var isNeedMergeRow = o.mergeRule(cache[i][j], cache[i - 1][j]);
-                        var isNeedMergeCol = o.mergeRule(cache[i][j], cache[i][j - 1]);
-                        if (isNeedMergeCol && isNeedMergeRow) {
-                            continue;
-                            //mergeRow(i, j);//优先合并列
-                        }
-                        if (isNeedMergeCol) {
-                            mergeCol(i, j);
-                        }
-                        if (isNeedMergeRow) {
-                            mergeRow(i, j);
-                        }
-                        if (!isNeedMergeCol && !isNeedMergeRow) {
-                            createOneEl(i, j);
-                        }
-                    }
-                } else {
-                    createOneEl(i, j);
-                }
-            }
-        });
-        return BI.map(result, function (i, item) {
-            return {
-                x: item.x,
-                y: item.y,
-                row: item.item._row,
-                col: item.item._col,
-                width: item.item._width,
-                height: item.item._height
-            }
-        });
-    },
-
-    populate: function (items, header) {
-        if (items && this.options.items !== items) {
-            this._isNeedDigest = true;
-            this.options.items = items;
-            this._restore();
-        }
-        if (header && this.options.header !== header) {
-            this._isNeedDigest = true;
-            this.options.header = header;
-            this._restore();
-        }
-        this._populate();
-    },
-
-    _restore: function () {
-        this.topLeftCollection.restore();
-        this.topRightCollection.restore();
-        this.bottomLeftCollection.restore();
-        this.bottomRightCollection.restore();
-    },
-
-    restore: function () {
-        this._restore();
-    },
-
-    setWidth: function (width) {
-        BI.CanvasTable.superclass.setWidth.apply(this, arguments);
-        this._width = width - BI.GridTableScrollbar.SIZE;
-    },
-
-    setHeight: function (height) {
-        BI.CanvasTable.superclass.setHeight.apply(this, arguments);
-        this._height = height - BI.GridTableScrollbar.SIZE;
-    },
-
-    setVerticalScroll: function (scrollTop) {
-        this.bottomLeftCollection.setScrollTop(scrollTop);
-        this.bottomRightCollection.setScrollTop(scrollTop);
-    },
-
-    setLeftHorizontalScroll: function (scrollLeft) {
-        this.topLeftCollection.setScrollLeft(scrollLeft);
-        this.bottomLeftCollection.setScrollLeft(scrollLeft);
-    },
-
-    setRightHorizontalScroll: function (scrollLeft) {
-        this.topRightCollection.setScrollLeft(scrollLeft);
-        this.bottomRightCollection.setScrollLeft(scrollLeft);
-    },
-
-    getVerticalScroll: function () {
-        return this.bottomRightCollection.getScrollTop();
-    },
-
-    getLeftHorizontalScroll: function () {
-        return this.bottomLeftCollection.getScrollLeft();
-    },
-
-    getRightHorizontalScroll: function () {
-        return this.bottomRightCollection.getScrollLeft();
-    },
-
-    setColumnSize: function (columnSize) {
-        this._isNeedDigest = true;
-        this.options.columnSize = columnSize;
-    },
-
-    setRegionColumnSize: function (regionColumnSize) {
-        this._isNeedDigest = true;
-        this.options.regionColumnSize = regionColumnSize;
-    },
-
-    getColumnSize: function () {
-        return this.options.columnSize;
-    },
-
-    getRegionColumnSize: function () {
-        return this.options.regionColumnSize;
-    },
-});
-
-BI.shortcut("bi.canvas_table", BI.CanvasTable);/**
  * 日期控件中的月份下拉框
  *
  * Created by GUY on 2015/9/7.
@@ -81743,7 +77307,6 @@ BI.shortcut('bi.date_combo', BI.DateCombo);BI.DateTrigger = BI.inherit(BI.Trigge
     _const: {
         hgap: 4,
         vgap: 2,
-        triggerWidth: 30,
         yearLength: 4,
         yearMonthLength: 7
     },
@@ -81753,7 +77316,7 @@ BI.shortcut('bi.date_combo', BI.DateCombo);BI.DateTrigger = BI.inherit(BI.Trigge
             extraCls: "bi-date-trigger",
             min: '1900-01-01', //最小日期
             max: '2099-12-31', //最大日期
-            height: 25
+            height: 24
         });
     },
     _init: function () {
@@ -82257,7 +77820,7 @@ BI.DateTimeCombo = BI.inherit(BI.Single, {
         var triggerBtn = BI.createWidget({
             type: "bi.icon_button",
             cls: "bi-trigger-icon-button date-font bi-border-right",
-            width: 30,
+            width: 24,
             height: 24
         });
         triggerBtn.on(BI.TriggerIconButton.EVENT_CHANGE, function () {
@@ -82595,7 +78158,6 @@ BI.shortcut("bi.date_time_select", BI.DateTimeSelect);/**
 BI.DateTimeTrigger = BI.inherit(BI.Trigger, {
     _const: {
         hgap: 4,
-        triggerWidth: 30
     },
 
     _defaultConfig: function () {
@@ -82623,7 +78185,7 @@ BI.DateTimeTrigger = BI.inherit(BI.Trigger, {
             element: this,
             items: [{
                 el: BI.createWidget(),
-                width: c.triggerWidth
+                width: o.height
             }, {
                 el: this.text
             }]
@@ -82905,6 +78467,7 @@ BI.DownListCombo = BI.inherit(BI.Widget, {
             adjustLength: 0,
             direction: "bottom",
             trigger: "click",
+            container: null,
             el: {}
         })
     },
@@ -82934,6 +78497,7 @@ BI.DownListCombo = BI.inherit(BI.Widget, {
             type: 'bi.combo',
             trigger: o.trigger,
             isNeedAdjustWidth: false,
+            container: o.container,
             adjustLength: o.adjustLength,
             direction: o.direction,
             el: BI.createWidget(o.el, {
@@ -83457,7 +79021,7 @@ BI.SearchEditor = BI.inherit(BI.Widget, {
         var conf = BI.SearchEditor.superclass._defaultConfig.apply(this, arguments);
         return BI.extend(conf, {
             baseCls: "bi-search-editor bi-border",
-            height: 30,
+            height: 24,
             errorText: "",
             watermark: BI.i18nText("BI-Basic_Search"),
             validationChecker: BI.emptyFn,
@@ -83676,7 +79240,7 @@ BI.TextEditor = BI.inherit(BI.Widget, {
             allowBlank: false,
             watermark: "",
             errorText: "",
-            height: 30
+            height: 24
         })
     },
 
@@ -85231,14 +80795,13 @@ BI.MonthTrigger = BI.inherit(BI.Trigger, {
     _const: {
         hgap: 4,
         vgap: 2,
-        triggerWidth: 25,
         errorText: BI.i18nText("BI-Month_Trigger_Error_Text")
     },
 
     _defaultConfig: function () {
         return BI.extend(BI.MonthTrigger.superclass._defaultConfig.apply(this, arguments), {
             extraCls: "bi-month-trigger bi-border",
-            height: 25
+            height: 24
         });
     },
     _init: function () {
@@ -85294,15 +80857,15 @@ BI.MonthTrigger = BI.inherit(BI.Trigger, {
                         type: "bi.text_button",
                         text: BI.i18nText("BI-Multi_Date_Month"),
                         baseCls: "bi-trigger-month-text",
-                        width: c.triggerWidth
+                        width: o.height
                     },
-                    width: c.triggerWidth
+                    width: o.height
                 }, {
                     el: {
                         type: "bi.trigger_icon_button",
-                        width: c.triggerWidth
+                        width: o.height
                     },
-                    width: c.triggerWidth
+                    width: o.height
                 }
             ]
         });
@@ -85614,8 +81177,8 @@ BI.MultiDateCombo = BI.inherit(BI.Single, {
         var triggerBtn = BI.createWidget({
             type: "bi.icon_button",
             cls: "bi-trigger-icon-button date-font",
-            width: 30,
-            height: 23
+            width: 24,
+            height: 24
         });
         triggerBtn.on(BI.TriggerIconButton.EVENT_CHANGE, function () {
             if (self.combo.isViewVisible()) {
@@ -85627,8 +81190,8 @@ BI.MultiDateCombo = BI.inherit(BI.Single, {
         this.changeIcon = BI.createWidget({
             type: "bi.icon_button",
             cls: "bi-trigger-icon-button date-change-h-font",
-            width: 30,
-            height: 23
+            width: 24,
+            height: 24
         });
 
 
@@ -87960,14 +83523,14 @@ BI.DisplaySelectedList = BI.inherit(BI.Pane, {
 
 BI.shortcut('bi.display_selected_list', BI.DisplaySelectedList);/**
  *
- * @class BI.MultiSelectCombo
+ * @class BI.MultiSelectInsertCombo
  * @extends BI.Single
  */
-BI.MultiSelectCombo = BI.inherit(BI.Single, {
+BI.MultiSelectInsertCombo = BI.inherit(BI.Single, {
 
     _defaultConfig: function () {
-        return BI.extend(BI.MultiSelectCombo.superclass._defaultConfig.apply(this, arguments), {
-            baseCls: 'bi-multi-select-combo',
+        return BI.extend(BI.MultiSelectInsertCombo.superclass._defaultConfig.apply(this, arguments), {
+            baseCls: 'bi-multi-select-insert-combo',
             itemsCreator: BI.emptyFn,
             valueFormatter: BI.emptyFn,
             height: 28
@@ -87975,7 +83538,7 @@ BI.MultiSelectCombo = BI.inherit(BI.Single, {
     },
 
     _init: function () {
-        BI.MultiSelectCombo.superclass._init.apply(this, arguments);
+        BI.MultiSelectInsertCombo.superclass._init.apply(this, arguments);
         var self = this, o = this.options;
 
         var assertShowValue = function () {
@@ -88036,6 +83599,358 @@ BI.MultiSelectCombo = BI.inherit(BI.Single, {
                 self._setStartValue("");
             })
             // }
+        });
+        this.trigger.on(BI.MultiSelectTrigger.EVENT_SEARCHING, function (keywords) {
+            var last = BI.last(keywords);
+            keywords = BI.initial(keywords || []);
+            if (keywords.length > 0) {
+                self._joinKeywords(keywords, function () {
+                    if (BI.isEndWithBlank(last)) {
+                        self.combo.setValue(self.storeValue);
+                        assertShowValue();
+                        self.combo.populate();
+                        self._setStartValue("");
+                    } else {
+                        self.combo.setValue(self.storeValue);
+                        assertShowValue();
+                    }
+                });
+            }
+        });
+
+        this.trigger.on(BI.MultiSelectTrigger.EVENT_CHANGE, function (value, obj) {
+            if (obj instanceof BI.MultiSelectBar) {
+                self._joinAll(this.getValue(), function () {
+                    assertShowValue();
+                });
+            } else {
+                self._join(this.getValue(), function () {
+                    assertShowValue();
+                });
+            }
+        });
+        this.trigger.on(BI.MultiSelectTrigger.EVENT_BEFORE_COUNTER_POPUPVIEW, function () {
+            this.getCounter().setValue(self.storeValue);
+        });
+        this.trigger.on(BI.MultiSelectTrigger.EVENT_COUNTER_CLICK, function () {
+            if (!self.combo.isViewVisible()) {
+                self.combo.showView();
+            }
+        });
+
+        this.combo = BI.createWidget({
+            type: "bi.combo",
+            toggle: false,
+            el: this.trigger,
+            adjustLength: 1,
+            popup: {
+                type: 'bi.multi_select_popup_view',
+                ref: function () {
+                    self.popup = this;
+                    self.trigger.setAdapter(this);
+                },
+                listeners: [{
+                    eventName: BI.MultiSelectPopupView.EVENT_CHANGE,
+                    action: function () {
+                        self.storeValue = this.getValue();
+                        self._adjust(function () {
+                            assertShowValue();
+                        });
+                    }
+                }, {
+                    eventName: BI.MultiSelectPopupView.EVENT_CLICK_CONFIRM,
+                    action: function () {
+                        self._defaultState();
+                    }
+                }, {
+                    eventName: BI.MultiSelectPopupView.EVENT_CLICK_CLEAR,
+                    action: function () {
+                        self.setValue();
+                        self._defaultState();
+                    }
+                }],
+                itemsCreator: o.itemsCreator,
+                valueFormatter: o.valueFormatter,
+                onLoaded: function () {
+                    BI.nextTick(function () {
+                        self.combo.adjustWidth();
+                        self.combo.adjustHeight();
+                        self.trigger.getCounter().adjustView();
+                        self.trigger.getSearcher().adjustView();
+                    });
+                }
+            },
+            hideChecker: function (e) {
+                return triggerBtn.element.find(e.target).length === 0;
+            }
+        });
+
+        this.combo.on(BI.Combo.EVENT_BEFORE_POPUPVIEW, function () {
+            this.setValue(self.storeValue);
+            BI.nextTick(function () {
+                self.populate();
+            });
+        });
+        //当退出的时候如果还在处理请求，则等请求结束后再对外发确定事件
+        this.wants2Quit = false;
+        this.combo.on(BI.Combo.EVENT_AFTER_HIDEVIEW, function () {
+            //important:关闭弹出时又可能没有退出编辑状态
+            self.trigger.stopEditing();
+            if (self.requesting === true) {
+                self.wants2Quit = true;
+            } else {
+                self.fireEvent(BI.MultiSelectInsertCombo.EVENT_CONFIRM);
+            }
+        });
+
+        var triggerBtn = BI.createWidget({
+            type: "bi.trigger_icon_button",
+            width: o.height,
+            height: o.height,
+            cls: "multi-select-trigger-icon-button bi-border-left"
+        });
+        triggerBtn.on(BI.TriggerIconButton.EVENT_CHANGE, function () {
+            self.trigger.getCounter().hideView();
+            if (self.combo.isViewVisible()) {
+                self.combo.hideView();
+            } else {
+                self.combo.showView();
+            }
+        });
+        BI.createWidget({
+            type: "bi.absolute",
+            element: this,
+            items: [{
+                el: this.combo,
+                left: 0,
+                right: 0,
+                top: 0,
+                bottom: 0
+            }, {
+                el: triggerBtn,
+                right: 0,
+                top: 0,
+                bottom: 0
+            }]
+        })
+    },
+
+    _defaultState: function () {
+        this.trigger.stopEditing();
+        this.combo.hideView();
+    },
+
+    _assertValue: function (val) {
+        val || (val = {});
+        val.type || (val.type = BI.Selection.Multi);
+        val.value || (val.value = []);
+    },
+
+    _makeMap: function (values) {
+        return BI.makeObject(values || []);
+    },
+
+    _joinKeywords: function (keywords, callback) {
+        var self = this, o = this.options;
+        this._assertValue(this.storeValue);
+        this.requesting = true;
+        o.itemsCreator({
+            type: BI.MultiSelectInsertCombo.REQ_GET_ALL_DATA,
+            keywords: keywords
+        }, function (ob) {
+            var values = BI.pluck(ob.items, "value");
+            digest(values);
+        });
+
+        function digest(items) {
+            var selectedMap = self._makeMap(items);
+            BI.each(keywords, function (i, val) {
+                if (BI.isNotNull(selectedMap[val])) {
+                    self.storeValue.value[self.storeValue.type === BI.Selection.Multi ? "pushDistinct" : "remove"](val);
+                }
+            });
+            self._adjust(callback);
+        }
+    },
+
+    _joinAll: function (res, callback) {
+        var self = this, o = this.options;
+        this._assertValue(res);
+        this.requesting = true;
+        o.itemsCreator({
+            type: BI.MultiSelectInsertCombo.REQ_GET_ALL_DATA,
+            keywords: [this.trigger.getKey()]
+        }, function (ob) {
+            var items = BI.pluck(ob.items, "value");
+            if (self.storeValue.type === res.type) {
+                var change = false;
+                var map = self._makeMap(self.storeValue.value);
+                BI.each(items, function (i, v) {
+                    if (BI.isNotNull(map[v])) {
+                        change = true;
+                        delete map[v];
+                    }
+                });
+                change && (self.storeValue.value = BI.values(map));
+                self._adjust(callback);
+                return;
+            }
+            var selectedMap = self._makeMap(self.storeValue.value);
+            var notSelectedMap = self._makeMap(res.value);
+            var newItems = [];
+            BI.each(items, function (i, item) {
+                if (BI.isNotNull(selectedMap[items[i]])) {
+                    delete selectedMap[items[i]];
+                }
+                if (BI.isNull(notSelectedMap[items[i]])) {
+                    newItems.push(item);
+                }
+            });
+            self.storeValue.value = newItems.concat(BI.values(selectedMap));
+            self._adjust(callback);
+        })
+    },
+
+    _adjust: function (callback) {
+        var self = this, o = this.options;
+        adjust();
+        callback();
+        function adjust() {
+            if (self.wants2Quit === true) {
+                self.fireEvent(BI.MultiSelectInsertCombo.EVENT_CONFIRM);
+                self.wants2Quit = false;
+            }
+            self.requesting = false;
+        }
+    },
+
+    _join: function (res, callback) {
+        var self = this, o = this.options;
+        this._assertValue(res);
+        this._assertValue(this.storeValue);
+        if (this.storeValue.type === res.type) {
+            var map = this._makeMap(this.storeValue.value);
+            BI.each(res.value, function (i, v) {
+                if (!map[v]) {
+                    self.storeValue.value.push(v);
+                    map[v] = v;
+                }
+            });
+            var change = false;
+            BI.each(res.assist, function (i, v) {
+                if (BI.isNotNull(map[v])) {
+                    change = true;
+                    delete map[v];
+                }
+            });
+            change && (this.storeValue.value = BI.values(map));
+            self._adjust(callback);
+            return;
+        }
+        this._joinAll(res, callback);
+    },
+
+    _setStartValue: function (value) {
+        this._startValue = value;
+        this.popup.setStartValue(value);
+    },
+
+    setValue: function (v) {
+        this.storeValue = v || {};
+        this._assertValue(this.storeValue);
+        this.combo.setValue(this.storeValue);
+    },
+
+    getValue: function () {
+        return BI.deepClone(this.storeValue);
+    },
+
+    populate: function () {
+        this.combo.populate.apply(this.combo, arguments);
+    }
+});
+
+BI.extend(BI.MultiSelectInsertCombo, {
+    REQ_GET_DATA_LENGTH: 0,
+    REQ_GET_ALL_DATA: -1
+});
+
+BI.MultiSelectInsertCombo.EVENT_CONFIRM = "EVENT_CONFIRM";
+
+BI.shortcut('bi.multi_select_insert_combo', BI.MultiSelectInsertCombo);/**
+ *
+ * @class BI.MultiSelectCombo
+ * @extends BI.Single
+ */
+BI.MultiSelectCombo = BI.inherit(BI.Single, {
+
+    _defaultConfig: function () {
+        return BI.extend(BI.MultiSelectCombo.superclass._defaultConfig.apply(this, arguments), {
+            baseCls: 'bi-multi-select-combo',
+            itemsCreator: BI.emptyFn,
+            valueFormatter: BI.emptyFn,
+            height: 28
+        });
+    },
+
+    _init: function () {
+        BI.MultiSelectCombo.superclass._init.apply(this, arguments);
+        var self = this, o = this.options;
+
+        var assertShowValue = function () {
+            BI.isKey(self._startValue) && self.storeValue.value[self.storeValue.type === BI.Selection.All ? "remove" : "pushDistinct"](self._startValue);
+            self.trigger.getSearcher().setState(self.storeValue);
+            self.trigger.getCounter().setButtonChecked(self.storeValue);
+        };
+        this.storeValue = {};
+        //标记正在请求数据
+        this.requesting = false;
+
+        this.trigger = BI.createWidget({
+            type: "bi.multi_select_trigger",
+            height: o.height,
+            // adapter: this.popup,
+            masker: {
+                offset: {
+                    left: 1,
+                    top: 1,
+                    right: 2,
+                    bottom: 33
+                }
+            },
+            valueFormatter: o.valueFormatter,
+            itemsCreator: function (op, callback) {
+                o.itemsCreator(op, function (res) {
+                    if (op.times === 1 && BI.isNotNull(op.keywords)) {
+                        //预防trigger内部把当前的storeValue改掉
+                        self.trigger.setValue(BI.deepClone(self.getValue()));
+                    }
+                    callback.apply(self, arguments);
+                });
+            }
+        });
+
+        this.trigger.on(BI.MultiSelectTrigger.EVENT_START, function () {
+            self._setStartValue("");
+            this.getSearcher().setValue(self.storeValue);
+        });
+        this.trigger.on(BI.MultiSelectTrigger.EVENT_STOP, function () {
+            self._setStartValue("");
+        });
+        this.trigger.on(BI.MultiSelectTrigger.EVENT_PAUSE, function () {
+            if (this.getSearcher().hasMatched()) {
+                var keyword = this.getSearcher().getKeyword();
+                self._join({
+                    type: BI.Selection.Multi,
+                    value: [keyword]
+                }, function () {
+                    self.combo.setValue(self.storeValue);
+                    self._setStartValue(keyword);
+                    assertShowValue();
+                    self.populate();
+                    self._setStartValue("");
+                })
+            }
         });
         this.trigger.on(BI.MultiSelectTrigger.EVENT_SEARCHING, function (keywords) {
             var last = BI.last(keywords);
@@ -88250,32 +84165,32 @@ BI.MultiSelectCombo = BI.inherit(BI.Single, {
 
     _adjust: function (callback) {
         var self = this, o = this.options;
-        // if (!this._count) {
-        //     o.itemsCreator({
-        //         type: BI.MultiSelectCombo.REQ_GET_DATA_LENGTH
-        //     }, function (res) {
-        //         self._count = res.count;
-        //         adjust();
-        //         callback();
-        //     });
-        // } else {
-        adjust();
-        callback();
+        if (!this._count) {
+            o.itemsCreator({
+                type: BI.MultiSelectCombo.REQ_GET_DATA_LENGTH
+            }, function (res) {
+                self._count = res.count;
+                adjust();
+                callback();
+            });
+        } else {
+            adjust();
+            callback();
 
-        // }
+        }
 
         function adjust() {
-            // if (self.storeValue.type === BI.Selection.All && self.storeValue.value.length >= self._count) {
-            //     self.storeValue = {
-            //         type: BI.Selection.Multi,
-            //         value: []
-            //     }
-            // } else if (self.storeValue.type === BI.Selection.Multi && self.storeValue.value.length >= self._count) {
-            //     self.storeValue = {
-            //         type: BI.Selection.All,
-            //         value: []
-            //     }
-            // }
+            if (self.storeValue.type === BI.Selection.All && self.storeValue.value.length >= self._count) {
+                self.storeValue = {
+                    type: BI.Selection.Multi,
+                    value: []
+                }
+            } else if (self.storeValue.type === BI.Selection.Multi && self.storeValue.value.length >= self._count) {
+                self.storeValue = {
+                    type: BI.Selection.All,
+                    value: []
+                }
+            }
             if (self.wants2Quit === true) {
                 self.fireEvent(BI.MultiSelectCombo.EVENT_CONFIRM);
                 self.wants2Quit = false;
@@ -89405,6 +85320,331 @@ BI.MultiSelectCheckSelectedSwitcher.EVENT_BEFORE_POPUPVIEW = "MultiSelectCheckSe
 BI.shortcut('bi.multi_select_check_selected_switcher', BI.MultiSelectCheckSelectedSwitcher);/**
  * Created by zcf_1 on 2017/5/2.
  */
+BI.MultiSelectInsertList = BI.inherit(BI.Widget, {
+    _defaultConfig: function () {
+        return BI.extend(BI.MultiSelectInsertList.superclass._defaultConfig.apply(this, arguments), {
+            baseCls: 'bi-multi-select-insert-list',
+            itemsCreator: BI.emptyFn,
+            valueFormatter: BI.emptyFn
+        })
+    },
+    _init: function () {
+        BI.MultiSelectInsertList.superclass._init.apply(this, arguments);
+
+        var self = this, o = this.options;
+        this.storeValue = {};
+
+        var assertShowValue = function () {
+            BI.isKey(self._startValue) && self.storeValue.value[self.storeValue.type === BI.Selection.All ? "remove" : "pushDistinct"](self._startValue);
+            // self.trigger.setValue(self.storeValue);
+        };
+
+        this.adapter = BI.createWidget({
+            type: "bi.multi_select_loader",
+            cls: "popup-multi-select-list bi-border-left bi-border-right bi-border-bottom",
+            itemsCreator: o.itemsCreator,
+            valueFormatter: o.valueFormatter,
+            logic: {
+                dynamic: false
+            },
+            // onLoaded: o.onLoaded,
+            el: {}
+        });
+        this.adapter.on(BI.MultiSelectLoader.EVENT_CHANGE, function () {
+            self.storeValue = this.getValue();
+                assertShowValue();
+                self.fireEvent(BI.MultiSelectInsertList.EVENT_CHANGE);
+        });
+
+        this.searcherPane = BI.createWidget({
+            type: "bi.multi_select_search_pane",
+            cls: "bi-border-left bi-border-right bi-border-bottom",
+            valueFormatter: o.valueFormatter,
+            keywordGetter: function () {
+                return self.trigger.getKeyword();
+            },
+            itemsCreator: function (op, callback) {
+                op.keyword = self.trigger.getKeyword();
+                this.setKeyword(op.keyword);
+                o.itemsCreator(op, callback);
+            }
+        });
+        this.searcherPane.setVisible(false);
+
+        this.trigger = BI.createWidget({
+            type: "bi.searcher",
+            isAutoSearch: false,
+            isAutoSync: false,
+            onSearch: function (op, callback) {
+                callback();
+            },
+            adapter: this.adapter,
+            popup: this.searcherPane,
+            height: 200,
+            masker: false,
+            listeners: [{
+                eventName: BI.Searcher.EVENT_START,
+                action: function () {
+                    self._showSearcherPane();
+                    self._setStartValue("");
+                    this.setValue(BI.deepClone(self.storeValue));
+                }
+            }, {
+                eventName: BI.Searcher.EVENT_STOP,
+                action: function () {
+                    self._showAdapter();
+                    self._setStartValue("");
+                    self.adapter.setValue(self.storeValue);
+                    //需要刷新回到初始界面，否则搜索的结果不能放在最前面
+                    self.adapter.populate();
+                }
+            }, {
+                eventName: BI.Searcher.EVENT_PAUSE,
+                action: function () {
+                    var keyword = this.getKeyword();
+                    if (this.hasMatched()) {
+                        self._join({
+                            type: BI.Selection.Multi,
+                            value: [keyword]
+                        }, function () {
+                            if (self.storeValue.type === BI.Selection.Multi) {
+                                self.storeValue.value.pushDistinct(keyword)
+                            }
+                            self._showAdapter();
+                            self.adapter.setValue(self.storeValue);
+                            self._setStartValue(keyword);
+                            assertShowValue();
+                            self.adapter.populate();
+                            self._setStartValue("");
+                            self.fireEvent(BI.MultiSelectInsertList.EVENT_CHANGE);
+                        })
+                    } else {
+                        if (self.storeValue.type === BI.Selection.Multi) {
+                            self.storeValue.value.pushDistinct(keyword)
+                        }
+                        self._showAdapter();
+                        self.adapter.setValue(self.storeValue);
+                        self.adapter.populate();
+                        if (self.storeValue.type === BI.Selection.Multi) {
+                            self.fireEvent(BI.MultiSelectInsertList.EVENT_CHANGE);
+                        }
+                    }
+                }
+            }, {
+                eventName: BI.Searcher.EVENT_SEARCHING,
+                action: function () {
+                    var keywords = this.getKeyword();
+                    var last = BI.last(keywords);
+                    keywords = BI.initial(keywords || []);
+                    if (keywords.length > 0) {
+                        self._joinKeywords(keywords, function () {
+                            if (BI.isEndWithBlank(last)) {
+                                self.adapter.setValue(self.storeValue);
+                                assertShowValue();
+                                self.adapter.populate();
+                                self._setStartValue("");
+                            } else {
+                                self.adapter.setValue(self.storeValue);
+                                assertShowValue();
+                            }
+                        });
+                    }
+                }
+            }, {
+                eventName: BI.Searcher.EVENT_CHANGE,
+                action: function (value, obj) {
+                    if (obj instanceof BI.MultiSelectBar) {
+                        self._joinAll(this.getValue(), function () {
+                            assertShowValue();
+                            self.fireEvent(BI.MultiSelectInsertList.EVENT_CHANGE);
+                        });
+                    } else {
+                        self._join(this.getValue(), function () {
+                            assertShowValue();
+                            self.fireEvent(BI.MultiSelectInsertList.EVENT_CHANGE);
+                        });
+                    }
+                }
+            }]
+        });
+
+        BI.createWidget({
+            type: "bi.vtape",
+            element: this,
+            items: [{
+                el: this.trigger,
+                height: 30
+            }, {
+                el: this.adapter,
+                height: "fill"
+            }]
+        });
+        BI.createWidget({
+            type: "bi.absolute",
+            element: this,
+            items: [{
+                el: this.searcherPane,
+                top: 30,
+                bottom: 0,
+                left: 0,
+                right: 0
+            }]
+        })
+    },
+
+    _showAdapter: function () {
+        this.adapter.setVisible(true);
+        this.searcherPane.setVisible(false);
+    },
+
+    _showSearcherPane: function () {
+        this.searcherPane.setVisible(true);
+        this.adapter.setVisible(false);
+    },
+
+    _defaultState: function () {
+        this.trigger.stopEditing();
+    },
+
+    _assertValue: function (val) {
+        val || (val = {});
+        val.type || (val.type = BI.Selection.Multi);
+        val.value || (val.value = []);
+    },
+
+    _makeMap: function (values) {
+        return BI.makeObject(values || []);
+    },
+
+    _joinKeywords: function (keywords, callback) {
+        var self = this, o = this.options;
+        this._assertValue(this.storeValue);
+        if (!this._allData) {
+            o.itemsCreator({
+                type: BI.MultiSelectInsertList.REQ_GET_ALL_DATA
+            }, function (ob) {
+                self._allData = BI.pluck(ob.items, "value");
+                digest(self._allData);
+            })
+        } else {
+            digest(this._allData)
+        }
+
+        function digest(items) {
+            var selectedMap = self._makeMap(items);
+            BI.each(keywords, function (i, val) {
+                if (BI.isNotNull(selectedMap[val])) {
+                    self.storeValue.value[self.storeValue.type === BI.Selection.Multi ? "pushDistinct" : "remove"](val);
+                }
+            });
+            callback();
+        }
+    },
+
+    _joinAll: function (res, callback) {
+        var self = this, o = this.options;
+        this._assertValue(res);
+        o.itemsCreator({
+            type: BI.MultiSelectInsertList.REQ_GET_ALL_DATA,
+            keyword: self.trigger.getKeyword()
+        }, function (ob) {
+            var items = BI.pluck(ob.items, "value");
+            if (self.storeValue.type === res.type) {
+                var change = false;
+                var map = self._makeMap(self.storeValue.value);
+                BI.each(items, function (i, v) {
+                    if (BI.isNotNull(map[v])) {
+                        change = true;
+                        delete map[v];
+                    }
+                });
+                change && (self.storeValue.value = BI.values(map));
+                callback();
+                return;
+            }
+            var selectedMap = self._makeMap(self.storeValue.value);
+            var notSelectedMap = self._makeMap(res.value);
+            var newItems = [];
+            BI.each(items, function (i, item) {
+                if (BI.isNotNull(selectedMap[items[i]])) {
+                    delete selectedMap[items[i]];
+                }
+                if (BI.isNull(notSelectedMap[items[i]])) {
+                    newItems.push(item);
+                }
+            });
+            self.storeValue.value = newItems.concat(BI.values(selectedMap));
+            callback();
+        })
+    },
+
+    _join: function (res, callback) {
+        var self = this, o = this.options;
+        this._assertValue(res);
+        this._assertValue(this.storeValue);
+        if (this.storeValue.type === res.type) {
+            var map = this._makeMap(this.storeValue.value);
+            BI.each(res.value, function (i, v) {
+                if (!map[v]) {
+                    self.storeValue.value.push(v);
+                    map[v] = v;
+                }
+            });
+            var change = false;
+            BI.each(res.assist, function (i, v) {
+                if (BI.isNotNull(map[v])) {
+                    change = true;
+                    delete map[v];
+                }
+            });
+            change && (this.storeValue.value = BI.values(map));
+            callback();
+            return;
+        }
+        this._joinAll(res, callback);
+    },
+
+    _setStartValue: function (value) {
+        this._startValue = value;
+        this.adapter.setStartValue(value);
+    },
+
+    isAllSelected: function () {
+        return this.adapter.isAllSelected();
+    },
+
+    resize: function () {
+        // this.trigger.getCounter().adjustView();
+        // this.trigger.adjustView();
+    },
+    setValue: function (v) {
+        this.storeValue = v || {};
+        this._assertValue(this.storeValue);
+        this.adapter.setValue(this.storeValue);
+        this.trigger.setValue(this.storeValue);
+    },
+
+    getValue: function () {
+        return BI.deepClone(this.storeValue);
+    },
+
+    populate: function () {
+        this._count = null;
+        this._allData = null;
+        this.adapter.populate.apply(this.adapter, arguments);
+        this.trigger.populate.apply(this.trigger, arguments);
+    }
+});
+
+BI.extend(BI.MultiSelectInsertList, {
+    REQ_GET_DATA_LENGTH: 0,
+    REQ_GET_ALL_DATA: -1
+});
+
+BI.MultiSelectInsertList.EVENT_CHANGE = "BI.MultiSelectInsertList.EVENT_CHANGE";
+BI.shortcut("bi.multi_select_insert_list", BI.MultiSelectInsertList);/**
+ * Created by zcf_1 on 2017/5/2.
+ */
 BI.MultiSelectList = BI.inherit(BI.Widget, {
     _defaultConfig: function () {
         return BI.extend(BI.MultiSelectList.superclass._defaultConfig.apply(this, arguments), {
@@ -89494,9 +85734,6 @@ BI.MultiSelectList = BI.inherit(BI.Widget, {
                             type: BI.Selection.Multi,
                             value: [keyword]
                         }, function () {
-                            if (self.storeValue.type === BI.Selection.Multi) {
-                                self.storeValue.value.pushDistinct(keyword)
-                            }
                             self._showAdapter();
                             self.adapter.setValue(self.storeValue);
                             self._setStartValue(keyword);
@@ -89505,16 +85742,6 @@ BI.MultiSelectList = BI.inherit(BI.Widget, {
                             self._setStartValue("");
                             self.fireEvent(BI.MultiSelectList.EVENT_CHANGE);
                         })
-                    } else {
-                        if (self.storeValue.type === BI.Selection.Multi) {
-                            self.storeValue.value.pushDistinct(keyword)
-                        }
-                        self._showAdapter();
-                        self.adapter.setValue(self.storeValue);
-                        self.adapter.populate();
-                        if (self.storeValue.type === BI.Selection.Multi) {
-                            self.fireEvent(BI.MultiSelectList.EVENT_CHANGE);
-                        }
                     }
                 }
             }, {
@@ -89667,32 +85894,31 @@ BI.MultiSelectList = BI.inherit(BI.Widget, {
 
     _adjust: function (callback) {
         var self = this, o = this.options;
-        // if (!this._count) {
-        //     o.itemsCreator({
-        //         type: BI.MultiSelectList.REQ_GET_DATA_LENGTH
-        //     }, function (res) {
-        //         self._count = res.count;
-        //         adjust();
-        //         callback();
-        //     });
-        // } else {
-        adjust();
-        callback();
-
-        // }
+        if (!this._count) {
+            o.itemsCreator({
+                type: BI.MultiSelectList.REQ_GET_DATA_LENGTH
+            }, function (res) {
+                self._count = res.count;
+                adjust();
+                callback();
+            });
+        } else {
+            adjust();
+            callback();
+        }
 
         function adjust() {
-            // if (self.storeValue.type === BI.Selection.All && self.storeValue.value.length >= self._count) {
-            //     self.storeValue = {
-            //         type: BI.Selection.Multi,
-            //         value: []
-            //     }
-            // } else if (self.storeValue.type === BI.Selection.Multi && self.storeValue.value.length >= self._count) {
-            //     self.storeValue = {
-            //         type: BI.Selection.All,
-            //         value: []
-            //     }
-            // }
+            if (self.storeValue.type === BI.Selection.All && self.storeValue.value.length >= self._count) {
+                self.storeValue = {
+                    type: BI.Selection.Multi,
+                    value: []
+                }
+            } else if (self.storeValue.type === BI.Selection.Multi && self.storeValue.value.length >= self._count) {
+                self.storeValue = {
+                    type: BI.Selection.All,
+                    value: []
+                }
+            }
         }
     },
 
@@ -90739,6 +86965,7 @@ BI.NumberEditor = BI.inherit(BI.Widget, {
                 return v;
             },
             value: 0,
+            allowBlank: false,
             errorText: "",
             step: 1
         })
@@ -90750,6 +86977,7 @@ BI.NumberEditor = BI.inherit(BI.Widget, {
         this.editor = BI.createWidget({
             type: "bi.sign_editor",
             height: o.height,
+            allowBlank: o.allowBlank,
             value: o.valueFormatter(o.value),
             validationChecker: o.validationChecker,
             errorText: o.errorText
@@ -92708,7 +88936,6 @@ BI.QuarterTrigger = BI.inherit(BI.Trigger, {
     _const: {
         hgap: 4,
         vgap: 2,
-        triggerWidth: 30,
         textWidth: 40,
         errorText: BI.i18nText("BI-Quarter_Trigger_Error_Text")
     },
@@ -92716,7 +88943,7 @@ BI.QuarterTrigger = BI.inherit(BI.Trigger, {
     _defaultConfig: function () {
         return BI.extend(BI.QuarterTrigger.superclass._defaultConfig.apply(this, arguments), {
             extraCls: "bi-quarter-trigger bi-border",
-            height: 25
+            height: 24
         });
     },
     _init: function () {
@@ -92779,9 +89006,9 @@ BI.QuarterTrigger = BI.inherit(BI.Trigger, {
                 }, {
                     el: {
                         type: "bi.trigger_icon_button",
-                        width: c.triggerWidth
+                        width: o.height
                     },
-                    width: c.triggerWidth
+                    width: o.height
                 }
             ]
         });
@@ -94852,7 +91079,7 @@ BI.SingleTreeCombo = BI.inherit(BI.Widget, {
         return BI.extend(BI.SingleTreeCombo.superclass._defaultConfig.apply(this, arguments), {
             baseCls: "bi-single-tree-combo",
             trigger: {},
-            height: 30,
+            height: 24,
             text: "",
             items: []
         });
@@ -94987,7 +91214,7 @@ BI.SingleTreeTrigger = BI.inherit(BI.Trigger, {
     _defaultConfig: function () {
         return BI.extend(BI.SingleTreeTrigger.superclass._defaultConfig.apply(this, arguments), {
             baseCls: "bi-single-tree-trigger",
-            height: 30,
+            height: 24,
             text: "",
             items: []
         });
@@ -95552,7 +91779,6 @@ BI.YearTrigger = BI.inherit(BI.Trigger, {
     _const: {
         hgap: 4,
         vgap: 2,
-        triggerWidth: 25,
         errorText: BI.i18nText("BI-Please_Input_Positive_Integer"),
         errorTextInvalid: BI.i18nText("BI-Year_Trigger_Invalid_Text")
     },
@@ -95562,7 +91788,7 @@ BI.YearTrigger = BI.inherit(BI.Trigger, {
             extraCls: "bi-year-trigger bi-border",
             min: '1900-01-01', //最小日期
             max: '2099-12-31', //最大日期
-            height: 25
+            height: 24
         });
     },
     _init: function () {
@@ -95619,15 +91845,15 @@ BI.YearTrigger = BI.inherit(BI.Trigger, {
                         type: "bi.text_button",
                         baseCls: "bi-trigger-year-text",
                         text: BI.i18nText("BI-Multi_Date_Year"),
-                        width: c.triggerWidth
+                        width: o.height
                     },
-                    width: c.triggerWidth
+                    width: o.height
                 }, {
                     el: {
                         type: "bi.trigger_icon_button",
-                        width: c.triggerWidth
+                        width: o.height
                     },
-                    width: c.triggerWidth
+                    width: o.height
                 }
             ]
         });
@@ -96941,4 +93167,126 @@ BI.ValueChooserPane = BI.inherit(BI.AbstractValueChooser, {
     }
 });
 BI.ValueChooserPane.EVENT_CHANGE = "ValueChooserPane.EVENT_CHANGE";
-BI.shortcut('bi.value_chooser_pane', BI.ValueChooserPane);
+BI.shortcut('bi.value_chooser_pane', BI.ValueChooserPane);BI.servletURL = "https://fanruan.coding.me/fineui/dist/";
+BI.resourceURL = "https://fanruan.coding.me/fineui/dist/resource/";
+BI.i18n = {
+    "BI-Multi_Date_Quarter_End": "季度末",
+    "BI-Multi_Date_Month_Begin": "月初",
+    "BI-Multi_Date_YMD": "年/月/日",
+    "BI-Custom_Color": "自定义颜色",
+    "BI-Numerical_Interval_Input_Data": "请输入数值",
+    "BI-Please_Input_Natural_Number": "请输入非负整数",
+    "BI-No_More_Data": "无更多数据",
+    "BI-Basic_Altogether": "共",
+    "BI-Basic_Sunday": "星期日",
+    "BI-Widget_Background_Colour": "组件背景",
+    "BI-Color_Picker_Error_Text": "请输入0~255的正整数",
+    "BI-Multi_Date_Month": "月",
+    "BI-No_Selected_Item": "没有可选项",
+    "BI-Multi_Date_Year_Begin": "年初",
+    "BI-Quarter_1": "第1季度",
+    "BI-Quarter_2": "第2季度",
+    "BI-Quarter_3": "第3季度",
+    "BI-Quarter_4": "第4季度",
+    "BI-Multi_Date_Year_Next": "年后",
+    "BI-Multi_Date_Month_Prev": "个月前",
+    "BI-Month_Trigger_Error_Text": "请输入1~12的正整数",
+    "BI-Less_And_Equal": "小于等于",
+    "BI-Year_Trigger_Invalid_Text": "请输入有效时间",
+    "BI-Multi_Date_Week_Next": "周后",
+    "BI-Font_Size": "字号",
+    "BI-Basic_Total": "共",
+    "BI-Already_Selected": "已选择",
+    "BI-Formula_Insert": "插入",
+    "BI-Select_All": "全选",
+    "BI-Basic_Tuesday": "星期二",
+    "BI-Multi_Date_Month_End": "月末",
+    "BI-Load_More": "点击加载更多数据",
+    "BI-Basic_September": "九月",
+    "BI-Current_Is_Last_Page": "当前已是最后一页",
+    "BI-Basic_Auto": "自动",
+    "BI-Basic_Count": "个",
+    "BI-Basic_Value": "值",
+    "BI-Basic_Unrestricted": "无限制",
+    "BI-Quarter_Trigger_Error_Text": "请输入1~4的正整数",
+    "BI-Basic_More": "更多",
+    "BI-Basic_Wednesday": "星期三",
+    "BI-Basic_Bold": "加粗",
+    "BI-Basic_Simple_Saturday": "六",
+    "BI-Multi_Date_Month_Next": "个月后",
+    "BI-Basic_March": "三月",
+    "BI-Current_Is_First_Page": "当前已是第一页",
+    "BI-Basic_Thursday": "星期四",
+    "BI-Basic_Prompt": "提示",
+    "BI-Multi_Date_Today": "今天",
+    "BI-Multi_Date_Quarter_Prev": "个季度前",
+    "BI-Row_Header": "行表头",
+    "BI-Date_Trigger_Error_Text": "日期格式示例:2015-3-11",
+    "BI-Basic_Cancel": "取消",
+    "BI-Basic_January": "一月",
+    "BI-Basic_June": "六月",
+    "BI-Basic_July": "七月",
+    "BI-Basic_April": "四月",
+    "BI-Multi_Date_Quarter_Begin": "季度初",
+    "BI-Multi_Date_Week": "周",
+    "BI-Click_Blank_To_Select": "点按\"空格键\"选中匹配项",
+    "BI-Basic_August": "八月",
+    "BI-Word_Align_Left": "文字居左",
+    "BI-Basic_November": "十一月",
+    "BI-Font_Colour": "字体颜色",
+    "BI-Multi_Date_Day_Prev": "天前",
+    "BI-Select_Part": "部分选择",
+    "BI-Multi_Date_Day_Next": "天后",
+    "BI-Less_Than": "小于",
+    "BI-Basic_February": "二月",
+    "BI-Multi_Date_Year": "年",
+    "BI-Number_Index": "序号",
+    "BI-Multi_Date_Week_Prev": "周前",
+    "BI-Next_Page": "下一页",
+    "BI-Right_Page": "向右翻页",
+    "BI-Numerical_Interval_Signal_Value": "前后值相等，请将操作符改为“≤”",
+    "BI-Basic_December": "十二月",
+    "BI-Basic_Saturday": "星期六",
+    "BI-Basic_Simple_Wednesday": "三",
+    "BI-Multi_Date_Quarter_Next": "个季度后",
+    "BI-Basic_October": "十月",
+    "BI-Basic_Simple_Friday": "五",
+    "BI-Primary_Key": "主键",
+    "BI-Basic_Save": "保存",
+    "BI-Numerical_Interval_Number_Value": "请保证前面的数值小于/等于后面的数值",
+    "BI-Previous_Page": "上一页",
+    "BI-No_Select": "搜索结果为空",
+    "BI-Basic_Clears": "清空",
+    "BI-Created_By_Me": "我创建的",
+    "BI-Basic_Simple_Tuesday": "二",
+    "BI-Word_Align_Right": "文字居右",
+    "BI-Summary_Values": "汇总",
+    "BI-Basic_Clear": "清除",
+    "BI-Upload_File_Size_Error": "文件大小不支",
+    "BI-Up_Page": "向上翻页",
+    "BI-Basic_Simple_Sunday": "日",
+    "BI-Multi_Date_Relative_Current_Time": "相对当前时间",
+    "BI-Selected_Data": "已选数据：",
+    "BI-Multi_Date_Quarter": "季度",
+    "BI-Check_Selected": "查看已选",
+    "BI-Basic_Search": "搜索",
+    "BI-Basic_May": "五月",
+    "BI-Continue_Select": "继续选择",
+    "BI-Please_Input_Positive_Integer": "请输入正整数",
+    "BI-Upload_File_Type_Error": "文件类型不支持",
+    "BI-Basic_Friday": "星期五",
+    "BI-Down_Page": "向下翻页",
+    "BI-Basic_Monday": "星期一",
+    "BI-Left_Page": "向左翻页",
+    "BI-Transparent_Color": "透明",
+    "BI-Basic_Simple_Monday": "一",
+    "BI-Multi_Date_Year_End": "年末",
+    "BI-Time_Interval_Error_Text": "请保证前面时间小于/等于后面的时间",
+    "BI-Basic_Time": "时间",
+    "BI-Basic_OK": "确定",
+    "BI-Basic_Sure": "确定",
+    "BI-Basic_Simple_Thursday": "四",
+    "BI-Multi_Date_Year_Prev": "年前",
+    "BI-Tiao_Data": "条数据",
+    "BI-Basic_Italic": "斜体"
+};

@@ -2,34 +2,56 @@
 <html lang="en">
 
 <head>
-      <meta charset="utf-8">
-      <title></title>
-      <link rel="stylesheet" type="text/css" href="core.css" />
-      <link rel="stylesheet" type="text/css" href="base.css" />
-      <link rel="stylesheet" type="text/css" href="widget.css" />
-      <link rel="stylesheet" type="text/css" href="resource.css" />
-      <link rel="stylesheet" type="text/css" href="demo.css" />
-      <link rel="stylesheet" type="text/css" href="sliders.css" />
+    <meta charset="utf-8">
+    <title></title>
+    <!--核心css文件-->
+    <link rel="stylesheet" type="text/css" href="core.css"/>
+    <!--基础css文件， 包含一些最基本控件的样式-->
+    <link rel="stylesheet" type="text/css" href="base.css"/>
+    <!--BI控件样式-->
+    <link rel="stylesheet" type="text/css" href="widget.css"/>
+    <!--资源样式， 包括font、icon、background、app-->
+    <link rel="stylesheet" type="text/css" href="resource.css"/>
+    <!--单值滑块、双值滑块控件样式-->
+    <link rel="stylesheet" type="text/css" href="sliders.css"/>
+    <!--当前demo定义的样式-->
+    <link rel="stylesheet" type="text/css" href="demo.css"/>
 
-      <script src="config.js"></script>
-      <script src="polyfill.js"></script>
-      <script src="core.js"></script>
-      <script src="jqueryui.js"></script>
-      <script src="base.js"></script>
-      <script src="case.js"></script>
-      <script src="widget.js"></script>
-      <script src="sliders.js"></script>
-      <!--图表-->
-      <!--<script src="vancharts-all.js"></script>-->
-      <!--<script src="biconst.js"></script>-->
-      <!--图表用到的常量(直接拿的bi的常量)-->
-      <!--<script src="chart.js"></script>-->
+    <!--IE9及以下兼容-->
+    <script src="polyfill.js"></script>
+    <!--核心js-->
+    <script src="core.js"></script>
+    <!--fix1.0版本框架， 只用ui的话不用引入， 引入的顺序需在core.js之后， 可以和2.0版本同步使用或使用任一个均可-->
+    <script src="fix/fix-1.0.js"></script>
+    <!--fix2.0版本框架， 只用ui的话不用引入， 引入的顺序需在core.js之后-->
+    <script src="fix/fix.js"></script>
+    <!--fix2.0版本框架， 只用ui的话不用引入， 引入的顺序需在core.js之后-->
+    <script src="fix/fix.compact.js"></script>
 
-      <script src="demo.js"></script>
+    <!--基础js， 包括最基本的控件-->
+    <script src="base.js"></script>
+    <!--基础js， 存放一些通用组件，如选色组件、富文本组件等-->
+    <script src="case.js"></script>
+    <!--BI控件js-->
+    <script src="widget.js"></script>
+
+    <!--jqueryui包括jquery的draggable、droppable、resizable-->
+    <script src="jqueryui.js"></script>
+    <!--单值滑块、双值滑块js， 因为用了jqueryui，所以提出来了-->
+    <script src="sliders.js"></script>
+    <!--工程配置文件，主要是BI.servletURL(根目录)、BI.resourceURL(资源路径)、BI.i18n(国际化)-->
+    <script src="config.js"></script>
+    <!--图表-->
+    <!--<script src="vancharts-all.js"></script>-->
+    <!--<script src="biconst.js"></script>-->
+    <!--图表用到的常量(直接拿的bi的常量)-->
+    <!--<script src="chart.js"></script>-->
+
+    <script src="demo.js"></script>
 </head>
 
 <body>
-      <div id="wrapper"></div>
+<div id="wrapper"></div>
 </body>
 
 </html>

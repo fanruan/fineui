@@ -1,5 +1,5 @@
 //工程配置
-$(function () {
+(function () {
     //注册布局
     var isSupportFlex = BI.isSupportCss3("flex");
     BI.Plugin.registerWidget("bi.horizontal", function (ob) {
@@ -88,7 +88,9 @@ $(function () {
         }
     });
     //IE8下滚动条用原生的
-    if (BI.isIE9Below()) {
-        BI.GridTableScrollbar.SIZE = 18;
-    }
-});
+    $(function () {
+        if (BI.isIE9Below()) {
+            BI.GridTableScrollbar.SIZE = 18;
+        }
+    })
+}());

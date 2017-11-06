@@ -165,13 +165,13 @@
 * 复选下拉框
     * [multi_select_combo](detailed/multi_select_combo.md)
 * 简单下拉树
-    * [single_tree_combo](detailed/tree/single_tree_combo.md)
+    * [single_tree_combo](detailed/combo/single_tree_combo.md)
 * 多层级下拉树
-    * [multilayer_single_tree_combo](detailed/tree/multilayer_single_tree_combo.md)
+    * [multilayer_single_tree_combo](detailed/combo/multilayer_single_tree_combo.md)
 * 可选下拉树
-    * [select_tree_combo](detailed/tree/select_tree_combo.md)
+    * [select_tree_combo](detailed/combo/select_tree_combo.md)
 * 多层级可选下拉树
-    * [multilayer_select_tree_combo](detailed/tree/multilayer_select_tree_combo.md)
+    * [multilayer_select_tree_combo](detailed/combo/multilayer_select_tree_combo.md)
 * 复选下拉树
     * [multi_tree_combo](detailed/tree/bi.multi_tree_combo.md)
 * 日期相关控件
