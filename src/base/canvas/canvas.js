@@ -29,6 +29,10 @@ BI.Canvas = BI.inherit(BI.Widget, {
         this._queue = [];
     },
 
+    mounted: function () {
+        this.stroke();
+    },
+
     _getContext: function () {
         if (!this.ctx) {
             this.ctx = this.canvas.getContext('2d');
@@ -43,11 +47,11 @@ BI.Canvas = BI.inherit(BI.Widget, {
         }
         if (BI.isObject(key)) {
             BI.each(key, function (k, v) {
-                self._queue.push({k: k, v: v});
+                self._queue.push({ k: k, v: v });
             });
             return;
         }
-        this._queue.push({k: key, v: value});
+        this._queue.push({ k: key, v: value });
     },
 
     _line: function (x0, y0) {
@@ -113,20 +117,19 @@ BI.Canvas = BI.inherit(BI.Widget, {
         this._getContext().clearRect(0, 0, this.canvas.width, this.canvas.height);
     },
 
-    stroke: function (callback) {
-        var self = this;
-        BI.nextTick(function () {
-            var ctx = self._getContext();
-            BI.each(self._queue, function (i, q) {
-                if (BI.isFunction(ctx[q.k])) {
-                    ctx[q.k].apply(ctx, q.v);
-                } else {
-                    ctx[q.k] = q.v;
-                }
-            });
-            self._queue = [];
-            callback && callback();
+    stroke: function () {
+        var ctx = this._getContext();
+        if(!ctx){
+            return false;
+        }
+        BI.each(this._queue, function (i, q) {
+            if (BI.isFunction(ctx[q.k])) {
+                ctx[q.k].apply(ctx, q.v);
+            } else {
+                ctx[q.k] = q.v;
+            }
         });
+        this._queue = [];
     }
 });
 BI.shortcut("bi.canvas", BI.Canvas);
