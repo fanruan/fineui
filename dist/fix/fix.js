@@ -1022,7 +1022,7 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
                 });
                 return;
             }
-            if (/\*\*|\*$/.test(exp)) {
+            if (/\*\*$|\*$/.test(exp)) {
                 throw new Error('not support');
             }
             //其他含有*的情况，如*.a,*.*.a,a.*.a.*
