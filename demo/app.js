@@ -1,12 +1,13 @@
-$(function () {
-    var ref;
-    BI.createWidget({
-        type: "demo.main",
-        ref: function (_ref) {
-            console.log(_ref);
-            ref = _ref;
-        },
-        element: '#wrapper'
-    });
-    // ref.destroy();
-});
+import {Component} from "../src/component";
+
+class App extends Component {
+    constructor(props, context) {
+        super(props, context);
+    }
+
+    render() {
+        return <bi-label></bi-label>;
+    }
+}
+
+export default App;
