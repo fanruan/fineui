@@ -20,17 +20,7 @@
 
 .icon(@class, @iconPath, @top:0px, @left:0px) {
   .@{class} {
-    & .x-icon,
-    &:hover .x-icon,
-    &:active .x-icon {
-      display: block;
-      .image2xPath(@iconPath, -@top, -@left);
-      &.hack {
-        .imagePath(@iconPath, -@top, -@left);
-      }
-    }
-    &.native .x-icon,
-    &.disabled .x-icon {
+    & .x-icon {
       display: block;
       .image2xPath(@iconPath, -@top, -@left);
       &.hack {
@@ -50,7 +40,6 @@
       }
     }
     &:hover .x-icon,
-    &:focus .x-icon,
     &.hover .x-icon,
     &:active .x-icon,
     &.active .x-icon {
@@ -60,7 +49,6 @@
         .imagePath(@iconPath, -@top, -(@left + @distance));
       }
     }
-    &.native .x-icon,
     &.disabled .x-icon {
       display: block;
       .image2xPath(@iconPath, -@top, -@left);
@@ -73,10 +61,7 @@
 
 .icon_active(@class, @iconPath, @top:0px, @left:0px, @distance: 20) {
   .@{class} {
-    & .x-icon,
-    &:hover .x-icon,
-    &:focus .x-icon,
-    &.hover .x-icon {
+    & .x-icon {
       display: block;
       .image2xPath(@iconPath, -@top, -@left);
       &.hack {
@@ -91,7 +76,6 @@
         .imagePath(@iconPath, -@top, -(@left + @distance));
       }
     }
-    &.native .x-icon,
     &.disabled .x-icon {
       display: block;
       .image2xPath(@iconPath, -@top, -@left);
@@ -112,7 +96,6 @@
       }
     }
     &:hover .x-icon,
-    &:focus .x-icon,
     &.hover .x-icon {
       display: block;
       .image2xPath(@iconPath, -@top, -(@left+@distance));
@@ -129,7 +112,6 @@
         .imagePath(@iconPath, -@top, -(@left+@distance*2));
       }
     }
-    &.native .x-icon,
     &.disabled .x-icon {
       display: block;
       .image2xPath(@iconPath, -@top, -@left);
@@ -156,7 +138,6 @@
         .imagePath(@iconPath, -@top, -(@left+@distance));
       }
     }
-    &.native .x-icon,
     &.disabled .x-icon {
       display: block;
       .image2xPath(@iconPath, -@top, -@left);
@@ -167,7 +148,7 @@
   }
 }
 
-.icon_custom(@class, @iconPath, @hoverPath:none, @activePath:none, @disablePath:none, @activeDisablePath:none) {
+.icon_custom(@class, @iconPath, @disablePath:none) {
   .@{class} {
     & .x-icon {
       display: block;
@@ -176,8 +157,57 @@
         .imagePath(@iconPath, 0, 0);
       }
     }
+
+    &.disabled .x-icon {
+      display: block;
+      .image2xPath(@disablePath, 0, 0);
+      &.hack {
+        .imagePath(@disablePath, 0, 0);
+      }
+    }
+  }
+}
+
+.icon_custom(@class, @iconPath, @hoverPath, @disablePath) when not (@disablePath = none) {
+  .@{class} {
+    & .x-icon {
+      display: block;
+      .image2xPath(@iconPath, 0, 0);
+      &.hack {
+        .imagePath(@iconPath, 0, 0);
+      }
+    }
+
     &:hover .x-icon,
-    &:focus .x-icon,
+    &.hover .x-icon {
+      display: block;
+      .image2xPath(@hoverPath, 0, 0);
+      &.hack {
+        .imagePath(@hoverPath, 0, 0);
+      }
+    }
+
+    &.disabled .x-icon {
+      display: block;
+      .image2xPath(@disablePath, 0, 0);
+      &.hack {
+        .imagePath(@disablePath, 0, 0);
+      }
+    }
+  }
+}
+
+.icon_custom(@class, @iconPath, @hoverPath, @activePath, @disablePath) when not (@disablePath = none) {
+  .@{class} {
+    & .x-icon {
+      display: block;
+      .image2xPath(@iconPath, 0, 0);
+      &.hack {
+        .imagePath(@iconPath, 0, 0);
+      }
+    }
+
+    &:hover .x-icon,
     &.hover .x-icon {
       display: block;
       .image2xPath(@hoverPath, 0, 0);
@@ -194,7 +224,7 @@
         .imagePath(@activePath, 0, 0);
       }
     }
-    &.native .x-icon,
+
     &.disabled .x-icon {
       display: block;
       .image2xPath(@disablePath, 0, 0);
@@ -202,7 +232,42 @@
         .imagePath(@disablePath, 0, 0);
       }
     }
-    &.native .x-icon,
+  }
+}
+
+.icon_custom(@class, @iconPath, @hoverPath:none, @activePath:none, @disablePath:none, @activeDisablePath:none) when not (@activeDisablePath = none) {
+  .@{class} {
+    & .x-icon {
+      display: block;
+      .image2xPath(@iconPath, 0, 0);
+      &.hack {
+        .imagePath(@iconPath, 0, 0);
+      }
+    }
+    &:hover .x-icon,
+    &.hover .x-icon {
+      display: block;
+      .image2xPath(@hoverPath, 0, 0);
+      &.hack {
+        .imagePath(@hoverPath, 0, 0);
+      }
+    }
+
+    &:active .x-icon,
+    &.active .x-icon {
+      display: block;
+      .image2xPath(@activePath, 0, 0);
+      &.hack {
+        .imagePath(@activePath, 0, 0);
+      }
+    }
+    &.disabled .x-icon {
+      display: block;
+      .image2xPath(@disablePath, 0, 0);
+      &.hack {
+        .imagePath(@disablePath, 0, 0);
+      }
+    }
     &.disabled.active .x-icon {
       display: block;
       .image2xPath(@activeDisablePath, 0, 0);
@@ -213,7 +278,7 @@
   }
 }
 
-.icon_custom_hover(@class, @iconPath, @hoverPath:none, @disablePath:none) {
+.icon_custom_hover(@class, @iconPath, @hoverPath:none) {
   .@{class} {
     & .x-icon {
       display: block;
@@ -223,7 +288,6 @@
       }
     }
     &:hover .x-icon,
-    &:focus .x-icon,
     &.hover .x-icon {
       display: block;
       .image2xPath(@hoverPath, 0, 0);
@@ -231,13 +295,72 @@
         .imagePath(@hoverPath, 0, 0);
       }
     }
-
-    &.native .x-icon,
     &.disabled .x-icon {
       display: block;
-      .image2xPath(@disablePath, 0, 0);
+      .image2xPath(@iconPath, 0, 0);
       &.hack {
-        .imagePath(@disablePath, 0, 0);
+        .imagePath(@iconPath, 0, 0);
+      }
+    }
+  }
+}
+
+.icon_custom_hover_active(@class, @iconPath, @hoverPath:none, @activePath) {
+  .@{class} {
+    & .x-icon {
+      display: block;
+      .image2xPath(@iconPath, 0, 0);
+      &.hack {
+        .imagePath(@iconPath, 0, 0);
+      }
+    }
+    &:hover .x-icon,
+    &.hover .x-icon {
+      display: block;
+      .image2xPath(@hoverPath, 0, 0);
+      &.hack {
+        .imagePath(@hoverPath, 0, 0);
+      }
+    }
+    &:active .x-icon,
+    &.active .x-icon {
+      display: block;
+      .image2xPath(@activePath, 0, 0);
+      &.hack {
+        .imagePath(@activePath, 0, 0);
+      }
+    }
+    &.disabled .x-icon {
+      display: block;
+      .image2xPath(@iconPath, 0, 0);
+      &.hack {
+        .imagePath(@iconPath, 0, 0);
+      }
+    }
+  }
+}
+
+.icon_custom_select(@class, @iconPath, @hoverPath:none, @selectPath) {
+  .@{class} {
+    & .x-icon {
+      display: block;
+      .image2xPath(@iconPath, 0, 0);
+      &.hack {
+        .imagePath(@iconPath, 0, 0);
+      }
+    }
+    &.active .x-icon {
+      display: block;
+      .image2xPath(@activePath, 0, 0);
+      &.hack {
+        .imagePath(@activePath, 0, 0);
+      }
+    }
+    &.disabled .x-icon {
+      display: block;
+      .image2xPath(@iconPath, 0, 0);
+      &.hack {
+        .imagePath(@iconPath, 0, 0);
       }
     }
   }
@@ -260,7 +383,6 @@
       content: @fc;
       color: @color;
     }
-    &.native .b-font:before,
     &.disabled .b-font:before {
       content: @fc;
       color: @color;
@@ -279,12 +401,10 @@
       color: @color-native;
     }
     &:hover .b-font:before,
-    &:focus .b-font:before,
     &.hover .b-font:before {
       content: @fc;
       color: @color-hover;
     }
-    &.native .b-font:before,
     &.disabled .b-font:before {
       content: @fc;
       color: @color-native;
@@ -303,7 +423,6 @@
       color: @color-native;
     }
     &:hover .b-font:before,
-    &:focus .b-font:before,
     &.hover .b-font:before {
       content: @fc;
       color: @color-hover;
@@ -316,7 +435,6 @@
       content: @fc;
       color: @color-active;
     }
-    &.native .b-font:before,
     &.disabled .b-font:before {
       content: @fc;
       color: @color-native;
@@ -335,7 +453,6 @@
       color: @color-native;
     }
     &:hover .b-font:before,
-    &:focus .b-font:before,
     &.hover .b-font:before {
       content: @fc;
       color: @color-hover;
@@ -346,7 +463,6 @@
       content: @fc;
       color: @color-active;
     }
-    &.native .b-font:before,
     &.disabled .b-font:before {
       content: @fc;
       color: @color-native;
