@@ -1,0 +1,17 @@
+@import "../../../bibase";
+
+.bi-tooltip{
+  max-width: 250px;
+  .border-radius(2px);
+  font-size: 12px;
+  &.tooltip-success{
+    background: @color-bi-tooltip-success-background;
+    border: 1px solid @color-bi-tooltip-success-background;
+    color: @color-bi-text-black;
+  }
+  &.tooltip-warning{
+    background: @color-bi-tip-warning-background;
+    color: @color-bi-text-warning;
+    border: 1px solid @color-bi-tooltip-warning-border;
+  }
+}

@@ -4,9 +4,9 @@ const express = require('express');
 const open = require('open');
 const fs=require("fs");
 const app = express();
-const port = 3100;
+const port = 3000;
 
-app.use(express.static("./"));
+app.use(express.static("./dist/"));
 app.listen(port, function() {
     console.log("server start");
     open('http://localhost:' + port + '/index.html');

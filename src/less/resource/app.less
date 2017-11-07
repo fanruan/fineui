@@ -1,0 +1,69 @@
+@import "../bibase";
+
+html,
+button,
+input,
+select,
+textarea, * {
+  font-family: "Microsoft YaHei", "Hiragino Sans GB W3";
+}
+
+html {
+  height: 100%;
+  overflow: hidden;
+}
+
+body {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  margin: 0;
+  padding: 0;
+  top: 0;
+  left: 0;
+  background-repeat: repeat;
+  .user-select-disable();
+  color: @color-bi-text-normal;
+  font: normal 12px "Microsoft YaHei", "Hiragino Sans GB W3";
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-decoration: none;
+  -kthml-user-focus: normal;
+  -moz-user-focus: normal;
+  -moz-outline: 0 none;
+  outline: 0 none;
+}
+
+div, textarea {
+  &::-webkit-scrollbar {
+    -webkit-appearance: none;
+    .background-color(@scroll-color, 5%);
+    width: 6px;
+    height: 6px;
+  }
+  &::-webkit-scrollbar-thumb {
+    .border-radius(0);
+    .background-color(@scroll-color, 30%);
+    &:hover {
+      .background-color(@scroll-color, 70%);
+    }
+  }
+}
+
+.bi-theme-dark {
+  div, textarea {
+    &::-webkit-scrollbar {
+      -webkit-appearance: none;
+      .background-color(@scroll-color-theme-dark, 5%);
+      width: 6px;
+      height: 6px;
+    }
+    &::-webkit-scrollbar-thumb {
+      .border-radius(0);
+      .background-color(@scroll-color-theme-dark, 30%);
+      &:hover {
+        .background-color(@scroll-color-theme-dark, 70%);
+      }
+    }
+  }
+}

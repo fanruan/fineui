@@ -1,0 +1,123 @@
+@import "../../../bibase";
+
+body .bi-button, #body .bi-button {
+  .border-radius(2px);
+  border: 1px solid @color-bi-border-highlight;
+  background-color: @color-bi-background-highlight;
+  text-align: center;
+  vertical-align: middle;
+  cursor: pointer;
+  font-size: 14px;
+  &.block {
+    font-size: inherit;
+    border-width: 0;
+    .border-radius(0px);
+  }
+  &.clear {
+    font-size: inherit;
+    border-width: 0;
+    background-color: transparent;
+    &:hover, &:active {
+      .opacity(0.75);
+    }
+  }
+  &.button-common {
+    &, & .b-font:before {
+      color: @color-bi-text;
+    }
+    &.clear, &.clear .b-font:before {
+      color: @color-bi-text-highlight;
+    }
+  }
+  &.button-ignore {
+    & {
+      &, & .b-font:before {
+        color: @color-bi-text-black;
+      }
+      background-color: @color-bi-background-default;
+      border-color: @color-bi-border-line;
+    }
+    &.clear {
+      background-color: transparent;
+      border-width: 0;
+    }
+  }
+  &.button-success {
+    & {
+      &, & .b-font:before {
+        color: @color-bi-text;
+      }
+      background-color: @color-bi-background-success;
+      border-color: @color-bi-border-success;
+    }
+    &.clear {
+      &, & .b-font:before {
+        color: @color-bi-text-success;
+      }
+      background-color: transparent;
+      border-width: 0;
+    }
+  }
+  &.button-warning {
+    & {
+      &, & .b-font:before {
+        color: @color-bi-text;
+      }
+      background-color: @color-bi-background-delete;
+      border-color: @color-bi-border-delete;
+    }
+    &.clear {
+      &, & .b-font:before {
+        color: @color-bi-text-warning;
+      }
+      background-color: transparent;
+      border-width: 0;
+    }
+  }
+  &.button-common.disabled,
+  &.button-success.disabled,
+  &.button-warning.disabled {
+    &, &.base-disabled {
+      &, & .b-font:before {
+        color: @color-bi-text !important;
+      }
+      background: @color-bi-background-disabled !important;
+      border-color: @color-bi-border-disabled !important;
+    }
+  }
+  &.button-ignore.disabled {
+    &, & .b-font:before {
+      color: @color-bi-text-disabled !important;
+    }
+    background: @color-bi-background-default !important;
+    border-color: @color-bi-border-line !important;
+  }
+  &.button-common.disabled,
+  &.button-success.disabled,
+  &.button-warning.disabled,
+  &.button-ignore.disabled {
+    &.clear {
+      &, & .b-font:before {
+        color: @color-bi-text-disabled !important;
+      }
+      background: transparent !important;
+      border-width: 0 !important;
+      &:hover, &:active {
+        .opacity(1);
+      }
+    }
+  }
+}
+
+.bi-basic-button {
+  &.button-common, &.button-success, &.button-warning {
+    & .bi-button-mask {
+      .opacity(0.2);
+      background-color: @color-bi-background-default;
+    }
+  }
+  & .bi-button-mask {
+    .opacity(0.2);
+    background-color: @color-bi-button-mask;
+  }
+}

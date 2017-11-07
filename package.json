@@ -1,53 +1,34 @@
 {
-  "name": "h",
-  "license": "MIT",
+  "name": "fineui",
+  "version": "1.0.1",
+  "description": "fineui",
+  "main": "index.js",
+  "dependencies": {},
+  "devDependencies": {
+    "express": "^4.15.2",
+    "grunt": "^1.0.1",
+    "grunt-contrib-concat": "^1.0.1",
+    "grunt-contrib-cssmin": "^1.0.1",
+    "grunt-contrib-jshint": "^1.0.0",
+    "grunt-contrib-less": "^1.4.1",
+    "grunt-contrib-uglify": "^1.0.1",
+    "grunt-contrib-watch": "^1.0.0",
+    "open": "0.0.5"
+  },
+  "scripts": {
+    "grunt": "grunt",
+    "start": "node server.js",
+    "uglify": "grunt min"
+  },
   "repository": {
     "type": "git",
-    "url": "https://github.com/gittz/h.git"
+    "url": "https://git.coding.net/fanruan/fineui.git"
   },
-  "version": "1.0.0",
-  "description": "h",
-  "main": "dist/h.js",
   "keywords": [
-    "javascript",
-    "mvvm",
-    "virtual dom"
+    "ui",
+    "fineui",
+    "finebi"
   ],
-  "scripts": {
-    "start": "node server.js",
-    "build": "node build"
-  },
-  "dependencies": {
-    "console-polyfill": "^0.2.2",
-    "es5-shim": "^4.4.1",
-    "es6-promise": "^3.0.2",
-    "fetch-ie8": "^1.4.0",
-    "polyfill": "^0.1.0"
-  },
-  "devDependencies": {
-    "babel-core": "^6.17.0",
-    "babel-preset-avalon": "^1.0.0",
-    "codecov": "^1.0.1",
-    "es3ify": "^0.2.2",
-    "express": "^4.15.2",
-    "karma": "^0.12.37",
-    "karma-chrome-launcher": "^0.1.2",
-    "karma-coverage": "^1.1.1",
-    "karma-firefox-launcher": "^1.0.0",
-    "karma-ie-launcher": "^1.0.0",
-    "karma-jasmine": "^0.2.2",
-    "karma-opera-launcher": "^1.0.0",
-    "karma-phantomjs-launcher": "^1.0.2",
-    "karma-sauce-launcher": "^0.2.14",
-    "karma-sourcemap-loader": "^0.3.7",
-    "karma-spec-reporter": "0.0.26",
-    "open": "0.0.5",
-    "rollup": "^0.36.3",
-    "rollup-plugin-istanbul": "^1.1.0",
-    "rollup-plugin-sourcemaps": "^0.4.1",
-    "semicolon-less": "^0.7.0"
-  },
-  "bugs": {
-    "url": "https://github.com/gittz/fineui/issues"
-  }
+  "author": "fanruan",
+  "license": "MIT"
 }

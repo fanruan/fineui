@@ -1,0 +1,121 @@
+Demo.BASE_CONFIG = [{
+    id: 2,
+    text: "基础控件",
+    open: false
+}, {
+    pId: 2,
+    text: "bi.label",
+    value: "demo.label"
+}, {
+    pId: 2,
+    text: "title提示",
+    value: "demo.title"
+}, {
+    pId: 2,
+    text: "气泡提示",
+    value: "demo.bubble"
+}, {
+    pId: 2,
+    text: "toast提示",
+    value: "demo.toast"
+}, {
+    pId: 2,
+    text: "message提示",
+    value: "demo.message"
+}, {
+    pId: 2,
+    id: 201,
+    text: "button"
+}, {
+    pId: 201,
+    text: "bi.button",
+    value: "demo.button"
+}, {
+    pId: 201,
+    text: "bi.text_button",
+    value: "demo.text_button"
+}, {
+    pId: 201,
+    text: "bi.icon_button",
+    value: "demo.icon_button"
+}, {
+    pId: 201,
+    text: "bi.image_button",
+    value: "demo.image_button"
+}, {
+    pId: 2,
+    id: 202,
+    text: "editor"
+}, {
+    pId: 202,
+    text: "bi.editor",
+    value: "demo.editor"
+}, {
+    pId: 202,
+    text: "bi.code_editor",
+    value: "demo.code_editor"
+}, {
+    pId: 202,
+    text: "bi.multifile_editor",
+    value: "demo.multifile_editor"
+}, {
+    pId: 202,
+    text: "bi.textarea_editor",
+    value: "demo.textarea_editor"
+}, {
+    pId: 202,
+    text: "bi.formula_editor",
+    value: "demo.formula_editor"
+}, {
+    pId: 202,
+    text: "bi.rich_editor",
+    value: "demo.rich_editor"
+}, {
+    pId: 2,
+    id: 203,
+    text: "tree"
+}, {
+    pId: 203,
+    text: "bi.tree_view",
+    value: "demo.tree_view"
+}, {
+    pId: 203,
+    text: "bi.async_tree",
+    value: "demo.sync_tree"
+}, {
+    pId: 203,
+    text: "bi.part_tree",
+    value: "demo.part_tree"
+}, {
+    pId: 2,
+    id: 204,
+    text: "table"
+}, {
+    pId: 204,
+    text: "bi.table_view",
+    value: "demo.table_view"
+}, {
+    pId: 204,
+    text: "bi.grid_table",
+    value: "demo.grid_table"
+}, {
+    pId: 204,
+    text: "bi.collection_table",
+    value: "demo.collection_table"
+}, {
+    pId: 204,
+    text: "bi.resizable_table",
+    value: "demo.resizable_table"
+}, {
+    pId: 2,
+    text: "bi.pager",
+    value: "demo.pager"
+}, {
+    pId: 2,
+    text: "bi.svg",
+    value: "demo.svg"
+}, {
+    pId: 2,
+    text: "bi.canvas",
+    value: "demo.canvas"
+}];

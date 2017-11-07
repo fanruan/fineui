@@ -1,0 +1,208 @@
+# Summary
+
+## 总览
+* [概览](README.md)
+* [起步](START.md)
+
+## 通用规范
+* [通用规范](OVERVIEW.md)
+
+## 核心控件
+* 布局
+    * [vertical](core/layout/vertical.md)
+    * [horizontal](core/layout/horizontal.md)
+    * [htape](core/layout/htape.md)
+    * [vtape](core/layout/vtape.md)
+    * [center_adapt](core/layout/center_adapt.md)
+    * [vertical_adapt](core/layout/vertical_adapt.md)
+    * [left_right_vertical_adapt](core/layout/left_right_vertical_adapt.md)
+    * [flow](core/layout/flow.md)
+    * [center](core/layout/center.md)
+    * [horizontal_adapt](core/layout/horizontal_adapt.md)
+    * [horizontal_auto](core/layout/horizontal_auto.md)
+    * [horizontal_float](core/layout/horizontal_float.md)
+    * [float_center](core/layout/float_center.md)
+    * [border](core/layout/border.md)
+    * [grid](core/layout/grid.md)
+    * [table](core/layout/table.md)
+    * [td](core/layout/td.md)
+    * ...
+* 抽象控件
+    * [button_group](core/abstract/button_group.md)
+    * [button_tree](core/abstract/button_tree.md)
+    * [virtual_group](core/abstract/virtual_group.md)
+    * [custom_tree](core/abstract/custom_tree.md)
+    * [grid_view](core/abstract/grid_view.md)
+    * [collection_view](core/abstract/collection_view.md)
+    * [list_view](core/abstract/list_view.md)
+    * [virtual_list](core/abstract/virtual_list.md)
+* 组合控件
+    * [combo](core/combination/bi.combo.md)
+    * [expander](core/combination/bi.expander.md)
+    * [combo_group](core/combination/combo_group.md)
+    * [loader](core/combination/loader.md)
+    * [navigation](core/combination/navigation.md)
+    * [searcher](core/combination/searcher.md)
+    * [switcher](core/combination/switcher.md)
+    * [tab](core/combination/tab.md)
+* 弹出层
+    * [float_box](core/layer/layer_float_box.md)
+    * [popup_view](core/layer/layer_popup.md)
+    * [searcher_view](core/layer/layer_searcher.md)
+* [Widget](core/widget.md)
+* [Single](core/single.md)
+* [BasicButton](core/basic_button.md)
+* [NodeButton](core/node_button.md)
+* [Pane](core/pane.md)
+
+## 基础控件
+* [label](base/label.md)
+* [bubble](base/bubble.md)
+* [toast](base/toast.md)
+* [message](base/message.md)
+* 按钮
+    * [button](base/button/button.md)
+    * [text_button](base/button/text_button.md)
+    * [icon_button](base/button/icon_button.md)
+    * [image_button](base/button/image_button.md)
+* 编辑框
+    * [editor](base/editor/editor.md)
+    * [code_editor](base/editor/code_editor.md)
+    * [multifile_editor](base/editor/multifile_editor.md)
+    * [textarea_editor](base/editor/textarea_editor.md)
+    * [formula_editor](base/editor/formula_editor.md)
+    * [rich_editor](base/editor/rich_editor.md)
+* 表格
+    * [table_view](base/table/table_view.md)
+    * [grid_table](base/table/grid_table.md)
+    * [collection_table](base/table/collection_table.md)
+    * [resizable_table](base/table/resizable_table.md)
+* [pager](base/pager.md)
+* [svg](base/svg.md)
+* [canvas](base/canvas.md)
+
+## 实例控件
+* 按钮
+    * [multi_select_item](case/button/multi_select_item.md)
+    * [single_select_item](case/button/single_select_item.md)
+    * [single_select_radio_item](case/button/single_select_radio_item.md)
+* 文本框
+    * [shelter_editor](case/editor/shelter_editor.md)
+    * [sign_editor](case/editor/sign_editor.md)
+    * [sign_initial_editor](case/editor/sign_initial_editor.md)
+    * [state_editor](case/editor/state_editor.md)
+    * [simple_state_editor](case/editor/simple_state_editor.md)
+    * [clear_editor](detailed/text_input/bi.clear_editor.md)
+* 列表
+    * [select_list](case/list/list.select.md)
+    * [lazy_loader](case/loader/lazy_loader.md)
+    * [list_loader](case/loader/list_loader.md)
+    * [sort_list(jquery-sortable封装)](case/loader/sort_list.md)
+* 面板
+    * [pane_list](case/layer/pane_list.md)
+    * [panel](case/layer/panel.md)
+* popup弹出层
+    * [multi_popup_view](case/layer/multi_popup_layer.md)
+    * [popup_panel](case/layer/layer_panel.md)
+* 触发器
+    * [editor_trigger](case/trigger/editor_trigger.md)
+    * [icon_trigger](case/trigger/icon_trigger.md)
+    * [text_trigger](case/trigger/text_trigger.md)
+    * [select_text_trigger](case/trigger/select_text_trigger.md)
+* 下拉框
+    * [bubble_combo](case/combo/bubble_combo.md)
+    * [icon_combo](case/combo/icon_combo.md)
+    * [static_combo](case/combo/static_combo.md)
+    * [text_value_combo](case/combo/text_value_combo.md)
+    * [text_value_check_combo](case/combo/text_value_check_combo.md)
+    * [editor_icon_check_combo](case/combo/editor_icon_check_combo.md)
+    * [text_value_down_list_combo](case/combo/text_value_down_list_combo.md)
+* 树
+    * [branch_tree](case/tree/branch_tree.md)
+    * [handstand_branch_tree](case/tree/handstand_branch_tree.md)
+    * [display_tree](case/tree/display_tree.md)
+    * [simple_tree](case/tree/simple_tree.md)
+    * [level_tree](case/tree/level_tree.md)
+    * [branch_relation](case/tree/branch_relation.md)
+* 表格
+    * [adaptive_table](case/table/adaptive_table.md)
+    * [tree_table](case/table/tree_table.md)
+    * [layer_tree_table](case/table/layer_tree_table.md)
+* Pager
+    * [all_count_pager](case/pager/all_count_pager.md)
+    * [direction_pager](case/pager/direction_pager.md)
+* [calendar](case/calendar.md)
+* [clipboard](case/clipboard.md)
+* [complex_canvas](case/complex_canvas.md)
+* [color_chooser](case/color_chooser.md)
+* [color_chooser_popup](case/color_chooser_popup.md)
+* [segment](case/segment.md)
+
+## 详细控件
+* 各种小组件
+    * [通用按钮](detailed/bi.button/general.md)
+    * [提示性信息](detailed/bi.button/tooltip.md)
+    * [各种items](detailed/bi.button/items.md)
+    * [各种节点nodes](detailed/bi.button/node.md)
+    * [各种segment](detailed/bi.button/segment.md)
+* 文本框控件
+    * [text_editor](detailed/text_input/bi.text_editor.md)
+    * [search_editor](detailed/text_input/bi.search_editor.md)
+    * [number_editor](detailed/text_input/number_editor.md)
+* 树
+    * [single_level_tree](detailed/tree/single_level_tree.md)
+    * [select_level_tree](detailed/tree/select_level_tree.md)
+    * [multi_single_level_tree](detailed/tree/multi_single_level_tree.md)
+    * [multi_select_level_tree](detailed/tree/multi_select_level_tree.md)
+    * [switch_tree](detailed/tree/bi.switch_tree.md)
+* 表格
+    * [preview_table](detailed/table/bi.preview_table.md)
+    * [responsive_table](detailed/table/bi.responsive_table.md)
+    * [sequence_table](detailed/table/bi.sequence_table.md)
+    * [page_table](detailed/table/bi.page_table.md)
+* 下拉列表
+    * [down_list_combo](detailed/down_list_combo.md)
+* 复选下拉框
+    * [multi_select_combo](detailed/multi_select_combo.md)
+* 简单下拉树
+    * [single_tree_combo](detailed/combo/single_tree_combo.md)
+* 多层级下拉树
+    * [multilayer_single_tree_combo](detailed/combo/multilayer_single_tree_combo.md)
+* 可选下拉树
+    * [select_tree_combo](detailed/combo/select_tree_combo.md)
+* 多层级可选下拉树
+    * [multilayer_select_tree_combo](detailed/combo/multilayer_select_tree_combo.md)
+* 复选下拉树
+    * [multi_tree_combo](detailed/tree/bi.multi_tree_combo.md)
+* 日期相关控件
+    * [year_combo](detailed/year_combo.md)
+    * [month_combo](detailed/month_combo.md)
+    * [quarter_combo](detailed/quarter_combo.md)
+    * [year_month_combo](detailed/date/year_month_combo.md)
+    * [year_quarter_combo](detailed/date/year_quarter_combo.md)
+    * [date_pane](detailed/date/date_pane.md)
+    * [date_combo](detailed/date/date_combo.md)
+    * [multidate_combo](detailed/date/multidate_combo.md)
+    * [date_time](detailed/date/date_time.md)
+    * [time_interval](detailed/date/time_interval.md)
+* 数值区间控件
+    * [number_interval](detailed/number_interval.md)
+* 路径选择
+    * [path_chooser](detailed/path/path_chooser.md)
+    * [direction_path_chooser](detailed/path/direction_path_chooser.md)
+* 关联视图
+    * [relation_view](detailed/relation_view.md)
+* 文件管理
+    * [file_manager](detailed/file_manager.md)
+
+## 部件
+* [value_chooser_combo](components/value_chooser_combo.md)
+* [value_chooser_pane](components/value_chooser_pane.md)
+* [all_value_chooser_combo](components/all_value_chooser_combo.md)
+* [tree_value_chooser_combo](components/tree_value_chooser_combo.md)
+* [tree_value_chooser_pane](components/tree_value_chooser_pane.md)
+
+## addons
+* sliders
+    * [single_slider](detailed/single_slider.md)
+
