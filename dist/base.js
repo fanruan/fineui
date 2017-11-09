@@ -16688,7 +16688,7 @@ BI.RichEditorAlignCenterButton = BI.inherit(BI.RichEditorAction, {
             title: BI.i18nText("BI-Word_Align_Center"),
             height: 20,
             width: 20,
-            cls: "text-toolbar-button bi-list-item-active text-align-center-font",
+            cls: "text-toolbar-button bi-list-item-active text-align-center-font"
         });
         this.align.on(BI.IconButton.EVENT_CHANGE, function () {
             self.doCommand();
@@ -16725,7 +16725,7 @@ BI.RichEditorAlignLeftButton = BI.inherit(BI.RichEditorAction, {
             title: BI.i18nText("BI-Word_Align_Left"),
             height: 20,
             width: 20,
-            cls: "text-toolbar-button bi-list-item-active text-align-left-font",
+            cls: "text-toolbar-button bi-list-item-active text-align-left-font"
         });
         this.align.on(BI.IconButton.EVENT_CHANGE, function () {
             self.doCommand();
@@ -16762,7 +16762,7 @@ BI.RichEditorAlignRightButton = BI.inherit(BI.RichEditorAction, {
             title: BI.i18nText("BI-Word_Align_Right"),
             height: 20,
             width: 20,
-            cls: "text-toolbar-button bi-list-item-active text-align-right-font",
+            cls: "text-toolbar-button bi-list-item-active text-align-right-font"
         });
         this.align.on(BI.IconButton.EVENT_CHANGE, function () {
             self.doCommand();
@@ -16800,7 +16800,7 @@ BI.RichEditorBoldButton = BI.inherit(BI.RichEditorAction, {
             title: BI.i18nText("BI-Basic_Bold"),
             height: 20,
             width: 20,
-            cls: "text-toolbar-button bi-list-item-active text-bold-font",
+            cls: "text-toolbar-button bi-list-item-active text-bold-font"
         });
         this.bold.on(BI.IconButton.EVENT_CHANGE, function () {
             self.doCommand();
@@ -16812,7 +16812,7 @@ BI.RichEditorBoldButton = BI.inherit(BI.RichEditorAction, {
 
     deactivate: function () {
         this.bold.setSelected(false);
-    },
+    }
 });
 BI.shortcut("bi.rich_editor_bold_button", BI.RichEditorBoldButton)/**
  *
@@ -16840,7 +16840,7 @@ BI.RichEditorItalicButton = BI.inherit(BI.RichEditorAction, {
             title: BI.i18nText("BI-Basic_Italic"),
             height: 20,
             width: 20,
-            cls: "text-toolbar-button bi-list-item-active text-italic-font",
+            cls: "text-toolbar-button bi-list-item-active text-italic-font"
         });
         this.italic.on(BI.IconButton.EVENT_CHANGE, function () {
             self.doCommand();
@@ -16852,7 +16852,7 @@ BI.RichEditorItalicButton = BI.inherit(BI.RichEditorAction, {
 
     deactivate: function () {
         this.italic.setSelected(false);
-    },
+    }
 });
 BI.shortcut("bi.rich_editor_italic_button", BI.RichEditorItalicButton)/**
  *
@@ -16916,7 +16916,7 @@ BI.RichEditorUnderlineButton = BI.inherit(BI.RichEditorAction, {
             title: BI.i18nText("BI-Basic_Underline"),
             height: 20,
             width: 20,
-            cls: "text-toolbar-button bi-list-item-active text-underline-font",
+            cls: "text-toolbar-button bi-list-item-active text-underline-font"
         });
         this.underline.on(BI.IconButton.EVENT_CHANGE, function () {
             self.doCommand();
@@ -16928,7 +16928,7 @@ BI.RichEditorUnderlineButton = BI.inherit(BI.RichEditorAction, {
 
     deactivate: function () {
         this.underline.setSelected(false);
-    },
+    }
 });
 BI.shortcut("bi.rich_editor_underline_button", BI.RichEditorUnderlineButton)/**
  * 颜色选择trigger
@@ -16992,7 +16992,7 @@ BI.RichEditorBackgroundColorChooser = BI.inherit(BI.RichEditorAction, {
     _defaultConfig: function () {
         return BI.extend(BI.RichEditorBackgroundColorChooser.superclass._defaultConfig.apply(this, arguments), {
             width: 20,
-            height: 20,
+            height: 20
         });
     },
 
@@ -30268,7 +30268,7 @@ BI.CollectionTable = BI.inherit(BI.Widget, {
                 el: this.leftScrollbar,
                 left: 0
             }, {
-                el: this.rightScrollbar,
+                el: this.rightScrollbar
             }]
         });
         this._width = o.width - BI.GridTableScrollbar.SIZE;

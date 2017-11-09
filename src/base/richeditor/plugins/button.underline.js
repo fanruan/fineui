@@ -24,7 +24,7 @@ BI.RichEditorUnderlineButton = BI.inherit(BI.RichEditorAction, {
             title: BI.i18nText("BI-Basic_Underline"),
             height: 20,
             width: 20,
-            cls: "text-toolbar-button bi-list-item-active text-underline-font",
+            cls: "text-toolbar-button bi-list-item-active text-underline-font"
         });
         this.underline.on(BI.IconButton.EVENT_CHANGE, function () {
             self.doCommand();
@@ -36,6 +36,6 @@ BI.RichEditorUnderlineButton = BI.inherit(BI.RichEditorAction, {
 
     deactivate: function () {
         this.underline.setSelected(false);
-    },
+    }
 });
 BI.shortcut("bi.rich_editor_underline_button", BI.RichEditorUnderlineButton)

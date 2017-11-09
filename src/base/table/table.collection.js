@@ -154,7 +154,7 @@ BI.CollectionTable = BI.inherit(BI.Widget, {
                 el: this.leftScrollbar,
                 left: 0
             }, {
-                el: this.rightScrollbar,
+                el: this.rightScrollbar
             }]
         });
         this._width = o.width - BI.GridTableScrollbar.SIZE;

@@ -42429,7 +42429,7 @@ BI.RichEditorAlignCenterButton = BI.inherit(BI.RichEditorAction, {
             title: BI.i18nText("BI-Word_Align_Center"),
             height: 20,
             width: 20,
-            cls: "text-toolbar-button bi-list-item-active text-align-center-font",
+            cls: "text-toolbar-button bi-list-item-active text-align-center-font"
         });
         this.align.on(BI.IconButton.EVENT_CHANGE, function () {
             self.doCommand();
@@ -42466,7 +42466,7 @@ BI.RichEditorAlignLeftButton = BI.inherit(BI.RichEditorAction, {
             title: BI.i18nText("BI-Word_Align_Left"),
             height: 20,
             width: 20,
-            cls: "text-toolbar-button bi-list-item-active text-align-left-font",
+            cls: "text-toolbar-button bi-list-item-active text-align-left-font"
         });
         this.align.on(BI.IconButton.EVENT_CHANGE, function () {
             self.doCommand();
@@ -42503,7 +42503,7 @@ BI.RichEditorAlignRightButton = BI.inherit(BI.RichEditorAction, {
             title: BI.i18nText("BI-Word_Align_Right"),
             height: 20,
             width: 20,
-            cls: "text-toolbar-button bi-list-item-active text-align-right-font",
+            cls: "text-toolbar-button bi-list-item-active text-align-right-font"
         });
         this.align.on(BI.IconButton.EVENT_CHANGE, function () {
             self.doCommand();
@@ -42541,7 +42541,7 @@ BI.RichEditorBoldButton = BI.inherit(BI.RichEditorAction, {
             title: BI.i18nText("BI-Basic_Bold"),
             height: 20,
             width: 20,
-            cls: "text-toolbar-button bi-list-item-active text-bold-font",
+            cls: "text-toolbar-button bi-list-item-active text-bold-font"
         });
         this.bold.on(BI.IconButton.EVENT_CHANGE, function () {
             self.doCommand();
@@ -42553,7 +42553,7 @@ BI.RichEditorBoldButton = BI.inherit(BI.RichEditorAction, {
 
     deactivate: function () {
         this.bold.setSelected(false);
-    },
+    }
 });
 BI.shortcut("bi.rich_editor_bold_button", BI.RichEditorBoldButton)/**
  *
@@ -42581,7 +42581,7 @@ BI.RichEditorItalicButton = BI.inherit(BI.RichEditorAction, {
             title: BI.i18nText("BI-Basic_Italic"),
             height: 20,
             width: 20,
-            cls: "text-toolbar-button bi-list-item-active text-italic-font",
+            cls: "text-toolbar-button bi-list-item-active text-italic-font"
         });
         this.italic.on(BI.IconButton.EVENT_CHANGE, function () {
             self.doCommand();
@@ -42593,7 +42593,7 @@ BI.RichEditorItalicButton = BI.inherit(BI.RichEditorAction, {
 
     deactivate: function () {
         this.italic.setSelected(false);
-    },
+    }
 });
 BI.shortcut("bi.rich_editor_italic_button", BI.RichEditorItalicButton)/**
  *
@@ -42657,7 +42657,7 @@ BI.RichEditorUnderlineButton = BI.inherit(BI.RichEditorAction, {
             title: BI.i18nText("BI-Basic_Underline"),
             height: 20,
             width: 20,
-            cls: "text-toolbar-button bi-list-item-active text-underline-font",
+            cls: "text-toolbar-button bi-list-item-active text-underline-font"
         });
         this.underline.on(BI.IconButton.EVENT_CHANGE, function () {
             self.doCommand();
@@ -42669,7 +42669,7 @@ BI.RichEditorUnderlineButton = BI.inherit(BI.RichEditorAction, {
 
     deactivate: function () {
         this.underline.setSelected(false);
-    },
+    }
 });
 BI.shortcut("bi.rich_editor_underline_button", BI.RichEditorUnderlineButton)/**
  * 颜色选择trigger
@@ -42733,7 +42733,7 @@ BI.RichEditorBackgroundColorChooser = BI.inherit(BI.RichEditorAction, {
     _defaultConfig: function () {
         return BI.extend(BI.RichEditorBackgroundColorChooser.superclass._defaultConfig.apply(this, arguments), {
             width: 20,
-            height: 20,
+            height: 20
         });
     },
 
@@ -56009,7 +56009,7 @@ BI.CollectionTable = BI.inherit(BI.Widget, {
                 el: this.leftScrollbar,
                 left: 0
             }, {
-                el: this.rightScrollbar,
+                el: this.rightScrollbar
             }]
         });
         this._width = o.width - BI.GridTableScrollbar.SIZE;
@@ -62649,7 +62649,7 @@ BI.SingleSelectItem = BI.inherit(BI.BasicButton, {
             extraCls: "bi-single-select-item bi-list-item-active",
             hgap: 10,
             height: 25,
-            textAlign: "left",
+            textAlign: "left"
         })
     },
     _init: function () {
@@ -67184,7 +67184,7 @@ BI.BubbleCombo = BI.inherit(BI.Widget, {
             hideChecker: BI.emptyFn,
             offsetStyle: "left", //left,right,center
             el: {},
-            popup: {},
+            popup: {}
         })
     },
     _init: function () {
@@ -67209,7 +67209,7 @@ BI.BubbleCombo = BI.inherit(BI.Widget, {
             el: o.el,
             popup: BI.extend({
                 type: "bi.bubble_popup_view"
-            }, o.popup),
+            }, o.popup)
         });
         this.combo.on(BI.Combo.EVENT_TRIGGER_CHANGE, function () {
             self.fireEvent(BI.BubbleCombo.EVENT_TRIGGER_CHANGE, arguments);
@@ -74965,7 +74965,7 @@ BI.shortcut("bi.small_select_text_trigger", BI.SmallSelectTextTrigger);/**
  */
 BI.SmallTextTrigger = BI.inherit(BI.Trigger, {
     _const: {
-        hgap: 4,
+        hgap: 4
     },
 
     _defaultConfig: function () {
@@ -78158,7 +78158,7 @@ BI.shortcut("bi.date_time_select", BI.DateTimeSelect);/**
  */
 BI.DateTimeTrigger = BI.inherit(BI.Trigger, {
     _const: {
-        hgap: 4,
+        hgap: 4
     },
 
     _defaultConfig: function () {
@@ -85858,7 +85858,7 @@ BI.MultiSelectSearchLoader = BI.inherit(BI.Widget, {
             baseCls: 'bi-multi-select-search-loader',
             itemsCreator: BI.emptyFn,
             keywordGetter: BI.emptyFn,
-            valueFormatter: BI.emptyFn,
+            valueFormatter: BI.emptyFn
         });
     },
 
@@ -92922,7 +92922,7 @@ BI.SingleSliderNormal = BI.inherit(BI.Widget, {
         minMax: {
             min: 0,
             max: 100
-        },
+        }
         // color: "#3f8ce8"
     },
 
