@@ -104,13 +104,13 @@ BI.IntervalSliderLabel = BI.inherit(BI.Widget, {
             this._setLabelOnePosition(significantPercent);
             this._setSliderOnePosition(significantPercent);
             this.labelOne.setValue(v);
-            self.labelOne.setText(v + o.unit);
+            this.labelOne.setText(v + o.unit);
             this.valueOne = v;
         }else{
             this._setLabelTwoPosition(significantPercent);
             this._setSliderTwoPosition(significantPercent);
             this.labelTwo.setValue(v);
-            self.labelTwo.setText(v + o.unit);
+            this.labelTwo.setText(v + o.unit);
             this.valueTwo = v;
         }
         this._setBlueTrack();
