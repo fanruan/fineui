@@ -24,7 +24,7 @@ BI.RichEditorBoldButton = BI.inherit(BI.RichEditorAction, {
             title: BI.i18nText("BI-Basic_Bold"),
             height: 20,
             width: 20,
-            cls: "text-toolbar-button bi-list-item-active text-bold-font",
+            cls: "text-toolbar-button bi-list-item-active text-bold-font"
         });
         this.bold.on(BI.IconButton.EVENT_CHANGE, function () {
             self.doCommand();
@@ -36,6 +36,6 @@ BI.RichEditorBoldButton = BI.inherit(BI.RichEditorAction, {
 
     deactivate: function () {
         this.bold.setSelected(false);
-    },
+    }
 });
 BI.shortcut("bi.rich_editor_bold_button", BI.RichEditorBoldButton)

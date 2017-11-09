@@ -3143,7 +3143,7 @@ BI.shortcut("bi.date_time_select", BI.DateTimeSelect);/**
  */
 BI.DateTimeTrigger = BI.inherit(BI.Trigger, {
     _const: {
-        hgap: 4,
+        hgap: 4
     },
 
     _defaultConfig: function () {
@@ -10843,7 +10843,7 @@ BI.MultiSelectSearchLoader = BI.inherit(BI.Widget, {
             baseCls: 'bi-multi-select-search-loader',
             itemsCreator: BI.emptyFn,
             keywordGetter: BI.emptyFn,
-            valueFormatter: BI.emptyFn,
+            valueFormatter: BI.emptyFn
         });
     },
 
@@ -17907,7 +17907,7 @@ BI.SingleSliderNormal = BI.inherit(BI.Widget, {
         minMax: {
             min: 0,
             max: 100
-        },
+        }
         // color: "#3f8ce8"
     },
 

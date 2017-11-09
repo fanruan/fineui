@@ -23,7 +23,7 @@ BI.RichEditorAlignLeftButton = BI.inherit(BI.RichEditorAction, {
             title: BI.i18nText("BI-Word_Align_Left"),
             height: 20,
             width: 20,
-            cls: "text-toolbar-button bi-list-item-active text-align-left-font",
+            cls: "text-toolbar-button bi-list-item-active text-align-left-font"
         });
         this.align.on(BI.IconButton.EVENT_CHANGE, function () {
             self.doCommand();

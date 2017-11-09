@@ -17,7 +17,7 @@ BI.SingleSliderNormal = BI.inherit(BI.Widget, {
         minMax: {
             min: 0,
             max: 100
-        },
+        }
         // color: "#3f8ce8"
     },
 
