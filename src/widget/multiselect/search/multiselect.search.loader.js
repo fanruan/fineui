@@ -11,7 +11,7 @@ BI.MultiSelectSearchLoader = BI.inherit(BI.Widget, {
             baseCls: 'bi-multi-select-search-loader',
             itemsCreator: BI.emptyFn,
             keywordGetter: BI.emptyFn,
-            valueFormatter: BI.emptyFn,
+            valueFormatter: BI.emptyFn
         });
     },
 

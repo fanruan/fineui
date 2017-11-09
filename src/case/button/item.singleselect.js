@@ -9,7 +9,7 @@ BI.SingleSelectItem = BI.inherit(BI.BasicButton, {
             extraCls: "bi-single-select-item bi-list-item-active",
             hgap: 10,
             height: 25,
-            textAlign: "left",
+            textAlign: "left"
         })
     },
     _init: function () {

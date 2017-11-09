@@ -3143,7 +3143,7 @@ BI.shortcut("bi.date_time_select", BI.DateTimeSelect);/**
  */
 BI.DateTimeTrigger = BI.inherit(BI.Trigger, {
     _const: {
-        hgap: 4,
+        hgap: 4
     },
 
     _defaultConfig: function () {
@@ -6208,13 +6208,13 @@ BI.IntervalSliderLabel = BI.inherit(BI.Widget, {
             this._setLabelOnePosition(significantPercent);
             this._setSliderOnePosition(significantPercent);
             this.labelOne.setValue(v);
-            self.labelOne.setText(v + o.unit);
+            this.labelOne.setText(v + o.unit);
             this.valueOne = v;
         }else{
             this._setLabelTwoPosition(significantPercent);
             this._setSliderTwoPosition(significantPercent);
             this.labelTwo.setValue(v);
-            self.labelTwo.setText(v + o.unit);
+            this.labelTwo.setText(v + o.unit);
             this.valueTwo = v;
         }
         this._setBlueTrack();
@@ -10843,7 +10843,7 @@ BI.MultiSelectSearchLoader = BI.inherit(BI.Widget, {
             baseCls: 'bi-multi-select-search-loader',
             itemsCreator: BI.emptyFn,
             keywordGetter: BI.emptyFn,
-            valueFormatter: BI.emptyFn,
+            valueFormatter: BI.emptyFn
         });
     },
 
@@ -17907,7 +17907,7 @@ BI.SingleSliderNormal = BI.inherit(BI.Widget, {
         minMax: {
             min: 0,
             max: 100
-        },
+        }
         // color: "#3f8ce8"
     },
 

@@ -25,7 +25,7 @@ BI.BubbleCombo = BI.inherit(BI.Widget, {
             hideChecker: BI.emptyFn,
             offsetStyle: "left", //left,right,center
             el: {},
-            popup: {},
+            popup: {}
         })
     },
     _init: function () {
@@ -50,7 +50,7 @@ BI.BubbleCombo = BI.inherit(BI.Widget, {
             el: o.el,
             popup: BI.extend({
                 type: "bi.bubble_popup_view"
-            }, o.popup),
+            }, o.popup)
         });
         this.combo.on(BI.Combo.EVENT_TRIGGER_CHANGE, function () {
             self.fireEvent(BI.BubbleCombo.EVENT_TRIGGER_CHANGE, arguments);

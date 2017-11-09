@@ -23,7 +23,7 @@ BI.RichEditorAlignCenterButton = BI.inherit(BI.RichEditorAction, {
             title: BI.i18nText("BI-Word_Align_Center"),
             height: 20,
             width: 20,
-            cls: "text-toolbar-button bi-list-item-active text-align-center-font",
+            cls: "text-toolbar-button bi-list-item-active text-align-center-font"
         });
         this.align.on(BI.IconButton.EVENT_CHANGE, function () {
             self.doCommand();
