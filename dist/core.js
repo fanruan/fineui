@@ -19913,7 +19913,7 @@ BI.extend(BI.Func, {
             matched: matched,
             finded: finded
         }
-    },
+    }
 });
 
 /**
@@ -25702,7 +25702,7 @@ Data.Constant = BI.Constant = BICst = {};
 
         get: function (name) {
             return Buffer[name];
-        },
+        }
     };
 })();/**
  * 共享池
