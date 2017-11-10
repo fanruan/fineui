@@ -12195,10 +12195,16 @@ if (!window.BI) {
     //浏览器相关方法
     _.extend(BI, {
         isIE: function () {
-            return /(msie|trident)/i.test(navigator.userAgent.toLowerCase());
+            if (this.__isIE == null) {
+                this.__isIE = /(msie|trident)/i.test(navigator.userAgent.toLowerCase());
+            }
+            return this.__isIE;
         },
 
         getIEVersion: function () {
+            if (this.__IEVersion != null) {
+                return this.__IEVersion;
+            }
             var version = 0;
             var agent = navigator.userAgent.toLowerCase();
             var v1 = agent.match(/(?:msie\s([\w.]+))/);
@@ -12212,7 +12218,7 @@ if (!window.BI) {
             } else {
                 version = 0;
             }
-            return version;
+            return this.__IEVersion = version;
         },
 
         isIE9Below: function () {
@@ -12220,10 +12226,6 @@ if (!window.BI) {
                 return false;
             }
             return this.getIEVersion() < 9;
-        },
-
-        isIE9: function () {
-            return this.getIEVersion() === 9;
         },
 
         isEdge: function () {
