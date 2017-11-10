@@ -989,6 +989,24 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
         var fns = exps.slice();
         var complete = false,
             running = false;
+        var callback = function callback(index) {
+            if (complete === true) {
+                return;
+            }
+            fns[index] = true;
+            if (runBinaryFunction(fns)) {
+                complete = true;
+                cb();
+            }
+            if (!running) {
+                running = true;
+                nextTick(function () {
+                    complete = false;
+                    running = false;
+                    fns = exps.slice();
+                });
+            }
+        };
         _.each(exps, function (exp, i) {
             if (_.has(operators, exp)) {
                 return;
@@ -1014,7 +1032,9 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
                 var w = new Watcher(model, function () {
                     dep.depend();
                     return NaN;
-                }, cb);
+                }, function () {
+                    callback(i);
+                });
                 watchers.push(function unwatchFn() {
                     w.teardown();
                     v.__ob__._scopeDeps && remove(v.__ob__._scopeDeps, dep);
@@ -1043,7 +1063,9 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
                 var _w = new Watcher(model, function () {
                     _dep.depend();
                     return NaN;
-                }, cb);
+                }, function () {
+                    callback(i);
+                });
                 watchers.push(function unwatchFn() {
                     _w.teardown();
                     root._globalDeps && delete root._globalDeps[regStr];
@@ -1051,22 +1073,7 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
                 return;
             }
             var watcher = new Watcher(model, exp, function () {
-                if (complete === true) {
-                    return;
-                }
-                fns[i] = true;
-                if (runBinaryFunction(fns)) {
-                    complete = true;
-                    cb();
-                }
-                if (!running) {
-                    running = true;
-                    nextTick(function () {
-                        complete = false;
-                        running = false;
-                        fns = exps.slice();
-                    });
-                }
+                callback(i);
             }, options);
             watchers.push(function unwatchFn() {
                 watcher.teardown();
