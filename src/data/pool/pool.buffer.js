@@ -17,6 +17,6 @@
 
         get: function (name) {
             return Buffer[name];
-        },
+        }
     };
 })();
