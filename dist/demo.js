@@ -1734,6 +1734,8 @@ Demo.IconCombo = BI.inherit(BI.Widget, {
             type: "bi.horizontal_auto",
             items: [{
                 type: "bi.icon_combo",
+                trigger: "click-hover",
+                container: "body",
                 ref:function(_ref){
                     self.refs=_ref;
                 },
