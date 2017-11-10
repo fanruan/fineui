@@ -16864,7 +16864,7 @@ BI.RichEditorParamButton = BI.inherit(BI.RichEditorParamAction, {
     _defaultConfig: function () {
         return BI.extend(BI.RichEditorParamButton.superclass._defaultConfig.apply(this, arguments), {
             width: 20,
-            height: 20,
+            height: 20
         });
     },
 
