@@ -12195,10 +12195,16 @@ if (!window.BI) {
     //浏览器相关方法
     _.extend(BI, {
         isIE: function () {
-            return /(msie|trident)/i.test(navigator.userAgent.toLowerCase());
+            if (this.__isIE == null) {
+                this.__isIE = /(msie|trident)/i.test(navigator.userAgent.toLowerCase());
+            }
+            return this.__isIE;
         },
 
         getIEVersion: function () {
+            if (this.__IEVersion != null) {
+                return this.__IEVersion;
+            }
             var version = 0;
             var agent = navigator.userAgent.toLowerCase();
             var v1 = agent.match(/(?:msie\s([\w.]+))/);
@@ -12212,7 +12218,7 @@ if (!window.BI) {
             } else {
                 version = 0;
             }
-            return version;
+            return this.__IEVersion = version;
         },
 
         isIE9Below: function () {
@@ -12220,10 +12226,6 @@ if (!window.BI) {
                 return false;
             }
             return this.getIEVersion() < 9;
-        },
-
-        isIE9: function () {
-            return this.getIEVersion() === 9;
         },
 
         isEdge: function () {
@@ -28749,6 +28751,19 @@ BI.Combo = BI.inherit(BI.Widget, {
                 e.stopPropagation();
             }
         };
+
+        var enterPopup = false;
+
+        function hide() {
+            if (self.isEnabled() && self.isValid() && self.combo.isEnabled() && self.combo.isValid() && o.toggle === true) {
+                self._hideView();
+                self.fireEvent(BI.Controller.EVENT_CHANGE, BI.Events.COLLAPSE, "", self.combo);
+                self.fireEvent(BI.Combo.EVENT_COLLAPSE);
+            }
+            self.popupView && self.popupView.element.off("mouseenter." + self.getName()).off("mouseleave." + self.getName());
+            enterPopup = false;
+        }
+
         BI.each(evs, function (i, ev) {
             switch (ev) {
                 case "hover":
@@ -28760,11 +28775,18 @@ BI.Combo = BI.inherit(BI.Widget, {
                         }
                     });
                     self.element.on("mouseleave." + self.getName(), function (e) {
-                        if (self.isEnabled() && self.isValid() && self.combo.isEnabled() && self.combo.isValid() && o.toggle === true) {
-                            self._hideView();
-                            self.fireEvent(BI.Controller.EVENT_CHANGE, BI.Events.COLLAPSE, "", self.combo);
-                            self.fireEvent(BI.Combo.EVENT_COLLAPSE);
-                        }
+                        self.popupView.element.on("mouseenter." + self.getName(), function (e) {
+                            enterPopup = true;
+                            self.popupView.element.on("mouseleave." + self.getName(), function (e) {
+                                hide();
+                            });
+                            self.popupView.element.off("mouseenter." + self.getName());
+                        });
+                        BI.defer(function () {
+                            if (!enterPopup) {
+                                hide();
+                            }
+                        }, 50);
                     });
                     break;
                 case "click":
@@ -28810,11 +28832,18 @@ BI.Combo = BI.inherit(BI.Widget, {
                         st(e);
                     });
                     self.element.on("mouseleave." + self.getName(), function (e) {
-                        if (self.isEnabled() && self.isValid() && self.combo.isEnabled() && self.combo.isValid() && o.toggle === true) {
-                            self._hideView();
-                            self.fireEvent(BI.Controller.EVENT_CHANGE, BI.Events.COLLAPSE, "", self.combo);
-                            self.fireEvent(BI.Combo.EVENT_COLLAPSE);
-                        }
+                        self.popupView.element.on("mouseenter." + self.getName(), function (e) {
+                            enterPopup = true;
+                            self.popupView.element.on("mouseleave." + self.getName(), function (e) {
+                                hide();
+                            });
+                            self.popupView.element.off("mouseenter." + self.getName());
+                        });
+                        BI.defer(function () {
+                            if (!enterPopup) {
+                                hide();
+                            }
+                        }, 50);
                     });
                     break;
             }
@@ -67626,6 +67655,8 @@ BI.IconCombo = BI.inherit(BI.Widget, {
             type: "bi.combo",
             element: this,
             direction: o.direction,
+            trigger: o.trigger,
+            container: o.container,
             adjustLength: o.adjustLength,
             adjustXOffset: o.adjustXOffset,
             adjustYOffset: o.adjustYOffset,
@@ -80815,7 +80846,7 @@ BI.IntervalSlider = BI.inherit(BI.Widget, {
         });
 
         function optimizeSize(s) {
-            return BI.clamp(s, 0, o.width);
+            return BI.clamp(s, 0, self._getGrayTrackLength());
         }
     },
 
@@ -81276,7 +81307,7 @@ BI.IntervalSliderLabel = BI.inherit(BI.Widget, {
         });
 
         function optimizeSize(s) {
-            return BI.clamp(s, 0, o.width);
+            return BI.clamp(s, 0, self._getGrayTrackLength());
         }
     },
 
@@ -92473,7 +92504,7 @@ BI.SingleSlider = BI.inherit(BI.Widget, {
         });
 
         function optimizeSize(s) {
-            return BI.clamp(s, 0, o.width);
+            return BI.clamp(s, 0, self._getGrayTrackLength());
         }
     },
 
@@ -92774,7 +92805,7 @@ BI.SingleSliderLabel = BI.inherit(BI.Widget, {
         });
 
         function optimizeSize(s) {
-            return BI.clamp(s, 0, o.width);
+            return BI.clamp(s, 0, self._getGrayTrackLength());
         }
     },
 
@@ -93039,7 +93070,7 @@ BI.SingleSliderNormal = BI.inherit(BI.Widget, {
         });
 
         function optimizeSize(s) {
-            return BI.clamp(s, 0, o.width);
+            return BI.clamp(s, 0, self._getGrayTrackLength());
         }
     },
 
