@@ -68,7 +68,7 @@ BI.extend(BI.Func, {
             matched: matched,
             finded: finded
         }
-    },
+    }
 });
 
 /**
