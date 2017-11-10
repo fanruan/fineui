@@ -55,6 +55,8 @@ BI.IconCombo = BI.inherit(BI.Widget, {
             type: "bi.combo",
             element: this,
             direction: o.direction,
+            trigger: o.trigger,
+            container: o.container,
             adjustLength: o.adjustLength,
             adjustXOffset: o.adjustXOffset,
             adjustYOffset: o.adjustYOffset,

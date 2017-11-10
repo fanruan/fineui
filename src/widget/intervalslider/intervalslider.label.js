@@ -157,7 +157,7 @@ BI.IntervalSliderLabel = BI.inherit(BI.Widget, {
         });
 
         function optimizeSize(s) {
-            return BI.clamp(s, 0, o.width);
+            return BI.clamp(s, 0, self._getGrayTrackLength());
         }
     },
 
