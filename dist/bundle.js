@@ -80815,7 +80815,7 @@ BI.IntervalSlider = BI.inherit(BI.Widget, {
         });
 
         function optimizeSize(s) {
-            return BI.clamp(s, 0, o.width);
+            return BI.clamp(s, 0, self._getGrayTrackLength());
         }
     },
 
@@ -81276,7 +81276,7 @@ BI.IntervalSliderLabel = BI.inherit(BI.Widget, {
         });
 
         function optimizeSize(s) {
-            return BI.clamp(s, 0, o.width);
+            return BI.clamp(s, 0, self._getGrayTrackLength());
         }
     },
 
@@ -92473,7 +92473,7 @@ BI.SingleSlider = BI.inherit(BI.Widget, {
         });
 
         function optimizeSize(s) {
-            return BI.clamp(s, 0, o.width);
+            return BI.clamp(s, 0, self._getGrayTrackLength());
         }
     },
 
@@ -92774,7 +92774,7 @@ BI.SingleSliderLabel = BI.inherit(BI.Widget, {
         });
 
         function optimizeSize(s) {
-            return BI.clamp(s, 0, o.width);
+            return BI.clamp(s, 0, self._getGrayTrackLength());
         }
     },
 
@@ -93039,7 +93039,7 @@ BI.SingleSliderNormal = BI.inherit(BI.Widget, {
         });
 
         function optimizeSize(s) {
-            return BI.clamp(s, 0, o.width);
+            return BI.clamp(s, 0, self._getGrayTrackLength());
         }
     },
 
