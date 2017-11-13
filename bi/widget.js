@@ -11349,16 +11349,36 @@ BI.MultiSelectSearcher = BI.inherit(BI.Widget, {
         ob || (ob = {});
         ob.value || (ob.value = []);
         if (ob.type === BI.Selection.All) {
-            if (BI.size(ob.assist) === 1) {
-                this.editor.setState(o.valueFormatter(ob.assist[0] + "") || (ob.assist[0] + ""));
+            if (ob.value.length === 0) {
+                this.editor.setState(BI.Selection.All);
+            } else if (BI.size(ob.assist) <= 20) {
+                var state = "";
+                BI.each(ob.assist, function (i, v) {
+                    if (i === 0) {
+                        state += "" + (o.valueFormatter(v + "") || v);
+                    } else {
+                        state += "," + (o.valueFormatter(v + "") || v);
+                    }
+                });
+                this.editor.setState(state);
             } else {
-                this.editor.setState(BI.size(ob.value) > 0 ? BI.Selection.Multi : BI.Selection.All);
+                this.editor.setState(BI.Selection.Multi);
             }
         } else {
-            if (BI.size(ob.value) === 1) {
-                this.editor.setState(o.valueFormatter(ob.value[0] + "") || (ob.value[0] + ""));
+            if (ob.value.length === 0) {
+                this.editor.setState(BI.Selection.None);
+            } else if (BI.size(ob.value) <= 20) {
+                var state = "";
+                BI.each(ob.value, function (i, v) {
+                    if (i === 0) {
+                        state += "" + (o.valueFormatter(v + "") || v);
+                    } else {
+                        state += "," + (o.valueFormatter(v + "") || v);
+                    }
+                });
+                this.editor.setState(state);
             } else {
-                this.editor.setState(BI.size(ob.value) > 0 ? BI.Selection.Multi : BI.Selection.None);
+                this.editor.setState(BI.Selection.Multi);
             }
         }
     },
