@@ -10337,6 +10337,7 @@ BI.shortcut("demo.tmp", Demo.Func);
             return {
                 type: "bi.tab",
                 defaultShowIndex: this.constant.TAB1,
+                single: true,
                 tab: {
                     type: "bi.button_group",
                     items: BI.createItems([{
