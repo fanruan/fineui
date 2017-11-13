@@ -48,7 +48,7 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
     }
 
     function remove(arr, item) {
-        if (arr.length) {
+        if (arr && arr.length) {
             var _index = arr.indexOf(item);
             if (_index > -1) {
                 return arr.splice(_index, 1);
