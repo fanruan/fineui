@@ -83025,13 +83025,13 @@ BI.MultiDateSegment = BI.inherit(BI.Single, {
             self.fireEvent(BI.Controller.EVENT_CHANGE, arguments);
         });
         this.textEditor = BI.createWidget({
-            type: 'bi.text_editor',
+            type: 'bi.sign_editor',
             value: this.constants.defaultEditorValue,
             title: function () {
                 return self.textEditor.getValue();
             },
             tipType: "success",
-            cls: 'bi-multidate-editor',
+            cls: 'bi-multidate-editor bi-border',
             width: this.constants.textWidth,
             height: this.constants.itemHeight
         });
