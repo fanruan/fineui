@@ -44833,10 +44833,6 @@ BI.CodeEditor = BI.inherit(BI.Single, {
     setStyle: function (style) {
         this.style = style;
         this.element.css(style);
-        var wrapperStyle = this.editor.getWrapperElement().style;
-        BI.extend(wrapperStyle, style, {
-                color: style.color || BI.DOM.getContrastColor(BI.DOM.isRGBColor(style.backgroundColor) ? BI.DOM.rgb2hex(style.backgroundColor) : style.backgroundColor)
-        });
     },
 
     getStyle: function () {
