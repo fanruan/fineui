@@ -5257,6 +5257,11 @@ Demo.FIX_CONFIG = [{
 }, {
     id: 72,
     pId: 7,
+    text: "state属性",
+    value: "demo.fix6"
+}, {
+    id: 78,
+    pId: 7,
     text: "计算属性",
     value: "demo.fix2"
 }, {
@@ -10640,7 +10645,55 @@ BI.shortcut("demo.tmp", Demo.Func);
     });
     BI.shortcut("demo.fix_scene_fine_index_update", Demo.FixSceneFineIndexUpdate);
 
-})();;(function(){
+})();;(function () {
+    var State = BI.inherit(Fix.VM, {
+        state: function () {
+            return {
+                name: "原始属性"
+            }
+        },
+        computed: {
+            b: function () {
+                return this.model.name + "-计算属性"
+            }
+        }
+    })
+
+    Demo.Fix = BI.inherit(BI.Widget, {
+        _store: function () {
+            return new State();
+        },
+        watch: {
+            b: function () {
+                this.button.setText(this.model.b)
+            }
+        },
+        render: function () {
+            var self = this;
+            return {
+                type: "bi.absolute",
+                items: [{
+                    el: {
+                        type: "bi.button",
+                        ref: function () {
+                            self.button = this;
+                        },
+                        handler: function () {
+                            self.model.name = "这是改变后的属性"
+                        },
+                        text: this.model.b
+                    }
+                }]
+            }
+        },
+        mounted: function () {
+
+
+        }
+    });
+
+    BI.shortcut("demo.fix6", Demo.Fix);
+}());;(function(){
     var model = Fix.define({
         name: "原始属性",
         arr: [{

@@ -820,6 +820,10 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 
     var computedWatcherOptions = { lazy: true };
 
+    function initState(vm, state) {
+        vm.$$state = observe(state).model;
+    }
+
     function initComputed(vm, computed) {
         var watchers = vm._computedWatchers = {};
 
@@ -894,7 +898,8 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
             } else {
                 this.options = model || {};
             }
-            var keys = _.keys(this.$$model).concat(_.keys(this.computed));
+            var state = this.state && this.state();
+            var keys = _.keys(this.$$model).concat(_.keys(state)).concat(_.keys(this.computed));
             var props = {};
 
             var _loop = function _loop(i, len) {
@@ -904,13 +909,21 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
                         enumerable: true,
                         configurable: true,
                         get: function get() {
-                            return key in vm.$$computed ? vm.$$computed[key] : vm.$$model[key];
+                            if (key in vm.$$computed) {
+                                return vm.$$computed[key];
+                            }
+                            if (key in vm.$$state) {
+                                return vm.$$state[key];
+                            }
+                            return vm.$$model[key];
                         },
                         set: function set(val) {
-                            if (!vm.$$model || !(key in vm.$$model)) {
-                                return;
+                            if (key in vm.$$state) {
+                                return vm.$$state[key] = val;
                             }
-                            return vm.$$model[key] = val;
+                            if (key in vm.$$model) {
+                                return vm.$$model[key] = val;
+                            }
                         }
                     };
                 }
@@ -921,6 +934,7 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
             }
             this.model = createViewModel$1({}, props);
             this.$$model && (this.model.__ob__ = this.$$model.__ob__);
+            state && initState(this, state);
             initComputed(this, this.computed);
             initMethods(this, this.actions);
             this._init();
@@ -1110,6 +1124,7 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
     exports.define = define;
     exports.version = version;
     exports.$$skipArray = $$skipArray;
+    exports.initState = initState;
     exports.VM = VM;
     exports.observerState = observerState;
     exports.Observer = Observer;

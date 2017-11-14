@@ -91,6 +91,11 @@ Demo.FIX_CONFIG = [{
 }, {
     id: 72,
     pId: 7,
+    text: "state属性",
+    value: "demo.fix6"
+}, {
+    id: 78,
+    pId: 7,
     text: "计算属性",
     value: "demo.fix2"
 }, {
