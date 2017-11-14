@@ -19,7 +19,7 @@ Demo.HtapeLayout = BI.inherit(BI.Widget, {
                 }, {
                     width: 200,
                     el : {
-                        type : 'bi.label',
+                        type : 'bi.multi_select_insert_list',
                         text : '2',
                         cls: "layout-bg2"
                     }

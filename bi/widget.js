@@ -11659,7 +11659,7 @@ BI.MultiSelectInsertList = BI.inherit(BI.Widget, {
             element: this,
             items: [{
                 el: this.trigger,
-                height: 30
+                height: 24
             }, {
                 el: this.adapter,
                 height: "fill"
@@ -11973,7 +11973,7 @@ BI.MultiSelectList = BI.inherit(BI.Widget, {
             element: this,
             items: [{
                 el: this.trigger,
-                height: 30
+                height: 24
             }, {
                 el: this.adapter,
                 height: "fill"
