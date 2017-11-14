@@ -87632,7 +87632,7 @@ BI.MultiTreeCombo = BI.inherit(BI.Single, {
                         change = true;
                         var val = {
                             type: BI.Selection.Multi,
-                            value: this.hasChecked() ? {1: 1} : {}
+                            value: this.hasChecked() ? this.getValue() : {}
                         };
                         self.trigger.getSearcher().setState(val);
                         self.trigger.getCounter().setButtonChecked(val);
@@ -87688,6 +87688,7 @@ BI.MultiTreeCombo = BI.inherit(BI.Single, {
                 }
             });
         });
+
         function showCounter() {
             if (isSearching()) {
                 self.storeValue = {value: self.trigger.getValue()};
@@ -87716,11 +87717,12 @@ BI.MultiTreeCombo = BI.inherit(BI.Single, {
         });
 
         this.trigger.on(BI.MultiSelectTrigger.EVENT_CHANGE, function () {
+            var checked = this.getSearcher().hasChecked();
             var val = {
                 type: BI.Selection.Multi,
-                value: this.getSearcher().hasChecked() ? {1: 1} : {}
+                value: checked ? {1: 1} : {}
             };
-            this.getSearcher().setState(val);
+            this.getSearcher().setState(checked ? BI.Selection.Multi : BI.Selection.None);
             this.getCounter().setButtonChecked(val);
         });
 
@@ -87740,7 +87742,7 @@ BI.MultiTreeCombo = BI.inherit(BI.Single, {
             if (isSearching()) {
                 self.trigger.stopEditing();
                 self.fireEvent(BI.MultiTreeCombo.EVENT_CONFIRM);
-            }else{
+            } else {
                 if (isPopupView()) {
                     self.trigger.stopEditing();
                     self.storeValue = {value: self.combo.getValue()};
@@ -88151,11 +88153,29 @@ BI.MultiTreeSearcher = BI.inherit(BI.Widget, {
 
     setState: function (ob) {
         ob || (ob = {});
-        ob.value || (ob.value = []);
-        if (ob.type === BI.Selection.All) {
-            this.editor.setState(BI.size(ob.value) > 0 ? BI.Selection.Multi : BI.Selection.All);
+        ob.value || (ob.value = {});
+        if (BI.isNumber(ob)) {
+            this.editor.setState(ob);
+        } else if (BI.size(ob.value) === 0) {
+            this.editor.setState(BI.Selection.None);
         } else {
-            this.editor.setState(BI.size(ob.value) > 0 ? BI.Selection.Multi : BI.Selection.None);
+            var text = "";
+            BI.each(ob.value, function (name, children) {
+                var childNodes = getChildrenNode(children);
+                text += name + (childNodes === "" ? "" : (":" + childNodes)) + "; ";
+            });
+            this.editor.setState(text);
+        }
+
+        function getChildrenNode(ob) {
+            var text = "";
+            var index = 0, size = BI.size(ob);
+            BI.each(ob, function (name, children) {
+                index++;
+                var childNodes = getChildrenNode(children);
+                text += name + (childNodes === "" ? "" : (":" + childNodes)) + (index === size ? "" : ",");
+            });
+            return text;
         }
     },
 

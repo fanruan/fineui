@@ -102,11 +102,29 @@ BI.MultiTreeSearcher = BI.inherit(BI.Widget, {
 
     setState: function (ob) {
         ob || (ob = {});
-        ob.value || (ob.value = []);
-        if (ob.type === BI.Selection.All) {
-            this.editor.setState(BI.size(ob.value) > 0 ? BI.Selection.Multi : BI.Selection.All);
+        ob.value || (ob.value = {});
+        if (BI.isNumber(ob)) {
+            this.editor.setState(ob);
+        } else if (BI.size(ob.value) === 0) {
+            this.editor.setState(BI.Selection.None);
         } else {
-            this.editor.setState(BI.size(ob.value) > 0 ? BI.Selection.Multi : BI.Selection.None);
+            var text = "";
+            BI.each(ob.value, function (name, children) {
+                var childNodes = getChildrenNode(children);
+                text += name + (childNodes === "" ? "" : (":" + childNodes)) + "; ";
+            });
+            this.editor.setState(text);
+        }
+
+        function getChildrenNode(ob) {
+            var text = "";
+            var index = 0, size = BI.size(ob);
+            BI.each(ob, function (name, children) {
+                index++;
+                var childNodes = getChildrenNode(children);
+                text += name + (childNodes === "" ? "" : (":" + childNodes)) + (index === size ? "" : ",");
+            });
+            return text;
         }
     },
 
