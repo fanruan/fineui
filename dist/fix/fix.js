@@ -909,19 +909,19 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
                         enumerable: true,
                         configurable: true,
                         get: function get() {
-                            if (key in vm.$$computed) {
+                            if (vm.$$computed && key in vm.$$computed) {
                                 return vm.$$computed[key];
                             }
-                            if (key in vm.$$state) {
+                            if (vm.$$state && key in vm.$$state) {
                                 return vm.$$state[key];
                             }
                             return vm.$$model[key];
                         },
                         set: function set(val) {
-                            if (key in vm.$$state) {
+                            if (vm.$$state && key in vm.$$state) {
                                 return vm.$$state[key] = val;
                             }
-                            if (key in vm.$$model) {
+                            if (vm.$$model && key in vm.$$model) {
                                 return vm.$$model[key] = val;
                             }
                         }
