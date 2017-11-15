@@ -437,9 +437,87 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
         return ob;
     }
 
+    function notify(model, key, dep) {
+        dep.notify();
+        //触发a.*绑定的依赖
+        _.each(model.__ob__._deps, function (dep) {
+            dep.notify();
+        });
+        //触发a.**绑定的依赖
+        var parent = model.__ob__,
+            root = model.__ob__,
+            route = key;
+        while (parent) {
+            _.each(parent._scopeDeps, function (dep) {
+                dep.notify();
+            });
+            if (parent.parentKey != null) {
+                route = parent.parentKey + '.' + route;
+            }
+            root = parent;
+            parent = parent.parent;
+        }
+        for (var _key2 in root._globalDeps) {
+            var reg = new RegExp(_key2);
+            if (reg.test(route)) {
+                root._globalDeps[_key2].notify();
+            }
+        }
+    }
+
     function defineReactive(obj, observer, shallow) {
         var props = {};
         var model = void 0;
+        if (typeof Proxy === 'function') {
+            var deps = {},
+                childObs = {},
+                cache = {};
+            _.each(obj, function (val, key) {
+                if (key in $$skipArray) {
+                    return;
+                }
+                cache[key] = val;
+                var dep = deps[key] = observer && observer['__dep' + key] || new Dep();
+                observer && (observer['__dep' + key] = dep);
+                childObs[key] = !shallow && observe(val, observer, key);
+            });
+            return model = new Proxy(props, {
+                has: function has(target, key) {
+                    return key in obj;
+                },
+                get: function get(target, key) {
+                    if (key in $$skipArray) {
+                        return target[key];
+                    }
+                    var value = cache[key];
+                    if (Dep.target) {
+                        deps[key].depend();
+                        if (childObs[key]) {
+                            childObs[key].dep.depend();
+                            if (_.isArray(value)) {
+                                dependArray(value);
+                            }
+                        }
+                    }
+                    return value;
+                },
+                set: function set(target, key, newVal) {
+                    if (key in $$skipArray) {
+                        return target[key] = newVal;
+                    }
+                    var value = cache[key],
+                        dep = deps[key];
+                    if (newVal === value || newVal !== newVal && value !== value) {
+                        return newVal;
+                    }
+                    cache[key] = newVal;
+                    childObs[key] = !shallow && observe(newVal, observer, key);
+                    obj[key] = childObs[key] ? childObs[key].model : newVal;
+                    notify(model, key, dep);
+                    return obj[key];
+                }
+            });
+        }
         _.each(obj, function (val, key) {
             if (key in $$skipArray) {
                 return;
@@ -471,31 +549,7 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
                     val = newVal;
                     childOb = !shallow && observe(newVal, observer, key);
                     obj[key] = childOb ? childOb.model : newVal;
-                    dep.notify();
-                    //触发a.*绑定的依赖
-                    _.each(model.__ob__._deps, function (dep) {
-                        dep.notify();
-                    });
-                    //触发a.**绑定的依赖
-                    var parent = model.__ob__,
-                        root = model.__ob__,
-                        route = key;
-                    while (parent) {
-                        _.each(parent._scopeDeps, function (dep) {
-                            dep.notify();
-                        });
-                        if (parent.parentKey != null) {
-                            route = parent.parentKey + '.' + route;
-                        }
-                        root = parent;
-                        parent = parent.parent;
-                    }
-                    for (var _key2 in root._globalDeps) {
-                        var reg = new RegExp(_key2);
-                        if (reg.test(route)) {
-                            root._globalDeps[_key2].notify();
-                        }
-                    }
+                    notify(model, key, dep);
                 }
             };
         });
@@ -838,11 +892,21 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
         }
     }
 
-    function defineComputed(target, computed) {
+    function defineComputed(vm, computed) {
         var props = {};
+        if (typeof Proxy === 'function') {
+            return vm.$$computed = new Proxy(props, {
+                has: function has(target, key) {
+                    return key in computed;
+                },
+                get: function get(target, key) {
+                    return createComputedGetter(vm, key)();
+                }
+            });
+        }
         var shouldCache = true;
         for (var key in computed) {
-            if (!(key in target)) {
+            if (!(key in vm)) {
                 var sharedPropertyDefinition = {
                     enumerable: true,
                     configurable: true,
@@ -851,7 +915,7 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
                 };
                 var userDef = computed[key];
                 if (typeof userDef === 'function') {
-                    sharedPropertyDefinition.get = createComputedGetter(target, key);
+                    sharedPropertyDefinition.get = createComputedGetter(vm, key);
                     sharedPropertyDefinition.set = noop;
                 } else {
                     sharedPropertyDefinition.get = userDef.get ? shouldCache && userDef.cache !== false ? createComputedGetter(key) : userDef.get : noop;
@@ -861,7 +925,7 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
                 props[key] = sharedPropertyDefinition;
             }
         }
-        target.$$computed = createViewModel$1({}, props);
+        vm.$$computed = createViewModel$1({}, props);
     }
 
     function createComputedGetter(vm, key) {
@@ -885,11 +949,76 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
         }
     }
 
+    function defineProps(vm, keys) {
+        var props = {};
+        if (typeof Proxy === 'function') {
+            return vm.model = new Proxy(props, {
+                has: function has(target, key) {
+                    return keys.indexOf(key) > -1;
+                },
+                get: function get(target, key) {
+                    if (key in $$skipArray) {
+                        return props[key];
+                    }
+                    if (vm.$$computed && key in vm.$$computed) {
+                        return vm.$$computed[key];
+                    }
+                    if (vm.$$state && key in vm.$$state) {
+                        return vm.$$state[key];
+                    }
+                    return vm.$$model[key];
+                },
+                set: function set(target, key, val) {
+                    if (key in $$skipArray) {
+                        return props[key] = val;
+                    }
+                    if (vm.$$state && key in vm.$$state) {
+                        return vm.$$state[key] = val;
+                    }
+                    if (vm.$$model && key in vm.$$model) {
+                        return vm.$$model[key] = val;
+                    }
+                }
+            });
+        }
+
+        var _loop = function _loop(i, len) {
+            var key = keys[i];
+            if (!(key in $$skipArray)) {
+                props[key] = {
+                    enumerable: true,
+                    configurable: true,
+                    get: function get() {
+                        if (vm.$$computed && key in vm.$$computed) {
+                            return vm.$$computed[key];
+                        }
+                        if (vm.$$state && key in vm.$$state) {
+                            return vm.$$state[key];
+                        }
+                        return vm.$$model[key];
+                    },
+                    set: function set(val) {
+                        if (vm.$$state && key in vm.$$state) {
+                            return vm.$$state[key] = val;
+                        }
+                        if (vm.$$model && key in vm.$$model) {
+                            return vm.$$model[key] = val;
+                        }
+                    }
+                };
+            }
+        };
+
+        for (var i = 0, len = keys.length; i < len; i++) {
+            _loop(i, len);
+        }
+        vm.model = createViewModel$1({}, props);
+    }
+
     var VM = function () {
         function VM(model) {
             _classCallCheck(this, VM);
 
-            var vm = this;
             if (model instanceof Observer || model instanceof VM) {
                 model = model.model;
             }
@@ -900,39 +1029,7 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
             }
             var state = this.state && this.state();
             var keys = _.keys(this.$$model).concat(_.keys(state)).concat(_.keys(this.computed));
-            var props = {};
-
-            var _loop = function _loop(i, len) {
-                var key = keys[i];
-                if (!(key in $$skipArray)) {
-                    props[key] = {
-                        enumerable: true,
-                        configurable: true,
-                        get: function get() {
-                            if (vm.$$computed && key in vm.$$computed) {
-                                return vm.$$computed[key];
-                            }
-                            if (vm.$$state && key in vm.$$state) {
-                                return vm.$$state[key];
-                            }
-                            return vm.$$model[key];
-                        },
-                        set: function set(val) {
-                            if (vm.$$state && key in vm.$$state) {
-                                return vm.$$state[key] = val;
-                            }
-                            if (vm.$$model && key in vm.$$model) {
-                                return vm.$$model[key] = val;
-                            }
-                        }
-                    };
-                }
-            };
-
-            for (var i = 0, len = keys.length; i < len; i++) {
-                _loop(i, len);
-            }
-            this.model = createViewModel$1({}, props);
+            defineProps(this, keys);
             this.$$model && (this.model.__ob__ = this.$$model.__ob__);
             state && initState(this, state);
             initComputed(this, this.computed);
@@ -1124,7 +1221,6 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
     exports.define = define;
     exports.version = version;
     exports.$$skipArray = $$skipArray;
-    exports.initState = initState;
     exports.VM = VM;
     exports.observerState = observerState;
     exports.Observer = Observer;
