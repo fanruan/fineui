@@ -30307,7 +30307,8 @@ BI.CollectionTable = BI.inherit(BI.Widget, {
     },
 
     _getFreezeColLength: function () {
-        return this.options.isNeedFreeze ? this.options.freezeCols.length : 0;
+        var o = this.options;
+        return o.isNeedFreeze === true ? BI.clamp(o.freezeCols.length, 0, o.columnSize.length) : 0;
     },
 
     _getFreezeHeaderHeight: function () {
@@ -31114,7 +31115,8 @@ BI.GridTable = BI.inherit(BI.Widget, {
     },
 
     _getFreezeColLength: function () {
-        return this.options.isNeedFreeze ? this.options.freezeCols.length : 0;
+        var o = this.options;
+        return o.isNeedFreeze === true ? BI.clamp(o.freezeCols.length, 0, o.columnSize.length) : 0;
     },
 
     _getFreezeHeaderHeight: function () {
@@ -33980,7 +33982,8 @@ BI.ResizableTable = BI.inherit(BI.Widget, {
     },
 
     _getFreezeColLength: function () {
-        return this.options.freezeCols.length;
+        var o = this.options;
+        return o.isNeedFreeze === true ? BI.clamp(o.freezeCols.length, 0, o.columnSize.length) : 0;
     },
 
     _getFreezeColumnSize: function () {

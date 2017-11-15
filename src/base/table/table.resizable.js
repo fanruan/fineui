@@ -181,7 +181,8 @@ BI.ResizableTable = BI.inherit(BI.Widget, {
     },
 
     _getFreezeColLength: function () {
-        return this.options.freezeCols.length;
+        var o = this.options;
+        return o.isNeedFreeze === true ? BI.clamp(o.freezeCols.length, 0, o.columnSize.length) : 0;
     },
 
     _getFreezeColumnSize: function () {
