@@ -110,7 +110,7 @@ Demo.Func = BI.inherit(BI.Widget, {
                             type: "bi.collection_table"
                         }
                     }
-                },
+                }
             },
             sequence: {
                 type: "bi.sequence_table_tree_number"

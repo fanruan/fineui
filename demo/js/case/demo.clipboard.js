@@ -30,7 +30,7 @@ Demo.Func = BI.inherit(BI.Widget, {
             items: [{
                 el: editor,
                 left: 100,
-                top: 50,
+                top: 50
             }, {
                 el: clipboard,
                 left: 100,

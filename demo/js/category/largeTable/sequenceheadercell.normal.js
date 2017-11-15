@@ -5,7 +5,7 @@
 BI.NormalSequenceHeaderCell = BI.inherit(BI.Widget, {
     _defaultConfig: function () {
         return BI.extend(BI.NormalSequenceHeaderCell.superclass._defaultConfig.apply(this, arguments), {
-            baseCls: "bi-normal-sequence-header-cell",
+            baseCls: "bi-normal-sequence-header-cell"
         })
     },
 

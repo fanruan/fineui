@@ -139,6 +139,7 @@
             return {
                 type: "bi.tab",
                 defaultShowIndex: this.constant.TAB1,
+                single: true,
                 tab: {
                     type: "bi.button_group",
                     items: BI.createItems([{
@@ -213,7 +214,7 @@
                         type: "bi.label",
                         cls: "layout-bg1",
                         width: 150
-                    }),
+                    })
 
                 }, {
                     type: "bi.vertical",

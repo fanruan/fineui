@@ -29,7 +29,7 @@ Demo.Func = BI.inherit(BI.Widget, {
         var table = BI.createWidget({
             type: "bi.resizable_table",
             el: {
-                type: "bi.grid_table",
+                type: "bi.grid_table"
             },
             width: 600,
             height: 500,

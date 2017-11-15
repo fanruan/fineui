@@ -7952,7 +7952,7 @@ BI.MultiDateSegment = BI.inherit(BI.Single, {
         itemHeight: 24,
         maxGap: 15,
         minGap: 10,
-        textWidth: 30,
+        textWidth: 60,
         defaultEditorValue: "1"
     },
 
@@ -7960,7 +7960,6 @@ BI.MultiDateSegment = BI.inherit(BI.Single, {
         return $.extend(BI.MultiDateSegment.superclass._defaultConfig.apply(this, arguments), {
             baseCls: 'bi-multidate-segment',
             text: "",
-            width: 130,
             height: 30,
             isEditorExist: true,
             selected: false,
@@ -11349,16 +11348,36 @@ BI.MultiSelectSearcher = BI.inherit(BI.Widget, {
         ob || (ob = {});
         ob.value || (ob.value = []);
         if (ob.type === BI.Selection.All) {
-            if (BI.size(ob.assist) === 1) {
-                this.editor.setState(o.valueFormatter(ob.assist[0] + "") || (ob.assist[0] + ""));
+            if (ob.value.length === 0) {
+                this.editor.setState(BI.Selection.All);
+            } else if (BI.size(ob.assist) <= 20) {
+                var state = "";
+                BI.each(ob.assist, function (i, v) {
+                    if (i === 0) {
+                        state += "" + (o.valueFormatter(v + "") || v);
+                    } else {
+                        state += "," + (o.valueFormatter(v + "") || v);
+                    }
+                });
+                this.editor.setState(state);
             } else {
-                this.editor.setState(BI.size(ob.value) > 0 ? BI.Selection.Multi : BI.Selection.All);
+                this.editor.setState(BI.Selection.Multi);
             }
         } else {
-            if (BI.size(ob.value) === 1) {
-                this.editor.setState(o.valueFormatter(ob.value[0] + "") || (ob.value[0] + ""));
+            if (ob.value.length === 0) {
+                this.editor.setState(BI.Selection.None);
+            } else if (BI.size(ob.value) <= 20) {
+                var state = "";
+                BI.each(ob.value, function (i, v) {
+                    if (i === 0) {
+                        state += "" + (o.valueFormatter(v + "") || v);
+                    } else {
+                        state += "," + (o.valueFormatter(v + "") || v);
+                    }
+                });
+                this.editor.setState(state);
             } else {
-                this.editor.setState(BI.size(ob.value) > 0 ? BI.Selection.Multi : BI.Selection.None);
+                this.editor.setState(BI.Selection.Multi);
             }
         }
     },
@@ -11640,7 +11659,7 @@ BI.MultiSelectInsertList = BI.inherit(BI.Widget, {
             element: this,
             items: [{
                 el: this.trigger,
-                height: 30
+                height: 24
             }, {
                 el: this.adapter,
                 height: "fill"
@@ -11954,7 +11973,7 @@ BI.MultiSelectList = BI.inherit(BI.Widget, {
             element: this,
             items: [{
                 el: this.trigger,
-                height: 30
+                height: 24
             }, {
                 el: this.adapter,
                 height: "fill"
@@ -12567,7 +12586,7 @@ BI.MultiTreeCombo = BI.inherit(BI.Single, {
                         change = true;
                         var val = {
                             type: BI.Selection.Multi,
-                            value: this.hasChecked() ? {1: 1} : {}
+                            value: this.hasChecked() ? this.getValue() : {}
                         };
                         self.trigger.getSearcher().setState(val);
                         self.trigger.getCounter().setButtonChecked(val);
@@ -12623,6 +12642,7 @@ BI.MultiTreeCombo = BI.inherit(BI.Single, {
                 }
             });
         });
+
         function showCounter() {
             if (isSearching()) {
                 self.storeValue = {value: self.trigger.getValue()};
@@ -12651,11 +12671,12 @@ BI.MultiTreeCombo = BI.inherit(BI.Single, {
         });
 
         this.trigger.on(BI.MultiSelectTrigger.EVENT_CHANGE, function () {
+            var checked = this.getSearcher().hasChecked();
             var val = {
                 type: BI.Selection.Multi,
-                value: this.getSearcher().hasChecked() ? {1: 1} : {}
+                value: checked ? {1: 1} : {}
             };
-            this.getSearcher().setState(val);
+            this.getSearcher().setState(checked ? BI.Selection.Multi : BI.Selection.None);
             this.getCounter().setButtonChecked(val);
         });
 
@@ -12675,7 +12696,7 @@ BI.MultiTreeCombo = BI.inherit(BI.Single, {
             if (isSearching()) {
                 self.trigger.stopEditing();
                 self.fireEvent(BI.MultiTreeCombo.EVENT_CONFIRM);
-            }else{
+            } else {
                 if (isPopupView()) {
                     self.trigger.stopEditing();
                     self.storeValue = {value: self.combo.getValue()};
@@ -13086,11 +13107,29 @@ BI.MultiTreeSearcher = BI.inherit(BI.Widget, {
 
     setState: function (ob) {
         ob || (ob = {});
-        ob.value || (ob.value = []);
-        if (ob.type === BI.Selection.All) {
-            this.editor.setState(BI.size(ob.value) > 0 ? BI.Selection.Multi : BI.Selection.All);
+        ob.value || (ob.value = {});
+        if (BI.isNumber(ob)) {
+            this.editor.setState(ob);
+        } else if (BI.size(ob.value) === 0) {
+            this.editor.setState(BI.Selection.None);
         } else {
-            this.editor.setState(BI.size(ob.value) > 0 ? BI.Selection.Multi : BI.Selection.None);
+            var text = "";
+            BI.each(ob.value, function (name, children) {
+                var childNodes = getChildrenNode(children);
+                text += name + (childNodes === "" ? "" : (":" + childNodes)) + "; ";
+            });
+            this.editor.setState(text);
+        }
+
+        function getChildrenNode(ob) {
+            var text = "";
+            var index = 0, size = BI.size(ob);
+            BI.each(ob, function (name, children) {
+                index++;
+                var childNodes = getChildrenNode(children);
+                text += name + (childNodes === "" ? "" : (":" + childNodes)) + (index === size ? "" : ",");
+            });
+            return text;
         }
     },
 

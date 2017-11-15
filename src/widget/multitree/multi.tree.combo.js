@@ -80,7 +80,7 @@ BI.MultiTreeCombo = BI.inherit(BI.Single, {
                         change = true;
                         var val = {
                             type: BI.Selection.Multi,
-                            value: this.hasChecked() ? {1: 1} : {}
+                            value: this.hasChecked() ? this.getValue() : {}
                         };
                         self.trigger.getSearcher().setState(val);
                         self.trigger.getCounter().setButtonChecked(val);
@@ -136,6 +136,7 @@ BI.MultiTreeCombo = BI.inherit(BI.Single, {
                 }
             });
         });
+
         function showCounter() {
             if (isSearching()) {
                 self.storeValue = {value: self.trigger.getValue()};
@@ -164,11 +165,12 @@ BI.MultiTreeCombo = BI.inherit(BI.Single, {
         });
 
         this.trigger.on(BI.MultiSelectTrigger.EVENT_CHANGE, function () {
+            var checked = this.getSearcher().hasChecked();
             var val = {
                 type: BI.Selection.Multi,
-                value: this.getSearcher().hasChecked() ? {1: 1} : {}
+                value: checked ? {1: 1} : {}
             };
-            this.getSearcher().setState(val);
+            this.getSearcher().setState(checked ? BI.Selection.Multi : BI.Selection.None);
             this.getCounter().setButtonChecked(val);
         });
 
@@ -188,7 +190,7 @@ BI.MultiTreeCombo = BI.inherit(BI.Single, {
             if (isSearching()) {
                 self.trigger.stopEditing();
                 self.fireEvent(BI.MultiTreeCombo.EVENT_CONFIRM);
-            }else{
+            } else {
                 if (isPopupView()) {
                     self.trigger.stopEditing();
                     self.storeValue = {value: self.combo.getValue()};

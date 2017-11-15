@@ -5,7 +5,7 @@ Demo.ValueChooserPane = BI.inherit(BI.Widget, {
     render: function () {
         return {
             type: "bi.value_chooser_pane",
-            items: BI.deepClone(Demo.CONSTANTS.ITEMS),
+            items: BI.deepClone(Demo.CONSTANTS.ITEMS)
             // itemsCreator: function (op, callback) {
             //     callback(BI.deepClone(Demo.CONSTANTS.ITEMS));
             // }
