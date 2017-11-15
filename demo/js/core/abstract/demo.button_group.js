@@ -16,7 +16,7 @@ Demo.Func = BI.inherit(BI.Widget, {
                     type: "bi.vertical",
                     items: [{
                         type: "bi.vtape",
-                        height: 200,
+                        height: 200
                     }]
                 }],
                 items: [{
@@ -24,7 +24,7 @@ Demo.Func = BI.inherit(BI.Widget, {
                         type: "bi.label",
                         text: "button_group是一类具有相同属性或相似属性的抽象, 本案例实现的是布局的嵌套(vertical布局下内嵌center_adapt布局)"
                     },
-                    height: 150,
+                    height: 150
                 }, {
                     el: {
                         type: "bi.button",

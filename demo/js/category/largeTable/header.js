@@ -33,6 +33,6 @@ BI.DetailTableHeader = BI.inherit(BI.Widget, {
         if (BI.isNotNull(o.styles) && BI.isObject(o.styles)) {
             this.element.css(o.styles);
         }
-    },
+    }
 });
 BI.shortcut("bi.detail_table_header", BI.DetailTableHeader);

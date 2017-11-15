@@ -953,7 +953,7 @@ BI.shortcut("demo.collection_table", Demo.Func);Demo.Func = BI.inherit(BI.Widget
         var table = BI.createWidget({
             type: "bi.resizable_table",
             el: {
-                type: "bi.grid_table",
+                type: "bi.grid_table"
             },
             width: 600,
             height: 500,
@@ -1009,7 +1009,7 @@ BI.shortcut("demo.grid_table", Demo.Func);Demo.Func = BI.inherit(BI.Widget, {
         var table = BI.createWidget({
             type: "bi.resizable_table",
             el: {
-                type: "bi.grid_table",
+                type: "bi.grid_table"
             },
             width: 600,
             height: 500,
@@ -1972,7 +1972,7 @@ BI.shortcut("demo.calendar", Demo.Func);Demo.Func = BI.inherit(BI.Widget, {
             items: [{
                 el: editor,
                 left: 100,
-                top: 50,
+                top: 50
             }, {
                 el: clipboard,
                 left: 100,
@@ -2420,7 +2420,7 @@ BI.shortcut("demo.all_count_pager", Demo.Func);Demo.Func = BI.inherit(BI.Widget,
             vgap: 50,
             element: this,
             items: [{
-                type: "bi.direction_pager",
+                type: "bi.direction_pager"
             }]
         })
     }
@@ -2690,7 +2690,7 @@ BI.shortcut("demo.popup_panel", Demo.Func);Demo.Func = BI.inherit(BI.Widget, {
             el: {
                 type: "bi.resizable_table",
                 el: {
-                    type: "bi.grid_table",
+                    type: "bi.grid_table"
                 }
             },
             width: 600,
@@ -3923,7 +3923,7 @@ BI.DemoLevelTree = BI.inherit(BI.Widget, {
                                 "text": "B",
                                 value: 2,
                                 isParent: true,
-                                open: true,
+                                open: true
                             }])
                         } else {
                             if (op.node.id == 1) {
@@ -3941,14 +3941,14 @@ BI.DemoLevelTree = BI.inherit(BI.Widget, {
                                         "pId": 1,
                                         "text": "test12",
                                         value: 12,
-                                        layer: 1,
+                                        layer: 1
                                     },
                                     {
                                         "id": 13,
                                         "pId": 1,
                                         "text": "test13",
                                         value: 13,
-                                        layer: 1,
+                                        layer: 1
                                     },
                                     {
                                         "id": 14,
@@ -3963,14 +3963,14 @@ BI.DemoLevelTree = BI.inherit(BI.Widget, {
                                         "pId": 1,
                                         "text": "test15",
                                         value: 15,
-                                        layer: 1,
+                                        layer: 1
                                     },
                                     {
                                         "id": 16,
                                         "pId": 1,
                                         "text": "test16",
                                         value: 16,
-                                        layer: 1,
+                                        layer: 1
                                     },
                                     {"id": 17, "pId": 1, "text": "test17", layer: 1, value: 17}
                                 ])
@@ -3980,14 +3980,14 @@ BI.DemoLevelTree = BI.inherit(BI.Widget, {
                                     "pId": 2,
                                     "text": "test21",
                                     value: 21,
-                                    layer: 1,
+                                    layer: 1
                                 },
                                     {
                                         "id": 22,
                                         "pId": 2,
                                         "text": "test22",
                                         value: 22,
-                                        layer: 1,
+                                        layer: 1
                                     }])
                             } else if (op.node.id == 11) {
                                 callback([{
@@ -3995,7 +3995,7 @@ BI.DemoLevelTree = BI.inherit(BI.Widget, {
                                     "pId": 11,
                                     "text": "test111",
                                     value: 111,
-                                    layer: 2,
+                                    layer: 2
                                 }])
                             }
                         }
@@ -4063,7 +4063,7 @@ BI.DetailTableCell = BI.inherit(BI.Widget, {
         if (BI.isNotNull(o.styles) && BI.isObject(o.styles)) {
             this.element.css(o.styles);
         }
-    },
+    }
 });
 BI.shortcut("bi.detail_table_cell", BI.DetailTableCell);/**
  * Created by Young's on 2016/4/15.
@@ -4100,7 +4100,7 @@ BI.DetailTableHeader = BI.inherit(BI.Widget, {
         if (BI.isNotNull(o.styles) && BI.isObject(o.styles)) {
             this.element.css(o.styles);
         }
-    },
+    }
 });
 BI.shortcut("bi.detail_table_header", BI.DetailTableHeader);Demo.Face = BI.inherit(BI.Widget, {
     props: {
@@ -4243,7 +4243,7 @@ BI.shortcut("demo.large_table", Demo.Face);/**
 BI.NormalSequenceHeaderCell = BI.inherit(BI.Widget, {
     _defaultConfig: function () {
         return BI.extend(BI.NormalSequenceHeaderCell.superclass._defaultConfig.apply(this, arguments), {
-            baseCls: "bi-normal-sequence-header-cell",
+            baseCls: "bi-normal-sequence-header-cell"
         })
     },
 
@@ -4409,7 +4409,7 @@ Demo.SortTree = BI.inherit(BI.Widget, {
             }
         });
         return nodes;
-    },
+    }
 });
 BI.shortcut("demo.sort_tree", Demo.SortTree);Demo.Center = BI.inherit(BI.Widget, {
     props: {
@@ -4537,7 +4537,7 @@ Demo.TreeValueChooser = BI.inherit(BI.Widget, {
 
         return {
             type: "bi.tree_value_chooser_pane",
-            items: BI.deepClone(Demo.CONSTANTS.TREEITEMS),
+            items: BI.deepClone(Demo.CONSTANTS.TREEITEMS)
             // itemsCreator: function (op, callback) {
             //     callback(tree);
             // }
@@ -4571,7 +4571,7 @@ BI.shortcut("demo.value_chooser_combo", Demo.ValueChooserCombo);Demo.ValueChoose
     render: function () {
         return {
             type: "bi.value_chooser_pane",
-            items: BI.deepClone(Demo.CONSTANTS.ITEMS),
+            items: BI.deepClone(Demo.CONSTANTS.ITEMS)
             // itemsCreator: function (op, callback) {
             //     callback(BI.deepClone(Demo.CONSTANTS.ITEMS));
             // }
@@ -5195,7 +5195,7 @@ var viewRouter = new (BI.inherit(BI.WRouter, {
 
         "/tmp": "TmpView",
         "/tmp/child": "TmpChildView",
-        "/tmp/child/child": "TmpChildChildView",
+        "/tmp/child/child": "TmpChildChildView"
     },
 
     getSkipToView: function (v) {
@@ -6596,7 +6596,7 @@ BI.shortcut("demo.tab", Demo.Func);Demo.Func = BI.inherit(BI.Widget, {
                     type: "bi.vertical",
                     items: [{
                         type: "bi.vtape",
-                        height: 200,
+                        height: 200
                     }]
                 }],
                 items: [{
@@ -6604,7 +6604,7 @@ BI.shortcut("demo.tab", Demo.Func);Demo.Func = BI.inherit(BI.Widget, {
                         type: "bi.label",
                         text: "button_group是一类具有相同属性或相似属性的抽象, 本案例实现的是布局的嵌套(vertical布局下内嵌center_adapt布局)"
                     },
-                    height: 150,
+                    height: 150
                 }, {
                     el: {
                         type: "bi.button",
@@ -6650,7 +6650,7 @@ BI.shortcut("demo.button_group", Demo.Func);Demo.Func = BI.inherit(BI.Widget, {
             layouts: [{
                 type: "bi.vertical"
             }, {
-                type: "bi.center_adapt",
+                type: "bi.center_adapt"
             }],
             items: [{
                 type: "bi.label",
@@ -7016,7 +7016,7 @@ BI.shortcut("demo.grid_view", Demo.Func);Demo.Func = BI.inherit(BI.Widget, {
                     type: "bi.label",
                     width: 200,
                     height: 200,
-                    text: (i + 1) + "." + item.text,
+                    text: (i + 1) + "." + item.text
                 });
             })
         }
@@ -7143,7 +7143,7 @@ BI.shortcut("demo.virtual_group_item", Demo.Item);Demo.Func = BI.inherit(BI.Widg
                 return BI.extend({}, item, {
                     type: "bi.label",
                     height: 30,
-                    text: (i + 1) + "." + item.text,
+                    text: (i + 1) + "." + item.text
                 });
             })
         }
@@ -7281,7 +7281,7 @@ BI.shortcut("demo.border", Demo.BorderLayout);Demo.CenterAdapt = BI.inherit(BI.W
                 cls: "layout-bg1"
             }]
         }
-    },
+    }
 });
 BI.shortcut("demo.center_adapt", Demo.CenterAdapt);/**
  * Created by User on 2017/3/22.
@@ -8510,15 +8510,15 @@ BI.shortcut("demo.vtape", Demo.VtapeLayout);Demo.Face = BI.inherit(BI.Widget, {
                                 }, {
                                     text: "column 1.222222222222222222222222222222222222",
                                     cls: "dot-e-font",
-                                    value: 22,
+                                    value: 22
                                 }, {
                                     text: "column 1.3",
                                     cls: "dot-e-font",
-                                    value: 23,
+                                    value: 23
                                 }, {
                                     text: "column 1.4",
                                     cls: "dot-e-font",
-                                    value: 24,
+                                    value: 24
                                 }, {
                                     text: "column 1.5",
                                     cls: "dot-e-font",
@@ -8541,7 +8541,7 @@ BI.shortcut("demo.vtape", Demo.VtapeLayout);Demo.Face = BI.inherit(BI.Widget, {
                                     height: 25,
                                     text: "column 2.1",
                                     value: 11
-                                }, {text: "column 2.2", value: 12, cls: "dot-e-font"}],
+                                }, {text: "column 2.2", value: 12, cls: "dot-e-font"}]
 
 
                             }
@@ -10417,7 +10417,7 @@ BI.shortcut("demo.tmp", Demo.Func);
                         type: "bi.label",
                         cls: "layout-bg1",
                         width: 150
-                    }),
+                    })
 
                 }, {
                     type: "bi.vertical",
@@ -12012,7 +12012,7 @@ BI.shortcut("demo.date_time", Demo.CustomDateTime);Demo.Downlist = BI.inherit(BI
                         }, {
                             text: "column 1.222222222222222222222222222222222222",
                             cls: "dot-e-font",
-                            value: 22,
+                            value: 22
                         }]
                     }],
                     [{
@@ -12800,7 +12800,7 @@ Demo.RelationView = BI.inherit(BI.Widget, {
                     foreign: {region: "B", value: "b1", text: "b1字段"}
                 },
                 {
-                    primary: {region: "X33", value: "x233", text: "x233字段"},
+                    primary: {region: "X33", value: "x233", text: "x233字段"}
                 }
             ]
         });
@@ -13194,7 +13194,7 @@ BI.shortcut("demo.slider", Demo.Slider);Demo.Func = BI.inherit(BI.Widget, {
                 type: "bi.page_table_cell",
                 text: "node3",
                 values: [1, 2]
-            }],
+            }]
             //values: [1, 2]
         }];
 
@@ -13213,7 +13213,7 @@ BI.shortcut("demo.slider", Demo.Slider);Demo.Func = BI.inherit(BI.Widget, {
                                 type: "bi.collection_table"
                             }
                         }
-                    },
+                    }
                 },
                 sequence: {
                     type: "bi.sequence_table_dynamic_number"
@@ -13816,7 +13816,7 @@ BI.shortcut("demo.responsive_table", Demo.Func);Demo.Func = BI.inherit(BI.Widget
                             type: "bi.collection_table"
                         }
                     }
-                },
+                }
             },
             sequence: {
                 type: "bi.sequence_table_tree_number"
@@ -14225,7 +14225,7 @@ Demo.YearQuarterCombo = BI.inherit(BI.Widget, {
                     self.widget = _ref;
                 },
                 yearBehaviors: {},
-                quarterBehaviors: {},
+                quarterBehaviors: {}
             }, {
                 type: "bi.button",
                 text: "getValue",

@@ -9,7 +9,7 @@ Demo.Func = BI.inherit(BI.Widget, {
             layouts: [{
                 type: "bi.vertical"
             }, {
-                type: "bi.center_adapt",
+                type: "bi.center_adapt"
             }],
             items: [{
                 type: "bi.label",

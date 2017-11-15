@@ -13,7 +13,7 @@ Demo.Func = BI.inherit(BI.Widget, {
                     type: "bi.label",
                     width: 200,
                     height: 200,
-                    text: (i + 1) + "." + item.text,
+                    text: (i + 1) + "." + item.text
                 });
             })
         }

@@ -116,7 +116,7 @@ BI.DemoLevelTree = BI.inherit(BI.Widget, {
                                 "text": "B",
                                 value: 2,
                                 isParent: true,
-                                open: true,
+                                open: true
                             }])
                         } else {
                             if (op.node.id == 1) {
@@ -134,14 +134,14 @@ BI.DemoLevelTree = BI.inherit(BI.Widget, {
                                         "pId": 1,
                                         "text": "test12",
                                         value: 12,
-                                        layer: 1,
+                                        layer: 1
                                     },
                                     {
                                         "id": 13,
                                         "pId": 1,
                                         "text": "test13",
                                         value: 13,
-                                        layer: 1,
+                                        layer: 1
                                     },
                                     {
                                         "id": 14,
@@ -156,14 +156,14 @@ BI.DemoLevelTree = BI.inherit(BI.Widget, {
                                         "pId": 1,
                                         "text": "test15",
                                         value: 15,
-                                        layer: 1,
+                                        layer: 1
                                     },
                                     {
                                         "id": 16,
                                         "pId": 1,
                                         "text": "test16",
                                         value: 16,
-                                        layer: 1,
+                                        layer: 1
                                     },
                                     {"id": 17, "pId": 1, "text": "test17", layer: 1, value: 17}
                                 ])
@@ -173,14 +173,14 @@ BI.DemoLevelTree = BI.inherit(BI.Widget, {
                                     "pId": 2,
                                     "text": "test21",
                                     value: 21,
-                                    layer: 1,
+                                    layer: 1
                                 },
                                     {
                                         "id": 22,
                                         "pId": 2,
                                         "text": "test22",
                                         value: 22,
-                                        layer: 1,
+                                        layer: 1
                                     }])
                             } else if (op.node.id == 11) {
                                 callback([{
@@ -188,7 +188,7 @@ BI.DemoLevelTree = BI.inherit(BI.Widget, {
                                     "pId": 11,
                                     "text": "test111",
                                     value: 111,
-                                    layer: 2,
+                                    layer: 2
                                 }])
                             }
                         }

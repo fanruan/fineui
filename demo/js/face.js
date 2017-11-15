@@ -389,15 +389,15 @@ Demo.Face = BI.inherit(BI.Widget, {
                                 }, {
                                     text: "column 1.222222222222222222222222222222222222",
                                     cls: "dot-e-font",
-                                    value: 22,
+                                    value: 22
                                 }, {
                                     text: "column 1.3",
                                     cls: "dot-e-font",
-                                    value: 23,
+                                    value: 23
                                 }, {
                                     text: "column 1.4",
                                     cls: "dot-e-font",
-                                    value: 24,
+                                    value: 24
                                 }, {
                                     text: "column 1.5",
                                     cls: "dot-e-font",
@@ -420,7 +420,7 @@ Demo.Face = BI.inherit(BI.Widget, {
                                     height: 25,
                                     text: "column 2.1",
                                     value: 11
-                                }, {text: "column 2.2", value: 12, cls: "dot-e-font"}],
+                                }, {text: "column 2.2", value: 12, cls: "dot-e-font"}]
 
 
                             }

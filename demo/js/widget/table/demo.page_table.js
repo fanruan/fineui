@@ -90,7 +90,7 @@ Demo.Func = BI.inherit(BI.Widget, {
                 type: "bi.page_table_cell",
                 text: "node3",
                 values: [1, 2]
-            }],
+            }]
             //values: [1, 2]
         }];
 
@@ -109,7 +109,7 @@ Demo.Func = BI.inherit(BI.Widget, {
                                 type: "bi.collection_table"
                             }
                         }
-                    },
+                    }
                 },
                 sequence: {
                     type: "bi.sequence_table_dynamic_number"

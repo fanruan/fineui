@@ -131,6 +131,6 @@ Demo.SortTree = BI.inherit(BI.Widget, {
             }
         });
         return nodes;
-    },
+    }
 });
 BI.shortcut("demo.sort_tree", Demo.SortTree);

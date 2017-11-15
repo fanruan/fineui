@@ -214,7 +214,7 @@
                         type: "bi.label",
                         cls: "layout-bg1",
                         width: 150
-                    }),
+                    })
 
                 }, {
                     type: "bi.vertical",

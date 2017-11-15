@@ -10,7 +10,7 @@ Demo.Func = BI.inherit(BI.Widget, {
             vgap: 50,
             element: this,
             items: [{
-                type: "bi.direction_pager",
+                type: "bi.direction_pager"
             }]
         })
     }

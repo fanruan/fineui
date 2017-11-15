@@ -29,7 +29,7 @@ var viewRouter = new (BI.inherit(BI.WRouter, {
 
         "/tmp": "TmpView",
         "/tmp/child": "TmpChildView",
-        "/tmp/child/child": "TmpChildChildView",
+        "/tmp/child/child": "TmpChildChildView"
     },
 
     getSkipToView: function (v) {
