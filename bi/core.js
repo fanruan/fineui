@@ -20530,7 +20530,22 @@ BI.HorizontalFillLayoutLogic = BI.inherit(BI.Logic, {
     _init: function () {
         BI.HorizontalFillLayoutLogic.superclass._init.apply(this, arguments);
     }
-});BI.Plugin = BI.Plugin || {};
+});;(function () {
+    var models = {};
+    BI.models = function (xtype, cls) {
+        if (models[xtype] != null) {
+            throw ("models:[" + xtype + "] has been registed");
+        }
+        models[xtype] = cls;
+    };
+
+    BI.Models = {
+        getModel: function (type, config) {
+            return new models[type](config);
+        }
+    }
+})();
+BI.Plugin = BI.Plugin || {};
 ;
 (function () {
     var _WidgetsPlugin = {};
@@ -21703,7 +21718,27 @@ $.extend(String, {
             return args[i];
         });
     }
-});BI.EventListener = {
+});;(function () {
+    var kv = {};
+    BI.models = function (xtype, cls) {
+        if (kv[xtype] != null) {
+            throw ("stores:[" + xtype + "] has been registed");
+        }
+        kv[xtype] = cls;
+    };
+
+    var stores = {};
+
+    BI.Stores = {
+        getStore: function (type, config) {
+            if (stores[type]) {
+                return stores[type];
+            }
+            return stores[type] = new kv[type](config);
+        }
+    }
+})();
+BI.EventListener = {
     listen: function listen(target, eventType, callback) {
         if (target.addEventListener) {
             target.addEventListener(eventType, callback, false);
