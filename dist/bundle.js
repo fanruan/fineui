@@ -76087,7 +76087,7 @@ BI.Arrangement = BI.inherit(BI.Widget, {
                 element: this.container
             });
         }
-        this.wrapper.populate(items);
+        this.wrapper.addItems(items);
     },
 
     getClientWidth: function () {
@@ -76820,7 +76820,17 @@ BI.Arrangement = BI.inherit(BI.Widget, {
     },
 
     populate: function (items) {
-        this.regions = {};
+        // this.regions = {};
+        var self = this;
+        BI.each(this.regions, function (name, region) {
+            var exist = BI.some(items, function (i, item) {
+                return item.el.attr("id") === name;
+            });
+            if (!exist) {
+                self.regions[name].el.setVisible(false);
+            }
+            delete self.regions[name];
+        });
         this._populate(items);
         this._renderRegion();
     }
