@@ -1,6 +1,6 @@
 ;(function () {
     var kv = {};
-    BI.models = function (xtype, cls) {
+    BI.stores = function (xtype, cls) {
         if (kv[xtype] != null) {
             throw ("stores:[" + xtype + "] has been registed");
         }
