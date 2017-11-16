@@ -1,14 +1,22 @@
 $(function () {
     var ref;
-    BI.createWidget({
-        type: "demo.main",
-        ref: function (_ref) {
-            console.log(_ref);
-            ref = _ref;
+    var AppRouter = BI.inherit(BI.Router, {
+        routes: {
+            "": "index"
         },
-        element: '#wrapper'
+        index: function () {
+            BI.createWidget({
+                type: "demo.main",
+                ref: function (_ref) {
+                    console.log(_ref);
+                    ref = _ref;
+                },
+                element: '#wrapper'
+            });
+        }
     });
-    // ref.destroy();
+    new AppRouter;
+    BI.history.start();
 });Demo.Button = BI.inherit(BI.Widget, {
     props: {
         baseCls: "demo-button"
