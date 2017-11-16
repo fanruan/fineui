@@ -215,7 +215,7 @@ BI.TreeView = BI.inherit(BI.Pane, {
 
     _getNodeValue: function (node) {
         //去除标红
-        return node.value == null ? node.text.replace(/<[^>]+>/g, "").replaceAll("　", " ") : node.value;
+        return node.value == null ? node.text.replace(/<[^>]+>/g, "").replaceAll("&nbsp;", " ") : node.value;
     },
 
     //获取半选框值
@@ -312,7 +312,7 @@ BI.TreeView = BI.inherit(BI.Pane, {
             if (BI.isKey(o.paras.keyword)) {
                 n.text = $("<div>").__textKeywordMarked__(n.text, o.paras.keyword, n.py).html();
             } else {
-                n.text = (n.text + "").replaceAll(" ", "　");
+                n.text = (n.text + "").replaceAll(" ", "&nbsp;");
             }
         });
         return nodes;
