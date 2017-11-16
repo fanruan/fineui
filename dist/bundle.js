@@ -26474,7 +26474,6 @@ BI.BasicButton = BI.inherit(BI.Single, {
                     var mouseDown = false;
                     hand.mousedown(function () {
                         mouseDown = true;
-                        ev(e);
                     });
                     hand.mouseup(function (e) {
                         if (mouseDown === true) {
@@ -26553,9 +26552,6 @@ BI.BasicButton = BI.inherit(BI.Single, {
                 default:
                     if (o.stopEvent || o.stopPropagation) {
                         hand.mousedown(function (e) {
-                            ev(e);
-                        });
-                        hand.mouseup(function (e) {
                             ev(e);
                         });
                     }
