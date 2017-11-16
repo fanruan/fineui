@@ -283,7 +283,7 @@ BI.SingleSelectItem = BI.inherit(BI.BasicButton, {
             extraCls: "bi-single-select-item bi-list-item-active",
             hgap: 10,
             height: 25,
-            textAlign: "left",
+            textAlign: "left"
         })
     },
     _init: function () {
@@ -4818,7 +4818,7 @@ BI.BubbleCombo = BI.inherit(BI.Widget, {
             hideChecker: BI.emptyFn,
             offsetStyle: "left", //left,right,center
             el: {},
-            popup: {},
+            popup: {}
         })
     },
     _init: function () {
@@ -4843,7 +4843,7 @@ BI.BubbleCombo = BI.inherit(BI.Widget, {
             el: o.el,
             popup: BI.extend({
                 type: "bi.bubble_popup_view"
-            }, o.popup),
+            }, o.popup)
         });
         this.combo.on(BI.Combo.EVENT_TRIGGER_CHANGE, function () {
             self.fireEvent(BI.BubbleCombo.EVENT_TRIGGER_CHANGE, arguments);
@@ -5260,6 +5260,8 @@ BI.IconCombo = BI.inherit(BI.Widget, {
             type: "bi.combo",
             element: this,
             direction: o.direction,
+            trigger: o.trigger,
+            container: o.container,
             adjustLength: o.adjustLength,
             adjustXOffset: o.adjustXOffset,
             adjustYOffset: o.adjustYOffset,
@@ -9541,7 +9543,8 @@ BI.AdaptiveTable = BI.inherit(BI.Widget, {
     },
 
     _getFreezeColLength: function () {
-        return this.options.isNeedFreeze === true ? this.options.freezeCols.length : 0;
+        var o = this.options;
+        return o.isNeedFreeze === true ? BI.clamp(o.freezeCols.length, 0, o.columnSize.length) : 0;
     },
 
     _digest: function () {
@@ -12599,7 +12602,7 @@ BI.shortcut("bi.small_select_text_trigger", BI.SmallSelectTextTrigger);/**
  */
 BI.SmallTextTrigger = BI.inherit(BI.Trigger, {
     _const: {
-        hgap: 4,
+        hgap: 4
     },
 
     _defaultConfig: function () {

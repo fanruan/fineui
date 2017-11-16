@@ -12195,10 +12195,16 @@ if (!window.BI) {
     //浏览器相关方法
     _.extend(BI, {
         isIE: function () {
-            return /(msie|trident)/i.test(navigator.userAgent.toLowerCase());
+            if (this.__isIE == null) {
+                this.__isIE = /(msie|trident)/i.test(navigator.userAgent.toLowerCase());
+            }
+            return this.__isIE;
         },
 
         getIEVersion: function () {
+            if (this.__IEVersion != null) {
+                return this.__IEVersion;
+            }
             var version = 0;
             var agent = navigator.userAgent.toLowerCase();
             var v1 = agent.match(/(?:msie\s([\w.]+))/);
@@ -12212,7 +12218,7 @@ if (!window.BI) {
             } else {
                 version = 0;
             }
-            return version;
+            return this.__IEVersion = version;
         },
 
         isIE9Below: function () {
@@ -12220,10 +12226,6 @@ if (!window.BI) {
                 return false;
             }
             return this.getIEVersion() < 9;
-        },
-
-        isIE9: function () {
-            return this.getIEVersion() === 9;
         },
 
         isEdge: function () {
@@ -13137,7 +13139,84 @@ BI.Widget = BI.inherit(BI.OB, {
 
         }
     })
-})();BI.CellSizeAndPositionManager = function (cellCount, cellSizeGetter, estimatedCellSize) {
+})();
+BI.Cache = {
+    _prefix: "bi",
+    setUsername: function (username) {
+        localStorage.setItem(BI.Cache._prefix + ".username", (username + "" || "").toUpperCase());
+    },
+    getUsername: function () {
+        return localStorage.getItem(BI.Cache._prefix + ".username") || "";
+    },
+    _getKeyPrefix: function () {
+        return BI.Cache.getUsername() + "." + BI.Cache._prefix + ".";
+    },
+    _generateKey: function (key) {
+        return BI.Cache._getKeyPrefix() + (key || "");
+    },
+    getItem: function (key) {
+        return localStorage.getItem(BI.Cache._generateKey(key));
+    },
+    setItem: function (key, value) {
+        localStorage.setItem(BI.Cache._generateKey(key), value);
+    },
+    removeItem: function (key) {
+        localStorage.removeItem(BI.Cache._generateKey(key));
+    },
+    clear: function () {
+        for (var i = localStorage.length; i >= 0; i--) {
+            var key = localStorage.key(i);
+            if (key) {
+                if (key.indexOf(BI.Cache._getKeyPrefix()) === 0) {
+                    localStorage.removeItem(key);
+                }
+            }
+        }
+    },
+    keys: function () {
+        var result = [];
+        for (var i = localStorage.length; i >= 0; i--) {
+            var key = localStorage.key(i);
+            if (key) {
+                var prefix = BI.Cache._getKeyPrefix();
+                if (key.indexOf(prefix) === 0) {
+                    result[result.length] = key.substring(prefix.length);
+                }
+            }
+        }
+        return result;
+    },
+
+    addCookie: function (name, value, path, expiresHours) {
+        var cookieString = name + "=" + escape(value);
+        // 判断是否设置过期时间
+        if (expiresHours && expiresHours > 0) {
+            var date = new Date();
+            date.setTime(date.getTime() + expiresHours * 3600 * 1000);
+            cookieString = cookieString + "; expires=" + date.toGMTString();
+        }
+        if (path) {
+            cookieString = cookieString + "; path=" + path;
+        }
+        document.cookie = cookieString;
+    },
+    getCookie: function (name) {
+        var arr, reg = new RegExp("(^| )" + name + "=([^;]*)(;|$)");
+        if (arr = document.cookie.match(reg))
+            return unescape(arr[2]);
+        else
+            return null;
+    },
+    deleteCookie: function (name, path) {
+        var date = new Date();
+        date.setTime(date.getTime() - 10000);
+        var cookieString = name + "=v; expires=" + date.toGMTString();
+        if (path) {
+            cookieString = cookieString + "; path=" + path;
+        }
+        document.cookie = cookieString;
+    }
+};BI.CellSizeAndPositionManager = function (cellCount, cellSizeGetter, estimatedCellSize) {
     this._cellSizeGetter = cellSizeGetter;
     this._cellCount = cellCount;
     this._estimatedCellSize = estimatedCellSize;
@@ -19199,7 +19278,7 @@ BI.extend(jQuery.fn, {
      */
     __textKeywordMarked__: function (text, keyword, py) {
         if (!BI.isKey(keyword) || (text + "").length > 100) {
-            return this.text((text + "").replaceAll(" ", "　"));
+            return this.html((text + "").replaceAll(" ", "&nbsp;"));
         }
         keyword = keyword + "";
         keyword = BI.toUpperCase(keyword);
@@ -19222,7 +19301,7 @@ BI.extend(jQuery.fn, {
             if (tidx >= 0) {
                 this.append(textLeft.substr(0, tidx));
                 this.append($("<span>").addClass("bi-keyword-red-mark")
-                    .text(textLeft.substr(tidx, keyword.length).replaceAll(" ", "　")));
+                    .html(textLeft.substr(tidx, keyword.length).replaceAll(" ", "&nbsp;")));
 
                 textLeft = textLeft.substr(tidx + keyword.length);
                 if (py != null) {
@@ -19231,7 +19310,7 @@ BI.extend(jQuery.fn, {
             } else if (pidx != null && pidx >= 0 && Math.floor(pidx / text.length) === Math.floor((pidx + keyword.length - 1) / text.length)) {
                 this.append(textLeft.substr(0, pidx));
                 this.append($("<span>").addClass("bi-keyword-red-mark")
-                    .text(textLeft.substr(pidx, keyword.length).replaceAll(" ", "　")));
+                    .html(textLeft.substr(pidx, keyword.length).replaceAll(" ", "&nbsp;")));
                 if (py != null) {
                     py = py.substr(pidx + keyword.length);
                 }
@@ -19836,7 +19915,7 @@ BI.extend(BI.Func, {
             matched: matched,
             finded: finded
         }
-    },
+    }
 });
 
 /**
@@ -20451,7 +20530,22 @@ BI.HorizontalFillLayoutLogic = BI.inherit(BI.Logic, {
     _init: function () {
         BI.HorizontalFillLayoutLogic.superclass._init.apply(this, arguments);
     }
-});BI.Plugin = BI.Plugin || {};
+});;(function () {
+    var models = {};
+    BI.models = function (xtype, cls) {
+        if (models[xtype] != null) {
+            throw ("models:[" + xtype + "] has been registed");
+        }
+        models[xtype] = cls;
+    };
+
+    BI.Models = {
+        getModel: function (type, config) {
+            return new models[type](config);
+        }
+    }
+})();
+BI.Plugin = BI.Plugin || {};
 ;
 (function () {
     var _WidgetsPlugin = {};
@@ -20546,84 +20640,7 @@ $.extend(Array.prototype, {
         }
     }
 });
-
-BI.Cache = {
-    _prefix: "bi",
-    setUsername: function (username) {
-        localStorage.setItem(BI.Cache._prefix + ".username", (username + "" || "").toUpperCase());
-    },
-    getUsername: function () {
-        return localStorage.getItem(BI.Cache._prefix + ".username") || "";
-    },
-    _getKeyPrefix: function () {
-        return BI.Cache.getUsername() + "." + BI.Cache._prefix + ".";
-    },
-    _generateKey: function (key) {
-        return BI.Cache._getKeyPrefix() + (key || "");
-    },
-    getItem: function (key) {
-        return localStorage.getItem(BI.Cache._generateKey(key));
-    },
-    setItem: function (key, value) {
-        localStorage.setItem(BI.Cache._generateKey(key), value);
-    },
-    removeItem: function (key) {
-        localStorage.removeItem(BI.Cache._generateKey(key));
-    },
-    clear: function () {
-        for (var i = localStorage.length; i >= 0; i--) {
-            var key = localStorage.key(i);
-            if (key) {
-                if (key.indexOf(BI.Cache._getKeyPrefix()) === 0) {
-                    localStorage.removeItem(key);
-                }
-            }
-        }
-    },
-    keys: function () {
-        var result = [];
-        for (var i = localStorage.length; i >= 0; i--) {
-            var key = localStorage.key(i);
-            if (key) {
-                var prefix = BI.Cache._getKeyPrefix();
-                if (key.indexOf(prefix) === 0) {
-                    result[result.length] = key.substring(prefix.length);
-                }
-            }
-        }
-        return result;
-    },
-
-    addCookie: function (name, value, path, expiresHours) {
-        var cookieString = name + "=" + escape(value);
-        // 判断是否设置过期时间
-        if (expiresHours && expiresHours > 0) {
-            var date = new Date();
-            date.setTime(date.getTime() + expiresHours * 3600 * 1000);
-            cookieString = cookieString + "; expires=" + date.toGMTString();
-        }
-        if (path) {
-            cookieString = cookieString + "; path=" + path;
-        }
-        document.cookie = cookieString;
-    },
-    getCookie: function (name) {
-        var arr, reg = new RegExp("(^| )" + name + "=([^;]*)(;|$)");
-        if (arr = document.cookie.match(reg))
-            return unescape(arr[2]);
-        else
-            return null;
-    },
-    deleteCookie: function (name, path) {
-        var date = new Date();
-        date.setTime(date.getTime() - 10000);
-        var cookieString = name + "=v; expires=" + date.toGMTString();
-        if (path) {
-            cookieString = cookieString + "; path=" + path;
-        }
-        document.cookie = cookieString;
-    }
-};$(function () {
+$(function () {
     //牵扯到国际化这些常量在页面加载后再生效
     // full day names
     Date._DN = [BI.i18nText("BI-Basic_Sunday"),
@@ -21701,7 +21718,27 @@ $.extend(String, {
             return args[i];
         });
     }
-});BI.EventListener = {
+});;(function () {
+    var kv = {};
+    BI.stores = function (xtype, cls) {
+        if (kv[xtype] != null) {
+            throw ("stores:[" + xtype + "] has been registed");
+        }
+        kv[xtype] = cls;
+    };
+
+    var stores = {};
+
+    BI.Stores = {
+        getStore: function (type, config) {
+            if (stores[type]) {
+                return stores[type];
+            }
+            return stores[type] = new kv[type](config);
+        }
+    }
+})();
+BI.EventListener = {
     listen: function listen(target, eventType, callback) {
         if (target.addEventListener) {
             target.addEventListener(eventType, callback, false);
@@ -25702,7 +25739,7 @@ Data.Constant = BI.Constant = BICst = {};
 
         get: function (name) {
             return Buffer[name];
-        },
+        }
     };
 })();/**
  * 共享池

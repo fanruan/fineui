@@ -234,4 +234,8 @@ Demo.WIDGET_CONFIG = [{
     pId: 419,
     text: "bi.file_manager",
     value: "demo.file_manager"
+}, {
+    id: 420,
+    text: "滚动sliders",
+    value: "demo.slider"
 }];

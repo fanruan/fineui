@@ -12195,10 +12195,16 @@ if (!window.BI) {
     //浏览器相关方法
     _.extend(BI, {
         isIE: function () {
-            return /(msie|trident)/i.test(navigator.userAgent.toLowerCase());
+            if (this.__isIE == null) {
+                this.__isIE = /(msie|trident)/i.test(navigator.userAgent.toLowerCase());
+            }
+            return this.__isIE;
         },
 
         getIEVersion: function () {
+            if (this.__IEVersion != null) {
+                return this.__IEVersion;
+            }
             var version = 0;
             var agent = navigator.userAgent.toLowerCase();
             var v1 = agent.match(/(?:msie\s([\w.]+))/);
@@ -12212,7 +12218,7 @@ if (!window.BI) {
             } else {
                 version = 0;
             }
-            return version;
+            return this.__IEVersion = version;
         },
 
         isIE9Below: function () {
@@ -12220,10 +12226,6 @@ if (!window.BI) {
                 return false;
             }
             return this.getIEVersion() < 9;
-        },
-
-        isIE9: function () {
-            return this.getIEVersion() === 9;
         },
 
         isEdge: function () {
@@ -13137,7 +13139,84 @@ BI.Widget = BI.inherit(BI.OB, {
 
         }
     })
-})();BI.CellSizeAndPositionManager = function (cellCount, cellSizeGetter, estimatedCellSize) {
+})();
+BI.Cache = {
+    _prefix: "bi",
+    setUsername: function (username) {
+        localStorage.setItem(BI.Cache._prefix + ".username", (username + "" || "").toUpperCase());
+    },
+    getUsername: function () {
+        return localStorage.getItem(BI.Cache._prefix + ".username") || "";
+    },
+    _getKeyPrefix: function () {
+        return BI.Cache.getUsername() + "." + BI.Cache._prefix + ".";
+    },
+    _generateKey: function (key) {
+        return BI.Cache._getKeyPrefix() + (key || "");
+    },
+    getItem: function (key) {
+        return localStorage.getItem(BI.Cache._generateKey(key));
+    },
+    setItem: function (key, value) {
+        localStorage.setItem(BI.Cache._generateKey(key), value);
+    },
+    removeItem: function (key) {
+        localStorage.removeItem(BI.Cache._generateKey(key));
+    },
+    clear: function () {
+        for (var i = localStorage.length; i >= 0; i--) {
+            var key = localStorage.key(i);
+            if (key) {
+                if (key.indexOf(BI.Cache._getKeyPrefix()) === 0) {
+                    localStorage.removeItem(key);
+                }
+            }
+        }
+    },
+    keys: function () {
+        var result = [];
+        for (var i = localStorage.length; i >= 0; i--) {
+            var key = localStorage.key(i);
+            if (key) {
+                var prefix = BI.Cache._getKeyPrefix();
+                if (key.indexOf(prefix) === 0) {
+                    result[result.length] = key.substring(prefix.length);
+                }
+            }
+        }
+        return result;
+    },
+
+    addCookie: function (name, value, path, expiresHours) {
+        var cookieString = name + "=" + escape(value);
+        // 判断是否设置过期时间
+        if (expiresHours && expiresHours > 0) {
+            var date = new Date();
+            date.setTime(date.getTime() + expiresHours * 3600 * 1000);
+            cookieString = cookieString + "; expires=" + date.toGMTString();
+        }
+        if (path) {
+            cookieString = cookieString + "; path=" + path;
+        }
+        document.cookie = cookieString;
+    },
+    getCookie: function (name) {
+        var arr, reg = new RegExp("(^| )" + name + "=([^;]*)(;|$)");
+        if (arr = document.cookie.match(reg))
+            return unescape(arr[2]);
+        else
+            return null;
+    },
+    deleteCookie: function (name, path) {
+        var date = new Date();
+        date.setTime(date.getTime() - 10000);
+        var cookieString = name + "=v; expires=" + date.toGMTString();
+        if (path) {
+            cookieString = cookieString + "; path=" + path;
+        }
+        document.cookie = cookieString;
+    }
+};BI.CellSizeAndPositionManager = function (cellCount, cellSizeGetter, estimatedCellSize) {
     this._cellSizeGetter = cellSizeGetter;
     this._cellCount = cellCount;
     this._estimatedCellSize = estimatedCellSize;
@@ -19199,7 +19278,7 @@ BI.extend(jQuery.fn, {
      */
     __textKeywordMarked__: function (text, keyword, py) {
         if (!BI.isKey(keyword) || (text + "").length > 100) {
-            return this.text((text + "").replaceAll(" ", "　"));
+            return this.html((text + "").replaceAll(" ", "&nbsp;"));
         }
         keyword = keyword + "";
         keyword = BI.toUpperCase(keyword);
@@ -19222,7 +19301,7 @@ BI.extend(jQuery.fn, {
             if (tidx >= 0) {
                 this.append(textLeft.substr(0, tidx));
                 this.append($("<span>").addClass("bi-keyword-red-mark")
-                    .text(textLeft.substr(tidx, keyword.length).replaceAll(" ", "　")));
+                    .html(textLeft.substr(tidx, keyword.length).replaceAll(" ", "&nbsp;")));
 
                 textLeft = textLeft.substr(tidx + keyword.length);
                 if (py != null) {
@@ -19231,7 +19310,7 @@ BI.extend(jQuery.fn, {
             } else if (pidx != null && pidx >= 0 && Math.floor(pidx / text.length) === Math.floor((pidx + keyword.length - 1) / text.length)) {
                 this.append(textLeft.substr(0, pidx));
                 this.append($("<span>").addClass("bi-keyword-red-mark")
-                    .text(textLeft.substr(pidx, keyword.length).replaceAll(" ", "　")));
+                    .html(textLeft.substr(pidx, keyword.length).replaceAll(" ", "&nbsp;")));
                 if (py != null) {
                     py = py.substr(pidx + keyword.length);
                 }
@@ -19836,7 +19915,7 @@ BI.extend(BI.Func, {
             matched: matched,
             finded: finded
         }
-    },
+    }
 });
 
 /**
@@ -20451,7 +20530,22 @@ BI.HorizontalFillLayoutLogic = BI.inherit(BI.Logic, {
     _init: function () {
         BI.HorizontalFillLayoutLogic.superclass._init.apply(this, arguments);
     }
-});BI.Plugin = BI.Plugin || {};
+});;(function () {
+    var models = {};
+    BI.models = function (xtype, cls) {
+        if (models[xtype] != null) {
+            throw ("models:[" + xtype + "] has been registed");
+        }
+        models[xtype] = cls;
+    };
+
+    BI.Models = {
+        getModel: function (type, config) {
+            return new models[type](config);
+        }
+    }
+})();
+BI.Plugin = BI.Plugin || {};
 ;
 (function () {
     var _WidgetsPlugin = {};
@@ -20546,84 +20640,7 @@ $.extend(Array.prototype, {
         }
     }
 });
-
-BI.Cache = {
-    _prefix: "bi",
-    setUsername: function (username) {
-        localStorage.setItem(BI.Cache._prefix + ".username", (username + "" || "").toUpperCase());
-    },
-    getUsername: function () {
-        return localStorage.getItem(BI.Cache._prefix + ".username") || "";
-    },
-    _getKeyPrefix: function () {
-        return BI.Cache.getUsername() + "." + BI.Cache._prefix + ".";
-    },
-    _generateKey: function (key) {
-        return BI.Cache._getKeyPrefix() + (key || "");
-    },
-    getItem: function (key) {
-        return localStorage.getItem(BI.Cache._generateKey(key));
-    },
-    setItem: function (key, value) {
-        localStorage.setItem(BI.Cache._generateKey(key), value);
-    },
-    removeItem: function (key) {
-        localStorage.removeItem(BI.Cache._generateKey(key));
-    },
-    clear: function () {
-        for (var i = localStorage.length; i >= 0; i--) {
-            var key = localStorage.key(i);
-            if (key) {
-                if (key.indexOf(BI.Cache._getKeyPrefix()) === 0) {
-                    localStorage.removeItem(key);
-                }
-            }
-        }
-    },
-    keys: function () {
-        var result = [];
-        for (var i = localStorage.length; i >= 0; i--) {
-            var key = localStorage.key(i);
-            if (key) {
-                var prefix = BI.Cache._getKeyPrefix();
-                if (key.indexOf(prefix) === 0) {
-                    result[result.length] = key.substring(prefix.length);
-                }
-            }
-        }
-        return result;
-    },
-
-    addCookie: function (name, value, path, expiresHours) {
-        var cookieString = name + "=" + escape(value);
-        // 判断是否设置过期时间
-        if (expiresHours && expiresHours > 0) {
-            var date = new Date();
-            date.setTime(date.getTime() + expiresHours * 3600 * 1000);
-            cookieString = cookieString + "; expires=" + date.toGMTString();
-        }
-        if (path) {
-            cookieString = cookieString + "; path=" + path;
-        }
-        document.cookie = cookieString;
-    },
-    getCookie: function (name) {
-        var arr, reg = new RegExp("(^| )" + name + "=([^;]*)(;|$)");
-        if (arr = document.cookie.match(reg))
-            return unescape(arr[2]);
-        else
-            return null;
-    },
-    deleteCookie: function (name, path) {
-        var date = new Date();
-        date.setTime(date.getTime() - 10000);
-        var cookieString = name + "=v; expires=" + date.toGMTString();
-        if (path) {
-            cookieString = cookieString + "; path=" + path;
-        }
-        document.cookie = cookieString;
-    }
-};$(function () {
+$(function () {
     //牵扯到国际化这些常量在页面加载后再生效
     // full day names
     Date._DN = [BI.i18nText("BI-Basic_Sunday"),
@@ -21701,7 +21718,27 @@ $.extend(String, {
             return args[i];
         });
     }
-});BI.EventListener = {
+});;(function () {
+    var kv = {};
+    BI.stores = function (xtype, cls) {
+        if (kv[xtype] != null) {
+            throw ("stores:[" + xtype + "] has been registed");
+        }
+        kv[xtype] = cls;
+    };
+
+    var stores = {};
+
+    BI.Stores = {
+        getStore: function (type, config) {
+            if (stores[type]) {
+                return stores[type];
+            }
+            return stores[type] = new kv[type](config);
+        }
+    }
+})();
+BI.EventListener = {
     listen: function listen(target, eventType, callback) {
         if (target.addEventListener) {
             target.addEventListener(eventType, callback, false);
@@ -25702,7 +25739,7 @@ Data.Constant = BI.Constant = BICst = {};
 
         get: function (name) {
             return Buffer[name];
-        },
+        }
     };
 })();/**
  * 共享池
@@ -26322,7 +26359,7 @@ BI.Text = BI.inherit(BI.Single, {
     setText: function (text) {
         BI.Text.superclass.setText.apply(this, arguments);
         this.options.text = text;
-        this.text.element.text((text + "").replaceAll(" ", "　"));
+        this.text.element.html((text + "").replaceAll(" ", "&nbsp;"));
     }
 });
 
@@ -27466,7 +27503,7 @@ BI.TreeView = BI.inherit(BI.Pane, {
 
     _getNodeValue: function (node) {
         //去除标红
-        return node.value == null ? node.text.replace(/<[^>]+>/g, "").replaceAll("　", " ") : node.value;
+        return node.value == null ? node.text.replace(/<[^>]+>/g, "").replaceAll("&nbsp;", " ") : node.value;
     },
 
     //获取半选框值
@@ -27563,7 +27600,7 @@ BI.TreeView = BI.inherit(BI.Pane, {
             if (BI.isKey(o.paras.keyword)) {
                 n.text = $("<div>").__textKeywordMarked__(n.text, o.paras.keyword, n.py).html();
             } else {
-                n.text = (n.text + "").replaceAll(" ", "　");
+                n.text = (n.text + "").replaceAll(" ", "&nbsp;");
             }
         });
         return nodes;
@@ -28166,6 +28203,10 @@ BI.Canvas = BI.inherit(BI.Widget, {
         this._queue = [];
     },
 
+    mounted: function () {
+        this.stroke();
+    },
+
     _getContext: function () {
         if (!this.ctx) {
             this.ctx = this.canvas.getContext('2d');
@@ -28180,11 +28221,11 @@ BI.Canvas = BI.inherit(BI.Widget, {
         }
         if (BI.isObject(key)) {
             BI.each(key, function (k, v) {
-                self._queue.push({k: k, v: v});
+                self._queue.push({ k: k, v: v });
             });
             return;
         }
-        this._queue.push({k: key, v: value});
+        this._queue.push({ k: key, v: value });
     },
 
     _line: function (x0, y0) {
@@ -28250,20 +28291,19 @@ BI.Canvas = BI.inherit(BI.Widget, {
         this._getContext().clearRect(0, 0, this.canvas.width, this.canvas.height);
     },
 
-    stroke: function (callback) {
-        var self = this;
-        BI.nextTick(function () {
-            var ctx = self._getContext();
-            BI.each(self._queue, function (i, q) {
-                if (BI.isFunction(ctx[q.k])) {
-                    ctx[q.k].apply(ctx, q.v);
-                } else {
-                    ctx[q.k] = q.v;
-                }
-            });
-            self._queue = [];
-            callback && callback();
+    stroke: function () {
+        var ctx = this._getContext();
+        if(!ctx){
+            return false;
+        }
+        BI.each(this._queue, function (i, q) {
+            if (BI.isFunction(ctx[q.k])) {
+                ctx[q.k].apply(ctx, q.v);
+            } else {
+                ctx[q.k] = q.v;
+            }
         });
+        this._queue = [];
     }
 });
 BI.shortcut("bi.canvas", BI.Canvas);/**
@@ -28746,6 +28786,19 @@ BI.Combo = BI.inherit(BI.Widget, {
                 e.stopPropagation();
             }
         };
+
+        var enterPopup = false;
+
+        function hide() {
+            if (self.isEnabled() && self.isValid() && self.combo.isEnabled() && self.combo.isValid() && o.toggle === true) {
+                self._hideView();
+                self.fireEvent(BI.Controller.EVENT_CHANGE, BI.Events.COLLAPSE, "", self.combo);
+                self.fireEvent(BI.Combo.EVENT_COLLAPSE);
+            }
+            self.popupView && self.popupView.element.off("mouseenter." + self.getName()).off("mouseleave." + self.getName());
+            enterPopup = false;
+        }
+
         BI.each(evs, function (i, ev) {
             switch (ev) {
                 case "hover":
@@ -28757,11 +28810,18 @@ BI.Combo = BI.inherit(BI.Widget, {
                         }
                     });
                     self.element.on("mouseleave." + self.getName(), function (e) {
-                        if (self.isEnabled() && self.isValid() && self.combo.isEnabled() && self.combo.isValid() && o.toggle === true) {
-                            self._hideView();
-                            self.fireEvent(BI.Controller.EVENT_CHANGE, BI.Events.COLLAPSE, "", self.combo);
-                            self.fireEvent(BI.Combo.EVENT_COLLAPSE);
-                        }
+                        self.popupView.element.on("mouseenter." + self.getName(), function (e) {
+                            enterPopup = true;
+                            self.popupView.element.on("mouseleave." + self.getName(), function (e) {
+                                hide();
+                            });
+                            self.popupView.element.off("mouseenter." + self.getName());
+                        });
+                        BI.defer(function () {
+                            if (!enterPopup) {
+                                hide();
+                            }
+                        }, 50);
                     });
                     break;
                 case "click":
@@ -28807,11 +28867,18 @@ BI.Combo = BI.inherit(BI.Widget, {
                         st(e);
                     });
                     self.element.on("mouseleave." + self.getName(), function (e) {
-                        if (self.isEnabled() && self.isValid() && self.combo.isEnabled() && self.combo.isValid() && o.toggle === true) {
-                            self._hideView();
-                            self.fireEvent(BI.Controller.EVENT_CHANGE, BI.Events.COLLAPSE, "", self.combo);
-                            self.fireEvent(BI.Combo.EVENT_COLLAPSE);
-                        }
+                        self.popupView.element.on("mouseenter." + self.getName(), function (e) {
+                            enterPopup = true;
+                            self.popupView.element.on("mouseleave." + self.getName(), function (e) {
+                                hide();
+                            });
+                            self.popupView.element.off("mouseenter." + self.getName());
+                        });
+                        BI.defer(function () {
+                            if (!enterPopup) {
+                                hide();
+                            }
+                        }, 50);
                     });
                     break;
             }
@@ -40880,10 +40947,10 @@ BI.FloatBox = BI.inherit(BI.Widget, {
                         type: "bi.absolute",
                         items: [{
                             el: this._center,
-                            left: 10,
-                            top: 10,
-                            right: 10,
-                            bottom: 10
+                            left: 20,
+                            top: 20,
+                            right: 20,
+                            bottom: 0
                         }]
                     }
                 },
@@ -40892,9 +40959,9 @@ BI.FloatBox = BI.inherit(BI.Widget, {
                         type: "bi.absolute",
                         items: [{
                             el: this._south,
-                            left: 10,
+                            left: 20,
                             top: 0,
-                            right: 10,
+                            right: 20,
                             bottom: 0
                         }]
                     },
@@ -42426,7 +42493,7 @@ BI.RichEditorAlignCenterButton = BI.inherit(BI.RichEditorAction, {
             title: BI.i18nText("BI-Word_Align_Center"),
             height: 20,
             width: 20,
-            cls: "text-toolbar-button bi-list-item-active text-align-center-font",
+            cls: "text-toolbar-button bi-list-item-active text-align-center-font"
         });
         this.align.on(BI.IconButton.EVENT_CHANGE, function () {
             self.doCommand();
@@ -42463,7 +42530,7 @@ BI.RichEditorAlignLeftButton = BI.inherit(BI.RichEditorAction, {
             title: BI.i18nText("BI-Word_Align_Left"),
             height: 20,
             width: 20,
-            cls: "text-toolbar-button bi-list-item-active text-align-left-font",
+            cls: "text-toolbar-button bi-list-item-active text-align-left-font"
         });
         this.align.on(BI.IconButton.EVENT_CHANGE, function () {
             self.doCommand();
@@ -42500,7 +42567,7 @@ BI.RichEditorAlignRightButton = BI.inherit(BI.RichEditorAction, {
             title: BI.i18nText("BI-Word_Align_Right"),
             height: 20,
             width: 20,
-            cls: "text-toolbar-button bi-list-item-active text-align-right-font",
+            cls: "text-toolbar-button bi-list-item-active text-align-right-font"
         });
         this.align.on(BI.IconButton.EVENT_CHANGE, function () {
             self.doCommand();
@@ -42538,7 +42605,7 @@ BI.RichEditorBoldButton = BI.inherit(BI.RichEditorAction, {
             title: BI.i18nText("BI-Basic_Bold"),
             height: 20,
             width: 20,
-            cls: "text-toolbar-button bi-list-item-active text-bold-font",
+            cls: "text-toolbar-button bi-list-item-active text-bold-font"
         });
         this.bold.on(BI.IconButton.EVENT_CHANGE, function () {
             self.doCommand();
@@ -42550,7 +42617,7 @@ BI.RichEditorBoldButton = BI.inherit(BI.RichEditorAction, {
 
     deactivate: function () {
         this.bold.setSelected(false);
-    },
+    }
 });
 BI.shortcut("bi.rich_editor_bold_button", BI.RichEditorBoldButton)/**
  *
@@ -42578,7 +42645,7 @@ BI.RichEditorItalicButton = BI.inherit(BI.RichEditorAction, {
             title: BI.i18nText("BI-Basic_Italic"),
             height: 20,
             width: 20,
-            cls: "text-toolbar-button bi-list-item-active text-italic-font",
+            cls: "text-toolbar-button bi-list-item-active text-italic-font"
         });
         this.italic.on(BI.IconButton.EVENT_CHANGE, function () {
             self.doCommand();
@@ -42590,7 +42657,7 @@ BI.RichEditorItalicButton = BI.inherit(BI.RichEditorAction, {
 
     deactivate: function () {
         this.italic.setSelected(false);
-    },
+    }
 });
 BI.shortcut("bi.rich_editor_italic_button", BI.RichEditorItalicButton)/**
  *
@@ -42602,7 +42669,7 @@ BI.RichEditorParamButton = BI.inherit(BI.RichEditorParamAction, {
     _defaultConfig: function () {
         return BI.extend(BI.RichEditorParamButton.superclass._defaultConfig.apply(this, arguments), {
             width: 20,
-            height: 20,
+            height: 20
         });
     },
 
@@ -42654,7 +42721,7 @@ BI.RichEditorUnderlineButton = BI.inherit(BI.RichEditorAction, {
             title: BI.i18nText("BI-Basic_Underline"),
             height: 20,
             width: 20,
-            cls: "text-toolbar-button bi-list-item-active text-underline-font",
+            cls: "text-toolbar-button bi-list-item-active text-underline-font"
         });
         this.underline.on(BI.IconButton.EVENT_CHANGE, function () {
             self.doCommand();
@@ -42666,7 +42733,7 @@ BI.RichEditorUnderlineButton = BI.inherit(BI.RichEditorAction, {
 
     deactivate: function () {
         this.underline.setSelected(false);
-    },
+    }
 });
 BI.shortcut("bi.rich_editor_underline_button", BI.RichEditorUnderlineButton)/**
  * 颜色选择trigger
@@ -42730,7 +42797,7 @@ BI.RichEditorBackgroundColorChooser = BI.inherit(BI.RichEditorAction, {
     _defaultConfig: function () {
         return BI.extend(BI.RichEditorBackgroundColorChooser.superclass._defaultConfig.apply(this, arguments), {
             width: 20,
-            height: 20,
+            height: 20
         });
     },
 
@@ -44737,6 +44804,7 @@ BI.CodeEditor = BI.inherit(BI.Single, {
         }
         options.value = value;
         this.editor.markText(from, to, options);
+        this.editor.replaceSelection(" ");
         this.editor.focus();
     },
 
@@ -44800,10 +44868,6 @@ BI.CodeEditor = BI.inherit(BI.Single, {
     setStyle: function (style) {
         this.style = style;
         this.element.css(style);
-        var wrapperStyle = this.editor.getWrapperElement().style;
-        BI.extend(wrapperStyle, style, {
-                color: style.color || BI.DOM.getContrastColor(BI.DOM.isRGBColor(style.backgroundColor) ? BI.DOM.rgb2hex(style.backgroundColor) : style.backgroundColor)
-        });
     },
 
     getStyle: function () {
@@ -56005,7 +56069,7 @@ BI.CollectionTable = BI.inherit(BI.Widget, {
                 el: this.leftScrollbar,
                 left: 0
             }, {
-                el: this.rightScrollbar,
+                el: this.rightScrollbar
             }]
         });
         this._width = o.width - BI.GridTableScrollbar.SIZE;
@@ -56021,7 +56085,8 @@ BI.CollectionTable = BI.inherit(BI.Widget, {
     },
 
     _getFreezeColLength: function () {
-        return this.options.isNeedFreeze ? this.options.freezeCols.length : 0;
+        var o = this.options;
+        return o.isNeedFreeze === true ? BI.clamp(o.freezeCols.length, 0, o.columnSize.length) : 0;
     },
 
     _getFreezeHeaderHeight: function () {
@@ -56828,7 +56893,8 @@ BI.GridTable = BI.inherit(BI.Widget, {
     },
 
     _getFreezeColLength: function () {
-        return this.options.isNeedFreeze ? this.options.freezeCols.length : 0;
+        var o = this.options;
+        return o.isNeedFreeze === true ? BI.clamp(o.freezeCols.length, 0, o.columnSize.length) : 0;
     },
 
     _getFreezeHeaderHeight: function () {
@@ -58141,16 +58207,15 @@ BI.Table = BI.inherit(BI.Widget, {
         }))));
 
         this._initFreezeScroll();
-        BI.nextTick(function () {
-            if (self.element.is(":visible")) {
-                self._resize();
-                self.fireEvent(BI.Table.EVENT_TABLE_AFTER_INIT);
-            }
-        });
         BI.ResizeDetector.addResizeListener(this, function () {
             self._resize();
             self.fireEvent(BI.Table.EVENT_TABLE_RESIZE);
         });
+    },
+
+    mounted: function () {
+        this._resize && this._resize();
+        this.fireEvent(BI.Table.EVENT_TABLE_AFTER_INIT);
     },
 
     _initFreezeScroll: function () {
@@ -58494,9 +58559,7 @@ BI.Table = BI.inherit(BI.Widget, {
         });
     },
 
-    _init: function () {
-        BI.Table.superclass._init.apply(this, arguments);
-
+    render: function () {
         this.populate(this.options.items);
     },
 
@@ -59697,7 +59760,8 @@ BI.ResizableTable = BI.inherit(BI.Widget, {
     },
 
     _getFreezeColLength: function () {
-        return this.options.freezeCols.length;
+        var o = this.options;
+        return o.isNeedFreeze === true ? BI.clamp(o.freezeCols.length, 0, o.columnSize.length) : 0;
     },
 
     _getFreezeColumnSize: function () {
@@ -62648,7 +62712,7 @@ BI.SingleSelectItem = BI.inherit(BI.BasicButton, {
             extraCls: "bi-single-select-item bi-list-item-active",
             hgap: 10,
             height: 25,
-            textAlign: "left",
+            textAlign: "left"
         })
     },
     _init: function () {
@@ -67183,7 +67247,7 @@ BI.BubbleCombo = BI.inherit(BI.Widget, {
             hideChecker: BI.emptyFn,
             offsetStyle: "left", //left,right,center
             el: {},
-            popup: {},
+            popup: {}
         })
     },
     _init: function () {
@@ -67208,7 +67272,7 @@ BI.BubbleCombo = BI.inherit(BI.Widget, {
             el: o.el,
             popup: BI.extend({
                 type: "bi.bubble_popup_view"
-            }, o.popup),
+            }, o.popup)
         });
         this.combo.on(BI.Combo.EVENT_TRIGGER_CHANGE, function () {
             self.fireEvent(BI.BubbleCombo.EVENT_TRIGGER_CHANGE, arguments);
@@ -67625,6 +67689,8 @@ BI.IconCombo = BI.inherit(BI.Widget, {
             type: "bi.combo",
             element: this,
             direction: o.direction,
+            trigger: o.trigger,
+            container: o.container,
             adjustLength: o.adjustLength,
             adjustXOffset: o.adjustXOffset,
             adjustYOffset: o.adjustYOffset,
@@ -71906,7 +71972,8 @@ BI.AdaptiveTable = BI.inherit(BI.Widget, {
     },
 
     _getFreezeColLength: function () {
-        return this.options.isNeedFreeze === true ? this.options.freezeCols.length : 0;
+        var o = this.options;
+        return o.isNeedFreeze === true ? BI.clamp(o.freezeCols.length, 0, o.columnSize.length) : 0;
     },
 
     _digest: function () {
@@ -74964,7 +75031,7 @@ BI.shortcut("bi.small_select_text_trigger", BI.SmallSelectTextTrigger);/**
  */
 BI.SmallTextTrigger = BI.inherit(BI.Trigger, {
     _const: {
-        hgap: 4,
+        hgap: 4
     },
 
     _defaultConfig: function () {
@@ -78157,7 +78224,7 @@ BI.shortcut("bi.date_time_select", BI.DateTimeSelect);/**
  */
 BI.DateTimeTrigger = BI.inherit(BI.Trigger, {
     _const: {
-        hgap: 4,
+        hgap: 4
     },
 
     _defaultConfig: function () {
@@ -78300,7 +78367,7 @@ BI.DirectionPathChooser = BI.inherit(BI.Widget, {
         var self = this, o = this.options;
         var routes = this.pathChooser.routes;
         var pathes = this.pathChooser.pathes;
-        var store = this.pathChooser.store;
+        var cache = this.pathChooser.cache;
         this.arrows = {};
         BI.each(routes, function (region, ps) {
             self.arrows[region] = [];
@@ -78312,7 +78379,7 @@ BI.DirectionPathChooser = BI.inherit(BI.Widget, {
                         var arrow;
                         if (dot.y === dots[i - 1].y) {
                             if (dots[i + 1].y != dot.y) {
-                                if (store[path[path.length - 2]].direction === -1) {
+                                if (cache[path[path.length - 2]].direction === -1) {
                                     if (i - 1 > 0) {
                                         arrow = self._drawOneArrow(dots[i - 1], 3);
                                     }
@@ -78322,13 +78389,13 @@ BI.DirectionPathChooser = BI.inherit(BI.Widget, {
                             }
                         } else if (dot.x === dots[i - 1].x) {
                             if (dot.y > dots[i - 1].y) {
-                                if (store[BI.first(path)].direction === -1) {
+                                if (cache[BI.first(path)].direction === -1) {
                                     arrow = self._drawOneArrow(dots[i - 1], 0);
                                 } else {
                                     arrow = self._drawOneArrow(dot, 2);
                                 }
                             } else {
-                                if (store[path[path.length - 2]].direction === -1) {
+                                if (cache[path[path.length - 2]].direction === -1) {
                                     arrow = self._drawOneArrow(dots[i - 1], 2);
                                 } else {
                                     arrow = self._drawOneArrow(dot, 0);
@@ -78344,7 +78411,7 @@ BI.DirectionPathChooser = BI.inherit(BI.Widget, {
                     if (i !== 0) {
                         var arrow;
                         var from = path[i - 1];
-                        if (store[from].direction === -1) {
+                        if (cache[from].direction === -1) {
                             var regionIndex = self.pathChooser.getRegionIndexById(from);
                             var x = getXoffsetByRegionIndex(regionIndex, -1);
                             var y = getYByXoffset(dots, x);
@@ -80619,6 +80686,1187 @@ BI.InteractiveArrangement = BI.inherit(BI.Widget, {
 BI.InteractiveArrangement.EVENT_RESIZE = "InteractiveArrangement.EVENT_RESIZE";
 BI.InteractiveArrangement.EVENT_SCROLL = "InteractiveArrangement.EVENT_SCROLL";
 BI.shortcut('bi.interactive_arrangement', BI.InteractiveArrangement);/**
+ * Created by zcf on 2016/9/26.
+ */
+BI.IntervalSlider = BI.inherit(BI.Widget, {
+    _constant: {
+        EDITOR_WIDTH: 58,
+        EDITOR_R_GAP: 60,
+        EDITOR_HEIGHT: 30,
+        SLIDER_WIDTH_HALF: 15,
+        SLIDER_WIDTH: 30,
+        SLIDER_HEIGHT: 30,
+        TRACK_HEIGHT: 24
+    },
+
+    _defaultConfig: function () {
+        return BI.extend(BI.IntervalSlider.superclass._defaultConfig.apply(this, arguments), {
+            baseCls: "bi-interval-slider bi-slider-track"
+        })
+    },
+
+    _init: function () {
+        BI.IntervalSlider.superclass._init.apply(this, arguments);
+
+        var self = this;
+        var c = this._constant;
+        this.enable = false;
+        this.valueOne = "";
+        this.valueTwo = "";
+        this.calculation = new BI.AccurateCalculationModel();
+
+        // this.backgroundTrack = BI.createWidget({
+        //     type: "bi.layout",
+        //     cls: "background-track",
+        //     height: c.TRACK_HEIGHT
+        // });
+        this.grayTrack = BI.createWidget({
+            type: "bi.layout",
+            cls: "gray-track",
+            height: 6
+        });
+        this.blueTrack = BI.createWidget({
+            type: "bi.layout",
+            cls: "blue-track bi-high-light-background",
+            height: 6
+        });
+        this.track = this._createTrackWrapper();
+
+        this.labelOne = BI.createWidget({
+            type: "bi.sign_editor",
+            cls: "slider-editor-button",
+            errorText: "",
+            allowBlank: false,
+            width: c.EDITOR_WIDTH,
+            validationChecker: function (v) {
+                return self._checkValidation(v);
+            }
+        });
+        this.labelOne.element.hover(function () {
+            self.labelOne.element.removeClass("bi-border").addClass("bi-border");
+        }, function () {
+            self.labelOne.element.removeClass("bi-border");
+        });
+        this.labelOne.on(BI.Editor.EVENT_CONFIRM, function () {
+            var v = BI.parseFloat(this.getValue());
+            self.valueOne = v;
+            var percent = self._getPercentByValue(v);
+            var significantPercent = BI.parseFloat(percent.toFixed(1));//分成1000份
+            self._setLabelOnePosition(significantPercent);
+            self._setSliderOnePosition(significantPercent);
+            self._setBlueTrack();
+            self.fireEvent(BI.IntervalSlider.EVENT_CHANGE);
+        });
+
+        this.labelTwo = BI.createWidget({
+            type: "bi.sign_editor",
+            cls: "slider-editor-button",
+            errorText: "",
+            allowBlank: false,
+            width: c.EDITOR_WIDTH,
+            validationChecker: function (v) {
+                return self._checkValidation(v);
+            }
+        });
+        this.labelTwo.element.hover(function () {
+            self.labelTwo.element.removeClass("bi-border").addClass("bi-border");
+        }, function () {
+            self.labelTwo.element.removeClass("bi-border");
+        });
+        this.labelTwo.on(BI.Editor.EVENT_CONFIRM, function () {
+            var v = BI.parseFloat(this.getValue());
+            self.valueTwo = v;
+            var percent = self._getPercentByValue(v);
+            var significantPercent = BI.parseFloat(percent.toFixed(1));
+            self._setLabelTwoPosition(significantPercent);
+            self._setSliderTwoPosition(significantPercent);
+            self._setBlueTrack();
+            self.fireEvent(BI.IntervalSlider.EVENT_CHANGE);
+        });
+
+        this.sliderOne = BI.createWidget({
+            type: "bi.single_slider_button"
+        });
+        this.sliderTwo = BI.createWidget({
+            type: "bi.single_slider_button"
+        });
+        this._draggable(this.sliderOne, true);
+        this._draggable(this.sliderTwo, false);
+        this._setVisible(false);
+
+        BI.createWidget({
+            type: "bi.absolute",
+            element: this,
+            items: [{
+                el: {
+                    type: "bi.vertical",
+                    items: [{
+                        type: "bi.absolute",
+                        items: [{
+                            el: this.track,
+                            width: "100%",
+                            height: c.TRACK_HEIGHT
+                        }]
+                    }],
+                    hgap: 7,
+                    height: c.TRACK_HEIGHT
+                },
+                top: 23,
+                left: 0,
+                width: "100%"
+            },
+                this._createLabelWrapper(),
+                this._createSliderWrapper()
+            ]
+        })
+    },
+
+    _rePosBySizeAfterMove: function (size, isLeft) {
+        var percent = size * 100 / (this._getGrayTrackLength());
+        var significantPercent = BI.parseFloat(percent.toFixed(1));
+        var v = this._getValueByPercent(significantPercent);
+        v = this._assertValue(v);
+        if(isLeft){
+            this._setLabelOnePosition(significantPercent);
+            this._setSliderOnePosition(significantPercent);
+            this.labelOne.setValue(v);
+            this.valueOne = v;
+        }else{
+            this._setLabelTwoPosition(significantPercent);
+            this._setSliderTwoPosition(significantPercent);
+            this.labelTwo.setValue(v);
+            this.valueTwo = v;
+        }
+        this._setBlueTrack();
+    },
+
+    _rePosBySizeAfterStop: function (size, isLeft) {
+        var percent = size * 100 / (this._getGrayTrackLength());
+        var significantPercent = BI.parseFloat(percent.toFixed(1));
+        isLeft ? this._setSliderOnePosition(significantPercent) : this._setSliderTwoPosition(significantPercent);
+    },
+
+    _draggable: function (widget, isLeft) {
+        var self = this, o = this.options;
+        var startDrag = false;
+        var size = 0, offset = 0, defaultSize = 0;
+        var mouseMoveTracker = new BI.MouseMoveTracker(function (deltaX) {
+            if (mouseMoveTracker.isDragging()) {
+                startDrag = true;
+                offset += deltaX;
+                size = optimizeSize(defaultSize + offset);
+                widget.element.addClass("dragging");
+                self._rePosBySizeAfterMove(size, isLeft);
+            }
+        }, function () {
+            if (startDrag === true) {
+                size = optimizeSize(size);
+                self._rePosBySizeAfterStop(size, isLeft);
+                size = 0;
+                offset = 0;
+                defaultSize = size;
+                startDrag = false;
+            }
+            widget.element.removeClass("dragging");
+            mouseMoveTracker.releaseMouseMoves();
+            self.fireEvent(BI.IntervalSlider.EVENT_CHANGE);
+        }, document);
+        widget.element.on("mousedown", function (event) {
+            if(!widget.isEnabled()){
+                return;
+            }
+            defaultSize = this.offsetLeft;
+            optimizeSize(defaultSize);
+            mouseMoveTracker.captureMouseMoves(event);
+        });
+
+        function optimizeSize(s) {
+            return BI.clamp(s, 0, self._getGrayTrackLength());
+        }
+    },
+
+    _createLabelWrapper: function () {
+        var c = this._constant;
+        return {
+            el: {
+                type: "bi.vertical",
+                items: [{
+                    type: "bi.absolute",
+                    items: [{
+                        el: this.labelOne,
+                        top: 0,
+                        left: "0%"
+                    }]
+                }, {
+                    type: "bi.absolute",
+                    items: [{
+                        el: this.labelTwo,
+                        top: 0,
+                        left: "100%"
+                    }]
+                }],
+                rgap: c.EDITOR_R_GAP,
+                height: 70
+            },
+            top: 0,
+            left: 0,
+            width: "100%"
+        }
+    },
+
+    _createSliderWrapper: function () {
+        var c = this._constant;
+        return {
+            el: {
+                type: "bi.vertical",
+                items: [{
+                    type: "bi.absolute",
+                    items: [{
+                        el: this.sliderOne,
+                        top: 0,
+                        left: "0%"
+                    }]
+                }, {
+                    type: "bi.absolute",
+                    items: [{
+                        el: this.sliderTwo,
+                        top: 0,
+                        left: "100%"
+                    }]
+                }],
+                hgap: c.SLIDER_WIDTH_HALF,
+                height: c.SLIDER_HEIGHT
+            },
+            top: 20,
+            left: 0,
+            width: "100%"
+        }
+    },
+
+    _createTrackWrapper: function () {
+        return BI.createWidget({
+            type: "bi.absolute",
+            items: [{
+                el: {
+                    type: "bi.vertical",
+                    items: [{
+                        type: "bi.absolute",
+                        items: [{
+                            el: this.grayTrack,
+                            top: 0,
+                            left: 0,
+                            width: "100%"
+                        }, {
+                            el: this.blueTrack,
+                            top: 0,
+                            left: 0,
+                            width: "0%"
+                        }]
+                    }],
+                    hgap: 8,
+                    height: 8
+                },
+                top: 8,
+                left: 0,
+                width: "100%"
+            }]
+        })
+    },
+
+    _checkValidation: function (v) {
+        return BI.isNumeric(v) && !(BI.isNull(v) || v < this.min || v > this.max)
+    },
+
+    _checkOverlap: function () {
+        var labelOneLeft = this.labelOne.element[0].offsetLeft;
+        var labelTwoLeft = this.labelTwo.element[0].offsetLeft;
+        if (labelOneLeft <= labelTwoLeft) {
+            if ((labelTwoLeft - labelOneLeft) < 90) {
+                this.labelTwo.element.css({"top": 40});
+            } else {
+                this.labelTwo.element.css({"top": 0});
+            }
+        } else {
+            if ((labelOneLeft - labelTwoLeft) < 90) {
+                this.labelTwo.element.css({"top": 40});
+            } else {
+                this.labelTwo.element.css({"top": 0});
+            }
+        }
+    },
+
+    _setLabelOnePosition: function (percent) {
+        this.labelOne.element.css({"left": percent + "%"});
+        this._checkOverlap();
+    },
+
+    _setLabelTwoPosition: function (percent) {
+        this.labelTwo.element.css({"left": percent + "%"});
+        this._checkOverlap();
+    },
+
+    _setSliderOnePosition: function (percent) {
+        this.sliderOne.element.css({"left": percent + "%"});
+    },
+
+    _setSliderTwoPosition: function (percent) {
+        this.sliderTwo.element.css({"left": percent + "%"});
+    },
+
+    _setBlueTrackLeft: function (percent) {
+        this.blueTrack.element.css({"left": percent + "%"});
+    },
+
+    _setBlueTrackWidth: function (percent) {
+        this.blueTrack.element.css({"width": percent + "%"});
+    },
+
+    _setBlueTrack: function () {
+        var percentOne = this._getPercentByValue(this.labelOne.getValue());
+        var percentTwo = this._getPercentByValue(this.labelTwo.getValue());
+        if (percentOne <= percentTwo) {
+            this._setBlueTrackLeft(percentOne);
+            this._setBlueTrackWidth(percentTwo - percentOne);
+        } else {
+            this._setBlueTrackLeft(percentTwo);
+            this._setBlueTrackWidth(percentOne - percentTwo);
+        }
+    },
+
+    _setAllPosition: function (one, two) {
+        this._setSliderOnePosition(one);
+        this._setLabelOnePosition(one);
+        this._setSliderTwoPosition(two);
+        this._setLabelTwoPosition(two);
+        this._setBlueTrack();
+    },
+
+    _setVisible: function (visible) {
+        this.sliderOne.setVisible(visible);
+        this.sliderTwo.setVisible(visible);
+        this.labelOne.setVisible(visible);
+        this.labelTwo.setVisible(visible);
+    },
+
+    _setErrorText: function () {
+        var errorText = BI.i18nText("BI-Please_Enter") + this.min + "-" + this.max + BI.i18nText("BI-Basic_De") + BI.i18nText("BI-Basic_Number");
+        this.labelOne.setErrorText(errorText);
+        this.labelTwo.setErrorText(errorText);
+    },
+
+    _getGrayTrackLength: function () {
+        return this.grayTrack.element[0].scrollWidth
+    },
+
+    //其中取max-min后保留4为有效数字后的值的小数位数为最终value的精度
+    _getValueByPercent: function (percent) {//return (((max-min)*percent)/100+min)
+        var sub = this.calculation.accurateSubtraction(this.max, this.min);
+        var mul = this.calculation.accurateMultiplication(sub, percent);
+        var div = this.calculation.accurateDivisionTenExponent(mul, 2);
+        if(this.precision < 0){
+            var value = BI.parseFloat(this.calculation.accurateAddition(div, this.min));
+            var reduceValue = Math.round(this.calculation.accurateDivisionTenExponent(value, -this.precision));
+            return this.calculation.accurateMultiplication(reduceValue, Math.pow(10, -this.precision));
+        }else{
+            return BI.parseFloat(this.calculation.accurateAddition(div, this.min).toFixed(this.precision));
+        }
+    },
+
+    _getPercentByValue: function (v) {
+        return (v - this.min) * 100 / (this.max - this.min);
+    },
+
+    _setDraggableEnable: function (enable) {
+        this.sliderOne.setEnable(enable);
+        this.sliderTwo.setEnable(enable);
+    },
+
+    _getPrecision: function () {
+        //计算每一份值的精度(最大值和最小值的差值保留4为有效数字后的精度)
+        //如果差值的整数位数大于4,toPrecision(4)得到的是科学计数法123456 => 1.235e+5
+        //返回非负值: 保留的小数位数
+        //返回负值: 保留的10^n精度中的n
+        var sub = this.calculation.accurateSubtraction(this.max, this.min);
+        var pre = sub.toPrecision(4);
+        //科学计数法
+        var eIndex = pre.indexOf("e");
+        var arr = [];
+        if(eIndex > -1){
+            arr = pre.split("e");
+            var decimalPartLength = BI.size(arr[0].split(".")[1]);
+            var sciencePartLength = BI.parseInt(arr[1].substring(1));
+            return decimalPartLength - sciencePartLength;
+        }else{
+            arr = pre.split(".");
+            return arr.length > 1 ? arr[1].length : 0;
+        }
+    },
+
+    _assertValue: function (value) {
+        if(value <= this.min){
+            return this.min
+        }
+        if(value >= this.max){
+            return this.max;
+        }
+        return value;
+    },
+
+    getValue: function () {
+        if (this.valueOne <= this.valueTwo) {
+            return {min: this.valueOne, max: this.valueTwo}
+        } else {
+            return {min: this.valueTwo, max: this.valueOne}
+        }
+    },
+
+    setMinAndMax: function (v) {
+        var minNumber = BI.parseFloat(v.min);
+        var maxNumber = BI.parseFloat(v.max);
+        if ((!isNaN(minNumber)) && (!isNaN(maxNumber)) && (maxNumber >= minNumber )) {
+            this.min = minNumber;
+            this.max = maxNumber;
+            this.valueOne = minNumber;
+            this.valueTwo = maxNumber;
+            this.precision = this._getPrecision();
+            this._setDraggableEnable(true);
+        }
+        if (maxNumber === minNumber) {
+            this._setDraggableEnable(false);
+        }
+    },
+
+    setValue: function (v) {
+        var valueOne = BI.parseFloat(v.min);
+        var valueTwo = BI.parseFloat(v.max);
+        if (!isNaN(valueOne) && !isNaN(valueTwo)) {
+            if (this._checkValidation(valueOne)) {
+                this.valueOne = valueOne;
+            }
+            if (this._checkValidation(valueTwo)) {
+                this.valueTwo = valueTwo;
+            }
+            if (valueOne < this.min) {
+                this.valueOne = this.min;
+            }
+            if (valueTwo > this.max) {
+                this.valueTwo = this.max;
+            }
+        }
+    },
+
+    reset: function () {
+        this._setVisible(false);
+        this.enable = false;
+        this.valueOne = "";
+        this.valueTwo = "";
+        this.min = NaN;
+        this.max = NaN;
+        this._setBlueTrackWidth(0);
+    },
+
+    populate: function () {
+        if (!isNaN(this.min) && !isNaN(this.max)) {
+            this.enable = true;
+            this._setVisible(true);
+            this._setErrorText();
+            if ((BI.isNumeric(this.valueOne) || BI.isNotEmptyString(this.valueOne)) && (BI.isNumeric(this.valueTwo) || BI.isNotEmptyString(this.valueTwo))) {
+                this.labelOne.setValue(this.valueOne);
+                this.labelTwo.setValue(this.valueTwo);
+                this._setAllPosition(this._getPercentByValue(this.valueOne), this._getPercentByValue(this.valueTwo));
+            } else {
+                this.labelOne.setValue(this.min);
+                this.labelTwo.setValue(this.max);
+                this._setAllPosition(0, 100)
+            }
+        }
+    }
+});
+BI.IntervalSlider.EVENT_CHANGE = "EVENT_CHANGE";
+BI.shortcut("bi.interval_slider", BI.IntervalSlider);/**
+ * Created by zcf on 2016/9/26.
+ */
+BI.IntervalSliderLabel = BI.inherit(BI.Widget, {
+    _constant: {
+        EDITOR_WIDTH: 58,
+        EDITOR_R_GAP: 60,
+        EDITOR_HEIGHT: 20,
+        HEIGHT: 20,
+        SLIDER_WIDTH_HALF: 15,
+        SLIDER_WIDTH: 30,
+        SLIDER_HEIGHT: 30,
+        TRACK_HEIGHT: 24
+    },
+
+    _defaultConfig: function () {
+        return BI.extend(BI.IntervalSliderLabel.superclass._defaultConfig.apply(this, arguments), {
+            baseCls: "bi-interval-slider-label bi-slider-track",
+            digit: false,
+            unit: ""
+        })
+    },
+
+    _init: function () {
+        BI.IntervalSliderLabel.superclass._init.apply(this, arguments);
+
+        var self = this, o = this.options;
+        var c = this._constant;
+        this.enable = false;
+        this.valueOne = "";
+        this.valueTwo = "";
+        this.calculation = new BI.AccurateCalculationModel();
+
+        this.grayTrack = BI.createWidget({
+            type: "bi.layout",
+            cls: "gray-track",
+            height: 6
+        });
+        this.blueTrack = BI.createWidget({
+            type: "bi.layout",
+            cls: "blue-track bi-high-light-background",
+            height: 6
+        });
+        this.track = this._createTrackWrapper();
+
+        this.labelOne = BI.createWidget({
+            type: "bi.label",
+            height: c.HEIGHT,
+            width: c.EDITOR_WIDTH
+        });
+
+        this.labelTwo = BI.createWidget({
+            type: "bi.label",
+            height: c.HEIGHT,
+            width: c.EDITOR_WIDTH
+        });
+
+        this.sliderOne = BI.createWidget({
+            type: "bi.single_slider_button"
+        });
+
+        this.sliderTwo = BI.createWidget({
+            type: "bi.single_slider_button"
+        });
+        this._draggable(this.sliderOne, true);
+        this._draggable(this.sliderTwo, false);
+        this._setVisible(false);
+
+        BI.createWidget({
+            type: "bi.absolute",
+            element: this,
+            items: [{
+                el: {
+                    type: "bi.vertical",
+                    items: [{
+                        type: "bi.absolute",
+                        items: [{
+                            el: this.track,
+                            width: "100%",
+                            height: c.TRACK_HEIGHT
+                        }]
+                    }],
+                    hgap: 7,
+                    height: c.TRACK_HEIGHT
+                },
+                top: 13,
+                left: 0,
+                width: "100%"
+            },
+                this._createLabelWrapper(),
+                this._createSliderWrapper()
+            ]
+        })
+    },
+
+    _rePosBySizeAfterMove: function (size, isLeft) {
+        var o = this.options;
+        var percent = size * 100 / (this._getGrayTrackLength());
+        var significantPercent = BI.parseFloat(percent.toFixed(1));
+        var v = this._getValueByPercent(significantPercent);
+        v = this._assertValue(v);
+        v = o.digit === false ? v : v.toFixed(o.digit);
+        if(isLeft){
+            this._setLabelOnePosition(significantPercent);
+            this._setSliderOnePosition(significantPercent);
+            this.labelOne.setValue(v);
+            this.labelOne.setText(v + o.unit);
+            this.valueOne = v;
+        }else{
+            this._setLabelTwoPosition(significantPercent);
+            this._setSliderTwoPosition(significantPercent);
+            this.labelTwo.setValue(v);
+            this.labelTwo.setText(v + o.unit);
+            this.valueTwo = v;
+        }
+        this._setBlueTrack();
+    },
+
+    _rePosBySizeAfterStop: function (size, isLeft) {
+        var percent = size * 100 / (this._getGrayTrackLength());
+        var significantPercent = BI.parseFloat(percent.toFixed(1));
+        isLeft ? this._setSliderOnePosition(significantPercent) : this._setSliderTwoPosition(significantPercent);
+    },
+
+    _draggable: function (widget, isLeft) {
+        var self = this, o = this.options;
+        var startDrag = false;
+        var size = 0, offset = 0, defaultSize = 0;
+        var mouseMoveTracker = new BI.MouseMoveTracker(function (deltaX) {
+            if (mouseMoveTracker.isDragging()) {
+                startDrag = true;
+                offset += deltaX;
+                size = optimizeSize(defaultSize + offset);
+                widget.element.addClass("dragging");
+                self._rePosBySizeAfterMove(size, isLeft);
+            }
+        }, function () {
+            if (startDrag === true) {
+                size = optimizeSize(size);
+                self._rePosBySizeAfterStop(size, isLeft);
+                size = 0;
+                offset = 0;
+                defaultSize = size;
+                startDrag = false;
+            }
+            widget.element.removeClass("dragging");
+            mouseMoveTracker.releaseMouseMoves();
+            self.fireEvent(BI.IntervalSliderLabel.EVENT_CHANGE);
+        }, document);
+        widget.element.on("mousedown", function (event) {
+            if(!widget.isEnabled()){
+                return;
+            }
+            defaultSize = this.offsetLeft;
+            optimizeSize(defaultSize);
+            mouseMoveTracker.captureMouseMoves(event);
+        });
+
+        function optimizeSize(s) {
+            return BI.clamp(s, 0, self._getGrayTrackLength());
+        }
+    },
+
+    _createLabelWrapper: function () {
+        var c = this._constant;
+        return {
+            el: {
+                type: "bi.vertical",
+                items: [{
+                    type: "bi.absolute",
+                    items: [{
+                        el: this.labelOne,
+                        top: 0,
+                        left: "0%"
+                    }]
+                }, {
+                    type: "bi.absolute",
+                    items: [{
+                        el: this.labelTwo,
+                        top: 0,
+                        left: "100%"
+                    }]
+                }],
+                rgap: c.EDITOR_R_GAP,
+                height: 50
+            },
+            top: 0,
+            left: 0,
+            width: "100%"
+        }
+    },
+
+    _createSliderWrapper: function () {
+        var c = this._constant;
+        return {
+            el: {
+                type: "bi.vertical",
+                items: [{
+                    type: "bi.absolute",
+                    items: [{
+                        el: this.sliderOne,
+                        top: 0,
+                        left: "0%"
+                    }]
+                }, {
+                    type: "bi.absolute",
+                    items: [{
+                        el: this.sliderTwo,
+                        top: 0,
+                        left: "100%"
+                    }]
+                }],
+                hgap: c.SLIDER_WIDTH_HALF,
+                height: c.SLIDER_HEIGHT
+            },
+            top: 10,
+            left: 0,
+            width: "100%"
+        }
+    },
+
+    _createTrackWrapper: function () {
+        return BI.createWidget({
+            type: "bi.absolute",
+            items: [{
+                el: {
+                    type: "bi.vertical",
+                    items: [{
+                        type: "bi.absolute",
+                        items: [{
+                            el: this.grayTrack,
+                            top: 0,
+                            left: 0,
+                            width: "100%"
+                        }, {
+                            el: this.blueTrack,
+                            top: 0,
+                            left: 0,
+                            width: "0%"
+                        }]
+                    }],
+                    hgap: 8,
+                    height: 8
+                },
+                top: 8,
+                left: 0,
+                width: "100%"
+            }]
+        })
+    },
+
+    _checkValidation: function (v) {
+        return BI.isNumeric(v) && !(BI.isNull(v) || v < this.min || v > this.max)
+    },
+
+    _checkOverlap: function () {
+        var labelOneLeft = this.labelOne.element[0].offsetLeft;
+        var labelTwoLeft = this.labelTwo.element[0].offsetLeft;
+        if (labelOneLeft <= labelTwoLeft) {
+            if ((labelTwoLeft - labelOneLeft) < 90) {
+                this.labelTwo.element.css({"top": 30});
+            } else {
+                this.labelTwo.element.css({"top": 0});
+            }
+        } else {
+            if ((labelOneLeft - labelTwoLeft) < 90) {
+                this.labelTwo.element.css({"top": 30});
+            } else {
+                this.labelTwo.element.css({"top": 0});
+            }
+        }
+    },
+
+    _setLabelOnePosition: function (percent) {
+        this.labelOne.element.css({"left": percent + "%"});
+        this._checkOverlap();
+    },
+
+    _setLabelTwoPosition: function (percent) {
+        this.labelTwo.element.css({"left": percent + "%"});
+        this._checkOverlap();
+    },
+
+    _setSliderOnePosition: function (percent) {
+        this.sliderOne.element.css({"left": percent + "%"});
+    },
+
+    _setSliderTwoPosition: function (percent) {
+        this.sliderTwo.element.css({"left": percent + "%"});
+    },
+
+    _setBlueTrackLeft: function (percent) {
+        this.blueTrack.element.css({"left": percent + "%"});
+    },
+
+    _setBlueTrackWidth: function (percent) {
+        this.blueTrack.element.css({"width": percent + "%"});
+    },
+
+    _setBlueTrack: function () {
+        var percentOne = this._getPercentByValue(this.labelOne.getValue());
+        var percentTwo = this._getPercentByValue(this.labelTwo.getValue());
+        if (percentOne <= percentTwo) {
+            this._setBlueTrackLeft(percentOne);
+            this._setBlueTrackWidth(percentTwo - percentOne);
+        } else {
+            this._setBlueTrackLeft(percentTwo);
+            this._setBlueTrackWidth(percentOne - percentTwo);
+        }
+    },
+
+    _setAllPosition: function (one, two) {
+        this._setSliderOnePosition(one);
+        this._setLabelOnePosition(one);
+        this._setSliderTwoPosition(two);
+        this._setLabelTwoPosition(two);
+        this._setBlueTrack();
+    },
+
+    _setVisible: function (visible) {
+        this.sliderOne.setVisible(visible);
+        this.sliderTwo.setVisible(visible);
+        this.labelOne.setVisible(visible);
+        this.labelTwo.setVisible(visible);
+    },
+
+    _getGrayTrackLength: function () {
+        return this.grayTrack.element[0].scrollWidth
+    },
+
+    //其中取max-min后保留4为有效数字后的值的小数位数为最终value的精度
+    _getValueByPercent: function (percent) {//return (((max-min)*percent)/100+min)
+        var sub = this.calculation.accurateSubtraction(this.max, this.min);
+        var mul = this.calculation.accurateMultiplication(sub, percent);
+        var div = this.calculation.accurateDivisionTenExponent(mul, 2);
+        if (this.precision < 0) {
+            var value = BI.parseFloat(this.calculation.accurateAddition(div, this.min));
+            var reduceValue = Math.round(this.calculation.accurateDivisionTenExponent(value, -this.precision));
+            return this.calculation.accurateMultiplication(reduceValue, Math.pow(10, -this.precision));
+        } else {
+            return BI.parseFloat(this.calculation.accurateAddition(div, this.min).toFixed(this.precision));
+        }
+    },
+
+    _getPercentByValue: function (v) {
+        return (v - this.min) * 100 / (this.max - this.min);
+    },
+
+    _setDraggableEnable: function (enable) {
+        this.sliderOne.setEnable(enable);
+        this.sliderTwo.setEnable(enable);
+    },
+
+    _getPrecision: function () {
+        //计算每一份值的精度(最大值和最小值的差值保留4为有效数字后的精度)
+        //如果差值的整数位数大于4,toPrecision(4)得到的是科学计数法123456 => 1.235e+5
+        //返回非负值: 保留的小数位数
+        //返回负值: 保留的10^n精度中的n
+        var sub = this.calculation.accurateSubtraction(this.max, this.min);
+        var pre = sub.toPrecision(4);
+        //科学计数法
+        var eIndex = pre.indexOf("e");
+        var arr = [];
+        if (eIndex > -1) {
+            arr = pre.split("e");
+            var decimalPartLength = BI.size(arr[0].split(".")[1]);
+            var sciencePartLength = BI.parseInt(arr[1].substring(1));
+            return decimalPartLength - sciencePartLength;
+        } else {
+            arr = pre.split(".");
+            return arr.length > 1 ? arr[1].length : 0;
+        }
+    },
+
+    _assertValue: function (value) {
+        if (value <= this.min) {
+            return this.min
+        }
+        if (value >= this.max) {
+            return this.max;
+        }
+        return value;
+    },
+
+    getValue: function () {
+        if (this.valueOne <= this.valueTwo) {
+            return {min: this.valueOne, max: this.valueTwo}
+        } else {
+            return {min: this.valueTwo, max: this.valueOne}
+        }
+    },
+
+    setMinAndMax: function (v) {
+        var minNumber = BI.parseFloat(v.min);
+        var maxNumber = BI.parseFloat(v.max);
+        if ((!isNaN(minNumber)) && (!isNaN(maxNumber)) && (maxNumber >= minNumber )) {
+            this.min = minNumber;
+            this.max = maxNumber;
+            this.valueOne = minNumber;
+            this.valueTwo = maxNumber;
+            this.precision = this._getPrecision();
+            this._setDraggableEnable(true);
+        }
+        if (maxNumber === minNumber) {
+            this._setDraggableEnable(false);
+        }
+    },
+
+    setValue: function (v) {
+        var o = this.options;
+        var valueOne = BI.parseFloat(v.min);
+        var valueTwo = BI.parseFloat(v.max);
+        valueOne = o.digit === false ? valueOne : valueOne.toFixed(o.digit);
+        valueTwo = o.digit === false ? valueTwo : valueTwo.toFixed(o.digit);
+        if (!isNaN(valueOne) && !isNaN(valueTwo)) {
+            if (this._checkValidation(valueOne)) {
+                this.valueOne = valueOne;
+            }
+            if (this._checkValidation(valueTwo)) {
+                this.valueTwo = valueTwo;
+            }
+            if (valueOne < this.min) {
+                this.valueOne = this.min;
+            }
+            if (valueTwo > this.max) {
+                this.valueTwo = this.max;
+            }
+        }
+    },
+
+    reset: function () {
+        this._setVisible(false);
+        this.enable = false;
+        this.valueOne = "";
+        this.valueTwo = "";
+        this.min = NaN;
+        this.max = NaN;
+        this._setBlueTrackWidth(0);
+    },
+
+    populate: function () {
+        var o = this.options;
+        if (!isNaN(this.min) && !isNaN(this.max)) {
+            this.enable = true;
+            this._setVisible(true);
+            if ((BI.isNumeric(this.valueOne) || BI.isNotEmptyString(this.valueOne)) && (BI.isNumeric(this.valueTwo) || BI.isNotEmptyString(this.valueTwo))) {
+                this.labelOne.setValue(this.valueOne);
+                this.labelTwo.setValue(this.valueTwo);
+                this.labelOne.setText(this.valueOne + o.unit);
+                this.labelTwo.setText(this.valueTwo + o.unit);
+                this._setAllPosition(this._getPercentByValue(this.valueOne), this._getPercentByValue(this.valueTwo));
+            } else {
+                this.labelOne.setValue(this.min);
+                this.labelTwo.setValue(this.max);
+                this.labelOne.setText(this.min + o.unit);
+                this.labelTwo.setText(this.max + o.unit);
+                this._setAllPosition(0, 100)
+            }
+        }
+    }
+});
+BI.IntervalSliderLabel.EVENT_CHANGE = "EVENT_CHANGE";
+BI.shortcut("bi.interval_slider_label", BI.IntervalSliderLabel);/**
+ * Created by zcf on 2017/3/1.
+ * 万恶的IEEE-754
+ * 使用字符串精确计算含小数加法、减法、乘法和10的指数倍除法，支持负数
+ */
+BI.AccurateCalculationModel = BI.inherit(BI.Widget, {
+    _defaultConfig: function () {
+        return BI.extend(BI.AccurateCalculationModel.superclass._defaultConfig.apply(this, arguments), {
+            baseCls: ""
+        })
+    },
+
+    _init: function () {
+        BI.AccurateCalculationModel.superclass._init.apply(this, arguments);
+    },
+
+    _getMagnitude: function (n) {
+        var magnitude = "1";
+        for (var i = 0; i < n; i++) {
+            magnitude += "0";
+        }
+        return BI.parseInt(magnitude);
+    },
+
+    _formatDecimal: function (stringNumber1, stringNumber2) {
+        if (stringNumber1.numDecimalLength === stringNumber2.numDecimalLength) {
+            return;
+        }
+        var magnitudeDiff = stringNumber1.numDecimalLength - stringNumber2.numDecimalLength;
+        if (magnitudeDiff > 0) {
+            var needAddZero = stringNumber2
+        } else {
+            var needAddZero = stringNumber1;
+            magnitudeDiff = (0 - magnitudeDiff);
+        }
+        for (var i = 0; i < magnitudeDiff; i++) {
+            if (needAddZero.numDecimal === "0" && i === 0) {
+                continue
+            }
+            needAddZero.numDecimal += "0"
+        }
+    },
+
+    _stringNumberFactory: function (num) {
+        var strNum = num.toString();
+        var numStrArray = strNum.split(".");
+        var numInteger = numStrArray[0];
+        if (numStrArray.length === 1) {
+            var numDecimal = "0";
+            var numDecimalLength = 0;
+        } else {
+            var numDecimal = numStrArray[1];
+            var numDecimalLength = numStrArray[1].length;
+        }
+        return {
+            "numInteger": numInteger,
+            "numDecimal": numDecimal,
+            "numDecimalLength": numDecimalLength
+        }
+    },
+
+    _accurateSubtraction: function (num1, num2) {//num1-num2 && num1>num2
+        var stringNumber1 = this._stringNumberFactory(num1);
+        var stringNumber2 = this._stringNumberFactory(num2);
+        //整数部分计算
+        var integerResult = BI.parseInt(stringNumber1.numInteger) - BI.parseInt(stringNumber2.numInteger);
+        //小数部分
+        this._formatDecimal(stringNumber1, stringNumber2);
+        var decimalMaxLength = getDecimalMaxLength(stringNumber1, stringNumber2);
+
+        if (BI.parseInt(stringNumber1.numDecimal) >= BI.parseInt(stringNumber2.numDecimal)) {
+            var decimalResultTemp = (BI.parseInt(stringNumber1.numDecimal) - BI.parseInt(stringNumber2.numDecimal)).toString();
+            var decimalResult = addZero(decimalResultTemp, decimalMaxLength);
+        } else {//否则借位
+            integerResult--;
+            var borrow = this._getMagnitude(decimalMaxLength);
+            var decimalResultTemp = (borrow + BI.parseInt(stringNumber1.numDecimal) - BI.parseInt(stringNumber2.numDecimal)).toString();
+            var decimalResult = addZero(decimalResultTemp, decimalMaxLength);
+        }
+        var result = integerResult + "." + decimalResult;
+        return BI.parseFloat(result);
+
+        function getDecimalMaxLength(num1, num2) {
+            if (num1.numDecimal.length >= num2.numDecimal.length) {
+                return num1.numDecimal.length
+            }
+            return num2.numDecimal.length
+        }
+
+        function addZero(resultTemp, length) {
+            var diff = length - resultTemp.length;
+            for (var i = 0; i < diff; i++) {
+                resultTemp = "0" + resultTemp;
+            }
+            return resultTemp
+        }
+    },
+
+    _accurateAddition: function (num1, num2) {//加法结合律
+        var stringNumber1 = this._stringNumberFactory(num1);
+        var stringNumber2 = this._stringNumberFactory(num2);
+        //整数部分计算
+        var integerResult = BI.parseInt(stringNumber1.numInteger) + BI.parseInt(stringNumber2.numInteger);
+        //小数部分
+        this._formatDecimal(stringNumber1, stringNumber2);
+
+        var decimalResult = (BI.parseInt(stringNumber1.numDecimal) + BI.parseInt(stringNumber2.numDecimal)).toString();
+
+        if (decimalResult !== "0") {
+            if (decimalResult.length <= stringNumber1.numDecimal.length) {
+                decimalResult = addZero(decimalResult, stringNumber1.numDecimal.length)
+            } else {
+                integerResult++;//进一
+                decimalResult = decimalResult.slice(1);
+            }
+        }
+        var result = integerResult + "." + decimalResult;
+        return BI.parseFloat(result);
+
+        function addZero(resultTemp, length) {
+            var diff = length - resultTemp.length;
+            for (var i = 0; i < diff; i++) {
+                resultTemp = "0" + resultTemp;
+            }
+            return resultTemp
+        }
+    },
+
+    _accurateMultiplication: function (num1, num2) {//乘法分配律
+        var stringNumber1 = this._stringNumberFactory(num1);
+        var stringNumber2 = this._stringNumberFactory(num2);
+        //整数部分计算
+        var integerResult = BI.parseInt(stringNumber1.numInteger) * BI.parseInt(stringNumber2.numInteger);
+        //num1的小数和num2的整数
+        var dec1Int2 = this._accurateDivisionTenExponent(BI.parseInt(stringNumber1.numDecimal) * BI.parseInt(stringNumber2.numInteger), stringNumber1.numDecimalLength);
+        //num1的整数和num2的小数
+        var int1dec2 = this._accurateDivisionTenExponent(BI.parseInt(stringNumber1.numInteger) * BI.parseInt(stringNumber2.numDecimal), stringNumber2.numDecimalLength);
+        //小数*小数
+        var dec1dec2 = this._accurateDivisionTenExponent(BI.parseInt(stringNumber1.numDecimal) * BI.parseInt(stringNumber2.numDecimal), (stringNumber1.numDecimalLength + stringNumber2.numDecimalLength));
+
+        return this._accurateAddition(this._accurateAddition(this._accurateAddition(integerResult, dec1Int2), int1dec2), dec1dec2);
+    },
+
+    _accurateDivisionTenExponent: function (num, n) {// num/10^n && n>0
+        var stringNumber = this._stringNumberFactory(num);
+        if (stringNumber.numInteger.length > n) {
+            var integerResult = stringNumber.numInteger.slice(0, (stringNumber.numInteger.length - n));
+            var partDecimalResult = stringNumber.numInteger.slice(-n);
+        } else {
+            var integerResult = "0";
+            var partDecimalResult = addZero(stringNumber.numInteger, n);
+        }
+        var result = integerResult + "." + partDecimalResult + stringNumber.numDecimal;
+        return BI.parseFloat(result);
+
+        function addZero(resultTemp, length) {
+            var diff = length - resultTemp.length;
+            for (var i = 0; i < diff; i++) {
+                resultTemp = "0" + resultTemp;
+            }
+            return resultTemp
+        }
+    },
+
+    accurateSubtraction: function (num1, num2) {
+        if (num1 >= 0 && num2 >= 0) {
+            if (num1 >= num2) {
+                return this._accurateSubtraction(num1, num2)
+            }
+            return -this._accurateSubtraction(num2, num1)
+        }
+        if (num1 >= 0 && num2 < 0) {
+            return this._accurateAddition(num1, -num2)
+        }
+        if (num1 < 0 && num2 >= 0) {
+            return -this._accurateAddition(-num1, num2)
+        }
+        if (num1 < 0 && num2 < 0) {
+            if (num1 >= num2) {
+                return this._accurateSubtraction(-num2, -num1)
+            }
+            return this._accurateSubtraction(-num1, -num2)
+        }
+    },
+
+    accurateAddition: function (num1, num2) {
+        if (num1 >= 0 && num2 >= 0) {
+            return this._accurateAddition(num1, num2)
+        }
+        if (num1 >= 0 && num2 < 0) {
+            return this.accurateSubtraction(num1, -num2)
+        }
+        if (num1 < 0 && num2 >= 0) {
+            return this.accurateSubtraction(num2, -num1)
+        }
+        if (num1 < 0 && num2 < 0) {
+            return -this._accurateAddition(-num1, -num2)
+        }
+    },
+
+    accurateMultiplication: function (num1, num2) {
+        if (num1 >= 0 && num2 >= 0) {
+            return this._accurateMultiplication(num1, num2)
+        }
+        if (num1 >= 0 && num2 < 0) {
+            return -this._accurateMultiplication(num1, -num2)
+        }
+        if (num1 < 0 && num2 >= 0) {
+            return -this._accurateMultiplication(-num1, num2)
+        }
+        if (num1 < 0 && num2 < 0) {
+            return this._accurateMultiplication(-num1, -num2)
+        }
+    },
+
+    accurateDivisionTenExponent: function (num1, n) {
+        if (num1 >= 0) {
+            return this._accurateDivisionTenExponent(num1, n);
+        }
+        return -this._accurateDivisionTenExponent(-num1, n);
+    }
+});/**
  * 月份下拉框
  *
  * Created by GUY on 2015/8/28.
@@ -81785,7 +83033,7 @@ BI.MultiDateSegment = BI.inherit(BI.Single, {
         itemHeight: 24,
         maxGap: 15,
         minGap: 10,
-        textWidth: 30,
+        textWidth: 60,
         defaultEditorValue: "1"
     },
 
@@ -81793,7 +83041,6 @@ BI.MultiDateSegment = BI.inherit(BI.Single, {
         return $.extend(BI.MultiDateSegment.superclass._defaultConfig.apply(this, arguments), {
             baseCls: 'bi-multidate-segment',
             text: "",
-            width: 130,
             height: 30,
             isEditorExist: true,
             selected: false,
@@ -84676,7 +85923,7 @@ BI.MultiSelectSearchLoader = BI.inherit(BI.Widget, {
             baseCls: 'bi-multi-select-search-loader',
             itemsCreator: BI.emptyFn,
             keywordGetter: BI.emptyFn,
-            valueFormatter: BI.emptyFn,
+            valueFormatter: BI.emptyFn
         });
     },
 
@@ -85182,16 +86429,36 @@ BI.MultiSelectSearcher = BI.inherit(BI.Widget, {
         ob || (ob = {});
         ob.value || (ob.value = []);
         if (ob.type === BI.Selection.All) {
-            if (BI.size(ob.assist) === 1) {
-                this.editor.setState(o.valueFormatter(ob.assist[0] + "") || (ob.assist[0] + ""));
+            if (ob.value.length === 0) {
+                this.editor.setState(BI.Selection.All);
+            } else if (BI.size(ob.assist) <= 20) {
+                var state = "";
+                BI.each(ob.assist, function (i, v) {
+                    if (i === 0) {
+                        state += "" + (o.valueFormatter(v + "") || v);
+                    } else {
+                        state += "," + (o.valueFormatter(v + "") || v);
+                    }
+                });
+                this.editor.setState(state);
             } else {
-                this.editor.setState(BI.size(ob.value) > 0 ? BI.Selection.Multi : BI.Selection.All);
+                this.editor.setState(BI.Selection.Multi);
             }
         } else {
-            if (BI.size(ob.value) === 1) {
-                this.editor.setState(o.valueFormatter(ob.value[0] + "") || (ob.value[0] + ""));
+            if (ob.value.length === 0) {
+                this.editor.setState(BI.Selection.None);
+            } else if (BI.size(ob.value) <= 20) {
+                var state = "";
+                BI.each(ob.value, function (i, v) {
+                    if (i === 0) {
+                        state += "" + (o.valueFormatter(v + "") || v);
+                    } else {
+                        state += "," + (o.valueFormatter(v + "") || v);
+                    }
+                });
+                this.editor.setState(state);
             } else {
-                this.editor.setState(BI.size(ob.value) > 0 ? BI.Selection.Multi : BI.Selection.None);
+                this.editor.setState(BI.Selection.Multi);
             }
         }
     },
@@ -85473,7 +86740,7 @@ BI.MultiSelectInsertList = BI.inherit(BI.Widget, {
             element: this,
             items: [{
                 el: this.trigger,
-                height: 30
+                height: 24
             }, {
                 el: this.adapter,
                 height: "fill"
@@ -85787,7 +87054,7 @@ BI.MultiSelectList = BI.inherit(BI.Widget, {
             element: this,
             items: [{
                 el: this.trigger,
-                height: 30
+                height: 24
             }, {
                 el: this.adapter,
                 height: "fill"
@@ -86400,7 +87667,7 @@ BI.MultiTreeCombo = BI.inherit(BI.Single, {
                         change = true;
                         var val = {
                             type: BI.Selection.Multi,
-                            value: this.hasChecked() ? {1: 1} : {}
+                            value: this.hasChecked() ? this.getValue() : {}
                         };
                         self.trigger.getSearcher().setState(val);
                         self.trigger.getCounter().setButtonChecked(val);
@@ -86456,6 +87723,7 @@ BI.MultiTreeCombo = BI.inherit(BI.Single, {
                 }
             });
         });
+
         function showCounter() {
             if (isSearching()) {
                 self.storeValue = {value: self.trigger.getValue()};
@@ -86484,11 +87752,12 @@ BI.MultiTreeCombo = BI.inherit(BI.Single, {
         });
 
         this.trigger.on(BI.MultiSelectTrigger.EVENT_CHANGE, function () {
+            var checked = this.getSearcher().hasChecked();
             var val = {
                 type: BI.Selection.Multi,
-                value: this.getSearcher().hasChecked() ? {1: 1} : {}
+                value: checked ? {1: 1} : {}
             };
-            this.getSearcher().setState(val);
+            this.getSearcher().setState(checked ? BI.Selection.Multi : BI.Selection.None);
             this.getCounter().setButtonChecked(val);
         });
 
@@ -86508,7 +87777,7 @@ BI.MultiTreeCombo = BI.inherit(BI.Single, {
             if (isSearching()) {
                 self.trigger.stopEditing();
                 self.fireEvent(BI.MultiTreeCombo.EVENT_CONFIRM);
-            }else{
+            } else {
                 if (isPopupView()) {
                     self.trigger.stopEditing();
                     self.storeValue = {value: self.combo.getValue()};
@@ -86919,11 +88188,29 @@ BI.MultiTreeSearcher = BI.inherit(BI.Widget, {
 
     setState: function (ob) {
         ob || (ob = {});
-        ob.value || (ob.value = []);
-        if (ob.type === BI.Selection.All) {
-            this.editor.setState(BI.size(ob.value) > 0 ? BI.Selection.Multi : BI.Selection.All);
+        ob.value || (ob.value = {});
+        if (BI.isNumber(ob)) {
+            this.editor.setState(ob);
+        } else if (BI.size(ob.value) === 0) {
+            this.editor.setState(BI.Selection.None);
         } else {
-            this.editor.setState(BI.size(ob.value) > 0 ? BI.Selection.Multi : BI.Selection.None);
+            var text = "";
+            BI.each(ob.value, function (name, children) {
+                var childNodes = getChildrenNode(children);
+                text += name + (childNodes === "" ? "" : (":" + childNodes)) + "; ";
+            });
+            this.editor.setState(text);
+        }
+
+        function getChildrenNode(ob) {
+            var text = "";
+            var index = 0, size = BI.size(ob);
+            BI.each(ob, function (name, children) {
+                index++;
+                var childNodes = getChildrenNode(children);
+                text += name + (childNodes === "" ? "" : (":" + childNodes)) + (index === size ? "" : ",");
+            });
+            return text;
         }
     },
 
@@ -87956,7 +89243,7 @@ BI.PathChooser = BI.inherit(BI.Widget, {
     },
 
     getRegionIndexById: function (id) {
-        var node = this.store[id];
+        var node = this.cache[id];
         var regionType = node.get("region");
         return this.regionMap[regionType];
     },
@@ -88173,7 +89460,7 @@ BI.PathChooser = BI.inherit(BI.Widget, {
 
     _createNodes: function () {
         var self = this, o = this.options;
-        this.store = {};
+        this.cache = {};
         this.texts = {};
         this.start = [];
         this.end = [];
@@ -88197,10 +89484,10 @@ BI.PathChooser = BI.inherit(BI.Widget, {
                 if (j > 0) {
                     prev = items[j - 1];
                 }
-                var parent = self.store[prev.value || ""];
-                var node = self.store[item.value] || new BI.Node(item.value);
+                var parent = self.cache[prev.value || ""];
+                var node = self.cache[item.value] || new BI.Node(item.value);
                 node.set(item);
-                self.store[item.value] = node;
+                self.cache[item.value] = node;
                 self.texts[item.value] = item.text;
                 self.texts[item.region] = item.regionText;
                 parent = BI.isNull(parent) ? tree.getRoot() : parent;
@@ -91070,6 +92357,931 @@ BI.SequenceTable = BI.inherit(BI.Widget, {
     }
 });
 BI.shortcut('bi.sequence_table', BI.SequenceTable);/**
+ * Created by zcf on 2016/9/22.
+ */
+BI.SliderIconButton = BI.inherit(BI.Widget, {
+    _defaultConfig: function () {
+        return BI.extend(BI.SliderIconButton.superclass._defaultConfig.apply(this, arguments), {
+            baseCls: "bi-single-slider-button"
+        });
+    },
+    _init: function () {
+        BI.extend(BI.SliderIconButton.superclass._init.apply(this, arguments));
+        this.slider = BI.createWidget({
+            type: "bi.icon_button",
+            cls: "slider-icon slider-button",
+            iconWidth: 14,
+            iconHeight: 14,
+            height: 14,
+            width: 14
+        });
+        BI.createWidget({
+            type: "bi.absolute",
+            element: this,
+            items: [{
+                el: this.slider,
+                top: 7,
+                left: -7
+            }],
+            width: 0,
+            height: 14
+        });
+    }
+});
+BI.shortcut("bi.single_slider_button", BI.SliderIconButton);/**
+ * Created by zcf on 2016/9/22.
+ */
+BI.SingleSlider = BI.inherit(BI.Widget, {
+    _constant: {
+        EDITOR_WIDTH: 90,
+        EDITOR_HEIGHT: 30,
+        SLIDER_WIDTH_HALF: 15,
+        SLIDER_WIDTH: 30,
+        SLIDER_HEIGHT: 30,
+        TRACK_HEIGHT: 24
+    },
+    _defaultConfig: function () {
+        return BI.extend(BI.SingleSlider.superclass._defaultConfig.apply(this, arguments), {
+            baseCls: "bi-single-slider bi-slider-track",
+            digit: false
+        });
+    },
+    _init: function () {
+        BI.SingleSlider.superclass._init.apply(this, arguments);
+
+        var self = this, o = this.options;
+        var c = this._constant;
+        this.enable = false;
+        this.value = "";
+
+        this.grayTrack = BI.createWidget({
+            type: "bi.layout",
+            cls: "gray-track",
+            height: 6
+        });
+        this.blueTrack = BI.createWidget({
+            type: "bi.layout",
+            cls: "blue-track bi-high-light-background",
+            height: 6
+        });
+        this.track = this._createTrackWrapper();
+
+        this.slider = BI.createWidget({
+            type: "bi.single_slider_button"
+        });
+        this._draggable(this.slider);
+        var sliderVertical = BI.createWidget({
+            type: "bi.vertical",
+            items: [{
+                type: "bi.absolute",
+                items: [this.slider]
+            }],
+            hgap: c.SLIDER_WIDTH_HALF,
+            height: c.SLIDER_HEIGHT
+        });
+        sliderVertical.element.click(function (e) {
+            if (self.enable) {
+                var offset = e.clientX - self.element.offset().left - c.SLIDER_WIDTH_HALF;
+                var trackLength = self.track.element[0].scrollWidth;
+                var percent = 0;
+                if (offset < 0) {
+                    percent = 0
+                }
+                if (offset > 0 && offset < (trackLength - c.SLIDER_WIDTH)) {
+                    percent = offset * 100 / self._getGrayTrackLength();
+                }
+                if (offset > (trackLength - c.SLIDER_WIDTH)) {
+                    percent = 100
+                }
+                var significantPercent = BI.parseFloat(percent.toFixed(1));
+                self._setAllPosition(significantPercent);
+                var v = self._getValueByPercent(significantPercent);
+                v = o.digit === false ? v : v.toFixed(o.digit);
+                self.label.setValue(v);
+                self.value = v;
+                self.fireEvent(BI.SingleSlider.EVENT_CHANGE);
+            }
+        });
+        this.label = BI.createWidget({
+            type: "bi.sign_editor",
+            cls: "slider-editor-button",
+            errorText: "",
+            width: c.EDITOR_WIDTH - 2,
+            allowBlank: false,
+            validationChecker: function (v) {
+                return self._checkValidation(v);
+            },
+            quitChecker: function (v) {
+                return self._checkValidation(v);
+            }
+        });
+        this.label.element.hover(function () {
+            self.label.element.removeClass("bi-border").addClass("bi-border");
+        }, function () {
+            self.label.element.removeClass("bi-border");
+        });
+        this.label.on(BI.SignEditor.EVENT_CONFIRM, function () {
+            var v = BI.parseFloat(this.getValue());
+            var percent = self._getPercentByValue(v);
+            var significantPercent = BI.parseFloat(percent.toFixed(1));
+            self._setAllPosition(significantPercent);
+            this.setValue(v);
+            self.value = v;
+            self.fireEvent(BI.SingleSlider.EVENT_CHANGE);
+        });
+        this._setVisible(false);
+        BI.createWidget({
+            type: "bi.absolute",
+            element: this,
+            items: [{
+                el: {
+                    type: "bi.vertical",
+                    items: [{
+                        type: "bi.absolute",
+                        items: [{
+                            el: this.track,
+                            width: "100%",
+                            height: c.TRACK_HEIGHT
+                        }]
+                    }],
+                    hgap: 7,
+                    height: c.TRACK_HEIGHT
+                },
+                top: 23,
+                left: 0,
+                width: "100%"
+            }, {
+                el: sliderVertical,
+                top: 20,
+                left: 0,
+                width: "100%"
+            }, {
+                el: {
+                    type: "bi.vertical",
+                    items: [{
+                        type: "bi.absolute",
+                        items: [this.label]
+                    }],
+                    rgap: c.EDITOR_WIDTH,
+                    height: c.EDITOR_HEIGHT
+                },
+                top: 0,
+                left: 0,
+                width: "100%"
+            }]
+        })
+    },
+
+    _draggable: function (widget) {
+        var self = this, o = this.options;
+        var startDrag = false;
+        var size = 0, offset = 0, defaultSize = 0;
+        var mouseMoveTracker = new BI.MouseMoveTracker(function (deltaX) {
+            if (mouseMoveTracker.isDragging()) {
+                startDrag = true;
+                offset += deltaX;
+                size = optimizeSize(defaultSize + offset);
+                widget.element.addClass("dragging");
+                var percent = size * 100 / (self._getGrayTrackLength());
+                var significantPercent = BI.parseFloat(percent.toFixed(1));//直接对计算出来的百分数保留到小数点后一位，相当于分成了1000份。
+                self._setBlueTrack(significantPercent);
+                self._setLabelPosition(significantPercent);
+                self._setSliderPosition(significantPercent);
+                var v = self._getValueByPercent(significantPercent);
+                v = o.digit === false ? v : v.toFixed(o.digit);
+                self.label.setValue(v);
+                self.value = v;
+                self.fireEvent(BI.SingleSlider.EVENT_CHANGE);
+            }
+        }, function () {
+            if (startDrag === true) {
+                size = optimizeSize(size);
+                var percent = size * 100 / (self._getGrayTrackLength());
+                var significantPercent = BI.parseFloat(percent.toFixed(1));
+                self._setSliderPosition(significantPercent);
+                size = 0;
+                offset = 0;
+                defaultSize = size;
+                startDrag = false;
+            }
+            widget.element.removeClass("dragging");
+            mouseMoveTracker.releaseMouseMoves();
+            self.fireEvent(BI.SingleSlider.EVENT_CHANGE);
+        }, document);
+        widget.element.on("mousedown", function (event) {
+            if(!widget.isEnabled()){
+                return;
+            }
+            defaultSize = this.offsetLeft;
+            optimizeSize(defaultSize);
+            mouseMoveTracker.captureMouseMoves(event);
+        });
+
+        function optimizeSize(s) {
+            return BI.clamp(s, 0, self._getGrayTrackLength());
+        }
+    },
+
+    _createTrackWrapper: function () {
+        return BI.createWidget({
+            type: "bi.absolute",
+            items: [{
+                el: {
+                    type: "bi.vertical",
+                    items: [{
+                        type: "bi.absolute",
+                        items: [{
+                            el: this.grayTrack,
+                            top: 0,
+                            left: 0,
+                            width: "100%"
+                        }, {
+                            el: this.blueTrack,
+                            top: 0,
+                            left: 0,
+                            width: "0%"
+                        }]
+                    }],
+                    hgap: 8,
+                    height: 8
+                },
+                top: 8,
+                left: 0,
+                width: "100%"
+            }]
+        })
+    },
+
+    _checkValidation: function (v) {
+        return BI.isNumeric(v) && !(BI.isNull(v) || v < this.min || v > this.max)
+    },
+
+    _setBlueTrack: function (percent) {
+        this.blueTrack.element.css({"width": percent + "%"});
+    },
+
+    _setLabelPosition: function (percent) {
+        this.label.element.css({"left": percent + "%"});
+    },
+
+    _setSliderPosition: function (percent) {
+        this.slider.element.css({"left": percent + "%"});
+    },
+
+    _setAllPosition: function (percent) {
+        this._setSliderPosition(percent);
+        this._setLabelPosition(percent);
+        this._setBlueTrack(percent);
+    },
+
+    _setVisible: function (visible) {
+        this.slider.setVisible(visible);
+        this.label.setVisible(visible);
+    },
+
+    _getGrayTrackLength: function () {
+        return this.grayTrack.element[0].scrollWidth
+    },
+
+    _getValueByPercent: function (percent) {
+        var thousandth = BI.parseInt(percent * 10);
+        return (((this.max - this.min) * thousandth) / 1000 + this.min);
+    },
+
+    _getPercentByValue: function (v) {
+        return (v - this.min) * 100 / (this.max - this.min);
+    },
+
+    getValue: function () {
+        return this.value;
+    },
+
+    setValue: function (v) {
+        var o = this.options;
+        v = BI.parseFloat(v);
+        v = o.digit === false ? v : v.toFixed(o.digit);
+        if ((!isNaN(v))) {
+            if (this._checkValidation(v)) {
+                this.value = v;
+            }
+            if (v > this.max) {
+                this.value = this.max;
+            }
+            if (v < this.min) {
+                this.value = this.min;
+            }
+        }
+    },
+
+    setMinAndMax: function (v) {
+        var minNumber = BI.parseFloat(v.min);
+        var maxNumber = BI.parseFloat(v.max);
+        if ((!isNaN(minNumber)) && (!isNaN(maxNumber)) && (maxNumber > minNumber )) {
+            this.min = minNumber;
+            this.max = maxNumber;
+        }
+    },
+
+    reset: function () {
+        this._setVisible(false);
+        this.enable = false;
+        this.value = "";
+        this.min = 0;
+        this.max = 0;
+        this._setBlueTrack(0);
+        
+    },
+
+    populate: function () {
+        if (!isNaN(this.min) && !isNaN(this.max)) {
+            this._setVisible(true);
+            this.enable = true;
+            this.label.setErrorText(BI.i18nText("BI-Please_Enter") + this.min + "-" + this.max + BI.i18nText("BI-Basic_De") + BI.i18nText("BI-Basic_Number"));
+            if (BI.isNumeric(this.value) || BI.isNotEmptyString(this.value)) {
+                this.label.setValue(this.value);
+                this._setAllPosition(this._getPercentByValue(this.value));
+            } else {
+                this.label.setValue(this.max);
+                this._setAllPosition(100);
+            }
+        }
+    }
+});
+BI.SingleSlider.EVENT_CHANGE = "EVENT_CHANGE";
+BI.shortcut("bi.single_slider", BI.SingleSlider);/**
+ * Created by Urthur on 2017/9/12.
+ */
+BI.SingleSliderLabel = BI.inherit(BI.Widget, {
+    _constant: {
+        EDITOR_WIDTH: 90,
+        EDITOR_HEIGHT: 20,
+        HEIGHT: 20,
+        SLIDER_WIDTH_HALF: 15,
+        SLIDER_WIDTH: 30,
+        SLIDER_HEIGHT: 30,
+        TRACK_HEIGHT: 24
+    },
+    _defaultConfig: function () {
+        return BI.extend(BI.SingleSliderLabel.superclass._defaultConfig.apply(this, arguments), {
+            baseCls: "bi-single-slider-label bi-slider-track",
+            digit: false,
+            unit: ""
+        });
+    },
+    _init: function () {
+        BI.SingleSliderLabel.superclass._init.apply(this, arguments);
+
+        var self = this, o = this.options;
+        var c = this._constant;
+        this.enable = false;
+        this.value = "";
+
+        this.grayTrack = BI.createWidget({
+            type: "bi.layout",
+            cls: "gray-track",
+            height: 6
+        });
+        this.blueTrack = BI.createWidget({
+            type: "bi.layout",
+            cls: "blue-track bi-high-light-background",
+            height: 6
+        });
+        this.track = this._createTrackWrapper();
+
+        this.slider = BI.createWidget({
+            type: "bi.single_slider_button"
+        });
+        this._draggable(this.slider);
+        var sliderVertical = BI.createWidget({
+            type: "bi.vertical",
+            items: [{
+                type: "bi.absolute",
+                items: [this.slider]
+            }],
+            hgap: c.SLIDER_WIDTH_HALF,
+            height: c.SLIDER_HEIGHT
+        });
+        sliderVertical.element.click(function (e) {
+            if (self.enable) {
+                var offset = e.clientX - self.element.offset().left - c.SLIDER_WIDTH_HALF;
+                var trackLength = self.track.element[0].scrollWidth;
+                var percent = 0;
+                if (offset < 0) {
+                    percent = 0
+                }
+                if (offset > 0 && offset < (trackLength - c.SLIDER_WIDTH)) {
+                    percent = offset * 100 / self._getGrayTrackLength();
+                }
+                if (offset > (trackLength - c.SLIDER_WIDTH)) {
+                    percent = 100
+                }
+                var significantPercent = BI.parseFloat(percent.toFixed(1));
+                self._setAllPosition(significantPercent);
+                var v = self._getValueByPercent(significantPercent);
+                v = o.digit === false ? v : v.toFixed(o.digit);
+                self.label.setText(v + o.unit);
+                self.value = v;
+                self.fireEvent(BI.SingleSliderLabel.EVENT_CHANGE);
+            }
+        });
+        this.label = BI.createWidget({
+            type: "bi.label",
+            height: c.HEIGHT,
+            width: c.EDITOR_WIDTH - 2
+        });
+
+        this._setVisible(false);
+        BI.createWidget({
+            type: "bi.absolute",
+            element: this,
+            items: [{
+                el: {
+                    type: "bi.vertical",
+                    items: [{
+                        type: "bi.absolute",
+                        items: [{
+                            el: this.track,
+                            width: "100%",
+                            height: c.TRACK_HEIGHT
+                        }]
+                    }],
+                    hgap: 7,
+                    height: c.TRACK_HEIGHT
+                },
+                top: 13,
+                left: 0,
+                width: "100%"
+            }, {
+                el: sliderVertical,
+                top: 10,
+                left: 0,
+                width: "100%"
+            }, {
+                el: {
+                    type: "bi.vertical",
+                    items: [{
+                        type: "bi.absolute",
+                        items: [this.label]
+                    }],
+                    rgap: c.EDITOR_WIDTH,
+                    height: c.EDITOR_HEIGHT
+                },
+                top: 0,
+                left: 0,
+                width: "100%"
+            }]
+        })
+    },
+
+    _draggable: function (widget) {
+        var self = this, o = this.options;
+        var startDrag = false;
+        var size = 0, offset = 0, defaultSize = 0;
+        var mouseMoveTracker = new BI.MouseMoveTracker(function (deltaX) {
+            if (mouseMoveTracker.isDragging()) {
+                startDrag = true;
+                offset += deltaX;
+                size = optimizeSize(defaultSize + offset);
+                widget.element.addClass("dragging");
+                var percent = size * 100 / (self._getGrayTrackLength());
+                var significantPercent = BI.parseFloat(percent.toFixed(1));//直接对计算出来的百分数保留到小数点后一位，相当于分成了1000份。
+                self._setBlueTrack(significantPercent);
+                self._setLabelPosition(significantPercent);
+                self._setSliderPosition(significantPercent);
+                var v = self._getValueByPercent(significantPercent);
+                v = o.digit === false ? v : v.toFixed(o.digit);
+                self.label.setValue(v);
+                self.value = v;
+                self.fireEvent(BI.SingleSliderLabel.EVENT_CHANGE);
+            }
+        }, function () {
+            if (startDrag === true) {
+                size = optimizeSize(size);
+                var percent = size * 100 / (self._getGrayTrackLength());
+                var significantPercent = BI.parseFloat(percent.toFixed(1));
+                self._setSliderPosition(significantPercent);
+                size = 0;
+                offset = 0;
+                defaultSize = size;
+                startDrag = false;
+            }
+            widget.element.removeClass("dragging");
+            mouseMoveTracker.releaseMouseMoves();
+            self.fireEvent(BI.SingleSliderLabel.EVENT_CHANGE);
+        }, document);
+        widget.element.on("mousedown", function (event) {
+            if(!widget.isEnabled()){
+                return;
+            }
+            defaultSize = this.offsetLeft;
+            optimizeSize(defaultSize);
+            mouseMoveTracker.captureMouseMoves(event);
+        });
+
+        function optimizeSize(s) {
+            return BI.clamp(s, 0, self._getGrayTrackLength());
+        }
+    },
+
+    _createTrackWrapper: function () {
+        return BI.createWidget({
+            type: "bi.absolute",
+            items: [{
+                el: {
+                    type: "bi.vertical",
+                    items: [{
+                        type: "bi.absolute",
+                        items: [{
+                            el: this.grayTrack,
+                            top: 0,
+                            left: 0,
+                            width: "100%"
+                        }, {
+                            el: this.blueTrack,
+                            top: 0,
+                            left: 0,
+                            width: "0%"
+                        }]
+                    }],
+                    hgap: 8,
+                    height: 8
+                },
+                top: 8,
+                left: 0,
+                width: "100%"
+            }]
+        })
+    },
+
+    _checkValidation: function (v) {
+        return BI.isNumeric(v) && !(BI.isNull(v) || v < this.min || v > this.max)
+    },
+
+    _setBlueTrack: function (percent) {
+        this.blueTrack.element.css({"width": percent + "%"});
+    },
+
+    _setLabelPosition: function (percent) {
+        this.label.element.css({"left": percent + "%"});
+    },
+
+    _setSliderPosition: function (percent) {
+        this.slider.element.css({"left": percent + "%"});
+    },
+
+    _setAllPosition: function (percent) {
+        this._setSliderPosition(percent);
+        this._setLabelPosition(percent);
+        this._setBlueTrack(percent);
+    },
+
+    _setVisible: function (visible) {
+        this.slider.setVisible(visible);
+        this.label.setVisible(visible);
+    },
+
+    _getGrayTrackLength: function () {
+        return this.grayTrack.element[0].scrollWidth
+    },
+
+    _getValueByPercent: function (percent) {
+        var thousandth = BI.parseInt(percent * 10);
+        return (((this.max - this.min) * thousandth) / 1000 + this.min);
+    },
+
+    _getPercentByValue: function (v) {
+        return (v - this.min) * 100 / (this.max - this.min);
+    },
+
+    getValue: function () {
+        return this.value;
+    },
+
+    setValue: function (v) {
+        var o = this.options;
+        v = BI.parseFloat(v);
+        v = o.digit === false ? v : v.toFixed(o.digit);
+        if ((!isNaN(v))) {
+            if (this._checkValidation(v)) {
+                this.value = v;
+            }
+            if (v > this.max) {
+                this.value = this.max;
+            }
+            if (v < this.min) {
+                this.value = this.min;
+            }
+        }
+    },
+
+    setMinAndMax: function (v) {
+        var minNumber = BI.parseFloat(v.min);
+        var maxNumber = BI.parseFloat(v.max);
+        if ((!isNaN(minNumber)) && (!isNaN(maxNumber)) && (maxNumber > minNumber )) {
+            this.min = minNumber;
+            this.max = maxNumber;
+        }
+    },
+
+    reset: function () {
+        this._setVisible(false);
+        this.enable = false;
+        this.value = "";
+        this.min = 0;
+        this.max = 0;
+        this._setBlueTrack(0);
+    },
+
+    populate: function () {
+        var o = this.options;
+        if (!isNaN(this.min) && !isNaN(this.max)) {
+            this._setVisible(true);
+            this.enable = true;
+            if (BI.isNumeric(this.value) || BI.isNotEmptyString(this.value)) {
+                this.label.setValue(this.value + o.unit);
+                this._setAllPosition(this._getPercentByValue(this.value));
+            } else {
+                this.label.setValue(this.max + o.unit);
+                this._setAllPosition(100);
+            }
+        }
+    }
+});
+BI.SingleSliderLabel.EVENT_CHANGE = "EVENT_CHANGE";
+BI.shortcut("bi.single_slider_label", BI.SingleSliderLabel);/**
+ * normal single slider
+ * Created by Young on 2017/6/21.
+ */
+BI.SingleSliderNormal = BI.inherit(BI.Widget, {
+
+    _constant: {
+        HEIGHT: 28,
+        SLIDER_WIDTH_HALF: 15,
+        SLIDER_WIDTH: 30,
+        SLIDER_HEIGHT: 30,
+        TRACK_HEIGHT: 24
+    },
+
+    props: {
+        baseCls: "bi-single-slider-normal bi-slider-track",
+        minMax: {
+            min: 0,
+            max: 100
+        }
+        // color: "#3f8ce8"
+    },
+
+    render: function () {
+        var self = this;
+        var c = this._constant;
+        var track = this._createTrack();
+        this.slider = BI.createWidget({
+            type: "bi.single_slider_button"
+        });
+        this._draggable(this.slider);
+
+        var sliderVertical = BI.createWidget({
+            type: "bi.vertical",
+            items: [{
+                type: "bi.absolute",
+                items: [this.slider]
+            }],
+            hgap: c.SLIDER_WIDTH_HALF,
+            height: c.SLIDER_HEIGHT
+        });
+        sliderVertical.element.click(function (e) {
+            if (self.enable) {
+                var offset = e.clientX - self.element.offset().left - c.SLIDER_WIDTH_HALF;
+                var trackLength = self.track.element[0].scrollWidth;
+                var percent = 0;
+                if (offset < 0) {
+                    percent = 0
+                }
+                if (offset > 0 && offset < (trackLength - c.SLIDER_WIDTH)) {
+                    percent = offset * 100 / self._getGrayTrackLength();
+                }
+                if (offset > (trackLength - c.SLIDER_WIDTH)) {
+                    percent = 100
+                }
+                var significantPercent = BI.parseFloat(percent.toFixed(1));
+                self._setAllPosition(significantPercent);
+                var v = self._getValueByPercent(significantPercent);
+                self.value = v;
+                self.fireEvent(BI.SingleSlider.EVENT_CHANGE);
+            }
+        });
+
+        return {
+            type: "bi.absolute",
+            element: this,
+            items: [{
+                el: {
+                    type: "bi.vertical",
+                    items: [{
+                        type: "bi.absolute",
+                        items: [{
+                            el: track,
+                            width: "100%",
+                            height: c.TRACK_HEIGHT
+                        }]
+                    }],
+                    hgap: 7,
+                    height: c.TRACK_HEIGHT
+                },
+                top: 3,
+                left: 0,
+                width: "100%"
+            }, {
+                el: sliderVertical,
+                top: 0,
+                left: 0,
+                width: "100%"
+            }]
+        }
+    },
+
+    _draggable: function (widget) {
+        var self = this, o = this.options;
+        var startDrag = false;
+        var size = 0, offset = 0, defaultSize = 0;
+        var mouseMoveTracker = new BI.MouseMoveTracker(function (deltaX) {
+            if (mouseMoveTracker.isDragging()) {
+                startDrag = true;
+                offset += deltaX;
+                size = optimizeSize(defaultSize + offset);
+                widget.element.addClass("dragging");
+                var percent = size * 100 / (self._getGrayTrackLength());
+                var significantPercent = BI.parseFloat(percent.toFixed(1));//直接对计算出来的百分数保留到小数点后一位，相当于分成了1000份。
+                self._setBlueTrack(significantPercent);
+                self._setSliderPosition(significantPercent);
+                var v = self._getValueByPercent(significantPercent);
+                v = o.digit === false ? v : v.toFixed(o.digit);
+                self.value = v;
+                self.fireEvent(BI.SingleSliderNormal.EVENT_DRAG, v);
+            }
+        }, function () {
+            if (startDrag === true) {
+                size = optimizeSize(size);
+                var percent = size * 100 / (self._getGrayTrackLength());
+                var significantPercent = BI.parseFloat(percent.toFixed(1));
+                self._setSliderPosition(significantPercent);
+                size = 0;
+                offset = 0;
+                defaultSize = size;
+                startDrag = false;
+            }
+            widget.element.removeClass("dragging");
+            mouseMoveTracker.releaseMouseMoves();
+            self.fireEvent(BI.SingleSlider.EVENT_CHANGE);
+        }, document);
+        widget.element.on("mousedown", function (event) {
+            if(!widget.isEnabled()){
+                return;
+            }
+            defaultSize = this.offsetLeft;
+            optimizeSize(defaultSize);
+            mouseMoveTracker.captureMouseMoves(event);
+        });
+
+        function optimizeSize(s) {
+            return BI.clamp(s, 0, self._getGrayTrackLength());
+        }
+    },
+
+    _createTrack: function () {
+        var self = this;
+        var c = this._constant;
+        this.grayTrack = BI.createWidget({
+            type: "bi.layout",
+            cls: "gray-track",
+            height: 6
+        });
+        this.blueTrack = BI.createWidget({
+            type: "bi.layout",
+            cls: "blue-track bi-high-light-background",
+            height: 6
+        });
+        if (this.options.color) {
+            this.blueTrack.element.css({"background-color": this.options.color});
+        }
+
+        return {
+            type: "bi.absolute",
+            items: [{
+                el: {
+                    type: "bi.vertical",
+                    items: [{
+                        type: "bi.absolute",
+                        items: [{
+                            el: this.grayTrack,
+                            top: 0,
+                            left: 0,
+                            width: "100%"
+                        }, {
+                            el: this.blueTrack,
+                            top: 0,
+                            left: 0,
+                            width: "0%"
+                        }]
+                    }],
+                    hgap: 8,
+                    height: 8
+                },
+                top: 8,
+                left: 0,
+                width: "100%"
+            }],
+            ref: function (ref) {
+                self.track = ref;
+            }
+        }
+    },
+
+    _checkValidation: function (v) {
+        return !(BI.isNull(v) || v < this.min || v > this.max)
+    },
+
+    _setBlueTrack: function (percent) {
+        this.blueTrack.element.css({"width": percent + "%"});
+    },
+
+    _setSliderPosition: function (percent) {
+        this.slider.element.css({"left": percent + "%"});
+    },
+
+    _setAllPosition: function (percent) {
+        this._setSliderPosition(percent);
+        this._setBlueTrack(percent);
+    },
+
+    _setVisible: function (visible) {
+        this.slider.setVisible(visible);
+    },
+
+    _getGrayTrackLength: function () {
+        return this.grayTrack.element[0].scrollWidth
+    },
+
+    _getValueByPercent: function (percent) {
+        var thousandth = BI.parseInt(percent * 10);
+        return (((this.max - this.min) * thousandth) / 1000 + this.min);
+    },
+
+    _getPercentByValue: function (v) {
+        return (v - this.min) * 100 / (this.max - this.min);
+    },
+
+    getValue: function () {
+        return this.value;
+    },
+
+    setValue: function (v) {
+        var value = BI.parseFloat(v);
+        if ((!isNaN(value))) {
+            if (this._checkValidation(value)) {
+                this.value = value;
+            }
+            if (value > this.max) {
+                this.value = this.max;
+            }
+            if (value < this.min) {
+                this.value = this.min;
+            }
+        }
+    },
+
+    setMinAndMax: function (v) {
+        var minNumber = BI.parseFloat(v.min);
+        var maxNumber = BI.parseFloat(v.max);
+        if ((!isNaN(minNumber)) && (!isNaN(maxNumber)) && (maxNumber > minNumber )) {
+            this.min = minNumber;
+            this.max = maxNumber;
+        }
+    },
+
+    reset: function () {
+        this._setVisible(false);
+        this.enable = false;
+        this.value = "";
+        this.min = 0;
+        this.max = 0;
+        this._setBlueTrack(0);
+    },
+
+    populate: function () {
+        if (!isNaN(this.min) && !isNaN(this.max)) {
+            this._setVisible(true);
+            this.enable = true;
+            if (BI.isNumeric(this.value) || BI.isNotEmptyString(this.value)) {
+                this._setAllPosition(this._getPercentByValue(this.value));
+            } else {
+                this._setAllPosition(100);
+            }
+        }
+    }
+});
+BI.SingleSliderNormal.EVENT_DRAG = "EVENT_DRAG";
+BI.shortcut("bi.single_slider_normal", BI.SingleSliderNormal);/**
  * @class BI.SingleTreeCombo
  * @extends BI.Widget
  */
@@ -93167,7 +95379,591 @@ BI.ValueChooserPane = BI.inherit(BI.AbstractValueChooser, {
     }
 });
 BI.ValueChooserPane.EVENT_CHANGE = "ValueChooserPane.EVENT_CHANGE";
-BI.shortcut('bi.value_chooser_pane', BI.ValueChooserPane);BI.servletURL = "https://fanruan.coding.me/fineui/dist/";
+BI.shortcut('bi.value_chooser_pane', BI.ValueChooserPane);;(function(){
+    var Events = {
+
+        // Bind an event to a `callback` function. Passing `"all"` will bind
+        // the callback to all events fired.
+        on: function (name, callback, context) {
+            if (!eventsApi(this, 'on', name, [callback, context]) || !callback) return this;
+            this._events || (this._events = {});
+            var events = this._events[name] || (this._events[name] = []);
+            events.push({callback: callback, context: context, ctx: context || this});
+            return this;
+        },
+
+        // Bind an event to only be triggered a single time. After the first time
+        // the callback is invoked, it will be removed.
+        once: function (name, callback, context) {
+            if (!eventsApi(this, 'once', name, [callback, context]) || !callback) return this;
+            var self = this;
+            var once = _.once(function () {
+                self.off(name, once);
+                callback.apply(this, arguments);
+            });
+            once._callback = callback;
+            return this.on(name, once, context);
+        },
+
+        // Remove one or many callbacks. If `context` is null, removes all
+        // callbacks with that function. If `callback` is null, removes all
+        // callbacks for the event. If `name` is null, removes all bound
+        // callbacks for all events.
+        off: function (name, callback, context) {
+            if (!this._events || !eventsApi(this, 'off', name, [callback, context])) return this;
+
+            // Remove all callbacks for all events.
+            if (!name && !callback && !context) {
+                this._events = void 0;
+                return this;
+            }
+
+            var names = name ? [name] : _.keys(this._events);
+            for (var i = 0, length = names.length; i < length; i++) {
+                name = names[i];
+
+                // Bail out if there are no events stored.
+                var events = this._events[name];
+                if (!events) continue;
+
+                // Remove all callbacks for this event.
+                if (!callback && !context) {
+                    delete this._events[name];
+                    continue;
+                }
+
+                // Find any remaining events.
+                var remaining = [];
+                for (var j = 0, k = events.length; j < k; j++) {
+                    var event = events[j];
+                    if (
+                        callback && callback !== event.callback &&
+                        callback !== event.callback._callback ||
+                        context && context !== event.context
+                    ) {
+                        remaining.push(event);
+                    }
+                }
+
+                // Replace events if there are any remaining.  Otherwise, clean up.
+                if (remaining.length) {
+                    this._events[name] = remaining;
+                } else {
+                    delete this._events[name];
+                }
+            }
+
+            return this;
+        },
+
+        un: function () {
+            this.off.apply(this, arguments);
+        },
+
+        // Trigger one or many events, firing all bound callbacks. Callbacks are
+        // passed the same arguments as `trigger` is, apart from the event name
+        // (unless you're listening on `"all"`, which will cause your callback to
+        // receive the true name of the event as the first argument).
+        trigger: function (name) {
+            if (!this._events) return this;
+            var args = slice.call(arguments, 1);
+            if (!eventsApi(this, 'trigger', name, args)) return this;
+            var events = this._events[name];
+            var allEvents = this._events.all;
+            if (events) triggerEvents(events, args);
+            if (allEvents) triggerEvents(allEvents, arguments);
+            return this;
+        },
+
+        fireEvent: function () {
+            this.trigger.apply(this, arguments);
+        },
+
+        // Inversion-of-control versions of `on` and `once`. Tell *this* object to
+        // listen to an event in another object ... keeping track of what it's
+        // listening to.
+        listenTo: function (obj, name, callback) {
+            var listeningTo = this._listeningTo || (this._listeningTo = {});
+            var id = obj._listenId || (obj._listenId = _.uniqueId('l'));
+            listeningTo[id] = obj;
+            if (!callback && typeof name === 'object') callback = this;
+            obj.on(name, callback, this);
+            return this;
+        },
+
+        listenToOnce: function (obj, name, callback) {
+            if (typeof name === 'object') {
+                for (var event in name) this.listenToOnce(obj, event, name[event]);
+                return this;
+            }
+            if (eventSplitter.test(name)) {
+                var names = name.split(eventSplitter);
+                for (var i = 0, length = names.length; i < length; i++) {
+                    this.listenToOnce(obj, names[i], callback);
+                }
+                return this;
+            }
+            if (!callback) return this;
+            var once = _.once(function () {
+                this.stopListening(obj, name, once);
+                callback.apply(this, arguments);
+            });
+            once._callback = callback;
+            return this.listenTo(obj, name, once);
+        },
+
+        // Tell this object to stop listening to either specific events ... or
+        // to every object it's currently listening to.
+        stopListening: function (obj, name, callback) {
+            var listeningTo = this._listeningTo;
+            if (!listeningTo) return this;
+            var remove = !name && !callback;
+            if (!callback && typeof name === 'object') callback = this;
+            if (obj) (listeningTo = {})[obj._listenId] = obj;
+            for (var id in listeningTo) {
+                obj = listeningTo[id];
+                obj.off(name, callback, this);
+                if (remove || _.isEmpty(obj._events)) delete this._listeningTo[id];
+            }
+            return this;
+        }
+
+    };
+
+    // Regular expression used to split event strings.
+    var eventSplitter = /\s+/;
+
+    // Implement fancy features of the Events API such as multiple event
+    // names `"change blur"` and jQuery-style event maps `{change: action}`
+    // in terms of the existing API.
+    var eventsApi = function (obj, action, name, rest) {
+        if (!name) return true;
+
+        // Handle event maps.
+        if (typeof name === 'object') {
+            for (var key in name) {
+                obj[action].apply(obj, [key, name[key]].concat(rest));
+            }
+            return false;
+        }
+
+        // Handle space separated event names.
+        if (eventSplitter.test(name)) {
+            var names = name.split(eventSplitter);
+            for (var i = 0, length = names.length; i < length; i++) {
+                obj[action].apply(obj, [names[i]].concat(rest));
+            }
+            return false;
+        }
+
+        return true;
+    };
+
+    // A difficult-to-believe, but optimized internal dispatch function for
+    // triggering events. Tries to keep the usual cases speedy (most internal
+    // BI events have 3 arguments).
+    var triggerEvents = function (events, args) {
+        var ev, i = -1, l = events.length, a1 = args[0], a2 = args[1], a3 = args[2];
+        switch (args.length) {
+            case 0:
+                while (++i < l) (ev = events[i]).callback.call(ev.ctx);
+                return;
+            case 1:
+                while (++i < l) (ev = events[i]).callback.call(ev.ctx, a1);
+                return;
+            case 2:
+                while (++i < l) (ev = events[i]).callback.call(ev.ctx, a1, a2);
+                return;
+            case 3:
+                while (++i < l) (ev = events[i]).callback.call(ev.ctx, a1, a2, a3);
+                return;
+            default:
+                while (++i < l) (ev = events[i]).callback.apply(ev.ctx, args);
+                return;
+        }
+    };
+
+    // BI.Router
+    // ---------------
+
+    // Routers map faux-URLs to actions, and fire events when routes are
+    // matched. Creating a new one sets its `routes` hash, if not set statically.
+    var Router = BI.Router = function (options) {
+        options || (options = {});
+        if (options.routes) this.routes = options.routes;
+        this._bindRoutes();
+        this._init.apply(this, arguments);
+    };
+
+    // Cached regular expressions for matching named param parts and splatted
+    // parts of route strings.
+    var optionalParam = /\((.*?)\)/g;
+    var namedParam = /(\(\?)?:\w+/g;
+    var splatParam = /\*\w+/g;
+    var escapeRegExp = /[\-{}\[\]+?.,\\\^$|#\s]/g;
+
+    // Set up all inheritable **BI.Router** properties and methods.
+    _.extend(Router.prototype, Events, {
+
+        // _init is an empty function by default. Override it with your own
+        // initialization logic.
+        _init: function () {
+        },
+
+        // Manually bind a single named route to a callback. For example:
+        //
+        //     this.route('search/:query/p:num', 'search', function(query, num) {
+        //       ...
+        //     });
+        //
+        route: function (route, name, callback) {
+            if (!_.isRegExp(route)) route = this._routeToRegExp(route);
+            if (_.isFunction(name)) {
+                callback = name;
+                name = '';
+            }
+            if (!callback) callback = this[name];
+            var router = this;
+            BI.history.route(route, function (fragment) {
+                var args = router._extractParameters(route, fragment);
+                if (router.execute(callback, args, name) !== false) {
+                    router.trigger.apply(router, ['route:' + name].concat(args));
+                    router.trigger('route', name, args);
+                    BI.history.trigger('route', router, name, args);
+                }
+            });
+            return this;
+        },
+
+        // Execute a route handler with the provided parameters.  This is an
+        // excellent place to do pre-route setup or post-route cleanup.
+        execute: function (callback, args, name) {
+            if (callback) callback.apply(this, args);
+        },
+
+        // Simple proxy to `BI.history` to save a fragment into the history.
+        navigate: function (fragment, options) {
+            BI.history.navigate(fragment, options);
+            return this;
+        },
+
+        // Bind all defined routes to `BI.history`. We have to reverse the
+        // order of the routes here to support behavior where the most general
+        // routes can be defined at the bottom of the route map.
+        _bindRoutes: function () {
+            if (!this.routes) return;
+            this.routes = _.result(this, 'routes');
+            var route, routes = _.keys(this.routes);
+            while ((route = routes.pop()) != null) {
+                this.route(route, this.routes[route]);
+            }
+        },
+
+        // Convert a route string into a regular expression, suitable for matching
+        // against the current location hash.
+        _routeToRegExp: function (route) {
+            route = route.replace(escapeRegExp, '\\$&')
+                .replace(optionalParam, '(?:$1)?')
+                .replace(namedParam, function (match, optional) {
+                    return optional ? match : '([^/?]+)';
+                })
+                .replace(splatParam, '([^?]*?)');
+            return new RegExp('^' + route + '(?:\\?([\\s\\S]*))?$');
+        },
+
+        // Given a route, and a URL fragment that it matches, return the array of
+        // extracted decoded parameters. Empty or unmatched parameters will be
+        // treated as `null` to normalize cross-browser behavior.
+        _extractParameters: function (route, fragment) {
+            var params = route.exec(fragment).slice(1);
+            return _.map(params, function (param, i) {
+                // Don't decode the search params.
+                if (i === params.length - 1) return param || null;
+                return param ? decodeURIComponent(param) : null;
+            });
+        }
+
+    });
+
+    // History
+    // ----------------
+
+    // Handles cross-browser history management, based on either
+    // [pushState](http://diveintohtml5.info/history.html) and real URLs, or
+    // [onhashchange](https://developer.mozilla.org/en-US/docs/DOM/window.onhashchange)
+    // and URL fragments. If the browser supports neither (old IE, natch),
+    // falls back to polling.
+    var History = function () {
+        this.handlers = [];
+        _.bindAll(this, 'checkUrl');
+
+        // Ensure that `History` can be used outside of the browser.
+        if (typeof window !== 'undefined') {
+            this.location = window.location;
+            this.history = window.history;
+        }
+    };
+
+    // Cached regex for stripping a leading hash/slash and trailing space.
+    var routeStripper = /^[#\/]|\s+$/g;
+
+    // Cached regex for stripping leading and trailing slashes.
+    var rootStripper = /^\/+|\/+$/g;
+
+    // Cached regex for stripping urls of hash.
+    var pathStripper = /#.*$/;
+
+    // Has the history handling already been started?
+    History.started = false;
+
+    // Set up all inheritable **BI.History** properties and methods.
+    _.extend(History.prototype, Events, {
+
+        // The default interval to poll for hash changes, if necessary, is
+        // twenty times a second.
+        interval: 50,
+
+        // Are we at the app root?
+        atRoot: function () {
+            var path = this.location.pathname.replace(/[^\/]$/, '$&/');
+            return path === this.root && !this.getSearch();
+        },
+
+        // In IE6, the hash fragment and search params are incorrect if the
+        // fragment contains `?`.
+        getSearch: function () {
+            var match = this.location.href.replace(/#.*/, '').match(/\?.+/);
+            return match ? match[0] : '';
+        },
+
+        // Gets the true hash value. Cannot use location.hash directly due to bug
+        // in Firefox where location.hash will always be decoded.
+        getHash: function (window) {
+            var match = (window || this).location.href.match(/#(.*)$/);
+            return match ? match[1] : '';
+        },
+
+        // Get the pathname and search params, without the root.
+        getPath: function () {
+            var path = decodeURI(this.location.pathname + this.getSearch());
+            var root = this.root.slice(0, -1);
+            if (!path.indexOf(root)) path = path.slice(root.length);
+            return path.charAt(0) === '/' ? path.slice(1) : path;
+        },
+
+        // Get the cross-browser normalized URL fragment from the path or hash.
+        getFragment: function (fragment) {
+            if (fragment == null) {
+                if (this._hasPushState || !this._wantsHashChange) {
+                    fragment = this.getPath();
+                } else {
+                    fragment = this.getHash();
+                }
+            }
+            return fragment.replace(routeStripper, '');
+        },
+
+        // Start the hash change handling, returning `true` if the current URL matches
+        // an existing route, and `false` otherwise.
+        start: function (options) {
+            if (History.started) throw new Error('BI.history has already been started');
+            History.started = true;
+
+            // Figure out the initial configuration. Do we need an iframe?
+            // Is pushState desired ... is it available?
+            this.options = _.extend({root: '/'}, this.options, options);
+            this.root = this.options.root;
+            this._wantsHashChange = this.options.hashChange !== false;
+            this._hasHashChange = 'onhashchange' in window;
+            this._wantsPushState = !!this.options.pushState;
+            this._hasPushState = !!(this.options.pushState && this.history && this.history.pushState);
+            this.fragment = this.getFragment();
+
+            // Normalize root to always include a leading and trailing slash.
+            this.root = ('/' + this.root + '/').replace(rootStripper, '/');
+
+            // Transition from hashChange to pushState or vice versa if both are
+            // requested.
+            if (this._wantsHashChange && this._wantsPushState) {
+
+                // If we've started off with a route from a `pushState`-enabled
+                // browser, but we're currently in a browser that doesn't support it...
+                if (!this._hasPushState && !this.atRoot()) {
+                    var root = this.root.slice(0, -1) || '/';
+                    this.location.replace(root + '#' + this.getPath());
+                    // Return immediately as browser will do redirect to new url
+                    return true;
+
+                    // Or if we've started out with a hash-based route, but we're currently
+                    // in a browser where it could be `pushState`-based instead...
+                } else if (this._hasPushState && this.atRoot()) {
+                    this.navigate(this.getHash(), {replace: true});
+                }
+
+            }
+
+            // Proxy an iframe to handle location events if the browser doesn't
+            // support the `hashchange` event, HTML5 history, or the user wants
+            // `hashChange` but not `pushState`.
+            if (!this._hasHashChange && this._wantsHashChange && (!this._wantsPushState || !this._hasPushState)) {
+                var iframe = document.createElement('iframe');
+                iframe.src = 'javascript:0';
+                iframe.style.display = 'none';
+                iframe.tabIndex = -1;
+                var body = document.body;
+                // Using `appendChild` will throw on IE < 9 if the document is not ready.
+                this.iframe = body.insertBefore(iframe, body.firstChild).contentWindow;
+                this.iframe.document.open().close();
+                this.iframe.location.hash = '#' + this.fragment;
+            }
+
+            // Add a cross-platform `addEventListener` shim for older browsers.
+            var addEventListener = window.addEventListener || function (eventName, listener) {
+                return attachEvent('on' + eventName, listener);
+            };
+
+            // Depending on whether we're using pushState or hashes, and whether
+            // 'onhashchange' is supported, determine how we check the URL state.
+            if (this._hasPushState) {
+                addEventListener('popstate', this.checkUrl, false);
+            } else if (this._wantsHashChange && this._hasHashChange && !this.iframe) {
+                addEventListener('hashchange', this.checkUrl, false);
+            } else if (this._wantsHashChange) {
+                this._checkUrlInterval = setInterval(this.checkUrl, this.interval);
+            }
+
+            if (!this.options.silent) return this.loadUrl();
+        },
+
+        // Disable BI.history, perhaps temporarily. Not useful in a real app,
+        // but possibly useful for unit testing Routers.
+        stop: function () {
+            // Add a cross-platform `removeEventListener` shim for older browsers.
+            var removeEventListener = window.removeEventListener || function (eventName, listener) {
+                return detachEvent('on' + eventName, listener);
+            };
+
+            // Remove window listeners.
+            if (this._hasPushState) {
+                removeEventListener('popstate', this.checkUrl, false);
+            } else if (this._wantsHashChange && this._hasHashChange && !this.iframe) {
+                removeEventListener('hashchange', this.checkUrl, false);
+            }
+
+            // Clean up the iframe if necessary.
+            if (this.iframe) {
+                document.body.removeChild(this.iframe.frameElement);
+                this.iframe = null;
+            }
+
+            // Some environments will throw when clearing an undefined interval.
+            if (this._checkUrlInterval) clearInterval(this._checkUrlInterval);
+            History.started = false;
+        },
+
+        // Add a route to be tested when the fragment changes. Routes added later
+        // may override previous routes.
+        route: function (route, callback) {
+            this.handlers.unshift({route: route, callback: callback});
+        },
+
+        // Checks the current URL to see if it has changed, and if it has,
+        // calls `loadUrl`, normalizing across the hidden iframe.
+        checkUrl: function (e) {
+            var current = this.getFragment();
+
+            // If the user pressed the back button, the iframe's hash will have
+            // changed and we should use that for comparison.
+            if (current === this.fragment && this.iframe) {
+                current = this.getHash(this.iframe);
+            }
+
+            if (current === this.fragment) return false;
+            if (this.iframe) this.navigate(current);
+            this.loadUrl();
+        },
+
+        // Attempt to load the current URL fragment. If a route succeeds with a
+        // match, returns `true`. If no defined routes matches the fragment,
+        // returns `false`.
+        loadUrl: function (fragment) {
+            fragment = this.fragment = this.getFragment(fragment);
+            return _.any(this.handlers, function (handler) {
+                if (handler.route.test(fragment)) {
+                    handler.callback(fragment);
+                    return true;
+                }
+            });
+        },
+
+        // Save a fragment into the hash history, or replace the URL state if the
+        // 'replace' option is passed. You are responsible for properly URL-encoding
+        // the fragment in advance.
+        //
+        // The options object can contain `trigger: true` if you wish to have the
+        // route callback be fired (not usually desirable), or `replace: true`, if
+        // you wish to modify the current URL without adding an entry to the history.
+        navigate: function (fragment, options) {
+            if (!History.started) return false;
+            if (!options || options === true) options = {trigger: !!options};
+
+            // Normalize the fragment.
+            fragment = this.getFragment(fragment || '');
+
+            // Don't include a trailing slash on the root.
+            var root = this.root;
+            if (fragment === '' || fragment.charAt(0) === '?') {
+                root = root.slice(0, -1) || '/';
+            }
+            var url = root + fragment;
+
+            // Strip the hash and decode for matching.
+            fragment = decodeURI(fragment.replace(pathStripper, ''));
+
+            if (this.fragment === fragment) return;
+            this.fragment = fragment;
+
+            // If pushState is available, we use it to set the fragment as a real URL.
+            if (this._hasPushState) {
+                this.history[options.replace ? 'replaceState' : 'pushState']({}, document.title, url);
+
+                // If hash changes haven't been explicitly disabled, update the hash
+                // fragment to store history.
+            } else if (this._wantsHashChange) {
+                this._updateHash(this.location, fragment, options.replace);
+                if (this.iframe && (fragment !== this.getHash(this.iframe))) {
+                    // Opening and closing the iframe tricks IE7 and earlier to push a
+                    // history entry on hash-tag change.  When replace is true, we don't
+                    // want this.
+                    if (!options.replace) this.iframe.document.open().close();
+                    this._updateHash(this.iframe.location, fragment, options.replace);
+                }
+
+                // If you've told us that you explicitly don't want fallback hashchange-
+                // based history, then `navigate` becomes a page refresh.
+            } else {
+                return this.location.assign(url);
+            }
+            if (options.trigger) return this.loadUrl(fragment);
+        },
+
+        // Update the hash location, either replacing the current entry, or adding
+        // a new one to the browser history.
+        _updateHash: function (location, fragment, replace) {
+            if (replace) {
+                var href = location.href.replace(/(javascript:|#).*$/, '');
+                location.replace(href + '#' + fragment);
+            } else {
+                // Some browsers require that `hash` contains a leading #.
+                location.hash = '#' + fragment;
+            }
+        }
+
+    });
+
+    // Create the default BI.history.
+    BI.history = new History;
+}());BI.servletURL = "https://fanruan.coding.me/fineui/dist/";
 BI.resourceURL = "https://fanruan.coding.me/fineui/dist/resource/";
 BI.i18n = {
     "BI-Multi_Date_Quarter_End": "季度末",

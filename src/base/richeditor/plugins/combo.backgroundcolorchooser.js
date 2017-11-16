@@ -9,7 +9,7 @@ BI.RichEditorBackgroundColorChooser = BI.inherit(BI.RichEditorAction, {
     _defaultConfig: function () {
         return BI.extend(BI.RichEditorBackgroundColorChooser.superclass._defaultConfig.apply(this, arguments), {
             width: 20,
-            height: 20,
+            height: 20
         });
     },
 

@@ -9,7 +9,7 @@ Demo.Func = BI.inherit(BI.Widget, {
                 return BI.extend({}, item, {
                     type: "bi.label",
                     height: 30,
-                    text: (i + 1) + "." + item.text,
+                    text: (i + 1) + "." + item.text
                 });
             })
         }

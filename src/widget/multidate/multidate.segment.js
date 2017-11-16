@@ -9,7 +9,7 @@ BI.MultiDateSegment = BI.inherit(BI.Single, {
         itemHeight: 24,
         maxGap: 15,
         minGap: 10,
-        textWidth: 30,
+        textWidth: 60,
         defaultEditorValue: "1"
     },
 
@@ -17,7 +17,6 @@ BI.MultiDateSegment = BI.inherit(BI.Single, {
         return $.extend(BI.MultiDateSegment.superclass._defaultConfig.apply(this, arguments), {
             baseCls: 'bi-multidate-segment',
             text: "",
-            width: 130,
             height: 30,
             isEditorExist: true,
             selected: false,

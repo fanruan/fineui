@@ -78,6 +78,12 @@
 .bi-interactive-arrangement .interactive-arrangement-dragtag-icon {
   z-index: 1000000000;
 }
+.bi-interval-slider {
+  min-height: 70px;
+}
+.bi-interval-slider-label {
+  min-height: 50px;
+}
 .bi-month-trigger {
   -webkit-border-radius: 2px;
   -moz-border-radius: 2px;
@@ -309,6 +315,36 @@
   /*IE8*/
   box-sizing: border-box;
   /*W3C标准(IE9+，Safari5.1+,Chrome10.0+,Opera10.6+都符合box-sizing的w3c标准语法)*/
+}
+.bi-single-slider-label {
+  min-height: 50px;
+}
+.bi-single-slider-normal {
+  min-height: 30px;
+}
+.bi-single-slider {
+  min-height: 50px;
+}
+.bi-single-slider-button .slider-button {
+  cursor: ew-resize;
+  -webkit-box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+  -moz-box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+  -webkit-border-radius: 7px;
+  -moz-border-radius: 7px;
+  border-radius: 7px;
+}
+.bi-slider-track .gray-track {
+  background-color: rgba(153, 153, 153, 0.3);
+  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr=#4d999999,endColorstr=#4d999999);
+  -webkit-border-radius: 3px;
+  -moz-border-radius: 3px;
+  border-radius: 3px;
+}
+.bi-slider-track .blue-track {
+  -webkit-border-radius: 3px;
+  -moz-border-radius: 3px;
+  border-radius: 3px;
 }
 .bi-param-time-interval.time-error .bi-input {
   color: #e85050;

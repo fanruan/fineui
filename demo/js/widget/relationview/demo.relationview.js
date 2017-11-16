@@ -50,7 +50,7 @@ Demo.RelationView = BI.inherit(BI.Widget, {
                     foreign: {region: "B", value: "b1", text: "b1字段"}
                 },
                 {
-                    primary: {region: "X33", value: "x233", text: "x233字段"},
+                    primary: {region: "X33", value: "x233", text: "x233字段"}
                 }
             ]
         });

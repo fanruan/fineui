@@ -1,141 +1,23 @@
 $(function () {
     var ref;
-    BI.createWidget({
-        type: "demo.main",
-        ref: function (_ref) {
-            console.log(_ref);
-            ref = _ref;
+    var AppRouter = BI.inherit(BI.Router, {
+        routes: {
+            "": "index"
         },
-        element: '#wrapper'
+        index: function () {
+            BI.createWidget({
+                type: "demo.main",
+                ref: function (_ref) {
+                    console.log(_ref);
+                    ref = _ref;
+                },
+                element: '#wrapper'
+            });
+        }
     });
-    // ref.destroy();
-});/**
- * Created by Urthur on 2017/9/4.
- */
-Demo.Slider = BI.inherit(BI.Widget, {
-    props: {
-            baseCls: "demo-slider",
-            width: 300,
-            height: 50,
-            min: 0,
-            max: 100
-    },
-
-    render: function () {
-        var self = this, o = this.options;
-        var singleSlider = BI.createWidget({
-            type: "bi.single_slider",
-            digit: 0,
-            width: o.width,
-            height: o.height,
-            cls: "layout-bg-white"
-        });
-
-        singleSlider.setMinAndMax({
-            min: 10,
-            max: o.max
-        });
-
-        singleSlider.setValue(30);
-        singleSlider.populate();
-        singleSlider.on(BI.SingleSlider.EVENT_CHANGE, function () {
-            console.log(this.getValue());
-        });
-
-        var normalSingleSlider = BI.createWidget({
-            type: "bi.single_slider_normal",
-            width: o.width,
-            height: 30,
-            cls: "layout-bg-white"
-        });
-        normalSingleSlider.setMinAndMax({
-            min: o.min,
-            max: o.max
-        });
-        normalSingleSlider.setValue(10);
-        normalSingleSlider.populate();
-
-        var singleSliderLabel = BI.createWidget({
-            type: "bi.single_slider_label",
-            width: o.width,
-            height: o.height,
-            digit: 0,
-            unit: "个",
-            cls: "layout-bg-white"
-        });
-        singleSliderLabel.setMinAndMax({
-            min: o.min,
-            max: o.max
-        });
-        singleSliderLabel.setValue(10);
-        singleSliderLabel.populate();
-
-        var intervalSlider = BI.createWidget({
-            type: "bi.interval_slider",
-            width: o.width,
-            cls: "layout-bg-white"
-        });
-        intervalSlider.setMinAndMax({
-            min: o.min,
-            max: o.max
-        });
-        intervalSlider.setValue({
-            min: 10,
-            max: 120
-        });
-        intervalSlider.populate();
-
-        var intervalSliderLabel = BI.createWidget({
-            type: "bi.interval_slider_label",
-            width: o.width,
-            unit: "个",
-            cls: "layout-bg-white"
-        });
-        intervalSliderLabel.setMinAndMax({
-            min: 0,
-            max: 120
-        });
-        intervalSliderLabel.setValue({
-            min: 10,
-            max: 120
-        });
-        intervalSliderLabel.populate();
-
-
-        return {
-            type: "bi.vertical",
-            element: this,
-            items: [{
-                type: "bi.center_adapt",
-                items: [{
-                    el: singleSlider
-                }]
-            }, {
-                type: "bi.center_adapt",
-                items: [{
-                    el: normalSingleSlider
-                }]
-            }, {
-                type: "bi.center_adapt",
-                items: [{
-                    el: singleSliderLabel
-                }]
-            }, {
-                type: "bi.center_adapt",
-                items: [{
-                    el: intervalSlider
-                }]
-            }, {
-                type: "bi.center_adapt",
-                items: [{
-                    el: intervalSliderLabel
-                }]
-            }],
-            vgap: 20
-        };
-    }
-});
-BI.shortcut("demo.slider", Demo.Slider);Demo.Button = BI.inherit(BI.Widget, {
+    new AppRouter;
+    BI.history.start();
+});Demo.Button = BI.inherit(BI.Widget, {
     props: {
         baseCls: "demo-button"
     },
@@ -1079,7 +961,7 @@ BI.shortcut("demo.collection_table", Demo.Func);Demo.Func = BI.inherit(BI.Widget
         var table = BI.createWidget({
             type: "bi.resizable_table",
             el: {
-                type: "bi.grid_table",
+                type: "bi.grid_table"
             },
             width: 600,
             height: 500,
@@ -1135,7 +1017,7 @@ BI.shortcut("demo.grid_table", Demo.Func);Demo.Func = BI.inherit(BI.Widget, {
         var table = BI.createWidget({
             type: "bi.resizable_table",
             el: {
-                type: "bi.grid_table",
+                type: "bi.grid_table"
             },
             width: 600,
             height: 500,
@@ -1860,6 +1742,8 @@ Demo.IconCombo = BI.inherit(BI.Widget, {
             type: "bi.horizontal_auto",
             items: [{
                 type: "bi.icon_combo",
+                trigger: "click-hover",
+                container: "body",
                 ref:function(_ref){
                     self.refs=_ref;
                 },
@@ -2096,7 +1980,7 @@ BI.shortcut("demo.calendar", Demo.Func);Demo.Func = BI.inherit(BI.Widget, {
             items: [{
                 el: editor,
                 left: 100,
-                top: 50,
+                top: 50
             }, {
                 el: clipboard,
                 left: 100,
@@ -2544,7 +2428,7 @@ BI.shortcut("demo.all_count_pager", Demo.Func);Demo.Func = BI.inherit(BI.Widget,
             vgap: 50,
             element: this,
             items: [{
-                type: "bi.direction_pager",
+                type: "bi.direction_pager"
             }]
         })
     }
@@ -2814,7 +2698,7 @@ BI.shortcut("demo.popup_panel", Demo.Func);Demo.Func = BI.inherit(BI.Widget, {
             el: {
                 type: "bi.resizable_table",
                 el: {
-                    type: "bi.grid_table",
+                    type: "bi.grid_table"
                 }
             },
             width: 600,
@@ -4047,7 +3931,7 @@ BI.DemoLevelTree = BI.inherit(BI.Widget, {
                                 "text": "B",
                                 value: 2,
                                 isParent: true,
-                                open: true,
+                                open: true
                             }])
                         } else {
                             if (op.node.id == 1) {
@@ -4065,14 +3949,14 @@ BI.DemoLevelTree = BI.inherit(BI.Widget, {
                                         "pId": 1,
                                         "text": "test12",
                                         value: 12,
-                                        layer: 1,
+                                        layer: 1
                                     },
                                     {
                                         "id": 13,
                                         "pId": 1,
                                         "text": "test13",
                                         value: 13,
-                                        layer: 1,
+                                        layer: 1
                                     },
                                     {
                                         "id": 14,
@@ -4087,14 +3971,14 @@ BI.DemoLevelTree = BI.inherit(BI.Widget, {
                                         "pId": 1,
                                         "text": "test15",
                                         value: 15,
-                                        layer: 1,
+                                        layer: 1
                                     },
                                     {
                                         "id": 16,
                                         "pId": 1,
                                         "text": "test16",
                                         value: 16,
-                                        layer: 1,
+                                        layer: 1
                                     },
                                     {"id": 17, "pId": 1, "text": "test17", layer: 1, value: 17}
                                 ])
@@ -4104,14 +3988,14 @@ BI.DemoLevelTree = BI.inherit(BI.Widget, {
                                     "pId": 2,
                                     "text": "test21",
                                     value: 21,
-                                    layer: 1,
+                                    layer: 1
                                 },
                                     {
                                         "id": 22,
                                         "pId": 2,
                                         "text": "test22",
                                         value: 22,
-                                        layer: 1,
+                                        layer: 1
                                     }])
                             } else if (op.node.id == 11) {
                                 callback([{
@@ -4119,7 +4003,7 @@ BI.DemoLevelTree = BI.inherit(BI.Widget, {
                                     "pId": 11,
                                     "text": "test111",
                                     value: 111,
-                                    layer: 2,
+                                    layer: 2
                                 }])
                             }
                         }
@@ -4187,7 +4071,7 @@ BI.DetailTableCell = BI.inherit(BI.Widget, {
         if (BI.isNotNull(o.styles) && BI.isObject(o.styles)) {
             this.element.css(o.styles);
         }
-    },
+    }
 });
 BI.shortcut("bi.detail_table_cell", BI.DetailTableCell);/**
  * Created by Young's on 2016/4/15.
@@ -4224,7 +4108,7 @@ BI.DetailTableHeader = BI.inherit(BI.Widget, {
         if (BI.isNotNull(o.styles) && BI.isObject(o.styles)) {
             this.element.css(o.styles);
         }
-    },
+    }
 });
 BI.shortcut("bi.detail_table_header", BI.DetailTableHeader);Demo.Face = BI.inherit(BI.Widget, {
     props: {
@@ -4367,7 +4251,7 @@ BI.shortcut("demo.large_table", Demo.Face);/**
 BI.NormalSequenceHeaderCell = BI.inherit(BI.Widget, {
     _defaultConfig: function () {
         return BI.extend(BI.NormalSequenceHeaderCell.superclass._defaultConfig.apply(this, arguments), {
-            baseCls: "bi-normal-sequence-header-cell",
+            baseCls: "bi-normal-sequence-header-cell"
         })
     },
 
@@ -4533,7 +4417,7 @@ Demo.SortTree = BI.inherit(BI.Widget, {
             }
         });
         return nodes;
-    },
+    }
 });
 BI.shortcut("demo.sort_tree", Demo.SortTree);Demo.Center = BI.inherit(BI.Widget, {
     props: {
@@ -4661,7 +4545,7 @@ Demo.TreeValueChooser = BI.inherit(BI.Widget, {
 
         return {
             type: "bi.tree_value_chooser_pane",
-            items: BI.deepClone(Demo.CONSTANTS.TREEITEMS),
+            items: BI.deepClone(Demo.CONSTANTS.TREEITEMS)
             // itemsCreator: function (op, callback) {
             //     callback(tree);
             // }
@@ -4695,7 +4579,7 @@ BI.shortcut("demo.value_chooser_combo", Demo.ValueChooserCombo);Demo.ValueChoose
     render: function () {
         return {
             type: "bi.value_chooser_pane",
-            items: BI.deepClone(Demo.CONSTANTS.ITEMS),
+            items: BI.deepClone(Demo.CONSTANTS.ITEMS)
             // itemsCreator: function (op, callback) {
             //     callback(BI.deepClone(Demo.CONSTANTS.ITEMS));
             // }
@@ -4713,11 +4597,6 @@ BI.shortcut("demo.value_chooser_pane", Demo.ValueChooserPane);Demo.ADDONS_CONFIG
     pId: 1001,
     text: "柱状图",
     value: "demo.axis_chart"
-}, {
-    pId: 1000,
-    id: 1002,
-    text: "滚动sliders",
-    value: "demo.slider"
 }];Demo.BASE_CONFIG = [{
     id: 2,
     text: "基础控件",
@@ -5324,7 +5203,7 @@ var viewRouter = new (BI.inherit(BI.WRouter, {
 
         "/tmp": "TmpView",
         "/tmp/child": "TmpChildView",
-        "/tmp/child/child": "TmpChildChildView",
+        "/tmp/child/child": "TmpChildChildView"
     },
 
     getSkipToView: function (v) {
@@ -5386,6 +5265,11 @@ Demo.FIX_CONFIG = [{
 }, {
     id: 72,
     pId: 7,
+    text: "state属性",
+    value: "demo.fix6"
+}, {
+    id: 78,
+    pId: 7,
     text: "计算属性",
     value: "demo.fix2"
 }, {
@@ -5408,6 +5292,11 @@ Demo.FIX_CONFIG = [{
     pId: 7,
     text: "一个混合的例子",
     value: "demo.fix"
+}, {
+    id: 77,
+    pId: 7,
+    text: "场景",
+    value: "demo.fix_scene"
 }];Demo.WIDGET_CONFIG = [{
     id: 4,
     text: "详细控件",
@@ -5644,6 +5533,10 @@ Demo.FIX_CONFIG = [{
     pId: 419,
     text: "bi.file_manager",
     value: "demo.file_manager"
+}, {
+    id: 420,
+    text: "滚动sliders",
+    value: "demo.slider"
 }];Demo.Func = BI.inherit(BI.Widget, {
     props: {
         baseCls: "demo-func"
@@ -6711,7 +6604,7 @@ BI.shortcut("demo.tab", Demo.Func);Demo.Func = BI.inherit(BI.Widget, {
                     type: "bi.vertical",
                     items: [{
                         type: "bi.vtape",
-                        height: 200,
+                        height: 200
                     }]
                 }],
                 items: [{
@@ -6719,7 +6612,7 @@ BI.shortcut("demo.tab", Demo.Func);Demo.Func = BI.inherit(BI.Widget, {
                         type: "bi.label",
                         text: "button_group是一类具有相同属性或相似属性的抽象, 本案例实现的是布局的嵌套(vertical布局下内嵌center_adapt布局)"
                     },
-                    height: 150,
+                    height: 150
                 }, {
                     el: {
                         type: "bi.button",
@@ -6765,7 +6658,7 @@ BI.shortcut("demo.button_group", Demo.Func);Demo.Func = BI.inherit(BI.Widget, {
             layouts: [{
                 type: "bi.vertical"
             }, {
-                type: "bi.center_adapt",
+                type: "bi.center_adapt"
             }],
             items: [{
                 type: "bi.label",
@@ -7131,7 +7024,7 @@ BI.shortcut("demo.grid_view", Demo.Func);Demo.Func = BI.inherit(BI.Widget, {
                     type: "bi.label",
                     width: 200,
                     height: 200,
-                    text: (i + 1) + "." + item.text,
+                    text: (i + 1) + "." + item.text
                 });
             })
         }
@@ -7258,7 +7151,7 @@ BI.shortcut("demo.virtual_group_item", Demo.Item);Demo.Func = BI.inherit(BI.Widg
                 return BI.extend({}, item, {
                     type: "bi.label",
                     height: 30,
-                    text: (i + 1) + "." + item.text,
+                    text: (i + 1) + "." + item.text
                 });
             })
         }
@@ -7396,7 +7289,7 @@ BI.shortcut("demo.border", Demo.BorderLayout);Demo.CenterAdapt = BI.inherit(BI.W
                 cls: "layout-bg1"
             }]
         }
-    },
+    }
 });
 BI.shortcut("demo.center_adapt", Demo.CenterAdapt);/**
  * Created by User on 2017/3/22.
@@ -8625,15 +8518,15 @@ BI.shortcut("demo.vtape", Demo.VtapeLayout);Demo.Face = BI.inherit(BI.Widget, {
                                 }, {
                                     text: "column 1.222222222222222222222222222222222222",
                                     cls: "dot-e-font",
-                                    value: 22,
+                                    value: 22
                                 }, {
                                     text: "column 1.3",
                                     cls: "dot-e-font",
-                                    value: 23,
+                                    value: 23
                                 }, {
                                     text: "column 1.4",
                                     cls: "dot-e-font",
-                                    value: 24,
+                                    value: 24
                                 }, {
                                     text: "column 1.5",
                                     cls: "dot-e-font",
@@ -8656,7 +8549,7 @@ BI.shortcut("demo.vtape", Demo.VtapeLayout);Demo.Face = BI.inherit(BI.Widget, {
                                     height: 25,
                                     text: "column 2.1",
                                     value: 11
-                                }, {text: "column 2.2", value: 12, cls: "dot-e-font"}],
+                                }, {text: "column 2.2", value: 12, cls: "dot-e-font"}]
 
 
                             }
@@ -10316,6 +10209,498 @@ BI.shortcut("demo.tmp", Demo.Func);
     });
 
     BI.shortcut("demo.fix5", Demo.Fix);
+}());/**
+ * @Author: Young
+ * @CreationDate 2017-11-06 10:32
+ * @Description
+ */
+;(function () {
+    var model = Fix.define({
+        groups: [{
+            id: "27a9c8bf159e99e",
+            name: "功能数据",
+            packages: [{
+                id: "82a96a4b03ac17e6",
+                name: "通信行业",
+                type: 1,
+                tables: [{
+                    id: "品类",
+                    name: "品类",
+                    connName: "BIDemo",
+                    fields: [{
+                        id: "sd2ad2f343ca23",
+                        name: "类别",
+                        type: 32,
+                        enable: true,
+                        usable: true
+                    }, {
+                        id: "f34ds34aw2345w",
+                        name: "描述",
+                        type: 32,
+                        enable: true,
+                        usable: true
+                    }]
+                }]
+            }]
+        }, {
+            id: "das2dw24214sa4",
+            name: "样式数据",
+            packages: [{
+                id: "hi23i1o34a34we",
+                name: "零售行业",
+                type: 1,
+                tables: [{
+                    id: "销售记录",
+                    name: "销售记录",
+                    connName: "BIDemo",
+                    fields: [{
+                        id: "wr213d24t345",
+                        name: "分类",
+                        type: 16,
+                        enable: true,
+                        usable: true
+                    }, {
+                        id: "faw134r24al344",
+                        name: "金额",
+                        type: 32,
+                        enable: true,
+                        usable: true
+                    }]
+                }]
+            }, {
+                id: "fwr124f3453fa",
+                name: "地产行业",
+                tables: [{
+                    id: "开发商名称",
+                    name: "开发商名称",
+                    connName: "BIDemo",
+                    fields: [{
+                        id: "sa13f345fg356",
+                        name: "编号",
+                        type: 32,
+                        enable: true,
+                        usable: true
+                    }, {
+                        id: "ad2r24tt232a22",
+                        name: "名称",
+                        type: 16,
+                        enable: true,
+                        usable: true
+                    }]
+                }, {
+                    id: "楼盘",
+                    name: "楼盘",
+                    connName: "BIDemo",
+                    fields: [{
+                        id: "hfe3345fg356",
+                        name: "编号",
+                        type: 32,
+                        enable: true,
+                        usable: true
+                    }, {
+                        id: "kl224tt232a22",
+                        name: "名称",
+                        type: 16,
+                        enable: true,
+                        usable: true
+                    }]
+                }]
+            }]
+        }],
+        fineIndexUpdate: {
+            needUpdate: false,
+            lastUpdate: 1509953199062
+        }
+    });
+
+    Demo.FixScene = BI.inherit(BI.Widget, {
+        constant: {
+            TAB1: 1,
+            TAB2: 2
+        },
+
+        _store: function () {
+            return model;
+        },
+
+        watch: {
+            "groups.*.name": function () {
+                this.fineIndexTab.setText("FineIndex更新（******* 分组名变化 需要更新 *******）");
+                this.model.fineIndexUpdate.needUpdate = true;
+            },
+            "groups.*.packages.*.name": function () {
+                this.fineIndexTab.setText("FineIndex更新（******* 业务包名变化 需要更新 *******）");
+                this.model.fineIndexUpdate.needUpdate = true;
+            },
+            "groups.*.packages.*.tables.*.name": function () {
+                this.fineIndexTab.setText("FineIndex更新（******* 表名变化 需要更新 *******）");
+                this.model.fineIndexUpdate.needUpdate = true;
+            },
+            "groups.*.packages.*.tables.*.fields.*.name": function () {
+                this.fineIndexTab.setText("FineIndex更新（******* 字段名变化 需要更新 *******）");
+                this.model.fineIndexUpdate.needUpdate = true;
+            },
+            "fineIndexUpdate.needUpdate": function (needUpdate) {
+                !needUpdate && this.fineIndexTab.setText("FineIndex更新");
+            }
+        },
+
+        render: function () {
+            var self = this;
+            return {
+                type: "bi.tab",
+                defaultShowIndex: this.constant.TAB1,
+                single: true,
+                tab: {
+                    type: "bi.button_group",
+                    items: BI.createItems([{
+                        text: "业务包管理",
+                        value: this.constant.TAB1
+                    }, {
+                        text: "FineIndex更新",
+                        value: this.constant.TAB2,
+                        ref: function (ref) {
+                            self.fineIndexTab = ref;
+                        }
+                    }], {
+                        type: "bi.text_button",
+                        cls: "bi-list-item-active",
+                        height: 50
+                    }),
+                    height: 50
+                },
+                cardCreator: BI.bind(this.cardCreator, this)
+            }
+        },
+
+        cardCreator: function (v) {
+            switch (v) {
+                case this.constant.TAB1:
+                    return {
+                        type: "demo.fix_scene_data_manager",
+                        data: this.model
+                    };
+                case this.constant.TAB2:
+                    return {
+                        type: "demo.fix_scene_fine_index_update"
+                    }
+            }
+        }
+    });
+    BI.shortcut("demo.fix_scene", Demo.FixScene);
+
+    Demo.FixSceneDataManager = BI.inherit(BI.Widget, {
+        _store: function () {
+            return this.options.data;
+        },
+
+        watch: {
+            "*.name": function () {
+
+            }
+        },
+
+        render: function () {
+            var items = [];
+            BI.each(this.model.groups, function (i, group) {
+                items.push({
+                    type: "demo.fix_scene_group",
+                    group: group
+                });
+            });
+
+            return {
+                type: "bi.vertical",
+                items: [{
+                    type: "bi.left",
+                    items: BI.createItems([{
+                        text: "分组名"
+                    }, {
+                        text: "业务包名"
+                    }, {
+                        text: "表名"
+                    }, {
+                        text: "字段名"
+                    }], {
+                        type: "bi.label",
+                        cls: "layout-bg1",
+                        width: 150
+                    })
+
+                }, {
+                    type: "bi.vertical",
+                    items: items
+                }],
+                vgap: 20,
+                hgap: 20
+            }
+        }
+
+    });
+    BI.shortcut("demo.fix_scene_data_manager", Demo.FixSceneDataManager);
+
+    Demo.FixSceneGroup = BI.inherit(BI.Widget, {
+        props: {
+            group: {}
+        },
+
+        _store: function () {
+            return this.options.group;
+        },
+
+        render: function () {
+            var self = this;
+            var items = [];
+            BI.each(this.model.packages, function (i, child) {
+                items.push({
+                    type: "demo.fix_scene_package",
+                    pack: child
+                });
+            });
+            return {
+                type: "bi.left",
+                items: [{
+                    type: "bi.sign_editor",
+                    cls: "bi-border-bottom",
+                    width: 100,
+                    height: 30,
+                    value: this.model.name,
+                    listeners: [{
+                        eventName: BI.SignEditor.EVENT_CHANGE,
+                        action: function () {
+                            self.model.name = this.getValue();
+                        }
+                    }]
+                }, {
+                    type: "bi.vertical",
+                    items: items
+                }],
+                hgap: 20
+            }
+        }
+    });
+    BI.shortcut("demo.fix_scene_group", Demo.FixSceneGroup);
+
+
+    Demo.FixScenePackage = BI.inherit(BI.Widget, {
+        props: {
+            pack: {}
+        },
+
+        _store: function () {
+            return this.options.pack;
+        },
+
+        render: function () {
+            var self = this;
+            var items = [];
+            BI.each(this.model.tables, function (i, child) {
+                items.push({
+                    type: "demo.fix_scene_table",
+                    table: child
+                })
+            });
+            return {
+                type: "bi.left",
+                items: [{
+                    type: "bi.sign_editor",
+                    cls: "bi-border-bottom",
+                    width: 100,
+                    height: 30,
+                    value: this.model.name,
+                    listeners: [{
+                        eventName: BI.SignEditor.EVENT_CHANGE,
+                        action: function () {
+                            self.model.name = this.getValue();
+                        }
+                    }]
+                }, {
+                    type: "bi.vertical",
+                    items: items
+                }],
+                hgap: 20
+            }
+        }
+    });
+    BI.shortcut("demo.fix_scene_package", Demo.FixScenePackage);
+
+    Demo.FixSceneTable = BI.inherit(BI.Widget, {
+        props: {
+            table: {}
+        },
+
+        _store: function () {
+            return this.options.table;
+        },
+
+        render: function () {
+            var self = this;
+            var items = [];
+            BI.each(this.model.fields, function (i, child) {
+                items.push({
+                    type: "demo.fix_scene_field",
+                    field: child
+                });
+            });
+            return {
+                type: "bi.left",
+                items: [{
+                    type: "bi.sign_editor",
+                    cls: "bi-border-bottom",
+                    width: 100,
+                    height: 30,
+                    value: this.model.name,
+                    listeners: [{
+                        eventName: BI.SignEditor.EVENT_CHANGE,
+                        action: function () {
+                            self.model.name = this.getValue();
+                        }
+                    }]
+                }, {
+                    type: "bi.vertical",
+                    items: items
+                }],
+                hgap: 20
+            }
+        }
+    });
+    BI.shortcut("demo.fix_scene_table", Demo.FixSceneTable);
+
+    Demo.FixSceneField = BI.inherit(BI.Widget, {
+        props: {
+            field: {}
+        },
+
+        _store: function () {
+            return this.options.field;
+        },
+
+        render: function () {
+            var self = this;
+            return {
+                type: "bi.center_adapt",
+                items: [{
+                    type: "bi.sign_editor",
+                    cls: "bi-border-bottom",
+                    width: 100,
+                    height: 30,
+                    value: this.model.name,
+                    listeners: [{
+                        eventName: BI.SignEditor.EVENT_CHANGE,
+                        action: function () {
+                            self.model.name = this.getValue();
+                        }
+                    }]
+                }]
+            }
+        }
+    });
+    BI.shortcut("demo.fix_scene_field", Demo.FixSceneField);
+
+    Demo.FixSceneFineIndexUpdateStore = BI.inherit(Fix.VM, {
+        _init: function () {
+            this.fineIndexUpdate = model.fineIndexUpdate;
+        },
+        computed: {
+            text: function () {
+                return "立即更新（上次更新时间：" + BI.date2Str(new Date(this.fineIndexUpdate.lastUpdate), "yyyy-MM-dd HH:mm:ss") + "）";
+            },
+            needUpdate: function () {
+                return this.fineIndexUpdate.needUpdate;
+            }
+        },
+        actions: {
+            updateFineIndex: function () {
+                this.fineIndexUpdate.needUpdate = false;
+                this.fineIndexUpdate.lastUpdate = new Date().getTime();
+            }
+        }
+    });
+
+    Demo.FixSceneFineIndexUpdate = BI.inherit(BI.Widget, {
+        _store: function () {
+            return new Demo.FixSceneFineIndexUpdateStore();
+        },
+
+        watch: {
+            "needUpdate": function () {
+                this.button.setEnable(this.model.needUpdate)
+            },
+            "text": function () {
+                this.button.setText(this.model.text);
+            }
+        },
+
+        render: function () {
+            var self = this;
+            return {
+                type: "bi.center_adapt",
+                items: [{
+                    type: "bi.button",
+                    text: this.model.text,
+                    disabled: !this.model.needUpdate,
+                    height: 30,
+                    width: 360,
+                    handler: function () {
+                        self.store.updateFineIndex();
+                    },
+                    ref: function (ref) {
+                        self.button = ref;
+                    }
+                }]
+            }
+        }
+    });
+    BI.shortcut("demo.fix_scene_fine_index_update", Demo.FixSceneFineIndexUpdate);
+
+})();;(function () {
+    var State = BI.inherit(Fix.VM, {
+        state: function () {
+            return {
+                name: "原始属性"
+            }
+        },
+        computed: {
+            b: function () {
+                return this.model.name + "-计算属性"
+            }
+        }
+    })
+
+    Demo.Fix = BI.inherit(BI.Widget, {
+        _store: function () {
+            return new State();
+        },
+        watch: {
+            b: function () {
+                this.button.setText(this.model.b)
+            }
+        },
+        render: function () {
+            var self = this;
+            return {
+                type: "bi.absolute",
+                items: [{
+                    el: {
+                        type: "bi.button",
+                        ref: function () {
+                            self.button = this;
+                        },
+                        handler: function () {
+                            self.model.name = "这是改变后的属性"
+                        },
+                        text: this.model.b
+                    }
+                }]
+            }
+        },
+        mounted: function () {
+
+
+        }
+    });
+
+    BI.shortcut("demo.fix6", Demo.Fix);
 }());;(function(){
     var model = Fix.define({
         name: "原始属性",
@@ -11635,7 +12020,7 @@ BI.shortcut("demo.date_time", Demo.CustomDateTime);Demo.Downlist = BI.inherit(BI
                         }, {
                             text: "column 1.222222222222222222222222222222222222",
                             cls: "dot-e-font",
-                            value: 22,
+                            value: 22
                         }]
                     }],
                     [{
@@ -12423,7 +12808,7 @@ Demo.RelationView = BI.inherit(BI.Widget, {
                     foreign: {region: "B", value: "b1", text: "b1字段"}
                 },
                 {
-                    primary: {region: "X33", value: "x233", text: "x233字段"},
+                    primary: {region: "X33", value: "x233", text: "x233字段"}
                 }
             ]
         });
@@ -12599,7 +12984,133 @@ Demo.SingleTreeCombo = BI.inherit(BI.Widget, {
     }
 })
 
-BI.shortcut("demo.single_tree_combo", Demo.SingleTreeCombo);Demo.Func = BI.inherit(BI.Widget, {
+BI.shortcut("demo.single_tree_combo", Demo.SingleTreeCombo);/**
+ * Created by Urthur on 2017/9/4.
+ */
+Demo.Slider = BI.inherit(BI.Widget, {
+    props: {
+            baseCls: "demo-slider",
+            width: 300,
+            height: 50,
+            min: 0,
+            max: 100
+    },
+
+    render: function () {
+        var self = this, o = this.options;
+        var singleSlider = BI.createWidget({
+            type: "bi.single_slider",
+            digit: 0,
+            width: o.width,
+            height: o.height,
+            cls: "layout-bg-white"
+        });
+
+        singleSlider.setMinAndMax({
+            min: 10,
+            max: o.max
+        });
+
+        singleSlider.setValue(30);
+        singleSlider.populate();
+        singleSlider.on(BI.SingleSlider.EVENT_CHANGE, function () {
+            console.log(this.getValue());
+        });
+
+        var normalSingleSlider = BI.createWidget({
+            type: "bi.single_slider_normal",
+            width: o.width,
+            height: 30,
+            cls: "layout-bg-white"
+        });
+        normalSingleSlider.setMinAndMax({
+            min: o.min,
+            max: o.max
+        });
+        normalSingleSlider.setValue(10);
+        normalSingleSlider.populate();
+
+        var singleSliderLabel = BI.createWidget({
+            type: "bi.single_slider_label",
+            width: o.width,
+            height: o.height,
+            digit: 0,
+            unit: "个",
+            cls: "layout-bg-white"
+        });
+        singleSliderLabel.setMinAndMax({
+            min: o.min,
+            max: o.max
+        });
+        singleSliderLabel.setValue(10);
+        singleSliderLabel.populate();
+
+        var intervalSlider = BI.createWidget({
+            type: "bi.interval_slider",
+            width: o.width,
+            cls: "layout-bg-white"
+        });
+        intervalSlider.setMinAndMax({
+            min: o.min,
+            max: o.max
+        });
+        intervalSlider.setValue({
+            min: 10,
+            max: 120
+        });
+        intervalSlider.populate();
+
+        var intervalSliderLabel = BI.createWidget({
+            type: "bi.interval_slider_label",
+            width: o.width,
+            unit: "个",
+            cls: "layout-bg-white"
+        });
+        intervalSliderLabel.setMinAndMax({
+            min: 0,
+            max: 120
+        });
+        intervalSliderLabel.setValue({
+            min: 10,
+            max: 120
+        });
+        intervalSliderLabel.populate();
+
+
+        return {
+            type: "bi.vertical",
+            element: this,
+            items: [{
+                type: "bi.center_adapt",
+                items: [{
+                    el: singleSlider
+                }]
+            }, {
+                type: "bi.center_adapt",
+                items: [{
+                    el: normalSingleSlider
+                }]
+            }, {
+                type: "bi.center_adapt",
+                items: [{
+                    el: singleSliderLabel
+                }]
+            }, {
+                type: "bi.center_adapt",
+                items: [{
+                    el: intervalSlider
+                }]
+            }, {
+                type: "bi.center_adapt",
+                items: [{
+                    el: intervalSliderLabel
+                }]
+            }],
+            vgap: 20
+        };
+    }
+});
+BI.shortcut("demo.slider", Demo.Slider);Demo.Func = BI.inherit(BI.Widget, {
     props: {
         baseCls: "demo-func"
     },
@@ -12691,7 +13202,7 @@ BI.shortcut("demo.single_tree_combo", Demo.SingleTreeCombo);Demo.Func = BI.inher
                 type: "bi.page_table_cell",
                 text: "node3",
                 values: [1, 2]
-            }],
+            }]
             //values: [1, 2]
         }];
 
@@ -12710,7 +13221,7 @@ BI.shortcut("demo.single_tree_combo", Demo.SingleTreeCombo);Demo.Func = BI.inher
                                 type: "bi.collection_table"
                             }
                         }
-                    },
+                    }
                 },
                 sequence: {
                     type: "bi.sequence_table_dynamic_number"
@@ -13313,7 +13824,7 @@ BI.shortcut("demo.responsive_table", Demo.Func);Demo.Func = BI.inherit(BI.Widget
                             type: "bi.collection_table"
                         }
                     }
-                },
+                }
             },
             sequence: {
                 type: "bi.sequence_table_tree_number"
@@ -13722,7 +14233,7 @@ Demo.YearQuarterCombo = BI.inherit(BI.Widget, {
                     self.widget = _ref;
                 },
                 yearBehaviors: {},
-                quarterBehaviors: {},
+                quarterBehaviors: {}
             }, {
                 type: "bi.button",
                 text: "getValue",

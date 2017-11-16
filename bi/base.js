@@ -581,7 +581,7 @@ BI.Text = BI.inherit(BI.Single, {
     setText: function (text) {
         BI.Text.superclass.setText.apply(this, arguments);
         this.options.text = text;
-        this.text.element.text((text + "").replaceAll(" ", "　"));
+        this.text.element.html((text + "").replaceAll(" ", "&nbsp;"));
     }
 });
 
@@ -1725,7 +1725,7 @@ BI.TreeView = BI.inherit(BI.Pane, {
 
     _getNodeValue: function (node) {
         //去除标红
-        return node.value == null ? node.text.replace(/<[^>]+>/g, "").replaceAll("　", " ") : node.value;
+        return node.value == null ? node.text.replace(/<[^>]+>/g, "").replaceAll("&nbsp;", " ") : node.value;
     },
 
     //获取半选框值
@@ -1822,7 +1822,7 @@ BI.TreeView = BI.inherit(BI.Pane, {
             if (BI.isKey(o.paras.keyword)) {
                 n.text = $("<div>").__textKeywordMarked__(n.text, o.paras.keyword, n.py).html();
             } else {
-                n.text = (n.text + "").replaceAll(" ", "　");
+                n.text = (n.text + "").replaceAll(" ", "&nbsp;");
             }
         });
         return nodes;
@@ -2425,6 +2425,10 @@ BI.Canvas = BI.inherit(BI.Widget, {
         this._queue = [];
     },
 
+    mounted: function () {
+        this.stroke();
+    },
+
     _getContext: function () {
         if (!this.ctx) {
             this.ctx = this.canvas.getContext('2d');
@@ -2439,11 +2443,11 @@ BI.Canvas = BI.inherit(BI.Widget, {
         }
         if (BI.isObject(key)) {
             BI.each(key, function (k, v) {
-                self._queue.push({k: k, v: v});
+                self._queue.push({ k: k, v: v });
             });
             return;
         }
-        this._queue.push({k: key, v: value});
+        this._queue.push({ k: key, v: value });
     },
 
     _line: function (x0, y0) {
@@ -2509,20 +2513,19 @@ BI.Canvas = BI.inherit(BI.Widget, {
         this._getContext().clearRect(0, 0, this.canvas.width, this.canvas.height);
     },
 
-    stroke: function (callback) {
-        var self = this;
-        BI.nextTick(function () {
-            var ctx = self._getContext();
-            BI.each(self._queue, function (i, q) {
-                if (BI.isFunction(ctx[q.k])) {
-                    ctx[q.k].apply(ctx, q.v);
-                } else {
-                    ctx[q.k] = q.v;
-                }
-            });
-            self._queue = [];
-            callback && callback();
+    stroke: function () {
+        var ctx = this._getContext();
+        if(!ctx){
+            return false;
+        }
+        BI.each(this._queue, function (i, q) {
+            if (BI.isFunction(ctx[q.k])) {
+                ctx[q.k].apply(ctx, q.v);
+            } else {
+                ctx[q.k] = q.v;
+            }
         });
+        this._queue = [];
     }
 });
 BI.shortcut("bi.canvas", BI.Canvas);/**
@@ -3005,6 +3008,19 @@ BI.Combo = BI.inherit(BI.Widget, {
                 e.stopPropagation();
             }
         };
+
+        var enterPopup = false;
+
+        function hide() {
+            if (self.isEnabled() && self.isValid() && self.combo.isEnabled() && self.combo.isValid() && o.toggle === true) {
+                self._hideView();
+                self.fireEvent(BI.Controller.EVENT_CHANGE, BI.Events.COLLAPSE, "", self.combo);
+                self.fireEvent(BI.Combo.EVENT_COLLAPSE);
+            }
+            self.popupView && self.popupView.element.off("mouseenter." + self.getName()).off("mouseleave." + self.getName());
+            enterPopup = false;
+        }
+
         BI.each(evs, function (i, ev) {
             switch (ev) {
                 case "hover":
@@ -3016,11 +3032,18 @@ BI.Combo = BI.inherit(BI.Widget, {
                         }
                     });
                     self.element.on("mouseleave." + self.getName(), function (e) {
-                        if (self.isEnabled() && self.isValid() && self.combo.isEnabled() && self.combo.isValid() && o.toggle === true) {
-                            self._hideView();
-                            self.fireEvent(BI.Controller.EVENT_CHANGE, BI.Events.COLLAPSE, "", self.combo);
-                            self.fireEvent(BI.Combo.EVENT_COLLAPSE);
-                        }
+                        self.popupView.element.on("mouseenter." + self.getName(), function (e) {
+                            enterPopup = true;
+                            self.popupView.element.on("mouseleave." + self.getName(), function (e) {
+                                hide();
+                            });
+                            self.popupView.element.off("mouseenter." + self.getName());
+                        });
+                        BI.defer(function () {
+                            if (!enterPopup) {
+                                hide();
+                            }
+                        }, 50);
                     });
                     break;
                 case "click":
@@ -3066,11 +3089,18 @@ BI.Combo = BI.inherit(BI.Widget, {
                         st(e);
                     });
                     self.element.on("mouseleave." + self.getName(), function (e) {
-                        if (self.isEnabled() && self.isValid() && self.combo.isEnabled() && self.combo.isValid() && o.toggle === true) {
-                            self._hideView();
-                            self.fireEvent(BI.Controller.EVENT_CHANGE, BI.Events.COLLAPSE, "", self.combo);
-                            self.fireEvent(BI.Combo.EVENT_COLLAPSE);
-                        }
+                        self.popupView.element.on("mouseenter." + self.getName(), function (e) {
+                            enterPopup = true;
+                            self.popupView.element.on("mouseleave." + self.getName(), function (e) {
+                                hide();
+                            });
+                            self.popupView.element.off("mouseenter." + self.getName());
+                        });
+                        BI.defer(function () {
+                            if (!enterPopup) {
+                                hide();
+                            }
+                        }, 50);
                     });
                     break;
             }
@@ -15139,10 +15169,10 @@ BI.FloatBox = BI.inherit(BI.Widget, {
                         type: "bi.absolute",
                         items: [{
                             el: this._center,
-                            left: 10,
-                            top: 10,
-                            right: 10,
-                            bottom: 10
+                            left: 20,
+                            top: 20,
+                            right: 20,
+                            bottom: 0
                         }]
                     }
                 },
@@ -15151,9 +15181,9 @@ BI.FloatBox = BI.inherit(BI.Widget, {
                         type: "bi.absolute",
                         items: [{
                             el: this._south,
-                            left: 10,
+                            left: 20,
                             top: 0,
-                            right: 10,
+                            right: 20,
                             bottom: 0
                         }]
                     },
@@ -16685,7 +16715,7 @@ BI.RichEditorAlignCenterButton = BI.inherit(BI.RichEditorAction, {
             title: BI.i18nText("BI-Word_Align_Center"),
             height: 20,
             width: 20,
-            cls: "text-toolbar-button bi-list-item-active text-align-center-font",
+            cls: "text-toolbar-button bi-list-item-active text-align-center-font"
         });
         this.align.on(BI.IconButton.EVENT_CHANGE, function () {
             self.doCommand();
@@ -16722,7 +16752,7 @@ BI.RichEditorAlignLeftButton = BI.inherit(BI.RichEditorAction, {
             title: BI.i18nText("BI-Word_Align_Left"),
             height: 20,
             width: 20,
-            cls: "text-toolbar-button bi-list-item-active text-align-left-font",
+            cls: "text-toolbar-button bi-list-item-active text-align-left-font"
         });
         this.align.on(BI.IconButton.EVENT_CHANGE, function () {
             self.doCommand();
@@ -16759,7 +16789,7 @@ BI.RichEditorAlignRightButton = BI.inherit(BI.RichEditorAction, {
             title: BI.i18nText("BI-Word_Align_Right"),
             height: 20,
             width: 20,
-            cls: "text-toolbar-button bi-list-item-active text-align-right-font",
+            cls: "text-toolbar-button bi-list-item-active text-align-right-font"
         });
         this.align.on(BI.IconButton.EVENT_CHANGE, function () {
             self.doCommand();
@@ -16797,7 +16827,7 @@ BI.RichEditorBoldButton = BI.inherit(BI.RichEditorAction, {
             title: BI.i18nText("BI-Basic_Bold"),
             height: 20,
             width: 20,
-            cls: "text-toolbar-button bi-list-item-active text-bold-font",
+            cls: "text-toolbar-button bi-list-item-active text-bold-font"
         });
         this.bold.on(BI.IconButton.EVENT_CHANGE, function () {
             self.doCommand();
@@ -16809,7 +16839,7 @@ BI.RichEditorBoldButton = BI.inherit(BI.RichEditorAction, {
 
     deactivate: function () {
         this.bold.setSelected(false);
-    },
+    }
 });
 BI.shortcut("bi.rich_editor_bold_button", BI.RichEditorBoldButton)/**
  *
@@ -16837,7 +16867,7 @@ BI.RichEditorItalicButton = BI.inherit(BI.RichEditorAction, {
             title: BI.i18nText("BI-Basic_Italic"),
             height: 20,
             width: 20,
-            cls: "text-toolbar-button bi-list-item-active text-italic-font",
+            cls: "text-toolbar-button bi-list-item-active text-italic-font"
         });
         this.italic.on(BI.IconButton.EVENT_CHANGE, function () {
             self.doCommand();
@@ -16849,7 +16879,7 @@ BI.RichEditorItalicButton = BI.inherit(BI.RichEditorAction, {
 
     deactivate: function () {
         this.italic.setSelected(false);
-    },
+    }
 });
 BI.shortcut("bi.rich_editor_italic_button", BI.RichEditorItalicButton)/**
  *
@@ -16861,7 +16891,7 @@ BI.RichEditorParamButton = BI.inherit(BI.RichEditorParamAction, {
     _defaultConfig: function () {
         return BI.extend(BI.RichEditorParamButton.superclass._defaultConfig.apply(this, arguments), {
             width: 20,
-            height: 20,
+            height: 20
         });
     },
 
@@ -16913,7 +16943,7 @@ BI.RichEditorUnderlineButton = BI.inherit(BI.RichEditorAction, {
             title: BI.i18nText("BI-Basic_Underline"),
             height: 20,
             width: 20,
-            cls: "text-toolbar-button bi-list-item-active text-underline-font",
+            cls: "text-toolbar-button bi-list-item-active text-underline-font"
         });
         this.underline.on(BI.IconButton.EVENT_CHANGE, function () {
             self.doCommand();
@@ -16925,7 +16955,7 @@ BI.RichEditorUnderlineButton = BI.inherit(BI.RichEditorAction, {
 
     deactivate: function () {
         this.underline.setSelected(false);
-    },
+    }
 });
 BI.shortcut("bi.rich_editor_underline_button", BI.RichEditorUnderlineButton)/**
  * 颜色选择trigger
@@ -16989,7 +17019,7 @@ BI.RichEditorBackgroundColorChooser = BI.inherit(BI.RichEditorAction, {
     _defaultConfig: function () {
         return BI.extend(BI.RichEditorBackgroundColorChooser.superclass._defaultConfig.apply(this, arguments), {
             width: 20,
-            height: 20,
+            height: 20
         });
     },
 
@@ -18996,6 +19026,7 @@ BI.CodeEditor = BI.inherit(BI.Single, {
         }
         options.value = value;
         this.editor.markText(from, to, options);
+        this.editor.replaceSelection(" ");
         this.editor.focus();
     },
 
@@ -19059,10 +19090,6 @@ BI.CodeEditor = BI.inherit(BI.Single, {
     setStyle: function (style) {
         this.style = style;
         this.element.css(style);
-        var wrapperStyle = this.editor.getWrapperElement().style;
-        BI.extend(wrapperStyle, style, {
-                color: style.color || BI.DOM.getContrastColor(BI.DOM.isRGBColor(style.backgroundColor) ? BI.DOM.rgb2hex(style.backgroundColor) : style.backgroundColor)
-        });
     },
 
     getStyle: function () {
@@ -30264,7 +30291,7 @@ BI.CollectionTable = BI.inherit(BI.Widget, {
                 el: this.leftScrollbar,
                 left: 0
             }, {
-                el: this.rightScrollbar,
+                el: this.rightScrollbar
             }]
         });
         this._width = o.width - BI.GridTableScrollbar.SIZE;
@@ -30280,7 +30307,8 @@ BI.CollectionTable = BI.inherit(BI.Widget, {
     },
 
     _getFreezeColLength: function () {
-        return this.options.isNeedFreeze ? this.options.freezeCols.length : 0;
+        var o = this.options;
+        return o.isNeedFreeze === true ? BI.clamp(o.freezeCols.length, 0, o.columnSize.length) : 0;
     },
 
     _getFreezeHeaderHeight: function () {
@@ -31087,7 +31115,8 @@ BI.GridTable = BI.inherit(BI.Widget, {
     },
 
     _getFreezeColLength: function () {
-        return this.options.isNeedFreeze ? this.options.freezeCols.length : 0;
+        var o = this.options;
+        return o.isNeedFreeze === true ? BI.clamp(o.freezeCols.length, 0, o.columnSize.length) : 0;
     },
 
     _getFreezeHeaderHeight: function () {
@@ -32400,16 +32429,15 @@ BI.Table = BI.inherit(BI.Widget, {
         }))));
 
         this._initFreezeScroll();
-        BI.nextTick(function () {
-            if (self.element.is(":visible")) {
-                self._resize();
-                self.fireEvent(BI.Table.EVENT_TABLE_AFTER_INIT);
-            }
-        });
         BI.ResizeDetector.addResizeListener(this, function () {
             self._resize();
             self.fireEvent(BI.Table.EVENT_TABLE_RESIZE);
         });
+    },
+
+    mounted: function () {
+        this._resize && this._resize();
+        this.fireEvent(BI.Table.EVENT_TABLE_AFTER_INIT);
     },
 
     _initFreezeScroll: function () {
@@ -32753,9 +32781,7 @@ BI.Table = BI.inherit(BI.Widget, {
         });
     },
 
-    _init: function () {
-        BI.Table.superclass._init.apply(this, arguments);
-
+    render: function () {
         this.populate(this.options.items);
     },
 
@@ -33956,7 +33982,8 @@ BI.ResizableTable = BI.inherit(BI.Widget, {
     },
 
     _getFreezeColLength: function () {
-        return this.options.freezeCols.length;
+        var o = this.options;
+        return o.isNeedFreeze === true ? BI.clamp(o.freezeCols.length, 0, o.columnSize.length) : 0;
     },
 
     _getFreezeColumnSize: function () {

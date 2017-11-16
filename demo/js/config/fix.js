@@ -29,7 +29,7 @@ var viewRouter = new (BI.inherit(BI.WRouter, {
 
         "/tmp": "TmpView",
         "/tmp/child": "TmpChildView",
-        "/tmp/child/child": "TmpChildChildView",
+        "/tmp/child/child": "TmpChildChildView"
     },
 
     getSkipToView: function (v) {
@@ -91,6 +91,11 @@ Demo.FIX_CONFIG = [{
 }, {
     id: 72,
     pId: 7,
+    text: "state属性",
+    value: "demo.fix6"
+}, {
+    id: 78,
+    pId: 7,
     text: "计算属性",
     value: "demo.fix2"
 }, {
@@ -113,4 +118,9 @@ Demo.FIX_CONFIG = [{
     pId: 7,
     text: "一个混合的例子",
     value: "demo.fix"
+}, {
+    id: 77,
+    pId: 7,
+    text: "场景",
+    value: "demo.fix_scene"
 }];

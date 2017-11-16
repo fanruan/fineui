@@ -24,7 +24,7 @@ BI.RichEditorItalicButton = BI.inherit(BI.RichEditorAction, {
             title: BI.i18nText("BI-Basic_Italic"),
             height: 20,
             width: 20,
-            cls: "text-toolbar-button bi-list-item-active text-italic-font",
+            cls: "text-toolbar-button bi-list-item-active text-italic-font"
         });
         this.italic.on(BI.IconButton.EVENT_CHANGE, function () {
             self.doCommand();
@@ -36,6 +36,6 @@ BI.RichEditorItalicButton = BI.inherit(BI.RichEditorAction, {
 
     deactivate: function () {
         this.italic.setSelected(false);
-    },
+    }
 });
 BI.shortcut("bi.rich_editor_italic_button", BI.RichEditorItalicButton)

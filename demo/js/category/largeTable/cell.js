@@ -42,6 +42,6 @@ BI.DetailTableCell = BI.inherit(BI.Widget, {
         if (BI.isNotNull(o.styles) && BI.isObject(o.styles)) {
             this.element.css(o.styles);
         }
-    },
+    }
 });
 BI.shortcut("bi.detail_table_cell", BI.DetailTableCell);

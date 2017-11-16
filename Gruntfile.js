@@ -71,6 +71,12 @@ module.exports = function (grunt) {
                 ],
                 dest: 'dist/widget.js'
             },
+            routerJs: {
+                src: [
+                    'src/router/**/*.js'
+                ],
+                dest: 'dist/router.js'
+            },
             chartJs: {
                 src: [
                     'src/addons/chart/chart.js',
@@ -79,32 +85,6 @@ module.exports = function (grunt) {
                     'src/addons/chart/**/*.js'
                 ],
                 dest: 'dist/chart.js'
-            },
-            sliderJs: {
-                src: [
-                    'src/addons/sliders/js/**/*.js'
-                ],
-                dest: 'dist/sliders.js'
-            },
-            sliderCss: {
-                src: [
-                    'src/addons/sliders/**/*.css'
-                ],
-                dest: 'dist/sliders.css'
-            },
-            jqueryuiJs: {
-                src: [
-                    'src/addons/sliders/lib/jquery.ui.core.js',
-                    'src/addons/sliders/lib/jquery.ui.core.js',
-                    'src/addons/sliders/lib/jquery.ui.widget.js',
-                    'src/addons/sliders/lib/jquery.ui.mouse.js',
-                    'src/addons/sliders/lib/jquery.ui.position.js',
-                    'src/addons/sliders/lib/jquery.ui.resizable.js',
-                    'src/addons/sliders/lib/jquery.ui.draggable.js',
-                    'src/addons/sliders/lib/jquery.ui.droppable.js',
-                    'src/addons/sliders/lib/jquery.ui.sortable.js'
-                ],
-                dest: 'dist/jqueryui.js'
             },
             coreCss: {
                 src: ['src/css/core/**/*.css', 'src/css/theme/**/*.css'],
@@ -124,7 +104,7 @@ module.exports = function (grunt) {
             },
 
             bundleJs: {
-                src: ['dist/core.js', 'dist/base.js', 'dist/case.js', 'dist/widget.js', 'public/js/**/*.js', 'public/js/index.js'],
+                src: ['dist/core.js', 'dist/base.js', 'dist/case.js', 'dist/widget.js', 'dist/router.js', 'public/js/**/*.js', 'public/js/index.js'],
                 dest: 'dist/bundle.js'
             },
 
@@ -211,6 +191,12 @@ module.exports = function (grunt) {
                 ],
                 dest: 'bi/widget.js'
             },
+            bi_routerJs: {
+                src: [
+                    'src/router/**/*.js'
+                ],
+                dest: 'bi/router.js'
+            },
             bi_chartJs: {
                 src: [
                     'src/addons/chart/chart.js',
@@ -219,32 +205,6 @@ module.exports = function (grunt) {
                     'src/addons/chart/**/*.js'
                 ],
                 dest: 'bi/chart.js'
-            },
-            bi_sliderJs: {
-                src: [
-                    'src/addons/sliders/js/**/*.js'
-                ],
-                dest: 'bi/sliders.js'
-            },
-            bi_sliderCss: {
-                src: [
-                    'src/addons/sliders/**/*.css'
-                ],
-                dest: 'bi/sliders.css'
-            },
-            bi_jqueryuiJs: {
-                src: [
-                    'src/addons/sliders/lib/jquery.ui.core.js',
-                    'src/addons/sliders/lib/jquery.ui.core.js',
-                    'src/addons/sliders/lib/jquery.ui.widget.js',
-                    'src/addons/sliders/lib/jquery.ui.mouse.js',
-                    'src/addons/sliders/lib/jquery.ui.position.js',
-                    'src/addons/sliders/lib/jquery.ui.resizable.js',
-                    'src/addons/sliders/lib/jquery.ui.draggable.js',
-                    'src/addons/sliders/lib/jquery.ui.droppable.js',
-                    'src/addons/sliders/lib/jquery.ui.sortable.js'
-                ],
-                dest: 'bi/jqueryui.js'
             },
             bi_coreCss: {
                 src: ['src/css/core/**/*.css', 'src/css/theme/**/*.css'],
@@ -261,13 +221,6 @@ module.exports = function (grunt) {
         },
 
         less: {
-            sliders: {
-                expand: true,
-                cwd: 'src/addons/sliders/less',
-                src: ['**/*.less'],
-                dest: 'src/addons/sliders/css/',
-                ext: '.css'
-            },
             demo: {
                 expand: true,
                 cwd: 'demo/less',

@@ -12,8 +12,6 @@
     <link rel="stylesheet" type="text/css" href="widget.css"/>
     <!--资源样式， 包括font、icon、background、app-->
     <link rel="stylesheet" type="text/css" href="resource.css"/>
-    <!--单值滑块、双值滑块控件样式-->
-    <link rel="stylesheet" type="text/css" href="sliders.css"/>
     <!--当前demo定义的样式-->
     <link rel="stylesheet" type="text/css" href="demo.css"/>
 
@@ -21,7 +19,9 @@
     <script src="polyfill.js"></script>
     <!--核心js-->
     <script src="core.js"></script>
-    <!--fix1.0版本框架， 只用ui的话不用引入， 引入的顺序需在core.js之后， 可以和2.0版本同步使用或使用任一个均可-->
+    <!--BI路由js-->
+    <script src="router.js"></script>
+    <!--fix1.0版本框架， 只用ui的话不用引入， fix1.0依赖于router，引入的顺序需在core.js、router.js之后， 可以和2.0版本同时使用或使用任一个均可-->
     <script src="fix/fix-1.0.js"></script>
     <!--fix2.0版本框架， 只用ui的话不用引入， 引入的顺序需在core.js之后-->
     <script src="fix/fix.js"></script>
@@ -35,10 +35,6 @@
     <!--BI控件js-->
     <script src="widget.js"></script>
 
-    <!--jqueryui包括jquery的draggable、droppable、resizable-->
-    <script src="jqueryui.js"></script>
-    <!--单值滑块、双值滑块js， 因为用了jqueryui，所以提出来了-->
-    <script src="sliders.js"></script>
     <!--工程配置文件，主要是BI.servletURL(根目录)、BI.resourceURL(资源路径)、BI.i18n(国际化)-->
     <script src="config.js"></script>
     <!--图表-->

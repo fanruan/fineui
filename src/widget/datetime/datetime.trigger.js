@@ -3,7 +3,7 @@
  */
 BI.DateTimeTrigger = BI.inherit(BI.Trigger, {
     _const: {
-        hgap: 4,
+        hgap: 4
     },
 
     _defaultConfig: function () {

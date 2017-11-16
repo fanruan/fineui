@@ -34,7 +34,7 @@
     var unMount = BI.Widget.prototype._unMount;
     BI.Widget.prototype._unMount = function () {
         unMount.apply(this, arguments);
-        this.store && this.store.destroy();
+        this.store && BI.isFunction(this.store.destroy) && this.store.destroy();
         BI.each(this._watchers, function (i, unwatches) {
             unwatches = BI.isArray(unwatches) ? unwatches : [unwatches];
             BI.each(unwatches, function (j, unwatch) {
