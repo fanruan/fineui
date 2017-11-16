@@ -19,7 +19,9 @@
     <script src="polyfill.js"></script>
     <!--核心js-->
     <script src="core.js"></script>
-    <!--fix1.0版本框架， 只用ui的话不用引入， 引入的顺序需在core.js之后， 可以和2.0版本同步使用或使用任一个均可-->
+    <!--BI路由js-->
+    <script src="router.js"></script>
+    <!--fix1.0版本框架， 只用ui的话不用引入， fix1.0依赖于router，引入的顺序需在core.js、router.js之后， 可以和2.0版本同时使用或使用任一个均可-->
     <script src="fix/fix-1.0.js"></script>
     <!--fix2.0版本框架， 只用ui的话不用引入， 引入的顺序需在core.js之后-->
     <script src="fix/fix.js"></script>

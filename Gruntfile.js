@@ -71,6 +71,12 @@ module.exports = function (grunt) {
                 ],
                 dest: 'dist/widget.js'
             },
+            routerJs: {
+                src: [
+                    'src/router/**/*.js'
+                ],
+                dest: 'dist/router.js'
+            },
             chartJs: {
                 src: [
                     'src/addons/chart/chart.js',
@@ -184,6 +190,12 @@ module.exports = function (grunt) {
                     'src/component/**/*.js'
                 ],
                 dest: 'bi/widget.js'
+            },
+            bi_routerJs: {
+                src: [
+                    'src/router/**/*.js'
+                ],
+                dest: 'bi/router.js'
             },
             bi_chartJs: {
                 src: [
