@@ -898,7 +898,7 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
         if (typeof Proxy === 'function') {
             return vm.$$computed = new Proxy(props, {
                 has: function has(target, key) {
-                    return key in computed;
+                    return computed && key in computed;
                 },
                 get: function get(target, key) {
                     return createComputedGetter(vm, key)();
