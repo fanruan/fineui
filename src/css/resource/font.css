@@ -4,10 +4,6 @@
   
   /*  iOS 4.1- */
 }
-@font-face {
-  font-family: 'bi';
-  src: url('font/iconfont.eot') /* IE6-IE8 */;
-}
 .b-font {
   font-family: "bi";
   font-style: normal;

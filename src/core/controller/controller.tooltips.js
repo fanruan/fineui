@@ -68,13 +68,14 @@ BI.TooltipsController = BI.inherit(BI.Controller, {
         if (!this.has(name)) {
             this.create(name, text, level, opt.container || context);
         }
-
-        var offset = context.element.offset();
-        var bounds = context.element.bounds();
-        if(bounds.height === 0 || bounds.width === 0) {
-            return;
+        if (!opt.belowMouse) {
+            var offset = context.element.offset();
+            var bounds = context.element.bounds();
+            if (bounds.height === 0 || bounds.width === 0) {
+                return;
+            }
+            var top = offset.top + bounds.height + 5;
         }
-        var top = offset.top + bounds.height + 5;
         var tooltip = this.get(name);
         tooltip.setText(text);
         tooltip.element.css({
@@ -90,8 +91,7 @@ BI.TooltipsController = BI.inherit(BI.Controller, {
         }
         if (y + tooltip.element.outerHeight() > $("body").outerHeight()) {
             y -= tooltip.element.outerHeight() + 15;
-            top = offset.top - tooltip.element.outerHeight() - 5;
-            !opt.belowMouse && (y = Math.min(y, top));
+            !opt.belowMouse && (y = Math.min(y, offset.top - tooltip.element.outerHeight() - 5));
         } else {
             !opt.belowMouse && (y = Math.max(y, top));
         }
