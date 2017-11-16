@@ -2782,4 +2782,4 @@ BI.FloatBoxRouter = BI.inherit(BI.WRouter, {
     }
 });BI.Fix = {
     version: "1.0"
-}
+};
