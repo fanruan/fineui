@@ -400,7 +400,8 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 
         Observer.prototype.observeArray = function observeArray(items) {
             for (var i = 0, l = items.length; i < l; i++) {
-                items[i] = observe(items[i], this, i).model;
+                var ob = observe(items[i], this, i);
+                items[i] = ob ? ob.model : items[i];
             }
             return items;
         };
