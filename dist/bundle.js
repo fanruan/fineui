@@ -19278,7 +19278,7 @@ BI.extend(jQuery.fn, {
      */
     __textKeywordMarked__: function (text, keyword, py) {
         if (!BI.isKey(keyword) || (text + "").length > 100) {
-            return this.text((text + "").replaceAll(" ", "　"));
+            return this.html((text + "").replaceAll(" ", "&nbsp;"));
         }
         keyword = keyword + "";
         keyword = BI.toUpperCase(keyword);
@@ -19301,7 +19301,7 @@ BI.extend(jQuery.fn, {
             if (tidx >= 0) {
                 this.append(textLeft.substr(0, tidx));
                 this.append($("<span>").addClass("bi-keyword-red-mark")
-                    .text(textLeft.substr(tidx, keyword.length).replaceAll(" ", "　")));
+                    .html(textLeft.substr(tidx, keyword.length).replaceAll(" ", "&nbsp;")));
 
                 textLeft = textLeft.substr(tidx + keyword.length);
                 if (py != null) {
@@ -19310,7 +19310,7 @@ BI.extend(jQuery.fn, {
             } else if (pidx != null && pidx >= 0 && Math.floor(pidx / text.length) === Math.floor((pidx + keyword.length - 1) / text.length)) {
                 this.append(textLeft.substr(0, pidx));
                 this.append($("<span>").addClass("bi-keyword-red-mark")
-                    .text(textLeft.substr(pidx, keyword.length).replaceAll(" ", "　")));
+                    .html(textLeft.substr(pidx, keyword.length).replaceAll(" ", "&nbsp;")));
                 if (py != null) {
                     py = py.substr(pidx + keyword.length);
                 }
@@ -26359,7 +26359,7 @@ BI.Text = BI.inherit(BI.Single, {
     setText: function (text) {
         BI.Text.superclass.setText.apply(this, arguments);
         this.options.text = text;
-        this.text.element.text((text + "").replaceAll(" ", "　"));
+        this.text.element.html((text + "").replaceAll(" ", "&nbsp;"));
     }
 });
 
@@ -27503,7 +27503,7 @@ BI.TreeView = BI.inherit(BI.Pane, {
 
     _getNodeValue: function (node) {
         //去除标红
-        return node.value == null ? node.text.replace(/<[^>]+>/g, "").replaceAll("　", " ") : node.value;
+        return node.value == null ? node.text.replace(/<[^>]+>/g, "").replaceAll("&nbsp;", " ") : node.value;
     },
 
     //获取半选框值
@@ -27600,7 +27600,7 @@ BI.TreeView = BI.inherit(BI.Pane, {
             if (BI.isKey(o.paras.keyword)) {
                 n.text = $("<div>").__textKeywordMarked__(n.text, o.paras.keyword, n.py).html();
             } else {
-                n.text = (n.text + "").replaceAll(" ", "　");
+                n.text = (n.text + "").replaceAll(" ", "&nbsp;");
             }
         });
         return nodes;
