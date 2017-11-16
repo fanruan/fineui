@@ -13031,7 +13031,7 @@ Demo.Slider = BI.inherit(BI.Widget, {
         normalSingleSlider.populate();
 
         var singleSliderLabel = BI.createWidget({
-            type: "bi.single_slider_label",
+            type: "bi.single_slider",
             width: o.width,
             height: o.height,
             digit: 0,
@@ -13061,7 +13061,7 @@ Demo.Slider = BI.inherit(BI.Widget, {
         intervalSlider.populate();
 
         var intervalSliderLabel = BI.createWidget({
-            type: "bi.interval_slider_label",
+            type: "bi.interval_slider",
             width: o.width,
             unit: "个",
             cls: "layout-bg-white"

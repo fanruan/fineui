@@ -14,7 +14,9 @@ BI.IntervalSlider = BI.inherit(BI.Widget, {
 
     _defaultConfig: function () {
         return BI.extend(BI.IntervalSlider.superclass._defaultConfig.apply(this, arguments), {
-            baseCls: "bi-interval-slider bi-slider-track"
+            baseCls: "bi-interval-slider bi-slider-track",
+            digit: false,
+            unit: ""
         })
     },
 
@@ -46,8 +48,9 @@ BI.IntervalSlider = BI.inherit(BI.Widget, {
         this.track = this._createTrackWrapper();
 
         this.labelOne = BI.createWidget({
-            type: "bi.sign_editor",
+            type: "bi.sign_text_editor",
             cls: "slider-editor-button",
+            text: this.options.unit,
             errorText: "",
             allowBlank: false,
             width: c.EDITOR_WIDTH,
@@ -72,9 +75,10 @@ BI.IntervalSlider = BI.inherit(BI.Widget, {
         });
 
         this.labelTwo = BI.createWidget({
-            type: "bi.sign_editor",
+            type: "bi.sign_text_editor",
             cls: "slider-editor-button",
             errorText: "",
+            text: this.options.unit,
             allowBlank: false,
             width: c.EDITOR_WIDTH,
             validationChecker: function (v) {
@@ -135,10 +139,12 @@ BI.IntervalSlider = BI.inherit(BI.Widget, {
     },
 
     _rePosBySizeAfterMove: function (size, isLeft) {
+        var o = this.options;
         var percent = size * 100 / (this._getGrayTrackLength());
         var significantPercent = BI.parseFloat(percent.toFixed(1));
         var v = this._getValueByPercent(significantPercent);
         v = this._assertValue(v);
+        v = o.digit === false ? v : v.toFixed(o.digit);
         if(isLeft){
             this._setLabelOnePosition(significantPercent);
             this._setSliderOnePosition(significantPercent);
@@ -450,8 +456,11 @@ BI.IntervalSlider = BI.inherit(BI.Widget, {
     },
 
     setValue: function (v) {
+        var o = this.options;
         var valueOne = BI.parseFloat(v.min);
         var valueTwo = BI.parseFloat(v.max);
+        valueOne = o.digit === false ? valueOne : valueOne.toFixed(o.digit);
+        valueTwo = o.digit === false ? valueTwo : valueTwo.toFixed(o.digit);
         if (!isNaN(valueOne) && !isNaN(valueTwo)) {
             if (this._checkValidation(valueOne)) {
                 this.valueOne = valueOne;
