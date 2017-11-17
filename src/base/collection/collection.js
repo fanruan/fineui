@@ -279,8 +279,12 @@ BI.CollectionView = BI.inherit(BI.Widget, {
             this.container.setHeight(this._height);
 
             this._calculateChildrenToRender();
-            this.element.scrollTop(o.scrollTop);
-            this.element.scrollLeft(o.scrollLeft);
+            //元素未挂载时不能设置scrollTop
+            try {
+                this.element.scrollTop(o.scrollTop);
+                this.element.scrollLeft(o.scrollLeft);
+            } catch (e) {
+            }
         }
     },
 
