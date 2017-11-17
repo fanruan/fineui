@@ -20192,6 +20192,20 @@ BI.extend(BI.DOM, {
         }
     }
 
+    var actions = {}
+    BI.action = function (type, actionFn) {
+        if (!actions[type]) {
+            actions[type] = [];
+        }
+        actions[type].push(actionFn)
+        return function () {
+            actions[type].remove(actionFn);
+            if (actions[type].length === 0) {
+                delete actions[type];
+            }
+        }
+    }
+
     BI.Constants = {
         getConstant: function (type) {
             return constantInjection[type];
@@ -20226,6 +20240,14 @@ BI.extend(BI.DOM, {
                 providerInstance[type] = new providers[type].$get()(config);
             }
             return providerInstance[type];
+        }
+    }
+
+    BI.Actions = {
+        runAction: function (type, config) {
+            BI.each(actions[type], function (i, act) {
+                act(config);
+            })
         }
     }
 })();
