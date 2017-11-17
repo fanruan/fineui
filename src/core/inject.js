@@ -16,7 +16,7 @@
     };
 
     var storeInjection = {};
-    BI.stores = function (xtype, cls) {
+    BI.store = function (xtype, cls) {
         if (storeInjection[xtype] != null) {
             throw ("store:[" + xtype + "] has been registed");
         }
