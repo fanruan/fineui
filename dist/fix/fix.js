@@ -944,6 +944,24 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
         };
     }
 
+    function initWatch(vm, watch) {
+        vm._watchers || (vm._watchers = []);
+        for (var key in watch) {
+            var handler = watch[key];
+            if (_.isArray(handler)) {
+                for (var i = 0; i < handler.length; i++) {
+                    vm._watchers.push(createWatcher(vm, key, handler[i]));
+                }
+            } else {
+                vm._watchers.push(createWatcher(vm, key, handler));
+            }
+        }
+    }
+
+    function createWatcher(vm, keyOrFn, handler, options) {
+        return Fix.watch(vm.model, keyOrFn, _.bind(handler, vm), options);
+    }
+
     function initMethods(vm, methods) {
         for (var key in methods) {
             vm[key] = methods[key] == null ? noop : _.bind(methods[key], vm.$$model ? vm.model : vm);
@@ -1034,6 +1052,7 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
             this.$$model && (this.model.__ob__ = this.$$model.__ob__);
             state && initState(this, state);
             initComputed(this, this.computed);
+            initWatch(this, this.watch);
             initMethods(this, this.actions);
             this._init();
             if (this.$$model) {
@@ -1047,6 +1066,13 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
             for (var _key3 in this._computedWatchers) {
                 this._computedWatchers[_key3].teardown();
             }
+            _.each(this._watchers, function (unwatches) {
+                unwatches = _.isArray(unwatches) ? unwatches : [unwatches];
+                _.each(unwatches, function (unwatch) {
+                    unwatch();
+                });
+            });
+            this._watchers && (this._watchers = []);
         };
 
         return VM;
