@@ -8,4 +8,4 @@ BI.Data = Data = {};
  * 存放bi里面通用的一些常量
  * @type {{}}
  */
-Data.Constant = BI.Constant = BICst = {};
+Data.Constant = BICst = {};
