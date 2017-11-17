@@ -15143,6 +15143,8 @@ BI.FloatBox = BI.inherit(BI.Widget, {
                 if (ui.position.top < 0) {
                     ui.position.top = 0;
                 }
+                //BI-12134 没有什么特别好的方法
+                BI.Resizers._resize();
             }
         });
         this._south = BI.createWidget();
