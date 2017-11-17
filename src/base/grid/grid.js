@@ -230,12 +230,15 @@ BI.GridView = BI.inherit(BI.Widget, {
         if (items && items !== this.options.items) {
             this.options.items = items;
         }
-        if (o.items.length > 0) {
+        if (BI.isNumber(o.columnCount)) {
+            this.columnCount = o.columnCount;
+        } else if (o.items.length > 0) {
             this.columnCount = o.items[0].length;
-            this.rowCount = o.items.length;
+        }
+        if (BI.isNumber(o.rowCount)) {
+            this.rowCount = o.rowCount;
         } else {
-            this.rowCount = 0;
-            this.columnCount = 0;
+            this.rowCount = o.items.length;
         }
         this.container.setWidth(this.columnCount * o.estimatedColumnSize);
         this.container.setHeight(this.rowCount * o.estimatedRowSize);
@@ -272,6 +275,14 @@ BI.GridView = BI.inherit(BI.Widget, {
         this._debounceRelease();
         this._calculateChildrenToRender();
         this.element.scrollTop(this.options.scrollTop);
+    },
+
+    setColumnCount: function (columnCount) {
+        this.options.columnCount = columnCount
+    },
+
+    setRowCount: function (rowCount) {
+        this.options.rowCount = rowCount
     },
 
     setOverflowX: function (b) {
