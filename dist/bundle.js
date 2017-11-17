@@ -20165,7 +20165,7 @@ BI.extend(BI.DOM, {
     };
 
     var storeInjection = {};
-    BI.stores = function (xtype, cls) {
+    BI.store = function (xtype, cls) {
         if (storeInjection[xtype] != null) {
             throw ("store:[" + xtype + "] has been registed");
         }
@@ -20189,6 +20189,20 @@ BI.extend(BI.DOM, {
                 providers[type] = new providerInjection[type]();
             }
             return configFn(providers[type])
+        }
+    }
+
+    var actions = {}
+    BI.action = function (type, actionFn) {
+        if (!actions[type]) {
+            actions[type] = [];
+        }
+        actions[type].push(actionFn)
+        return function () {
+            actions[type].remove(actionFn);
+            if (actions[type].length === 0) {
+                delete actions[type];
+            }
         }
     }
 
@@ -20226,6 +20240,14 @@ BI.extend(BI.DOM, {
                 providerInstance[type] = new providers[type].$get()(config);
             }
             return providerInstance[type];
+        }
+    }
+
+    BI.Actions = {
+        runAction: function (type, config) {
+            BI.each(actions[type], function (i, act) {
+                act(config);
+            })
         }
     }
 })();
@@ -26588,7 +26610,7 @@ BI.BasicButton = BI.inherit(BI.Single, {
                             return;
                         }
                         interval = setInterval(function () {
-                            if(self.isEnabled()){
+                            if (self.isEnabled()) {
                                 self.doClick();
                             }
                         }, 100);
@@ -26630,7 +26652,7 @@ BI.BasicButton = BI.inherit(BI.Single, {
 
     _trigger: function () {
         var o = this.options;
-        if(!this.isEnabled()){
+        if (!this.isEnabled()) {
             return;
         }
         if (!this.isDisableSelected()) {
@@ -26643,6 +26665,9 @@ BI.BasicButton = BI.inherit(BI.Single, {
             var v = this.getValue();
             this.fireEvent(BI.Controller.EVENT_CHANGE, BI.Events.CLICK, v, this);
             this.fireEvent(BI.BasicButton.EVENT_CHANGE, v, this);
+            if (o.action) {
+                BI.Actions.runAction(o.action, o);
+            }
         }
     },
 

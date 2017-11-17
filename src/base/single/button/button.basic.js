@@ -176,7 +176,7 @@ BI.BasicButton = BI.inherit(BI.Single, {
                             return;
                         }
                         interval = setInterval(function () {
-                            if(self.isEnabled()){
+                            if (self.isEnabled()) {
                                 self.doClick();
                             }
                         }, 100);
@@ -218,7 +218,7 @@ BI.BasicButton = BI.inherit(BI.Single, {
 
     _trigger: function () {
         var o = this.options;
-        if(!this.isEnabled()){
+        if (!this.isEnabled()) {
             return;
         }
         if (!this.isDisableSelected()) {
@@ -231,6 +231,9 @@ BI.BasicButton = BI.inherit(BI.Single, {
             var v = this.getValue();
             this.fireEvent(BI.Controller.EVENT_CHANGE, BI.Events.CLICK, v, this);
             this.fireEvent(BI.BasicButton.EVENT_CHANGE, v, this);
+            if (o.action) {
+                BI.Actions.runAction(o.action, o);
+            }
         }
     },
 

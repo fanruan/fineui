@@ -16,7 +16,7 @@
     };
 
     var storeInjection = {};
-    BI.stores = function (xtype, cls) {
+    BI.store = function (xtype, cls) {
         if (storeInjection[xtype] != null) {
             throw ("store:[" + xtype + "] has been registed");
         }
@@ -40,6 +40,20 @@
                 providers[type] = new providerInjection[type]();
             }
             return configFn(providers[type])
+        }
+    }
+
+    var actions = {}
+    BI.action = function (type, actionFn) {
+        if (!actions[type]) {
+            actions[type] = [];
+        }
+        actions[type].push(actionFn)
+        return function () {
+            actions[type].remove(actionFn);
+            if (actions[type].length === 0) {
+                delete actions[type];
+            }
         }
     }
 
@@ -77,6 +91,14 @@
                 providerInstance[type] = new providers[type].$get()(config);
             }
             return providerInstance[type];
+        }
+    }
+
+    BI.Actions = {
+        runAction: function (type, config) {
+            BI.each(actions[type], function (i, act) {
+                act(config);
+            })
         }
     }
 })();
