@@ -696,7 +696,6 @@ BI.BasicButton = BI.inherit(BI.Single, {
                     var mouseDown = false;
                     hand.mousedown(function () {
                         mouseDown = true;
-                        ev(e);
                     });
                     hand.mouseup(function (e) {
                         if (mouseDown === true) {
@@ -775,9 +774,6 @@ BI.BasicButton = BI.inherit(BI.Single, {
                 default:
                     if (o.stopEvent || o.stopPropagation) {
                         hand.mousedown(function (e) {
-                            ev(e);
-                        });
-                        hand.mouseup(function (e) {
                             ev(e);
                         });
                     }
@@ -2809,8 +2805,12 @@ BI.CollectionView = BI.inherit(BI.Widget, {
             this.container.setHeight(this._height);
 
             this._calculateChildrenToRender();
-            this.element.scrollTop(o.scrollTop);
-            this.element.scrollLeft(o.scrollLeft);
+            //元素未挂载时不能设置scrollTop
+            try {
+                this.element.scrollTop(o.scrollTop);
+                this.element.scrollLeft(o.scrollLeft);
+            } catch (e) {
+            }
         }
     },
 
@@ -14989,8 +14989,12 @@ BI.GridView = BI.inherit(BI.Widget, {
         this._rowSizeAndPositionManager = new BI.ScalingCellSizeAndPositionManager(this.rowCount, o.rowHeightGetter, o.estimatedRowSize);
 
         this._calculateChildrenToRender();
-        this.element.scrollTop(o.scrollTop);
-        this.element.scrollLeft(o.scrollLeft);
+        //元素未挂载时不能设置scrollTop
+        try {
+            this.element.scrollTop(o.scrollTop);
+            this.element.scrollLeft(o.scrollLeft);
+        } catch (e) {
+        }
     },
 
     setScrollLeft: function (scrollLeft) {

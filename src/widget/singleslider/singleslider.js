@@ -13,7 +13,8 @@ BI.SingleSlider = BI.inherit(BI.Widget, {
     _defaultConfig: function () {
         return BI.extend(BI.SingleSlider.superclass._defaultConfig.apply(this, arguments), {
             baseCls: "bi-single-slider bi-slider-track",
-            digit: false
+            digit: false,
+            unit: ""
         });
     },
     _init: function () {
@@ -73,9 +74,10 @@ BI.SingleSlider = BI.inherit(BI.Widget, {
             }
         });
         this.label = BI.createWidget({
-            type: "bi.sign_editor",
+            type: "bi.sign_text_editor",
             cls: "slider-editor-button",
             errorText: "",
+            text: o.unit,
             width: c.EDITOR_WIDTH - 2,
             allowBlank: false,
             validationChecker: function (v) {
