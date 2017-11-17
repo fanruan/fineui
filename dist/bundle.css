@@ -1225,12 +1225,14 @@ i {
   -moz-justify-content: center;
   -ms-justify-content: center;
   -o-justify-content: center;
+  -ms-flex-pack: center;
   justify-content: center;
   /* 09版 */
   -webkit-box-align: center;
   /* 12版 */
   -webkit-align-items: center;
   -moz-align-items: center;
+  -ms-flex-align: center;
   -ms-align-items: center;
   -o-align-items: center;
   align-items: center;
@@ -1263,13 +1265,15 @@ i {
   -moz-justify-content: flex-start;
   -ms-justify-content: flex-start;
   -o-justify-content: flex-start;
+  -ms-flex-pack: start;
   justify-content: flex-start;
   /* 09版 */
-  -webkit-box-align: flex-start;
+  -webkit-box-align: start;
   /* 12版 */
   -webkit-align-items: flex-start;
   -moz-align-items: flex-start;
   -ms-align-items: flex-start;
+  -ms-flex-align: start;
   -o-align-items: flex-start;
   align-items: flex-start;
   /* 09版 */
@@ -1288,6 +1292,7 @@ i {
   -webkit-align-items: center;
   -moz-align-items: center;
   -ms-align-items: center;
+  -ms-flex-align: center;
   -o-align-items: center;
   align-items: center;
 }
@@ -1298,6 +1303,7 @@ i {
   -webkit-align-items: flex-end;
   -moz-align-items: flex-end;
   -ms-align-items: flex-end;
+  -ms-flex-align: end;
   -o-align-items: flex-end;
   align-items: flex-end;
 }
@@ -1329,6 +1335,7 @@ i {
   -moz-justify-content: flex-start;
   -ms-justify-content: flex-start;
   -o-justify-content: flex-start;
+  -ms-flex-pack: start;
   justify-content: flex-start;
   /* 09版 */
   -webkit-box-align: center;
@@ -1336,6 +1343,7 @@ i {
   -webkit-align-items: center;
   -moz-align-items: center;
   -ms-align-items: center;
+  -ms-flex-align: center;
   -o-align-items: center;
   align-items: center;
   /* 09版 */
@@ -1362,6 +1370,7 @@ i {
   -webkit-justify-content: center;
   -moz-justify-content: center;
   -ms-justify-content: center;
+  -ms-flex-pack: center;
   -o-justify-content: center;
   justify-content: center;
   /* 09版 */
@@ -1370,6 +1379,7 @@ i {
   -webkit-align-items: stretch;
   -moz-align-items: stretch;
   -ms-align-items: stretch;
+  -ms-flex-align: stretch;
   -o-align-items: stretch;
   align-items: stretch;
 }
@@ -1400,6 +1410,7 @@ i {
   -webkit-justify-content: center;
   -moz-justify-content: center;
   -ms-justify-content: center;
+  -ms-flex-pack: center;
   -o-justify-content: center;
   justify-content: center;
   /* 09版 */
@@ -1408,6 +1419,7 @@ i {
   -webkit-align-items: center;
   -moz-align-items: center;
   -ms-align-items: center;
+  -ms-flex-align: center;
   -o-align-items: center;
   align-items: center;
   min-width: 100%;
@@ -1441,6 +1453,7 @@ i {
   -webkit-justify-content: flex-start;
   -moz-justify-content: flex-start;
   -ms-justify-content: flex-start;
+  -ms-flex-pack: start;
   -o-justify-content: flex-start;
   justify-content: flex-start;
   /* 09版 */
@@ -1449,6 +1462,7 @@ i {
   -webkit-align-items: flex-start;
   -moz-align-items: flex-start;
   -ms-align-items: flex-start;
+  -ms-flex-align: start;
   -o-align-items: flex-start;
   align-items: flex-start;
   /* 09版 */
@@ -1508,6 +1522,7 @@ i {
   -webkit-justify-content: flex-start;
   -moz-justify-content: flex-start;
   -ms-justify-content: flex-start;
+  -ms-flex-pack: start;
   -o-justify-content: flex-start;
   justify-content: flex-start;
   /* 09版 */
@@ -1516,6 +1531,7 @@ i {
   -webkit-align-items: center;
   -moz-align-items: center;
   -ms-align-items: center;
+  -ms-flex-align: center;
   -o-align-items: center;
   align-items: center;
   /* 09版 */

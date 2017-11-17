@@ -26,12 +26,14 @@
   -moz-justify-content: center;
   -ms-justify-content: center;
   -o-justify-content: center;
+  -ms-flex-pack: center;
   justify-content: center;
   /* 09版 */
   -webkit-box-align: center;
   /* 12版 */
   -webkit-align-items: center;
   -moz-align-items: center;
+  -ms-flex-align: center;
   -ms-align-items: center;
   -o-align-items: center;
   align-items: center;

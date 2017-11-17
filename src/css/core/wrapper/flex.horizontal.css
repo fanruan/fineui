@@ -26,13 +26,15 @@
   -moz-justify-content: flex-start;
   -ms-justify-content: flex-start;
   -o-justify-content: flex-start;
+  -ms-flex-pack: start;
   justify-content: flex-start;
   /* 09版 */
-  -webkit-box-align: flex-start;
+  -webkit-box-align: start;
   /* 12版 */
   -webkit-align-items: flex-start;
   -moz-align-items: flex-start;
   -ms-align-items: flex-start;
+  -ms-flex-align: start;
   -o-align-items: flex-start;
   align-items: flex-start;
   /* 09版 */
@@ -51,6 +53,7 @@
   -webkit-align-items: center;
   -moz-align-items: center;
   -ms-align-items: center;
+  -ms-flex-align: center;
   -o-align-items: center;
   align-items: center;
 }
@@ -61,6 +64,7 @@
   -webkit-align-items: flex-end;
   -moz-align-items: flex-end;
   -ms-align-items: flex-end;
+  -ms-flex-align: end;
   -o-align-items: flex-end;
   align-items: flex-end;
 }
