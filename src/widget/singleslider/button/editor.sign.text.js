@@ -17,7 +17,6 @@ BI.SignTextEditor = BI.inherit(BI.Widget, {
             allowBlank: true,
             watermark: "",
             errorText: "",
-            value: "",
             text: "",
             height: 24
         })
