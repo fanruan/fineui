@@ -41990,1109 +41990,6 @@ BI.Pager = BI.inherit(BI.Widget, {
 BI.Pager.EVENT_CHANGE = "EVENT_CHANGE";
 BI.Pager.EVENT_AFTER_POPULATE = "EVENT_AFTER_POPULATE";
 BI.shortcut("bi.pager", BI.Pager);/**
- *
- * Created by GUY on 2017/09/18.
- * @class BI.TextToolbar
- * @extends BI.Widget
- */
-BI.RichEditorAction = BI.inherit(BI.Widget, {
-    _defaultConfig: function () {
-        return BI.extend(BI.RichEditorAction.superclass._defaultConfig.apply(this, arguments), {
-            width: 20,
-            height: 20,
-            command: ""
-        });
-    },
-
-    _init: function () {
-        BI.RichEditorAction.superclass._init.apply(this, arguments);
-        var self = this, o = this.options;
-        o.editor.on(BI.NicEditor.EVENT_SELECTED, function (e) {
-            self.setEnable(true);
-            self.checkNodes(e.target);
-            self.key(e);
-        });
-        o.editor.on(BI.NicEditor.EVENT_BLUR, function () {
-            self.setEnable(false);
-        });
-        o.editor.on(BI.NicEditor.EVENT_KEYDOWN, BI.bind(this.keydown, this));
-    },
-
-    checkNodes: function (e) {
-        if (!e) {
-            return false;
-        }
-        var elm = e;
-        do {
-            if (this.options.tags && this.options.tags.contains(elm.nodeName)) {
-                this.activate();
-                return true;
-            }
-        } while (elm = elm.parentNode && elm.className && elm.className.indexOf("bi-nic-editor") >= -1);
-        elm = e;
-        while (elm.nodeType == 3) {
-            elm = elm.parentNode;
-        }
-        if (this.options.css) {
-            for (var itm in this.options.css) {
-                if ($(elm).css(itm) == this.options.css[itm]) {
-                    this.activate();
-                    return true;
-                }
-            }
-        }
-        this.deactivate();
-        return false;
-    },
-
-    key: function () {
-
-    },
-
-    keydown: function () {
-    },
-
-    activate: function () {
-    },
-
-    deactivate: function () {
-    },
-
-    doCommand: function (args) {
-        if (this.options.command) {
-            this.options.editor.nicCommand(this.options.command, args);
-        }
-    }
-});/**
- *
- * Created by GUY on 2017/09/18.
- * @class BI.RichEditorParamAction
- * @extends BI.Widget
- */
-BI.RichEditorParamAction = BI.inherit(BI.RichEditorAction, {
-    _defaultConfig: function () {
-        return BI.extend(BI.RichEditorParamAction.superclass._defaultConfig.apply(this, arguments), {});
-    },
-
-    _init: function () {
-        BI.RichEditorParamAction.superclass._init.apply(this, arguments);
-    },
-
-    _isParam: function (sel) {
-        return sel.attr("data-type") === "param";
-    },
-
-    _createBlankNode: function () {
-        return $("<span>").html("&nbsp;");
-    },
-
-    _addBlank: function ($param) {
-        var o = this.options;
-        var instance = o.editor.selectedInstance;
-        var next = $param.next();
-        if (next.length === 0 || this._isParam(next)) {
-            var preNode = this._createBlankNode();
-            var nextNode = this._createBlankNode();
-            $param.before(preNode);
-            $param.after(nextNode);
-            instance.setFocus(nextNode[0]);
-        } else {
-            instance.setFocus(next[0]);
-        }
-    },
-
-    _get$Sel: function () {
-        var o = this.options;
-        var instance = o.editor.selectedInstance;
-        var sel = $(instance.selElm());
-        if (sel[0].nodeType === 3 && this._isParam(sel.parent())) {
-            sel = sel.parent();
-        }
-        return sel;
-    },
-
-    addParam: function (param) {
-        var o = this.options;
-        var sel = this._get$Sel();
-        var $param = $("<span>").attr({
-            "data-type": "param",
-            "data-value": param
-        }).css({
-            color: "white",
-            backgroundColor: "#009de3",
-            padding: "0 5px"
-        }).text(param).keydown(function (e) {
-            if (e.keyCode === BI.KeyCode.BACKSPACE || e.keyCode === BI.KeyCode.DELETE) {
-                $param.destroy();
-            }
-            e.stopEvent();
-            return false;
-        });
-        var wrapper = o.editor.instance.getElm().element;
-        if (wrapper.find(sel).length <= 0) {
-            wrapper.append($param);
-        } else {
-            sel.after($param);
-        }
-        this._addBlank($param);
-    },
-
-    keydown: function (e) {
-        var o = this.options;
-        var sel = this._get$Sel();
-        if (e.keyCode === 229) {//中文输入法
-            if (this._isParam(sel)) {
-                this._addBlank(sel);
-                e.stopEvent();
-                return false;
-            }
-        }
-        if (BI.Key[e.keyCode] || e.keyCode === BI.KeyCode.TAB || e.keyCode === BI.KeyCode.ENTER || e.keyCode === BI.KeyCode.SPACE) {
-            if (this._isParam(sel)) {
-                e.stopEvent();
-                return false;
-            }
-        }
-        if (e.keyCode === BI.KeyCode.BACKSPACE || e.keyCode === BI.KeyCode.DELETE) {
-            if (this._isParam(sel)) {
-                sel.destroy();
-                e.preventDefault();
-                return false;
-            }
-        }
-    },
-
-    key: function (e) {
-    }
-});/**
- * 颜色选择
- *
- * Created by GUY on 2015/11/26.
- * @class BI.RichEditorTextToolbar
- * @extends BI.Widget
- */
-BI.RichEditorTextToolbar = BI.inherit(BI.Widget, {
-    _defaultConfig: function () {
-        return BI.extend(BI.RichEditorTextToolbar.superclass._defaultConfig.apply(this, arguments), {
-            baseCls: "bi-rich-editor-text-toolbar bi-background",
-            buttons: [
-                {type: "bi.rich_editor_size_chooser"},
-                {type: "bi.rich_editor_bold_button"},
-                {type: "bi.rich_editor_italic_button"},
-                {type: "bi.rich_editor_underline_button"},
-                {type: "bi.rich_editor_color_chooser"},
-                {type: "bi.rich_editor_background_color_chooser"},
-                {type: "bi.rich_editor_align_left_button"},
-                {type: "bi.rich_editor_align_center_button"},
-                {type: "bi.rich_editor_align_right_button"},
-                {type: "bi.rich_editor_param_button"},
-            ],
-            height: 28
-        });
-    },
-
-    _init: function () {
-        BI.RichEditorTextToolbar.superclass._init.apply(this, arguments);
-        var self = this, o = this.options;
-        BI.createWidget({
-            type: "bi.left",
-            element: this,
-            items: BI.map(o.buttons, function (i, btn) {
-                return BI.extend(btn, {
-                    editor: o.editor
-                });
-            }),
-            hgap: 3,
-            vgap: 3
-        })
-    },
-
-    mounted: function () {
-        var self = this;
-        if (BI.isIE9Below()) {//IE8下必须要设置unselectable才能不blur输入框
-            this.element.mousedown(function () {
-                self._noSelect(self.element[0]);
-            });
-            this._noSelect(this.element[0]);
-        }
-    },
-
-    _noSelect: function (element) {
-        if (element.setAttribute && element.nodeName.toLowerCase() != 'input' && element.nodeName.toLowerCase() != 'textarea') {
-            element.setAttribute('unselectable', 'on');
-        }
-        for (var i = 0; i < element.childNodes.length; i++) {
-            this._noSelect(element.childNodes[i]);
-        }
-    }
-});
-BI.shortcut('bi.rich_editor_text_toolbar', BI.RichEditorTextToolbar);/**
- * 富文本编辑器
- *
- * Created by GUY on 2017/9/15.
- * @class BI.NicEditor
- * @extends BI.Widget
- */
-!(function () {
-    BI.NicEditor = BI.inherit(BI.Widget, {
-        _defaultConfig: function () {
-            return BI.extend(BI.NicEditor.superclass._defaultConfig.apply(this, arguments), {
-                baseCls: "bi-nic-editor"
-            });
-        },
-        _init: function () {
-            BI.NicEditor.superclass._init.apply(this, arguments);
-            var o = this.options;
-            $(document).bind("mousedown." + this.getName(), BI.bind(this.selectCheck, this));
-            BI.createWidget({
-                type: "bi.vertical",
-                element: this,
-                items: [{
-                    type: "bi.layout",
-                    height: 1
-                }, this.instance = this.addInstance()]
-            })
-        },
-
-        addInstance: function () {
-            var o = this.options;
-            var conf = {
-                ne: this,
-                height: o.height - 1,
-                maxHeight: o.maxHeight ? o.maxHeight : null
-            };
-            if (this.element[0].contentEditable || !!window.opera) {
-                var newInstance = new nicEditorInstance(conf);
-            } else {
-                console.error("不支持此浏览器");
-            }
-            return newInstance;
-        },
-
-        nicCommand: function (cmd, args) {
-            if (this.selectedInstance) {
-                this.selectedInstance.nicCommand(cmd, args);
-            }
-        },
-
-        selectCheck: function (e) {
-            var t = e.target;
-            var found = false;
-            do {
-                if (t.nodeName !== "svg" && t.className && t.className.indexOf(prefix) != -1) {
-                    return;
-                    // return false;
-                }
-            } while (t = t.parentNode);
-            this.fireEvent('blur', t);
-            this.lastSelectedInstance = this.selectedInstance;
-            this.selectedInstance = null;
-            // return false;
-        },
-
-        setValue: function (v) {
-            this.instance.setContent(v);
-        },
-
-        getValue: function () {
-            return this.instance.getContent();
-        },
-
-        destroyed: function () {
-            $(document).unbind("mousedown." + this.getName());
-        }
-    });
-    BI.NicEditor.EVENT_SELECTED = "selected";
-    BI.NicEditor.EVENT_BLUR = "blur";
-    BI.NicEditor.EVENT_KEYDOWN = "keydown";
-    BI.shortcut('bi.nic_editor', BI.NicEditor);
-
-    var prefix = "niceditor-";
-
-    var nicEditorInstance = BI.inherit(BI.Layout, {
-        isSelected: false,
-        _init: function () {
-            nicEditorInstance.superclass._init.apply(this, arguments);
-            var o = this.options;
-            this.ne = this.options.ne;
-            this.elm = BI.createWidget({
-                type: "bi.layout",
-                width: o.width - 8,
-                scrollable: false
-            });
-            this.elm.element.css({
-                margin: "4px",
-                minHeight: (o.height - 8) + "px",
-                outline: "none"
-            }).html(o.value);
-
-            this.element.css("maxHeight", (o.maxHeight) ? o.maxHeight + 'px' : null);
-
-            this.e = BI.createWidget({
-                type: "bi.layout",
-                invisible: true,
-                tagName: "textarea"
-            });
-            BI.createWidget({
-                type: "bi.default",
-                element: this,
-                scrolly: true,
-                items: [this.elm, this.e]
-            });
-
-            this.ne.on("blur", BI.bind(this.blur, this));
-
-            this.start();
-            this.blur();
-        },
-
-        start: function () {
-            this.elm.element.attr("contentEditable", true);
-            if (this.getContent() == "") {
-                // this.setContent("<br />");
-            }
-            this.instanceDoc = document.defaultView;
-            this.elm.element.on('mousedown', BI.bind(this.selected, this));
-            this.elm.element.on('keydown', BI.bind(this.keyDown, this));
-            this.elm.element.on('focus', BI.bind(this.selected, this));
-            this.elm.element.on('blur', BI.bind(this.blur, this));
-            this.elm.element.on('keyup', BI.bind(this.selected, this));
-            this.ne.fireEvent('add');
-        },
-
-        disable: function () {
-            this.elm.element.attr("contentEditable", false);
-        },
-
-        getSel: function () {
-            return (window.getSelection) ? window.getSelection() : document.selection;
-        },
-
-        getRng: function () {
-            var s = this.getSel();
-            if (!s || s.rangeCount === 0) {
-                return;
-            }
-            return (s.rangeCount > 0) ? s.getRangeAt(0) : s.createRange();
-        },
-
-        selRng: function (rng, s) {
-            if (window.getSelection) {
-                s.removeAllRanges();
-                s.addRange(rng);
-            } else {
-                rng.select();
-            }
-        },
-
-        selElm: function () {
-            var r = this.getRng();
-            if (!r) {
-                return;
-            }
-            if (r.startContainer) {
-                var contain = r.startContainer;
-                if (r.cloneContents().childNodes.length == 1) {
-                    for (var i = 0; i < contain.childNodes.length; i++) {
-                        var rng = contain.childNodes[i].ownerDocument.createRange();
-                        rng.selectNode(contain.childNodes[i]);
-                        if (r.compareBoundaryPoints(Range.START_TO_START, rng) != 1 &&
-                            r.compareBoundaryPoints(Range.END_TO_END, rng) != -1) {
-                            return contain.childNodes[i];
-                        }
-                    }
-                }
-                return contain;
-            } else {
-                return (this.getSel().type == "Control") ? r.item(0) : r.parentElement();
-            }
-        },
-
-        saveRng: function () {
-            this.savedRange = this.getRng();
-            this.savedSel = this.getSel();
-        },
-
-        setFocus: function (el) {
-            try {
-                el.focus();
-            } catch (e) {
-
-            }
-            if (!window.getSelection) {
-                var rng;
-                try {
-                    el.focus();
-                } catch (e) {
-
-                }
-                rng = document.selection.createRange();
-                rng.moveStart('character', -el.innerText.length);
-                var text = rng.text;
-                for (var i = 0; i < el.innerText.length; i++) {
-                    if (el.innerText.substring(0, i + 1) == text.substring(text.length - i - 1, text.length)) {
-                        result = i + 1;
-                    }
-                }
-            } else {
-                var range = document.createRange();
-                range.selectNodeContents(el);
-                range.collapse(false);
-                var sel = window.getSelection();
-                sel.removeAllRanges();
-                sel.addRange(range);
-            }
-        },
-
-        restoreRng: function () {
-            if (this.savedRange) {
-                this.selRng(this.savedRange, this.savedSel);
-            }
-        },
-
-        keyDown: function (e, t) {
-            this.ne.fireEvent('keydown', e);
-        },
-
-        selected: function (e) {
-            var t = e.target;
-            if (!t && !(t = this.selElm())) {
-                t = this.selElm();
-            }
-            if (!e.ctrlKey) {
-                var selInstance = this.ne.selectedInstance;
-                if (selInstance != this) {
-                    if (selInstance) {
-                        this.ne.fireEvent('blur', e);
-                    }
-                    this.ne.selectedInstance = this;
-                    this.ne.fireEvent('focus', e);
-                }
-                this.ne.fireEvent('selected', e);
-                this.isFocused = true;
-                this.elm.element.addClass(prefix + 'selected');
-            }
-            // return false;
-        },
-
-        blur: function () {
-            this.isFocused = false;
-            this.elm.element.removeClass(prefix + 'selected');
-        },
-
-        saveContent: function () {
-            this.ne.fireEvent('save');
-            this.e.element.value(this.getContent());
-        },
-
-        getElm: function () {
-            return this.elm;
-        },
-
-        getContent: function () {
-            this.content = this.getElm().element.html();
-            this.ne.fireEvent('get');
-            return this.content;
-        },
-
-        setContent: function (e) {
-            this.content = e;
-            this.ne.fireEvent('set');
-            this.elm.element.html(this.content);
-        },
-
-        nicCommand: function (cmd, args) {
-            document.execCommand(cmd, false, args);
-        }
-    });
-}());
-/**
- * 颜色选择trigger
- *
- * Created by GUY on 2015/11/26.
- * @class BI.RichEditorBackgroundChooserTrigger
- * @extends BI.Widget
- */
-BI.RichEditorBackgroundChooserTrigger = BI.inherit(BI.Widget, {
-    _defaultConfig: function () {
-        var conf = BI.RichEditorBackgroundChooserTrigger.superclass._defaultConfig.apply(this, arguments);
-        return BI.extend(conf, {
-            width: 20,
-            height: 20
-        });
-    },
-
-    _init: function () {
-        BI.RichEditorBackgroundChooserTrigger.superclass._init.apply(this, arguments);
-        this.font = BI.createWidget({
-            type: "bi.icon_button",
-            cls: "text-background-font"
-        });
-
-        this.underline = BI.createWidget({
-            type: "bi.icon_button",
-            cls: "text-color-underline-font"
-        });
-
-        BI.createWidget({
-            type: "bi.absolute",
-            element: this,
-            items: [{
-                el: this.font,
-                top: 2,
-                left: 2
-            }, {
-                el: this.underline,
-                top: 7,
-                left: 2
-            }]
-        })
-    },
-
-    setValue: function (color) {
-        this.underline.element.css("color", color);
-    },
-
-    getValue: function () {
-        return this.font.element.css("color");
-    }
-});
-BI.shortcut('bi.rich_editor_background_color_chooser_trigger', BI.RichEditorBackgroundChooserTrigger);/**
- *
- * Created by GUY on 2015/11/26.
- * @class BI.RichEditorAlignCenterButton
- * @extends BI.RichEditorAction
- */
-BI.RichEditorAlignCenterButton = BI.inherit(BI.RichEditorAction, {
-    _defaultConfig: function () {
-        return BI.extend(BI.RichEditorAlignCenterButton.superclass._defaultConfig.apply(this, arguments), {
-            width: 20,
-            height: 20,
-            command: "justifycenter"
-        });
-    },
-
-    _init: function () {
-        BI.RichEditorAlignCenterButton.superclass._init.apply(this, arguments);
-        var self = this, o = this.options;
-        this.align = BI.createWidget({
-            type: "bi.icon_button",
-            element: this,
-            forceNotSelected: true,
-            title: BI.i18nText("BI-Word_Align_Center"),
-            height: 20,
-            width: 20,
-            cls: "text-toolbar-button bi-list-item-active text-align-center-font"
-        });
-        this.align.on(BI.IconButton.EVENT_CHANGE, function () {
-            self.doCommand();
-        });
-    },
-    activate: function () {
-    },
-
-    deactivate: function () {
-    }
-});
-BI.shortcut("bi.rich_editor_align_center_button", BI.RichEditorAlignCenterButton)/**
- *
- * Created by GUY on 2015/11/26.
- * @class BI.RichEditorAlignLeftButton
- * @extends BI.RichEditorAction
- */
-BI.RichEditorAlignLeftButton = BI.inherit(BI.RichEditorAction, {
-    _defaultConfig: function () {
-        return BI.extend(BI.RichEditorAlignLeftButton.superclass._defaultConfig.apply(this, arguments), {
-            width: 20,
-            height: 20,
-            command: "justifyleft"
-        });
-    },
-
-    _init: function () {
-        BI.RichEditorAlignLeftButton.superclass._init.apply(this, arguments);
-        var self = this, o = this.options;
-        this.align = BI.createWidget({
-            type: "bi.icon_button",
-            element: this,
-            forceNotSelected: true,
-            title: BI.i18nText("BI-Word_Align_Left"),
-            height: 20,
-            width: 20,
-            cls: "text-toolbar-button bi-list-item-active text-align-left-font"
-        });
-        this.align.on(BI.IconButton.EVENT_CHANGE, function () {
-            self.doCommand();
-        });
-    },
-    activate: function () {
-    },
-
-    deactivate: function () {
-    }
-});
-BI.shortcut("bi.rich_editor_align_left_button", BI.RichEditorAlignLeftButton)/**
- *
- * Created by GUY on 2015/11/26.
- * @class BI.RichEditorAlignRightButton
- * @extends BI.RichEditorAction
- */
-BI.RichEditorAlignRightButton = BI.inherit(BI.RichEditorAction, {
-    _defaultConfig: function () {
-        return BI.extend(BI.RichEditorAlignRightButton.superclass._defaultConfig.apply(this, arguments), {
-            width: 20,
-            height: 20,
-            command: "justifyright"
-        });
-    },
-
-    _init: function () {
-        BI.RichEditorAlignRightButton.superclass._init.apply(this, arguments);
-        var self = this, o = this.options;
-        this.align = BI.createWidget({
-            type: "bi.icon_button",
-            element: this,
-            forceNotSelected: true,
-            title: BI.i18nText("BI-Word_Align_Right"),
-            height: 20,
-            width: 20,
-            cls: "text-toolbar-button bi-list-item-active text-align-right-font"
-        });
-        this.align.on(BI.IconButton.EVENT_CHANGE, function () {
-            self.doCommand();
-        });
-    },
-    activate: function () {
-    },
-
-    deactivate: function () {
-    }
-});
-BI.shortcut("bi.rich_editor_align_right_button", BI.RichEditorAlignRightButton)/**
- *
- * Created by GUY on 2015/11/26.
- * @class BI.RichEditorBoldButton
- * @extends BI.RichEditorAction
- */
-BI.RichEditorBoldButton = BI.inherit(BI.RichEditorAction, {
-    _defaultConfig: function () {
-        return BI.extend(BI.RichEditorBoldButton.superclass._defaultConfig.apply(this, arguments), {
-            width: 20,
-            height: 20,
-            command: "Bold",
-            tags: ["B", "STRONG"],
-            css: {fontWeight: "bold"}
-        });
-    },
-
-    _init: function () {
-        BI.RichEditorBoldButton.superclass._init.apply(this, arguments);
-        var self = this, o = this.options;
-        this.bold = BI.createWidget({
-            type: "bi.icon_button",
-            element: this,
-            title: BI.i18nText("BI-Basic_Bold"),
-            height: 20,
-            width: 20,
-            cls: "text-toolbar-button bi-list-item-active text-bold-font"
-        });
-        this.bold.on(BI.IconButton.EVENT_CHANGE, function () {
-            self.doCommand();
-        });
-    },
-    activate: function () {
-        this.bold.setSelected(true);
-    },
-
-    deactivate: function () {
-        this.bold.setSelected(false);
-    }
-});
-BI.shortcut("bi.rich_editor_bold_button", BI.RichEditorBoldButton)/**
- *
- * Created by GUY on 2015/11/26.
- * @class BI.RichEditorItalicButton
- * @extends BI.RichEditorAction
- */
-BI.RichEditorItalicButton = BI.inherit(BI.RichEditorAction, {
-    _defaultConfig: function () {
-        return BI.extend(BI.RichEditorItalicButton.superclass._defaultConfig.apply(this, arguments), {
-            width: 20,
-            height: 20,
-            command: "Italic",
-            tags: ["EM", "I"],
-            css: {fontStyle: "italic"}
-        });
-    },
-
-    _init: function () {
-        BI.RichEditorItalicButton.superclass._init.apply(this, arguments);
-        var self = this, o = this.options;
-        this.italic = BI.createWidget({
-            type: "bi.icon_button",
-            element: this,
-            title: BI.i18nText("BI-Basic_Italic"),
-            height: 20,
-            width: 20,
-            cls: "text-toolbar-button bi-list-item-active text-italic-font"
-        });
-        this.italic.on(BI.IconButton.EVENT_CHANGE, function () {
-            self.doCommand();
-        });
-    },
-    activate: function () {
-        this.italic.setSelected(true);
-    },
-
-    deactivate: function () {
-        this.italic.setSelected(false);
-    }
-});
-BI.shortcut("bi.rich_editor_italic_button", BI.RichEditorItalicButton)/**
- *
- * Created by GUY on 2015/11/26.
- * @class BI.RichEditorParamButton
- * @extends BI.RichEditorParamAction
- */
-BI.RichEditorParamButton = BI.inherit(BI.RichEditorParamAction, {
-    _defaultConfig: function () {
-        return BI.extend(BI.RichEditorParamButton.superclass._defaultConfig.apply(this, arguments), {
-            width: 20,
-            height: 20
-        });
-    },
-
-    _init: function () {
-        BI.RichEditorParamButton.superclass._init.apply(this, arguments);
-        var self = this, o = this.options;
-        this.param = BI.createWidget({
-            type: "bi.button",
-            element: this,
-            level: "ignore",
-            minWidth: 0,
-            text: BI.i18nText("BI-Formula_Insert"),
-            height: 20,
-            width: 30
-        });
-        this.param.on(BI.Button.EVENT_CHANGE, function () {
-            self.addParam("参数")
-        });
-    },
-    activate: function () {
-    },
-
-    deactivate: function () {
-    }
-});
-BI.shortcut("bi.rich_editor_param_button", BI.RichEditorParamButton)/**
- *
- * Created by GUY on 2015/11/26.
- * @class BI.RichEditorItalicButton
- * @extends BI.RichEditorAction
- */
-BI.RichEditorUnderlineButton = BI.inherit(BI.RichEditorAction, {
-    _defaultConfig: function () {
-        return BI.extend(BI.RichEditorUnderlineButton.superclass._defaultConfig.apply(this, arguments), {
-            width: 20,
-            height: 20,
-            command: "Underline",
-            tags: ["U"],
-            css: {textDecoration: "underline"}
-        });
-    },
-
-    _init: function () {
-        BI.RichEditorUnderlineButton.superclass._init.apply(this, arguments);
-        var self = this, o = this.options;
-        this.underline = BI.createWidget({
-            type: "bi.icon_button",
-            element: this,
-            title: BI.i18nText("BI-Basic_Underline"),
-            height: 20,
-            width: 20,
-            cls: "text-toolbar-button bi-list-item-active text-underline-font"
-        });
-        this.underline.on(BI.IconButton.EVENT_CHANGE, function () {
-            self.doCommand();
-        });
-    },
-    activate: function () {
-        this.underline.setSelected(true);
-    },
-
-    deactivate: function () {
-        this.underline.setSelected(false);
-    }
-});
-BI.shortcut("bi.rich_editor_underline_button", BI.RichEditorUnderlineButton)/**
- * 颜色选择trigger
- *
- * Created by GUY on 2015/11/26.
- * @class BI.RichEditorColorChooserTrigger
- * @extends BI.Widget
- */
-BI.RichEditorColorChooserTrigger = BI.inherit(BI.Widget, {
-    _defaultConfig: function () {
-        var conf = BI.RichEditorColorChooserTrigger.superclass._defaultConfig.apply(this, arguments);
-        return BI.extend(conf, {
-            width: 20,
-            height: 20
-        });
-    },
-
-    _init: function () {
-        BI.RichEditorColorChooserTrigger.superclass._init.apply(this, arguments);
-        this.font = BI.createWidget({
-            type: "bi.icon_button",
-            cls: "text-color-font"
-        });
-
-        this.underline = BI.createWidget({
-            type: "bi.icon_button",
-            cls: "text-color-underline-font"
-        });
-
-        BI.createWidget({
-            type: "bi.absolute",
-            element: this,
-            items: [{
-                el: this.font,
-                top: 2,
-                left: 2
-            }, {
-                el: this.underline,
-                top: 7,
-                left: 2
-            }]
-        })
-    },
-
-    setValue: function (color) {
-        this.underline.element.css("color", color);
-    },
-
-    getValue: function () {
-        return this.font.element.css("color");
-    }
-});
-BI.shortcut('bi.rich_editor_color_chooser_trigger', BI.RichEditorColorChooserTrigger);/**
- * 颜色选择
- *
- * Created by GUY on 2015/11/26.
- * @class BI.RichEditorBackgroundColorChooser
- * @extends BI.RichEditorAction
- */
-BI.RichEditorBackgroundColorChooser = BI.inherit(BI.RichEditorAction, {
-    _defaultConfig: function () {
-        return BI.extend(BI.RichEditorBackgroundColorChooser.superclass._defaultConfig.apply(this, arguments), {
-            width: 20,
-            height: 20
-        });
-    },
-
-    _init: function () {
-        BI.RichEditorBackgroundColorChooser.superclass._init.apply(this, arguments);
-        var self = this, o = this.options;
-        this.colorchooser = BI.createWidget({
-            type: "bi.color_chooser",
-            element: this,
-            width: o.width,
-            height: o.height,
-            el: {
-                type: "bi.rich_editor_background_color_chooser_trigger",
-                title: BI.i18nText("BI-Widget_Background_Colour"),
-                cls: "text-toolbar-button"
-            }
-        });
-        this.colorchooser.on(BI.ColorChooser.EVENT_CHANGE, function () {
-            var backgroundColor = this.getValue();
-            o.editor.element.css({
-                backgroundColor: backgroundColor,
-                color: BI.DOM.getContrastColor(backgroundColor)
-            });
-            this.setValue("");
-        });
-    },
-
-    deactivate: function () {
-    }
-});
-BI.shortcut('bi.rich_editor_background_color_chooser', BI.RichEditorBackgroundColorChooser);/**
- * 颜色选择
- *
- * Created by GUY on 2015/11/26.
- * @class BI.RichEditorColorChooser
- * @extends BI.RichEditorAction
- */
-BI.RichEditorColorChooser = BI.inherit(BI.RichEditorAction, {
-    _defaultConfig: function () {
-        return BI.extend(BI.RichEditorColorChooser.superclass._defaultConfig.apply(this, arguments), {
-            width: 20,
-            height: 20,
-            command: "foreColor"
-        });
-    },
-
-    _init: function () {
-        BI.RichEditorColorChooser.superclass._init.apply(this, arguments);
-        var self = this, o = this.options;
-        this.colorchooser = BI.createWidget({
-            type: "bi.color_chooser",
-            element: this,
-            width: o.width,
-            height: o.height,
-            el: {
-                type: "bi.rich_editor_color_chooser_trigger",
-                title: BI.i18nText("BI-Font_Colour"),
-                cls: "text-toolbar-button"
-            }
-        });
-        this.colorchooser.on(BI.ColorChooser.EVENT_CHANGE, function () {
-            self.doCommand(this.getValue());
-        });
-
-    },
-
-    deactivate: function () {
-        this.colorchooser.setValue("");
-    }
-});
-BI.shortcut('bi.rich_editor_color_chooser', BI.RichEditorColorChooser);/**
- * 字体大小选择
- *
- * Created by GUY on 2015/11/26.
- * @class BI.RichEditorSizeChooser
- * @extends BI.RichEditorAction
- */
-BI.RichEditorSizeChooser = BI.inherit(BI.RichEditorAction, {
-    _defaultConfig: function () {
-        return BI.extend(BI.RichEditorSizeChooser.superclass._defaultConfig.apply(this, arguments), {
-            baseCls: "bi-rich-editor-size-chooser bi-border bi-card",
-            command: "FontSize",
-            width: 50,
-            height: 20
-        });
-    },
-
-    _items: [{
-        value: 1,
-        text: "1(8pt)"
-    }, {
-        value: 2,
-        text: "2(10pt)"
-    }, {
-        value: 3,
-        text: "3(12pt)"
-    }, {
-        value: 4,
-        text: "4(14pt)"
-    }, {
-        value: 5,
-        text: "5(18pt)"
-    }, {
-        value: 6,
-        text: "6(24pt)"
-    }],
-
-    _init: function () {
-        BI.RichEditorSizeChooser.superclass._init.apply(this, arguments);
-        var self = this, o = this.options;
-        this.trigger = BI.createWidget({
-            type: "bi.text_trigger",
-            readonly: true,
-            height: o.height,
-            triggerWidth: 16,
-            text: BI.i18nText("BI-Font_Size")
-        });
-
-        this.combo = BI.createWidget({
-            type: "bi.combo",
-            element: this,
-            el: this.trigger,
-            adjustLength: 1,
-            popup: {
-                maxWidth: 70,
-                minWidth: 70,
-                el: {
-                    type: "bi.button_group",
-                    items: BI.createItems(this._items, {
-                        type: "bi.single_select_item"
-                    }),
-                    layouts: [{
-                        type: "bi.vertical"
-                    }]
-                }
-            }
-        });
-        this.combo.on(BI.Combo.EVENT_CHANGE, function () {
-            var val = this.getValue()[0];
-            self.doCommand(val);
-            this.hideView();
-            this.setValue([]);
-        })
-    }
-});
-BI.shortcut('bi.rich_editor_size_chooser', BI.RichEditorSizeChooser);/**
- * 富文本编辑器
- *
- * Created by GUY on 2017/9/15.
- * @class BI.RichEditor
- * @extends BI.Widget
- */
-BI.RichEditor = BI.inherit(BI.Widget, {
-    _defaultConfig: function () {
-        return BI.extend(BI.RichEditor.superclass._defaultConfig.apply(this, arguments), {
-            baseCls: "bi-rich-editor bi-card",
-            toolbar: {}
-        });
-    },
-    _init: function () {
-        BI.RichEditor.superclass._init.apply(this, arguments);
-        var self = this, o = this.options;
-        this.editor = BI.createWidget({
-            type: "bi.nic_editor",
-            width: o.width,
-            height: o.height
-        });
-
-        this.editor.on(BI.NicEditor.EVENT_BLUR, function () {
-            self.fireEvent(BI.RichEditor.EVENT_CONFIRM);
-        });
-
-        this.combo = BI.createWidget({
-            type: "bi.combo",
-            element: this,
-            toggle: false,
-            direction: "top",
-            isNeedAdjustWidth: false,
-            isNeedAdjustHeight: false,
-            adjustLength: 1,
-            el: this.editor,
-            popup: {
-                el: BI.extend({
-                    type: "bi.rich_editor_text_toolbar",
-                    editor: this.editor
-                }, o.toolbar),
-                height: 30,
-                stopPropagation: true,
-                stopEvent: true
-            }
-        });
-
-        this.combo.on(BI.Combo.EVENT_AFTER_HIDEVIEW, function () {
-        });
-    },
-
-    setValue: function (v) {
-        this.editor.setValue(v);
-    },
-
-    getValue: function () {
-        return this.editor.getValue();
-    }
-});
-BI.RichEditor.EVENT_CONFIRM = "EVENT_CONFIRM";
-BI.shortcut('bi.rich_editor', BI.RichEditor);/**
  * 超链接
  *
  * Created by GUY on 2015/9/9.
@@ -66250,6 +65147,14 @@ BI.ColorChooser = BI.inherit(BI.Widget, {
         return this.combo.isViewVisible();
     },
 
+    hideView: function () {
+        this.combo.hideView();
+    },
+
+    showView: function () {
+        this.combo.showView();
+    },
+
     setValue: function (color) {
         this.combo.setValue(color);
     },
@@ -71868,6 +70773,1132 @@ BI.DetailPager = BI.inherit(BI.Widget, {
 BI.DetailPager.EVENT_CHANGE = "EVENT_CHANGE";
 BI.DetailPager.EVENT_AFTER_POPULATE = "EVENT_AFTER_POPULATE";
 BI.shortcut("bi.detail_pager", BI.DetailPager);/**
+ *
+ * Created by GUY on 2017/09/18.
+ * @class BI.TextToolbar
+ * @extends BI.Widget
+ */
+BI.RichEditorAction = BI.inherit(BI.Widget, {
+    _defaultConfig: function () {
+        return BI.extend(BI.RichEditorAction.superclass._defaultConfig.apply(this, arguments), {
+            width: 20,
+            height: 20,
+            command: ""
+        });
+    },
+
+    _init: function () {
+        BI.RichEditorAction.superclass._init.apply(this, arguments);
+        var self = this, o = this.options;
+        o.editor.on(BI.NicEditor.EVENT_SELECTED, function (e) {
+            self.setEnable(true);
+            self.checkNodes(e.target);
+            self.key(e);
+        });
+        o.editor.on(BI.NicEditor.EVENT_BLUR, function () {
+            self.setEnable(false);
+        });
+        o.editor.on(BI.NicEditor.EVENT_KEYDOWN, BI.bind(this.keydown, this));
+    },
+
+    checkNodes: function (e) {
+        if (!e) {
+            return false;
+        }
+        var elm = e;
+        do {
+            if (this.options.tags && this.options.tags.contains(elm.nodeName)) {
+                this.activate();
+                return true;
+            }
+        } while (elm = elm.parentNode && elm.className && elm.className.indexOf("bi-nic-editor") >= -1);
+        elm = e;
+        while (elm.nodeType == 3) {
+            elm = elm.parentNode;
+        }
+        if (this.options.css) {
+            for (var itm in this.options.css) {
+                if ($(elm).css(itm) == this.options.css[itm]) {
+                    this.activate();
+                    return true;
+                }
+            }
+        }
+        this.deactivate();
+        return false;
+    },
+
+    start: function () {
+
+    },
+
+    key: function () {
+
+    },
+
+    keydown: function () {
+    },
+
+    activate: function () {
+    },
+
+    deactivate: function () {
+    },
+
+    doCommand: function (args) {
+        if (this.options.command) {
+            this.options.editor.nicCommand(this.options.command, args);
+        }
+    }
+});/**
+ *
+ * Created by GUY on 2017/09/18.
+ * @class BI.RichEditorParamAction
+ * @extends BI.Widget
+ */
+BI.RichEditorParamAction = BI.inherit(BI.RichEditorAction, {
+    _defaultConfig: function () {
+        return BI.extend(BI.RichEditorParamAction.superclass._defaultConfig.apply(this, arguments), {});
+    },
+
+    _init: function () {
+        BI.RichEditorParamAction.superclass._init.apply(this, arguments);
+    },
+
+    _isParam: function (sel) {
+        return sel.attr("data-type") === "param";
+    },
+
+    _createBlankNode: function () {
+        return $("<span>").html("&nbsp;");
+    },
+
+    _addBlank: function ($param) {
+        var o = this.options;
+        var instance = o.editor.selectedInstance;
+        var next = $param.next();
+        if (next.length === 0 || this._isParam(next)) {
+            var preNode = this._createBlankNode();
+            var nextNode = this._createBlankNode();
+            $param.before(preNode);
+            $param.after(nextNode);
+            instance.setFocus(nextNode[0]);
+        } else {
+            instance.setFocus(next[0]);
+        }
+    },
+
+    _get$Sel: function () {
+        var o = this.options;
+        var instance = o.editor.selectedInstance;
+        var sel = $(instance.selElm());
+        if (sel[0].nodeType === 3 && this._isParam(sel.parent())) {
+            sel = sel.parent();
+        }
+        return sel;
+    },
+
+    addParam: function (param) {
+        var o = this.options;
+        var sel = this._get$Sel();
+        var $param = $("<span>").attr({
+            "data-type": "param",
+            "data-value": param
+        }).css({
+            color: "white",
+            backgroundColor: "#009de3",
+            padding: "0 5px"
+        }).text(param).keydown(function (e) {
+            if (e.keyCode === BI.KeyCode.BACKSPACE || e.keyCode === BI.KeyCode.DELETE) {
+                $param.destroy();
+            }
+            e.stopEvent();
+            return false;
+        });
+        var wrapper = o.editor.instance.getElm().element;
+        if (wrapper.find(sel).length <= 0) {
+            wrapper.append($param);
+        } else {
+            sel.after($param);
+        }
+        this._addBlank($param);
+    },
+
+    keydown: function (e) {
+        var o = this.options;
+        var sel = this._get$Sel();
+        if (e.keyCode === 229) {//中文输入法
+            if (this._isParam(sel)) {
+                this._addBlank(sel);
+                e.stopEvent();
+                return false;
+            }
+        }
+        if (BI.Key[e.keyCode] || e.keyCode === BI.KeyCode.TAB || e.keyCode === BI.KeyCode.ENTER || e.keyCode === BI.KeyCode.SPACE) {
+            if (this._isParam(sel)) {
+                e.stopEvent();
+                return false;
+            }
+        }
+        if (e.keyCode === BI.KeyCode.BACKSPACE || e.keyCode === BI.KeyCode.DELETE) {
+            if (this._isParam(sel)) {
+                sel.destroy();
+                e.preventDefault();
+                return false;
+            }
+        }
+    },
+
+    key: function (e) {
+    }
+});/**
+ * 颜色选择
+ *
+ * Created by GUY on 2015/11/26.
+ * @class BI.RichEditorTextToolbar
+ * @extends BI.Widget
+ */
+BI.RichEditorTextToolbar = BI.inherit(BI.Widget, {
+    _defaultConfig: function () {
+        return BI.extend(BI.RichEditorTextToolbar.superclass._defaultConfig.apply(this, arguments), {
+            baseCls: "bi-rich-editor-text-toolbar bi-background",
+            buttons: [
+                {type: "bi.rich_editor_size_chooser"},
+                {type: "bi.rich_editor_bold_button"},
+                {type: "bi.rich_editor_italic_button"},
+                {type: "bi.rich_editor_underline_button"},
+                {type: "bi.rich_editor_color_chooser"},
+                {type: "bi.rich_editor_background_color_chooser"},
+                {type: "bi.rich_editor_align_left_button"},
+                {type: "bi.rich_editor_align_center_button"},
+                {type: "bi.rich_editor_align_right_button"},
+                {type: "bi.rich_editor_param_button"},
+            ],
+            height: 28
+        });
+    },
+
+    _init: function () {
+        BI.RichEditorTextToolbar.superclass._init.apply(this, arguments);
+        var self = this, o = this.options;
+        var operators = [];
+        BI.each(o.buttons, function (i, btn) {
+            operators.push(BI.createWidget(BI.extend(btn, {
+                editor: o.editor
+            })));
+        });
+        this.element.on("mousedown", function () {
+            BI.each(operators, function (i, op) {
+                op.start();
+            });
+        });
+        BI.createWidget({
+            type: "bi.left",
+            element: this,
+            items: operators,
+            hgap: 3,
+            vgap: 3
+        })
+    },
+
+    mounted: function () {
+        var self = this;
+        if (BI.isIE9Below()) {//IE8下必须要设置unselectable才能不blur输入框
+            this.element.mousedown(function () {
+                self._noSelect(self.element[0]);
+            });
+            this._noSelect(this.element[0]);
+        }
+    },
+
+    _noSelect: function (element) {
+        if (element.setAttribute && element.nodeName.toLowerCase() != 'input' && element.nodeName.toLowerCase() != 'textarea') {
+            element.setAttribute('unselectable', 'on');
+        }
+        for (var i = 0; i < element.childNodes.length; i++) {
+            this._noSelect(element.childNodes[i]);
+        }
+    }
+});
+BI.shortcut('bi.rich_editor_text_toolbar', BI.RichEditorTextToolbar);/**
+ * 富文本编辑器
+ *
+ * Created by GUY on 2017/9/15.
+ * @class BI.NicEditor
+ * @extends BI.Widget
+ */
+!(function () {
+    BI.NicEditor = BI.inherit(BI.Widget, {
+        _defaultConfig: function () {
+            return BI.extend(BI.NicEditor.superclass._defaultConfig.apply(this, arguments), {
+                baseCls: "bi-nic-editor"
+            });
+        },
+        _init: function () {
+            BI.NicEditor.superclass._init.apply(this, arguments);
+            var o = this.options;
+            $(document).bind("mousedown." + this.getName(), BI.bind(this.selectCheck, this));
+            BI.createWidget({
+                type: "bi.vertical",
+                element: this,
+                items: [{
+                    type: "bi.layout",
+                    height: 1
+                }, this.instance = this.addInstance()]
+            })
+        },
+
+        addInstance: function () {
+            var o = this.options;
+            var conf = {
+                ne: this,
+                height: o.height - 1,
+                maxHeight: o.maxHeight ? o.maxHeight : null
+            };
+            if (this.element[0].contentEditable || !!window.opera) {
+                var newInstance = new nicEditorInstance(conf);
+            } else {
+                console.error("不支持此浏览器");
+            }
+            return newInstance;
+        },
+
+        nicCommand: function (cmd, args) {
+            if (this.selectedInstance) {
+                this.selectedInstance.nicCommand(cmd, args);
+            }
+        },
+
+        selectCheck: function (e) {
+            var t = e.target;
+            var found = false;
+            do {
+                if (t.nodeName !== "svg" && t.className && t.className.indexOf(prefix) != -1) {
+                    return;
+                    // return false;
+                }
+            } while (t = t.parentNode);
+            this.fireEvent('blur', t);
+            this.lastSelectedInstance = this.selectedInstance;
+            this.selectedInstance = null;
+            // return false;
+        },
+
+        setValue: function (v) {
+            this.instance.setContent(v);
+        },
+
+        getValue: function () {
+            return this.instance.getContent();
+        },
+
+        destroyed: function () {
+            $(document).unbind("mousedown." + this.getName());
+        }
+    });
+    BI.NicEditor.EVENT_SELECTED = "selected";
+    BI.NicEditor.EVENT_BLUR = "blur";
+    BI.NicEditor.EVENT_KEYDOWN = "keydown";
+    BI.shortcut('bi.nic_editor', BI.NicEditor);
+
+    var prefix = "niceditor-";
+
+    var nicEditorInstance = BI.inherit(BI.Layout, {
+        isSelected: false,
+        _init: function () {
+            nicEditorInstance.superclass._init.apply(this, arguments);
+            var o = this.options;
+            this.ne = this.options.ne;
+            this.elm = BI.createWidget({
+                type: "bi.layout",
+                width: o.width - 8,
+                scrollable: false
+            });
+            this.elm.element.css({
+                margin: "4px",
+                minHeight: (o.height - 8) + "px",
+                outline: "none"
+            }).html(o.value);
+
+            this.element.css("maxHeight", (o.maxHeight) ? o.maxHeight + 'px' : null);
+
+            this.e = BI.createWidget({
+                type: "bi.layout",
+                invisible: true,
+                tagName: "textarea"
+            });
+            BI.createWidget({
+                type: "bi.default",
+                element: this,
+                scrolly: true,
+                items: [this.elm, this.e]
+            });
+
+            this.ne.on("blur", BI.bind(this.blur, this));
+
+            this.start();
+            this.blur();
+        },
+
+        start: function () {
+            this.elm.element.attr("contentEditable", true);
+            if (this.getContent() == "") {
+                // this.setContent("<br />");
+            }
+            this.instanceDoc = document.defaultView;
+            this.elm.element.on('mousedown', BI.bind(this.selected, this));
+            this.elm.element.on('keydown', BI.bind(this.keyDown, this));
+            this.elm.element.on('focus', BI.bind(this.selected, this));
+            this.elm.element.on('blur', BI.bind(this.blur, this));
+            this.elm.element.on('keyup', BI.bind(this.selected, this));
+            this.ne.fireEvent('add');
+        },
+
+        disable: function () {
+            this.elm.element.attr("contentEditable", false);
+        },
+
+        getSel: function () {
+            return (window.getSelection) ? window.getSelection() : document.selection;
+        },
+
+        getRng: function () {
+            var s = this.getSel();
+            if (!s || s.rangeCount === 0) {
+                return;
+            }
+            return (s.rangeCount > 0) ? s.getRangeAt(0) : s.createRange();
+        },
+
+        selRng: function (rng, s) {
+            if (window.getSelection) {
+                s.removeAllRanges();
+                s.addRange(rng);
+            } else {
+                rng.select();
+            }
+        },
+
+        selElm: function () {
+            var r = this.getRng();
+            if (!r) {
+                return;
+            }
+            if (r.startContainer) {
+                var contain = r.startContainer;
+                if (r.cloneContents().childNodes.length == 1) {
+                    for (var i = 0; i < contain.childNodes.length; i++) {
+                        var rng = contain.childNodes[i].ownerDocument.createRange();
+                        rng.selectNode(contain.childNodes[i]);
+                        if (r.compareBoundaryPoints(Range.START_TO_START, rng) != 1 &&
+                            r.compareBoundaryPoints(Range.END_TO_END, rng) != -1) {
+                            return contain.childNodes[i];
+                        }
+                    }
+                }
+                return contain;
+            } else {
+                return (this.getSel().type == "Control") ? r.item(0) : r.parentElement();
+            }
+        },
+
+        saveRng: function () {
+            this.savedRange = this.getRng();
+            this.savedSel = this.getSel();
+        },
+
+        setFocus: function (el) {
+            try {
+                el.focus();
+            } catch (e) {
+
+            }
+            if (!window.getSelection) {
+                var rng;
+                try {
+                    el.focus();
+                } catch (e) {
+
+                }
+                rng = document.selection.createRange();
+                rng.moveStart('character', -el.innerText.length);
+                var text = rng.text;
+                for (var i = 0; i < el.innerText.length; i++) {
+                    if (el.innerText.substring(0, i + 1) == text.substring(text.length - i - 1, text.length)) {
+                        result = i + 1;
+                    }
+                }
+            } else {
+                var range = document.createRange();
+                range.selectNodeContents(el);
+                range.collapse(false);
+                var sel = window.getSelection();
+                sel.removeAllRanges();
+                sel.addRange(range);
+            }
+        },
+
+        restoreRng: function () {
+            if (this.savedRange) {
+                this.selRng(this.savedRange, this.savedSel);
+            }
+        },
+
+        keyDown: function (e, t) {
+            this.ne.fireEvent('keydown', e);
+        },
+
+        selected: function (e) {
+            var t = e.target;
+            if (!t && !(t = this.selElm())) {
+                t = this.selElm();
+            }
+            if (!e.ctrlKey) {
+                var selInstance = this.ne.selectedInstance;
+                if (selInstance != this) {
+                    if (selInstance) {
+                        this.ne.fireEvent('blur', e);
+                    }
+                    this.ne.selectedInstance = this;
+                    this.ne.fireEvent('focus', e);
+                }
+                this.ne.fireEvent('selected', e);
+                this.isFocused = true;
+                this.elm.element.addClass(prefix + 'selected');
+            }
+            // return false;
+        },
+
+        blur: function () {
+            this.isFocused = false;
+            this.elm.element.removeClass(prefix + 'selected');
+        },
+
+        saveContent: function () {
+            this.ne.fireEvent('save');
+            this.e.element.value(this.getContent());
+        },
+
+        getElm: function () {
+            return this.elm;
+        },
+
+        getContent: function () {
+            this.content = this.getElm().element.html();
+            this.ne.fireEvent('get');
+            return this.content;
+        },
+
+        setContent: function (e) {
+            this.content = e;
+            this.ne.fireEvent('set');
+            this.elm.element.html(this.content);
+        },
+
+        nicCommand: function (cmd, args) {
+            document.execCommand(cmd, false, args);
+        }
+    });
+}());
+/**
+ * 颜色选择trigger
+ *
+ * Created by GUY on 2015/11/26.
+ * @class BI.RichEditorBackgroundChooserTrigger
+ * @extends BI.Widget
+ */
+BI.RichEditorBackgroundChooserTrigger = BI.inherit(BI.Widget, {
+    _defaultConfig: function () {
+        var conf = BI.RichEditorBackgroundChooserTrigger.superclass._defaultConfig.apply(this, arguments);
+        return BI.extend(conf, {
+            width: 20,
+            height: 20
+        });
+    },
+
+    _init: function () {
+        BI.RichEditorBackgroundChooserTrigger.superclass._init.apply(this, arguments);
+        this.font = BI.createWidget({
+            type: "bi.icon_button",
+            cls: "text-background-font"
+        });
+
+        this.underline = BI.createWidget({
+            type: "bi.icon_button",
+            cls: "text-color-underline-font"
+        });
+
+        BI.createWidget({
+            type: "bi.absolute",
+            element: this,
+            items: [{
+                el: this.font,
+                top: 2,
+                left: 2
+            }, {
+                el: this.underline,
+                top: 7,
+                left: 2
+            }]
+        })
+    },
+
+    setValue: function (color) {
+        this.underline.element.css("color", color);
+    },
+
+    getValue: function () {
+        return this.font.element.css("color");
+    }
+});
+BI.shortcut('bi.rich_editor_background_color_chooser_trigger', BI.RichEditorBackgroundChooserTrigger);/**
+ *
+ * Created by GUY on 2015/11/26.
+ * @class BI.RichEditorAlignCenterButton
+ * @extends BI.RichEditorAction
+ */
+BI.RichEditorAlignCenterButton = BI.inherit(BI.RichEditorAction, {
+    _defaultConfig: function () {
+        return BI.extend(BI.RichEditorAlignCenterButton.superclass._defaultConfig.apply(this, arguments), {
+            width: 20,
+            height: 20,
+            command: "justifycenter"
+        });
+    },
+
+    _init: function () {
+        BI.RichEditorAlignCenterButton.superclass._init.apply(this, arguments);
+        var self = this, o = this.options;
+        this.align = BI.createWidget({
+            type: "bi.icon_button",
+            element: this,
+            forceNotSelected: true,
+            title: BI.i18nText("BI-Word_Align_Center"),
+            height: 20,
+            width: 20,
+            cls: "text-toolbar-button bi-list-item-active text-align-center-font"
+        });
+        this.align.on(BI.IconButton.EVENT_CHANGE, function () {
+            self.doCommand();
+        });
+    },
+    activate: function () {
+    },
+
+    deactivate: function () {
+    }
+});
+BI.shortcut("bi.rich_editor_align_center_button", BI.RichEditorAlignCenterButton)/**
+ *
+ * Created by GUY on 2015/11/26.
+ * @class BI.RichEditorAlignLeftButton
+ * @extends BI.RichEditorAction
+ */
+BI.RichEditorAlignLeftButton = BI.inherit(BI.RichEditorAction, {
+    _defaultConfig: function () {
+        return BI.extend(BI.RichEditorAlignLeftButton.superclass._defaultConfig.apply(this, arguments), {
+            width: 20,
+            height: 20,
+            command: "justifyleft"
+        });
+    },
+
+    _init: function () {
+        BI.RichEditorAlignLeftButton.superclass._init.apply(this, arguments);
+        var self = this, o = this.options;
+        this.align = BI.createWidget({
+            type: "bi.icon_button",
+            element: this,
+            forceNotSelected: true,
+            title: BI.i18nText("BI-Word_Align_Left"),
+            height: 20,
+            width: 20,
+            cls: "text-toolbar-button bi-list-item-active text-align-left-font"
+        });
+        this.align.on(BI.IconButton.EVENT_CHANGE, function () {
+            self.doCommand();
+        });
+    },
+    activate: function () {
+    },
+
+    deactivate: function () {
+    }
+});
+BI.shortcut("bi.rich_editor_align_left_button", BI.RichEditorAlignLeftButton)/**
+ *
+ * Created by GUY on 2015/11/26.
+ * @class BI.RichEditorAlignRightButton
+ * @extends BI.RichEditorAction
+ */
+BI.RichEditorAlignRightButton = BI.inherit(BI.RichEditorAction, {
+    _defaultConfig: function () {
+        return BI.extend(BI.RichEditorAlignRightButton.superclass._defaultConfig.apply(this, arguments), {
+            width: 20,
+            height: 20,
+            command: "justifyright"
+        });
+    },
+
+    _init: function () {
+        BI.RichEditorAlignRightButton.superclass._init.apply(this, arguments);
+        var self = this, o = this.options;
+        this.align = BI.createWidget({
+            type: "bi.icon_button",
+            element: this,
+            forceNotSelected: true,
+            title: BI.i18nText("BI-Word_Align_Right"),
+            height: 20,
+            width: 20,
+            cls: "text-toolbar-button bi-list-item-active text-align-right-font"
+        });
+        this.align.on(BI.IconButton.EVENT_CHANGE, function () {
+            self.doCommand();
+        });
+    },
+    activate: function () {
+    },
+
+    deactivate: function () {
+    }
+});
+BI.shortcut("bi.rich_editor_align_right_button", BI.RichEditorAlignRightButton)/**
+ *
+ * Created by GUY on 2015/11/26.
+ * @class BI.RichEditorBoldButton
+ * @extends BI.RichEditorAction
+ */
+BI.RichEditorBoldButton = BI.inherit(BI.RichEditorAction, {
+    _defaultConfig: function () {
+        return BI.extend(BI.RichEditorBoldButton.superclass._defaultConfig.apply(this, arguments), {
+            width: 20,
+            height: 20,
+            command: "Bold",
+            tags: ["B", "STRONG"],
+            css: {fontWeight: "bold"}
+        });
+    },
+
+    _init: function () {
+        BI.RichEditorBoldButton.superclass._init.apply(this, arguments);
+        var self = this, o = this.options;
+        this.bold = BI.createWidget({
+            type: "bi.icon_button",
+            element: this,
+            title: BI.i18nText("BI-Basic_Bold"),
+            height: 20,
+            width: 20,
+            cls: "text-toolbar-button bi-list-item-active text-bold-font"
+        });
+        this.bold.on(BI.IconButton.EVENT_CHANGE, function () {
+            self.doCommand();
+        });
+    },
+    activate: function () {
+        this.bold.setSelected(true);
+    },
+
+    deactivate: function () {
+        this.bold.setSelected(false);
+    }
+});
+BI.shortcut("bi.rich_editor_bold_button", BI.RichEditorBoldButton)/**
+ *
+ * Created by GUY on 2015/11/26.
+ * @class BI.RichEditorItalicButton
+ * @extends BI.RichEditorAction
+ */
+BI.RichEditorItalicButton = BI.inherit(BI.RichEditorAction, {
+    _defaultConfig: function () {
+        return BI.extend(BI.RichEditorItalicButton.superclass._defaultConfig.apply(this, arguments), {
+            width: 20,
+            height: 20,
+            command: "Italic",
+            tags: ["EM", "I"],
+            css: {fontStyle: "italic"}
+        });
+    },
+
+    _init: function () {
+        BI.RichEditorItalicButton.superclass._init.apply(this, arguments);
+        var self = this, o = this.options;
+        this.italic = BI.createWidget({
+            type: "bi.icon_button",
+            element: this,
+            title: BI.i18nText("BI-Basic_Italic"),
+            height: 20,
+            width: 20,
+            cls: "text-toolbar-button bi-list-item-active text-italic-font"
+        });
+        this.italic.on(BI.IconButton.EVENT_CHANGE, function () {
+            self.doCommand();
+        });
+    },
+    activate: function () {
+        this.italic.setSelected(true);
+    },
+
+    deactivate: function () {
+        this.italic.setSelected(false);
+    }
+});
+BI.shortcut("bi.rich_editor_italic_button", BI.RichEditorItalicButton)/**
+ *
+ * Created by GUY on 2015/11/26.
+ * @class BI.RichEditorParamButton
+ * @extends BI.RichEditorParamAction
+ */
+BI.RichEditorParamButton = BI.inherit(BI.RichEditorParamAction, {
+    _defaultConfig: function () {
+        return BI.extend(BI.RichEditorParamButton.superclass._defaultConfig.apply(this, arguments), {
+            width: 20,
+            height: 20
+        });
+    },
+
+    _init: function () {
+        BI.RichEditorParamButton.superclass._init.apply(this, arguments);
+        var self = this, o = this.options;
+        this.param = BI.createWidget({
+            type: "bi.button",
+            element: this,
+            level: "ignore",
+            minWidth: 0,
+            text: BI.i18nText("BI-Formula_Insert"),
+            height: 20,
+            width: 30
+        });
+        this.param.on(BI.Button.EVENT_CHANGE, function () {
+            self.addParam("参数")
+        });
+    },
+    activate: function () {
+    },
+
+    deactivate: function () {
+    }
+});
+BI.shortcut("bi.rich_editor_param_button", BI.RichEditorParamButton)/**
+ *
+ * Created by GUY on 2015/11/26.
+ * @class BI.RichEditorItalicButton
+ * @extends BI.RichEditorAction
+ */
+BI.RichEditorUnderlineButton = BI.inherit(BI.RichEditorAction, {
+    _defaultConfig: function () {
+        return BI.extend(BI.RichEditorUnderlineButton.superclass._defaultConfig.apply(this, arguments), {
+            width: 20,
+            height: 20,
+            command: "Underline",
+            tags: ["U"],
+            css: {textDecoration: "underline"}
+        });
+    },
+
+    _init: function () {
+        BI.RichEditorUnderlineButton.superclass._init.apply(this, arguments);
+        var self = this, o = this.options;
+        this.underline = BI.createWidget({
+            type: "bi.icon_button",
+            element: this,
+            title: BI.i18nText("BI-Basic_Underline"),
+            height: 20,
+            width: 20,
+            cls: "text-toolbar-button bi-list-item-active text-underline-font"
+        });
+        this.underline.on(BI.IconButton.EVENT_CHANGE, function () {
+            self.doCommand();
+        });
+    },
+    activate: function () {
+        this.underline.setSelected(true);
+    },
+
+    deactivate: function () {
+        this.underline.setSelected(false);
+    }
+});
+BI.shortcut("bi.rich_editor_underline_button", BI.RichEditorUnderlineButton)/**
+ * 颜色选择trigger
+ *
+ * Created by GUY on 2015/11/26.
+ * @class BI.RichEditorColorChooserTrigger
+ * @extends BI.Widget
+ */
+BI.RichEditorColorChooserTrigger = BI.inherit(BI.Widget, {
+    _defaultConfig: function () {
+        var conf = BI.RichEditorColorChooserTrigger.superclass._defaultConfig.apply(this, arguments);
+        return BI.extend(conf, {
+            width: 20,
+            height: 20
+        });
+    },
+
+    _init: function () {
+        BI.RichEditorColorChooserTrigger.superclass._init.apply(this, arguments);
+        this.font = BI.createWidget({
+            type: "bi.icon_button",
+            cls: "text-color-font"
+        });
+
+        this.underline = BI.createWidget({
+            type: "bi.icon_button",
+            cls: "text-color-underline-font"
+        });
+
+        BI.createWidget({
+            type: "bi.absolute",
+            element: this,
+            items: [{
+                el: this.font,
+                top: 2,
+                left: 2
+            }, {
+                el: this.underline,
+                top: 7,
+                left: 2
+            }]
+        })
+    },
+
+    setValue: function (color) {
+        this.underline.element.css("color", color);
+    },
+
+    getValue: function () {
+        return this.font.element.css("color");
+    }
+});
+BI.shortcut('bi.rich_editor_color_chooser_trigger', BI.RichEditorColorChooserTrigger);/**
+ * 颜色选择
+ *
+ * Created by GUY on 2015/11/26.
+ * @class BI.RichEditorBackgroundColorChooser
+ * @extends BI.RichEditorAction
+ */
+BI.RichEditorBackgroundColorChooser = BI.inherit(BI.RichEditorAction, {
+    _defaultConfig: function () {
+        return BI.extend(BI.RichEditorBackgroundColorChooser.superclass._defaultConfig.apply(this, arguments), {
+            width: 20,
+            height: 20
+        });
+    },
+
+    _init: function () {
+        BI.RichEditorBackgroundColorChooser.superclass._init.apply(this, arguments);
+        var self = this, o = this.options;
+        this.colorchooser = BI.createWidget({
+            type: "bi.color_chooser",
+            element: this,
+            width: o.width,
+            height: o.height,
+            el: {
+                type: "bi.rich_editor_background_color_chooser_trigger",
+                title: BI.i18nText("BI-Widget_Background_Colour"),
+                cls: "text-toolbar-button"
+            }
+        });
+        this.colorchooser.on(BI.ColorChooser.EVENT_CHANGE, function () {
+            var backgroundColor = this.getValue();
+            o.editor.element.css({
+                backgroundColor: backgroundColor,
+                color: BI.DOM.getContrastColor(backgroundColor)
+            });
+            this.setValue("");
+        });
+    },
+
+    start: function () {
+        this.colorchooser.hideView();
+    },
+
+    deactivate: function () {
+    }
+});
+BI.shortcut('bi.rich_editor_background_color_chooser', BI.RichEditorBackgroundColorChooser);/**
+ * 颜色选择
+ *
+ * Created by GUY on 2015/11/26.
+ * @class BI.RichEditorColorChooser
+ * @extends BI.RichEditorAction
+ */
+BI.RichEditorColorChooser = BI.inherit(BI.RichEditorAction, {
+    _defaultConfig: function () {
+        return BI.extend(BI.RichEditorColorChooser.superclass._defaultConfig.apply(this, arguments), {
+            width: 20,
+            height: 20,
+            command: "foreColor"
+        });
+    },
+
+    _init: function () {
+        BI.RichEditorColorChooser.superclass._init.apply(this, arguments);
+        var self = this, o = this.options;
+        this.colorchooser = BI.createWidget({
+            type: "bi.color_chooser",
+            element: this,
+            width: o.width,
+            height: o.height,
+            el: {
+                type: "bi.rich_editor_color_chooser_trigger",
+                title: BI.i18nText("BI-Font_Colour"),
+                cls: "text-toolbar-button"
+            }
+        });
+        this.colorchooser.on(BI.ColorChooser.EVENT_CHANGE, function () {
+            self.doCommand(this.getValue());
+        });
+
+    },
+
+    start: function () {
+        this.colorchooser.hideView();
+    },
+
+    deactivate: function () {
+        this.colorchooser.setValue("");
+    }
+});
+BI.shortcut('bi.rich_editor_color_chooser', BI.RichEditorColorChooser);/**
+ * 字体大小选择
+ *
+ * Created by GUY on 2015/11/26.
+ * @class BI.RichEditorSizeChooser
+ * @extends BI.RichEditorAction
+ */
+BI.RichEditorSizeChooser = BI.inherit(BI.RichEditorAction, {
+    _defaultConfig: function () {
+        return BI.extend(BI.RichEditorSizeChooser.superclass._defaultConfig.apply(this, arguments), {
+            baseCls: "bi-rich-editor-size-chooser bi-border bi-card",
+            command: "FontSize",
+            width: 50,
+            height: 20
+        });
+    },
+
+    _items: [{
+        value: 1,
+        text: "1(8pt)"
+    }, {
+        value: 2,
+        text: "2(10pt)"
+    }, {
+        value: 3,
+        text: "3(12pt)"
+    }, {
+        value: 4,
+        text: "4(14pt)"
+    }, {
+        value: 5,
+        text: "5(18pt)"
+    }, {
+        value: 6,
+        text: "6(24pt)"
+    }],
+
+    _init: function () {
+        BI.RichEditorSizeChooser.superclass._init.apply(this, arguments);
+        var self = this, o = this.options;
+        this.trigger = BI.createWidget({
+            type: "bi.text_trigger",
+            readonly: true,
+            height: o.height,
+            triggerWidth: 16,
+            text: BI.i18nText("BI-Font_Size")
+        });
+
+        this.combo = BI.createWidget({
+            type: "bi.combo",
+            element: this,
+            el: this.trigger,
+            adjustLength: 1,
+            popup: {
+                maxWidth: 70,
+                minWidth: 70,
+                el: {
+                    type: "bi.button_group",
+                    items: BI.createItems(this._items, {
+                        type: "bi.single_select_item"
+                    }),
+                    layouts: [{
+                        type: "bi.vertical"
+                    }]
+                }
+            }
+        });
+        this.combo.on(BI.Combo.EVENT_CHANGE, function () {
+            var val = this.getValue()[0];
+            self.doCommand(val);
+            this.hideView();
+            this.setValue([]);
+        })
+    },
+
+    start: function () {
+        this.combo.hideView();
+    }
+});
+BI.shortcut('bi.rich_editor_size_chooser', BI.RichEditorSizeChooser);/**
+ * 富文本编辑器
+ *
+ * Created by GUY on 2017/9/15.
+ * @class BI.RichEditor
+ * @extends BI.Widget
+ */
+BI.RichEditor = BI.inherit(BI.Widget, {
+    _defaultConfig: function () {
+        return BI.extend(BI.RichEditor.superclass._defaultConfig.apply(this, arguments), {
+            baseCls: "bi-rich-editor bi-card",
+            toolbar: {}
+        });
+    },
+    _init: function () {
+        BI.RichEditor.superclass._init.apply(this, arguments);
+        var self = this, o = this.options;
+        this.editor = BI.createWidget({
+            type: "bi.nic_editor",
+            width: o.width,
+            height: o.height
+        });
+
+        this.editor.on(BI.NicEditor.EVENT_BLUR, function () {
+            self.fireEvent(BI.RichEditor.EVENT_CONFIRM);
+        });
+
+        this.combo = BI.createWidget({
+            type: "bi.combo",
+            element: this,
+            toggle: false,
+            direction: "top",
+            isNeedAdjustWidth: false,
+            isNeedAdjustHeight: false,
+            adjustLength: 1,
+            el: this.editor,
+            popup: {
+                el: BI.extend({
+                    type: "bi.rich_editor_text_toolbar",
+                    editor: this.editor
+                }, o.toolbar),
+                height: 30,
+                stopPropagation: true,
+                stopEvent: true
+            }
+        });
+
+        this.combo.on(BI.Combo.EVENT_AFTER_HIDEVIEW, function () {
+        });
+    },
+
+    setValue: function (v) {
+        this.editor.setValue(v);
+    },
+
+    getValue: function () {
+        return this.editor.getValue();
+    }
+});
+BI.RichEditor.EVENT_CONFIRM = "EVENT_CONFIRM";
+BI.shortcut('bi.rich_editor', BI.RichEditor);/**
  * 分段控件使用的button
  *
  * Created by GUY on 2015/9/7.
