@@ -54,6 +54,10 @@ BI.RichEditorAction = BI.inherit(BI.Widget, {
         return false;
     },
 
+    start: function () {
+
+    },
+
     key: function () {
 
     },

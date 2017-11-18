@@ -70,6 +70,14 @@ BI.ColorChooser = BI.inherit(BI.Widget, {
         return this.combo.isViewVisible();
     },
 
+    hideView: function () {
+        this.combo.hideView();
+    },
+
+    showView: function () {
+        this.combo.showView();
+    },
+
     setValue: function (color) {
         this.combo.setValue(color);
     },
