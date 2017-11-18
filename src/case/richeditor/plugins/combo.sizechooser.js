@@ -71,10 +71,6 @@ BI.RichEditorSizeChooser = BI.inherit(BI.RichEditorAction, {
             this.hideView();
             this.setValue([]);
         })
-    },
-
-    start: function () {
-        this.combo.hideView();
     }
 });
 BI.shortcut('bi.rich_editor_size_chooser', BI.RichEditorSizeChooser);

@@ -9561,21 +9561,14 @@ BI.RichEditorTextToolbar = BI.inherit(BI.Widget, {
     _init: function () {
         BI.RichEditorTextToolbar.superclass._init.apply(this, arguments);
         var self = this, o = this.options;
-        var operators = [];
-        BI.each(o.buttons, function (i, btn) {
-            operators.push(BI.createWidget(BI.extend(btn, {
-                editor: o.editor
-            })));
-        });
-        this.element.on("mousedown", function () {
-            BI.each(operators, function (i, op) {
-                op.start();
-            });
-        });
         BI.createWidget({
             type: "bi.left",
             element: this,
-            items: operators,
+            items: BI.map(o.buttons, function (i, btn) {
+                return BI.extend(btn, {
+                    editor: o.editor
+                });
+            }),
             hgap: 3,
             vgap: 3
         })
@@ -10288,10 +10281,6 @@ BI.RichEditorBackgroundColorChooser = BI.inherit(BI.RichEditorAction, {
         });
     },
 
-    start: function () {
-        this.colorchooser.hideView();
-    },
-
     deactivate: function () {
     }
 });
@@ -10329,10 +10318,6 @@ BI.RichEditorColorChooser = BI.inherit(BI.RichEditorAction, {
             self.doCommand(this.getValue());
         });
 
-    },
-
-    start: function () {
-        this.colorchooser.hideView();
     },
 
     deactivate: function () {
@@ -10412,10 +10397,6 @@ BI.RichEditorSizeChooser = BI.inherit(BI.RichEditorAction, {
             this.hideView();
             this.setValue([]);
         })
-    },
-
-    start: function () {
-        this.combo.hideView();
     }
 });
 BI.shortcut('bi.rich_editor_size_chooser', BI.RichEditorSizeChooser);/**
