@@ -227,6 +227,8 @@ BI.GridView = BI.inherit(BI.Widget, {
     _populate: function (items) {
         var self = this, o = this.options;
         this._reRange();
+        this.columnCount = 0;
+        this.rowCount = 0;
         if (items && items !== this.options.items) {
             this.options.items = items;
         }
