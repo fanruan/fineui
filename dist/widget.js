@@ -5632,7 +5632,10 @@ BI.IntervalSlider = BI.inherit(BI.Widget, {
         return BI.extend(BI.IntervalSlider.superclass._defaultConfig.apply(this, arguments), {
             baseCls: "bi-interval-slider bi-slider-track",
             digit: false,
-            unit: ""
+            unit: "",
+            validationChecker: function (v) {
+                return true;
+            }
         })
     },
 
@@ -5909,7 +5912,7 @@ BI.IntervalSlider = BI.inherit(BI.Widget, {
     },
 
     _checkValidation: function (v) {
-        return BI.isNumeric(v) && !(BI.isNull(v) || v < this.min || v > this.max)
+        return this.options.validationChecker(v) && (BI.isNumeric(v) && !(BI.isNull(v) || v < this.min || v > this.max));
     },
 
     _checkOverlap: function () {
@@ -17496,6 +17499,7 @@ BI.SignTextEditor = BI.inherit(BI.Widget, {
     }
 });
 BI.SignTextEditor.EVENT_CONFIRM = "EVENT_CONFIRM";
+BI.SignTextEditor.EVENT_CLICK_LABEL = "EVENT_CLICK_LABEL";
 
 BI.shortcut("bi.sign_text_editor", BI.SignTextEditor);/**
  * Created by zcf on 2016/9/22.

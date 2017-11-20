@@ -16,7 +16,10 @@ BI.IntervalSlider = BI.inherit(BI.Widget, {
         return BI.extend(BI.IntervalSlider.superclass._defaultConfig.apply(this, arguments), {
             baseCls: "bi-interval-slider bi-slider-track",
             digit: false,
-            unit: ""
+            unit: "",
+            validationChecker: function (v) {
+                return true;
+            }
         })
     },
 
@@ -293,7 +296,7 @@ BI.IntervalSlider = BI.inherit(BI.Widget, {
     },
 
     _checkValidation: function (v) {
-        return BI.isNumeric(v) && !(BI.isNull(v) || v < this.min || v > this.max)
+        return this.options.validationChecker(v) && (BI.isNumeric(v) && !(BI.isNull(v) || v < this.min || v > this.max));
     },
 
     _checkOverlap: function () {
