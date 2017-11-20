@@ -13065,10 +13065,7 @@ Demo.Slider = BI.inherit(BI.Widget, {
             width: o.width,
             unit: "px",
             cls: "layout-bg-white",
-            digit: 0,
-            validationChecker: function (v) {
-                return BI.isInteger(v);
-            }
+            digit: 1
         });
         intervalSliderLabel.setMinAndMax({
             min: 0,
