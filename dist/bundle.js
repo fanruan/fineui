@@ -45237,9 +45237,12 @@ BI.Input = BI.inherit(BI.Single, {
                 }
             })
             .on("input propertychange", function (e) {
-                inputEventValid = true;
-                self._keydown_ = true;
-                _keydown(e.keyCode);
+                //这个事件在input的属性发生改变的时候就会触发（class的变化也算）
+                if(BI.isNotNull(e.keyCode)){
+                    inputEventValid = true;
+                    self._keydown_ = true;
+                    _keydown(e.keyCode);
+                }
             })
             .click(function (e) {
                 e.stopPropagation();
