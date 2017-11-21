@@ -200,5 +200,6 @@ BI.SignTextEditor = BI.inherit(BI.Widget, {
     }
 });
 BI.SignTextEditor.EVENT_CONFIRM = "EVENT_CONFIRM";
+BI.SignTextEditor.EVENT_CLICK_LABEL = "EVENT_CLICK_LABEL";
 
 BI.shortcut("bi.sign_text_editor", BI.SignTextEditor);
