@@ -41,7 +41,7 @@ BI.BarPopoverSection = BI.inherit(BI.PopoverSection, {
         BI.createWidget({
             type: 'bi.right_vertical_adapt',
             element: south,
-            hgap: 5,
+            lgap: 10,
             items: [this.cancel, this.sure]
         });
     },
