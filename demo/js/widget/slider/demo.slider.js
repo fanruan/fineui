@@ -77,8 +77,9 @@ Demo.Slider = BI.inherit(BI.Widget, {
         var intervalSliderLabel = BI.createWidget({
             type: "bi.interval_slider",
             width: o.width,
-            unit: "个",
-            cls: "layout-bg-white"
+            unit: "px",
+            cls: "layout-bg-white",
+            digit: 1
         });
         intervalSliderLabel.setMinAndMax({
             min: 0,

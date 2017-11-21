@@ -1073,6 +1073,7 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
                 });
             });
             this._watchers && (this._watchers = []);
+            this.destroyed && this.destroyed();
         };
 
         return VM;
