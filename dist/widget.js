@@ -17162,9 +17162,6 @@ BI.SingleSlider = BI.inherit(BI.Widget, {
             allowBlank: false,
             validationChecker: function (v) {
                 return self._checkValidation(v);
-            },
-            quitChecker: function (v) {
-                return self._checkValidation(v);
             }
         });
         this.label.element.hover(function () {
