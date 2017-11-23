@@ -87028,7 +87028,7 @@ BI.MultiSelectTree = BI.inherit(BI.Widget, {
             element: this,
             items: [{
                 el: this.searcher,
-                height: 30
+                height: 24
             }, {
                 el: this.adapter,
                 height: "fill"
