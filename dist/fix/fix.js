@@ -469,56 +469,53 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
     function defineReactive(obj, observer, shallow) {
         var props = {};
         var model = void 0;
-        if (typeof Proxy === 'function') {
-            var deps = {},
-                childObs = {},
-                cache = {};
-            _.each(obj, function (val, key) {
-                if (key in $$skipArray) {
-                    return;
-                }
-                cache[key] = val;
-                var dep = deps[key] = observer && observer['__dep' + key] || new Dep();
-                observer && (observer['__dep' + key] = dep);
-                childObs[key] = !shallow && observe(val, observer, key);
-            });
-            return model = new Proxy(props, {
-                has: function has(target, key) {
-                    return key in obj;
-                },
-                get: function get(target, key) {
-                    if (key in $$skipArray) {
-                        return target[key];
-                    }
-                    var value = cache[key];
-                    if (Dep.target) {
-                        deps[key].depend();
-                        if (childObs[key]) {
-                            childObs[key].dep.depend();
-                            if (_.isArray(value)) {
-                                dependArray(value);
-                            }
-                        }
-                    }
-                    return value;
-                },
-                set: function set(target, key, newVal) {
-                    if (key in $$skipArray) {
-                        return target[key] = newVal;
-                    }
-                    var value = cache[key],
-                        dep = deps[key];
-                    if (newVal === value || newVal !== newVal && value !== value) {
-                        return newVal;
-                    }
-                    cache[key] = newVal;
-                    childObs[key] = !shallow && observe(newVal, observer, key);
-                    obj[key] = childObs[key] ? childObs[key].model : newVal;
-                    notify(model, key, dep);
-                    return obj[key];
-                }
-            });
-        }
+        // if (typeof Proxy === 'function') {
+        //     const deps = {}, childObs = {}, cache = {}
+        //     _.each(obj, function (val, key) {
+        //         if (key in $$skipArray) {
+        //             return
+        //         }
+        //         cache[key] = val
+        //         const dep = deps[key] = (observer && observer['__dep' + key]) || new Dep()
+        //         observer && (observer['__dep' + key] = dep)
+        //         childObs[key] = !shallow && observe(val, observer, key)
+        //     })
+        //     return model = new Proxy(props, {
+        //         has: function (target, key) {
+        //             return key in obj;
+        //         },
+        //         get: function (target, key) {
+        //             if (key in $$skipArray) {
+        //                 return target[key]
+        //             }
+        //             const value = cache[key]
+        //             if (Dep.target) {
+        //                 deps[key].depend()
+        //                 if (childObs[key]) {
+        //                     childObs[key].dep.depend()
+        //                     if (_.isArray(value)) {
+        //                         dependArray(value)
+        //                     }
+        //                 }
+        //             }
+        //             return value
+        //         },
+        //         set: function (target, key, newVal) {
+        //             if (key in $$skipArray) {
+        //                 return target[key] = newVal
+        //             }
+        //             const value = cache[key], dep = deps[key]
+        //             if (newVal === value || (newVal !== newVal && value !== value)) {
+        //                 return newVal
+        //             }
+        //             cache[key] = newVal
+        //             childObs[key] = !shallow && observe(newVal, observer, key)
+        //             obj[key] = childObs[key] ? childObs[key].model : newVal
+        //             notify(model, key, dep)
+        //             return obj[key]
+        //         }
+        //     })
+        // }
         _.each(obj, function (val, key) {
             if (key in $$skipArray) {
                 return;
@@ -893,16 +890,16 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 
     function defineComputed(vm, computed) {
         var props = {};
-        if (typeof Proxy === 'function') {
-            return vm.$$computed = new Proxy(props, {
-                has: function has(target, key) {
-                    return computed && key in computed;
-                },
-                get: function get(target, key) {
-                    return createComputedGetter(vm, key)();
-                }
-            });
-        }
+        // if (typeof Proxy === 'function') {
+        //     return vm.$$computed = new Proxy(props, {
+        //         has: function (target, key) {
+        //             return computed && key in computed
+        //         },
+        //         get: function (target, key) {
+        //             return createComputedGetter(vm, key)()
+        //         }
+        //     })
+        // }
         var shouldCache = true;
         for (var key in computed) {
             if (!(key in vm)) {
@@ -968,36 +965,36 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 
     function defineProps(vm, keys) {
         var props = {};
-        if (typeof Proxy === 'function') {
-            return vm.model = new Proxy(props, {
-                has: function has(target, key) {
-                    return keys.indexOf(key) > -1;
-                },
-                get: function get(target, key) {
-                    if (key in $$skipArray) {
-                        return props[key];
-                    }
-                    if (vm.$$computed && key in vm.$$computed) {
-                        return vm.$$computed[key];
-                    }
-                    if (vm.$$state && key in vm.$$state) {
-                        return vm.$$state[key];
-                    }
-                    return vm.$$model[key];
-                },
-                set: function set(target, key, val) {
-                    if (key in $$skipArray) {
-                        return props[key] = val;
-                    }
-                    if (vm.$$state && key in vm.$$state) {
-                        return vm.$$state[key] = val;
-                    }
-                    if (vm.$$model && key in vm.$$model) {
-                        return vm.$$model[key] = val;
-                    }
-                }
-            });
-        }
+        // if (typeof Proxy === 'function') {
+        //     return vm.model = new Proxy(props, {
+        //         has: function (target, key) {
+        //             return keys.indexOf(key) > -1;
+        //         },
+        //         get: function (target, key) {
+        //             if (key in $$skipArray) {
+        //                 return props[key]
+        //             }
+        //             if (vm.$$computed && key in vm.$$computed) {
+        //                 return vm.$$computed[key]
+        //             }
+        //             if (vm.$$state && key in vm.$$state) {
+        //                 return vm.$$state[key]
+        //             }
+        //             return vm.$$model[key]
+        //         },
+        //         set: function (target, key, val) {
+        //             if (key in $$skipArray) {
+        //                 return props[key] = val
+        //             }
+        //             if (vm.$$state && key in vm.$$state) {
+        //                 return vm.$$state[key] = val
+        //             }
+        //             if (vm.$$model && key in vm.$$model) {
+        //                 return vm.$$model[key] = val
+        //             }
+        //         }
+        //     })
+        // }
 
         var _loop = function _loop(i, len) {
             var key = keys[i];
