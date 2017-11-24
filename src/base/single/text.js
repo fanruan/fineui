@@ -114,7 +114,7 @@ BI.Text = BI.inherit(BI.Single, {
     setText: function (text) {
         BI.Text.superclass.setText.apply(this, arguments);
         this.options.text = text;
-        this.text.element.html(( this[0] && this[0].ownerDocument || document ).createTextNode( (text + "").replaceAll(" ", "&nbsp;") ));
+        this.text.element.html(BI.Func.formatSpecialCharInHtml(text));
     }
 });
 
