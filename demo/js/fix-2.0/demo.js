@@ -67,7 +67,6 @@
         },
         mounted: function () {
 
-
         }
     });
 
