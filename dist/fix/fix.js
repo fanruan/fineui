@@ -127,9 +127,10 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
             var _resolve = void 0;
             callbacks.push(function () {
                 if (cb) {
-                    try {
-                        cb.call(ctx);
-                    } catch (e) {}
+                    // try {
+                    cb.call(ctx);
+                    // } catch (e) {
+                    // }
                 } else if (_resolve) {
                     _resolve(ctx);
                 }
@@ -727,9 +728,10 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
             try {
                 value = this.getter.call(vm, vm);
             } catch (e) {
-                if (this.user) {} else {
-                    throw e;
-                }
+                // if (this.user) {
+                // } else {
+                throw e;
+                // }
             } finally {
                 // "touch" every property so they are all tracked as
                 // dependencies for deep watching
@@ -794,9 +796,10 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
                     var oldValue = this.value;
                     this.value = value;
                     if (this.user) {
-                        try {
-                            this.cb.call(this.vm, value, oldValue);
-                        } catch (e) {}
+                        // try {
+                        this.cb.call(this.vm, value, oldValue);
+                        // } catch (e) {
+                        // }
                     } else {
                         this.cb.call(this.vm, value, oldValue);
                     }
