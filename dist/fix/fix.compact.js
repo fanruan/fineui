@@ -31,8 +31,8 @@
         _init.apply(this, arguments);
     };
 
-    var unMount = BI.Widget.prototype._unMount;
-    BI.Widget.prototype._unMount = function () {
+    var unMount = BI.Widget.prototype.__d;
+    BI.Widget.prototype.__d = function () {
         unMount.apply(this, arguments);
         this.store && BI.isFunction(this.store.destroy) && this.store.destroy();
         BI.each(this._watchers, function (i, unwatches) {
