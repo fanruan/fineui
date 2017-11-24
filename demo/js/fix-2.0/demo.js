@@ -18,7 +18,7 @@
         }
     })
 
-    var Store = BI.inherit(Fix.VM, {
+    var Store = BI.inherit(Fix.Model, {
         _init: function () {
             this.comp = new Computed(model);
         },

@@ -21,7 +21,7 @@
     BI.Widget.prototype._init = function () {
         if (window.Fix && this._store) {
             this.store = this._store();
-            if (this.store instanceof Fix.VM) {
+            if (this.store instanceof Fix.Model) {
                 this.model = this.store.model;
             } else {
                 this.model = this.store;
