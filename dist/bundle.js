@@ -19278,7 +19278,7 @@ BI.extend(jQuery.fn, {
      */
     __textKeywordMarked__: function (text, keyword, py) {
         if (!BI.isKey(keyword) || (text + "").length > 100) {
-            return this.html((text + "").replaceAll(" ", "&nbsp;"));
+            return this.html(( this[0] && this[0].ownerDocument || document ).createTextNode((text + "").replaceAll(" ", "&nbsp;")));
         }
         keyword = keyword + "";
         keyword = BI.toUpperCase(keyword);
@@ -19301,7 +19301,7 @@ BI.extend(jQuery.fn, {
             if (tidx >= 0) {
                 this.append(textLeft.substr(0, tidx));
                 this.append($("<span>").addClass("bi-keyword-red-mark")
-                    .html(textLeft.substr(tidx, keyword.length).replaceAll(" ", "&nbsp;")));
+                    .html(( this[0] && this[0].ownerDocument || document ).createTextNode(textLeft.substr(tidx, keyword.length).replaceAll(" ", "&nbsp;"))));
 
                 textLeft = textLeft.substr(tidx + keyword.length);
                 if (py != null) {
@@ -19310,7 +19310,7 @@ BI.extend(jQuery.fn, {
             } else if (pidx != null && pidx >= 0 && Math.floor(pidx / text.length) === Math.floor((pidx + keyword.length - 1) / text.length)) {
                 this.append(textLeft.substr(0, pidx));
                 this.append($("<span>").addClass("bi-keyword-red-mark")
-                    .html(textLeft.substr(pidx, keyword.length).replaceAll(" ", "&nbsp;")));
+                    .html(( this[0] && this[0].ownerDocument || document ).createTextNode(textLeft.substr(pidx, keyword.length).replaceAll(" ", "&nbsp;"))));
                 if (py != null) {
                     py = py.substr(pidx + keyword.length);
                 }
@@ -26428,7 +26428,7 @@ BI.Text = BI.inherit(BI.Single, {
     setText: function (text) {
         BI.Text.superclass.setText.apply(this, arguments);
         this.options.text = text;
-        this.text.element.html((text + "").replaceAll(" ", "&nbsp;"));
+        this.text.element.html(( this[0] && this[0].ownerDocument || document ).createTextNode( (text + "").replaceAll(" ", "&nbsp;") ));
     }
 });
 
@@ -87028,7 +87028,7 @@ BI.MultiSelectTree = BI.inherit(BI.Widget, {
             element: this,
             items: [{
                 el: this.searcher,
-                height: 30
+                height: 24
             }, {
                 el: this.adapter,
                 height: "fill"
@@ -92353,9 +92353,6 @@ BI.SingleSlider = BI.inherit(BI.Widget, {
             width: c.EDITOR_WIDTH - 2,
             allowBlank: false,
             validationChecker: function (v) {
-                return self._checkValidation(v);
-            },
-            quitChecker: function (v) {
                 return self._checkValidation(v);
             }
         });

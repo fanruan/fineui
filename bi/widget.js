@@ -11836,7 +11836,7 @@ BI.MultiSelectTree = BI.inherit(BI.Widget, {
             element: this,
             items: [{
                 el: this.searcher,
-                height: 30
+                height: 24
             }, {
                 el: this.adapter,
                 height: "fill"
@@ -17161,9 +17161,6 @@ BI.SingleSlider = BI.inherit(BI.Widget, {
             width: c.EDITOR_WIDTH - 2,
             allowBlank: false,
             validationChecker: function (v) {
-                return self._checkValidation(v);
-            },
-            quitChecker: function (v) {
                 return self._checkValidation(v);
             }
         });
