@@ -386,7 +386,7 @@
     });
     BI.shortcut("demo.fix_scene_field", Demo.FixSceneField);
 
-    Demo.FixSceneFineIndexUpdateStore = BI.inherit(Fix.VM, {
+    Demo.FixSceneFineIndexUpdateStore = BI.inherit(Fix.Model, {
         _init: function () {
             this.fineIndexUpdate = model.fineIndexUpdate;
         },

@@ -824,9 +824,7 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
                 // remove self from vm's watcher list
                 // this is a somewhat expensive operation so we skip it
                 // if the vm is being destroyed.
-                if (!this.vm._isBeingDestroyed) {
-                    remove(this.vm._watchers, this);
-                }
+                remove(this.vm._watchers, this);
                 var i = this.deps.length;
                 while (i--) {
                     this.deps[i].removeSub(this);
@@ -1034,11 +1032,11 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
         vm.model = createViewModel$1({}, props);
     }
 
-    var VM = function () {
-        function VM(model) {
-            _classCallCheck(this, VM);
+    var Model = function () {
+        function Model(model) {
+            _classCallCheck(this, Model);
 
-            if (model instanceof Observer || model instanceof VM) {
+            if (model instanceof Observer || model instanceof Model) {
                 model = model.model;
             }
             if (_.has(model, '__ob__')) {
@@ -1060,9 +1058,9 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
             }
         }
 
-        VM.prototype._init = function _init() {};
+        Model.prototype._init = function _init() {};
 
-        VM.prototype.destroy = function destroy() {
+        Model.prototype.destroy = function destroy() {
             for (var _key3 in this._computedWatchers) {
                 this._computedWatchers[_key3].teardown();
             }
@@ -1074,9 +1072,12 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
             });
             this._watchers && (this._watchers = []);
             this.destroyed && this.destroyed();
+            this.$$model = null;
+            this.$$computed = null;
+            this.$$state = null;
         };
 
-        return VM;
+        return Model;
     }();
 
     var falsy$1;
@@ -1249,7 +1250,7 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
     exports.define = define;
     exports.version = version;
     exports.$$skipArray = $$skipArray;
-    exports.VM = VM;
+    exports.Model = Model;
     exports.observerState = observerState;
     exports.Observer = Observer;
     exports.observe = observe;

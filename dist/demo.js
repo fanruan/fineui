@@ -9997,7 +9997,7 @@ BI.shortcut("demo.tmp", Demo.Func);
             n: 'b'
         }]
     });
-    var Computed = BI.inherit(Fix.VM, {
+    var Computed = BI.inherit(Fix.Model, {
         computed: {
             b: function () {
                 return this.name + "-计算属性"
@@ -10093,7 +10093,7 @@ BI.shortcut("demo.tmp", Demo.Func);
             n: 0
         }]
     });
-    var Computed = BI.inherit(Fix.VM, {
+    var Computed = BI.inherit(Fix.Model, {
         computed: {
             b: function () {
                 return this.name + 1
@@ -10597,7 +10597,7 @@ BI.shortcut("demo.tmp", Demo.Func);
     });
     BI.shortcut("demo.fix_scene_field", Demo.FixSceneField);
 
-    Demo.FixSceneFineIndexUpdateStore = BI.inherit(Fix.VM, {
+    Demo.FixSceneFineIndexUpdateStore = BI.inherit(Fix.Model, {
         _init: function () {
             this.fineIndexUpdate = model.fineIndexUpdate;
         },
@@ -10654,7 +10654,7 @@ BI.shortcut("demo.tmp", Demo.Func);
     BI.shortcut("demo.fix_scene_fine_index_update", Demo.FixSceneFineIndexUpdate);
 
 })();;(function () {
-    var State = BI.inherit(Fix.VM, {
+    var State = BI.inherit(Fix.Model, {
         state: function () {
             return {
                 name: "原始属性"
@@ -10711,7 +10711,7 @@ BI.shortcut("demo.tmp", Demo.Func);
         }]
     });
 
-    var Store = BI.inherit(Fix.VM, {
+    var Store = BI.inherit(Fix.Model, {
         _init: function () {
         },
         computed: {
