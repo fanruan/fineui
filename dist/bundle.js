@@ -20226,6 +20226,9 @@ BI.extend(BI.DOM, {
                 return stores[type];
             }
             return stores[type] = new storeInjection[type](config);
+        },
+        releaseStore: function (type) {
+            delete stores[type];
         }
     }
 
@@ -20240,6 +20243,10 @@ BI.extend(BI.DOM, {
                 providerInstance[type] = new providers[type].$get()(config);
             }
             return providerInstance[type];
+        },
+        releaseProvider: function (type) {
+            delete providers[type];
+            delete providerInstance[type];
         }
     }
 

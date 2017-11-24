@@ -77,6 +77,9 @@
                 return stores[type];
             }
             return stores[type] = new storeInjection[type](config);
+        },
+        releaseStore: function (type) {
+            delete stores[type];
         }
     }
 
@@ -91,6 +94,10 @@
                 providerInstance[type] = new providers[type].$get()(config);
             }
             return providerInstance[type];
+        },
+        releaseProvider: function (type) {
+            delete providers[type];
+            delete providerInstance[type];
         }
     }
 
