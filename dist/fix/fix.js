@@ -1044,7 +1044,7 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
             } else {
                 this.options = model || {};
             }
-            var state = this.state && this.state();
+            var state = _.isFunction(this.state) ? this.state() : this.state;
             var keys = _.keys(this.$$model).concat(_.keys(state)).concat(_.keys(this.computed));
             defineProps(this, keys);
             this.$$model && (this.model.__ob__ = this.$$model.__ob__);
