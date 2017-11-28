@@ -30511,6 +30511,11 @@ BI.QuickGridTable = BI.inherit(BI.GridTable, {
         this.bottomRightGrid.setEstimatedColumnSize((o.columnSize.length - freezeColLength) > 0 ? (totalRightColumnSize / (o.columnSize.length - freezeColLength)) : 0);
         this.bottomRightGrid.setEstimatedRowSize(o.rowSize);
 
+        this.topLeftGrid.setColumnCount(freezeColLength);
+        this.topRightGrid.setColumnCount(o.columnSize.length - freezeColLength);
+        this.bottomLeftGrid.setColumnCount(freezeColLength);
+        this.bottomRightGrid.setColumnCount(o.columnSize.length - freezeColLength);
+
         var items = this.contextLayout.attr("items");
         items[1].left = regionSize;
         items[2].top = this._getFreezeHeaderHeight();
