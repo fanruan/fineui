@@ -48,5 +48,5 @@
         }
     });
 
-    BI.shortcut("demo.fix2", Demo.Fix);
+    BI.shortcut("demo.fix_computed", Demo.Fix);
 }());

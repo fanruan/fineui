@@ -5261,39 +5261,44 @@ Demo.FIX_CONFIG = [{
     id: 71,
     pId: 7,
     text: "定义响应式数据",
-    value: "demo.fix1"
+    value: "demo.fix_define"
 }, {
     id: 72,
     pId: 7,
     text: "state属性",
-    value: "demo.fix6"
+    value: "demo.fix_state"
 }, {
     id: 78,
     pId: 7,
     text: "计算属性",
-    value: "demo.fix2"
+    value: "demo.fix_computed"
 }, {
     id: 73,
     pId: 7,
     text: "store",
-    value: "demo.fix3"
+    value: "demo.fix_store"
 }, {
     id: 74,
     pId: 7,
     text: "watcher且或表达式",
-    value: "demo.fix4"
+    value: "demo.fix_watcher"
 }, {
     id: 75,
     pId: 7,
     text: "watcher星号表达式",
-    value: "demo.fix5"
+    value: "demo.fix_global_watcher"
 }, {
     id: 76,
+    pId: 7,
+    text: "context",
+    value: "demo.fix_context"
+}, {
+    id: 77,
     pId: 7,
     text: "一个混合的例子",
     value: "demo.fix"
 }, {
-    id: 77,
+    id: 78,
     pId: 7,
     text: "场景",
     value: "demo.fix_scene"
@@ -10038,7 +10043,81 @@ BI.shortcut("demo.tmp", Demo.Func);
         }
     });
 
-    BI.shortcut("demo.fix2", Demo.Fix);
+    BI.shortcut("demo.fix_computed", Demo.Fix);
+}());;(function () {
+    var ParentStore = BI.inherit(Fix.Model, {
+        state: function () {
+            return {
+                context: "默认context"
+            }
+        },
+        childContext: ["context"]
+    })
+
+    var ChildStore = BI.inherit(Fix.Model, {
+        context: ["context"],
+        computed: {
+            currContext: function () {
+                return this.model.context
+            }
+        },
+        actions: {
+            changeContext: function () {
+                this.model.context = "改变后的context";
+            }
+        }
+    })
+
+    var Child = BI.inherit(BI.Widget, {
+        _store: function () {
+            return new ChildStore();
+        },
+        watch: {
+            currContext: function (val) {
+                this.button.setText(val);
+            }
+        },
+        render: function () {
+            var self = this;
+            return {
+                type: "bi.button",
+                ref: function () {
+                    self.button = this;
+                },
+                text: this.model.context,
+                handler: function () {
+                    self.store.changeContext();
+                }
+            }
+        },
+        mounted: function () {
+
+        }
+    })
+
+    BI.shortcut("demo.fix_context_child", Child)
+
+    var Parent = BI.inherit(BI.Widget, {
+        _store: function () {
+            return new ParentStore();
+        },
+        render: function () {
+            var self = this;
+            return {
+                type: "bi.absolute",
+                items: [{
+                    el: {
+                        type: "demo.fix_context_child",
+                    }
+                }]
+            }
+        },
+        mounted: function () {
+
+        }
+    });
+
+    BI.shortcut("demo.fix_context", Parent);
 }());;(function () {
     var model = Fix.define({
         name: "原始属性",
@@ -10082,7 +10161,7 @@ BI.shortcut("demo.tmp", Demo.Func);
         }
     });
 
-    BI.shortcut("demo.fix1", Demo.Fix);
+    BI.shortcut("demo.fix_define", Demo.Fix);
 }());
 ;(function () {
     var model = Fix.define({
@@ -10153,7 +10232,6 @@ BI.shortcut("demo.tmp", Demo.Func);
         },
         mounted: function () {
 
-
         }
     });
 
@@ -10208,7 +10286,7 @@ BI.shortcut("demo.tmp", Demo.Func);
         }
     });
 
-    BI.shortcut("demo.fix5", Demo.Fix);
+    BI.shortcut("demo.fix_global_watcher", Demo.Fix);
 }());/**
  * @Author: Young
  * @CreationDate 2017-11-06 10:32
@@ -10700,7 +10778,7 @@ BI.shortcut("demo.tmp", Demo.Func);
         }
     });
 
-    BI.shortcut("demo.fix6", Demo.Fix);
+    BI.shortcut("demo.fix_state", Demo.Fix);
 }());;(function(){
     var model = Fix.define({
         name: "原始属性",
@@ -10759,7 +10837,7 @@ BI.shortcut("demo.tmp", Demo.Func);
         }
     });
 
-    BI.shortcut("demo.fix3", Demo.Fix);
+    BI.shortcut("demo.fix_store", Demo.Fix);
 }());;(function () {
     var model = Fix.define({
         name: "原始属性",
@@ -10809,7 +10887,7 @@ BI.shortcut("demo.tmp", Demo.Func);
         }
     });
 
-    BI.shortcut("demo.fix4", Demo.Fix);
+    BI.shortcut("demo.fix_watcher", Demo.Fix);
 }());Demo.Main = BI.inherit(BI.Widget, {
     props: {
         baseCls: "demo-main bi-background"

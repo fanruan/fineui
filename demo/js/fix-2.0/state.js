@@ -45,5 +45,5 @@
         }
     });
 
-    BI.shortcut("demo.fix6", Demo.Fix);
+    BI.shortcut("demo.fix_state", Demo.Fix);
 }());
