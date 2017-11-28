@@ -871,215 +871,6 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
         }
     }
 
-    var computedWatcherOptions = { lazy: true };
-
-    function initState(vm, state) {
-        vm.$$state = observe(state).model;
-    }
-
-    function initComputed(vm, computed) {
-        var watchers = vm._computedWatchers = {};
-
-        defineComputed(vm, computed);
-
-        for (var key in computed) {
-            var userDef = computed[key],
-                context = vm.$$model ? vm.model : vm;
-            var getter = typeof userDef === 'function' ? _.bind(userDef, context) : _.bind(userDef.get, context);
-
-            watchers[key] = new Watcher(vm.$$computed, getter || noop, noop, computedWatcherOptions);
-        }
-    }
-
-    function defineComputed(vm, computed) {
-        var props = {};
-        // if (typeof Proxy === 'function') {
-        //     return vm.$$computed = new Proxy(props, {
-        //         has: function (target, key) {
-        //             return computed && key in computed
-        //         },
-        //         get: function (target, key) {
-        //             return createComputedGetter(vm, key)()
-        //         }
-        //     })
-        // }
-        var shouldCache = true;
-        for (var key in computed) {
-            if (!(key in vm)) {
-                var sharedPropertyDefinition = {
-                    enumerable: true,
-                    configurable: true,
-                    get: noop,
-                    set: noop
-                };
-                var userDef = computed[key];
-                if (typeof userDef === 'function') {
-                    sharedPropertyDefinition.get = createComputedGetter(vm, key);
-                    sharedPropertyDefinition.set = noop;
-                } else {
-                    sharedPropertyDefinition.get = userDef.get ? shouldCache && userDef.cache !== false ? createComputedGetter(key) : userDef.get : noop;
-                    sharedPropertyDefinition.set = userDef.set ? userDef.set : noop;
-                }
-
-                props[key] = sharedPropertyDefinition;
-            }
-        }
-        vm.$$computed = createViewModel$1({}, props);
-    }
-
-    function createComputedGetter(vm, key) {
-        return function computedGetter() {
-            var watcher = vm._computedWatchers && vm._computedWatchers[key];
-            if (watcher) {
-                if (watcher.dirty) {
-                    watcher.evaluate();
-                }
-                if (Dep.target) {
-                    watcher.depend();
-                }
-                return watcher.value;
-            }
-        };
-    }
-
-    function initWatch(vm, watch) {
-        vm._watchers || (vm._watchers = []);
-        for (var key in watch) {
-            var handler = watch[key];
-            if (_.isArray(handler)) {
-                for (var i = 0; i < handler.length; i++) {
-                    vm._watchers.push(createWatcher(vm, key, handler[i]));
-                }
-            } else {
-                vm._watchers.push(createWatcher(vm, key, handler));
-            }
-        }
-    }
-
-    function createWatcher(vm, keyOrFn, handler, options) {
-        return Fix.watch(vm.model, keyOrFn, _.bind(handler, vm), options);
-    }
-
-    function initMethods(vm, methods) {
-        for (var key in methods) {
-            vm[key] = methods[key] == null ? noop : _.bind(methods[key], vm.$$model ? vm.model : vm);
-        }
-    }
-
-    function defineProps(vm, keys) {
-        var props = {};
-        // if (typeof Proxy === 'function') {
-        //     return vm.model = new Proxy(props, {
-        //         has: function (target, key) {
-        //             return keys.indexOf(key) > -1;
-        //         },
-        //         get: function (target, key) {
-        //             if (key in $$skipArray) {
-        //                 return props[key]
-        //             }
-        //             if (vm.$$computed && key in vm.$$computed) {
-        //                 return vm.$$computed[key]
-        //             }
-        //             if (vm.$$state && key in vm.$$state) {
-        //                 return vm.$$state[key]
-        //             }
-        //             return vm.$$model[key]
-        //         },
-        //         set: function (target, key, val) {
-        //             if (key in $$skipArray) {
-        //                 return props[key] = val
-        //             }
-        //             if (vm.$$state && key in vm.$$state) {
-        //                 return vm.$$state[key] = val
-        //             }
-        //             if (vm.$$model && key in vm.$$model) {
-        //                 return vm.$$model[key] = val
-        //             }
-        //         }
-        //     })
-        // }
-
-        var _loop = function _loop(i, len) {
-            var key = keys[i];
-            if (!(key in $$skipArray)) {
-                props[key] = {
-                    enumerable: true,
-                    configurable: true,
-                    get: function get() {
-                        if (vm.$$computed && key in vm.$$computed) {
-                            return vm.$$computed[key];
-                        }
-                        if (vm.$$state && key in vm.$$state) {
-                            return vm.$$state[key];
-                        }
-                        return vm.$$model[key];
-                    },
-                    set: function set(val) {
-                        if (vm.$$state && key in vm.$$state) {
-                            return vm.$$state[key] = val;
-                        }
-                        if (vm.$$model && key in vm.$$model) {
-                            return vm.$$model[key] = val;
-                        }
-                    }
-                };
-            }
-        };
-
-        for (var i = 0, len = keys.length; i < len; i++) {
-            _loop(i, len);
-        }
-        vm.model = createViewModel$1({}, props);
-    }
-
-    var Model = function () {
-        function Model(model) {
-            _classCallCheck(this, Model);
-
-            if (model instanceof Observer || model instanceof Model) {
-                model = model.model;
-            }
-            if (_.has(model, '__ob__')) {
-                this.$$model = model;
-            } else {
-                this.options = model || {};
-            }
-            var state = _.isFunction(this.state) ? this.state() : this.state;
-            var keys = _.keys(this.$$model).concat(_.keys(state)).concat(_.keys(this.computed));
-            defineProps(this, keys);
-            this.$$model && (this.model.__ob__ = this.$$model.__ob__);
-            state && initState(this, state);
-            initComputed(this, this.computed);
-            initWatch(this, this.watch);
-            initMethods(this, this.actions);
-            this._init();
-            if (this.$$model) {
-                return this.model;
-            }
-        }
-
-        Model.prototype._init = function _init() {};
-
-        Model.prototype.destroy = function destroy() {
-            for (var _key3 in this._computedWatchers) {
-                this._computedWatchers[_key3].teardown();
-            }
-            _.each(this._watchers, function (unwatches) {
-                unwatches = _.isArray(unwatches) ? unwatches : [unwatches];
-                _.each(unwatches, function (unwatch) {
-                    unwatch();
-                });
-            });
-            this._watchers && (this._watchers = []);
-            this.destroyed && this.destroyed();
-            this.$$model = null;
-            this.$$computed = null;
-            this.$$state = null;
-        };
-
-        return Model;
-    }();
-
     var falsy$1;
     var operators = {
         '||': falsy$1,
@@ -1221,6 +1012,262 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
         });
         return watchers;
     }
+
+    var computedWatcherOptions = { lazy: true };
+
+    function initState(vm, state) {
+        if (state) {
+            vm.$$state = observe(state).model;
+        }
+    }
+
+    function initComputed(vm, computed) {
+        var watchers = vm._computedWatchers = {};
+
+        defineComputed(vm, computed);
+
+        for (var key in computed) {
+            var userDef = computed[key],
+                context = vm.$$model ? vm.model : vm;
+            var getter = typeof userDef === 'function' ? _.bind(userDef, context) : _.bind(userDef.get, context);
+
+            watchers[key] = new Watcher(vm.$$computed, getter || noop, noop, computedWatcherOptions);
+        }
+    }
+
+    function defineComputed(vm, computed) {
+        var props = {};
+        // if (typeof Proxy === 'function') {
+        //     return vm.$$computed = new Proxy(props, {
+        //         has: function (target, key) {
+        //             return computed && key in computed
+        //         },
+        //         get: function (target, key) {
+        //             return createComputedGetter(vm, key)()
+        //         }
+        //     })
+        // }
+        var shouldCache = true;
+        for (var key in computed) {
+            if (!(key in vm)) {
+                var sharedPropertyDefinition = {
+                    enumerable: true,
+                    configurable: true,
+                    get: noop,
+                    set: noop
+                };
+                var userDef = computed[key];
+                if (typeof userDef === 'function') {
+                    sharedPropertyDefinition.get = createComputedGetter(vm, key);
+                    sharedPropertyDefinition.set = noop;
+                } else {
+                    sharedPropertyDefinition.get = userDef.get ? shouldCache && userDef.cache !== false ? createComputedGetter(key) : userDef.get : noop;
+                    sharedPropertyDefinition.set = userDef.set ? userDef.set : noop;
+                }
+
+                props[key] = sharedPropertyDefinition;
+            }
+        }
+        vm.$$computed = createViewModel$1({}, props);
+    }
+
+    function createComputedGetter(vm, key) {
+        return function computedGetter() {
+            var watcher = vm._computedWatchers && vm._computedWatchers[key];
+            if (watcher) {
+                if (watcher.dirty) {
+                    watcher.evaluate();
+                }
+                if (Dep.target) {
+                    watcher.depend();
+                }
+                return watcher.value;
+            }
+        };
+    }
+
+    function initWatch(vm, watch$$1) {
+        vm._watchers || (vm._watchers = []);
+        for (var key in watch$$1) {
+            var handler = watch$$1[key];
+            if (_.isArray(handler)) {
+                for (var i = 0; i < handler.length; i++) {
+                    vm._watchers.push(createWatcher(vm, key, handler[i]));
+                }
+            } else {
+                vm._watchers.push(createWatcher(vm, key, handler));
+            }
+        }
+    }
+
+    function createWatcher(vm, keyOrFn, handler) {
+        return watch(vm.model, keyOrFn, _.bind(handler, vm.$$model ? vm.model : vm), {
+            sync: true
+        });
+    }
+
+    function initMethods(vm, methods) {
+        for (var key in methods) {
+            vm[key] = methods[key] == null ? noop : _.bind(methods[key], vm.$$model ? vm.model : vm);
+        }
+    }
+
+    function defineProps(vm, keys) {
+        var props = {};
+        // if (typeof Proxy === 'function') {
+        //     return vm.model = new Proxy(props, {
+        //         has: function (target, key) {
+        //             return keys.indexOf(key) > -1;
+        //         },
+        //         get: function (target, key) {
+        //             if (key in $$skipArray) {
+        //                 return props[key]
+        //             }
+        //             if (vm.$$computed && key in vm.$$computed) {
+        //                 return vm.$$computed[key]
+        //             }
+        //             if (vm.$$state && key in vm.$$state) {
+        //                 return vm.$$state[key]
+        //             }
+        //             return vm.$$model[key]
+        //         },
+        //         set: function (target, key, val) {
+        //             if (key in $$skipArray) {
+        //                 return props[key] = val
+        //             }
+        //             if (vm.$$state && key in vm.$$state) {
+        //                 return vm.$$state[key] = val
+        //             }
+        //             if (vm.$$model && key in vm.$$model) {
+        //                 return vm.$$model[key] = val
+        //             }
+        //         }
+        //     })
+        // }
+
+        var _loop = function _loop(i, len) {
+            var key = keys[i];
+            if (!(key in $$skipArray)) {
+                props[key] = {
+                    enumerable: true,
+                    configurable: true,
+                    get: function get() {
+                        if (vm.$$computed && key in vm.$$computed) {
+                            return vm.$$computed[key];
+                        }
+                        if (vm.$$state && key in vm.$$state) {
+                            return vm.$$state[key];
+                        }
+                        if (vm.$$model && key in vm.$$model) {
+                            return vm.$$model;
+                        }
+                        var p = vm._parent;
+                        while (p) {
+                            if (p.$$context && key in p.$$context) {
+                                return p.$$context[key];
+                            }
+                            p = p._parent;
+                        }
+                    },
+                    set: function set(val) {
+                        if (vm.$$state && key in vm.$$state) {
+                            return vm.$$state[key] = val;
+                        }
+                        if (vm.$$model && key in vm.$$model) {
+                            return vm.$$model[key] = val;
+                        }
+                        var p = vm._parent;
+                        while (p) {
+                            if (p.$$context && key in p.$$context) {
+                                return p.$$context[key] = val;
+                            }
+                            p = p._parent;
+                        }
+                    }
+                };
+            }
+        };
+
+        for (var i = 0, len = keys.length; i < len; i++) {
+            _loop(i, len);
+        }
+        vm.model = createViewModel$1({}, props);
+    }
+
+    function defineContext(vm, keys) {
+        var props = {};
+
+        var _loop2 = function _loop2(i, len) {
+            var key = keys[i];
+            if (!(key in $$skipArray)) {
+                props[key] = {
+                    enumerable: true,
+                    configurable: true,
+                    get: function get() {
+                        return vm.model[key];
+                    },
+                    set: function set(val) {
+                        return vm.model[key] = val;
+                    }
+                };
+            }
+        };
+
+        for (var i = 0, len = keys.length; i < len; i++) {
+            _loop2(i, len);
+        }
+        vm.$$context = createViewModel$1({}, props);
+    }
+
+    var Model = function () {
+        function Model(model) {
+            _classCallCheck(this, Model);
+
+            if (model instanceof Observer || model instanceof Model) {
+                model = model.model;
+            }
+            if (_.has(model, '__ob__')) {
+                this.$$model = model;
+            } else {
+                this.options = model || {};
+            }
+            this._parent = Model.target;
+            var state = _.isFunction(this.state) ? this.state() : this.state;
+            var keys = _.keys(this.$$model).concat(_.keys(state)).concat(_.keys(this.computed)).concat(this.context);
+            defineProps(this, keys);
+            this.childContext && defineContext(this, this.childContext);
+            this.$$model && (this.model.__ob__ = this.$$model.__ob__);
+            this._init();
+            initState(this, state);
+            initComputed(this, this.computed);
+            initWatch(this, this.watch);
+            initMethods(this, this.actions);
+            if (this.$$model) {
+                return this.model;
+            }
+        }
+
+        Model.prototype._init = function _init() {};
+
+        Model.prototype.destroy = function destroy() {
+            for (var _key3 in this._computedWatchers) {
+                this._computedWatchers[_key3].teardown();
+            }
+            _.each(this._watchers, function (unwatches) {
+                unwatches = _.isArray(unwatches) ? unwatches : [unwatches];
+                _.each(unwatches, function (unwatch) {
+                    unwatch();
+                });
+            });
+            this._watchers && (this._watchers = []);
+            this.destroyed && this.destroyed();
+            this.$$model = null;
+            this.$$computed = null;
+            this.$$state = null;
+        };
+
+        return Model;
+    }();
 
     function toJSON(model) {
         var result = void 0;

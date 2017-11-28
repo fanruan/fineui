@@ -17,18 +17,40 @@
         return Fix.watch(vm.model, keyOrFn, _.bind(handler, vm), options)
     }
 
+    var target = null
+    const targetStack = []
+
+    function pushTarget(_target) {
+        if (target) targetStack.push(target)
+        Fix.Model.target = target = _target
+    }
+
+    function popTarget() {
+        Fix.Model.target = target = targetStack.pop()
+    }
+
     var _init = BI.Widget.prototype._init;
     BI.Widget.prototype._init = function () {
+        var needPop = false;
         if (window.Fix && this._store) {
+            if (this.options.element && this.options.element.store) {
+                pushTarget(this.options.element.store);
+                needPop = true;
+            }
             this.store = this._store();
+            needPop && popTarget();
+            needPop = false;
+            pushTarget(this.store);
             if (this.store instanceof Fix.Model) {
                 this.model = this.store.model;
             } else {
                 this.model = this.store;
             }
             initWatch(this, this.watch);
+            needPop = true;
         }
         _init.apply(this, arguments);
+        needPop && popTarget();
     };
 
     var unMount = BI.Widget.prototype.__d;
@@ -42,6 +64,6 @@
             })
         });
         this._watchers && (this._watchers = []);
-        this.store && (this.store = null);
+        this.store && (this.store._parent = null, this.store = null);
     }
 }());
