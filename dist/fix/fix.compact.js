@@ -33,8 +33,15 @@
     BI.Widget.prototype._init = function () {
         var needPop = false;
         if (window.Fix && this._store) {
-            if (this.options.element && this.options.element.store) {
-                pushTarget(this.options.element.store);
+            var p = this.options.element;
+            while (p) {
+                if (p.store) {
+                    break;
+                }
+                p = p._parent || (p.options && p.options.element);
+            }
+            if (p) {
+                pushTarget(p.store);
                 needPop = true;
             }
             this.store = this._store();
@@ -66,4 +73,18 @@
         this._watchers && (this._watchers = []);
         this.store && (this.store._parent = null, this.store = null);
     }
+
+    _.each(["each", "map", "reduce", "reduceRight", "find", "filter", "reject", "every", "all", "some", "any", "max", "min",
+        "sortBy", "groupBy", "indexBy", "countBy", "partition",
+        "keys", "allKeys", "values", "pairs", "invert",
+        "mapObject", "findKey", "pick", "omit", "tap"], function (name) {
+        var old = BI[name]
+        BI[name] = function (obj, fn) {
+            return old(obj, function (key, value) {
+                if (!(key in Fix.$$skipArray)) {
+                    return fn.apply(null, arguments);
+                }
+            });
+        }
+    });
 }());
