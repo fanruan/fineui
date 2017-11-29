@@ -13,8 +13,10 @@
         }
     }
 
-    function createWatcher(vm, keyOrFn, handler, options) {
-        return Fix.watch(vm.model, keyOrFn, _.bind(handler, vm), options)
+    function createWatcher(vm, keyOrFn, handler) {
+        return Fix.watch(vm.model, keyOrFn, _.bind(handler, vm), {
+            store: vm
+        })
     }
 
     var target = null
@@ -27,6 +29,23 @@
 
     function popTarget() {
         Fix.Model.target = target = targetStack.pop()
+    }
+
+    var oldWatch = Fix.watch;
+    Fix.watch = function (model, expOrFn, cb, options) {
+        if (BI.isPlainObject(cb)) {
+            options = cb
+            cb = cb.handler
+        }
+        if (typeof cb === 'string') {
+            cb = model[cb]
+        }
+        return oldWatch.call(this, model, expOrFn, function () {
+            pushTarget(options.store);
+            var res = cb.apply(this, arguments);
+            popTarget();
+            return res;
+        }, options);
     }
 
     var _init = BI.Widget.prototype._init;
@@ -91,9 +110,9 @@
         BI[name] = function (obj, fn) {
             return typeof fn === "function" ? old(obj, function (key, value) {
                 if (!(key in Fix.$$skipArray)) {
-                    return fn.apply(null, arguments);
+                    return fn.apply(this, arguments);
                 }
-            }) : old.apply(null, arguments);
+            }) : old.apply(this, arguments);
         }
     });
 }());
