@@ -69,7 +69,7 @@
 .search-close-h-font:hover .b-font:before,
 .search-close-h-font.hover .b-font:before {
   content: "\e600";
-  color: #e85050;
+  color: #faaa39;
 }
 .search-close-h-font.disabled .b-font:before {
   content: "\e600";
@@ -211,7 +211,7 @@
 }
 .dot-e-font:active .b-font:before {
   content: "\e606";
-  color: #3f8ce8;
+  color: #3685f2;
 }
 .dot-e-font.disabled .b-font:before {
   content: "\e606";
@@ -535,7 +535,7 @@
 .trigger-triangle-font:active .b-font:before,
 .trigger-triangle-font.active .b-font:before {
   content: "\e66a";
-  color: #3f8ce8;
+  color: #3685f2;
 }
 .trigger-triangle-font.disabled .b-font:before {
   content: "\e66a";
@@ -594,11 +594,11 @@
 }
 .check-font .b-font:before {
   content: "\e611";
-  color: #3f8ce8;
+  color: #3685f2;
 }
 .check-font.disabled .b-font:before {
   content: "\e611";
-  color: #3f8ce8;
+  color: #3685f2;
 }
 .item-check-font .b-font {
   *zoom: expression( this.runtimeStyle['zoom'] = '1',this.innerHTML = '&#xe611;');
@@ -642,11 +642,11 @@
 }
 .drag-tag-font .b-font:before {
   content: "\e600";
-  color: #f07d0a;
+  color: #ff4949;
 }
 .drag-tag-font.disabled .b-font:before {
   content: "\e600";
-  color: #f07d0a;
+  color: #ff4949;
 }
 .less-font .b-font {
   *zoom: expression( this.runtimeStyle['zoom'] = '1',this.innerHTML = '&#xe633;');

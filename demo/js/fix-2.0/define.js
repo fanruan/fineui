@@ -41,5 +41,5 @@
         }
     });
 
-    BI.shortcut("demo.fix1", Demo.Fix);
+    BI.shortcut("demo.fix_define", Demo.Fix);
 }());

@@ -5261,39 +5261,44 @@ Demo.FIX_CONFIG = [{
     id: 71,
     pId: 7,
     text: "定义响应式数据",
-    value: "demo.fix1"
+    value: "demo.fix_define"
 }, {
     id: 72,
     pId: 7,
     text: "state属性",
-    value: "demo.fix6"
+    value: "demo.fix_state"
 }, {
     id: 78,
     pId: 7,
     text: "计算属性",
-    value: "demo.fix2"
+    value: "demo.fix_computed"
 }, {
     id: 73,
     pId: 7,
     text: "store",
-    value: "demo.fix3"
+    value: "demo.fix_store"
 }, {
     id: 74,
     pId: 7,
     text: "watcher且或表达式",
-    value: "demo.fix4"
+    value: "demo.fix_watcher"
 }, {
     id: 75,
     pId: 7,
     text: "watcher星号表达式",
-    value: "demo.fix5"
+    value: "demo.fix_global_watcher"
 }, {
     id: 76,
+    pId: 7,
+    text: "context",
+    value: "demo.fix_context"
+}, {
+    id: 77,
     pId: 7,
     text: "一个混合的例子",
     value: "demo.fix"
 }, {
-    id: 77,
+    id: 78,
     pId: 7,
     text: "场景",
     value: "demo.fix_scene"
@@ -5537,6 +5542,14 @@ Demo.FIX_CONFIG = [{
     id: 420,
     text: "滚动sliders",
     value: "demo.slider"
+}, {
+    pId: 4,
+    id: 421,
+    text: "单选下拉框"
+}, {
+    pId: 421,
+    text: "bi.single_select_combo",
+    value: "demo.single_select_combo"
 }];Demo.Func = BI.inherit(BI.Widget, {
     props: {
         baseCls: "demo-func"
@@ -9997,7 +10010,7 @@ BI.shortcut("demo.tmp", Demo.Func);
             n: 'b'
         }]
     });
-    var Computed = BI.inherit(Fix.VM, {
+    var Computed = BI.inherit(Fix.Model, {
         computed: {
             b: function () {
                 return this.name + "-计算属性"
@@ -10038,7 +10051,81 @@ BI.shortcut("demo.tmp", Demo.Func);
         }
     });
 
-    BI.shortcut("demo.fix2", Demo.Fix);
+    BI.shortcut("demo.fix_computed", Demo.Fix);
+}());;(function () {
+    var ParentStore = BI.inherit(Fix.Model, {
+        state: function () {
+            return {
+                context: "默认context"
+            }
+        },
+        childContext: ["context"]
+    })
+
+    var ChildStore = BI.inherit(Fix.Model, {
+        context: ["context"],
+        computed: {
+            currContext: function () {
+                return this.model.context
+            }
+        },
+        actions: {
+            changeContext: function () {
+                this.model.context = "改变后的context";
+            }
+        }
+    })
+
+    var Child = BI.inherit(BI.Widget, {
+        _store: function () {
+            return new ChildStore();
+        },
+        watch: {
+            currContext: function (val) {
+                this.button.setText(val);
+            }
+        },
+        render: function () {
+            var self = this;
+            return {
+                type: "bi.button",
+                ref: function () {
+                    self.button = this;
+                },
+                text: this.model.context,
+                handler: function () {
+                    self.store.changeContext();
+                }
+            }
+        },
+        mounted: function () {
+
+        }
+    })
+
+    BI.shortcut("demo.fix_context_child", Child)
+
+    var Parent = BI.inherit(BI.Widget, {
+        _store: function () {
+            return new ParentStore();
+        },
+        render: function () {
+            var self = this;
+            return {
+                type: "bi.absolute",
+                items: [{
+                    el: {
+                        type: "demo.fix_context_child",
+                    }
+                }]
+            }
+        },
+        mounted: function () {
+
+        }
+    });
+
+    BI.shortcut("demo.fix_context", Parent);
 }());;(function () {
     var model = Fix.define({
         name: "原始属性",
@@ -10082,7 +10169,7 @@ BI.shortcut("demo.tmp", Demo.Func);
         }
     });
 
-    BI.shortcut("demo.fix1", Demo.Fix);
+    BI.shortcut("demo.fix_define", Demo.Fix);
 }());
 ;(function () {
     var model = Fix.define({
@@ -10093,7 +10180,7 @@ BI.shortcut("demo.tmp", Demo.Func);
             n: 0
         }]
     });
-    var Computed = BI.inherit(Fix.VM, {
+    var Computed = BI.inherit(Fix.Model, {
         computed: {
             b: function () {
                 return this.name + 1
@@ -10104,7 +10191,7 @@ BI.shortcut("demo.tmp", Demo.Func);
         }
     })
 
-    var Store = BI.inherit(Fix.VM, {
+    var Store = BI.inherit(Fix.Model, {
         _init: function () {
             this.comp = new Computed(model);
         },
@@ -10152,7 +10239,6 @@ BI.shortcut("demo.tmp", Demo.Func);
             }
         },
         mounted: function () {
-
 
         }
     });
@@ -10208,7 +10294,7 @@ BI.shortcut("demo.tmp", Demo.Func);
         }
     });
 
-    BI.shortcut("demo.fix5", Demo.Fix);
+    BI.shortcut("demo.fix_global_watcher", Demo.Fix);
 }());/**
  * @Author: Young
  * @CreationDate 2017-11-06 10:32
@@ -10597,7 +10683,7 @@ BI.shortcut("demo.tmp", Demo.Func);
     });
     BI.shortcut("demo.fix_scene_field", Demo.FixSceneField);
 
-    Demo.FixSceneFineIndexUpdateStore = BI.inherit(Fix.VM, {
+    Demo.FixSceneFineIndexUpdateStore = BI.inherit(Fix.Model, {
         _init: function () {
             this.fineIndexUpdate = model.fineIndexUpdate;
         },
@@ -10654,7 +10740,7 @@ BI.shortcut("demo.tmp", Demo.Func);
     BI.shortcut("demo.fix_scene_fine_index_update", Demo.FixSceneFineIndexUpdate);
 
 })();;(function () {
-    var State = BI.inherit(Fix.VM, {
+    var State = BI.inherit(Fix.Model, {
         state: function () {
             return {
                 name: "原始属性"
@@ -10700,7 +10786,7 @@ BI.shortcut("demo.tmp", Demo.Func);
         }
     });
 
-    BI.shortcut("demo.fix6", Demo.Fix);
+    BI.shortcut("demo.fix_state", Demo.Fix);
 }());;(function(){
     var model = Fix.define({
         name: "原始属性",
@@ -10711,7 +10797,7 @@ BI.shortcut("demo.tmp", Demo.Func);
         }]
     });
 
-    var Store = BI.inherit(Fix.VM, {
+    var Store = BI.inherit(Fix.Model, {
         _init: function () {
         },
         computed: {
@@ -10759,7 +10845,7 @@ BI.shortcut("demo.tmp", Demo.Func);
         }
     });
 
-    BI.shortcut("demo.fix3", Demo.Fix);
+    BI.shortcut("demo.fix_store", Demo.Fix);
 }());;(function () {
     var model = Fix.define({
         name: "原始属性",
@@ -10809,7 +10895,7 @@ BI.shortcut("demo.tmp", Demo.Func);
         }
     });
 
-    BI.shortcut("demo.fix4", Demo.Fix);
+    BI.shortcut("demo.fix_watcher", Demo.Fix);
 }());Demo.Main = BI.inherit(BI.Widget, {
     props: {
         baseCls: "demo-main bi-background"
@@ -12903,6 +12989,88 @@ Demo.SelectTreeCombo = BI.inherit(BI.Widget, {
 })
 
 BI.shortcut("demo.select_tree_combo", Demo.SelectTreeCombo);/**
+ * Created by User on 2017/3/22.
+ */
+Demo.SingleSelectCombo = BI.inherit(BI.Widget, {
+    props: {
+        baseCls: "demo-single-select-combo"
+    },
+
+    _createSingleSelectCombo: function () {
+        var self = this;
+        var widget = BI.createWidget({
+            type: 'bi.single_select_combo',
+            itemsCreator: BI.bind(this._itemsCreator, this),
+            width: 200
+        });
+
+        widget.on(BI.SingleSelectCombo.EVENT_CONFIRM, function () {
+            BI.Msg.toast(JSON.stringify(this.getValue()));
+        });
+
+        return widget;
+    },
+
+    _getItemsByTimes: function (items, times) {
+        var res = [];
+        for (var i = (times - 1) * 10; items[i] && i < times * 10; i++) {
+            res.push(items[i]);
+        }
+        return res;
+    },
+
+    _hasNextByTimes: function (items, times) {
+        return times * 10 < items.length;
+    },
+
+    _itemsCreator: function (options, callback) {
+        var self = this;
+        var items = Demo.CONSTANTS.ITEMS;
+        var keywords = (options.keywords || []).slice();
+        if (options.keyword) {
+            keywords.push(options.keyword);
+        }
+        BI.each(keywords, function (i, kw) {
+            var search = BI.Func.getSearchResult(items, kw);
+            items = search.matched.concat(search.finded);
+        });
+        if (options.selectedValues) {//过滤
+            var filter = BI.makeObject(options.selectedValues, true);
+            items = BI.filter(items, function (i, ob) {
+                return !filter[ob.value];
+            });
+        }
+        if (options.type == BI.SingleSelectCombo.REQ_GET_ALL_DATA) {
+            callback({
+                items: items
+            });
+            return;
+        }
+        if (options.type == BI.SingleSelectCombo.REQ_GET_DATA_LENGTH) {
+            callback({count: items.length});
+            return;
+        }
+        BI.delay(function () {
+            callback({
+                items: self._getItemsByTimes(items, options.times),
+                hasNext: self._hasNextByTimes(items, options.times)
+            });
+        }, 1000);
+    },
+
+    render: function () {
+        return {
+            type: 'bi.absolute',
+            scrolly: false,
+            items: [{
+                el: this._createSingleSelectCombo(),
+                right: "50%",
+                top: 10
+            }]
+        }
+    }
+});
+BI.shortcut("demo.single_select_combo", Demo.SingleSelectCombo);/**
  * Created by Dailer on 2017/7/13.
  */
 Demo.MultiLayerSingleTreeCombo = BI.inherit(BI.Widget, {
@@ -13048,6 +13216,7 @@ Demo.Slider = BI.inherit(BI.Widget, {
         var intervalSlider = BI.createWidget({
             type: "bi.interval_slider",
             width: o.width,
+            digit: 0,
             cls: "layout-bg-white"
         });
         intervalSlider.setMinAndMax({

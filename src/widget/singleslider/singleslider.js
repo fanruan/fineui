@@ -82,9 +82,6 @@ BI.SingleSlider = BI.inherit(BI.Widget, {
             allowBlank: false,
             validationChecker: function (v) {
                 return self._checkValidation(v);
-            },
-            quitChecker: function (v) {
-                return self._checkValidation(v);
             }
         });
         this.label.element.hover(function () {
@@ -225,7 +222,17 @@ BI.SingleSlider = BI.inherit(BI.Widget, {
     },
 
     _checkValidation: function (v) {
-        return BI.isNumeric(v) && !(BI.isNull(v) || v < this.min || v > this.max)
+        var o = this.options;
+        var valid = false;
+        if (BI.isNumeric(v) && !(BI.isNull(v) || v < this.min || v > this.max)) {
+            if(o.digit === false){
+                valid = true;
+            }else{
+                var dotText = (v + "").split(".")[1] || "";
+                valid = (dotText.length === o.digit);
+            }
+        }
+        return valid;
     },
 
     _setBlueTrack: function (percent) {

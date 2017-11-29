@@ -184,7 +184,7 @@
 .cm-s-default span[class*="fieldName"] {
   display: inline-block;
   color: white;
-  background: #3f8ce8;
+  background: #3685f2;
   padding: 0 5px;
   margin: 1px 1px;
 }
@@ -206,7 +206,7 @@
   border-radius: 3px;
 }
 .cm-s-default span[class*="#"] {
-  color: #3f8ce8;
+  color: #3685f2;
 }
 .cm-s-default .cm-error {
   color: #f00;

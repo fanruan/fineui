@@ -8,7 +8,7 @@
         }]
     });
 
-    var Store = BI.inherit(Fix.VM, {
+    var Store = BI.inherit(Fix.Model, {
         _init: function () {
         },
         computed: {
@@ -56,5 +56,5 @@
         }
     });
 
-    BI.shortcut("demo.fix3", Demo.Fix);
+    BI.shortcut("demo.fix_store", Demo.Fix);
 }());

@@ -19278,7 +19278,7 @@ BI.extend(jQuery.fn, {
      */
     __textKeywordMarked__: function (text, keyword, py) {
         if (!BI.isKey(keyword) || (text + "").length > 100) {
-            return this.html((text + "").replaceAll(" ", "&nbsp;"));
+            return this.html(BI.Func.formatSpecialCharInHtml(text));
         }
         keyword = keyword + "";
         keyword = BI.toUpperCase(keyword);
@@ -19301,7 +19301,7 @@ BI.extend(jQuery.fn, {
             if (tidx >= 0) {
                 this.append(textLeft.substr(0, tidx));
                 this.append($("<span>").addClass("bi-keyword-red-mark")
-                    .html(textLeft.substr(tidx, keyword.length).replaceAll(" ", "&nbsp;")));
+                    .html(BI.Func.formatSpecialCharInHtml(textLeft.substr(tidx, keyword.length))));
 
                 textLeft = textLeft.substr(tidx + keyword.length);
                 if (py != null) {
@@ -19310,7 +19310,7 @@ BI.extend(jQuery.fn, {
             } else if (pidx != null && pidx >= 0 && Math.floor(pidx / text.length) === Math.floor((pidx + keyword.length - 1) / text.length)) {
                 this.append(textLeft.substr(0, pidx));
                 this.append($("<span>").addClass("bi-keyword-red-mark")
-                    .html(textLeft.substr(pidx, keyword.length).replaceAll(" ", "&nbsp;")));
+                    .html(BI.Func.formatSpecialCharInHtml(textLeft.substr(pidx, keyword.length))));
                 if (py != null) {
                     py = py.substr(pidx + keyword.length);
                 }
@@ -19915,6 +19915,27 @@ BI.extend(BI.Func, {
             matched: matched,
             finded: finded
         }
+    },
+
+    /**
+     * 将字符串中的尖括号等字符encode成html能解析的形式
+     * @param str
+     */
+    formatSpecialCharInHtml: function (str) {
+        return (str + "").replaceAll("\\s|<=?|>=?", function (str) {
+            switch (str) {
+                case "<":
+                    return "&lt;";
+                case "<=":
+                    return "&le;";
+                case ">":
+                    return "&gt;";
+                case ">=":
+                    return "&ge;";
+                default:
+                    return "&nbsp;";
+            }
+        });
     }
 });
 
@@ -20226,6 +20247,9 @@ BI.extend(BI.DOM, {
                 return stores[type];
             }
             return stores[type] = new storeInjection[type](config);
+        },
+        releaseStore: function (type) {
+            delete stores[type];
         }
     }
 
@@ -20240,6 +20264,10 @@ BI.extend(BI.DOM, {
                 providerInstance[type] = new providers[type].$get()(config);
             }
             return providerInstance[type];
+        },
+        releaseProvider: function (type) {
+            delete providers[type];
+            delete providerInstance[type];
         }
     }
 

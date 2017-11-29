@@ -1,5 +1,5 @@
 ;(function () {
-    var State = BI.inherit(Fix.VM, {
+    var State = BI.inherit(Fix.Model, {
         state: function () {
             return {
                 name: "原始属性"
@@ -45,5 +45,5 @@
         }
     });
 
-    BI.shortcut("demo.fix6", Demo.Fix);
+    BI.shortcut("demo.fix_state", Demo.Fix);
 }());

@@ -7,7 +7,7 @@
             n: 'b'
         }]
     });
-    var Computed = BI.inherit(Fix.VM, {
+    var Computed = BI.inherit(Fix.Model, {
         computed: {
             b: function () {
                 return this.name + "-计算属性"
@@ -48,5 +48,5 @@
         }
     });
 
-    BI.shortcut("demo.fix2", Demo.Fix);
+    BI.shortcut("demo.fix_computed", Demo.Fix);
 }());
