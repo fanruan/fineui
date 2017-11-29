@@ -15,7 +15,7 @@
 
     function createWatcher(vm, keyOrFn, handler) {
         return Fix.watch(vm.model, keyOrFn, _.bind(handler, vm), {
-            store: vm
+            store: vm.store
         })
     }
 
