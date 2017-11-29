@@ -80,11 +80,11 @@
         "mapObject", "findKey", "pick", "omit", "tap"], function (name) {
         var old = BI[name]
         BI[name] = function (obj, fn) {
-            return old(obj, function (key, value) {
+            return typeof fn === "function" ? old(obj, function (key, value) {
                 if (!(key in Fix.$$skipArray)) {
                     return fn.apply(null, arguments);
                 }
-            });
+            }) : old.apply(null, arguments);
         }
     });
 }());
