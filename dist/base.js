@@ -581,7 +581,7 @@ BI.Text = BI.inherit(BI.Single, {
     setText: function (text) {
         BI.Text.superclass.setText.apply(this, arguments);
         this.options.text = text;
-        this.text.element.html((text + "").replaceAll(" ", "&nbsp;"));
+        this.text.element.html(BI.Func.formatSpecialCharInHtml(text));
     }
 });
 
@@ -30514,6 +30514,11 @@ BI.QuickGridTable = BI.inherit(BI.GridTable, {
         this.bottomLeftGrid.setEstimatedRowSize(o.rowSize);
         this.bottomRightGrid.setEstimatedColumnSize((o.columnSize.length - freezeColLength) > 0 ? (totalRightColumnSize / (o.columnSize.length - freezeColLength)) : 0);
         this.bottomRightGrid.setEstimatedRowSize(o.rowSize);
+
+        this.topLeftGrid.setColumnCount(freezeColLength);
+        this.topRightGrid.setColumnCount(o.columnSize.length - freezeColLength);
+        this.bottomLeftGrid.setColumnCount(freezeColLength);
+        this.bottomRightGrid.setColumnCount(o.columnSize.length - freezeColLength);
 
         var items = this.contextLayout.attr("items");
         items[1].left = regionSize;

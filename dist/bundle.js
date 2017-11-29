@@ -19278,7 +19278,7 @@ BI.extend(jQuery.fn, {
      */
     __textKeywordMarked__: function (text, keyword, py) {
         if (!BI.isKey(keyword) || (text + "").length > 100) {
-            return this.html((text + "").replaceAll(" ", "&nbsp;"));
+            return this.html(BI.Func.formatSpecialCharInHtml(text));
         }
         keyword = keyword + "";
         keyword = BI.toUpperCase(keyword);
@@ -19301,7 +19301,7 @@ BI.extend(jQuery.fn, {
             if (tidx >= 0) {
                 this.append(textLeft.substr(0, tidx));
                 this.append($("<span>").addClass("bi-keyword-red-mark")
-                    .html(textLeft.substr(tidx, keyword.length).replaceAll(" ", "&nbsp;")));
+                    .html(BI.Func.formatSpecialCharInHtml(textLeft.substr(tidx, keyword.length))));
 
                 textLeft = textLeft.substr(tidx + keyword.length);
                 if (py != null) {
@@ -19310,7 +19310,7 @@ BI.extend(jQuery.fn, {
             } else if (pidx != null && pidx >= 0 && Math.floor(pidx / text.length) === Math.floor((pidx + keyword.length - 1) / text.length)) {
                 this.append(textLeft.substr(0, pidx));
                 this.append($("<span>").addClass("bi-keyword-red-mark")
-                    .html(textLeft.substr(pidx, keyword.length).replaceAll(" ", "&nbsp;")));
+                    .html(BI.Func.formatSpecialCharInHtml(textLeft.substr(pidx, keyword.length))));
                 if (py != null) {
                     py = py.substr(pidx + keyword.length);
                 }
@@ -19915,6 +19915,27 @@ BI.extend(BI.Func, {
             matched: matched,
             finded: finded
         }
+    },
+
+    /**
+     * 将字符串中的尖括号等字符encode成html能解析的形式
+     * @param str
+     */
+    formatSpecialCharInHtml: function (str) {
+        return (str + "").replaceAll("\\s|<=?|>=?", function (str) {
+            switch (str) {
+                case "<":
+                    return "&lt;";
+                case "<=":
+                    return "&le;";
+                case ">":
+                    return "&gt;";
+                case ">=":
+                    return "&ge;";
+                default:
+                    return "&nbsp;";
+            }
+        });
     }
 });
 
@@ -26435,7 +26456,7 @@ BI.Text = BI.inherit(BI.Single, {
     setText: function (text) {
         BI.Text.superclass.setText.apply(this, arguments);
         this.options.text = text;
-        this.text.element.html((text + "").replaceAll(" ", "&nbsp;"));
+        this.text.element.html(BI.Func.formatSpecialCharInHtml(text));
     }
 });
 
@@ -56369,6 +56390,11 @@ BI.QuickGridTable = BI.inherit(BI.GridTable, {
         this.bottomRightGrid.setEstimatedColumnSize((o.columnSize.length - freezeColLength) > 0 ? (totalRightColumnSize / (o.columnSize.length - freezeColLength)) : 0);
         this.bottomRightGrid.setEstimatedRowSize(o.rowSize);
 
+        this.topLeftGrid.setColumnCount(freezeColLength);
+        this.topRightGrid.setColumnCount(o.columnSize.length - freezeColLength);
+        this.bottomLeftGrid.setColumnCount(freezeColLength);
+        this.bottomRightGrid.setColumnCount(o.columnSize.length - freezeColLength);
+
         var items = this.contextLayout.attr("items");
         items[1].left = regionSize;
         items[2].top = this._getFreezeHeaderHeight();
@@ -68991,7 +69017,7 @@ BI.BarPopoverSection = BI.inherit(BI.PopoverSection, {
         BI.createWidget({
             type: 'bi.right_vertical_adapt',
             element: south,
-            hgap: 5,
+            lgap: 10,
             items: [this.cancel, this.sure]
         });
     },
@@ -82567,6 +82593,11 @@ BI.MultiDatePopup = BI.inherit(BI.Widget, {
             this.textButton.setEnable(false);
         }
     },
+
+    _checkValueValid: function (value) {
+        return BI.isNotNull(value) && BI.isNotEmptyObject(value) && BI.isNotEmptyString(value);
+    },
+
     setValue: function (v) {
         this.storeValue = v;
         var self = this, date;
@@ -82622,7 +82653,7 @@ BI.MultiDatePopup = BI.inherit(BI.Widget, {
                 self._setInnerValue(this.day);
                 break;
             default:
-                if (BI.isNull(value) || BI.isEmptyObject(value)) {
+                if (!this._checkValueValid(value)) {
                     var date = new Date();
                     this.dateTab.setSelect(BI.MultiDateCombo.MULTI_DATE_YMD_CARD);
                     this.ymd.setValue({
@@ -87039,7 +87070,7 @@ BI.MultiSelectTree = BI.inherit(BI.Widget, {
             element: this,
             items: [{
                 el: this.searcher,
-                height: 30
+                height: 24
             }, {
                 el: this.adapter,
                 height: "fill"
@@ -93702,9 +93733,6 @@ BI.SingleSlider = BI.inherit(BI.Widget, {
             width: c.EDITOR_WIDTH - 2,
             allowBlank: false,
             validationChecker: function (v) {
-                return self._checkValidation(v);
-            },
-            quitChecker: function (v) {
                 return self._checkValidation(v);
             }
         });
