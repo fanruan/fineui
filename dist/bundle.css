@@ -1597,9 +1597,9 @@ i {
   -webkit-border-radius: 2px;
   -moz-border-radius: 2px;
   border-radius: 2px;
-  box-shadow: 0px 0px 2px 1px #232e40 inset;
-  -webkit-box-shadow: 0px 0px 2px 1px #232e40 inset;
-  -moz-box-shadow: 0px 0px 2px 1px #232e40 inset;
+  box-shadow: 0px 0px 2px 1px #d4dadd inset;
+  -webkit-box-shadow: 0px 0px 2px 1px #d4dadd inset;
+  -moz-box-shadow: 0px 0px 2px 1px #d4dadd inset;
 }
 .bi-color-picker-button .color-picker-button-mask {
   border: 1px solid #1a1a1a;
@@ -1611,9 +1611,9 @@ i {
   -webkit-border-radius: 2px;
   -moz-border-radius: 2px;
   border-radius: 2px;
-  box-shadow: 0px 0px 2px 1px #232e40 inset;
-  -webkit-box-shadow: 0px 0px 2px 1px #232e40 inset;
-  -moz-box-shadow: 0px 0px 2px 1px #232e40 inset;
+  box-shadow: 0px 0px 2px 1px #d4dadd inset;
+  -webkit-box-shadow: 0px 0px 2px 1px #d4dadd inset;
+  -moz-box-shadow: 0px 0px 2px 1px #d4dadd inset;
 }
 .farbtastic {
   position: relative;

@@ -9,14 +9,14 @@
   /*W3C标准(IE9+，Safari5.1+,Chrome10.0+,Opera10.6+都符合box-sizing的w3c标准语法)*/
 }
 .bi-grid-table-cell.first-row {
-  border-top: 1px solid #e8eaed;
+  border-top: 1px solid #d4dadd;
 }
 .bi-grid-table-cell.first-col {
-  border-left: 1px solid #e8eaed;
+  border-left: 1px solid #d4dadd;
 }
 .bi-theme-dark .bi-grid-table-cell.first-row {
-  border-top: 1px solid #f2f4f7;
+  border-top: 1px solid #525466;
 }
 .bi-theme-dark .bi-grid-table-cell.first-col {
-  border-left: 1px solid #f2f4f7;
+  border-left: 1px solid #525466;
 }

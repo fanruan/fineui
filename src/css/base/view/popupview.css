@@ -15,13 +15,13 @@
   line-height: 30px;
 }
 .bi-popup-view .list-view-toolbar > .center-element {
-  border-left: 1px solid #e8eaed;
+  border-left: 1px solid #d4dadd;
 }
 .bi-popup-view .list-view-toolbar > .first-element {
   border-left: none;
 }
 .bi-theme-dark .bi-popup-view .list-view-toolbar > .center-element {
-  border-left: 1px solid #f2f4f7;
+  border-left: 1px solid #525466;
 }
 .bi-theme-dark .bi-popup-view .list-view-toolbar > .first-element {
   border-left: none;

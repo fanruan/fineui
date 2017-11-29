@@ -106,34 +106,34 @@
   color: #c4c9d1;
 }
 .bi-border {
-  border: 1px solid #e8eaed;
+  border: 1px solid #d4dadd;
 }
 .bi-theme-dark .bi-border {
-  border: 1px solid #f2f4f7;
+  border: 1px solid #525466;
 }
 .bi-border-left {
-  border-left: 1px solid #e8eaed;
+  border-left: 1px solid #d4dadd;
 }
 .bi-theme-dark .bi-border-left {
-  border-left: 1px solid #f2f4f7;
+  border-left: 1px solid #525466;
 }
 .bi-border-right {
-  border-right: 1px solid #e8eaed;
+  border-right: 1px solid #d4dadd;
 }
 .bi-theme-dark .bi-border-right {
-  border-right: 1px solid #f2f4f7;
+  border-right: 1px solid #525466;
 }
 .bi-border-top {
-  border-top: 1px solid #e8eaed;
+  border-top: 1px solid #d4dadd;
 }
 .bi-theme-dark .bi-border-top {
-  border-top: 1px solid #f2f4f7;
+  border-top: 1px solid #525466;
 }
 .bi-border-bottom {
-  border-bottom: 1px solid #e8eaed;
+  border-bottom: 1px solid #d4dadd;
 }
 .bi-theme-dark .bi-border-bottom {
-  border-bottom: 1px solid #f2f4f7;
+  border-bottom: 1px solid #525466;
 }
 .bi-keyword-red-mark {
   color: #ff4949;

@@ -5,24 +5,24 @@
   border-top: none;
 }
 .bi-table > div > div > table {
-  border-bottom: 1px solid #e8eaed;
-  border-right: 1px solid #e8eaed;
+  border-bottom: 1px solid #d4dadd;
+  border-right: 1px solid #d4dadd;
 }
 .bi-table > div.top-left > div > div > table {
-  border-bottom: 1px solid #e8eaed;
-  border-right: 1px solid #e8eaed;
+  border-bottom: 1px solid #d4dadd;
+  border-right: 1px solid #d4dadd;
 }
 .bi-table > div.top-right > div > div > table {
-  border-bottom: 1px solid #e8eaed;
-  border-right: 1px solid #e8eaed;
+  border-bottom: 1px solid #d4dadd;
+  border-right: 1px solid #d4dadd;
 }
 .bi-table > div.bottom-left > div > div > table {
-  border-bottom: 1px solid #e8eaed;
-  border-right: 1px solid #e8eaed;
+  border-bottom: 1px solid #d4dadd;
+  border-right: 1px solid #d4dadd;
 }
 .bi-table > div.bottom-right > div > div > table {
-  border-right: 1px solid #e8eaed;
-  border-bottom: 1px solid #e8eaed;
+  border-right: 1px solid #d4dadd;
+  border-bottom: 1px solid #d4dadd;
 }
 .bi-table > div > div > table,
 .bi-table > div > div > div > table {
@@ -46,33 +46,33 @@
 .bi-table > div > div > div > table > tbody > tr > td,
 .bi-table > div > div > table > thead > tr > td,
 .bi-table > div > div > div > table > thead > tr > td {
-  border-top: 1px solid #e8eaed;
-  border-left: 1px solid #e8eaed;
+  border-top: 1px solid #d4dadd;
+  border-left: 1px solid #d4dadd;
 }
 .bi-theme-dark .bi-table > div > div > table {
-  border-bottom: 1px solid #f2f4f7;
-  border-right: 1px solid #f2f4f7;
+  border-bottom: 1px solid #525466;
+  border-right: 1px solid #525466;
 }
 .bi-theme-dark .bi-table > div.top-left > div > div > table {
-  border-bottom: 1px solid #f2f4f7;
-  border-right: 1px solid #f2f4f7;
+  border-bottom: 1px solid #525466;
+  border-right: 1px solid #525466;
 }
 .bi-theme-dark .bi-table > div.top-right > div > div > table {
-  border-bottom: 1px solid #f2f4f7;
-  border-right: 1px solid #f2f4f7;
+  border-bottom: 1px solid #525466;
+  border-right: 1px solid #525466;
 }
 .bi-theme-dark .bi-table > div.bottom-left > div > div > table {
-  border-bottom: 1px solid #f2f4f7;
-  border-right: 1px solid #f2f4f7;
+  border-bottom: 1px solid #525466;
+  border-right: 1px solid #525466;
 }
 .bi-theme-dark .bi-table > div.bottom-right > div > div > table {
-  border-right: 1px solid #f2f4f7;
-  border-bottom: 1px solid #f2f4f7;
+  border-right: 1px solid #525466;
+  border-bottom: 1px solid #525466;
 }
 .bi-theme-dark .bi-table > div > div > table > tbody > tr > td,
 .bi-theme-dark .bi-table > div > div > div > table > tbody > tr > td,
 .bi-theme-dark .bi-table > div > div > table > thead > tr > td,
 .bi-theme-dark .bi-table > div > div > div > table > thead > tr > td {
-  border-top: 1px solid #f2f4f7;
-  border-left: 1px solid #f2f4f7;
+  border-top: 1px solid #525466;
+  border-left: 1px solid #525466;
 }

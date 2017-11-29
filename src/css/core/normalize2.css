@@ -34,11 +34,11 @@ textarea {
   margin: 0;
   padding: 0;
   outline: none;
-  border: 1px solid #e8eaed;
+  border: 1px solid #d4dadd;
 }
 .bi-theme-dark input,
 .bi-theme-dark textarea {
-  border: 1px solid #f2f4f7;
+  border: 1px solid #525466;
 }
 ul {
   list-style: disc;

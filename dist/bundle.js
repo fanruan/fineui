@@ -28889,18 +28889,20 @@ BI.Combo = BI.inherit(BI.Widget, {
                         }
                     });
                     self.element.on("mouseleave." + self.getName(), function (e) {
-                        self.popupView.element.on("mouseenter." + self.getName(), function (e) {
-                            enterPopup = true;
-                            self.popupView.element.on("mouseleave." + self.getName(), function (e) {
-                                hide();
+                        if (self.popupView) {
+                            self.popupView.element.on("mouseenter." + self.getName(), function (e) {
+                                enterPopup = true;
+                                self.popupView.element.on("mouseleave." + self.getName(), function (e) {
+                                    hide();
+                                });
+                                self.popupView.element.off("mouseenter." + self.getName());
                             });
-                            self.popupView.element.off("mouseenter." + self.getName());
-                        });
-                        BI.defer(function () {
-                            if (!enterPopup) {
-                                hide();
-                            }
-                        }, 50);
+                            BI.defer(function () {
+                                if (!enterPopup) {
+                                    hide();
+                                }
+                            }, 50);
+                        }
                     });
                     break;
                 case "click":
@@ -28946,18 +28948,20 @@ BI.Combo = BI.inherit(BI.Widget, {
                         st(e);
                     });
                     self.element.on("mouseleave." + self.getName(), function (e) {
-                        self.popupView.element.on("mouseenter." + self.getName(), function (e) {
-                            enterPopup = true;
-                            self.popupView.element.on("mouseleave." + self.getName(), function (e) {
-                                hide();
+                        if (self.popupView) {
+                            self.popupView.element.on("mouseenter." + self.getName(), function (e) {
+                                enterPopup = true;
+                                self.popupView.element.on("mouseleave." + self.getName(), function (e) {
+                                    hide();
+                                });
+                                self.popupView.element.off("mouseenter." + self.getName());
                             });
-                            self.popupView.element.off("mouseenter." + self.getName());
-                        });
-                        BI.defer(function () {
-                            if (!enterPopup) {
-                                hide();
-                            }
-                        }, 50);
+                            BI.defer(function () {
+                                if (!enterPopup) {
+                                    hide();
+                                }
+                            }, 50);
+                        }
                     });
                     break;
             }

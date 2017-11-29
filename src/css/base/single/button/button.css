@@ -46,7 +46,7 @@ body .bi-button.button-common.clear .b-font:before,
 body .bi-button.button-ignore,
 #body .bi-button.button-ignore {
   background-color: #ffffff;
-  border-color: #e8eaed;
+  border-color: #d4dadd;
 }
 body .bi-button.button-ignore,
 #body .bi-button.button-ignore,
@@ -147,7 +147,7 @@ body .bi-button.button-warning.disabled.base-disabled .b-font:before,
 body .bi-button.button-ignore.disabled,
 #body .bi-button.button-ignore.disabled {
   background: #ffffff !important;
-  border-color: #e8eaed !important;
+  border-color: #d4dadd !important;
 }
 body .bi-button.button-ignore.disabled,
 #body .bi-button.button-ignore.disabled,
