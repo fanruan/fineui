@@ -74,6 +74,15 @@
         this.store && (this.store._parent = null, this.store = null);
     }
 
+    _.each(["mounted", "populate"], function (name) {
+        var old = BI.Widget.prototype[name];
+        old && BI.Widget.prototype[name] = function () {
+            this.store && pushTarget(this.store);
+            return old.apply(this, arguments);
+            this.store && popTarget();
+        };
+    })
+
     _.each(["each", "map", "reduce", "reduceRight", "find", "filter", "reject", "every", "all", "some", "any", "max", "min",
         "sortBy", "groupBy", "indexBy", "countBy", "partition",
         "keys", "allKeys", "values", "pairs", "invert",
