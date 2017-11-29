@@ -238,4 +238,12 @@ Demo.WIDGET_CONFIG = [{
     id: 420,
     text: "滚动sliders",
     value: "demo.slider"
+}, {
+    pId: 4,
+    id: 421,
+    text: "单选下拉框"
+}, {
+    pId: 421,
+    text: "bi.single_select_combo",
+    value: "demo.single_select_combo"
 }];

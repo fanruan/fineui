@@ -5542,6 +5542,14 @@ Demo.FIX_CONFIG = [{
     id: 420,
     text: "滚动sliders",
     value: "demo.slider"
+}, {
+    pId: 4,
+    id: 421,
+    text: "单选下拉框"
+}, {
+    pId: 421,
+    text: "bi.single_select_combo",
+    value: "demo.single_select_combo"
 }];Demo.Func = BI.inherit(BI.Widget, {
     props: {
         baseCls: "demo-func"
@@ -12981,6 +12989,88 @@ Demo.SelectTreeCombo = BI.inherit(BI.Widget, {
 })
 
 BI.shortcut("demo.select_tree_combo", Demo.SelectTreeCombo);/**
+ * Created by User on 2017/3/22.
+ */
+Demo.SingleSelectCombo = BI.inherit(BI.Widget, {
+    props: {
+        baseCls: "demo-single-select-combo"
+    },
+
+    _createSingleSelectCombo: function () {
+        var self = this;
+        var widget = BI.createWidget({
+            type: 'bi.single_select_combo',
+            itemsCreator: BI.bind(this._itemsCreator, this),
+            width: 200
+        });
+
+        widget.on(BI.SingleSelectCombo.EVENT_CONFIRM, function () {
+            BI.Msg.toast(JSON.stringify(this.getValue()));
+        });
+
+        return widget;
+    },
+
+    _getItemsByTimes: function (items, times) {
+        var res = [];
+        for (var i = (times - 1) * 10; items[i] && i < times * 10; i++) {
+            res.push(items[i]);
+        }
+        return res;
+    },
+
+    _hasNextByTimes: function (items, times) {
+        return times * 10 < items.length;
+    },
+
+    _itemsCreator: function (options, callback) {
+        var self = this;
+        var items = Demo.CONSTANTS.ITEMS;
+        var keywords = (options.keywords || []).slice();
+        if (options.keyword) {
+            keywords.push(options.keyword);
+        }
+        BI.each(keywords, function (i, kw) {
+            var search = BI.Func.getSearchResult(items, kw);
+            items = search.matched.concat(search.finded);
+        });
+        if (options.selectedValues) {//过滤
+            var filter = BI.makeObject(options.selectedValues, true);
+            items = BI.filter(items, function (i, ob) {
+                return !filter[ob.value];
+            });
+        }
+        if (options.type == BI.SingleSelectCombo.REQ_GET_ALL_DATA) {
+            callback({
+                items: items
+            });
+            return;
+        }
+        if (options.type == BI.SingleSelectCombo.REQ_GET_DATA_LENGTH) {
+            callback({count: items.length});
+            return;
+        }
+        BI.delay(function () {
+            callback({
+                items: self._getItemsByTimes(items, options.times),
+                hasNext: self._hasNextByTimes(items, options.times)
+            });
+        }, 1000);
+    },
+
+    render: function () {
+        return {
+            type: 'bi.absolute',
+            scrolly: false,
+            items: [{
+                el: this._createSingleSelectCombo(),
+                right: "50%",
+                top: 10
+            }]
+        }
+    }
+});
+BI.shortcut("demo.single_select_combo", Demo.SingleSelectCombo);/**
  * Created by Dailer on 2017/7/13.
  */
 Demo.MultiLayerSingleTreeCombo = BI.inherit(BI.Widget, {
