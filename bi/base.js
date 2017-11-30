@@ -14357,7 +14357,9 @@ BI.FormulaEditor = BI.inherit(BI.Single, {
             textWrapping: true,
             lineWrapping: true,
             lineNumbers: false,
-            mode: 'formula'
+            mode: 'formula',
+            //解决插入字段由括号或其他特殊字符包围时分裂的bug
+            specialChars: /[\u0000-\u001f\u007f\u00ad\u200c-\u200f\u2028\u2029\ufeff]/
         });
         o.lineHeight === 1 ? this.element.addClass("codemirror-low-line-height") : this.element.addClass("codemirror-high-line-height");
         this.editor.on("change", function (cm, change) {
@@ -14448,7 +14450,8 @@ BI.FormulaEditor = BI.inherit(BI.Single, {
      */
     insertField: function (field) {
         var from = this.editor.getCursor();
-        this.editor.replaceSelection(field);
+        //解决插入字段由括号或其他特殊字符包围时分裂的bug,在两端以不可见字符包裹一下
+        this.editor.replaceSelection('\u200b' + field + '\u200b');
         var to = this.editor.getCursor();
         this.editor.markText(from, to, {className: 'fieldName', atomic: true, startStyle: "start", endStyle: "end"});
         this.editor.replaceSelection(" ");
