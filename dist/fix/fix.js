@@ -1159,7 +1159,7 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
                             return vm.$$state[key];
                         }
                         if (vm.$$model && key in vm.$$model) {
-                            return vm.$$model;
+                            return vm.$$model[key];
                         }
                         var p = vm._parent;
                         while (p) {
