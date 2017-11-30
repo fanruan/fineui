@@ -19,10 +19,10 @@ BI.SingleSelectCombo = BI.inherit(BI.Single, {
         var self = this, o = this.options;
 
         var assertShowValue = function () {
-            BI.isKey(self._startValue) && (self.storeValue.value = [self._startValue]);
+            BI.isKey(self._startValue) && (self.storeValue = self._startValue);
             self.trigger.getSearcher().setState(self.storeValue);
         };
-        this.storeValue = {};
+        this.storeValue = '';
         //标记正在请求数据
         this.requesting = false;
 
@@ -43,7 +43,7 @@ BI.SingleSelectCombo = BI.inherit(BI.Single, {
                 o.itemsCreator(op, function (res) {
                     if (op.times === 1 && BI.isNotNull(op.keywords)) {
                         //预防trigger内部把当前的storeValue改掉
-                        self.trigger.setValue(BI.deepClone(self.getValue()));
+                        self.trigger.setValue(self.getValue());
                     }
                     callback.apply(self, arguments);
                 });
@@ -121,6 +121,7 @@ BI.SingleSelectCombo = BI.inherit(BI.Single, {
                 listeners: [{
                     eventName: BI.SingleSelectPopupView.EVENT_CHANGE,
                     action: function () {
+                        console.log(this.getValue())
                         self.storeValue = this.getValue();
                         self._adjust(function () {
                             assertShowValue();
@@ -209,9 +210,7 @@ BI.SingleSelectCombo = BI.inherit(BI.Single, {
     },
 
     _assertValue: function (val) {
-        val || (val = {});
-        val.type || (val.type = BI.Selection.Single);
-        val.value || (val.value = []);
+        val || (val = '');
     },
 
     _makeMap: function (values) {
@@ -336,13 +335,13 @@ BI.SingleSelectCombo = BI.inherit(BI.Single, {
     },
 
     setValue: function (v) {
-        this.storeValue = v || {};
+        this.storeValue = v || '';
         this._assertValue(this.storeValue);
         this.combo.setValue(this.storeValue);
     },
 
     getValue: function () {
-        return BI.deepClone(this.storeValue);
+        return this.storeValue;
     },
 
     populate: function () {

@@ -16900,14 +16900,14 @@ BI.SingleSelectSearchLoader = BI.inherit(BI.Widget, {
             },
             itemsCreator: function (op, callback) {
                 self.storeValue && (op = BI.extend(op || {}, {
-                    selectedValues: self.storeValue.value
+                    selectedValues: [self.storeValue]
                 }));
                 opts.itemsCreator(op, function (ob) {
                     var keyword = ob.keyword = opts.keywordGetter();
                     hasNext = ob.hasNext;
                     var firstItems = [];
                     if (op.times === 1 && self.storeValue) {
-                        var json = BI.map(self.storeValue.value, function (i, v) {
+                        var json = BI.map([self.storeValue], function (i, v) {
                             var txt = opts.valueFormatter(v) || v;
                             return {
                                 text: txt,
@@ -16973,7 +16973,7 @@ BI.SingleSelectSearchLoader = BI.inherit(BI.Widget, {
 
     setValue: function (v) {
         //暂存的值一定是新的值，不然v改掉后，storeValue也跟着改了
-        this.storeValue = BI.deepClone(v);
+        this.storeValue = v;
         this.button_group.setValue(v);
     },
 
@@ -17121,10 +17121,10 @@ BI.SingleSelectCombo = BI.inherit(BI.Single, {
         var self = this, o = this.options;
 
         var assertShowValue = function () {
-            BI.isKey(self._startValue) && (self.storeValue.value = [self._startValue]);
+            BI.isKey(self._startValue) && (self.storeValue = self._startValue);
             self.trigger.getSearcher().setState(self.storeValue);
         };
-        this.storeValue = {};
+        this.storeValue = '';
         //标记正在请求数据
         this.requesting = false;
 
@@ -17145,7 +17145,7 @@ BI.SingleSelectCombo = BI.inherit(BI.Single, {
                 o.itemsCreator(op, function (res) {
                     if (op.times === 1 && BI.isNotNull(op.keywords)) {
                         //预防trigger内部把当前的storeValue改掉
-                        self.trigger.setValue(BI.deepClone(self.getValue()));
+                        self.trigger.setValue(self.getValue());
                     }
                     callback.apply(self, arguments);
                 });
@@ -17223,6 +17223,7 @@ BI.SingleSelectCombo = BI.inherit(BI.Single, {
                 listeners: [{
                     eventName: BI.SingleSelectPopupView.EVENT_CHANGE,
                     action: function () {
+                        console.log(this.getValue())
                         self.storeValue = this.getValue();
                         self._adjust(function () {
                             assertShowValue();
@@ -17311,9 +17312,7 @@ BI.SingleSelectCombo = BI.inherit(BI.Single, {
     },
 
     _assertValue: function (val) {
-        val || (val = {});
-        val.type || (val.type = BI.Selection.Single);
-        val.value || (val.value = []);
+        val || (val = '');
     },
 
     _makeMap: function (values) {
@@ -17438,13 +17437,13 @@ BI.SingleSelectCombo = BI.inherit(BI.Single, {
     },
 
     setValue: function (v) {
-        this.storeValue = v || {};
+        this.storeValue = v || '';
         this._assertValue(this.storeValue);
         this.combo.setValue(this.storeValue);
     },
 
     getValue: function () {
-        return BI.deepClone(this.storeValue);
+        return this.storeValue;
     },
 
     populate: function () {
@@ -17534,16 +17533,12 @@ BI.SingleSelectList = BI.inherit(BI.Widget, {
             this.list.addItems.apply(this.list, arguments);
         },
     
-        setValue: function (data) {
-            this.list["setValue"](data.value);
+        setValue: function (v) {
+            this.list.setValue([v]);
         },
     
         getValue: function () {
-            return {
-                type: BI.ButtonGroup.CHOOSE_TYPE_SINGLE,
-                value: this.list.getValue(),
-                assist: this.list.getNotSelectedValue()
-            };
+            return this.list.getValue()[0];
         },
     
         empty: function () {
@@ -17654,13 +17649,13 @@ BI.SingleSelectLoader = BI.inherit(BI.Widget, {
             itemsCreator: function (op, callback) {
                 var startValue = self._startValue;
                 self.storeValue && (op = BI.extend(op || {}, {
-                    selectedValues: self.storeValue.value
+                    selectedValues: [self.storeValue]
                 }));
                 opts.itemsCreator(op, function (ob) {
                     hasNext = ob.hasNext;
                     var firstItems = [];
                     if (op.times === 1 && self.storeValue) {
-                        var json = BI.map(self.storeValue.value, function (i, v) {
+                        var json = BI.map([self.storeValue], function (i, v) {
                             var txt = opts.valueFormatter(v) || v;
                             return {
                                 text: txt,
@@ -17669,20 +17664,11 @@ BI.SingleSelectLoader = BI.inherit(BI.Widget, {
                                 selected: false
                             }
                         });
-                        if (BI.isKey(self._startValue) && !self.storeValue.value.contains(self._startValue)) {
-                            var txt = opts.valueFormatter(startValue) || startValue;
-                            json.unshift({
-                                text: txt,
-                                value: startValue,
-                                title: txt,
-                                selected: true
-                            })
-                        }
                         firstItems = self._createItems(json);
                     }
                     callback(firstItems.concat(self._createItems(ob.items)), ob.keyword || "");
                     if (op.times === 1 && self.storeValue) {
-                        BI.isKey(startValue) && self.storeValue.value["pushDistinct"](startValue);
+                        BI.isKey(startValue) && (self.storeValue = startValue);
                         self.setValue(self.storeValue);
                     }
                     (op.times === 1) && self._scrollToTop();
@@ -17717,9 +17703,7 @@ BI.SingleSelectLoader = BI.inherit(BI.Widget, {
     },
 
     _assertValue: function (val) {
-        val || (val = {});
-        val.type || (val.type = BI.Selection.Single);
-        val.value || (val.value = []);
+        val || (val = '');
     },
 
     setStartValue: function (v) {
@@ -17727,7 +17711,7 @@ BI.SingleSelectLoader = BI.inherit(BI.Widget, {
     },
 
     setValue: function (v) {
-        this.storeValue = v || {};
+        this.storeValue = v || '';
         this._assertValue(this.storeValue);
         this.button_group.setValue(this.storeValue);
     },
@@ -17812,10 +17796,6 @@ BI.SingleSelectPopupView = BI.inherit(BI.Widget, {
                     break;
             }
         });
-    },
-
-    isAllSelected: function () {
-        return this.loader.isAllSelected();
     },
 
     setStartValue: function (v) {
@@ -17935,8 +17915,8 @@ BI.SingleSelectTrigger = BI.inherit(BI.Trigger, {
         this.searcher.setAdapter(adapter);
     },
 
-    setValue: function (ob) {
-        this.searcher.setValue(ob);
+    setValue: function (v) {
+        this.searcher.setValue(v);
     },
 
     getKey: function () {
@@ -18142,22 +18122,13 @@ BI.SingleSelectSearcher = BI.inherit(BI.Widget, {
         this.searcher.setAdapter(adapter);
     },
 
-    setState: function (ob) {
+    setState: function (v) {
         var o = this.options;
-        ob || (ob = {});
-        ob.value || (ob.value = []);
-        if (ob.value.length === 0) {
+        v || (v = '');
+        if (v === '') {
             this.editor.setState(BI.Selection.None);
         } else {
-            var state = "";
-            BI.each(ob.value, function (i, v) {
-                if (i === 0) {
-                    state += "" + (o.valueFormatter(v + "") || v);
-                } else {
-                    state += "," + (o.valueFormatter(v + "") || v);
-                }
-            });
-            this.editor.setState(state);
+            this.editor.setState(o.valueFormatter(v + "") || v);
         }
     },
 

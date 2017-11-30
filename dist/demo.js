@@ -13001,7 +13001,10 @@ Demo.SingleSelectCombo = BI.inherit(BI.Widget, {
         var widget = BI.createWidget({
             type: 'bi.single_select_combo',
             itemsCreator: BI.bind(this._itemsCreator, this),
-            width: 200
+            width: 200,
+            ref: function () {
+                self.SingleSelectCombo = this;
+            }
         });
 
         widget.on(BI.SingleSelectCombo.EVENT_CONFIRM, function () {
@@ -13059,6 +13062,7 @@ Demo.SingleSelectCombo = BI.inherit(BI.Widget, {
     },
 
     render: function () {
+        var self = this;
         return {
             type: 'bi.absolute',
             scrolly: false,
@@ -13066,6 +13070,15 @@ Demo.SingleSelectCombo = BI.inherit(BI.Widget, {
                 el: this._createSingleSelectCombo(),
                 right: "50%",
                 top: 10
+            }, {
+                el: {
+
+                    type: 'bi.button',
+                    text: 'setValue("柳州市针织总厂")',
+                    handler: function () {
+                        self.SingleSelectCombo.setValue('柳州市针织总厂');
+                    }
+                }
             }]
         }
     }

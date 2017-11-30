@@ -85,8 +85,8 @@ BI.SingleSelectTrigger = BI.inherit(BI.Trigger, {
         this.searcher.setAdapter(adapter);
     },
 
-    setValue: function (ob) {
-        this.searcher.setValue(ob);
+    setValue: function (v) {
+        this.searcher.setValue(v);
     },
 
     getKey: function () {

@@ -51,14 +51,14 @@ BI.SingleSelectSearchLoader = BI.inherit(BI.Widget, {
             },
             itemsCreator: function (op, callback) {
                 self.storeValue && (op = BI.extend(op || {}, {
-                    selectedValues: self.storeValue.value
+                    selectedValues: [self.storeValue]
                 }));
                 opts.itemsCreator(op, function (ob) {
                     var keyword = ob.keyword = opts.keywordGetter();
                     hasNext = ob.hasNext;
                     var firstItems = [];
                     if (op.times === 1 && self.storeValue) {
-                        var json = BI.map(self.storeValue.value, function (i, v) {
+                        var json = BI.map([self.storeValue], function (i, v) {
                             var txt = opts.valueFormatter(v) || v;
                             return {
                                 text: txt,
@@ -124,7 +124,7 @@ BI.SingleSelectSearchLoader = BI.inherit(BI.Widget, {
 
     setValue: function (v) {
         //暂存的值一定是新的值，不然v改掉后，storeValue也跟着改了
-        this.storeValue = BI.deepClone(v);
+        this.storeValue = v;
         this.button_group.setValue(v);
     },
 

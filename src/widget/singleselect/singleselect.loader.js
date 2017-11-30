@@ -56,13 +56,13 @@ BI.SingleSelectLoader = BI.inherit(BI.Widget, {
             itemsCreator: function (op, callback) {
                 var startValue = self._startValue;
                 self.storeValue && (op = BI.extend(op || {}, {
-                    selectedValues: self.storeValue.value
+                    selectedValues: [self.storeValue]
                 }));
                 opts.itemsCreator(op, function (ob) {
                     hasNext = ob.hasNext;
                     var firstItems = [];
                     if (op.times === 1 && self.storeValue) {
-                        var json = BI.map(self.storeValue.value, function (i, v) {
+                        var json = BI.map([self.storeValue], function (i, v) {
                             var txt = opts.valueFormatter(v) || v;
                             return {
                                 text: txt,
@@ -71,20 +71,11 @@ BI.SingleSelectLoader = BI.inherit(BI.Widget, {
                                 selected: false
                             }
                         });
-                        if (BI.isKey(self._startValue) && !self.storeValue.value.contains(self._startValue)) {
-                            var txt = opts.valueFormatter(startValue) || startValue;
-                            json.unshift({
-                                text: txt,
-                                value: startValue,
-                                title: txt,
-                                selected: true
-                            })
-                        }
                         firstItems = self._createItems(json);
                     }
                     callback(firstItems.concat(self._createItems(ob.items)), ob.keyword || "");
                     if (op.times === 1 && self.storeValue) {
-                        BI.isKey(startValue) && self.storeValue.value["pushDistinct"](startValue);
+                        BI.isKey(startValue) && (self.storeValue = startValue);
                         self.setValue(self.storeValue);
                     }
                     (op.times === 1) && self._scrollToTop();
@@ -119,9 +110,7 @@ BI.SingleSelectLoader = BI.inherit(BI.Widget, {
     },
 
     _assertValue: function (val) {
-        val || (val = {});
-        val.type || (val.type = BI.Selection.Single);
-        val.value || (val.value = []);
+        val || (val = '');
     },
 
     setStartValue: function (v) {
@@ -129,7 +118,7 @@ BI.SingleSelectLoader = BI.inherit(BI.Widget, {
     },
 
     setValue: function (v) {
-        this.storeValue = v || {};
+        this.storeValue = v || '';
         this._assertValue(this.storeValue);
         this.button_group.setValue(this.storeValue);
     },
