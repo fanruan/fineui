@@ -166,7 +166,8 @@ BI.FormulaEditor = BI.inherit(BI.Single, {
             _.forEach(line.markedSpans, function (i, ms) {
                 switch (i.marker.className) {
                     case "fieldName":
-                        var dId = fieldMap[value.substr(i.from, i.to - i.from)];
+                        //因为插入字段的时候首尾加了不可见字符，所以首尾缩进一个字符
+                        var dId = fieldMap[value.substr(i.from + 1, i.to - i.from - 2)];
                         if (!fields.contains(dId)) {
                             fields.push(dId);
                         }
