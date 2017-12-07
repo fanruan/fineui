@@ -38,7 +38,7 @@ BI.SingleSelectSearcher = BI.inherit(BI.Widget, {
             el: this.editor,
 
             popup: BI.extend({
-                type: "bi.single_select_search_pane",
+                type: "bi.single_select_search_add_pane",
                 valueFormatter: o.valueFormatter,
                 keywordGetter: function () {
                     return self.editor.getValue();
@@ -136,4 +136,4 @@ BI.SingleSelectSearcher.EVENT_START = "EVENT_START";
 BI.SingleSelectSearcher.EVENT_STOP = "EVENT_STOP";
 BI.SingleSelectSearcher.EVENT_PAUSE = "EVENT_PAUSE";
 BI.SingleSelectSearcher.EVENT_SEARCHING = "EVENT_SEARCHING";
-BI.shortcut('bi.single_select_searcher', BI.SingleSelectSearcher);
+BI.shortcut('bi.single_select_add_searcher', BI.SingleSelectSearcher);
