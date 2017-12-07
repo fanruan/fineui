@@ -54,10 +54,6 @@ BI.SingleSelectPopupView = BI.inherit(BI.Widget, {
         });
     },
 
-    isAllSelected: function () {
-        return this.loader.isAllSelected();
-    },
-
     setStartValue: function (v) {
         this.loader.setStartValue(v);
     },

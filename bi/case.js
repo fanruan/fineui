@@ -10430,7 +10430,7 @@ BI.RichEditor = BI.inherit(BI.Widget, {
             type: "bi.combo",
             element: this,
             toggle: false,
-            direction: "top",
+            direction: "top,left",
             isNeedAdjustWidth: false,
             isNeedAdjustHeight: false,
             adjustLength: 1,

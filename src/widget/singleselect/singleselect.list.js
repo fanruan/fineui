@@ -72,16 +72,12 @@ BI.SingleSelectList = BI.inherit(BI.Widget, {
             this.list.addItems.apply(this.list, arguments);
         },
     
-        setValue: function (data) {
-            this.list["setValue"](data.value);
+        setValue: function (v) {
+            this.list.setValue([v]);
         },
     
         getValue: function () {
-            return {
-                type: BI.ButtonGroup.CHOOSE_TYPE_SINGLE,
-                value: this.list.getValue(),
-                assist: this.list.getNotSelectedValue()
-            };
+            return this.list.getValue()[0];
         },
     
         empty: function () {

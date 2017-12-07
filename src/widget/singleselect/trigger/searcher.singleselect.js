@@ -102,22 +102,13 @@ BI.SingleSelectSearcher = BI.inherit(BI.Widget, {
         this.searcher.setAdapter(adapter);
     },
 
-    setState: function (ob) {
+    setState: function (v) {
         var o = this.options;
-        ob || (ob = {});
-        ob.value || (ob.value = []);
-        if (ob.value.length === 0) {
+        v || (v = '');
+        if (v === '') {
             this.editor.setState(BI.Selection.None);
         } else {
-            var state = "";
-            BI.each(ob.value, function (i, v) {
-                if (i === 0) {
-                    state += "" + (o.valueFormatter(v + "") || v);
-                } else {
-                    state += "," + (o.valueFormatter(v + "") || v);
-                }
-            });
-            this.editor.setState(state);
+            this.editor.setState(o.valueFormatter(v + "") || v);
         }
     },
 
