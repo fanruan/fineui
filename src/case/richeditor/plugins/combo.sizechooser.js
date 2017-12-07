@@ -70,7 +70,13 @@ BI.RichEditorSizeChooser = BI.inherit(BI.RichEditorAction, {
             self.doCommand(val);
             this.hideView();
             this.setValue([]);
-        })
+        });
+    },
+
+    hideIf: function (e) {
+        if(!this.combo.element.find(e.target).length > 0) {
+            this.combo.hideView();
+        }
     }
 });
-BI.shortcut('bi.rich_editor_size_chooser', BI.RichEditorSizeChooser);
+BI.shortcut("bi.rich_editor_size_chooser", BI.RichEditorSizeChooser);

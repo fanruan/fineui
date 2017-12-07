@@ -37,7 +37,13 @@ BI.RichEditorBackgroundColorChooser = BI.inherit(BI.RichEditorAction, {
         });
     },
 
+    hideIf: function (e) {
+        if(!this.colorchooser.element.find(e.target).length > 0) {
+            this.colorchooser.hideView();
+        }
+    },
+
     deactivate: function () {
     }
 });
-BI.shortcut('bi.rich_editor_background_color_chooser', BI.RichEditorBackgroundColorChooser);
+BI.shortcut("bi.rich_editor_background_color_chooser", BI.RichEditorBackgroundColorChooser);
