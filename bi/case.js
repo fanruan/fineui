@@ -9419,6 +9419,10 @@ BI.RichEditorAction = BI.inherit(BI.Widget, {
     keydown: function () {
     },
 
+    hideIf: function (e) {
+
+    },
+
     activate: function () {
     },
 
@@ -9552,7 +9556,7 @@ BI.RichEditorTextToolbar = BI.inherit(BI.Widget, {
                 {type: "bi.rich_editor_align_left_button"},
                 {type: "bi.rich_editor_align_center_button"},
                 {type: "bi.rich_editor_align_right_button"},
-                {type: "bi.rich_editor_param_button"},
+                {type: "bi.rich_editor_param_button"}
             ],
             height: 28
         });
@@ -9561,22 +9565,28 @@ BI.RichEditorTextToolbar = BI.inherit(BI.Widget, {
     _init: function () {
         BI.RichEditorTextToolbar.superclass._init.apply(this, arguments);
         var self = this, o = this.options;
+        var buttons = BI.createWidgets(BI.map(o.buttons, function (i, btn) {
+            return BI.extend(btn, {
+                editor: o.editor
+            });
+        }));
+        this.element.mousedown(function (e) {
+            BI.each(buttons, function (i, btn) {
+                btn.hideIf(e);
+            });
+        });
         BI.createWidget({
             type: "bi.left",
             element: this,
-            items: BI.map(o.buttons, function (i, btn) {
-                return BI.extend(btn, {
-                    editor: o.editor
-                });
-            }),
+            items: buttons,
             hgap: 3,
             vgap: 3
-        })
+        });
     },
 
     mounted: function () {
         var self = this;
-        if (BI.isIE9Below()) {//IE8下必须要设置unselectable才能不blur输入框
+        if (BI.isIE9Below()) {// IE8下必须要设置unselectable才能不blur输入框
             this.element.mousedown(function () {
                 self._noSelect(self.element[0]);
             });
@@ -9585,15 +9595,15 @@ BI.RichEditorTextToolbar = BI.inherit(BI.Widget, {
     },
 
     _noSelect: function (element) {
-        if (element.setAttribute && element.nodeName.toLowerCase() != 'input' && element.nodeName.toLowerCase() != 'textarea') {
-            element.setAttribute('unselectable', 'on');
+        if (element.setAttribute && element.nodeName.toLowerCase() != "input" && element.nodeName.toLowerCase() != "textarea") {
+            element.setAttribute("unselectable", "on");
         }
         for (var i = 0; i < element.childNodes.length; i++) {
             this._noSelect(element.childNodes[i]);
         }
     }
 });
-BI.shortcut('bi.rich_editor_text_toolbar', BI.RichEditorTextToolbar);/**
+BI.shortcut("bi.rich_editor_text_toolbar", BI.RichEditorTextToolbar);/**
  * 富文本编辑器
  *
  * Created by GUY on 2017/9/15.
@@ -10281,10 +10291,16 @@ BI.RichEditorBackgroundColorChooser = BI.inherit(BI.RichEditorAction, {
         });
     },
 
+    hideIf: function (e) {
+        if(!this.colorchooser.element.find(e.target).length > 0) {
+            this.colorchooser.hideView();
+        }
+    },
+
     deactivate: function () {
     }
 });
-BI.shortcut('bi.rich_editor_background_color_chooser', BI.RichEditorBackgroundColorChooser);/**
+BI.shortcut("bi.rich_editor_background_color_chooser", BI.RichEditorBackgroundColorChooser);/**
  * 颜色选择
  *
  * Created by GUY on 2015/11/26.
@@ -10318,6 +10334,12 @@ BI.RichEditorColorChooser = BI.inherit(BI.RichEditorAction, {
             self.doCommand(this.getValue());
         });
 
+    },
+
+    hideIf: function (e) {
+        if(!this.colorchooser.element.find(e.target).length > 0) {
+            this.colorchooser.hideView();
+        }
     },
 
     deactivate: function () {
@@ -10396,10 +10418,16 @@ BI.RichEditorSizeChooser = BI.inherit(BI.RichEditorAction, {
             self.doCommand(val);
             this.hideView();
             this.setValue([]);
-        })
+        });
+    },
+
+    hideIf: function (e) {
+        if(!this.combo.element.find(e.target).length > 0) {
+            this.combo.hideView();
+        }
     }
 });
-BI.shortcut('bi.rich_editor_size_chooser', BI.RichEditorSizeChooser);/**
+BI.shortcut("bi.rich_editor_size_chooser", BI.RichEditorSizeChooser);/**
  * 富文本编辑器
  *
  * Created by GUY on 2017/9/15.
@@ -10430,7 +10458,7 @@ BI.RichEditor = BI.inherit(BI.Widget, {
             type: "bi.combo",
             element: this,
             toggle: false,
-            direction: "top",
+            direction: "top,left",
             isNeedAdjustWidth: false,
             isNeedAdjustHeight: false,
             adjustLength: 1,

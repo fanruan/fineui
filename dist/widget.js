@@ -17223,7 +17223,6 @@ BI.SingleSelectCombo = BI.inherit(BI.Single, {
                 listeners: [{
                     eventName: BI.SingleSelectPopupView.EVENT_CHANGE,
                     action: function () {
-                        console.log(this.getValue())
                         self.storeValue = this.getValue();
                         self._adjust(function () {
                             assertShowValue();

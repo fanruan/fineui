@@ -5268,37 +5268,37 @@ Demo.FIX_CONFIG = [{
     text: "state属性",
     value: "demo.fix_state"
 }, {
-    id: 78,
+    id: 73,
     pId: 7,
     text: "计算属性",
     value: "demo.fix_computed"
 }, {
-    id: 73,
+    id: 74,
     pId: 7,
     text: "store",
     value: "demo.fix_store"
 }, {
-    id: 74,
+    id: 75,
     pId: 7,
     text: "watcher且或表达式",
     value: "demo.fix_watcher"
 }, {
-    id: 75,
+    id: 76,
     pId: 7,
     text: "watcher星号表达式",
     value: "demo.fix_global_watcher"
 }, {
-    id: 76,
+    id: 77,
     pId: 7,
     text: "context",
     value: "demo.fix_context"
 }, {
-    id: 77,
+    id: 78,
     pId: 7,
     text: "一个混合的例子",
     value: "demo.fix"
 }, {
-    id: 78,
+    id: 79,
     pId: 7,
     text: "场景",
     value: "demo.fix_scene"

@@ -34,6 +34,12 @@ BI.RichEditorColorChooser = BI.inherit(BI.RichEditorAction, {
 
     },
 
+    hideIf: function (e) {
+        if(!this.colorchooser.element.find(e.target).length > 0) {
+            this.colorchooser.hideView();
+        }
+    },
+
     deactivate: function () {
         this.colorchooser.setValue("");
     }
