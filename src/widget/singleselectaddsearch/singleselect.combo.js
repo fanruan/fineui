@@ -27,7 +27,7 @@ BI.SingleSelectCombo = BI.inherit(BI.Single, {
         this.requesting = false;
 
         this.trigger = BI.createWidget({
-            type: "bi.single_select_trigger",
+            type: "bi.single_select_add_trigger",
             height: o.height,
             // adapter: this.popup,
             masker: {
@@ -348,4 +348,4 @@ BI.extend(BI.SingleSelectCombo, {
 
 BI.SingleSelectCombo.EVENT_CONFIRM = "EVENT_CONFIRM";
 
-BI.shortcut('bi.single_select_combo', BI.SingleSelectCombo);
+BI.shortcut('bi.single_select_add_combo', BI.SingleSelectCombo);
