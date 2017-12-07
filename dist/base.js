@@ -16185,10 +16185,6 @@ BI.shortcut("bi.a", BI.A);/**
  * @type {*|void|Object}
  */
 BI.LoadingBar = BI.inherit(BI.Single, {
-    consts: {
-        loadedText: BI.i18nText("BI-Load_More"),
-        endText: BI.i18nText("BI-No_More_Data")
-    },
     _defaultConfig: function() {
         var conf = BI.LoadingBar.superclass._defaultConfig.apply(this, arguments);
         return BI.extend( conf, {
@@ -16203,7 +16199,7 @@ BI.LoadingBar = BI.inherit(BI.Single, {
         this.loaded = BI.createWidget({
             type: "bi.text_button",
             cls: "loading-text bi-list-item-simple",
-            text: this.consts.loadedText,
+            text: BI.i18nText("BI-Load_More"),
             width: 120,
             handler: this.options.handler
         })
@@ -16241,7 +16237,7 @@ BI.LoadingBar = BI.inherit(BI.Single, {
 
     _reset: function(){
         this.visible();
-        this.loaded.setText(this.consts.loadedText);
+        this.loaded.setText(BI.i18nText("BI-Load_More"));
         this.loaded.enable();
     },
 
@@ -16252,7 +16248,7 @@ BI.LoadingBar = BI.inherit(BI.Single, {
 
     setEnd: function(){
         this.setLoaded();
-        this.loaded.setText(this.consts.endText);
+        this.loaded.setText(BI.i18nText("BI-No_More_Data"));
         this.loaded.disable();
     },
 
