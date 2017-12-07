@@ -1946,8 +1946,8 @@ BI.DatePicker = BI.inherit(BI.Widget, {
     _init: function () {
         BI.DatePicker.superclass._init.apply(this, arguments);
         var self = this, o = this.options;
-        this._year = new Date().getFullYear();
-        this._month = new Date().getMonth();
+        this._year = Date.getDate().getFullYear();
+        this._month = Date.getDate().getMonth();
         this.left = BI.createWidget({
             type: "bi.icon_button",
             cls: "pre-page-h-font",
@@ -2111,7 +2111,7 @@ BI.DateCalendarPopup = BI.inherit(BI.Widget, {
         BI.DateCalendarPopup.superclass._init.apply(this, arguments);
         var self = this,
             o = this.options;
-        this.today = new Date();
+        this.today = Date.getDate();
         this._year = this.today.getFullYear();
         this._month = this.today.getMonth();
         this._day = this.today.getDate();
@@ -2433,7 +2433,7 @@ BI.shortcut('bi.date_combo', BI.DateCombo);BI.DateTrigger = BI.inherit(BI.Trigge
 
     setValue: function (v) {
         var type, value, self = this;
-        var date = new Date();
+        var date = Date.getDate();
         this.store_value = v;
         if (BI.isNotNull(v)) {
             type = v.type || BI.DateTrigger.MULTI_DATE_CALENDAR; value = v.value;
@@ -2450,62 +2450,62 @@ BI.shortcut('bi.date_combo', BI.DateCombo);BI.DateTrigger = BI.inherit(BI.Trigge
         switch (type) {
             case BI.DateTrigger.MULTI_DATE_YEAR_PREV:
                 var text = value + BI.DateTrigger.MULTI_DATE_SEGMENT_NUM[BI.DateTrigger.MULTI_DATE_YEAR_PREV];
-                date = new Date((date.getFullYear() - 1 * value), date.getMonth(), date.getDate());
+                date = Date.getDate((date.getFullYear() - 1 * value), date.getMonth(), date.getDate());
                 _setInnerValue(date, text);
                 break;
             case BI.DateTrigger.MULTI_DATE_YEAR_AFTER:
                 var text = value + BI.DateTrigger.MULTI_DATE_SEGMENT_NUM[BI.DateTrigger.MULTI_DATE_YEAR_AFTER];
-                date = new Date((date.getFullYear() + 1 * value), date.getMonth(), date.getDate());
+                date = Date.getDate((date.getFullYear() + 1 * value), date.getMonth(), date.getDate());
                 _setInnerValue(date, text);
                 break;
             case BI.DateTrigger.MULTI_DATE_YEAR_BEGIN:
                 var text = BI.DateTrigger.MULTI_DATE_SEGMENT_NUM[BI.DateTrigger.MULTI_DATE_YEAR_BEGIN];
-                date = new Date(date.getFullYear(), 0, 1);
+                date = Date.getDate(date.getFullYear(), 0, 1);
                 _setInnerValue(date, text);
                 break;
             case BI.DateTrigger.MULTI_DATE_YEAR_END:
                 var text = BI.DateTrigger.MULTI_DATE_SEGMENT_NUM[BI.DateTrigger.MULTI_DATE_YEAR_END];
-                date = new Date(date.getFullYear(), 11, 31);
+                date = Date.getDate(date.getFullYear(), 11, 31);
                 _setInnerValue(date, text);
                 break;
             case BI.DateTrigger.MULTI_DATE_QUARTER_PREV:
                 var text = value + BI.DateTrigger.MULTI_DATE_SEGMENT_NUM[BI.DateTrigger.MULTI_DATE_QUARTER_PREV];
-                date = new Date().getBeforeMulQuarter(value);
+                date = Date.getDate().getBeforeMulQuarter(value);
                 _setInnerValue(date, text);
                 break;
             case BI.DateTrigger.MULTI_DATE_QUARTER_AFTER:
                 var text = value + BI.DateTrigger.MULTI_DATE_SEGMENT_NUM[BI.DateTrigger.MULTI_DATE_QUARTER_AFTER];
-                date = new Date().getAfterMulQuarter(value);
+                date = Date.getDate().getAfterMulQuarter(value);
                 _setInnerValue(date, text);
                 break;
             case BI.DateTrigger.MULTI_DATE_QUARTER_BEGIN:
                 var text = BI.DateTrigger.MULTI_DATE_SEGMENT_NUM[BI.DateTrigger.MULTI_DATE_QUARTER_BEGIN];
-                date = new Date().getQuarterStartDate();
+                date = Date.getDate().getQuarterStartDate();
                 _setInnerValue(date, text);
                 break;
             case BI.DateTrigger.MULTI_DATE_QUARTER_END:
                 var text = BI.DateTrigger.MULTI_DATE_SEGMENT_NUM[BI.DateTrigger.MULTI_DATE_QUARTER_END];
-                date = new Date().getQuarterEndDate();
+                date = Date.getDate().getQuarterEndDate();
                 _setInnerValue(date, text);
                 break;
             case BI.DateTrigger.MULTI_DATE_MONTH_PREV:
                 var text = value + BI.DateTrigger.MULTI_DATE_SEGMENT_NUM[BI.DateTrigger.MULTI_DATE_MONTH_PREV];
-                date = new Date().getBeforeMultiMonth(value);
+                date = Date.getDate().getBeforeMultiMonth(value);
                 _setInnerValue(date, text);
                 break;
             case BI.DateTrigger.MULTI_DATE_MONTH_AFTER:
                 var text = value + BI.DateTrigger.MULTI_DATE_SEGMENT_NUM[BI.DateTrigger.MULTI_DATE_MONTH_AFTER];
-                date = new Date().getAfterMultiMonth(value);
+                date = Date.getDate().getAfterMultiMonth(value);
                 _setInnerValue(date, text);
                 break;
             case BI.DateTrigger.MULTI_DATE_MONTH_BEGIN:
                 var text = BI.DateTrigger.MULTI_DATE_SEGMENT_NUM[BI.DateTrigger.MULTI_DATE_MONTH_BEGIN];
-                date = new Date(date.getFullYear(), date.getMonth(), 1);
+                date = Date.getDate(date.getFullYear(), date.getMonth(), 1);
                 _setInnerValue(date, text);
                 break;
             case BI.DateTrigger.MULTI_DATE_MONTH_END:
                 var text = BI.DateTrigger.MULTI_DATE_SEGMENT_NUM[BI.DateTrigger.MULTI_DATE_MONTH_END];
-                date = new Date(date.getFullYear(), date.getMonth(), (date.getLastDateOfMonth()).getDate());
+                date = Date.getDate(date.getFullYear(), date.getMonth(), (date.getLastDateOfMonth()).getDate());
                 _setInnerValue(date, text);
                 break;
             case BI.DateTrigger.MULTI_DATE_WEEK_PREV:
@@ -2530,7 +2530,7 @@ BI.shortcut('bi.date_combo', BI.DateCombo);BI.DateTrigger = BI.inherit(BI.Trigge
                 break;
             case BI.DateTrigger.MULTI_DATE_DAY_TODAY:
                 var text = BI.DateTrigger.MULTI_DATE_SEGMENT_NUM[BI.DateTrigger.MULTI_DATE_DAY_TODAY];
-                date = new Date();
+                date = Date.getDate();
                 _setInnerValue(date, text);
                 break;
             default:
@@ -2631,7 +2631,7 @@ BI.DatePaneWidget = BI.inherit(BI.Widget, {
         BI.DatePaneWidget.superclass._init.apply(this, arguments);
         var self = this, o = this.options;
 
-        this.today = new Date();
+        this.today = Date.getDate();
         this._year = this.today.getFullYear();
         this._month = this.today.getMonth();
 
@@ -2695,7 +2695,7 @@ BI.DatePaneWidget = BI.inherit(BI.Widget, {
     },
 
     _getNewCurrentDate: function () {
-        var today = new Date();
+        var today = Date.getDate();
         return {
             year: today.getFullYear(),
             month: today.getMonth()
@@ -2757,7 +2757,7 @@ BI.DateTimeCombo = BI.inherit(BI.Single, {
     _init: function () {
         BI.DateTimeCombo.superclass._init.apply(this, arguments);
         var self = this, opts = this.options;
-        var date = new Date();
+        var date = Date.getDate();
         this.storeValue = {
             year: date.getFullYear(),
             month: date.getMonth(),
@@ -2974,7 +2974,7 @@ BI.DateTimePopup = BI.inherit(BI.Widget, {
             }]
         });
 
-        var date = new Date();
+        var date = Date.getDate();
         this.dateCombo.setValue({
             year: date.getFullYear(),
             month: date.getMonth(),
@@ -3006,7 +3006,7 @@ BI.DateTimePopup = BI.inherit(BI.Widget, {
     setValue: function (v) {
         var value = v, date;
         if (BI.isNull(value)) {
-            date = new Date();
+            date = Date.getDate();
             this.dateCombo.setValue({
                 year: date.getFullYear(),
                 month: date.getMonth(),
@@ -3196,10 +3196,10 @@ BI.DateTimeTrigger = BI.inherit(BI.Trigger, {
         var self = this;
         var value = v, dateStr;
         if(BI.isNull(value)){
-            value = new Date();
+            value = Date.getDate();
             dateStr = value.print("%Y-%X-%d %H:%M:%S");
         } else {
-            var date = new Date(value.year,value.month,value.day,value.hour,value.minute,value.second);
+            var date = Date.getDate(value.year,value.month,value.day,value.hour,value.minute,value.second);
             dateStr = date.print("%Y-%X-%d %H:%M:%S");
 
         }
@@ -6741,39 +6741,39 @@ BI.MultiDateCard = BI.inherit(BI.Widget, {
         var type = valueObject.type, value = valueObject.value;
         switch (type) {
             case BI.MultiDateCombo.DATE_TYPE.MULTI_DATE_DAY_PREV:
-                return new Date().getOffsetDate(-1 * value);
+                return Date.getDate().getOffsetDate(-1 * value);
             case BI.MultiDateCombo.DATE_TYPE.MULTI_DATE_DAY_AFTER:
-                return new Date().getOffsetDate(value);
+                return Date.getDate().getOffsetDate(value);
             case BI.MultiDateCombo.DATE_TYPE.MULTI_DATE_DAY_TODAY:
-                return new Date();
+                return Date.getDate();
             case BI.MultiDateCombo.DATE_TYPE.MULTI_DATE_MONTH_PREV:
-                return new Date().getBeforeMultiMonth(value);
+                return Date.getDate().getBeforeMultiMonth(value);
             case BI.MultiDateCombo.DATE_TYPE.MULTI_DATE_MONTH_AFTER:
-                return new Date().getAfterMultiMonth(value);
+                return Date.getDate().getAfterMultiMonth(value);
             case BI.MultiDateCombo.DATE_TYPE.MULTI_DATE_MONTH_BEGIN:
-                return new Date(new Date().getFullYear(), new Date().getMonth(), 1);
+                return Date.getDate(Date.getDate().getFullYear(), Date.getDate().getMonth(), 1);
             case BI.MultiDateCombo.DATE_TYPE.MULTI_DATE_MONTH_END:
-                return new Date(new Date().getFullYear(), new Date().getMonth(), (new Date().getLastDateOfMonth()).getDate());
+                return Date.getDate(Date.getDate().getFullYear(), Date.getDate().getMonth(), (Date.getDate().getLastDateOfMonth()).getDate());
             case BI.MultiDateCombo.DATE_TYPE.MULTI_DATE_QUARTER_PREV:
-                return new Date().getBeforeMulQuarter(value);
+                return Date.getDate().getBeforeMulQuarter(value);
             case BI.MultiDateCombo.DATE_TYPE.MULTI_DATE_QUARTER_AFTER:
-                return new Date().getAfterMulQuarter(value);
+                return Date.getDate().getAfterMulQuarter(value);
             case BI.MultiDateCombo.DATE_TYPE.MULTI_DATE_QUARTER_BEGIN:
-                return new Date().getQuarterStartDate();
+                return Date.getDate().getQuarterStartDate();
             case BI.MultiDateCombo.DATE_TYPE.MULTI_DATE_QUARTER_END:
-                return new Date().getQuarterEndDate();
+                return Date.getDate().getQuarterEndDate();
             case BI.MultiDateCombo.DATE_TYPE.MULTI_DATE_WEEK_PREV:
-                return new Date().getOffsetDate(-7 * value);
+                return Date.getDate().getOffsetDate(-7 * value);
             case BI.MultiDateCombo.DATE_TYPE.MULTI_DATE_WEEK_AFTER:
-                return new Date().getOffsetDate(7 * value);
+                return Date.getDate().getOffsetDate(7 * value);
             case BI.MultiDateCombo.DATE_TYPE.MULTI_DATE_YEAR_PREV:
-                return new Date((new Date().getFullYear() - 1 * value), new Date().getMonth(), new Date().getDate());
+                return Date.getDate((Date.getDate().getFullYear() - 1 * value), Date.getDate().getMonth(), Date.getDate().getDate());
             case BI.MultiDateCombo.DATE_TYPE.MULTI_DATE_YEAR_AFTER:
-                return new Date((new Date().getFullYear() + 1 * value), new Date().getMonth(), new Date().getDate());
+                return Date.getDate((Date.getDate().getFullYear() + 1 * value), Date.getDate().getMonth(), Date.getDate().getDate());
             case BI.MultiDateCombo.DATE_TYPE.MULTI_DATE_YEAR_BEGIN:
-                return new Date(new Date().getFullYear(), 0, 1);
+                return Date.getDate(Date.getDate().getFullYear(), 0, 1);
             case BI.MultiDateCombo.DATE_TYPE.MULTI_DATE_YEAR_END:
-                return new Date(new Date().getFullYear(), 11, 31);
+                return Date.getDate(Date.getDate().getFullYear(), 11, 31);
         }
     }
 });
@@ -6802,7 +6802,7 @@ BI.MultiDateCombo = BI.inherit(BI.Single, {
         BI.MultiDateCombo.superclass._init.apply(this, arguments);
         var self = this, opts = this.options;
         this.storeTriggerValue = "";
-        var date = new Date();
+        var date = Date.getDate();
         this.storeValue = null;
         this.trigger = BI.createWidget({
             type: 'bi.date_trigger',
@@ -6869,7 +6869,7 @@ BI.MultiDateCombo = BI.inherit(BI.Single, {
             self.fireEvent(BI.MultiDateCombo.EVENT_CONFIRM);
         });
         this.popup.on(BI.MultiDatePopup.BUTTON_lABEL_EVENT_CHANGE, function () {
-            var date = new Date();
+            var date = Date.getDate();
             self.setValue({
                 year: date.getFullYear(),
                 month: date.getMonth(),
@@ -7425,7 +7425,7 @@ BI.MultiDatePopup = BI.inherit(BI.Widget, {
                 break;
             default:
                 if (this._checkValueValid(value)) {
-                    var date = new Date();
+                    var date = Date.getDate();
                     this.dateTab.setSelect(BI.MultiDateCombo.MULTI_DATE_YMD_CARD);
                     this.ymd.setValue({
                         year: date.getFullYear(),
@@ -18618,7 +18618,7 @@ BI.YearPopup = BI.inherit(BI.Widget, {
         BI.YearPopup.superclass._init.apply(this, arguments);
         var self = this;
 
-        this.selectedYear = this._year = new Date().getFullYear();
+        this.selectedYear = this._year = Date.getDate().getFullYear();
 
         var backBtn = BI.createWidget({
             type: "bi.icon_button",
@@ -18672,7 +18672,7 @@ BI.YearPopup = BI.inherit(BI.Widget, {
     setValue: function (v) {
         var o = this.options;
         if (Date.checkVoid(v, 1, 1, o.min, o.max)[0]) {
-            v = new Date().getFullYear();
+            v = Date.getDate().getFullYear();
             this.selectedYear = "";
             this.navigation.setSelect(BI.YearCalendar.getPageByYear(v));
             this.navigation.setValue("");

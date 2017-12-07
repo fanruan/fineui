@@ -17,8 +17,8 @@ BI.DatePicker = BI.inherit(BI.Widget, {
     _init: function () {
         BI.DatePicker.superclass._init.apply(this, arguments);
         var self = this, o = this.options;
-        this._year = new Date().getFullYear();
-        this._month = new Date().getMonth();
+        this._year = Date.getDate().getFullYear();
+        this._month = Date.getDate().getMonth();
         this.left = BI.createWidget({
             type: "bi.icon_button",
             cls: "pre-page-h-font",

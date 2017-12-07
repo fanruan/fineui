@@ -275,7 +275,7 @@ BI.MultiDatePopup = BI.inherit(BI.Widget, {
                 break;
             default:
                 if (this._checkValueValid(value)) {
-                    var date = new Date();
+                    var date = Date.getDate();
                     this.dateTab.setSelect(BI.MultiDateCombo.MULTI_DATE_YMD_CARD);
                     this.ymd.setValue({
                         year: date.getFullYear(),
