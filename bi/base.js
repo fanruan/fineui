@@ -15673,7 +15673,7 @@ BI.ListView = BI.inherit(BI.Widget, {
         if (items && this.options.items !== items) {
             this.restore();
         }
-        this._populate();
+        this._populate(items);
     },
 
     destroyed: function () {
