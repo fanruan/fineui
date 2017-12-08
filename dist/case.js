@@ -344,9 +344,6 @@ BI.SingleSelectRadioItem = BI.inherit(BI.BasicButton, {
             type: "bi.radio"
         });
         this.radio.on(BI.Controller.EVENT_CHANGE, function (type) {
-            if (type === BI.Events.CLICK) {
-                self.setSelected(!self.isSelected());
-            }
             self.fireEvent(BI.Controller.EVENT_CHANGE, arguments);
         });
         this.text = BI.createWidget({
