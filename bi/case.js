@@ -344,9 +344,6 @@ BI.SingleSelectRadioItem = BI.inherit(BI.BasicButton, {
             type: "bi.radio"
         });
         this.radio.on(BI.Controller.EVENT_CHANGE, function (type) {
-            if (type === BI.Events.CLICK) {
-                self.setSelected(!self.isSelected());
-            }
             self.fireEvent(BI.Controller.EVENT_CHANGE, arguments);
         });
         this.text = BI.createWidget({
@@ -3607,8 +3604,7 @@ BI.CustomColorChooser = BI.inherit(BI.Widget, {
         BI.CustomColorChooser.superclass._init.apply(this, arguments);
         var self = this;
         this.editor = BI.createWidget({
-            type: "bi.color_picker_editor",
-            width: 195
+            type: "bi.color_picker_editor"
         });
         this.editor.on(BI.ColorPickerEditor.EVENT_CHANGE, function () {
             self.setValue(this.getValue());
@@ -3627,9 +3623,9 @@ BI.CustomColorChooser = BI.inherit(BI.Widget, {
                 type: "bi.absolute",
                 items: [{
                     el: this.editor,
-                    left: 15,
+                    left: 10,
                     top: 10,
-                    right: 15
+                    right: 10
                 }],
                 height: 30
             }, {
@@ -4261,7 +4257,7 @@ BI.ColorPickerEditor = BI.inherit(BI.Widget, {
     _defaultConfig: function () {
         return BI.extend(BI.ColorPickerEditor.superclass._defaultConfig.apply(this, arguments), {
             baseCls: "bi-color-picker-editor",
-            width: 200,
+            // width: 200,
             height: 20
         })
     },
