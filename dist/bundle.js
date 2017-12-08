@@ -81154,12 +81154,17 @@ BI.IntervalSlider = BI.inherit(BI.Widget, {
     _checkValidation: function (v) {
         var o = this.options;
         var valid = false;
-        if (BI.isNumeric(v) && !(BI.isNull(v) || v < this.min || v > this.max)) {
-            if(o.digit === false){
-                valid = true;
-            }else{
-                var dotText = (v + "").split(".")[1] || "";
-                valid = (dotText.length === o.digit);
+        //像90.这样的既不属于整数又不属于小数，是不合法的值
+        var dotText = (v + "").split(".")[1];
+        if (BI.isEmptyString(dotText)) {
+        }else{
+            if (BI.isNumeric(v) && !(BI.isNull(v) || v < this.min || v > this.max)) {
+                if(o.digit === false){
+                    valid = true;
+                }else{
+                    dotText = dotText || "";
+                    valid = (dotText.length === o.digit);
+                }
             }
         }
         return valid;
