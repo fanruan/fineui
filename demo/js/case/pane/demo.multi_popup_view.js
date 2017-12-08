@@ -33,7 +33,7 @@ Demo.Func = BI.inherit(BI.Widget, {
                     }
                 }
             }]
-        }
+        };
     }
 });
 BI.shortcut("demo.multi_popup_view", Demo.Func);

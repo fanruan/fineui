@@ -1,8 +1,8 @@
-;(function () {
+(function () {
     var model = Fix.define({
         name: 1,
         arr: [{
-            n: 'a'
+            n: "a"
         }, {
             n: 0
         }]
@@ -10,13 +10,13 @@
     var Computed = BI.inherit(Fix.Model, {
         computed: {
             b: function () {
-                return this.name + 1
+                return this.name + 1;
             },
             c: function () {
-                return this.arr[1].n + this.b
+                return this.arr[1].n + this.b;
             }
         }
-    })
+    });
 
     var Store = BI.inherit(Fix.Model, {
         _init: function () {
@@ -24,7 +24,7 @@
         },
         computed: {
             b: function () {
-                return this.comp.c + 1
+                return this.comp.c + 1;
             },
             c: function () {
                 return this.comp.arr[1].n & 1;
@@ -44,7 +44,7 @@
         },
         watch: {
             "b&&(c||b)": function () {
-                this.button.setText(this.model.b)
+                this.button.setText(this.model.b);
             }
         },
         render: function () {
@@ -58,12 +58,12 @@
                             self.button = this;
                         },
                         handler: function () {
-                            self.store.run()
+                            self.store.run();
                         },
                         text: this.model.b
                     }
                 }]
-            }
+            };
         },
         mounted: function () {
 

@@ -37,11 +37,11 @@ Demo.Date = BI.inherit(BI.Widget, {
                         year: 2017,
                         month: 11,
                         day: 31
-                    })
+                    });
                 }
             }]
-        }
+        };
     }
-})
+});
 
 BI.shortcut("demo.multidate_combo", Demo.Date);

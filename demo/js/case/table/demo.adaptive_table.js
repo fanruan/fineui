@@ -154,7 +154,7 @@ Demo.Func = BI.inherit(BI.Widget, {
                 top: 10,
                 bottom: 10
             }]
-        })
+        });
     }
 });
 BI.shortcut("demo.adaptive_table", Demo.Func);

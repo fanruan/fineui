@@ -1,16 +1,16 @@
-//skipTo 函数
+// skipTo 函数
 SkipToView = BI.inherit(BI.View, {
-    _defaultConfig: function(){
-        return BI.extend(SkipToView.superclass._defaultConfig.apply(this, arguments),{
+    _defaultConfig: function () {
+        return BI.extend(SkipToView.superclass._defaultConfig.apply(this, arguments), {
             baseCls: "bi-skip-to"
-        })
+        });
     },
 
-    _init: function(){
+    _init: function () {
         SkipToView.superclass._init.apply(this, arguments);
     },
 
-    _createNav: function(){
+    _createNav: function () {
         var self = this;
         var nav = BI.createWidget({
             type: "bi.button_group",
@@ -28,15 +28,15 @@ SkipToView = BI.inherit(BI.View, {
                 hgap: 3
             }]
         });
-        nav.on(BI.ButtonGroup.EVENT_CHANGE, function(){
+        nav.on(BI.ButtonGroup.EVENT_CHANGE, function () {
             self.skipTo(this.getValue()[0], "pane", this.getValue()[0]);
         });
         return nav;
     },
 
-    _createPane: function(){
+    _createPane: function () {
         var pane = BI.createWidget({
-            type:"bi.center",
+            type: "bi.center",
             cls: "center-pane",
             height: 200
         });
@@ -46,36 +46,36 @@ SkipToView = BI.inherit(BI.View, {
         return pane;
     },
 
-    render: function(vessel){
+    render: function (vessel) {
         BI.createWidget({
             type: "bi.vertical",
             element: vessel,
             items: [this._createNav(), this._createPane()],
             vgap: 10,
             hgap: 10
-        })
+        });
     },
 
-    refresh: function(){
+    refresh: function () {
         this.skipTo("green", "pane", "green");
     }
 });
 
 SkipToModel = BI.inherit(BI.Model, {
-    _defaultConfig: function(){
-        return BI.extend(SkipToModel.superclass._defaultConfig.apply(this, arguments),{
-            "red": {
+    _defaultConfig: function () {
+        return BI.extend(SkipToModel.superclass._defaultConfig.apply(this, arguments), {
+            red: {
                 text: "hotpink"
-            },"blue": {
+            }, blue: {
                 text: "cornflowerblue"
-            },"green": {
+            }, green: {
                 text: "darkcyan"
-            },"yellow": {
+            }, yellow: {
                 text: "darkgoldenrod"
             }
-        })
+        });
     },
-    _static: function(){
+    _static: function () {
         return {
             items: [{
                 text: "hotpink",
@@ -95,21 +95,21 @@ SkipToModel = BI.inherit(BI.Model, {
                 value: "yellow",
                 cls: "yellow-pane mvc-button"
             }]
-        }
+        };
     },
 
-    _init: function(){
+    _init: function () {
         SkipToModel.superclass._init.apply(this, arguments);
     }
 });
 
-//Red pane #FF69B4
+// Red pane #FF69B4
 SkipToRedView = BI.inherit(BI.View, {
-    _init: function(){
+    _init: function () {
         SkipToRedView.superclass._init.apply(this, arguments);
     },
 
-    render: function(vessel){
+    render: function (vessel) {
         BI.createWidget({
             type: "bi.absolute",
             element: vessel,
@@ -122,30 +122,30 @@ SkipToRedView = BI.inherit(BI.View, {
                     height: 26
                 }
             }]
-        })
+        });
     }
 
 });
 
 SkipToRedModel = BI.inherit(BI.Model, {
-    _defaultConfig: function(){
-        return BI.extend(SetGetModel.superclass._defaultConfig.apply(this, arguments),{
+    _defaultConfig: function () {
+        return BI.extend(SetGetModel.superclass._defaultConfig.apply(this, arguments), {
 
-        })
+        });
     },
 
-    _init: function(){
+    _init: function () {
         SkipToRedModel.superclass._init.apply(this, arguments);
     }
 });
 
-//Blue pane #6495ED
+// Blue pane #6495ED
 SkipToBlueView = BI.inherit(BI.View, {
-    _init: function(){
+    _init: function () {
         SkipToBlueView.superclass._init.apply(this, arguments);
     },
 
-    render: function(vessel){
+    render: function (vessel) {
         BI.createWidget({
             type: "bi.absolute",
             element: vessel,
@@ -162,34 +162,34 @@ SkipToBlueView = BI.inherit(BI.View, {
                 top: 0,
                 bottom: 0
             }]
-        })
+        });
     }
 });
 
 SkipToBlueModel = BI.inherit(BI.Model, {
-    _defaultConfig: function(){
-        return BI.extend(SetGetModel.superclass._defaultConfig.apply(this, arguments),{
-        })
+    _defaultConfig: function () {
+        return BI.extend(SetGetModel.superclass._defaultConfig.apply(this, arguments), {
+        });
     },
 
-    _init: function(){
+    _init: function () {
         SkipToGreenModel.superclass._init.apply(this, arguments);
     }
 });
 
-//Dark green pane #008B8B
+// Dark green pane #008B8B
 SkipToGreenView = BI.inherit(BI.View, {
-    _init: function(){
+    _init: function () {
         SkipToGreenView.superclass._init.apply(this, arguments);
     },
 
-    render: function(vessel){
+    render: function (vessel) {
         BI.createWidget({
             type: "bi.absolute",
             element: vessel,
             cls: "green-pane",
             items: [{
-                el:{
+                el: {
                     type: "bi.label",
                     text: "Model Data: " + JSON.stringify(this.model.toJSON()),
                     hgap: 20,
@@ -200,34 +200,34 @@ SkipToGreenView = BI.inherit(BI.View, {
                 top: 0,
                 bottom: 0
             }]
-        })
+        });
     }
 });
 
 SkipToGreenModel = BI.inherit(BI.Model, {
-    _defaultConfig: function(){
-        return BI.extend(SetGetModel.superclass._defaultConfig.apply(this, arguments),{
-        })
+    _defaultConfig: function () {
+        return BI.extend(SetGetModel.superclass._defaultConfig.apply(this, arguments), {
+        });
     },
 
-    _init: function(){
+    _init: function () {
         SkipToGreenModel.superclass._init.apply(this, arguments);
     }
 });
 
-//Dark yellow pane #B8860B
+// Dark yellow pane #B8860B
 SkipToYellowView = BI.inherit(BI.View, {
-    _init: function(){
+    _init: function () {
         SkipToYellowView.superclass._init.apply(this, arguments);
     },
 
-    render: function(vessel){
+    render: function (vessel) {
         BI.createWidget({
             type: "bi.absolute",
             element: vessel,
             cls: "yellow-pane",
             items: [{
-                el:{
+                el: {
                     type: "bi.label",
                     text: "Model Data: " + JSON.stringify(this.model.toJSON()),
                     hgap: 20,
@@ -238,17 +238,17 @@ SkipToYellowView = BI.inherit(BI.View, {
                 top: 0,
                 bottom: 0
             }]
-        })
+        });
     }
 });
 
 SkipToYellowModel = BI.inherit(BI.Model, {
-    _defaultConfig: function(){
-        return BI.extend(SetGetModel.superclass._defaultConfig.apply(this, arguments),{
-        })
+    _defaultConfig: function () {
+        return BI.extend(SetGetModel.superclass._defaultConfig.apply(this, arguments), {
+        });
     },
 
-    _init: function(){
+    _init: function () {
         SkipToYellowModel.superclass._init.apply(this, arguments);
     }
 });

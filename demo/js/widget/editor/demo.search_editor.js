@@ -11,19 +11,19 @@ Demo.SearchEditor = BI.inherit(BI.Widget, {
             items: [{
                 type: "bi.search_editor",
                 width: 300,
-                watermark:"添加合法性判断",
+                watermark: "添加合法性判断",
                 errorText: "长度必须大于4",
-                validationChecker:function(){
-                    return this.getValue().length > 4 ? true : false
+                validationChecker: function () {
+                    return this.getValue().length > 4;
                 }
-            },{
+            }, {
                 type: "bi.small_search_editor",
                 width: 300,
-                watermark:"这个是 small,小一号"
+                watermark: "这个是 small,小一号"
             }],
-            vgap:20
-        }
+            vgap: 20
+        };
     }
-})
+});
 
 BI.shortcut("demo.search_editor", Demo.SearchEditor);

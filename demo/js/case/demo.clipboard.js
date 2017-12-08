@@ -11,10 +11,10 @@ Demo.Func = BI.inherit(BI.Widget, {
             value: "这是复制的内容"
         });
         var clipboard = BI.createWidget({
-            type: 'bi.clipboard',
+            type: "bi.clipboard",
             width: 100,
             height: 100,
-            cls: 'layout-bg1',
+            cls: "layout-bg1",
             copy: function () {
                 return editor.getValue();
             },
@@ -36,7 +36,7 @@ Demo.Func = BI.inherit(BI.Widget, {
                 left: 100,
                 top: 100
             }]
-        })
+        });
     }
 });
 BI.shortcut("demo.clipboard", Demo.Func);

@@ -38,18 +38,18 @@ Demo.DatePane = BI.inherit(BI.Widget, {
                             year: 2017,
                             month: 11,
                             day: 31
-                        })
+                        });
                     }
                 }
                 ],
                 width: "50%"
             }]
-        }
+        };
     },
 
     mounted: function () {
-        this.datepane.setValue();//不设value值表示当前时间
+        this.datepane.setValue();// 不设value值表示当前时间
     }
-})
+});
 
 BI.shortcut("demo.date_pane", Demo.DatePane);

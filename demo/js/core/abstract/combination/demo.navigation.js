@@ -7,7 +7,7 @@ Demo.Func = BI.inherit(BI.Widget, {
             type: "bi.label",
             cls: "layout-bg" + BI.random(1, 8),
             text: "第" + v + "页"
-        })
+        });
     },
 
     render: function () {
@@ -29,7 +29,7 @@ Demo.Func = BI.inherit(BI.Widget, {
                 }]
             },
             cardCreator: BI.bind(this._createNav, this)
-        }
+        };
     }
 });
 BI.shortcut("demo.navigation", Demo.Func);

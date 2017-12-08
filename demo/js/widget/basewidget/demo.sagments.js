@@ -28,7 +28,7 @@ Demo.Segments = BI.inherit(BI.Widget, {
             }],
             hgap: 50,
             vgap: 20
-        }
+        };
     }
 });
 

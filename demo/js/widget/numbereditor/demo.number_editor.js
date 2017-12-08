@@ -10,7 +10,7 @@ Demo.FileManager = BI.inherit(BI.Widget, {
         var editor = BI.createWidget({
             type: "bi.number_editor",
             validationChecker: function (v) {
-                return BI.parseFloat(v) <= 100 && BI.parseFloat(v) >= 0
+                return BI.parseFloat(v) <= 100 && BI.parseFloat(v) >= 0;
             },
             height: 24,
             width: 150,
@@ -29,7 +29,7 @@ Demo.FileManager = BI.inherit(BI.Widget, {
                 el: editor,
                 height: 24
             }]
-        }
+        };
     }
 });
 BI.shortcut("demo.number_editor", Demo.FileManager);

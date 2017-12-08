@@ -16,13 +16,13 @@ Demo.HorizontalAdapt = BI.inherit(BI.Widget, {
                 width: 300,
                 height: 30
             }]
-        })
+        });
     },
 
     _createAdaptLayout: function () {
         return BI.createWidget({
             type: "bi.horizontal_adapt",
-            columnSize: [300, 'fill'],
+            columnSize: [300, "fill"],
             items: [{
                 type: "bi.label",
                 text: "例子2:用于水平适应布局",
@@ -34,7 +34,7 @@ Demo.HorizontalAdapt = BI.inherit(BI.Widget, {
                 cls: "layout-bg2",
                 height: 30
             }]
-        })
+        });
     },
 
     render: function () {
@@ -51,7 +51,7 @@ Demo.HorizontalAdapt = BI.inherit(BI.Widget, {
                 row: 1,
                 el: this._createAdaptLayout()
             }]
-        }
+        };
     }
 });
 BI.shortcut("demo.horizontal_adapt", Demo.HorizontalAdapt);

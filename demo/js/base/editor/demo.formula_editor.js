@@ -4,10 +4,10 @@ Demo.CodeEditor = BI.inherit(BI.Widget, {
     },
     render: function () {
         this.formula = BI.createWidget({
-            type : 'bi.formula_editor',
-            width : 300,
-            height : 200,
-            value : 'SUM(C5, 16, 26)'
+            type: "bi.formula_editor",
+            width: 300,
+            height: 200,
+            value: "SUM(C5, 16, 26)"
         });
         BI.createWidget({
             type: "bi.left",
@@ -15,7 +15,7 @@ Demo.CodeEditor = BI.inherit(BI.Widget, {
             items: [this.formula],
             hgap: 20,
             vgap: 20
-        })
+        });
     }
 });
 BI.shortcut("demo.formula_editor", Demo.CodeEditor);

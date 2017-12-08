@@ -5,7 +5,7 @@ Demo.WIDGET_CONFIG = [{
 }, {
     pId: 4,
     id: 401,
-    text: '各种小控件'
+    text: "各种小控件"
 }, {
     pId: 401,
     text: "各种通用按钮",
@@ -180,8 +180,8 @@ Demo.WIDGET_CONFIG = [{
     value: "demo.date_time"
 }, {
     pId: 412,
-    text: 'bi.time_interval',
-    value: 'demo.time_interval'
+    text: "bi.time_interval",
+    value: "demo.time_interval"
 }, {
     pId: 4,
     id: 413,

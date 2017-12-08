@@ -5,7 +5,7 @@ BI.DetailTableHeader = BI.inherit(BI.Widget, {
     _defaultConfig: function () {
         return BI.extend(BI.DetailTableHeader.superclass._defaultConfig.apply(this, arguments), {
             baseCls: "bi-detail-table-header"
-        })
+        });
     },
 
     _init: function () {
@@ -29,7 +29,7 @@ BI.DetailTableHeader = BI.inherit(BI.Widget, {
             }]
         });
 
-        //表格样式
+        // 表格样式
         if (BI.isNotNull(o.styles) && BI.isObject(o.styles)) {
             this.element.css(o.styles);
         }

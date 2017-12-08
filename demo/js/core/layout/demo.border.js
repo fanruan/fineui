@@ -6,28 +6,28 @@ Demo.BorderLayout = BI.inherit(BI.Widget, {
         baseCls: "demo-border"
     },
 
-    _createNorth: function(){
+    _createNorth: function () {
         return BI.createWidget({
             type: "bi.label",
             text: "North",
             cls: "layout-bg1",
             height: 30
-        })
+        });
     },
 
-    _createWest: function(){
+    _createWest: function () {
         return BI.createWidget({
             type: "bi.center",
             cls: "layout-bg2",
-            items:[{
+            items: [{
                 type: "bi.label",
                 text: "West",
                 whiteSpace: "normal"
             }]
-        })
+        });
     },
 
-    _createCenter: function(){
+    _createCenter: function () {
         return BI.createWidget({
             type: "bi.center",
             cls: "layout-bg3",
@@ -36,10 +36,10 @@ Demo.BorderLayout = BI.inherit(BI.Widget, {
                 text: "Center",
                 whiteSpace: "normal"
             }]
-        })
+        });
     },
 
-    _createEast: function(){
+    _createEast: function () {
         return BI.createWidget({
             type: "bi.center",
             cls: "layout-bg5",
@@ -48,16 +48,16 @@ Demo.BorderLayout = BI.inherit(BI.Widget, {
                 text: "East",
                 whiteSpace: "normal"
             }]
-        })
+        });
     },
 
-    _createSouth: function(){
+    _createSouth: function () {
         return BI.createWidget({
             type: "bi.label",
             text: "South",
             cls: "layout-bg6",
             height: 50
-        })
+        });
     },
 
     render: function () {
@@ -91,7 +91,7 @@ Demo.BorderLayout = BI.inherit(BI.Widget, {
                 },
                 center: this._createCenter()
             }
-        }
+        };
     }
 });
 BI.shortcut("demo.border", Demo.BorderLayout);

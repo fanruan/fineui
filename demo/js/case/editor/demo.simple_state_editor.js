@@ -19,15 +19,15 @@ Demo.SimpleStateEditor = BI.inherit(BI.Widget, {
             }],
             vgap: 20
 
-        }
+        };
     },
 
     mounted: function () {
         var self = this;
         setTimeout(function () {
             self.editor.setState(["*", "*"]);
-        }, 1000)
+        }, 1000);
     }
-})
+});
 
 BI.shortcut("demo.simple_state_editor", Demo.SimpleStateEditor);

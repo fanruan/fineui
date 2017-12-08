@@ -15,8 +15,8 @@ Demo.Func = BI.inherit(BI.Widget, {
                     callback(BI.createItems(BI.deepClone(Demo.CONSTANTS.ITEMS), {
                         type: "bi.multi_select_item",
                         height: 25
-                    }))
-                }, 2000)
+                    }));
+                }, 2000);
             },
             el: {
                 type: "bi.button_group",
@@ -24,7 +24,7 @@ Demo.Func = BI.inherit(BI.Widget, {
                     type: "bi.vertical"
                 }]
             }
-        }
+        };
     },
 
     mounted: function () {

@@ -1,29 +1,29 @@
-//change函数
+// change函数
 ChangeView = BI.inherit(BI.View, {
-    _defaultConfig: function(){
-        return BI.extend(ChangeView.superclass._defaultConfig.apply(this, arguments),{
+    _defaultConfig: function () {
+        return BI.extend(ChangeView.superclass._defaultConfig.apply(this, arguments), {
             baseCls: "bi-change"
-        })
+        });
     },
 
-    _init: function(){
+    _init: function () {
         ChangeView.superclass._init.apply(this, arguments);
     },
 
-    change: function(changed){
-        if(changed.child){
+    change: function (changed) {
+        if(changed.child) {
             this._showModelData();
         }
-        if(changed.superiors){
+        if(changed.superiors) {
             this._showModelData();
         }
     },
 
-    _showModelData: function(){
+    _showModelData: function () {
         this.outerText.setText("父级Model层数据: " + JSON.stringify(this.model.toJSON()));
     },
 
-    _createOuter: function(){
+    _createOuter: function () {
         this.outerText = BI.createWidget({
             type: "bi.label",
             cls: "outer-text",
@@ -42,7 +42,7 @@ ChangeView = BI.inherit(BI.View, {
         });
     },
 
-    _createInner: function(){
+    _createInner: function () {
         var innerPane = BI.createWidget({
             type: "bi.absolute",
             cls: "inner"
@@ -53,7 +53,7 @@ ChangeView = BI.inherit(BI.View, {
         return innerPane;
     },
 
-    render: function(vessel){
+    render: function (vessel) {
         BI.createWidget({
             type: "bi.center",
             element: vessel,
@@ -65,45 +65,45 @@ ChangeView = BI.inherit(BI.View, {
         this._showModelData();
     },
 
-    refresh: function(){
+    refresh: function () {
         this.skipTo("inner", "innerPane", "superiors");
     }
 });
 
 ChangeModel = BI.inherit(BI.Model, {
-    _defaultConfig: function(){
-        return BI.extend(ChangeModel.superclass._defaultConfig.apply(this, arguments),{
+    _defaultConfig: function () {
+        return BI.extend(ChangeModel.superclass._defaultConfig.apply(this, arguments), {
             superiors: {
                 child: "default"
             },
             child: "default"
-        })
+        });
     },
 
-    _init: function(){
+    _init: function () {
         ChangeModel.superclass._init.apply(this, arguments);
     },
 
-    change: function(changed){
-        if(changed.superiors){
+    change: function (changed) {
+        if(changed.superiors) {
             this.set("child", changed.superiors.child);
         }
     }
 });
 
-//ChangeView 的子级
+// ChangeView 的子级
 ChangeInnerView = BI.inherit(BI.View, {
-    _init: function(){
+    _init: function () {
         ChangeInnerView.superclass._init.apply(this, arguments);
     },
 
-    change: function(changed){
-        if(changed.child){
+    change: function (changed) {
+        if(changed.child) {
             this._showModelData();
         }
     },
 
-    _createOuter: function(){
+    _createOuter: function () {
         var self = this;
         this.text = BI.createWidget({
             type: "bi.label",
@@ -120,7 +120,7 @@ ChangeInnerView = BI.inherit(BI.View, {
             })
         });
 
-        this.buttons.on(BI.ButtonGroup.EVENT_CHANGE, function(){
+        this.buttons.on(BI.ButtonGroup.EVENT_CHANGE, function () {
             self.model.set("child", this.getValue()[0]);
         });
 
@@ -135,11 +135,11 @@ ChangeInnerView = BI.inherit(BI.View, {
         });
     },
 
-    _showModelData: function(){
+    _showModelData: function () {
         this.text.setText("子级Model层数据: " + JSON.stringify(this.model.toJSON()));
     },
 
-    render: function(vessel){
+    render: function (vessel) {
         BI.createWidget({
             type: "bi.center",
             element: vessel,
@@ -151,13 +151,13 @@ ChangeInnerView = BI.inherit(BI.View, {
 
 
 ChangeInnerModel = BI.inherit(BI.Model, {
-    _defaultConfig: function(){
-        return BI.extend(ChangeInnerModel.superclass._defaultConfig.apply(this, arguments),{
+    _defaultConfig: function () {
+        return BI.extend(ChangeInnerModel.superclass._defaultConfig.apply(this, arguments), {
 
-        })
+        });
     },
 
-    _static: function(){
+    _static: function () {
         return {
             items: [{
                 text: "Type-1",
@@ -172,10 +172,10 @@ ChangeInnerModel = BI.inherit(BI.Model, {
                 value: "third",
                 cls: "type-third mvc-button"
             }]
-        }
+        };
     },
 
-    _init: function(){
+    _init: function () {
         ChangeInnerModel.superclass._init.apply(this, arguments);
     }
 

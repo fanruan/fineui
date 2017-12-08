@@ -25,8 +25,8 @@ Demo.TextValueCombo = BI.inherit(BI.Widget, {
                 }]
             }],
             vgap: 20
-        }
+        };
     }
-})
+});
 
 BI.shortcut("demo.text_value_combo", Demo.TextValueCombo);

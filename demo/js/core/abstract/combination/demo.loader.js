@@ -14,14 +14,14 @@ Demo.Func = BI.inherit(BI.Widget, {
                         return BI.extend(v, {
                             type: "bi.single_select_item",
                             height: 25
-                        })
-                    }))
+                        });
+                    }));
                 }, 1000);
             },
             hasNext: function (options) {
                 return options.times * 10 < items.length;
             }
-        }
+        };
     }
 });
 BI.shortcut("demo.loader", Demo.Func);

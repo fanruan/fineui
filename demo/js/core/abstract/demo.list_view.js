@@ -16,7 +16,7 @@ Demo.Func = BI.inherit(BI.Widget, {
                     text: (i + 1) + "." + item.text
                 });
             })
-        }
+        };
     }
 });
 BI.shortcut("demo.list_view", Demo.Func);

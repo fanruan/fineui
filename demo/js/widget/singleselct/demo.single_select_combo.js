@@ -9,7 +9,7 @@ Demo.SingleSelectCombo = BI.inherit(BI.Widget, {
     _createSingleSelectCombo: function () {
         var self = this;
         var widget = BI.createWidget({
-            type: 'bi.single_select_combo',
+            type: "bi.single_select_combo",
             itemsCreator: BI.bind(this._itemsCreator, this),
             width: 200,
             ref: function () {
@@ -47,7 +47,7 @@ Demo.SingleSelectCombo = BI.inherit(BI.Widget, {
             var search = BI.Func.getSearchResult(items, kw);
             items = search.matched.concat(search.finded);
         });
-        if (options.selectedValues) {//过滤
+        if (options.selectedValues) {// 过滤
             var filter = BI.makeObject(options.selectedValues, true);
             items = BI.filter(items, function (i, ob) {
                 return !filter[ob.value];
@@ -74,7 +74,7 @@ Demo.SingleSelectCombo = BI.inherit(BI.Widget, {
     render: function () {
         var self = this;
         return {
-            type: 'bi.absolute',
+            type: "bi.absolute",
             scrolly: false,
             items: [{
                 el: this._createSingleSelectCombo(),
@@ -83,14 +83,14 @@ Demo.SingleSelectCombo = BI.inherit(BI.Widget, {
             }, {
                 el: {
 
-                    type: 'bi.button',
-                    text: 'setValue("柳州市针织总厂")',
+                    type: "bi.button",
+                    text: "setValue(\"柳州市针织总厂\")",
                     handler: function () {
-                        self.SingleSelectCombo.setValue('柳州市针织总厂');
+                        self.SingleSelectCombo.setValue("柳州市针织总厂");
                     }
                 }
             }]
-        }
+        };
     }
 });
 BI.shortcut("demo.single_select_combo", Demo.SingleSelectCombo);

@@ -35,8 +35,8 @@ Demo.Month = BI.inherit(BI.Widget, {
                 width: 300
             }],
             vgap: 10
-        }
+        };
     }
-})
+});
 
 BI.shortcut("demo.month", Demo.Month);

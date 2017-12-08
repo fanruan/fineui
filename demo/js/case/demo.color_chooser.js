@@ -15,7 +15,7 @@ Demo.Func = BI.inherit(BI.Widget, {
                 left: 100,
                 top: 250
             }]
-        }
+        };
     }
 });
 BI.shortcut("demo.color_chooser", Demo.Func);

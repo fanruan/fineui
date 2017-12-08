@@ -68,7 +68,7 @@ Demo.Func = BI.inherit(BI.Widget, {
             items: [childCombo],
             hgap: 20,
             vgap: 20
-        })
+        });
     },
 
     render: function () {
@@ -81,7 +81,7 @@ Demo.Func = BI.inherit(BI.Widget, {
                 row: 0,
                 el: this._createBottom()
             }]
-        }
+        };
     }
 });
 BI.shortcut("demo.combo_group", Demo.Func);

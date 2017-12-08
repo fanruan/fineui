@@ -1,10 +1,10 @@
-;(function () {
+(function () {
     var model = Fix.define({
         name: "原始属性",
         arr: [{
-            n: 'a'
+            n: "a"
         }, {
-            n: 'b'
+            n: "b"
         }]
     });
 
@@ -14,7 +14,7 @@
         },
         watch: {
             name: function () {
-                this.button.setText(this.model.name)
+                this.button.setText(this.model.name);
             }
         },
         render: function () {
@@ -28,12 +28,12 @@
                             self.button = this;
                         },
                         handler: function () {
-                            self.model.name = "这是改变后的属性"
+                            self.model.name = "这是改变后的属性";
                         },
                         text: this.model.name
                     }
                 }]
-            }
+            };
         },
         mounted: function () {
 

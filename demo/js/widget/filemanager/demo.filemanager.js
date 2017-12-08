@@ -48,7 +48,7 @@ Demo.FileManager = BI.inherit(BI.Widget, {
         return {
             type: "bi.file_manager",
             items: items
-        }
+        };
     }
 });
 BI.shortcut("demo.file_manager", Demo.FileManager);

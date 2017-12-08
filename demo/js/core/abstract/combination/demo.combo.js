@@ -204,8 +204,8 @@ Demo.Func = BI.inherit(BI.Widget, {
 
                     },
                     isAllCheckedBySelectedValue: function (selectedValue) {
-                        return selectedValue.length == self.years.length
-//                        return true;
+                        return selectedValue.length == self.years.length;
+                        //                        return true;
                     }
                 }],
                 buttons: [{
@@ -294,7 +294,7 @@ Demo.Func = BI.inherit(BI.Widget, {
                                     text: val,
                                     value: val,
                                     height: 25
-                                }
+                                };
                             });
                             popuplate(map);
 
@@ -302,7 +302,7 @@ Demo.Func = BI.inherit(BI.Widget, {
 
                     },
                     hasNext: function (options) {
-                        return options.times < 3
+                        return options.times < 3;
                     }
                 },
                 buttons: [{
@@ -327,7 +327,7 @@ Demo.Func = BI.inherit(BI.Widget, {
             items: [yearCombo, multiCombo, dynamicPopupCombo, dynamicCombo],
             hgap: 20,
             vgap: 20
-        })
+        });
     },
 
     _createBottom: function () {
@@ -408,7 +408,7 @@ Demo.Func = BI.inherit(BI.Widget, {
                                 type: "bi.table",
                                 columns: 2,
                                 rows: 6,
-                                columnSize: [0.5, 'fill'],
+                                columnSize: [0.5, "fill"],
                                 rowSize: 30
                             },
                             left: 4,
@@ -458,7 +458,7 @@ Demo.Func = BI.inherit(BI.Widget, {
                             type: "bi.text_button",
                             whiteSpace: "normal",
                             text: new Date().getFullYear() + v
-                        })
+                        });
                     }
                 }
             },
@@ -470,7 +470,7 @@ Demo.Func = BI.inherit(BI.Widget, {
             items: [combo, childCombo, monthCombo, yearCombo],
             hgap: 20,
             vgap: 20
-        })
+        });
     },
 
     render: function () {
@@ -487,7 +487,7 @@ Demo.Func = BI.inherit(BI.Widget, {
                 row: 1,
                 el: this._createBottom()
             }]
-        }
+        };
     }
 });
 BI.shortcut("demo.combo", Demo.Func);

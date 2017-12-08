@@ -33,7 +33,7 @@ Demo.Title = BI.inherit(BI.Widget, {
             }],
             hgap: 300,
             vgap: 20
-        }
+        };
     }
 });
 BI.shortcut("demo.title", Demo.Title);

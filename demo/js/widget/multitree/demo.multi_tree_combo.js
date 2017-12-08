@@ -18,7 +18,7 @@ Demo.MultiTreeCombo = BI.inherit(BI.Widget, {
                 },
                 itemsCreator: function (options, callback) {
                     console.log(options);
-                    //根据不同的类型处理相应的结果
+                    // 根据不同的类型处理相应的结果
                     switch (options.type) {
                         case BI.TreeView.REQ_TYPE_INIT_DATA:
                             break;
@@ -45,8 +45,8 @@ Demo.MultiTreeCombo = BI.inherit(BI.Widget, {
                 width: 300
             }],
             vgap: 20
-        }
+        };
     }
-})
+});
 
 BI.shortcut("demo.multi_tree_combo", Demo.MultiTreeCombo);

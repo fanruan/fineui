@@ -16,7 +16,7 @@ Demo.Center = BI.inherit(BI.Widget, {
                     type: v
                 });
             }
-        }
+        };
     },
 
     setValue: function (v) {

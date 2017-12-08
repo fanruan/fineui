@@ -79,7 +79,7 @@ Demo.FlowLayout = BI.inherit(BI.Widget, {
                 hgap: 20,
                 vgap: 20
             }]
-        }
+        };
     }
 });
 BI.shortcut("demo.flow", Demo.FlowLayout);

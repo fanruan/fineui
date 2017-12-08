@@ -131,7 +131,7 @@ Demo.GridLayout = BI.inherit(BI.Widget, {
                     cls: "layout-bg6"
                 }
             }]
-        }
+        };
     }
 });
 BI.shortcut("demo.grid", Demo.GridLayout);

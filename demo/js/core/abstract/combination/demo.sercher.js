@@ -10,7 +10,7 @@ Demo.Func = BI.inherit(BI.Widget, {
             handler: function (v) {
 
             }
-        })
+        });
     },
 
     render: function () {
@@ -78,7 +78,7 @@ Demo.Func = BI.inherit(BI.Widget, {
                 top: 100,
                 left: 300
             }]
-        })
+        });
     }
 });
 BI.shortcut("demo.searcher", Demo.Func);

@@ -12,7 +12,7 @@ Demo.Func = BI.inherit(BI.Widget, {
                 header[i][j] = {
                     type: "bi.label",
                     text: "表头" + i + "-" + j
-                }
+                };
                 columnSize[j] = 100;
             }
         }
@@ -22,7 +22,7 @@ Demo.Func = BI.inherit(BI.Widget, {
                 items[i][j] = {
                     type: "bi.label",
                     text: (i < 3 ? 0 : i) + "-" + j
-                }
+                };
             }
         }
 
@@ -51,7 +51,7 @@ Demo.Func = BI.inherit(BI.Widget, {
                 top: 10,
                 bottom: 10
             }]
-        })
+        });
     }
 });
 BI.shortcut("demo.grid_table", Demo.Func);

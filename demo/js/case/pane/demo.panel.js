@@ -22,7 +22,7 @@ Demo.Func = BI.inherit(BI.Widget, {
                     height: 25
                 })
             }
-        }
+        };
     }
 });
 BI.shortcut("demo.panel", Demo.Func);

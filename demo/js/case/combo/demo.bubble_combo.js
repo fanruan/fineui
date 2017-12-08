@@ -27,7 +27,7 @@ Demo.Func = BI.inherit(BI.Widget, {
                 },
                 maxHeight: 200
             }
-        })
+        });
         var combo2 = BI.createWidget({
             type: "bi.bubble_combo",
             el: {
@@ -51,7 +51,7 @@ Demo.Func = BI.inherit(BI.Widget, {
                 maxHeight: 200,
                 minWidth: 600
             }
-        })
+        });
         BI.createWidget({
             type: "bi.absolute",
             element: this,
@@ -64,7 +64,7 @@ Demo.Func = BI.inherit(BI.Widget, {
                 left: 100,
                 bottom: 100
             }]
-        })
+        });
     }
 });
 BI.shortcut("demo.bubble_combo", Demo.Func);

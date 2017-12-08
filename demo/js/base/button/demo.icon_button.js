@@ -6,7 +6,7 @@ Demo.Button = BI.inherit(BI.Widget, {
         var items = [
             {
                 el: {
-                    type: 'bi.icon_button',
+                    type: "bi.icon_button",
                     cls: "close-ha-font",
                     width: 20,
                     height: 20
@@ -18,7 +18,7 @@ Demo.Button = BI.inherit(BI.Widget, {
             vgap: 200,
             hgap: 20,
             items: items
-        }
+        };
     }
 });
 BI.shortcut("demo.icon_button", Demo.Button);

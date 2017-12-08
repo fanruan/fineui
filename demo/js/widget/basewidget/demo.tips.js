@@ -12,8 +12,8 @@ Demo.Tips = BI.inherit(BI.Widget, {
             type: "bi.left",
             items: [{
                 el: {
-                    type: 'bi.button',
-                    text: 'bubble测试',
+                    type: "bi.button",
+                    text: "bubble测试",
                     height: 30,
                     handler: function () {
                         BI.Bubbles.show("singleBubble1", "bubble测试", this);
@@ -22,8 +22,8 @@ Demo.Tips = BI.inherit(BI.Widget, {
                 }
             }, {
                 el: {
-                    type: 'bi.button',
-                    text: 'bubble测试(居中显示)',
+                    type: "bi.button",
+                    text: "bubble测试(居中显示)",
                     height: 30,
                     handler: function () {
                         BI.Bubbles.show("singleBubble2", "bubble测试", this, {
@@ -34,8 +34,8 @@ Demo.Tips = BI.inherit(BI.Widget, {
                 }
             }, {
                 el: {
-                    type: 'bi.button',
-                    text: 'bubble测试(右边显示)',
+                    type: "bi.button",
+                    text: "bubble测试(右边显示)",
                     height: 30,
                     handler: function () {
                         BI.Bubbles.show("singleBubble3", "bubble测试", this, {
@@ -46,14 +46,14 @@ Demo.Tips = BI.inherit(BI.Widget, {
                 }
             }, {
                 el: {
-                    type: 'bi.button',
-                    text: '隐藏所有 bubble',
+                    type: "bi.button",
+                    text: "隐藏所有 bubble",
                     height: 30,
                     cls: "layout-bg2",
                     handler: function () {
                         BI.each(btns, function (index, value) {
                             BI.Bubbles.hide(value);
-                        })
+                        });
                     }
                 }
             }],
@@ -96,8 +96,8 @@ Demo.Tips = BI.inherit(BI.Widget, {
             type: "bi.vertical",
             items: [{
                 el: {
-                    type: 'bi.button',
-                    text: '简单Toast测试',
+                    type: "bi.button",
+                    text: "简单Toast测试",
                     height: 30,
                     handler: function () {
                         BI.Msg.toast("这是一条简单的数据");
@@ -105,26 +105,26 @@ Demo.Tips = BI.inherit(BI.Widget, {
                 }
             }, {
                 el: {
-                    type: 'bi.button',
-                    text: '很长的Toast测试',
+                    type: "bi.button",
+                    text: "很长的Toast测试",
                     height: 30,
                     handler: function () {
-                        BI.Msg.toast("这是一条很长很长很长很长很长很长很长很长很长很长很长很长很长很长很长很长很长很长很长很长很长很长很长很长很长很长很长很长很长很长很长很长很长很长很长很长很长很长很长很长很长很长很长很长很长很长很长很长的数据")
+                        BI.Msg.toast("这是一条很长很长很长很长很长很长很长很长很长很长很长很长很长很长很长很长很长很长很长很长很长很长很长很长很长很长很长很长很长很长很长很长很长很长很长很长很长很长很长很长很长很长很长很长很长很长很长很长的数据");
                     }
                 }
             }, {
                 el: {
-                    type: 'bi.button',
-                    text: '非常长的Toast测试',
+                    type: "bi.button",
+                    text: "非常长的Toast测试",
                     height: 30,
                     handler: function () {
-                        BI.Msg.toast("这是一条非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长的数据")
+                        BI.Msg.toast("这是一条非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长的数据");
                     }
                 }
             }, {
                 el: {
-                    type: 'bi.button',
-                    text: '错误提示Toast测试',
+                    type: "bi.button",
+                    text: "错误提示Toast测试",
                     level: "warning",
                     height: 30,
                     handler: function () {
@@ -140,7 +140,7 @@ Demo.Tips = BI.inherit(BI.Widget, {
             vgap: 20,
             hgap: 20,
             items: [bubble, title, toast]
-        }
+        };
     }
 });
 BI.shortcut("demo.tips", Demo.Tips);

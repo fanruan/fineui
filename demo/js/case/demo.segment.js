@@ -22,7 +22,7 @@ Demo.Func = BI.inherit(BI.Widget, {
                     value: 3
                 }]
             }]
-        })
+        });
     }
 });
 BI.shortcut("demo.segment", Demo.Func);

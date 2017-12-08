@@ -3,11 +3,11 @@
  */
 Demo.Slider = BI.inherit(BI.Widget, {
     props: {
-            baseCls: "demo-slider",
-            width: 300,
-            height: 50,
-            min: 0,
-            max: 100
+        baseCls: "demo-slider",
+        width: 300,
+        height: 50,
+        min: 0,
+        max: 100
     },
 
     render: function () {
