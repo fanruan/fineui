@@ -27898,13 +27898,13 @@ BI.shortcut("bi.tree_view", BI.TreeView);/**
  */
 BI.AsyncTree = BI.inherit(BI.TreeView, {
     _defaultConfig: function () {
-        return BI.extend(BI.AsyncTree.superclass._defaultConfig.apply(this, arguments), {})
+        return BI.extend(BI.AsyncTree.superclass._defaultConfig.apply(this, arguments), {});
     },
     _init: function () {
         BI.AsyncTree.superclass._init.apply(this, arguments);
     },
 
-    //配置属性
+    // 配置属性
     _configSetting: function () {
         var paras = this.options.paras;
         var self = this;
@@ -27941,23 +27941,23 @@ BI.AsyncTree = BI.inherit(BI.TreeView, {
             }
         };
 
-        function onClick(event, treeId, treeNode) {
+        function onClick (event, treeId, treeNode) {
             var zTree = $.fn.zTree.getZTreeObj(treeId);
             zTree.checkNode(treeNode, !treeNode.checked, true, true);
         }
 
-        function beforeCheck(treeId, treeNode) {
+        function beforeCheck (treeId, treeNode) {
             treeNode.halfCheck = false;
             if (treeNode.checked === true) {
-                //将展开的节点halfCheck设为false，解决展开节点存在halfCheck=true的情况 guy
-                //所有的半选状态都需要取消halfCheck=true的情况
-                function track(children) {
+                // 将展开的节点halfCheck设为false，解决展开节点存在halfCheck=true的情况 guy
+                // 所有的半选状态都需要取消halfCheck=true的情况
+                function track (children) {
                     BI.each(children, function (i, ch) {
                         if (ch.halfCheck === true) {
                             ch.halfCheck = false;
                             track(ch.children);
                         }
-                    })
+                    });
                 }
 
                 track(treeNode.children);
@@ -27966,23 +27966,23 @@ BI.AsyncTree = BI.inherit(BI.TreeView, {
                 var nodes = treeObj.getSelectedNodes();
                 BI.each(nodes, function (index, node) {
                     node.halfCheck = false;
-                })
+                });
             }
         }
 
-        function beforeExpand(treeId, treeNode) {
+        function beforeExpand (treeId, treeNode) {
             self._beforeExpandNode(treeId, treeNode);
         }
 
-        function onCheck(event, treeId, treeNode) {
+        function onCheck (event, treeId, treeNode) {
             self._selectTreeNode(treeId, treeNode);
         }
 
-        function onExpand(event, treeId, treeNode) {
+        function onExpand (event, treeId, treeNode) {
             treeNode.halfCheck = false;
         }
 
-        function onCollapse(event, treeId, treeNode) {
+        function onCollapse (event, treeId, treeNode) {
             treeNode.halfCheck = false;
         }
 
@@ -27993,7 +27993,7 @@ BI.AsyncTree = BI.inherit(BI.TreeView, {
         var self = this, o = this.options;
         var parentValues = BI.deepClone(treeNode.parentValues || self._getParentValues(treeNode));
         var name = this._getNodeValue(treeNode);
-//        var values = parentValues.concat([name]);
+        //        var values = parentValues.concat([name]);
         if (treeNode.checked === true) {
         } else {
             var tNode = treeNode;
@@ -28014,7 +28014,7 @@ BI.AsyncTree = BI.inherit(BI.TreeView, {
         BI.AsyncTree.superclass._selectTreeNode.apply(self, arguments);
     },
 
-    //展开节点
+    // 展开节点
     _beforeExpandNode: function (treeId, treeNode) {
         var self = this, o = this.options;
         var parentValues = treeNode.parentValues || self._getParentValues(treeNode);
@@ -28032,7 +28032,7 @@ BI.AsyncTree = BI.inherit(BI.TreeView, {
         };
         var times = 1;
 
-        function callback(nodes, hasNext) {
+        function callback (nodes, hasNext) {
             self.nodes.addNodes(treeNode, nodes);
 
             if (hasNext === true) {
@@ -28045,7 +28045,9 @@ BI.AsyncTree = BI.inherit(BI.TreeView, {
         }
 
         if (!treeNode.children) {
-            o.itemsCreator(op, complete)
+            setTimeout(function () {
+                o.itemsCreator(op, complete);
+            }, 17);
         }
     },
 
@@ -28054,7 +28056,7 @@ BI.AsyncTree = BI.inherit(BI.TreeView, {
         var map = {};
         track([], valueA, valueB);
         track([], valueB, valueA);
-        function track(parent, node, compare) {
+        function track (parent, node, compare) {
             BI.each(node, function (n, item) {
                 if (BI.isNull(compare[n])) {
                     self._addTreeNode(map, parent, n, item);
@@ -28063,7 +28065,7 @@ BI.AsyncTree = BI.inherit(BI.TreeView, {
                 } else {
                     track(parent.concat([n]), node[n], compare[n]);
                 }
-            })
+            });
         }
 
         return map;
@@ -28087,7 +28089,7 @@ BI.AsyncTree = BI.inherit(BI.TreeView, {
         return this._join(checkedValues, this.options.paras.selectedValues);
     },
 
-    //生成树方法
+    // 生成树方法
     stroke: function (config) {
         delete this.options.keyword;
         BI.extend(this.options.paras, config);
