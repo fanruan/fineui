@@ -18776,9 +18776,9 @@ BI.TooltipsController = BI.inherit(BI.Controller, {
         tooltip.visible();
         tooltip.element.height(tooltip.element[0].scrollHeight);
         this.showingTips[name] = true;
-        var x = e.pageX || e.clientX, y = (e.pageY || e.clientY) + 15;
+        var x = (e.pageX || e.clientX) + 15, y = (e.pageY || e.clientY) + 15;
         if (x + tooltip.element.outerWidth() > $("body").outerWidth()) {
-            x -= tooltip.element.outerWidth();
+            x -= tooltip.element.outerWidth() + 15;
         }
         if (y + tooltip.element.outerHeight() > $("body").outerHeight()) {
             y -= tooltip.element.outerHeight() + 15;
