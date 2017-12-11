@@ -215,6 +215,7 @@
                                 break;
                         }
                     }
+                    upload.onloadstart();
                 }
                 var boundary = "AjaxUploadBoundary" + (new Date).getTime();
                 xhr.setRequestHeader("Content-Type", "multipart/form-data; boundary=" + boundary);
@@ -423,7 +424,7 @@
 
                 _wrap.onloadstart = function (rpe, xhr) {
                     //BI.Msg.toast("loadstart");
-                    self.fireEvent(BI.File.EVENT_UPLOADSTART);
+                    self.fireEvent(BI.File.EVENT_UPLOADSTART, arguments);
                 };
 
                 _wrap.onprogress = function (rpe, xhr) {
