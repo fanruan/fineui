@@ -20861,7 +20861,7 @@ Date.prototype.getDayOfYear = function () {
 Date.prototype.getWeekNumber = function () {
     var d = Date.getDate(this.getFullYear(), this.getMonth(), this.getDate(), 0, 0, 0);
     //周一是一周第一天
-    var week = d.getDay() === 0 ? 6 : d.getDay();
+    var week = d.getDay();
     if (this.getMonth() === 0 && this.getDate() <= week) {
         return 1;
     }
@@ -20870,7 +20870,7 @@ Date.prototype.getWeekNumber = function () {
     d.setMonth(0);
     d.setDate(1);
     var offset = Math.floor((ms - d.valueOf()) / (7 * 864e5)) + 1;
-    if (d.getDay() !== 1) {
+    if (d.getDay() > 0) {
         offset++;
     }
     return offset;
