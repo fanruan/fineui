@@ -66934,6 +66934,125 @@ BI.IconComboTrigger = BI.inherit(BI.Trigger, {
 });
 BI.IconComboTrigger.EVENT_CHANGE = "EVENT_CHANGE";
 BI.shortcut("bi.icon_combo_trigger", BI.IconComboTrigger);/**
+ * Created by Windy on 2017/12/12.
+ * combo : icon + text + icon, popup : icon + text
+ */
+BI.IconTextValueCombo = BI.inherit(BI.Widget, {
+    _defaultConfig: function () {
+        return BI.extend(BI.IconTextValueCombo.superclass._defaultConfig.apply(this, arguments), {
+            baseClass: "bi-icon-text-value-combo",
+            height: 30,
+            text: "",
+            el: {}
+        })
+    },
+
+    _init: function () {
+        BI.IconTextValueCombo.superclass._init.apply(this, arguments);
+        var self = this, o = this.options;
+        this.trigger = BI.createWidget(o.el, {
+            type: "bi.select_icon_text_trigger",
+            items: o.items,
+            height: o.height,
+            text: o.text
+        });
+        this.popup = BI.createWidget({
+            type: "bi.icon_text_value_combo_popup",
+            items: o.items
+        });
+        this.popup.on(BI.IconTextValueComboPopup.EVENT_CHANGE, function () {
+            self.setValue(self.popup.getValue());
+            self.textIconCombo.hideView();
+            self.fireEvent(BI.IconTextValueCombo.EVENT_CHANGE, arguments);
+        });
+        this.popup.on(BI.Controller.EVENT_CHANGE, function () {
+            self.fireEvent(BI.Controller.EVENT_CHANGE, arguments);
+        });
+        this.textIconCombo = BI.createWidget({
+            type: "bi.combo",
+            element: this,
+            adjustLength: 2,
+            el: this.trigger,
+            popup: {
+                el: this.popup,
+                maxHeight: 300
+            }
+        });
+    },
+
+    setValue: function (v) {
+        this.textIconCombo.setValue(v);
+    },
+
+    getValue: function () {
+        return this.textIconCombo.getValue();
+    },
+
+    populate: function (items) {
+        this.options.items = items;
+        this.textIconCombo.populate(items);
+    }
+});
+BI.IconTextValueCombo.EVENT_CHANGE = "EVENT_CHANGE";
+BI.shortcut("bi.icon_text_value_combo", BI.IconTextValueCombo);/**
+ * Created by Windy on 2017/12/12.
+ */
+BI.IconTextValueComboPopup = BI.inherit(BI.Pane, {
+    _defaultConfig: function () {
+        return BI.extend(BI.IconTextValueComboPopup.superclass._defaultConfig.apply(this, arguments), {
+            baseCls: "bi-icon-text-icon-popup"
+        });
+    },
+
+    _init: function () {
+        BI.IconTextValueComboPopup.superclass._init.apply(this, arguments);
+        var o = this.options, self = this;
+        this.popup = BI.createWidget({
+            type: "bi.button_group",
+            items: BI.createItems(o.items, {
+                type: "bi.single_select_icon_text_item",
+                height: 30
+            }),
+            chooseType: BI.ButtonGroup.CHOOSE_TYPE_SINGLE,
+            layouts: [{
+                type: "bi.vertical"
+            }]
+        });
+
+        this.popup.on(BI.Controller.EVENT_CHANGE, function (type, val, obj) {
+            self.fireEvent(BI.Controller.EVENT_CHANGE, arguments);
+            if (type === BI.Events.CLICK) {
+                self.fireEvent(BI.IconTextValueComboPopup.EVENT_CHANGE, val, obj);
+            }
+        });
+
+        BI.createWidget({
+            type: "bi.vertical",
+            element: this,
+            items: [this.popup]
+        });
+    },
+
+    populate: function (items) {
+        BI.IconTextValueComboPopup.superclass.populate.apply(this, arguments);
+        items = BI.createItems(items, {
+            type: "bi.single_select_icon_text_item",
+            height: 30
+        });
+        this.popup.populate(items);
+    },
+
+    getValue: function () {
+        return this.popup.getValue();
+    },
+
+    setValue: function (v) {
+        this.popup.setValue(v);
+    }
+
+});
+BI.IconTextValueComboPopup.EVENT_CHANGE = "EVENT_CHANGE";
+BI.shortcut("bi.icon_text_value_combo_popup", BI.IconTextValueComboPopup);/**
  * 单选combo
  *
  * @class BI.StaticCombo
@@ -75020,6 +75139,60 @@ BI.IconTextTrigger = BI.inherit(BI.Trigger, {
     }
 });
 BI.shortcut("bi.icon_text_trigger", BI.IconTextTrigger);/**
+ * Created by Windy on 2017/12/12.
+ */
+BI.SelectIconTextTrigger = BI.inherit(BI.Trigger, {
+
+    _defaultConfig: function () {
+        return BI.extend(BI.SelectIconTextTrigger.superclass._defaultConfig.apply(this, arguments), {
+            baseCls: "bi-select-text-trigger bi-border",
+            height: 24
+        });
+    },
+
+    _init: function () {
+        this.options.height -= 2;
+        BI.SelectIconTextTrigger.superclass._init.apply(this, arguments);
+        var self = this, o = this.options;
+        this.trigger = BI.createWidget({
+            type: "bi.icon_text_trigger",
+            element: this,
+            height: o.height
+        });
+        if (BI.isKey(o.text)) {
+            this.setValue(o.text);
+        }
+    },
+
+    setValue: function (vals) {
+        var o = this.options;
+        vals = BI.isArray(vals) ? vals : [vals];
+        var result;
+        var items = BI.Tree.transformToArrayFormat(this.options.items);
+        BI.any(items, function (i, item) {
+            if (BI.deepContains(vals, item.value)) {
+                result = {
+                    text: item.text || item.value,
+                    iconClass: item.iconClass
+                };
+                return true;
+            }
+        });
+
+        if (BI.isNotNull(result)) {
+            this.trigger.setText(result.text);
+            this.trigger.setIcon(result.iconClass);
+        } else {
+            this.trigger.setText(o.text);
+            this.trigger.setIcon("");
+        }
+    },
+
+    populate: function (items) {
+        this.options.items = items;
+    }
+});
+BI.shortcut("bi.select_icon_text_trigger", BI.SelectIconTextTrigger);/**
  * 文字trigger
  *
  * Created by GUY on 2015/9/15.
