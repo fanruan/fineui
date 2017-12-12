@@ -53,7 +53,7 @@ Demo.Func = BI.inherit(BI.Widget, {
                 },
                 adapter: adapter
             }]
-        })
+        });
     }
 });
 BI.shortcut("demo.switcher", Demo.Func);

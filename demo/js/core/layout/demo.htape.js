@@ -8,31 +8,31 @@ Demo.HtapeLayout = BI.inherit(BI.Widget, {
     render: function () {
         return {
             type: "bi.htape",
-            items : [
+            items: [
                 {
                     width: 100,
-                    el : {
-                        type : 'bi.label',
-                        text : '1',
+                    el: {
+                        type: "bi.label",
+                        text: "1",
                         cls: "layout-bg1"
                     }
                 }, {
                     width: 200,
-                    el : {
-                        type : 'bi.label',
-                        text : '2',
+                    el: {
+                        type: "bi.label",
+                        text: "2",
                         cls: "layout-bg2"
                     }
                 }, {
-                    width: 'fill',
-                    el : {
-                        type : 'bi.label',
-                        text : '3',
+                    width: "fill",
+                    el: {
+                        type: "bi.label",
+                        text: "3",
                         cls: "layout-bg3"
                     }
                 }
             ]
-        }
+        };
     }
 });
 BI.shortcut("demo.htape", Demo.HtapeLayout);

@@ -1,10 +1,10 @@
-;(function(){
+(function () {
     var model = Fix.define({
         name: "原始属性",
         arr: [{
-            n: 'a'
+            n: "a"
         }, {
-            n: 'b'
+            n: "b"
         }]
     });
 
@@ -13,7 +13,7 @@
         },
         computed: {
             b: function () {
-                return model.name + '-计算属性'
+                return model.name + "-计算属性";
             }
         },
         actions: {
@@ -29,7 +29,7 @@
         },
         watch: {
             b: function () {
-                this.button.setText(this.model.b)
+                this.button.setText(this.model.b);
             }
         },
         render: function () {
@@ -43,12 +43,12 @@
                             self.button = this;
                         },
                         handler: function () {
-                            self.store.run()
+                            self.store.run();
                         },
                         text: this.model.b
                     }
                 }]
-            }
+            };
         },
         mounted: function () {
 

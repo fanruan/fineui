@@ -90,7 +90,7 @@ Demo.Editor = BI.inherit(BI.Widget, {
                 left: 200,
                 bottom: 60
             }]
-        })
+        });
     }
 });
 BI.shortcut("demo.editor", Demo.Editor);

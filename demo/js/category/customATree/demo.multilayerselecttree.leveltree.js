@@ -26,8 +26,8 @@ BI.PlatformLevelTree = BI.inherit(BI.Widget, {
 
             itemsCreator: function (op, callback) {
                 o.itemsCreator(op, function (items) {
-                    callback(self._formatItems(items))
-                })
+                    callback(self._formatItems(items));
+                });
             },
 
             el: {
@@ -44,7 +44,7 @@ BI.PlatformLevelTree = BI.inherit(BI.Widget, {
         });
         this.tree.on(BI.CustomTree.EVENT_CHANGE, function () {
             self.fireEvent(BI.PlatformLevelTree.EVENT_CHANGE, arguments);
-        })
+        });
     },
 
     _formatItems: function (nodes) {
@@ -103,93 +103,93 @@ BI.DemoLevelTree = BI.inherit(BI.Widget, {
                         self.tree = this;
                     },
                     itemsCreator: function (op, callback) {
-                        if (!op.node) {//根节点
+                        if (!op.node) {// 根节点
                             callback([{
-                                "id": 1,
-                                "pId": 0,
+                                id: 1,
+                                pId: 0,
                                 text: "A",
                                 value: 1,
                                 isParent: true
                             }, {
-                                "id": 2,
-                                "pId": 0,
-                                "text": "B",
+                                id: 2,
+                                pId: 0,
+                                text: "B",
                                 value: 2,
                                 isParent: true,
                                 open: true
-                            }])
+                            }]);
                         } else {
                             if (op.node.id == 1) {
                                 callback([
                                     {
-                                        "id": 11,
-                                        "pId": 1,
-                                        "text": "test11",
+                                        id: 11,
+                                        pId: 1,
+                                        text: "test11",
                                         value: 11,
                                         layer: 1,
                                         isParent: true
                                     },
                                     {
-                                        "id": 12,
-                                        "pId": 1,
-                                        "text": "test12",
+                                        id: 12,
+                                        pId: 1,
+                                        text: "test12",
                                         value: 12,
                                         layer: 1
                                     },
                                     {
-                                        "id": 13,
-                                        "pId": 1,
-                                        "text": "test13",
+                                        id: 13,
+                                        pId: 1,
+                                        text: "test13",
                                         value: 13,
                                         layer: 1
                                     },
                                     {
-                                        "id": 14,
-                                        "pId": 1,
-                                        "text": "test14",
+                                        id: 14,
+                                        pId: 1,
+                                        text: "test14",
                                         value: 14,
                                         layer: 1,
                                         height: 35
                                     },
                                     {
-                                        "id": 15,
-                                        "pId": 1,
-                                        "text": "test15",
+                                        id: 15,
+                                        pId: 1,
+                                        text: "test15",
                                         value: 15,
                                         layer: 1
                                     },
                                     {
-                                        "id": 16,
-                                        "pId": 1,
-                                        "text": "test16",
+                                        id: 16,
+                                        pId: 1,
+                                        text: "test16",
                                         value: 16,
                                         layer: 1
                                     },
-                                    {"id": 17, "pId": 1, "text": "test17", layer: 1, value: 17}
-                                ])
+                                    {id: 17, pId: 1, text: "test17", layer: 1, value: 17}
+                                ]);
                             } else if (op.node.id == 2) {
                                 callback([{
-                                    "id": 21,
-                                    "pId": 2,
-                                    "text": "test21",
+                                    id: 21,
+                                    pId: 2,
+                                    text: "test21",
                                     value: 21,
                                     layer: 1
                                 },
-                                    {
-                                        "id": 22,
-                                        "pId": 2,
-                                        "text": "test22",
-                                        value: 22,
-                                        layer: 1
-                                    }])
+                                {
+                                    id: 22,
+                                    pId: 2,
+                                    text: "test22",
+                                    value: 22,
+                                    layer: 1
+                                }]);
                             } else if (op.node.id == 11) {
                                 callback([{
-                                    "id": 111,
-                                    "pId": 11,
-                                    "text": "test111",
+                                    id: 111,
+                                    pId: 11,
+                                    text: "test111",
                                     value: 111,
                                     layer: 2
-                                }])
+                                }]);
                             }
                         }
                     }
@@ -205,7 +205,7 @@ BI.DemoLevelTree = BI.inherit(BI.Widget, {
                 height: 25
             }]
 
-        }
+        };
     },
 
     mounted: function () {

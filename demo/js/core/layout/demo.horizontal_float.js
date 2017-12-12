@@ -15,7 +15,7 @@ Demo.HorizontalFloat = BI.inherit(BI.Widget, {
                 cls: "layout-bg1",
                 height: 30
             }]
-        }
+        };
     }
 });
 BI.shortcut("demo.horizontal_float", Demo.HorizontalFloat);

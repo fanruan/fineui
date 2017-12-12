@@ -20193,6 +20193,14 @@ BI.extend(BI.DOM, {
         storeInjection[xtype] = cls;
     };
 
+    var serviceInjection = {};
+    BI.service = function (xtype, cls) {
+        if (serviceInjection[xtype] != null) {
+            throw ("service:[" + xtype + "] has been registed");
+        }
+        serviceInjection[xtype] = cls;
+    };
+
     var providerInjection = {};
     BI.provider = function (xtype, cls) {
         if (providerInjection[xtype] != null) {
@@ -20250,6 +20258,20 @@ BI.extend(BI.DOM, {
         },
         releaseStore: function (type) {
             delete stores[type];
+        }
+    }
+
+    var services = {};
+
+    BI.Services = {
+        getService: function (type, config) {
+            if (services[type]) {
+                return services[type];
+            }
+            return services[type] = new serviceInjection[type](config);
+        },
+        releaseService: function (type) {
+            delete services[type];
         }
     }
 
@@ -44686,7 +44708,7 @@ BI.shortcut("bi.checkbox", BI.Checkbox);/**
                 e.stopPropagation ? e.stopPropagation() : e.cancelBubble = true;
                 e.preventDefault ? e.preventDefault() : e.returnValue = false;
             }
-            ;
+
             return false;
         }
     };
@@ -44695,7 +44717,7 @@ BI.shortcut("bi.checkbox", BI.Checkbox);/**
         var multipart = function (boundary, name, file) {
                 return "--".concat(
                     boundary, CRLF,
-                    'Content-Disposition: form-data; name="', name, '"; filename="', BI.cjkEncode(file.fileName), '"', CRLF,
+                    "Content-Disposition: form-data; name=\"", name, "\"; filename=\"", BI.cjkEncode(file.fileName), "\"", CRLF,
                     "Content-Type: application/octet-stream", CRLF,
                     CRLF,
                     file.getAsBinary(), CRLF,
@@ -44721,15 +44743,15 @@ BI.shortcut("bi.checkbox", BI.Checkbox);/**
                     return;
                 }
                 for (var
-                         xhr = new XMLHttpRequest,
-                         upload = xhr.upload || {
-                                 addEventListener: function (event, callback) {
-                                     this["on" + event] = callback
-                                 }
-                             },
-                         i = 0;
-                     i < length;
-                     i++
+                    xhr = new XMLHttpRequest,
+                    upload = xhr.upload || {
+                        addEventListener: function (event, callback) {
+                            this["on" + event] = callback;
+                        }
+                    },
+                    i = 0;
+                    i < length;
+                    i++
                 ) {
                     upload.addEventListener(
                         split[i].substring(2),
@@ -44764,7 +44786,7 @@ BI.shortcut("bi.checkbox", BI.Checkbox);/**
                     },
                     false
                 );
-                xhr.open("post", handler.url + '&filename=' + window.encodeURIComponent(handler.file.fileName), true);
+                xhr.open("post", handler.url + "&filename=" + window.encodeURIComponent(handler.file.fileName), true);
                 if (!xhr.upload) {
                     var rpe = {loaded: 0, total: handler.file.fileSize || handler.file.size, simulation: true};
                     rpe.interval = setInterval(function () {
@@ -44784,8 +44806,7 @@ BI.shortcut("bi.checkbox", BI.Checkbox);/**
                         switch (xhr.readyState) {
                             case    2:
                             case    3:
-                                if (rpe.total <= rpe.loaded)
-                                    rpe.loaded = rpe.total;
+                                if (rpe.total <= rpe.loaded) {rpe.loaded = rpe.total;}
                                 upload.onprogress(rpe);
                                 break;
                             case    4:
@@ -44797,7 +44818,7 @@ BI.shortcut("bi.checkbox", BI.Checkbox);/**
                                     upload["onload"]({});
                                     var attachO = BI.jsonDecode(xhr.responseText);
                                     attachO.filename = handler.file.fileName;
-                                    if (handler.file.type.indexOf('image') != -1) {
+                                    if (handler.file.type.indexOf("image") != -1) {
                                         attachO.attach_type = "image";
                                     }
                                     handler.attach_array.push(attachO);
@@ -44813,7 +44834,7 @@ BI.shortcut("bi.checkbox", BI.Checkbox);/**
                         switch (xhr.readyState) {
                             case    4:
                                 var attachO = BI.jsonDecode(xhr.responseText);
-                                if (handler.file.type.indexOf('image') != -1) {
+                                if (handler.file.type.indexOf("image") != -1) {
                                     attachO.attach_type = "image";
                                 }
                                 attachO.filename = handler.file.fileName;
@@ -44825,7 +44846,8 @@ BI.shortcut("bi.checkbox", BI.Checkbox);/**
                                 }
                                 break;
                         }
-                    }
+                    };
+                    upload.onloadstart();
                 }
                 var boundary = "AjaxUploadBoundary" + (new Date).getTime();
                 xhr.setRequestHeader("Content-Type", "multipart/form-data; boundary=" + boundary);
@@ -44833,8 +44855,8 @@ BI.shortcut("bi.checkbox", BI.Checkbox);/**
                     xhr[xhr.sendAsBinary ? "sendAsBinary" : "send"](multipart(boundary, handler.name, handler.file));
                 } else {
                     xhr.setRequestHeader("Content-Type", "multipart/form-data");
-//                    xhr.setRequestHeader("X-Name", handler.name);
-//                    xhr.setRequestHeader("X-File-Name", handler.file.fileName);
+                    //                    xhr.setRequestHeader("X-Name", handler.name);
+                    //                    xhr.setRequestHeader("X-File-Name", handler.file.fileName);
                     var form = new FormData();
                     form.append("FileData", handler.file);
                     xhr.send(form);
@@ -44848,10 +44870,8 @@ BI.shortcut("bi.checkbox", BI.Checkbox);/**
                 var url = handler.url.concat(-1 === handler.url.indexOf("?") ? "?" : "&", "AjaxUploadFrame=true"),
                     rpe = {
                         loaded: 1, total: 100, simulation: true, interval: setInterval(function () {
-                            if (rpe.loaded < rpe.total)
-                                ++rpe.loaded;
-                            if (isFunction(handler.onprogress))
-                                handler.onprogress(rpe, {});
+                            if (rpe.loaded < rpe.total) {++rpe.loaded;}
+                            if (isFunction(handler.onprogress)) {handler.onprogress(rpe, {});}
                         }, 100)
                     },
                     onload = function () {
@@ -44859,15 +44879,15 @@ BI.shortcut("bi.checkbox", BI.Checkbox);/**
                         form.parentNode.removeChild(form);
                         form = null;
                         clearInterval(rpe.interval);
-                        //rpe.loaded = rpe.total;
+                        // rpe.loaded = rpe.total;
                         try {
                             var responseText = (iframe.contentWindow.document || iframe.contentWindow.contentDocument).body.innerHTML;
                             var attachO = BI.jsonDecode(responseText);
-                            if (handler.file.type.indexOf('image') != -1) {
+                            if (handler.file.type.indexOf("image") != -1) {
                                 attachO.attach_type = "image";
                             }
 
-                            //attachO.fileSize = responseText.length;
+                            // attachO.fileSize = responseText.length;
                             attachO.filename = BI.cjkDecode(handler.file.fileName);
                             if (handler.maxlength == 1) {
                                 handler.attach_array[0] = attachO;
@@ -44875,18 +44895,16 @@ BI.shortcut("bi.checkbox", BI.Checkbox);/**
                                 handler.attach_array.push(attachO);
                             }
                         } catch (e) {
-                            if (isFunction(handler.onerror))
-                                handler.onerror(rpe, event || window.event);
+                            if (isFunction(handler.onerror)) {handler.onerror(rpe, event || window.event);}
                         }
-                        if (isFunction(handler.onload))
-                            handler.onload(rpe, {responseText: responseText});
+                        if (isFunction(handler.onload)) {handler.onload(rpe, {responseText: responseText});}
                     },
                     target = ["AjaxUpload", (new Date).getTime(), String(Math.random()).substring(2)].join("_");
                 try { // IE < 8 does not accept enctype attribute ...
-                    var form = document.createElement('<form enctype="multipart/form-data"></form>'),
-                        iframe = handler.iframe || (handler.iframe = document.createElement('<iframe id="' + target + '" name="' + target + '" src="' + url + '"></iframe>'));
+                    var form = document.createElement("<form enctype=\"multipart/form-data\"></form>"),
+                        iframe = handler.iframe || (handler.iframe = document.createElement("<iframe id=\"" + target + "\" name=\"" + target + "\" src=\"" + url + "\"></iframe>"));
                 } catch (e) {
-                    var form = document.createElement('form'),
+                    var form = document.createElement("form"),
                         iframe = handler.iframe || (handler.iframe = document.createElement("iframe"));
                     form.setAttribute("enctype", "multipart/form-data");
                     iframe.setAttribute("name", iframe.id = target);
@@ -44904,9 +44922,8 @@ BI.shortcut("bi.checkbox", BI.Checkbox);/**
                     if (/loaded|complete/i.test(iframe.readyState)) {
                         onload();
 
-                        //wei : todo,将附件信息放到handler.attach
-                    }
-                    else if (isFunction(handler.onloadprogress)) {
+                        // wei : todo,将附件信息放到handler.attach
+                    } else if (isFunction(handler.onloadprogress)) {
                         if (rpe.loaded < rpe.total) {
                             ++rpe.loaded;
                         }
@@ -44933,7 +44950,7 @@ BI.shortcut("bi.checkbox", BI.Checkbox);/**
                     appendChild(form);
                     form.submit();
                 }
-                ;
+
                 return handler;
             };
         }
@@ -45009,9 +45026,9 @@ BI.shortcut("bi.checkbox", BI.Checkbox);/**
                 name: "",
                 url: "",
                 multiple: true,
-                accept: "", /**'*.jpg; *.zip'**/
-                maxSize: -1 //1024 * 1024
-            })
+                accept: "", /** '*.jpg; *.zip'**/
+                maxSize: -1 // 1024 * 1024
+            });
         },
 
         _init: function () {
@@ -45021,77 +45038,78 @@ BI.shortcut("bi.checkbox", BI.Checkbox);/**
                 this.element.attr("multiple", "multiple");
             }
             this.element.attr("name", o.name || this.getName());
+        },
 
-            BI.nextTick(function () {
-                // create the noswfupload.wrap Object
-                // wrap.maxSize 文件大小限制
-                // wrap.maxlength 文件个数限制
-                var _wrap = self.wrap = self._wrap(self.element[0], o.maxSize);
-                // fileType could contain whatever text but filter checks *.{extension}
-                // if present
+        mounted: function () {
+            var self = this, o = this.options;
+            // create the noswfupload.wrap Object
+            // wrap.maxSize 文件大小限制
+            // wrap.maxlength 文件个数限制
+            var _wrap = this.wrap = this._wrap(this.element[0], o.maxSize);
+            // fileType could contain whatever text but filter checks *.{extension}
+            // if present
 
-                // handlers
+            // handlers
 
-                _wrap.onloadstart = function (rpe, xhr) {
-                    //BI.Msg.toast("loadstart");
-                    self.fireEvent(BI.File.EVENT_UPLOADSTART);
-                };
+            _wrap.onloadstart = function (rpe, xhr) {
+                // BI.Msg.toast("loadstart");
+                self.fireEvent(BI.File.EVENT_UPLOADSTART, arguments);
+            };
 
-                _wrap.onprogress = function (rpe, xhr) {
-                    //BI.Msg.toast("onprogress");
-                    // percent for each bar
+            _wrap.onprogress = function (rpe, xhr) {
+                // BI.Msg.toast("onprogress");
+                // percent for each bar
 
-                    // fileSize is -1 only if browser does not support file info access
-                    // this if splits recent browsers from others
-                    if (this.file.fileSize !== -1) {
-                        // simulation property indicates when the progress event is fake
-                        if (rpe.simulation) {
+                // fileSize is -1 only if browser does not support file info access
+                // this if splits recent browsers from others
+                if (this.file.fileSize !== -1) {
+                    // simulation property indicates when the progress event is fake
+                    if (rpe.simulation) {
 
-                        } else {
-
-                        }
                     } else {
-                        // if fileSIze is -1 browser is using an iframe because it does
-                        // not support
-                        // files sent via Ajax (XMLHttpRequest)
-                        // We can still show some information
+
                     }
-                    self.fireEvent(BI.File.EVENT_PROGRESS, {
-                        file: this.file,
-                        total: rpe.total,
-                        loaded: rpe.loaded,
-                        simulation: rpe.simulation
-                    });
-                };
+                } else {
+                    // if fileSIze is -1 browser is using an iframe because it does
+                    // not support
+                    // files sent via Ajax (XMLHttpRequest)
+                    // We can still show some information
+                }
+                self.fireEvent(BI.File.EVENT_PROGRESS, {
+                    file: this.file,
+                    total: rpe.total,
+                    loaded: rpe.loaded,
+                    simulation: rpe.simulation
+                });
+            };
 
-                // generated if there is something wrong during upload
-                _wrap.onerror = function () {
-                    // just inform the user something was wrong
-                    self.fireEvent(BI.File.EVENT_ERROR);
-                };
+            // generated if there is something wrong during upload
+            _wrap.onerror = function () {
+                // just inform the user something was wrong
+                self.fireEvent(BI.File.EVENT_ERROR);
+            };
 
-                // generated when every file has been sent (one or more, it does not
-                // matter)
-                _wrap.onload = function (rpe, xhr) {
-                    var self_ = this;
-                    // just show everything is fine ...
-                    // ... and after a second reset the component
-                    setTimeout(function () {
-                        self_.clean(); // remove files from list
-                        self_.hide(); // hide progress bars and enable input file
+            // generated when every file has been sent (one or more, it does not
+            // matter)
+            _wrap.onload = function (rpe, xhr) {
+                var self_ = this;
+                // just show everything is fine ...
+                // ... and after a second reset the component
+                setTimeout(function () {
+                    self_.clean(); // remove files from list
+                    self_.hide(); // hide progress bars and enable input file
 
-                        //BI.Msg.toast("onload");
-                        self.fireEvent(BI.File.EVENT_UPLOADED);
-                        // enable again the submit button/element
-                    }, 1000);
-                };
-                _wrap.url = o.url ? o.url : BI.servletURL
-                    + '?op=fr_attach&cmd=ah_upload';
-                _wrap.fileType = o.accept;   //文件类型限制
-                _wrap.attach_array = [];
-                _wrap.attach_names = [];
-                _wrap.attachNum = 0;
-            });
+                    // BI.Msg.toast("onload");
+                    self.fireEvent(BI.File.EVENT_UPLOADED);
+                    // enable again the submit button/element
+                }, 1000);
+            };
+            _wrap.url = o.url ? o.url : BI.servletURL
+                + "?op=fr_attach&cmd=ah_upload";
+            _wrap.fileType = o.accept;   // 文件类型限制
+            _wrap.attach_array = [];
+            _wrap.attach_names = [];
+            _wrap.attachNum = 0;
         },
 
         _events: function (wrap) {
@@ -45105,14 +45123,14 @@ BI.shortcut("bi.checkbox", BI.Checkbox);/**
                         ext = -1 !== value.indexOf(".") ? value.split(".").pop().toLowerCase() : "unknown",
                         size = item.fileSize || item.size;
                     if (wrap.fileType && -1 === wrap.fileType.indexOf("*." + ext)) {
-                        //文件类型不支持
+                        // 文件类型不支持
                         BI.Msg.toast(BI.i18nText("BI-Upload_File_Type_Error"));
                         self.fireEvent(BI.File.EVENT_ERROR, {
                             errorType: 0,
                             file: item
                         });
                     } else if (wrap.maxSize !== -1 && size && wrap.maxSize < size) {
-                        //文件大小不支持
+                        // 文件大小不支持
                         BI.Msg.toast(BI.i18nText("BI-Upload_File_Size_Error"));
                         self.fireEvent(BI.File.EVENT_ERROR, {
                             errorType: 1,
@@ -45120,7 +45138,7 @@ BI.shortcut("bi.checkbox", BI.Checkbox);/**
                         });
                     } else {
                         wrap.files.unshift(item);
-                        //BI.Msg.toast(value);
+                        // BI.Msg.toast(value);
                         self.fireEvent(BI.File.EVENT_CHANGE, {
                             file: item
                         });
@@ -45152,7 +45170,7 @@ BI.shortcut("bi.checkbox", BI.Checkbox);/**
                     disabled: false      // internal use, checks input file state
                 },
                 name: input.name,        // name to send for each file ($_FILES[{name}] in the server)
-                                         // maxSize is the maximum amount of bytes for each file
+                // maxSize is the maximum amount of bytes for each file
                 maxSize: o.maxSize ? o.maxSize >> 0 : -1,
                 files: [],               // file list
 

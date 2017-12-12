@@ -27,7 +27,7 @@ Demo.CodeEditor = BI.inherit(BI.Widget, {
                     editor.setValue("测试数据");
                 }
             }]
-        })
+        });
     }
 });
 BI.shortcut("demo.code_editor", Demo.CodeEditor);

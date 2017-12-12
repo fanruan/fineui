@@ -8,7 +8,7 @@ Demo.Func = BI.inherit(BI.Widget, {
             type: "bi.button",
             height: 25,
             text: "点击"
-        }
+        };
     },
 
     oneCombo: function () {
@@ -71,7 +71,7 @@ Demo.Func = BI.inherit(BI.Widget, {
                     height: 1200
                 }
             }
-        })
+        });
     },
 
     fiveCombo: function () {
@@ -89,7 +89,7 @@ Demo.Func = BI.inherit(BI.Widget, {
                 },
                 maxHeight: 2000
             }
-        })
+        });
     },
 
     sixCombo: function () {
@@ -106,7 +106,7 @@ Demo.Func = BI.inherit(BI.Widget, {
                     height: 1200
                 }
             }
-        })
+        });
     },
 
     sevenCombo: function () {
@@ -116,7 +116,7 @@ Demo.Func = BI.inherit(BI.Widget, {
             adjustYOffset: 5,
             direction: "bottom",
             isNeedAdjustWidth: false,
-            //isNeedAdjustHeight: false,
+            // isNeedAdjustHeight: false,
             offsetStyle: "center",
             el: this._createEl(),
             popup: {
@@ -126,7 +126,7 @@ Demo.Func = BI.inherit(BI.Widget, {
                     height: 1200
                 }
             }
-        })
+        });
     },
 
     eightCombo: function () {
@@ -136,7 +136,7 @@ Demo.Func = BI.inherit(BI.Widget, {
             adjustYOffset: 5,
             direction: "right",
             isNeedAdjustWidth: false,
-            //isNeedAdjustHeight: false,
+            // isNeedAdjustHeight: false,
             offsetStyle: "middle",
             el: this._createEl(),
             popup: {
@@ -146,7 +146,7 @@ Demo.Func = BI.inherit(BI.Widget, {
                     height: 200
                 }
             }
-        })
+        });
     },
 
     render: function () {

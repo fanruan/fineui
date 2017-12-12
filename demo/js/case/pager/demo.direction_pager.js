@@ -12,7 +12,7 @@ Demo.Func = BI.inherit(BI.Widget, {
             items: [{
                 type: "bi.direction_pager"
             }]
-        })
+        });
     }
 });
 BI.shortcut("demo.direction_pager", Demo.Func);

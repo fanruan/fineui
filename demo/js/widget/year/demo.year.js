@@ -31,8 +31,8 @@ Demo.Year = BI.inherit(BI.Widget, {
                 width: 300
             }],
             vgap: 10
-        }
+        };
     }
-})
+});
 
 BI.shortcut("demo.year", Demo.Year);

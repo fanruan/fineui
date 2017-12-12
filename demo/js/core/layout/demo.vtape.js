@@ -8,31 +8,31 @@ Demo.VtapeLayout = BI.inherit(BI.Widget, {
     render: function () {
         return {
             type: "bi.vtape",
-            items : [
+            items: [
                 {
                     height: 100,
-                    el : {
-                        type : 'bi.label',
-                        text : '1',
+                    el: {
+                        type: "bi.label",
+                        text: "1",
                         cls: "layout-bg1"
                     }
                 }, {
                     height: 200,
-                    el : {
-                        type : 'bi.label',
-                        text : '2',
+                    el: {
+                        type: "bi.label",
+                        text: "2",
                         cls: "layout-bg2"
                     }
                 }, {
-                    height: 'fill',
-                    el : {
-                        type : 'bi.label',
-                        text : '3',
+                    height: "fill",
+                    el: {
+                        type: "bi.label",
+                        text: "3",
                         cls: "layout-bg3"
                     }
                 }
             ]
-        }
+        };
     }
 });
 BI.shortcut("demo.vtape", Demo.VtapeLayout);

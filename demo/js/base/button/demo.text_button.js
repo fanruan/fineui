@@ -6,8 +6,8 @@ Demo.Button = BI.inherit(BI.Widget, {
         var items = [
             {
                 el: {
-                    type: 'bi.text_button',
-                    text: '文字按钮',
+                    type: "bi.text_button",
+                    text: "文字按钮",
                     height: 30
                 }
             }
@@ -17,7 +17,7 @@ Demo.Button = BI.inherit(BI.Widget, {
             vgap: 200,
             hgap: 20,
             items: items
-        }
+        };
     }
 });
 BI.shortcut("demo.text_button", Demo.Button);

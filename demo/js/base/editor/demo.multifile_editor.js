@@ -20,7 +20,7 @@ Demo.CodeEditor = BI.inherit(BI.Widget, {
                 top: 50,
                 left: 50
             }]
-        }
+        };
     }
 });
 BI.shortcut("demo.multifile_editor", Demo.CodeEditor);

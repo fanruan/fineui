@@ -8,7 +8,7 @@ Demo.Expander = BI.inherit(BI.Widget, {
             },
             el: o.el,
             popup: o.popup
-        }
+        };
     },
 
     update: function (opt) {
@@ -16,7 +16,7 @@ Demo.Expander = BI.inherit(BI.Widget, {
         return true;
     }
 });
-BI.shortcut("demo.sort_tree_expander", Demo.Expander)
+BI.shortcut("demo.sort_tree_expander", Demo.Expander);
 
 /**
  * guy
@@ -62,7 +62,7 @@ Demo.SortTree = BI.inherit(BI.Widget, {
                         "margin-right": $currentItem.css("margin-right"),
                         "margin-top": $currentItem.css("margin-top"),
                         "margin-bottom": $currentItem.css("margin-bottom"),
-                        "margin": $currentItem.css("margin")
+                        margin: $currentItem.css("margin")
                     });
                     return holder.element;
                 },
@@ -73,12 +73,12 @@ Demo.SortTree = BI.inherit(BI.Widget, {
             update: function (event, ui) {
                 var node = ui.item.data("node");
                 var findTheNode = tree.search(node.id);
-                //这里简单处理下找到它的父节点
+                // 这里简单处理下找到它的父节点
                 var currentIndex = 0, parentNode;
                 if (ui.item.next().length > 0) {
                     var n = ui.item.next().data("node");
                     var nextId = n.id;
-                    var nextNode = tree.search(nextId)
+                    var nextNode = tree.search(nextId);
                     parentNode = nextNode.getParent();
                     var nextIndex = parentNode.getChildIndex(nextId);
                     currentIndex = nextIndex > 0 && (nextIndex - 1);
@@ -86,7 +86,7 @@ Demo.SortTree = BI.inherit(BI.Widget, {
                 } else if (ui.item.prev().length > 0) {
                     var n = ui.item.prev().data("node");
                     var prevId = n.id;
-                    var prevNode = tree.search(prevId)
+                    var prevNode = tree.search(prevId);
                     parentNode = prevNode.getParent();
                     var prevIndex = parentNode.getChildIndex(prevId);
                     currentIndex = prevIndex + 1;

@@ -134,7 +134,7 @@ Demo.Func = BI.inherit(BI.Widget, {
         var tree = this._createBranchTree();
         var mapTree = this._createBranchMapTree();
 
-        function getItems() {
+        function getItems () {
             return [{
                 text: "且",
                 value: "且",
@@ -159,7 +159,7 @@ Demo.Func = BI.inherit(BI.Widget, {
                         type: "bi.label",
                         height: 30,
                         textAlign: "left",
-                        text: "这里是一段文字" ,
+                        text: "这里是一段文字",
                         value: "这里是一段文字"
                     }, {
                         text: "且",
@@ -227,7 +227,7 @@ Demo.Func = BI.inherit(BI.Widget, {
                     }
                 }]
             }]
-        })
+        });
     }
 });
 BI.shortcut("demo.branch_tree", Demo.Func);

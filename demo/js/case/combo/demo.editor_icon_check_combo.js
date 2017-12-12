@@ -15,19 +15,19 @@ Demo.TextValueCombo = BI.inherit(BI.Widget, {
                 width: 200,
                 height: 30,
                 items: [{
-                    //text: "MVC-1",
+                    // text: "MVC-1",
                     value: "1"
                 }, {
-                    //text: "MVC-2",
+                    // text: "MVC-2",
                     value: "2"
                 }, {
-                    //text: "MVC-3",
+                    // text: "MVC-3",
                     value: "3"
                 }]
             }],
             vgap: 20
-        }
+        };
     }
-})
+});
 
 BI.shortcut("demo.editor_icon_check_combo", Demo.TextValueCombo);

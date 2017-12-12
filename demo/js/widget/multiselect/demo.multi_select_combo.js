@@ -9,7 +9,7 @@ Demo.MultiSelectCombo = BI.inherit(BI.Widget, {
     _createMultiSelectCombo: function () {
         var self = this;
         var widget = BI.createWidget({
-            type: 'bi.multi_select_combo',
+            type: "bi.multi_select_combo",
             itemsCreator: BI.bind(this._itemsCreator, this),
             width: 200
         });
@@ -44,7 +44,7 @@ Demo.MultiSelectCombo = BI.inherit(BI.Widget, {
             var search = BI.Func.getSearchResult(items, kw);
             items = search.matched.concat(search.finded);
         });
-        if (options.selectedValues) {//过滤
+        if (options.selectedValues) {// 过滤
             var filter = BI.makeObject(options.selectedValues, true);
             items = BI.filter(items, function (i, ob) {
                 return !filter[ob.value];
@@ -70,14 +70,14 @@ Demo.MultiSelectCombo = BI.inherit(BI.Widget, {
 
     render: function () {
         return {
-            type: 'bi.absolute',
+            type: "bi.absolute",
             scrolly: false,
             items: [{
                 el: this._createMultiSelectCombo(),
                 right: "50%",
                 top: 10
             }]
-        }
+        };
     }
 });
 BI.shortcut("demo.multi_select_combo", Demo.MultiSelectCombo);

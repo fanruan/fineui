@@ -153,7 +153,7 @@ Demo.Func = BI.inherit(BI.Widget, {
                 top: 10,
                 bottom: 50
             }]
-        })
+        });
     }
 });
 BI.shortcut("demo.sequence_table", Demo.Func);

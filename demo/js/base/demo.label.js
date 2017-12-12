@@ -132,7 +132,7 @@ Demo.Label = BI.inherit(BI.Widget, {
             }],
             hgap: 300,
             vgap: 20
-        }
+        };
     }
 });
 BI.shortcut("demo.label", Demo.Label);

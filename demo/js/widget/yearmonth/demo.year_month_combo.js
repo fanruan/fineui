@@ -20,7 +20,7 @@ Demo.YearMonthCombo = BI.inherit(BI.Widget, {
                 type: "bi.button",
                 text: "getValue",
                 handler: function () {
-                    BI.Msg.toast(JSON.stringify(self.widget.getValue()))
+                    BI.Msg.toast(JSON.stringify(self.widget.getValue()));
                 },
                 width: 300
             }, {
@@ -31,12 +31,12 @@ Demo.YearMonthCombo = BI.inherit(BI.Widget, {
                     self.widget.setValue({
                         year: 2017,
                         month: 11
-                    })
+                    });
                 }
             }],
             vgap: 20
-        }
+        };
     }
-})
+});
 
 BI.shortcut("demo.year_month_combo", Demo.YearMonthCombo);

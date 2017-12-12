@@ -21,7 +21,7 @@ Demo.YearQuarterCombo = BI.inherit(BI.Widget, {
                 type: "bi.button",
                 text: "getValue",
                 handler: function () {
-                    BI.Msg.toast(JSON.stringify(self.widget.getValue()))
+                    BI.Msg.toast(JSON.stringify(self.widget.getValue()));
                 },
                 width: 300
             }, {
@@ -32,12 +32,12 @@ Demo.YearQuarterCombo = BI.inherit(BI.Widget, {
                     self.widget.setValue({
                         year: 2017,
                         quarter: 3
-                    })
+                    });
                 }
             }],
             vgap: 20
-        }
+        };
     }
-})
+});
 
 BI.shortcut("demo.year_quarter_combo", Demo.YearQuarterCombo);

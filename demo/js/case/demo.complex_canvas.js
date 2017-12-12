@@ -29,7 +29,7 @@ Demo.Func = BI.inherit(BI.Widget, {
                 left: 100,
                 top: 50
             }]
-        })
+        });
     }
 });
 BI.shortcut("demo.complex_canvas", Demo.Func);

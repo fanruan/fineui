@@ -3,19 +3,19 @@ Demo.Func = BI.inherit(BI.Widget, {
         baseCls: "demo-func"
     },
 
-    _createDefaultTree: function(){
+    _createDefaultTree: function () {
         var tree = BI.createWidget({
             type: "bi.tree_view"
         });
         tree.initTree([
-            {"id":1, "pId":0, "text":"test1", open:true},
-            {"id":11, "pId":1, "text":"test11"},
-            {"id":12, "pId":1, "text":"test12"},
-            {"id":111, "pId":11, "text":"test111"},
-            {"id":2, "pId":0, "text":"test2", open:true},
-            {"id":21, "pId":2, "text":"test21"},
-            {"id":22, "pId":2, "text":"test22"}
-        ])
+            {id: 1, pId: 0, text: "test1", open: true},
+            {id: 11, pId: 1, text: "test11"},
+            {id: 12, pId: 1, text: "test12"},
+            {id: 111, pId: 11, text: "test111"},
+            {id: 2, pId: 0, text: "test2", open: true},
+            {id: 21, pId: 2, text: "test21"},
+            {id: 22, pId: 2, text: "test22"}
+        ]);
         return tree;
     },
 
@@ -38,7 +38,7 @@ Demo.Func = BI.inherit(BI.Widget, {
                         {
                             el: {
                                 type: "bi.label",
-                                text: 'tree.initTree([{"id":1, "pId":0, "text":"test1", open:true},{"id":11, "pId":1, "text":"test11"},{"id":12, "pId":1, "text":"test12"},{"id":111, "pId":11, "text":"test111"}])',
+                                text: "tree.initTree([{\"id\":1, \"pId\":0, \"text\":\"test1\", open:true},{\"id\":11, \"pId\":1, \"text\":\"test11\"},{\"id\":12, \"pId\":1, \"text\":\"test12\"},{\"id\":111, \"pId\":11, \"text\":\"test111\"}])",
                                 whiteSpace: "normal"
                             },
                             height: 50
@@ -46,7 +46,7 @@ Demo.Func = BI.inherit(BI.Widget, {
                     ]
                 }
             }]
-        })
+        });
     }
 });
 BI.shortcut("demo.tree_view", Demo.Func);

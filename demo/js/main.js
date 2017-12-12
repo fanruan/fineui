@@ -40,7 +40,7 @@ Demo.Main = BI.inherit(BI.Widget, {
                     }
                 }
             }
-        }
+        };
     }
 });
 BI.shortcut("demo.main", Demo.Main);

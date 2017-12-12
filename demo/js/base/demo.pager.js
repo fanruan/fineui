@@ -114,7 +114,7 @@ Demo.Func = BI.inherit(BI.Widget, {
                     return v < 3;
                 }
             }]
-        }
+        };
     }
 });
 BI.shortcut("demo.pager", Demo.Func);

@@ -143,7 +143,7 @@ Demo.Func = BI.inherit(BI.Widget, {
                 top: 10,
                 bottom: 10
             }]
-        })
+        });
     }
 });
 BI.shortcut("demo.tree_table", Demo.Func);

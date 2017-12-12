@@ -1,4 +1,4 @@
-//定义Model路由
+// 定义Model路由
 var modelRouter = new (BI.inherit(BI.WRouter, {
     routes: {
         "": "index"
@@ -8,7 +8,7 @@ var modelRouter = new (BI.inherit(BI.WRouter, {
         return {};
     }
 }));
-//定义View路由
+// 定义View路由
 var viewRouter = new (BI.inherit(BI.WRouter, {
     routes: {
         "": "TestView",
@@ -49,7 +49,7 @@ var viewRouter = new (BI.inherit(BI.WRouter, {
     }
 }));
 
-//注册路由
+// 注册路由
 BI.View.registerVMRouter(viewRouter, modelRouter);
 
 

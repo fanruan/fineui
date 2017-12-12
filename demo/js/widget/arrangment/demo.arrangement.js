@@ -47,7 +47,7 @@ Demo.Arrangement = BI.inherit(BI.Widget, {
                 }, {
                     width: 300,
                     height: 200
-                })
+                });
             },
             stop: function (e, ui) {
                 self.arrangement.addRegion({

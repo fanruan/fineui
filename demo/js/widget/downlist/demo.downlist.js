@@ -73,12 +73,12 @@ Demo.Downlist = BI.inherit(BI.Widget, {
                         cls: "dot-e-font",
                         selected: true
                     },
-                        {
+                    {
 
-                            text: "column 9",
-                            cls: "dot-e-font",
-                            value: 19
-                        }
+                        text: "column 9",
+                        cls: "dot-e-font",
+                        value: 19
+                    }
                     ],
                     [{
                         text: "column 10",
@@ -86,36 +86,36 @@ Demo.Downlist = BI.inherit(BI.Widget, {
                         cls: "dot-e-font",
                         selected: true
                     },
-                        {
+                    {
 
-                            text: "column 11",
-                            cls: "dot-e-font",
-                            value: 21
-                        },
-                        {
+                        text: "column 11",
+                        cls: "dot-e-font",
+                        value: 21
+                    },
+                    {
 
-                            text: "column 12",
-                            cls: "dot-e-font",
-                            value: 22
-                        },
-                        {
+                        text: "column 12",
+                        cls: "dot-e-font",
+                        value: 22
+                    },
+                    {
 
-                            text: "column 13",
-                            cls: "dot-e-font",
-                            value: 23
-                        },
-                        {
+                        text: "column 13",
+                        cls: "dot-e-font",
+                        value: 23
+                    },
+                    {
 
-                            text: "column 14",
-                            cls: "dot-e-font",
-                            value: 24
-                        },
-                        {
+                        text: "column 14",
+                        cls: "dot-e-font",
+                        value: 24
+                    },
+                    {
 
-                            text: "column 15",
-                            cls: "dot-e-font",
-                            value: 23
-                        }
+                        text: "column 15",
+                        cls: "dot-e-font",
+                        value: 23
+                    }
                     ]
 
                 ]
@@ -129,8 +129,8 @@ Demo.Downlist = BI.inherit(BI.Widget, {
                 }
             }],
             vgap: 20
-        }
+        };
     }
-})
+});
 
 BI.shortcut("demo.down_list", Demo.Downlist);

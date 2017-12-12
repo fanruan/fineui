@@ -19,7 +19,7 @@ Demo.VerticalLayout = BI.inherit(BI.Widget, {
                 text: "垂直布局",
                 height: 30
             }]
-        }
+        };
     }
 });
 BI.shortcut("demo.vertical", Demo.VerticalLayout);

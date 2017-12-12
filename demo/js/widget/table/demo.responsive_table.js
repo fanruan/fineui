@@ -152,7 +152,7 @@ Demo.Func = BI.inherit(BI.Widget, {
                 top: 10,
                 bottom: 10
             }]
-        })
+        });
     }
 });
 BI.shortcut("demo.responsive_table", Demo.Func);

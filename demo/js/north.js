@@ -13,7 +13,7 @@ Demo.North = BI.inherit(BI.Widget, {
                     listeners: [{
                         eventName: BI.Button.EVENT_CHANGE,
                         action: function () {
-                            self.fireEvent(Demo.North.EVENT_VALUE_CHANGE, "demo.face")
+                            self.fireEvent(Demo.North.EVENT_VALUE_CHANGE, "demo.face");
                         }
                     }],
                     cls: "logo",
@@ -39,7 +39,7 @@ Demo.North = BI.inherit(BI.Widget, {
                     }]
                 }
             }]
-        }
+        };
     }
 });
 Demo.North.EVENT_VALUE_CHANGE = "EVENT_VALUE_CHANGE";

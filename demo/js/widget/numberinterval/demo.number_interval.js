@@ -13,7 +13,7 @@ Demo.NumericalInterval = BI.inherit(BI.Widget, {
             var temp = numerical.getValue();
             var res = "大于" + (temp.closemin ? "等于 " : " ") + temp.min + " 小于" + (temp.closemax ? "等于 " : " ") + temp.max;
             label.setValue(res);
-        })
+        });
     },
 
 
@@ -35,8 +35,8 @@ Demo.NumericalInterval = BI.inherit(BI.Widget, {
                 text: "显示结果"
             }],
             vgap: 20
-        }
+        };
     }
-})
+});
 
 BI.shortcut("demo.number_interval", Demo.NumericalInterval);

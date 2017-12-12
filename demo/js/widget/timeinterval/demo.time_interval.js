@@ -26,7 +26,7 @@ Demo.TimeInterval = BI.inherit(BI.Widget, {
                 width: 300
             }],
             vgap: 20
-        }
+        };
     }
 });
 

@@ -1,8 +1,8 @@
-;(function () {
+(function () {
     var model = Fix.define({
         name: "原始属性",
         arr: [{
-            n: 'a'
+            n: "a"
         }, {
             n: 0
         }]
@@ -14,7 +14,7 @@
         },
         watch: {
             "name||arr.1.n": function () {
-                this.button.setText(this.model.name + "-" + this.model.arr[1].n)
+                this.button.setText(this.model.name + "-" + this.model.arr[1].n);
             }
         },
         render: function () {
@@ -39,7 +39,7 @@
                         text: this.model.name + "-" + this.model.arr[1].n
                     }
                 }]
-            }
+            };
         },
         mounted: function () {
 

@@ -1,18 +1,18 @@
-;(function () {
+(function () {
     var ParentStore = BI.inherit(Fix.Model, {
         state: function () {
             return {
                 context: "默认context"
-            }
+            };
         },
         childContext: ["context"]
-    })
+    });
 
     var ChildStore = BI.inherit(Fix.Model, {
         context: ["context"],
         computed: {
             currContext: function () {
-                return this.model.context
+                return this.model.context;
             }
         },
         actions: {
@@ -20,7 +20,7 @@
                 this.model.context = "改变后的context";
             }
         }
-    })
+    });
 
     var Child = BI.inherit(BI.Widget, {
         _store: function () {
@@ -42,14 +42,14 @@
                 handler: function () {
                     self.store.changeContext();
                 }
-            }
+            };
         },
         mounted: function () {
 
         }
-    })
+    });
 
-    BI.shortcut("demo.fix_context_child", Child)
+    BI.shortcut("demo.fix_context_child", Child);
 
     var Parent = BI.inherit(BI.Widget, {
         _store: function () {
@@ -61,10 +61,10 @@
                 type: "bi.absolute",
                 items: [{
                     el: {
-                        type: "demo.fix_context_child",
+                        type: "demo.fix_context_child"
                     }
                 }]
-            }
+            };
         },
         mounted: function () {
 

@@ -29,7 +29,7 @@ Demo.Nodes = BI.inherit(BI.Widget, {
                 type: "bi.arrow_group_node",
                 text: "箭头节点"
             }]
-        }
+        };
     }
 });
 

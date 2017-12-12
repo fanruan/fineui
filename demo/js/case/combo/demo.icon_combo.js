@@ -17,10 +17,10 @@ Demo.IconCombo = BI.inherit(BI.Widget, {
                 type: "bi.icon_combo",
                 trigger: "click-hover",
                 container: "body",
-                ref:function(_ref){
-                    self.refs=_ref;
+                ref: function (_ref) {
+                    self.refs = _ref;
                 },
-               iconClass: "search-font",
+                iconClass: "search-font",
                 items: [{
                     value: "第一项",
                     iconClass: "close-font"
@@ -33,8 +33,8 @@ Demo.IconCombo = BI.inherit(BI.Widget, {
                 }]
             }],
             vgap: 20
-        }
+        };
     }
-})
+});
 
 BI.shortcut("demo.icon_combo", Demo.IconCombo);

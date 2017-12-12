@@ -6,174 +6,174 @@ Demo.Button = BI.inherit(BI.Widget, {
         var items = [
             {
                 el: {
-                    type: 'bi.button',
-                    text: '一般按钮',
-                    level: 'common',
+                    type: "bi.button",
+                    text: "一般按钮",
+                    level: "common",
                     height: 30
                 }
             }, {
                 el: {
-                    type: 'bi.button',
-                    text: '表示成功状态按钮',
-                    level: 'success',
+                    type: "bi.button",
+                    text: "表示成功状态按钮",
+                    level: "success",
                     height: 30
                 }
             },
             {
                 el: {
-                    type: 'bi.button',
-                    text: '表示警告状态的按钮',
-                    level: 'warning',
+                    type: "bi.button",
+                    text: "表示警告状态的按钮",
+                    level: "warning",
                     height: 30
                 }
             }, {
                 el: {
-                    type: 'bi.button',
-                    text: '表示忽略状态的按钮',
-                    level: 'ignore',
+                    type: "bi.button",
+                    text: "表示忽略状态的按钮",
+                    level: "ignore",
                     height: 30
                 }
             }, {
                 el: {
-                    type: 'bi.button',
-                    text: '普通灰化按钮',
+                    type: "bi.button",
+                    text: "普通灰化按钮",
                     disabled: true,
-                    level: 'success',
+                    level: "success",
                     height: 30
                 }
             }, {
                 el: {
-                    type: 'bi.button',
-                    text: '忽略状态灰化按钮',
+                    type: "bi.button",
+                    text: "忽略状态灰化按钮",
                     disabled: true,
-                    level: 'ignore',
+                    level: "ignore",
                     height: 30
                 }
             }, {
                 el: {
-                    type: 'bi.button',
-                    text: '带图标的按钮',
-                    //level: 'ignore',
+                    type: "bi.button",
+                    text: "带图标的按钮",
+                    // level: 'ignore',
                     iconClass: "close-font",
                     height: 30
                 }
             }, {
                 el: {
-                    type: 'bi.button',
-                    text: '一般按钮',
+                    type: "bi.button",
+                    text: "一般按钮",
                     block: true,
-                    level: 'common',
+                    level: "common",
                     height: 30
                 }
             }, {
                 el: {
-                    type: 'bi.button',
-                    text: '表示成功状态按钮',
+                    type: "bi.button",
+                    text: "表示成功状态按钮",
                     block: true,
-                    level: 'success',
+                    level: "success",
                     height: 30
                 }
             },
             {
                 el: {
-                    type: 'bi.button',
-                    text: '表示警告状态的按钮',
+                    type: "bi.button",
+                    text: "表示警告状态的按钮",
                     block: true,
-                    level: 'warning',
+                    level: "warning",
                     height: 30
                 }
             }, {
                 el: {
-                    type: 'bi.button',
-                    text: '表示忽略状态的按钮',
+                    type: "bi.button",
+                    text: "表示忽略状态的按钮",
                     block: true,
-                    level: 'ignore',
+                    level: "ignore",
                     height: 30
                 }
             }, {
                 el: {
-                    type: 'bi.button',
-                    text: '普通灰化按钮',
+                    type: "bi.button",
+                    text: "普通灰化按钮",
                     block: true,
                     disabled: true,
-                    level: 'success',
+                    level: "success",
                     height: 30
                 }
             }, {
                 el: {
-                    type: 'bi.button',
-                    text: '忽略状态灰化按钮',
+                    type: "bi.button",
+                    text: "忽略状态灰化按钮",
                     block: true,
                     disabled: true,
-                    level: 'ignore',
+                    level: "ignore",
                     height: 30
                 }
             }, {
                 el: {
-                    type: 'bi.button',
-                    text: '带图标的按钮',
+                    type: "bi.button",
+                    text: "带图标的按钮",
                     block: true,
-                    //level: 'ignore',
+                    // level: 'ignore',
                     iconClass: "close-font",
                     height: 30
                 }
             }, {
                 el: {
-                    type: 'bi.button',
-                    text: '一般按钮',
+                    type: "bi.button",
+                    text: "一般按钮",
                     clear: true,
-                    level: 'common',
+                    level: "common",
                     height: 30
                 }
             }, {
                 el: {
-                    type: 'bi.button',
-                    text: '表示成功状态按钮',
+                    type: "bi.button",
+                    text: "表示成功状态按钮",
                     clear: true,
-                    level: 'success',
+                    level: "success",
                     height: 30
                 }
             },
             {
                 el: {
-                    type: 'bi.button',
-                    text: '表示警告状态的按钮',
+                    type: "bi.button",
+                    text: "表示警告状态的按钮",
                     clear: true,
-                    level: 'warning',
+                    level: "warning",
                     height: 30
                 }
             }, {
                 el: {
-                    type: 'bi.button',
-                    text: '表示忽略状态的按钮',
+                    type: "bi.button",
+                    text: "表示忽略状态的按钮",
                     clear: true,
-                    level: 'ignore',
+                    level: "ignore",
                     height: 30
                 }
             }, {
                 el: {
-                    type: 'bi.button',
-                    text: '普通灰化按钮',
+                    type: "bi.button",
+                    text: "普通灰化按钮",
                     clear: true,
                     disabled: true,
-                    level: 'success',
+                    level: "success",
                     height: 30
                 }
             }, {
                 el: {
-                    type: 'bi.button',
-                    text: '忽略状态灰化按钮',
+                    type: "bi.button",
+                    text: "忽略状态灰化按钮",
                     clear: true,
                     disabled: true,
-                    level: 'ignore',
+                    level: "ignore",
                     height: 30
                 }
             }, {
                 el: {
-                    type: 'bi.button',
-                    text: '带图标的按钮',
+                    type: "bi.button",
+                    text: "带图标的按钮",
                     clear: true,
-                    //level: 'ignore',
+                    // level: 'ignore',
                     iconClass: "close-font",
                     height: 30
                 }
@@ -181,15 +181,15 @@ Demo.Button = BI.inherit(BI.Widget, {
         ];
         BI.each(items, function (i, item) {
             item.el.handler = function () {
-                BI.Msg.alert('按钮', this.options.text);
-            }
+                BI.Msg.alert("按钮", this.options.text);
+            };
         });
         return {
             type: "bi.left",
             vgap: 100,
             hgap: 20,
             items: items
-        }
+        };
     }
 });
 BI.shortcut("demo.button", Demo.Button);

@@ -97,8 +97,9 @@
         var old = BI.Widget.prototype[name];
         old && (BI.Widget.prototype[name] = function () {
             this.store && pushTarget(this.store);
-            return old.apply(this, arguments);
+            var res = old.apply(this, arguments);
             this.store && popTarget();
+            return res;
         });
     })
 

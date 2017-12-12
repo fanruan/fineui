@@ -37,105 +37,105 @@ Demo.Func = BI.inherit(BI.Widget, {
         this.asyncTree = BI.createWidget({
             type: "bi.custom_tree",
             itemsCreator: function (op, callback) {
-                if (!op.node) {//根节点
+                if (!op.node) {// 根节点
                     callback([{
-                        "id": 1,
-                        "pId": 0,
+                        id: 1,
+                        pId: 0,
                         type: "bi.plus_group_node",
                         text: "test1",
                         value: 1,
                         height: 25,
                         isParent: true
                     }, {
-                        "id": 2,
-                        "pId": 0,
+                        id: 2,
+                        pId: 0,
                         type: "bi.plus_group_node",
-                        "text": "test2",
+                        text: "test2",
                         value: 1,
                         isParent: true,
                         open: true,
                         height: 25
-                    }])
+                    }]);
                 } else {
                     if (op.node.id == 1) {
                         callback([
                             {
-                                "id": 11,
-                                "pId": 1,
+                                id: 11,
+                                pId: 1,
                                 type: "bi.plus_group_node",
-                                "text": "test11",
+                                text: "test11",
                                 value: 11,
                                 height: 25,
                                 isParent: true
                             },
                             {
-                                "id": 12,
-                                "pId": 1,
+                                id: 12,
+                                pId: 1,
                                 type: "bi.single_select_item",
-                                "text": "test12",
+                                text: "test12",
                                 value: 12,
                                 height: 35
                             },
                             {
-                                "id": 13,
-                                "pId": 1,
+                                id: 13,
+                                pId: 1,
                                 type: "bi.single_select_item",
-                                "text": "test13",
+                                text: "test13",
                                 value: 13,
                                 height: 35
                             },
                             {
-                                "id": 14,
-                                "pId": 1,
+                                id: 14,
+                                pId: 1,
                                 type: "bi.single_select_item",
-                                "text": "test14",
+                                text: "test14",
                                 value: 14,
                                 height: 35
                             },
                             {
-                                "id": 15,
-                                "pId": 1,
+                                id: 15,
+                                pId: 1,
                                 type: "bi.single_select_item",
-                                "text": "test15",
+                                text: "test15",
                                 value: 15,
                                 height: 35
                             },
                             {
-                                "id": 16,
-                                "pId": 1,
+                                id: 16,
+                                pId: 1,
                                 type: "bi.single_select_item",
-                                "text": "test16",
+                                text: "test16",
                                 value: 16,
                                 height: 35
                             },
-                            {"id": 17, "pId": 1, type: "bi.single_select_item", "text": "test17", value: 17, height: 35}
-                        ])
+                            {id: 17, pId: 1, type: "bi.single_select_item", text: "test17", value: 17, height: 35}
+                        ]);
                     } else if (op.node.id == 2) {
                         callback([{
-                            "id": 21,
-                            "pId": 2,
+                            id: 21,
+                            pId: 2,
                             type: "bi.single_select_item",
-                            "text": "test21",
+                            text: "test21",
                             value: 21,
                             height: 35
                         },
-                            {
-                                "id": 22,
-                                "pId": 2,
-                                type: "bi.single_select_item",
-                                "text": "test22",
-                                value: 22,
-                                height: 35
-                            }])
+                        {
+                            id: 22,
+                            pId: 2,
+                            type: "bi.single_select_item",
+                            text: "test22",
+                            value: 22,
+                            height: 35
+                        }]);
                     } else if (op.node.id == 11) {
                         callback([{
-                            "id": 111,
-                            "pId": 11,
+                            id: 111,
+                            pId: 11,
                             type: "bi.single_select_item",
-                            "text": "test111",
+                            text: "test111",
                             value: 111,
                             height: 35
-                        }])
+                        }]);
                     }
                 }
             },
@@ -239,7 +239,7 @@ Demo.Func = BI.inherit(BI.Widget, {
                     ]
                 }
             }]
-        })
+        });
     }
 });
 BI.shortcut("demo.custom_tree", Demo.Func);

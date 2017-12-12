@@ -33,7 +33,7 @@ Demo.CodeEditor = BI.inherit(BI.Widget, {
                     editor.setValue("测试数据");
                 }
             }]
-        })
+        });
     }
 });
 BI.shortcut("demo.textarea_editor", Demo.CodeEditor);

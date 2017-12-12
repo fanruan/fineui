@@ -21,7 +21,7 @@ Demo.FloatCenterLayout = BI.inherit(BI.Widget, {
             }],
             hgap: 20,
             vgap: 20
-        }
+        };
     }
 });
 BI.shortcut("demo.float_center", Demo.FloatCenterLayout);

@@ -12,7 +12,7 @@ Demo.CenterAdapt = BI.inherit(BI.Widget, {
                 height: 200,
                 cls: "layout-bg1"
             }]
-        }
+        };
     }
 });
 BI.shortcut("demo.center_adapt", Demo.CenterAdapt);
