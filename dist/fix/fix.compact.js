@@ -60,14 +60,20 @@
             widget.__cacheStore = p.store;
             return p.__cacheStore || p.store;
         }
-        throw new Error("找不到store");
     }
 
     var _init = BI.Widget.prototype._init;
     BI.Widget.prototype._init = function () {
         var needPop = false;
         if (window.Fix && this._store) {
+            var store = findStore(this.options.element);
+            if (store) {
+                pushTarget(store);
+                needPop = true;
+            }
             this.store = this._store();
+            needPop && popTarget();
+            needPop = false;
             pushTarget(this.store);
             if (this.store instanceof Fix.Model) {
                 this.model = this.store.model;
@@ -98,10 +104,9 @@
     _.each(["_mount", "populate"], function (name) {
         var old = BI.Widget.prototype[name];
         old && (BI.Widget.prototype[name] = function () {
-            var store = findStore(this);
-            store && pushTarget(store);
+            this.store && pushTarget(this.store);
             var res = old.apply(this, arguments);
-            store && popTarget();
+            this.store && popTarget();
             return res;
         });
     });
