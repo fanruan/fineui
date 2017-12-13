@@ -101,7 +101,7 @@
         this.store && (this.store._parent = null, this.store = null);
     };
 
-    _.each(["_mount", "populate"], function (name) {
+    _.each(["_mount"], function (name) {
         var old = BI.Widget.prototype[name];
         old && (BI.Widget.prototype[name] = function () {
             this.store && pushTarget(this.store);
