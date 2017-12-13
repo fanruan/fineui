@@ -21,7 +21,9 @@ BI.FormulaEditor = BI.inherit(BI.Single, {
             textWrapping: true,
             lineWrapping: true,
             lineNumbers: false,
-            mode: 'formula'
+            mode: 'formula',
+            //解决插入字段由括号或其他特殊字符包围时分裂的bug
+            specialChars: /[\u0000-\u001f\u007f\u00ad\u200c-\u200f\u2028\u2029\ufeff]/
         });
         o.lineHeight === 1 ? this.element.addClass("codemirror-low-line-height") : this.element.addClass("codemirror-high-line-height");
         this.editor.on("change", function (cm, change) {
@@ -112,7 +114,8 @@ BI.FormulaEditor = BI.inherit(BI.Single, {
      */
     insertField: function (field) {
         var from = this.editor.getCursor();
-        this.editor.replaceSelection(field);
+        //解决插入字段由括号或其他特殊字符包围时分裂的bug,在两端以不可见字符包裹一下
+        this.editor.replaceSelection('\u200b' + field + '\u200b');
         var to = this.editor.getCursor();
         this.editor.markText(from, to, {className: 'fieldName', atomic: true, startStyle: "start", endStyle: "end"});
         this.editor.replaceSelection(" ");
@@ -163,7 +166,8 @@ BI.FormulaEditor = BI.inherit(BI.Single, {
             _.forEach(line.markedSpans, function (i, ms) {
                 switch (i.marker.className) {
                     case "fieldName":
-                        var dId = fieldMap[value.substr(i.from, i.to - i.from)];
+                        //因为插入字段的时候首尾加了不可见字符，所以首尾缩进一个字符
+                        var dId = fieldMap[value.substr(i.from + 1, i.to - i.from - 2)];
                         if (!fields.contains(dId)) {
                             fields.push(dId);
                         }
@@ -202,8 +206,10 @@ BI.FormulaEditor = BI.inherit(BI.Single, {
                 switch (i.marker.className) {
                     case "fieldName":
                         var fieldNameLength = i.to - i.from;
-                        var fieldId = fieldMap[value.substr(i.from + num, fieldNameLength)];
-                        value = value.substr(0, i.from + num) + "$\{" + fieldMap[value.substr(i.from + num, fieldNameLength)] + "\}" + value.substr(i.to + num, value.length);
+                        var start = i.from + num + 1;
+                        var end = fieldNameLength - 2;
+                        var fieldId = fieldMap[value.substr(start, end)];
+                        value = value.substr(0, i.from + num) + "$\{" + fieldId + "\}" + value.substr(i.to + num, value.length);
                         num += fieldId.length - fieldNameLength + 3;
                         break;
                 }
