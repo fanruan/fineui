@@ -559,12 +559,12 @@ Date.parseDateTime = function (str, fmt) {
 
 Date.getDate = function () {
     var dt = new (Function.prototype.bind.apply(Date, BI.concat([null], [].slice.apply(arguments))))();
-    if (arguments.length > 0 || BI.isNull(Date.timeZone)) {
-        return dt;
-    } else {
+    if(BI.isNotNull(Date.timeZone) && (arguments.length === 0 || (arguments.length === 1 && BI.isNumber(arguments[0])))){
         var localTime = dt.getTime();
         var localOffset = dt.getTimezoneOffset() * 60000; //获得当地时间偏移的毫秒数
         var utc = localTime + localOffset; //utc即GMT时间标准时区
         return new Date(utc + Date.timeZone);//+ Pool.timeZone.offset);
+    }else{
+        return dt;
     }
 };
