@@ -51,14 +51,16 @@
     function findStore (widget) {
         var p = widget;
         while (p) {
-            if (p.store) {
+            if (p.store || p.__cacheStore) {
                 break;
             }
             p = p._parent || (p.options && p.options.element);
         }
         if (p) {
-            return p.store;
+            widget.__cacheStore = p.store;
+            return p.__cacheStore || p.store;
         }
+        throw new Error("找不到store");
     }
 
     var _init = BI.Widget.prototype._init;
