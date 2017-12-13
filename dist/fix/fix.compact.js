@@ -65,14 +65,7 @@
     BI.Widget.prototype._init = function () {
         var needPop = false;
         if (window.Fix && this._store) {
-            var store = findStore(this.options.element);
-            if (store) {
-                pushTarget(store);
-                needPop = true;
-            }
             this.store = this._store();
-            needPop && popTarget();
-            needPop = false;
             pushTarget(this.store);
             if (this.store instanceof Fix.Model) {
                 this.model = this.store.model;
