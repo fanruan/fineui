@@ -17,7 +17,7 @@ Demo.Func = BI.inherit(BI.Widget, {
             items: BI.createItems(BI.deepClone(Demo.CONSTANTS.ITEMS), {
                 type: "bi.button"
             })
-        })
+        });
     }
 });
 BI.shortcut("demo.lazy_loader", Demo.Func);

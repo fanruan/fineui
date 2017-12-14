@@ -20,7 +20,7 @@ BI.Calendar = BI.inherit(BI.Widget, {
     },
 
     _dateCreator: function (Y, M, D) {
-        var self = this, o = this.options, log = {}, De = new Date();
+        var self = this, o = this.options, log = {}, De = Date.getDate();
         var mins = o.min.match(/\d+/g);
         var maxs = o.max.match(/\d+/g);
         Y < (mins[0] | 0) && (Y = (mins[0] | 0));
@@ -130,7 +130,7 @@ BI.Calendar = BI.inherit(BI.Widget, {
 
     isFrontDate: function () {
         var o = this.options, c = this._const;
-        var Y = o.year, M = o.month, De = new Date(), day = De.getDay();
+        var Y = o.year, M = o.month, De = Date.getDate(), day = De.getDay();
         Y = Y | 0;
         De.setFullYear(Y, M, 1);
         var newDate = De.getOffsetDate(-1 * (day + 1));
@@ -139,7 +139,7 @@ BI.Calendar = BI.inherit(BI.Widget, {
 
     isFinalDate: function () {
         var o = this.options, c = this._const;
-        var Y = o.year, M = o.month, De = new Date(), day = De.getDay();
+        var Y = o.year, M = o.month, De = Date.getDate(), day = De.getDay();
         Y = Y | 0;
         De.setFullYear(Y, M, 1);
         var newDate = De.getOffsetDate(42 - day);
@@ -162,14 +162,14 @@ BI.Calendar = BI.inherit(BI.Widget, {
 
 BI.extend(BI.Calendar, {
     getPageByDateJSON: function (json) {
-        var year = new Date().getFullYear();
-        var month = new Date().getMonth();
+        var year = Date.getDate().getFullYear();
+        var month = Date.getDate().getMonth();
         var page = (json.year - year) * 12;
         page += json.month - month;
         return page;
     },
     getDateJSONByPage: function(v){
-        var months = new Date().getMonth();
+        var months = Date.getDate().getMonth();
         var page = v;
 
         //对当前page做偏移,使到当前年初
@@ -181,7 +181,7 @@ BI.extend(BI.Calendar, {
         }
         var month = page >= 0 ? (page % 12) : ((12 + page % 12) % 12);
         return {
-            year: new Date().getFullYear() + year,
+            year: Date.getDate().getFullYear() + year,
             month: month
         }
     }

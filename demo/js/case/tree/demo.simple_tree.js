@@ -4,7 +4,7 @@ Demo.Func = BI.inherit(BI.Widget, {
     },
 
     render: function () {
-        //value值一定要是字符串
+        // value值一定要是字符串
         var tree = BI.createWidget({
             type: "bi.simple_tree",
             items: []
@@ -66,7 +66,7 @@ Demo.Func = BI.inherit(BI.Widget, {
                     height: 30,
                     text: "setValue(['31', '32', '33'])",
                     handler: function () {
-                        tree.setValue(['31', '32', '33']);
+                        tree.setValue(["31", "32", "33"]);
                     }
                 }
             }, {
@@ -80,7 +80,7 @@ Demo.Func = BI.inherit(BI.Widget, {
                     }
                 }
             }]
-        })
+        });
     }
 });
 BI.shortcut("demo.simple_tree", Demo.Func);

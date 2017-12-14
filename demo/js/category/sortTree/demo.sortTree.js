@@ -8,7 +8,7 @@ Demo.Expander = BI.inherit(BI.Widget, {
             },
             el: o.el,
             popup: o.popup
-        }
+        };
     },
 
     update: function (opt) {
@@ -16,7 +16,7 @@ Demo.Expander = BI.inherit(BI.Widget, {
         return true;
     }
 });
-BI.shortcut("demo.sort_tree_expander", Demo.Expander)
+BI.shortcut("demo.sort_tree_expander", Demo.Expander);
 
 /**
  * guy
@@ -27,6 +27,7 @@ BI.shortcut("demo.sort_tree_expander", Demo.Expander)
 Demo.SortTree = BI.inherit(BI.Widget, {
 
     render: function () {
+        BI.$import("https://coding.net/u/fanruan/p/bi-components/git/raw/master/dist/jqueryui.js");
         var self = this, o = this.options;
         var tree = new BI.Tree();
         tree.initTree(BI.Tree.transformToTreeFormat(Demo.CONSTANTS.TREEITEMS));
@@ -47,64 +48,65 @@ Demo.SortTree = BI.inherit(BI.Widget, {
                 }]
             }
         });
+        BI.delay(function () {
+            self.tree.element.sortable({
+                items: ".sort-item",
+                placeholder: {
+                    element: function ($currentItem) {
+                        var holder = BI.createWidget({
+                            type: "bi.layout",
+                            cls: "bi-sortable-holder",
+                            height: $currentItem.outerHeight()
+                        });
+                        holder.element.css({
+                            "margin-left": $currentItem.css("margin-left"),
+                            "margin-right": $currentItem.css("margin-right"),
+                            "margin-top": $currentItem.css("margin-top"),
+                            "margin-bottom": $currentItem.css("margin-bottom"),
+                            margin: $currentItem.css("margin")
+                        });
+                        return holder.element;
+                    },
+                    update: function () {
 
-        this.tree.element.sortable({
-            items: ".sort-item",
-            placeholder: {
-                element: function ($currentItem) {
-                    var holder = BI.createWidget({
-                        type: "bi.layout",
-                        cls: "bi-sortable-holder",
-                        height: $currentItem.outerHeight()
-                    });
-                    holder.element.css({
-                        "margin-left": $currentItem.css("margin-left"),
-                        "margin-right": $currentItem.css("margin-right"),
-                        "margin-top": $currentItem.css("margin-top"),
-                        "margin-bottom": $currentItem.css("margin-bottom"),
-                        "margin": $currentItem.css("margin")
-                    });
-                    return holder.element;
+                    }
                 },
-                update: function () {
+                update: function (event, ui) {
+                    var node = ui.item.data("node");
+                    var findTheNode = tree.search(node.id);
+                    // 这里简单处理下找到它的父节点
+                    var currentIndex = 0, parentNode;
+                    if (ui.item.next().length > 0) {
+                        var n = ui.item.next().data("node");
+                        var nextId = n.id;
+                        var nextNode = tree.search(nextId);
+                        parentNode = nextNode.getParent();
+                        var nextIndex = parentNode.getChildIndex(nextId);
+                        currentIndex = nextIndex > 0 && (nextIndex - 1);
+
+                    } else if (ui.item.prev().length > 0) {
+                        var n = ui.item.prev().data("node");
+                        var prevId = n.id;
+                        var prevNode = tree.search(prevId);
+                        parentNode = prevNode.getParent();
+                        var prevIndex = parentNode.getChildIndex(prevId);
+                        currentIndex = prevIndex + 1;
+                    }
+                    findTheNode.getParent().removeChild(node.id);
+                    parentNode.addChild(findTheNode, currentIndex);
+                    console.log(tree.toJSON());
+                    self.tree.populate(self._formatItems(0, tree.toJSON()));
+                },
+                start: function (event, ui) {
+
+                },
+                stop: function (event, ui) {
+                },
+                over: function (event, ui) {
 
                 }
-            },
-            update: function (event, ui) {
-                var node = ui.item.data("node");
-                var findTheNode = tree.search(node.id);
-                //这里简单处理下找到它的父节点
-                var currentIndex = 0, parentNode;
-                if (ui.item.next().length > 0) {
-                    var n = ui.item.next().data("node");
-                    var nextId = n.id;
-                    var nextNode = tree.search(nextId)
-                    parentNode = nextNode.getParent();
-                    var nextIndex = parentNode.getChildIndex(nextId);
-                    currentIndex = nextIndex > 0 && (nextIndex - 1);
-
-                } else if (ui.item.prev().length > 0) {
-                    var n = ui.item.prev().data("node");
-                    var prevId = n.id;
-                    var prevNode = tree.search(prevId)
-                    parentNode = prevNode.getParent();
-                    var prevIndex = parentNode.getChildIndex(prevId);
-                    currentIndex = prevIndex + 1;
-                }
-                findTheNode.getParent().removeChild(node.id);
-                parentNode.addChild(findTheNode, currentIndex);
-                console.log(tree.toJSON());
-                self.tree.populate(self._formatItems(0, tree.toJSON()));
-            },
-            start: function (event, ui) {
-
-            },
-            stop: function (event, ui) {
-            },
-            over: function (event, ui) {
-
-            }
-        });
+            });
+        }, 2000);
     },
 
     _formatItems: function (layer, nodes) {

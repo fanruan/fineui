@@ -52,11 +52,11 @@ Demo.Func = BI.inherit(BI.Widget, {
                             type: "bi.label",
                             text: "3"
                         }
-                    }])
+                    }]);
                 }
             }]
 
-        }
+        };
     }
 });
 BI.shortcut("demo.button_group", Demo.Func);

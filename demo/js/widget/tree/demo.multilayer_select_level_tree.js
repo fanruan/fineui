@@ -39,7 +39,7 @@ Demo.MultiLayerSelectLevelTree = BI.inherit(BI.Widget, {
             }],
             width: 500,
             hgap: 300
-        }
+        };
     }
 });
 

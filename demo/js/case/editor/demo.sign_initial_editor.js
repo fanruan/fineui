@@ -9,7 +9,7 @@ Demo.SignInitialEditor = BI.inherit(BI.Widget, {
         this.editor.setValue({
             value: "123",
             text: "sdga"
-        })
+        });
     },
     render: function () {
         var self = this;
@@ -26,8 +26,8 @@ Demo.SignInitialEditor = BI.inherit(BI.Widget, {
             }],
             vgap: 20
 
-        }
+        };
     }
-})
+});
 
 BI.shortcut("demo.sign_initial_editor", Demo.SignInitialEditor);

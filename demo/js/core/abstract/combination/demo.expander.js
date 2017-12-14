@@ -35,7 +35,7 @@ Demo.Func = BI.inherit(BI.Widget, {
                     })
                 }
             }]
-        }
+        };
     }
 });
 BI.shortcut("demo.expander", Demo.Func);

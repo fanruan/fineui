@@ -22,7 +22,7 @@ Demo.HorizontalAuto = BI.inherit(BI.Widget, {
                 width: 300,
                 height: 30
             }]
-        })
+        });
     },
     
     render: function () {
@@ -35,7 +35,7 @@ Demo.HorizontalAuto = BI.inherit(BI.Widget, {
                 row: 0,
                 el: this._createLayout()
             }]
-        }
+        };
     }
 });
 BI.shortcut("demo.horizontal_auto", Demo.HorizontalAuto);

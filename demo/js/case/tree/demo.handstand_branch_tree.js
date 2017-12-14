@@ -97,7 +97,7 @@ Demo.Func = BI.inherit(BI.Widget, {
                     }
                 }]
             }]
-        })
+        });
     }
 });
 BI.shortcut("demo.handstand_branch_tree", Demo.Func);

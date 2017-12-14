@@ -63,7 +63,7 @@ Demo.Func = BI.inherit(BI.Widget, {
                 text: "子项3",
                 value: 33
             }]
-        })
+        });
 
         BI.createWidget({
             type: "bi.vtape",
@@ -81,7 +81,7 @@ Demo.Func = BI.inherit(BI.Widget, {
                     }
                 }
             }]
-        })
+        });
     }
 });
 BI.shortcut("demo.level_tree", Demo.Func);

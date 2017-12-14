@@ -35,8 +35,8 @@ Demo.SelectTreeCombo = BI.inherit(BI.Widget, {
                 width: 300
             }],
             vgap: 20
-        }
+        };
     }
-})
+});
 
 BI.shortcut("demo.select_tree_combo", Demo.SelectTreeCombo);

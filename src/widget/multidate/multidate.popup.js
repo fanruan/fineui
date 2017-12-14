@@ -214,6 +214,11 @@ BI.MultiDatePopup = BI.inherit(BI.Widget, {
             this.textButton.setEnable(false);
         }
     },
+
+    _checkValueValid: function (value) {
+        return BI.isNull(value) || BI.isEmptyObject(value) || BI.isEmptyString(value);
+    },
+
     setValue: function (v) {
         this.storeValue = v;
         var self = this, date;
@@ -269,8 +274,8 @@ BI.MultiDatePopup = BI.inherit(BI.Widget, {
                 self._setInnerValue(this.day);
                 break;
             default:
-                if (BI.isNull(value) || BI.isEmptyObject(value)) {
-                    var date = new Date();
+                if (this._checkValueValid(value)) {
+                    var date = Date.getDate();
                     this.dateTab.setSelect(BI.MultiDateCombo.MULTI_DATE_YMD_CARD);
                     this.ymd.setValue({
                         year: date.getFullYear(),

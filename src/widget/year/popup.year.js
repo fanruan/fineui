@@ -37,7 +37,7 @@ BI.YearPopup = BI.inherit(BI.Widget, {
         BI.YearPopup.superclass._init.apply(this, arguments);
         var self = this;
 
-        this.selectedYear = this._year = new Date().getFullYear();
+        this.selectedYear = this._year = Date.getDate().getFullYear();
 
         var backBtn = BI.createWidget({
             type: "bi.icon_button",
@@ -91,7 +91,7 @@ BI.YearPopup = BI.inherit(BI.Widget, {
     setValue: function (v) {
         var o = this.options;
         if (Date.checkVoid(v, 1, 1, o.min, o.max)[0]) {
-            v = new Date().getFullYear();
+            v = Date.getDate().getFullYear();
             this.selectedYear = "";
             this.navigation.setSelect(BI.YearCalendar.getPageByYear(v));
             this.navigation.setValue("");

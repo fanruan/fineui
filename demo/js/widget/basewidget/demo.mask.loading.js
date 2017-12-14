@@ -49,7 +49,7 @@ Demo.LoadingMask = BI.inherit(BI.Widget, {
             element: vessel,
             items: [left, right],
             hgap: 20
-        })
+        });
     }
 });
 

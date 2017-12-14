@@ -1,4 +1,4 @@
-//定义Model路由
+// 定义Model路由
 var modelRouter = new (BI.inherit(BI.WRouter, {
     routes: {
         "": "index"
@@ -8,7 +8,7 @@ var modelRouter = new (BI.inherit(BI.WRouter, {
         return {};
     }
 }));
-//定义View路由
+// 定义View路由
 var viewRouter = new (BI.inherit(BI.WRouter, {
     routes: {
         "": "TestView",
@@ -49,7 +49,7 @@ var viewRouter = new (BI.inherit(BI.WRouter, {
     }
 }));
 
-//注册路由
+// 注册路由
 BI.View.registerVMRouter(viewRouter, modelRouter);
 
 
@@ -87,39 +87,44 @@ Demo.FIX_CONFIG = [{
     id: 71,
     pId: 7,
     text: "定义响应式数据",
-    value: "demo.fix1"
+    value: "demo.fix_define"
 }, {
     id: 72,
     pId: 7,
     text: "state属性",
-    value: "demo.fix6"
-}, {
-    id: 78,
-    pId: 7,
-    text: "计算属性",
-    value: "demo.fix2"
+    value: "demo.fix_state"
 }, {
     id: 73,
     pId: 7,
-    text: "store",
-    value: "demo.fix3"
+    text: "计算属性",
+    value: "demo.fix_computed"
 }, {
     id: 74,
     pId: 7,
-    text: "watcher且或表达式",
-    value: "demo.fix4"
+    text: "store",
+    value: "demo.fix_store"
 }, {
     id: 75,
     pId: 7,
-    text: "watcher星号表达式",
-    value: "demo.fix5"
+    text: "watcher且或表达式",
+    value: "demo.fix_watcher"
 }, {
     id: 76,
+    pId: 7,
+    text: "watcher星号表达式",
+    value: "demo.fix_global_watcher"
+}, {
+    id: 77,
+    pId: 7,
+    text: "context",
+    value: "demo.fix_context"
+}, {
+    id: 78,
     pId: 7,
     text: "一个混合的例子",
     value: "demo.fix"
 }, {
-    id: 77,
+    id: 79,
     pId: 7,
     text: "场景",
     value: "demo.fix_scene"

@@ -19,7 +19,7 @@ Demo.Func = BI.inherit(BI.Widget, {
             }],
             hgap: 20,
             vgap: 20
-        })
+        });
     }
 });
 BI.shortcut("demo.text_trigger", Demo.Func);

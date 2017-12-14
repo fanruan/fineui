@@ -143,7 +143,7 @@ Demo.Func = BI.inherit(BI.Widget, {
             type: "bi.adaptive",
             element: this,
             items: [relation]
-        })
+        });
     }
 });
 BI.shortcut("demo.branch_relation", Demo.Func);

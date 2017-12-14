@@ -344,9 +344,6 @@ BI.SingleSelectRadioItem = BI.inherit(BI.BasicButton, {
             type: "bi.radio"
         });
         this.radio.on(BI.Controller.EVENT_CHANGE, function (type) {
-            if (type === BI.Events.CLICK) {
-                self.setSelected(!self.isSelected());
-            }
             self.fireEvent(BI.Controller.EVENT_CHANGE, arguments);
         });
         this.text = BI.createWidget({
@@ -1643,7 +1640,7 @@ BI.Calendar = BI.inherit(BI.Widget, {
     },
 
     _dateCreator: function (Y, M, D) {
-        var self = this, o = this.options, log = {}, De = new Date();
+        var self = this, o = this.options, log = {}, De = Date.getDate();
         var mins = o.min.match(/\d+/g);
         var maxs = o.max.match(/\d+/g);
         Y < (mins[0] | 0) && (Y = (mins[0] | 0));
@@ -1753,7 +1750,7 @@ BI.Calendar = BI.inherit(BI.Widget, {
 
     isFrontDate: function () {
         var o = this.options, c = this._const;
-        var Y = o.year, M = o.month, De = new Date(), day = De.getDay();
+        var Y = o.year, M = o.month, De = Date.getDate(), day = De.getDay();
         Y = Y | 0;
         De.setFullYear(Y, M, 1);
         var newDate = De.getOffsetDate(-1 * (day + 1));
@@ -1762,7 +1759,7 @@ BI.Calendar = BI.inherit(BI.Widget, {
 
     isFinalDate: function () {
         var o = this.options, c = this._const;
-        var Y = o.year, M = o.month, De = new Date(), day = De.getDay();
+        var Y = o.year, M = o.month, De = Date.getDate(), day = De.getDay();
         Y = Y | 0;
         De.setFullYear(Y, M, 1);
         var newDate = De.getOffsetDate(42 - day);
@@ -1785,14 +1782,14 @@ BI.Calendar = BI.inherit(BI.Widget, {
 
 BI.extend(BI.Calendar, {
     getPageByDateJSON: function (json) {
-        var year = new Date().getFullYear();
-        var month = new Date().getMonth();
+        var year = Date.getDate().getFullYear();
+        var month = Date.getDate().getMonth();
         var page = (json.year - year) * 12;
         page += json.month - month;
         return page;
     },
     getDateJSONByPage: function(v){
-        var months = new Date().getMonth();
+        var months = Date.getDate().getMonth();
         var page = v;
 
         //对当前page做偏移,使到当前年初
@@ -1804,7 +1801,7 @@ BI.extend(BI.Calendar, {
         }
         var month = page >= 0 ? (page % 12) : ((12 + page % 12) % 12);
         return {
-            year: new Date().getFullYear() + year,
+            year: Date.getDate().getFullYear() + year,
             month: month
         }
     }
@@ -1850,7 +1847,7 @@ BI.YearCalendar = BI.inherit(BI.Widget, {
     _init: function () {
         BI.YearCalendar.superclass._init.apply(this, arguments);
         var self = this, o = this.options;
-        this.currentYear = new Date().getFullYear();
+        this.currentYear = Date.getDate().getFullYear();
         var years = this._yearCreator(o.year || this.currentYear);
 
         //纵向排列年
@@ -1937,7 +1934,7 @@ BI.extend(BI.YearCalendar, {
 
     //获取显示的第一年
     getStartYear: function (year) {
-        var cur = new Date().getFullYear();
+        var cur = Date.getDate().getFullYear();
         return year - ((year - cur + 3) % BI.YearCalendar.INTERVAL + 12) % BI.YearCalendar.INTERVAL;
     },
 
@@ -1946,7 +1943,7 @@ BI.extend(BI.YearCalendar, {
     },
 
     getPageByYear: function (year) {
-        var cur = new Date().getFullYear();
+        var cur = Date.getDate().getFullYear();
         year = BI.YearCalendar.getStartYear(year);
         return (year - cur + 3) / BI.YearCalendar.INTERVAL;
     }
@@ -3607,8 +3604,7 @@ BI.CustomColorChooser = BI.inherit(BI.Widget, {
         BI.CustomColorChooser.superclass._init.apply(this, arguments);
         var self = this;
         this.editor = BI.createWidget({
-            type: "bi.color_picker_editor",
-            width: 195
+            type: "bi.color_picker_editor"
         });
         this.editor.on(BI.ColorPickerEditor.EVENT_CHANGE, function () {
             self.setValue(this.getValue());
@@ -3627,9 +3623,9 @@ BI.CustomColorChooser = BI.inherit(BI.Widget, {
                 type: "bi.absolute",
                 items: [{
                     el: this.editor,
-                    left: 15,
+                    left: 10,
                     top: 10,
-                    right: 15
+                    right: 10
                 }],
                 height: 30
             }, {
@@ -4261,7 +4257,7 @@ BI.ColorPickerEditor = BI.inherit(BI.Widget, {
     _defaultConfig: function () {
         return BI.extend(BI.ColorPickerEditor.superclass._defaultConfig.apply(this, arguments), {
             baseCls: "bi-color-picker-editor",
-            width: 200,
+            // width: 200,
             height: 20
         })
     },
@@ -5458,6 +5454,125 @@ BI.IconComboTrigger = BI.inherit(BI.Trigger, {
 });
 BI.IconComboTrigger.EVENT_CHANGE = "EVENT_CHANGE";
 BI.shortcut("bi.icon_combo_trigger", BI.IconComboTrigger);/**
+ * Created by Windy on 2017/12/12.
+ * combo : icon + text + icon, popup : icon + text
+ */
+BI.IconTextValueCombo = BI.inherit(BI.Widget, {
+    _defaultConfig: function () {
+        return BI.extend(BI.IconTextValueCombo.superclass._defaultConfig.apply(this, arguments), {
+            baseClass: "bi-icon-text-value-combo",
+            height: 30,
+            text: "",
+            el: {}
+        })
+    },
+
+    _init: function () {
+        BI.IconTextValueCombo.superclass._init.apply(this, arguments);
+        var self = this, o = this.options;
+        this.trigger = BI.createWidget(o.el, {
+            type: "bi.select_icon_text_trigger",
+            items: o.items,
+            height: o.height,
+            text: o.text
+        });
+        this.popup = BI.createWidget({
+            type: "bi.icon_text_value_combo_popup",
+            items: o.items
+        });
+        this.popup.on(BI.IconTextValueComboPopup.EVENT_CHANGE, function () {
+            self.setValue(self.popup.getValue());
+            self.textIconCombo.hideView();
+            self.fireEvent(BI.IconTextValueCombo.EVENT_CHANGE, arguments);
+        });
+        this.popup.on(BI.Controller.EVENT_CHANGE, function () {
+            self.fireEvent(BI.Controller.EVENT_CHANGE, arguments);
+        });
+        this.textIconCombo = BI.createWidget({
+            type: "bi.combo",
+            element: this,
+            adjustLength: 2,
+            el: this.trigger,
+            popup: {
+                el: this.popup,
+                maxHeight: 300
+            }
+        });
+    },
+
+    setValue: function (v) {
+        this.textIconCombo.setValue(v);
+    },
+
+    getValue: function () {
+        return this.textIconCombo.getValue();
+    },
+
+    populate: function (items) {
+        this.options.items = items;
+        this.textIconCombo.populate(items);
+    }
+});
+BI.IconTextValueCombo.EVENT_CHANGE = "EVENT_CHANGE";
+BI.shortcut("bi.icon_text_value_combo", BI.IconTextValueCombo);/**
+ * Created by Windy on 2017/12/12.
+ */
+BI.IconTextValueComboPopup = BI.inherit(BI.Pane, {
+    _defaultConfig: function () {
+        return BI.extend(BI.IconTextValueComboPopup.superclass._defaultConfig.apply(this, arguments), {
+            baseCls: "bi-icon-text-icon-popup"
+        });
+    },
+
+    _init: function () {
+        BI.IconTextValueComboPopup.superclass._init.apply(this, arguments);
+        var o = this.options, self = this;
+        this.popup = BI.createWidget({
+            type: "bi.button_group",
+            items: BI.createItems(o.items, {
+                type: "bi.single_select_icon_text_item",
+                height: 30
+            }),
+            chooseType: BI.ButtonGroup.CHOOSE_TYPE_SINGLE,
+            layouts: [{
+                type: "bi.vertical"
+            }]
+        });
+
+        this.popup.on(BI.Controller.EVENT_CHANGE, function (type, val, obj) {
+            self.fireEvent(BI.Controller.EVENT_CHANGE, arguments);
+            if (type === BI.Events.CLICK) {
+                self.fireEvent(BI.IconTextValueComboPopup.EVENT_CHANGE, val, obj);
+            }
+        });
+
+        BI.createWidget({
+            type: "bi.vertical",
+            element: this,
+            items: [this.popup]
+        });
+    },
+
+    populate: function (items) {
+        BI.IconTextValueComboPopup.superclass.populate.apply(this, arguments);
+        items = BI.createItems(items, {
+            type: "bi.single_select_icon_text_item",
+            height: 30
+        });
+        this.popup.populate(items);
+    },
+
+    getValue: function () {
+        return this.popup.getValue();
+    },
+
+    setValue: function (v) {
+        this.popup.setValue(v);
+    }
+
+});
+BI.IconTextValueComboPopup.EVENT_CHANGE = "EVENT_CHANGE";
+BI.shortcut("bi.icon_text_value_combo_popup", BI.IconTextValueComboPopup);/**
  * 单选combo
  *
  * @class BI.StaticCombo
@@ -7555,7 +7670,7 @@ BI.BarPopoverSection = BI.inherit(BI.PopoverSection, {
         BI.createWidget({
             type: 'bi.right_vertical_adapt',
             element: south,
-            hgap: 5,
+            lgap: 10,
             items: [this.cancel, this.sure]
         });
     },
@@ -9419,6 +9534,10 @@ BI.RichEditorAction = BI.inherit(BI.Widget, {
     keydown: function () {
     },
 
+    hideIf: function (e) {
+
+    },
+
     activate: function () {
     },
 
@@ -9552,7 +9671,7 @@ BI.RichEditorTextToolbar = BI.inherit(BI.Widget, {
                 {type: "bi.rich_editor_align_left_button"},
                 {type: "bi.rich_editor_align_center_button"},
                 {type: "bi.rich_editor_align_right_button"},
-                {type: "bi.rich_editor_param_button"},
+                {type: "bi.rich_editor_param_button"}
             ],
             height: 28
         });
@@ -9561,22 +9680,28 @@ BI.RichEditorTextToolbar = BI.inherit(BI.Widget, {
     _init: function () {
         BI.RichEditorTextToolbar.superclass._init.apply(this, arguments);
         var self = this, o = this.options;
+        var buttons = BI.createWidgets(BI.map(o.buttons, function (i, btn) {
+            return BI.extend(btn, {
+                editor: o.editor
+            });
+        }));
+        this.element.mousedown(function (e) {
+            BI.each(buttons, function (i, btn) {
+                btn.hideIf(e);
+            });
+        });
         BI.createWidget({
             type: "bi.left",
             element: this,
-            items: BI.map(o.buttons, function (i, btn) {
-                return BI.extend(btn, {
-                    editor: o.editor
-                });
-            }),
+            items: buttons,
             hgap: 3,
             vgap: 3
-        })
+        });
     },
 
     mounted: function () {
         var self = this;
-        if (BI.isIE9Below()) {//IE8下必须要设置unselectable才能不blur输入框
+        if (BI.isIE9Below()) {// IE8下必须要设置unselectable才能不blur输入框
             this.element.mousedown(function () {
                 self._noSelect(self.element[0]);
             });
@@ -9585,15 +9710,15 @@ BI.RichEditorTextToolbar = BI.inherit(BI.Widget, {
     },
 
     _noSelect: function (element) {
-        if (element.setAttribute && element.nodeName.toLowerCase() != 'input' && element.nodeName.toLowerCase() != 'textarea') {
-            element.setAttribute('unselectable', 'on');
+        if (element.setAttribute && element.nodeName.toLowerCase() != "input" && element.nodeName.toLowerCase() != "textarea") {
+            element.setAttribute("unselectable", "on");
         }
         for (var i = 0; i < element.childNodes.length; i++) {
             this._noSelect(element.childNodes[i]);
         }
     }
 });
-BI.shortcut('bi.rich_editor_text_toolbar', BI.RichEditorTextToolbar);/**
+BI.shortcut("bi.rich_editor_text_toolbar", BI.RichEditorTextToolbar);/**
  * 富文本编辑器
  *
  * Created by GUY on 2017/9/15.
@@ -10281,10 +10406,16 @@ BI.RichEditorBackgroundColorChooser = BI.inherit(BI.RichEditorAction, {
         });
     },
 
+    hideIf: function (e) {
+        if(!this.colorchooser.element.find(e.target).length > 0) {
+            this.colorchooser.hideView();
+        }
+    },
+
     deactivate: function () {
     }
 });
-BI.shortcut('bi.rich_editor_background_color_chooser', BI.RichEditorBackgroundColorChooser);/**
+BI.shortcut("bi.rich_editor_background_color_chooser", BI.RichEditorBackgroundColorChooser);/**
  * 颜色选择
  *
  * Created by GUY on 2015/11/26.
@@ -10318,6 +10449,12 @@ BI.RichEditorColorChooser = BI.inherit(BI.RichEditorAction, {
             self.doCommand(this.getValue());
         });
 
+    },
+
+    hideIf: function (e) {
+        if(!this.colorchooser.element.find(e.target).length > 0) {
+            this.colorchooser.hideView();
+        }
     },
 
     deactivate: function () {
@@ -10396,10 +10533,16 @@ BI.RichEditorSizeChooser = BI.inherit(BI.RichEditorAction, {
             self.doCommand(val);
             this.hideView();
             this.setValue([]);
-        })
+        });
+    },
+
+    hideIf: function (e) {
+        if(!this.combo.element.find(e.target).length > 0) {
+            this.combo.hideView();
+        }
     }
 });
-BI.shortcut('bi.rich_editor_size_chooser', BI.RichEditorSizeChooser);/**
+BI.shortcut("bi.rich_editor_size_chooser", BI.RichEditorSizeChooser);/**
  * 富文本编辑器
  *
  * Created by GUY on 2017/9/15.
@@ -10430,7 +10573,7 @@ BI.RichEditor = BI.inherit(BI.Widget, {
             type: "bi.combo",
             element: this,
             toggle: false,
-            direction: "top",
+            direction: "top,left",
             isNeedAdjustWidth: false,
             isNeedAdjustHeight: false,
             adjustLength: 1,
@@ -13508,6 +13651,9 @@ BI.IconTextTrigger = BI.inherit(BI.Trigger, {
         BI.createWidget({
             element: this,
             type: 'bi.htape',
+            ref: function (_ref) {
+                self.wrapper = _ref;
+            },
             items: [{
                 el: {
                     type: "bi.icon_change_button",
@@ -13535,7 +13681,20 @@ BI.IconTextTrigger = BI.inherit(BI.Trigger, {
     },
 
     setIcon: function (iconCls) {
+        var o = this.options;
         this.icon.setIcon(iconCls);
+        var iconItem = this.wrapper.attr("items")[0];
+        if(BI.isNull(iconCls) || BI.isEmptyString(iconCls)){
+            if(iconItem.width !== 0){
+                iconItem.width = 0;
+                this.wrapper.resize();
+            }
+        }else{
+            if(iconItem.width !== (o.triggerWidth || o.height)){
+                iconItem.width = (o.triggerWidth || o.height);
+                this.wrapper.resize();
+            }
+        }
     },
 
     setText: function (text) {
@@ -13544,6 +13703,60 @@ BI.IconTextTrigger = BI.inherit(BI.Trigger, {
     }
 });
 BI.shortcut("bi.icon_text_trigger", BI.IconTextTrigger);/**
+ * Created by Windy on 2017/12/12.
+ */
+BI.SelectIconTextTrigger = BI.inherit(BI.Trigger, {
+
+    _defaultConfig: function () {
+        return BI.extend(BI.SelectIconTextTrigger.superclass._defaultConfig.apply(this, arguments), {
+            baseCls: "bi-select-text-trigger bi-border",
+            height: 24
+        });
+    },
+
+    _init: function () {
+        this.options.height -= 2;
+        BI.SelectIconTextTrigger.superclass._init.apply(this, arguments);
+        var self = this, o = this.options;
+        this.trigger = BI.createWidget({
+            type: "bi.icon_text_trigger",
+            element: this,
+            height: o.height
+        });
+        if (BI.isKey(o.text)) {
+            this.setValue(o.text);
+        }
+    },
+
+    setValue: function (vals) {
+        var o = this.options;
+        vals = BI.isArray(vals) ? vals : [vals];
+        var result;
+        var items = BI.Tree.transformToArrayFormat(this.options.items);
+        BI.any(items, function (i, item) {
+            if (BI.deepContains(vals, item.value)) {
+                result = {
+                    text: item.text || item.value,
+                    iconClass: item.iconClass
+                };
+                return true;
+            }
+        });
+
+        if (BI.isNotNull(result)) {
+            this.trigger.setText(result.text);
+            this.trigger.setIcon(result.iconClass);
+        } else {
+            this.trigger.setText(o.text);
+            this.trigger.setIcon("");
+        }
+    },
+
+    populate: function (items) {
+        this.options.items = items;
+    }
+});
+BI.shortcut("bi.select_icon_text_trigger", BI.SelectIconTextTrigger);/**
  * 文字trigger
  *
  * Created by GUY on 2015/9/15.

@@ -91,7 +91,7 @@ Demo.Func = BI.inherit(BI.Widget, {
                 text: "node3",
                 values: [1, 2]
             }]
-            //values: [1, 2]
+            // values: [1, 2]
         }];
 
         var table1 = BI.createWidget({
@@ -122,24 +122,24 @@ Demo.Func = BI.inherit(BI.Widget, {
                 } : {
                     backgroundColor: "#B0C4DE",
                     color: "#ffffff"
-                }
+                };
             },
             sequenceCellStyleGetter: function (index) {
                 return {
                     backgroundColor: "#87CEEB",
                     color: "#ffffff"
-                }
+                };
             },
             headerCellStyleGetter: function () {
                 return {
                     backgroundColor: "#6495ED",
                     color: "#ffffff"
-                }
+                };
             },
             pager: {
                 horizontal: {
-                    pages: false, //总页数
-                    curr: 1, //初始化当前页， pages为数字时可用
+                    pages: false, // 总页数
+                    curr: 1, // 初始化当前页， pages为数字时可用
 
                     hasPrev: function (page) {
                         return page > 1;
@@ -149,8 +149,8 @@ Demo.Func = BI.inherit(BI.Widget, {
                     }
                 },
                 vertical: {
-                    pages: false, //总页数
-                    curr: 1, //初始化当前页， pages为数字时可用
+                    pages: false, // 总页数
+                    curr: 1, // 初始化当前页， pages为数字时可用
 
                     hasPrev: function (page) {
                         return page > 1;
@@ -208,7 +208,7 @@ Demo.Func = BI.inherit(BI.Widget, {
                 top: 10,
                 bottom: 10
             }]
-        })
+        });
     }
 });
 BI.shortcut("demo.page_table", Demo.Func);

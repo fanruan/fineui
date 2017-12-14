@@ -35,8 +35,8 @@ Demo.MultiLayerSelectTreeCombo = BI.inherit(BI.Widget, {
                 width: 300
             }],
             vgap: 20
-        }
+        };
     }
-})
+});
 
 BI.shortcut("demo.multilayer_select_tree_combo", Demo.MultiLayerSelectTreeCombo);

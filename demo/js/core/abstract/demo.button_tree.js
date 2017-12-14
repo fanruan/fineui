@@ -20,7 +20,7 @@ Demo.Func = BI.inherit(BI.Widget, {
                 text: "1",
                 value: 1
             }]
-        }
+        };
     }
 });
 BI.shortcut("demo.button_tree", Demo.Func);

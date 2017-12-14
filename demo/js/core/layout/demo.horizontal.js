@@ -34,7 +34,7 @@ Demo.Horizontal = BI.inherit(BI.Widget, {
                 width: 300,
                 height: 30
             }]
-        }
+        };
     }
 });
 BI.shortcut("demo.horizontal", Demo.Horizontal);

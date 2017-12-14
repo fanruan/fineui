@@ -19,7 +19,7 @@ Demo.StateEditor = BI.inherit(BI.Widget, {
             }],
             vgap: 20
 
-        }
+        };
     },
 
 
@@ -27,8 +27,8 @@ Demo.StateEditor = BI.inherit(BI.Widget, {
         var self = this;
         setTimeout(function () {
             self.editor.setState(["*", "*"]);
-        }, 1000)
+        }, 1000);
     }
-})
+});
 
 BI.shortcut("demo.state_editor", Demo.StateEditor);

@@ -18,15 +18,15 @@ Demo.Func = BI.inherit(BI.Widget, {
 
         canvas.circle(150, 50, 20, "green");
 
-        //渐变矩形
+        // 渐变矩形
         canvas.rect(0, 120, 80, 100, canvas.gradient(0, 120, 80, 220, "#FF0000", "#00FF00"));
 
-        //空心图形
+        // 空心图形
         canvas.hollow(100, 120, 100, 220, 200, 120, {
             strokeStyle: "blue"
         });
 
-        //实心图形
+        // 实心图形
         canvas.solid(100, 240, 200, 240, 150, 280, 200, 320, 100, 320, {
             strokeStyle: "yellow",
             fillStyle: "pink"
@@ -42,7 +42,7 @@ Demo.Func = BI.inherit(BI.Widget, {
                 left: 100,
                 top: 50
             }]
-        })
+        });
     }
 });
 BI.shortcut("demo.canvas", Demo.Func);

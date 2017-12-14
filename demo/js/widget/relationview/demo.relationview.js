@@ -12,14 +12,14 @@ Demo.RelationView = BI.inherit(BI.Widget, {
                 {
                     primary: {
                         region: "B", regionText: "比", regionTitle: "bbb", regionHandler: function () {
-                            alert("a")
+                            alert("a");
                         },
 
 
                         title: "b2...",
                         value: "b2", text: "b2字段",
                         handler: function () {
-                            alert("d")
+                            alert("d");
                         }
                     },
                     foreign: {region: "C", value: "c1", text: "c1字段"}
@@ -59,7 +59,7 @@ Demo.RelationView = BI.inherit(BI.Widget, {
             items: [{
                 el: relationview
             }]
-        }
+        };
     }
 });
 BI.shortcut("demo.relation_view", Demo.RelationView);

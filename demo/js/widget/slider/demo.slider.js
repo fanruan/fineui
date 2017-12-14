@@ -3,11 +3,11 @@
  */
 Demo.Slider = BI.inherit(BI.Widget, {
     props: {
-            baseCls: "demo-slider",
-            width: 300,
-            height: 50,
-            min: 0,
-            max: 100
+        baseCls: "demo-slider",
+        width: 300,
+        height: 50,
+        min: 0,
+        max: 100
     },
 
     render: function () {
@@ -62,6 +62,7 @@ Demo.Slider = BI.inherit(BI.Widget, {
         var intervalSlider = BI.createWidget({
             type: "bi.interval_slider",
             width: o.width,
+            digit: 0,
             cls: "layout-bg-white"
         });
         intervalSlider.setMinAndMax({

@@ -3,7 +3,7 @@
  * @CreationDate 2017-11-06 10:32
  * @Description
  */
-;(function () {
+(function () {
     var model = Fix.define({
         groups: [{
             id: "27a9c8bf159e99e",
@@ -159,7 +159,7 @@
                     height: 50
                 },
                 cardCreator: BI.bind(this.cardCreator, this)
-            }
+            };
         },
 
         cardCreator: function (v) {
@@ -172,7 +172,7 @@
                 case this.constant.TAB2:
                     return {
                         type: "demo.fix_scene_fine_index_update"
-                    }
+                    };
             }
         }
     });
@@ -222,7 +222,7 @@
                 }],
                 vgap: 20,
                 hgap: 20
-            }
+            };
         }
 
     });
@@ -265,7 +265,7 @@
                     items: items
                 }],
                 hgap: 20
-            }
+            };
         }
     });
     BI.shortcut("demo.fix_scene_group", Demo.FixSceneGroup);
@@ -287,7 +287,7 @@
                 items.push({
                     type: "demo.fix_scene_table",
                     table: child
-                })
+                });
             });
             return {
                 type: "bi.left",
@@ -308,7 +308,7 @@
                     items: items
                 }],
                 hgap: 20
-            }
+            };
         }
     });
     BI.shortcut("demo.fix_scene_package", Demo.FixScenePackage);
@@ -350,7 +350,7 @@
                     items: items
                 }],
                 hgap: 20
-            }
+            };
         }
     });
     BI.shortcut("demo.fix_scene_table", Demo.FixSceneTable);
@@ -381,7 +381,7 @@
                         }
                     }]
                 }]
-            }
+            };
         }
     });
     BI.shortcut("demo.fix_scene_field", Demo.FixSceneField);
@@ -412,10 +412,10 @@
         },
 
         watch: {
-            "needUpdate": function () {
-                this.button.setEnable(this.model.needUpdate)
+            needUpdate: function () {
+                this.button.setEnable(this.model.needUpdate);
             },
-            "text": function () {
+            text: function () {
                 this.button.setText(this.model.text);
             }
         },
@@ -437,7 +437,7 @@
                         self.button = ref;
                     }
                 }]
-            }
+            };
         }
     });
     BI.shortcut("demo.fix_scene_fine_index_update", Demo.FixSceneFineIndexUpdate);

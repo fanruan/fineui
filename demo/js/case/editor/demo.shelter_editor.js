@@ -14,7 +14,7 @@ Demo.ClearEditor = BI.inherit(BI.Widget, {
             },
             watermark: "可以设置标记的输入框",
             text: "这是一个遮罩"
-        })
+        });
         BI.createWidget({
             type: "bi.vertical",
             element: this,
@@ -22,7 +22,7 @@ Demo.ClearEditor = BI.inherit(BI.Widget, {
             vgap: 20,
             bgap: 50,
             items: [editor]
-        })
+        });
         BI.createWidget({
             type: "bi.absolute",
             element: this,
@@ -39,8 +39,8 @@ Demo.ClearEditor = BI.inherit(BI.Widget, {
                 left: 10,
                 bottom: 10
             }]
-        })
+        });
     }
-})
+});
 
 BI.shortcut("demo.shelter_editor", Demo.ClearEditor);

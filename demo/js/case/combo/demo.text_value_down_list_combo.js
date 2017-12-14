@@ -37,12 +37,12 @@ Demo.TextValueDownListCombo = BI.inherit(BI.Widget, {
                 ]
             }],
             vgap: 20
-        }
+        };
     },
 
     mounted: function () {
         this.refs.setValue(2);
     }
-})
+});
 
 BI.shortcut("demo.text_value_down_list_combo", Demo.TextValueDownListCombo);

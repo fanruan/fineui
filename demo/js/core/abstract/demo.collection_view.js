@@ -22,7 +22,7 @@ Demo.Func = BI.inherit(BI.Widget, {
                     y: Math.floor(index / 10) * 50,
                     width: 50,
                     height: 50
-                }
+                };
             }
         });
         BI.createWidget({
@@ -35,7 +35,7 @@ Demo.Func = BI.inherit(BI.Widget, {
                 top: 10,
                 bottom: 10
             }]
-        })
+        });
     }
 });
 BI.shortcut("demo.collection_view", Demo.Func);

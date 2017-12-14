@@ -1,9 +1,9 @@
-//splice和duplicate函数
+// splice和duplicate函数
 SpliceDuplicateView = BI.inherit(BI.View, {
     _defaultConfig: function () {
         return BI.extend(SpliceDuplicateView.superclass._defaultConfig.apply(this, arguments), {
             baseCls: "bi-splice-duplicate"
-        })
+        });
     },
 
     _init: function () {
@@ -23,7 +23,7 @@ SpliceDuplicateView = BI.inherit(BI.View, {
     },
 
     _showModelData: function () {
-        //这里只是为了输出this.model.data   原则上是不允许这么调用的
+        // 这里只是为了输出this.model.data   原则上是不允许这么调用的
         this.text.setText("父级数据：" + JSON.stringify(this.model.data));
     },
 
@@ -62,17 +62,17 @@ SpliceDuplicateView = BI.inherit(BI.View, {
             if (!self.children[key]) {
                 self.add(key);
             }
-        })
+        });
     }
 });
 
 SpliceDuplicateModel = BI.inherit(BI.Model, {
     _defaultConfig: function () {
         return BI.extend(SpliceDuplicateModel.superclass._defaultConfig.apply(this, arguments), {
-            "1": {
+            1: {
                 name: "名字"
             }
-        })
+        });
     },
 
     splice: function (key1) {
@@ -130,7 +130,7 @@ SDSubView = BI.inherit(BI.View, {
                     self.model.destroy();
                 }
             }]
-        })
+        });
     }
 });
 

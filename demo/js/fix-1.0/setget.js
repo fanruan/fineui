@@ -1,9 +1,9 @@
-//set、get函数
+// set、get函数
 SetGetView = BI.inherit(BI.View, {
     _defaultConfig: function () {
         return BI.extend(SetGetView.superclass._defaultConfig.apply(this, arguments), {
             baseCls: "bi-set-get"
-        })
+        });
     },
 
     _init: function () {
@@ -45,7 +45,7 @@ SetGetView = BI.inherit(BI.View, {
                     }
                 }
             }
-        }))
+        }));
     },
 
     _showModelData: function () {
@@ -73,7 +73,7 @@ SetGetView = BI.inherit(BI.View, {
                     })
                 }
             }
-        }))
+        }));
     },
 
     render: function (vessel) {
@@ -87,10 +87,10 @@ SetGetView = BI.inherit(BI.View, {
             }],
             hgap: 50,
             vgap: 100
-        })
+        });
         this._showModelData();
     }
-})
+});
 
 SetGetModel = BI.inherit(BI.Model, {
     _defaultConfig: function () {
@@ -105,14 +105,14 @@ SetGetModel = BI.inherit(BI.Model, {
                 {text: "item7", value: 7},
                 {text: "item8", value: 8}
             ]
-        })
+        });
     },
 
     _init: function () {
         SetGetModel.superclass._init.apply(this, arguments);
     }
 
-})
+});
 
 
 Demo.Func = BI.inherit(BI.Widget, {

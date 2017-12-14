@@ -23,7 +23,7 @@ Demo.VerticalAdaptLayout = BI.inherit(BI.Widget, {
                 width: 300,
                 height: 30
             }]
-        })
+        });
     },
     
     render: function () {
@@ -36,7 +36,7 @@ Demo.VerticalAdaptLayout = BI.inherit(BI.Widget, {
                 row: 0,
                 el: this._createLayout()
             }]
-        }
+        };
     }
 });
 BI.shortcut("demo.vertical_adapt", Demo.VerticalAdaptLayout);

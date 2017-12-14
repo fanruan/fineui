@@ -19,7 +19,7 @@ Demo.Func = BI.inherit(BI.Widget, {
                 curr: 1,
                 count: 1000
             }]
-        })
+        });
     }
 });
 BI.shortcut("demo.all_count_pager", Demo.Func);

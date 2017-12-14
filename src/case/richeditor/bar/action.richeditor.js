@@ -65,6 +65,10 @@ BI.RichEditorAction = BI.inherit(BI.Widget, {
     keydown: function () {
     },
 
+    hideIf: function (e) {
+
+    },
+
     activate: function () {
     },
 

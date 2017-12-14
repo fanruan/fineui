@@ -15,8 +15,8 @@ Demo.ClearEditor = BI.inherit(BI.Widget, {
                 watermark: "这个是带清除按钮的"
             }],
             vgap: 20
-        }
+        };
     }
-})
+});
 
 BI.shortcut("demo.clear_editor", Demo.ClearEditor);

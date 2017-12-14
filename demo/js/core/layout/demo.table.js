@@ -136,7 +136,7 @@ Demo.TableLayout = BI.inherit(BI.Widget, {
             rowSize: [10, 30, 50, 70, 90, 110, 130],
             hgap: 20,
             vgap: 10
-        }
+        };
     },
 
     render: function () {
@@ -150,13 +150,13 @@ Demo.TableLayout = BI.inherit(BI.Widget, {
                     row: 0,
                     el: this._createTable1()
                 }
-                //, {
+                // , {
                 //    column: 0,
                 //    row: 1,
                 //    el: this._createTable2()
-                //}
+                // }
             ]
-        }
+        };
     }
 });
 BI.shortcut("demo.table_layout", Demo.TableLayout);

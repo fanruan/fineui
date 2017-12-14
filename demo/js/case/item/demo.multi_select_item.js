@@ -16,7 +16,7 @@ Demo.Func = BI.inherit(BI.Widget, {
                 text: "复选项"
             }],
             hgap: 300
-        }
+        };
     }
 });
 BI.shortcut("demo.multi_select_item", Demo.Func);

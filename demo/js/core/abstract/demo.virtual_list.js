@@ -12,7 +12,7 @@ Demo.Func = BI.inherit(BI.Widget, {
                     text: (i + 1) + "." + item.text
                 });
             })
-        }
+        };
     }
 });
 BI.shortcut("demo.virtual_list", Demo.Func);

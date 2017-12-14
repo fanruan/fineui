@@ -19,7 +19,7 @@ BI.RichEditorTextToolbar = BI.inherit(BI.Widget, {
                 {type: "bi.rich_editor_align_left_button"},
                 {type: "bi.rich_editor_align_center_button"},
                 {type: "bi.rich_editor_align_right_button"},
-                {type: "bi.rich_editor_param_button"},
+                {type: "bi.rich_editor_param_button"}
             ],
             height: 28
         });
@@ -28,22 +28,28 @@ BI.RichEditorTextToolbar = BI.inherit(BI.Widget, {
     _init: function () {
         BI.RichEditorTextToolbar.superclass._init.apply(this, arguments);
         var self = this, o = this.options;
+        var buttons = BI.createWidgets(BI.map(o.buttons, function (i, btn) {
+            return BI.extend(btn, {
+                editor: o.editor
+            });
+        }));
+        this.element.mousedown(function (e) {
+            BI.each(buttons, function (i, btn) {
+                btn.hideIf(e);
+            });
+        });
         BI.createWidget({
             type: "bi.left",
             element: this,
-            items: BI.map(o.buttons, function (i, btn) {
-                return BI.extend(btn, {
-                    editor: o.editor
-                });
-            }),
+            items: buttons,
             hgap: 3,
             vgap: 3
-        })
+        });
     },
 
     mounted: function () {
         var self = this;
-        if (BI.isIE9Below()) {//IE8下必须要设置unselectable才能不blur输入框
+        if (BI.isIE9Below()) {// IE8下必须要设置unselectable才能不blur输入框
             this.element.mousedown(function () {
                 self._noSelect(self.element[0]);
             });
@@ -52,12 +58,12 @@ BI.RichEditorTextToolbar = BI.inherit(BI.Widget, {
     },
 
     _noSelect: function (element) {
-        if (element.setAttribute && element.nodeName.toLowerCase() != 'input' && element.nodeName.toLowerCase() != 'textarea') {
-            element.setAttribute('unselectable', 'on');
+        if (element.setAttribute && element.nodeName.toLowerCase() != "input" && element.nodeName.toLowerCase() != "textarea") {
+            element.setAttribute("unselectable", "on");
         }
         for (var i = 0; i < element.childNodes.length; i++) {
             this._noSelect(element.childNodes[i]);
         }
     }
 });
-BI.shortcut('bi.rich_editor_text_toolbar', BI.RichEditorTextToolbar);
+BI.shortcut("bi.rich_editor_text_toolbar", BI.RichEditorTextToolbar);

@@ -67,7 +67,7 @@ Demo.Face = BI.inherit(BI.Widget, {
                 top: 0,
                 bottom: 0
             }]
-        }
+        };
     },
 
     mounted: function () {
@@ -114,7 +114,7 @@ Demo.Face = BI.inherit(BI.Widget, {
             for (var m = 0; m < times - 1; m++) {
                 BI.each(items[n % 100], function (j, item) {
                     copy[n].push(item);
-                })
+                });
             }
         }
         return copy;
@@ -126,7 +126,7 @@ Demo.Face = BI.inherit(BI.Widget, {
             for (var m = 0; m < times - 1; m++) {
                 BI.each(items[n], function (j, item) {
                     copy[n].push(item);
-                })
+                });
             }
         }
         return copy;

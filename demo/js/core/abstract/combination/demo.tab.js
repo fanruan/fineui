@@ -10,13 +10,13 @@ Demo.Func = BI.inherit(BI.Widget, {
                     type: "bi.label",
                     cls: "layout-bg1",
                     text: "面板1"
-                })
+                });
             case 2:
                 return BI.createWidget({
                     type: "bi.label",
                     cls: "layout-bg2",
                     text: "面板2"
-                })
+                });
         }
     },
 
@@ -61,7 +61,7 @@ Demo.Func = BI.inherit(BI.Widget, {
                 left: 200,
                 top: 200
             }]
-        })
+        });
 
         tab.setSelect(2);
     }

@@ -38,8 +38,8 @@ Demo.StaticCombo = BI.inherit(BI.Widget, {
                 ]
             }],
             vgap: 20
-        }
+        };
     }
-})
+});
 
 BI.shortcut("demo.static_combo", Demo.StaticCombo);

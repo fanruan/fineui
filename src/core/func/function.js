@@ -68,6 +68,27 @@ BI.extend(BI.Func, {
             matched: matched,
             finded: finded
         }
+    },
+
+    /**
+     * 将字符串中的尖括号等字符encode成html能解析的形式
+     * @param str
+     */
+    formatSpecialCharInHtml: function (str) {
+        return (str + "").replaceAll("\\s|<=?|>=?", function (str) {
+            switch (str) {
+                case "<":
+                    return "&lt;";
+                case "<=":
+                    return "&le;";
+                case ">":
+                    return "&gt;";
+                case ">=":
+                    return "&ge;";
+                default:
+                    return "&nbsp;";
+            }
+        });
     }
 });
 

@@ -17,7 +17,7 @@ Demo.Items = BI.inherit(BI.Widget, {
                 text: "单选项"
             }],
             hgap: 300
-        }
+        };
     }
 });
 

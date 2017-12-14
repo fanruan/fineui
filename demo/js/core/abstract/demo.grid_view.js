@@ -11,7 +11,7 @@ Demo.Func = BI.inherit(BI.Widget, {
                 items[i][j] = {
                     type: "bi.label",
                     text: i + "-" + j
-                }
+                };
             }
         }
         var grid = BI.createWidget({
@@ -48,7 +48,7 @@ Demo.Func = BI.inherit(BI.Widget, {
                 top: 10,
                 bottom: 10
             }]
-        })
+        });
     }
 });
 BI.shortcut("demo.grid_view", Demo.Func);

@@ -13,7 +13,7 @@ Demo.Preview = BI.inherit(BI.Widget, {
                 header[i][j] = {
                     type: "bi.label",
                     text: "表头" + i + "-" + j
-                }
+                };
                 columnSize[j] = 100;
             }
         }
@@ -23,7 +23,7 @@ Demo.Preview = BI.inherit(BI.Widget, {
                 items[i][j] = {
                     type: "bi.label",
                     text: (i < 3 ? 0 : i) + "-" + j
-                }
+                };
             }
         }
         return {
@@ -95,7 +95,7 @@ Demo.Preview = BI.inherit(BI.Widget, {
                 top: 160,
                 bottom: 60
             }]
-        }
+        };
     },
     mounted: function () {
     }

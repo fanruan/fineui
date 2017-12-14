@@ -9,7 +9,7 @@ Demo.Func = BI.inherit(BI.Widget, {
                 type: "demo.virtual_group_item",
                 value: i,
                 key: i + 1
-            }
+            };
         });
         return items;
     },
@@ -66,7 +66,7 @@ Demo.Func = BI.inherit(BI.Widget, {
                 }
             }]
 
-        }
+        };
     }
 });
 BI.shortcut("demo.virtual_group", Demo.Func);
@@ -86,7 +86,7 @@ Demo.Item = BI.inherit(BI.Widget, {
             },
             height: this.options.height,
             text: "key:" + o.key + ",随机数" + BI.UUID()
-        }
+        };
     },
 
     shouldUpdate: function (nextProps) {
@@ -97,7 +97,7 @@ Demo.Item = BI.inherit(BI.Widget, {
     update: function (item) {
         this.label.setText(item.value);
         console.log("更新了一项");
-        return true;//返回是不是更新成功
+        return true;// 返回是不是更新成功
     },
 
     created: function () {

@@ -14,7 +14,7 @@ Demo.Face = BI.inherit(BI.Widget, {
                 height: 40,
                 cls: "config-label"
             }
-        }
+        };
     },
 
     _createColorPicker: function (ref, action) {
@@ -32,7 +32,7 @@ Demo.Face = BI.inherit(BI.Widget, {
                     height: 30
                 }]
             }
-        }
+        };
     },
 
     _createBackgroundConfig: function () {
@@ -46,7 +46,7 @@ Demo.Face = BI.inherit(BI.Widget, {
             }, function () {
                 self._runGlobalStyle();
             })]
-        }
+        };
     },
 
     _createFontConfig: function () {
@@ -60,7 +60,7 @@ Demo.Face = BI.inherit(BI.Widget, {
             }, function () {
                 self._runGlobalStyle();
             })]
-        }
+        };
     },
 
     _createActiveFontConfig: function () {
@@ -74,7 +74,7 @@ Demo.Face = BI.inherit(BI.Widget, {
             }, function () {
                 self._runGlobalStyle();
             })]
-        }
+        };
     },
 
     _createSelectFontConfig: function () {
@@ -88,7 +88,7 @@ Demo.Face = BI.inherit(BI.Widget, {
             }, function () {
                 self._runGlobalStyle();
             })]
-        }
+        };
     },
 
     _createGrayFontConfig: function () {
@@ -102,7 +102,7 @@ Demo.Face = BI.inherit(BI.Widget, {
             }, function () {
                 self._runGlobalStyle();
             })]
-        }
+        };
     },
 
     _createDisableFontConfig: function () {
@@ -124,7 +124,7 @@ Demo.Face = BI.inherit(BI.Widget, {
                     disabled: true
                 }
             }]
-        }
+        };
     },
 
     _createCard1BackgroundConfig: function () {
@@ -138,7 +138,7 @@ Demo.Face = BI.inherit(BI.Widget, {
             }, function () {
                 self._runGlobalStyle();
             })]
-        }
+        };
     },
     _createCard2BackgroundConfig: function () {
         var self = this;
@@ -147,7 +147,7 @@ Demo.Face = BI.inherit(BI.Widget, {
             cls: "config-item bi-border-bottom",
             height: 40,
             items: [this._createLabel("Card2背景颜色：无颜色")]
-        }
+        };
     },
 
     _createHoverBackgroundColor: function () {
@@ -161,7 +161,7 @@ Demo.Face = BI.inherit(BI.Widget, {
             }, function () {
                 self._runGlobalStyle();
             })]
-        }
+        };
     },
 
     _createActiveBackgroundColor: function () {
@@ -175,7 +175,7 @@ Demo.Face = BI.inherit(BI.Widget, {
             }, function () {
                 self._runGlobalStyle();
             })]
-        }
+        };
     },
 
     _createSelectBackgroundColor: function () {
@@ -189,7 +189,7 @@ Demo.Face = BI.inherit(BI.Widget, {
             }, function () {
                 self._runGlobalStyle();
             })]
-        }
+        };
     },
 
     _createSlitColor: function () {
@@ -203,7 +203,7 @@ Demo.Face = BI.inherit(BI.Widget, {
             }, function () {
                 self._runGlobalStyle();
             })]
-        }
+        };
     },
 
     _createBaseConfig: function () {
@@ -223,7 +223,7 @@ Demo.Face = BI.inherit(BI.Widget, {
                 this._createSelectBackgroundColor(),
                 this._createSlitColor()
             ]
-        }
+        };
     },
 
 
@@ -249,7 +249,7 @@ Demo.Face = BI.inherit(BI.Widget, {
                     }]
                 }
             }]
-        }
+        };
     },
 
     _createButton2BackgroundConfig: function () {
@@ -275,7 +275,7 @@ Demo.Face = BI.inherit(BI.Widget, {
                     }]
                 }
             }]
-        }
+        };
     },
 
     _createButton3BackgroundConfig: function () {
@@ -301,7 +301,7 @@ Demo.Face = BI.inherit(BI.Widget, {
                     }]
                 }
             }]
-        }
+        };
     },
 
     _createButton4BackgroundConfig: function () {
@@ -327,7 +327,7 @@ Demo.Face = BI.inherit(BI.Widget, {
                     }]
                 }
             }]
-        }
+        };
     },
 
     _createScrollBackgroundConfig: function () {
@@ -341,7 +341,7 @@ Demo.Face = BI.inherit(BI.Widget, {
             }, function () {
                 self._runGlobalStyle();
             })]
-        }
+        };
     },
 
     _createScrollThumbConfig: function () {
@@ -355,7 +355,7 @@ Demo.Face = BI.inherit(BI.Widget, {
             }, function () {
                 self._runGlobalStyle();
             })]
-        }
+        };
     },
 
     _createPopupBackgroundConfig: function () {
@@ -460,7 +460,7 @@ Demo.Face = BI.inherit(BI.Widget, {
                     }]
                 }
             }]
-        }
+        };
     },
 
     _createMaskBackgroundConfig: function () {
@@ -481,12 +481,12 @@ Demo.Face = BI.inherit(BI.Widget, {
                         type: "bi.button",
                         text: "mask测试",
                         handler: function () {
-                            BI.Msg.alert("弹出层", "弹出层面板")
+                            BI.Msg.alert("弹出层", "弹出层面板");
                         }
                     }]
                 }
             }]
-        }
+        };
     },
 
     _createCommonConfig: function () {
@@ -502,7 +502,7 @@ Demo.Face = BI.inherit(BI.Widget, {
                 this._createPopupBackgroundConfig(),
                 this._createMaskBackgroundConfig()
             ]
-        }
+        };
     },
 
     render: function () {
@@ -525,7 +525,7 @@ Demo.Face = BI.inherit(BI.Widget, {
                         this._createCommonConfig()]
                 }
             }]]
-        }
+        };
     },
 
     _setStyle: function (objects) {
@@ -533,7 +533,7 @@ Demo.Face = BI.inherit(BI.Widget, {
         BI.each(objects, function (cls, object) {
             result += cls + "{";
             BI.each(object, function (name, value) {
-                result += name + ":" + value + ";"
+                result += name + ":" + value + ";";
             });
             result += "} ";
         });
@@ -565,13 +565,13 @@ Demo.Face = BI.inherit(BI.Widget, {
         this._setStyle({
             "#wrapper.bi-background, #wrapper .bi-background": {
                 "background-color": backgroundColor,
-                "color": fontColor
+                color: fontColor
             },
             "#wrapper .bi-card": {
                 "background-color": cardBackgroundColor
             },
             "#wrapper .bi-tips": {
-                "color": grayFontColor
+                color: grayFontColor
             },
             "div::-webkit-scrollbar,.scrollbar-layout-main": {
                 "background-color": scrollBackgroundColor + "!important"
@@ -596,11 +596,11 @@ Demo.Face = BI.inherit(BI.Widget, {
             },
             ".bi-list-item-active:active,.bi-list-item-select:active,.bi-list-item-effect:active": {
                 "background-color": activeBackgroundColor + "!important",
-                "color": activeFontColor + "!important"
+                color: activeFontColor + "!important"
             },
             ".bi-list-item-active.active,.bi-list-item-select.active,.bi-list-item-effect.active": {
                 "background-color": selectBackgroundColor + "!important",
-                "color": selectFontColor + "!important"
+                color: selectFontColor + "!important"
             },
             ".bi-button": {
                 "background-color": button1BackgroundColor,
@@ -627,7 +627,7 @@ Demo.Face = BI.inherit(BI.Widget, {
             ".bi-collection-table-cell.first-row": {
                 "border-top-color": slitColor
             }
-        })
+        });
     },
 
     mounted: function () {

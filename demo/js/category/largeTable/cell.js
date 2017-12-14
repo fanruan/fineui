@@ -8,7 +8,7 @@ BI.DetailTableCell = BI.inherit(BI.Widget, {
             baseCls: "bi-detail-table-cell",
             dId: "",
             text: ""
-        })
+        });
     },
 
     _init: function () {
@@ -36,9 +36,9 @@ BI.DetailTableCell = BI.inherit(BI.Widget, {
             type: "bi.vertical",
             element: this,
             items: [item]
-        })
+        });
 
-        //表格样式
+        // 表格样式
         if (BI.isNotNull(o.styles) && BI.isObject(o.styles)) {
             this.element.css(o.styles);
         }

@@ -23,6 +23,14 @@
         storeInjection[xtype] = cls;
     };
 
+    var serviceInjection = {};
+    BI.service = function (xtype, cls) {
+        if (serviceInjection[xtype] != null) {
+            throw ("service:[" + xtype + "] has been registed");
+        }
+        serviceInjection[xtype] = cls;
+    };
+
     var providerInjection = {};
     BI.provider = function (xtype, cls) {
         if (providerInjection[xtype] != null) {
@@ -80,6 +88,20 @@
         },
         releaseStore: function (type) {
             delete stores[type];
+        }
+    }
+
+    var services = {};
+
+    BI.Services = {
+        getService: function (type, config) {
+            if (services[type]) {
+                return services[type];
+            }
+            return services[type] = new serviceInjection[type](config);
+        },
+        releaseService: function (type) {
+            delete services[type];
         }
     }
 

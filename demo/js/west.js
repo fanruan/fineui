@@ -16,7 +16,7 @@ Demo.West = BI.inherit(BI.Widget, {
                 }],
                 items: Demo.CONFIG
             }]
-        }
+        };
     }
 });
 Demo.West.EVENT_VALUE_CHANGE = "EVENT_VALUE_CHANGE";
