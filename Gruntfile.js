@@ -107,9 +107,19 @@ module.exports = function (grunt) {
                 dest: 'dist/resource.css'
             },
 
+            publicBundleJs: {
+                src: ['public/js/**/*.js', 'public/js/index.js'],
+                dest: 'public/bundle.js'
+            },
+
             bundleJs: {
                 src: ['dist/core.js', 'dist/base.js', 'dist/case.js', 'dist/widget.js', 'dist/router.js', 'public/js/**/*.js', 'public/js/index.js'],
                 dest: 'dist/bundle.js'
+            },
+
+            publicBundleCss: {
+                src: ['public/css/app.css', 'public/css/**/*.css'],
+                dest: 'public/bundle.css'
             },
 
             bundleCss: {
