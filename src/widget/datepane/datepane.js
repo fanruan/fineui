@@ -15,7 +15,7 @@ BI.DatePaneWidget = BI.inherit(BI.Widget, {
         BI.DatePaneWidget.superclass._init.apply(this, arguments);
         var self = this, o = this.options;
 
-        this.today = new Date();
+        this.today = Date.getDate();
         this._year = this.today.getFullYear();
         this._month = this.today.getMonth();
 
@@ -79,7 +79,7 @@ BI.DatePaneWidget = BI.inherit(BI.Widget, {
     },
 
     _getNewCurrentDate: function () {
-        var today = new Date();
+        var today = Date.getDate();
         return {
             year: today.getFullYear(),
             month: today.getMonth()

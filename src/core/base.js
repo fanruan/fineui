@@ -545,7 +545,7 @@ if (!window.BI) {
 
             // Date
             if (type === '[object Date]') {
-                return new Date(obj.getTime());
+                return Date.getDate(obj.getTime());
             }
 
             var i, clone, key;
@@ -775,7 +775,7 @@ if (!window.BI) {
                     if (Date.now) {
                         return Date.now();
                     } else {
-                        return new Date().getTime();
+                        return Date.getDate().getTime();
                     }
                 }
             }

@@ -1,7 +1,7 @@
 /**
- * Created by Dailer on 2017/7/11.
+ * Created by Windy on 2017/12/13.
  */
-Demo.TextValueCombo = BI.inherit(BI.Widget, {
+Demo.IconTextValueCombo = BI.inherit(BI.Widget, {
     props: {
         baseCls: ""
     },
@@ -15,15 +15,15 @@ Demo.TextValueCombo = BI.inherit(BI.Widget, {
                 width: 300,
                 items: [{
                     text: "MVC-1",
-                    iconClass: "date-font",
+                    iconClass: "close-font",
                     value: 1
                 }, {
                     text: "MVC-2",
-                    iconClass: "search-font",
+                    iconClass: "date-font",
                     value: 2
                 }, {
                     text: "MVC-3",
-                    iconClass: "pull-right-font",
+                    iconClass: "search-close-h-font",
                     value: 3
                 }]
             }],
@@ -32,4 +32,4 @@ Demo.TextValueCombo = BI.inherit(BI.Widget, {
     }
 });
 
-BI.shortcut("demo.text_value_combo", Demo.TextValueCombo);
+BI.shortcut("demo.icon_text_value_combo", Demo.IconTextValueCombo);

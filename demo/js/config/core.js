@@ -162,8 +162,8 @@ Demo.CORE_CONFIG = [{
     text: "弹出层"
 }, {
     pId: 10202,
-    text: "bi.float_box",
-    value: "demo.float_box"
+    text: "bi.popover",
+    value: "demo.popover"
 }, {
     pId: 10202,
     text: "bi.popup_view",

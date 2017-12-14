@@ -90,6 +90,10 @@ module.exports = function (grunt) {
                 src: ['src/css/core/**/*.css', 'src/css/theme/**/*.css'],
                 dest: 'dist/core.css'
             },
+            coreWithoutNormalizeCss: {
+                src: ['src/css/core/**/*.css', 'src/css/theme/**/*.css', '!src/css/core/normalize.css','!src/css/core/normalize2.css'],
+                dest: 'dist/core_without_normalize.css'
+            },
             baseCss: {
                 src: ['src/css/base/**/*.css'],
                 dest: 'dist/base.css'
