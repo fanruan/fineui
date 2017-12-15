@@ -109,11 +109,9 @@ BI.Loader = BI.inherit(BI.Widget, {
         o.isDefaultInit && BI.isEmpty(o.items) && BI.nextTick(BI.bind(function () {
             o.isDefaultInit && BI.isEmpty(o.items) && this.populate();
         }, this));
-        /*
         if (BI.isNotEmptyArray(o.items)) {
             this.populate(o.items);
         }
-        */
     },
 
     hasPrev: function () {
