@@ -568,3 +568,12 @@ Date.getDate = function () {
         return dt;
     }
 };
+
+Date.getTime = function () {
+    var dt = Function.prototype.bind.apply(Date.getDate, BI.concat([null], [].slice.apply(arguments)))();
+    if(BI.isNotNull(Date.timeZone)){
+        return dt.getTime() - Date.timeZone - dt.getTimezoneOffset() * 60000;
+    }else{
+        return dt.getTime();
+    }
+};
