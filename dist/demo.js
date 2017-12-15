@@ -831,7 +831,30 @@ BI.shortcut("demo.multifile_editor", Demo.CodeEditor);Demo.RichEditor = BI.inher
         this.editor.setValue('这是一条<font size="4" color="#009de3">测试</font>数据')
     }
 });
-BI.shortcut("demo.rich_editor", Demo.RichEditor);Demo.CodeEditor = BI.inherit(BI.Widget, {
+BI.shortcut("demo.rich_editor", Demo.RichEditor);/**
+ * Created by Windy on 2017/12/15.
+ */
+Demo.SQLEditor = BI.inherit(BI.Widget, {
+    props: {
+        baseCls: "demo-editor"
+    },
+    render: function () {
+        this.formula = BI.createWidget({
+            type : 'bi.sql_editor',
+            width : 300,
+            height : 200,
+            value : 'select * from DEMO_CONTRACT'
+        });
+        BI.createWidget({
+            type: "bi.left",
+            element: this,
+            items: [this.formula],
+            hgap: 20,
+            vgap: 20
+        })
+    }
+});
+BI.shortcut("demo.sql_editor", Demo.SQLEditor);Demo.CodeEditor = BI.inherit(BI.Widget, {
     props: {
         baseCls: "demo-editor"
     },
