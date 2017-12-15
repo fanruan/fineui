@@ -38,7 +38,7 @@ BI.YearCalendar = BI.inherit(BI.Widget, {
     _init: function () {
         BI.YearCalendar.superclass._init.apply(this, arguments);
         var self = this, o = this.options;
-        this.currentYear = new Date().getFullYear();
+        this.currentYear = Date.getDate().getFullYear();
         var years = this._yearCreator(o.year || this.currentYear);
 
         //纵向排列年
@@ -125,7 +125,7 @@ BI.extend(BI.YearCalendar, {
 
     //获取显示的第一年
     getStartYear: function (year) {
-        var cur = new Date().getFullYear();
+        var cur = Date.getDate().getFullYear();
         return year - ((year - cur + 3) % BI.YearCalendar.INTERVAL + 12) % BI.YearCalendar.INTERVAL;
     },
 
@@ -134,7 +134,7 @@ BI.extend(BI.YearCalendar, {
     },
 
     getPageByYear: function (year) {
-        var cur = new Date().getFullYear();
+        var cur = Date.getDate().getFullYear();
         year = BI.YearCalendar.getStartYear(year);
         return (year - cur + 3) / BI.YearCalendar.INTERVAL;
     }

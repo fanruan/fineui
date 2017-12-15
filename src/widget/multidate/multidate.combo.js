@@ -22,7 +22,7 @@ BI.MultiDateCombo = BI.inherit(BI.Single, {
         BI.MultiDateCombo.superclass._init.apply(this, arguments);
         var self = this, opts = this.options;
         this.storeTriggerValue = "";
-        var date = new Date();
+        var date = Date.getDate();
         this.storeValue = null;
         this.trigger = BI.createWidget({
             type: 'bi.date_trigger',
@@ -89,7 +89,7 @@ BI.MultiDateCombo = BI.inherit(BI.Single, {
             self.fireEvent(BI.MultiDateCombo.EVENT_CONFIRM);
         });
         this.popup.on(BI.MultiDatePopup.BUTTON_lABEL_EVENT_CHANGE, function () {
-            var date = new Date();
+            var date = Date.getDate();
             self.setValue({
                 year: date.getFullYear(),
                 month: date.getMonth(),
