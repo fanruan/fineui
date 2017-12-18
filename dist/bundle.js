@@ -67126,6 +67126,9 @@ BI.StaticCombo = BI.inherit(BI.Widget, {
                 el: this.popup
             }
         });
+        if (BI.isKey(o.text)) {
+            this.setValue(o.text);
+        }
     },
 
     populate: function (items) {
@@ -75345,9 +75348,6 @@ BI.SelectTextTrigger = BI.inherit(BI.Trigger, {
             element: this,
             height: o.height
         });
-        if (BI.isKey(o.text)) {
-            this.setValue(o.text);
-        }
     },
 
     setValue: function (vals) {
