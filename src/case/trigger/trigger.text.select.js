@@ -23,6 +23,9 @@ BI.SelectTextTrigger = BI.inherit(BI.Trigger, {
             element: this,
             height: o.height
         });
+        if (BI.isKey(o.text)) {
+            this.setValue(o.text);
+        }
     },
 
     setValue: function (vals) {

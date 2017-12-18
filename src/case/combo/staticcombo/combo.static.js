@@ -13,7 +13,7 @@ BI.StaticCombo = BI.inherit(BI.Widget, {
             el: {},
             items: [],
             chooseType: BI.ButtonGroup.CHOOSE_TYPE_SINGLE
-        });
+        })
     },
 
     _init: function () {
@@ -49,9 +49,6 @@ BI.StaticCombo = BI.inherit(BI.Widget, {
                 el: this.popup
             }
         });
-        if (BI.isKey(o.text)) {
-            this.setValue(o.text);
-        }
     },
 
     populate: function (items) {

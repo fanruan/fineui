@@ -67090,7 +67090,7 @@ BI.StaticCombo = BI.inherit(BI.Widget, {
             el: {},
             items: [],
             chooseType: BI.ButtonGroup.CHOOSE_TYPE_SINGLE
-        })
+        });
     },
 
     _init: function () {
@@ -67126,9 +67126,6 @@ BI.StaticCombo = BI.inherit(BI.Widget, {
                 el: this.popup
             }
         });
-        if (BI.isKey(o.text)) {
-            this.setValue(o.text);
-        }
     },
 
     populate: function (items) {
@@ -67352,7 +67349,7 @@ BI.TextValueCombo = BI.inherit(BI.Widget, {
             chooseType: BI.ButtonGroup.CHOOSE_TYPE_SINGLE,
             text: "",
             el: {}
-        })
+        });
     },
 
     _init: function () {
@@ -67361,8 +67358,7 @@ BI.TextValueCombo = BI.inherit(BI.Widget, {
         this.trigger = BI.createWidget(o.el, {
             type: "bi.select_text_trigger",
             items: o.items,
-            height: o.height,
-            text: o.text
+            height: o.height
         });
         this.popup = BI.createWidget({
             type: "bi.text_value_combo_popup",
@@ -67387,6 +67383,9 @@ BI.TextValueCombo = BI.inherit(BI.Widget, {
                 maxHeight: 300
             }
         });
+        if (BI.isKey(o.text)) {
+            this.setValue(o.text);
+        }
     },
 
     setValue: function (v) {
@@ -75348,6 +75347,9 @@ BI.SelectTextTrigger = BI.inherit(BI.Trigger, {
             element: this,
             height: o.height
         });
+        if (BI.isKey(o.text)) {
+            this.setValue(o.text);
+        }
     },
 
     setValue: function (vals) {
