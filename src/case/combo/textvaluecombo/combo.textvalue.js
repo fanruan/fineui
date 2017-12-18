@@ -10,7 +10,7 @@ BI.TextValueCombo = BI.inherit(BI.Widget, {
             baseClass: "bi-text-value-combo",
             height: 30,
             chooseType: BI.ButtonGroup.CHOOSE_TYPE_SINGLE,
-            text: "",
+            value: "",
             el: {}
         });
     },
@@ -46,8 +46,8 @@ BI.TextValueCombo = BI.inherit(BI.Widget, {
                 maxHeight: 300
             }
         });
-        if (BI.isKey(o.text)) {
-            this.setValue(o.text);
+        if (BI.isKey(o.value)) {
+            this.setValue(o.value);
         }
     },
 

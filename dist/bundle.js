@@ -66965,7 +66965,7 @@ BI.IconTextValueCombo = BI.inherit(BI.Widget, {
         return BI.extend(BI.IconTextValueCombo.superclass._defaultConfig.apply(this, arguments), {
             baseClass: "bi-icon-text-value-combo",
             height: 30,
-            text: "",
+            value: "",
             el: {}
         });
     },
@@ -67000,8 +67000,8 @@ BI.IconTextValueCombo = BI.inherit(BI.Widget, {
                 maxHeight: 300
             }
         });
-        if (BI.isKey(o.text)) {
-            this.setValue(o.text);
+        if (BI.isKey(o.value)) {
+            this.setValue(o.value);
         }
     },
 
@@ -67155,7 +67155,7 @@ BI.TextValueCheckCombo = BI.inherit(BI.Widget, {
             width: 100,
             height: 24,
             chooseType: BI.ButtonGroup.CHOOSE_TYPE_SINGLE,
-            text: ""
+            value: ""
         });
     },
 
@@ -67191,8 +67191,8 @@ BI.TextValueCheckCombo = BI.inherit(BI.Widget, {
             }
         });
 
-        if (BI.isKey(o.text)) {
-            this.setValue(o.text);
+        if (BI.isKey(o.value)) {
+            this.setValue(o.value);
         }
     },
 
@@ -67352,7 +67352,7 @@ BI.TextValueCombo = BI.inherit(BI.Widget, {
             baseClass: "bi-text-value-combo",
             height: 30,
             chooseType: BI.ButtonGroup.CHOOSE_TYPE_SINGLE,
-            text: "",
+            value: "",
             el: {}
         });
     },
@@ -67388,8 +67388,8 @@ BI.TextValueCombo = BI.inherit(BI.Widget, {
                 maxHeight: 300
             }
         });
-        if (BI.isKey(o.text)) {
-            this.setValue(o.text);
+        if (BI.isKey(o.value)) {
+            this.setValue(o.value);
         }
     },
 

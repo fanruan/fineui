@@ -10,7 +10,7 @@ BI.TextValueCheckCombo = BI.inherit(BI.Widget, {
             width: 100,
             height: 24,
             chooseType: BI.ButtonGroup.CHOOSE_TYPE_SINGLE,
-            text: ""
+            value: ""
         });
     },
 
@@ -46,8 +46,8 @@ BI.TextValueCheckCombo = BI.inherit(BI.Widget, {
             }
         });
 
-        if (BI.isKey(o.text)) {
-            this.setValue(o.text);
+        if (BI.isKey(o.value)) {
+            this.setValue(o.value);
         }
     },
 
