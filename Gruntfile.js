@@ -38,6 +38,7 @@ module.exports = function (grunt) {
             baseJs: {
                 src: [
                     'src/third/**/*.js',
+                    'src/base/formula/config.js',
                     'src/base/pane.js',
                     'src/base/single/single.js',
                     'src/base/single/text.js',
@@ -172,6 +173,7 @@ module.exports = function (grunt) {
             bi_baseJs: {
                 src: [
                     'src/third/**/*.js',
+                    'src/base/formula/config.js',
                     'src/base/pane.js',
                     'src/base/single/single.js',
                     'src/base/single/text.js',

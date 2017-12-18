@@ -1,0 +1,19 @@
+.bi-sql-editor .cm-s-default span[class*="#"] {
+  color: #faaa39;
+}
+.bi-sql-editor .cm-s-default .cm-keyword {
+  color: #3685f2;
+}
+.bi-sql-editor .cm-s-default .cm-function {
+  color: #faaa39;
+}
+.CodeMirror-hints .sql-fr-function {
+  color: #faaa39;
+}
+.CodeMirror-hints .sql-keyword {
+  color: #3685f2;
+}
+.CodeMirror-hints .CodeMirror-hint-active {
+  background: #3f8ce8;
+  color: #ffffff;
+}
