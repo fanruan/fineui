@@ -9,7 +9,7 @@ BI.IconTextValueCombo = BI.inherit(BI.Widget, {
             height: 30,
             text: "",
             el: {}
-        })
+        });
     },
 
     _init: function () {
@@ -18,8 +18,7 @@ BI.IconTextValueCombo = BI.inherit(BI.Widget, {
         this.trigger = BI.createWidget(o.el, {
             type: "bi.select_icon_text_trigger",
             items: o.items,
-            height: o.height,
-            text: o.text
+            height: o.height
         });
         this.popup = BI.createWidget({
             type: "bi.icon_text_value_combo_popup",
@@ -43,6 +42,9 @@ BI.IconTextValueCombo = BI.inherit(BI.Widget, {
                 maxHeight: 300
             }
         });
+        if (BI.isKey(o.text)) {
+            this.setValue(o.text);
+        }
     },
 
     setValue: function (v) {
