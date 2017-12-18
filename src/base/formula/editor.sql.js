@@ -14,18 +14,19 @@ BI.SQLEditor = BI.inherit(BI.Widget, {
         BI.CodeEditor.superclass._init.apply(this, arguments);
         var o = this.options, self = this;
         this.editor = CodeMirror(this.element[0], {
-            //mode: {name: 'text/x-sql'},
             mode: "text/x-sql",
             textWrapping: true,
             lineWrapping: true,
             lineNumbers: false
         });
         o.lineHeight === 1 ? this.element.addClass("codemirror-low-line-height") : this.element.addClass("codemirror-high-line-height");
-
+        
         this.editor.on("change", function (cm, change) {
             self._checkWaterMark();
             if (o.showHint) {
-                CodeMirror.showHint(cm, CodeMirror.formulaHint, {completeSingle: false});
+                CodeMirror.showHint(cm, CodeMirror.sqlHint, {
+                    completeSingle: false
+                });
             }
             BI.nextTick(function () {
                 self.fireEvent(BI.FormulaEditor.EVENT_CHANGE)
@@ -91,11 +92,11 @@ BI.SQLEditor = BI.inherit(BI.Widget, {
     },
 
     getValue: function () {
-
+        return this.editor.getValue();
     },
 
     setValue: function (v) {
-
+        this.editor.setValue(v);
     }
 });
 BI.shortcut("bi.sql_editor", BI.SQLEditor);

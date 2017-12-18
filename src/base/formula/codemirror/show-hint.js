@@ -73,13 +73,16 @@
             else {
                 this.cm.replaceRange(getText(completion), completion.from || data.from,
                     completion.to || data.to, "complete");
-                var to = this.cm.getCursor();
-                this.cm.markText(completion.from || data.from, to, {className: "#function", atomic: true});
-                this.cm.replaceSelection("() ");
-                to = this.cm.getCursor();
-                to.ch = to.ch - 2;
-                this.cm.setCursor(to);
-                this.cm.focus();
+                    if(completion.isKeyword === true){
+                    }else{
+                        var to = this.cm.getCursor();
+                        this.cm.markText(completion.from || data.from, to, {className: "#function", atomic: true});
+                        this.cm.replaceSelection("() ");
+                        to = this.cm.getCursor();
+                        to.ch = to.ch - 2;
+                        this.cm.setCursor(to);
+                        this.cm.focus();
+                    }
             }
             CodeMirror.signal(data, "pick", completion);
             this.close();
@@ -213,7 +216,7 @@
         this.data = data;
         this.picked = false;
         var widget = this, cm = completion.cm;
-
+        
         var hints = this.hints = document.createElement("ul");
         hints.className = "CodeMirror-hints";
         this.selectedHint = data.selectedHint || 0;

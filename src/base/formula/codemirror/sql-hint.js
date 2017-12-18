@@ -65,7 +65,7 @@
   }
 
   function match(string, word) {
-    if (BI.isNotEmptyString(string)) {
+    if (BI.isNotEmptyString(string) && word.length !== string.length) {
       var len = string.length;
       var sub = getText(word).substr(0, len);
       return string.toUpperCase() === sub.toUpperCase();
@@ -75,7 +75,7 @@
   function addMatches(result, search, wordlist, formatter) {
     if (isArray(wordlist)) {
       for (var i = 0; i < wordlist.length; i++)
-        if (match(search, wordlist[i])) result.push(formatter(wordlist[i]))
+        if (match(search, wordlist[i])) result.push(formatter(wordlist[i], i));
     } else {
       for (var word in wordlist) if (wordlist.hasOwnProperty(word)) {
         var val = wordlist[word]
@@ -240,6 +240,20 @@
     var disableKeywords = options && options.disableKeywords;
     defaultTable = defaultTableName && getTable(defaultTableName);
     keywords = getKeywords(editor);
+    var keywordsCount = BI.size(keywords);
+    var functions = [];
+    var desc = {};
+    var cur = editor.getCursor();
+    var token = editor.getTokenAt(cur);
+    BI.each(BI.FormulaCollections, function(idx, formula){
+      if(formula.lastIndexOf(token.string, 0) == 0 && !BI.contains(functions, formula)){
+        functions.push(formula);
+      }
+    });
+    BI.each(BI.FormulaJson, function(idx, formula){
+        desc[formula.name.toLowerCase()] = formula.def;
+    });
+    keywords = BI.concat(BI.keys(keywords), functions);
     identifierQuote = getIdentifierQuote(editor);
 
     if (defaultTableName && !defaultTable)
@@ -250,9 +264,8 @@
     if (defaultTable.columns)
       defaultTable = defaultTable.columns;
 
-    var cur = editor.getCursor();
     var result = [];
-    var token = editor.getTokenAt(cur), start, end, search;
+    var start, end, search;
     if (token.end > cur.ch) {
       token.end = cur.ch;
       token.string = token.string.slice(0, cur.ch - token.start);
@@ -269,10 +282,28 @@
     if (search.charAt(0) == "." || search.charAt(0) == identifierQuote) {
       start = nameCompletion(cur, token, result, editor);
     } else {
-      addMatches(result, search, tables, function(w) {return w;});
-      addMatches(result, search, defaultTable, function(w) {return w;});
+      addMatches(result, search, tables, function(w) {return w});
+      addMatches(result, search, defaultTable, function(w) {return w});
       if (!disableKeywords)
-        addMatches(result, search, keywords, function(w) {return w.toUpperCase();});
+        addMatches(result, search, keywords, function(w, i) {
+          var isKeyword = i < keywordsCount;
+          return {
+            isKeyword: isKeyword,
+            text: w,
+            description: desc[w] || "SQL关键字",
+            className: isKeyword ? "sql-keyword" : "sql-fr-function",
+            render: function (Element, self, data) {
+              var label = BI.createWidget({
+                type: "bi.label",
+                element: Element,
+                text: data.displayText || getText(data)
+              });
+              label.setTitle(data.description, {
+                container: "body"
+              });
+            }
+          };
+        });
     }
 
     return {list: result, from: Pos(cur.line, start), to: Pos(cur.line, end)};
