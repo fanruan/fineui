@@ -17552,6 +17552,53 @@ BI.PopoverSection.EVENT_CLOSE = "EVENT_CLOSE";;(function () {
         return newText
     };
 
+    /**
+     * 将cjkEncode处理过的字符串转化为原始字符串
+     *
+     * @static
+     * @param text 需要做解码的字符串
+     * @return {String} 解码后的字符串
+     */
+    BI.cjkDecode = function (text) {
+        if (text == null) {
+            return "";
+        }
+        //查找没有 "[", 直接返回.  kunsnat:数字的时候, 不支持indexOf方法, 也是直接返回.
+        if (!isNaN(text) || text.indexOf('[') == -1) {
+            return text;
+        }
+
+        var newText = "";
+        for (var i = 0; i < text.length; i++) {
+            var ch = text.charAt(i);
+            if (ch == '[') {
+                var rightIdx = text.indexOf(']', i + 1);
+                if (rightIdx > i + 1) {
+                    var subText = text.substring(i + 1, rightIdx);
+                    //james：主要是考虑[CDATA[]]这样的值的出现
+                    if (subText.length > 0) {
+                        ch = String.fromCharCode(eval("0x" + subText));
+                    }
+
+                    i = rightIdx;
+                }
+            }
+
+            newText += ch;
+        }
+
+        return newText;
+    };
+
+    //replace the html special tags
+    BI.htmlEncode = function (text) {
+        return (text == null) ? '' : String(text).replace(/&/g, '&amp;').replace(/\"/g, '&quot;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+    };
+    //html decode
+    BI.htmlDecode = function (text) {
+        return (text == null) ? '' : String(text).replace(/&amp;/g, '&').replace(/&quot;/g, '\"').replace(/&lt;/g, '<').replace(/&gt;/g, '>').replace(/&nbsp;/g, ' ');
+    };
+
     BI.cjkEncodeDO = function (o) {
         if (BI.isPlainObject(o)) {
             var result = {};
@@ -19278,7 +19325,7 @@ BI.extend(jQuery.fn, {
      */
     __textKeywordMarked__: function (text, keyword, py) {
         if (!BI.isKey(keyword) || (text + "").length > 100) {
-            return this.html(BI.Func.formatSpecialCharInHtml(text));
+            return this.html(BI.htmlEncode(text));
         }
         keyword = keyword + "";
         keyword = BI.toUpperCase(keyword);
@@ -19301,7 +19348,7 @@ BI.extend(jQuery.fn, {
             if (tidx >= 0) {
                 this.append(textLeft.substr(0, tidx));
                 this.append($("<span>").addClass("bi-keyword-red-mark")
-                    .html(BI.Func.formatSpecialCharInHtml(textLeft.substr(tidx, keyword.length))));
+                    .html(BI.htmlEncode(textLeft.substr(tidx, keyword.length))));
 
                 textLeft = textLeft.substr(tidx + keyword.length);
                 if (py != null) {
@@ -19310,7 +19357,7 @@ BI.extend(jQuery.fn, {
             } else if (pidx != null && pidx >= 0 && Math.floor(pidx / text.length) === Math.floor((pidx + keyword.length - 1) / text.length)) {
                 this.append(textLeft.substr(0, pidx));
                 this.append($("<span>").addClass("bi-keyword-red-mark")
-                    .html(BI.Func.formatSpecialCharInHtml(textLeft.substr(pidx, keyword.length))));
+                    .html(BI.htmlEncode(textLeft.substr(pidx, keyword.length))));
                 if (py != null) {
                     py = py.substr(pidx + keyword.length);
                 }
@@ -19915,27 +19962,6 @@ BI.extend(BI.Func, {
             matched: matched,
             finded: finded
         }
-    },
-
-    /**
-     * 将字符串中的尖括号等字符encode成html能解析的形式
-     * @param str
-     */
-    formatSpecialCharInHtml: function (str) {
-        return (str + "").replaceAll("\\s|<=?|>=?", function (str) {
-            switch (str) {
-                case "<":
-                    return "&lt;";
-                case "<=":
-                    return "&le;";
-                case ">":
-                    return "&gt;";
-                case ">=":
-                    return "&ge;";
-                default:
-                    return "&nbsp;";
-            }
-        });
     }
 });
 
@@ -26418,7 +26444,7 @@ BI.Text = BI.inherit(BI.Single, {
     setText: function (text) {
         BI.Text.superclass.setText.apply(this, arguments);
         this.options.text = text;
-        this.text.element.html(BI.Func.formatSpecialCharInHtml(text));
+        this.text.element.html(BI.htmlEncode(text));
     }
 });
 
@@ -40167,285 +40193,7 @@ BI.shortcut('bi.el', BI.EL);// CodeMirror, copyright (c) by Marijn Haverbeke and
     };
 
     CodeMirror.defineOption("hintOptions", null);
-});// CodeMirror, copyright (c) by Marijn Haverbeke and others
-// Distributed under an MIT license: http://codemirror.net/LICENSE
-
-(function(mod) {
-  mod(CodeMirror);
-})(function(CodeMirror) {
-
-  var tables;
-  var defaultTable;
-  var keywords;
-  var identifierQuote;
-  var CONS = {
-    QUERY_DIV: ";",
-    ALIAS_KEYWORD: "AS"
-  };
-  var Pos = CodeMirror.Pos, cmpPos = CodeMirror.cmpPos;
-
-  function isArray(val) { return Object.prototype.toString.call(val) == "[object Array]" }
-
-  function getKeywords(editor) {
-    var mode = editor.doc.modeOption;
-    if (mode === "sql") mode = "text/x-sql";
-    return CodeMirror.resolveMode(mode).keywords;
-  }
-
-  function getIdentifierQuote(editor) {
-    var mode = editor.doc.modeOption;
-    if (mode === "sql") mode = "text/x-sql";
-    return CodeMirror.resolveMode(mode).identifierQuote || "`";
-  }
-
-  function getText(item) {
-    return typeof item == "string" ? item : item.text;
-  }
-
-  function wrapTable(name, value) {
-    if (isArray(value)) value = {columns: value}
-    if (!value.text) value.text = name
-    return value
-  }
-
-  function parseTables(input) {
-    var result = {}
-    if (isArray(input)) {
-      for (var i = input.length - 1; i >= 0; i--) {
-        var item = input[i]
-        result[getText(item).toUpperCase()] = wrapTable(getText(item), item)
-      }
-    } else if (input) {
-      for (var name in input)
-        result[name.toUpperCase()] = wrapTable(name, input[name])
-    }
-    return result
-  }
-
-  function getTable(name) {
-    return tables[name.toUpperCase()]
-  }
-
-  function shallowClone(object) {
-    var result = {};
-    for (var key in object) if (object.hasOwnProperty(key))
-      result[key] = object[key];
-    return result;
-  }
-
-  function match(string, word) {
-    var len = string.length;
-    var sub = getText(word).substr(0, len);
-    return string.toUpperCase() === sub.toUpperCase();
-  }
-
-  function addMatches(result, search, wordlist, formatter) {
-    if (isArray(wordlist)) {
-      for (var i = 0; i < wordlist.length; i++)
-        if (match(search, wordlist[i])) result.push(formatter(wordlist[i]))
-    } else {
-      for (var word in wordlist) if (wordlist.hasOwnProperty(word)) {
-        var val = wordlist[word]
-        if (!val || val === true)
-          val = word
-        else
-          val = val.displayText ? {text: val.text, displayText: val.displayText} : val.text
-        if (match(search, val)) result.push(formatter(val))
-      }
-    }
-  }
-
-  function cleanName(name) {
-    // Get rid name from identifierQuote and preceding dot(.)
-    if (name.charAt(0) == ".") {
-      name = name.substr(1);
-    }
-    // replace doublicated identifierQuotes with single identifierQuotes
-    // and remove single identifierQuotes
-    var nameParts = name.split(identifierQuote+identifierQuote);
-    for (var i = 0; i < nameParts.length; i++)
-      nameParts[i] = nameParts[i].replace(new RegExp(identifierQuote,"g"), "");
-    return nameParts.join(identifierQuote);
-  }
-
-  function insertIdentifierQuotes(name) {
-    var nameParts = getText(name).split(".");
-    for (var i = 0; i < nameParts.length; i++)
-      nameParts[i] = identifierQuote +
-        // doublicate identifierQuotes
-        nameParts[i].replace(new RegExp(identifierQuote,"g"), identifierQuote+identifierQuote) +
-        identifierQuote;
-    var escaped = nameParts.join(".");
-    if (typeof name == "string") return escaped;
-    name = shallowClone(name);
-    name.text = escaped;
-    return name;
-  }
-
-  function nameCompletion(cur, token, result, editor) {
-    // Try to complete table, column names and return start position of completion
-    var useIdentifierQuotes = false;
-    var nameParts = [];
-    var start = token.start;
-    var cont = true;
-    while (cont) {
-      cont = (token.string.charAt(0) == ".");
-      useIdentifierQuotes = useIdentifierQuotes || (token.string.charAt(0) == identifierQuote);
-
-      start = token.start;
-      nameParts.unshift(cleanName(token.string));
-
-      token = editor.getTokenAt(Pos(cur.line, token.start));
-      if (token.string == ".") {
-        cont = true;
-        token = editor.getTokenAt(Pos(cur.line, token.start));
-      }
-    }
-
-    // Try to complete table names
-    var string = nameParts.join(".");
-    addMatches(result, string, tables, function(w) {
-      return useIdentifierQuotes ? insertIdentifierQuotes(w) : w;
-    });
-
-    // Try to complete columns from defaultTable
-    addMatches(result, string, defaultTable, function(w) {
-      return useIdentifierQuotes ? insertIdentifierQuotes(w) : w;
-    });
-
-    // Try to complete columns
-    string = nameParts.pop();
-    var table = nameParts.join(".");
-
-    var alias = false;
-    var aliasTable = table;
-    // Check if table is available. If not, find table by Alias
-    if (!getTable(table)) {
-      var oldTable = table;
-      table = findTableByAlias(table, editor);
-      if (table !== oldTable) alias = true;
-    }
-
-    var columns = getTable(table);
-    if (columns && columns.columns)
-      columns = columns.columns;
-
-    if (columns) {
-      addMatches(result, string, columns, function(w) {
-        var tableInsert = table;
-        if (alias == true) tableInsert = aliasTable;
-        if (typeof w == "string") {
-          w = tableInsert + "." + w;
-        } else {
-          w = shallowClone(w);
-          w.text = tableInsert + "." + w.text;
-        }
-        return useIdentifierQuotes ? insertIdentifierQuotes(w) : w;
-      });
-    }
-
-    return start;
-  }
-
-  function eachWord(lineText, f) {
-    var words = lineText.split(/\s+/)
-    for (var i = 0; i < words.length; i++)
-      if (words[i]) f(words[i].replace(/[,;]/g, ''))
-  }
-
-  function findTableByAlias(alias, editor) {
-    var doc = editor.doc;
-    var fullQuery = doc.getValue();
-    var aliasUpperCase = alias.toUpperCase();
-    var previousWord = "";
-    var table = "";
-    var separator = [];
-    var validRange = {
-      start: Pos(0, 0),
-      end: Pos(editor.lastLine(), editor.getLineHandle(editor.lastLine()).length)
-    };
-
-    //add separator
-    var indexOfSeparator = fullQuery.indexOf(CONS.QUERY_DIV);
-    while(indexOfSeparator != -1) {
-      separator.push(doc.posFromIndex(indexOfSeparator));
-      indexOfSeparator = fullQuery.indexOf(CONS.QUERY_DIV, indexOfSeparator+1);
-    }
-    separator.unshift(Pos(0, 0));
-    separator.push(Pos(editor.lastLine(), editor.getLineHandle(editor.lastLine()).text.length));
-
-    //find valid range
-    var prevItem = null;
-    var current = editor.getCursor()
-    for (var i = 0; i < separator.length; i++) {
-      if ((prevItem == null || cmpPos(current, prevItem) > 0) && cmpPos(current, separator[i]) <= 0) {
-        validRange = {start: prevItem, end: separator[i]};
-        break;
-      }
-      prevItem = separator[i];
-    }
-
-    var query = doc.getRange(validRange.start, validRange.end, false);
-
-    for (var i = 0; i < query.length; i++) {
-      var lineText = query[i];
-      eachWord(lineText, function(word) {
-        var wordUpperCase = word.toUpperCase();
-        if (wordUpperCase === aliasUpperCase && getTable(previousWord))
-          table = previousWord;
-        if (wordUpperCase !== CONS.ALIAS_KEYWORD)
-          previousWord = word;
-      });
-      if (table) break;
-    }
-    return table;
-  }
-
-  CodeMirror.registerHelper("hint", "sql", function(editor, options) {
-    tables = parseTables(options && options.tables)
-    var defaultTableName = options && options.defaultTable;
-    var disableKeywords = options && options.disableKeywords;
-    defaultTable = defaultTableName && getTable(defaultTableName);
-    keywords = getKeywords(editor);
-    identifierQuote = getIdentifierQuote(editor);
-
-    if (defaultTableName && !defaultTable)
-      defaultTable = findTableByAlias(defaultTableName, editor);
-
-    defaultTable = defaultTable || [];
-
-    if (defaultTable.columns)
-      defaultTable = defaultTable.columns;
-
-    var cur = editor.getCursor();
-    var result = [];
-    var token = editor.getTokenAt(cur), start, end, search;
-    if (token.end > cur.ch) {
-      token.end = cur.ch;
-      token.string = token.string.slice(0, cur.ch - token.start);
-    }
-
-    if (token.string.match(/^[.`"\w@]\w*$/)) {
-      search = token.string;
-      start = token.start;
-      end = token.end;
-    } else {
-      start = end = cur.ch;
-      search = "";
-    }
-    if (search.charAt(0) == "." || search.charAt(0) == identifierQuote) {
-      start = nameCompletion(cur, token, result, editor);
-    } else {
-      addMatches(result, search, tables, function(w) {return w;});
-      addMatches(result, search, defaultTable, function(w) {return w;});
-      if (!disableKeywords)
-        addMatches(result, search, keywords, function(w) {return w.toUpperCase();});
-    }
-
-    return {list: result, from: Pos(cur.line, start), to: Pos(cur.line, end)};
-  });
-});
-/**
+});/**
  * Created by User on 2017/3/21.
  */
 BI.FormulaCollections = ["abs","ABS","acos","ACOS","acosh","ACOSH","add2array","ADD2ARRAY","and","AND","array","ARRAY","asin","ASIN","asinh","ASINH","atan","ATAN","atan2","ATAN2","atanh","ATANH","average","AVERAGE","bitnot","BITNOT","bitoperation","BITOPERATION","ceiling","CEILING","char","CHAR","circular","CIRCULAR","class","CLASS","cnmoney","CNMONEY","code","CODE","col","COL","colcount","COLCOUNT","colname","COLNAME","combin","COMBIN","concatenate","CONCATENATE","correl","CORREL","cos","COS","cosh","COSH","count","COUNT","crosslayertotal","CROSSLAYERTOTAL","date","DATE","datedelta","DATEDELTA","datedif","DATEDIF","dateinmonth","DATEINMONTH","dateinquarter","DATEINQUARTER","dateinweek","DATEINWEEK","dateinyear","DATEINYEAR","datesubdate","DATESUBDATE","datetime","DATETIME","datetonumber","DATETONUMBER","day","DAY","days360","DAYS360","daysofmonth","DAYSOFMONTH","daysofquarter","DAYSOFQUARTER","daysofyear","DAYSOFYEAR","dayvalue","DAYVALUE","decimal","DECIMAL","decode","DECODE","degrees","DEGREES","encode","ENCODE","endwith","ENDWITH","enmoney","ENMONEY","ennumber","ENNUMBER","eval","EVAL","even","EVEN","exact","EXACT","exp","EXP","fact","FACT","fields","FIELDS","filename","FILENAME","filesize","FILESIZE","filetype","FILETYPE","find","FIND","floor","FLOOR","format","FORMAT","getuserdepartments","GETUSERDEPARTMENTS","getuserjobtitles","GETUSERJOBTITLES","greparray","GREPARRAY","hierarchy","HIERARCHY","hour","HOUR","i18n","I18N","if","IF","inarray","INARRAY","index","INDEX","indexof","INDEXOF","indexofarray","INDEXOFARRAY","int","INT","isnull","ISNULL","joinarray","JOINARRAY","jvm","JVM","layertotal","LAYERTOTAL","left","LEFT","len","LEN","let","LET","ln","LN","log","LOG","log10","LOG10","lower","LOWER","lunar","LUNAR","map","MAP","maparray","MAPARRAY","max","MAX","median","MEDIAN","mid","MID","min","MIN","minute","MINUTE","mod","MOD","mom","MOM","month","MONTH","monthdelta","MONTHDELTA","now","NOW","numto","NUMTO","nvl","NVL","odd","ODD","or","OR","pi","PI","power","POWER","product","PRODUCT","promotion","PROMOTION","proper","PROPER","proportion","PROPORTION","radians","RADIANS","rand","RAND","randbetween","RANDBETWEEN","range","RANGE","rank","RANK","records","RECORDS","regexp","REGEXP","removearray","REMOVEARRAY","repeat","REPEAT","replace","REPLACE","reverse","REVERSE","reversearray","REVERSEARRAY","right","RIGHT","round","ROUND","round5","ROUND5","rounddown","ROUNDDOWN","roundup","ROUNDUP","row","ROW","rowcount","ROWCOUNT","second","SECOND","seq","SEQ","sign","SIGN","sin","SIN","sinh","SINH","slicearray","SLICEARRAY","sort","SORT","sortarray","SORTARRAY","split","SPLIT","sql","SQL","sqrt","SQRT","startwith","STARTWITH","stdev","STDEV","substitute","SUBSTITUTE","sum","SUM","sumsq","SUMSQ","switch","SWITCH","tabledatafields","TABLEDATAFIELDS","tabledatas","TABLEDATAS","tables","TABLES","tan","TAN","tanh","TANH","time","TIME","tobigdecimal","TOBIGDECIMAL","tobinary","TOBINARY","todate","TODATE","today","TODAY","todouble","TODOUBLE","tohex","TOHEX","toimage","TOIMAGE","tointeger","TOINTEGER","tooctal","TOOCTAL","totext","TOTEXT","treelayer","TREELAYER","trim","TRIM","trunc","TRUNC","uniquearray","UNIQUEARRAY","upper","UPPER","uuid","UUID","value","VALUE","webimage","WEBIMAGE","week","WEEK","weekdate","WEEKDATE","weekday","WEEKDAY","weightedaverage","WEIGHTEDAVERAGE","year","YEAR","yeardelta","YEARDELTA"];

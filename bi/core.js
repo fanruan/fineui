@@ -17552,6 +17552,53 @@ BI.PopoverSection.EVENT_CLOSE = "EVENT_CLOSE";;(function () {
         return newText
     };
 
+    /**
+     * 将cjkEncode处理过的字符串转化为原始字符串
+     *
+     * @static
+     * @param text 需要做解码的字符串
+     * @return {String} 解码后的字符串
+     */
+    BI.cjkDecode = function (text) {
+        if (text == null) {
+            return "";
+        }
+        //查找没有 "[", 直接返回.  kunsnat:数字的时候, 不支持indexOf方法, 也是直接返回.
+        if (!isNaN(text) || text.indexOf('[') == -1) {
+            return text;
+        }
+
+        var newText = "";
+        for (var i = 0; i < text.length; i++) {
+            var ch = text.charAt(i);
+            if (ch == '[') {
+                var rightIdx = text.indexOf(']', i + 1);
+                if (rightIdx > i + 1) {
+                    var subText = text.substring(i + 1, rightIdx);
+                    //james：主要是考虑[CDATA[]]这样的值的出现
+                    if (subText.length > 0) {
+                        ch = String.fromCharCode(eval("0x" + subText));
+                    }
+
+                    i = rightIdx;
+                }
+            }
+
+            newText += ch;
+        }
+
+        return newText;
+    };
+
+    //replace the html special tags
+    BI.htmlEncode = function (text) {
+        return (text == null) ? '' : String(text).replace(/&/g, '&amp;').replace(/\"/g, '&quot;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+    };
+    //html decode
+    BI.htmlDecode = function (text) {
+        return (text == null) ? '' : String(text).replace(/&amp;/g, '&').replace(/&quot;/g, '\"').replace(/&lt;/g, '<').replace(/&gt;/g, '>').replace(/&nbsp;/g, ' ');
+    };
+
     BI.cjkEncodeDO = function (o) {
         if (BI.isPlainObject(o)) {
             var result = {};
@@ -19278,7 +19325,7 @@ BI.extend(jQuery.fn, {
      */
     __textKeywordMarked__: function (text, keyword, py) {
         if (!BI.isKey(keyword) || (text + "").length > 100) {
-            return this.html(BI.Func.formatSpecialCharInHtml(text));
+            return this.html(BI.htmlEncode(text));
         }
         keyword = keyword + "";
         keyword = BI.toUpperCase(keyword);
@@ -19301,7 +19348,7 @@ BI.extend(jQuery.fn, {
             if (tidx >= 0) {
                 this.append(textLeft.substr(0, tidx));
                 this.append($("<span>").addClass("bi-keyword-red-mark")
-                    .html(BI.Func.formatSpecialCharInHtml(textLeft.substr(tidx, keyword.length))));
+                    .html(BI.htmlEncode(textLeft.substr(tidx, keyword.length))));
 
                 textLeft = textLeft.substr(tidx + keyword.length);
                 if (py != null) {
@@ -19310,7 +19357,7 @@ BI.extend(jQuery.fn, {
             } else if (pidx != null && pidx >= 0 && Math.floor(pidx / text.length) === Math.floor((pidx + keyword.length - 1) / text.length)) {
                 this.append(textLeft.substr(0, pidx));
                 this.append($("<span>").addClass("bi-keyword-red-mark")
-                    .html(BI.Func.formatSpecialCharInHtml(textLeft.substr(pidx, keyword.length))));
+                    .html(BI.htmlEncode(textLeft.substr(pidx, keyword.length))));
                 if (py != null) {
                     py = py.substr(pidx + keyword.length);
                 }
@@ -19915,27 +19962,6 @@ BI.extend(BI.Func, {
             matched: matched,
             finded: finded
         }
-    },
-
-    /**
-     * 将字符串中的尖括号等字符encode成html能解析的形式
-     * @param str
-     */
-    formatSpecialCharInHtml: function (str) {
-        return (str + "").replaceAll("\\s|<=?|>=?", function (str) {
-            switch (str) {
-                case "<":
-                    return "&lt;";
-                case "<=":
-                    return "&le;";
-                case ">":
-                    return "&gt;";
-                case ">=":
-                    return "&ge;";
-                default:
-                    return "&nbsp;";
-            }
-        });
     }
 });
 
