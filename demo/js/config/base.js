@@ -64,6 +64,10 @@ Demo.BASE_CONFIG = [{
     value: "demo.textarea_editor"
 }, {
     pId: 202,
+    text: "bi.sql_editor",
+    value: "demo.sql_editor"
+}, {
+    pId: 202,
     text: "bi.formula_editor",
     value: "demo.formula_editor"
 }, {

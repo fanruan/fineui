@@ -831,7 +831,38 @@ BI.shortcut("demo.multifile_editor", Demo.CodeEditor);Demo.RichEditor = BI.inher
         this.editor.setValue("这是一条<font size=\"4\" color=\"#009de3\">测试</font>数据");
     }
 });
-BI.shortcut("demo.rich_editor", Demo.RichEditor);Demo.CodeEditor = BI.inherit(BI.Widget, {
+BI.shortcut("demo.rich_editor", Demo.RichEditor);/**
+ * Created by Windy on 2017/12/15.
+ */
+Demo.SQLEditor = BI.inherit(BI.Widget, {
+    props: {
+        baseCls: "demo-editor"
+    },
+    render: function () {
+        var self = this;
+        this.formula = BI.createWidget({
+            type : 'bi.sql_editor',
+            width : 300,
+            height : 200,
+            value : "select * from DEMO_CONTRACT where 合同类型 = '长期协议' and 购买数量 = sum([1,2,3,4])"
+        });
+        BI.createWidget({
+            type: "bi.left",
+            element: this,
+            items: [this.formula, {
+                type: "bi.button",
+                height: 24,
+                handler: function () {
+                    BI.Msg.alert("", self.formula.getValue());
+                }
+
+            }],
+            hgap: 20,
+            vgap: 20
+        })
+    }
+});
+BI.shortcut("demo.sql_editor", Demo.SQLEditor);Demo.CodeEditor = BI.inherit(BI.Widget, {
     props: {
         baseCls: "demo-editor"
     },
@@ -4700,6 +4731,10 @@ BI.shortcut("demo.value_chooser_pane", Demo.ValueChooserPane);Demo.ADDONS_CONFIG
     pId: 202,
     text: "bi.textarea_editor",
     value: "demo.textarea_editor"
+}, {
+    pId: 202,
+    text: "bi.sql_editor",
+    value: "demo.sql_editor"
 }, {
     pId: 202,
     text: "bi.formula_editor",
