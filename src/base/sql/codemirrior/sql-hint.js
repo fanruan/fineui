@@ -285,27 +285,25 @@
       addMatches(result, search, tables, function(w) {return w});
       addMatches(result, search, defaultTable, function(w) {return w});
       if (!disableKeywords)
-        addMatches(result, search, keywords, function(w) {return w;});
-        // 这边是加tooltip的，现在貌似不要了
-        // addMatches(result, search, keywords, function(w, i) {
-        //   var isKeyword = i < keywordsCount;
-        //   return {
-        //     isKeyword: isKeyword,
-        //     text: w,
-        //     description: desc[w] || "SQL关键字",
-        //     className: isKeyword ? "sql-keyword" : "sql-fr-function",
-        //     render: function (Element, self, data) {
-        //       var label = BI.createWidget({
-        //         type: "bi.label",
-        //         element: Element,
-        //         text: data.displayText || getText(data)
-        //       });
-        //       label.setTitle(data.description, {
-        //         container: "body"
-        //       });
-        //     }
-        //   };
-        // });
+        addMatches(result, search, keywords, function(w, i) {
+          var isKeyword = i < keywordsCount;
+          return {
+            isKeyword: isKeyword,
+            text: w
+            // description: desc[w] || "SQL关键字",
+            // className: isKeyword ? "sql-keyword" : "sql-fr-function",
+            // render: function (Element, self, data) {
+            //   var label = BI.createWidget({
+            //     type: "bi.label",
+            //     element: Element,
+            //     text: data.displayText || getText(data)
+            //   });
+            //   label.setTitle(data.description, {
+            //     container: "body"
+            //   });
+            // }
+          };
+        });
     }
 
     return {list: result, from: Pos(cur.line, start), to: Pos(cur.line, end)};
