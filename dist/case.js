@@ -5462,9 +5462,9 @@ BI.IconTextValueCombo = BI.inherit(BI.Widget, {
         return BI.extend(BI.IconTextValueCombo.superclass._defaultConfig.apply(this, arguments), {
             baseClass: "bi-icon-text-value-combo",
             height: 30,
-            text: "",
+            value: "",
             el: {}
-        })
+        });
     },
 
     _init: function () {
@@ -5473,8 +5473,7 @@ BI.IconTextValueCombo = BI.inherit(BI.Widget, {
         this.trigger = BI.createWidget(o.el, {
             type: "bi.select_icon_text_trigger",
             items: o.items,
-            height: o.height,
-            text: o.text
+            height: o.height
         });
         this.popup = BI.createWidget({
             type: "bi.icon_text_value_combo_popup",
@@ -5498,6 +5497,9 @@ BI.IconTextValueCombo = BI.inherit(BI.Widget, {
                 maxHeight: 300
             }
         });
+        if (BI.isKey(o.value)) {
+            this.setValue(o.value);
+        }
     },
 
     setValue: function (v) {
@@ -5650,8 +5652,8 @@ BI.TextValueCheckCombo = BI.inherit(BI.Widget, {
             width: 100,
             height: 24,
             chooseType: BI.ButtonGroup.CHOOSE_TYPE_SINGLE,
-            text: ""
-        })
+            value: ""
+        });
     },
 
     _init: function () {
@@ -5660,8 +5662,7 @@ BI.TextValueCheckCombo = BI.inherit(BI.Widget, {
         this.trigger = BI.createWidget({
             type: "bi.select_text_trigger",
             items: o.items,
-            height: o.height,
-            text: o.text
+            height: o.height
         });
         this.popup = BI.createWidget({
             type: "bi.text_value_check_combo_popup",
@@ -5686,6 +5687,10 @@ BI.TextValueCheckCombo = BI.inherit(BI.Widget, {
                 maxHeight: 300
             }
         });
+
+        if (BI.isKey(o.value)) {
+            this.setValue(o.value);
+        }
     },
 
     setTitle: function (title) {
@@ -5844,9 +5849,9 @@ BI.TextValueCombo = BI.inherit(BI.Widget, {
             baseClass: "bi-text-value-combo",
             height: 30,
             chooseType: BI.ButtonGroup.CHOOSE_TYPE_SINGLE,
-            text: "",
+            value: "",
             el: {}
-        })
+        });
     },
 
     _init: function () {
@@ -5855,8 +5860,7 @@ BI.TextValueCombo = BI.inherit(BI.Widget, {
         this.trigger = BI.createWidget(o.el, {
             type: "bi.select_text_trigger",
             items: o.items,
-            height: o.height,
-            text: o.text
+            height: o.height
         });
         this.popup = BI.createWidget({
             type: "bi.text_value_combo_popup",
@@ -5881,6 +5885,9 @@ BI.TextValueCombo = BI.inherit(BI.Widget, {
                 maxHeight: 300
             }
         });
+        if (BI.isKey(o.value)) {
+            this.setValue(o.value);
+        }
     },
 
     setValue: function (v) {
@@ -6027,8 +6034,7 @@ BI.TextValueDownListCombo = BI.inherit(BI.Widget, {
     _defaultConfig: function () {
         return BI.extend(BI.TextValueDownListCombo.superclass._defaultConfig.apply(this, arguments), {
             baseCls: "bi-text-value-down-list-combo",
-            height: 30,
-            text: ""
+            height: 30
         })
     },
 
