@@ -289,19 +289,19 @@
           var isKeyword = i < keywordsCount;
           return {
             isKeyword: isKeyword,
-            text: w,
-            description: desc[w] || "SQL关键字",
-            className: isKeyword ? "sql-keyword" : "sql-fr-function",
-            render: function (Element, self, data) {
-              var label = BI.createWidget({
-                type: "bi.label",
-                element: Element,
-                text: data.displayText || getText(data)
-              });
-              label.setTitle(data.description, {
-                container: "body"
-              });
-            }
+            text: w
+            // description: desc[w] || "SQL关键字",
+            // className: isKeyword ? "sql-keyword" : "sql-fr-function",
+            // render: function (Element, self, data) {
+            //   var label = BI.createWidget({
+            //     type: "bi.label",
+            //     element: Element,
+            //     text: data.displayText || getText(data)
+            //   });
+            //   label.setTitle(data.description, {
+            //     container: "body"
+            //   });
+            // }
           };
         });
     }
