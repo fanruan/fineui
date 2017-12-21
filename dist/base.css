@@ -785,7 +785,7 @@ body .bi-button.button-warning.clear,
 #body .bi-button.button-warning.clear,
 body .bi-button.button-warning.clear .b-font:before,
 #body .bi-button.button-warning.clear .b-font:before {
-  color: #faaa39;
+  color: #ff4949;
 }
 body .bi-button.button-common.disabled,
 #body .bi-button.button-common.disabled,
@@ -914,7 +914,7 @@ body .bi-button.button-ignore.disabled.clear:active,
   display: inline-block;
 }
 .bi-code-editor .error-param {
-  color: #faaa39;
+  color: #ff4949;
   padding: 0 5px;
   margin: 1px 1px;
   display: inline-block;
@@ -967,7 +967,7 @@ body .bi-button.button-ignore.disabled.clear:active,
 .bi-input.bi-input-error,
 .bi-textarea.bi-input-error {
   border: none;
-  color: #faaa39 !important;
+  color: #ff4949 !important;
 }
 .bi-label {
   text-overflow: ellipsis;
@@ -999,8 +999,8 @@ body .bi-button.button-ignore.disabled.clear:active,
   -webkit-border-radius: 2px;
   -moz-border-radius: 2px;
   border-radius: 2px;
-  background: #fddddd;
-  color: #faaa39;
+  background: #ff4949;
+  color: #ff4949;
 }
 .bi-tip {
   position: fixed !important;
@@ -1016,8 +1016,8 @@ body .bi-button.button-ignore.disabled.clear:active,
   color: #5cb75d;
 }
 .bi-toast.toast-warning {
-  background: #fddddd;
-  color: #faaa39;
+  background: #ff4949;
+  color: #ff4949;
 }
 .bi-tooltip {
   max-width: 250px;
@@ -1032,8 +1032,8 @@ body .bi-button.button-ignore.disabled.clear:active,
   color: #1a1a1a;
 }
 .bi-tooltip.tooltip-warning {
-  background: #fddddd;
-  color: #faaa39;
+  background: #ff4949;
+  color: #ff4949;
   border: 1px solid #f4cbcb;
 }
 .bi-sql-editor .cm-s-default span[class*="#"] {

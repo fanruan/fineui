@@ -419,13 +419,13 @@ i {
   border-bottom: 1px solid #525466;
 }
 .bi-keyword-red-mark {
-  color: #ff4949;
+  color: #faaa39;
 }
 .bi-keyword-red-mark .bi-input {
-  color: #ff4949;
+  color: #faaa39;
 }
 .bi-keyword-red-mark .bi-textarea {
-  color: #ff4949;
+  color: #faaa39;
 }
 .bi-high-light {
   color: #3685f2;
@@ -2380,7 +2380,7 @@ body .bi-button.button-warning.clear,
 #body .bi-button.button-warning.clear,
 body .bi-button.button-warning.clear .b-font:before,
 #body .bi-button.button-warning.clear .b-font:before {
-  color: #faaa39;
+  color: #ff4949;
 }
 body .bi-button.button-common.disabled,
 #body .bi-button.button-common.disabled,
@@ -2509,7 +2509,7 @@ body .bi-button.button-ignore.disabled.clear:active,
   display: inline-block;
 }
 .bi-code-editor .error-param {
-  color: #faaa39;
+  color: #ff4949;
   padding: 0 5px;
   margin: 1px 1px;
   display: inline-block;
@@ -2562,7 +2562,7 @@ body .bi-button.button-ignore.disabled.clear:active,
 .bi-input.bi-input-error,
 .bi-textarea.bi-input-error {
   border: none;
-  color: #faaa39 !important;
+  color: #ff4949 !important;
 }
 .bi-label {
   text-overflow: ellipsis;
@@ -2594,8 +2594,8 @@ body .bi-button.button-ignore.disabled.clear:active,
   -webkit-border-radius: 2px;
   -moz-border-radius: 2px;
   border-radius: 2px;
-  background: #fddddd;
-  color: #faaa39;
+  background: #ff4949;
+  color: #ff4949;
 }
 .bi-tip {
   position: fixed !important;
@@ -2611,8 +2611,8 @@ body .bi-button.button-ignore.disabled.clear:active,
   color: #5cb75d;
 }
 .bi-toast.toast-warning {
-  background: #fddddd;
-  color: #faaa39;
+  background: #ff4949;
+  color: #ff4949;
 }
 .bi-tooltip {
   max-width: 250px;
@@ -2627,8 +2627,8 @@ body .bi-button.button-ignore.disabled.clear:active,
   color: #1a1a1a;
 }
 .bi-tooltip.tooltip-warning {
-  background: #fddddd;
-  color: #faaa39;
+  background: #ff4949;
+  color: #ff4949;
   border: 1px solid #f4cbcb;
 }
 .bi-sql-editor .cm-s-default span[class*="#"] {
@@ -3263,7 +3263,7 @@ ul.ztree.zTreeDragUL {
 }
 .bi-interactive-arrangement .interactive-arrangement-dragtag-line {
   z-index: 1000000000;
-  background-color: #ff4949;
+  background-color: #faaa39;
 }
 .bi-interactive-arrangement .interactive-arrangement-dragtag-icon {
   z-index: 1000000000;
@@ -3318,7 +3318,7 @@ ul.ztree.zTreeDragUL {
   border-radius: 2px 2px 2px 2px;
 }
 .bi-multi-select-search-pane .multi-select-toolbar {
-  color: #faaa39;
+  color: #ff4949;
 }
 .bi-multi-select-check-selected-button {
   z-index: 1;
@@ -3380,7 +3380,7 @@ ul.ztree.zTreeDragUL {
   font-size: 14px;
 }
 .bi-number-interval.number-error .bi-input {
-  color: #faaa39 !important;
+  color: #ff4949 !important;
 }
 .bi-page-table-cell {
   -webkit-user-select: text;
@@ -3537,10 +3537,10 @@ ul.ztree.zTreeDragUL {
   border-radius: 3px;
 }
 .bi-param-time-interval.time-error .bi-input {
-  color: #faaa39;
+  color: #ff4949;
 }
 .bi-param-time-interval.time-error .sign-editor-text {
-  color: #faaa39;
+  color: #ff4949;
 }
 .bi-year-popup .year-popup-navigation {
   line-height: 30px;

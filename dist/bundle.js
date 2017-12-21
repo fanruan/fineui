@@ -46564,6 +46564,7 @@ BI.Trigger = BI.inherit(BI.Single, {
             //   });
             //   label.setTitle(data.description, {
             //     container: "body"
+            
             //   });
             // }
           };
