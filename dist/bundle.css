@@ -2592,7 +2592,7 @@ body .bi-button.button-ignore.disabled.clear:active,
   -webkit-border-radius: 2px;
   -moz-border-radius: 2px;
   border-radius: 2px;
-  background: #ff4949;
+  background: #fddddd;
   color: #ff4949;
 }
 .bi-tip {
@@ -2609,7 +2609,7 @@ body .bi-button.button-ignore.disabled.clear:active,
   color: #5cb75d;
 }
 .bi-toast.toast-warning {
-  background: #ff4949;
+  background: #fddddd;
   color: #ff4949;
 }
 .bi-tooltip {
@@ -2625,7 +2625,7 @@ body .bi-button.button-ignore.disabled.clear:active,
   color: #1a1a1a;
 }
 .bi-tooltip.tooltip-warning {
-  background: #ff4949;
+  background: #fddddd;
   color: #ff4949;
   border: 1px solid #f4cbcb;
 }
