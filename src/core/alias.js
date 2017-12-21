@@ -251,6 +251,53 @@
         return newText
     };
 
+    /**
+     * 将cjkEncode处理过的字符串转化为原始字符串
+     *
+     * @static
+     * @param text 需要做解码的字符串
+     * @return {String} 解码后的字符串
+     */
+    BI.cjkDecode = function (text) {
+        if (text == null) {
+            return "";
+        }
+        //查找没有 "[", 直接返回.  kunsnat:数字的时候, 不支持indexOf方法, 也是直接返回.
+        if (!isNaN(text) || text.indexOf('[') == -1) {
+            return text;
+        }
+
+        var newText = "";
+        for (var i = 0; i < text.length; i++) {
+            var ch = text.charAt(i);
+            if (ch == '[') {
+                var rightIdx = text.indexOf(']', i + 1);
+                if (rightIdx > i + 1) {
+                    var subText = text.substring(i + 1, rightIdx);
+                    //james：主要是考虑[CDATA[]]这样的值的出现
+                    if (subText.length > 0) {
+                        ch = String.fromCharCode(eval("0x" + subText));
+                    }
+
+                    i = rightIdx;
+                }
+            }
+
+            newText += ch;
+        }
+
+        return newText;
+    };
+
+    //replace the html special tags
+    BI.htmlEncode = function (text) {
+        return (text == null) ? '' : String(text).replace(/&/g, '&amp;').replace(/\"/g, '&quot;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+    };
+    //html decode
+    BI.htmlDecode = function (text) {
+        return (text == null) ? '' : String(text).replace(/&amp;/g, '&').replace(/&quot;/g, '\"').replace(/&lt;/g, '<').replace(/&gt;/g, '>').replace(/&nbsp;/g, ' ');
+    };
+
     BI.cjkEncodeDO = function (o) {
         if (BI.isPlainObject(o)) {
             var result = {};
