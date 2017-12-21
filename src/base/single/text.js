@@ -114,7 +114,7 @@ BI.Text = BI.inherit(BI.Single, {
     setText: function (text) {
         BI.Text.superclass.setText.apply(this, arguments);
         this.options.text = text;
-        this.text.element.html(BI.Func.formatSpecialCharInHtml(text));
+        this.text.element.html(BI.htmlEncode(text));
     }
 });
 
