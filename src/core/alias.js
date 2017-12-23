@@ -291,7 +291,7 @@
 
     //replace the html special tags
     BI.htmlEncode = function (text) {
-        return (text == null) ? '' : String(text).replace(/&/g, '&amp;').replace(/\"/g, '&quot;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+        return (text == null) ? '' : String(text).replace(/&/g, '&amp;').replace(/\"/g, '&quot;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/\s/g, '&nbsp;');
     };
     //html decode
     BI.htmlDecode = function (text) {
