@@ -67582,7 +67582,8 @@ BI.IconTextValueCombo = BI.inherit(BI.Widget, {
         this.trigger = BI.createWidget(o.el, {
             type: "bi.select_icon_text_trigger",
             items: o.items,
-            height: o.height
+            height: o.height,
+            value: o.value
         });
         this.popup = BI.createWidget({
             type: "bi.icon_text_value_combo_popup",
@@ -75838,8 +75839,8 @@ BI.SelectIconTextTrigger = BI.inherit(BI.Trigger, {
             element: this,
             height: o.height
         });
-        if (BI.isKey(o.text)) {
-            this.setValue(o.text);
+        if (BI.isKey(o.value)) {
+            this.setValue(o.value);
         }
     },
 
@@ -75862,7 +75863,7 @@ BI.SelectIconTextTrigger = BI.inherit(BI.Trigger, {
             this.trigger.setText(result.text);
             this.trigger.setIcon(result.iconClass);
         } else {
-            this.trigger.setText(o.text);
+            this.trigger.setText(o.value);
             this.trigger.setIcon("");
         }
     },
