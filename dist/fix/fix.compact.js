@@ -124,4 +124,5 @@
             }) : old.apply(this, arguments);
         };
     });
+    BI.watch = Fix.watch;
 }());
