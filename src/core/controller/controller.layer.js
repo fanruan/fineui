@@ -24,7 +24,7 @@ BI.LayerController = BI.inherit(BI.Controller, {
             if (layer.element.is(":visible")) {
                 layer.element.trigger("__resize__");
             }
-        })
+        });
     },
 
     make: function (name, container, op) {

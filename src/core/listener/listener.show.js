@@ -41,7 +41,7 @@ BI.ShowListener = BI.inherit(BI.OB, {
                     self.fireEvent(BI.ShowListener.EVENT_CHANGE, cardName);
                 });
             }
-        })
+        });
     }
 });
 BI.ShowListener.EVENT_CHANGE = "ShowListener.EVENT_CHANGE";

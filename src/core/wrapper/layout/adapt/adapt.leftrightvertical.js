@@ -30,8 +30,8 @@ BI.LeftRightVerticalAdaptLayout = BI.inherit(BI.Layout, {
     },
 
     addItem: function () {
-        //do nothing
-        throw new Error("cannot be added")
+        // do nothing
+        throw new Error("cannot be added");
     },
 
     stroke: function (items) {
@@ -73,7 +73,7 @@ BI.LeftRightVerticalAdaptLayout = BI.inherit(BI.Layout, {
         this._mount();
     }
 });
-BI.shortcut('bi.left_right_vertical_adapt', BI.LeftRightVerticalAdaptLayout);
+BI.shortcut("bi.left_right_vertical_adapt", BI.LeftRightVerticalAdaptLayout);
 
 
 BI.LeftVerticalAdaptLayout = BI.inherit(BI.Layout, {
@@ -96,8 +96,8 @@ BI.LeftVerticalAdaptLayout = BI.inherit(BI.Layout, {
     },
 
     addItem: function () {
-        //do nothing
-        throw new Error("cannot be added")
+        // do nothing
+        throw new Error("cannot be added");
     },
 
     stroke: function (items) {
@@ -122,7 +122,7 @@ BI.LeftVerticalAdaptLayout = BI.inherit(BI.Layout, {
         this._mount();
     }
 });
-BI.shortcut('bi.left_vertical_adapt', BI.LeftVerticalAdaptLayout);
+BI.shortcut("bi.left_vertical_adapt", BI.LeftVerticalAdaptLayout);
 
 BI.RightVerticalAdaptLayout = BI.inherit(BI.Layout, {
     props: function () {
@@ -144,8 +144,8 @@ BI.RightVerticalAdaptLayout = BI.inherit(BI.Layout, {
     },
 
     addItem: function () {
-        //do nothing
-        throw new Error("cannot be added")
+        // do nothing
+        throw new Error("cannot be added");
     },
 
     stroke: function (items) {
@@ -170,4 +170,4 @@ BI.RightVerticalAdaptLayout = BI.inherit(BI.Layout, {
         this._mount();
     }
 });
-BI.shortcut('bi.right_vertical_adapt', BI.RightVerticalAdaptLayout);
+BI.shortcut("bi.right_vertical_adapt", BI.RightVerticalAdaptLayout);

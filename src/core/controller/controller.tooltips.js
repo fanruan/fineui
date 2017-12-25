@@ -18,7 +18,7 @@ BI.TooltipsController = BI.inherit(BI.Controller, {
     _init: function () {
         BI.TooltipsController.superclass._init.apply(this, arguments);
         this.tooltipsManager = {};
-        this.showingTips = {};//存储正在显示的tooltip
+        this.showingTips = {};// 存储正在显示的tooltip
     },
 
     _createTooltip: function (text, level) {
@@ -57,7 +57,7 @@ BI.TooltipsController = BI.inherit(BI.Controller, {
         return this.get(name);
     },
 
-    //opt: {container: '', belowMouse: false}
+    // opt: {container: '', belowMouse: false}
     show: function (e, name, text, level, context, opt) {
         opt || (opt = {});
         var self = this;

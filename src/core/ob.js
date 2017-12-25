@@ -30,14 +30,14 @@ $.extend(BI.OB.prototype, {
         var self = this;
         if (this.options.listeners != null) {
             $.each(this.options.listeners, function (i, lis) {
-                (lis.target ? lis.target : self)[lis.once ? 'once' : 'on']
-                (lis.eventName, _.bind(lis.action, self))
+                (lis.target ? lis.target : self)[lis.once ? "once" : "on"]
+                (lis.eventName, _.bind(lis.action, self));
             });
             delete this.options.listeners;
         }
     },
 
-    //获得一个当前对象的引用
+    // 获得一个当前对象的引用
     _initRef: function () {
         if (this.options.ref) {
             this.options.ref.call(this, this);
@@ -46,7 +46,7 @@ $.extend(BI.OB.prototype, {
 
     _getEvents: function () {
         if (!$.isArray(this.events)) {
-            this.events = []
+            this.events = [];
         }
         return this.events;
     },
@@ -86,7 +86,7 @@ $.extend(BI.OB.prototype, {
     un: function (eventName, fn) {
         eventName = eventName.toLowerCase();
 
-        /*alex:如果fn是null,就是把eventName上面所有方法都un掉*/
+        /* alex:如果fn是null,就是把eventName上面所有方法都un掉*/
         if (fn == null) {
             delete this._getEvents()[eventName];
         } else {
@@ -97,7 +97,7 @@ $.extend(BI.OB.prototype, {
                     if (ifn != fn) {
                         newFns.push(ifn);
                     }
-                })
+                });
                 this._getEvents()[eventName] = newFns;
             }
         }
@@ -106,7 +106,7 @@ $.extend(BI.OB.prototype, {
      * 清除观察者的所有事件绑定
      */
     purgeListeners: function () {
-        /*alex:清空events*/
+        /* alex:清空events*/
         this.events = [];
     },
     /**

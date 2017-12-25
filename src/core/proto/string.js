@@ -61,7 +61,7 @@ $.extend(String.prototype, {
             src += "&";
         }
         $.each(paras, function (name, value) {
-            if (typeof(name) === 'string') {
+            if (typeof(name) === "string") {
                 src += name + "=" + value + "&";
             }
         });
@@ -85,9 +85,9 @@ $.extend(String.prototype, {
     perfectStart: function (start) {
         if (this.startWith(start)) {
             return this;
-        } else {
-            return start + this;
         }
+        return start + this;
+        
     },
 
     /**
@@ -96,7 +96,7 @@ $.extend(String.prototype, {
      * @return {Number[]} 子字符串在父字符串中出现的所有位置组成的数组
      */
     allIndexOf: function (sub) {
-        if (typeof sub != 'string') {
+        if (typeof sub !== "string") {
             return [];
         }
         var str = this;

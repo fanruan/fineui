@@ -1,4 +1,4 @@
-;
+
 !(function () {
     BI.LinkHashMap = function () {
         this.array = [];
@@ -14,7 +14,7 @@
         },
 
         add: function (key, value) {
-            if (typeof key == 'undefined') {
+            if (typeof key === "undefined") {
                 return;
             }
             if (key in this.map) {
@@ -44,7 +44,7 @@
         each: function (fn, scope) {
             var scope = scope || window;
             var fn = fn || null;
-            if (fn == null || typeof (fn) != "function") {
+            if (fn == null || typeof (fn) !== "function") {
                 return;
             }
             for (var i = 0; i < this.array.length; i++) {
@@ -65,8 +65,8 @@
             var array = [];
             this.each(function (key, value) {
                 array.push(value);
-            })
+            });
             return array;
         }
-    }
+    };
 })();

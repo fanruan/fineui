@@ -25,27 +25,27 @@ BI.VerticalLayout = BI.inherit(BI.Layout, {
         var o = this.options;
         var w = BI.VerticalLayout.superclass._addElement.apply(this, arguments);
         w.element.css({
-            "position": "relative"
+            position: "relative"
         });
         if (o.vgap + o.tgap + (item.tgap || 0) !== 0) {
             w.element.css({
                 "margin-top": o.vgap + o.tgap + (item.tgap || 0) + "px"
-            })
+            });
         }
         if (o.hgap + o.lgap + (item.lgap || 0) !== 0) {
             w.element.css({
                 "margin-left": o.hgap + o.lgap + (item.lgap || 0) + "px"
-            })
+            });
         }
         if (o.hgap + o.rgap + (item.rgap || 0) !== 0) {
             w.element.css({
                 "margin-right": o.hgap + o.rgap + (item.rgap || 0) + "px"
-            })
+            });
         }
         if (o.vgap + o.bgap + (item.bgap || 0) !== 0) {
             w.element.css({
                 "margin-bottom": o.vgap + o.bgap + (item.bgap || 0) + "px"
-            })
+            });
         }
         return w;
     },
@@ -59,4 +59,4 @@ BI.VerticalLayout = BI.inherit(BI.Layout, {
         this._mount();
     }
 });
-BI.shortcut('bi.vertical', BI.VerticalLayout);
+BI.shortcut("bi.vertical", BI.VerticalLayout);

@@ -25,60 +25,60 @@ BI.AbsoluteLayout = BI.inherit(BI.Layout, {
         var w = BI.AbsoluteLayout.superclass._addElement.apply(this, arguments);
         var left = 0, right = 0, top = 0, bottom = 0;
         if (BI.isNotNull(item.left)) {
-            w.element.css({"left": item.left});
+            w.element.css({left: item.left});
             left += item.left;
         }
         if (BI.isNotNull(item.right)) {
-            w.element.css({"right": item.right});
+            w.element.css({right: item.right});
             right += item.right;
         }
         if (BI.isNotNull(item.top)) {
-            w.element.css({"top": item.top});
+            w.element.css({top: item.top});
             top += item.top;
         }
         if (BI.isNotNull(item.bottom)) {
-            w.element.css({"bottom": item.bottom});
+            w.element.css({bottom: item.bottom});
             bottom += item.bottom;
         }
 
         if (BI.isNotNull(o.hgap)) {
             left += o.hgap;
-            w.element.css({"left": left});
+            w.element.css({left: left});
             right += o.hgap;
-            w.element.css({"right": right});
+            w.element.css({right: right});
         }
         if (BI.isNotNull(o.vgap)) {
             top += o.vgap;
-            w.element.css({"top": top});
+            w.element.css({top: top});
             bottom += o.vgap;
-            w.element.css({"bottom": bottom});
+            w.element.css({bottom: bottom});
         }
 
         if (BI.isNotNull(o.lgap)) {
             left += o.lgap;
-            w.element.css({"left": left});
+            w.element.css({left: left});
         }
         if (BI.isNotNull(o.rgap)) {
             right += o.rgap;
-            w.element.css({"right": right});
+            w.element.css({right: right});
         }
         if (BI.isNotNull(o.tgap)) {
             top += o.tgap;
-            w.element.css({"top": top});
+            w.element.css({top: top});
         }
         if (BI.isNotNull(o.bgap)) {
             bottom += o.bgap;
-            w.element.css({"bottom": bottom});
+            w.element.css({bottom: bottom});
         }
 
 
         if (BI.isNotNull(item.width)) {
-            w.element.css({"width": item.width});
+            w.element.css({width: item.width});
         }
         if (BI.isNotNull(item.height)) {
-            w.element.css({"height": item.height});
+            w.element.css({height: item.height});
         }
-        w.element.css({"position": "absolute"});
+        w.element.css({position: "absolute"});
         return w;
     },
 
@@ -90,7 +90,7 @@ BI.AbsoluteLayout = BI.inherit(BI.Layout, {
         this.options.items = items || [];
         var self = this;
         BI.each(items, function (i, item) {
-            if (!!item) {
+            if (item) {
                 if (!BI.isWidget(item) && !item.el) {
                     throw new Error("el must be exist");
                 }
@@ -104,4 +104,4 @@ BI.AbsoluteLayout = BI.inherit(BI.Layout, {
         this._mount();
     }
 });
-BI.shortcut('bi.absolute', BI.AbsoluteLayout);
+BI.shortcut("bi.absolute", BI.AbsoluteLayout);

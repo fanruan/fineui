@@ -1,6 +1,6 @@
-;
+
 (function () {
-    function defaultComparator(a, b) {
+    function defaultComparator (a, b) {
         return a < b;
     }
 
@@ -111,5 +111,5 @@
                 index = swapIndex;
             }
         }
-    }
+    };
 })();

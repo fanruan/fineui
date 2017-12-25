@@ -5,24 +5,24 @@ $.extend(BI, {
         var config;
         if (BI.isObject(options)) {
             config = $.extend({
-                op: 'resource',
+                op: "resource",
                 path: null,
                 type: null,
                 must: false
             }, options);
-            config.url = BI.servletURL + '?op=' + config.op + '&resource=' + config.path;
+            config.url = BI.servletURL + "?op=" + config.op + "&resource=" + config.path;
         } else {
             config = {
                 url: BI.servletURL + "?op=resource&resource=" + options,
                 type: arguments[1],
                 must: arguments[2]
-            }
+            };
         }
         this.$import(config.url, config.type, config.must);
     },
     $import: function () {
         var _LOADED = {}; // alex:保存加载过的
-        function loadReady(src, must) {
+        function loadReady (src, must) {
             var $scripts = $("head script, body script");
             $.each($scripts, function (i, item) {
                 if (item.src.indexOf(src) != -1) {
@@ -45,12 +45,12 @@ $.extend(BI, {
             if (_LOADED[src] === true) {
                 return;
             }
-            if (ext === 'css') {
-                var link = document.createElement('link');
-                link.rel = 'stylesheet';
-                link.type = 'text/css';
+            if (ext === "css") {
+                var link = document.createElement("link");
+                link.rel = "stylesheet";
+                link.type = "text/css";
                 link.href = src;
-                var head = document.getElementsByTagName('head')[0];
+                var head = document.getElementsByTagName("head")[0];
                 head.appendChild(link);
                 _LOADED[src] = true;
             } else {
@@ -65,12 +65,12 @@ $.extend(BI, {
                          * alex:发现jquery会很智能地判断一下返回的数据类型是不是script,然后做一个globalEval
                          * 所以当status为success时就不需要再把其中的内容加到script里面去了
                          */
-                        if (status == 'success') {
+                        if (status == "success") {
                             _LOADED[src] = true;
                         }
                     }
-                })
+                });
             }
-        }
+        };
     }()
 });

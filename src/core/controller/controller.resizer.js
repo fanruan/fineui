@@ -14,9 +14,9 @@ BI.ResizeController = BI.inherit(BI.Controller, {
         var self = this;
         this.resizerManger = {};
         var fn = BI.debounce(function (ev) {
-            //if (BI.isWindow(ev.target)) {
+            // if (BI.isWindow(ev.target)) {
             self._resize(ev);
-            //}
+            // }
         }, 30);
         $(window).resize(fn);
     },
@@ -37,7 +37,7 @@ BI.ResizeController = BI.inherit(BI.Controller, {
                 resizer(ev);
                 return;
             }
-        })
+        });
     },
 
     add: function (name, resizer) {

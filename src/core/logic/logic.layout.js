@@ -42,7 +42,7 @@ BI.VerticalLayoutLogic = BI.inherit(BI.Logic, {
             tgap: o.tgap,
             bgap: o.bgap,
             items: o.items
-        }
+        };
     },
 
     _init: function () {
@@ -95,7 +95,7 @@ BI.HorizontalLayoutLogic = BI.inherit(BI.Logic, {
             tgap: o.tgap,
             bgap: o.bgap,
             items: o.items
-        }
+        };
     },
 
     _init: function () {
@@ -147,7 +147,7 @@ BI.TableLayoutLogic = BI.inherit(BI.Logic, {
             hgap: o.hgap,
             vgap: o.vgap,
             items: o.items
-        }
+        };
     },
 
     _init: function () {
@@ -203,7 +203,7 @@ BI.HorizontalFillLayoutLogic = BI.inherit(BI.Logic, {
             tgap: o.tgap,
             bgap: o.bgap,
             items: o.items
-        }
+        };
     },
 
     _init: function () {

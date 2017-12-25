@@ -33,61 +33,61 @@ _.extend(BI, {
          * @static
          * @property 确定事件
          */
-        CONFIRM: '_CONFIRM',
+        CONFIRM: "_CONFIRM",
 
         /**
          * @static
          * @property 错误事件
          */
-        ERROR: '_ERROR',
+        ERROR: "_ERROR",
 
         /**
          * @static
          * @property 暂停事件
          */
-        PAUSE: '_PAUSE',
+        PAUSE: "_PAUSE",
 
         /**
          * @static
          * @property destroy事件
          */
-        DESTROY: '_DESTROY',
+        DESTROY: "_DESTROY",
 
         /**
          * @static
          * @property 取消挂载事件
          */
-        UNMOUNT: '_UNMOUNT',
+        UNMOUNT: "_UNMOUNT",
 
         /**
          * @static
          * @property 清除选择
          */
-        CLEAR: '_CLEAR',
+        CLEAR: "_CLEAR",
 
         /**
          * @static
          * @property 添加数据
          */
-        ADD: '_ADD',
+        ADD: "_ADD",
 
         /**
          * @static
          * @property 正在编辑状态事件
          */
-        EDITING: '_EDITING',
+        EDITING: "_EDITING",
 
         /**
          * @static
          * @property 空状态事件
          */
-        EMPTY: '_EMPTY',
+        EMPTY: "_EMPTY",
 
         /**
          * @static
          * @property 显示隐藏事件
          */
-        VIEW: '_VIEW',
+        VIEW: "_VIEW",
 
         /**
          * @static
@@ -99,334 +99,334 @@ _.extend(BI, {
          * @static
          * @property 编辑前事件
          */
-        BEFOREEDIT: '_BEFOREEDIT',
+        BEFOREEDIT: "_BEFOREEDIT",
 
         /**
          * @static
          * @property 编辑后事件
          */
-        AFTEREDIT: '_AFTEREDIT',
+        AFTEREDIT: "_AFTEREDIT",
 
         /**
          * @static
          * @property 开始编辑事件
          */
-        STARTEDIT: '_STARTEDIT',
+        STARTEDIT: "_STARTEDIT",
 
         /**
          * @static
          * @property 停止编辑事件
          */
-        STOPEDIT: '_STOPEDIT',
+        STOPEDIT: "_STOPEDIT",
 
         /**
          * @static
          * @property 值改变事件
          */
-        CHANGE: '_CHANGE',
+        CHANGE: "_CHANGE",
 
         /**
          * @static
          * @property 下拉弹出菜单事件
          */
-        EXPAND: '_EXPAND',
+        EXPAND: "_EXPAND",
 
         /**
          * @static
          * @property 关闭下拉菜单事件
          */
-        COLLAPSE: '_COLLAPSE',
+        COLLAPSE: "_COLLAPSE",
 
         /**
          * @static
          * @property 回调事件
          */
-        CALLBACK: '_CALLBACK',
+        CALLBACK: "_CALLBACK",
 
         /**
          * @static
          * @property 点击事件
          */
-        CLICK: '_CLICK',
+        CLICK: "_CLICK",
 
         /**
          * @static
          * @property 状态改变事件，一般是用在复选按钮和单选按钮
          */
-        STATECHANGE: '_STATECHANGE',
+        STATECHANGE: "_STATECHANGE",
 
         /**
          * @static
          * @property 状态改变前事件
          */
-        BEFORESTATECHANGE: '_BEFORESTATECHANGE',
+        BEFORESTATECHANGE: "_BEFORESTATECHANGE",
 
 
         /**
          * @static
          * @property 初始化事件
          */
-        INIT: '_INIT',
+        INIT: "_INIT",
 
         /**
          * @static
          * @property 初始化后事件
          */
-        AFTERINIT: '_AFTERINIT',
+        AFTERINIT: "_AFTERINIT",
 
         /**
          * @static
          * @property 滚动条滚动事件
          */
-        SCROLL: '_SCROLL',
+        SCROLL: "_SCROLL",
 
 
         /**
          * @static
          * @property 开始加载事件
          */
-        STARTLOAD: '_STARTLOAD',
+        STARTLOAD: "_STARTLOAD",
 
         /**
          * @static
          * @property 加载后事件
          */
-        AFTERLOAD: '_AFTERLOAD',
+        AFTERLOAD: "_AFTERLOAD",
 
 
         /**
          * @static
          * @property 提交前事件
          */
-        BS: 'beforesubmit',
+        BS: "beforesubmit",
 
         /**
          * @static
          * @property 提交后事件
          */
-        AS: 'aftersubmit',
+        AS: "aftersubmit",
 
         /**
          * @static
          * @property 提交完成事件
          */
-        SC: 'submitcomplete',
+        SC: "submitcomplete",
 
         /**
          * @static
          * @property 提交失败事件
          */
-        SF: 'submitfailure',
+        SF: "submitfailure",
 
         /**
          * @static
          * @property 提交成功事件
          */
-        SS: 'submitsuccess',
+        SS: "submitsuccess",
 
         /**
          * @static
          * @property 校验提交前事件
          */
-        BVW: 'beforeverifywrite',
+        BVW: "beforeverifywrite",
 
         /**
          * @static
          * @property 校验提交后事件
          */
-        AVW: 'afterverifywrite',
+        AVW: "afterverifywrite",
 
         /**
          * @static
          * @property 校验后事件
          */
-        AV: 'afterverify',
+        AV: "afterverify",
 
         /**
          * @static
          * @property 填报前事件
          */
-        BW: 'beforewrite',
+        BW: "beforewrite",
 
         /**
          * @static
          * @property 填报后事件
          */
-        AW: 'afterwrite',
+        AW: "afterwrite",
 
         /**
          * @static
          * @property 填报成功事件
          */
-        WS: 'writesuccess',
+        WS: "writesuccess",
 
         /**
          * @static
          * @property 填报失败事件
          */
-        WF: 'writefailure',
+        WF: "writefailure",
 
         /**
          * @static
          * @property 添加行前事件
          */
-        BA: 'beforeappend',
+        BA: "beforeappend",
 
         /**
          * @static
          * @property 添加行后事件
          */
-        AA: 'afterappend',
+        AA: "afterappend",
 
         /**
          * @static
          * @property 删除行前事件
          */
-        BD: 'beforedelete',
+        BD: "beforedelete",
 
         /**
          * @static
          * @property 删除行后事件
          */
-        AD: 'beforedelete',
+        AD: "beforedelete",
 
         /**
          * @static
          * @property 未提交离开事件
          */
-        UC: 'unloadcheck',
+        UC: "unloadcheck",
 
 
         /**
          * @static
          * @property PDF导出前事件
          */
-        BTOPDF: 'beforetopdf',
+        BTOPDF: "beforetopdf",
 
         /**
          * @static
          * @property PDF导出后事件
          */
-        ATOPDF: 'aftertopdf',
+        ATOPDF: "aftertopdf",
 
         /**
          * @static
          * @property Excel导出前事件
          */
-        BTOEXCEL: 'beforetoexcel',
+        BTOEXCEL: "beforetoexcel",
 
         /**
          * @static
          * @property Excel导出后事件
          */
-        ATOEXCEL: 'aftertoexcel',
+        ATOEXCEL: "aftertoexcel",
 
         /**
          * @static
          * @property Word导出前事件
          */
-        BTOWORD: 'beforetoword',
+        BTOWORD: "beforetoword",
 
         /**
          * @static
          * @property Word导出后事件
          */
-        ATOWORD: 'aftertoword',
+        ATOWORD: "aftertoword",
 
         /**
          * @static
          * @property 图片导出前事件
          */
-        BTOIMAGE: 'beforetoimage',
+        BTOIMAGE: "beforetoimage",
 
         /**
          * @static
          * @property 图片导出后事件
          */
-        ATOIMAGE: 'aftertoimage',
+        ATOIMAGE: "aftertoimage",
 
         /**
          * @static
          * @property HTML导出前事件
          */
-        BTOHTML: 'beforetohtml',
+        BTOHTML: "beforetohtml",
 
         /**
          * @static
          * @property HTML导出后事件
          */
-        ATOHTML: 'aftertohtml',
+        ATOHTML: "aftertohtml",
 
         /**
          * @static
          * @property Excel导入前事件
          */
-        BIMEXCEL: 'beforeimportexcel',
+        BIMEXCEL: "beforeimportexcel",
 
         /**
          * @static
          * @property Excel导出后事件
          */
-        AIMEXCEL: 'afterimportexcel',
+        AIMEXCEL: "afterimportexcel",
 
         /**
          * @static
          * @property PDF打印前事件
          */
-        BPDFPRINT: 'beforepdfprint',
+        BPDFPRINT: "beforepdfprint",
 
         /**
          * @static
          * @property PDF打印后事件
          */
-        APDFPRINT: 'afterpdfprint',
+        APDFPRINT: "afterpdfprint",
 
         /**
          * @static
          * @property Flash打印前事件
          */
-        BFLASHPRINT: 'beforeflashprint',
+        BFLASHPRINT: "beforeflashprint",
 
         /**
          * @static
          * @property Flash打印后事件
          */
-        AFLASHPRINT: 'afterflashprint',
+        AFLASHPRINT: "afterflashprint",
 
         /**
          * @static
          * @property Applet打印前事件
          */
-        BAPPLETPRINT: 'beforeappletprint',
+        BAPPLETPRINT: "beforeappletprint",
 
         /**
          * @static
          * @property Applet打印后事件
          */
-        AAPPLETPRINT: 'afterappletprint',
+        AAPPLETPRINT: "afterappletprint",
 
         /**
          * @static
          * @property 服务器打印前事件
          */
-        BSEVERPRINT: 'beforeserverprint',
+        BSEVERPRINT: "beforeserverprint",
 
         /**
          * @static
          * @property 服务器打印后事件
          */
-        ASERVERPRINT: 'afterserverprint',
+        ASERVERPRINT: "afterserverprint",
 
         /**
          * @static
          * @property 邮件发送前事件
          */
-        BEMAIL: 'beforeemail',
+        BEMAIL: "beforeemail",
 
         /**
          * @static
          * @property 邮件发送后事件
          */
-        AEMAIL: 'afteremail'
+        AEMAIL: "afteremail"
     }
 });

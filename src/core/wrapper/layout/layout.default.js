@@ -27,22 +27,22 @@ BI.DefaultLayout = BI.inherit(BI.Layout, {
         if (o.vgap + o.tgap + (item.tgap || 0) !== 0) {
             w.element.css({
                 "margin-top": o.vgap + o.tgap + (item.tgap || 0) + "px"
-            })
+            });
         }
         if (o.hgap + o.lgap + (item.lgap || 0) !== 0) {
             w.element.css({
                 "margin-left": o.hgap + o.lgap + (item.lgap || 0) + "px"
-            })
+            });
         }
         if (o.hgap + o.rgap + (item.rgap || 0) !== 0) {
             w.element.css({
                 "margin-right": o.hgap + o.rgap + (item.rgap || 0) + "px"
-            })
+            });
         }
         if (o.vgap + o.bgap + (item.bgap || 0) !== 0) {
             w.element.css({
                 "margin-bottom": o.vgap + o.bgap + (item.bgap || 0) + "px"
-            })
+            });
         }
         return w;
     },
@@ -56,4 +56,4 @@ BI.DefaultLayout = BI.inherit(BI.Layout, {
         this._mount();
     }
 });
-BI.shortcut('bi.default', BI.DefaultLayout);
+BI.shortcut("bi.default", BI.DefaultLayout);

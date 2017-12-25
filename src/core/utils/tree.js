@@ -1,4 +1,4 @@
-;
+
 (function () {
     BI.Tree = function () {
         this.root = new BI.Node(BI.UUID());
@@ -46,7 +46,7 @@
                     n.set("data", child);
                     queue.push(n);
                     self.addNode(parent, n);
-                })
+                });
             }
         },
 
@@ -59,8 +59,8 @@
             return BI.extend({
                 id: node.id
             }, BI.deepClone(node.get("data")), (children.length > 0 ? {
-                children: children
-            } : {}));
+                    children: children
+                } : {}));
         },
 
         toJSON: function (node) {
@@ -82,8 +82,8 @@
             }, BI.deepClone(node.get("data")), {
                 node: node
             }, (children.length > 0 ? {
-                children: children
-            } : {}));
+                    children: children
+                } : {}));
         },
 
         toJSONWithNode: function (node) {
@@ -161,7 +161,7 @@
             this._inOrderTraverse(this.root, callback);
         },
 
-        //中序遍历(递归)
+        // 中序遍历(递归)
         _inOrderTraverse: function (node, callback) {
             if (node != null) {
                 this._inOrderTraverse(node.getLeft());
@@ -170,7 +170,7 @@
             }
         },
 
-        //中序遍历(非递归)
+        // 中序遍历(非递归)
         nrInOrderTraverse: function (callback) {
 
             var stack = [];
@@ -190,7 +190,7 @@
             this._preOrderTraverse(this.root, callback);
         },
 
-        //先序遍历(递归)
+        // 先序遍历(递归)
         _preOrderTraverse: function (node, callback) {
             if (node != null) {
                 callback && callback(node);
@@ -199,7 +199,7 @@
             }
         },
 
-        //先序遍历（非递归）
+        // 先序遍历（非递归）
         nrPreOrderTraverse: function (callback) {
 
             var stack = [];
@@ -221,7 +221,7 @@
             this._postOrderTraverse(this.root, callback);
         },
 
-        //后序遍历(递归)
+        // 后序遍历(递归)
         _postOrderTraverse: function (node, callback) {
             if (node != null) {
                 this._postOrderTraverse(node.getLeft());
@@ -230,12 +230,12 @@
             }
         },
 
-        //后续遍历(非递归)
+        // 后续遍历(非递归)
         nrPostOrderTraverse: function (callback) {
 
             var stack = [];
             var node = this.root;
-            var preNode = null;//表示最近一次访问的节点
+            var preNode = null;// 表示最近一次访问的节点
 
             while (node != null || !BI.isEmpty(stack)) {
 
@@ -465,9 +465,9 @@
                     delete tmpMap[sNodes[i].id].pId;
                 }
                 return r;
-            } else {
-                return [sNodes];
             }
+            return [sNodes];
+            
         },
 
         treeFormat: function (sNodes) {
@@ -496,9 +496,9 @@
                     }
                 }
                 return r;
-            } else {
-                return [sNodes];
             }
+            return [sNodes];
+            
         },
 
         traversal: function (array, callback) {
@@ -511,7 +511,7 @@
                     return true;
                 }
                 self.traversal(item.children, callback);
-            })
+            });
         }
-    })
+    });
 })();

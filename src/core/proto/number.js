@@ -1,12 +1,12 @@
-if (!Number.prototype.toFixed || (0.00008).toFixed(3) !== '0.000' ||
-    (0.9).toFixed(0) === '0' || (1.255).toFixed(2) !== '1.25' ||
+if (!Number.prototype.toFixed || (0.00008).toFixed(3) !== "0.000" ||
+    (0.9).toFixed(0) === "0" || (1.255).toFixed(2) !== "1.25" ||
     (1000000000000000128).toFixed(0) !== "1000000000000000128") {
     (function () {
         var base, size, data, i;
         base = 1e7;
         size = 6;
         data = [0, 0, 0, 0, 0, 0];
-        function multiply(n, c) {
+        function multiply (n, c) {
             var i = -1;
             while (++i < size) {
                 c += n * data[i];
@@ -15,7 +15,7 @@ if (!Number.prototype.toFixed || (0.00008).toFixed(3) !== '0.000' ||
             }
         }
 
-        function divide(n) {
+        function divide (n) {
             var i = size, c = 0;
             while (--i >= 0) {
                 c += data[i];
@@ -24,28 +24,28 @@ if (!Number.prototype.toFixed || (0.00008).toFixed(3) !== '0.000' ||
             }
         }
 
-        function toString() {
+        function toString () {
             var i = size;
-            var s = '';
+            var s = "";
             while (--i >= 0) {
-                if (s !== '' || i === 0 || data[i] !== 0) {
+                if (s !== "" || i === 0 || data[i] !== 0) {
                     var t = String(data[i]);
-                    if (s === '') {
+                    if (s === "") {
                         s = t;
                     } else {
-                        s += '0000000'.slice(0, 7 - t.length) + t;
+                        s += "0000000".slice(0, 7 - t.length) + t;
                     }
                 }
             }
             return s;
         }
 
-        function pow(x, n, acc) {
+        function pow (x, n, acc) {
             return (n === 0 ? acc : (n % 2 === 1 ? pow(x, n - 1, acc * x)
                 : pow(x * x, n / 2, acc)));
         }
 
-        function log(x) {
+        function log (x) {
             var n = 0;
             while (x >= 4096) {
                 n += 12;
@@ -64,7 +64,7 @@ if (!Number.prototype.toFixed || (0.00008).toFixed(3) !== '0.000' ||
             f = f !== f ? 0 : Math.floor(f);
 
             if (f < 0 || f > 20) {
-                throw new RangeError('Number.toFixed called with invalid number of decimals');
+                throw new RangeError("Number.toFixed called with invalid number of decimals");
             }
 
             x = Number(this);
@@ -87,15 +87,15 @@ if (!Number.prototype.toFixed || (0.00008).toFixed(3) !== '0.000' ||
             m = "0";
 
             if (x > 1e-21) {
-                //1e-21<x<1e21
-                //-70<log2(x)<70
+                // 1e-21<x<1e21
+                // -70<log2(x)<70
                 e = log(x * pow(2, 69, 1)) - 69;
                 z = (e < 0 ? x * pow(2, -e, 1) : x / pow(2, e, 1));
-                z *= 0x10000000000000;//Math.pow(2,52);
+                z *= 0x10000000000000;// Math.pow(2,52);
                 e = 52 - e;
 
-                //-18<e<122
-                //x=z/2^e
+                // -18<e<122
+                // x=z/2^e
                 if (e > 0) {
                     multiply(0, z);
                     j = f;
@@ -119,7 +119,7 @@ if (!Number.prototype.toFixed || (0.00008).toFixed(3) !== '0.000' ||
                 } else {
                     multiply(0, z);
                     multiply(1 << (-e), 0);
-                    m = toString() + '0.00000000000000000000'.slice(2, 2 + f);
+                    m = toString() + "0.00000000000000000000".slice(2, 2 + f);
                 }
             }
 
@@ -127,16 +127,16 @@ if (!Number.prototype.toFixed || (0.00008).toFixed(3) !== '0.000' ||
                 k = m.length;
 
                 if (k <= f) {
-                    m = s + '0.0000000000000000000'.slice(0, f - k + 2) + m;
+                    m = s + "0.0000000000000000000".slice(0, f - k + 2) + m;
                 } else {
-                    m = s + m.slice(0, k - f) + '.' + m.slice(k - f);
+                    m = s + m.slice(0, k - f) + "." + m.slice(k - f);
                 }
             } else {
                 m = s + m;
             }
 
             return m;
-        }
+        };
 
     })();
 }
@@ -148,18 +148,16 @@ if (!Number.prototype.toFixed || (0.00008).toFixed(3) !== '0.000' ||
  ** 调用：accAdd(arg1,arg2)
  ** 返回值：arg1加上arg2的精确结果
  **/
-function accAdd(arg1, arg2) {
+function accAdd (arg1, arg2) {
     var r1, r2, m, c;
     try {
         r1 = arg1.toString().split(".")[1].length;
-    }
-    catch (e) {
+    } catch (e) {
         r1 = 0;
     }
     try {
         r2 = arg2.toString().split(".")[1].length;
-    }
-    catch (e) {
+    } catch (e) {
         r2 = 0;
     }
     c = Math.abs(r1 - r2);
@@ -180,7 +178,7 @@ function accAdd(arg1, arg2) {
     return (arg1 + arg2) / m;
 }
 
-//给Number类型增加一个add方法，调用起来更加方便。
+// 给Number类型增加一个add方法，调用起来更加方便。
 Number.prototype.add = function (arg) {
     return accAdd(arg, this);
 };
@@ -190,21 +188,19 @@ Number.prototype.add = function (arg) {
  ** 调用：accSub(arg1,arg2)
  ** 返回值：arg1加上arg2的精确结果
  **/
-function accSub(arg1, arg2) {
+function accSub (arg1, arg2) {
     var r1, r2, m, n;
     try {
         r1 = arg1.toString().split(".")[1].length;
-    }
-    catch (e) {
+    } catch (e) {
         r1 = 0;
     }
     try {
         r2 = arg2.toString().split(".")[1].length;
-    }
-    catch (e) {
+    } catch (e) {
         r2 = 0;
     }
-    m = Math.pow(10, Math.max(r1, r2)); //last modify by deeka //动态控制精度长度
+    m = Math.pow(10, Math.max(r1, r2)); // last modify by deeka //动态控制精度长度
     n = (r1 >= r2) ? r1 : r2;
     return ((arg1 * m - arg2 * m) / m).toFixed(n);
 }
@@ -219,17 +215,15 @@ Number.prototype.sub = function (arg) {
  ** 调用：accMul(arg1,arg2)
  ** 返回值：arg1乘以 arg2的精确结果
  **/
-function accMul(arg1, arg2) {
+function accMul (arg1, arg2) {
     var m = 0, s1 = arg1.toString(), s2 = arg2.toString();
     try {
         m += s1.split(".")[1].length;
-    }
-    catch (e) {
+    } catch (e) {
     }
     try {
         m += s2.split(".")[1].length;
-    }
-    catch (e) {
+    } catch (e) {
     }
     return Number(s1.replace(".", "")) * Number(s2.replace(".", "")) / Math.pow(10, m);
 }
@@ -244,17 +238,15 @@ Number.prototype.mul = function (arg) {
  ** 调用：accDiv(arg1,arg2)
  ** 返回值：arg1除以arg2的精确结果
  **/
-function accDiv(arg1, arg2) {
+function accDiv (arg1, arg2) {
     var t1 = 0, t2 = 0, r1, r2;
     try {
         t1 = arg1.toString().split(".")[1].length;
-    }
-    catch (e) {
+    } catch (e) {
     }
     try {
         t2 = arg2.toString().split(".")[1].length;
-    }
-    catch (e) {
+    } catch (e) {
     }
     with (Math) {
         r1 = Number(arg1.toString().replace(".", ""));
@@ -263,7 +255,7 @@ function accDiv(arg1, arg2) {
     }
 }
 
-//给Number类型增加一个div方法，调用起来更加方便。
+// 给Number类型增加一个div方法，调用起来更加方便。
 Number.prototype.div = function (arg) {
     return accDiv(this, arg);
 };

@@ -1,5 +1,5 @@
 $(function () {
-    //牵扯到国际化这些常量在页面加载后再生效
+    // 牵扯到国际化这些常量在页面加载后再生效
     // full day names
     Date._DN = [BI.i18nText("BI-Basic_Sunday"),
         BI.i18nText("BI-Basic_Monday"),
@@ -59,10 +59,10 @@ $(function () {
 
     /** Adds the number of days array to the Date object. */
     Date._MD = [31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];
-})
+});
 
 /** Constants used for time computations */
-Date.SECOND = 1000 /* milliseconds */;
+Date.SECOND = 1000;
 Date.MINUTE = 60 * Date.SECOND;
 Date.HOUR = 60 * Date.MINUTE;
 Date.DAY = 24 * Date.HOUR;
@@ -79,14 +79,14 @@ Date.prototype.getTimezone = function () {
 /** Returns the number of days in the current month */
 Date.prototype.getMonthDays = function (month) {
     var year = this.getFullYear();
-    if (typeof month == "undefined") {
+    if (typeof month === "undefined") {
         month = this.getMonth();
     }
     if (((0 == (year % 4)) && ( (0 != (year % 100)) || (0 == (year % 400)))) && month == 1) {
         return 29;
-    } else {
-        return Date._MD[month];
     }
+    return Date._MD[month];
+    
 };
 
 /**
@@ -108,9 +108,9 @@ Date.prototype.getDayOfYear = function () {
 /** Returns the number of the week in year, as defined in ISO 8601. */
 Date.prototype.getWeekNumber = function () {
     var d = Date.getDate(this.getFullYear(), this.getMonth(), this.getDate(), 0, 0, 0);
-    //周一是一周第一天
+    // 周一是一周第一天
     var week = d.getDay() === 0 ? 7 : d.getDay();
-    //var week = d.getDay();
+    // var week = d.getDay();
     if (this.getMonth() === 0 && this.getDate() <= week) {
         return 1;
     }
@@ -129,7 +129,7 @@ Date.prototype.getQuarter = function () {
     return Math.floor(this.getMonth() / 3) + 1;
 };
 
-//离当前时间多少天的时间
+// 离当前时间多少天的时间
 Date.prototype.getOffsetDate = function (offset) {
     return Date.getDate(Date.getTime(this.getFullYear(), this.getMonth(), this.getDate(), this.getHours(), this.getMinutes(), this.getSeconds()) + offset * 864e5);
 };
@@ -139,13 +139,13 @@ Date.prototype.getAfterMulQuarter = function (n) {
     dt.setMonth(dt.getMonth() + n * 3);
     return dt;
 };
-//获得n个季度前的日期
+// 获得n个季度前的日期
 Date.prototype.getBeforeMulQuarter = function (n) {
     var dt = Date.getDate(Date.getTime(this.getFullYear(), this.getMonth(), this.getDate(), this.getHours(), this.getMinutes(), this.getSeconds()));
     dt.setMonth(dt.getMonth() - n * 3);
     return dt;
 };
-//得到本季度的起始月份
+// 得到本季度的起始月份
 Date.prototype.getQuarterStartMonth = function () {
     var quarterStartMonth = 0;
     var nowMonth = this.getMonth();
@@ -163,11 +163,11 @@ Date.prototype.getQuarterStartMonth = function () {
     }
     return quarterStartMonth;
 };
-//获得本季度的起始日期
+// 获得本季度的起始日期
 Date.prototype.getQuarterStartDate = function () {
     return Date.getDate(this.getFullYear(), this.getQuarterStartMonth(), 1);
 };
-//得到本季度的结束日期
+// 得到本季度的结束日期
 Date.prototype.getQuarterEndDate = function () {
     var quarterEndMonth = this.getQuarterStartMonth() + 2;
     return Date.getDate(this.getFullYear(), quarterEndMonth, this.getMonthDays(quarterEndMonth));
@@ -183,7 +183,7 @@ Date.prototype.getBeforeMultiMonth = function (n) {
     return dt;
 };
 
-//指定日期n个月之前或之后的日期
+// 指定日期n个月之前或之后的日期
 Date.prototype.getOffsetMonth = function (n) {
     var dt = Date.getDate(Date.getTime(this.getFullYear(), this.getMonth(), this.getDate(), this.getHours(), this.getMinutes(), this.getSeconds()));
     var day = dt.getDate();
@@ -196,12 +196,12 @@ Date.prototype.getOffsetMonth = function (n) {
     return dt;
 };
 
-//获得本周的起始日期
+// 获得本周的起始日期
 Date.prototype.getWeekStartDate = function () {
     var w = this.getDay();
     return this.getOffsetDate(w === 0 ? -6 : 1 - w);
 };
-//得到本周的结束日期
+// 得到本周的结束日期
 Date.prototype.getWeekEndDate = function () {
     var w = this.getDay();
     return this.getOffsetDate(w === 0 ? 0 : 7 - w);
@@ -259,7 +259,7 @@ Date.prototype.print = function (str) {
     s["%k"] = hr;		// hour, range 0 to 23 (24h format)
     s["%l"] = ir;		// hour, range 1 to 12 (12h format)
     s["%X"] = (m < 9) ? ("0" + (1 + m)) : (1 + m); // month, range 01 to 12
-    s["%x"] = m + 1 // month, range 1 to 12
+    s["%x"] = m + 1; // month, range 1 to 12
     s["%M"] = (min < 10) ? ("0" + min) : min; // minute, range 00 to 59
     s["%n"] = "\n";		// a newline character
     s["%p"] = pm ? "PM" : "AM";
@@ -275,7 +275,7 @@ Date.prototype.print = function (str) {
     s["%w"] = w;		// the day of the week (range 0 to 6, 0 = SUN)
     // FIXME: %x : preferred date representation for the current locale without the time
     // FIXME: %X : preferred time representation for the current locale without the date
-    s["%y"] = ('' + y).substr(2, 2); // year without the century (range 00 to 99)
+    s["%y"] = ("" + y).substr(2, 2); // year without the century (range 00 to 99)
     s["%Y"] = y;		// year with the century
     s["%%"] = "%";		// a literal '%' character
     s["%Q"] = qr;
@@ -291,7 +291,7 @@ Date.prototype.print = function (str) {
     for (var i = 0; i < a.length; i++) {
         var tmp = s[a[i]];
         if (tmp) {
-            re = new RegExp(a[i], 'g');
+            re = new RegExp(a[i], "g");
             str = str.replace(re, tmp);
         }
     }
@@ -326,25 +326,25 @@ Date.checkVoid = function (YY, MM, DD, minDate, maxDate) {
     minDate = BI.isString(minDate) ? minDate.match(/\d+/g) : minDate;
     maxDate = BI.isString(maxDate) ? maxDate.match(/\d+/g) : maxDate;
     if (YY < minDate[0]) {
-        back = ['y'];
+        back = ["y"];
     } else if (YY > maxDate[0]) {
-        back = ['y', 1];
+        back = ["y", 1];
     } else if (YY >= minDate[0] && YY <= maxDate[0]) {
         if (YY == minDate[0]) {
             if (MM < minDate[1]) {
-                back = ['m'];
+                back = ["m"];
             } else if (MM == minDate[1]) {
                 if (DD < minDate[2]) {
-                    back = ['d'];
+                    back = ["d"];
                 }
             }
         }
         if (YY == maxDate[0]) {
             if (MM > maxDate[1]) {
-                back = ['m', 1];
+                back = ["m", 1];
             } else if (MM == maxDate[1]) {
                 if (DD > maxDate[2]) {
-                    back = ['d', 1];
+                    back = ["d", 1];
                 }
             }
         }
@@ -371,9 +371,9 @@ Date.parseDateTime = function (str, fmt) {
     var y = 0;
     var m = 0;
     var d = 1;
-    //wei : 对于fmt为‘YYYYMM’或者‘YYYYMMdd’的格式，str的值为类似'201111'的形式，因为年月之间没有分隔符，所以正则表达式分割无效，导致bug7376。
+    // wei : 对于fmt为‘YYYYMM’或者‘YYYYMMdd’的格式，str的值为类似'201111'的形式，因为年月之间没有分隔符，所以正则表达式分割无效，导致bug7376。
     var a = str.split(/\W+/);
-    if (fmt.toLowerCase() == '%y%x' || fmt.toLowerCase() == '%y%x%d') {
+    if (fmt.toLowerCase() == "%y%x" || fmt.toLowerCase() == "%y%x%d") {
         var yearlength = 4;
         var otherlength = 2;
         a[0] = str.substring(0, yearlength);
@@ -438,9 +438,9 @@ Date.parseDateTime = function (str, fmt) {
                 break;
         }
     }
-//    if (!a[i]) {
-//        continue;
-//	}
+    //    if (!a[i]) {
+    //        continue;
+    //	}
     if (isNaN(y)) {
         y = today.getFullYear();
     }
@@ -500,21 +500,21 @@ Date.parseDateTime = function (str, fmt) {
 
 Date.getDate = function () {
     var dt = new (Function.prototype.bind.apply(Date, BI.concat([null], [].slice.apply(arguments))))();
-    if(BI.isNotNull(Date.timeZone) && (arguments.length === 0 || (arguments.length === 1 && BI.isNumber(arguments[0])))){
+    if(BI.isNotNull(Date.timeZone) && (arguments.length === 0 || (arguments.length === 1 && BI.isNumber(arguments[0])))) {
         var localTime = dt.getTime();
-        var localOffset = dt.getTimezoneOffset() * 60000; //获得当地时间偏移的毫秒数
-        var utc = localTime + localOffset; //utc即GMT时间标准时区
-        return new Date(utc + Date.timeZone);//+ Pool.timeZone.offset);
-    }else{
-        return dt;
+        var localOffset = dt.getTimezoneOffset() * 60000; // 获得当地时间偏移的毫秒数
+        var utc = localTime + localOffset; // utc即GMT时间标准时区
+        return new Date(utc + Date.timeZone);// + Pool.timeZone.offset);
     }
+    return dt;
+    
 };
 
 Date.getTime = function () {
     var dt = Function.prototype.bind.apply(Date.getDate, BI.concat([null], [].slice.apply(arguments)))();
-    if(BI.isNotNull(Date.timeZone)){
+    if(BI.isNotNull(Date.timeZone)) {
         return dt.getTime() - Date.timeZone - dt.getTimezoneOffset() * 60000;
-    }else{
-        return dt.getTime();
     }
+    return dt.getTime();
+    
 };

@@ -11,7 +11,7 @@ BI.GridLayout = BI.inherit(BI.Layout, {
             columns: null,
             rows: null,
             items: []
-            /*[
+            /* [
              {
              column: 0,
              row: 0,
@@ -40,8 +40,8 @@ BI.GridLayout = BI.inherit(BI.Layout, {
     },
 
     addItem: function () {
-        //do nothing
-        throw new Error("cannot be added")
+        // do nothing
+        throw new Error("cannot be added");
     },
 
     stroke: function (items) {
@@ -52,9 +52,9 @@ BI.GridLayout = BI.inherit(BI.Layout, {
         for (var i = 0; i < rows; i++) {
             els[i] = [];
         }
-        function firstElement(item, row, col) {
+        function firstElement (item, row, col) {
             if (row === 0) {
-                item.addClass("first-row")
+                item.addClass("first-row");
             }
             if (col === 0) {
                 item.addClass("first-col");
@@ -64,7 +64,7 @@ BI.GridLayout = BI.inherit(BI.Layout, {
             item.addClass("center-element");
         }
 
-        function firstObject(item, row, col) {
+        function firstObject (item, row, col) {
             var cls = "";
             if (row === 0) {
                 cls += " first-row";
@@ -77,13 +77,13 @@ BI.GridLayout = BI.inherit(BI.Layout, {
             item.cls = (item.cls || "") + cls + " center-element";
         }
 
-        function first(item, row, col) {
+        function first (item, row, col) {
             if (item instanceof BI.Widget) {
                 firstElement(item.element, row, col);
             } else if (item.el instanceof BI.Widget) {
                 firstElement(item.el.element, row, col);
             } else if (item.el) {
-                firstObject(item.el, row, col)
+                firstObject(item.el, row, col);
             } else {
                 firstObject(item, row, col);
             }
@@ -107,11 +107,11 @@ BI.GridLayout = BI.inherit(BI.Layout, {
                 }
                 first(els[i][j], i, j);
                 els[i][j].element.css({
-                    "position": "absolute",
-                    "top": height * i + "%",
-                    "left": width * j + "%",
-                    "right": (100 - (width * (j + 1))) + "%",
-                    "bottom": (100 - (height * (i + 1))) + "%"
+                    position: "absolute",
+                    top: height * i + "%",
+                    left: width * j + "%",
+                    right: (100 - (width * (j + 1))) + "%",
+                    bottom: (100 - (height * (i + 1))) + "%"
                 });
                 this.addWidget(els[i][j]);
             }
@@ -123,4 +123,4 @@ BI.GridLayout = BI.inherit(BI.Layout, {
         this._mount();
     }
 });
-BI.shortcut('bi.grid', BI.GridLayout);
+BI.shortcut("bi.grid", BI.GridLayout);

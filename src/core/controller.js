@@ -7,16 +7,16 @@
  * @abstract
  */
 BI.Controller = BI.inherit(BI.OB, {
-    _defaultConfig: function() {
+    _defaultConfig: function () {
         return BI.extend(BI.Controller.superclass._defaultConfig.apply(this, arguments), {
 
-        })
+        });
     },
-    _init : function() {
+    _init: function () {
         BI.Controller.superclass._init.apply(this, arguments);
     },
 
-    destroy: function(){
+    destroy: function () {
 
     }
 });

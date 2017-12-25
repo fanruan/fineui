@@ -11,9 +11,9 @@
 BI.Layout = BI.inherit(BI.Widget, {
     props: function () {
         return {
-            scrollable: null, //true, false, null
-            scrollx: false, //true, false
-            scrolly: false, //true, false
+            scrollable: null, // true, false, null
+            scrollx: false, // true, false
+            scrolly: false, // true, false
             items: []
         };
     },
@@ -25,16 +25,16 @@ BI.Layout = BI.inherit(BI.Widget, {
 
     _init4Margin: function () {
         if (this.options.top) {
-            this.element.css('top', this.options.top);
+            this.element.css("top", this.options.top);
         }
         if (this.options.left) {
-            this.element.css('left', this.options.left);
+            this.element.css("left", this.options.left);
         }
         if (this.options.bottom) {
-            this.element.css('bottom', this.options.bottom);
+            this.element.css("bottom", this.options.bottom);
         }
         if (this.options.right) {
-            this.element.css('right', this.options.right);
+            this.element.css("right", this.options.right);
         }
     },
 
@@ -116,8 +116,8 @@ BI.Layout = BI.inherit(BI.Widget, {
         var self = this;
         return eq(item1, item2);
 
-        //不比较函数
-        function eq(a, b, aStack, bStack) {
+        // 不比较函数
+        function eq (a, b, aStack, bStack) {
             if (a === b) {
                 return a !== 0 || 1 / a === 1 / b;
             }
@@ -126,20 +126,20 @@ BI.Layout = BI.inherit(BI.Widget, {
             }
             var className = Object.prototype.toString.call(a);
             switch (className) {
-                case '[object RegExp]':
-                case '[object String]':
-                    return '' + a === '' + b;
-                case '[object Number]':
+                case "[object RegExp]":
+                case "[object String]":
+                    return "" + a === "" + b;
+                case "[object Number]":
                     if (+a !== +a) {
                         return +b !== +b;
                     }
                     return +a === 0 ? 1 / +a === 1 / b : +a === +b;
-                case '[object Date]':
-                case '[object Boolean]':
+                case "[object Date]":
+                case "[object Boolean]":
                     return +a === +b;
             }
 
-            var areArrays = className === '[object Array]';
+            var areArrays = className === "[object Array]";
             if (!areArrays) {
                 if (BI.isFunction(a) && BI.isFunction(b)) {
                     return true;
@@ -306,7 +306,7 @@ BI.Layout = BI.inherit(BI.Widget, {
         this._getWrapper().append(fragment);
         BI.each(added, function (i, w) {
             w._mount();
-        })
+        });
     },
 
     prependItems: function (items) {
@@ -325,7 +325,7 @@ BI.Layout = BI.inherit(BI.Widget, {
         this._getWrapper().prepend(fragment);
         BI.each(added, function (i, w) {
             w._mount();
-        })
+        });
     },
 
     getValue: function () {
@@ -346,7 +346,7 @@ BI.Layout = BI.inherit(BI.Widget, {
             if (child = self._children[self._getChildName(i)]) {
                 child.setValue(v);
             }
-        })
+        });
     },
 
     setText: function (v) {
@@ -355,7 +355,7 @@ BI.Layout = BI.inherit(BI.Widget, {
             if (child = self._children[self._getChildName(i)]) {
                 child.setText(v);
             }
-        })
+        });
     },
 
     patchItem: function (oldVnode, vnode, index) {
@@ -433,31 +433,31 @@ BI.Layout = BI.inherit(BI.Widget, {
             self._children[self._getChildName(i)] = children[key];
         });
 
-        function sameVnode(vnode1, vnode2, oldIndex, newIndex) {
+        function sameVnode (vnode1, vnode2, oldIndex, newIndex) {
             vnode1 = self._getOptions(vnode1);
             vnode2 = self._getOptions(vnode2);
             if (BI.isKey(vnode1.key)) {
                 return vnode1.key === vnode2.key;
             }
             if (oldIndex >= 0) {
-                return oldIndex === newIndex
+                return oldIndex === newIndex;
             }
         }
 
-        function addNode(vnode, index) {
+        function addNode (vnode, index) {
             var opt = self._getOptions(vnode);
             var key = opt.key == null ? index : opt.key;
             return children[key] = self._addElement(key, vnode);
         }
 
-        function addVnodes(before, vnodes, startIdx, endIdx) {
+        function addVnodes (before, vnodes, startIdx, endIdx) {
             for (; startIdx <= endIdx; ++startIdx) {
                 var node = addNode(vnodes[startIdx], startIdx);
                 insertBefore(node, before, false, startIdx);
             }
         }
 
-        function removeVnodes(vnodes, startIdx, endIdx) {
+        function removeVnodes (vnodes, startIdx, endIdx) {
             for (; startIdx <= endIdx; ++startIdx) {
                 var node = self._getOptions(vnodes[startIdx]);
                 var key = node.key == null ? startIdx : node.key;
@@ -465,7 +465,7 @@ BI.Layout = BI.inherit(BI.Widget, {
             }
         }
 
-        function insertBefore(insert, before, isNext, index) {
+        function insertBefore (insert, before, isNext, index) {
             insert = self._getOptions(insert);
             before = before && self._getOptions(before);
             var insertKey = BI.isKey(insert.key) ? insert.key : index;
@@ -523,7 +523,7 @@ BI.Layout = BI.inherit(BI.Widget, {
     stroke: function (items) {
         var self = this;
         BI.each(items, function (i, item) {
-            if (!!item) {
+            if (item) {
                 self._addElement(i, item);
             }
         });
@@ -536,7 +536,7 @@ BI.Layout = BI.inherit(BI.Widget, {
                 if (child === nameOrWidget) {
                     removeIndex = name;
                 }
-            })
+            });
         } else {
             removeIndex = nameOrWidget;
         }
@@ -570,4 +570,4 @@ BI.Layout = BI.inherit(BI.Widget, {
 
     }
 });
-BI.shortcut('bi.layout', BI.Layout);
+BI.shortcut("bi.layout", BI.Layout);

@@ -7,27 +7,27 @@
 if (!window.BI) {
     window.BI = {};
 }
-;
+
 !(function ($, undefined) {
     var traverse = function (func, context) {
         return function (value, key, obj) {
             return func.call(context, key, value, obj);
-        }
+        };
     };
     var _apply = function (name) {
         return function () {
             return _[name].apply(_, arguments);
-        }
+        };
     };
     var _applyFunc = function (name) {
         return function () {
             var args = Array.prototype.slice.call(arguments, 0);
             args[1] = _.isFunction(args[1]) ? traverse(args[1], args[2]) : args[1];
             return _[name].apply(_, args);
-        }
+        };
     };
 
-    //Utility
+    // Utility
     _.extend(BI, {
         i18nText: function (key) {
             var localeText = (BI.i18n && BI.i18n[key]) || "";
@@ -61,11 +61,11 @@ if (!window.BI) {
         },
 
         warn: function (message) {
-            console.warn(message)
+            console.warn(message);
         },
 
         UUID: function () {
-            var f = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'a', 'b', 'c', 'd', 'e', 'f'];
+            var f = ["0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "a", "b", "c", "d", "e", "f"];
             var str = "";
             for (var i = 0; i < 16; i++) {
                 var r = parseInt(f.length * Math.random(), 10);
@@ -80,7 +80,7 @@ if (!window.BI) {
 
         createWidgets: function (items, options) {
             if (!BI.isArray(items)) {
-                throw new Error("cannot create Widgets")
+                throw new Error("cannot create Widgets");
             }
             return BI.map(BI.flatten(items), function (i, item) {
                 return BI.createWidget(item, BI.deepClone(options));
@@ -104,7 +104,7 @@ if (!window.BI) {
                     outerAttr.shift();
                     return BI.extend({}, item, {
                         el: innerAttr.shift()
-                    })
+                    });
                 }
                 if (item.el instanceof BI.Widget || (BI.View && item.el instanceof BI.View)) {
                     innerAttr.shift();
@@ -113,15 +113,15 @@ if (!window.BI) {
                 if (item.el) {
                     return BI.extend({}, outerAttr.shift(), item, {
                         el: BI.extend({}, innerAttr.shift(), item.el)
-                    })
+                    });
                 }
                 return BI.extend({}, outerAttr.shift(), {
                     el: BI.extend({}, innerAttr.shift(), item)
-                })
-            })
+                });
+            });
         },
 
-        //用容器包装items
+        // 用容器包装items
         packageItems: function (items, layouts) {
             for (var i = layouts.length - 1; i >= 0; i--) {
                 items = BI.map(items, function (k, it) {
@@ -131,8 +131,8 @@ if (!window.BI) {
                                 el: it
                             })
                         ]
-                    })
-                })
+                    });
+                });
             }
             return items;
         },
@@ -146,7 +146,7 @@ if (!window.BI) {
             };
         },
 
-        //剥开EL
+        // 剥开EL
         stripEL: function (obj) {
             return obj.type && obj || obj.el || obj;
         },
@@ -158,13 +158,13 @@ if (!window.BI) {
         }
     });
 
-    //集合相关方法
+    // 集合相关方法
     _.each(["where", "findWhere", "contains", "invoke", "pluck", "shuffle", "sample", "toArray", "size"], function (name) {
-        BI[name] = _apply(name)
+        BI[name] = _apply(name);
     });
     _.each(["each", "map", "reduce", "reduceRight", "find", "filter", "reject", "every", "all", "some", "any", "max", "min",
         "sortBy", "groupBy", "indexBy", "countBy", "partition"], function (name) {
-        BI[name] = _applyFunc(name)
+        BI[name] = _applyFunc(name);
     });
     _.extend(BI, {
         clamp: function (value, minValue, maxValue) {
@@ -176,7 +176,7 @@ if (!window.BI) {
             }
             return value;
         },
-        //数数
+        // 数数
         count: function (from, to, predicate) {
             var t;
             if (predicate) {
@@ -187,7 +187,7 @@ if (!window.BI) {
             return to - from;
         },
 
-        //倒数
+        // 倒数
         inverse: function (from, to, predicate) {
             return BI.count(to, from, predicate);
         },
@@ -326,7 +326,7 @@ if (!window.BI) {
         },
 
         string2Array: function (str) {
-            return str.split('&-&');
+            return str.split("&-&");
         },
 
         array2String: function (array) {
@@ -334,7 +334,7 @@ if (!window.BI) {
         },
 
         abc2Int: function (str) {
-            var idx = 0, start = 'A', str = str.toUpperCase();
+            var idx = 0, start = "A", str = str.toUpperCase();
             for (var i = 0, len = str.length; i < len; ++i) {
                 idx = str.charAt(i).charCodeAt(0) - start.charCodeAt(0) + 26 * idx + 1;
                 if (idx > (2147483646 - str.charAt(i).charCodeAt(0) + start.charCodeAt(0)) / 26) {
@@ -345,7 +345,7 @@ if (!window.BI) {
         },
 
         int2Abc: function (num) {
-            var DIGITS = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z'];
+            var DIGITS = ["A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z"];
             var idx = num, str = "";
             if (num === 0) {
                 return "";
@@ -362,16 +362,16 @@ if (!window.BI) {
         }
     });
 
-    //数组相关的方法
+    // 数组相关的方法
     _.each(["first", "initial", "last", "rest", "compact", "flatten", "without", "union", "intersection",
         "difference", "zip", "unzip", "object", "indexOf", "lastIndexOf", "sortedIndex", "range"], function (name) {
-        BI[name] = _apply(name)
+        BI[name] = _apply(name);
     });
     _.each(["findIndex", "findLastIndex"], function (name) {
-        BI[name] = _applyFunc(name)
+        BI[name] = _applyFunc(name);
     });
     _.extend(BI, {
-        //构建一个长度为length的数组
+        // 构建一个长度为length的数组
         makeArray: function (length, value) {
             var res = [];
             for (var i = 0; i < length; i++) {
@@ -425,20 +425,20 @@ if (!window.BI) {
         }
     });
 
-    //对象相关方法
+    // 对象相关方法
     _.each(["keys", "allKeys", "values", "pairs", "invert", "create", "functions", "extend", "extendOwn",
         "defaults", "clone", "property", "propertyOf", "matcher", "isEqual", "isMatch", "isEmpty",
         "isElement", "isNumber", "isString", "isArray", "isObject", "isArguments", "isFunction", "isFinite",
         "isBoolean", "isDate", "isRegExp", "isError", "isNaN", "isUndefined"], function (name) {
-        BI[name] = _apply(name)
+        BI[name] = _apply(name);
     });
     _.each(["mapObject", "findKey", "pick", "omit", "tap"], function (name) {
-        BI[name] = _applyFunc(name)
+        BI[name] = _applyFunc(name);
     });
     _.extend(BI, {
 
         inherit: function (sb, sp, overrides) {
-            if (typeof sp == 'object') {
+            if (typeof sp === "object") {
                 overrides = sp;
                 sp = sb;
                 sb = function () {
@@ -446,7 +446,7 @@ if (!window.BI) {
                 };
             }
             var F = function () {
-            }, spp = sp.prototype;
+                }, spp = sp.prototype;
             F.prototype = spp;
             sb.prototype = new F();
             sb.superclass = spp;
@@ -468,12 +468,12 @@ if (!window.BI) {
             return _.has.apply(_, arguments);
         },
 
-        //数字和字符串可以作为key
+        // 数字和字符串可以作为key
         isKey: function (key) {
             return BI.isNumber(key) || (BI.isString(key) && key.length > 0);
         },
 
-        //忽略大小写的等于
+        // 忽略大小写的等于
         isCapitalEqual: function (a, b) {
             a = BI.isNull(a) ? a : ("" + a).toLowerCase();
             b = BI.isNull(b) ? b : ("" + b).toLowerCase();
@@ -481,10 +481,10 @@ if (!window.BI) {
         },
 
         isWidthOrHeight: function (w) {
-            if (typeof w == 'number') {
+            if (typeof w === "number") {
                 return w >= 0;
-            } else if (typeof w == 'string') {
-                return /^\d{1,3}%$/.exec(w) || w == 'auto' || /^\d+px$/.exec(w);
+            } else if (typeof w === "string") {
+                return /^\d{1,3}%$/.exec(w) || w == "auto" || /^\d+px$/.exec(w);
             }
         },
 
@@ -529,7 +529,7 @@ if (!window.BI) {
         }
     });
 
-    //deep方法
+    // deep方法
     _.extend(BI, {
         /**
          *完全克隆�?个js对象
@@ -544,14 +544,14 @@ if (!window.BI) {
             var type = Object.prototype.toString.call(obj);
 
             // Date
-            if (type === '[object Date]') {
+            if (type === "[object Date]") {
                 return Date.getDate(obj.getTime());
             }
 
             var i, clone, key;
 
             // Array
-            if (type === '[object Array]') {
+            if (type === "[object Array]") {
                 i = obj.length;
 
                 clone = [];
@@ -561,7 +561,7 @@ if (!window.BI) {
                 }
             }
             // Object
-            else if (type === '[object Object]' && obj.constructor === Object) {
+            else if (type === "[object Object]" && obj.constructor === Object) {
                 clone = {};
 
                 for (var i in obj) {
@@ -595,7 +595,7 @@ if (!window.BI) {
                     if (BI.isEqual(v, copy)) {
                         return true;
                     }
-                })
+                });
             }
             return BI.contains(obj, copy);
         },
@@ -639,15 +639,15 @@ if (!window.BI) {
                     }
                 }
                 return result;
-            } else {
-                var result = {};
-                BI.each(obj, function (i, v) {
-                    if (!BI.isEqual(target, obj[i])) {
-                        result[i] = v;
-                    }
-                });
-                return result;
             }
+            var result = {};
+            BI.each(obj, function (i, v) {
+                if (!BI.isEqual(target, obj[i])) {
+                    result[i] = v;
+                }
+            });
+            return result;
+            
         },
 
         deepUnique: function (array) {
@@ -660,7 +660,7 @@ if (!window.BI) {
             return result;
         },
 
-        //比较两个对象得出不一样的key值
+        // 比较两个对象得出不一样的key值
         deepDiff: function (object, other) {
             object || (object = {});
             other || (other = {});
@@ -683,18 +683,18 @@ if (!window.BI) {
         }
     });
 
-    //通用方法
+    // 通用方法
     _.each(["uniqueId", "result", "chain", "iteratee", "escape", "unescape"], function (name) {
         BI[name] = function () {
             return _[name].apply(_, arguments);
-        }
+        };
     });
 
-    //事件相关方法
+    // 事件相关方法
     _.each(["bind", "once", "partial", "debounce", "throttle", "delay", "defer", "wrap"], function (name) {
         BI[name] = function () {
             return _[name].apply(_, arguments);
-        }
+        };
     });
 
     _.extend(BI, {
@@ -703,7 +703,7 @@ if (!window.BI) {
             var pending = false;
             var timerFunc;
 
-            function nextTickHandler() {
+            function nextTickHandler () {
                 pending = false;
                 var copies = callbacks.slice(0);
                 callbacks = [];
@@ -712,15 +712,15 @@ if (!window.BI) {
                 }
             }
 
-            if (typeof Promise !== 'undefined') {
+            if (typeof Promise !== "undefined") {
                 var p = Promise.resolve();
                 timerFunc = function () {
                     p.then(nextTickHandler);
-                }
+                };
             } else
 
             /* istanbul ignore if */
-            if (typeof MutationObserver !== 'undefined') {
+            if (typeof MutationObserver !== "undefined") {
                 var counter = 1;
                 var observer = new MutationObserver(nextTickHandler);
                 var textNode = document.createTextNode(counter + "");
@@ -730,13 +730,13 @@ if (!window.BI) {
                 timerFunc = function () {
                     counter = (counter + 1) % 2;
                     textNode.data = counter + "";
-                }
+                };
             } else {
                 timerFunc = function () {
-                    setTimeout(nextTickHandler, 0)
-                }
+                    setTimeout(nextTickHandler, 0);
+                };
             }
-            return function queueNextTick(cb) {
+            return function queueNextTick (cb) {
                 var _resolve;
                 var args = [].slice.call(arguments, 1);
                 callbacks.push(function () {
@@ -751,34 +751,34 @@ if (!window.BI) {
                     pending = true;
                     timerFunc();
                 }
-                if (!cb && typeof Promise !== 'undefined') {
+                if (!cb && typeof Promise !== "undefined") {
                     return new Promise(function (resolve) {
-                        _resolve = resolve
-                    })
+                        _resolve = resolve;
+                    });
                 }
-            }
+            };
         })()
     });
 
-    //数字相关方法
+    // 数字相关方法
     _.each(["random"], function (name) {
-        BI[name] = _apply(name)
+        BI[name] = _apply(name);
     });
     _.extend(BI, {
         getTime: function () {
             if (window.performance && window.performance.now) {
                 return window.performance.now();
-            } else {
-                if (window.performance && window.performance.webkitNow) {
-                    return window.performance.webkitNow();
-                } else {
-                    if (Date.now) {
-                        return Date.now();
-                    } else {
-                        return Date.getDate().getTime();
-                    }
-                }
             }
+            if (window.performance && window.performance.webkitNow) {
+                return window.performance.webkitNow();
+            }
+            if (Date.now) {
+                return Date.now();
+            }
+            return Date.getDate().getTime();
+                    
+                
+            
         },
 
         parseInt: function (number) {
@@ -881,7 +881,7 @@ if (!window.BI) {
         }
     });
 
-    //字符串相关方法
+    // 字符串相关方法
     _.extend(BI, {
         trim: function () {
             return $.trim.apply($, arguments);
@@ -900,28 +900,28 @@ if (!window.BI) {
         },
 
         isLiteral: function (exp) {
-            var literalValueRE = /^\s?(true|false|-?[\d\.]+|'[^']*'|"[^"]*")\s?$/
-            return literalValueRE.test(exp)
+            var literalValueRE = /^\s?(true|false|-?[\d\.]+|'[^']*'|"[^"]*")\s?$/;
+            return literalValueRE.test(exp);
         },
 
         stripQuotes: function (str) {
-            var a = str.charCodeAt(0)
-            var b = str.charCodeAt(str.length - 1)
+            var a = str.charCodeAt(0);
+            var b = str.charCodeAt(str.length - 1);
             return a === b && (a === 0x22 || a === 0x27)
                 ? str.slice(1, -1)
-                : str
+                : str;
         },
 
-        //background-color => backgroundColor
+        // background-color => backgroundColor
         camelize: function (str) {
             return str.replace(/-(.)/g, function (_, character) {
                 return character.toUpperCase();
             });
         },
 
-        //backgroundColor => background-color
+        // backgroundColor => background-color
         hyphenate: function (str) {
-            return str.replace(/([A-Z])/g, '-$1').toLowerCase();
+            return str.replace(/([A-Z])/g, "-$1").toLowerCase();
         },
 
         isNotEmptyString: function (str) {
@@ -965,7 +965,7 @@ if (!window.BI) {
                 alert("Algorithm cannot find a suitable hash. Please choose a different password. \nPossible considerations are to choose a more complex or longer password.");
                 return null;
             }
-//        var salt = Math.round(Math.random() * 1000000000) % 100000000;
+            //        var salt = Math.round(Math.random() * 1000000000) % 100000000;
             var salt = 101;
             prand += salt;
             while (prand.length > 10) {
@@ -1042,7 +1042,7 @@ if (!window.BI) {
         }
     });
 
-    //浏览器相关方法
+    // 浏览器相关方法
     _.extend(BI, {
         isIE: function () {
             if (this.__isIE == null) {
@@ -1111,7 +1111,7 @@ if (!window.BI) {
         },
 
         isSupportCss3: function (style) {
-            var prefix = ['webkit', 'Moz', 'ms', 'o'],
+            var prefix = ["webkit", "Moz", "ms", "o"],
                 i, len,
                 humpString = [],
                 htmlStyle = document.documentElement.style,
@@ -1122,7 +1122,7 @@ if (!window.BI) {
                 };
 
             for (i in prefix) {
-                humpString.push(_toHumb(prefix[i] + '-' + style));
+                humpString.push(_toHumb(prefix[i] + "-" + style));
             }
             humpString.push(_toHumb(style));
 
@@ -1134,7 +1134,7 @@ if (!window.BI) {
             return false;
         }
     });
-    //BI请求
+    // BI请求
     _.extend(BI, {
 
         ajax: function (option) {

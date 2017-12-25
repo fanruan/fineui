@@ -25,12 +25,12 @@ BI.AbsoluteVerticalLayout = BI.inherit(BI.Layout, {
         var o = this.options;
         var w = BI.AbsoluteVerticalLayout.superclass._addElement.apply(this, arguments);
         w.element.css({
-            "position": "absolute",
-            "left": item.lgap,
-            "right": item.rgap,
-            "top": o.vgap + o.tgap + (item.tgap || 0),
-            "bottom": o.vgap + o.bgap + (item.bgap || 0),
-            "margin": "auto"
+            position: "absolute",
+            left: item.lgap,
+            right: item.rgap,
+            top: o.vgap + o.tgap + (item.tgap || 0),
+            bottom: o.vgap + o.bgap + (item.bgap || 0),
+            margin: "auto"
         });
         if (o.hgap + o.lgap + (item.lgap || 0) !== 0) {
             w.element.css("left", o.hgap + o.lgap + (item.lgap || 0));
@@ -50,4 +50,4 @@ BI.AbsoluteVerticalLayout = BI.inherit(BI.Layout, {
         this._mount();
     }
 });
-BI.shortcut('bi.absolute_vertical_adapt', BI.AbsoluteVerticalLayout);
+BI.shortcut("bi.absolute_vertical_adapt", BI.AbsoluteVerticalLayout);

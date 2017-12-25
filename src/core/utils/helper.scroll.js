@@ -1,4 +1,4 @@
-;(function () {
+(function () {
     var clamp = function (min, value, max) {
         if (value < min) {
             return min;
@@ -18,9 +18,9 @@
     };
 
     BI.TableScrollHelper = function (rowCount,
-                                     defaultRowHeight,
-                                     viewportHeight,
-                                     rowHeightGetter) {
+        defaultRowHeight,
+        viewportHeight,
+        rowHeightGetter) {
         this._rowOffsets = BI.PrefixIntervalTree.uniform(rowCount, defaultRowHeight);
         this._storedHeights = new Array(rowCount);
         for (var i = 0; i < rowCount; ++i) {
@@ -32,8 +32,8 @@
         this._defaultRowHeight = defaultRowHeight;
         this._rowHeightGetter = rowHeightGetter ?
             rowHeightGetter : function () {
-            return defaultRowHeight
-        };
+                return defaultRowHeight;
+            };
         this._viewportHeight = viewportHeight;
 
         this._updateHeightsInViewport(0, 0);
@@ -54,7 +54,7 @@
         },
 
         _updateHeightsInViewport: function (firstRowIndex,
-                                            firstRowOffset) {
+            firstRowOffset) {
             var top = firstRowOffset;
             var index = firstRowIndex;
             while (top <= this._viewportHeight && index < this._rowCount) {

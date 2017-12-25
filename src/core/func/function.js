@@ -15,8 +15,8 @@ BI.extend(BI.Func, {
         name = name || "";
         while (true) {
             if (BI.every(array, function (i, item) {
-                    return item.name !== name;
-                })) {
+                return item.name !== name;
+            })) {
                 break;
             }
             name = src + (idx++);
@@ -67,7 +67,7 @@ BI.extend(BI.Func, {
         return {
             matched: matched,
             finded: finded
-        }
+        };
     }
 });
 
@@ -98,11 +98,11 @@ BI.extend(BI.DOM, {
         return $("body").find(obj.element).length > 0;
     },
 
-    //预加载图片
+    // 预加载图片
     preloadImages: function (srcArray, onload) {
         var count = 0, images = [];
 
-        function complete() {
+        function complete () {
             count++;
             if (count >= srcArray.length) {
                 onload();
@@ -113,10 +113,10 @@ BI.extend(BI.DOM, {
             images[i] = new Image();
             images[i].src = src;
             images[i].onload = function () {
-                complete()
+                complete();
             };
             images[i].onerror = function () {
-                complete()
+                complete();
             };
         });
     },
@@ -145,13 +145,13 @@ BI.extend(BI.DOM, {
         }
         var rgb = this.rgb2json(this.hex2rgb(hex));
         var grayLevel = Math.round(rgb.r * 0.299 + rgb.g * 0.587 + rgb.b * 0.114);
-        if (grayLevel < 192/**网上给的是140**/) {
+        if (grayLevel < 192/** 网上给的是140**/) {
             return true;
         }
         return false;
     },
 
-    //获取对比颜色
+    // 获取对比颜色
     getContrastColor: function (color) {
         if (!color || !this.isColor(color)) {
             return "";
@@ -219,9 +219,9 @@ BI.extend(BI.DOM, {
     },
 
     int2hex: function (strNum) {
-        var hexdig = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'a', 'b', 'c', 'd', 'e', 'f'];
+        var hexdig = ["0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "a", "b", "c", "d", "e", "f"];
 
-        return hexdig[strNum >>> 4] + '' + hexdig[strNum & 15];
+        return hexdig[strNum >>> 4] + "" + hexdig[strNum & 15];
     },
 
     hex2rgb: function (color) {
@@ -234,14 +234,13 @@ BI.extend(BI.DOM, {
         var tempValue = "rgb(", colorArray;
 
         if (color.length === 7) {
-            colorArray = [BI.parseInt('0x' + color.substring(1, 3)),
-                BI.parseInt('0x' + color.substring(3, 5)),
-                BI.parseInt('0x' + color.substring(5, 7))];
-        }
-        else if (color.length === 4) {
-            colorArray = [BI.parseInt('0x' + color.substring(1, 2)),
-                BI.parseInt('0x' + color.substring(2, 3)),
-                BI.parseInt('0x' + color.substring(3, 4))];
+            colorArray = [BI.parseInt("0x" + color.substring(1, 3)),
+                BI.parseInt("0x" + color.substring(3, 5)),
+                BI.parseInt("0x" + color.substring(5, 7))];
+        } else if (color.length === 4) {
+            colorArray = [BI.parseInt("0x" + color.substring(1, 2)),
+                BI.parseInt("0x" + color.substring(2, 3)),
+                BI.parseInt("0x" + color.substring(3, 4))];
         }
         tempValue += colorArray[0] + ",";
         tempValue += colorArray[1] + ",";
@@ -287,7 +286,7 @@ BI.extend(BI.DOM, {
         return width;
     },
 
-    //获取滚动条的宽度
+    // 获取滚动条的宽度
     getScrollWidth: function () {
         if (this._scrollWidth == null) {
             var ul = $("<div>").width(50).height(50).css({

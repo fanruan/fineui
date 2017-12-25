@@ -33,7 +33,7 @@ BI.DivisionLayout = BI.inherit(BI.Layout, {
             //        height: 0.33,
             //        el: {type: 'bi.button', text: 'button3'}
             //    }
-            //]
+            // ]
         });
     },
     render: function () {
@@ -47,16 +47,16 @@ BI.DivisionLayout = BI.inherit(BI.Layout, {
 
     addItem: function (item) {
         // do nothing
-        throw new Error("cannot be added")
+        throw new Error("cannot be added");
     },
 
-    stroke: function(items){
+    stroke: function (items) {
         var o = this.options;
         var rows = o.rows || o.items.length, columns = o.columns || ((o.items[0] && o.items[0].length) | 0);
         var map = BI.makeArray(rows), widths = {}, heights = {};
-        function firstElement(item, row, col) {
+        function firstElement (item, row, col) {
             if (row === 0) {
-                item.addClass("first-row")
+                item.addClass("first-row");
             }
             if (col === 0) {
                 item.addClass("first-col");
@@ -66,7 +66,7 @@ BI.DivisionLayout = BI.inherit(BI.Layout, {
             item.addClass("center-element");
         }
 
-        function firstObject(item, row, col) {
+        function firstObject (item, row, col) {
             var cls = "";
             if (row === 0) {
                 cls += " first-row";
@@ -79,13 +79,13 @@ BI.DivisionLayout = BI.inherit(BI.Layout, {
             item.cls = (item.cls || "") + cls + " center-element";
         }
 
-        function first(item, row, col) {
+        function first (item, row, col) {
             if (item instanceof BI.Widget) {
                 firstElement(item.element, row, col);
             } else if (item.el instanceof BI.Widget) {
                 firstElement(item.el.element, row, col);
             } else if (item.el) {
-                firstObject(item.el, row, col)
+                firstObject(item.el, row, col);
             } else {
                 firstObject(item, row, col);
             }
@@ -119,13 +119,13 @@ BI.DivisionLayout = BI.inherit(BI.Layout, {
                     w = this.getWidgetByName(this.getName() + i + "_" + j);
                 }
                 var left = totalW * 100 / widths[i];
-                w.element.css({"position": "absolute", "left": left + "%"});
+                w.element.css({position: "absolute", left: left + "%"});
                 if (j > 0) {
                     var lastW = this.getWidgetByName(this.getName() + i + "_" + (j - 1));
-                    lastW.element.css({"right": (100 - left) + "%"});
+                    lastW.element.css({right: (100 - left) + "%"});
                 }
                 if (j == o.columns - 1) {
-                    w.element.css({"right": "0%"});
+                    w.element.css({right: "0%"});
                 }
                 first(w, i, j);
                 totalW += map[i][j].width;
@@ -136,13 +136,13 @@ BI.DivisionLayout = BI.inherit(BI.Layout, {
             for (var i = 0; i < o.rows; i++) {
                 var w = this.getWidgetByName(this.getName() + i + "_" + j);
                 var top = totalH * 100 / heights[j];
-                w.element.css({"top": top + "%"});
+                w.element.css({top: top + "%"});
                 if (i > 0) {
                     var lastW = this.getWidgetByName(this.getName() + (i - 1) + "_" + j);
-                    lastW.element.css({"bottom": (100 - top) + "%"});
+                    lastW.element.css({bottom: (100 - top) + "%"});
                 }
                 if (i == o.rows - 1) {
-                    w.element.css({"bottom": "0%"});
+                    w.element.css({bottom: "0%"});
                 }
                 totalH += map[i][j].height;
             }
@@ -154,4 +154,4 @@ BI.DivisionLayout = BI.inherit(BI.Layout, {
         this._mount();
     }
 });
-BI.shortcut('bi.division', BI.DivisionLayout);
+BI.shortcut("bi.division", BI.DivisionLayout);

@@ -1,7 +1,7 @@
 BI.BehaviorFactory = {
-    createBehavior: function(key, options){
+    createBehavior: function (key, options) {
         var behavior;
-        switch (key){
+        switch (key) {
             case "highlight":
                 behavior = BI.HighlightBehavior;
                 break;
@@ -11,7 +11,7 @@ BI.BehaviorFactory = {
         }
         return new behavior(options);
     }
-}
+};
 
 /**
  * guy
@@ -20,18 +20,18 @@ BI.BehaviorFactory = {
  * @extends BI.OB
  */
 BI.Behavior = BI.inherit(BI.OB, {
-    _defaultConfig: function() {
+    _defaultConfig: function () {
         return BI.extend(BI.Behavior.superclass._defaultConfig.apply(this, arguments), {
-            rule: function(){return true;}
+            rule: function () {return true;}
         });
     },
 
-    _init : function() {
+    _init: function () {
         BI.Behavior.superclass._init.apply(this, arguments);
 
     },
 
-    doBehavior: function(){
+    doBehavior: function () {
 
     }
 });

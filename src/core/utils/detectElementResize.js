@@ -9,16 +9,16 @@
  **/
 !(function () {
     // Check `document` and `window` in case of server-side rendering
-    var _window
-    if (typeof window !== 'undefined') {
-        _window = window
-    } else if (typeof self !== 'undefined') {
-        _window = self
+    var _window;
+    if (typeof window !== "undefined") {
+        _window = window;
+    } else if (typeof self !== "undefined") {
+        _window = self;
     } else {
-        _window = this
+        _window = this;
     }
 
-    var addEventListener = typeof document !== 'undefined' && document.addEventListener;
+    var addEventListener = typeof document !== "undefined" && document.addEventListener;
     var stylesCreated = false;
 
     if (addEventListener) {
@@ -47,8 +47,8 @@
                 expandChild = expand.firstElementChild;
             contract.scrollLeft = contract.scrollWidth;
             contract.scrollTop = contract.scrollHeight;
-            expandChild.style.width = expand.offsetWidth + 1 + 'px';
-            expandChild.style.height = expand.offsetHeight + 1 + 'px';
+            expandChild.style.width = expand.offsetWidth + 1 + "px";
+            expandChild.style.height = expand.offsetHeight + 1 + "px";
             expand.scrollLeft = expand.scrollWidth;
             expand.scrollTop = expand.scrollHeight;
         };
@@ -56,7 +56,7 @@
         var checkTriggers = function (element) {
             return element.offsetWidth !== element.__resizeLast__.width ||
                 element.offsetHeight !== element.__resizeLast__.height;
-        }
+        };
 
         var scrollListener = function (e) {
             var element = this;
@@ -75,24 +75,24 @@
 
         /* Detect CSS Animations support to detect element display/re-attach */
         var animation = false,
-            animationstring = 'animation',
-            keyframeprefix = '',
-            animationstartevent = 'animationstart',
-            domPrefixes = 'Webkit Moz O ms'.split(' '),
-            startEvents = 'webkitAnimationStart animationstart oAnimationStart MSAnimationStart'.split(' '),
-            pfx = '';
+            animationstring = "animation",
+            keyframeprefix = "",
+            animationstartevent = "animationstart",
+            domPrefixes = "Webkit Moz O ms".split(" "),
+            startEvents = "webkitAnimationStart animationstart oAnimationStart MSAnimationStart".split(" "),
+            pfx = "";
         {
-            var elm = document.createElement('fakeelement');
+            var elm = document.createElement("fakeelement");
             if (elm.style.animationName !== undefined) {
                 animation = true;
             }
 
             if (animation === false) {
                 for (var i = 0; i < domPrefixes.length; i++) {
-                    if (elm.style[domPrefixes[i] + 'AnimationName'] !== undefined) {
+                    if (elm.style[domPrefixes[i] + "AnimationName"] !== undefined) {
                         pfx = domPrefixes[i];
-                        animationstring = pfx + 'Animation';
-                        keyframeprefix = '-' + pfx.toLowerCase() + '-';
+                        animationstring = pfx + "Animation";
+                        keyframeprefix = "-" + pfx.toLowerCase() + "-";
                         animationstartevent = startEvents[i];
                         animation = true;
                         break;
@@ -101,21 +101,21 @@
             }
         }
 
-        var animationName = 'resizeanim';
-        var animationKeyframes = '@' + keyframeprefix + 'keyframes ' + animationName + ' { from { opacity: 0; } to { opacity: 0; } } ';
-        var animationStyle = keyframeprefix + 'animation: 1ms ' + animationName + '; ';
+        var animationName = "resizeanim";
+        var animationKeyframes = "@" + keyframeprefix + "keyframes " + animationName + " { from { opacity: 0; } to { opacity: 0; } } ";
+        var animationStyle = keyframeprefix + "animation: 1ms " + animationName + "; ";
     }
 
     var createStyles = function () {
         if (!stylesCreated) {
-            //opacity:0 works around a chrome bug https://code.google.com/p/chromium/issues/detail?id=286360
-            var css = (animationKeyframes ? animationKeyframes : '') +
-                    '.resize-triggers { ' + (animationStyle ? animationStyle : '') + 'visibility: hidden; opacity: 0; } ' +
-                    '.resize-triggers, .resize-triggers > div, .contract-trigger:before { content: \" \"; display: block; position: absolute; top: 0; left: 0; height: 100%; width: 100%; overflow: hidden; } .resize-triggers > div { background: #eee; overflow: auto; } .contract-trigger:before { width: 200%; height: 200%; }',
-                head = document.head || document.getElementsByTagName('head')[0],
-                style = document.createElement('style');
+            // opacity:0 works around a chrome bug https://code.google.com/p/chromium/issues/detail?id=286360
+            var css = (animationKeyframes ? animationKeyframes : "") +
+                    ".resize-triggers { " + (animationStyle ? animationStyle : "") + "visibility: hidden; opacity: 0; } " +
+                    ".resize-triggers, .resize-triggers > div, .contract-trigger:before { content: \" \"; display: block; position: absolute; top: 0; left: 0; height: 100%; width: 100%; overflow: hidden; } .resize-triggers > div { background: #eee; overflow: auto; } .contract-trigger:before { width: 200%; height: 200%; }",
+                head = document.head || document.getElementsByTagName("head")[0],
+                style = document.createElement("style");
 
-            style.type = 'text/css';
+            style.type = "text/css";
             if (style.styleSheet) {
                 style.styleSheet.cssText = css;
             } else {
@@ -125,32 +125,31 @@
             head.appendChild(style);
             stylesCreated = true;
         }
-    }
+    };
 
     var addResizeListener = function (element, fn) {
-        if (addEventListener){
+        if (addEventListener) {
             if (!element.__resizeTriggers__) {
-                if (getComputedStyle(element).position === 'static') element.style.position = 'relative';
+                if (getComputedStyle(element).position === "static") element.style.position = "relative";
                 createStyles();
                 element.__resizeLast__ = {};
                 element.__resizeListeners__ = [];
-                (element.__resizeTriggers__ = document.createElement('div')).className = 'resize-triggers';
-                element.__resizeTriggers__.innerHTML = '<div class="expand-trigger"><div></div></div>' +
-                    '<div class="contract-trigger"></div>';
+                (element.__resizeTriggers__ = document.createElement("div")).className = "resize-triggers";
+                element.__resizeTriggers__.innerHTML = "<div class=\"expand-trigger\"><div></div></div>" +
+                    "<div class=\"contract-trigger\"></div>";
                 element.appendChild(element.__resizeTriggers__);
                 resetTriggers(element);
-                element.addEventListener('scroll', scrollListener, true);
+                element.addEventListener("scroll", scrollListener, true);
 
                 /* Listen for a css animation to detect element display/re-attach */
                 animationstartevent && element.__resizeTriggers__.addEventListener(animationstartevent, function (e) {
-                    if (e.animationName === animationName)
-                        resetTriggers(element);
+                    if (e.animationName === animationName) {resetTriggers(element);}
                 });
             }
             element.__resizeListeners__.push(fn);
 
         } else {
-            element.attachEvent('onresize', fn);
+            element.attachEvent("onresize", fn);
         }
     };
 
@@ -158,11 +157,11 @@
         if (addEventListener) {
             element.__resizeListeners__.splice(element.__resizeListeners__.indexOf(fn), 1);
             if (!element.__resizeListeners__.length) {
-                element.removeEventListener('scroll', scrollListener, true);
+                element.removeEventListener("scroll", scrollListener, true);
                 element.__resizeTriggers__ = !element.removeChild(element.__resizeTriggers__);
             }
         } else {
-            element.detachEvent('onresize', fn);
+            element.detachEvent("onresize", fn);
         }
     };
 
@@ -171,7 +170,7 @@
             addResizeListener(widget.element[0], fn);
             return function () {
                 removeResizeListener(widget.element[0], fn);
-            }
+            };
         },
         removeResizeListener: function (widget, fn) {
             removeResizeListener(widget.element[0], fn);
