@@ -150,6 +150,13 @@ module.exports = function (grunt) {
                 dest: 'demo/css/',
                 ext: '.css'
             },
+            main: {
+                expand: true,
+                cwd: "public/less",
+                src: ["**/*.less"],
+                dest: "public/css",
+                ext: ".css"
+            },
             dev: {
                 options: {
                     compress: true,
