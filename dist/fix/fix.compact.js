@@ -20,7 +20,7 @@
     }
 
     var target = null;
-    const targetStack = [];
+    var targetStack = [];
 
     function pushTarget (_target) {
         if (target) targetStack.push(target);
