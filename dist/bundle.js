@@ -75270,10 +75270,10 @@ BI.LevelTree = BI.inherit(BI.Widget, {
                 }]
             }, o.el)
         });
-        this.tree.on(BI.Controller.EVENT_CHANGE, function (type) {
+        this.tree.on(BI.Controller.EVENT_CHANGE, function (type, value, ob) {
             self.fireEvent(BI.Controller.EVENT_CHANGE, arguments);
             if (type === BI.Events.CLICK) {
-                self.fireEvent(BI.LevelTree.EVENT_CHANGE, arguments);
+                self.fireEvent(BI.LevelTree.EVENT_CHANGE, value, ob);
             }
         });
     },
