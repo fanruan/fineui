@@ -11797,7 +11797,7 @@ if (!window.BI) {
                 }
             });
             return result;
-            
+
         },
 
         deepUnique: function (array) {
@@ -11830,6 +11830,12 @@ if (!window.BI) {
                 }
             }
             return result;
+        },
+
+        deepExtend: function () {
+            var args = [].slice.call(arguments);
+            args.unshift(true);
+            return $.extend.apply($, args);
         }
     });
 
@@ -11926,9 +11932,9 @@ if (!window.BI) {
                 return Date.now();
             }
             return Date.getDate().getTime();
-                    
-                
-            
+
+
+
         },
 
         parseInt: function (number) {
