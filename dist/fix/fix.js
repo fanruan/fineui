@@ -1226,7 +1226,7 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
             if (model instanceof Observer || model instanceof Model) {
                 model = model.model;
             }
-            if (model.__ob__) {
+            if (model && model.__ob__) {
                 this.$$model = model;
             } else {
                 this.options = model || {};
