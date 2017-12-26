@@ -429,7 +429,7 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
             return;
         }
         var ob = void 0;
-        if (_.has(value, '__ob__') && value.__ob__ instanceof Observer) {
+        if (value.__ob__ instanceof Observer) {
             ob = value.__ob__;
         } else if (observerState.shouldConvert && (_.isArray(value) || isPlainObject(value))) {
             ob = new Observer(value);
@@ -1029,7 +1029,7 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
         for (var key in computed) {
             var userDef = computed[key],
                 context = vm.$$model ? vm.model : vm;
-            var getter = typeof userDef === 'function' ? _.bind(userDef, context) : _.bind(userDef.get, context);
+            var getter = typeof userDef === "function" ? _.bind(userDef, context) : _.bind(userDef.get, context);
 
             watchers[key] = new Watcher(vm.$$computed, getter || noop, noop, computedWatcherOptions);
         }
@@ -1057,7 +1057,7 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
                     set: noop
                 };
                 var userDef = computed[key];
-                if (typeof userDef === 'function') {
+                if (typeof userDef === "function") {
                     sharedPropertyDefinition.get = createComputedGetter(vm, key);
                     sharedPropertyDefinition.set = noop;
                 } else {
@@ -1226,7 +1226,7 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
             if (model instanceof Observer || model instanceof Model) {
                 model = model.model;
             }
-            if (_.has(model, '__ob__')) {
+            if (model.__ob__) {
                 this.$$model = model;
             } else {
                 this.options = model || {};
