@@ -11,7 +11,7 @@ BI.SimpleTreeView = BI.inherit(BI.Widget, {
             baseCls: "bi-simple-tree",
             itemsCreator: BI.emptyFn,
             items: null
-        })
+        });
     },
     _init: function () {
         BI.SimpleTreeView.superclass._init.apply(this, arguments);
@@ -92,7 +92,7 @@ BI.SimpleTreeView = BI.inherit(BI.Widget, {
                 } else {
                     track(node);
                 }
-            })
+            });
         };
         track(val);
         return result;
@@ -111,7 +111,7 @@ BI.SimpleTreeView = BI.inherit(BI.Widget, {
                     if (node.isLeaf()) {
                         result.push(node.value);
                     }
-                })
+                });
             }
         });
         return result;

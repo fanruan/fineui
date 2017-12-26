@@ -13,4 +13,4 @@ BI.ArrangementDroppable = BI.inherit(BI.Widget, {
         });
     }
 });
-BI.shortcut('bi.arrangement_droppable', BI.ArrangementDroppable);
+BI.shortcut("bi.arrangement_droppable", BI.ArrangementDroppable);

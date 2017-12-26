@@ -13,7 +13,7 @@ BI.LevelTree = BI.inherit(BI.Widget, {
             },
             expander: {},
             items: []
-        })
+        });
     },
 
     _init: function () {
@@ -65,7 +65,7 @@ BI.LevelTree = BI.inherit(BI.Widget, {
         });
     },
 
-    //构造树结构，
+    // 构造树结构，
     initTree: function (nodes) {
         var self = this, o = this.options;
         this.empty();
@@ -95,10 +95,10 @@ BI.LevelTree = BI.inherit(BI.Widget, {
             if (type === BI.Events.CLICK) {
                 self.fireEvent(BI.LevelTree.EVENT_CHANGE, arguments);
             }
-        })
+        });
     },
 
-    //生成树方法
+    // 生成树方法
     stroke: function (nodes) {
         this.tree.stroke.apply(this.tree, arguments);
     },

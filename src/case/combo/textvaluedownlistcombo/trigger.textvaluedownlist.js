@@ -27,12 +27,12 @@ BI.DownListSelectTextTrigger = BI.inherit(BI.Trigger, {
         });
     },
 
-    _formatItemArray: function(){
+    _formatItemArray: function () {
         var sourceArray = BI.flatten(BI.deepClone(this.options.items));
         var targetArray = [];
-        BI.each(sourceArray, function(idx, item){
-            if(BI.has(item, "el")){
-                BI.each(item.children, function(id, it){
+        BI.each(sourceArray, function (idx, item) {
+            if(BI.has(item, "el")) {
+                BI.each(item.children, function (id, it) {
                     it.text = item.el.text + "(" + it.text + ")";
                 });
                 targetArray = BI.concat(targetArray, item.children);

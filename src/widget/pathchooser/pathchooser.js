@@ -16,7 +16,7 @@ BI.PathChooser = BI.inherit(BI.Widget, {
         return BI.extend(BI.PathChooser.superclass._defaultConfig.apply(this, arguments), {
             baseCls: "bi-path-chooser",
             items: []
-        })
+        });
     },
 
     _init: function () {
@@ -30,7 +30,7 @@ BI.PathChooser = BI.inherit(BI.Widget, {
             return {
                 type: "bi.path_region",
                 title: self.texts[region] || region
-            }
+            };
         }));
         this.regionMap = {};
         BI.each(regions, function (i, region) {
@@ -123,7 +123,7 @@ BI.PathChooser = BI.inherit(BI.Widget, {
                 left: x - 6.5,
                 top: y - 6.5
             }]
-        })
+        });
     },
 
     _drawLine: function (start, lines) {
@@ -135,7 +135,7 @@ BI.PathChooser = BI.inherit(BI.Widget, {
             this.pathes[start] = [];
         }
         var startRegionIndex = this.getRegionIndexById(start);
-        //start所在的位置，然后接着往下画其他的路径
+        // start所在的位置，然后接着往下画其他的路径
         var offset = this.regions[startRegionIndex].getIndexByValue(start);
         BI.each(lines, function (i, line) {
             self.pathes[start][i] = [];
@@ -154,14 +154,14 @@ BI.PathChooser = BI.inherit(BI.Widget, {
                 self.pathes[start][i].push({
                     x: sleft - 50,
                     y: stop
-                })
+                });
             } else if (idx === 0) {
                 radioStartX = sleft + 50;
                 path += "M" + sleft + "," + stop;
                 self.pathes[start][i].push({
                     x: sleft,
                     y: stop
-                })
+                });
             } else {
                 radioStartX = sleft + 50;
                 path += "M" + sleft + "," + 47.5 + "L" + (sleft + 50) + "," + 47.5 + "L" + (sleft + 50) + "," + stop;
@@ -204,13 +204,13 @@ BI.PathChooser = BI.inherit(BI.Widget, {
             var graph = self.svg.path(path)
                 .attr({
                     stroke: idx === 0 ? self._const.selectLineColor : self._const.lineColor,
-                    'stroke-dasharray': '-'
+                    "stroke-dasharray": "-"
                 });
             self.lines[start].push(graph);
             if (lines.length > 1) {
                 self.lines[start][0].toFront();
             }
-            //第一个元素无论有多少个都要显示radio
+            // 第一个元素无论有多少个都要显示radio
             if (BI.contains(self.start, start)) {
                 self.lines[self.regions[0].getValueByIndex(0)][0].toFront();
             }
@@ -237,7 +237,7 @@ BI.PathChooser = BI.inherit(BI.Widget, {
                         self.regionIndexes[k].push(regionIndex);
                     }
                 });
-            })
+            });
         });
         BI.each(routes, function (k, route) {
             self._drawLine(k, route);
@@ -305,16 +305,16 @@ BI.PathChooser = BI.inherit(BI.Widget, {
                 if (parent.getChildIndex(item.value) === -1) {
                     tree.addNode(parent, node);
                 }
-            })
+            });
         });
 
-        //算出区域列表
+        // 算出区域列表
         tree.traverse(function (node) {
             BI.each(node.getChildren(), function (i, child) {
                 if (BI.contains(regions, child.get("region"))) {
                     var index1 = BI.indexOf(regions, node.get("region"));
                     var index2 = BI.indexOf(regions, child.get("region"));
-                    //交换区域
+                    // 交换区域
                     if (index1 > index2) {
                         var t = regions[index2];
                         for (var j = index2; j < index1; j++) {
@@ -329,14 +329,14 @@ BI.PathChooser = BI.inherit(BI.Widget, {
         });
         this._createRegions(regions);
 
-        //算出节点
+        // 算出节点
         BI.each(branches, function (k, branch) {
             if (branch < max) {
                 delete branches[k];
             }
         });
 
-        //过滤节点
+        // 过滤节点
         var nodes = [];
         var n = tree.getRoot();
         while (n && n.getChildrenLength() === 1) {
@@ -354,7 +354,7 @@ BI.PathChooser = BI.inherit(BI.Widget, {
             }
         });
 
-        //填充节点
+        // 填充节点
         var routes = {};
         var s, e;
         for (var i = 0, len = nodes.length; i < len + 1; i++) {
@@ -395,7 +395,7 @@ BI.PathChooser = BI.inherit(BI.Widget, {
                             return true;
                         }
                     }
-                })
+                });
             });
         }
         this.routes = routes;
@@ -460,7 +460,7 @@ BI.PathChooser = BI.inherit(BI.Widget, {
         if (array.length > 0) {
             result.push(array);
         }
-        //画这n条路径
+        // 画这n条路径
         BI.each(result, function (idx, path) {
             var start = path[0];
             var index = BI.findIndex(self.routes[start], function (idx, p) {

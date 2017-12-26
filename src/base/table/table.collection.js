@@ -272,7 +272,7 @@ BI.CollectionTable = BI.inherit(BI.Widget, {
                 overflow: "scroll",
                 overflowX: "scroll",
                 overflowY: "scroll"
-            })
+            });
         };
 
         this.topLeft.setWidth(otlw);
@@ -330,7 +330,7 @@ BI.CollectionTable = BI.inherit(BI.Widget, {
     _digest: function () {
         var o = this.options;
         var freezeColLength = this._getFreezeColLength();
-        //如果表头位置不够，取消表头冻结
+        // 如果表头位置不够，取消表头冻结
         if (this._getFreezeHeaderHeight() <= 0) {
             this.topLeftItems = [];
             this.topRightItems = [];
@@ -420,7 +420,7 @@ BI.CollectionTable = BI.inherit(BI.Widget, {
                         var isNeedMergeCol = o.mergeRule(cache[i][j], cache[i][j - 1]);
                         if (isNeedMergeCol && isNeedMergeRow) {
                             continue;
-                            //mergeRow(i, j);//优先合并列
+                            // mergeRow(i, j);//优先合并列
                         }
                         if (isNeedMergeCol) {
                             mergeCol(i, j);
@@ -445,7 +445,7 @@ BI.CollectionTable = BI.inherit(BI.Widget, {
                 col: item.item._col,
                 width: item.item._width,
                 height: item.item._height
-            }
+            };
         });
     },
 
@@ -555,4 +555,4 @@ BI.CollectionTable = BI.inherit(BI.Widget, {
         this._restore();
     }
 });
-BI.shortcut('bi.collection_table', BI.CollectionTable);
+BI.shortcut("bi.collection_table", BI.CollectionTable);

@@ -18,7 +18,7 @@ BI.MonthPopup = BI.inherit(BI.Widget, {
         BI.MonthPopup.superclass._init.apply(this, arguments);
         var self = this, o = this.options;
 
-        //纵向排列月
+        // 纵向排列月
         var month = [0, 6, 1, 7, 2, 8, 3, 9, 4, 10, 5, 11];
         var items = [];
         items.push(month.slice(0, 2));
@@ -68,7 +68,7 @@ BI.MonthPopup = BI.inherit(BI.Widget, {
             if (type === BI.Events.CLICK) {
                 self.fireEvent(BI.MonthPopup.EVENT_CHANGE);
             }
-        })
+        });
     },
 
     getValue: function () {

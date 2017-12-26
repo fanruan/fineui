@@ -14,13 +14,13 @@ BI.LayerTreeTable = BI.inherit(BI.Widget, {
                 type: "bi.resizable_table"
             },
 
-            isNeedResize: false,//是否需要调整列宽
-            isResizeAdapt: true,//是否需要在调整列宽或区域宽度的时候它们自适应变化
+            isNeedResize: false, // 是否需要调整列宽
+            isResizeAdapt: true, // 是否需要在调整列宽或区域宽度的时候它们自适应变化
 
-            isNeedFreeze: false,//是否需要冻结单元格
-            freezeCols: [], //冻结的列号,从0开始,isNeedFreeze为tree时生效
+            isNeedFreeze: false, // 是否需要冻结单元格
+            freezeCols: [], // 冻结的列号,从0开始,isNeedFreeze为tree时生效
 
-            isNeedMerge: true,//是否需要合并单元格
+            isNeedMerge: true, // 是否需要合并单元格
             mergeCols: [],
             mergeRule: BI.emptyFn,
 
@@ -42,14 +42,14 @@ BI.LayerTreeTable = BI.inherit(BI.Widget, {
             header: [],
             items: [],
 
-            //交叉表头
+            // 交叉表头
             crossHeader: [],
             crossItems: []
-        })
+        });
     },
 
     _getVDeep: function () {
-        return this.options.crossHeader.length;//纵向深度
+        return this.options.crossHeader.length;// 纵向深度
     },
 
     _getHDeep: function () {
@@ -71,16 +71,16 @@ BI.LayerTreeTable = BI.inherit(BI.Widget, {
             var deep = this._getHDeep();
             if (deep <= 0) {
                 newHeader.unshift(o.rowHeaderCreator || {
-                        type: "bi.table_style_cell",
-                        text: BI.i18nText("BI-Row_Header"),
-                        styleGetter: o.headerCellStyleGetter
-                    });
+                    type: "bi.table_style_cell",
+                    text: BI.i18nText("BI-Row_Header"),
+                    styleGetter: o.headerCellStyleGetter
+                });
             } else {
                 newHeader[0] = o.rowHeaderCreator || {
-                        type: "bi.table_style_cell",
-                        text: BI.i18nText("BI-Row_Header"),
-                        styleGetter: o.headerCellStyleGetter
-                    };
+                    type: "bi.table_style_cell",
+                    text: BI.i18nText("BI-Row_Header"),
+                    styleGetter: o.headerCellStyleGetter
+                };
             }
             result.push(newHeader);
         }
@@ -91,7 +91,7 @@ BI.LayerTreeTable = BI.inherit(BI.Widget, {
         var self = this, o = this.options;
         var result = [];
 
-        function track(node, layer) {
+        function track (node, layer) {
             node.type || (node.type = "bi.layer_tree_table_cell");
             node.layer = layer;
             var next = [node];
@@ -116,7 +116,7 @@ BI.LayerTreeTable = BI.inherit(BI.Widget, {
                         return o.summaryCellStyleGetter(true);
                     }
                 }].concat(node.values);
-                result.push(next)
+                result.push(next);
             }
         });
         return result;
@@ -164,7 +164,7 @@ BI.LayerTreeTable = BI.inherit(BI.Widget, {
             minColumnSize: this._formatColumns(o.minColumnSize, deep),
             maxColumnSize: this._formatColumns(o.maxColumnSize, deep),
             freezeCols: this._formatFreezeCols()
-        }
+        };
     },
 
     _init: function () {

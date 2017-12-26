@@ -28,7 +28,7 @@ BI.MultiSelectCheckPane = BI.inherit(BI.Widget, {
 
         this.storeValue = {};
         this.display = BI.createWidget({
-            type: 'bi.display_selected_list',
+            type: "bi.display_selected_list",
             items: opts.items,
             itemsCreator: function (op, callback) {
                 op = BI.extend(op || {}, {
@@ -42,7 +42,7 @@ BI.MultiSelectCheckPane = BI.inherit(BI.Widget, {
                                 text: txt,
                                 value: v,
                                 title: txt
-                            }
+                            };
                         })
                     });
                     return;
@@ -52,9 +52,9 @@ BI.MultiSelectCheckPane = BI.inherit(BI.Widget, {
         });
 
         this.continueSelect = BI.createWidget({
-            type: 'bi.text_button',
-            text: BI.i18nText('BI-Continue_Select'),
-            cls: 'multi-select-check-selected bi-high-light'
+            type: "bi.text_button",
+            text: BI.i18nText("BI-Continue_Select"),
+            cls: "multi-select-check-selected bi-high-light"
         });
 
         this.continueSelect.on(BI.TextButton.EVENT_CHANGE, function () {
@@ -62,18 +62,18 @@ BI.MultiSelectCheckPane = BI.inherit(BI.Widget, {
         });
 
         BI.createWidget({
-            type: 'bi.vtape',
+            type: "bi.vtape",
             element: this,
             items: [{
                 height: this.constants.height,
                 el: {
-                    type: 'bi.left',
-                    cls: 'multi-select-continue-select',
+                    type: "bi.left",
+                    cls: "multi-select-continue-select",
                     items: [
                         {
                             el: {
                                 type: "bi.label",
-                                text: BI.i18nText('BI-Selected_Data')
+                                text: BI.i18nText("BI-Selected_Data")
                             },
                             lgap: this.constants.lgap,
                             tgap: this.constants.tgap
@@ -85,7 +85,7 @@ BI.MultiSelectCheckPane = BI.inherit(BI.Widget, {
                         }]
                 }
             }, {
-                height: 'fill',
+                height: "fill",
                 el: this.display
             }]
         });

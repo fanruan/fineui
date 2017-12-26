@@ -90,7 +90,7 @@ BI.InteractiveArrangement = BI.inherit(BI.Widget, {
             top: top,
             middle: middle,
             bottom: bottom
-        }
+        };
     },
 
     _getRegionClientPosition: function (name) {
@@ -102,7 +102,7 @@ BI.InteractiveArrangement = BI.inherit(BI.Widget, {
             width: region.width,
             height: region.height,
             id: region.id
-        }
+        };
     },
 
     _vAlign: function (position, regions) {
@@ -228,14 +228,14 @@ BI.InteractiveArrangement = BI.inherit(BI.Widget, {
     _drawOneTag: function (start, end) {
         var s = BI.createWidget({
             type: "bi.icon_button",
-            //invisible: true,
+            // invisible: true,
             width: 13,
             height: 13,
             cls: "drag-tag-font interactive-arrangement-dragtag-icon"
         });
         var e = BI.createWidget({
             type: "bi.icon_button",
-            //invisible: true,
+            // invisible: true,
             width: 13,
             height: 13,
             cls: "drag-tag-font interactive-arrangement-dragtag-icon"
@@ -243,7 +243,7 @@ BI.InteractiveArrangement = BI.inherit(BI.Widget, {
         if (this._isEqual(start.left, end.left)) {
             var line = BI.createWidget({
                 type: "bi.layout",
-                //invisible: true,
+                // invisible: true,
                 cls: "interactive-arrangement-dragtag-line",
                 width: 1,
                 height: Math.abs(start.top - end.top)
@@ -251,7 +251,7 @@ BI.InteractiveArrangement = BI.inherit(BI.Widget, {
         } else {
             var line = BI.createWidget({
                 type: "bi.layout",
-                //invisible: true,
+                // invisible: true,
                 cls: "interactive-arrangement-dragtag-line",
                 height: 1,
                 width: Math.abs(start.left - end.left)
@@ -347,7 +347,7 @@ BI.InteractiveArrangement = BI.inherit(BI.Widget, {
         return position;
     },
 
-    //position不动 变size
+    // position不动 变size
     getSize: function (name, position, size) {
         var regions = this.getAllRegions();
         var me;
@@ -487,7 +487,7 @@ BI.InteractiveArrangement = BI.inherit(BI.Widget, {
         return function () {
             callback();
             self.stopDraw();
-        }
+        };
     },
 
     scrollInterval: function () {
@@ -549,4 +549,4 @@ BI.InteractiveArrangement = BI.inherit(BI.Widget, {
 });
 BI.InteractiveArrangement.EVENT_RESIZE = "InteractiveArrangement.EVENT_RESIZE";
 BI.InteractiveArrangement.EVENT_SCROLL = "InteractiveArrangement.EVENT_SCROLL";
-BI.shortcut('bi.interactive_arrangement', BI.InteractiveArrangement);
+BI.shortcut("bi.interactive_arrangement", BI.InteractiveArrangement);

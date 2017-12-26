@@ -6,9 +6,9 @@
 BI.FormulaEditor = BI.inherit(BI.Single, {
     _defaultConfig: function () {
         return $.extend(BI.FormulaEditor.superclass._defaultConfig.apply(), {
-            baseCls: 'bi-formula-editor bi-card',
-            watermark: '',
-            value: '',
+            baseCls: "bi-formula-editor bi-card",
+            watermark: "",
+            value: "",
             fieldTextValueMap: {},
             showHint: true,
             lineHeight: 2
@@ -21,8 +21,8 @@ BI.FormulaEditor = BI.inherit(BI.Single, {
             textWrapping: true,
             lineWrapping: true,
             lineNumbers: false,
-            mode: 'formula',
-            //解决插入字段由括号或其他特殊字符包围时分裂的bug
+            mode: "formula",
+            // 解决插入字段由括号或其他特殊字符包围时分裂的bug
             specialChars: /[\u0000-\u001f\u007f\u00ad\u200c-\u200f\u2028\u2029\ufeff]/
         });
         o.lineHeight === 1 ? this.element.addClass("codemirror-low-line-height") : this.element.addClass("codemirror-high-line-height");
@@ -32,7 +32,7 @@ BI.FormulaEditor = BI.inherit(BI.Single, {
                 CodeMirror.showHint(cm, CodeMirror.formulaHint, {completeSingle: false});
             }
             BI.nextTick(function () {
-                self.fireEvent(BI.FormulaEditor.EVENT_CHANGE)
+                self.fireEvent(BI.FormulaEditor.EVENT_CHANGE);
             });
         });
 
@@ -114,10 +114,10 @@ BI.FormulaEditor = BI.inherit(BI.Single, {
      */
     insertField: function (field) {
         var from = this.editor.getCursor();
-        //解决插入字段由括号或其他特殊字符包围时分裂的bug,在两端以不可见字符包裹一下
-        this.editor.replaceSelection('\u200b' + field + '\u200b');
+        // 解决插入字段由括号或其他特殊字符包围时分裂的bug,在两端以不可见字符包裹一下
+        this.editor.replaceSelection("\u200b" + field + "\u200b");
         var to = this.editor.getCursor();
-        this.editor.markText(from, to, {className: 'fieldName', atomic: true, startStyle: "start", endStyle: "end"});
+        this.editor.markText(from, to, {className: "fieldName", atomic: true, startStyle: "start", endStyle: "end"});
         this.editor.replaceSelection(" ");
         this.editor.focus();
     },
@@ -166,7 +166,7 @@ BI.FormulaEditor = BI.inherit(BI.Single, {
             _.forEach(line.markedSpans, function (i, ms) {
                 switch (i.marker.className) {
                     case "fieldName":
-                        //因为插入字段的时候首尾加了不可见字符，所以首尾缩进一个字符
+                        // 因为插入字段的时候首尾加了不可见字符，所以首尾缩进一个字符
                         var dId = fieldMap[value.substr(i.from + 1, i.to - i.from - 2)];
                         if (!fields.contains(dId)) {
                             fields.push(dId);

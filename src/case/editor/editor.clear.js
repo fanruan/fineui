@@ -71,34 +71,34 @@ BI.ClearEditor = BI.inherit(BI.Widget, {
             self.fireEvent(BI.ClearEditor.EVENT_KEY_DOWN, v);
         });
         this.editor.on(BI.Editor.EVENT_SPACE, function () {
-            self.fireEvent(BI.ClearEditor.EVENT_SPACE)
+            self.fireEvent(BI.ClearEditor.EVENT_SPACE);
         });
         this.editor.on(BI.Editor.EVENT_BACKSPACE, function () {
-            self.fireEvent(BI.ClearEditor.EVENT_BACKSPACE)
+            self.fireEvent(BI.ClearEditor.EVENT_BACKSPACE);
         });
 
 
         this.editor.on(BI.Editor.EVENT_VALID, function () {
-            self.fireEvent(BI.ClearEditor.EVENT_VALID)
+            self.fireEvent(BI.ClearEditor.EVENT_VALID);
         });
         this.editor.on(BI.Editor.EVENT_ERROR, function () {
-            self.fireEvent(BI.ClearEditor.EVENT_ERROR)
+            self.fireEvent(BI.ClearEditor.EVENT_ERROR);
         });
         this.editor.on(BI.Editor.EVENT_ENTER, function () {
             self.fireEvent(BI.ClearEditor.EVENT_ENTER);
         });
         this.editor.on(BI.Editor.EVENT_RESTRICT, function () {
-            self.fireEvent(BI.ClearEditor.EVENT_RESTRICT)
+            self.fireEvent(BI.ClearEditor.EVENT_RESTRICT);
         });
         this.editor.on(BI.Editor.EVENT_EMPTY, function () {
             self._checkClear();
-            self.fireEvent(BI.ClearEditor.EVENT_EMPTY)
+            self.fireEvent(BI.ClearEditor.EVENT_EMPTY);
         });
         this.editor.on(BI.Editor.EVENT_REMOVE, function () {
-            self.fireEvent(BI.ClearEditor.EVENT_REMOVE)
+            self.fireEvent(BI.ClearEditor.EVENT_REMOVE);
         });
         this.editor.on(BI.Editor.EVENT_CONFIRM, function () {
-            self.fireEvent(BI.ClearEditor.EVENT_CONFIRM)
+            self.fireEvent(BI.ClearEditor.EVENT_CONFIRM);
         });
         this.editor.on(BI.Editor.EVENT_START, function () {
             self.fireEvent(BI.ClearEditor.EVENT_START);

@@ -12,7 +12,7 @@ BI.SingleSelectRadioItem = BI.inherit(BI.BasicButton, {
             },
             hgap: 10,
             height: 25
-        })
+        });
     },
     _init: function () {
         BI.SingleSelectRadioItem.superclass._init.apply(this, arguments);

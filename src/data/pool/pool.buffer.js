@@ -2,10 +2,10 @@
  * 缓冲池
  * @type {{Buffer: {}}}
  */
-;
+
 (function () {
     var Buffer = {};
-    var MODE = false;//设置缓存模式为关闭
+    var MODE = false;// 设置缓存模式为关闭
 
     Data.BufferPool = {
         put: function (name, cache) {

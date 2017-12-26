@@ -11,9 +11,9 @@ BI.Input = BI.inherit(BI.Single, {
             baseCls: (conf.baseCls || "") + " bi-input display-block",
             element: "<input/>",
             validationChecker: BI.emptyFn,
-            quitChecker: BI.emptyFn,//按确定键能否退出编辑
+            quitChecker: BI.emptyFn, // 按确定键能否退出编辑
             allowBlank: false
-        })
+        });
     },
 
     _init: function () {
@@ -40,8 +40,8 @@ BI.Input = BI.inherit(BI.Single, {
                 }
             })
             .on("input propertychange", function (e) {
-                //这个事件在input的属性发生改变的时候就会触发（class的变化也算）
-                if(BI.isNotNull(e.keyCode)){
+                // 这个事件在input的属性发生改变的时候就会触发（class的变化也算）
+                if(BI.isNotNull(e.keyCode)) {
                     inputEventValid = true;
                     self._keydown_ = true;
                     _keydown(e.keyCode);
@@ -77,7 +77,7 @@ BI.Input = BI.inherit(BI.Single, {
         } else {
             blur();
         }
-        function blur() {
+        function blur () {
             if (!self.isValid() && self.options.quitChecker.apply(self, [BI.trim(self.getValue())]) !== false) {
                 self.element.val(self._lastValidValue ? self._lastValidValue : "");
                 self._checkValidationOnValueChange();
@@ -119,7 +119,7 @@ BI.Input = BI.inherit(BI.Single, {
                 this.fireEvent(BI.Input.EVENT_START);
             }
         }
-        if (ctrlKey === true && keyCode === 86) {//ctrlKey+V
+        if (ctrlKey === true && keyCode === 86) {// ctrlKey+V
             this._valueChange();
         } else {
             if (keyCode == BI.KeyCode.ENTER) {
@@ -157,7 +157,7 @@ BI.Input = BI.inherit(BI.Single, {
         }
     },
 
-    //初始状态
+    // 初始状态
     _defaultState: function () {
         if (this.getValue() == "") {
             this.fireEvent(BI.Controller.EVENT_CHANGE, BI.Events.EMPTY, this.getValue(), this);

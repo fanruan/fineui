@@ -9,9 +9,9 @@ BI.SortList = BI.inherit(BI.Widget, {
         return BI.extend(BI.SortList.superclass._defaultConfig.apply(this, arguments), {
             baseCls: "bi-sort-list",
 
-            isDefaultInit: true,//是否默认初始化数据
+            isDefaultInit: true, // 是否默认初始化数据
 
-            //下面是button_group的属性
+            // 下面是button_group的属性
             el: {
                 type: "bi.button_group"
             },
@@ -20,14 +20,14 @@ BI.SortList = BI.inherit(BI.Widget, {
             itemsCreator: BI.emptyFn,
             onLoaded: BI.emptyFn,
 
-            //下面是分页信息
+            // 下面是分页信息
             count: false,
             next: {},
             hasNext: BI.emptyFn
 
-            //containment: this.element,
-            //connectWith: ".bi-sort-list",
-        })
+            // containment: this.element,
+            // connectWith: ".bi-sort-list",
+        });
     },
 
     _init: function () {
@@ -74,7 +74,7 @@ BI.SortList = BI.inherit(BI.Widget, {
                         "margin-right": $currentItem.css("margin-right"),
                         "margin-top": $currentItem.css("margin-top"),
                         "margin-bottom": $currentItem.css("margin-bottom"),
-                        "margin": $currentItem.css("margin")
+                        margin: $currentItem.css("margin")
                     });
                     return holder.element;
                 },

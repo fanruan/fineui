@@ -21,7 +21,7 @@ BI.SequenceTableDynamicNumber = BI.inherit(BI.SequenceTableTreeNumber, {
         var result = [];
         var count = this._getStart(nodes);
 
-        function getLeafCount(node) {
+        function getLeafCount (node) {
             var cnt = 0;
             if (BI.isNotEmptyArray(node.children)) {
                 BI.each(node.children, function (index, child) {
@@ -68,4 +68,4 @@ BI.SequenceTableDynamicNumber = BI.inherit(BI.SequenceTableTreeNumber, {
         return result;
     }
 });
-BI.shortcut('bi.sequence_table_dynamic_number', BI.SequenceTableDynamicNumber);
+BI.shortcut("bi.sequence_table_dynamic_number", BI.SequenceTableDynamicNumber);

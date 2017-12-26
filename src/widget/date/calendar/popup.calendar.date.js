@@ -8,10 +8,10 @@ BI.DateCalendarPopup = BI.inherit(BI.Widget, {
         var conf = BI.DateCalendarPopup.superclass._defaultConfig.apply(this, arguments);
         return BI.extend(conf, {
             baseCls: "bi-date-calendar-popup",
-            min: '1900-01-01', //最小日期
-            max: '2099-12-31', //最大日期
+            min: "1900-01-01", // 最小日期
+            max: "2099-12-31", // 最大日期
             selectedTime: null
-        })
+        });
     },
 
     _createNav: function (v) {
@@ -27,7 +27,7 @@ BI.DateCalendarPopup = BI.inherit(BI.Widget, {
             month: date.month,
             day: this.selectedTime.day
         });
-        return calendar
+        return calendar;
     },
 
     _init: function () {

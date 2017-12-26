@@ -4,8 +4,8 @@
  * @type {*|void|Object}
  */
 BI.HalfIconButton = BI.inherit(BI.IconButton, {
-    _defaultConfig: function() {
-        var conf = BI.HalfIconButton.superclass._defaultConfig.apply(this,arguments);
+    _defaultConfig: function () {
+        var conf = BI.HalfIconButton.superclass._defaultConfig.apply(this, arguments);
         return BI.extend(conf, {
             extraCls: "bi-half-icon-button check-half-select-icon",
             height: 16,
@@ -13,16 +13,16 @@ BI.HalfIconButton = BI.inherit(BI.IconButton, {
             iconWidth: 16,
             iconHeight: 16,
             selected: false
-        })
+        });
     },
 
-    _init : function() {
+    _init: function () {
         BI.HalfIconButton.superclass._init.apply(this, arguments);
     },
 
-    doClick: function(){
+    doClick: function () {
         BI.HalfIconButton.superclass.doClick.apply(this, arguments);
-        if(this.isValid()){
+        if(this.isValid()) {
             this.fireEvent(BI.HalfIconButton.EVENT_CHANGE);
         }
     }

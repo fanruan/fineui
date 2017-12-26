@@ -8,7 +8,7 @@ if (!Array.prototype.indexOf) {
         // 1. Let o be the result of calling ToObject passing
         //    the this value as the argument.
         if (this == null) {
-            throw new TypeError('"this" is null or not defined');
+            throw new TypeError("\"this\" is null or not defined");
         }
 
         var o = Object(this);
@@ -60,8 +60,8 @@ if (!Array.prototype.indexOf) {
     };
 }
 if (!Array.prototype.lastIndexOf) {
-    Array.prototype.lastIndexOf = function (searchElement /*, fromIndex*/) {
-        'use strict';
+    Array.prototype.lastIndexOf = function (searchElement /* , fromIndex*/) {
+        "use strict";
 
         if (this === void 0 || this === null) {
             throw new TypeError();
@@ -79,8 +79,7 @@ if (!Array.prototype.lastIndexOf) {
             n = Number(arguments[1]);
             if (n != n) {
                 n = 0;
-            }
-            else if (n != 0 && n != (1 / 0) && n != -(1 / 0)) {
+            } else if (n != 0 && n != (1 / 0) && n != -(1 / 0)) {
                 n = (n > 0 || -1) * Math.floor(Math.abs(n));
             }
         }
@@ -99,14 +98,14 @@ if (!Array.prototype.lastIndexOf) {
  * 特殊情况
  * Created by wang on 15/6/23.
  */
-//解决console未定义问题 guy
+// 解决console未定义问题 guy
 window.console = window.console || (function () {
-        var c = {};
-        c.log = c.warn = c.debug = c.info = c.error = c.time = c.dir = c.profile
+    var c = {};
+    c.log = c.warn = c.debug = c.info = c.error = c.time = c.dir = c.profile
             = c.clear = c.exception = c.trace = c.assert = function () {
         };
-        return c;
-    })();
+    return c;
+})();
 /*
  * 前端缓存
  */
@@ -127,29 +126,29 @@ window.localStorage || (window.localStorage = {
     clear: function () {
         this.items = {};
     }
-});if (typeof Set !== 'undefined' && Set.toString().match(/native code/)) {
+});if (typeof Set !== "undefined" && Set.toString().match(/native code/)) {
 
 } else {
     Set = function () {
-        this.set = {}
+        this.set = {};
     };
     Set.prototype.has = function (key) {
         return this.set[key] !== undefined;
     };
     Set.prototype.add = function (key) {
-        this.set[key] = 1
+        this.set[key] = 1;
     };
     Set.prototype.clear = function () {
-        this.set = {}
+        this.set = {};
     };
-}//修复ie9下sort方法的bug
-;!function (window) {
+}// 修复ie9下sort方法的bug
+!function (window) {
     var ua = window.navigator.userAgent.toLowerCase(),
         reg = /msie|applewebkit.+safari/;
     if (reg.test(ua)) {
         var _sort = Array.prototype.sort;
         Array.prototype.sort = function (fn) {
-            if (!!fn && typeof fn === 'function') {
+            if (!!fn && typeof fn === "function") {
                 if (this.length < 2) {
                     return this;
                 }
@@ -157,8 +156,8 @@ window.localStorage || (window.localStorage = {
                 for (; i < l; i++) {
                     for (j = i + 1; j < l; j++) {
                         t = fn.call(this, this[i], this[j]);
-                        r = (typeof t === 'number' ? t :
-                                !!t ? 1 : 0) > 0;
+                        r = (typeof t === "number" ? t :
+                            t ? 1 : 0) > 0;
                         if (r === true) {
                             tmp = this[i];
                             this[i] = this[j];
@@ -167,9 +166,9 @@ window.localStorage || (window.localStorage = {
                     }
                 }
                 return this;
-            } else {
-                return _sort.call(this);
             }
+            return _sort.call(this);
+            
         };
     }
 }(window);

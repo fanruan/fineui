@@ -11,7 +11,7 @@ BI.FileManagerButtonGroup = BI.inherit(BI.Widget, {
         return BI.extend(BI.FileManagerButtonGroup.superclass._defaultConfig.apply(this, arguments), {
             baseCls: "bi-file-manager-button_group",
             items: []
-        })
+        });
     },
 
     _init: function () {

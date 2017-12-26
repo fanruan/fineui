@@ -12,8 +12,8 @@ BI.DirectionPager = BI.inherit(BI.Widget, {
             baseCls: "bi-direction-pager",
             height: 30,
             horizontal: {
-                pages: false, //总页数
-                curr: 1, //初始化当前页， pages为数字时可用
+                pages: false, // 总页数
+                curr: 1, // 初始化当前页， pages为数字时可用
 
                 hasPrev: BI.emptyFn,
                 hasNext: BI.emptyFn,
@@ -21,15 +21,15 @@ BI.DirectionPager = BI.inherit(BI.Widget, {
                 lastPage: BI.emptyFn
             },
             vertical: {
-                pages: false, //总页数
-                curr: 1, //初始化当前页， pages为数字时可用
+                pages: false, // 总页数
+                curr: 1, // 初始化当前页， pages为数字时可用
 
                 hasPrev: BI.emptyFn,
                 hasNext: BI.emptyFn,
                 firstPage: 1,
                 lastPage: BI.emptyFn
             }
-        })
+        });
     },
     _init: function () {
         BI.DirectionPager.superclass._init.apply(this, arguments);

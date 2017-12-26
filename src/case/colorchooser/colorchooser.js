@@ -11,7 +11,7 @@ BI.ColorChooser = BI.inherit(BI.Widget, {
         return BI.extend(BI.ColorChooser.superclass._defaultConfig.apply(this, arguments), {
             baseCls: "bi-color-chooser",
             el: {}
-        })
+        });
     },
 
     _init: function () {
@@ -63,7 +63,7 @@ BI.ColorChooser = BI.inherit(BI.Widget, {
 
         this.combo.on(BI.Combo.EVENT_AFTER_HIDEVIEW, function () {
             self.fireEvent(BI.ColorChooser.EVENT_CHANGE, arguments);
-        })
+        });
     },
 
     isViewVisible: function () {

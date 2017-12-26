@@ -14,7 +14,7 @@ BI.MidTreeLeafItem = BI.inherit(BI.BasicButton, {
             pId: "",
             layer: 0,
             height: 25
-        })
+        });
     },
     _init: function () {
         BI.MidTreeLeafItem.superclass._init.apply(this, arguments);

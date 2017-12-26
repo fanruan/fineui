@@ -9,7 +9,7 @@ BI.LazyLoader = BI.inherit(BI.Widget, {
         return BI.extend(BI.LazyLoader.superclass._defaultConfig.apply(this, arguments), {
             baseCls: "bi-lazy-loader",
             el: {}
-        })
+        });
     },
 
     _init: function () {
@@ -19,7 +19,7 @@ BI.LazyLoader = BI.inherit(BI.Widget, {
         this.loader = BI.createWidget({
             type: "bi.loader",
             element: this,
-            //下面是button_group的属性
+            // 下面是button_group的属性
             el: o.el,
 
             itemsCreator: function (options, populate) {
@@ -31,8 +31,8 @@ BI.LazyLoader = BI.inherit(BI.Widget, {
         });
 
         this.loader.on(BI.Loader.EVENT_CHANGE, function (obj) {
-            self.fireEvent(BI.LazyLoader.EVENT_CHANGE, obj)
-        })
+            self.fireEvent(BI.LazyLoader.EVENT_CHANGE, obj);
+        });
     },
     _getNextItems: function (options) {
         var self = this, o = this.options;

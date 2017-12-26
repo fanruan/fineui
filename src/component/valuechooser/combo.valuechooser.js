@@ -26,7 +26,7 @@ BI.ValueChooserCombo = BI.inherit(BI.AbstractValueChooser, {
             this.items = o.items;
         }
         this.combo = BI.createWidget({
-            type: 'bi.multi_select_combo',
+            type: "bi.multi_select_combo",
             element: this,
             itemsCreator: BI.bind(this._itemsCreator, this),
             valueFormatter: BI.bind(this._valueFormatter, this),
@@ -48,7 +48,7 @@ BI.ValueChooserCombo = BI.inherit(BI.AbstractValueChooser, {
         return {
             type: val.type,
             value: val.value
-        }
+        };
     },
 
     populate: function () {
@@ -56,4 +56,4 @@ BI.ValueChooserCombo = BI.inherit(BI.AbstractValueChooser, {
     }
 });
 BI.ValueChooserCombo.EVENT_CONFIRM = "ValueChooserCombo.EVENT_CONFIRM";
-BI.shortcut('bi.value_chooser_combo', BI.ValueChooserCombo);
+BI.shortcut("bi.value_chooser_combo", BI.ValueChooserCombo);

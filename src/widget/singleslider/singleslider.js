@@ -56,13 +56,13 @@ BI.SingleSlider = BI.inherit(BI.Widget, {
                 var trackLength = self.track.element[0].scrollWidth;
                 var percent = 0;
                 if (offset < 0) {
-                    percent = 0
+                    percent = 0;
                 }
                 if (offset > 0 && offset < (trackLength - c.SLIDER_WIDTH)) {
                     percent = offset * 100 / self._getGrayTrackLength();
                 }
                 if (offset > (trackLength - c.SLIDER_WIDTH)) {
-                    percent = 100
+                    percent = 100;
                 }
                 var significantPercent = BI.parseFloat(percent.toFixed(1));
                 self._setAllPosition(significantPercent);
@@ -138,7 +138,7 @@ BI.SingleSlider = BI.inherit(BI.Widget, {
                 left: 0,
                 width: "100%"
             }]
-        })
+        });
     },
 
     _draggable: function (widget) {
@@ -152,7 +152,7 @@ BI.SingleSlider = BI.inherit(BI.Widget, {
                 size = optimizeSize(defaultSize + offset);
                 widget.element.addClass("dragging");
                 var percent = size * 100 / (self._getGrayTrackLength());
-                var significantPercent = BI.parseFloat(percent.toFixed(1));//直接对计算出来的百分数保留到小数点后一位，相当于分成了1000份。
+                var significantPercent = BI.parseFloat(percent.toFixed(1));// 直接对计算出来的百分数保留到小数点后一位，相当于分成了1000份。
                 self._setBlueTrack(significantPercent);
                 self._setLabelPosition(significantPercent);
                 self._setSliderPosition(significantPercent);
@@ -178,7 +178,7 @@ BI.SingleSlider = BI.inherit(BI.Widget, {
             self.fireEvent(BI.SingleSlider.EVENT_CHANGE);
         }, document);
         widget.element.on("mousedown", function (event) {
-            if(!widget.isEnabled()){
+            if(!widget.isEnabled()) {
                 return;
             }
             defaultSize = this.offsetLeft;
@@ -186,7 +186,7 @@ BI.SingleSlider = BI.inherit(BI.Widget, {
             mouseMoveTracker.captureMouseMoves(event);
         });
 
-        function optimizeSize(s) {
+        function optimizeSize (s) {
             return BI.clamp(s, 0, self._getGrayTrackLength());
         }
     },
@@ -218,14 +218,14 @@ BI.SingleSlider = BI.inherit(BI.Widget, {
                 left: 0,
                 width: "100%"
             }]
-        })
+        });
     },
 
     _checkValidation: function (v) {
         var o = this.options;
         var valid = false;
         if (BI.isNumeric(v) && !(BI.isNull(v) || v < this.min || v > this.max)) {
-            if(o.digit === false){
+            if(o.digit === false) {
                 valid = true;
             }else{
                 var dotText = (v + "").split(".")[1] || "";
@@ -236,15 +236,15 @@ BI.SingleSlider = BI.inherit(BI.Widget, {
     },
 
     _setBlueTrack: function (percent) {
-        this.blueTrack.element.css({"width": percent + "%"});
+        this.blueTrack.element.css({width: percent + "%"});
     },
 
     _setLabelPosition: function (percent) {
-        this.label.element.css({"left": percent + "%"});
+        this.label.element.css({left: percent + "%"});
     },
 
     _setSliderPosition: function (percent) {
-        this.slider.element.css({"left": percent + "%"});
+        this.slider.element.css({left: percent + "%"});
     },
 
     _setAllPosition: function (percent) {
@@ -259,7 +259,7 @@ BI.SingleSlider = BI.inherit(BI.Widget, {
     },
 
     _getGrayTrackLength: function () {
-        return this.grayTrack.element[0].scrollWidth
+        return this.grayTrack.element[0].scrollWidth;
     },
 
     _getValueByPercent: function (percent) {

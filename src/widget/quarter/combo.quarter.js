@@ -82,4 +82,4 @@ BI.QuarterCombo = BI.inherit(BI.Widget, {
 
 BI.QuarterCombo.EVENT_CONFIRM = "EVENT_CONFIRM";
 BI.QuarterCombo.EVENT_BEFORE_POPUPVIEW = "EVENT_BEFORE_POPUPVIEW";
-BI.shortcut('bi.quarter_combo', BI.QuarterCombo);
+BI.shortcut("bi.quarter_combo", BI.QuarterCombo);

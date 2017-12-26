@@ -11,7 +11,7 @@ BI.MultiLayerSingleLevelTree = BI.inherit(BI.Widget, {
             isDefaultInit: false,
             items: [],
             itemsCreator: BI.emptyFn
-        })
+        });
     },
 
     _init: function () {
@@ -63,7 +63,7 @@ BI.MultiLayerSingleLevelTree = BI.inherit(BI.Widget, {
         });
     },
 
-    //构造树结构，
+    // 构造树结构，
     initTree: function (nodes) {
         var self = this, o = this.options;
         this.empty();
@@ -82,8 +82,8 @@ BI.MultiLayerSingleLevelTree = BI.inherit(BI.Widget, {
             items: this._formatItems(BI.Tree.transformToTreeFormat(nodes), 0),
             itemsCreator: function (op, callback) {
                 o.itemsCreator(op, function (items) {
-                    callback(BI.Tree.transformToTreeFormat(items), 0)
-                })
+                    callback(BI.Tree.transformToTreeFormat(items), 0);
+                });
             },
 
             el: {
@@ -99,7 +99,7 @@ BI.MultiLayerSingleLevelTree = BI.inherit(BI.Widget, {
             if (type === BI.Events.CLICK) {
                 self.fireEvent(BI.MultiLayerSingleLevelTree.EVENT_CHANGE, v);
             }
-        })
+        });
     },
 
     populate: function (nodes) {

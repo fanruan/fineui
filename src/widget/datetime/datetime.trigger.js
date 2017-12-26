@@ -9,8 +9,8 @@ BI.DateTimeTrigger = BI.inherit(BI.Trigger, {
     _defaultConfig: function () {
         return BI.extend(BI.DateTimeTrigger.superclass._defaultConfig.apply(this, arguments), {
             extraCls: "bi-date-time-trigger",
-            min: '1900-01-01', //最小日期
-            max: '2099-12-31', //最大日期
+            min: "1900-01-01", // 最小日期
+            max: "2099-12-31", // 最大日期
             height: 24,
             width: 200
         });
@@ -35,7 +35,7 @@ BI.DateTimeTrigger = BI.inherit(BI.Trigger, {
             }, {
                 el: this.text
             }]
-        })
+        });
     },
 
     _printTime: function (v) {
@@ -45,11 +45,11 @@ BI.DateTimeTrigger = BI.inherit(BI.Trigger, {
     setValue: function (v) {
         var self = this;
         var value = v, dateStr;
-        if(BI.isNull(value)){
+        if(BI.isNull(value)) {
             value = Date.getDate();
             dateStr = value.print("%Y-%X-%d %H:%M:%S");
         } else {
-            var date = Date.getDate(value.year,value.month,value.day,value.hour,value.minute,value.second);
+            var date = Date.getDate(value.year, value.month, value.day, value.hour, value.minute, value.second);
             dateStr = date.print("%Y-%X-%d %H:%M:%S");
 
         }

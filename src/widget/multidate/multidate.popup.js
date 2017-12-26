@@ -23,7 +23,7 @@ BI.MultiDatePopup = BI.inherit(BI.Widget, {
     },
     _defaultConfig: function () {
         return BI.extend(BI.MultiDatePopup.superclass._defaultConfig.apply(this, arguments), {
-            baseCls: 'bi-multidate-popup',
+            baseCls: "bi-multidate-popup",
             width: 268,
             height: 260
         });
@@ -33,9 +33,9 @@ BI.MultiDatePopup = BI.inherit(BI.Widget, {
         var self = this, opts = this.options;
         this.storeValue = "";
         this.textButton = BI.createWidget({
-            type: 'bi.text_button',
+            type: "bi.text_button",
             forceCenter: true,
-            cls: 'bi-multidate-popup-label bi-border-left bi-border-right bi-border-top',
+            cls: "bi-multidate-popup-label bi-border-left bi-border-right bi-border-top",
             shadow: true,
             text: BI.i18nText("BI-Multi_Date_Today")
         });
@@ -45,7 +45,7 @@ BI.MultiDatePopup = BI.inherit(BI.Widget, {
         this.clearButton = BI.createWidget({
             type: "bi.text_button",
             forceCenter: true,
-            cls: 'bi-multidate-popup-button bi-border-top',
+            cls: "bi-multidate-popup-button bi-border-top",
             shadow: true,
             text: BI.i18nText("BI-Basic_Clear")
         });
@@ -55,7 +55,7 @@ BI.MultiDatePopup = BI.inherit(BI.Widget, {
         this.okButton = BI.createWidget({
             type: "bi.text_button",
             forceCenter: true,
-            cls: 'bi-multidate-popup-button bi-border-top',
+            cls: "bi-multidate-popup-button bi-border-top",
             shadow: true,
             text: BI.i18nText("BI-Basic_OK")
         });
@@ -63,7 +63,7 @@ BI.MultiDatePopup = BI.inherit(BI.Widget, {
             self.fireEvent(BI.MultiDatePopup.BUTTON_OK_EVENT_CHANGE);
         });
         this.dateTab = BI.createWidget({
-            type: 'bi.tab',
+            type: "bi.tab",
             tab: {
                 cls: "bi-multidate-popup-tab bi-border-bottom",
                 height: this.constants.tabHeight,
@@ -90,10 +90,10 @@ BI.MultiDatePopup = BI.inherit(BI.Widget, {
                     width: this.constants.tabWidth,
                     textAlign: "center",
                     height: this.constants.itemHeight,
-                    cls: 'bi-multidate-popup-item bi-list-item-active'
+                    cls: "bi-multidate-popup-item bi-list-item-active"
                 }),
                 layouts: [{
-                    type: 'bi.left'
+                    type: "bi.left"
                 }]
             },
             cardCreator: function (v) {
@@ -118,7 +118,7 @@ BI.MultiDatePopup = BI.inherit(BI.Widget, {
                         return self.year;
                     case BI.MultiDateCombo.MULTI_DATE_QUARTER_CARD:
                         self.quarter = BI.createWidget({
-                            type: 'bi.quartercard'
+                            type: "bi.quartercard"
                         });
                         self.quarter.on(BI.MultiDateCard.EVENT_CHANGE, function (v) {
                             self._setInnerValue(self.quarter, v);
@@ -126,7 +126,7 @@ BI.MultiDatePopup = BI.inherit(BI.Widget, {
                         return self.quarter;
                     case BI.MultiDateCombo.MULTI_DATE_MONTH_CARD:
                         self.month = BI.createWidget({
-                            type: 'bi.monthcard'
+                            type: "bi.monthcard"
                         });
                         self.month.on(BI.MultiDateCard.EVENT_CHANGE, function (v) {
                             self._setInnerValue(self.month, v);
@@ -134,7 +134,7 @@ BI.MultiDatePopup = BI.inherit(BI.Widget, {
                         return self.month;
                     case BI.MultiDateCombo.MULTI_DATE_WEEK_CARD:
                         self.week = BI.createWidget({
-                            type: 'bi.weekcard'
+                            type: "bi.weekcard"
                         });
                         self.week.on(BI.MultiDateCard.EVENT_CHANGE, function (v) {
                             self._setInnerValue(self.week, v);
@@ -142,7 +142,7 @@ BI.MultiDatePopup = BI.inherit(BI.Widget, {
                         return self.week;
                     case BI.MultiDateCombo.MULTI_DATE_DAY_CARD:
                         self.day = BI.createWidget({
-                            type: 'bi.daycard'
+                            type: "bi.daycard"
                         });
                         self.day.on(BI.MultiDateCard.EVENT_CHANGE, function (v) {
                             self._setInnerValue(self.day, v);
@@ -314,4 +314,4 @@ BI.MultiDatePopup.BUTTON_OK_EVENT_CHANGE = "BUTTON_OK_EVENT_CHANGE";
 BI.MultiDatePopup.BUTTON_lABEL_EVENT_CHANGE = "BUTTON_lABEL_EVENT_CHANGE";
 BI.MultiDatePopup.BUTTON_CLEAR_EVENT_CHANGE = "BUTTON_CLEAR_EVENT_CHANGE";
 BI.MultiDatePopup.CALENDAR_EVENT_CHANGE = "CALENDAR_EVENT_CHANGE";
-BI.shortcut('bi.multidate_popup', BI.MultiDatePopup);
+BI.shortcut("bi.multidate_popup", BI.MultiDatePopup);

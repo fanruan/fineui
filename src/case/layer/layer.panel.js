@@ -11,7 +11,7 @@ BI.PopupPanel = BI.inherit(BI.MultiPopupView, {
         return BI.extend(conf, {
             baseCls: (conf.baseCls || "") + " bi-popup-panel",
             title: ""
-        })
+        });
     },
 
     _init: function () {

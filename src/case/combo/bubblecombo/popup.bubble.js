@@ -9,7 +9,7 @@ BI.BubblePopupView = BI.inherit(BI.PopupView, {
         var config = BI.BubblePopupView.superclass._defaultConfig.apply(this, arguments);
         return BI.extend(config, {
             baseCls: config.baseCls + " bi-bubble-popup-view"
-        })
+        });
     },
     _init: function () {
         BI.BubblePopupView.superclass._init.apply(this, arguments);
@@ -62,7 +62,7 @@ BI.BubblePopupView = BI.inherit(BI.PopupView, {
             type: "bi.absolute",
             element: this,
             items: [pos]
-        })
+        });
     },
 
     hideLine: function () {
@@ -83,7 +83,7 @@ BI.BubblePopupBarView = BI.inherit(BI.BubblePopupView, {
         return BI.extend(BI.BubblePopupBarView.superclass._defaultConfig.apply(this, arguments), {
             extraCls: "bi-bubble-bar-popup-view",
             buttons: [{value: BI.i18nText(BI.i18nText("BI-Basic_Sure"))}, {value: BI.i18nText("BI-Basic_Cancel"), level: "ignore"}]
-        })
+        });
     },
     _init: function () {
         BI.BubblePopupBarView.superclass._init.apply(this, arguments);
@@ -93,20 +93,20 @@ BI.BubblePopupBarView = BI.inherit(BI.BubblePopupView, {
 
         var items = [];
         BI.each(o.buttons.reverse(), function (i, buttonOpt) {
-            if(BI.isWidget(buttonOpt)){
+            if(BI.isWidget(buttonOpt)) {
                 items.push(buttonOpt);
             }else{
                 items.push(BI.extend({
-                    type: 'bi.button',
+                    type: "bi.button",
                     height: 30,
                     handler: function (v) {
                         self.fireEvent(BI.BubblePopupBarView.EVENT_CLICK_TOOLBAR_BUTTON, v);
                     }
-                }, buttonOpt))
+                }, buttonOpt));
             }
         });
         return BI.createWidget({
-            type: 'bi.right_vertical_adapt',
+            type: "bi.right_vertical_adapt",
             height: 40,
             hgap: 10,
             bgap: 10,

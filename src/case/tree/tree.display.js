@@ -8,13 +8,13 @@ BI.DisplayTree = BI.inherit(BI.TreeView, {
     _defaultConfig: function () {
         return BI.extend(BI.DisplayTree.superclass._defaultConfig.apply(this, arguments), {
             extraCls: "bi-display-tree"
-        })
+        });
     },
     _init: function () {
         BI.DisplayTree.superclass._init.apply(this, arguments);
     },
 
-    //配置属性
+    // 配置属性
     _configSetting: function () {
         var setting = {
             view: {
@@ -37,7 +37,7 @@ BI.DisplayTree = BI.inherit(BI.TreeView, {
             }
         };
 
-        function beforeCollapse(treeId, treeNode) {
+        function beforeCollapse (treeId, treeNode) {
             return false;
         }
 

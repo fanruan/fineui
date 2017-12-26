@@ -12,7 +12,7 @@ BI.FileManagerList = BI.inherit(BI.Widget, {
             baseCls: "bi-file-manager-list",
             el: {},
             items: []
-        })
+        });
     },
 
     _init: function () {

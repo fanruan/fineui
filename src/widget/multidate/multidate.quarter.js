@@ -8,7 +8,7 @@ BI.QuarterCard = BI.inherit(BI.MultiDateCard, {
 
     _defaultConfig: function () {
         return $.extend(BI.QuarterCard.superclass._defaultConfig.apply(this, arguments), {
-            baseCls: 'bi-multidate-quartercard'
+            baseCls: "bi-multidate-quartercard"
         });
     },
 
@@ -23,21 +23,21 @@ BI.QuarterCard = BI.inherit(BI.MultiDateCard, {
             isEditorExist: true,
             text: BI.i18nText("BI-Multi_Date_Quarter_Prev")
         },
-            {
-                value: BI.MultiDateCombo.DATE_TYPE.MULTI_DATE_QUARTER_AFTER,
-                isEditorExist: true,
-                text: BI.i18nText("BI-Multi_Date_Quarter_Next")
-            },
-            {
-                value: BI.MultiDateCombo.DATE_TYPE.MULTI_DATE_QUARTER_BEGIN,
-                isEditorExist: false,
-                text: BI.i18nText("BI-Multi_Date_Quarter_Begin")
-            },
-            {
-                value: BI.MultiDateCombo.DATE_TYPE.MULTI_DATE_QUARTER_END,
-                isEditorExist: false,
-                text: BI.i18nText("BI-Multi_Date_Quarter_End")
-            }]
+        {
+            value: BI.MultiDateCombo.DATE_TYPE.MULTI_DATE_QUARTER_AFTER,
+            isEditorExist: true,
+            text: BI.i18nText("BI-Multi_Date_Quarter_Next")
+        },
+        {
+            value: BI.MultiDateCombo.DATE_TYPE.MULTI_DATE_QUARTER_BEGIN,
+            isEditorExist: false,
+            text: BI.i18nText("BI-Multi_Date_Quarter_Begin")
+        },
+        {
+            value: BI.MultiDateCombo.DATE_TYPE.MULTI_DATE_QUARTER_END,
+            isEditorExist: false,
+            text: BI.i18nText("BI-Multi_Date_Quarter_End")
+        }];
     },
 
     defaultSelectedItem: function () {
@@ -45,4 +45,4 @@ BI.QuarterCard = BI.inherit(BI.MultiDateCard, {
     }
 });
 BI.QuarterCard.EVENT_CHANGE = "EVENT_CHANGE";
-BI.shortcut('bi.quartercard', BI.QuarterCard);
+BI.shortcut("bi.quartercard", BI.QuarterCard);

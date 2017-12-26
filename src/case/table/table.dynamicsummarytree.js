@@ -14,13 +14,13 @@ BI.DynamicSummaryTreeTable = BI.inherit(BI.Widget, {
                 type: "bi.resizable_table"
             },
 
-            isNeedResize: true,//是否需要调整列宽
-            isResizeAdapt: true,//是否需要在调整列宽或区域宽度的时候它们自适应变化
+            isNeedResize: true, // 是否需要调整列宽
+            isResizeAdapt: true, // 是否需要在调整列宽或区域宽度的时候它们自适应变化
 
-            isNeedFreeze: false,//是否需要冻结单元格
-            freezeCols: [], //冻结的列号,从0开始,isNeedFreeze为tree时生效
+            isNeedFreeze: false, // 是否需要冻结单元格
+            freezeCols: [], // 冻结的列号,从0开始,isNeedFreeze为tree时生效
 
-            isNeedMerge: true,//是否需要合并单元格
+            isNeedMerge: true, // 是否需要合并单元格
             mergeCols: [],
             mergeRule: BI.emptyFn,
 
@@ -41,14 +41,14 @@ BI.DynamicSummaryTreeTable = BI.inherit(BI.Widget, {
             footer: false,
             items: [],
 
-            //交叉表头
+            // 交叉表头
             crossHeader: [],
             crossItems: []
-        })
+        });
     },
 
     _getVDeep: function () {
-        return this.options.crossHeader.length;//纵向深度
+        return this.options.crossHeader.length;// 纵向深度
     },
 
     _getHDeep: function () {
@@ -226,7 +226,7 @@ BI.extend(BI.DynamicSummaryTreeTable, {
     formatHorizontalItems: function (nodes, deep, isCross, styleGetter) {
         var result = [];
 
-        function track(store, node) {
+        function track (store, node) {
             var next;
             if (BI.isArray(node.children)) {
                 BI.each(node.children, function (index, child) {
@@ -250,7 +250,7 @@ BI.extend(BI.DynamicSummaryTreeTable, {
                         text: BI.i18nText("BI-Summary_Values"),
                         type: "bi.table_style_cell",
                         styleGetter: function () {
-                            return styleGetter(store === -1)
+                            return styleGetter(store === -1);
                         }
                     };
                     for (var i = next.length; i < deep; i++) {
@@ -297,7 +297,7 @@ BI.extend(BI.DynamicSummaryTreeTable, {
         BI.each(nodes, function (i, node) {
             track(-1, node);
         });
-        //填充空位
+        // 填充空位
         BI.each(result, function (i, line) {
             var last = BI.last(line);
             for (var j = line.length; j < deep; j++) {
@@ -308,11 +308,11 @@ BI.extend(BI.DynamicSummaryTreeTable, {
     },
 
     formatSummaryItems: function (items, header, crossItems, deep) {
-        //求纵向需要去除的列
+        // 求纵向需要去除的列
         var cols = [];
         var leaf = 0;
 
-        function track(node) {
+        function track (node) {
             if (BI.isArray(node.children)) {
                 BI.each(node.children, function (index, child) {
                     track(child);
@@ -348,7 +348,7 @@ BI.extend(BI.DynamicSummaryTreeTable, {
             BI.each(items, function (i, node) {
                 var nNode = node.slice();
                 BI.removeAt(nNode, cols);
-                nItems.push(nNode);;
+                nItems.push(nNode);
             });
             header = nHeader;
             items = nItems;

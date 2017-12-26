@@ -25,7 +25,7 @@ BI.RichEditorParamButton = BI.inherit(BI.RichEditorParamAction, {
             width: 30
         });
         this.param.on(BI.Button.EVENT_CHANGE, function () {
-            self.addParam("参数")
+            self.addParam("参数");
         });
     },
     activate: function () {
@@ -34,4 +34,4 @@ BI.RichEditorParamButton = BI.inherit(BI.RichEditorParamAction, {
     deactivate: function () {
     }
 });
-BI.shortcut("bi.rich_editor_param_button", BI.RichEditorParamButton)
+BI.shortcut("bi.rich_editor_param_button", BI.RichEditorParamButton);

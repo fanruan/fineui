@@ -8,7 +8,7 @@ BI.CompareAreaChart = BI.inherit(BI.AbstractChart, {
     _defaultConfig: function () {
         return BI.extend(BI.CompareAreaChart.superclass._defaultConfig.apply(this, arguments), {
             baseCls: "bi-compare-area-chart"
-        })
+        });
     },
 
     _init: function () {
@@ -34,7 +34,7 @@ BI.CompareAreaChart = BI.inherit(BI.AbstractChart, {
             self.fireEvent(BI.CompareAreaChart.EVENT_CHANGE, obj);
         });
         this.combineChart.on(BI.CombineChart.EVENT_ITEM_CLICK, function (obj) {
-            self.fireEvent(BI.AbstractChart.EVENT_ITEM_CLICK, obj)
+            self.fireEvent(BI.AbstractChart.EVENT_ITEM_CLICK, obj);
         });
     },
 
@@ -103,20 +103,20 @@ BI.CompareAreaChart = BI.inherit(BI.AbstractChart, {
             enableTick: this.config.enableTick,
             labelRotation: this.config.textDirection,
             gridLineWidth: this.config.showGridLine === true ? 1 : 0,
-            maxHeight: '40%'
+            maxHeight: "40%"
         });
 
         config.chartType = "area";
 
-        //为了给数据标签加个%,还要遍历所有的系列，唉
+        // 为了给数据标签加个%,还要遍历所有的系列，唉
         this.formatDataLabel(config.plotOptions.dataLabels.enabled, items, config, this.config.chartFont);
 
-        //全局样式的图表文字
+        // 全局样式的图表文字
         this.setFontStyle(this.config.chartFont, config);
 
         return [items, config];
 
-        function _calculateValueNiceDomain(minValue, maxValue) {
+        function _calculateValueNiceDomain (minValue, maxValue) {
 
             minValue = Math.min(0, minValue);
 
@@ -125,7 +125,7 @@ BI.CompareAreaChart = BI.inherit(BI.AbstractChart, {
             return _linearNiceDomain(minValue, maxValue, tickInterval);
         }
 
-        function _linearTickInterval(minValue, maxValue, m) {
+        function _linearTickInterval (minValue, maxValue, m) {
 
             m = m || 5;
             var span = maxValue - minValue;
@@ -137,7 +137,7 @@ BI.CompareAreaChart = BI.inherit(BI.AbstractChart, {
             return step;
         }
 
-        function _linearNiceDomain(minValue, maxValue, tickInterval) {
+        function _linearNiceDomain (minValue, maxValue, tickInterval) {
 
             minValue = VanUtils.accMul(Math.floor(minValue / tickInterval), tickInterval);
 
@@ -146,7 +146,7 @@ BI.CompareAreaChart = BI.inherit(BI.AbstractChart, {
             return [minValue, maxValue];
         }
 
-        function formatChartStyle() {
+        function formatChartStyle () {
             switch (self.config.chartStyle) {
                 case BICst.CHART_STYLE.STYLE_GRADUAL:
                     return "gradual";
@@ -156,7 +156,7 @@ BI.CompareAreaChart = BI.inherit(BI.AbstractChart, {
             }
         }
 
-        function formatCordon() {
+        function formatCordon () {
             BI.each(self.config.cordon, function (idx, cor) {
                 if (idx === 0 && self.xAxis.length > 0) {
                     var magnify = self.calcMagnify(self.config.xAxisNumberLevel);
@@ -165,9 +165,9 @@ BI.CompareAreaChart = BI.inherit(BI.AbstractChart, {
                             value: t.value.div(magnify),
                             width: 1,
                             label: {
-                                "style": self.config.chartFont,
-                                "text": t.text,
-                                "align": "top"
+                                style: self.config.chartFont,
+                                text: t.text,
+                                align: "top"
                             }
                         });
                     });
@@ -190,17 +190,17 @@ BI.CompareAreaChart = BI.inherit(BI.AbstractChart, {
                             value: t.value.div(magnify),
                             width: 1,
                             label: {
-                                "style": self.config.chartFont,
-                                "text": t.text,
-                                "align": "left"
+                                style: self.config.chartFont,
+                                text: t.text,
+                                align: "left"
                             }
                         });
                     });
                 }
-            })
+            });
         }
 
-        function formatChartLineStyle() {
+        function formatChartLineStyle () {
             switch (self.config.chartLineType) {
                 case BICst.CHART_SHAPE.RIGHT_ANGLE:
                     config.plotOptions.area = {
@@ -224,7 +224,7 @@ BI.CompareAreaChart = BI.inherit(BI.AbstractChart, {
             }
         }
 
-        function formatNumberLevelInYaxis(type, position, formatter) {
+        function formatNumberLevelInYaxis (type, position, formatter) {
             var magnify = self.calcMagnify(type);
             BI.each(items, function (idx, item) {
                 var max = null;
@@ -246,7 +246,7 @@ BI.CompareAreaChart = BI.inherit(BI.AbstractChart, {
             });
         }
 
-        function getXYAxisUnit(numberLevelType, position) {
+        function getXYAxisUnit (numberLevelType, position) {
             var unit = "";
             switch (numberLevelType) {
                 case BICst.TARGET_STYLE.NUM_LEVEL.NORMAL:
@@ -263,13 +263,13 @@ BI.CompareAreaChart = BI.inherit(BI.AbstractChart, {
                     break;
             }
             if (position === self.constants.X_AXIS) {
-                self.config.xAxisUnit !== "" && (unit = unit + self.config.xAxisUnit)
+                self.config.xAxisUnit !== "" && (unit = unit + self.config.xAxisUnit);
             }
             if (position === self.constants.LEFT_AXIS) {
-                self.config.leftYAxisUnit !== "" && (unit = unit + self.config.leftYAxisUnit)
+                self.config.leftYAxisUnit !== "" && (unit = unit + self.config.leftYAxisUnit);
             }
             if (position === self.constants.RIGHT_AXIS) {
-                self.config.rightYAxisUnit !== "" && (unit = unit + self.config.rightYAxisUnit)
+                self.config.rightYAxisUnit !== "" && (unit = unit + self.config.rightYAxisUnit);
             }
             return unit === "" ? unit : "(" + unit + ")";
         }
@@ -370,4 +370,4 @@ BI.CompareAreaChart = BI.inherit(BI.AbstractChart, {
     }
 });
 BI.CompareAreaChart.EVENT_CHANGE = "EVENT_CHANGE";
-BI.shortcut('bi.compare_area_chart', BI.CompareAreaChart);
+BI.shortcut("bi.compare_area_chart", BI.CompareAreaChart);

@@ -13,7 +13,7 @@ BI.EditorIconCheckCombo = BI.inherit(BI.Widget, {
             allowBlank: true,
             watermark: "",
             errorText: ""
-        })
+        });
     },
 
     _init: function () {

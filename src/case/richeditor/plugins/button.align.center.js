@@ -35,4 +35,4 @@ BI.RichEditorAlignCenterButton = BI.inherit(BI.RichEditorAction, {
     deactivate: function () {
     }
 });
-BI.shortcut("bi.rich_editor_align_center_button", BI.RichEditorAlignCenterButton)
+BI.shortcut("bi.rich_editor_align_center_button", BI.RichEditorAlignCenterButton);

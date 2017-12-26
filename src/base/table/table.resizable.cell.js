@@ -17,7 +17,7 @@ BI.ResizableTableCell = BI.inherit(BI.Widget, {
             start: BI.emptyFn,
             resize: BI.emptyFn,
             stop: BI.emptyFn
-        })
+        });
     },
 
     _init: function () {
@@ -28,7 +28,7 @@ BI.ResizableTableCell = BI.inherit(BI.Widget, {
         var startDrag = false;
         var size = 0, offset = 0, defaultSize = o.width;
 
-        function optimizeSize(s) {
+        function optimizeSize (s) {
             var optSize = BI.clamp(s, o.minSize, o.maxSize || Number.MAX_VALUE);
             // if (o.suitableSize) {
             //     if (Math.abs(o.suitableSize - optSize) < 5) {
@@ -97,7 +97,7 @@ BI.ResizableTableCell = BI.inherit(BI.Widget, {
                 top: 0,
                 bottom: 0
             }]
-        })
+        });
     },
 
     setWidth: function (width) {

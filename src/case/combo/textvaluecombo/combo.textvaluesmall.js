@@ -12,7 +12,7 @@ BI.SmallTextValueCombo = BI.inherit(BI.Widget, {
             chooseType: BI.ButtonGroup.CHOOSE_TYPE_SINGLE,
             el: {},
             text: ""
-        })
+        });
     },
 
     _init: function () {

@@ -8,7 +8,7 @@ BI.AccumulateAreaChart = BI.inherit(BI.AbstractChart, {
     _defaultConfig: function () {
         return BI.extend(BI.AccumulateAreaChart.superclass._defaultConfig.apply(this, arguments), {
             baseCls: "bi-accumulate-area-chart"
-        })
+        });
     },
 
     _init: function () {
@@ -35,7 +35,7 @@ BI.AccumulateAreaChart = BI.inherit(BI.AbstractChart, {
             self.fireEvent(BI.AccumulateAreaChart.EVENT_CHANGE, obj);
         });
         this.combineChart.on(BI.CombineChart.EVENT_ITEM_CLICK, function (obj) {
-            self.fireEvent(BI.AbstractChart.EVENT_ITEM_CLICK, obj)
+            self.fireEvent(BI.AbstractChart.EVENT_ITEM_CLICK, obj);
         });
     },
 
@@ -102,20 +102,20 @@ BI.AccumulateAreaChart = BI.inherit(BI.AbstractChart, {
             enableTick: this.config.enableTick,
             labelRotation: this.config.textDirection,
             gridLineWidth: this.config.showGridLine === true ? 1 : 0,
-            maxHeight: '40%'
+            maxHeight: "40%"
         });
 
         config.chartType = "area";
 
-        //为了给数据标签加个%,还要遍历所有的系列，唉
+        // 为了给数据标签加个%,还要遍历所有的系列，唉
         this.formatDataLabel(config.plotOptions.dataLabels.enabled, items, config, this.config.chartFont);
 
-        //全局样式的图表文字
+        // 全局样式的图表文字
         this.setFontStyle(this.config.chartFont, config);
 
         return [items, config];
 
-        function formatChartStyle(v) {
+        function formatChartStyle (v) {
             switch (v) {
                 case BICst.CHART_STYLE.STYLE_GRADUAL:
                     return "gradual";
@@ -125,7 +125,7 @@ BI.AccumulateAreaChart = BI.inherit(BI.AbstractChart, {
             }
         }
 
-        function formatChartLineStyle(v) {
+        function formatChartLineStyle (v) {
             switch (v) {
                 case BICst.CHART_SHAPE.RIGHT_ANGLE:
                     config.plotOptions.curve = false;
@@ -143,7 +143,7 @@ BI.AccumulateAreaChart = BI.inherit(BI.AbstractChart, {
             }
         }
 
-        function formatCordon(cordon) {
+        function formatCordon (cordon) {
             BI.each(cordon, function (idx, cor) {
                 if (idx === 0 && self.xAxis.length > 0) {
                     var magnify = self.calcMagnify(self.config.xAxisNumberLevel);
@@ -152,9 +152,9 @@ BI.AccumulateAreaChart = BI.inherit(BI.AbstractChart, {
                             value: t.value.div(magnify),
                             width: 1,
                             label: {
-                                "style" : self.config.chartFont,
-                                "text": t.text,
-                                "align": "top"
+                                style: self.config.chartFont,
+                                text: t.text,
+                                align: "top"
                             }
                         });
                     });
@@ -177,14 +177,14 @@ BI.AccumulateAreaChart = BI.inherit(BI.AbstractChart, {
                             value: t.value.div(magnify),
                             width: 1,
                             label: {
-                                "style" : self.config.chartFont,
-                                "text": t.text,
-                                "align": "left"
+                                style: self.config.chartFont,
+                                text: t.text,
+                                align: "left"
                             }
                         });
                     });
                 }
-            })
+            });
         }
     },
 
@@ -274,4 +274,4 @@ BI.AccumulateAreaChart = BI.inherit(BI.AbstractChart, {
     }
 });
 BI.AccumulateAreaChart.EVENT_CHANGE = "EVENT_CHANGE";
-BI.shortcut('bi.accumulate_area_chart', BI.AccumulateAreaChart);
+BI.shortcut("bi.accumulate_area_chart", BI.AccumulateAreaChart);

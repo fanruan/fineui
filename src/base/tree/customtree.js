@@ -27,7 +27,7 @@ BI.CustomTree = BI.inherit(BI.Widget, {
                     type: "bi.vertical"
                 }]
             }
-        })
+        });
     },
 
     _init: function () {
@@ -62,7 +62,7 @@ BI.CustomTree = BI.inherit(BI.Widget, {
                 item.popup.expander = BI.deepClone(o.expander);
                 item.items = item.popup.items = node.children;
                 item.itemsCreator = item.popup.itemsCreator = function (op) {
-                    if (BI.isNotNull(op.node)) {//从子节点传过来的itemsCreator直接向上传递
+                    if (BI.isNotNull(op.node)) {// 从子节点传过来的itemsCreator直接向上传递
                         return o.itemsCreator.apply(self, arguments);
                     }
                     var args = Array.prototype.slice.call(arguments, 0);
@@ -78,7 +78,7 @@ BI.CustomTree = BI.inherit(BI.Widget, {
         return items;
     },
 
-    //构造树结构，
+    // 构造树结构，
     initTree: function (nodes) {
         var self = this, o = this.options;
         this.tree = BI.createWidget(o.el, {
@@ -97,10 +97,10 @@ BI.CustomTree = BI.inherit(BI.Widget, {
             if (type === BI.Events.CLICK) {
                 self.fireEvent(BI.CustomTree.EVENT_CHANGE, val, obj);
             }
-        })
+        });
     },
 
-    //生成树方法
+    // 生成树方法
     stroke: function (nodes) {
         this.populate.apply(this, arguments);
     },

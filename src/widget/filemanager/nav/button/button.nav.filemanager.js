@@ -16,7 +16,7 @@ BI.FileManagerNavButton = BI.inherit(BI.Widget, {
             baseCls: "bi-file-manager-nav-button",
             selected: false,
             height: 40
-        })
+        });
     },
 
     _init: function () {
@@ -45,8 +45,8 @@ BI.FileManagerNavButton = BI.inherit(BI.Widget, {
             height: o.height
         });
         var path = svg.path("M0,0L15,20L0,40").attr({
-            "stroke": c.select_color,
-            "fill": o.selected ? c.select_color : c.normal_color
+            stroke: c.select_color,
+            fill: o.selected ? c.select_color : c.normal_color
         });
         this.button.on(BI.TextButton.EVENT_CHANGE, function () {
             if (this.isSelected()) {
@@ -69,7 +69,7 @@ BI.FileManagerNavButton = BI.inherit(BI.Widget, {
                 top: 0,
                 bottom: 0
             }]
-        })
+        });
     },
 
     isSelected: function () {

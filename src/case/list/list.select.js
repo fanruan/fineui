@@ -10,7 +10,7 @@ BI.SelectList = BI.inherit(BI.Widget, {
     _defaultConfig: function () {
         return BI.extend(BI.SelectList.superclass._defaultConfig.apply(this, arguments), {
             baseCls: "bi-select-list",
-            direction: BI.Direction.Top,//toolbar的位置
+            direction: BI.Direction.Top, // toolbar的位置
             logic: {
                 dynamic: true
             },
@@ -24,13 +24,13 @@ BI.SelectList = BI.inherit(BI.Widget, {
             el: {
                 type: "bi.list_pane"
             }
-        })
+        });
     },
     _init: function () {
         BI.SelectList.superclass._init.apply(this, arguments);
         var self = this, o = this.options;
 
-        //全选
+        // 全选
         this.toolbar = BI.createWidget(o.toolbar);
         this.allSelected = false;
         this.toolbar.on(BI.Controller.EVENT_CHANGE, function (type, value, obj) {
@@ -141,13 +141,13 @@ BI.SelectList = BI.inherit(BI.Widget, {
                 value: this.list.getValue(),
                 assist: this.list.getNotSelectedValue()
             };
-        } else {
-            return {
-                type: BI.ButtonGroup.CHOOSE_TYPE_ALL,
-                value: this.list.getNotSelectedValue(),
-                assist: this.list.getValue()
-            };
         }
+        return {
+            type: BI.ButtonGroup.CHOOSE_TYPE_ALL,
+            value: this.list.getNotSelectedValue(),
+            assist: this.list.getValue()
+        };
+        
     },
 
     empty: function () {
@@ -169,7 +169,7 @@ BI.SelectList = BI.inherit(BI.Widget, {
     resetHeight: function (h) {
         var toolHeight = ( this.toolbar.element.outerHeight() || 25) * ( this.toolbar.isVisible() ? 1 : 0);
         this.list.resetHeight ? this.list.resetHeight(h - toolHeight) :
-            this.list.element.css({"max-height": h - toolHeight + "px"})
+            this.list.element.css({"max-height": h - toolHeight + "px"});
     },
 
     setNotSelectedValue: function () {

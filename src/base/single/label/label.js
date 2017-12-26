@@ -8,8 +8,8 @@ BI.Label = BI.inherit(BI.Single, {
         return BI.extend(conf, {
             baseCls: (conf.baseCls || "") + " bi-label",
             textAlign: "center",
-            whiteSpace: "nowrap", //normal  or  nowrap
-            forceCenter: false, //是否无论如何都要居中, 不考虑超出边界的情况, 在未知宽度和高度时有效
+            whiteSpace: "nowrap", // normal  or  nowrap
+            forceCenter: false, // 是否无论如何都要居中, 不考虑超出边界的情况, 在未知宽度和高度时有效
             textWidth: null,
             textHeight: null,
             hgap: 0,
@@ -21,7 +21,7 @@ BI.Label = BI.inherit(BI.Single, {
             text: "",
             py: "",
             keyword: ""
-        })
+        });
     },
 
     _createJson: function () {
@@ -226,7 +226,7 @@ BI.Label = BI.inherit(BI.Single, {
             type: "bi.layout",
             element: this.text,
             scrollable: o.whiteSpace === "normal"
-        })
+        });
     },
 
     _createNotCenterEl: function () {
@@ -344,7 +344,7 @@ BI.Label = BI.inherit(BI.Single, {
             return;
         }
         if (o.whiteSpace == "normal") {
-            this.text = BI.createWidget(json)
+            this.text = BI.createWidget(json);
             BI.createWidget({
                 type: "bi.vertical_adapt",
                 scrollable: o.whiteSpace === "normal",
@@ -424,7 +424,7 @@ BI.Label = BI.inherit(BI.Single, {
             type: "bi.layout",
             element: this.text,
             scrollable: o.whiteSpace === "normal"
-        })
+        });
     },
 
     doRedMark: function () {
@@ -453,7 +453,7 @@ BI.Label = BI.inherit(BI.Single, {
     },
 
     setStyle: function (css) {
-        this.text.setStyle(css)
+        this.text.setStyle(css);
     },
 
     setValue: function (v) {

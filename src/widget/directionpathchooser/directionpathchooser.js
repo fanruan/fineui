@@ -28,7 +28,7 @@ BI.DirectionPathChooser = BI.inherit(BI.Widget, {
             items: o.items
         });
         this.pathChooser.on(BI.PathChooser.EVENT_CHANGE, function (start, index) {
-            //self._unselectAllArrows();
+            // self._unselectAllArrows();
             self._setValue(start, index);
             self.fireEvent(BI.DirectionPathChooser.EVENT_CHANGE);
         });
@@ -48,7 +48,7 @@ BI.DirectionPathChooser = BI.inherit(BI.Widget, {
     },
 
     _drawOneArrow: function (dot, direction) {
-        //0,1,2,3  上右下左
+        // 0,1,2,3  上右下左
         var lineColor = this._const.lineColor;
         var selectLineColor = this._const.selectLineColor;
         var svg = this.pathChooser.svg;
@@ -146,17 +146,17 @@ BI.DirectionPathChooser = BI.inherit(BI.Widget, {
                         }
                     }
                 });
-            })
+            });
         });
 
-        function getXoffsetByRegionIndex(regionIndex, diregion) {
+        function getXoffsetByRegionIndex (regionIndex, diregion) {
             if (diregion === -1) {
                 return 100 * (regionIndex + 1) - 20;
             }
             return 100 * regionIndex + 20;
         }
 
-        function getYByXoffset(dots, xoffset) {
+        function getYByXoffset (dots, xoffset) {
             var finded = BI.find(dots, function (i, dot) {
                 if (i > 0) {
                     if (dots[i - 1].x < xoffset && dots[i].x > xoffset) {
@@ -216,7 +216,7 @@ BI.DirectionPathChooser = BI.inherit(BI.Widget, {
         if (array.length > 0) {
             result.push(array);
         }
-        //画这n条路径
+        // 画这n条路径
         BI.each(result, function (idx, path) {
             var start = path[0];
             var index = BI.findIndex(routes[start], function (idx, p) {
@@ -240,4 +240,4 @@ BI.DirectionPathChooser = BI.inherit(BI.Widget, {
     }
 });
 BI.DirectionPathChooser.EVENT_CHANGE = "DirectionPathChooser.EVENT_CHANGE";
-BI.shortcut('bi.direction_path_chooser', BI.DirectionPathChooser);
+BI.shortcut("bi.direction_path_chooser", BI.DirectionPathChooser);

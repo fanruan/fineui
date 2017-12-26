@@ -16,8 +16,8 @@ BI.YearTrigger = BI.inherit(BI.Trigger, {
     _defaultConfig: function () {
         return BI.extend(BI.YearTrigger.superclass._defaultConfig.apply(this, arguments), {
             extraCls: "bi-year-trigger bi-border",
-            min: '1900-01-01', //最小日期
-            max: '2099-12-31', //最大日期
+            min: "1900-01-01", // 最小日期
+            max: "2099-12-31", // 最大日期
             height: 24
         });
     },
@@ -38,7 +38,7 @@ BI.YearTrigger = BI.inherit(BI.Trigger, {
             vgap: c.vgap,
             allowBlank: true,
             errorText: c.errorText
-        })
+        });
         this.editor.on(BI.SignEditor.EVENT_FOCUS, function () {
             self.fireEvent(BI.YearTrigger.EVENT_FOCUS);
         });
@@ -66,7 +66,7 @@ BI.YearTrigger = BI.inherit(BI.Trigger, {
         });
         BI.createWidget({
             element: this,
-            type: 'bi.htape',
+            type: "bi.htape",
             items: [
                 {
                     el: this.editor

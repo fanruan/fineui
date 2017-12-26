@@ -8,7 +8,7 @@ BI.SingleSelectLoader = BI.inherit(BI.Widget, {
 
     _defaultConfig: function () {
         return BI.extend(BI.SingleSelectLoader.superclass._defaultConfig.apply(this, arguments), {
-            baseCls: 'bi-single-select-loader',
+            baseCls: "bi-single-select-loader",
             logic: {
                 dynamic: true
             },
@@ -69,7 +69,7 @@ BI.SingleSelectLoader = BI.inherit(BI.Widget, {
                                 value: v,
                                 title: txt,
                                 selected: false
-                            }
+                            };
                         });
                         firstItems = self._createItems(json);
                     }
@@ -99,7 +99,7 @@ BI.SingleSelectLoader = BI.inherit(BI.Widget, {
             logic: this.options.logic,
             height: 25,
             selected: false
-        })
+        });
     },
 
     _scrollToTop: function () {
@@ -110,7 +110,7 @@ BI.SingleSelectLoader = BI.inherit(BI.Widget, {
     },
 
     _assertValue: function (val) {
-        val || (val = '');
+        val || (val = "");
     },
 
     setStartValue: function (v) {
@@ -118,7 +118,7 @@ BI.SingleSelectLoader = BI.inherit(BI.Widget, {
     },
 
     setValue: function (v) {
-        this.storeValue = v || '';
+        this.storeValue = v || "";
         this._assertValue(this.storeValue);
         this.button_group.setValue(this.storeValue);
     },
@@ -149,4 +149,4 @@ BI.SingleSelectLoader = BI.inherit(BI.Widget, {
 });
 
 BI.SingleSelectLoader.EVENT_CHANGE = "EVENT_CHANGE";
-BI.shortcut('bi.single_select_loader', BI.SingleSelectLoader);
+BI.shortcut("bi.single_select_loader", BI.SingleSelectLoader);

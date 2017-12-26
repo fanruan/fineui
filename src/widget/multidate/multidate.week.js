@@ -7,7 +7,7 @@
 BI.WeekCard = BI.inherit(BI.MultiDateCard, {
     _defaultConfig: function () {
         return $.extend(BI.WeekCard.superclass._defaultConfig.apply(this, arguments), {
-            baseCls: 'bi-multidate-weekcard'
+            baseCls: "bi-multidate-weekcard"
         });
     },
 
@@ -22,11 +22,11 @@ BI.WeekCard = BI.inherit(BI.MultiDateCard, {
             text: BI.i18nText("BI-Multi_Date_Week_Prev"),
             value: BI.MultiDateCombo.DATE_TYPE.MULTI_DATE_WEEK_PREV
         },
-            {
-                isEditorExist: true,
-                text: BI.i18nText("BI-Multi_Date_Week_Next"),
-                value: BI.MultiDateCombo.DATE_TYPE.MULTI_DATE_WEEK_AFTER
-            }];
+        {
+            isEditorExist: true,
+            text: BI.i18nText("BI-Multi_Date_Week_Next"),
+            value: BI.MultiDateCombo.DATE_TYPE.MULTI_DATE_WEEK_AFTER
+        }];
     },
 
     defaultSelectedItem: function () {
@@ -34,4 +34,4 @@ BI.WeekCard = BI.inherit(BI.MultiDateCard, {
     }
 });
 BI.WeekCard.EVENT_CHANGE = "EVENT_CHANGE";
-BI.shortcut('bi.weekcard', BI.WeekCard);
+BI.shortcut("bi.weekcard", BI.WeekCard);

@@ -18,16 +18,16 @@ BI.IconChangeButton = BI.inherit(BI.Single, {
             stopEvent: false,
             stopPropagation: false,
             selected: false,
-            once: false, //点击一次选中有效,再点无效
-            forceSelected: false, //点击即选中， 选中了就不会被取消
-            forceNotSelected: false, //无论怎么点击都不会被选中
-            disableSelected: false, //使能选中
+            once: false, // 点击一次选中有效,再点无效
+            forceSelected: false, // 点击即选中， 选中了就不会被取消
+            forceNotSelected: false, // 无论怎么点击都不会被选中
+            disableSelected: false, // 使能选中
 
             shadow: false,
-            isShadowShowingOnSelected: false,  //选中状态下是否显示阴影
+            isShadowShowingOnSelected: false,  // 选中状态下是否显示阴影
             trigger: null,
             handler: BI.emptyFn
-        })
+        });
     },
 
     _init: function () {

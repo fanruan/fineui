@@ -24,7 +24,7 @@ BI.EL = BI.inherit(BI.Widget, {
         });
         this.ele.on(BI.Controller.EVENT_CHANGE, function () {
             self.fireEvent(BI.Controller.EVENT_CHANGE, arguments);
-        })
+        });
     },
 
     setValue: function (v) {
@@ -39,4 +39,4 @@ BI.EL = BI.inherit(BI.Widget, {
         this.ele.populate.apply(this, arguments);
     }
 });
-BI.shortcut('bi.el', BI.EL);
+BI.shortcut("bi.el", BI.EL);

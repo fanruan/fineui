@@ -13,7 +13,7 @@ BI.StaticCombo = BI.inherit(BI.Widget, {
             el: {},
             items: [],
             chooseType: BI.ButtonGroup.CHOOSE_TYPE_SINGLE
-        })
+        });
     },
 
     _init: function () {

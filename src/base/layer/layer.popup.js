@@ -7,9 +7,9 @@ BI.PopupView = BI.inherit(BI.Widget, {
     _defaultConfig: function () {
         return BI.extend(BI.PopupView.superclass._defaultConfig.apply(this, arguments), {
             baseCls: "bi-popup-view",
-            maxWidth: 'auto',
+            maxWidth: "auto",
             minWidth: 100,
-            //maxHeight: 200,
+            // maxHeight: 200,
             minHeight: 25,
             lgap: 0,
             rgap: 0,
@@ -17,16 +17,16 @@ BI.PopupView = BI.inherit(BI.Widget, {
             bgap: 0,
             vgap: 0,
             hgap: 0,
-            direction: BI.Direction.Top, //工具栏的方向
-            stopEvent: false,//是否停止mousedown、mouseup事件
-            stopPropagation: false, //是否停止mousedown、mouseup向上冒泡
+            direction: BI.Direction.Top, // 工具栏的方向
+            stopEvent: false, // 是否停止mousedown、mouseup事件
+            stopPropagation: false, // 是否停止mousedown、mouseup向上冒泡
             logic: {
                 dynamic: true
             },
 
-            tool: false, //自定义工具栏
-            tabs: [], //导航栏
-            buttons: [], //toolbar栏
+            tool: false, // 自定义工具栏
+            tabs: [], // 导航栏
+            buttons: [], // toolbar栏
 
             el: {
                 type: "bi.button_group",
@@ -37,28 +37,28 @@ BI.PopupView = BI.inherit(BI.Widget, {
                     type: "bi.vertical"
                 }]
             }
-        })
+        });
     },
 
     _init: function () {
         BI.PopupView.superclass._init.apply(this, arguments);
         var self = this, o = this.options;
         var fn = function (e) {
-            e.stopPropagation();
-        }, stop = function (e) {
-            e.stopEvent();
-            return false;
-        };
+                e.stopPropagation();
+            }, stop = function (e) {
+                e.stopEvent();
+                return false;
+            };
         this.element.css({
             "z-index": BI.zIndex_popup,
             "min-width": o.minWidth + "px",
             "max-width": o.maxWidth + "px"
-        }).bind({"click": fn});
+        }).bind({click: fn});
 
         this.element.bind("mousewheel", fn);
 
-        o.stopPropagation && this.element.bind({"mousedown": fn, "mouseup": fn, "mouseover": fn});
-        o.stopEvent && this.element.bind({"mousedown": stop, "mouseup": stop, "mouseover": stop});
+        o.stopPropagation && this.element.bind({mousedown: fn, mouseup: fn, mouseover: fn});
+        o.stopEvent && this.element.bind({mousedown: stop, mouseup: stop, mouseover: stop});
         this.tool = this._createTool();
         this.tab = this._createTab();
         this.view = this._createView();
@@ -103,7 +103,7 @@ BI.PopupView = BI.inherit(BI.Widget, {
         if (false === o.tool) {
             return;
         }
-        return BI.createWidget(o.tool)
+        return BI.createWidget(o.tool);
     },
 
     _createTab: function () {
@@ -116,7 +116,7 @@ BI.PopupView = BI.inherit(BI.Widget, {
             cls: "list-view-tab",
             height: 25,
             items: o.tabs
-        })
+        });
     },
 
     _createToolBar: function () {
@@ -134,7 +134,7 @@ BI.PopupView = BI.inherit(BI.Widget, {
                 shadow: true,
                 isShadowShowingOnSelected: true
             })
-        })
+        });
     },
 
     getView: function () {
@@ -155,7 +155,7 @@ BI.PopupView = BI.inherit(BI.Widget, {
             tabHeight = this.tab ? (this.tab.attr("height") || 25) : 0,
             toolHeight = ((this.tool && this.tool.attr("height")) || 25) * ((this.tool && this.tool.isVisible()) ? 1 : 0);
         this.view.resetHeight ? this.view.resetHeight(h - tbHeight - tabHeight - toolHeight - 2) :
-            this.view.element.css({"max-height": (h - tbHeight - tabHeight - toolHeight - 2) + "px"})
+            this.view.element.css({"max-height": (h - tbHeight - tabHeight - toolHeight - 2) + "px"});
     },
 
     setValue: function (selectedValues) {

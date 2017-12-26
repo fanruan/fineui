@@ -8,7 +8,7 @@ BI.MultiSelectLoader = BI.inherit(BI.Widget, {
 
     _defaultConfig: function () {
         return BI.extend(BI.MultiSelectLoader.superclass._defaultConfig.apply(this, arguments), {
-            baseCls: 'bi-multi-select-loader',
+            baseCls: "bi-multi-select-loader",
             logic: {
                 dynamic: true
             },
@@ -70,7 +70,7 @@ BI.MultiSelectLoader = BI.inherit(BI.Widget, {
                                 value: v,
                                 title: txt,
                                 selected: self.storeValue.type === BI.Selection.Multi
-                            }
+                            };
                         });
                         if (BI.isKey(self._startValue) && !self.storeValue.value.contains(self._startValue)) {
                             var txt = opts.valueFormatter(startValue) || startValue;
@@ -79,7 +79,7 @@ BI.MultiSelectLoader = BI.inherit(BI.Widget, {
                                 value: startValue,
                                 title: txt,
                                 selected: true
-                            })
+                            });
                         }
                         firstItems = self._createItems(json);
                     }
@@ -109,7 +109,7 @@ BI.MultiSelectLoader = BI.inherit(BI.Widget, {
             logic: this.options.logic,
             height: 25,
             selected: this.isAllSelected()
-        })
+        });
     },
 
     _scrollToTop: function () {
@@ -165,4 +165,4 @@ BI.MultiSelectLoader = BI.inherit(BI.Widget, {
 });
 
 BI.MultiSelectLoader.EVENT_CHANGE = "EVENT_CHANGE";
-BI.shortcut('bi.multi_select_loader', BI.MultiSelectLoader);
+BI.shortcut("bi.multi_select_loader", BI.MultiSelectLoader);

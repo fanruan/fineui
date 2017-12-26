@@ -64,7 +64,7 @@ BI.QuarterTrigger = BI.inherit(BI.Trigger, {
 
         BI.createWidget({
             element: this,
-            type: 'bi.htape',
+            type: "bi.htape",
             items: [
                 {
                     el: this.editor

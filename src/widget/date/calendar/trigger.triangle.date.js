@@ -12,13 +12,13 @@ BI.DateTriangleTrigger = BI.inherit(BI.Trigger, {
         iconHeight: 13
     },
 
-    _defaultConfig: function() {
+    _defaultConfig: function () {
         return BI.extend( BI.DateTriangleTrigger.superclass._defaultConfig.apply(this, arguments), {
             baseCls: "bi-date-triangle-trigger pull-down-ha-font cursor-pointer",
             height: 25
         });
     },
-    _init: function() {
+    _init: function () {
         BI.DateTriangleTrigger.superclass._init.apply(this, arguments);
         var o = this.options, c = this._const;
         this.text = BI.createWidget({
@@ -28,7 +28,7 @@ BI.DateTriangleTrigger = BI.inherit(BI.Trigger, {
             text: o.text,
             value: o.value,
             height: c.height
-        })
+        });
         this.icon = BI.createWidget({
             type: "bi.icon",
             width: c.iconWidth,
@@ -44,27 +44,27 @@ BI.DateTriangleTrigger = BI.inherit(BI.Trigger, {
                 height: c.height,
                 items: [this.text, this.icon]
             }]
-        })
+        });
     },
 
-    setValue: function(v){
+    setValue: function (v) {
         this.text.setValue(v);
     },
 
-    getValue: function(){
+    getValue: function () {
         return this.text.getValue();
     },
 
-    setText: function(v){
+    setText: function (v) {
         this.text.setText(v);
     },
 
-    getText: function(){
+    getText: function () {
         return this.item.getText();
     },
 
-    getKey: function(){
+    getKey: function () {
 
     }
 });
-BI.shortcut('bi.date_triangle_trigger', BI.DateTriangleTrigger);
+BI.shortcut("bi.date_triangle_trigger", BI.DateTriangleTrigger);

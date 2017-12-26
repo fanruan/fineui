@@ -21,7 +21,7 @@ BI.StateEditor = BI.inherit(BI.Widget, {
             watermark: "",
             errorText: "",
             height: 24
-        })
+        });
     },
 
     _init: function () {

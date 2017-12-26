@@ -9,7 +9,7 @@ BI.IconTreeLeafItem = BI.inherit(BI.BasicButton, {
             iconWidth: 16,
             iconHeight: 16,
             iconCls: ""
-        })
+        });
     },
 
     _init: function () {

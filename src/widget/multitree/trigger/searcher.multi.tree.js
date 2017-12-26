@@ -8,7 +8,7 @@ BI.MultiTreeSearcher = BI.inherit(BI.Widget, {
 
     _defaultConfig: function () {
         return BI.extend(BI.MultiTreeSearcher.superclass._defaultConfig.apply(this, arguments), {
-            baseCls: 'bi-multi-tree-searcher',
+            baseCls: "bi-multi-tree-searcher",
             itemsCreator: BI.emptyFn,
             popup: {},
 
@@ -21,7 +21,7 @@ BI.MultiTreeSearcher = BI.inherit(BI.Widget, {
         BI.MultiTreeSearcher.superclass._init.apply(this, arguments);
         var self = this, o = this.options;
         this.editor = BI.createWidget({
-            type: 'bi.multi_select_editor',
+            type: "bi.multi_select_editor",
             height: o.height,
             el: {
                 type: "bi.simple_state_editor",
@@ -116,7 +116,7 @@ BI.MultiTreeSearcher = BI.inherit(BI.Widget, {
             this.editor.setState(text);
         }
 
-        function getChildrenNode(ob) {
+        function getChildrenNode (ob) {
             var text = "";
             var index = 0, size = BI.size(ob);
             BI.each(ob, function (name, children) {
@@ -151,4 +151,4 @@ BI.MultiTreeSearcher.EVENT_CHANGE = "EVENT_CHANGE";
 BI.MultiTreeSearcher.EVENT_START = "EVENT_START";
 BI.MultiTreeSearcher.EVENT_STOP = "EVENT_STOP";
 BI.MultiTreeSearcher.EVENT_PAUSE = "EVENT_PAUSE";
-BI.shortcut('bi.multi_tree_searcher', BI.MultiTreeSearcher);
+BI.shortcut("bi.multi_tree_searcher", BI.MultiTreeSearcher);

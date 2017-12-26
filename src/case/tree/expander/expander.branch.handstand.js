@@ -14,7 +14,7 @@ BI.HandStandBranchExpander = BI.inherit(BI.Widget, {
             },
             el: {type: "bi.label"},
             popup: {}
-        })
+        });
     },
 
     _init: function () {

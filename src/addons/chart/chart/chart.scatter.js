@@ -8,7 +8,7 @@ BI.ScatterChart = BI.inherit(BI.AbstractChart, {
     _defaultConfig: function () {
         return BI.extend(BI.ScatterChart.superclass._defaultConfig.apply(this, arguments), {
             baseCls: "bi-scatter-chart"
-        })
+        });
     },
 
     _init: function () {
@@ -43,7 +43,7 @@ BI.ScatterChart = BI.inherit(BI.AbstractChart, {
             self.fireEvent(BI.ScatterChart.EVENT_CHANGE, obj);
         });
         this.combineChart.on(BI.CombineChart.EVENT_ITEM_CLICK, function (obj) {
-            self.fireEvent(BI.AbstractChart.EVENT_ITEM_CLICK, obj)
+            self.fireEvent(BI.AbstractChart.EVENT_ITEM_CLICK, obj);
         });
     },
 
@@ -53,7 +53,7 @@ BI.ScatterChart = BI.inherit(BI.AbstractChart, {
         delete config.zoom;
         config.colors = this.config.chartColor;
         config.style = formatChartStyle();
-        config.plotOptions.marker = {"symbol": "circle", "radius": 4.5, "enabled": true};
+        config.plotOptions.marker = {symbol: "circle", radius: 4.5, enabled: true};
         formatCordon();
         this.formatChartLegend(config, this.config.chartLegend);
         config.plotOptions.dataLabels.enabled = this.config.showDataLabel;
@@ -68,7 +68,7 @@ BI.ScatterChart = BI.inherit(BI.AbstractChart, {
         config.yAxis[0].title.text = this.config.showLeftYAxisTitle === true ? this.config.leftYAxisTitle + config.yAxis[0].title.text : config.yAxis[0].title.text;
         config.yAxis[0].gridLineWidth = this.config.showGridLine === true ? 1 : 0;
         config.yAxis[0].title.rotation = this.constants.ROTATION;
-        config.yAxis[0].maxWidth = '40%';
+        config.yAxis[0].maxWidth = "40%";
 
         config.xAxis[0].formatter = self.formatTickInXYaxis(this.config.xAxisStyle, this.config.xAxisNumberLevel, this.config.rightNumSeparators);
         formatNumberLevelInXaxis(this.config.xAxisNumberLevel);
@@ -76,32 +76,32 @@ BI.ScatterChart = BI.inherit(BI.AbstractChart, {
         config.xAxis[0].title.text = this.config.showXAxisTitle === true ? this.config.xAxisTitle + config.xAxis[0].title.text : config.xAxis[0].title.text;
         config.xAxis[0].title.align = "center";
         config.xAxis[0].gridLineWidth = this.config.showGridLine === true ? 1 : 0;
-        config.xAxis[0].maxHeight = '40%';
+        config.xAxis[0].maxHeight = "40%";
         config.chartType = "scatter";
 
         if (BI.isNotEmptyArray(this.config.tooltip)) {
             config.plotOptions.tooltip.formatter = function () {
                 var y = self.formatTickInXYaxis(self.config.leftYAxisStyle, self.config.leftYAxisNumberLevel, self.config.numSeparators)(this.y);
                 var x = self.formatTickInXYaxis(self.config.xAxisStyle, self.config.xAxisNumberLevel, self.config.rightNumSeparators)(this.x);
-                return this.seriesName + '<div>(X)' + self.config.tooltip[0]
-                    + ':' + x + '</div><div>(Y)' + self.config.tooltip[1] + ':' + y + '</div>'
+                return this.seriesName + "<div>(X)" + self.config.tooltip[0]
+                    + ":" + x + "</div><div>(Y)" + self.config.tooltip[1] + ":" + y + "</div>";
             };
         }
 
         if (config.plotOptions.dataLabels.enabled === true) {
             BI.each(items, function (idx, item) {
                 item.dataLabels = {
-                    "style": self.config.chartFont,
-                    "align": "outside",
-                    "autoAdjust": true,
+                    style: self.config.chartFont,
+                    align: "outside",
+                    autoAdjust: true,
                     enabled: true,
                     formatter: {
                         identifier: "${X}${Y}",
-                        "XFormat": function () {
-                            return BI.contentFormat(arguments[0], '#.##;-#.##')
+                        XFormat: function () {
+                            return BI.contentFormat(arguments[0], "#.##;-#.##");
                         },
-                        "YFormat": function () {
-                            return BI.contentFormat(arguments[0], '#.##;-#.##')
+                        YFormat: function () {
+                            return BI.contentFormat(arguments[0], "#.##;-#.##");
                         }
                     }
                 };
@@ -110,14 +110,14 @@ BI.ScatterChart = BI.inherit(BI.AbstractChart, {
             });
         }
 
-        //全局样式图表文字
+        // 全局样式图表文字
         config.legend.style = this.config.chartFont;
         config.yAxis[0].title.style = config.yAxis[0].labelStyle = this.config.chartFont;
         config.xAxis[0].title.style = config.xAxis[0].labelStyle = this.config.chartFont;
 
         return [items, config];
 
-        function formatChartStyle() {
+        function formatChartStyle () {
             switch (self.config.chartStyle) {
                 case BICst.CHART_STYLE.STYLE_GRADUAL:
                     return "gradual";
@@ -127,7 +127,7 @@ BI.ScatterChart = BI.inherit(BI.AbstractChart, {
             }
         }
 
-        function formatCordon() {
+        function formatCordon () {
             BI.each(self.config.cordon, function (idx, cor) {
                 if (idx === 0 && self.xAxis.length > 0) {
                     var magnify = self.calcMagnify(self.config.xAxisNumberLevel);
@@ -136,9 +136,9 @@ BI.ScatterChart = BI.inherit(BI.AbstractChart, {
                             value: t.value.div(magnify),
                             width: 1,
                             label: {
-                                "style": self.config.chartFont,
-                                "text": t.text,
-                                "align": "top"
+                                style: self.config.chartFont,
+                                text: t.text,
+                                align: "top"
                             }
                         });
                     });
@@ -161,35 +161,35 @@ BI.ScatterChart = BI.inherit(BI.AbstractChart, {
                             value: t.value.div(magnify),
                             width: 1,
                             label: {
-                                "style": self.config.chartFont,
-                                "text": t.text,
-                                "align": "left"
+                                style: self.config.chartFont,
+                                text: t.text,
+                                align: "left"
                             }
                         });
                     });
                 }
-            })
+            });
         }
 
-        function formatNumberLevelInXaxis(type) {
+        function formatNumberLevelInXaxis (type) {
             var magnify = self.calcMagnify(type);
             BI.each(items, function (idx, item) {
                 BI.each(item.data, function (id, da) {
                     da.x = self.formatXYDataWithMagnify(da.x, magnify);
-                })
-            })
-        }
-
-        function formatNumberLevelInYaxis(type) {
-            var magnify = self.calcMagnify(type);
-            BI.each(items, function (idx, item) {
-                BI.each(item.data, function (id, da) {
-                        da.y = self.formatXYDataWithMagnify(da.y, magnify);
-                })
+                });
             });
         }
 
-        function getXYAxisUnit(numberLevelType, position) {
+        function formatNumberLevelInYaxis (type) {
+            var magnify = self.calcMagnify(type);
+            BI.each(items, function (idx, item) {
+                BI.each(item.data, function (id, da) {
+                    da.y = self.formatXYDataWithMagnify(da.y, magnify);
+                });
+            });
+        }
+
+        function getXYAxisUnit (numberLevelType, position) {
             var unit = "";
             switch (numberLevelType) {
                 case BICst.TARGET_STYLE.NUM_LEVEL.NORMAL:
@@ -206,13 +206,13 @@ BI.ScatterChart = BI.inherit(BI.AbstractChart, {
                     break;
             }
             if (position === self.constants.X_AXIS) {
-                self.config.xAxisUnit !== "" && (unit = unit + self.config.xAxisUnit)
+                self.config.xAxisUnit !== "" && (unit = unit + self.config.xAxisUnit);
             }
             if (position === self.constants.LEFT_AXIS) {
-                self.config.leftYAxisUnit !== "" && (unit = unit + self.config.leftYAxisUnit)
+                self.config.leftYAxisUnit !== "" && (unit = unit + self.config.leftYAxisUnit);
             }
             if (position === self.constants.RIGHT_AXIS) {
-                self.config.rightYAxisUnit !== "" && (unit = unit + self.config.rightYAxisUnit)
+                self.config.rightYAxisUnit !== "" && (unit = unit + self.config.rightYAxisUnit);
             }
             return unit === "" ? unit : "(" + unit + ")";
         }
@@ -263,4 +263,4 @@ BI.ScatterChart = BI.inherit(BI.AbstractChart, {
     }
 });
 BI.ScatterChart.EVENT_CHANGE = "EVENT_CHANGE";
-BI.shortcut('bi.scatter_chart', BI.ScatterChart);
+BI.shortcut("bi.scatter_chart", BI.ScatterChart);

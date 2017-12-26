@@ -14,14 +14,14 @@ BI.CombineChart = BI.inherit(BI.Widget, {
             types: [[], []],
             popupItemsGetter: BI.emptyFn,
             formatConfig: BI.emptyFn
-        })
+        });
     },
 
     _init: function () {
         BI.CombineChart.superclass._init.apply(this, arguments);
         var self = this, o = this.options;
 
-        //图可配置属性
+        // 图可配置属性
         this.CombineChart = BI.createWidget({
             type: "bi.chart",
             element: this.element
@@ -44,7 +44,7 @@ BI.CombineChart = BI.inherit(BI.Widget, {
                 if (BI.isArray(axisItems)) {
                     result = BI.concat(result, axisItems);
                 } else {
-                    result.push(BI.extend(axisItems, {"yAxis": yAxisIndex}));
+                    result.push(BI.extend(axisItems, {yAxis: yAxisIndex}));
                 }
             });
             if (BI.isNotEmptyArray(combineItems)) {
@@ -93,7 +93,7 @@ BI.CombineChart = BI.inherit(BI.Widget, {
                                 },
                                 hgap: 10
                             }, item)
-                        }
+                        };
                     })
                 })
             },
@@ -118,7 +118,7 @@ BI.CombineChart = BI.inherit(BI.Widget, {
         this.combo.showView();
         this._debounce2Destroy();
 
-        function destroyCombo() {
+        function destroyCombo () {
             if (self._doDestroy) {
                 this.destroy();
             }
@@ -153,4 +153,4 @@ BI.CombineChart = BI.inherit(BI.Widget, {
 });
 BI.CombineChart.EVENT_CHANGE = "EVENT_CHANGE";
 BI.CombineChart.EVENT_ITEM_CLICK = "EVENT_ITEM_CLICK";
-BI.shortcut('bi.combine_chart', BI.CombineChart);
+BI.shortcut("bi.combine_chart", BI.CombineChart);

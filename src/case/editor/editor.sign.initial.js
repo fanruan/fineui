@@ -20,7 +20,7 @@ BI.SignInitialEditor = BI.inherit(BI.Widget, {
             value: "",
             text: "",
             height: 24
-        })
+        });
     },
 
     _init: function () {
@@ -59,7 +59,7 @@ BI.SignInitialEditor = BI.inherit(BI.Widget, {
         });
         this.text.on(BI.TextButton.EVENT_CHANGE, function () {
             BI.nextTick(function () {
-                self.fireEvent(BI.SignInitialEditor.EVENT_CLICK_LABEL)
+                self.fireEvent(BI.SignInitialEditor.EVENT_CLICK_LABEL);
             });
         });
         BI.createWidget({
@@ -232,7 +232,7 @@ BI.SignInitialEditor = BI.inherit(BI.Widget, {
         return {
             value: this.editor.getValue(),
             text: this.options.text
-        }
+        };
     },
 
     getState: function () {

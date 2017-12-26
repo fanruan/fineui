@@ -70,7 +70,7 @@ BI.AdaptiveArrangement = BI.inherit(BI.Widget, {
         var self = this, o = this.options;
         item.element.css("zIndex", ++this.zIndex);
         item.element.mousedown(function () {
-            self._setSelect(item)
+            self._setSelect(item);
         });
     },
 
@@ -296,4 +296,4 @@ BI.AdaptiveArrangement.EVENT_ELEMENT_RESIZE = "AdaptiveArrangement.EVENT_ELEMENT
 BI.AdaptiveArrangement.EVENT_ELEMENT_STOP_RESIZE = "AdaptiveArrangement.EVENT_ELEMENT_STOP_RESIZE";
 BI.AdaptiveArrangement.EVENT_RESIZE = "AdaptiveArrangement.EVENT_RESIZE";
 BI.AdaptiveArrangement.EVENT_SCROLL = "AdaptiveArrangement.EVENT_SCROLL";
-BI.shortcut('bi.adaptive_arrangement', BI.AdaptiveArrangement);
+BI.shortcut("bi.adaptive_arrangement", BI.AdaptiveArrangement);

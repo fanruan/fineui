@@ -11,7 +11,7 @@ BI.MultiSelectItem = BI.inherit(BI.BasicButton, {
             logic: {
                 dynamic: false
             }
-        })
+        });
     },
     _init: function () {
         BI.MultiSelectItem.superclass._init.apply(this, arguments);

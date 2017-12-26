@@ -51,8 +51,8 @@ BI.SwitchTree = BI.inherit(BI.Widget, {
         }
     },
 
-    _removeIsParent: function(items) {
-        BI.each(items, function(i, item) {
+    _removeIsParent: function (items) {
+        BI.each(items, function (i, item) {
             BI.isNotNull(item.isParent) && delete item.isParent;
         });
         return items;
@@ -108,4 +108,4 @@ BI.SwitchTree.SelectType = {
     SingleSelect: BI.Selection.Single,
     MultiSelect: BI.Selection.Multi
 };
-BI.shortcut('bi.switch_tree', BI.SwitchTree);
+BI.shortcut("bi.switch_tree", BI.SwitchTree);

@@ -13,7 +13,7 @@ BI.DownListCombo = BI.inherit(BI.Widget, {
             trigger: "click",
             container: null,
             el: {}
-        })
+        });
     },
 
     _init: function () {
@@ -38,7 +38,7 @@ BI.DownListCombo = BI.inherit(BI.Widget, {
 
         this.downlistcombo = BI.createWidget({
             element: this,
-            type: 'bi.combo',
+            type: "bi.combo",
             trigger: o.trigger,
             isNeedAdjustWidth: false,
             container: o.container,
@@ -78,7 +78,7 @@ BI.DownListCombo = BI.inherit(BI.Widget, {
         this.popupview.setValue(v);
     },
     getValue: function () {
-        return this.popupview.getValue()
+        return this.popupview.getValue();
     }
 });
 BI.DownListCombo.EVENT_CHANGE = "EVENT_CHANGE";

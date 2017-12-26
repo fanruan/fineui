@@ -38,4 +38,4 @@ BI.RichEditorBoldButton = BI.inherit(BI.RichEditorAction, {
         this.bold.setSelected(false);
     }
 });
-BI.shortcut("bi.rich_editor_bold_button", BI.RichEditorBoldButton)
+BI.shortcut("bi.rich_editor_bold_button", BI.RichEditorBoldButton);

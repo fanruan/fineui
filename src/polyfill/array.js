@@ -8,7 +8,7 @@ if (!Array.prototype.indexOf) {
         // 1. Let o be the result of calling ToObject passing
         //    the this value as the argument.
         if (this == null) {
-            throw new TypeError('"this" is null or not defined');
+            throw new TypeError("\"this\" is null or not defined");
         }
 
         var o = Object(this);
@@ -60,8 +60,8 @@ if (!Array.prototype.indexOf) {
     };
 }
 if (!Array.prototype.lastIndexOf) {
-    Array.prototype.lastIndexOf = function (searchElement /*, fromIndex*/) {
-        'use strict';
+    Array.prototype.lastIndexOf = function (searchElement /* , fromIndex*/) {
+        "use strict";
 
         if (this === void 0 || this === null) {
             throw new TypeError();
@@ -79,8 +79,7 @@ if (!Array.prototype.lastIndexOf) {
             n = Number(arguments[1]);
             if (n != n) {
                 n = 0;
-            }
-            else if (n != 0 && n != (1 / 0) && n != -(1 / 0)) {
+            } else if (n != 0 && n != (1 / 0) && n != -(1 / 0)) {
                 n = (n > 0 || -1) * Math.floor(Math.abs(n));
             }
         }

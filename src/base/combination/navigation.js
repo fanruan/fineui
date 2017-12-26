@@ -5,7 +5,7 @@
 BI.Navigation = BI.inherit(BI.Widget, {
     _defaultConfig: function () {
         return BI.extend(BI.Navigation.superclass._defaultConfig.apply(this, arguments), {
-            direction: "bottom",//top, bottom, left, right, custom
+            direction: "bottom", // top, bottom, left, right, custom
             logic: {
                 dynamic: false
             },
@@ -18,7 +18,7 @@ BI.Navigation = BI.inherit(BI.Widget, {
 
             afterCardCreated: BI.emptyFn,
             afterCardShow: BI.emptyFn
-        })
+        });
     },
 
     render: function () {

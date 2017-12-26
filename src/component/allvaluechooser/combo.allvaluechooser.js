@@ -26,7 +26,7 @@ BI.AllValueChooserCombo = BI.inherit(BI.AbstractAllValueChooser, {
             this.items = o.items;
         }
         this.combo = BI.createWidget({
-            type: 'bi.multi_select_combo',
+            type: "bi.multi_select_combo",
             element: this,
             itemsCreator: BI.bind(this._itemsCreator, this),
             valueFormatter: BI.bind(this._valueFormatter, this),
@@ -59,4 +59,4 @@ BI.AllValueChooserCombo = BI.inherit(BI.AbstractAllValueChooser, {
     }
 });
 BI.AllValueChooserCombo.EVENT_CONFIRM = "AllValueChooserCombo.EVENT_CONFIRM";
-BI.shortcut('bi.all_value_chooser_combo', BI.AllValueChooserCombo);
+BI.shortcut("bi.all_value_chooser_combo", BI.AllValueChooserCombo);

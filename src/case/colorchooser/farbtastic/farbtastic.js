@@ -12,7 +12,7 @@ BI.Farbtastic = BI.inherit(BI.Widget, {
             baseCls: "bi-farbtastic",
             width: 195,
             height: 195
-        })
+        });
     },
 
     _init: function () {

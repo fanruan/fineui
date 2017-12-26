@@ -29,8 +29,8 @@ BI.MultiSelectSearchPane = BI.inherit(BI.Widget, {
         this.tooltipClick = BI.createWidget({
             type: "bi.label",
             invisible: true,
-            text: BI.i18nText('BI-Click_Blank_To_Select'),
-            cls: 'multi-select-toolbar',
+            text: BI.i18nText("BI-Click_Blank_To_Select"),
+            cls: "multi-select-toolbar",
             height: this.constants.height
         });
 

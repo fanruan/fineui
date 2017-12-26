@@ -12,7 +12,7 @@ BI.TableCell = BI.inherit(BI.Widget, {
             baseCls: "bi-table-cell",
             textAlign: "left",
             text: ""
-        })
+        });
     },
 
     _init: function () {
@@ -26,7 +26,7 @@ BI.TableCell = BI.inherit(BI.Widget, {
             text: this.options.text,
             value: this.options.value,
             lgap: 5
-        })
+        });
     }
 });
 

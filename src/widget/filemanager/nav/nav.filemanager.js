@@ -12,7 +12,7 @@ BI.FileManagerNav = BI.inherit(BI.Widget, {
             baseCls: "bi-file-manager-nav bi-border-left",
             height: 40,
             items: []
-        })
+        });
     },
 
     _init: function () {
@@ -86,7 +86,7 @@ BI.FileManagerNav = BI.inherit(BI.Widget, {
         return ids;
     },
 
-    refreshTreeData: function(items){
+    refreshTreeData: function (items) {
         this.tree.initTree(BI.Tree.transformToTreeFormat(items));
         this.tree.getRoot().set("data", {
             text: BI.i18nText("BI-Created_By_Me"),

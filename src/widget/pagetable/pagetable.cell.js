@@ -12,7 +12,7 @@ BI.PageTableCell = BI.inherit(BI.Widget, {
             baseCls: "bi-page-table-cell",
             text: "",
             title: ""
-        })
+        });
     },
 
     _init: function () {

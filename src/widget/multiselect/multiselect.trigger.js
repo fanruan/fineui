@@ -59,7 +59,7 @@ BI.MultiSelectTrigger = BI.inherit(BI.Trigger, {
             self.fireEvent(BI.MultiSelectTrigger.EVENT_CHANGE, arguments);
         });
         this.numberCounter = BI.createWidget(o.switcher, {
-            type: 'bi.multi_select_check_selected_switcher',
+            type: "bi.multi_select_check_selected_switcher",
             valueFormatter: o.valueFormatter,
             itemsCreator: o.itemsCreator,
             adapter: o.adapter,
@@ -73,7 +73,7 @@ BI.MultiSelectTrigger = BI.inherit(BI.Trigger, {
         });
 
         var wrapNumberCounter = BI.createWidget({
-            type: 'bi.right_vertical_adapt',
+            type: "bi.right_vertical_adapt",
             hgap: 4,
             items: [{
                 el: this.numberCounter
@@ -81,12 +81,12 @@ BI.MultiSelectTrigger = BI.inherit(BI.Trigger, {
         });
 
         var wrapper = BI.createWidget({
-            type: 'bi.htape',
+            type: "bi.htape",
             element: this,
             items: [
                 {
                     el: this.searcher,
-                    width: 'fill'
+                    width: "fill"
                 }, {
                     el: wrapNumberCounter,
                     width: 0
@@ -97,7 +97,7 @@ BI.MultiSelectTrigger = BI.inherit(BI.Trigger, {
         });
 
         this.numberCounter.on(BI.Events.VIEW, function (b) {
-            BI.nextTick(function () {//自动调整宽度
+            BI.nextTick(function () {// 自动调整宽度
                 wrapper.attr("items")[1].width = (b === true ? self.numberCounter.element.outerWidth() + 8 : 0);
                 wrapper.resize();
             });
@@ -151,4 +151,4 @@ BI.MultiSelectTrigger.EVENT_PAUSE = "EVENT_PAUSE";
 BI.MultiSelectTrigger.EVENT_SEARCHING = "EVENT_SEARCHING";
 BI.MultiSelectTrigger.EVENT_BEFORE_COUNTER_POPUPVIEW = "EVENT_BEFORE_COUNTER_POPUPVIEW";
 
-BI.shortcut('bi.multi_select_trigger', BI.MultiSelectTrigger);
+BI.shortcut("bi.multi_select_trigger", BI.MultiSelectTrigger);

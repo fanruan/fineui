@@ -55,7 +55,7 @@ BI.RelationViewRegionContainer = BI.inherit(BI.Widget, {
         return this.region.getHeight();
     },
 
-    //获取上方开始划线的位置
+    // 获取上方开始划线的位置
     getTopLeftPosition: function () {
         return this.region.getTopLeftPosition();
     },
@@ -84,7 +84,7 @@ BI.RelationViewRegionContainer = BI.inherit(BI.Widget, {
         v === true ? this.region.element.fadeIn() : this.region.element.fadeOut();
     },
 
-    setPreviewSelected: function(v) {
+    setPreviewSelected: function (v) {
         this.region.setPreviewSelected(v);
     }
 });

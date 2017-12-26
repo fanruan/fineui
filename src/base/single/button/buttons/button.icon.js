@@ -10,17 +10,17 @@ BI.IconButton = BI.inherit(BI.BasicButton, {
             baseCls: (conf.baseCls || "") + " bi-icon-button horizon-center",
             iconWidth: null,
             iconHeight: null
-        })
+        });
     },
 
     _init: function () {
         BI.IconButton.superclass._init.apply(this, arguments);
         var o = this.options;
         this.element.css({
-            textAlign: 'center'
+            textAlign: "center"
         });
         this.icon = BI.createWidget({
-            type: 'bi.icon',
+            type: "bi.icon",
             width: o.iconWidth,
             height: o.iconHeight
         });
@@ -30,11 +30,11 @@ BI.IconButton = BI.inherit(BI.BasicButton, {
                 type: "bi.default",
                 element: this,
                 items: [this.icon]
-            })
+            });
         } else {
             BI.createWidget({
                 element: this,
-                type: 'bi.center_adapt',
+                type: "bi.center_adapt",
                 items: [this.icon]
             });
         }

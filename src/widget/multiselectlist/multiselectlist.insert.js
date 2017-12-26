@@ -4,10 +4,10 @@
 BI.MultiSelectInsertList = BI.inherit(BI.Widget, {
     _defaultConfig: function () {
         return BI.extend(BI.MultiSelectInsertList.superclass._defaultConfig.apply(this, arguments), {
-            baseCls: 'bi-multi-select-insert-list',
+            baseCls: "bi-multi-select-insert-list",
             itemsCreator: BI.emptyFn,
             valueFormatter: BI.emptyFn
-        })
+        });
     },
     _init: function () {
         BI.MultiSelectInsertList.superclass._init.apply(this, arguments);
@@ -33,8 +33,8 @@ BI.MultiSelectInsertList = BI.inherit(BI.Widget, {
         });
         this.adapter.on(BI.MultiSelectLoader.EVENT_CHANGE, function () {
             self.storeValue = this.getValue();
-                assertShowValue();
-                self.fireEvent(BI.MultiSelectInsertList.EVENT_CHANGE);
+            assertShowValue();
+            self.fireEvent(BI.MultiSelectInsertList.EVENT_CHANGE);
         });
 
         this.searcherPane = BI.createWidget({
@@ -76,7 +76,7 @@ BI.MultiSelectInsertList = BI.inherit(BI.Widget, {
                     self._showAdapter();
                     self._setStartValue("");
                     self.adapter.setValue(self.storeValue);
-                    //需要刷新回到初始界面，否则搜索的结果不能放在最前面
+                    // 需要刷新回到初始界面，否则搜索的结果不能放在最前面
                     self.adapter.populate();
                 }
             }, {
@@ -89,7 +89,7 @@ BI.MultiSelectInsertList = BI.inherit(BI.Widget, {
                             value: [keyword]
                         }, function () {
                             if (self.storeValue.type === BI.Selection.Multi) {
-                                self.storeValue.value.pushDistinct(keyword)
+                                self.storeValue.value.pushDistinct(keyword);
                             }
                             self._showAdapter();
                             self.adapter.setValue(self.storeValue);
@@ -98,10 +98,10 @@ BI.MultiSelectInsertList = BI.inherit(BI.Widget, {
                             self.adapter.populate();
                             self._setStartValue("");
                             self.fireEvent(BI.MultiSelectInsertList.EVENT_CHANGE);
-                        })
+                        });
                     } else {
                         if (self.storeValue.type === BI.Selection.Multi) {
-                            self.storeValue.value.pushDistinct(keyword)
+                            self.storeValue.value.pushDistinct(keyword);
                         }
                         self._showAdapter();
                         self.adapter.setValue(self.storeValue);
@@ -170,7 +170,7 @@ BI.MultiSelectInsertList = BI.inherit(BI.Widget, {
                 left: 0,
                 right: 0
             }]
-        })
+        });
     },
 
     _showAdapter: function () {
@@ -206,12 +206,12 @@ BI.MultiSelectInsertList = BI.inherit(BI.Widget, {
             }, function (ob) {
                 self._allData = BI.pluck(ob.items, "value");
                 digest(self._allData);
-            })
+            });
         } else {
-            digest(this._allData)
+            digest(this._allData);
         }
 
-        function digest(items) {
+        function digest (items) {
             var selectedMap = self._makeMap(items);
             BI.each(keywords, function (i, val) {
                 if (BI.isNotNull(selectedMap[val])) {
@@ -256,7 +256,7 @@ BI.MultiSelectInsertList = BI.inherit(BI.Widget, {
             });
             self.storeValue.value = newItems.concat(BI.values(selectedMap));
             callback();
-        })
+        });
     },
 
     _join: function (res, callback) {

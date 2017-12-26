@@ -30,17 +30,17 @@ BI.MultiDateCard = BI.inherit(BI.Widget, {
         var self = this, opts = this.options;
 
         this.label = BI.createWidget({
-            type: 'bi.label',
+            type: "bi.label",
             height: this.constants.itemHeight,
             textAlign: "left",
             text: BI.i18nText("BI-Multi_Date_Relative_Current_Time"),
-            cls: 'bi-multidate-inner-label bi-tips'
+            cls: "bi-multidate-inner-label bi-tips"
         });
         this.radioGroup = BI.createWidget({
             type: "bi.button_group",
             chooseType: 0,
             items: BI.createItems(this.dateConfig(), {
-                type: 'bi.multidate_segment',
+                type: "bi.multidate_segment",
                 height: this.constants.itemHeight
             }),
             layouts: [{
@@ -59,10 +59,10 @@ BI.MultiDateCard = BI.inherit(BI.Widget, {
         });
         BI.createWidget({
             element: this,
-            type: 'bi.center_adapt',
+            type: "bi.center_adapt",
             lgap: this.constants.lgap,
             items: [{
-                type: 'bi.vertical',
+                type: "bi.vertical",
                 items: [this.label, this.radioGroup]
             }]
         });
@@ -74,7 +74,7 @@ BI.MultiDateCard = BI.inherit(BI.Widget, {
         return {
             type: type,
             value: value
-        }
+        };
     },
 
     _isTypeAvaliable: function (type) {

@@ -9,8 +9,8 @@ BI.DateTrigger = BI.inherit(BI.Trigger, {
     _defaultConfig: function () {
         return BI.extend(BI.DateTrigger.superclass._defaultConfig.apply(this, arguments), {
             extraCls: "bi-date-trigger",
-            min: '1900-01-01', //最小日期
-            max: '2099-12-31', //最大日期
+            min: "1900-01-01", // 最小日期
+            max: "2099-12-31", // 最大日期
             height: 24
         });
     },
@@ -24,10 +24,10 @@ BI.DateTrigger = BI.inherit(BI.Trigger, {
                 var date = v.match(/\d+/g);
                 self._autoAppend(v, date);
                 return self._dateCheck(v) && Date.checkLegal(v) && self._checkVoid({
-                        year: date[0],
-                        month: date[1],
-                        day: date[2]
-                    });
+                    year: date[0],
+                    month: date[1],
+                    day: date[2]
+                });
             },
             quitChecker: function () {
                 return false;
@@ -44,7 +44,7 @@ BI.DateTrigger = BI.inherit(BI.Trigger, {
             }
         });
         this.editor.on(BI.SignEditor.EVENT_KEY_DOWN, function () {
-            self.fireEvent(BI.DateTrigger.EVENT_KEY_DOWN)
+            self.fireEvent(BI.DateTrigger.EVENT_KEY_DOWN);
         });
         this.editor.on(BI.SignEditor.EVENT_FOCUS, function () {
             self.fireEvent(BI.DateTrigger.EVENT_FOCUS);
@@ -68,7 +68,7 @@ BI.DateTrigger = BI.inherit(BI.Trigger, {
                 var date = value.split("-");
                 self.store_value = {
                     type: BI.DateTrigger.MULTI_DATE_CALENDAR,
-                    value:{
+                    value: {
                         year: date[0] | 0,
                         month: date[1] - 1,
                         day: date[2] | 0
@@ -97,7 +97,7 @@ BI.DateTrigger = BI.inherit(BI.Trigger, {
             }, {
                 el: this.editor
             }]
-        })
+        });
     },
     _dateCheck: function (date) {
         return Date.parseDateTime(date, "%Y-%x-%d").print("%Y-%x-%d") == date || Date.parseDateTime(date, "%Y-%X-%d").print("%Y-%X-%d") == date || Date.parseDateTime(date, "%Y-%x-%e").print("%Y-%x-%e") == date || Date.parseDateTime(date, "%Y-%X-%e").print("%Y-%X-%e") == date;
@@ -136,7 +136,7 @@ BI.DateTrigger = BI.inherit(BI.Trigger, {
         this.store_value = v;
         if (BI.isNotNull(v)) {
             type = v.type || BI.DateTrigger.MULTI_DATE_CALENDAR; value = v.value;
-            if(BI.isNull(value)){
+            if(BI.isNull(value)) {
                 value = v;
             }
         }

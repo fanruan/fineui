@@ -7,12 +7,12 @@
 BI.SingleSelectEditor = BI.inherit(BI.Widget, {
 
     _const: {
-        checkSelected: BI.i18nText('BI-Check_Selected')
+        checkSelected: BI.i18nText("BI-Check_Selected")
     },
 
     _defaultConfig: function () {
         return BI.extend(BI.SingleSelectEditor.superclass._defaultConfig.apply(this, arguments), {
-            baseCls: 'bi-single-select-editor',
+            baseCls: "bi-single-select-editor",
             el: {}
         });
     },
@@ -21,10 +21,10 @@ BI.SingleSelectEditor = BI.inherit(BI.Widget, {
         BI.SingleSelectEditor.superclass._init.apply(this, arguments);
         var self = this, o = this.options;
         this.editor = BI.createWidget(o.el, {
-            type: 'bi.state_editor',
+            type: "bi.state_editor",
             element: this,
             height: o.height,
-            watermark: BI.i18nText('BI-Basic_Search'),
+            watermark: BI.i18nText("BI-Basic_Search"),
             allowBlank: true
         });
 
@@ -60,16 +60,16 @@ BI.SingleSelectEditor = BI.inherit(BI.Widget, {
         var v = this.editor.getState();
         if (BI.isArray(v) && v.length > 0) {
             return v[v.length - 1];
-        } else {
-            return "";
         }
+        return "";
+        
     },
 
     getKeywords: function () {
         var val = this.editor.getLastValidValue();
         var keywords = val.match(/[\S]+/g);
         if (BI.isEndWithBlank(val)) {
-            return keywords.concat([' ']);
+            return keywords.concat([" "]);
         }
         return keywords;
     },
@@ -79,4 +79,4 @@ BI.SingleSelectEditor = BI.inherit(BI.Widget, {
     }
 });
 BI.SingleSelectEditor.EVENT_PAUSE = "SingleSelectEditor.EVENT_PAUSE";
-BI.shortcut('bi.single_select_editor', BI.SingleSelectEditor);
+BI.shortcut("bi.single_select_editor", BI.SingleSelectEditor);

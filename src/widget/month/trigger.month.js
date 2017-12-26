@@ -62,7 +62,7 @@ BI.MonthTrigger = BI.inherit(BI.Trigger, {
         });
         BI.createWidget({
             element: this,
-            type: 'bi.htape',
+            type: "bi.htape",
             items: [
                 {
                     el: this.editor
@@ -85,7 +85,7 @@ BI.MonthTrigger = BI.inherit(BI.Trigger, {
         });
     },
     setValue: function (v) {
-        if(BI.isNotNull(v)){
+        if(BI.isNotNull(v)) {
             this.editor.setState(v + 1);
             this.editor.setValue(v + 1);
             this.editor.setTitle(v + 1);

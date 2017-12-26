@@ -21,7 +21,7 @@ BI.ValueChooserPane = BI.inherit(BI.AbstractValueChooser, {
         BI.ValueChooserPane.superclass._init.apply(this, arguments);
         var self = this, o = this.options;
         this.list = BI.createWidget({
-            type: 'bi.multi_select_list',
+            type: "bi.multi_select_list",
             element: this,
             itemsCreator: BI.bind(this._itemsCreator, this),
             valueFormatter: BI.bind(this._valueFormatter, this)
@@ -45,7 +45,7 @@ BI.ValueChooserPane = BI.inherit(BI.AbstractValueChooser, {
         return {
             type: val.type,
             value: val.value
-        }
+        };
     },
 
     populate: function () {
@@ -53,4 +53,4 @@ BI.ValueChooserPane = BI.inherit(BI.AbstractValueChooser, {
     }
 });
 BI.ValueChooserPane.EVENT_CHANGE = "ValueChooserPane.EVENT_CHANGE";
-BI.shortcut('bi.value_chooser_pane', BI.ValueChooserPane);
+BI.shortcut("bi.value_chooser_pane", BI.ValueChooserPane);

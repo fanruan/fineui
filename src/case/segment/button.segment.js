@@ -10,19 +10,19 @@ BI.SegmentButton = BI.inherit(BI.BasicButton, {
     _defaultConfig: function () {
         var conf = BI.SegmentButton.superclass._defaultConfig.apply(this, arguments);
         return BI.extend(conf, {
-            baseCls: (conf.baseCls || "") + ' bi-segment-button bi-list-item-active',
+            baseCls: (conf.baseCls || "") + " bi-segment-button bi-list-item-active",
             shadow: true,
             readonly: true,
             hgap: 5
-        })
+        });
     },
 
     _init: function () {
         BI.SegmentButton.superclass._init.apply(this, arguments);
         var opts = this.options, self = this;
-        //if (BI.isNumber(opts.height) && BI.isNull(opts.lineHeight)) {
+        // if (BI.isNumber(opts.height) && BI.isNull(opts.lineHeight)) {
         //    this.element.css({lineHeight : (opts.height - 2) + 'px'});
-        //}
+        // }
         this.text = BI.createWidget({
             type: "bi.label",
             element: this,
@@ -31,7 +31,7 @@ BI.SegmentButton = BI.inherit(BI.BasicButton, {
             text: opts.text,
             value: opts.value,
             hgap: opts.hgap
-        })
+        });
     },
 
     setSelected: function () {
@@ -47,4 +47,4 @@ BI.SegmentButton = BI.inherit(BI.BasicButton, {
         BI.SegmentButton.superclass.destroy.apply(this, arguments);
     }
 });
-BI.shortcut('bi.segment_button', BI.SegmentButton);
+BI.shortcut("bi.segment_button", BI.SegmentButton);

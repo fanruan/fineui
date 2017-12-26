@@ -8,7 +8,7 @@ BI.SingleSelectSearcher = BI.inherit(BI.Widget, {
 
     _defaultConfig: function () {
         return BI.extend(BI.SingleSelectSearcher.superclass._defaultConfig.apply(this, arguments), {
-            baseCls: 'bi-single-select-searcher',
+            baseCls: "bi-single-select-searcher",
             itemsCreator: BI.emptyFn,
             el: {},
             popup: {},
@@ -22,7 +22,7 @@ BI.SingleSelectSearcher = BI.inherit(BI.Widget, {
         BI.SingleSelectSearcher.superclass._init.apply(this, arguments);
         var self = this, o = this.options;
         this.editor = BI.createWidget(o.el, {
-            type: 'bi.single_select_editor',
+            type: "bi.single_select_editor",
             height: o.height
         });
 
@@ -104,11 +104,11 @@ BI.SingleSelectSearcher = BI.inherit(BI.Widget, {
 
     setState: function (v) {
         var o = this.options;
-        v || (v = '');
-        if (v === '') {
+        v || (v = "");
+        if (v === "") {
             this.editor.setState(BI.Selection.None);
         } else {
-            this.editor.setState(o.valueFormatter(v + "") || (v + ''));
+            this.editor.setState(o.valueFormatter(v + "") || (v + ""));
         }
     },
 
@@ -136,4 +136,4 @@ BI.SingleSelectSearcher.EVENT_START = "EVENT_START";
 BI.SingleSelectSearcher.EVENT_STOP = "EVENT_STOP";
 BI.SingleSelectSearcher.EVENT_PAUSE = "EVENT_PAUSE";
 BI.SingleSelectSearcher.EVENT_SEARCHING = "EVENT_SEARCHING";
-BI.shortcut('bi.single_select_searcher', BI.SingleSelectSearcher);
+BI.shortcut("bi.single_select_searcher", BI.SingleSelectSearcher);

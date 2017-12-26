@@ -62,11 +62,11 @@ BI.PreviewTable = BI.inherit(BI.Widget, {
         });
     },
 
-    //是否有自适应调节的列，即列宽为""
+    // 是否有自适应调节的列，即列宽为""
     _hasAdaptCol: function (columnSize) {
         return BI.any(columnSize, function (i, size) {
             return size === "";
-        })
+        });
     },
 
     _isPercentage: function (columnSize) {
@@ -76,7 +76,7 @@ BI.PreviewTable = BI.inherit(BI.Widget, {
     _adjustColumns: function () {
         var self = this, o = this.options;
         if (o.isNeedFreeze === true) {
-            //如果存在百分比的情况
+            // 如果存在百分比的情况
             if (this._isPercentage(o.columnSize)) {
                 if (this._hasAdaptCol(o.columnSize)) {
                     var findCols = [], remain = 0;
@@ -113,7 +113,7 @@ BI.PreviewTable = BI.inherit(BI.Widget, {
                 this.table.setColumnSize(isRight ? (notFreezeSize.concat(freezeSize)) : (freezeSize.concat(notFreezeSize)));
             }
         } else {
-            //如果存在自适应宽度的列或者是百分比计算的列，需要将整个表宽设为100%
+            // 如果存在自适应宽度的列或者是百分比计算的列，需要将整个表宽设为100%
             if (this._hasAdaptCol(o.columnSize) || this._isPercentage(o.columnSize)) {
                 this.table.setRegionColumnSize(["100%"]);
             }
@@ -157,11 +157,11 @@ BI.PreviewTable = BI.inherit(BI.Widget, {
     },
 
     getScrollRegionColumnSize: function () {
-        return this.table.getScrollRegionColumnSize()
+        return this.table.getScrollRegionColumnSize();
     },
 
     getScrollRegionRowSize: function () {
-        return this.table.getScrollRegionRowSize()
+        return this.table.getScrollRegionRowSize();
     },
 
     hasVerticalScroll: function () {
@@ -173,7 +173,7 @@ BI.PreviewTable = BI.inherit(BI.Widget, {
     },
 
     setLeftHorizontalScroll: function (scrollLeft) {
-        return this.table.setLeftHorizontalScroll(scrollLeft)
+        return this.table.setLeftHorizontalScroll(scrollLeft);
     },
 
     setRightHorizontalScroll: function (scrollLeft) {
@@ -201,4 +201,4 @@ BI.PreviewTable = BI.inherit(BI.Widget, {
     }
 });
 BI.PreviewTable.EVENT_CHANGE = "PreviewTable.EVENT_CHANGE";
-BI.shortcut('bi.preview_table', BI.PreviewTable);
+BI.shortcut("bi.preview_table", BI.PreviewTable);

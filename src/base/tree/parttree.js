@@ -6,7 +6,7 @@
  */
 BI.PartTree = BI.inherit(BI.AsyncTree, {
     _defaultConfig: function () {
-        return BI.extend(BI.PartTree.superclass._defaultConfig.apply(this, arguments), {})
+        return BI.extend(BI.PartTree.superclass._defaultConfig.apply(this, arguments), {});
     },
 
     _init: function () {
@@ -44,7 +44,7 @@ BI.PartTree = BI.inherit(BI.AsyncTree, {
         if (treeNode.checked === true) {
             BI.AsyncTree.superclass._selectTreeNode.apply(self, arguments);
         } else {
-            //如果选中的值中不存在该值不处理
+            // 如果选中的值中不存在该值不处理
             var t = this.options.paras.selectedValues;
             var p = parentValues.concat(name);
             for (var i = 0, len = p.length; i < len; i++) {
@@ -72,19 +72,19 @@ BI.PartTree = BI.inherit(BI.AsyncTree, {
         var hashMap = {};
         var rootNoots = this.nodes.getNodes();
         track(rootNoots);
-        function track(nodes) {
+        function track (nodes) {
             BI.each(nodes, function (i, node) {
                 var checkState = node.getCheckStatus();
                 if (checkState.checked === false) {
                     return true;
                 }
                 var parentValues = node.parentValues || self._getParentValues(node);
-                //把文字中的html去掉，其实就是把文字颜色去掉
+                // 把文字中的html去掉，其实就是把文字颜色去掉
                 var values = parentValues.concat([self._getNodeValue(node)]);
                 self._buildTree(hashMap, values);
-//                if(checkState.checked === true && checkState.half === false && nodes[i].flag === true){
-//                    continue;
-//                }
+                //                if(checkState.checked === true && checkState.half === false && nodes[i].flag === true){
+                //                    continue;
+                //                }
                 if (BI.isNotEmptyArray(node.children)) {
                     track(node.children);
                     return true;
@@ -92,7 +92,7 @@ BI.PartTree = BI.inherit(BI.AsyncTree, {
                 if (checkState.half === true) {
                     self._getHalfSelectedValues(hashMap, node);
                 }
-            })
+            });
         }
 
         return hashMap;
@@ -128,7 +128,7 @@ BI.PartTree = BI.inherit(BI.AsyncTree, {
             self.fireEvent(BI.Events.AFTERINIT);
         };
 
-        function callback(nodes) {
+        function callback (nodes) {
             if (self._stop === true) {
                 return;
             }
@@ -152,7 +152,7 @@ BI.PartTree = BI.inherit(BI.AsyncTree, {
         return result;
     },
 
-    //生成树方法
+    // 生成树方法
     stroke: function (config) {
         var o = this.options;
         delete o.paras.keyword;

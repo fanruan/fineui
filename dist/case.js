@@ -18,16 +18,16 @@ BI.IconChangeButton = BI.inherit(BI.Single, {
             stopEvent: false,
             stopPropagation: false,
             selected: false,
-            once: false, //点击一次选中有效,再点无效
-            forceSelected: false, //点击即选中， 选中了就不会被取消
-            forceNotSelected: false, //无论怎么点击都不会被选中
-            disableSelected: false, //使能选中
+            once: false, // 点击一次选中有效,再点无效
+            forceSelected: false, // 点击即选中， 选中了就不会被取消
+            forceNotSelected: false, // 无论怎么点击都不会被选中
+            disableSelected: false, // 使能选中
 
             shadow: false,
-            isShadowShowingOnSelected: false,  //选中状态下是否显示阴影
+            isShadowShowingOnSelected: false,  // 选中状态下是否显示阴影
             trigger: null,
             handler: BI.emptyFn
-        })
+        });
     },
 
     _init: function () {
@@ -86,8 +86,8 @@ BI.shortcut("bi.icon_change_button", BI.IconChangeButton);/**
  * @type {*|void|Object}
  */
 BI.HalfIconButton = BI.inherit(BI.IconButton, {
-    _defaultConfig: function() {
-        var conf = BI.HalfIconButton.superclass._defaultConfig.apply(this,arguments);
+    _defaultConfig: function () {
+        var conf = BI.HalfIconButton.superclass._defaultConfig.apply(this, arguments);
         return BI.extend(conf, {
             extraCls: "bi-half-icon-button check-half-select-icon",
             height: 16,
@@ -95,16 +95,16 @@ BI.HalfIconButton = BI.inherit(BI.IconButton, {
             iconWidth: 16,
             iconHeight: 16,
             selected: false
-        })
+        });
     },
 
-    _init : function() {
+    _init: function () {
         BI.HalfIconButton.superclass._init.apply(this, arguments);
     },
 
-    doClick: function(){
+    doClick: function () {
         BI.HalfIconButton.superclass.doClick.apply(this, arguments);
-        if(this.isValid()){
+        if(this.isValid()) {
             this.fireEvent(BI.HalfIconButton.EVENT_CHANGE);
         }
     }
@@ -153,7 +153,7 @@ BI.MultiSelectItem = BI.inherit(BI.BasicButton, {
             logic: {
                 dynamic: false
             }
-        })
+        });
     },
     _init: function () {
         BI.MultiSelectItem.superclass._init.apply(this, arguments);
@@ -227,7 +227,7 @@ BI.SingleSelectIconTextItem = BI.inherit(BI.Single, {
             iconClass: "",
             hgap: 10,
             height: 25
-        })
+        });
     },
     _init: function () {
         BI.SingleSelectIconTextItem.superclass._init.apply(this, arguments);
@@ -284,7 +284,7 @@ BI.SingleSelectItem = BI.inherit(BI.BasicButton, {
             hgap: 10,
             height: 25,
             textAlign: "left"
-        })
+        });
     },
     _init: function () {
         BI.SingleSelectItem.superclass._init.apply(this, arguments);
@@ -335,7 +335,7 @@ BI.SingleSelectRadioItem = BI.inherit(BI.BasicButton, {
             },
             hgap: 10,
             height: 25
-        })
+        });
     },
     _init: function () {
         BI.SingleSelectRadioItem.superclass._init.apply(this, arguments);
@@ -488,7 +488,7 @@ BI.FirstPlusGroupNode = BI.inherit(BI.NodeButton, {
             pId: "",
             open: false,
             height: 25
-        })
+        });
     },
     _init: function () {
         BI.FirstPlusGroupNode.superclass._init.apply(this, arguments);
@@ -573,7 +573,7 @@ BI.IconArrowNode = BI.inherit(BI.NodeButton, {
             iconHeight: 13,
             iconWidth: 13,
             iconCls: ""
-        })
+        });
     },
     _init: function () {
         BI.IconArrowNode.superclass._init.apply(this, arguments);
@@ -669,7 +669,7 @@ BI.LastPlusGroupNode = BI.inherit(BI.NodeButton, {
             pId: "",
             open: false,
             height: 25
-        })
+        });
     },
     _init: function () {
         BI.LastPlusGroupNode.superclass._init.apply(this, arguments);
@@ -749,7 +749,7 @@ BI.MidPlusGroupNode = BI.inherit(BI.NodeButton, {
             pId: "",
             open: false,
             height: 25
-        })
+        });
     },
     _init: function () {
         BI.MidPlusGroupNode.superclass._init.apply(this, arguments);
@@ -816,7 +816,7 @@ BI.shortcut("bi.mid_plus_group_node", BI.MidPlusGroupNode);BI.MultiLayerIconArro
         var conf = BI.MultiLayerIconArrowNode.superclass._defaultConfig.apply(this, arguments);
         return BI.extend(conf, {
             extraCls: "bi-multilayer-icon-arrow-node bi-list-item",
-            layer: 0,//第几层级
+            layer: 0, // 第几层级
             id: "",
             pId: "",
             open: false,
@@ -824,7 +824,7 @@ BI.shortcut("bi.mid_plus_group_node", BI.MidPlusGroupNode);BI.MultiLayerIconArro
             iconHeight: 13,
             iconWidth: 13,
             iconCls: ""
-        })
+        });
     },
     _init: function () {
         BI.MultiLayerIconArrowNode.superclass._init.apply(this, arguments);
@@ -832,9 +832,9 @@ BI.shortcut("bi.mid_plus_group_node", BI.MidPlusGroupNode);BI.MultiLayerIconArro
         this.node = BI.createWidget({
             type: "bi.icon_arrow_node",
             iconCls: o.iconCls,
-            //logic: {
+            // logic: {
             //    dynamic: true
-            //},
+            // },
             id: o.id,
             pId: o.pId,
             open: o.open,
@@ -857,7 +857,7 @@ BI.shortcut("bi.mid_plus_group_node", BI.MidPlusGroupNode);BI.MultiLayerIconArro
                 type: "bi.layout",
                 width: 13,
                 height: o.height
-            })
+            });
         });
         items.push(this.node);
         BI.createWidget({
@@ -865,7 +865,7 @@ BI.shortcut("bi.mid_plus_group_node", BI.MidPlusGroupNode);BI.MultiLayerIconArro
             element: this,
             columnSize: BI.makeArray(o.layer, 13),
             items: [items]
-        })
+        });
     },
 
     isOnce: function () {
@@ -918,7 +918,7 @@ BI.PlusGroupNode = BI.inherit(BI.NodeButton, {
             pId: "",
             open: false,
             height: 25
-        })
+        });
     },
     _init: function () {
         BI.PlusGroupNode.superclass._init.apply(this, arguments);
@@ -994,7 +994,7 @@ BI.TriangleGroupNode = BI.inherit(BI.NodeButton, {
             pId: "",
             open: false,
             height: 25
-        })
+        });
     },
     _init: function () {
         BI.TriangleGroupNode.superclass._init.apply(this, arguments);
@@ -1052,7 +1052,7 @@ BI.TriangleGroupNode = BI.inherit(BI.NodeButton, {
         this.checkbox.setSelected(v);
     },
 
-    setText: function(text){
+    setText: function (text) {
         BI.TriangleGroupNode.superclass.setText.apply(this, arguments);
         this.text.setText(text);
     }
@@ -1074,7 +1074,7 @@ BI.FirstTreeLeafItem = BI.inherit(BI.BasicButton, {
             pId: "",
             layer: 0,
             height: 25
-        })
+        });
     },
     _init: function () {
         BI.FirstTreeLeafItem.superclass._init.apply(this, arguments);
@@ -1172,7 +1172,7 @@ BI.shortcut("bi.first_tree_leaf_item", BI.FirstTreeLeafItem);BI.IconTreeLeafItem
             iconWidth: 16,
             iconHeight: 16,
             iconCls: ""
-        })
+        });
     },
 
     _init: function () {
@@ -1264,7 +1264,7 @@ BI.LastTreeLeafItem = BI.inherit(BI.BasicButton, {
             pId: "",
             layer: 0,
             height: 25
-        })
+        });
     },
     _init: function () {
         BI.LastTreeLeafItem.superclass._init.apply(this, arguments);
@@ -1367,7 +1367,7 @@ BI.MidTreeLeafItem = BI.inherit(BI.BasicButton, {
             pId: "",
             layer: 0,
             height: 25
-        })
+        });
     },
     _init: function () {
         BI.MidTreeLeafItem.superclass._init.apply(this, arguments);
@@ -1467,7 +1467,7 @@ BI.MultiLayerIconTreeLeafItem = BI.inherit(BI.BasicButton, {
             iconCls: "",
             iconHeight: 14,
             iconWidth: 12
-        })
+        });
     },
     _init: function () {
         BI.MultiLayerIconTreeLeafItem.superclass._init.apply(this, arguments);
@@ -1488,7 +1488,7 @@ BI.MultiLayerIconTreeLeafItem = BI.inherit(BI.BasicButton, {
             iconHeight: o.iconHeight
         });
         this.item.on(BI.Controller.EVENT_CHANGE, function (type) {
-            if (type === BI.Events.CLICK) {//本身实现click功能
+            if (type === BI.Events.CLICK) {// 本身实现click功能
                 return;
             }
             self.fireEvent(BI.Controller.EVENT_CHANGE, arguments);
@@ -1500,7 +1500,7 @@ BI.MultiLayerIconTreeLeafItem = BI.inherit(BI.BasicButton, {
                 type: "bi.layout",
                 width: 13,
                 height: o.height
-            })
+            });
         });
         items.push(this.item);
         BI.createWidget({
@@ -1545,7 +1545,7 @@ BI.MultiLayerIconTreeLeafItem = BI.inherit(BI.BasicButton, {
         this.item.setSelected(v);
     },
 
-    getValue: function(){
+    getValue: function () {
         return this.options.value;
     }
 });
@@ -1557,7 +1557,7 @@ BI.shortcut("bi.multilayer_icon_tree_leaf_item", BI.MultiLayerIconTreeLeafItem);
  * @extends BI.BasicButton
  */
 BI.TreeTextLeafItem = BI.inherit(BI.BasicButton, {
-    _defaultConfig: function() {
+    _defaultConfig: function () {
         return BI.extend(BI.TreeTextLeafItem.superclass._defaultConfig.apply(this, arguments), {
             extraCls: "bi-tree-text-leaf-item bi-list-item-active",
             id: "",
@@ -1566,9 +1566,9 @@ BI.TreeTextLeafItem = BI.inherit(BI.BasicButton, {
             hgap: 0,
             lgap: 0,
             rgap: 0
-        })
+        });
     },
-    _init : function() {
+    _init: function () {
         BI.TreeTextLeafItem.superclass._init.apply(this, arguments);
         var self = this, o = this.options;
         this.text = BI.createWidget({
@@ -1590,30 +1590,30 @@ BI.TreeTextLeafItem = BI.inherit(BI.BasicButton, {
             items: [{
                 el: this.text
             }]
-        })
+        });
     },
 
-    doRedMark: function(){
+    doRedMark: function () {
         this.text.doRedMark.apply(this.text, arguments);
     },
 
-    unRedMark: function(){
+    unRedMark: function () {
         this.text.unRedMark.apply(this.text, arguments);
     },
 
-    doHighLight: function(){
+    doHighLight: function () {
         this.text.doHighLight.apply(this.text, arguments);
     },
 
-    unHighLight: function(){
+    unHighLight: function () {
         this.text.unHighLight.apply(this.text, arguments);
     },
 
-    getId: function(){
+    getId: function () {
         return this.options.id;
     },
 
-    getPId: function(){
+    getPId: function () {
         return this.options.pId;
     }
 });
@@ -1631,12 +1631,12 @@ BI.Calendar = BI.inherit(BI.Widget, {
             logic: {
                 dynamic: false
             },
-            min: '1900-01-01', //最小日期
-            max: '2099-12-31', //最大日期
+            min: "1900-01-01", // 最小日期
+            max: "2099-12-31", // 最大日期
             year: 2015,
-            month: 7,  //7表示八月
+            month: 7,  // 7表示八月
             day: 25
-        })
+        });
     },
 
     _dateCreator: function (Y, M, D) {
@@ -1682,7 +1682,7 @@ BI.Calendar = BI.inherit(BI.Widget, {
             }
             td.text = DD;
             items.push(td);
-        })
+        });
         return items;
     },
 
@@ -1694,13 +1694,13 @@ BI.Calendar = BI.inherit(BI.Widget, {
                 type: "bi.label",
                 height: 25,
                 text: value
-            }
-        })
+            };
+        });
         var title = BI.createWidget({
             type: "bi.button_group",
             height: 25,
             items: items
-        })
+        });
         var days = this._dateCreator(o.year, o.month, o.day);
         items = [];
         items.push(days.slice(0, 7));
@@ -1722,7 +1722,7 @@ BI.Calendar = BI.inherit(BI.Widget, {
                     height: 25,
                     value: o.year + "-" + o.month + "-" + td.text,
                     disabled: td.lastMonth || td.nextMonth || td.disabled
-                    //selected: td.currentDay
+                    // selected: td.currentDay
                 });
             });
         });
@@ -1739,7 +1739,7 @@ BI.Calendar = BI.inherit(BI.Widget, {
         });
         this.days.on(BI.Controller.EVENT_CHANGE, function () {
             self.fireEvent(BI.Controller.EVENT_CHANGE, arguments);
-        })
+        });
         BI.createWidget(BI.extend({
             element: this
 
@@ -1776,7 +1776,7 @@ BI.Calendar = BI.inherit(BI.Widget, {
             year: date[0] | 0,
             month: date[1] | 0,
             day: date[2] | 0
-        }
+        };
     }
 });
 
@@ -1788,22 +1788,22 @@ BI.extend(BI.Calendar, {
         page += json.month - month;
         return page;
     },
-    getDateJSONByPage: function(v){
+    getDateJSONByPage: function (v) {
         var months = Date.getDate().getMonth();
         var page = v;
 
-        //对当前page做偏移,使到当前年初
+        // 对当前page做偏移,使到当前年初
         page = page + months;
 
         var year = BI.parseInt(page / 12);
-        if(page < 0 && page % 12 !== 0){
+        if(page < 0 && page % 12 !== 0) {
             year--;
         }
         var month = page >= 0 ? (page % 12) : ((12 + page % 12) % 12);
         return {
             year: Date.getDate().getFullYear() + year,
             month: month
-        }
+        };
     }
 });
 
@@ -1822,10 +1822,10 @@ BI.YearCalendar = BI.inherit(BI.Widget, {
             logic: {
                 dynamic: false
             },
-            min: '1900-01-01', //最小日期
-            max: '2099-12-31', //最大日期
+            min: "1900-01-01", // 最小日期
+            max: "2099-12-31", // 最大日期
             year: null
-        })
+        });
     },
 
     _yearCreator: function (Y) {
@@ -1850,7 +1850,7 @@ BI.YearCalendar = BI.inherit(BI.Widget, {
         this.currentYear = Date.getDate().getFullYear();
         var years = this._yearCreator(o.year || this.currentYear);
 
-        //纵向排列年
+        // 纵向排列年
         var len = years.length, tyears = BI.makeArray(len, "");
         var map = [0, 6, 1, 7, 2, 8, 3, 9, 4, 10, 5, 11];
         BI.each(years, function (i, y) {
@@ -1928,11 +1928,11 @@ BI.YearCalendar = BI.inherit(BI.Widget, {
         return this.years.getValue()[0];
     }
 });
-//类方法
+// 类方法
 BI.extend(BI.YearCalendar, {
     INTERVAL: 12,
 
-    //获取显示的第一年
+    // 获取显示的第一年
     getStartYear: function (year) {
         var cur = Date.getDate().getFullYear();
         return year - ((year - cur + 3) % BI.YearCalendar.INTERVAL + 12) % BI.YearCalendar.INTERVAL;
@@ -1960,7 +1960,7 @@ BI.ComplexCanvas = BI.inherit(BI.Widget, {
     _defaultConfig: function () {
         return BI.extend(BI.ComplexCanvas.superclass._defaultConfig.apply(this, arguments), {
             baseCls: "bi-complex-canvas"
-        })
+        });
     },
 
 
@@ -1975,7 +1975,7 @@ BI.ComplexCanvas = BI.inherit(BI.Widget, {
         });
     },
 
-    //绘制树枝节点
+    // 绘制树枝节点
     branch: function (x0, y0, x1, y1, x2, y2) {
         var self = this, args = [].slice.call(arguments);
         if (args.length <= 5) {
@@ -2044,18 +2044,18 @@ BI.shortcut("bi.complex_canvas", BI.ComplexCanvas);/**
  * Created by roy on 15/10/16.
  * 上箭头与下箭头切换的树节点
  */
-BI.ArrowTreeGroupNodeCheckbox=BI.inherit(BI.IconButton,{
-    _defaultConfig:function(){
-        return BI.extend(BI.ArrowTreeGroupNodeCheckbox.superclass._defaultConfig.apply(this,arguments),{
-            extraCls:"bi-arrow-tree-group-node",
+BI.ArrowTreeGroupNodeCheckbox = BI.inherit(BI.IconButton, {
+    _defaultConfig: function () {
+        return BI.extend(BI.ArrowTreeGroupNodeCheckbox.superclass._defaultConfig.apply(this, arguments), {
+            extraCls: "bi-arrow-tree-group-node",
             iconWidth: 13,
             iconHeight: 13
         });
     },
-    _init:function(){
-        BI.ArrowTreeGroupNodeCheckbox.superclass._init.apply(this,arguments);
+    _init: function () {
+        BI.ArrowTreeGroupNodeCheckbox.superclass._init.apply(this, arguments);
     },
-    setSelected: function(v){
+    setSelected: function (v) {
         BI.ArrowTreeGroupNodeCheckbox.superclass.setSelected.apply(this, arguments);
         if(v) {
             this.element.removeClass("column-next-page-h-font").addClass("column-pre-page-h-font");
@@ -2064,27 +2064,27 @@ BI.ArrowTreeGroupNodeCheckbox=BI.inherit(BI.IconButton,{
         }
     }
 });
-BI.shortcut("bi.arrow_tree_group_node_checkbox",BI.ArrowTreeGroupNodeCheckbox);/**
+BI.shortcut("bi.arrow_tree_group_node_checkbox", BI.ArrowTreeGroupNodeCheckbox);/**
  * 十字型的树节点
  * @class BI.CheckingMarkNode
  * @extends BI.IconButton
  */
 BI.CheckingMarkNode = BI.inherit(BI.IconButton, {
-    _defaultConfig: function() {
+    _defaultConfig: function () {
         return BI.extend( BI.CheckingMarkNode.superclass._defaultConfig.apply(this, arguments), {
             extraCls: "check-mark-font",
             iconWidth: 13,
             iconHeight: 13
         });
     },
-    _init:function() {
+    _init: function () {
         BI.CheckingMarkNode.superclass._init.apply(this, arguments);
         this.setSelected(this.options.selected);
 
     },
-    setSelected: function(v){
+    setSelected: function (v) {
         BI.CheckingMarkNode.superclass.setSelected.apply(this, arguments);
-        if(v===true) {
+        if(v === true) {
             this.element.addClass("check-mark-font");
         } else {
             this.element.removeClass("check-mark-font");
@@ -2097,20 +2097,20 @@ BI.shortcut("bi.checking_mark_node", BI.CheckingMarkNode);/**
  * @extends BI.IconButton
  */
 BI.FirstTreeNodeCheckbox = BI.inherit(BI.IconButton, {
-    _defaultConfig: function() {
+    _defaultConfig: function () {
         return BI.extend( BI.FirstTreeNodeCheckbox.superclass._defaultConfig.apply(this, arguments), {
             extraCls: "tree-collapse-icon-type2",
             iconWidth: 25,
             iconHeight: 25
         });
     },
-    _init:function() {
+    _init: function () {
         BI.FirstTreeNodeCheckbox.superclass._init.apply(this, arguments);
 
     },
-    setSelected: function(v){
+    setSelected: function (v) {
         BI.FirstTreeNodeCheckbox.superclass.setSelected.apply(this, arguments);
-        if(v===true) {
+        if(v === true) {
             this.element.addClass("tree-expand-icon-type2");
         } else {
             this.element.removeClass("tree-expand-icon-type2");
@@ -2123,20 +2123,20 @@ BI.shortcut("bi.first_tree_node_checkbox", BI.FirstTreeNodeCheckbox);/**
  * @extends BI.IconButton
  */
 BI.LastTreeNodeCheckbox = BI.inherit(BI.IconButton, {
-    _defaultConfig: function() {
+    _defaultConfig: function () {
         return BI.extend( BI.LastTreeNodeCheckbox.superclass._defaultConfig.apply(this, arguments), {
             extraCls: "tree-collapse-icon-type4",
             iconWidth: 25,
             iconHeight: 25
         });
     },
-    _init:function() {
+    _init: function () {
         BI.LastTreeNodeCheckbox.superclass._init.apply(this, arguments);
 
     },
-    setSelected: function(v){
+    setSelected: function (v) {
         BI.LastTreeNodeCheckbox.superclass.setSelected.apply(this, arguments);
-        if(v===true) {
+        if(v === true) {
             this.element.addClass("tree-expand-icon-type3");
         } else {
             this.element.removeClass("tree-expand-icon-type3");
@@ -2149,20 +2149,20 @@ BI.shortcut("bi.last_tree_node_checkbox", BI.LastTreeNodeCheckbox);/**
  * @extends BI.IconButton
  */
 BI.MidTreeNodeCheckbox = BI.inherit(BI.IconButton, {
-    _defaultConfig: function() {
+    _defaultConfig: function () {
         return BI.extend( BI.MidTreeNodeCheckbox.superclass._defaultConfig.apply(this, arguments), {
             extraCls: "tree-collapse-icon-type3",
             iconWidth: 25,
             iconHeight: 25
         });
     },
-    _init:function() {
+    _init: function () {
         BI.MidTreeNodeCheckbox.superclass._init.apply(this, arguments);
 
     },
-    setSelected: function(v){
+    setSelected: function (v) {
         BI.MidTreeNodeCheckbox.superclass.setSelected.apply(this, arguments);
-        if(v===true) {
+        if(v === true) {
             this.element.addClass("tree-expand-icon-type3");
         } else {
             this.element.removeClass("tree-expand-icon-type3");
@@ -2176,18 +2176,18 @@ BI.shortcut("bi.mid_tree_node_checkbox", BI.MidTreeNodeCheckbox);/**
  * @extends BI.IconButton
  */
 BI.TreeGroupNodeCheckbox = BI.inherit(BI.IconButton, {
-    _defaultConfig: function() {
+    _defaultConfig: function () {
         return BI.extend( BI.TreeGroupNodeCheckbox.superclass._defaultConfig.apply(this, arguments), {
             extraCls: "tree-node-triangle-collapse-font",
             iconWidth: 13,
             iconHeight: 13
         });
     },
-    _init:function() {
+    _init: function () {
         BI.TreeGroupNodeCheckbox.superclass._init.apply(this, arguments);
 
     },
-    setSelected: function(v){
+    setSelected: function (v) {
         BI.TreeGroupNodeCheckbox.superclass.setSelected.apply(this, arguments);
         if(v) {
             this.element.removeClass("tree-node-triangle-collapse-font").addClass("tree-node-triangle-expand-font");
@@ -2202,18 +2202,18 @@ BI.shortcut("bi.tree_group_node_checkbox", BI.TreeGroupNodeCheckbox);/**
  * @extends BI.IconButton
  */
 BI.TreeNodeCheckbox = BI.inherit(BI.IconButton, {
-    _defaultConfig: function() {
+    _defaultConfig: function () {
         return BI.extend( BI.TreeNodeCheckbox.superclass._defaultConfig.apply(this, arguments), {
             extraCls: "tree-collapse-icon-type1",
             iconWidth: 25,
             iconHeight: 25
         });
     },
-    _init:function() {
+    _init: function () {
         BI.TreeNodeCheckbox.superclass._init.apply(this, arguments);
 
     },
-    setSelected: function(v){
+    setSelected: function (v) {
         BI.TreeNodeCheckbox.superclass.setSelected.apply(this, arguments);
         if(v) {
             this.element.addClass("tree-expand-icon-type1");
@@ -2222,55 +2222,55 @@ BI.TreeNodeCheckbox = BI.inherit(BI.IconButton, {
         }
     }
 });
-BI.shortcut("bi.tree_node_checkbox", BI.TreeNodeCheckbox);/*!
+BI.shortcut("bi.tree_node_checkbox", BI.TreeNodeCheckbox);/* !
  * clipboard.js v1.6.1
  * https://zenorocha.github.io/clipboard.js
  *
  * Licensed MIT © Zeno Rocha
  */
-try {//IE8下会抛错
+try {// IE8下会抛错
     (function (f) {
         if (typeof exports === "object" && typeof module !== "undefined") {
-            module.exports = f()
+            module.exports = f();
         } else if (typeof define === "function" && define.amd) {
-            define([], f)
+            define([], f);
         } else {
             var g;
             if (typeof window !== "undefined") {
-                g = window
+                g = window;
             } else if (typeof global !== "undefined") {
-                g = global
+                g = global;
             } else if (typeof self !== "undefined") {
-                g = self
+                g = self;
             } else {
-                g = this
+                g = this;
             }
-            g.Clipboard = f()
+            g.Clipboard = f();
         }
     })(function () {
         var define, module, exports;
-        return (function e(t, n, r) {
-            function s(o, u) {
+        return (function e (t, n, r) {
+            function s (o, u) {
                 if (!n[o]) {
                     if (!t[o]) {
-                        var a = typeof require == "function" && require;
+                        var a = typeof require === "function" && require;
                         if (!u && a)return a(o, !0);
                         if (i)return i(o, !0);
                         var f = new Error("Cannot find module '" + o + "'");
-                        throw f.code = "MODULE_NOT_FOUND", f
+                        throw f.code = "MODULE_NOT_FOUND", f;
                     }
                     var l = n[o] = {exports: {}};
                     t[o][0].call(l.exports, function (e) {
                         var n = t[o][1][e];
-                        return s(n ? n : e)
-                    }, l, l.exports, e, t, n, r)
+                        return s(n ? n : e);
+                    }, l, l.exports, e, t, n, r);
                 }
-                return n[o].exports
+                return n[o].exports;
             }
 
-            var i = typeof require == "function" && require;
+            var i = typeof require === "function" && require;
             for (var o = 0; o < r.length; o++)s(r[o]);
-            return s
+            return s;
         })({
             1: [function (require, module, exports) {
                 var DOCUMENT_NODE_TYPE = 9;
@@ -2278,7 +2278,7 @@ try {//IE8下会抛错
                 /**
                  * A polyfill for Element.matches()
                  */
-                if (typeof Element !== 'undefined' && !Element.prototype.matches) {
+                if (typeof Element !== "undefined" && !Element.prototype.matches) {
                     var proto = Element.prototype;
 
                     proto.matches = proto.matchesSelector ||
@@ -2295,7 +2295,7 @@ try {//IE8下会抛错
                  * @param {String} selector
                  * @return {Function}
                  */
-                function closest(element, selector) {
+                function closest (element, selector) {
                     while (element && element.nodeType !== DOCUMENT_NODE_TYPE) {
                         if (element.matches(selector)) return element;
                         element = element.parentNode;
@@ -2305,7 +2305,7 @@ try {//IE8下会抛错
                 module.exports = closest;
 
             }, {}], 2: [function (require, module, exports) {
-                var closest = require('./closest');
+                var closest = require("./closest");
 
                 /**
                  * Delegates event to a selector.
@@ -2317,7 +2317,7 @@ try {//IE8下会抛错
                  * @param {Boolean} useCapture
                  * @return {Object}
                  */
-                function delegate(element, selector, type, callback, useCapture) {
+                function delegate (element, selector, type, callback, useCapture) {
                     var listenerFn = listener.apply(this, arguments);
 
                     element.addEventListener(type, listenerFn, useCapture);
@@ -2326,7 +2326,7 @@ try {//IE8下会抛错
                         destroy: function () {
                             element.removeEventListener(type, listenerFn, useCapture);
                         }
-                    }
+                    };
                 }
 
                 /**
@@ -2338,14 +2338,14 @@ try {//IE8下会抛错
                  * @param {Function} callback
                  * @return {Function}
                  */
-                function listener(element, selector, type, callback) {
+                function listener (element, selector, type, callback) {
                     return function (e) {
                         e.delegateTarget = closest(e.target, selector);
 
                         if (e.delegateTarget) {
                             callback.call(element, e);
                         }
-                    }
+                    };
                 }
 
                 module.exports = delegate;
@@ -2373,8 +2373,8 @@ try {//IE8下会抛错
                     var type = Object.prototype.toString.call(value);
 
                     return value !== undefined
-                        && (type === '[object NodeList]' || type === '[object HTMLCollection]')
-                        && ('length' in value)
+                        && (type === "[object NodeList]" || type === "[object HTMLCollection]")
+                        && ("length" in value)
                         && (value.length === 0 || exports.node(value[0]));
                 };
 
@@ -2385,7 +2385,7 @@ try {//IE8下会抛错
                  * @return {Boolean}
                  */
                 exports.string = function (value) {
-                    return typeof value === 'string'
+                    return typeof value === "string"
                         || value instanceof String;
                 };
 
@@ -2398,12 +2398,12 @@ try {//IE8下会抛错
                 exports.fn = function (value) {
                     var type = Object.prototype.toString.call(value);
 
-                    return type === '[object Function]';
+                    return type === "[object Function]";
                 };
 
             }, {}], 4: [function (require, module, exports) {
-                var is = require('./is');
-                var delegate = require('delegate');
+                var is = require("./is");
+                var delegate = require("delegate");
 
                 /**
                  * Validates all params and calls the right
@@ -2414,31 +2414,29 @@ try {//IE8下会抛错
                  * @param {Function} callback
                  * @return {Object}
                  */
-                function listen(target, type, callback) {
+                function listen (target, type, callback) {
                     if (!target && !type && !callback) {
-                        throw new Error('Missing required arguments');
+                        throw new Error("Missing required arguments");
                     }
 
                     if (!is.string(type)) {
-                        throw new TypeError('Second argument must be a String');
+                        throw new TypeError("Second argument must be a String");
                     }
 
                     if (!is.fn(callback)) {
-                        throw new TypeError('Third argument must be a Function');
+                        throw new TypeError("Third argument must be a Function");
                     }
 
                     if (is.node(target)) {
                         return listenNode(target, type, callback);
-                    }
-                    else if (is.nodeList(target)) {
+                    } else if (is.nodeList(target)) {
                         return listenNodeList(target, type, callback);
-                    }
-                    else if (is.string(target)) {
+                    } else if (is.string(target)) {
                         return listenSelector(target, type, callback);
                     }
-                    else {
-                        throw new TypeError('First argument must be a String, HTMLElement, HTMLCollection, or NodeList');
-                    }
+                    
+                    throw new TypeError("First argument must be a String, HTMLElement, HTMLCollection, or NodeList");
+                    
                 }
 
                 /**
@@ -2450,14 +2448,14 @@ try {//IE8下会抛错
                  * @param {Function} callback
                  * @return {Object}
                  */
-                function listenNode(node, type, callback) {
+                function listenNode (node, type, callback) {
                     node.addEventListener(type, callback);
 
                     return {
                         destroy: function () {
                             node.removeEventListener(type, callback);
                         }
-                    }
+                    };
                 }
 
                 /**
@@ -2469,7 +2467,7 @@ try {//IE8下会抛错
                  * @param {Function} callback
                  * @return {Object}
                  */
-                function listenNodeList(nodeList, type, callback) {
+                function listenNodeList (nodeList, type, callback) {
                     Array.prototype.forEach.call(nodeList, function (node) {
                         node.addEventListener(type, callback);
                     });
@@ -2480,7 +2478,7 @@ try {//IE8下会抛错
                                 node.removeEventListener(type, callback);
                             });
                         }
-                    }
+                    };
                 }
 
                 /**
@@ -2492,39 +2490,37 @@ try {//IE8下会抛错
                  * @param {Function} callback
                  * @return {Object}
                  */
-                function listenSelector(selector, type, callback) {
+                function listenSelector (selector, type, callback) {
                     return delegate(document.body, selector, type, callback);
                 }
 
                 module.exports = listen;
 
-            }, {"./is": 3, "delegate": 2}], 5: [function (require, module, exports) {
-                function select(element) {
+            }, {"./is": 3, delegate: 2}], 5: [function (require, module, exports) {
+                function select (element) {
                     var selectedText;
 
-                    if (element.nodeName === 'SELECT') {
+                    if (element.nodeName === "SELECT") {
                         element.focus();
 
                         selectedText = element.value;
-                    }
-                    else if (element.nodeName === 'INPUT' || element.nodeName === 'TEXTAREA') {
-                        var isReadOnly = element.hasAttribute('readonly');
+                    } else if (element.nodeName === "INPUT" || element.nodeName === "TEXTAREA") {
+                        var isReadOnly = element.hasAttribute("readonly");
 
                         if (!isReadOnly) {
-                            element.setAttribute('readonly', '');
+                            element.setAttribute("readonly", "");
                         }
 
                         element.select();
                         element.setSelectionRange(0, element.value.length);
 
                         if (!isReadOnly) {
-                            element.removeAttribute('readonly');
+                            element.removeAttribute("readonly");
                         }
 
                         selectedText = element.value;
-                    }
-                    else {
-                        if (element.hasAttribute('contenteditable')) {
+                    } else {
+                        if (element.hasAttribute("contenteditable")) {
                             element.focus();
                         }
 
@@ -2544,7 +2540,7 @@ try {//IE8下会抛错
                 module.exports = select;
 
             }, {}], 6: [function (require, module, exports) {
-                function E() {
+                function E () {
                     // Keep this empty so it's easier to inherit from
                     // (via https://github.com/lipsmack from https://github.com/scottcorgan/tiny-emitter/issues/3)
                 }
@@ -2564,12 +2560,12 @@ try {//IE8下会抛错
                     once: function (name, callback, ctx) {
                         var self = this;
 
-                        function listener() {
+                        function listener () {
                             self.off(name, listener);
                             callback.apply(ctx, arguments);
-                        };
+                        }
 
-                        listener._ = callback
+                        listener._ = callback;
                         return this.on(name, listener, ctx);
                     },
 
@@ -2593,8 +2589,7 @@ try {//IE8下会抛错
 
                         if (evts && callback) {
                             for (var i = 0, len = evts.length; i < len; i++) {
-                                if (evts[i].fn !== callback && evts[i].fn._ !== callback)
-                                    liveEvents.push(evts[i]);
+                                if (evts[i].fn !== callback && evts[i].fn._ !== callback) {liveEvents.push(evts[i]);}
                             }
                         }
 
@@ -2615,9 +2610,9 @@ try {//IE8下会抛错
             }, {}], 7: [function (require, module, exports) {
                 (function (global, factory) {
                     if (typeof define === "function" && define.amd) {
-                        define(['module', 'select'], factory);
+                        define(["module", "select"], factory);
                     } else if (typeof exports !== "undefined") {
-                        factory(module, require('select'));
+                        factory(module, require("select"));
                     } else {
                         var mod = {
                             exports: {}
@@ -2626,13 +2621,13 @@ try {//IE8下会抛错
                         global.clipboardAction = mod.exports;
                     }
                 })(this, function (module, _select) {
-                    'use strict';
+                    "use strict";
 
                     var _select2 = _interopRequireDefault(_select);
 
-                    function _interopRequireDefault(obj) {
+                    function _interopRequireDefault (obj) {
                         return obj && obj.__esModule ? obj : {
-                            "default": obj
+                            default: obj
                         };
                     }
 
@@ -2642,14 +2637,14 @@ try {//IE8下会抛错
                         return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj;
                     };
 
-                    function _classCallCheck(instance, Constructor) {
+                    function _classCallCheck (instance, Constructor) {
                         if (!(instance instanceof Constructor)) {
                             throw new TypeError("Cannot call a class as a function");
                         }
                     }
 
                     var _createClass = function () {
-                        function defineProperties(target, props) {
+                        function defineProperties (target, props) {
                             for (var i = 0; i < props.length; i++) {
                                 var descriptor = props[i];
                                 descriptor.enumerable = descriptor.enumerable || false;
@@ -2670,7 +2665,7 @@ try {//IE8下会抛错
                         /**
                          * @param {Object} options
                          */
-                        function ClipboardAction(options) {
+                        function ClipboardAction (options) {
                             _classCallCheck(this, ClipboardAction);
 
                             this.resolveOptions(options);
@@ -2684,8 +2679,8 @@ try {//IE8下会抛错
 
 
                         _createClass(ClipboardAction, [{
-                            key: 'resolveOptions',
-                            value: function resolveOptions() {
+                            key: "resolveOptions",
+                            value: function resolveOptions () {
                                 var options = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
 
                                 this.action = options.action;
@@ -2694,11 +2689,11 @@ try {//IE8下会抛错
                                 this.text = options.text;
                                 this.trigger = options.trigger;
 
-                                this.selectedText = '';
+                                this.selectedText = "";
                             }
                         }, {
-                            key: 'initSelection',
-                            value: function initSelection() {
+                            key: "initSelection",
+                            value: function initSelection () {
                                 if (this.text) {
                                     this.selectFake();
                                 } else if (this.target) {
@@ -2706,34 +2701,34 @@ try {//IE8下会抛错
                                 }
                             }
                         }, {
-                            key: 'selectFake',
-                            value: function selectFake() {
+                            key: "selectFake",
+                            value: function selectFake () {
                                 var _this = this;
 
-                                var isRTL = document.documentElement.getAttribute('dir') == 'rtl';
+                                var isRTL = document.documentElement.getAttribute("dir") == "rtl";
 
                                 this.removeFake();
 
                                 this.fakeHandlerCallback = function () {
                                     return _this.removeFake();
                                 };
-                                this.fakeHandler = document.body.addEventListener('click', this.fakeHandlerCallback) || true;
+                                this.fakeHandler = document.body.addEventListener("click", this.fakeHandlerCallback) || true;
 
-                                this.fakeElem = document.createElement('textarea');
+                                this.fakeElem = document.createElement("textarea");
                                 // Prevent zooming on iOS
-                                this.fakeElem.style.fontSize = '12pt';
+                                this.fakeElem.style.fontSize = "12pt";
                                 // Reset box model
-                                this.fakeElem.style.border = '0';
-                                this.fakeElem.style.padding = '0';
-                                this.fakeElem.style.margin = '0';
+                                this.fakeElem.style.border = "0";
+                                this.fakeElem.style.padding = "0";
+                                this.fakeElem.style.margin = "0";
                                 // Move element out of screen horizontally
-                                this.fakeElem.style.position = 'absolute';
-                                this.fakeElem.style[isRTL ? 'right' : 'left'] = '-9999px';
+                                this.fakeElem.style.position = "absolute";
+                                this.fakeElem.style[isRTL ? "right" : "left"] = "-9999px";
                                 // Move element to the same position vertically
                                 var yPosition = window.pageYOffset || document.documentElement.scrollTop;
-                                this.fakeElem.style.top = yPosition + 'px';
+                                this.fakeElem.style.top = yPosition + "px";
 
-                                this.fakeElem.setAttribute('readonly', '');
+                                this.fakeElem.setAttribute("readonly", "");
                                 this.fakeElem.value = this.text;
 
                                 document.body.appendChild(this.fakeElem);
@@ -2742,10 +2737,10 @@ try {//IE8下会抛错
                                 this.copyText();
                             }
                         }, {
-                            key: 'removeFake',
-                            value: function removeFake() {
+                            key: "removeFake",
+                            value: function removeFake () {
                                 if (this.fakeHandler) {
-                                    document.body.removeEventListener('click', this.fakeHandlerCallback);
+                                    document.body.removeEventListener("click", this.fakeHandlerCallback);
                                     this.fakeHandler = null;
                                     this.fakeHandlerCallback = null;
                                 }
@@ -2756,14 +2751,14 @@ try {//IE8下会抛错
                                 }
                             }
                         }, {
-                            key: 'selectTarget',
-                            value: function selectTarget() {
+                            key: "selectTarget",
+                            value: function selectTarget () {
                                 this.selectedText = (0, _select2["default"])(this.target);
                                 this.copyText();
                             }
                         }, {
-                            key: 'copyText',
-                            value: function copyText() {
+                            key: "copyText",
+                            value: function copyText () {
                                 var succeeded = void 0;
 
                                 try {
@@ -2775,9 +2770,9 @@ try {//IE8下会抛错
                                 this.handleResult(succeeded);
                             }
                         }, {
-                            key: 'handleResult',
-                            value: function handleResult(succeeded) {
-                                this.emitter.emit(succeeded ? 'success' : 'error', {
+                            key: "handleResult",
+                            value: function handleResult (succeeded) {
+                                this.emitter.emit(succeeded ? "success" : "error", {
                                     action: this.action,
                                     text: this.selectedText,
                                     trigger: this.trigger,
@@ -2785,8 +2780,8 @@ try {//IE8下会抛错
                                 });
                             }
                         }, {
-                            key: 'clearSelection',
-                            value: function clearSelection() {
+                            key: "clearSelection",
+                            value: function clearSelection () {
                                 if (this.target) {
                                     this.target.blur();
                                 }
@@ -2794,44 +2789,44 @@ try {//IE8下会抛错
                                 window.getSelection().removeAllRanges();
                             }
                         }, {
-                            key: 'destroy',
-                            value: function destroy() {
+                            key: "destroy",
+                            value: function destroy () {
                                 this.removeFake();
                             }
                         }, {
-                            key: 'action',
-                            set: function set() {
-                                var action = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : 'copy';
+                            key: "action",
+                            set: function set () {
+                                var action = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : "copy";
 
                                 this._action = action;
 
-                                if (this._action !== 'copy' && this._action !== 'cut') {
-                                    throw new Error('Invalid "action" value, use either "copy" or "cut"');
+                                if (this._action !== "copy" && this._action !== "cut") {
+                                    throw new Error("Invalid \"action\" value, use either \"copy\" or \"cut\"");
                                 }
                             },
-                            get: function get() {
+                            get: function get () {
                                 return this._action;
                             }
                         }, {
-                            key: 'target',
-                            set: function set(target) {
+                            key: "target",
+                            set: function set (target) {
                                 if (target !== undefined) {
-                                    if (target && (typeof target === 'undefined' ? 'undefined' : _typeof(target)) === 'object' && target.nodeType === 1) {
-                                        if (this.action === 'copy' && target.hasAttribute('disabled')) {
-                                            throw new Error('Invalid "target" attribute. Please use "readonly" instead of "disabled" attribute');
+                                    if (target && (typeof target === "undefined" ? "undefined" : _typeof(target)) === "object" && target.nodeType === 1) {
+                                        if (this.action === "copy" && target.hasAttribute("disabled")) {
+                                            throw new Error("Invalid \"target\" attribute. Please use \"readonly\" instead of \"disabled\" attribute");
                                         }
 
-                                        if (this.action === 'cut' && (target.hasAttribute('readonly') || target.hasAttribute('disabled'))) {
-                                            throw new Error('Invalid "target" attribute. You can\'t cut text from elements with "readonly" or "disabled" attributes');
+                                        if (this.action === "cut" && (target.hasAttribute("readonly") || target.hasAttribute("disabled"))) {
+                                            throw new Error("Invalid \"target\" attribute. You can't cut text from elements with \"readonly\" or \"disabled\" attributes");
                                         }
 
                                         this._target = target;
                                     } else {
-                                        throw new Error('Invalid "target" value, use a valid Element');
+                                        throw new Error("Invalid \"target\" value, use a valid Element");
                                     }
                                 }
                             },
-                            get: function get() {
+                            get: function get () {
                                 return this._target;
                             }
                         }]);
@@ -2842,12 +2837,12 @@ try {//IE8下会抛错
                     module.exports = ClipboardAction;
                 });
 
-            }, {"select": 5}], 8: [function (require, module, exports) {
+            }, {select: 5}], 8: [function (require, module, exports) {
                 (function (global, factory) {
                     if (typeof define === "function" && define.amd) {
-                        define(['module', './clipboard-action', 'tiny-emitter', 'good-listener'], factory);
+                        define(["module", "./clipboard-action", "tiny-emitter", "good-listener"], factory);
                     } else if (typeof exports !== "undefined") {
-                        factory(module, require('./clipboard-action'), require('tiny-emitter'), require('good-listener'));
+                        factory(module, require("./clipboard-action"), require("tiny-emitter"), require("good-listener"));
                     } else {
                         var mod = {
                             exports: {}
@@ -2856,7 +2851,7 @@ try {//IE8下会抛错
                         global.clipboard = mod.exports;
                     }
                 })(this, function (module, _clipboardAction, _tinyEmitter, _goodListener) {
-                    'use strict';
+                    "use strict";
 
                     var _clipboardAction2 = _interopRequireDefault(_clipboardAction);
 
@@ -2864,20 +2859,20 @@ try {//IE8下会抛错
 
                     var _goodListener2 = _interopRequireDefault(_goodListener);
 
-                    function _interopRequireDefault(obj) {
+                    function _interopRequireDefault (obj) {
                         return obj && obj.__esModule ? obj : {
-                            "default": obj
+                            default: obj
                         };
                     }
 
-                    function _classCallCheck(instance, Constructor) {
+                    function _classCallCheck (instance, Constructor) {
                         if (!(instance instanceof Constructor)) {
                             throw new TypeError("Cannot call a class as a function");
                         }
                     }
 
                     var _createClass = function () {
-                        function defineProperties(target, props) {
+                        function defineProperties (target, props) {
                             for (var i = 0; i < props.length; i++) {
                                 var descriptor = props[i];
                                 descriptor.enumerable = descriptor.enumerable || false;
@@ -2894,7 +2889,7 @@ try {//IE8下会抛错
                         };
                     }();
 
-                    function _possibleConstructorReturn(self, call) {
+                    function _possibleConstructorReturn (self, call) {
                         if (!self) {
                             throw new ReferenceError("this hasn't been initialised - super() hasn't been called");
                         }
@@ -2902,7 +2897,7 @@ try {//IE8下会抛错
                         return call && (typeof call === "object" || typeof call === "function") ? call : self;
                     }
 
-                    function _inherits(subClass, superClass) {
+                    function _inherits (subClass, superClass) {
                         if (typeof superClass !== "function" && superClass !== null) {
                             throw new TypeError("Super expression must either be null or a function, not " + typeof superClass);
                         }
@@ -2925,7 +2920,7 @@ try {//IE8下会抛错
                          * @param {String|HTMLElement|HTMLCollection|NodeList} trigger
                          * @param {Object} options
                          */
-                        function Clipboard(trigger, options) {
+                        function Clipboard (trigger, options) {
                             _classCallCheck(this, Clipboard);
 
                             var _this = _possibleConstructorReturn(this, (Clipboard.__proto__ || Object.getPrototypeOf(Clipboard)).call(this));
@@ -2943,26 +2938,26 @@ try {//IE8下会抛错
 
 
                         _createClass(Clipboard, [{
-                            key: 'resolveOptions',
-                            value: function resolveOptions() {
+                            key: "resolveOptions",
+                            value: function resolveOptions () {
                                 var options = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
 
-                                this.action = typeof options.action === 'function' ? options.action : this.defaultAction;
-                                this.target = typeof options.target === 'function' ? options.target : this.defaultTarget;
-                                this.text = typeof options.text === 'function' ? options.text : this.defaultText;
+                                this.action = typeof options.action === "function" ? options.action : this.defaultAction;
+                                this.target = typeof options.target === "function" ? options.target : this.defaultTarget;
+                                this.text = typeof options.text === "function" ? options.text : this.defaultText;
                             }
                         }, {
-                            key: 'listenClick',
-                            value: function listenClick(trigger) {
+                            key: "listenClick",
+                            value: function listenClick (trigger) {
                                 var _this2 = this;
 
-                                this.listener = (0, _goodListener2["default"])(trigger, 'click', function (e) {
+                                this.listener = (0, _goodListener2["default"])(trigger, "click", function (e) {
                                     return _this2.onClick(e);
                                 });
                             }
                         }, {
-                            key: 'onClick',
-                            value: function onClick(e) {
+                            key: "onClick",
+                            value: function onClick (e) {
                                 var trigger = e.delegateTarget || e.currentTarget;
 
                                 if (this.clipboardAction) {
@@ -2978,27 +2973,27 @@ try {//IE8下会抛错
                                 });
                             }
                         }, {
-                            key: 'defaultAction',
-                            value: function defaultAction(trigger) {
-                                return getAttributeValue('action', trigger);
+                            key: "defaultAction",
+                            value: function defaultAction (trigger) {
+                                return getAttributeValue("action", trigger);
                             }
                         }, {
-                            key: 'defaultTarget',
-                            value: function defaultTarget(trigger) {
-                                var selector = getAttributeValue('target', trigger);
+                            key: "defaultTarget",
+                            value: function defaultTarget (trigger) {
+                                var selector = getAttributeValue("target", trigger);
 
                                 if (selector) {
                                     return document.querySelector(selector);
                                 }
                             }
                         }, {
-                            key: 'defaultText',
-                            value: function defaultText(trigger) {
-                                return getAttributeValue('text', trigger);
+                            key: "defaultText",
+                            value: function defaultText (trigger) {
+                                return getAttributeValue("text", trigger);
                             }
                         }, {
-                            key: 'destroy',
-                            value: function destroy() {
+                            key: "destroy",
+                            value: function destroy () {
                                 this.listener.destroy();
 
                                 if (this.clipboardAction) {
@@ -3007,11 +3002,11 @@ try {//IE8下会抛错
                                 }
                             }
                         }], [{
-                            key: 'isSupported',
-                            value: function isSupported() {
-                                var action = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : ['copy', 'cut'];
+                            key: "isSupported",
+                            value: function isSupported () {
+                                var action = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : ["copy", "cut"];
 
-                                var actions = typeof action === 'string' ? [action] : action;
+                                var actions = typeof action === "string" ? [action] : action;
                                 var support = !!document.queryCommandSupported;
 
                                 actions.forEach(function (action) {
@@ -3030,8 +3025,8 @@ try {//IE8下会抛错
                      * @param {String} suffix
                      * @param {Element} element
                      */
-                    function getAttributeValue(suffix, element) {
-                        var attribute = 'data-clipboard-' + suffix;
+                    function getAttributeValue (suffix, element) {
+                        var attribute = "data-clipboard-" + suffix;
 
                         if (!element.hasAttribute(attribute)) {
                             return;
@@ -3044,7 +3039,7 @@ try {//IE8下会抛错
                 });
 
             }, {"./clipboard-action": 7, "good-listener": 4, "tiny-emitter": 6}]
-        }, {}, [8])(8)
+        }, {}, [8])(8);
     });
 } catch (e) {
     /*
@@ -3063,11 +3058,11 @@ try {//IE8下会抛错
 
         $.fn.zclip = function (params) {
 
-            if (typeof params == "object" && !params.length) {
+            if (typeof params === "object" && !params.length) {
 
                 var settings = $.extend({
 
-                    path: 'ZeroClipboard.swf',
+                    path: "ZeroClipboard.swf",
                     copy: null,
                     beforeCopy: null,
                     afterCopy: null,
@@ -3082,62 +3077,62 @@ try {//IE8下会抛错
 
                     var o = $(this);
 
-                    if (o.is(':visible') && (typeof settings.copy == 'string' || $.isFunction(settings.copy))) {
+                    if (o.is(":visible") && (typeof settings.copy === "string" || $.isFunction(settings.copy))) {
 
                         ZeroClipboard.setMoviePath(settings.path);
                         var clip = new ZeroClipboard.Client();
 
                         if ($.isFunction(settings.copy)) {
-                            o.bind('zClip_copy', settings.copy);
+                            o.bind("zClip_copy", settings.copy);
                         }
                         if ($.isFunction(settings.beforeCopy)) {
-                            o.bind('zClip_beforeCopy', settings.beforeCopy);
+                            o.bind("zClip_beforeCopy", settings.beforeCopy);
                         }
                         if ($.isFunction(settings.afterCopy)) {
-                            o.bind('zClip_afterCopy', settings.afterCopy);
+                            o.bind("zClip_afterCopy", settings.afterCopy);
                         }
 
                         clip.setHandCursor(settings.setHandCursor);
                         clip.setCSSEffects(settings.setCSSEffects);
-                        clip.addEventListener('mouseOver', function (client) {
-                            o.trigger('mouseenter');
+                        clip.addEventListener("mouseOver", function (client) {
+                            o.trigger("mouseenter");
                         });
-                        clip.addEventListener('mouseOut', function (client) {
-                            o.trigger('mouseleave');
+                        clip.addEventListener("mouseOut", function (client) {
+                            o.trigger("mouseleave");
                         });
-                        clip.addEventListener('mouseDown', function (client) {
+                        clip.addEventListener("mouseDown", function (client) {
 
-                            o.trigger('mousedown');
+                            o.trigger("mousedown");
 
                             if (!$.isFunction(settings.copy)) {
                                 clip.setText(settings.copy);
                             } else {
-                                clip.setText(o.triggerHandler('zClip_copy'));
+                                clip.setText(o.triggerHandler("zClip_copy"));
                             }
 
                             if ($.isFunction(settings.beforeCopy)) {
-                                o.trigger('zClip_beforeCopy');
+                                o.trigger("zClip_beforeCopy");
                             }
 
                         });
 
-                        clip.addEventListener('complete', function (client, text) {
+                        clip.addEventListener("complete", function (client, text) {
 
                             if ($.isFunction(settings.afterCopy)) {
 
-                                o.trigger('zClip_afterCopy');
+                                o.trigger("zClip_afterCopy");
 
                             } else {
                                 if (text.length > 500) {
                                     text = text.substr(0, 500) + "...\n\n(" + (text.length - 500) + " characters not shown)";
                                 }
 
-                                o.removeClass('hover');
+                                o.removeClass("hover");
                                 alert("Copied text to clipboard:\n\n " + text);
                             }
 
                             if (settings.clickAfter) {
-                                o.trigger('click');
+                                o.trigger("click");
                             }
 
                         });
@@ -3145,7 +3140,7 @@ try {//IE8下会抛错
 
                         clip.glue(o[0], o.parent()[0]);
 
-                        $(window).bind('load resize', function () {
+                        $(window).bind("load resize", function () {
                             clip.reposition();
                         });
 
@@ -3154,25 +3149,25 @@ try {//IE8下会抛错
 
                 });
 
-            } else if (typeof params == "string") {
+            } else if (typeof params === "string") {
 
                 return this.each(function () {
 
                     var o = $(this);
 
                     params = params.toLowerCase();
-                    var zclipId = o.data('zclipId');
-                    var clipElm = $('#' + zclipId + '.zclip');
+                    var zclipId = o.data("zclipId");
+                    var clipElm = $("#" + zclipId + ".zclip");
 
                     if (params == "remove") {
 
                         clipElm.remove();
-                        o.removeClass('active hover');
+                        o.removeClass("active hover");
 
                     } else if (params == "hide") {
 
                         clipElm.hide();
-                        o.removeClass('active hover');
+                        o.removeClass("active hover");
 
                     } else if (params == "show") {
 
@@ -3184,38 +3179,38 @@ try {//IE8下会抛错
 
             }
 
-        }
+        };
 
 
     })(jQuery);
 
 
-// ZeroClipboard
-// Simple Set Clipboard System
-// Author: Joseph Huckaby
+    // ZeroClipboard
+    // Simple Set Clipboard System
+    // Author: Joseph Huckaby
     var ZeroClipboard = {
 
         version: "1.0.7",
         clients: {},
         // registered upload clients on page, indexed by id
-        moviePath: 'ZeroClipboard.swf',
+        moviePath: "ZeroClipboard.swf",
         // URL to movie
         nextId: 1,
         // ID of next movie
         $: function (thingy) {
             // simple DOM lookup utility function
-            if (typeof(thingy) == 'string') thingy = document.getElementById(thingy);
+            if (typeof(thingy) === "string") thingy = document.getElementById(thingy);
             if (!thingy.addClass) {
                 // extend element with a few useful methods
                 thingy.hide = function () {
-                    this.style.display = 'none';
+                    this.style.display = "none";
                 };
                 thingy.show = function () {
-                    this.style.display = '';
+                    this.style.display = "";
                 };
                 thingy.addClass = function (name) {
                     this.removeClass(name);
-                    this.className += ' ' + name;
+                    this.className += " " + name;
                 };
                 thingy.removeClass = function (name) {
                     var classes = this.className.split(/\s+/);
@@ -3228,7 +3223,7 @@ try {//IE8下会抛错
                     }
                     if (idx > -1) {
                         classes.splice(idx, 1);
-                        this.className = classes.join(' ');
+                        this.className = classes.join(" ");
                     }
                     return this;
                 };
@@ -3280,7 +3275,7 @@ try {//IE8下会抛错
 
             // unique ID
             this.id = ZeroClipboard.nextId++;
-            this.movieId = 'ZeroClipboardMovie_' + this.id;
+            this.movieId = "ZeroClipboardMovie_" + this.id;
 
             // register client with singleton to receive flash events
             ZeroClipboard.register(this.id, this);
@@ -3298,7 +3293,7 @@ try {//IE8下会抛错
         // whether movie is ready to receive events or not
         movie: null,
         // reference to movie object
-        clipText: '',
+        clipText: "",
         // text to copy to clipboard
         handCursorEnabled: true,
         // whether to show hand cursor, or default pointer cursor
@@ -3317,29 +3312,29 @@ try {//IE8下会抛错
                 zIndex = parseInt(this.domElement.style.zIndex, 10) + 1;
             }
 
-            if (typeof(appendElem) == 'string') {
+            if (typeof(appendElem) === "string") {
                 appendElem = ZeroClipboard.$(appendElem);
-            } else if (typeof(appendElem) == 'undefined') {
-                appendElem = document.getElementsByTagName('body')[0];
+            } else if (typeof(appendElem) === "undefined") {
+                appendElem = document.getElementsByTagName("body")[0];
             }
 
             // find X/Y position of domElement
             var box = ZeroClipboard.getDOMObjectPosition(this.domElement, appendElem);
 
             // create floating DIV above element
-            this.div = document.createElement('div');
+            this.div = document.createElement("div");
             this.div.className = "zclip";
             this.div.id = "zclip-" + this.movieId;
-            $(this.domElement).data('zclipId', 'zclip-' + this.movieId);
+            $(this.domElement).data("zclipId", "zclip-" + this.movieId);
             var style = this.div.style;
-            style.position = 'absolute';
-            style.left = '' + box.left + 'px';
-            style.top = '' + box.top + 'px';
-            style.width = '' + box.width + 'px';
-            style.height = '' + box.height + 'px';
+            style.position = "absolute";
+            style.left = "" + box.left + "px";
+            style.top = "" + box.top + "px";
+            style.width = "" + box.width + "px";
+            style.height = "" + box.height + "px";
             style.zIndex = zIndex;
 
-            if (typeof(stylesToAdd) == 'object') {
+            if (typeof(stylesToAdd) === "object") {
                 for (addedStyle in stylesToAdd) {
                     style[addedStyle] = stylesToAdd[addedStyle];
                 }
@@ -3353,16 +3348,16 @@ try {//IE8下会抛错
 
         getHTML: function (width, height) {
             // return HTML for movie
-            var html = '';
-            var flashvars = 'id=' + this.id + '&width=' + width + '&height=' + height;
+            var html = "";
+            var flashvars = "id=" + this.id + "&width=" + width + "&height=" + height;
 
             if (navigator.userAgent.match(/MSIE/)) {
                 // IE gets an OBJECT tag
-                var protocol = location.href.match(/^https/i) ? 'https://' : 'http://';
-                html += '<object classid="clsid:d27cdb6e-ae6d-11cf-96b8-444553540000" codebase="' + protocol + 'download.macromedia.com/pub/shockwave/cabs/flash/swflash.cab#version=9,0,0,0" width="' + width + '" height="' + height + '" id="' + this.movieId + '" align="middle"><param name="allowScriptAccess" value="always" /><param name="allowFullScreen" value="false" /><param name="movie" value="' + ZeroClipboard.moviePath + '" /><param name="loop" value="false" /><param name="menu" value="false" /><param name="quality" value="best" /><param name="bgcolor" value="#ffffff" /><param name="flashvars" value="' + flashvars + '"/><param name="wmode" value="transparent"/></object>';
+                var protocol = location.href.match(/^https/i) ? "https://" : "http://";
+                html += "<object classid=\"clsid:d27cdb6e-ae6d-11cf-96b8-444553540000\" codebase=\"" + protocol + "download.macromedia.com/pub/shockwave/cabs/flash/swflash.cab#version=9,0,0,0\" width=\"" + width + "\" height=\"" + height + "\" id=\"" + this.movieId + "\" align=\"middle\"><param name=\"allowScriptAccess\" value=\"always\" /><param name=\"allowFullScreen\" value=\"false\" /><param name=\"movie\" value=\"" + ZeroClipboard.moviePath + "\" /><param name=\"loop\" value=\"false\" /><param name=\"menu\" value=\"false\" /><param name=\"quality\" value=\"best\" /><param name=\"bgcolor\" value=\"#ffffff\" /><param name=\"flashvars\" value=\"" + flashvars + "\"/><param name=\"wmode\" value=\"transparent\"/></object>";
             } else {
                 // all other browsers get an EMBED tag
-                html += '<embed id="' + this.movieId + '" src="' + ZeroClipboard.moviePath + '" loop="false" menu="false" quality="best" bgcolor="#ffffff" width="' + width + '" height="' + height + '" name="' + this.movieId + '" align="middle" allowScriptAccess="always" allowFullScreen="false" type="application/x-shockwave-flash" pluginspage="http://www.macromedia.com/go/getflashplayer" flashvars="' + flashvars + '" wmode="transparent" />';
+                html += "<embed id=\"" + this.movieId + "\" src=\"" + ZeroClipboard.moviePath + "\" loop=\"false\" menu=\"false\" quality=\"best\" bgcolor=\"#ffffff\" width=\"" + width + "\" height=\"" + height + "\" name=\"" + this.movieId + "\" align=\"middle\" allowScriptAccess=\"always\" allowFullScreen=\"false\" type=\"application/x-shockwave-flash\" pluginspage=\"http://www.macromedia.com/go/getflashplayer\" flashvars=\"" + flashvars + "\" wmode=\"transparent\" />";
             }
             return html;
         },
@@ -3370,7 +3365,7 @@ try {//IE8下会抛错
         hide: function () {
             // temporarily hide floater offscreen
             if (this.div) {
-                this.div.style.left = '-2000px';
+                this.div.style.left = "-2000px";
             }
         },
 
@@ -3383,13 +3378,13 @@ try {//IE8下会抛错
             // destroy control and floater
             if (this.domElement && this.div) {
                 this.hide();
-                this.div.innerHTML = '';
+                this.div.innerHTML = "";
 
-                var body = document.getElementsByTagName('body')[0];
+                var body = document.getElementsByTagName("body")[0];
                 try {
                     body.removeChild(this.div);
                 } catch (e) {
-                    ;
+                    
                 }
 
                 this.domElement = null;
@@ -3408,8 +3403,8 @@ try {//IE8下会抛错
             if (this.domElement && this.div) {
                 var box = ZeroClipboard.getDOMObjectPosition(this.domElement);
                 var style = this.div.style;
-                style.left = '' + box.left + 'px';
-                style.top = '' + box.top + 'px';
+                style.left = "" + box.left + "px";
+                style.top = "" + box.top + "px";
             }
         },
 
@@ -3424,7 +3419,7 @@ try {//IE8下会抛错
         addEventListener: function (eventName, func) {
             // add user event listener for event
             // event types: load, queueStart, fileStart, fileComplete, queueComplete, progress, error, cancel
-            eventName = eventName.toString().toLowerCase().replace(/^on/, '');
+            eventName = eventName.toString().toLowerCase().replace(/^on/, "");
             if (!this.handlers[eventName]) {
                 this.handlers[eventName] = [];
             }
@@ -3446,18 +3441,18 @@ try {//IE8下会抛错
 
         receiveEvent: function (eventName, args) {
             // receive event from flash
-            eventName = eventName.toString().toLowerCase().replace(/^on/, '');
+            eventName = eventName.toString().toLowerCase().replace(/^on/, "");
 
             // special behavior for certain events
             switch (eventName) {
-                case 'load':
+                case "load":
                     // movie claims it is ready, but in IE this isn't always the case...
                     // bug fix: Cannot extend EMBED DOM elements in Firefox, must use traditional function
                     this.movie = document.getElementById(this.movieId);
                     if (!this.movie) {
                         var self = this;
                         setTimeout(function () {
-                            self.receiveEvent('load', null);
+                            self.receiveEvent("load", null);
                         }, 1);
                         return;
                     }
@@ -3466,7 +3461,7 @@ try {//IE8下会抛错
                     if (!this.ready && navigator.userAgent.match(/Firefox/) && navigator.userAgent.match(/Windows/)) {
                         var self = this;
                         setTimeout(function () {
-                            self.receiveEvent('load', null);
+                            self.receiveEvent("load", null);
                         }, 100);
                         this.ready = true;
                         return;
@@ -3483,11 +3478,11 @@ try {//IE8下会抛错
                     }
                     break;
 
-                case 'mouseover':
+                case "mouseover":
                     if (this.domElement && this.cssEffects) {
-                        this.domElement.addClass('hover');
+                        this.domElement.addClass("hover");
                         if (this.recoverActive) {
-                            this.domElement.addClass('active');
+                            this.domElement.addClass("active");
                         }
 
 
@@ -3496,27 +3491,27 @@ try {//IE8下会抛错
 
                     break;
 
-                case 'mouseout':
+                case "mouseout":
                     if (this.domElement && this.cssEffects) {
                         this.recoverActive = false;
-                        if (this.domElement.hasClass('active')) {
-                            this.domElement.removeClass('active');
+                        if (this.domElement.hasClass("active")) {
+                            this.domElement.removeClass("active");
                             this.recoverActive = true;
                         }
-                        this.domElement.removeClass('hover');
+                        this.domElement.removeClass("hover");
 
                     }
                     break;
 
-                case 'mousedown':
+                case "mousedown":
                     if (this.domElement && this.cssEffects) {
-                        this.domElement.addClass('active');
+                        this.domElement.addClass("active");
                     }
                     break;
 
-                case 'mouseup':
+                case "mouseup":
                     if (this.domElement && this.cssEffects) {
-                        this.domElement.removeClass('active');
+                        this.domElement.removeClass("active");
                         this.recoverActive = false;
                     }
                     break;
@@ -3525,13 +3520,13 @@ try {//IE8下会抛错
                 for (var idx = 0, len = this.handlers[eventName].length; idx < len; idx++) {
                     var func = this.handlers[eventName][idx];
 
-                    if (typeof(func) == 'function') {
+                    if (typeof(func) === "function") {
                         // actual function reference
                         func(this, args);
-                    } else if ((typeof(func) == 'object') && (func.length == 2)) {
+                    } else if ((typeof(func) === "object") && (func.length == 2)) {
                         // PHP style object + method, i.e. [myObject, 'myMethod']
                         func[0][func[1]](this, args);
-                    } else if (typeof(func) == 'string') {
+                    } else if (typeof(func) === "string") {
                         // name of function
                         window[func](this, args);
                     }
@@ -3552,7 +3547,7 @@ BI.ClipBoard = BI.inherit(BI.BasicButton, {
             extraCls: "bi-clipboard",
             copy: BI.emptyFn,
             afterCopy: BI.emptyFn
-        })
+        });
     },
 
     _init: function () {
@@ -3567,7 +3562,7 @@ BI.ClipBoard = BI.inherit(BI.BasicButton, {
                     return BI.isFunction(o.copy) ? o.copy() : o.copy;
                 }
             });
-            this.clipboard.on("success", o.afterCopy)
+            this.clipboard.on("success", o.afterCopy);
         } else {
             this.element.zclip({
                 path: BI.resourceURL + "/ZeroClipboard.swf",
@@ -3597,7 +3592,7 @@ BI.CustomColorChooser = BI.inherit(BI.Widget, {
             baseCls: "bi-custom-color-chooser",
             width: 227,
             height: 245
-        })
+        });
     },
 
     _init: function () {
@@ -3638,7 +3633,7 @@ BI.CustomColorChooser = BI.inherit(BI.Widget, {
                 }],
                 height: 215
             }]
-        })
+        });
     },
 
     setValue: function (color) {
@@ -3664,7 +3659,7 @@ BI.ColorChooser = BI.inherit(BI.Widget, {
         return BI.extend(BI.ColorChooser.superclass._defaultConfig.apply(this, arguments), {
             baseCls: "bi-color-chooser",
             el: {}
-        })
+        });
     },
 
     _init: function () {
@@ -3716,7 +3711,7 @@ BI.ColorChooser = BI.inherit(BI.Widget, {
 
         this.combo.on(BI.Combo.EVENT_AFTER_HIDEVIEW, function () {
             self.fireEvent(BI.ColorChooser.EVENT_CHANGE, arguments);
-        })
+        });
     },
 
     isViewVisible: function () {
@@ -3754,7 +3749,7 @@ BI.ColorChooserPopup = BI.inherit(BI.Widget, {
             baseCls: "bi-color-chooser-popup",
             width: 200,
             height: 145
-        })
+        });
     },
 
     _init: function () {
@@ -3902,7 +3897,7 @@ BI.ColorChooserPopup = BI.inherit(BI.Widget, {
                 el: this.more,
                 height: 20
             }]
-        })
+        });
     },
 
     setStoreColors: function (colors) {
@@ -3910,13 +3905,13 @@ BI.ColorChooserPopup = BI.inherit(BI.Widget, {
             var items = BI.map(colors, function (i, color) {
                 return {
                     value: color
-                }
+                };
             });
             BI.count(colors.length, 8, function (i) {
                 items.push({
                     value: "",
                     disabled: true
-                })
+                });
             });
             this.storeColors.populate([items]);
         }
@@ -3948,7 +3943,7 @@ BI.ColorChooserTrigger = BI.inherit(BI.Trigger, {
         return BI.extend(conf, {
             baseCls: (conf.baseCls || "") + " bi-color-chooser-trigger",
             height: 30
-        })
+        });
     },
 
     _init: function () {
@@ -3991,7 +3986,7 @@ BI.ColorChooserTrigger = BI.inherit(BI.Trigger, {
         if (color === "") {
             this.colorContainer.element.css("background-color", "").removeClass("trans-color-background").addClass("auto-color-background");
         } else if (color === "transparent") {
-            this.colorContainer.element.css("background-color", "").removeClass("auto-color-background").addClass("trans-color-background")
+            this.colorContainer.element.css("background-color", "").removeClass("auto-color-background").addClass("trans-color-background");
         } else {
             this.colorContainer.element.css({"background-color": color}).removeClass("auto-color-background").removeClass("trans-color-background");
         }
@@ -4011,7 +4006,7 @@ BI.ColorPickerButton = BI.inherit(BI.BasicButton, {
         var conf = BI.ColorPickerButton.superclass._defaultConfig.apply(this, arguments);
         return BI.extend(conf, {
             baseCls: (conf.baseCls || "") + " bi-color-picker-button bi-background bi-border-top bi-border-left"
-        })
+        });
     },
 
     _init: function () {
@@ -4050,10 +4045,10 @@ BI.ColorPickerButton = BI.inherit(BI.BasicButton, {
 
     setSelected: function (b) {
         BI.ColorPickerButton.superclass.setSelected.apply(this, arguments);
-        if (!!b) {
+        if (b) {
             this._createMask();
         }
-        BI.Maskers[!!b ? "show" : "hide"](this.getName());
+        BI.Maskers[b ? "show" : "hide"](this.getName());
     }
 });
 BI.ColorPickerButton.EVENT_CHANGE = "ColorPickerButton.EVENT_CHANGE";
@@ -4070,7 +4065,7 @@ BI.ColorPicker = BI.inherit(BI.Widget, {
         return BI.extend(BI.ColorPicker.superclass._defaultConfig.apply(this, arguments), {
             baseCls: "bi-color-picker",
             items: null
-        })
+        });
     },
 
     _items: [
@@ -4224,11 +4219,11 @@ BI.ColorPicker = BI.inherit(BI.Widget, {
         });
         this.colors.on(BI.ButtonGroup.EVENT_CHANGE, function () {
             self.fireEvent(BI.ColorPicker.EVENT_CHANGE, arguments);
-        })
+        });
     },
 
-    populate: function(items){
-        var args  =[].slice.call(arguments);
+    populate: function (items) {
+        var args  = [].slice.call(arguments);
         args[0] = BI.createItems(items, {
             type: "bi.color_picker_button",
             once: false
@@ -4259,7 +4254,7 @@ BI.ColorPickerEditor = BI.inherit(BI.Widget, {
             baseCls: "bi-color-picker-editor",
             // width: 200,
             height: 20
-        })
+        });
     },
 
     _init: function () {
@@ -4341,7 +4336,7 @@ BI.ColorPickerEditor = BI.inherit(BI.Widget, {
             element: this,
             items: [{
                 el: this.colorShow,
-                width: 'fill'
+                width: "fill"
             }, {
                 el: RGB[0],
                 lgap: 10,
@@ -4376,7 +4371,7 @@ BI.ColorPickerEditor = BI.inherit(BI.Widget, {
                 },
                 width: 18
             }]
-        })
+        });
     },
 
     setValue: function (color) {
@@ -4410,7 +4405,7 @@ BI.ColorPickerEditor = BI.inherit(BI.Widget, {
             r: this.R.getValue(),
             g: this.G.getValue(),
             b: this.B.getValue()
-        }))
+        }));
     }
 });
 BI.ColorPickerEditor.EVENT_CHANGE = "ColorPickerEditor.EVENT_CHANGE";
@@ -4428,7 +4423,7 @@ BI.Farbtastic = BI.inherit(BI.Widget, {
             baseCls: "bi-farbtastic",
             width: 195,
             height: 195
-        })
+        });
     },
 
     _init: function () {
@@ -4471,159 +4466,157 @@ BI.shortcut("bi.farbtastic", BI.Farbtastic);/**
  */
 
 jQuery.fn.farbtastic = function (callback) {
-  $.farbtastic(this, callback);
-  return this;
+    $.farbtastic(this, callback);
+    return this;
 };
 
 jQuery.farbtastic = function (container, callback) {
-  var container = $(container).get(0);
-  return container.farbtastic || (container.farbtastic = new jQuery._farbtastic(container, callback));
-}
+    var container = $(container).get(0);
+    return container.farbtastic || (container.farbtastic = new jQuery._farbtastic(container, callback));
+};
 
 jQuery._farbtastic = function (container, callback) {
-  // Store farbtastic object
-  var fb = this;
+    // Store farbtastic object
+    var fb = this;
 
-  // Insert markup
-  $(container).html('<div class="farbtastic"><div class="color"></div><div class="wheel"></div><div class="overlay"></div><div class="h-marker marker"></div><div class="sl-marker marker"></div></div>');
-  var e = $('.farbtastic', container);
-  fb.wheel = $('.wheel', container).get(0);
-  // Dimensions
-  fb.radius = 84;
-  fb.square = 100;
-  fb.width = 194;
+    // Insert markup
+    $(container).html("<div class=\"farbtastic\"><div class=\"color\"></div><div class=\"wheel\"></div><div class=\"overlay\"></div><div class=\"h-marker marker\"></div><div class=\"sl-marker marker\"></div></div>");
+    var e = $(".farbtastic", container);
+    fb.wheel = $(".wheel", container).get(0);
+    // Dimensions
+    fb.radius = 84;
+    fb.square = 100;
+    fb.width = 194;
 
-  // Fix background PNGs in IE6
-  if (navigator.appVersion.match(/MSIE [0-6]\./)) {
-    $('*', e).each(function () {
-      if (this.currentStyle.backgroundImage != 'none') {
-        var image = this.currentStyle.backgroundImage;
-        image = this.currentStyle.backgroundImage.substring(5, image.length - 2);
-        $(this).css({
-          'backgroundImage': 'none',
-          'filter': "progid:DXImageTransform.Microsoft.AlphaImageLoader(enabled=true, sizingMethod=crop, src='" + image + "')"
+    // Fix background PNGs in IE6
+    if (navigator.appVersion.match(/MSIE [0-6]\./)) {
+        $("*", e).each(function () {
+            if (this.currentStyle.backgroundImage != "none") {
+                var image = this.currentStyle.backgroundImage;
+                image = this.currentStyle.backgroundImage.substring(5, image.length - 2);
+                $(this).css({
+                    backgroundImage: "none",
+                    filter: "progid:DXImageTransform.Microsoft.AlphaImageLoader(enabled=true, sizingMethod=crop, src='" + image + "')"
+                });
+            }
         });
-      }
-    });
-  }
+    }
 
-  /**
+    /**
    * Link to the given element(s) or callback.
    */
-  fb.linkTo = function (callback) {
+    fb.linkTo = function (callback) {
     // Unbind previous nodes
-    if (typeof fb.callback == 'object') {
-      $(fb.callback).unbind('keyup', fb.updateValue);
-    }
+        if (typeof fb.callback === "object") {
+            $(fb.callback).unbind("keyup", fb.updateValue);
+        }
 
-    // Reset color
-    fb.color = null;
+        // Reset color
+        fb.color = null;
 
-    // Bind callback or elements
-    if (typeof callback == 'function') {
-      fb.callback = callback;
-    }
-    else if (typeof callback == 'object' || typeof callback == 'string') {
-      fb.callback = $(callback);
-      fb.callback.bind('keyup', fb.updateValue);
-      if (fb.callback.get(0).value) {
-        fb.setColor(fb.callback.get(0).value);
-      }
-    }
-    return this;
-  }
-  fb.updateValue = function (event) {
-    if (this.value && this.value != fb.color) {
-      fb.setColor(this.value);
-    }
-  }
+        // Bind callback or elements
+        if (typeof callback === "function") {
+            fb.callback = callback;
+        } else if (typeof callback === "object" || typeof callback === "string") {
+            fb.callback = $(callback);
+            fb.callback.bind("keyup", fb.updateValue);
+            if (fb.callback.get(0).value) {
+                fb.setColor(fb.callback.get(0).value);
+            }
+        }
+        return this;
+    };
+    fb.updateValue = function (event) {
+        if (this.value && this.value != fb.color) {
+            fb.setColor(this.value);
+        }
+    };
 
-  /**
+    /**
    * Change color with HTML syntax #123456
    */
-  fb.setColor = function (color) {
-    var unpack = fb.unpack(color);
-    if (fb.color != color && unpack) {
-      fb.color = color;
-      fb.rgb = unpack;
-      fb.hsl = fb.RGBToHSL(fb.rgb);
-      fb.updateDisplay();
-    }
-    return this;
-  }
+    fb.setColor = function (color) {
+        var unpack = fb.unpack(color);
+        if (fb.color != color && unpack) {
+            fb.color = color;
+            fb.rgb = unpack;
+            fb.hsl = fb.RGBToHSL(fb.rgb);
+            fb.updateDisplay();
+        }
+        return this;
+    };
 
-  /**
+    /**
    * Change color with HSL triplet [0..1, 0..1, 0..1]
    */
-  fb.setHSL = function (hsl) {
-    fb.hsl = hsl;
-    fb.rgb = fb.HSLToRGB(hsl);
-    fb.color = fb.pack(fb.rgb);
-    fb.updateDisplay();
-    return this;
-  }
+    fb.setHSL = function (hsl) {
+        fb.hsl = hsl;
+        fb.rgb = fb.HSLToRGB(hsl);
+        fb.color = fb.pack(fb.rgb);
+        fb.updateDisplay();
+        return this;
+    };
 
-  /////////////////////////////////////////////////////
+    // ///////////////////////////////////////////////////
 
-  /**
+    /**
    * Retrieve the coordinates of the given event relative to the center
    * of the widget.
    */
-  fb.widgetCoords = function (event) {
-    var x, y;
-    var el = event.target || event.srcElement;
-    var reference = fb.wheel;
+    fb.widgetCoords = function (event) {
+        var x, y;
+        var el = event.target || event.srcElement;
+        var reference = fb.wheel;
 
-    if (typeof event.offsetX != 'undefined') {
-      // Use offset coordinates and find common offsetParent
-      var pos = { x: event.offsetX, y: event.offsetY };
+        if (typeof event.offsetX !== "undefined") {
+            // Use offset coordinates and find common offsetParent
+            var pos = { x: event.offsetX, y: event.offsetY };
 
-      // Send the coordinates upwards through the offsetParent chain.
-      var e = el;
-      while (e) {
-        e.mouseX = pos.x;
-        e.mouseY = pos.y;
-        pos.x += e.offsetLeft;
-        pos.y += e.offsetTop;
-        e = e.offsetParent;
-      }
+            // Send the coordinates upwards through the offsetParent chain.
+            var e = el;
+            while (e) {
+                e.mouseX = pos.x;
+                e.mouseY = pos.y;
+                pos.x += e.offsetLeft;
+                pos.y += e.offsetTop;
+                e = e.offsetParent;
+            }
 
-      // Look for the coordinates starting from the wheel widget.
-      var e = reference;
-      var offset = { x: 0, y: 0 }
-      while (e) {
-        if (typeof e.mouseX != 'undefined') {
-          x = e.mouseX - offset.x;
-          y = e.mouseY - offset.y;
-          break;
+            // Look for the coordinates starting from the wheel widget.
+            var e = reference;
+            var offset = { x: 0, y: 0 };
+            while (e) {
+                if (typeof e.mouseX !== "undefined") {
+                    x = e.mouseX - offset.x;
+                    y = e.mouseY - offset.y;
+                    break;
+                }
+                offset.x += e.offsetLeft;
+                offset.y += e.offsetTop;
+                e = e.offsetParent;
+            }
+
+            // Reset stored coordinates
+            e = el;
+            while (e) {
+                e.mouseX = undefined;
+                e.mouseY = undefined;
+                e = e.offsetParent;
+            }
+        } else {
+            // Use absolute coordinates
+            var pos = fb.absolutePosition(reference);
+            x = (event.pageX || 0 * (event.clientX + $("html").get(0).scrollLeft)) - pos.x;
+            y = (event.pageY || 0 * (event.clientY + $("html").get(0).scrollTop)) - pos.y;
         }
-        offset.x += e.offsetLeft;
-        offset.y += e.offsetTop;
-        e = e.offsetParent;
-      }
+        // Subtract distance to middle
+        return { x: x - fb.width / 2, y: y - fb.width / 2 };
+    };
 
-      // Reset stored coordinates
-      e = el;
-      while (e) {
-        e.mouseX = undefined;
-        e.mouseY = undefined;
-        e = e.offsetParent;
-      }
-    }
-    else {
-      // Use absolute coordinates
-      var pos = fb.absolutePosition(reference);
-      x = (event.pageX || 0*(event.clientX + $('html').get(0).scrollLeft)) - pos.x;
-      y = (event.pageY || 0*(event.clientY + $('html').get(0).scrollTop)) - pos.y;
-    }
-    // Subtract distance to middle
-    return { x: x - fb.width / 2, y: y - fb.width / 2 };
-  }
-
-  /**
+    /**
    * Mousedown handler
    */
-  fb.click = function (event) {
+    fb.click = function (event) {
     // Capture mouse
     // if (!document.dragging) {
     //   $(document).bind('mousemove', fb.mousemove).bind('mouseup', fb.mouseup);
@@ -4631,171 +4624,168 @@ jQuery._farbtastic = function (container, callback) {
     // }
 
     // Check which area is being dragged
-    var pos = fb.widgetCoords(event);
-    fb.circleDrag = Math.max(Math.abs(pos.x), Math.abs(pos.y)) * 2 > fb.square;
+        var pos = fb.widgetCoords(event);
+        fb.circleDrag = Math.max(Math.abs(pos.x), Math.abs(pos.y)) * 2 > fb.square;
 
-    // Process
-    fb.mousemove(event);
-    return false;
-  }
+        // Process
+        fb.mousemove(event);
+        return false;
+    };
 
-  /**
+    /**
    * Mousemove handler
    */
-  fb.mousemove = function (event) {
+    fb.mousemove = function (event) {
     // Get coordinates relative to color picker center
-    var pos = fb.widgetCoords(event);
+        var pos = fb.widgetCoords(event);
 
-    // Set new HSL parameters
-    if (fb.circleDrag) {
-      var hue = Math.atan2(pos.x, -pos.y) / 6.28;
-      if (hue < 0) hue += 1;
-      fb.setHSL([hue, fb.hsl[1], fb.hsl[2]]);
-    }
-    else {
-      var sat = Math.max(0, Math.min(1, -(pos.x / fb.square) + .5));
-      var lum = Math.max(0, Math.min(1, -(pos.y / fb.square) + .5));
-      fb.setHSL([fb.hsl[0], sat, lum]);
-    }
-    return false;
-  }
+        // Set new HSL parameters
+        if (fb.circleDrag) {
+            var hue = Math.atan2(pos.x, -pos.y) / 6.28;
+            if (hue < 0) hue += 1;
+            fb.setHSL([hue, fb.hsl[1], fb.hsl[2]]);
+        } else {
+            var sat = Math.max(0, Math.min(1, -(pos.x / fb.square) + .5));
+            var lum = Math.max(0, Math.min(1, -(pos.y / fb.square) + .5));
+            fb.setHSL([fb.hsl[0], sat, lum]);
+        }
+        return false;
+    };
 
-  /**
+    /**
    * Mouseup handler
    */
-  // fb.mouseup = function () {
-  //   // Uncapture mouse
-  //   $(document).unbind('mousemove', fb.mousemove);
-  //   $(document).unbind('mouseup', fb.mouseup);
-  //   document.dragging = false;
-  // }
+    // fb.mouseup = function () {
+    //   // Uncapture mouse
+    //   $(document).unbind('mousemove', fb.mousemove);
+    //   $(document).unbind('mouseup', fb.mouseup);
+    //   document.dragging = false;
+    // }
 
-  /**
+    /**
    * Update the markers and styles
    */
-  fb.updateDisplay = function () {
+    fb.updateDisplay = function () {
     // Markers
-    var angle = fb.hsl[0] * 6.28;
-    $('.h-marker', e).css({
-      left: Math.round(Math.sin(angle) * fb.radius + fb.width / 2) + 'px',
-      top: Math.round(-Math.cos(angle) * fb.radius + fb.width / 2) + 'px'
-    });
+        var angle = fb.hsl[0] * 6.28;
+        $(".h-marker", e).css({
+            left: Math.round(Math.sin(angle) * fb.radius + fb.width / 2) + "px",
+            top: Math.round(-Math.cos(angle) * fb.radius + fb.width / 2) + "px"
+        });
 
-    $('.sl-marker', e).css({
-      left: Math.round(fb.square * (.5 - fb.hsl[1]) + fb.width / 2) + 'px',
-      top: Math.round(fb.square * (.5 - fb.hsl[2]) + fb.width / 2) + 'px'
-    });
+        $(".sl-marker", e).css({
+            left: Math.round(fb.square * (.5 - fb.hsl[1]) + fb.width / 2) + "px",
+            top: Math.round(fb.square * (.5 - fb.hsl[2]) + fb.width / 2) + "px"
+        });
 
-    // Saturation/Luminance gradient
-    $('.color', e).css('backgroundColor', fb.pack(fb.HSLToRGB([fb.hsl[0], 1, 0.5])));
+        // Saturation/Luminance gradient
+        $(".color", e).css("backgroundColor", fb.pack(fb.HSLToRGB([fb.hsl[0], 1, 0.5])));
 
-    // Linked elements or callback
-    if (typeof fb.callback == 'object') {
-      // Set background/foreground color
-      $(fb.callback).css({
-        backgroundColor: fb.color,
-        color: fb.hsl[2] > 0.5 ? '#000' : '#fff'
-      });
+        // Linked elements or callback
+        if (typeof fb.callback === "object") {
+            // Set background/foreground color
+            $(fb.callback).css({
+                backgroundColor: fb.color,
+                color: fb.hsl[2] > 0.5 ? "#000" : "#fff"
+            });
 
-      // Change linked value
-      $(fb.callback).each(function() {
-        if (this.value && this.value != fb.color) {
-          this.value = fb.color;
+            // Change linked value
+            $(fb.callback).each(function () {
+                if (this.value && this.value != fb.color) {
+                    this.value = fb.color;
+                }
+            });
+        } else if (typeof fb.callback === "function") {
+            fb.callback.call(fb, fb.color);
         }
-      });
-    }
-    else if (typeof fb.callback == 'function') {
-      fb.callback.call(fb, fb.color);
-    }
-  }
+    };
 
-  /**
+    /**
    * Get absolute position of element
    */
-  fb.absolutePosition = function (el) {
-    var r = { x: el.offsetLeft, y: el.offsetTop };
-    // Resolve relative to offsetParent
-    if (el.offsetParent) {
-      var tmp = fb.absolutePosition(el.offsetParent);
-      r.x += tmp.x;
-      r.y += tmp.y;
-    }
-    return r;
-  };
+    fb.absolutePosition = function (el) {
+        var r = { x: el.offsetLeft, y: el.offsetTop };
+        // Resolve relative to offsetParent
+        if (el.offsetParent) {
+            var tmp = fb.absolutePosition(el.offsetParent);
+            r.x += tmp.x;
+            r.y += tmp.y;
+        }
+        return r;
+    };
 
-  /* Various color utility functions */
-  fb.pack = function (rgb) {
-    var r = Math.round(rgb[0] * 255);
-    var g = Math.round(rgb[1] * 255);
-    var b = Math.round(rgb[2] * 255);
-    return '#' + (r < 16 ? '0' : '') + r.toString(16) +
-           (g < 16 ? '0' : '') + g.toString(16) +
-           (b < 16 ? '0' : '') + b.toString(16);
-  }
+    /* Various color utility functions */
+    fb.pack = function (rgb) {
+        var r = Math.round(rgb[0] * 255);
+        var g = Math.round(rgb[1] * 255);
+        var b = Math.round(rgb[2] * 255);
+        return "#" + (r < 16 ? "0" : "") + r.toString(16) +
+           (g < 16 ? "0" : "") + g.toString(16) +
+           (b < 16 ? "0" : "") + b.toString(16);
+    };
 
-  fb.unpack = function (color) {
-    if (color.length == 7) {
-      return [parseInt('0x' + color.substring(1, 3)) / 255,
-        parseInt('0x' + color.substring(3, 5)) / 255,
-        parseInt('0x' + color.substring(5, 7)) / 255];
-    }
-    else if (color.length == 4) {
-      return [parseInt('0x' + color.substring(1, 2)) / 15,
-        parseInt('0x' + color.substring(2, 3)) / 15,
-        parseInt('0x' + color.substring(3, 4)) / 15];
-    }
-  }
+    fb.unpack = function (color) {
+        if (color.length == 7) {
+            return [parseInt("0x" + color.substring(1, 3)) / 255,
+                parseInt("0x" + color.substring(3, 5)) / 255,
+                parseInt("0x" + color.substring(5, 7)) / 255];
+        } else if (color.length == 4) {
+            return [parseInt("0x" + color.substring(1, 2)) / 15,
+                parseInt("0x" + color.substring(2, 3)) / 15,
+                parseInt("0x" + color.substring(3, 4)) / 15];
+        }
+    };
 
-  fb.HSLToRGB = function (hsl) {
-    var m1, m2, r, g, b;
-    var h = hsl[0], s = hsl[1], l = hsl[2];
-    m2 = (l <= 0.5) ? l * (s + 1) : l + s - l*s;
-    m1 = l * 2 - m2;
-    return [this.hueToRGB(m1, m2, h+0.33333),
-        this.hueToRGB(m1, m2, h),
-        this.hueToRGB(m1, m2, h-0.33333)];
-  }
+    fb.HSLToRGB = function (hsl) {
+        var m1, m2, r, g, b;
+        var h = hsl[0], s = hsl[1], l = hsl[2];
+        m2 = (l <= 0.5) ? l * (s + 1) : l + s - l * s;
+        m1 = l * 2 - m2;
+        return [this.hueToRGB(m1, m2, h + 0.33333),
+            this.hueToRGB(m1, m2, h),
+            this.hueToRGB(m1, m2, h - 0.33333)];
+    };
 
-  fb.hueToRGB = function (m1, m2, h) {
-    h = (h < 0) ? h + 1 : ((h > 1) ? h - 1 : h);
-    if (h * 6 < 1) return m1 + (m2 - m1) * h * 6;
-    if (h * 2 < 1) return m2;
-    if (h * 3 < 2) return m1 + (m2 - m1) * (0.66666 - h) * 6;
-    return m1;
-  }
+    fb.hueToRGB = function (m1, m2, h) {
+        h = (h < 0) ? h + 1 : ((h > 1) ? h - 1 : h);
+        if (h * 6 < 1) return m1 + (m2 - m1) * h * 6;
+        if (h * 2 < 1) return m2;
+        if (h * 3 < 2) return m1 + (m2 - m1) * (0.66666 - h) * 6;
+        return m1;
+    };
 
-  fb.RGBToHSL = function (rgb) {
-    var min, max, delta, h, s, l;
-    var r = rgb[0], g = rgb[1], b = rgb[2];
-    min = Math.min(r, Math.min(g, b));
-    max = Math.max(r, Math.max(g, b));
-    delta = max - min;
-    l = (min + max) / 2;
-    s = 0;
-    if (l > 0 && l < 1) {
-      s = delta / (l < 0.5 ? (2 * l) : (2 - 2 * l));
-    }
-    h = 0;
-    if (delta > 0) {
-      if (max == r && max != g) h += (g - b) / delta;
-      if (max == g && max != b) h += (2 + (b - r) / delta);
-      if (max == b && max != r) h += (4 + (r - g) / delta);
-      h /= 6;
-    }
-    return [h, s, l];
-  }
+    fb.RGBToHSL = function (rgb) {
+        var min, max, delta, h, s, l;
+        var r = rgb[0], g = rgb[1], b = rgb[2];
+        min = Math.min(r, Math.min(g, b));
+        max = Math.max(r, Math.max(g, b));
+        delta = max - min;
+        l = (min + max) / 2;
+        s = 0;
+        if (l > 0 && l < 1) {
+            s = delta / (l < 0.5 ? (2 * l) : (2 - 2 * l));
+        }
+        h = 0;
+        if (delta > 0) {
+            if (max == r && max != g) h += (g - b) / delta;
+            if (max == g && max != b) h += (2 + (b - r) / delta);
+            if (max == b && max != r) h += (4 + (r - g) / delta);
+            h /= 6;
+        }
+        return [h, s, l];
+    };
 
-  // Install mousedown handler (the others are set on the document on-demand)
-  $('*', e).click(fb.click);
+    // Install mousedown handler (the others are set on the document on-demand)
+    $("*", e).click(fb.click);
 
     // Init color
-  fb.setColor('#000000');
+    fb.setColor("#000000");
 
-  // Set linked elements/callback
-  if (callback) {
-    fb.linkTo(callback);
-  }
-}/**
+    // Set linked elements/callback
+    if (callback) {
+        fb.linkTo(callback);
+    }
+};/**
  * Created by GUY on 2017/2/8.
  *
  * @class BI.BubbleCombo
@@ -4810,20 +4800,20 @@ BI.BubbleCombo = BI.inherit(BI.Widget, {
             baseCls: "bi-bubble-combo",
             trigger: "click",
             toggle: true,
-            direction: "bottom", //top||bottom||left||right||top,left||top,right||bottom,left||bottom,right
+            direction: "bottom", // top||bottom||left||right||top,left||top,right||bottom,left||bottom,right
             isDefaultInit: false,
             destroyWhenHide: false,
-            isNeedAdjustHeight: true,//是否需要高度调整
+            isNeedAdjustHeight: true, // 是否需要高度调整
             isNeedAdjustWidth: true,
             stopPropagation: false,
-            adjustLength: 0,//调整的距离
+            adjustLength: 0, // 调整的距离
             // adjustXOffset: 0,
             // adjustYOffset: 10,
             hideChecker: BI.emptyFn,
-            offsetStyle: "left", //left,right,center
+            offsetStyle: "left", // left,right,center
             el: {},
             popup: {}
-        })
+        });
     },
     _init: function () {
         BI.BubbleCombo.superclass._init.apply(this, arguments);
@@ -4940,7 +4930,7 @@ BI.BubbleCombo = BI.inherit(BI.Widget, {
             type: "bi.absolute",
             element: this,
             items: [pos]
-        })
+        });
     },
 
     _createLeftTriangle: function () {
@@ -5027,7 +5017,7 @@ BI.BubblePopupView = BI.inherit(BI.PopupView, {
         var config = BI.BubblePopupView.superclass._defaultConfig.apply(this, arguments);
         return BI.extend(config, {
             baseCls: config.baseCls + " bi-bubble-popup-view"
-        })
+        });
     },
     _init: function () {
         BI.BubblePopupView.superclass._init.apply(this, arguments);
@@ -5080,7 +5070,7 @@ BI.BubblePopupView = BI.inherit(BI.PopupView, {
             type: "bi.absolute",
             element: this,
             items: [pos]
-        })
+        });
     },
 
     hideLine: function () {
@@ -5101,7 +5091,7 @@ BI.BubblePopupBarView = BI.inherit(BI.BubblePopupView, {
         return BI.extend(BI.BubblePopupBarView.superclass._defaultConfig.apply(this, arguments), {
             extraCls: "bi-bubble-bar-popup-view",
             buttons: [{value: BI.i18nText(BI.i18nText("BI-Basic_Sure"))}, {value: BI.i18nText("BI-Basic_Cancel"), level: "ignore"}]
-        })
+        });
     },
     _init: function () {
         BI.BubblePopupBarView.superclass._init.apply(this, arguments);
@@ -5111,20 +5101,20 @@ BI.BubblePopupBarView = BI.inherit(BI.BubblePopupView, {
 
         var items = [];
         BI.each(o.buttons.reverse(), function (i, buttonOpt) {
-            if(BI.isWidget(buttonOpt)){
+            if(BI.isWidget(buttonOpt)) {
                 items.push(buttonOpt);
             }else{
                 items.push(BI.extend({
-                    type: 'bi.button',
+                    type: "bi.button",
                     height: 30,
                     handler: function (v) {
                         self.fireEvent(BI.BubblePopupBarView.EVENT_CLICK_TOOLBAR_BUTTON, v);
                     }
-                }, buttonOpt))
+                }, buttonOpt));
             }
         });
         return BI.createWidget({
-            type: 'bi.right_vertical_adapt',
+            type: "bi.right_vertical_adapt",
             height: 40,
             hgap: 10,
             bgap: 10,
@@ -5148,7 +5138,7 @@ BI.EditorIconCheckCombo = BI.inherit(BI.Widget, {
             allowBlank: true,
             watermark: "",
             errorText: ""
-        })
+        });
     },
 
     _init: function () {
@@ -5223,15 +5213,15 @@ BI.IconCombo = BI.inherit(BI.Widget, {
             el: {},
             popup: {},
             minWidth: 100,
-            maxWidth: 'auto',
+            maxWidth: "auto",
             maxHeight: 300,
             direction: "bottom",
-            adjustLength: 3,//调整的距离
+            adjustLength: 3, // 调整的距离
             adjustXOffset: 0,
             adjustYOffset: 0,
             offsetStyle: "left",
             chooseType: BI.ButtonGroup.CHOOSE_TYPE_SINGLE
-        })
+        });
     },
 
     _init: function () {
@@ -5437,11 +5427,11 @@ BI.IconComboTrigger = BI.inherit(BI.Trigger, {
         var iconClass = "";
         v = BI.isArray(v) ? v[0] : v;
         if (BI.any(this.options.items, function (i, item) {
-                if (v === item.value) {
-                    iconClass = item.iconClass;
-                    return true;
-                }
-            })) {
+            if (v === item.value) {
+                iconClass = item.iconClass;
+                return true;
+            }
+        })) {
             this.button.setIcon(iconClass);
             this.button.setSelected(true);
             this.down.setSelected(true);
@@ -5590,7 +5580,7 @@ BI.StaticCombo = BI.inherit(BI.Widget, {
             el: {},
             items: [],
             chooseType: BI.ButtonGroup.CHOOSE_TYPE_SINGLE
-        })
+        });
     },
 
     _init: function () {
@@ -5728,7 +5718,7 @@ BI.SmallTextValueCheckCombo = BI.inherit(BI.Widget, {
             height: 24,
             chooseType: BI.ButtonGroup.CHOOSE_TYPE_SINGLE,
             text: ""
-        })
+        });
     },
 
     _init: function () {
@@ -5919,7 +5909,7 @@ BI.SmallTextValueCombo = BI.inherit(BI.Widget, {
             chooseType: BI.ButtonGroup.CHOOSE_TYPE_SINGLE,
             el: {},
             text: ""
-        })
+        });
     },
 
     _init: function () {
@@ -6036,7 +6026,7 @@ BI.TextValueDownListCombo = BI.inherit(BI.Widget, {
         return BI.extend(BI.TextValueDownListCombo.superclass._defaultConfig.apply(this, arguments), {
             baseCls: "bi-text-value-down-list-combo",
             height: 30
-        })
+        });
     },
 
     _init: function () {
@@ -6078,7 +6068,7 @@ BI.TextValueDownListCombo = BI.inherit(BI.Widget, {
         BI.each(BI.flatten(this.options.items), function (idx, item) {
             if (BI.has(item, "el")) {
                 BI.each(item.children, function (id, it) {
-                    self.valueMap[it.value] = {value: item.el.value, childValue: it.value}
+                    self.valueMap[it.value] = {value: item.el.value, childValue: it.value};
                 });
             } else {
                 self.valueMap[item.value] = {value: item.value};
@@ -6133,12 +6123,12 @@ BI.DownListSelectTextTrigger = BI.inherit(BI.Trigger, {
         });
     },
 
-    _formatItemArray: function(){
+    _formatItemArray: function () {
         var sourceArray = BI.flatten(BI.deepClone(this.options.items));
         var targetArray = [];
-        BI.each(sourceArray, function(idx, item){
-            if(BI.has(item, "el")){
-                BI.each(item.children, function(id, it){
+        BI.each(sourceArray, function (idx, item) {
+            if(BI.has(item, "el")) {
+                BI.each(item.children, function (id, it) {
                     it.text = item.el.text + "(" + it.text + ")";
                 });
                 targetArray = BI.concat(targetArray, item.children);
@@ -6230,34 +6220,34 @@ BI.ClearEditor = BI.inherit(BI.Widget, {
             self.fireEvent(BI.ClearEditor.EVENT_KEY_DOWN, v);
         });
         this.editor.on(BI.Editor.EVENT_SPACE, function () {
-            self.fireEvent(BI.ClearEditor.EVENT_SPACE)
+            self.fireEvent(BI.ClearEditor.EVENT_SPACE);
         });
         this.editor.on(BI.Editor.EVENT_BACKSPACE, function () {
-            self.fireEvent(BI.ClearEditor.EVENT_BACKSPACE)
+            self.fireEvent(BI.ClearEditor.EVENT_BACKSPACE);
         });
 
 
         this.editor.on(BI.Editor.EVENT_VALID, function () {
-            self.fireEvent(BI.ClearEditor.EVENT_VALID)
+            self.fireEvent(BI.ClearEditor.EVENT_VALID);
         });
         this.editor.on(BI.Editor.EVENT_ERROR, function () {
-            self.fireEvent(BI.ClearEditor.EVENT_ERROR)
+            self.fireEvent(BI.ClearEditor.EVENT_ERROR);
         });
         this.editor.on(BI.Editor.EVENT_ENTER, function () {
             self.fireEvent(BI.ClearEditor.EVENT_ENTER);
         });
         this.editor.on(BI.Editor.EVENT_RESTRICT, function () {
-            self.fireEvent(BI.ClearEditor.EVENT_RESTRICT)
+            self.fireEvent(BI.ClearEditor.EVENT_RESTRICT);
         });
         this.editor.on(BI.Editor.EVENT_EMPTY, function () {
             self._checkClear();
-            self.fireEvent(BI.ClearEditor.EVENT_EMPTY)
+            self.fireEvent(BI.ClearEditor.EVENT_EMPTY);
         });
         this.editor.on(BI.Editor.EVENT_REMOVE, function () {
-            self.fireEvent(BI.ClearEditor.EVENT_REMOVE)
+            self.fireEvent(BI.ClearEditor.EVENT_REMOVE);
         });
         this.editor.on(BI.Editor.EVENT_CONFIRM, function () {
-            self.fireEvent(BI.ClearEditor.EVENT_CONFIRM)
+            self.fireEvent(BI.ClearEditor.EVENT_CONFIRM);
         });
         this.editor.on(BI.Editor.EVENT_START, function () {
             self.fireEvent(BI.ClearEditor.EVENT_START);
@@ -6349,7 +6339,7 @@ BI.ShelterEditor = BI.inherit(BI.Widget, {
             errorText: "",
             height: 24,
             textAlign: "left"
-        })
+        });
     },
 
     _init: function () {
@@ -6605,7 +6595,7 @@ BI.SignInitialEditor = BI.inherit(BI.Widget, {
             value: "",
             text: "",
             height: 24
-        })
+        });
     },
 
     _init: function () {
@@ -6644,7 +6634,7 @@ BI.SignInitialEditor = BI.inherit(BI.Widget, {
         });
         this.text.on(BI.TextButton.EVENT_CHANGE, function () {
             BI.nextTick(function () {
-                self.fireEvent(BI.SignInitialEditor.EVENT_CLICK_LABEL)
+                self.fireEvent(BI.SignInitialEditor.EVENT_CLICK_LABEL);
             });
         });
         BI.createWidget({
@@ -6817,7 +6807,7 @@ BI.SignInitialEditor = BI.inherit(BI.Widget, {
         return {
             value: this.editor.getValue(),
             text: this.options.text
-        }
+        };
     },
 
     getState: function () {
@@ -6872,7 +6862,7 @@ BI.SignEditor = BI.inherit(BI.Widget, {
             watermark: "",
             errorText: "",
             height: 24
-        })
+        });
     },
 
     _init: function () {
@@ -6911,7 +6901,7 @@ BI.SignEditor = BI.inherit(BI.Widget, {
         });
         this.text.on(BI.TextButton.EVENT_CHANGE, function () {
             BI.nextTick(function () {
-                self.fireEvent(BI.SignEditor.EVENT_CLICK_LABEL)
+                self.fireEvent(BI.SignEditor.EVENT_CLICK_LABEL);
             });
         });
         BI.createWidget({
@@ -7130,7 +7120,7 @@ BI.StateEditor = BI.inherit(BI.Widget, {
             watermark: "",
             errorText: "",
             height: 24
-        })
+        });
     },
 
     _init: function () {
@@ -7404,7 +7394,7 @@ BI.SimpleStateEditor = BI.inherit(BI.Widget, {
             watermark: "",
             errorText: "",
             height: 24
-        })
+        });
     },
 
     _init: function () {
@@ -7644,7 +7634,7 @@ BI.BarPopoverSection = BI.inherit(BI.PopoverSection, {
     _defaultConfig: function () {
         return BI.extend(BI.BarPopoverSection.superclass._defaultConfig.apply(this, arguments), {
             btns: [BI.i18nText(BI.i18nText("BI-Basic_Sure")), BI.i18nText(BI.i18nText("BI-Basic_Cancel"))]
-        })
+        });
     },
 
     _init: function () {
@@ -7654,7 +7644,7 @@ BI.BarPopoverSection = BI.inherit(BI.PopoverSection, {
     rebuildSouth: function (south) {
         var self = this, o = this.options;
         this.sure = BI.createWidget({
-            type: 'bi.button',
+            type: "bi.button",
             text: this.options.btns[0],
             warningTitle: o.warningTitle,
             height: 30,
@@ -7665,24 +7655,24 @@ BI.BarPopoverSection = BI.inherit(BI.PopoverSection, {
             }
         });
         this.cancel = BI.createWidget({
-            type: 'bi.button',
+            type: "bi.button",
             text: this.options.btns[1],
             height: 30,
             value: 1,
-            level: 'ignore',
+            level: "ignore",
             handler: function (v) {
                 self.close(v);
             }
         });
         BI.createWidget({
-            type: 'bi.right_vertical_adapt',
+            type: "bi.right_vertical_adapt",
             element: south,
             lgap: 10,
             items: [this.cancel, this.sure]
         });
     },
 
-    setConfirmButtonEnable: function(v){
+    setConfirmButtonEnable: function (v) {
         this.sure.setEnable(!!v);
     }
 });/**
@@ -7698,7 +7688,7 @@ BI.MultiPopupView = BI.inherit(BI.PopupView, {
         return BI.extend(conf, {
             baseCls: (conf.baseCls || "") + " bi-multi-list-view",
             buttons: [BI.i18nText("BI-Basic_Sure")]
-        })
+        });
     },
 
     _init: function () {
@@ -7711,12 +7701,12 @@ BI.MultiPopupView = BI.inherit(BI.PopupView, {
             return;
         }
 
-        var text = [];          //构造[{text:content},……]
+        var text = [];          // 构造[{text:content},……]
         BI.each(o.buttons, function (idx, item) {
             text.push({
                 text: item,
                 value: idx
-            })
+            });
         });
 
         this.buttongroup = BI.createWidget({
@@ -7761,7 +7751,7 @@ BI.PopupPanel = BI.inherit(BI.MultiPopupView, {
         return BI.extend(conf, {
             baseCls: (conf.baseCls || "") + " bi-popup-panel",
             title: ""
-        })
+        });
     },
 
     _init: function () {
@@ -7833,7 +7823,7 @@ BI.ListPane = BI.inherit(BI.Pane, {
             el: {
                 type: "bi.button_group"
             }
-        })
+        });
     },
     _init: function () {
         BI.ListPane.superclass._init.apply(this, arguments);
@@ -7848,7 +7838,7 @@ BI.ListPane = BI.inherit(BI.Pane, {
                 if (op.times === 1) {
                     self.empty();
                     BI.nextTick(function () {
-                        self.loading()
+                        self.loading();
                     });
                 }
                 o.itemsCreator(op, function () {
@@ -7916,7 +7906,7 @@ BI.ListPane = BI.inherit(BI.Pane, {
 
     populate: function (items) {
         var self = this, o = this.options;
-        if (arguments.length === 0 && (BI.isFunction(this.button_group.attr("itemsCreator")))) {//接管loader的populate方法
+        if (arguments.length === 0 && (BI.isFunction(this.button_group.attr("itemsCreator")))) {// 接管loader的populate方法
             this.button_group.attr("itemsCreator").apply(this, [{times: 1}, function () {
                 if (arguments.length === 0) {
                     throw new Error("参数不能为空");
@@ -7983,32 +7973,32 @@ BI.shortcut("bi.list_pane", BI.ListPane);/**
  * @class BI.Panel
  * @extends BI.Widget
  */
-BI.Panel = BI.inherit(BI.Widget,{
-    _defaultConfig : function(){
-        return BI.extend(BI.Panel.superclass._defaultConfig.apply(this,arguments),{
+BI.Panel = BI.inherit(BI.Widget, {
+    _defaultConfig: function () {
+        return BI.extend(BI.Panel.superclass._defaultConfig.apply(this, arguments), {
             baseCls: "bi-panel bi-border",
-            title:"",
-            titleButtons:[],
-            el:{},
-            logic:{
+            title: "",
+            titleButtons: [],
+            el: {},
+            logic: {
                 dynamic: false
             }
         });
     },
 
-    _init:function(){
-        BI.Panel.superclass._init.apply(this,arguments);
+    _init: function () {
+        BI.Panel.superclass._init.apply(this, arguments);
         var o = this.options;
 
         BI.createWidget(BI.extend({
             element: this
         }, BI.LogicFactory.createLogic("vertical", BI.extend(o.logic, {
             items: BI.LogicFactory.createLogicItemsByDirection("top", this._createTitle()
-                ,this.options.el)
+                , this.options.el)
         }))));
     },
 
-    _createTitle:function(){
+    _createTitle: function () {
         var self = this, o = this.options;
         this.text = BI.createWidget({
             type: "bi.label",
@@ -8018,19 +8008,19 @@ BI.Panel = BI.inherit(BI.Widget,{
         });
 
         this.button_group = BI.createWidget({
-            type:"bi.button_group",
+            type: "bi.button_group",
             items: o.titleButtons,
             layouts: [{
                 type: "bi.center_adapt",
-                lgap:10
+                lgap: 10
             }]
         });
 
-        this.button_group.on(BI.Controller.EVENT_CHANGE, function(){
+        this.button_group.on(BI.Controller.EVENT_CHANGE, function () {
             self.fireEvent(BI.Controller.EVENT_CHANGE, arguments);
         });
 
-        this.button_group.on(BI.ButtonGroup.EVENT_CHANGE, function(value, obj){
+        this.button_group.on(BI.ButtonGroup.EVENT_CHANGE, function (value, obj) {
             self.fireEvent(BI.Panel.EVENT_CHANGE, value, obj);
         });
 
@@ -8050,13 +8040,13 @@ BI.Panel = BI.inherit(BI.Widget,{
         };
     },
 
-    setTitle: function(title){
+    setTitle: function (title) {
         this.text.setValue(title);
     }
 });
 BI.Panel.EVENT_CHANGE = "Panel.EVENT_CHANGE";
 
-BI.shortcut("bi.panel",BI.Panel);/**
+BI.shortcut("bi.panel", BI.Panel);/**
  * 选择列表
  *
  * Created by GUY on 2015/11/1.
@@ -8068,7 +8058,7 @@ BI.SelectList = BI.inherit(BI.Widget, {
     _defaultConfig: function () {
         return BI.extend(BI.SelectList.superclass._defaultConfig.apply(this, arguments), {
             baseCls: "bi-select-list",
-            direction: BI.Direction.Top,//toolbar的位置
+            direction: BI.Direction.Top, // toolbar的位置
             logic: {
                 dynamic: true
             },
@@ -8082,13 +8072,13 @@ BI.SelectList = BI.inherit(BI.Widget, {
             el: {
                 type: "bi.list_pane"
             }
-        })
+        });
     },
     _init: function () {
         BI.SelectList.superclass._init.apply(this, arguments);
         var self = this, o = this.options;
 
-        //全选
+        // 全选
         this.toolbar = BI.createWidget(o.toolbar);
         this.allSelected = false;
         this.toolbar.on(BI.Controller.EVENT_CHANGE, function (type, value, obj) {
@@ -8199,13 +8189,13 @@ BI.SelectList = BI.inherit(BI.Widget, {
                 value: this.list.getValue(),
                 assist: this.list.getNotSelectedValue()
             };
-        } else {
-            return {
-                type: BI.ButtonGroup.CHOOSE_TYPE_ALL,
-                value: this.list.getNotSelectedValue(),
-                assist: this.list.getValue()
-            };
         }
+        return {
+            type: BI.ButtonGroup.CHOOSE_TYPE_ALL,
+            value: this.list.getNotSelectedValue(),
+            assist: this.list.getValue()
+        };
+        
     },
 
     empty: function () {
@@ -8227,7 +8217,7 @@ BI.SelectList = BI.inherit(BI.Widget, {
     resetHeight: function (h) {
         var toolHeight = ( this.toolbar.element.outerHeight() || 25) * ( this.toolbar.isVisible() ? 1 : 0);
         this.list.resetHeight ? this.list.resetHeight(h - toolHeight) :
-            this.list.element.css({"max-height": h - toolHeight + "px"})
+            this.list.element.css({"max-height": h - toolHeight + "px"});
     },
 
     setNotSelectedValue: function () {
@@ -8279,7 +8269,7 @@ BI.LazyLoader = BI.inherit(BI.Widget, {
         return BI.extend(BI.LazyLoader.superclass._defaultConfig.apply(this, arguments), {
             baseCls: "bi-lazy-loader",
             el: {}
-        })
+        });
     },
 
     _init: function () {
@@ -8289,7 +8279,7 @@ BI.LazyLoader = BI.inherit(BI.Widget, {
         this.loader = BI.createWidget({
             type: "bi.loader",
             element: this,
-            //下面是button_group的属性
+            // 下面是button_group的属性
             el: o.el,
 
             itemsCreator: function (options, populate) {
@@ -8301,8 +8291,8 @@ BI.LazyLoader = BI.inherit(BI.Widget, {
         });
 
         this.loader.on(BI.Loader.EVENT_CHANGE, function (obj) {
-            self.fireEvent(BI.LazyLoader.EVENT_CHANGE, obj)
-        })
+            self.fireEvent(BI.LazyLoader.EVENT_CHANGE, obj);
+        });
     },
     _getNextItems: function (options) {
         var self = this, o = this.options;
@@ -8381,9 +8371,9 @@ BI.ListLoader = BI.inherit(BI.Widget, {
         return BI.extend(BI.ListLoader.superclass._defaultConfig.apply(this, arguments), {
             baseCls: "bi-list-loader",
 
-            isDefaultInit: true,//是否默认初始化数据
+            isDefaultInit: true, // 是否默认初始化数据
 
-            //下面是button_group的属性
+            // 下面是button_group的属性
             el: {
                 type: "bi.button_group"
             },
@@ -8392,11 +8382,11 @@ BI.ListLoader = BI.inherit(BI.Widget, {
             itemsCreator: BI.emptyFn,
             onLoaded: BI.emptyFn,
 
-            //下面是分页信息
+            // 下面是分页信息
             count: false,
             next: {},
             hasNext: BI.emptyFn
-        })
+        });
     },
 
     _nextLoad: function () {
@@ -8440,7 +8430,7 @@ BI.ListLoader = BI.inherit(BI.Widget, {
                 if (type === BI.Events.CLICK) {
                     self._nextLoad();
                 }
-            })
+            });
         }
 
         BI.createWidget({
@@ -8465,7 +8455,7 @@ BI.ListLoader = BI.inherit(BI.Widget, {
         return !!o.hasNext.apply(this, [{
             times: this.times,
             count: this.count
-        }])
+        }]);
     },
 
     addItems: function (items) {
@@ -8575,9 +8565,9 @@ BI.SortList = BI.inherit(BI.Widget, {
         return BI.extend(BI.SortList.superclass._defaultConfig.apply(this, arguments), {
             baseCls: "bi-sort-list",
 
-            isDefaultInit: true,//是否默认初始化数据
+            isDefaultInit: true, // 是否默认初始化数据
 
-            //下面是button_group的属性
+            // 下面是button_group的属性
             el: {
                 type: "bi.button_group"
             },
@@ -8586,14 +8576,14 @@ BI.SortList = BI.inherit(BI.Widget, {
             itemsCreator: BI.emptyFn,
             onLoaded: BI.emptyFn,
 
-            //下面是分页信息
+            // 下面是分页信息
             count: false,
             next: {},
             hasNext: BI.emptyFn
 
-            //containment: this.element,
-            //connectWith: ".bi-sort-list",
-        })
+            // containment: this.element,
+            // connectWith: ".bi-sort-list",
+        });
     },
 
     _init: function () {
@@ -8640,7 +8630,7 @@ BI.SortList = BI.inherit(BI.Widget, {
                         "margin-right": $currentItem.css("margin-right"),
                         "margin-top": $currentItem.css("margin-top"),
                         "margin-bottom": $currentItem.css("margin-bottom"),
-                        "margin": $currentItem.css("margin")
+                        margin: $currentItem.css("margin")
                     });
                     return holder.element;
                 },
@@ -8749,10 +8739,10 @@ BI.AllCountPager = BI.inherit(BI.Widget, {
         return BI.extend(BI.AllCountPager.superclass._defaultConfig.apply(this, arguments), {
             extraCls: "bi-all-count-pager",
             height: 30,
-            pages: 1, //必选项
-            curr: 1, //初始化当前页， pages为数字时可用，
-            count: 1 //总行数
-        })
+            pages: 1, // 必选项
+            curr: 1, // 初始化当前页， pages为数字时可用，
+            count: 1 // 总行数
+        });
     },
     _init: function () {
         BI.AllCountPager.superclass._init.apply(this, arguments);
@@ -8858,7 +8848,7 @@ BI.AllCountPager = BI.inherit(BI.Widget, {
             element: this,
             columnSize: ["", 35, 40, 36],
             items: [count, this.editor, this.allPages, this.pager]
-        })
+        });
     },
 
     alwaysShowPager: true,
@@ -8920,8 +8910,8 @@ BI.DirectionPager = BI.inherit(BI.Widget, {
             baseCls: "bi-direction-pager",
             height: 30,
             horizontal: {
-                pages: false, //总页数
-                curr: 1, //初始化当前页， pages为数字时可用
+                pages: false, // 总页数
+                curr: 1, // 初始化当前页， pages为数字时可用
 
                 hasPrev: BI.emptyFn,
                 hasNext: BI.emptyFn,
@@ -8929,15 +8919,15 @@ BI.DirectionPager = BI.inherit(BI.Widget, {
                 lastPage: BI.emptyFn
             },
             vertical: {
-                pages: false, //总页数
-                curr: 1, //初始化当前页， pages为数字时可用
+                pages: false, // 总页数
+                curr: 1, // 初始化当前页， pages为数字时可用
 
                 hasPrev: BI.emptyFn,
                 hasNext: BI.emptyFn,
                 firstPage: 1,
                 lastPage: BI.emptyFn
             }
-        })
+        });
     },
     _init: function () {
         BI.DirectionPager.superclass._init.apply(this, arguments);
@@ -9205,35 +9195,35 @@ BI.DetailPager = BI.inherit(BI.Widget, {
                 vgap: 0
             }],
 
-            dynamicShow: true, //是否动态显示上一页、下一页、首页、尾页， 若为false，则指对其设置使能状态
-            //dynamicShow为false时以下两个有用
-            dynamicShowFirstLast: false,//是否动态显示首页、尾页
-            dynamicShowPrevNext: false,//是否动态显示上一页、下一页
-            pages: false, //总页数
+            dynamicShow: true, // 是否动态显示上一页、下一页、首页、尾页， 若为false，则指对其设置使能状态
+            // dynamicShow为false时以下两个有用
+            dynamicShowFirstLast: false, // 是否动态显示首页、尾页
+            dynamicShowPrevNext: false, // 是否动态显示上一页、下一页
+            pages: false, // 总页数
             curr: function () {
                 return 1;
-            }, //初始化当前页
-            groups: 0, //连续显示分页数
-            jump: BI.emptyFn, //分页的回调函数
+            }, // 初始化当前页
+            groups: 0, // 连续显示分页数
+            jump: BI.emptyFn, // 分页的回调函数
 
-            first: false, //是否显示首页
-            last: false, //是否显示尾页
+            first: false, // 是否显示首页
+            last: false, // 是否显示尾页
             prev: "上一页",
             next: "下一页",
 
             firstPage: 1,
-            lastPage: function () { //在万不得已时才会调用这个函数获取最后一页的页码,  主要作用于setValue方法
+            lastPage: function () { // 在万不得已时才会调用这个函数获取最后一页的页码,  主要作用于setValue方法
                 return 1;
             },
-            hasPrev: BI.emptyFn, //pages不可用时有效
-            hasNext: BI.emptyFn  //pages不可用时有效
-        })
+            hasPrev: BI.emptyFn, // pages不可用时有效
+            hasNext: BI.emptyFn  // pages不可用时有效
+        });
     },
     _init: function () {
         BI.DetailPager.superclass._init.apply(this, arguments);
         var self = this;
         this.currPage = BI.result(this.options, "curr");
-        //翻页太灵敏
+        // 翻页太灵敏
         this._lock = false;
         this._debouce = BI.debounce(function () {
             self._lock = false;
@@ -9260,17 +9250,17 @@ BI.DetailPager = BI.inherit(BI.Widget, {
             groups > pages && (groups = pages);
         }
 
-        //计算当前组
+        // 计算当前组
         dict.index = Math.ceil((curr + ((groups > 1 && groups !== pages) ? 1 : 0)) / (groups === 0 ? 1 : groups));
 
-        //当前页非首页，则输出上一页
+        // 当前页非首页，则输出上一页
         if (((!o.dynamicShow && !o.dynamicShowPrevNext) || curr > 1) && prev !== false) {
             if (BI.isKey(prev)) {
                 view.push({
                     text: prev,
                     value: "prev",
                     disabled: pages === false ? o.hasPrev(curr) === false : !(curr > 1 && prev !== false)
-                })
+                });
             } else {
                 view.push(BI.extend({
                     disabled: pages === false ? o.hasPrev(curr) === false : !(curr > 1 && prev !== false)
@@ -9278,7 +9268,7 @@ BI.DetailPager = BI.inherit(BI.Widget, {
             }
         }
 
-        //当前组非首组，则输出首页
+        // 当前组非首组，则输出首页
         if (((!o.dynamicShow && !o.dynamicShowFirstLast) || (dict.index > 1 && groups !== 0)) && first) {
             view.push({
                 text: first,
@@ -9294,14 +9284,14 @@ BI.DetailPager = BI.inherit(BI.Widget, {
             }
         }
 
-        //输出当前页组
+        // 输出当前页组
         dict.poor = Math.floor((groups - 1) / 2);
         dict.start = dict.index > 1 ? curr - dict.poor : 1;
         dict.end = dict.index > 1 ? (function () {
             var max = curr + (groups - dict.poor - 1);
             return max > pages ? pages : max;
         }()) : groups;
-        if (dict.end - dict.start < groups - 1) { //最后一组状态
+        if (dict.end - dict.start < groups - 1) { // 最后一组状态
             dict.start = dict.end - groups + 1;
         }
         var s = dict.start, e = dict.end;
@@ -9315,16 +9305,16 @@ BI.DetailPager = BI.inherit(BI.Widget, {
                     text: s,
                     value: s,
                     selected: true
-                })
+                });
             } else {
                 view.push({
                     text: s,
                     value: s
-                })
+                });
             }
         }
 
-        //总页数大于连续分页数，且当前组最大页小于总页，输出尾页
+        // 总页数大于连续分页数，且当前组最大页小于总页，输出尾页
         if (((!o.dynamicShow && !o.dynamicShowFirstLast) || (pages > groups && dict.end < pages && groups !== 0)) && last) {
             if (pages > groups && dict.end < pages && groups !== 0) {
                 view.push({
@@ -9337,27 +9327,27 @@ BI.DetailPager = BI.inherit(BI.Widget, {
                 text: last,
                 value: "last",
                 disabled: !(pages > groups && dict.end < pages && groups !== 0)
-            })
+            });
         }
 
-        //当前页不为尾页时，输出下一页
+        // 当前页不为尾页时，输出下一页
         dict.flow = !prev && groups === 0;
         if (((!o.dynamicShow && !o.dynamicShowPrevNext) && next) || (curr !== pages && next || dict.flow)) {
             view.push((function () {
                 if (BI.isKey(next)) {
                     if (pages === false) {
-                        return {text: next, value: "next", disabled: o.hasNext(curr) === false}
+                        return {text: next, value: "next", disabled: o.hasNext(curr) === false};
                     }
                     return (dict.flow && curr === pages)
                         ?
-                    {text: next, value: "next", disabled: true}
+                        {text: next, value: "next", disabled: true}
                         :
-                    {text: next, value: "next", disabled: !(curr !== pages && next || dict.flow)};
-                } else {
-                    return BI.extend({
-                        disabled: pages === false ? o.hasNext(curr) === false : !(curr !== pages && next || dict.flow)
-                    }, next);
+                        {text: next, value: "next", disabled: !(curr !== pages && next || dict.flow)};
                 }
+                return BI.extend({
+                    disabled: pages === false ? o.hasNext(curr) === false : !(curr !== pages && next || dict.flow)
+                }, next);
+                
             }()));
         }
 
@@ -9633,7 +9623,7 @@ BI.RichEditorParamAction = BI.inherit(BI.RichEditorAction, {
     keydown: function (e) {
         var o = this.options;
         var sel = this._get$Sel();
-        if (e.keyCode === 229) {//中文输入法
+        if (e.keyCode === 229) {// 中文输入法
             if (this._isParam(sel)) {
                 this._addBlank(sel);
                 e.stopEvent();
@@ -9750,7 +9740,7 @@ BI.shortcut("bi.rich_editor_text_toolbar", BI.RichEditorTextToolbar);/**
                     type: "bi.layout",
                     height: 1
                 }, this.instance = this.addInstance()]
-            })
+            });
         },
 
         addInstance: function () {
@@ -9783,7 +9773,7 @@ BI.shortcut("bi.rich_editor_text_toolbar", BI.RichEditorTextToolbar);/**
                     // return false;
                 }
             } while (t = t.parentNode);
-            this.fireEvent('blur', t);
+            this.fireEvent("blur", t);
             this.lastSelectedInstance = this.selectedInstance;
             this.selectedInstance = null;
             // return false;
@@ -9804,7 +9794,7 @@ BI.shortcut("bi.rich_editor_text_toolbar", BI.RichEditorTextToolbar);/**
     BI.NicEditor.EVENT_SELECTED = "selected";
     BI.NicEditor.EVENT_BLUR = "blur";
     BI.NicEditor.EVENT_KEYDOWN = "keydown";
-    BI.shortcut('bi.nic_editor', BI.NicEditor);
+    BI.shortcut("bi.nic_editor", BI.NicEditor);
 
     var prefix = "niceditor-";
 
@@ -9825,7 +9815,7 @@ BI.shortcut("bi.rich_editor_text_toolbar", BI.RichEditorTextToolbar);/**
                 outline: "none"
             }).html(o.value);
 
-            this.element.css("maxHeight", (o.maxHeight) ? o.maxHeight + 'px' : null);
+            this.element.css("maxHeight", (o.maxHeight) ? o.maxHeight + "px" : null);
 
             this.e = BI.createWidget({
                 type: "bi.layout",
@@ -9851,12 +9841,12 @@ BI.shortcut("bi.rich_editor_text_toolbar", BI.RichEditorTextToolbar);/**
                 // this.setContent("<br />");
             }
             this.instanceDoc = document.defaultView;
-            this.elm.element.on('mousedown', BI.bind(this.selected, this));
-            this.elm.element.on('keydown', BI.bind(this.keyDown, this));
-            this.elm.element.on('focus', BI.bind(this.selected, this));
-            this.elm.element.on('blur', BI.bind(this.blur, this));
-            this.elm.element.on('keyup', BI.bind(this.selected, this));
-            this.ne.fireEvent('add');
+            this.elm.element.on("mousedown", BI.bind(this.selected, this));
+            this.elm.element.on("keydown", BI.bind(this.keyDown, this));
+            this.elm.element.on("focus", BI.bind(this.selected, this));
+            this.elm.element.on("blur", BI.bind(this.blur, this));
+            this.elm.element.on("keyup", BI.bind(this.selected, this));
+            this.ne.fireEvent("add");
         },
 
         disable: function () {
@@ -9902,9 +9892,9 @@ BI.shortcut("bi.rich_editor_text_toolbar", BI.RichEditorTextToolbar);/**
                     }
                 }
                 return contain;
-            } else {
-                return (this.getSel().type == "Control") ? r.item(0) : r.parentElement();
             }
+            return (this.getSel().type == "Control") ? r.item(0) : r.parentElement();
+            
         },
 
         saveRng: function () {
@@ -9926,7 +9916,7 @@ BI.shortcut("bi.rich_editor_text_toolbar", BI.RichEditorTextToolbar);/**
 
                 }
                 rng = document.selection.createRange();
-                rng.moveStart('character', -el.innerText.length);
+                rng.moveStart("character", -el.innerText.length);
                 var text = rng.text;
                 for (var i = 0; i < el.innerText.length; i++) {
                     if (el.innerText.substring(0, i + 1) == text.substring(text.length - i - 1, text.length)) {
@@ -9950,7 +9940,7 @@ BI.shortcut("bi.rich_editor_text_toolbar", BI.RichEditorTextToolbar);/**
         },
 
         keyDown: function (e, t) {
-            this.ne.fireEvent('keydown', e);
+            this.ne.fireEvent("keydown", e);
         },
 
         selected: function (e) {
@@ -9962,25 +9952,25 @@ BI.shortcut("bi.rich_editor_text_toolbar", BI.RichEditorTextToolbar);/**
                 var selInstance = this.ne.selectedInstance;
                 if (selInstance != this) {
                     if (selInstance) {
-                        this.ne.fireEvent('blur', e);
+                        this.ne.fireEvent("blur", e);
                     }
                     this.ne.selectedInstance = this;
-                    this.ne.fireEvent('focus', e);
+                    this.ne.fireEvent("focus", e);
                 }
-                this.ne.fireEvent('selected', e);
+                this.ne.fireEvent("selected", e);
                 this.isFocused = true;
-                this.elm.element.addClass(prefix + 'selected');
+                this.elm.element.addClass(prefix + "selected");
             }
             // return false;
         },
 
         blur: function () {
             this.isFocused = false;
-            this.elm.element.removeClass(prefix + 'selected');
+            this.elm.element.removeClass(prefix + "selected");
         },
 
         saveContent: function () {
-            this.ne.fireEvent('save');
+            this.ne.fireEvent("save");
             this.e.element.value(this.getContent());
         },
 
@@ -9990,13 +9980,13 @@ BI.shortcut("bi.rich_editor_text_toolbar", BI.RichEditorTextToolbar);/**
 
         getContent: function () {
             this.content = this.getElm().element.html();
-            this.ne.fireEvent('get');
+            this.ne.fireEvent("get");
             return this.content;
         },
 
         setContent: function (e) {
             this.content = e;
-            this.ne.fireEvent('set');
+            this.ne.fireEvent("set");
             this.elm.element.html(this.content);
         },
 
@@ -10045,7 +10035,7 @@ BI.RichEditorBackgroundChooserTrigger = BI.inherit(BI.Widget, {
                 top: 7,
                 left: 2
             }]
-        })
+        });
     },
 
     setValue: function (color) {
@@ -10056,7 +10046,7 @@ BI.RichEditorBackgroundChooserTrigger = BI.inherit(BI.Widget, {
         return this.font.element.css("color");
     }
 });
-BI.shortcut('bi.rich_editor_background_color_chooser_trigger', BI.RichEditorBackgroundChooserTrigger);/**
+BI.shortcut("bi.rich_editor_background_color_chooser_trigger", BI.RichEditorBackgroundChooserTrigger);/**
  *
  * Created by GUY on 2015/11/26.
  * @class BI.RichEditorAlignCenterButton
@@ -10093,7 +10083,7 @@ BI.RichEditorAlignCenterButton = BI.inherit(BI.RichEditorAction, {
     deactivate: function () {
     }
 });
-BI.shortcut("bi.rich_editor_align_center_button", BI.RichEditorAlignCenterButton)/**
+BI.shortcut("bi.rich_editor_align_center_button", BI.RichEditorAlignCenterButton);/**
  *
  * Created by GUY on 2015/11/26.
  * @class BI.RichEditorAlignLeftButton
@@ -10130,7 +10120,7 @@ BI.RichEditorAlignLeftButton = BI.inherit(BI.RichEditorAction, {
     deactivate: function () {
     }
 });
-BI.shortcut("bi.rich_editor_align_left_button", BI.RichEditorAlignLeftButton)/**
+BI.shortcut("bi.rich_editor_align_left_button", BI.RichEditorAlignLeftButton);/**
  *
  * Created by GUY on 2015/11/26.
  * @class BI.RichEditorAlignRightButton
@@ -10167,7 +10157,7 @@ BI.RichEditorAlignRightButton = BI.inherit(BI.RichEditorAction, {
     deactivate: function () {
     }
 });
-BI.shortcut("bi.rich_editor_align_right_button", BI.RichEditorAlignRightButton)/**
+BI.shortcut("bi.rich_editor_align_right_button", BI.RichEditorAlignRightButton);/**
  *
  * Created by GUY on 2015/11/26.
  * @class BI.RichEditorBoldButton
@@ -10207,7 +10197,7 @@ BI.RichEditorBoldButton = BI.inherit(BI.RichEditorAction, {
         this.bold.setSelected(false);
     }
 });
-BI.shortcut("bi.rich_editor_bold_button", BI.RichEditorBoldButton)/**
+BI.shortcut("bi.rich_editor_bold_button", BI.RichEditorBoldButton);/**
  *
  * Created by GUY on 2015/11/26.
  * @class BI.RichEditorItalicButton
@@ -10247,7 +10237,7 @@ BI.RichEditorItalicButton = BI.inherit(BI.RichEditorAction, {
         this.italic.setSelected(false);
     }
 });
-BI.shortcut("bi.rich_editor_italic_button", BI.RichEditorItalicButton)/**
+BI.shortcut("bi.rich_editor_italic_button", BI.RichEditorItalicButton);/**
  *
  * Created by GUY on 2015/11/26.
  * @class BI.RichEditorParamButton
@@ -10274,7 +10264,7 @@ BI.RichEditorParamButton = BI.inherit(BI.RichEditorParamAction, {
             width: 30
         });
         this.param.on(BI.Button.EVENT_CHANGE, function () {
-            self.addParam("参数")
+            self.addParam("参数");
         });
     },
     activate: function () {
@@ -10283,7 +10273,7 @@ BI.RichEditorParamButton = BI.inherit(BI.RichEditorParamAction, {
     deactivate: function () {
     }
 });
-BI.shortcut("bi.rich_editor_param_button", BI.RichEditorParamButton)/**
+BI.shortcut("bi.rich_editor_param_button", BI.RichEditorParamButton);/**
  *
  * Created by GUY on 2015/11/26.
  * @class BI.RichEditorItalicButton
@@ -10323,7 +10313,7 @@ BI.RichEditorUnderlineButton = BI.inherit(BI.RichEditorAction, {
         this.underline.setSelected(false);
     }
 });
-BI.shortcut("bi.rich_editor_underline_button", BI.RichEditorUnderlineButton)/**
+BI.shortcut("bi.rich_editor_underline_button", BI.RichEditorUnderlineButton);/**
  * 颜色选择trigger
  *
  * Created by GUY on 2015/11/26.
@@ -10363,7 +10353,7 @@ BI.RichEditorColorChooserTrigger = BI.inherit(BI.Widget, {
                 top: 7,
                 left: 2
             }]
-        })
+        });
     },
 
     setValue: function (color) {
@@ -10374,7 +10364,7 @@ BI.RichEditorColorChooserTrigger = BI.inherit(BI.Widget, {
         return this.font.element.css("color");
     }
 });
-BI.shortcut('bi.rich_editor_color_chooser_trigger', BI.RichEditorColorChooserTrigger);/**
+BI.shortcut("bi.rich_editor_color_chooser_trigger", BI.RichEditorColorChooserTrigger);/**
  * 颜色选择
  *
  * Created by GUY on 2015/11/26.
@@ -10468,7 +10458,7 @@ BI.RichEditorColorChooser = BI.inherit(BI.RichEditorAction, {
         this.colorchooser.setValue("");
     }
 });
-BI.shortcut('bi.rich_editor_color_chooser', BI.RichEditorColorChooser);/**
+BI.shortcut("bi.rich_editor_color_chooser", BI.RichEditorColorChooser);/**
  * 字体大小选择
  *
  * Created by GUY on 2015/11/26.
@@ -10609,7 +10599,7 @@ BI.RichEditor = BI.inherit(BI.Widget, {
     }
 });
 BI.RichEditor.EVENT_CONFIRM = "EVENT_CONFIRM";
-BI.shortcut('bi.rich_editor', BI.RichEditor);/**
+BI.shortcut("bi.rich_editor", BI.RichEditor);/**
  * 分段控件使用的button
  *
  * Created by GUY on 2015/9/7.
@@ -10621,19 +10611,19 @@ BI.SegmentButton = BI.inherit(BI.BasicButton, {
     _defaultConfig: function () {
         var conf = BI.SegmentButton.superclass._defaultConfig.apply(this, arguments);
         return BI.extend(conf, {
-            baseCls: (conf.baseCls || "") + ' bi-segment-button bi-list-item-active',
+            baseCls: (conf.baseCls || "") + " bi-segment-button bi-list-item-active",
             shadow: true,
             readonly: true,
             hgap: 5
-        })
+        });
     },
 
     _init: function () {
         BI.SegmentButton.superclass._init.apply(this, arguments);
         var opts = this.options, self = this;
-        //if (BI.isNumber(opts.height) && BI.isNull(opts.lineHeight)) {
+        // if (BI.isNumber(opts.height) && BI.isNull(opts.lineHeight)) {
         //    this.element.css({lineHeight : (opts.height - 2) + 'px'});
-        //}
+        // }
         this.text = BI.createWidget({
             type: "bi.label",
             element: this,
@@ -10642,7 +10632,7 @@ BI.SegmentButton = BI.inherit(BI.BasicButton, {
             text: opts.text,
             value: opts.value,
             hgap: opts.hgap
-        })
+        });
     },
 
     setSelected: function () {
@@ -10658,7 +10648,7 @@ BI.SegmentButton = BI.inherit(BI.BasicButton, {
         BI.SegmentButton.superclass.destroy.apply(this, arguments);
     }
 });
-BI.shortcut('bi.segment_button', BI.SegmentButton);/**
+BI.shortcut("bi.segment_button", BI.SegmentButton);/**
  * 单选按钮组
  *
  * Created by GUY on 2015/9/7.
@@ -10689,13 +10679,13 @@ BI.Segment = BI.inherit(BI.Widget, {
                     type: "bi.center"
                 }
             ]
-        })
+        });
         this.buttonGroup.on(BI.Controller.EVENT_CHANGE, function () {
-            self.fireEvent(BI.Controller.EVENT_CHANGE, arguments)
+            self.fireEvent(BI.Controller.EVENT_CHANGE, arguments);
         });
         this.buttonGroup.on(BI.ButtonGroup.EVENT_CHANGE, function (value, obj) {
-            self.fireEvent(BI.Segment.EVENT_CHANGE, value, obj)
-        })
+            self.fireEvent(BI.Segment.EVENT_CHANGE, value, obj);
+        });
     },
 
     setValue: function (v) {
@@ -10711,7 +10701,7 @@ BI.Segment = BI.inherit(BI.Widget, {
     }
 });
 BI.Segment.EVENT_CHANGE = "EVENT_CHANGE";
-BI.shortcut('bi.segment', BI.Segment);/**
+BI.shortcut("bi.segment", BI.Segment);/**
  * 自适应宽度的表格
  *
  * Created by GUY on 2016/2/3.
@@ -10731,11 +10721,11 @@ BI.AdaptiveTable = BI.inherit(BI.Widget, {
                 type: "bi.resizable_table"
             },
             isNeedResize: true,
-            isNeedFreeze: false,//是否需要冻结单元格
-            freezeCols: [], //冻结的列号,从0开始,isNeedFreeze为true时生效
+            isNeedFreeze: false, // 是否需要冻结单元格
+            freezeCols: [], // 冻结的列号,从0开始,isNeedFreeze为true时生效
 
-            isNeedMerge: false,//是否需要合并单元格
-            mergeCols: [], //合并的单元格列号
+            isNeedMerge: false, // 是否需要合并单元格
+            mergeCols: [], // 合并的单元格列号
             mergeRule: BI.emptyFn,
 
             columnSize: [],
@@ -10748,9 +10738,9 @@ BI.AdaptiveTable = BI.inherit(BI.Widget, {
             regionColumnSize: [],
 
             header: [],
-            items: [], //二维数组
+            items: [], // 二维数组
 
-            //交叉表头
+            // 交叉表头
             crossHeader: [],
             crossItems: []
         });
@@ -10785,7 +10775,7 @@ BI.AdaptiveTable = BI.inherit(BI.Widget, {
 
             header: o.header,
             items: o.items,
-            //交叉表头
+            // 交叉表头
             crossHeader: o.crossHeader,
             crossItems: o.crossItems
         });
@@ -10852,7 +10842,7 @@ BI.AdaptiveTable = BI.inherit(BI.Widget, {
             freezeCols: freezeCols,
             columnSize: columnSize,
             regionColumnSize: regionColumnSize
-        }
+        };
     },
 
     _populate: function () {
@@ -10938,7 +10928,7 @@ BI.AdaptiveTable = BI.inherit(BI.Widget, {
         BI.AdaptiveTable.superclass.destroy.apply(this, arguments);
     }
 });
-BI.shortcut('bi.adaptive_table', BI.AdaptiveTable);/**
+BI.shortcut("bi.adaptive_table", BI.AdaptiveTable);/**
  *
  * 层级树状结构的表格
  *
@@ -10954,13 +10944,13 @@ BI.DynamicSummaryLayerTreeTable = BI.inherit(BI.Widget, {
             el: {
                 type: "bi.resizable_table"
             },
-            isNeedResize: true,//是否需要调整列宽
-            isResizeAdapt: true,//是否需要在调整列宽或区域宽度的时候它们自适应变化
+            isNeedResize: true, // 是否需要调整列宽
+            isResizeAdapt: true, // 是否需要在调整列宽或区域宽度的时候它们自适应变化
 
-            isNeedFreeze: false,//是否需要冻结单元格
-            freezeCols: [], //冻结的列号,从0开始,isNeedFreeze为tree时生效
+            isNeedFreeze: false, // 是否需要冻结单元格
+            freezeCols: [], // 冻结的列号,从0开始,isNeedFreeze为tree时生效
 
-            isNeedMerge: true,//是否需要合并单元格
+            isNeedMerge: true, // 是否需要合并单元格
             mergeCols: [],
             mergeRule: BI.emptyFn,
 
@@ -10973,7 +10963,7 @@ BI.DynamicSummaryLayerTreeTable = BI.inherit(BI.Widget, {
 
             regionColumnSize: [],
 
-            //行表头
+            // 行表头
             rowHeaderCreator: null,
 
             headerCellStyleGetter: BI.emptyFn,
@@ -10984,14 +10974,14 @@ BI.DynamicSummaryLayerTreeTable = BI.inherit(BI.Widget, {
             footer: false,
             items: [],
 
-            //交叉表头
+            // 交叉表头
             crossHeader: [],
             crossItems: []
-        })
+        });
     },
 
     _getVDeep: function () {
-        return this.options.crossHeader.length;//纵向深度
+        return this.options.crossHeader.length;// 纵向深度
     },
 
     _getHDeep: function () {
@@ -11013,16 +11003,16 @@ BI.DynamicSummaryLayerTreeTable = BI.inherit(BI.Widget, {
             var deep = this._getHDeep();
             if (deep <= 0) {
                 newHeader.unshift(o.rowHeaderCreator || {
-                        type: "bi.table_style_cell",
-                        text: BI.i18nText("BI-Row_Header"),
-                        styleGetter: o.headerCellStyleGetter
-                    });
+                    type: "bi.table_style_cell",
+                    text: BI.i18nText("BI-Row_Header"),
+                    styleGetter: o.headerCellStyleGetter
+                });
             } else {
                 newHeader[0] = o.rowHeaderCreator || {
-                        type: "bi.table_style_cell",
-                        text: BI.i18nText("BI-Row_Header"),
-                        styleGetter: o.headerCellStyleGetter
-                    };
+                    type: "bi.table_style_cell",
+                    text: BI.i18nText("BI-Row_Header"),
+                    styleGetter: o.headerCellStyleGetter
+                };
             }
             result.push(newHeader);
         }
@@ -11033,7 +11023,7 @@ BI.DynamicSummaryLayerTreeTable = BI.inherit(BI.Widget, {
         var self = this, o = this.options;
         var result = [];
 
-        function track(node, layer) {
+        function track (node, layer) {
             node.type || (node.type = "bi.layer_tree_table_cell");
             node.layer = layer;
             var next = [node];
@@ -11060,7 +11050,7 @@ BI.DynamicSummaryLayerTreeTable = BI.inherit(BI.Widget, {
                         return o.summaryCellStyleGetter(true);
                     }
                 }].concat(node.values);
-                result.push(next)
+                result.push(next);
             }
         });
         return BI.DynamicSummaryTreeTable.formatSummaryItems(result, header, o.crossItems, 1);
@@ -11128,7 +11118,7 @@ BI.DynamicSummaryLayerTreeTable = BI.inherit(BI.Widget, {
             minColumnSize: this._formatColumns(minColumnSize, deep),
             maxColumnSize: this._formatColumns(maxColumnSize, deep),
             freezeCols: this._formatFreezeCols()
-        }
+        };
     },
 
     _init: function () {
@@ -11288,13 +11278,13 @@ BI.DynamicSummaryTreeTable = BI.inherit(BI.Widget, {
                 type: "bi.resizable_table"
             },
 
-            isNeedResize: true,//是否需要调整列宽
-            isResizeAdapt: true,//是否需要在调整列宽或区域宽度的时候它们自适应变化
+            isNeedResize: true, // 是否需要调整列宽
+            isResizeAdapt: true, // 是否需要在调整列宽或区域宽度的时候它们自适应变化
 
-            isNeedFreeze: false,//是否需要冻结单元格
-            freezeCols: [], //冻结的列号,从0开始,isNeedFreeze为tree时生效
+            isNeedFreeze: false, // 是否需要冻结单元格
+            freezeCols: [], // 冻结的列号,从0开始,isNeedFreeze为tree时生效
 
-            isNeedMerge: true,//是否需要合并单元格
+            isNeedMerge: true, // 是否需要合并单元格
             mergeCols: [],
             mergeRule: BI.emptyFn,
 
@@ -11315,14 +11305,14 @@ BI.DynamicSummaryTreeTable = BI.inherit(BI.Widget, {
             footer: false,
             items: [],
 
-            //交叉表头
+            // 交叉表头
             crossHeader: [],
             crossItems: []
-        })
+        });
     },
 
     _getVDeep: function () {
-        return this.options.crossHeader.length;//纵向深度
+        return this.options.crossHeader.length;// 纵向深度
     },
 
     _getHDeep: function () {
@@ -11500,7 +11490,7 @@ BI.extend(BI.DynamicSummaryTreeTable, {
     formatHorizontalItems: function (nodes, deep, isCross, styleGetter) {
         var result = [];
 
-        function track(store, node) {
+        function track (store, node) {
             var next;
             if (BI.isArray(node.children)) {
                 BI.each(node.children, function (index, child) {
@@ -11524,7 +11514,7 @@ BI.extend(BI.DynamicSummaryTreeTable, {
                         text: BI.i18nText("BI-Summary_Values"),
                         type: "bi.table_style_cell",
                         styleGetter: function () {
-                            return styleGetter(store === -1)
+                            return styleGetter(store === -1);
                         }
                     };
                     for (var i = next.length; i < deep; i++) {
@@ -11571,7 +11561,7 @@ BI.extend(BI.DynamicSummaryTreeTable, {
         BI.each(nodes, function (i, node) {
             track(-1, node);
         });
-        //填充空位
+        // 填充空位
         BI.each(result, function (i, line) {
             var last = BI.last(line);
             for (var j = line.length; j < deep; j++) {
@@ -11582,11 +11572,11 @@ BI.extend(BI.DynamicSummaryTreeTable, {
     },
 
     formatSummaryItems: function (items, header, crossItems, deep) {
-        //求纵向需要去除的列
+        // 求纵向需要去除的列
         var cols = [];
         var leaf = 0;
 
-        function track(node) {
+        function track (node) {
             if (BI.isArray(node.children)) {
                 BI.each(node.children, function (index, child) {
                     track(child);
@@ -11622,7 +11612,7 @@ BI.extend(BI.DynamicSummaryTreeTable, {
             BI.each(items, function (i, node) {
                 var nNode = node.slice();
                 BI.removeAt(nNode, cols);
-                nItems.push(nNode);;
+                nItems.push(nNode);
             });
             header = nHeader;
             items = nItems;
@@ -11642,7 +11632,7 @@ BI.LayerTreeTableCell = BI.inherit(BI.Widget, {
             baseCls: "bi-layer-tree-table-cell",
             layer: 0,
             text: ""
-        })
+        });
     },
 
     _init: function () {
@@ -11658,7 +11648,7 @@ BI.LayerTreeTableCell = BI.inherit(BI.Widget, {
             value: o.value,
             lgap: 5 + 30 * o.layer,
             rgap: 5
-        })
+        });
     }
 });
 
@@ -11678,13 +11668,13 @@ BI.LayerTreeTable = BI.inherit(BI.Widget, {
                 type: "bi.resizable_table"
             },
 
-            isNeedResize: false,//是否需要调整列宽
-            isResizeAdapt: true,//是否需要在调整列宽或区域宽度的时候它们自适应变化
+            isNeedResize: false, // 是否需要调整列宽
+            isResizeAdapt: true, // 是否需要在调整列宽或区域宽度的时候它们自适应变化
 
-            isNeedFreeze: false,//是否需要冻结单元格
-            freezeCols: [], //冻结的列号,从0开始,isNeedFreeze为tree时生效
+            isNeedFreeze: false, // 是否需要冻结单元格
+            freezeCols: [], // 冻结的列号,从0开始,isNeedFreeze为tree时生效
 
-            isNeedMerge: true,//是否需要合并单元格
+            isNeedMerge: true, // 是否需要合并单元格
             mergeCols: [],
             mergeRule: BI.emptyFn,
 
@@ -11706,14 +11696,14 @@ BI.LayerTreeTable = BI.inherit(BI.Widget, {
             header: [],
             items: [],
 
-            //交叉表头
+            // 交叉表头
             crossHeader: [],
             crossItems: []
-        })
+        });
     },
 
     _getVDeep: function () {
-        return this.options.crossHeader.length;//纵向深度
+        return this.options.crossHeader.length;// 纵向深度
     },
 
     _getHDeep: function () {
@@ -11735,16 +11725,16 @@ BI.LayerTreeTable = BI.inherit(BI.Widget, {
             var deep = this._getHDeep();
             if (deep <= 0) {
                 newHeader.unshift(o.rowHeaderCreator || {
-                        type: "bi.table_style_cell",
-                        text: BI.i18nText("BI-Row_Header"),
-                        styleGetter: o.headerCellStyleGetter
-                    });
+                    type: "bi.table_style_cell",
+                    text: BI.i18nText("BI-Row_Header"),
+                    styleGetter: o.headerCellStyleGetter
+                });
             } else {
                 newHeader[0] = o.rowHeaderCreator || {
-                        type: "bi.table_style_cell",
-                        text: BI.i18nText("BI-Row_Header"),
-                        styleGetter: o.headerCellStyleGetter
-                    };
+                    type: "bi.table_style_cell",
+                    text: BI.i18nText("BI-Row_Header"),
+                    styleGetter: o.headerCellStyleGetter
+                };
             }
             result.push(newHeader);
         }
@@ -11755,7 +11745,7 @@ BI.LayerTreeTable = BI.inherit(BI.Widget, {
         var self = this, o = this.options;
         var result = [];
 
-        function track(node, layer) {
+        function track (node, layer) {
             node.type || (node.type = "bi.layer_tree_table_cell");
             node.layer = layer;
             var next = [node];
@@ -11780,7 +11770,7 @@ BI.LayerTreeTable = BI.inherit(BI.Widget, {
                         return o.summaryCellStyleGetter(true);
                     }
                 }].concat(node.values);
-                result.push(next)
+                result.push(next);
             }
         });
         return result;
@@ -11828,7 +11818,7 @@ BI.LayerTreeTable = BI.inherit(BI.Widget, {
             minColumnSize: this._formatColumns(o.minColumnSize, deep),
             maxColumnSize: this._formatColumns(o.maxColumnSize, deep),
             freezeCols: this._formatFreezeCols()
-        }
+        };
     },
 
     _init: function () {
@@ -12024,7 +12014,7 @@ BI.TableStyleCell = BI.inherit(BI.Single, {
         this._digestStyle();
     }
 });
-BI.shortcut('bi.table_style_cell', BI.TableStyleCell);/**
+BI.shortcut("bi.table_style_cell", BI.TableStyleCell);/**
  *
  * 树状结构的表格
  *
@@ -12039,12 +12029,12 @@ BI.TableTree = BI.inherit(BI.Widget, {
             el: {
                 type: "bi.resizable_table"
             },
-            isNeedResize: true,//是否需要调整列宽
-            isResizeAdapt: true,//是否需要在调整列宽或区域宽度的时候它们自适应变化
+            isNeedResize: true, // 是否需要调整列宽
+            isResizeAdapt: true, // 是否需要在调整列宽或区域宽度的时候它们自适应变化
 
-            freezeCols: [], //冻结的列号,从0开始,isNeedFreeze为tree时生效
+            freezeCols: [], // 冻结的列号,从0开始,isNeedFreeze为tree时生效
 
-            isNeedMerge: true,//是否需要合并单元格
+            isNeedMerge: true, // 是否需要合并单元格
             mergeCols: [],
             mergeRule: BI.emptyFn,
 
@@ -12063,14 +12053,14 @@ BI.TableTree = BI.inherit(BI.Widget, {
             header: [],
             items: [],
 
-            //交叉表头
+            // 交叉表头
             crossHeader: [],
             crossItems: []
-        })
+        });
     },
 
     _getVDeep: function () {
-        return this.options.crossHeader.length;//纵向深度
+        return this.options.crossHeader.length;// 纵向深度
     },
 
     _getHDeep: function () {
@@ -12132,7 +12122,7 @@ BI.TableTree = BI.inherit(BI.Widget, {
         return {
             header: header,
             items: items
-        }
+        };
     },
 
     setWidth: function (width) {
@@ -12241,7 +12231,7 @@ BI.extend(BI.TableTree, {
         var self = this;
         var result = [];
 
-        function track(store, node) {
+        function track (store, node) {
             var next;
             if (BI.isArray(node.children)) {
                 BI.each(node.children, function (index, child) {
@@ -12260,12 +12250,12 @@ BI.extend(BI.TableTree, {
                 } else {
                     next = [];
                 }
-                if (/**(store == -1 || node.children.length > 1) &&**/ BI.isNotEmptyArray(node.values)) {
+                if (/** (store == -1 || node.children.length > 1) &&**/ BI.isNotEmptyArray(node.values)) {
                     var summary = {
                         text: BI.i18nText("BI-Summary_Values"),
                         type: "bi.table_style_cell",
                         styleGetter: function () {
-                            return styleGetter(store === -1)
+                            return styleGetter(store === -1);
                         }
                     };
                     for (var i = next.length; i < deep; i++) {
@@ -12313,7 +12303,7 @@ BI.extend(BI.TableTree, {
         BI.each(nodes, function (i, node) {
             track(-1, node);
         });
-        //填充空位
+        // 填充空位
         BI.each(result, function (i, line) {
             var last = BI.last(line);
             for (var j = line.length; j < deep; j++) {
@@ -12329,7 +12319,7 @@ BI.extend(BI.TableTree, {
     },
 
     maxDeep: function (nodes) {
-        function track(deep, node) {
+        function track (deep, node) {
             var d = deep;
             if (BI.isNotEmptyArray(node.children)) {
                 BI.each(node.children, function (index, child) {
@@ -12361,14 +12351,14 @@ BI.MultiSelectBar = BI.inherit(BI.BasicButton, {
         return BI.extend(BI.MultiSelectBar.superclass._defaultConfig.apply(this, arguments), {
             extraCls: "bi-multi-select-bar",
             height: 25,
-            text: BI.i18nText('BI-Select_All'),
+            text: BI.i18nText("BI-Select_All"),
             isAllCheckedBySelectedValue: BI.emptyFn,
-            //手动控制选中
+            // 手动控制选中
             disableSelected: true,
             isHalfCheckedBySelectedValue: function (selectedValues) {
                 return selectedValues.length > 0;
             }
-        })
+        });
     },
     _init: function () {
         BI.MultiSelectBar.superclass._init.apply(this, arguments);
@@ -12427,7 +12417,7 @@ BI.MultiSelectBar = BI.inherit(BI.BasicButton, {
         this.half.invisible();
     },
 
-    //自己手动控制选中
+    // 自己手动控制选中
     beforeClick: function () {
         var isHalf = this.isHalfSelected(), isSelected = this.isSelected();
         if (isHalf === true) {
@@ -12483,10 +12473,10 @@ BI.BranchRelation = BI.inherit(BI.Widget, {
             baseCls: "bi-branch-relation-tree",
             items: [],
 
-            centerOffset: 0,//重心偏移量
+            centerOffset: 0, // 重心偏移量
             direction: BI.Direction.Bottom,
             align: BI.VerticalAlign.Top
-        })
+        });
     },
 
     _init: function () {
@@ -12494,11 +12484,11 @@ BI.BranchRelation = BI.inherit(BI.Widget, {
         this.populate(this.options.items);
     },
 
-    //树分层
+    // 树分层
     _stratification: function () {
         var levels = [];
         this.tree.recursion(function (node, route) {
-            //node.isRoot = route.length <= 1;
+            // node.isRoot = route.length <= 1;
             node.leaf = node.isLeaf();
             if (!levels[route.length - 1]) {
                 levels[route.length - 1] = [];
@@ -12508,11 +12498,11 @@ BI.BranchRelation = BI.inherit(BI.Widget, {
         return levels;
     },
 
-    //计算所有节点的叶子结点个数
+    // 计算所有节点的叶子结点个数
     _calculateLeaves: function () {
         var count = 0;
 
-        function track(node) {
+        function track (node) {
             var c = 0;
             if (node.isLeaf()) {
                 return 1;
@@ -12528,7 +12518,7 @@ BI.BranchRelation = BI.inherit(BI.Widget, {
         return count;
     },
 
-    //树平移
+    // 树平移
     _translate: function (levels) {
         var adjust = [];
         var maxLevel = levels.length;
@@ -12539,16 +12529,16 @@ BI.BranchRelation = BI.inherit(BI.Widget, {
             BI.each(nodes, function (j, node) {
                 if (node.isLeaf() && i < maxLevel - 1) {
                     var newNode = new BI.Node(BI.UUID());
-                    //newNode.isEmptyRoot = node.isRoot || node.isEmptyRoot;
+                    // newNode.isEmptyRoot = node.isRoot || node.isEmptyRoot;
                     newNode.isNew = true;
-                    //把node向下一层移
+                    // 把node向下一层移
                     var tar = 0;
                     if (j > 0) {
                         var c = nodes[j - 1].getLastChild();
                         tar = levels[i + 1].indexOf(c) + 1;
                     }
                     levels[i + 1].splice(tar, 0, node);
-                    //新增一个临时树节点
+                    // 新增一个临时树节点
                     var index = node.parent.getChildIndex(node.id);
                     node.parent.removeChildByIndex(index);
                     node.parent.addChild(newNode, index);
@@ -12558,12 +12548,12 @@ BI.BranchRelation = BI.inherit(BI.Widget, {
                 } else {
                     adjust[i].push(node);
                 }
-            })
+            });
         });
         return adjust;
     },
 
-    //树补白
+    // 树补白
     _fill: function (levels) {
         var adjust = [];
         var maxLevel = levels.length;
@@ -12578,23 +12568,23 @@ BI.BranchRelation = BI.inherit(BI.Widget, {
                     newNode.width = node.width;
                     newNode.height = node.height;
                     newNode.isNew = true;
-                    //把node向下一层移
+                    // 把node向下一层移
                     var tar = 0;
                     if (j > 0) {
                         var c = nodes[j - 1].getLastChild();
                         tar = levels[i + 1].indexOf(c) + 1;
                     }
                     levels[i + 1].splice(tar, 0, newNode);
-                    //新增一个临时树节点
+                    // 新增一个临时树节点
                     node.addChild(newNode);
                 }
                 adjust[i].push(node);
-            })
+            });
         });
         return adjust;
     },
 
-    //树调整
+    // 树调整
     _adjust: function (adjust) {
         while (true) {
             var isAllNeedAjust = false;
@@ -12618,7 +12608,7 @@ BI.BranchRelation = BI.inherit(BI.Widget, {
                                 node.addChild(c);
                             });
                             var newNode = new BI.Node(BI.UUID());
-                            //newNode.isEmptyRoot = node.isRoot || node.isEmptyRoot;
+                            // newNode.isEmptyRoot = node.isRoot || node.isEmptyRoot;
                             newNode.isNew = true;
                             var index = node.parent.getChildIndex(node.id);
                             node.parent.removeChildByIndex(index);
@@ -12627,11 +12617,11 @@ BI.BranchRelation = BI.inherit(BI.Widget, {
                             isAllNeedAjust = true;
                         }
                     }
-                })
+                });
             });
             if (isAllNeedAjust === false) {
                 break;
-            } else {//树重构
+            } else {// 树重构
                 adjust = this._stratification();
             }
         }
@@ -12642,7 +12632,7 @@ BI.BranchRelation = BI.inherit(BI.Widget, {
         var o = this.options;
         var width = 0;
 
-        function track1(node) {
+        function track1 (node) {
             var w = 0;
             if (node.isLeaf()) {
                 return node.width;
@@ -12653,7 +12643,7 @@ BI.BranchRelation = BI.inherit(BI.Widget, {
             return w;
         }
 
-        function track2(node) {
+        function track2 (node) {
             var w = 0;
             if (node.isLeaf()) {
                 return node.height;
@@ -12682,7 +12672,7 @@ BI.BranchRelation = BI.inherit(BI.Widget, {
         var o = this.options;
         var height = 0;
 
-        function track1(node) {
+        function track1 (node) {
             var h = 0;
             BI.each(node.getChildren(), function (i, child) {
                 h = Math.max(h, track1(child));
@@ -12690,7 +12680,7 @@ BI.BranchRelation = BI.inherit(BI.Widget, {
             return h + (node.height || 0);
         }
 
-        function track2(node) {
+        function track2 (node) {
             var h = 0;
             BI.each(node.getChildren(), function (i, child) {
                 h = Math.max(h, track2(child));
@@ -12712,23 +12702,23 @@ BI.BranchRelation = BI.inherit(BI.Widget, {
         var height = this._calculateHeight();
         var levelCount = levels.length;
         var allLeavesCount = this._calculateLeaves();
-        //计算坐标
+        // 计算坐标
         var xy = {};
         var levelHeight = height / levelCount;
         BI.each(levels, function (i, nodes) {
-            //计算权重
+            // 计算权重
             var weights = [];
             BI.each(nodes, function (j, node) {
                 weights[j] = (node.get("leaves") || 1) / allLeavesCount;
             });
             BI.each(nodes, function (j, node) {
-                //求前j个元素的权重
+                // 求前j个元素的权重
                 var weight = BI.sum(weights.slice(0, j));
-                //求坐标
+                // 求坐标
                 var x = weight * width + weights[j] * width / 2;
                 var y = i * levelHeight + levelHeight / 2;
                 xy[node.id] = {x: x, y: y};
-            })
+            });
         });
         return xy;
     },
@@ -12757,7 +12747,7 @@ BI.BranchRelation = BI.inherit(BI.Widget, {
                             }
                             self.svg.path(path).attr("stroke", "#d4dadd");
                         }
-                    })
+                    });
                 });
                 break;
             case BI.Direction.Bottom:
@@ -12778,7 +12768,7 @@ BI.BranchRelation = BI.inherit(BI.Widget, {
                             }
                             self.svg.path(path).attr("stroke", "#d4dadd");
                         }
-                    })
+                    });
                 });
                 break;
             case BI.Direction.Left:
@@ -12799,7 +12789,7 @@ BI.BranchRelation = BI.inherit(BI.Widget, {
                             }
                             self.svg.path(path).attr("stroke", "#d4dadd");
                         }
-                    })
+                    });
                 });
                 break;
             case BI.Direction.Right:
@@ -12820,7 +12810,7 @@ BI.BranchRelation = BI.inherit(BI.Widget, {
                             }
                             self.svg.path(path).attr("stroke", "#d4dadd");
                         }
-                    })
+                    });
                 });
                 break;
         }
@@ -12832,14 +12822,14 @@ BI.BranchRelation = BI.inherit(BI.Widget, {
             levels = levels.reverse();
         }
         var xy = this._calculateXY(levels);
-        //画图
+        // 画图
         this._stroke(levels, xy);
     },
 
     _isNeedAdjust: function () {
         var o = this.options;
         return o.direction === BI.Direction.Top && o.align === BI.VerticalAlign.Bottom || o.direction === BI.Direction.Bottom && o.align === BI.VerticalAlign.Top
-            || o.direction === BI.Direction.Left && o.align === BI.HorizontalAlign.Right || o.direction === BI.Direction.Right && o.align === BI.HorizontalAlign.Left
+            || o.direction === BI.Direction.Left && o.align === BI.HorizontalAlign.Right || o.direction === BI.Direction.Right && o.align === BI.HorizontalAlign.Left;
     },
 
     setValue: function (value) {
@@ -12873,9 +12863,9 @@ BI.BranchRelation = BI.inherit(BI.Widget, {
                 }
             }
             return r;
-        } else {
-            return [sNodes];
         }
+        return [sNodes];
+        
     },
 
     populate: function (items) {
@@ -12890,13 +12880,13 @@ BI.BranchRelation = BI.inherit(BI.Widget, {
             type: "bi.svg"
         });
 
-        //树分层
+        // 树分层
         var levels = this._stratification();
 
         if (this._isNeedAdjust()) {
-            //树平移
+            // 树平移
             var adjust = this._translate(levels);
-            //树调整
+            // 树调整
             adjust = this._adjust(adjust);
 
             this._createBranches(adjust);
@@ -12935,7 +12925,7 @@ BI.BranchRelation = BI.inherit(BI.Widget, {
                     }]
                 },
                 items: items
-            }]
+            }];
         } else {
             items = [{
                 type: "bi.branch_tree",
@@ -12950,7 +12940,7 @@ BI.BranchRelation = BI.inherit(BI.Widget, {
                     }]
                 },
                 items: items
-            }]
+            }];
         }
         BI.createWidget({
             type: "bi.adaptive",
@@ -12982,7 +12972,7 @@ BI.HandStandBranchExpander = BI.inherit(BI.Widget, {
             },
             el: {type: "bi.label"},
             popup: {}
-        })
+        });
     },
 
     _init: function () {
@@ -13040,7 +13030,7 @@ BI.BranchExpander = BI.inherit(BI.Widget, {
             },
             el: {},
             popup: {}
-        })
+        });
     },
 
     _init: function () {
@@ -13097,7 +13087,7 @@ BI.HandStandBranchTree = BI.inherit(BI.Widget, {
             expander: {},
             el: {},
             items: []
-        })
+        });
     },
     _init: function () {
         BI.HandStandBranchTree.superclass._init.apply(this, arguments);
@@ -13121,10 +13111,10 @@ BI.HandStandBranchTree = BI.inherit(BI.Widget, {
             }, o.el),
             items: this.options.items
         });
-        this.branchTree.on(BI.CustomTree.EVENT_CHANGE, function(){
+        this.branchTree.on(BI.CustomTree.EVENT_CHANGE, function () {
             self.fireEvent(BI.HandStandBranchTree.EVENT_CHANGE, arguments);
         });
-        this.branchTree.on(BI.Controller.EVENT_CHANGE, function(){
+        this.branchTree.on(BI.Controller.EVENT_CHANGE, function () {
             self.fireEvent(BI.Controller.EVENT_CHANGE, arguments);
         });
     },
@@ -13151,7 +13141,7 @@ BI.BranchTree = BI.inherit(BI.Widget, {
             expander: {},
             el: {},
             items: []
-        })
+        });
     },
     _init: function () {
         BI.BranchTree.superclass._init.apply(this, arguments);
@@ -13175,10 +13165,10 @@ BI.BranchTree = BI.inherit(BI.Widget, {
             }, o.el),
             items: this.options.items
         });
-        this.branchTree.on(BI.CustomTree.EVENT_CHANGE, function(){
+        this.branchTree.on(BI.CustomTree.EVENT_CHANGE, function () {
             self.fireEvent(BI.BranchTree.EVENT_CHANGE, arguments);
         });
-        this.branchTree.on(BI.Controller.EVENT_CHANGE, function(){
+        this.branchTree.on(BI.Controller.EVENT_CHANGE, function () {
             self.fireEvent(BI.Controller.EVENT_CHANGE, arguments);
         });
     },
@@ -13202,13 +13192,13 @@ BI.DisplayTree = BI.inherit(BI.TreeView, {
     _defaultConfig: function () {
         return BI.extend(BI.DisplayTree.superclass._defaultConfig.apply(this, arguments), {
             extraCls: "bi-display-tree"
-        })
+        });
     },
     _init: function () {
         BI.DisplayTree.superclass._init.apply(this, arguments);
     },
 
-    //配置属性
+    // 配置属性
     _configSetting: function () {
         var setting = {
             view: {
@@ -13231,7 +13221,7 @@ BI.DisplayTree = BI.inherit(BI.TreeView, {
             }
         };
 
-        function beforeCollapse(treeId, treeNode) {
+        function beforeCollapse (treeId, treeNode) {
             return false;
         }
 
@@ -13277,7 +13267,7 @@ BI.LevelTree = BI.inherit(BI.Widget, {
             },
             expander: {},
             items: []
-        })
+        });
     },
 
     _init: function () {
@@ -13329,7 +13319,7 @@ BI.LevelTree = BI.inherit(BI.Widget, {
         });
     },
 
-    //构造树结构，
+    // 构造树结构，
     initTree: function (nodes) {
         var self = this, o = this.options;
         this.empty();
@@ -13359,10 +13349,10 @@ BI.LevelTree = BI.inherit(BI.Widget, {
             if (type === BI.Events.CLICK) {
                 self.fireEvent(BI.LevelTree.EVENT_CHANGE, arguments);
             }
-        })
+        });
     },
 
-    //生成树方法
+    // 生成树方法
     stroke: function (nodes) {
         this.tree.stroke.apply(this.tree, arguments);
     },
@@ -13407,7 +13397,7 @@ BI.SimpleTreeView = BI.inherit(BI.Widget, {
             baseCls: "bi-simple-tree",
             itemsCreator: BI.emptyFn,
             items: null
-        })
+        });
     },
     _init: function () {
         BI.SimpleTreeView.superclass._init.apply(this, arguments);
@@ -13488,7 +13478,7 @@ BI.SimpleTreeView = BI.inherit(BI.Widget, {
                 } else {
                     track(node);
                 }
-            })
+            });
         };
         track(val);
         return result;
@@ -13507,7 +13497,7 @@ BI.SimpleTreeView = BI.inherit(BI.Widget, {
                     if (node.isLeaf()) {
                         result.push(node.value);
                     }
-                })
+                });
             }
         });
         return result;
@@ -13563,7 +13553,7 @@ BI.EditorTrigger = BI.inherit(BI.Trigger, {
 
         BI.createWidget({
             element: this,
-            type: 'bi.htape',
+            type: "bi.htape",
             items: [
                 {
                     el: this.editor
@@ -13619,7 +13609,7 @@ BI.IconTrigger = BI.inherit(BI.Trigger, {
         });
     }
 });
-BI.shortcut('bi.icon_trigger', BI.IconTrigger);/**
+BI.shortcut("bi.icon_trigger", BI.IconTrigger);/**
  * 文字trigger
  *
  * Created by GUY on 2015/9/15.
@@ -13657,7 +13647,7 @@ BI.IconTextTrigger = BI.inherit(BI.Trigger, {
 
         BI.createWidget({
             element: this,
-            type: 'bi.htape',
+            type: "bi.htape",
             ref: function (_ref) {
                 self.wrapper = _ref;
             },
@@ -13672,12 +13662,12 @@ BI.IconTextTrigger = BI.inherit(BI.Trigger, {
                 },
                 width: o.triggerWidth || o.height
             },
-                {
-                    el: this.text
-                }, {
-                    el: this.trigerButton,
-                    width: o.triggerWidth || o.height
-                }
+            {
+                el: this.text
+            }, {
+                el: this.trigerButton,
+                width: o.triggerWidth || o.height
+            }
             ]
         });
     },
@@ -13691,13 +13681,13 @@ BI.IconTextTrigger = BI.inherit(BI.Trigger, {
         var o = this.options;
         this.icon.setIcon(iconCls);
         var iconItem = this.wrapper.attr("items")[0];
-        if(BI.isNull(iconCls) || BI.isEmptyString(iconCls)){
-            if(iconItem.width !== 0){
+        if(BI.isNull(iconCls) || BI.isEmptyString(iconCls)) {
+            if(iconItem.width !== 0) {
                 iconItem.width = 0;
                 this.wrapper.resize();
             }
         }else{
-            if(iconItem.width !== (o.triggerWidth || o.height)){
+            if(iconItem.width !== (o.triggerWidth || o.height)) {
                 iconItem.width = (o.triggerWidth || o.height);
                 this.wrapper.resize();
             }
@@ -13802,7 +13792,7 @@ BI.TextTrigger = BI.inherit(BI.Trigger, {
 
         BI.createWidget({
             element: this,
-            type: 'bi.htape',
+            type: "bi.htape",
             items: [
                 {
                     el: this.text
@@ -13965,7 +13955,7 @@ BI.SmallTextTrigger = BI.inherit(BI.Trigger, {
 
         BI.createWidget({
             element: this,
-            type: 'bi.htape',
+            type: "bi.htape",
             items: [
                 {
                     el: this.text

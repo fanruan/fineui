@@ -8,10 +8,10 @@ BI.AllCountPager = BI.inherit(BI.Widget, {
         return BI.extend(BI.AllCountPager.superclass._defaultConfig.apply(this, arguments), {
             extraCls: "bi-all-count-pager",
             height: 30,
-            pages: 1, //必选项
-            curr: 1, //初始化当前页， pages为数字时可用，
-            count: 1 //总行数
-        })
+            pages: 1, // 必选项
+            curr: 1, // 初始化当前页， pages为数字时可用，
+            count: 1 // 总行数
+        });
     },
     _init: function () {
         BI.AllCountPager.superclass._init.apply(this, arguments);
@@ -117,7 +117,7 @@ BI.AllCountPager = BI.inherit(BI.Widget, {
             element: this,
             columnSize: ["", 35, 40, 36],
             items: [count, this.editor, this.allPages, this.pager]
-        })
+        });
     },
 
     alwaysShowPager: true,

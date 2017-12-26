@@ -6,8 +6,8 @@ BI.Tab = BI.inherit(BI.Widget, {
     _defaultConfig: function () {
         return BI.extend(BI.Tab.superclass._defaultConfig.apply(this, arguments), {
             baseCls: "bi-tab",
-            direction: "top",//top, bottom, left, right, custom
-            single: false, //是不是单页面
+            direction: "top", // top, bottom, left, right, custom
+            single: false, // 是不是单页面
             logic: {
                 dynamic: false
             },
@@ -16,7 +16,7 @@ BI.Tab = BI.inherit(BI.Widget, {
             cardCreator: function (v) {
                 return BI.createWidget();
             }
-        })
+        });
     },
 
     render: function () {
@@ -25,7 +25,7 @@ BI.Tab = BI.inherit(BI.Widget, {
             this.tab = BI.createWidget(this.options.tab, {type: "bi.button_group"});
             this.tab.on(BI.Controller.EVENT_CHANGE, function (type, value, obj) {
                 self.fireEvent(BI.Controller.EVENT_CHANGE, arguments);
-            })
+            });
         }
         this.cardMap = {};
         this.layout = BI.createWidget({

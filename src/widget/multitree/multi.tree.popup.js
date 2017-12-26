@@ -7,8 +7,8 @@ BI.MultiTreePopup = BI.inherit(BI.Pane, {
 
     _defaultConfig: function () {
         return BI.extend(BI.MultiTreePopup.superclass._defaultConfig.apply(this, arguments), {
-            baseCls: 'bi-multi-tree-popup',
-            maxWidth: 'auto',
+            baseCls: "bi-multi-tree-popup",
+            maxWidth: "auto",
             minWidth: 100,
             maxHeight: 400,
             onLoaded: BI.emptyFn
@@ -25,7 +25,7 @@ BI.MultiTreePopup = BI.inherit(BI.Pane, {
         this.tree = BI.createWidget({
             type: "bi.async_tree",
             height: 400,
-            cls:"popup-view-tree",
+            cls: "popup-view-tree",
             itemsCreator: opts.itemsCreator,
             onLoaded: opts.onLoaded
         });
@@ -37,7 +37,7 @@ BI.MultiTreePopup = BI.inherit(BI.Pane, {
             maxWidth: opts.maxWidth,
             minWidth: opts.minWidth,
             maxHeight: opts.maxHeight,
-            buttons: [BI.i18nText('BI-Basic_Clears'), BI.i18nText('BI-Basic_Sure')],
+            buttons: [BI.i18nText("BI-Basic_Clears"), BI.i18nText("BI-Basic_Sure")],
             el: this.tree
         });
 
@@ -94,4 +94,4 @@ BI.MultiTreePopup.EVENT_CLICK_CLEAR = "EVENT_CLICK_CLEAR";
 BI.MultiTreePopup.EVENT_AFTERINIT = "EVENT_AFTERINIT";
 
 
-BI.shortcut('bi.multi_tree_popup_view', BI.MultiTreePopup);
+BI.shortcut("bi.multi_tree_popup_view", BI.MultiTreePopup);

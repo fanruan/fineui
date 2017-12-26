@@ -13,16 +13,16 @@ BI.Table = BI.inherit(BI.Widget, {
     _defaultConfig: function () {
         return BI.extend(BI.Table.superclass._defaultConfig.apply(this, arguments), {
             baseCls: "bi-table",
-            logic: { //冻结的页面布局逻辑
+            logic: { // 冻结的页面布局逻辑
                 dynamic: false
             },
 
-            isNeedFreeze: false,//是否需要冻结单元格
-            freezeCols: [], //冻结的列号,从0开始,isNeedFreeze为true时生效
+            isNeedFreeze: false, // 是否需要冻结单元格
+            freezeCols: [], // 冻结的列号,从0开始,isNeedFreeze为true时生效
 
-            isNeedMerge: false,//是否需要合并单元格
-            mergeCols: [], //合并的单元格列号
-            mergeRule: function (row1, row2) { //合并规则, 默认相等时合并
+            isNeedMerge: false, // 是否需要合并单元格
+            mergeCols: [], // 合并的单元格列号
+            mergeRule: function (row1, row2) { // 合并规则, 默认相等时合并
                 return BI.isEqual(row1, row2);
             },
 
@@ -35,8 +35,8 @@ BI.Table = BI.inherit(BI.Widget, {
 
             header: [],
             footer: false,
-            items: [] //二维数组
-        })
+            items: [] // 二维数组
+        });
     },
 
     _calculateWidth: function (width) {
@@ -326,17 +326,17 @@ BI.Table = BI.inherit(BI.Widget, {
 
         var regionColumnSize = o.regionColumnSize;
         if (o.freezeCols.length === 0) {
-            regionColumnSize = isRight ? ['fill', 0] : [0, 'fill'];
+            regionColumnSize = isRight ? ["fill", 0] : [0, "fill"];
         } else if (o.freezeCols.length >= o.columnSize.length) {
-            regionColumnSize = isRight ? [0, 'fill'] : ['fill', 0];
+            regionColumnSize = isRight ? [0, "fill"] : ["fill", 0];
         }
         this.partitions = BI.createWidget(BI.extend({
             element: this
         }, BI.LogicFactory.createLogic("table", BI.extend({}, o.logic, {
             rows: 2,
             columns: 2,
-            columnSize: regionColumnSize || (isRight ? ['fill', leftWidth] : [leftWidth, 'fill']),
-            rowSize: [headerHeight, 'fill'],
+            columnSize: regionColumnSize || (isRight ? ["fill", leftWidth] : [leftWidth, "fill"]),
+            rowSize: [headerHeight, "fill"],
             items: [[{
                 el: this.topLeft
             }, {
@@ -365,7 +365,7 @@ BI.Table = BI.inherit(BI.Widget, {
         scroll(this.scrollBottomRight.element, this.scrollTopRight.element, this.scrollBottomLeft.element);
         // scroll(this.scrollBottomLeft.element, this.scrollTopLeft.element, this.scrollBottomRight.element);
 
-        function scroll(scrollElement, scrollTopElement, otherElement) {
+        function scroll (scrollElement, scrollTopElement, otherElement) {
             scrollElement.scroll(function (e) {
                 otherElement.scrollTop(scrollElement.scrollTop());
                 scrollTopElement.scrollLeft(scrollElement.scrollLeft());
@@ -442,10 +442,10 @@ BI.Table = BI.inherit(BI.Widget, {
                     createOneEl(i, j);
                 }
             });
-            function mergeRow(i, j) {
+            function mergeRow (i, j) {
                 var height = (preCol[j].attr("height") | 0) + rowSize + 1;
                 preCol[j].attr("height", height).css("height", height);
-                //preCW[j].element.css("height", height);
+                // preCW[j].element.css("height", height);
                 var rowspan = ((preCol[j].attr("rowspan") || 1) | 0) + 1;
                 preCol[j].attr("rowspan", rowspan);
                 preCol[j].__mergeRows.pushDistinct(i);
@@ -453,7 +453,7 @@ BI.Table = BI.inherit(BI.Widget, {
                 Ws[i][j] = preCW[j];
             }
 
-            function mergeCol(i, j) {
+            function mergeCol (i, j) {
                 if (columnSize[j]) {
                     var width = preRow[i].attr("width") | 0;
                     if (width > 1.05 && columnSize[j]) {
@@ -462,7 +462,7 @@ BI.Table = BI.inherit(BI.Widget, {
                             width--;
                         }
                     } else {
-                        width = width + columnSize[j]
+                        width = width + columnSize[j];
                     }
                     width = self._calculateWidth(width);
                     preRow[i].attr("width", width).css("width", width);
@@ -475,14 +475,14 @@ BI.Table = BI.inherit(BI.Widget, {
                 Ws[i][j] = preRW[i];
             }
 
-            function createOneEl(r, c) {
+            function createOneEl (r, c) {
                 var width = self._calculateWidth(columnSize[c]);
                 if (width > 1.05 && c === columnSize.length - 1) {
                     width--;
                 }
                 var height = self._calculateHeight(rowSize);
                 var td = $("<td>").attr("height", height)
-                    .attr("width", width).css({"width": width, "height": height, "position": "relative"})
+                    .attr("width", width).css({width: width, height: height, position: "relative"})
                     .addClass((c & 1) === 0 ? "odd-col" : "even-col")
                     .addClass(r === 0 ? "first-row" : "")
                     .addClass(c === 0 ? "first-col" : "")
@@ -653,12 +653,12 @@ BI.Table = BI.inherit(BI.Widget, {
                 } else {
                     (isRight ? left : right)[i].push(cell);
                 }
-            })
+            });
         });
         return {
             left: left,
             right: right
-        }
+        };
     },
 
     _table: function () {
@@ -666,7 +666,7 @@ BI.Table = BI.inherit(BI.Widget, {
             type: "bi.layout",
             tagName: "table",
             cls: "table",
-            attribute: {"cellspacing": 0, "cellpadding": 0}
+            attribute: {cellspacing: 0, cellpadding: 0}
         });
     },
 
@@ -820,7 +820,7 @@ BI.Table = BI.inherit(BI.Widget, {
                             }
                         });
                     }
-                })
+                });
             };
             run(topleft);
             run(topright);
@@ -1080,21 +1080,21 @@ BI.Table = BI.inherit(BI.Widget, {
         if (o.isNeedFreeze === true) {
             if (BI.size(this.bottomLeftBodyTds) > 0 || BI.size(this.bottomRightBodyTds) > 0) {
                 if (!BI.any(this.bottomLeftBodyTds, function (i, tds) {
-                        if (!BI.any(tds, function (i, item) {
-                                if (item.__mergeCols.length > 1) {
-                                    return true;
-                                }
-                            })) {
-                            BI.each(tds, function (i, item) {
-                                var width = item.width() / item.__mergeCols.length;
-                                if (i == BI.size(tds) - 1) {
-                                    width++;
-                                }
-                                columnSize.push(width);
-                            });
+                    if (!BI.any(tds, function (i, item) {
+                        if (item.__mergeCols.length > 1) {
                             return true;
                         }
                     })) {
+                        BI.each(tds, function (i, item) {
+                            var width = item.width() / item.__mergeCols.length;
+                            if (i == BI.size(tds) - 1) {
+                                width++;
+                            }
+                            columnSize.push(width);
+                        });
+                        return true;
+                    }
+                })) {
                     BI.each(this.bottomLeftBodyTds[0], function (i, item) {
                         var width = item.width() / item.__mergeCols.length;
                         if (i == BI.size(self.bottomLeftBodyTds[0]) - 1) {
@@ -1104,21 +1104,21 @@ BI.Table = BI.inherit(BI.Widget, {
                     });
                 }
                 if (!BI.any(this.bottomRightBodyTds, function (i, tds) {
-                        if (!BI.any(tds, function (i, item) {
-                                if (item.__mergeCols.length > 1) {
-                                    return true;
-                                }
-                            })) {
-                            BI.each(tds, function (i, item) {
-                                var width = item.width() / item.__mergeCols.length;
-                                if (i == BI.size(tds) - 1) {
-                                    width++;
-                                }
-                                columnSize.push(width);
-                            });
+                    if (!BI.any(tds, function (i, item) {
+                        if (item.__mergeCols.length > 1) {
                             return true;
                         }
                     })) {
+                        BI.each(tds, function (i, item) {
+                            var width = item.width() / item.__mergeCols.length;
+                            if (i == BI.size(tds) - 1) {
+                                width++;
+                            }
+                            columnSize.push(width);
+                        });
+                        return true;
+                    }
+                })) {
                     BI.each(this.bottomRightBodyTds[0], function (i, item) {
                         var width = item.width() / item.__mergeCols.length;
                         if (i == BI.size(self.bottomRightBodyTds[0]) - 1) {
@@ -1130,21 +1130,21 @@ BI.Table = BI.inherit(BI.Widget, {
                 return columnSize;
             }
             if (!BI.any(this.topLeftBodyTds, function (i, tds) {
-                    if (!BI.any(tds, function (i, item) {
-                            if (item.__mergeCols.length > 1) {
-                                return true;
-                            }
-                        })) {
-                        BI.each(tds, function (i, item) {
-                            var width = item.width() / item.__mergeCols.length;
-                            if (i == BI.size(tds) - 1) {
-                                width++;
-                            }
-                            columnSize.push(width);
-                        });
+                if (!BI.any(tds, function (i, item) {
+                    if (item.__mergeCols.length > 1) {
                         return true;
                     }
                 })) {
+                    BI.each(tds, function (i, item) {
+                        var width = item.width() / item.__mergeCols.length;
+                        if (i == BI.size(tds) - 1) {
+                            width++;
+                        }
+                        columnSize.push(width);
+                    });
+                    return true;
+                }
+            })) {
                 BI.each(this.topLeftBodyTds[BI.size(this.topLeftBodyTds) - 1], function (i, item) {
                     var width = item.width() / item.__mergeCols.length;
                     if (i == BI.size(self.topLeftBodyTds[BI.size(self.topLeftBodyTds) - 1]) - 1) {
@@ -1154,21 +1154,21 @@ BI.Table = BI.inherit(BI.Widget, {
                 });
             }
             if (!BI.any(this.topRightBodyTds, function (i, tds) {
-                    if (!BI.any(tds, function (i, item) {
-                            if (item.__mergeCols.length > 1) {
-                                return true;
-                            }
-                        })) {
-                        BI.each(tds, function (i, item) {
-                            var width = item.width() / item.__mergeCols.length;
-                            if (i == BI.size(tds) - 1) {
-                                width++;
-                            }
-                            columnSize.push(width);
-                        });
+                if (!BI.any(tds, function (i, item) {
+                    if (item.__mergeCols.length > 1) {
                         return true;
                     }
                 })) {
+                    BI.each(tds, function (i, item) {
+                        var width = item.width() / item.__mergeCols.length;
+                        if (i == BI.size(tds) - 1) {
+                            width++;
+                        }
+                        columnSize.push(width);
+                    });
+                    return true;
+                }
+            })) {
                 BI.each(this.topRightBodyTds[BI.size(this.topRightBodyTds) - 1], function (i, item) {
                     var width = item.width() / item.__mergeCols.length;
                     if (i == BI.size(self.topRightBodyTds[BI.size(self.topRightBodyTds) - 1]) - 1) {
@@ -1291,7 +1291,7 @@ BI.Table = BI.inherit(BI.Widget, {
                             }
                         });
                     }
-                })
+                });
             };
             run(topleft);
             run(topright);
@@ -1404,7 +1404,7 @@ BI.Table = BI.inherit(BI.Widget, {
         o.regionColumnSize = columnSize;
         if (o.freezeCols.length === 0) {
             if (o.isNeedFreeze) {
-                this.partitions.attr("columnSize", this._isRightFreeze() ? ['fill', 0] : [0, 'fill']);
+                this.partitions.attr("columnSize", this._isRightFreeze() ? ["fill", 0] : [0, "fill"]);
                 this.partitions.resize();
             } else {
                 this.tableContainer.element.width(columnSize[0]);
@@ -1418,7 +1418,7 @@ BI.Table = BI.inherit(BI.Widget, {
             }
         } else {
             if (o.isNeedFreeze) {
-                this.partitions.attr("columnSize", this._isRightFreeze() ? [0, 'fill'] : ['fill', 0]);
+                this.partitions.attr("columnSize", this._isRightFreeze() ? [0, "fill"] : ["fill", 0]);
                 this.partitions.resize();
             } else {
                 this.tableContainer.element.width(columnSize[0]);
@@ -1475,9 +1475,9 @@ BI.Table = BI.inherit(BI.Widget, {
         if (o.isNeedFreeze) {
             if (o.freezeCols.length < o.columnSize.length) {
                 return [this.scrollTopRight.element[0].scrollHeight, this.scrollBottomRight.element[0].scrollHeight];
-            } else {
-                return [this.scrollTopLeft.element[0].scrollHeight, this.scrollBottomLeft.element[0].scrollHeight];
             }
+            return [this.scrollTopLeft.element[0].scrollHeight, this.scrollBottomLeft.element[0].scrollHeight];
+            
         }
         return [this.scrollBottomRight.element[0].scrollHeight];
     },
@@ -1570,14 +1570,14 @@ BI.Table = BI.inherit(BI.Widget, {
                 topRight: this.topRightBodyItems,
                 bottomLeft: this.bottomLeftBodyItems,
                 bottomRight: this.bottomRightBodyItems
-            }
-        } else {
-            return {
-                header: this.headerItems,
-                body: this.bodyItems,
-                footer: this.footerItems
-            }
+            };
         }
+        return {
+            header: this.headerItems,
+            body: this.bodyItems,
+            footer: this.footerItems
+        };
+        
     },
 
     populate: function (items, header) {

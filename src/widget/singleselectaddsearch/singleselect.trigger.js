@@ -60,12 +60,12 @@ BI.SingleSelectTrigger = BI.inherit(BI.Trigger, {
         });
 
         var wrapper = BI.createWidget({
-            type: 'bi.htape',
+            type: "bi.htape",
             element: this,
             items: [
                 {
                     el: this.searcher,
-                    width: 'fill'
+                    width: "fill"
                 }, {
                     el: BI.createWidget(),
                     width: 30
@@ -107,4 +107,4 @@ BI.SingleSelectTrigger.EVENT_PAUSE = "EVENT_PAUSE";
 BI.SingleSelectTrigger.EVENT_SEARCHING = "EVENT_SEARCHING";
 BI.SingleSelectTrigger.EVENT_BEFORE_COUNTER_POPUPVIEW = "EVENT_BEFORE_COUNTER_POPUPVIEW";
 
-BI.shortcut('bi.single_select_add_trigger', BI.SingleSelectTrigger);
+BI.shortcut("bi.single_select_add_trigger", BI.SingleSelectTrigger);

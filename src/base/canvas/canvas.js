@@ -10,14 +10,14 @@ BI.Canvas = BI.inherit(BI.Widget, {
     _defaultConfig: function () {
         return BI.extend(BI.Canvas.superclass._defaultConfig.apply(this, arguments), {
             baseCls: "bi-canvas"
-        })
+        });
     },
 
     _init: function () {
         BI.Canvas.superclass._init.apply(this, arguments);
         var self = this, o = this.options;
         var canvas = document.createElement("canvas");
-        if (!document.createElement('canvas').getContext) {
+        if (!document.createElement("canvas").getContext) {
             canvas = window.G_vmlCanvasManager.initElement(canvas);
         }
         this.element.append(canvas);
@@ -35,7 +35,7 @@ BI.Canvas = BI.inherit(BI.Widget, {
 
     _getContext: function () {
         if (!this.ctx) {
-            this.ctx = this.canvas.getContext('2d');
+            this.ctx = this.canvas.getContext("2d");
         }
         return this.ctx;
     },
@@ -119,7 +119,7 @@ BI.Canvas = BI.inherit(BI.Widget, {
 
     stroke: function () {
         var ctx = this._getContext();
-        if(!ctx){
+        if(!ctx) {
             return false;
         }
         BI.each(this._queue, function (i, q) {

@@ -1,52 +1,52 @@
-/*!
+/* !
  * clipboard.js v1.6.1
  * https://zenorocha.github.io/clipboard.js
  *
  * Licensed MIT © Zeno Rocha
  */
-try {//IE8下会抛错
+try {// IE8下会抛错
     (function (f) {
         if (typeof exports === "object" && typeof module !== "undefined") {
-            module.exports = f()
+            module.exports = f();
         } else if (typeof define === "function" && define.amd) {
-            define([], f)
+            define([], f);
         } else {
             var g;
             if (typeof window !== "undefined") {
-                g = window
+                g = window;
             } else if (typeof global !== "undefined") {
-                g = global
+                g = global;
             } else if (typeof self !== "undefined") {
-                g = self
+                g = self;
             } else {
-                g = this
+                g = this;
             }
-            g.Clipboard = f()
+            g.Clipboard = f();
         }
     })(function () {
         var define, module, exports;
-        return (function e(t, n, r) {
-            function s(o, u) {
+        return (function e (t, n, r) {
+            function s (o, u) {
                 if (!n[o]) {
                     if (!t[o]) {
-                        var a = typeof require == "function" && require;
+                        var a = typeof require === "function" && require;
                         if (!u && a)return a(o, !0);
                         if (i)return i(o, !0);
                         var f = new Error("Cannot find module '" + o + "'");
-                        throw f.code = "MODULE_NOT_FOUND", f
+                        throw f.code = "MODULE_NOT_FOUND", f;
                     }
                     var l = n[o] = {exports: {}};
                     t[o][0].call(l.exports, function (e) {
                         var n = t[o][1][e];
-                        return s(n ? n : e)
-                    }, l, l.exports, e, t, n, r)
+                        return s(n ? n : e);
+                    }, l, l.exports, e, t, n, r);
                 }
-                return n[o].exports
+                return n[o].exports;
             }
 
-            var i = typeof require == "function" && require;
+            var i = typeof require === "function" && require;
             for (var o = 0; o < r.length; o++)s(r[o]);
-            return s
+            return s;
         })({
             1: [function (require, module, exports) {
                 var DOCUMENT_NODE_TYPE = 9;
@@ -54,7 +54,7 @@ try {//IE8下会抛错
                 /**
                  * A polyfill for Element.matches()
                  */
-                if (typeof Element !== 'undefined' && !Element.prototype.matches) {
+                if (typeof Element !== "undefined" && !Element.prototype.matches) {
                     var proto = Element.prototype;
 
                     proto.matches = proto.matchesSelector ||
@@ -71,7 +71,7 @@ try {//IE8下会抛错
                  * @param {String} selector
                  * @return {Function}
                  */
-                function closest(element, selector) {
+                function closest (element, selector) {
                     while (element && element.nodeType !== DOCUMENT_NODE_TYPE) {
                         if (element.matches(selector)) return element;
                         element = element.parentNode;
@@ -81,7 +81,7 @@ try {//IE8下会抛错
                 module.exports = closest;
 
             }, {}], 2: [function (require, module, exports) {
-                var closest = require('./closest');
+                var closest = require("./closest");
 
                 /**
                  * Delegates event to a selector.
@@ -93,7 +93,7 @@ try {//IE8下会抛错
                  * @param {Boolean} useCapture
                  * @return {Object}
                  */
-                function delegate(element, selector, type, callback, useCapture) {
+                function delegate (element, selector, type, callback, useCapture) {
                     var listenerFn = listener.apply(this, arguments);
 
                     element.addEventListener(type, listenerFn, useCapture);
@@ -102,7 +102,7 @@ try {//IE8下会抛错
                         destroy: function () {
                             element.removeEventListener(type, listenerFn, useCapture);
                         }
-                    }
+                    };
                 }
 
                 /**
@@ -114,14 +114,14 @@ try {//IE8下会抛错
                  * @param {Function} callback
                  * @return {Function}
                  */
-                function listener(element, selector, type, callback) {
+                function listener (element, selector, type, callback) {
                     return function (e) {
                         e.delegateTarget = closest(e.target, selector);
 
                         if (e.delegateTarget) {
                             callback.call(element, e);
                         }
-                    }
+                    };
                 }
 
                 module.exports = delegate;
@@ -149,8 +149,8 @@ try {//IE8下会抛错
                     var type = Object.prototype.toString.call(value);
 
                     return value !== undefined
-                        && (type === '[object NodeList]' || type === '[object HTMLCollection]')
-                        && ('length' in value)
+                        && (type === "[object NodeList]" || type === "[object HTMLCollection]")
+                        && ("length" in value)
                         && (value.length === 0 || exports.node(value[0]));
                 };
 
@@ -161,7 +161,7 @@ try {//IE8下会抛错
                  * @return {Boolean}
                  */
                 exports.string = function (value) {
-                    return typeof value === 'string'
+                    return typeof value === "string"
                         || value instanceof String;
                 };
 
@@ -174,12 +174,12 @@ try {//IE8下会抛错
                 exports.fn = function (value) {
                     var type = Object.prototype.toString.call(value);
 
-                    return type === '[object Function]';
+                    return type === "[object Function]";
                 };
 
             }, {}], 4: [function (require, module, exports) {
-                var is = require('./is');
-                var delegate = require('delegate');
+                var is = require("./is");
+                var delegate = require("delegate");
 
                 /**
                  * Validates all params and calls the right
@@ -190,31 +190,29 @@ try {//IE8下会抛错
                  * @param {Function} callback
                  * @return {Object}
                  */
-                function listen(target, type, callback) {
+                function listen (target, type, callback) {
                     if (!target && !type && !callback) {
-                        throw new Error('Missing required arguments');
+                        throw new Error("Missing required arguments");
                     }
 
                     if (!is.string(type)) {
-                        throw new TypeError('Second argument must be a String');
+                        throw new TypeError("Second argument must be a String");
                     }
 
                     if (!is.fn(callback)) {
-                        throw new TypeError('Third argument must be a Function');
+                        throw new TypeError("Third argument must be a Function");
                     }
 
                     if (is.node(target)) {
                         return listenNode(target, type, callback);
-                    }
-                    else if (is.nodeList(target)) {
+                    } else if (is.nodeList(target)) {
                         return listenNodeList(target, type, callback);
-                    }
-                    else if (is.string(target)) {
+                    } else if (is.string(target)) {
                         return listenSelector(target, type, callback);
                     }
-                    else {
-                        throw new TypeError('First argument must be a String, HTMLElement, HTMLCollection, or NodeList');
-                    }
+                    
+                    throw new TypeError("First argument must be a String, HTMLElement, HTMLCollection, or NodeList");
+                    
                 }
 
                 /**
@@ -226,14 +224,14 @@ try {//IE8下会抛错
                  * @param {Function} callback
                  * @return {Object}
                  */
-                function listenNode(node, type, callback) {
+                function listenNode (node, type, callback) {
                     node.addEventListener(type, callback);
 
                     return {
                         destroy: function () {
                             node.removeEventListener(type, callback);
                         }
-                    }
+                    };
                 }
 
                 /**
@@ -245,7 +243,7 @@ try {//IE8下会抛错
                  * @param {Function} callback
                  * @return {Object}
                  */
-                function listenNodeList(nodeList, type, callback) {
+                function listenNodeList (nodeList, type, callback) {
                     Array.prototype.forEach.call(nodeList, function (node) {
                         node.addEventListener(type, callback);
                     });
@@ -256,7 +254,7 @@ try {//IE8下会抛错
                                 node.removeEventListener(type, callback);
                             });
                         }
-                    }
+                    };
                 }
 
                 /**
@@ -268,39 +266,37 @@ try {//IE8下会抛错
                  * @param {Function} callback
                  * @return {Object}
                  */
-                function listenSelector(selector, type, callback) {
+                function listenSelector (selector, type, callback) {
                     return delegate(document.body, selector, type, callback);
                 }
 
                 module.exports = listen;
 
-            }, {"./is": 3, "delegate": 2}], 5: [function (require, module, exports) {
-                function select(element) {
+            }, {"./is": 3, delegate: 2}], 5: [function (require, module, exports) {
+                function select (element) {
                     var selectedText;
 
-                    if (element.nodeName === 'SELECT') {
+                    if (element.nodeName === "SELECT") {
                         element.focus();
 
                         selectedText = element.value;
-                    }
-                    else if (element.nodeName === 'INPUT' || element.nodeName === 'TEXTAREA') {
-                        var isReadOnly = element.hasAttribute('readonly');
+                    } else if (element.nodeName === "INPUT" || element.nodeName === "TEXTAREA") {
+                        var isReadOnly = element.hasAttribute("readonly");
 
                         if (!isReadOnly) {
-                            element.setAttribute('readonly', '');
+                            element.setAttribute("readonly", "");
                         }
 
                         element.select();
                         element.setSelectionRange(0, element.value.length);
 
                         if (!isReadOnly) {
-                            element.removeAttribute('readonly');
+                            element.removeAttribute("readonly");
                         }
 
                         selectedText = element.value;
-                    }
-                    else {
-                        if (element.hasAttribute('contenteditable')) {
+                    } else {
+                        if (element.hasAttribute("contenteditable")) {
                             element.focus();
                         }
 
@@ -320,7 +316,7 @@ try {//IE8下会抛错
                 module.exports = select;
 
             }, {}], 6: [function (require, module, exports) {
-                function E() {
+                function E () {
                     // Keep this empty so it's easier to inherit from
                     // (via https://github.com/lipsmack from https://github.com/scottcorgan/tiny-emitter/issues/3)
                 }
@@ -340,12 +336,12 @@ try {//IE8下会抛错
                     once: function (name, callback, ctx) {
                         var self = this;
 
-                        function listener() {
+                        function listener () {
                             self.off(name, listener);
                             callback.apply(ctx, arguments);
-                        };
+                        }
 
-                        listener._ = callback
+                        listener._ = callback;
                         return this.on(name, listener, ctx);
                     },
 
@@ -369,8 +365,7 @@ try {//IE8下会抛错
 
                         if (evts && callback) {
                             for (var i = 0, len = evts.length; i < len; i++) {
-                                if (evts[i].fn !== callback && evts[i].fn._ !== callback)
-                                    liveEvents.push(evts[i]);
+                                if (evts[i].fn !== callback && evts[i].fn._ !== callback) {liveEvents.push(evts[i]);}
                             }
                         }
 
@@ -391,9 +386,9 @@ try {//IE8下会抛错
             }, {}], 7: [function (require, module, exports) {
                 (function (global, factory) {
                     if (typeof define === "function" && define.amd) {
-                        define(['module', 'select'], factory);
+                        define(["module", "select"], factory);
                     } else if (typeof exports !== "undefined") {
-                        factory(module, require('select'));
+                        factory(module, require("select"));
                     } else {
                         var mod = {
                             exports: {}
@@ -402,13 +397,13 @@ try {//IE8下会抛错
                         global.clipboardAction = mod.exports;
                     }
                 })(this, function (module, _select) {
-                    'use strict';
+                    "use strict";
 
                     var _select2 = _interopRequireDefault(_select);
 
-                    function _interopRequireDefault(obj) {
+                    function _interopRequireDefault (obj) {
                         return obj && obj.__esModule ? obj : {
-                            "default": obj
+                            default: obj
                         };
                     }
 
@@ -418,14 +413,14 @@ try {//IE8下会抛错
                         return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj;
                     };
 
-                    function _classCallCheck(instance, Constructor) {
+                    function _classCallCheck (instance, Constructor) {
                         if (!(instance instanceof Constructor)) {
                             throw new TypeError("Cannot call a class as a function");
                         }
                     }
 
                     var _createClass = function () {
-                        function defineProperties(target, props) {
+                        function defineProperties (target, props) {
                             for (var i = 0; i < props.length; i++) {
                                 var descriptor = props[i];
                                 descriptor.enumerable = descriptor.enumerable || false;
@@ -446,7 +441,7 @@ try {//IE8下会抛错
                         /**
                          * @param {Object} options
                          */
-                        function ClipboardAction(options) {
+                        function ClipboardAction (options) {
                             _classCallCheck(this, ClipboardAction);
 
                             this.resolveOptions(options);
@@ -460,8 +455,8 @@ try {//IE8下会抛错
 
 
                         _createClass(ClipboardAction, [{
-                            key: 'resolveOptions',
-                            value: function resolveOptions() {
+                            key: "resolveOptions",
+                            value: function resolveOptions () {
                                 var options = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
 
                                 this.action = options.action;
@@ -470,11 +465,11 @@ try {//IE8下会抛错
                                 this.text = options.text;
                                 this.trigger = options.trigger;
 
-                                this.selectedText = '';
+                                this.selectedText = "";
                             }
                         }, {
-                            key: 'initSelection',
-                            value: function initSelection() {
+                            key: "initSelection",
+                            value: function initSelection () {
                                 if (this.text) {
                                     this.selectFake();
                                 } else if (this.target) {
@@ -482,34 +477,34 @@ try {//IE8下会抛错
                                 }
                             }
                         }, {
-                            key: 'selectFake',
-                            value: function selectFake() {
+                            key: "selectFake",
+                            value: function selectFake () {
                                 var _this = this;
 
-                                var isRTL = document.documentElement.getAttribute('dir') == 'rtl';
+                                var isRTL = document.documentElement.getAttribute("dir") == "rtl";
 
                                 this.removeFake();
 
                                 this.fakeHandlerCallback = function () {
                                     return _this.removeFake();
                                 };
-                                this.fakeHandler = document.body.addEventListener('click', this.fakeHandlerCallback) || true;
+                                this.fakeHandler = document.body.addEventListener("click", this.fakeHandlerCallback) || true;
 
-                                this.fakeElem = document.createElement('textarea');
+                                this.fakeElem = document.createElement("textarea");
                                 // Prevent zooming on iOS
-                                this.fakeElem.style.fontSize = '12pt';
+                                this.fakeElem.style.fontSize = "12pt";
                                 // Reset box model
-                                this.fakeElem.style.border = '0';
-                                this.fakeElem.style.padding = '0';
-                                this.fakeElem.style.margin = '0';
+                                this.fakeElem.style.border = "0";
+                                this.fakeElem.style.padding = "0";
+                                this.fakeElem.style.margin = "0";
                                 // Move element out of screen horizontally
-                                this.fakeElem.style.position = 'absolute';
-                                this.fakeElem.style[isRTL ? 'right' : 'left'] = '-9999px';
+                                this.fakeElem.style.position = "absolute";
+                                this.fakeElem.style[isRTL ? "right" : "left"] = "-9999px";
                                 // Move element to the same position vertically
                                 var yPosition = window.pageYOffset || document.documentElement.scrollTop;
-                                this.fakeElem.style.top = yPosition + 'px';
+                                this.fakeElem.style.top = yPosition + "px";
 
-                                this.fakeElem.setAttribute('readonly', '');
+                                this.fakeElem.setAttribute("readonly", "");
                                 this.fakeElem.value = this.text;
 
                                 document.body.appendChild(this.fakeElem);
@@ -518,10 +513,10 @@ try {//IE8下会抛错
                                 this.copyText();
                             }
                         }, {
-                            key: 'removeFake',
-                            value: function removeFake() {
+                            key: "removeFake",
+                            value: function removeFake () {
                                 if (this.fakeHandler) {
-                                    document.body.removeEventListener('click', this.fakeHandlerCallback);
+                                    document.body.removeEventListener("click", this.fakeHandlerCallback);
                                     this.fakeHandler = null;
                                     this.fakeHandlerCallback = null;
                                 }
@@ -532,14 +527,14 @@ try {//IE8下会抛错
                                 }
                             }
                         }, {
-                            key: 'selectTarget',
-                            value: function selectTarget() {
+                            key: "selectTarget",
+                            value: function selectTarget () {
                                 this.selectedText = (0, _select2["default"])(this.target);
                                 this.copyText();
                             }
                         }, {
-                            key: 'copyText',
-                            value: function copyText() {
+                            key: "copyText",
+                            value: function copyText () {
                                 var succeeded = void 0;
 
                                 try {
@@ -551,9 +546,9 @@ try {//IE8下会抛错
                                 this.handleResult(succeeded);
                             }
                         }, {
-                            key: 'handleResult',
-                            value: function handleResult(succeeded) {
-                                this.emitter.emit(succeeded ? 'success' : 'error', {
+                            key: "handleResult",
+                            value: function handleResult (succeeded) {
+                                this.emitter.emit(succeeded ? "success" : "error", {
                                     action: this.action,
                                     text: this.selectedText,
                                     trigger: this.trigger,
@@ -561,8 +556,8 @@ try {//IE8下会抛错
                                 });
                             }
                         }, {
-                            key: 'clearSelection',
-                            value: function clearSelection() {
+                            key: "clearSelection",
+                            value: function clearSelection () {
                                 if (this.target) {
                                     this.target.blur();
                                 }
@@ -570,44 +565,44 @@ try {//IE8下会抛错
                                 window.getSelection().removeAllRanges();
                             }
                         }, {
-                            key: 'destroy',
-                            value: function destroy() {
+                            key: "destroy",
+                            value: function destroy () {
                                 this.removeFake();
                             }
                         }, {
-                            key: 'action',
-                            set: function set() {
-                                var action = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : 'copy';
+                            key: "action",
+                            set: function set () {
+                                var action = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : "copy";
 
                                 this._action = action;
 
-                                if (this._action !== 'copy' && this._action !== 'cut') {
-                                    throw new Error('Invalid "action" value, use either "copy" or "cut"');
+                                if (this._action !== "copy" && this._action !== "cut") {
+                                    throw new Error("Invalid \"action\" value, use either \"copy\" or \"cut\"");
                                 }
                             },
-                            get: function get() {
+                            get: function get () {
                                 return this._action;
                             }
                         }, {
-                            key: 'target',
-                            set: function set(target) {
+                            key: "target",
+                            set: function set (target) {
                                 if (target !== undefined) {
-                                    if (target && (typeof target === 'undefined' ? 'undefined' : _typeof(target)) === 'object' && target.nodeType === 1) {
-                                        if (this.action === 'copy' && target.hasAttribute('disabled')) {
-                                            throw new Error('Invalid "target" attribute. Please use "readonly" instead of "disabled" attribute');
+                                    if (target && (typeof target === "undefined" ? "undefined" : _typeof(target)) === "object" && target.nodeType === 1) {
+                                        if (this.action === "copy" && target.hasAttribute("disabled")) {
+                                            throw new Error("Invalid \"target\" attribute. Please use \"readonly\" instead of \"disabled\" attribute");
                                         }
 
-                                        if (this.action === 'cut' && (target.hasAttribute('readonly') || target.hasAttribute('disabled'))) {
-                                            throw new Error('Invalid "target" attribute. You can\'t cut text from elements with "readonly" or "disabled" attributes');
+                                        if (this.action === "cut" && (target.hasAttribute("readonly") || target.hasAttribute("disabled"))) {
+                                            throw new Error("Invalid \"target\" attribute. You can't cut text from elements with \"readonly\" or \"disabled\" attributes");
                                         }
 
                                         this._target = target;
                                     } else {
-                                        throw new Error('Invalid "target" value, use a valid Element');
+                                        throw new Error("Invalid \"target\" value, use a valid Element");
                                     }
                                 }
                             },
-                            get: function get() {
+                            get: function get () {
                                 return this._target;
                             }
                         }]);
@@ -618,12 +613,12 @@ try {//IE8下会抛错
                     module.exports = ClipboardAction;
                 });
 
-            }, {"select": 5}], 8: [function (require, module, exports) {
+            }, {select: 5}], 8: [function (require, module, exports) {
                 (function (global, factory) {
                     if (typeof define === "function" && define.amd) {
-                        define(['module', './clipboard-action', 'tiny-emitter', 'good-listener'], factory);
+                        define(["module", "./clipboard-action", "tiny-emitter", "good-listener"], factory);
                     } else if (typeof exports !== "undefined") {
-                        factory(module, require('./clipboard-action'), require('tiny-emitter'), require('good-listener'));
+                        factory(module, require("./clipboard-action"), require("tiny-emitter"), require("good-listener"));
                     } else {
                         var mod = {
                             exports: {}
@@ -632,7 +627,7 @@ try {//IE8下会抛错
                         global.clipboard = mod.exports;
                     }
                 })(this, function (module, _clipboardAction, _tinyEmitter, _goodListener) {
-                    'use strict';
+                    "use strict";
 
                     var _clipboardAction2 = _interopRequireDefault(_clipboardAction);
 
@@ -640,20 +635,20 @@ try {//IE8下会抛错
 
                     var _goodListener2 = _interopRequireDefault(_goodListener);
 
-                    function _interopRequireDefault(obj) {
+                    function _interopRequireDefault (obj) {
                         return obj && obj.__esModule ? obj : {
-                            "default": obj
+                            default: obj
                         };
                     }
 
-                    function _classCallCheck(instance, Constructor) {
+                    function _classCallCheck (instance, Constructor) {
                         if (!(instance instanceof Constructor)) {
                             throw new TypeError("Cannot call a class as a function");
                         }
                     }
 
                     var _createClass = function () {
-                        function defineProperties(target, props) {
+                        function defineProperties (target, props) {
                             for (var i = 0; i < props.length; i++) {
                                 var descriptor = props[i];
                                 descriptor.enumerable = descriptor.enumerable || false;
@@ -670,7 +665,7 @@ try {//IE8下会抛错
                         };
                     }();
 
-                    function _possibleConstructorReturn(self, call) {
+                    function _possibleConstructorReturn (self, call) {
                         if (!self) {
                             throw new ReferenceError("this hasn't been initialised - super() hasn't been called");
                         }
@@ -678,7 +673,7 @@ try {//IE8下会抛错
                         return call && (typeof call === "object" || typeof call === "function") ? call : self;
                     }
 
-                    function _inherits(subClass, superClass) {
+                    function _inherits (subClass, superClass) {
                         if (typeof superClass !== "function" && superClass !== null) {
                             throw new TypeError("Super expression must either be null or a function, not " + typeof superClass);
                         }
@@ -701,7 +696,7 @@ try {//IE8下会抛错
                          * @param {String|HTMLElement|HTMLCollection|NodeList} trigger
                          * @param {Object} options
                          */
-                        function Clipboard(trigger, options) {
+                        function Clipboard (trigger, options) {
                             _classCallCheck(this, Clipboard);
 
                             var _this = _possibleConstructorReturn(this, (Clipboard.__proto__ || Object.getPrototypeOf(Clipboard)).call(this));
@@ -719,26 +714,26 @@ try {//IE8下会抛错
 
 
                         _createClass(Clipboard, [{
-                            key: 'resolveOptions',
-                            value: function resolveOptions() {
+                            key: "resolveOptions",
+                            value: function resolveOptions () {
                                 var options = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
 
-                                this.action = typeof options.action === 'function' ? options.action : this.defaultAction;
-                                this.target = typeof options.target === 'function' ? options.target : this.defaultTarget;
-                                this.text = typeof options.text === 'function' ? options.text : this.defaultText;
+                                this.action = typeof options.action === "function" ? options.action : this.defaultAction;
+                                this.target = typeof options.target === "function" ? options.target : this.defaultTarget;
+                                this.text = typeof options.text === "function" ? options.text : this.defaultText;
                             }
                         }, {
-                            key: 'listenClick',
-                            value: function listenClick(trigger) {
+                            key: "listenClick",
+                            value: function listenClick (trigger) {
                                 var _this2 = this;
 
-                                this.listener = (0, _goodListener2["default"])(trigger, 'click', function (e) {
+                                this.listener = (0, _goodListener2["default"])(trigger, "click", function (e) {
                                     return _this2.onClick(e);
                                 });
                             }
                         }, {
-                            key: 'onClick',
-                            value: function onClick(e) {
+                            key: "onClick",
+                            value: function onClick (e) {
                                 var trigger = e.delegateTarget || e.currentTarget;
 
                                 if (this.clipboardAction) {
@@ -754,27 +749,27 @@ try {//IE8下会抛错
                                 });
                             }
                         }, {
-                            key: 'defaultAction',
-                            value: function defaultAction(trigger) {
-                                return getAttributeValue('action', trigger);
+                            key: "defaultAction",
+                            value: function defaultAction (trigger) {
+                                return getAttributeValue("action", trigger);
                             }
                         }, {
-                            key: 'defaultTarget',
-                            value: function defaultTarget(trigger) {
-                                var selector = getAttributeValue('target', trigger);
+                            key: "defaultTarget",
+                            value: function defaultTarget (trigger) {
+                                var selector = getAttributeValue("target", trigger);
 
                                 if (selector) {
                                     return document.querySelector(selector);
                                 }
                             }
                         }, {
-                            key: 'defaultText',
-                            value: function defaultText(trigger) {
-                                return getAttributeValue('text', trigger);
+                            key: "defaultText",
+                            value: function defaultText (trigger) {
+                                return getAttributeValue("text", trigger);
                             }
                         }, {
-                            key: 'destroy',
-                            value: function destroy() {
+                            key: "destroy",
+                            value: function destroy () {
                                 this.listener.destroy();
 
                                 if (this.clipboardAction) {
@@ -783,11 +778,11 @@ try {//IE8下会抛错
                                 }
                             }
                         }], [{
-                            key: 'isSupported',
-                            value: function isSupported() {
-                                var action = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : ['copy', 'cut'];
+                            key: "isSupported",
+                            value: function isSupported () {
+                                var action = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : ["copy", "cut"];
 
-                                var actions = typeof action === 'string' ? [action] : action;
+                                var actions = typeof action === "string" ? [action] : action;
                                 var support = !!document.queryCommandSupported;
 
                                 actions.forEach(function (action) {
@@ -806,8 +801,8 @@ try {//IE8下会抛错
                      * @param {String} suffix
                      * @param {Element} element
                      */
-                    function getAttributeValue(suffix, element) {
-                        var attribute = 'data-clipboard-' + suffix;
+                    function getAttributeValue (suffix, element) {
+                        var attribute = "data-clipboard-" + suffix;
 
                         if (!element.hasAttribute(attribute)) {
                             return;
@@ -820,7 +815,7 @@ try {//IE8下会抛错
                 });
 
             }, {"./clipboard-action": 7, "good-listener": 4, "tiny-emitter": 6}]
-        }, {}, [8])(8)
+        }, {}, [8])(8);
     });
 } catch (e) {
     /*
@@ -839,11 +834,11 @@ try {//IE8下会抛错
 
         $.fn.zclip = function (params) {
 
-            if (typeof params == "object" && !params.length) {
+            if (typeof params === "object" && !params.length) {
 
                 var settings = $.extend({
 
-                    path: 'ZeroClipboard.swf',
+                    path: "ZeroClipboard.swf",
                     copy: null,
                     beforeCopy: null,
                     afterCopy: null,
@@ -858,62 +853,62 @@ try {//IE8下会抛错
 
                     var o = $(this);
 
-                    if (o.is(':visible') && (typeof settings.copy == 'string' || $.isFunction(settings.copy))) {
+                    if (o.is(":visible") && (typeof settings.copy === "string" || $.isFunction(settings.copy))) {
 
                         ZeroClipboard.setMoviePath(settings.path);
                         var clip = new ZeroClipboard.Client();
 
                         if ($.isFunction(settings.copy)) {
-                            o.bind('zClip_copy', settings.copy);
+                            o.bind("zClip_copy", settings.copy);
                         }
                         if ($.isFunction(settings.beforeCopy)) {
-                            o.bind('zClip_beforeCopy', settings.beforeCopy);
+                            o.bind("zClip_beforeCopy", settings.beforeCopy);
                         }
                         if ($.isFunction(settings.afterCopy)) {
-                            o.bind('zClip_afterCopy', settings.afterCopy);
+                            o.bind("zClip_afterCopy", settings.afterCopy);
                         }
 
                         clip.setHandCursor(settings.setHandCursor);
                         clip.setCSSEffects(settings.setCSSEffects);
-                        clip.addEventListener('mouseOver', function (client) {
-                            o.trigger('mouseenter');
+                        clip.addEventListener("mouseOver", function (client) {
+                            o.trigger("mouseenter");
                         });
-                        clip.addEventListener('mouseOut', function (client) {
-                            o.trigger('mouseleave');
+                        clip.addEventListener("mouseOut", function (client) {
+                            o.trigger("mouseleave");
                         });
-                        clip.addEventListener('mouseDown', function (client) {
+                        clip.addEventListener("mouseDown", function (client) {
 
-                            o.trigger('mousedown');
+                            o.trigger("mousedown");
 
                             if (!$.isFunction(settings.copy)) {
                                 clip.setText(settings.copy);
                             } else {
-                                clip.setText(o.triggerHandler('zClip_copy'));
+                                clip.setText(o.triggerHandler("zClip_copy"));
                             }
 
                             if ($.isFunction(settings.beforeCopy)) {
-                                o.trigger('zClip_beforeCopy');
+                                o.trigger("zClip_beforeCopy");
                             }
 
                         });
 
-                        clip.addEventListener('complete', function (client, text) {
+                        clip.addEventListener("complete", function (client, text) {
 
                             if ($.isFunction(settings.afterCopy)) {
 
-                                o.trigger('zClip_afterCopy');
+                                o.trigger("zClip_afterCopy");
 
                             } else {
                                 if (text.length > 500) {
                                     text = text.substr(0, 500) + "...\n\n(" + (text.length - 500) + " characters not shown)";
                                 }
 
-                                o.removeClass('hover');
+                                o.removeClass("hover");
                                 alert("Copied text to clipboard:\n\n " + text);
                             }
 
                             if (settings.clickAfter) {
-                                o.trigger('click');
+                                o.trigger("click");
                             }
 
                         });
@@ -921,7 +916,7 @@ try {//IE8下会抛错
 
                         clip.glue(o[0], o.parent()[0]);
 
-                        $(window).bind('load resize', function () {
+                        $(window).bind("load resize", function () {
                             clip.reposition();
                         });
 
@@ -930,25 +925,25 @@ try {//IE8下会抛错
 
                 });
 
-            } else if (typeof params == "string") {
+            } else if (typeof params === "string") {
 
                 return this.each(function () {
 
                     var o = $(this);
 
                     params = params.toLowerCase();
-                    var zclipId = o.data('zclipId');
-                    var clipElm = $('#' + zclipId + '.zclip');
+                    var zclipId = o.data("zclipId");
+                    var clipElm = $("#" + zclipId + ".zclip");
 
                     if (params == "remove") {
 
                         clipElm.remove();
-                        o.removeClass('active hover');
+                        o.removeClass("active hover");
 
                     } else if (params == "hide") {
 
                         clipElm.hide();
-                        o.removeClass('active hover');
+                        o.removeClass("active hover");
 
                     } else if (params == "show") {
 
@@ -960,38 +955,38 @@ try {//IE8下会抛错
 
             }
 
-        }
+        };
 
 
     })(jQuery);
 
 
-// ZeroClipboard
-// Simple Set Clipboard System
-// Author: Joseph Huckaby
+    // ZeroClipboard
+    // Simple Set Clipboard System
+    // Author: Joseph Huckaby
     var ZeroClipboard = {
 
         version: "1.0.7",
         clients: {},
         // registered upload clients on page, indexed by id
-        moviePath: 'ZeroClipboard.swf',
+        moviePath: "ZeroClipboard.swf",
         // URL to movie
         nextId: 1,
         // ID of next movie
         $: function (thingy) {
             // simple DOM lookup utility function
-            if (typeof(thingy) == 'string') thingy = document.getElementById(thingy);
+            if (typeof(thingy) === "string") thingy = document.getElementById(thingy);
             if (!thingy.addClass) {
                 // extend element with a few useful methods
                 thingy.hide = function () {
-                    this.style.display = 'none';
+                    this.style.display = "none";
                 };
                 thingy.show = function () {
-                    this.style.display = '';
+                    this.style.display = "";
                 };
                 thingy.addClass = function (name) {
                     this.removeClass(name);
-                    this.className += ' ' + name;
+                    this.className += " " + name;
                 };
                 thingy.removeClass = function (name) {
                     var classes = this.className.split(/\s+/);
@@ -1004,7 +999,7 @@ try {//IE8下会抛错
                     }
                     if (idx > -1) {
                         classes.splice(idx, 1);
-                        this.className = classes.join(' ');
+                        this.className = classes.join(" ");
                     }
                     return this;
                 };
@@ -1056,7 +1051,7 @@ try {//IE8下会抛错
 
             // unique ID
             this.id = ZeroClipboard.nextId++;
-            this.movieId = 'ZeroClipboardMovie_' + this.id;
+            this.movieId = "ZeroClipboardMovie_" + this.id;
 
             // register client with singleton to receive flash events
             ZeroClipboard.register(this.id, this);
@@ -1074,7 +1069,7 @@ try {//IE8下会抛错
         // whether movie is ready to receive events or not
         movie: null,
         // reference to movie object
-        clipText: '',
+        clipText: "",
         // text to copy to clipboard
         handCursorEnabled: true,
         // whether to show hand cursor, or default pointer cursor
@@ -1093,29 +1088,29 @@ try {//IE8下会抛错
                 zIndex = parseInt(this.domElement.style.zIndex, 10) + 1;
             }
 
-            if (typeof(appendElem) == 'string') {
+            if (typeof(appendElem) === "string") {
                 appendElem = ZeroClipboard.$(appendElem);
-            } else if (typeof(appendElem) == 'undefined') {
-                appendElem = document.getElementsByTagName('body')[0];
+            } else if (typeof(appendElem) === "undefined") {
+                appendElem = document.getElementsByTagName("body")[0];
             }
 
             // find X/Y position of domElement
             var box = ZeroClipboard.getDOMObjectPosition(this.domElement, appendElem);
 
             // create floating DIV above element
-            this.div = document.createElement('div');
+            this.div = document.createElement("div");
             this.div.className = "zclip";
             this.div.id = "zclip-" + this.movieId;
-            $(this.domElement).data('zclipId', 'zclip-' + this.movieId);
+            $(this.domElement).data("zclipId", "zclip-" + this.movieId);
             var style = this.div.style;
-            style.position = 'absolute';
-            style.left = '' + box.left + 'px';
-            style.top = '' + box.top + 'px';
-            style.width = '' + box.width + 'px';
-            style.height = '' + box.height + 'px';
+            style.position = "absolute";
+            style.left = "" + box.left + "px";
+            style.top = "" + box.top + "px";
+            style.width = "" + box.width + "px";
+            style.height = "" + box.height + "px";
             style.zIndex = zIndex;
 
-            if (typeof(stylesToAdd) == 'object') {
+            if (typeof(stylesToAdd) === "object") {
                 for (addedStyle in stylesToAdd) {
                     style[addedStyle] = stylesToAdd[addedStyle];
                 }
@@ -1129,16 +1124,16 @@ try {//IE8下会抛错
 
         getHTML: function (width, height) {
             // return HTML for movie
-            var html = '';
-            var flashvars = 'id=' + this.id + '&width=' + width + '&height=' + height;
+            var html = "";
+            var flashvars = "id=" + this.id + "&width=" + width + "&height=" + height;
 
             if (navigator.userAgent.match(/MSIE/)) {
                 // IE gets an OBJECT tag
-                var protocol = location.href.match(/^https/i) ? 'https://' : 'http://';
-                html += '<object classid="clsid:d27cdb6e-ae6d-11cf-96b8-444553540000" codebase="' + protocol + 'download.macromedia.com/pub/shockwave/cabs/flash/swflash.cab#version=9,0,0,0" width="' + width + '" height="' + height + '" id="' + this.movieId + '" align="middle"><param name="allowScriptAccess" value="always" /><param name="allowFullScreen" value="false" /><param name="movie" value="' + ZeroClipboard.moviePath + '" /><param name="loop" value="false" /><param name="menu" value="false" /><param name="quality" value="best" /><param name="bgcolor" value="#ffffff" /><param name="flashvars" value="' + flashvars + '"/><param name="wmode" value="transparent"/></object>';
+                var protocol = location.href.match(/^https/i) ? "https://" : "http://";
+                html += "<object classid=\"clsid:d27cdb6e-ae6d-11cf-96b8-444553540000\" codebase=\"" + protocol + "download.macromedia.com/pub/shockwave/cabs/flash/swflash.cab#version=9,0,0,0\" width=\"" + width + "\" height=\"" + height + "\" id=\"" + this.movieId + "\" align=\"middle\"><param name=\"allowScriptAccess\" value=\"always\" /><param name=\"allowFullScreen\" value=\"false\" /><param name=\"movie\" value=\"" + ZeroClipboard.moviePath + "\" /><param name=\"loop\" value=\"false\" /><param name=\"menu\" value=\"false\" /><param name=\"quality\" value=\"best\" /><param name=\"bgcolor\" value=\"#ffffff\" /><param name=\"flashvars\" value=\"" + flashvars + "\"/><param name=\"wmode\" value=\"transparent\"/></object>";
             } else {
                 // all other browsers get an EMBED tag
-                html += '<embed id="' + this.movieId + '" src="' + ZeroClipboard.moviePath + '" loop="false" menu="false" quality="best" bgcolor="#ffffff" width="' + width + '" height="' + height + '" name="' + this.movieId + '" align="middle" allowScriptAccess="always" allowFullScreen="false" type="application/x-shockwave-flash" pluginspage="http://www.macromedia.com/go/getflashplayer" flashvars="' + flashvars + '" wmode="transparent" />';
+                html += "<embed id=\"" + this.movieId + "\" src=\"" + ZeroClipboard.moviePath + "\" loop=\"false\" menu=\"false\" quality=\"best\" bgcolor=\"#ffffff\" width=\"" + width + "\" height=\"" + height + "\" name=\"" + this.movieId + "\" align=\"middle\" allowScriptAccess=\"always\" allowFullScreen=\"false\" type=\"application/x-shockwave-flash\" pluginspage=\"http://www.macromedia.com/go/getflashplayer\" flashvars=\"" + flashvars + "\" wmode=\"transparent\" />";
             }
             return html;
         },
@@ -1146,7 +1141,7 @@ try {//IE8下会抛错
         hide: function () {
             // temporarily hide floater offscreen
             if (this.div) {
-                this.div.style.left = '-2000px';
+                this.div.style.left = "-2000px";
             }
         },
 
@@ -1159,13 +1154,13 @@ try {//IE8下会抛错
             // destroy control and floater
             if (this.domElement && this.div) {
                 this.hide();
-                this.div.innerHTML = '';
+                this.div.innerHTML = "";
 
-                var body = document.getElementsByTagName('body')[0];
+                var body = document.getElementsByTagName("body")[0];
                 try {
                     body.removeChild(this.div);
                 } catch (e) {
-                    ;
+                    
                 }
 
                 this.domElement = null;
@@ -1184,8 +1179,8 @@ try {//IE8下会抛错
             if (this.domElement && this.div) {
                 var box = ZeroClipboard.getDOMObjectPosition(this.domElement);
                 var style = this.div.style;
-                style.left = '' + box.left + 'px';
-                style.top = '' + box.top + 'px';
+                style.left = "" + box.left + "px";
+                style.top = "" + box.top + "px";
             }
         },
 
@@ -1200,7 +1195,7 @@ try {//IE8下会抛错
         addEventListener: function (eventName, func) {
             // add user event listener for event
             // event types: load, queueStart, fileStart, fileComplete, queueComplete, progress, error, cancel
-            eventName = eventName.toString().toLowerCase().replace(/^on/, '');
+            eventName = eventName.toString().toLowerCase().replace(/^on/, "");
             if (!this.handlers[eventName]) {
                 this.handlers[eventName] = [];
             }
@@ -1222,18 +1217,18 @@ try {//IE8下会抛错
 
         receiveEvent: function (eventName, args) {
             // receive event from flash
-            eventName = eventName.toString().toLowerCase().replace(/^on/, '');
+            eventName = eventName.toString().toLowerCase().replace(/^on/, "");
 
             // special behavior for certain events
             switch (eventName) {
-                case 'load':
+                case "load":
                     // movie claims it is ready, but in IE this isn't always the case...
                     // bug fix: Cannot extend EMBED DOM elements in Firefox, must use traditional function
                     this.movie = document.getElementById(this.movieId);
                     if (!this.movie) {
                         var self = this;
                         setTimeout(function () {
-                            self.receiveEvent('load', null);
+                            self.receiveEvent("load", null);
                         }, 1);
                         return;
                     }
@@ -1242,7 +1237,7 @@ try {//IE8下会抛错
                     if (!this.ready && navigator.userAgent.match(/Firefox/) && navigator.userAgent.match(/Windows/)) {
                         var self = this;
                         setTimeout(function () {
-                            self.receiveEvent('load', null);
+                            self.receiveEvent("load", null);
                         }, 100);
                         this.ready = true;
                         return;
@@ -1259,11 +1254,11 @@ try {//IE8下会抛错
                     }
                     break;
 
-                case 'mouseover':
+                case "mouseover":
                     if (this.domElement && this.cssEffects) {
-                        this.domElement.addClass('hover');
+                        this.domElement.addClass("hover");
                         if (this.recoverActive) {
-                            this.domElement.addClass('active');
+                            this.domElement.addClass("active");
                         }
 
 
@@ -1272,27 +1267,27 @@ try {//IE8下会抛错
 
                     break;
 
-                case 'mouseout':
+                case "mouseout":
                     if (this.domElement && this.cssEffects) {
                         this.recoverActive = false;
-                        if (this.domElement.hasClass('active')) {
-                            this.domElement.removeClass('active');
+                        if (this.domElement.hasClass("active")) {
+                            this.domElement.removeClass("active");
                             this.recoverActive = true;
                         }
-                        this.domElement.removeClass('hover');
+                        this.domElement.removeClass("hover");
 
                     }
                     break;
 
-                case 'mousedown':
+                case "mousedown":
                     if (this.domElement && this.cssEffects) {
-                        this.domElement.addClass('active');
+                        this.domElement.addClass("active");
                     }
                     break;
 
-                case 'mouseup':
+                case "mouseup":
                     if (this.domElement && this.cssEffects) {
-                        this.domElement.removeClass('active');
+                        this.domElement.removeClass("active");
                         this.recoverActive = false;
                     }
                     break;
@@ -1301,13 +1296,13 @@ try {//IE8下会抛错
                 for (var idx = 0, len = this.handlers[eventName].length; idx < len; idx++) {
                     var func = this.handlers[eventName][idx];
 
-                    if (typeof(func) == 'function') {
+                    if (typeof(func) === "function") {
                         // actual function reference
                         func(this, args);
-                    } else if ((typeof(func) == 'object') && (func.length == 2)) {
+                    } else if ((typeof(func) === "object") && (func.length == 2)) {
                         // PHP style object + method, i.e. [myObject, 'myMethod']
                         func[0][func[1]](this, args);
-                    } else if (typeof(func) == 'string') {
+                    } else if (typeof(func) === "string") {
                         // name of function
                         window[func](this, args);
                     }

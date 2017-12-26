@@ -23,7 +23,7 @@
                     type: "bi.layout",
                     height: 1
                 }, this.instance = this.addInstance()]
-            })
+            });
         },
 
         addInstance: function () {
@@ -56,7 +56,7 @@
                     // return false;
                 }
             } while (t = t.parentNode);
-            this.fireEvent('blur', t);
+            this.fireEvent("blur", t);
             this.lastSelectedInstance = this.selectedInstance;
             this.selectedInstance = null;
             // return false;
@@ -77,7 +77,7 @@
     BI.NicEditor.EVENT_SELECTED = "selected";
     BI.NicEditor.EVENT_BLUR = "blur";
     BI.NicEditor.EVENT_KEYDOWN = "keydown";
-    BI.shortcut('bi.nic_editor', BI.NicEditor);
+    BI.shortcut("bi.nic_editor", BI.NicEditor);
 
     var prefix = "niceditor-";
 
@@ -98,7 +98,7 @@
                 outline: "none"
             }).html(o.value);
 
-            this.element.css("maxHeight", (o.maxHeight) ? o.maxHeight + 'px' : null);
+            this.element.css("maxHeight", (o.maxHeight) ? o.maxHeight + "px" : null);
 
             this.e = BI.createWidget({
                 type: "bi.layout",
@@ -124,12 +124,12 @@
                 // this.setContent("<br />");
             }
             this.instanceDoc = document.defaultView;
-            this.elm.element.on('mousedown', BI.bind(this.selected, this));
-            this.elm.element.on('keydown', BI.bind(this.keyDown, this));
-            this.elm.element.on('focus', BI.bind(this.selected, this));
-            this.elm.element.on('blur', BI.bind(this.blur, this));
-            this.elm.element.on('keyup', BI.bind(this.selected, this));
-            this.ne.fireEvent('add');
+            this.elm.element.on("mousedown", BI.bind(this.selected, this));
+            this.elm.element.on("keydown", BI.bind(this.keyDown, this));
+            this.elm.element.on("focus", BI.bind(this.selected, this));
+            this.elm.element.on("blur", BI.bind(this.blur, this));
+            this.elm.element.on("keyup", BI.bind(this.selected, this));
+            this.ne.fireEvent("add");
         },
 
         disable: function () {
@@ -175,9 +175,9 @@
                     }
                 }
                 return contain;
-            } else {
-                return (this.getSel().type == "Control") ? r.item(0) : r.parentElement();
             }
+            return (this.getSel().type == "Control") ? r.item(0) : r.parentElement();
+            
         },
 
         saveRng: function () {
@@ -199,7 +199,7 @@
 
                 }
                 rng = document.selection.createRange();
-                rng.moveStart('character', -el.innerText.length);
+                rng.moveStart("character", -el.innerText.length);
                 var text = rng.text;
                 for (var i = 0; i < el.innerText.length; i++) {
                     if (el.innerText.substring(0, i + 1) == text.substring(text.length - i - 1, text.length)) {
@@ -223,7 +223,7 @@
         },
 
         keyDown: function (e, t) {
-            this.ne.fireEvent('keydown', e);
+            this.ne.fireEvent("keydown", e);
         },
 
         selected: function (e) {
@@ -235,25 +235,25 @@
                 var selInstance = this.ne.selectedInstance;
                 if (selInstance != this) {
                     if (selInstance) {
-                        this.ne.fireEvent('blur', e);
+                        this.ne.fireEvent("blur", e);
                     }
                     this.ne.selectedInstance = this;
-                    this.ne.fireEvent('focus', e);
+                    this.ne.fireEvent("focus", e);
                 }
-                this.ne.fireEvent('selected', e);
+                this.ne.fireEvent("selected", e);
                 this.isFocused = true;
-                this.elm.element.addClass(prefix + 'selected');
+                this.elm.element.addClass(prefix + "selected");
             }
             // return false;
         },
 
         blur: function () {
             this.isFocused = false;
-            this.elm.element.removeClass(prefix + 'selected');
+            this.elm.element.removeClass(prefix + "selected");
         },
 
         saveContent: function () {
-            this.ne.fireEvent('save');
+            this.ne.fireEvent("save");
             this.e.element.value(this.getContent());
         },
 
@@ -263,13 +263,13 @@
 
         getContent: function () {
             this.content = this.getElm().element.html();
-            this.ne.fireEvent('get');
+            this.ne.fireEvent("get");
             return this.content;
         },
 
         setContent: function (e) {
             this.content = e;
-            this.ne.fireEvent('set');
+            this.ne.fireEvent("set");
             this.elm.element.html(this.content);
         },
 

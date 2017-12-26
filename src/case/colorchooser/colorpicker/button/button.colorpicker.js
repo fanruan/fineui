@@ -11,7 +11,7 @@ BI.ColorPickerButton = BI.inherit(BI.BasicButton, {
         var conf = BI.ColorPickerButton.superclass._defaultConfig.apply(this, arguments);
         return BI.extend(conf, {
             baseCls: (conf.baseCls || "") + " bi-color-picker-button bi-background bi-border-top bi-border-left"
-        })
+        });
     },
 
     _init: function () {
@@ -50,10 +50,10 @@ BI.ColorPickerButton = BI.inherit(BI.BasicButton, {
 
     setSelected: function (b) {
         BI.ColorPickerButton.superclass.setSelected.apply(this, arguments);
-        if (!!b) {
+        if (b) {
             this._createMask();
         }
-        BI.Maskers[!!b ? "show" : "hide"](this.getName());
+        BI.Maskers[b ? "show" : "hide"](this.getName());
     }
 });
 BI.ColorPickerButton.EVENT_CHANGE = "ColorPickerButton.EVENT_CHANGE";

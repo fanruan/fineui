@@ -36,7 +36,7 @@ BI.IconTextTrigger = BI.inherit(BI.Trigger, {
 
         BI.createWidget({
             element: this,
-            type: 'bi.htape',
+            type: "bi.htape",
             ref: function (_ref) {
                 self.wrapper = _ref;
             },
@@ -51,12 +51,12 @@ BI.IconTextTrigger = BI.inherit(BI.Trigger, {
                 },
                 width: o.triggerWidth || o.height
             },
-                {
-                    el: this.text
-                }, {
-                    el: this.trigerButton,
-                    width: o.triggerWidth || o.height
-                }
+            {
+                el: this.text
+            }, {
+                el: this.trigerButton,
+                width: o.triggerWidth || o.height
+            }
             ]
         });
     },
@@ -70,13 +70,13 @@ BI.IconTextTrigger = BI.inherit(BI.Trigger, {
         var o = this.options;
         this.icon.setIcon(iconCls);
         var iconItem = this.wrapper.attr("items")[0];
-        if(BI.isNull(iconCls) || BI.isEmptyString(iconCls)){
-            if(iconItem.width !== 0){
+        if(BI.isNull(iconCls) || BI.isEmptyString(iconCls)) {
+            if(iconItem.width !== 0) {
                 iconItem.width = 0;
                 this.wrapper.resize();
             }
         }else{
-            if(iconItem.width !== (o.triggerWidth || o.height)){
+            if(iconItem.width !== (o.triggerWidth || o.height)) {
                 iconItem.width = (o.triggerWidth || o.height);
                 this.wrapper.resize();
             }

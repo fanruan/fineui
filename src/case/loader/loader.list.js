@@ -10,9 +10,9 @@ BI.ListLoader = BI.inherit(BI.Widget, {
         return BI.extend(BI.ListLoader.superclass._defaultConfig.apply(this, arguments), {
             baseCls: "bi-list-loader",
 
-            isDefaultInit: true,//是否默认初始化数据
+            isDefaultInit: true, // 是否默认初始化数据
 
-            //下面是button_group的属性
+            // 下面是button_group的属性
             el: {
                 type: "bi.button_group"
             },
@@ -21,11 +21,11 @@ BI.ListLoader = BI.inherit(BI.Widget, {
             itemsCreator: BI.emptyFn,
             onLoaded: BI.emptyFn,
 
-            //下面是分页信息
+            // 下面是分页信息
             count: false,
             next: {},
             hasNext: BI.emptyFn
-        })
+        });
     },
 
     _nextLoad: function () {
@@ -69,7 +69,7 @@ BI.ListLoader = BI.inherit(BI.Widget, {
                 if (type === BI.Events.CLICK) {
                     self._nextLoad();
                 }
-            })
+            });
         }
 
         BI.createWidget({
@@ -94,7 +94,7 @@ BI.ListLoader = BI.inherit(BI.Widget, {
         return !!o.hasNext.apply(this, [{
             times: this.times,
             count: this.count
-        }])
+        }]);
     },
 
     addItems: function (items) {

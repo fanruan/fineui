@@ -7,8 +7,8 @@ BI.SingleSelectPopupView = BI.inherit(BI.Widget, {
 
     _defaultConfig: function () {
         return BI.extend(BI.SingleSelectPopupView.superclass._defaultConfig.apply(this, arguments), {
-            baseCls: 'bi-single-select-popup-view',
-            maxWidth: 'auto',
+            baseCls: "bi-single-select-popup-view",
+            maxWidth: "auto",
             minWidth: 135,
             maxHeight: 400,
             valueFormatter: BI.emptyFn,
@@ -35,7 +35,7 @@ BI.SingleSelectPopupView = BI.inherit(BI.Widget, {
             minWidth: opts.minWidth,
             maxHeight: opts.maxHeight,
             element: this,
-            buttons: [BI.i18nText('BI-Basic_Clears'), BI.i18nText('BI-Basic_Sure')],
+            buttons: [BI.i18nText("BI-Basic_Clears"), BI.i18nText("BI-Basic_Sure")],
             el: this.loader
         });
 
@@ -84,4 +84,4 @@ BI.SingleSelectPopupView.EVENT_CLICK_CONFIRM = "EVENT_CLICK_CONFIRM";
 BI.SingleSelectPopupView.EVENT_CLICK_CLEAR = "EVENT_CLICK_CLEAR";
 
 
-BI.shortcut('bi.single_select_popup_view', BI.SingleSelectPopupView);
+BI.shortcut("bi.single_select_popup_view", BI.SingleSelectPopupView);

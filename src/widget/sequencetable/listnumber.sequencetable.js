@@ -11,16 +11,16 @@ BI.SequenceTableListNumber = BI.inherit(BI.Widget, {
             baseCls: "bi-sequence-table-list-number",
             isNeedFreeze: false,
             scrollTop: 0,
-            startSequence: 1,//开始的序号
+            startSequence: 1, // 开始的序号
             headerRowSize: 25,
             rowSize: 25,
 
             sequenceHeaderCreator: null,
 
             header: [],
-            items: [], //二维数组
+            items: [], // 二维数组
 
-            //交叉表头
+            // 交叉表头
             crossHeader: [],
             crossItems: [],
 
@@ -141,7 +141,7 @@ BI.SequenceTableListNumber = BI.inherit(BI.Widget, {
                     styleGetter: function (index) {
                         return function () {
                             return o.sequenceCellStyleGetter(self.start + i - 1);
-                        }
+                        };
                     }(cnt)
                 }));
                 renderedCells.push({
@@ -154,7 +154,7 @@ BI.SequenceTableListNumber = BI.inherit(BI.Widget, {
             renderedKeys.push(this.start + i);
         }
 
-        //已存在的， 需要添加的和需要删除的
+        // 已存在的， 需要添加的和需要删除的
         var existSet = {}, addSet = {}, deleteArray = [];
         BI.each(renderedKeys, function (i, key) {
             if (BI.deepContains(self.renderedKeys, key)) {
@@ -177,7 +177,7 @@ BI.SequenceTableListNumber = BI.inherit(BI.Widget, {
         });
         var addedItems = [];
         BI.each(addSet, function (index) {
-            addedItems.push(renderedCells[index])
+            addedItems.push(renderedCells[index]);
         });
         BI.createWidget({
             type: "bi.absolute",
@@ -241,4 +241,4 @@ BI.SequenceTableListNumber = BI.inherit(BI.Widget, {
         this._populate();
     }
 });
-BI.shortcut('bi.sequence_table_list_number', BI.SequenceTableListNumber);
+BI.shortcut("bi.sequence_table_list_number", BI.SequenceTableListNumber);

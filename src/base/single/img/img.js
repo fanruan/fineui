@@ -14,7 +14,7 @@ BI.Img = BI.inherit(BI.Single, {
             src: "",
             width: "100%",
             height: "100%"
-        })
+        });
     },
 
     _init: function () {

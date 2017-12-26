@@ -38,7 +38,7 @@ BI.RichEditorColorChooserTrigger = BI.inherit(BI.Widget, {
                 top: 7,
                 left: 2
             }]
-        })
+        });
     },
 
     setValue: function (color) {
@@ -49,4 +49,4 @@ BI.RichEditorColorChooserTrigger = BI.inherit(BI.Widget, {
         return this.font.element.css("color");
     }
 });
-BI.shortcut('bi.rich_editor_color_chooser_trigger', BI.RichEditorColorChooserTrigger);
+BI.shortcut("bi.rich_editor_color_chooser_trigger", BI.RichEditorColorChooserTrigger);

@@ -10,7 +10,7 @@ BI.SmallTextValueCheckCombo = BI.inherit(BI.Widget, {
             height: 24,
             chooseType: BI.ButtonGroup.CHOOSE_TYPE_SINGLE,
             text: ""
-        })
+        });
     },
 
     _init: function () {

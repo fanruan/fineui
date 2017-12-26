@@ -19,7 +19,7 @@ BI.TreeValueChooserPane = BI.inherit(BI.AbstractTreeValueChooser, {
         BI.TreeValueChooserPane.superclass._init.apply(this, arguments);
         var self = this, o = this.options;
         this.pane = BI.createWidget({
-            type: 'bi.multi_select_tree',
+            type: "bi.multi_select_tree",
             element: this,
             itemsCreator: BI.bind(this._itemsCreator, this)
         });
@@ -50,4 +50,4 @@ BI.TreeValueChooserPane = BI.inherit(BI.AbstractTreeValueChooser, {
     }
 });
 BI.TreeValueChooserPane.EVENT_CHANGE = "TreeValueChooserPane.EVENT_CHANGE";
-BI.shortcut('bi.tree_value_chooser_pane', BI.TreeValueChooserPane);
+BI.shortcut("bi.tree_value_chooser_pane", BI.TreeValueChooserPane);

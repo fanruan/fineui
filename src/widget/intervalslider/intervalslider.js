@@ -17,7 +17,7 @@ BI.IntervalSlider = BI.inherit(BI.Widget, {
             baseCls: "bi-interval-slider bi-slider-track",
             digit: false,
             unit: ""
-        })
+        });
     },
 
     _init: function () {
@@ -67,7 +67,7 @@ BI.IntervalSlider = BI.inherit(BI.Widget, {
             var v = BI.parseFloat(this.getValue());
             self.valueOne = v;
             var percent = self._getPercentByValue(v);
-            var significantPercent = BI.parseFloat(percent.toFixed(1));//分成1000份
+            var significantPercent = BI.parseFloat(percent.toFixed(1));// 分成1000份
             self._setLabelOnePosition(significantPercent);
             self._setSliderOnePosition(significantPercent);
             self._setBlueTrack();
@@ -132,10 +132,10 @@ BI.IntervalSlider = BI.inherit(BI.Widget, {
                 left: 0,
                 width: "100%"
             },
-                this._createLabelWrapper(),
-                this._createSliderWrapper()
+            this._createLabelWrapper(),
+            this._createSliderWrapper()
             ]
-        })
+        });
     },
 
     _rePosBySizeAfterMove: function (size, isLeft) {
@@ -145,7 +145,7 @@ BI.IntervalSlider = BI.inherit(BI.Widget, {
         var v = this._getValueByPercent(significantPercent);
         v = this._assertValue(v);
         v = o.digit === false ? v : v.toFixed(o.digit);
-        if(isLeft){
+        if(isLeft) {
             this._setLabelOnePosition(significantPercent);
             this._setSliderOnePosition(significantPercent);
             this.labelOne.setValue(v);
@@ -191,7 +191,7 @@ BI.IntervalSlider = BI.inherit(BI.Widget, {
             self.fireEvent(BI.IntervalSlider.EVENT_CHANGE);
         }, document);
         widget.element.on("mousedown", function (event) {
-            if(!widget.isEnabled()){
+            if(!widget.isEnabled()) {
                 return;
             }
             defaultSize = this.offsetLeft;
@@ -199,7 +199,7 @@ BI.IntervalSlider = BI.inherit(BI.Widget, {
             mouseMoveTracker.captureMouseMoves(event);
         });
 
-        function optimizeSize(s) {
+        function optimizeSize (s) {
             return BI.clamp(s, 0, self._getGrayTrackLength());
         }
     },
@@ -230,7 +230,7 @@ BI.IntervalSlider = BI.inherit(BI.Widget, {
             top: 0,
             left: 0,
             width: "100%"
-        }
+        };
     },
 
     _createSliderWrapper: function () {
@@ -259,7 +259,7 @@ BI.IntervalSlider = BI.inherit(BI.Widget, {
             top: 20,
             left: 0,
             width: "100%"
-        }
+        };
     },
 
     _createTrackWrapper: function () {
@@ -289,18 +289,18 @@ BI.IntervalSlider = BI.inherit(BI.Widget, {
                 left: 0,
                 width: "100%"
             }]
-        })
+        });
     },
 
     _checkValidation: function (v) {
         var o = this.options;
         var valid = false;
-        //像90.这样的既不属于整数又不属于小数，是不合法的值
+        // 像90.这样的既不属于整数又不属于小数，是不合法的值
         var dotText = (v + "").split(".")[1];
         if (BI.isEmptyString(dotText)) {
         }else{
             if (BI.isNumeric(v) && !(BI.isNull(v) || v < this.min || v > this.max)) {
-                if(o.digit === false){
+                if(o.digit === false) {
                     valid = true;
                 }else{
                     dotText = dotText || "";
@@ -316,43 +316,43 @@ BI.IntervalSlider = BI.inherit(BI.Widget, {
         var labelTwoLeft = this.labelTwo.element[0].offsetLeft;
         if (labelOneLeft <= labelTwoLeft) {
             if ((labelTwoLeft - labelOneLeft) < 90) {
-                this.labelTwo.element.css({"top": 40});
+                this.labelTwo.element.css({top: 40});
             } else {
-                this.labelTwo.element.css({"top": 0});
+                this.labelTwo.element.css({top: 0});
             }
         } else {
             if ((labelOneLeft - labelTwoLeft) < 90) {
-                this.labelTwo.element.css({"top": 40});
+                this.labelTwo.element.css({top: 40});
             } else {
-                this.labelTwo.element.css({"top": 0});
+                this.labelTwo.element.css({top: 0});
             }
         }
     },
 
     _setLabelOnePosition: function (percent) {
-        this.labelOne.element.css({"left": percent + "%"});
+        this.labelOne.element.css({left: percent + "%"});
         this._checkOverlap();
     },
 
     _setLabelTwoPosition: function (percent) {
-        this.labelTwo.element.css({"left": percent + "%"});
+        this.labelTwo.element.css({left: percent + "%"});
         this._checkOverlap();
     },
 
     _setSliderOnePosition: function (percent) {
-        this.sliderOne.element.css({"left": percent + "%"});
+        this.sliderOne.element.css({left: percent + "%"});
     },
 
     _setSliderTwoPosition: function (percent) {
-        this.sliderTwo.element.css({"left": percent + "%"});
+        this.sliderTwo.element.css({left: percent + "%"});
     },
 
     _setBlueTrackLeft: function (percent) {
-        this.blueTrack.element.css({"left": percent + "%"});
+        this.blueTrack.element.css({left: percent + "%"});
     },
 
     _setBlueTrackWidth: function (percent) {
-        this.blueTrack.element.css({"width": percent + "%"});
+        this.blueTrack.element.css({width: percent + "%"});
     },
 
     _setBlueTrack: function () {
@@ -389,21 +389,21 @@ BI.IntervalSlider = BI.inherit(BI.Widget, {
     },
 
     _getGrayTrackLength: function () {
-        return this.grayTrack.element[0].scrollWidth
+        return this.grayTrack.element[0].scrollWidth;
     },
 
-    //其中取max-min后保留4为有效数字后的值的小数位数为最终value的精度
-    _getValueByPercent: function (percent) {//return (((max-min)*percent)/100+min)
+    // 其中取max-min后保留4为有效数字后的值的小数位数为最终value的精度
+    _getValueByPercent: function (percent) {// return (((max-min)*percent)/100+min)
         var sub = this.calculation.accurateSubtraction(this.max, this.min);
         var mul = this.calculation.accurateMultiplication(sub, percent);
         var div = this.calculation.accurateDivisionTenExponent(mul, 2);
-        if(this.precision < 0){
+        if(this.precision < 0) {
             var value = BI.parseFloat(this.calculation.accurateAddition(div, this.min));
             var reduceValue = Math.round(this.calculation.accurateDivisionTenExponent(value, -this.precision));
             return this.calculation.accurateMultiplication(reduceValue, Math.pow(10, -this.precision));
-        }else{
-            return BI.parseFloat(this.calculation.accurateAddition(div, this.min).toFixed(this.precision));
         }
+        return BI.parseFloat(this.calculation.accurateAddition(div, this.min).toFixed(this.precision));
+        
     },
 
     _getPercentByValue: function (v) {
@@ -416,31 +416,31 @@ BI.IntervalSlider = BI.inherit(BI.Widget, {
     },
 
     _getPrecision: function () {
-        //计算每一份值的精度(最大值和最小值的差值保留4为有效数字后的精度)
-        //如果差值的整数位数大于4,toPrecision(4)得到的是科学计数法123456 => 1.235e+5
-        //返回非负值: 保留的小数位数
-        //返回负值: 保留的10^n精度中的n
+        // 计算每一份值的精度(最大值和最小值的差值保留4为有效数字后的精度)
+        // 如果差值的整数位数大于4,toPrecision(4)得到的是科学计数法123456 => 1.235e+5
+        // 返回非负值: 保留的小数位数
+        // 返回负值: 保留的10^n精度中的n
         var sub = this.calculation.accurateSubtraction(this.max, this.min);
         var pre = sub.toPrecision(4);
-        //科学计数法
+        // 科学计数法
         var eIndex = pre.indexOf("e");
         var arr = [];
-        if(eIndex > -1){
+        if(eIndex > -1) {
             arr = pre.split("e");
             var decimalPartLength = BI.size(arr[0].split(".")[1]);
             var sciencePartLength = BI.parseInt(arr[1].substring(1));
             return decimalPartLength - sciencePartLength;
-        }else{
-            arr = pre.split(".");
-            return arr.length > 1 ? arr[1].length : 0;
         }
+        arr = pre.split(".");
+        return arr.length > 1 ? arr[1].length : 0;
+        
     },
 
     _assertValue: function (value) {
-        if(value <= this.min){
-            return this.min
+        if(value <= this.min) {
+            return this.min;
         }
-        if(value >= this.max){
+        if(value >= this.max) {
             return this.max;
         }
         return value;
@@ -448,10 +448,10 @@ BI.IntervalSlider = BI.inherit(BI.Widget, {
 
     getValue: function () {
         if (this.valueOne <= this.valueTwo) {
-            return {min: this.valueOne, max: this.valueTwo}
-        } else {
-            return {min: this.valueTwo, max: this.valueOne}
+            return {min: this.valueOne, max: this.valueTwo};
         }
+        return {min: this.valueTwo, max: this.valueOne};
+        
     },
 
     setMinAndMax: function (v) {
@@ -514,7 +514,7 @@ BI.IntervalSlider = BI.inherit(BI.Widget, {
             } else {
                 this.labelOne.setValue(this.min);
                 this.labelTwo.setValue(this.max);
-                this._setAllPosition(0, 100)
+                this._setAllPosition(0, 100);
             }
         }
     }

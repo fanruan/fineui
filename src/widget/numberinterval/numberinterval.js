@@ -1,5 +1,5 @@
-//小于号的值为：0，小于等于号的值为:1
-//closeMIn：最小值的符号，closeMax：最大值的符号
+// 小于号的值为：0，小于等于号的值为:1
+// closeMIn：最小值的符号，closeMax：最大值的符号
 /**
  * Created by roy on 15/9/17.
  *
@@ -20,16 +20,16 @@ BI.NumberInterval = BI.inherit(BI.Single, {
         numTip: ""
     },
     _defaultConfig: function () {
-        var conf = BI.NumberInterval.superclass._defaultConfig.apply(this, arguments)
+        var conf = BI.NumberInterval.superclass._defaultConfig.apply(this, arguments);
         return BI.extend(conf, {
             extraCls: "bi-number-interval",
             height: 25,
             validation: "valid"
-        })
+        });
     },
     _init: function () {
         var self = this, c = this.constants, o = this.options;
-        BI.NumberInterval.superclass._init.apply(this, arguments)
+        BI.NumberInterval.superclass._init.apply(this, arguments);
         this.smallEditor = BI.createWidget({
             type: "bi.editor",
             height: o.height - 2,
@@ -104,21 +104,21 @@ BI.NumberInterval = BI.inherit(BI.Single, {
             }]
         });
 
-        //this.smallCombo = BI.createWidget({
+        // this.smallCombo = BI.createWidget({
         //    type: "bi.number_interval_combo",
         //    cls: "number-interval-small-combo",
         //    height: o.height,
         //    value: o.closemin ? 1 : 0,
         //    offsetStyle: "left"
-        //});
+        // });
         //
-        //this.bigCombo = BI.createWidget({
+        // this.bigCombo = BI.createWidget({
         //    type: "bi.number_interval_combo",
         //    cls: "number-interval-big-combo",
         //    height: o.height,
         //    value: o.closemax ? 1 : 0,
         //    offsetStyle: "left"
-        //});
+        // });
         this.smallCombo = BI.createWidget({
             type: "bi.icon_combo",
             cls: "number-interval-small-combo bi-border",
@@ -248,42 +248,42 @@ BI.NumberInterval = BI.inherit(BI.Single, {
             self.element.removeClass("number-error");
             o.validation = "invalid";
             return c.typeError;
-        } else {
-            if (BI.isEmptyString(self.smallEditor.getValue()) || BI.isEmptyString(self.bigEditor.getValue())) {
-                self.element.removeClass("number-error");
-                o.validation = "valid";
-                return "";
-            } else {
-                var smallValue = parseFloat(self.smallEditor.getValue()), bigValue = parseFloat(self.bigEditor.getValue()),
-                    bigComboValue = self.bigCombo.getValue(), smallComboValue = self.smallCombo.getValue();
-                if (bigComboValue[0] === c.less_equal && smallComboValue[0] === c.less_equal) {
-                    if (smallValue > bigValue) {
-                        self.element.addClass("number-error");
-                        o.validation = "invalid";
-                        return c.numberError;
-                    } else {
-                        self.element.removeClass("number-error");
-                        o.validation = "valid";
-                        return "";
-                    }
-                } else {
-                    if (smallValue > bigValue) {
-                        self.element.addClass("number-error");
-                        o.validation = "invalid";
-                        return c.numberError;
-                    } else if (smallValue === bigValue) {
-                        self.element.addClass("number-error");
-                        o.validation = "invalid";
-                        return c.signalError;
-                    } else {
-                        self.element.removeClass("number-error");
-                        o.validation = "valid";
-                        return "";
-                    }
-                }
-            }
-
         }
+        if (BI.isEmptyString(self.smallEditor.getValue()) || BI.isEmptyString(self.bigEditor.getValue())) {
+            self.element.removeClass("number-error");
+            o.validation = "valid";
+            return "";
+        }
+        var smallValue = parseFloat(self.smallEditor.getValue()), bigValue = parseFloat(self.bigEditor.getValue()),
+            bigComboValue = self.bigCombo.getValue(), smallComboValue = self.smallCombo.getValue();
+        if (bigComboValue[0] === c.less_equal && smallComboValue[0] === c.less_equal) {
+            if (smallValue > bigValue) {
+                self.element.addClass("number-error");
+                o.validation = "invalid";
+                return c.numberError;
+            }
+            self.element.removeClass("number-error");
+            o.validation = "valid";
+            return "";
+                    
+        }
+        if (smallValue > bigValue) {
+            self.element.addClass("number-error");
+            o.validation = "invalid";
+            return c.numberError;
+        } else if (smallValue === bigValue) {
+            self.element.addClass("number-error");
+            o.validation = "invalid";
+            return c.signalError;
+        }
+        self.element.removeClass("number-error");
+        o.validation = "valid";
+        return "";
+                    
+                
+            
+
+        
     },
 
     _setTitle: function (v) {
@@ -314,10 +314,10 @@ BI.NumberInterval = BI.inherit(BI.Single, {
                     });
                     break;
                 default :
-                    return
+                    return;
             }
 
-        })
+        });
     },
     _setBlurEvent: function (w) {
         var c = this.constants, self = this;
@@ -338,18 +338,18 @@ BI.NumberInterval = BI.inherit(BI.Single, {
                 default:
                     self._setTitle("");
             }
-        })
+        });
     },
 
     _setErrorEvent: function (w) {
-        var c = this.constants, self = this
+        var c = this.constants, self = this;
         w.on(BI.Editor.EVENT_ERROR, function () {
             self._checkValidation();
             BI.Bubbles.show(c.typeError, BI.i18nText("BI-Numerical_Interval_Input_Data"), self, {
                 offsetStyle: "center"
             });
             self.fireEvent(BI.NumberInterval.EVENT_ERROR);
-        })
+        });
     },
 
 
@@ -372,7 +372,7 @@ BI.NumberInterval = BI.inherit(BI.Single, {
                 default:
                     self.fireEvent(BI.NumberInterval.EVENT_VALID);
             }
-        })
+        });
     },
 
 
@@ -422,7 +422,7 @@ BI.NumberInterval = BI.inherit(BI.Single, {
                     self.fireEvent(BI.NumberInterval.EVENT_CHANGE);
                     self.fireEvent(BI.NumberInterval.EVENT_VALID);
             }
-        })
+        });
     },
 
     isStateValid: function () {
@@ -455,12 +455,12 @@ BI.NumberInterval = BI.inherit(BI.Single, {
         this.bigTip.setVisible(false);
     },
 
-    setNumTip: function(numTip) {
+    setNumTip: function (numTip) {
         this.smallTip.setText(numTip);
         this.bigTip.setText(numTip);
     },
 
-    getNumTip: function() {
+    getNumTip: function () {
         return this.smallTip.getText();
     },
 
@@ -485,18 +485,18 @@ BI.NumberInterval = BI.inherit(BI.Single, {
 
         if (!BI.isNull(data.closemin)) {
             if (data.closemin === true) {
-                combo_value = 1
+                combo_value = 1;
             } else {
-                combo_value = 0
+                combo_value = 0;
             }
             self.smallCombo.setValue(combo_value);
         }
 
         if (!BI.isNull(data.closemax)) {
             if (data.closemax === true) {
-                combo_value = 1
+                combo_value = 1;
             } else {
-                combo_value = 0
+                combo_value = 0;
             }
             self.bigCombo.setValue(combo_value);
         }
@@ -508,15 +508,15 @@ BI.NumberInterval = BI.inherit(BI.Single, {
         value.min = self.smallEditor.getValue();
         value.max = self.bigEditor.getValue();
         if (minComboValue[0] === 0) {
-            value.closemin = false
+            value.closemin = false;
         } else {
-            value.closemin = true
+            value.closemin = true;
         }
 
         if (maxComboValue[0] === 0) {
-            value.closemax = false
+            value.closemax = false;
         } else {
-            value.closemax = true
+            value.closemax = true;
         }
         return value;
     }

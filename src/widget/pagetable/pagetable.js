@@ -20,8 +20,8 @@ BI.PageTable = BI.inherit(BI.Widget, {
             },
             pager: {
                 horizontal: {
-                    pages: false, //总页数
-                    curr: 1, //初始化当前页， pages为数字时可用
+                    pages: false, // 总页数
+                    curr: 1, // 初始化当前页， pages为数字时可用
 
                     hasPrev: BI.emptyFn,
                     hasNext: BI.emptyFn,
@@ -29,8 +29,8 @@ BI.PageTable = BI.inherit(BI.Widget, {
                     lastPage: BI.emptyFn
                 },
                 vertical: {
-                    pages: false, //总页数
-                    curr: 1, //初始化当前页， pages为数字时可用
+                    pages: false, // 总页数
+                    curr: 1, // 初始化当前页， pages为数字时可用
 
                     hasPrev: BI.emptyFn,
                     hasNext: BI.emptyFn,
@@ -41,11 +41,11 @@ BI.PageTable = BI.inherit(BI.Widget, {
 
             itemsCreator: BI.emptyFn,
 
-            isNeedFreeze: false,//是否需要冻结单元格
-            freezeCols: [], //冻结的列号,从0开始,isNeedFreeze为true时生效
+            isNeedFreeze: false, // 是否需要冻结单元格
+            freezeCols: [], // 冻结的列号,从0开始,isNeedFreeze为true时生效
 
-            isNeedMerge: false,//是否需要合并单元格
-            mergeCols: [], //合并的单元格列号
+            isNeedMerge: false, // 是否需要合并单元格
+            mergeCols: [], // 合并的单元格列号
             mergeRule: BI.emptyFn,
 
             columnSize: [],
@@ -61,9 +61,9 @@ BI.PageTable = BI.inherit(BI.Widget, {
             sequenceCellStyleGetter: BI.emptyFn,
 
             header: [],
-            items: [], //二维数组
+            items: [], // 二维数组
 
-            //交叉表头
+            // 交叉表头
             crossHeader: [],
             crossItems: []
         });
@@ -104,7 +104,7 @@ BI.PageTable = BI.inherit(BI.Widget, {
 
             header: o.header,
             items: o.items,
-            //交叉表头
+            // 交叉表头
             crossHeader: o.crossHeader,
             crossItems: o.crossItems
         });
@@ -156,7 +156,7 @@ BI.PageTable = BI.inherit(BI.Widget, {
                 right: 0,
                 bottom: 0
             }]
-        })
+        });
     },
 
     setHPage: function (v) {
@@ -275,4 +275,4 @@ BI.PageTable = BI.inherit(BI.Widget, {
         BI.PageTable.superclass.destroy.apply(this, arguments);
     }
 });
-BI.shortcut('bi.page_table', BI.PageTable);
+BI.shortcut("bi.page_table", BI.PageTable);

@@ -13,12 +13,12 @@ BI.TableTree = BI.inherit(BI.Widget, {
             el: {
                 type: "bi.resizable_table"
             },
-            isNeedResize: true,//是否需要调整列宽
-            isResizeAdapt: true,//是否需要在调整列宽或区域宽度的时候它们自适应变化
+            isNeedResize: true, // 是否需要调整列宽
+            isResizeAdapt: true, // 是否需要在调整列宽或区域宽度的时候它们自适应变化
 
-            freezeCols: [], //冻结的列号,从0开始,isNeedFreeze为tree时生效
+            freezeCols: [], // 冻结的列号,从0开始,isNeedFreeze为tree时生效
 
-            isNeedMerge: true,//是否需要合并单元格
+            isNeedMerge: true, // 是否需要合并单元格
             mergeCols: [],
             mergeRule: BI.emptyFn,
 
@@ -37,14 +37,14 @@ BI.TableTree = BI.inherit(BI.Widget, {
             header: [],
             items: [],
 
-            //交叉表头
+            // 交叉表头
             crossHeader: [],
             crossItems: []
-        })
+        });
     },
 
     _getVDeep: function () {
-        return this.options.crossHeader.length;//纵向深度
+        return this.options.crossHeader.length;// 纵向深度
     },
 
     _getHDeep: function () {
@@ -106,7 +106,7 @@ BI.TableTree = BI.inherit(BI.Widget, {
         return {
             header: header,
             items: items
-        }
+        };
     },
 
     setWidth: function (width) {
@@ -215,7 +215,7 @@ BI.extend(BI.TableTree, {
         var self = this;
         var result = [];
 
-        function track(store, node) {
+        function track (store, node) {
             var next;
             if (BI.isArray(node.children)) {
                 BI.each(node.children, function (index, child) {
@@ -234,12 +234,12 @@ BI.extend(BI.TableTree, {
                 } else {
                     next = [];
                 }
-                if (/**(store == -1 || node.children.length > 1) &&**/ BI.isNotEmptyArray(node.values)) {
+                if (/** (store == -1 || node.children.length > 1) &&**/ BI.isNotEmptyArray(node.values)) {
                     var summary = {
                         text: BI.i18nText("BI-Summary_Values"),
                         type: "bi.table_style_cell",
                         styleGetter: function () {
-                            return styleGetter(store === -1)
+                            return styleGetter(store === -1);
                         }
                     };
                     for (var i = next.length; i < deep; i++) {
@@ -287,7 +287,7 @@ BI.extend(BI.TableTree, {
         BI.each(nodes, function (i, node) {
             track(-1, node);
         });
-        //填充空位
+        // 填充空位
         BI.each(result, function (i, line) {
             var last = BI.last(line);
             for (var j = line.length; j < deep; j++) {
@@ -303,7 +303,7 @@ BI.extend(BI.TableTree, {
     },
 
     maxDeep: function (nodes) {
-        function track(deep, node) {
+        function track (deep, node) {
             var d = deep;
             if (BI.isNotEmptyArray(node.children)) {
                 BI.each(node.children, function (index, child) {

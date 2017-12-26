@@ -13,7 +13,7 @@ BI.ImageButton = BI.inherit(BI.BasicButton, {
             src: "",
             iconWidth: "100%",
             iconHeight: "100%"
-        })
+        });
     },
 
     _init: function () {
@@ -30,14 +30,14 @@ BI.ImageButton = BI.inherit(BI.BasicButton, {
                 type: "bi.center_adapt",
                 element: this,
                 items: [this.image]
-            })
+            });
         } else {
             BI.createWidget({
                 type: "bi.adaptive",
                 element: this,
                 items: [this.image],
                 scrollable: false
-            })
+            });
         }
     },
 

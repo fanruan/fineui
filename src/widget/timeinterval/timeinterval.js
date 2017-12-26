@@ -15,7 +15,7 @@ BI.TimeInterval = BI.inherit(BI.Single, {
         var conf = BI.TimeInterval.superclass._defaultConfig.apply(this, arguments);
         return BI.extend(conf, {
             extraCls: "bi-time-interval"
-        })
+        });
     },
     _init: function () {
         var self = this;
@@ -24,7 +24,7 @@ BI.TimeInterval = BI.inherit(BI.Single, {
         this.left = this._createCombo();
         this.right = this._createCombo();
         this.label = BI.createWidget({
-            type: 'bi.label',
+            type: "bi.label",
             height: this.constants.height,
             width: this.constants.width,
             text: "-"
@@ -66,7 +66,7 @@ BI.TimeInterval = BI.inherit(BI.Single, {
     _createCombo: function () {
         var self = this;
         var combo = BI.createWidget({
-            type: 'bi.multidate_combo'
+            type: "bi.multidate_combo"
         });
         combo.on(BI.MultiDateCombo.EVENT_ERROR, function () {
             self._clearTitle();
@@ -74,7 +74,7 @@ BI.TimeInterval = BI.inherit(BI.Single, {
             self.fireEvent(BI.TimeInterval.EVENT_ERROR);
         });
 
-        combo.on(BI.MultiDateCombo.EVENT_VALID, function(){
+        combo.on(BI.MultiDateCombo.EVENT_VALID, function () {
             BI.Bubbles.hide("error");
             var smallDate = self.left.getKey(), bigDate = self.right.getKey();
             if (self._check(smallDate, bigDate) && self._compare(smallDate, bigDate)) {
@@ -90,7 +90,7 @@ BI.TimeInterval = BI.inherit(BI.Single, {
             }
         });
 
-        combo.on(BI.MultiDateCombo.EVENT_FOCUS, function(){
+        combo.on(BI.MultiDateCombo.EVENT_FOCUS, function () {
             BI.Bubbles.hide("error");
             var smallDate = self.left.getKey(), bigDate = self.right.getKey();
             if (self._check(smallDate, bigDate) && self._compare(smallDate, bigDate)) {
@@ -110,7 +110,7 @@ BI.TimeInterval = BI.inherit(BI.Single, {
             self.left.hidePopupView();
             self.right.hidePopupView();
         });
-        //combo.on(BI.MultiDateCombo.EVENT_CHANGE, function () {
+        // combo.on(BI.MultiDateCombo.EVENT_CHANGE, function () {
         //    BI.Bubbles.hide("error");
         //    var smallDate = self.left.getKey(), bigDate = self.right.getKey();
         //    if (self._check(smallDate, bigDate) && self._compare(smallDate, bigDate)) {
@@ -124,9 +124,9 @@ BI.TimeInterval = BI.inherit(BI.Single, {
         //        self._clearTitle();
         //        self.element.removeClass(self.constants.timeErrorCls);
         //    }
-        //});
+        // });
 
-        combo.on(BI.MultiDateCombo.EVENT_CONFIRM, function(){
+        combo.on(BI.MultiDateCombo.EVENT_CONFIRM, function () {
             BI.Bubbles.hide("error");
             var smallDate = self.left.getKey(), bigDate = self.right.getKey();
             if (self._check(smallDate, bigDate) && self._compare(smallDate, bigDate)) {
@@ -150,14 +150,14 @@ BI.TimeInterval = BI.inherit(BI.Single, {
     _check: function (smallDate, bigDate) {
         var smallObj = smallDate.match(/\d+/g), bigObj = bigDate.match(/\d+/g);
         return this._dateCheck(smallDate) && Date.checkLegal(smallDate) && this._checkVoid({
-                year: smallObj[0],
-                month: smallObj[1],
-                day: smallObj[2]
-            }) && this._dateCheck(bigDate) && Date.checkLegal(bigDate) && this._checkVoid({
-                year: bigObj[0],
-                month: bigObj[1],
-                day: bigObj[2]
-            });
+            year: smallObj[0],
+            month: smallObj[1],
+            day: smallObj[2]
+        }) && this._dateCheck(bigDate) && Date.checkLegal(bigDate) && this._checkVoid({
+            year: bigObj[0],
+            month: bigObj[1],
+            day: bigObj[2]
+        });
     },
     _compare: function (smallDate, bigDate) {
         smallDate = Date.parseDateTime(smallDate, "%Y-%X-%d").print("%Y-%X-%d");

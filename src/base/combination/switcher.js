@@ -19,7 +19,7 @@ BI.Switcher = BI.inherit(BI.Widget, {
             masker: {},
             switcherClass: "bi-switcher-popup",
             hoverClass: "bi-switcher-hover"
-        })
+        });
     },
 
     _init: function () {
@@ -89,13 +89,13 @@ BI.Switcher = BI.inherit(BI.Widget, {
                     self.element[e](function (e) {
                         if (self.isEnabled() && self.switcher.isEnabled()) {
                             self._popupView();
-                            self.fireEvent(BI.Controller.EVENT_CHANGE, BI.Events.EXPAND, '', self.switcher);
+                            self.fireEvent(BI.Controller.EVENT_CHANGE, BI.Events.EXPAND, "", self.switcher);
                             self.fireEvent(BI.Switcher.EVENT_EXPAND);
                         }
                     }, function () {
                         if (self.isEnabled() && self.switcher.isEnabled() && o.toggle) {
                             self._hideView();
-                            self.fireEvent(BI.Controller.EVENT_CHANGE, BI.Events.COLLAPSE, '', self.switcher);
+                            self.fireEvent(BI.Controller.EVENT_CHANGE, BI.Events.COLLAPSE, "", self.switcher);
                             self.fireEvent(BI.Switcher.EVENT_COLLAPSE);
                         }
                     });
@@ -107,10 +107,10 @@ BI.Switcher = BI.inherit(BI.Widget, {
                                 if (self.isEnabled() && self.switcher.isEnabled()) {
                                     o.toggle ? self._toggle() : self._popupView();
                                     if (self.isExpanded()) {
-                                        self.fireEvent(BI.Controller.EVENT_CHANGE, BI.Events.EXPAND, '', self.switcher);
+                                        self.fireEvent(BI.Controller.EVENT_CHANGE, BI.Events.EXPAND, "", self.switcher);
                                         self.fireEvent(BI.Switcher.EVENT_EXPAND);
                                     } else {
-                                        self.fireEvent(BI.Controller.EVENT_CHANGE, BI.Events.COLLAPSE, '', self.switcher);
+                                        self.fireEvent(BI.Controller.EVENT_CHANGE, BI.Events.COLLAPSE, "", self.switcher);
                                         self.fireEvent(BI.Switcher.EVENT_COLLAPSE);
                                     }
                                 }
@@ -119,7 +119,7 @@ BI.Switcher = BI.inherit(BI.Widget, {
                     }
                     break;
             }
-        })
+        });
     },
 
     _initSwitcher: function () {

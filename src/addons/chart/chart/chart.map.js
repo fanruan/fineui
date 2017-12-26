@@ -8,7 +8,7 @@ BI.MapChart = BI.inherit(BI.AbstractChart, {
     _defaultConfig: function () {
         return BI.extend(BI.MapChart.superclass._defaultConfig.apply(this, arguments), {
             baseCls: "bi-map-chart"
-        })
+        });
     },
 
     _init: function () {
@@ -24,7 +24,7 @@ BI.MapChart = BI.inherit(BI.AbstractChart, {
             self.fireEvent(BI.MapChart.EVENT_CHANGE, obj);
         });
         this.combineChart.on(BI.CombineChart.EVENT_ITEM_CLICK, function (obj) {
-            self.fireEvent(BI.AbstractChart.EVENT_ITEM_CLICK, obj)
+            self.fireEvent(BI.AbstractChart.EVENT_ITEM_CLICK, obj);
         });
     },
 
@@ -46,7 +46,7 @@ BI.MapChart = BI.inherit(BI.AbstractChart, {
             var tip = this.name;
             var point = this.points[0];
             var index = BI.isNull(point.size) ? 0 : 1;
-            tip += ('<div>' + point.seriesName + ':' + BI.contentFormat(point.size || point.y, formatterArray[index]) + '</div>');
+            tip += ("<div>" + point.seriesName + ":" + BI.contentFormat(point.size || point.y, formatterArray[index]) + "</div>");
             return tip;
         };
         config.plotOptions.dataLabels.formatter.valueFormat = function () {
@@ -64,7 +64,7 @@ BI.MapChart = BI.inherit(BI.AbstractChart, {
             if (this.config.backgroundLayerInfo.type === BICst.WMS_SERVER) {
                 config.geo.tileLayer = false;
                 config.geo.wmsUrl = this.config.backgroundLayerInfo.url;
-                config.geo.wmsLayer = this.config.backgroundLayerInfo.wmsLayer
+                config.geo.wmsLayer = this.config.backgroundLayerInfo.wmsLayer;
             } else {
                 config.geo.tileLayer = this.config.backgroundLayerInfo.url;
             }
@@ -89,12 +89,12 @@ BI.MapChart = BI.inherit(BI.AbstractChart, {
             items.push({
                 type: "areaMap",
                 data: []
-            })
+            });
         }
 
         return [items, config];
 
-        function formatRangeLegend() {
+        function formatRangeLegend () {
             config.rangeLegend.enabled = true;
             switch (self.config.chartLegend) {
                 case BICst.CHART_LEGENDS.BOTTOM:
@@ -117,36 +117,36 @@ BI.MapChart = BI.inherit(BI.AbstractChart, {
                     var settings = items[0].settings;
                     var legendFormat = formatToolTipAndDataLabel(settings.format || c.NORMAL, settings.num_level || c.NORMAL,
                         settings.unit || "", settings.numSeparators || c.NUM_SEPARATORS);
-                    to = BI.contentFormat(to, legendFormat)
+                    to = BI.contentFormat(to, legendFormat);
                 }
-                return to
+                return to;
             };
         }
 
-        function formatToolTipAndDataLabel(format, numberLevel, unit, numSeparators) {
-            var formatter = '#.##';
+        function formatToolTipAndDataLabel (format, numberLevel, unit, numSeparators) {
+            var formatter = "#.##";
             switch (format) {
                 case self.constants.NORMAL:
-                    formatter = '#.##';
-                    if (numSeparators) formatter = '#,###.##';
+                    formatter = "#.##";
+                    if (numSeparators) formatter = "#,###.##";
                     break;
                 case self.constants.ZERO2POINT:
-                    formatter = '#0';
-                    if (numSeparators) formatter = '#,###';
+                    formatter = "#0";
+                    if (numSeparators) formatter = "#,###";
                     break;
                 case self.constants.ONE2POINT:
-                    formatter = '#0.0';
-                    if (numSeparators) formatter = '#,###.0';
+                    formatter = "#0.0";
+                    if (numSeparators) formatter = "#,###.0";
                     break;
                 case self.constants.TWO2POINT:
-                    formatter = '#0.00';
-                    if (numSeparators) formatter = '#,###.00';
+                    formatter = "#0.00";
+                    if (numSeparators) formatter = "#,###.00";
                     break;
             }
 
             switch (numberLevel) {
                 case BICst.TARGET_STYLE.NUM_LEVEL.NORMAL:
-                    formatter += '';
+                    formatter += "";
                     break;
                 case BICst.TARGET_STYLE.NUM_LEVEL.TEN_THOUSAND:
                     formatter += BI.i18nText("BI-Wan");
@@ -158,23 +158,23 @@ BI.MapChart = BI.inherit(BI.AbstractChart, {
                     formatter += BI.i18nText("BI-Yi");
                     break;
                 case BICst.TARGET_STYLE.NUM_LEVEL.PERCENT:
-                    formatter += '%';
+                    formatter += "%";
                     break;
             }
 
             return formatter + unit;
         }
 
-        function getRangeStyle(styles, change, defaultColor) {
+        function getRangeStyle (styles, change, defaultColor) {
             var range = [], color = null, defaultStyle = {};
             var conditionMax = null, conditionMin = null, min = null;
 
             BI.each(items, function (idx, item) {
                 BI.each(item.data, function (id, it) {
                     if (BI.isNull(min) || BI.parseFloat(min) > BI.parseFloat(it.y)) {
-                        min = it.y
+                        min = it.y;
                     }
-                })
+                });
             });
 
             switch (change) {
@@ -196,11 +196,11 @@ BI.MapChart = BI.inherit(BI.AbstractChart, {
                                 range.push({
                                     color: style.color || "rgba(255,255,255,0)",
                                     from: style.range.min,
-                                    to: to,
+                                    to: to
                                 });
                             }
                             color = style.color;
-                            conditionMax = style.range.max
+                            conditionMax = style.range.max;
                         });
 
                         conditionMin = BI.parseFloat(styles[0].range.min);
@@ -220,21 +220,21 @@ BI.MapChart = BI.inherit(BI.AbstractChart, {
                             });
                         }
                         return range;
-                    } else {
-                        defaultStyle.color = defaultColor;
-                        return defaultStyle;
                     }
+                    defaultStyle.color = defaultColor;
+                    return defaultStyle;
+                    
             }
         }
 
-        function _calculateValueNiceDomain(minValue, maxValue) {
+        function _calculateValueNiceDomain (minValue, maxValue) {
             minValue = Math.min(0, minValue);
             var tickInterval = _linearTickInterval(minValue, maxValue);
 
             return _linearNiceDomain(minValue, maxValue, tickInterval);
         }
 
-        function _linearTickInterval(minValue, maxValue, m) {
+        function _linearTickInterval (minValue, maxValue, m) {
             m = m || 5;
             var span = maxValue - minValue;
             var step = Math.pow(10, Math.floor(Math.log(span / m) / Math.LN10));
@@ -245,7 +245,7 @@ BI.MapChart = BI.inherit(BI.AbstractChart, {
             return step;
         }
 
-        function _linearNiceDomain(minValue, maxValue, tickInterval) {
+        function _linearNiceDomain (minValue, maxValue, tickInterval) {
             minValue = VanUtils.accMul(Math.floor(minValue / tickInterval), tickInterval);
             maxValue = VanUtils.accMul(Math.ceil(maxValue / tickInterval), tickInterval);
 
@@ -313,7 +313,7 @@ BI.MapChart = BI.inherit(BI.AbstractChart, {
                         self._formatDrillItems(da.drilldown);
                     }
                 });
-            })
+            });
         });
         return items;
     },
@@ -358,4 +358,4 @@ BI.MapChart = BI.inherit(BI.AbstractChart, {
 });
 BI.MapChart.EVENT_CHANGE = "EVENT_CHANGE";
 BI.MapChart.EVENT_CLICK_DTOOL = "EVENT_CLICK_DTOOL";
-BI.shortcut('bi.map_chart', BI.MapChart);
+BI.shortcut("bi.map_chart", BI.MapChart);

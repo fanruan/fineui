@@ -14,12 +14,12 @@ BI.ResponisveTable = BI.inherit(BI.Widget, {
     _defaultConfig: function () {
         return BI.extend(BI.ResponisveTable.superclass._defaultConfig.apply(this, arguments), {
             baseCls: "bi-responsive-table",
-            isNeedFreeze: false,//是否需要冻结单元格
-            freezeCols: [], //冻结的列号,从0开始,isNeedFreeze为true时生效
+            isNeedFreeze: false, // 是否需要冻结单元格
+            freezeCols: [], // 冻结的列号,从0开始,isNeedFreeze为true时生效
 
-            isNeedMerge: false,//是否需要合并单元格
-            mergeCols: [], //合并的单元格列号
-            mergeRule: function (row1, row2) { //合并规则, 默认相等时合并
+            isNeedMerge: false, // 是否需要合并单元格
+            mergeCols: [], // 合并的单元格列号
+            mergeRule: function (row1, row2) { // 合并规则, 默认相等时合并
                 return BI.isEqual(row1, row2);
             },
 
@@ -32,9 +32,9 @@ BI.ResponisveTable = BI.inherit(BI.Widget, {
 
             header: [],
             footer: false,
-            items: [], //二维数组
+            items: [], // 二维数组
 
-            //交叉表头
+            // 交叉表头
             crossHeader: [],
             crossItems: []
         });
@@ -65,7 +65,7 @@ BI.ResponisveTable = BI.inherit(BI.Widget, {
             header: o.header,
             footer: o.footer,
             items: o.items,
-            //交叉表头
+            // 交叉表头
             crossHeader: o.crossHeader,
             crossItems: o.crossItems
         });
@@ -87,7 +87,7 @@ BI.ResponisveTable = BI.inherit(BI.Widget, {
             self.fireEvent(BI.Table.EVENT_TABLE_BEFORE_REGION_RESIZE, arguments);
         });
         this.table.on(BI.Table.EVENT_TABLE_REGION_RESIZE, function () {
-            //important:在冻结并自适应列宽的情况下要随时变更表头宽度
+            // important:在冻结并自适应列宽的情况下要随时变更表头宽度
             if (o.isNeedResize === true && self._isAdaptiveColumn()) {
                 self._resizeHeader();
             }
@@ -117,7 +117,7 @@ BI.ResponisveTable = BI.inherit(BI.Widget, {
         if (o.isNeedFreeze === true) {
             var regionColumnSize = this.table.getRegionColumnSize();
             var maxWidth = this.table.element.width();
-            if (!regionColumnSize[0] || (regionColumnSize[0] === 'fill') || regionColumnSize[0] > maxWidth || regionColumnSize[1] > maxWidth) {
+            if (!regionColumnSize[0] || (regionColumnSize[0] === "fill") || regionColumnSize[0] > maxWidth || regionColumnSize[1] > maxWidth) {
                 var freezeCols = o.freezeCols;
                 if (freezeCols.length === 0) {
                     this.table.setRegionColumnSize([0, "fill"]);
@@ -146,7 +146,7 @@ BI.ResponisveTable = BI.inherit(BI.Widget, {
                     columnSizeRight.push(size);
                 }
             });
-            //因为有边框，所以加上数组长度的参数调整
+            // 因为有边框，所以加上数组长度的参数调整
             var sumLeft = BI.sum(columnSizeLeft) + columnSizeLeft.length,
                 sumRight = BI.sum(columnSizeRight) + columnSizeRight.length;
             return {
@@ -154,7 +154,7 @@ BI.ResponisveTable = BI.inherit(BI.Widget, {
                 sumRight: sumRight,
                 left: columnSizeLeft,
                 right: columnSizeRight
-            }
+            };
         }
         return {
             size: columnSize,
@@ -169,7 +169,7 @@ BI.ResponisveTable = BI.inherit(BI.Widget, {
     _resizeHeader: function () {
         var self = this, o = this.options;
         if (o.isNeedFreeze === true) {
-            //若是当前处于自适应调节阶段
+            // 若是当前处于自适应调节阶段
             if (this._isAdaptiveColumn()) {
                 var columnSize = this.table.getCalculateColumnSize();
                 this.table.setHeaderColumnSize(columnSize);
@@ -188,10 +188,10 @@ BI.ResponisveTable = BI.inherit(BI.Widget, {
 
                 block = self._getBlockSize();
                 if (columnSizeLeft[columnSizeLeft.length - 1] < block.left[block.left.length - 1]) {
-                    columnSizeLeft[columnSizeLeft.length - 1] = block.left[block.left.length - 1]
+                    columnSizeLeft[columnSizeLeft.length - 1] = block.left[block.left.length - 1];
                 }
                 if (columnSizeRight[columnSizeRight.length - 1] < block.right[block.right.length - 1]) {
-                    columnSizeRight[columnSizeRight.length - 1] = block.right[block.right.length - 1]
+                    columnSizeRight[columnSizeRight.length - 1] = block.right[block.right.length - 1];
                 }
 
                 self.table.setColumnSize(columnSizeLeft.concat(columnSizeRight));
@@ -211,7 +211,7 @@ BI.ResponisveTable = BI.inherit(BI.Widget, {
                 block = this._getBlockSize();
 
                 if (size[size.length - 1] < block.size[block.size.length - 1]) {
-                    size[size.length - 1] = block.size[block.size.length - 1]
+                    size[size.length - 1] = block.size[block.size.length - 1];
                 }
                 this.table.setColumnSize(size);
             }
@@ -359,4 +359,4 @@ BI.ResponisveTable = BI.inherit(BI.Widget, {
         }
     }
 });
-BI.shortcut('bi.responsive_table', BI.ResponisveTable);
+BI.shortcut("bi.responsive_table", BI.ResponisveTable);

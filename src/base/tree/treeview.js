@@ -10,7 +10,7 @@ BI.TreeView = BI.inherit(BI.Pane, {
             baseCls: "bi-tree",
             paras: {},
             itemsCreator: BI.emptyFn
-        })
+        });
     },
     _init: function () {
         BI.TreeView.superclass._init.apply(this, arguments);
@@ -51,13 +51,13 @@ BI.TreeView = BI.inherit(BI.Pane, {
         });
     },
 
-    //选择节点触发方法
+    // 选择节点触发方法
     _selectTreeNode: function (treeId, treeNode) {
         this.fireEvent(BI.Controller.EVENT_CHANGE, BI.Events.CLICK, treeNode, this);
         this.fireEvent(BI.TreeView.EVENT_CHANGE, treeNode, this);
     },
 
-    //配置属性
+    // 配置属性
     _configSetting: function () {
         var paras = this.options.paras;
         var self = this;
@@ -99,11 +99,11 @@ BI.TreeView = BI.inherit(BI.Pane, {
         };
         var className = "dark", perTime = 100;
 
-        function onClick(event, treeId, treeNode) {
+        function onClick (event, treeId, treeNode) {
             self.nodes.checkNode(treeNode, !treeNode.checked, true, true);
         }
 
-        function getUrl(treeId, treeNode) {
+        function getUrl (treeId, treeNode) {
             var parentNode = self._getParentValues(treeNode);
             treeNode.times = treeNode.times || 1;
             var param = "id=" + treeNode.id
@@ -111,23 +111,23 @@ BI.TreeView = BI.inherit(BI.Pane, {
                 + "&parentValues= " + window.encodeURIComponent(BI.jsonEncode(parentNode))
                 + "&checkState=" + window.encodeURIComponent(BI.jsonEncode(treeNode.getCheckStatus()));
 
-            return BI.servletURL + '?op=' + self.options.op + '&cmd=' + self.options.cmd + "&" + param;
+            return BI.servletURL + "?op=" + self.options.op + "&cmd=" + self.options.cmd + "&" + param;
         }
 
-        function beforeExpand(treeId, treeNode) {
+        function beforeExpand (treeId, treeNode) {
             if (!treeNode.isAjaxing) {
                 if (!treeNode.children) {
                     treeNode.times = 1;
                     ajaxGetNodes(treeNode, "refresh");
                 }
                 return true;
-            } else {
-                BI.Msg.toast("Please Wait。", "warning");
-                return false;
             }
+            BI.Msg.toast("Please Wait。", "warning");
+            return false;
+            
         }
 
-        function onAsyncSuccess(event, treeId, treeNode, msg) {
+        function onAsyncSuccess (event, treeId, treeNode, msg) {
             treeNode.halfCheck = false;
             if (!msg || msg.length === 0 || /^<html>[\s,\S]*<\/html>$/gi.test(msg) || self._stop) {
                 return;
@@ -135,7 +135,7 @@ BI.TreeView = BI.inherit(BI.Pane, {
             var zTree = self.nodes;
             var totalCount = treeNode.count || 0;
 
-            //尝试去获取下一组节点，若获取值为空数组，表示获取完成
+            // 尝试去获取下一组节点，若获取值为空数组，表示获取完成
             // TODO by GUY
             if (treeNode.children.length > totalCount) {
                 treeNode.count = treeNode.children.length;
@@ -143,41 +143,41 @@ BI.TreeView = BI.inherit(BI.Pane, {
                     ajaxGetNodes(treeNode);
                 }, perTime);
             } else {
-                //treeNode.icon = "";
+                // treeNode.icon = "";
                 zTree.updateNode(treeNode);
                 zTree.selectNode(treeNode.children[0]);
-                //className = (className === "dark" ? "":"dark");
+                // className = (className === "dark" ? "":"dark");
             }
         }
 
-        function onAsyncError(event, treeId, treeNode, XMLHttpRequest, textStatus, errorThrown) {
+        function onAsyncError (event, treeId, treeNode, XMLHttpRequest, textStatus, errorThrown) {
             var zTree = self.nodes;
             BI.Msg.toast("Error!", "warning");
-            //treeNode.icon = "";
-            //zTree.updateNode(treeNode);
+            // treeNode.icon = "";
+            // zTree.updateNode(treeNode);
         }
 
-        function ajaxGetNodes(treeNode, reloadType) {
+        function ajaxGetNodes (treeNode, reloadType) {
             var zTree = self.nodes;
             if (reloadType == "refresh") {
-                //treeNode.icon = BI.servletURL +"?op=resource&resource=/com/fr/bi/web/css/base/third/ztree/img/loading.gif";
+                // treeNode.icon = BI.servletURL +"?op=resource&resource=/com/fr/bi/web/css/base/third/ztree/img/loading.gif";
                 zTree.updateNode(treeNode);
             }
             zTree.reAsyncChildNodes(treeNode, reloadType, true);
         }
 
-        function beforeCheck(treeId, treeNode) {
+        function beforeCheck (treeId, treeNode) {
             treeNode.halfCheck = false;
             if (treeNode.checked === true) {
-                //将展开的节点halfCheck设为false，解决展开节点存在halfCheck=true的情况 guy
-                //所有的半选状态都需要取消halfCheck=true的情况
-                function track(children) {
+                // 将展开的节点halfCheck设为false，解决展开节点存在halfCheck=true的情况 guy
+                // 所有的半选状态都需要取消halfCheck=true的情况
+                function track (children) {
                     BI.each(children, function (i, ch) {
                         if (ch.halfCheck === true) {
                             ch.halfCheck = false;
                             track(ch.children);
                         }
-                    })
+                    });
                 }
 
                 track(treeNode.children);
@@ -185,19 +185,19 @@ BI.TreeView = BI.inherit(BI.Pane, {
                 var nodes = treeObj.getSelectedNodes();
                 $.each(nodes, function (index, node) {
                     node.halfCheck = false;
-                })
+                });
             }
         }
 
-        function onCheck(event, treeId, treeNode) {
+        function onCheck (event, treeId, treeNode) {
             self._selectTreeNode(treeId, treeNode);
         }
 
-        function onExpand(event, treeId, treeNode) {
+        function onExpand (event, treeId, treeNode) {
             treeNode.halfCheck = false;
         }
 
-        function onCollapse(event, treeId, treeNode) {
+        function onCollapse (event, treeId, treeNode) {
         }
 
         return setting;
@@ -214,19 +214,19 @@ BI.TreeView = BI.inherit(BI.Pane, {
     },
 
     _getNodeValue: function (node) {
-        //去除标红
+        // 去除标红
         return node.value == null ? node.text.replace(/<[^>]+>/g, "").replaceAll("&nbsp;", " ") : node.value;
     },
 
-    //获取半选框值
+    // 获取半选框值
     _getHalfSelectedValues: function (map, node) {
         var self = this;
         var checkState = node.getCheckStatus();
-        //将未选的去掉
+        // 将未选的去掉
         if (checkState.checked === false && checkState.half === false) {
             return;
         }
-        //如果节点已展开,并且是半选
+        // 如果节点已展开,并且是半选
         if (BI.isNotEmptyArray(node.children) && checkState.half === true) {
             var children = node.children;
             BI.each(children, function (i, ch) {
@@ -267,7 +267,7 @@ BI.TreeView = BI.inherit(BI.Pane, {
         cur[key] = value;
     },
 
-    //构造树节点
+    // 构造树节点
     _buildTree: function (map, values) {
         var cur = map;
         BI.each(values, function (i, value) {
@@ -275,16 +275,16 @@ BI.TreeView = BI.inherit(BI.Pane, {
                 cur[value] = {};
             }
             cur = cur[value];
-        })
+        });
     },
 
-    //获取选中的值
+    // 获取选中的值
     _getSelectedValues: function () {
         var self = this;
         var hashMap = {};
         var rootNoots = this.nodes.getNodes();
         track(rootNoots);
-        function track(nodes) {
+        function track (nodes) {
             BI.each(nodes, function (i, node) {
                 var checkState = node.getCheckStatus();
                 if (checkState.checked === true || checkState.half === true) {
@@ -296,19 +296,19 @@ BI.TreeView = BI.inherit(BI.Pane, {
                         self._buildTree(hashMap, values);
                     }
                 }
-            })
+            });
         }
 
         return hashMap;
     },
 
-    //处理节点
+    // 处理节点
     _dealWidthNodes: function (nodes) {
         var self = this, o = this.options;
         var ns = BI.Tree.arrayFormat(nodes);
         BI.each(ns, function (i, n) {
             n.title = n.title || n.text || n.value;
-            //处理标红
+            // 处理标红
             if (BI.isKey(o.paras.keyword)) {
                 n.text = $("<div>").__textKeywordMarked__(n.text, o.paras.keyword, n.py).html();
             } else {
@@ -341,7 +341,7 @@ BI.TreeView = BI.inherit(BI.Pane, {
         });
     },
 
-    //生成树内部方法
+    // 生成树内部方法
     _initTree: function (setting) {
         var self = this, o = this.options;
         self.fireEvent(BI.Events.INIT);
@@ -379,31 +379,31 @@ BI.TreeView = BI.inherit(BI.Pane, {
         });
     },
 
-    //构造树结构，
+    // 构造树结构，
     initTree: function (nodes, setting) {
         var setting = setting || {
-                async: {
-                    enable: false
+            async: {
+                enable: false
+            },
+            check: {
+                enable: false
+            },
+            data: {
+                key: {
+                    title: "title",
+                    name: "text"
                 },
-                check: {
-                    enable: false
-                },
-                data: {
-                    key: {
-                        title: "title",
-                        name: "text"
-                    },
-                    simpleData: {
-                        enable: true
-                    }
-                },
-                view: {
-                    showIcon: false,
-                    expandSpeed: "",
-                    nameIsHTML: true
-                },
-                callback: {}
-            };
+                simpleData: {
+                    enable: true
+                }
+            },
+            view: {
+                showIcon: false,
+                expandSpeed: "",
+                nameIsHTML: true
+            },
+            callback: {}
+        };
         this.nodes = $.fn.zTree.init(this.tree.element, setting, nodes);
     },
 
@@ -415,7 +415,7 @@ BI.TreeView = BI.inherit(BI.Pane, {
         this._stop = true;
     },
 
-    //生成树方法
+    // 生成树方法
     stroke: function (config) {
         delete this.options.keyword;
         BI.extend(this.options.paras, config);
@@ -435,7 +435,7 @@ BI.TreeView = BI.inherit(BI.Pane, {
     },
 
     checkAll: function (checked) {
-        function setNode(children) {
+        function setNode (children) {
             BI.each(children, function (i, child) {
                 child.halfCheck = false;
                 setNode(child.children);
@@ -453,7 +453,7 @@ BI.TreeView = BI.inherit(BI.Pane, {
         this.nodes && this.nodes.expandAll(flag);
     },
 
-    //设置树节点的状态
+    // 设置树节点的状态
     setValue: function (value, param) {
         this.checkAll(false);
         this.updateValue(value, param);
@@ -475,7 +475,7 @@ BI.TreeView = BI.inherit(BI.Pane, {
             BI.each(nodes, function (j, node) {
                 BI.extend(node, {checked: true}, op);
                 treeObj.updateNode(node);
-            })
+            });
         });
     },
 

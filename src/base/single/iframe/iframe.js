@@ -12,7 +12,7 @@ BI.Iframe = BI.inherit(BI.Single, {
             src: "",
             width: "100%",
             height: "100%"
-        })
+        });
     },
 
     _init: function () {
@@ -40,11 +40,11 @@ BI.Iframe = BI.inherit(BI.Single, {
     },
 
     getWidth: function () {
-        return this.options.width
+        return this.options.width;
     },
 
     getHeight: function () {
-        return this.options.height
+        return this.options.height;
     }
 });
 

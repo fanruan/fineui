@@ -58,4 +58,4 @@ BI.RichEditor = BI.inherit(BI.Widget, {
     }
 });
 BI.RichEditor.EVENT_CONFIRM = "EVENT_CONFIRM";
-BI.shortcut('bi.rich_editor', BI.RichEditor);
+BI.shortcut("bi.rich_editor", BI.RichEditor);

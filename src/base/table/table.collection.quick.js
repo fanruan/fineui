@@ -65,25 +65,25 @@ BI.QuickCollectionTable = BI.inherit(BI.CollectionTable, {
     _shouldHandleLeftX: function (delta) {
         if (delta > 0) {
             return this.bottomLeftCollection.getScrollLeft() < this.bottomLeftCollection.getMaxScrollLeft();
-        } else {
-            return this.bottomLeftCollection.getScrollLeft() > 0;
         }
+        return this.bottomLeftCollection.getScrollLeft() > 0;
+        
     },
 
     _shouldHandleRightX: function (delta) {
         if (delta > 0) {
             return this.bottomRightCollection.getScrollLeft() < this.bottomRightCollection.getMaxScrollLeft();
-        } else {
-            return this.bottomRightCollection.getScrollLeft() > 0;
         }
+        return this.bottomRightCollection.getScrollLeft() > 0;
+        
     },
 
     _shouldHandleY: function (delta) {
         if (delta > 0) {
             return this.bottomRightCollection.getScrollTop() < this.bottomRightCollection.getMaxScrollTop();
-        } else {
-            return this.bottomRightCollection.getScrollTop() > 0;
         }
+        return this.bottomRightCollection.getScrollTop() > 0;
+        
     },
 
     _onWheelLeft: function (deltaX, deltaY) {
@@ -117,7 +117,7 @@ BI.QuickCollectionTable = BI.inherit(BI.CollectionTable, {
     _populateTable: function () {
         var self = this, o = this.options;
         var regionSize = this.getRegionSize(), totalLeftColumnSize = 0, totalRightColumnSize = 0, totalColumnSize = 0,
-            summaryColumnSizeArray = []
+            summaryColumnSizeArray = [];
         BI.each(o.columnSize, function (i, size) {
             if (o.isNeedFreeze === true && o.freezeCols.contains(i)) {
                 totalLeftColumnSize += size;
@@ -188,4 +188,4 @@ BI.QuickCollectionTable = BI.inherit(BI.CollectionTable, {
         this.bottomRightCollection.populate(rightItems);
     }
 });
-BI.shortcut('bi.quick_collection_table', BI.QuickCollectionTable);
+BI.shortcut("bi.quick_collection_table", BI.QuickCollectionTable);

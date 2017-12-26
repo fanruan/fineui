@@ -11,7 +11,7 @@ BI.Text = BI.inherit(BI.Single, {
             textAlign: "left",
             whiteSpace: "normal",
             lineHeight: null,
-            handler: null,//如果传入handler,表示处理文字的点击事件，不是区域的
+            handler: null, // 如果传入handler,表示处理文字的点击事件，不是区域的
             hgap: 0,
             vgap: 0,
             lgap: 0,
@@ -20,7 +20,7 @@ BI.Text = BI.inherit(BI.Single, {
             bgap: 0,
             text: "",
             py: ""
-        })
+        });
     },
 
     _init: function () {
@@ -29,37 +29,37 @@ BI.Text = BI.inherit(BI.Single, {
         if (o.hgap + o.lgap > 0) {
             this.element.css({
                 "padding-left": o.hgap + o.lgap + "px"
-            })
+            });
         }
         if (o.hgap + o.rgap > 0) {
             this.element.css({
                 "padding-right": o.hgap + o.rgap + "px"
-            })
+            });
         }
         if (o.vgap + o.tgap > 0) {
             this.element.css({
                 "padding-top": o.vgap + o.tgap + "px"
-            })
+            });
         }
         if (o.vgap + o.bgap > 0) {
             this.element.css({
                 "padding-bottom": o.vgap + o.bgap + "px"
-            })
+            });
         }
         if (BI.isNumber(o.height)) {
-            this.element.css({"lineHeight": o.height + "px"});
+            this.element.css({lineHeight: o.height + "px"});
         }
         if (BI.isNumber(o.lineHeight)) {
-            this.element.css({"lineHeight": o.lineHeight + "px"});
+            this.element.css({lineHeight: o.lineHeight + "px"});
         }
         this.element.css({
-            "textAlign": o.textAlign,
-            "whiteSpace": o.whiteSpace
+            textAlign: o.textAlign,
+            whiteSpace: o.whiteSpace
         });
         if (o.handler) {
             this.text = BI.createWidget({
                 type: "bi.layout",
-                tagName: 'span'
+                tagName: "span"
             });
             this.text.element.click(function () {
                 o.handler(self.getValue());
@@ -108,7 +108,7 @@ BI.Text = BI.inherit(BI.Single, {
     },
 
     setStyle: function (css) {
-        this.text.element.css(css)
+        this.text.element.css(css);
     },
 
     setText: function (text) {

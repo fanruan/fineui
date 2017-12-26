@@ -8,7 +8,7 @@ BI.BarChart = BI.inherit(BI.AbstractChart, {
     _defaultConfig: function () {
         return BI.extend(BI.BarChart.superclass._defaultConfig.apply(this, arguments), {
             baseCls: "bi-bar-chart"
-        })
+        });
     },
 
     _init: function () {
@@ -21,7 +21,7 @@ BI.BarChart = BI.inherit(BI.AbstractChart, {
             },
             labelStyle: this.constants.FONT_STYLE,
             formatter: function () {
-                return this > 0 ? this : (-1) * this
+                return this > 0 ? this : (-1) * this;
             },
             gridLineWidth: 0
         }];
@@ -48,7 +48,7 @@ BI.BarChart = BI.inherit(BI.AbstractChart, {
             self.fireEvent(BI.BarChart.EVENT_CHANGE, obj);
         });
         this.combineChart.on(BI.CombineChart.EVENT_ITEM_CLICK, function (obj) {
-            self.fireEvent(BI.AbstractChart.EVENT_ITEM_CLICK, obj)
+            self.fireEvent(BI.AbstractChart.EVENT_ITEM_CLICK, obj);
         });
     },
 
@@ -60,7 +60,7 @@ BI.BarChart = BI.inherit(BI.AbstractChart, {
         this.formatChartLegend(config, this.config.chartLegend);
         config.plotOptions.dataLabels.enabled = this.config.showDataLabel;
 
-        //分类轴
+        // 分类轴
         config.yAxis = this.yAxis;
         config.yAxis[0].title.text = this.config.showXAxisTitle === true ? this.config.xAxisTitle : "";
         config.yAxis[0].title.rotation = this.constants.ROTATION;
@@ -69,10 +69,10 @@ BI.BarChart = BI.inherit(BI.AbstractChart, {
             labelRotation: this.config.textDirection,
             enableTick: this.config.enableTick,
             lineWidth: this.config.lineWidth,
-            maxWidth: '40%'
+            maxWidth: "40%"
         });
 
-        //值轴
+        // 值轴
         self.formatNumberLevelInXaxis(items, this.config.leftYAxisNumberLevel);
         config.xAxis[0].title.text = getXAxisTitle(this.config.leftYAxisNumberLevel, this.constants.X_AXIS);
         config.xAxis[0].title.align = "center";
@@ -90,12 +90,12 @@ BI.BarChart = BI.inherit(BI.AbstractChart, {
 
         config.plotOptions.tooltip.formatter.valueFormat = config.xAxis[0].formatter;
 
-        //全局样式的图表文字
+        // 全局样式的图表文字
         this.setFontStyle(this.config.chartFont, config);
 
         return [items, config];
 
-        function formatChartStyle() {
+        function formatChartStyle () {
             switch (self.config.chartStyle) {
                 case BICst.CHART_STYLE.STYLE_GRADUAL:
                     return "gradual";
@@ -105,7 +105,7 @@ BI.BarChart = BI.inherit(BI.AbstractChart, {
             }
         }
 
-        function formatCordon() {
+        function formatCordon () {
             BI.each(self.config.cordon, function (idx, cor) {
                 if (idx === 0 && self.xAxis.length > 0) {
                     var magnify = self.calcMagnify(self.config.leftYAxisNumberLevel);
@@ -114,9 +114,9 @@ BI.BarChart = BI.inherit(BI.AbstractChart, {
                             value: t.value.div(magnify),
                             width: 1,
                             label: {
-                                "style" : self.config.chartFont,
-                                "text": t.text,
-                                "align": "top"
+                                style: self.config.chartFont,
+                                text: t.text,
+                                align: "top"
                             }
                         });
                     });
@@ -136,17 +136,17 @@ BI.BarChart = BI.inherit(BI.AbstractChart, {
                             value: t.value.div(magnify),
                             width: 1,
                             label: {
-                                "style" : self.config.chartFont,
-                                "text": t.text,
-                                "align": "left"
+                                style: self.config.chartFont,
+                                text: t.text,
+                                align: "left"
                             }
                         });
                     });
                 }
-            })
+            });
         }
 
-        function getXAxisTitle(numberLevelType, position) {
+        function getXAxisTitle (numberLevelType, position) {
             var unit = "";
             switch (numberLevelType) {
                 case BICst.TARGET_STYLE.NUM_LEVEL.NORMAL:
@@ -163,10 +163,10 @@ BI.BarChart = BI.inherit(BI.AbstractChart, {
                     break;
             }
             if (position === self.constants.X_AXIS) {
-                self.config.leftYAxisUnit !== "" && (unit = unit + self.config.leftYAxisUnit)
+                self.config.leftYAxisUnit !== "" && (unit = unit + self.config.leftYAxisUnit);
             }
             if (position === self.constants.LEFT_AXIS) {
-                self.config.xAxisUnit !== "" && (unit = unit + self.config.xAxisUnit)
+                self.config.xAxisUnit !== "" && (unit = unit + self.config.xAxisUnit);
             }
             unit = unit === "" ? unit : "(" + unit + ")";
 
@@ -181,7 +181,7 @@ BI.BarChart = BI.inherit(BI.AbstractChart, {
                     var tmp = t.x;
                     t.x = t.y;
                     t.y = tmp;
-                })
+                });
             });
         });
         return items;
@@ -238,4 +238,4 @@ BI.BarChart = BI.inherit(BI.AbstractChart, {
     }
 });
 BI.BarChart.EVENT_CHANGE = "EVENT_CHANGE";
-BI.shortcut('bi.bar_chart', BI.BarChart);
+BI.shortcut("bi.bar_chart", BI.BarChart);

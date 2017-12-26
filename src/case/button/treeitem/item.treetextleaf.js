@@ -5,7 +5,7 @@
  * @extends BI.BasicButton
  */
 BI.TreeTextLeafItem = BI.inherit(BI.BasicButton, {
-    _defaultConfig: function() {
+    _defaultConfig: function () {
         return BI.extend(BI.TreeTextLeafItem.superclass._defaultConfig.apply(this, arguments), {
             extraCls: "bi-tree-text-leaf-item bi-list-item-active",
             id: "",
@@ -14,9 +14,9 @@ BI.TreeTextLeafItem = BI.inherit(BI.BasicButton, {
             hgap: 0,
             lgap: 0,
             rgap: 0
-        })
+        });
     },
-    _init : function() {
+    _init: function () {
         BI.TreeTextLeafItem.superclass._init.apply(this, arguments);
         var self = this, o = this.options;
         this.text = BI.createWidget({
@@ -38,30 +38,30 @@ BI.TreeTextLeafItem = BI.inherit(BI.BasicButton, {
             items: [{
                 el: this.text
             }]
-        })
+        });
     },
 
-    doRedMark: function(){
+    doRedMark: function () {
         this.text.doRedMark.apply(this.text, arguments);
     },
 
-    unRedMark: function(){
+    unRedMark: function () {
         this.text.unRedMark.apply(this.text, arguments);
     },
 
-    doHighLight: function(){
+    doHighLight: function () {
         this.text.doHighLight.apply(this.text, arguments);
     },
 
-    unHighLight: function(){
+    unHighLight: function () {
         this.text.unHighLight.apply(this.text, arguments);
     },
 
-    getId: function(){
+    getId: function () {
         return this.options.id;
     },
 
-    getPId: function(){
+    getPId: function () {
         return this.options.pId;
     }
 });

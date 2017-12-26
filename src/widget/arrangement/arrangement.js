@@ -62,7 +62,7 @@ BI.Arrangement = BI.inherit(BI.Widget, {
         }
     },
 
-    ////初始化操作////
+    // //初始化操作////
     _calculateRegions: function (items) {
         var self = this, o = this.options;
         this.regions = {};
@@ -92,7 +92,7 @@ BI.Arrangement = BI.inherit(BI.Widget, {
         return num1 >= num2 || this._isEqual(num1, num2);
     },
 
-    //获取占有的最大Region
+    // 获取占有的最大Region
     _getRegionOccupied: function (regions) {
         var self = this, o = this.options;
         if (BI.size(regions || this.regions) <= 0) {
@@ -101,7 +101,7 @@ BI.Arrangement = BI.inherit(BI.Widget, {
                 top: 0,
                 width: 0,
                 height: 0
-            }
+            };
         }
         var minLeft = BI.MAX, maxLeft = BI.MIN, minTop = BI.MAX, maxTop = BI.MIN;
         BI.each(regions || this.regions, function (id, region) {
@@ -115,10 +115,10 @@ BI.Arrangement = BI.inherit(BI.Widget, {
             top: minTop,
             width: maxLeft - minLeft,
             height: maxTop - minTop
-        }
+        };
     },
 
-    //两个区域的交叉面积
+    // 两个区域的交叉面积
     _getCrossArea: function (region1, region2) {
         if (region1.left <= region2.left) {
             if (region1.top <= region2.top) {
@@ -156,7 +156,7 @@ BI.Arrangement = BI.inherit(BI.Widget, {
         return 0;
     },
 
-    //是否有覆盖的组件
+    // 是否有覆盖的组件
     _isRegionOverlay: function (regions) {
         var reg = [];
         BI.each(regions || this.regions, function (id, region) {
@@ -184,7 +184,7 @@ BI.Arrangement = BI.inherit(BI.Widget, {
         return false;
     },
 
-    //布局是否是优良的
+    // 布局是否是优良的
     _isArrangeFine: function (regions) {
         switch (this.options.layoutType) {
             case BI.Arrangement.LAYOUT_TYPE.FREE:
@@ -238,24 +238,24 @@ BI.Arrangement = BI.inherit(BI.Widget, {
         return clone;
     },
 
-    //测试合法性
+    // 测试合法性
     _test: function (regions) {
         var self = this;
         return !BI.any(regions || this.regions, function (i, region) {
             if (BI.isNaN(region.width) || BI.isNaN(region.height) || region.width <= 21 || region.height <= 21) {
                 return true;
             }
-        })
+        });
     },
 
     _getScrollOffset: function () {
         return {
             left: this.container.element[0].scrollLeft,
             top: this.container.element[0].scrollTop
-        }
+        };
     },
 
-    ////操作////
+    // //操作////
     _createOneRegion: function (item) {
         var el = BI.createWidget(item.el);
         el.setVisible(true);
@@ -266,7 +266,7 @@ BI.Arrangement = BI.inherit(BI.Widget, {
             width: item.width,
             height: item.height,
             el: el
-        }
+        };
     },
 
     _applyRegion: function (regions) {
@@ -346,10 +346,10 @@ BI.Arrangement = BI.inherit(BI.Widget, {
             top: size.top,
             width: size.width,
             height: size.height
-        })
+        });
     },
 
-    //Grid
+    // Grid
     _getOneWidthPortion: function () {
         return this.getClientWidth() / BI.Arrangement.PORTION;
     },
@@ -384,7 +384,7 @@ BI.Arrangement = BI.inherit(BI.Widget, {
             y: topPortion,
             w: widthPortion,
             h: heightPortion
-        }
+        };
     },
 
     _getBlockPositionAndSize: function (position) {
@@ -404,7 +404,7 @@ BI.Arrangement = BI.inherit(BI.Widget, {
         BI.each(regions || this.regions, function (id, region) {
             result.push(BI.extend(self._getGridPositionAndSize(region), {
                 i: region.id
-            }))
+            }));
         });
         return result;
     },
@@ -457,10 +457,10 @@ BI.Arrangement = BI.inherit(BI.Widget, {
         }
 
         var movingUp = y && l.y > y;
-        if (typeof x === 'number') {
+        if (typeof x === "number") {
             l.x = x;
         }
-        if (typeof y === 'number') {
+        if (typeof y === "number") {
             l.y = y;
         }
         l.moved = true;
@@ -490,7 +490,7 @@ BI.Arrangement = BI.inherit(BI.Widget, {
 
         return layout;
 
-        function getAllCollisions(layout, layoutItem) {
+        function getAllCollisions (layout, layoutItem) {
             return BI.filter(layout, function (i, l) {
                 return self._collides(l, layoutItem);
             });
@@ -534,14 +534,14 @@ BI.Arrangement = BI.inherit(BI.Widget, {
     },
 
     _moveElementAwayFromCollision: function (layout, collidesWith,
-                                             itemToMove, isUserAction) {
+        itemToMove, isUserAction) {
         if (isUserAction) {
             var fakeItem = {
                 x: itemToMove.x,
                 y: itemToMove.y,
                 w: itemToMove.w,
                 h: itemToMove.h,
-                i: '-1'
+                i: "-1"
             };
             fakeItem.y = Math.max(collidesWith.y - itemToMove.h, 0);
             if (!this._getFirstCollision(layout, fakeItem)) {
@@ -587,14 +587,14 @@ BI.Arrangement = BI.inherit(BI.Widget, {
 
         return out;
 
-        function getStatics(layout) {
+        function getStatics (layout) {
             return BI.filter(layout, function (i, l) {
                 return l._static;
             });
         }
     },
 
-    ////公有方法////
+    // //公有方法////
     getRegionByName: function (name) {
         var obj = {};
         obj[name] = this.regions[name];
@@ -633,7 +633,7 @@ BI.Arrangement = BI.inherit(BI.Widget, {
         this.block.setVisible(false);
     },
 
-    ////公有操作////
+    // //公有操作////
     setLayoutType: function (type) {
         var self = this, o = this.options;
         if (type !== o.layoutType) {
@@ -658,7 +658,7 @@ BI.Arrangement = BI.inherit(BI.Widget, {
         return {
             x: BI.parseFloat(BI.contentFormat((occupied.left + occupied.width) / width, "#.##;-#.##")),
             y: BI.parseFloat(BI.contentFormat((occupied.top + occupied.height) / height, "#.##;-#.##"))
-        }
+        };
     },
 
     addRegion: function (region, position) {
@@ -877,7 +877,7 @@ BI.Arrangement = BI.inherit(BI.Widget, {
         }));
         return function () {
             self.arrangement.setVisible(false);
-        }
+        };
     },
 
     scrollTo: function (scroll) {
@@ -896,13 +896,13 @@ BI.Arrangement = BI.inherit(BI.Widget, {
                 if (this._isArrangeFine()) {
                     var width = this.getClientWidth();
                     var xRatio = (ratio.x || 1) * width / (occupied.left + occupied.width);
-                    //var yRatio = ratio.y * height / (occupied.top + occupied.height);
+                    // var yRatio = ratio.y * height / (occupied.top + occupied.height);
                     var regions = this._cloneRegion();
                     BI.each(regions, function (i, region) {
                         region.left = region.left * xRatio;
-                        //region.top = region.top * yRatio;
+                        // region.top = region.top * yRatio;
                         region.width = region.width * xRatio;
-                        //region.height = region.height * yRatio;
+                        // region.height = region.height * yRatio;
                     });
                     if (this._test(regions)) {
                         this._modifyRegion(regions);
@@ -924,7 +924,7 @@ BI.Arrangement = BI.inherit(BI.Widget, {
                         region.width = region.width * xRatio;
                         region.top = region.top * yRatio;
                         region.height = region.height * yRatio;
-                        //做一下自适应布局到网格布局的兼容
+                        // 做一下自适应布局到网格布局的兼容
                         var perWidth = self._getOneWidthPortion();
                         var widthPortion = Math.round(region.width / perWidth);
                         var leftPortion = Math.round(region.left / perWidth);
@@ -999,7 +999,7 @@ BI.Arrangement = BI.inherit(BI.Widget, {
                         }
                         store[row][col] = region;
                     });
-                    //非4的倍数
+                    // 非4的倍数
                     // if (count % 4 !== 0) {
                     //     var lasts = store[rows - 1];
                     //     var perWidth = width / (count % 4);
@@ -1055,4 +1055,4 @@ BI.extend(BI.Arrangement, {
         FREE: 1
     }
 });
-BI.shortcut('bi.arrangement', BI.Arrangement);
+BI.shortcut("bi.arrangement", BI.Arrangement);

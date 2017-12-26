@@ -6,15 +6,15 @@
  * @extends BI.Trigger
  */
 BI.YearDateCombo = BI.inherit(BI.Trigger, {
-    _defaultConfig: function() {
+    _defaultConfig: function () {
         return BI.extend( BI.YearDateCombo.superclass._defaultConfig.apply(this, arguments), {
             baseCls: "bi-year-combo",
-            min: '1900-01-01', //最小日期
-            max: '2099-12-31', //最大日期
+            min: "1900-01-01", // 最小日期
+            max: "2099-12-31", // 最大日期
             height: 25
         });
     },
-    _init: function() {
+    _init: function () {
         BI.YearDateCombo.superclass._init.apply(this, arguments);
         var self = this, o = this.options;
 
@@ -28,11 +28,11 @@ BI.YearDateCombo = BI.inherit(BI.Trigger, {
             max: o.max
         });
 
-        this.popup.on(BI.YearPopup.EVENT_CHANGE, function(){
+        this.popup.on(BI.YearPopup.EVENT_CHANGE, function () {
             self.setValue(self.popup.getValue());
             self.combo.hideView();
             self.fireEvent(BI.YearDateCombo.EVENT_CHANGE);
-        })
+        });
 
 
         this.combo = BI.createWidget({
@@ -47,20 +47,20 @@ BI.YearDateCombo = BI.inherit(BI.Trigger, {
                 stopPropagation: false,
                 el: this.popup
             }
-        })
-        this.combo.on(BI.Combo.EVENT_CHANGE, function(){
+        });
+        this.combo.on(BI.Combo.EVENT_CHANGE, function () {
             self.fireEvent(BI.YearDateCombo.EVENT_CHANGE);
-        })
+        });
     },
 
-    setValue: function(v){
+    setValue: function (v) {
         this.trigger.setValue(v);
         this.popup.setValue(v);
     },
 
-    getValue: function(){
+    getValue: function () {
         return this.popup.getValue();
     }
 });
 BI.YearDateCombo.EVENT_CHANGE = "EVENT_CHANGE";
-BI.shortcut('bi.year_date_combo', BI.YearDateCombo);
+BI.shortcut("bi.year_date_combo", BI.YearDateCombo);

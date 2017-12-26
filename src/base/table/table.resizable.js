@@ -18,7 +18,7 @@ BI.ResizableTable = BI.inherit(BI.Widget, {
             isResizeAdapt: false,
             headerRowSize: 25,
             rowSize: 25,
-            isNeedMerge: true,//是否需要合并单元格
+            isNeedMerge: true, // 是否需要合并单元格
             mergeCols: [],
             mergeRule: BI.emptyFn,
             columnSize: [],
@@ -28,7 +28,7 @@ BI.ResizableTable = BI.inherit(BI.Widget, {
             header: [],
             items: [],
             regionColumnSize: []
-        })
+        });
     },
 
     _init: function () {
@@ -217,7 +217,7 @@ BI.ResizableTable = BI.inherit(BI.Widget, {
             self.resizer.setVisible(true);
             var height = o.headerRowSize + self._getRegionRowSize()[1];
             self.resizer.setHeight(height);
-            //TODO 不知道为什么加入这段代码会使得列宽调整出问题
+            // TODO 不知道为什么加入这段代码会使得列宽调整出问题
             // if (o.minColumnSize[j]) {
             //     if (size === o.minColumnSize[j]) {
             //         self.resizer.element.addClass("suitable");
@@ -288,7 +288,7 @@ BI.ResizableTable = BI.inherit(BI.Widget, {
 
     setWidth: function (width) {
         BI.ResizableTable.superclass.setWidth.apply(this, arguments);
-        this.table.setWidth(width)
+        this.table.setWidth(width);
     },
 
     setHeight: function (height) {

@@ -12,7 +12,7 @@ BI.FileManager = BI.inherit(BI.Widget, {
             baseCls: "bi-file-manager",
             el: {},
             items: []
-        })
+        });
     },
 
     _init: function () {
@@ -27,7 +27,7 @@ BI.FileManager = BI.inherit(BI.Widget, {
             items: BI.deepClone(items)
         });
         this.nav.on(BI.FileManagerNav.EVENT_CHANGE, function (value, obj) {
-            if (value == "-1") {//根节点
+            if (value == "-1") {// 根节点
                 self.populate({children: self.tree.toJSON()});
             } else {
                 var node = self.tree.search(obj.attr("id"));

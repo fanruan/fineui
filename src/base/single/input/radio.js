@@ -4,8 +4,8 @@
  * @type {*|void|Object}
  */
 BI.Radio = BI.inherit(BI.IconButton, {
-    _defaultConfig: function() {
-        var conf = BI.Radio.superclass._defaultConfig.apply(this,arguments);
+    _defaultConfig: function () {
+        var conf = BI.Radio.superclass._defaultConfig.apply(this, arguments);
         return BI.extend(conf, {
             baseCls: (conf.baseCls || "") + " bi-radio radio-icon",
             selected: false,
@@ -14,16 +14,16 @@ BI.Radio = BI.inherit(BI.IconButton, {
             height: 16,
             iconWidth: 16,
             iconHeight: 16
-        })
+        });
     },
 
-    _init : function() {
+    _init: function () {
         BI.Radio.superclass._init.apply(this, arguments);
     },
 
-    doClick: function(){
+    doClick: function () {
         BI.Radio.superclass.doClick.apply(this, arguments);
-        if(this.isValid()){
+        if(this.isValid()) {
             this.fireEvent(BI.Radio.EVENT_CHANGE);
         }
     }

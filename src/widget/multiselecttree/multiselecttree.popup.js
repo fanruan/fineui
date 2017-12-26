@@ -17,10 +17,10 @@ BI.MultiSelectTreePopup = BI.inherit(BI.Widget, {
             itemsCreator: o.itemsCreator
         });
         this.popup.on(BI.TreeView.EVENT_AFTERINIT, function () {
-            self.fireEvent(BI.MultiSelectTreePopup.EVENT_AFTER_INIT)
+            self.fireEvent(BI.MultiSelectTreePopup.EVENT_AFTER_INIT);
         });
         this.popup.on(BI.TreeView.EVENT_CHANGE, function () {
-            self.fireEvent(BI.MultiSelectTreePopup.EVENT_CHANGE)
+            self.fireEvent(BI.MultiSelectTreePopup.EVENT_CHANGE);
         });
     },
 

@@ -11,7 +11,7 @@ BI.ColorPicker = BI.inherit(BI.Widget, {
         return BI.extend(BI.ColorPicker.superclass._defaultConfig.apply(this, arguments), {
             baseCls: "bi-color-picker",
             items: null
-        })
+        });
     },
 
     _items: [
@@ -165,11 +165,11 @@ BI.ColorPicker = BI.inherit(BI.Widget, {
         });
         this.colors.on(BI.ButtonGroup.EVENT_CHANGE, function () {
             self.fireEvent(BI.ColorPicker.EVENT_CHANGE, arguments);
-        })
+        });
     },
 
-    populate: function(items){
-        var args  =[].slice.call(arguments);
+    populate: function (items) {
+        var args  = [].slice.call(arguments);
         args[0] = BI.createItems(items, {
             type: "bi.color_picker_button",
             once: false

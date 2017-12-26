@@ -14,7 +14,7 @@ BI.Editor = BI.inherit(BI.Single, {
             rgap: 0,
             tgap: 0,
             bgap: 0,
-            //title,warningTitle这两个属性没用
+            // title,warningTitle这两个属性没用
             tipType: "warning",
             inputType: "text",
             validationChecker: BI.emptyFn,
@@ -22,7 +22,7 @@ BI.Editor = BI.inherit(BI.Single, {
             allowBlank: false,
             watermark: "",
             errorText: ""
-        })
+        });
     },
 
     _init: function () {
@@ -38,12 +38,12 @@ BI.Editor = BI.inherit(BI.Single, {
             allowBlank: o.allowBlank
         }));
         this.editor.element.css({
-            "width": "100%",
-            "height": "100%",
-            "border": "none",
-            "outline": "none",
-            "padding": "0",
-            "margin": "0"
+            width: "100%",
+            height: "100%",
+            border: "none",
+            outline: "none",
+            padding: "0",
+            margin: "0"
         });
         if (BI.isKey(this.options.watermark)) {
             this.watermark = BI.createWidget({
