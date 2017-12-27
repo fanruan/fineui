@@ -1,8 +1,8 @@
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
 (function (global, factory) {
-    typeof exports === 'object' && typeof module !== 'undefined' ? factory(exports) : typeof define === 'function' && define.amd ? define(['exports'], factory) : factory(global.Fix = global.Fix || {});
-})(this, function (exports) {
+    typeof exports === 'object' && typeof module !== 'undefined' ? factory(exports, require('lodash')) : typeof define === 'function' && define.amd ? define(['exports', 'lodash'], factory) : factory(global.Fix = global.Fix || {}, global.lodash);
+})(this, function (exports, lodash) {
     'use strict';
 
     function noop(a, b, c) {}
