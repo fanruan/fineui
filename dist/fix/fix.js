@@ -1305,6 +1305,8 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
     exports.set = set;
     exports.del = del;
     exports.Watcher = Watcher;
+    exports.pushTarget = pushTarget;
+    exports.popTarget = popTarget;
     exports.watch = watch;
     exports.toJSON = toJSON;
 
