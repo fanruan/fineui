@@ -41,9 +41,9 @@
             cb = model[cb];
         }
         return oldWatch.call(this, model, expOrFn, function () {
-            pushTarget(options.store);
+            options && options.store && pushTarget(options.store);
             var res = cb.apply(this, arguments);
-            popTarget();
+            options && options.store && popTarget();
             return res;
         }, options);
     };
