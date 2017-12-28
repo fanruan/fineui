@@ -74,3 +74,6 @@
   -o-align-items: stretch;
   align-items: stretch;
 }
+.bi-flex-vertical-center > * {
+  margin: auto;
+}

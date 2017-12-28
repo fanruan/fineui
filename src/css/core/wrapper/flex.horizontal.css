@@ -68,3 +68,6 @@
   -o-align-items: flex-end;
   align-items: flex-end;
 }
+.bi-flex-horizontal-layout > * {
+  margin: auto;
+}

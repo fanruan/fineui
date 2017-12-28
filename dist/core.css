@@ -1310,6 +1310,9 @@ i {
   -o-align-items: flex-end;
   align-items: flex-end;
 }
+.bi-flex-horizontal-layout > * {
+  margin: auto;
+}
 .bi-flex-vertical-center {
   display: box;
   /* OLD - Android 4.4- */
@@ -1386,6 +1389,9 @@ i {
   -o-align-items: stretch;
   align-items: stretch;
 }
+.bi-flex-vertical-center > * {
+  margin: auto;
+}
 .bi-flex-wrapper-center-layout .flex-wrapper-center-layout-wrapper {
   display: box;
   /* OLD - Android 4.4- */
@@ -1428,6 +1434,9 @@ i {
   min-width: 100%;
   min-height: 100%;
   float: left;
+}
+.bi-flex-wrapper-center-layout > * {
+  margin: auto;
 }
 .bi-flex-wrapper-horizontal-layout .flex-wrapper-horizontal-layout-wrapper {
   display: box;
@@ -1497,6 +1506,9 @@ i {
   -ms-align-items: flex-end;
   -o-align-items: flex-end;
   align-items: flex-end;
+}
+.bi-flex-wrapper-horizontal-layout .flex-wrapper-horizontal-layout-wrapper > * {
+  margin: auto;
 }
 .bi-flex-wrapper-vertical-center .flex-wrapper-vertical-center-wrapper {
   display: box;
@@ -1574,6 +1586,9 @@ i {
   -ms-align-items: stretch;
   -o-align-items: stretch;
   align-items: stretch;
+}
+.bi-flex-wrapper-vertical-center .flex-wrapper-vertical-center-wrapper > * {
+  margin: auto;
 }
 .bi-inline-center-adapt-layout:after {
   display: inline-block;
