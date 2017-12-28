@@ -954,6 +954,9 @@
   -o-align-items: center;
   align-items: center;
 }
+.bi-flex-center-layout > * {
+  margin: auto;
+}
 .bi-flex-horizontal-layout {
   display: box;
   /* OLD - Android 4.4- */

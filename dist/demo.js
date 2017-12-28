@@ -5966,7 +5966,6 @@ BI.shortcut("demo.combo_group", Demo.Func);Demo.Func = BI.inherit(BI.Widget, {
 
         var dynamicCombo = BI.createWidget({
             type: "bi.combo",
-            dynamic: true,
             el: {
                 type: "bi.button",
                 text: "搜索",
