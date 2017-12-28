@@ -1233,15 +1233,20 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
             }
             this._parent = Model.target;
             var state = _.isFunction(this.state) ? this.state() : this.state;
-            var keys = _.keys(this.$$model).concat(_.keys(state)).concat(_.keys(this.computed)).concat(this.context);
+            var computed = _.isFunction(this.computed) ? this.computed() : this.computed;
+            var context = _.isFunction(this.context) ? this.context() : this.context;
+            var childContext = _.isFunction(this.childContext) ? this.childContext() : this.childContext;
+            var watch$$1 = _.isFunction(this.watch) ? this.watch() : this.watch;
+            var actions = _.isFunction(this.actions) ? this.actions() : this.actions;
+            var keys = _.keys(this.$$model).concat(_.keys(state)).concat(_.keys(computed)).concat(context);
             defineProps(this, keys);
-            this.childContext && defineContext(this, this.childContext);
+            childContext && defineContext(this, childContext);
             this.$$model && (this.model.__ob__ = this.$$model.__ob__);
             this._init();
             initState(this, state);
-            initComputed(this, this.computed);
-            initWatch(this, this.watch);
-            initMethods(this, this.actions);
+            initComputed(this, computed);
+            initWatch(this, watch$$1);
+            initMethods(this, actions);
             if (this.$$model) {
                 return this.model;
             }
