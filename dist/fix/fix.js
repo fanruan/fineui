@@ -371,6 +371,15 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
         shouldConvert: true
     };
 
+    function def(obj, key, val, enumerable) {
+        Object.defineProperty(obj, key, {
+            value: val,
+            enumerable: !!enumerable,
+            writable: true,
+            configurable: true
+        });
+    }
+
     /**
      * Observer class that are attached to each observed
      * object. Once attached, the observer converts target
@@ -392,7 +401,11 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
             } else {
                 this.model = this.walk(value);
             }
-            this.model['__ob__'] = this;
+            try {
+                def(this.model, "__ob__", this);
+            } catch (e) {
+                this.model['__ob__'] = this;
+            }
         }
 
         Observer.prototype.walk = function walk(obj) {
