@@ -10,7 +10,7 @@
         "use strict";
 
         var client         = parserConfig.client || {},
-            atoms          = parserConfig.atoms || {false: true, true: true, null: true},
+            atoms          = parserConfig.atoms || {"false": true, "true": true, "null": true},
             builtin        = parserConfig.builtin || {},
             keywords       = parserConfig.keywords || {},
             operatorChars  = parserConfig.operatorChars || /^[*+\-%<>!=&|~^]/,

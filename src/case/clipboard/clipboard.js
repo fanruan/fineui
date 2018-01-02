@@ -210,9 +210,9 @@ try {// IE8下会抛错
                     } else if (is.string(target)) {
                         return listenSelector(target, type, callback);
                     }
-                    
+
                     throw new TypeError("First argument must be a String, HTMLElement, HTMLCollection, or NodeList");
-                    
+
                 }
 
                 /**
@@ -403,7 +403,7 @@ try {// IE8下会抛错
 
                     function _interopRequireDefault (obj) {
                         return obj && obj.__esModule ? obj : {
-                            default: obj
+                            "default": obj
                         };
                     }
 
@@ -637,7 +637,7 @@ try {// IE8下会抛错
 
                     function _interopRequireDefault (obj) {
                         return obj && obj.__esModule ? obj : {
-                            default: obj
+                            "default": obj
                         };
                     }
 
@@ -1160,7 +1160,7 @@ try {// IE8下会抛错
                 try {
                     body.removeChild(this.div);
                 } catch (e) {
-                    
+
                 }
 
                 this.domElement = null;

@@ -401,10 +401,10 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
             } else {
                 this.model = this.walk(value);
             }
-            try {
-                def(this.model, "__ob__", this);
-            } catch (e) {
+            if (isIE9Below) {
                 this.model['__ob__'] = this;
+            } else {
+                def(this.model, "__ob__", this);
             }
         }
 
