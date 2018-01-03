@@ -10479,7 +10479,7 @@ BI.shortcut("demo.tmp", Demo.Func);
             "*.*.n": function () {
                 debugger
             },
-            "arr.**": function () {
+            "**": function () {
                 debugger
             },
             "arr.1.*": function () {
