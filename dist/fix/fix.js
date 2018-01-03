@@ -244,7 +244,7 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
                     break;
             }
             var result = original.apply(this, args);
-            ob.dep.notify();
+            notify(ob.parent, ob.parentKey, ob.dep);
             return result;
         };
     });
@@ -452,30 +452,32 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
         return ob;
     }
 
-    function notify(model, key, dep) {
+    function notify(observer, key, dep) {
         dep.notify();
-        //触发a.*绑定的依赖
-        _.each(model.__ob__._deps, function (dep) {
-            dep.notify();
-        });
-        //触发a.**绑定的依赖
-        var parent = model.__ob__,
-            root = model.__ob__,
-            route = key;
-        while (parent) {
-            _.each(parent._scopeDeps, function (dep) {
+        if (observer) {
+            //触发a.*绑定的依赖
+            _.each(observer._deps, function (dep) {
                 dep.notify();
             });
-            if (parent.parentKey != null) {
-                route = parent.parentKey + '.' + route;
+            //触发a.**绑定的依赖
+            var parent = observer,
+                root = observer,
+                route = key || "";
+            while (parent) {
+                _.each(parent._scopeDeps, function (dep) {
+                    dep.notify();
+                });
+                if (parent.parentKey != null) {
+                    route = parent.parentKey + '.' + route;
+                }
+                root = parent;
+                parent = parent.parent;
             }
-            root = parent;
-            parent = parent.parent;
-        }
-        for (var _key2 in root._globalDeps) {
-            var reg = new RegExp(_key2);
-            if (reg.test(route)) {
-                root._globalDeps[_key2].notify();
+            for (var _key2 in root._globalDeps) {
+                var reg = new RegExp(_key2);
+                if (reg.test(route)) {
+                    root._globalDeps[_key2].notify();
+                }
             }
         }
     }
@@ -561,7 +563,7 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
                     val = newVal;
                     childOb = !shallow && observe(newVal, observer, key);
                     obj[key] = childOb ? childOb.model : newVal;
-                    notify(model, key, dep);
+                    notify(model.__ob__, key, dep);
                 }
             };
         });
@@ -590,7 +592,7 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
         }
         ob.value[key] = val;
         target = defineReactive(ob.value, ob);
-        ob.dep.notify();
+        notify(ob, key, ob.dep);
         return target;
     }
 
@@ -612,7 +614,7 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
         }
         delete ob.value[key];
         target = defineReactive(ob.value, ob);
-        ob.dep.notify();
+        notify(ob, key, ob.dep);
         return target;
     }
 
@@ -956,7 +958,7 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
                 return;
             }
             //a.**或a.*形式
-            if (/^[1-9a-zA-Z.]+(\*\*$|\*$)/.test(exp)) {
+            if (/^[1-9a-zA-Z.]+(\*\*$|\*$)/.test(exp) || exp === "**") {
                 var isGlobal = /\*\*$/.test(exp);
                 if (isGlobal) {
                     //a.**的形式
@@ -965,7 +967,9 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
                     //a.*的形式
                     exp = exp.replace(".*", "");
                 }
-                var getter = parsePath(exp);
+                var getter = exp === "**" ? function (m) {
+                    return m;
+                } : parsePath(exp);
                 var v = getter.call(model, model);
                 var dep = new Dep();
                 if (isGlobal) {
@@ -1319,6 +1323,7 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
     exports.observerState = observerState;
     exports.Observer = Observer;
     exports.observe = observe;
+    exports.notify = notify;
     exports.defineReactive = defineReactive;
     exports.set = set;
     exports.del = del;
