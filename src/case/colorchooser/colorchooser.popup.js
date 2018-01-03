@@ -12,7 +12,7 @@ BI.ColorChooserPopup = BI.inherit(BI.Widget, {
             baseCls: "bi-color-chooser-popup",
             width: 200,
             height: 145
-        })
+        });
     },
 
     _init: function () {
@@ -160,7 +160,7 @@ BI.ColorChooserPopup = BI.inherit(BI.Widget, {
                 el: this.more,
                 height: 20
             }]
-        })
+        });
     },
 
     setStoreColors: function (colors) {
@@ -168,13 +168,13 @@ BI.ColorChooserPopup = BI.inherit(BI.Widget, {
             var items = BI.map(colors, function (i, color) {
                 return {
                     value: color
-                }
+                };
             });
             BI.count(colors.length, 8, function (i) {
                 items.push({
                     value: "",
                     disabled: true
-                })
+                });
             });
             this.storeColors.populate([items]);
         }

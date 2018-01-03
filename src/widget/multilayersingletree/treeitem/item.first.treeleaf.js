@@ -15,7 +15,7 @@ BI.MultiLayerSingleTreeFirstTreeLeafItem = BI.inherit(BI.BasicButton, {
             id: "",
             pId: "",
             height: 25
-        })
+        });
     },
     _init: function () {
         BI.MultiLayerSingleTreeFirstTreeLeafItem.superclass._init.apply(this, arguments);
@@ -35,7 +35,7 @@ BI.MultiLayerSingleTreeFirstTreeLeafItem = BI.inherit(BI.BasicButton, {
             py: o.py
         });
         this.item.on(BI.Controller.EVENT_CHANGE, function (type) {
-            if (type === BI.Events.CLICK) {//本身实现click功能
+            if (type === BI.Events.CLICK) {// 本身实现click功能
                 return;
             }
             self.fireEvent(BI.Controller.EVENT_CHANGE, arguments);
@@ -48,7 +48,7 @@ BI.MultiLayerSingleTreeFirstTreeLeafItem = BI.inherit(BI.BasicButton, {
                 cls: "base-line-conn-background",
                 width: 13,
                 height: o.height
-            })
+            });
         });
         items.push(this.item);
         BI.createWidget({
@@ -56,7 +56,7 @@ BI.MultiLayerSingleTreeFirstTreeLeafItem = BI.inherit(BI.BasicButton, {
             element: this,
             columnSize: BI.makeArray(o.layer, 13),
             items: [items]
-        })
+        });
     },
 
     doRedMark: function () {

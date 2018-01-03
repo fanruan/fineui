@@ -11,7 +11,7 @@ BI.FileManagerFileItem = BI.inherit(BI.Single, {
         return BI.extend(BI.FileManagerFileItem.superclass._defaultConfig.apply(this, arguments), {
             baseCls: "bi-file-manager-file-item bi-list-item bi-border-bottom",
             height: 30
-        })
+        });
     },
 
     _init: function () {
@@ -49,10 +49,10 @@ BI.FileManagerFileItem = BI.inherit(BI.Single, {
                     value: o.value
                 }
             }]
-        })
+        });
     },
 
-    getAllLeaves: function(){
+    getAllLeaves: function () {
         return [this.options.value];
     },
 

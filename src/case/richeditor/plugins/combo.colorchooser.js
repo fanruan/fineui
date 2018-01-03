@@ -44,4 +44,4 @@ BI.RichEditorColorChooser = BI.inherit(BI.RichEditorAction, {
         this.colorchooser.setValue("");
     }
 });
-BI.shortcut('bi.rich_editor_color_chooser', BI.RichEditorColorChooser);
+BI.shortcut("bi.rich_editor_color_chooser", BI.RichEditorColorChooser);

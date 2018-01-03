@@ -10,7 +10,7 @@ BI.SingleSelectItem = BI.inherit(BI.BasicButton, {
             hgap: 10,
             height: 25,
             textAlign: "left"
-        })
+        });
     },
     _init: function () {
         BI.SingleSelectItem.superclass._init.apply(this, arguments);

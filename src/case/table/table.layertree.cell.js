@@ -9,7 +9,7 @@ BI.LayerTreeTableCell = BI.inherit(BI.Widget, {
             baseCls: "bi-layer-tree-table-cell",
             layer: 0,
             text: ""
-        })
+        });
     },
 
     _init: function () {
@@ -25,7 +25,7 @@ BI.LayerTreeTableCell = BI.inherit(BI.Widget, {
             value: o.value,
             lgap: 5 + 30 * o.layer,
             rgap: 5
-        })
+        });
     }
 });
 

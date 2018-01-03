@@ -8,7 +8,7 @@ BI.MultiSelectCheckSelectedSwitcher = BI.inherit(BI.Widget, {
 
     _defaultConfig: function () {
         return BI.extend(BI.MultiSelectCheckSelectedSwitcher.superclass._defaultConfig.apply(this, arguments), {
-            baseCls: 'bi-multi-select-check-selected-switcher',
+            baseCls: "bi-multi-select-check-selected-switcher",
             itemsCreator: BI.emptyFn,
             valueFormatter: BI.emptyFn,
             el: {},
@@ -81,7 +81,7 @@ BI.MultiSelectCheckSelectedSwitcher = BI.inherit(BI.Widget, {
     },
 
     setButtonChecked: function (v) {
-        this.button.setValue(v)
+        this.button.setValue(v);
     },
 
     getValue: function () {
@@ -95,4 +95,4 @@ BI.MultiSelectCheckSelectedSwitcher = BI.inherit(BI.Widget, {
 
 BI.MultiSelectCheckSelectedSwitcher.EVENT_TRIGGER_CHANGE = "MultiSelectCheckSelectedSwitcher.EVENT_TRIGGER_CHANGE";
 BI.MultiSelectCheckSelectedSwitcher.EVENT_BEFORE_POPUPVIEW = "MultiSelectCheckSelectedSwitcher.EVENT_BEFORE_POPUPVIEW";
-BI.shortcut('bi.multi_select_check_selected_switcher', BI.MultiSelectCheckSelectedSwitcher);
+BI.shortcut("bi.multi_select_check_selected_switcher", BI.MultiSelectCheckSelectedSwitcher);

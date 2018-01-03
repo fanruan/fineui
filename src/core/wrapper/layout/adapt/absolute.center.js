@@ -25,12 +25,12 @@ BI.AbsoluteCenterLayout = BI.inherit(BI.Layout, {
         var o = this.options;
         var w = BI.AbsoluteCenterLayout.superclass._addElement.apply(this, arguments);
         w.element.css({
-            "position": "absolute",
-            "left": o.hgap + o.lgap + (item.lgap || 0),
-            "right": o.hgap + o.rgap + (item.rgap || 0),
-            "top": o.vgap + o.tgap + (item.tgap || 0),
-            "bottom": o.vgap + o.bgap + (item.bgap || 0),
-            "margin": "auto"
+            position: "absolute",
+            left: o.hgap + o.lgap + (item.lgap || 0),
+            right: o.hgap + o.rgap + (item.rgap || 0),
+            top: o.vgap + o.tgap + (item.tgap || 0),
+            bottom: o.vgap + o.bgap + (item.bgap || 0),
+            margin: "auto"
         });
         return w;
     },
@@ -44,4 +44,4 @@ BI.AbsoluteCenterLayout = BI.inherit(BI.Layout, {
         this._mount();
     }
 });
-BI.shortcut('bi.absolute_center_adapt', BI.AbsoluteCenterLayout);
+BI.shortcut("bi.absolute_center_adapt", BI.AbsoluteCenterLayout);

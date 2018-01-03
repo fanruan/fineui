@@ -50,7 +50,7 @@ BI.FloatBoxController = BI.inherit(BI.Controller, {
             cls: "bi-popup-view",
             items: [{
                 el: (this.floatLayer[name] = BI.createWidget({
-                    type: 'bi.absolute',
+                    type: "bi.absolute",
                     items: [floatbox]
                 })),
                 left: 0,
@@ -63,7 +63,7 @@ BI.FloatBoxController = BI.inherit(BI.Controller, {
         (function (key) {
             floatbox.on(BI.FloatBox.EVENT_FLOAT_BOX_CLOSED, function () {
                 self.close(key);
-            })
+            });
         })(name);
         BI.createWidget({
             type: "bi.absolute",

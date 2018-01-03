@@ -11,13 +11,13 @@ BI.Loader = BI.inherit(BI.Widget, {
             baseCls: "bi-loader",
 
             direction: "top",
-            isDefaultInit: true,//是否默认初始化数据
+            isDefaultInit: true, // 是否默认初始化数据
             logic: {
                 dynamic: true,
                 scrolly: true
             },
 
-            //下面是button_group的属性
+            // 下面是button_group的属性
             el: {
                 type: "bi.button_group"
             },
@@ -26,13 +26,13 @@ BI.Loader = BI.inherit(BI.Widget, {
             itemsCreator: BI.emptyFn,
             onLoaded: BI.emptyFn,
 
-            //下面是分页信息
+            // 下面是分页信息
             count: false,
             prev: false,
             next: {},
             hasPrev: BI.emptyFn,
             hasNext: BI.emptyFn
-        })
+        });
     },
 
     _prevLoad: function () {
@@ -95,7 +95,7 @@ BI.Loader = BI.inherit(BI.Widget, {
                 if (type === BI.Events.CLICK) {
                     self._nextLoad();
                 }
-            })
+            });
         }
 
         BI.createWidget(BI.extend({
@@ -122,7 +122,7 @@ BI.Loader = BI.inherit(BI.Widget, {
         return !!o.hasPrev.apply(this, [{
             times: this.times,
             count: this.count
-        }])
+        }]);
     },
 
     hasNext: function () {
@@ -133,7 +133,7 @@ BI.Loader = BI.inherit(BI.Widget, {
         return !!o.hasNext.apply(this, [{
             times: this.times,
             count: this.count
-        }])
+        }]);
     },
 
     prependItems: function (items) {

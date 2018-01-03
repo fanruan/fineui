@@ -38,4 +38,4 @@ BI.RichEditorItalicButton = BI.inherit(BI.RichEditorAction, {
         this.italic.setSelected(false);
     }
 });
-BI.shortcut("bi.rich_editor_italic_button", BI.RichEditorItalicButton)
+BI.shortcut("bi.rich_editor_italic_button", BI.RichEditorItalicButton);

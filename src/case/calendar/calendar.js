@@ -11,12 +11,12 @@ BI.Calendar = BI.inherit(BI.Widget, {
             logic: {
                 dynamic: false
             },
-            min: '1900-01-01', //最小日期
-            max: '2099-12-31', //最大日期
+            min: "1900-01-01", // 最小日期
+            max: "2099-12-31", // 最大日期
             year: 2015,
-            month: 7,  //7表示八月
+            month: 7,  // 7表示八月
             day: 25
-        })
+        });
     },
 
     _dateCreator: function (Y, M, D) {
@@ -62,7 +62,7 @@ BI.Calendar = BI.inherit(BI.Widget, {
             }
             td.text = DD;
             items.push(td);
-        })
+        });
         return items;
     },
 
@@ -74,13 +74,13 @@ BI.Calendar = BI.inherit(BI.Widget, {
                 type: "bi.label",
                 height: 25,
                 text: value
-            }
-        })
+            };
+        });
         var title = BI.createWidget({
             type: "bi.button_group",
             height: 25,
             items: items
-        })
+        });
         var days = this._dateCreator(o.year, o.month, o.day);
         items = [];
         items.push(days.slice(0, 7));
@@ -102,7 +102,7 @@ BI.Calendar = BI.inherit(BI.Widget, {
                     height: 25,
                     value: o.year + "-" + o.month + "-" + td.text,
                     disabled: td.lastMonth || td.nextMonth || td.disabled
-                    //selected: td.currentDay
+                    // selected: td.currentDay
                 });
             });
         });
@@ -119,7 +119,7 @@ BI.Calendar = BI.inherit(BI.Widget, {
         });
         this.days.on(BI.Controller.EVENT_CHANGE, function () {
             self.fireEvent(BI.Controller.EVENT_CHANGE, arguments);
-        })
+        });
         BI.createWidget(BI.extend({
             element: this
 
@@ -156,7 +156,7 @@ BI.Calendar = BI.inherit(BI.Widget, {
             year: date[0] | 0,
             month: date[1] | 0,
             day: date[2] | 0
-        }
+        };
     }
 });
 
@@ -168,22 +168,22 @@ BI.extend(BI.Calendar, {
         page += json.month - month;
         return page;
     },
-    getDateJSONByPage: function(v){
+    getDateJSONByPage: function (v) {
         var months = Date.getDate().getMonth();
         var page = v;
 
-        //对当前page做偏移,使到当前年初
+        // 对当前page做偏移,使到当前年初
         page = page + months;
 
         var year = BI.parseInt(page / 12);
-        if(page < 0 && page % 12 !== 0){
+        if(page < 0 && page % 12 !== 0) {
             year--;
         }
         var month = page >= 0 ? (page % 12) : ((12 + page % 12) % 12);
         return {
             year: Date.getDate().getFullYear() + year,
             month: month
-        }
+        };
     }
 });
 

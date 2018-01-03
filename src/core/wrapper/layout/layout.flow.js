@@ -27,15 +27,15 @@ BI.FloatLeftLayout = BI.inherit(BI.Layout, {
     _addElement: function (i, item) {
         var o = this.options;
         var w = BI.FloatLeftLayout.superclass._addElement.apply(this, arguments);
-        w.element.css({"position": "relative", "float": "left"});
+        w.element.css({position: "relative", float: "left"});
         if (BI.isNotNull(item.left)) {
-            w.element.css({"left": item.left});
+            w.element.css({left: item.left});
         }
         if (BI.isNotNull(item.right)) {
-            w.element.css({"right": item.right});
+            w.element.css({right: item.right});
         }
         if (BI.isNotNull(item.top)) {
-            w.element.css({"top": item.top});
+            w.element.css({top: item.top});
         }
         if ((item.lgap || 0) + o.hgap + o.lgap !== 0) {
             w.element.css("margin-left", (item.lgap || 0) + o.hgap + o.lgap);
@@ -61,7 +61,7 @@ BI.FloatLeftLayout = BI.inherit(BI.Layout, {
         this._mount();
     }
 });
-BI.shortcut('bi.left', BI.FloatLeftLayout);
+BI.shortcut("bi.left", BI.FloatLeftLayout);
 
 /**
  * 靠右对齐的自由浮动布局
@@ -92,15 +92,15 @@ BI.FloatRightLayout = BI.inherit(BI.Layout, {
     _addElement: function (i, item) {
         var o = this.options;
         var w = BI.FloatRightLayout.superclass._addElement.apply(this, arguments);
-        w.element.css({"position": "relative", "float": "right"});
+        w.element.css({position: "relative", float: "right"});
         if (BI.isNotNull(item.left)) {
-            w.element.css({"left": item.left});
+            w.element.css({left: item.left});
         }
         if (BI.isNotNull(item.right)) {
-            w.element.css({"right": item.right});
+            w.element.css({right: item.right});
         }
         if (BI.isNotNull(item.top)) {
-            w.element.css({"top": item.top});
+            w.element.css({top: item.top});
         }
         if ((item.lgap || 0) + o.hgap + o.lgap !== 0) {
             w.element.css("margin-left", (item.lgap || 0) + o.hgap + o.lgap);
@@ -126,4 +126,4 @@ BI.FloatRightLayout = BI.inherit(BI.Layout, {
         this._mount();
     }
 });
-BI.shortcut('bi.right', BI.FloatRightLayout);
+BI.shortcut("bi.right", BI.FloatRightLayout);

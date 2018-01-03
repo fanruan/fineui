@@ -38,4 +38,4 @@ BI.RichEditorUnderlineButton = BI.inherit(BI.RichEditorAction, {
         this.underline.setSelected(false);
     }
 });
-BI.shortcut("bi.rich_editor_underline_button", BI.RichEditorUnderlineButton)
+BI.shortcut("bi.rich_editor_underline_button", BI.RichEditorUnderlineButton);

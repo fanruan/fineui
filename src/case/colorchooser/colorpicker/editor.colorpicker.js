@@ -12,7 +12,7 @@ BI.ColorPickerEditor = BI.inherit(BI.Widget, {
             baseCls: "bi-color-picker-editor",
             // width: 200,
             height: 20
-        })
+        });
     },
 
     _init: function () {
@@ -94,7 +94,7 @@ BI.ColorPickerEditor = BI.inherit(BI.Widget, {
             element: this,
             items: [{
                 el: this.colorShow,
-                width: 'fill'
+                width: "fill"
             }, {
                 el: RGB[0],
                 lgap: 10,
@@ -129,7 +129,7 @@ BI.ColorPickerEditor = BI.inherit(BI.Widget, {
                 },
                 width: 18
             }]
-        })
+        });
     },
 
     setValue: function (color) {
@@ -163,7 +163,7 @@ BI.ColorPickerEditor = BI.inherit(BI.Widget, {
             r: this.R.getValue(),
             g: this.G.getValue(),
             b: this.B.getValue()
-        }))
+        }));
     }
 });
 BI.ColorPickerEditor.EVENT_CHANGE = "ColorPickerEditor.EVENT_CHANGE";

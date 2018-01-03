@@ -7,12 +7,12 @@
 BI.MultiTreeCheckSelectedButton = BI.inherit(BI.Single, {
 
     _const: {
-        checkSelected: BI.i18nText('BI-Check_Selected')
+        checkSelected: BI.i18nText("BI-Check_Selected")
     },
 
     _defaultConfig: function () {
         return BI.extend(BI.MultiTreeCheckSelectedButton.superclass._defaultConfig.apply(this, arguments), {
-            baseCls: 'bi-multi-tree-check-selected-button',
+            baseCls: "bi-multi-tree-check-selected-button",
             itemsCreator: BI.emptyFn
         });
     },
@@ -21,20 +21,20 @@ BI.MultiTreeCheckSelectedButton = BI.inherit(BI.Single, {
         BI.MultiTreeCheckSelectedButton.superclass._init.apply(this, arguments);
         var self = this;
         this.indicator = BI.createWidget({
-            type: 'bi.icon_button',
-            cls: 'check-font trigger-check-selected',
+            type: "bi.icon_button",
+            cls: "check-font trigger-check-selected",
             width: 15,
             height: 15,
             stopPropagation: true
         });
 
         this.checkSelected = BI.createWidget({
-            type: 'bi.text_button',
+            type: "bi.text_button",
             cls: "trigger-check-selected",
             invisible: true,
             hgap: 4,
             text: this._const.checkSelected,
-            textAlign: 'center',
+            textAlign: "center",
             textHeight: 15
         });
         this.checkSelected.on(BI.Controller.EVENT_CHANGE, function () {
@@ -49,7 +49,7 @@ BI.MultiTreeCheckSelectedButton = BI.inherit(BI.Single, {
             type: "bi.horizontal",
             element: this,
             items: [this.indicator, this.checkSelected]
-        })
+        });
 
         this.element.hover(function () {
             self.indicator.setVisible(false);
@@ -68,4 +68,4 @@ BI.MultiTreeCheckSelectedButton = BI.inherit(BI.Single, {
 });
 
 BI.MultiTreeCheckSelectedButton.EVENT_CHANGE = "EVENT_CHANGE";
-BI.shortcut('bi.multi_tree_check_selected_button', BI.MultiTreeCheckSelectedButton);
+BI.shortcut("bi.multi_tree_check_selected_button", BI.MultiTreeCheckSelectedButton);

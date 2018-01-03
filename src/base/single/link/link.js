@@ -4,19 +4,19 @@
  * @extends BI.Text
  */
 BI.Link = BI.inherit(BI.Label, {
-    _defaultConfig: function() {
+    _defaultConfig: function () {
         var conf = BI.Link.superclass._defaultConfig.apply(this, arguments);
         return BI.extend(conf, {
             baseCls: (conf.baseCls || "") + " bi-link",
             href: "",
             target: "_blank"
-        })
+        });
     },
 
-    _createJson: function(){
+    _createJson: function () {
         var o = this.options;
         return {
-            type:"bi.a",
+            type: "bi.a",
             textAlign: o.textAlign,
             whiteSpace: o.whiteSpace,
             lineHeight: o.textHeight,
@@ -29,7 +29,7 @@ BI.Link = BI.inherit(BI.Label, {
         };
     },
 
-    _init : function() {
+    _init: function () {
         BI.Link.superclass._init.apply(this, arguments);
     }
 });

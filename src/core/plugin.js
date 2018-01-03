@@ -1,6 +1,5 @@
 BI.Plugin = BI.Plugin || {};
-;
-(function () {
+!(function () {
     var _WidgetsPlugin = {};
     var _ObjectPlugin = {};
     BI.extend(BI.Plugin, {
@@ -8,7 +7,7 @@ BI.Plugin = BI.Plugin || {};
         getWidget: function (type, options) {
             if (_WidgetsPlugin[type]) {
                 var res;
-                for (var i = _WidgetsPlugin[type].length-1; i >=0; i--) {
+                for (var i = _WidgetsPlugin[type].length - 1; i >= 0; i--) {
                     if (res = _WidgetsPlugin[type][i](options)) {
                         return res;
                     }

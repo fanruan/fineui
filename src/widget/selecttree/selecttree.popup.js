@@ -52,7 +52,7 @@ BI.SelectTreePopup = BI.inherit(BI.Pane, {
         var self = this, o = this.options;
 
         this.tree = BI.createWidget({
-            type: 'bi.level_tree',
+            type: "bi.level_tree",
             expander: {
                 type: "bi.select_tree_expander",
                 isDefaultInit: true

@@ -11,7 +11,7 @@ BI.TableHeaderCell = BI.inherit(BI.Widget, {
         return BI.extend(BI.TableHeaderCell.superclass._defaultConfig.apply(this, arguments), {
             baseCls: "bi-table-header-cell",
             text: ""
-        })
+        });
     },
 
     _init: function () {
@@ -23,7 +23,7 @@ BI.TableHeaderCell = BI.inherit(BI.Widget, {
             height: this.options.height,
             text: this.options.text,
             value: this.options.value
-        })
+        });
     }
 });
 

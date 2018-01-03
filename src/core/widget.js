@@ -20,10 +20,10 @@ BI.Widget = BI.inherit(BI.OB, {
             baseCls: "",
             extraCls: "",
             cls: ""
-        })
+        });
     },
 
-    //生命周期函数
+    // 生命周期函数
     beforeCreate: null,
 
     created: null,
@@ -111,7 +111,7 @@ BI.Widget = BI.inherit(BI.OB, {
     _initVisual: function () {
         var o = this.options;
         if (o.invisible) {
-            //用display属性做显示和隐藏，否则jquery会在显示时将display设为block会覆盖掉display:flex属性
+            // 用display属性做显示和隐藏，否则jquery会在显示时将display设为block会覆盖掉display:flex属性
             this.element.css("display", "none");
         }
     },
@@ -142,8 +142,8 @@ BI.Widget = BI.inherit(BI.OB, {
             BI.each(els, function (i, el) {
                 BI.createWidget(el, {
                     element: self
-                })
-            })
+                });
+            });
         }
         // if (this._isRoot === true || !(this instanceof BI.Layout)) {
         this._mount();
@@ -201,7 +201,7 @@ BI.Widget = BI.inherit(BI.OB, {
         } else if (enable === false) {
             this.options.disabled = true;
         }
-        //递归将所有子组件使能
+        // 递归将所有子组件使能
         BI.each(this._children, function (i, child) {
             !child._manualSetEnable && child._setEnable && child._setEnable(enable);
         });
@@ -213,7 +213,7 @@ BI.Widget = BI.inherit(BI.OB, {
         } else if (valid === false) {
             this.options.invalid = true;
         }
-        //递归将所有子组件使有效
+        // 递归将所有子组件使有效
         BI.each(this._children, function (i, child) {
             !child._manualSetValid && child._setValid && child._setValid(valid);
         });
@@ -240,7 +240,7 @@ BI.Widget = BI.inherit(BI.OB, {
     setVisible: function (visible) {
         this._setVisible(visible);
         if (visible === true) {
-            //用this.element.show()会把display属性改成block
+            // 用this.element.show()会把display属性改成block
             this.element.css("display", "");
             this._mount();
         } else if (visible === false) {
@@ -261,7 +261,7 @@ BI.Widget = BI.inherit(BI.OB, {
 
     doBehavior: function () {
         var args = arguments;
-        //递归将所有子组件使有效
+        // 递归将所有子组件使有效
         BI.each(this._children, function (i, child) {
             child.doBehavior && child.doBehavior.apply(child, args);
         });
@@ -350,7 +350,7 @@ BI.Widget = BI.inherit(BI.OB, {
         if (BI.isPlainObject(key)) {
             BI.each(key, function (k, v) {
                 self.attr(k, v);
-            })
+            });
             return;
         }
         if (BI.isNotNull(value)) {

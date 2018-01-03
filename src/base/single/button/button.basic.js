@@ -15,16 +15,16 @@ BI.BasicButton = BI.inherit(BI.Single, {
             stopEvent: false,
             stopPropagation: false,
             selected: false,
-            once: false, //点击一次选中有效,再点无效
-            forceSelected: false, //点击即选中, 选中了就不会被取消,与once的区别是forceSelected不影响事件的触发
-            forceNotSelected: false, //无论怎么点击都不会被选中
-            disableSelected: false, //使能选中
+            once: false, // 点击一次选中有效,再点无效
+            forceSelected: false, // 点击即选中, 选中了就不会被取消,与once的区别是forceSelected不影响事件的触发
+            forceNotSelected: false, // 无论怎么点击都不会被选中
+            disableSelected: false, // 使能选中
 
             shadow: false,
-            isShadowShowingOnSelected: false,  //选中状态下是否显示阴影
+            isShadowShowingOnSelected: false,  // 选中状态下是否显示阴影
             trigger: null,
             handler: BI.emptyFn
-        })
+        });
     },
     _init: function () {
         BI.BasicButton.superclass._init.apply(this, arguments);
@@ -195,10 +195,10 @@ BI.BasicButton = BI.inherit(BI.Single, {
             }
         });
 
-        //之后的300ms点击无效
+        // 之后的300ms点击无效
         var onClick = BI.debounce(this._doClick, BI.EVENT_RESPONSE_TIME, true);
 
-        function ev(e) {
+        function ev (e) {
             if (o.stopEvent) {
                 e.stopEvent();
             }
@@ -207,7 +207,7 @@ BI.BasicButton = BI.inherit(BI.Single, {
             }
         }
 
-        function clk(e) {
+        function clk (e) {
             ev(e);
             if (!self.isEnabled() || (self.isOnce() && self.isSelected())) {
                 return;

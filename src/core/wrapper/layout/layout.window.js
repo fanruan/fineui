@@ -19,13 +19,13 @@ BI.WindowLayout = BI.inherit(BI.Layout, {
             rowSize: [100, "fill"],
             items: [[
                 {
-                    el: {type: 'bi.button', text: 'button1'}
+                    el: {type: "bi.button", text: "button1"}
                 },
                 {
-                    el: {type: 'bi.button', text: 'button2'}
+                    el: {type: "bi.button", text: "button2"}
                 },
                 {
-                    el: {type: 'bi.button', text: 'button3'}
+                    el: {type: "bi.button", text: "button3"}
                 }
             ]]
         });
@@ -41,7 +41,7 @@ BI.WindowLayout = BI.inherit(BI.Layout, {
 
     addItem: function (item) {
         // do nothing
-        throw new Error("cannot be added")
+        throw new Error("cannot be added");
     },
 
     stroke: function (items) {
@@ -52,9 +52,9 @@ BI.WindowLayout = BI.inherit(BI.Layout, {
         if (BI.isNumber(o.columnSize)) {
             o.columnSize = BI.makeArray(o.items[0].length, 1 / o.items[0].length);
         }
-        function firstElement(item, row, col) {
+        function firstElement (item, row, col) {
             if (row === 0) {
-                item.addClass("first-row")
+                item.addClass("first-row");
             }
             if (col === 0) {
                 item.addClass("first-col");
@@ -64,7 +64,7 @@ BI.WindowLayout = BI.inherit(BI.Layout, {
             item.addClass("center-element");
         }
 
-        function firstObject(item, row, col) {
+        function firstObject (item, row, col) {
             var cls = "";
             if (row === 0) {
                 cls += " first-row";
@@ -77,13 +77,13 @@ BI.WindowLayout = BI.inherit(BI.Layout, {
             item.cls = (item.cls || "") + cls + " center-element";
         }
 
-        function first(item, row, col) {
+        function first (item, row, col) {
             if (item instanceof BI.Widget) {
                 firstElement(item.element, row, col);
             } else if (item.el instanceof BI.Widget) {
                 firstElement(item.el.element, row, col);
             } else if (item.el) {
-                firstObject(item.el, row, col)
+                firstObject(item.el, row, col);
             } else {
                 firstObject(item, row, col);
             }
@@ -96,7 +96,7 @@ BI.WindowLayout = BI.inherit(BI.Layout, {
                 }
                 if (!this.hasWidget(this.getName() + i + "_" + j)) {
                     var w = BI.createWidget(o.items[i][j]);
-                    w.element.css({"position": "absolute"});
+                    w.element.css({position: "absolute"});
                     this.addWidget(this.getName() + i + "_" + j, w);
                 }
             }
@@ -106,7 +106,7 @@ BI.WindowLayout = BI.inherit(BI.Layout, {
         top[0] = 0;
         right[o.columns - 1] = 0;
         bottom[o.rows - 1] = 0;
-        //从上到下
+        // 从上到下
         for (var i = 0; i < o.rows; i++) {
             for (var j = 0; j < o.columns; j++) {
                 var wi = this.getWidgetByName(this.getName() + i + "_" + j);
@@ -117,14 +117,14 @@ BI.WindowLayout = BI.inherit(BI.Layout, {
                 if (BI.isNumber(o.rowSize[i])) {
                     h = o.rowSize[i] <= 1 ? o.rowSize[i] * 100 + "%" : o.rowSize[i] + "px";
                 }
-                wi.element.css({"top": t, height: h});
+                wi.element.css({top: t, height: h});
                 first(wi, i, j);
             }
             if (!BI.isNumber(o.rowSize[i])) {
                 break;
             }
         }
-        //从下到上
+        // 从下到上
         for (var i = o.rows - 1; i >= 0; i--) {
             for (var j = 0; j < o.columns; j++) {
                 var wi = this.getWidgetByName(this.getName() + i + "_" + j);
@@ -135,14 +135,14 @@ BI.WindowLayout = BI.inherit(BI.Layout, {
                 if (BI.isNumber(o.rowSize[i])) {
                     h = o.rowSize[i] <= 1 ? o.rowSize[i] * 100 + "%" : o.rowSize[i] + "px";
                 }
-                wi.element.css({"bottom": b, height: h});
+                wi.element.css({bottom: b, height: h});
                 first(wi, i, j);
             }
             if (!BI.isNumber(o.rowSize[i])) {
                 break;
             }
         }
-        //从左到右
+        // 从左到右
         for (var j = 0; j < o.columns; j++) {
             for (var i = 0; i < o.rows; i++) {
                 var wi = this.getWidgetByName(this.getName() + i + "_" + j);
@@ -153,25 +153,25 @@ BI.WindowLayout = BI.inherit(BI.Layout, {
                 if (BI.isNumber(o.columnSize[j])) {
                     w = o.columnSize[j] <= 1 ? o.columnSize[j] * 100 + "%" : o.columnSize[j] + "px";
                 }
-                wi.element.css({"left": l, width: w});
+                wi.element.css({left: l, width: w});
                 first(wi, i, j);
             }
             if (!BI.isNumber(o.columnSize[j])) {
                 break;
             }
         }
-        //从右到左
+        // 从右到左
         for (var j = o.columns - 1; j >= 0; j--) {
             for (var i = 0; i < o.rows; i++) {
                 var wi = this.getWidgetByName(this.getName() + i + "_" + j);
                 if (BI.isNull(right[j])) {
-                    right[j] = right[j + 1] + (o.columnSize[j + 1] < 1 ? o.columnSize[j + 1] : o.columnSize[j + 1] + o.hgap + o.lgap)
+                    right[j] = right[j + 1] + (o.columnSize[j + 1] < 1 ? o.columnSize[j + 1] : o.columnSize[j + 1] + o.hgap + o.lgap);
                 }
                 var r = right[j] <= 1 ? right[j] * 100 + "%" : right[j] + o.hgap + o.rgap + "px", w = "";
                 if (BI.isNumber(o.columnSize[j])) {
                     w = o.columnSize[j] <= 1 ? o.columnSize[j] * 100 + "%" : o.columnSize[j] + "px";
                 }
-                wi.element.css({"right": r, width: w});
+                wi.element.css({right: r, width: w});
                 first(wi, i, j);
             }
             if (!BI.isNumber(o.columnSize[j])) {
@@ -185,4 +185,4 @@ BI.WindowLayout = BI.inherit(BI.Layout, {
         this._mount();
     }
 });
-BI.shortcut('bi.window', BI.WindowLayout);
+BI.shortcut("bi.window", BI.WindowLayout);

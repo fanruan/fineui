@@ -16,15 +16,15 @@ BI.HTapeLayout = BI.inherit(BI.Layout, {
             items: [
                 {
                     width: 100,
-                    el: {type: 'bi.button', text: 'button1'}
+                    el: {type: "bi.button", text: "button1"}
                 },
                 {
-                    width: 'fill',
-                    el: {type: 'bi.button', text: 'button2'}
+                    width: "fill",
+                    el: {type: "bi.button", text: "button2"}
                 },
                 {
                     width: 200,
-                    el: {type: 'bi.button', text: 'button3'}
+                    el: {type: "bi.button", text: "button3"}
                 }
             ]
         });
@@ -39,7 +39,7 @@ BI.HTapeLayout = BI.inherit(BI.Layout, {
     },
     addItem: function (item) {
         // do nothing
-        throw new Error("cannot be added")
+        throw new Error("cannot be added");
     },
 
     stroke: function (items) {
@@ -52,7 +52,7 @@ BI.HTapeLayout = BI.inherit(BI.Layout, {
             } else {
                 w = self.getWidgetByName(self.getName() + i + "");
             }
-            w.element.css({"position": "absolute", top: o.vgap + o.tgap + "px", bottom: o.vgap + o.bgap + "px"});
+            w.element.css({position: "absolute", top: o.vgap + o.tgap + "px", bottom: o.vgap + o.bgap + "px"});
         });
 
         var left = {}, right = {};
@@ -65,10 +65,10 @@ BI.HTapeLayout = BI.inherit(BI.Layout, {
                 left[i] = left[i - 1] + items[i - 1].width + 2 * o.hgap + o.lgap + o.rgap;
             }
             if (item.width < 1 && item.width >= 0) {
-                w.element.css({"left": left[i] * 100 + "%", width: item.width * 100 + "%"})
+                w.element.css({left: left[i] * 100 + "%", width: item.width * 100 + "%"});
             } else {
                 w.element.css({
-                    "left": left[i] + o.hgap + o.lgap + "px",
+                    left: left[i] + o.hgap + o.lgap + "px",
                     width: BI.isNumber(item.width) ? item.width : ""
                 });
             }
@@ -82,17 +82,17 @@ BI.HTapeLayout = BI.inherit(BI.Layout, {
                 right[i] = right[i + 1] + items[i + 1].width + 2 * o.hgap + o.lgap + o.rgap;
             }
             if (item.width < 1 && item.width >= 0) {
-                w.element.css({"right": right[i] * 100 + "%", width: item.width * 100 + "%"})
+                w.element.css({right: right[i] * 100 + "%", width: item.width * 100 + "%"});
             } else {
                 w.element.css({
-                    "right": right[i] + o.hgap + o.rgap + "px",
+                    right: right[i] + o.hgap + o.rgap + "px",
                     width: BI.isNumber(item.width) ? item.width : ""
                 });
             }
             if (!BI.isNumber(item.width)) {
                 return true;
             }
-        })
+        });
     },
 
     populate: function (items) {
@@ -100,7 +100,7 @@ BI.HTapeLayout = BI.inherit(BI.Layout, {
         this._mount();
     }
 });
-BI.shortcut('bi.htape', BI.HTapeLayout);
+BI.shortcut("bi.htape", BI.HTapeLayout);
 
 /**
  * 垂直tape布局
@@ -120,15 +120,15 @@ BI.VTapeLayout = BI.inherit(BI.Layout, {
             items: [
                 {
                     height: 100,
-                    el: {type: 'bi.button', text: 'button1'}
+                    el: {type: "bi.button", text: "button1"}
                 },
                 {
-                    height: 'fill',
-                    el: {type: 'bi.button', text: 'button2'}
+                    height: "fill",
+                    el: {type: "bi.button", text: "button2"}
                 },
                 {
                     height: 200,
-                    el: {type: 'bi.button', text: 'button3'}
+                    el: {type: "bi.button", text: "button3"}
                 }
             ]
         });
@@ -144,7 +144,7 @@ BI.VTapeLayout = BI.inherit(BI.Layout, {
 
     addItem: function (item) {
         // do nothing
-        throw new Error("cannot be added")
+        throw new Error("cannot be added");
     },
 
     stroke: function (items) {
@@ -157,7 +157,7 @@ BI.VTapeLayout = BI.inherit(BI.Layout, {
             } else {
                 w = self.getWidgetByName(self.getName() + i + "");
             }
-            w.element.css({"position": "absolute", left: o.hgap + o.lgap + "px", right: o.hgap + o.rgap + "px"});
+            w.element.css({position: "absolute", left: o.hgap + o.lgap + "px", right: o.hgap + o.rgap + "px"});
         });
 
         var top = {}, bottom = {};
@@ -170,10 +170,10 @@ BI.VTapeLayout = BI.inherit(BI.Layout, {
                 top[i] = top[i - 1] + items[i - 1].height + 2 * o.vgap + o.tgap + o.bgap;
             }
             if (item.height < 1 && item.height >= 0) {
-                w.element.css({"top": top[i] * 100 + "%", height: item.height * 100 + "%"})
+                w.element.css({top: top[i] * 100 + "%", height: item.height * 100 + "%"});
             } else {
                 w.element.css({
-                    "top": top[i] + o.vgap + o.tgap + "px",
+                    top: top[i] + o.vgap + o.tgap + "px",
                     height: BI.isNumber(item.height) ? item.height : ""
                 });
             }
@@ -187,17 +187,17 @@ BI.VTapeLayout = BI.inherit(BI.Layout, {
                 bottom[i] = bottom[i + 1] + items[i + 1].height + 2 * o.vgap + o.tgap + o.bgap;
             }
             if (item.height < 1 && item.height >= 0) {
-                w.element.css({"bottom": bottom[i] * 100 + "%", height: item.height * 100 + "%"})
+                w.element.css({bottom: bottom[i] * 100 + "%", height: item.height * 100 + "%"});
             } else {
                 w.element.css({
-                    "bottom": bottom[i] + o.vgap + o.bgap + "px",
+                    bottom: bottom[i] + o.vgap + o.bgap + "px",
                     height: BI.isNumber(item.height) ? item.height : ""
                 });
             }
             if (!BI.isNumber(item.height)) {
                 return true;
             }
-        })
+        });
     },
 
     populate: function (items) {
@@ -205,4 +205,4 @@ BI.VTapeLayout = BI.inherit(BI.Layout, {
         this._mount();
     }
 });
-BI.shortcut('bi.vtape', BI.VTapeLayout);
+BI.shortcut("bi.vtape", BI.VTapeLayout);

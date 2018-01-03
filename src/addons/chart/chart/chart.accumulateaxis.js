@@ -8,7 +8,7 @@ BI.AccumulateAxisChart = BI.inherit(BI.AbstractChart, {
     _defaultConfig: function () {
         return BI.extend(BI.AccumulateAxisChart.superclass._defaultConfig.apply(this, arguments), {
             baseCls: "bi-accumulate-axis-chart"
-        })
+        });
     },
 
     _init: function () {
@@ -33,7 +33,7 @@ BI.AccumulateAxisChart = BI.inherit(BI.AbstractChart, {
             self.fireEvent(BI.AccumulateAxisChart.EVENT_CHANGE, obj);
         });
         this.combineChart.on(BI.CombineChart.EVENT_ITEM_CLICK, function (obj) {
-            self.fireEvent(BI.AbstractChart.EVENT_ITEM_CLICK, obj)
+            self.fireEvent(BI.AbstractChart.EVENT_ITEM_CLICK, obj);
         });
     },
 
@@ -93,20 +93,20 @@ BI.AccumulateAxisChart = BI.inherit(BI.AbstractChart, {
             enableTick: self.config.enableTick,
             labelRotation: this.config.textDirection,
             gridLineWidth: this.config.showGridLine === true ? 1 : 0,
-            maxHeight: '40%'
+            maxHeight: "40%"
         });
 
         config.chartType = "column";
 
-        //为了给数据标签加个%,还要遍历所有的系列，唉
+        // 为了给数据标签加个%,还要遍历所有的系列，唉
         this.formatDataLabel(config.plotOptions.dataLabels.enabled, items, config, this.config.chartFont);
 
-        //全局样式的图表文字
+        // 全局样式的图表文字
         this.setFontStyle(this.config.chartFont, config);
 
         return [items, config];
 
-        function formatCordon() {
+        function formatCordon () {
             BI.each(self.config.cordon, function (idx, cor) {
                 if (idx === 0 && self.xAxis.length > 0) {
                     var magnify = self.calcMagnify(self.config.xAxisNumberLevel);
@@ -115,9 +115,9 @@ BI.AccumulateAxisChart = BI.inherit(BI.AbstractChart, {
                             value: t.value.div(magnify),
                             width: 1,
                             label: {
-                                "style" : self.config.chartFont,
-                                "text": t.text,
-                                "align": "top"
+                                style: self.config.chartFont,
+                                text: t.text,
+                                align: "top"
                             }
                         });
                     });
@@ -140,17 +140,17 @@ BI.AccumulateAxisChart = BI.inherit(BI.AbstractChart, {
                             value: t.value.div(magnify),
                             width: 1,
                             label: {
-                                "style" : self.config.chartFont,
-                                "text": t.text,
-                                "align": "left"
+                                style: self.config.chartFont,
+                                text: t.text,
+                                align: "left"
                             }
                         });
                     });
                 }
-            })
+            });
         }
 
-        function formatChartStyle() {
+        function formatChartStyle () {
             switch (self.config.chartStyle) {
                 case BICst.CHART_STYLE.STYLE_GRADUAL:
                     return "gradual";
@@ -160,7 +160,7 @@ BI.AccumulateAxisChart = BI.inherit(BI.AbstractChart, {
             }
         }
 
-        function getTitleText(numberLevelType, position, show, title) {
+        function getTitleText (numberLevelType, position, show, title) {
             var unit = "";
 
             switch (numberLevelType) {
@@ -178,13 +178,13 @@ BI.AccumulateAxisChart = BI.inherit(BI.AbstractChart, {
                     break;
             }
             if (position === self.constants.X_AXIS) {
-                self.config.xAxisUnit !== "" && (unit = unit + self.config.xAxisUnit)
+                self.config.xAxisUnit !== "" && (unit = unit + self.config.xAxisUnit);
             }
             if (position === self.constants.LEFT_AXIS) {
-                self.config.leftYAxisUnit !== "" && (unit = unit + self.config.leftYAxisUnit)
+                self.config.leftYAxisUnit !== "" && (unit = unit + self.config.leftYAxisUnit);
             }
             if (position === self.constants.RIGHT_AXIS) {
-                self.config.rightYAxisUnit !== "" && (unit = unit + self.config.rightYAxisUnit)
+                self.config.rightYAxisUnit !== "" && (unit = unit + self.config.rightYAxisUnit);
             }
 
             unit = unit === "" ? unit : "(" + unit + ")";
@@ -277,4 +277,4 @@ BI.AccumulateAxisChart = BI.inherit(BI.AbstractChart, {
     }
 });
 BI.AccumulateAxisChart.EVENT_CHANGE = "EVENT_CHANGE";
-BI.shortcut('bi.accumulate_axis_chart', BI.AccumulateAxisChart);
+BI.shortcut("bi.accumulate_axis_chart", BI.AccumulateAxisChart);

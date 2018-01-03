@@ -1,16 +1,16 @@
-//线段树
-;(function () {
+// 线段树
+(function () {
     var parent = function (node) {
         return Math.floor(node / 2);
     };
 
     var Int32Array = window.Int32Array || function (size) {
-            var xs = [];
-            for (var i = size - 1; i >= 0; --i) {
-                xs[i] = 0;
-            }
-            return xs;
-        };
+        var xs = [];
+        for (var i = size - 1; i >= 0; --i) {
+            xs[i] = 0;
+        }
+        return xs;
+    };
 
     var ceilLog2 = function (x) {
         var y = 1;

@@ -2,7 +2,7 @@
  * 共享池
  * @type {{Shared: {}}}
  */
-;
+
 (function () {
     var _Shared = {};
     Data.SharingPool = {

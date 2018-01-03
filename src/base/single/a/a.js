@@ -15,7 +15,7 @@ BI.A = BI.inherit(BI.Text, {
             target: "_blank",
             el: null,
             element: "<a/>"
-        })
+        });
     },
     _init: function () {
         var o = this.options;

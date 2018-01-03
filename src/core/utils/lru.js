@@ -1,4 +1,4 @@
-;
+
 !(function () {
     BI.LRU = function (limit) {
         this.size = 0;
@@ -23,9 +23,9 @@
             this._keymap[key] = entry;
             if (this.tail) {
                 this.tail.newer = entry;
-                entry.older = this.tail
+                entry.older = this.tail;
             } else {
-                this.head = entry
+                this.head = entry;
             }
             this.tail = entry;
             this.size++;
@@ -54,7 +54,7 @@
         if (entry === this.tail) {
             return returnEntry
                 ? entry
-                : entry.value
+                : entry.value;
         }
         // HEAD--------------TAIL
         //   <.older   .newer>
@@ -62,7 +62,7 @@
         //   A  B  C  <D>  E
         if (entry.newer) {
             if (entry === this.head) {
-                this.head = entry.newer
+                this.head = entry.newer;
             }
             entry.newer.older = entry.older; // C <-- E.
         }
@@ -77,10 +77,10 @@
         this.tail = entry;
         return returnEntry
             ? entry
-            : entry.value
+            : entry.value;
     };
 
     p.has = function (key) {
         return this._keymap[key] != null;
-    }
+    };
 })();

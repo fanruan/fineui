@@ -17,7 +17,7 @@ BI.GridTableCell = BI.inherit(BI.Widget, {
             _left: 0,
             _top: 0,
             cell: {}
-        })
+        });
     },
 
     _init: function () {

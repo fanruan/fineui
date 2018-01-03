@@ -22,7 +22,7 @@ BI.ShelterEditor = BI.inherit(BI.Widget, {
             errorText: "",
             height: 24,
             textAlign: "left"
-        })
+        });
     },
 
     _init: function () {

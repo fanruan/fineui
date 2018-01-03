@@ -12,7 +12,7 @@ BI.DateTimeCombo = BI.inherit(BI.Single, {
     },
     _defaultConfig: function () {
         return BI.extend(BI.DateTimeCombo.superclass._defaultConfig.apply(this, arguments), {
-            baseCls: 'bi-date-time-combo bi-border',
+            baseCls: "bi-date-time-combo bi-border",
             width: 200,
             height: 24
         });
@@ -30,7 +30,7 @@ BI.DateTimeCombo = BI.inherit(BI.Single, {
             second: date.getSeconds()
         };
         this.trigger = BI.createWidget({
-            type: 'bi.date_time_trigger',
+            type: "bi.date_time_trigger",
             min: this.constants.DATE_MIN_VALUE,
             max: this.constants.DATE_MAX_VALUE
         });
@@ -58,7 +58,7 @@ BI.DateTimeCombo = BI.inherit(BI.Single, {
             self.fireEvent(BI.DateTimeCombo.EVENT_CHANGE);
         });
         this.combo = BI.createWidget({
-            type: 'bi.combo',
+            type: "bi.combo",
             toggle: false,
             isNeedAdjustHeight: false,
             isNeedAdjustWidth: false,
@@ -107,7 +107,7 @@ BI.DateTimeCombo = BI.inherit(BI.Single, {
                     left: 0
                 }]
             }]
-        })
+        });
     },
 
     setValue: function (v) {
@@ -128,4 +128,4 @@ BI.DateTimeCombo.EVENT_CANCEL = "EVENT_CANCEL";
 BI.DateTimeCombo.EVENT_CONFIRM = "EVENT_CONFIRM";
 BI.DateTimeCombo.EVENT_CHANGE = "EVENT_CHANGE";
 BI.DateTimeCombo.EVENT_BEFORE_POPUPVIEW = "BI.DateTimeCombo.EVENT_BEFORE_POPUPVIEW";
-BI.shortcut('bi.date_time_combo', BI.DateTimeCombo);
+BI.shortcut("bi.date_time_combo", BI.DateTimeCombo);

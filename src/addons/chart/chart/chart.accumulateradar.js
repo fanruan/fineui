@@ -8,7 +8,7 @@ BI.AccumulateRadarChart = BI.inherit(BI.AbstractChart, {
     _defaultConfig: function () {
         return BI.extend(BI.AccumulateRadarChart.superclass._defaultConfig.apply(this, arguments), {
             baseCls: "bi-accumulate-radar-chart"
-        })
+        });
     },
 
     _init: function () {
@@ -21,7 +21,7 @@ BI.AccumulateRadarChart = BI.inherit(BI.AbstractChart, {
             },
             labelStyle: this.constants.FONT_STYLE,
             formatter: function () {
-                return this > 0 ? this : (-1) * this
+                return this > 0 ? this : (-1) * this;
             },
             gridLineWidth: 0,
             position: "bottom"
@@ -45,7 +45,7 @@ BI.AccumulateRadarChart = BI.inherit(BI.AbstractChart, {
             self.fireEvent(BI.AccumulateRadarChart.EVENT_CHANGE, obj);
         });
         this.combineChart.on(BI.CombineChart.EVENT_ITEM_CLICK, function (obj) {
-            self.fireEvent(BI.AbstractChart.EVENT_ITEM_CLICK, obj)
+            self.fireEvent(BI.AbstractChart.EVENT_ITEM_CLICK, obj);
         });
     },
 
@@ -81,17 +81,17 @@ BI.AccumulateRadarChart = BI.inherit(BI.AbstractChart, {
         config.plotOptions.columnType = true;
         delete config.xAxis;
         delete config.yAxis;
-        //为了给数据标签加个%,还要遍历所有的系列，唉
+        // 为了给数据标签加个%,还要遍历所有的系列，唉
         this.formatDataLabelForAxis(config.plotOptions.dataLabels.enabled, items, config.radiusAxis[0].formatter, this.config.chartFont);
 
-        //全局样式的图表文字
+        // 全局样式的图表文字
         config.radiusAxis[0].labelStyle = config.radiusAxis[0].title.style = this.config.chartFont;
         config.angleAxis[0].labelStyle = config.angleAxis[0].title.style = this.config.chartFont;
         config.legend.style = this.config.chartFont;
 
         return [items, config];
 
-        function formatChartStyle() {
+        function formatChartStyle () {
             switch (self.config.chartStyle) {
                 case BICst.CHART_STYLE.STYLE_GRADUAL:
                     return "gradual";
@@ -101,7 +101,7 @@ BI.AccumulateRadarChart = BI.inherit(BI.AbstractChart, {
             }
         }
 
-        function formatChartRadarStyle() {
+        function formatChartRadarStyle () {
             switch (self.config.chartRadarType) {
                 case BICst.CHART_SHAPE.POLYGON:
                     config.plotOptions.shape = "polygon";
@@ -112,19 +112,19 @@ BI.AccumulateRadarChart = BI.inherit(BI.AbstractChart, {
             }
         }
 
-        function formatNumberLevelInYaxis(type, position, formatter) {
+        function formatNumberLevelInYaxis (type, position, formatter) {
             var magnify = self.calcMagnify(type);
             BI.each(items, function (idx, item) {
                 BI.each(item.data, function (id, da) {
                     if (position === item.yAxis) {
                         da.y = self.formatXYDataWithMagnify(da.y, magnify);
                     }
-                })
+                });
             });
             config.plotOptions.tooltip.formatter.valueFormat = formatter;
         }
 
-        function getXYAxisUnit(numberLevelType, position) {
+        function getXYAxisUnit (numberLevelType, position) {
             var unit = "";
             switch (numberLevelType) {
                 case BICst.TARGET_STYLE.NUM_LEVEL.NORMAL:
@@ -141,13 +141,13 @@ BI.AccumulateRadarChart = BI.inherit(BI.AbstractChart, {
                     break;
             }
             if (position === self.constants.X_AXIS) {
-                self.config.xAxisUnit !== "" && (unit = unit + self.config.xAxisUnit)
+                self.config.xAxisUnit !== "" && (unit = unit + self.config.xAxisUnit);
             }
             if (position === self.constants.LEFT_AXIS) {
-                self.config.leftYAxisUnit !== "" && (unit = unit + self.config.leftYAxisUnit)
+                self.config.leftYAxisUnit !== "" && (unit = unit + self.config.leftYAxisUnit);
             }
             if (position === self.constants.RIGHT_AXIS) {
-                self.config.rightYAxisUnit !== "" && (unit = unit + self.config.rightYAxisUnit)
+                self.config.rightYAxisUnit !== "" && (unit = unit + self.config.rightYAxisUnit);
             }
             return unit === "" ? unit : "(" + unit + ")";
         }
@@ -191,4 +191,4 @@ BI.AccumulateRadarChart = BI.inherit(BI.AbstractChart, {
     }
 });
 BI.AccumulateRadarChart.EVENT_CHANGE = "EVENT_CHANGE";
-BI.shortcut('bi.accumulate_radar_chart', BI.AccumulateRadarChart);
+BI.shortcut("bi.accumulate_radar_chart", BI.AccumulateRadarChart);

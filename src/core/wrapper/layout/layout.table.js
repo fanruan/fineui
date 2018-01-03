@@ -9,19 +9,19 @@ BI.TableLayout = BI.inherit(BI.Layout, {
         return BI.extend(BI.TableLayout.superclass.props.apply(this, arguments), {
             baseCls: "bi-table-layout",
             scrolly: true,
-            columnSize: [200, 200, 'fill'],
-            rowSize: 30,  //or [30,30,30]
+            columnSize: [200, 200, "fill"],
+            rowSize: 30,  // or [30,30,30]
             hgap: 0,
             vgap: 0,
             items: [[
                 {
-                    el: {text: 'label1'}
+                    el: {text: "label1"}
                 },
                 {
-                    el: {text: 'label2'}
+                    el: {text: "label2"}
                 },
                 {
-                    el: {text: 'label3'}
+                    el: {text: "label3"}
                 }
             ]]
         });
@@ -36,9 +36,9 @@ BI.TableLayout = BI.inherit(BI.Layout, {
         var o = this.options;
         var abs = [], left = 0, right = 0, i, j;
 
-        function firstElement(item, row, col) {
+        function firstElement (item, row, col) {
             if (row === 0) {
-                item.addClass("first-row")
+                item.addClass("first-row");
             }
             if (col === 0) {
                 item.addClass("first-col");
@@ -48,7 +48,7 @@ BI.TableLayout = BI.inherit(BI.Layout, {
             item.addClass("center-element");
         }
 
-        function firstObject(item, row, col) {
+        function firstObject (item, row, col) {
             var cls = "";
             if (row === 0) {
                 cls += " first-row";
@@ -61,13 +61,13 @@ BI.TableLayout = BI.inherit(BI.Layout, {
             item.cls = (item.cls || "") + cls + " center-element";
         }
 
-        function first(item, row, col) {
+        function first (item, row, col) {
             if (item instanceof BI.Widget) {
                 firstElement(item.element, row, col);
             } else if (item.el instanceof BI.Widget) {
                 firstElement(item.el.element, row, col);
             } else if (item.el) {
-                firstObject(item.el, row, col)
+                firstObject(item.el, row, col);
             } else {
                 firstObject(item, row, col);
             }
@@ -95,7 +95,7 @@ BI.TableLayout = BI.inherit(BI.Layout, {
                     bottom: 0,
                     right: o.columnSize[j] <= 1 ? right * 100 + "%" : right,
                     width: o.columnSize[j] <= 1 ? o.columnSize[j] * 100 + "%" : o.columnSize[j]
-                }, arr[j]))
+                }, arr[j]));
                 right += o.columnSize[j] + (o.columnSize[j] < 1 ? 0 : o.hgap);
             } else {
                 throw new Error("item with fill can only be one");
@@ -108,7 +108,7 @@ BI.TableLayout = BI.inherit(BI.Layout, {
                 bottom: 0,
                 left: left <= 1 ? left * 100 + "%" : left,
                 right: right <= 1 ? right * 100 + "%" : right
-            }, arr[i]))
+            }, arr[i]));
         }
         var w = BI.createWidget({
             type: "bi.absolute",
@@ -118,10 +118,10 @@ BI.TableLayout = BI.inherit(BI.Layout, {
         if (this.rows > 0) {
             this.getWidgetByName(this.getName() + (this.rows - 1)).element.css({
                 "margin-bottom": o.vgap
-            })
+            });
         }
         w.element.css({
-            "position": "relative"
+            position: "relative"
         });
         this.addWidget(this.getName() + (this.rows++), w);
         return w;
@@ -143,4 +143,4 @@ BI.TableLayout = BI.inherit(BI.Layout, {
         this._mount();
     }
 });
-BI.shortcut('bi.table', BI.TableLayout);
+BI.shortcut("bi.table", BI.TableLayout);

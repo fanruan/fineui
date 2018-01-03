@@ -17,7 +17,7 @@ BI.TextNode = BI.inherit(BI.NodeButton, {
             textVgap: 0,
             textLgap: 0,
             textRgap: 0
-        })
+        });
     },
     _init: function () {
         BI.TextNode.superclass._init.apply(this, arguments);

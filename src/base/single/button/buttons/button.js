@@ -13,15 +13,15 @@
         _defaultConfig: function (props) {
             var conf = BI.Button.superclass._defaultConfig.apply(this, arguments);
             return BI.extend(conf, {
-                baseCls: (conf.baseCls || "") + ' bi-button',
+                baseCls: (conf.baseCls || "") + " bi-button",
                 minWidth: (props.block === true || props.clear === true) ? 0 : 90,
                 shadow: props.clear !== true,
                 isShadowShowingOnSelected: true,
                 readonly: true,
                 iconClass: "",
-                level: 'common',
-                block: false, //是否块状显示，即不显示边框，没有最小宽度的限制
-                clear: false, //是否去掉边框和背景
+                level: "common",
+                block: false, // 是否块状显示，即不显示边框，没有最小宽度的限制
+                clear: false, // 是否去掉边框和背景
                 textAlign: "center",
                 whiteSpace: "nowrap",
                 forceCenter: false,
@@ -33,7 +33,7 @@
                 bgap: 0,
                 lgap: 0,
                 rgap: 0
-            })
+            });
         },
 
         _init: function () {
@@ -68,7 +68,7 @@
                         type: "bi.horizontal",
                         items: [this.icon, this.text]
                     }]
-                })
+                });
             } else {
                 this.text = BI.createWidget({
                     type: "bi.label",
@@ -139,6 +139,6 @@
             BI.Button.superclass.destroy.apply(this, arguments);
         }
     });
-    BI.shortcut('bi.button', BI.Button);
+    BI.shortcut("bi.button", BI.Button);
     BI.Button.EVENT_CHANGE = "EVENT_CHANGE";
 })(jQuery);

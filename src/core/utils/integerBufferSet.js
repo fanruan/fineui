@@ -25,18 +25,18 @@ BI.IntegerBufferSet = function () {
 
 BI.IntegerBufferSet.prototype = {
     constructor: BI.IntegerBufferSet,
-    getSize: function () /*number*/ {
+    getSize: function () /* number*/ {
         return this._size;
     },
 
-    getValuePosition: function (/*number*/ value) /*?number*/ {
+    getValuePosition: function (/* number*/ value) /* ?number*/ {
         if (this._valueToPositionMap[value] === undefined) {
             return null;
         }
         return this._valueToPositionMap[value];
     },
 
-    getNewPositionForValue: function (/*number*/ value) /*number*/ {
+    getNewPositionForValue: function (/* number*/ value) /* number*/ {
         var newPosition = this._size;
         this._size++;
         this._pushToHeaps(newPosition, value);
@@ -44,9 +44,9 @@ BI.IntegerBufferSet.prototype = {
         return newPosition;
     },
 
-    replaceFurthestValuePosition: function (/*number*/ lowValue,
-                                            /*number*/ highValue,
-                                            /*number*/ newValue) /*?number*/ {
+    replaceFurthestValuePosition: function (/* number*/ lowValue,
+        /* number*/ highValue,
+        /* number*/ newValue) /* ?number*/ {
         this._cleanHeaps();
         if (this._smallValues.empty() || this._largeValues.empty()) {
             // Threre are currently no values stored. We will have to create new
@@ -78,10 +78,10 @@ BI.IntegerBufferSet.prototype = {
         return position;
     },
 
-    _pushToHeaps: function (/*number*/ position, /*number*/ value) {
+    _pushToHeaps: function (/* number*/ position, /* number*/ value) {
         var element = {
             position: position,
-            value:value
+            value: value
         };
         // We can reuse the same object in both heaps, because we don't mutate them
         this._smallValues.push(element);
@@ -128,18 +128,18 @@ BI.IntegerBufferSet.prototype = {
         this._largeValues = newLargeValues;
     },
 
-    _cleanHeap: function (/*object*/ heap) {
+    _cleanHeap: function (/* object*/ heap) {
         while (!heap.empty() &&
         this._valueToPositionMap[heap.peek().value] === undefined) {
             heap.pop();
         }
     },
 
-    _smallerComparator: function (/*object*/ lhs, /*object*/ rhs) /*boolean*/ {
+    _smallerComparator: function (/* object*/ lhs, /* object*/ rhs) /* boolean*/ {
         return lhs.value < rhs.value;
     },
 
-    _greaterComparator: function (/*object*/ lhs, /*object*/ rhs) /*boolean*/ {
+    _greaterComparator: function (/* object*/ lhs, /* object*/ rhs) /* boolean*/ {
         return lhs.value > rhs.value;
     }
 };

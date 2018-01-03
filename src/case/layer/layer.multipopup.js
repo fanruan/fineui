@@ -11,7 +11,7 @@ BI.MultiPopupView = BI.inherit(BI.PopupView, {
         return BI.extend(conf, {
             baseCls: (conf.baseCls || "") + " bi-multi-list-view",
             buttons: [BI.i18nText("BI-Basic_Sure")]
-        })
+        });
     },
 
     _init: function () {
@@ -24,12 +24,12 @@ BI.MultiPopupView = BI.inherit(BI.PopupView, {
             return;
         }
 
-        var text = [];          //构造[{text:content},……]
+        var text = [];          // 构造[{text:content},……]
         BI.each(o.buttons, function (idx, item) {
             text.push({
                 text: item,
                 value: idx
-            })
+            });
         });
 
         this.buttongroup = BI.createWidget({

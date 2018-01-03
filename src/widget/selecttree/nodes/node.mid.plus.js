@@ -17,7 +17,7 @@ BI.SelectTreeMidPlusGroupNode = BI.inherit(BI.NodeButton, {
             readonly: true,
             open: false,
             height: 25
-        })
+        });
     },
     _init: function () {
         BI.SelectTreeMidPlusGroupNode.superclass._init.apply(this, arguments);

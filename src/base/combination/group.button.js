@@ -16,7 +16,7 @@ BI.ButtonGroup = BI.inherit(BI.Widget, {
                 hgap: 0,
                 vgap: 0
             }]
-        })
+        });
     },
 
     _init: function () {
@@ -25,7 +25,7 @@ BI.ButtonGroup = BI.inherit(BI.Widget, {
         BI.each(this.options.behaviors, function (key, rule) {
             behaviors[key] = BI.BehaviorFactory.createBehavior(key, {
                 rule: rule
-            })
+            });
         });
         this.behaviors = behaviors;
         this.populate(this.options.items);
@@ -65,7 +65,7 @@ BI.ButtonGroup = BI.inherit(BI.Widget, {
             });
             btn.on(BI.Events.DESTROY, function () {
                 BI.remove(self.buttons, btn);
-            })
+            });
         });
 
         return buttons;
@@ -81,8 +81,8 @@ BI.ButtonGroup = BI.inherit(BI.Widget, {
                             el: it
                         })
                     ]
-                })
-            })
+                });
+            });
         }
         return btns;
     },
@@ -95,8 +95,8 @@ BI.ButtonGroup = BI.inherit(BI.Widget, {
             }
             return BI.extend({}, item, {
                 el: btns[i]
-            })
-        })
+            });
+        });
     },
 
     _packageItems: function (items, packBtns) {
@@ -114,10 +114,10 @@ BI.ButtonGroup = BI.inherit(BI.Widget, {
         return layout;
     },
 
-    //如果是一个简单的layout
+    // 如果是一个简单的layout
     _isSimpleLayout: function () {
         var o = this.options;
-        return o.layouts.length === 1 && !BI.isArray(o.items[0])
+        return o.layouts.length === 1 && !BI.isArray(o.items[0]);
     },
 
     doBehavior: function () {
@@ -125,7 +125,7 @@ BI.ButtonGroup = BI.inherit(BI.Widget, {
         args.unshift(this.buttons);
         BI.each(this.behaviors, function (i, behavior) {
             behavior.doBehavior.apply(behavior, args);
-        })
+        });
     },
 
     prependItems: function (items) {
@@ -147,7 +147,7 @@ BI.ButtonGroup = BI.inherit(BI.Widget, {
         var btns = this._btnsCreator.apply(this, arguments);
         this.buttons = BI.concat(this.buttons, btns);
 
-        //如果是一个简单的layout
+        // 如果是一个简单的layout
         if (this._isSimpleLayout() && this.layouts && this.layouts.addItems) {
             this.layouts.addItems(btns);
             return;

@@ -10,14 +10,14 @@ BI.MultiSelectBar = BI.inherit(BI.BasicButton, {
         return BI.extend(BI.MultiSelectBar.superclass._defaultConfig.apply(this, arguments), {
             extraCls: "bi-multi-select-bar",
             height: 25,
-            text: BI.i18nText('BI-Select_All'),
+            text: BI.i18nText("BI-Select_All"),
             isAllCheckedBySelectedValue: BI.emptyFn,
-            //手动控制选中
+            // 手动控制选中
             disableSelected: true,
             isHalfCheckedBySelectedValue: function (selectedValues) {
                 return selectedValues.length > 0;
             }
-        })
+        });
     },
     _init: function () {
         BI.MultiSelectBar.superclass._init.apply(this, arguments);
@@ -76,7 +76,7 @@ BI.MultiSelectBar = BI.inherit(BI.BasicButton, {
         this.half.invisible();
     },
 
-    //自己手动控制选中
+    // 自己手动控制选中
     beforeClick: function () {
         var isHalf = this.isHalfSelected(), isSelected = this.isSelected();
         if (isHalf === true) {

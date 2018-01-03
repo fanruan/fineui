@@ -5,7 +5,7 @@ Function.prototype.before = function (func) {
             return false;
         }
         return __self.apply(this, arguments);
-    }
+    };
 };
 
 Function.prototype.after = function (func) {
@@ -17,5 +17,5 @@ Function.prototype.after = function (func) {
         }
         func.apply(this, arguments);
         return ret;
-    }
+    };
 };

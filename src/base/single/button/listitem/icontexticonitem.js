@@ -26,7 +26,7 @@ BI.IconTextIconItem = BI.inherit(BI.BasicButton, {
             textVgap: 0,
             textLgap: 0,
             textRgap: 0
-        })
+        });
     },
     _init: function () {
         BI.IconTextIconItem.superclass._init.apply(this, arguments);
@@ -42,7 +42,7 @@ BI.IconTextIconItem = BI.inherit(BI.BasicButton, {
             value: o.value,
             keyword: o.keyword,
             height: o.height
-        })
+        });
 
         var icon1 = BI.createWidget({
             type: "bi.center_adapt",
@@ -56,11 +56,11 @@ BI.IconTextIconItem = BI.inherit(BI.BasicButton, {
                     height: o.iconHeight
                 }
             }]
-        })
+        });
         var blank = BI.createWidget({
             type: "bi.layout",
             width: c.commonWidth
-        })
+        });
         BI.createWidget({
             type: "bi.absolute",
             element: this,
@@ -81,7 +81,7 @@ BI.IconTextIconItem = BI.inherit(BI.BasicButton, {
                 bottom: 0,
                 right: 0
             }]
-        })
+        });
 
         BI.createWidget(BI.extend({
             element: this

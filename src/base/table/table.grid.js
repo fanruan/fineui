@@ -320,7 +320,7 @@ BI.GridTable = BI.inherit(BI.Widget, {
                 overflow: "scroll",
                 overflowX: "scroll",
                 overflowY: "scroll"
-            })
+            });
         };
 
         this.topLeft.setWidth(otlw);
@@ -476,4 +476,4 @@ BI.GridTable = BI.inherit(BI.Widget, {
         this._restore();
     }
 });
-BI.shortcut('bi.grid_table', BI.GridTable);
+BI.shortcut("bi.grid_table", BI.GridTable);

@@ -6,13 +6,13 @@
  * @extends BI.Trigger
  */
 BI.MonthDateCombo = BI.inherit(BI.Trigger, {
-    _defaultConfig: function() {
+    _defaultConfig: function () {
         return BI.extend( BI.MonthDateCombo.superclass._defaultConfig.apply(this, arguments), {
             baseCls: "bi-month-combo",
             height: 25
         });
     },
-    _init: function() {
+    _init: function () {
         BI.MonthDateCombo.superclass._init.apply(this, arguments);
         var self = this, o = this.options;
 
@@ -24,9 +24,9 @@ BI.MonthDateCombo = BI.inherit(BI.Trigger, {
             type: "bi.month_popup"
         });
 
-        this.popup.on(BI.YearPopup.EVENT_CHANGE, function(){
+        this.popup.on(BI.YearPopup.EVENT_CHANGE, function () {
             self.setValue(self.popup.getValue());
-        })
+        });
 
 
         this.combo = BI.createWidget({
@@ -41,21 +41,21 @@ BI.MonthDateCombo = BI.inherit(BI.Trigger, {
                 stopPropagation: false,
                 el: this.popup
             }
-        })
-        this.combo.on(BI.Combo.EVENT_CHANGE, function(){
+        });
+        this.combo.on(BI.Combo.EVENT_CHANGE, function () {
             self.combo.hideView();
             self.fireEvent(BI.MonthDateCombo.EVENT_CHANGE);
         });
     },
 
-    setValue: function(v){
+    setValue: function (v) {
         this.trigger.setValue(v + 1);
         this.popup.setValue(v);
     },
 
-    getValue: function(){
+    getValue: function () {
         return this.popup.getValue();
     }
 });
 BI.MonthDateCombo.EVENT_CHANGE = "EVENT_CHANGE";
-BI.shortcut('bi.month_date_combo', BI.MonthDateCombo);
+BI.shortcut("bi.month_date_combo", BI.MonthDateCombo);

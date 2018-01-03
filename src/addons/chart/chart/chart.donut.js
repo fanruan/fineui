@@ -8,7 +8,7 @@ BI.DonutChart = BI.inherit(BI.AbstractChart, {
     _defaultConfig: function () {
         return BI.extend(BI.DonutChart.superclass._defaultConfig.apply(this, arguments), {
             baseCls: "bi-donut-chart"
-        })
+        });
     },
 
     _init: function () {
@@ -24,11 +24,11 @@ BI.DonutChart = BI.inherit(BI.AbstractChart, {
             self.fireEvent(BI.DonutChart.EVENT_CHANGE, obj);
         });
         this.combineChart.on(BI.CombineChart.EVENT_ITEM_CLICK, function (obj) {
-            self.fireEvent(BI.AbstractChart.EVENT_ITEM_CLICK, obj)
+            self.fireEvent(BI.AbstractChart.EVENT_ITEM_CLICK, obj);
         });
     },
 
-    _formatConfig: function(config, items){
+    _formatConfig: function (config, items) {
         var self = this;
         delete config.zoom;
         config.colors = this.config.chartColor;
@@ -49,13 +49,13 @@ BI.DonutChart = BI.inherit(BI.AbstractChart, {
         BI.each(items, function (idx, item) {
             BI.each(item.data, function (id, da) {
                 da.y = self.formatXYDataWithMagnify(da.y, 1);
-            })
+            });
         });
 
         config.legend.style = this.config.chartFont;
         return [items, config];
 
-        function formatChartStyle(){
+        function formatChartStyle () {
             switch (self.config.chartStyle) {
                 case BICst.CHART_STYLE.STYLE_GRADUAL:
                     return "gradual";
@@ -80,9 +80,9 @@ BI.DonutChart = BI.inherit(BI.AbstractChart, {
         this.options.items = items;
 
         var types = [];
-        BI.each(items, function(idx, axisItems){
+        BI.each(items, function (idx, axisItems) {
             var type = [];
-            BI.each(axisItems, function(id, item){
+            BI.each(axisItems, function (id, item) {
                 type.push(BICst.WIDGET.DONUT);
             });
             types.push(type);
@@ -95,9 +95,9 @@ BI.DonutChart = BI.inherit(BI.AbstractChart, {
         this.combineChart.resize();
     },
 
-    magnify: function(){
+    magnify: function () {
         this.combineChart.magnify();
     }
 });
 BI.DonutChart.EVENT_CHANGE = "EVENT_CHANGE";
-BI.shortcut('bi.donut_chart', BI.DonutChart);
+BI.shortcut("bi.donut_chart", BI.DonutChart);

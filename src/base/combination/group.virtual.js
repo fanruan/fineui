@@ -8,7 +8,7 @@ BI.VirtualGroup = BI.inherit(BI.Widget, {
                 hgap: 0,
                 vgap: 0
             }]
-        })
+        });
     },
 
     render: function () {
@@ -26,8 +26,8 @@ BI.VirtualGroup = BI.inherit(BI.Widget, {
                             el: BI.stripEL(it)
                         })
                     ]
-                })
-            })
+                });
+            });
         }
         return items;
     },

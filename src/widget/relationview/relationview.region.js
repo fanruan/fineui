@@ -42,11 +42,11 @@ BI.RelationViewRegion = BI.inherit(BI.BasicButton, {
             value: o.value,
             textAlign: "left"
         });
-        //title放body上
+        // title放body上
         if (BI.isKey(o.header)) {
             this.title.setTitle(o.header, {
                 container: "body"
-            })
+            });
         }
 
         this.button_group = BI.createWidget({
@@ -71,7 +71,7 @@ BI.RelationViewRegion = BI.inherit(BI.BasicButton, {
             }],
             hgap: 25,
             vgap: 20
-        })
+        });
     },
 
     _createItems: function (items) {
@@ -87,7 +87,7 @@ BI.RelationViewRegion = BI.inherit(BI.BasicButton, {
                     self.setValue([]);
                     self.fireEvent(BI.RelationViewRegion.EVENT_HOVER_OUT, item.value);
                 }
-            })
+            });
         });
     },
 
@@ -107,51 +107,51 @@ BI.RelationViewRegion = BI.inherit(BI.BasicButton, {
         return this.button_group.getAllButtons().length * 25 + 25 + 2 * 20 + 3;
     },
 
-    //获取上方开始划线的位置
+    // 获取上方开始划线的位置
     getTopLeftPosition: function () {
         return {
             x: 25 + 10,
             y: 20
-        }
+        };
     },
 
     getTopRightPosition: function () {
         return {
             x: this.getWidth() - 25 - 10,
             y: 20
-        }
+        };
     },
 
     getBottomPosition: function () {
         return {
             x: 25 + 10,
             y: this.getHeight() - 20
-        }
+        };
     },
 
     getLeftPosition: function () {
         return {
             x: 25,
             y: 20 + 10
-        }
+        };
     },
 
     getRightPosition: function () {
         return {
             x: this.getWidth() - 25,
             y: 20 + 10
-        }
+        };
     },
 
     setValue: function (v) {
         this.button_group.setValue(v);
     },
 
-    setPreviewSelected: function(v) {
+    setPreviewSelected: function (v) {
         this.preview.setSelected(v);
     }
 });
 BI.RelationViewRegion.EVENT_HOVER_IN = "RelationViewRegion.EVENT_HOVER_IN";
 BI.RelationViewRegion.EVENT_HOVER_OUT = "RelationViewRegion.EVENT_HOVER_OUT";
 BI.RelationViewRegion.EVENT_PREVIEW = "RelationViewRegion.EVENT_PREVIEW";
-BI.shortcut('bi.relation_view_region', BI.RelationViewRegion);
+BI.shortcut("bi.relation_view_region", BI.RelationViewRegion);

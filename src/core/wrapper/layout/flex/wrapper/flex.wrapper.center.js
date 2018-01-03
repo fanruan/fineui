@@ -20,7 +20,7 @@ BI.FlexCenterLayout = BI.inherit(BI.Layout, {
     _addElement: function (i, item) {
         var o = this.options;
         var w = BI.FlexCenterLayout.superclass._addElement.apply(this, arguments);
-        w.element.css({"position": "relative"});
+        w.element.css({position: "relative"});
         return w;
     },
 
@@ -40,7 +40,7 @@ BI.FlexCenterLayout = BI.inherit(BI.Layout, {
         }
     },
 
-    _getWrapper: function(){
+    _getWrapper: function () {
         return this.$wrapper;
     },
 
@@ -53,4 +53,4 @@ BI.FlexCenterLayout = BI.inherit(BI.Layout, {
         this._mount();
     }
 });
-BI.shortcut('bi.flex_wrapper_center', BI.FlexCenterLayout);
+BI.shortcut("bi.flex_wrapper_center", BI.FlexCenterLayout);

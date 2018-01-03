@@ -45,7 +45,7 @@ BI.DateCombo = BI.inherit(BI.Widget, {
                 el: this.popup,
                 stopPropagation: false
             }
-        })
+        });
     },
 
     setValue: function (v) {
@@ -57,4 +57,4 @@ BI.DateCombo = BI.inherit(BI.Widget, {
         return this.popup.getValue();
     }
 });
-BI.shortcut('bi.date_combo', BI.DateCombo);
+BI.shortcut("bi.date_combo", BI.DateCombo);

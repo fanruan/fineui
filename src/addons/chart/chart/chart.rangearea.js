@@ -9,7 +9,7 @@ BI.RangeAreaChart = BI.inherit(BI.AbstractChart, {
     _defaultConfig: function () {
         return BI.extend(BI.RangeAreaChart.superclass._defaultConfig.apply(this, arguments), {
             baseCls: "bi-range-area-chart"
-        })
+        });
     },
 
     _init: function () {
@@ -44,7 +44,7 @@ BI.RangeAreaChart = BI.inherit(BI.AbstractChart, {
             self.fireEvent(BI.RangeAreaChart.EVENT_CHANGE, obj);
         });
         this.combineChart.on(BI.CombineChart.EVENT_ITEM_CLICK, function (obj) {
-            self.fireEvent(BI.AbstractChart.EVENT_ITEM_CLICK, obj)
+            self.fireEvent(BI.AbstractChart.EVENT_ITEM_CLICK, obj);
         });
     },
 
@@ -79,21 +79,21 @@ BI.RangeAreaChart = BI.inherit(BI.AbstractChart, {
             enableTick: this.config.enableTick,
             labelRotation: this.config.textDirection,
             gridLineWidth: this.config.showGridLine === true ? 1 : 0,
-            maxHeight: '40%'
+            maxHeight: "40%"
         });
 
         config.chartType = "area";
         config.plotOptions.tooltip.formatter.identifier = "${CATEGORY}${VALUE}";
 
-        //为了给数据标签加个%,还要遍历所有的系列，唉
+        // 为了给数据标签加个%,还要遍历所有的系列，唉
         this.formatDataLabelForAxis(config.plotOptions.dataLabels.enabled, items, config.yAxis[0].formatter, this.config.chartFont);
 
-        //全局样式的图表文字
+        // 全局样式的图表文字
         this.setFontStyle(this.config.chartFont, config);
 
         return [items, config];
 
-        function formatChartStyle() {
+        function formatChartStyle () {
             switch (self.config.chartStyle) {
                 case BICst.CHART_STYLE.STYLE_GRADUAL:
                     return "gradual";
@@ -103,7 +103,7 @@ BI.RangeAreaChart = BI.inherit(BI.AbstractChart, {
             }
         }
 
-        function formatCordon() {
+        function formatCordon () {
             BI.each(self.config.cordon, function (idx, cor) {
                 if (idx === 0 && self.xAxis.length > 0) {
                     var magnify = self.calcMagnify(self.config.xAxisNumberLevel);
@@ -112,9 +112,9 @@ BI.RangeAreaChart = BI.inherit(BI.AbstractChart, {
                             value: t.value.div(magnify),
                             width: 1,
                             label: {
-                                "style" : self.config.chartFont,
-                                "text": t.text,
-                                "align": "top"
+                                style: self.config.chartFont,
+                                text: t.text,
+                                align: "top"
                             }
                         });
                     });
@@ -137,29 +137,29 @@ BI.RangeAreaChart = BI.inherit(BI.AbstractChart, {
                             value: t.value.div(magnify),
                             width: 1,
                             label: {
-                                "style" : self.config.chartFont,
-                                "text": t.text,
-                                "align": "left"
+                                style: self.config.chartFont,
+                                text: t.text,
+                                align: "left"
                             }
                         });
                     });
                 }
-            })
+            });
         }
 
-        function formatNumberLevelInYaxis(type, position, formatter) {
+        function formatNumberLevelInYaxis (type, position, formatter) {
             var magnify = self.calcMagnify(type);
             BI.each(items, function (idx, item) {
                 BI.each(item.data, function (id, da) {
                     if (position === item.yAxis) {
                         da.y = self.formatXYDataWithMagnify(da.y, magnify);
                     }
-                })
+                });
             });
             config.plotOptions.tooltip.formatter.valueFormat = formatter;
         }
 
-        function getXYAxisUnit(numberLevelType, position) {
+        function getXYAxisUnit (numberLevelType, position) {
             var unit = "";
             switch (numberLevelType) {
                 case BICst.TARGET_STYLE.NUM_LEVEL.NORMAL:
@@ -176,10 +176,10 @@ BI.RangeAreaChart = BI.inherit(BI.AbstractChart, {
                     break;
             }
             if (position === self.constants.X_AXIS) {
-                self.config.xAxisUnit !== "" && (unit = unit + self.config.xAxisUnit)
+                self.config.xAxisUnit !== "" && (unit = unit + self.config.xAxisUnit);
             }
             if (position === self.constants.LEFT_AXIS) {
-                self.config.leftYAxisUnit !== "" && (unit = unit + self.config.leftYAxisUnit)
+                self.config.leftYAxisUnit !== "" && (unit = unit + self.config.leftYAxisUnit);
             }
             return unit === "" ? unit : "(" + unit + ")";
         }
@@ -281,4 +281,4 @@ BI.RangeAreaChart = BI.inherit(BI.AbstractChart, {
     }
 });
 BI.RangeAreaChart.EVENT_CHANGE = "EVENT_CHANGE";
-BI.shortcut('bi.range_area_chart', BI.RangeAreaChart);
+BI.shortcut("bi.range_area_chart", BI.RangeAreaChart);

@@ -11,7 +11,7 @@ BI.FileManagerFolderItem = BI.inherit(BI.Single, {
         return BI.extend(BI.FileManagerFolderItem.superclass._defaultConfig.apply(this, arguments), {
             baseCls: "bi-file-manager-folder-item bi-list-item bi-border-bottom",
             height: 30
-        })
+        });
     },
 
     _init: function () {
@@ -60,7 +60,7 @@ BI.FileManagerFolderItem = BI.inherit(BI.Single, {
             }, {
                 el: this.button
             }]
-        })
+        });
     },
 
     setAllSelected: function (v) {
@@ -70,7 +70,7 @@ BI.FileManagerFolderItem = BI.inherit(BI.Single, {
 
     setHalfSelected: function (v) {
         this.checked.setHalfSelected(v);
-        if(!v){
+        if(!v) {
             this.selectValue = [];
         }
     },
@@ -104,7 +104,7 @@ BI.FileManagerFolderItem = BI.inherit(BI.Single, {
         var res = [];
         this.tree.traverse(function (node) {
             if (node.isLeaf()) {
-                res.push(node.get("data").value)
+                res.push(node.get("data").value);
             }
         });
         return res;

@@ -8,7 +8,7 @@ BI.ButtonTree = BI.inherit(BI.ButtonGroup, {
     _defaultConfig: function () {
         return BI.extend(BI.ButtonTree.superclass._defaultConfig.apply(this, arguments), {
             baseCls: "bi-button-tree"
-        })
+        });
     },
 
     _init: function () {
@@ -116,7 +116,7 @@ BI.ButtonTree = BI.inherit(BI.ButtonGroup, {
         return btns;
     },
 
-    //获取所有的叶子节点
+    // 获取所有的叶子节点
     getAllLeaves: function () {
         var leaves = [];
         BI.each(this.buttons, function (i, item) {

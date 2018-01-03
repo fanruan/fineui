@@ -10,8 +10,8 @@ BI.YearCombo = BI.inherit(BI.Widget, {
         return BI.extend(BI.YearCombo.superclass._defaultConfig.apply(this, arguments), {
             baseCls: "bi-year-combo",
             behaviors: {},
-            min: '1900-01-01', //最小日期
-            max: '2099-12-31', //最大日期
+            min: "1900-01-01", // 最小日期
+            max: "2099-12-31", // 最大日期
             height: 25
         });
     },
@@ -100,4 +100,4 @@ BI.YearCombo = BI.inherit(BI.Widget, {
 });
 BI.YearCombo.EVENT_CONFIRM = "EVENT_CONFIRM";
 BI.YearCombo.EVENT_BEFORE_POPUPVIEW = "EVENT_BEFORE_POPUPVIEW";
-BI.shortcut('bi.year_combo', BI.YearCombo);
+BI.shortcut("bi.year_combo", BI.YearCombo);

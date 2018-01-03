@@ -24,8 +24,8 @@ BI.FloatCenterAdaptLayout = BI.inherit(BI.Layout, {
     },
 
     addItem: function () {
-        //do nothing
-        throw new Error("cannot be added")
+        // do nothing
+        throw new Error("cannot be added");
     },
 
     mounted: function () {
@@ -71,4 +71,4 @@ BI.FloatCenterAdaptLayout = BI.inherit(BI.Layout, {
         this._mount();
     }
 });
-BI.shortcut('bi.float_center_adapt', BI.FloatCenterAdaptLayout);
+BI.shortcut("bi.float_center_adapt", BI.FloatCenterAdaptLayout);

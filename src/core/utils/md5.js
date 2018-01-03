@@ -1,4 +1,4 @@
-;
+
 !(function () {
     var MD5 = function (hexcase) {
         this.hexcase = !hexcase ? 0 : 1;
@@ -167,8 +167,7 @@
      */
     MD5.prototype.core_hmac_md5 = function (key, data) {
         var bkey = this.str2binl(key);
-        if (bkey.length > 16)
-            bkey = this.core_md5(bkey, key.length * this.chrsz);
+        if (bkey.length > 16) {bkey = this.core_md5(bkey, key.length * this.chrsz);}
 
         var ipad = Array(16), opad = Array(16);
         for (var i = 0; i < 16; i++) {
@@ -204,8 +203,7 @@
     MD5.prototype.str2binl = function (str) {
         var bin = Array();
         var mask = (1 << this.chrsz) - 1;
-        for (var i = 0; i < str.length * this.chrsz; i += this.chrsz)
-            bin[i >> 5] |= (str.charCodeAt(i / this.chrsz) & mask) << (i % 32);
+        for (var i = 0; i < str.length * this.chrsz; i += this.chrsz) {bin[i >> 5] |= (str.charCodeAt(i / this.chrsz) & mask) << (i % 32);}
         return bin;
     };
 
@@ -233,10 +231,7 @@
                 | (((binarray[i + 1 >> 2] >> 8 * ((i + 1) % 4)) & 0xFF) << 8)
                 | ((binarray[i + 2 >> 2] >> 8 * ((i + 2) % 4)) & 0xFF);
             for (var j = 0; j < 4; j++) {
-                if (i * 8 + j * 6 > binarray.length * 32)
-                    str += this.b64pad;
-                else
-                    str += tab.charAt((triplet >> 6 * (3 - j)) & 0x3F);
+                if (i * 8 + j * 6 > binarray.length * 32) {str += this.b64pad;} else {str += tab.charAt((triplet >> 6 * (3 - j)) & 0x3F);}
             }
         }
         return str;

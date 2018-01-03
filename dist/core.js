@@ -9601,7 +9601,7 @@ if ( typeof define === "function" && define.amd && define.amd.jQuery ) {
 //     (c) 2009-2015 Jeremy Ashkenas, DocumentCloud and Investigative Reporters & Editors
 //     Underscore may be freely distributed under the MIT license.
 
-(function() {
+(function () {
 
     // Baseline setup
     // --------------
@@ -9631,10 +9631,10 @@ if ( typeof define === "function" && define.amd && define.amd.jQuery ) {
         nativeCreate       = Object.create;
 
     // Naked function reference for surrogate-prototype-swapping.
-    var Ctor = function(){};
+    var Ctor = function () {};
 
     // Create a safe reference to the Underscore object for use below.
-    var _ = function(obj) {
+    var _ = function (obj) {
         if (obj instanceof _) return obj;
         if (!(this instanceof _)) return new _(obj);
         this._wrapped = obj;
@@ -9643,8 +9643,8 @@ if ( typeof define === "function" && define.amd && define.amd.jQuery ) {
     // Export the Underscore object for **Node.js**, with
     // backwards-compatibility for the old `require()` API. If we're in
     // the browser, add `_` as a global object.
-    if (typeof exports !== 'undefined') {
-        if (typeof module !== 'undefined' && module.exports) {
+    if (typeof exports !== "undefined") {
+        if (typeof module !== "undefined" && module.exports) {
             exports = module.exports = _;
         }
         exports._ = _;
@@ -9653,28 +9653,28 @@ if ( typeof define === "function" && define.amd && define.amd.jQuery ) {
     }
 
     // Current version.
-    _.VERSION = '1.8.2';
+    _.VERSION = "1.8.2";
 
     // Internal function that returns an efficient (for current engines) version
     // of the passed-in callback, to be repeatedly applied in other Underscore
     // functions.
-    var optimizeCb = function(func, context, argCount) {
+    var optimizeCb = function (func, context, argCount) {
         if (context === void 0) return func;
         switch (argCount == null ? 3 : argCount) {
-            case 1: return function(value) {
+            case 1: return function (value) {
                 return func.call(context, value);
             };
-            case 2: return function(value, other) {
+            case 2: return function (value, other) {
                 return func.call(context, value, other);
             };
-            case 3: return function(value, index, collection) {
+            case 3: return function (value, index, collection) {
                 return func.call(context, value, index, collection);
             };
-            case 4: return function(accumulator, value, index, collection) {
+            case 4: return function (accumulator, value, index, collection) {
                 return func.call(context, accumulator, value, index, collection);
             };
         }
-        return function() {
+        return function () {
             return func.apply(context, arguments);
         };
     };
@@ -9682,19 +9682,19 @@ if ( typeof define === "function" && define.amd && define.amd.jQuery ) {
     // A mostly-internal function to generate callbacks that can be applied
     // to each element in a collection, returning the desired result 鈥? either
     // identity, an arbitrary callback, a property matcher, or a property accessor.
-    var cb = function(value, context, argCount) {
+    var cb = function (value, context, argCount) {
         if (value == null) return _.identity;
         if (_.isFunction(value)) return optimizeCb(value, context, argCount);
         if (_.isObject(value)) return _.matcher(value);
         return _.property(value);
     };
-    _.iteratee = function(value, context) {
+    _.iteratee = function (value, context) {
         return cb(value, context, Infinity);
     };
 
     // An internal function for creating assigner functions.
-    var createAssigner = function(keysFunc, undefinedOnly) {
-        return function(obj) {
+    var createAssigner = function (keysFunc, undefinedOnly) {
+        return function (obj) {
             var length = arguments.length;
             if (length < 2 || obj == null) return obj;
             for (var index = 1; index < length; index++) {
@@ -9711,7 +9711,7 @@ if ( typeof define === "function" && define.amd && define.amd.jQuery ) {
     };
 
     // An internal function for creating a new object that inherits from another.
-    var baseCreate = function(prototype) {
+    var baseCreate = function (prototype) {
         if (!_.isObject(prototype)) return {};
         if (nativeCreate) return nativeCreate(prototype);
         Ctor.prototype = prototype;
@@ -9724,9 +9724,9 @@ if ( typeof define === "function" && define.amd && define.amd.jQuery ) {
     // should be iterated as an array or as an object
     // Related: http://people.mozilla.org/~jorendorff/es6-draft.html#sec-tolength
     var MAX_ARRAY_INDEX = Math.pow(2, 53) - 1;
-    var isArrayLike = function(collection) {
+    var isArrayLike = function (collection) {
         var length = collection != null && collection.length;
-        return typeof length == 'number' && length >= 0 && length <= MAX_ARRAY_INDEX;
+        return typeof length === "number" && length >= 0 && length <= MAX_ARRAY_INDEX;
     };
 
     // Collection Functions
@@ -9735,7 +9735,7 @@ if ( typeof define === "function" && define.amd && define.amd.jQuery ) {
     // The cornerstone, an `each` implementation, aka `forEach`.
     // Handles raw objects in addition to array-likes. Treats all
     // sparse array-likes as if they were dense.
-    _.each = _.forEach = function(obj, iteratee, context) {
+    _.each = _.forEach = function (obj, iteratee, context) {
         iteratee = optimizeCb(iteratee, context);
         var i, length;
         if (isArrayLike(obj)) {
@@ -9752,7 +9752,7 @@ if ( typeof define === "function" && define.amd && define.amd.jQuery ) {
     };
 
     // Return the results of applying the iteratee to each element.
-    _.map = _.collect = function(obj, iteratee, context) {
+    _.map = _.collect = function (obj, iteratee, context) {
         iteratee = cb(iteratee, context);
         var keys = !isArrayLike(obj) && _.keys(obj),
             length = (keys || obj).length,
@@ -9765,10 +9765,10 @@ if ( typeof define === "function" && define.amd && define.amd.jQuery ) {
     };
 
     // Create a reducing function iterating left or right.
-    function createReduce(dir) {
+    function createReduce (dir) {
         // Optimized iterator function as using arguments.length
         // in the main function will deoptimize the, see #1991.
-        function iterator(obj, iteratee, memo, keys, index, length) {
+        function iterator (obj, iteratee, memo, keys, index, length) {
             for (; index >= 0 && index < length; index += dir) {
                 var currentKey = keys ? keys[index] : index;
                 memo = iteratee(memo, obj[currentKey], currentKey, obj);
@@ -9776,7 +9776,7 @@ if ( typeof define === "function" && define.amd && define.amd.jQuery ) {
             return memo;
         }
 
-        return function(obj, iteratee, memo, context) {
+        return function (obj, iteratee, memo, context) {
             iteratee = optimizeCb(iteratee, context, 4);
             var keys = !isArrayLike(obj) && _.keys(obj),
                 length = (keys || obj).length,
@@ -9798,7 +9798,7 @@ if ( typeof define === "function" && define.amd && define.amd.jQuery ) {
     _.reduceRight = _.foldr = createReduce(-1);
 
     // Return the first value which passes a truth test. Aliased as `detect`.
-    _.find = _.detect = function(obj, predicate, context) {
+    _.find = _.detect = function (obj, predicate, context) {
         var key;
         if (isArrayLike(obj)) {
             key = _.findIndex(obj, predicate, context);
@@ -9810,23 +9810,23 @@ if ( typeof define === "function" && define.amd && define.amd.jQuery ) {
 
     // Return all the elements that pass a truth test.
     // Aliased as `select`.
-    _.filter = _.select = function(obj, predicate, context) {
+    _.filter = _.select = function (obj, predicate, context) {
         var results = [];
         predicate = cb(predicate, context);
-        _.each(obj, function(value, index, list) {
+        _.each(obj, function (value, index, list) {
             if (predicate(value, index, list)) results.push(value);
         });
         return results;
     };
 
     // Return all the elements for which a truth test fails.
-    _.reject = function(obj, predicate, context) {
+    _.reject = function (obj, predicate, context) {
         return _.filter(obj, _.negate(cb(predicate)), context);
     };
 
     // Determine whether all of the elements match a truth test.
     // Aliased as `all`.
-    _.every = _.all = function(obj, predicate, context) {
+    _.every = _.all = function (obj, predicate, context) {
         predicate = cb(predicate, context);
         var keys = !isArrayLike(obj) && _.keys(obj),
             length = (keys || obj).length;
@@ -9839,7 +9839,7 @@ if ( typeof define === "function" && define.amd && define.amd.jQuery ) {
 
     // Determine if at least one element in the object matches a truth test.
     // Aliased as `any`.
-    _.some = _.any = function(obj, predicate, context) {
+    _.some = _.any = function (obj, predicate, context) {
         predicate = cb(predicate, context);
         var keys = !isArrayLike(obj) && _.keys(obj),
             length = (keys || obj).length;
@@ -9852,40 +9852,40 @@ if ( typeof define === "function" && define.amd && define.amd.jQuery ) {
 
     // Determine if the array or object contains a given value (using `===`).
     // Aliased as `includes` and `include`.
-    _.contains = _.includes = _.include = function(obj, target, fromIndex) {
+    _.contains = _.includes = _.include = function (obj, target, fromIndex) {
         if (!isArrayLike(obj)) obj = _.values(obj);
-        return _.indexOf(obj, target, typeof fromIndex == 'number' && fromIndex) >= 0;
+        return _.indexOf(obj, target, typeof fromIndex === "number" && fromIndex) >= 0;
     };
 
     // Invoke a method (with arguments) on every item in a collection.
-    _.invoke = function(obj, method) {
+    _.invoke = function (obj, method) {
         var args = slice.call(arguments, 2);
         var isFunc = _.isFunction(method);
-        return _.map(obj, function(value) {
+        return _.map(obj, function (value) {
             var func = isFunc ? method : value[method];
             return func == null ? func : func.apply(value, args);
         });
     };
 
     // Convenience version of a common use case of `map`: fetching a property.
-    _.pluck = function(obj, key) {
+    _.pluck = function (obj, key) {
         return _.map(obj, _.property(key));
     };
 
     // Convenience version of a common use case of `filter`: selecting only objects
     // containing specific `key:value` pairs.
-    _.where = function(obj, attrs) {
+    _.where = function (obj, attrs) {
         return _.filter(obj, _.matcher(attrs));
     };
 
     // Convenience version of a common use case of `find`: getting the first object
     // containing specific `key:value` pairs.
-    _.findWhere = function(obj, attrs) {
+    _.findWhere = function (obj, attrs) {
         return _.find(obj, _.matcher(attrs));
     };
 
     // Return the maximum element (or element-based computation).
-    _.max = function(obj, iteratee, context) {
+    _.max = function (obj, iteratee, context) {
         var result = -Infinity, lastComputed = -Infinity,
             value, computed;
         if (iteratee == null && obj != null) {
@@ -9898,7 +9898,7 @@ if ( typeof define === "function" && define.amd && define.amd.jQuery ) {
             }
         } else {
             iteratee = cb(iteratee, context);
-            _.each(obj, function(value, index, list) {
+            _.each(obj, function (value, index, list) {
                 computed = iteratee(value, index, list);
                 if (computed > lastComputed || computed === -Infinity && result === -Infinity) {
                     result = value;
@@ -9910,7 +9910,7 @@ if ( typeof define === "function" && define.amd && define.amd.jQuery ) {
     };
 
     // Return the minimum element (or element-based computation).
-    _.min = function(obj, iteratee, context) {
+    _.min = function (obj, iteratee, context) {
         var result = Infinity, lastComputed = Infinity,
             value, computed;
         if (iteratee == null && obj != null) {
@@ -9923,7 +9923,7 @@ if ( typeof define === "function" && define.amd && define.amd.jQuery ) {
             }
         } else {
             iteratee = cb(iteratee, context);
-            _.each(obj, function(value, index, list) {
+            _.each(obj, function (value, index, list) {
                 computed = iteratee(value, index, list);
                 if (computed < lastComputed || computed === Infinity && result === Infinity) {
                     result = value;
@@ -9936,7 +9936,7 @@ if ( typeof define === "function" && define.amd && define.amd.jQuery ) {
 
     // Shuffle a collection, using the modern version of the
     // [Fisher-Yates shuffle](http://en.wikipedia.org/wiki/Fisher鈥揧ates_shuffle).
-    _.shuffle = function(obj) {
+    _.shuffle = function (obj) {
         var set = isArrayLike(obj) ? obj : _.values(obj);
         var length = set.length;
         var shuffled = Array(length);
@@ -9951,7 +9951,7 @@ if ( typeof define === "function" && define.amd && define.amd.jQuery ) {
     // Sample **n** random values from a collection.
     // If **n** is not specified, returns a single random element.
     // The internal `guard` argument allows it to work with `map`.
-    _.sample = function(obj, n, guard) {
+    _.sample = function (obj, n, guard) {
         if (n == null || guard) {
             if (!isArrayLike(obj)) obj = _.values(obj);
             return obj[_.random(obj.length - 1)];
@@ -9960,15 +9960,15 @@ if ( typeof define === "function" && define.amd && define.amd.jQuery ) {
     };
 
     // Sort the object's values by a criterion produced by an iteratee.
-    _.sortBy = function(obj, iteratee, context) {
+    _.sortBy = function (obj, iteratee, context) {
         iteratee = cb(iteratee, context);
-        return _.pluck(_.map(obj, function(value, index, list) {
+        return _.pluck(_.map(obj, function (value, index, list) {
             return {
                 value: value,
                 index: index,
                 criteria: iteratee(value, index, list)
             };
-        }).sort(function(left, right) {
+        }).sort(function (left, right) {
             var a = left.criteria;
             var b = right.criteria;
             if (a !== b) {
@@ -9976,15 +9976,15 @@ if ( typeof define === "function" && define.amd && define.amd.jQuery ) {
                 if (a < b || b === void 0) return -1;
             }
             return left.index - right.index;
-        }), 'value');
+        }), "value");
     };
 
     // An internal function used for aggregate "group by" operations.
-    var group = function(behavior) {
-        return function(obj, iteratee, context) {
+    var group = function (behavior) {
+        return function (obj, iteratee, context) {
             var result = {};
             iteratee = cb(iteratee, context);
-            _.each(obj, function(value, index) {
+            _.each(obj, function (value, index) {
                 var key = iteratee(value, index, obj);
                 behavior(result, value, key);
             });
@@ -9994,25 +9994,25 @@ if ( typeof define === "function" && define.amd && define.amd.jQuery ) {
 
     // Groups the object's values by a criterion. Pass either a string attribute
     // to group by, or a function that returns the criterion.
-    _.groupBy = group(function(result, value, key) {
+    _.groupBy = group(function (result, value, key) {
         if (_.has(result, key)) result[key].push(value); else result[key] = [value];
     });
 
     // Indexes the object's values by a criterion, similar to `groupBy`, but for
     // when you know that your index values will be unique.
-    _.indexBy = group(function(result, value, key) {
+    _.indexBy = group(function (result, value, key) {
         result[key] = value;
     });
 
     // Counts instances of an object that group by a certain criterion. Pass
     // either a string attribute to count by, or a function that returns the
     // criterion.
-    _.countBy = group(function(result, value, key) {
+    _.countBy = group(function (result, value, key) {
         if (_.has(result, key)) result[key]++; else result[key] = 1;
     });
 
     // Safely create a real, live array from anything iterable.
-    _.toArray = function(obj) {
+    _.toArray = function (obj) {
         if (!obj) return [];
         if (_.isArray(obj)) return slice.call(obj);
         if (isArrayLike(obj)) return _.map(obj, _.identity);
@@ -10020,17 +10020,17 @@ if ( typeof define === "function" && define.amd && define.amd.jQuery ) {
     };
 
     // Return the number of elements in an object.
-    _.size = function(obj) {
+    _.size = function (obj) {
         if (obj == null) return 0;
         return isArrayLike(obj) ? obj.length : _.keys(obj).length;
     };
 
     // Split a collection into two arrays: one whose elements all satisfy the given
     // predicate, and one whose elements all do not satisfy the predicate.
-    _.partition = function(obj, predicate, context) {
+    _.partition = function (obj, predicate, context) {
         predicate = cb(predicate, context);
         var pass = [], fail = [];
-        _.each(obj, function(value, key, obj) {
+        _.each(obj, function (value, key, obj) {
             (predicate(value, key, obj) ? pass : fail).push(value);
         });
         return [pass, fail];
@@ -10042,7 +10042,7 @@ if ( typeof define === "function" && define.amd && define.amd.jQuery ) {
     // Get the first element of an array. Passing **n** will return the first N
     // values in the array. Aliased as `head` and `take`. The **guard** check
     // allows it to work with `_.map`.
-    _.first = _.head = _.take = function(array, n, guard) {
+    _.first = _.head = _.take = function (array, n, guard) {
         if (array == null) return void 0;
         if (n == null || guard) return array[0];
         return _.initial(array, array.length - n);
@@ -10051,13 +10051,13 @@ if ( typeof define === "function" && define.amd && define.amd.jQuery ) {
     // Returns everything but the last entry of the array. Especially useful on
     // the arguments object. Passing **n** will return all the values in
     // the array, excluding the last N.
-    _.initial = function(array, n, guard) {
+    _.initial = function (array, n, guard) {
         return slice.call(array, 0, Math.max(0, array.length - (n == null || guard ? 1 : n)));
     };
 
     // Get the last element of an array. Passing **n** will return the last N
     // values in the array.
-    _.last = function(array, n, guard) {
+    _.last = function (array, n, guard) {
         if (array == null) return void 0;
         if (n == null || guard) return array[array.length - 1];
         return _.rest(array, Math.max(0, array.length - n));
@@ -10066,22 +10066,22 @@ if ( typeof define === "function" && define.amd && define.amd.jQuery ) {
     // Returns everything but the first entry of the array. Aliased as `tail` and `drop`.
     // Especially useful on the arguments object. Passing an **n** will return
     // the rest N values in the array.
-    _.rest = _.tail = _.drop = function(array, n, guard) {
+    _.rest = _.tail = _.drop = function (array, n, guard) {
         return slice.call(array, n == null || guard ? 1 : n);
     };
 
     // Trim out all falsy values from an array.
-    _.compact = function(array) {
+    _.compact = function (array) {
         return _.filter(array, _.identity);
     };
 
     // Internal implementation of a recursive `flatten` function.
-    var flatten = function(input, shallow, strict, startIndex) {
+    var flatten = function (input, shallow, strict, startIndex) {
         var output = [], idx = 0;
         for (var i = startIndex || 0, length = input && input.length; i < length; i++) {
             var value = input[i];
             if (isArrayLike(value) && (_.isArray(value) || _.isArguments(value))) {
-                //flatten current level of array or arguments object
+                // flatten current level of array or arguments object
                 if (!shallow) value = flatten(value, shallow, strict);
                 var j = 0, len = value.length;
                 output.length += len;
@@ -10096,19 +10096,19 @@ if ( typeof define === "function" && define.amd && define.amd.jQuery ) {
     };
 
     // Flatten out an array, either recursively (by default), or just one level.
-    _.flatten = function(array, shallow) {
+    _.flatten = function (array, shallow) {
         return flatten(array, shallow, false);
     };
 
     // Return a version of the array that does not contain the specified value(s).
-    _.without = function(array) {
+    _.without = function (array) {
         return _.difference(array, slice.call(arguments, 1));
     };
 
     // Produce a duplicate-free version of the array. If the array has already
     // been sorted, you have the option of using a faster algorithm.
     // Aliased as `unique`.
-    _.uniq = _.unique = function(array, isSorted, iteratee, context) {
+    _.uniq = _.unique = function (array, isSorted, iteratee, context) {
         if (array == null) return [];
         if (!_.isBoolean(isSorted)) {
             context = iteratee;
@@ -10138,13 +10138,13 @@ if ( typeof define === "function" && define.amd && define.amd.jQuery ) {
 
     // Produce an array that contains the union: each distinct element from all of
     // the passed-in arrays.
-    _.union = function() {
+    _.union = function () {
         return _.uniq(flatten(arguments, true, true));
     };
 
     // Produce an array that contains every item shared between all the
     // passed-in arrays.
-    _.intersection = function(array) {
+    _.intersection = function (array) {
         if (array == null) return [];
         var result = [];
         var argsLength = arguments.length;
@@ -10161,23 +10161,23 @@ if ( typeof define === "function" && define.amd && define.amd.jQuery ) {
 
     // Take the difference between one array and a number of other arrays.
     // Only the elements present in just the first array will remain.
-    _.difference = function(array) {
+    _.difference = function (array) {
         var rest = flatten(arguments, true, true, 1);
-        return _.filter(array, function(value){
+        return _.filter(array, function (value) {
             return !_.contains(rest, value);
         });
     };
 
     // Zip together multiple lists into a single array -- elements that share
     // an index go together.
-    _.zip = function() {
+    _.zip = function () {
         return _.unzip(arguments);
     };
 
     // Complement of _.zip. Unzip accepts an array of arrays and groups
     // each array's elements on shared indices
-    _.unzip = function(array) {
-        var length = array && _.max(array, 'length').length || 0;
+    _.unzip = function (array) {
+        var length = array && _.max(array, "length").length || 0;
         var result = Array(length);
 
         for (var index = 0; index < length; index++) {
@@ -10189,7 +10189,7 @@ if ( typeof define === "function" && define.amd && define.amd.jQuery ) {
     // Converts lists into objects. Pass either a single array of `[key, value]`
     // pairs, or two parallel arrays of the same length -- one of keys, and one of
     // the corresponding values.
-    _.object = function(list, values) {
+    _.object = function (list, values) {
         var result = {};
         for (var i = 0, length = list && list.length; i < length; i++) {
             if (values) {
@@ -10205,9 +10205,9 @@ if ( typeof define === "function" && define.amd && define.amd.jQuery ) {
     // or -1 if the item is not included in the array.
     // If the array is large and already in sort order, pass `true`
     // for **isSorted** to use binary search.
-    _.indexOf = function(array, item, isSorted) {
+    _.indexOf = function (array, item, isSorted) {
         var i = 0, length = array && array.length;
-        if (typeof isSorted == 'number') {
+        if (typeof isSorted === "number") {
             i = isSorted < 0 ? Math.max(0, length + isSorted) : isSorted;
         } else if (isSorted && length) {
             i = _.sortedIndex(array, item);
@@ -10220,9 +10220,9 @@ if ( typeof define === "function" && define.amd && define.amd.jQuery ) {
         return -1;
     };
 
-    _.lastIndexOf = function(array, item, from) {
+    _.lastIndexOf = function (array, item, from) {
         var idx = array ? array.length : 0;
-        if (typeof from == 'number') {
+        if (typeof from === "number") {
             idx = from < 0 ? idx + from + 1 : Math.min(idx, from + 1);
         }
         if (item !== item) {
@@ -10233,8 +10233,8 @@ if ( typeof define === "function" && define.amd && define.amd.jQuery ) {
     };
 
     // Generator function to create the findIndex and findLastIndex functions
-    function createIndexFinder(dir) {
-        return function(array, predicate, context) {
+    function createIndexFinder (dir) {
+        return function (array, predicate, context) {
             predicate = cb(predicate, context);
             var length = array != null && array.length;
             var index = dir > 0 ? 0 : length - 1;
@@ -10252,7 +10252,7 @@ if ( typeof define === "function" && define.amd && define.amd.jQuery ) {
 
     // Use a comparator function to figure out the smallest index at which
     // an object should be inserted so as to maintain order. Uses binary search.
-    _.sortedIndex = function(array, obj, iteratee, context) {
+    _.sortedIndex = function (array, obj, iteratee, context) {
         iteratee = cb(iteratee, context, 1);
         var value = iteratee(obj);
         var low = 0, high = array.length;
@@ -10266,7 +10266,7 @@ if ( typeof define === "function" && define.amd && define.amd.jQuery ) {
     // Generate an integer Array containing an arithmetic progression. A port of
     // the native Python `range()` function. See
     // [the Python documentation](http://docs.python.org/library/functions.html#range).
-    _.range = function(start, stop, step) {
+    _.range = function (start, stop, step) {
         if (arguments.length <= 1) {
             stop = start || 0;
             start = 0;
@@ -10288,7 +10288,7 @@ if ( typeof define === "function" && define.amd && define.amd.jQuery ) {
 
     // Determines whether to execute a function as a constructor
     // or a normal function with the provided arguments
-    var executeBound = function(sourceFunc, boundFunc, context, callingContext, args) {
+    var executeBound = function (sourceFunc, boundFunc, context, callingContext, args) {
         if (!(callingContext instanceof boundFunc)) return sourceFunc.apply(context, args);
         var self = baseCreate(sourceFunc.prototype);
         var result = sourceFunc.apply(self, args);
@@ -10299,11 +10299,11 @@ if ( typeof define === "function" && define.amd && define.amd.jQuery ) {
     // Create a function bound to a given object (assigning `this`, and arguments,
     // optionally). Delegates to **ECMAScript 5**'s native `Function.bind` if
     // available.
-    _.bind = function(func, context) {
+    _.bind = function (func, context) {
         if (nativeBind && func.bind === nativeBind) return nativeBind.apply(func, slice.call(arguments, 1));
-        if (!_.isFunction(func)) throw new TypeError('Bind must be called on a function');
+        if (!_.isFunction(func)) throw new TypeError("Bind must be called on a function");
         var args = slice.call(arguments, 2);
-        var bound = function() {
+        var bound = function () {
             return executeBound(func, bound, context, this, args.concat(slice.call(arguments)));
         };
         return bound;
@@ -10312,9 +10312,9 @@ if ( typeof define === "function" && define.amd && define.amd.jQuery ) {
     // Partially apply a function by creating a version that has had some of its
     // arguments pre-filled, without changing its dynamic `this` context. _ acts
     // as a placeholder, allowing any combination of arguments to be pre-filled.
-    _.partial = function(func) {
+    _.partial = function (func) {
         var boundArgs = slice.call(arguments, 1);
-        var bound = function() {
+        var bound = function () {
             var position = 0, length = boundArgs.length;
             var args = Array(length);
             for (var i = 0; i < length; i++) {
@@ -10329,9 +10329,9 @@ if ( typeof define === "function" && define.amd && define.amd.jQuery ) {
     // Bind a number of an object's methods to that object. Remaining arguments
     // are the method names to be bound. Useful for ensuring that all callbacks
     // defined on an object belong to it.
-    _.bindAll = function(obj) {
+    _.bindAll = function (obj) {
         var i, length = arguments.length, key;
-        if (length <= 1) throw new Error('bindAll must be passed function names');
+        if (length <= 1) throw new Error("bindAll must be passed function names");
         for (i = 1; i < length; i++) {
             key = arguments[i];
             obj[key] = _.bind(obj[key], obj);
@@ -10340,10 +10340,10 @@ if ( typeof define === "function" && define.amd && define.amd.jQuery ) {
     };
 
     // Memoize an expensive function by storing its results.
-    _.memoize = function(func, hasher) {
-        var memoize = function(key) {
+    _.memoize = function (func, hasher) {
+        var memoize = function (key) {
             var cache = memoize.cache;
-            var address = '' + (hasher ? hasher.apply(this, arguments) : key);
+            var address = "" + (hasher ? hasher.apply(this, arguments) : key);
             if (!_.has(cache, address)) cache[address] = func.apply(this, arguments);
             return cache[address];
         };
@@ -10353,9 +10353,9 @@ if ( typeof define === "function" && define.amd && define.amd.jQuery ) {
 
     // Delays a function for the given number of milliseconds, and then calls
     // it with the arguments supplied.
-    _.delay = function(func, wait) {
+    _.delay = function (func, wait) {
         var args = slice.call(arguments, 2);
-        return setTimeout(function(){
+        return setTimeout(function () {
             return func.apply(null, args);
         }, wait);
     };
@@ -10369,18 +10369,18 @@ if ( typeof define === "function" && define.amd && define.amd.jQuery ) {
     // as much as it can, without ever going more than once per `wait` duration;
     // but if you'd like to disable the execution on the leading edge, pass
     // `{leading: false}`. To disable execution on the trailing edge, ditto.
-    _.throttle = function(func, wait, options) {
+    _.throttle = function (func, wait, options) {
         var context, args, result;
         var timeout = null;
         var previous = 0;
         if (!options) options = {};
-        var later = function() {
+        var later = function () {
             previous = options.leading === false ? 0 : _.now();
             timeout = null;
             result = func.apply(context, args);
             if (!timeout) context = args = null;
         };
-        return function() {
+        return function () {
             var now = _.now();
             if (!previous && options.leading === false) previous = now;
             var remaining = wait - (now - previous);
@@ -10405,10 +10405,10 @@ if ( typeof define === "function" && define.amd && define.amd.jQuery ) {
     // be triggered. The function will be called after it stops being called for
     // N milliseconds. If `immediate` is passed, trigger the function on the
     // leading edge, instead of the trailing.
-    _.debounce = function(func, wait, immediate) {
+    _.debounce = function (func, wait, immediate) {
         var timeout, args, context, timestamp, result;
 
-        var later = function() {
+        var later = function () {
             var last = _.now() - timestamp;
 
             if (last < wait && last >= 0) {
@@ -10422,7 +10422,7 @@ if ( typeof define === "function" && define.amd && define.amd.jQuery ) {
             }
         };
 
-        return function() {
+        return function () {
             context = this;
             args = arguments;
             timestamp = _.now();
@@ -10440,23 +10440,23 @@ if ( typeof define === "function" && define.amd && define.amd.jQuery ) {
     // Returns the first function passed as an argument to the second,
     // allowing you to adjust arguments, run code before and after, and
     // conditionally execute the original function.
-    _.wrap = function(func, wrapper) {
+    _.wrap = function (func, wrapper) {
         return _.partial(wrapper, func);
     };
 
     // Returns a negated version of the passed-in predicate.
-    _.negate = function(predicate) {
-        return function() {
+    _.negate = function (predicate) {
+        return function () {
             return !predicate.apply(this, arguments);
         };
     };
 
     // Returns a function that is the composition of a list of functions, each
     // consuming the return value of the function that follows.
-    _.compose = function() {
+    _.compose = function () {
         var args = arguments;
         var start = args.length - 1;
-        return function() {
+        return function () {
             var i = start;
             var result = args[start].apply(this, arguments);
             while (i--) result = args[i].call(this, result);
@@ -10465,8 +10465,8 @@ if ( typeof define === "function" && define.amd && define.amd.jQuery ) {
     };
 
     // Returns a function that will only be executed on and after the Nth call.
-    _.after = function(times, func) {
-        return function() {
+    _.after = function (times, func) {
+        return function () {
             if (--times < 1) {
                 return func.apply(this, arguments);
             }
@@ -10474,9 +10474,9 @@ if ( typeof define === "function" && define.amd && define.amd.jQuery ) {
     };
 
     // Returns a function that will only be executed up to (but not including) the Nth call.
-    _.before = function(times, func) {
+    _.before = function (times, func) {
         var memo;
-        return function() {
+        return function () {
             if (--times > 0) {
                 memo = func.apply(this, arguments);
             }
@@ -10493,17 +10493,17 @@ if ( typeof define === "function" && define.amd && define.amd.jQuery ) {
     // ----------------
 
     // Keys in IE < 9 that won't be iterated by `for key in ...` and thus missed.
-    var hasEnumBug = !{toString: null}.propertyIsEnumerable('toString');
-    var nonEnumerableProps = ['valueOf', 'isPrototypeOf', 'toString',
-        'propertyIsEnumerable', 'hasOwnProperty', 'toLocaleString'];
+    var hasEnumBug = !{toString: null}.propertyIsEnumerable("toString");
+    var nonEnumerableProps = ["valueOf", "isPrototypeOf", "toString",
+        "propertyIsEnumerable", "hasOwnProperty", "toLocaleString"];
 
-    function collectNonEnumProps(obj, keys) {
+    function collectNonEnumProps (obj, keys) {
         var nonEnumIdx = nonEnumerableProps.length;
         var constructor = obj.constructor;
         var proto = (_.isFunction(constructor) && constructor.prototype) || ObjProto;
 
         // Constructor is a special case.
-        var prop = 'constructor';
+        var prop = "constructor";
         if (_.has(obj, prop) && !_.contains(keys, prop)) keys.push(prop);
 
         while (nonEnumIdx--) {
@@ -10516,7 +10516,7 @@ if ( typeof define === "function" && define.amd && define.amd.jQuery ) {
 
     // Retrieve the names of an object's own properties.
     // Delegates to **ECMAScript 5**'s native `Object.keys`
-    _.keys = function(obj) {
+    _.keys = function (obj) {
         if (!_.isObject(obj)) return [];
         if (nativeKeys) return nativeKeys(obj);
         var keys = [];
@@ -10527,7 +10527,7 @@ if ( typeof define === "function" && define.amd && define.amd.jQuery ) {
     };
 
     // Retrieve all the property names of an object.
-    _.allKeys = function(obj) {
+    _.allKeys = function (obj) {
         if (!_.isObject(obj)) return [];
         var keys = [];
         for (var key in obj) keys.push(key);
@@ -10537,7 +10537,7 @@ if ( typeof define === "function" && define.amd && define.amd.jQuery ) {
     };
 
     // Retrieve the values of an object's properties.
-    _.values = function(obj) {
+    _.values = function (obj) {
         var keys = _.keys(obj);
         var length = keys.length;
         var values = Array(length);
@@ -10549,7 +10549,7 @@ if ( typeof define === "function" && define.amd && define.amd.jQuery ) {
 
     // Returns the results of applying the iteratee to each element of the object
     // In contrast to _.map it returns an object
-    _.mapObject = function(obj, iteratee, context) {
+    _.mapObject = function (obj, iteratee, context) {
         iteratee = cb(iteratee, context);
         var keys =  _.keys(obj),
             length = keys.length,
@@ -10563,7 +10563,7 @@ if ( typeof define === "function" && define.amd && define.amd.jQuery ) {
     };
 
     // Convert an object into a list of `[key, value]` pairs.
-    _.pairs = function(obj) {
+    _.pairs = function (obj) {
         var keys = _.keys(obj);
         var length = keys.length;
         var pairs = Array(length);
@@ -10574,7 +10574,7 @@ if ( typeof define === "function" && define.amd && define.amd.jQuery ) {
     };
 
     // Invert the keys and values of an object. The values must be serializable.
-    _.invert = function(obj) {
+    _.invert = function (obj) {
         var result = {};
         var keys = _.keys(obj);
         for (var i = 0, length = keys.length; i < length; i++) {
@@ -10585,7 +10585,7 @@ if ( typeof define === "function" && define.amd && define.amd.jQuery ) {
 
     // Return a sorted list of the function names available on the object.
     // Aliased as `methods`
-    _.functions = _.methods = function(obj) {
+    _.functions = _.methods = function (obj) {
         var names = [];
         for (var key in obj) {
             if (_.isFunction(obj[key])) names.push(key);
@@ -10601,7 +10601,7 @@ if ( typeof define === "function" && define.amd && define.amd.jQuery ) {
     _.extendOwn = _.assign = createAssigner(_.keys);
 
     // Returns the first key on an object that passes a predicate test
-    _.findKey = function(obj, predicate, context) {
+    _.findKey = function (obj, predicate, context) {
         predicate = cb(predicate, context);
         var keys = _.keys(obj), key;
         for (var i = 0, length = keys.length; i < length; i++) {
@@ -10611,7 +10611,7 @@ if ( typeof define === "function" && define.amd && define.amd.jQuery ) {
     };
 
     // Return a copy of the object only containing the whitelisted properties.
-    _.pick = function(object, oiteratee, context) {
+    _.pick = function (object, oiteratee, context) {
         var result = {}, obj = object, iteratee, keys;
         if (obj == null) return result;
         if (_.isFunction(oiteratee)) {
@@ -10619,7 +10619,7 @@ if ( typeof define === "function" && define.amd && define.amd.jQuery ) {
             iteratee = optimizeCb(oiteratee, context);
         } else {
             keys = flatten(arguments, false, false, 1);
-            iteratee = function(value, key, obj) { return key in obj; };
+            iteratee = function (value, key, obj) { return key in obj; };
             obj = Object(obj);
         }
         for (var i = 0, length = keys.length; i < length; i++) {
@@ -10631,12 +10631,12 @@ if ( typeof define === "function" && define.amd && define.amd.jQuery ) {
     };
 
     // Return a copy of the object without the blacklisted properties.
-    _.omit = function(obj, iteratee, context) {
+    _.omit = function (obj, iteratee, context) {
         if (_.isFunction(iteratee)) {
             iteratee = _.negate(iteratee);
         } else {
             var keys = _.map(flatten(arguments, false, false, 1), String);
-            iteratee = function(value, key) {
+            iteratee = function (value, key) {
                 return !_.contains(keys, key);
             };
         }
@@ -10649,14 +10649,14 @@ if ( typeof define === "function" && define.amd && define.amd.jQuery ) {
     // Creates an object that inherits from the given prototype object.
     // If additional properties are provided then they will be added to the
     // created object.
-    _.create = function(prototype, props) {
+    _.create = function (prototype, props) {
         var result = baseCreate(prototype);
         if (props) _.extendOwn(result, props);
         return result;
     };
 
     // Create a (shallow-cloned) duplicate of an object.
-    _.clone = function(obj) {
+    _.clone = function (obj) {
         if (!_.isObject(obj)) return obj;
         return _.isArray(obj) ? obj.slice() : _.extend({}, obj);
     };
@@ -10664,13 +10664,13 @@ if ( typeof define === "function" && define.amd && define.amd.jQuery ) {
     // Invokes interceptor with the obj, and then returns obj.
     // The primary purpose of this method is to "tap into" a method chain, in
     // order to perform operations on intermediate results within the chain.
-    _.tap = function(obj, interceptor) {
+    _.tap = function (obj, interceptor) {
         interceptor(obj);
         return obj;
     };
 
     // Returns whether an object has a given set of `key:value` pairs.
-    _.isMatch = function(object, attrs) {
+    _.isMatch = function (object, attrs) {
         var keys = _.keys(attrs), length = keys.length;
         if (object == null) return !length;
         var obj = Object(object);
@@ -10683,7 +10683,7 @@ if ( typeof define === "function" && define.amd && define.amd.jQuery ) {
 
 
     // Internal recursive comparison function for `isEqual`.
-    var eq = function(a, b, aStack, bStack) {
+    var eq = function (a, b, aStack, bStack) {
         // Identical objects are equal. `0 === -0`, but they aren't identical.
         // See the [Harmony `egal` proposal](http://wiki.ecmascript.org/doku.php?id=harmony:egal).
         if (a === b) return a !== 0 || 1 / a === 1 / b;
@@ -10697,36 +10697,36 @@ if ( typeof define === "function" && define.amd && define.amd.jQuery ) {
         if (className !== toString.call(b)) return false;
         switch (className) {
             // Strings, numbers, regular expressions, dates, and booleans are compared by value.
-            case '[object RegExp]':
+            case "[object RegExp]":
             // RegExps are coerced to strings for comparison (Note: '' + /a/i === '/a/i')
-            case '[object String]':
+            case "[object String]":
                 // Primitives and their corresponding object wrappers are equivalent; thus, `"5"` is
                 // equivalent to `new String("5")`.
-                return '' + a === '' + b;
-            case '[object Number]':
+                return "" + a === "" + b;
+            case "[object Number]":
                 // `NaN`s are equivalent, but non-reflexive.
                 // Object(NaN) is equivalent to NaN
                 if (+a !== +a) return +b !== +b;
                 // An `egal` comparison is performed for other numeric values.
                 return +a === 0 ? 1 / +a === 1 / b : +a === +b;
-            case '[object Date]':
-            case '[object Boolean]':
+            case "[object Date]":
+            case "[object Boolean]":
                 // Coerce dates and booleans to numeric primitive values. Dates are compared by their
                 // millisecond representations. Note that invalid dates with millisecond representations
                 // of `NaN` are not equivalent.
                 return +a === +b;
         }
 
-        var areArrays = className === '[object Array]';
+        var areArrays = className === "[object Array]";
         if (!areArrays) {
-            if (typeof a != 'object' || typeof b != 'object') return false;
+            if (typeof a !== "object" || typeof b !== "object") return false;
 
             // Objects with different constructors are not equivalent, but `Object`s or `Array`s
             // from different frames are.
             var aCtor = a.constructor, bCtor = b.constructor;
             if (aCtor !== bCtor && !(_.isFunction(aCtor) && aCtor instanceof aCtor &&
                 _.isFunction(bCtor) && bCtor instanceof bCtor)
-                && ('constructor' in a && 'constructor' in b)) {
+                && ("constructor" in a && "constructor" in b)) {
                 return false;
             }
         }
@@ -10776,86 +10776,86 @@ if ( typeof define === "function" && define.amd && define.amd.jQuery ) {
     };
 
     // Perform a deep comparison to check if two objects are equal.
-    _.isEqual = function(a, b) {
+    _.isEqual = function (a, b) {
         return eq(a, b);
     };
 
     // Is a given array, string, or object empty?
     // An "empty" object has no enumerable own-properties.
-    _.isEmpty = function(obj) {
+    _.isEmpty = function (obj) {
         if (obj == null) return true;
         if (isArrayLike(obj) && (_.isArray(obj) || _.isString(obj) || _.isArguments(obj))) return obj.length === 0;
         return _.keys(obj).length === 0;
     };
 
     // Is a given value a DOM element?
-    _.isElement = function(obj) {
+    _.isElement = function (obj) {
         return !!(obj && obj.nodeType === 1);
     };
 
     // Is a given value an array?
     // Delegates to ECMA5's native Array.isArray
-    _.isArray = nativeIsArray || function(obj) {
-        return toString.call(obj) === '[object Array]';
+    _.isArray = nativeIsArray || function (obj) {
+        return toString.call(obj) === "[object Array]";
     };
 
     // Is a given variable an object?
-    _.isObject = function(obj) {
+    _.isObject = function (obj) {
         var type = typeof obj;
-        return type === 'function' || type === 'object' && !!obj;
+        return type === "function" || type === "object" && !!obj;
     };
 
     // Add some isType methods: isArguments, isFunction, isString, isNumber, isDate, isRegExp, isError.
-    _.each(['Arguments', 'Function', 'String', 'Number', 'Date', 'RegExp', 'Error'], function(name) {
-        _['is' + name] = function(obj) {
-            return toString.call(obj) === '[object ' + name + ']';
+    _.each(["Arguments", "Function", "String", "Number", "Date", "RegExp", "Error"], function (name) {
+        _["is" + name] = function (obj) {
+            return toString.call(obj) === "[object " + name + "]";
         };
     });
 
     // Define a fallback version of the method in browsers (ahem, IE < 9), where
     // there isn't any inspectable "Arguments" type.
     if (!_.isArguments(arguments)) {
-        _.isArguments = function(obj) {
-            return _.has(obj, 'callee');
+        _.isArguments = function (obj) {
+            return _.has(obj, "callee");
         };
     }
 
     // Optimize `isFunction` if appropriate. Work around some typeof bugs in old v8,
     // IE 11 (#1621), and in Safari 8 (#1929).
-    if (typeof /./ != 'function' && typeof Int8Array != 'object') {
-        _.isFunction = function(obj) {
-            return typeof obj == 'function' || false;
+    if (typeof /./ !== "function" && typeof Int8Array !== "object") {
+        _.isFunction = function (obj) {
+            return typeof obj === "function" || false;
         };
     }
 
     // Is a given object a finite number?
-    _.isFinite = function(obj) {
+    _.isFinite = function (obj) {
         return isFinite(obj) && !isNaN(parseFloat(obj));
     };
 
     // Is the given value `NaN`? (NaN is the only number which does not equal itself).
-    _.isNaN = function(obj) {
+    _.isNaN = function (obj) {
         return _.isNumber(obj) && obj !== +obj;
     };
 
     // Is a given value a boolean?
-    _.isBoolean = function(obj) {
-        return obj === true || obj === false || toString.call(obj) === '[object Boolean]';
+    _.isBoolean = function (obj) {
+        return obj === true || obj === false || toString.call(obj) === "[object Boolean]";
     };
 
     // Is a given value equal to null?
-    _.isNull = function(obj) {
+    _.isNull = function (obj) {
         return obj === null;
     };
 
     // Is a given variable undefined?
-    _.isUndefined = function(obj) {
+    _.isUndefined = function (obj) {
         return obj === void 0;
     };
 
     // Shortcut function for checking if an object has a given property directly
     // on itself (in other words, not on a prototype).
-    _.has = function(obj, key) {
+    _.has = function (obj, key) {
         return obj != null && hasOwnProperty.call(obj, key);
     };
 
@@ -10864,49 +10864,49 @@ if ( typeof define === "function" && define.amd && define.amd.jQuery ) {
 
     // Run Underscore.js in *noConflict* mode, returning the `_` variable to its
     // previous owner. Returns a reference to the Underscore object.
-    _.noConflict = function() {
+    _.noConflict = function () {
         root._ = previousUnderscore;
         return this;
     };
 
     // Keep the identity function around for default iteratees.
-    _.identity = function(value) {
+    _.identity = function (value) {
         return value;
     };
 
     // Predicate-generating functions. Often useful outside of Underscore.
-    _.constant = function(value) {
-        return function() {
+    _.constant = function (value) {
+        return function () {
             return value;
         };
     };
 
-    _.noop = function(){};
+    _.noop = function () {};
 
-    _.property = function(key) {
-        return function(obj) {
+    _.property = function (key) {
+        return function (obj) {
             return obj == null ? void 0 : obj[key];
         };
     };
 
     // Generates a function for a given object that returns a given property.
-    _.propertyOf = function(obj) {
-        return obj == null ? function(){} : function(key) {
+    _.propertyOf = function (obj) {
+        return obj == null ? function () {} : function (key) {
             return obj[key];
         };
     };
 
     // Returns a predicate for checking whether an object has a given set of
     // `key:value` pairs.
-    _.matcher = _.matches = function(attrs) {
+    _.matcher = _.matches = function (attrs) {
         attrs = _.extendOwn({}, attrs);
-        return function(obj) {
+        return function (obj) {
             return _.isMatch(obj, attrs);
         };
     };
 
     // Run a function **n** times.
-    _.times = function(n, iteratee, context) {
+    _.times = function (n, iteratee, context) {
         var accum = Array(Math.max(0, n));
         iteratee = optimizeCb(iteratee, context, 1);
         for (var i = 0; i < n; i++) accum[i] = iteratee(i);
@@ -10914,7 +10914,7 @@ if ( typeof define === "function" && define.amd && define.amd.jQuery ) {
     };
 
     // Return a random integer between min and max (inclusive).
-    _.random = function(min, max) {
+    _.random = function (min, max) {
         if (max == null) {
             max = min;
             min = 0;
@@ -10923,32 +10923,32 @@ if ( typeof define === "function" && define.amd && define.amd.jQuery ) {
     };
 
     // A (possibly faster) way to get the current timestamp as an integer.
-    _.now = Date.now || function() {
+    _.now = Date.now || function () {
         return new Date().getTime();
     };
 
     // List of HTML entities for escaping.
     var escapeMap = {
-        '&': '&amp;',
-        '<': '&lt;',
-        '>': '&gt;',
-        '"': '&quot;',
-        "'": '&#x27;',
-        '`': '&#x60;'
+        "&": "&amp;",
+        "<": "&lt;",
+        ">": "&gt;",
+        "\"": "&quot;",
+        "'": "&#x27;",
+        "`": "&#x60;"
     };
     var unescapeMap = _.invert(escapeMap);
 
     // Functions for escaping and unescaping strings to/from HTML interpolation.
-    var createEscaper = function(map) {
-        var escaper = function(match) {
+    var createEscaper = function (map) {
+        var escaper = function (match) {
             return map[match];
         };
         // Regexes for identifying a key that needs to be escaped
-        var source = '(?:' + _.keys(map).join('|') + ')';
+        var source = "(?:" + _.keys(map).join("|") + ")";
         var testRegexp = RegExp(source);
-        var replaceRegexp = RegExp(source, 'g');
-        return function(string) {
-            string = string == null ? '' : '' + string;
+        var replaceRegexp = RegExp(source, "g");
+        return function (string) {
+            string = string == null ? "" : "" + string;
             return testRegexp.test(string) ? string.replace(replaceRegexp, escaper) : string;
         };
     };
@@ -10957,7 +10957,7 @@ if ( typeof define === "function" && define.amd && define.amd.jQuery ) {
 
     // If the value of the named `property` is a function then invoke it with the
     // `object` as context; otherwise, return it.
-    _.result = function(object, property, fallback) {
+    _.result = function (object, property, fallback) {
         var value = object == null ? void 0 : object[property];
         if (value === void 0) {
             value = fallback;
@@ -10968,17 +10968,17 @@ if ( typeof define === "function" && define.amd && define.amd.jQuery ) {
     // Generate a unique integer id (unique within the entire client session).
     // Useful for temporary DOM ids.
     var idCounter = 0;
-    _.uniqueId = function(prefix) {
-        var id = ++idCounter + '';
+    _.uniqueId = function (prefix) {
+        var id = ++idCounter + "";
         return prefix ? prefix + id : id;
     };
 
     // By default, Underscore uses ERB-style template delimiters, change the
     // following template settings to use alternative delimiters.
     _.templateSettings = {
-        evaluate    : /<%([\s\S]+?)%>/g,
-        interpolate : /<%=([\s\S]+?)%>/g,
-        escape      : /<%-([\s\S]+?)%>/g
+        evaluate: /<%([\s\S]+?)%>/g,
+        interpolate: /<%=([\s\S]+?)%>/g,
+        escape: /<%-([\s\S]+?)%>/g
     };
 
     // When customizing `templateSettings`, if you don't want to define an
@@ -10989,25 +10989,25 @@ if ( typeof define === "function" && define.amd && define.amd.jQuery ) {
     // Certain characters need to be escaped so that they can be put into a
     // string literal.
     var escapes = {
-        "'":      "'",
-        '\\':     '\\',
-        '\r':     'r',
-        '\n':     'n',
-        '\u2028': 'u2028',
-        '\u2029': 'u2029'
+        "'": "'",
+        "\\": "\\",
+        "\r": "r",
+        "\n": "n",
+        "\u2028": "u2028",
+        "\u2029": "u2029"
     };
 
     var escaper = /\\|'|\r|\n|\u2028|\u2029/g;
 
-    var escapeChar = function(match) {
-        return '\\' + escapes[match];
+    var escapeChar = function (match) {
+        return "\\" + escapes[match];
     };
 
     // JavaScript micro-templating, similar to John Resig's implementation.
     // Underscore templating handles arbitrary delimiters, preserves whitespace,
     // and correctly escapes quotes within interpolated code.
     // NB: `oldSettings` only exists for backwards compatibility.
-    _.template = function(text, settings, oldSettings) {
+    _.template = function (text, settings, oldSettings) {
         if (!settings && oldSettings) settings = oldSettings;
         settings = _.defaults({}, settings, _.templateSettings);
 
@@ -11016,12 +11016,12 @@ if ( typeof define === "function" && define.amd && define.amd.jQuery ) {
             (settings.escape || noMatch).source,
             (settings.interpolate || noMatch).source,
             (settings.evaluate || noMatch).source
-        ].join('|') + '|$', 'g');
+        ].join("|") + "|$", "g");
 
         // Compile the template source, escaping string literals appropriately.
         var index = 0;
         var source = "__p+='";
-        text.replace(matcher, function(match, escape, interpolate, evaluate, offset) {
+        text.replace(matcher, function (match, escape, interpolate, evaluate, offset) {
             source += text.slice(index, offset).replace(escaper, escapeChar);
             index = offset + match.length;
 
@@ -11039,32 +11039,32 @@ if ( typeof define === "function" && define.amd && define.amd.jQuery ) {
         source += "';\n";
 
         // If a variable is not specified, place data values in local scope.
-        if (!settings.variable) source = 'with(obj||{}){\n' + source + '}\n';
+        if (!settings.variable) source = "with(obj||{}){\n" + source + "}\n";
 
         source = "var __t,__p='',__j=Array.prototype.join," +
             "print=function(){__p+=__j.call(arguments,'');};\n" +
-            source + 'return __p;\n';
+            source + "return __p;\n";
 
         try {
-            var render = new Function(settings.variable || 'obj', '_', source);
+            var render = new Function(settings.variable || "obj", "_", source);
         } catch (e) {
             e.source = source;
             throw e;
         }
 
-        var template = function(data) {
+        var template = function (data) {
             return render.call(this, data, _);
         };
 
         // Provide the compiled source as a convenience for precompilation.
-        var argument = settings.variable || 'obj';
-        template.source = 'function(' + argument + '){\n' + source + '}';
+        var argument = settings.variable || "obj";
+        template.source = "function(" + argument + "){\n" + source + "}";
 
         return template;
     };
 
     // Add a "chain" function. Start chaining a wrapped Underscore object.
-    _.chain = function(obj) {
+    _.chain = function (obj) {
         var instance = _(obj);
         instance._chain = true;
         return instance;
@@ -11077,15 +11077,15 @@ if ( typeof define === "function" && define.amd && define.amd.jQuery ) {
     // underscore functions. Wrapped objects may be chained.
 
     // Helper function to continue chaining intermediate results.
-    var result = function(instance, obj) {
+    var result = function (instance, obj) {
         return instance._chain ? _(obj).chain() : obj;
     };
 
     // Add your own custom functions to the Underscore object.
-    _.mixin = function(obj) {
-        _.each(_.functions(obj), function(name) {
+    _.mixin = function (obj) {
+        _.each(_.functions(obj), function (name) {
             var func = _[name] = obj[name];
-            _.prototype[name] = function() {
+            _.prototype[name] = function () {
                 var args = [this._wrapped];
                 push.apply(args, arguments);
                 return result(this, func.apply(_, args));
@@ -11097,26 +11097,26 @@ if ( typeof define === "function" && define.amd && define.amd.jQuery ) {
     _.mixin(_);
 
     // Add all mutator Array functions to the wrapper.
-    _.each(['pop', 'push', 'reverse', 'shift', 'sort', 'splice', 'unshift'], function(name) {
+    _.each(["pop", "push", "reverse", "shift", "sort", "splice", "unshift"], function (name) {
         var method = ArrayProto[name];
-        _.prototype[name] = function() {
+        _.prototype[name] = function () {
             var obj = this._wrapped;
             method.apply(obj, arguments);
-            if ((name === 'shift' || name === 'splice') && obj.length === 0) delete obj[0];
+            if ((name === "shift" || name === "splice") && obj.length === 0) delete obj[0];
             return result(this, obj);
         };
     });
 
     // Add all accessor Array functions to the wrapper.
-    _.each(['concat', 'join', 'slice'], function(name) {
+    _.each(["concat", "join", "slice"], function (name) {
         var method = ArrayProto[name];
-        _.prototype[name] = function() {
+        _.prototype[name] = function () {
             return result(this, method.apply(this._wrapped, arguments));
         };
     });
 
     // Extracts the result from a wrapped and chained object.
-    _.prototype.value = function() {
+    _.prototype.value = function () {
         return this._wrapped;
     };
 
@@ -11124,8 +11124,8 @@ if ( typeof define === "function" && define.amd && define.amd.jQuery ) {
     // such as arithmetic and JSON stringification.
     _.prototype.valueOf = _.prototype.toJSON = _.prototype.value;
 
-    _.prototype.toString = function() {
-        return '' + this._wrapped;
+    _.prototype.toString = function () {
+        return "" + this._wrapped;
     };
 
     // AMD registration happens at the end for compatibility with AMD loaders
@@ -11135,8 +11135,8 @@ if ( typeof define === "function" && define.amd && define.amd.jQuery ) {
     // popular enough to be bundled in a third party lib, but not be part of
     // an AMD load request. Those cases could generate an error when an
     // anonymous define() is called outside of a loader request.
-    if (typeof define === 'function' && define.amd) {
-        define('underscore', [], function() {
+    if (typeof define === "function" && define.amd) {
+        define("underscore", [], function () {
             return _;
         });
     }
@@ -11157,27 +11157,27 @@ if (window.BI == null) {
 if (!window.BI) {
     window.BI = {};
 }
-;
+
 !(function ($, undefined) {
     var traverse = function (func, context) {
         return function (value, key, obj) {
             return func.call(context, key, value, obj);
-        }
+        };
     };
     var _apply = function (name) {
         return function () {
             return _[name].apply(_, arguments);
-        }
+        };
     };
     var _applyFunc = function (name) {
         return function () {
             var args = Array.prototype.slice.call(arguments, 0);
             args[1] = _.isFunction(args[1]) ? traverse(args[1], args[2]) : args[1];
             return _[name].apply(_, args);
-        }
+        };
     };
 
-    //Utility
+    // Utility
     _.extend(BI, {
         i18nText: function (key) {
             var localeText = (BI.i18n && BI.i18n[key]) || "";
@@ -11211,11 +11211,11 @@ if (!window.BI) {
         },
 
         warn: function (message) {
-            console.warn(message)
+            console.warn(message);
         },
 
         UUID: function () {
-            var f = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'a', 'b', 'c', 'd', 'e', 'f'];
+            var f = ["0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "a", "b", "c", "d", "e", "f"];
             var str = "";
             for (var i = 0; i < 16; i++) {
                 var r = parseInt(f.length * Math.random(), 10);
@@ -11230,7 +11230,7 @@ if (!window.BI) {
 
         createWidgets: function (items, options) {
             if (!BI.isArray(items)) {
-                throw new Error("cannot create Widgets")
+                throw new Error("cannot create Widgets");
             }
             return BI.map(BI.flatten(items), function (i, item) {
                 return BI.createWidget(item, BI.deepClone(options));
@@ -11254,7 +11254,7 @@ if (!window.BI) {
                     outerAttr.shift();
                     return BI.extend({}, item, {
                         el: innerAttr.shift()
-                    })
+                    });
                 }
                 if (item.el instanceof BI.Widget || (BI.View && item.el instanceof BI.View)) {
                     innerAttr.shift();
@@ -11263,15 +11263,15 @@ if (!window.BI) {
                 if (item.el) {
                     return BI.extend({}, outerAttr.shift(), item, {
                         el: BI.extend({}, innerAttr.shift(), item.el)
-                    })
+                    });
                 }
                 return BI.extend({}, outerAttr.shift(), {
                     el: BI.extend({}, innerAttr.shift(), item)
-                })
-            })
+                });
+            });
         },
 
-        //用容器包装items
+        // 用容器包装items
         packageItems: function (items, layouts) {
             for (var i = layouts.length - 1; i >= 0; i--) {
                 items = BI.map(items, function (k, it) {
@@ -11281,8 +11281,8 @@ if (!window.BI) {
                                 el: it
                             })
                         ]
-                    })
-                })
+                    });
+                });
             }
             return items;
         },
@@ -11296,7 +11296,7 @@ if (!window.BI) {
             };
         },
 
-        //剥开EL
+        // 剥开EL
         stripEL: function (obj) {
             return obj.type && obj || obj.el || obj;
         },
@@ -11308,13 +11308,13 @@ if (!window.BI) {
         }
     });
 
-    //集合相关方法
+    // 集合相关方法
     _.each(["where", "findWhere", "contains", "invoke", "pluck", "shuffle", "sample", "toArray", "size"], function (name) {
-        BI[name] = _apply(name)
+        BI[name] = _apply(name);
     });
     _.each(["each", "map", "reduce", "reduceRight", "find", "filter", "reject", "every", "all", "some", "any", "max", "min",
         "sortBy", "groupBy", "indexBy", "countBy", "partition"], function (name) {
-        BI[name] = _applyFunc(name)
+        BI[name] = _applyFunc(name);
     });
     _.extend(BI, {
         clamp: function (value, minValue, maxValue) {
@@ -11326,7 +11326,7 @@ if (!window.BI) {
             }
             return value;
         },
-        //数数
+        // 数数
         count: function (from, to, predicate) {
             var t;
             if (predicate) {
@@ -11337,7 +11337,7 @@ if (!window.BI) {
             return to - from;
         },
 
-        //倒数
+        // 倒数
         inverse: function (from, to, predicate) {
             return BI.count(to, from, predicate);
         },
@@ -11476,7 +11476,7 @@ if (!window.BI) {
         },
 
         string2Array: function (str) {
-            return str.split('&-&');
+            return str.split("&-&");
         },
 
         array2String: function (array) {
@@ -11484,7 +11484,7 @@ if (!window.BI) {
         },
 
         abc2Int: function (str) {
-            var idx = 0, start = 'A', str = str.toUpperCase();
+            var idx = 0, start = "A", str = str.toUpperCase();
             for (var i = 0, len = str.length; i < len; ++i) {
                 idx = str.charAt(i).charCodeAt(0) - start.charCodeAt(0) + 26 * idx + 1;
                 if (idx > (2147483646 - str.charAt(i).charCodeAt(0) + start.charCodeAt(0)) / 26) {
@@ -11495,7 +11495,7 @@ if (!window.BI) {
         },
 
         int2Abc: function (num) {
-            var DIGITS = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z'];
+            var DIGITS = ["A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z"];
             var idx = num, str = "";
             if (num === 0) {
                 return "";
@@ -11512,16 +11512,16 @@ if (!window.BI) {
         }
     });
 
-    //数组相关的方法
+    // 数组相关的方法
     _.each(["first", "initial", "last", "rest", "compact", "flatten", "without", "union", "intersection",
         "difference", "zip", "unzip", "object", "indexOf", "lastIndexOf", "sortedIndex", "range"], function (name) {
-        BI[name] = _apply(name)
+        BI[name] = _apply(name);
     });
     _.each(["findIndex", "findLastIndex"], function (name) {
-        BI[name] = _applyFunc(name)
+        BI[name] = _applyFunc(name);
     });
     _.extend(BI, {
-        //构建一个长度为length的数组
+        // 构建一个长度为length的数组
         makeArray: function (length, value) {
             var res = [];
             for (var i = 0; i < length; i++) {
@@ -11575,20 +11575,20 @@ if (!window.BI) {
         }
     });
 
-    //对象相关方法
+    // 对象相关方法
     _.each(["keys", "allKeys", "values", "pairs", "invert", "create", "functions", "extend", "extendOwn",
         "defaults", "clone", "property", "propertyOf", "matcher", "isEqual", "isMatch", "isEmpty",
         "isElement", "isNumber", "isString", "isArray", "isObject", "isArguments", "isFunction", "isFinite",
         "isBoolean", "isDate", "isRegExp", "isError", "isNaN", "isUndefined"], function (name) {
-        BI[name] = _apply(name)
+        BI[name] = _apply(name);
     });
     _.each(["mapObject", "findKey", "pick", "omit", "tap"], function (name) {
-        BI[name] = _applyFunc(name)
+        BI[name] = _applyFunc(name);
     });
     _.extend(BI, {
 
         inherit: function (sb, sp, overrides) {
-            if (typeof sp == 'object') {
+            if (typeof sp === "object") {
                 overrides = sp;
                 sp = sb;
                 sb = function () {
@@ -11596,7 +11596,7 @@ if (!window.BI) {
                 };
             }
             var F = function () {
-            }, spp = sp.prototype;
+                }, spp = sp.prototype;
             F.prototype = spp;
             sb.prototype = new F();
             sb.superclass = spp;
@@ -11618,12 +11618,12 @@ if (!window.BI) {
             return _.has.apply(_, arguments);
         },
 
-        //数字和字符串可以作为key
+        // 数字和字符串可以作为key
         isKey: function (key) {
             return BI.isNumber(key) || (BI.isString(key) && key.length > 0);
         },
 
-        //忽略大小写的等于
+        // 忽略大小写的等于
         isCapitalEqual: function (a, b) {
             a = BI.isNull(a) ? a : ("" + a).toLowerCase();
             b = BI.isNull(b) ? b : ("" + b).toLowerCase();
@@ -11631,10 +11631,10 @@ if (!window.BI) {
         },
 
         isWidthOrHeight: function (w) {
-            if (typeof w == 'number') {
+            if (typeof w === "number") {
                 return w >= 0;
-            } else if (typeof w == 'string') {
-                return /^\d{1,3}%$/.exec(w) || w == 'auto' || /^\d+px$/.exec(w);
+            } else if (typeof w === "string") {
+                return /^\d{1,3}%$/.exec(w) || w == "auto" || /^\d+px$/.exec(w);
             }
         },
 
@@ -11679,7 +11679,7 @@ if (!window.BI) {
         }
     });
 
-    //deep方法
+    // deep方法
     _.extend(BI, {
         /**
          *完全克隆�?个js对象
@@ -11694,14 +11694,14 @@ if (!window.BI) {
             var type = Object.prototype.toString.call(obj);
 
             // Date
-            if (type === '[object Date]') {
+            if (type === "[object Date]") {
                 return Date.getDate(obj.getTime());
             }
 
             var i, clone, key;
 
             // Array
-            if (type === '[object Array]') {
+            if (type === "[object Array]") {
                 i = obj.length;
 
                 clone = [];
@@ -11711,7 +11711,7 @@ if (!window.BI) {
                 }
             }
             // Object
-            else if (type === '[object Object]' && obj.constructor === Object) {
+            else if (type === "[object Object]" && obj.constructor === Object) {
                 clone = {};
 
                 for (var i in obj) {
@@ -11745,7 +11745,7 @@ if (!window.BI) {
                     if (BI.isEqual(v, copy)) {
                         return true;
                     }
-                })
+                });
             }
             return BI.contains(obj, copy);
         },
@@ -11789,15 +11789,15 @@ if (!window.BI) {
                     }
                 }
                 return result;
-            } else {
-                var result = {};
-                BI.each(obj, function (i, v) {
-                    if (!BI.isEqual(target, obj[i])) {
-                        result[i] = v;
-                    }
-                });
-                return result;
             }
+            var result = {};
+            BI.each(obj, function (i, v) {
+                if (!BI.isEqual(target, obj[i])) {
+                    result[i] = v;
+                }
+            });
+            return result;
+
         },
 
         deepUnique: function (array) {
@@ -11810,7 +11810,7 @@ if (!window.BI) {
             return result;
         },
 
-        //比较两个对象得出不一样的key值
+        // 比较两个对象得出不一样的key值
         deepDiff: function (object, other) {
             object || (object = {});
             other || (other = {});
@@ -11830,21 +11830,27 @@ if (!window.BI) {
                 }
             }
             return result;
+        },
+
+        deepExtend: function () {
+            var args = [].slice.call(arguments);
+            args.unshift(true);
+            return $.extend.apply($, args);
         }
     });
 
-    //通用方法
+    // 通用方法
     _.each(["uniqueId", "result", "chain", "iteratee", "escape", "unescape"], function (name) {
         BI[name] = function () {
             return _[name].apply(_, arguments);
-        }
+        };
     });
 
-    //事件相关方法
+    // 事件相关方法
     _.each(["bind", "once", "partial", "debounce", "throttle", "delay", "defer", "wrap"], function (name) {
         BI[name] = function () {
             return _[name].apply(_, arguments);
-        }
+        };
     });
 
     _.extend(BI, {
@@ -11853,7 +11859,7 @@ if (!window.BI) {
             var pending = false;
             var timerFunc;
 
-            function nextTickHandler() {
+            function nextTickHandler () {
                 pending = false;
                 var copies = callbacks.slice(0);
                 callbacks = [];
@@ -11862,15 +11868,15 @@ if (!window.BI) {
                 }
             }
 
-            if (typeof Promise !== 'undefined') {
+            if (typeof Promise !== "undefined") {
                 var p = Promise.resolve();
                 timerFunc = function () {
                     p.then(nextTickHandler);
-                }
+                };
             } else
 
             /* istanbul ignore if */
-            if (typeof MutationObserver !== 'undefined') {
+            if (typeof MutationObserver !== "undefined") {
                 var counter = 1;
                 var observer = new MutationObserver(nextTickHandler);
                 var textNode = document.createTextNode(counter + "");
@@ -11880,13 +11886,13 @@ if (!window.BI) {
                 timerFunc = function () {
                     counter = (counter + 1) % 2;
                     textNode.data = counter + "";
-                }
+                };
             } else {
                 timerFunc = function () {
-                    setTimeout(nextTickHandler, 0)
-                }
+                    setTimeout(nextTickHandler, 0);
+                };
             }
-            return function queueNextTick(cb) {
+            return function queueNextTick (cb) {
                 var _resolve;
                 var args = [].slice.call(arguments, 1);
                 callbacks.push(function () {
@@ -11901,34 +11907,34 @@ if (!window.BI) {
                     pending = true;
                     timerFunc();
                 }
-                if (!cb && typeof Promise !== 'undefined') {
+                if (!cb && typeof Promise !== "undefined") {
                     return new Promise(function (resolve) {
-                        _resolve = resolve
-                    })
+                        _resolve = resolve;
+                    });
                 }
-            }
+            };
         })()
     });
 
-    //数字相关方法
+    // 数字相关方法
     _.each(["random"], function (name) {
-        BI[name] = _apply(name)
+        BI[name] = _apply(name);
     });
     _.extend(BI, {
         getTime: function () {
             if (window.performance && window.performance.now) {
                 return window.performance.now();
-            } else {
-                if (window.performance && window.performance.webkitNow) {
-                    return window.performance.webkitNow();
-                } else {
-                    if (Date.now) {
-                        return Date.now();
-                    } else {
-                        return Date.getDate().getTime();
-                    }
-                }
             }
+            if (window.performance && window.performance.webkitNow) {
+                return window.performance.webkitNow();
+            }
+            if (Date.now) {
+                return Date.now();
+            }
+            return Date.getDate().getTime();
+
+
+
         },
 
         parseInt: function (number) {
@@ -12031,7 +12037,7 @@ if (!window.BI) {
         }
     });
 
-    //字符串相关方法
+    // 字符串相关方法
     _.extend(BI, {
         trim: function () {
             return $.trim.apply($, arguments);
@@ -12050,28 +12056,28 @@ if (!window.BI) {
         },
 
         isLiteral: function (exp) {
-            var literalValueRE = /^\s?(true|false|-?[\d\.]+|'[^']*'|"[^"]*")\s?$/
-            return literalValueRE.test(exp)
+            var literalValueRE = /^\s?(true|false|-?[\d\.]+|'[^']*'|"[^"]*")\s?$/;
+            return literalValueRE.test(exp);
         },
 
         stripQuotes: function (str) {
-            var a = str.charCodeAt(0)
-            var b = str.charCodeAt(str.length - 1)
+            var a = str.charCodeAt(0);
+            var b = str.charCodeAt(str.length - 1);
             return a === b && (a === 0x22 || a === 0x27)
                 ? str.slice(1, -1)
-                : str
+                : str;
         },
 
-        //background-color => backgroundColor
+        // background-color => backgroundColor
         camelize: function (str) {
             return str.replace(/-(.)/g, function (_, character) {
                 return character.toUpperCase();
             });
         },
 
-        //backgroundColor => background-color
+        // backgroundColor => background-color
         hyphenate: function (str) {
-            return str.replace(/([A-Z])/g, '-$1').toLowerCase();
+            return str.replace(/([A-Z])/g, "-$1").toLowerCase();
         },
 
         isNotEmptyString: function (str) {
@@ -12115,7 +12121,7 @@ if (!window.BI) {
                 alert("Algorithm cannot find a suitable hash. Please choose a different password. \nPossible considerations are to choose a more complex or longer password.");
                 return null;
             }
-//        var salt = Math.round(Math.random() * 1000000000) % 100000000;
+            //        var salt = Math.round(Math.random() * 1000000000) % 100000000;
             var salt = 101;
             prand += salt;
             while (prand.length > 10) {
@@ -12192,7 +12198,7 @@ if (!window.BI) {
         }
     });
 
-    //浏览器相关方法
+    // 浏览器相关方法
     _.extend(BI, {
         isIE: function () {
             if (this.__isIE == null) {
@@ -12261,7 +12267,7 @@ if (!window.BI) {
         },
 
         isSupportCss3: function (style) {
-            var prefix = ['webkit', 'Moz', 'ms', 'o'],
+            var prefix = ["webkit", "Moz", "ms", "o"],
                 i, len,
                 humpString = [],
                 htmlStyle = document.documentElement.style,
@@ -12272,7 +12278,7 @@ if (!window.BI) {
                 };
 
             for (i in prefix) {
-                humpString.push(_toHumb(prefix[i] + '-' + style));
+                humpString.push(_toHumb(prefix[i] + "-" + style));
             }
             humpString.push(_toHumb(style));
 
@@ -12284,7 +12290,7 @@ if (!window.BI) {
             return false;
         }
     });
-    //BI请求
+    // BI请求
     _.extend(BI, {
 
         ajax: function (option) {
@@ -12338,14 +12344,14 @@ $.extend(BI.OB.prototype, {
         var self = this;
         if (this.options.listeners != null) {
             $.each(this.options.listeners, function (i, lis) {
-                (lis.target ? lis.target : self)[lis.once ? 'once' : 'on']
-                (lis.eventName, _.bind(lis.action, self))
+                (lis.target ? lis.target : self)[lis.once ? "once" : "on"]
+                (lis.eventName, _.bind(lis.action, self));
             });
             delete this.options.listeners;
         }
     },
 
-    //获得一个当前对象的引用
+    // 获得一个当前对象的引用
     _initRef: function () {
         if (this.options.ref) {
             this.options.ref.call(this, this);
@@ -12354,7 +12360,7 @@ $.extend(BI.OB.prototype, {
 
     _getEvents: function () {
         if (!$.isArray(this.events)) {
-            this.events = []
+            this.events = [];
         }
         return this.events;
     },
@@ -12394,7 +12400,7 @@ $.extend(BI.OB.prototype, {
     un: function (eventName, fn) {
         eventName = eventName.toLowerCase();
 
-        /*alex:如果fn是null,就是把eventName上面所有方法都un掉*/
+        /* alex:如果fn是null,就是把eventName上面所有方法都un掉*/
         if (fn == null) {
             delete this._getEvents()[eventName];
         } else {
@@ -12405,7 +12411,7 @@ $.extend(BI.OB.prototype, {
                     if (ifn != fn) {
                         newFns.push(ifn);
                     }
-                })
+                });
                 this._getEvents()[eventName] = newFns;
             }
         }
@@ -12414,7 +12420,7 @@ $.extend(BI.OB.prototype, {
      * 清除观察者的所有事件绑定
      */
     purgeListeners: function () {
-        /*alex:清空events*/
+        /* alex:清空events*/
         this.events = [];
     },
     /**
@@ -12471,10 +12477,10 @@ BI.Widget = BI.inherit(BI.OB, {
             baseCls: "",
             extraCls: "",
             cls: ""
-        })
+        });
     },
 
-    //生命周期函数
+    // 生命周期函数
     beforeCreate: null,
 
     created: null,
@@ -12562,7 +12568,7 @@ BI.Widget = BI.inherit(BI.OB, {
     _initVisual: function () {
         var o = this.options;
         if (o.invisible) {
-            //用display属性做显示和隐藏，否则jquery会在显示时将display设为block会覆盖掉display:flex属性
+            // 用display属性做显示和隐藏，否则jquery会在显示时将display设为block会覆盖掉display:flex属性
             this.element.css("display", "none");
         }
     },
@@ -12593,8 +12599,8 @@ BI.Widget = BI.inherit(BI.OB, {
             BI.each(els, function (i, el) {
                 BI.createWidget(el, {
                     element: self
-                })
-            })
+                });
+            });
         }
         // if (this._isRoot === true || !(this instanceof BI.Layout)) {
         this._mount();
@@ -12652,7 +12658,7 @@ BI.Widget = BI.inherit(BI.OB, {
         } else if (enable === false) {
             this.options.disabled = true;
         }
-        //递归将所有子组件使能
+        // 递归将所有子组件使能
         BI.each(this._children, function (i, child) {
             !child._manualSetEnable && child._setEnable && child._setEnable(enable);
         });
@@ -12664,7 +12670,7 @@ BI.Widget = BI.inherit(BI.OB, {
         } else if (valid === false) {
             this.options.invalid = true;
         }
-        //递归将所有子组件使有效
+        // 递归将所有子组件使有效
         BI.each(this._children, function (i, child) {
             !child._manualSetValid && child._setValid && child._setValid(valid);
         });
@@ -12691,7 +12697,7 @@ BI.Widget = BI.inherit(BI.OB, {
     setVisible: function (visible) {
         this._setVisible(visible);
         if (visible === true) {
-            //用this.element.show()会把display属性改成block
+            // 用this.element.show()会把display属性改成block
             this.element.css("display", "");
             this._mount();
         } else if (visible === false) {
@@ -12712,7 +12718,7 @@ BI.Widget = BI.inherit(BI.OB, {
 
     doBehavior: function () {
         var args = arguments;
-        //递归将所有子组件使有效
+        // 递归将所有子组件使有效
         BI.each(this._children, function (i, child) {
             child.doBehavior && child.doBehavior.apply(child, args);
         });
@@ -12801,7 +12807,7 @@ BI.Widget = BI.inherit(BI.OB, {
         if (BI.isPlainObject(key)) {
             BI.each(key, function (k, v) {
                 self.attr(k, v);
-            })
+            });
             return;
         }
         if (BI.isNotNull(value)) {
@@ -12949,7 +12955,7 @@ BI.Widget = BI.inherit(BI.OB, {
     };
 
 })();(function (window, undefined) {
-    function aspect(type) {
+    function aspect (type) {
         return function (target, methodName, advice) {
             var exist = target[methodName],
                 dispatcher;
@@ -13010,7 +13016,7 @@ BI.Widget = BI.inherit(BI.OB, {
 
     return BI.aspect;
 
-})(window);;
+})(window);
 !(function () {
 
     var _keyStr = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/=";
@@ -13138,7 +13144,7 @@ BI.Widget = BI.inherit(BI.OB, {
             return output;
 
         }
-    })
+    });
 })();
 BI.Cache = {
     _prefix: "bi",
@@ -13202,10 +13208,8 @@ BI.Cache = {
     },
     getCookie: function (name) {
         var arr, reg = new RegExp("(^| )" + name + "=([^;]*)(;|$)");
-        if (arr = document.cookie.match(reg))
-            return unescape(arr[2]);
-        else
-            return null;
+        if (arr = document.cookie.match(reg)) {return unescape(arr[2]);}
+        return null;
     },
     deleteCookie: function (name, path) {
         var date = new Date();
@@ -13275,14 +13279,14 @@ BI.CellSizeAndPositionManager.prototype = {
         return this._lastMeasuredIndex >= 0
             ? this._cellSizeAndPositionData[this._lastMeasuredIndex]
             : {
-            offset: 0,
-            size: 0
-        }
+                offset: 0,
+                size: 0
+            };
     },
 
     getTotalSize: function () {
         var lastMeasuredCellSizeAndPosition = this.getSizeAndPositionOfLastMeasuredCell();
-        return lastMeasuredCellSizeAndPosition.offset + lastMeasuredCellSizeAndPosition.size + (this._cellCount - this._lastMeasuredIndex - 1) * this._estimatedCellSize
+        return lastMeasuredCellSizeAndPosition.offset + lastMeasuredCellSizeAndPosition.size + (this._cellCount - this._lastMeasuredIndex - 1) * this._estimatedCellSize;
     },
 
     getUpdatedOffsetForIndex: function (align, containerSize, currentOffset, targetIndex) {
@@ -13293,13 +13297,13 @@ BI.CellSizeAndPositionManager.prototype = {
         var idealOffset;
 
         switch (align) {
-            case 'start':
+            case "start":
                 idealOffset = maxOffset;
                 break;
-            case 'end':
+            case "end":
                 idealOffset = minOffset;
                 break;
-            case 'center':
+            case "center":
                 idealOffset = maxOffset - ((containerSize - datum.size) / 2);
                 break;
             default:
@@ -13316,7 +13320,7 @@ BI.CellSizeAndPositionManager.prototype = {
         var totalSize = this.getTotalSize();
 
         if (totalSize === 0) {
-            return {}
+            return {};
         }
 
         var maxOffset = offset + containerSize;
@@ -13335,11 +13339,11 @@ BI.CellSizeAndPositionManager.prototype = {
         return {
             start: start,
             stop: stop
-        }
+        };
     },
 
     resetCell: function (index) {
-        this._lastMeasuredIndex = Math.min(this._lastMeasuredIndex, index - 1)
+        this._lastMeasuredIndex = Math.min(this._lastMeasuredIndex, index - 1);
     },
 
     _binarySearch: function (high, low, offset) {
@@ -13387,15 +13391,15 @@ BI.CellSizeAndPositionManager.prototype = {
 
         if (lastMeasuredCellSizeAndPosition.offset >= offset) {
             return this._binarySearch(lastMeasuredIndex, 0, offset);
-        } else {
-            return this._exponentialSearch(lastMeasuredIndex, offset);
         }
+        return this._exponentialSearch(lastMeasuredIndex, offset);
+        
     }
 };
 
 BI.ScalingCellSizeAndPositionManager = function (cellCount, cellSizeGetter, estimatedCellSize, maxScrollSize) {
     this._cellSizeAndPositionManager = new BI.CellSizeAndPositionManager(cellCount, cellSizeGetter, estimatedCellSize);
-    this._maxScrollSize = maxScrollSize || 10000000
+    this._maxScrollSize = maxScrollSize || 10000000;
 };
 
 BI.ScalingCellSizeAndPositionManager.prototype = {
@@ -13406,15 +13410,15 @@ BI.ScalingCellSizeAndPositionManager.prototype = {
     },
 
     getCellCount: function () {
-        return this._cellSizeAndPositionManager.getCellCount()
+        return this._cellSizeAndPositionManager.getCellCount();
     },
 
     getEstimatedCellSize: function () {
-        return this._cellSizeAndPositionManager.getEstimatedCellSize()
+        return this._cellSizeAndPositionManager.getEstimatedCellSize();
     },
 
     getLastMeasuredIndex: function () {
-        return this._cellSizeAndPositionManager.getLastMeasuredIndex()
+        return this._cellSizeAndPositionManager.getLastMeasuredIndex();
     },
 
     getOffsetAdjustment: function (containerSize, offset) {
@@ -13452,13 +13456,13 @@ BI.ScalingCellSizeAndPositionManager.prototype = {
     },
 
     resetCell: function (index) {
-        this._cellSizeAndPositionManager.resetCell(index)
+        this._cellSizeAndPositionManager.resetCell(index);
     },
 
     _getOffsetPercentage: function (containerSize, offset, totalSize) {
         return totalSize <= containerSize
             ? 0
-            : offset / (totalSize - containerSize)
+            : offset / (totalSize - containerSize);
     },
 
     _offsetToSafeOffset: function (containerSize, offset) {
@@ -13467,11 +13471,11 @@ BI.ScalingCellSizeAndPositionManager.prototype = {
 
         if (totalSize === safeTotalSize) {
             return offset;
-        } else {
-            var offsetPercentage = this._getOffsetPercentage(containerSize, offset, totalSize);
-
-            return Math.round(offsetPercentage * (safeTotalSize - containerSize));
         }
+        var offsetPercentage = this._getOffsetPercentage(containerSize, offset, totalSize);
+
+        return Math.round(offsetPercentage * (safeTotalSize - containerSize));
+        
     },
 
     _safeOffsetToOffset: function (containerSize, offset) {
@@ -13480,399 +13484,398 @@ BI.ScalingCellSizeAndPositionManager.prototype = {
 
         if (totalSize === safeTotalSize) {
             return offset;
-        } else {
-            var offsetPercentage = this._getOffsetPercentage(containerSize, offset, safeTotalSize);
-
-            return Math.round(offsetPercentage * (totalSize - containerSize));
         }
+        var offsetPercentage = this._getOffsetPercentage(containerSize, offset, safeTotalSize);
+
+        return Math.round(offsetPercentage * (totalSize - containerSize));
+        
     }
 };/**
  * 汉字拼音索引
  */
-;
+
 !(function () {
     var _ChineseFirstPY = "YDYQSXMWZSSXJBYMGCCZQPSSQBYCDSCDQLDYLYBSSJGYZZJJFKCCLZDHWDWZJLJPFYYNWJJTMYHZWZHFLZPPQHGSCYYYNJQYXXGJHHSDSJNKKTMOMLCRXYPSNQSECCQZGGLLYJLMYZZSECYKYYHQWJSSGGYXYZYJWWKDJHYCHMYXJTLXJYQBYXZLDWRDJRWYSRLDZJPCBZJJBRCFTLECZSTZFXXZHTRQHYBDLYCZSSYMMRFMYQZPWWJJYFCRWFDFZQPYDDWYXKYJAWJFFXYPSFTZYHHYZYSWCJYXSCLCXXWZZXNBGNNXBXLZSZSBSGPYSYZDHMDZBQBZCWDZZYYTZHBTSYYBZGNTNXQYWQSKBPHHLXGYBFMJEBJHHGQTJCYSXSTKZHLYCKGLYSMZXYALMELDCCXGZYRJXSDLTYZCQKCNNJWHJTZZCQLJSTSTBNXBTYXCEQXGKWJYFLZQLYHYXSPSFXLMPBYSXXXYDJCZYLLLSJXFHJXPJBTFFYABYXBHZZBJYZLWLCZGGBTSSMDTJZXPTHYQTGLJSCQFZKJZJQNLZWLSLHDZBWJNCJZYZSQQYCQYRZCJJWYBRTWPYFTWEXCSKDZCTBZHYZZYYJXZCFFZZMJYXXSDZZOTTBZLQWFCKSZSXFYRLNYJMBDTHJXSQQCCSBXYYTSYFBXDZTGBCNSLCYZZPSAZYZZSCJCSHZQYDXLBPJLLMQXTYDZXSQJTZPXLCGLQTZWJBHCTSYJSFXYEJJTLBGXSXJMYJQQPFZASYJNTYDJXKJCDJSZCBARTDCLYJQMWNQNCLLLKBYBZZSYHQQLTWLCCXTXLLZNTYLNEWYZYXCZXXGRKRMTCNDNJTSYYSSDQDGHSDBJGHRWRQLYBGLXHLGTGXBQJDZPYJSJYJCTMRNYMGRZJCZGJMZMGXMPRYXKJNYMSGMZJYMKMFXMLDTGFBHCJHKYLPFMDXLQJJSMTQGZSJLQDLDGJYCALCMZCSDJLLNXDJFFFFJCZFMZFFPFKHKGDPSXKTACJDHHZDDCRRCFQYJKQCCWJDXHWJLYLLZGCFCQDSMLZPBJJPLSBCJGGDCKKDEZSQCCKJGCGKDJTJDLZYCXKLQSCGJCLTFPCQCZGWPJDQYZJJBYJHSJDZWGFSJGZKQCCZLLPSPKJGQJHZZLJPLGJGJJTHJJYJZCZMLZLYQBGJWMLJKXZDZNJQSYZMLJLLJKYWXMKJLHSKJGBMCLYYMKXJQLBMLLKMDXXKWYXYSLMLPSJQQJQXYXFJTJDXMXXLLCXQBSYJBGWYMBGGBCYXPJYGPEPFGDJGBHBNSQJYZJKJKHXQFGQZKFHYGKHDKLLSDJQXPQYKYBNQSXQNSZSWHBSXWHXWBZZXDMNSJBSBKBBZKLYLXGWXDRWYQZMYWSJQLCJXXJXKJEQXSCYETLZHLYYYSDZPAQYZCMTLSHTZCFYZYXYLJSDCJQAGYSLCQLYYYSHMRQQKLDXZSCSSSYDYCJYSFSJBFRSSZQSBXXPXJYSDRCKGJLGDKZJZBDKTCSYQPYHSTCLDJDHMXMCGXYZHJDDTMHLTXZXYLYMOHYJCLTYFBQQXPFBDFHHTKSQHZYYWCNXXCRWHOWGYJLEGWDQCWGFJYCSNTMYTOLBYGWQWESJPWNMLRYDZSZTXYQPZGCWXHNGPYXSHMYQJXZTDPPBFYHZHTJYFDZWKGKZBLDNTSXHQEEGZZYLZMMZYJZGXZXKHKSTXNXXWYLYAPSTHXDWHZYMPXAGKYDXBHNHXKDPJNMYHYLPMGOCSLNZHKXXLPZZLBMLSFBHHGYGYYGGBHSCYAQTYWLXTZQCEZYDQDQMMHTKLLSZHLSJZWFYHQSWSCWLQAZYNYTLSXTHAZNKZZSZZLAXXZWWCTGQQTDDYZTCCHYQZFLXPSLZYGPZSZNGLNDQTBDLXGTCTAJDKYWNSYZLJHHZZCWNYYZYWMHYCHHYXHJKZWSXHZYXLYSKQYSPSLYZWMYPPKBYGLKZHTYXAXQSYSHXASMCHKDSCRSWJPWXSGZJLWWSCHSJHSQNHCSEGNDAQTBAALZZMSSTDQJCJKTSCJAXPLGGXHHGXXZCXPDMMHLDGTYBYSJMXHMRCPXXJZCKZXSHMLQXXTTHXWZFKHCCZDYTCJYXQHLXDHYPJQXYLSYYDZOZJNYXQEZYSQYAYXWYPDGXDDXSPPYZNDLTWRHXYDXZZJHTCXMCZLHPYYYYMHZLLHNXMYLLLMDCPPXHMXDKYCYRDLTXJCHHZZXZLCCLYLNZSHZJZZLNNRLWHYQSNJHXYNTTTKYJPYCHHYEGKCTTWLGQRLGGTGTYGYHPYHYLQYQGCWYQKPYYYTTTTLHYHLLTYTTSPLKYZXGZWGPYDSSZZDQXSKCQNMJJZZBXYQMJRTFFBTKHZKBXLJJKDXJTLBWFZPPTKQTZTGPDGNTPJYFALQMKGXBDCLZFHZCLLLLADPMXDJHLCCLGYHDZFGYDDGCYYFGYDXKSSEBDHYKDKDKHNAXXYBPBYYHXZQGAFFQYJXDMLJCSQZLLPCHBSXGJYNDYBYQSPZWJLZKSDDTACTBXZDYZYPJZQSJNKKTKNJDJGYYPGTLFYQKASDNTCYHBLWDZHBBYDWJRYGKZYHEYYFJMSDTYFZJJHGCXPLXHLDWXXJKYTCYKSSSMTWCTTQZLPBSZDZWZXGZAGYKTYWXLHLSPBCLLOQMMZSSLCMBJCSZZKYDCZJGQQDSMCYTZQQLWZQZXSSFPTTFQMDDZDSHDTDWFHTDYZJYQJQKYPBDJYYXTLJHDRQXXXHAYDHRJLKLYTWHLLRLLRCXYLBWSRSZZSYMKZZHHKYHXKSMDSYDYCJPBZBSQLFCXXXNXKXWYWSDZYQOGGQMMYHCDZTTFJYYBGSTTTYBYKJDHKYXBELHTYPJQNFXFDYKZHQKZBYJTZBXHFDXKDASWTAWAJLDYJSFHBLDNNTNQJTJNCHXFJSRFWHZFMDRYJYJWZPDJKZYJYMPCYZNYNXFBYTFYFWYGDBNZZZDNYTXZEMMQBSQEHXFZMBMFLZZSRXYMJGSXWZJSPRYDJSJGXHJJGLJJYNZZJXHGXKYMLPYYYCXYTWQZSWHWLYRJLPXSLSXMFSWWKLCTNXNYNPSJSZHDZEPTXMYYWXYYSYWLXJQZQXZDCLEEELMCPJPCLWBXSQHFWWTFFJTNQJHJQDXHWLBYZNFJLALKYYJLDXHHYCSTYYWNRJYXYWTRMDRQHWQCMFJDYZMHMYYXJWMYZQZXTLMRSPWWCHAQBXYGZYPXYYRRCLMPYMGKSJSZYSRMYJSNXTPLNBAPPYPYLXYYZKYNLDZYJZCZNNLMZHHARQMPGWQTZMXXMLLHGDZXYHXKYXYCJMFFYYHJFSBSSQLXXNDYCANNMTCJCYPRRNYTYQNYYMBMSXNDLYLYSLJRLXYSXQMLLYZLZJJJKYZZCSFBZXXMSTBJGNXYZHLXNMCWSCYZYFZLXBRNNNYLBNRTGZQYSATSWRYHYJZMZDHZGZDWYBSSCSKXSYHYTXXGCQGXZZSHYXJSCRHMKKBXCZJYJYMKQHZJFNBHMQHYSNJNZYBKNQMCLGQHWLZNZSWXKHLJHYYBQLBFCDSXDLDSPFZPSKJYZWZXZDDXJSMMEGJSCSSMGCLXXKYYYLNYPWWWGYDKZJGGGZGGSYCKNJWNJPCXBJJTQTJWDSSPJXZXNZXUMELPXFSXTLLXCLJXJJLJZXCTPSWXLYDHLYQRWHSYCSQYYBYAYWJJJQFWQCQQCJQGXALDBZZYJGKGXPLTZYFXJLTPADKYQHPMATLCPDCKBMTXYBHKLENXDLEEGQDYMSAWHZMLJTWYGXLYQZLJEEYYBQQFFNLYXRDSCTGJGXYYNKLLYQKCCTLHJLQMKKZGCYYGLLLJDZGYDHZWXPYSJBZKDZGYZZHYWYFQYTYZSZYEZZLYMHJJHTSMQWYZLKYYWZCSRKQYTLTDXWCTYJKLWSQZWBDCQYNCJSRSZJLKCDCDTLZZZACQQZZDDXYPLXZBQJYLZLLLQDDZQJYJYJZYXNYYYNYJXKXDAZWYRDLJYYYRJLXLLDYXJCYWYWNQCCLDDNYYYNYCKCZHXXCCLGZQJGKWPPCQQJYSBZZXYJSQPXJPZBSBDSFNSFPZXHDWZTDWPPTFLZZBZDMYYPQJRSDZSQZSQXBDGCPZSWDWCSQZGMDHZXMWWFYBPDGPHTMJTHZSMMBGZMBZJCFZWFZBBZMQCFMBDMCJXLGPNJBBXGYHYYJGPTZGZMQBQTCGYXJXLWZKYDPDYMGCFTPFXYZTZXDZXTGKMTYBBCLBJASKYTSSQYYMSZXFJEWLXLLSZBQJJJAKLYLXLYCCTSXMCWFKKKBSXLLLLJYXTYLTJYYTDPJHNHNNKBYQNFQYYZBYYESSESSGDYHFHWTCJBSDZZTFDMXHCNJZYMQWSRYJDZJQPDQBBSTJGGFBKJBXTGQHNGWJXJGDLLTHZHHYYYYYYSXWTYYYCCBDBPYPZYCCZYJPZYWCBDLFWZCWJDXXHYHLHWZZXJTCZLCDPXUJCZZZLYXJJTXPHFXWPYWXZPTDZZBDZCYHJHMLXBQXSBYLRDTGJRRCTTTHYTCZWMXFYTWWZCWJWXJYWCSKYBZSCCTZQNHXNWXXKHKFHTSWOCCJYBCMPZZYKBNNZPBZHHZDLSYDDYTYFJPXYNGFXBYQXCBHXCPSXTYZDMKYSNXSXLHKMZXLYHDHKWHXXSSKQYHHCJYXGLHZXCSNHEKDTGZXQYPKDHEXTYKCNYMYYYPKQYYYKXZLTHJQTBYQHXBMYHSQCKWWYLLHCYYLNNEQXQWMCFBDCCMLJGGXDQKTLXKGNQCDGZJWYJJLYHHQTTTNWCHMXCXWHWSZJYDJCCDBQCDGDNYXZTHCQRXCBHZTQCBXWGQWYYBXHMBYMYQTYEXMQKYAQYRGYZSLFYKKQHYSSQYSHJGJCNXKZYCXSBXYXHYYLSTYCXQTHYSMGSCPMMGCCCCCMTZTASMGQZJHKLOSQYLSWTMXSYQKDZLJQQYPLSYCZTCQQPBBQJZCLPKHQZYYXXDTDDTSJCXFFLLCHQXMJLWCJCXTSPYCXNDTJSHJWXDQQJSKXYAMYLSJHMLALYKXCYYDMNMDQMXMCZNNCYBZKKYFLMCHCMLHXRCJJHSYLNMTJZGZGYWJXSRXCWJGJQHQZDQJDCJJZKJKGDZQGJJYJYLXZXXCDQHHHEYTMHLFSBDJSYYSHFYSTCZQLPBDRFRZTZYKYWHSZYQKWDQZRKMSYNBCRXQBJYFAZPZZEDZCJYWBCJWHYJBQSZYWRYSZPTDKZPFPBNZTKLQYHBBZPNPPTYZZYBQNYDCPJMMCYCQMCYFZZDCMNLFPBPLNGQJTBTTNJZPZBBZNJKLJQYLNBZQHKSJZNGGQSZZKYXSHPZSNBCGZKDDZQANZHJKDRTLZLSWJLJZLYWTJNDJZJHXYAYNCBGTZCSSQMNJPJYTYSWXZFKWJQTKHTZPLBHSNJZSYZBWZZZZLSYLSBJHDWWQPSLMMFBJDWAQYZTCJTBNNWZXQXCDSLQGDSDPDZHJTQQPSWLYYJZLGYXYZLCTCBJTKTYCZJTQKBSJLGMGZDMCSGPYNJZYQYYKNXRPWSZXMTNCSZZYXYBYHYZAXYWQCJTLLCKJJTJHGDXDXYQYZZBYWDLWQCGLZGJGQRQZCZSSBCRPCSKYDZNXJSQGXSSJMYDNSTZTPBDLTKZWXQWQTZEXNQCZGWEZKSSBYBRTSSSLCCGBPSZQSZLCCGLLLZXHZQTHCZMQGYZQZNMCOCSZJMMZSQPJYGQLJYJPPLDXRGZYXCCSXHSHGTZNLZWZKJCXTCFCJXLBMQBCZZWPQDNHXLJCTHYZLGYLNLSZZPCXDSCQQHJQKSXZPBAJYEMSMJTZDXLCJYRYYNWJBNGZZTMJXLTBSLYRZPYLSSCNXPHLLHYLLQQZQLXYMRSYCXZLMMCZLTZSDWTJJLLNZGGQXPFSKYGYGHBFZPDKMWGHCXMSGDXJMCJZDYCABXJDLNBCDQYGSKYDQTXDJJYXMSZQAZDZFSLQXYJSJZYLBTXXWXQQZBJZUFBBLYLWDSLJHXJYZJWTDJCZFQZQZZDZSXZZQLZCDZFJHYSPYMPQZMLPPLFFXJJNZZYLSJEYQZFPFZKSYWJJJHRDJZZXTXXGLGHYDXCSKYSWMMZCWYBAZBJKSHFHJCXMHFQHYXXYZFTSJYZFXYXPZLCHMZMBXHZZSXYFYMNCWDABAZLXKTCSHHXKXJJZJSTHYGXSXYYHHHJWXKZXSSBZZWHHHCWTZZZPJXSNXQQJGZYZYWLLCWXZFXXYXYHXMKYYSWSQMNLNAYCYSPMJKHWCQHYLAJJMZXHMMCNZHBHXCLXTJPLTXYJHDYYLTTXFSZHYXXSJBJYAYRSMXYPLCKDUYHLXRLNLLSTYZYYQYGYHHSCCSMZCTZQXKYQFPYYRPFFLKQUNTSZLLZMWWTCQQYZWTLLMLMPWMBZSSTZRBPDDTLQJJBXZCSRZQQYGWCSXFWZLXCCRSZDZMCYGGDZQSGTJSWLJMYMMZYHFBJDGYXCCPSHXNZCSBSJYJGJMPPWAFFYFNXHYZXZYLREMZGZCYZSSZDLLJCSQFNXZKPTXZGXJJGFMYYYSNBTYLBNLHPFZDCYFBMGQRRSSSZXYSGTZRNYDZZCDGPJAFJFZKNZBLCZSZPSGCYCJSZLMLRSZBZZLDLSLLYSXSQZQLYXZLSKKBRXBRBZCYCXZZZEEYFGKLZLYYHGZSGZLFJHGTGWKRAAJYZKZQTSSHJJXDCYZUYJLZYRZDQQHGJZXSSZBYKJPBFRTJXLLFQWJHYLQTYMBLPZDXTZYGBDHZZRBGXHWNJTJXLKSCFSMWLSDQYSJTXKZSCFWJLBXFTZLLJZLLQBLSQMQQCGCZFPBPHZCZJLPYYGGDTGWDCFCZQYYYQYSSCLXZSKLZZZGFFCQNWGLHQYZJJCZLQZZYJPJZZBPDCCMHJGXDQDGDLZQMFGPSYTSDYFWWDJZJYSXYYCZCYHZWPBYKXRYLYBHKJKSFXTZJMMCKHLLTNYYMSYXYZPYJQYCSYCWMTJJKQYRHLLQXPSGTLYYCLJSCPXJYZFNMLRGJJTYZBXYZMSJYJHHFZQMSYXRSZCWTLRTQZSSTKXGQKGSPTGCZNJSJCQCXHMXGGZTQYDJKZDLBZSXJLHYQGGGTHQSZPYHJHHGYYGKGGCWJZZYLCZLXQSFTGZSLLLMLJSKCTBLLZZSZMMNYTPZSXQHJCJYQXYZXZQZCPSHKZZYSXCDFGMWQRLLQXRFZTLYSTCTMJCXJJXHJNXTNRZTZFQYHQGLLGCXSZSJDJLJCYDSJTLNYXHSZXCGJZYQPYLFHDJSBPCCZHJJJQZJQDYBSSLLCMYTTMQTBHJQNNYGKYRQYQMZGCJKPDCGMYZHQLLSLLCLMHOLZGDYYFZSLJCQZLYLZQJESHNYLLJXGJXLYSYYYXNBZLJSSZCQQCJYLLZLTJYLLZLLBNYLGQCHXYYXOXCXQKYJXXXYKLXSXXYQXCYKQXQCSGYXXYQXYGYTQOHXHXPYXXXULCYEYCHZZCBWQBBWJQZSCSZSSLZYLKDESJZWMYMCYTSDSXXSCJPQQSQYLYYZYCMDJDZYWCBTJSYDJKCYDDJLBDJJSODZYSYXQQYXDHHGQQYQHDYXWGMMMAJDYBBBPPBCMUUPLJZSMTXERXJMHQNUTPJDCBSSMSSSTKJTSSMMTRCPLZSZMLQDSDMJMQPNQDXCFYNBFSDQXYXHYAYKQYDDLQYYYSSZBYDSLNTFQTZQPZMCHDHCZCWFDXTMYQSPHQYYXSRGJCWTJTZZQMGWJJTJHTQJBBHWZPXXHYQFXXQYWYYHYSCDYDHHQMNMTMWCPBSZPPZZGLMZFOLLCFWHMMSJZTTDHZZYFFYTZZGZYSKYJXQYJZQBHMBZZLYGHGFMSHPZFZSNCLPBQSNJXZSLXXFPMTYJYGBXLLDLXPZJYZJYHHZCYWHJYLSJEXFSZZYWXKZJLUYDTMLYMQJPWXYHXSKTQJEZRPXXZHHMHWQPWQLYJJQJJZSZCPHJLCHHNXJLQWZJHBMZYXBDHHYPZLHLHLGFWLCHYYTLHJXCJMSCPXSTKPNHQXSRTYXXTESYJCTLSSLSTDLLLWWYHDHRJZSFGXTSYCZYNYHTDHWJSLHTZDQDJZXXQHGYLTZPHCSQFCLNJTCLZPFSTPDYNYLGMJLLYCQHYSSHCHYLHQYQTMZYPBYWRFQYKQSYSLZDQJMPXYYSSRHZJNYWTQDFZBWWTWWRXCWHGYHXMKMYYYQMSMZHNGCEPMLQQMTCWCTMMPXJPJJHFXYYZSXZHTYBMSTSYJTTQQQYYLHYNPYQZLCYZHZWSMYLKFJXLWGXYPJYTYSYXYMZCKTTWLKSMZSYLMPWLZWXWQZSSAQSYXYRHSSNTSRAPXCPWCMGDXHXZDZYFJHGZTTSBJHGYZSZYSMYCLLLXBTYXHBBZJKSSDMALXHYCFYGMQYPJYCQXJLLLJGSLZGQLYCJCCZOTYXMTMTTLLWTGPXYMZMKLPSZZZXHKQYSXCTYJZYHXSHYXZKXLZWPSQPYHJWPJPWXQQYLXSDHMRSLZZYZWTTCYXYSZZSHBSCCSTPLWSSCJCHNLCGCHSSPHYLHFHHXJSXYLLNYLSZDHZXYLSXLWZYKCLDYAXZCMDDYSPJTQJZLNWQPSSSWCTSTSZLBLNXSMNYYMJQBQHRZWTYYDCHQLXKPZWBGQYBKFCMZWPZLLYYLSZYDWHXPSBCMLJBSCGBHXLQHYRLJXYSWXWXZSLDFHLSLYNJLZYFLYJYCDRJLFSYZFSLLCQYQFGJYHYXZLYLMSTDJCYHBZLLNWLXXYGYYHSMGDHXXHHLZZJZXCZZZCYQZFNGWPYLCPKPYYPMCLQKDGXZGGWQBDXZZKZFBXXLZXJTPJPTTBYTSZZDWSLCHZHSLTYXHQLHYXXXYYZYSWTXZKHLXZXZPYHGCHKCFSYHUTJRLXFJXPTZTWHPLYXFCRHXSHXKYXXYHZQDXQWULHYHMJTBFLKHTXCWHJFWJCFPQRYQXCYYYQYGRPYWSGSUNGWCHKZDXYFLXXHJJBYZWTSXXNCYJJYMSWZJQRMHXZWFQSYLZJZGBHYNSLBGTTCSYBYXXWXYHXYYXNSQYXMQYWRGYQLXBBZLJSYLPSYTJZYHYZAWLRORJMKSCZJXXXYXCHDYXRYXXJDTSQFXLYLTSFFYXLMTYJMJUYYYXLTZCSXQZQHZXLYYXZHDNBRXXXJCTYHLBRLMBRLLAXKYLLLJLYXXLYCRYLCJTGJCMTLZLLCYZZPZPCYAWHJJFYBDYYZSMPCKZDQYQPBPCJPDCYZMDPBCYYDYCNNPLMTMLRMFMMGWYZBSJGYGSMZQQQZTXMKQWGXLLPJGZBQCDJJJFPKJKCXBLJMSWMDTQJXLDLPPBXCWRCQFBFQJCZAHZGMYKPHYYHZYKNDKZMBPJYXPXYHLFPNYYGXJDBKXNXHJMZJXSTRSTLDXSKZYSYBZXJLXYSLBZYSLHXJPFXPQNBYLLJQKYGZMCYZZYMCCSLCLHZFWFWYXZMWSXTYNXJHPYYMCYSPMHYSMYDYSHQYZCHMJJMZCAAGCFJBBHPLYZYLXXSDJGXDHKXXTXXNBHRMLYJSLTXMRHNLXQJXYZLLYSWQGDLBJHDCGJYQYCMHWFMJYBMBYJYJWYMDPWHXQLDYGPDFXXBCGJSPCKRSSYZJMSLBZZJFLJJJLGXZGYXYXLSZQYXBEXYXHGCXBPLDYHWETTWWCJMBTXCHXYQXLLXFLYXLLJLSSFWDPZSMYJCLMWYTCZPCHQEKCQBWLCQYDPLQPPQZQFJQDJHYMMCXTXDRMJWRHXCJZYLQXDYYNHYYHRSLSRSYWWZJYMTLTLLGTQCJZYABTCKZCJYCCQLJZQXALMZYHYWLWDXZXQDLLQSHGPJFJLJHJABCQZDJGTKHSSTCYJLPSWZLXZXRWGLDLZRLZXTGSLLLLZLYXXWGDZYGBDPHZPBRLWSXQBPFDWOFMWHLYPCBJCCLDMBZPBZZLCYQXLDOMZBLZWPDWYYGDSTTHCSQSCCRSSSYSLFYBFNTYJSZDFNDPDHDZZMBBLSLCMYFFGTJJQWFTMTPJWFNLBZCMMJTGBDZLQLPYFHYYMJYLSDCHDZJWJCCTLJCLDTLJJCPDDSQDSSZYBNDBJLGGJZXSXNLYCYBJXQYCBYLZCFZPPGKCXZDZFZTJJFJSJXZBNZYJQTTYJYHTYCZHYMDJXTTMPXSPLZCDWSLSHXYPZGTFMLCJTYCBPMGDKWYCYZCDSZZYHFLYCTYGWHKJYYLSJCXGYWJCBLLCSNDDBTZBSCLYZCZZSSQDLLMQYYHFSLQLLXFTYHABXGWNYWYYPLLSDLDLLBJCYXJZMLHLJDXYYQYTDLLLBUGBFDFBBQJZZMDPJHGCLGMJJPGAEHHBWCQXAXHHHZCHXYPHJAXHLPHJPGPZJQCQZGJJZZUZDMQYYBZZPHYHYBWHAZYJHYKFGDPFQSDLZMLJXKXGALXZDAGLMDGXMWZQYXXDXXPFDMMSSYMPFMDMMKXKSYZYSHDZKXSYSMMZZZMSYDNZZCZXFPLSTMZDNMXCKJMZTYYMZMZZMSXHHDCZJEMXXKLJSTLWLSQLYJZLLZJSSDPPMHNLZJCZYHMXXHGZCJMDHXTKGRMXFWMCGMWKDTKSXQMMMFZZYDKMSCLCMPCGMHSPXQPZDSSLCXKYXTWLWJYAHZJGZQMCSNXYYMMPMLKJXMHLMLQMXCTKZMJQYSZJSYSZHSYJZJCDAJZYBSDQJZGWZQQXFKDMSDJLFWEHKZQKJPEYPZYSZCDWYJFFMZZYLTTDZZEFMZLBNPPLPLPEPSZALLTYLKCKQZKGENQLWAGYXYDPXLHSXQQWQCQXQCLHYXXMLYCCWLYMQYSKGCHLCJNSZKPYZKCQZQLJPDMDZHLASXLBYDWQLWDNBQCRYDDZTJYBKBWSZDXDTNPJDTCTQDFXQQMGNXECLTTBKPWSLCTYQLPWYZZKLPYGZCQQPLLKCCYLPQMZCZQCLJSLQZDJXLDDHPZQDLJJXZQDXYZQKZLJCYQDYJPPYPQYKJYRMPCBYMCXKLLZLLFQPYLLLMBSGLCYSSLRSYSQTMXYXZQZFDZUYSYZTFFMZZSMZQHZSSCCMLYXWTPZGXZJGZGSJSGKDDHTQGGZLLBJDZLCBCHYXYZHZFYWXYZYMSDBZZYJGTSMTFXQYXQSTDGSLNXDLRYZZLRYYLXQHTXSRTZNGZXBNQQZFMYKMZJBZYMKBPNLYZPBLMCNQYZZZSJZHJCTZKHYZZJRDYZHNPXGLFZTLKGJTCTSSYLLGZRZBBQZZKLPKLCZYSSUYXBJFPNJZZXCDWXZYJXZZDJJKGGRSRJKMSMZJLSJYWQSKYHQJSXPJZZZLSNSHRNYPZTWCHKLPSRZLZXYJQXQKYSJYCZTLQZYBBYBWZPQDWWYZCYTJCJXCKCWDKKZXSGKDZXWWYYJQYYTCYTDLLXWKCZKKLCCLZCQQDZLQLCSFQCHQHSFSMQZZLNBJJZBSJHTSZDYSJQJPDLZCDCWJKJZZLPYCGMZWDJJBSJQZSYZYHHXJPBJYDSSXDZNCGLQMBTSFSBPDZDLZNFGFJGFSMPXJQLMBLGQCYYXBQKDJJQYRFKZTJDHCZKLBSDZCFJTPLLJGXHYXZCSSZZXSTJYGKGCKGYOQXJPLZPBPGTGYJZGHZQZZLBJLSQFZGKQQJZGYCZBZQTLDXRJXBSXXPZXHYZYCLWDXJJHXMFDZPFZHQHQMQGKSLYHTYCGFRZGNQXCLPDLBZCSCZQLLJBLHBZCYPZZPPDYMZZSGYHCKCPZJGSLJLNSCDSLDLXBMSTLDDFJMKDJDHZLZXLSZQPQPGJLLYBDSZGQLBZLSLKYYHZTTNTJYQTZZPSZQZTLLJTYYLLQLLQYZQLBDZLSLYYZYMDFSZSNHLXZNCZQZPBWSKRFBSYZMTHBLGJPMCZZLSTLXSHTCSYZLZBLFEQHLXFLCJLYLJQCBZLZJHHSSTBRMHXZHJZCLXFNBGXGTQJCZTMSFZKJMSSNXLJKBHSJXNTNLZDNTLMSJXGZJYJCZXYJYJWRWWQNZTNFJSZPZSHZJFYRDJSFSZJZBJFZQZZHZLXFYSBZQLZSGYFTZDCSZXZJBQMSZKJRHYJZCKMJKHCHGTXKXQGLXPXFXTRTYLXJXHDTSJXHJZJXZWZLCQSBTXWXGXTXXHXFTSDKFJHZYJFJXRZSDLLLTQSQQZQWZXSYQTWGWBZCGZLLYZBCLMQQTZHZXZXLJFRMYZFLXYSQXXJKXRMQDZDMMYYBSQBHGZMWFWXGMXLZPYYTGZYCCDXYZXYWGSYJYZNBHPZJSQSYXSXRTFYZGRHZTXSZZTHCBFCLSYXZLZQMZLMPLMXZJXSFLBYZMYQHXJSXRXSQZZZSSLYFRCZJRCRXHHZXQYDYHXSJJHZCXZBTYNSYSXJBQLPXZQPYMLXZKYXLXCJLCYSXXZZLXDLLLJJYHZXGYJWKJRWYHCPSGNRZLFZWFZZNSXGXFLZSXZZZBFCSYJDBRJKRDHHGXJLJJTGXJXXSTJTJXLYXQFCSGSWMSBCTLQZZWLZZKXJMLTMJYHSDDBXGZHDLBMYJFRZFSGCLYJBPMLYSMSXLSZJQQHJZFXGFQFQBPXZGYYQXGZTCQWYLTLGWSGWHRLFSFGZJMGMGBGTJFSYZZGZYZAFLSSPMLPFLCWBJZCLJJMZLPJJLYMQDMYYYFBGYGYZMLYZDXQYXRQQQHSYYYQXYLJTYXFSFSLLGNQCYHYCWFHCCCFXPYLYPLLZYXXXXXKQHHXSHJZCFZSCZJXCPZWHHHHHAPYLQALPQAFYHXDYLUKMZQGGGDDESRNNZLTZGCHYPPYSQJJHCLLJTOLNJPZLJLHYMHEYDYDSQYCDDHGZUNDZCLZYZLLZNTNYZGSLHSLPJJBDGWXPCDUTJCKLKCLWKLLCASSTKZZDNQNTTLYYZSSYSSZZRYLJQKCQDHHCRXRZYDGRGCWCGZQFFFPPJFZYNAKRGYWYQPQXXFKJTSZZXSWZDDFBBXTBGTZKZNPZZPZXZPJSZBMQHKCYXYLDKLJNYPKYGHGDZJXXEAHPNZKZTZCMXCXMMJXNKSZQNMNLWBWWXJKYHCPSTMCSQTZJYXTPCTPDTNNPGLLLZSJLSPBLPLQHDTNJNLYYRSZFFJFQWDPHZDWMRZCCLODAXNSSNYZRESTYJWJYJDBCFXNMWTTBYLWSTSZGYBLJPXGLBOCLHPCBJLTMXZLJYLZXCLTPNCLCKXTPZJSWCYXSFYSZDKNTLBYJCYJLLSTGQCBXRYZXBXKLYLHZLQZLNZCXWJZLJZJNCJHXMNZZGJZZXTZJXYCYYCXXJYYXJJXSSSJSTSSTTPPGQTCSXWZDCSYFPTFBFHFBBLZJCLZZDBXGCXLQPXKFZFLSYLTUWBMQJHSZBMDDBCYSCCLDXYCDDQLYJJWMQLLCSGLJJSYFPYYCCYLTJANTJJPWYCMMGQYYSXDXQMZHSZXPFTWWZQSWQRFKJLZJQQYFBRXJHHFWJJZYQAZMYFRHCYYBYQWLPEXCCZSTYRLTTDMQLYKMBBGMYYJPRKZNPBSXYXBHYZDJDNGHPMFSGMWFZMFQMMBCMZZCJJLCNUXYQLMLRYGQZCYXZLWJGCJCGGMCJNFYZZJHYCPRRCMTZQZXHFQGTJXCCJEAQCRJYHPLQLSZDJRBCQHQDYRHYLYXJSYMHZYDWLDFRYHBPYDTSSCNWBXGLPZMLZZTQSSCPJMXXYCSJYTYCGHYCJWYRXXLFEMWJNMKLLSWTXHYYYNCMMCWJDQDJZGLLJWJRKHPZGGFLCCSCZMCBLTBHBQJXQDSPDJZZGHGLFQYWBZYZJLTSTDHQHCTCBCHFLQMPWDSHYYTQWCNZZJTLBYMBPDYYYXSQKXWYYFLXXNCWCXYPMAELYKKJMZZZBRXYYQJFLJPFHHHYTZZXSGQQMHSPGDZQWBWPJHZJDYSCQWZKTXXSQLZYYMYSDZGRXCKKUJLWPYSYSCSYZLRMLQSYLJXBCXTLWDQZPCYCYKPPPNSXFYZJJRCEMHSZMSXLXGLRWGCSTLRSXBZGBZGZTCPLUJLSLYLYMTXMTZPALZXPXJTJWTCYYZLBLXBZLQMYLXPGHDSLSSDMXMBDZZSXWHAMLCZCPJMCNHJYSNSYGCHSKQMZZQDLLKABLWJXSFMOCDXJRRLYQZKJMYBYQLYHETFJZFRFKSRYXFJTWDSXXSYSQJYSLYXWJHSNLXYYXHBHAWHHJZXWMYLJCSSLKYDZTXBZSYFDXGXZJKHSXXYBSSXDPYNZWRPTQZCZENYGCXQFJYKJBZMLJCMQQXUOXSLYXXLYLLJDZBTYMHPFSTTQQWLHOKYBLZZALZXQLHZWRRQHLSTMYPYXJJXMQSJFNBXYXYJXXYQYLTHYLQYFMLKLJTMLLHSZWKZHLJMLHLJKLJSTLQXYLMBHHLNLZXQJHXCFXXLHYHJJGBYZZKBXSCQDJQDSUJZYYHZHHMGSXCSYMXFEBCQWWRBPYYJQTYZCYQYQQZYHMWFFHGZFRJFCDPXNTQYZPDYKHJLFRZXPPXZDBBGZQSTLGDGYLCQMLCHHMFYWLZYXKJLYPQHSYWMQQGQZMLZJNSQXJQSYJYCBEHSXFSZPXZWFLLBCYYJDYTDTHWZSFJMQQYJLMQXXLLDTTKHHYBFPWTYYSQQWNQWLGWDEBZWCMYGCULKJXTMXMYJSXHYBRWFYMWFRXYQMXYSZTZZTFYKMLDHQDXWYYNLCRYJBLPSXCXYWLSPRRJWXHQYPHTYDNXHHMMYWYTZCSQMTSSCCDALWZTCPQPYJLLQZYJSWXMZZMMYLMXCLMXCZMXMZSQTZPPQQBLPGXQZHFLJJHYTJSRXWZXSCCDLXTYJDCQJXSLQYCLZXLZZXMXQRJMHRHZJBHMFLJLMLCLQNLDXZLLLPYPSYJYSXCQQDCMQJZZXHNPNXZMEKMXHYKYQLXSXTXJYYHWDCWDZHQYYBGYBCYSCFGPSJNZDYZZJZXRZRQJJYMCANYRJTLDPPYZBSTJKXXZYPFDWFGZZRPYMTNGXZQBYXNBUFNQKRJQZMJEGRZGYCLKXZDSKKNSXKCLJSPJYYZLQQJYBZSSQLLLKJXTBKTYLCCDDBLSPPFYLGYDTZJYQGGKQTTFZXBDKTYYHYBBFYTYYBCLPDYTGDHRYRNJSPTCSNYJQHKLLLZSLYDXXWBCJQSPXBPJZJCJDZFFXXBRMLAZHCSNDLBJDSZBLPRZTSWSBXBCLLXXLZDJZSJPYLYXXYFTFFFBHJJXGBYXJPMMMPSSJZJMTLYZJXSWXTYLEDQPJMYGQZJGDJLQJWJQLLSJGJGYGMSCLJJXDTYGJQJQJCJZCJGDZZSXQGSJGGCXHQXSNQLZZBXHSGZXCXYLJXYXYYDFQQJHJFXDHCTXJYRXYSQTJXYEFYYSSYYJXNCYZXFXMSYSZXYYSCHSHXZZZGZZZGFJDLTYLNPZGYJYZYYQZPBXQBDZTZCZYXXYHHSQXSHDHGQHJHGYWSZTMZMLHYXGEBTYLZKQWYTJZRCLEKYSTDBCYKQQSAYXCJXWWGSBHJYZYDHCSJKQCXSWXFLTYNYZPZCCZJQTZWJQDZZZQZLJJXLSBHPYXXPSXSHHEZTXFPTLQYZZXHYTXNCFZYYHXGNXMYWXTZSJPTHHGYMXMXQZXTSBCZYJYXXTYYZYPCQLMMSZMJZZLLZXGXZAAJZYXJMZXWDXZSXZDZXLEYJJZQBHZWZZZQTZPSXZTDSXJJJZNYAZPHXYYSRNQDTHZHYYKYJHDZXZLSWCLYBZYECWCYCRYLCXNHZYDZYDYJDFRJJHTRSQTXYXJRJHOJYNXELXSFSFJZGHPZSXZSZDZCQZBYYKLSGSJHCZSHDGQGXYZGXCHXZJWYQWGYHKSSEQZZNDZFKWYSSTCLZSTSYMCDHJXXYWEYXCZAYDMPXMDSXYBSQMJMZJMTZQLPJYQZCGQHXJHHLXXHLHDLDJQCLDWBSXFZZYYSCHTYTYYBHECXHYKGJPXHHYZJFXHWHBDZFYZBCAPNPGNYDMSXHMMMMAMYNBYJTMPXYYMCTHJBZYFCGTYHWPHFTWZZEZSBZEGPFMTSKFTYCMHFLLHGPZJXZJGZJYXZSBBQSCZZLZCCSTPGXMJSFTCCZJZDJXCYBZLFCJSYZFGSZLYBCWZZBYZDZYPSWYJZXZBDSYUXLZZBZFYGCZXBZHZFTPBGZGEJBSTGKDMFHYZZJHZLLZZGJQZLSFDJSSCBZGPDLFZFZSZYZYZSYGCXSNXXCHCZXTZZLJFZGQSQYXZJQDCCZTQCDXZJYQJQCHXZTDLGSCXZSYQJQTZWLQDQZTQCHQQJZYEZZZPBWKDJFCJPZTYPQYQTTYNLMBDKTJZPQZQZZFPZSBNJLGYJDXJDZZKZGQKXDLPZJTCJDQBXDJQJSTCKNXBXZMSLYJCQMTJQWWCJQNJNLLLHJCWQTBZQYDZCZPZZDZYDDCYZZZCCJTTJFZDPRRTZTJDCQTQZDTJNPLZBCLLCTZSXKJZQZPZLBZRBTJDCXFCZDBCCJJLTQQPLDCGZDBBZJCQDCJWYNLLZYZCCDWLLXWZLXRXNTQQCZXKQLSGDFQTDDGLRLAJJTKUYMKQLLTZYTDYYCZGJWYXDXFRSKSTQTENQMRKQZHHQKDLDAZFKYPBGGPZREBZZYKZZSPEGJXGYKQZZZSLYSYYYZWFQZYLZZLZHWCHKYPQGNPGBLPLRRJYXCCSYYHSFZFYBZYYTGZXYLXCZWXXZJZBLFFLGSKHYJZEYJHLPLLLLCZGXDRZELRHGKLZZYHZLYQSZZJZQLJZFLNBHGWLCZCFJYSPYXZLZLXGCCPZBLLCYBBBBUBBCBPCRNNZCZYRBFSRLDCGQYYQXYGMQZWTZYTYJXYFWTEHZZJYWLCCNTZYJJZDEDPZDZTSYQJHDYMBJNYJZLXTSSTPHNDJXXBYXQTZQDDTJTDYYTGWSCSZQFLSHLGLBCZPHDLYZJYCKWTYTYLBNYTSDSYCCTYSZYYEBHEXHQDTWNYGYCLXTSZYSTQMYGZAZCCSZZDSLZCLZRQXYYELJSBYMXSXZTEMBBLLYYLLYTDQYSHYMRQWKFKBFXNXSBYCHXBWJYHTQBPBSBWDZYLKGZSKYHXQZJXHXJXGNLJKZLYYCDXLFYFGHLJGJYBXQLYBXQPQGZTZPLNCYPXDJYQYDYMRBESJYYHKXXSTMXRCZZYWXYQYBMCLLYZHQYZWQXDBXBZWZMSLPDMYSKFMZKLZCYQYCZLQXFZZYDQZPZYGYJYZMZXDZFYFYTTQTZHGSPCZMLCCYTZXJCYTJMKSLPZHYSNZLLYTPZCTZZCKTXDHXXTQCYFKSMQCCYYAZHTJPCYLZLYJBJXTPNYLJYYNRXSYLMMNXJSMYBCSYSYLZYLXJJQYLDZLPQBFZZBLFNDXQKCZFYWHGQMRDSXYCYTXNQQJZYYPFZXDYZFPRXEJDGYQBXRCNFYYQPGHYJDYZXGRHTKYLNWDZNTSMPKLBTHBPYSZBZTJZSZZJTYYXZPHSSZZBZCZPTQFZMYFLYPYBBJQXZMXXDJMTSYSKKBJZXHJCKLPSMKYJZCXTMLJYXRZZQSLXXQPYZXMKYXXXJCLJPRMYYGADYSKQLSNDHYZKQXZYZTCGHZTLMLWZYBWSYCTBHJHJFCWZTXWYTKZLXQSHLYJZJXTMPLPYCGLTBZZTLZJCYJGDTCLKLPLLQPJMZPAPXYZLKKTKDZCZZBNZDYDYQZJYJGMCTXLTGXSZLMLHBGLKFWNWZHDXUHLFMKYSLGXDTWWFRJEJZTZHYDXYKSHWFZCQSHKTMQQHTZHYMJDJSKHXZJZBZZXYMPAGQMSTPXLSKLZYNWRTSQLSZBPSPSGZWYHTLKSSSWHZZLYYTNXJGMJSZSUFWNLSOZTXGXLSAMMLBWLDSZYLAKQCQCTMYCFJBSLXCLZZCLXXKSBZQCLHJPSQPLSXXCKSLNHPSFQQYTXYJZLQLDXZQJZDYYDJNZPTUZDSKJFSLJHYLZSQZLBTXYDGTQFDBYAZXDZHZJNHHQBYKNXJJQCZMLLJZKSPLDYCLBBLXKLELXJLBQYCXJXGCNLCQPLZLZYJTZLJGYZDZPLTQCSXFDMNYCXGBTJDCZNBGBQYQJWGKFHTNPYQZQGBKPBBYZMTJDYTBLSQMPSXTBNPDXKLEMYYCJYNZCTLDYKZZXDDXHQSHDGMZSJYCCTAYRZLPYLTLKXSLZCGGEXCLFXLKJRTLQJAQZNCMBYDKKCXGLCZJZXJHPTDJJMZQYKQSECQZDSHHADMLZFMMZBGNTJNNLGBYJBRBTMLBYJDZXLCJLPLDLPCQDHLXZLYCBLCXZZJADJLNZMMSSSMYBHBSQKBHRSXXJMXSDZNZPXLGBRHWGGFCXGMSKLLTSJYYCQLTSKYWYYHYWXBXQYWPYWYKQLSQPTNTKHQCWDQKTWPXXHCPTHTWUMSSYHBWCRWXHJMKMZNGWTMLKFGHKJYLSYYCXWHYECLQHKQHTTQKHFZLDXQWYZYYDESBPKYRZPJFYYZJCEQDZZDLATZBBFJLLCXDLMJSSXEGYGSJQXCWBXSSZPDYZCXDNYXPPZYDLYJCZPLTXLSXYZYRXCYYYDYLWWNZSAHJSYQYHGYWWAXTJZDAXYSRLTDPSSYYFNEJDXYZHLXLLLZQZSJNYQYQQXYJGHZGZCYJCHZLYCDSHWSHJZYJXCLLNXZJJYYXNFXMWFPYLCYLLABWDDHWDXJMCXZTZPMLQZHSFHZYNZTLLDYWLSLXHYMMYLMBWWKYXYADTXYLLDJPYBPWUXJMWMLLSAFDLLYFLBHHHBQQLTZJCQJLDJTFFKMMMBYTHYGDCQRDDWRQJXNBYSNWZDBYYTBJHPYBYTTJXAAHGQDQTMYSTQXKBTZPKJLZRBEQQSSMJJBDJOTGTBXPGBKTLHQXJJJCTHXQDWJLWRFWQGWSHCKRYSWGFTGYGBXSDWDWRFHWYTJJXXXJYZYSLPYYYPAYXHYDQKXSHXYXGSKQHYWFDDDPPLCJLQQEEWXKSYYKDYPLTJTHKJLTCYYHHJTTPLTZZCDLTHQKZXQYSTEEYWYYZYXXYYSTTJKLLPZMCYHQGXYHSRMBXPLLNQYDQHXSXXWGDQBSHYLLPJJJTHYJKYPPTHYYKTYEZYENMDSHLCRPQFDGFXZPSFTLJXXJBSWYYSKSFLXLPPLBBBLBSFXFYZBSJSSYLPBBFFFFSSCJDSTZSXZRYYSYFFSYZYZBJTBCTSBSDHRTJJBYTCXYJEYLXCBNEBJDSYXYKGSJZBXBYTFZWGENYHHTHZHHXFWGCSTBGXKLSXYWMTMBYXJSTZSCDYQRCYTWXZFHMYMCXLZNSDJTTTXRYCFYJSBSDYERXJLJXBBDEYNJGHXGCKGSCYMBLXJMSZNSKGXFBNBPTHFJAAFXYXFPXMYPQDTZCXZZPXRSYWZDLYBBKTYQPQJPZYPZJZNJPZJLZZFYSBTTSLMPTZRTDXQSJEHBZYLZDHLJSQMLHTXTJECXSLZZSPKTLZKQQYFSYGYWPCPQFHQHYTQXZKRSGTTSQCZLPTXCDYYZXSQZSLXLZMYCPCQBZYXHBSXLZDLTCDXTYLZJYYZPZYZLTXJSJXHLPMYTXCQRBLZSSFJZZTNJYTXMYJHLHPPLCYXQJQQKZZSCPZKSWALQSBLCCZJSXGWWWYGYKTJBBZTDKHXHKGTGPBKQYSLPXPJCKBMLLXDZSTBKLGGQKQLSBKKTFXRMDKBFTPZFRTBBRFERQGXYJPZSSTLBZTPSZQZSJDHLJQLZBPMSMMSXLQQNHKNBLRDDNXXDHDDJCYYGYLXGZLXSYGMQQGKHBPMXYXLYTQWLWGCPBMQXCYZYDRJBHTDJYHQSHTMJSBYPLWHLZFFNYPMHXXHPLTBQPFBJWQDBYGPNZTPFZJGSDDTQSHZEAWZZYLLTYYBWJKXXGHLFKXDJTMSZSQYNZGGSWQSPHTLSSKMCLZXYSZQZXNCJDQGZDLFNYKLJCJLLZLMZZNHYDSSHTHZZLZZBBHQZWWYCRZHLYQQJBEYFXXXWHSRXWQHWPSLMSSKZTTYGYQQWRSLALHMJTQJSMXQBJJZJXZYZKXBYQXBJXSHZTSFJLXMXZXFGHKZSZGGYLCLSARJYHSLLLMZXELGLXYDJYTLFBHBPNLYZFBBHPTGJKWETZHKJJXZXXGLLJLSTGSHJJYQLQZFKCGNNDJSSZFDBCTWWSEQFHQJBSAQTGYPQLBXBMMYWXGSLZHGLZGQYFLZBYFZJFRYSFMBYZHQGFWZSYFYJJPHZBYYZFFWODGRLMFTWLBZGYCQXCDJYGZYYYYTYTYDWEGAZYHXJLZYYHLRMGRXXZCLHNELJJTJTPWJYBJJBXJJTJTEEKHWSLJPLPSFYZPQQBDLQJJTYYQLYZKDKSQJYYQZLDQTGJQYZJSUCMRYQTHTEJMFCTYHYPKMHYZWJDQFHYYXWSHCTXRLJHQXHCCYYYJLTKTTYTMXGTCJTZAYYOCZLYLBSZYWJYTSJYHBYSHFJLYGJXXTMZYYLTXXYPZLXYJZYZYYPNHMYMDYYLBLHLSYYQQLLNJJYMSOYQBZGDLYXYLCQYXTSZEGXHZGLHWBLJHEYXTWQMAKBPQCGYSHHEGQCMWYYWLJYJHYYZLLJJYLHZYHMGSLJLJXCJJYCLYCJPCPZJZJMMYLCQLNQLJQJSXYJMLSZLJQLYCMMHCFMMFPQQMFYLQMCFFQMMMMHMZNFHHJGTTHHKHSLNCHHYQDXTMMQDCYZYXYQMYQYLTDCYYYZAZZCYMZYDLZFFFMMYCQZWZZMABTBYZTDMNZZGGDFTYPCGQYTTSSFFWFDTZQSSYSTWXJHXYTSXXYLBYQHWWKXHZXWZNNZZJZJJQJCCCHYYXBZXZCYZTLLCQXYNJYCYYCYNZZQYYYEWYCZDCJYCCHYJLBTZYYCQWMPWPYMLGKDLDLGKQQBGYCHJXY";
 
-    //此处收录了375个多音字,数据来自于http://www.51window.net/page/pinyin
+    // 此处收录了375个多音字,数据来自于http://www.51window.net/page/pinyin
     var oMultiDiff = {
-        "19969": "DZ",
-        "19975": "WM",
-        "19988": "QJ",
-        "20048": "YL",
-        "20056": "SC",
-        "20060": "NM",
-        "20094": "QG",
-        "20127": "QJ",
-        "20167": "QC",
-        "20193": "YG",
-        "20250": "KH",
-        "20256": "ZC",
-        "20282": "SC",
-        "20285": "QJG",
-        "20291": "TD",
-        "20314": "YD",
-        "20315": "BF",
-        "20340": "NE",
-        "20375": "TD",
-        "20389": "YJ",
-        "20391": "CZ",
-        "20415": "PB",
-        "20446": "YS",
-        "20447": "SQ",
-        "20504": "TC",
-        "20608": "KG",
-        "20854": "QJ",
-        "20857": "ZC",
-        "20911": "PF",
-        "20985": "AW",
-        "21032": "PB",
-        "21048": "XQ",
-        "21049": "SC",
-        "21089": "YS",
-        "21119": "JC",
-        "21242": "SB",
-        "21273": "SC",
-        "21305": "YP",
-        "21306": "QO",
-        "21330": "ZC",
-        "21333": "SDC",
-        "21345": "QK",
-        "21378": "CA",
-        "21397": "SC",
-        "21414": "XS",
-        "21442": "SC",
-        "21477": "JG",
-        "21480": "TD",
-        "21484": "ZS",
-        "21494": "YX",
-        "21505": "YX",
-        "21512": "HG",
-        "21523": "XH",
-        "21537": "PB",
-        "21542": "PF",
-        "21549": "KH",
-        "21571": "E",
-        "21574": "DA",
-        "21588": "TD",
-        "21589": "O",
-        "21618": "ZC",
-        "21621": "KHA",
-        "21632": "ZJ",
-        "21654": "KG",
-        "21679": "LKG",
-        "21683": "KH",
-        "21710": "A",
-        "21719": "YH",
-        "21734": "WOE",
-        "21769": "A",
-        "21780": "WN",
-        "21804": "XH",
-        "21834": "A",
-        "21899": "ZD",
-        "21903": "RN",
-        "21908": "WO",
-        "21939": "ZC",
-        "21956": "SA",
-        "21964": "YA",
-        "21970": "TD",
-        "22003": "A",
-        "22031": "JG",
-        "22040": "XS",
-        "22060": "ZC",
-        "22066": "ZC",
-        "22079": "MH",
-        "22129": "XJ",
-        "22179": "XA",
-        "22237": "NJ",
-        "22244": "TD",
-        "22280": "JQ",
-        "22300": "YH",
-        "22313": "XW",
-        "22331": "YQ",
-        "22343": "YJ",
-        "22351": "PH",
-        "22395": "DC",
-        "22412": "TD",
-        "22484": "PB",
-        "22500": "PB",
-        "22534": "ZD",
-        "22549": "DH",
-        "22561": "PB",
-        "22612": "TD",
-        "22771": "KQ",
-        "22831": "HB",
-        "22841": "JG",
-        "22855": "QJ",
-        "22865": "XQ",
-        "23013": "ML",
-        "23081": "WM",
-        "23487": "SX",
-        "23558": "QJ",
-        "23561": "YW",
-        "23586": "YW",
-        "23614": "YW",
-        "23615": "SN",
-        "23631": "PB",
-        "23646": "ZS",
-        "23663": "ZT",
-        "23673": "YG",
-        "23762": "TD",
-        "23769": "ZS",
-        "23780": "QJ",
-        "23884": "QK",
-        "24055": "XH",
-        "24113": "DC",
-        "24162": "ZC",
-        "24191": "GA",
-        "24273": "QJ",
-        "24324": "NL",
-        "24377": "TD",
-        "24378": "QJ",
-        "24439": "PF",
-        "24554": "ZS",
-        "24683": "TD",
-        "24694": "WE",
-        "24733": "LK",
-        "24925": "TN",
-        "25094": "ZG",
-        "25100": "XQ",
-        "25103": "XH",
-        "25153": "PB",
-        "25170": "PB",
-        "25179": "KG",
-        "25203": "PB",
-        "25240": "ZS",
-        "25282": "FB",
-        "25303": "NA",
-        "25324": "KG",
-        "25341": "ZY",
-        "25373": "WZ",
-        "25375": "XJ",
-        "25384": "A",
-        "25457": "A",
-        "25528": "SD",
-        "25530": "SC",
-        "25552": "TD",
-        "25774": "ZC",
-        "25874": "ZC",
-        "26044": "YW",
-        "26080": "WM",
-        "26292": "PB",
-        "26333": "PB",
-        "26355": "ZY",
-        "26366": "CZ",
-        "26397": "ZC",
-        "26399": "QJ",
-        "26415": "ZS",
-        "26451": "SB",
-        "26526": "ZC",
-        "26552": "JG",
-        "26561": "TD",
-        "26588": "JG",
-        "26597": "CZ",
-        "26629": "ZS",
-        "26638": "YL",
-        "26646": "XQ",
-        "26653": "KG",
-        "26657": "XJ",
-        "26727": "HG",
-        "26894": "ZC",
-        "26937": "ZS",
-        "26946": "ZC",
-        "26999": "KJ",
-        "27099": "KJ",
-        "27449": "YQ",
-        "27481": "XS",
-        "27542": "ZS",
-        "27663": "ZS",
-        "27748": "TS",
-        "27784": "SC",
-        "27788": "ZD",
-        "27795": "TD",
-        "27812": "O",
-        "27850": "PB",
-        "27852": "MB",
-        "27895": "SL",
-        "27898": "PL",
-        "27973": "QJ",
-        "27981": "KH",
-        "27986": "HX",
-        "27994": "XJ",
-        "28044": "YC",
-        "28065": "WG",
-        "28177": "SM",
-        "28267": "QJ",
-        "28291": "KH",
-        "28337": "ZQ",
-        "28463": "TL",
-        "28548": "DC",
-        "28601": "TD",
-        "28689": "PB",
-        "28805": "JG",
-        "28820": "QG",
-        "28846": "PB",
-        "28952": "TD",
-        "28975": "ZC",
-        "29100": "A",
-        "29325": "QJ",
-        "29575": "SL",
-        "29602": "FB",
-        "30010": "TD",
-        "30044": "CX",
-        "30058": "PF",
-        "30091": "YSP",
-        "30111": "YN",
-        "30229": "XJ",
-        "30427": "SC",
-        "30465": "SX",
-        "30631": "YQ",
-        "30655": "QJ",
-        "30684": "QJG",
-        "30707": "SD",
-        "30729": "XH",
-        "30796": "LG",
-        "30917": "PB",
-        "31074": "NM",
-        "31085": "JZ",
-        "31109": "SC",
-        "31181": "ZC",
-        "31192": "MLB",
-        "31293": "JQ",
-        "31400": "YX",
-        "31584": "YJ",
-        "31896": "ZN",
-        "31909": "ZY",
-        "31995": "XJ",
-        "32321": "PF",
-        "32327": "ZY",
-        "32418": "HG",
-        "32420": "XQ",
-        "32421": "HG",
-        "32438": "LG",
-        "32473": "GJ",
-        "32488": "TD",
-        "32521": "QJ",
-        "32527": "PB",
-        "32562": "ZSQ",
-        "32564": "JZ",
-        "32735": "ZD",
-        "32793": "PB",
-        "33071": "PF",
-        "33098": "XL",
-        "33100": "YA",
-        "33152": "PB",
-        "33261": "CX",
-        "33324": "BP",
-        "33333": "TD",
-        "33406": "YA",
-        "33426": "WM",
-        "33432": "PB",
-        "33445": "JG",
-        "33486": "ZN",
-        "33493": "TS",
-        "33507": "QJ",
-        "33540": "QJ",
-        "33544": "ZC",
-        "33564": "XQ",
-        "33617": "YT",
-        "33632": "QJ",
-        "33636": "XH",
-        "33637": "YX",
-        "33694": "WG",
-        "33705": "PF",
-        "33728": "YW",
-        "33882": "SR",
-        "34067": "WM",
-        "34074": "YW",
-        "34121": "QJ",
-        "34255": "ZC",
-        "34259": "XL",
-        "34425": "JH",
-        "34430": "XH",
-        "34485": "KH",
-        "34503": "YS",
-        "34532": "HG",
-        "34552": "XS",
-        "34558": "YE",
-        "34593": "ZL",
-        "34660": "YQ",
-        "34892": "XH",
-        "34928": "SC",
-        "34999": "QJ",
-        "35048": "PB",
-        "35059": "SC",
-        "35098": "ZC",
-        "35203": "TQ",
-        "35265": "JX",
-        "35299": "JX",
-        "35782": "SZ",
-        "35828": "YS",
-        "35830": "E",
-        "35843": "TD",
-        "35895": "YG",
-        "35977": "MH",
-        "36158": "JG",
-        "36228": "QJ",
-        "36426": "XQ",
-        "36466": "DC",
-        "36710": "JC",
-        "36711": "ZYG",
-        "36767": "PB",
-        "36866": "SK",
-        "36951": "YW",
-        "37034": "YX",
-        "37063": "XH",
-        "37218": "ZC",
-        "37325": "ZC",
-        "38063": "PB",
-        "38079": "TD",
-        "38085": "QY",
-        "38107": "DC",
-        "38116": "TD",
-        "38123": "YD",
-        "38224": "HG",
-        "38241": "XTC",
-        "38271": "ZC",
-        "38415": "YE",
-        "38426": "KH",
-        "38461": "YD",
-        "38463": "AE",
-        "38466": "PB",
-        "38477": "XJ",
-        "38518": "YT",
-        "38551": "WK",
-        "38585": "ZC",
-        "38704": "XS",
-        "38739": "LJ",
-        "38761": "GJ",
-        "38808": "SQ",
-        "39048": "JG",
-        "39049": "XJ",
-        "39052": "HG",
-        "39076": "CZ",
-        "39271": "XT",
-        "39534": "TD",
-        "39552": "TD",
-        "39584": "PB",
-        "39647": "SB",
-        "39730": "LG",
-        "39748": "TPB",
-        "40109": "ZQ",
-        "40479": "ND",
-        "40516": "HG",
-        "40536": "HG",
-        "40583": "QJ",
-        "40765": "YQ",
-        "40784": "QJ",
-        "40840": "YK",
-        "40863": "QJG"
+        19969: "DZ",
+        19975: "WM",
+        19988: "QJ",
+        20048: "YL",
+        20056: "SC",
+        20060: "NM",
+        20094: "QG",
+        20127: "QJ",
+        20167: "QC",
+        20193: "YG",
+        20250: "KH",
+        20256: "ZC",
+        20282: "SC",
+        20285: "QJG",
+        20291: "TD",
+        20314: "YD",
+        20315: "BF",
+        20340: "NE",
+        20375: "TD",
+        20389: "YJ",
+        20391: "CZ",
+        20415: "PB",
+        20446: "YS",
+        20447: "SQ",
+        20504: "TC",
+        20608: "KG",
+        20854: "QJ",
+        20857: "ZC",
+        20911: "PF",
+        20985: "AW",
+        21032: "PB",
+        21048: "XQ",
+        21049: "SC",
+        21089: "YS",
+        21119: "JC",
+        21242: "SB",
+        21273: "SC",
+        21305: "YP",
+        21306: "QO",
+        21330: "ZC",
+        21333: "SDC",
+        21345: "QK",
+        21378: "CA",
+        21397: "SC",
+        21414: "XS",
+        21442: "SC",
+        21477: "JG",
+        21480: "TD",
+        21484: "ZS",
+        21494: "YX",
+        21505: "YX",
+        21512: "HG",
+        21523: "XH",
+        21537: "PB",
+        21542: "PF",
+        21549: "KH",
+        21571: "E",
+        21574: "DA",
+        21588: "TD",
+        21589: "O",
+        21618: "ZC",
+        21621: "KHA",
+        21632: "ZJ",
+        21654: "KG",
+        21679: "LKG",
+        21683: "KH",
+        21710: "A",
+        21719: "YH",
+        21734: "WOE",
+        21769: "A",
+        21780: "WN",
+        21804: "XH",
+        21834: "A",
+        21899: "ZD",
+        21903: "RN",
+        21908: "WO",
+        21939: "ZC",
+        21956: "SA",
+        21964: "YA",
+        21970: "TD",
+        22003: "A",
+        22031: "JG",
+        22040: "XS",
+        22060: "ZC",
+        22066: "ZC",
+        22079: "MH",
+        22129: "XJ",
+        22179: "XA",
+        22237: "NJ",
+        22244: "TD",
+        22280: "JQ",
+        22300: "YH",
+        22313: "XW",
+        22331: "YQ",
+        22343: "YJ",
+        22351: "PH",
+        22395: "DC",
+        22412: "TD",
+        22484: "PB",
+        22500: "PB",
+        22534: "ZD",
+        22549: "DH",
+        22561: "PB",
+        22612: "TD",
+        22771: "KQ",
+        22831: "HB",
+        22841: "JG",
+        22855: "QJ",
+        22865: "XQ",
+        23013: "ML",
+        23081: "WM",
+        23487: "SX",
+        23558: "QJ",
+        23561: "YW",
+        23586: "YW",
+        23614: "YW",
+        23615: "SN",
+        23631: "PB",
+        23646: "ZS",
+        23663: "ZT",
+        23673: "YG",
+        23762: "TD",
+        23769: "ZS",
+        23780: "QJ",
+        23884: "QK",
+        24055: "XH",
+        24113: "DC",
+        24162: "ZC",
+        24191: "GA",
+        24273: "QJ",
+        24324: "NL",
+        24377: "TD",
+        24378: "QJ",
+        24439: "PF",
+        24554: "ZS",
+        24683: "TD",
+        24694: "WE",
+        24733: "LK",
+        24925: "TN",
+        25094: "ZG",
+        25100: "XQ",
+        25103: "XH",
+        25153: "PB",
+        25170: "PB",
+        25179: "KG",
+        25203: "PB",
+        25240: "ZS",
+        25282: "FB",
+        25303: "NA",
+        25324: "KG",
+        25341: "ZY",
+        25373: "WZ",
+        25375: "XJ",
+        25384: "A",
+        25457: "A",
+        25528: "SD",
+        25530: "SC",
+        25552: "TD",
+        25774: "ZC",
+        25874: "ZC",
+        26044: "YW",
+        26080: "WM",
+        26292: "PB",
+        26333: "PB",
+        26355: "ZY",
+        26366: "CZ",
+        26397: "ZC",
+        26399: "QJ",
+        26415: "ZS",
+        26451: "SB",
+        26526: "ZC",
+        26552: "JG",
+        26561: "TD",
+        26588: "JG",
+        26597: "CZ",
+        26629: "ZS",
+        26638: "YL",
+        26646: "XQ",
+        26653: "KG",
+        26657: "XJ",
+        26727: "HG",
+        26894: "ZC",
+        26937: "ZS",
+        26946: "ZC",
+        26999: "KJ",
+        27099: "KJ",
+        27449: "YQ",
+        27481: "XS",
+        27542: "ZS",
+        27663: "ZS",
+        27748: "TS",
+        27784: "SC",
+        27788: "ZD",
+        27795: "TD",
+        27812: "O",
+        27850: "PB",
+        27852: "MB",
+        27895: "SL",
+        27898: "PL",
+        27973: "QJ",
+        27981: "KH",
+        27986: "HX",
+        27994: "XJ",
+        28044: "YC",
+        28065: "WG",
+        28177: "SM",
+        28267: "QJ",
+        28291: "KH",
+        28337: "ZQ",
+        28463: "TL",
+        28548: "DC",
+        28601: "TD",
+        28689: "PB",
+        28805: "JG",
+        28820: "QG",
+        28846: "PB",
+        28952: "TD",
+        28975: "ZC",
+        29100: "A",
+        29325: "QJ",
+        29575: "SL",
+        29602: "FB",
+        30010: "TD",
+        30044: "CX",
+        30058: "PF",
+        30091: "YSP",
+        30111: "YN",
+        30229: "XJ",
+        30427: "SC",
+        30465: "SX",
+        30631: "YQ",
+        30655: "QJ",
+        30684: "QJG",
+        30707: "SD",
+        30729: "XH",
+        30796: "LG",
+        30917: "PB",
+        31074: "NM",
+        31085: "JZ",
+        31109: "SC",
+        31181: "ZC",
+        31192: "MLB",
+        31293: "JQ",
+        31400: "YX",
+        31584: "YJ",
+        31896: "ZN",
+        31909: "ZY",
+        31995: "XJ",
+        32321: "PF",
+        32327: "ZY",
+        32418: "HG",
+        32420: "XQ",
+        32421: "HG",
+        32438: "LG",
+        32473: "GJ",
+        32488: "TD",
+        32521: "QJ",
+        32527: "PB",
+        32562: "ZSQ",
+        32564: "JZ",
+        32735: "ZD",
+        32793: "PB",
+        33071: "PF",
+        33098: "XL",
+        33100: "YA",
+        33152: "PB",
+        33261: "CX",
+        33324: "BP",
+        33333: "TD",
+        33406: "YA",
+        33426: "WM",
+        33432: "PB",
+        33445: "JG",
+        33486: "ZN",
+        33493: "TS",
+        33507: "QJ",
+        33540: "QJ",
+        33544: "ZC",
+        33564: "XQ",
+        33617: "YT",
+        33632: "QJ",
+        33636: "XH",
+        33637: "YX",
+        33694: "WG",
+        33705: "PF",
+        33728: "YW",
+        33882: "SR",
+        34067: "WM",
+        34074: "YW",
+        34121: "QJ",
+        34255: "ZC",
+        34259: "XL",
+        34425: "JH",
+        34430: "XH",
+        34485: "KH",
+        34503: "YS",
+        34532: "HG",
+        34552: "XS",
+        34558: "YE",
+        34593: "ZL",
+        34660: "YQ",
+        34892: "XH",
+        34928: "SC",
+        34999: "QJ",
+        35048: "PB",
+        35059: "SC",
+        35098: "ZC",
+        35203: "TQ",
+        35265: "JX",
+        35299: "JX",
+        35782: "SZ",
+        35828: "YS",
+        35830: "E",
+        35843: "TD",
+        35895: "YG",
+        35977: "MH",
+        36158: "JG",
+        36228: "QJ",
+        36426: "XQ",
+        36466: "DC",
+        36710: "JC",
+        36711: "ZYG",
+        36767: "PB",
+        36866: "SK",
+        36951: "YW",
+        37034: "YX",
+        37063: "XH",
+        37218: "ZC",
+        37325: "ZC",
+        38063: "PB",
+        38079: "TD",
+        38085: "QY",
+        38107: "DC",
+        38116: "TD",
+        38123: "YD",
+        38224: "HG",
+        38241: "XTC",
+        38271: "ZC",
+        38415: "YE",
+        38426: "KH",
+        38461: "YD",
+        38463: "AE",
+        38466: "PB",
+        38477: "XJ",
+        38518: "YT",
+        38551: "WK",
+        38585: "ZC",
+        38704: "XS",
+        38739: "LJ",
+        38761: "GJ",
+        38808: "SQ",
+        39048: "JG",
+        39049: "XJ",
+        39052: "HG",
+        39076: "CZ",
+        39271: "XT",
+        39534: "TD",
+        39552: "TD",
+        39584: "PB",
+        39647: "SB",
+        39730: "LG",
+        39748: "TPB",
+        40109: "ZQ",
+        40479: "ND",
+        40516: "HG",
+        40536: "HG",
+        40583: "QJ",
+        40765: "YQ",
+        40784: "QJ",
+        40840: "YK",
+        40863: "QJG"
     };
 
     var _checkPYCh = function (ch) {
         var uni = ch.charCodeAt(0);
         // 如果不在汉字处理范围之内,返回原字符,也可以调用自己的处理函数
-        if (uni > 40869 || uni < 19968)
-            return ch; // dealWithOthers(ch);
+        if (uni > 40869 || uni < 19968) {return ch;} // dealWithOthers(ch);
         return (oMultiDiff[uni] ? oMultiDiff[uni] : (_ChineseFirstPY.charAt(uni - 19968)));
     };
 
@@ -13905,8 +13908,7 @@ BI.ScalingCellSizeAndPositionManager.prototype = {
 
     _.extend(BI, {
         makeFirstPY: function (str) {
-            if (typeof (str) != "string")
-                return '' + str;
+            if (typeof (str) !== "string") {return "" + str;}
             var arrResult = []; // 保存中间结果的数组
             for (var i = 0, len = str.length; i < len; i++) {
                 // 获得unicode码
@@ -13929,16 +13931,16 @@ BI.ScalingCellSizeAndPositionManager.prototype = {
  **/
 !(function () {
     // Check `document` and `window` in case of server-side rendering
-    var _window
-    if (typeof window !== 'undefined') {
-        _window = window
-    } else if (typeof self !== 'undefined') {
-        _window = self
+    var _window;
+    if (typeof window !== "undefined") {
+        _window = window;
+    } else if (typeof self !== "undefined") {
+        _window = self;
     } else {
-        _window = this
+        _window = this;
     }
 
-    var addEventListener = typeof document !== 'undefined' && document.addEventListener;
+    var addEventListener = typeof document !== "undefined" && document.addEventListener;
     var stylesCreated = false;
 
     if (addEventListener) {
@@ -13967,8 +13969,8 @@ BI.ScalingCellSizeAndPositionManager.prototype = {
                 expandChild = expand.firstElementChild;
             contract.scrollLeft = contract.scrollWidth;
             contract.scrollTop = contract.scrollHeight;
-            expandChild.style.width = expand.offsetWidth + 1 + 'px';
-            expandChild.style.height = expand.offsetHeight + 1 + 'px';
+            expandChild.style.width = expand.offsetWidth + 1 + "px";
+            expandChild.style.height = expand.offsetHeight + 1 + "px";
             expand.scrollLeft = expand.scrollWidth;
             expand.scrollTop = expand.scrollHeight;
         };
@@ -13976,7 +13978,7 @@ BI.ScalingCellSizeAndPositionManager.prototype = {
         var checkTriggers = function (element) {
             return element.offsetWidth !== element.__resizeLast__.width ||
                 element.offsetHeight !== element.__resizeLast__.height;
-        }
+        };
 
         var scrollListener = function (e) {
             var element = this;
@@ -13995,24 +13997,24 @@ BI.ScalingCellSizeAndPositionManager.prototype = {
 
         /* Detect CSS Animations support to detect element display/re-attach */
         var animation = false,
-            animationstring = 'animation',
-            keyframeprefix = '',
-            animationstartevent = 'animationstart',
-            domPrefixes = 'Webkit Moz O ms'.split(' '),
-            startEvents = 'webkitAnimationStart animationstart oAnimationStart MSAnimationStart'.split(' '),
-            pfx = '';
+            animationstring = "animation",
+            keyframeprefix = "",
+            animationstartevent = "animationstart",
+            domPrefixes = "Webkit Moz O ms".split(" "),
+            startEvents = "webkitAnimationStart animationstart oAnimationStart MSAnimationStart".split(" "),
+            pfx = "";
         {
-            var elm = document.createElement('fakeelement');
+            var elm = document.createElement("fakeelement");
             if (elm.style.animationName !== undefined) {
                 animation = true;
             }
 
             if (animation === false) {
                 for (var i = 0; i < domPrefixes.length; i++) {
-                    if (elm.style[domPrefixes[i] + 'AnimationName'] !== undefined) {
+                    if (elm.style[domPrefixes[i] + "AnimationName"] !== undefined) {
                         pfx = domPrefixes[i];
-                        animationstring = pfx + 'Animation';
-                        keyframeprefix = '-' + pfx.toLowerCase() + '-';
+                        animationstring = pfx + "Animation";
+                        keyframeprefix = "-" + pfx.toLowerCase() + "-";
                         animationstartevent = startEvents[i];
                         animation = true;
                         break;
@@ -14021,21 +14023,21 @@ BI.ScalingCellSizeAndPositionManager.prototype = {
             }
         }
 
-        var animationName = 'resizeanim';
-        var animationKeyframes = '@' + keyframeprefix + 'keyframes ' + animationName + ' { from { opacity: 0; } to { opacity: 0; } } ';
-        var animationStyle = keyframeprefix + 'animation: 1ms ' + animationName + '; ';
+        var animationName = "resizeanim";
+        var animationKeyframes = "@" + keyframeprefix + "keyframes " + animationName + " { from { opacity: 0; } to { opacity: 0; } } ";
+        var animationStyle = keyframeprefix + "animation: 1ms " + animationName + "; ";
     }
 
     var createStyles = function () {
         if (!stylesCreated) {
-            //opacity:0 works around a chrome bug https://code.google.com/p/chromium/issues/detail?id=286360
-            var css = (animationKeyframes ? animationKeyframes : '') +
-                    '.resize-triggers { ' + (animationStyle ? animationStyle : '') + 'visibility: hidden; opacity: 0; } ' +
-                    '.resize-triggers, .resize-triggers > div, .contract-trigger:before { content: \" \"; display: block; position: absolute; top: 0; left: 0; height: 100%; width: 100%; overflow: hidden; } .resize-triggers > div { background: #eee; overflow: auto; } .contract-trigger:before { width: 200%; height: 200%; }',
-                head = document.head || document.getElementsByTagName('head')[0],
-                style = document.createElement('style');
+            // opacity:0 works around a chrome bug https://code.google.com/p/chromium/issues/detail?id=286360
+            var css = (animationKeyframes ? animationKeyframes : "") +
+                    ".resize-triggers { " + (animationStyle ? animationStyle : "") + "visibility: hidden; opacity: 0; } " +
+                    ".resize-triggers, .resize-triggers > div, .contract-trigger:before { content: \" \"; display: block; position: absolute; top: 0; left: 0; height: 100%; width: 100%; overflow: hidden; } .resize-triggers > div { background: #eee; overflow: auto; } .contract-trigger:before { width: 200%; height: 200%; }",
+                head = document.head || document.getElementsByTagName("head")[0],
+                style = document.createElement("style");
 
-            style.type = 'text/css';
+            style.type = "text/css";
             if (style.styleSheet) {
                 style.styleSheet.cssText = css;
             } else {
@@ -14045,32 +14047,31 @@ BI.ScalingCellSizeAndPositionManager.prototype = {
             head.appendChild(style);
             stylesCreated = true;
         }
-    }
+    };
 
     var addResizeListener = function (element, fn) {
-        if (addEventListener){
+        if (addEventListener) {
             if (!element.__resizeTriggers__) {
-                if (getComputedStyle(element).position === 'static') element.style.position = 'relative';
+                if (getComputedStyle(element).position === "static") element.style.position = "relative";
                 createStyles();
                 element.__resizeLast__ = {};
                 element.__resizeListeners__ = [];
-                (element.__resizeTriggers__ = document.createElement('div')).className = 'resize-triggers';
-                element.__resizeTriggers__.innerHTML = '<div class="expand-trigger"><div></div></div>' +
-                    '<div class="contract-trigger"></div>';
+                (element.__resizeTriggers__ = document.createElement("div")).className = "resize-triggers";
+                element.__resizeTriggers__.innerHTML = "<div class=\"expand-trigger\"><div></div></div>" +
+                    "<div class=\"contract-trigger\"></div>";
                 element.appendChild(element.__resizeTriggers__);
                 resetTriggers(element);
-                element.addEventListener('scroll', scrollListener, true);
+                element.addEventListener("scroll", scrollListener, true);
 
                 /* Listen for a css animation to detect element display/re-attach */
                 animationstartevent && element.__resizeTriggers__.addEventListener(animationstartevent, function (e) {
-                    if (e.animationName === animationName)
-                        resetTriggers(element);
+                    if (e.animationName === animationName) {resetTriggers(element);}
                 });
             }
             element.__resizeListeners__.push(fn);
 
         } else {
-            element.attachEvent('onresize', fn);
+            element.attachEvent("onresize", fn);
         }
     };
 
@@ -14078,11 +14079,11 @@ BI.ScalingCellSizeAndPositionManager.prototype = {
         if (addEventListener) {
             element.__resizeListeners__.splice(element.__resizeListeners__.indexOf(fn), 1);
             if (!element.__resizeListeners__.length) {
-                element.removeEventListener('scroll', scrollListener, true);
+                element.removeEventListener("scroll", scrollListener, true);
                 element.__resizeTriggers__ = !element.removeChild(element.__resizeTriggers__);
             }
         } else {
-            element.detachEvent('onresize', fn);
+            element.detachEvent("onresize", fn);
         }
     };
 
@@ -14091,16 +14092,16 @@ BI.ScalingCellSizeAndPositionManager.prototype = {
             addResizeListener(widget.element[0], fn);
             return function () {
                 removeResizeListener(widget.element[0], fn);
-            }
+            };
         },
         removeResizeListener: function (widget, fn) {
             removeResizeListener(widget.element[0], fn);
         }
     };
 }());
-;
+
 (function () {
-    function defaultComparator(a, b) {
+    function defaultComparator (a, b) {
         return a < b;
     }
 
@@ -14211,9 +14212,9 @@ BI.ScalingCellSizeAndPositionManager.prototype = {
                 index = swapIndex;
             }
         }
-    }
+    };
 })();
-;(function () {
+(function () {
     var clamp = function (min, value, max) {
         if (value < min) {
             return min;
@@ -14233,9 +14234,9 @@ BI.ScalingCellSizeAndPositionManager.prototype = {
     };
 
     BI.TableScrollHelper = function (rowCount,
-                                     defaultRowHeight,
-                                     viewportHeight,
-                                     rowHeightGetter) {
+        defaultRowHeight,
+        viewportHeight,
+        rowHeightGetter) {
         this._rowOffsets = BI.PrefixIntervalTree.uniform(rowCount, defaultRowHeight);
         this._storedHeights = new Array(rowCount);
         for (var i = 0; i < rowCount; ++i) {
@@ -14247,8 +14248,8 @@ BI.ScalingCellSizeAndPositionManager.prototype = {
         this._defaultRowHeight = defaultRowHeight;
         this._rowHeightGetter = rowHeightGetter ?
             rowHeightGetter : function () {
-            return defaultRowHeight
-        };
+                return defaultRowHeight;
+            };
         this._viewportHeight = viewportHeight;
 
         this._updateHeightsInViewport(0, 0);
@@ -14269,7 +14270,7 @@ BI.ScalingCellSizeAndPositionManager.prototype = {
         },
 
         _updateHeightsInViewport: function (firstRowIndex,
-                                            firstRowOffset) {
+            firstRowOffset) {
             var top = firstRowOffset;
             var index = firstRowIndex;
             while (top <= this._viewportHeight && index < this._rowCount) {
@@ -14503,18 +14504,18 @@ BI.IntegerBufferSet = function () {
 
 BI.IntegerBufferSet.prototype = {
     constructor: BI.IntegerBufferSet,
-    getSize: function () /*number*/ {
+    getSize: function () /* number*/ {
         return this._size;
     },
 
-    getValuePosition: function (/*number*/ value) /*?number*/ {
+    getValuePosition: function (/* number*/ value) /* ?number*/ {
         if (this._valueToPositionMap[value] === undefined) {
             return null;
         }
         return this._valueToPositionMap[value];
     },
 
-    getNewPositionForValue: function (/*number*/ value) /*number*/ {
+    getNewPositionForValue: function (/* number*/ value) /* number*/ {
         var newPosition = this._size;
         this._size++;
         this._pushToHeaps(newPosition, value);
@@ -14522,9 +14523,9 @@ BI.IntegerBufferSet.prototype = {
         return newPosition;
     },
 
-    replaceFurthestValuePosition: function (/*number*/ lowValue,
-                                            /*number*/ highValue,
-                                            /*number*/ newValue) /*?number*/ {
+    replaceFurthestValuePosition: function (/* number*/ lowValue,
+        /* number*/ highValue,
+        /* number*/ newValue) /* ?number*/ {
         this._cleanHeaps();
         if (this._smallValues.empty() || this._largeValues.empty()) {
             // Threre are currently no values stored. We will have to create new
@@ -14556,10 +14557,10 @@ BI.IntegerBufferSet.prototype = {
         return position;
     },
 
-    _pushToHeaps: function (/*number*/ position, /*number*/ value) {
+    _pushToHeaps: function (/* number*/ position, /* number*/ value) {
         var element = {
             position: position,
-            value:value
+            value: value
         };
         // We can reuse the same object in both heaps, because we don't mutate them
         this._smallValues.push(element);
@@ -14606,22 +14607,22 @@ BI.IntegerBufferSet.prototype = {
         this._largeValues = newLargeValues;
     },
 
-    _cleanHeap: function (/*object*/ heap) {
+    _cleanHeap: function (/* object*/ heap) {
         while (!heap.empty() &&
         this._valueToPositionMap[heap.peek().value] === undefined) {
             heap.pop();
         }
     },
 
-    _smallerComparator: function (/*object*/ lhs, /*object*/ rhs) /*boolean*/ {
+    _smallerComparator: function (/* object*/ lhs, /* object*/ rhs) /* boolean*/ {
         return lhs.value < rhs.value;
     },
 
-    _greaterComparator: function (/*object*/ lhs, /*object*/ rhs) /*boolean*/ {
+    _greaterComparator: function (/* object*/ lhs, /* object*/ rhs) /* boolean*/ {
         return lhs.value > rhs.value;
     }
 };
-;
+
 !(function () {
     BI.LinkHashMap = function () {
         this.array = [];
@@ -14637,7 +14638,7 @@ BI.IntegerBufferSet.prototype = {
         },
 
         add: function (key, value) {
-            if (typeof key == 'undefined') {
+            if (typeof key === "undefined") {
                 return;
             }
             if (key in this.map) {
@@ -14667,7 +14668,7 @@ BI.IntegerBufferSet.prototype = {
         each: function (fn, scope) {
             var scope = scope || window;
             var fn = fn || null;
-            if (fn == null || typeof (fn) != "function") {
+            if (fn == null || typeof (fn) !== "function") {
                 return;
             }
             for (var i = 0; i < this.array.length; i++) {
@@ -14688,10 +14689,10 @@ BI.IntegerBufferSet.prototype = {
             var array = [];
             this.each(function (key, value) {
                 array.push(value);
-            })
+            });
             return array;
         }
-    }
+    };
 })();window.BI = window.BI || {};
 
 $.extend(BI, {
@@ -14699,24 +14700,24 @@ $.extend(BI, {
         var config;
         if (BI.isObject(options)) {
             config = $.extend({
-                op: 'resource',
+                op: "resource",
                 path: null,
                 type: null,
                 must: false
             }, options);
-            config.url = BI.servletURL + '?op=' + config.op + '&resource=' + config.path;
+            config.url = BI.servletURL + "?op=" + config.op + "&resource=" + config.path;
         } else {
             config = {
                 url: BI.servletURL + "?op=resource&resource=" + options,
                 type: arguments[1],
                 must: arguments[2]
-            }
+            };
         }
         this.$import(config.url, config.type, config.must);
     },
     $import: function () {
         var _LOADED = {}; // alex:保存加载过的
-        function loadReady(src, must) {
+        function loadReady (src, must) {
             var $scripts = $("head script, body script");
             $.each($scripts, function (i, item) {
                 if (item.src.indexOf(src) != -1) {
@@ -14739,12 +14740,12 @@ $.extend(BI, {
             if (_LOADED[src] === true) {
                 return;
             }
-            if (ext === 'css') {
-                var link = document.createElement('link');
-                link.rel = 'stylesheet';
-                link.type = 'text/css';
+            if (ext === "css") {
+                var link = document.createElement("link");
+                link.rel = "stylesheet";
+                link.type = "text/css";
                 link.href = src;
-                var head = document.getElementsByTagName('head')[0];
+                var head = document.getElementsByTagName("head")[0];
                 head.appendChild(link);
                 _LOADED[src] = true;
             } else {
@@ -14759,15 +14760,15 @@ $.extend(BI, {
                          * alex:发现jquery会很智能地判断一下返回的数据类型是不是script,然后做一个globalEval
                          * 所以当status为success时就不需要再把其中的内容加到script里面去了
                          */
-                        if (status == 'success') {
+                        if (status == "success") {
                             _LOADED[src] = true;
                         }
                     }
-                })
+                });
             }
-        }
+        };
     }()
-});;
+});
 !(function () {
     BI.LRU = function (limit) {
         this.size = 0;
@@ -14792,9 +14793,9 @@ $.extend(BI, {
             this._keymap[key] = entry;
             if (this.tail) {
                 this.tail.newer = entry;
-                entry.older = this.tail
+                entry.older = this.tail;
             } else {
-                this.head = entry
+                this.head = entry;
             }
             this.tail = entry;
             this.size++;
@@ -14823,7 +14824,7 @@ $.extend(BI, {
         if (entry === this.tail) {
             return returnEntry
                 ? entry
-                : entry.value
+                : entry.value;
         }
         // HEAD--------------TAIL
         //   <.older   .newer>
@@ -14831,7 +14832,7 @@ $.extend(BI, {
         //   A  B  C  <D>  E
         if (entry.newer) {
             if (entry === this.head) {
-                this.head = entry.newer
+                this.head = entry.newer;
             }
             entry.newer.older = entry.older; // C <-- E.
         }
@@ -14846,13 +14847,13 @@ $.extend(BI, {
         this.tail = entry;
         return returnEntry
             ? entry
-            : entry.value
+            : entry.value;
     };
 
     p.has = function (key) {
         return this._keymap[key] != null;
-    }
-})();;
+    };
+})();
 !(function () {
     var MD5 = function (hexcase) {
         this.hexcase = !hexcase ? 0 : 1;
@@ -15021,8 +15022,7 @@ $.extend(BI, {
      */
     MD5.prototype.core_hmac_md5 = function (key, data) {
         var bkey = this.str2binl(key);
-        if (bkey.length > 16)
-            bkey = this.core_md5(bkey, key.length * this.chrsz);
+        if (bkey.length > 16) {bkey = this.core_md5(bkey, key.length * this.chrsz);}
 
         var ipad = Array(16), opad = Array(16);
         for (var i = 0; i < 16; i++) {
@@ -15058,8 +15058,7 @@ $.extend(BI, {
     MD5.prototype.str2binl = function (str) {
         var bin = Array();
         var mask = (1 << this.chrsz) - 1;
-        for (var i = 0; i < str.length * this.chrsz; i += this.chrsz)
-            bin[i >> 5] |= (str.charCodeAt(i / this.chrsz) & mask) << (i % 32);
+        for (var i = 0; i < str.length * this.chrsz; i += this.chrsz) {bin[i >> 5] |= (str.charCodeAt(i / this.chrsz) & mask) << (i % 32);}
         return bin;
     };
 
@@ -15087,28 +15086,25 @@ $.extend(BI, {
                 | (((binarray[i + 1 >> 2] >> 8 * ((i + 1) % 4)) & 0xFF) << 8)
                 | ((binarray[i + 2 >> 2] >> 8 * ((i + 2) % 4)) & 0xFF);
             for (var j = 0; j < 4; j++) {
-                if (i * 8 + j * 6 > binarray.length * 32)
-                    str += this.b64pad;
-                else
-                    str += tab.charAt((triplet >> 6 * (3 - j)) & 0x3F);
+                if (i * 8 + j * 6 > binarray.length * 32) {str += this.b64pad;} else {str += tab.charAt((triplet >> 6 * (3 - j)) & 0x3F);}
             }
         }
         return str;
     };
     BI.MD5 = new MD5();
-})();//线段树
-;(function () {
+})();// 线段树
+(function () {
     var parent = function (node) {
         return Math.floor(node / 2);
     };
 
     var Int32Array = window.Int32Array || function (size) {
-            var xs = [];
-            for (var i = size - 1; i >= 0; --i) {
-                xs[i] = 0;
-            }
-            return xs;
-        };
+        var xs = [];
+        for (var i = size - 1; i >= 0; --i) {
+            xs[i] = 0;
+        }
+        return xs;
+    };
 
     var ceilLog2 = function (x) {
         var y = 1;
@@ -15273,7 +15269,7 @@ $.extend(BI, {
     };
 
 })();
-;
+
 !(function () {
     BI.Queue = function (capacity) {
         this.capacity = capacity;
@@ -15290,7 +15286,7 @@ $.extend(BI, {
             return this.array.contains(v);
         },
 
-        getElementByIndex: function(index) {
+        getElementByIndex: function (index) {
             return this.array[index];
         },
 
@@ -15320,12 +15316,12 @@ $.extend(BI, {
             this.array.remove(v);
         },
         
-        splice: function() {
-            this.array.splice.apply(this.array, arguments);  
+        splice: function () {
+            this.array.splice.apply(this.array, arguments);
         },
         
-        slice: function() {
-            this.array.slice.apply(this.array, arguments);    
+        slice: function () {
+            this.array.slice.apply(this.array, arguments);
         },
         
         size: function () {
@@ -15335,7 +15331,7 @@ $.extend(BI, {
         each: function (fn, scope) {
             var scope = scope || window;
             var fn = fn || null;
-            if (fn == null || typeof (fn) != "function") {
+            if (fn == null || typeof (fn) !== "function") {
                 return;
             }
             for (var i = 0; i < this.array.length; i++) {
@@ -15354,13 +15350,13 @@ $.extend(BI, {
             var self = this;
             BI.each(array, function (i, v) {
                 self.push(v);
-            })
+            });
         },
 
         clear: function () {
             this.array.clear();
         }
-    }
+    };
 })();!(function () {
     var Section = function (height, width, x, y) {
         this.height = height;
@@ -15382,7 +15378,7 @@ $.extend(BI, {
         },
 
         getCellIndices: function () {
-            return this._indices
+            return this._indices;
         }
     };
 
@@ -15400,12 +15396,12 @@ $.extend(BI, {
 
             BI.each(this.getSections(height, width, x, y), function (i, section) {
                 BI.each(section.getCellIndices(), function (j, index) {
-                    indices[index] = index
-                })
+                    indices[index] = index;
+                });
             });
 
             return BI.map(BI.keys(indices), function (i, index) {
-                return indices[index]
+                return indices[index];
             });
         },
 
@@ -15426,14 +15422,14 @@ $.extend(BI, {
                     var key = sectionX + "." + sectionY;
 
                     if (!this._sections[key]) {
-                        this._sections[key] = new Section(this._sectionSize, this._sectionSize, sectionX * this._sectionSize, sectionY * this._sectionSize)
+                        this._sections[key] = new Section(this._sectionSize, this._sectionSize, sectionX * this._sectionSize, sectionY * this._sectionSize);
                     }
 
-                    sections.push(this._sections[key])
+                    sections.push(this._sections[key]);
                 }
             }
 
-            return sections
+            return sections;
         },
 
         getTotalSectionCount: function () {
@@ -15447,8 +15443,8 @@ $.extend(BI, {
                 section.addCellIndex(index);
             });
         }
-    }
-})();;
+    };
+})();
 (function () {
     var clamp = function (value, min, max) {
         if (value < min) {
@@ -15463,9 +15459,9 @@ $.extend(BI, {
     var MAX_BUFFER_ROWS = 10;
 
     BI.TableRowBuffer = function (rowsCount,
-                                  defaultRowHeight,
-                                  viewportHeight,
-                                  rowHeightGetter) {
+        defaultRowHeight,
+        viewportHeight,
+        rowHeightGetter) {
         this._bufferSet = new BI.IntegerBufferSet();
         this._defaultRowHeight = defaultRowHeight;
         this._viewportRowsBegin = 0;
@@ -15513,7 +15509,7 @@ $.extend(BI, {
         },
 
         getRows: function (firstRowIndex,
-                           firstRowOffset) {
+            firstRowOffset) {
             var top = firstRowOffset;
             var totalHeight = top;
             var rowIndex = firstRowIndex;
@@ -15539,8 +15535,8 @@ $.extend(BI, {
         },
 
         _addRowToBuffer: function (rowIndex,
-                                   firstViewportRowIndex,
-                                   lastViewportRowIndex) {
+            firstViewportRowIndex,
+            lastViewportRowIndex) {
             var rowPosition = this._bufferSet.getValuePosition(rowIndex);
             var viewportRowsCount = lastViewportRowIndex - firstViewportRowIndex + 1;
             var allowedRowsCount = viewportRowsCount + this._bufferRowsCount * 2;
@@ -15564,10 +15560,10 @@ $.extend(BI, {
                 this._rows[rowPosition] = rowIndex;
             }
         }
-    }
+    };
 
 })();
-;
+
 (function () {
     BI.Tree = function () {
         this.root = new BI.Node(BI.UUID());
@@ -15615,7 +15611,7 @@ $.extend(BI, {
                     n.set("data", child);
                     queue.push(n);
                     self.addNode(parent, n);
-                })
+                });
             }
         },
 
@@ -15628,8 +15624,8 @@ $.extend(BI, {
             return BI.extend({
                 id: node.id
             }, BI.deepClone(node.get("data")), (children.length > 0 ? {
-                children: children
-            } : {}));
+                    children: children
+                } : {}));
         },
 
         toJSON: function (node) {
@@ -15651,8 +15647,8 @@ $.extend(BI, {
             }, BI.deepClone(node.get("data")), {
                 node: node
             }, (children.length > 0 ? {
-                children: children
-            } : {}));
+                    children: children
+                } : {}));
         },
 
         toJSONWithNode: function (node) {
@@ -15730,7 +15726,7 @@ $.extend(BI, {
             this._inOrderTraverse(this.root, callback);
         },
 
-        //中序遍历(递归)
+        // 中序遍历(递归)
         _inOrderTraverse: function (node, callback) {
             if (node != null) {
                 this._inOrderTraverse(node.getLeft());
@@ -15739,7 +15735,7 @@ $.extend(BI, {
             }
         },
 
-        //中序遍历(非递归)
+        // 中序遍历(非递归)
         nrInOrderTraverse: function (callback) {
 
             var stack = [];
@@ -15759,7 +15755,7 @@ $.extend(BI, {
             this._preOrderTraverse(this.root, callback);
         },
 
-        //先序遍历(递归)
+        // 先序遍历(递归)
         _preOrderTraverse: function (node, callback) {
             if (node != null) {
                 callback && callback(node);
@@ -15768,7 +15764,7 @@ $.extend(BI, {
             }
         },
 
-        //先序遍历（非递归）
+        // 先序遍历（非递归）
         nrPreOrderTraverse: function (callback) {
 
             var stack = [];
@@ -15790,7 +15786,7 @@ $.extend(BI, {
             this._postOrderTraverse(this.root, callback);
         },
 
-        //后序遍历(递归)
+        // 后序遍历(递归)
         _postOrderTraverse: function (node, callback) {
             if (node != null) {
                 this._postOrderTraverse(node.getLeft());
@@ -15799,12 +15795,12 @@ $.extend(BI, {
             }
         },
 
-        //后续遍历(非递归)
+        // 后续遍历(非递归)
         nrPostOrderTraverse: function (callback) {
 
             var stack = [];
             var node = this.root;
-            var preNode = null;//表示最近一次访问的节点
+            var preNode = null;// 表示最近一次访问的节点
 
             while (node != null || !BI.isEmpty(stack)) {
 
@@ -16034,9 +16030,9 @@ $.extend(BI, {
                     delete tmpMap[sNodes[i].id].pId;
                 }
                 return r;
-            } else {
-                return [sNodes];
             }
+            return [sNodes];
+            
         },
 
         treeFormat: function (sNodes) {
@@ -16065,9 +16061,9 @@ $.extend(BI, {
                     }
                 }
                 return r;
-            } else {
-                return [sNodes];
             }
+            return [sNodes];
+            
         },
 
         traversal: function (array, callback) {
@@ -16080,10 +16076,10 @@ $.extend(BI, {
                     return true;
                 }
                 self.traversal(item.children, callback);
-            })
+            });
         }
-    })
-})();//向量操作
+    });
+})();// 向量操作
 BI.Vector = function (x, y) {
     this.x = x;
     this.y = y;
@@ -16105,7 +16101,7 @@ BI.Region = function (x, y, w, h) {
 };
 BI.Region.prototype = {
     constructor: BI.Region,
-    //判断两个区域是否相交，若相交，则要么顶点互相包含，要么矩形边界（或对角线）相交
+    // 判断两个区域是否相交，若相交，则要么顶点互相包含，要么矩形边界（或对角线）相交
     isIntersects: function (obj) {
         if (this.isPointInside(obj.x, obj.y) ||
             this.isPointInside(obj.x + obj.w, obj.y) ||
@@ -16117,9 +16113,9 @@ BI.Region.prototype = {
             obj.isPointInside(this.x, this.y + this.h) ||
             obj.isPointInside(this.x + this.w, this.y + this.h)) {
             return true;
-        } else if (obj.x != null && obj.y != null)//判断矩形对角线相交 |v1 X v2||v1 X v3| < 0
+        } else if (obj.x != null && obj.y != null)// 判断矩形对角线相交 |v1 X v2||v1 X v3| < 0
         {
-            var vector1 = new BI.Vector(this.w, this.h);//矩形对角线向量
+            var vector1 = new BI.Vector(this.w, this.h);// 矩形对角线向量
             var vector2 = new BI.Vector(obj.x - this.x, obj.y - this.y);
             var vector3 = new BI.Vector(vector2.x + obj.w, vector2.y + obj.h);
             if ((vector1.cross(vector2) * vector1.cross(vector3)) < 0) {
@@ -16128,7 +16124,7 @@ BI.Region.prototype = {
         }
         return false;
     },
-    //判断一个点是否在这个区域内部
+    // 判断一个点是否在这个区域内部
     isPointInside: function (x, y) {
         if (this.x == null || this.y == null) {
             return false;
@@ -16138,7 +16134,7 @@ BI.Region.prototype = {
         }
         return false;
     },
-    //返回区域的重心，因为是矩形所以返回中点
+    // 返回区域的重心，因为是矩形所以返回中点
     getPosition: function () {
         var pos = [];
         pos.push(this.x + this.w / 2);
@@ -16499,9 +16495,9 @@ BI.Region.prototype = {
 //     };
 // })(BI);
 BI.BehaviorFactory = {
-    createBehavior: function(key, options){
+    createBehavior: function (key, options) {
         var behavior;
-        switch (key){
+        switch (key) {
             case "highlight":
                 behavior = BI.HighlightBehavior;
                 break;
@@ -16511,7 +16507,7 @@ BI.BehaviorFactory = {
         }
         return new behavior(options);
     }
-}
+};
 
 /**
  * guy
@@ -16520,18 +16516,18 @@ BI.BehaviorFactory = {
  * @extends BI.OB
  */
 BI.Behavior = BI.inherit(BI.OB, {
-    _defaultConfig: function() {
+    _defaultConfig: function () {
         return BI.extend(BI.Behavior.superclass._defaultConfig.apply(this, arguments), {
-            rule: function(){return true;}
+            rule: function () {return true;}
         });
     },
 
-    _init : function() {
+    _init: function () {
         BI.Behavior.superclass._init.apply(this, arguments);
 
     },
 
-    doBehavior: function(){
+    doBehavior: function () {
 
     }
 });/**
@@ -16547,9 +16543,9 @@ BI.Behavior = BI.inherit(BI.OB, {
 BI.Layout = BI.inherit(BI.Widget, {
     props: function () {
         return {
-            scrollable: null, //true, false, null
-            scrollx: false, //true, false
-            scrolly: false, //true, false
+            scrollable: null, // true, false, null
+            scrollx: false, // true, false
+            scrolly: false, // true, false
             items: []
         };
     },
@@ -16561,16 +16557,16 @@ BI.Layout = BI.inherit(BI.Widget, {
 
     _init4Margin: function () {
         if (this.options.top) {
-            this.element.css('top', this.options.top);
+            this.element.css("top", this.options.top);
         }
         if (this.options.left) {
-            this.element.css('left', this.options.left);
+            this.element.css("left", this.options.left);
         }
         if (this.options.bottom) {
-            this.element.css('bottom', this.options.bottom);
+            this.element.css("bottom", this.options.bottom);
         }
         if (this.options.right) {
-            this.element.css('right', this.options.right);
+            this.element.css("right", this.options.right);
         }
     },
 
@@ -16652,8 +16648,8 @@ BI.Layout = BI.inherit(BI.Widget, {
         var self = this;
         return eq(item1, item2);
 
-        //不比较函数
-        function eq(a, b, aStack, bStack) {
+        // 不比较函数
+        function eq (a, b, aStack, bStack) {
             if (a === b) {
                 return a !== 0 || 1 / a === 1 / b;
             }
@@ -16662,20 +16658,20 @@ BI.Layout = BI.inherit(BI.Widget, {
             }
             var className = Object.prototype.toString.call(a);
             switch (className) {
-                case '[object RegExp]':
-                case '[object String]':
-                    return '' + a === '' + b;
-                case '[object Number]':
+                case "[object RegExp]":
+                case "[object String]":
+                    return "" + a === "" + b;
+                case "[object Number]":
                     if (+a !== +a) {
                         return +b !== +b;
                     }
                     return +a === 0 ? 1 / +a === 1 / b : +a === +b;
-                case '[object Date]':
-                case '[object Boolean]':
+                case "[object Date]":
+                case "[object Boolean]":
                     return +a === +b;
             }
 
-            var areArrays = className === '[object Array]';
+            var areArrays = className === "[object Array]";
             if (!areArrays) {
                 if (BI.isFunction(a) && BI.isFunction(b)) {
                     return true;
@@ -16842,7 +16838,7 @@ BI.Layout = BI.inherit(BI.Widget, {
         this._getWrapper().append(fragment);
         BI.each(added, function (i, w) {
             w._mount();
-        })
+        });
     },
 
     prependItems: function (items) {
@@ -16861,7 +16857,7 @@ BI.Layout = BI.inherit(BI.Widget, {
         this._getWrapper().prepend(fragment);
         BI.each(added, function (i, w) {
             w._mount();
-        })
+        });
     },
 
     getValue: function () {
@@ -16882,7 +16878,7 @@ BI.Layout = BI.inherit(BI.Widget, {
             if (child = self._children[self._getChildName(i)]) {
                 child.setValue(v);
             }
-        })
+        });
     },
 
     setText: function (v) {
@@ -16891,7 +16887,7 @@ BI.Layout = BI.inherit(BI.Widget, {
             if (child = self._children[self._getChildName(i)]) {
                 child.setText(v);
             }
-        })
+        });
     },
 
     patchItem: function (oldVnode, vnode, index) {
@@ -16969,31 +16965,31 @@ BI.Layout = BI.inherit(BI.Widget, {
             self._children[self._getChildName(i)] = children[key];
         });
 
-        function sameVnode(vnode1, vnode2, oldIndex, newIndex) {
+        function sameVnode (vnode1, vnode2, oldIndex, newIndex) {
             vnode1 = self._getOptions(vnode1);
             vnode2 = self._getOptions(vnode2);
             if (BI.isKey(vnode1.key)) {
                 return vnode1.key === vnode2.key;
             }
             if (oldIndex >= 0) {
-                return oldIndex === newIndex
+                return oldIndex === newIndex;
             }
         }
 
-        function addNode(vnode, index) {
+        function addNode (vnode, index) {
             var opt = self._getOptions(vnode);
             var key = opt.key == null ? index : opt.key;
             return children[key] = self._addElement(key, vnode);
         }
 
-        function addVnodes(before, vnodes, startIdx, endIdx) {
+        function addVnodes (before, vnodes, startIdx, endIdx) {
             for (; startIdx <= endIdx; ++startIdx) {
                 var node = addNode(vnodes[startIdx], startIdx);
                 insertBefore(node, before, false, startIdx);
             }
         }
 
-        function removeVnodes(vnodes, startIdx, endIdx) {
+        function removeVnodes (vnodes, startIdx, endIdx) {
             for (; startIdx <= endIdx; ++startIdx) {
                 var node = self._getOptions(vnodes[startIdx]);
                 var key = node.key == null ? startIdx : node.key;
@@ -17001,7 +16997,7 @@ BI.Layout = BI.inherit(BI.Widget, {
             }
         }
 
-        function insertBefore(insert, before, isNext, index) {
+        function insertBefore (insert, before, isNext, index) {
             insert = self._getOptions(insert);
             before = before && self._getOptions(before);
             var insertKey = BI.isKey(insert.key) ? insert.key : index;
@@ -17059,7 +17055,7 @@ BI.Layout = BI.inherit(BI.Widget, {
     stroke: function (items) {
         var self = this;
         BI.each(items, function (i, item) {
-            if (!!item) {
+            if (item) {
                 self._addElement(i, item);
             }
         });
@@ -17072,7 +17068,7 @@ BI.Layout = BI.inherit(BI.Widget, {
                 if (child === nameOrWidget) {
                     removeIndex = name;
                 }
-            })
+            });
         } else {
             removeIndex = nameOrWidget;
         }
@@ -17106,7 +17102,7 @@ BI.Layout = BI.inherit(BI.Widget, {
 
     }
 });
-BI.shortcut('bi.layout', BI.Layout);/**
+BI.shortcut("bi.layout", BI.Layout);/**
  * guy
  * 由一个元素切换到另一个元素的行为
  * @class BI.Action
@@ -17114,37 +17110,37 @@ BI.shortcut('bi.layout', BI.Layout);/**
  * @abstract
  */
 BI.Action = BI.inherit(BI.OB, {
-    _defaultConfig: function() {
+    _defaultConfig: function () {
         return BI.extend(BI.Action.superclass._defaultConfig.apply(this, arguments), {
             src: null,
             tar: null
         });
     },
 
-    _init : function() {
+    _init: function () {
         BI.Action.superclass._init.apply(this, arguments);
     },
 
-    actionPerformed: function(src, tar, callback){
+    actionPerformed: function (src, tar, callback) {
 
     },
 
-    actionBack: function(tar, src, callback){
+    actionBack: function (tar, src, callback) {
 
     }
 });
 
 BI.ActionFactory = {
-    createAction: function(key, options){
+    createAction: function (key, options) {
         var action;
-        switch (key){
+        switch (key) {
             case "show":
                 action = BI.ShowAction;
                 break;
         }
         return new action(options);
     }
-}/**
+};/**
  * guy
  * 由一个元素切换到另一个元素的行为
  * @class BI.ShowAction
@@ -17177,62 +17173,62 @@ BI.ShowAction = BI.inherit(BI.Action, {
  * @abstract
  */
 BI.PopoverSection = BI.inherit(BI.Widget, {
-    _init : function() {
+    _init: function () {
         BI.PopoverSection.superclass._init.apply(this, arguments);
     },
 
-    rebuildNorth : function(north) {
+    rebuildNorth: function (north) {
         return true;
     },
-    rebuildCenter : function(center) {},
-    rebuildSouth : function(south) {
+    rebuildCenter: function (center) {},
+    rebuildSouth: function (south) {
         return false;
     },
-    close: function(){
+    close: function () {
         this.fireEvent(BI.PopoverSection.EVENT_CLOSE);
     },
-    end: function(){
+    end: function () {
 
     }
 });
-BI.PopoverSection.EVENT_CLOSE = "EVENT_CLOSE";;(function () {
+BI.PopoverSection.EVENT_CLOSE = "EVENT_CLOSE";(function () {
     if (!window.BI) {
         window.BI = {};
     }
-    function isEmpty(value) {
+    function isEmpty (value) {
         // 判断是否为空值
         var result = value === "" || value === null || value === undefined;
         return result;
     }
 
     // 判断是否是无效的日期
-    function isInvalidDate(date) {
+    function isInvalidDate (date) {
         return date == "Invalid Date" || date == "NaN";
     }
 
     /**
      * 科学计数格式
      */
-    function _eFormat(text, fmt) {
+    function _eFormat (text, fmt) {
         var e = fmt.indexOf("E");
         var eleft = fmt.substr(0, e), eright = fmt.substr(e + 1);
         if (/^[0\.-]+$/.test(text)) {
-            text = BI._numberFormat(0.0, eleft) + 'E' + BI._numberFormat(0, eright)
+            text = BI._numberFormat(0.0, eleft) + "E" + BI._numberFormat(0, eright);
         } else {
             var isNegative = text < 0;
             if (isNegative) {
                 text = text.substr(1);
             }
-            var elvl = (eleft.split('.')[0] || '').length;
+            var elvl = (eleft.split(".")[0] || "").length;
             var point = text.indexOf(".");
             if (point < 0) {
                 point = text.length;
             }
-            var i = 0; //第一个不为0的数的位置
-            text = text.replace('.', '');
+            var i = 0; // 第一个不为0的数的位置
+            text = text.replace(".", "");
             for (var len = text.length; i < len; i++) {
                 var ech = text.charAt(i);
-                if (ech <= '9' && ech >= '1') {
+                if (ech <= "9" && ech >= "1") {
                     break;
                 }
             }
@@ -17240,20 +17236,20 @@ BI.PopoverSection.EVENT_CLOSE = "EVENT_CLOSE";;(function () {
             var left = text.substr(i, elvl);
             var dis = i + elvl - text.length;
             if (dis > 0) {
-                //末位补全0
+                // 末位补全0
                 for (var k = 0; k < dis; k++) {
-                    left += '0';
+                    left += "0";
                 }
             } else {
-                left += '.' + text.substr(i + elvl);
+                left += "." + text.substr(i + elvl);
             }
-            left = left.replace(/^[0]+/, '');
-            if (right < 0 && eright.indexOf('-') < 0) {
-                eright += ';-' + eright;
+            left = left.replace(/^[0]+/, "");
+            if (right < 0 && eright.indexOf("-") < 0) {
+                eright += ";-" + eright;
             }
-            text = BI._numberFormat(left, eleft) + 'E' + BI._numberFormat(right, eright);
+            text = BI._numberFormat(left, eleft) + "E" + BI._numberFormat(right, eright);
             if (isNegative) {
-                text = '-' + text;
+                text = "-" + text;
             }
         }
         return text;
@@ -17262,50 +17258,50 @@ BI.PopoverSection.EVENT_CLOSE = "EVENT_CLOSE";;(function () {
     /**
      * 数字格式
      */
-    function _numberFormat(text, format) {
-        var text = text + '';
-        //数字格式，区分正负数
-        var numMod = format.indexOf(';');
+    function _numberFormat (text, format) {
+        var text = text + "";
+        // 数字格式，区分正负数
+        var numMod = format.indexOf(";");
         if (numMod > -1) {
             if (text >= 0) {
                 return _numberFormat(text + "", format.substring(0, numMod));
-            } else {
-                return _numberFormat((-text) + "", format.substr(numMod + 1));
             }
-        } else {
-            //兼容格式处理负数的情况(copy:fr-jquery.format.js)
-            if (+text < 0 && format.charAt(0) !== '-') {
-                return _numberFormat((-text) + "", '-' + format);
-            }
+            return _numberFormat((-text) + "", format.substr(numMod + 1));
+            
         }
-        var tp = text.split('.'), fp = format.split('.'),
-            tleft = tp[0] || '', fleft = fp[0] || '',
-            tright = tp[1] || '', fright = fp[1] || '';
-        //百分比,千分比的小数点移位处理
+        // 兼容格式处理负数的情况(copy:fr-jquery.format.js)
+        if (+text < 0 && format.charAt(0) !== "-") {
+            return _numberFormat((-text) + "", "-" + format);
+        }
+        
+        var tp = text.split("."), fp = format.split("."),
+            tleft = tp[0] || "", fleft = fp[0] || "",
+            tright = tp[1] || "", fright = fp[1] || "";
+        // 百分比,千分比的小数点移位处理
         if (/[%‰]$/.test(format)) {
-            var paddingZero = /[%]$/.test(format) ? '00' : '000';
+            var paddingZero = /[%]$/.test(format) ? "00" : "000";
             tright += paddingZero;
             tleft += tright.substr(0, paddingZero.length);
-            tleft = tleft.replace(/^0+/gi, '');
-            tright = tright.substr(paddingZero.length).replace(/0+$/gi, '');
+            tleft = tleft.replace(/^0+/gi, "");
+            tright = tright.substr(paddingZero.length).replace(/0+$/gi, "");
         }
         var right = _dealWithRight(tright, fright);
         if (right.leftPlus) {
-            //小数点后有进位
-            tleft = parseInt(tleft) + 1 + '';
+            // 小数点后有进位
+            tleft = parseInt(tleft) + 1 + "";
 
-            tleft = isNaN(tleft) ? '1' : tleft;
+            tleft = isNaN(tleft) ? "1" : tleft;
         }
         right = right.num;
         var left = _dealWithLeft(tleft, fleft);
         if (!(/[0-9]/.test(left))) {
-            left = left + '0';
+            left = left + "0";
         }
         if (!(/[0-9]/.test(right))) {
             return left + right;
-        } else {
-            return left + '.' + right;
         }
+        return left + "." + right;
+        
     }
 
     /**
@@ -17315,20 +17311,20 @@ BI.PopoverSection.EVENT_CLOSE = "EVENT_CLOSE";;(function () {
      * @returns {JSON} 返回处理结果和整数部分是否需要进位
      * @private
      */
-    function _dealWithRight(tright, fright) {
-        var right = '', j = 0, i = 0;
+    function _dealWithRight (tright, fright) {
+        var right = "", j = 0, i = 0;
         for (var len = fright.length; i < len; i++) {
             var ch = fright.charAt(i);
             var c = tright.charAt(j);
             switch (ch) {
-                case '0':
+                case "0":
                     if (isEmpty(c)) {
-                        c = '0';
+                        c = "0";
                     }
                     right += c;
                     j++;
                     break;
-                case '#':
+                case "#":
                     right += c;
                     j++;
                     break;
@@ -17340,18 +17336,18 @@ BI.PopoverSection.EVENT_CLOSE = "EVENT_CLOSE";;(function () {
         var rll = tright.substr(j);
         var result = {};
         if (!isEmpty(rll) && rll.charAt(0) > 4) {
-            //有多余字符，需要四舍五入
+            // 有多余字符，需要四舍五入
             result.leftPlus = true;
             var numReg = right.match(/^[0-9]+/);
             if (numReg) {
                 var num = numReg[0];
                 var orilen = num.length;
-                var newnum = parseInt(num) + 1 + '';
-                //进位到整数部分
+                var newnum = parseInt(num) + 1 + "";
+                // 进位到整数部分
                 if (newnum.length > orilen) {
                     newnum = newnum.substr(1);
                 } else {
-                    newnum = String.leftPad(newnum, orilen, '0');
+                    newnum = String.leftPad(newnum, orilen, "0");
                     result.leftPlus = false;
                 }
                 right = right.replace(/^[0-9]+/, newnum);
@@ -17368,8 +17364,8 @@ BI.PopoverSection.EVENT_CLOSE = "EVENT_CLOSE";;(function () {
      * @returns {string} 返回处理结果
      * @private
      */
-    function _dealWithLeft(tleft, fleft) {
-        var left = '';
+    function _dealWithLeft (tleft, fleft) {
+        var left = "";
         var j = tleft.length - 1;
         var combo = -1, last = -1;
         var i = fleft.length - 1;
@@ -17377,27 +17373,27 @@ BI.PopoverSection.EVENT_CLOSE = "EVENT_CLOSE";;(function () {
             var ch = fleft.charAt(i);
             var c = tleft.charAt(j);
             switch (ch) {
-                case '0':
+                case "0":
                     if (isEmpty(c)) {
-                        c = '0';
+                        c = "0";
                     }
                     last = -1;
                     left = c + left;
                     j--;
                     break;
-                case '#':
+                case "#":
                     last = i;
                     left = c + left;
                     j--;
                     break;
-                case ',':
+                case ",":
                     if (!isEmpty(c)) {
-                        //计算一个,分隔区间的长度
+                        // 计算一个,分隔区间的长度
                         var com = fleft.match(/,[#0]+/);
                         if (com) {
                             combo = com[0].length - 1;
                         }
-                        left = ',' + left;
+                        left = "," + left;
                     }
                     break;
                 default :
@@ -17406,22 +17402,22 @@ BI.PopoverSection.EVENT_CLOSE = "EVENT_CLOSE";;(function () {
             }
         }
         if (last > -1) {
-            //处理剩余字符
+            // 处理剩余字符
             var tll = tleft.substr(0, j + 1);
             left = left.substr(0, last) + tll + left.substr(last);
         }
         if (combo > 0) {
-            //处理,分隔区间
+            // 处理,分隔区间
             var res = left.match(/[0-9]+,/);
             if (res) {
                 res = res[0];
-                var newstr = '', n = res.length - 1 - combo;
+                var newstr = "", n = res.length - 1 - combo;
                 for (; n >= 0; n = n - combo) {
-                    newstr = res.substr(n, combo) + ',' + newstr;
+                    newstr = res.substr(n, combo) + "," + newstr;
                 }
                 var lres = res.substr(0, n + combo);
                 if (!isEmpty(lres)) {
-                    newstr = lres + ',' + newstr;
+                    newstr = lres + "," + newstr;
                 }
             }
             left = left.replace(/[0-9]+,/, newstr);
@@ -17431,31 +17427,78 @@ BI.PopoverSection.EVENT_CLOSE = "EVENT_CLOSE";;(function () {
 
     BI.cjkEncode = function (text) {
         // alex:如果非字符串,返回其本身(cjkEncode(234) 返回 ""是不对的)
-        if (typeof text !== 'string') {
+        if (typeof text !== "string") {
             return text;
         }
 
         var newText = "";
         for (var i = 0; i < text.length; i++) {
             var code = text.charCodeAt(i);
-            if (code >= 128 || code === 91 || code === 93) {//91 is "[", 93 is "]".
+            if (code >= 128 || code === 91 || code === 93) {// 91 is "[", 93 is "]".
                 newText += "[" + code.toString(16) + "]";
             } else {
                 newText += text.charAt(i);
             }
         }
 
-        return newText
+        return newText;
+    };
+
+    /**
+     * 将cjkEncode处理过的字符串转化为原始字符串
+     *
+     * @static
+     * @param text 需要做解码的字符串
+     * @return {String} 解码后的字符串
+     */
+    BI.cjkDecode = function (text) {
+        if (text == null) {
+            return "";
+        }
+        // 查找没有 "[", 直接返回.  kunsnat:数字的时候, 不支持indexOf方法, 也是直接返回.
+        if (!isNaN(text) || text.indexOf("[") == -1) {
+            return text;
+        }
+
+        var newText = "";
+        for (var i = 0; i < text.length; i++) {
+            var ch = text.charAt(i);
+            if (ch == "[") {
+                var rightIdx = text.indexOf("]", i + 1);
+                if (rightIdx > i + 1) {
+                    var subText = text.substring(i + 1, rightIdx);
+                    // james：主要是考虑[CDATA[]]这样的值的出现
+                    if (subText.length > 0) {
+                        ch = String.fromCharCode(eval("0x" + subText));
+                    }
+
+                    i = rightIdx;
+                }
+            }
+
+            newText += ch;
+        }
+
+        return newText;
+    };
+
+    // replace the html special tags
+    BI.htmlEncode = function (text) {
+        return (text == null) ? "" : String(text).replace(/&/g, "&amp;").replace(/\"/g, "&quot;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
+    };
+    // html decode
+    BI.htmlDecode = function (text) {
+        return (text == null) ? "" : String(text).replace(/&amp;/g, "&").replace(/&quot;/g, "\"").replace(/&lt;/g, "<").replace(/&gt;/g, ">").replace(/&nbsp;/g, " ");
     };
 
     BI.cjkEncodeDO = function (o) {
         if (BI.isPlainObject(o)) {
             var result = {};
             $.each(o, function (k, v) {
-                if (!(typeof v == "string")) {
+                if (!(typeof v === "string")) {
                     v = BI.jsonEncode(v);
                 }
-                //wei:bug 43338，如果key是中文，cjkencode后o的长度就加了1，ie9以下版本死循环，所以新建对象result。
+                // wei:bug 43338，如果key是中文，cjkencode后o的长度就加了1，ie9以下版本死循环，所以新建对象result。
                 k = BI.cjkEncode(k);
                 result[k] = BI.cjkEncode(v);
             });
@@ -17465,36 +17508,36 @@ BI.PopoverSection.EVENT_CLOSE = "EVENT_CLOSE";;(function () {
     };
 
     BI.jsonEncode = function (o) {
-        //james:这个Encode是抄的EXT的
-        var useHasOwn = {}.hasOwnProperty ? true : false;
+        // james:这个Encode是抄的EXT的
+        var useHasOwn = !!{}.hasOwnProperty;
 
         // crashes Safari in some instances
-        //var validRE = /^("(\\.|[^"\\\n\r])*?"|[,:{}\[\]0-9.\-+Eaeflnr-u \n\r\t])+?$/;
+        // var validRE = /^("(\\.|[^"\\\n\r])*?"|[,:{}\[\]0-9.\-+Eaeflnr-u \n\r\t])+?$/;
 
         var m = {
-            "\b": '\\b',
-            "\t": '\\t',
-            "\n": '\\n',
-            "\f": '\\f',
-            "\r": '\\r',
-            '"': '\\"',
-            "\\": '\\\\'
+            "\b": "\\b",
+            "\t": "\\t",
+            "\n": "\\n",
+            "\f": "\\f",
+            "\r": "\\r",
+            "\"": "\\\"",
+            "\\": "\\\\"
         };
 
         var encodeString = function (s) {
             if (/["\\\x00-\x1f]/.test(s)) {
-                return '"' + s.replace(/([\x00-\x1f\\"])/g, function (a, b) {
-                        var c = m[b];
-                        if (c) {
-                            return c;
-                        }
-                        c = b.charCodeAt();
-                        return "\\u00" +
+                return "\"" + s.replace(/([\x00-\x1f\\"])/g, function (a, b) {
+                    var c = m[b];
+                    if (c) {
+                        return c;
+                    }
+                    c = b.charCodeAt();
+                    return "\\u00" +
                             Math.floor(c / 16).toString(16) +
                             (c % 16).toString(16);
-                    }) + '"';
+                }) + "\"";
             }
-            return '"' + s + '"';
+            return "\"" + s + "\"";
         };
 
         var encodeArray = function (o) {
@@ -17508,7 +17551,7 @@ BI.PopoverSection.EVENT_CLOSE = "EVENT_CLOSE";;(function () {
                         break;
                     default:
                         if (b) {
-                            a.push(',');
+                            a.push(",");
                         }
                         a.push(v === null ? "null" : BI.jsonEncode(v));
                         b = true;
@@ -17518,7 +17561,7 @@ BI.PopoverSection.EVENT_CLOSE = "EVENT_CLOSE";;(function () {
             return a.join("");
         };
 
-        if (typeof o == "undefined" || o === null) {
+        if (typeof o === "undefined" || o === null) {
             return "null";
         } else if (BI.isArray(o)) {
             return encodeArray(o);
@@ -17529,44 +17572,44 @@ BI.PopoverSection.EVENT_CLOSE = "EVENT_CLOSE";;(function () {
              */
             return BI.jsonEncode({
                 __time__: o.getTime()
-            })
-        } else if (typeof o == "string") {
+            });
+        } else if (typeof o === "string") {
             return encodeString(o);
-        } else if (typeof o == "number") {
+        } else if (typeof o === "number") {
             return isFinite(o) ? String(o) : "null";
-        } else if (typeof o == "boolean") {
+        } else if (typeof o === "boolean") {
             return String(o);
         } else if (BI.isFunction(o)) {
             return String(o);
-        } else {
-            var a = ["{"], b, i, v;
-            for (i in o) {
-                if (!useHasOwn || o.hasOwnProperty(i)) {
-                    v = o[i];
-                    switch (typeof v) {
-                        case "undefined":
-                        case "unknown":
-                            break;
-                        default:
-                            if (b) {
-                                a.push(',');
-                            }
-                            a.push(BI.jsonEncode(i), ":",
-                                v === null ? "null" : BI.jsonEncode(v));
-                            b = true;
-                    }
+        }
+        var a = ["{"], b, i, v;
+        for (i in o) {
+            if (!useHasOwn || o.hasOwnProperty(i)) {
+                v = o[i];
+                switch (typeof v) {
+                    case "undefined":
+                    case "unknown":
+                        break;
+                    default:
+                        if (b) {
+                            a.push(",");
+                        }
+                        a.push(BI.jsonEncode(i), ":",
+                            v === null ? "null" : BI.jsonEncode(v));
+                        b = true;
                 }
             }
-            a.push("}");
-            return a.join("");
         }
+        a.push("}");
+        return a.join("");
+        
     };
 
     BI.jsonDecode = function (text) {
 
         try {
             // 注意0啊
-            //var jo = $.parseJSON(text) || {};
+            // var jo = $.parseJSON(text) || {};
             var jo = $.parseJSON(text);
             if (jo == null) {
                 jo = {};
@@ -17579,7 +17622,7 @@ BI.PopoverSection.EVENT_CLOSE = "EVENT_CLOSE";;(function () {
             try {
                 jo = new Function("return " + text)() || {};
             } catch (e) {
-                //do nothing
+                // do nothing
             }
             if (jo == null) {
                 jo = [];
@@ -17589,7 +17632,7 @@ BI.PopoverSection.EVENT_CLOSE = "EVENT_CLOSE";;(function () {
             return jo;
         }
 
-        function _hasDateInJson(json) {
+        function _hasDateInJson (json) {
             if (!json || typeof json !== "string") {
                 return false;
             }
@@ -17604,7 +17647,7 @@ BI.PopoverSection.EVENT_CLOSE = "EVENT_CLOSE";;(function () {
                 return new Date(o.__time__);
             }
             for (var a in o) {
-                if (o[a] == o || typeof o[a] == 'object' || $.isFunction(o[a])) {
+                if (o[a] == o || typeof o[a] === "object" || $.isFunction(o[a])) {
                     break;
                 }
                 o[a] = arguments.callee(o[a]);
@@ -17616,25 +17659,25 @@ BI.PopoverSection.EVENT_CLOSE = "EVENT_CLOSE";;(function () {
 
     BI.contentFormat = function (cv, fmt) {
         if (isEmpty(cv)) {
-            //原值为空，返回空字符
-            return '';
+            // 原值为空，返回空字符
+            return "";
         }
         var text = cv.toString();
         if (isEmpty(fmt)) {
-            //格式为空，返回原字符
+            // 格式为空，返回原字符
             return text;
         }
         if (fmt.match(/^T/)) {
-            //T - 文本格式
+            // T - 文本格式
             return text;
         } else if (fmt.match(/^D/)) {
-            //D - 日期(时间)格式
+            // D - 日期(时间)格式
             if (!(cv instanceof Date)) {
-                if (typeof cv === 'number') {
-                    //毫秒数类型
+                if (typeof cv === "number") {
+                    // 毫秒数类型
                     cv = new Date(cv);
                 } else {
-                    //字符串类型，如yyyyMMdd、MMddyyyy等这样无分隔符的结构
+                    // 字符串类型，如yyyyMMdd、MMddyyyy等这样无分隔符的结构
                     cv = Date.parseDate(cv + "", Date.patterns.ISO8601Long);
                 }
             }
@@ -17643,14 +17686,14 @@ BI.PopoverSection.EVENT_CLOSE = "EVENT_CLOSE";;(function () {
                 text = BI.date2Str(cv, fmt.substring(needTrim ? 2 : 1));
             }
         } else if (fmt.match(/E/)) {
-            //科学计数格式
+            // 科学计数格式
             text = _eFormat(text, fmt);
         } else {
-            //数字格式
+            // 数字格式
             text = _numberFormat(text, fmt);
         }
-        //¤ - 货币格式
-        text = text.replace(/¤/g, '￥');
+        // ¤ - 货币格式
+        text = text.replace(/¤/g, "￥");
         return text;
     };
 
@@ -17668,19 +17711,19 @@ BI.PopoverSection.EVENT_CLOSE = "EVENT_CLOSE";;(function () {
      */
     BI.date2Str = function (date, format) {
         if (!date) {
-            return '';
+            return "";
         }
         // O(len(format))
-        var len = format.length, result = '';
+        var len = format.length, result = "";
         if (len > 0) {
             var flagch = format.charAt(0), start = 0, str = flagch;
             for (var i = 1; i < len; i++) {
                 var ch = format.charAt(i);
                 if (flagch !== ch) {
                     result += compileJFmt({
-                        'char': flagch,
-                        'str': str,
-                        'len': i - start
+                        char: flagch,
+                        str: str,
+                        len: i - start
                     }, date);
                     flagch = ch;
                     start = i;
@@ -17690,78 +17733,78 @@ BI.PopoverSection.EVENT_CLOSE = "EVENT_CLOSE";;(function () {
                 }
             }
             result += compileJFmt({
-                'char': flagch,
-                'str': str,
-                'len': len - start
+                char: flagch,
+                str: str,
+                len: len - start
             }, date);
         }
         return result;
 
-        function compileJFmt(jfmt, date) {
-            var str = jfmt.str, len = jfmt.len, ch = jfmt['char'];
+        function compileJFmt (jfmt, date) {
+            var str = jfmt.str, len = jfmt.len, ch = jfmt["char"];
             switch (ch) {
-                case 'E': //星期
+                case "E": // 星期
                     str = Date._DN[date.getDay()];
                     break;
-                case 'y': //年
+                case "y": // 年
                     if (len <= 3) {
-                        str = (date.getFullYear() + '').slice(2, 4);
+                        str = (date.getFullYear() + "").slice(2, 4);
                     } else {
                         str = date.getFullYear();
                     }
                     break;
-                case 'M': //月
+                case "M": // 月
                     if (len > 2) {
                         str = Date._MN[date.getMonth()];
                     } else if (len < 2) {
                         str = date.getMonth() + 1;
                     } else {
-                        str = String.leftPad(date.getMonth() + 1 + '', 2, '0');
+                        str = String.leftPad(date.getMonth() + 1 + "", 2, "0");
                     }
                     break;
-                case 'd': //日
+                case "d": // 日
                     if (len > 1) {
-                        str = String.leftPad(date.getDate() + '', 2, '0');
+                        str = String.leftPad(date.getDate() + "", 2, "0");
                     } else {
                         str = date.getDate();
                     }
                     break;
-                case 'h': //时(12)
+                case "h": // 时(12)
                     var hour = date.getHours() % 12;
                     if (hour === 0) {
                         hour = 12;
                     }
                     if (len > 1) {
-                        str = String.leftPad(hour + '', 2, '0');
+                        str = String.leftPad(hour + "", 2, "0");
                     } else {
                         str = hour;
                     }
                     break;
-                case 'H': //时(24)
+                case "H": // 时(24)
                     if (len > 1) {
-                        str = String.leftPad(date.getHours() + '', 2, '0');
+                        str = String.leftPad(date.getHours() + "", 2, "0");
                     } else {
                         str = date.getHours();
                     }
                     break;
-                case 'm':
+                case "m":
                     if (len > 1) {
-                        str = String.leftPad(date.getMinutes() + '', 2, '0');
+                        str = String.leftPad(date.getMinutes() + "", 2, "0");
                     } else {
                         str = date.getMinutes();
                     }
                     break;
-                case 's':
+                case "s":
                     if (len > 1) {
-                        str = String.leftPad(date.getSeconds() + '', 2, '0');
+                        str = String.leftPad(date.getSeconds() + "", 2, "0");
                     } else {
                         str = date.getSeconds();
                     }
                     break;
-                case 'a':
-                    str = date.getHours() < 12 ? 'am' : 'pm';
+                case "a":
+                    str = date.getHours() < 12 ? "am" : "pm";
                     break;
-                case 'z':
+                case "z":
                     str = date.getTimezone();
                     break;
                 default:
@@ -17776,16 +17819,16 @@ BI.PopoverSection.EVENT_CLOSE = "EVENT_CLOSE";;(function () {
         if (value == null) {
             return 0;
         }
-        if (typeof value == 'number') {
+        if (typeof value === "number") {
             return value;
-        } else {
-            var str = value + "";
-            if (str.indexOf(".") === -1) {
-                return parseInt(str);
-            } else {
-                return parseFloat(str);
-            }
         }
+        var str = value + "";
+        if (str.indexOf(".") === -1) {
+            return parseInt(str);
+        }
+        return parseFloat(str);
+            
+        
     };
 
     BI.object2Date = function (obj) {
@@ -17794,18 +17837,18 @@ BI.PopoverSection.EVENT_CLOSE = "EVENT_CLOSE";;(function () {
         }
         if (obj instanceof Date) {
             return obj;
-        } else if (typeof obj == 'number') {
+        } else if (typeof obj === "number") {
             return new Date(obj);
-        } else {
-            var str = obj + "";
-            str = str.replace(/-/g, '/');
-            var dt = new Date(str);
-            if (!isInvalidDate(dt)) {
-                return dt;
-            }
-
-            return new Date();
         }
+        var str = obj + "";
+        str = str.replace(/-/g, "/");
+        var dt = new Date(str);
+        if (!isInvalidDate(dt)) {
+            return dt;
+        }
+
+        return new Date();
+        
     };
 
     BI.object2Time = function (obj) {
@@ -17814,25 +17857,25 @@ BI.PopoverSection.EVENT_CLOSE = "EVENT_CLOSE";;(function () {
         }
         if (obj instanceof Date) {
             return obj;
-        } else {
-            var str = obj + "";
-            str = str.replace(/-/g, '/');
-            var dt = new Date(str);
-            if (!isInvalidDate(dt)) {
-                return dt;
-            }
-            if (str.indexOf('/') === -1 && str.indexOf(':') !== -1) {
-                dt = new Date("1970/01/01 " + str);
-                if (!isInvalidDate(dt)) {
-                    return dt;
-                }
-            }
-            dt = BI.str2Date(str, "HH:mm:ss");
-            if (!isInvalidDate(dt)) {
-                return dt;
-            }
-            return new Date();
         }
+        var str = obj + "";
+        str = str.replace(/-/g, "/");
+        var dt = new Date(str);
+        if (!isInvalidDate(dt)) {
+            return dt;
+        }
+        if (str.indexOf("/") === -1 && str.indexOf(":") !== -1) {
+            dt = new Date("1970/01/01 " + str);
+            if (!isInvalidDate(dt)) {
+                return dt;
+            }
+        }
+        dt = BI.str2Date(str, "HH:mm:ss");
+        if (!isInvalidDate(dt)) {
+            return dt;
+        }
+        return new Date();
+        
     };
 })();
 /**
@@ -17858,7 +17901,7 @@ BI.HighlightBehavior = BI.inherit(BI.Behavior, {
             if (item instanceof BI.Single) {
                 var rule = o.rule(item.getValue(), item);
 
-                function doBe(run) {
+                function doBe (run) {
                     if (run === true) {
                         item.doHighLight.apply(item, args);
                     } else {
@@ -17874,7 +17917,7 @@ BI.HighlightBehavior = BI.inherit(BI.Behavior, {
             } else {
                 item.doBehavior.apply(item, args);
             }
-        })
+        });
     }
 });/**
  * guy
@@ -17883,21 +17926,21 @@ BI.HighlightBehavior = BI.inherit(BI.Behavior, {
  * @extends BI.Behavior
  */
 BI.RedMarkBehavior = BI.inherit(BI.Behavior, {
-    _defaultConfig: function() {
+    _defaultConfig: function () {
         return BI.extend(BI.RedMarkBehavior.superclass._defaultConfig.apply(this, arguments), {
 
         });
     },
 
-    _init : function() {
+    _init: function () {
         BI.RedMarkBehavior.superclass._init.apply(this, arguments);
 
     },
 
-    doBehavior: function(items){
+    doBehavior: function (items) {
         var args  = Array.prototype.slice.call(arguments, 1),
             o     = this.options;
-        BI.each(items, function(i, item){
+        BI.each(items, function (i, item) {
             if(item instanceof BI.Single) {
                 if (o.rule(item.getValue(), item)) {
                     item.doRedMark.apply(item, args);
@@ -17907,7 +17950,7 @@ BI.RedMarkBehavior = BI.inherit(BI.Behavior, {
             } else {
                 item.doBehavior.apply(item, args);
             }
-        })
+        });
     }
 });/**
  * guy
@@ -17918,16 +17961,16 @@ BI.RedMarkBehavior = BI.inherit(BI.Behavior, {
  * @abstract
  */
 BI.Controller = BI.inherit(BI.OB, {
-    _defaultConfig: function() {
+    _defaultConfig: function () {
         return BI.extend(BI.Controller.superclass._defaultConfig.apply(this, arguments), {
 
-        })
+        });
     },
-    _init : function() {
+    _init: function () {
         BI.Controller.superclass._init.apply(this, arguments);
     },
 
-    destroy: function(){
+    destroy: function () {
 
     }
 });
@@ -17955,7 +17998,7 @@ BI.BroadcastController = BI.inherit(BI.Controller, {
         this._broadcasts[name].push(fn);
         return function () {
             self.remove(name, fn);
-        }
+        };
     },
 
     send: function (name) {
@@ -18241,7 +18284,7 @@ BI.FloatBoxController = BI.inherit(BI.Controller, {
             cls: "bi-popup-view",
             items: [{
                 el: (this.floatLayer[name] = BI.createWidget({
-                    type: 'bi.absolute',
+                    type: "bi.absolute",
                     items: [floatbox]
                 })),
                 left: 0,
@@ -18254,7 +18297,7 @@ BI.FloatBoxController = BI.inherit(BI.Controller, {
         (function (key) {
             floatbox.on(BI.FloatBox.EVENT_FLOAT_BOX_CLOSED, function () {
                 self.close(key);
-            })
+            });
         })(name);
         BI.createWidget({
             type: "bi.absolute",
@@ -18357,7 +18400,7 @@ BI.LayerController = BI.inherit(BI.Controller, {
             if (layer.element.is(":visible")) {
                 layer.element.trigger("__resize__");
             }
-        })
+        });
     },
 
     make: function (name, container, op) {
@@ -18533,9 +18576,9 @@ BI.ResizeController = BI.inherit(BI.Controller, {
         var self = this;
         this.resizerManger = {};
         var fn = BI.debounce(function (ev) {
-            //if (BI.isWindow(ev.target)) {
+            // if (BI.isWindow(ev.target)) {
             self._resize(ev);
-            //}
+            // }
         }, 30);
         $(window).resize(fn);
     },
@@ -18556,7 +18599,7 @@ BI.ResizeController = BI.inherit(BI.Controller, {
                 resizer(ev);
                 return;
             }
-        })
+        });
     },
 
     add: function (name, resizer) {
@@ -18605,7 +18648,7 @@ BI.TooltipsController = BI.inherit(BI.Controller, {
     _init: function () {
         BI.TooltipsController.superclass._init.apply(this, arguments);
         this.tooltipsManager = {};
-        this.showingTips = {};//存储正在显示的tooltip
+        this.showingTips = {};// 存储正在显示的tooltip
     },
 
     _createTooltip: function (text, level) {
@@ -18644,7 +18687,7 @@ BI.TooltipsController = BI.inherit(BI.Controller, {
         return this.get(name);
     },
 
-    //opt: {container: '', belowMouse: false}
+    // opt: {container: '', belowMouse: false}
     show: function (e, name, text, level, context, opt) {
         opt || (opt = {});
         var self = this;
@@ -18756,61 +18799,61 @@ _.extend(BI, {
          * @static
          * @property 确定事件
          */
-        CONFIRM: '_CONFIRM',
+        CONFIRM: "_CONFIRM",
 
         /**
          * @static
          * @property 错误事件
          */
-        ERROR: '_ERROR',
+        ERROR: "_ERROR",
 
         /**
          * @static
          * @property 暂停事件
          */
-        PAUSE: '_PAUSE',
+        PAUSE: "_PAUSE",
 
         /**
          * @static
          * @property destroy事件
          */
-        DESTROY: '_DESTROY',
+        DESTROY: "_DESTROY",
 
         /**
          * @static
          * @property 取消挂载事件
          */
-        UNMOUNT: '_UNMOUNT',
+        UNMOUNT: "_UNMOUNT",
 
         /**
          * @static
          * @property 清除选择
          */
-        CLEAR: '_CLEAR',
+        CLEAR: "_CLEAR",
 
         /**
          * @static
          * @property 添加数据
          */
-        ADD: '_ADD',
+        ADD: "_ADD",
 
         /**
          * @static
          * @property 正在编辑状态事件
          */
-        EDITING: '_EDITING',
+        EDITING: "_EDITING",
 
         /**
          * @static
          * @property 空状态事件
          */
-        EMPTY: '_EMPTY',
+        EMPTY: "_EMPTY",
 
         /**
          * @static
          * @property 显示隐藏事件
          */
-        VIEW: '_VIEW',
+        VIEW: "_VIEW",
 
         /**
          * @static
@@ -18822,335 +18865,335 @@ _.extend(BI, {
          * @static
          * @property 编辑前事件
          */
-        BEFOREEDIT: '_BEFOREEDIT',
+        BEFOREEDIT: "_BEFOREEDIT",
 
         /**
          * @static
          * @property 编辑后事件
          */
-        AFTEREDIT: '_AFTEREDIT',
+        AFTEREDIT: "_AFTEREDIT",
 
         /**
          * @static
          * @property 开始编辑事件
          */
-        STARTEDIT: '_STARTEDIT',
+        STARTEDIT: "_STARTEDIT",
 
         /**
          * @static
          * @property 停止编辑事件
          */
-        STOPEDIT: '_STOPEDIT',
+        STOPEDIT: "_STOPEDIT",
 
         /**
          * @static
          * @property 值改变事件
          */
-        CHANGE: '_CHANGE',
+        CHANGE: "_CHANGE",
 
         /**
          * @static
          * @property 下拉弹出菜单事件
          */
-        EXPAND: '_EXPAND',
+        EXPAND: "_EXPAND",
 
         /**
          * @static
          * @property 关闭下拉菜单事件
          */
-        COLLAPSE: '_COLLAPSE',
+        COLLAPSE: "_COLLAPSE",
 
         /**
          * @static
          * @property 回调事件
          */
-        CALLBACK: '_CALLBACK',
+        CALLBACK: "_CALLBACK",
 
         /**
          * @static
          * @property 点击事件
          */
-        CLICK: '_CLICK',
+        CLICK: "_CLICK",
 
         /**
          * @static
          * @property 状态改变事件，一般是用在复选按钮和单选按钮
          */
-        STATECHANGE: '_STATECHANGE',
+        STATECHANGE: "_STATECHANGE",
 
         /**
          * @static
          * @property 状态改变前事件
          */
-        BEFORESTATECHANGE: '_BEFORESTATECHANGE',
+        BEFORESTATECHANGE: "_BEFORESTATECHANGE",
 
 
         /**
          * @static
          * @property 初始化事件
          */
-        INIT: '_INIT',
+        INIT: "_INIT",
 
         /**
          * @static
          * @property 初始化后事件
          */
-        AFTERINIT: '_AFTERINIT',
+        AFTERINIT: "_AFTERINIT",
 
         /**
          * @static
          * @property 滚动条滚动事件
          */
-        SCROLL: '_SCROLL',
+        SCROLL: "_SCROLL",
 
 
         /**
          * @static
          * @property 开始加载事件
          */
-        STARTLOAD: '_STARTLOAD',
+        STARTLOAD: "_STARTLOAD",
 
         /**
          * @static
          * @property 加载后事件
          */
-        AFTERLOAD: '_AFTERLOAD',
+        AFTERLOAD: "_AFTERLOAD",
 
 
         /**
          * @static
          * @property 提交前事件
          */
-        BS: 'beforesubmit',
+        BS: "beforesubmit",
 
         /**
          * @static
          * @property 提交后事件
          */
-        AS: 'aftersubmit',
+        AS: "aftersubmit",
 
         /**
          * @static
          * @property 提交完成事件
          */
-        SC: 'submitcomplete',
+        SC: "submitcomplete",
 
         /**
          * @static
          * @property 提交失败事件
          */
-        SF: 'submitfailure',
+        SF: "submitfailure",
 
         /**
          * @static
          * @property 提交成功事件
          */
-        SS: 'submitsuccess',
+        SS: "submitsuccess",
 
         /**
          * @static
          * @property 校验提交前事件
          */
-        BVW: 'beforeverifywrite',
+        BVW: "beforeverifywrite",
 
         /**
          * @static
          * @property 校验提交后事件
          */
-        AVW: 'afterverifywrite',
+        AVW: "afterverifywrite",
 
         /**
          * @static
          * @property 校验后事件
          */
-        AV: 'afterverify',
+        AV: "afterverify",
 
         /**
          * @static
          * @property 填报前事件
          */
-        BW: 'beforewrite',
+        BW: "beforewrite",
 
         /**
          * @static
          * @property 填报后事件
          */
-        AW: 'afterwrite',
+        AW: "afterwrite",
 
         /**
          * @static
          * @property 填报成功事件
          */
-        WS: 'writesuccess',
+        WS: "writesuccess",
 
         /**
          * @static
          * @property 填报失败事件
          */
-        WF: 'writefailure',
+        WF: "writefailure",
 
         /**
          * @static
          * @property 添加行前事件
          */
-        BA: 'beforeappend',
+        BA: "beforeappend",
 
         /**
          * @static
          * @property 添加行后事件
          */
-        AA: 'afterappend',
+        AA: "afterappend",
 
         /**
          * @static
          * @property 删除行前事件
          */
-        BD: 'beforedelete',
+        BD: "beforedelete",
 
         /**
          * @static
          * @property 删除行后事件
          */
-        AD: 'beforedelete',
+        AD: "beforedelete",
 
         /**
          * @static
          * @property 未提交离开事件
          */
-        UC: 'unloadcheck',
+        UC: "unloadcheck",
 
 
         /**
          * @static
          * @property PDF导出前事件
          */
-        BTOPDF: 'beforetopdf',
+        BTOPDF: "beforetopdf",
 
         /**
          * @static
          * @property PDF导出后事件
          */
-        ATOPDF: 'aftertopdf',
+        ATOPDF: "aftertopdf",
 
         /**
          * @static
          * @property Excel导出前事件
          */
-        BTOEXCEL: 'beforetoexcel',
+        BTOEXCEL: "beforetoexcel",
 
         /**
          * @static
          * @property Excel导出后事件
          */
-        ATOEXCEL: 'aftertoexcel',
+        ATOEXCEL: "aftertoexcel",
 
         /**
          * @static
          * @property Word导出前事件
          */
-        BTOWORD: 'beforetoword',
+        BTOWORD: "beforetoword",
 
         /**
          * @static
          * @property Word导出后事件
          */
-        ATOWORD: 'aftertoword',
+        ATOWORD: "aftertoword",
 
         /**
          * @static
          * @property 图片导出前事件
          */
-        BTOIMAGE: 'beforetoimage',
+        BTOIMAGE: "beforetoimage",
 
         /**
          * @static
          * @property 图片导出后事件
          */
-        ATOIMAGE: 'aftertoimage',
+        ATOIMAGE: "aftertoimage",
 
         /**
          * @static
          * @property HTML导出前事件
          */
-        BTOHTML: 'beforetohtml',
+        BTOHTML: "beforetohtml",
 
         /**
          * @static
          * @property HTML导出后事件
          */
-        ATOHTML: 'aftertohtml',
+        ATOHTML: "aftertohtml",
 
         /**
          * @static
          * @property Excel导入前事件
          */
-        BIMEXCEL: 'beforeimportexcel',
+        BIMEXCEL: "beforeimportexcel",
 
         /**
          * @static
          * @property Excel导出后事件
          */
-        AIMEXCEL: 'afterimportexcel',
+        AIMEXCEL: "afterimportexcel",
 
         /**
          * @static
          * @property PDF打印前事件
          */
-        BPDFPRINT: 'beforepdfprint',
+        BPDFPRINT: "beforepdfprint",
 
         /**
          * @static
          * @property PDF打印后事件
          */
-        APDFPRINT: 'afterpdfprint',
+        APDFPRINT: "afterpdfprint",
 
         /**
          * @static
          * @property Flash打印前事件
          */
-        BFLASHPRINT: 'beforeflashprint',
+        BFLASHPRINT: "beforeflashprint",
 
         /**
          * @static
          * @property Flash打印后事件
          */
-        AFLASHPRINT: 'afterflashprint',
+        AFLASHPRINT: "afterflashprint",
 
         /**
          * @static
          * @property Applet打印前事件
          */
-        BAPPLETPRINT: 'beforeappletprint',
+        BAPPLETPRINT: "beforeappletprint",
 
         /**
          * @static
          * @property Applet打印后事件
          */
-        AAPPLETPRINT: 'afterappletprint',
+        AAPPLETPRINT: "afterappletprint",
 
         /**
          * @static
          * @property 服务器打印前事件
          */
-        BSEVERPRINT: 'beforeserverprint',
+        BSEVERPRINT: "beforeserverprint",
 
         /**
          * @static
          * @property 服务器打印后事件
          */
-        ASERVERPRINT: 'afterserverprint',
+        ASERVERPRINT: "afterserverprint",
 
         /**
          * @static
          * @property 邮件发送前事件
          */
-        BEMAIL: 'beforeemail',
+        BEMAIL: "beforeemail",
 
         /**
          * @static
          * @property 邮件发送后事件
          */
-        AEMAIL: 'afteremail'
+        AEMAIL: "afteremail"
     }
 });/**
  * guy
@@ -19161,7 +19204,7 @@ BI.extend(jQuery.fn, {
     destroy: function () {
         this.remove();
         if (BI.isIE() === true) {
-            this[0].outerHTML = '';
+            this[0].outerHTML = "";
         }
     },
     /**
@@ -19174,7 +19217,7 @@ BI.extend(jQuery.fn, {
      */
     __textKeywordMarked__: function (text, keyword, py) {
         if (!BI.isKey(keyword) || (text + "").length > 100) {
-            return this.html(BI.Func.formatSpecialCharInHtml(text));
+            return this.html(BI.htmlEncode(text));
         }
         keyword = keyword + "";
         keyword = BI.toUpperCase(keyword);
@@ -19197,7 +19240,7 @@ BI.extend(jQuery.fn, {
             if (tidx >= 0) {
                 this.append(textLeft.substr(0, tidx));
                 this.append($("<span>").addClass("bi-keyword-red-mark")
-                    .html(BI.Func.formatSpecialCharInHtml(textLeft.substr(tidx, keyword.length))));
+                    .html(BI.htmlEncode(textLeft.substr(tidx, keyword.length))));
 
                 textLeft = textLeft.substr(tidx + keyword.length);
                 if (py != null) {
@@ -19206,7 +19249,7 @@ BI.extend(jQuery.fn, {
             } else if (pidx != null && pidx >= 0 && Math.floor(pidx / text.length) === Math.floor((pidx + keyword.length - 1) / text.length)) {
                 this.append(textLeft.substr(0, pidx));
                 this.append($("<span>").addClass("bi-keyword-red-mark")
-                    .html(BI.Func.formatSpecialCharInHtml(textLeft.substr(pidx, keyword.length))));
+                    .html(BI.htmlEncode(textLeft.substr(pidx, keyword.length))));
                 if (py != null) {
                     py = py.substr(pidx + keyword.length);
                 }
@@ -19228,17 +19271,17 @@ BI.extend(jQuery.fn, {
         return height;
     },
 
-    //是否有竖直滚动条
+    // 是否有竖直滚动条
     hasVerticalScroll: function () {
         return this.height() > 0 && this[0].clientWidth < this[0].offsetWidth;
     },
 
-    //是否有水平滚动条
+    // 是否有水平滚动条
     hasHorizonScroll: function () {
         return this.width() > 0 && this[0].clientHeight < this[0].offsetHeight;
     },
 
-    //获取计算后的样式
+    // 获取计算后的样式
     getStyle: function (name) {
         var node = this[0];
         var computedStyle = void 0;
@@ -19258,13 +19301,13 @@ BI.extend(jQuery.fn, {
             if (computedStyle) {
                 return computedStyle.getPropertyValue(BI.hyphenate(name));
             }
-            if (name === 'display') {
-                return 'none';
+            if (name === "display") {
+                return "none";
             }
         }
         // Internet Explorer
         if (node.currentStyle) {
-            if (name === 'float') {
+            if (name === "float") {
                 return node.currentStyle.cssFloat || node.currentStyle.styleFloat;
             }
             return node.currentStyle[BI.camelize(name)];
@@ -19275,7 +19318,7 @@ BI.extend(jQuery.fn, {
     __isMouseInBounds__: function (e) {
         var offset2Body = this.offset();
         return !(e.pageX < offset2Body.left || e.pageX > offset2Body.left + this.outerWidth()
-        || e.pageY < offset2Body.top || e.pageY > offset2Body.top + this.outerHeight())
+        || e.pageY < offset2Body.top || e.pageY > offset2Body.top + this.outerHeight());
     },
 
     __hasZIndexMask__: function (zindex) {
@@ -19283,8 +19326,8 @@ BI.extend(jQuery.fn, {
     },
 
     __buildZIndexMask__: function (zindex, domArray) {
-        this.zIndexMask = this.zIndexMask || {};//存储z-index的mask
-        this.indexMask = this.indexMask || [];//存储mask
+        this.zIndexMask = this.zIndexMask || {};// 存储z-index的mask
+        this.indexMask = this.indexMask || [];// 存储mask
         var mask = BI.createWidget({
             type: "bi.center_adapt",
             cls: "bi-z-index-mask",
@@ -19332,7 +19375,7 @@ BI.extend(jQuery, {
         var el = combo.element;
         return {
             left: el.offset().left + el.outerWidth() + (extraWidth || 0)
-        }
+        };
     },
 
     getTopPosition: function (combo, popup, extraHeight) {
@@ -19387,7 +19430,7 @@ BI.extend(jQuery, {
         }
         return {
             left: left
-        }
+        };
     },
 
     getLeftAdaptPosition: function (combo, popup, extraWidth) {
@@ -19396,7 +19439,7 @@ BI.extend(jQuery, {
         }
         return {
             left: 0
-        }
+        };
     },
 
     getRightAlignPosition: function (combo, popup, extraWidth) {
@@ -19407,7 +19450,7 @@ BI.extend(jQuery, {
         }
         return {
             left: left
-        }
+        };
     },
 
     getRightAdaptPosition: function (combo, popup, extraWidth) {
@@ -19416,7 +19459,7 @@ BI.extend(jQuery, {
         }
         return {
             left: $("body").bounds().width - popup.element.bounds().width
-        }
+        };
     },
 
     getTopAlignPosition: function (combo, popup, extraHeight, needAdaptHeight) {
@@ -19443,7 +19486,7 @@ BI.extend(jQuery, {
             adaptHeight: adaptHeight
         } : {
             top: top
-        }
+        };
     },
 
     getTopAdaptPosition: function (combo, popup, extraHeight, needAdaptHeight) {
@@ -19455,17 +19498,17 @@ BI.extend(jQuery, {
             return {
                 top: 0,
                 adaptHeight: combo.element.offset().top - extraHeight
-            }
+            };
         }
         if (popupBounds.height + extraHeight > windowBounds.height) {
             return {
                 top: 0,
                 adaptHeight: windowBounds.height - extraHeight
-            }
+            };
         }
         return {
             top: 0
-        }
+        };
     },
 
     getBottomAlignPosition: function (combo, popup, extraHeight, needAdaptHeight) {
@@ -19492,7 +19535,7 @@ BI.extend(jQuery, {
             adaptHeight: adaptHeight
         } : {
             top: top
-        }
+        };
     },
 
     getBottomAdaptPosition: function (combo, popup, extraHeight, needAdaptHeight) {
@@ -19506,17 +19549,17 @@ BI.extend(jQuery, {
             return {
                 top: comboOffset.top + comboBounds.height + extraHeight,
                 adaptHeight: windowBounds.height - comboOffset.top - comboBounds.height - extraHeight
-            }
+            };
         }
         if (popupBounds.height + extraHeight > windowBounds.height) {
             return {
                 top: extraHeight,
                 adaptHeight: windowBounds.height - extraHeight
-            }
+            };
         }
         return {
             top: windowBounds.height - popupBounds.height - extraHeight
-        }
+        };
     },
 
     getCenterAdaptPosition: function (combo, popup) {
@@ -19534,7 +19577,7 @@ BI.extend(jQuery, {
         }
         return {
             left: left
-        }
+        };
     },
 
     getMiddleAdaptPosition: function (combo, popup) {
@@ -19552,7 +19595,7 @@ BI.extend(jQuery, {
         }
         return {
             top: top
-        }
+        };
     },
 
     getComboPositionByDirections: function (combo, popup, extraWidth, extraHeight, needAdaptHeight, directions) {
@@ -19715,7 +19758,7 @@ BI.extend(jQuery, {
         var bodyHeight = $("body").bounds().height - extraHeight;
         var maxHeight = Math.min(popup.attr("maxHeight") || bodyHeight, bodyHeight);
         popup.resetHeight && popup.resetHeight(maxHeight);
-        var position = $.getComboPositionByDirections(combo, popup, extraWidth, extraHeight, needAdaptHeight, directions || ['bottom', 'top', 'right', 'left']);
+        var position = $.getComboPositionByDirections(combo, popup, extraWidth, extraHeight, needAdaptHeight, directions || ["bottom", "top", "right", "left"]);
         switch (offsetStyle) {
             case "center":
                 if (position.change) {
@@ -19758,8 +19801,8 @@ BI.extend(BI.Func, {
         name = name || "";
         while (true) {
             if (BI.every(array, function (i, item) {
-                    return item.name !== name;
-                })) {
+                return item.name !== name;
+            })) {
                 break;
             }
             name = src + (idx++);
@@ -19810,28 +19853,7 @@ BI.extend(BI.Func, {
         return {
             matched: matched,
             finded: finded
-        }
-    },
-
-    /**
-     * 将字符串中的尖括号等字符encode成html能解析的形式
-     * @param str
-     */
-    formatSpecialCharInHtml: function (str) {
-        return (str + "").replaceAll("\\s|<=?|>=?", function (str) {
-            switch (str) {
-                case "<":
-                    return "&lt;";
-                case "<=":
-                    return "&le;";
-                case ">":
-                    return "&gt;";
-                case ">=":
-                    return "&ge;";
-                default:
-                    return "&nbsp;";
-            }
-        });
+        };
     }
 });
 
@@ -19862,11 +19884,11 @@ BI.extend(BI.DOM, {
         return $("body").find(obj.element).length > 0;
     },
 
-    //预加载图片
+    // 预加载图片
     preloadImages: function (srcArray, onload) {
         var count = 0, images = [];
 
-        function complete() {
+        function complete () {
             count++;
             if (count >= srcArray.length) {
                 onload();
@@ -19877,10 +19899,10 @@ BI.extend(BI.DOM, {
             images[i] = new Image();
             images[i].src = src;
             images[i].onload = function () {
-                complete()
+                complete();
             };
             images[i].onerror = function () {
-                complete()
+                complete();
             };
         });
     },
@@ -19909,13 +19931,13 @@ BI.extend(BI.DOM, {
         }
         var rgb = this.rgb2json(this.hex2rgb(hex));
         var grayLevel = Math.round(rgb.r * 0.299 + rgb.g * 0.587 + rgb.b * 0.114);
-        if (grayLevel < 192/**网上给的是140**/) {
+        if (grayLevel < 192/** 网上给的是140**/) {
             return true;
         }
         return false;
     },
 
-    //获取对比颜色
+    // 获取对比颜色
     getContrastColor: function (color) {
         if (!color || !this.isColor(color)) {
             return "";
@@ -19983,9 +20005,9 @@ BI.extend(BI.DOM, {
     },
 
     int2hex: function (strNum) {
-        var hexdig = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'a', 'b', 'c', 'd', 'e', 'f'];
+        var hexdig = ["0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "a", "b", "c", "d", "e", "f"];
 
-        return hexdig[strNum >>> 4] + '' + hexdig[strNum & 15];
+        return hexdig[strNum >>> 4] + "" + hexdig[strNum & 15];
     },
 
     hex2rgb: function (color) {
@@ -19998,14 +20020,13 @@ BI.extend(BI.DOM, {
         var tempValue = "rgb(", colorArray;
 
         if (color.length === 7) {
-            colorArray = [BI.parseInt('0x' + color.substring(1, 3)),
-                BI.parseInt('0x' + color.substring(3, 5)),
-                BI.parseInt('0x' + color.substring(5, 7))];
-        }
-        else if (color.length === 4) {
-            colorArray = [BI.parseInt('0x' + color.substring(1, 2)),
-                BI.parseInt('0x' + color.substring(2, 3)),
-                BI.parseInt('0x' + color.substring(3, 4))];
+            colorArray = [BI.parseInt("0x" + color.substring(1, 3)),
+                BI.parseInt("0x" + color.substring(3, 5)),
+                BI.parseInt("0x" + color.substring(5, 7))];
+        } else if (color.length === 4) {
+            colorArray = [BI.parseInt("0x" + color.substring(1, 2)),
+                BI.parseInt("0x" + color.substring(2, 3)),
+                BI.parseInt("0x" + color.substring(3, 4))];
         }
         tempValue += colorArray[0] + ",";
         tempValue += colorArray[1] + ",";
@@ -20051,7 +20072,7 @@ BI.extend(BI.DOM, {
         return width;
     },
 
-    //获取滚动条的宽度
+    // 获取滚动条的宽度
     getScrollWidth: function () {
         if (this._scrollWidth == null) {
             var ul = $("<div>").width(50).height(50).css({
@@ -20064,7 +20085,7 @@ BI.extend(BI.DOM, {
         }
         return this._scrollWidth;
     }
-});;(function () {
+});(function () {
     var constantInjection = {};
     BI.constant = function (xtype, cls) {
         if (constantInjection[xtype] != null) {
@@ -20113,35 +20134,36 @@ BI.extend(BI.DOM, {
             if (!providers[type]) {
                 providers[type] = new providerInjection[type]();
             }
-            return configFn(providers[type])
+            return configFn(providers[type]);
         }
-    }
+        BI.Plugin.registerWidget(type, configFn);
+    };
 
-    var actions = {}
+    var actions = {};
     BI.action = function (type, actionFn) {
         if (!actions[type]) {
             actions[type] = [];
         }
-        actions[type].push(actionFn)
+        actions[type].push(actionFn);
         return function () {
             actions[type].remove(actionFn);
             if (actions[type].length === 0) {
                 delete actions[type];
             }
-        }
-    }
+        };
+    };
 
     BI.Constants = {
         getConstant: function (type) {
             return constantInjection[type];
         }
-    }
+    };
 
     BI.Models = {
         getModel: function (type, config) {
             return new modelInjection[type](config);
         }
-    }
+    };
 
     var stores = {};
 
@@ -20155,7 +20177,7 @@ BI.extend(BI.DOM, {
         releaseStore: function (type) {
             delete stores[type];
         }
-    }
+    };
 
     var services = {};
 
@@ -20169,9 +20191,9 @@ BI.extend(BI.DOM, {
         releaseService: function (type) {
             delete services[type];
         }
-    }
+    };
 
-    var providers = {}, providerInstance = {}
+    var providers = {}, providerInstance = {};
 
     BI.Providers = {
         getProvider: function (type, config) {
@@ -20187,15 +20209,15 @@ BI.extend(BI.DOM, {
             delete providers[type];
             delete providerInstance[type];
         }
-    }
+    };
 
     BI.Actions = {
         runAction: function (type, config) {
             BI.each(actions[type], function (i, act) {
                 act(config);
-            })
+            });
         }
-    }
+    };
 })();
 /**
  * guy
@@ -20240,7 +20262,7 @@ BI.ShowListener = BI.inherit(BI.OB, {
                     self.fireEvent(BI.ShowListener.EVENT_CHANGE, cardName);
                 });
             }
-        })
+        });
     }
 });
 BI.ShowListener.EVENT_CHANGE = "ShowListener.EVENT_CHANGE";/**
@@ -20260,9 +20282,9 @@ BI.StyleLoaderManager = BI.inherit(BI.OB, {
     },
 
     loadStyle: function (name, styleString) {
-        var d = document, styles = d.createElement('style');
-        d.getElementsByTagName('head')[0].appendChild(styles);
-        styles.setAttribute('type', 'text/css');
+        var d = document, styles = d.createElement("style");
+        d.getElementsByTagName("head")[0].appendChild(styles);
+        styles.setAttribute("type", "text/css");
         if (styles.styleSheet) {
             styles.styleSheet.cssText = styleString;
         } else {
@@ -20350,7 +20372,7 @@ BI.LogicFactory = {
                     el: item,
                     width: item.options.width,
                     height: item.options.height
-                }
+                };
             }
             return item;
         });
@@ -20413,7 +20435,7 @@ BI.VerticalLayoutLogic = BI.inherit(BI.Logic, {
             tgap: o.tgap,
             bgap: o.bgap,
             items: o.items
-        }
+        };
     },
 
     _init: function () {
@@ -20466,7 +20488,7 @@ BI.HorizontalLayoutLogic = BI.inherit(BI.Logic, {
             tgap: o.tgap,
             bgap: o.bgap,
             items: o.items
-        }
+        };
     },
 
     _init: function () {
@@ -20518,7 +20540,7 @@ BI.TableLayoutLogic = BI.inherit(BI.Logic, {
             hgap: o.hgap,
             vgap: o.vgap,
             items: o.items
-        }
+        };
     },
 
     _init: function () {
@@ -20574,15 +20596,14 @@ BI.HorizontalFillLayoutLogic = BI.inherit(BI.Logic, {
             tgap: o.tgap,
             bgap: o.bgap,
             items: o.items
-        }
+        };
     },
 
     _init: function () {
         BI.HorizontalFillLayoutLogic.superclass._init.apply(this, arguments);
     }
 });BI.Plugin = BI.Plugin || {};
-;
-(function () {
+!(function () {
     var _WidgetsPlugin = {};
     var _ObjectPlugin = {};
     BI.extend(BI.Plugin, {
@@ -20590,7 +20611,7 @@ BI.HorizontalFillLayoutLogic = BI.inherit(BI.Logic, {
         getWidget: function (type, options) {
             if (_WidgetsPlugin[type]) {
                 var res;
-                for (var i = _WidgetsPlugin[type].length-1; i >=0; i--) {
+                for (var i = _WidgetsPlugin[type].length - 1; i >= 0; i--) {
                     if (res = _WidgetsPlugin[type][i](options)) {
                         return res;
                     }
@@ -20676,7 +20697,7 @@ $.extend(Array.prototype, {
     }
 });
 $(function () {
-    //牵扯到国际化这些常量在页面加载后再生效
+    // 牵扯到国际化这些常量在页面加载后再生效
     // full day names
     Date._DN = [BI.i18nText("BI-Basic_Sunday"),
         BI.i18nText("BI-Basic_Monday"),
@@ -20736,10 +20757,10 @@ $(function () {
 
     /** Adds the number of days array to the Date object. */
     Date._MD = [31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];
-})
+});
 
 /** Constants used for time computations */
-Date.SECOND = 1000 /* milliseconds */;
+Date.SECOND = 1000;
 Date.MINUTE = 60 * Date.SECOND;
 Date.HOUR = 60 * Date.MINUTE;
 Date.DAY = 24 * Date.HOUR;
@@ -20756,14 +20777,14 @@ Date.prototype.getTimezone = function () {
 /** Returns the number of days in the current month */
 Date.prototype.getMonthDays = function (month) {
     var year = this.getFullYear();
-    if (typeof month == "undefined") {
+    if (typeof month === "undefined") {
         month = this.getMonth();
     }
     if (((0 == (year % 4)) && ( (0 != (year % 100)) || (0 == (year % 400)))) && month == 1) {
         return 29;
-    } else {
-        return Date._MD[month];
     }
+    return Date._MD[month];
+    
 };
 
 /**
@@ -20785,17 +20806,18 @@ Date.prototype.getDayOfYear = function () {
 /** Returns the number of the week in year, as defined in ISO 8601. */
 Date.prototype.getWeekNumber = function () {
     var d = Date.getDate(this.getFullYear(), this.getMonth(), this.getDate(), 0, 0, 0);
-    //周一是一周第一天
-    var week = d.getDay();
+    // 周一是一周第一天
+    var week = d.getDay() === 0 ? 7 : d.getDay();
+    // var week = d.getDay();
     if (this.getMonth() === 0 && this.getDate() <= week) {
         return 1;
     }
-    d.setDate(this.getDate() - week);
+    d.setDate(this.getDate() - (week - 1));
     var ms = d.valueOf(); // GMT
     d.setMonth(0);
     d.setDate(1);
     var offset = Math.floor((ms - d.valueOf()) / (7 * 864e5)) + 1;
-    if (d.getDay() > 0) {
+    if (d.getDay() !== 1) {
         offset++;
     }
     return offset;
@@ -20805,23 +20827,23 @@ Date.prototype.getQuarter = function () {
     return Math.floor(this.getMonth() / 3) + 1;
 };
 
-//离当前时间多少天的时间
+// 离当前时间多少天的时间
 Date.prototype.getOffsetDate = function (offset) {
-    return Date.getDate(this.getTime() + offset * 864e5);
+    return Date.getDate(Date.getTime(this.getFullYear(), this.getMonth(), this.getDate(), this.getHours(), this.getMinutes(), this.getSeconds()) + offset * 864e5);
 };
 
 Date.prototype.getAfterMulQuarter = function (n) {
-    var dt = Date.getDate(this.getTime());
+    var dt = Date.getDate(Date.getTime(this.getFullYear(), this.getMonth(), this.getDate(), this.getHours(), this.getMinutes(), this.getSeconds()));
     dt.setMonth(dt.getMonth() + n * 3);
     return dt;
 };
-//获得n个季度前的日期
+// 获得n个季度前的日期
 Date.prototype.getBeforeMulQuarter = function (n) {
-    var dt = Date.getDate(this.getTime());
+    var dt = Date.getDate(Date.getTime(this.getFullYear(), this.getMonth(), this.getDate(), this.getHours(), this.getMinutes(), this.getSeconds()));
     dt.setMonth(dt.getMonth() - n * 3);
     return dt;
 };
-//得到本季度的起始月份
+// 得到本季度的起始月份
 Date.prototype.getQuarterStartMonth = function () {
     var quarterStartMonth = 0;
     var nowMonth = this.getMonth();
@@ -20839,59 +20861,29 @@ Date.prototype.getQuarterStartMonth = function () {
     }
     return quarterStartMonth;
 };
-//获得本季度的起始日期
+// 获得本季度的起始日期
 Date.prototype.getQuarterStartDate = function () {
     return Date.getDate(this.getFullYear(), this.getQuarterStartMonth(), 1);
 };
-//得到本季度的结束日期
+// 得到本季度的结束日期
 Date.prototype.getQuarterEndDate = function () {
     var quarterEndMonth = this.getQuarterStartMonth() + 2;
     return Date.getDate(this.getFullYear(), quarterEndMonth, this.getMonthDays(quarterEndMonth));
 };
 Date.prototype.getAfterMultiMonth = function (n) {
-    var dt = Date.getDate(this.getTime());
+    var dt = Date.getDate(Date.getTime(this.getFullYear(), this.getMonth(), this.getDate(), this.getHours(), this.getMinutes(), this.getSeconds()));
     dt.setMonth(dt.getMonth() + n | 0);
     return dt;
 };
 Date.prototype.getBeforeMultiMonth = function (n) {
-    var dt = Date.getDate(this.getTime());
+    var dt = Date.getDate(Date.getTime(this.getFullYear(), this.getMonth(), this.getDate(), this.getHours(), this.getMinutes(), this.getSeconds()));
     dt.setMonth(dt.getMonth() - n | 0);
     return dt;
 };
 
-Date.prototype.getAfterMulQuarter = function (n) {
-    var dt = Date.getDate(this.getTime());
-    dt.setMonth(dt.getMonth() + n * 3);
-    return dt;
-};
-//获得n个季度前的日期
-Date.prototype.getBeforeMulQuarter = function (n) {
-    var dt = Date.getDate(this.getTime());
-    dt.setMonth(dt.getMonth() - n * 3);
-    return dt;
-};
-//得到本季度的起始月份
-Date.prototype.getQuarterStartMonth = function () {
-    var quarterStartMonth = 0;
-    var nowMonth = this.getMonth();
-    if (nowMonth < 3) {
-        quarterStartMonth = 0;
-    }
-    if (2 < nowMonth && nowMonth < 6) {
-        quarterStartMonth = 3;
-    }
-    if (5 < nowMonth && nowMonth < 9) {
-        quarterStartMonth = 6;
-    }
-    if (nowMonth > 8) {
-        quarterStartMonth = 9;
-    }
-    return quarterStartMonth;
-};
-
-//指定日期n个月之前或之后的日期
+// 指定日期n个月之前或之后的日期
 Date.prototype.getOffsetMonth = function (n) {
-    var dt = Date.getDate(this.getTime());
+    var dt = Date.getDate(Date.getTime(this.getFullYear(), this.getMonth(), this.getDate(), this.getHours(), this.getMinutes(), this.getSeconds()));
     var day = dt.getDate();
     var monthDay = Date.getDate(dt.getFullYear(), dt.getMonth() + parseInt(n), 1).getMonthDays();
     if (day > monthDay) {
@@ -20902,45 +20894,15 @@ Date.prototype.getOffsetMonth = function (n) {
     return dt;
 };
 
-//获得本周的起始日期
+// 获得本周的起始日期
 Date.prototype.getWeekStartDate = function () {
     var w = this.getDay();
-    return this.getOffsetDate(-w);
+    return this.getOffsetDate(w === 0 ? -6 : 1 - w);
 };
-//得到本周的结束日期
+// 得到本周的结束日期
 Date.prototype.getWeekEndDate = function () {
     var w = this.getDay();
-    var offset = (w === 0 ? 6 : 6 - w);
-    return this.getOffsetDate(offset);
-};
-
-//获得本季度的起始日期
-Date.prototype.getQuarterStartDate = function () {
-    return Date.getDate(this.getFullYear(), this.getQuarterStartMonth(), 1);
-};
-//得到本季度的结束日期
-Date.prototype.getQuarterEndDate = function () {
-    var quarterEndMonth = this.getQuarterStartMonth() + 2;
-    return Date.getDate(this.getFullYear(), quarterEndMonth, this.getMonthDays(quarterEndMonth));
-};
-Date.prototype.getAfterMultiMonth = function (n) {
-    var dt = Date.getDate(this.getTime());
-    dt.setMonth(dt.getMonth() + n | 0);
-    return dt;
-};
-Date.prototype.getBeforeMultiMonth = function (n) {
-    var dt = Date.getDate(this.getTime());
-    dt.setMonth(dt.getMonth() - n | 0);
-    return dt;
-};
-
-//获得当前时区对应指定时区的时间
-Date.prototype.getTimeZoneTimeByTimezoneOffset = function (offset) {
-    var dt = Date.getDate(this.getTime());
-    var localTime = dt.getTime();
-    var localOffset = dt.getTimezoneOffset() * 60000; //获得当地时间偏移的毫秒数
-    var utc = localTime + localOffset; //utc即GMT时间标准时区
-    return Date.getDate(utc + offset);
+    return this.getOffsetDate(w === 0 ? 0 : 7 - w);
 };
 
 /** Checks date and time equality */
@@ -20995,7 +20957,7 @@ Date.prototype.print = function (str) {
     s["%k"] = hr;		// hour, range 0 to 23 (24h format)
     s["%l"] = ir;		// hour, range 1 to 12 (12h format)
     s["%X"] = (m < 9) ? ("0" + (1 + m)) : (1 + m); // month, range 01 to 12
-    s["%x"] = m + 1 // month, range 1 to 12
+    s["%x"] = m + 1; // month, range 1 to 12
     s["%M"] = (min < 10) ? ("0" + min) : min; // minute, range 00 to 59
     s["%n"] = "\n";		// a newline character
     s["%p"] = pm ? "PM" : "AM";
@@ -21011,7 +20973,7 @@ Date.prototype.print = function (str) {
     s["%w"] = w;		// the day of the week (range 0 to 6, 0 = SUN)
     // FIXME: %x : preferred date representation for the current locale without the time
     // FIXME: %X : preferred time representation for the current locale without the date
-    s["%y"] = ('' + y).substr(2, 2); // year without the century (range 00 to 99)
+    s["%y"] = ("" + y).substr(2, 2); // year without the century (range 00 to 99)
     s["%Y"] = y;		// year with the century
     s["%%"] = "%";		// a literal '%' character
     s["%Q"] = qr;
@@ -21027,7 +20989,7 @@ Date.prototype.print = function (str) {
     for (var i = 0; i < a.length; i++) {
         var tmp = s[a[i]];
         if (tmp) {
-            re = new RegExp(a[i], 'g');
+            re = new RegExp(a[i], "g");
             str = str.replace(re, tmp);
         }
     }
@@ -21062,25 +21024,25 @@ Date.checkVoid = function (YY, MM, DD, minDate, maxDate) {
     minDate = BI.isString(minDate) ? minDate.match(/\d+/g) : minDate;
     maxDate = BI.isString(maxDate) ? maxDate.match(/\d+/g) : maxDate;
     if (YY < minDate[0]) {
-        back = ['y'];
+        back = ["y"];
     } else if (YY > maxDate[0]) {
-        back = ['y', 1];
+        back = ["y", 1];
     } else if (YY >= minDate[0] && YY <= maxDate[0]) {
         if (YY == minDate[0]) {
             if (MM < minDate[1]) {
-                back = ['m'];
+                back = ["m"];
             } else if (MM == minDate[1]) {
                 if (DD < minDate[2]) {
-                    back = ['d'];
+                    back = ["d"];
                 }
             }
         }
         if (YY == maxDate[0]) {
             if (MM > maxDate[1]) {
-                back = ['m', 1];
+                back = ["m", 1];
             } else if (MM == maxDate[1]) {
                 if (DD > maxDate[2]) {
-                    back = ['d', 1];
+                    back = ["d", 1];
                 }
             }
         }
@@ -21107,9 +21069,9 @@ Date.parseDateTime = function (str, fmt) {
     var y = 0;
     var m = 0;
     var d = 1;
-    //wei : 对于fmt为‘YYYYMM’或者‘YYYYMMdd’的格式，str的值为类似'201111'的形式，因为年月之间没有分隔符，所以正则表达式分割无效，导致bug7376。
+    // wei : 对于fmt为‘YYYYMM’或者‘YYYYMMdd’的格式，str的值为类似'201111'的形式，因为年月之间没有分隔符，所以正则表达式分割无效，导致bug7376。
     var a = str.split(/\W+/);
-    if (fmt.toLowerCase() == '%y%x' || fmt.toLowerCase() == '%y%x%d') {
+    if (fmt.toLowerCase() == "%y%x" || fmt.toLowerCase() == "%y%x%d") {
         var yearlength = 4;
         var otherlength = 2;
         a[0] = str.substring(0, yearlength);
@@ -21174,9 +21136,9 @@ Date.parseDateTime = function (str, fmt) {
                 break;
         }
     }
-//    if (!a[i]) {
-//        continue;
-//	}
+    //    if (!a[i]) {
+    //        continue;
+    //	}
     if (isNaN(y)) {
         y = today.getFullYear();
     }
@@ -21236,14 +21198,23 @@ Date.parseDateTime = function (str, fmt) {
 
 Date.getDate = function () {
     var dt = new (Function.prototype.bind.apply(Date, BI.concat([null], [].slice.apply(arguments))))();
-    if(BI.isNotNull(Date.timeZone) && (arguments.length === 0 || (arguments.length === 1 && BI.isNumber(arguments[0])))){
+    if(BI.isNotNull(Date.timeZone) && (arguments.length === 0 || (arguments.length === 1 && BI.isNumber(arguments[0])))) {
         var localTime = dt.getTime();
-        var localOffset = dt.getTimezoneOffset() * 60000; //获得当地时间偏移的毫秒数
-        var utc = localTime + localOffset; //utc即GMT时间标准时区
-        return new Date(utc + Date.timeZone);//+ Pool.timeZone.offset);
-    }else{
-        return dt;
+        var localOffset = dt.getTimezoneOffset() * 60000; // 获得当地时间偏移的毫秒数
+        var utc = localTime + localOffset; // utc即GMT时间标准时区
+        return new Date(utc + Date.timeZone);// + Pool.timeZone.offset);
     }
+    return dt;
+    
+};
+
+Date.getTime = function () {
+    var dt = Function.prototype.bind.apply(Date.getDate, BI.concat([null], [].slice.apply(arguments)))();
+    if(BI.isNotNull(Date.timeZone)) {
+        return dt.getTime() - Date.timeZone - dt.getTimezoneOffset() * 60000;
+    }
+    return dt.getTime();
+    
 };
 /*
  * 给jQuery.Event对象添加的工具方法
@@ -21261,7 +21232,7 @@ $.extend($.Event.prototype, {
             return false;
         }
         return __self.apply(this, arguments);
-    }
+    };
 };
 
 Function.prototype.after = function (func) {
@@ -21273,7 +21244,7 @@ Function.prototype.after = function (func) {
         }
         func.apply(this, arguments);
         return ret;
-    }
+    };
 };if (jQuery) {
     (function ($) {
         // richer:容器在其各个边缘留出的空间
@@ -21282,10 +21253,10 @@ Function.prototype.after = function (func) {
                 var p = this.padding(),
                     b = this.border();
                 return {
-                    'top': p.top,
-                    'bottom': p.bottom + b.bottom + b.top,
-                    'left': p.left,
-                    'right': p.right + b.right + b.left
+                    top: p.top,
+                    bottom: p.bottom + b.bottom + b.top,
+                    left: p.left,
+                    right: p.right + b.right + b.left
                 };
             };
         }
@@ -21306,41 +21277,41 @@ Function.prototype.after = function (func) {
                         tmp.width = (value.width - (this.outerWidth(true) - this.width()));
                         tmp.width = (tmp.width >= 0) ? tmp.width : value.width;
                         // fix chrome
-                        //tmp.width = (tmp.width >= 0) ? tmp.width : 0;
+                        // tmp.width = (tmp.width >= 0) ? tmp.width : 0;
                     }
                     if (value.height != null) {
                         tmp.height = value.height - (this.outerHeight(true) - this.height());
                         tmp.height = (tmp.height >= 0) ? tmp.height : value.height;
                         // fix chrome
-                        //tmp.height = (tmp.height >= 0) ? tmp.height : value.0;
+                        // tmp.height = (tmp.height >= 0) ? tmp.height : value.0;
                     }
                     this.css(tmp);
                     return this;
                 }
-                else {
-                    // richer:注意此方法只对可见元素有效
-                    tmp = this.position();
-                    return {
-                        'x': tmp.left,
-                        'y': tmp.top,
-                        // richer:这里计算外部宽度和高度的时候，都不包括边框
-                        'width': this.outerWidth(),
-                        'height': this.outerHeight()
-                    };
-                }
+                
+                // richer:注意此方法只对可见元素有效
+                tmp = this.position();
+                return {
+                    x: tmp.left,
+                    y: tmp.top,
+                    // richer:这里计算外部宽度和高度的时候，都不包括边框
+                    width: this.outerWidth(),
+                    height: this.outerHeight()
+                };
+                
             };
         }
     })(jQuery);
 }
-;if (!Number.prototype.toFixed || (0.00008).toFixed(3) !== '0.000' ||
-    (0.9).toFixed(0) === '0' || (1.255).toFixed(2) !== '1.25' ||
+if (!Number.prototype.toFixed || (0.00008).toFixed(3) !== "0.000" ||
+    (0.9).toFixed(0) === "0" || (1.255).toFixed(2) !== "1.25" ||
     (1000000000000000128).toFixed(0) !== "1000000000000000128") {
     (function () {
         var base, size, data, i;
         base = 1e7;
         size = 6;
         data = [0, 0, 0, 0, 0, 0];
-        function multiply(n, c) {
+        function multiply (n, c) {
             var i = -1;
             while (++i < size) {
                 c += n * data[i];
@@ -21349,7 +21320,7 @@ Function.prototype.after = function (func) {
             }
         }
 
-        function divide(n) {
+        function divide (n) {
             var i = size, c = 0;
             while (--i >= 0) {
                 c += data[i];
@@ -21358,28 +21329,28 @@ Function.prototype.after = function (func) {
             }
         }
 
-        function toString() {
+        function toString () {
             var i = size;
-            var s = '';
+            var s = "";
             while (--i >= 0) {
-                if (s !== '' || i === 0 || data[i] !== 0) {
+                if (s !== "" || i === 0 || data[i] !== 0) {
                     var t = String(data[i]);
-                    if (s === '') {
+                    if (s === "") {
                         s = t;
                     } else {
-                        s += '0000000'.slice(0, 7 - t.length) + t;
+                        s += "0000000".slice(0, 7 - t.length) + t;
                     }
                 }
             }
             return s;
         }
 
-        function pow(x, n, acc) {
+        function pow (x, n, acc) {
             return (n === 0 ? acc : (n % 2 === 1 ? pow(x, n - 1, acc * x)
                 : pow(x * x, n / 2, acc)));
         }
 
-        function log(x) {
+        function log (x) {
             var n = 0;
             while (x >= 4096) {
                 n += 12;
@@ -21398,7 +21369,7 @@ Function.prototype.after = function (func) {
             f = f !== f ? 0 : Math.floor(f);
 
             if (f < 0 || f > 20) {
-                throw new RangeError('Number.toFixed called with invalid number of decimals');
+                throw new RangeError("Number.toFixed called with invalid number of decimals");
             }
 
             x = Number(this);
@@ -21421,15 +21392,15 @@ Function.prototype.after = function (func) {
             m = "0";
 
             if (x > 1e-21) {
-                //1e-21<x<1e21
-                //-70<log2(x)<70
+                // 1e-21<x<1e21
+                // -70<log2(x)<70
                 e = log(x * pow(2, 69, 1)) - 69;
                 z = (e < 0 ? x * pow(2, -e, 1) : x / pow(2, e, 1));
-                z *= 0x10000000000000;//Math.pow(2,52);
+                z *= 0x10000000000000;// Math.pow(2,52);
                 e = 52 - e;
 
-                //-18<e<122
-                //x=z/2^e
+                // -18<e<122
+                // x=z/2^e
                 if (e > 0) {
                     multiply(0, z);
                     j = f;
@@ -21453,7 +21424,7 @@ Function.prototype.after = function (func) {
                 } else {
                     multiply(0, z);
                     multiply(1 << (-e), 0);
-                    m = toString() + '0.00000000000000000000'.slice(2, 2 + f);
+                    m = toString() + "0.00000000000000000000".slice(2, 2 + f);
                 }
             }
 
@@ -21461,16 +21432,16 @@ Function.prototype.after = function (func) {
                 k = m.length;
 
                 if (k <= f) {
-                    m = s + '0.0000000000000000000'.slice(0, f - k + 2) + m;
+                    m = s + "0.0000000000000000000".slice(0, f - k + 2) + m;
                 } else {
-                    m = s + m.slice(0, k - f) + '.' + m.slice(k - f);
+                    m = s + m.slice(0, k - f) + "." + m.slice(k - f);
                 }
             } else {
                 m = s + m;
             }
 
             return m;
-        }
+        };
 
     })();
 }
@@ -21482,18 +21453,16 @@ Function.prototype.after = function (func) {
  ** 调用：accAdd(arg1,arg2)
  ** 返回值：arg1加上arg2的精确结果
  **/
-function accAdd(arg1, arg2) {
+function accAdd (arg1, arg2) {
     var r1, r2, m, c;
     try {
         r1 = arg1.toString().split(".")[1].length;
-    }
-    catch (e) {
+    } catch (e) {
         r1 = 0;
     }
     try {
         r2 = arg2.toString().split(".")[1].length;
-    }
-    catch (e) {
+    } catch (e) {
         r2 = 0;
     }
     c = Math.abs(r1 - r2);
@@ -21514,7 +21483,7 @@ function accAdd(arg1, arg2) {
     return (arg1 + arg2) / m;
 }
 
-//给Number类型增加一个add方法，调用起来更加方便。
+// 给Number类型增加一个add方法，调用起来更加方便。
 Number.prototype.add = function (arg) {
     return accAdd(arg, this);
 };
@@ -21524,21 +21493,19 @@ Number.prototype.add = function (arg) {
  ** 调用：accSub(arg1,arg2)
  ** 返回值：arg1加上arg2的精确结果
  **/
-function accSub(arg1, arg2) {
+function accSub (arg1, arg2) {
     var r1, r2, m, n;
     try {
         r1 = arg1.toString().split(".")[1].length;
-    }
-    catch (e) {
+    } catch (e) {
         r1 = 0;
     }
     try {
         r2 = arg2.toString().split(".")[1].length;
-    }
-    catch (e) {
+    } catch (e) {
         r2 = 0;
     }
-    m = Math.pow(10, Math.max(r1, r2)); //last modify by deeka //动态控制精度长度
+    m = Math.pow(10, Math.max(r1, r2)); // last modify by deeka //动态控制精度长度
     n = (r1 >= r2) ? r1 : r2;
     return ((arg1 * m - arg2 * m) / m).toFixed(n);
 }
@@ -21553,17 +21520,15 @@ Number.prototype.sub = function (arg) {
  ** 调用：accMul(arg1,arg2)
  ** 返回值：arg1乘以 arg2的精确结果
  **/
-function accMul(arg1, arg2) {
+function accMul (arg1, arg2) {
     var m = 0, s1 = arg1.toString(), s2 = arg2.toString();
     try {
         m += s1.split(".")[1].length;
-    }
-    catch (e) {
+    } catch (e) {
     }
     try {
         m += s2.split(".")[1].length;
-    }
-    catch (e) {
+    } catch (e) {
     }
     return Number(s1.replace(".", "")) * Number(s2.replace(".", "")) / Math.pow(10, m);
 }
@@ -21578,17 +21543,15 @@ Number.prototype.mul = function (arg) {
  ** 调用：accDiv(arg1,arg2)
  ** 返回值：arg1除以arg2的精确结果
  **/
-function accDiv(arg1, arg2) {
+function accDiv (arg1, arg2) {
     var t1 = 0, t2 = 0, r1, r2;
     try {
         t1 = arg1.toString().split(".")[1].length;
-    }
-    catch (e) {
+    } catch (e) {
     }
     try {
         t2 = arg2.toString().split(".")[1].length;
-    }
-    catch (e) {
+    } catch (e) {
     }
     with (Math) {
         r1 = Number(arg1.toString().replace(".", ""));
@@ -21597,7 +21560,7 @@ function accDiv(arg1, arg2) {
     }
 }
 
-//给Number类型增加一个div方法，调用起来更加方便。
+// 给Number类型增加一个div方法，调用起来更加方便。
 Number.prototype.div = function (arg) {
     return accDiv(this, arg);
 };/**
@@ -21663,7 +21626,7 @@ $.extend(String.prototype, {
             src += "&";
         }
         $.each(paras, function (name, value) {
-            if (typeof(name) === 'string') {
+            if (typeof(name) === "string") {
                 src += name + "=" + value + "&";
             }
         });
@@ -21687,9 +21650,9 @@ $.extend(String.prototype, {
     perfectStart: function (start) {
         if (this.startWith(start)) {
             return this;
-        } else {
-            return start + this;
         }
+        return start + this;
+        
     },
 
     /**
@@ -21698,7 +21661,7 @@ $.extend(String.prototype, {
      * @return {Number[]} 子字符串在父字符串中出现的所有位置组成的数组
      */
     allIndexOf: function (sub) {
-        if (typeof sub != 'string') {
+        if (typeof sub !== "string") {
             return [];
         }
         var str = this;
@@ -21773,40 +21736,40 @@ $.extend(String, {
         });
     }
 });BI.EventListener = {
-    listen: function listen(target, eventType, callback) {
+    listen: function listen (target, eventType, callback) {
         if (target.addEventListener) {
             target.addEventListener(eventType, callback, false);
             return {
-                remove: function remove() {
+                remove: function remove () {
                     target.removeEventListener(eventType, callback, false);
                 }
             };
         } else if (target.attachEvent) {
-            target.attachEvent('on' + eventType, callback);
+            target.attachEvent("on" + eventType, callback);
             return {
-                remove: function remove() {
-                    target.detachEvent('on' + eventType, callback);
+                remove: function remove () {
+                    target.detachEvent("on" + eventType, callback);
                 }
             };
         }
     },
 
-    capture: function capture(target, eventType, callback) {
+    capture: function capture (target, eventType, callback) {
         if (target.addEventListener) {
             target.addEventListener(eventType, callback, true);
             return {
-                remove: function remove() {
+                remove: function remove () {
                     target.removeEventListener(eventType, callback, true);
                 }
             };
-        } else {
-            return {
-                remove: BI.emptyFn
-            };
         }
+        return {
+            remove: BI.emptyFn
+        };
+        
     },
 
-    registerDefault: function registerDefault() {
+    registerDefault: function registerDefault () {
     }
 };!(function () {
     var cancelAnimationFrame =
@@ -21833,16 +21796,16 @@ $.extend(String, {
     };
     BI.MouseMoveTracker.prototype = {
         constructor: BI.MouseMoveTracker,
-        captureMouseMoves: function (/*object*/ event) {
+        captureMouseMoves: function (/* object*/ event) {
             if (!this._eventMoveToken && !this._eventUpToken) {
                 this._eventMoveToken = BI.EventListener.listen(
                     this._domNode,
-                    'mousemove',
+                    "mousemove",
                     this._onMouseMove
                 );
                 this._eventUpToken = BI.EventListener.listen(
                     this._domNode,
-                    'mouseup',
+                    "mouseup",
                     this._onMouseUp
                 );
             }
@@ -21877,11 +21840,11 @@ $.extend(String, {
             }
         },
 
-        isDragging: function () /*boolean*/ {
+        isDragging: function () /* boolean*/ {
             return this._isDragging;
         },
 
-        _onMouseMove: function (/*object*/ event) {
+        _onMouseMove: function (/* object*/ event) {
             var x = event.clientX;
             var y = event.clientY;
 
@@ -21920,7 +21883,7 @@ $.extend(String, {
     var PAGE_HEIGHT = 800;
     var requestAnimationFrame = window.requestAnimationFrame || window.webkitRequestAnimationFrame || window.mozRequestAnimationFrame || window.oRequestAnimationFrame || window.msRequestAnimationFrame || window.setTimeout;
 
-    function normalizeWheel(/*object*/event) /*object*/ {
+    function normalizeWheel (/* object*/event) /* object*/ {
         var sX = 0,
             sY = 0,
             // spinX, spinY
@@ -21928,21 +21891,21 @@ $.extend(String, {
             pY = 0; // pixelX, pixelY
 
         // Legacy
-        if ('detail' in event) {
+        if ("detail" in event) {
             sY = event.detail;
         }
-        if ('wheelDelta' in event) {
+        if ("wheelDelta" in event) {
             sY = -event.wheelDelta / 120;
         }
-        if ('wheelDeltaY' in event) {
+        if ("wheelDeltaY" in event) {
             sY = -event.wheelDeltaY / 120;
         }
-        if ('wheelDeltaX' in event) {
+        if ("wheelDeltaX" in event) {
             sX = -event.wheelDeltaX / 120;
         }
 
         // side scrolling on FF with DOMMouseScroll
-        if ('axis' in event && event.axis === event.HORIZONTAL_AXIS) {
+        if ("axis" in event && event.axis === event.HORIZONTAL_AXIS) {
             sX = sY;
             sY = 0;
         }
@@ -21950,10 +21913,10 @@ $.extend(String, {
         pX = sX * PIXEL_STEP;
         pY = sY * PIXEL_STEP;
 
-        if ('deltaY' in event) {
+        if ("deltaY" in event) {
             pY = event.deltaY;
         }
-        if ('deltaX' in event) {
+        if ("deltaX" in event) {
             pX = event.deltaX;
         }
 
@@ -21990,33 +21953,33 @@ $.extend(String, {
         this._deltaX = 0;
         this._deltaY = 0;
         this._didWheel = BI.bind(this._didWheel, this);
-        if (typeof handleScrollX !== 'function') {
+        if (typeof handleScrollX !== "function") {
             handleScrollX = handleScrollX ?
                 function () {
-                    return true
+                    return true;
                 } :
                 function () {
-                    return false
+                    return false;
                 };
         }
 
-        if (typeof handleScrollY !== 'function') {
+        if (typeof handleScrollY !== "function") {
             handleScrollY = handleScrollY ?
                 function () {
-                    return true
+                    return true;
                 } :
                 function () {
-                    return false
+                    return false;
                 };
         }
 
-        if (typeof stopPropagation !== 'function') {
+        if (typeof stopPropagation !== "function") {
             stopPropagation = stopPropagation ?
                 function () {
-                    return true
+                    return true;
                 } :
                 function () {
-                    return false
+                    return false;
                 };
         }
 
@@ -22028,7 +21991,7 @@ $.extend(String, {
     };
     BI.WheelHandler.prototype = {
         constructor: BI.WheelHandler,
-        onWheel: function (/*object*/ event) {
+        onWheel: function (/* object*/ event) {
             var normalizedEvent = normalizeWheel(event);
             var deltaX = this._deltaX + normalizedEvent.pixelX;
             var deltaY = this._deltaY + normalizedEvent.pixelY;
@@ -22080,57 +22043,57 @@ _.extend(BI, {
     },
     empty: null,
     Key: {
-        "48": "0",
-        "49": "1",
-        "50": "2",
-        "51": "3",
-        "52": "4",
-        "53": "5",
-        "54": "6",
-        "55": "7",
-        "56": "8",
-        "57": "9",
-        "65": "a",
-        "66": "b",
-        "67": "c",
-        "68": "d",
-        "69": "e",
-        "70": "f",
-        "71": "g",
-        "72": "h",
-        "73": "i",
-        "74": "j",
-        "75": "k",
-        "76": "l",
-        "77": "m",
-        "78": "n",
-        "79": "o",
-        "80": "p",
-        "81": "q",
-        "82": "r",
-        "83": "s",
-        "84": "t",
-        "85": "u",
-        "86": "v",
-        "87": "w",
-        "88": "x",
-        "89": "y",
-        "90": "z",
-        "96": "0",
-        "97": "1",
-        "98": "2",
-        "99": "3",
-        "100": "4",
-        "101": "5",
-        "102": "6",
-        "103": "7",
-        "104": "8",
-        "105": "9",
-        "106": "*",
-        "107": "+",
-        "109": "-",
-        "110": ".",
-        "111": "/"
+        48: "0",
+        49: "1",
+        50: "2",
+        51: "3",
+        52: "4",
+        53: "5",
+        54: "6",
+        55: "7",
+        56: "8",
+        57: "9",
+        65: "a",
+        66: "b",
+        67: "c",
+        68: "d",
+        69: "e",
+        70: "f",
+        71: "g",
+        72: "h",
+        73: "i",
+        74: "j",
+        75: "k",
+        76: "l",
+        77: "m",
+        78: "n",
+        79: "o",
+        80: "p",
+        81: "q",
+        82: "r",
+        83: "s",
+        84: "t",
+        85: "u",
+        86: "v",
+        87: "w",
+        88: "x",
+        89: "y",
+        90: "z",
+        96: "0",
+        97: "1",
+        98: "2",
+        99: "3",
+        100: "4",
+        101: "5",
+        102: "6",
+        103: "7",
+        104: "8",
+        105: "9",
+        106: "*",
+        107: "+",
+        109: "-",
+        110: ".",
+        111: "/"
     },
     KeyCode: {
         BACKSPACE: 8,
@@ -22224,12 +22187,12 @@ BI.AbsoluteCenterLayout = BI.inherit(BI.Layout, {
         var o = this.options;
         var w = BI.AbsoluteCenterLayout.superclass._addElement.apply(this, arguments);
         w.element.css({
-            "position": "absolute",
-            "left": o.hgap + o.lgap + (item.lgap || 0),
-            "right": o.hgap + o.rgap + (item.rgap || 0),
-            "top": o.vgap + o.tgap + (item.tgap || 0),
-            "bottom": o.vgap + o.bgap + (item.bgap || 0),
-            "margin": "auto"
+            position: "absolute",
+            left: o.hgap + o.lgap + (item.lgap || 0),
+            right: o.hgap + o.rgap + (item.rgap || 0),
+            top: o.vgap + o.tgap + (item.tgap || 0),
+            bottom: o.vgap + o.bgap + (item.bgap || 0),
+            margin: "auto"
         });
         return w;
     },
@@ -22243,7 +22206,7 @@ BI.AbsoluteCenterLayout = BI.inherit(BI.Layout, {
         this._mount();
     }
 });
-BI.shortcut('bi.absolute_center_adapt', BI.AbsoluteCenterLayout);/**
+BI.shortcut("bi.absolute_center_adapt", BI.AbsoluteCenterLayout);/**
  * absolute实现的居中布局
  * @class BI.AbsoluteHorizontalLayout
  * @extends BI.Layout
@@ -22270,10 +22233,10 @@ BI.AbsoluteHorizontalLayout = BI.inherit(BI.Layout, {
         var o = this.options;
         var w = BI.AbsoluteHorizontalLayout.superclass._addElement.apply(this, arguments);
         w.element.css({
-            "position": "absolute",
-            "left": o.hgap + o.lgap + (item.lgap || 0),
-            "right": o.hgap + o.rgap + (item.rgap || 0),
-            "margin": "auto"
+            position: "absolute",
+            left: o.hgap + o.lgap + (item.lgap || 0),
+            right: o.hgap + o.rgap + (item.rgap || 0),
+            margin: "auto"
         });
         if (o.vgap + o.tgap + (item.tgap || 0) !== 0) {
             w.element.css("top", o.vgap + o.tgap + (item.tgap || 0));
@@ -22293,7 +22256,7 @@ BI.AbsoluteHorizontalLayout = BI.inherit(BI.Layout, {
         this._mount();
     }
 });
-BI.shortcut('bi.absolute_horizontal_adapt', BI.AbsoluteHorizontalLayout);/**
+BI.shortcut("bi.absolute_horizontal_adapt", BI.AbsoluteHorizontalLayout);/**
  * absolute实现的居中布局
  * @class BI.AbsoluteVerticalLayout
  * @extends BI.Layout
@@ -22320,12 +22283,12 @@ BI.AbsoluteVerticalLayout = BI.inherit(BI.Layout, {
         var o = this.options;
         var w = BI.AbsoluteVerticalLayout.superclass._addElement.apply(this, arguments);
         w.element.css({
-            "position": "absolute",
-            "left": item.lgap,
-            "right": item.rgap,
-            "top": o.vgap + o.tgap + (item.tgap || 0),
-            "bottom": o.vgap + o.bgap + (item.bgap || 0),
-            "margin": "auto"
+            position: "absolute",
+            left: item.lgap,
+            right: item.rgap,
+            top: o.vgap + o.tgap + (item.tgap || 0),
+            bottom: o.vgap + o.bgap + (item.bgap || 0),
+            margin: "auto"
         });
         if (o.hgap + o.lgap + (item.lgap || 0) !== 0) {
             w.element.css("left", o.hgap + o.lgap + (item.lgap || 0));
@@ -22345,7 +22308,7 @@ BI.AbsoluteVerticalLayout = BI.inherit(BI.Layout, {
         this._mount();
     }
 });
-BI.shortcut('bi.absolute_vertical_adapt', BI.AbsoluteVerticalLayout);/**
+BI.shortcut("bi.absolute_vertical_adapt", BI.AbsoluteVerticalLayout);/**
  * 自适应水平和垂直方向都居中容器
  * @class BI.CenterAdaptLayout
  * @extends BI.Layout
@@ -22365,13 +22328,13 @@ BI.CenterAdaptLayout = BI.inherit(BI.Layout, {
     },
     render: function () {
         BI.CenterAdaptLayout.superclass.render.apply(this, arguments);
-        this.$table = $("<table>").attr({"cellspacing": 0, "cellpadding": 0}).css({
-            "position": "relative",
-            "width": "100%",
-            "height": "100%",
+        this.$table = $("<table>").attr({cellspacing: 0, cellpadding: 0}).css({
+            position: "relative",
+            width: "100%",
+            height: "100%",
             "white-space": "nowrap",
             "border-spacing": "0px",
-            "border": "none",
+            border: "none",
             "border-collapse": "separate"
         });
         this.$tr = $("<tr>");
@@ -22385,7 +22348,7 @@ BI.CenterAdaptLayout = BI.inherit(BI.Layout, {
         var width = o.columnSize[i] <= 1 ? (o.columnSize[i] * 100 + "%") : o.columnSize[i];
         if (!this.hasWidget(this._getChildName(i))) {
             var w = BI.createWidget(item);
-            w.element.css({"position": "relative", "top": "0", "left": "0", "margin": "0px auto"});
+            w.element.css({position: "relative", top: "0", left: "0", margin: "0px auto"});
             td = BI.createWidget({
                 type: "bi.default",
                 tagName: "td",
@@ -22404,32 +22367,32 @@ BI.CenterAdaptLayout = BI.inherit(BI.Layout, {
             td.element.addClass("first-element");
         }
         td.element.css({
-            "position": "relative",
-            "height": "100%",
+            position: "relative",
+            height: "100%",
             "vertical-align": "middle",
-            "margin": "0",
-            "padding": "0",
-            "border": "none"
+            margin: "0",
+            padding: "0",
+            border: "none"
         });
         if (o.hgap + o.lgap + (item.lgap || 0) !== 0) {
             w.element.css({
                 "margin-left": o.hgap + o.lgap + (item.lgap || 0) + "px"
-            })
+            });
         }
         if (o.hgap + o.rgap + (item.rgap || 0) !== 0) {
             w.element.css({
                 "margin-right": o.hgap + o.rgap + (item.rgap || 0) + "px"
-            })
+            });
         }
         if (o.vgap + o.tgap + (item.tgap || 0) !== 0) {
             w.element.css({
                 "margin-top": o.vgap + o.tgap + (item.tgap || 0) + "px"
-            })
+            });
         }
         if (o.vgap + o.bgap + (item.bgap || 0) !== 0) {
             w.element.css({
                 "margin-bottom": o.vgap + o.bgap + (item.bgap || 0) + "px"
-            })
+            });
         }
         return td;
     },
@@ -22454,7 +22417,7 @@ BI.CenterAdaptLayout = BI.inherit(BI.Layout, {
         // console.log("center_adapt布局不需要resize");
     },
 
-    _getWrapper: function(){
+    _getWrapper: function () {
         return this.$tr;
     },
 
@@ -22463,7 +22426,7 @@ BI.CenterAdaptLayout = BI.inherit(BI.Layout, {
         this._mount();
     }
 });
-BI.shortcut('bi.center_adapt', BI.CenterAdaptLayout);/**
+BI.shortcut("bi.center_adapt", BI.CenterAdaptLayout);/**
  * 水平方向居中容器
  * @class BI.HorizontalAdaptLayout
  * @extends BI.Layout
@@ -22484,12 +22447,12 @@ BI.HorizontalAdaptLayout = BI.inherit(BI.Layout, {
     },
     render: function () {
         BI.HorizontalAdaptLayout.superclass.render.apply(this, arguments);
-        this.$table = $("<table>").attr({"cellspacing": 0, "cellpadding": 0}).css({
-            "position": "relative",
-            "width": "100%",
+        this.$table = $("<table>").attr({cellspacing: 0, cellpadding: 0}).css({
+            position: "relative",
+            width: "100%",
             "white-space": "nowrap",
             "border-spacing": "0px",
-            "border": "none",
+            border: "none",
             "border-collapse": "separate"
         });
         this.$tr = $("<tr>");
@@ -22503,7 +22466,7 @@ BI.HorizontalAdaptLayout = BI.inherit(BI.Layout, {
         var width = o.columnSize[i] <= 1 ? (o.columnSize[i] * 100 + "%") : o.columnSize[i];
         if (!this.hasWidget(this._getChildName(i))) {
             var w = BI.createWidget(item);
-            w.element.css({"position": "relative", "top": "0", "left": "0", "margin": "0px auto"});
+            w.element.css({position: "relative", top: "0", left: "0", margin: "0px auto"});
             td = BI.createWidget({
                 type: "bi.default",
                 tagName: "td",
@@ -22522,31 +22485,31 @@ BI.HorizontalAdaptLayout = BI.inherit(BI.Layout, {
             td.element.addClass("first-element");
         }
         td.element.css({
-            "position": "relative",
+            position: "relative",
             "vertical-align": o.verticalAlign,
-            "margin": "0",
-            "padding": "0",
-            "border": "none"
+            margin: "0",
+            padding: "0",
+            border: "none"
         });
         if (o.hgap + o.lgap + (item.lgap || 0) !== 0) {
             w.element.css({
                 "margin-left": o.hgap + o.lgap + (item.lgap || 0) + "px"
-            })
+            });
         }
         if (o.hgap + o.rgap + (item.rgap || 0) !== 0) {
             w.element.css({
                 "margin-right": o.hgap + o.rgap + (item.rgap || 0) + "px"
-            })
+            });
         }
         if (o.vgap + o.tgap + (item.tgap || 0) !== 0) {
             w.element.css({
                 "margin-top": o.vgap + o.tgap + (item.tgap || 0) + "px"
-            })
+            });
         }
         if (o.vgap + o.bgap + (item.bgap || 0) !== 0) {
             w.element.css({
                 "margin-bottom": o.vgap + o.bgap + (item.bgap || 0) + "px"
-            })
+            });
         }
         return td;
     },
@@ -22580,7 +22543,7 @@ BI.HorizontalAdaptLayout = BI.inherit(BI.Layout, {
         this._mount();
     }
 });
-BI.shortcut('bi.horizontal_adapt', BI.HorizontalAdaptLayout);/**
+BI.shortcut("bi.horizontal_adapt", BI.HorizontalAdaptLayout);/**
  * 左右分离，垂直方向居中容器
  *          items:{
                 left: [{el:{type:"bi.button"}}],
@@ -22612,8 +22575,8 @@ BI.LeftRightVerticalAdaptLayout = BI.inherit(BI.Layout, {
     },
 
     addItem: function () {
-        //do nothing
-        throw new Error("cannot be added")
+        // do nothing
+        throw new Error("cannot be added");
     },
 
     stroke: function (items) {
@@ -22655,7 +22618,7 @@ BI.LeftRightVerticalAdaptLayout = BI.inherit(BI.Layout, {
         this._mount();
     }
 });
-BI.shortcut('bi.left_right_vertical_adapt', BI.LeftRightVerticalAdaptLayout);
+BI.shortcut("bi.left_right_vertical_adapt", BI.LeftRightVerticalAdaptLayout);
 
 
 BI.LeftVerticalAdaptLayout = BI.inherit(BI.Layout, {
@@ -22678,8 +22641,8 @@ BI.LeftVerticalAdaptLayout = BI.inherit(BI.Layout, {
     },
 
     addItem: function () {
-        //do nothing
-        throw new Error("cannot be added")
+        // do nothing
+        throw new Error("cannot be added");
     },
 
     stroke: function (items) {
@@ -22704,7 +22667,7 @@ BI.LeftVerticalAdaptLayout = BI.inherit(BI.Layout, {
         this._mount();
     }
 });
-BI.shortcut('bi.left_vertical_adapt', BI.LeftVerticalAdaptLayout);
+BI.shortcut("bi.left_vertical_adapt", BI.LeftVerticalAdaptLayout);
 
 BI.RightVerticalAdaptLayout = BI.inherit(BI.Layout, {
     props: function () {
@@ -22726,8 +22689,8 @@ BI.RightVerticalAdaptLayout = BI.inherit(BI.Layout, {
     },
 
     addItem: function () {
-        //do nothing
-        throw new Error("cannot be added")
+        // do nothing
+        throw new Error("cannot be added");
     },
 
     stroke: function (items) {
@@ -22752,7 +22715,7 @@ BI.RightVerticalAdaptLayout = BI.inherit(BI.Layout, {
         this._mount();
     }
 });
-BI.shortcut('bi.right_vertical_adapt', BI.RightVerticalAdaptLayout);/**
+BI.shortcut("bi.right_vertical_adapt", BI.RightVerticalAdaptLayout);/**
  * 垂直方向居中容器
  * @class BI.VerticalAdaptLayout
  * @extends BI.Layout
@@ -22772,13 +22735,13 @@ BI.VerticalAdaptLayout = BI.inherit(BI.Layout, {
     render: function () {
         BI.VerticalAdaptLayout.superclass.render.apply(this, arguments);
         var o = this.options;
-        this.$table = $("<table>").attr({"cellspacing": 0, "cellpadding": 0}).css({
-            "position": "relative",
-            "width": o.horizontalAlign === BI.HorizontalAlign.Stretch ? "100%" : "auto",
-            "height": "100%",
+        this.$table = $("<table>").attr({cellspacing: 0, cellpadding: 0}).css({
+            position: "relative",
+            width: o.horizontalAlign === BI.HorizontalAlign.Stretch ? "100%" : "auto",
+            height: "100%",
             "white-space": "nowrap",
             "border-spacing": "0px",
-            "border": "none",
+            border: "none",
             "border-collapse": "separate"
         });
         this.$tr = $("<tr>");
@@ -22792,7 +22755,7 @@ BI.VerticalAdaptLayout = BI.inherit(BI.Layout, {
         var width = o.columnSize[i] <= 1 ? (o.columnSize[i] * 100 + "%") : o.columnSize[i];
         if (!this.hasWidget(this._getChildName(i))) {
             var w = BI.createWidget(item);
-            w.element.css({"position": "relative", "top": "0", "left": "0", "margin": "0px auto"});
+            w.element.css({position: "relative", top: "0", left: "0", margin: "0px auto"});
             td = BI.createWidget({
                 type: "bi.default",
                 tagName: "td",
@@ -22811,32 +22774,32 @@ BI.VerticalAdaptLayout = BI.inherit(BI.Layout, {
             td.element.addClass("first-element");
         }
         td.element.css({
-            "position": "relative",
-            "height": "100%",
+            position: "relative",
+            height: "100%",
             "vertical-align": "middle",
-            "margin": "0",
-            "padding": "0",
-            "border": "none"
+            margin: "0",
+            padding: "0",
+            border: "none"
         });
         if (o.hgap + o.lgap + (item.lgap || 0) !== 0) {
             w.element.css({
                 "margin-left": o.hgap + o.lgap + (item.lgap || 0) + "px"
-            })
+            });
         }
         if (o.hgap + o.rgap + (item.rgap || 0) !== 0) {
             w.element.css({
                 "margin-right": o.hgap + o.rgap + (item.rgap || 0) + "px"
-            })
+            });
         }
         if (o.vgap + o.tgap + (item.tgap || 0) !== 0) {
             w.element.css({
                 "margin-top": o.vgap + o.tgap + (item.tgap || 0) + "px"
-            })
+            });
         }
         if (o.vgap + o.bgap + (item.bgap || 0) !== 0) {
             w.element.css({
                 "margin-bottom": o.vgap + o.bgap + (item.bgap || 0) + "px"
-            })
+            });
         }
         return td;
     },
@@ -22870,7 +22833,7 @@ BI.VerticalAdaptLayout = BI.inherit(BI.Layout, {
         this._mount();
     }
 });
-BI.shortcut('bi.vertical_adapt', BI.VerticalAdaptLayout);/**
+BI.shortcut("bi.vertical_adapt", BI.VerticalAdaptLayout);/**
  * 水平方向居中自适应容器
  * @class BI.HorizontalAutoLayout
  * @extends BI.Layout
@@ -22897,28 +22860,28 @@ BI.HorizontalAutoLayout = BI.inherit(BI.Layout, {
         var o = this.options;
         var w = BI.HorizontalAutoLayout.superclass._addElement.apply(this, arguments);
         w.element.css({
-            "position": "relative",
-            "margin": "0px auto"
+            position: "relative",
+            margin: "0px auto"
         });
         if (o.hgap + o.lgap + (item.lgap || 0) !== 0) {
             w.element.css({
                 "margin-left": o.hgap + o.lgap + (item.lgap || 0) + "px"
-            })
+            });
         }
         if (o.hgap + o.rgap + (item.rgap || 0) !== 0) {
             w.element.css({
                 "margin-right": o.hgap + o.rgap + (item.rgap || 0) + "px"
-            })
+            });
         }
         if (o.vgap + o.tgap + (item.tgap || 0) !== 0) {
             w.element.css({
                 "margin-top": o.vgap + o.tgap + (item.tgap || 0) + "px"
-            })
+            });
         }
         if (o.vgap + o.bgap + (item.bgap || 0) !== 0) {
             w.element.css({
                 "margin-bottom": o.vgap + o.bgap + (item.bgap || 0) + "px"
-            })
+            });
         }
         return w;
     },
@@ -22932,7 +22895,7 @@ BI.HorizontalAutoLayout = BI.inherit(BI.Layout, {
         this._mount();
     }
 });
-BI.shortcut('bi.horizontal_auto', BI.HorizontalAutoLayout);/**
+BI.shortcut("bi.horizontal_auto", BI.HorizontalAutoLayout);/**
  * 浮动的居中布局
  */
 BI.FloatCenterAdaptLayout = BI.inherit(BI.Layout, {
@@ -22958,8 +22921,8 @@ BI.FloatCenterAdaptLayout = BI.inherit(BI.Layout, {
     },
 
     addItem: function () {
-        //do nothing
-        throw new Error("cannot be added")
+        // do nothing
+        throw new Error("cannot be added");
     },
 
     mounted: function () {
@@ -23005,7 +22968,7 @@ BI.FloatCenterAdaptLayout = BI.inherit(BI.Layout, {
         this._mount();
     }
 });
-BI.shortcut('bi.float_center_adapt', BI.FloatCenterAdaptLayout);/**
+BI.shortcut("bi.float_center_adapt", BI.FloatCenterAdaptLayout);/**
  * 浮动的水平居中布局
  */
 BI.FloatHorizontalLayout = BI.inherit(BI.Layout, {
@@ -23074,7 +23037,7 @@ BI.FloatHorizontalLayout = BI.inherit(BI.Layout, {
         this._mount();
     }
 });
-BI.shortcut('bi.horizontal_float', BI.FloatHorizontalLayout);/**
+BI.shortcut("bi.horizontal_float", BI.FloatHorizontalLayout);/**
  *自适应水平和垂直方向都居中容器
  * Created by GUY on 2016/12/2.
  *
@@ -23095,7 +23058,7 @@ BI.FlexCenterLayout = BI.inherit(BI.Layout, {
     _addElement: function (i, item) {
         var o = this.options;
         var w = BI.FlexCenterLayout.superclass._addElement.apply(this, arguments);
-        w.element.css({"position": "relative", "flex-shrink": "0"});
+        w.element.css({position: "relative", "flex-shrink": "0"});
         return w;
     },
 
@@ -23108,7 +23071,7 @@ BI.FlexCenterLayout = BI.inherit(BI.Layout, {
         this._mount();
     }
 });
-BI.shortcut('bi.flex_center', BI.FlexCenterLayout);/**
+BI.shortcut("bi.flex_center", BI.FlexCenterLayout);/**
  *自适应水平和垂直方向都居中容器
  * Created by GUY on 2016/12/2.
  *
@@ -23140,26 +23103,26 @@ BI.FlexHorizontalLayout = BI.inherit(BI.Layout, {
     _addElement: function (i, item) {
         var o = this.options;
         var w = BI.FlexHorizontalLayout.superclass._addElement.apply(this, arguments);
-        w.element.css({"position": "relative", "flex-shrink": "0"});
+        w.element.css({position: "relative", "flex-shrink": "0"});
         if (o.hgap + o.lgap + (item.lgap || 0) > 0) {
             w.element.css({
                 "margin-left": o.hgap + o.lgap + (item.lgap || 0) + "px"
-            })
+            });
         }
         if (o.hgap + o.rgap + (item.rgap || 0) > 0) {
             w.element.css({
                 "margin-right": o.hgap + o.rgap + (item.rgap || 0) + "px"
-            })
+            });
         }
         if (o.vgap + o.tgap + (item.tgap || 0) > 0) {
             w.element.css({
                 "margin-top": o.vgap + o.tgap + (item.tgap || 0) + "px"
-            })
+            });
         }
         if (o.vgap + o.bgap + (item.bgap || 0) > 0) {
             w.element.css({
                 "margin-bottom": o.vgap + o.bgap + (item.bgap || 0) + "px"
-            })
+            });
         }
         return w;
     },
@@ -23173,7 +23136,7 @@ BI.FlexHorizontalLayout = BI.inherit(BI.Layout, {
         this._mount();
     }
 });
-BI.shortcut('bi.flex_horizontal', BI.FlexHorizontalLayout);/**
+BI.shortcut("bi.flex_horizontal", BI.FlexHorizontalLayout);/**
  *自适应水平和垂直方向都居中容器
  * Created by GUY on 2016/12/2.
  *
@@ -23204,26 +23167,26 @@ BI.FlexVerticalCenter = BI.inherit(BI.Layout, {
     _addElement: function (i, item) {
         var o = this.options;
         var w = BI.FlexVerticalCenter.superclass._addElement.apply(this, arguments);
-        w.element.css({"position": "relative", "flex-shrink": "0"});
+        w.element.css({position: "relative", "flex-shrink": "0"});
         if (o.hgap + o.lgap + (item.lgap || 0) > 0) {
             w.element.css({
                 "margin-left": o.hgap + o.lgap + (item.lgap || 0) + "px"
-            })
+            });
         }
         if (o.hgap + o.rgap + (item.rgap || 0) > 0) {
             w.element.css({
                 "margin-right": o.hgap + o.rgap + (item.rgap || 0) + "px"
-            })
+            });
         }
         if (o.vgap + o.tgap + (item.tgap || 0) > 0) {
             w.element.css({
                 "margin-top": o.vgap + o.tgap + (item.tgap || 0) + "px"
-            })
+            });
         }
         if (o.vgap + o.bgap + (item.bgap || 0) > 0) {
             w.element.css({
                 "margin-bottom": o.vgap + o.bgap + (item.bgap || 0) + "px"
-            })
+            });
         }
         return w;
     },
@@ -23237,7 +23200,7 @@ BI.FlexVerticalCenter = BI.inherit(BI.Layout, {
         this._mount();
     }
 });
-BI.shortcut('bi.flex_vertical_center', BI.FlexVerticalCenter);/**
+BI.shortcut("bi.flex_vertical_center", BI.FlexVerticalCenter);/**
  *自适应水平和垂直方向都居中容器
  * Created by GUY on 2016/12/2.
  *
@@ -23259,7 +23222,7 @@ BI.FlexCenterLayout = BI.inherit(BI.Layout, {
     _addElement: function (i, item) {
         var o = this.options;
         var w = BI.FlexCenterLayout.superclass._addElement.apply(this, arguments);
-        w.element.css({"position": "relative"});
+        w.element.css({position: "relative"});
         return w;
     },
 
@@ -23279,7 +23242,7 @@ BI.FlexCenterLayout = BI.inherit(BI.Layout, {
         }
     },
 
-    _getWrapper: function(){
+    _getWrapper: function () {
         return this.$wrapper;
     },
 
@@ -23292,7 +23255,7 @@ BI.FlexCenterLayout = BI.inherit(BI.Layout, {
         this._mount();
     }
 });
-BI.shortcut('bi.flex_wrapper_center', BI.FlexCenterLayout);/**
+BI.shortcut("bi.flex_wrapper_center", BI.FlexCenterLayout);/**
  *自适应水平和垂直方向都居中容器
  * Created by GUY on 2016/12/2.
  *
@@ -23324,26 +23287,26 @@ BI.FlexHorizontalLayout = BI.inherit(BI.Layout, {
     _addElement: function (i, item) {
         var o = this.options;
         var w = BI.FlexHorizontalLayout.superclass._addElement.apply(this, arguments);
-        w.element.css({"position": "relative"});
+        w.element.css({position: "relative"});
         if (o.hgap + o.lgap + (item.lgap || 0) > 0) {
             w.element.css({
                 "margin-left": o.hgap + o.lgap + (item.lgap || 0) + "px"
-            })
+            });
         }
         if (o.hgap + o.rgap + (item.rgap || 0) > 0) {
             w.element.css({
                 "margin-right": o.hgap + o.rgap + (item.rgap || 0) + "px"
-            })
+            });
         }
         if (o.vgap + o.tgap + (item.tgap || 0) > 0) {
             w.element.css({
                 "margin-top": o.vgap + o.tgap + (item.tgap || 0) + "px"
-            })
+            });
         }
         if (o.vgap + o.bgap + (item.bgap || 0) > 0) {
             w.element.css({
                 "margin-bottom": o.vgap + o.bgap + (item.bgap || 0) + "px"
-            })
+            });
         }
         return w;
     },
@@ -23364,7 +23327,7 @@ BI.FlexHorizontalLayout = BI.inherit(BI.Layout, {
         }
     },
 
-    _getWrapper: function(){
+    _getWrapper: function () {
         return this.$wrapper;
     },
 
@@ -23377,7 +23340,7 @@ BI.FlexHorizontalLayout = BI.inherit(BI.Layout, {
         this._mount();
     }
 });
-BI.shortcut('bi.flex_wrapper_horizontal', BI.FlexHorizontalLayout);/**
+BI.shortcut("bi.flex_wrapper_horizontal", BI.FlexHorizontalLayout);/**
  *自适应水平和垂直方向都居中容器
  * Created by GUY on 2016/12/2.
  *
@@ -23409,26 +23372,26 @@ BI.FlexVerticalCenter = BI.inherit(BI.Layout, {
     _addElement: function (i, item) {
         var o = this.options;
         var w = BI.FlexVerticalCenter.superclass._addElement.apply(this, arguments);
-        w.element.css({"position": "relative"});
+        w.element.css({position: "relative"});
         if (o.hgap + o.lgap + (item.lgap || 0) > 0) {
             w.element.css({
                 "margin-left": o.hgap + o.lgap + (item.lgap || 0) + "px"
-            })
+            });
         }
         if (o.hgap + o.rgap + (item.rgap || 0) > 0) {
             w.element.css({
                 "margin-right": o.hgap + o.rgap + (item.rgap || 0) + "px"
-            })
+            });
         }
         if (o.vgap + o.tgap + (item.tgap || 0) > 0) {
             w.element.css({
                 "margin-top": o.vgap + o.tgap + (item.tgap || 0) + "px"
-            })
+            });
         }
         if (o.vgap + o.bgap + (item.bgap || 0) > 0) {
             w.element.css({
                 "margin-bottom": o.vgap + o.bgap + (item.bgap || 0) + "px"
-            })
+            });
         }
         return w;
     },
@@ -23462,7 +23425,7 @@ BI.FlexVerticalCenter = BI.inherit(BI.Layout, {
         this._mount();
     }
 });
-BI.shortcut('bi.flex_wrapper_vertical_center', BI.FlexVerticalCenter);/**
+BI.shortcut("bi.flex_wrapper_vertical_center", BI.FlexVerticalCenter);/**
  * 固定子组件上下左右的布局容器
  * @class BI.AbsoluteLayout
  * @extends BI.Layout
@@ -23489,60 +23452,60 @@ BI.AbsoluteLayout = BI.inherit(BI.Layout, {
         var w = BI.AbsoluteLayout.superclass._addElement.apply(this, arguments);
         var left = 0, right = 0, top = 0, bottom = 0;
         if (BI.isNotNull(item.left)) {
-            w.element.css({"left": item.left});
+            w.element.css({left: item.left});
             left += item.left;
         }
         if (BI.isNotNull(item.right)) {
-            w.element.css({"right": item.right});
+            w.element.css({right: item.right});
             right += item.right;
         }
         if (BI.isNotNull(item.top)) {
-            w.element.css({"top": item.top});
+            w.element.css({top: item.top});
             top += item.top;
         }
         if (BI.isNotNull(item.bottom)) {
-            w.element.css({"bottom": item.bottom});
+            w.element.css({bottom: item.bottom});
             bottom += item.bottom;
         }
 
         if (BI.isNotNull(o.hgap)) {
             left += o.hgap;
-            w.element.css({"left": left});
+            w.element.css({left: left});
             right += o.hgap;
-            w.element.css({"right": right});
+            w.element.css({right: right});
         }
         if (BI.isNotNull(o.vgap)) {
             top += o.vgap;
-            w.element.css({"top": top});
+            w.element.css({top: top});
             bottom += o.vgap;
-            w.element.css({"bottom": bottom});
+            w.element.css({bottom: bottom});
         }
 
         if (BI.isNotNull(o.lgap)) {
             left += o.lgap;
-            w.element.css({"left": left});
+            w.element.css({left: left});
         }
         if (BI.isNotNull(o.rgap)) {
             right += o.rgap;
-            w.element.css({"right": right});
+            w.element.css({right: right});
         }
         if (BI.isNotNull(o.tgap)) {
             top += o.tgap;
-            w.element.css({"top": top});
+            w.element.css({top: top});
         }
         if (BI.isNotNull(o.bgap)) {
             bottom += o.bgap;
-            w.element.css({"bottom": bottom});
+            w.element.css({bottom: bottom});
         }
 
 
         if (BI.isNotNull(item.width)) {
-            w.element.css({"width": item.width});
+            w.element.css({width: item.width});
         }
         if (BI.isNotNull(item.height)) {
-            w.element.css({"height": item.height});
+            w.element.css({height: item.height});
         }
-        w.element.css({"position": "absolute"});
+        w.element.css({position: "absolute"});
         return w;
     },
 
@@ -23554,7 +23517,7 @@ BI.AbsoluteLayout = BI.inherit(BI.Layout, {
         this.options.items = items || [];
         var self = this;
         BI.each(items, function (i, item) {
-            if (!!item) {
+            if (item) {
                 if (!BI.isWidget(item) && !item.el) {
                     throw new Error("el must be exist");
                 }
@@ -23568,7 +23531,7 @@ BI.AbsoluteLayout = BI.inherit(BI.Layout, {
         this._mount();
     }
 });
-BI.shortcut('bi.absolute', BI.AbsoluteLayout);BI.AdaptiveLayout = BI.inherit(BI.Layout, {
+BI.shortcut("bi.absolute", BI.AbsoluteLayout);BI.AdaptiveLayout = BI.inherit(BI.Layout, {
     props: function () {
         return BI.extend(BI.AdaptiveLayout.superclass.props.apply(this, arguments), {
             baseCls: "bi-adaptive-layout",
@@ -23588,64 +23551,64 @@ BI.shortcut('bi.absolute', BI.AbsoluteLayout);BI.AdaptiveLayout = BI.inherit(BI.
     _addElement: function (i, item) {
         var o = this.options;
         var w = BI.AdaptiveLayout.superclass._addElement.apply(this, arguments);
-        w.element.css({"position": "relative"});
+        w.element.css({position: "relative"});
         var left = 0, right = 0, top = 0, bottom = 0;
         if (BI.isNotNull(item.left)) {
             w.element.css({
                 "margin-left": item.left
-            })
+            });
         }
         if (BI.isNotNull(item.right)) {
             w.element.css({
                 "margin-right": item.right
-            })
+            });
         }
         if (BI.isNotNull(item.top)) {
             w.element.css({
                 "margin-top": item.top
-            })
+            });
         }
         if (BI.isNotNull(item.bottom)) {
             w.element.css({
                 "margin-bottom": item.bottom
-            })
+            });
         }
 
         if (BI.isNotNull(o.hgap)) {
             left += o.hgap;
-            w.element.css({"left": left});
+            w.element.css({left: left});
             right += o.hgap;
-            w.element.css({"right": right});
+            w.element.css({right: right});
         }
         if (BI.isNotNull(o.vgap)) {
             top += o.vgap;
-            w.element.css({"top": top});
+            w.element.css({top: top});
             bottom += o.vgap;
-            w.element.css({"bottom": bottom});
+            w.element.css({bottom: bottom});
         }
 
         if (BI.isNotNull(o.lgap)) {
             left += o.lgap;
-            w.element.css({"left": left});
+            w.element.css({left: left});
         }
         if (BI.isNotNull(o.rgap)) {
             right += o.rgap;
-            w.element.css({"right": right});
+            w.element.css({right: right});
         }
         if (BI.isNotNull(o.tgap)) {
             top += o.tgap;
-            w.element.css({"top": top});
+            w.element.css({top: top});
         }
         if (BI.isNotNull(o.bgap)) {
             bottom += o.bgap;
-            w.element.css({"bottom": bottom});
+            w.element.css({bottom: bottom});
         }
 
         if (BI.isNotNull(item.width)) {
-            w.element.css({"width": item.width});
+            w.element.css({width: item.width});
         }
         if (BI.isNotNull(item.height)) {
-            w.element.css({"height": item.height});
+            w.element.css({height: item.height});
         }
         return w;
     },
@@ -23659,7 +23622,7 @@ BI.shortcut('bi.absolute', BI.AbsoluteLayout);BI.AdaptiveLayout = BI.inherit(BI.
         this._mount();
     }
 });
-BI.shortcut('bi.adaptive', BI.AdaptiveLayout);/**
+BI.shortcut("bi.adaptive", BI.AdaptiveLayout);/**
  * 上下的高度固定/左右的宽度固定，中间的高度/宽度自适应
  *
  * @class BI.BorderLayout
@@ -23683,10 +23646,10 @@ BI.BorderLayout = BI.inherit(BI.Layout, {
 
     addItem: function (item) {
         // do nothing
-        throw new Error("cannot be added")
+        throw new Error("cannot be added");
     },
 
-    stroke: function(regions){
+    stroke: function (regions) {
         var item;
         var top = 0;
         var bottom = 0;
@@ -23702,11 +23665,11 @@ BI.BorderLayout = BI.inherit(BI.Layout, {
                     }
                     this.getWidgetByName(this.getName() + "north").element.height(item.height)
                         .css({
-                            "position": "absolute",
-                            "top": (item.top || 0),
-                            "left": (item.left || 0),
-                            "right": (item.right || 0),
-                            "bottom": "initial"
+                            position: "absolute",
+                            top: (item.top || 0),
+                            left: (item.left || 0),
+                            right: (item.right || 0),
+                            bottom: "initial"
                         });
                 }
                 top = (item.height || 0) + (item.top || 0) + (item.bottom || 0);
@@ -23722,11 +23685,11 @@ BI.BorderLayout = BI.inherit(BI.Layout, {
                     }
                     this.getWidgetByName(this.getName() + "south").element.height(item.height)
                         .css({
-                            "position": "absolute",
-                            "bottom": (item.bottom || 0),
-                            "left": (item.left || 0),
-                            "right": (item.right || 0),
-                            "top": "initial"
+                            position: "absolute",
+                            bottom: (item.bottom || 0),
+                            left: (item.left || 0),
+                            right: (item.right || 0),
+                            top: "initial"
                         });
                 }
                 bottom = (item.height || 0) + (item.top || 0) + (item.bottom || 0);
@@ -23742,11 +23705,11 @@ BI.BorderLayout = BI.inherit(BI.Layout, {
                     }
                     this.getWidgetByName(this.getName() + "west").element.width(item.width)
                         .css({
-                            "position": "absolute",
-                            "left": (item.left || 0),
+                            position: "absolute",
+                            left: (item.left || 0),
                             top: top,
                             bottom: bottom,
-                            "right": "initial"
+                            right: "initial"
                         });
                 }
                 left = (item.width || 0) + (item.left || 0) + (item.right || 0);
@@ -23762,11 +23725,11 @@ BI.BorderLayout = BI.inherit(BI.Layout, {
                     }
                     this.getWidgetByName(this.getName() + "east").element.width(item.width)
                         .css({
-                            "position": "absolute",
-                            "right": (item.right || 0),
+                            position: "absolute",
+                            right: (item.right || 0),
                             top: top,
                             bottom: bottom,
-                            "left": "initial"
+                            left: "initial"
                         });
                 }
                 right = (item.width || 0) + (item.left || 0) + (item.right || 0);
@@ -23780,7 +23743,7 @@ BI.BorderLayout = BI.inherit(BI.Layout, {
                     this.addWidget(this.getName() + "center", w);
                 }
                 this.getWidgetByName(this.getName() + "center").element
-                    .css({"position": "absolute", "top": top, "bottom": bottom, "left": left, "right": right});
+                    .css({position: "absolute", top: top, bottom: bottom, left: left, right: right});
             }
         }
     },
@@ -23790,7 +23753,7 @@ BI.BorderLayout = BI.inherit(BI.Layout, {
         this._mount();
     }
 });
-BI.shortcut('bi.border', BI.BorderLayout);/**
+BI.shortcut("bi.border", BI.BorderLayout);/**
  * 卡片布局，可以做到当前只显示一个组件，其他的都隐藏
  * @class BI.CardLayout
  * @extends BI.Layout
@@ -23818,7 +23781,7 @@ BI.CardLayout = BI.inherit(BI.Layout, {
         var self = this, o = this.options;
         this.showIndex = void 0;
         BI.each(items, function (i, item) {
-            if (!!item) {
+            if (item) {
                 if (!self.hasWidget(item.cardName)) {
                     var w = BI.createWidget(item);
                     w.on(BI.Events.DESTROY, function () {
@@ -23833,7 +23796,7 @@ BI.CardLayout = BI.inherit(BI.Layout, {
                 } else {
                     var w = self.getWidgetByName(item.cardName);
                 }
-                w.element.css({"position": "absolute", "top": "0", "right": "0", "bottom": "0", "left": "0"});
+                w.element.css({position: "absolute", top: "0", right: "0", bottom: "0", left: "0"});
                 w.setVisible(false);
             }
         });
@@ -23892,11 +23855,11 @@ BI.CardLayout = BI.inherit(BI.Layout, {
         }
         var widget = BI.createWidget(cardItem);
         widget.element.css({
-            "position": "relative",
-            "top": "0",
-            "left": "0",
-            "width": "100%",
-            "height": "100%"
+            position: "relative",
+            top: "0",
+            left: "0",
+            width: "100%",
+            height: "100%"
         }).appendTo(this.element);
         widget.invisible();
         this.addWidget(cardName, widget);
@@ -23906,7 +23869,7 @@ BI.CardLayout = BI.inherit(BI.Layout, {
 
     showCardByName: function (name, action, callback) {
         var self = this;
-        //name不存在的时候全部隐藏
+        // name不存在的时候全部隐藏
         var exist = this.isCardExisted(name);
         if (this.showIndex != null) {
             this.lastShowIndex = this.showIndex;
@@ -23917,10 +23880,10 @@ BI.CardLayout = BI.inherit(BI.Layout, {
             var el = self._children[item.cardName];
             if (el) {
                 if (name != item.cardName) {
-                    //动画效果只有在全部都隐藏的时候才有意义,且只要执行一次动画操作就够了
+                    // 动画效果只有在全部都隐藏的时候才有意义,且只要执行一次动画操作就够了
                     !flag && !exist && (BI.Action && action instanceof BI.Action) ? (action.actionBack(el), flag = true) : el.invisible();
                 } else {
-                    (BI.Action && action instanceof BI.Action) ? action.actionPerformed(void 0, el, callback) : (el.visible(), callback && callback())
+                    (BI.Action && action instanceof BI.Action) ? action.actionPerformed(void 0, el, callback) : (el.visible(), callback && callback());
                 }
             }
         });
@@ -23931,7 +23894,7 @@ BI.CardLayout = BI.inherit(BI.Layout, {
         this.showIndex = this.lastShowIndex;
         BI.each(this.options.items, function (i, item) {
             self._children[item.cardName].setVisible(self.showIndex == i);
-        })
+        });
     },
 
     setDefaultShowName: function (name) {
@@ -23946,7 +23909,7 @@ BI.CardLayout = BI.inherit(BI.Layout, {
     getAllCardNames: function () {
         return BI.map(this.options.items, function (i, item) {
             return item.cardName;
-        })
+        });
     },
 
     getShowingCard: function () {
@@ -23960,7 +23923,7 @@ BI.CardLayout = BI.inherit(BI.Layout, {
         var self = this;
         BI.each(this.getAllCardNames(), function (i, name) {
             self.deleteCardByName(name);
-        })
+        });
     },
 
     hideAllCard: function () {
@@ -23989,7 +23952,7 @@ BI.CardLayout = BI.inherit(BI.Layout, {
                 if (child === nameOrWidget) {
                     removeName = name;
                 }
-            })
+            });
         } else {
             removeName = nameOrWidget;
         }
@@ -23998,7 +23961,7 @@ BI.CardLayout = BI.inherit(BI.Layout, {
         }
     }
 });
-BI.shortcut('bi.card', BI.CardLayout);/**
+BI.shortcut("bi.card", BI.CardLayout);/**
  * 默认的布局方式
  *
  * @class BI.DefaultLayout
@@ -24027,22 +23990,22 @@ BI.DefaultLayout = BI.inherit(BI.Layout, {
         if (o.vgap + o.tgap + (item.tgap || 0) !== 0) {
             w.element.css({
                 "margin-top": o.vgap + o.tgap + (item.tgap || 0) + "px"
-            })
+            });
         }
         if (o.hgap + o.lgap + (item.lgap || 0) !== 0) {
             w.element.css({
                 "margin-left": o.hgap + o.lgap + (item.lgap || 0) + "px"
-            })
+            });
         }
         if (o.hgap + o.rgap + (item.rgap || 0) !== 0) {
             w.element.css({
                 "margin-right": o.hgap + o.rgap + (item.rgap || 0) + "px"
-            })
+            });
         }
         if (o.vgap + o.bgap + (item.bgap || 0) !== 0) {
             w.element.css({
                 "margin-bottom": o.vgap + o.bgap + (item.bgap || 0) + "px"
-            })
+            });
         }
         return w;
     },
@@ -24056,7 +24019,7 @@ BI.DefaultLayout = BI.inherit(BI.Layout, {
         this._mount();
     }
 });
-BI.shortcut('bi.default', BI.DefaultLayout);/**
+BI.shortcut("bi.default", BI.DefaultLayout);/**
  * 分隔容器的控件，按照宽度和高度所占比平分整个容器
  *
  * @class BI.DivisionLayout
@@ -24091,7 +24054,7 @@ BI.DivisionLayout = BI.inherit(BI.Layout, {
             //        height: 0.33,
             //        el: {type: 'bi.button', text: 'button3'}
             //    }
-            //]
+            // ]
         });
     },
     render: function () {
@@ -24105,16 +24068,16 @@ BI.DivisionLayout = BI.inherit(BI.Layout, {
 
     addItem: function (item) {
         // do nothing
-        throw new Error("cannot be added")
+        throw new Error("cannot be added");
     },
 
-    stroke: function(items){
+    stroke: function (items) {
         var o = this.options;
         var rows = o.rows || o.items.length, columns = o.columns || ((o.items[0] && o.items[0].length) | 0);
         var map = BI.makeArray(rows), widths = {}, heights = {};
-        function firstElement(item, row, col) {
+        function firstElement (item, row, col) {
             if (row === 0) {
-                item.addClass("first-row")
+                item.addClass("first-row");
             }
             if (col === 0) {
                 item.addClass("first-col");
@@ -24124,7 +24087,7 @@ BI.DivisionLayout = BI.inherit(BI.Layout, {
             item.addClass("center-element");
         }
 
-        function firstObject(item, row, col) {
+        function firstObject (item, row, col) {
             var cls = "";
             if (row === 0) {
                 cls += " first-row";
@@ -24137,13 +24100,13 @@ BI.DivisionLayout = BI.inherit(BI.Layout, {
             item.cls = (item.cls || "") + cls + " center-element";
         }
 
-        function first(item, row, col) {
+        function first (item, row, col) {
             if (item instanceof BI.Widget) {
                 firstElement(item.element, row, col);
             } else if (item.el instanceof BI.Widget) {
                 firstElement(item.el.element, row, col);
             } else if (item.el) {
-                firstObject(item.el, row, col)
+                firstObject(item.el, row, col);
             } else {
                 firstObject(item, row, col);
             }
@@ -24177,13 +24140,13 @@ BI.DivisionLayout = BI.inherit(BI.Layout, {
                     w = this.getWidgetByName(this.getName() + i + "_" + j);
                 }
                 var left = totalW * 100 / widths[i];
-                w.element.css({"position": "absolute", "left": left + "%"});
+                w.element.css({position: "absolute", left: left + "%"});
                 if (j > 0) {
                     var lastW = this.getWidgetByName(this.getName() + i + "_" + (j - 1));
-                    lastW.element.css({"right": (100 - left) + "%"});
+                    lastW.element.css({right: (100 - left) + "%"});
                 }
                 if (j == o.columns - 1) {
-                    w.element.css({"right": "0%"});
+                    w.element.css({right: "0%"});
                 }
                 first(w, i, j);
                 totalW += map[i][j].width;
@@ -24194,13 +24157,13 @@ BI.DivisionLayout = BI.inherit(BI.Layout, {
             for (var i = 0; i < o.rows; i++) {
                 var w = this.getWidgetByName(this.getName() + i + "_" + j);
                 var top = totalH * 100 / heights[j];
-                w.element.css({"top": top + "%"});
+                w.element.css({top: top + "%"});
                 if (i > 0) {
                     var lastW = this.getWidgetByName(this.getName() + (i - 1) + "_" + j);
-                    lastW.element.css({"bottom": (100 - top) + "%"});
+                    lastW.element.css({bottom: (100 - top) + "%"});
                 }
                 if (i == o.rows - 1) {
-                    w.element.css({"bottom": "0%"});
+                    w.element.css({bottom: "0%"});
                 }
                 totalH += map[i][j].height;
             }
@@ -24212,7 +24175,7 @@ BI.DivisionLayout = BI.inherit(BI.Layout, {
         this._mount();
     }
 });
-BI.shortcut('bi.division', BI.DivisionLayout);/**
+BI.shortcut("bi.division", BI.DivisionLayout);/**
  * 靠左对齐的自由浮动布局
  * @class BI.FloatLeftLayout
  * @extends BI.Layout
@@ -24241,15 +24204,15 @@ BI.FloatLeftLayout = BI.inherit(BI.Layout, {
     _addElement: function (i, item) {
         var o = this.options;
         var w = BI.FloatLeftLayout.superclass._addElement.apply(this, arguments);
-        w.element.css({"position": "relative", "float": "left"});
+        w.element.css({position: "relative", float: "left"});
         if (BI.isNotNull(item.left)) {
-            w.element.css({"left": item.left});
+            w.element.css({left: item.left});
         }
         if (BI.isNotNull(item.right)) {
-            w.element.css({"right": item.right});
+            w.element.css({right: item.right});
         }
         if (BI.isNotNull(item.top)) {
-            w.element.css({"top": item.top});
+            w.element.css({top: item.top});
         }
         if ((item.lgap || 0) + o.hgap + o.lgap !== 0) {
             w.element.css("margin-left", (item.lgap || 0) + o.hgap + o.lgap);
@@ -24275,7 +24238,7 @@ BI.FloatLeftLayout = BI.inherit(BI.Layout, {
         this._mount();
     }
 });
-BI.shortcut('bi.left', BI.FloatLeftLayout);
+BI.shortcut("bi.left", BI.FloatLeftLayout);
 
 /**
  * 靠右对齐的自由浮动布局
@@ -24306,15 +24269,15 @@ BI.FloatRightLayout = BI.inherit(BI.Layout, {
     _addElement: function (i, item) {
         var o = this.options;
         var w = BI.FloatRightLayout.superclass._addElement.apply(this, arguments);
-        w.element.css({"position": "relative", "float": "right"});
+        w.element.css({position: "relative", float: "right"});
         if (BI.isNotNull(item.left)) {
-            w.element.css({"left": item.left});
+            w.element.css({left: item.left});
         }
         if (BI.isNotNull(item.right)) {
-            w.element.css({"right": item.right});
+            w.element.css({right: item.right});
         }
         if (BI.isNotNull(item.top)) {
-            w.element.css({"top": item.top});
+            w.element.css({top: item.top});
         }
         if ((item.lgap || 0) + o.hgap + o.lgap !== 0) {
             w.element.css("margin-left", (item.lgap || 0) + o.hgap + o.lgap);
@@ -24340,7 +24303,7 @@ BI.FloatRightLayout = BI.inherit(BI.Layout, {
         this._mount();
     }
 });
-BI.shortcut('bi.right', BI.FloatRightLayout);/**
+BI.shortcut("bi.right", BI.FloatRightLayout);/**
  * 上下的高度固定/左右的宽度固定，中间的高度/宽度自适应
  *
  * @class BI.BorderLayout
@@ -24353,7 +24316,7 @@ BI.GridLayout = BI.inherit(BI.Layout, {
             columns: null,
             rows: null,
             items: []
-            /*[
+            /* [
              {
              column: 0,
              row: 0,
@@ -24382,8 +24345,8 @@ BI.GridLayout = BI.inherit(BI.Layout, {
     },
 
     addItem: function () {
-        //do nothing
-        throw new Error("cannot be added")
+        // do nothing
+        throw new Error("cannot be added");
     },
 
     stroke: function (items) {
@@ -24394,9 +24357,9 @@ BI.GridLayout = BI.inherit(BI.Layout, {
         for (var i = 0; i < rows; i++) {
             els[i] = [];
         }
-        function firstElement(item, row, col) {
+        function firstElement (item, row, col) {
             if (row === 0) {
-                item.addClass("first-row")
+                item.addClass("first-row");
             }
             if (col === 0) {
                 item.addClass("first-col");
@@ -24406,7 +24369,7 @@ BI.GridLayout = BI.inherit(BI.Layout, {
             item.addClass("center-element");
         }
 
-        function firstObject(item, row, col) {
+        function firstObject (item, row, col) {
             var cls = "";
             if (row === 0) {
                 cls += " first-row";
@@ -24419,13 +24382,13 @@ BI.GridLayout = BI.inherit(BI.Layout, {
             item.cls = (item.cls || "") + cls + " center-element";
         }
 
-        function first(item, row, col) {
+        function first (item, row, col) {
             if (item instanceof BI.Widget) {
                 firstElement(item.element, row, col);
             } else if (item.el instanceof BI.Widget) {
                 firstElement(item.el.element, row, col);
             } else if (item.el) {
-                firstObject(item.el, row, col)
+                firstObject(item.el, row, col);
             } else {
                 firstObject(item, row, col);
             }
@@ -24449,11 +24412,11 @@ BI.GridLayout = BI.inherit(BI.Layout, {
                 }
                 first(els[i][j], i, j);
                 els[i][j].element.css({
-                    "position": "absolute",
-                    "top": height * i + "%",
-                    "left": width * j + "%",
-                    "right": (100 - (width * (j + 1))) + "%",
-                    "bottom": (100 - (height * (i + 1))) + "%"
+                    position: "absolute",
+                    top: height * i + "%",
+                    left: width * j + "%",
+                    right: (100 - (width * (j + 1))) + "%",
+                    bottom: (100 - (height * (i + 1))) + "%"
                 });
                 this.addWidget(els[i][j]);
             }
@@ -24465,7 +24428,7 @@ BI.GridLayout = BI.inherit(BI.Layout, {
         this._mount();
     }
 });
-BI.shortcut('bi.grid', BI.GridLayout);/**
+BI.shortcut("bi.grid", BI.GridLayout);/**
  * 水平布局
  * @class BI.HorizontalLayout
  * @extends BI.Layout
@@ -24487,11 +24450,11 @@ BI.HorizontalLayout = BI.inherit(BI.Layout, {
     },
     render: function () {
         BI.HorizontalLayout.superclass.render.apply(this, arguments);
-        this.$table = $("<table>").attr({"cellspacing": 0, "cellpadding": 0}).css({
-            "position": "relative",
+        this.$table = $("<table>").attr({cellspacing: 0, cellpadding: 0}).css({
+            position: "relative",
             "white-space": "nowrap",
             "border-spacing": "0px",
-            "border": "none",
+            border: "none",
             "border-collapse": "separate"
         });
         this.$tr = $("<tr>");
@@ -24505,7 +24468,7 @@ BI.HorizontalLayout = BI.inherit(BI.Layout, {
         var width = o.columnSize[i] <= 1 ? (o.columnSize[i] * 100 + "%") : o.columnSize[i];
         if (!this.hasWidget(this._getChildName(i))) {
             var w = BI.createWidget(item);
-            w.element.css({"position": "relative", "margin": "0px auto"});
+            w.element.css({position: "relative", margin: "0px auto"});
             td = BI.createWidget({
                 type: "bi.default",
                 tagName: "td",
@@ -24524,31 +24487,31 @@ BI.HorizontalLayout = BI.inherit(BI.Layout, {
             td.element.addClass("first-element");
         }
         td.element.css({
-            "position": "relative",
+            position: "relative",
             "vertical-align": o.verticalAlign,
-            "margin": "0",
-            "padding": "0",
-            "border": "none"
+            margin: "0",
+            padding: "0",
+            border: "none"
         });
         if (o.hgap + o.lgap + (item.lgap || 0) > 0) {
             w.element.css({
                 "margin-left": o.hgap + o.lgap + (item.lgap || 0) + "px"
-            })
+            });
         }
         if (o.hgap + o.rgap + (item.rgap || 0) > 0) {
             w.element.css({
                 "margin-right": o.hgap + o.rgap + (item.rgap || 0) + "px"
-            })
+            });
         }
         if (o.vgap + o.tgap + (item.tgap || 0) > 0) {
             w.element.css({
                 "margin-top": o.vgap + o.tgap + (item.tgap || 0) + "px"
-            })
+            });
         }
         if (o.vgap + o.bgap + (item.bgap || 0) > 0) {
             w.element.css({
                 "margin-bottom": o.vgap + o.bgap + (item.bgap || 0) + "px"
-            })
+            });
         }
         return td;
     },
@@ -24574,7 +24537,7 @@ BI.HorizontalLayout = BI.inherit(BI.Layout, {
         // console.log("horizontal layout do not need to resize");
     },
 
-    _getWrapper: function(){
+    _getWrapper: function () {
         return this.$tr;
     },
 
@@ -24583,7 +24546,7 @@ BI.HorizontalLayout = BI.inherit(BI.Layout, {
         this._mount();
     }
 });
-BI.shortcut('bi.horizontal', BI.HorizontalLayout);
+BI.shortcut("bi.horizontal", BI.HorizontalLayout);
 
 /**
  * 水平布局
@@ -24605,33 +24568,33 @@ BI.HorizontalCellLayout = BI.inherit(BI.Layout, {
     },
     render: function () {
         BI.HorizontalCellLayout.superclass.render.apply(this, arguments);
-        this.element.css({"display": "table", "vertical-align": "top"});
+        this.element.css({display: "table", "vertical-align": "top"});
         this.populate(this.options.items);
     },
 
     _addElement: function (i, item) {
         var o = this.options;
         var w = BI.HorizontalCellLayout.superclass._addElement.apply(this, arguments);
-        w.element.css({"position": "relative", "display": "table-cell", "vertical-align": "middle"});
+        w.element.css({position: "relative", display: "table-cell", "vertical-align": "middle"});
         if (o.hgap + o.lgap > 0) {
             w.element.css({
                 "margin-left": o.hgap + o.lgap + "px"
-            })
+            });
         }
         if (o.hgap + o.rgap > 0) {
             w.element.css({
                 "margin-right": o.hgap + o.rgap + "px"
-            })
+            });
         }
         if (o.vgap + o.tgap > 0) {
             w.element.css({
                 "margin-top": o.vgap + o.tgap + "px"
-            })
+            });
         }
         if (o.vgap + o.bgap > 0) {
             w.element.css({
                 "margin-bottom": o.vgap + o.bgap + "px"
-            })
+            });
         }
         return w;
     },
@@ -24645,7 +24608,7 @@ BI.HorizontalCellLayout = BI.inherit(BI.Layout, {
         this._mount();
     }
 });
-BI.shortcut('bi.horizontal_cell', BI.HorizontalCellLayout);/**
+BI.shortcut("bi.horizontal_cell", BI.HorizontalCellLayout);/**
  * 靠左对齐的自由浮动布局
  * @class BI.LatticeLayout
  * @extends BI.Layout
@@ -24658,7 +24621,7 @@ BI.LatticeLayout = BI.inherit(BI.Layout, {
     props: function () {
         return BI.extend(BI.LatticeLayout.superclass.props.apply(this, arguments), {
             baseCls: "bi-lattice-layout clearfix"
-            //columnSize: [0.2, 0.2, 0.6],
+            // columnSize: [0.2, 0.2, 0.6],
         });
     },
     render: function () {
@@ -24672,9 +24635,9 @@ BI.LatticeLayout = BI.inherit(BI.Layout, {
         if (o.columnSize && o.columnSize[i]) {
             var width = o.columnSize[i] / BI.sum(o.columnSize) * 100 + "%";
         } else {
-            var width = 1 / this.options.items.length * 100 + "%"
+            var width = 1 / this.options.items.length * 100 + "%";
         }
-        w.element.css({"position": "relative", "float": "left", "width": width});
+        w.element.css({position: "relative", float: "left", width: width});
         return w;
     },
 
@@ -24699,7 +24662,7 @@ BI.LatticeLayout = BI.inherit(BI.Layout, {
         this._mount();
     }
 });
-BI.shortcut('bi.lattice', BI.LatticeLayout);/**
+BI.shortcut("bi.lattice", BI.LatticeLayout);/**
  * 上下的高度固定/左右的宽度固定，中间的高度/宽度自适应
  *
  * @class BI.TableLayout
@@ -24710,19 +24673,19 @@ BI.TableLayout = BI.inherit(BI.Layout, {
         return BI.extend(BI.TableLayout.superclass.props.apply(this, arguments), {
             baseCls: "bi-table-layout",
             scrolly: true,
-            columnSize: [200, 200, 'fill'],
-            rowSize: 30,  //or [30,30,30]
+            columnSize: [200, 200, "fill"],
+            rowSize: 30,  // or [30,30,30]
             hgap: 0,
             vgap: 0,
             items: [[
                 {
-                    el: {text: 'label1'}
+                    el: {text: "label1"}
                 },
                 {
-                    el: {text: 'label2'}
+                    el: {text: "label2"}
                 },
                 {
-                    el: {text: 'label3'}
+                    el: {text: "label3"}
                 }
             ]]
         });
@@ -24737,9 +24700,9 @@ BI.TableLayout = BI.inherit(BI.Layout, {
         var o = this.options;
         var abs = [], left = 0, right = 0, i, j;
 
-        function firstElement(item, row, col) {
+        function firstElement (item, row, col) {
             if (row === 0) {
-                item.addClass("first-row")
+                item.addClass("first-row");
             }
             if (col === 0) {
                 item.addClass("first-col");
@@ -24749,7 +24712,7 @@ BI.TableLayout = BI.inherit(BI.Layout, {
             item.addClass("center-element");
         }
 
-        function firstObject(item, row, col) {
+        function firstObject (item, row, col) {
             var cls = "";
             if (row === 0) {
                 cls += " first-row";
@@ -24762,13 +24725,13 @@ BI.TableLayout = BI.inherit(BI.Layout, {
             item.cls = (item.cls || "") + cls + " center-element";
         }
 
-        function first(item, row, col) {
+        function first (item, row, col) {
             if (item instanceof BI.Widget) {
                 firstElement(item.element, row, col);
             } else if (item.el instanceof BI.Widget) {
                 firstElement(item.el.element, row, col);
             } else if (item.el) {
-                firstObject(item.el, row, col)
+                firstObject(item.el, row, col);
             } else {
                 firstObject(item, row, col);
             }
@@ -24796,7 +24759,7 @@ BI.TableLayout = BI.inherit(BI.Layout, {
                     bottom: 0,
                     right: o.columnSize[j] <= 1 ? right * 100 + "%" : right,
                     width: o.columnSize[j] <= 1 ? o.columnSize[j] * 100 + "%" : o.columnSize[j]
-                }, arr[j]))
+                }, arr[j]));
                 right += o.columnSize[j] + (o.columnSize[j] < 1 ? 0 : o.hgap);
             } else {
                 throw new Error("item with fill can only be one");
@@ -24809,7 +24772,7 @@ BI.TableLayout = BI.inherit(BI.Layout, {
                 bottom: 0,
                 left: left <= 1 ? left * 100 + "%" : left,
                 right: right <= 1 ? right * 100 + "%" : right
-            }, arr[i]))
+            }, arr[i]));
         }
         var w = BI.createWidget({
             type: "bi.absolute",
@@ -24819,10 +24782,10 @@ BI.TableLayout = BI.inherit(BI.Layout, {
         if (this.rows > 0) {
             this.getWidgetByName(this.getName() + (this.rows - 1)).element.css({
                 "margin-bottom": o.vgap
-            })
+            });
         }
         w.element.css({
-            "position": "relative"
+            position: "relative"
         });
         this.addWidget(this.getName() + (this.rows++), w);
         return w;
@@ -24844,7 +24807,7 @@ BI.TableLayout = BI.inherit(BI.Layout, {
         this._mount();
     }
 });
-BI.shortcut('bi.table', BI.TableLayout);/**
+BI.shortcut("bi.table", BI.TableLayout);/**
  * 水平tape布局
  * @class BI.HTapeLayout
  * @extends BI.Layout
@@ -24862,15 +24825,15 @@ BI.HTapeLayout = BI.inherit(BI.Layout, {
             items: [
                 {
                     width: 100,
-                    el: {type: 'bi.button', text: 'button1'}
+                    el: {type: "bi.button", text: "button1"}
                 },
                 {
-                    width: 'fill',
-                    el: {type: 'bi.button', text: 'button2'}
+                    width: "fill",
+                    el: {type: "bi.button", text: "button2"}
                 },
                 {
                     width: 200,
-                    el: {type: 'bi.button', text: 'button3'}
+                    el: {type: "bi.button", text: "button3"}
                 }
             ]
         });
@@ -24885,7 +24848,7 @@ BI.HTapeLayout = BI.inherit(BI.Layout, {
     },
     addItem: function (item) {
         // do nothing
-        throw new Error("cannot be added")
+        throw new Error("cannot be added");
     },
 
     stroke: function (items) {
@@ -24898,7 +24861,7 @@ BI.HTapeLayout = BI.inherit(BI.Layout, {
             } else {
                 w = self.getWidgetByName(self.getName() + i + "");
             }
-            w.element.css({"position": "absolute", top: o.vgap + o.tgap + "px", bottom: o.vgap + o.bgap + "px"});
+            w.element.css({position: "absolute", top: o.vgap + o.tgap + "px", bottom: o.vgap + o.bgap + "px"});
         });
 
         var left = {}, right = {};
@@ -24911,10 +24874,10 @@ BI.HTapeLayout = BI.inherit(BI.Layout, {
                 left[i] = left[i - 1] + items[i - 1].width + 2 * o.hgap + o.lgap + o.rgap;
             }
             if (item.width < 1 && item.width >= 0) {
-                w.element.css({"left": left[i] * 100 + "%", width: item.width * 100 + "%"})
+                w.element.css({left: left[i] * 100 + "%", width: item.width * 100 + "%"});
             } else {
                 w.element.css({
-                    "left": left[i] + o.hgap + o.lgap + "px",
+                    left: left[i] + o.hgap + o.lgap + "px",
                     width: BI.isNumber(item.width) ? item.width : ""
                 });
             }
@@ -24928,17 +24891,17 @@ BI.HTapeLayout = BI.inherit(BI.Layout, {
                 right[i] = right[i + 1] + items[i + 1].width + 2 * o.hgap + o.lgap + o.rgap;
             }
             if (item.width < 1 && item.width >= 0) {
-                w.element.css({"right": right[i] * 100 + "%", width: item.width * 100 + "%"})
+                w.element.css({right: right[i] * 100 + "%", width: item.width * 100 + "%"});
             } else {
                 w.element.css({
-                    "right": right[i] + o.hgap + o.rgap + "px",
+                    right: right[i] + o.hgap + o.rgap + "px",
                     width: BI.isNumber(item.width) ? item.width : ""
                 });
             }
             if (!BI.isNumber(item.width)) {
                 return true;
             }
-        })
+        });
     },
 
     populate: function (items) {
@@ -24946,7 +24909,7 @@ BI.HTapeLayout = BI.inherit(BI.Layout, {
         this._mount();
     }
 });
-BI.shortcut('bi.htape', BI.HTapeLayout);
+BI.shortcut("bi.htape", BI.HTapeLayout);
 
 /**
  * 垂直tape布局
@@ -24966,15 +24929,15 @@ BI.VTapeLayout = BI.inherit(BI.Layout, {
             items: [
                 {
                     height: 100,
-                    el: {type: 'bi.button', text: 'button1'}
+                    el: {type: "bi.button", text: "button1"}
                 },
                 {
-                    height: 'fill',
-                    el: {type: 'bi.button', text: 'button2'}
+                    height: "fill",
+                    el: {type: "bi.button", text: "button2"}
                 },
                 {
                     height: 200,
-                    el: {type: 'bi.button', text: 'button3'}
+                    el: {type: "bi.button", text: "button3"}
                 }
             ]
         });
@@ -24990,7 +24953,7 @@ BI.VTapeLayout = BI.inherit(BI.Layout, {
 
     addItem: function (item) {
         // do nothing
-        throw new Error("cannot be added")
+        throw new Error("cannot be added");
     },
 
     stroke: function (items) {
@@ -25003,7 +24966,7 @@ BI.VTapeLayout = BI.inherit(BI.Layout, {
             } else {
                 w = self.getWidgetByName(self.getName() + i + "");
             }
-            w.element.css({"position": "absolute", left: o.hgap + o.lgap + "px", right: o.hgap + o.rgap + "px"});
+            w.element.css({position: "absolute", left: o.hgap + o.lgap + "px", right: o.hgap + o.rgap + "px"});
         });
 
         var top = {}, bottom = {};
@@ -25016,10 +24979,10 @@ BI.VTapeLayout = BI.inherit(BI.Layout, {
                 top[i] = top[i - 1] + items[i - 1].height + 2 * o.vgap + o.tgap + o.bgap;
             }
             if (item.height < 1 && item.height >= 0) {
-                w.element.css({"top": top[i] * 100 + "%", height: item.height * 100 + "%"})
+                w.element.css({top: top[i] * 100 + "%", height: item.height * 100 + "%"});
             } else {
                 w.element.css({
-                    "top": top[i] + o.vgap + o.tgap + "px",
+                    top: top[i] + o.vgap + o.tgap + "px",
                     height: BI.isNumber(item.height) ? item.height : ""
                 });
             }
@@ -25033,17 +24996,17 @@ BI.VTapeLayout = BI.inherit(BI.Layout, {
                 bottom[i] = bottom[i + 1] + items[i + 1].height + 2 * o.vgap + o.tgap + o.bgap;
             }
             if (item.height < 1 && item.height >= 0) {
-                w.element.css({"bottom": bottom[i] * 100 + "%", height: item.height * 100 + "%"})
+                w.element.css({bottom: bottom[i] * 100 + "%", height: item.height * 100 + "%"});
             } else {
                 w.element.css({
-                    "bottom": bottom[i] + o.vgap + o.bgap + "px",
+                    bottom: bottom[i] + o.vgap + o.bgap + "px",
                     height: BI.isNumber(item.height) ? item.height : ""
                 });
             }
             if (!BI.isNumber(item.height)) {
                 return true;
             }
-        })
+        });
     },
 
     populate: function (items) {
@@ -25051,7 +25014,7 @@ BI.VTapeLayout = BI.inherit(BI.Layout, {
         this._mount();
     }
 });
-BI.shortcut('bi.vtape', BI.VTapeLayout);/**
+BI.shortcut("bi.vtape", BI.VTapeLayout);/**
  * td布局
  * @class BI.TdLayout
  * @extends BI.Layout
@@ -25065,25 +25028,25 @@ BI.TdLayout = BI.inherit(BI.Layout, {
             vgap: 0,
             items: [[
                 {
-                    el: {text: 'label1'}
+                    el: {text: "label1"}
                 },
                 {
-                    el: {text: 'label2'}
+                    el: {text: "label2"}
                 },
                 {
-                    el: {text: 'label3'}
+                    el: {text: "label3"}
                 }
             ]]
         });
     },
     render: function () {
         BI.TdLayout.superclass.render.apply(this, arguments);
-        this.$table = $("<table>").attr({"cellspacing": 0, "cellpadding": 0}).css({
-            "position": "relative",
-            "width": "100%",
-            "height": "100%",
+        this.$table = $("<table>").attr({cellspacing: 0, cellpadding: 0}).css({
+            position: "relative",
+            width: "100%",
+            height: "100%",
             "border-spacing": "0px",
-            "border": "none",
+            border: "none",
             "border-collapse": "separate"
         });
         this.rows = 0;
@@ -25093,9 +25056,9 @@ BI.TdLayout = BI.inherit(BI.Layout, {
     _addElement: function (idx, arr) {
         var o = this.options;
 
-        function firstElement(item, row, col) {
+        function firstElement (item, row, col) {
             if (row === 0) {
-                item.addClass("first-row")
+                item.addClass("first-row");
             }
             if (col === 0) {
                 item.addClass("first-col");
@@ -25105,7 +25068,7 @@ BI.TdLayout = BI.inherit(BI.Layout, {
             item.addClass("center-element");
         }
 
-        function firstObject(item, row, col) {
+        function firstObject (item, row, col) {
             var cls = "";
             if (row === 0) {
                 cls += " first-row";
@@ -25118,13 +25081,13 @@ BI.TdLayout = BI.inherit(BI.Layout, {
             item.cls = (item.cls || "") + cls + " center-element";
         }
 
-        function first(item, row, col) {
+        function first (item, row, col) {
             if (item instanceof BI.Widget) {
                 firstElement(item.element, row, col);
             } else if (item.el instanceof BI.Widget) {
                 firstElement(item.el.element, row, col);
             } else if (item.el) {
-                firstObject(item.el, row, col)
+                firstObject(item.el, row, col);
             } else {
                 firstObject(item, row, col);
             }
@@ -25137,7 +25100,7 @@ BI.TdLayout = BI.inherit(BI.Layout, {
 
         for (var i = 0; i < arr.length; i++) {
             var w = BI.createWidget(arr[i]);
-            w.element.css({"position": "relative", "top": "0", "left": "0", "margin": "0px auto"});
+            w.element.css({position: "relative", top: "0", left: "0", margin: "0px auto"});
             if (arr[i].lgap) {
                 w.element.css({"margin-left": arr[i].lgap + "px"});
             }
@@ -25152,19 +25115,19 @@ BI.TdLayout = BI.inherit(BI.Layout, {
             }
             first(w, this.rows++, i);
             var td = BI.createWidget({
-                type: 'bi.default',
+                type: "bi.default",
                 attributes: {
                     width: o.columnSize[i] <= 1 ? (o.columnSize[i] * 100 + "%") : o.columnSize[i]
                 },
-                tagName: 'td',
+                tagName: "td",
                 items: [w]
             });
             td.element.css({
-                "position": "relative",
+                position: "relative",
                 "vertical-align": "middle",
-                "margin": "0",
-                "padding": "0",
-                "border": "none"
+                margin: "0",
+                padding: "0",
+                border: "none"
             });
             tr.addItem(td);
         }
@@ -25204,7 +25167,7 @@ BI.TdLayout = BI.inherit(BI.Layout, {
         this._mount();
     }
 });
-BI.shortcut('bi.td', BI.TdLayout);/**
+BI.shortcut("bi.td", BI.TdLayout);/**
  * 垂直布局
  * @class BI.VerticalLayout
  * @extends BI.Layout
@@ -25231,27 +25194,27 @@ BI.VerticalLayout = BI.inherit(BI.Layout, {
         var o = this.options;
         var w = BI.VerticalLayout.superclass._addElement.apply(this, arguments);
         w.element.css({
-            "position": "relative"
+            position: "relative"
         });
         if (o.vgap + o.tgap + (item.tgap || 0) !== 0) {
             w.element.css({
                 "margin-top": o.vgap + o.tgap + (item.tgap || 0) + "px"
-            })
+            });
         }
         if (o.hgap + o.lgap + (item.lgap || 0) !== 0) {
             w.element.css({
                 "margin-left": o.hgap + o.lgap + (item.lgap || 0) + "px"
-            })
+            });
         }
         if (o.hgap + o.rgap + (item.rgap || 0) !== 0) {
             w.element.css({
                 "margin-right": o.hgap + o.rgap + (item.rgap || 0) + "px"
-            })
+            });
         }
         if (o.vgap + o.bgap + (item.bgap || 0) !== 0) {
             w.element.css({
                 "margin-bottom": o.vgap + o.bgap + (item.bgap || 0) + "px"
-            })
+            });
         }
         return w;
     },
@@ -25265,7 +25228,7 @@ BI.VerticalLayout = BI.inherit(BI.Layout, {
         this._mount();
     }
 });
-BI.shortcut('bi.vertical', BI.VerticalLayout);/**
+BI.shortcut("bi.vertical", BI.VerticalLayout);/**
  *
  * @class BI.WindowLayout
  * @extends BI.Layout
@@ -25286,13 +25249,13 @@ BI.WindowLayout = BI.inherit(BI.Layout, {
             rowSize: [100, "fill"],
             items: [[
                 {
-                    el: {type: 'bi.button', text: 'button1'}
+                    el: {type: "bi.button", text: "button1"}
                 },
                 {
-                    el: {type: 'bi.button', text: 'button2'}
+                    el: {type: "bi.button", text: "button2"}
                 },
                 {
-                    el: {type: 'bi.button', text: 'button3'}
+                    el: {type: "bi.button", text: "button3"}
                 }
             ]]
         });
@@ -25308,7 +25271,7 @@ BI.WindowLayout = BI.inherit(BI.Layout, {
 
     addItem: function (item) {
         // do nothing
-        throw new Error("cannot be added")
+        throw new Error("cannot be added");
     },
 
     stroke: function (items) {
@@ -25319,9 +25282,9 @@ BI.WindowLayout = BI.inherit(BI.Layout, {
         if (BI.isNumber(o.columnSize)) {
             o.columnSize = BI.makeArray(o.items[0].length, 1 / o.items[0].length);
         }
-        function firstElement(item, row, col) {
+        function firstElement (item, row, col) {
             if (row === 0) {
-                item.addClass("first-row")
+                item.addClass("first-row");
             }
             if (col === 0) {
                 item.addClass("first-col");
@@ -25331,7 +25294,7 @@ BI.WindowLayout = BI.inherit(BI.Layout, {
             item.addClass("center-element");
         }
 
-        function firstObject(item, row, col) {
+        function firstObject (item, row, col) {
             var cls = "";
             if (row === 0) {
                 cls += " first-row";
@@ -25344,13 +25307,13 @@ BI.WindowLayout = BI.inherit(BI.Layout, {
             item.cls = (item.cls || "") + cls + " center-element";
         }
 
-        function first(item, row, col) {
+        function first (item, row, col) {
             if (item instanceof BI.Widget) {
                 firstElement(item.element, row, col);
             } else if (item.el instanceof BI.Widget) {
                 firstElement(item.el.element, row, col);
             } else if (item.el) {
-                firstObject(item.el, row, col)
+                firstObject(item.el, row, col);
             } else {
                 firstObject(item, row, col);
             }
@@ -25363,7 +25326,7 @@ BI.WindowLayout = BI.inherit(BI.Layout, {
                 }
                 if (!this.hasWidget(this.getName() + i + "_" + j)) {
                     var w = BI.createWidget(o.items[i][j]);
-                    w.element.css({"position": "absolute"});
+                    w.element.css({position: "absolute"});
                     this.addWidget(this.getName() + i + "_" + j, w);
                 }
             }
@@ -25373,7 +25336,7 @@ BI.WindowLayout = BI.inherit(BI.Layout, {
         top[0] = 0;
         right[o.columns - 1] = 0;
         bottom[o.rows - 1] = 0;
-        //从上到下
+        // 从上到下
         for (var i = 0; i < o.rows; i++) {
             for (var j = 0; j < o.columns; j++) {
                 var wi = this.getWidgetByName(this.getName() + i + "_" + j);
@@ -25384,14 +25347,14 @@ BI.WindowLayout = BI.inherit(BI.Layout, {
                 if (BI.isNumber(o.rowSize[i])) {
                     h = o.rowSize[i] <= 1 ? o.rowSize[i] * 100 + "%" : o.rowSize[i] + "px";
                 }
-                wi.element.css({"top": t, height: h});
+                wi.element.css({top: t, height: h});
                 first(wi, i, j);
             }
             if (!BI.isNumber(o.rowSize[i])) {
                 break;
             }
         }
-        //从下到上
+        // 从下到上
         for (var i = o.rows - 1; i >= 0; i--) {
             for (var j = 0; j < o.columns; j++) {
                 var wi = this.getWidgetByName(this.getName() + i + "_" + j);
@@ -25402,14 +25365,14 @@ BI.WindowLayout = BI.inherit(BI.Layout, {
                 if (BI.isNumber(o.rowSize[i])) {
                     h = o.rowSize[i] <= 1 ? o.rowSize[i] * 100 + "%" : o.rowSize[i] + "px";
                 }
-                wi.element.css({"bottom": b, height: h});
+                wi.element.css({bottom: b, height: h});
                 first(wi, i, j);
             }
             if (!BI.isNumber(o.rowSize[i])) {
                 break;
             }
         }
-        //从左到右
+        // 从左到右
         for (var j = 0; j < o.columns; j++) {
             for (var i = 0; i < o.rows; i++) {
                 var wi = this.getWidgetByName(this.getName() + i + "_" + j);
@@ -25420,25 +25383,25 @@ BI.WindowLayout = BI.inherit(BI.Layout, {
                 if (BI.isNumber(o.columnSize[j])) {
                     w = o.columnSize[j] <= 1 ? o.columnSize[j] * 100 + "%" : o.columnSize[j] + "px";
                 }
-                wi.element.css({"left": l, width: w});
+                wi.element.css({left: l, width: w});
                 first(wi, i, j);
             }
             if (!BI.isNumber(o.columnSize[j])) {
                 break;
             }
         }
-        //从右到左
+        // 从右到左
         for (var j = o.columns - 1; j >= 0; j--) {
             for (var i = 0; i < o.rows; i++) {
                 var wi = this.getWidgetByName(this.getName() + i + "_" + j);
                 if (BI.isNull(right[j])) {
-                    right[j] = right[j + 1] + (o.columnSize[j + 1] < 1 ? o.columnSize[j + 1] : o.columnSize[j + 1] + o.hgap + o.lgap)
+                    right[j] = right[j + 1] + (o.columnSize[j + 1] < 1 ? o.columnSize[j + 1] : o.columnSize[j + 1] + o.hgap + o.lgap);
                 }
                 var r = right[j] <= 1 ? right[j] * 100 + "%" : right[j] + o.hgap + o.rgap + "px", w = "";
                 if (BI.isNumber(o.columnSize[j])) {
                     w = o.columnSize[j] <= 1 ? o.columnSize[j] * 100 + "%" : o.columnSize[j] + "px";
                 }
-                wi.element.css({"right": r, width: w});
+                wi.element.css({right: r, width: w});
                 first(wi, i, j);
             }
             if (!BI.isNumber(o.columnSize[j])) {
@@ -25452,7 +25415,7 @@ BI.WindowLayout = BI.inherit(BI.Layout, {
         this._mount();
     }
 });
-BI.shortcut('bi.window', BI.WindowLayout);/**
+BI.shortcut("bi.window", BI.WindowLayout);/**
  * 水平和垂直方向都居中容器, 非自适应，用于宽度高度固定的面板
  * @class BI.CenterLayout
  * @extends BI.Layout
@@ -25480,7 +25443,7 @@ BI.CenterLayout = BI.inherit(BI.Layout, {
     },
 
     addItem: function (item) {
-        //do nothing
+        // do nothing
         throw new Error("cannot be added");
     },
 
@@ -25498,7 +25461,7 @@ BI.CenterLayout = BI.inherit(BI.Layout, {
             });
         });
         BI.each(items, function (i, item) {
-            if (!!item) {
+            if (item) {
                 var w = BI.createWidget(item);
                 w.element.css({
                     position: "absolute",
@@ -25526,7 +25489,7 @@ BI.CenterLayout = BI.inherit(BI.Layout, {
         this._mount();
     }
 });
-BI.shortcut('bi.center', BI.CenterLayout);/**
+BI.shortcut("bi.center", BI.CenterLayout);/**
  * 浮动布局实现的居中容器
  * @class BI.FloatCenterLayout
  * @extends BI.Layout
@@ -25553,8 +25516,8 @@ BI.FloatCenterLayout = BI.inherit(BI.Layout, {
     },
 
     addItem: function (item) {
-        //do nothing
-        throw new Error("cannot be added")
+        // do nothing
+        throw new Error("cannot be added");
     },
 
     stroke: function (items) {
@@ -25573,7 +25536,7 @@ BI.FloatCenterLayout = BI.inherit(BI.Layout, {
             });
         });
         BI.each(items, function (i, item) {
-            if (!!item) {
+            if (item) {
                 var w = BI.createWidget(item);
                 w.element.css({
                     position: "absolute",
@@ -25599,7 +25562,7 @@ BI.FloatCenterLayout = BI.inherit(BI.Layout, {
         this._mount();
     }
 });
-BI.shortcut('bi.float_center', BI.FloatCenterLayout);/**
+BI.shortcut("bi.float_center", BI.FloatCenterLayout);/**
  * 水平和垂直方向都居中容器, 非自适应，用于宽度高度固定的面板
  * @class BI.HorizontalCenterLayout
  * @extends BI.Layout
@@ -25626,8 +25589,8 @@ BI.HorizontalCenterLayout = BI.inherit(BI.Layout, {
     },
 
     addItem: function (item) {
-        //do nothing
-        throw new Error("cannot be added")
+        // do nothing
+        throw new Error("cannot be added");
     },
 
     stroke: function (items) {
@@ -25644,7 +25607,7 @@ BI.HorizontalCenterLayout = BI.inherit(BI.Layout, {
             });
         });
         BI.each(items, function (i, item) {
-            if (!!item) {
+            if (item) {
                 var w = BI.createWidget(item);
                 w.element.css({
                     position: "absolute",
@@ -25671,7 +25634,7 @@ BI.HorizontalCenterLayout = BI.inherit(BI.Layout, {
         this._mount();
     }
 });
-BI.shortcut('bi.horizontal_center', BI.HorizontalCenterLayout);/**
+BI.shortcut("bi.horizontal_center", BI.HorizontalCenterLayout);/**
  * 垂直方向都居中容器, 非自适应，用于高度不固定的面板
  * @class BI.VerticalCenterLayout
  * @extends BI.Layout
@@ -25698,8 +25661,8 @@ BI.VerticalCenterLayout = BI.inherit(BI.Layout, {
     },
 
     addItem: function (item) {
-        //do nothing
-        throw new Error("cannot be added")
+        // do nothing
+        throw new Error("cannot be added");
     },
 
     stroke: function (items) {
@@ -25716,7 +25679,7 @@ BI.VerticalCenterLayout = BI.inherit(BI.Layout, {
             });
         });
         BI.each(items, function (i, item) {
-            if (!!item) {
+            if (item) {
                 var w = BI.createWidget(item);
                 w.element.css({
                     position: "absolute",
@@ -25743,7 +25706,7 @@ BI.VerticalCenterLayout = BI.inherit(BI.Layout, {
         this._mount();
     }
 });
-BI.shortcut('bi.vertical_center', BI.VerticalCenterLayout);/**
+BI.shortcut("bi.vertical_center", BI.VerticalCenterLayout);/**
  * 保存数据，将js里面用到的常量数据都分离
  *
  */
@@ -25758,10 +25721,10 @@ Data.Constant = BICst = {};
  * 缓冲池
  * @type {{Buffer: {}}}
  */
-;
+
 (function () {
     var Buffer = {};
-    var MODE = false;//设置缓存模式为关闭
+    var MODE = false;// 设置缓存模式为关闭
 
     Data.BufferPool = {
         put: function (name, cache) {
@@ -25779,7 +25742,7 @@ Data.Constant = BICst = {};
  * 共享池
  * @type {{Shared: {}}}
  */
-;
+
 (function () {
     var _Shared = {};
     Data.SharingPool = {

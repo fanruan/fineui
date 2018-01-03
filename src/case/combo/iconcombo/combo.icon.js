@@ -14,15 +14,15 @@ BI.IconCombo = BI.inherit(BI.Widget, {
             el: {},
             popup: {},
             minWidth: 100,
-            maxWidth: 'auto',
+            maxWidth: "auto",
             maxHeight: 300,
             direction: "bottom",
-            adjustLength: 3,//调整的距离
+            adjustLength: 3, // 调整的距离
             adjustXOffset: 0,
             adjustYOffset: 0,
             offsetStyle: "left",
             chooseType: BI.ButtonGroup.CHOOSE_TYPE_SINGLE
-        })
+        });
     },
 
     _init: function () {

@@ -7,8 +7,8 @@
 BI.TextAreaEditor = BI.inherit(BI.Single, {
     _defaultConfig: function () {
         return $.extend(BI.TextAreaEditor.superclass._defaultConfig.apply(), {
-            baseCls: 'bi-textarea-editor bi-card',
-            value: ''
+            baseCls: "bi-textarea-editor bi-card",
+            value: ""
         });
     },
     _init: function () {
@@ -21,7 +21,7 @@ BI.TextAreaEditor = BI.inherit(BI.Single, {
             height: "100%",
             cls: "bi-textarea textarea-editor-content display-block"
         });
-        this.content.element.css({"resize": "none"});
+        this.content.element.css({resize: "none"});
         BI.createWidget({
             type: "bi.absolute",
             element: this,
@@ -92,7 +92,7 @@ BI.TextAreaEditor = BI.inherit(BI.Single, {
                         self.focus();
                     });
                     BI.createWidget({
-                        type: 'bi.absolute',
+                        type: "bi.absolute",
                         element: this,
                         items: [{
                             el: this.watermark,
@@ -100,7 +100,7 @@ BI.TextAreaEditor = BI.inherit(BI.Single, {
                             top: 0,
                             right: 0
                         }]
-                    })
+                    });
                 } else {
                     this.watermark.setText(o.watermark);
                     this.watermark.setValid(!o.invalid);
@@ -144,7 +144,7 @@ BI.TextAreaEditor = BI.inherit(BI.Single, {
         this.element.css(style);
         this.content.element.css(BI.extend({}, style, {
             color: style.color || BI.DOM.getContrastColor(BI.DOM.isRGBColor(style.backgroundColor) ? BI.DOM.rgb2hex(style.backgroundColor) : style.backgroundColor)
-        }))
+        }));
     },
 
     getStyle: function () {

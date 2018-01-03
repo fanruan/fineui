@@ -10,12 +10,12 @@ BI.MultiLayerSingleTreeMidPlusGroupNode = BI.inherit(BI.NodeButton, {
         var conf = BI.MultiLayerSingleTreeMidPlusGroupNode.superclass._defaultConfig.apply(this, arguments);
         return BI.extend(conf, {
             extraCls: "bi-multilayer-single-tree-mid-plus-group-node bi-list-item",
-            layer: 0,//第几层级
+            layer: 0, // 第几层级
             id: "",
             pId: "",
             open: false,
             height: 25
-        })
+        });
     },
     _init: function () {
         BI.MultiLayerSingleTreeMidPlusGroupNode.superclass._init.apply(this, arguments);
@@ -36,7 +36,7 @@ BI.MultiLayerSingleTreeMidPlusGroupNode = BI.inherit(BI.NodeButton, {
             py: o.py
         });
         this.node.on(BI.Controller.EVENT_CHANGE, function (type) {
-            if (type === BI.Events.CLICK) {//本身实现click功能
+            if (type === BI.Events.CLICK) {// 本身实现click功能
                 return;
             }
             self.fireEvent(BI.Controller.EVENT_CHANGE, arguments);
@@ -49,7 +49,7 @@ BI.MultiLayerSingleTreeMidPlusGroupNode = BI.inherit(BI.NodeButton, {
                 cls: "base-line-conn-background",
                 width: 13,
                 height: o.height
-            })
+            });
         });
         items.push(this.node);
         BI.createWidget({
@@ -57,7 +57,7 @@ BI.MultiLayerSingleTreeMidPlusGroupNode = BI.inherit(BI.NodeButton, {
             element: this,
             columnSize: BI.makeArray(o.layer, 13),
             items: [items]
-        })
+        });
     },
 
     doRedMark: function () {

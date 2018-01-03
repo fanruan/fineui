@@ -17,7 +17,7 @@ BI.SelectTreeLastPlusGroupNode = BI.inherit(BI.NodeButton, {
             readonly: true,
             open: false,
             height: 25
-        })
+        });
     },
     _init: function () {
         BI.SelectTreeLastPlusGroupNode.superclass._init.apply(this, arguments);
@@ -25,7 +25,7 @@ BI.SelectTreeLastPlusGroupNode = BI.inherit(BI.NodeButton, {
         this.checkbox = BI.createWidget({
             type: "bi.last_tree_node_checkbox",
             stopPropagation: true
-        })
+        });
         this.text = BI.createWidget({
             type: "bi.label",
             textAlign: "left",

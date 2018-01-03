@@ -10,7 +10,7 @@ BI.Svg = BI.inherit(BI.Widget, {
     _defaultConfig: function () {
         return BI.extend(BI.Svg.superclass._defaultConfig.apply(this, arguments), {
             baseCls: "bi-svg"
-        })
+        });
     },
 
     _init: function () {
@@ -18,7 +18,7 @@ BI.Svg = BI.inherit(BI.Widget, {
         this.paper = Raphael(this.element[0]);
 
         this.element.css("overflow", "hidden");
-        $(this.paper.canvas).width("100%").height("100%").css({"left": "0", "top": "0"}).appendTo(this.element);
+        $(this.paper.canvas).width("100%").height("100%").css({left: "0", top: "0"}).appendTo(this.element);
 
         this.top = this.paper.top;
         this.bottom = this.paper.bottom;

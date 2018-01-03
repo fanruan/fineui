@@ -13,7 +13,7 @@ BI.BranchExpander = BI.inherit(BI.Widget, {
             },
             el: {},
             popup: {}
-        })
+        });
     },
 
     _init: function () {

@@ -65,25 +65,25 @@ BI.QuickGridTable = BI.inherit(BI.GridTable, {
     _shouldHandleLeftX: function (delta) {
         if (delta > 0) {
             return this.bottomLeftGrid.getScrollLeft() < this.bottomLeftGrid.getMaxScrollLeft();
-        } else {
-            return this.bottomLeftGrid.getScrollLeft() > 0;
         }
+        return this.bottomLeftGrid.getScrollLeft() > 0;
+        
     },
 
     _shouldHandleRightX: function (delta) {
         if (delta > 0) {
             return this.bottomRightGrid.getScrollLeft() < this.bottomRightGrid.getMaxScrollLeft();
-        } else {
-            return this.bottomRightGrid.getScrollLeft() > 0;
         }
+        return this.bottomRightGrid.getScrollLeft() > 0;
+        
     },
 
     _shouldHandleY: function (delta) {
         if (delta > 0) {
             return this.bottomRightGrid.getScrollTop() < this.bottomRightGrid.getMaxScrollTop();
-        } else {
-            return this.bottomRightGrid.getScrollTop() > 0;
         }
+        return this.bottomRightGrid.getScrollTop() > 0;
+        
     },
 
     _onWheelLeft: function (deltaX, deltaY) {
@@ -220,4 +220,4 @@ BI.QuickGridTable = BI.inherit(BI.GridTable, {
         this.bottomRightGrid.populate(rightItems);
     }
 });
-BI.shortcut('bi.quick_grid_table', BI.QuickGridTable);
+BI.shortcut("bi.quick_grid_table", BI.QuickGridTable);

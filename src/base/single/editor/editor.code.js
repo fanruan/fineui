@@ -7,12 +7,12 @@
 BI.CodeEditor = BI.inherit(BI.Single, {
     _defaultConfig: function () {
         return $.extend(BI.CodeEditor.superclass._defaultConfig.apply(), {
-            baseCls: 'bi-code-editor',
-            value: '',
+            baseCls: "bi-code-editor",
+            value: "",
             watermark: "",
             lineHeight: 2,
             readOnly: false,
-            //参数显示值构造函数
+            // 参数显示值构造函数
             paramFormatter: function (v) {
                 return v;
             }
@@ -26,13 +26,13 @@ BI.CodeEditor = BI.inherit(BI.Single, {
             lineWrapping: true,
             lineNumbers: false,
             readOnly: o.readOnly,
-            //解决插入字段由括号或其他特殊字符包围时分裂的bug
+            // 解决插入字段由括号或其他特殊字符包围时分裂的bug
             specialChars: /[\u0000-\u001f\u007f\u00ad\u200c-\u200f\u2028\u2029\ufeff]/
         });
         o.lineHeight === 1 ? this.element.addClass("codemirror-low-line-height") : this.element.addClass("codemirror-high-line-height");
         this.editor.on("change", function (cm, change) {
             BI.nextTick(function () {
-                self.fireEvent(BI.CodeEditor.EVENT_CHANGE)
+                self.fireEvent(BI.CodeEditor.EVENT_CHANGE);
             });
         });
 
@@ -58,7 +58,7 @@ BI.CodeEditor = BI.inherit(BI.Single, {
         //     self.editor.execCommand("goLineEnd");
         // });
 
-        //水印
+        // 水印
         this.watermark = BI.createWidget({
             type: "bi.label",
             text: o.watermark,
@@ -96,7 +96,7 @@ BI.CodeEditor = BI.inherit(BI.Single, {
 
     _setEnable: function (b) {
         BI.CodeEditor.superclass._setEnable.apply(this, arguments);
-        this.editor.setOption("readOnly", b === true ? false : "nocursor")
+        this.editor.setOption("readOnly", b === true ? false : "nocursor");
     },
 
     _checkWaterMark: function () {
@@ -112,12 +112,12 @@ BI.CodeEditor = BI.inherit(BI.Single, {
         var value = param;
         param = this.options.paramFormatter(param);
         var from = this.editor.getCursor();
-        //解决插入字段由括号或其他特殊字符包围时分裂的bug,在两端以不可见字符包裹一下
-        this.editor.replaceSelection('\u200b' + param + '\u200b');
+        // 解决插入字段由括号或其他特殊字符包围时分裂的bug,在两端以不可见字符包裹一下
+        this.editor.replaceSelection("\u200b" + param + "\u200b");
         var to = this.editor.getCursor();
-        var options = {className: 'param', atomic: true};
+        var options = {className: "param", atomic: true};
         if (BI.isNotNull(param.match(/^<!.*!>$/))) {
-            options.className = 'error-param';
+            options.className = "error-param";
         }
         options.value = value;
         this.editor.markText(from, to, options);
@@ -134,16 +134,16 @@ BI.CodeEditor = BI.inherit(BI.Single, {
         return this.editor.getValue("\n", function (line) {
             var rawText = line.text, value = line.text, num = 0;
             value.text = rawText;
-            //根据插入位置不同，line.markedSpan可能是乱序的
+            // 根据插入位置不同，line.markedSpan可能是乱序的
             _.forEach(_.sortBy(line.markedSpans, "from"), function (i, ms) {
                 switch (i.marker.className) {
                     case "param":
                     case "error-param":
                         var fieldNameLength = i.to - i.from;
                         value = value.substr(0, i.from + num) + "$\{" + i.marker.value + "\}" + value.substr(i.to + num, value.length);
-                        //加上${}的偏移
+                        // 加上${}的偏移
                         num += 3;
-                        //加上实际值和显示值的长度差的偏移
+                        // 加上实际值和显示值的长度差的偏移
                         num += (i.marker.value.length - fieldNameLength);
                         break;
                 }

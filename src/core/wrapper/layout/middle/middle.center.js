@@ -26,7 +26,7 @@ BI.CenterLayout = BI.inherit(BI.Layout, {
     },
 
     addItem: function (item) {
-        //do nothing
+        // do nothing
         throw new Error("cannot be added");
     },
 
@@ -44,7 +44,7 @@ BI.CenterLayout = BI.inherit(BI.Layout, {
             });
         });
         BI.each(items, function (i, item) {
-            if (!!item) {
+            if (item) {
                 var w = BI.createWidget(item);
                 w.element.css({
                     position: "absolute",
@@ -72,4 +72,4 @@ BI.CenterLayout = BI.inherit(BI.Layout, {
         this._mount();
     }
 });
-BI.shortcut('bi.center', BI.CenterLayout);
+BI.shortcut("bi.center", BI.CenterLayout);

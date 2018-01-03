@@ -21,7 +21,7 @@ BI.IconArrowNode = BI.inherit(BI.NodeButton, {
             iconHeight: 13,
             iconWidth: 13,
             iconCls: ""
-        })
+        });
     },
     _init: function () {
         BI.IconArrowNode.superclass._init.apply(this, arguments);

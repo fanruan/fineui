@@ -6,10 +6,10 @@ BI.DatePaneWidget = BI.inherit(BI.Widget, {
         var conf = BI.DatePaneWidget.superclass._defaultConfig.apply(this, arguments);
         return BI.extend(conf, {
             baseCls: "bi-date-pane",
-            min: '1900-01-01', //最小日期
-            max: '2099-12-31', //最大日期
+            min: "1900-01-01", // 最小日期
+            max: "2099-12-31", // 最大日期
             selectedTime: null
-        })
+        });
     },
     _init: function () {
         BI.DatePaneWidget.superclass._init.apply(this, arguments);
@@ -20,9 +20,9 @@ BI.DatePaneWidget = BI.inherit(BI.Widget, {
         this._month = this.today.getMonth();
 
         this.selectedTime = o.selectedTime || {
-                year: this._year,
-                month: this._month
-            };
+            year: this._year,
+            month: this._month
+        };
 
         this.datePicker = BI.createWidget({
             type: "bi.date_picker",
@@ -83,7 +83,7 @@ BI.DatePaneWidget = BI.inherit(BI.Widget, {
         return {
             year: today.getFullYear(),
             month: today.getMonth()
-        }
+        };
     },
 
     _setCalenderValue: function (date) {
@@ -105,7 +105,7 @@ BI.DatePaneWidget = BI.inherit(BI.Widget, {
             this.calendar.empty();
             this._setCalenderValue(this._getNewCurrentDate());
         } else {
-            this._setCalenderValue(timeOb)
+            this._setCalenderValue(timeOb);
         }
     },
 

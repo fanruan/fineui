@@ -67,4 +67,4 @@ BI.FloatHorizontalLayout = BI.inherit(BI.Layout, {
         this._mount();
     }
 });
-BI.shortcut('bi.horizontal_float', BI.FloatHorizontalLayout);
+BI.shortcut("bi.horizontal_float", BI.FloatHorizontalLayout);

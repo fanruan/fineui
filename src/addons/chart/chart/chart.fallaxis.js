@@ -8,7 +8,7 @@ BI.FallAxisChart = BI.inherit(BI.AbstractChart, {
     _defaultConfig: function () {
         return BI.extend(BI.FallAxisChart.superclass._defaultConfig.apply(this, arguments), {
             baseCls: "bi-fall-axis-chart"
-        })
+        });
     },
 
     _init: function () {
@@ -43,11 +43,11 @@ BI.FallAxisChart = BI.inherit(BI.AbstractChart, {
             self.fireEvent(BI.FallAxisChart.EVENT_CHANGE, obj);
         });
         this.combineChart.on(BI.CombineChart.EVENT_ITEM_CLICK, function (obj) {
-            self.fireEvent(BI.AbstractChart.EVENT_ITEM_CLICK, obj)
+            self.fireEvent(BI.AbstractChart.EVENT_ITEM_CLICK, obj);
         });
     },
 
-    _formatConfig: function(config, items){
+    _formatConfig: function (config, items) {
         var self = this, o = this.options;
         var yTitle = getXYAxisUnit(this.config.leftYAxisNumberLevel, this.constants.LEFT_AXIS);
         config.colors = this.config.chartColor;
@@ -56,11 +56,11 @@ BI.FallAxisChart = BI.inherit(BI.AbstractChart, {
         config.legend.enabled = false;
         config.plotOptions.dataLabels.enabled = this.config.showDataLabel;
         config.dataSheet.enabled = this.config.showDataTable;
-        if(config.dataSheet.enabled === true){
+        if(config.dataSheet.enabled === true) {
             config.xAxis[0].showLabel = false;
         }
         config.zoom.zoomTool.enabled = this.config.showZoom;
-        if(this.config.showZoom === true){
+        if(this.config.showZoom === true) {
             delete config.dataSheet;
             delete config.zoom.zoomType;
         }
@@ -86,20 +86,20 @@ BI.FallAxisChart = BI.inherit(BI.AbstractChart, {
             enableMinorTick: this.config.enableMinorTick,
             labelRotation: this.config.textDirection,
             gridLineWidth: this.config.showGridLine === true ? 1 : 0,
-            maxHeight: '40%'
+            maxHeight: "40%"
         });
 
-        //为了给数据标签加个%,还要遍历所有的系列，唉
-        if(config.plotOptions.dataLabels.enabled === true){
-            BI.each(items, function(idx, item){
-                if(idx === 0){
+        // 为了给数据标签加个%,还要遍历所有的系列，唉
+        if(config.plotOptions.dataLabels.enabled === true) {
+            BI.each(items, function (idx, item) {
+                if(idx === 0) {
                     item.dataLabels = {};
                     return;
                 }
                 item.dataLabels = {
-                    "style": self.config.chartFont,
-                    "align": "outside",
-                    "autoAdjust": true,
+                    style: self.config.chartFont,
+                    align: "outside",
+                    autoAdjust: true,
                     enabled: true,
                     formatter: {
                         identifier: "${VALUE}",
@@ -109,12 +109,12 @@ BI.FallAxisChart = BI.inherit(BI.AbstractChart, {
             });
         }
 
-        //全局样式的图表文字
+        // 全局样式的图表文字
         this.setFontStyle(this.config.chartFont, config);
 
         return [items, config];
 
-        function formatChartStyle(){
+        function formatChartStyle () {
             switch (self.config.chartStyle) {
                 case BICst.CHART_STYLE.STYLE_GRADUAL:
                     return "gradual";
@@ -124,23 +124,23 @@ BI.FallAxisChart = BI.inherit(BI.AbstractChart, {
             }
         }
 
-        function formatCordon(){
-            BI.each(self.config.cordon, function(idx, cor){
-                if(idx === 0 && self.xAxis.length > 0){
+        function formatCordon () {
+            BI.each(self.config.cordon, function (idx, cor) {
+                if(idx === 0 && self.xAxis.length > 0) {
                     var magnify = self.calcMagnify(self.config.xAxisNumberLevel);
-                    self.xAxis[0].plotLines = BI.map(cor, function(i, t){
+                    self.xAxis[0].plotLines = BI.map(cor, function (i, t) {
                         return BI.extend(t, {
                             value: t.value.div(magnify),
                             width: 1,
                             label: {
-                                "style": self.config.chartFont,
-                                "text": t.text,
-                                "align": "top"
+                                style: self.config.chartFont,
+                                text: t.text,
+                                align: "top"
                             }
                         });
                     });
                 }
-                if(idx > 0 && self.yAxis.length >= idx){
+                if(idx > 0 && self.yAxis.length >= idx) {
                     var magnify = 1;
                     switch (idx - 1) {
                         case self.constants.LEFT_AXIS:
@@ -153,34 +153,34 @@ BI.FallAxisChart = BI.inherit(BI.AbstractChart, {
                             magnify = self.calcMagnify(self.config.rightYAxisSecondNumberLevel);
                             break;
                     }
-                    self.yAxis[idx - 1].plotLines = BI.map(cor, function(i, t){
+                    self.yAxis[idx - 1].plotLines = BI.map(cor, function (i, t) {
                         return BI.extend(t, {
                             value: t.value.div(magnify),
                             width: 1,
                             label: {
-                                "style": self.config.chartFont,
-                                "text": t.text,
-                                "align": "left"
+                                style: self.config.chartFont,
+                                text: t.text,
+                                align: "left"
                             }
                         });
                     });
                 }
-            })
+            });
         }
 
-        function formatNumberLevelInYaxis(type, position, formatter){
+        function formatNumberLevelInYaxis (type, position, formatter) {
             var magnify = self.calcMagnify(type);
             BI.each(items, function (idx, item) {
                 BI.each(item.data, function (id, da) {
                     if (position === item.yAxis) {
                         da.y = self.formatXYDataWithMagnify(da.y, magnify);
                     }
-                })
+                });
             });
             config.plotOptions.tooltip.formatter.valueFormat = formatter;
         }
 
-        function getXYAxisUnit(numberLevelType, position){
+        function getXYAxisUnit (numberLevelType, position) {
             var unit = "";
             switch (numberLevelType) {
                 case BICst.TARGET_STYLE.NUM_LEVEL.NORMAL:
@@ -196,33 +196,33 @@ BI.FallAxisChart = BI.inherit(BI.AbstractChart, {
                     unit = BI.i18nText("BI-Yi");
                     break;
             }
-            if(position === self.constants.X_AXIS){
-                self.config.xAxisUnit !== "" && (unit = unit + self.config.xAxisUnit)
+            if(position === self.constants.X_AXIS) {
+                self.config.xAxisUnit !== "" && (unit = unit + self.config.xAxisUnit);
             }
-            if(position === self.constants.LEFT_AXIS){
-                self.config.leftYAxisUnit !== "" && (unit = unit + self.config.leftYAxisUnit)
+            if(position === self.constants.LEFT_AXIS) {
+                self.config.leftYAxisUnit !== "" && (unit = unit + self.config.leftYAxisUnit);
             }
-            if(position === self.constants.RIGHT_AXIS){
-                self.config.rightYAxisUnit !== "" && (unit = unit + self.config.rightYAxisUnit)
+            if(position === self.constants.RIGHT_AXIS) {
+                self.config.rightYAxisUnit !== "" && (unit = unit + self.config.rightYAxisUnit);
             }
             return unit === "" ? unit : "(" + unit + ")";
         }
     },
 
-    _formatItems: function(items){
+    _formatItems: function (items) {
         var o = this.options;
-        if(BI.isEmptyArray(items)){
+        if(BI.isEmptyArray(items)) {
             return [];
         }
         items = items[0];
         var tables = [], sum = 0;
         var colors = this.config.chartColor || [];
-        if(BI.isEmptyArray(colors)){
+        if(BI.isEmptyArray(colors)) {
             colors = ["rgb(152, 118, 170)", "rgb(0, 157, 227)"];
         }
-        BI.each(items, function(idx, item){
-            BI.each(item.data, function(i, t){
-                if(t.y < 0){
+        BI.each(items, function (idx, item) {
+            BI.each(item.data, function (i, t) {
+                if(t.y < 0) {
                     tables.push([t.x, t.y, sum + t.y, t]);
                 }else{
                     tables.push([t.x, t.y, sum, t]);
@@ -231,14 +231,14 @@ BI.FallAxisChart = BI.inherit(BI.AbstractChart, {
             });
         });
 
-        return [BI.map(BI.makeArray(2, null), function(idx, item){
+        return [BI.map(BI.makeArray(2, null), function (idx, item) {
             return {
-                "data": BI.map(tables, function(id, cell){
+                data: BI.map(tables, function (id, cell) {
                     var axis = BI.extend({}, cell[3], {
                         x: cell[0],
                         y: Math.abs(cell[2 - idx])
                     });
-                    if(idx === 1){
+                    if(idx === 1) {
                         axis.color = cell[2 - idx] < 0 ? colors[1] : colors[0];
                     }else{
                         axis.color = "rgba(0,0,0,0)";
@@ -248,7 +248,7 @@ BI.FallAxisChart = BI.inherit(BI.AbstractChart, {
                         axis.mouseOverColor = "rgba(0,0,0,0)";
                         axis.tooltip = {
                             enable: false
-                        }
+                        };
                     }
                     return axis;
                 }),
@@ -287,9 +287,9 @@ BI.FallAxisChart = BI.inherit(BI.AbstractChart, {
         };
         this.options.items = items;
         var types = [];
-        BI.each(items, function(idx, axisItems){
+        BI.each(items, function (idx, axisItems) {
             var type = [];
-            BI.each(axisItems, function(id, item){
+            BI.each(axisItems, function (id, item) {
                 type.push(BICst.WIDGET.AXIS);
             });
             types.push(type);
@@ -302,9 +302,9 @@ BI.FallAxisChart = BI.inherit(BI.AbstractChart, {
         this.combineChart.resize();
     },
 
-    magnify: function(){
+    magnify: function () {
         this.combineChart.magnify();
     }
 });
 BI.FallAxisChart.EVENT_CHANGE = "EVENT_CHANGE";
-BI.shortcut('bi.fall_axis_chart', BI.FallAxisChart);
+BI.shortcut("bi.fall_axis_chart", BI.FallAxisChart);

@@ -9,7 +9,7 @@ BI.FloatBox = BI.inherit(BI.Widget, {
             baseCls: "bi-float-box bi-card",
             width: 600,
             height: 500
-        })
+        });
     },
     _init: function () {
         BI.FloatBox.superclass._init.apply(this, arguments);
@@ -35,19 +35,19 @@ BI.FloatBox = BI.inherit(BI.Widget, {
                 if (ui.position.top < 0) {
                     ui.position.top = 0;
                 }
-                //BI-12134 没有什么特别好的方法
+                // BI-12134 没有什么特别好的方法
                 BI.Resizers._resize();
             }
         });
         this._south = BI.createWidget();
         BI.createWidget({
-            type: 'bi.border',
+            type: "bi.border",
             element: this,
             items: {
-                'north': {
+                north: {
                     el: {
-                        type: 'bi.border',
-                        cls: 'bi-message-title bi-background',
+                        type: "bi.border",
+                        cls: "bi-message-title bi-background",
                         items: {
                             center: {
                                 el: {
@@ -63,8 +63,8 @@ BI.FloatBox = BI.inherit(BI.Widget, {
                             },
                             east: {
                                 el: {
-                                    type: 'bi.icon_button',
-                                    cls: 'bi-message-close close-font',
+                                    type: "bi.icon_button",
+                                    cls: "bi-message-close close-font",
                                     height: 50,
                                     handler: function () {
                                         self.currentSectionProvider.close();
@@ -76,7 +76,7 @@ BI.FloatBox = BI.inherit(BI.Widget, {
                     },
                     height: 50
                 },
-                'center': {
+                center: {
                     el: {
                         type: "bi.absolute",
                         items: [{
@@ -88,7 +88,7 @@ BI.FloatBox = BI.inherit(BI.Widget, {
                         }]
                     }
                 },
-                'south': {
+                south: {
                     el: {
                         type: "bi.absolute",
                         items: [{
@@ -102,7 +102,7 @@ BI.FloatBox = BI.inherit(BI.Widget, {
                     height: 60
                 }
             }
-        })
+        });
     },
 
     populate: function (sectionProvider) {
@@ -116,7 +116,7 @@ BI.FloatBox = BI.inherit(BI.Widget, {
         sectionProvider.rebuildSouth(this._south);
         sectionProvider.on(BI.PopoverSection.EVENT_CLOSE, function () {
             self.close();
-        })
+        });
     },
 
     show: function () {

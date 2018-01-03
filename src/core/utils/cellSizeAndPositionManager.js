@@ -57,14 +57,14 @@ BI.CellSizeAndPositionManager.prototype = {
         return this._lastMeasuredIndex >= 0
             ? this._cellSizeAndPositionData[this._lastMeasuredIndex]
             : {
-            offset: 0,
-            size: 0
-        }
+                offset: 0,
+                size: 0
+            };
     },
 
     getTotalSize: function () {
         var lastMeasuredCellSizeAndPosition = this.getSizeAndPositionOfLastMeasuredCell();
-        return lastMeasuredCellSizeAndPosition.offset + lastMeasuredCellSizeAndPosition.size + (this._cellCount - this._lastMeasuredIndex - 1) * this._estimatedCellSize
+        return lastMeasuredCellSizeAndPosition.offset + lastMeasuredCellSizeAndPosition.size + (this._cellCount - this._lastMeasuredIndex - 1) * this._estimatedCellSize;
     },
 
     getUpdatedOffsetForIndex: function (align, containerSize, currentOffset, targetIndex) {
@@ -75,13 +75,13 @@ BI.CellSizeAndPositionManager.prototype = {
         var idealOffset;
 
         switch (align) {
-            case 'start':
+            case "start":
                 idealOffset = maxOffset;
                 break;
-            case 'end':
+            case "end":
                 idealOffset = minOffset;
                 break;
-            case 'center':
+            case "center":
                 idealOffset = maxOffset - ((containerSize - datum.size) / 2);
                 break;
             default:
@@ -98,7 +98,7 @@ BI.CellSizeAndPositionManager.prototype = {
         var totalSize = this.getTotalSize();
 
         if (totalSize === 0) {
-            return {}
+            return {};
         }
 
         var maxOffset = offset + containerSize;
@@ -117,11 +117,11 @@ BI.CellSizeAndPositionManager.prototype = {
         return {
             start: start,
             stop: stop
-        }
+        };
     },
 
     resetCell: function (index) {
-        this._lastMeasuredIndex = Math.min(this._lastMeasuredIndex, index - 1)
+        this._lastMeasuredIndex = Math.min(this._lastMeasuredIndex, index - 1);
     },
 
     _binarySearch: function (high, low, offset) {
@@ -169,15 +169,15 @@ BI.CellSizeAndPositionManager.prototype = {
 
         if (lastMeasuredCellSizeAndPosition.offset >= offset) {
             return this._binarySearch(lastMeasuredIndex, 0, offset);
-        } else {
-            return this._exponentialSearch(lastMeasuredIndex, offset);
         }
+        return this._exponentialSearch(lastMeasuredIndex, offset);
+        
     }
 };
 
 BI.ScalingCellSizeAndPositionManager = function (cellCount, cellSizeGetter, estimatedCellSize, maxScrollSize) {
     this._cellSizeAndPositionManager = new BI.CellSizeAndPositionManager(cellCount, cellSizeGetter, estimatedCellSize);
-    this._maxScrollSize = maxScrollSize || 10000000
+    this._maxScrollSize = maxScrollSize || 10000000;
 };
 
 BI.ScalingCellSizeAndPositionManager.prototype = {
@@ -188,15 +188,15 @@ BI.ScalingCellSizeAndPositionManager.prototype = {
     },
 
     getCellCount: function () {
-        return this._cellSizeAndPositionManager.getCellCount()
+        return this._cellSizeAndPositionManager.getCellCount();
     },
 
     getEstimatedCellSize: function () {
-        return this._cellSizeAndPositionManager.getEstimatedCellSize()
+        return this._cellSizeAndPositionManager.getEstimatedCellSize();
     },
 
     getLastMeasuredIndex: function () {
-        return this._cellSizeAndPositionManager.getLastMeasuredIndex()
+        return this._cellSizeAndPositionManager.getLastMeasuredIndex();
     },
 
     getOffsetAdjustment: function (containerSize, offset) {
@@ -234,13 +234,13 @@ BI.ScalingCellSizeAndPositionManager.prototype = {
     },
 
     resetCell: function (index) {
-        this._cellSizeAndPositionManager.resetCell(index)
+        this._cellSizeAndPositionManager.resetCell(index);
     },
 
     _getOffsetPercentage: function (containerSize, offset, totalSize) {
         return totalSize <= containerSize
             ? 0
-            : offset / (totalSize - containerSize)
+            : offset / (totalSize - containerSize);
     },
 
     _offsetToSafeOffset: function (containerSize, offset) {
@@ -249,11 +249,11 @@ BI.ScalingCellSizeAndPositionManager.prototype = {
 
         if (totalSize === safeTotalSize) {
             return offset;
-        } else {
-            var offsetPercentage = this._getOffsetPercentage(containerSize, offset, totalSize);
-
-            return Math.round(offsetPercentage * (safeTotalSize - containerSize));
         }
+        var offsetPercentage = this._getOffsetPercentage(containerSize, offset, totalSize);
+
+        return Math.round(offsetPercentage * (safeTotalSize - containerSize));
+        
     },
 
     _safeOffsetToOffset: function (containerSize, offset) {
@@ -262,10 +262,10 @@ BI.ScalingCellSizeAndPositionManager.prototype = {
 
         if (totalSize === safeTotalSize) {
             return offset;
-        } else {
-            var offsetPercentage = this._getOffsetPercentage(containerSize, offset, safeTotalSize);
-
-            return Math.round(offsetPercentage * (totalSize - containerSize));
         }
+        var offsetPercentage = this._getOffsetPercentage(containerSize, offset, safeTotalSize);
+
+        return Math.round(offsetPercentage * (totalSize - containerSize));
+        
     }
 };

@@ -25,8 +25,8 @@ BI.HorizontalCenterLayout = BI.inherit(BI.Layout, {
     },
 
     addItem: function (item) {
-        //do nothing
-        throw new Error("cannot be added")
+        // do nothing
+        throw new Error("cannot be added");
     },
 
     stroke: function (items) {
@@ -43,7 +43,7 @@ BI.HorizontalCenterLayout = BI.inherit(BI.Layout, {
             });
         });
         BI.each(items, function (i, item) {
-            if (!!item) {
+            if (item) {
                 var w = BI.createWidget(item);
                 w.element.css({
                     position: "absolute",
@@ -70,4 +70,4 @@ BI.HorizontalCenterLayout = BI.inherit(BI.Layout, {
         this._mount();
     }
 });
-BI.shortcut('bi.horizontal_center', BI.HorizontalCenterLayout);
+BI.shortcut("bi.horizontal_center", BI.HorizontalCenterLayout);

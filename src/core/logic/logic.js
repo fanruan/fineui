@@ -59,7 +59,7 @@ BI.LogicFactory = {
                     el: item,
                     width: item.options.width,
                     height: item.options.height
-                }
+                };
             }
             return item;
         });

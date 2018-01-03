@@ -1,4 +1,4 @@
-//向量操作
+// 向量操作
 BI.Vector = function (x, y) {
     this.x = x;
     this.y = y;
@@ -20,7 +20,7 @@ BI.Region = function (x, y, w, h) {
 };
 BI.Region.prototype = {
     constructor: BI.Region,
-    //判断两个区域是否相交，若相交，则要么顶点互相包含，要么矩形边界（或对角线）相交
+    // 判断两个区域是否相交，若相交，则要么顶点互相包含，要么矩形边界（或对角线）相交
     isIntersects: function (obj) {
         if (this.isPointInside(obj.x, obj.y) ||
             this.isPointInside(obj.x + obj.w, obj.y) ||
@@ -32,9 +32,9 @@ BI.Region.prototype = {
             obj.isPointInside(this.x, this.y + this.h) ||
             obj.isPointInside(this.x + this.w, this.y + this.h)) {
             return true;
-        } else if (obj.x != null && obj.y != null)//判断矩形对角线相交 |v1 X v2||v1 X v3| < 0
+        } else if (obj.x != null && obj.y != null)// 判断矩形对角线相交 |v1 X v2||v1 X v3| < 0
         {
-            var vector1 = new BI.Vector(this.w, this.h);//矩形对角线向量
+            var vector1 = new BI.Vector(this.w, this.h);// 矩形对角线向量
             var vector2 = new BI.Vector(obj.x - this.x, obj.y - this.y);
             var vector3 = new BI.Vector(vector2.x + obj.w, vector2.y + obj.h);
             if ((vector1.cross(vector2) * vector1.cross(vector3)) < 0) {
@@ -43,7 +43,7 @@ BI.Region.prototype = {
         }
         return false;
     },
-    //判断一个点是否在这个区域内部
+    // 判断一个点是否在这个区域内部
     isPointInside: function (x, y) {
         if (this.x == null || this.y == null) {
             return false;
@@ -53,7 +53,7 @@ BI.Region.prototype = {
         }
         return false;
     },
-    //返回区域的重心，因为是矩形所以返回中点
+    // 返回区域的重心，因为是矩形所以返回中点
     getPosition: function () {
         var pos = [];
         pos.push(this.x + this.w / 2);

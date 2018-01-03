@@ -58,7 +58,7 @@ BI.QuarterPopup = BI.inherit(BI.Widget, {
             if (type === BI.Events.CLICK) {
                 self.fireEvent(BI.MonthPopup.EVENT_CHANGE);
             }
-        })
+        });
     },
 
     getValue: function () {

@@ -100,7 +100,7 @@ BI.CollectionView = BI.inherit(BI.Widget, {
 
     _cellRenderers: function (height, width, x, y) {
         this._lastRenderedCellIndices = this._sectionManager.getCellIndices(height, width, x, y);
-        return this._cellGroupRenderer()
+        return this._cellGroupRenderer();
     },
 
     _cellGroupRenderer: function () {
@@ -122,13 +122,13 @@ BI.CollectionView = BI.inherit(BI.Widget, {
         var right = Math.min(this._width, scrollLeft + o.width + o.horizontalOverscanSize);
         var bottom = Math.min(this._height, scrollTop + o.height + o.verticalOverscanSize);
         if (right > 0 && bottom > 0) {
-            //如果滚动的区间并没有超出渲染的范围
+            // 如果滚动的区间并没有超出渲染的范围
             if (top >= this.renderRange.minY && bottom <= this.renderRange.maxY && left >= this.renderRange.minX && right <= this.renderRange.maxX) {
                 return;
             }
             var childrenToDisplay = this._cellRenderers(bottom - top, right - left, left, top);
             var renderedCells = [], renderedKeys = {}, renderedWidgets = {};
-            //存储所有的left和top
+            // 存储所有的left和top
             var lefts = {}, tops = {};
             for (var i = 0, len = childrenToDisplay.length; i < len; i++) {
                 var datum = childrenToDisplay[i];
@@ -141,7 +141,7 @@ BI.CollectionView = BI.inherit(BI.Widget, {
             tops = BI.toArray(tops);
             var leftMap = BI.invert(lefts);
             var topMap = BI.invert(tops);
-            //存储上下左右四个边界
+            // 存储上下左右四个边界
             var leftBorder = {}, rightBorder = {}, topBorder = {}, bottomBorder = {};
             var assertMinBorder = function (border, offset) {
                 if (border[offset] == null) {
@@ -215,7 +215,7 @@ BI.CollectionView = BI.inherit(BI.Widget, {
                 renderedKeys[datum.index] = [datum.index, i];
                 renderedWidgets[i] = child;
             }
-            //已存在的， 需要添加的和需要删除的
+            // 已存在的， 需要添加的和需要删除的
             var existSet = {}, addSet = {}, deleteArray = [];
             BI.each(renderedKeys, function (i, key) {
                 if (self.renderedKeys[i]) {
@@ -234,21 +234,21 @@ BI.CollectionView = BI.inherit(BI.Widget, {
                 deleteArray.push(key[1]);
             });
             BI.each(deleteArray, function (i, index) {
-                //性能优化，不调用destroy方法防止触发destroy事件
+                // 性能优化，不调用destroy方法防止触发destroy事件
                 self.renderedCells[index].el._destroy();
             });
             var addedItems = [];
             BI.each(addSet, function (index, key) {
-                addedItems.push(renderedCells[key[1]])
+                addedItems.push(renderedCells[key[1]]);
             });
             this.container.addItems(addedItems);
-            //拦截父子级关系
+            // 拦截父子级关系
             this.container._children = renderedWidgets;
             this.container.attr("items", renderedCells);
             this.renderedCells = renderedCells;
             this.renderedKeys = renderedKeys;
 
-            //Todo 左右比较特殊
+            // Todo 左右比较特殊
             var minX = BI.min(leftBorder);
             var maxX = BI.max(rightBorder);
 
@@ -279,7 +279,7 @@ BI.CollectionView = BI.inherit(BI.Widget, {
             this.container.setHeight(this._height);
 
             this._calculateChildrenToRender();
-            //元素未挂载时不能设置scrollTop
+            // 元素未挂载时不能设置scrollTop
             try {
                 this.element.scrollTop(o.scrollTop);
                 this.element.scrollLeft(o.scrollLeft);
@@ -315,7 +315,7 @@ BI.CollectionView = BI.inherit(BI.Widget, {
         if (this.options.overflowX !== !!b) {
             this.options.overflowX = !!b;
             BI.nextTick(function () {
-                self.element.css({overflowX: !!b ? "auto" : "hidden"});
+                self.element.css({overflowX: b ? "auto" : "hidden"});
             });
         }
     },
@@ -325,7 +325,7 @@ BI.CollectionView = BI.inherit(BI.Widget, {
         if (this.options.overflowY !== !!b) {
             this.options.overflowY = !!b;
             BI.nextTick(function () {
-                self.element.css({overflowY: !!b ? "auto" : "hidden"});
+                self.element.css({overflowY: b ? "auto" : "hidden"});
             });
         }
     },
@@ -346,7 +346,7 @@ BI.CollectionView = BI.inherit(BI.Widget, {
         return this._getMaxScrollTop();
     },
 
-    //重新计算children
+    // 重新计算children
     _reRange: function () {
         this.renderRange = {};
     },
@@ -375,4 +375,4 @@ BI.CollectionView = BI.inherit(BI.Widget, {
     }
 });
 BI.CollectionView.EVENT_SCROLL = "EVENT_SCROLL";
-BI.shortcut('bi.collection_view', BI.CollectionView);
+BI.shortcut("bi.collection_view", BI.CollectionView);

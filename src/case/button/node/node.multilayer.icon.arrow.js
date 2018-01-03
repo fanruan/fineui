@@ -3,7 +3,7 @@ BI.MultiLayerIconArrowNode = BI.inherit(BI.NodeButton, {
         var conf = BI.MultiLayerIconArrowNode.superclass._defaultConfig.apply(this, arguments);
         return BI.extend(conf, {
             extraCls: "bi-multilayer-icon-arrow-node bi-list-item",
-            layer: 0,//第几层级
+            layer: 0, // 第几层级
             id: "",
             pId: "",
             open: false,
@@ -11,7 +11,7 @@ BI.MultiLayerIconArrowNode = BI.inherit(BI.NodeButton, {
             iconHeight: 13,
             iconWidth: 13,
             iconCls: ""
-        })
+        });
     },
     _init: function () {
         BI.MultiLayerIconArrowNode.superclass._init.apply(this, arguments);
@@ -19,9 +19,9 @@ BI.MultiLayerIconArrowNode = BI.inherit(BI.NodeButton, {
         this.node = BI.createWidget({
             type: "bi.icon_arrow_node",
             iconCls: o.iconCls,
-            //logic: {
+            // logic: {
             //    dynamic: true
-            //},
+            // },
             id: o.id,
             pId: o.pId,
             open: o.open,
@@ -44,7 +44,7 @@ BI.MultiLayerIconArrowNode = BI.inherit(BI.NodeButton, {
                 type: "bi.layout",
                 width: 13,
                 height: o.height
-            })
+            });
         });
         items.push(this.node);
         BI.createWidget({
@@ -52,7 +52,7 @@ BI.MultiLayerIconArrowNode = BI.inherit(BI.NodeButton, {
             element: this,
             columnSize: BI.makeArray(o.layer, 13),
             items: [items]
-        })
+        });
     },
 
     isOnce: function () {

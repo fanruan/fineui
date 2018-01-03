@@ -10,13 +10,13 @@ BI.MultiLayerSelectTreeMidPlusGroupNode = BI.inherit(BI.NodeButton, {
         var conf = BI.MultiLayerSelectTreeMidPlusGroupNode.superclass._defaultConfig.apply(this, arguments);
         return BI.extend(conf, {
             extraCls: "bi-multilayer-select-tree-mid-plus-group-node bi-list-item-active",
-            layer: 0,//第几层级
+            layer: 0, // 第几层级
             id: "",
             pId: "",
             readonly: true,
             open: false,
             height: 25
-        })
+        });
     },
     _init: function () {
         BI.MultiLayerSelectTreeMidPlusGroupNode.superclass._init.apply(this, arguments);
@@ -49,7 +49,7 @@ BI.MultiLayerSelectTreeMidPlusGroupNode = BI.inherit(BI.NodeButton, {
                 cls: "base-line-conn-background",
                 width: 13,
                 height: o.height
-            })
+            });
         });
         items.push(this.node);
         BI.createWidget({
@@ -57,7 +57,7 @@ BI.MultiLayerSelectTreeMidPlusGroupNode = BI.inherit(BI.NodeButton, {
             element: this,
             columnSize: BI.makeArray(o.layer, 13),
             items: [items]
-        })
+        });
     },
 
     doRedMark: function () {

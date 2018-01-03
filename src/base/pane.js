@@ -14,7 +14,7 @@ BI.Pane = BI.inherit(BI.Widget, {
             tipText: BI.i18nText("BI-No_Selected_Item"),
             overlap: true,
             onLoaded: BI.emptyFn
-        })
+        });
     },
 
     _init: function () {
@@ -44,7 +44,7 @@ BI.Pane = BI.inherit(BI.Widget, {
         if (o.overlap === true) {
             if (!BI.Layers.has(this.getName())) {
                 BI.createWidget({
-                    type: 'bi.vtape',
+                    type: "bi.vtape",
                     items: [{
                         el: {
                             type: "bi.layout",
@@ -72,7 +72,7 @@ BI.Pane = BI.inherit(BI.Widget, {
                     right: 0,
                     top: 0
                 }]
-            })
+            });
         }
     },
 

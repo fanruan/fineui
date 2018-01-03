@@ -1,4 +1,4 @@
-;
+
 !(function () {
     BI.Queue = function (capacity) {
         this.capacity = capacity;
@@ -15,7 +15,7 @@
             return this.array.contains(v);
         },
 
-        getElementByIndex: function(index) {
+        getElementByIndex: function (index) {
             return this.array[index];
         },
 
@@ -45,12 +45,12 @@
             this.array.remove(v);
         },
         
-        splice: function() {
-            this.array.splice.apply(this.array, arguments);  
+        splice: function () {
+            this.array.splice.apply(this.array, arguments);
         },
         
-        slice: function() {
-            this.array.slice.apply(this.array, arguments);    
+        slice: function () {
+            this.array.slice.apply(this.array, arguments);
         },
         
         size: function () {
@@ -60,7 +60,7 @@
         each: function (fn, scope) {
             var scope = scope || window;
             var fn = fn || null;
-            if (fn == null || typeof (fn) != "function") {
+            if (fn == null || typeof (fn) !== "function") {
                 return;
             }
             for (var i = 0; i < this.array.length; i++) {
@@ -79,11 +79,11 @@
             var self = this;
             BI.each(array, function (i, v) {
                 self.push(v);
-            })
+            });
         },
 
         clear: function () {
             this.array.clear();
         }
-    }
+    };
 })();

@@ -1,4 +1,4 @@
-;
+
 (function () {
     var clamp = function (value, min, max) {
         if (value < min) {
@@ -13,9 +13,9 @@
     var MAX_BUFFER_ROWS = 10;
 
     BI.TableRowBuffer = function (rowsCount,
-                                  defaultRowHeight,
-                                  viewportHeight,
-                                  rowHeightGetter) {
+        defaultRowHeight,
+        viewportHeight,
+        rowHeightGetter) {
         this._bufferSet = new BI.IntegerBufferSet();
         this._defaultRowHeight = defaultRowHeight;
         this._viewportRowsBegin = 0;
@@ -63,7 +63,7 @@
         },
 
         getRows: function (firstRowIndex,
-                           firstRowOffset) {
+            firstRowOffset) {
             var top = firstRowOffset;
             var totalHeight = top;
             var rowIndex = firstRowIndex;
@@ -89,8 +89,8 @@
         },
 
         _addRowToBuffer: function (rowIndex,
-                                   firstViewportRowIndex,
-                                   lastViewportRowIndex) {
+            firstViewportRowIndex,
+            lastViewportRowIndex) {
             var rowPosition = this._bufferSet.getValuePosition(rowIndex);
             var viewportRowsCount = lastViewportRowIndex - firstViewportRowIndex + 1;
             var allowedRowsCount = viewportRowsCount + this._bufferRowsCount * 2;
@@ -114,6 +114,6 @@
                 this._rows[rowPosition] = rowIndex;
             }
         }
-    }
+    };
 
 })();

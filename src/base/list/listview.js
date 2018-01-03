@@ -35,7 +35,7 @@ BI.ListView = BI.inherit(BI.Widget, {
                 }
             }, o.el)],
             element: this
-        }
+        };
     },
 
     mounted: function () {
@@ -106,5 +106,5 @@ BI.ListView = BI.inherit(BI.Widget, {
         this.restore();
     }
 });
-BI.shortcut('bi.list_view', BI.ListView);
+BI.shortcut("bi.list_view", BI.ListView);
 

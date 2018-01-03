@@ -19,7 +19,7 @@ BI.SignTextEditor = BI.inherit(BI.Widget, {
             errorText: "",
             text: "",
             height: 24
-        })
+        });
     },
 
     _init: function () {
@@ -58,7 +58,7 @@ BI.SignTextEditor = BI.inherit(BI.Widget, {
         });
         this.text.on(BI.TextButton.EVENT_CHANGE, function () {
             BI.nextTick(function () {
-                self.fireEvent(BI.SignTextEditor.EVENT_CLICK_LABEL)
+                self.fireEvent(BI.SignTextEditor.EVENT_CLICK_LABEL);
             });
         });
         BI.createWidget({

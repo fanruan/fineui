@@ -12,13 +12,13 @@ BI.Expander = BI.inherit(BI.Widget, {
             baseCls: "bi-expander",
             trigger: "click",
             toggle: true,
-            //direction: "bottom", //top,bottom四个方向
-            isDefaultInit: false, //是否默认初始化子节点
+            // direction: "bottom", //top,bottom四个方向
+            isDefaultInit: false, // 是否默认初始化子节点
             el: {},
             popup: {},
             expanderClass: "bi-expander-popup",
             hoverClass: "bi-expander-hover"
-        })
+        });
     },
 
     _init: function () {
@@ -92,13 +92,13 @@ BI.Expander = BI.inherit(BI.Widget, {
                     self.element[e](function (e) {
                         if (self.isEnabled() && self.isValid() && self.expander.isEnabled() && self.expander.isValid()) {
                             self._popupView();
-                            self.fireEvent(BI.Controller.EVENT_CHANGE, BI.Events.EXPAND, '', self.expander);
+                            self.fireEvent(BI.Controller.EVENT_CHANGE, BI.Events.EXPAND, "", self.expander);
                             self.fireEvent(BI.Expander.EVENT_EXPAND);
                         }
                     }, function () {
                         if (self.isEnabled() && self.isValid() && self.expander.isEnabled() && self.expander.isValid() && o.toggle) {
                             self._hideView();
-                            self.fireEvent(BI.Controller.EVENT_CHANGE, BI.Events.COLLAPSE, '', self.expander);
+                            self.fireEvent(BI.Controller.EVENT_CHANGE, BI.Events.COLLAPSE, "", self.expander);
                             self.fireEvent(BI.Expander.EVENT_COLLAPSE);
                         }
                     });
@@ -113,7 +113,7 @@ BI.Expander = BI.inherit(BI.Widget, {
                                         self.fireEvent(BI.Controller.EVENT_CHANGE, BI.Events.EXPAND, "", self.expander);
                                         self.fireEvent(BI.Expander.EVENT_EXPAND);
                                     } else {
-                                        self.fireEvent(BI.Controller.EVENT_CHANGE, BI.Events.COLLAPSE, '', self.expander);
+                                        self.fireEvent(BI.Controller.EVENT_CHANGE, BI.Events.COLLAPSE, "", self.expander);
                                         self.fireEvent(BI.Expander.EVENT_COLLAPSE);
                                     }
                                 }
@@ -122,7 +122,7 @@ BI.Expander = BI.inherit(BI.Widget, {
                     }
                     break;
             }
-        })
+        });
     },
 
     _initExpander: function () {
@@ -144,7 +144,7 @@ BI.Expander = BI.inherit(BI.Widget, {
             this.popupView.on(BI.Controller.EVENT_CHANGE, function (type, value, obj) {
                 self.fireEvent(BI.Controller.EVENT_CHANGE, arguments);
                 if (type === BI.Events.CLICK) {
-                    //self.setValue(self.getValue());
+                    // self.setValue(self.getValue());
                     self.fireEvent(BI.Expander.EVENT_CHANGE, value, obj);
                 }
             });
@@ -191,7 +191,7 @@ BI.Expander = BI.inherit(BI.Widget, {
     },
 
     populate: function (items) {
-        //this._assertPopupView();
+        // this._assertPopupView();
         this.popupView && this.popupView.populate.apply(this.popupView, arguments);
         this.expander.populate.apply(this.expander, arguments);
     },
@@ -203,13 +203,13 @@ BI.Expander = BI.inherit(BI.Widget, {
     },
 
     setValue: function (v) {
-        //this._assertPopupView();
+        // this._assertPopupView();
         this.expander.setValue(v);
         this.popupView && this.popupView.setValue(v);
     },
 
     getValue: function () {
-        //this._assertPopupView();
+        // this._assertPopupView();
         return this.popupView ? this.popupView.getValue() : [];
     },
 

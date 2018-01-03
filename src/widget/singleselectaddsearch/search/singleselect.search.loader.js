@@ -8,7 +8,7 @@ BI.SingleSelectSearchLoader = BI.inherit(BI.Widget, {
 
     _defaultConfig: function () {
         return BI.extend(BI.SingleSelectSearchLoader.superclass._defaultConfig.apply(this, arguments), {
-            baseCls: 'bi-single-select-search-loader',
+            baseCls: "bi-single-select-search-loader",
             itemsCreator: BI.emptyFn,
             keywordGetter: BI.emptyFn,
             valueFormatter: BI.emptyFn
@@ -65,7 +65,7 @@ BI.SingleSelectSearchLoader = BI.inherit(BI.Widget, {
                                 value: v,
                                 title: txt,
                                 selected: false
-                            }
+                            };
                         });
                         firstItems = self._createItems(json);
                     }
@@ -112,7 +112,7 @@ BI.SingleSelectSearchLoader = BI.inherit(BI.Widget, {
             },
             height: 25,
             selected: false
-        })
+        });
     },
 
     _filterValues: function (src) {
@@ -135,12 +135,12 @@ BI.SingleSelectSearchLoader = BI.inherit(BI.Widget, {
                 title: v.text,
                 value: v.value,
                 selected: false
-            }
-        })
+            };
+        });
     },
 
     setValue: function (v) {
-        //暂存的值一定是新的值，不然v改掉后，storeValue也跟着改了
+        // 暂存的值一定是新的值，不然v改掉后，storeValue也跟着改了
         this.storeValue = v;
         this.button_group.setValue(v);
     },
@@ -171,4 +171,4 @@ BI.SingleSelectSearchLoader = BI.inherit(BI.Widget, {
 });
 
 BI.SingleSelectSearchLoader.EVENT_CHANGE = "EVENT_CHANGE";
-BI.shortcut('bi.single_select_search_add_loader', BI.SingleSelectSearchLoader);
+BI.shortcut("bi.single_select_search_add_loader", BI.SingleSelectSearchLoader);

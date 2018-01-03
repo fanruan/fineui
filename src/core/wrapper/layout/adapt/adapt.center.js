@@ -18,13 +18,13 @@ BI.CenterAdaptLayout = BI.inherit(BI.Layout, {
     },
     render: function () {
         BI.CenterAdaptLayout.superclass.render.apply(this, arguments);
-        this.$table = $("<table>").attr({"cellspacing": 0, "cellpadding": 0}).css({
-            "position": "relative",
-            "width": "100%",
-            "height": "100%",
+        this.$table = $("<table>").attr({cellspacing: 0, cellpadding: 0}).css({
+            position: "relative",
+            width: "100%",
+            height: "100%",
             "white-space": "nowrap",
             "border-spacing": "0px",
-            "border": "none",
+            border: "none",
             "border-collapse": "separate"
         });
         this.$tr = $("<tr>");
@@ -38,7 +38,7 @@ BI.CenterAdaptLayout = BI.inherit(BI.Layout, {
         var width = o.columnSize[i] <= 1 ? (o.columnSize[i] * 100 + "%") : o.columnSize[i];
         if (!this.hasWidget(this._getChildName(i))) {
             var w = BI.createWidget(item);
-            w.element.css({"position": "relative", "top": "0", "left": "0", "margin": "0px auto"});
+            w.element.css({position: "relative", top: "0", left: "0", margin: "0px auto"});
             td = BI.createWidget({
                 type: "bi.default",
                 tagName: "td",
@@ -57,32 +57,32 @@ BI.CenterAdaptLayout = BI.inherit(BI.Layout, {
             td.element.addClass("first-element");
         }
         td.element.css({
-            "position": "relative",
-            "height": "100%",
+            position: "relative",
+            height: "100%",
             "vertical-align": "middle",
-            "margin": "0",
-            "padding": "0",
-            "border": "none"
+            margin: "0",
+            padding: "0",
+            border: "none"
         });
         if (o.hgap + o.lgap + (item.lgap || 0) !== 0) {
             w.element.css({
                 "margin-left": o.hgap + o.lgap + (item.lgap || 0) + "px"
-            })
+            });
         }
         if (o.hgap + o.rgap + (item.rgap || 0) !== 0) {
             w.element.css({
                 "margin-right": o.hgap + o.rgap + (item.rgap || 0) + "px"
-            })
+            });
         }
         if (o.vgap + o.tgap + (item.tgap || 0) !== 0) {
             w.element.css({
                 "margin-top": o.vgap + o.tgap + (item.tgap || 0) + "px"
-            })
+            });
         }
         if (o.vgap + o.bgap + (item.bgap || 0) !== 0) {
             w.element.css({
                 "margin-bottom": o.vgap + o.bgap + (item.bgap || 0) + "px"
-            })
+            });
         }
         return td;
     },
@@ -107,7 +107,7 @@ BI.CenterAdaptLayout = BI.inherit(BI.Layout, {
         // console.log("center_adapt布局不需要resize");
     },
 
-    _getWrapper: function(){
+    _getWrapper: function () {
         return this.$tr;
     },
 
@@ -116,4 +116,4 @@ BI.CenterAdaptLayout = BI.inherit(BI.Layout, {
         this._mount();
     }
 });
-BI.shortcut('bi.center_adapt', BI.CenterAdaptLayout);
+BI.shortcut("bi.center_adapt", BI.CenterAdaptLayout);

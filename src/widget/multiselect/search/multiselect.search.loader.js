@@ -8,7 +8,7 @@ BI.MultiSelectSearchLoader = BI.inherit(BI.Widget, {
 
     _defaultConfig: function () {
         return BI.extend(BI.MultiSelectSearchLoader.superclass._defaultConfig.apply(this, arguments), {
-            baseCls: 'bi-multi-select-search-loader',
+            baseCls: "bi-multi-select-search-loader",
             itemsCreator: BI.emptyFn,
             keywordGetter: BI.emptyFn,
             valueFormatter: BI.emptyFn
@@ -87,7 +87,7 @@ BI.MultiSelectSearchLoader = BI.inherit(BI.Widget, {
             },
             height: 25,
             selected: this.isAllSelected()
-        })
+        });
     },
 
     isAllSelected: function () {
@@ -114,12 +114,12 @@ BI.MultiSelectSearchLoader = BI.inherit(BI.Widget, {
                 title: v.text,
                 value: v.value,
                 selected: src.type === BI.Selection.All
-            }
-        })
+            };
+        });
     },
 
     setValue: function (v) {
-        //暂存的值一定是新的值，不然v改掉后，storeValue也跟着改了
+        // 暂存的值一定是新的值，不然v改掉后，storeValue也跟着改了
         this.storeValue = BI.deepClone(v);
         this.button_group.setValue(v);
     },
@@ -150,4 +150,4 @@ BI.MultiSelectSearchLoader = BI.inherit(BI.Widget, {
 });
 
 BI.MultiSelectSearchLoader.EVENT_CHANGE = "EVENT_CHANGE";
-BI.shortcut('bi.multi_select_search_loader', BI.MultiSelectSearchLoader);
+BI.shortcut("bi.multi_select_search_loader", BI.MultiSelectSearchLoader);

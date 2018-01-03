@@ -13,20 +13,20 @@ BI.BubbleCombo = BI.inherit(BI.Widget, {
             baseCls: "bi-bubble-combo",
             trigger: "click",
             toggle: true,
-            direction: "bottom", //top||bottom||left||right||top,left||top,right||bottom,left||bottom,right
+            direction: "bottom", // top||bottom||left||right||top,left||top,right||bottom,left||bottom,right
             isDefaultInit: false,
             destroyWhenHide: false,
-            isNeedAdjustHeight: true,//是否需要高度调整
+            isNeedAdjustHeight: true, // 是否需要高度调整
             isNeedAdjustWidth: true,
             stopPropagation: false,
-            adjustLength: 0,//调整的距离
+            adjustLength: 0, // 调整的距离
             // adjustXOffset: 0,
             // adjustYOffset: 10,
             hideChecker: BI.emptyFn,
-            offsetStyle: "left", //left,right,center
+            offsetStyle: "left", // left,right,center
             el: {},
             popup: {}
-        })
+        });
     },
     _init: function () {
         BI.BubbleCombo.superclass._init.apply(this, arguments);
@@ -143,7 +143,7 @@ BI.BubbleCombo = BI.inherit(BI.Widget, {
             type: "bi.absolute",
             element: this,
             items: [pos]
-        })
+        });
     },
 
     _createLeftTriangle: function () {

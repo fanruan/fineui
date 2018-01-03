@@ -8,7 +8,7 @@ BI.GISMapChart = BI.inherit(BI.AbstractChart, {
     _defaultConfig: function () {
         return BI.extend(BI.GISMapChart.superclass._defaultConfig.apply(this, arguments), {
             baseCls: "bi-gis-map-chart"
-        })
+        });
     },
 
     _init: function () {
@@ -24,7 +24,7 @@ BI.GISMapChart = BI.inherit(BI.AbstractChart, {
             self.fireEvent(BI.GISMapChart.EVENT_CHANGE, obj);
         });
         this.combineChart.on(BI.CombineChart.EVENT_ITEM_CLICK, function (obj) {
-            self.fireEvent(BI.AbstractChart.EVENT_ITEM_CLICK, obj)
+            self.fireEvent(BI.AbstractChart.EVENT_ITEM_CLICK, obj);
         });
     },
 
@@ -36,29 +36,29 @@ BI.GISMapChart = BI.inherit(BI.AbstractChart, {
         config.plotOptions.dataLabels.useHtml = true;
         config.plotOptions.dataLabels.style = this.config.chartFont;
         config.plotOptions.dataLabels.formatter = function () {
-            var name = (BI.isArray(this.name) ? '' : this.name + ',') + BI.contentFormat(this.value, '#.##;-#.##') ;
+            var name = (BI.isArray(this.name) ? "" : this.name + ",") + BI.contentFormat(this.value, "#.##;-#.##");
             var style = "padding: 5px; background-color: rgba(0,0,0,0.4980392156862745);border-color: rgb(0,0,0); border-radius:2px; border-width:0px;";
-            var a = '<div style = ' + style + '>' + name + '</div>';
+            var a = "<div style = " + style + ">" + name + "</div>";
             return a;
         };
         config.plotOptions.tooltip.shared = true;
         config.plotOptions.tooltip.formatter = function () {
-            var tip = BI.isArray(this.name) ? '' : this.name;
+            var tip = BI.isArray(this.name) ? "" : this.name;
             BI.each(this.points, function (idx, point) {
-                tip += ('<div>' + point.seriesName + ':' + BI.contentFormat((point.size || point.y), '#.##;-#.##') + '</div>');
+                tip += ("<div>" + point.seriesName + ":" + BI.contentFormat((point.size || point.y), "#.##;-#.##") + "</div>");
             });
             return tip;
         };
         config.geo = {
-            "tileLayer": "http://webrd01.is.autonavi.com/appmaptile?lang=zh_cn&size=1&scale=1&style=8&x={x}&y={y}&z={z}",
-            "attribution": "<a><img src='http://webapi.amap.com/theme/v1.3/mapinfo_05.png'>&copy; 2016 AutoNavi</a>"
+            tileLayer: "http://webrd01.is.autonavi.com/appmaptile?lang=zh_cn&size=1&scale=1&style=8&x={x}&y={y}&z={z}",
+            attribution: "<a><img src='http://webapi.amap.com/theme/v1.3/mapinfo_05.png'>&copy; 2016 AutoNavi</a>"
         };
         if (this.config.showBackgroundLayer === true && BI.isNotNull(this.config.backgroundLayerInfo)) {
             config.geo = {};
             if (this.config.backgroundLayerInfo.type === BICst.WMS_SERVER) {
                 config.geo.tileLayer = false;
                 config.geo.wmsUrl = this.config.backgroundLayerInfo.url;
-                config.geo.wmsLayer = this.config.backgroundLayerInfo.wmsLayer
+                config.geo.wmsLayer = this.config.backgroundLayerInfo.wmsLayer;
             } else {
                 config.geo.tileLayer = this.config.backgroundLayerInfo.url;
             }
@@ -157,4 +157,4 @@ BI.GISMapChart = BI.inherit(BI.AbstractChart, {
     }
 });
 BI.GISMapChart.EVENT_CHANGE = "EVENT_CHANGE";
-BI.shortcut('bi.gis_map_chart', BI.GISMapChart);
+BI.shortcut("bi.gis_map_chart", BI.GISMapChart);

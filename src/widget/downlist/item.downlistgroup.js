@@ -9,7 +9,7 @@ BI.DownListGroupItem = BI.inherit(BI.BasicButton, {
             // invalid: true,
             iconCls1: "dot-e-font",
             iconCls2: "pull-right-e-font"
-        })
+        });
     },
     _init: function () {
         BI.DownListGroupItem.superclass._init.apply(this, arguments);
@@ -65,7 +65,7 @@ BI.DownListGroupItem = BI.inherit(BI.BasicButton, {
             }
         }, function () {
             if (self.isEnabled()) {
-                self.dishover()
+                self.dishover();
             }
         });
     },
@@ -105,10 +105,10 @@ BI.DownListGroupItem = BI.inherit(BI.BasicButton, {
             if (BI.contains(o.childValues, value)) {
                 self.icon1.setSelected(true);
                 return true;
-            } else {
-                self.icon1.setSelected(false);
             }
-        })
+            self.icon1.setSelected(false);
+            
+        });
     }
 });
 BI.DownListGroupItem.EVENT_CHANGE = "EVENT_CHANGE";

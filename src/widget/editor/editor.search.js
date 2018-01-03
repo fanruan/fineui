@@ -82,34 +82,34 @@ BI.SearchEditor = BI.inherit(BI.Widget, {
             self.fireEvent(BI.SearchEditor.EVENT_KEY_DOWN, v);
         });
         this.editor.on(BI.Editor.EVENT_SPACE, function () {
-            self.fireEvent(BI.SearchEditor.EVENT_SPACE)
+            self.fireEvent(BI.SearchEditor.EVENT_SPACE);
         });
         this.editor.on(BI.Editor.EVENT_BACKSPACE, function () {
-            self.fireEvent(BI.SearchEditor.EVENT_BACKSPACE)
+            self.fireEvent(BI.SearchEditor.EVENT_BACKSPACE);
         });
 
 
         this.editor.on(BI.Editor.EVENT_VALID, function () {
-            self.fireEvent(BI.SearchEditor.EVENT_VALID)
+            self.fireEvent(BI.SearchEditor.EVENT_VALID);
         });
         this.editor.on(BI.Editor.EVENT_ERROR, function () {
-            self.fireEvent(BI.SearchEditor.EVENT_ERROR)
+            self.fireEvent(BI.SearchEditor.EVENT_ERROR);
         });
         this.editor.on(BI.Editor.EVENT_ENTER, function () {
             self.fireEvent(BI.SearchEditor.EVENT_ENTER);
         });
         this.editor.on(BI.Editor.EVENT_RESTRICT, function () {
-            self.fireEvent(BI.SearchEditor.EVENT_RESTRICT)
+            self.fireEvent(BI.SearchEditor.EVENT_RESTRICT);
         });
         this.editor.on(BI.Editor.EVENT_EMPTY, function () {
             self._checkClear();
-            self.fireEvent(BI.SearchEditor.EVENT_EMPTY)
+            self.fireEvent(BI.SearchEditor.EVENT_EMPTY);
         });
         this.editor.on(BI.Editor.EVENT_REMOVE, function () {
-            self.fireEvent(BI.SearchEditor.EVENT_REMOVE)
+            self.fireEvent(BI.SearchEditor.EVENT_REMOVE);
         });
         this.editor.on(BI.Editor.EVENT_CONFIRM, function () {
-            self.fireEvent(BI.SearchEditor.EVENT_CONFIRM)
+            self.fireEvent(BI.SearchEditor.EVENT_CONFIRM);
         });
         this.editor.on(BI.Editor.EVENT_START, function () {
             self.fireEvent(BI.SearchEditor.EVENT_START);

@@ -20,11 +20,11 @@ BI.HorizontalLayout = BI.inherit(BI.Layout, {
     },
     render: function () {
         BI.HorizontalLayout.superclass.render.apply(this, arguments);
-        this.$table = $("<table>").attr({"cellspacing": 0, "cellpadding": 0}).css({
-            "position": "relative",
+        this.$table = $("<table>").attr({cellspacing: 0, cellpadding: 0}).css({
+            position: "relative",
             "white-space": "nowrap",
             "border-spacing": "0px",
-            "border": "none",
+            border: "none",
             "border-collapse": "separate"
         });
         this.$tr = $("<tr>");
@@ -38,7 +38,7 @@ BI.HorizontalLayout = BI.inherit(BI.Layout, {
         var width = o.columnSize[i] <= 1 ? (o.columnSize[i] * 100 + "%") : o.columnSize[i];
         if (!this.hasWidget(this._getChildName(i))) {
             var w = BI.createWidget(item);
-            w.element.css({"position": "relative", "margin": "0px auto"});
+            w.element.css({position: "relative", margin: "0px auto"});
             td = BI.createWidget({
                 type: "bi.default",
                 tagName: "td",
@@ -57,31 +57,31 @@ BI.HorizontalLayout = BI.inherit(BI.Layout, {
             td.element.addClass("first-element");
         }
         td.element.css({
-            "position": "relative",
+            position: "relative",
             "vertical-align": o.verticalAlign,
-            "margin": "0",
-            "padding": "0",
-            "border": "none"
+            margin: "0",
+            padding: "0",
+            border: "none"
         });
         if (o.hgap + o.lgap + (item.lgap || 0) > 0) {
             w.element.css({
                 "margin-left": o.hgap + o.lgap + (item.lgap || 0) + "px"
-            })
+            });
         }
         if (o.hgap + o.rgap + (item.rgap || 0) > 0) {
             w.element.css({
                 "margin-right": o.hgap + o.rgap + (item.rgap || 0) + "px"
-            })
+            });
         }
         if (o.vgap + o.tgap + (item.tgap || 0) > 0) {
             w.element.css({
                 "margin-top": o.vgap + o.tgap + (item.tgap || 0) + "px"
-            })
+            });
         }
         if (o.vgap + o.bgap + (item.bgap || 0) > 0) {
             w.element.css({
                 "margin-bottom": o.vgap + o.bgap + (item.bgap || 0) + "px"
-            })
+            });
         }
         return td;
     },
@@ -107,7 +107,7 @@ BI.HorizontalLayout = BI.inherit(BI.Layout, {
         // console.log("horizontal layout do not need to resize");
     },
 
-    _getWrapper: function(){
+    _getWrapper: function () {
         return this.$tr;
     },
 
@@ -116,7 +116,7 @@ BI.HorizontalLayout = BI.inherit(BI.Layout, {
         this._mount();
     }
 });
-BI.shortcut('bi.horizontal', BI.HorizontalLayout);
+BI.shortcut("bi.horizontal", BI.HorizontalLayout);
 
 /**
  * 水平布局
@@ -138,33 +138,33 @@ BI.HorizontalCellLayout = BI.inherit(BI.Layout, {
     },
     render: function () {
         BI.HorizontalCellLayout.superclass.render.apply(this, arguments);
-        this.element.css({"display": "table", "vertical-align": "top"});
+        this.element.css({display: "table", "vertical-align": "top"});
         this.populate(this.options.items);
     },
 
     _addElement: function (i, item) {
         var o = this.options;
         var w = BI.HorizontalCellLayout.superclass._addElement.apply(this, arguments);
-        w.element.css({"position": "relative", "display": "table-cell", "vertical-align": "middle"});
+        w.element.css({position: "relative", display: "table-cell", "vertical-align": "middle"});
         if (o.hgap + o.lgap > 0) {
             w.element.css({
                 "margin-left": o.hgap + o.lgap + "px"
-            })
+            });
         }
         if (o.hgap + o.rgap > 0) {
             w.element.css({
                 "margin-right": o.hgap + o.rgap + "px"
-            })
+            });
         }
         if (o.vgap + o.tgap > 0) {
             w.element.css({
                 "margin-top": o.vgap + o.tgap + "px"
-            })
+            });
         }
         if (o.vgap + o.bgap > 0) {
             w.element.css({
                 "margin-bottom": o.vgap + o.bgap + "px"
-            })
+            });
         }
         return w;
     },
@@ -178,4 +178,4 @@ BI.HorizontalCellLayout = BI.inherit(BI.Layout, {
         this._mount();
     }
 });
-BI.shortcut('bi.horizontal_cell', BI.HorizontalCellLayout);
+BI.shortcut("bi.horizontal_cell", BI.HorizontalCellLayout);

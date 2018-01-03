@@ -16,7 +16,7 @@ BI.NumberEditor = BI.inherit(BI.Widget, {
             allowBlank: false,
             errorText: "",
             step: 1
-        })
+        });
     },
 
     _init: function () {
@@ -80,7 +80,7 @@ BI.NumberEditor = BI.inherit(BI.Widget, {
         });
     },
 
-    //微调
+    // 微调
     _finetuning: function (add) {
         var v = BI.parseFloat(this.getValue());
         this.setValue(v.add(add));

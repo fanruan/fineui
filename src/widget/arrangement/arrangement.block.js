@@ -13,4 +13,4 @@ BI.ArrangementBlock = BI.inherit(BI.Widget, {
         });
     }
 });
-BI.shortcut('bi.arrangement_block', BI.ArrangementBlock);
+BI.shortcut("bi.arrangement_block", BI.ArrangementBlock);

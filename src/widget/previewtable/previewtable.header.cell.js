@@ -26,7 +26,7 @@ BI.PreviewTableHeaderCell = BI.inherit(BI.Widget, {
             height: this.options.height,
             text: this.options.text,
             value: this.options.value
-        })
+        });
     }
 });
-BI.shortcut('bi.preview_table_header_cell', BI.PreviewTableHeaderCell);
+BI.shortcut("bi.preview_table_header_cell", BI.PreviewTableHeaderCell);

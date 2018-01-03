@@ -20,7 +20,7 @@ BI.TextButton = BI.inherit(BI.BasicButton, {
             rgap: 0,
             text: "",
             py: ""
-        })
+        });
     },
 
     _init: function () {

@@ -75,7 +75,7 @@ BI.RichEditorParamAction = BI.inherit(BI.RichEditorAction, {
     keydown: function (e) {
         var o = this.options;
         var sel = this._get$Sel();
-        if (e.keyCode === 229) {//中文输入法
+        if (e.keyCode === 229) {// 中文输入法
             if (this._isParam(sel)) {
                 this._addBlank(sel);
                 e.stopEvent();

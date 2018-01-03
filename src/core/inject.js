@@ -1,4 +1,4 @@
-;(function () {
+(function () {
     var constantInjection = {};
     BI.constant = function (xtype, cls) {
         if (constantInjection[xtype] != null) {
@@ -47,35 +47,36 @@
             if (!providers[type]) {
                 providers[type] = new providerInjection[type]();
             }
-            return configFn(providers[type])
+            return configFn(providers[type]);
         }
-    }
+        BI.Plugin.registerWidget(type, configFn);
+    };
 
-    var actions = {}
+    var actions = {};
     BI.action = function (type, actionFn) {
         if (!actions[type]) {
             actions[type] = [];
         }
-        actions[type].push(actionFn)
+        actions[type].push(actionFn);
         return function () {
             actions[type].remove(actionFn);
             if (actions[type].length === 0) {
                 delete actions[type];
             }
-        }
-    }
+        };
+    };
 
     BI.Constants = {
         getConstant: function (type) {
             return constantInjection[type];
         }
-    }
+    };
 
     BI.Models = {
         getModel: function (type, config) {
             return new modelInjection[type](config);
         }
-    }
+    };
 
     var stores = {};
 
@@ -89,7 +90,7 @@
         releaseStore: function (type) {
             delete stores[type];
         }
-    }
+    };
 
     var services = {};
 
@@ -103,9 +104,9 @@
         releaseService: function (type) {
             delete services[type];
         }
-    }
+    };
 
-    var providers = {}, providerInstance = {}
+    var providers = {}, providerInstance = {};
 
     BI.Providers = {
         getProvider: function (type, config) {
@@ -121,13 +122,13 @@
             delete providers[type];
             delete providerInstance[type];
         }
-    }
+    };
 
     BI.Actions = {
         runAction: function (type, config) {
             BI.each(actions[type], function (i, act) {
                 act(config);
-            })
+            });
         }
-    }
+    };
 })();

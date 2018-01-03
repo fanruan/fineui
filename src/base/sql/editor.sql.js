@@ -4,8 +4,8 @@
 BI.SQLEditor = BI.inherit(BI.Widget, {
     _defaultConfig: function () {
         return $.extend(BI.CodeEditor.superclass._defaultConfig.apply(), {
-            baseCls: 'bi-sql-editor',
-            value: '',
+            baseCls: "bi-sql-editor",
+            value: "",
             lineHeight: 2,
             showHint: true
         });
@@ -29,7 +29,7 @@ BI.SQLEditor = BI.inherit(BI.Widget, {
                 });
             }
             BI.nextTick(function () {
-                self.fireEvent(BI.FormulaEditor.EVENT_CHANGE)
+                self.fireEvent(BI.FormulaEditor.EVENT_CHANGE);
             });
         });
 
@@ -42,7 +42,7 @@ BI.SQLEditor = BI.inherit(BI.Widget, {
             self.fireEvent(BI.FormulaEditor.EVENT_BLUR);
         });
 
-        //水印
+        // 水印
         this.watermark = BI.createWidget({
             type: "bi.label",
             text: BI.i18nText("Please_Enter_SQL"),

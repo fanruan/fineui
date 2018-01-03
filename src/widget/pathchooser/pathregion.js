@@ -12,7 +12,7 @@ BI.PathRegion = BI.inherit(BI.Widget, {
             baseCls: "bi-path-region bi-background",
             width: 80,
             title: ""
-        })
+        });
     },
 
     _init: function () {
@@ -33,7 +33,7 @@ BI.PathRegion = BI.inherit(BI.Widget, {
             bgap: 5,
             hgap: 10,
             items: [title]
-        })
+        });
     },
 
     hasItem: function (val) {

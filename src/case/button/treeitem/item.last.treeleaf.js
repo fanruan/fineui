@@ -14,7 +14,7 @@ BI.LastTreeLeafItem = BI.inherit(BI.BasicButton, {
             pId: "",
             layer: 0,
             height: 25
-        })
+        });
     },
     _init: function () {
         BI.LastTreeLeafItem.superclass._init.apply(this, arguments);

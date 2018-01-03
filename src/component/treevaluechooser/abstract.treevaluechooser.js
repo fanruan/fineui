@@ -28,7 +28,7 @@ BI.AbstractTreeValueChooser = BI.inherit(BI.Widget, {
         } else {
             call();
         }
-        function call() {
+        function call () {
             switch (options.type) {
                 case BI.TreeView.REQ_TYPE_INIT_DATA:
                     self._reqInitTreeNode(options, callback);
@@ -65,7 +65,7 @@ BI.AbstractTreeValueChooser = BI.inherit(BI.Widget, {
             items: result
         });
 
-        function doCheck(parentValues, node, selected) {
+        function doCheck (parentValues, node, selected) {
             if (selected == null || BI.isEmpty(selected)) {
                 BI.each(node.getChildren(), function (i, child) {
                     var newParents = BI.clone(parentValues);
@@ -82,10 +82,10 @@ BI.AbstractTreeValueChooser = BI.inherit(BI.Widget, {
                 newParents.push(node.value);
                 createOneJson(node, node.parent && node.parent.id, getCount(selected[k], newParents));
                 doCheck(newParents, node, selected[k]);
-            })
+            });
         }
 
-        function getCount(jo, parentValues) {
+        function getCount (jo, parentValues) {
             if (jo == null) {
                 return 0;
             }
@@ -96,7 +96,7 @@ BI.AbstractTreeValueChooser = BI.inherit(BI.Widget, {
             return BI.size(jo);
         }
 
-        function createOneJson(node, pId, llen) {
+        function createOneJson (node, pId, llen) {
             result.push({
                 id: node.id,
                 pId: pId,
@@ -123,15 +123,15 @@ BI.AbstractTreeValueChooser = BI.inherit(BI.Widget, {
         callback(selectedValues);
 
 
-        function dealWithSelectedValues(selectedValues) {
+        function dealWithSelectedValues (selectedValues) {
             var p = parentValues.concat(notSelectedValue);
-            //存储的值中存在这个值就把它删掉
-            //例如选中了中国-江苏-南京， 取消中国或江苏或南京
+            // 存储的值中存在这个值就把它删掉
+            // 例如选中了中国-江苏-南京， 取消中国或江苏或南京
             if (canFindKey(selectedValues, p)) {
-                //如果搜索的值在父亲链中
+                // 如果搜索的值在父亲链中
                 if (isSearchValueInParent(p)) {
-                    //例如选中了 中国-江苏， 搜索江苏， 取消江苏
-                    //例如选中了 中国-江苏， 搜索江苏， 取消中国
+                    // 例如选中了 中国-江苏， 搜索江苏， 取消江苏
+                    // 例如选中了 中国-江苏， 搜索江苏， 取消中国
                     self._deleteNode(selectedValues, p);
                 } else {
                     var searched = [];
@@ -140,50 +140,50 @@ BI.AbstractTreeValueChooser = BI.inherit(BI.Widget, {
                         BI.each(searched, function (i, arr) {
                             var node = self._getNode(selectedValues, arr);
                             if (node) {
-                                //例如选中了 中国-江苏-南京，搜索南京，取消中国
+                                // 例如选中了 中国-江苏-南京，搜索南京，取消中国
                                 self._deleteNode(selectedValues, arr);
                             } else {
-                                //例如选中了 中国-江苏，搜索南京，取消中国
+                                // 例如选中了 中国-江苏，搜索南京，取消中国
                                 expandSelectedValue(selectedValues, arr, BI.last(arr));
                             }
-                        })
+                        });
                     }
                 }
             }
 
-            //存储的值中不存在这个值，但父亲节点是全选的情况
-            //例如选中了中国-江苏，取消南京
-            //important 选中了中国-江苏，取消了江苏，但是搜索的是南京
+            // 存储的值中不存在这个值，但父亲节点是全选的情况
+            // 例如选中了中国-江苏，取消南京
+            // important 选中了中国-江苏，取消了江苏，但是搜索的是南京
             if (isChild(selectedValues, p)) {
                 var result = [], finded = false;
-                //如果parentValues中有匹配的值，说明搜索结果不在当前值下
+                // 如果parentValues中有匹配的值，说明搜索结果不在当前值下
                 if (isSearchValueInParent(p)) {
                     finded = true;
                 } else {
-                    //从当前值开始搜
+                    // 从当前值开始搜
                     finded = search(parentValues, notSelectedValue, result);
                     p = parentValues;
                 }
 
                 if (finded === true) {
-                    //去掉点击的节点之后的结果集
+                    // 去掉点击的节点之后的结果集
                     expandSelectedValue(selectedValues, p, notSelectedValue);
-                    //添加去掉搜索的结果集
+                    // 添加去掉搜索的结果集
                     if (result.length > 0) {
                         BI.each(result, function (i, strs) {
                             self._buildTree(selectedValues, strs);
-                        })
+                        });
                     }
                 }
             }
 
         }
 
-        function expandSelectedValue(selectedValues, parents, notSelectedValue) {
+        function expandSelectedValue (selectedValues, parents, notSelectedValue) {
             var next = selectedValues;
             var childrenCount = [];
             var path = [];
-            //去掉点击的节点之后的结果集
+            // 去掉点击的节点之后的结果集
             BI.some(parents, function (i, v) {
                 var t = next[v];
                 if (t == null) {
@@ -195,7 +195,7 @@ BI.AbstractTreeValueChooser = BI.inherit(BI.Widget, {
                         var expanded = self._getChildren(split);
                         path.push(split);
                         childrenCount.push(expanded.length);
-                        //如果只有一个值且取消的就是这个值
+                        // 如果只有一个值且取消的就是这个值
                         if (i === parents.length - 1 && expanded.length === 1 && expanded[0] === notSelectedValue) {
                             for (var j = childrenCount.length - 1; j >= 0; j--) {
                                 if (childrenCount[j] === 1) {
@@ -224,7 +224,7 @@ BI.AbstractTreeValueChooser = BI.inherit(BI.Widget, {
             });
         }
 
-        function search(parents, current, result, searched) {
+        function search (parents, current, result, searched) {
             var newParents = BI.clone(parents);
             newParents.push(current);
             if (self._isMatch(parents, current, keyword)) {
@@ -254,7 +254,7 @@ BI.AbstractTreeValueChooser = BI.inherit(BI.Widget, {
             return can;
         }
 
-        function isSearchValueInParent(parentValues) {
+        function isSearchValueInParent (parentValues) {
             for (var i = 0, len = parentValues.length; i < len; i++) {
                 if (self._isMatch(parentValues.slice(0, parentValues.length - 1), parentValues[i], keyword)) {
                     return true;
@@ -263,7 +263,7 @@ BI.AbstractTreeValueChooser = BI.inherit(BI.Widget, {
             return false;
         }
 
-        function canFindKey(selectedValues, parents) {
+        function canFindKey (selectedValues, parents) {
             var t = selectedValues;
             for (var i = 0; i < parents.length; i++) {
                 var v = parents[i];
@@ -275,7 +275,7 @@ BI.AbstractTreeValueChooser = BI.inherit(BI.Widget, {
             return true;
         }
 
-        function isChild(selectedValues, parents) {
+        function isChild (selectedValues, parents) {
             var t = selectedValues;
             for (var i = 0; i < parents.length; i++) {
                 var v = parents[i];
@@ -311,7 +311,7 @@ BI.AbstractTreeValueChooser = BI.inherit(BI.Widget, {
         });
         callback(jo);
 
-        function dealWithSelectedValues(selected, parents) {
+        function dealWithSelectedValues (selected, parents) {
             if (selected == null || BI.isEmpty(selected)) {
                 return true;
             }
@@ -331,7 +331,7 @@ BI.AbstractTreeValueChooser = BI.inherit(BI.Widget, {
             return can && isAllSelected(selected, parents);
         }
 
-        function isAllSelected(selected, parents) {
+        function isAllSelected (selected, parents) {
             return BI.isEmpty(selected) || self._getChildCount(parents) === BI.size(selected);
         }
     },
@@ -348,10 +348,10 @@ BI.AbstractTreeValueChooser = BI.inherit(BI.Widget, {
                 hasNext: output.length > self._const.perPage,
                 items: result,
                 lastSearchValue: BI.last(output)
-            })
+            });
         });
 
-        function search() {
+        function search () {
             var children = self._getChildren([]);
             var start = children.length;
             if (lastSearchValue !== "") {
@@ -381,7 +381,7 @@ BI.AbstractTreeValueChooser = BI.inherit(BI.Widget, {
             return output;
         }
 
-        function nodeSearch(deep, parentValues, current, isAllSelect, result) {
+        function nodeSearch (deep, parentValues, current, isAllSelect, result) {
             if (self._isMatch(parentValues, current, keyword)) {
                 var checked = isAllSelect || isSelected(parentValues, current);
                 createOneJson(parentValues, current, false, checked, !isAllSelect && isHalf(parentValues, current), true, result);
@@ -410,8 +410,8 @@ BI.AbstractTreeValueChooser = BI.inherit(BI.Widget, {
             return [can, checked];
         }
 
-        function createOneJson(parentValues, value, isOpen, checked, half, flag, result) {
-            var node = self._getTreeNode(parentValues, value)
+        function createOneJson (parentValues, value, isOpen, checked, half, flag, result) {
+            var node = self._getTreeNode(parentValues, value);
             result.push({
                 id: node.id,
                 pId: node.pId,
@@ -426,7 +426,7 @@ BI.AbstractTreeValueChooser = BI.inherit(BI.Widget, {
             });
         }
 
-        function isHalf(parentValues, value) {
+        function isHalf (parentValues, value) {
             var find = findSelectedObj(parentValues);
             if (find == null) {
                 return null;
@@ -440,7 +440,7 @@ BI.AbstractTreeValueChooser = BI.inherit(BI.Widget, {
             });
         }
 
-        function isAllSelected(parentValues, value) {
+        function isAllSelected (parentValues, value) {
             var find = findSelectedObj(parentValues);
             if (find == null) {
                 return null;
@@ -454,7 +454,7 @@ BI.AbstractTreeValueChooser = BI.inherit(BI.Widget, {
             });
         }
 
-        function isSelected(parentValues, value) {
+        function isSelected (parentValues, value) {
             var find = findSelectedObj(parentValues);
             if (find == null) {
                 return false;
@@ -466,7 +466,7 @@ BI.AbstractTreeValueChooser = BI.inherit(BI.Widget, {
             });
         }
 
-        function findSelectedObj(parentValues) {
+        function findSelectedObj (parentValues) {
             var find = selectedValues;
             if (find == null) {
                 return null;
@@ -505,7 +505,7 @@ BI.AbstractTreeValueChooser = BI.inherit(BI.Widget, {
                 isParent: nodes[i].getChildrenLength() > 0,
                 checked: state[0],
                 halfCheck: state[1]
-            })
+            });
         }
         BI.nextTick(function () {
             callback({
@@ -514,7 +514,7 @@ BI.AbstractTreeValueChooser = BI.inherit(BI.Widget, {
             });
         });
 
-        function judgeState(parentValues, selected_value, checkState) {
+        function judgeState (parentValues, selected_value, checkState) {
             var checked = checkState.checked, half = checkState.half;
             if (parentValues.length > 0 && !checked) {
                 return false;
@@ -522,7 +522,7 @@ BI.AbstractTreeValueChooser = BI.inherit(BI.Widget, {
             return (parentValues.length === 0 || (checked && half) && !BI.isEmpty(selected_value));
         }
 
-        function dealWidthSelectedValue(parentValues, selectedValues) {
+        function dealWidthSelectedValue (parentValues, selectedValues) {
             var valueMap = {};
             BI.each(parentValues, function (i, v) {
                 selectedValues = selectedValues[v] || {};
@@ -547,11 +547,11 @@ BI.AbstractTreeValueChooser = BI.inherit(BI.Widget, {
             return valueMap;
         }
 
-        function getCheckState(current, parentValues, valueMap, checkState) {
+        function getCheckState (current, parentValues, valueMap, checkState) {
             var checked = checkState.checked, half = checkState.half;
             var tempCheck = false, halfCheck = false;
             if (BI.has(valueMap, current)) {
-                //可能是半选
+                // 可能是半选
                 if (valueMap[current][0] === 1) {
                     var values = BI.clone(parentValues);
                     values.push(current);
@@ -590,7 +590,7 @@ BI.AbstractTreeValueChooser = BI.inherit(BI.Widget, {
         var pNode = this._getNode(selectedValues, p);
         if (pNode != null && pNode[name]) {
             delete pNode[name];
-            //递归删掉空父节点
+            // 递归删掉空父节点
             while (p.length > 0 && BI.isEmpty(pNode)) {
                 name = p[p.length - 1];
                 p = p.slice(0, p.length - 1);

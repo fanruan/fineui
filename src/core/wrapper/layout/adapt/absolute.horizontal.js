@@ -25,10 +25,10 @@ BI.AbsoluteHorizontalLayout = BI.inherit(BI.Layout, {
         var o = this.options;
         var w = BI.AbsoluteHorizontalLayout.superclass._addElement.apply(this, arguments);
         w.element.css({
-            "position": "absolute",
-            "left": o.hgap + o.lgap + (item.lgap || 0),
-            "right": o.hgap + o.rgap + (item.rgap || 0),
-            "margin": "auto"
+            position: "absolute",
+            left: o.hgap + o.lgap + (item.lgap || 0),
+            right: o.hgap + o.rgap + (item.rgap || 0),
+            margin: "auto"
         });
         if (o.vgap + o.tgap + (item.tgap || 0) !== 0) {
             w.element.css("top", o.vgap + o.tgap + (item.tgap || 0));
@@ -48,4 +48,4 @@ BI.AbsoluteHorizontalLayout = BI.inherit(BI.Layout, {
         this._mount();
     }
 });
-BI.shortcut('bi.absolute_horizontal_adapt', BI.AbsoluteHorizontalLayout);
+BI.shortcut("bi.absolute_horizontal_adapt", BI.AbsoluteHorizontalLayout);

@@ -23,16 +23,16 @@
     };
     BI.MouseMoveTracker.prototype = {
         constructor: BI.MouseMoveTracker,
-        captureMouseMoves: function (/*object*/ event) {
+        captureMouseMoves: function (/* object*/ event) {
             if (!this._eventMoveToken && !this._eventUpToken) {
                 this._eventMoveToken = BI.EventListener.listen(
                     this._domNode,
-                    'mousemove',
+                    "mousemove",
                     this._onMouseMove
                 );
                 this._eventUpToken = BI.EventListener.listen(
                     this._domNode,
-                    'mouseup',
+                    "mouseup",
                     this._onMouseUp
                 );
             }
@@ -67,11 +67,11 @@
             }
         },
 
-        isDragging: function () /*boolean*/ {
+        isDragging: function () /* boolean*/ {
             return this._isDragging;
         },
 
-        _onMouseMove: function (/*object*/ event) {
+        _onMouseMove: function (/* object*/ event) {
             var x = event.clientX;
             var y = event.clientY;
 

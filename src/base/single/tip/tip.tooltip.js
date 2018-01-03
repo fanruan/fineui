@@ -14,11 +14,11 @@ BI.Tooltip = BI.inherit(BI.Tip, {
         return BI.extend(BI.Tooltip.superclass._defaultConfig.apply(this, arguments), {
             extraCls: "bi-tooltip",
             text: "",
-            level: "success",//success或warning
+            level: "success", // success或warning
             stopEvent: false,
             stopPropagation: false,
             height: 20
-        })
+        });
     },
     _init: function () {
         BI.Tooltip.superclass._init.apply(this, arguments);
@@ -29,13 +29,13 @@ BI.Tooltip = BI.inherit(BI.Tip, {
             o.stopEvent && e.stopEvent();
         };
         this.element.bind({
-            "click": fn,
-            "mousedown": fn,
-            "mouseup": fn,
-            "mouseover": fn,
-            "mouseenter": fn,
-            "mouseleave": fn,
-            "mousemove": fn
+            click: fn,
+            mousedown: fn,
+            mouseup: fn,
+            mouseover: fn,
+            mouseenter: fn,
+            mouseleave: fn,
+            mousemove: fn
         });
 
         var texts = (o.text + "").split("\n");
@@ -51,9 +51,9 @@ BI.Tooltip = BI.inherit(BI.Tip, {
                         whiteSpace: "normal",
                         text: text,
                         textHeight: 16
-                    }
+                    };
                 })
-            })
+            });
         } else {
             this.text = BI.createWidget({
                 type: "bi.label",

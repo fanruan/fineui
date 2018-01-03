@@ -5,18 +5,18 @@
  * @extends BI.IconButton
  */
 BI.TreeGroupNodeCheckbox = BI.inherit(BI.IconButton, {
-    _defaultConfig: function() {
+    _defaultConfig: function () {
         return BI.extend( BI.TreeGroupNodeCheckbox.superclass._defaultConfig.apply(this, arguments), {
             extraCls: "tree-node-triangle-collapse-font",
             iconWidth: 13,
             iconHeight: 13
         });
     },
-    _init:function() {
+    _init: function () {
         BI.TreeGroupNodeCheckbox.superclass._init.apply(this, arguments);
 
     },
-    setSelected: function(v){
+    setSelected: function (v) {
         BI.TreeGroupNodeCheckbox.superclass.setSelected.apply(this, arguments);
         if(v) {
             this.element.removeClass("tree-node-triangle-collapse-font").addClass("tree-node-triangle-expand-font");

@@ -5966,7 +5966,6 @@ BI.shortcut("demo.combo_group", Demo.Func);Demo.Func = BI.inherit(BI.Widget, {
 
         var dynamicCombo = BI.createWidget({
             type: "bi.combo",
-            dynamic: true,
             el: {
                 type: "bi.button",
                 text: "搜索",
@@ -10478,10 +10477,10 @@ BI.shortcut("demo.tmp", Demo.Func);
         },
         watch: {
             "*.*.n": function () {
-                
+                debugger
             },
             "arr.**": function () {
-                
+                debugger
             },
             "arr.1.*": function () {
                 this.button.setText(this.model.name + "-" + this.model.arr[1].n);

@@ -4,10 +4,10 @@
 BI.MultiSelectList = BI.inherit(BI.Widget, {
     _defaultConfig: function () {
         return BI.extend(BI.MultiSelectList.superclass._defaultConfig.apply(this, arguments), {
-            baseCls: 'bi-multi-select-list',
+            baseCls: "bi-multi-select-list",
             itemsCreator: BI.emptyFn,
             valueFormatter: BI.emptyFn
-        })
+        });
     },
     _init: function () {
         BI.MultiSelectList.superclass._init.apply(this, arguments);
@@ -78,7 +78,7 @@ BI.MultiSelectList = BI.inherit(BI.Widget, {
                     self._showAdapter();
                     self._setStartValue("");
                     self.adapter.setValue(self.storeValue);
-                    //需要刷新回到初始界面，否则搜索的结果不能放在最前面
+                    // 需要刷新回到初始界面，否则搜索的结果不能放在最前面
                     self.adapter.populate();
                 }
             }, {
@@ -97,7 +97,7 @@ BI.MultiSelectList = BI.inherit(BI.Widget, {
                             self.adapter.populate();
                             self._setStartValue("");
                             self.fireEvent(BI.MultiSelectList.EVENT_CHANGE);
-                        })
+                        });
                     }
                 }
             }, {
@@ -159,7 +159,7 @@ BI.MultiSelectList = BI.inherit(BI.Widget, {
                 left: 0,
                 right: 0
             }]
-        })
+        });
     },
 
     _showAdapter: function () {
@@ -195,12 +195,12 @@ BI.MultiSelectList = BI.inherit(BI.Widget, {
             }, function (ob) {
                 self._allData = BI.pluck(ob.items, "value");
                 digest(self._allData);
-            })
+            });
         } else {
-            digest(this._allData)
+            digest(this._allData);
         }
 
-        function digest(items) {
+        function digest (items) {
             var selectedMap = self._makeMap(items);
             BI.each(keywords, function (i, val) {
                 if (BI.isNotNull(selectedMap[val])) {
@@ -245,7 +245,7 @@ BI.MultiSelectList = BI.inherit(BI.Widget, {
             });
             self.storeValue.value = newItems.concat(BI.values(selectedMap));
             self._adjust(callback);
-        })
+        });
     },
 
     _adjust: function (callback) {
@@ -263,17 +263,17 @@ BI.MultiSelectList = BI.inherit(BI.Widget, {
             callback();
         }
 
-        function adjust() {
+        function adjust () {
             if (self.storeValue.type === BI.Selection.All && self.storeValue.value.length >= self._count) {
                 self.storeValue = {
                     type: BI.Selection.Multi,
                     value: []
-                }
+                };
             } else if (self.storeValue.type === BI.Selection.Multi && self.storeValue.value.length >= self._count) {
                 self.storeValue = {
                     type: BI.Selection.All,
                     value: []
-                }
+                };
             }
         }
     },

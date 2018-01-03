@@ -8,7 +8,7 @@ BI.ForceBubbleChart = BI.inherit(BI.AbstractChart, {
     _defaultConfig: function () {
         return BI.extend(BI.ForceBubbleChart.superclass._defaultConfig.apply(this, arguments), {
             baseCls: "bi-force-bubble-chart"
-        })
+        });
     },
 
     _init: function () {
@@ -24,13 +24,13 @@ BI.ForceBubbleChart = BI.inherit(BI.AbstractChart, {
             self.fireEvent(BI.ForceBubbleChart.EVENT_CHANGE, obj);
         });
         this.combineChart.on(BI.CombineChart.EVENT_ITEM_CLICK, function (obj) {
-            self.fireEvent(BI.AbstractChart.EVENT_ITEM_CLICK, obj)
+            self.fireEvent(BI.AbstractChart.EVENT_ITEM_CLICK, obj);
         });
     },
 
     _formatConfig: function (config, items) {
         var self = this, o = this.options;
-        config.chartType = 'forceBubble';
+        config.chartType = "forceBubble";
         config.colors = this.config.chartColor;
         this.formatChartLegend(config, this.config.chartLegend);
 
@@ -46,7 +46,7 @@ BI.ForceBubbleChart = BI.inherit(BI.AbstractChart, {
         BI.each(items, function (idx, item) {
             BI.each(item.data, function (id, da) {
                 da.y = self.formatXYDataWithMagnify(da.y, 1);
-            })
+            });
         });
         config.legend.style = this.config.chartFont;
         return [items, config];
@@ -84,4 +84,4 @@ BI.ForceBubbleChart = BI.inherit(BI.AbstractChart, {
     }
 });
 BI.ForceBubbleChart.EVENT_CHANGE = "EVENT_CHANGE";
-BI.shortcut('bi.force_bubble_chart', BI.ForceBubbleChart);
+BI.shortcut("bi.force_bubble_chart", BI.ForceBubbleChart);

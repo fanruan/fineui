@@ -22,10 +22,10 @@ BI.BorderLayout = BI.inherit(BI.Layout, {
 
     addItem: function (item) {
         // do nothing
-        throw new Error("cannot be added")
+        throw new Error("cannot be added");
     },
 
-    stroke: function(regions){
+    stroke: function (regions) {
         var item;
         var top = 0;
         var bottom = 0;
@@ -41,11 +41,11 @@ BI.BorderLayout = BI.inherit(BI.Layout, {
                     }
                     this.getWidgetByName(this.getName() + "north").element.height(item.height)
                         .css({
-                            "position": "absolute",
-                            "top": (item.top || 0),
-                            "left": (item.left || 0),
-                            "right": (item.right || 0),
-                            "bottom": "initial"
+                            position: "absolute",
+                            top: (item.top || 0),
+                            left: (item.left || 0),
+                            right: (item.right || 0),
+                            bottom: "initial"
                         });
                 }
                 top = (item.height || 0) + (item.top || 0) + (item.bottom || 0);
@@ -61,11 +61,11 @@ BI.BorderLayout = BI.inherit(BI.Layout, {
                     }
                     this.getWidgetByName(this.getName() + "south").element.height(item.height)
                         .css({
-                            "position": "absolute",
-                            "bottom": (item.bottom || 0),
-                            "left": (item.left || 0),
-                            "right": (item.right || 0),
-                            "top": "initial"
+                            position: "absolute",
+                            bottom: (item.bottom || 0),
+                            left: (item.left || 0),
+                            right: (item.right || 0),
+                            top: "initial"
                         });
                 }
                 bottom = (item.height || 0) + (item.top || 0) + (item.bottom || 0);
@@ -81,11 +81,11 @@ BI.BorderLayout = BI.inherit(BI.Layout, {
                     }
                     this.getWidgetByName(this.getName() + "west").element.width(item.width)
                         .css({
-                            "position": "absolute",
-                            "left": (item.left || 0),
+                            position: "absolute",
+                            left: (item.left || 0),
                             top: top,
                             bottom: bottom,
-                            "right": "initial"
+                            right: "initial"
                         });
                 }
                 left = (item.width || 0) + (item.left || 0) + (item.right || 0);
@@ -101,11 +101,11 @@ BI.BorderLayout = BI.inherit(BI.Layout, {
                     }
                     this.getWidgetByName(this.getName() + "east").element.width(item.width)
                         .css({
-                            "position": "absolute",
-                            "right": (item.right || 0),
+                            position: "absolute",
+                            right: (item.right || 0),
                             top: top,
                             bottom: bottom,
-                            "left": "initial"
+                            left: "initial"
                         });
                 }
                 right = (item.width || 0) + (item.left || 0) + (item.right || 0);
@@ -119,7 +119,7 @@ BI.BorderLayout = BI.inherit(BI.Layout, {
                     this.addWidget(this.getName() + "center", w);
                 }
                 this.getWidgetByName(this.getName() + "center").element
-                    .css({"position": "absolute", "top": top, "bottom": bottom, "left": left, "right": right});
+                    .css({position: "absolute", top: top, bottom: bottom, left: left, right: right});
             }
         }
     },
@@ -129,4 +129,4 @@ BI.BorderLayout = BI.inherit(BI.Layout, {
         this._mount();
     }
 });
-BI.shortcut('bi.border', BI.BorderLayout);
+BI.shortcut("bi.border", BI.BorderLayout);

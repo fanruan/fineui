@@ -25,8 +25,8 @@ BI.FloatCenterLayout = BI.inherit(BI.Layout, {
     },
 
     addItem: function (item) {
-        //do nothing
-        throw new Error("cannot be added")
+        // do nothing
+        throw new Error("cannot be added");
     },
 
     stroke: function (items) {
@@ -45,7 +45,7 @@ BI.FloatCenterLayout = BI.inherit(BI.Layout, {
             });
         });
         BI.each(items, function (i, item) {
-            if (!!item) {
+            if (item) {
                 var w = BI.createWidget(item);
                 w.element.css({
                     position: "absolute",
@@ -71,4 +71,4 @@ BI.FloatCenterLayout = BI.inherit(BI.Layout, {
         this._mount();
     }
 });
-BI.shortcut('bi.float_center', BI.FloatCenterLayout);
+BI.shortcut("bi.float_center", BI.FloatCenterLayout);

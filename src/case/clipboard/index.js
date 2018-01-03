@@ -10,7 +10,7 @@ BI.ClipBoard = BI.inherit(BI.BasicButton, {
             extraCls: "bi-clipboard",
             copy: BI.emptyFn,
             afterCopy: BI.emptyFn
-        })
+        });
     },
 
     _init: function () {
@@ -25,7 +25,7 @@ BI.ClipBoard = BI.inherit(BI.BasicButton, {
                     return BI.isFunction(o.copy) ? o.copy() : o.copy;
                 }
             });
-            this.clipboard.on("success", o.afterCopy)
+            this.clipboard.on("success", o.afterCopy);
         } else {
             this.element.zclip({
                 path: BI.resourceURL + "/ZeroClipboard.swf",

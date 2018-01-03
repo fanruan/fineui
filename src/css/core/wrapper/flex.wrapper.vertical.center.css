@@ -75,3 +75,6 @@
   -o-align-items: stretch;
   align-items: stretch;
 }
+.bi-flex-wrapper-vertical-center .flex-wrapper-vertical-center-wrapper > * {
+  margin: auto;
+}

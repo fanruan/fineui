@@ -11,7 +11,7 @@ BI.MultiLayerSelectLevelTree = BI.inherit(BI.Widget, {
             isDefaultInit: false,
             items: [],
             itemsCreator: BI.emptyFn
-        })
+        });
     },
 
     _init: function () {
@@ -63,7 +63,7 @@ BI.MultiLayerSelectLevelTree = BI.inherit(BI.Widget, {
         });
     },
 
-    //构造树结构，
+    // 构造树结构，
     initTree: function (nodes) {
         var self = this, o = this.options;
         this.empty();
@@ -96,7 +96,7 @@ BI.MultiLayerSelectLevelTree = BI.inherit(BI.Widget, {
             if (type === BI.Events.CLICK) {
                 self.fireEvent(BI.MultiLayerSelectLevelTree.EVENT_CHANGE, arguments);
             }
-        })
+        });
     },
 
     populate: function (nodes) {

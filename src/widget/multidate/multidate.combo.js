@@ -14,7 +14,7 @@ BI.MultiDateCombo = BI.inherit(BI.Single, {
     },
     _defaultConfig: function () {
         return BI.extend(BI.MultiDateCombo.superclass._defaultConfig.apply(this, arguments), {
-            baseCls: 'bi-multidate-combo bi-border',
+            baseCls: "bi-multidate-combo bi-border",
             height: 24
         });
     },
@@ -25,7 +25,7 @@ BI.MultiDateCombo = BI.inherit(BI.Single, {
         var date = Date.getDate();
         this.storeValue = null;
         this.trigger = BI.createWidget({
-            type: 'bi.date_trigger',
+            type: "bi.date_trigger",
             min: this.constants.DATE_MIN_VALUE,
             max: this.constants.DATE_MAX_VALUE
         });
@@ -106,11 +106,11 @@ BI.MultiDateCombo = BI.inherit(BI.Single, {
         this.popup.on(BI.MultiDatePopup.CALENDAR_EVENT_CHANGE, function () {
             self.setValue(self.popup.getValue());
             self.combo.hideView();
-            //self.fireEvent(BI.MultiDateCombo.EVENT_CHANGE);
+            // self.fireEvent(BI.MultiDateCombo.EVENT_CHANGE);
             self.fireEvent(BI.MultiDateCombo.EVENT_CONFIRM);
         });
         this.combo = BI.createWidget({
-            type: 'bi.combo',
+            type: "bi.combo",
             toggle: false,
             isNeedAdjustHeight: false,
             isNeedAdjustWidth: false,
@@ -174,13 +174,13 @@ BI.MultiDateCombo = BI.inherit(BI.Single, {
             ref: function (_ref) {
                 self.comboWrapper = _ref;
             }
-        })
+        });
     },
 
     _checkDynamicValue: function (v) {
         var type = null;
         if (BI.isNotNull(v)) {
-            type = v.type
+            type = v.type;
         }
         switch (type) {
             case BI.MultiDateCombo.DATE_TYPE.MULTI_DATE_YEAR_PREV:
@@ -216,7 +216,7 @@ BI.MultiDateCombo = BI.inherit(BI.Single, {
         this.storeValue = v;
         this.popup.setValue(v);
         this.trigger.setValue(v);
-        this._checkDynamicValue(v)
+        this._checkDynamicValue(v);
     },
     getValue: function () {
         return this.storeValue;
@@ -228,7 +228,7 @@ BI.MultiDateCombo = BI.inherit(BI.Single, {
         this.combo.hideView();
     }
 });
-BI.shortcut('bi.multidate_combo', BI.MultiDateCombo);
+BI.shortcut("bi.multidate_combo", BI.MultiDateCombo);
 
 BI.MultiDateCombo.EVENT_CONFIRM = "EVENT_CONFIRM";
 BI.MultiDateCombo.EVENT_FOCUS = "EVENT_FOCUS";

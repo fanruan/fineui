@@ -19,11 +19,11 @@ BI.SequenceTable = BI.inherit(BI.Widget, {
             isNeedResize: true,
             isResizeAdapt: false,
 
-            isNeedFreeze: false,//是否需要冻结单元格
-            freezeCols: [], //冻结的列号,从0开始,isNeedFreeze为true时生效
+            isNeedFreeze: false, // 是否需要冻结单元格
+            freezeCols: [], // 冻结的列号,从0开始,isNeedFreeze为true时生效
 
-            isNeedMerge: false,//是否需要合并单元格
-            mergeCols: [], //合并的单元格列号
+            isNeedMerge: false, // 是否需要合并单元格
+            mergeCols: [], // 合并的单元格列号
             mergeRule: BI.emptyFn,
 
             columnSize: [],
@@ -39,14 +39,14 @@ BI.SequenceTable = BI.inherit(BI.Widget, {
             sequenceCellStyleGetter: BI.emptyFn,
 
             header: [],
-            items: [], //二维数组
+            items: [], // 二维数组
 
-            //交叉表头
+            // 交叉表头
             crossHeader: [],
             crossItems: [],
 
             showSequence: false,
-            startSequence: 1//开始的序号
+            startSequence: 1// 开始的序号
         });
     },
 
@@ -100,7 +100,7 @@ BI.SequenceTable = BI.inherit(BI.Widget, {
 
             header: o.header,
             items: o.items,
-            //交叉表头
+            // 交叉表头
             crossHeader: o.crossHeader,
             crossItems: o.crossItems
         });
@@ -250,4 +250,4 @@ BI.SequenceTable = BI.inherit(BI.Widget, {
         BI.SequenceTable.superclass.destroy.apply(this, arguments);
     }
 });
-BI.shortcut('bi.sequence_table', BI.SequenceTable);
+BI.shortcut("bi.sequence_table", BI.SequenceTable);

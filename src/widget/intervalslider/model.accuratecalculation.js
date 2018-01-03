@@ -7,7 +7,7 @@ BI.AccurateCalculationModel = BI.inherit(BI.Widget, {
     _defaultConfig: function () {
         return BI.extend(BI.AccurateCalculationModel.superclass._defaultConfig.apply(this, arguments), {
             baseCls: ""
-        })
+        });
     },
 
     _init: function () {
@@ -28,16 +28,16 @@ BI.AccurateCalculationModel = BI.inherit(BI.Widget, {
         }
         var magnitudeDiff = stringNumber1.numDecimalLength - stringNumber2.numDecimalLength;
         if (magnitudeDiff > 0) {
-            var needAddZero = stringNumber2
+            var needAddZero = stringNumber2;
         } else {
             var needAddZero = stringNumber1;
             magnitudeDiff = (0 - magnitudeDiff);
         }
         for (var i = 0; i < magnitudeDiff; i++) {
             if (needAddZero.numDecimal === "0" && i === 0) {
-                continue
+                continue;
             }
-            needAddZero.numDecimal += "0"
+            needAddZero.numDecimal += "0";
         }
     },
 
@@ -53,25 +53,25 @@ BI.AccurateCalculationModel = BI.inherit(BI.Widget, {
             var numDecimalLength = numStrArray[1].length;
         }
         return {
-            "numInteger": numInteger,
-            "numDecimal": numDecimal,
-            "numDecimalLength": numDecimalLength
-        }
+            numInteger: numInteger,
+            numDecimal: numDecimal,
+            numDecimalLength: numDecimalLength
+        };
     },
 
-    _accurateSubtraction: function (num1, num2) {//num1-num2 && num1>num2
+    _accurateSubtraction: function (num1, num2) {// num1-num2 && num1>num2
         var stringNumber1 = this._stringNumberFactory(num1);
         var stringNumber2 = this._stringNumberFactory(num2);
-        //整数部分计算
+        // 整数部分计算
         var integerResult = BI.parseInt(stringNumber1.numInteger) - BI.parseInt(stringNumber2.numInteger);
-        //小数部分
+        // 小数部分
         this._formatDecimal(stringNumber1, stringNumber2);
         var decimalMaxLength = getDecimalMaxLength(stringNumber1, stringNumber2);
 
         if (BI.parseInt(stringNumber1.numDecimal) >= BI.parseInt(stringNumber2.numDecimal)) {
             var decimalResultTemp = (BI.parseInt(stringNumber1.numDecimal) - BI.parseInt(stringNumber2.numDecimal)).toString();
             var decimalResult = addZero(decimalResultTemp, decimalMaxLength);
-        } else {//否则借位
+        } else {// 否则借位
             integerResult--;
             var borrow = this._getMagnitude(decimalMaxLength);
             var decimalResultTemp = (borrow + BI.parseInt(stringNumber1.numDecimal) - BI.parseInt(stringNumber2.numDecimal)).toString();
@@ -80,62 +80,62 @@ BI.AccurateCalculationModel = BI.inherit(BI.Widget, {
         var result = integerResult + "." + decimalResult;
         return BI.parseFloat(result);
 
-        function getDecimalMaxLength(num1, num2) {
+        function getDecimalMaxLength (num1, num2) {
             if (num1.numDecimal.length >= num2.numDecimal.length) {
-                return num1.numDecimal.length
+                return num1.numDecimal.length;
             }
-            return num2.numDecimal.length
+            return num2.numDecimal.length;
         }
 
-        function addZero(resultTemp, length) {
+        function addZero (resultTemp, length) {
             var diff = length - resultTemp.length;
             for (var i = 0; i < diff; i++) {
                 resultTemp = "0" + resultTemp;
             }
-            return resultTemp
+            return resultTemp;
         }
     },
 
-    _accurateAddition: function (num1, num2) {//加法结合律
+    _accurateAddition: function (num1, num2) {// 加法结合律
         var stringNumber1 = this._stringNumberFactory(num1);
         var stringNumber2 = this._stringNumberFactory(num2);
-        //整数部分计算
+        // 整数部分计算
         var integerResult = BI.parseInt(stringNumber1.numInteger) + BI.parseInt(stringNumber2.numInteger);
-        //小数部分
+        // 小数部分
         this._formatDecimal(stringNumber1, stringNumber2);
 
         var decimalResult = (BI.parseInt(stringNumber1.numDecimal) + BI.parseInt(stringNumber2.numDecimal)).toString();
 
         if (decimalResult !== "0") {
             if (decimalResult.length <= stringNumber1.numDecimal.length) {
-                decimalResult = addZero(decimalResult, stringNumber1.numDecimal.length)
+                decimalResult = addZero(decimalResult, stringNumber1.numDecimal.length);
             } else {
-                integerResult++;//进一
+                integerResult++;// 进一
                 decimalResult = decimalResult.slice(1);
             }
         }
         var result = integerResult + "." + decimalResult;
         return BI.parseFloat(result);
 
-        function addZero(resultTemp, length) {
+        function addZero (resultTemp, length) {
             var diff = length - resultTemp.length;
             for (var i = 0; i < diff; i++) {
                 resultTemp = "0" + resultTemp;
             }
-            return resultTemp
+            return resultTemp;
         }
     },
 
-    _accurateMultiplication: function (num1, num2) {//乘法分配律
+    _accurateMultiplication: function (num1, num2) {// 乘法分配律
         var stringNumber1 = this._stringNumberFactory(num1);
         var stringNumber2 = this._stringNumberFactory(num2);
-        //整数部分计算
+        // 整数部分计算
         var integerResult = BI.parseInt(stringNumber1.numInteger) * BI.parseInt(stringNumber2.numInteger);
-        //num1的小数和num2的整数
+        // num1的小数和num2的整数
         var dec1Int2 = this._accurateDivisionTenExponent(BI.parseInt(stringNumber1.numDecimal) * BI.parseInt(stringNumber2.numInteger), stringNumber1.numDecimalLength);
-        //num1的整数和num2的小数
+        // num1的整数和num2的小数
         var int1dec2 = this._accurateDivisionTenExponent(BI.parseInt(stringNumber1.numInteger) * BI.parseInt(stringNumber2.numDecimal), stringNumber2.numDecimalLength);
-        //小数*小数
+        // 小数*小数
         var dec1dec2 = this._accurateDivisionTenExponent(BI.parseInt(stringNumber1.numDecimal) * BI.parseInt(stringNumber2.numDecimal), (stringNumber1.numDecimalLength + stringNumber2.numDecimalLength));
 
         return this._accurateAddition(this._accurateAddition(this._accurateAddition(integerResult, dec1Int2), int1dec2), dec1dec2);
@@ -153,63 +153,63 @@ BI.AccurateCalculationModel = BI.inherit(BI.Widget, {
         var result = integerResult + "." + partDecimalResult + stringNumber.numDecimal;
         return BI.parseFloat(result);
 
-        function addZero(resultTemp, length) {
+        function addZero (resultTemp, length) {
             var diff = length - resultTemp.length;
             for (var i = 0; i < diff; i++) {
                 resultTemp = "0" + resultTemp;
             }
-            return resultTemp
+            return resultTemp;
         }
     },
 
     accurateSubtraction: function (num1, num2) {
         if (num1 >= 0 && num2 >= 0) {
             if (num1 >= num2) {
-                return this._accurateSubtraction(num1, num2)
+                return this._accurateSubtraction(num1, num2);
             }
-            return -this._accurateSubtraction(num2, num1)
+            return -this._accurateSubtraction(num2, num1);
         }
         if (num1 >= 0 && num2 < 0) {
-            return this._accurateAddition(num1, -num2)
+            return this._accurateAddition(num1, -num2);
         }
         if (num1 < 0 && num2 >= 0) {
-            return -this._accurateAddition(-num1, num2)
+            return -this._accurateAddition(-num1, num2);
         }
         if (num1 < 0 && num2 < 0) {
             if (num1 >= num2) {
-                return this._accurateSubtraction(-num2, -num1)
+                return this._accurateSubtraction(-num2, -num1);
             }
-            return this._accurateSubtraction(-num1, -num2)
+            return this._accurateSubtraction(-num1, -num2);
         }
     },
 
     accurateAddition: function (num1, num2) {
         if (num1 >= 0 && num2 >= 0) {
-            return this._accurateAddition(num1, num2)
+            return this._accurateAddition(num1, num2);
         }
         if (num1 >= 0 && num2 < 0) {
-            return this.accurateSubtraction(num1, -num2)
+            return this.accurateSubtraction(num1, -num2);
         }
         if (num1 < 0 && num2 >= 0) {
-            return this.accurateSubtraction(num2, -num1)
+            return this.accurateSubtraction(num2, -num1);
         }
         if (num1 < 0 && num2 < 0) {
-            return -this._accurateAddition(-num1, -num2)
+            return -this._accurateAddition(-num1, -num2);
         }
     },
 
     accurateMultiplication: function (num1, num2) {
         if (num1 >= 0 && num2 >= 0) {
-            return this._accurateMultiplication(num1, num2)
+            return this._accurateMultiplication(num1, num2);
         }
         if (num1 >= 0 && num2 < 0) {
-            return -this._accurateMultiplication(num1, -num2)
+            return -this._accurateMultiplication(num1, -num2);
         }
         if (num1 < 0 && num2 >= 0) {
-            return -this._accurateMultiplication(-num1, num2)
+            return -this._accurateMultiplication(-num1, num2);
         }
         if (num1 < 0 && num2 < 0) {
-            return this._accurateMultiplication(-num1, -num2)
+            return this._accurateMultiplication(-num1, -num2);
         }
     },
 

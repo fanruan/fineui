@@ -25,7 +25,7 @@ BI.TextIconItem = BI.inherit(BI.BasicButton, {
             textVgap: 0,
             textLgap: 0,
             textRgap: 0
-        })
+        });
     },
     _init: function () {
         BI.TextIconItem.superclass._init.apply(this, arguments);

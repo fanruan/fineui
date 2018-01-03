@@ -1,4 +1,4 @@
-/*!
+/* !
  * jQuery Mousewheel 3.1.13
  *
  * Copyright jQuery Foundation and other contributors
@@ -7,10 +7,10 @@
  */
 
 (function (factory) {
-    if ( typeof define === 'function' && define.amd ) {
+    if ( typeof define === "function" && define.amd ) {
         // AMD. Register as an anonymous module.
-        define(['../core/jquery'], factory);
-    } else if (typeof exports === 'object') {
+        define(["../core/jquery"], factory);
+    } else if (typeof exports === "object") {
         // Node/CommonJS style for Browserify
         module.exports = factory;
     } else {
@@ -19,9 +19,9 @@
     }
 }(function ($) {
 
-    var toFix  = ['wheel', 'mousewheel', 'DOMMouseScroll', 'MozMousePixelScroll'],
-        toBind = ( 'onwheel' in document || document.documentMode >= 9 ) ?
-                    ['wheel'] : ['mousewheel', 'DomMouseScroll', 'MozMousePixelScroll'],
+    var toFix  = ["wheel", "mousewheel", "DOMMouseScroll", "MozMousePixelScroll"],
+        toBind = ( "onwheel" in document || document.documentMode >= 9 ) ?
+            ["wheel"] : ["mousewheel", "DomMouseScroll", "MozMousePixelScroll"],
         slice  = Array.prototype.slice,
         nullLowestDeltaTimeout, lowestDelta;
 
@@ -32,9 +32,9 @@
     }
 
     var special = $.event.special.mousewheel = {
-        version: '3.1.12',
+        version: "3.1.12",
 
-        setup: function() {
+        setup: function () {
             if ( this.addEventListener ) {
                 for ( var i = toBind.length; i; ) {
                     this.addEventListener( toBind[--i], handler, false );
@@ -44,7 +44,7 @@
             }
         },
 
-        teardown: function() {
+        teardown: function () {
             if ( this.removeEventListener ) {
                 for ( var i = toBind.length; i; ) {
                     this.removeEventListener( toBind[--i], handler, false );
@@ -61,17 +61,17 @@
     };
 
     $.fn.extend({
-        mousewheel: function(fn) {
-            return fn ? this.bind('mousewheel', fn) : this.trigger('mousewheel');
+        mousewheel: function (fn) {
+            return fn ? this.bind("mousewheel", fn) : this.trigger("mousewheel");
         },
 
-        unmousewheel: function(fn) {
-            return this.unbind('mousewheel', fn);
+        unmousewheel: function (fn) {
+            return this.unbind("mousewheel", fn);
         }
     });
 
 
-    function handler(event) {
+    function handler (event) {
         var orgEvent   = event || window.event,
             args       = slice.call(arguments, 1),
             delta      = 0,
@@ -81,16 +81,16 @@
             offsetX    = 0,
             offsetY    = 0;
         event = $.event.fix(orgEvent);
-        event.type = 'mousewheel';
+        event.type = "mousewheel";
 
         // Old school scrollwheel delta
-        if ( 'detail'      in orgEvent ) { deltaY = orgEvent.detail * -1;      }
-        if ( 'wheelDelta'  in orgEvent ) { deltaY = orgEvent.wheelDelta;       }
-        if ( 'wheelDeltaY' in orgEvent ) { deltaY = orgEvent.wheelDeltaY;      }
-        if ( 'wheelDeltaX' in orgEvent ) { deltaX = orgEvent.wheelDeltaX * -1; }
+        if ( "detail"      in orgEvent ) { deltaY = orgEvent.detail * -1;      }
+        if ( "wheelDelta"  in orgEvent ) { deltaY = orgEvent.wheelDelta;       }
+        if ( "wheelDeltaY" in orgEvent ) { deltaY = orgEvent.wheelDeltaY;      }
+        if ( "wheelDeltaX" in orgEvent ) { deltaX = orgEvent.wheelDeltaX * -1; }
 
         // Firefox < 17 horizontal scrolling related to DOMMouseScroll event
-        if ( 'axis' in orgEvent && orgEvent.axis === orgEvent.HORIZONTAL_AXIS ) {
+        if ( "axis" in orgEvent && orgEvent.axis === orgEvent.HORIZONTAL_AXIS ) {
             deltaX = deltaY * -1;
             deltaY = 0;
         }
@@ -99,11 +99,11 @@
         delta = deltaY === 0 ? deltaX : deltaY;
 
         // New school wheel delta (wheel event)
-        if ( 'deltaY' in orgEvent ) {
+        if ( "deltaY" in orgEvent ) {
             deltaY = orgEvent.deltaY * -1;
             delta  = deltaY;
         }
-        if ( 'deltaX' in orgEvent ) {
+        if ( "deltaX" in orgEvent ) {
             deltaX = orgEvent.deltaX;
             if ( deltaY === 0 ) { delta  = deltaX * -1; }
         }
@@ -149,9 +149,9 @@
         }
 
         // Get a whole, normalized value for the deltas
-        delta  = Math[ delta  >= 1 ? 'floor' : 'ceil' ](delta  / lowestDelta);
-        deltaX = Math[ deltaX >= 1 ? 'floor' : 'ceil' ](deltaX / lowestDelta);
-        deltaY = Math[ deltaY >= 1 ? 'floor' : 'ceil' ](deltaY / lowestDelta);
+        delta  = Math[ delta  >= 1 ? "floor" : "ceil" ](delta  / lowestDelta);
+        deltaX = Math[ deltaX >= 1 ? "floor" : "ceil" ](deltaX / lowestDelta);
+        deltaY = Math[ deltaY >= 1 ? "floor" : "ceil" ](deltaY / lowestDelta);
 
         // Normalise offsetX and offsetY properties
         if ( special.settings.normalizeOffset && this.getBoundingClientRect ) {
@@ -184,11 +184,11 @@
         return ($.event.dispatch || $.event.handle).apply(this, args);
     }
 
-    function nullLowestDelta() {
+    function nullLowestDelta () {
         lowestDelta = null;
     }
 
-    function shouldAdjustOldDeltas(orgEvent, absDelta) {
+    function shouldAdjustOldDeltas (orgEvent, absDelta) {
         // If this is an older event and the delta is divisable by 120,
         // then we are assuming that the browser is treating this as an
         // older mouse wheel event and that we should divide the deltas
@@ -196,7 +196,7 @@
         // Side note, this actually impacts the reported scroll distance
         // in older browsers and can cause scrolling to be slower than native.
         // Turn this off by setting $.event.special.mousewheel.settings.adjustOldDeltas to false.
-        return special.settings.adjustOldDeltas && orgEvent.type === 'mousewheel' && absDelta % 120 === 0;
+        return special.settings.adjustOldDeltas && orgEvent.type === "mousewheel" && absDelta % 120 === 0;
     }
 
 }));

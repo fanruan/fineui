@@ -22,7 +22,7 @@ BI.TextIconNode = BI.inherit(BI.NodeButton, {
             textVgap: 0,
             textLgap: 0,
             textRgap: 0
-        })
+        });
     },
     _init: function () {
         BI.TextIconNode.superclass._init.apply(this, arguments);
@@ -39,7 +39,7 @@ BI.TextIconNode = BI.inherit(BI.NodeButton, {
             value: o.value,
             keyword: o.keyword,
             height: o.height
-        })
+        });
         this.icon = BI.createWidget({
             type: "bi.center_adapt",
             width: c.commonWidth,

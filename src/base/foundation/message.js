@@ -43,28 +43,28 @@ $.extend(BI, {
                     BI.delay(function () {
                         toast.element.slideUp(500, function () {
                             toast.destroy();
-                        })
-                    }, 5000)
-                })
+                        });
+                    }, 5000);
+                });
             },
             _show: function (hasCancel, title, message, callback) {
-                $mask = $('<div class="bi-z-index-mask">').css({
-                    position: 'absolute',
-                    'zIndex': BI.zIndex_tip - 2,
+                $mask = $("<div class=\"bi-z-index-mask\">").css({
+                    position: "absolute",
+                    zIndex: BI.zIndex_tip - 2,
                     top: 0,
                     left: 0,
                     right: 0,
                     bottom: 0,
                     opacity: 0.5
-                }).appendTo('body');
-                $pop = $('<div class="bi-message-depend">').css({
-                    position: 'absolute',
-                    'zIndex': BI.zIndex_tip - 1,
+                }).appendTo("body");
+                $pop = $("<div class=\"bi-message-depend\">").css({
+                    position: "absolute",
+                    zIndex: BI.zIndex_tip - 1,
                     top: 0,
                     left: 0,
                     right: 0,
                     bottom: 0
-                }).appendTo('body');
+                }).appendTo("body");
                 var close = function () {
                     messageShow.destroy();
                     $mask.remove();
@@ -73,10 +73,10 @@ $.extend(BI, {
                 if (hasCancel === true) {
                     controlItems.push({
                         el: {
-                            type: 'bi.button',
+                            type: "bi.button",
                             text: BI.i18nText("BI-Basic_Cancel"),
                             height: 30,
-                            level: 'ignore',
+                            level: "ignore",
                             handler: function () {
                                 close();
                                 if (BI.isFunction(callback)) {
@@ -88,7 +88,7 @@ $.extend(BI, {
                 }
                 controlItems.push({
                     el: {
-                        type: 'bi.button',
+                        type: "bi.button",
                         text: BI.i18nText("BI-Basic_OK"),
                         height: 30,
                         handler: function () {
@@ -101,31 +101,31 @@ $.extend(BI, {
                 });
                 var conf = {
                     element: $pop,
-                    type: 'bi.center_adapt',
+                    type: "bi.center_adapt",
                     items: [
                         {
-                            type: 'bi.border',
-                            cls: 'bi-message-content bi-card',
+                            type: "bi.border",
+                            cls: "bi-message-content bi-card",
                             items: {
-                                'north': {
+                                north: {
                                     el: {
-                                        type: 'bi.border',
-                                        cls: 'bi-message-title bi-background',
+                                        type: "bi.border",
+                                        cls: "bi-message-title bi-background",
                                         items: {
                                             center: {
                                                 el: {
-                                                    type: 'bi.label',
+                                                    type: "bi.label",
                                                     text: title || BI.i18nText("BI-Basic_Prompt"),
-                                                    textAlign: 'left',
+                                                    textAlign: "left",
                                                     hgap: 20,
                                                     height: 50
                                                 }
                                             },
                                             east: {
                                                 el: {
-                                                    type: 'bi.icon_button',
-                                                    cls: 'bi-message-close close-font',
-//                                                    height: 50,
+                                                    type: "bi.icon_button",
+                                                    cls: "bi-message-close close-font",
+                                                    //                                                    height: 50,
                                                     handler: function () {
                                                         close();
                                                     }
@@ -136,7 +136,7 @@ $.extend(BI, {
                                     },
                                     height: 50
                                 },
-                                'center': {
+                                center: {
                                     el: {
                                         type: "bi.text",
                                         cls: "bi-message-text",
@@ -147,12 +147,12 @@ $.extend(BI, {
                                         text: message
                                     }
                                 },
-                                'south': {
+                                south: {
                                     el: {
                                         type: "bi.absolute",
                                         items: [{
                                             el: {
-                                                type: 'bi.right_vertical_adapt',
+                                                type: "bi.right_vertical_adapt",
                                                 hgap: 5,
                                                 items: controlItems
                                             },

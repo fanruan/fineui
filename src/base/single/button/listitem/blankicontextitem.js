@@ -25,7 +25,7 @@ BI.BlankIconTextItem = BI.inherit(BI.BasicButton, {
             textVgap: 0,
             textLgap: 0,
             textRgap: 0
-        })
+        });
     },
     _init: function () {
         BI.BlankIconTextItem.superclass._init.apply(this, arguments);
@@ -33,7 +33,7 @@ BI.BlankIconTextItem = BI.inherit(BI.BasicButton, {
         var blank = BI.createWidget({
             type: "bi.layout",
             width: o.blankWidth
-        })
+        });
         this.text = BI.createWidget({
             type: "bi.label",
             cls: "list-item-text",
@@ -46,7 +46,7 @@ BI.BlankIconTextItem = BI.inherit(BI.BasicButton, {
             value: o.value,
             keyword: o.keyword,
             height: o.height
-        })
+        });
         this.icon = BI.createWidget({
             type: "bi.center_adapt",
             width: c.commonWidth,

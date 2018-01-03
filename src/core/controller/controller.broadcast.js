@@ -22,7 +22,7 @@ BI.BroadcastController = BI.inherit(BI.Controller, {
         this._broadcasts[name].push(fn);
         return function () {
             self.remove(name, fn);
-        }
+        };
     },
 
     send: function (name) {

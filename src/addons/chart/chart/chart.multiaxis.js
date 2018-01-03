@@ -11,7 +11,7 @@ BI.MultiAxisChart = BI.inherit(BI.AbstractChart, {
     _defaultConfig: function () {
         return BI.extend(BI.MultiAxisChart.superclass._defaultConfig.apply(this, arguments), {
             baseCls: "bi-multi-axis-chart"
-        })
+        });
     },
 
     _init: function () {
@@ -20,10 +20,10 @@ BI.MultiAxisChart = BI.inherit(BI.AbstractChart, {
         this.xAxis = [{
             type: "category",
             title: {
-                style: {"fontFamily": "inherit", "color": "#808080", "fontSize": "12px", "fontWeight": ""}
+                style: {fontFamily: "inherit", color: "#808080", fontSize: "12px", fontWeight: ""}
             },
             labelStyle: {
-                "fontFamily": "inherit", "color": "#808080", "fontSize": "12px"
+                fontFamily: "inherit", color: "#808080", fontSize: "12px"
             },
             position: "bottom",
             gridLineWidth: 0
@@ -39,7 +39,7 @@ BI.MultiAxisChart = BI.inherit(BI.AbstractChart, {
             self.fireEvent(BI.MultiAxisChart.EVENT_CHANGE, obj);
         });
         this.combineChart.on(BI.CombineChart.EVENT_ITEM_CLICK, function (obj) {
-            self.fireEvent(BI.AbstractChart.EVENT_ITEM_CLICK, obj)
+            self.fireEvent(BI.AbstractChart.EVENT_ITEM_CLICK, obj);
         });
     },
 
@@ -120,13 +120,13 @@ BI.MultiAxisChart = BI.inherit(BI.AbstractChart, {
             labelRotation: this.config.textDirection,
             enableMinorTick: this.config.enableMinorTick,
             gridLineWidth: this.config.showGridLine === true ? 1 : 0,
-            maxHeight: '40%'
+            maxHeight: "40%"
         });
 
-        //为了给数据标签加个%,还要遍历所有的系列，唉
+        // 为了给数据标签加个%,还要遍历所有的系列，唉
         this.formatDataLabel(config.plotOptions.dataLabels.enabled, items, config, this.config.chartFont);
 
-        //全局样式的图表文字
+        // 全局样式的图表文字
         if (config.dataSheet) {
             config.dataSheet.style = this.config.chartFont;
         }
@@ -161,14 +161,14 @@ BI.MultiAxisChart = BI.inherit(BI.AbstractChart, {
                         value: t.value.div(magnify),
                         width: 1,
                         label: {
-                            "style": {
-                                "fontFamily": "inherit",
-                                "color": "#808080",
-                                "fontSize": "12px",
-                                "fontWeight": ""
+                            style: {
+                                fontFamily: "inherit",
+                                color: "#808080",
+                                fontSize: "12px",
+                                fontWeight: ""
                             },
-                            "text": t.text,
-                            "align": "top"
+                            text: t.text,
+                            align: "top"
                         }
                     });
                 });
@@ -193,19 +193,19 @@ BI.MultiAxisChart = BI.inherit(BI.AbstractChart, {
                         value: t.value.div(magnify),
                         width: 1,
                         label: {
-                            "style": {
-                                "fontFamily": "inherit",
-                                "color": "#808080",
-                                "fontSize": "12px",
-                                "fontWeight": ""
+                            style: {
+                                fontFamily: "inherit",
+                                color: "#808080",
+                                fontSize: "12px",
+                                fontWeight: ""
                             },
-                            "text": t.text,
-                            "align": "left"
+                            text: t.text,
+                            align: "left"
                         }
                     });
                 });
             }
-        })
+        });
     },
 
     getXYAxisUnit: function (numberLevelType, position) {
@@ -227,16 +227,16 @@ BI.MultiAxisChart = BI.inherit(BI.AbstractChart, {
                 break;
         }
         if (position === this.constants.X_AXIS) {
-            this.config.xAxisUnit !== "" && (unit = unit + this.config.xAxisUnit)
+            this.config.xAxisUnit !== "" && (unit = unit + this.config.xAxisUnit);
         }
         if (position === this.constants.LEFT_AXIS) {
-            this.config.leftYAxisUnit !== "" && (unit = unit + this.config.leftYAxisUnit)
+            this.config.leftYAxisUnit !== "" && (unit = unit + this.config.leftYAxisUnit);
         }
         if (position === this.constants.RIGHT_AXIS) {
-            this.config.rightYAxisUnit !== "" && (unit = unit + this.config.rightYAxisUnit)
+            this.config.rightYAxisUnit !== "" && (unit = unit + this.config.rightYAxisUnit);
         }
         if (position === this.constants.RIGHT_AXIS_SECOND) {
-            this.config.rightYAxisSecondUnit !== "" && (unit = unit + this.config.rightYAxisSecondUnit)
+            this.config.rightYAxisSecondUnit !== "" && (unit = unit + this.config.rightYAxisSecondUnit);
         }
         return unit === "" ? unit : "(" + unit + ")";
     },
@@ -294,10 +294,10 @@ BI.MultiAxisChart = BI.inherit(BI.AbstractChart, {
             var newYAxis = {
                 type: "value",
                 title: {
-                    style: {"fontFamily": "inherit", "color": "#808080", "fontSize": "12px", "fontWeight": ""}
+                    style: {fontFamily: "inherit", color: "#808080", fontSize: "12px", fontWeight: ""}
                 },
                 labelStyle: {
-                    "fontFamily": "inherit", "color": "#808080", "fontSize": "12px"
+                    fontFamily: "inherit", color: "#808080", fontSize: "12px"
                 },
                 position: idx > 0 ? "right" : "left",
                 lineWidth: 1,
@@ -319,4 +319,4 @@ BI.MultiAxisChart = BI.inherit(BI.AbstractChart, {
     }
 });
 BI.MultiAxisChart.EVENT_CHANGE = "EVENT_CHANGE";
-BI.shortcut('bi.multi_axis_chart', BI.MultiAxisChart);
+BI.shortcut("bi.multi_axis_chart", BI.MultiAxisChart);

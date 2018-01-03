@@ -15,8 +15,8 @@ BI.GridView = BI.inherit(BI.Widget, {
             overflowY: true,
             overscanColumnCount: 0,
             overscanRowCount: 0,
-            rowHeightGetter: BI.emptyFn, //number类型或function类型
-            columnWidthGetter: BI.emptyFn, //number类型或function类型
+            rowHeightGetter: BI.emptyFn, // number类型或function类型
+            columnWidthGetter: BI.emptyFn, // number类型或function类型
             // estimatedColumnSize: 100, //columnWidthGetter为function时必设
             // estimatedRowSize: 30, //rowHeightGetter为function时必设
             scrollLeft: 0,
@@ -73,7 +73,7 @@ BI.GridView = BI.inherit(BI.Widget, {
         return {
             overscanStartIndex: Math.max(0, startIndex - overscanCellsCount),
             overscanStopIndex: Math.min(cellCount - 1, stopIndex + overscanCellsCount)
-        }
+        };
     },
 
     _calculateChildrenToRender: function () {
@@ -98,7 +98,7 @@ BI.GridView = BI.inherit(BI.Widget, {
             this._renderedRowStartIndex = visibleRowIndices.start;
             this._renderedRowStopIndex = visibleRowIndices.stop;
 
-            var overscanColumnIndices = this._getOverscanIndices(this.columnCount, overscanColumnCount, this._renderedColumnStartIndex, this._renderedColumnStopIndex)
+            var overscanColumnIndices = this._getOverscanIndices(this.columnCount, overscanColumnCount, this._renderedColumnStartIndex, this._renderedColumnStopIndex);
 
             var overscanRowIndices = this._getOverscanIndices(this.rowCount, overscanRowCount, this._renderedRowStartIndex, this._renderedRowStopIndex);
 
@@ -107,7 +107,7 @@ BI.GridView = BI.inherit(BI.Widget, {
             var rowStartIndex = overscanRowIndices.overscanStartIndex;
             var rowStopIndex = overscanRowIndices.overscanStopIndex;
 
-            //算区间size
+            // 算区间size
             var minRowDatum = this._rowSizeAndPositionManager.getSizeAndPositionOfCell(rowStartIndex);
             var minColumnDatum = this._columnSizeAndPositionManager.getSizeAndPositionOfCell(columnStartIndex);
             var maxRowDatum = this._rowSizeAndPositionManager.getSizeAndPositionOfCell(rowStopIndex);
@@ -116,7 +116,7 @@ BI.GridView = BI.inherit(BI.Widget, {
             var left = minColumnDatum.offset + horizontalOffsetAdjustment;
             var bottom = maxRowDatum.offset + verticalOffsetAdjustment + maxRowDatum.size;
             var right = maxColumnDatum.offset + horizontalOffsetAdjustment + maxColumnDatum.size;
-            //如果滚动的区间并没有超出渲染的范围
+            // 如果滚动的区间并没有超出渲染的范围
             if (top >= this.renderRange.minY && bottom <= this.renderRange.maxY && left >= this.renderRange.minX && right <= this.renderRange.maxX) {
                 return;
             }
@@ -180,7 +180,7 @@ BI.GridView = BI.inherit(BI.Widget, {
                     count++;
                 }
             }
-            //已存在的， 需要添加的和需要删除的
+            // 已存在的， 需要添加的和需要删除的
             var existSet = {}, addSet = {}, deleteArray = [];
             BI.each(renderedKeys, function (i, key) {
                 if (self.renderedKeys[i]) {
@@ -199,15 +199,15 @@ BI.GridView = BI.inherit(BI.Widget, {
                 deleteArray.push(key[2]);
             });
             BI.each(deleteArray, function (i, index) {
-                //性能优化，不调用destroy方法防止触发destroy事件
+                // 性能优化，不调用destroy方法防止触发destroy事件
                 self.renderedCells[index].el._destroy();
             });
             var addedItems = [];
             BI.each(addSet, function (index, key) {
-                addedItems.push(renderedCells[key[2]])
+                addedItems.push(renderedCells[key[2]]);
             });
             this.container.addItems(addedItems);
-            //拦截父子级关系
+            // 拦截父子级关系
             this.container._children = renderedWidgets;
             this.container.attr("items", renderedCells);
             this.renderedCells = renderedCells;
@@ -249,7 +249,7 @@ BI.GridView = BI.inherit(BI.Widget, {
         this._rowSizeAndPositionManager = new BI.ScalingCellSizeAndPositionManager(this.rowCount, o.rowHeightGetter, o.estimatedRowSize);
 
         this._calculateChildrenToRender();
-        //元素未挂载时不能设置scrollTop
+        // 元素未挂载时不能设置scrollTop
         try {
             this.element.scrollTop(o.scrollTop);
             this.element.scrollLeft(o.scrollLeft);
@@ -280,11 +280,11 @@ BI.GridView = BI.inherit(BI.Widget, {
     },
 
     setColumnCount: function (columnCount) {
-        this.options.columnCount = columnCount
+        this.options.columnCount = columnCount;
     },
 
     setRowCount: function (rowCount) {
-        this.options.rowCount = rowCount
+        this.options.rowCount = rowCount;
     },
 
     setOverflowX: function (b) {
@@ -292,7 +292,7 @@ BI.GridView = BI.inherit(BI.Widget, {
         if (this.options.overflowX !== !!b) {
             this.options.overflowX = !!b;
             BI.nextTick(function () {
-                self.element.css({overflowX: !!b ? "auto" : "hidden"});
+                self.element.css({overflowX: b ? "auto" : "hidden"});
             });
         }
     },
@@ -302,7 +302,7 @@ BI.GridView = BI.inherit(BI.Widget, {
         if (this.options.overflowY !== !!b) {
             this.options.overflowY = !!b;
             BI.nextTick(function () {
-                self.element.css({overflowY: !!b ? "auto" : "hidden"});
+                self.element.css({overflowY: b ? "auto" : "hidden"});
             });
         }
     },
@@ -331,7 +331,7 @@ BI.GridView = BI.inherit(BI.Widget, {
         this.options.estimatedRowSize = height;
     },
 
-    //重新计算children
+    // 重新计算children
     _reRange: function () {
         this.renderRange = {};
     },
@@ -360,4 +360,4 @@ BI.GridView = BI.inherit(BI.Widget, {
     }
 });
 BI.GridView.EVENT_SCROLL = "EVENT_SCROLL";
-BI.shortcut('bi.grid_view', BI.GridView);
+BI.shortcut("bi.grid_view", BI.GridView);

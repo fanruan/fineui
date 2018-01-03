@@ -7,7 +7,7 @@ BI.SingleSelectCombo = BI.inherit(BI.Single, {
 
     _defaultConfig: function () {
         return BI.extend(BI.SingleSelectCombo.superclass._defaultConfig.apply(this, arguments), {
-            baseCls: 'bi-single-select-combo',
+            baseCls: "bi-single-select-combo",
             itemsCreator: BI.emptyFn,
             valueFormatter: BI.emptyFn,
             height: 28
@@ -22,8 +22,8 @@ BI.SingleSelectCombo = BI.inherit(BI.Single, {
             BI.isKey(self._startValue) && (self.storeValue = self._startValue);
             self.trigger.getSearcher().setState(self.storeValue);
         };
-        this.storeValue = '';
-        //标记正在请求数据
+        this.storeValue = "";
+        // 标记正在请求数据
         this.requesting = false;
 
         this.trigger = BI.createWidget({
@@ -42,7 +42,7 @@ BI.SingleSelectCombo = BI.inherit(BI.Single, {
             itemsCreator: function (op, callback) {
                 o.itemsCreator(op, function (res) {
                     if (op.times === 1 && BI.isNotNull(op.keywords)) {
-                        //预防trigger内部把当前的storeValue改掉
+                        // 预防trigger内部把当前的storeValue改掉
                         self.trigger.setValue(self.getValue());
                     }
                     callback.apply(self, arguments);
@@ -69,7 +69,7 @@ BI.SingleSelectCombo = BI.inherit(BI.Single, {
                     assertShowValue();
                     self.populate();
                     self._setStartValue("");
-                })
+                });
             }
         });
         this.trigger.on(BI.SingleSelectTrigger.EVENT_SEARCHING, function (keywords) {
@@ -106,7 +106,7 @@ BI.SingleSelectCombo = BI.inherit(BI.Single, {
             el: this.trigger,
             adjustLength: 1,
             popup: {
-                type: 'bi.single_select_popup_view',
+                type: "bi.single_select_popup_view",
                 ref: function () {
                     self.popup = this;
                     self.trigger.setAdapter(this);
@@ -152,10 +152,10 @@ BI.SingleSelectCombo = BI.inherit(BI.Single, {
                 self.populate();
             });
         });
-        //当退出的时候如果还在处理请求，则等请求结束后再对外发确定事件
+        // 当退出的时候如果还在处理请求，则等请求结束后再对外发确定事件
         this.wants2Quit = false;
         this.combo.on(BI.Combo.EVENT_AFTER_HIDEVIEW, function () {
-            //important:关闭弹出时又可能没有退出编辑状态
+            // important:关闭弹出时又可能没有退出编辑状态
             self.trigger.stopEditing();
             if (self.requesting === true) {
                 self.wants2Quit = true;
@@ -192,7 +192,7 @@ BI.SingleSelectCombo = BI.inherit(BI.Single, {
                 top: 0,
                 bottom: 0
             }]
-        })
+        });
     },
 
     _defaultState: function () {
@@ -201,7 +201,7 @@ BI.SingleSelectCombo = BI.inherit(BI.Single, {
     },
 
     _assertValue: function (val) {
-        val || (val = '');
+        val || (val = "");
     },
 
     _makeMap: function (values) {
@@ -220,7 +220,7 @@ BI.SingleSelectCombo = BI.inherit(BI.Single, {
             digest(values);
         });
 
-        function digest(items) {
+        function digest (items) {
             var selectedMap = self._makeMap(items);
             BI.each(keywords, function (i, val) {
                 if (BI.isNotNull(selectedMap[val])) {
@@ -266,7 +266,7 @@ BI.SingleSelectCombo = BI.inherit(BI.Single, {
             });
             self.storeValue.value = newItems.concat(BI.values(selectedMap));
             self._adjust(callback);
-        })
+        });
     },
 
     _adjust: function (callback) {
@@ -285,7 +285,7 @@ BI.SingleSelectCombo = BI.inherit(BI.Single, {
 
         }
 
-        function adjust() {
+        function adjust () {
             if (self.wants2Quit === true) {
                 self.fireEvent(BI.SingleSelectCombo.EVENT_CONFIRM);
                 self.wants2Quit = false;
@@ -326,7 +326,7 @@ BI.SingleSelectCombo = BI.inherit(BI.Single, {
     },
 
     setValue: function (v) {
-        this.storeValue = v || '';
+        this.storeValue = v || "";
         this._assertValue(this.storeValue);
         this.combo.setValue(this.storeValue);
     },
@@ -348,4 +348,4 @@ BI.extend(BI.SingleSelectCombo, {
 
 BI.SingleSelectCombo.EVENT_CONFIRM = "EVENT_CONFIRM";
 
-BI.shortcut('bi.single_select_combo', BI.SingleSelectCombo);
+BI.shortcut("bi.single_select_combo", BI.SingleSelectCombo);

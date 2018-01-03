@@ -18,11 +18,11 @@ BI.AdaptiveTable = BI.inherit(BI.Widget, {
                 type: "bi.resizable_table"
             },
             isNeedResize: true,
-            isNeedFreeze: false,//是否需要冻结单元格
-            freezeCols: [], //冻结的列号,从0开始,isNeedFreeze为true时生效
+            isNeedFreeze: false, // 是否需要冻结单元格
+            freezeCols: [], // 冻结的列号,从0开始,isNeedFreeze为true时生效
 
-            isNeedMerge: false,//是否需要合并单元格
-            mergeCols: [], //合并的单元格列号
+            isNeedMerge: false, // 是否需要合并单元格
+            mergeCols: [], // 合并的单元格列号
             mergeRule: BI.emptyFn,
 
             columnSize: [],
@@ -35,9 +35,9 @@ BI.AdaptiveTable = BI.inherit(BI.Widget, {
             regionColumnSize: [],
 
             header: [],
-            items: [], //二维数组
+            items: [], // 二维数组
 
-            //交叉表头
+            // 交叉表头
             crossHeader: [],
             crossItems: []
         });
@@ -72,7 +72,7 @@ BI.AdaptiveTable = BI.inherit(BI.Widget, {
 
             header: o.header,
             items: o.items,
-            //交叉表头
+            // 交叉表头
             crossHeader: o.crossHeader,
             crossItems: o.crossItems
         });
@@ -139,7 +139,7 @@ BI.AdaptiveTable = BI.inherit(BI.Widget, {
             freezeCols: freezeCols,
             columnSize: columnSize,
             regionColumnSize: regionColumnSize
-        }
+        };
     },
 
     _populate: function () {
@@ -225,4 +225,4 @@ BI.AdaptiveTable = BI.inherit(BI.Widget, {
         BI.AdaptiveTable.superclass.destroy.apply(this, arguments);
     }
 });
-BI.shortcut('bi.adaptive_table', BI.AdaptiveTable);
+BI.shortcut("bi.adaptive_table", BI.AdaptiveTable);

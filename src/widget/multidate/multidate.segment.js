@@ -15,7 +15,7 @@ BI.MultiDateSegment = BI.inherit(BI.Single, {
 
     _defaultConfig: function () {
         return $.extend(BI.MultiDateSegment.superclass._defaultConfig.apply(this, arguments), {
-            baseCls: 'bi-multidate-segment',
+            baseCls: "bi-multidate-segment",
             text: "",
             height: 30,
             isEditorExist: true,
@@ -35,13 +35,13 @@ BI.MultiDateSegment = BI.inherit(BI.Single, {
             self.fireEvent(BI.Controller.EVENT_CHANGE, arguments);
         });
         this.textEditor = BI.createWidget({
-            type: 'bi.text_editor',
+            type: "bi.text_editor",
             value: this.constants.defaultEditorValue,
             title: function () {
                 return self.textEditor.getValue();
             },
             tipType: "success",
-            cls: 'bi-multidate-editor',
+            cls: "bi-multidate-editor",
             width: this.constants.textWidth,
             height: this.constants.itemHeight
         });
@@ -51,7 +51,7 @@ BI.MultiDateSegment = BI.inherit(BI.Single, {
         this.text = BI.createWidget({
             type: "bi.label",
             textAlign: "left",
-            cls: 'bi-multidate-normal-label',
+            cls: "bi-multidate-normal-label",
             text: opts.text,
             height: this.constants.itemHeight
         });
@@ -61,7 +61,7 @@ BI.MultiDateSegment = BI.inherit(BI.Single, {
         if (this.options.isEditorExist === true) {
             return BI.createWidget({
                 element: this,
-                type: 'bi.left',
+                type: "bi.left",
                 items: [{
                     el: {
                         type: "bi.center_adapt",
@@ -70,23 +70,23 @@ BI.MultiDateSegment = BI.inherit(BI.Single, {
                     },
                     lgap: 0
                 },
-                    {
-                        el: {
-                            type: "bi.center_adapt",
-                            items: [this.textEditor],
-                            widgetName: 'textEditor'
-                        },
-                        lgap: this.constants.maxGap
+                {
+                    el: {
+                        type: "bi.center_adapt",
+                        items: [this.textEditor],
+                        widgetName: "textEditor"
                     },
-                    {
-                        el: this.text,
-                        lgap: this.constants.minGap
-                    }]
+                    lgap: this.constants.maxGap
+                },
+                {
+                    el: this.text,
+                    lgap: this.constants.minGap
+                }]
             });
         }
         return BI.createWidget({
             element: this,
-            type: 'bi.left',
+            type: "bi.left",
             items: [{
                 el: {
                     type: "bi.center_adapt",
@@ -95,11 +95,11 @@ BI.MultiDateSegment = BI.inherit(BI.Single, {
                 },
                 lgap: 0
             },
-                {
-                    el: this.text,
-                    lgap: this.constants.maxGap
-                }]
-        })
+            {
+                el: this.text,
+                lgap: this.constants.maxGap
+            }]
+        });
     },
     setSelected: function (v) {
         if (BI.isNotNull(this.radio)) {
@@ -124,4 +124,4 @@ BI.MultiDateSegment = BI.inherit(BI.Single, {
     }
 });
 BI.MultiDateSegment.EVENT_CHANGE = "EVENT_CHANGE";
-BI.shortcut('bi.multidate_segment', BI.MultiDateSegment);
+BI.shortcut("bi.multidate_segment", BI.MultiDateSegment);

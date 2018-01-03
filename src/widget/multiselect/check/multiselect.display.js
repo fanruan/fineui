@@ -49,7 +49,7 @@ BI.DisplaySelectedList = BI.inherit(BI.Pane, {
                 opts.itemsCreator(options, function (ob) {
                     self.hasNext = !!ob.hasNext;
                     callback(self._createItems(ob.items));
-                })
+                });
             },
             hasNext: function () {
                 return self.hasNext;
@@ -59,8 +59,8 @@ BI.DisplaySelectedList = BI.inherit(BI.Pane, {
 
     _createItems: function (items) {
         return BI.createItems(items, {
-            type: 'bi.icon_text_item',
-            cls: 'cursor-default check-font display-list-item bi-tips',
+            type: "bi.icon_text_item",
+            cls: "cursor-default check-font display-list-item bi-tips",
             once: true,
             invalid: true,
             selected: true,
@@ -84,4 +84,4 @@ BI.DisplaySelectedList = BI.inherit(BI.Pane, {
     }
 });
 
-BI.shortcut('bi.display_selected_list', BI.DisplaySelectedList);
+BI.shortcut("bi.display_selected_list", BI.DisplaySelectedList);

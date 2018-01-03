@@ -19,8 +19,8 @@ BI.SelectIconTextTrigger = BI.inherit(BI.Trigger, {
             element: this,
             height: o.height
         });
-        if (BI.isKey(o.text)) {
-            this.setValue(o.text);
+        if (BI.isKey(o.value)) {
+            this.setValue(o.value);
         }
     },
 
@@ -43,7 +43,7 @@ BI.SelectIconTextTrigger = BI.inherit(BI.Trigger, {
             this.trigger.setText(result.text);
             this.trigger.setIcon(result.iconClass);
         } else {
-            this.trigger.setText(o.text);
+            this.trigger.setText(o.value);
             this.trigger.setIcon("");
         }
     },

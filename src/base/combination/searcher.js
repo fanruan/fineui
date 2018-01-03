@@ -18,13 +18,13 @@ BI.Searcher = BI.inherit(BI.Widget, {
             hgap: 0,
 
             isDefaultInit: false,
-            isAutoSearch: true, //是否自动搜索
-            isAutoSync: true, //是否自动同步数据, 即是否保持搜索面板和adapter面板状态值的统一
+            isAutoSearch: true, // 是否自动搜索
+            isAutoSync: true, // 是否自动同步数据, 即是否保持搜索面板和adapter面板状态值的统一
             chooseType: BI.ButtonGroup.CHOOSE_TYPE_SINGLE,
 
-            //isAutoSearch为false时启用
+            // isAutoSearch为false时启用
             onSearch: function (op, callback) {
-                callback([])
+                callback([]);
             },
 
             el: {
@@ -36,10 +36,10 @@ BI.Searcher = BI.inherit(BI.Widget, {
             },
 
             adapter: null,
-            masker: { //masker层
+            masker: { // masker层
                 offset: {}
             }
-        })
+        });
     },
 
     _init: function () {
@@ -79,7 +79,7 @@ BI.Searcher = BI.inherit(BI.Widget, {
                     self._pauseSearch();
                     break;
             }
-        })
+        });
     },
 
     _assertPopupView: function () {
@@ -129,7 +129,7 @@ BI.Searcher = BI.inherit(BI.Widget, {
         this._isSearching = true;
         this.fireEvent(BI.Searcher.EVENT_START);
         this.popupView.startSearch && this.popupView.startSearch();
-        //搜索前先清空dom
+        // 搜索前先清空dom
         // BI.Maskers.get(this.getName()).empty();
         BI.nextTick(function (name) {
             BI.Maskers.show(name);
@@ -206,8 +206,8 @@ BI.Searcher = BI.inherit(BI.Widget, {
     },
 
     stopSearch: function () {
-        this._stopSearch();//先停止搜索，然后再去设置editor为空
-        //important:停止搜索必须退出编辑状态,这里必须加上try(input框不显示时blur会抛异常)
+        this._stopSearch();// 先停止搜索，然后再去设置editor为空
+        // important:停止搜索必须退出编辑状态,这里必须加上try(input框不显示时blur会抛异常)
         try {
             this.editor.blur();
         } catch (e) {
@@ -268,9 +268,9 @@ BI.Searcher = BI.inherit(BI.Widget, {
             return this.popupView.getValue();
         } else if (o.adapter && o.adapter.getValue) {
             return o.adapter.getValue();
-        } else {
-            return this.popupView.getValue();
         }
+        return this.popupView.getValue();
+        
     },
 
     populate: function (result, searchResult, keyword) {

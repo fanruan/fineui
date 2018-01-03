@@ -12,7 +12,7 @@ BI.CustomColorChooser = BI.inherit(BI.Widget, {
             baseCls: "bi-custom-color-chooser",
             width: 227,
             height: 245
-        })
+        });
     },
 
     _init: function () {
@@ -53,7 +53,7 @@ BI.CustomColorChooser = BI.inherit(BI.Widget, {
                 }],
                 height: 215
             }]
-        })
+        });
     },
 
     setValue: function (color) {

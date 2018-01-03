@@ -1,11 +1,11 @@
-//修复ie9下sort方法的bug
-;!function (window) {
+// 修复ie9下sort方法的bug
+!function (window) {
     var ua = window.navigator.userAgent.toLowerCase(),
         reg = /msie|applewebkit.+safari/;
     if (reg.test(ua)) {
         var _sort = Array.prototype.sort;
         Array.prototype.sort = function (fn) {
-            if (!!fn && typeof fn === 'function') {
+            if (!!fn && typeof fn === "function") {
                 if (this.length < 2) {
                     return this;
                 }
@@ -13,8 +13,8 @@
                 for (; i < l; i++) {
                     for (j = i + 1; j < l; j++) {
                         t = fn.call(this, this[i], this[j]);
-                        r = (typeof t === 'number' ? t :
-                                !!t ? 1 : 0) > 0;
+                        r = (typeof t === "number" ? t :
+                            t ? 1 : 0) > 0;
                         if (r === true) {
                             tmp = this[i];
                             this[i] = this[j];
@@ -23,9 +23,9 @@
                     }
                 }
                 return this;
-            } else {
-                return _sort.call(this);
             }
+            return _sort.call(this);
+            
         };
     }
 }(window);

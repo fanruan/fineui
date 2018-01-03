@@ -11,7 +11,7 @@ BI.SingleSelectIconTextItem = BI.inherit(BI.Single, {
             iconClass: "",
             hgap: 10,
             height: 25
-        })
+        });
     },
     _init: function () {
         BI.SingleSelectIconTextItem.superclass._init.apply(this, arguments);

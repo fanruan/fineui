@@ -1,5 +1,5 @@
 (function (window, undefined) {
-    function aspect(type) {
+    function aspect (type) {
         return function (target, methodName, advice) {
             var exist = target[methodName],
                 dispatcher;

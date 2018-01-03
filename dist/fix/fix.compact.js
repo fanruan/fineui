@@ -20,7 +20,7 @@
     }
 
     var target = null;
-    const targetStack = [];
+    var targetStack = [];
 
     function pushTarget (_target) {
         if (target) targetStack.push(target);
@@ -41,9 +41,9 @@
             cb = model[cb];
         }
         return oldWatch.call(this, model, expOrFn, function () {
-            pushTarget(options.store);
+            options && options.store && pushTarget(options.store);
             var res = cb.apply(this, arguments);
-            popTarget();
+            options && options.store && popTarget();
             return res;
         }, options);
     };
@@ -98,7 +98,10 @@
             });
         });
         this._watchers && (this._watchers = []);
-        this.store && (this.store._parent = null, this.store = null);
+        if (this.store) {
+            this.store._parent && (this.store._parent = null);
+            this.store = null;
+        }
     };
 
     _.each(["_mount"], function (name) {
@@ -111,17 +114,20 @@
         });
     });
 
-    _.each(["each", "map", "reduce", "reduceRight", "find", "filter", "reject", "every", "all", "some", "any", "max", "min",
-        "sortBy", "groupBy", "indexBy", "countBy", "partition",
-        "keys", "allKeys", "values", "pairs", "invert",
-        "mapObject", "findKey", "pick", "omit", "tap"], function (name) {
-        var old = BI[name];
-        BI[name] = function (obj, fn) {
-            return typeof fn === "function" ? old(obj, function (key, value) {
-                if (!(key in Fix.$$skipArray)) {
-                    return fn.apply(this, arguments);
-                }
-            }) : old.apply(this, arguments);
-        };
-    });
+    if (BI.isIE9Below()) {
+        _.each(["each", "map", "reduce", "reduceRight", "find", "filter", "reject", "every", "all", "some", "any", "max", "min",
+            "sortBy", "groupBy", "indexBy", "countBy", "partition",
+            "keys", "allKeys", "values", "pairs", "invert",
+            "mapObject", "findKey", "pick", "omit", "tap"], function (name) {
+            var old = BI[name];
+            BI[name] = function (obj, fn) {
+                return typeof fn === "function" ? old(obj, function (key, value) {
+                    if (!(key in Fix.$$skipArray)) {
+                        return fn.apply(this, arguments);
+                    }
+                }) : old.apply(this, arguments);
+            };
+        });
+    }
+    BI.watch = Fix.watch;
 }());

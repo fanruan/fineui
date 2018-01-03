@@ -17,7 +17,7 @@ BI.MultiTreeCombo = BI.inherit(BI.Single, {
 
     _defaultConfig: function () {
         return BI.extend(BI.MultiTreeCombo.superclass._defaultConfig.apply(this, arguments), {
-            baseCls: 'bi-multi-tree-combo',
+            baseCls: "bi-multi-tree-combo",
             itemsCreator: BI.emptyFn,
             height: 25
         });
@@ -60,7 +60,7 @@ BI.MultiTreeCombo = BI.inherit(BI.Single, {
             el: this.trigger,
             adjustLength: 1,
             popup: {
-                type: 'bi.multi_tree_popup_view',
+                type: "bi.multi_tree_popup_view",
                 ref: function () {
                     self.popup = this;
                     self.trigger.setAdapter(this);
@@ -113,7 +113,7 @@ BI.MultiTreeCombo = BI.inherit(BI.Single, {
 
         this.storeValue = {value: {}};
         var change = false;
-        var clear = false;          //标识当前是否点击了清空
+        var clear = false;          // 标识当前是否点击了清空
 
         var isSearching = function () {
             return self.trigger.getSearcher().isSearching();
@@ -137,7 +137,7 @@ BI.MultiTreeCombo = BI.inherit(BI.Single, {
             });
         });
 
-        function showCounter() {
+        function showCounter () {
             if (isSearching()) {
                 self.storeValue = {value: self.trigger.getValue()};
             } else if (isPopupView()) {
@@ -233,7 +233,7 @@ BI.MultiTreeCombo = BI.inherit(BI.Single, {
                 top: 0,
                 bottom: 0
             }]
-        })
+        });
     },
 
     _defaultState: function () {
@@ -259,4 +259,4 @@ BI.MultiTreeCombo = BI.inherit(BI.Single, {
 
 BI.MultiTreeCombo.EVENT_CONFIRM = "MultiTreeCombo.EVENT_CONFIRM";
 
-BI.shortcut('bi.multi_tree_combo', BI.MultiTreeCombo);
+BI.shortcut("bi.multi_tree_combo", BI.MultiTreeCombo);

@@ -67,3 +67,6 @@
   -o-align-items: flex-end;
   align-items: flex-end;
 }
+.bi-flex-wrapper-horizontal-layout .flex-wrapper-horizontal-layout-wrapper > * {
+  margin: auto;
+}

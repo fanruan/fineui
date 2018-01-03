@@ -31,7 +31,7 @@
         completion.update(true);
     });
 
-    function Completion(cm, options) {
+    function Completion (cm, options) {
         this.cm = cm;
         this.options = this.buildOptions(options);
         this.widget = null;
@@ -47,8 +47,8 @@
     }
 
     var requestAnimationFrame = window.requestAnimationFrame || function (fn) {
-            return setTimeout(fn, 1000 / 60);
-        };
+        return setTimeout(fn, 1000 / 60);
+    };
     var cancelAnimationFrame = window.cancelAnimationFrame || clearTimeout;
 
     Completion.prototype = {
@@ -73,16 +73,16 @@
             else {
                 this.cm.replaceRange(getText(completion), completion.from || data.from,
                     completion.to || data.to, "complete");
-                    if(completion.isKeyword === true){
-                    }else{
-                        var to = this.cm.getCursor();
-                        this.cm.markText(completion.from || data.from, to, {className: "#function", atomic: true});
-                        this.cm.replaceSelection("() ");
-                        to = this.cm.getCursor();
-                        to.ch = to.ch - 2;
-                        this.cm.setCursor(to);
-                        this.cm.focus();
-                    }
+                if(completion.isKeyword === true) {
+                }else{
+                    var to = this.cm.getCursor();
+                    this.cm.markText(completion.from || data.from, to, {className: "#function", atomic: true});
+                    this.cm.replaceSelection("() ");
+                    to = this.cm.getCursor();
+                    to.ch = to.ch - 2;
+                    this.cm.setCursor(to);
+                    this.cm.focus();
+                }
             }
             CodeMirror.signal(data, "pick", completion);
             this.close();
@@ -140,20 +140,22 @@
             var editor = this.cm.options.hintOptions;
             var out = {};
             for (var prop in defaultOptions) out[prop] = defaultOptions[prop];
-            if (editor) for (var prop in editor)
-                if (editor[prop] !== undefined) out[prop] = editor[prop];
-            if (options) for (var prop in options)
-                if (options[prop] !== undefined) out[prop] = options[prop];
+            if (editor) {
+                for (var prop in editor) {if (editor[prop] !== undefined) out[prop] = editor[prop];}
+            }
+            if (options) {
+                for (var prop in options) {if (options[prop] !== undefined) out[prop] = options[prop];}
+            }
             return out;
         }
     };
 
-    function getText(completion) {
-        if (typeof completion == "string") return completion;
-        else return completion.text;
+    function getText (completion) {
+        if (typeof completion === "string") return completion;
+        return completion.text;
     }
 
-    function buildKeyMap(completion, handle) {
+    function buildKeyMap (completion, handle) {
         var baseMap = {
             Up: function () {
                 handle.moveFocus(-1);
@@ -180,38 +182,40 @@
         var custom = completion.options.customKeys;
         var ourMap = custom ? {} : baseMap;
 
-        function addBinding(key, val) {
+        function addBinding (key, val) {
             var bound;
-            if (typeof val != "string")
+            if (typeof val !== "string") {
                 bound = function (cm) {
                     return val(cm, handle);
                 };
+            }
             // This mechanism is deprecated
-            else if (baseMap.hasOwnProperty(val))
-                bound = baseMap[val];
-            else
-                bound = val;
+            else if (baseMap.hasOwnProperty(val)) {bound = baseMap[val];} else {bound = val;}
             ourMap[key] = bound;
         }
 
-        if (custom)
-            for (var key in custom) if (custom.hasOwnProperty(key))
-                addBinding(key, custom[key]);
+        if (custom) {
+            for (var key in custom) {
+                if (custom.hasOwnProperty(key)) {addBinding(key, custom[key]);}
+            }
+        }
         var extra = completion.options.extraKeys;
-        if (extra)
-            for (var key in extra) if (extra.hasOwnProperty(key))
-                addBinding(key, extra[key]);
+        if (extra) {
+            for (var key in extra) {
+                if (extra.hasOwnProperty(key)) {addBinding(key, extra[key]);}
+            }
+        }
         return ourMap;
     }
 
-    function getHintElement(hintsElement, el) {
+    function getHintElement (hintsElement, el) {
         while (el && el != hintsElement) {
             if (el.nodeName.toUpperCase() === "LI" && el.parentNode == hintsElement) return el;
             el = el.parentNode;
         }
     }
 
-    function Widget(completion, data) {
+    function Widget (completion, data) {
         this.completion = completion;
         this.data = data;
         this.picked = false;
@@ -366,19 +370,13 @@
         },
 
         changeActive: function (i, avoidWrap) {
-            if (i >= this.data.list.length)
-                i = avoidWrap ? this.data.list.length - 1 : 0;
-            else if (i < 0)
-                i = avoidWrap ? 0 : this.data.list.length - 1;
+            if (i >= this.data.list.length) {i = avoidWrap ? this.data.list.length - 1 : 0;} else if (i < 0) {i = avoidWrap ? 0 : this.data.list.length - 1;}
             if (this.selectedHint == i) return;
             var node = this.hints.childNodes[this.selectedHint];
             node.className = node.className.replace(" " + ACTIVE_HINT_ELEMENT_CLASS, "");
             node = this.hints.childNodes[this.selectedHint = i];
             node.className += " " + ACTIVE_HINT_ELEMENT_CLASS;
-            if (node.offsetTop < this.hints.scrollTop)
-                this.hints.scrollTop = node.offsetTop - 3;
-            else if (node.offsetTop + node.offsetHeight > this.hints.scrollTop + this.hints.clientHeight)
-                this.hints.scrollTop = node.offsetTop + node.offsetHeight - this.hints.clientHeight + 3;
+            if (node.offsetTop < this.hints.scrollTop) {this.hints.scrollTop = node.offsetTop - 3;} else if (node.offsetTop + node.offsetHeight > this.hints.scrollTop + this.hints.clientHeight) {this.hints.scrollTop = node.offsetTop + node.offsetHeight - this.hints.clientHeight + 3;}
             CodeMirror.signal(this.data, "select", this.data.list[this.selectedHint], node);
         },
 
@@ -406,15 +404,16 @@
         var found = [];
         for (var i = 0; i < options.words.length; i++) {
             var word = options.words[i];
-            if (word.slice(0, token.string.length) == token.string)
-                found.push(word);
+            if (word.slice(0, token.string.length) == token.string) {found.push(word);}
         }
 
-        if (found.length) return {
-            list: found,
-            from: CodeMirror.Pos(cur.line, token.start),
-            to: CodeMirror.Pos(cur.line, token.end)
-        };
+        if (found.length) {
+            return {
+                list: found,
+                from: CodeMirror.Pos(cur.line, token.start),
+                to: CodeMirror.Pos(cur.line, token.end)
+            };
+        }
     });
 
     CodeMirror.commands.autocomplete = CodeMirror.showHint;

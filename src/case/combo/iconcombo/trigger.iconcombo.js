@@ -71,11 +71,11 @@ BI.IconComboTrigger = BI.inherit(BI.Trigger, {
         var iconClass = "";
         v = BI.isArray(v) ? v[0] : v;
         if (BI.any(this.options.items, function (i, item) {
-                if (v === item.value) {
-                    iconClass = item.iconClass;
-                    return true;
-                }
-            })) {
+            if (v === item.value) {
+                iconClass = item.iconClass;
+                return true;
+            }
+        })) {
             this.button.setIcon(iconClass);
             this.button.setSelected(true);
             this.down.setSelected(true);

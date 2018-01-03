@@ -25,4 +25,4 @@ BI.IconTrigger = BI.inherit(BI.Trigger, {
         });
     }
 });
-BI.shortcut('bi.icon_trigger', BI.IconTrigger);
+BI.shortcut("bi.icon_trigger", BI.IconTrigger);

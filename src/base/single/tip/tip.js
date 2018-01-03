@@ -7,16 +7,16 @@
  * @abstract
  */
 BI.Tip = BI.inherit(BI.Single, {
-    _defaultConfig: function() {
+    _defaultConfig: function () {
         var conf = BI.Link.superclass._defaultConfig.apply(this, arguments);
         return BI.extend(conf, {
             baseCls: (conf.baseCls || "") + " bi-tip",
             zIndex: BI.zIndex_tip
-        })
+        });
     },
 
-    _init : function() {
+    _init: function () {
         BI.Tip.superclass._init.apply(this, arguments);
-        this.element.css({"zIndex": this.options.zIndex});
+        this.element.css({zIndex: this.options.zIndex});
     }
 });

@@ -32,7 +32,7 @@ BI.RelationView = BI.inherit(BI.Widget, {
                     widths[j] = BI.MIN;
                 }
                 widths[j] = Math.max(widths[j], obj.getWidth());
-            })
+            });
         });
         return widths;
     },
@@ -42,7 +42,7 @@ BI.RelationView = BI.inherit(BI.Widget, {
         BI.each(this.views, function (i, items) {
             BI.each(items, function (j, obj) {
                 heights[i] = Math.max(heights[i], obj.getHeight());
-            })
+            });
         });
         return heights;
     },
@@ -73,7 +73,7 @@ BI.RelationView = BI.inherit(BI.Widget, {
         });
     },
 
-    previewRelationTables: function(relationTables, show) {
+    previewRelationTables: function (relationTables, show) {
         if (!show) {
             BI.each(this.storeViews, function (i, view) {
                 view.toggleRegion(true);
@@ -110,7 +110,7 @@ BI.RelationView = BI.inherit(BI.Widget, {
             type: "bi.svg"
         });
 
-        //算出所有的区域和关联
+        // 算出所有的区域和关联
         var regions = this.regions = {}, relations = this.relations = {};
         BI.each(items, function (i, item) {
             var pr = item.primary.region, fr = item.foreign && item.foreign.region;
@@ -134,7 +134,7 @@ BI.RelationView = BI.inherit(BI.Widget, {
             }
             pr && fr && relations[pr][fr].push(item);
         });
-        //求拓扑
+        // 求拓扑
         var topology = [];
         var rs = BI.clone(regions), store = {};
         while (!BI.isEmpty(rs)) {
@@ -150,7 +150,7 @@ BI.RelationView = BI.inherit(BI.Widget, {
                 delete rs[k];
             });
         }
-        //构建视图
+        // 构建视图
         var views = this.views = {}, storeViews = this.storeViews = {}, indexes = this.indexes = {};
         var verticals = [];
         BI.each(topology, function (i, items) {
@@ -187,16 +187,16 @@ BI.RelationView = BI.inherit(BI.Widget, {
             verticals.push({
                 type: "bi.horizontal",
                 items: horizontal
-            })
+            });
         });
 
-        //求每一行的高度
+        // 求每一行的高度
         var heights = this._calculateHeights();
 
-        //求每一列的宽度
+        // 求每一列的宽度
         var widths = this._calculateWidths();
 
-        //求相对宽度和高度
+        // 求相对宽度和高度
         var offsetWidths = [0], offsetHeights = [0];
         BI.each(heights, function (i, h) {
             if (i === 0) {
@@ -211,8 +211,8 @@ BI.RelationView = BI.inherit(BI.Widget, {
             offsetWidths[i] = offsetWidths[i - 1] + widths[i - 1];
         });
 
-        //画线
-        var lines = this.lines = {};//缓存所有的线
+        // 画线
+        var lines = this.lines = {};// 缓存所有的线
         BI.each(relations, function (start, rs) {
             BI.each(rs, function (end, relation) {
                 var startIndex = indexes[start], endIndex = indexes[end];
@@ -276,7 +276,7 @@ BI.RelationView = BI.inherit(BI.Widget, {
                 }
                 path += "M" + si.x + "," + si.y + "L" + ei.x + "," + ei.y;
                 var line = lines[start][end] = self.svg.path(path)
-                    .attr({"stroke": c.lineColor, "stroke-width": "2"})
+                    .attr({stroke: c.lineColor, "stroke-width": "2"})
                     .hover(function () {
                         line.attr("stroke", c.selectLineColor).toFront();
                         storeViews[start].setValue(relation[0].primary.value);
@@ -316,4 +316,4 @@ BI.RelationView = BI.inherit(BI.Widget, {
 });
 BI.RelationView.EVENT_CHANGE = "RelationView.EVENT_CHANGE";
 BI.RelationView.EVENT_PREVIEW = "EVENT_PREVIEW";
-BI.shortcut('bi.relation_view', BI.RelationView);
+BI.shortcut("bi.relation_view", BI.RelationView);

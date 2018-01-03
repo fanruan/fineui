@@ -7,7 +7,7 @@ BI.ComboGroup = BI.inherit(BI.Widget, {
         return BI.extend(BI.ComboGroup.superclass._defaultConfig.apply(this, arguments), {
             baseCls: "bi-combo-group bi-list-item",
 
-            //以下这些属性对每一个combo都是公用的
+            // 以下这些属性对每一个combo都是公用的
             trigger: "click,hover",
             direction: "right",
             adjustLength: 0,
@@ -27,7 +27,7 @@ BI.ComboGroup = BI.inherit(BI.Widget, {
                     }]
                 }
             }
-        })
+        });
     },
 
     _init: function () {
@@ -57,7 +57,7 @@ BI.ComboGroup = BI.inherit(BI.Widget, {
                 ch.adjustLength = o.adjustLength;
                 ch.popup = o.popup;
             }
-        })
+        });
         this.combo = BI.createWidget({
             type: "bi.combo",
             element: this,
@@ -74,13 +74,13 @@ BI.ComboGroup = BI.inherit(BI.Widget, {
                     items: children
                 }, o.popup.el)
             })
-        })
+        });
         this.combo.on(BI.Controller.EVENT_CHANGE, function (type, value, obj) {
             self.fireEvent(BI.Controller.EVENT_CHANGE, arguments);
             if (type === BI.Events.CLICK) {
                 self.fireEvent(BI.ComboGroup.EVENT_CHANGE, obj);
             }
-        })
+        });
     },
 
     getValue: function () {

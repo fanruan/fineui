@@ -16,7 +16,7 @@ BI.LastPlusGroupNode = BI.inherit(BI.NodeButton, {
             pId: "",
             open: false,
             height: 25
-        })
+        });
     },
     _init: function () {
         BI.LastPlusGroupNode.superclass._init.apply(this, arguments);

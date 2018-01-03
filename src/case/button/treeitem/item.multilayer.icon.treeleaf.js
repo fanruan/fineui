@@ -11,7 +11,7 @@ BI.MultiLayerIconTreeLeafItem = BI.inherit(BI.BasicButton, {
             iconCls: "",
             iconHeight: 14,
             iconWidth: 12
-        })
+        });
     },
     _init: function () {
         BI.MultiLayerIconTreeLeafItem.superclass._init.apply(this, arguments);
@@ -32,7 +32,7 @@ BI.MultiLayerIconTreeLeafItem = BI.inherit(BI.BasicButton, {
             iconHeight: o.iconHeight
         });
         this.item.on(BI.Controller.EVENT_CHANGE, function (type) {
-            if (type === BI.Events.CLICK) {//本身实现click功能
+            if (type === BI.Events.CLICK) {// 本身实现click功能
                 return;
             }
             self.fireEvent(BI.Controller.EVENT_CHANGE, arguments);
@@ -44,7 +44,7 @@ BI.MultiLayerIconTreeLeafItem = BI.inherit(BI.BasicButton, {
                 type: "bi.layout",
                 width: 13,
                 height: o.height
-            })
+            });
         });
         items.push(this.item);
         BI.createWidget({
@@ -89,7 +89,7 @@ BI.MultiLayerIconTreeLeafItem = BI.inherit(BI.BasicButton, {
         this.item.setSelected(v);
     },
 
-    getValue: function(){
+    getValue: function () {
         return this.options.value;
     }
 });

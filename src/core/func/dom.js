@@ -7,7 +7,7 @@ BI.extend(jQuery.fn, {
     destroy: function () {
         this.remove();
         if (BI.isIE() === true) {
-            this[0].outerHTML = '';
+            this[0].outerHTML = "";
         }
     },
     /**
@@ -20,7 +20,7 @@ BI.extend(jQuery.fn, {
      */
     __textKeywordMarked__: function (text, keyword, py) {
         if (!BI.isKey(keyword) || (text + "").length > 100) {
-            return this.html(BI.Func.formatSpecialCharInHtml(text));
+            return this.html(BI.htmlEncode(text));
         }
         keyword = keyword + "";
         keyword = BI.toUpperCase(keyword);
@@ -43,7 +43,7 @@ BI.extend(jQuery.fn, {
             if (tidx >= 0) {
                 this.append(textLeft.substr(0, tidx));
                 this.append($("<span>").addClass("bi-keyword-red-mark")
-                    .html(BI.Func.formatSpecialCharInHtml(textLeft.substr(tidx, keyword.length))));
+                    .html(BI.htmlEncode(textLeft.substr(tidx, keyword.length))));
 
                 textLeft = textLeft.substr(tidx + keyword.length);
                 if (py != null) {
@@ -52,7 +52,7 @@ BI.extend(jQuery.fn, {
             } else if (pidx != null && pidx >= 0 && Math.floor(pidx / text.length) === Math.floor((pidx + keyword.length - 1) / text.length)) {
                 this.append(textLeft.substr(0, pidx));
                 this.append($("<span>").addClass("bi-keyword-red-mark")
-                    .html(BI.Func.formatSpecialCharInHtml(textLeft.substr(pidx, keyword.length))));
+                    .html(BI.htmlEncode(textLeft.substr(pidx, keyword.length))));
                 if (py != null) {
                     py = py.substr(pidx + keyword.length);
                 }
@@ -74,17 +74,17 @@ BI.extend(jQuery.fn, {
         return height;
     },
 
-    //是否有竖直滚动条
+    // 是否有竖直滚动条
     hasVerticalScroll: function () {
         return this.height() > 0 && this[0].clientWidth < this[0].offsetWidth;
     },
 
-    //是否有水平滚动条
+    // 是否有水平滚动条
     hasHorizonScroll: function () {
         return this.width() > 0 && this[0].clientHeight < this[0].offsetHeight;
     },
 
-    //获取计算后的样式
+    // 获取计算后的样式
     getStyle: function (name) {
         var node = this[0];
         var computedStyle = void 0;
@@ -104,13 +104,13 @@ BI.extend(jQuery.fn, {
             if (computedStyle) {
                 return computedStyle.getPropertyValue(BI.hyphenate(name));
             }
-            if (name === 'display') {
-                return 'none';
+            if (name === "display") {
+                return "none";
             }
         }
         // Internet Explorer
         if (node.currentStyle) {
-            if (name === 'float') {
+            if (name === "float") {
                 return node.currentStyle.cssFloat || node.currentStyle.styleFloat;
             }
             return node.currentStyle[BI.camelize(name)];
@@ -121,7 +121,7 @@ BI.extend(jQuery.fn, {
     __isMouseInBounds__: function (e) {
         var offset2Body = this.offset();
         return !(e.pageX < offset2Body.left || e.pageX > offset2Body.left + this.outerWidth()
-        || e.pageY < offset2Body.top || e.pageY > offset2Body.top + this.outerHeight())
+        || e.pageY < offset2Body.top || e.pageY > offset2Body.top + this.outerHeight());
     },
 
     __hasZIndexMask__: function (zindex) {
@@ -129,8 +129,8 @@ BI.extend(jQuery.fn, {
     },
 
     __buildZIndexMask__: function (zindex, domArray) {
-        this.zIndexMask = this.zIndexMask || {};//存储z-index的mask
-        this.indexMask = this.indexMask || [];//存储mask
+        this.zIndexMask = this.zIndexMask || {};// 存储z-index的mask
+        this.indexMask = this.indexMask || [];// 存储mask
         var mask = BI.createWidget({
             type: "bi.center_adapt",
             cls: "bi-z-index-mask",
@@ -178,7 +178,7 @@ BI.extend(jQuery, {
         var el = combo.element;
         return {
             left: el.offset().left + el.outerWidth() + (extraWidth || 0)
-        }
+        };
     },
 
     getTopPosition: function (combo, popup, extraHeight) {
@@ -233,7 +233,7 @@ BI.extend(jQuery, {
         }
         return {
             left: left
-        }
+        };
     },
 
     getLeftAdaptPosition: function (combo, popup, extraWidth) {
@@ -242,7 +242,7 @@ BI.extend(jQuery, {
         }
         return {
             left: 0
-        }
+        };
     },
 
     getRightAlignPosition: function (combo, popup, extraWidth) {
@@ -253,7 +253,7 @@ BI.extend(jQuery, {
         }
         return {
             left: left
-        }
+        };
     },
 
     getRightAdaptPosition: function (combo, popup, extraWidth) {
@@ -262,7 +262,7 @@ BI.extend(jQuery, {
         }
         return {
             left: $("body").bounds().width - popup.element.bounds().width
-        }
+        };
     },
 
     getTopAlignPosition: function (combo, popup, extraHeight, needAdaptHeight) {
@@ -289,7 +289,7 @@ BI.extend(jQuery, {
             adaptHeight: adaptHeight
         } : {
             top: top
-        }
+        };
     },
 
     getTopAdaptPosition: function (combo, popup, extraHeight, needAdaptHeight) {
@@ -301,17 +301,17 @@ BI.extend(jQuery, {
             return {
                 top: 0,
                 adaptHeight: combo.element.offset().top - extraHeight
-            }
+            };
         }
         if (popupBounds.height + extraHeight > windowBounds.height) {
             return {
                 top: 0,
                 adaptHeight: windowBounds.height - extraHeight
-            }
+            };
         }
         return {
             top: 0
-        }
+        };
     },
 
     getBottomAlignPosition: function (combo, popup, extraHeight, needAdaptHeight) {
@@ -338,7 +338,7 @@ BI.extend(jQuery, {
             adaptHeight: adaptHeight
         } : {
             top: top
-        }
+        };
     },
 
     getBottomAdaptPosition: function (combo, popup, extraHeight, needAdaptHeight) {
@@ -352,17 +352,17 @@ BI.extend(jQuery, {
             return {
                 top: comboOffset.top + comboBounds.height + extraHeight,
                 adaptHeight: windowBounds.height - comboOffset.top - comboBounds.height - extraHeight
-            }
+            };
         }
         if (popupBounds.height + extraHeight > windowBounds.height) {
             return {
                 top: extraHeight,
                 adaptHeight: windowBounds.height - extraHeight
-            }
+            };
         }
         return {
             top: windowBounds.height - popupBounds.height - extraHeight
-        }
+        };
     },
 
     getCenterAdaptPosition: function (combo, popup) {
@@ -380,7 +380,7 @@ BI.extend(jQuery, {
         }
         return {
             left: left
-        }
+        };
     },
 
     getMiddleAdaptPosition: function (combo, popup) {
@@ -398,7 +398,7 @@ BI.extend(jQuery, {
         }
         return {
             top: top
-        }
+        };
     },
 
     getComboPositionByDirections: function (combo, popup, extraWidth, extraHeight, needAdaptHeight, directions) {
@@ -561,7 +561,7 @@ BI.extend(jQuery, {
         var bodyHeight = $("body").bounds().height - extraHeight;
         var maxHeight = Math.min(popup.attr("maxHeight") || bodyHeight, bodyHeight);
         popup.resetHeight && popup.resetHeight(maxHeight);
-        var position = $.getComboPositionByDirections(combo, popup, extraWidth, extraHeight, needAdaptHeight, directions || ['bottom', 'top', 'right', 'left']);
+        var position = $.getComboPositionByDirections(combo, popup, extraWidth, extraHeight, needAdaptHeight, directions || ["bottom", "top", "right", "left"]);
         switch (offsetStyle) {
             case "center":
                 if (position.change) {

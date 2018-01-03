@@ -25,7 +25,7 @@ BI.GridTableScrollbar = BI.inherit(BI.Widget, {
             orientation: "vertical",
             position: 0,
             size: 0
-        })
+        });
     },
 
     render: function () {
@@ -50,7 +50,7 @@ BI.GridTableScrollbar = BI.inherit(BI.Widget, {
 
     mounted: function () {
         var self = this, o = this.options;
-        var onWheel = o.orientation === 'horizontal' ? this._onWheelX : this._onWheelY;
+        var onWheel = o.orientation === "horizontal" ? this._onWheelX : this._onWheelY;
         this._wheelHandler = new BI.WheelHandler(
             BI.bind(onWheel, this),
             BI.bind(this._shouldHandleX, this),
@@ -83,7 +83,7 @@ BI.GridTableScrollbar = BI.inherit(BI.Widget, {
     },
 
     _isHorizontal: function () {
-        return this.options.orientation === 'horizontal'
+        return this.options.orientation === "horizontal";
     },
 
     _getScale: function () {
@@ -109,13 +109,13 @@ BI.GridTableScrollbar = BI.inherit(BI.Widget, {
     },
 
     _shouldHandleX: function (delta) {
-        return this.options.orientation === 'horizontal' ?
+        return this.options.orientation === "horizontal" ?
             this._shouldHandleChange(delta) :
             false;
     },
 
     _shouldHandleY: function (delta) {
-        return this.options.orientation !== 'horizontal' ?
+        return this.options.orientation !== "horizontal" ?
             this._shouldHandleChange(delta) :
             false;
     },
@@ -349,7 +349,7 @@ BI.GridTableHorizontalScrollbar = BI.inherit(BI.Widget, {
             contentSize: 0,
             position: 0,
             size: 0
-        })
+        });
     },
 
     _init: function () {

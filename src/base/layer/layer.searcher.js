@@ -14,7 +14,7 @@ BI.SearcherView = BI.inherit(BI.Pane, {
             tipText: BI.i18nText("BI-No_Select"),
             chooseType: BI.Selection.Single,
 
-            matcher: {//完全匹配的构造器
+            matcher: {// 完全匹配的构造器
                 type: "bi.button_group",
                 behaviors: {
                     redmark: function () {
@@ -38,7 +38,7 @@ BI.SearcherView = BI.inherit(BI.Pane, {
                     type: "bi.vertical"
                 }]
             }
-        })
+        });
     },
 
     _init: function () {

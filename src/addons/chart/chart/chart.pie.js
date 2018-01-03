@@ -8,7 +8,7 @@ BI.PieChart = BI.inherit(BI.AbstractChart, {
     _defaultConfig: function () {
         return BI.extend(BI.PieChart.superclass._defaultConfig.apply(this, arguments), {
             baseCls: "bi-pie-chart"
-        })
+        });
     },
 
     _init: function () {
@@ -24,11 +24,11 @@ BI.PieChart = BI.inherit(BI.AbstractChart, {
             self.fireEvent(BI.PieChart.EVENT_CHANGE, obj);
         });
         this.combineChart.on(BI.CombineChart.EVENT_ITEM_CLICK, function (obj) {
-            self.fireEvent(BI.AbstractChart.EVENT_ITEM_CLICK, obj)
+            self.fireEvent(BI.AbstractChart.EVENT_ITEM_CLICK, obj);
         });
     },
 
-    _formatConfig: function(config, items){
+    _formatConfig: function (config, items) {
         var self = this, o = this.options;
         delete config.zoom;
         config.colors = this.config.chartColor;
@@ -50,14 +50,14 @@ BI.PieChart = BI.inherit(BI.AbstractChart, {
         BI.each(items, function (idx, item) {
             BI.each(item.data, function (id, da) {
                 da.y = self.formatXYDataWithMagnify(da.y, 1);
-            })
+            });
         });
 
         config.legend.style = this.config.chartFont;
 
         return [items, config];
 
-        function formatChartStyle(){
+        function formatChartStyle () {
             switch (self.config.chartStyle) {
                 case BICst.CHART_STYLE.STYLE_GRADUAL:
                     return "gradual";
@@ -67,8 +67,8 @@ BI.PieChart = BI.inherit(BI.AbstractChart, {
             }
         }
 
-        function formatChartPieStyle(){
-            switch (self.config.chartPieType){
+        function formatChartPieStyle () {
+            switch (self.config.chartPieType) {
                 case BICst.CHART_SHAPE.EQUAL_ARC_ROSE:
                     config.plotOptions.roseType = "sameArc";
                     break;
@@ -86,31 +86,31 @@ BI.PieChart = BI.inherit(BI.AbstractChart, {
 
     },
 
-    //目前饼图不会有多个系列，如果有多个就要把它们合并在一起
-    _isNeedConvert: function(items){
-        var result = BI.find(items, function(idx, item){
+    // 目前饼图不会有多个系列，如果有多个就要把它们合并在一起
+    _isNeedConvert: function (items) {
+        var result = BI.find(items, function (idx, item) {
             return item.length > 1;
         });
         return BI.isNotNull(result);
     },
 
-    _formatItems: function(items){
-        if(this._isNeedConvert(items)){
-            //把每个坐标轴所有的多个系列合并成一个系列
-            return BI.map(items, function(idx, item){
+    _formatItems: function (items) {
+        if(this._isNeedConvert(items)) {
+            // 把每个坐标轴所有的多个系列合并成一个系列
+            return BI.map(items, function (idx, item) {
                 var seriesItem = [];
                 var obj = {data: [], name: ""};
                 seriesItem.push(obj);
-                BI.each(item, function(id, series){
-                    BI.each(series.data, function(i, da){
+                BI.each(item, function (id, series) {
+                    BI.each(series.data, function (i, da) {
                         obj.data.push(BI.extend({}, da, {x: series.name}));
                     });
                 });
                 return seriesItem;
-            })
-        }else{
-            return items;
+            });
         }
+        return items;
+        
     },
 
     populate: function (items, options) {
@@ -129,9 +129,9 @@ BI.PieChart = BI.inherit(BI.AbstractChart, {
         this.options.items = items;
 
         var types = [];
-        BI.each(items, function(idx, axisItems){
+        BI.each(items, function (idx, axisItems) {
             var type = [];
-            BI.each(axisItems, function(id, item){
+            BI.each(axisItems, function (id, item) {
                 type.push(BICst.WIDGET.PIE);
             });
             types.push(type);
@@ -144,10 +144,10 @@ BI.PieChart = BI.inherit(BI.AbstractChart, {
         this.combineChart.resize();
     },
 
-    magnify: function(){
+    magnify: function () {
         this.combineChart.magnify();
     }
 });
 BI.PieChart.EVENT_CHANGE = "EVENT_CHANGE";
-BI.shortcut('bi.pie_chart', BI.PieChart);
+BI.shortcut("bi.pie_chart", BI.PieChart);
 

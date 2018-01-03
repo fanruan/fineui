@@ -19,7 +19,7 @@ BI.Single = BI.inherit(BI.Widget, {
             warningTitle: null,
             tipType: null, // success或warning
             value: null
-        })
+        });
     },
 
     _showToolTip: function (e, opt) {
@@ -88,7 +88,7 @@ BI.Single = BI.inherit(BI.Widget, {
     },
 
     disabledHover: function () {
-        //取消hover事件
+        // 取消hover事件
         if (BI.isNotNull(this.timeout)) {
             clearTimeout(this.timeout);
         }
@@ -103,7 +103,7 @@ BI.Single = BI.inherit(BI.Widget, {
         this.items = items || [];
     },
 
-    //opt: {container: '', belowMouse: false}
+    // opt: {container: '', belowMouse: false}
     setTitle: function (title, opt) {
         this.options.title = title;
         if (BI.isKey(title)) {

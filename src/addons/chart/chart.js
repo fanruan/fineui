@@ -8,7 +8,7 @@ BI.Chart = BI.inherit(BI.Pane, {
     _defaultConfig: function () {
         return BI.extend(BI.Chart.superclass._defaultConfig.apply(this, arguments), {
             baseCls: "bi-chart"
-        })
+        });
     },
 
     _init: function () {
@@ -35,7 +35,7 @@ BI.Chart = BI.inherit(BI.Pane, {
     },
 
     magnify: function () {
-        this.vanCharts.refreshRestore()
+        this.vanCharts.refreshRestore();
     },
 
     populate: function (items, options) {
@@ -52,4 +52,4 @@ BI.Chart = BI.inherit(BI.Pane, {
     }
 });
 BI.Chart.EVENT_CHANGE = "EVENT_CHANGE";
-BI.shortcut('bi.chart', BI.Chart);
+BI.shortcut("bi.chart", BI.Chart);

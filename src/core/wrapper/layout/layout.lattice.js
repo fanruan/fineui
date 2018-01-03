@@ -11,7 +11,7 @@ BI.LatticeLayout = BI.inherit(BI.Layout, {
     props: function () {
         return BI.extend(BI.LatticeLayout.superclass.props.apply(this, arguments), {
             baseCls: "bi-lattice-layout clearfix"
-            //columnSize: [0.2, 0.2, 0.6],
+            // columnSize: [0.2, 0.2, 0.6],
         });
     },
     render: function () {
@@ -25,9 +25,9 @@ BI.LatticeLayout = BI.inherit(BI.Layout, {
         if (o.columnSize && o.columnSize[i]) {
             var width = o.columnSize[i] / BI.sum(o.columnSize) * 100 + "%";
         } else {
-            var width = 1 / this.options.items.length * 100 + "%"
+            var width = 1 / this.options.items.length * 100 + "%";
         }
-        w.element.css({"position": "relative", "float": "left", "width": width});
+        w.element.css({position: "relative", float: "left", width: width});
         return w;
     },
 
@@ -52,4 +52,4 @@ BI.LatticeLayout = BI.inherit(BI.Layout, {
         this._mount();
     }
 });
-BI.shortcut('bi.lattice', BI.LatticeLayout);
+BI.shortcut("bi.lattice", BI.LatticeLayout);

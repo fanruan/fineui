@@ -9,7 +9,7 @@ BI.ComplexCanvas = BI.inherit(BI.Widget, {
     _defaultConfig: function () {
         return BI.extend(BI.ComplexCanvas.superclass._defaultConfig.apply(this, arguments), {
             baseCls: "bi-complex-canvas"
-        })
+        });
     },
 
 
@@ -24,7 +24,7 @@ BI.ComplexCanvas = BI.inherit(BI.Widget, {
         });
     },
 
-    //绘制树枝节点
+    // 绘制树枝节点
     branch: function (x0, y0, x1, y1, x2, y2) {
         var self = this, args = [].slice.call(arguments);
         if (args.length <= 5) {

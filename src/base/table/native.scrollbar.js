@@ -16,12 +16,12 @@ BI.NativeTableScrollbar = BI.inherit(BI.Widget, {
             defaultPosition: 0,
             position: 0,
             size: 0
-        })
+        });
     },
 
     render: function () {
         var self = this, o = this.options;
-        //把滚动台size改掉
+        // 把滚动台size改掉
         this.element.width(36);
 
         var throttle = BI.throttle(function () {
@@ -40,7 +40,7 @@ BI.NativeTableScrollbar = BI.inherit(BI.Widget, {
                     self.inner = _ref;
                 }
             }]
-        }
+        };
     },
 
     mounted: function () {
@@ -92,12 +92,12 @@ BI.NativeTableHorizontalScrollbar = BI.inherit(BI.Widget, {
             contentSize: 0,
             position: 0,
             size: 0
-        })
+        });
     },
 
     render: function () {
         var self = this, o = this.options;
-        //把滚动台size改掉
+        // 把滚动台size改掉
         this.element.height(36);
 
         var throttle = BI.throttle(function () {
@@ -116,7 +116,7 @@ BI.NativeTableHorizontalScrollbar = BI.inherit(BI.Widget, {
                     self.inner = _ref;
                 }
             }]
-        }
+        };
     },
 
     setContentSize: function (contentSize) {

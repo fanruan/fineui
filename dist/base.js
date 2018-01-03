@@ -1,4 +1,4 @@
-/*!
+/* !
  * jQuery Mousewheel 3.1.13
  *
  * Copyright jQuery Foundation and other contributors
@@ -7,10 +7,10 @@
  */
 
 (function (factory) {
-    if ( typeof define === 'function' && define.amd ) {
+    if ( typeof define === "function" && define.amd ) {
         // AMD. Register as an anonymous module.
-        define(['../core/jquery'], factory);
-    } else if (typeof exports === 'object') {
+        define(["../core/jquery"], factory);
+    } else if (typeof exports === "object") {
         // Node/CommonJS style for Browserify
         module.exports = factory;
     } else {
@@ -19,9 +19,9 @@
     }
 }(function ($) {
 
-    var toFix  = ['wheel', 'mousewheel', 'DOMMouseScroll', 'MozMousePixelScroll'],
-        toBind = ( 'onwheel' in document || document.documentMode >= 9 ) ?
-                    ['wheel'] : ['mousewheel', 'DomMouseScroll', 'MozMousePixelScroll'],
+    var toFix  = ["wheel", "mousewheel", "DOMMouseScroll", "MozMousePixelScroll"],
+        toBind = ( "onwheel" in document || document.documentMode >= 9 ) ?
+            ["wheel"] : ["mousewheel", "DomMouseScroll", "MozMousePixelScroll"],
         slice  = Array.prototype.slice,
         nullLowestDeltaTimeout, lowestDelta;
 
@@ -32,9 +32,9 @@
     }
 
     var special = $.event.special.mousewheel = {
-        version: '3.1.12',
+        version: "3.1.12",
 
-        setup: function() {
+        setup: function () {
             if ( this.addEventListener ) {
                 for ( var i = toBind.length; i; ) {
                     this.addEventListener( toBind[--i], handler, false );
@@ -44,7 +44,7 @@
             }
         },
 
-        teardown: function() {
+        teardown: function () {
             if ( this.removeEventListener ) {
                 for ( var i = toBind.length; i; ) {
                     this.removeEventListener( toBind[--i], handler, false );
@@ -61,17 +61,17 @@
     };
 
     $.fn.extend({
-        mousewheel: function(fn) {
-            return fn ? this.bind('mousewheel', fn) : this.trigger('mousewheel');
+        mousewheel: function (fn) {
+            return fn ? this.bind("mousewheel", fn) : this.trigger("mousewheel");
         },
 
-        unmousewheel: function(fn) {
-            return this.unbind('mousewheel', fn);
+        unmousewheel: function (fn) {
+            return this.unbind("mousewheel", fn);
         }
     });
 
 
-    function handler(event) {
+    function handler (event) {
         var orgEvent   = event || window.event,
             args       = slice.call(arguments, 1),
             delta      = 0,
@@ -81,16 +81,16 @@
             offsetX    = 0,
             offsetY    = 0;
         event = $.event.fix(orgEvent);
-        event.type = 'mousewheel';
+        event.type = "mousewheel";
 
         // Old school scrollwheel delta
-        if ( 'detail'      in orgEvent ) { deltaY = orgEvent.detail * -1;      }
-        if ( 'wheelDelta'  in orgEvent ) { deltaY = orgEvent.wheelDelta;       }
-        if ( 'wheelDeltaY' in orgEvent ) { deltaY = orgEvent.wheelDeltaY;      }
-        if ( 'wheelDeltaX' in orgEvent ) { deltaX = orgEvent.wheelDeltaX * -1; }
+        if ( "detail"      in orgEvent ) { deltaY = orgEvent.detail * -1;      }
+        if ( "wheelDelta"  in orgEvent ) { deltaY = orgEvent.wheelDelta;       }
+        if ( "wheelDeltaY" in orgEvent ) { deltaY = orgEvent.wheelDeltaY;      }
+        if ( "wheelDeltaX" in orgEvent ) { deltaX = orgEvent.wheelDeltaX * -1; }
 
         // Firefox < 17 horizontal scrolling related to DOMMouseScroll event
-        if ( 'axis' in orgEvent && orgEvent.axis === orgEvent.HORIZONTAL_AXIS ) {
+        if ( "axis" in orgEvent && orgEvent.axis === orgEvent.HORIZONTAL_AXIS ) {
             deltaX = deltaY * -1;
             deltaY = 0;
         }
@@ -99,11 +99,11 @@
         delta = deltaY === 0 ? deltaX : deltaY;
 
         // New school wheel delta (wheel event)
-        if ( 'deltaY' in orgEvent ) {
+        if ( "deltaY" in orgEvent ) {
             deltaY = orgEvent.deltaY * -1;
             delta  = deltaY;
         }
-        if ( 'deltaX' in orgEvent ) {
+        if ( "deltaX" in orgEvent ) {
             deltaX = orgEvent.deltaX;
             if ( deltaY === 0 ) { delta  = deltaX * -1; }
         }
@@ -149,9 +149,9 @@
         }
 
         // Get a whole, normalized value for the deltas
-        delta  = Math[ delta  >= 1 ? 'floor' : 'ceil' ](delta  / lowestDelta);
-        deltaX = Math[ deltaX >= 1 ? 'floor' : 'ceil' ](deltaX / lowestDelta);
-        deltaY = Math[ deltaY >= 1 ? 'floor' : 'ceil' ](deltaY / lowestDelta);
+        delta  = Math[ delta  >= 1 ? "floor" : "ceil" ](delta  / lowestDelta);
+        deltaX = Math[ deltaX >= 1 ? "floor" : "ceil" ](deltaX / lowestDelta);
+        deltaY = Math[ deltaY >= 1 ? "floor" : "ceil" ](deltaY / lowestDelta);
 
         // Normalise offsetX and offsetY properties
         if ( special.settings.normalizeOffset && this.getBoundingClientRect ) {
@@ -184,11 +184,11 @@
         return ($.event.dispatch || $.event.handle).apply(this, args);
     }
 
-    function nullLowestDelta() {
+    function nullLowestDelta () {
         lowestDelta = null;
     }
 
-    function shouldAdjustOldDeltas(orgEvent, absDelta) {
+    function shouldAdjustOldDeltas (orgEvent, absDelta) {
         // If this is an older event and the delta is divisable by 120,
         // then we are assuming that the browser is treating this as an
         // older mouse wheel event and that we should divide the deltas
@@ -196,15 +196,15 @@
         // Side note, this actually impacts the reported scroll distance
         // in older browsers and can cause scrolling to be slower than native.
         // Turn this off by setting $.event.special.mousewheel.settings.adjustOldDeltas to false.
-        return special.settings.adjustOldDeltas && orgEvent.type === 'mousewheel' && absDelta % 120 === 0;
+        return special.settings.adjustOldDeltas && orgEvent.type === "mousewheel" && absDelta % 120 === 0;
     }
 
 }));/**
  * Created by User on 2017/3/21.
  */
-BI.FormulaCollections = ["abs","ABS","acos","ACOS","acosh","ACOSH","add2array","ADD2ARRAY","and","AND","array","ARRAY","asin","ASIN","asinh","ASINH","atan","ATAN","atan2","ATAN2","atanh","ATANH","average","AVERAGE","bitnot","BITNOT","bitoperation","BITOPERATION","ceiling","CEILING","char","CHAR","circular","CIRCULAR","class","CLASS","cnmoney","CNMONEY","code","CODE","col","COL","colcount","COLCOUNT","colname","COLNAME","combin","COMBIN","concatenate","CONCATENATE","correl","CORREL","cos","COS","cosh","COSH","count","COUNT","crosslayertotal","CROSSLAYERTOTAL","date","DATE","datedelta","DATEDELTA","datedif","DATEDIF","dateinmonth","DATEINMONTH","dateinquarter","DATEINQUARTER","dateinweek","DATEINWEEK","dateinyear","DATEINYEAR","datesubdate","DATESUBDATE","datetime","DATETIME","datetonumber","DATETONUMBER","day","DAY","days360","DAYS360","daysofmonth","DAYSOFMONTH","daysofquarter","DAYSOFQUARTER","daysofyear","DAYSOFYEAR","dayvalue","DAYVALUE","decimal","DECIMAL","decode","DECODE","degrees","DEGREES","encode","ENCODE","endwith","ENDWITH","enmoney","ENMONEY","ennumber","ENNUMBER","eval","EVAL","even","EVEN","exact","EXACT","exp","EXP","fact","FACT","fields","FIELDS","filename","FILENAME","filesize","FILESIZE","filetype","FILETYPE","find","FIND","floor","FLOOR","format","FORMAT","getuserdepartments","GETUSERDEPARTMENTS","getuserjobtitles","GETUSERJOBTITLES","greparray","GREPARRAY","hierarchy","HIERARCHY","hour","HOUR","i18n","I18N","if","IF","inarray","INARRAY","index","INDEX","indexof","INDEXOF","indexofarray","INDEXOFARRAY","int","INT","isnull","ISNULL","joinarray","JOINARRAY","jvm","JVM","layertotal","LAYERTOTAL","left","LEFT","len","LEN","let","LET","ln","LN","log","LOG","log10","LOG10","lower","LOWER","lunar","LUNAR","map","MAP","maparray","MAPARRAY","max","MAX","median","MEDIAN","mid","MID","min","MIN","minute","MINUTE","mod","MOD","mom","MOM","month","MONTH","monthdelta","MONTHDELTA","now","NOW","numto","NUMTO","nvl","NVL","odd","ODD","or","OR","pi","PI","power","POWER","product","PRODUCT","promotion","PROMOTION","proper","PROPER","proportion","PROPORTION","radians","RADIANS","rand","RAND","randbetween","RANDBETWEEN","range","RANGE","rank","RANK","records","RECORDS","regexp","REGEXP","removearray","REMOVEARRAY","repeat","REPEAT","replace","REPLACE","reverse","REVERSE","reversearray","REVERSEARRAY","right","RIGHT","round","ROUND","round5","ROUND5","rounddown","ROUNDDOWN","roundup","ROUNDUP","row","ROW","rowcount","ROWCOUNT","second","SECOND","seq","SEQ","sign","SIGN","sin","SIN","sinh","SINH","slicearray","SLICEARRAY","sort","SORT","sortarray","SORTARRAY","split","SPLIT","sql","SQL","sqrt","SQRT","startwith","STARTWITH","stdev","STDEV","substitute","SUBSTITUTE","sum","SUM","sumsq","SUMSQ","switch","SWITCH","tabledatafields","TABLEDATAFIELDS","tabledatas","TABLEDATAS","tables","TABLES","tan","TAN","tanh","TANH","time","TIME","tobigdecimal","TOBIGDECIMAL","tobinary","TOBINARY","todate","TODATE","today","TODAY","todouble","TODOUBLE","tohex","TOHEX","toimage","TOIMAGE","tointeger","TOINTEGER","tooctal","TOOCTAL","totext","TOTEXT","treelayer","TREELAYER","trim","TRIM","trunc","TRUNC","uniquearray","UNIQUEARRAY","upper","UPPER","uuid","UUID","value","VALUE","webimage","WEBIMAGE","week","WEEK","weekdate","WEEKDATE","weekday","WEEKDAY","weightedaverage","WEIGHTEDAVERAGE","year","YEAR","yeardelta","YEARDELTA"];
+BI.FormulaCollections = ["abs", "ABS", "acos", "ACOS", "acosh", "ACOSH", "add2array", "ADD2ARRAY", "and", "AND", "array", "ARRAY", "asin", "ASIN", "asinh", "ASINH", "atan", "ATAN", "atan2", "ATAN2", "atanh", "ATANH", "average", "AVERAGE", "bitnot", "BITNOT", "bitoperation", "BITOPERATION", "ceiling", "CEILING", "char", "CHAR", "circular", "CIRCULAR", "class", "CLASS", "cnmoney", "CNMONEY", "code", "CODE", "col", "COL", "colcount", "COLCOUNT", "colname", "COLNAME", "combin", "COMBIN", "concatenate", "CONCATENATE", "correl", "CORREL", "cos", "COS", "cosh", "COSH", "count", "COUNT", "crosslayertotal", "CROSSLAYERTOTAL", "date", "DATE", "datedelta", "DATEDELTA", "datedif", "DATEDIF", "dateinmonth", "DATEINMONTH", "dateinquarter", "DATEINQUARTER", "dateinweek", "DATEINWEEK", "dateinyear", "DATEINYEAR", "datesubdate", "DATESUBDATE", "datetime", "DATETIME", "datetonumber", "DATETONUMBER", "day", "DAY", "days360", "DAYS360", "daysofmonth", "DAYSOFMONTH", "daysofquarter", "DAYSOFQUARTER", "daysofyear", "DAYSOFYEAR", "dayvalue", "DAYVALUE", "decimal", "DECIMAL", "decode", "DECODE", "degrees", "DEGREES", "encode", "ENCODE", "endwith", "ENDWITH", "enmoney", "ENMONEY", "ennumber", "ENNUMBER", "eval", "EVAL", "even", "EVEN", "exact", "EXACT", "exp", "EXP", "fact", "FACT", "fields", "FIELDS", "filename", "FILENAME", "filesize", "FILESIZE", "filetype", "FILETYPE", "find", "FIND", "floor", "FLOOR", "format", "FORMAT", "getuserdepartments", "GETUSERDEPARTMENTS", "getuserjobtitles", "GETUSERJOBTITLES", "greparray", "GREPARRAY", "hierarchy", "HIERARCHY", "hour", "HOUR", "i18n", "I18N", "if", "IF", "inarray", "INARRAY", "index", "INDEX", "indexof", "INDEXOF", "indexofarray", "INDEXOFARRAY", "int", "INT", "isnull", "ISNULL", "joinarray", "JOINARRAY", "jvm", "JVM", "layertotal", "LAYERTOTAL", "left", "LEFT", "len", "LEN", "let", "LET", "ln", "LN", "log", "LOG", "log10", "LOG10", "lower", "LOWER", "lunar", "LUNAR", "map", "MAP", "maparray", "MAPARRAY", "max", "MAX", "median", "MEDIAN", "mid", "MID", "min", "MIN", "minute", "MINUTE", "mod", "MOD", "mom", "MOM", "month", "MONTH", "monthdelta", "MONTHDELTA", "now", "NOW", "numto", "NUMTO", "nvl", "NVL", "odd", "ODD", "or", "OR", "pi", "PI", "power", "POWER", "product", "PRODUCT", "promotion", "PROMOTION", "proper", "PROPER", "proportion", "PROPORTION", "radians", "RADIANS", "rand", "RAND", "randbetween", "RANDBETWEEN", "range", "RANGE", "rank", "RANK", "records", "RECORDS", "regexp", "REGEXP", "removearray", "REMOVEARRAY", "repeat", "REPEAT", "replace", "REPLACE", "reverse", "REVERSE", "reversearray", "REVERSEARRAY", "right", "RIGHT", "round", "ROUND", "round5", "ROUND5", "rounddown", "ROUNDDOWN", "roundup", "ROUNDUP", "row", "ROW", "rowcount", "ROWCOUNT", "second", "SECOND", "seq", "SEQ", "sign", "SIGN", "sin", "SIN", "sinh", "SINH", "slicearray", "SLICEARRAY", "sort", "SORT", "sortarray", "SORTARRAY", "split", "SPLIT", "sql", "SQL", "sqrt", "SQRT", "startwith", "STARTWITH", "stdev", "STDEV", "substitute", "SUBSTITUTE", "sum", "SUM", "sumsq", "SUMSQ", "switch", "SWITCH", "tabledatafields", "TABLEDATAFIELDS", "tabledatas", "TABLEDATAS", "tables", "TABLES", "tan", "TAN", "tanh", "TANH", "time", "TIME", "tobigdecimal", "TOBIGDECIMAL", "tobinary", "TOBINARY", "todate", "TODATE", "today", "TODAY", "todouble", "TODOUBLE", "tohex", "TOHEX", "toimage", "TOIMAGE", "tointeger", "TOINTEGER", "tooctal", "TOOCTAL", "totext", "TOTEXT", "treelayer", "TREELAYER", "trim", "TRIM", "trunc", "TRUNC", "uniquearray", "UNIQUEARRAY", "upper", "UPPER", "uuid", "UUID", "value", "VALUE", "webimage", "WEBIMAGE", "week", "WEEK", "weekdate", "WEEKDATE", "weekday", "WEEKDAY", "weightedaverage", "WEIGHTEDAVERAGE", "year", "YEAR", "yeardelta", "YEARDELTA"];
 
-BI.FormulaJson = [{"def":"MONTH:(serial_number)返回日期中的月。月是介于1和12之间的一个数。\nSerial_number:含有所求的月的日期.\n备注:\nFineReport将日期保存为系列数，一个系列数代表一个与之匹配的日期，以方便用户对日期进行数值式计算。\n在1900年日期系统中，FineReport电子表格将1900年1月1日保存为系列数2，将1900年1月2日保存为系列数3，\n将1900年1月3日保存为系列数4……依此类推。如在1900年日期系统，1998年1月1日存为系列数35796。\n示例:\nMONTH(\"2000/1/1\")等于1。\nMONTH(\"2006/05/05\")等于5。\nMONTH(\"1997/04/20\")等于4。\nMONTH(\"2000-1-1\", \"yyyy-MM-dd\")等于1。\nMONTH(\"2006-05-05\", \"yyyy-MM-dd\")等于5。\nMONTH(\"1997-04-20\", \"yyyy-MM-dd\")等于4。\nMONTH(35796)等于1。","name":"MONTH","type":"DATETIME"},{"def":"ROWCOUNT(tableData)返回tableData的行数。\ntableData:TableData的名字，字符串形式的。\n备注:\n    先从私有数据源中查找，然后再从公有数据源中查找，返回的是tableData的行数。\n示例:\n以我们提供的数据源FRDemo为例\n新建数据集ds1:SELECT * FROM [CUSTOMER]\nROWCOUNT(\"ds1\")等于20。","name":"ROWCOUNT","type":"REPORT"},{"def":"RAND(): 返回均匀分布的随机数。每计算一次工作表，函数都会返回一个新的随机数值。\n备注:\n    要生成一个位于a和b之间的随机数，可以使用以下的公式: C=RAND()*(b-a)+a。\n    如果要使一个随机产生的数值不随单元格的重计算而改变，可以在编辑框中输入=RAND()并保持编辑状态，然后按F9，将公式永久性地改为随机数。\n示例:\n假如需要生成一个大于等于0，小于60的随机数，使用公式: =RAND()*60。\n假如需要生成一个大于等于0，小于19的随机数，使用公式: =RAND()*19。\n假如需要生成一个大于等于0，小于50的随机数，使用公式: =RAND()*50。","name":"RAND","type":"MATH"},{"def":"GETUSERDEPARTMENTS():返回角色部门\n示例:\nGETUSERDEPARTMENTS():返回角色所有部门，若多个部门则数组\nGETUSERDEPARTMENTS(3,2):返回角色该部门的第三层和第二层名字，\n若多个部门则返回数组，若没有第三层则只显示第二层","name":"GETUSERDEPARTMENTS","type":"OTHER"},{"def":"FORMAT(object,format) : 返回object的format格式。\nobject 需要被格式化对象，可以是String，数字，Object(常用的有Date, Time)。\nformat 格式化的样式。\n示例\nFORMAT(1234.5, \"#,##0.00\") => 1234.50\nFORMAT(1234.5, \"#,##0\") => 1234\nFORMAT(1234.5, \"￥#,##0.00\") => ￥1234.50\nFORMAT(1.5, \"0%\") => 150%\nFORMAT(1.5, \"0.000%\") => 150.000%\nFORMAT(6789, \"##0.0E0\") => 6.789E3\nFORMAT(6789, \"0.00E00\") => 6.79E03\nFORMAT(date(2007,1,1), \"EEEEE, MMMMM dd, yyyy\") => 星期一，一月 01，2007\nFORMAT(date(2007,1,13), \"MM/dd/yyyy\") => 01/13/2007\nFORMAT(date(2007,1,13), \"M-d-yy\") => 1-13-07\nFORMAT(time(16,23,56), \"h:mm:ss a\") => 4:23:56 下午","name":"FORMAT","type":"TEXT"},{"def":"TRIM(text): 清除文本中所有空格，单词间的单个空格除外，也可用于带有不规则空格的文本。\nText:需要清除空格的文本。\n示例:\nTRIM(\" Monthly Report\")等于Monthly Report。","name":"TRIM","type":"TEXT"},{"def":"SQRT(number): 返回一个正数的平方根。\nNumber:要求其平方根的任一正数。\n备注:\nNumber必须是一个正数，否则函数返回错误信息*NUM!。\n示例:\nSQRT(64)等于8。\nSQRT(-64)返回*NUM!。","name":"SQRT","type":"MATH"},{"def":"DAYSOFYEAR(year):返回某年包含的天数。\n示例：\nDAYSOFYEAR(2008)等于365，等价于DAYSOFYEAR(\"2008-01-01\")。","name":"DAYSOFYEAR","type":"DATETIME"},{"def":"RANK(number,ref,order): 返回一个数在一个数组中的秩。(如果把这个数组排序，该数的秩即为它在数组中的序号。)\nNumber 所求秩的数。(可以是Boolean型，true=1，false=0)\nRef    可以是数组，引用，或一系列数，非实数的值被忽略处理(接受Boolean型，true=1，false=0)。\nOrder  指定求秩的参数，非零为升序，零为降序\n\n备注\n1.  RANK对重复的数返回相同的秩，但重复的数影响后面的数的秩，比如，在一组升序排列的整数中，如果5出现了2次，并且秩为3，那么6的秩为5 (没有数的秩是4).\n\n示例\nA1:A5 = 6, 4.5, 4.5, 2, 4\nRANK(A1,A1:A5,1) 即 6 的秩为 5.\n\nRANK(3,1,2,\"go\",3,4,1) = 3, \"go\"被忽略。","name":"RANK","type":"OTHER"},{"def":"ODD(number):返回对指定数值进行舍入后的奇数。\nnumber:是要舍入求奇的数值。\n不论正负号如何，数值都朝着远离 0 的方向舍入。如果 number 恰好是奇数，则不须进行任何舍入处理。\n示例:\nODD(1.5) 等于 3\nODD(3) 等于 3\nODD(2) 等于 3\nODD(-1) 等于 -1","name":"ODD","type":"MATH"},{"def":"COLCOUNT(tableData):返回tableData中列的个数。\ntableData:tableData的名字，字符串形式的。\n备注：\n    先从私有数据源中查找，然后再从公有数据源中查找，返回的是第一个查找到的tableData中列数。\n示例:\n以我们提供的数据源FRDemo为例\n新建数据集ds1:SELECT * FROM [CUSTOMER]\nCOLCOUNT(\"ds1\")等于6。\n","name":"COLCOUNT","type":"REPORT"},{"def":"ENDWITH(str1，str2):判断字符串str1是否以str2结束。\n备注:\n    str1和str2都是大小写敏感的。\n示例:\nENDWITH(\"FineReport\",\"Report\")等于true。\nENDWITH(\"FineReport\",\"Fine\")等于false。\nENDWITH(\"FineReport\",\"report\")等于false。","name":"ENDWITH","type":"TEXT"},{"def":"LOG10(number):返回以 10 为底的对数。\nnumber: 用于常用对数计算的正实数。\n示例:\nLOG10(86) 等于 1.934498451\nLOG10(10) 等于 1\nLOG10(1E5) 等于 5\n","name":"LOG10","type":"MATH"},{"def":"MAPARRAY(array, fn):把一个数组中的项目转换到另一个数组中。\narray (Array): 要转换的数组 \nfn (Function): 处理数组项目的函数 \n示例：\nMAPARRAY([3,4,2,3,6,8,7], item != 3)等于[false,true,true,false,true,true,true].","name":"MAPARRAY","type":"ARRAY"},{"def":"FLOOR(number): 将参数number沿绝对值减小的方向去尾舍入。\nNumber:待舍入的数值。\n示例:\nFLOOR(-2.5)等于-2。\nFLOOR(2.5)等于2。\n","name":"FLOOR","type":"MATH"},{"def":"NUMTO(number,bool)或NUMTO(number):返回number的中文表示。其中bool用于选择中文表示的方式，当没有bool时采用默认方式显示。\n示例：NUMTO(2345,true)等于二三四五。\n示例：NUMTO(2345,false)等于二千三百四十五。\n示例：NUMTO(2345)等于二千三百四十五。","name":"NUMTO","type":"TEXT"},{"def":"ATANH(number): 返回数字的反双曲正切值，该函数的参数值即为反双曲正切值的双曲正切值。\nNumber:指介于-1~1之间的任意实数。\n备注:\n    指定的number必须介于-1~1之间（不包括-1，1）。\n    ATANH(TANH(number))=number，例如，ATANH(TANH(8))=8。\n示例:\nATANH(-0.5)等于-0.549306144。\nATANH(0)等于0。\nATANH(0.7)等于0.867300528。","name":"ATANH","type":"MATH"},{"def":"YEAR:(serial_number)返回日期中的年。Year是介于1900和9999之间的一个数。\nSerial_number:含有所求的年的日期.\n备注:\nFineReport将日期保存为系列数，一个系列数代表一个与之匹配的日期，以方便用户对日期进行数值式计算。\n在1900年日期系统中，FineReport电子表格将1900年1月1日保存为系列数2，将1900年1月2日保存为系列数3，\n将1900年1月3日保存为系列数4……依此类推。如在1900年日期系统，1998年1月1日存为系列数35796。\n示例:\nYEAR(\"2000/1/1\")等于2000。\nYEAR(\"2006/05/05\")等于2006。\nYEAR(\"1997/04/20\")等于1997。\nYEAR(\"2000-1-1\", \"yyyy-MM-dd\")等于2000。\nYEAR(\"2006-05-05\", \"yyyy-MM-dd\")等于2006。\nYEAR(\"1997-04-20\", \"yyyy-MM-dd\")等于1997。\nYEAR(35796)等于1998。","name":"YEAR","type":"DATETIME"},{"def":"SLICEARRAY(array, start, end):返回数组从第start个到第end个元素(包括第end个元素)。\n示例：\nSLICEARRAY([3, 4, 4, 5, 1, 5, 7], 3, 6)返回[4, 5, 1, 5].\n当不使用end参数时，返回从start开始到数组结束之间的元素。\nSLICEARRAY([3, 4, 4, 5, 1, 5, 7], 3)返回[4, 5, 1, 5, 7].","name":"SLICEARRAY","type":"ARRAY"},{"def":"","name":"DECODE","type":"OTHER"},{"def":"ENMONEY(value):将给定的BigDemical类型的数字转换成英文金额字符串。\n示例：\nENMONEY(23.49)等于TWENTY THREE AND CENTS FORTY NINE","name":"ENMONEY","type":"TEXT"},{"def":"IF(boolean,number1/string1,number2/string2):判断函数,boolean为true时返回第二个参数,为false时返回第三个。\nboolean: 用于判断的布尔值,true或者false。\nnumber1/string1: 第一个参数，如果boolean为ture,返回这个值。\nnumber2/string2: 第二个参数，如果boolean为false,返回这个值。\n示例:\nIF(true,2,8)等于2\nIF(false,\"first\",\"second\")等于second\nIF(true,\"first\",7)等于first","name":"IF","type":"LOGIC"},{"def":"DATEINWEEK(date, number):函数返回在某一个星期当中第几天的日期。\n示例：\ndateInWeek(\"2008-08-28\", 2)等于2008-08-26。\ndateInWeek(\"2008-08-28\", -1)等于2008-08-31。\n如果最后一个参数为-1，返回该日期所在星期的最后一天\n","name":"DATEINWEEK","type":"DATETIME"},{"def":"MONTHDELTA(date,delta):返回指定日期date后delta个月的日期。\n示例：\nMONTHDELTA(\"2008-08-08\", 4)等于2008-12-08。","name":"MONTHDELTA","type":"DATETIME"},{"def":"FIELDS(connectionName,tableName):返回tableName这个表中的所有字段名。\n示例：\n数据库BASE中有个名叫task的表的内容如下：\nname start  end\na    2008   2009\nb    2009   2012\n那么FIELDS(\"BASE\",\"task\")等于[name,start,end].","name":"FIELDS","type":"REPORT"},{"def":"DATEDIF(start_date,end_date,unit):返回两个指定日期间的天数、月数或年数。\nStart_date:代表所指定时间段的初始日期。\nEnd_date:代表所指定时间段的终止日期。\nUnit:函数返回信息的类型。\n若unit=“Y”，则DATEDIF返回指定时间段的年差数。\n若unit=“M”，则DATEDIF返回指定时间段的月差数。\n若unit=“D”，则DATEDIF返回指定时间段的日差数。\n若unit=“MD”，则DATEDIF忽略年和月，返回指定时间段的日差数。\n若unit=“YM”，则DATEDIF忽略年和日，返回指定时间段的月差数。\n若unit=“YD”，则DATEDIF忽略年，返回指定时间段的日差数。\n示例:\nDATEDIF(\"2001/2/28\",\"2004/3/20\",\"Y\")等于3，即在2001年2月28日与2004年3月20日之间有3个整年。\nDATEDIF(\"2001/2/28\",\"2004/3/20\",\"M\")等于37，即在2001年2月28日与2004年3月20日之间有36个整月。\nDATEDIF(\"2001/2/28\",\"2004/3/20\",\"D\")等于1116，即在2001年2月28日与2004年3月20日之间有1116个整天。\nDATEDIF(\"2001/2/28\",\"2004/3/20\",\"MD\")等于8，即忽略月和年后，2001年2月28日与2004年3月20日的差为8天。\nDATEDIF(\"2001/1/28\",\"2004/3/20\",\"YM\")等于2，即忽略日和年后，2001年1月28日与2004年3月20日的差为2个月。\nDATEDIF(\"2001/2/28\",\"2004/3/20\",\"YD\")等于21，即忽略年后，2001年2月28日与2004年3月20日的差为21天。","name":"DATEDIF","type":"DATETIME"},{"def":"TOIMAGE(path):显示指定路径下的图片。此处默认开启了图片缓存功能以加速报表的生成.\n如不需要缓存，请在参数后面追加值FALSE，例如：TOIMAGE(\"D:/fr.png\",false).\n如需要指定图片大小,拉伸显示, 则需要添加参数,TOIMAGE(patch, true, width, height).\n示例:=toimage(\"d:/1.jpg\", true, \"50%\", 300), 第三个参数为指定宽度, 第四个参数为指定高度.\n如果参数为整数, 则直接写数字, 如果为百分比, 则需要加上引号, 如\"300%\"","name":"TOIMAGE","type":"OTHER"},{"def":"LEFT(text,num_chars): 根据指定的字符数返回文本串中的第一个或前几个字符。\nText:包含需要选取字符的文本串或单元格引用。\nNum_chars:指定返回的字符串长度。\n备注:\n    Num_chars的值必须等于或大于0。\n    如果num_chars大于整个文本的长度，LEFT函数将返回所有的文本。\n    如果省略num_chars，则默认值为1。\n示例:\nLEFT(\"Fine software\",8)等于“Fine sof”。\nLEFT(\"Fine software\")等于“F”。\n如果单元格A3中含有“China”，则LEFT(A3,2)等于“Ch”。","name":"LEFT","type":"TEXT"},{"def":"SUBSTITUTE(text,old_text,new_text,instance_num): 用new_text替换文本串中的old_text。\nText:需要被替换字符的文本，或含有文本的单元格引用。\nOld_text:需要被替换的部分文本。\nNew_text:用于替换old_text的文本。\nInstance_num:指定用new_text来替换第几次出现的old_text。如果指定了instance_num，则只有指定位置上的old_text被替换，否则文字串中出现的所有old_text都被new_text替换。\n备注:\n    如果需要替换文本串中的指定文本，则使用SUBSTITUTE函数；如果需要替换文本串中指定位置上的任意文本，则使用REPLACE函数。\n示例:\nSUBSTITUTE(\"data base\",\"base\",\"model\")等于“data model”。\nSUBSTITUTE(\"July 28, 2000\",\"2\",\"1\",1)等于“July 18, 2000”。\nSUBSTITUTE(\"July 28, 2000\",\"2\",\"1\")等于“July 18, 1000”。\nSUBSTITUTE(\"July 28, 2000\",\"2\",\"1\",2)等于“July 28, 1000”。 ","name":"SUBSTITUTE","type":"TEXT"},{"def":"LOG(number,base): 按指定的任意底数，返回数值的对数。\nNumber:需要求对数的正实数。\nBase:对数的底数。如果省略底数，默认值为10。\n示例:\nLOG(16,2)等于4。\nLOG(10)等于1。\nLOG(24,3)等于2.892789261。","name":"LOG","type":"MATH"},{"def":"SORTARRAY(array):返回数组array排过序的数组。\n示例：\nSORTARRAY([3, 4, 4, 5, 1, 5, 7])返回[1, 3, 4, 4, 5, 5, 7].\n注意：数组array的元素类型必须一样，并且要可比较。","name":"SORTARRAY","type":"ARRAY"},{"def":"DATEDELTA(date, deltadays):返回一个日期??date后deltadays的日期。\ndeltaDays可以为正值，负值，零。\n示例：\nDATEDELTA(\"2008-08-08\",  -10)等于2008-07-29。\nDATEDELTA(\"2008-08-08\",   10)等于2008-08-18。","name":"DATEDELTA","type":"DATETIME"},{"def":"MID(text,start_num,num_chars): 返回文本串中从指定位置开始的一定数目的字符，该数目由用户指定。\nText:包含要提取字符的文本串。\nStart_num:文本中需要提取字符的起始位置。文本中第一个字符的start_num为1，依此类推。\nNum_chars:返回字符的长度。\n备注:\n    如果start_num大于文本长度，MID函数返回“”（空文本）。\n    如果start_num小于文本长度，并且start_num加上num_chars大于文本长度，MID函数将从start_num指定的起始字符直至文本末的所有字符。\n    如果start_num小于1，MID函数返回错误信息*VALUE!。\n    如果num_chars是负数，MID函数返回错误信息*VALUE!。\n示例:\nMID(\"Finemore software\",10,8)返回“software”。\nMID(\"Finemore software\",30,5)返回“”（空文本）。\nMID(\"Finemore software\",0,8)返回*VALUE!。\nMID(\"Finemore software\",5,-1)返回*VALUE!。","name":"MID","type":"TEXT"},{"def":"ATAN2(x_num,y_num): 返回x、y坐标的反正切值。返回角度为x轴与过（x_num,y_num）与坐标原点（0,0）的一条直线形成的角度。该角度以弧度显示。\nX_num:指定点的x坐标。\nY_num:指定点的y坐标。\n备注:\n    正值表示从x轴开始以逆时针方式所得的角度；负值表示从x轴开始以顺时针方式所得的角度。\na > 0,b > 0 or a > 0, b < 0时，公式直接成立；\na < 0,b > 0, ATAN2(a,b)=PI()-ABS(ATAN(b/a))\na < 0,b < 0, ATAN2(a,b)=ABS(ATAN(b/a))-PI()\n    当x_num与y_num都为0时，ATAN2返回错误信息*DIV/0!。\n    用角度制显示返回数值时，把返回数值乘以180/PI()。\n    返回值以弧度表示（返回值大于-pi且小于等于pi）。\n示例:\nATAN2(-2,2)等于2.356194490192345（弧度制的3*pi/4）。\nATAN2(2,2)等于0.785398163（弧度制的pi/4）。\nATAN2(-2,2)*180/PI()等于135（角度制）。","name":"ATAN2","type":"MATH"},{"def":"SUM(number1,number2,…): 求一个指定单元格区域中所有数字之和。\nNumber1,number2,…:1到30个参数或指定单元格区域中所有数字。\n备注:\n    函数将直接键入参数中的数值、逻辑值及文本表达式计算在内。\n    若参数是数组或引用，则只有数组或单元格引用中的数值进行计算。\n示例:\nSUM(70,80)等于150。\nSUM(\"70\",80,TRUE)等于151，逻辑值“TRUE”作为1来计算；“FALSE”作为0计算；文本“70”作为70来计算。","name":"SUM","type":"MATH"},{"def":"EXACT(text1,text2): 检测两组文本是否相同。如果完全相同，EXACT函数返回TRUE；否则，返回FALSE。EXACT函数可以区分大小写，但忽略格式的不同。同时也可以利用EXACT函数来检测输入文档的文字。\nText1:需要比较的第一组文本。\nText2:需要比较的第二组文本。\n示例:\nEXACT(\"Spreadsheet\",\"Spreadsheet\")等于TRUE。\nEXACT(\"Spreadsheet\",\"S preadsheet\")等于FALSE。\nEXACT(\"Spreadsheet\",\"spreadsheet\")等于FALSE。","name":"EXACT","type":"TEXT"},{"def":"TOINTEGER(text): 将文本转换成Integer对象。\nText:需要转换的文本。\n示例:\nTOINTEGER(\"123\")等于 new Integer(123)。","name":"TOINTEGER","type":"TEXT"},{"def":"ACOSH(number): 返回给定数值的反双曲余弦。\nNumber:返回值的双曲余弦。\n备注:\n    参数number的值必须大于或等于1。\n    ACOSH(COSH(number))=number。\n示例:\nACOSH(1)等于0。\nACOSH(8)等于2.768659383。\nACOSH(5.5)等于2.389526435。","name":"ACOSH","type":"MATH"},{"def":"weekdate(year,month,weekOfMonth,dayOfWeek): 返回指定年月的指定周的周几的具体日期。\n示例：\nweekdate(2009,10,2,1)\n返回的是2009年的10月的第二个周的第一天即星期天的日期，返回的是2009-10-04\n最后一个参数dayOfWeek为-1时，表示这个周的最后一天\n示例：\nweekdate(2009,12,1,-1)\n返回的是2009年的12月的第一个周的最后一天即星期六的日期，返回的是2009-12-05\n","name":"WEEKDATE","type":"DATETIME"},{"def":"MIN(number1,number2,…): 返回参数列表中的最小值。\nNumber1,number2,…:1到30个需要找出最小值的参数。\n备注:\n    若参数中没有数字，函数MIN将返回0。\n    参数应为数字、空白单元格、逻辑值或是表示数值的文本串。如果参数是错误值时，MIN将返回错误信息。\n    如果数组或引用参数中包含可解析文本值，逻辑值，零值或空白单元格，这些值都将参与计算，而不可解析的文本值忽略不计。\n示例:\n如果B1:B4包含3，6，9，12，则:\nMIN(B1:B4)等于3。\nMIN(B1:B4,0)等于0。","name":"MIN","type":"MATH"},{"def":"STARTWITH(str1，str2):判断字符串str1是否以str2开始。\n备注:\n    str1和str2都是大小写敏感的。\n示例:\nSTARTWITH(\"FineReport\",\"Fine\")等于true。\nSTARTWITH(\"FineReport\",\"Report\")等于false。\nSTARTWITH(\"FineReport\",\"fine\")等于false。","name":"STARTWITH","type":"TEXT"},{"def":"COMBIN(number,number_chosen): 返回若干个指定对象的组合数。该函数与数学表达式为Cnk功能相同。\nNumber或数学表达式中的“n”指对象总数。\nNumber_chosen或数学表达式中的“k”指在对象总数中某一组合的数量。\n备注:\n    Number必须是正整数，number_chosen必须是非负整数。\n    如果number和number_chosen小于0或number小于number_chosen，函数返回错误信息*NUM!。\n    对象组合是对象的子集。与排列不同的是，组合不涉及对象内部的先后顺序，而顺序对排列是非常重要的。\n    假设number=n，number_chosen=k，则: COMBIN(n,k)=Cnk=n!/(k!(n-k)!)。\n示例:\nCOMBIN(5,6)等于*NUM!。\nCOMBIN(5,2)等于10。","name":"COMBIN","type":"MATH"},{"def":"EVEN(number):返回沿绝对值增大方向取整后最接近的偶数。使用该函数可以处理那些成对出现的对象。\nnumber:所要取整的数值。\n不论正负号如何，数值都朝着远离 0 的方向舍入。如果 number 恰好是偶数，则不须进行任何舍入处理。\n示例:\nEVEN(1.5) 等于 2\nEVEN(3) 等于 4\nEVEN(2) 等于 2\nEVEN(-1) 等于 -2","name":"EVEN","type":"MATH"},{"def":"COUNT(value1,value2,…): 计算数组或数据区域中所含项的个数。\nValue1,value2,…:可包含任何类型数据的参数。","name":"COUNT","type":"MATH"},{"def":"INDEXOFARRAY(array, index):返回数组array的第index个元素。\n示例：\nINDEXOFARRAY([\"第一个\", \"第二个\", \"第三个\"], 2)返回\"第二个\"。","name":"INDEXOFARRAY","type":"ARRAY"},{"def":"MAP(object, string, int, int):四个参数分别是索引值,数据集的名字,索引值所在列序号,返回值所在列序号。\n提醒：后两个参数也可以写列名代替。\n根据数据集的名字,找到对应的数据集,找到其中索引列的值为key所对应的返回值。\n数据集的查找方式是依次从报表数据集找到服务器数据集。\n索引列序号与返回值序列号的初始值为1示例:\nMAP(1001, \"employee\", 1, 2)返回employee数据集,第1列中值为1001那条记录中第2列的值。\nMAP(1001, \"employee\", \"name\", \"address\")返回employee数据集,name列中值为1001那条记录中address列的值。","name":"MAP","type":"REPORT"},{"def":"SEQ(): 返回数值，在整个报表执行过程中，返回该函数被第几次执行了。\n示例:\nSEQ()在第一次执行时，结果为1。\nSEQ()在第二次执行时，结果为2。","name":"SEQ","type":"OTHER"},{"def":"i18n为本软件内置的国际化公式,可以对一些常用的词语进行国际化.\n示例:i18n('File'), 则会在中文语言环境下显示为: 文件, 而在英文语言环境下显示为: File","name":"I18N","type":"REPORT"},{"def":"层次坐标简写, 等同于=A1[A1:-1], 若需=B1[A1:-1]则HIERARCHY(A1, B1).\n若为横向, 偏移量为-2, 则写成HIERARCHY(A1, B1, -2, false), 等同于=B1[;A1:-1].\n公式中最后一个参数表示横纵向, 默认不传递, 表示纵向扩展, 若横向扩展, 则需要加上最后一个参数FALSE来区分. ","name":"HIERARCHY","type":"HA"},{"def":"","name":"ENCODE","type":"OTHER"},{"def":"DATEINMONTH(date, number):函数返回在某一个月当中第几天的日期。\n示例：\nDATEINMONTH(\"2008-08-08\", 20) 等于2008-08-20。\nDATEINMONTH(\"2008-08-08\", -1) 等于2008-08-31。","name":"DATEINMONTH","type":"DATETIME"},{"def":"TOOCTAL(int): 将一个十进制整型数转换成八进制表示的字符串。\nint:表示需要进行转换的十进制整数。\n示例:\nTOOCTAL(10)等于 \"12\"。\nTOOCTAL(20)等于 \"24\"。","name":"TOOCTAL","type":"MATH"},{"def":"REPEAT(text,number_times): 根据指定的次数重复显示文本。REPEAT函数可用来显示同一字符串，并对单元格进行填充。\nText:需要重复显示的文本或包含文本的单元格引用。\nNumber_times:指定文本重复的次数，且为正数。如果number_times为0，REPEAT函数将返回“”（空文本）。如果number_times不是整数，将被取整。REPEAT函数的最终结果通常不大于32767个字符。\n备注:\n    该函数可被用于在工作表中创建简单的直方图。\n示例:\nREPEAT(\"$\",4)等于“$$$$”。\n如果单元格B10的内容为“你好”，REPEAT(B10,3)等于“你好你好你好”。","name":"REPEAT","type":"TEXT"},{"def":"GREPARRAY(array，fn):函数(返回true或者false)是条件，过滤此数组，最后形成一个新数组。\n示例：\nGREPARRAY([3,4,2,3,6,8,7], item != 3)等于[4,2,6,8,7].\n","name":"GREPARRAY","type":"ARRAY"},{"def":"MAX(number1,number2,…): 返回参数列表中的最大值。\nNumber1,number2,…:1到30个需要找出最大值的参数。\n备注:\n    参数可以是数字、空白单元格、逻辑值或数字的文本表达式。\n    如果数组或引用参数中包含可解析文本值，逻辑值，零值或空白单元格，这些值都将参与计算，而不可解析的文本值忽略不计。\n    如果参数中没有任何数字，MAX将返回0。\n示例:\nMAX(0.1,0,1.2)等于1.2。","name":"MAX","type":"MATH"},{"def":"CHAR(number): 根据指定数字返回对应的字符。CHAR函数可将计算机其他类型的数字代码转换为字符。\nNumber:用于指定字符的数字，介于1~65535之间（包括1和65535）。\n示例:\nCHAR(88)等于“X”。\nCHAR(45)等于“-”。","name":"CHAR","type":"TEXT"},{"def":"TRUNC(number,num_digits):将数字的小数部分截去，返回整数。\nnumber:需要截尾取整的数字。\nnum_digits:用于指定取整精度的数字。\n示例:\nTRUNC(8.9) 等于 8\nTRUNC(-8.9) 等于 -8\nTRUNC(PI()) 等于 3\n","name":"TRUNC","type":"MATH"},{"def":"FACT(number):返回数的阶乘，一个数的阶乘等于 1*2*3*...*该数。\nnumber:要计算其阶乘的非负数。如果输入的 number 不是整数，则截尾取整。\n示例:\nFACT(1) 等于 1\nFACT(1.9) 等于 FACT(1) 等于 1\nFACT(0) 等于 1\nFACT(5) 等于 1*2*3*4*5 等于 120\n","name":"FACT","type":"MATH"},{"def":"STDEV(array1): 计算数据系列的标准偏差(与Excel的同名函数作用相同)。\n\n示例:\nSTDEV([1,2,3])=1。\n","name":"STDEV","type":"OTHER"},{"def":"SPLIT(String1,String2)：返回由String2分割String1组成的字符串数组。\nString1：以双引号表示的字符串。\nString2：以双引号表示的分隔符。例如逗号\",\"\n示例:\nSPLIT(\"hello,world,yes\",\",\") = [\"hello\",\"world\",\"yes\"]。\nSPLIT(\"this is very good\",\" \") = [\"this\",\"is\",\"very\",\"good\"]。\n备注：\n如果只有一个参数，则返回一个错误。\n如果有多个参数，则只有前两个起作用。","name":"SPLIT","type":"TEXT"},{"def":"INARRAY(co, array):返回co在数组array中的位置，如果co不在array中，则返回0.\n示例：\nString[] arr = {\"a\",\"b\",\"c\",\"d\"}\n那么INARRAY(\"b\", arr)等于2.","name":"INARRAY","type":"ARRAY"},{"def":"REVERSEARRAY(array):返回数组array的倒序数组。\n示例：\nREVERSEARRAY([\"第一个\", \"第二个\", \"第三个\"])返回[\"第三个\", \"第二个\", \"第一个\"].","name":"REVERSEARRAY","type":"ARRAY"},{"def":"RANDBETWEEN(value1,value2):返回value1和value2之间的一个随机整数。\n示例：\nRANDBETWEEN(12.333, 13.233)只会返回13。\nRANDBETWEEN(11.2, 13.3)有可能返回12或者13。","name":"RANDBETWEEN","type":"MATH"},{"def":"UPPER(text): 将文本中所有的字符转化为大写。\nText:需要转化为大写字符的文本，或是包含文本的单元格引用。\n示例:\nUPPER(\"notes\")等于“NOTES”。\n如果单元格E5的值为“Examples”，则UPPER(E5)等于“EXAMPLES”。","name":"UPPER","type":"TEXT"},{"def":"ABS(number): 返回指定数字的绝对值。绝对值是指没有正负符号的数值。\nNumber:需要求出绝对值的任意实数。\n示例:\nABS(-1.5)等于1.5。\nABS(0)等于0。\nABS(2.5)等于2.5。","name":"ABS","type":"MATH"},{"def":"RIGHT(text,num_chars): 根据指定的字符数从右开始返回文本串中的最后一个或几个字符。\nText:包含需要提取字符的文本串或单元格引用。\nNum_chars:指定RIGHT函数从文本串中提取的字符数。Num_chars不能小于0。如果num_chars大于文本串长度，RIGHT函数将返回整个文本。如果不指定num_chars，则默认值为1。\n示例:\nRIGHT(\"It is interesting\",6)等于“esting”。\nRIGHT(\"Share Holder\")等于“r”。\nRIGHT(\"Huge sale\",4)等于“sale”。","name":"RIGHT","type":"TEXT"},{"def":"MEDIAN(array1): 返回数据系列的中值(与Excel的同名函数作用相同)。\n\n示例:\nMEDIAN([1,2,3])=2。\n","name":"MEDIAN","type":"OTHER"},{"def":"TABLEDATAFIELDS(tableData):返回tableData中所有的字段名。\n备注:\n    先从报表数据集中查找，然后再从服务器数据集中查找，返回的是tableData的列名组成的数组。\n以我们提供的数据源FRDemo为例\n新建数据集ds1:SELECT * FROM [CUSTOMER]\nTABLEDATAFIELDS(\"ds1\")等于\nCUSTOMERID,CUSTOMERAME,CITY,COUNTRY,TEL,DISTRICT。","name":"TABLEDATAFIELDS","type":"REPORT"},{"def":"占比公式, =PROPORTION(A1)等同于=A1/sum(A1[!0])","name":"PROPORTION","type":"HA"},{"def":"COL()返回当前单元格的列号，必须使用于条件属性中\n示例:\n如果当前单元格是A5，在A5中写入\"=col()\"则返回1。\n如果当前单元格是C6，在C6中写入\"=col()\"则返回3。","name":"COL","type":"REPORT"},{"def":"TOHEX(int): 将一个十进制整型数转换成十六进制表示的字符串。\nint:表示需要进行转换的十进制整数。\n示例:\nTOHEX(15)等于 \"f\"。\nTOHEX(20)等于 \"14\"。","name":"TOHEX","type":"MATH"},{"def":"COS(number): 返回一个角度的余弦值。\nNumber:以弧度表示的需要求余弦值的角度。\n备注:\n    要把一个角度转换成弧度值，将角度乘于PI()/180。\n    COS(n*2*PI()+number)=COS(number)（其中n为整数，number从-pi到pi）。\n示例:\nCOS(0.5)等于0.877582562。\nCOS(30*PI()/180)等于0.866025404。","name":"COS","type":"MATH"},{"def":"跨层累计, =CROSSLAYERTOTAL(A1, B1, C1, D1)等同于=IF(&B1 >1, D1[B1:-1] + C1, D1[A1:-1,B1:!-1] + C1), 如需横向, 则传递第五个参数false","name":"CROSSLAYERTOTAL","type":"HA"},{"def":"POWER(number,power): 返回指定数字的乘幂。\nNumber:底数，可以为任意实数。\nPower:指数。参数number按照该指数次幂乘方。\n备注:\n    可以使用符号“^”代替POWER，如: POWER(5,2)等于5^2。\n示例:\nPOWER(6,2)等于36。\nPOWER(14,5)等于537824。\nPOWER(4,2/3)等于2.519842100。\nPOWER(3,-2.3)等于0.079913677。","name":"POWER","type":"MATH"},{"def":"DAYS360(start_date,end_date,method):按照一年 360 天的算法（每个月以 30 天计，一年共计 12 个月），\n返回两日期间相差的天数，这在会计计算中将会用到。如果财务系统是基于一年 12 个月，每月 30 天，\n可用此函数帮助计算支付款项。\nStart_date 和 end_date :是用于计算期间天数的起止日期。\nMethod : 它指定了在计算中是采用欧洲方法还是美国方法。\nMethod 定义 :\nFALSE或忽略    美国方法 (NASD)。如果起始日期是一个月的 31 号，则等于同月的 30 号。如果终止日期是一个月的\n31号，并且起始日期早于 30 号，则终止日期等于下一个月的 1 号，否则，终止日期等于本月的 30 号。\nTRUE           欧洲方法。无论是起始日期还是终止日期为一个月的 31 号，都将等于本月的 30 号。\n备注:\nFineReport将日期保存为系列数，一个系列数代表一个与之匹配的日期，以方便用户对日期进行数值式计算。\n在1900年日期系统中，FineReport电子表格将1900年1月1日保存为系列数2，将1900年1月2日保存为系列数3，\n将1900年1月3日保存为系列数4……依此类推。如在1900年日期系统，1998年1月1日存为系列数35796。\n示例:\nDAYS360(\"1998/1/30\", \"1998/2/1\") 等于 1","name":"DAYS360","type":"DATETIME"},{"def":"filetype(file)获取文件的类型。\n当file为单文件时，返回文件类型字符串，当file为多文件时，返回文件类型的字符串数组。\n如果file不为文件类型，则返回错误信息。\n示例：\n假设文件控件在B2单元格，而B2单元格依次上传了三个不同类型文件{A.doc, C.xls ,B.txt }，则filetype(B2)返回值为[“doc”, “xls”, “txt”]。","name":"FILETYPE","type":"OTHER"},{"def":"ADDARRAY(array, insertArray, start):在数组第start个位置插入insertArray中的所有元素，再返回该数组。\n示例：\nADDARRAY([3, 4, 1, 5, 7], [23, 43, 22], 3)返回[3, 4, 23, 43, 22, 1, 5, 7].\nADDARRAY([3, 4, 1, 5, 7], \"测试\", 3)返回[3, 4, \"测试\", 1, 5, 7].\n注意：如果start为小于1的数或者不写start参数，则默认从数组的第一位开始插入数组元素。","name":"ADD2ARRAY","type":"ARRAY"},{"def":"BITNOT(int):将一个十进制整数进行二进制取反运算。\nint:需要进行转换的十进制数。\n示例：\nBITNOT(3)等于-4。\nBITNOT(12)等于-13。","name":"BITNOT","type":"LOGIC"},{"def":"TABLEAS(connectionName):返回名为connectionName的数据库中的所有表名。\n示例：\n假设在FRDemo这个数据库中，有3个表：a,b,c;\n那么TABLES(\"FRDemo\")等于[a,b,c].","name":"TABLES","type":"REPORT"},{"def":"SUMSQ(number1,number2, ...):返回所有参数的平方和。\nnumber1, number2, ...:为 1 到 30 个需要求平方和的参数，也可以使用数组或对数组的引用来代替以逗号分隔的参数。\n示例:\nSUMSQ(3, 4) 等于 25\n","name":"SUMSQ","type":"MATH"},{"def":"RECORDS(connection, table,field):返回数据库表table中字段名field下的所有元素。\n示例：\n数据库BASE中有个名叫task的表的内容如下：\nname start  end\na    2008   2009\nb    2009   2012\n那么RECORDS(\"BASE\",\"task\",\"end\")等于[2009,2012].\n\nRECORDS(connection, table,field,row)返回table中field字段下的第row行的记录，field可以为列名也可以为列号。\n    RECORDS(\"BASE\",\"task\",\"end\",2)等于2012.\n    RECORDS(\"BASE\",\"task\",2,2)等于2009.","name":"RECORDS","type":"REPORT"},{"def":"","name":"TOBIGDECIMAL","type":"DELETE"},{"def":"TODOUBLE(text): 将文本转换成Double对象。\nText:需要转换的文本。\n示例:\nTODOUBLE(\"123.21\")等于 new Double(123.21)。","name":"TODOUBLE","type":"TEXT"},{"def":"TODATE()函数可以将各种日期形式的参数转换为日期类型。\n它有三种参数的形式：\n1 参数是一个日期型的参数，那么直接将这个参数返回。\n示例：\nTODATE(DATE(2007,12,12))返回2007年12月12日组成的日期。\n2 参数是以从1970年1月1日0时0分0秒开始的毫秒数，返回对应的时间。\n示例：\nTODATE(1023542354746)返回2002年6月8日。\n3 参数是日期格式的文本，那么返回这个文本对应的日期。\n示例：\nTODATE(\"2007/10/15\")返回2007年10月5日组成的日期。\nTODATE(\"2007-6-8\")返回2007年6月8日组成的日期。\n4 有两个参数，第一个参数是一个日期格式的文本，第二个参数是用来解析日期的格式。\n示例：\nTODATE(\"1/15/07\",\"mm/dd/yy\")返回07年1月15日组成的日期。\n特别的，\"yyyyMMdd\"是用来解析形如“20081230”之类的日期格式的。比如TODATE(\"20110830\",\"yyyyMMdd\")返回11年08月30日组成的日期\n5 有三个参数，第一个参数是一个日期格式的文本，第二个参数是用来解析日期的格式，第三个参数为解析日期的语言，如：zh（中文），en（英文）。\n示例：\nTODATE(\"星期三 1/15/07\",\"EEE mm/dd/yy\", \"zh\")返回07年1月15日组成的日期，使用“zh（中文）”才能够正常解析“星期三”这个字符串。","name":"TODATE","type":"DATETIME"},{"def":"PROPER(text): 将文本中的第一个字母和所有非字母字符后的第一个字母转化成大写，其他字母变为小写。\nText:需要转化为文本的公式、由双引号引用的文本串或是单元格引用。\n示例:\nPROPER(\"Finemore Integrated Office\")等于“Finemore Integrated Office”。\nPROPER(\"100 percent\")等于“100 Percent”。\nPROPER(\"SpreaDSheEt\")等于“Spreadsheet”。","name":"PROPER","type":"TEXT"},{"def":"DAY:(serial_number)返回日期中的日。DAY是介于1和31之间的一个数。\nSerial_number:含有所求的年的日期.\n备注:\nFineReport将日期保存为系列数，一个系列数代表一个与之匹配的日期，以方便用户对日期进行数值式计算。\n在1900年日期系统中，FineReport电子表格将1900年1月1日保存为系列数2，将1900年1月2日保存为系列数3，\n将1900年1月3日保存为系列数4……依此类推。如在1900年日期系统，1998年1月1日存为系列数35796。\n示例:\nDAY(\"2000/1/1\")等于1。\nDAY(\"2006/05/05\")等于5。\nDAY(\"1997/04/20\")等于20。\nDAY(\"2000-1-1\", \"yyyy-MM-dd\")等于1。\nDAY(\"2006-05-05\", \"yyyy-MM-dd\")等于5。\nDAY(\"1997-04-20\", \"yyyy-MM-dd\")等于20。\nDAY(35796)等于1。","name":"DAY","type":"DATETIME"},{"def":"LUNAR(year,day,month): 返回当前日期对应的农历时间。\nyear,month,day:分别对应年月日。\n示例:\n如果需要查询2011年7月21日对应的农历时间，则只需输入LUNAR(2011,7,21)结果将显示为：辛卯年六月廿一\n同样，如输入LUNAR(2001,7,21)，则显示：辛巳年六月初一 。本公式支持的时间段为1900-2100年。","name":"LUNAR","type":"DATETIME"},{"def":"TABLEDATAS():返回报表数据集和服务器数据集名字。\n示例：\n服务器数据集有：ds1,ds2,ds3;报表数据集有dsr1,dsr2.\nTABLEDATAS()等于[dsr1,dsr2,ds1,ds2,ds3].\n而TABLEDATAS(0)返回服务器数据集名字；TABLEDATAS(1)返回报表数据集名字；\nTABLEDATAS(0)等于[ds1,ds2,ds3];TABLEDATAS(1)等于[dsr1,dsr2].","name":"TABLEDATAS","type":"REPORT"},{"def":"TAN(number): 返回指定角度的正切值。\nNumber:待求正切值的角度，以弧度表示。如果参数是以度为单位的，乘以Pi()/180后转换为弧度。\n示例:\nTAN(0.8)等于1.029638557。\nTAN(45*Pi()/180)等于1。","name":"TAN","type":"MATH"},{"def":"","name":"JVM","type":"DELETE"},{"def":"LN(number):返回一个数的自然对数。自然对数以常数项 e（2.71828182845904）为底。\nnumber:是用于计算其自然对数的正实数。\n示例:\nLN(86) 等于 4.45437\nLN(2.7182818) 等于 1\nLN(EXP(3)) 等于 3\nEXP(LN(4)) 等于 4\n","name":"LN","type":"MATH"},{"def":"ARRAY(arg1,arg2...):返回一个由arg1,arg2,...组成的数组.\narg1,arg2,...:字符串或者数字.\n示例:\nARRAY(\"hello\") = [\"hello\"].\nARRAY(\"hello\",\"world\") = [\"hello\",\"world\"].\nARRAY(\"hello\",98) = [\"hello\",98].\nARRAY(67,98) = [67,98].","name":"ARRAY","type":"ARRAY"},{"def":"TOBINARY(int): 将一个十进制整型数转换成二进制表示的字符串。\nint:表示需要进行转换的十进制整数。\n示例:\nTOBINARY(10)等于 \"1010\"。\nTOBINARY(20)等于 \"10100\"。","name":"TOBINARY","type":"MATH"},{"def":"NVL(value1,value2,value3,...):在所有参数中返回第一个不是null的值value1:可以为任意数，也可以为null。\nvalue2:可以为任意数，也可以为null。\n当字符串长度为0时, 返回也为null\n示例:\nNVL(12,20)等于12。\nNVL(null,12)等于12。\nNVL(null,null)等于null。\nNVL(20,null)等于20。\nNVL(null,null,10)等于10。","name":"NVL","type":"OTHER"},{"def":"CORREL(array1,array2): 求两个相同长度数据系列的相关系数(与Excel的同名函数作用相同)。\n如果数组或引用参数包含文本、逻辑值或空白单元格，则这些值将被忽略；但包含零值的单元格将计算在内。\n函数计算结果出现负数表示负相关。相关系数的取值范围是[-1,1]之间的数。相关系数的绝对值越大，表示误差越小。 Array1 和 Array2 的数据点的个数必须相同，例如：\nCORREL([1,2,3],[2,4,6])=1。\n","name":"CORREL","type":"OTHER"},{"def":"COLNAME(tableData,colIndex)返回的是tableData中列序号colIndex的列名。\ntableData:表示TableData的名字，字符串形式。\ncolIndex:表示列序号。\n备注:\n    TableData先从私有数据源中查找，再从公有数据源中查找。\n示例:\nCOLNAME(\"Check\"，3)等于AcceName。\nCOLNAME(\"country\"，4)等于Area。","name":"COLNAME","type":"REPORT"},{"def":"DECIMAL(number): 返回number的大数类型，常用于精确计算。","name":"DECIMAL","type":"MATH"},{"def":"CLASS(object):返回object对象的所属的类。","name":"CLASS","type":"OTHER"},{"def":"VALUE(tableData,col,row)返回tableData中列号为col的值, 行号为row。\ntableData:tableData的名字，字符串形式的。\nrow:行号。\ncol:列号。\n备注:\n    先从报表数据集中查找，然后再从服务器数据集中查找，返回的是tableData的行数。\n示例:\nVALUE(\"country\",5,3)等于South America。\nVALUE(\"Simple\",8,3)等于jonnason。\n示例：VALUE(\"country\",5,\"大陆\")等于South America。\n\nVALUE(tableData,col)返回tableData中列号为col的一列值。\nVALUE(tableData,targetCol, orgCol, element)返回tableData中第targetCol列中的元素，这些元素对应的第orgCol列的值为element。\n示例：\ntableData : co\n国家 省份\n\n中国 江苏\n中国 浙江\n中国 北京\n美国 纽约\n美国 新泽西\nVALUE(\"co\",2, 1, \"中国\")等于[\"江苏\", \"浙江\", \"北京\"]。\n特别说明：列号也可以写为列名。\nVALUE(tableData,targetCol, orgCol, element, idx)返回VALUE(tableData,targetCol, orgCol, element)数组的第idx个值。\n特别说明：idx的值小于0时，会取数组的第一个值，idx的值大于数组长度时，会取数组的最后一个值。\n","name":"VALUE","type":"REPORT"},{"def":"JOINARRAY(array,sepa):返回一个由sepa作为分隔符的字符串.\narray:[arg1,arg2...]格式的数组;\nsepa:分隔符。\n示例:\nJOINARRAY([1,2],\";\") = [1;2].\nJOINARRAY([hello,world],\"-\") = [hello-world].","name":"JOINARRAY","type":"ARRAY"},{"def":"DATETONUMBER(date):返回自 1970 年 1 月 1 日 00:00:00 GMT 经过的毫秒数。\n示例：\nDATETONUMBER(\"2008-08-08\")等于1218124800000。","name":"DATETONUMBER","type":"DATETIME"},{"def":"INDEXOF(str1，index):返回字符串str1在index位置上的字符。\n备注:\n    index是从0开始计数的。\n示例:\nINDEXOF(\"FineReport\",0)等于'F'。\nINDEXOF(\"FineReport\",2)等于'n'。\nINDEXOF(\"FineReport\",9)等于't'。\n\nINDEXOF(array, index):返回数组在index位置上的元素。\n备注：\n    index是从1开始计数的。\n示例：\nString[] array = {\"a\", \"b\", \"c\"}\nINDEXOF(array, 1)等于\"a\".\n","name":"INDEXOF","type":"TEXT"},{"def":"PRODUCT(number1,number2, ...):将所有以参数形式给出的数字相乘，并返回乘积值。\nnumber1, number2, ...:为 1 到 30 个需要相乘的数字参数。\n示例:\nPRODUCT(3,4) 等于 12\nPRODUCT(3,4,5) 等于 60\n\n","name":"PRODUCT","type":"MATH"},{"def":"ACOS(number): 返回指定数值的反余弦值。反余弦值为一个角度，返回角度以弧度形式表示。\nNumber:需要返回角度的余弦值。\n备注:\n    函数的参数必须在-1和1之间，包括-1和1。\n    返回的角度值在0和Pi之间。\n    如果要把返回的角度用度数来表示，用180/PI()乘返回值即可。\n示例:\nACOS(1)等于0（弧度）。\nACOS(0.5)等于1.047197551（Pi/3弧度）。\nACOS(0.5)*180/PI()等于60（度）。","name":"ACOS","type":"MATH"},{"def":"FIND(find_text,within_text,start_num):从指定的索引(start_num)处开始，返回第一次出现的指定子字符串(find_text)在此字符串(within_text)中的索引。\nFind_text:需要查找的文本或包含文本的单元格引用。\nWithin_text:包含需要查找文本的文本或单元格引用。\nStart_num:指定进行查找字符的索引位置。within_text里的索引从1开始。如果省略start_num，则假设值为1。\n备注:\n    如果find_text不在within_text中，FIND函数返回值为0。\n    如果start_num不大于0，FIND函数返回错误信息*VALUE!。\n    如果start_num大于within_text的长度，FIND函数返回值为0。\n    如果find_text是空白文本，FIND函数将在搜索串中匹配第一个字符（即编号为start_num或1的字符）。\n示例:\nFIND(\"I\",\"Information\")等于1。\nFIND(\"i\",\"Information\")等于9。\nFIND(\"o\",\"Information\",2)等于4。\nFIND(\"o\",\"Information\",12)等于0。\nFIND(\"o\",\"Information\",-1)等于*VALUE!。","name":"FIND","type":"TEXT"},{"def":"MINUTE(serial_number):返回某一指定时间的分钟数，其值是介于0与59之间的一个整数。\nserial_number:包含所求分钟数的时间。\n示例:\nMINUTE(\"15:36:25\")等于36。\nMINUTE(\"15:36:25\", \"HH:mm:ss\")等于36。","name":"MINUTE","type":"DATETIME"},{"def":"SIGN(number):返回数字的符号。当数字为正数时返回 1，为零时返回 0，为负数时返回 -1。\nNumber:为任意实数。\n示例:\nSIGN(10) 等于 1\nSIGN(4-4) 等于 0\nSIGN(-0.00001) 等于 -1\n","name":"SIGN","type":"MATH"},{"def":"INDEX(key,val1,val2,...):返回key在val1,val2,...所组成的序列中的位置,不存在于序列中则返回参数的个数.\n备注:\n    key和valn可以是任意类型\n示例:\nINDEX(2,2)等于1。\nINDEX(2,1,2)等于2。\nINDEX(2,4,5,6)等于4。\nINDEX(\"b\",\"b\",\"o\",\"y\")等于1。","name":"INDEX","type":"OTHER"},{"def":"REVERSE(value):返回与value相反的逻辑值。\n示例：\nREVERSE(true)等于false。","name":"REVERSE","type":"LOGIC"},{"def":"REPLACE(text, texttoreplace, replacetext):根据指定字符串，用其他文本来代替原始文本中的内容。\ntext：需要被替换部分字符的文本或单元格引用。\ntexttoreplace：指定的字符串或正则表达式。\nreplacetext:需要替换部分旧文本的文本。\n示例：\nREPLACE(\"abcd\", \"a\", \"re\")等于\"rebcd\"。\nREPLACE(\"a**d\", \"**d\", \"rose\")等于\"arose\"。\nREPLACE(old_text,start_num,num_chars,new_text): 根据指定的字符数，用其他文本串来替换某个文本串中的部分内容。\nOld_text:需要被替换部分字符的文本或单元格引用。\nStart_num:需要用new_text来替换old_text中字符的起始位置。\nNum_chars:需要用new_text来替换old_text中字符的个数。\nNew_text:需要替换部分旧文本的文本。\n示例:\nREPLACE(\"0123456789\",5,4,\"*\")等于“0123*89”。\nREPLACE(\"1980\",3,2,\"99\")等于“1999”。","name":"REPLACE","type":"TEXT"},{"def":"UUID():返回随机的UUID。\n示例:UUID()返回36位随机机器数。\n       UUID(32)返回32位随机机器数。","name":"UUID","type":"OTHER"},{"def":"DATESUBDATE(date1, date2, op):返回两个日期之间的时间差。\nop表示返回的时间单位：\n\"s\"，以秒为单位。\n\"m\"，以分钟为单位。\n\"h\"，以小时为单位。\n\"d\"，以天为单位。\n\"w\"，以周为单位。\n示例：\nDATESUBDATE(\"2008-08-08\", \"2008-06-06\",\"h\")等于1512。","name":"DATESUBDATE","type":"DATETIME"},{"def":"CONCATENATE(text1,text2,...): 将数个字符串合并成一个字符串。\nText1,text2,...:需要合并成单个文本的文本项，可以是字符，数字或是单元格引用。\n示例:\nCONCATENATE(\"Average \",\"Price\")等于“Average Price”。\nCONCATENATE(\"1\",\"2\")等于12。","name":"CONCATENATE","type":"TEXT"},{"def":"filesize(file)获取文件的大小，单位为Kb。\n当file为单文件时，返回文件大小，当file为多文件时，返回文件大小的数组。\n如果file不为文件类型，则返回错误信息。\n示例：\n假设文件控件在B2单元格，而B2单元格依次上传了两个大小分别为100字节和10240字节的文件，则filename(B2)返回值为[0.098, 10.0]。","name":"FILESIZE","type":"OTHER"},{"def":"DAYSOFMONTH(date):返回从1900年1月后某年某月包含的天数。\n示例：\nDAYSOFMONTH(\"1900-02-01\")等于28。\nDAYSOFMONTH(\"2008/04/04\")等于30。","name":"DAYSOFMONTH","type":"DATETIME"},{"def":"DATEINQUARTER(date, number): 函数返回在某一个季度当中第几天的日期。\n示例：\nDATEINQUARTER(\"2009-05-05\", 20)等于 2009-04-20。","name":"DATEINQUARTER","type":"DATETIME"},{"def":"逐层累计, =LAYERTOTAL(B1, C1, D1)等同于=D1[B1:-1] + C1, 如需横向, 则传递第四个参数false.如LAYERTOTAL(B1, C1, D1, false)","name":"LAYERTOTAL","type":"HA"},{"def":"CNMONEY(number,unit)返回人民币大写。\nnumber:需要转换的数值型的数。\nunit:单位，\"s\",\"b\",\"q\",\"w\",\"sw\",\"bw\",\"qw\",\"y\",\"sy\",\"by\",\"qy\",\"wy\"分别代表“拾”，“佰”，“仟”，“万”，“拾万”，“佰万”，“仟万”，“亿”，“拾亿”，“佰亿”，“仟亿”，“万亿”。\n备注:\n    单位可以为空，如果为空，则直接将number转换为人民币大写，否则先将number与单位的进制相乘，然后再将相乘的结果转换为人民币大写。\n示例:\nCNMONEY(1200)等于壹仟贰佰圆整。\nCNMONEY(12.5,\"w\")等于壹拾贰万伍仟圆整。\nCNMONEY(56.3478,\"bw\")等于伍仟陆佰叁拾肆万柒仟捌佰圆整。\nCNMONEY(3.4567,\"y\")等于叁亿肆仟伍佰陆拾柒万圆整。","name":"CNMONEY","type":"TEXT"},{"def":"DAYVALUE(date):返回1900年至 date日期所经历的天数。\n示例：\nDAYVALUE(\"2008/08/08\")等于39668。","name":"DAYVALUE","type":"DATETIME"},{"def":"SQL(connectionName,sql,columnIndex,rowIndex)返回通过sql语句从connectionName中获得数据表的第columnIndex列第rowIndex行所对应的元素。\nconnectionName：数据库库的名字，字符串形式；\nsql:SQL语句，字符串形式；\ncolumnIndex:列序号，整形;\nrowIndex:行序号，整形。\n备注:行序号可以不写，这样返回值为数据列。\n示例：\n以我们提供的数据源HSQL为例\nSQL(\"HSQL\",\"SELECT * FROM CUSTOMER\",2,2)等于王先生。","name":"SQL","type":"REPORT"},{"def":"DATE(year,month,day): 返回一个表示某一特定日期的系列数。\nYear:代表年，可为一到四位数。\nMonth:代表月份。\n若1 month 12，则函数把参数值作为月。\n若month>12，则函数从年的一月份开始往上累加。例如: DATE(2000,25,2)等于2002年1月2日的系列数。\nDay:代表日。\n若日期小于等于某指定月的天数，则函数将此参数值作为日。\n若日期大于某指定月的天数，则函数从指定月份的第一天开始往上累加。若日期大于两个或多个月的总天数，则函数把减去两个月或多个月的余数加到第三或第四个月上，依此类推。例如:DATE(2000,3,35)等于2000年4月4日的系列数。\n备注:\n   若需要处理公式中日期的一部分，如年或月等，则可用此公式。\n   若年，月和日是函数而不是函数中的常量，则此公式最能体现其作用。\n示例:\nDATE(1978, 9, 19) 等于1978-09-19.\nDATE(1211, 12, 1) 等于1211-12-01.   ","name":"DATE","type":"DATETIME"},{"def":"BITOPERATIOIN(int,int,op) 位运算，返回两个整数根据op进行位运算后的结果。\nint:十进制整数。\nop:位运算操作符，支持\"&\"(与),\"|\"(或),\"^\"(异或),\"<<\"(左移),\">>\"(右移)。\n示例：\nBITOPERATION(4,2,\"&\")表示4与2进行\"与\"运算,结果等于0。\nBITOPERATION(4,2,\"|\")表示4与2进行\"或\"运算,结果等于6。\nBITOPERATION(4,2,\"^\")表示4与2进行\"异或\"运算,结果等于6。\nBITOPERATION(4,2,\"<<\")表示4按位左移2位，结果等于16。\nBITOPERATION(4,2,\">>\")表示4按位右移2位，结果等于1。\nBITOPERATION(4,2,\"^~\")表示4与2进行\"同或\"运算,结果为-7。","name":"BITOPERATION","type":"LOGIC"},{"def":"LOWER(text): 将所有的大写字母转化为小写字母。\nText:需要转化为小写字母的文本串。LOWER函数不转化文本串中非字母的字符。\n示例:\nLOWER(\"A.M.10:30\")等于“a.m.10:30”。\nLOWER(\"China\")等于“china”。","name":"LOWER","type":"TEXT"},{"def":"CEILING(number): 将参数number沿绝对值增大的方向，舍入为最接近的整数\nNumber:指待舍入的数值。\nCEILING(-2.5)等于-3。\nCEILING(0.5)等于1。","name":"CEILING","type":"MATH"},{"def":"SINH(number):返回某一数字的双曲正弦值。\nnumber:为任意实数。\n示例:\nSINH(1) 等于 1.175201194\nSINH(-1) 等于 -1.175201194","name":"SINH","type":"MATH"},{"def":"AND(logical1,logical2,…): 当所有参数的值为真时，返回TRUE；当任意参数的值为假时，返回FALSE。\nLogical1,logical2,…:指1到30个需要检验TRUE或FALSE的条件值。\n备注:\n    参数必须是逻辑值，或是含有逻辑值的数组或引用。\n    如果数组或引用中含有文本或空的单元格，则忽略其值。\n    如果在指定的单元格区域中没有逻辑值，AND函数将返回错误信息*NAME?。\n示例:\nAND(1+7=8,5+7=12)等于TRUE。\nAND(1+7=8,5+7=11)等于FALSE。\n如果单元格A1到A4的值分别为TRUE、TRUE、FALSE和TRUE，则:\nAND(A1:A4)等于FALSE。\n如果单元格A5的值在0~50之间，则: AND(0<A5,A5<50)等于TRUE。","name":"AND","type":"LOGIC"},{"def":"NOW():获取当前时间。\n示例：\n如果系统时间是2012年5月12日 15点18分38秒\n则NOW()等于2012-05-12 15:18:36。","name":"NOW","type":"DATETIME"},{"def":"排名公式, =SORT(A1)等同于=COUNT(A1[!0]{A1 > $A1}) + 1, 默认升序排列, 如需要降序, 则传递参数false,\n =SORT(A1, false)等同于=COUNT(A1[!0]{A1 < $A1}) + 1.","name":"SORT","type":"HA"},{"def":"SIN(number): 计算给定角度的正弦值。\nNumber:待求正弦值的以弧度表示的角度。\n备注:\n    如果参数的单位是度，将其乘以PI()/180即可转换成弧度。\n示例:\nSIN(10)等于-0.5440211108893698。\nSIN(45*PI()/180)等于0.707106781。","name":"SIN","type":"MATH"},{"def":"switch(表达式, 值1, 结果1, 值2, 结果2, ...)\n如果表达式的结果是值1，整个函数返回结果1\n如果表达式的结果是值2，整个函数返回结果2\n如果表达式的结果是值3，整个函数返回结果3\n等等\n","name":"SWITCH","type":"LOGIC"},{"def":"ROW()返回当前单元格的行号，必须使用于条件属性中\n示例:\n如果当前单元格为A5，在A5中写入\"=ROW()\"则返回5。\n如果当前单元格为B8，在B8中写入\"=ROW()\"则返回8。","name":"ROW","type":"REPORT"},{"def":"EVAL(exp)返回表达式exp计算后的结果。\nexp:一个表达式形式字符串。\n备注:\n    只要EVAL中的参数exp最终可以转化成一表达式形式的字符串，比如\"sum(2,4)\",\"2+7\"等等，那么它就可以被计算。\nEVAL(\"2+5\")等于7。\nEVAL(\"count(2,3)\")等于2。\nEVAL(\"sum\"+\"(2,3,5)\")等于10。\nEVAL(IF(true, \"sum\", \"count\") + \"(1,2,3,4)\")等于10。\nEVAL(IF(false, \"sum\", \"count\") + \"(1,2,3,4)\")等于4。","name":"EVAL","type":"OTHER"},{"def":"ATAN(number): 计算指定数值的反正切值。指定数值是返回角度的正切值，返回角度以弧度形式表示。\nNumber:返回角度的正切。\n备注:\n    返回角度在-pi/2到pi/2之间。\n    如果返回角度等于-pi/2或pi/2，ATAN将返回错误信息*NUM!。\n    用角度形式返回数值时，返回数值乘以180/PI()。\n示例:\nATAN(-1)等于-0.785398163（-pi/4弧度）。\nATAN(0)等于0（弧度）。\nATAN(2)*180/PI()等于63.43494882（度）。","name":"ATAN","type":"MATH"},{"def":"RANGE(from，to，step)函数表示从整数from开始，以step为每一步的大小，直到整数to的一个数字序列。\n例如：\nRANGE(1,5,1)表示从1开始，直到5(包括5)，每一步大小为1，那么它返回一个数字序列为[1,2,3,4,5]。\nRANGE(-1,6,2)表示从-1开始，直到6(包括6)，每一步大小为2，那么它返回一个数字序列为[-1,1,3,5]。\n备注：RANGE函数有三种参数形式：\n1 RANGE(to)，默认的from为1，step为1，例如：\n  RANGE(4)返回[1,2,3,4]。\n  RANGE(-5)返回[]。\n2 RANGE(from,to)，默认的step为1，例如:\n  RANGE(-1,3)返回[-1,0,1,2,3]。\n  RANGE(0,5)返回[0,1,2,3,4,5]。\n3 RANGE(from,to,step)，三个参数的情况参照上面的注释，例如：\n  RANGE(6,-1,-2)返回[6,4,2,0]。\n  RANGE(4,1,1)返回[]。","name":"RANGE","type":"ARRAY"},{"def":"TANH(number):返回某一数字的双曲正切值。\nnumber:为任意实数。\n双曲正切的计算公式如下：\n示例:\nTANH(-2) 等于 -0.96403\nTANH(0) 等于 0\nTANH(0.5) 等于 0.462117\n","name":"TANH","type":"MATH"},{"def":"ROUNDDOWN(number,num_digits):靠近零值，向下（绝对值减小的方向）舍入数字。\nnumber:为需要向下舍入的任意实数。\nnum_digits:舍入后的数字的位数。\n函数 ROUNDDOWN 和函数 ROUND 功能相似，不同之处在于函数 ROUNDDOWN 总是向下舍入数字。\n示例:\nROUNDDOWN(3.2, 0) 等于 3\nROUNDDOWN(76.9,0) 等于 76\nROUNDDOWN(3.14159, 3) 等于 3.141\nROUNDDOWN(-3.14159, 1) 等于 -3.1\nROUNDDOWN(31415.92654, -2) 等于 31,400\n","name":"ROUNDDOWN","type":"MATH"},{"def":"循环引用, =CIRCULAR(A1, B1, C1, D1)等同于=IF(&A1 = 1, 0, B1[A1:-1] + C1[A1:-1] – D1[A1:-1]),如需横向, 则传递第五个参数false","name":"CIRCULAR","type":"HA"},{"def":"HOUR(serial_number):返回某一指定时间的小时数。函数指定HOUR为0（0:00）到23（23:00)之间的一个整数。\nSerial_number:包含所求小时的时间。\n示例:\nHOUR(\"11:32:40\")等于11。\nHOUR(\"11:32:40\", \"HH:mm:ss\")等于11。","name":"HOUR","type":"DATETIME"},{"def":"ROUND(number,num_digits):返回某个数字按指定位数舍入后的数字。\nnumber:需要进行舍入的数字。\nnum_digits:指定的位数，按此位数进行舍入。\n如果 num_digits 大于 0，则舍入到指定的小数位。\n如果 num_digits 等于 0，则舍入到最接近的整数。\n如果 num_digits 小于 0，则在小数点左侧进行舍入。\n示例:\nROUND(2.15, 1) 等于 2.2\nROUND(2.149, 1) 等于 2.1\nROUND(-1.475, 2) 等于 -1.48\nROUND(21.5, -1) 等于 20\n因浮点数存在精度计算丢失问题, 导致计算结果里可能带上9999, 0000这些, \n因此加入第三个参数来控制是否需要去除9999. true表示需要过滤9999, 0000这些数据.","name":"ROUND","type":"MATH"},{"def":"YEARDELTA(date, delta):返回指定日期后delta年的日期。\n示例：\nYEARDELTA(\"2008-10-10\",10)等于2018-10-10。","name":"YEARDELTA","type":"DATETIME"},{"def":"DATEINYEAR(date, number):函数返回在一年当中第几天的日期。\n示例：\nDATEINYEAR(2008,100)等于2008-04-09，等价于DATEINYEAR(\"2008-08-08\",100)，也返回2008-04-09.\nDATEINYEAR(2008,-1)等于2008-12-31，等价于DATEINYEAR(\"2008-08-08\",-1)，也返回2008-12-31.","name":"DATEINYEAR","type":"DATETIME"},{"def":"WEIGHTEDAVERAGE(A1:A4,B1:B4): 返回指定数据的加权平均值。\n加权平均数是不同比重数据的平均数，加权平均数就是把原始数据按照合理的比例来计算。\nA1:A4,B1:B4:用于计算平均值的参数，A1~A4为数据，B1~B4为权值。\n示例:\n如果A1:A4为10,9,8,7，B1:B4为0.2,0.1,0.3,0.4则:\nWEIGHTEDAVERAGE(A1:A4,B1:B4)等于8.1。","name":"WEIGHTEDAVERAGE","type":"MATH"},{"def":"ASIN(number): 返回指定数值的反正弦值。反正弦值为一个角度，返回角度以弧度形式表示。\nNumber:需要返回角度的正弦值。\n备注:\n    指定数值必须在-1到1之间（含1与-1）。\n    返回角度在-pi/2到pi/2之间（含-pi/2与pi/2）。\n    用角度形式返回数值时，返回数值乘以180/PI()。\n示例:\nASIN(0.5)等于0.523598776（pi/6弧度）。\nASIN(1)等于1.570796327（pi/2弧度）。\nASIN(0.5)*180/PI()等于30（度）。","name":"ASIN","type":"MATH"},{"def":"INT(number): 返回数字下舍入（数值减小的方向）后最接近的整数值。\nNumber:需要下舍入为整数的实数。\n示例:\nINT(4.8)等于4。\nINT(-4.8)等于-5。\nINT(4.3)等于4。\nINT(-4.3)等于-5。\n公式INT(A1)将返回A1单元格中的一个正实数的整数数部分。","name":"INT","type":"MATH"},{"def":"GETUSERJOBTITLES():返回角色职务\n示例:\nGETUSERDEPARTMENTS():返回角色所有职务，若多个部门职务则返回职务数组","name":"GETUSERJOBTITLES","type":"OTHER"},{"def":"REGEXP(str, pattern):字符串str是否与正则表达式pattern相匹配。\n示例：\nREGEXP(\"aaaaac\",\"a*c\")等于true。\nREGEXP(\"abc\",\"a*c\")等于false。\n\nREGEXP(str, pattern,  intNumber):字符串str是否与具有给定模式 intNumber的正则表达式pattern相匹配。\n示例：\nCASE_INSENSITIVE = 0         启用不区分大小写的匹配。 默认情况下，不区分大小写的匹配假定仅匹配 US-ASCII 字符集中的字符。可以通过指                                                         定 UNICODE_CASE 标志连同此标志来启用 Unicode 感知的、不区分大小写的匹配。 \nMULTILINE = 1                          启用多行模式。\nDOTALL = 2                               启用 dotall 模式。在 dotall 模式中，表达式 . 可以匹配任何字符，包括行结束符。默认情况下，此表达式不匹配行                                                         结束符。\nUNICODE_CASE = 3               启用 Unicode 感知的大小写折叠。指定此标志后，由 CASE_INSENSITIVE 标志启用时，不区分大小写的匹配将以                                                        符合 Unicode Standard 的方式完成。\nCANON_EQ = 4                         启用规范等价。 指定此标志后，当且仅当其完整规范分解匹配时，两个字符才可视为匹配。\nUNIX_LINES = 5                        启用 Unix 行模式。 在此模式中，.、^ 和 $ 的行为中仅识别 '\\n' 行结束符。\nLITERAL = 6                               启用模式的字面值解析。 指定此标志后，指定模式的输入字符串就会作为字面值字符序列来对待。输入序列中的                                                          元字符或转义序列不具有任何特殊意义。 标志 CASE_INSENSITIVE 和 UNICODE_CASE 在与此标志一起使用时将                                                        对匹配产生影响。其他标志都变得多余了。\nCOMMENTS = 7                        模式中允许空白和注释。 此模式将忽略空白和在结束行之前以 # 开头的嵌入式注释。\n \nREGEXP(\"Aaaaabbbbc\",\"a*b*c\", 3)等于true。\nREGEXP(\"Aaaaabbbbc\",\"a*b*c\", 1)等于false。\n\n","name":"REGEXP","type":"TEXT"},{"def":"DAYSOFQUARTER(date): 返回从1900年1月后某年某季度的天数。\n示例：\nDAYSOFQUARTER(\"2009-02-01\")等于90。\nDAYSOFQUARTER(\"2009/05/05\")等于91。","name":"DAYSOFQUARTER","type":"DATETIME"},{"def":"AVERAGE(number1,number2,…,countstring): 返回指定数据的平均值。\nNumber1,number2…:用于计算平均值的参数; countString:文字、逻辑值是否参与计数。\n备注:\n    参数必须是数字，或是含有数字的名称，数组或引用。\n    如果数组或引用参数中含有文字，逻辑值，默认参与计数，countString为false则不参与计数；\n    空单元格始终不参与计数，但是，单元格中的零值参与。\n示例:\n如果A1:A6被命名为“ages”，分别等于10，23，文字，29，33及25，则:\nAVERAGE(A1:A6)等于20。\nAVERAGE(A1:A6, false)等于24。\nAVERAGE(ages)等于20。\n如果还有一个年龄为27的，求所有年龄的平均值为: AVERAGE(A1:A6,27)等于21。","name":"AVERAGE","type":"MATH"},{"def":"RADIANS(angle): 将角度转换成弧度。\nAngle:需要转换为弧度的角度。\n示例:\nRADIANS(90)等于1.570796327（π/2弧度）。","name":"RADIANS","type":"MATH"},{"def":"REMOVEARRAY(array, start, deleteCount):从数组array中删除从第start个元素开始的deleteCount个数组元素，并返回删除后的数组。\n示例：\nREMOVEARRAY([3, 4, 4, 2, 6, 7, 87], 4, 2)返回[3, 4, 4, 7, 87].\n","name":"REMOVEARRAY","type":"ARRAY"},{"def":"WEBIMAGE(path):在web页面上显示指定路径下的图片。","name":"WEBIMAGE","type":"OTHER"},{"def":"WEEK(serial_num):返回一个代表一年中的第几周的数字。\nSerial_num:表示输入的日期。\n备注:\nFineReport将日期保存为系列数，一个系列数代表一个与之匹配的日期，以方便用户对日期进行数值式计算。\n在1900年日期系统中，FineReport电子表格将1900年1月1日保存为系列数2，将1900年1月2日保存为系列数3，\n将1900年1月3日保存为系列数4……依此类推。如在1900年日期系统，1998年1月1日存为系列数35796。\n示例:\nWEEK(\"2010/1/1\")等于52。\nWEEK(\"2010/1/6\")等于1。\nWEEK(35796)等于1。","name":"WEEK","type":"DATETIME"},{"def":"filename(file)获取文件的文件名。\n当file为单文件时，返回文件名字符串，当file为多文件时，返回文件名的字符串数组。\n如果file不为文件类型，则返回错误信息。\n示例：\n假设文件控件在B2单元格，而B2单元格依次上传了三个不同类型文件{A.doc, C.xls ,B.cpt }，则filename(B2)返回值为[“A.doc”, “C.xls”, “B.cpt”]。","name":"FILENAME","type":"OTHER"},{"def":"COSH(number): 返回一个数值的双曲线余弦值。\nNumber:需要求其双曲线余弦值的一个实数。\n备注:\n   双曲线余弦值计算公式为: ，其中e是自然对数的底，e=2.71828182845904。\n示例:\nCOSH(3)等于10.06766200。\nCOSH(5)等于74.20994852。\nCOSH(6)等于201.7156361。","name":"COSH","type":"MATH"},{"def":"WEEKDAY(Serial_number):获取日期并返回星期数。返回值为介于0到6之间的某一整数，分别代表星期中的某一天（从星期日到星期六）。\nSerial_number:输入的日期\n备注:\nFineReport将日期保存为系列数，一个系列数代表一个与之匹配的日期，以方便用户对日期进行数值式计算。\n在1900年日期系统中，FineReport电子表格将1900年1月1日保存为系列数2，将1900年1月2日保存为系列数3，\n将1900年1月3日保存为系列数4……依此类推。如在1900年日期系统，1998年1月1日存为系列数35796。\n举例:\nWEEKDAY(\"2005/9/10\")等于6（星期六）。\nWEEKDAY(\"2005/9/11\")等于0（星期日）。\nWEEKDAY(35796)等于4（星期四）。\n","name":"WEEKDAY","type":"DATETIME"},{"def":"OR(logical1,logical2,…): 当所有参数的值为假时，返回FALSE；当任意参数的值为真时，返回TRUE。\nLogical1,logical2,…:指1到30个需要检验TRUE或FALSE的条件值。\n备注:\n    参数必须是逻辑值，或是含有逻辑值的数组或引用。\n    如果数组或引用中含有文本或空的单元格，则忽略其值。\n    如果在指定的单元格区域中没有逻辑值，AND函数将返回错误信息*NAME?。\n示例:\nOR(1+7=9,5+7=11)等于FALSE。\nOR(1+7=8,5+7=11)等于TRUE。","name":"OR","type":"LOGIC"},{"def":"MOD(number,divisor):返回两数相除的余数。结果的正负号与除数相同。\nnumber:为被除数。\ndivisor:为除数。\n示例:\nMOD(3, 2) 等于 1\nMOD(-3, 2) 等于 1\nMOD(3, -2) 等于 -1\nMOD(-3, -2) 等于 -1\n","name":"MOD","type":"MATH"},{"def":"TODAY():获取当前日期。\n示例：\n如果系统日期是2005年9月10日\n则TODAY()等于2005-9-10。","name":"TODAY","type":"DATETIME"},{"def":"ROUNDUP(number,num_digits):远离零值，向上（绝对值增大的方向）舍入数字。\nnumber:为需要向上舍入的任意实数。\nnum_digits:舍入后的数字的位数。\n函数 ROUNDUP 和函数 ROUND 功能相似，不同之处在于函数 ROUNDUP 总是向上舍入数字。\n示例:\nROUNDUP(3.2,0) 等于 4\nROUNDUP(76.9,0) 等于 77\nROUNDUP(3.14159, 3) 等于 3.142\nROUNDUP(-3.14159, 1) 等于 -3.2\nROUNDUP(31415.92654, -2) 等于 31,500\n\n","name":"ROUNDUP","type":"MATH"},{"def":"ROUND5(number,num_digits):这个是四舍五入，奇进偶不进。\nnumber:需要进行舍入的数字。\nnum_digits:指定的位数，按此位数进行舍入。\n如果 num_digits 大于 0，则舍入到指定的小数位。\n如果 num_digits 等于 0，则舍入到最接近的整数。\n如果 num_digits 小于 0，则在小数点左侧进行舍入。\n示例:\nROUND5(2.125, 2) 等于 2.12\nROUND5(2.135, 2) 等于 2.14\n","name":"ROUND5","type":"MATH"},{"def":"TIME(hour,minute,second): 返回代表指定时间的小数。介于0:00:00（12:00:00 A.M.）与23:59:59（11:59:59 P.M.）之间的时间可返回0到0.99999999之间的对应数值。\nHour:介于0到23之间的数。\nMinute:介于0到59之间的数。\nSecond:介于0到59之间的数。\n示例:\nTIME(14,40,0)等于2:40 PM。\nTIME(19,43,24)等于7:43 PM。","name":"TIME","type":"DATETIME"},{"def":"环比公式, =MOM(A1, B1)等同于=IF(&A1 > 1, B1 / B1[A1:-1],0), 其中如果需要指定偏移量x, 则传递第三个参数x, 第四个参数表示横纵向.\n如=MOM(A1, B1, -2, false)等同于=IF(&A1 > 1, B1 / B1[;A1:-2], 0)","name":"MOM","type":"HA"},{"def":"ASINH(number): 返回指定数值的反双曲正弦值。反双曲正弦值的双曲正弦等于指定数值。即: ASINH(SINH(number))=number。\nNumber:任意实数。\n示例:\nASINH(-5)等于-2.312438341。\nASINH(8)等于2.776472281。\nASINH(16)等于3.466711038。","name":"ASINH","type":"MATH"},{"def":"EENNUMBER(value)：将给定的BigDecimal类型的数字（100以内）取整后转化成英文金额的字符串。\n示例：\nENNUMBER(23.49)等于TWENTY THREE。\n注：若出现结果为空，需要将数字强制转换为BigDecimal类型，例如：ENNUMBER(TOBIGDECIMAL(80))","name":"ENNUMBER","type":"TEXT"},{"def":"CODE(text): 计算文本串中第一个字符的数字代码。返回的代码对应于计算机使用的字符集。\nText:需要计算第一个字符代码的文本或单元格引用。\n示例:\nCODE(\"S\")等于83。\nCODE(\"Spreadsheet\")等于83。","name":"CODE","type":"TEXT"},{"def":"DEGREES(angle): 将弧度转化为度。\nangle:待转换的弧度角。\n示例:\nDEGREES(PI()/2)等于90。\nDEGREES(3.1415926)等于179.9999969。","name":"DEGREES","type":"MATH"},{"def":"LEN(args): 返回文本串中的字符数或者数组的长度。\n需要注意的是：参数args为文本串时，空格也计为字符。\n参数args为数组时，直接返回数组长度。\n示例:\nLEN(\"Evermore software\")等于17。\nLEN(\" \")等于1。\nLEN(['a','b'])等于2。\n","name":"LEN","type":"TEXT"},{"def":"DATETIME():获取当前日期和时间。\n示例：\n如果系统时间是2005年9月10日 15点18分38秒\n则DATETIME()等于2005-9-10 15:18:36。","name":"DATETIME","type":"DELETE"},{"def":"UNIQUEARRAY(array):去掉数组array中的重复元素。\n示例：\nUNIQUEARRAY([14, 2, 3, 4, 3, 2, 5, 6, 2, 7, 9, 12, 3])返回[14, 2, 3, 4, 5, 6, 7, 9, 12].","name":"UNIQUEARRAY","type":"ARRAY"},{"def":"PROMOTION(value1,value2):返回value2在value1上提升的比例。\n示例：\nPROMOTION(12, 14)等于0.166666666，即提升了16.6666666%.\nPROMOTION(-12, 14)等于2.166666666，即提升了216.6666666%.","name":"PROMOTION","type":"MATH"},{"def":"PI(number): 是一个数学常量函数，当number为空时，函数返回精确到15位的数值3.141592653589793；当参数不为空时，number表示PI的倍数。\n示例:\nSIN(PI()/2)等于1。\n计算圆的面积的公式: S=PI()*(r^2)，其中S为圆的面积，R为圆的半径。\nPI(3)等于9.42477796076938。","name":"PI","type":"MATH"},{"def":"ISNULL(object):判断对象中所有的值是否全部都是NULL或者为空字符串。","name":"ISNULL","type":"OTHER"},{"def":"LET(变量名,变量值,变量名,变量值,..., 表达式):局部变量赋值函数,参数的个数N必须为奇数, 最后一个是表达式，前面是N-1(偶数)为局部变量赋值对。\n变量名: 必须是合法的变量名，以字母开头，可以包括字母，数字和下划线\n表达式: 根据前面的N-1个参数赋值后计算出来的结果，这些变量赋值只在这个表达式内部有效\n示例:\nLET(a, 5,b, 6, a+b)等于11\n","name":"LET","type":"OTHER"},{"def":"SECOND(serial_number):返回某一指定时间的秒数，其值是介于0与59之间的一个整数。\nSerial_number:包含所求秒数的时间。\n示例:\nSECOND(\"15:36:25\")等于25。\nSECOND(\"15:36:25\", \"HH:mm:ss\")等于25。","name":"SECOND","type":"DATETIME"},{"def":"EXP(number): 返回e的n次幂。常数e为自然对数的底数，等于2.71828182845904。\nNumber:为任意实数，作为常数e的指数。\n备注:\n    如果要返回其他常数作为底数的幂，可以使用指数运算符（^）。例如: 在4^2中，4是底数，而2是指数。\n    EXP函数与LN函数互为反函数。\n示例:\nEXP(0)等于1。\nEXP(3)等于20.08553692。\nEXP(LN(2))等于2。","name":"EXP","type":"MATH"},{"def":"treelayer(TreeObject, Int, Boolean, String)：\n返回tree对象第n层的值，并且可以设置返回值类型及分隔符。\nTreeObject：tree对象，如$tree。\nInt：想要获得层级的数值，最上层为1，第二层为2，依此类推,若无则返回最底层\n。Boolean：返回值类型为字符串还是数组，默认false，返回数组；为true时返回字符串。\nString：当Boolean为true返回字符串时的分隔符，以双引号表示，默认为逗号\",\"，如\";\"。\n示例：\n假设$tree勾选的值为中国-江苏-南京,中国-浙江-杭州，则treelayer($tree, true, ”\\’,\\’”)：返回”’,’”分割的所选中节点字符串”南京’,’杭州”treelayer($tree, 2)：以数组形式返回第二层[“江苏”,”浙江”]。treelayer($tree, 2, true, ”\\’,\\’”)：返回”’,’”分割的字符串江苏’,’浙江。","name":"TREELAYER","type":"OTHER"},{"def":"读取配置文件","name":"TOTEXT","type":"DELETE"}];
+BI.FormulaJson = [{def: "MONTH:(serial_number)返回日期中的月。月是介于1和12之间的一个数。\nSerial_number:含有所求的月的日期.\n备注:\nFineReport将日期保存为系列数，一个系列数代表一个与之匹配的日期，以方便用户对日期进行数值式计算。\n在1900年日期系统中，FineReport电子表格将1900年1月1日保存为系列数2，将1900年1月2日保存为系列数3，\n将1900年1月3日保存为系列数4……依此类推。如在1900年日期系统，1998年1月1日存为系列数35796。\n示例:\nMONTH(\"2000/1/1\")等于1。\nMONTH(\"2006/05/05\")等于5。\nMONTH(\"1997/04/20\")等于4。\nMONTH(\"2000-1-1\", \"yyyy-MM-dd\")等于1。\nMONTH(\"2006-05-05\", \"yyyy-MM-dd\")等于5。\nMONTH(\"1997-04-20\", \"yyyy-MM-dd\")等于4。\nMONTH(35796)等于1。", name: "MONTH", type: "DATETIME"}, {def: "ROWCOUNT(tableData)返回tableData的行数。\ntableData:TableData的名字，字符串形式的。\n备注:\n    先从私有数据源中查找，然后再从公有数据源中查找，返回的是tableData的行数。\n示例:\n以我们提供的数据源FRDemo为例\n新建数据集ds1:SELECT * FROM [CUSTOMER]\nROWCOUNT(\"ds1\")等于20。", name: "ROWCOUNT", type: "REPORT"}, {def: "RAND(): 返回均匀分布的随机数。每计算一次工作表，函数都会返回一个新的随机数值。\n备注:\n    要生成一个位于a和b之间的随机数，可以使用以下的公式: C=RAND()*(b-a)+a。\n    如果要使一个随机产生的数值不随单元格的重计算而改变，可以在编辑框中输入=RAND()并保持编辑状态，然后按F9，将公式永久性地改为随机数。\n示例:\n假如需要生成一个大于等于0，小于60的随机数，使用公式: =RAND()*60。\n假如需要生成一个大于等于0，小于19的随机数，使用公式: =RAND()*19。\n假如需要生成一个大于等于0，小于50的随机数，使用公式: =RAND()*50。", name: "RAND", type: "MATH"}, {def: "GETUSERDEPARTMENTS():返回角色部门\n示例:\nGETUSERDEPARTMENTS():返回角色所有部门，若多个部门则数组\nGETUSERDEPARTMENTS(3,2):返回角色该部门的第三层和第二层名字，\n若多个部门则返回数组，若没有第三层则只显示第二层", name: "GETUSERDEPARTMENTS", type: "OTHER"}, {def: "FORMAT(object,format) : 返回object的format格式。\nobject 需要被格式化对象，可以是String，数字，Object(常用的有Date, Time)。\nformat 格式化的样式。\n示例\nFORMAT(1234.5, \"#,##0.00\") => 1234.50\nFORMAT(1234.5, \"#,##0\") => 1234\nFORMAT(1234.5, \"￥#,##0.00\") => ￥1234.50\nFORMAT(1.5, \"0%\") => 150%\nFORMAT(1.5, \"0.000%\") => 150.000%\nFORMAT(6789, \"##0.0E0\") => 6.789E3\nFORMAT(6789, \"0.00E00\") => 6.79E03\nFORMAT(date(2007,1,1), \"EEEEE, MMMMM dd, yyyy\") => 星期一，一月 01，2007\nFORMAT(date(2007,1,13), \"MM/dd/yyyy\") => 01/13/2007\nFORMAT(date(2007,1,13), \"M-d-yy\") => 1-13-07\nFORMAT(time(16,23,56), \"h:mm:ss a\") => 4:23:56 下午", name: "FORMAT", type: "TEXT"}, {def: "TRIM(text): 清除文本中所有空格，单词间的单个空格除外，也可用于带有不规则空格的文本。\nText:需要清除空格的文本。\n示例:\nTRIM(\" Monthly Report\")等于Monthly Report。", name: "TRIM", type: "TEXT"}, {def: "SQRT(number): 返回一个正数的平方根。\nNumber:要求其平方根的任一正数。\n备注:\nNumber必须是一个正数，否则函数返回错误信息*NUM!。\n示例:\nSQRT(64)等于8。\nSQRT(-64)返回*NUM!。", name: "SQRT", type: "MATH"}, {def: "DAYSOFYEAR(year):返回某年包含的天数。\n示例：\nDAYSOFYEAR(2008)等于365，等价于DAYSOFYEAR(\"2008-01-01\")。", name: "DAYSOFYEAR", type: "DATETIME"}, {def: "RANK(number,ref,order): 返回一个数在一个数组中的秩。(如果把这个数组排序，该数的秩即为它在数组中的序号。)\nNumber 所求秩的数。(可以是Boolean型，true=1，false=0)\nRef    可以是数组，引用，或一系列数，非实数的值被忽略处理(接受Boolean型，true=1，false=0)。\nOrder  指定求秩的参数，非零为升序，零为降序\n\n备注\n1.  RANK对重复的数返回相同的秩，但重复的数影响后面的数的秩，比如，在一组升序排列的整数中，如果5出现了2次，并且秩为3，那么6的秩为5 (没有数的秩是4).\n\n示例\nA1:A5 = 6, 4.5, 4.5, 2, 4\nRANK(A1,A1:A5,1) 即 6 的秩为 5.\n\nRANK(3,1,2,\"go\",3,4,1) = 3, \"go\"被忽略。", name: "RANK", type: "OTHER"}, {def: "ODD(number):返回对指定数值进行舍入后的奇数。\nnumber:是要舍入求奇的数值。\n不论正负号如何，数值都朝着远离 0 的方向舍入。如果 number 恰好是奇数，则不须进行任何舍入处理。\n示例:\nODD(1.5) 等于 3\nODD(3) 等于 3\nODD(2) 等于 3\nODD(-1) 等于 -1", name: "ODD", type: "MATH"}, {def: "COLCOUNT(tableData):返回tableData中列的个数。\ntableData:tableData的名字，字符串形式的。\n备注：\n    先从私有数据源中查找，然后再从公有数据源中查找，返回的是第一个查找到的tableData中列数。\n示例:\n以我们提供的数据源FRDemo为例\n新建数据集ds1:SELECT * FROM [CUSTOMER]\nCOLCOUNT(\"ds1\")等于6。\n", name: "COLCOUNT", type: "REPORT"}, {def: "ENDWITH(str1，str2):判断字符串str1是否以str2结束。\n备注:\n    str1和str2都是大小写敏感的。\n示例:\nENDWITH(\"FineReport\",\"Report\")等于true。\nENDWITH(\"FineReport\",\"Fine\")等于false。\nENDWITH(\"FineReport\",\"report\")等于false。", name: "ENDWITH", type: "TEXT"}, {def: "LOG10(number):返回以 10 为底的对数。\nnumber: 用于常用对数计算的正实数。\n示例:\nLOG10(86) 等于 1.934498451\nLOG10(10) 等于 1\nLOG10(1E5) 等于 5\n", name: "LOG10", type: "MATH"}, {def: "MAPARRAY(array, fn):把一个数组中的项目转换到另一个数组中。\narray (Array): 要转换的数组 \nfn (Function): 处理数组项目的函数 \n示例：\nMAPARRAY([3,4,2,3,6,8,7], item != 3)等于[false,true,true,false,true,true,true].", name: "MAPARRAY", type: "ARRAY"}, {def: "FLOOR(number): 将参数number沿绝对值减小的方向去尾舍入。\nNumber:待舍入的数值。\n示例:\nFLOOR(-2.5)等于-2。\nFLOOR(2.5)等于2。\n", name: "FLOOR", type: "MATH"}, {def: "NUMTO(number,bool)或NUMTO(number):返回number的中文表示。其中bool用于选择中文表示的方式，当没有bool时采用默认方式显示。\n示例：NUMTO(2345,true)等于二三四五。\n示例：NUMTO(2345,false)等于二千三百四十五。\n示例：NUMTO(2345)等于二千三百四十五。", name: "NUMTO", type: "TEXT"}, {def: "ATANH(number): 返回数字的反双曲正切值，该函数的参数值即为反双曲正切值的双曲正切值。\nNumber:指介于-1~1之间的任意实数。\n备注:\n    指定的number必须介于-1~1之间（不包括-1，1）。\n    ATANH(TANH(number))=number，例如，ATANH(TANH(8))=8。\n示例:\nATANH(-0.5)等于-0.549306144。\nATANH(0)等于0。\nATANH(0.7)等于0.867300528。", name: "ATANH", type: "MATH"}, {def: "YEAR:(serial_number)返回日期中的年。Year是介于1900和9999之间的一个数。\nSerial_number:含有所求的年的日期.\n备注:\nFineReport将日期保存为系列数，一个系列数代表一个与之匹配的日期，以方便用户对日期进行数值式计算。\n在1900年日期系统中，FineReport电子表格将1900年1月1日保存为系列数2，将1900年1月2日保存为系列数3，\n将1900年1月3日保存为系列数4……依此类推。如在1900年日期系统，1998年1月1日存为系列数35796。\n示例:\nYEAR(\"2000/1/1\")等于2000。\nYEAR(\"2006/05/05\")等于2006。\nYEAR(\"1997/04/20\")等于1997。\nYEAR(\"2000-1-1\", \"yyyy-MM-dd\")等于2000。\nYEAR(\"2006-05-05\", \"yyyy-MM-dd\")等于2006。\nYEAR(\"1997-04-20\", \"yyyy-MM-dd\")等于1997。\nYEAR(35796)等于1998。", name: "YEAR", type: "DATETIME"}, {def: "SLICEARRAY(array, start, end):返回数组从第start个到第end个元素(包括第end个元素)。\n示例：\nSLICEARRAY([3, 4, 4, 5, 1, 5, 7], 3, 6)返回[4, 5, 1, 5].\n当不使用end参数时，返回从start开始到数组结束之间的元素。\nSLICEARRAY([3, 4, 4, 5, 1, 5, 7], 3)返回[4, 5, 1, 5, 7].", name: "SLICEARRAY", type: "ARRAY"}, {def: "", name: "DECODE", type: "OTHER"}, {def: "ENMONEY(value):将给定的BigDemical类型的数字转换成英文金额字符串。\n示例：\nENMONEY(23.49)等于TWENTY THREE AND CENTS FORTY NINE", name: "ENMONEY", type: "TEXT"}, {def: "IF(boolean,number1/string1,number2/string2):判断函数,boolean为true时返回第二个参数,为false时返回第三个。\nboolean: 用于判断的布尔值,true或者false。\nnumber1/string1: 第一个参数，如果boolean为ture,返回这个值。\nnumber2/string2: 第二个参数，如果boolean为false,返回这个值。\n示例:\nIF(true,2,8)等于2\nIF(false,\"first\",\"second\")等于second\nIF(true,\"first\",7)等于first", name: "IF", type: "LOGIC"}, {def: "DATEINWEEK(date, number):函数返回在某一个星期当中第几天的日期。\n示例：\ndateInWeek(\"2008-08-28\", 2)等于2008-08-26。\ndateInWeek(\"2008-08-28\", -1)等于2008-08-31。\n如果最后一个参数为-1，返回该日期所在星期的最后一天\n", name: "DATEINWEEK", type: "DATETIME"}, {def: "MONTHDELTA(date,delta):返回指定日期date后delta个月的日期。\n示例：\nMONTHDELTA(\"2008-08-08\", 4)等于2008-12-08。", name: "MONTHDELTA", type: "DATETIME"}, {def: "FIELDS(connectionName,tableName):返回tableName这个表中的所有字段名。\n示例：\n数据库BASE中有个名叫task的表的内容如下：\nname start  end\na    2008   2009\nb    2009   2012\n那么FIELDS(\"BASE\",\"task\")等于[name,start,end].", name: "FIELDS", type: "REPORT"}, {def: "DATEDIF(start_date,end_date,unit):返回两个指定日期间的天数、月数或年数。\nStart_date:代表所指定时间段的初始日期。\nEnd_date:代表所指定时间段的终止日期。\nUnit:函数返回信息的类型。\n若unit=“Y”，则DATEDIF返回指定时间段的年差数。\n若unit=“M”，则DATEDIF返回指定时间段的月差数。\n若unit=“D”，则DATEDIF返回指定时间段的日差数。\n若unit=“MD”，则DATEDIF忽略年和月，返回指定时间段的日差数。\n若unit=“YM”，则DATEDIF忽略年和日，返回指定时间段的月差数。\n若unit=“YD”，则DATEDIF忽略年，返回指定时间段的日差数。\n示例:\nDATEDIF(\"2001/2/28\",\"2004/3/20\",\"Y\")等于3，即在2001年2月28日与2004年3月20日之间有3个整年。\nDATEDIF(\"2001/2/28\",\"2004/3/20\",\"M\")等于37，即在2001年2月28日与2004年3月20日之间有36个整月。\nDATEDIF(\"2001/2/28\",\"2004/3/20\",\"D\")等于1116，即在2001年2月28日与2004年3月20日之间有1116个整天。\nDATEDIF(\"2001/2/28\",\"2004/3/20\",\"MD\")等于8，即忽略月和年后，2001年2月28日与2004年3月20日的差为8天。\nDATEDIF(\"2001/1/28\",\"2004/3/20\",\"YM\")等于2，即忽略日和年后，2001年1月28日与2004年3月20日的差为2个月。\nDATEDIF(\"2001/2/28\",\"2004/3/20\",\"YD\")等于21，即忽略年后，2001年2月28日与2004年3月20日的差为21天。", name: "DATEDIF", type: "DATETIME"}, {def: "TOIMAGE(path):显示指定路径下的图片。此处默认开启了图片缓存功能以加速报表的生成.\n如不需要缓存，请在参数后面追加值FALSE，例如：TOIMAGE(\"D:/fr.png\",false).\n如需要指定图片大小,拉伸显示, 则需要添加参数,TOIMAGE(patch, true, width, height).\n示例:=toimage(\"d:/1.jpg\", true, \"50%\", 300), 第三个参数为指定宽度, 第四个参数为指定高度.\n如果参数为整数, 则直接写数字, 如果为百分比, 则需要加上引号, 如\"300%\"", name: "TOIMAGE", type: "OTHER"}, {def: "LEFT(text,num_chars): 根据指定的字符数返回文本串中的第一个或前几个字符。\nText:包含需要选取字符的文本串或单元格引用。\nNum_chars:指定返回的字符串长度。\n备注:\n    Num_chars的值必须等于或大于0。\n    如果num_chars大于整个文本的长度，LEFT函数将返回所有的文本。\n    如果省略num_chars，则默认值为1。\n示例:\nLEFT(\"Fine software\",8)等于“Fine sof”。\nLEFT(\"Fine software\")等于“F”。\n如果单元格A3中含有“China”，则LEFT(A3,2)等于“Ch”。", name: "LEFT", type: "TEXT"}, {def: "SUBSTITUTE(text,old_text,new_text,instance_num): 用new_text替换文本串中的old_text。\nText:需要被替换字符的文本，或含有文本的单元格引用。\nOld_text:需要被替换的部分文本。\nNew_text:用于替换old_text的文本。\nInstance_num:指定用new_text来替换第几次出现的old_text。如果指定了instance_num，则只有指定位置上的old_text被替换，否则文字串中出现的所有old_text都被new_text替换。\n备注:\n    如果需要替换文本串中的指定文本，则使用SUBSTITUTE函数；如果需要替换文本串中指定位置上的任意文本，则使用REPLACE函数。\n示例:\nSUBSTITUTE(\"data base\",\"base\",\"model\")等于“data model”。\nSUBSTITUTE(\"July 28, 2000\",\"2\",\"1\",1)等于“July 18, 2000”。\nSUBSTITUTE(\"July 28, 2000\",\"2\",\"1\")等于“July 18, 1000”。\nSUBSTITUTE(\"July 28, 2000\",\"2\",\"1\",2)等于“July 28, 1000”。 ", name: "SUBSTITUTE", type: "TEXT"}, {def: "LOG(number,base): 按指定的任意底数，返回数值的对数。\nNumber:需要求对数的正实数。\nBase:对数的底数。如果省略底数，默认值为10。\n示例:\nLOG(16,2)等于4。\nLOG(10)等于1。\nLOG(24,3)等于2.892789261。", name: "LOG", type: "MATH"}, {def: "SORTARRAY(array):返回数组array排过序的数组。\n示例：\nSORTARRAY([3, 4, 4, 5, 1, 5, 7])返回[1, 3, 4, 4, 5, 5, 7].\n注意：数组array的元素类型必须一样，并且要可比较。", name: "SORTARRAY", type: "ARRAY"}, {def: "DATEDELTA(date, deltadays):返回一个日期??date后deltadays的日期。\ndeltaDays可以为正值，负值，零。\n示例：\nDATEDELTA(\"2008-08-08\",  -10)等于2008-07-29。\nDATEDELTA(\"2008-08-08\",   10)等于2008-08-18。", name: "DATEDELTA", type: "DATETIME"}, {def: "MID(text,start_num,num_chars): 返回文本串中从指定位置开始的一定数目的字符，该数目由用户指定。\nText:包含要提取字符的文本串。\nStart_num:文本中需要提取字符的起始位置。文本中第一个字符的start_num为1，依此类推。\nNum_chars:返回字符的长度。\n备注:\n    如果start_num大于文本长度，MID函数返回“”（空文本）。\n    如果start_num小于文本长度，并且start_num加上num_chars大于文本长度，MID函数将从start_num指定的起始字符直至文本末的所有字符。\n    如果start_num小于1，MID函数返回错误信息*VALUE!。\n    如果num_chars是负数，MID函数返回错误信息*VALUE!。\n示例:\nMID(\"Finemore software\",10,8)返回“software”。\nMID(\"Finemore software\",30,5)返回“”（空文本）。\nMID(\"Finemore software\",0,8)返回*VALUE!。\nMID(\"Finemore software\",5,-1)返回*VALUE!。", name: "MID", type: "TEXT"}, {def: "ATAN2(x_num,y_num): 返回x、y坐标的反正切值。返回角度为x轴与过（x_num,y_num）与坐标原点（0,0）的一条直线形成的角度。该角度以弧度显示。\nX_num:指定点的x坐标。\nY_num:指定点的y坐标。\n备注:\n    正值表示从x轴开始以逆时针方式所得的角度；负值表示从x轴开始以顺时针方式所得的角度。\na > 0,b > 0 or a > 0, b < 0时，公式直接成立；\na < 0,b > 0, ATAN2(a,b)=PI()-ABS(ATAN(b/a))\na < 0,b < 0, ATAN2(a,b)=ABS(ATAN(b/a))-PI()\n    当x_num与y_num都为0时，ATAN2返回错误信息*DIV/0!。\n    用角度制显示返回数值时，把返回数值乘以180/PI()。\n    返回值以弧度表示（返回值大于-pi且小于等于pi）。\n示例:\nATAN2(-2,2)等于2.356194490192345（弧度制的3*pi/4）。\nATAN2(2,2)等于0.785398163（弧度制的pi/4）。\nATAN2(-2,2)*180/PI()等于135（角度制）。", name: "ATAN2", type: "MATH"}, {def: "SUM(number1,number2,…): 求一个指定单元格区域中所有数字之和。\nNumber1,number2,…:1到30个参数或指定单元格区域中所有数字。\n备注:\n    函数将直接键入参数中的数值、逻辑值及文本表达式计算在内。\n    若参数是数组或引用，则只有数组或单元格引用中的数值进行计算。\n示例:\nSUM(70,80)等于150。\nSUM(\"70\",80,TRUE)等于151，逻辑值“TRUE”作为1来计算；“FALSE”作为0计算；文本“70”作为70来计算。", name: "SUM", type: "MATH"}, {def: "EXACT(text1,text2): 检测两组文本是否相同。如果完全相同，EXACT函数返回TRUE；否则，返回FALSE。EXACT函数可以区分大小写，但忽略格式的不同。同时也可以利用EXACT函数来检测输入文档的文字。\nText1:需要比较的第一组文本。\nText2:需要比较的第二组文本。\n示例:\nEXACT(\"Spreadsheet\",\"Spreadsheet\")等于TRUE。\nEXACT(\"Spreadsheet\",\"S preadsheet\")等于FALSE。\nEXACT(\"Spreadsheet\",\"spreadsheet\")等于FALSE。", name: "EXACT", type: "TEXT"}, {def: "TOINTEGER(text): 将文本转换成Integer对象。\nText:需要转换的文本。\n示例:\nTOINTEGER(\"123\")等于 new Integer(123)。", name: "TOINTEGER", type: "TEXT"}, {def: "ACOSH(number): 返回给定数值的反双曲余弦。\nNumber:返回值的双曲余弦。\n备注:\n    参数number的值必须大于或等于1。\n    ACOSH(COSH(number))=number。\n示例:\nACOSH(1)等于0。\nACOSH(8)等于2.768659383。\nACOSH(5.5)等于2.389526435。", name: "ACOSH", type: "MATH"}, {def: "weekdate(year,month,weekOfMonth,dayOfWeek): 返回指定年月的指定周的周几的具体日期。\n示例：\nweekdate(2009,10,2,1)\n返回的是2009年的10月的第二个周的第一天即星期天的日期，返回的是2009-10-04\n最后一个参数dayOfWeek为-1时，表示这个周的最后一天\n示例：\nweekdate(2009,12,1,-1)\n返回的是2009年的12月的第一个周的最后一天即星期六的日期，返回的是2009-12-05\n", name: "WEEKDATE", type: "DATETIME"}, {def: "MIN(number1,number2,…): 返回参数列表中的最小值。\nNumber1,number2,…:1到30个需要找出最小值的参数。\n备注:\n    若参数中没有数字，函数MIN将返回0。\n    参数应为数字、空白单元格、逻辑值或是表示数值的文本串。如果参数是错误值时，MIN将返回错误信息。\n    如果数组或引用参数中包含可解析文本值，逻辑值，零值或空白单元格，这些值都将参与计算，而不可解析的文本值忽略不计。\n示例:\n如果B1:B4包含3，6，9，12，则:\nMIN(B1:B4)等于3。\nMIN(B1:B4,0)等于0。", name: "MIN", type: "MATH"}, {def: "STARTWITH(str1，str2):判断字符串str1是否以str2开始。\n备注:\n    str1和str2都是大小写敏感的。\n示例:\nSTARTWITH(\"FineReport\",\"Fine\")等于true。\nSTARTWITH(\"FineReport\",\"Report\")等于false。\nSTARTWITH(\"FineReport\",\"fine\")等于false。", name: "STARTWITH", type: "TEXT"}, {def: "COMBIN(number,number_chosen): 返回若干个指定对象的组合数。该函数与数学表达式为Cnk功能相同。\nNumber或数学表达式中的“n”指对象总数。\nNumber_chosen或数学表达式中的“k”指在对象总数中某一组合的数量。\n备注:\n    Number必须是正整数，number_chosen必须是非负整数。\n    如果number和number_chosen小于0或number小于number_chosen，函数返回错误信息*NUM!。\n    对象组合是对象的子集。与排列不同的是，组合不涉及对象内部的先后顺序，而顺序对排列是非常重要的。\n    假设number=n，number_chosen=k，则: COMBIN(n,k)=Cnk=n!/(k!(n-k)!)。\n示例:\nCOMBIN(5,6)等于*NUM!。\nCOMBIN(5,2)等于10。", name: "COMBIN", type: "MATH"}, {def: "EVEN(number):返回沿绝对值增大方向取整后最接近的偶数。使用该函数可以处理那些成对出现的对象。\nnumber:所要取整的数值。\n不论正负号如何，数值都朝着远离 0 的方向舍入。如果 number 恰好是偶数，则不须进行任何舍入处理。\n示例:\nEVEN(1.5) 等于 2\nEVEN(3) 等于 4\nEVEN(2) 等于 2\nEVEN(-1) 等于 -2", name: "EVEN", type: "MATH"}, {def: "COUNT(value1,value2,…): 计算数组或数据区域中所含项的个数。\nValue1,value2,…:可包含任何类型数据的参数。", name: "COUNT", type: "MATH"}, {def: "INDEXOFARRAY(array, index):返回数组array的第index个元素。\n示例：\nINDEXOFARRAY([\"第一个\", \"第二个\", \"第三个\"], 2)返回\"第二个\"。", name: "INDEXOFARRAY", type: "ARRAY"}, {def: "MAP(object, string, int, int):四个参数分别是索引值,数据集的名字,索引值所在列序号,返回值所在列序号。\n提醒：后两个参数也可以写列名代替。\n根据数据集的名字,找到对应的数据集,找到其中索引列的值为key所对应的返回值。\n数据集的查找方式是依次从报表数据集找到服务器数据集。\n索引列序号与返回值序列号的初始值为1示例:\nMAP(1001, \"employee\", 1, 2)返回employee数据集,第1列中值为1001那条记录中第2列的值。\nMAP(1001, \"employee\", \"name\", \"address\")返回employee数据集,name列中值为1001那条记录中address列的值。", name: "MAP", type: "REPORT"}, {def: "SEQ(): 返回数值，在整个报表执行过程中，返回该函数被第几次执行了。\n示例:\nSEQ()在第一次执行时，结果为1。\nSEQ()在第二次执行时，结果为2。", name: "SEQ", type: "OTHER"}, {def: "i18n为本软件内置的国际化公式,可以对一些常用的词语进行国际化.\n示例:i18n('File'), 则会在中文语言环境下显示为: 文件, 而在英文语言环境下显示为: File", name: "I18N", type: "REPORT"}, {def: "层次坐标简写, 等同于=A1[A1:-1], 若需=B1[A1:-1]则HIERARCHY(A1, B1).\n若为横向, 偏移量为-2, 则写成HIERARCHY(A1, B1, -2, false), 等同于=B1[;A1:-1].\n公式中最后一个参数表示横纵向, 默认不传递, 表示纵向扩展, 若横向扩展, 则需要加上最后一个参数FALSE来区分. ", name: "HIERARCHY", type: "HA"}, {def: "", name: "ENCODE", type: "OTHER"}, {def: "DATEINMONTH(date, number):函数返回在某一个月当中第几天的日期。\n示例：\nDATEINMONTH(\"2008-08-08\", 20) 等于2008-08-20。\nDATEINMONTH(\"2008-08-08\", -1) 等于2008-08-31。", name: "DATEINMONTH", type: "DATETIME"}, {def: "TOOCTAL(int): 将一个十进制整型数转换成八进制表示的字符串。\nint:表示需要进行转换的十进制整数。\n示例:\nTOOCTAL(10)等于 \"12\"。\nTOOCTAL(20)等于 \"24\"。", name: "TOOCTAL", type: "MATH"}, {def: "REPEAT(text,number_times): 根据指定的次数重复显示文本。REPEAT函数可用来显示同一字符串，并对单元格进行填充。\nText:需要重复显示的文本或包含文本的单元格引用。\nNumber_times:指定文本重复的次数，且为正数。如果number_times为0，REPEAT函数将返回“”（空文本）。如果number_times不是整数，将被取整。REPEAT函数的最终结果通常不大于32767个字符。\n备注:\n    该函数可被用于在工作表中创建简单的直方图。\n示例:\nREPEAT(\"$\",4)等于“$$$$”。\n如果单元格B10的内容为“你好”，REPEAT(B10,3)等于“你好你好你好”。", name: "REPEAT", type: "TEXT"}, {def: "GREPARRAY(array，fn):函数(返回true或者false)是条件，过滤此数组，最后形成一个新数组。\n示例：\nGREPARRAY([3,4,2,3,6,8,7], item != 3)等于[4,2,6,8,7].\n", name: "GREPARRAY", type: "ARRAY"}, {def: "MAX(number1,number2,…): 返回参数列表中的最大值。\nNumber1,number2,…:1到30个需要找出最大值的参数。\n备注:\n    参数可以是数字、空白单元格、逻辑值或数字的文本表达式。\n    如果数组或引用参数中包含可解析文本值，逻辑值，零值或空白单元格，这些值都将参与计算，而不可解析的文本值忽略不计。\n    如果参数中没有任何数字，MAX将返回0。\n示例:\nMAX(0.1,0,1.2)等于1.2。", name: "MAX", type: "MATH"}, {def: "CHAR(number): 根据指定数字返回对应的字符。CHAR函数可将计算机其他类型的数字代码转换为字符。\nNumber:用于指定字符的数字，介于1~65535之间（包括1和65535）。\n示例:\nCHAR(88)等于“X”。\nCHAR(45)等于“-”。", name: "CHAR", type: "TEXT"}, {def: "TRUNC(number,num_digits):将数字的小数部分截去，返回整数。\nnumber:需要截尾取整的数字。\nnum_digits:用于指定取整精度的数字。\n示例:\nTRUNC(8.9) 等于 8\nTRUNC(-8.9) 等于 -8\nTRUNC(PI()) 等于 3\n", name: "TRUNC", type: "MATH"}, {def: "FACT(number):返回数的阶乘，一个数的阶乘等于 1*2*3*...*该数。\nnumber:要计算其阶乘的非负数。如果输入的 number 不是整数，则截尾取整。\n示例:\nFACT(1) 等于 1\nFACT(1.9) 等于 FACT(1) 等于 1\nFACT(0) 等于 1\nFACT(5) 等于 1*2*3*4*5 等于 120\n", name: "FACT", type: "MATH"}, {def: "STDEV(array1): 计算数据系列的标准偏差(与Excel的同名函数作用相同)。\n\n示例:\nSTDEV([1,2,3])=1。\n", name: "STDEV", type: "OTHER"}, {def: "SPLIT(String1,String2)：返回由String2分割String1组成的字符串数组。\nString1：以双引号表示的字符串。\nString2：以双引号表示的分隔符。例如逗号\",\"\n示例:\nSPLIT(\"hello,world,yes\",\",\") = [\"hello\",\"world\",\"yes\"]。\nSPLIT(\"this is very good\",\" \") = [\"this\",\"is\",\"very\",\"good\"]。\n备注：\n如果只有一个参数，则返回一个错误。\n如果有多个参数，则只有前两个起作用。", name: "SPLIT", type: "TEXT"}, {def: "INARRAY(co, array):返回co在数组array中的位置，如果co不在array中，则返回0.\n示例：\nString[] arr = {\"a\",\"b\",\"c\",\"d\"}\n那么INARRAY(\"b\", arr)等于2.", name: "INARRAY", type: "ARRAY"}, {def: "REVERSEARRAY(array):返回数组array的倒序数组。\n示例：\nREVERSEARRAY([\"第一个\", \"第二个\", \"第三个\"])返回[\"第三个\", \"第二个\", \"第一个\"].", name: "REVERSEARRAY", type: "ARRAY"}, {def: "RANDBETWEEN(value1,value2):返回value1和value2之间的一个随机整数。\n示例：\nRANDBETWEEN(12.333, 13.233)只会返回13。\nRANDBETWEEN(11.2, 13.3)有可能返回12或者13。", name: "RANDBETWEEN", type: "MATH"}, {def: "UPPER(text): 将文本中所有的字符转化为大写。\nText:需要转化为大写字符的文本，或是包含文本的单元格引用。\n示例:\nUPPER(\"notes\")等于“NOTES”。\n如果单元格E5的值为“Examples”，则UPPER(E5)等于“EXAMPLES”。", name: "UPPER", type: "TEXT"}, {def: "ABS(number): 返回指定数字的绝对值。绝对值是指没有正负符号的数值。\nNumber:需要求出绝对值的任意实数。\n示例:\nABS(-1.5)等于1.5。\nABS(0)等于0。\nABS(2.5)等于2.5。", name: "ABS", type: "MATH"}, {def: "RIGHT(text,num_chars): 根据指定的字符数从右开始返回文本串中的最后一个或几个字符。\nText:包含需要提取字符的文本串或单元格引用。\nNum_chars:指定RIGHT函数从文本串中提取的字符数。Num_chars不能小于0。如果num_chars大于文本串长度，RIGHT函数将返回整个文本。如果不指定num_chars，则默认值为1。\n示例:\nRIGHT(\"It is interesting\",6)等于“esting”。\nRIGHT(\"Share Holder\")等于“r”。\nRIGHT(\"Huge sale\",4)等于“sale”。", name: "RIGHT", type: "TEXT"}, {def: "MEDIAN(array1): 返回数据系列的中值(与Excel的同名函数作用相同)。\n\n示例:\nMEDIAN([1,2,3])=2。\n", name: "MEDIAN", type: "OTHER"}, {def: "TABLEDATAFIELDS(tableData):返回tableData中所有的字段名。\n备注:\n    先从报表数据集中查找，然后再从服务器数据集中查找，返回的是tableData的列名组成的数组。\n以我们提供的数据源FRDemo为例\n新建数据集ds1:SELECT * FROM [CUSTOMER]\nTABLEDATAFIELDS(\"ds1\")等于\nCUSTOMERID,CUSTOMERAME,CITY,COUNTRY,TEL,DISTRICT。", name: "TABLEDATAFIELDS", type: "REPORT"}, {def: "占比公式, =PROPORTION(A1)等同于=A1/sum(A1[!0])", name: "PROPORTION", type: "HA"}, {def: "COL()返回当前单元格的列号，必须使用于条件属性中\n示例:\n如果当前单元格是A5，在A5中写入\"=col()\"则返回1。\n如果当前单元格是C6，在C6中写入\"=col()\"则返回3。", name: "COL", type: "REPORT"}, {def: "TOHEX(int): 将一个十进制整型数转换成十六进制表示的字符串。\nint:表示需要进行转换的十进制整数。\n示例:\nTOHEX(15)等于 \"f\"。\nTOHEX(20)等于 \"14\"。", name: "TOHEX", type: "MATH"}, {def: "COS(number): 返回一个角度的余弦值。\nNumber:以弧度表示的需要求余弦值的角度。\n备注:\n    要把一个角度转换成弧度值，将角度乘于PI()/180。\n    COS(n*2*PI()+number)=COS(number)（其中n为整数，number从-pi到pi）。\n示例:\nCOS(0.5)等于0.877582562。\nCOS(30*PI()/180)等于0.866025404。", name: "COS", type: "MATH"}, {def: "跨层累计, =CROSSLAYERTOTAL(A1, B1, C1, D1)等同于=IF(&B1 >1, D1[B1:-1] + C1, D1[A1:-1,B1:!-1] + C1), 如需横向, 则传递第五个参数false", name: "CROSSLAYERTOTAL", type: "HA"}, {def: "POWER(number,power): 返回指定数字的乘幂。\nNumber:底数，可以为任意实数。\nPower:指数。参数number按照该指数次幂乘方。\n备注:\n    可以使用符号“^”代替POWER，如: POWER(5,2)等于5^2。\n示例:\nPOWER(6,2)等于36。\nPOWER(14,5)等于537824。\nPOWER(4,2/3)等于2.519842100。\nPOWER(3,-2.3)等于0.079913677。", name: "POWER", type: "MATH"}, {def: "DAYS360(start_date,end_date,method):按照一年 360 天的算法（每个月以 30 天计，一年共计 12 个月），\n返回两日期间相差的天数，这在会计计算中将会用到。如果财务系统是基于一年 12 个月，每月 30 天，\n可用此函数帮助计算支付款项。\nStart_date 和 end_date :是用于计算期间天数的起止日期。\nMethod : 它指定了在计算中是采用欧洲方法还是美国方法。\nMethod 定义 :\nFALSE或忽略    美国方法 (NASD)。如果起始日期是一个月的 31 号，则等于同月的 30 号。如果终止日期是一个月的\n31号，并且起始日期早于 30 号，则终止日期等于下一个月的 1 号，否则，终止日期等于本月的 30 号。\nTRUE           欧洲方法。无论是起始日期还是终止日期为一个月的 31 号，都将等于本月的 30 号。\n备注:\nFineReport将日期保存为系列数，一个系列数代表一个与之匹配的日期，以方便用户对日期进行数值式计算。\n在1900年日期系统中，FineReport电子表格将1900年1月1日保存为系列数2，将1900年1月2日保存为系列数3，\n将1900年1月3日保存为系列数4……依此类推。如在1900年日期系统，1998年1月1日存为系列数35796。\n示例:\nDAYS360(\"1998/1/30\", \"1998/2/1\") 等于 1", name: "DAYS360", type: "DATETIME"}, {def: "filetype(file)获取文件的类型。\n当file为单文件时，返回文件类型字符串，当file为多文件时，返回文件类型的字符串数组。\n如果file不为文件类型，则返回错误信息。\n示例：\n假设文件控件在B2单元格，而B2单元格依次上传了三个不同类型文件{A.doc, C.xls ,B.txt }，则filetype(B2)返回值为[“doc”, “xls”, “txt”]。", name: "FILETYPE", type: "OTHER"}, {def: "ADDARRAY(array, insertArray, start):在数组第start个位置插入insertArray中的所有元素，再返回该数组。\n示例：\nADDARRAY([3, 4, 1, 5, 7], [23, 43, 22], 3)返回[3, 4, 23, 43, 22, 1, 5, 7].\nADDARRAY([3, 4, 1, 5, 7], \"测试\", 3)返回[3, 4, \"测试\", 1, 5, 7].\n注意：如果start为小于1的数或者不写start参数，则默认从数组的第一位开始插入数组元素。", name: "ADD2ARRAY", type: "ARRAY"}, {def: "BITNOT(int):将一个十进制整数进行二进制取反运算。\nint:需要进行转换的十进制数。\n示例：\nBITNOT(3)等于-4。\nBITNOT(12)等于-13。", name: "BITNOT", type: "LOGIC"}, {def: "TABLEAS(connectionName):返回名为connectionName的数据库中的所有表名。\n示例：\n假设在FRDemo这个数据库中，有3个表：a,b,c;\n那么TABLES(\"FRDemo\")等于[a,b,c].", name: "TABLES", type: "REPORT"}, {def: "SUMSQ(number1,number2, ...):返回所有参数的平方和。\nnumber1, number2, ...:为 1 到 30 个需要求平方和的参数，也可以使用数组或对数组的引用来代替以逗号分隔的参数。\n示例:\nSUMSQ(3, 4) 等于 25\n", name: "SUMSQ", type: "MATH"}, {def: "RECORDS(connection, table,field):返回数据库表table中字段名field下的所有元素。\n示例：\n数据库BASE中有个名叫task的表的内容如下：\nname start  end\na    2008   2009\nb    2009   2012\n那么RECORDS(\"BASE\",\"task\",\"end\")等于[2009,2012].\n\nRECORDS(connection, table,field,row)返回table中field字段下的第row行的记录，field可以为列名也可以为列号。\n    RECORDS(\"BASE\",\"task\",\"end\",2)等于2012.\n    RECORDS(\"BASE\",\"task\",2,2)等于2009.", name: "RECORDS", type: "REPORT"}, {def: "", name: "TOBIGDECIMAL", type: "DELETE"}, {def: "TODOUBLE(text): 将文本转换成Double对象。\nText:需要转换的文本。\n示例:\nTODOUBLE(\"123.21\")等于 new Double(123.21)。", name: "TODOUBLE", type: "TEXT"}, {def: "TODATE()函数可以将各种日期形式的参数转换为日期类型。\n它有三种参数的形式：\n1 参数是一个日期型的参数，那么直接将这个参数返回。\n示例：\nTODATE(DATE(2007,12,12))返回2007年12月12日组成的日期。\n2 参数是以从1970年1月1日0时0分0秒开始的毫秒数，返回对应的时间。\n示例：\nTODATE(1023542354746)返回2002年6月8日。\n3 参数是日期格式的文本，那么返回这个文本对应的日期。\n示例：\nTODATE(\"2007/10/15\")返回2007年10月5日组成的日期。\nTODATE(\"2007-6-8\")返回2007年6月8日组成的日期。\n4 有两个参数，第一个参数是一个日期格式的文本，第二个参数是用来解析日期的格式。\n示例：\nTODATE(\"1/15/07\",\"mm/dd/yy\")返回07年1月15日组成的日期。\n特别的，\"yyyyMMdd\"是用来解析形如“20081230”之类的日期格式的。比如TODATE(\"20110830\",\"yyyyMMdd\")返回11年08月30日组成的日期\n5 有三个参数，第一个参数是一个日期格式的文本，第二个参数是用来解析日期的格式，第三个参数为解析日期的语言，如：zh（中文），en（英文）。\n示例：\nTODATE(\"星期三 1/15/07\",\"EEE mm/dd/yy\", \"zh\")返回07年1月15日组成的日期，使用“zh（中文）”才能够正常解析“星期三”这个字符串。", name: "TODATE", type: "DATETIME"}, {def: "PROPER(text): 将文本中的第一个字母和所有非字母字符后的第一个字母转化成大写，其他字母变为小写。\nText:需要转化为文本的公式、由双引号引用的文本串或是单元格引用。\n示例:\nPROPER(\"Finemore Integrated Office\")等于“Finemore Integrated Office”。\nPROPER(\"100 percent\")等于“100 Percent”。\nPROPER(\"SpreaDSheEt\")等于“Spreadsheet”。", name: "PROPER", type: "TEXT"}, {def: "DAY:(serial_number)返回日期中的日。DAY是介于1和31之间的一个数。\nSerial_number:含有所求的年的日期.\n备注:\nFineReport将日期保存为系列数，一个系列数代表一个与之匹配的日期，以方便用户对日期进行数值式计算。\n在1900年日期系统中，FineReport电子表格将1900年1月1日保存为系列数2，将1900年1月2日保存为系列数3，\n将1900年1月3日保存为系列数4……依此类推。如在1900年日期系统，1998年1月1日存为系列数35796。\n示例:\nDAY(\"2000/1/1\")等于1。\nDAY(\"2006/05/05\")等于5。\nDAY(\"1997/04/20\")等于20。\nDAY(\"2000-1-1\", \"yyyy-MM-dd\")等于1。\nDAY(\"2006-05-05\", \"yyyy-MM-dd\")等于5。\nDAY(\"1997-04-20\", \"yyyy-MM-dd\")等于20。\nDAY(35796)等于1。", name: "DAY", type: "DATETIME"}, {def: "LUNAR(year,day,month): 返回当前日期对应的农历时间。\nyear,month,day:分别对应年月日。\n示例:\n如果需要查询2011年7月21日对应的农历时间，则只需输入LUNAR(2011,7,21)结果将显示为：辛卯年六月廿一\n同样，如输入LUNAR(2001,7,21)，则显示：辛巳年六月初一 。本公式支持的时间段为1900-2100年。", name: "LUNAR", type: "DATETIME"}, {def: "TABLEDATAS():返回报表数据集和服务器数据集名字。\n示例：\n服务器数据集有：ds1,ds2,ds3;报表数据集有dsr1,dsr2.\nTABLEDATAS()等于[dsr1,dsr2,ds1,ds2,ds3].\n而TABLEDATAS(0)返回服务器数据集名字；TABLEDATAS(1)返回报表数据集名字；\nTABLEDATAS(0)等于[ds1,ds2,ds3];TABLEDATAS(1)等于[dsr1,dsr2].", name: "TABLEDATAS", type: "REPORT"}, {def: "TAN(number): 返回指定角度的正切值。\nNumber:待求正切值的角度，以弧度表示。如果参数是以度为单位的，乘以Pi()/180后转换为弧度。\n示例:\nTAN(0.8)等于1.029638557。\nTAN(45*Pi()/180)等于1。", name: "TAN", type: "MATH"}, {def: "", name: "JVM", type: "DELETE"}, {def: "LN(number):返回一个数的自然对数。自然对数以常数项 e（2.71828182845904）为底。\nnumber:是用于计算其自然对数的正实数。\n示例:\nLN(86) 等于 4.45437\nLN(2.7182818) 等于 1\nLN(EXP(3)) 等于 3\nEXP(LN(4)) 等于 4\n", name: "LN", type: "MATH"}, {def: "ARRAY(arg1,arg2...):返回一个由arg1,arg2,...组成的数组.\narg1,arg2,...:字符串或者数字.\n示例:\nARRAY(\"hello\") = [\"hello\"].\nARRAY(\"hello\",\"world\") = [\"hello\",\"world\"].\nARRAY(\"hello\",98) = [\"hello\",98].\nARRAY(67,98) = [67,98].", name: "ARRAY", type: "ARRAY"}, {def: "TOBINARY(int): 将一个十进制整型数转换成二进制表示的字符串。\nint:表示需要进行转换的十进制整数。\n示例:\nTOBINARY(10)等于 \"1010\"。\nTOBINARY(20)等于 \"10100\"。", name: "TOBINARY", type: "MATH"}, {def: "NVL(value1,value2,value3,...):在所有参数中返回第一个不是null的值value1:可以为任意数，也可以为null。\nvalue2:可以为任意数，也可以为null。\n当字符串长度为0时, 返回也为null\n示例:\nNVL(12,20)等于12。\nNVL(null,12)等于12。\nNVL(null,null)等于null。\nNVL(20,null)等于20。\nNVL(null,null,10)等于10。", name: "NVL", type: "OTHER"}, {def: "CORREL(array1,array2): 求两个相同长度数据系列的相关系数(与Excel的同名函数作用相同)。\n如果数组或引用参数包含文本、逻辑值或空白单元格，则这些值将被忽略；但包含零值的单元格将计算在内。\n函数计算结果出现负数表示负相关。相关系数的取值范围是[-1,1]之间的数。相关系数的绝对值越大，表示误差越小。 Array1 和 Array2 的数据点的个数必须相同，例如：\nCORREL([1,2,3],[2,4,6])=1。\n", name: "CORREL", type: "OTHER"}, {def: "COLNAME(tableData,colIndex)返回的是tableData中列序号colIndex的列名。\ntableData:表示TableData的名字，字符串形式。\ncolIndex:表示列序号。\n备注:\n    TableData先从私有数据源中查找，再从公有数据源中查找。\n示例:\nCOLNAME(\"Check\"，3)等于AcceName。\nCOLNAME(\"country\"，4)等于Area。", name: "COLNAME", type: "REPORT"}, {def: "DECIMAL(number): 返回number的大数类型，常用于精确计算。", name: "DECIMAL", type: "MATH"}, {def: "CLASS(object):返回object对象的所属的类。", name: "CLASS", type: "OTHER"}, {def: "VALUE(tableData,col,row)返回tableData中列号为col的值, 行号为row。\ntableData:tableData的名字，字符串形式的。\nrow:行号。\ncol:列号。\n备注:\n    先从报表数据集中查找，然后再从服务器数据集中查找，返回的是tableData的行数。\n示例:\nVALUE(\"country\",5,3)等于South America。\nVALUE(\"Simple\",8,3)等于jonnason。\n示例：VALUE(\"country\",5,\"大陆\")等于South America。\n\nVALUE(tableData,col)返回tableData中列号为col的一列值。\nVALUE(tableData,targetCol, orgCol, element)返回tableData中第targetCol列中的元素，这些元素对应的第orgCol列的值为element。\n示例：\ntableData : co\n国家 省份\n\n中国 江苏\n中国 浙江\n中国 北京\n美国 纽约\n美国 新泽西\nVALUE(\"co\",2, 1, \"中国\")等于[\"江苏\", \"浙江\", \"北京\"]。\n特别说明：列号也可以写为列名。\nVALUE(tableData,targetCol, orgCol, element, idx)返回VALUE(tableData,targetCol, orgCol, element)数组的第idx个值。\n特别说明：idx的值小于0时，会取数组的第一个值，idx的值大于数组长度时，会取数组的最后一个值。\n", name: "VALUE", type: "REPORT"}, {def: "JOINARRAY(array,sepa):返回一个由sepa作为分隔符的字符串.\narray:[arg1,arg2...]格式的数组;\nsepa:分隔符。\n示例:\nJOINARRAY([1,2],\";\") = [1;2].\nJOINARRAY([hello,world],\"-\") = [hello-world].", name: "JOINARRAY", type: "ARRAY"}, {def: "DATETONUMBER(date):返回自 1970 年 1 月 1 日 00:00:00 GMT 经过的毫秒数。\n示例：\nDATETONUMBER(\"2008-08-08\")等于1218124800000。", name: "DATETONUMBER", type: "DATETIME"}, {def: "INDEXOF(str1，index):返回字符串str1在index位置上的字符。\n备注:\n    index是从0开始计数的。\n示例:\nINDEXOF(\"FineReport\",0)等于'F'。\nINDEXOF(\"FineReport\",2)等于'n'。\nINDEXOF(\"FineReport\",9)等于't'。\n\nINDEXOF(array, index):返回数组在index位置上的元素。\n备注：\n    index是从1开始计数的。\n示例：\nString[] array = {\"a\", \"b\", \"c\"}\nINDEXOF(array, 1)等于\"a\".\n", name: "INDEXOF", type: "TEXT"}, {def: "PRODUCT(number1,number2, ...):将所有以参数形式给出的数字相乘，并返回乘积值。\nnumber1, number2, ...:为 1 到 30 个需要相乘的数字参数。\n示例:\nPRODUCT(3,4) 等于 12\nPRODUCT(3,4,5) 等于 60\n\n", name: "PRODUCT", type: "MATH"}, {def: "ACOS(number): 返回指定数值的反余弦值。反余弦值为一个角度，返回角度以弧度形式表示。\nNumber:需要返回角度的余弦值。\n备注:\n    函数的参数必须在-1和1之间，包括-1和1。\n    返回的角度值在0和Pi之间。\n    如果要把返回的角度用度数来表示，用180/PI()乘返回值即可。\n示例:\nACOS(1)等于0（弧度）。\nACOS(0.5)等于1.047197551（Pi/3弧度）。\nACOS(0.5)*180/PI()等于60（度）。", name: "ACOS", type: "MATH"}, {def: "FIND(find_text,within_text,start_num):从指定的索引(start_num)处开始，返回第一次出现的指定子字符串(find_text)在此字符串(within_text)中的索引。\nFind_text:需要查找的文本或包含文本的单元格引用。\nWithin_text:包含需要查找文本的文本或单元格引用。\nStart_num:指定进行查找字符的索引位置。within_text里的索引从1开始。如果省略start_num，则假设值为1。\n备注:\n    如果find_text不在within_text中，FIND函数返回值为0。\n    如果start_num不大于0，FIND函数返回错误信息*VALUE!。\n    如果start_num大于within_text的长度，FIND函数返回值为0。\n    如果find_text是空白文本，FIND函数将在搜索串中匹配第一个字符（即编号为start_num或1的字符）。\n示例:\nFIND(\"I\",\"Information\")等于1。\nFIND(\"i\",\"Information\")等于9。\nFIND(\"o\",\"Information\",2)等于4。\nFIND(\"o\",\"Information\",12)等于0。\nFIND(\"o\",\"Information\",-1)等于*VALUE!。", name: "FIND", type: "TEXT"}, {def: "MINUTE(serial_number):返回某一指定时间的分钟数，其值是介于0与59之间的一个整数。\nserial_number:包含所求分钟数的时间。\n示例:\nMINUTE(\"15:36:25\")等于36。\nMINUTE(\"15:36:25\", \"HH:mm:ss\")等于36。", name: "MINUTE", type: "DATETIME"}, {def: "SIGN(number):返回数字的符号。当数字为正数时返回 1，为零时返回 0，为负数时返回 -1。\nNumber:为任意实数。\n示例:\nSIGN(10) 等于 1\nSIGN(4-4) 等于 0\nSIGN(-0.00001) 等于 -1\n", name: "SIGN", type: "MATH"}, {def: "INDEX(key,val1,val2,...):返回key在val1,val2,...所组成的序列中的位置,不存在于序列中则返回参数的个数.\n备注:\n    key和valn可以是任意类型\n示例:\nINDEX(2,2)等于1。\nINDEX(2,1,2)等于2。\nINDEX(2,4,5,6)等于4。\nINDEX(\"b\",\"b\",\"o\",\"y\")等于1。", name: "INDEX", type: "OTHER"}, {def: "REVERSE(value):返回与value相反的逻辑值。\n示例：\nREVERSE(true)等于false。", name: "REVERSE", type: "LOGIC"}, {def: "REPLACE(text, texttoreplace, replacetext):根据指定字符串，用其他文本来代替原始文本中的内容。\ntext：需要被替换部分字符的文本或单元格引用。\ntexttoreplace：指定的字符串或正则表达式。\nreplacetext:需要替换部分旧文本的文本。\n示例：\nREPLACE(\"abcd\", \"a\", \"re\")等于\"rebcd\"。\nREPLACE(\"a**d\", \"**d\", \"rose\")等于\"arose\"。\nREPLACE(old_text,start_num,num_chars,new_text): 根据指定的字符数，用其他文本串来替换某个文本串中的部分内容。\nOld_text:需要被替换部分字符的文本或单元格引用。\nStart_num:需要用new_text来替换old_text中字符的起始位置。\nNum_chars:需要用new_text来替换old_text中字符的个数。\nNew_text:需要替换部分旧文本的文本。\n示例:\nREPLACE(\"0123456789\",5,4,\"*\")等于“0123*89”。\nREPLACE(\"1980\",3,2,\"99\")等于“1999”。", name: "REPLACE", type: "TEXT"}, {def: "UUID():返回随机的UUID。\n示例:UUID()返回36位随机机器数。\n       UUID(32)返回32位随机机器数。", name: "UUID", type: "OTHER"}, {def: "DATESUBDATE(date1, date2, op):返回两个日期之间的时间差。\nop表示返回的时间单位：\n\"s\"，以秒为单位。\n\"m\"，以分钟为单位。\n\"h\"，以小时为单位。\n\"d\"，以天为单位。\n\"w\"，以周为单位。\n示例：\nDATESUBDATE(\"2008-08-08\", \"2008-06-06\",\"h\")等于1512。", name: "DATESUBDATE", type: "DATETIME"}, {def: "CONCATENATE(text1,text2,...): 将数个字符串合并成一个字符串。\nText1,text2,...:需要合并成单个文本的文本项，可以是字符，数字或是单元格引用。\n示例:\nCONCATENATE(\"Average \",\"Price\")等于“Average Price”。\nCONCATENATE(\"1\",\"2\")等于12。", name: "CONCATENATE", type: "TEXT"}, {def: "filesize(file)获取文件的大小，单位为Kb。\n当file为单文件时，返回文件大小，当file为多文件时，返回文件大小的数组。\n如果file不为文件类型，则返回错误信息。\n示例：\n假设文件控件在B2单元格，而B2单元格依次上传了两个大小分别为100字节和10240字节的文件，则filename(B2)返回值为[0.098, 10.0]。", name: "FILESIZE", type: "OTHER"}, {def: "DAYSOFMONTH(date):返回从1900年1月后某年某月包含的天数。\n示例：\nDAYSOFMONTH(\"1900-02-01\")等于28。\nDAYSOFMONTH(\"2008/04/04\")等于30。", name: "DAYSOFMONTH", type: "DATETIME"}, {def: "DATEINQUARTER(date, number): 函数返回在某一个季度当中第几天的日期。\n示例：\nDATEINQUARTER(\"2009-05-05\", 20)等于 2009-04-20。", name: "DATEINQUARTER", type: "DATETIME"}, {def: "逐层累计, =LAYERTOTAL(B1, C1, D1)等同于=D1[B1:-1] + C1, 如需横向, 则传递第四个参数false.如LAYERTOTAL(B1, C1, D1, false)", name: "LAYERTOTAL", type: "HA"}, {def: "CNMONEY(number,unit)返回人民币大写。\nnumber:需要转换的数值型的数。\nunit:单位，\"s\",\"b\",\"q\",\"w\",\"sw\",\"bw\",\"qw\",\"y\",\"sy\",\"by\",\"qy\",\"wy\"分别代表“拾”，“佰”，“仟”，“万”，“拾万”，“佰万”，“仟万”，“亿”，“拾亿”，“佰亿”，“仟亿”，“万亿”。\n备注:\n    单位可以为空，如果为空，则直接将number转换为人民币大写，否则先将number与单位的进制相乘，然后再将相乘的结果转换为人民币大写。\n示例:\nCNMONEY(1200)等于壹仟贰佰圆整。\nCNMONEY(12.5,\"w\")等于壹拾贰万伍仟圆整。\nCNMONEY(56.3478,\"bw\")等于伍仟陆佰叁拾肆万柒仟捌佰圆整。\nCNMONEY(3.4567,\"y\")等于叁亿肆仟伍佰陆拾柒万圆整。", name: "CNMONEY", type: "TEXT"}, {def: "DAYVALUE(date):返回1900年至 date日期所经历的天数。\n示例：\nDAYVALUE(\"2008/08/08\")等于39668。", name: "DAYVALUE", type: "DATETIME"}, {def: "SQL(connectionName,sql,columnIndex,rowIndex)返回通过sql语句从connectionName中获得数据表的第columnIndex列第rowIndex行所对应的元素。\nconnectionName：数据库库的名字，字符串形式；\nsql:SQL语句，字符串形式；\ncolumnIndex:列序号，整形;\nrowIndex:行序号，整形。\n备注:行序号可以不写，这样返回值为数据列。\n示例：\n以我们提供的数据源HSQL为例\nSQL(\"HSQL\",\"SELECT * FROM CUSTOMER\",2,2)等于王先生。", name: "SQL", type: "REPORT"}, {def: "DATE(year,month,day): 返回一个表示某一特定日期的系列数。\nYear:代表年，可为一到四位数。\nMonth:代表月份。\n若1 month 12，则函数把参数值作为月。\n若month>12，则函数从年的一月份开始往上累加。例如: DATE(2000,25,2)等于2002年1月2日的系列数。\nDay:代表日。\n若日期小于等于某指定月的天数，则函数将此参数值作为日。\n若日期大于某指定月的天数，则函数从指定月份的第一天开始往上累加。若日期大于两个或多个月的总天数，则函数把减去两个月或多个月的余数加到第三或第四个月上，依此类推。例如:DATE(2000,3,35)等于2000年4月4日的系列数。\n备注:\n   若需要处理公式中日期的一部分，如年或月等，则可用此公式。\n   若年，月和日是函数而不是函数中的常量，则此公式最能体现其作用。\n示例:\nDATE(1978, 9, 19) 等于1978-09-19.\nDATE(1211, 12, 1) 等于1211-12-01.   ", name: "DATE", type: "DATETIME"}, {def: "BITOPERATIOIN(int,int,op) 位运算，返回两个整数根据op进行位运算后的结果。\nint:十进制整数。\nop:位运算操作符，支持\"&\"(与),\"|\"(或),\"^\"(异或),\"<<\"(左移),\">>\"(右移)。\n示例：\nBITOPERATION(4,2,\"&\")表示4与2进行\"与\"运算,结果等于0。\nBITOPERATION(4,2,\"|\")表示4与2进行\"或\"运算,结果等于6。\nBITOPERATION(4,2,\"^\")表示4与2进行\"异或\"运算,结果等于6。\nBITOPERATION(4,2,\"<<\")表示4按位左移2位，结果等于16。\nBITOPERATION(4,2,\">>\")表示4按位右移2位，结果等于1。\nBITOPERATION(4,2,\"^~\")表示4与2进行\"同或\"运算,结果为-7。", name: "BITOPERATION", type: "LOGIC"}, {def: "LOWER(text): 将所有的大写字母转化为小写字母。\nText:需要转化为小写字母的文本串。LOWER函数不转化文本串中非字母的字符。\n示例:\nLOWER(\"A.M.10:30\")等于“a.m.10:30”。\nLOWER(\"China\")等于“china”。", name: "LOWER", type: "TEXT"}, {def: "CEILING(number): 将参数number沿绝对值增大的方向，舍入为最接近的整数\nNumber:指待舍入的数值。\nCEILING(-2.5)等于-3。\nCEILING(0.5)等于1。", name: "CEILING", type: "MATH"}, {def: "SINH(number):返回某一数字的双曲正弦值。\nnumber:为任意实数。\n示例:\nSINH(1) 等于 1.175201194\nSINH(-1) 等于 -1.175201194", name: "SINH", type: "MATH"}, {def: "AND(logical1,logical2,…): 当所有参数的值为真时，返回TRUE；当任意参数的值为假时，返回FALSE。\nLogical1,logical2,…:指1到30个需要检验TRUE或FALSE的条件值。\n备注:\n    参数必须是逻辑值，或是含有逻辑值的数组或引用。\n    如果数组或引用中含有文本或空的单元格，则忽略其值。\n    如果在指定的单元格区域中没有逻辑值，AND函数将返回错误信息*NAME?。\n示例:\nAND(1+7=8,5+7=12)等于TRUE。\nAND(1+7=8,5+7=11)等于FALSE。\n如果单元格A1到A4的值分别为TRUE、TRUE、FALSE和TRUE，则:\nAND(A1:A4)等于FALSE。\n如果单元格A5的值在0~50之间，则: AND(0<A5,A5<50)等于TRUE。", name: "AND", type: "LOGIC"}, {def: "NOW():获取当前时间。\n示例：\n如果系统时间是2012年5月12日 15点18分38秒\n则NOW()等于2012-05-12 15:18:36。", name: "NOW", type: "DATETIME"}, {def: "排名公式, =SORT(A1)等同于=COUNT(A1[!0]{A1 > $A1}) + 1, 默认升序排列, 如需要降序, 则传递参数false,\n =SORT(A1, false)等同于=COUNT(A1[!0]{A1 < $A1}) + 1.", name: "SORT", type: "HA"}, {def: "SIN(number): 计算给定角度的正弦值。\nNumber:待求正弦值的以弧度表示的角度。\n备注:\n    如果参数的单位是度，将其乘以PI()/180即可转换成弧度。\n示例:\nSIN(10)等于-0.5440211108893698。\nSIN(45*PI()/180)等于0.707106781。", name: "SIN", type: "MATH"}, {def: "switch(表达式, 值1, 结果1, 值2, 结果2, ...)\n如果表达式的结果是值1，整个函数返回结果1\n如果表达式的结果是值2，整个函数返回结果2\n如果表达式的结果是值3，整个函数返回结果3\n等等\n", name: "SWITCH", type: "LOGIC"}, {def: "ROW()返回当前单元格的行号，必须使用于条件属性中\n示例:\n如果当前单元格为A5，在A5中写入\"=ROW()\"则返回5。\n如果当前单元格为B8，在B8中写入\"=ROW()\"则返回8。", name: "ROW", type: "REPORT"}, {def: "EVAL(exp)返回表达式exp计算后的结果。\nexp:一个表达式形式字符串。\n备注:\n    只要EVAL中的参数exp最终可以转化成一表达式形式的字符串，比如\"sum(2,4)\",\"2+7\"等等，那么它就可以被计算。\nEVAL(\"2+5\")等于7。\nEVAL(\"count(2,3)\")等于2。\nEVAL(\"sum\"+\"(2,3,5)\")等于10。\nEVAL(IF(true, \"sum\", \"count\") + \"(1,2,3,4)\")等于10。\nEVAL(IF(false, \"sum\", \"count\") + \"(1,2,3,4)\")等于4。", name: "EVAL", type: "OTHER"}, {def: "ATAN(number): 计算指定数值的反正切值。指定数值是返回角度的正切值，返回角度以弧度形式表示。\nNumber:返回角度的正切。\n备注:\n    返回角度在-pi/2到pi/2之间。\n    如果返回角度等于-pi/2或pi/2，ATAN将返回错误信息*NUM!。\n    用角度形式返回数值时，返回数值乘以180/PI()。\n示例:\nATAN(-1)等于-0.785398163（-pi/4弧度）。\nATAN(0)等于0（弧度）。\nATAN(2)*180/PI()等于63.43494882（度）。", name: "ATAN", type: "MATH"}, {def: "RANGE(from，to，step)函数表示从整数from开始，以step为每一步的大小，直到整数to的一个数字序列。\n例如：\nRANGE(1,5,1)表示从1开始，直到5(包括5)，每一步大小为1，那么它返回一个数字序列为[1,2,3,4,5]。\nRANGE(-1,6,2)表示从-1开始，直到6(包括6)，每一步大小为2，那么它返回一个数字序列为[-1,1,3,5]。\n备注：RANGE函数有三种参数形式：\n1 RANGE(to)，默认的from为1，step为1，例如：\n  RANGE(4)返回[1,2,3,4]。\n  RANGE(-5)返回[]。\n2 RANGE(from,to)，默认的step为1，例如:\n  RANGE(-1,3)返回[-1,0,1,2,3]。\n  RANGE(0,5)返回[0,1,2,3,4,5]。\n3 RANGE(from,to,step)，三个参数的情况参照上面的注释，例如：\n  RANGE(6,-1,-2)返回[6,4,2,0]。\n  RANGE(4,1,1)返回[]。", name: "RANGE", type: "ARRAY"}, {def: "TANH(number):返回某一数字的双曲正切值。\nnumber:为任意实数。\n双曲正切的计算公式如下：\n示例:\nTANH(-2) 等于 -0.96403\nTANH(0) 等于 0\nTANH(0.5) 等于 0.462117\n", name: "TANH", type: "MATH"}, {def: "ROUNDDOWN(number,num_digits):靠近零值，向下（绝对值减小的方向）舍入数字。\nnumber:为需要向下舍入的任意实数。\nnum_digits:舍入后的数字的位数。\n函数 ROUNDDOWN 和函数 ROUND 功能相似，不同之处在于函数 ROUNDDOWN 总是向下舍入数字。\n示例:\nROUNDDOWN(3.2, 0) 等于 3\nROUNDDOWN(76.9,0) 等于 76\nROUNDDOWN(3.14159, 3) 等于 3.141\nROUNDDOWN(-3.14159, 1) 等于 -3.1\nROUNDDOWN(31415.92654, -2) 等于 31,400\n", name: "ROUNDDOWN", type: "MATH"}, {def: "循环引用, =CIRCULAR(A1, B1, C1, D1)等同于=IF(&A1 = 1, 0, B1[A1:-1] + C1[A1:-1] – D1[A1:-1]),如需横向, 则传递第五个参数false", name: "CIRCULAR", type: "HA"}, {def: "HOUR(serial_number):返回某一指定时间的小时数。函数指定HOUR为0（0:00）到23（23:00)之间的一个整数。\nSerial_number:包含所求小时的时间。\n示例:\nHOUR(\"11:32:40\")等于11。\nHOUR(\"11:32:40\", \"HH:mm:ss\")等于11。", name: "HOUR", type: "DATETIME"}, {def: "ROUND(number,num_digits):返回某个数字按指定位数舍入后的数字。\nnumber:需要进行舍入的数字。\nnum_digits:指定的位数，按此位数进行舍入。\n如果 num_digits 大于 0，则舍入到指定的小数位。\n如果 num_digits 等于 0，则舍入到最接近的整数。\n如果 num_digits 小于 0，则在小数点左侧进行舍入。\n示例:\nROUND(2.15, 1) 等于 2.2\nROUND(2.149, 1) 等于 2.1\nROUND(-1.475, 2) 等于 -1.48\nROUND(21.5, -1) 等于 20\n因浮点数存在精度计算丢失问题, 导致计算结果里可能带上9999, 0000这些, \n因此加入第三个参数来控制是否需要去除9999. true表示需要过滤9999, 0000这些数据.", name: "ROUND", type: "MATH"}, {def: "YEARDELTA(date, delta):返回指定日期后delta年的日期。\n示例：\nYEARDELTA(\"2008-10-10\",10)等于2018-10-10。", name: "YEARDELTA", type: "DATETIME"}, {def: "DATEINYEAR(date, number):函数返回在一年当中第几天的日期。\n示例：\nDATEINYEAR(2008,100)等于2008-04-09，等价于DATEINYEAR(\"2008-08-08\",100)，也返回2008-04-09.\nDATEINYEAR(2008,-1)等于2008-12-31，等价于DATEINYEAR(\"2008-08-08\",-1)，也返回2008-12-31.", name: "DATEINYEAR", type: "DATETIME"}, {def: "WEIGHTEDAVERAGE(A1:A4,B1:B4): 返回指定数据的加权平均值。\n加权平均数是不同比重数据的平均数，加权平均数就是把原始数据按照合理的比例来计算。\nA1:A4,B1:B4:用于计算平均值的参数，A1~A4为数据，B1~B4为权值。\n示例:\n如果A1:A4为10,9,8,7，B1:B4为0.2,0.1,0.3,0.4则:\nWEIGHTEDAVERAGE(A1:A4,B1:B4)等于8.1。", name: "WEIGHTEDAVERAGE", type: "MATH"}, {def: "ASIN(number): 返回指定数值的反正弦值。反正弦值为一个角度，返回角度以弧度形式表示。\nNumber:需要返回角度的正弦值。\n备注:\n    指定数值必须在-1到1之间（含1与-1）。\n    返回角度在-pi/2到pi/2之间（含-pi/2与pi/2）。\n    用角度形式返回数值时，返回数值乘以180/PI()。\n示例:\nASIN(0.5)等于0.523598776（pi/6弧度）。\nASIN(1)等于1.570796327（pi/2弧度）。\nASIN(0.5)*180/PI()等于30（度）。", name: "ASIN", type: "MATH"}, {def: "INT(number): 返回数字下舍入（数值减小的方向）后最接近的整数值。\nNumber:需要下舍入为整数的实数。\n示例:\nINT(4.8)等于4。\nINT(-4.8)等于-5。\nINT(4.3)等于4。\nINT(-4.3)等于-5。\n公式INT(A1)将返回A1单元格中的一个正实数的整数数部分。", name: "INT", type: "MATH"}, {def: "GETUSERJOBTITLES():返回角色职务\n示例:\nGETUSERDEPARTMENTS():返回角色所有职务，若多个部门职务则返回职务数组", name: "GETUSERJOBTITLES", type: "OTHER"}, {def: "REGEXP(str, pattern):字符串str是否与正则表达式pattern相匹配。\n示例：\nREGEXP(\"aaaaac\",\"a*c\")等于true。\nREGEXP(\"abc\",\"a*c\")等于false。\n\nREGEXP(str, pattern,  intNumber):字符串str是否与具有给定模式 intNumber的正则表达式pattern相匹配。\n示例：\nCASE_INSENSITIVE = 0         启用不区分大小写的匹配。 默认情况下，不区分大小写的匹配假定仅匹配 US-ASCII 字符集中的字符。可以通过指                                                         定 UNICODE_CASE 标志连同此标志来启用 Unicode 感知的、不区分大小写的匹配。 \nMULTILINE = 1                          启用多行模式。\nDOTALL = 2                               启用 dotall 模式。在 dotall 模式中，表达式 . 可以匹配任何字符，包括行结束符。默认情况下，此表达式不匹配行                                                         结束符。\nUNICODE_CASE = 3               启用 Unicode 感知的大小写折叠。指定此标志后，由 CASE_INSENSITIVE 标志启用时，不区分大小写的匹配将以                                                        符合 Unicode Standard 的方式完成。\nCANON_EQ = 4                         启用规范等价。 指定此标志后，当且仅当其完整规范分解匹配时，两个字符才可视为匹配。\nUNIX_LINES = 5                        启用 Unix 行模式。 在此模式中，.、^ 和 $ 的行为中仅识别 '\\n' 行结束符。\nLITERAL = 6                               启用模式的字面值解析。 指定此标志后，指定模式的输入字符串就会作为字面值字符序列来对待。输入序列中的                                                          元字符或转义序列不具有任何特殊意义。 标志 CASE_INSENSITIVE 和 UNICODE_CASE 在与此标志一起使用时将                                                        对匹配产生影响。其他标志都变得多余了。\nCOMMENTS = 7                        模式中允许空白和注释。 此模式将忽略空白和在结束行之前以 # 开头的嵌入式注释。\n \nREGEXP(\"Aaaaabbbbc\",\"a*b*c\", 3)等于true。\nREGEXP(\"Aaaaabbbbc\",\"a*b*c\", 1)等于false。\n\n", name: "REGEXP", type: "TEXT"}, {def: "DAYSOFQUARTER(date): 返回从1900年1月后某年某季度的天数。\n示例：\nDAYSOFQUARTER(\"2009-02-01\")等于90。\nDAYSOFQUARTER(\"2009/05/05\")等于91。", name: "DAYSOFQUARTER", type: "DATETIME"}, {def: "AVERAGE(number1,number2,…,countstring): 返回指定数据的平均值。\nNumber1,number2…:用于计算平均值的参数; countString:文字、逻辑值是否参与计数。\n备注:\n    参数必须是数字，或是含有数字的名称，数组或引用。\n    如果数组或引用参数中含有文字，逻辑值，默认参与计数，countString为false则不参与计数；\n    空单元格始终不参与计数，但是，单元格中的零值参与。\n示例:\n如果A1:A6被命名为“ages”，分别等于10，23，文字，29，33及25，则:\nAVERAGE(A1:A6)等于20。\nAVERAGE(A1:A6, false)等于24。\nAVERAGE(ages)等于20。\n如果还有一个年龄为27的，求所有年龄的平均值为: AVERAGE(A1:A6,27)等于21。", name: "AVERAGE", type: "MATH"}, {def: "RADIANS(angle): 将角度转换成弧度。\nAngle:需要转换为弧度的角度。\n示例:\nRADIANS(90)等于1.570796327（π/2弧度）。", name: "RADIANS", type: "MATH"}, {def: "REMOVEARRAY(array, start, deleteCount):从数组array中删除从第start个元素开始的deleteCount个数组元素，并返回删除后的数组。\n示例：\nREMOVEARRAY([3, 4, 4, 2, 6, 7, 87], 4, 2)返回[3, 4, 4, 7, 87].\n", name: "REMOVEARRAY", type: "ARRAY"}, {def: "WEBIMAGE(path):在web页面上显示指定路径下的图片。", name: "WEBIMAGE", type: "OTHER"}, {def: "WEEK(serial_num):返回一个代表一年中的第几周的数字。\nSerial_num:表示输入的日期。\n备注:\nFineReport将日期保存为系列数，一个系列数代表一个与之匹配的日期，以方便用户对日期进行数值式计算。\n在1900年日期系统中，FineReport电子表格将1900年1月1日保存为系列数2，将1900年1月2日保存为系列数3，\n将1900年1月3日保存为系列数4……依此类推。如在1900年日期系统，1998年1月1日存为系列数35796。\n示例:\nWEEK(\"2010/1/1\")等于52。\nWEEK(\"2010/1/6\")等于1。\nWEEK(35796)等于1。", name: "WEEK", type: "DATETIME"}, {def: "filename(file)获取文件的文件名。\n当file为单文件时，返回文件名字符串，当file为多文件时，返回文件名的字符串数组。\n如果file不为文件类型，则返回错误信息。\n示例：\n假设文件控件在B2单元格，而B2单元格依次上传了三个不同类型文件{A.doc, C.xls ,B.cpt }，则filename(B2)返回值为[“A.doc”, “C.xls”, “B.cpt”]。", name: "FILENAME", type: "OTHER"}, {def: "COSH(number): 返回一个数值的双曲线余弦值。\nNumber:需要求其双曲线余弦值的一个实数。\n备注:\n   双曲线余弦值计算公式为: ，其中e是自然对数的底，e=2.71828182845904。\n示例:\nCOSH(3)等于10.06766200。\nCOSH(5)等于74.20994852。\nCOSH(6)等于201.7156361。", name: "COSH", type: "MATH"}, {def: "WEEKDAY(Serial_number):获取日期并返回星期数。返回值为介于0到6之间的某一整数，分别代表星期中的某一天（从星期日到星期六）。\nSerial_number:输入的日期\n备注:\nFineReport将日期保存为系列数，一个系列数代表一个与之匹配的日期，以方便用户对日期进行数值式计算。\n在1900年日期系统中，FineReport电子表格将1900年1月1日保存为系列数2，将1900年1月2日保存为系列数3，\n将1900年1月3日保存为系列数4……依此类推。如在1900年日期系统，1998年1月1日存为系列数35796。\n举例:\nWEEKDAY(\"2005/9/10\")等于6（星期六）。\nWEEKDAY(\"2005/9/11\")等于0（星期日）。\nWEEKDAY(35796)等于4（星期四）。\n", name: "WEEKDAY", type: "DATETIME"}, {def: "OR(logical1,logical2,…): 当所有参数的值为假时，返回FALSE；当任意参数的值为真时，返回TRUE。\nLogical1,logical2,…:指1到30个需要检验TRUE或FALSE的条件值。\n备注:\n    参数必须是逻辑值，或是含有逻辑值的数组或引用。\n    如果数组或引用中含有文本或空的单元格，则忽略其值。\n    如果在指定的单元格区域中没有逻辑值，AND函数将返回错误信息*NAME?。\n示例:\nOR(1+7=9,5+7=11)等于FALSE。\nOR(1+7=8,5+7=11)等于TRUE。", name: "OR", type: "LOGIC"}, {def: "MOD(number,divisor):返回两数相除的余数。结果的正负号与除数相同。\nnumber:为被除数。\ndivisor:为除数。\n示例:\nMOD(3, 2) 等于 1\nMOD(-3, 2) 等于 1\nMOD(3, -2) 等于 -1\nMOD(-3, -2) 等于 -1\n", name: "MOD", type: "MATH"}, {def: "TODAY():获取当前日期。\n示例：\n如果系统日期是2005年9月10日\n则TODAY()等于2005-9-10。", name: "TODAY", type: "DATETIME"}, {def: "ROUNDUP(number,num_digits):远离零值，向上（绝对值增大的方向）舍入数字。\nnumber:为需要向上舍入的任意实数。\nnum_digits:舍入后的数字的位数。\n函数 ROUNDUP 和函数 ROUND 功能相似，不同之处在于函数 ROUNDUP 总是向上舍入数字。\n示例:\nROUNDUP(3.2,0) 等于 4\nROUNDUP(76.9,0) 等于 77\nROUNDUP(3.14159, 3) 等于 3.142\nROUNDUP(-3.14159, 1) 等于 -3.2\nROUNDUP(31415.92654, -2) 等于 31,500\n\n", name: "ROUNDUP", type: "MATH"}, {def: "ROUND5(number,num_digits):这个是四舍五入，奇进偶不进。\nnumber:需要进行舍入的数字。\nnum_digits:指定的位数，按此位数进行舍入。\n如果 num_digits 大于 0，则舍入到指定的小数位。\n如果 num_digits 等于 0，则舍入到最接近的整数。\n如果 num_digits 小于 0，则在小数点左侧进行舍入。\n示例:\nROUND5(2.125, 2) 等于 2.12\nROUND5(2.135, 2) 等于 2.14\n", name: "ROUND5", type: "MATH"}, {def: "TIME(hour,minute,second): 返回代表指定时间的小数。介于0:00:00（12:00:00 A.M.）与23:59:59（11:59:59 P.M.）之间的时间可返回0到0.99999999之间的对应数值。\nHour:介于0到23之间的数。\nMinute:介于0到59之间的数。\nSecond:介于0到59之间的数。\n示例:\nTIME(14,40,0)等于2:40 PM。\nTIME(19,43,24)等于7:43 PM。", name: "TIME", type: "DATETIME"}, {def: "环比公式, =MOM(A1, B1)等同于=IF(&A1 > 1, B1 / B1[A1:-1],0), 其中如果需要指定偏移量x, 则传递第三个参数x, 第四个参数表示横纵向.\n如=MOM(A1, B1, -2, false)等同于=IF(&A1 > 1, B1 / B1[;A1:-2], 0)", name: "MOM", type: "HA"}, {def: "ASINH(number): 返回指定数值的反双曲正弦值。反双曲正弦值的双曲正弦等于指定数值。即: ASINH(SINH(number))=number。\nNumber:任意实数。\n示例:\nASINH(-5)等于-2.312438341。\nASINH(8)等于2.776472281。\nASINH(16)等于3.466711038。", name: "ASINH", type: "MATH"}, {def: "EENNUMBER(value)：将给定的BigDecimal类型的数字（100以内）取整后转化成英文金额的字符串。\n示例：\nENNUMBER(23.49)等于TWENTY THREE。\n注：若出现结果为空，需要将数字强制转换为BigDecimal类型，例如：ENNUMBER(TOBIGDECIMAL(80))", name: "ENNUMBER", type: "TEXT"}, {def: "CODE(text): 计算文本串中第一个字符的数字代码。返回的代码对应于计算机使用的字符集。\nText:需要计算第一个字符代码的文本或单元格引用。\n示例:\nCODE(\"S\")等于83。\nCODE(\"Spreadsheet\")等于83。", name: "CODE", type: "TEXT"}, {def: "DEGREES(angle): 将弧度转化为度。\nangle:待转换的弧度角。\n示例:\nDEGREES(PI()/2)等于90。\nDEGREES(3.1415926)等于179.9999969。", name: "DEGREES", type: "MATH"}, {def: "LEN(args): 返回文本串中的字符数或者数组的长度。\n需要注意的是：参数args为文本串时，空格也计为字符。\n参数args为数组时，直接返回数组长度。\n示例:\nLEN(\"Evermore software\")等于17。\nLEN(\" \")等于1。\nLEN(['a','b'])等于2。\n", name: "LEN", type: "TEXT"}, {def: "DATETIME():获取当前日期和时间。\n示例：\n如果系统时间是2005年9月10日 15点18分38秒\n则DATETIME()等于2005-9-10 15:18:36。", name: "DATETIME", type: "DELETE"}, {def: "UNIQUEARRAY(array):去掉数组array中的重复元素。\n示例：\nUNIQUEARRAY([14, 2, 3, 4, 3, 2, 5, 6, 2, 7, 9, 12, 3])返回[14, 2, 3, 4, 5, 6, 7, 9, 12].", name: "UNIQUEARRAY", type: "ARRAY"}, {def: "PROMOTION(value1,value2):返回value2在value1上提升的比例。\n示例：\nPROMOTION(12, 14)等于0.166666666，即提升了16.6666666%.\nPROMOTION(-12, 14)等于2.166666666，即提升了216.6666666%.", name: "PROMOTION", type: "MATH"}, {def: "PI(number): 是一个数学常量函数，当number为空时，函数返回精确到15位的数值3.141592653589793；当参数不为空时，number表示PI的倍数。\n示例:\nSIN(PI()/2)等于1。\n计算圆的面积的公式: S=PI()*(r^2)，其中S为圆的面积，R为圆的半径。\nPI(3)等于9.42477796076938。", name: "PI", type: "MATH"}, {def: "ISNULL(object):判断对象中所有的值是否全部都是NULL或者为空字符串。", name: "ISNULL", type: "OTHER"}, {def: "LET(变量名,变量值,变量名,变量值,..., 表达式):局部变量赋值函数,参数的个数N必须为奇数, 最后一个是表达式，前面是N-1(偶数)为局部变量赋值对。\n变量名: 必须是合法的变量名，以字母开头，可以包括字母，数字和下划线\n表达式: 根据前面的N-1个参数赋值后计算出来的结果，这些变量赋值只在这个表达式内部有效\n示例:\nLET(a, 5,b, 6, a+b)等于11\n", name: "LET", type: "OTHER"}, {def: "SECOND(serial_number):返回某一指定时间的秒数，其值是介于0与59之间的一个整数。\nSerial_number:包含所求秒数的时间。\n示例:\nSECOND(\"15:36:25\")等于25。\nSECOND(\"15:36:25\", \"HH:mm:ss\")等于25。", name: "SECOND", type: "DATETIME"}, {def: "EXP(number): 返回e的n次幂。常数e为自然对数的底数，等于2.71828182845904。\nNumber:为任意实数，作为常数e的指数。\n备注:\n    如果要返回其他常数作为底数的幂，可以使用指数运算符（^）。例如: 在4^2中，4是底数，而2是指数。\n    EXP函数与LN函数互为反函数。\n示例:\nEXP(0)等于1。\nEXP(3)等于20.08553692。\nEXP(LN(2))等于2。", name: "EXP", type: "MATH"}, {def: "treelayer(TreeObject, Int, Boolean, String)：\n返回tree对象第n层的值，并且可以设置返回值类型及分隔符。\nTreeObject：tree对象，如$tree。\nInt：想要获得层级的数值，最上层为1，第二层为2，依此类推,若无则返回最底层\n。Boolean：返回值类型为字符串还是数组，默认false，返回数组；为true时返回字符串。\nString：当Boolean为true返回字符串时的分隔符，以双引号表示，默认为逗号\",\"，如\";\"。\n示例：\n假设$tree勾选的值为中国-江苏-南京,中国-浙江-杭州，则treelayer($tree, true, ”\\’,\\’”)：返回”’,’”分割的所选中节点字符串”南京’,’杭州”treelayer($tree, 2)：以数组形式返回第二层[“江苏”,”浙江”]。treelayer($tree, 2, true, ”\\’,\\’”)：返回”’,’”分割的字符串江苏’,’浙江。", name: "TREELAYER", type: "OTHER"}, {def: "读取配置文件", name: "TOTEXT", type: "DELETE"}];
 /**
  * 当没有元素时有提示信息的view
  *
@@ -221,7 +221,7 @@ BI.Pane = BI.inherit(BI.Widget, {
             tipText: BI.i18nText("BI-No_Selected_Item"),
             overlap: true,
             onLoaded: BI.emptyFn
-        })
+        });
     },
 
     _init: function () {
@@ -251,7 +251,7 @@ BI.Pane = BI.inherit(BI.Widget, {
         if (o.overlap === true) {
             if (!BI.Layers.has(this.getName())) {
                 BI.createWidget({
-                    type: 'bi.vtape',
+                    type: "bi.vtape",
                     items: [{
                         el: {
                             type: "bi.layout",
@@ -279,7 +279,7 @@ BI.Pane = BI.inherit(BI.Widget, {
                     right: 0,
                     top: 0
                 }]
-            })
+            });
         }
     },
 
@@ -335,7 +335,7 @@ BI.Single = BI.inherit(BI.Widget, {
             warningTitle: null,
             tipType: null, // success或warning
             value: null
-        })
+        });
     },
 
     _showToolTip: function (e, opt) {
@@ -404,7 +404,7 @@ BI.Single = BI.inherit(BI.Widget, {
     },
 
     disabledHover: function () {
-        //取消hover事件
+        // 取消hover事件
         if (BI.isNotNull(this.timeout)) {
             clearTimeout(this.timeout);
         }
@@ -419,7 +419,7 @@ BI.Single = BI.inherit(BI.Widget, {
         this.items = items || [];
     },
 
-    //opt: {container: '', belowMouse: false}
+    // opt: {container: '', belowMouse: false}
     setTitle: function (title, opt) {
         this.options.title = title;
         if (BI.isKey(title)) {
@@ -484,7 +484,7 @@ BI.Text = BI.inherit(BI.Single, {
             textAlign: "left",
             whiteSpace: "normal",
             lineHeight: null,
-            handler: null,//如果传入handler,表示处理文字的点击事件，不是区域的
+            handler: null, // 如果传入handler,表示处理文字的点击事件，不是区域的
             hgap: 0,
             vgap: 0,
             lgap: 0,
@@ -493,7 +493,7 @@ BI.Text = BI.inherit(BI.Single, {
             bgap: 0,
             text: "",
             py: ""
-        })
+        });
     },
 
     _init: function () {
@@ -502,37 +502,37 @@ BI.Text = BI.inherit(BI.Single, {
         if (o.hgap + o.lgap > 0) {
             this.element.css({
                 "padding-left": o.hgap + o.lgap + "px"
-            })
+            });
         }
         if (o.hgap + o.rgap > 0) {
             this.element.css({
                 "padding-right": o.hgap + o.rgap + "px"
-            })
+            });
         }
         if (o.vgap + o.tgap > 0) {
             this.element.css({
                 "padding-top": o.vgap + o.tgap + "px"
-            })
+            });
         }
         if (o.vgap + o.bgap > 0) {
             this.element.css({
                 "padding-bottom": o.vgap + o.bgap + "px"
-            })
+            });
         }
         if (BI.isNumber(o.height)) {
-            this.element.css({"lineHeight": o.height + "px"});
+            this.element.css({lineHeight: o.height + "px"});
         }
         if (BI.isNumber(o.lineHeight)) {
-            this.element.css({"lineHeight": o.lineHeight + "px"});
+            this.element.css({lineHeight: o.lineHeight + "px"});
         }
         this.element.css({
-            "textAlign": o.textAlign,
-            "whiteSpace": o.whiteSpace
+            textAlign: o.textAlign,
+            whiteSpace: o.whiteSpace
         });
         if (o.handler) {
             this.text = BI.createWidget({
                 type: "bi.layout",
-                tagName: 'span'
+                tagName: "span"
             });
             this.text.element.click(function () {
                 o.handler(self.getValue());
@@ -581,13 +581,13 @@ BI.Text = BI.inherit(BI.Single, {
     },
 
     setStyle: function (css) {
-        this.text.element.css(css)
+        this.text.element.css(css);
     },
 
     setText: function (text) {
         BI.Text.superclass.setText.apply(this, arguments);
         this.options.text = text;
-        this.text.element.html(BI.Func.formatSpecialCharInHtml(text));
+        this.text.element.html(BI.htmlEncode(text));
     }
 });
 
@@ -608,16 +608,16 @@ BI.BasicButton = BI.inherit(BI.Single, {
             stopEvent: false,
             stopPropagation: false,
             selected: false,
-            once: false, //点击一次选中有效,再点无效
-            forceSelected: false, //点击即选中, 选中了就不会被取消,与once的区别是forceSelected不影响事件的触发
-            forceNotSelected: false, //无论怎么点击都不会被选中
-            disableSelected: false, //使能选中
+            once: false, // 点击一次选中有效,再点无效
+            forceSelected: false, // 点击即选中, 选中了就不会被取消,与once的区别是forceSelected不影响事件的触发
+            forceNotSelected: false, // 无论怎么点击都不会被选中
+            disableSelected: false, // 使能选中
 
             shadow: false,
-            isShadowShowingOnSelected: false,  //选中状态下是否显示阴影
+            isShadowShowingOnSelected: false,  // 选中状态下是否显示阴影
             trigger: null,
             handler: BI.emptyFn
-        })
+        });
     },
     _init: function () {
         BI.BasicButton.superclass._init.apply(this, arguments);
@@ -788,10 +788,10 @@ BI.BasicButton = BI.inherit(BI.Single, {
             }
         });
 
-        //之后的300ms点击无效
+        // 之后的300ms点击无效
         var onClick = BI.debounce(this._doClick, BI.EVENT_RESPONSE_TIME, true);
 
-        function ev(e) {
+        function ev (e) {
             if (o.stopEvent) {
                 e.stopEvent();
             }
@@ -800,7 +800,7 @@ BI.BasicButton = BI.inherit(BI.Single, {
             }
         }
 
-        function clk(e) {
+        function clk (e) {
             ev(e);
             if (!self.isEnabled() || (self.isOnce() && self.isSelected())) {
                 return;
@@ -941,47 +941,47 @@ BI.BasicButton.EVENT_CHANGE = "BasicButton.EVENT_CHANGE";/**
  * @abstract
  */
 BI.NodeButton = BI.inherit(BI.BasicButton, {
-    _defaultConfig: function() {
+    _defaultConfig: function () {
         var conf = BI.NodeButton.superclass._defaultConfig.apply(this, arguments);
         return BI.extend( conf, {
             baseCls: (conf.baseCls || "") + " bi-node",
             open: false
-        })
+        });
     },
 
-    _init:function() {
+    _init: function () {
         BI.NodeButton.superclass._init.apply(this, arguments);
         var self = this;
-        BI.nextTick(function(){
+        BI.nextTick(function () {
             self.setOpened(self.isOpened());
-        })
+        });
     },
 
-    doClick: function(){
+    doClick: function () {
         BI.NodeButton.superclass.doClick.apply(this, arguments);
         this.setOpened(!this.isOpened());
     },
 
-    isOnce: function(){
+    isOnce: function () {
         return false;
     },
 
-    isOpened: function(){
+    isOpened: function () {
         return !!this.options.open;
     },
 
-    setOpened: function(b){
+    setOpened: function (b) {
         this.options.open = !!b;
     },
 
-    triggerCollapse: function(){
+    triggerCollapse: function () {
         if(this.isOpened()) {
             this.setOpened(false);
             this.fireEvent(BI.Controller.EVENT_CHANGE, BI.Events.COLLAPSE, this.getValue(), this);
         }
     },
 
-    triggerExpand: function(){
+    triggerExpand: function () {
         if(!this.isOpened()) {
             this.setOpened(true);
             this.fireEvent(BI.Controller.EVENT_CHANGE, BI.Events.EXPAND, this.getValue(), this);
@@ -996,17 +996,17 @@ BI.NodeButton = BI.inherit(BI.BasicButton, {
  * @abstract
  */
 BI.Tip = BI.inherit(BI.Single, {
-    _defaultConfig: function() {
+    _defaultConfig: function () {
         var conf = BI.Link.superclass._defaultConfig.apply(this, arguments);
         return BI.extend(conf, {
             baseCls: (conf.baseCls || "") + " bi-tip",
             zIndex: BI.zIndex_tip
-        })
+        });
     },
 
-    _init : function() {
+    _init: function () {
         BI.Tip.superclass._init.apply(this, arguments);
-        this.element.css({"zIndex": this.options.zIndex});
+        this.element.css({zIndex: this.options.zIndex});
     }
 });/**
  * Created by GUY on 2015/6/26.
@@ -1026,7 +1026,7 @@ BI.ButtonGroup = BI.inherit(BI.Widget, {
                 hgap: 0,
                 vgap: 0
             }]
-        })
+        });
     },
 
     _init: function () {
@@ -1035,7 +1035,7 @@ BI.ButtonGroup = BI.inherit(BI.Widget, {
         BI.each(this.options.behaviors, function (key, rule) {
             behaviors[key] = BI.BehaviorFactory.createBehavior(key, {
                 rule: rule
-            })
+            });
         });
         this.behaviors = behaviors;
         this.populate(this.options.items);
@@ -1075,7 +1075,7 @@ BI.ButtonGroup = BI.inherit(BI.Widget, {
             });
             btn.on(BI.Events.DESTROY, function () {
                 BI.remove(self.buttons, btn);
-            })
+            });
         });
 
         return buttons;
@@ -1091,8 +1091,8 @@ BI.ButtonGroup = BI.inherit(BI.Widget, {
                             el: it
                         })
                     ]
-                })
-            })
+                });
+            });
         }
         return btns;
     },
@@ -1105,8 +1105,8 @@ BI.ButtonGroup = BI.inherit(BI.Widget, {
             }
             return BI.extend({}, item, {
                 el: btns[i]
-            })
-        })
+            });
+        });
     },
 
     _packageItems: function (items, packBtns) {
@@ -1124,10 +1124,10 @@ BI.ButtonGroup = BI.inherit(BI.Widget, {
         return layout;
     },
 
-    //如果是一个简单的layout
+    // 如果是一个简单的layout
     _isSimpleLayout: function () {
         var o = this.options;
-        return o.layouts.length === 1 && !BI.isArray(o.items[0])
+        return o.layouts.length === 1 && !BI.isArray(o.items[0]);
     },
 
     doBehavior: function () {
@@ -1135,7 +1135,7 @@ BI.ButtonGroup = BI.inherit(BI.Widget, {
         args.unshift(this.buttons);
         BI.each(this.behaviors, function (i, behavior) {
             behavior.doBehavior.apply(behavior, args);
-        })
+        });
     },
 
     prependItems: function (items) {
@@ -1157,7 +1157,7 @@ BI.ButtonGroup = BI.inherit(BI.Widget, {
         var btns = this._btnsCreator.apply(this, arguments);
         this.buttons = BI.concat(this.buttons, btns);
 
-        //如果是一个简单的layout
+        // 如果是一个简单的layout
         if (this._isSimpleLayout() && this.layouts && this.layouts.addItems) {
             this.layouts.addItems(btns);
             return;
@@ -1342,7 +1342,7 @@ BI.ButtonTree = BI.inherit(BI.ButtonGroup, {
     _defaultConfig: function () {
         return BI.extend(BI.ButtonTree.superclass._defaultConfig.apply(this, arguments), {
             baseCls: "bi-button-tree"
-        })
+        });
     },
 
     _init: function () {
@@ -1450,7 +1450,7 @@ BI.ButtonTree = BI.inherit(BI.ButtonGroup, {
         return btns;
     },
 
-    //获取所有的叶子节点
+    // 获取所有的叶子节点
     getAllLeaves: function () {
         var leaves = [];
         BI.each(this.buttons, function (i, item) {
@@ -1525,7 +1525,7 @@ BI.TreeView = BI.inherit(BI.Pane, {
             baseCls: "bi-tree",
             paras: {},
             itemsCreator: BI.emptyFn
-        })
+        });
     },
     _init: function () {
         BI.TreeView.superclass._init.apply(this, arguments);
@@ -1566,13 +1566,13 @@ BI.TreeView = BI.inherit(BI.Pane, {
         });
     },
 
-    //选择节点触发方法
+    // 选择节点触发方法
     _selectTreeNode: function (treeId, treeNode) {
         this.fireEvent(BI.Controller.EVENT_CHANGE, BI.Events.CLICK, treeNode, this);
         this.fireEvent(BI.TreeView.EVENT_CHANGE, treeNode, this);
     },
 
-    //配置属性
+    // 配置属性
     _configSetting: function () {
         var paras = this.options.paras;
         var self = this;
@@ -1614,11 +1614,11 @@ BI.TreeView = BI.inherit(BI.Pane, {
         };
         var className = "dark", perTime = 100;
 
-        function onClick(event, treeId, treeNode) {
+        function onClick (event, treeId, treeNode) {
             self.nodes.checkNode(treeNode, !treeNode.checked, true, true);
         }
 
-        function getUrl(treeId, treeNode) {
+        function getUrl (treeId, treeNode) {
             var parentNode = self._getParentValues(treeNode);
             treeNode.times = treeNode.times || 1;
             var param = "id=" + treeNode.id
@@ -1626,23 +1626,23 @@ BI.TreeView = BI.inherit(BI.Pane, {
                 + "&parentValues= " + window.encodeURIComponent(BI.jsonEncode(parentNode))
                 + "&checkState=" + window.encodeURIComponent(BI.jsonEncode(treeNode.getCheckStatus()));
 
-            return BI.servletURL + '?op=' + self.options.op + '&cmd=' + self.options.cmd + "&" + param;
+            return BI.servletURL + "?op=" + self.options.op + "&cmd=" + self.options.cmd + "&" + param;
         }
 
-        function beforeExpand(treeId, treeNode) {
+        function beforeExpand (treeId, treeNode) {
             if (!treeNode.isAjaxing) {
                 if (!treeNode.children) {
                     treeNode.times = 1;
                     ajaxGetNodes(treeNode, "refresh");
                 }
                 return true;
-            } else {
-                BI.Msg.toast("Please Wait。", "warning");
-                return false;
             }
+            BI.Msg.toast("Please Wait。", "warning");
+            return false;
+            
         }
 
-        function onAsyncSuccess(event, treeId, treeNode, msg) {
+        function onAsyncSuccess (event, treeId, treeNode, msg) {
             treeNode.halfCheck = false;
             if (!msg || msg.length === 0 || /^<html>[\s,\S]*<\/html>$/gi.test(msg) || self._stop) {
                 return;
@@ -1650,7 +1650,7 @@ BI.TreeView = BI.inherit(BI.Pane, {
             var zTree = self.nodes;
             var totalCount = treeNode.count || 0;
 
-            //尝试去获取下一组节点，若获取值为空数组，表示获取完成
+            // 尝试去获取下一组节点，若获取值为空数组，表示获取完成
             // TODO by GUY
             if (treeNode.children.length > totalCount) {
                 treeNode.count = treeNode.children.length;
@@ -1658,41 +1658,41 @@ BI.TreeView = BI.inherit(BI.Pane, {
                     ajaxGetNodes(treeNode);
                 }, perTime);
             } else {
-                //treeNode.icon = "";
+                // treeNode.icon = "";
                 zTree.updateNode(treeNode);
                 zTree.selectNode(treeNode.children[0]);
-                //className = (className === "dark" ? "":"dark");
+                // className = (className === "dark" ? "":"dark");
             }
         }
 
-        function onAsyncError(event, treeId, treeNode, XMLHttpRequest, textStatus, errorThrown) {
+        function onAsyncError (event, treeId, treeNode, XMLHttpRequest, textStatus, errorThrown) {
             var zTree = self.nodes;
             BI.Msg.toast("Error!", "warning");
-            //treeNode.icon = "";
-            //zTree.updateNode(treeNode);
+            // treeNode.icon = "";
+            // zTree.updateNode(treeNode);
         }
 
-        function ajaxGetNodes(treeNode, reloadType) {
+        function ajaxGetNodes (treeNode, reloadType) {
             var zTree = self.nodes;
             if (reloadType == "refresh") {
-                //treeNode.icon = BI.servletURL +"?op=resource&resource=/com/fr/bi/web/css/base/third/ztree/img/loading.gif";
+                // treeNode.icon = BI.servletURL +"?op=resource&resource=/com/fr/bi/web/css/base/third/ztree/img/loading.gif";
                 zTree.updateNode(treeNode);
             }
             zTree.reAsyncChildNodes(treeNode, reloadType, true);
         }
 
-        function beforeCheck(treeId, treeNode) {
+        function beforeCheck (treeId, treeNode) {
             treeNode.halfCheck = false;
             if (treeNode.checked === true) {
-                //将展开的节点halfCheck设为false，解决展开节点存在halfCheck=true的情况 guy
-                //所有的半选状态都需要取消halfCheck=true的情况
-                function track(children) {
+                // 将展开的节点halfCheck设为false，解决展开节点存在halfCheck=true的情况 guy
+                // 所有的半选状态都需要取消halfCheck=true的情况
+                function track (children) {
                     BI.each(children, function (i, ch) {
                         if (ch.halfCheck === true) {
                             ch.halfCheck = false;
                             track(ch.children);
                         }
-                    })
+                    });
                 }
 
                 track(treeNode.children);
@@ -1700,19 +1700,19 @@ BI.TreeView = BI.inherit(BI.Pane, {
                 var nodes = treeObj.getSelectedNodes();
                 $.each(nodes, function (index, node) {
                     node.halfCheck = false;
-                })
+                });
             }
         }
 
-        function onCheck(event, treeId, treeNode) {
+        function onCheck (event, treeId, treeNode) {
             self._selectTreeNode(treeId, treeNode);
         }
 
-        function onExpand(event, treeId, treeNode) {
+        function onExpand (event, treeId, treeNode) {
             treeNode.halfCheck = false;
         }
 
-        function onCollapse(event, treeId, treeNode) {
+        function onCollapse (event, treeId, treeNode) {
         }
 
         return setting;
@@ -1729,19 +1729,19 @@ BI.TreeView = BI.inherit(BI.Pane, {
     },
 
     _getNodeValue: function (node) {
-        //去除标红
+        // 去除标红
         return node.value == null ? node.text.replace(/<[^>]+>/g, "").replaceAll("&nbsp;", " ") : node.value;
     },
 
-    //获取半选框值
+    // 获取半选框值
     _getHalfSelectedValues: function (map, node) {
         var self = this;
         var checkState = node.getCheckStatus();
-        //将未选的去掉
+        // 将未选的去掉
         if (checkState.checked === false && checkState.half === false) {
             return;
         }
-        //如果节点已展开,并且是半选
+        // 如果节点已展开,并且是半选
         if (BI.isNotEmptyArray(node.children) && checkState.half === true) {
             var children = node.children;
             BI.each(children, function (i, ch) {
@@ -1782,7 +1782,7 @@ BI.TreeView = BI.inherit(BI.Pane, {
         cur[key] = value;
     },
 
-    //构造树节点
+    // 构造树节点
     _buildTree: function (map, values) {
         var cur = map;
         BI.each(values, function (i, value) {
@@ -1790,16 +1790,16 @@ BI.TreeView = BI.inherit(BI.Pane, {
                 cur[value] = {};
             }
             cur = cur[value];
-        })
+        });
     },
 
-    //获取选中的值
+    // 获取选中的值
     _getSelectedValues: function () {
         var self = this;
         var hashMap = {};
         var rootNoots = this.nodes.getNodes();
         track(rootNoots);
-        function track(nodes) {
+        function track (nodes) {
             BI.each(nodes, function (i, node) {
                 var checkState = node.getCheckStatus();
                 if (checkState.checked === true || checkState.half === true) {
@@ -1811,19 +1811,19 @@ BI.TreeView = BI.inherit(BI.Pane, {
                         self._buildTree(hashMap, values);
                     }
                 }
-            })
+            });
         }
 
         return hashMap;
     },
 
-    //处理节点
+    // 处理节点
     _dealWidthNodes: function (nodes) {
         var self = this, o = this.options;
         var ns = BI.Tree.arrayFormat(nodes);
         BI.each(ns, function (i, n) {
             n.title = n.title || n.text || n.value;
-            //处理标红
+            // 处理标红
             if (BI.isKey(o.paras.keyword)) {
                 n.text = $("<div>").__textKeywordMarked__(n.text, o.paras.keyword, n.py).html();
             } else {
@@ -1856,7 +1856,7 @@ BI.TreeView = BI.inherit(BI.Pane, {
         });
     },
 
-    //生成树内部方法
+    // 生成树内部方法
     _initTree: function (setting) {
         var self = this, o = this.options;
         self.fireEvent(BI.Events.INIT);
@@ -1894,31 +1894,31 @@ BI.TreeView = BI.inherit(BI.Pane, {
         });
     },
 
-    //构造树结构，
+    // 构造树结构，
     initTree: function (nodes, setting) {
         var setting = setting || {
-                async: {
-                    enable: false
+            async: {
+                enable: false
+            },
+            check: {
+                enable: false
+            },
+            data: {
+                key: {
+                    title: "title",
+                    name: "text"
                 },
-                check: {
-                    enable: false
-                },
-                data: {
-                    key: {
-                        title: "title",
-                        name: "text"
-                    },
-                    simpleData: {
-                        enable: true
-                    }
-                },
-                view: {
-                    showIcon: false,
-                    expandSpeed: "",
-                    nameIsHTML: true
-                },
-                callback: {}
-            };
+                simpleData: {
+                    enable: true
+                }
+            },
+            view: {
+                showIcon: false,
+                expandSpeed: "",
+                nameIsHTML: true
+            },
+            callback: {}
+        };
         this.nodes = $.fn.zTree.init(this.tree.element, setting, nodes);
     },
 
@@ -1930,7 +1930,7 @@ BI.TreeView = BI.inherit(BI.Pane, {
         this._stop = true;
     },
 
-    //生成树方法
+    // 生成树方法
     stroke: function (config) {
         delete this.options.keyword;
         BI.extend(this.options.paras, config);
@@ -1950,7 +1950,7 @@ BI.TreeView = BI.inherit(BI.Pane, {
     },
 
     checkAll: function (checked) {
-        function setNode(children) {
+        function setNode (children) {
             BI.each(children, function (i, child) {
                 child.halfCheck = false;
                 setNode(child.children);
@@ -1968,7 +1968,7 @@ BI.TreeView = BI.inherit(BI.Pane, {
         this.nodes && this.nodes.expandAll(flag);
     },
 
-    //设置树节点的状态
+    // 设置树节点的状态
     setValue: function (value, param) {
         this.checkAll(false);
         this.updateValue(value, param);
@@ -1990,7 +1990,7 @@ BI.TreeView = BI.inherit(BI.Pane, {
             BI.each(nodes, function (j, node) {
                 BI.extend(node, {checked: true}, op);
                 treeObj.updateNode(node);
-            })
+            });
         });
     },
 
@@ -2237,7 +2237,7 @@ BI.shortcut("bi.async_tree", BI.AsyncTree);/**
  */
 BI.PartTree = BI.inherit(BI.AsyncTree, {
     _defaultConfig: function () {
-        return BI.extend(BI.PartTree.superclass._defaultConfig.apply(this, arguments), {})
+        return BI.extend(BI.PartTree.superclass._defaultConfig.apply(this, arguments), {});
     },
 
     _init: function () {
@@ -2275,7 +2275,7 @@ BI.PartTree = BI.inherit(BI.AsyncTree, {
         if (treeNode.checked === true) {
             BI.AsyncTree.superclass._selectTreeNode.apply(self, arguments);
         } else {
-            //如果选中的值中不存在该值不处理
+            // 如果选中的值中不存在该值不处理
             var t = this.options.paras.selectedValues;
             var p = parentValues.concat(name);
             for (var i = 0, len = p.length; i < len; i++) {
@@ -2303,19 +2303,19 @@ BI.PartTree = BI.inherit(BI.AsyncTree, {
         var hashMap = {};
         var rootNoots = this.nodes.getNodes();
         track(rootNoots);
-        function track(nodes) {
+        function track (nodes) {
             BI.each(nodes, function (i, node) {
                 var checkState = node.getCheckStatus();
                 if (checkState.checked === false) {
                     return true;
                 }
                 var parentValues = node.parentValues || self._getParentValues(node);
-                //把文字中的html去掉，其实就是把文字颜色去掉
+                // 把文字中的html去掉，其实就是把文字颜色去掉
                 var values = parentValues.concat([self._getNodeValue(node)]);
                 self._buildTree(hashMap, values);
-//                if(checkState.checked === true && checkState.half === false && nodes[i].flag === true){
-//                    continue;
-//                }
+                //                if(checkState.checked === true && checkState.half === false && nodes[i].flag === true){
+                //                    continue;
+                //                }
                 if (BI.isNotEmptyArray(node.children)) {
                     track(node.children);
                     return true;
@@ -2323,7 +2323,7 @@ BI.PartTree = BI.inherit(BI.AsyncTree, {
                 if (checkState.half === true) {
                     self._getHalfSelectedValues(hashMap, node);
                 }
-            })
+            });
         }
 
         return hashMap;
@@ -2359,7 +2359,7 @@ BI.PartTree = BI.inherit(BI.AsyncTree, {
             self.fireEvent(BI.Events.AFTERINIT);
         };
 
-        function callback(nodes) {
+        function callback (nodes) {
             if (self._stop === true) {
                 return;
             }
@@ -2383,7 +2383,7 @@ BI.PartTree = BI.inherit(BI.AsyncTree, {
         return result;
     },
 
-    //生成树方法
+    // 生成树方法
     stroke: function (config) {
         var o = this.options;
         delete o.paras.keyword;
@@ -2413,14 +2413,14 @@ BI.Canvas = BI.inherit(BI.Widget, {
     _defaultConfig: function () {
         return BI.extend(BI.Canvas.superclass._defaultConfig.apply(this, arguments), {
             baseCls: "bi-canvas"
-        })
+        });
     },
 
     _init: function () {
         BI.Canvas.superclass._init.apply(this, arguments);
         var self = this, o = this.options;
         var canvas = document.createElement("canvas");
-        if (!document.createElement('canvas').getContext) {
+        if (!document.createElement("canvas").getContext) {
             canvas = window.G_vmlCanvasManager.initElement(canvas);
         }
         this.element.append(canvas);
@@ -2438,7 +2438,7 @@ BI.Canvas = BI.inherit(BI.Widget, {
 
     _getContext: function () {
         if (!this.ctx) {
-            this.ctx = this.canvas.getContext('2d');
+            this.ctx = this.canvas.getContext("2d");
         }
         return this.ctx;
     },
@@ -2522,7 +2522,7 @@ BI.Canvas = BI.inherit(BI.Widget, {
 
     stroke: function () {
         var ctx = this._getContext();
-        if(!ctx){
+        if(!ctx) {
             return false;
         }
         BI.each(this._queue, function (i, q) {
@@ -2637,7 +2637,7 @@ BI.CollectionView = BI.inherit(BI.Widget, {
 
     _cellRenderers: function (height, width, x, y) {
         this._lastRenderedCellIndices = this._sectionManager.getCellIndices(height, width, x, y);
-        return this._cellGroupRenderer()
+        return this._cellGroupRenderer();
     },
 
     _cellGroupRenderer: function () {
@@ -2659,13 +2659,13 @@ BI.CollectionView = BI.inherit(BI.Widget, {
         var right = Math.min(this._width, scrollLeft + o.width + o.horizontalOverscanSize);
         var bottom = Math.min(this._height, scrollTop + o.height + o.verticalOverscanSize);
         if (right > 0 && bottom > 0) {
-            //如果滚动的区间并没有超出渲染的范围
+            // 如果滚动的区间并没有超出渲染的范围
             if (top >= this.renderRange.minY && bottom <= this.renderRange.maxY && left >= this.renderRange.minX && right <= this.renderRange.maxX) {
                 return;
             }
             var childrenToDisplay = this._cellRenderers(bottom - top, right - left, left, top);
             var renderedCells = [], renderedKeys = {}, renderedWidgets = {};
-            //存储所有的left和top
+            // 存储所有的left和top
             var lefts = {}, tops = {};
             for (var i = 0, len = childrenToDisplay.length; i < len; i++) {
                 var datum = childrenToDisplay[i];
@@ -2678,7 +2678,7 @@ BI.CollectionView = BI.inherit(BI.Widget, {
             tops = BI.toArray(tops);
             var leftMap = BI.invert(lefts);
             var topMap = BI.invert(tops);
-            //存储上下左右四个边界
+            // 存储上下左右四个边界
             var leftBorder = {}, rightBorder = {}, topBorder = {}, bottomBorder = {};
             var assertMinBorder = function (border, offset) {
                 if (border[offset] == null) {
@@ -2752,7 +2752,7 @@ BI.CollectionView = BI.inherit(BI.Widget, {
                 renderedKeys[datum.index] = [datum.index, i];
                 renderedWidgets[i] = child;
             }
-            //已存在的， 需要添加的和需要删除的
+            // 已存在的， 需要添加的和需要删除的
             var existSet = {}, addSet = {}, deleteArray = [];
             BI.each(renderedKeys, function (i, key) {
                 if (self.renderedKeys[i]) {
@@ -2771,21 +2771,21 @@ BI.CollectionView = BI.inherit(BI.Widget, {
                 deleteArray.push(key[1]);
             });
             BI.each(deleteArray, function (i, index) {
-                //性能优化，不调用destroy方法防止触发destroy事件
+                // 性能优化，不调用destroy方法防止触发destroy事件
                 self.renderedCells[index].el._destroy();
             });
             var addedItems = [];
             BI.each(addSet, function (index, key) {
-                addedItems.push(renderedCells[key[1]])
+                addedItems.push(renderedCells[key[1]]);
             });
             this.container.addItems(addedItems);
-            //拦截父子级关系
+            // 拦截父子级关系
             this.container._children = renderedWidgets;
             this.container.attr("items", renderedCells);
             this.renderedCells = renderedCells;
             this.renderedKeys = renderedKeys;
 
-            //Todo 左右比较特殊
+            // Todo 左右比较特殊
             var minX = BI.min(leftBorder);
             var maxX = BI.max(rightBorder);
 
@@ -2816,7 +2816,7 @@ BI.CollectionView = BI.inherit(BI.Widget, {
             this.container.setHeight(this._height);
 
             this._calculateChildrenToRender();
-            //元素未挂载时不能设置scrollTop
+            // 元素未挂载时不能设置scrollTop
             try {
                 this.element.scrollTop(o.scrollTop);
                 this.element.scrollLeft(o.scrollLeft);
@@ -2852,7 +2852,7 @@ BI.CollectionView = BI.inherit(BI.Widget, {
         if (this.options.overflowX !== !!b) {
             this.options.overflowX = !!b;
             BI.nextTick(function () {
-                self.element.css({overflowX: !!b ? "auto" : "hidden"});
+                self.element.css({overflowX: b ? "auto" : "hidden"});
             });
         }
     },
@@ -2862,7 +2862,7 @@ BI.CollectionView = BI.inherit(BI.Widget, {
         if (this.options.overflowY !== !!b) {
             this.options.overflowY = !!b;
             BI.nextTick(function () {
-                self.element.css({overflowY: !!b ? "auto" : "hidden"});
+                self.element.css({overflowY: b ? "auto" : "hidden"});
             });
         }
     },
@@ -2883,7 +2883,7 @@ BI.CollectionView = BI.inherit(BI.Widget, {
         return this._getMaxScrollTop();
     },
 
-    //重新计算children
+    // 重新计算children
     _reRange: function () {
         this.renderRange = {};
     },
@@ -2912,7 +2912,7 @@ BI.CollectionView = BI.inherit(BI.Widget, {
     }
 });
 BI.CollectionView.EVENT_SCROLL = "EVENT_SCROLL";
-BI.shortcut('bi.collection_view', BI.CollectionView);/**
+BI.shortcut("bi.collection_view", BI.CollectionView);/**
  * @class BI.Combo
  * @extends BI.Widget
  */
@@ -2923,24 +2923,24 @@ BI.Combo = BI.inherit(BI.Widget, {
             baseCls: (conf.baseCls || "") + " bi-combo",
             trigger: "click",
             toggle: true,
-            direction: "bottom", //top||bottom||left||right||top,left||top,right||bottom,left||bottom,right
-            container: null,//popupview放置的容器，默认为this.element
+            direction: "bottom", // top||bottom||left||right||top,left||top,right||bottom,left||bottom,right
+            container: null, // popupview放置的容器，默认为this.element
             isDefaultInit: false,
             destroyWhenHide: false,
-            isNeedAdjustHeight: true,//是否需要高度调整
+            isNeedAdjustHeight: true, // 是否需要高度调整
             isNeedAdjustWidth: true,
             stopEvent: false,
             stopPropagation: false,
-            adjustLength: 0,//调整的距离
+            adjustLength: 0, // 调整的距离
             adjustXOffset: 0,
             adjustYOffset: 0,
             hideChecker: BI.emptyFn,
-            offsetStyle: "left", //left,right,center
+            offsetStyle: "left", // left,right,center
             el: {},
             popup: {},
             comboClass: "bi-combo-popup",
             hoverClass: "bi-combo-hover"
-        })
+        });
     },
 
     _init: function () {
@@ -3022,7 +3022,7 @@ BI.Combo = BI.inherit(BI.Widget, {
 
         var enterPopup = false;
 
-        function hide() {
+        function hide () {
             if (self.isEnabled() && self.isValid() && self.combo.isEnabled() && self.combo.isValid() && o.toggle === true) {
                 self._hideView();
                 self.fireEvent(BI.Controller.EVENT_CHANGE, BI.Events.COLLAPSE, "", self.combo);
@@ -3165,8 +3165,8 @@ BI.Combo = BI.inherit(BI.Widget, {
         // if (this.element.__isMouseInBounds__(e) || (this.popupView && this.popupView.element.__isMouseInBounds__(e))) {
         //     return;
         // }
-        //BI-10290 公式combo双击公式内容会收起
-        if (this.element.find(e.target).length > 0 || e.target.className === "CodeMirror-cursor" || $(e.target).closest(".CodeMirror-hints").length > 0) {//BI-9887 CodeMirror的公式弹框需要特殊处理下
+        // BI-10290 公式combo双击公式内容会收起
+        if (this.element.find(e.target).length > 0 || e.target.className === "CodeMirror-cursor" || $(e.target).closest(".CodeMirror-hints").length > 0) {// BI-9887 CodeMirror的公式弹框需要特殊处理下
             return;
         }
         var isHide = this.options.hideChecker.apply(this, [e]);
@@ -3233,31 +3233,31 @@ BI.Combo = BI.inherit(BI.Widget, {
         switch (o.direction) {
             case "bottom":
             case "bottom,right":
-                p = $.getComboPosition(this.combo, this.popupView, o.adjustXOffset, o.adjustYOffset || o.adjustLength, o.isNeedAdjustHeight, ['bottom', 'top', 'right', 'left'], o.offsetStyle);
+                p = $.getComboPosition(this.combo, this.popupView, o.adjustXOffset, o.adjustYOffset || o.adjustLength, o.isNeedAdjustHeight, ["bottom", "top", "right", "left"], o.offsetStyle);
                 break;
             case "top":
             case "top,right":
-                p = $.getComboPosition(this.combo, this.popupView, o.adjustXOffset, o.adjustYOffset || o.adjustLength, o.isNeedAdjustHeight, ['top', 'bottom', 'right', 'left'], o.offsetStyle);
+                p = $.getComboPosition(this.combo, this.popupView, o.adjustXOffset, o.adjustYOffset || o.adjustLength, o.isNeedAdjustHeight, ["top", "bottom", "right", "left"], o.offsetStyle);
                 break;
             case "left":
             case "left,bottom":
-                p = $.getComboPosition(this.combo, this.popupView, o.adjustXOffset || o.adjustLength, o.adjustYOffset, o.isNeedAdjustHeight, ['left', 'right', 'bottom', 'top'], o.offsetStyle);
+                p = $.getComboPosition(this.combo, this.popupView, o.adjustXOffset || o.adjustLength, o.adjustYOffset, o.isNeedAdjustHeight, ["left", "right", "bottom", "top"], o.offsetStyle);
                 break;
             case "right":
             case "right,bottom":
-                p = $.getComboPosition(this.combo, this.popupView, o.adjustXOffset || o.adjustLength, o.adjustYOffset, o.isNeedAdjustHeight, ['right', 'left', 'bottom', 'top'], o.offsetStyle);
+                p = $.getComboPosition(this.combo, this.popupView, o.adjustXOffset || o.adjustLength, o.adjustYOffset, o.isNeedAdjustHeight, ["right", "left", "bottom", "top"], o.offsetStyle);
                 break;
             case "top,left":
-                p = $.getComboPosition(this.combo, this.popupView, o.adjustXOffset, o.adjustYOffset || o.adjustLength, o.isNeedAdjustHeight, ['top', 'bottom', 'left', 'right'], o.offsetStyle);
+                p = $.getComboPosition(this.combo, this.popupView, o.adjustXOffset, o.adjustYOffset || o.adjustLength, o.isNeedAdjustHeight, ["top", "bottom", "left", "right"], o.offsetStyle);
                 break;
             case "bottom,left":
-                p = $.getComboPosition(this.combo, this.popupView, o.adjustXOffset, o.adjustYOffset || o.adjustLength, o.isNeedAdjustHeight, ['bottom', 'top', 'left', 'right'], o.offsetStyle);
+                p = $.getComboPosition(this.combo, this.popupView, o.adjustXOffset, o.adjustYOffset || o.adjustLength, o.isNeedAdjustHeight, ["bottom", "top", "left", "right"], o.offsetStyle);
                 break;
             case "left,top":
-                p = $.getComboPosition(this.combo, this.popupView, o.adjustXOffset || o.adjustLength, o.adjustYOffset, o.isNeedAdjustHeight, ['left', 'right', 'top', 'bottom'], o.offsetStyle);
+                p = $.getComboPosition(this.combo, this.popupView, o.adjustXOffset || o.adjustLength, o.adjustYOffset, o.isNeedAdjustHeight, ["left", "right", "top", "bottom"], o.offsetStyle);
                 break;
             case "right,top":
-                p = $.getComboPosition(this.combo, this.popupView, o.adjustXOffset || o.adjustLength, o.adjustYOffset, o.isNeedAdjustHeight, ['right', 'left', 'top', 'bottom'], o.offsetStyle);
+                p = $.getComboPosition(this.combo, this.popupView, o.adjustXOffset || o.adjustLength, o.adjustYOffset, o.isNeedAdjustHeight, ["right", "left", "top", "bottom"], o.offsetStyle);
                 break;
             case "top,custom":
             case "custom,top":
@@ -3282,7 +3282,7 @@ BI.Combo = BI.inherit(BI.Widget, {
         }
 
         if ("adaptHeight" in p) {
-            this.resetListHeight(p['adaptHeight']);
+            this.resetListHeight(p["adaptHeight"]);
         }
         if ("left" in p) {
             this.popupView.element.css({
@@ -3393,13 +3393,13 @@ BI.Expander = BI.inherit(BI.Widget, {
             baseCls: "bi-expander",
             trigger: "click",
             toggle: true,
-            //direction: "bottom", //top,bottom四个方向
-            isDefaultInit: false, //是否默认初始化子节点
+            // direction: "bottom", //top,bottom四个方向
+            isDefaultInit: false, // 是否默认初始化子节点
             el: {},
             popup: {},
             expanderClass: "bi-expander-popup",
             hoverClass: "bi-expander-hover"
-        })
+        });
     },
 
     _init: function () {
@@ -3473,13 +3473,13 @@ BI.Expander = BI.inherit(BI.Widget, {
                     self.element[e](function (e) {
                         if (self.isEnabled() && self.isValid() && self.expander.isEnabled() && self.expander.isValid()) {
                             self._popupView();
-                            self.fireEvent(BI.Controller.EVENT_CHANGE, BI.Events.EXPAND, '', self.expander);
+                            self.fireEvent(BI.Controller.EVENT_CHANGE, BI.Events.EXPAND, "", self.expander);
                             self.fireEvent(BI.Expander.EVENT_EXPAND);
                         }
                     }, function () {
                         if (self.isEnabled() && self.isValid() && self.expander.isEnabled() && self.expander.isValid() && o.toggle) {
                             self._hideView();
-                            self.fireEvent(BI.Controller.EVENT_CHANGE, BI.Events.COLLAPSE, '', self.expander);
+                            self.fireEvent(BI.Controller.EVENT_CHANGE, BI.Events.COLLAPSE, "", self.expander);
                             self.fireEvent(BI.Expander.EVENT_COLLAPSE);
                         }
                     });
@@ -3494,7 +3494,7 @@ BI.Expander = BI.inherit(BI.Widget, {
                                         self.fireEvent(BI.Controller.EVENT_CHANGE, BI.Events.EXPAND, "", self.expander);
                                         self.fireEvent(BI.Expander.EVENT_EXPAND);
                                     } else {
-                                        self.fireEvent(BI.Controller.EVENT_CHANGE, BI.Events.COLLAPSE, '', self.expander);
+                                        self.fireEvent(BI.Controller.EVENT_CHANGE, BI.Events.COLLAPSE, "", self.expander);
                                         self.fireEvent(BI.Expander.EVENT_COLLAPSE);
                                     }
                                 }
@@ -3503,7 +3503,7 @@ BI.Expander = BI.inherit(BI.Widget, {
                     }
                     break;
             }
-        })
+        });
     },
 
     _initExpander: function () {
@@ -3525,7 +3525,7 @@ BI.Expander = BI.inherit(BI.Widget, {
             this.popupView.on(BI.Controller.EVENT_CHANGE, function (type, value, obj) {
                 self.fireEvent(BI.Controller.EVENT_CHANGE, arguments);
                 if (type === BI.Events.CLICK) {
-                    //self.setValue(self.getValue());
+                    // self.setValue(self.getValue());
                     self.fireEvent(BI.Expander.EVENT_CHANGE, value, obj);
                 }
             });
@@ -3572,7 +3572,7 @@ BI.Expander = BI.inherit(BI.Widget, {
     },
 
     populate: function (items) {
-        //this._assertPopupView();
+        // this._assertPopupView();
         this.popupView && this.popupView.populate.apply(this.popupView, arguments);
         this.expander.populate.apply(this.expander, arguments);
     },
@@ -3584,13 +3584,13 @@ BI.Expander = BI.inherit(BI.Widget, {
     },
 
     setValue: function (v) {
-        //this._assertPopupView();
+        // this._assertPopupView();
         this.expander.setValue(v);
         this.popupView && this.popupView.setValue(v);
     },
 
     getValue: function () {
-        //this._assertPopupView();
+        // this._assertPopupView();
         return this.popupView ? this.popupView.getValue() : [];
     },
 
@@ -3659,7 +3659,7 @@ BI.ComboGroup = BI.inherit(BI.Widget, {
         return BI.extend(BI.ComboGroup.superclass._defaultConfig.apply(this, arguments), {
             baseCls: "bi-combo-group bi-list-item",
 
-            //以下这些属性对每一个combo都是公用的
+            // 以下这些属性对每一个combo都是公用的
             trigger: "click,hover",
             direction: "right",
             adjustLength: 0,
@@ -3679,7 +3679,7 @@ BI.ComboGroup = BI.inherit(BI.Widget, {
                     }]
                 }
             }
-        })
+        });
     },
 
     _init: function () {
@@ -3709,7 +3709,7 @@ BI.ComboGroup = BI.inherit(BI.Widget, {
                 ch.adjustLength = o.adjustLength;
                 ch.popup = o.popup;
             }
-        })
+        });
         this.combo = BI.createWidget({
             type: "bi.combo",
             element: this,
@@ -3726,13 +3726,13 @@ BI.ComboGroup = BI.inherit(BI.Widget, {
                     items: children
                 }, o.popup.el)
             })
-        })
+        });
         this.combo.on(BI.Controller.EVENT_CHANGE, function (type, value, obj) {
             self.fireEvent(BI.Controller.EVENT_CHANGE, arguments);
             if (type === BI.Events.CLICK) {
                 self.fireEvent(BI.ComboGroup.EVENT_CHANGE, obj);
             }
-        })
+        });
     },
 
     getValue: function () {
@@ -3755,7 +3755,7 @@ BI.shortcut("bi.combo_group", BI.ComboGroup);BI.VirtualGroup = BI.inherit(BI.Wid
                 hgap: 0,
                 vgap: 0
             }]
-        })
+        });
     },
 
     render: function () {
@@ -3773,8 +3773,8 @@ BI.shortcut("bi.combo_group", BI.ComboGroup);BI.VirtualGroup = BI.inherit(BI.Wid
                             el: BI.stripEL(it)
                         })
                     ]
-                })
-            })
+                });
+            });
         }
         return items;
     },
@@ -3837,13 +3837,13 @@ BI.Loader = BI.inherit(BI.Widget, {
             baseCls: "bi-loader",
 
             direction: "top",
-            isDefaultInit: true,//是否默认初始化数据
+            isDefaultInit: true, // 是否默认初始化数据
             logic: {
                 dynamic: true,
                 scrolly: true
             },
 
-            //下面是button_group的属性
+            // 下面是button_group的属性
             el: {
                 type: "bi.button_group"
             },
@@ -3852,13 +3852,13 @@ BI.Loader = BI.inherit(BI.Widget, {
             itemsCreator: BI.emptyFn,
             onLoaded: BI.emptyFn,
 
-            //下面是分页信息
+            // 下面是分页信息
             count: false,
             prev: false,
             next: {},
             hasPrev: BI.emptyFn,
             hasNext: BI.emptyFn
-        })
+        });
     },
 
     _prevLoad: function () {
@@ -3921,7 +3921,7 @@ BI.Loader = BI.inherit(BI.Widget, {
                 if (type === BI.Events.CLICK) {
                     self._nextLoad();
                 }
-            })
+            });
         }
 
         BI.createWidget(BI.extend({
@@ -3948,7 +3948,7 @@ BI.Loader = BI.inherit(BI.Widget, {
         return !!o.hasPrev.apply(this, [{
             times: this.times,
             count: this.count
-        }])
+        }]);
     },
 
     hasNext: function () {
@@ -3959,7 +3959,7 @@ BI.Loader = BI.inherit(BI.Widget, {
         return !!o.hasNext.apply(this, [{
             times: this.times,
             count: this.count
-        }])
+        }]);
     },
 
     prependItems: function (items) {
@@ -4084,7 +4084,7 @@ BI.shortcut("bi.loader", BI.Loader);/**
 BI.Navigation = BI.inherit(BI.Widget, {
     _defaultConfig: function () {
         return BI.extend(BI.Navigation.superclass._defaultConfig.apply(this, arguments), {
-            direction: "bottom",//top, bottom, left, right, custom
+            direction: "bottom", // top, bottom, left, right, custom
             logic: {
                 dynamic: false
             },
@@ -4097,7 +4097,7 @@ BI.Navigation = BI.inherit(BI.Widget, {
 
             afterCardCreated: BI.emptyFn,
             afterCardShow: BI.emptyFn
-        })
+        });
     },
 
     render: function () {
@@ -4254,13 +4254,13 @@ BI.Searcher = BI.inherit(BI.Widget, {
             hgap: 0,
 
             isDefaultInit: false,
-            isAutoSearch: true, //是否自动搜索
-            isAutoSync: true, //是否自动同步数据, 即是否保持搜索面板和adapter面板状态值的统一
+            isAutoSearch: true, // 是否自动搜索
+            isAutoSync: true, // 是否自动同步数据, 即是否保持搜索面板和adapter面板状态值的统一
             chooseType: BI.ButtonGroup.CHOOSE_TYPE_SINGLE,
 
-            //isAutoSearch为false时启用
+            // isAutoSearch为false时启用
             onSearch: function (op, callback) {
-                callback([])
+                callback([]);
             },
 
             el: {
@@ -4272,10 +4272,10 @@ BI.Searcher = BI.inherit(BI.Widget, {
             },
 
             adapter: null,
-            masker: { //masker层
+            masker: { // masker层
                 offset: {}
             }
-        })
+        });
     },
 
     _init: function () {
@@ -4315,7 +4315,7 @@ BI.Searcher = BI.inherit(BI.Widget, {
                     self._pauseSearch();
                     break;
             }
-        })
+        });
     },
 
     _assertPopupView: function () {
@@ -4365,7 +4365,7 @@ BI.Searcher = BI.inherit(BI.Widget, {
         this._isSearching = true;
         this.fireEvent(BI.Searcher.EVENT_START);
         this.popupView.startSearch && this.popupView.startSearch();
-        //搜索前先清空dom
+        // 搜索前先清空dom
         // BI.Maskers.get(this.getName()).empty();
         BI.nextTick(function (name) {
             BI.Maskers.show(name);
@@ -4442,8 +4442,8 @@ BI.Searcher = BI.inherit(BI.Widget, {
     },
 
     stopSearch: function () {
-        this._stopSearch();//先停止搜索，然后再去设置editor为空
-        //important:停止搜索必须退出编辑状态,这里必须加上try(input框不显示时blur会抛异常)
+        this._stopSearch();// 先停止搜索，然后再去设置editor为空
+        // important:停止搜索必须退出编辑状态,这里必须加上try(input框不显示时blur会抛异常)
         try {
             this.editor.blur();
         } catch (e) {
@@ -4504,9 +4504,9 @@ BI.Searcher = BI.inherit(BI.Widget, {
             return this.popupView.getValue();
         } else if (o.adapter && o.adapter.getValue) {
             return o.adapter.getValue();
-        } else {
-            return this.popupView.getValue();
         }
+        return this.popupView.getValue();
+        
     },
 
     populate: function (result, searchResult, keyword) {
@@ -4555,7 +4555,7 @@ BI.Switcher = BI.inherit(BI.Widget, {
             masker: {},
             switcherClass: "bi-switcher-popup",
             hoverClass: "bi-switcher-hover"
-        })
+        });
     },
 
     _init: function () {
@@ -4625,13 +4625,13 @@ BI.Switcher = BI.inherit(BI.Widget, {
                     self.element[e](function (e) {
                         if (self.isEnabled() && self.switcher.isEnabled()) {
                             self._popupView();
-                            self.fireEvent(BI.Controller.EVENT_CHANGE, BI.Events.EXPAND, '', self.switcher);
+                            self.fireEvent(BI.Controller.EVENT_CHANGE, BI.Events.EXPAND, "", self.switcher);
                             self.fireEvent(BI.Switcher.EVENT_EXPAND);
                         }
                     }, function () {
                         if (self.isEnabled() && self.switcher.isEnabled() && o.toggle) {
                             self._hideView();
-                            self.fireEvent(BI.Controller.EVENT_CHANGE, BI.Events.COLLAPSE, '', self.switcher);
+                            self.fireEvent(BI.Controller.EVENT_CHANGE, BI.Events.COLLAPSE, "", self.switcher);
                             self.fireEvent(BI.Switcher.EVENT_COLLAPSE);
                         }
                     });
@@ -4643,10 +4643,10 @@ BI.Switcher = BI.inherit(BI.Widget, {
                                 if (self.isEnabled() && self.switcher.isEnabled()) {
                                     o.toggle ? self._toggle() : self._popupView();
                                     if (self.isExpanded()) {
-                                        self.fireEvent(BI.Controller.EVENT_CHANGE, BI.Events.EXPAND, '', self.switcher);
+                                        self.fireEvent(BI.Controller.EVENT_CHANGE, BI.Events.EXPAND, "", self.switcher);
                                         self.fireEvent(BI.Switcher.EVENT_EXPAND);
                                     } else {
-                                        self.fireEvent(BI.Controller.EVENT_CHANGE, BI.Events.COLLAPSE, '', self.switcher);
+                                        self.fireEvent(BI.Controller.EVENT_CHANGE, BI.Events.COLLAPSE, "", self.switcher);
                                         self.fireEvent(BI.Switcher.EVENT_COLLAPSE);
                                     }
                                 }
@@ -4655,7 +4655,7 @@ BI.Switcher = BI.inherit(BI.Widget, {
                     }
                     break;
             }
-        })
+        });
     },
 
     _initSwitcher: function () {
@@ -4821,8 +4821,8 @@ BI.Tab = BI.inherit(BI.Widget, {
     _defaultConfig: function () {
         return BI.extend(BI.Tab.superclass._defaultConfig.apply(this, arguments), {
             baseCls: "bi-tab",
-            direction: "top",//top, bottom, left, right, custom
-            single: false, //是不是单页面
+            direction: "top", // top, bottom, left, right, custom
+            single: false, // 是不是单页面
             logic: {
                 dynamic: false
             },
@@ -4831,7 +4831,7 @@ BI.Tab = BI.inherit(BI.Widget, {
             cardCreator: function (v) {
                 return BI.createWidget();
             }
-        })
+        });
     },
 
     render: function () {
@@ -4840,7 +4840,7 @@ BI.Tab = BI.inherit(BI.Widget, {
             this.tab = BI.createWidget(this.options.tab, {type: "bi.button_group"});
             this.tab.on(BI.Controller.EVENT_CHANGE, function (type, value, obj) {
                 self.fireEvent(BI.Controller.EVENT_CHANGE, arguments);
-            })
+            });
         }
         this.cardMap = {};
         this.layout = BI.createWidget({
@@ -4991,7 +4991,7 @@ BI.EL = BI.inherit(BI.Widget, {
         });
         this.ele.on(BI.Controller.EVENT_CHANGE, function () {
             self.fireEvent(BI.Controller.EVENT_CHANGE, arguments);
-        })
+        });
     },
 
     setValue: function (v) {
@@ -5006,7 +5006,7 @@ BI.EL = BI.inherit(BI.Widget, {
         this.ele.populate.apply(this, arguments);
     }
 });
-BI.shortcut('bi.el', BI.EL);// CodeMirror, copyright (c) by Marijn Haverbeke and others
+BI.shortcut("bi.el", BI.EL);// CodeMirror, copyright (c) by Marijn Haverbeke and others
 // Distributed under an MIT license: http://codemirror.net/LICENSE
 
 // This is CodeMirror (http://codemirror.net), a code editor
@@ -13746,11 +13746,11 @@ BI.shortcut('bi.el', BI.EL);// CodeMirror, copyright (c) by Marijn Haverbeke and
 })(function (CodeMirror) {
     var Pos = CodeMirror.Pos;
 
-    function forEach(arr, f) {
+    function forEach (arr, f) {
         for (var i = 0, e = arr.length; i < e; ++i) f(arr[i]);
     }
 
-    function arrayContains(arr, item) {
+    function arrayContains (arr, item) {
         if (!Array.prototype.indexOf) {
             var i = arr.length;
             while (i--) {
@@ -13763,7 +13763,7 @@ BI.shortcut('bi.el', BI.EL);// CodeMirror, copyright (c) by Marijn Haverbeke and
         return arr.indexOf(item) != -1;
     }
 
-    function scriptHint(editor, keywords, getToken, options) {
+    function scriptHint (editor, keywords, getToken, options) {
         // Find the token at the cursor
         var cur = editor.getCursor(), token = getToken(editor, cur);
         if (/\b(?:string)\b/.test(token.type)) {
@@ -13797,25 +13797,25 @@ BI.shortcut('bi.el', BI.EL);// CodeMirror, copyright (c) by Marijn Haverbeke and
         };
     }
 
-    function getFormulaKeywords() {
+    function getFormulaKeywords () {
         return BI.FormulaCollections;
     }
 
-    function formulaHint(editor, options) {
+    function formulaHint (editor, options) {
         return scriptHint(editor, getFormulaKeywords(),
             function (e, cur) {
                 return e.getTokenAt(cur);
             },
             options);
-    };
+    }
     CodeMirror.registerHelper("hint", "formula", formulaHint);
 
-    function getCompletions(token, context, keywords, options) {
+    function getCompletions (token, context, keywords, options) {
         var found = [], start = token.string;
         if (!start) {
             return found;
         }
-        function maybeAdd(str) {
+        function maybeAdd (str) {
             if (str.lastIndexOf(start, 0) == 0 && !arrayContains(found, str)) {
                 found.push(str);
             }
@@ -13833,44 +13833,44 @@ BI.shortcut('bi.el', BI.EL);// CodeMirror, copyright (c) by Marijn Haverbeke and
 })(function (CodeMirror) {
     "use strict";
 
-    CodeMirror.defineMode('formula', function () {
-        function wordObj(words) {
+    CodeMirror.defineMode("formula", function () {
+        function wordObj (words) {
             var o = {};
             for (var i = 0, e = words.length; i < e; ++i) o[words[i]] = true;
             return o;
         }
 
-        var atoms = wordObj(['false', 'true']);
+        var atoms = wordObj(["false", "true"]);
         var keywords = wordObj(BI.FormulaCollections);
 
-        function tokenBase(stream, state) {
+        function tokenBase (stream, state) {
             if (stream.eatSpace()) {
                 return null;
             }
             var ch = stream.next();
 
-            if (ch === '"' || ch === '\'') {
+            if (ch === "\"" || ch === "'") {
                 nextUntilUnescaped(stream, ch);
                 return "string";
             }
-            if (ch === '\u200b') {
+            if (ch === "\u200b") {
                 nextUntilUnescaped(stream, ch);
                 return "field";
             }
             if (/[\[\],\(\)]/.test(ch)) {
-                return 'bracket';
+                return "bracket";
             }
 
             // richie：暂时不需要解析操作符号
-            //if (/[+\-*\/=<>!&|]/.test(ch)) {
+            // if (/[+\-*\/=<>!&|]/.test(ch)) {
             //  return 'operator';
-            //}
-            //if (/\d|\d./.test(ch)) {
+            // }
+            // if (/\d|\d./.test(ch)) {
             //    stream.eatWhile(/\d|\./);
             //    if (stream.eol() || !/\w/.test(stream.peek())) {
             //        return 'number';
             //    }
-            //}
+            // }
 
 
 
@@ -13885,7 +13885,7 @@ BI.shortcut('bi.el', BI.EL);// CodeMirror, copyright (c) by Marijn Haverbeke and
             return null;
         }
 
-        function nextUntilUnescaped(stream, end) {
+        function nextUntilUnescaped (stream, end) {
             var escaped = false, next;
             while ((next = stream.next()) != null) {
                 if (next === end && !escaped) {
@@ -13896,7 +13896,7 @@ BI.shortcut('bi.el', BI.EL);// CodeMirror, copyright (c) by Marijn Haverbeke and
             return escaped;
         }
 
-        function tokenize(stream, state) {
+        function tokenize (stream, state) {
             return (state.tokens[0] || tokenBase)(stream, state);
         }
 
@@ -13944,7 +13944,7 @@ BI.shortcut('bi.el', BI.EL);// CodeMirror, copyright (c) by Marijn Haverbeke and
         completion.update(true);
     });
 
-    function Completion(cm, options) {
+    function Completion (cm, options) {
         this.cm = cm;
         this.options = this.buildOptions(options);
         this.widget = null;
@@ -13960,8 +13960,8 @@ BI.shortcut('bi.el', BI.EL);// CodeMirror, copyright (c) by Marijn Haverbeke and
     }
 
     var requestAnimationFrame = window.requestAnimationFrame || function (fn) {
-            return setTimeout(fn, 1000 / 60);
-        };
+        return setTimeout(fn, 1000 / 60);
+    };
     var cancelAnimationFrame = window.cancelAnimationFrame || clearTimeout;
 
     Completion.prototype = {
@@ -13986,16 +13986,16 @@ BI.shortcut('bi.el', BI.EL);// CodeMirror, copyright (c) by Marijn Haverbeke and
             else {
                 this.cm.replaceRange(getText(completion), completion.from || data.from,
                     completion.to || data.to, "complete");
-                    if(completion.isKeyword === true){
-                    }else{
-                        var to = this.cm.getCursor();
-                        this.cm.markText(completion.from || data.from, to, {className: "#function", atomic: true});
-                        this.cm.replaceSelection("() ");
-                        to = this.cm.getCursor();
-                        to.ch = to.ch - 2;
-                        this.cm.setCursor(to);
-                        this.cm.focus();
-                    }
+                if(completion.isKeyword === true) {
+                }else{
+                    var to = this.cm.getCursor();
+                    this.cm.markText(completion.from || data.from, to, {className: "#function", atomic: true});
+                    this.cm.replaceSelection("() ");
+                    to = this.cm.getCursor();
+                    to.ch = to.ch - 2;
+                    this.cm.setCursor(to);
+                    this.cm.focus();
+                }
             }
             CodeMirror.signal(data, "pick", completion);
             this.close();
@@ -14053,20 +14053,22 @@ BI.shortcut('bi.el', BI.EL);// CodeMirror, copyright (c) by Marijn Haverbeke and
             var editor = this.cm.options.hintOptions;
             var out = {};
             for (var prop in defaultOptions) out[prop] = defaultOptions[prop];
-            if (editor) for (var prop in editor)
-                if (editor[prop] !== undefined) out[prop] = editor[prop];
-            if (options) for (var prop in options)
-                if (options[prop] !== undefined) out[prop] = options[prop];
+            if (editor) {
+                for (var prop in editor) {if (editor[prop] !== undefined) out[prop] = editor[prop];}
+            }
+            if (options) {
+                for (var prop in options) {if (options[prop] !== undefined) out[prop] = options[prop];}
+            }
             return out;
         }
     };
 
-    function getText(completion) {
-        if (typeof completion == "string") return completion;
-        else return completion.text;
+    function getText (completion) {
+        if (typeof completion === "string") return completion;
+        return completion.text;
     }
 
-    function buildKeyMap(completion, handle) {
+    function buildKeyMap (completion, handle) {
         var baseMap = {
             Up: function () {
                 handle.moveFocus(-1);
@@ -14093,38 +14095,40 @@ BI.shortcut('bi.el', BI.EL);// CodeMirror, copyright (c) by Marijn Haverbeke and
         var custom = completion.options.customKeys;
         var ourMap = custom ? {} : baseMap;
 
-        function addBinding(key, val) {
+        function addBinding (key, val) {
             var bound;
-            if (typeof val != "string")
+            if (typeof val !== "string") {
                 bound = function (cm) {
                     return val(cm, handle);
                 };
+            }
             // This mechanism is deprecated
-            else if (baseMap.hasOwnProperty(val))
-                bound = baseMap[val];
-            else
-                bound = val;
+            else if (baseMap.hasOwnProperty(val)) {bound = baseMap[val];} else {bound = val;}
             ourMap[key] = bound;
         }
 
-        if (custom)
-            for (var key in custom) if (custom.hasOwnProperty(key))
-                addBinding(key, custom[key]);
+        if (custom) {
+            for (var key in custom) {
+                if (custom.hasOwnProperty(key)) {addBinding(key, custom[key]);}
+            }
+        }
         var extra = completion.options.extraKeys;
-        if (extra)
-            for (var key in extra) if (extra.hasOwnProperty(key))
-                addBinding(key, extra[key]);
+        if (extra) {
+            for (var key in extra) {
+                if (extra.hasOwnProperty(key)) {addBinding(key, extra[key]);}
+            }
+        }
         return ourMap;
     }
 
-    function getHintElement(hintsElement, el) {
+    function getHintElement (hintsElement, el) {
         while (el && el != hintsElement) {
             if (el.nodeName.toUpperCase() === "LI" && el.parentNode == hintsElement) return el;
             el = el.parentNode;
         }
     }
 
-    function Widget(completion, data) {
+    function Widget (completion, data) {
         this.completion = completion;
         this.data = data;
         this.picked = false;
@@ -14279,19 +14283,13 @@ BI.shortcut('bi.el', BI.EL);// CodeMirror, copyright (c) by Marijn Haverbeke and
         },
 
         changeActive: function (i, avoidWrap) {
-            if (i >= this.data.list.length)
-                i = avoidWrap ? this.data.list.length - 1 : 0;
-            else if (i < 0)
-                i = avoidWrap ? 0 : this.data.list.length - 1;
+            if (i >= this.data.list.length) {i = avoidWrap ? this.data.list.length - 1 : 0;} else if (i < 0) {i = avoidWrap ? 0 : this.data.list.length - 1;}
             if (this.selectedHint == i) return;
             var node = this.hints.childNodes[this.selectedHint];
             node.className = node.className.replace(" " + ACTIVE_HINT_ELEMENT_CLASS, "");
             node = this.hints.childNodes[this.selectedHint = i];
             node.className += " " + ACTIVE_HINT_ELEMENT_CLASS;
-            if (node.offsetTop < this.hints.scrollTop)
-                this.hints.scrollTop = node.offsetTop - 3;
-            else if (node.offsetTop + node.offsetHeight > this.hints.scrollTop + this.hints.clientHeight)
-                this.hints.scrollTop = node.offsetTop + node.offsetHeight - this.hints.clientHeight + 3;
+            if (node.offsetTop < this.hints.scrollTop) {this.hints.scrollTop = node.offsetTop - 3;} else if (node.offsetTop + node.offsetHeight > this.hints.scrollTop + this.hints.clientHeight) {this.hints.scrollTop = node.offsetTop + node.offsetHeight - this.hints.clientHeight + 3;}
             CodeMirror.signal(this.data, "select", this.data.list[this.selectedHint], node);
         },
 
@@ -14319,15 +14317,16 @@ BI.shortcut('bi.el', BI.EL);// CodeMirror, copyright (c) by Marijn Haverbeke and
         var found = [];
         for (var i = 0; i < options.words.length; i++) {
             var word = options.words[i];
-            if (word.slice(0, token.string.length) == token.string)
-                found.push(word);
+            if (word.slice(0, token.string.length) == token.string) {found.push(word);}
         }
 
-        if (found.length) return {
-            list: found,
-            from: CodeMirror.Pos(cur.line, token.start),
-            to: CodeMirror.Pos(cur.line, token.end)
-        };
+        if (found.length) {
+            return {
+                list: found,
+                from: CodeMirror.Pos(cur.line, token.start),
+                to: CodeMirror.Pos(cur.line, token.end)
+            };
+        }
     });
 
     CodeMirror.commands.autocomplete = CodeMirror.showHint;
@@ -14353,9 +14352,9 @@ BI.shortcut('bi.el', BI.EL);// CodeMirror, copyright (c) by Marijn Haverbeke and
 BI.FormulaEditor = BI.inherit(BI.Single, {
     _defaultConfig: function () {
         return $.extend(BI.FormulaEditor.superclass._defaultConfig.apply(), {
-            baseCls: 'bi-formula-editor bi-card',
-            watermark: '',
-            value: '',
+            baseCls: "bi-formula-editor bi-card",
+            watermark: "",
+            value: "",
             fieldTextValueMap: {},
             showHint: true,
             lineHeight: 2
@@ -14368,8 +14367,8 @@ BI.FormulaEditor = BI.inherit(BI.Single, {
             textWrapping: true,
             lineWrapping: true,
             lineNumbers: false,
-            mode: 'formula',
-            //解决插入字段由括号或其他特殊字符包围时分裂的bug
+            mode: "formula",
+            // 解决插入字段由括号或其他特殊字符包围时分裂的bug
             specialChars: /[\u0000-\u001f\u007f\u00ad\u200c-\u200f\u2028\u2029\ufeff]/
         });
         o.lineHeight === 1 ? this.element.addClass("codemirror-low-line-height") : this.element.addClass("codemirror-high-line-height");
@@ -14379,7 +14378,7 @@ BI.FormulaEditor = BI.inherit(BI.Single, {
                 CodeMirror.showHint(cm, CodeMirror.formulaHint, {completeSingle: false});
             }
             BI.nextTick(function () {
-                self.fireEvent(BI.FormulaEditor.EVENT_CHANGE)
+                self.fireEvent(BI.FormulaEditor.EVENT_CHANGE);
             });
         });
 
@@ -14461,10 +14460,10 @@ BI.FormulaEditor = BI.inherit(BI.Single, {
      */
     insertField: function (field) {
         var from = this.editor.getCursor();
-        //解决插入字段由括号或其他特殊字符包围时分裂的bug,在两端以不可见字符包裹一下
-        this.editor.replaceSelection('\u200b' + field + '\u200b');
+        // 解决插入字段由括号或其他特殊字符包围时分裂的bug,在两端以不可见字符包裹一下
+        this.editor.replaceSelection("\u200b" + field + "\u200b");
         var to = this.editor.getCursor();
-        this.editor.markText(from, to, {className: 'fieldName', atomic: true, startStyle: "start", endStyle: "end"});
+        this.editor.markText(from, to, {className: "fieldName", atomic: true, startStyle: "start", endStyle: "end"});
         this.editor.replaceSelection(" ");
         this.editor.focus();
     },
@@ -14513,7 +14512,7 @@ BI.FormulaEditor = BI.inherit(BI.Single, {
             _.forEach(line.markedSpans, function (i, ms) {
                 switch (i.marker.className) {
                     case "fieldName":
-                        //因为插入字段的时候首尾加了不可见字符，所以首尾缩进一个字符
+                        // 因为插入字段的时候首尾加了不可见字符，所以首尾缩进一个字符
                         var dId = fieldMap[value.substr(i.from + 1, i.to - i.from - 2)];
                         if (!fields.contains(dId)) {
                             fields.push(dId);
@@ -14630,28 +14629,28 @@ $.extend(BI, {
                     BI.delay(function () {
                         toast.element.slideUp(500, function () {
                             toast.destroy();
-                        })
-                    }, 5000)
-                })
+                        });
+                    }, 5000);
+                });
             },
             _show: function (hasCancel, title, message, callback) {
-                $mask = $('<div class="bi-z-index-mask">').css({
-                    position: 'absolute',
-                    'zIndex': BI.zIndex_tip - 2,
+                $mask = $("<div class=\"bi-z-index-mask\">").css({
+                    position: "absolute",
+                    zIndex: BI.zIndex_tip - 2,
                     top: 0,
                     left: 0,
                     right: 0,
                     bottom: 0,
                     opacity: 0.5
-                }).appendTo('body');
-                $pop = $('<div class="bi-message-depend">').css({
-                    position: 'absolute',
-                    'zIndex': BI.zIndex_tip - 1,
+                }).appendTo("body");
+                $pop = $("<div class=\"bi-message-depend\">").css({
+                    position: "absolute",
+                    zIndex: BI.zIndex_tip - 1,
                     top: 0,
                     left: 0,
                     right: 0,
                     bottom: 0
-                }).appendTo('body');
+                }).appendTo("body");
                 var close = function () {
                     messageShow.destroy();
                     $mask.remove();
@@ -14660,10 +14659,10 @@ $.extend(BI, {
                 if (hasCancel === true) {
                     controlItems.push({
                         el: {
-                            type: 'bi.button',
+                            type: "bi.button",
                             text: BI.i18nText("BI-Basic_Cancel"),
                             height: 30,
-                            level: 'ignore',
+                            level: "ignore",
                             handler: function () {
                                 close();
                                 if (BI.isFunction(callback)) {
@@ -14675,7 +14674,7 @@ $.extend(BI, {
                 }
                 controlItems.push({
                     el: {
-                        type: 'bi.button',
+                        type: "bi.button",
                         text: BI.i18nText("BI-Basic_OK"),
                         height: 30,
                         handler: function () {
@@ -14688,31 +14687,31 @@ $.extend(BI, {
                 });
                 var conf = {
                     element: $pop,
-                    type: 'bi.center_adapt',
+                    type: "bi.center_adapt",
                     items: [
                         {
-                            type: 'bi.border',
-                            cls: 'bi-message-content bi-card',
+                            type: "bi.border",
+                            cls: "bi-message-content bi-card",
                             items: {
-                                'north': {
+                                north: {
                                     el: {
-                                        type: 'bi.border',
-                                        cls: 'bi-message-title bi-background',
+                                        type: "bi.border",
+                                        cls: "bi-message-title bi-background",
                                         items: {
                                             center: {
                                                 el: {
-                                                    type: 'bi.label',
+                                                    type: "bi.label",
                                                     text: title || BI.i18nText("BI-Basic_Prompt"),
-                                                    textAlign: 'left',
+                                                    textAlign: "left",
                                                     hgap: 20,
                                                     height: 50
                                                 }
                                             },
                                             east: {
                                                 el: {
-                                                    type: 'bi.icon_button',
-                                                    cls: 'bi-message-close close-font',
-//                                                    height: 50,
+                                                    type: "bi.icon_button",
+                                                    cls: "bi-message-close close-font",
+                                                    //                                                    height: 50,
                                                     handler: function () {
                                                         close();
                                                     }
@@ -14723,7 +14722,7 @@ $.extend(BI, {
                                     },
                                     height: 50
                                 },
-                                'center': {
+                                center: {
                                     el: {
                                         type: "bi.text",
                                         cls: "bi-message-text",
@@ -14734,12 +14733,12 @@ $.extend(BI, {
                                         text: message
                                     }
                                 },
-                                'south': {
+                                south: {
                                     el: {
                                         type: "bi.absolute",
                                         items: [{
                                             el: {
-                                                type: 'bi.right_vertical_adapt',
+                                                type: "bi.right_vertical_adapt",
                                                 hgap: 5,
                                                 items: controlItems
                                             },
@@ -14780,8 +14779,8 @@ BI.GridView = BI.inherit(BI.Widget, {
             overflowY: true,
             overscanColumnCount: 0,
             overscanRowCount: 0,
-            rowHeightGetter: BI.emptyFn, //number类型或function类型
-            columnWidthGetter: BI.emptyFn, //number类型或function类型
+            rowHeightGetter: BI.emptyFn, // number类型或function类型
+            columnWidthGetter: BI.emptyFn, // number类型或function类型
             // estimatedColumnSize: 100, //columnWidthGetter为function时必设
             // estimatedRowSize: 30, //rowHeightGetter为function时必设
             scrollLeft: 0,
@@ -14838,7 +14837,7 @@ BI.GridView = BI.inherit(BI.Widget, {
         return {
             overscanStartIndex: Math.max(0, startIndex - overscanCellsCount),
             overscanStopIndex: Math.min(cellCount - 1, stopIndex + overscanCellsCount)
-        }
+        };
     },
 
     _calculateChildrenToRender: function () {
@@ -14863,7 +14862,7 @@ BI.GridView = BI.inherit(BI.Widget, {
             this._renderedRowStartIndex = visibleRowIndices.start;
             this._renderedRowStopIndex = visibleRowIndices.stop;
 
-            var overscanColumnIndices = this._getOverscanIndices(this.columnCount, overscanColumnCount, this._renderedColumnStartIndex, this._renderedColumnStopIndex)
+            var overscanColumnIndices = this._getOverscanIndices(this.columnCount, overscanColumnCount, this._renderedColumnStartIndex, this._renderedColumnStopIndex);
 
             var overscanRowIndices = this._getOverscanIndices(this.rowCount, overscanRowCount, this._renderedRowStartIndex, this._renderedRowStopIndex);
 
@@ -14872,7 +14871,7 @@ BI.GridView = BI.inherit(BI.Widget, {
             var rowStartIndex = overscanRowIndices.overscanStartIndex;
             var rowStopIndex = overscanRowIndices.overscanStopIndex;
 
-            //算区间size
+            // 算区间size
             var minRowDatum = this._rowSizeAndPositionManager.getSizeAndPositionOfCell(rowStartIndex);
             var minColumnDatum = this._columnSizeAndPositionManager.getSizeAndPositionOfCell(columnStartIndex);
             var maxRowDatum = this._rowSizeAndPositionManager.getSizeAndPositionOfCell(rowStopIndex);
@@ -14881,7 +14880,7 @@ BI.GridView = BI.inherit(BI.Widget, {
             var left = minColumnDatum.offset + horizontalOffsetAdjustment;
             var bottom = maxRowDatum.offset + verticalOffsetAdjustment + maxRowDatum.size;
             var right = maxColumnDatum.offset + horizontalOffsetAdjustment + maxColumnDatum.size;
-            //如果滚动的区间并没有超出渲染的范围
+            // 如果滚动的区间并没有超出渲染的范围
             if (top >= this.renderRange.minY && bottom <= this.renderRange.maxY && left >= this.renderRange.minX && right <= this.renderRange.maxX) {
                 return;
             }
@@ -14945,7 +14944,7 @@ BI.GridView = BI.inherit(BI.Widget, {
                     count++;
                 }
             }
-            //已存在的， 需要添加的和需要删除的
+            // 已存在的， 需要添加的和需要删除的
             var existSet = {}, addSet = {}, deleteArray = [];
             BI.each(renderedKeys, function (i, key) {
                 if (self.renderedKeys[i]) {
@@ -14964,15 +14963,15 @@ BI.GridView = BI.inherit(BI.Widget, {
                 deleteArray.push(key[2]);
             });
             BI.each(deleteArray, function (i, index) {
-                //性能优化，不调用destroy方法防止触发destroy事件
+                // 性能优化，不调用destroy方法防止触发destroy事件
                 self.renderedCells[index].el._destroy();
             });
             var addedItems = [];
             BI.each(addSet, function (index, key) {
-                addedItems.push(renderedCells[key[2]])
+                addedItems.push(renderedCells[key[2]]);
             });
             this.container.addItems(addedItems);
-            //拦截父子级关系
+            // 拦截父子级关系
             this.container._children = renderedWidgets;
             this.container.attr("items", renderedCells);
             this.renderedCells = renderedCells;
@@ -15014,7 +15013,7 @@ BI.GridView = BI.inherit(BI.Widget, {
         this._rowSizeAndPositionManager = new BI.ScalingCellSizeAndPositionManager(this.rowCount, o.rowHeightGetter, o.estimatedRowSize);
 
         this._calculateChildrenToRender();
-        //元素未挂载时不能设置scrollTop
+        // 元素未挂载时不能设置scrollTop
         try {
             this.element.scrollTop(o.scrollTop);
             this.element.scrollLeft(o.scrollLeft);
@@ -15045,11 +15044,11 @@ BI.GridView = BI.inherit(BI.Widget, {
     },
 
     setColumnCount: function (columnCount) {
-        this.options.columnCount = columnCount
+        this.options.columnCount = columnCount;
     },
 
     setRowCount: function (rowCount) {
-        this.options.rowCount = rowCount
+        this.options.rowCount = rowCount;
     },
 
     setOverflowX: function (b) {
@@ -15057,7 +15056,7 @@ BI.GridView = BI.inherit(BI.Widget, {
         if (this.options.overflowX !== !!b) {
             this.options.overflowX = !!b;
             BI.nextTick(function () {
-                self.element.css({overflowX: !!b ? "auto" : "hidden"});
+                self.element.css({overflowX: b ? "auto" : "hidden"});
             });
         }
     },
@@ -15067,7 +15066,7 @@ BI.GridView = BI.inherit(BI.Widget, {
         if (this.options.overflowY !== !!b) {
             this.options.overflowY = !!b;
             BI.nextTick(function () {
-                self.element.css({overflowY: !!b ? "auto" : "hidden"});
+                self.element.css({overflowY: b ? "auto" : "hidden"});
             });
         }
     },
@@ -15096,7 +15095,7 @@ BI.GridView = BI.inherit(BI.Widget, {
         this.options.estimatedRowSize = height;
     },
 
-    //重新计算children
+    // 重新计算children
     _reRange: function () {
         this.renderRange = {};
     },
@@ -15125,7 +15124,7 @@ BI.GridView = BI.inherit(BI.Widget, {
     }
 });
 BI.GridView.EVENT_SCROLL = "EVENT_SCROLL";
-BI.shortcut('bi.grid_view', BI.GridView);/**
+BI.shortcut("bi.grid_view", BI.GridView);/**
  * floatBox弹出层，
  * @class BI.FloatBox
  * @extends BI.Widget
@@ -15136,7 +15135,7 @@ BI.FloatBox = BI.inherit(BI.Widget, {
             baseCls: "bi-float-box bi-card",
             width: 600,
             height: 500
-        })
+        });
     },
     _init: function () {
         BI.FloatBox.superclass._init.apply(this, arguments);
@@ -15162,19 +15161,19 @@ BI.FloatBox = BI.inherit(BI.Widget, {
                 if (ui.position.top < 0) {
                     ui.position.top = 0;
                 }
-                //BI-12134 没有什么特别好的方法
+                // BI-12134 没有什么特别好的方法
                 BI.Resizers._resize();
             }
         });
         this._south = BI.createWidget();
         BI.createWidget({
-            type: 'bi.border',
+            type: "bi.border",
             element: this,
             items: {
-                'north': {
+                north: {
                     el: {
-                        type: 'bi.border',
-                        cls: 'bi-message-title bi-background',
+                        type: "bi.border",
+                        cls: "bi-message-title bi-background",
                         items: {
                             center: {
                                 el: {
@@ -15190,8 +15189,8 @@ BI.FloatBox = BI.inherit(BI.Widget, {
                             },
                             east: {
                                 el: {
-                                    type: 'bi.icon_button',
-                                    cls: 'bi-message-close close-font',
+                                    type: "bi.icon_button",
+                                    cls: "bi-message-close close-font",
                                     height: 50,
                                     handler: function () {
                                         self.currentSectionProvider.close();
@@ -15203,7 +15202,7 @@ BI.FloatBox = BI.inherit(BI.Widget, {
                     },
                     height: 50
                 },
-                'center': {
+                center: {
                     el: {
                         type: "bi.absolute",
                         items: [{
@@ -15215,7 +15214,7 @@ BI.FloatBox = BI.inherit(BI.Widget, {
                         }]
                     }
                 },
-                'south': {
+                south: {
                     el: {
                         type: "bi.absolute",
                         items: [{
@@ -15229,7 +15228,7 @@ BI.FloatBox = BI.inherit(BI.Widget, {
                     height: 60
                 }
             }
-        })
+        });
     },
 
     populate: function (sectionProvider) {
@@ -15243,7 +15242,7 @@ BI.FloatBox = BI.inherit(BI.Widget, {
         sectionProvider.rebuildSouth(this._south);
         sectionProvider.on(BI.PopoverSection.EVENT_CLOSE, function () {
             self.close();
-        })
+        });
     },
 
     show: function () {
@@ -15286,9 +15285,9 @@ BI.PopupView = BI.inherit(BI.Widget, {
     _defaultConfig: function () {
         return BI.extend(BI.PopupView.superclass._defaultConfig.apply(this, arguments), {
             baseCls: "bi-popup-view",
-            maxWidth: 'auto',
+            maxWidth: "auto",
             minWidth: 100,
-            //maxHeight: 200,
+            // maxHeight: 200,
             minHeight: 25,
             lgap: 0,
             rgap: 0,
@@ -15296,16 +15295,16 @@ BI.PopupView = BI.inherit(BI.Widget, {
             bgap: 0,
             vgap: 0,
             hgap: 0,
-            direction: BI.Direction.Top, //工具栏的方向
-            stopEvent: false,//是否停止mousedown、mouseup事件
-            stopPropagation: false, //是否停止mousedown、mouseup向上冒泡
+            direction: BI.Direction.Top, // 工具栏的方向
+            stopEvent: false, // 是否停止mousedown、mouseup事件
+            stopPropagation: false, // 是否停止mousedown、mouseup向上冒泡
             logic: {
                 dynamic: true
             },
 
-            tool: false, //自定义工具栏
-            tabs: [], //导航栏
-            buttons: [], //toolbar栏
+            tool: false, // 自定义工具栏
+            tabs: [], // 导航栏
+            buttons: [], // toolbar栏
 
             el: {
                 type: "bi.button_group",
@@ -15316,28 +15315,28 @@ BI.PopupView = BI.inherit(BI.Widget, {
                     type: "bi.vertical"
                 }]
             }
-        })
+        });
     },
 
     _init: function () {
         BI.PopupView.superclass._init.apply(this, arguments);
         var self = this, o = this.options;
         var fn = function (e) {
-            e.stopPropagation();
-        }, stop = function (e) {
-            e.stopEvent();
-            return false;
-        };
+                e.stopPropagation();
+            }, stop = function (e) {
+                e.stopEvent();
+                return false;
+            };
         this.element.css({
             "z-index": BI.zIndex_popup,
             "min-width": o.minWidth + "px",
             "max-width": o.maxWidth + "px"
-        }).bind({"click": fn});
+        }).bind({click: fn});
 
         this.element.bind("mousewheel", fn);
 
-        o.stopPropagation && this.element.bind({"mousedown": fn, "mouseup": fn, "mouseover": fn});
-        o.stopEvent && this.element.bind({"mousedown": stop, "mouseup": stop, "mouseover": stop});
+        o.stopPropagation && this.element.bind({mousedown: fn, mouseup: fn, mouseover: fn});
+        o.stopEvent && this.element.bind({mousedown: stop, mouseup: stop, mouseover: stop});
         this.tool = this._createTool();
         this.tab = this._createTab();
         this.view = this._createView();
@@ -15382,7 +15381,7 @@ BI.PopupView = BI.inherit(BI.Widget, {
         if (false === o.tool) {
             return;
         }
-        return BI.createWidget(o.tool)
+        return BI.createWidget(o.tool);
     },
 
     _createTab: function () {
@@ -15395,7 +15394,7 @@ BI.PopupView = BI.inherit(BI.Widget, {
             cls: "list-view-tab",
             height: 25,
             items: o.tabs
-        })
+        });
     },
 
     _createToolBar: function () {
@@ -15413,7 +15412,7 @@ BI.PopupView = BI.inherit(BI.Widget, {
                 shadow: true,
                 isShadowShowingOnSelected: true
             })
-        })
+        });
     },
 
     getView: function () {
@@ -15434,7 +15433,7 @@ BI.PopupView = BI.inherit(BI.Widget, {
             tabHeight = this.tab ? (this.tab.attr("height") || 25) : 0,
             toolHeight = ((this.tool && this.tool.attr("height")) || 25) * ((this.tool && this.tool.isVisible()) ? 1 : 0);
         this.view.resetHeight ? this.view.resetHeight(h - tbHeight - tabHeight - toolHeight - 2) :
-            this.view.element.css({"max-height": (h - tbHeight - tabHeight - toolHeight - 2) + "px"})
+            this.view.element.css({"max-height": (h - tbHeight - tabHeight - toolHeight - 2) + "px"});
     },
 
     setValue: function (selectedValues) {
@@ -15463,7 +15462,7 @@ BI.SearcherView = BI.inherit(BI.Pane, {
             tipText: BI.i18nText("BI-No_Select"),
             chooseType: BI.Selection.Single,
 
-            matcher: {//完全匹配的构造器
+            matcher: {// 完全匹配的构造器
                 type: "bi.button_group",
                 behaviors: {
                     redmark: function () {
@@ -15487,7 +15486,7 @@ BI.SearcherView = BI.inherit(BI.Pane, {
                     type: "bi.vertical"
                 }]
             }
-        })
+        });
     },
 
     _init: function () {
@@ -15622,7 +15621,7 @@ BI.ListView = BI.inherit(BI.Widget, {
                 }
             }, o.el)],
             element: this
-        }
+        };
     },
 
     mounted: function () {
@@ -15693,7 +15692,7 @@ BI.ListView = BI.inherit(BI.Widget, {
         this.restore();
     }
 });
-BI.shortcut('bi.list_view', BI.ListView);
+BI.shortcut("bi.list_view", BI.ListView);
 
 /**
  * 表示当前对象
@@ -15741,7 +15740,7 @@ BI.VirtualList = BI.inherit(BI.Widget, {
                 }
             }],
             element: this
-        }
+        };
     },
 
     mounted: function () {
@@ -15872,7 +15871,7 @@ BI.VirtualList = BI.inherit(BI.Widget, {
         this.restore();
     }
 });
-BI.shortcut('bi.virtual_list', BI.VirtualList);
+BI.shortcut("bi.virtual_list", BI.VirtualList);
 
 /**
  * 分页控件
@@ -15892,35 +15891,35 @@ BI.Pager = BI.inherit(BI.Widget, {
                 vgap: 0
             }],
 
-            dynamicShow: true, //是否动态显示上一页、下一页、首页、尾页， 若为false，则指对其设置使能状态
-            //dynamicShow为false时以下两个有用
-            dynamicShowFirstLast: false,//是否动态显示首页、尾页
-            dynamicShowPrevNext: false,//是否动态显示上一页、下一页
-            pages: false, //总页数
+            dynamicShow: true, // 是否动态显示上一页、下一页、首页、尾页， 若为false，则指对其设置使能状态
+            // dynamicShow为false时以下两个有用
+            dynamicShowFirstLast: false, // 是否动态显示首页、尾页
+            dynamicShowPrevNext: false, // 是否动态显示上一页、下一页
+            pages: false, // 总页数
             curr: function () {
                 return 1;
-            }, //初始化当前页
-            groups: 0, //连续显示分页数
-            jump: BI.emptyFn, //分页的回调函数
+            }, // 初始化当前页
+            groups: 0, // 连续显示分页数
+            jump: BI.emptyFn, // 分页的回调函数
 
-            first: false, //是否显示首页
-            last: false, //是否显示尾页
+            first: false, // 是否显示首页
+            last: false, // 是否显示尾页
             prev: "上一页",
             next: "下一页",
 
             firstPage: 1,
-            lastPage: function () { //在万不得已时才会调用这个函数获取最后一页的页码,  主要作用于setValue方法
+            lastPage: function () { // 在万不得已时才会调用这个函数获取最后一页的页码,  主要作用于setValue方法
                 return 1;
             },
-            hasPrev: BI.emptyFn, //pages不可用时有效
-            hasNext: BI.emptyFn  //pages不可用时有效
-        })
+            hasPrev: BI.emptyFn, // pages不可用时有效
+            hasNext: BI.emptyFn  // pages不可用时有效
+        });
     },
     _init: function () {
         BI.Pager.superclass._init.apply(this, arguments);
         var self = this;
         this.currPage = BI.result(this.options, "curr");
-        //翻页太灵敏
+        // 翻页太灵敏
         // this._lock = false;
         // this._debouce = BI.debounce(function () {
         //     self._lock = false;
@@ -15947,17 +15946,17 @@ BI.Pager = BI.inherit(BI.Widget, {
             groups > pages && (groups = pages);
         }
 
-        //计算当前组
+        // 计算当前组
         dict.index = Math.ceil((curr + ((groups > 1 && groups !== pages) ? 1 : 0)) / (groups === 0 ? 1 : groups));
 
-        //当前页非首页，则输出上一页
+        // 当前页非首页，则输出上一页
         if (((!o.dynamicShow && !o.dynamicShowPrevNext) || curr > 1) && prev !== false) {
             if (BI.isKey(prev)) {
                 view.push({
                     text: prev,
                     value: "prev",
                     disabled: pages === false ? o.hasPrev(curr) === false : !(curr > 1 && prev !== false)
-                })
+                });
             } else {
                 view.push(BI.extend({
                     disabled: pages === false ? o.hasPrev(curr) === false : !(curr > 1 && prev !== false)
@@ -15965,7 +15964,7 @@ BI.Pager = BI.inherit(BI.Widget, {
             }
         }
 
-        //当前组非首组，则输出首页
+        // 当前组非首组，则输出首页
         if (((!o.dynamicShow && !o.dynamicShowFirstLast) || (dict.index > 1 && groups !== 0)) && first) {
             view.push({
                 text: first,
@@ -15981,14 +15980,14 @@ BI.Pager = BI.inherit(BI.Widget, {
             }
         }
 
-        //输出当前页组
+        // 输出当前页组
         dict.poor = Math.floor((groups - 1) / 2);
         dict.start = dict.index > 1 ? curr - dict.poor : 1;
         dict.end = dict.index > 1 ? (function () {
             var max = curr + (groups - dict.poor - 1);
             return max > pages ? pages : max;
         }()) : groups;
-        if (dict.end - dict.start < groups - 1) { //最后一组状态
+        if (dict.end - dict.start < groups - 1) { // 最后一组状态
             dict.start = dict.end - groups + 1;
         }
         var s = dict.start, e = dict.end;
@@ -16002,16 +16001,16 @@ BI.Pager = BI.inherit(BI.Widget, {
                     text: s,
                     value: s,
                     selected: true
-                })
+                });
             } else {
                 view.push({
                     text: s,
                     value: s
-                })
+                });
             }
         }
 
-        //总页数大于连续分页数，且当前组最大页小于总页，输出尾页
+        // 总页数大于连续分页数，且当前组最大页小于总页，输出尾页
         if (((!o.dynamicShow && !o.dynamicShowFirstLast) || (pages > groups && dict.end < pages && groups !== 0)) && last) {
             if (pages > groups && dict.end < pages && groups !== 0) {
                 view.push({
@@ -16024,27 +16023,27 @@ BI.Pager = BI.inherit(BI.Widget, {
                 text: last,
                 value: "last",
                 disabled: !(pages > groups && dict.end < pages && groups !== 0)
-            })
+            });
         }
 
-        //当前页不为尾页时，输出下一页
+        // 当前页不为尾页时，输出下一页
         dict.flow = !prev && groups === 0;
         if (((!o.dynamicShow && !o.dynamicShowPrevNext) && next) || (curr !== pages && next || dict.flow)) {
             view.push((function () {
                 if (BI.isKey(next)) {
                     if (pages === false) {
-                        return {text: next, value: "next", disabled: o.hasNext(curr) === false}
+                        return {text: next, value: "next", disabled: o.hasNext(curr) === false};
                     }
                     return (dict.flow && curr === pages)
                         ?
-                    {text: next, value: "next", disabled: true}
+                        {text: next, value: "next", disabled: true}
                         :
-                    {text: next, value: "next", disabled: !(curr !== pages && next || dict.flow)};
-                } else {
-                    return BI.extend({
-                        disabled: pages === false ? o.hasNext(curr) === false : !(curr !== pages && next || dict.flow)
-                    }, next);
+                        {text: next, value: "next", disabled: !(curr !== pages && next || dict.flow)};
                 }
+                return BI.extend({
+                    disabled: pages === false ? o.hasNext(curr) === false : !(curr !== pages && next || dict.flow)
+                }, next);
+                
             }()));
         }
 
@@ -16178,7 +16177,7 @@ BI.A = BI.inherit(BI.Text, {
             target: "_blank",
             el: null,
             element: "<a/>"
-        })
+        });
     },
     _init: function () {
         var o = this.options;
@@ -16198,15 +16197,15 @@ BI.shortcut("bi.a", BI.A);/**
  * @type {*|void|Object}
  */
 BI.LoadingBar = BI.inherit(BI.Single, {
-    _defaultConfig: function() {
+    _defaultConfig: function () {
         var conf = BI.LoadingBar.superclass._defaultConfig.apply(this, arguments);
         return BI.extend( conf, {
-            baseCls : (conf.baseCls ||"")+' bi-loading-bar bi-tips',
+            baseCls: (conf.baseCls || "") + " bi-loading-bar bi-tips",
             height: 30,
             handler: BI.emptyFn
-        })
+        });
     },
-    _init : function() {
+    _init: function () {
         BI.LoadingBar.superclass._init.apply(this, arguments);
         var self = this;
         this.loaded = BI.createWidget({
@@ -16215,25 +16214,25 @@ BI.LoadingBar = BI.inherit(BI.Single, {
             text: BI.i18nText("BI-Load_More"),
             width: 120,
             handler: this.options.handler
-        })
-        this.loaded.on(BI.Controller.EVENT_CHANGE, function(type){
+        });
+        this.loaded.on(BI.Controller.EVENT_CHANGE, function (type) {
             self.fireEvent(BI.Controller.EVENT_CHANGE, arguments);
-        })
+        });
 
         this.loading = BI.createWidget({
             type: "bi.layout",
             width: this.options.height,
-            height:this.options.height,
+            height: this.options.height,
             cls: "loading-background cursor-default"
-        })
+        });
         var loaded = BI.createWidget({
             type: "bi.center_adapt",
             items: [this.loaded]
-        })
+        });
         var loading = BI.createWidget({
             type: "bi.center_adapt",
             items: [this.loading]
-        })
+        });
         this.cardLayout = BI.createWidget({
             type: "bi.card",
             element: this,
@@ -16244,28 +16243,28 @@ BI.LoadingBar = BI.inherit(BI.Single, {
                 el: loading,
                 cardName: "loading"
             }]
-        })
+        });
         this.invisible();
     },
 
-    _reset: function(){
+    _reset: function () {
         this.visible();
         this.loaded.setText(BI.i18nText("BI-Load_More"));
         this.loaded.enable();
     },
 
-    setLoaded: function(){
+    setLoaded: function () {
         this._reset();
         this.cardLayout.showCardByName("loaded");
     },
 
-    setEnd: function(){
+    setEnd: function () {
         this.setLoaded();
         this.loaded.setText(BI.i18nText("BI-No_More_Data"));
         this.loaded.disable();
     },
 
-    setLoading: function(){
+    setLoading: function () {
         this._reset();
         this.cardLayout.showCardByName("loading");
     }
@@ -16283,17 +16282,17 @@ BI.IconButton = BI.inherit(BI.BasicButton, {
             baseCls: (conf.baseCls || "") + " bi-icon-button horizon-center",
             iconWidth: null,
             iconHeight: null
-        })
+        });
     },
 
     _init: function () {
         BI.IconButton.superclass._init.apply(this, arguments);
         var o = this.options;
         this.element.css({
-            textAlign: 'center'
+            textAlign: "center"
         });
         this.icon = BI.createWidget({
-            type: 'bi.icon',
+            type: "bi.icon",
             width: o.iconWidth,
             height: o.iconHeight
         });
@@ -16303,11 +16302,11 @@ BI.IconButton = BI.inherit(BI.BasicButton, {
                 type: "bi.default",
                 element: this,
                 items: [this.icon]
-            })
+            });
         } else {
             BI.createWidget({
                 element: this,
-                type: 'bi.center_adapt',
+                type: "bi.center_adapt",
                 items: [this.icon]
             });
         }
@@ -16336,7 +16335,7 @@ BI.ImageButton = BI.inherit(BI.BasicButton, {
             src: "",
             iconWidth: "100%",
             iconHeight: "100%"
-        })
+        });
     },
 
     _init: function () {
@@ -16353,14 +16352,14 @@ BI.ImageButton = BI.inherit(BI.BasicButton, {
                 type: "bi.center_adapt",
                 element: this,
                 items: [this.image]
-            })
+            });
         } else {
             BI.createWidget({
                 type: "bi.adaptive",
                 element: this,
                 items: [this.image],
                 scrollable: false
-            })
+            });
         }
     },
 
@@ -16422,15 +16421,15 @@ BI.shortcut("bi.image_button", BI.ImageButton);(function ($) {
         _defaultConfig: function (props) {
             var conf = BI.Button.superclass._defaultConfig.apply(this, arguments);
             return BI.extend(conf, {
-                baseCls: (conf.baseCls || "") + ' bi-button',
+                baseCls: (conf.baseCls || "") + " bi-button",
                 minWidth: (props.block === true || props.clear === true) ? 0 : 90,
                 shadow: props.clear !== true,
                 isShadowShowingOnSelected: true,
                 readonly: true,
                 iconClass: "",
-                level: 'common',
-                block: false, //是否块状显示，即不显示边框，没有最小宽度的限制
-                clear: false, //是否去掉边框和背景
+                level: "common",
+                block: false, // 是否块状显示，即不显示边框，没有最小宽度的限制
+                clear: false, // 是否去掉边框和背景
                 textAlign: "center",
                 whiteSpace: "nowrap",
                 forceCenter: false,
@@ -16442,7 +16441,7 @@ BI.shortcut("bi.image_button", BI.ImageButton);(function ($) {
                 bgap: 0,
                 lgap: 0,
                 rgap: 0
-            })
+            });
         },
 
         _init: function () {
@@ -16477,7 +16476,7 @@ BI.shortcut("bi.image_button", BI.ImageButton);(function ($) {
                         type: "bi.horizontal",
                         items: [this.icon, this.text]
                     }]
-                })
+                });
             } else {
                 this.text = BI.createWidget({
                     type: "bi.label",
@@ -16548,7 +16547,7 @@ BI.shortcut("bi.image_button", BI.ImageButton);(function ($) {
             BI.Button.superclass.destroy.apply(this, arguments);
         }
     });
-    BI.shortcut('bi.button', BI.Button);
+    BI.shortcut("bi.button", BI.Button);
     BI.Button.EVENT_CHANGE = "EVENT_CHANGE";
 })(jQuery);/**
  * guy
@@ -16572,7 +16571,7 @@ BI.TextButton = BI.inherit(BI.BasicButton, {
             rgap: 0,
             text: "",
             py: ""
-        })
+        });
     },
 
     _init: function () {
@@ -16667,7 +16666,7 @@ BI.BlankIconIconTextItem = BI.inherit(BI.BasicButton, {
             textVgap: 0,
             textLgap: 0,
             textRgap: 0
-        })
+        });
     },
     _init: function () {
         BI.BlankIconIconTextItem.superclass._init.apply(this, arguments);
@@ -16676,7 +16675,7 @@ BI.BlankIconIconTextItem = BI.inherit(BI.BasicButton, {
             type: "bi.layout",
             width: o.blankWidth,
             height: o.height
-        })
+        });
         this.text = BI.createWidget({
             type: "bi.label",
             cls: "list-item-text",
@@ -16789,7 +16788,7 @@ BI.BlankIconTextIconItem = BI.inherit(BI.BasicButton, {
             textVgap: 0,
             textLgap: 0,
             textRgap: 0
-        })
+        });
     },
     _init: function () {
         BI.BlankIconTextIconItem.superclass._init.apply(this, arguments);
@@ -16805,7 +16804,7 @@ BI.BlankIconTextIconItem = BI.inherit(BI.BasicButton, {
             value: o.value,
             keyword: o.keyword,
             height: o.height
-        })
+        });
 
         var icon1 = BI.createWidget({
             type: "bi.center_adapt",
@@ -16819,7 +16818,7 @@ BI.BlankIconTextIconItem = BI.inherit(BI.BasicButton, {
                     height: o.iconHeight
                 }
             }]
-        })
+        });
         BI.createWidget({
             type: "bi.absolute",
             element: this,
@@ -16841,7 +16840,7 @@ BI.BlankIconTextIconItem = BI.inherit(BI.BasicButton, {
                 bottom: 0,
                 right: 0
             }]
-        })
+        });
 
         BI.createWidget(BI.extend({
             element: this
@@ -16925,7 +16924,7 @@ BI.BlankIconTextItem = BI.inherit(BI.BasicButton, {
             textVgap: 0,
             textLgap: 0,
             textRgap: 0
-        })
+        });
     },
     _init: function () {
         BI.BlankIconTextItem.superclass._init.apply(this, arguments);
@@ -16933,7 +16932,7 @@ BI.BlankIconTextItem = BI.inherit(BI.BasicButton, {
         var blank = BI.createWidget({
             type: "bi.layout",
             width: o.blankWidth
-        })
+        });
         this.text = BI.createWidget({
             type: "bi.label",
             cls: "list-item-text",
@@ -16946,7 +16945,7 @@ BI.BlankIconTextItem = BI.inherit(BI.BasicButton, {
             value: o.value,
             keyword: o.keyword,
             height: o.height
-        })
+        });
         this.icon = BI.createWidget({
             type: "bi.center_adapt",
             width: c.commonWidth,
@@ -17037,7 +17036,7 @@ BI.IconTextIconItem = BI.inherit(BI.BasicButton, {
             textVgap: 0,
             textLgap: 0,
             textRgap: 0
-        })
+        });
     },
     _init: function () {
         BI.IconTextIconItem.superclass._init.apply(this, arguments);
@@ -17053,7 +17052,7 @@ BI.IconTextIconItem = BI.inherit(BI.BasicButton, {
             value: o.value,
             keyword: o.keyword,
             height: o.height
-        })
+        });
 
         var icon1 = BI.createWidget({
             type: "bi.center_adapt",
@@ -17067,11 +17066,11 @@ BI.IconTextIconItem = BI.inherit(BI.BasicButton, {
                     height: o.iconHeight
                 }
             }]
-        })
+        });
         var blank = BI.createWidget({
             type: "bi.layout",
             width: c.commonWidth
-        })
+        });
         BI.createWidget({
             type: "bi.absolute",
             element: this,
@@ -17092,7 +17091,7 @@ BI.IconTextIconItem = BI.inherit(BI.BasicButton, {
                 bottom: 0,
                 right: 0
             }]
-        })
+        });
 
         BI.createWidget(BI.extend({
             element: this
@@ -17169,7 +17168,7 @@ BI.IconTextItem = BI.inherit(BI.BasicButton, {
             textVgap: 0,
             textLgap: 0,
             textRgap: 0
-        })
+        });
     },
     _init: function () {
         BI.IconTextItem.superclass._init.apply(this, arguments);
@@ -17276,7 +17275,7 @@ BI.TextIconItem = BI.inherit(BI.BasicButton, {
             textVgap: 0,
             textLgap: 0,
             textRgap: 0
-        })
+        });
     },
     _init: function () {
         BI.TextIconItem.superclass._init.apply(this, arguments);
@@ -17376,7 +17375,7 @@ BI.TextItem = BI.inherit(BI.BasicButton, {
             textVgap: 0,
             textLgap: 0,
             textRgap: 0
-        })
+        });
     },
     _init: function () {
         BI.TextItem.superclass._init.apply(this, arguments);
@@ -17467,7 +17466,7 @@ BI.IconTextIconNode = BI.inherit(BI.NodeButton, {
             textVgap: 0,
             textLgap: 0,
             textRgap: 0
-        })
+        });
     },
     _init: function () {
         BI.IconTextIconNode.superclass._init.apply(this, arguments);
@@ -17483,7 +17482,7 @@ BI.IconTextIconNode = BI.inherit(BI.NodeButton, {
             value: o.value,
             keyword: o.keyword,
             height: o.height
-        })
+        });
 
         var icon1 = BI.createWidget({
             type: "bi.center_adapt",
@@ -17497,12 +17496,12 @@ BI.IconTextIconNode = BI.inherit(BI.NodeButton, {
                     height: o.iconHeight
                 }
             }]
-        })
+        });
         var blank = BI.createWidget({
             type: "bi.layout",
             width: c.commonWidth,
             height: o.height
-        })
+        });
         BI.createWidget({
             type: "bi.absolute",
             element: this,
@@ -17523,7 +17522,7 @@ BI.IconTextIconNode = BI.inherit(BI.NodeButton, {
                 bottom: 0,
                 right: 0
             }]
-        })
+        });
 
         BI.createWidget(BI.extend({
             element: this
@@ -17591,7 +17590,7 @@ BI.IconTextNode = BI.inherit(BI.NodeButton, {
             textVgap: 0,
             textLgap: 0,
             textRgap: 0
-        })
+        });
     },
     _init: function () {
         BI.IconTextNode.superclass._init.apply(this, arguments);
@@ -17608,7 +17607,7 @@ BI.IconTextNode = BI.inherit(BI.NodeButton, {
             value: o.value,
             keyword: o.keyword,
             height: o.height
-        })
+        });
         this.icon = BI.createWidget({
             type: "bi.center_adapt",
             width: c.commonWidth,
@@ -17620,7 +17619,7 @@ BI.IconTextNode = BI.inherit(BI.NodeButton, {
                     height: o.iconHeight
                 }
             }]
-        })
+        });
 
         BI.createWidget(BI.extend({
             element: this
@@ -17687,7 +17686,7 @@ BI.TextIconNode = BI.inherit(BI.NodeButton, {
             textVgap: 0,
             textLgap: 0,
             textRgap: 0
-        })
+        });
     },
     _init: function () {
         BI.TextIconNode.superclass._init.apply(this, arguments);
@@ -17704,7 +17703,7 @@ BI.TextIconNode = BI.inherit(BI.NodeButton, {
             value: o.value,
             keyword: o.keyword,
             height: o.height
-        })
+        });
         this.icon = BI.createWidget({
             type: "bi.center_adapt",
             width: c.commonWidth,
@@ -17778,7 +17777,7 @@ BI.TextNode = BI.inherit(BI.NodeButton, {
             textVgap: 0,
             textLgap: 0,
             textRgap: 0
-        })
+        });
     },
     _init: function () {
         BI.TextNode.superclass._init.apply(this, arguments);
@@ -17844,12 +17843,12 @@ BI.shortcut("bi.text_node", BI.TextNode);/**
 BI.CodeEditor = BI.inherit(BI.Single, {
     _defaultConfig: function () {
         return $.extend(BI.CodeEditor.superclass._defaultConfig.apply(), {
-            baseCls: 'bi-code-editor',
-            value: '',
+            baseCls: "bi-code-editor",
+            value: "",
             watermark: "",
             lineHeight: 2,
             readOnly: false,
-            //参数显示值构造函数
+            // 参数显示值构造函数
             paramFormatter: function (v) {
                 return v;
             }
@@ -17863,13 +17862,13 @@ BI.CodeEditor = BI.inherit(BI.Single, {
             lineWrapping: true,
             lineNumbers: false,
             readOnly: o.readOnly,
-            //解决插入字段由括号或其他特殊字符包围时分裂的bug
+            // 解决插入字段由括号或其他特殊字符包围时分裂的bug
             specialChars: /[\u0000-\u001f\u007f\u00ad\u200c-\u200f\u2028\u2029\ufeff]/
         });
         o.lineHeight === 1 ? this.element.addClass("codemirror-low-line-height") : this.element.addClass("codemirror-high-line-height");
         this.editor.on("change", function (cm, change) {
             BI.nextTick(function () {
-                self.fireEvent(BI.CodeEditor.EVENT_CHANGE)
+                self.fireEvent(BI.CodeEditor.EVENT_CHANGE);
             });
         });
 
@@ -17895,7 +17894,7 @@ BI.CodeEditor = BI.inherit(BI.Single, {
         //     self.editor.execCommand("goLineEnd");
         // });
 
-        //水印
+        // 水印
         this.watermark = BI.createWidget({
             type: "bi.label",
             text: o.watermark,
@@ -17933,7 +17932,7 @@ BI.CodeEditor = BI.inherit(BI.Single, {
 
     _setEnable: function (b) {
         BI.CodeEditor.superclass._setEnable.apply(this, arguments);
-        this.editor.setOption("readOnly", b === true ? false : "nocursor")
+        this.editor.setOption("readOnly", b === true ? false : "nocursor");
     },
 
     _checkWaterMark: function () {
@@ -17949,12 +17948,12 @@ BI.CodeEditor = BI.inherit(BI.Single, {
         var value = param;
         param = this.options.paramFormatter(param);
         var from = this.editor.getCursor();
-        //解决插入字段由括号或其他特殊字符包围时分裂的bug,在两端以不可见字符包裹一下
-        this.editor.replaceSelection('\u200b' + param + '\u200b');
+        // 解决插入字段由括号或其他特殊字符包围时分裂的bug,在两端以不可见字符包裹一下
+        this.editor.replaceSelection("\u200b" + param + "\u200b");
         var to = this.editor.getCursor();
-        var options = {className: 'param', atomic: true};
+        var options = {className: "param", atomic: true};
         if (BI.isNotNull(param.match(/^<!.*!>$/))) {
-            options.className = 'error-param';
+            options.className = "error-param";
         }
         options.value = value;
         this.editor.markText(from, to, options);
@@ -17971,16 +17970,16 @@ BI.CodeEditor = BI.inherit(BI.Single, {
         return this.editor.getValue("\n", function (line) {
             var rawText = line.text, value = line.text, num = 0;
             value.text = rawText;
-            //根据插入位置不同，line.markedSpan可能是乱序的
+            // 根据插入位置不同，line.markedSpan可能是乱序的
             _.forEach(_.sortBy(line.markedSpans, "from"), function (i, ms) {
                 switch (i.marker.className) {
                     case "param":
                     case "error-param":
                         var fieldNameLength = i.to - i.from;
                         value = value.substr(0, i.from + num) + "$\{" + i.marker.value + "\}" + value.substr(i.to + num, value.length);
-                        //加上${}的偏移
+                        // 加上${}的偏移
                         num += 3;
-                        //加上实际值和显示值的长度差的偏移
+                        // 加上实际值和显示值的长度差的偏移
                         num += (i.marker.value.length - fieldNameLength);
                         break;
                 }
@@ -18054,7 +18053,7 @@ BI.Editor = BI.inherit(BI.Single, {
             rgap: 0,
             tgap: 0,
             bgap: 0,
-            //title,warningTitle这两个属性没用
+            // title,warningTitle这两个属性没用
             tipType: "warning",
             inputType: "text",
             validationChecker: BI.emptyFn,
@@ -18062,7 +18061,7 @@ BI.Editor = BI.inherit(BI.Single, {
             allowBlank: false,
             watermark: "",
             errorText: ""
-        })
+        });
     },
 
     _init: function () {
@@ -18078,12 +18077,12 @@ BI.Editor = BI.inherit(BI.Single, {
             allowBlank: o.allowBlank
         }));
         this.editor.element.css({
-            "width": "100%",
-            "height": "100%",
-            "border": "none",
-            "outline": "none",
-            "padding": "0",
-            "margin": "0"
+            width: "100%",
+            height: "100%",
+            border: "none",
+            outline: "none",
+            padding: "0",
+            margin: "0"
         });
         if (BI.isKey(this.options.watermark)) {
             this.watermark = BI.createWidget({
@@ -18371,10 +18370,10 @@ BI.MultifileEditor = BI.inherit(BI.Single, {
         return BI.extend(conf, {
             baseCls: (conf.baseCls || "") + " bi-multifile-editor",
             multiple: false,
-            maxSize: -1,//1024 * 1024
+            maxSize: -1, // 1024 * 1024
             accept: "",
             url: ""
-        })
+        });
     },
 
     _init: function () {
@@ -18454,8 +18453,8 @@ BI.shortcut("bi.multifile_editor", BI.MultifileEditor);/**
 BI.TextAreaEditor = BI.inherit(BI.Single, {
     _defaultConfig: function () {
         return $.extend(BI.TextAreaEditor.superclass._defaultConfig.apply(), {
-            baseCls: 'bi-textarea-editor bi-card',
-            value: ''
+            baseCls: "bi-textarea-editor bi-card",
+            value: ""
         });
     },
     _init: function () {
@@ -18468,7 +18467,7 @@ BI.TextAreaEditor = BI.inherit(BI.Single, {
             height: "100%",
             cls: "bi-textarea textarea-editor-content display-block"
         });
-        this.content.element.css({"resize": "none"});
+        this.content.element.css({resize: "none"});
         BI.createWidget({
             type: "bi.absolute",
             element: this,
@@ -18539,7 +18538,7 @@ BI.TextAreaEditor = BI.inherit(BI.Single, {
                         self.focus();
                     });
                     BI.createWidget({
-                        type: 'bi.absolute',
+                        type: "bi.absolute",
                         element: this,
                         items: [{
                             el: this.watermark,
@@ -18547,7 +18546,7 @@ BI.TextAreaEditor = BI.inherit(BI.Single, {
                             top: 0,
                             right: 0
                         }]
-                    })
+                    });
                 } else {
                     this.watermark.setText(o.watermark);
                     this.watermark.setValid(!o.invalid);
@@ -18591,7 +18590,7 @@ BI.TextAreaEditor = BI.inherit(BI.Single, {
         this.element.css(style);
         this.content.element.css(BI.extend({}, style, {
             color: style.color || BI.DOM.getContrastColor(BI.DOM.isRGBColor(style.backgroundColor) ? BI.DOM.rgb2hex(style.backgroundColor) : style.backgroundColor)
-        }))
+        }));
     },
 
     getStyle: function () {
@@ -18618,7 +18617,7 @@ BI.Icon = BI.inherit(BI.Single, {
         return BI.extend(conf, {
             tagName: "i",
             baseCls: (conf.baseCls || "") + " x-icon b-font horizon-center display-block"
-        })
+        });
     },
     _init: function () {
         BI.Icon.superclass._init.apply(this, arguments);
@@ -18641,7 +18640,7 @@ BI.Iframe = BI.inherit(BI.Single, {
             src: "",
             width: "100%",
             height: "100%"
-        })
+        });
     },
 
     _init: function () {
@@ -18669,11 +18668,11 @@ BI.Iframe = BI.inherit(BI.Single, {
     },
 
     getWidth: function () {
-        return this.options.width
+        return this.options.width;
     },
 
     getHeight: function () {
-        return this.options.height
+        return this.options.height;
     }
 });
 
@@ -18693,7 +18692,7 @@ BI.Img = BI.inherit(BI.Single, {
             src: "",
             width: "100%",
             height: "100%"
-        })
+        });
     },
 
     _init: function () {
@@ -18719,8 +18718,8 @@ BI.shortcut("bi.img", BI.Img);
  * @type {*|void|Object}
  */
 BI.Checkbox = BI.inherit(BI.IconButton, {
-    _defaultConfig: function() {
-        var conf = BI.Checkbox.superclass._defaultConfig.apply(this,arguments);
+    _defaultConfig: function () {
+        var conf = BI.Checkbox.superclass._defaultConfig.apply(this, arguments);
         return BI.extend(conf, {
             baseCls: (conf.baseCls || "") + " bi-checkbox check-box-icon",
             selected: false,
@@ -18729,16 +18728,16 @@ BI.Checkbox = BI.inherit(BI.IconButton, {
             height: 16,
             iconWidth: 16,
             iconHeight: 16
-        })
+        });
     },
 
-    _init : function() {
+    _init: function () {
         BI.Checkbox.superclass._init.apply(this, arguments);
     },
 
-    doClick: function(){
+    doClick: function () {
         BI.Checkbox.superclass.doClick.apply(this, arguments);
-        if(this.isValid()){
+        if(this.isValid()) {
             this.fireEvent(BI.Checkbox.EVENT_CHANGE);
         }
     }
@@ -19372,9 +19371,9 @@ BI.Input = BI.inherit(BI.Single, {
             baseCls: (conf.baseCls || "") + " bi-input display-block",
             element: "<input/>",
             validationChecker: BI.emptyFn,
-            quitChecker: BI.emptyFn,//按确定键能否退出编辑
+            quitChecker: BI.emptyFn, // 按确定键能否退出编辑
             allowBlank: false
-        })
+        });
     },
 
     _init: function () {
@@ -19401,8 +19400,8 @@ BI.Input = BI.inherit(BI.Single, {
                 }
             })
             .on("input propertychange", function (e) {
-                //这个事件在input的属性发生改变的时候就会触发（class的变化也算）
-                if(BI.isNotNull(e.keyCode)){
+                // 这个事件在input的属性发生改变的时候就会触发（class的变化也算）
+                if(BI.isNotNull(e.keyCode)) {
                     inputEventValid = true;
                     self._keydown_ = true;
                     _keydown(e.keyCode);
@@ -19438,7 +19437,7 @@ BI.Input = BI.inherit(BI.Single, {
         } else {
             blur();
         }
-        function blur() {
+        function blur () {
             if (!self.isValid() && self.options.quitChecker.apply(self, [BI.trim(self.getValue())]) !== false) {
                 self.element.val(self._lastValidValue ? self._lastValidValue : "");
                 self._checkValidationOnValueChange();
@@ -19480,7 +19479,7 @@ BI.Input = BI.inherit(BI.Single, {
                 this.fireEvent(BI.Input.EVENT_START);
             }
         }
-        if (ctrlKey === true && keyCode === 86) {//ctrlKey+V
+        if (ctrlKey === true && keyCode === 86) {// ctrlKey+V
             this._valueChange();
         } else {
             if (keyCode == BI.KeyCode.ENTER) {
@@ -19518,7 +19517,7 @@ BI.Input = BI.inherit(BI.Single, {
         }
     },
 
-    //初始状态
+    // 初始状态
     _defaultState: function () {
         if (this.getValue() == "") {
             this.fireEvent(BI.Controller.EVENT_CHANGE, BI.Events.EMPTY, this.getValue(), this);
@@ -19650,8 +19649,8 @@ BI.shortcut("bi.input", BI.Input);/**
  * @type {*|void|Object}
  */
 BI.Radio = BI.inherit(BI.IconButton, {
-    _defaultConfig: function() {
-        var conf = BI.Radio.superclass._defaultConfig.apply(this,arguments);
+    _defaultConfig: function () {
+        var conf = BI.Radio.superclass._defaultConfig.apply(this, arguments);
         return BI.extend(conf, {
             baseCls: (conf.baseCls || "") + " bi-radio radio-icon",
             selected: false,
@@ -19660,16 +19659,16 @@ BI.Radio = BI.inherit(BI.IconButton, {
             height: 16,
             iconWidth: 16,
             iconHeight: 16
-        })
+        });
     },
 
-    _init : function() {
+    _init: function () {
         BI.Radio.superclass._init.apply(this, arguments);
     },
 
-    doClick: function(){
+    doClick: function () {
         BI.Radio.superclass.doClick.apply(this, arguments);
-        if(this.isValid()){
+        if(this.isValid()) {
             this.fireEvent(BI.Radio.EVENT_CHANGE);
         }
     }
@@ -19686,8 +19685,8 @@ BI.Label = BI.inherit(BI.Single, {
         return BI.extend(conf, {
             baseCls: (conf.baseCls || "") + " bi-label",
             textAlign: "center",
-            whiteSpace: "nowrap", //normal  or  nowrap
-            forceCenter: false, //是否无论如何都要居中, 不考虑超出边界的情况, 在未知宽度和高度时有效
+            whiteSpace: "nowrap", // normal  or  nowrap
+            forceCenter: false, // 是否无论如何都要居中, 不考虑超出边界的情况, 在未知宽度和高度时有效
             textWidth: null,
             textHeight: null,
             hgap: 0,
@@ -19699,7 +19698,7 @@ BI.Label = BI.inherit(BI.Single, {
             text: "",
             py: "",
             keyword: ""
-        })
+        });
     },
 
     _createJson: function () {
@@ -19904,7 +19903,7 @@ BI.Label = BI.inherit(BI.Single, {
             type: "bi.layout",
             element: this.text,
             scrollable: o.whiteSpace === "normal"
-        })
+        });
     },
 
     _createNotCenterEl: function () {
@@ -20022,7 +20021,7 @@ BI.Label = BI.inherit(BI.Single, {
             return;
         }
         if (o.whiteSpace == "normal") {
-            this.text = BI.createWidget(json)
+            this.text = BI.createWidget(json);
             BI.createWidget({
                 type: "bi.vertical_adapt",
                 scrollable: o.whiteSpace === "normal",
@@ -20102,7 +20101,7 @@ BI.Label = BI.inherit(BI.Single, {
             type: "bi.layout",
             element: this.text,
             scrollable: o.whiteSpace === "normal"
-        })
+        });
     },
 
     doRedMark: function () {
@@ -20131,7 +20130,7 @@ BI.Label = BI.inherit(BI.Single, {
     },
 
     setStyle: function (css) {
-        this.text.setStyle(css)
+        this.text.setStyle(css);
     },
 
     setValue: function (v) {
@@ -20152,19 +20151,19 @@ BI.shortcut("bi.label", BI.Label);/**
  * @extends BI.Text
  */
 BI.Link = BI.inherit(BI.Label, {
-    _defaultConfig: function() {
+    _defaultConfig: function () {
         var conf = BI.Link.superclass._defaultConfig.apply(this, arguments);
         return BI.extend(conf, {
             baseCls: (conf.baseCls || "") + " bi-link",
             href: "",
             target: "_blank"
-        })
+        });
     },
 
-    _createJson: function(){
+    _createJson: function () {
         var o = this.options;
         return {
-            type:"bi.a",
+            type: "bi.a",
             textAlign: o.textAlign,
             whiteSpace: o.whiteSpace,
             lineHeight: o.textHeight,
@@ -20177,7 +20176,7 @@ BI.Link = BI.inherit(BI.Label, {
         };
     },
 
-    _init : function() {
+    _init: function () {
         BI.Link.superclass._init.apply(this, arguments);
     }
 });
@@ -20190,30 +20189,30 @@ BI.shortcut("bi.link", BI.Link);/**
  * @type {*|void|Object}
  */
 BI.Bubble = BI.inherit(BI.Tip, {
-    _defaultConfig: function() {
+    _defaultConfig: function () {
         return BI.extend(BI.Bubble.superclass._defaultConfig.apply(this, arguments), {
             extraCls: "bi-bubble",
             direction: "top",
             text: "",
             height: 35
-        })
+        });
     },
-    _init : function() {
+    _init: function () {
         BI.Bubble.superclass._init.apply(this, arguments);
         var fn = function (e) {
             e.stopPropagation();
             e.stopEvent();
             return false;
         };
-        this.element.bind({"click": fn, "mousedown": fn, "mouseup": fn, "mouseover": fn, "mouseenter": fn, "mouseleave": fn, "mousemove": fn});
+        this.element.bind({click: fn, mousedown: fn, mouseup: fn, mouseover: fn, mouseenter: fn, mouseleave: fn, mousemove: fn});
         BI.createWidget({
             type: "bi.left",
             element: this,
             items: [this["_" + this.options.direction]()]
-        })
+        });
     },
 
-    _createBubbleText: function(){
+    _createBubbleText: function () {
         return (this.text = BI.createWidget({
             type: "bi.label",
             cls: "bubble-text",
@@ -20223,7 +20222,7 @@ BI.Bubble = BI.inherit(BI.Tip, {
         }));
     },
 
-    _top: function(){
+    _top: function () {
         return BI.createWidget({
             type: "bi.vertical",
             items: [{
@@ -20235,10 +20234,10 @@ BI.Bubble = BI.inherit(BI.Tip, {
                 },
                 height: 3
             }]
-        })
+        });
     },
 
-    _bottom: function(){
+    _bottom: function () {
         return BI.createWidget({
             type: "bi.vertical",
             items: [{
@@ -20250,10 +20249,10 @@ BI.Bubble = BI.inherit(BI.Tip, {
                 el: this._createBubbleText(),
                 height: 30
             }]
-        })
+        });
     },
 
-    _left: function(){
+    _left: function () {
         return BI.createWidget({
             type: "bi.right",
             items: [{
@@ -20265,10 +20264,10 @@ BI.Bubble = BI.inherit(BI.Tip, {
             }, {
                 el: this._createBubbleText()
             }]
-        })
+        });
     },
 
-    _right: function(){
+    _right: function () {
         return BI.createWidget({
             type: "bi.left",
             items: [{
@@ -20280,10 +20279,10 @@ BI.Bubble = BI.inherit(BI.Tip, {
             }, {
                 el: this._createBubbleText()
             }]
-        })
+        });
     },
 
-    setText: function(text){
+    setText: function (text) {
         this.text.setText(text);
     }
 });
@@ -20305,23 +20304,23 @@ BI.Toast = BI.inherit(BI.Tip, {
         return BI.extend(BI.Toast.superclass._defaultConfig.apply(this, arguments), {
             extraCls: "bi-toast",
             text: "",
-            level: "success",//success或warning
+            level: "success", // success或warning
             height: 30
-        })
+        });
     },
     _init: function () {
         BI.Toast.superclass._init.apply(this, arguments);
         var o = this.options;
         this.element.css({
             minWidth: this._const.minWidth + "px"
-        })
+        });
         this.element.addClass("toast-" + o.level);
         var fn = function (e) {
             e.stopPropagation();
             e.stopEvent();
             return false;
         };
-        this.element.bind({"click": fn, "mousedown": fn, "mouseup": fn, "mouseover": fn, "mouseenter": fn, "mouseleave": fn, "mousemove": fn});
+        this.element.bind({click: fn, mousedown: fn, mouseup: fn, mouseover: fn, mouseenter: fn, mouseleave: fn, mousemove: fn});
 
         this.text = BI.createWidget({
             type: "bi.label",
@@ -20329,10 +20328,10 @@ BI.Toast = BI.inherit(BI.Tip, {
             text: o.text,
             height: 30,
             hgap: this._const.hgap
-        })
+        });
     },
 
-    setWidth: function(width){
+    setWidth: function (width) {
         this.element.width(width);
     },
 
@@ -20357,11 +20356,11 @@ BI.Tooltip = BI.inherit(BI.Tip, {
         return BI.extend(BI.Tooltip.superclass._defaultConfig.apply(this, arguments), {
             extraCls: "bi-tooltip",
             text: "",
-            level: "success",//success或warning
+            level: "success", // success或warning
             stopEvent: false,
             stopPropagation: false,
             height: 20
-        })
+        });
     },
     _init: function () {
         BI.Tooltip.superclass._init.apply(this, arguments);
@@ -20372,13 +20371,13 @@ BI.Tooltip = BI.inherit(BI.Tip, {
             o.stopEvent && e.stopEvent();
         };
         this.element.bind({
-            "click": fn,
-            "mousedown": fn,
-            "mouseup": fn,
-            "mouseover": fn,
-            "mouseenter": fn,
-            "mouseleave": fn,
-            "mousemove": fn
+            click: fn,
+            mousedown: fn,
+            mouseup: fn,
+            mouseover: fn,
+            mouseenter: fn,
+            mouseleave: fn,
+            mousemove: fn
         });
 
         var texts = (o.text + "").split("\n");
@@ -20394,9 +20393,9 @@ BI.Tooltip = BI.inherit(BI.Tip, {
                         whiteSpace: "normal",
                         text: text,
                         textHeight: 16
-                    }
+                    };
                 })
-            })
+            });
         } else {
             this.text = BI.createWidget({
                 type: "bi.label",
@@ -20431,621 +20430,604 @@ BI.shortcut("bi.tooltip", BI.Tooltip);/**
  * @abstract
  */
 BI.Trigger = BI.inherit(BI.Single, {
-    _defaultConfig: function() {
+    _defaultConfig: function () {
         var conf = BI.Trigger.superclass._defaultConfig.apply(this, arguments);
         return BI.extend(conf, {
             baseCls: (conf.baseCls || "") + " bi-trigger cursor-pointer",
             height: 24
-        })
+        });
     },
 
-    _init : function() {
+    _init: function () {
         BI.Trigger.superclass._init.apply(this, arguments);
     },
 
-    setKey: function(){
+    setKey: function () {
 
     },
 
-    getKey: function(){
+    getKey: function () {
 
     }
 });// CodeMirror, copyright (c) by Marijn Haverbeke and others
 // Distributed under an MIT license: http://codemirror.net/LICENSE
 
-(function(mod) {
-  mod(CodeMirror);
-})(function(CodeMirror) {
+(function (mod) {
+    mod(CodeMirror);
+})(function (CodeMirror) {
 
-  var tables;
-  var defaultTable;
-  var keywords;
-  var identifierQuote;
-  var CONS = {
-    QUERY_DIV: ";",
-    ALIAS_KEYWORD: "AS"
-  };
-  var Pos = CodeMirror.Pos, cmpPos = CodeMirror.cmpPos;
-
-  function isArray(val) { return Object.prototype.toString.call(val) == "[object Array]" }
-
-  function getKeywords(editor) {
-    var mode = editor.doc.modeOption;
-    if (mode === "sql") mode = "text/x-sql";
-    return CodeMirror.resolveMode(mode).keywords;
-  }
-
-  function getIdentifierQuote(editor) {
-    var mode = editor.doc.modeOption;
-    if (mode === "sql") mode = "text/x-sql";
-    return CodeMirror.resolveMode(mode).identifierQuote || "`";
-  }
-
-  function getText(item) {
-    return typeof item == "string" ? item : item.text;
-  }
-
-  function wrapTable(name, value) {
-    if (isArray(value)) value = {columns: value}
-    if (!value.text) value.text = name
-    return value
-  }
-
-  function parseTables(input) {
-    var result = {}
-    if (isArray(input)) {
-      for (var i = input.length - 1; i >= 0; i--) {
-        var item = input[i]
-        result[getText(item).toUpperCase()] = wrapTable(getText(item), item)
-      }
-    } else if (input) {
-      for (var name in input)
-        result[name.toUpperCase()] = wrapTable(name, input[name])
-    }
-    return result
-  }
-
-  function getTable(name) {
-    return tables[name.toUpperCase()]
-  }
-
-  function shallowClone(object) {
-    var result = {};
-    for (var key in object) if (object.hasOwnProperty(key))
-      result[key] = object[key];
-    return result;
-  }
-
-  function match(string, word) {
-    if (BI.isNotEmptyString(string) && word.length !== string.length) {
-      var len = string.length;
-      var sub = getText(word).substr(0, len);
-      return string.toUpperCase() === sub.toUpperCase();
-    }
-  }
-
-  function addMatches(result, search, wordlist, formatter) {
-    if (isArray(wordlist)) {
-      for (var i = 0; i < wordlist.length; i++)
-        if (match(search, wordlist[i])) result.push(formatter(wordlist[i], i));
-    } else {
-      for (var word in wordlist) if (wordlist.hasOwnProperty(word)) {
-        var val = wordlist[word]
-        if (!val || val === true)
-          val = word
-        else
-          val = val.displayText ? {text: val.text, displayText: val.displayText} : val.text
-        if (match(search, val)) result.push(formatter(val))
-      }
-    }
-  }
-
-  function cleanName(name) {
-    // Get rid name from identifierQuote and preceding dot(.)
-    if (name.charAt(0) == ".") {
-      name = name.substr(1);
-    }
-    // replace doublicated identifierQuotes with single identifierQuotes
-    // and remove single identifierQuotes
-    var nameParts = name.split(identifierQuote+identifierQuote);
-    for (var i = 0; i < nameParts.length; i++)
-      nameParts[i] = nameParts[i].replace(new RegExp(identifierQuote,"g"), "");
-    return nameParts.join(identifierQuote);
-  }
-
-  function insertIdentifierQuotes(name) {
-    var nameParts = getText(name).split(".");
-    for (var i = 0; i < nameParts.length; i++)
-      nameParts[i] = identifierQuote +
-        // doublicate identifierQuotes
-        nameParts[i].replace(new RegExp(identifierQuote,"g"), identifierQuote+identifierQuote) +
-        identifierQuote;
-    var escaped = nameParts.join(".");
-    if (typeof name == "string") return escaped;
-    name = shallowClone(name);
-    name.text = escaped;
-    return name;
-  }
-
-  function nameCompletion(cur, token, result, editor) {
-    // Try to complete table, column names and return start position of completion
-    var useIdentifierQuotes = false;
-    var nameParts = [];
-    var start = token.start;
-    var cont = true;
-    while (cont) {
-      cont = (token.string.charAt(0) == ".");
-      useIdentifierQuotes = useIdentifierQuotes || (token.string.charAt(0) == identifierQuote);
-
-      start = token.start;
-      nameParts.unshift(cleanName(token.string));
-
-      token = editor.getTokenAt(Pos(cur.line, token.start));
-      if (token.string == ".") {
-        cont = true;
-        token = editor.getTokenAt(Pos(cur.line, token.start));
-      }
-    }
-
-    // Try to complete table names
-    var string = nameParts.join(".");
-    addMatches(result, string, tables, function(w) {
-      return useIdentifierQuotes ? insertIdentifierQuotes(w) : w;
-    });
-
-    // Try to complete columns from defaultTable
-    addMatches(result, string, defaultTable, function(w) {
-      return useIdentifierQuotes ? insertIdentifierQuotes(w) : w;
-    });
-
-    // Try to complete columns
-    string = nameParts.pop();
-    var table = nameParts.join(".");
-
-    var alias = false;
-    var aliasTable = table;
-    // Check if table is available. If not, find table by Alias
-    if (!getTable(table)) {
-      var oldTable = table;
-      table = findTableByAlias(table, editor);
-      if (table !== oldTable) alias = true;
-    }
-
-    var columns = getTable(table);
-    if (columns && columns.columns)
-      columns = columns.columns;
-
-    if (columns) {
-      addMatches(result, string, columns, function(w) {
-        var tableInsert = table;
-        if (alias == true) tableInsert = aliasTable;
-        if (typeof w == "string") {
-          w = tableInsert + "." + w;
-        } else {
-          w = shallowClone(w);
-          w.text = tableInsert + "." + w.text;
-        }
-        return useIdentifierQuotes ? insertIdentifierQuotes(w) : w;
-      });
-    }
-
-    return start;
-  }
-
-  function eachWord(lineText, f) {
-    var words = lineText.split(/\s+/)
-    for (var i = 0; i < words.length; i++)
-      if (words[i]) f(words[i].replace(/[,;]/g, ''))
-  }
-
-  function findTableByAlias(alias, editor) {
-    var doc = editor.doc;
-    var fullQuery = doc.getValue();
-    var aliasUpperCase = alias.toUpperCase();
-    var previousWord = "";
-    var table = "";
-    var separator = [];
-    var validRange = {
-      start: Pos(0, 0),
-      end: Pos(editor.lastLine(), editor.getLineHandle(editor.lastLine()).length)
+    var tables;
+    var defaultTable;
+    var keywords;
+    var identifierQuote;
+    var CONS = {
+        QUERY_DIV: ";",
+        ALIAS_KEYWORD: "AS"
     };
+    var Pos = CodeMirror.Pos, cmpPos = CodeMirror.cmpPos;
 
-    //add separator
-    var indexOfSeparator = fullQuery.indexOf(CONS.QUERY_DIV);
-    while(indexOfSeparator != -1) {
-      separator.push(doc.posFromIndex(indexOfSeparator));
-      indexOfSeparator = fullQuery.indexOf(CONS.QUERY_DIV, indexOfSeparator+1);
-    }
-    separator.unshift(Pos(0, 0));
-    separator.push(Pos(editor.lastLine(), editor.getLineHandle(editor.lastLine()).text.length));
+    function isArray (val) { return Object.prototype.toString.call(val) == "[object Array]"; }
 
-    //find valid range
-    var prevItem = null;
-    var current = editor.getCursor()
-    for (var i = 0; i < separator.length; i++) {
-      if ((prevItem == null || cmpPos(current, prevItem) > 0) && cmpPos(current, separator[i]) <= 0) {
-        validRange = {start: prevItem, end: separator[i]};
-        break;
-      }
-      prevItem = separator[i];
+    function getKeywords (editor) {
+        var mode = editor.doc.modeOption;
+        if (mode === "sql") mode = "text/x-sql";
+        return CodeMirror.resolveMode(mode).keywords;
     }
 
-    var query = doc.getRange(validRange.start, validRange.end, false);
-
-    for (var i = 0; i < query.length; i++) {
-      var lineText = query[i];
-      eachWord(lineText, function(word) {
-        var wordUpperCase = word.toUpperCase();
-        if (wordUpperCase === aliasUpperCase && getTable(previousWord))
-          table = previousWord;
-        if (wordUpperCase !== CONS.ALIAS_KEYWORD)
-          previousWord = word;
-      });
-      if (table) break;
-    }
-    return table;
-  }
-
-  CodeMirror.registerHelper("hint", "sql", function(editor, options) {
-    tables = parseTables(options && options.tables)
-    var defaultTableName = options && options.defaultTable;
-    var disableKeywords = options && options.disableKeywords;
-    defaultTable = defaultTableName && getTable(defaultTableName);
-    keywords = getKeywords(editor);
-    var keywordsCount = BI.size(keywords);
-    var functions = [];
-    var desc = {};
-    var cur = editor.getCursor();
-    var token = editor.getTokenAt(cur);
-    BI.each(BI.FormulaCollections, function(idx, formula){
-      if(formula.lastIndexOf(token.string, 0) == 0 && !BI.contains(functions, formula)){
-        functions.push(formula);
-      }
-    });
-    BI.each(BI.FormulaJson, function(idx, formula){
-        desc[formula.name.toLowerCase()] = formula.def;
-    });
-    keywords = BI.concat(BI.keys(keywords), functions);
-    identifierQuote = getIdentifierQuote(editor);
-
-    if (defaultTableName && !defaultTable)
-      defaultTable = findTableByAlias(defaultTableName, editor);
-
-    defaultTable = defaultTable || [];
-
-    if (defaultTable.columns)
-      defaultTable = defaultTable.columns;
-
-    var result = [];
-    var start, end, search;
-    if (token.end > cur.ch) {
-      token.end = cur.ch;
-      token.string = token.string.slice(0, cur.ch - token.start);
+    function getIdentifierQuote (editor) {
+        var mode = editor.doc.modeOption;
+        if (mode === "sql") mode = "text/x-sql";
+        return CodeMirror.resolveMode(mode).identifierQuote || "`";
     }
 
-    if (token.string.match(/^[.`"\w@]\w*$/)) {
-      search = token.string;
-      start = token.start;
-      end = token.end;
-    } else {
-      start = end = cur.ch;
-      search = "";
+    function getText (item) {
+        return typeof item === "string" ? item : item.text;
     }
-    if (search.charAt(0) == "." || search.charAt(0) == identifierQuote) {
-      start = nameCompletion(cur, token, result, editor);
-    } else {
-      addMatches(result, search, tables, function(w) {return w});
-      addMatches(result, search, defaultTable, function(w) {return w});
-      if (!disableKeywords)
-        addMatches(result, search, keywords, function(w, i) {
-          var isKeyword = i < keywordsCount;
-          return {
-            isKeyword: isKeyword,
-            text: w
-            // description: desc[w] || "SQL关键字",
-            // className: isKeyword ? "sql-keyword" : "sql-fr-function",
-            // render: function (Element, self, data) {
-            //   var label = BI.createWidget({
-            //     type: "bi.label",
-            //     element: Element,
-            //     text: data.displayText || getText(data)
-            //   });
-            //   label.setTitle(data.description, {
-            //     container: "body"
-            //   });
-            // }
-          };
+
+    function wrapTable (name, value) {
+        if (isArray(value)) value = {columns: value};
+        if (!value.text) value.text = name;
+        return value;
+    }
+
+    function parseTables (input) {
+        var result = {};
+        if (isArray(input)) {
+            for (var i = input.length - 1; i >= 0; i--) {
+                var item = input[i];
+                result[getText(item).toUpperCase()] = wrapTable(getText(item), item);
+            }
+        } else if (input) {
+            for (var name in input) {result[name.toUpperCase()] = wrapTable(name, input[name]);}
+        }
+        return result;
+    }
+
+    function getTable (name) {
+        return tables[name.toUpperCase()];
+    }
+
+    function shallowClone (object) {
+        var result = {};
+        for (var key in object) {
+            if (object.hasOwnProperty(key)) {result[key] = object[key];}
+        }
+        return result;
+    }
+
+    function match (string, word) {
+        if (BI.isNotEmptyString(string) && word.length !== string.length) {
+            var len = string.length;
+            var sub = getText(word).substr(0, len);
+            return string.toUpperCase() === sub.toUpperCase();
+        }
+    }
+
+    function addMatches (result, search, wordlist, formatter) {
+        if (isArray(wordlist)) {
+            for (var i = 0; i < wordlist.length; i++) {if (match(search, wordlist[i])) result.push(formatter(wordlist[i], i));}
+        } else {
+            for (var word in wordlist) {
+                if (wordlist.hasOwnProperty(word)) {
+                    var val = wordlist[word];
+                    if (!val || val === true) {val = word;} else {val = val.displayText ? {text: val.text, displayText: val.displayText} : val.text;}
+                    if (match(search, val)) result.push(formatter(val));
+                }
+            }
+        }
+    }
+
+    function cleanName (name) {
+    // Get rid name from identifierQuote and preceding dot(.)
+        if (name.charAt(0) == ".") {
+            name = name.substr(1);
+        }
+        // replace doublicated identifierQuotes with single identifierQuotes
+        // and remove single identifierQuotes
+        var nameParts = name.split(identifierQuote + identifierQuote);
+        for (var i = 0; i < nameParts.length; i++) {nameParts[i] = nameParts[i].replace(new RegExp(identifierQuote, "g"), "");}
+        return nameParts.join(identifierQuote);
+    }
+
+    function insertIdentifierQuotes (name) {
+        var nameParts = getText(name).split(".");
+        for (var i = 0; i < nameParts.length; i++) {
+            nameParts[i] = identifierQuote +
+        // doublicate identifierQuotes
+        nameParts[i].replace(new RegExp(identifierQuote, "g"), identifierQuote + identifierQuote) +
+        identifierQuote;
+        }
+        var escaped = nameParts.join(".");
+        if (typeof name === "string") return escaped;
+        name = shallowClone(name);
+        name.text = escaped;
+        return name;
+    }
+
+    function nameCompletion (cur, token, result, editor) {
+    // Try to complete table, column names and return start position of completion
+        var useIdentifierQuotes = false;
+        var nameParts = [];
+        var start = token.start;
+        var cont = true;
+        while (cont) {
+            cont = (token.string.charAt(0) == ".");
+            useIdentifierQuotes = useIdentifierQuotes || (token.string.charAt(0) == identifierQuote);
+
+            start = token.start;
+            nameParts.unshift(cleanName(token.string));
+
+            token = editor.getTokenAt(Pos(cur.line, token.start));
+            if (token.string == ".") {
+                cont = true;
+                token = editor.getTokenAt(Pos(cur.line, token.start));
+            }
+        }
+
+        // Try to complete table names
+        var string = nameParts.join(".");
+        addMatches(result, string, tables, function (w) {
+            return useIdentifierQuotes ? insertIdentifierQuotes(w) : w;
         });
+
+        // Try to complete columns from defaultTable
+        addMatches(result, string, defaultTable, function (w) {
+            return useIdentifierQuotes ? insertIdentifierQuotes(w) : w;
+        });
+
+        // Try to complete columns
+        string = nameParts.pop();
+        var table = nameParts.join(".");
+
+        var alias = false;
+        var aliasTable = table;
+        // Check if table is available. If not, find table by Alias
+        if (!getTable(table)) {
+            var oldTable = table;
+            table = findTableByAlias(table, editor);
+            if (table !== oldTable) alias = true;
+        }
+
+        var columns = getTable(table);
+        if (columns && columns.columns) {columns = columns.columns;}
+
+        if (columns) {
+            addMatches(result, string, columns, function (w) {
+                var tableInsert = table;
+                if (alias == true) tableInsert = aliasTable;
+                if (typeof w === "string") {
+                    w = tableInsert + "." + w;
+                } else {
+                    w = shallowClone(w);
+                    w.text = tableInsert + "." + w.text;
+                }
+                return useIdentifierQuotes ? insertIdentifierQuotes(w) : w;
+            });
+        }
+
+        return start;
     }
 
-    return {list: result, from: Pos(cur.line, start), to: Pos(cur.line, end)};
-  });
+    function eachWord (lineText, f) {
+        var words = lineText.split(/\s+/);
+        for (var i = 0; i < words.length; i++) {if (words[i]) f(words[i].replace(/[,;]/g, ""));}
+    }
+
+    function findTableByAlias (alias, editor) {
+        var doc = editor.doc;
+        var fullQuery = doc.getValue();
+        var aliasUpperCase = alias.toUpperCase();
+        var previousWord = "";
+        var table = "";
+        var separator = [];
+        var validRange = {
+            start: Pos(0, 0),
+            end: Pos(editor.lastLine(), editor.getLineHandle(editor.lastLine()).length)
+        };
+
+        // add separator
+        var indexOfSeparator = fullQuery.indexOf(CONS.QUERY_DIV);
+        while(indexOfSeparator != -1) {
+            separator.push(doc.posFromIndex(indexOfSeparator));
+            indexOfSeparator = fullQuery.indexOf(CONS.QUERY_DIV, indexOfSeparator + 1);
+        }
+        separator.unshift(Pos(0, 0));
+        separator.push(Pos(editor.lastLine(), editor.getLineHandle(editor.lastLine()).text.length));
+
+        // find valid range
+        var prevItem = null;
+        var current = editor.getCursor();
+        for (var i = 0; i < separator.length; i++) {
+            if ((prevItem == null || cmpPos(current, prevItem) > 0) && cmpPos(current, separator[i]) <= 0) {
+                validRange = {start: prevItem, end: separator[i]};
+                break;
+            }
+            prevItem = separator[i];
+        }
+
+        var query = doc.getRange(validRange.start, validRange.end, false);
+
+        for (var i = 0; i < query.length; i++) {
+            var lineText = query[i];
+            eachWord(lineText, function (word) {
+                var wordUpperCase = word.toUpperCase();
+                if (wordUpperCase === aliasUpperCase && getTable(previousWord)) {table = previousWord;}
+                if (wordUpperCase !== CONS.ALIAS_KEYWORD) {previousWord = word;}
+            });
+            if (table) break;
+        }
+        return table;
+    }
+
+    CodeMirror.registerHelper("hint", "sql", function (editor, options) {
+        tables = parseTables(options && options.tables);
+        var defaultTableName = options && options.defaultTable;
+        var disableKeywords = options && options.disableKeywords;
+        defaultTable = defaultTableName && getTable(defaultTableName);
+        keywords = getKeywords(editor);
+        var keywordsCount = BI.size(keywords);
+        var functions = [];
+        var desc = {};
+        var cur = editor.getCursor();
+        var token = editor.getTokenAt(cur);
+        BI.each(BI.FormulaCollections, function (idx, formula) {
+            if(formula.lastIndexOf(token.string, 0) == 0 && !BI.contains(functions, formula)) {
+                functions.push(formula);
+            }
+        });
+        BI.each(BI.FormulaJson, function (idx, formula) {
+            desc[formula.name.toLowerCase()] = formula.def;
+        });
+        keywords = BI.concat(BI.keys(keywords), functions);
+        identifierQuote = getIdentifierQuote(editor);
+
+        if (defaultTableName && !defaultTable) {defaultTable = findTableByAlias(defaultTableName, editor);}
+
+        defaultTable = defaultTable || [];
+
+        if (defaultTable.columns) {defaultTable = defaultTable.columns;}
+
+        var result = [];
+        var start, end, search;
+        if (token.end > cur.ch) {
+            token.end = cur.ch;
+            token.string = token.string.slice(0, cur.ch - token.start);
+        }
+
+        if (token.string.match(/^[.`"\w@]\w*$/)) {
+            search = token.string;
+            start = token.start;
+            end = token.end;
+        } else {
+            start = end = cur.ch;
+            search = "";
+        }
+        if (search.charAt(0) == "." || search.charAt(0) == identifierQuote) {
+            start = nameCompletion(cur, token, result, editor);
+        } else {
+            addMatches(result, search, tables, function (w) {return w;});
+            addMatches(result, search, defaultTable, function (w) {return w;});
+            if (!disableKeywords) {
+                addMatches(result, search, keywords, function (w, i) {
+                    var isKeyword = i < keywordsCount;
+                    return {
+                        isKeyword: isKeyword,
+                        text: w
+                    // description: desc[w] || "SQL关键字",
+                    // className: isKeyword ? "sql-keyword" : "sql-fr-function",
+                    // render: function (Element, self, data) {
+                    //   var label = BI.createWidget({
+                    //     type: "bi.label",
+                    //     element: Element,
+                    //     text: data.displayText || getText(data)
+                    //   });
+                    //   label.setTitle(data.description, {
+                    //     container: "body"
+            
+                    //   });
+                    // }
+                    };
+                });
+            }
+        }
+
+        return {list: result, from: Pos(cur.line, start), to: Pos(cur.line, end)};
+    });
 });
 // CodeMirror, copyright (c) by Marijn Haverbeke and others
 // Distributed under an MIT license: http://codemirror.net/LICENSE
 
-(function(mod) {
+(function (mod) {
     mod(CodeMirror);
-})(function(CodeMirror) {
+})(function (CodeMirror) {
     "use strict";
 
-CodeMirror.defineMode("sql", function(config, parserConfig) {
-  "use strict";
+    CodeMirror.defineMode("sql", function (config, parserConfig) {
+        "use strict";
 
-  var client         = parserConfig.client || {},
-      atoms          = parserConfig.atoms || {"false": true, "true": true, "null": true},
-      builtin        = parserConfig.builtin || {},
-      keywords       = parserConfig.keywords || {},
-      operatorChars  = parserConfig.operatorChars || /^[*+\-%<>!=&|~^]/,
-      support        = parserConfig.support || {},
-      hooks          = parserConfig.hooks || {},
-      dateSQL        = parserConfig.dateSQL || {"date" : true, "time" : true, "timestamp" : true},
-      functions      = parserConfig.functions || {};
+        var client         = parserConfig.client || {},
+            atoms          = parserConfig.atoms || {"false": true, "true": true, "null": true},
+            builtin        = parserConfig.builtin || {},
+            keywords       = parserConfig.keywords || {},
+            operatorChars  = parserConfig.operatorChars || /^[*+\-%<>!=&|~^]/,
+            support        = parserConfig.support || {},
+            hooks          = parserConfig.hooks || {},
+            dateSQL        = parserConfig.dateSQL || {date: true, time: true, timestamp: true},
+            functions      = parserConfig.functions || {};
 
-  function tokenBase(stream, state) {
-    var ch = stream.next();
+        function tokenBase (stream, state) {
+            var ch = stream.next();
 
-    // call hooks from the mime type
-    if (hooks[ch]) {
-      var result = hooks[ch](stream, state);
-      if (result !== false) return result;
-    }
+            // call hooks from the mime type
+            if (hooks[ch]) {
+                var result = hooks[ch](stream, state);
+                if (result !== false) return result;
+            }
 
-    if (support.hexNumber &&
+            if (support.hexNumber &&
       ((ch == "0" && stream.match(/^[xX][0-9a-fA-F]+/))
       || (ch == "x" || ch == "X") && stream.match(/^'[0-9a-fA-F]+'/))) {
-      // hex
-      // ref: http://dev.mysql.com/doc/refman/5.5/en/hexadecimal-literals.html
-      return "number";
-    } else if (support.binaryNumber &&
+                // hex
+                // ref: http://dev.mysql.com/doc/refman/5.5/en/hexadecimal-literals.html
+                return "number";
+            } else if (support.binaryNumber &&
       (((ch == "b" || ch == "B") && stream.match(/^'[01]+'/))
       || (ch == "0" && stream.match(/^b[01]+/)))) {
-      // bitstring
-      // ref: http://dev.mysql.com/doc/refman/5.5/en/bit-field-literals.html
-      return "number";
-    } else if (ch.charCodeAt(0) > 47 && ch.charCodeAt(0) < 58) {
-      // numbers
-      // ref: http://dev.mysql.com/doc/refman/5.5/en/number-literals.html
-      stream.match(/^[0-9]*(\.[0-9]+)?([eE][-+]?[0-9]+)?/);
-      support.decimallessFloat && stream.match(/^\.(?!\.)/);
-      return "number";
-    } else if (ch == "?" && (stream.eatSpace() || stream.eol() || stream.eat(";"))) {
-      // placeholders
-      return "variable-3";
-    } else if (ch == "'" || (ch == '"' && support.doubleQuote)) {
-      // strings
-      // ref: http://dev.mysql.com/doc/refman/5.5/en/string-literals.html
-      state.tokenize = tokenLiteral(ch);
-      return state.tokenize(stream, state);
-    } else if ((((support.nCharCast && (ch == "n" || ch == "N"))
+                // bitstring
+                // ref: http://dev.mysql.com/doc/refman/5.5/en/bit-field-literals.html
+                return "number";
+            } else if (ch.charCodeAt(0) > 47 && ch.charCodeAt(0) < 58) {
+                // numbers
+                // ref: http://dev.mysql.com/doc/refman/5.5/en/number-literals.html
+                stream.match(/^[0-9]*(\.[0-9]+)?([eE][-+]?[0-9]+)?/);
+                support.decimallessFloat && stream.match(/^\.(?!\.)/);
+                return "number";
+            } else if (ch == "?" && (stream.eatSpace() || stream.eol() || stream.eat(";"))) {
+                // placeholders
+                return "variable-3";
+            } else if (ch == "'" || (ch == "\"" && support.doubleQuote)) {
+                // strings
+                // ref: http://dev.mysql.com/doc/refman/5.5/en/string-literals.html
+                state.tokenize = tokenLiteral(ch);
+                return state.tokenize(stream, state);
+            } else if ((((support.nCharCast && (ch == "n" || ch == "N"))
         || (support.charsetCast && ch == "_" && stream.match(/[a-z][a-z0-9]*/i)))
-        && (stream.peek() == "'" || stream.peek() == '"'))) {
-      // charset casting: _utf8'str', N'str', n'str'
-      // ref: http://dev.mysql.com/doc/refman/5.5/en/string-literals.html
-      return "keyword";
-    } else if (/^[\(\),\;\[\]]/.test(ch)) {
-      // no highlighting
-      return null;
-    } else if (support.commentSlashSlash && ch == "/" && stream.eat("/")) {
-      // 1-line comment
-      stream.skipToEnd();
-      return "comment";
-    } else if ((support.commentHash && ch == "#")
+        && (stream.peek() == "'" || stream.peek() == "\""))) {
+                // charset casting: _utf8'str', N'str', n'str'
+                // ref: http://dev.mysql.com/doc/refman/5.5/en/string-literals.html
+                return "keyword";
+            } else if (/^[\(\),\;\[\]]/.test(ch)) {
+                // no highlighting
+                return null;
+            } else if (support.commentSlashSlash && ch == "/" && stream.eat("/")) {
+                // 1-line comment
+                stream.skipToEnd();
+                return "comment";
+            } else if ((support.commentHash && ch == "#")
         || (ch == "-" && stream.eat("-") && (!support.commentSpaceRequired || stream.eat(" ")))) {
-      // 1-line comments
-      // ref: https://kb.askmonty.org/en/comment-syntax/
-      stream.skipToEnd();
-      return "comment";
-    } else if (ch == "/" && stream.eat("*")) {
-      // multi-line comments
-      // ref: https://kb.askmonty.org/en/comment-syntax/
-      state.tokenize = tokenComment(1);
-      return state.tokenize(stream, state);
-    } else if (ch == ".") {
-      // .1 for 0.1
-      if (support.zerolessFloat && stream.match(/^(?:\d+(?:e[+-]?\d+)?)/i))
-        return "number";
-      if (stream.match(/^\.+/))
-        return null
-      // .table_name (ODBC)
-      // // ref: http://dev.mysql.com/doc/refman/5.6/en/identifier-qualifiers.html
-      if (support.ODBCdotTable && stream.match(/^[\w\d_]+/))
-        return "variable-2";
-    } else if (operatorChars.test(ch)) {
-      // operators
-      stream.eatWhile(operatorChars);
-      return null;
-    } else if (ch == '{' &&
+                // 1-line comments
+                // ref: https://kb.askmonty.org/en/comment-syntax/
+                stream.skipToEnd();
+                return "comment";
+            } else if (ch == "/" && stream.eat("*")) {
+                // multi-line comments
+                // ref: https://kb.askmonty.org/en/comment-syntax/
+                state.tokenize = tokenComment(1);
+                return state.tokenize(stream, state);
+            } else if (ch == ".") {
+                // .1 for 0.1
+                if (support.zerolessFloat && stream.match(/^(?:\d+(?:e[+-]?\d+)?)/i)) {return "number";}
+                if (stream.match(/^\.+/)) {return null;}
+                // .table_name (ODBC)
+                // // ref: http://dev.mysql.com/doc/refman/5.6/en/identifier-qualifiers.html
+                if (support.ODBCdotTable && stream.match(/^[\w\d_]+/)) {return "variable-2";}
+            } else if (operatorChars.test(ch)) {
+                // operators
+                stream.eatWhile(operatorChars);
+                return null;
+            } else if (ch == "{" &&
         (stream.match(/^( )*(d|D|t|T|ts|TS)( )*'[^']*'( )*}/) || stream.match(/^( )*(d|D|t|T|ts|TS)( )*"[^"]*"( )*}/))) {
-      // dates (weird ODBC syntax)
-      // ref: http://dev.mysql.com/doc/refman/5.5/en/date-and-time-literals.html
-      return "number";
-    } else {
-      stream.eatWhile(/^[_\w\d]/);
-      var word = stream.current().toLowerCase();
-      // dates (standard SQL syntax)
-      // ref: http://dev.mysql.com/doc/refman/5.5/en/date-and-time-literals.html
-      if (dateSQL.hasOwnProperty(word) && (stream.match(/^( )+'[^']*'/) || stream.match(/^( )+"[^"]*"/)))
-        return "number";
-      if (atoms.hasOwnProperty(word)) return "atom";
-      if (builtin.hasOwnProperty(word)) return "builtin";
-      if (functions.hasOwnProperty(word) && stream.peek() === '(') return "function";
-      if (keywords.hasOwnProperty(word)) return "keyword";
-      if (client.hasOwnProperty(word)) return "string-2";
-      return null;
-    }
-  }
-
-  // 'string', with char specified in quote escaped by '\'
-  function tokenLiteral(quote) {
-    return function(stream, state) {
-      var escaped = false, ch;
-      while ((ch = stream.next()) != null) {
-        if (ch == quote && !escaped) {
-          state.tokenize = tokenBase;
-          break;
+                // dates (weird ODBC syntax)
+                // ref: http://dev.mysql.com/doc/refman/5.5/en/date-and-time-literals.html
+                return "number";
+            } else {
+                stream.eatWhile(/^[_\w\d]/);
+                var word = stream.current().toLowerCase();
+                // dates (standard SQL syntax)
+                // ref: http://dev.mysql.com/doc/refman/5.5/en/date-and-time-literals.html
+                if (dateSQL.hasOwnProperty(word) && (stream.match(/^( )+'[^']*'/) || stream.match(/^( )+"[^"]*"/))) {return "number";}
+                if (atoms.hasOwnProperty(word)) return "atom";
+                if (builtin.hasOwnProperty(word)) return "builtin";
+                if (functions.hasOwnProperty(word) && stream.peek() === "(") return "function";
+                if (keywords.hasOwnProperty(word)) return "keyword";
+                if (client.hasOwnProperty(word)) return "string-2";
+                return null;
+            }
         }
-        escaped = !escaped && ch == "\\";
-      }
-      return "string";
-    };
-  }
-  function tokenComment(depth) {
-    return function(stream, state) {
-      var m = stream.match(/^.*?(\/\*|\*\/)/)
-      if (!m) stream.skipToEnd()
-      else if (m[1] == "/*") state.tokenize = tokenComment(depth + 1)
-      else if (depth > 1) state.tokenize = tokenComment(depth - 1)
-      else state.tokenize = tokenBase
-      return "comment"
-    }
-  }
 
-  function pushContext(stream, state, type) {
-    state.context = {
-      prev: state.context,
-      indent: stream.indentation(),
-      col: stream.column(),
-      type: type
-    };
-  }
+        // 'string', with char specified in quote escaped by '\'
+        function tokenLiteral (quote) {
+            return function (stream, state) {
+                var escaped = false, ch;
+                while ((ch = stream.next()) != null) {
+                    if (ch == quote && !escaped) {
+                        state.tokenize = tokenBase;
+                        break;
+                    }
+                    escaped = !escaped && ch == "\\";
+                }
+                return "string";
+            };
+        }
+        function tokenComment (depth) {
+            return function (stream, state) {
+                var m = stream.match(/^.*?(\/\*|\*\/)/);
+                if (!m) stream.skipToEnd();
+                else if (m[1] == "/*") state.tokenize = tokenComment(depth + 1);
+                else if (depth > 1) state.tokenize = tokenComment(depth - 1);
+                else state.tokenize = tokenBase;
+                return "comment";
+            };
+        }
 
-  function popContext(state) {
-    state.indent = state.context.indent;
-    state.context = state.context.prev;
-  }
+        function pushContext (stream, state, type) {
+            state.context = {
+                prev: state.context,
+                indent: stream.indentation(),
+                col: stream.column(),
+                type: type
+            };
+        }
 
-  return {
-    startState: function() {
-      return {tokenize: tokenBase, context: null};
-    },
+        function popContext (state) {
+            state.indent = state.context.indent;
+            state.context = state.context.prev;
+        }
 
-    token: function(stream, state) {
-      if (stream.sol()) {
-        if (state.context && state.context.align == null)
-          state.context.align = false;
-      }
-      if (state.tokenize == tokenBase && stream.eatSpace()) return null;
+        return {
+            startState: function () {
+                return {tokenize: tokenBase, context: null};
+            },
 
-      var style = state.tokenize(stream, state);
-      if (style == "comment") return style;
+            token: function (stream, state) {
+                if (stream.sol()) {
+                    if (state.context && state.context.align == null) {state.context.align = false;}
+                }
+                if (state.tokenize == tokenBase && stream.eatSpace()) return null;
 
-      if (state.context && state.context.align == null)
-        state.context.align = true;
+                var style = state.tokenize(stream, state);
+                if (style == "comment") return style;
 
-      var tok = stream.current();
-      if (tok == "(")
-        pushContext(stream, state, ")");
-      else if (tok == "[")
-        pushContext(stream, state, "]");
-      else if (state.context && state.context.type == tok)
-        popContext(state);
-      return style;
-    },
+                if (state.context && state.context.align == null) {state.context.align = true;}
 
-    indent: function(state, textAfter) {
-      var cx = state.context;
-      if (!cx) return CodeMirror.Pass;
-      var closing = textAfter.charAt(0) == cx.type;
-      if (cx.align) return cx.col + (closing ? 0 : 1);
-      else return cx.indent + (closing ? 0 : config.indentUnit);
-    },
+                var tok = stream.current();
+                if (tok == "(") {pushContext(stream, state, ")");} else if (tok == "[") {pushContext(stream, state, "]");} else if (state.context && state.context.type == tok) {popContext(state);}
+                return style;
+            },
 
-    blockCommentStart: "/*",
-    blockCommentEnd: "*/",
-    lineComment: support.commentSlashSlash ? "//" : support.commentHash ? "#" : "--"
-  };
-});
+            indent: function (state, textAfter) {
+                var cx = state.context;
+                if (!cx) return CodeMirror.Pass;
+                var closing = textAfter.charAt(0) == cx.type;
+                if (cx.align) return cx.col + (closing ? 0 : 1);
+                return cx.indent + (closing ? 0 : config.indentUnit);
+            },
 
-(function() {
-  "use strict";
+            blockCommentStart: "/*",
+            blockCommentEnd: "*/",
+            lineComment: support.commentSlashSlash ? "//" : support.commentHash ? "#" : "--"
+        };
+    });
 
-  // `identifier`
-  function hookIdentifier(stream) {
-    // MySQL/MariaDB identifiers
-    // ref: http://dev.mysql.com/doc/refman/5.6/en/identifier-qualifiers.html
-    var ch;
-    while ((ch = stream.next()) != null) {
-      if (ch == "`" && !stream.eat("`")) return "variable-2";
-    }
-    stream.backUp(stream.current().length - 1);
-    return stream.eatWhile(/\w/) ? "variable-2" : null;
-  }
+    (function () {
+        "use strict";
 
-  // "identifier"
-  function hookIdentifierDoublequote(stream) {
-    // Standard SQL /SQLite identifiers
-    // ref: http://web.archive.org/web/20160813185132/http://savage.net.au/SQL/sql-99.bnf.html#delimited%20identifier
-    // ref: http://sqlite.org/lang_keywords.html
-    var ch;
-    while ((ch = stream.next()) != null) {
-      if (ch == "\"" && !stream.eat("\"")) return "variable-2";
-    }
-    stream.backUp(stream.current().length - 1);
-    return stream.eatWhile(/\w/) ? "variable-2" : null;
-  }
+        // `identifier`
+        function hookIdentifier (stream) {
+            // MySQL/MariaDB identifiers
+            // ref: http://dev.mysql.com/doc/refman/5.6/en/identifier-qualifiers.html
+            var ch;
+            while ((ch = stream.next()) != null) {
+                if (ch == "`" && !stream.eat("`")) return "variable-2";
+            }
+            stream.backUp(stream.current().length - 1);
+            return stream.eatWhile(/\w/) ? "variable-2" : null;
+        }
 
-  // variable token
-  function hookVar(stream) {
-    // variables
-    // @@prefix.varName @varName
-    // varName can be quoted with ` or ' or "
-    // ref: http://dev.mysql.com/doc/refman/5.5/en/user-variables.html
-    if (stream.eat("@")) {
-      stream.match(/^session\./);
-      stream.match(/^local\./);
-      stream.match(/^global\./);
-    }
+        // "identifier"
+        function hookIdentifierDoublequote (stream) {
+            // Standard SQL /SQLite identifiers
+            // ref: http://web.archive.org/web/20160813185132/http://savage.net.au/SQL/sql-99.bnf.html#delimited%20identifier
+            // ref: http://sqlite.org/lang_keywords.html
+            var ch;
+            while ((ch = stream.next()) != null) {
+                if (ch == "\"" && !stream.eat("\"")) return "variable-2";
+            }
+            stream.backUp(stream.current().length - 1);
+            return stream.eatWhile(/\w/) ? "variable-2" : null;
+        }
 
-    if (stream.eat("'")) {
-      stream.match(/^.*'/);
-      return "variable-2";
-    } else if (stream.eat('"')) {
-      stream.match(/^.*"/);
-      return "variable-2";
-    } else if (stream.eat("`")) {
-      stream.match(/^.*`/);
-      return "variable-2";
-    } else if (stream.match(/^[0-9a-zA-Z$\.\_]+/)) {
-      return "variable-2";
-    }
-    return null;
-  };
+        // variable token
+        function hookVar (stream) {
+            // variables
+            // @@prefix.varName @varName
+            // varName can be quoted with ` or ' or "
+            // ref: http://dev.mysql.com/doc/refman/5.5/en/user-variables.html
+            if (stream.eat("@")) {
+                stream.match(/^session\./);
+                stream.match(/^local\./);
+                stream.match(/^global\./);
+            }
 
-  // short client keyword token
-  function hookClient(stream) {
-    // \N means NULL
-    // ref: http://dev.mysql.com/doc/refman/5.5/en/null-values.html
-    if (stream.eat("N")) {
-        return "atom";
-    }
-    // \g, etc
-    // ref: http://dev.mysql.com/doc/refman/5.5/en/mysql-commands.html
-    return stream.match(/^[a-zA-Z.#!?]/) ? "variable-2" : null;
-  }
+            if (stream.eat("'")) {
+                stream.match(/^.*'/);
+                return "variable-2";
+            } else if (stream.eat("\"")) {
+                stream.match(/^.*"/);
+                return "variable-2";
+            } else if (stream.eat("`")) {
+                stream.match(/^.*`/);
+                return "variable-2";
+            } else if (stream.match(/^[0-9a-zA-Z$\.\_]+/)) {
+                return "variable-2";
+            }
+            return null;
+        }
 
-  // these keywords are used by all SQL dialects (however, a mode can still overwrite it)
-  var sqlKeywords = "alter and as asc between by count create delete desc distinct drop from group having in insert into is join like not on or order select set table union update values where limit ";
+        // short client keyword token
+        function hookClient (stream) {
+            // \N means NULL
+            // ref: http://dev.mysql.com/doc/refman/5.5/en/null-values.html
+            if (stream.eat("N")) {
+                return "atom";
+            }
+            // \g, etc
+            // ref: http://dev.mysql.com/doc/refman/5.5/en/mysql-commands.html
+            return stream.match(/^[a-zA-Z.#!?]/) ? "variable-2" : null;
+        }
 
-  // turn a space-separated list into an array
-  function set(str) {
-    var obj = {}, words = str.split(" ");
-    for (var i = 0; i < words.length; ++i) obj[words[i]] = true;
-    return obj;
-  }
+        // these keywords are used by all SQL dialects (however, a mode can still overwrite it)
+        var sqlKeywords = "alter and as asc between by count create delete desc distinct drop from group having in insert into is join like not on or order select set table union update values where limit ";
 
-  // A generic SQL Mode. It's not a standard, it just try to support what is generally supported
-  CodeMirror.defineMIME("text/x-sql", {
-    name: "sql",
-    keywords: set(sqlKeywords + "begin"),
-    builtin: set("bool boolean bit blob enum long longblob longtext medium mediumblob mediumint mediumtext time timestamp tinyblob tinyint tinytext text bigint int int1 int2 int3 int4 int8 integer float float4 float8 double char varbinary varchar varcharacter precision real date datetime year unsigned signed decimal numeric"),
-    atoms: set("false true null unknown"),
-    operatorChars: /^[*+\-%<>!=]/,
-    dateSQL: set("date time timestamp"),
-    support: set("ODBCdotTable doubleQuote binaryNumber hexNumber"),
-    functions: BI.makeObject(BI.FormulaCollections, true)
-  });
-}());
+        // turn a space-separated list into an array
+        function set (str) {
+            var obj = {}, words = str.split(" ");
+            for (var i = 0; i < words.length; ++i) obj[words[i]] = true;
+            return obj;
+        }
+
+        // A generic SQL Mode. It's not a standard, it just try to support what is generally supported
+        CodeMirror.defineMIME("text/x-sql", {
+            name: "sql",
+            keywords: set(sqlKeywords + "begin"),
+            builtin: set("bool boolean bit blob enum long longblob longtext medium mediumblob mediumint mediumtext time timestamp tinyblob tinyint tinytext text bigint int int1 int2 int3 int4 int8 integer float float4 float8 double char varbinary varchar varcharacter precision real date datetime year unsigned signed decimal numeric"),
+            atoms: set("false true null unknown"),
+            operatorChars: /^[*+\-%<>!=]/,
+            dateSQL: set("date time timestamp"),
+            support: set("ODBCdotTable doubleQuote binaryNumber hexNumber"),
+            functions: BI.makeObject(BI.FormulaCollections, true)
+        });
+    }());
 
 });
 
@@ -21083,8 +21065,8 @@ CodeMirror.defineMode("sql", function(config, parserConfig) {
 BI.SQLEditor = BI.inherit(BI.Widget, {
     _defaultConfig: function () {
         return $.extend(BI.CodeEditor.superclass._defaultConfig.apply(), {
-            baseCls: 'bi-sql-editor',
-            value: '',
+            baseCls: "bi-sql-editor",
+            value: "",
             lineHeight: 2,
             showHint: true
         });
@@ -21108,7 +21090,7 @@ BI.SQLEditor = BI.inherit(BI.Widget, {
                 });
             }
             BI.nextTick(function () {
-                self.fireEvent(BI.FormulaEditor.EVENT_CHANGE)
+                self.fireEvent(BI.FormulaEditor.EVENT_CHANGE);
             });
         });
 
@@ -21121,7 +21103,7 @@ BI.SQLEditor = BI.inherit(BI.Widget, {
             self.fireEvent(BI.FormulaEditor.EVENT_BLUR);
         });
 
-        //水印
+        // 水印
         this.watermark = BI.createWidget({
             type: "bi.label",
             text: BI.i18nText("Please_Enter_SQL"),
@@ -29458,7 +29440,7 @@ BI.Svg = BI.inherit(BI.Widget, {
     _defaultConfig: function () {
         return BI.extend(BI.Svg.superclass._defaultConfig.apply(this, arguments), {
             baseCls: "bi-svg"
-        })
+        });
     },
 
     _init: function () {
@@ -29466,7 +29448,7 @@ BI.Svg = BI.inherit(BI.Widget, {
         this.paper = Raphael(this.element[0]);
 
         this.element.css("overflow", "hidden");
-        $(this.paper.canvas).width("100%").height("100%").css({"left": "0", "top": "0"}).appendTo(this.element);
+        $(this.paper.canvas).width("100%").height("100%").css({left: "0", top: "0"}).appendTo(this.element);
 
         this.top = this.paper.top;
         this.bottom = this.paper.bottom;
@@ -29570,12 +29552,12 @@ BI.NativeTableScrollbar = BI.inherit(BI.Widget, {
             defaultPosition: 0,
             position: 0,
             size: 0
-        })
+        });
     },
 
     render: function () {
         var self = this, o = this.options;
-        //把滚动台size改掉
+        // 把滚动台size改掉
         this.element.width(36);
 
         var throttle = BI.throttle(function () {
@@ -29594,7 +29576,7 @@ BI.NativeTableScrollbar = BI.inherit(BI.Widget, {
                     self.inner = _ref;
                 }
             }]
-        }
+        };
     },
 
     mounted: function () {
@@ -29646,12 +29628,12 @@ BI.NativeTableHorizontalScrollbar = BI.inherit(BI.Widget, {
             contentSize: 0,
             position: 0,
             size: 0
-        })
+        });
     },
 
     render: function () {
         var self = this, o = this.options;
-        //把滚动台size改掉
+        // 把滚动台size改掉
         this.element.height(36);
 
         var throttle = BI.throttle(function () {
@@ -29670,7 +29652,7 @@ BI.NativeTableHorizontalScrollbar = BI.inherit(BI.Widget, {
                     self.inner = _ref;
                 }
             }]
-        }
+        };
     },
 
     setContentSize: function (contentSize) {
@@ -29720,7 +29702,7 @@ BI.TableCell = BI.inherit(BI.Widget, {
             baseCls: "bi-table-cell",
             textAlign: "left",
             text: ""
-        })
+        });
     },
 
     _init: function () {
@@ -29734,7 +29716,7 @@ BI.TableCell = BI.inherit(BI.Widget, {
             text: this.options.text,
             value: this.options.value,
             lgap: 5
-        })
+        });
     }
 });
 
@@ -29755,7 +29737,7 @@ BI.CollectionTableCell = BI.inherit(BI.Widget, {
             _left: 0,
             _top: 0,
             cell: {}
-        })
+        });
     },
 
     _init: function () {
@@ -30068,7 +30050,7 @@ BI.CollectionTable = BI.inherit(BI.Widget, {
                 overflow: "scroll",
                 overflowX: "scroll",
                 overflowY: "scroll"
-            })
+            });
         };
 
         this.topLeft.setWidth(otlw);
@@ -30126,7 +30108,7 @@ BI.CollectionTable = BI.inherit(BI.Widget, {
     _digest: function () {
         var o = this.options;
         var freezeColLength = this._getFreezeColLength();
-        //如果表头位置不够，取消表头冻结
+        // 如果表头位置不够，取消表头冻结
         if (this._getFreezeHeaderHeight() <= 0) {
             this.topLeftItems = [];
             this.topRightItems = [];
@@ -30216,7 +30198,7 @@ BI.CollectionTable = BI.inherit(BI.Widget, {
                         var isNeedMergeCol = o.mergeRule(cache[i][j], cache[i][j - 1]);
                         if (isNeedMergeCol && isNeedMergeRow) {
                             continue;
-                            //mergeRow(i, j);//优先合并列
+                            // mergeRow(i, j);//优先合并列
                         }
                         if (isNeedMergeCol) {
                             mergeCol(i, j);
@@ -30241,7 +30223,7 @@ BI.CollectionTable = BI.inherit(BI.Widget, {
                 col: item.item._col,
                 width: item.item._width,
                 height: item.item._height
-            }
+            };
         });
     },
 
@@ -30351,7 +30333,7 @@ BI.CollectionTable = BI.inherit(BI.Widget, {
         this._restore();
     }
 });
-BI.shortcut('bi.collection_table', BI.CollectionTable);/**
+BI.shortcut("bi.collection_table", BI.CollectionTable);/**
  * QuickCollectionTable
  *
  * Created by GUY on 2016/1/12.
@@ -30418,25 +30400,25 @@ BI.QuickCollectionTable = BI.inherit(BI.CollectionTable, {
     _shouldHandleLeftX: function (delta) {
         if (delta > 0) {
             return this.bottomLeftCollection.getScrollLeft() < this.bottomLeftCollection.getMaxScrollLeft();
-        } else {
-            return this.bottomLeftCollection.getScrollLeft() > 0;
         }
+        return this.bottomLeftCollection.getScrollLeft() > 0;
+        
     },
 
     _shouldHandleRightX: function (delta) {
         if (delta > 0) {
             return this.bottomRightCollection.getScrollLeft() < this.bottomRightCollection.getMaxScrollLeft();
-        } else {
-            return this.bottomRightCollection.getScrollLeft() > 0;
         }
+        return this.bottomRightCollection.getScrollLeft() > 0;
+        
     },
 
     _shouldHandleY: function (delta) {
         if (delta > 0) {
             return this.bottomRightCollection.getScrollTop() < this.bottomRightCollection.getMaxScrollTop();
-        } else {
-            return this.bottomRightCollection.getScrollTop() > 0;
         }
+        return this.bottomRightCollection.getScrollTop() > 0;
+        
     },
 
     _onWheelLeft: function (deltaX, deltaY) {
@@ -30470,7 +30452,7 @@ BI.QuickCollectionTable = BI.inherit(BI.CollectionTable, {
     _populateTable: function () {
         var self = this, o = this.options;
         var regionSize = this.getRegionSize(), totalLeftColumnSize = 0, totalRightColumnSize = 0, totalColumnSize = 0,
-            summaryColumnSizeArray = []
+            summaryColumnSizeArray = [];
         BI.each(o.columnSize, function (i, size) {
             if (o.isNeedFreeze === true && o.freezeCols.contains(i)) {
                 totalLeftColumnSize += size;
@@ -30541,7 +30523,7 @@ BI.QuickCollectionTable = BI.inherit(BI.CollectionTable, {
         this.bottomRightCollection.populate(rightItems);
     }
 });
-BI.shortcut('bi.quick_collection_table', BI.QuickCollectionTable);/**
+BI.shortcut("bi.quick_collection_table", BI.QuickCollectionTable);/**
  *
  * 表格单元格
  *
@@ -30560,7 +30542,7 @@ BI.GridTableCell = BI.inherit(BI.Widget, {
             _left: 0,
             _top: 0,
             cell: {}
-        })
+        });
     },
 
     _init: function () {
@@ -30921,7 +30903,7 @@ BI.GridTable = BI.inherit(BI.Widget, {
                 overflow: "scroll",
                 overflowX: "scroll",
                 overflowY: "scroll"
-            })
+            });
         };
 
         this.topLeft.setWidth(otlw);
@@ -31077,7 +31059,7 @@ BI.GridTable = BI.inherit(BI.Widget, {
         this._restore();
     }
 });
-BI.shortcut('bi.grid_table', BI.GridTable);/**
+BI.shortcut("bi.grid_table", BI.GridTable);/**
  * QuickGridTable
  *
  * Created by GUY on 2016/1/12.
@@ -31144,25 +31126,25 @@ BI.QuickGridTable = BI.inherit(BI.GridTable, {
     _shouldHandleLeftX: function (delta) {
         if (delta > 0) {
             return this.bottomLeftGrid.getScrollLeft() < this.bottomLeftGrid.getMaxScrollLeft();
-        } else {
-            return this.bottomLeftGrid.getScrollLeft() > 0;
         }
+        return this.bottomLeftGrid.getScrollLeft() > 0;
+        
     },
 
     _shouldHandleRightX: function (delta) {
         if (delta > 0) {
             return this.bottomRightGrid.getScrollLeft() < this.bottomRightGrid.getMaxScrollLeft();
-        } else {
-            return this.bottomRightGrid.getScrollLeft() > 0;
         }
+        return this.bottomRightGrid.getScrollLeft() > 0;
+        
     },
 
     _shouldHandleY: function (delta) {
         if (delta > 0) {
             return this.bottomRightGrid.getScrollTop() < this.bottomRightGrid.getMaxScrollTop();
-        } else {
-            return this.bottomRightGrid.getScrollTop() > 0;
         }
+        return this.bottomRightGrid.getScrollTop() > 0;
+        
     },
 
     _onWheelLeft: function (deltaX, deltaY) {
@@ -31299,7 +31281,7 @@ BI.QuickGridTable = BI.inherit(BI.GridTable, {
         this.bottomRightGrid.populate(rightItems);
     }
 });
-BI.shortcut('bi.quick_grid_table', BI.QuickGridTable);/**
+BI.shortcut("bi.quick_grid_table", BI.QuickGridTable);/**
  *
  * 表格滚动条
  *
@@ -31326,7 +31308,7 @@ BI.GridTableScrollbar = BI.inherit(BI.Widget, {
             orientation: "vertical",
             position: 0,
             size: 0
-        })
+        });
     },
 
     render: function () {
@@ -31351,7 +31333,7 @@ BI.GridTableScrollbar = BI.inherit(BI.Widget, {
 
     mounted: function () {
         var self = this, o = this.options;
-        var onWheel = o.orientation === 'horizontal' ? this._onWheelX : this._onWheelY;
+        var onWheel = o.orientation === "horizontal" ? this._onWheelX : this._onWheelY;
         this._wheelHandler = new BI.WheelHandler(
             BI.bind(onWheel, this),
             BI.bind(this._shouldHandleX, this),
@@ -31384,7 +31366,7 @@ BI.GridTableScrollbar = BI.inherit(BI.Widget, {
     },
 
     _isHorizontal: function () {
-        return this.options.orientation === 'horizontal'
+        return this.options.orientation === "horizontal";
     },
 
     _getScale: function () {
@@ -31410,13 +31392,13 @@ BI.GridTableScrollbar = BI.inherit(BI.Widget, {
     },
 
     _shouldHandleX: function (delta) {
-        return this.options.orientation === 'horizontal' ?
+        return this.options.orientation === "horizontal" ?
             this._shouldHandleChange(delta) :
             false;
     },
 
     _shouldHandleY: function (delta) {
-        return this.options.orientation !== 'horizontal' ?
+        return this.options.orientation !== "horizontal" ?
             this._shouldHandleChange(delta) :
             false;
     },
@@ -31650,7 +31632,7 @@ BI.GridTableHorizontalScrollbar = BI.inherit(BI.Widget, {
             contentSize: 0,
             position: 0,
             size: 0
-        })
+        });
     },
 
     _init: function () {
@@ -31731,7 +31713,7 @@ BI.TableHeaderCell = BI.inherit(BI.Widget, {
         return BI.extend(BI.TableHeaderCell.superclass._defaultConfig.apply(this, arguments), {
             baseCls: "bi-table-header-cell",
             text: ""
-        })
+        });
     },
 
     _init: function () {
@@ -31743,7 +31725,7 @@ BI.TableHeaderCell = BI.inherit(BI.Widget, {
             height: this.options.height,
             text: this.options.text,
             value: this.options.value
-        })
+        });
     }
 });
 
@@ -31762,16 +31744,16 @@ BI.Table = BI.inherit(BI.Widget, {
     _defaultConfig: function () {
         return BI.extend(BI.Table.superclass._defaultConfig.apply(this, arguments), {
             baseCls: "bi-table",
-            logic: { //冻结的页面布局逻辑
+            logic: { // 冻结的页面布局逻辑
                 dynamic: false
             },
 
-            isNeedFreeze: false,//是否需要冻结单元格
-            freezeCols: [], //冻结的列号,从0开始,isNeedFreeze为true时生效
+            isNeedFreeze: false, // 是否需要冻结单元格
+            freezeCols: [], // 冻结的列号,从0开始,isNeedFreeze为true时生效
 
-            isNeedMerge: false,//是否需要合并单元格
-            mergeCols: [], //合并的单元格列号
-            mergeRule: function (row1, row2) { //合并规则, 默认相等时合并
+            isNeedMerge: false, // 是否需要合并单元格
+            mergeCols: [], // 合并的单元格列号
+            mergeRule: function (row1, row2) { // 合并规则, 默认相等时合并
                 return BI.isEqual(row1, row2);
             },
 
@@ -31784,8 +31766,8 @@ BI.Table = BI.inherit(BI.Widget, {
 
             header: [],
             footer: false,
-            items: [] //二维数组
-        })
+            items: [] // 二维数组
+        });
     },
 
     _calculateWidth: function (width) {
@@ -32075,17 +32057,17 @@ BI.Table = BI.inherit(BI.Widget, {
 
         var regionColumnSize = o.regionColumnSize;
         if (o.freezeCols.length === 0) {
-            regionColumnSize = isRight ? ['fill', 0] : [0, 'fill'];
+            regionColumnSize = isRight ? ["fill", 0] : [0, "fill"];
         } else if (o.freezeCols.length >= o.columnSize.length) {
-            regionColumnSize = isRight ? [0, 'fill'] : ['fill', 0];
+            regionColumnSize = isRight ? [0, "fill"] : ["fill", 0];
         }
         this.partitions = BI.createWidget(BI.extend({
             element: this
         }, BI.LogicFactory.createLogic("table", BI.extend({}, o.logic, {
             rows: 2,
             columns: 2,
-            columnSize: regionColumnSize || (isRight ? ['fill', leftWidth] : [leftWidth, 'fill']),
-            rowSize: [headerHeight, 'fill'],
+            columnSize: regionColumnSize || (isRight ? ["fill", leftWidth] : [leftWidth, "fill"]),
+            rowSize: [headerHeight, "fill"],
             items: [[{
                 el: this.topLeft
             }, {
@@ -32114,7 +32096,7 @@ BI.Table = BI.inherit(BI.Widget, {
         scroll(this.scrollBottomRight.element, this.scrollTopRight.element, this.scrollBottomLeft.element);
         // scroll(this.scrollBottomLeft.element, this.scrollTopLeft.element, this.scrollBottomRight.element);
 
-        function scroll(scrollElement, scrollTopElement, otherElement) {
+        function scroll (scrollElement, scrollTopElement, otherElement) {
             scrollElement.scroll(function (e) {
                 otherElement.scrollTop(scrollElement.scrollTop());
                 scrollTopElement.scrollLeft(scrollElement.scrollLeft());
@@ -32191,10 +32173,10 @@ BI.Table = BI.inherit(BI.Widget, {
                     createOneEl(i, j);
                 }
             });
-            function mergeRow(i, j) {
+            function mergeRow (i, j) {
                 var height = (preCol[j].attr("height") | 0) + rowSize + 1;
                 preCol[j].attr("height", height).css("height", height);
-                //preCW[j].element.css("height", height);
+                // preCW[j].element.css("height", height);
                 var rowspan = ((preCol[j].attr("rowspan") || 1) | 0) + 1;
                 preCol[j].attr("rowspan", rowspan);
                 preCol[j].__mergeRows.pushDistinct(i);
@@ -32202,7 +32184,7 @@ BI.Table = BI.inherit(BI.Widget, {
                 Ws[i][j] = preCW[j];
             }
 
-            function mergeCol(i, j) {
+            function mergeCol (i, j) {
                 if (columnSize[j]) {
                     var width = preRow[i].attr("width") | 0;
                     if (width > 1.05 && columnSize[j]) {
@@ -32211,7 +32193,7 @@ BI.Table = BI.inherit(BI.Widget, {
                             width--;
                         }
                     } else {
-                        width = width + columnSize[j]
+                        width = width + columnSize[j];
                     }
                     width = self._calculateWidth(width);
                     preRow[i].attr("width", width).css("width", width);
@@ -32224,14 +32206,14 @@ BI.Table = BI.inherit(BI.Widget, {
                 Ws[i][j] = preRW[i];
             }
 
-            function createOneEl(r, c) {
+            function createOneEl (r, c) {
                 var width = self._calculateWidth(columnSize[c]);
                 if (width > 1.05 && c === columnSize.length - 1) {
                     width--;
                 }
                 var height = self._calculateHeight(rowSize);
                 var td = $("<td>").attr("height", height)
-                    .attr("width", width).css({"width": width, "height": height, "position": "relative"})
+                    .attr("width", width).css({width: width, height: height, position: "relative"})
                     .addClass((c & 1) === 0 ? "odd-col" : "even-col")
                     .addClass(r === 0 ? "first-row" : "")
                     .addClass(c === 0 ? "first-col" : "")
@@ -32402,12 +32384,12 @@ BI.Table = BI.inherit(BI.Widget, {
                 } else {
                     (isRight ? left : right)[i].push(cell);
                 }
-            })
+            });
         });
         return {
             left: left,
             right: right
-        }
+        };
     },
 
     _table: function () {
@@ -32415,7 +32397,7 @@ BI.Table = BI.inherit(BI.Widget, {
             type: "bi.layout",
             tagName: "table",
             cls: "table",
-            attribute: {"cellspacing": 0, "cellpadding": 0}
+            attribute: {cellspacing: 0, cellpadding: 0}
         });
     },
 
@@ -32569,7 +32551,7 @@ BI.Table = BI.inherit(BI.Widget, {
                             }
                         });
                     }
-                })
+                });
             };
             run(topleft);
             run(topright);
@@ -32829,21 +32811,21 @@ BI.Table = BI.inherit(BI.Widget, {
         if (o.isNeedFreeze === true) {
             if (BI.size(this.bottomLeftBodyTds) > 0 || BI.size(this.bottomRightBodyTds) > 0) {
                 if (!BI.any(this.bottomLeftBodyTds, function (i, tds) {
-                        if (!BI.any(tds, function (i, item) {
-                                if (item.__mergeCols.length > 1) {
-                                    return true;
-                                }
-                            })) {
-                            BI.each(tds, function (i, item) {
-                                var width = item.width() / item.__mergeCols.length;
-                                if (i == BI.size(tds) - 1) {
-                                    width++;
-                                }
-                                columnSize.push(width);
-                            });
+                    if (!BI.any(tds, function (i, item) {
+                        if (item.__mergeCols.length > 1) {
                             return true;
                         }
                     })) {
+                        BI.each(tds, function (i, item) {
+                            var width = item.width() / item.__mergeCols.length;
+                            if (i == BI.size(tds) - 1) {
+                                width++;
+                            }
+                            columnSize.push(width);
+                        });
+                        return true;
+                    }
+                })) {
                     BI.each(this.bottomLeftBodyTds[0], function (i, item) {
                         var width = item.width() / item.__mergeCols.length;
                         if (i == BI.size(self.bottomLeftBodyTds[0]) - 1) {
@@ -32853,21 +32835,21 @@ BI.Table = BI.inherit(BI.Widget, {
                     });
                 }
                 if (!BI.any(this.bottomRightBodyTds, function (i, tds) {
-                        if (!BI.any(tds, function (i, item) {
-                                if (item.__mergeCols.length > 1) {
-                                    return true;
-                                }
-                            })) {
-                            BI.each(tds, function (i, item) {
-                                var width = item.width() / item.__mergeCols.length;
-                                if (i == BI.size(tds) - 1) {
-                                    width++;
-                                }
-                                columnSize.push(width);
-                            });
+                    if (!BI.any(tds, function (i, item) {
+                        if (item.__mergeCols.length > 1) {
                             return true;
                         }
                     })) {
+                        BI.each(tds, function (i, item) {
+                            var width = item.width() / item.__mergeCols.length;
+                            if (i == BI.size(tds) - 1) {
+                                width++;
+                            }
+                            columnSize.push(width);
+                        });
+                        return true;
+                    }
+                })) {
                     BI.each(this.bottomRightBodyTds[0], function (i, item) {
                         var width = item.width() / item.__mergeCols.length;
                         if (i == BI.size(self.bottomRightBodyTds[0]) - 1) {
@@ -32879,21 +32861,21 @@ BI.Table = BI.inherit(BI.Widget, {
                 return columnSize;
             }
             if (!BI.any(this.topLeftBodyTds, function (i, tds) {
-                    if (!BI.any(tds, function (i, item) {
-                            if (item.__mergeCols.length > 1) {
-                                return true;
-                            }
-                        })) {
-                        BI.each(tds, function (i, item) {
-                            var width = item.width() / item.__mergeCols.length;
-                            if (i == BI.size(tds) - 1) {
-                                width++;
-                            }
-                            columnSize.push(width);
-                        });
+                if (!BI.any(tds, function (i, item) {
+                    if (item.__mergeCols.length > 1) {
                         return true;
                     }
                 })) {
+                    BI.each(tds, function (i, item) {
+                        var width = item.width() / item.__mergeCols.length;
+                        if (i == BI.size(tds) - 1) {
+                            width++;
+                        }
+                        columnSize.push(width);
+                    });
+                    return true;
+                }
+            })) {
                 BI.each(this.topLeftBodyTds[BI.size(this.topLeftBodyTds) - 1], function (i, item) {
                     var width = item.width() / item.__mergeCols.length;
                     if (i == BI.size(self.topLeftBodyTds[BI.size(self.topLeftBodyTds) - 1]) - 1) {
@@ -32903,21 +32885,21 @@ BI.Table = BI.inherit(BI.Widget, {
                 });
             }
             if (!BI.any(this.topRightBodyTds, function (i, tds) {
-                    if (!BI.any(tds, function (i, item) {
-                            if (item.__mergeCols.length > 1) {
-                                return true;
-                            }
-                        })) {
-                        BI.each(tds, function (i, item) {
-                            var width = item.width() / item.__mergeCols.length;
-                            if (i == BI.size(tds) - 1) {
-                                width++;
-                            }
-                            columnSize.push(width);
-                        });
+                if (!BI.any(tds, function (i, item) {
+                    if (item.__mergeCols.length > 1) {
                         return true;
                     }
                 })) {
+                    BI.each(tds, function (i, item) {
+                        var width = item.width() / item.__mergeCols.length;
+                        if (i == BI.size(tds) - 1) {
+                            width++;
+                        }
+                        columnSize.push(width);
+                    });
+                    return true;
+                }
+            })) {
                 BI.each(this.topRightBodyTds[BI.size(this.topRightBodyTds) - 1], function (i, item) {
                     var width = item.width() / item.__mergeCols.length;
                     if (i == BI.size(self.topRightBodyTds[BI.size(self.topRightBodyTds) - 1]) - 1) {
@@ -33040,7 +33022,7 @@ BI.Table = BI.inherit(BI.Widget, {
                             }
                         });
                     }
-                })
+                });
             };
             run(topleft);
             run(topright);
@@ -33153,7 +33135,7 @@ BI.Table = BI.inherit(BI.Widget, {
         o.regionColumnSize = columnSize;
         if (o.freezeCols.length === 0) {
             if (o.isNeedFreeze) {
-                this.partitions.attr("columnSize", this._isRightFreeze() ? ['fill', 0] : [0, 'fill']);
+                this.partitions.attr("columnSize", this._isRightFreeze() ? ["fill", 0] : [0, "fill"]);
                 this.partitions.resize();
             } else {
                 this.tableContainer.element.width(columnSize[0]);
@@ -33167,7 +33149,7 @@ BI.Table = BI.inherit(BI.Widget, {
             }
         } else {
             if (o.isNeedFreeze) {
-                this.partitions.attr("columnSize", this._isRightFreeze() ? [0, 'fill'] : ['fill', 0]);
+                this.partitions.attr("columnSize", this._isRightFreeze() ? [0, "fill"] : ["fill", 0]);
                 this.partitions.resize();
             } else {
                 this.tableContainer.element.width(columnSize[0]);
@@ -33224,9 +33206,9 @@ BI.Table = BI.inherit(BI.Widget, {
         if (o.isNeedFreeze) {
             if (o.freezeCols.length < o.columnSize.length) {
                 return [this.scrollTopRight.element[0].scrollHeight, this.scrollBottomRight.element[0].scrollHeight];
-            } else {
-                return [this.scrollTopLeft.element[0].scrollHeight, this.scrollBottomLeft.element[0].scrollHeight];
             }
+            return [this.scrollTopLeft.element[0].scrollHeight, this.scrollBottomLeft.element[0].scrollHeight];
+            
         }
         return [this.scrollBottomRight.element[0].scrollHeight];
     },
@@ -33319,14 +33301,14 @@ BI.Table = BI.inherit(BI.Widget, {
                 topRight: this.topRightBodyItems,
                 bottomLeft: this.bottomLeftBodyItems,
                 bottomRight: this.bottomRightBodyItems
-            }
-        } else {
-            return {
-                header: this.headerItems,
-                body: this.bodyItems,
-                footer: this.footerItems
-            }
+            };
         }
+        return {
+            header: this.headerItems,
+            body: this.bodyItems,
+            footer: this.footerItems
+        };
+        
     },
 
     populate: function (items, header) {
@@ -33373,7 +33355,7 @@ BI.ResizableTableCell = BI.inherit(BI.Widget, {
             start: BI.emptyFn,
             resize: BI.emptyFn,
             stop: BI.emptyFn
-        })
+        });
     },
 
     _init: function () {
@@ -33384,7 +33366,7 @@ BI.ResizableTableCell = BI.inherit(BI.Widget, {
         var startDrag = false;
         var size = 0, offset = 0, defaultSize = o.width;
 
-        function optimizeSize(s) {
+        function optimizeSize (s) {
             var optSize = BI.clamp(s, o.minSize, o.maxSize || Number.MAX_VALUE);
             // if (o.suitableSize) {
             //     if (Math.abs(o.suitableSize - optSize) < 5) {
@@ -33453,7 +33435,7 @@ BI.ResizableTableCell = BI.inherit(BI.Widget, {
                 top: 0,
                 bottom: 0
             }]
-        })
+        });
     },
 
     setWidth: function (width) {
@@ -33488,7 +33470,7 @@ BI.ResizableTable = BI.inherit(BI.Widget, {
             isResizeAdapt: false,
             headerRowSize: 25,
             rowSize: 25,
-            isNeedMerge: true,//是否需要合并单元格
+            isNeedMerge: true, // 是否需要合并单元格
             mergeCols: [],
             mergeRule: BI.emptyFn,
             columnSize: [],
@@ -33498,7 +33480,7 @@ BI.ResizableTable = BI.inherit(BI.Widget, {
             header: [],
             items: [],
             regionColumnSize: []
-        })
+        });
     },
 
     _init: function () {
@@ -33687,7 +33669,7 @@ BI.ResizableTable = BI.inherit(BI.Widget, {
             self.resizer.setVisible(true);
             var height = o.headerRowSize + self._getRegionRowSize()[1];
             self.resizer.setHeight(height);
-            //TODO 不知道为什么加入这段代码会使得列宽调整出问题
+            // TODO 不知道为什么加入这段代码会使得列宽调整出问题
             // if (o.minColumnSize[j]) {
             //     if (size === o.minColumnSize[j]) {
             //         self.resizer.element.addClass("suitable");
@@ -33758,7 +33740,7 @@ BI.ResizableTable = BI.inherit(BI.Widget, {
 
     setWidth: function (width) {
         BI.ResizableTable.superclass.setWidth.apply(this, arguments);
-        this.table.setWidth(width)
+        this.table.setWidth(width);
     },
 
     setHeight: function (height) {
@@ -33861,7 +33843,7 @@ BI.CustomTree = BI.inherit(BI.Widget, {
                     type: "bi.vertical"
                 }]
             }
-        })
+        });
     },
 
     _init: function () {
@@ -33896,7 +33878,7 @@ BI.CustomTree = BI.inherit(BI.Widget, {
                 item.popup.expander = BI.deepClone(o.expander);
                 item.items = item.popup.items = node.children;
                 item.itemsCreator = item.popup.itemsCreator = function (op) {
-                    if (BI.isNotNull(op.node)) {//从子节点传过来的itemsCreator直接向上传递
+                    if (BI.isNotNull(op.node)) {// 从子节点传过来的itemsCreator直接向上传递
                         return o.itemsCreator.apply(self, arguments);
                     }
                     var args = Array.prototype.slice.call(arguments, 0);
@@ -33912,7 +33894,7 @@ BI.CustomTree = BI.inherit(BI.Widget, {
         return items;
     },
 
-    //构造树结构，
+    // 构造树结构，
     initTree: function (nodes) {
         var self = this, o = this.options;
         this.tree = BI.createWidget(o.el, {
@@ -33931,10 +33913,10 @@ BI.CustomTree = BI.inherit(BI.Widget, {
             if (type === BI.Events.CLICK) {
                 self.fireEvent(BI.CustomTree.EVENT_CHANGE, val, obj);
             }
-        })
+        });
     },
 
-    //生成树方法
+    // 生成树方法
     stroke: function (nodes) {
         this.populate.apply(this, arguments);
     },

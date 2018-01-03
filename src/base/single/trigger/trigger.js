@@ -5,23 +5,23 @@
  * @abstract
  */
 BI.Trigger = BI.inherit(BI.Single, {
-    _defaultConfig: function() {
+    _defaultConfig: function () {
         var conf = BI.Trigger.superclass._defaultConfig.apply(this, arguments);
         return BI.extend(conf, {
             baseCls: (conf.baseCls || "") + " bi-trigger cursor-pointer",
             height: 24
-        })
+        });
     },
 
-    _init : function() {
+    _init: function () {
         BI.Trigger.superclass._init.apply(this, arguments);
     },
 
-    setKey: function(){
+    setKey: function () {
 
     },
 
-    getKey: function(){
+    getKey: function () {
 
     }
 });

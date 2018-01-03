@@ -1,10 +1,10 @@
-;(function(){
+(function () {
     var Events = {
 
         // Bind an event to a `callback` function. Passing `"all"` will bind
         // the callback to all events fired.
         on: function (name, callback, context) {
-            if (!eventsApi(this, 'on', name, [callback, context]) || !callback) return this;
+            if (!eventsApi(this, "on", name, [callback, context]) || !callback) return this;
             this._events || (this._events = {});
             var events = this._events[name] || (this._events[name] = []);
             events.push({callback: callback, context: context, ctx: context || this});
@@ -14,7 +14,7 @@
         // Bind an event to only be triggered a single time. After the first time
         // the callback is invoked, it will be removed.
         once: function (name, callback, context) {
-            if (!eventsApi(this, 'once', name, [callback, context]) || !callback) return this;
+            if (!eventsApi(this, "once", name, [callback, context]) || !callback) return this;
             var self = this;
             var once = _.once(function () {
                 self.off(name, once);
@@ -29,7 +29,7 @@
         // callbacks for the event. If `name` is null, removes all bound
         // callbacks for all events.
         off: function (name, callback, context) {
-            if (!this._events || !eventsApi(this, 'off', name, [callback, context])) return this;
+            if (!this._events || !eventsApi(this, "off", name, [callback, context])) return this;
 
             // Remove all callbacks for all events.
             if (!name && !callback && !context) {
@@ -86,7 +86,7 @@
         trigger: function (name) {
             if (!this._events) return this;
             var args = slice.call(arguments, 1);
-            if (!eventsApi(this, 'trigger', name, args)) return this;
+            if (!eventsApi(this, "trigger", name, args)) return this;
             var events = this._events[name];
             var allEvents = this._events.all;
             if (events) triggerEvents(events, args);
@@ -103,15 +103,15 @@
         // listening to.
         listenTo: function (obj, name, callback) {
             var listeningTo = this._listeningTo || (this._listeningTo = {});
-            var id = obj._listenId || (obj._listenId = _.uniqueId('l'));
+            var id = obj._listenId || (obj._listenId = _.uniqueId("l"));
             listeningTo[id] = obj;
-            if (!callback && typeof name === 'object') callback = this;
+            if (!callback && typeof name === "object") callback = this;
             obj.on(name, callback, this);
             return this;
         },
 
         listenToOnce: function (obj, name, callback) {
-            if (typeof name === 'object') {
+            if (typeof name === "object") {
                 for (var event in name) this.listenToOnce(obj, event, name[event]);
                 return this;
             }
@@ -137,7 +137,7 @@
             var listeningTo = this._listeningTo;
             if (!listeningTo) return this;
             var remove = !name && !callback;
-            if (!callback && typeof name === 'object') callback = this;
+            if (!callback && typeof name === "object") callback = this;
             if (obj) (listeningTo = {})[obj._listenId] = obj;
             for (var id in listeningTo) {
                 obj = listeningTo[id];
@@ -159,7 +159,7 @@
         if (!name) return true;
 
         // Handle event maps.
-        if (typeof name === 'object') {
+        if (typeof name === "object") {
             for (var key in name) {
                 obj[action].apply(obj, [key, name[key]].concat(rest));
             }
@@ -239,16 +239,16 @@
             if (!_.isRegExp(route)) route = this._routeToRegExp(route);
             if (_.isFunction(name)) {
                 callback = name;
-                name = '';
+                name = "";
             }
             if (!callback) callback = this[name];
             var router = this;
             BI.history.route(route, function (fragment) {
                 var args = router._extractParameters(route, fragment);
                 if (router.execute(callback, args, name) !== false) {
-                    router.trigger.apply(router, ['route:' + name].concat(args));
-                    router.trigger('route', name, args);
-                    BI.history.trigger('route', router, name, args);
+                    router.trigger.apply(router, ["route:" + name].concat(args));
+                    router.trigger("route", name, args);
+                    BI.history.trigger("route", router, name, args);
                 }
             });
             return this;
@@ -271,7 +271,7 @@
         // routes can be defined at the bottom of the route map.
         _bindRoutes: function () {
             if (!this.routes) return;
-            this.routes = _.result(this, 'routes');
+            this.routes = _.result(this, "routes");
             var route, routes = _.keys(this.routes);
             while ((route = routes.pop()) != null) {
                 this.route(route, this.routes[route]);
@@ -281,13 +281,13 @@
         // Convert a route string into a regular expression, suitable for matching
         // against the current location hash.
         _routeToRegExp: function (route) {
-            route = route.replace(escapeRegExp, '\\$&')
-                .replace(optionalParam, '(?:$1)?')
+            route = route.replace(escapeRegExp, "\\$&")
+                .replace(optionalParam, "(?:$1)?")
                 .replace(namedParam, function (match, optional) {
-                    return optional ? match : '([^/?]+)';
+                    return optional ? match : "([^/?]+)";
                 })
-                .replace(splatParam, '([^?]*?)');
-            return new RegExp('^' + route + '(?:\\?([\\s\\S]*))?$');
+                .replace(splatParam, "([^?]*?)");
+            return new RegExp("^" + route + "(?:\\?([\\s\\S]*))?$");
         },
 
         // Given a route, and a URL fragment that it matches, return the array of
@@ -314,10 +314,10 @@
     // falls back to polling.
     var History = function () {
         this.handlers = [];
-        _.bindAll(this, 'checkUrl');
+        _.bindAll(this, "checkUrl");
 
         // Ensure that `History` can be used outside of the browser.
-        if (typeof window !== 'undefined') {
+        if (typeof window !== "undefined") {
             this.location = window.location;
             this.history = window.history;
         }
@@ -344,22 +344,22 @@
 
         // Are we at the app root?
         atRoot: function () {
-            var path = this.location.pathname.replace(/[^\/]$/, '$&/');
+            var path = this.location.pathname.replace(/[^\/]$/, "$&/");
             return path === this.root && !this.getSearch();
         },
 
         // In IE6, the hash fragment and search params are incorrect if the
         // fragment contains `?`.
         getSearch: function () {
-            var match = this.location.href.replace(/#.*/, '').match(/\?.+/);
-            return match ? match[0] : '';
+            var match = this.location.href.replace(/#.*/, "").match(/\?.+/);
+            return match ? match[0] : "";
         },
 
         // Gets the true hash value. Cannot use location.hash directly due to bug
         // in Firefox where location.hash will always be decoded.
         getHash: function (window) {
             var match = (window || this).location.href.match(/#(.*)$/);
-            return match ? match[1] : '';
+            return match ? match[1] : "";
         },
 
         // Get the pathname and search params, without the root.
@@ -367,7 +367,7 @@
             var path = decodeURI(this.location.pathname + this.getSearch());
             var root = this.root.slice(0, -1);
             if (!path.indexOf(root)) path = path.slice(root.length);
-            return path.charAt(0) === '/' ? path.slice(1) : path;
+            return path.charAt(0) === "/" ? path.slice(1) : path;
         },
 
         // Get the cross-browser normalized URL fragment from the path or hash.
@@ -379,27 +379,27 @@
                     fragment = this.getHash();
                 }
             }
-            return fragment.replace(routeStripper, '');
+            return fragment.replace(routeStripper, "");
         },
 
         // Start the hash change handling, returning `true` if the current URL matches
         // an existing route, and `false` otherwise.
         start: function (options) {
-            if (History.started) throw new Error('BI.history has already been started');
+            if (History.started) throw new Error("BI.history has already been started");
             History.started = true;
 
             // Figure out the initial configuration. Do we need an iframe?
             // Is pushState desired ... is it available?
-            this.options = _.extend({root: '/'}, this.options, options);
+            this.options = _.extend({root: "/"}, this.options, options);
             this.root = this.options.root;
             this._wantsHashChange = this.options.hashChange !== false;
-            this._hasHashChange = 'onhashchange' in window;
+            this._hasHashChange = "onhashchange" in window;
             this._wantsPushState = !!this.options.pushState;
             this._hasPushState = !!(this.options.pushState && this.history && this.history.pushState);
             this.fragment = this.getFragment();
 
             // Normalize root to always include a leading and trailing slash.
-            this.root = ('/' + this.root + '/').replace(rootStripper, '/');
+            this.root = ("/" + this.root + "/").replace(rootStripper, "/");
 
             // Transition from hashChange to pushState or vice versa if both are
             // requested.
@@ -408,8 +408,8 @@
                 // If we've started off with a route from a `pushState`-enabled
                 // browser, but we're currently in a browser that doesn't support it...
                 if (!this._hasPushState && !this.atRoot()) {
-                    var root = this.root.slice(0, -1) || '/';
-                    this.location.replace(root + '#' + this.getPath());
+                    var root = this.root.slice(0, -1) || "/";
+                    this.location.replace(root + "#" + this.getPath());
                     // Return immediately as browser will do redirect to new url
                     return true;
 
@@ -425,28 +425,28 @@
             // support the `hashchange` event, HTML5 history, or the user wants
             // `hashChange` but not `pushState`.
             if (!this._hasHashChange && this._wantsHashChange && (!this._wantsPushState || !this._hasPushState)) {
-                var iframe = document.createElement('iframe');
-                iframe.src = 'javascript:0';
-                iframe.style.display = 'none';
+                var iframe = document.createElement("iframe");
+                iframe.src = "javascript:0";
+                iframe.style.display = "none";
                 iframe.tabIndex = -1;
                 var body = document.body;
                 // Using `appendChild` will throw on IE < 9 if the document is not ready.
                 this.iframe = body.insertBefore(iframe, body.firstChild).contentWindow;
                 this.iframe.document.open().close();
-                this.iframe.location.hash = '#' + this.fragment;
+                this.iframe.location.hash = "#" + this.fragment;
             }
 
             // Add a cross-platform `addEventListener` shim for older browsers.
             var addEventListener = window.addEventListener || function (eventName, listener) {
-                return attachEvent('on' + eventName, listener);
+                return attachEvent("on" + eventName, listener);
             };
 
             // Depending on whether we're using pushState or hashes, and whether
             // 'onhashchange' is supported, determine how we check the URL state.
             if (this._hasPushState) {
-                addEventListener('popstate', this.checkUrl, false);
+                addEventListener("popstate", this.checkUrl, false);
             } else if (this._wantsHashChange && this._hasHashChange && !this.iframe) {
-                addEventListener('hashchange', this.checkUrl, false);
+                addEventListener("hashchange", this.checkUrl, false);
             } else if (this._wantsHashChange) {
                 this._checkUrlInterval = setInterval(this.checkUrl, this.interval);
             }
@@ -459,14 +459,14 @@
         stop: function () {
             // Add a cross-platform `removeEventListener` shim for older browsers.
             var removeEventListener = window.removeEventListener || function (eventName, listener) {
-                return detachEvent('on' + eventName, listener);
+                return detachEvent("on" + eventName, listener);
             };
 
             // Remove window listeners.
             if (this._hasPushState) {
-                removeEventListener('popstate', this.checkUrl, false);
+                removeEventListener("popstate", this.checkUrl, false);
             } else if (this._wantsHashChange && this._hasHashChange && !this.iframe) {
-                removeEventListener('hashchange', this.checkUrl, false);
+                removeEventListener("hashchange", this.checkUrl, false);
             }
 
             // Clean up the iframe if necessary.
@@ -527,24 +527,24 @@
             if (!options || options === true) options = {trigger: !!options};
 
             // Normalize the fragment.
-            fragment = this.getFragment(fragment || '');
+            fragment = this.getFragment(fragment || "");
 
             // Don't include a trailing slash on the root.
             var root = this.root;
-            if (fragment === '' || fragment.charAt(0) === '?') {
-                root = root.slice(0, -1) || '/';
+            if (fragment === "" || fragment.charAt(0) === "?") {
+                root = root.slice(0, -1) || "/";
             }
             var url = root + fragment;
 
             // Strip the hash and decode for matching.
-            fragment = decodeURI(fragment.replace(pathStripper, ''));
+            fragment = decodeURI(fragment.replace(pathStripper, ""));
 
             if (this.fragment === fragment) return;
             this.fragment = fragment;
 
             // If pushState is available, we use it to set the fragment as a real URL.
             if (this._hasPushState) {
-                this.history[options.replace ? 'replaceState' : 'pushState']({}, document.title, url);
+                this.history[options.replace ? "replaceState" : "pushState"]({}, document.title, url);
 
                 // If hash changes haven't been explicitly disabled, update the hash
                 // fragment to store history.
@@ -570,11 +570,11 @@
         // a new one to the browser history.
         _updateHash: function (location, fragment, replace) {
             if (replace) {
-                var href = location.href.replace(/(javascript:|#).*$/, '');
-                location.replace(href + '#' + fragment);
+                var href = location.href.replace(/(javascript:|#).*$/, "");
+                location.replace(href + "#" + fragment);
             } else {
                 // Some browsers require that `hash` contains a leading #.
-                location.hash = '#' + fragment;
+                location.hash = "#" + fragment;
             }
         }
 

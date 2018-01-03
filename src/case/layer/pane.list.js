@@ -27,7 +27,7 @@ BI.ListPane = BI.inherit(BI.Pane, {
             el: {
                 type: "bi.button_group"
             }
-        })
+        });
     },
     _init: function () {
         BI.ListPane.superclass._init.apply(this, arguments);
@@ -42,7 +42,7 @@ BI.ListPane = BI.inherit(BI.Pane, {
                 if (op.times === 1) {
                     self.empty();
                     BI.nextTick(function () {
-                        self.loading()
+                        self.loading();
                     });
                 }
                 o.itemsCreator(op, function () {
@@ -110,7 +110,7 @@ BI.ListPane = BI.inherit(BI.Pane, {
 
     populate: function (items) {
         var self = this, o = this.options;
-        if (arguments.length === 0 && (BI.isFunction(this.button_group.attr("itemsCreator")))) {//接管loader的populate方法
+        if (arguments.length === 0 && (BI.isFunction(this.button_group.attr("itemsCreator")))) {// 接管loader的populate方法
             this.button_group.attr("itemsCreator").apply(this, [{times: 1}, function () {
                 if (arguments.length === 0) {
                     throw new Error("参数不能为空");

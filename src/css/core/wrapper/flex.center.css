@@ -38,3 +38,6 @@
   -o-align-items: center;
   align-items: center;
 }
+.bi-flex-center-layout > * {
+  margin: auto;
+}

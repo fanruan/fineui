@@ -35,4 +35,4 @@ BI.RichEditorAlignLeftButton = BI.inherit(BI.RichEditorAction, {
     deactivate: function () {
     }
 });
-BI.shortcut("bi.rich_editor_align_left_button", BI.RichEditorAlignLeftButton)
+BI.shortcut("bi.rich_editor_align_left_button", BI.RichEditorAlignLeftButton);

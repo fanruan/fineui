@@ -7,7 +7,7 @@ BI.TextValueDownListCombo = BI.inherit(BI.Widget, {
         return BI.extend(BI.TextValueDownListCombo.superclass._defaultConfig.apply(this, arguments), {
             baseCls: "bi-text-value-down-list-combo",
             height: 30
-        })
+        });
     },
 
     _init: function () {
@@ -49,7 +49,7 @@ BI.TextValueDownListCombo = BI.inherit(BI.Widget, {
         BI.each(BI.flatten(this.options.items), function (idx, item) {
             if (BI.has(item, "el")) {
                 BI.each(item.children, function (id, it) {
-                    self.valueMap[it.value] = {value: item.el.value, childValue: it.value}
+                    self.valueMap[it.value] = {value: item.el.value, childValue: it.value};
                 });
             } else {
                 self.valueMap[item.value] = {value: item.value};

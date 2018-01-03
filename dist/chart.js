@@ -8,7 +8,7 @@ BI.Chart = BI.inherit(BI.Pane, {
     _defaultConfig: function () {
         return BI.extend(BI.Chart.superclass._defaultConfig.apply(this, arguments), {
             baseCls: "bi-chart"
-        })
+        });
     },
 
     _init: function () {
@@ -35,7 +35,7 @@ BI.Chart = BI.inherit(BI.Pane, {
     },
 
     magnify: function () {
-        this.vanCharts.refreshRestore()
+        this.vanCharts.refreshRestore();
     },
 
     populate: function (items, options) {
@@ -52,7 +52,7 @@ BI.Chart = BI.inherit(BI.Pane, {
     }
 });
 BI.Chart.EVENT_CHANGE = "EVENT_CHANGE";
-BI.shortcut('bi.chart', BI.Chart);/**
+BI.shortcut("bi.chart", BI.Chart);/**
  * 图表控件
  * @class BI.CombineChart
  * @extends BI.Widget
@@ -68,14 +68,14 @@ BI.CombineChart = BI.inherit(BI.Widget, {
             types: [[], []],
             popupItemsGetter: BI.emptyFn,
             formatConfig: BI.emptyFn
-        })
+        });
     },
 
     _init: function () {
         BI.CombineChart.superclass._init.apply(this, arguments);
         var self = this, o = this.options;
 
-        //图可配置属性
+        // 图可配置属性
         this.CombineChart = BI.createWidget({
             type: "bi.chart",
             element: this.element
@@ -98,7 +98,7 @@ BI.CombineChart = BI.inherit(BI.Widget, {
                 if (BI.isArray(axisItems)) {
                     result = BI.concat(result, axisItems);
                 } else {
-                    result.push(BI.extend(axisItems, {"yAxis": yAxisIndex}));
+                    result.push(BI.extend(axisItems, {yAxis: yAxisIndex}));
                 }
             });
             if (BI.isNotEmptyArray(combineItems)) {
@@ -147,7 +147,7 @@ BI.CombineChart = BI.inherit(BI.Widget, {
                                 },
                                 hgap: 10
                             }, item)
-                        }
+                        };
                     })
                 })
             },
@@ -172,7 +172,7 @@ BI.CombineChart = BI.inherit(BI.Widget, {
         this.combo.showView();
         this._debounce2Destroy();
 
-        function destroyCombo() {
+        function destroyCombo () {
             if (self._doDestroy) {
                 this.destroy();
             }
@@ -207,7 +207,7 @@ BI.CombineChart = BI.inherit(BI.Widget, {
 });
 BI.CombineChart.EVENT_CHANGE = "EVENT_CHANGE";
 BI.CombineChart.EVENT_ITEM_CLICK = "EVENT_ITEM_CLICK";
-BI.shortcut('bi.combine_chart', BI.CombineChart);BI.ChartCombineFormatItemFactory = {
+BI.shortcut("bi.combine_chart", BI.CombineChart);BI.ChartCombineFormatItemFactory = {
     combineItems: function (types, items) {
         var calItems = BI.values(items);
         return BI.map(calItems, function (idx, item) {
@@ -221,55 +221,55 @@ BI.shortcut('bi.combine_chart', BI.CombineChart);BI.ChartCombineFormatItemFactor
             case BICst.WIDGET.BAR:
             case BICst.WIDGET.ACCUMULATE_BAR:
             case BICst.WIDGET.COMPARE_BAR:
-                item = BI.extend({"type": "bar"}, items);
+                item = BI.extend({type: "bar"}, items);
                 break;
             case BICst.WIDGET.BUBBLE:
-                item = BI.extend({"type": "bubble"}, items);
+                item = BI.extend({type: "bubble"}, items);
                 break;
             case BICst.WIDGET.FORCE_BUBBLE:
-                item = BI.extend({"type": "forceBubble"}, items);
+                item = BI.extend({type: "forceBubble"}, items);
                 break;
             case BICst.WIDGET.SCATTER:
-                item = BI.extend({"type": "scatter"}, items);
+                item = BI.extend({type: "scatter"}, items);
                 break;
             case BICst.WIDGET.AXIS:
             case BICst.WIDGET.ACCUMULATE_AXIS:
             case BICst.WIDGET.PERCENT_ACCUMULATE_AXIS:
             case BICst.WIDGET.COMPARE_AXIS:
             case BICst.WIDGET.FALL_AXIS:
-                item = BI.extend({"type": "column"}, items);
+                item = BI.extend({type: "column"}, items);
                 break;
             case BICst.WIDGET.LINE:
-                item = BI.extend({"type": "line"}, items);
+                item = BI.extend({type: "line"}, items);
                 break;
             case BICst.WIDGET.AREA:
             case BICst.WIDGET.ACCUMULATE_AREA:
             case BICst.WIDGET.COMPARE_AREA:
             case BICst.WIDGET.RANGE_AREA:
             case BICst.WIDGET.PERCENT_ACCUMULATE_AREA:
-                item = BI.extend({"type": "area"}, items);
+                item = BI.extend({type: "area"}, items);
                 break;
             case BICst.WIDGET.DONUT:
-                item = BI.extend({"type": "pie"}, items);
+                item = BI.extend({type: "pie"}, items);
                 break;
             case BICst.WIDGET.RADAR:
             case BICst.WIDGET.ACCUMULATE_RADAR:
-                item = BI.extend({"type": "radar"}, items);
+                item = BI.extend({type: "radar"}, items);
                 break;
             case BICst.WIDGET.PIE:
-                item = BI.extend({"type": "pie"}, items);
+                item = BI.extend({type: "pie"}, items);
                 break;
             case BICst.WIDGET.DASHBOARD:
-                item = BI.extend({"type": "gauge"}, items);
+                item = BI.extend({type: "gauge"}, items);
                 break;
             case BICst.WIDGET.MAP:
-                item = BI.extend({"type": "areaMap"}, items);
+                item = BI.extend({type: "areaMap"}, items);
                 break;
             case BICst.WIDGET.GIS_MAP:
-                item = BI.extend({"type": "pointMap"}, items);
+                item = BI.extend({type: "pointMap"}, items);
                 break;
             default:
-                item = BI.extend({"type": "column"}, items);
+                item = BI.extend({type: "column"}, items);
                 break;
         }
         return item;
@@ -277,177 +277,177 @@ BI.shortcut('bi.combine_chart', BI.CombineChart);BI.ChartCombineFormatItemFactor
 
     combineConfig: function () {
         return {
-            "title": "",
-            "chartType": "column",
-            "plotOptions": {
-                "rotatable": false,
-                "startAngle": 0,
-                "borderRadius": 0,
-                "endAngle": 360,
-                "innerRadius": "0.0%",
-                "layout": "horizontal",
-                "hinge": "rgb(101,107,109)",
-                "dataLabels": {
-                    "autoAdjust": true,
-                    "style": {"fontFamily": "inherit", "color": "inherit", "fontSize": "12px"},
-                    "formatter": {
-                        "identifier": "${VALUE}",
-                        "valueFormat": this._contentFormat2Decimal,
-                        "seriesFormat": this._contentFormat,
-                        "percentFormat": this._contentFormatPercentage,
-                        "categoryFormat": this._contentFormat,
-                        "XFormat": this._contentFormat2Decimal,
-                        "YFormat": this._contentFormat2Decimal,
-                        "sizeFormat": this._contentFormat2Decimal
+            title: "",
+            chartType: "column",
+            plotOptions: {
+                rotatable: false,
+                startAngle: 0,
+                borderRadius: 0,
+                endAngle: 360,
+                innerRadius: "0.0%",
+                layout: "horizontal",
+                hinge: "rgb(101,107,109)",
+                dataLabels: {
+                    autoAdjust: true,
+                    style: {fontFamily: "inherit", color: "inherit", fontSize: "12px"},
+                    formatter: {
+                        identifier: "${VALUE}",
+                        valueFormat: this._contentFormat2Decimal,
+                        seriesFormat: this._contentFormat,
+                        percentFormat: this._contentFormatPercentage,
+                        categoryFormat: this._contentFormat,
+                        XFormat: this._contentFormat2Decimal,
+                        YFormat: this._contentFormat2Decimal,
+                        sizeFormat: this._contentFormat2Decimal
                     },
-                    "align": "outside",
-                    "enabled": false
+                    align: "outside",
+                    enabled: false
                 },
-                "percentageLabel": {
-                    "formatter": {
-                        "identifier": "${PERCENT}",
-                        "valueFormat": this._contentFormat2Decimal,
-                        "seriesFormat": this._contentFormat,
-                        "percentFormat": this._contentFormatPercentage,
-                        "categoryFormat": this._contentFormat
+                percentageLabel: {
+                    formatter: {
+                        identifier: "${PERCENT}",
+                        valueFormat: this._contentFormat2Decimal,
+                        seriesFormat: this._contentFormat,
+                        percentFormat: this._contentFormatPercentage,
+                        categoryFormat: this._contentFormat
                     },
-                    "style": {
-                        "fontFamily": "inherit", "color": "inherit", "fontSize": "12px"
+                    style: {
+                        fontFamily: "inherit", color: "inherit", fontSize: "12px"
                     },
-                    "align": "bottom",
-                    "enabled": true
+                    align: "bottom",
+                    enabled: true
                 },
-                "valueLabel": {
-                    "formatter": {
-                        "identifier": "${SERIES}${VALUE}",
-                        "valueFormat": this._contentFormat2Decimal,
-                        "seriesFormat": this._contentFormat,
-                        "percentFormat": this._contentFormatPercentage,
-                        "categoryFormat": this._contentFormat
+                valueLabel: {
+                    formatter: {
+                        identifier: "${SERIES}${VALUE}",
+                        valueFormat: this._contentFormat2Decimal,
+                        seriesFormat: this._contentFormat,
+                        percentFormat: this._contentFormatPercentage,
+                        categoryFormat: this._contentFormat
                     },
-                    "backgroundColor": "rgb(255,255,0)",
-                    "style": {
-                        "fontFamily": "inherit", "color": "inherit", "fontSize": "12px"
+                    backgroundColor: "rgb(255,255,0)",
+                    style: {
+                        fontFamily: "inherit", color: "inherit", fontSize: "12px"
                     },
-                    "align": "inside",
-                    "enabled": true
+                    align: "inside",
+                    enabled: true
                 },
-                "hingeBackgroundColor": "rgb(220,242,249)",
-                "seriesLabel": {
-                    "formatter": {
-                        "identifier": "${CATEGORY}",
-                        "valueFormat": this._contentFormat2Decimal,
-                        "seriesFormat": this._contentFormat,
-                        "percentFormat": this._contentFormatPercentage,
-                        "categoryFormat": this._contentFormat
+                hingeBackgroundColor: "rgb(220,242,249)",
+                seriesLabel: {
+                    formatter: {
+                        identifier: "${CATEGORY}",
+                        valueFormat: this._contentFormat2Decimal,
+                        seriesFormat: this._contentFormat,
+                        percentFormat: this._contentFormatPercentage,
+                        categoryFormat: this._contentFormat
                     },
-                    "style": {
-                        "fontFamily": "inherit", "color": "inherit", "fontSize": "12px"
+                    style: {
+                        fontFamily: "inherit", color: "inherit", fontSize: "12px"
                     },
-                    "align": "bottom",
-                    "enabled": true
+                    align: "bottom",
+                    enabled: true
                 },
-                "paneBackgroundColor": "rgb(252,252,252)",
-                "needle": "rgb(229,113,90)",
-                "large": false,
-                "connectNulls": false,
-                "shadow": true,
-                "curve": false,
-                "sizeBy": "area",
-                "tooltip": {
-                    "formatter": {
-                        "identifier": "${SERIES}${X}${Y}${SIZE}{CATEGORY}${SERIES}${VALUE}",
-                        "valueFormat": this._contentFormat2Decimal,
-                        "seriesFormat": this._contentFormat,
-                        "percentFormat": this._contentFormatPercentage,
-                        "categoryFormat": this._contentFormat,
-                        "XFormat": this._contentFormat2Decimal,
-                        "sizeFormat": this._contentFormat2Decimal,
-                        "YFormat": this._contentFormat2Decimal
+                paneBackgroundColor: "rgb(252,252,252)",
+                needle: "rgb(229,113,90)",
+                large: false,
+                connectNulls: false,
+                shadow: true,
+                curve: false,
+                sizeBy: "area",
+                tooltip: {
+                    formatter: {
+                        identifier: "${SERIES}${X}${Y}${SIZE}{CATEGORY}${SERIES}${VALUE}",
+                        valueFormat: this._contentFormat2Decimal,
+                        seriesFormat: this._contentFormat,
+                        percentFormat: this._contentFormatPercentage,
+                        categoryFormat: this._contentFormat,
+                        XFormat: this._contentFormat2Decimal,
+                        sizeFormat: this._contentFormat2Decimal,
+                        YFormat: this._contentFormat2Decimal
                     },
-                    "shared": false,
-                    "padding": 5,
-                    "backgroundColor": "rgba(0,0,0,0.4980392156862745)",
-                    "borderColor": "rgb(0,0,0)",
-                    "shadow": false,
-                    "borderRadius": 2,
-                    "borderWidth": 0,
-                    "follow": false,
-                    "enabled": true,
-                    "animation": true,
-                    "style": {
-                        "fontFamily": "Microsoft YaHei, Hiragino Sans GB W3",
-                        "color": "#c4c6c6",
-                        "fontSize": "12px",
-                        "fontWeight": ""
+                    shared: false,
+                    padding: 5,
+                    backgroundColor: "rgba(0,0,0,0.4980392156862745)",
+                    borderColor: "rgb(0,0,0)",
+                    shadow: false,
+                    borderRadius: 2,
+                    borderWidth: 0,
+                    follow: false,
+                    enabled: true,
+                    animation: true,
+                    style: {
+                        fontFamily: "Microsoft YaHei, Hiragino Sans GB W3",
+                        color: "#c4c6c6",
+                        fontSize: "12px",
+                        fontWeight: ""
                     }
                 },
-                "maxSize": 80,
-                "fillColorOpacity": 0.5,
-                "step": false,
-                "force": false,
-                "minSize": 15,
-                "displayNegative": true,
-                "categoryGap": "16.0%",
-                "borderColor": "rgb(255,255,255)",
-                "borderWidth": 1,
-                "gap": "22.0%",
-                "animation": true,
-                "lineWidth": 2,
-                "bubble": {
-                    "large": false,
-                    "connectNulls": false,
-                    "shadow": true,
-                    "curve": false,
-                    "sizeBy": "area",
-                    "maxSize": 80,
-                    "minSize": 15,
-                    "lineWidth": 0,
-                    "animation": true,
-                    "fillColorOpacity": 0.699999988079071,
-                    "marker": {
-                        "symbol": "circle",
-                        "radius": 28.39695010101295,
-                        "enabled": true
+                maxSize: 80,
+                fillColorOpacity: 0.5,
+                step: false,
+                force: false,
+                minSize: 15,
+                displayNegative: true,
+                categoryGap: "16.0%",
+                borderColor: "rgb(255,255,255)",
+                borderWidth: 1,
+                gap: "22.0%",
+                animation: true,
+                lineWidth: 2,
+                bubble: {
+                    large: false,
+                    connectNulls: false,
+                    shadow: true,
+                    curve: false,
+                    sizeBy: "area",
+                    maxSize: 80,
+                    minSize: 15,
+                    lineWidth: 0,
+                    animation: true,
+                    fillColorOpacity: 0.699999988079071,
+                    marker: {
+                        symbol: "circle",
+                        radius: 28.39695010101295,
+                        enabled: true
                     }
                 }
             },
-            "dTools": {
-                "enabled": false,
-                "style": {
-                    "fontFamily": "Microsoft YaHei, Hiragino Sans GB W3",
-                    "color": "#1a1a1a",
-                    "fontSize": "12px"
+            dTools: {
+                enabled: false,
+                style: {
+                    fontFamily: "Microsoft YaHei, Hiragino Sans GB W3",
+                    color: "#1a1a1a",
+                    fontSize: "12px"
                 },
-                "backgroundColor": 'white'
+                backgroundColor: "white"
             },
-            "dataSheet": {
-                "enabled": false,
-                "borderColor": "rgb(0,0,0)",
-                "borderWidth": 1,
-                "formatter": this._contentFormat2Decimal,
-                "style": {
-                    "fontFamily": "inherit", "color": "inherit", "fontSize": "12px"
+            dataSheet: {
+                enabled: false,
+                borderColor: "rgb(0,0,0)",
+                borderWidth: 1,
+                formatter: this._contentFormat2Decimal,
+                style: {
+                    fontFamily: "inherit", color: "inherit", fontSize: "12px"
                 }
             },
-            "borderColor": "rgb(238,238,238)",
-            "shadow": false,
-            "legend": {
-                "borderColor": "rgb(204,204,204)",
-                "borderRadius": 0,
-                "shadow": false,
-                "borderWidth": 0,
-                "visible": true,
-                "style": {
-                    "fontFamily": "inherit", "color": "inherit", "fontSize": "12px"
+            borderColor: "rgb(238,238,238)",
+            shadow: false,
+            legend: {
+                borderColor: "rgb(204,204,204)",
+                borderRadius: 0,
+                shadow: false,
+                borderWidth: 0,
+                visible: true,
+                style: {
+                    fontFamily: "inherit", color: "inherit", fontSize: "12px"
                 },
-                "position": "right",
-                "enabled": false
+                position: "right",
+                enabled: false
             },
-            "rangeLegend": {
-                "range": {
-                    "min": 0,
-                    "color": [
+            rangeLegend: {
+                range: {
+                    min: 0,
+                    color: [
                         [
                             0,
                             "rgb(182,226,255)"
@@ -461,41 +461,41 @@ BI.shortcut('bi.combine_chart', BI.CombineChart);BI.ChartCombineFormatItemFactor
                             "rgb(36,167,255)"
                         ]
                     ],
-                    "max": 266393
+                    max: 266393
                 },
-                "enabled": false
+                enabled: false
             },
-            "zoom": {"zoomType": "xy", "zoomTool": {"visible": false, "resize": true, "from": "", "to": ""}},
-            "plotBorderColor": "rgba(255,255,255,0)",
-            "tools": {
-                "hidden": false,
-                "toImage": {"enabled": false},
-                "sort": {"enabled": false},
-                "fullScreen": {"enabled": false},
-                "refresh": {
-                    "enabled": false
+            zoom: {zoomType: "xy", zoomTool: {visible: false, resize: true, from: "", to: ""}},
+            plotBorderColor: "rgba(255,255,255,0)",
+            tools: {
+                hidden: false,
+                toImage: {enabled: false},
+                sort: {enabled: false},
+                fullScreen: {enabled: false},
+                refresh: {
+                    enabled: false
                 }
             },
-            "plotBorderWidth": 0,
-            "style": "normal",
-            "colors": ["rgb(99,178,238)", "rgb(118,218,145)"],
-            "borderRadius": 0,
-            "borderWidth": 0,
-            "plotShadow": false,
-            "plotBorderRadius": 0
+            plotBorderWidth: 0,
+            style: "normal",
+            colors: ["rgb(99,178,238)", "rgb(118,218,145)"],
+            borderRadius: 0,
+            borderWidth: 0,
+            plotShadow: false,
+            plotBorderRadius: 0
         };
     },
 
     _contentFormat: function () {
-        return BI.contentFormat(arguments[0], '')
+        return BI.contentFormat(arguments[0], "");
     },
 
     _contentFormat2Decimal: function () {
-        return BI.contentFormat(arguments[0], '#.##;-#.##')
+        return BI.contentFormat(arguments[0], "#.##;-#.##");
     },
 
     _contentFormatPercentage: function () {
-        return BI.contentFormat(arguments[0], '#.##%;-#.##%')
+        return BI.contentFormat(arguments[0], "#.##%;-#.##%");
     }
 };/**
  * 图表控件
@@ -540,9 +540,9 @@ BI.AbstractChart = BI.inherit(BI.Widget, {
         LINE_WIDTH: 1,
         NUM_SEPARATORS: false,
         FONT_STYLE: {
-            "fontFamily": "inherit",
-            "color": "inherit",
-            "fontSize": "12px"
+            fontFamily: "inherit",
+            color: "inherit",
+            fontSize: "12px"
         }
     },
 
@@ -550,7 +550,7 @@ BI.AbstractChart = BI.inherit(BI.Widget, {
         return BI.extend(BI.AbstractChart.superclass._defaultConfig.apply(this, arguments), {
             baseCls: "bi-abstract-chart",
             popupItemsGetter: BI.emptyFn
-        })
+        });
     },
 
     _init: function () {
@@ -600,12 +600,12 @@ BI.AbstractChart = BI.inherit(BI.Widget, {
                     da.x = BI.contentFormat(BI.parseFloat(da.x.div(magnify).toFixed(4)), "#.####;-#.####");
                 }
             });
-        })
+        });
     },
 
     formatXYDataWithMagnify: function (number, magnify) {
         if (BI.isNull(number)) {
-            return null
+            return null;
         }
         if (!BI.isNumber(number)) {
             number = BI.parseFloat(number);
@@ -672,46 +672,46 @@ BI.AbstractChart = BI.inherit(BI.Widget, {
     },
 
     formatTickInXYaxis: function (type, number_level, separators, isCompareBar) {
-        var formatter = '#.##';
+        var formatter = "#.##";
         switch (type) {
             case this.constants.NORMAL:
-                formatter = '#.##';
+                formatter = "#.##";
                 if (separators) {
-                    formatter = '#,###.##'
+                    formatter = "#,###.##";
                 }
                 break;
             case this.constants.ZERO2POINT:
-                formatter = '#0';
+                formatter = "#0";
                 if (separators) {
-                    formatter = '#,###';
+                    formatter = "#,###";
                 }
                 break;
             case this.constants.ONE2POINT:
-                formatter = '#0.0';
+                formatter = "#0.0";
                 if (separators) {
-                    formatter = '#,###.0';
+                    formatter = "#,###.0";
                 }
                 break;
             case this.constants.TWO2POINT:
-                formatter = '#0.00';
+                formatter = "#0.00";
                 if (separators) {
-                    formatter = '#,###.00';
+                    formatter = "#,###.00";
                 }
                 break;
         }
         if (number_level === BICst.TARGET_STYLE.NUM_LEVEL.PERCENT) {
-            formatter += '%';
+            formatter += "%";
         }
         formatter += ";-" + formatter;
         if(isCompareBar) {
             return function () {
                 arguments[0] = arguments[0] > 0 ? arguments[0] : (-1) * arguments[0];
                 return BI.contentFormat(arguments[0], formatter);
-            }
+            };
         }
         return function () {
-            return BI.contentFormat(arguments[0], formatter)
-        }
+            return BI.contentFormat(arguments[0], formatter);
+        };
     },
 
     formatDataLabel: function (state, items, config, style) {
@@ -719,8 +719,8 @@ BI.AbstractChart = BI.inherit(BI.Widget, {
         if (state === true) {
             BI.each(items, function (idx, item) {
                 item.dataLabels = {
-                    "align": "outside",
-                    "autoAdjust": true,
+                    align: "outside",
+                    autoAdjust: true,
                     style: style,
                     enabled: true,
                     formatter: {
@@ -737,13 +737,13 @@ BI.AbstractChart = BI.inherit(BI.Widget, {
         if (state === true) {
             BI.each(items, function (idx, item) {
                 item.dataLabels = {
-                    "align": "outside",
-                    "autoAdjust": true,
+                    align: "outside",
+                    autoAdjust: true,
                     style: style,
                     enabled: true,
                     formatter: {
                         identifier: "${VALUE}",
-                        valueFormat: format,
+                        valueFormat: format
                     }
                 };
                 if(isPercentChart) {
@@ -764,7 +764,7 @@ BI.AbstractChart = BI.inherit(BI.Widget, {
         BI.each(config.yAxis, function (idx, axis) {
             axis.labelStyle = fontStyle;
             axis.title.style = fontStyle;
-        })
+        });
     },
 
     _formatItems: function (items) {
@@ -793,7 +793,7 @@ BI.AccumulateAreaChart = BI.inherit(BI.AbstractChart, {
     _defaultConfig: function () {
         return BI.extend(BI.AccumulateAreaChart.superclass._defaultConfig.apply(this, arguments), {
             baseCls: "bi-accumulate-area-chart"
-        })
+        });
     },
 
     _init: function () {
@@ -820,7 +820,7 @@ BI.AccumulateAreaChart = BI.inherit(BI.AbstractChart, {
             self.fireEvent(BI.AccumulateAreaChart.EVENT_CHANGE, obj);
         });
         this.combineChart.on(BI.CombineChart.EVENT_ITEM_CLICK, function (obj) {
-            self.fireEvent(BI.AbstractChart.EVENT_ITEM_CLICK, obj)
+            self.fireEvent(BI.AbstractChart.EVENT_ITEM_CLICK, obj);
         });
     },
 
@@ -887,20 +887,20 @@ BI.AccumulateAreaChart = BI.inherit(BI.AbstractChart, {
             enableTick: this.config.enableTick,
             labelRotation: this.config.textDirection,
             gridLineWidth: this.config.showGridLine === true ? 1 : 0,
-            maxHeight: '40%'
+            maxHeight: "40%"
         });
 
         config.chartType = "area";
 
-        //为了给数据标签加个%,还要遍历所有的系列，唉
+        // 为了给数据标签加个%,还要遍历所有的系列，唉
         this.formatDataLabel(config.plotOptions.dataLabels.enabled, items, config, this.config.chartFont);
 
-        //全局样式的图表文字
+        // 全局样式的图表文字
         this.setFontStyle(this.config.chartFont, config);
 
         return [items, config];
 
-        function formatChartStyle(v) {
+        function formatChartStyle (v) {
             switch (v) {
                 case BICst.CHART_STYLE.STYLE_GRADUAL:
                     return "gradual";
@@ -910,7 +910,7 @@ BI.AccumulateAreaChart = BI.inherit(BI.AbstractChart, {
             }
         }
 
-        function formatChartLineStyle(v) {
+        function formatChartLineStyle (v) {
             switch (v) {
                 case BICst.CHART_SHAPE.RIGHT_ANGLE:
                     config.plotOptions.curve = false;
@@ -928,7 +928,7 @@ BI.AccumulateAreaChart = BI.inherit(BI.AbstractChart, {
             }
         }
 
-        function formatCordon(cordon) {
+        function formatCordon (cordon) {
             BI.each(cordon, function (idx, cor) {
                 if (idx === 0 && self.xAxis.length > 0) {
                     var magnify = self.calcMagnify(self.config.xAxisNumberLevel);
@@ -937,9 +937,9 @@ BI.AccumulateAreaChart = BI.inherit(BI.AbstractChart, {
                             value: t.value.div(magnify),
                             width: 1,
                             label: {
-                                "style" : self.config.chartFont,
-                                "text": t.text,
-                                "align": "top"
+                                style: self.config.chartFont,
+                                text: t.text,
+                                align: "top"
                             }
                         });
                     });
@@ -962,14 +962,14 @@ BI.AccumulateAreaChart = BI.inherit(BI.AbstractChart, {
                             value: t.value.div(magnify),
                             width: 1,
                             label: {
-                                "style" : self.config.chartFont,
-                                "text": t.text,
-                                "align": "left"
+                                style: self.config.chartFont,
+                                text: t.text,
+                                align: "left"
                             }
                         });
                     });
                 }
-            })
+            });
         }
     },
 
@@ -1059,7 +1059,7 @@ BI.AccumulateAreaChart = BI.inherit(BI.AbstractChart, {
     }
 });
 BI.AccumulateAreaChart.EVENT_CHANGE = "EVENT_CHANGE";
-BI.shortcut('bi.accumulate_area_chart', BI.AccumulateAreaChart);/**
+BI.shortcut("bi.accumulate_area_chart", BI.AccumulateAreaChart);/**
  * 图表控件
  * @class BI.AccumulateAxisChart
  * @extends BI.Widget
@@ -1069,7 +1069,7 @@ BI.AccumulateAxisChart = BI.inherit(BI.AbstractChart, {
     _defaultConfig: function () {
         return BI.extend(BI.AccumulateAxisChart.superclass._defaultConfig.apply(this, arguments), {
             baseCls: "bi-accumulate-axis-chart"
-        })
+        });
     },
 
     _init: function () {
@@ -1094,7 +1094,7 @@ BI.AccumulateAxisChart = BI.inherit(BI.AbstractChart, {
             self.fireEvent(BI.AccumulateAxisChart.EVENT_CHANGE, obj);
         });
         this.combineChart.on(BI.CombineChart.EVENT_ITEM_CLICK, function (obj) {
-            self.fireEvent(BI.AbstractChart.EVENT_ITEM_CLICK, obj)
+            self.fireEvent(BI.AbstractChart.EVENT_ITEM_CLICK, obj);
         });
     },
 
@@ -1154,20 +1154,20 @@ BI.AccumulateAxisChart = BI.inherit(BI.AbstractChart, {
             enableTick: self.config.enableTick,
             labelRotation: this.config.textDirection,
             gridLineWidth: this.config.showGridLine === true ? 1 : 0,
-            maxHeight: '40%'
+            maxHeight: "40%"
         });
 
         config.chartType = "column";
 
-        //为了给数据标签加个%,还要遍历所有的系列，唉
+        // 为了给数据标签加个%,还要遍历所有的系列，唉
         this.formatDataLabel(config.plotOptions.dataLabels.enabled, items, config, this.config.chartFont);
 
-        //全局样式的图表文字
+        // 全局样式的图表文字
         this.setFontStyle(this.config.chartFont, config);
 
         return [items, config];
 
-        function formatCordon() {
+        function formatCordon () {
             BI.each(self.config.cordon, function (idx, cor) {
                 if (idx === 0 && self.xAxis.length > 0) {
                     var magnify = self.calcMagnify(self.config.xAxisNumberLevel);
@@ -1176,9 +1176,9 @@ BI.AccumulateAxisChart = BI.inherit(BI.AbstractChart, {
                             value: t.value.div(magnify),
                             width: 1,
                             label: {
-                                "style" : self.config.chartFont,
-                                "text": t.text,
-                                "align": "top"
+                                style: self.config.chartFont,
+                                text: t.text,
+                                align: "top"
                             }
                         });
                     });
@@ -1201,17 +1201,17 @@ BI.AccumulateAxisChart = BI.inherit(BI.AbstractChart, {
                             value: t.value.div(magnify),
                             width: 1,
                             label: {
-                                "style" : self.config.chartFont,
-                                "text": t.text,
-                                "align": "left"
+                                style: self.config.chartFont,
+                                text: t.text,
+                                align: "left"
                             }
                         });
                     });
                 }
-            })
+            });
         }
 
-        function formatChartStyle() {
+        function formatChartStyle () {
             switch (self.config.chartStyle) {
                 case BICst.CHART_STYLE.STYLE_GRADUAL:
                     return "gradual";
@@ -1221,7 +1221,7 @@ BI.AccumulateAxisChart = BI.inherit(BI.AbstractChart, {
             }
         }
 
-        function getTitleText(numberLevelType, position, show, title) {
+        function getTitleText (numberLevelType, position, show, title) {
             var unit = "";
 
             switch (numberLevelType) {
@@ -1239,13 +1239,13 @@ BI.AccumulateAxisChart = BI.inherit(BI.AbstractChart, {
                     break;
             }
             if (position === self.constants.X_AXIS) {
-                self.config.xAxisUnit !== "" && (unit = unit + self.config.xAxisUnit)
+                self.config.xAxisUnit !== "" && (unit = unit + self.config.xAxisUnit);
             }
             if (position === self.constants.LEFT_AXIS) {
-                self.config.leftYAxisUnit !== "" && (unit = unit + self.config.leftYAxisUnit)
+                self.config.leftYAxisUnit !== "" && (unit = unit + self.config.leftYAxisUnit);
             }
             if (position === self.constants.RIGHT_AXIS) {
-                self.config.rightYAxisUnit !== "" && (unit = unit + self.config.rightYAxisUnit)
+                self.config.rightYAxisUnit !== "" && (unit = unit + self.config.rightYAxisUnit);
             }
 
             unit = unit === "" ? unit : "(" + unit + ")";
@@ -1338,7 +1338,7 @@ BI.AccumulateAxisChart = BI.inherit(BI.AbstractChart, {
     }
 });
 BI.AccumulateAxisChart.EVENT_CHANGE = "EVENT_CHANGE";
-BI.shortcut('bi.accumulate_axis_chart', BI.AccumulateAxisChart);/**
+BI.shortcut("bi.accumulate_axis_chart", BI.AccumulateAxisChart);/**
  * 图表控件
  * @class BI.AccumulateBarChart
  * @extends BI.Widget
@@ -1348,7 +1348,7 @@ BI.AccumulateBarChart = BI.inherit(BI.AbstractChart, {
     _defaultConfig: function () {
         return BI.extend(BI.AccumulateBarChart.superclass._defaultConfig.apply(this, arguments), {
             baseCls: "bi-accumulate-bar-chart"
-        })
+        });
     },
 
     _init: function () {
@@ -1361,7 +1361,7 @@ BI.AccumulateBarChart = BI.inherit(BI.AbstractChart, {
             },
             labelStyle: this.constants.FONT_STYLE,
             formatter: function () {
-                return this > 0 ? this : (-1) * this
+                return this > 0 ? this : (-1) * this;
             },
             gridLineWidth: 0
         }];
@@ -1385,7 +1385,7 @@ BI.AccumulateBarChart = BI.inherit(BI.AbstractChart, {
             self.fireEvent(BI.AccumulateBarChart.EVENT_CHANGE, obj);
         });
         this.combineChart.on(BI.CombineChart.EVENT_ITEM_CLICK, function (obj) {
-            self.fireEvent(BI.AbstractChart.EVENT_ITEM_CLICK, obj)
+            self.fireEvent(BI.AbstractChart.EVENT_ITEM_CLICK, obj);
         });
     },
 
@@ -1407,7 +1407,7 @@ BI.AccumulateBarChart = BI.inherit(BI.AbstractChart, {
             labelRotation: this.config.textDirection,
             lineWidth: this.config.lineWidth,
             enableTick: this.config.enableTick,
-            maxWidth: '40%'
+            maxWidth: "40%"
         });
 
         self.formatNumberLevelInXaxis(items, this.config.leftYAxisNumberLevel);
@@ -1422,17 +1422,17 @@ BI.AccumulateBarChart = BI.inherit(BI.AbstractChart, {
             enableMinorTick: this.config.enableMinorTick
         });
         config.chartType = "bar";
-        //为了给数据标签加个%,还要遍历所有的系列，唉
+        // 为了给数据标签加个%,还要遍历所有的系列，唉
         this.formatDataLabelForAxis(config.plotOptions.dataLabels.enabled, items, config.xAxis[0].formatter, this.config.chartFont);
 
         config.plotOptions.tooltip.formatter.valueFormat = config.xAxis[0].formatter;
 
-        //全局样式的图表文字
+        // 全局样式的图表文字
         this.setFontStyle(this.config.chartFont, config);
 
         return [items, config];
 
-        function formatChartStyle() {
+        function formatChartStyle () {
             switch (self.config.chartStyle) {
                 case BICst.CHART_STYLE.STYLE_GRADUAL:
                     return "gradual";
@@ -1442,7 +1442,7 @@ BI.AccumulateBarChart = BI.inherit(BI.AbstractChart, {
             }
         }
 
-        function formatCordon() {
+        function formatCordon () {
             BI.each(self.config.cordon, function (idx, cor) {
                 if (idx === 0 && self.xAxis.length > 0) {
                     var magnify = self.calcMagnify(self.config.leftYAxisNumberLevel);
@@ -1451,9 +1451,9 @@ BI.AccumulateBarChart = BI.inherit(BI.AbstractChart, {
                             value: t.value.div(magnify),
                             width: 1,
                             label: {
-                                "style" : self.config.chartFont,
-                                "text": t.text,
-                                "align": "top"
+                                style: self.config.chartFont,
+                                text: t.text,
+                                align: "top"
                             }
                         });
                     });
@@ -1476,17 +1476,17 @@ BI.AccumulateBarChart = BI.inherit(BI.AbstractChart, {
                             value: t.value.div(magnify),
                             width: 1,
                             label: {
-                                "style" : self.config.chartFont,
-                                "text": t.text,
-                                "align": "left"
+                                style: self.config.chartFont,
+                                text: t.text,
+                                align: "left"
                             }
                         });
                     });
                 }
-            })
+            });
         }
 
-        function getXYAxisUnit(numberLevelType, position) {
+        function getXYAxisUnit (numberLevelType, position) {
             var unit = "";
             switch (numberLevelType) {
                 case BICst.TARGET_STYLE.NUM_LEVEL.NORMAL:
@@ -1503,13 +1503,13 @@ BI.AccumulateBarChart = BI.inherit(BI.AbstractChart, {
                     break;
             }
             if (position === self.constants.X_AXIS) {
-                self.config.leftYAxisUnit !== "" && (unit = unit + self.config.leftYAxisUnit)
+                self.config.leftYAxisUnit !== "" && (unit = unit + self.config.leftYAxisUnit);
             }
             if (position === self.constants.LEFT_AXIS) {
-                self.config.xAxisUnit !== "" && (unit = unit + self.config.xAxisUnit)
+                self.config.xAxisUnit !== "" && (unit = unit + self.config.xAxisUnit);
             }
             if (position === self.constants.RIGHT_AXIS) {
-                self.config.rightYAxisUnit !== "" && (unit = unit + self.config.rightYAxisUnit)
+                self.config.rightYAxisUnit !== "" && (unit = unit + self.config.rightYAxisUnit);
             }
             return unit === "" ? unit : "(" + unit + ")";
         }
@@ -1524,7 +1524,7 @@ BI.AccumulateBarChart = BI.inherit(BI.AbstractChart, {
                     var tmp = t.x;
                     t.x = t.y;
                     t.y = tmp;
-                })
+                });
             });
         });
         return items;
@@ -1583,7 +1583,7 @@ BI.AccumulateBarChart = BI.inherit(BI.AbstractChart, {
     }
 });
 BI.AccumulateBarChart.EVENT_CHANGE = "EVENT_CHANGE";
-BI.shortcut('bi.accumulate_bar_chart', BI.AccumulateBarChart);/**
+BI.shortcut("bi.accumulate_bar_chart", BI.AccumulateBarChart);/**
  * 图表控件
  * @class BI.AccumulateRadarChart
  * @extends BI.Widget
@@ -1593,7 +1593,7 @@ BI.AccumulateRadarChart = BI.inherit(BI.AbstractChart, {
     _defaultConfig: function () {
         return BI.extend(BI.AccumulateRadarChart.superclass._defaultConfig.apply(this, arguments), {
             baseCls: "bi-accumulate-radar-chart"
-        })
+        });
     },
 
     _init: function () {
@@ -1606,7 +1606,7 @@ BI.AccumulateRadarChart = BI.inherit(BI.AbstractChart, {
             },
             labelStyle: this.constants.FONT_STYLE,
             formatter: function () {
-                return this > 0 ? this : (-1) * this
+                return this > 0 ? this : (-1) * this;
             },
             gridLineWidth: 0,
             position: "bottom"
@@ -1630,7 +1630,7 @@ BI.AccumulateRadarChart = BI.inherit(BI.AbstractChart, {
             self.fireEvent(BI.AccumulateRadarChart.EVENT_CHANGE, obj);
         });
         this.combineChart.on(BI.CombineChart.EVENT_ITEM_CLICK, function (obj) {
-            self.fireEvent(BI.AbstractChart.EVENT_ITEM_CLICK, obj)
+            self.fireEvent(BI.AbstractChart.EVENT_ITEM_CLICK, obj);
         });
     },
 
@@ -1666,17 +1666,17 @@ BI.AccumulateRadarChart = BI.inherit(BI.AbstractChart, {
         config.plotOptions.columnType = true;
         delete config.xAxis;
         delete config.yAxis;
-        //为了给数据标签加个%,还要遍历所有的系列，唉
+        // 为了给数据标签加个%,还要遍历所有的系列，唉
         this.formatDataLabelForAxis(config.plotOptions.dataLabels.enabled, items, config.radiusAxis[0].formatter, this.config.chartFont);
 
-        //全局样式的图表文字
+        // 全局样式的图表文字
         config.radiusAxis[0].labelStyle = config.radiusAxis[0].title.style = this.config.chartFont;
         config.angleAxis[0].labelStyle = config.angleAxis[0].title.style = this.config.chartFont;
         config.legend.style = this.config.chartFont;
 
         return [items, config];
 
-        function formatChartStyle() {
+        function formatChartStyle () {
             switch (self.config.chartStyle) {
                 case BICst.CHART_STYLE.STYLE_GRADUAL:
                     return "gradual";
@@ -1686,7 +1686,7 @@ BI.AccumulateRadarChart = BI.inherit(BI.AbstractChart, {
             }
         }
 
-        function formatChartRadarStyle() {
+        function formatChartRadarStyle () {
             switch (self.config.chartRadarType) {
                 case BICst.CHART_SHAPE.POLYGON:
                     config.plotOptions.shape = "polygon";
@@ -1697,19 +1697,19 @@ BI.AccumulateRadarChart = BI.inherit(BI.AbstractChart, {
             }
         }
 
-        function formatNumberLevelInYaxis(type, position, formatter) {
+        function formatNumberLevelInYaxis (type, position, formatter) {
             var magnify = self.calcMagnify(type);
             BI.each(items, function (idx, item) {
                 BI.each(item.data, function (id, da) {
                     if (position === item.yAxis) {
                         da.y = self.formatXYDataWithMagnify(da.y, magnify);
                     }
-                })
+                });
             });
             config.plotOptions.tooltip.formatter.valueFormat = formatter;
         }
 
-        function getXYAxisUnit(numberLevelType, position) {
+        function getXYAxisUnit (numberLevelType, position) {
             var unit = "";
             switch (numberLevelType) {
                 case BICst.TARGET_STYLE.NUM_LEVEL.NORMAL:
@@ -1726,13 +1726,13 @@ BI.AccumulateRadarChart = BI.inherit(BI.AbstractChart, {
                     break;
             }
             if (position === self.constants.X_AXIS) {
-                self.config.xAxisUnit !== "" && (unit = unit + self.config.xAxisUnit)
+                self.config.xAxisUnit !== "" && (unit = unit + self.config.xAxisUnit);
             }
             if (position === self.constants.LEFT_AXIS) {
-                self.config.leftYAxisUnit !== "" && (unit = unit + self.config.leftYAxisUnit)
+                self.config.leftYAxisUnit !== "" && (unit = unit + self.config.leftYAxisUnit);
             }
             if (position === self.constants.RIGHT_AXIS) {
-                self.config.rightYAxisUnit !== "" && (unit = unit + self.config.rightYAxisUnit)
+                self.config.rightYAxisUnit !== "" && (unit = unit + self.config.rightYAxisUnit);
             }
             return unit === "" ? unit : "(" + unit + ")";
         }
@@ -1776,7 +1776,7 @@ BI.AccumulateRadarChart = BI.inherit(BI.AbstractChart, {
     }
 });
 BI.AccumulateRadarChart.EVENT_CHANGE = "EVENT_CHANGE";
-BI.shortcut('bi.accumulate_radar_chart', BI.AccumulateRadarChart);/**
+BI.shortcut("bi.accumulate_radar_chart", BI.AccumulateRadarChart);/**
  * 图表控件
  * @class BI.AreaChart
  * @extends BI.Widget
@@ -1786,7 +1786,7 @@ BI.AreaChart = BI.inherit(BI.AbstractChart, {
     _defaultConfig: function () {
         return BI.extend(BI.AreaChart.superclass._defaultConfig.apply(this, arguments), {
             baseCls: "bi-area-chart"
-        })
+        });
     },
 
     _init: function () {
@@ -1812,7 +1812,7 @@ BI.AreaChart = BI.inherit(BI.AbstractChart, {
             self.fireEvent(BI.AreaChart.EVENT_CHANGE, obj);
         });
         this.combineChart.on(BI.CombineChart.EVENT_ITEM_CLICK, function (obj) {
-            self.fireEvent(BI.AbstractChart.EVENT_ITEM_CLICK, obj)
+            self.fireEvent(BI.AbstractChart.EVENT_ITEM_CLICK, obj);
         });
     },
 
@@ -1877,20 +1877,20 @@ BI.AreaChart = BI.inherit(BI.AbstractChart, {
             enableTick: this.config.enableTick,
             labelRotation: this.config.textDirection,
             gridLineWidth: this.config.showGridLine === true ? 1 : 0,
-            maxHeight: '40%'
+            maxHeight: "40%"
         });
 
         config.chartType = "area";
 
-        //为了给数据标签加个%,还要遍历所有的系列，唉
+        // 为了给数据标签加个%,还要遍历所有的系列，唉
         this.formatDataLabel(config.plotOptions.dataLabels.enabled, items, config, this.config.chartFont);
 
-        //全局样式的图表文字
+        // 全局样式的图表文字
         this.setFontStyle(this.config.chartFont, config);
 
         return [items, config];
 
-        function formatChartStyle() {
+        function formatChartStyle () {
             switch (self.config.chartStyle) {
                 case BICst.CHART_STYLE.STYLE_GRADUAL:
                     return "gradual";
@@ -1900,7 +1900,7 @@ BI.AreaChart = BI.inherit(BI.AbstractChart, {
             }
         }
 
-        function formatCordon() {
+        function formatCordon () {
             BI.each(self.config.cordon, function (idx, cor) {
                 if (idx === 0 && self.xAxis.length > 0) {
                     var magnify = self.calcMagnify(self.config.xAxisNumberLevel);
@@ -1909,9 +1909,9 @@ BI.AreaChart = BI.inherit(BI.AbstractChart, {
                             value: t.value.div(magnify),
                             width: 1,
                             label: {
-                                "style" : self.config.chartFont,
-                                "text": t.text,
-                                "align": "top"
+                                style: self.config.chartFont,
+                                text: t.text,
+                                align: "top"
                             }
                         });
                     });
@@ -1934,17 +1934,17 @@ BI.AreaChart = BI.inherit(BI.AbstractChart, {
                             value: t.value.div(magnify),
                             width: 1,
                             label: {
-                                "style" : self.config.chartFont,
-                                "text": t.text,
-                                "align": "left"
+                                style: self.config.chartFont,
+                                text: t.text,
+                                align: "left"
                             }
                         });
                     });
                 }
-            })
+            });
         }
 
-        function formatChartLineStyle() {
+        function formatChartLineStyle () {
             switch (self.config.chartLineType) {
                 case BICst.CHART_SHAPE.RIGHT_ANGLE:
                     config.plotOptions.curve = false;
@@ -1962,7 +1962,7 @@ BI.AreaChart = BI.inherit(BI.AbstractChart, {
             }
         }
 
-        function getXYAxisUnit(numberLevelType, position) {
+        function getXYAxisUnit (numberLevelType, position) {
             var unit = "";
             switch (numberLevelType) {
                 case BICst.TARGET_STYLE.NUM_LEVEL.NORMAL:
@@ -1979,13 +1979,13 @@ BI.AreaChart = BI.inherit(BI.AbstractChart, {
                     break;
             }
             if (position === self.constants.X_AXIS) {
-                self.config.xAxisUnit !== "" && (unit = unit + self.config.xAxisUnit)
+                self.config.xAxisUnit !== "" && (unit = unit + self.config.xAxisUnit);
             }
             if (position === self.constants.LEFT_AXIS) {
-                self.config.leftYAxisUnit !== "" && (unit = unit + self.config.leftYAxisUnit)
+                self.config.leftYAxisUnit !== "" && (unit = unit + self.config.leftYAxisUnit);
             }
             if (position === self.constants.RIGHT_AXIS) {
-                self.config.rightYAxisUnit !== "" && (unit = unit + self.config.rightYAxisUnit)
+                self.config.rightYAxisUnit !== "" && (unit = unit + self.config.rightYAxisUnit);
             }
             return unit === "" ? unit : "(" + unit + ")";
         }
@@ -2077,7 +2077,7 @@ BI.AreaChart = BI.inherit(BI.AbstractChart, {
     }
 });
 BI.AreaChart.EVENT_CHANGE = "EVENT_CHANGE";
-BI.shortcut('bi.area_chart', BI.AreaChart);/**
+BI.shortcut("bi.area_chart", BI.AreaChart);/**
  * 图表控件 柱状
  * @class BI.AxisChart
  * @extends BI.Widget
@@ -2090,7 +2090,7 @@ BI.AxisChart = BI.inherit(BI.AbstractChart, {
     _defaultConfig: function () {
         return BI.extend(BI.AxisChart.superclass._defaultConfig.apply(this, arguments), {
             baseCls: "bi-axis-chart"
-        })
+        });
     },
 
     _init: function () {
@@ -2116,7 +2116,7 @@ BI.AxisChart = BI.inherit(BI.AbstractChart, {
             self.fireEvent(BI.AxisChart.EVENT_CHANGE, obj);
         });
         this.combineChart.on(BI.CombineChart.EVENT_ITEM_CLICK, function (obj) {
-            self.fireEvent(BI.AbstractChart.EVENT_ITEM_CLICK, obj)
+            self.fireEvent(BI.AbstractChart.EVENT_ITEM_CLICK, obj);
         });
     },
 
@@ -2181,7 +2181,7 @@ BI.AxisChart = BI.inherit(BI.AbstractChart, {
             labelRotation: this.config.textDirection,
             enableMinorTick: this.config.enableMinorTick,
             gridLineWidth: this.config.showGridLine === true ? 1 : 0,
-            maxHeight: '40%'
+            maxHeight: "40%"
         });
 
         var lineItem = [];
@@ -2194,15 +2194,15 @@ BI.AxisChart = BI.inherit(BI.AbstractChart, {
             }
         });
 
-        //为了给数据标签加个%,还要遍历所有的系列，唉
+        // 为了给数据标签加个%,还要遍历所有的系列，唉
         this.formatDataLabel(config.plotOptions.dataLabels.enabled, items, config, this.config.chartFont);
 
-        //全局样式的图表文字
+        // 全局样式的图表文字
         this.setFontStyle(this.config.chartFont, config);
 
         return [BI.concat(otherItem, lineItem), config];
 
-        function formatChartStyle() {
+        function formatChartStyle () {
             switch (self.config.chartStyle) {
                 case BICst.CHART_STYLE.STYLE_GRADUAL:
                     return "gradual";
@@ -2212,7 +2212,7 @@ BI.AxisChart = BI.inherit(BI.AbstractChart, {
             }
         }
 
-        function formatCordon() {
+        function formatCordon () {
             BI.each(self.config.cordon, function (idx, cor) {
                 if (idx === 0 && self.xAxis.length > 0) {
                     var magnify = self.calcMagnify(self.config.xAxisNumberLevel);
@@ -2221,9 +2221,9 @@ BI.AxisChart = BI.inherit(BI.AbstractChart, {
                             value: t.value.div(magnify),
                             width: 1,
                             label: {
-                                "style" : self.config.chartFont,
-                                "text": t.text,
-                                "align": "top"
+                                style: self.config.chartFont,
+                                text: t.text,
+                                align: "top"
                             }
                         });
                     });
@@ -2243,17 +2243,17 @@ BI.AxisChart = BI.inherit(BI.AbstractChart, {
                             value: t.value.div(magnify),
                             width: 1,
                             label: {
-                                "style" : self.config.chartFont,
-                                "text": t.text,
-                                "align": "left"
+                                style: self.config.chartFont,
+                                text: t.text,
+                                align: "left"
                             }
                         });
                     });
                 }
-            })
+            });
         }
 
-        function getXYAxisUnit(numberLevelType, position) {
+        function getXYAxisUnit (numberLevelType, position) {
             var unit = "";
             switch (numberLevelType) {
                 case BICst.TARGET_STYLE.NUM_LEVEL.NORMAL:
@@ -2270,13 +2270,13 @@ BI.AxisChart = BI.inherit(BI.AbstractChart, {
                     break;
             }
             if (position === self.constants.X_AXIS) {
-                self.config.xAxisUnit !== "" && (unit = unit + self.config.xAxisUnit)
+                self.config.xAxisUnit !== "" && (unit = unit + self.config.xAxisUnit);
             }
             if (position === self.constants.LEFT_AXIS) {
-                self.config.leftYAxisUnit !== "" && (unit = unit + self.config.leftYAxisUnit)
+                self.config.leftYAxisUnit !== "" && (unit = unit + self.config.leftYAxisUnit);
             }
             if (position === self.constants.RIGHT_AXIS) {
-                self.config.rightYAxisUnit !== "" && (unit = unit + self.config.rightYAxisUnit)
+                self.config.rightYAxisUnit !== "" && (unit = unit + self.config.rightYAxisUnit);
             }
             return unit === "" ? unit : "(" + unit + ")";
         }
@@ -2352,7 +2352,7 @@ BI.AxisChart = BI.inherit(BI.AbstractChart, {
     }
 });
 BI.AxisChart.EVENT_CHANGE = "EVENT_CHANGE";
-BI.shortcut('bi.axis_chart', BI.AxisChart);/**
+BI.shortcut("bi.axis_chart", BI.AxisChart);/**
  * 图表控件
  * @class BI.BarChart
  * @extends BI.Widget
@@ -2362,7 +2362,7 @@ BI.BarChart = BI.inherit(BI.AbstractChart, {
     _defaultConfig: function () {
         return BI.extend(BI.BarChart.superclass._defaultConfig.apply(this, arguments), {
             baseCls: "bi-bar-chart"
-        })
+        });
     },
 
     _init: function () {
@@ -2375,7 +2375,7 @@ BI.BarChart = BI.inherit(BI.AbstractChart, {
             },
             labelStyle: this.constants.FONT_STYLE,
             formatter: function () {
-                return this > 0 ? this : (-1) * this
+                return this > 0 ? this : (-1) * this;
             },
             gridLineWidth: 0
         }];
@@ -2402,7 +2402,7 @@ BI.BarChart = BI.inherit(BI.AbstractChart, {
             self.fireEvent(BI.BarChart.EVENT_CHANGE, obj);
         });
         this.combineChart.on(BI.CombineChart.EVENT_ITEM_CLICK, function (obj) {
-            self.fireEvent(BI.AbstractChart.EVENT_ITEM_CLICK, obj)
+            self.fireEvent(BI.AbstractChart.EVENT_ITEM_CLICK, obj);
         });
     },
 
@@ -2414,7 +2414,7 @@ BI.BarChart = BI.inherit(BI.AbstractChart, {
         this.formatChartLegend(config, this.config.chartLegend);
         config.plotOptions.dataLabels.enabled = this.config.showDataLabel;
 
-        //分类轴
+        // 分类轴
         config.yAxis = this.yAxis;
         config.yAxis[0].title.text = this.config.showXAxisTitle === true ? this.config.xAxisTitle : "";
         config.yAxis[0].title.rotation = this.constants.ROTATION;
@@ -2423,10 +2423,10 @@ BI.BarChart = BI.inherit(BI.AbstractChart, {
             labelRotation: this.config.textDirection,
             enableTick: this.config.enableTick,
             lineWidth: this.config.lineWidth,
-            maxWidth: '40%'
+            maxWidth: "40%"
         });
 
-        //值轴
+        // 值轴
         self.formatNumberLevelInXaxis(items, this.config.leftYAxisNumberLevel);
         config.xAxis[0].title.text = getXAxisTitle(this.config.leftYAxisNumberLevel, this.constants.X_AXIS);
         config.xAxis[0].title.align = "center";
@@ -2444,12 +2444,12 @@ BI.BarChart = BI.inherit(BI.AbstractChart, {
 
         config.plotOptions.tooltip.formatter.valueFormat = config.xAxis[0].formatter;
 
-        //全局样式的图表文字
+        // 全局样式的图表文字
         this.setFontStyle(this.config.chartFont, config);
 
         return [items, config];
 
-        function formatChartStyle() {
+        function formatChartStyle () {
             switch (self.config.chartStyle) {
                 case BICst.CHART_STYLE.STYLE_GRADUAL:
                     return "gradual";
@@ -2459,7 +2459,7 @@ BI.BarChart = BI.inherit(BI.AbstractChart, {
             }
         }
 
-        function formatCordon() {
+        function formatCordon () {
             BI.each(self.config.cordon, function (idx, cor) {
                 if (idx === 0 && self.xAxis.length > 0) {
                     var magnify = self.calcMagnify(self.config.leftYAxisNumberLevel);
@@ -2468,9 +2468,9 @@ BI.BarChart = BI.inherit(BI.AbstractChart, {
                             value: t.value.div(magnify),
                             width: 1,
                             label: {
-                                "style" : self.config.chartFont,
-                                "text": t.text,
-                                "align": "top"
+                                style: self.config.chartFont,
+                                text: t.text,
+                                align: "top"
                             }
                         });
                     });
@@ -2490,17 +2490,17 @@ BI.BarChart = BI.inherit(BI.AbstractChart, {
                             value: t.value.div(magnify),
                             width: 1,
                             label: {
-                                "style" : self.config.chartFont,
-                                "text": t.text,
-                                "align": "left"
+                                style: self.config.chartFont,
+                                text: t.text,
+                                align: "left"
                             }
                         });
                     });
                 }
-            })
+            });
         }
 
-        function getXAxisTitle(numberLevelType, position) {
+        function getXAxisTitle (numberLevelType, position) {
             var unit = "";
             switch (numberLevelType) {
                 case BICst.TARGET_STYLE.NUM_LEVEL.NORMAL:
@@ -2517,10 +2517,10 @@ BI.BarChart = BI.inherit(BI.AbstractChart, {
                     break;
             }
             if (position === self.constants.X_AXIS) {
-                self.config.leftYAxisUnit !== "" && (unit = unit + self.config.leftYAxisUnit)
+                self.config.leftYAxisUnit !== "" && (unit = unit + self.config.leftYAxisUnit);
             }
             if (position === self.constants.LEFT_AXIS) {
-                self.config.xAxisUnit !== "" && (unit = unit + self.config.xAxisUnit)
+                self.config.xAxisUnit !== "" && (unit = unit + self.config.xAxisUnit);
             }
             unit = unit === "" ? unit : "(" + unit + ")";
 
@@ -2535,7 +2535,7 @@ BI.BarChart = BI.inherit(BI.AbstractChart, {
                     var tmp = t.x;
                     t.x = t.y;
                     t.y = tmp;
-                })
+                });
             });
         });
         return items;
@@ -2592,7 +2592,7 @@ BI.BarChart = BI.inherit(BI.AbstractChart, {
     }
 });
 BI.BarChart.EVENT_CHANGE = "EVENT_CHANGE";
-BI.shortcut('bi.bar_chart', BI.BarChart);/**
+BI.shortcut("bi.bar_chart", BI.BarChart);/**
  * 图表控件
  * @class BI.BubbleChart
  * @extends BI.Widget
@@ -2602,7 +2602,7 @@ BI.BubbleChart = BI.inherit(BI.AbstractChart, {
     _defaultConfig: function () {
         return BI.extend(BI.BubbleChart.superclass._defaultConfig.apply(this, arguments), {
             baseCls: "bi-bubble-chart"
-        })
+        });
     },
 
     _init: function () {
@@ -2637,7 +2637,7 @@ BI.BubbleChart = BI.inherit(BI.AbstractChart, {
             self.fireEvent(BI.BubbleChart.EVENT_CHANGE, obj);
         });
         this.combineChart.on(BI.CombineChart.EVENT_ITEM_CLICK, function (obj) {
-            self.fireEvent(BI.AbstractChart.EVENT_ITEM_CLICK, obj)
+            self.fireEvent(BI.AbstractChart.EVENT_ITEM_CLICK, obj);
         });
     },
 
@@ -2660,7 +2660,7 @@ BI.BubbleChart = BI.inherit(BI.AbstractChart, {
         config.yAxis[0].gridLineWidth = this.config.showGridLine === true ? 1 : 0;
         config.yAxis[0].lineWidth = 1;
         config.yAxis[0].title.rotation = this.constants.ROTATION;
-        config.yAxis[0].maxWidth = '40%';
+        config.yAxis[0].maxWidth = "40%";
 
         config.xAxis[0].formatter = self.formatTickInXYaxis(this.config.xAxisStyle, this.config.xAxisNumberLevel, this.config.rightNumSeparators);
         self.formatNumberLevelInXaxis(items, this.config.xAxisNumberLevel);
@@ -2668,41 +2668,42 @@ BI.BubbleChart = BI.inherit(BI.AbstractChart, {
         config.xAxis[0].title.text = this.config.showXAxisTitle === true ? this.config.xAxisTitle + config.xAxis[0].title.text : config.xAxis[0].title.text;
         config.xAxis[0].title.align = "center";
         config.xAxis[0].gridLineWidth = this.config.showGridLine === true ? 1 : 0;
-        config.xAxis[0].maxHeith = '40%';
+        config.xAxis[0].maxHeith = "40%";
         config.chartType = "bubble";
 
         if (BI.isNotEmptyArray(this.config.tooltip)) {
             config.plotOptions.bubble.tooltip = {
                 useHtml: true,
                 style: {
-                    color: 'RGB(184, 184, 184)'
+                    color: "RGB(184, 184, 184)"
                 },
                 formatter: function () {
-                var y = self.formatTickInXYaxis(self.config.leftYAxisStyle, self.config.leftYAxisNumberLevel, self.config.numSeparators)(this.y);
-                var x = self.formatTickInXYaxis(self.config.xAxisStyle, self.config.xAxisNumberLevel, self.config.rightNumSeparators)(this.x);
-                return this.seriesName + '<div>(X)' + self.config.tooltip[0] + ':' + x + '</div><div>(Y)' + self.config.tooltip[1]
-                    + ':' + y + '</div><div>(' + BI.i18nText("BI-Size") + ')' + self.config.tooltip[2] + ':' + this.size + '</div>'}
+                    var y = self.formatTickInXYaxis(self.config.leftYAxisStyle, self.config.leftYAxisNumberLevel, self.config.numSeparators)(this.y);
+                    var x = self.formatTickInXYaxis(self.config.xAxisStyle, self.config.xAxisNumberLevel, self.config.rightNumSeparators)(this.x);
+                    return this.seriesName + "<div>(X)" + self.config.tooltip[0] + ":" + x + "</div><div>(Y)" + self.config.tooltip[1]
+                    + ":" + y + "</div><div>(" + BI.i18nText("BI-Size") + ")" + self.config.tooltip[2] + ":" + this.size + "</div>";
+                }
             };
         }
 
-        //为了给数据标签加个%,还要遍历所有的系列，唉
+        // 为了给数据标签加个%,还要遍历所有的系列，唉
         if (config.plotOptions.dataLabels.enabled === true) {
             BI.each(items, function (idx, item) {
                 item.dataLabels = {
-                    "style" : self.config.chartFont,
-                    "align": "outside",
-                    "autoAdjust": true,
+                    style: self.config.chartFont,
+                    align: "outside",
+                    autoAdjust: true,
                     enabled: true,
                     formatter: {
                         identifier: "${X}${Y}${SIZE}",
-                        "XFormat": function () {
-                            return BI.contentFormat(arguments[0], '#.##;-#.##')
+                        XFormat: function () {
+                            return BI.contentFormat(arguments[0], "#.##;-#.##");
                         },
-                        "YFormat": function () {
-                            return BI.contentFormat(arguments[0], '#.##;-#.##')
+                        YFormat: function () {
+                            return BI.contentFormat(arguments[0], "#.##;-#.##");
                         },
-                        "sizeFormat": function () {
-                            return BI.contentFormat(arguments[0], '#.##;-#.##')
+                        sizeFormat: function () {
+                            return BI.contentFormat(arguments[0], "#.##;-#.##");
                         }
                     }
                 };
@@ -2711,14 +2712,14 @@ BI.BubbleChart = BI.inherit(BI.AbstractChart, {
             });
         }
 
-        //全局样式图表文字
+        // 全局样式图表文字
         config.yAxis[0].title.style = config.yAxis[0].labelStyle = this.config.chartFont;
         config.xAxis[0].title.style = config.xAxis[0].labelStyle = this.config.chartFont;
         config.legend.style = this.config.chartFont;
 
         return [items, config];
 
-        function formatChartStyle() {
+        function formatChartStyle () {
             switch (self.config.chartStyle) {
                 case BICst.CHART_STYLE.STYLE_GRADUAL:
                     return "gradual";
@@ -2728,7 +2729,7 @@ BI.BubbleChart = BI.inherit(BI.AbstractChart, {
             }
         }
 
-        function formatCordon() {
+        function formatCordon () {
             BI.each(self.config.cordon, function (idx, cor) {
                 if (idx === 0 && self.xAxis.length > 0) {
                     var magnify = self.calcMagnify(self.config.xAxisNumberLevel);
@@ -2737,9 +2738,9 @@ BI.BubbleChart = BI.inherit(BI.AbstractChart, {
                             value: t.value.div(magnify),
                             width: 1,
                             label: {
-                                "style" : self.config.chartFont,
-                                "text": t.text,
-                                "align": "top"
+                                style: self.config.chartFont,
+                                text: t.text,
+                                align: "top"
                             }
                         });
                     });
@@ -2762,31 +2763,31 @@ BI.BubbleChart = BI.inherit(BI.AbstractChart, {
                             value: t.value.div(magnify),
                             width: 1,
                             label: {
-                                "style" : self.config.chartFont,
-                                "text": t.text,
-                                "align": "left"
+                                style: self.config.chartFont,
+                                text: t.text,
+                                align: "left"
                             }
                         });
                     });
                 }
-            })
+            });
         }
 
-        function formatNumberLevelInYaxis(type, position) {
+        function formatNumberLevelInYaxis (type, position) {
             var magnify = self.calcMagnify(type);
             BI.each(items, function (idx, item) {
                 BI.each(item.data, function (id, da) {
                     if (position === item.yAxis) {
                         da.y = self.formatXYDataWithMagnify(da.y, magnify);
                     }
-                })
+                });
             });
             if (type === BICst.TARGET_STYLE.NUM_LEVEL.PERCENT) {
-                //config.plotOptions.tooltip.formatter.valueFormat = "function(){return window.FR ? FR.contentFormat(arguments[0], '#0%') : arguments[0]}";
+                // config.plotOptions.tooltip.formatter.valueFormat = "function(){return window.FR ? FR.contentFormat(arguments[0], '#0%') : arguments[0]}";
             }
         }
 
-        function getXYAxisUnit(numberLevelType, position) {
+        function getXYAxisUnit (numberLevelType, position) {
             var unit = "";
             switch (numberLevelType) {
                 case BICst.TARGET_STYLE.NUM_LEVEL.NORMAL:
@@ -2803,13 +2804,13 @@ BI.BubbleChart = BI.inherit(BI.AbstractChart, {
                     break;
             }
             if (position === self.constants.X_AXIS) {
-                self.config.xAxisUnit !== "" && (unit = unit + self.config.xAxisUnit)
+                self.config.xAxisUnit !== "" && (unit = unit + self.config.xAxisUnit);
             }
             if (position === self.constants.LEFT_AXIS) {
-                self.config.leftYAxisUnit !== "" && (unit = unit + self.config.leftYAxisUnit)
+                self.config.leftYAxisUnit !== "" && (unit = unit + self.config.leftYAxisUnit);
             }
             if (position === self.constants.RIGHT_AXIS) {
-                self.config.rightYAxisUnit !== "" && (unit = unit + self.config.rightYAxisUnit)
+                self.config.rightYAxisUnit !== "" && (unit = unit + self.config.rightYAxisUnit);
             }
             return unit === "" ? unit : "(" + unit + ")";
         }
@@ -2820,9 +2821,9 @@ BI.BubbleChart = BI.inherit(BI.AbstractChart, {
             BI.each(item, function (id, it) {
                 BI.each(it.data, function (i, da) {
                     var data = da.size;
-                    da.size = BI.contentFormat(data, '#.##;-#.##')
-                })
-            })
+                    da.size = BI.contentFormat(data, "#.##;-#.##");
+                });
+            });
         });
         return items;
     },
@@ -2873,7 +2874,7 @@ BI.BubbleChart = BI.inherit(BI.AbstractChart, {
     }
 });
 BI.BubbleChart.EVENT_CHANGE = "EVENT_CHANGE";
-BI.shortcut('bi.bubble_chart', BI.BubbleChart);
+BI.shortcut("bi.bubble_chart", BI.BubbleChart);
 /**
  * 图表控件
  * @class BI.CompareAreaChart
@@ -2884,7 +2885,7 @@ BI.CompareAreaChart = BI.inherit(BI.AbstractChart, {
     _defaultConfig: function () {
         return BI.extend(BI.CompareAreaChart.superclass._defaultConfig.apply(this, arguments), {
             baseCls: "bi-compare-area-chart"
-        })
+        });
     },
 
     _init: function () {
@@ -2910,7 +2911,7 @@ BI.CompareAreaChart = BI.inherit(BI.AbstractChart, {
             self.fireEvent(BI.CompareAreaChart.EVENT_CHANGE, obj);
         });
         this.combineChart.on(BI.CombineChart.EVENT_ITEM_CLICK, function (obj) {
-            self.fireEvent(BI.AbstractChart.EVENT_ITEM_CLICK, obj)
+            self.fireEvent(BI.AbstractChart.EVENT_ITEM_CLICK, obj);
         });
     },
 
@@ -2979,20 +2980,20 @@ BI.CompareAreaChart = BI.inherit(BI.AbstractChart, {
             enableTick: this.config.enableTick,
             labelRotation: this.config.textDirection,
             gridLineWidth: this.config.showGridLine === true ? 1 : 0,
-            maxHeight: '40%'
+            maxHeight: "40%"
         });
 
         config.chartType = "area";
 
-        //为了给数据标签加个%,还要遍历所有的系列，唉
+        // 为了给数据标签加个%,还要遍历所有的系列，唉
         this.formatDataLabel(config.plotOptions.dataLabels.enabled, items, config, this.config.chartFont);
 
-        //全局样式的图表文字
+        // 全局样式的图表文字
         this.setFontStyle(this.config.chartFont, config);
 
         return [items, config];
 
-        function _calculateValueNiceDomain(minValue, maxValue) {
+        function _calculateValueNiceDomain (minValue, maxValue) {
 
             minValue = Math.min(0, minValue);
 
@@ -3001,7 +3002,7 @@ BI.CompareAreaChart = BI.inherit(BI.AbstractChart, {
             return _linearNiceDomain(minValue, maxValue, tickInterval);
         }
 
-        function _linearTickInterval(minValue, maxValue, m) {
+        function _linearTickInterval (minValue, maxValue, m) {
 
             m = m || 5;
             var span = maxValue - minValue;
@@ -3013,7 +3014,7 @@ BI.CompareAreaChart = BI.inherit(BI.AbstractChart, {
             return step;
         }
 
-        function _linearNiceDomain(minValue, maxValue, tickInterval) {
+        function _linearNiceDomain (minValue, maxValue, tickInterval) {
 
             minValue = VanUtils.accMul(Math.floor(minValue / tickInterval), tickInterval);
 
@@ -3022,7 +3023,7 @@ BI.CompareAreaChart = BI.inherit(BI.AbstractChart, {
             return [minValue, maxValue];
         }
 
-        function formatChartStyle() {
+        function formatChartStyle () {
             switch (self.config.chartStyle) {
                 case BICst.CHART_STYLE.STYLE_GRADUAL:
                     return "gradual";
@@ -3032,7 +3033,7 @@ BI.CompareAreaChart = BI.inherit(BI.AbstractChart, {
             }
         }
 
-        function formatCordon() {
+        function formatCordon () {
             BI.each(self.config.cordon, function (idx, cor) {
                 if (idx === 0 && self.xAxis.length > 0) {
                     var magnify = self.calcMagnify(self.config.xAxisNumberLevel);
@@ -3041,9 +3042,9 @@ BI.CompareAreaChart = BI.inherit(BI.AbstractChart, {
                             value: t.value.div(magnify),
                             width: 1,
                             label: {
-                                "style": self.config.chartFont,
-                                "text": t.text,
-                                "align": "top"
+                                style: self.config.chartFont,
+                                text: t.text,
+                                align: "top"
                             }
                         });
                     });
@@ -3066,17 +3067,17 @@ BI.CompareAreaChart = BI.inherit(BI.AbstractChart, {
                             value: t.value.div(magnify),
                             width: 1,
                             label: {
-                                "style": self.config.chartFont,
-                                "text": t.text,
-                                "align": "left"
+                                style: self.config.chartFont,
+                                text: t.text,
+                                align: "left"
                             }
                         });
                     });
                 }
-            })
+            });
         }
 
-        function formatChartLineStyle() {
+        function formatChartLineStyle () {
             switch (self.config.chartLineType) {
                 case BICst.CHART_SHAPE.RIGHT_ANGLE:
                     config.plotOptions.area = {
@@ -3100,7 +3101,7 @@ BI.CompareAreaChart = BI.inherit(BI.AbstractChart, {
             }
         }
 
-        function formatNumberLevelInYaxis(type, position, formatter) {
+        function formatNumberLevelInYaxis (type, position, formatter) {
             var magnify = self.calcMagnify(type);
             BI.each(items, function (idx, item) {
                 var max = null;
@@ -3122,7 +3123,7 @@ BI.CompareAreaChart = BI.inherit(BI.AbstractChart, {
             });
         }
 
-        function getXYAxisUnit(numberLevelType, position) {
+        function getXYAxisUnit (numberLevelType, position) {
             var unit = "";
             switch (numberLevelType) {
                 case BICst.TARGET_STYLE.NUM_LEVEL.NORMAL:
@@ -3139,13 +3140,13 @@ BI.CompareAreaChart = BI.inherit(BI.AbstractChart, {
                     break;
             }
             if (position === self.constants.X_AXIS) {
-                self.config.xAxisUnit !== "" && (unit = unit + self.config.xAxisUnit)
+                self.config.xAxisUnit !== "" && (unit = unit + self.config.xAxisUnit);
             }
             if (position === self.constants.LEFT_AXIS) {
-                self.config.leftYAxisUnit !== "" && (unit = unit + self.config.leftYAxisUnit)
+                self.config.leftYAxisUnit !== "" && (unit = unit + self.config.leftYAxisUnit);
             }
             if (position === self.constants.RIGHT_AXIS) {
-                self.config.rightYAxisUnit !== "" && (unit = unit + self.config.rightYAxisUnit)
+                self.config.rightYAxisUnit !== "" && (unit = unit + self.config.rightYAxisUnit);
             }
             return unit === "" ? unit : "(" + unit + ")";
         }
@@ -3246,7 +3247,7 @@ BI.CompareAreaChart = BI.inherit(BI.AbstractChart, {
     }
 });
 BI.CompareAreaChart.EVENT_CHANGE = "EVENT_CHANGE";
-BI.shortcut('bi.compare_area_chart', BI.CompareAreaChart);/**
+BI.shortcut("bi.compare_area_chart", BI.CompareAreaChart);/**
  * 图表控件
  * @class BI.CompareAxisChart
  * @extends BI.Widget
@@ -3256,7 +3257,7 @@ BI.CompareAxisChart = BI.inherit(BI.AbstractChart, {
     _defaultConfig: function () {
         return BI.extend(BI.CompareAxisChart.superclass._defaultConfig.apply(this, arguments), {
             baseCls: "bi-compare-axis-chart"
-        })
+        });
     },
 
     _init: function () {
@@ -3291,11 +3292,11 @@ BI.CompareAxisChart = BI.inherit(BI.AbstractChart, {
             self.fireEvent(BI.CompareAxisChart.EVENT_CHANGE, obj);
         });
         this.combineChart.on(BI.CombineChart.EVENT_ITEM_CLICK, function (obj) {
-            self.fireEvent(BI.AbstractChart.EVENT_ITEM_CLICK, obj)
+            self.fireEvent(BI.AbstractChart.EVENT_ITEM_CLICK, obj);
         });
     },
 
-    _formatConfig: function(config, items){
+    _formatConfig: function (config, items) {
         var self = this, o = this.options;
         config.colors = this.config.chartColor;
         config.style = formatChartStyle();
@@ -3306,15 +3307,15 @@ BI.CompareAxisChart = BI.inherit(BI.AbstractChart, {
         config.dataSheet.enabled = this.config.showDataTable;
         config.xAxis[0].showLabel = !config.dataSheet.enabled;
         config.zoom.zoomTool.enabled = this.config.showZoom;
-        if(this.config.showZoom === true){
+        if(this.config.showZoom === true) {
             delete config.dataSheet;
             delete config.zoom.zoomType;
         }
 
         config.yAxis = this.yAxis;
-        BI.each(config.yAxis, function(idx, axis){
-            var unit = '';
-            switch (axis.axisIndex){
+        BI.each(config.yAxis, function (idx, axis) {
+            var unit = "";
+            switch (axis.axisIndex) {
                 case self.constants.LEFT_AXIS:
                     unit = getXYAxisUnit(self.config.leftYAxisNumberLevel, self.constants.LEFT_AXIS);
                     axis.title.rotation = self.constants.ROTATION;
@@ -3360,7 +3361,7 @@ BI.CompareAxisChart = BI.inherit(BI.AbstractChart, {
             labelRotation: this.config.textDirection,
             enableMinorTick: this.config.enableMinorTick,
             gridLineWidth: this.config.showGridLine === true ? 1 : 0,
-            maxHeight: '40%'
+            maxHeight: "40%"
         });
 
         BI.extend(config.xAxis[1], {
@@ -3369,15 +3370,15 @@ BI.CompareAxisChart = BI.inherit(BI.AbstractChart, {
             enableMinorTick: this.config.enableMinorTick
         });
 
-        //为了给数据标签加个%,还要遍历所有的系列，唉
+        // 为了给数据标签加个%,还要遍历所有的系列，唉
         this.formatDataLabel(config.plotOptions.dataLabels.enabled, items, config, this.config.chartFont);
 
-        //全局样式的图表文字
+        // 全局样式的图表文字
         this.setFontStyle(this.config.chartFont, config);
 
         return [items, config];
 
-        function formatChartStyle(){
+        function formatChartStyle () {
             switch (self.config.chartStyle) {
                 case BICst.CHART_STYLE.STYLE_GRADUAL:
                     return "gradual";
@@ -3387,23 +3388,23 @@ BI.CompareAxisChart = BI.inherit(BI.AbstractChart, {
             }
         }
 
-        function formatCordon(){
-            BI.each(self.config.cordon, function(idx, cor){
-                if(idx === 0 && self.xAxis.length > 0){
+        function formatCordon () {
+            BI.each(self.config.cordon, function (idx, cor) {
+                if(idx === 0 && self.xAxis.length > 0) {
                     var magnify = self.calcMagnify(self.config.leftYAxisNumberLevel);
-                    self.xAxis[0].plotLines = BI.map(cor, function(i, t){
+                    self.xAxis[0].plotLines = BI.map(cor, function (i, t) {
                         return BI.extend(t, {
                             value: t.value.div(magnify),
                             width: 1,
                             label: {
-                                "style" : self.config.chartFont,
-                                "text": t.text,
-                                "align": "top"
+                                style: self.config.chartFont,
+                                text: t.text,
+                                align: "top"
                             }
                         });
                     });
                 }
-                if(idx > 0 && self.yAxis.length >= idx){
+                if(idx > 0 && self.yAxis.length >= idx) {
                     var magnify = 1;
                     switch (idx - 1) {
                         case self.constants.LEFT_AXIS:
@@ -3416,22 +3417,22 @@ BI.CompareAxisChart = BI.inherit(BI.AbstractChart, {
                             magnify = self.calcMagnify(self.config.rightYAxisSecondNumberLevel);
                             break;
                     }
-                    self.yAxis[idx - 1].plotLines = BI.map(cor, function(i, t){
+                    self.yAxis[idx - 1].plotLines = BI.map(cor, function (i, t) {
                         return BI.extend(t, {
                             value: t.value.div(magnify),
                             width: 1,
                             label: {
-                                "style" : self.config.chartFont,
-                                "text": t.text,
-                                "align": "left"
+                                style: self.config.chartFont,
+                                text: t.text,
+                                align: "left"
                             }
                         });
                     });
                 }
-            })
+            });
         }
 
-        function formatChartLineStyle(){
+        function formatChartLineStyle () {
             switch (self.config.chartLineType) {
                 case BICst.CHART_SHAPE.RIGHT_ANGLE:
                     config.plotOptions.curve = false;
@@ -3449,29 +3450,29 @@ BI.CompareAxisChart = BI.inherit(BI.AbstractChart, {
             }
         }
 
-        function formatNumberLevelInYaxis(type, position, formatter){
+        function formatNumberLevelInYaxis (type, position, formatter) {
             var magnify = self.calcMagnify(type);
             BI.each(items, function (idx, item) {
                 var max = null;
                 BI.each(item.data, function (id, da) {
                     if (position === item.yAxis) {
                         da.y = self.formatXYDataWithMagnify(da.y, magnify);
-                        if((BI.isNull(max) || BI.parseFloat(da.y) > BI.parseFloat(max))){
+                        if((BI.isNull(max) || BI.parseFloat(da.y) > BI.parseFloat(max))) {
                             max = da.y;
                         }
                     }
                 });
-                if(position === item.yAxis){
+                if(position === item.yAxis) {
                     item.tooltip = BI.deepClone(config.plotOptions.tooltip);
                     item.tooltip.formatter.valueFormat = formatter;
                 }
-                if(BI.isNotNull(max)){
+                if(BI.isNotNull(max)) {
                     self.maxes.push(max);
                 }
             });
         }
 
-        function getXYAxisUnit(numberLevelType, position){
+        function getXYAxisUnit (numberLevelType, position) {
             var unit = "";
             switch (numberLevelType) {
                 case BICst.TARGET_STYLE.NUM_LEVEL.NORMAL:
@@ -3487,19 +3488,19 @@ BI.CompareAxisChart = BI.inherit(BI.AbstractChart, {
                     unit = BI.i18nText("BI-Yi");
                     break;
             }
-            if(position === self.constants.X_AXIS){
-                self.config.xAxisUnit !== "" && (unit = unit + self.config.xAxisUnit)
+            if(position === self.constants.X_AXIS) {
+                self.config.xAxisUnit !== "" && (unit = unit + self.config.xAxisUnit);
             }
-            if(position === self.constants.LEFT_AXIS){
-                self.config.leftYAxisUnit !== "" && (unit = unit + self.config.leftYAxisUnit)
+            if(position === self.constants.LEFT_AXIS) {
+                self.config.leftYAxisUnit !== "" && (unit = unit + self.config.leftYAxisUnit);
             }
-            if(position === self.constants.RIGHT_AXIS){
-                self.config.rightYAxisUnit !== "" && (unit = unit + self.config.rightYAxisUnit)
+            if(position === self.constants.RIGHT_AXIS) {
+                self.config.rightYAxisUnit !== "" && (unit = unit + self.config.rightYAxisUnit);
             }
             return unit === "" ? unit : "(" + unit + ")";
         }
 
-        function _calculateValueNiceDomain(minValue, maxValue){
+        function _calculateValueNiceDomain (minValue, maxValue) {
 
             minValue = Math.min(0, minValue);
 
@@ -3508,7 +3509,7 @@ BI.CompareAxisChart = BI.inherit(BI.AbstractChart, {
             return _linearNiceDomain(minValue, maxValue, tickInterval);
         }
 
-        function _linearTickInterval(minValue, maxValue, m){
+        function _linearTickInterval (minValue, maxValue, m) {
 
             m = m || 5;
             var span = maxValue - minValue;
@@ -3520,7 +3521,7 @@ BI.CompareAxisChart = BI.inherit(BI.AbstractChart, {
             return step;
         }
 
-        function _linearNiceDomain(minValue, maxValue, tickInterval){
+        function _linearNiceDomain (minValue, maxValue, tickInterval) {
 
             minValue = VanUtils.accMul(Math.floor(minValue / tickInterval), tickInterval);
 
@@ -3530,12 +3531,12 @@ BI.CompareAxisChart = BI.inherit(BI.AbstractChart, {
         }
     },
 
-    _formatItems: function(items){
+    _formatItems: function (items) {
         var self = this;
         this.maxes = [];
-        BI.each(items, function(idx, item){
-            BI.each(item, function(id, it){
-                if(idx > 0){
+        BI.each(items, function (idx, item) {
+            BI.each(item, function (id, it) {
+                if(idx > 0) {
                     BI.extend(it, {reversed: true, xAxis: 1});
                 }else{
                     BI.extend(it, {reversed: false, xAxis: 0});
@@ -3562,7 +3563,7 @@ BI.CompareAxisChart = BI.inherit(BI.AbstractChart, {
             leftYAxisReversed: options.leftYAxisReversed || false,
             rightYAxisReversed: options.rightYAxisReversed || false,
             leftYAxisNumberLevel: options.leftYAxisNumberLevel || c.NORMAL,
-            rightYAxisNumberLevel:  options.rightYAxisNumberLevel || c.NORMAL,
+            rightYAxisNumberLevel: options.rightYAxisNumberLevel || c.NORMAL,
             xAxisUnit: options.xAxisUnit || "",
             leftYAxisUnit: options.leftYAxisUnit || "",
             rightYAxisUnit: options.rightYAxisUnit || "",
@@ -3587,16 +3588,16 @@ BI.CompareAxisChart = BI.inherit(BI.AbstractChart, {
         this.yAxis = [];
 
         var types = [];
-        BI.each(items, function(idx, axisItems){
+        BI.each(items, function (idx, axisItems) {
             var type = [];
-            BI.each(axisItems, function(id, item){
+            BI.each(axisItems, function (id, item) {
                 type.push(BICst.WIDGET.AXIS);
             });
             types.push(type);
         });
 
-        BI.each(types, function(idx, type){
-            if(BI.isEmptyArray(type)){
+        BI.each(types, function (idx, type) {
+            if(BI.isEmptyArray(type)) {
                 return;
             }
             var newYAxis = {
@@ -3621,12 +3622,12 @@ BI.CompareAxisChart = BI.inherit(BI.AbstractChart, {
         this.combineChart.resize();
     },
 
-    magnify: function(){
+    magnify: function () {
         this.combineChart.magnify();
     }
 });
 BI.CompareAxisChart.EVENT_CHANGE = "EVENT_CHANGE";
-BI.shortcut('bi.compare_axis_chart', BI.CompareAxisChart);/**
+BI.shortcut("bi.compare_axis_chart", BI.CompareAxisChart);/**
  * 图表控件
  * @class BI.CompareBarChart
  * @extends BI.Widget
@@ -3636,7 +3637,7 @@ BI.CompareBarChart = BI.inherit(BI.AbstractChart, {
     _defaultConfig: function () {
         return BI.extend(BI.CompareBarChart.superclass._defaultConfig.apply(this, arguments), {
             baseCls: "bi-compare-bar-chart"
-        })
+        });
     },
 
     _init: function () {
@@ -3673,7 +3674,7 @@ BI.CompareBarChart = BI.inherit(BI.AbstractChart, {
             self.fireEvent(BI.CompareBarChart.EVENT_CHANGE, obj);
         });
         this.combineChart.on(BI.CombineChart.EVENT_ITEM_CLICK, function (obj) {
-            self.fireEvent(BI.AbstractChart.EVENT_ITEM_CLICK, obj)
+            self.fireEvent(BI.AbstractChart.EVENT_ITEM_CLICK, obj);
         });
     },
 
@@ -3695,7 +3696,7 @@ BI.CompareBarChart = BI.inherit(BI.AbstractChart, {
             lineWidth: this.config.lineWidth,
             enableTick: this.config.enableTick,
             labelRotation: this.config.textDirection,
-            maxWidth: '40%'
+            maxWidth: "40%"
         });
 
         self.formatNumberLevelInXaxis(items, this.config.leftYAxisNumberLevel);
@@ -3711,17 +3712,17 @@ BI.CompareBarChart = BI.inherit(BI.AbstractChart, {
         });
 
         config.chartType = "bar";
-        //为了给数据标签加个%,还要遍历所有的系列，唉
+        // 为了给数据标签加个%,还要遍历所有的系列，唉
         this.formatDataLabelForAxis(config.plotOptions.dataLabels.enabled, items, config.xAxis[0].formatter, this.config.chartFont);
 
         config.plotOptions.tooltip.formatter.valueFormat = config.xAxis[0].formatter;
 
-        //全局样式的图表文字
+        // 全局样式的图表文字
         this.setFontStyle(this.config.chartFont, config);
 
         return [items, config];
 
-        function formatChartStyle() {
+        function formatChartStyle () {
             switch (self.config.chartStyle) {
                 case BICst.CHART_STYLE.STYLE_GRADUAL:
                     return "gradual";
@@ -3731,7 +3732,7 @@ BI.CompareBarChart = BI.inherit(BI.AbstractChart, {
             }
         }
 
-        function formatCordon() {
+        function formatCordon () {
             BI.each(self.config.cordon, function (idx, cor) {
                 if (idx === 0 && self.xAxis.length > 0) {
                     var magnify = self.calcMagnify(self.config.leftYAxisNumberLevel);
@@ -3740,9 +3741,9 @@ BI.CompareBarChart = BI.inherit(BI.AbstractChart, {
                             value: t.value.div(magnify),
                             width: 1,
                             label: {
-                                "style" : self.config.chartFont,
-                                "text": t.text,
-                                "align": "top"
+                                style: self.config.chartFont,
+                                text: t.text,
+                                align: "top"
                             }
                         });
                     });
@@ -3765,17 +3766,17 @@ BI.CompareBarChart = BI.inherit(BI.AbstractChart, {
                             value: t.value.div(magnify),
                             width: 1,
                             label: {
-                                "style" : self.config.chartFont,
-                                "text": t.text,
-                                "align": "left"
+                                style: self.config.chartFont,
+                                text: t.text,
+                                align: "left"
                             }
                         });
                     });
                 }
-            })
+            });
         }
 
-        function getXYAxisUnit(numberLevelType, position) {
+        function getXYAxisUnit (numberLevelType, position) {
             var unit = "";
             switch (numberLevelType) {
                 case BICst.TARGET_STYLE.NUM_LEVEL.NORMAL:
@@ -3792,13 +3793,13 @@ BI.CompareBarChart = BI.inherit(BI.AbstractChart, {
                     break;
             }
             if (position === self.constants.X_AXIS) {
-                self.config.leftYAxisUnit !== "" && (unit = unit + self.config.leftYAxisUnit)
+                self.config.leftYAxisUnit !== "" && (unit = unit + self.config.leftYAxisUnit);
             }
             if (position === self.constants.LEFT_AXIS) {
-                self.config.xAxisUnit !== "" && (unit = unit + self.config.xAxisUnit)
+                self.config.xAxisUnit !== "" && (unit = unit + self.config.xAxisUnit);
             }
             if (position === self.constants.RIGHT_AXIS) {
-                self.config.rightYAxisUnit !== "" && (unit = unit + self.config.rightYAxisUnit)
+                self.config.rightYAxisUnit !== "" && (unit = unit + self.config.rightYAxisUnit);
             }
             return unit === "" ? unit : "(" + unit + ")";
         }
@@ -3818,7 +3819,7 @@ BI.CompareBarChart = BI.inherit(BI.AbstractChart, {
                     }
                 });
                 it.stack = i;
-            })
+            });
         });
         BI.each(items, function (idx, item) {
             result = BI.concat(result, item);
@@ -3878,7 +3879,7 @@ BI.CompareBarChart = BI.inherit(BI.AbstractChart, {
     }
 });
 BI.CompareBarChart.EVENT_CHANGE = "EVENT_CHANGE";
-BI.shortcut('bi.compare_bar_chart', BI.CompareBarChart);/**
+BI.shortcut("bi.compare_bar_chart", BI.CompareBarChart);/**
  * 图表控件
  * @class BI.DashboardChart
  * @extends BI.Widget
@@ -3889,18 +3890,18 @@ BI.DashboardChart = BI.inherit(BI.AbstractChart, {
     _defaultConfig: function () {
         return BI.extend(BI.DashboardChart.superclass._defaultConfig.apply(this, arguments), {
             baseCls: "bi-dashboard-chart"
-        })
+        });
     },
 
     _init: function () {
         BI.DashboardChart.superclass._init.apply(this, arguments);
         var self = this, o = this.options;
         this.gaugeAxis = [{
-            "minorTickColor": "rgb(226,226,226)",
-            "tickColor": "rgb(186,186,186)",
+            minorTickColor: "rgb(226,226,226)",
+            tickColor: "rgb(186,186,186)",
             labelStyle: this.constants.FONT_STYLE,
-            "step": 0,
-            "showLabel": true
+            step: 0,
+            showLabel: true
         }];
         this.combineChart = BI.createWidget({
             type: "bi.combine_chart",
@@ -3912,7 +3913,7 @@ BI.DashboardChart = BI.inherit(BI.AbstractChart, {
             self.fireEvent(BI.DashboardChart.EVENT_CHANGE, obj);
         });
         this.combineChart.on(BI.CombineChart.EVENT_ITEM_CLICK, function (obj) {
-            self.fireEvent(BI.AbstractChart.EVENT_ITEM_CLICK, obj)
+            self.fireEvent(BI.AbstractChart.EVENT_ITEM_CLICK, obj);
         });
     },
 
@@ -3928,13 +3929,13 @@ BI.DashboardChart = BI.inherit(BI.AbstractChart, {
         if (isDashboard && !isMultiPointers) {
             config.plotOptions.seriesLabel.enabled = false;
             if(BI.isNull(items[0].data[0].z)) {
-                config.plotOptions.tooltip.formatter.identifier = "${SERIES}${X}${Y}${SIZE}${VALUE}"
+                config.plotOptions.tooltip.formatter.identifier = "${SERIES}${X}${Y}${SIZE}${VALUE}";
             }
         }
         config.gaugeAxis[0].labelStyle = this.config.chartFont;
         return [items, config];
 
-        function formatChartDashboardStyle() {
+        function formatChartDashboardStyle () {
             var bands = getBandsStyles(self.config.bandsStyles, self.config.autoCustomStyle);
             var percentageLabel = BI.extend(config.plotOptions.percentageLabel, {
                 enabled: self.config.showPercentage === BICst.PERCENTAGE.SHOW
@@ -3946,29 +3947,29 @@ BI.DashboardChart = BI.inherit(BI.AbstractChart, {
                 formatter: function () {
                     var value = this.value;
                     if (self.config.dashboardNumberLevel === BICst.TARGET_STYLE.NUM_LEVEL.PERCENT && self.config.numSeparators) {
-                        value = BI.contentFormat(this.value, "#,##0%;-#,##0%")
+                        value = BI.contentFormat(this.value, "#,##0%;-#,##0%");
                     } else if (self.config.dashboardNumberLevel === BICst.TARGET_STYLE.NUM_LEVEL.PERCENT && !self.config.numSeparators) {
                         value = BI.contentFormat(this.value, "#0.00%");
                     } else if (!(self.config.dashboardNumberLevel === BICst.TARGET_STYLE.NUM_LEVEL.PERCENT) && self.config.numSeparators) {
-                        value = BI.contentFormat(this.value, "#,###.##;-#,###.##")
+                        value = BI.contentFormat(this.value, "#,###.##;-#,###.##");
                     } else {
                         value = BI.contentFormat(this.value, "#.##;-#.##");
                     }
 
-                    var label = '<div style="text-align: center">' + this.seriesName + '</div>' + '<div style="text-align: center">' + value +
-                        getXYAxisUnit(self.config.dashboardNumberLevel, self.constants.DASHBOARD_AXIS) + '</div>';
+                    var label = "<div style=\"text-align: center\">" + this.seriesName + "</div>" + "<div style=\"text-align: center\">" + value +
+                        getXYAxisUnit(self.config.dashboardNumberLevel, self.constants.DASHBOARD_AXIS) + "</div>";
 
                     if (isDashboard && items[0].data.length > 1) {
                         if (isMultiPointers) {
-                            return '<div style="text-align: center">' + this.seriesName + ':' + value +
-                                getXYAxisUnit(self.config.dashboardNumberLevel, self.constants.DASHBOARD_AXIS) + '</div>';
+                            return "<div style=\"text-align: center\">" + this.seriesName + ":" + value +
+                                getXYAxisUnit(self.config.dashboardNumberLevel, self.constants.DASHBOARD_AXIS) + "</div>";
                         }
-                        return label
+                        return label;
                     } else if (isDashboard &&  BI.isNull(items[0].data[0].z)) {
-                        return label
+                        return label;
                     }
 
-                    return '<div style="text-align: center">' + this.category + '</div>' + label;
+                    return "<div style=\"text-align: center\">" + this.category + "</div>" + label;
                 },
                 style: self.config.chartFont,
                 useHtml: true
@@ -4012,9 +4013,9 @@ BI.DashboardChart = BI.inherit(BI.AbstractChart, {
                 config.gaugeAxis[0].formatter = function () {
                     var scaleValue = this;
                     if (self.config.numSeparators) {
-                        scaleValue = BI.contentFormat(scaleValue, '#,##0%;-#,##0%')
+                        scaleValue = BI.contentFormat(scaleValue, "#,##0%;-#,##0%");
                     } else {
-                        scaleValue = BI.contentFormat(scaleValue, '#0.00%')
+                        scaleValue = BI.contentFormat(scaleValue, "#0.00%");
                     }
                     return scaleValue + getXYAxisUnit(self.config.dashboardNumberLevel, self.constants.DASHBOARD_AXIS);
                 };
@@ -4022,14 +4023,14 @@ BI.DashboardChart = BI.inherit(BI.AbstractChart, {
                 config.gaugeAxis[0].formatter = function () {
                     var value = this;
                     if (self.config.numSeparators) {
-                        value = BI.contentFormat(value, "#,###;-#,###")
+                        value = BI.contentFormat(value, "#,###;-#,###");
                     }
                     return value + getXYAxisUnit(self.config.dashboardNumberLevel, self.constants.DASHBOARD_AXIS);
                 };
             }
         }
 
-        function setPlotOptions(style, bands, slotValueLAbel, percentageLabel, thermometerLayout, layout) {
+        function setPlotOptions (style, bands, slotValueLAbel, percentageLabel, thermometerLayout, layout) {
             config.style = style;
             config.plotOptions.bands = bands;
             config.plotOptions.valueLabel = slotValueLAbel;
@@ -4038,44 +4039,44 @@ BI.DashboardChart = BI.inherit(BI.AbstractChart, {
             config.plotOptions.layout = layout;
         }
 
-        function changeMaxMinScale() {
+        function changeMaxMinScale () {
             self.gaugeAxis[0].min = BI.parseFloat(self.config.minScale) || null;
             self.gaugeAxis[0].max = BI.parseFloat(self.config.maxScale) || null;
         }
 
-        function formatNumberLevelInYaxis(type, position) {
+        function formatNumberLevelInYaxis (type, position) {
             var magnify = self.calcMagnify(type);
             BI.each(items, function (idx, item) {
                 BI.each(item.data, function (id, da) {
                     if (position === item.yAxis) {
                         da.y = self.formatXYDataWithMagnify(da.y, magnify);
                     }
-                })
+                });
             });
 
             config.plotOptions.tooltip.formatter.valueFormat = function () {
-                return BI.contentFormat(this, '#.##;-#.##') + getXYAxisUnit(type, position)
+                return BI.contentFormat(this, "#.##;-#.##") + getXYAxisUnit(type, position);
             };
 
             if (self.config.numSeparators) {
                 config.plotOptions.tooltip.formatter.valueFormat = function () {
-                    return BI.contentFormat(arguments[0], '#,###.##;-#,###.##')
+                    return BI.contentFormat(arguments[0], "#,###.##;-#,###.##");
                 };
             }
 
             if (type === BICst.TARGET_STYLE.NUM_LEVEL.PERCENT) {
                 config.plotOptions.tooltip.formatter.valueFormat = function () {
-                    return BI.contentFormat(arguments[0], '#0.00%')
+                    return BI.contentFormat(arguments[0], "#0.00%");
                 };
                 if (self.config.numSeparators) {
                     config.plotOptions.tooltip.formatter.valueFormat = function () {
-                        return BI.contentFormat(arguments[0], '#,##0%;-#,##0%')
+                        return BI.contentFormat(arguments[0], "#,##0%;-#,##0%");
                     };
                 }
             }
         }
 
-        function getXYAxisUnit(numberLevelType, position) {
+        function getXYAxisUnit (numberLevelType, position) {
             var unit = "";
             switch (numberLevelType) {
                 case BICst.TARGET_STYLE.NUM_LEVEL.NORMAL:
@@ -4092,18 +4093,18 @@ BI.DashboardChart = BI.inherit(BI.AbstractChart, {
                     break;
             }
             if (position === self.constants.DASHBOARD_AXIS) {
-                self.config.dashboardUnit !== "" && (unit = unit + self.config.dashboardUnit)
+                self.config.dashboardUnit !== "" && (unit = unit + self.config.dashboardUnit);
             }
             return unit;
         }
 
-        function getBandsStyles(styles, change) {
+        function getBandsStyles (styles, change) {
             var min = 0, bands = [], color = null, max = null, conditionMax = null;
 
             BI.each(items, function (idx, item) {
                 var data = item.data[0];
                 if ((BI.isNull(max) || data.y > max)) {
-                    max = data.y
+                    max = data.y;
                 }
             });
 
@@ -4113,52 +4114,52 @@ BI.DashboardChart = BI.inherit(BI.AbstractChart, {
                     break;
                 case BICst.SCALE_SETTING.CUSTOM:
                     if (styles.length === 0) {
-                        return bands
-                    } else {
-                        var maxScale = _calculateValueNiceDomain(0, max)[1];
-
-                        BI.each(styles, function (idx, style) {
-                            if(BI.parseFloat(style.range.min) > BI.parseFloat(style.range.max)) {
-                               return bands.push({
-                                    color: color,
-                                    from: conditionMax,
-                                    to: maxScale
-                                });
-                            }
-                            bands.push({
-                                color: style.color,
-                                from: style.range.min,
-                                to: style.range.max
-                            });
-                            color = style.color;
-                            conditionMax = style.range.max
-                        });
-                        min = BI.parseInt(styles[0].range.min);
-                        bands.push({
-                            color: "#808080",
-                            from: 0,
-                            to: min
-                        });
-
-                        bands.push({
-                            color: color,
-                            from: conditionMax,
-                            to: maxScale
-                        });
-
                         return bands;
                     }
+                    var maxScale = _calculateValueNiceDomain(0, max)[1];
+
+                    BI.each(styles, function (idx, style) {
+                        if(BI.parseFloat(style.range.min) > BI.parseFloat(style.range.max)) {
+                            return bands.push({
+                                color: color,
+                                from: conditionMax,
+                                to: maxScale
+                            });
+                        }
+                        bands.push({
+                            color: style.color,
+                            from: style.range.min,
+                            to: style.range.max
+                        });
+                        color = style.color;
+                        conditionMax = style.range.max;
+                    });
+                    min = BI.parseInt(styles[0].range.min);
+                    bands.push({
+                        color: "#808080",
+                        from: 0,
+                        to: min
+                    });
+
+                    bands.push({
+                        color: color,
+                        from: conditionMax,
+                        to: maxScale
+                    });
+
+                    return bands;
+                    
             }
         }
 
-        function _calculateValueNiceDomain(minValue, maxValue) {
+        function _calculateValueNiceDomain (minValue, maxValue) {
             minValue = Math.min(0, minValue);
             var tickInterval = _linearTickInterval(minValue, maxValue);
 
             return _linearNiceDomain(minValue, maxValue, tickInterval);
         }
 
-        function _linearTickInterval(minValue, maxValue, m) {
+        function _linearTickInterval (minValue, maxValue, m) {
             m = m || 5;
             var span = maxValue - minValue;
             var step = Math.pow(10, Math.floor(Math.log(span / m) / Math.LN10));
@@ -4168,7 +4169,7 @@ BI.DashboardChart = BI.inherit(BI.AbstractChart, {
             return step;
         }
 
-        function _linearNiceDomain(minValue, maxValue, tickInterval) {
+        function _linearNiceDomain (minValue, maxValue, tickInterval) {
             minValue = VanUtils.accMul(Math.floor(minValue / tickInterval), tickInterval);
             maxValue = VanUtils.accMul(Math.ceil(maxValue / tickInterval), tickInterval);
 
@@ -4183,14 +4184,14 @@ BI.DashboardChart = BI.inherit(BI.AbstractChart, {
         var c = this.constants;
         if (this.config.chartDashboardType === c.NORMAL || this.config.chartDashboardType === c.HALF_DASHBOARD) {
             var result = [];
-            if (this.config.numberOfPointer === c.ONE_POINTER && items[0].length === 1) {//单个系列
+            if (this.config.numberOfPointer === c.ONE_POINTER && items[0].length === 1) {// 单个系列
                 BI.each(items[0][0].data, function (idx, da) {
                     result.push({
                         data: [BI.extend({}, da, {
                             x: items[0][0].name
                         })],
                         name: da.x
-                    })
+                    });
                 });
                 return [result];
             } else if(this.config.numberOfPointer === c.ONE_POINTER && items[0].length > 1) {
@@ -4200,17 +4201,17 @@ BI.DashboardChart = BI.inherit(BI.AbstractChart, {
                             x: item.name
                         })],
                         name: BI.UUID()
-                    })
+                    });
                 });
-                return [result]
+                return [result];
             }
-            if (this.config.numberOfPointer === c.MULTI_POINTER && items[0].length > 1) {//多个系列
+            if (this.config.numberOfPointer === c.MULTI_POINTER && items[0].length > 1) {// 多个系列
                 BI.each(items, function (idx, item) {
                     BI.each(item, function (id, it) {
                         var data = it.data[0];
                         data.x = it.name;
                         result.push(data);
-                    })
+                    });
                 });
                 return [[{
                     data: result,
@@ -4228,8 +4229,8 @@ BI.DashboardChart = BI.inherit(BI.AbstractChart, {
                                 y: da.y
                             })],
                             name: da.x
-                        })
-                    })
+                        });
+                    });
                 });
                 return [others];
             }
@@ -4275,7 +4276,7 @@ BI.DashboardChart = BI.inherit(BI.AbstractChart, {
     }
 });
 BI.DashboardChart.EVENT_CHANGE = "EVENT_CHANGE";
-BI.shortcut('bi.dashboard_chart', BI.DashboardChart);/**
+BI.shortcut("bi.dashboard_chart", BI.DashboardChart);/**
  * 图表控件
  * @class BI.DonutChart
  * @extends BI.Widget
@@ -4285,7 +4286,7 @@ BI.DonutChart = BI.inherit(BI.AbstractChart, {
     _defaultConfig: function () {
         return BI.extend(BI.DonutChart.superclass._defaultConfig.apply(this, arguments), {
             baseCls: "bi-donut-chart"
-        })
+        });
     },
 
     _init: function () {
@@ -4301,11 +4302,11 @@ BI.DonutChart = BI.inherit(BI.AbstractChart, {
             self.fireEvent(BI.DonutChart.EVENT_CHANGE, obj);
         });
         this.combineChart.on(BI.CombineChart.EVENT_ITEM_CLICK, function (obj) {
-            self.fireEvent(BI.AbstractChart.EVENT_ITEM_CLICK, obj)
+            self.fireEvent(BI.AbstractChart.EVENT_ITEM_CLICK, obj);
         });
     },
 
-    _formatConfig: function(config, items){
+    _formatConfig: function (config, items) {
         var self = this;
         delete config.zoom;
         config.colors = this.config.chartColor;
@@ -4326,13 +4327,13 @@ BI.DonutChart = BI.inherit(BI.AbstractChart, {
         BI.each(items, function (idx, item) {
             BI.each(item.data, function (id, da) {
                 da.y = self.formatXYDataWithMagnify(da.y, 1);
-            })
+            });
         });
 
         config.legend.style = this.config.chartFont;
         return [items, config];
 
-        function formatChartStyle(){
+        function formatChartStyle () {
             switch (self.config.chartStyle) {
                 case BICst.CHART_STYLE.STYLE_GRADUAL:
                     return "gradual";
@@ -4357,9 +4358,9 @@ BI.DonutChart = BI.inherit(BI.AbstractChart, {
         this.options.items = items;
 
         var types = [];
-        BI.each(items, function(idx, axisItems){
+        BI.each(items, function (idx, axisItems) {
             var type = [];
-            BI.each(axisItems, function(id, item){
+            BI.each(axisItems, function (id, item) {
                 type.push(BICst.WIDGET.DONUT);
             });
             types.push(type);
@@ -4372,12 +4373,12 @@ BI.DonutChart = BI.inherit(BI.AbstractChart, {
         this.combineChart.resize();
     },
 
-    magnify: function(){
+    magnify: function () {
         this.combineChart.magnify();
     }
 });
 BI.DonutChart.EVENT_CHANGE = "EVENT_CHANGE";
-BI.shortcut('bi.donut_chart', BI.DonutChart);/**
+BI.shortcut("bi.donut_chart", BI.DonutChart);/**
  * 图表控件
  * @class BI.FallAxisChart
  * @extends BI.Widget
@@ -4387,7 +4388,7 @@ BI.FallAxisChart = BI.inherit(BI.AbstractChart, {
     _defaultConfig: function () {
         return BI.extend(BI.FallAxisChart.superclass._defaultConfig.apply(this, arguments), {
             baseCls: "bi-fall-axis-chart"
-        })
+        });
     },
 
     _init: function () {
@@ -4422,11 +4423,11 @@ BI.FallAxisChart = BI.inherit(BI.AbstractChart, {
             self.fireEvent(BI.FallAxisChart.EVENT_CHANGE, obj);
         });
         this.combineChart.on(BI.CombineChart.EVENT_ITEM_CLICK, function (obj) {
-            self.fireEvent(BI.AbstractChart.EVENT_ITEM_CLICK, obj)
+            self.fireEvent(BI.AbstractChart.EVENT_ITEM_CLICK, obj);
         });
     },
 
-    _formatConfig: function(config, items){
+    _formatConfig: function (config, items) {
         var self = this, o = this.options;
         var yTitle = getXYAxisUnit(this.config.leftYAxisNumberLevel, this.constants.LEFT_AXIS);
         config.colors = this.config.chartColor;
@@ -4435,11 +4436,11 @@ BI.FallAxisChart = BI.inherit(BI.AbstractChart, {
         config.legend.enabled = false;
         config.plotOptions.dataLabels.enabled = this.config.showDataLabel;
         config.dataSheet.enabled = this.config.showDataTable;
-        if(config.dataSheet.enabled === true){
+        if(config.dataSheet.enabled === true) {
             config.xAxis[0].showLabel = false;
         }
         config.zoom.zoomTool.enabled = this.config.showZoom;
-        if(this.config.showZoom === true){
+        if(this.config.showZoom === true) {
             delete config.dataSheet;
             delete config.zoom.zoomType;
         }
@@ -4465,20 +4466,20 @@ BI.FallAxisChart = BI.inherit(BI.AbstractChart, {
             enableMinorTick: this.config.enableMinorTick,
             labelRotation: this.config.textDirection,
             gridLineWidth: this.config.showGridLine === true ? 1 : 0,
-            maxHeight: '40%'
+            maxHeight: "40%"
         });
 
-        //为了给数据标签加个%,还要遍历所有的系列，唉
-        if(config.plotOptions.dataLabels.enabled === true){
-            BI.each(items, function(idx, item){
-                if(idx === 0){
+        // 为了给数据标签加个%,还要遍历所有的系列，唉
+        if(config.plotOptions.dataLabels.enabled === true) {
+            BI.each(items, function (idx, item) {
+                if(idx === 0) {
                     item.dataLabels = {};
                     return;
                 }
                 item.dataLabels = {
-                    "style": self.config.chartFont,
-                    "align": "outside",
-                    "autoAdjust": true,
+                    style: self.config.chartFont,
+                    align: "outside",
+                    autoAdjust: true,
                     enabled: true,
                     formatter: {
                         identifier: "${VALUE}",
@@ -4488,12 +4489,12 @@ BI.FallAxisChart = BI.inherit(BI.AbstractChart, {
             });
         }
 
-        //全局样式的图表文字
+        // 全局样式的图表文字
         this.setFontStyle(this.config.chartFont, config);
 
         return [items, config];
 
-        function formatChartStyle(){
+        function formatChartStyle () {
             switch (self.config.chartStyle) {
                 case BICst.CHART_STYLE.STYLE_GRADUAL:
                     return "gradual";
@@ -4503,23 +4504,23 @@ BI.FallAxisChart = BI.inherit(BI.AbstractChart, {
             }
         }
 
-        function formatCordon(){
-            BI.each(self.config.cordon, function(idx, cor){
-                if(idx === 0 && self.xAxis.length > 0){
+        function formatCordon () {
+            BI.each(self.config.cordon, function (idx, cor) {
+                if(idx === 0 && self.xAxis.length > 0) {
                     var magnify = self.calcMagnify(self.config.xAxisNumberLevel);
-                    self.xAxis[0].plotLines = BI.map(cor, function(i, t){
+                    self.xAxis[0].plotLines = BI.map(cor, function (i, t) {
                         return BI.extend(t, {
                             value: t.value.div(magnify),
                             width: 1,
                             label: {
-                                "style": self.config.chartFont,
-                                "text": t.text,
-                                "align": "top"
+                                style: self.config.chartFont,
+                                text: t.text,
+                                align: "top"
                             }
                         });
                     });
                 }
-                if(idx > 0 && self.yAxis.length >= idx){
+                if(idx > 0 && self.yAxis.length >= idx) {
                     var magnify = 1;
                     switch (idx - 1) {
                         case self.constants.LEFT_AXIS:
@@ -4532,34 +4533,34 @@ BI.FallAxisChart = BI.inherit(BI.AbstractChart, {
                             magnify = self.calcMagnify(self.config.rightYAxisSecondNumberLevel);
                             break;
                     }
-                    self.yAxis[idx - 1].plotLines = BI.map(cor, function(i, t){
+                    self.yAxis[idx - 1].plotLines = BI.map(cor, function (i, t) {
                         return BI.extend(t, {
                             value: t.value.div(magnify),
                             width: 1,
                             label: {
-                                "style": self.config.chartFont,
-                                "text": t.text,
-                                "align": "left"
+                                style: self.config.chartFont,
+                                text: t.text,
+                                align: "left"
                             }
                         });
                     });
                 }
-            })
+            });
         }
 
-        function formatNumberLevelInYaxis(type, position, formatter){
+        function formatNumberLevelInYaxis (type, position, formatter) {
             var magnify = self.calcMagnify(type);
             BI.each(items, function (idx, item) {
                 BI.each(item.data, function (id, da) {
                     if (position === item.yAxis) {
                         da.y = self.formatXYDataWithMagnify(da.y, magnify);
                     }
-                })
+                });
             });
             config.plotOptions.tooltip.formatter.valueFormat = formatter;
         }
 
-        function getXYAxisUnit(numberLevelType, position){
+        function getXYAxisUnit (numberLevelType, position) {
             var unit = "";
             switch (numberLevelType) {
                 case BICst.TARGET_STYLE.NUM_LEVEL.NORMAL:
@@ -4575,33 +4576,33 @@ BI.FallAxisChart = BI.inherit(BI.AbstractChart, {
                     unit = BI.i18nText("BI-Yi");
                     break;
             }
-            if(position === self.constants.X_AXIS){
-                self.config.xAxisUnit !== "" && (unit = unit + self.config.xAxisUnit)
+            if(position === self.constants.X_AXIS) {
+                self.config.xAxisUnit !== "" && (unit = unit + self.config.xAxisUnit);
             }
-            if(position === self.constants.LEFT_AXIS){
-                self.config.leftYAxisUnit !== "" && (unit = unit + self.config.leftYAxisUnit)
+            if(position === self.constants.LEFT_AXIS) {
+                self.config.leftYAxisUnit !== "" && (unit = unit + self.config.leftYAxisUnit);
             }
-            if(position === self.constants.RIGHT_AXIS){
-                self.config.rightYAxisUnit !== "" && (unit = unit + self.config.rightYAxisUnit)
+            if(position === self.constants.RIGHT_AXIS) {
+                self.config.rightYAxisUnit !== "" && (unit = unit + self.config.rightYAxisUnit);
             }
             return unit === "" ? unit : "(" + unit + ")";
         }
     },
 
-    _formatItems: function(items){
+    _formatItems: function (items) {
         var o = this.options;
-        if(BI.isEmptyArray(items)){
+        if(BI.isEmptyArray(items)) {
             return [];
         }
         items = items[0];
         var tables = [], sum = 0;
         var colors = this.config.chartColor || [];
-        if(BI.isEmptyArray(colors)){
+        if(BI.isEmptyArray(colors)) {
             colors = ["rgb(152, 118, 170)", "rgb(0, 157, 227)"];
         }
-        BI.each(items, function(idx, item){
-            BI.each(item.data, function(i, t){
-                if(t.y < 0){
+        BI.each(items, function (idx, item) {
+            BI.each(item.data, function (i, t) {
+                if(t.y < 0) {
                     tables.push([t.x, t.y, sum + t.y, t]);
                 }else{
                     tables.push([t.x, t.y, sum, t]);
@@ -4610,14 +4611,14 @@ BI.FallAxisChart = BI.inherit(BI.AbstractChart, {
             });
         });
 
-        return [BI.map(BI.makeArray(2, null), function(idx, item){
+        return [BI.map(BI.makeArray(2, null), function (idx, item) {
             return {
-                "data": BI.map(tables, function(id, cell){
+                data: BI.map(tables, function (id, cell) {
                     var axis = BI.extend({}, cell[3], {
                         x: cell[0],
                         y: Math.abs(cell[2 - idx])
                     });
-                    if(idx === 1){
+                    if(idx === 1) {
                         axis.color = cell[2 - idx] < 0 ? colors[1] : colors[0];
                     }else{
                         axis.color = "rgba(0,0,0,0)";
@@ -4627,7 +4628,7 @@ BI.FallAxisChart = BI.inherit(BI.AbstractChart, {
                         axis.mouseOverColor = "rgba(0,0,0,0)";
                         axis.tooltip = {
                             enable: false
-                        }
+                        };
                     }
                     return axis;
                 }),
@@ -4666,9 +4667,9 @@ BI.FallAxisChart = BI.inherit(BI.AbstractChart, {
         };
         this.options.items = items;
         var types = [];
-        BI.each(items, function(idx, axisItems){
+        BI.each(items, function (idx, axisItems) {
             var type = [];
-            BI.each(axisItems, function(id, item){
+            BI.each(axisItems, function (id, item) {
                 type.push(BICst.WIDGET.AXIS);
             });
             types.push(type);
@@ -4681,12 +4682,12 @@ BI.FallAxisChart = BI.inherit(BI.AbstractChart, {
         this.combineChart.resize();
     },
 
-    magnify: function(){
+    magnify: function () {
         this.combineChart.magnify();
     }
 });
 BI.FallAxisChart.EVENT_CHANGE = "EVENT_CHANGE";
-BI.shortcut('bi.fall_axis_chart', BI.FallAxisChart);/**
+BI.shortcut("bi.fall_axis_chart", BI.FallAxisChart);/**
  * 图表控件
  * @class BI.ForceBubbleChart
  * @extends BI.Widget
@@ -4696,7 +4697,7 @@ BI.ForceBubbleChart = BI.inherit(BI.AbstractChart, {
     _defaultConfig: function () {
         return BI.extend(BI.ForceBubbleChart.superclass._defaultConfig.apply(this, arguments), {
             baseCls: "bi-force-bubble-chart"
-        })
+        });
     },
 
     _init: function () {
@@ -4712,13 +4713,13 @@ BI.ForceBubbleChart = BI.inherit(BI.AbstractChart, {
             self.fireEvent(BI.ForceBubbleChart.EVENT_CHANGE, obj);
         });
         this.combineChart.on(BI.CombineChart.EVENT_ITEM_CLICK, function (obj) {
-            self.fireEvent(BI.AbstractChart.EVENT_ITEM_CLICK, obj)
+            self.fireEvent(BI.AbstractChart.EVENT_ITEM_CLICK, obj);
         });
     },
 
     _formatConfig: function (config, items) {
         var self = this, o = this.options;
-        config.chartType = 'forceBubble';
+        config.chartType = "forceBubble";
         config.colors = this.config.chartColor;
         this.formatChartLegend(config, this.config.chartLegend);
 
@@ -4734,7 +4735,7 @@ BI.ForceBubbleChart = BI.inherit(BI.AbstractChart, {
         BI.each(items, function (idx, item) {
             BI.each(item.data, function (id, da) {
                 da.y = self.formatXYDataWithMagnify(da.y, 1);
-            })
+            });
         });
         config.legend.style = this.config.chartFont;
         return [items, config];
@@ -4772,7 +4773,7 @@ BI.ForceBubbleChart = BI.inherit(BI.AbstractChart, {
     }
 });
 BI.ForceBubbleChart.EVENT_CHANGE = "EVENT_CHANGE";
-BI.shortcut('bi.force_bubble_chart', BI.ForceBubbleChart);/**
+BI.shortcut("bi.force_bubble_chart", BI.ForceBubbleChart);/**
  * 图表控件
  * @class BI.GISMapChart
  * @extends BI.Widget
@@ -4782,7 +4783,7 @@ BI.GISMapChart = BI.inherit(BI.AbstractChart, {
     _defaultConfig: function () {
         return BI.extend(BI.GISMapChart.superclass._defaultConfig.apply(this, arguments), {
             baseCls: "bi-gis-map-chart"
-        })
+        });
     },
 
     _init: function () {
@@ -4798,7 +4799,7 @@ BI.GISMapChart = BI.inherit(BI.AbstractChart, {
             self.fireEvent(BI.GISMapChart.EVENT_CHANGE, obj);
         });
         this.combineChart.on(BI.CombineChart.EVENT_ITEM_CLICK, function (obj) {
-            self.fireEvent(BI.AbstractChart.EVENT_ITEM_CLICK, obj)
+            self.fireEvent(BI.AbstractChart.EVENT_ITEM_CLICK, obj);
         });
     },
 
@@ -4810,29 +4811,29 @@ BI.GISMapChart = BI.inherit(BI.AbstractChart, {
         config.plotOptions.dataLabels.useHtml = true;
         config.plotOptions.dataLabels.style = this.config.chartFont;
         config.plotOptions.dataLabels.formatter = function () {
-            var name = (BI.isArray(this.name) ? '' : this.name + ',') + BI.contentFormat(this.value, '#.##;-#.##') ;
+            var name = (BI.isArray(this.name) ? "" : this.name + ",") + BI.contentFormat(this.value, "#.##;-#.##");
             var style = "padding: 5px; background-color: rgba(0,0,0,0.4980392156862745);border-color: rgb(0,0,0); border-radius:2px; border-width:0px;";
-            var a = '<div style = ' + style + '>' + name + '</div>';
+            var a = "<div style = " + style + ">" + name + "</div>";
             return a;
         };
         config.plotOptions.tooltip.shared = true;
         config.plotOptions.tooltip.formatter = function () {
-            var tip = BI.isArray(this.name) ? '' : this.name;
+            var tip = BI.isArray(this.name) ? "" : this.name;
             BI.each(this.points, function (idx, point) {
-                tip += ('<div>' + point.seriesName + ':' + BI.contentFormat((point.size || point.y), '#.##;-#.##') + '</div>');
+                tip += ("<div>" + point.seriesName + ":" + BI.contentFormat((point.size || point.y), "#.##;-#.##") + "</div>");
             });
             return tip;
         };
         config.geo = {
-            "tileLayer": "http://webrd01.is.autonavi.com/appmaptile?lang=zh_cn&size=1&scale=1&style=8&x={x}&y={y}&z={z}",
-            "attribution": "<a><img src='http://webapi.amap.com/theme/v1.3/mapinfo_05.png'>&copy; 2016 AutoNavi</a>"
+            tileLayer: "http://webrd01.is.autonavi.com/appmaptile?lang=zh_cn&size=1&scale=1&style=8&x={x}&y={y}&z={z}",
+            attribution: "<a><img src='http://webapi.amap.com/theme/v1.3/mapinfo_05.png'>&copy; 2016 AutoNavi</a>"
         };
         if (this.config.showBackgroundLayer === true && BI.isNotNull(this.config.backgroundLayerInfo)) {
             config.geo = {};
             if (this.config.backgroundLayerInfo.type === BICst.WMS_SERVER) {
                 config.geo.tileLayer = false;
                 config.geo.wmsUrl = this.config.backgroundLayerInfo.url;
-                config.geo.wmsLayer = this.config.backgroundLayerInfo.wmsLayer
+                config.geo.wmsLayer = this.config.backgroundLayerInfo.wmsLayer;
             } else {
                 config.geo.tileLayer = this.config.backgroundLayerInfo.url;
             }
@@ -4931,7 +4932,7 @@ BI.GISMapChart = BI.inherit(BI.AbstractChart, {
     }
 });
 BI.GISMapChart.EVENT_CHANGE = "EVENT_CHANGE";
-BI.shortcut('bi.gis_map_chart', BI.GISMapChart);/**
+BI.shortcut("bi.gis_map_chart", BI.GISMapChart);/**
  * 图表控件
  * @class BI.LineChart
  * @extends BI.Widget
@@ -4941,7 +4942,7 @@ BI.LineChart = BI.inherit(BI.AbstractChart, {
     _defaultConfig: function () {
         return BI.extend(BI.LineChart.superclass._defaultConfig.apply(this, arguments), {
             baseCls: "bi-line-chart"
-        })
+        });
     },
 
     _init: function () {
@@ -4967,7 +4968,7 @@ BI.LineChart = BI.inherit(BI.AbstractChart, {
             self.fireEvent(BI.LineChart.EVENT_CHANGE, obj);
         });
         this.combineChart.on(BI.CombineChart.EVENT_ITEM_CLICK, function (obj) {
-            self.fireEvent(BI.AbstractChart.EVENT_ITEM_CLICK, obj)
+            self.fireEvent(BI.AbstractChart.EVENT_ITEM_CLICK, obj);
         });
     },
 
@@ -5033,20 +5034,20 @@ BI.LineChart = BI.inherit(BI.AbstractChart, {
             labelRotation: this.config.textDirection,
             enableMinorTick: self.config.enableMinorTick,
             gridLineWidth: this.config.showGridLine === true ? 1 : 0,
-            maxHeight: '40%'
+            maxHeight: "40%"
         });
 
         config.chartType = "line";
 
-        //为了给数据标签加个%,还要遍历所有的系列，唉
+        // 为了给数据标签加个%,还要遍历所有的系列，唉
         this.formatDataLabel(config.plotOptions.dataLabels.enabled, items, config, this.config.chartFont);
 
-        //全局样式的图表文字
+        // 全局样式的图表文字
         this.setFontStyle(this.config.chartFont, config);
 
         return [items, config];
 
-        function formatChartStyle() {
+        function formatChartStyle () {
             switch (self.config.chartStyle) {
                 case BICst.CHART_STYLE.STYLE_GRADUAL:
                     return "gradual";
@@ -5056,7 +5057,7 @@ BI.LineChart = BI.inherit(BI.AbstractChart, {
             }
         }
 
-        function formatCordon() {
+        function formatCordon () {
             BI.each(self.config.cordon, function (idx, cor) {
                 if (idx === 0 && self.xAxis.length > 0) {
                     var magnify = self.calcMagnify(self.config.xAxisNumberLevel);
@@ -5065,9 +5066,9 @@ BI.LineChart = BI.inherit(BI.AbstractChart, {
                             value: t.value.div(magnify),
                             width: 1,
                             label: {
-                                "style" : self.config.chartFont,
-                                "text": t.text,
-                                "align": "top"
+                                style: self.config.chartFont,
+                                text: t.text,
+                                align: "top"
                             }
                         });
                     });
@@ -5090,17 +5091,17 @@ BI.LineChart = BI.inherit(BI.AbstractChart, {
                             value: t.value.div(magnify),
                             width: 1,
                             label: {
-                                "style" : self.config.chartFont,
-                                "text": t.text,
-                                "align": "left"
+                                style: self.config.chartFont,
+                                text: t.text,
+                                align: "left"
                             }
                         });
                     });
                 }
-            })
+            });
         }
 
-        function formatChartLineStyle() {
+        function formatChartLineStyle () {
             switch (self.config.chartLineType) {
                 case BICst.CHART_SHAPE.RIGHT_ANGLE:
                     config.plotOptions.curve = false;
@@ -5118,7 +5119,7 @@ BI.LineChart = BI.inherit(BI.AbstractChart, {
             }
         }
 
-        function getXYAxisUnit(numberLevelType, position) {
+        function getXYAxisUnit (numberLevelType, position) {
             var unit = "";
             switch (numberLevelType) {
                 case BICst.TARGET_STYLE.NUM_LEVEL.NORMAL:
@@ -5135,13 +5136,13 @@ BI.LineChart = BI.inherit(BI.AbstractChart, {
                     break;
             }
             if (position === self.constants.X_AXIS) {
-                self.config.xAxisUnit !== "" && (unit = unit + self.config.xAxisUnit)
+                self.config.xAxisUnit !== "" && (unit = unit + self.config.xAxisUnit);
             }
             if (position === self.constants.LEFT_AXIS) {
-                self.config.leftYAxisUnit !== "" && (unit = unit + self.config.leftYAxisUnit)
+                self.config.leftYAxisUnit !== "" && (unit = unit + self.config.leftYAxisUnit);
             }
             if (position === self.constants.RIGHT_AXIS) {
-                self.config.rightYAxisUnit !== "" && (unit = unit + self.config.rightYAxisUnit)
+                self.config.rightYAxisUnit !== "" && (unit = unit + self.config.rightYAxisUnit);
             }
             return unit === "" ? unit : "(" + unit + ")";
         }
@@ -5227,7 +5228,7 @@ BI.LineChart = BI.inherit(BI.AbstractChart, {
     }
 });
 BI.LineChart.EVENT_CHANGE = "EVENT_CHANGE";
-BI.shortcut('bi.line_chart', BI.LineChart);/**
+BI.shortcut("bi.line_chart", BI.LineChart);/**
  * 图表控件
  * @class BI.MapChart
  * @extends BI.Widget
@@ -5237,7 +5238,7 @@ BI.MapChart = BI.inherit(BI.AbstractChart, {
     _defaultConfig: function () {
         return BI.extend(BI.MapChart.superclass._defaultConfig.apply(this, arguments), {
             baseCls: "bi-map-chart"
-        })
+        });
     },
 
     _init: function () {
@@ -5253,7 +5254,7 @@ BI.MapChart = BI.inherit(BI.AbstractChart, {
             self.fireEvent(BI.MapChart.EVENT_CHANGE, obj);
         });
         this.combineChart.on(BI.CombineChart.EVENT_ITEM_CLICK, function (obj) {
-            self.fireEvent(BI.AbstractChart.EVENT_ITEM_CLICK, obj)
+            self.fireEvent(BI.AbstractChart.EVENT_ITEM_CLICK, obj);
         });
     },
 
@@ -5275,7 +5276,7 @@ BI.MapChart = BI.inherit(BI.AbstractChart, {
             var tip = this.name;
             var point = this.points[0];
             var index = BI.isNull(point.size) ? 0 : 1;
-            tip += ('<div>' + point.seriesName + ':' + BI.contentFormat(point.size || point.y, formatterArray[index]) + '</div>');
+            tip += ("<div>" + point.seriesName + ":" + BI.contentFormat(point.size || point.y, formatterArray[index]) + "</div>");
             return tip;
         };
         config.plotOptions.dataLabels.formatter.valueFormat = function () {
@@ -5293,7 +5294,7 @@ BI.MapChart = BI.inherit(BI.AbstractChart, {
             if (this.config.backgroundLayerInfo.type === BICst.WMS_SERVER) {
                 config.geo.tileLayer = false;
                 config.geo.wmsUrl = this.config.backgroundLayerInfo.url;
-                config.geo.wmsLayer = this.config.backgroundLayerInfo.wmsLayer
+                config.geo.wmsLayer = this.config.backgroundLayerInfo.wmsLayer;
             } else {
                 config.geo.tileLayer = this.config.backgroundLayerInfo.url;
             }
@@ -5318,12 +5319,12 @@ BI.MapChart = BI.inherit(BI.AbstractChart, {
             items.push({
                 type: "areaMap",
                 data: []
-            })
+            });
         }
 
         return [items, config];
 
-        function formatRangeLegend() {
+        function formatRangeLegend () {
             config.rangeLegend.enabled = true;
             switch (self.config.chartLegend) {
                 case BICst.CHART_LEGENDS.BOTTOM:
@@ -5346,36 +5347,36 @@ BI.MapChart = BI.inherit(BI.AbstractChart, {
                     var settings = items[0].settings;
                     var legendFormat = formatToolTipAndDataLabel(settings.format || c.NORMAL, settings.num_level || c.NORMAL,
                         settings.unit || "", settings.numSeparators || c.NUM_SEPARATORS);
-                    to = BI.contentFormat(to, legendFormat)
+                    to = BI.contentFormat(to, legendFormat);
                 }
-                return to
+                return to;
             };
         }
 
-        function formatToolTipAndDataLabel(format, numberLevel, unit, numSeparators) {
-            var formatter = '#.##';
+        function formatToolTipAndDataLabel (format, numberLevel, unit, numSeparators) {
+            var formatter = "#.##";
             switch (format) {
                 case self.constants.NORMAL:
-                    formatter = '#.##';
-                    if (numSeparators) formatter = '#,###.##';
+                    formatter = "#.##";
+                    if (numSeparators) formatter = "#,###.##";
                     break;
                 case self.constants.ZERO2POINT:
-                    formatter = '#0';
-                    if (numSeparators) formatter = '#,###';
+                    formatter = "#0";
+                    if (numSeparators) formatter = "#,###";
                     break;
                 case self.constants.ONE2POINT:
-                    formatter = '#0.0';
-                    if (numSeparators) formatter = '#,###.0';
+                    formatter = "#0.0";
+                    if (numSeparators) formatter = "#,###.0";
                     break;
                 case self.constants.TWO2POINT:
-                    formatter = '#0.00';
-                    if (numSeparators) formatter = '#,###.00';
+                    formatter = "#0.00";
+                    if (numSeparators) formatter = "#,###.00";
                     break;
             }
 
             switch (numberLevel) {
                 case BICst.TARGET_STYLE.NUM_LEVEL.NORMAL:
-                    formatter += '';
+                    formatter += "";
                     break;
                 case BICst.TARGET_STYLE.NUM_LEVEL.TEN_THOUSAND:
                     formatter += BI.i18nText("BI-Wan");
@@ -5387,23 +5388,23 @@ BI.MapChart = BI.inherit(BI.AbstractChart, {
                     formatter += BI.i18nText("BI-Yi");
                     break;
                 case BICst.TARGET_STYLE.NUM_LEVEL.PERCENT:
-                    formatter += '%';
+                    formatter += "%";
                     break;
             }
 
             return formatter + unit;
         }
 
-        function getRangeStyle(styles, change, defaultColor) {
+        function getRangeStyle (styles, change, defaultColor) {
             var range = [], color = null, defaultStyle = {};
             var conditionMax = null, conditionMin = null, min = null;
 
             BI.each(items, function (idx, item) {
                 BI.each(item.data, function (id, it) {
                     if (BI.isNull(min) || BI.parseFloat(min) > BI.parseFloat(it.y)) {
-                        min = it.y
+                        min = it.y;
                     }
-                })
+                });
             });
 
             switch (change) {
@@ -5425,11 +5426,11 @@ BI.MapChart = BI.inherit(BI.AbstractChart, {
                                 range.push({
                                     color: style.color || "rgba(255,255,255,0)",
                                     from: style.range.min,
-                                    to: to,
+                                    to: to
                                 });
                             }
                             color = style.color;
-                            conditionMax = style.range.max
+                            conditionMax = style.range.max;
                         });
 
                         conditionMin = BI.parseFloat(styles[0].range.min);
@@ -5449,21 +5450,21 @@ BI.MapChart = BI.inherit(BI.AbstractChart, {
                             });
                         }
                         return range;
-                    } else {
-                        defaultStyle.color = defaultColor;
-                        return defaultStyle;
                     }
+                    defaultStyle.color = defaultColor;
+                    return defaultStyle;
+                    
             }
         }
 
-        function _calculateValueNiceDomain(minValue, maxValue) {
+        function _calculateValueNiceDomain (minValue, maxValue) {
             minValue = Math.min(0, minValue);
             var tickInterval = _linearTickInterval(minValue, maxValue);
 
             return _linearNiceDomain(minValue, maxValue, tickInterval);
         }
 
-        function _linearTickInterval(minValue, maxValue, m) {
+        function _linearTickInterval (minValue, maxValue, m) {
             m = m || 5;
             var span = maxValue - minValue;
             var step = Math.pow(10, Math.floor(Math.log(span / m) / Math.LN10));
@@ -5474,7 +5475,7 @@ BI.MapChart = BI.inherit(BI.AbstractChart, {
             return step;
         }
 
-        function _linearNiceDomain(minValue, maxValue, tickInterval) {
+        function _linearNiceDomain (minValue, maxValue, tickInterval) {
             minValue = VanUtils.accMul(Math.floor(minValue / tickInterval), tickInterval);
             maxValue = VanUtils.accMul(Math.ceil(maxValue / tickInterval), tickInterval);
 
@@ -5542,7 +5543,7 @@ BI.MapChart = BI.inherit(BI.AbstractChart, {
                         self._formatDrillItems(da.drilldown);
                     }
                 });
-            })
+            });
         });
         return items;
     },
@@ -5587,7 +5588,7 @@ BI.MapChart = BI.inherit(BI.AbstractChart, {
 });
 BI.MapChart.EVENT_CHANGE = "EVENT_CHANGE";
 BI.MapChart.EVENT_CLICK_DTOOL = "EVENT_CLICK_DTOOL";
-BI.shortcut('bi.map_chart', BI.MapChart);/**
+BI.shortcut("bi.map_chart", BI.MapChart);/**
  * 图表控件
  * @class BI.MultiAxisChart
  * @extends BI.Widget
@@ -5600,7 +5601,7 @@ BI.MultiAxisChart = BI.inherit(BI.AbstractChart, {
     _defaultConfig: function () {
         return BI.extend(BI.MultiAxisChart.superclass._defaultConfig.apply(this, arguments), {
             baseCls: "bi-multi-axis-chart"
-        })
+        });
     },
 
     _init: function () {
@@ -5609,10 +5610,10 @@ BI.MultiAxisChart = BI.inherit(BI.AbstractChart, {
         this.xAxis = [{
             type: "category",
             title: {
-                style: {"fontFamily": "inherit", "color": "#808080", "fontSize": "12px", "fontWeight": ""}
+                style: {fontFamily: "inherit", color: "#808080", fontSize: "12px", fontWeight: ""}
             },
             labelStyle: {
-                "fontFamily": "inherit", "color": "#808080", "fontSize": "12px"
+                fontFamily: "inherit", color: "#808080", fontSize: "12px"
             },
             position: "bottom",
             gridLineWidth: 0
@@ -5628,7 +5629,7 @@ BI.MultiAxisChart = BI.inherit(BI.AbstractChart, {
             self.fireEvent(BI.MultiAxisChart.EVENT_CHANGE, obj);
         });
         this.combineChart.on(BI.CombineChart.EVENT_ITEM_CLICK, function (obj) {
-            self.fireEvent(BI.AbstractChart.EVENT_ITEM_CLICK, obj)
+            self.fireEvent(BI.AbstractChart.EVENT_ITEM_CLICK, obj);
         });
     },
 
@@ -5709,13 +5710,13 @@ BI.MultiAxisChart = BI.inherit(BI.AbstractChart, {
             labelRotation: this.config.textDirection,
             enableMinorTick: this.config.enableMinorTick,
             gridLineWidth: this.config.showGridLine === true ? 1 : 0,
-            maxHeight: '40%'
+            maxHeight: "40%"
         });
 
-        //为了给数据标签加个%,还要遍历所有的系列，唉
+        // 为了给数据标签加个%,还要遍历所有的系列，唉
         this.formatDataLabel(config.plotOptions.dataLabels.enabled, items, config, this.config.chartFont);
 
-        //全局样式的图表文字
+        // 全局样式的图表文字
         if (config.dataSheet) {
             config.dataSheet.style = this.config.chartFont;
         }
@@ -5750,14 +5751,14 @@ BI.MultiAxisChart = BI.inherit(BI.AbstractChart, {
                         value: t.value.div(magnify),
                         width: 1,
                         label: {
-                            "style": {
-                                "fontFamily": "inherit",
-                                "color": "#808080",
-                                "fontSize": "12px",
-                                "fontWeight": ""
+                            style: {
+                                fontFamily: "inherit",
+                                color: "#808080",
+                                fontSize: "12px",
+                                fontWeight: ""
                             },
-                            "text": t.text,
-                            "align": "top"
+                            text: t.text,
+                            align: "top"
                         }
                     });
                 });
@@ -5782,19 +5783,19 @@ BI.MultiAxisChart = BI.inherit(BI.AbstractChart, {
                         value: t.value.div(magnify),
                         width: 1,
                         label: {
-                            "style": {
-                                "fontFamily": "inherit",
-                                "color": "#808080",
-                                "fontSize": "12px",
-                                "fontWeight": ""
+                            style: {
+                                fontFamily: "inherit",
+                                color: "#808080",
+                                fontSize: "12px",
+                                fontWeight: ""
                             },
-                            "text": t.text,
-                            "align": "left"
+                            text: t.text,
+                            align: "left"
                         }
                     });
                 });
             }
-        })
+        });
     },
 
     getXYAxisUnit: function (numberLevelType, position) {
@@ -5816,16 +5817,16 @@ BI.MultiAxisChart = BI.inherit(BI.AbstractChart, {
                 break;
         }
         if (position === this.constants.X_AXIS) {
-            this.config.xAxisUnit !== "" && (unit = unit + this.config.xAxisUnit)
+            this.config.xAxisUnit !== "" && (unit = unit + this.config.xAxisUnit);
         }
         if (position === this.constants.LEFT_AXIS) {
-            this.config.leftYAxisUnit !== "" && (unit = unit + this.config.leftYAxisUnit)
+            this.config.leftYAxisUnit !== "" && (unit = unit + this.config.leftYAxisUnit);
         }
         if (position === this.constants.RIGHT_AXIS) {
-            this.config.rightYAxisUnit !== "" && (unit = unit + this.config.rightYAxisUnit)
+            this.config.rightYAxisUnit !== "" && (unit = unit + this.config.rightYAxisUnit);
         }
         if (position === this.constants.RIGHT_AXIS_SECOND) {
-            this.config.rightYAxisSecondUnit !== "" && (unit = unit + this.config.rightYAxisSecondUnit)
+            this.config.rightYAxisSecondUnit !== "" && (unit = unit + this.config.rightYAxisSecondUnit);
         }
         return unit === "" ? unit : "(" + unit + ")";
     },
@@ -5883,10 +5884,10 @@ BI.MultiAxisChart = BI.inherit(BI.AbstractChart, {
             var newYAxis = {
                 type: "value",
                 title: {
-                    style: {"fontFamily": "inherit", "color": "#808080", "fontSize": "12px", "fontWeight": ""}
+                    style: {fontFamily: "inherit", color: "#808080", fontSize: "12px", fontWeight: ""}
                 },
                 labelStyle: {
-                    "fontFamily": "inherit", "color": "#808080", "fontSize": "12px"
+                    fontFamily: "inherit", color: "#808080", fontSize: "12px"
                 },
                 position: idx > 0 ? "right" : "left",
                 lineWidth: 1,
@@ -5908,7 +5909,7 @@ BI.MultiAxisChart = BI.inherit(BI.AbstractChart, {
     }
 });
 BI.MultiAxisChart.EVENT_CHANGE = "EVENT_CHANGE";
-BI.shortcut('bi.multi_axis_chart', BI.MultiAxisChart);/**
+BI.shortcut("bi.multi_axis_chart", BI.MultiAxisChart);/**
  * 图表控件
  * @class BI.MultiAxisChart
  * @extends BI.Widget
@@ -5921,7 +5922,7 @@ BI.MultiAxisCombineChart = BI.inherit(BI.AbstractChart, {
     _defaultConfig: function () {
         return BI.extend(BI.MultiAxisCombineChart.superclass._defaultConfig.apply(this, arguments), {
             baseCls: "bi-multi-axis-combine-chart"
-        })
+        });
     },
 
     _init: function () {
@@ -5930,10 +5931,10 @@ BI.MultiAxisCombineChart = BI.inherit(BI.AbstractChart, {
         this.xAxis = [{
             type: "category",
             title: {
-                style: {"fontFamily": "inherit", "color": "#808080", "fontSize": "12px", "fontWeight": ""}
+                style: {fontFamily: "inherit", color: "#808080", fontSize: "12px", fontWeight: ""}
             },
             labelStyle: {
-                "fontFamily": "inherit", "color": "#808080", "fontSize": "12px"
+                fontFamily: "inherit", color: "#808080", fontSize: "12px"
             },
             position: "bottom",
             gridLineWidth: 0
@@ -5949,7 +5950,7 @@ BI.MultiAxisCombineChart = BI.inherit(BI.AbstractChart, {
             self.fireEvent(BI.MultiAxisCombineChart.EVENT_CHANGE, obj);
         });
         this.combineChart.on(BI.CombineChart.EVENT_ITEM_CLICK, function (obj) {
-            self.fireEvent(BI.AbstractChart.EVENT_ITEM_CLICK, obj)
+            self.fireEvent(BI.AbstractChart.EVENT_ITEM_CLICK, obj);
         });
     },
 
@@ -6033,13 +6034,13 @@ BI.MultiAxisCombineChart = BI.inherit(BI.AbstractChart, {
             labelRotation: this.config.textDirection,
             enableMinorTick: this.config.enableMinorTick,
             gridLineWidth: this.config.showGridLine === true ? 1 : 0,
-            maxHeight: '40%'
+            maxHeight: "40%"
         });
 
-        //为了给数据标签加个%,还要遍历所有的系列，唉
+        // 为了给数据标签加个%,还要遍历所有的系列，唉
         this.formatDataLabel(config.plotOptions.dataLabels.enabled, items, config, this.config.chartFont);
 
-        //全局样式的图表文字
+        // 全局样式的图表文字
         if (config.dataSheet) {
             config.dataSheet.style = this.config.chartFont;
         }
@@ -6074,14 +6075,14 @@ BI.MultiAxisCombineChart = BI.inherit(BI.AbstractChart, {
                         value: t.value.div(magnify),
                         width: 1,
                         label: {
-                            "style": {
-                                "fontFamily": "inherit",
-                                "color": "#808080",
-                                "fontSize": "12px",
-                                "fontWeight": ""
+                            style: {
+                                fontFamily: "inherit",
+                                color: "#808080",
+                                fontSize: "12px",
+                                fontWeight: ""
                             },
-                            "text": t.text,
-                            "align": "top"
+                            text: t.text,
+                            align: "top"
                         }
                     });
                 });
@@ -6106,19 +6107,19 @@ BI.MultiAxisCombineChart = BI.inherit(BI.AbstractChart, {
                         value: t.value.div(magnify),
                         width: 1,
                         label: {
-                            "style": {
-                                "fontFamily": "inherit",
-                                "color": "#808080",
-                                "fontSize": "12px",
-                                "fontWeight": ""
+                            style: {
+                                fontFamily: "inherit",
+                                color: "#808080",
+                                fontSize: "12px",
+                                fontWeight: ""
                             },
-                            "text": t.text,
-                            "align": "left"
+                            text: t.text,
+                            align: "left"
                         }
                     });
                 });
             }
-        })
+        });
     },
 
     getXYAxisUnit: function (numberLevelType, position) {
@@ -6140,16 +6141,16 @@ BI.MultiAxisCombineChart = BI.inherit(BI.AbstractChart, {
                 break;
         }
         if (position === this.constants.X_AXIS) {
-            this.config.xAxisUnit !== "" && (unit = unit + this.config.xAxisUnit)
+            this.config.xAxisUnit !== "" && (unit = unit + this.config.xAxisUnit);
         }
         if (position === this.constants.LEFT_AXIS) {
-            this.config.leftYAxisUnit !== "" && (unit = unit + this.config.leftYAxisUnit)
+            this.config.leftYAxisUnit !== "" && (unit = unit + this.config.leftYAxisUnit);
         }
         if (position === this.constants.RIGHT_AXIS) {
-            this.config.rightYAxisUnit !== "" && (unit = unit + this.config.rightYAxisUnit)
+            this.config.rightYAxisUnit !== "" && (unit = unit + this.config.rightYAxisUnit);
         }
         if (position === this.constants.RIGHT_AXIS_SECOND) {
-            this.config.rightYAxisSecondUnit !== "" && (unit = unit + this.config.rightYAxisSecondUnit)
+            this.config.rightYAxisSecondUnit !== "" && (unit = unit + this.config.rightYAxisSecondUnit);
         }
         return unit === "" ? unit : "(" + unit + ")";
     },
@@ -6206,10 +6207,10 @@ BI.MultiAxisCombineChart = BI.inherit(BI.AbstractChart, {
             var newYAxis = {
                 type: "value",
                 title: {
-                    style: {"fontFamily": "inherit", "color": "#808080", "fontSize": "12px", "fontWeight": ""}
+                    style: {fontFamily: "inherit", color: "#808080", fontSize: "12px", fontWeight: ""}
                 },
                 labelStyle: {
-                    "fontFamily": "inherit", "color": "#808080", "fontSize": "12px"
+                    fontFamily: "inherit", color: "#808080", fontSize: "12px"
                 },
                 position: idx > 0 ? "right" : "left",
                 lineWidth: 1,
@@ -6231,7 +6232,7 @@ BI.MultiAxisCombineChart = BI.inherit(BI.AbstractChart, {
     }
 });
 BI.MultiAxisCombineChart.EVENT_CHANGE = "EVENT_CHANGE";
-BI.shortcut('bi.multi_axis_combine_chart', BI.MultiAxisCombineChart);/**
+BI.shortcut("bi.multi_axis_combine_chart", BI.MultiAxisCombineChart);/**
  * 图表控件
  * @class BI.PercentAccumulateAreaChart
  * @extends BI.Widget
@@ -6241,7 +6242,7 @@ BI.PercentAccumulateAreaChart = BI.inherit(BI.AbstractChart, {
     _defaultConfig: function () {
         return BI.extend(BI.PercentAccumulateAreaChart.superclass._defaultConfig.apply(this, arguments), {
             baseCls: "bi-percent-accumulate-area-chart"
-        })
+        });
     },
 
     _init: function () {
@@ -6276,7 +6277,7 @@ BI.PercentAccumulateAreaChart = BI.inherit(BI.AbstractChart, {
             self.fireEvent(BI.PercentAccumulateAreaChart.EVENT_CHANGE, obj);
         });
         this.combineChart.on(BI.CombineChart.EVENT_ITEM_CLICK, function (obj) {
-            self.fireEvent(BI.AbstractChart.EVENT_ITEM_CLICK, obj)
+            self.fireEvent(BI.AbstractChart.EVENT_ITEM_CLICK, obj);
         });
     },
 
@@ -6317,20 +6318,20 @@ BI.PercentAccumulateAreaChart = BI.inherit(BI.AbstractChart, {
             enableTick: this.config.enableTick,
             labelRotation: this.config.textDirection,
             gridLineWidth: this.config.showGridLine === true ? 1 : 0,
-            maxHeight: '40%'
+            maxHeight: "40%"
         });
 
         config.chartType = "area";
 
-        //为了给数据标签加个%,还要遍历所有的系列，唉
+        // 为了给数据标签加个%,还要遍历所有的系列，唉
         this.formatDataLabelForAxis(config.plotOptions.dataLabels.enabled, items, config.yAxis[0].formatter, this.config.chartFont, true);
 
-        //全局样式的图表文字
+        // 全局样式的图表文字
         this.setFontStyle(this.config.chartFont, config);
 
         return [items, config];
 
-        function formatChartStyle() {
+        function formatChartStyle () {
             switch (self.config.chartStyle) {
                 case BICst.CHART_STYLE.STYLE_GRADUAL:
                     return "gradual";
@@ -6340,7 +6341,7 @@ BI.PercentAccumulateAreaChart = BI.inherit(BI.AbstractChart, {
             }
         }
 
-        function formatCordon() {
+        function formatCordon () {
             BI.each(self.config.cordon, function (idx, cor) {
                 if (idx === 0 && self.xAxis.length > 0) {
                     var magnify = self.calcMagnify(self.config.xAxisNumberLevel);
@@ -6349,9 +6350,9 @@ BI.PercentAccumulateAreaChart = BI.inherit(BI.AbstractChart, {
                             value: t.value.div(magnify),
                             width: 1,
                             label: {
-                                "style": self.config.chartFont,
-                                "text": t.text,
-                                "align": "top"
+                                style: self.config.chartFont,
+                                text: t.text,
+                                align: "top"
                             }
                         });
                     });
@@ -6374,17 +6375,17 @@ BI.PercentAccumulateAreaChart = BI.inherit(BI.AbstractChart, {
                             value: t.value.div(magnify),
                             width: 1,
                             label: {
-                                "style": self.config.chartFont,
-                                "text": t.text,
-                                "align": "left"
+                                style: self.config.chartFont,
+                                text: t.text,
+                                align: "left"
                             }
                         });
                     });
                 }
-            })
+            });
         }
 
-        function getXYAxisUnit(numberLevelType, position) {
+        function getXYAxisUnit (numberLevelType, position) {
             var unit = "";
             switch (numberLevelType) {
                 case BICst.TARGET_STYLE.NUM_LEVEL.NORMAL:
@@ -6401,15 +6402,15 @@ BI.PercentAccumulateAreaChart = BI.inherit(BI.AbstractChart, {
                     break;
             }
             if (position === self.constants.X_AXIS) {
-                self.config.xAxisUnit !== "" && (unit = unit + self.config.xAxisUnit)
+                self.config.xAxisUnit !== "" && (unit = unit + self.config.xAxisUnit);
             }
             if (position === self.constants.LEFT_AXIS) {
-                self.config.leftYAxisUnit !== "" && (unit = unit + self.config.leftYAxisUnit)
+                self.config.leftYAxisUnit !== "" && (unit = unit + self.config.leftYAxisUnit);
             }
 
             unit = unit === "" ? unit : "(" + unit + ")";
 
-            return self.config.showLeftYAxisTitle === true ? self.config.leftYAxisTitle + unit : unit
+            return self.config.showLeftYAxisTitle === true ? self.config.leftYAxisTitle + unit : unit;
         }
     },
 
@@ -6475,7 +6476,7 @@ BI.PercentAccumulateAreaChart = BI.inherit(BI.AbstractChart, {
     }
 });
 BI.PercentAccumulateAreaChart.EVENT_CHANGE = "EVENT_CHANGE";
-BI.shortcut('bi.percent_accumulate_area_chart', BI.PercentAccumulateAreaChart);/**
+BI.shortcut("bi.percent_accumulate_area_chart", BI.PercentAccumulateAreaChart);/**
  * 图表控件 百分比堆积柱状
  * @class BI.PercentAccumulateAxisChart
  * @extends BI.Widget
@@ -6485,7 +6486,7 @@ BI.PercentAccumulateAxisChart = BI.inherit(BI.AbstractChart, {
     _defaultConfig: function () {
         return BI.extend(BI.PercentAccumulateAxisChart.superclass._defaultConfig.apply(this, arguments), {
             baseCls: "bi-percent-accumulate-axis-chart"
-        })
+        });
     },
 
     _init: function () {
@@ -6520,7 +6521,7 @@ BI.PercentAccumulateAxisChart = BI.inherit(BI.AbstractChart, {
             self.fireEvent(BI.PercentAccumulateAxisChart.EVENT_CHANGE, obj);
         });
         this.combineChart.on(BI.CombineChart.EVENT_ITEM_CLICK, function (obj) {
-            self.fireEvent(BI.AbstractChart.EVENT_ITEM_CLICK, obj)
+            self.fireEvent(BI.AbstractChart.EVENT_ITEM_CLICK, obj);
         });
     },
 
@@ -6562,18 +6563,18 @@ BI.PercentAccumulateAxisChart = BI.inherit(BI.AbstractChart, {
             labelRotation: this.config.textDirection,
             enableMinorTick: this.config.enableMinorTick,
             gridLineWidth: this.config.showGridLine === true ? 1 : 0,
-            maxHeight: '40%'
+            maxHeight: "40%"
         });
 
-        //为了给数据标签加个%,还要遍历所有的系列，唉
+        // 为了给数据标签加个%,还要遍历所有的系列，唉
         this.formatDataLabelForAxis(config.plotOptions.dataLabels.enabled, items, config.yAxis[0].formatter, this.config.chartFont, true);
 
-        //全局样式的图表文字
+        // 全局样式的图表文字
         this.setFontStyle(this.config.chartFont, config);
 
         return [items, config];
 
-        function formatChartStyle() {
+        function formatChartStyle () {
             switch (self.config.chartStyle) {
                 case BICst.CHART_STYLE.STYLE_GRADUAL:
                     return "gradual";
@@ -6583,7 +6584,7 @@ BI.PercentAccumulateAxisChart = BI.inherit(BI.AbstractChart, {
             }
         }
 
-        function formatCordon() {
+        function formatCordon () {
             BI.each(self.config.cordon, function (idx, cor) {
                 if (idx === 0 && self.xAxis.length > 0) {
                     var magnify = self.calcMagnify(self.config.xAxisNumberLevel);
@@ -6592,9 +6593,9 @@ BI.PercentAccumulateAxisChart = BI.inherit(BI.AbstractChart, {
                             value: t.value.div(magnify),
                             width: 1,
                             label: {
-                                "style" : self.config.chartFont,
-                                "text": t.text,
-                                "align": "top"
+                                style: self.config.chartFont,
+                                text: t.text,
+                                align: "top"
                             }
                         });
                     });
@@ -6617,17 +6618,17 @@ BI.PercentAccumulateAxisChart = BI.inherit(BI.AbstractChart, {
                             value: t.value.div(magnify),
                             width: 1,
                             label: {
-                                "style" : self.config.chartFont,
-                                "text": t.text,
-                                "align": "left"
+                                style: self.config.chartFont,
+                                text: t.text,
+                                align: "left"
                             }
                         });
                     });
                 }
-            })
+            });
         }
 
-        function getXYAxisUnit(numberLevelType, position) {
+        function getXYAxisUnit (numberLevelType, position) {
             var unit = "";
             switch (numberLevelType) {
                 case BICst.TARGET_STYLE.NUM_LEVEL.NORMAL:
@@ -6644,10 +6645,10 @@ BI.PercentAccumulateAxisChart = BI.inherit(BI.AbstractChart, {
                     break;
             }
             if (position === self.constants.X_AXIS) {
-                self.config.xAxisUnit !== "" && (unit = unit + self.config.xAxisUnit)
+                self.config.xAxisUnit !== "" && (unit = unit + self.config.xAxisUnit);
             }
             if (position === self.constants.LEFT_AXIS) {
-                self.config.leftYAxisUnit !== "" && (unit = unit + self.config.leftYAxisUnit)
+                self.config.leftYAxisUnit !== "" && (unit = unit + self.config.leftYAxisUnit);
             }
             return unit === "" ? unit : "(" + unit + ")";
         }
@@ -6714,7 +6715,7 @@ BI.PercentAccumulateAxisChart = BI.inherit(BI.AbstractChart, {
     }
 });
 BI.PercentAccumulateAxisChart.EVENT_CHANGE = "EVENT_CHANGE";
-BI.shortcut('bi.percent_accumulate_axis_chart', BI.PercentAccumulateAxisChart);/**
+BI.shortcut("bi.percent_accumulate_axis_chart", BI.PercentAccumulateAxisChart);/**
  * 图表控件
  * @class BI.PieChart
  * @extends BI.Widget
@@ -6724,7 +6725,7 @@ BI.PieChart = BI.inherit(BI.AbstractChart, {
     _defaultConfig: function () {
         return BI.extend(BI.PieChart.superclass._defaultConfig.apply(this, arguments), {
             baseCls: "bi-pie-chart"
-        })
+        });
     },
 
     _init: function () {
@@ -6740,11 +6741,11 @@ BI.PieChart = BI.inherit(BI.AbstractChart, {
             self.fireEvent(BI.PieChart.EVENT_CHANGE, obj);
         });
         this.combineChart.on(BI.CombineChart.EVENT_ITEM_CLICK, function (obj) {
-            self.fireEvent(BI.AbstractChart.EVENT_ITEM_CLICK, obj)
+            self.fireEvent(BI.AbstractChart.EVENT_ITEM_CLICK, obj);
         });
     },
 
-    _formatConfig: function(config, items){
+    _formatConfig: function (config, items) {
         var self = this, o = this.options;
         delete config.zoom;
         config.colors = this.config.chartColor;
@@ -6766,14 +6767,14 @@ BI.PieChart = BI.inherit(BI.AbstractChart, {
         BI.each(items, function (idx, item) {
             BI.each(item.data, function (id, da) {
                 da.y = self.formatXYDataWithMagnify(da.y, 1);
-            })
+            });
         });
 
         config.legend.style = this.config.chartFont;
 
         return [items, config];
 
-        function formatChartStyle(){
+        function formatChartStyle () {
             switch (self.config.chartStyle) {
                 case BICst.CHART_STYLE.STYLE_GRADUAL:
                     return "gradual";
@@ -6783,8 +6784,8 @@ BI.PieChart = BI.inherit(BI.AbstractChart, {
             }
         }
 
-        function formatChartPieStyle(){
-            switch (self.config.chartPieType){
+        function formatChartPieStyle () {
+            switch (self.config.chartPieType) {
                 case BICst.CHART_SHAPE.EQUAL_ARC_ROSE:
                     config.plotOptions.roseType = "sameArc";
                     break;
@@ -6802,31 +6803,31 @@ BI.PieChart = BI.inherit(BI.AbstractChart, {
 
     },
 
-    //目前饼图不会有多个系列，如果有多个就要把它们合并在一起
-    _isNeedConvert: function(items){
-        var result = BI.find(items, function(idx, item){
+    // 目前饼图不会有多个系列，如果有多个就要把它们合并在一起
+    _isNeedConvert: function (items) {
+        var result = BI.find(items, function (idx, item) {
             return item.length > 1;
         });
         return BI.isNotNull(result);
     },
 
-    _formatItems: function(items){
-        if(this._isNeedConvert(items)){
-            //把每个坐标轴所有的多个系列合并成一个系列
-            return BI.map(items, function(idx, item){
+    _formatItems: function (items) {
+        if(this._isNeedConvert(items)) {
+            // 把每个坐标轴所有的多个系列合并成一个系列
+            return BI.map(items, function (idx, item) {
                 var seriesItem = [];
                 var obj = {data: [], name: ""};
                 seriesItem.push(obj);
-                BI.each(item, function(id, series){
-                    BI.each(series.data, function(i, da){
+                BI.each(item, function (id, series) {
+                    BI.each(series.data, function (i, da) {
                         obj.data.push(BI.extend({}, da, {x: series.name}));
                     });
                 });
                 return seriesItem;
-            })
-        }else{
-            return items;
+            });
         }
+        return items;
+        
     },
 
     populate: function (items, options) {
@@ -6845,9 +6846,9 @@ BI.PieChart = BI.inherit(BI.AbstractChart, {
         this.options.items = items;
 
         var types = [];
-        BI.each(items, function(idx, axisItems){
+        BI.each(items, function (idx, axisItems) {
             var type = [];
-            BI.each(axisItems, function(id, item){
+            BI.each(axisItems, function (id, item) {
                 type.push(BICst.WIDGET.PIE);
             });
             types.push(type);
@@ -6860,12 +6861,12 @@ BI.PieChart = BI.inherit(BI.AbstractChart, {
         this.combineChart.resize();
     },
 
-    magnify: function(){
+    magnify: function () {
         this.combineChart.magnify();
     }
 });
 BI.PieChart.EVENT_CHANGE = "EVENT_CHANGE";
-BI.shortcut('bi.pie_chart', BI.PieChart);
+BI.shortcut("bi.pie_chart", BI.PieChart);
 
 /**
  * 图表控件
@@ -6877,7 +6878,7 @@ BI.RadarChart = BI.inherit(BI.AbstractChart, {
     _defaultConfig: function () {
         return BI.extend(BI.RadarChart.superclass._defaultConfig.apply(this, arguments), {
             baseCls: "bi-radar-chart"
-        })
+        });
     },
 
     _init: function () {
@@ -6890,7 +6891,7 @@ BI.RadarChart = BI.inherit(BI.AbstractChart, {
             },
             labelStyle: this.constants.FONT_STYLE,
             formatter: function () {
-                return this > 0 ? this : (-1) * this
+                return this > 0 ? this : (-1) * this;
             },
             gridLineWidth: 0,
             position: "bottom"
@@ -6914,7 +6915,7 @@ BI.RadarChart = BI.inherit(BI.AbstractChart, {
             self.fireEvent(BI.RadarChart.EVENT_CHANGE, obj);
         });
         this.combineChart.on(BI.CombineChart.EVENT_ITEM_CLICK, function (obj) {
-            self.fireEvent(BI.AbstractChart.EVENT_ITEM_CLICK, obj)
+            self.fireEvent(BI.AbstractChart.EVENT_ITEM_CLICK, obj);
         });
     },
 
@@ -6941,17 +6942,17 @@ BI.RadarChart = BI.inherit(BI.AbstractChart, {
         config.chartType = "radar";
         delete config.xAxis;
         delete config.yAxis;
-        //为了给数据标签加个%,还要遍历所有的系列，唉
+        // 为了给数据标签加个%,还要遍历所有的系列，唉
         this.formatDataLabelForAxis(config.plotOptions.dataLabels.enabled, items, config.radiusAxis[0].formatter, this.config.chartFont);
 
-        //全局样式
+        // 全局样式
         config.legend.style = this.config.chartFont;
         config.radiusAxis[0].title.style = config.radiusAxis[0].labelStyle = this.config.chartFont;
         config.angleAxis[0].title.style = config.angleAxis[0].labelStyle = this.config.chartFont;
 
         return [items, config];
 
-        function formatChartStyle() {
+        function formatChartStyle () {
             switch (self.config.chartStyle) {
                 case BICst.CHART_STYLE.STYLE_GRADUAL:
                     return "gradual";
@@ -6961,7 +6962,7 @@ BI.RadarChart = BI.inherit(BI.AbstractChart, {
             }
         }
 
-        function formatChartRadarStyle() {
+        function formatChartRadarStyle () {
             switch (self.config.chartRadarType) {
                 case BICst.CHART_SHAPE.POLYGON:
                     config.plotOptions.shape = "polygon";
@@ -6972,19 +6973,19 @@ BI.RadarChart = BI.inherit(BI.AbstractChart, {
             }
         }
 
-        function formatNumberLevelInYaxis(type, position, formatter) {
+        function formatNumberLevelInYaxis (type, position, formatter) {
             var magnify = self.calcMagnify(type);
             BI.each(items, function (idx, item) {
                 BI.each(item.data, function (id, da) {
                     if (position === item.yAxis) {
                         da.y = self.formatXYDataWithMagnify(da.y, magnify);
                     }
-                })
+                });
             });
             config.plotOptions.tooltip.formatter.valueFormat = formatter;
         }
 
-        function getXYAxisUnit(numberLevelType, position) {
+        function getXYAxisUnit (numberLevelType, position) {
             var unit = "";
             switch (numberLevelType) {
                 case BICst.TARGET_STYLE.NUM_LEVEL.NORMAL:
@@ -7001,13 +7002,13 @@ BI.RadarChart = BI.inherit(BI.AbstractChart, {
                     break;
             }
             if (position === self.constants.X_AXIS) {
-                self.config.xAxisUnit !== "" && (unit = unit + self.config.xAxisUnit)
+                self.config.xAxisUnit !== "" && (unit = unit + self.config.xAxisUnit);
             }
             if (position === self.constants.LEFT_AXIS) {
-                self.config.leftYAxisUnit !== "" && (unit = unit + self.config.leftYAxisUnit)
+                self.config.leftYAxisUnit !== "" && (unit = unit + self.config.leftYAxisUnit);
             }
             if (position === self.constants.RIGHT_AXIS) {
-                self.config.rightYAxisUnit !== "" && (unit = unit + self.config.rightYAxisUnit)
+                self.config.rightYAxisUnit !== "" && (unit = unit + self.config.rightYAxisUnit);
             }
             return unit === "" ? unit : "(" + unit + ")";
         }
@@ -7051,7 +7052,7 @@ BI.RadarChart = BI.inherit(BI.AbstractChart, {
     }
 });
 BI.RadarChart.EVENT_CHANGE = "EVENT_CHANGE";
-BI.shortcut('bi.radar_chart', BI.RadarChart);/**
+BI.shortcut("bi.radar_chart", BI.RadarChart);/**
  * 图表控件
  * @class BI.RangeAreaChart
  * @extends BI.Widget
@@ -7062,7 +7063,7 @@ BI.RangeAreaChart = BI.inherit(BI.AbstractChart, {
     _defaultConfig: function () {
         return BI.extend(BI.RangeAreaChart.superclass._defaultConfig.apply(this, arguments), {
             baseCls: "bi-range-area-chart"
-        })
+        });
     },
 
     _init: function () {
@@ -7097,7 +7098,7 @@ BI.RangeAreaChart = BI.inherit(BI.AbstractChart, {
             self.fireEvent(BI.RangeAreaChart.EVENT_CHANGE, obj);
         });
         this.combineChart.on(BI.CombineChart.EVENT_ITEM_CLICK, function (obj) {
-            self.fireEvent(BI.AbstractChart.EVENT_ITEM_CLICK, obj)
+            self.fireEvent(BI.AbstractChart.EVENT_ITEM_CLICK, obj);
         });
     },
 
@@ -7132,21 +7133,21 @@ BI.RangeAreaChart = BI.inherit(BI.AbstractChart, {
             enableTick: this.config.enableTick,
             labelRotation: this.config.textDirection,
             gridLineWidth: this.config.showGridLine === true ? 1 : 0,
-            maxHeight: '40%'
+            maxHeight: "40%"
         });
 
         config.chartType = "area";
         config.plotOptions.tooltip.formatter.identifier = "${CATEGORY}${VALUE}";
 
-        //为了给数据标签加个%,还要遍历所有的系列，唉
+        // 为了给数据标签加个%,还要遍历所有的系列，唉
         this.formatDataLabelForAxis(config.plotOptions.dataLabels.enabled, items, config.yAxis[0].formatter, this.config.chartFont);
 
-        //全局样式的图表文字
+        // 全局样式的图表文字
         this.setFontStyle(this.config.chartFont, config);
 
         return [items, config];
 
-        function formatChartStyle() {
+        function formatChartStyle () {
             switch (self.config.chartStyle) {
                 case BICst.CHART_STYLE.STYLE_GRADUAL:
                     return "gradual";
@@ -7156,7 +7157,7 @@ BI.RangeAreaChart = BI.inherit(BI.AbstractChart, {
             }
         }
 
-        function formatCordon() {
+        function formatCordon () {
             BI.each(self.config.cordon, function (idx, cor) {
                 if (idx === 0 && self.xAxis.length > 0) {
                     var magnify = self.calcMagnify(self.config.xAxisNumberLevel);
@@ -7165,9 +7166,9 @@ BI.RangeAreaChart = BI.inherit(BI.AbstractChart, {
                             value: t.value.div(magnify),
                             width: 1,
                             label: {
-                                "style" : self.config.chartFont,
-                                "text": t.text,
-                                "align": "top"
+                                style: self.config.chartFont,
+                                text: t.text,
+                                align: "top"
                             }
                         });
                     });
@@ -7190,29 +7191,29 @@ BI.RangeAreaChart = BI.inherit(BI.AbstractChart, {
                             value: t.value.div(magnify),
                             width: 1,
                             label: {
-                                "style" : self.config.chartFont,
-                                "text": t.text,
-                                "align": "left"
+                                style: self.config.chartFont,
+                                text: t.text,
+                                align: "left"
                             }
                         });
                     });
                 }
-            })
+            });
         }
 
-        function formatNumberLevelInYaxis(type, position, formatter) {
+        function formatNumberLevelInYaxis (type, position, formatter) {
             var magnify = self.calcMagnify(type);
             BI.each(items, function (idx, item) {
                 BI.each(item.data, function (id, da) {
                     if (position === item.yAxis) {
                         da.y = self.formatXYDataWithMagnify(da.y, magnify);
                     }
-                })
+                });
             });
             config.plotOptions.tooltip.formatter.valueFormat = formatter;
         }
 
-        function getXYAxisUnit(numberLevelType, position) {
+        function getXYAxisUnit (numberLevelType, position) {
             var unit = "";
             switch (numberLevelType) {
                 case BICst.TARGET_STYLE.NUM_LEVEL.NORMAL:
@@ -7229,10 +7230,10 @@ BI.RangeAreaChart = BI.inherit(BI.AbstractChart, {
                     break;
             }
             if (position === self.constants.X_AXIS) {
-                self.config.xAxisUnit !== "" && (unit = unit + self.config.xAxisUnit)
+                self.config.xAxisUnit !== "" && (unit = unit + self.config.xAxisUnit);
             }
             if (position === self.constants.LEFT_AXIS) {
-                self.config.leftYAxisUnit !== "" && (unit = unit + self.config.leftYAxisUnit)
+                self.config.leftYAxisUnit !== "" && (unit = unit + self.config.leftYAxisUnit);
             }
             return unit === "" ? unit : "(" + unit + ")";
         }
@@ -7334,7 +7335,7 @@ BI.RangeAreaChart = BI.inherit(BI.AbstractChart, {
     }
 });
 BI.RangeAreaChart.EVENT_CHANGE = "EVENT_CHANGE";
-BI.shortcut('bi.range_area_chart', BI.RangeAreaChart);/**
+BI.shortcut("bi.range_area_chart", BI.RangeAreaChart);/**
  * 图表控件
  * @class BI.ScatterChart
  * @extends BI.Widget
@@ -7344,7 +7345,7 @@ BI.ScatterChart = BI.inherit(BI.AbstractChart, {
     _defaultConfig: function () {
         return BI.extend(BI.ScatterChart.superclass._defaultConfig.apply(this, arguments), {
             baseCls: "bi-scatter-chart"
-        })
+        });
     },
 
     _init: function () {
@@ -7379,7 +7380,7 @@ BI.ScatterChart = BI.inherit(BI.AbstractChart, {
             self.fireEvent(BI.ScatterChart.EVENT_CHANGE, obj);
         });
         this.combineChart.on(BI.CombineChart.EVENT_ITEM_CLICK, function (obj) {
-            self.fireEvent(BI.AbstractChart.EVENT_ITEM_CLICK, obj)
+            self.fireEvent(BI.AbstractChart.EVENT_ITEM_CLICK, obj);
         });
     },
 
@@ -7389,7 +7390,7 @@ BI.ScatterChart = BI.inherit(BI.AbstractChart, {
         delete config.zoom;
         config.colors = this.config.chartColor;
         config.style = formatChartStyle();
-        config.plotOptions.marker = {"symbol": "circle", "radius": 4.5, "enabled": true};
+        config.plotOptions.marker = {symbol: "circle", radius: 4.5, enabled: true};
         formatCordon();
         this.formatChartLegend(config, this.config.chartLegend);
         config.plotOptions.dataLabels.enabled = this.config.showDataLabel;
@@ -7404,7 +7405,7 @@ BI.ScatterChart = BI.inherit(BI.AbstractChart, {
         config.yAxis[0].title.text = this.config.showLeftYAxisTitle === true ? this.config.leftYAxisTitle + config.yAxis[0].title.text : config.yAxis[0].title.text;
         config.yAxis[0].gridLineWidth = this.config.showGridLine === true ? 1 : 0;
         config.yAxis[0].title.rotation = this.constants.ROTATION;
-        config.yAxis[0].maxWidth = '40%';
+        config.yAxis[0].maxWidth = "40%";
 
         config.xAxis[0].formatter = self.formatTickInXYaxis(this.config.xAxisStyle, this.config.xAxisNumberLevel, this.config.rightNumSeparators);
         formatNumberLevelInXaxis(this.config.xAxisNumberLevel);
@@ -7412,32 +7413,32 @@ BI.ScatterChart = BI.inherit(BI.AbstractChart, {
         config.xAxis[0].title.text = this.config.showXAxisTitle === true ? this.config.xAxisTitle + config.xAxis[0].title.text : config.xAxis[0].title.text;
         config.xAxis[0].title.align = "center";
         config.xAxis[0].gridLineWidth = this.config.showGridLine === true ? 1 : 0;
-        config.xAxis[0].maxHeight = '40%';
+        config.xAxis[0].maxHeight = "40%";
         config.chartType = "scatter";
 
         if (BI.isNotEmptyArray(this.config.tooltip)) {
             config.plotOptions.tooltip.formatter = function () {
                 var y = self.formatTickInXYaxis(self.config.leftYAxisStyle, self.config.leftYAxisNumberLevel, self.config.numSeparators)(this.y);
                 var x = self.formatTickInXYaxis(self.config.xAxisStyle, self.config.xAxisNumberLevel, self.config.rightNumSeparators)(this.x);
-                return this.seriesName + '<div>(X)' + self.config.tooltip[0]
-                    + ':' + x + '</div><div>(Y)' + self.config.tooltip[1] + ':' + y + '</div>'
+                return this.seriesName + "<div>(X)" + self.config.tooltip[0]
+                    + ":" + x + "</div><div>(Y)" + self.config.tooltip[1] + ":" + y + "</div>";
             };
         }
 
         if (config.plotOptions.dataLabels.enabled === true) {
             BI.each(items, function (idx, item) {
                 item.dataLabels = {
-                    "style": self.config.chartFont,
-                    "align": "outside",
-                    "autoAdjust": true,
+                    style: self.config.chartFont,
+                    align: "outside",
+                    autoAdjust: true,
                     enabled: true,
                     formatter: {
                         identifier: "${X}${Y}",
-                        "XFormat": function () {
-                            return BI.contentFormat(arguments[0], '#.##;-#.##')
+                        XFormat: function () {
+                            return BI.contentFormat(arguments[0], "#.##;-#.##");
                         },
-                        "YFormat": function () {
-                            return BI.contentFormat(arguments[0], '#.##;-#.##')
+                        YFormat: function () {
+                            return BI.contentFormat(arguments[0], "#.##;-#.##");
                         }
                     }
                 };
@@ -7446,14 +7447,14 @@ BI.ScatterChart = BI.inherit(BI.AbstractChart, {
             });
         }
 
-        //全局样式图表文字
+        // 全局样式图表文字
         config.legend.style = this.config.chartFont;
         config.yAxis[0].title.style = config.yAxis[0].labelStyle = this.config.chartFont;
         config.xAxis[0].title.style = config.xAxis[0].labelStyle = this.config.chartFont;
 
         return [items, config];
 
-        function formatChartStyle() {
+        function formatChartStyle () {
             switch (self.config.chartStyle) {
                 case BICst.CHART_STYLE.STYLE_GRADUAL:
                     return "gradual";
@@ -7463,7 +7464,7 @@ BI.ScatterChart = BI.inherit(BI.AbstractChart, {
             }
         }
 
-        function formatCordon() {
+        function formatCordon () {
             BI.each(self.config.cordon, function (idx, cor) {
                 if (idx === 0 && self.xAxis.length > 0) {
                     var magnify = self.calcMagnify(self.config.xAxisNumberLevel);
@@ -7472,9 +7473,9 @@ BI.ScatterChart = BI.inherit(BI.AbstractChart, {
                             value: t.value.div(magnify),
                             width: 1,
                             label: {
-                                "style": self.config.chartFont,
-                                "text": t.text,
-                                "align": "top"
+                                style: self.config.chartFont,
+                                text: t.text,
+                                align: "top"
                             }
                         });
                     });
@@ -7497,35 +7498,35 @@ BI.ScatterChart = BI.inherit(BI.AbstractChart, {
                             value: t.value.div(magnify),
                             width: 1,
                             label: {
-                                "style": self.config.chartFont,
-                                "text": t.text,
-                                "align": "left"
+                                style: self.config.chartFont,
+                                text: t.text,
+                                align: "left"
                             }
                         });
                     });
                 }
-            })
+            });
         }
 
-        function formatNumberLevelInXaxis(type) {
+        function formatNumberLevelInXaxis (type) {
             var magnify = self.calcMagnify(type);
             BI.each(items, function (idx, item) {
                 BI.each(item.data, function (id, da) {
                     da.x = self.formatXYDataWithMagnify(da.x, magnify);
-                })
-            })
-        }
-
-        function formatNumberLevelInYaxis(type) {
-            var magnify = self.calcMagnify(type);
-            BI.each(items, function (idx, item) {
-                BI.each(item.data, function (id, da) {
-                        da.y = self.formatXYDataWithMagnify(da.y, magnify);
-                })
+                });
             });
         }
 
-        function getXYAxisUnit(numberLevelType, position) {
+        function formatNumberLevelInYaxis (type) {
+            var magnify = self.calcMagnify(type);
+            BI.each(items, function (idx, item) {
+                BI.each(item.data, function (id, da) {
+                    da.y = self.formatXYDataWithMagnify(da.y, magnify);
+                });
+            });
+        }
+
+        function getXYAxisUnit (numberLevelType, position) {
             var unit = "";
             switch (numberLevelType) {
                 case BICst.TARGET_STYLE.NUM_LEVEL.NORMAL:
@@ -7542,13 +7543,13 @@ BI.ScatterChart = BI.inherit(BI.AbstractChart, {
                     break;
             }
             if (position === self.constants.X_AXIS) {
-                self.config.xAxisUnit !== "" && (unit = unit + self.config.xAxisUnit)
+                self.config.xAxisUnit !== "" && (unit = unit + self.config.xAxisUnit);
             }
             if (position === self.constants.LEFT_AXIS) {
-                self.config.leftYAxisUnit !== "" && (unit = unit + self.config.leftYAxisUnit)
+                self.config.leftYAxisUnit !== "" && (unit = unit + self.config.leftYAxisUnit);
             }
             if (position === self.constants.RIGHT_AXIS) {
-                self.config.rightYAxisUnit !== "" && (unit = unit + self.config.rightYAxisUnit)
+                self.config.rightYAxisUnit !== "" && (unit = unit + self.config.rightYAxisUnit);
             }
             return unit === "" ? unit : "(" + unit + ")";
         }
@@ -7599,4 +7600,4 @@ BI.ScatterChart = BI.inherit(BI.AbstractChart, {
     }
 });
 BI.ScatterChart.EVENT_CHANGE = "EVENT_CHANGE";
-BI.shortcut('bi.scatter_chart', BI.ScatterChart);
+BI.shortcut("bi.scatter_chart", BI.ScatterChart);

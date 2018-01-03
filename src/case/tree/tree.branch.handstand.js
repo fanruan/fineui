@@ -11,7 +11,7 @@ BI.HandStandBranchTree = BI.inherit(BI.Widget, {
             expander: {},
             el: {},
             items: []
-        })
+        });
     },
     _init: function () {
         BI.HandStandBranchTree.superclass._init.apply(this, arguments);
@@ -35,10 +35,10 @@ BI.HandStandBranchTree = BI.inherit(BI.Widget, {
             }, o.el),
             items: this.options.items
         });
-        this.branchTree.on(BI.CustomTree.EVENT_CHANGE, function(){
+        this.branchTree.on(BI.CustomTree.EVENT_CHANGE, function () {
             self.fireEvent(BI.HandStandBranchTree.EVENT_CHANGE, arguments);
         });
-        this.branchTree.on(BI.Controller.EVENT_CHANGE, function(){
+        this.branchTree.on(BI.Controller.EVENT_CHANGE, function () {
             self.fireEvent(BI.Controller.EVENT_CHANGE, arguments);
         });
     },

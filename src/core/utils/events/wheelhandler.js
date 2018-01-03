@@ -4,7 +4,7 @@
     var PAGE_HEIGHT = 800;
     var requestAnimationFrame = window.requestAnimationFrame || window.webkitRequestAnimationFrame || window.mozRequestAnimationFrame || window.oRequestAnimationFrame || window.msRequestAnimationFrame || window.setTimeout;
 
-    function normalizeWheel(/*object*/event) /*object*/ {
+    function normalizeWheel (/* object*/event) /* object*/ {
         var sX = 0,
             sY = 0,
             // spinX, spinY
@@ -12,21 +12,21 @@
             pY = 0; // pixelX, pixelY
 
         // Legacy
-        if ('detail' in event) {
+        if ("detail" in event) {
             sY = event.detail;
         }
-        if ('wheelDelta' in event) {
+        if ("wheelDelta" in event) {
             sY = -event.wheelDelta / 120;
         }
-        if ('wheelDeltaY' in event) {
+        if ("wheelDeltaY" in event) {
             sY = -event.wheelDeltaY / 120;
         }
-        if ('wheelDeltaX' in event) {
+        if ("wheelDeltaX" in event) {
             sX = -event.wheelDeltaX / 120;
         }
 
         // side scrolling on FF with DOMMouseScroll
-        if ('axis' in event && event.axis === event.HORIZONTAL_AXIS) {
+        if ("axis" in event && event.axis === event.HORIZONTAL_AXIS) {
             sX = sY;
             sY = 0;
         }
@@ -34,10 +34,10 @@
         pX = sX * PIXEL_STEP;
         pY = sY * PIXEL_STEP;
 
-        if ('deltaY' in event) {
+        if ("deltaY" in event) {
             pY = event.deltaY;
         }
-        if ('deltaX' in event) {
+        if ("deltaX" in event) {
             pX = event.deltaX;
         }
 
@@ -74,33 +74,33 @@
         this._deltaX = 0;
         this._deltaY = 0;
         this._didWheel = BI.bind(this._didWheel, this);
-        if (typeof handleScrollX !== 'function') {
+        if (typeof handleScrollX !== "function") {
             handleScrollX = handleScrollX ?
                 function () {
-                    return true
+                    return true;
                 } :
                 function () {
-                    return false
+                    return false;
                 };
         }
 
-        if (typeof handleScrollY !== 'function') {
+        if (typeof handleScrollY !== "function") {
             handleScrollY = handleScrollY ?
                 function () {
-                    return true
+                    return true;
                 } :
                 function () {
-                    return false
+                    return false;
                 };
         }
 
-        if (typeof stopPropagation !== 'function') {
+        if (typeof stopPropagation !== "function") {
             stopPropagation = stopPropagation ?
                 function () {
-                    return true
+                    return true;
                 } :
                 function () {
-                    return false
+                    return false;
                 };
         }
 
@@ -112,7 +112,7 @@
     };
     BI.WheelHandler.prototype = {
         constructor: BI.WheelHandler,
-        onWheel: function (/*object*/ event) {
+        onWheel: function (/* object*/ event) {
             var normalizedEvent = normalizeWheel(event);
             var deltaX = this._deltaX + normalizedEvent.pixelX;
             var deltaY = this._deltaY + normalizedEvent.pixelY;

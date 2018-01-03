@@ -4,9 +4,9 @@
 BI.MultiSelectTree = BI.inherit(BI.Widget, {
     _defaultConfig: function () {
         return BI.extend(BI.MultiSelectTree.superclass._defaultConfig.apply(this, arguments), {
-            baseCls: 'bi-multi-select-tree',
+            baseCls: "bi-multi-select-tree",
             itemsCreator: BI.emptyFn
-        })
+        });
     },
 
     _init: function () {
@@ -28,7 +28,7 @@ BI.MultiSelectTree = BI.inherit(BI.Widget, {
             self.fireEvent(BI.MultiSelectTree.EVENT_CHANGE);
         });
 
-        //搜索中的时候用的是parttree，同adapter中的synctree不一样
+        // 搜索中的时候用的是parttree，同adapter中的synctree不一样
         this.searcherPane = BI.createWidget({
             type: "bi.multi_tree_search_pane",
             cls: "bi-border-left bi-border-right bi-border-bottom",
@@ -111,7 +111,7 @@ BI.MultiSelectTree = BI.inherit(BI.Widget, {
                 left: 0,
                 right: 0
             }]
-        })
+        });
 
     },
 

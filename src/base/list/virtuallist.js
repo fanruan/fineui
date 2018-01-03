@@ -44,7 +44,7 @@ BI.VirtualList = BI.inherit(BI.Widget, {
                 }
             }],
             element: this
-        }
+        };
     },
 
     mounted: function () {
@@ -175,5 +175,5 @@ BI.VirtualList = BI.inherit(BI.Widget, {
         this.restore();
     }
 });
-BI.shortcut('bi.virtual_list', BI.VirtualList);
+BI.shortcut("bi.virtual_list", BI.VirtualList);
 

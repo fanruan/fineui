@@ -26,9 +26,9 @@ BI.MultiTreeCheckPane = BI.inherit(BI.Pane, {
         this.selectedValues = {};
 
         var continueSelect = BI.createWidget({
-            type: 'bi.text_button',
-            text: BI.i18nText('BI-Continue_Select'),
-            cls: 'multi-tree-check-selected'
+            type: "bi.text_button",
+            text: BI.i18nText("BI-Continue_Select"),
+            cls: "multi-tree-check-selected"
         });
         continueSelect.on(BI.TextButton.EVENT_CHANGE, function () {
             opts.onClickContinueSelect();
@@ -38,13 +38,13 @@ BI.MultiTreeCheckPane = BI.inherit(BI.Pane, {
         });
 
         var backToPopup = BI.createWidget({
-            type: 'bi.left',
-            cls: 'multi-tree-continue-select',
+            type: "bi.left",
+            cls: "multi-tree-continue-select",
             items: [
                 {
                     el: {
                         type: "bi.label",
-                        text: BI.i18nText('BI-Selected_Data')
+                        text: BI.i18nText("BI-Selected_Data")
                     },
                     lgap: this.constants.lgap,
                     tgap: this.constants.tgap
@@ -78,13 +78,13 @@ BI.MultiTreeCheckPane = BI.inherit(BI.Pane, {
         });
 
         BI.createWidget({
-            type: 'bi.vtape',
+            type: "bi.vtape",
             element: this,
             items: [{
                 height: this.constants.height,
                 el: backToPopup
             }, {
-                height: 'fill',
+                height: "fill",
                 el: this.display
             }]
         });

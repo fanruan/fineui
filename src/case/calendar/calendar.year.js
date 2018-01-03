@@ -13,10 +13,10 @@ BI.YearCalendar = BI.inherit(BI.Widget, {
             logic: {
                 dynamic: false
             },
-            min: '1900-01-01', //最小日期
-            max: '2099-12-31', //最大日期
+            min: "1900-01-01", // 最小日期
+            max: "2099-12-31", // 最大日期
             year: null
-        })
+        });
     },
 
     _yearCreator: function (Y) {
@@ -41,7 +41,7 @@ BI.YearCalendar = BI.inherit(BI.Widget, {
         this.currentYear = Date.getDate().getFullYear();
         var years = this._yearCreator(o.year || this.currentYear);
 
-        //纵向排列年
+        // 纵向排列年
         var len = years.length, tyears = BI.makeArray(len, "");
         var map = [0, 6, 1, 7, 2, 8, 3, 9, 4, 10, 5, 11];
         BI.each(years, function (i, y) {
@@ -119,11 +119,11 @@ BI.YearCalendar = BI.inherit(BI.Widget, {
         return this.years.getValue()[0];
     }
 });
-//类方法
+// 类方法
 BI.extend(BI.YearCalendar, {
     INTERVAL: 12,
 
-    //获取显示的第一年
+    // 获取显示的第一年
     getStartYear: function (year) {
         var cur = Date.getDate().getFullYear();
         return year - ((year - cur + 3) % BI.YearCalendar.INTERVAL + 12) % BI.YearCalendar.INTERVAL;

@@ -7,7 +7,7 @@ BI.DateTimeSelect = BI.inherit(BI.Widget, {
             baseCls: "bi-date-time-select bi-border",
             max: 23,
             min: 0
-        })
+        });
     },
 
     _init: function () {
@@ -18,11 +18,11 @@ BI.DateTimeSelect = BI.inherit(BI.Widget, {
             value: this._alertInEditorValue(o.min),
             allowBlank: false,
             errorText: BI.i18nText("BI-Please_Input_Natural_Number"),
-            validationChecker: function(v){
+            validationChecker: function (v) {
                 return BI.isNaturalNumber(v);
             }
         });
-        this.editor.on(BI.TextEditor.EVENT_CONFIRM, function(){
+        this.editor.on(BI.TextEditor.EVENT_CONFIRM, function () {
             self._finetuning(0);
             self.fireEvent(BI.DateTimeSelect.EVENT_CONFIRM);
         });
@@ -30,7 +30,7 @@ BI.DateTimeSelect = BI.inherit(BI.Widget, {
             type: "bi.icon_button",
             cls: "column-pre-page-h-font top-button bi-border-left bi-border-bottom"
         });
-        this.topBtn.on(BI.IconButton.EVENT_CHANGE, function(){
+        this.topBtn.on(BI.IconButton.EVENT_CHANGE, function () {
             self._finetuning(1);
             self.fireEvent(BI.DateTimeSelect.EVENT_CONFIRM);
         });
@@ -38,7 +38,7 @@ BI.DateTimeSelect = BI.inherit(BI.Widget, {
             type: "bi.icon_button",
             cls: "column-next-page-h-font bottom-button bi-border-left"
         });
-        this.bottomBtn.on(BI.IconButton.EVENT_CHANGE, function(){
+        this.bottomBtn.on(BI.IconButton.EVENT_CHANGE, function () {
             self._finetuning(-1);
             self.fireEvent(BI.DateTimeSelect.EVENT_CONFIRM);
         });
@@ -66,28 +66,28 @@ BI.DateTimeSelect = BI.inherit(BI.Widget, {
         });
     },
 
-    _alertOutEditorValue: function(v){
-        if (v > this.options.max){
+    _alertOutEditorValue: function (v) {
+        if (v > this.options.max) {
             v = this.options.min;
         }
-        if (v < this.options.min){
-            v = this.options.max
+        if (v < this.options.min) {
+            v = this.options.max;
         }
         return BI.parseInt(v);
     },
 
-    _alertInEditorValue: function(v){
-        if (v > this.options.max){
+    _alertInEditorValue: function (v) {
+        if (v > this.options.max) {
             v = this.options.min;
         }
-        if (v < this.options.min){
+        if (v < this.options.min) {
             v = this.options.max;
         }
         v = v < 10 ? "0" + v : v;
         return v;
     },
 
-    _finetuning: function(add){
+    _finetuning: function (add) {
         var v = BI.parseInt(this._alertOutEditorValue(this.editor.getValue()));
         this.editor.setValue(this._alertInEditorValue(v + add));
     },

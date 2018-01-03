@@ -19,7 +19,7 @@
         },
 
         getCellIndices: function () {
-            return this._indices
+            return this._indices;
         }
     };
 
@@ -37,12 +37,12 @@
 
             BI.each(this.getSections(height, width, x, y), function (i, section) {
                 BI.each(section.getCellIndices(), function (j, index) {
-                    indices[index] = index
-                })
+                    indices[index] = index;
+                });
             });
 
             return BI.map(BI.keys(indices), function (i, index) {
-                return indices[index]
+                return indices[index];
             });
         },
 
@@ -63,14 +63,14 @@
                     var key = sectionX + "." + sectionY;
 
                     if (!this._sections[key]) {
-                        this._sections[key] = new Section(this._sectionSize, this._sectionSize, sectionX * this._sectionSize, sectionY * this._sectionSize)
+                        this._sections[key] = new Section(this._sectionSize, this._sectionSize, sectionX * this._sectionSize, sectionY * this._sectionSize);
                     }
 
-                    sections.push(this._sections[key])
+                    sections.push(this._sections[key]);
                 }
             }
 
-            return sections
+            return sections;
         },
 
         getTotalSectionCount: function () {
@@ -84,5 +84,5 @@
                 section.addCellIndex(index);
             });
         }
-    }
+    };
 })();

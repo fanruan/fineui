@@ -3,44 +3,44 @@
 })(function (CodeMirror) {
     "use strict";
 
-    CodeMirror.defineMode('formula', function () {
-        function wordObj(words) {
+    CodeMirror.defineMode("formula", function () {
+        function wordObj (words) {
             var o = {};
             for (var i = 0, e = words.length; i < e; ++i) o[words[i]] = true;
             return o;
         }
 
-        var atoms = wordObj(['false', 'true']);
+        var atoms = wordObj(["false", "true"]);
         var keywords = wordObj(BI.FormulaCollections);
 
-        function tokenBase(stream, state) {
+        function tokenBase (stream, state) {
             if (stream.eatSpace()) {
                 return null;
             }
             var ch = stream.next();
 
-            if (ch === '"' || ch === '\'') {
+            if (ch === "\"" || ch === "'") {
                 nextUntilUnescaped(stream, ch);
                 return "string";
             }
-            if (ch === '\u200b') {
+            if (ch === "\u200b") {
                 nextUntilUnescaped(stream, ch);
                 return "field";
             }
             if (/[\[\],\(\)]/.test(ch)) {
-                return 'bracket';
+                return "bracket";
             }
 
             // richie：暂时不需要解析操作符号
-            //if (/[+\-*\/=<>!&|]/.test(ch)) {
+            // if (/[+\-*\/=<>!&|]/.test(ch)) {
             //  return 'operator';
-            //}
-            //if (/\d|\d./.test(ch)) {
+            // }
+            // if (/\d|\d./.test(ch)) {
             //    stream.eatWhile(/\d|\./);
             //    if (stream.eol() || !/\w/.test(stream.peek())) {
             //        return 'number';
             //    }
-            //}
+            // }
 
 
 
@@ -55,7 +55,7 @@
             return null;
         }
 
-        function nextUntilUnescaped(stream, end) {
+        function nextUntilUnescaped (stream, end) {
             var escaped = false, next;
             while ((next = stream.next()) != null) {
                 if (next === end && !escaped) {
@@ -66,7 +66,7 @@
             return escaped;
         }
 
-        function tokenize(stream, state) {
+        function tokenize (stream, state) {
             return (state.tokens[0] || tokenBase)(stream, state);
         }
 

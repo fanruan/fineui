@@ -10,7 +10,7 @@ BI.SequenceTableTreeNumber = BI.inherit(BI.Widget, {
         return BI.extend(BI.SequenceTableTreeNumber.superclass._defaultConfig.apply(this, arguments), {
             baseCls: "bi-sequence-table-tree-number",
             isNeedFreeze: false,
-            startSequence: 1,//开始的序号
+            startSequence: 1, // 开始的序号
             scrollTop: 0,
             headerRowSize: 25,
             rowSize: 25,
@@ -18,9 +18,9 @@ BI.SequenceTableTreeNumber = BI.inherit(BI.Widget, {
             sequenceHeaderCreator: null,
 
             header: [],
-            items: [], //二维数组
+            items: [], // 二维数组
 
-            //交叉表头
+            // 交叉表头
             crossHeader: [],
             crossItems: []
         });
@@ -65,7 +65,7 @@ BI.SequenceTableTreeNumber = BI.inherit(BI.Widget, {
                 el: this.scrollContainer
             }]
         });
-        //缓存第一行对应的序号
+        // 缓存第一行对应的序号
         this.start = this.options.startSequence;
         this.cache = {};
         this._nextState();
@@ -78,8 +78,8 @@ BI.SequenceTableTreeNumber = BI.inherit(BI.Widget, {
         var start = this.start;
         var cnt = this.start;
 
-        function track(node) {
-            //如果已经有缓存了就不改计数了，复杂表会出现这种情况
+        function track (node) {
+            // 如果已经有缓存了就不改计数了，复杂表会出现这种情况
             self.cache[node.text || node.value] || (self.cache[node.text || node.value] = cnt);
             cnt++;
         }
@@ -92,7 +92,7 @@ BI.SequenceTableTreeNumber = BI.inherit(BI.Widget, {
                             start = cnt = self.cache[child.text || child.value];
                         }
                     }
-                    track(child)
+                    track(child);
                 });
             }
         });
@@ -123,13 +123,13 @@ BI.SequenceTableTreeNumber = BI.inherit(BI.Widget, {
         var result = [];
         var count = this._getStart(nodes);
 
-        function getLeafCount(node) {
+        function getLeafCount (node) {
             var cnt = 0;
             if (BI.isNotEmptyArray(node.children)) {
                 BI.each(node.children, function (index, child) {
                     cnt += getLeafCount(child);
                 });
-                if (/**node.children.length > 1 && **/BI.isNotEmptyArray(node.values)) {
+                if (/** node.children.length > 1 && **/BI.isNotEmptyArray(node.values)) {
                     cnt++;
                 }
             } else {
@@ -290,7 +290,7 @@ BI.SequenceTableTreeNumber = BI.inherit(BI.Widget, {
                     } : function (key) {
                         return function () {
                             return o.sequenceCellStyleGetter(key);
-                        }
+                        };
                     }(numbers[key].index)
                 }, numbers[key]));
                 renderedCells.push({
@@ -302,7 +302,7 @@ BI.SequenceTableTreeNumber = BI.inherit(BI.Widget, {
             }
         });
 
-        //已存在的， 需要添加的和需要删除的
+        // 已存在的， 需要添加的和需要删除的
         var existSet = {}, addSet = {}, deleteArray = [];
         BI.each(renderedKeys, function (i, key) {
             if (BI.deepContains(self.renderedKeys, key)) {
@@ -325,7 +325,7 @@ BI.SequenceTableTreeNumber = BI.inherit(BI.Widget, {
         });
         var addedItems = [];
         BI.each(addSet, function (index) {
-            addedItems.push(renderedCells[index])
+            addedItems.push(renderedCells[index]);
         });
         BI.createWidget({
             type: "bi.absolute",
@@ -417,4 +417,4 @@ BI.SequenceTableTreeNumber = BI.inherit(BI.Widget, {
         this._populate();
     }
 });
-BI.shortcut('bi.sequence_table_tree_number', BI.SequenceTableTreeNumber);
+BI.shortcut("bi.sequence_table_tree_number", BI.SequenceTableTreeNumber);

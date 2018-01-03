@@ -7,8 +7,8 @@ BI.MultiSelectPopupView = BI.inherit(BI.Widget, {
 
     _defaultConfig: function () {
         return BI.extend(BI.MultiSelectPopupView.superclass._defaultConfig.apply(this, arguments), {
-            baseCls: 'bi-multi-select-popup-view',
-            maxWidth: 'auto',
+            baseCls: "bi-multi-select-popup-view",
+            maxWidth: "auto",
             minWidth: 135,
             maxHeight: 400,
             valueFormatter: BI.emptyFn,
@@ -35,7 +35,7 @@ BI.MultiSelectPopupView = BI.inherit(BI.Widget, {
             minWidth: opts.minWidth,
             maxHeight: opts.maxHeight,
             element: this,
-            buttons: [BI.i18nText('BI-Basic_Clears'), BI.i18nText('BI-Basic_Sure')],
+            buttons: [BI.i18nText("BI-Basic_Clears"), BI.i18nText("BI-Basic_Sure")],
             el: this.loader
         });
 
@@ -88,4 +88,4 @@ BI.MultiSelectPopupView.EVENT_CLICK_CONFIRM = "EVENT_CLICK_CONFIRM";
 BI.MultiSelectPopupView.EVENT_CLICK_CLEAR = "EVENT_CLICK_CLEAR";
 
 
-BI.shortcut('bi.multi_select_popup_view', BI.MultiSelectPopupView);
+BI.shortcut("bi.multi_select_popup_view", BI.MultiSelectPopupView);

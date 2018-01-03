@@ -15,7 +15,7 @@ BI.DownListItem = BI.inherit(BI.Single, {
             textVgap: 0,
             textLgap: 0,
             textRgap: 0
-        })
+        });
     },
     _init: function () {
         BI.DownListItem.superclass._init.apply(this, arguments);

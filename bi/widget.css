@@ -73,7 +73,7 @@
 }
 .bi-interactive-arrangement .interactive-arrangement-dragtag-line {
   z-index: 1000000000;
-  background-color: #ff4949;
+  background-color: #faaa39;
 }
 .bi-interactive-arrangement .interactive-arrangement-dragtag-icon {
   z-index: 1000000000;
@@ -128,7 +128,7 @@
   border-radius: 2px 2px 2px 2px;
 }
 .bi-multi-select-search-pane .multi-select-toolbar {
-  color: #faaa39;
+  color: #ff4949;
 }
 .bi-multi-select-check-selected-button {
   z-index: 1;
@@ -190,7 +190,7 @@
   font-size: 14px;
 }
 .bi-number-interval.number-error .bi-input {
-  color: #faaa39 !important;
+  color: #ff4949 !important;
 }
 .bi-page-table-cell {
   -webkit-user-select: text;
@@ -347,10 +347,10 @@
   border-radius: 3px;
 }
 .bi-param-time-interval.time-error .bi-input {
-  color: #faaa39;
+  color: #ff4949;
 }
 .bi-param-time-interval.time-error .sign-editor-text {
-  color: #faaa39;
+  color: #ff4949;
 }
 .bi-year-popup .year-popup-navigation {
   line-height: 30px;

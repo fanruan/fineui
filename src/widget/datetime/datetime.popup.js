@@ -4,7 +4,7 @@
 BI.DateTimePopup = BI.inherit(BI.Widget, {
     _defaultConfig: function () {
         return BI.extend(BI.DateTimePopup.superclass._defaultConfig.apply(this, arguments), {
-            baseCls: 'bi-date-time-popup',
+            baseCls: "bi-date-time-popup",
             width: 268,
             height: 290
         });
@@ -13,9 +13,9 @@ BI.DateTimePopup = BI.inherit(BI.Widget, {
         BI.DateTimePopup.superclass._init.apply(this, arguments);
         var self = this, opts = this.options;
         this.cancelButton = BI.createWidget({
-            type: 'bi.text_button',
+            type: "bi.text_button",
             forceCenter: true,
-            cls: 'multidate-popup-button bi-border-top bi-border-right',
+            cls: "multidate-popup-button bi-border-top bi-border-right",
             shadow: true,
             text: BI.i18nText("BI-Basic_Cancel")
         });
@@ -26,7 +26,7 @@ BI.DateTimePopup = BI.inherit(BI.Widget, {
         this.okButton = BI.createWidget({
             type: "bi.text_button",
             forceCenter: true,
-            cls: 'multidate-popup-button bi-border-top',
+            cls: "multidate-popup-button bi-border-top",
             shadow: true,
             text: BI.i18nText("BI-Basic_OK")
         });
@@ -167,10 +167,10 @@ BI.DateTimePopup = BI.inherit(BI.Widget, {
             hour: this.hour.getValue(),
             minute: this.minute.getValue(),
             second: this.second.getValue()
-        }
+        };
     }
 });
 BI.DateTimePopup.BUTTON_OK_EVENT_CHANGE = "BUTTON_OK_EVENT_CHANGE";
 BI.DateTimePopup.BUTTON_CANCEL_EVENT_CHANGE = "BUTTON_CANCEL_EVENT_CHANGE";
 BI.DateTimePopup.CALENDAR_EVENT_CHANGE = "CALENDAR_EVENT_CHANGE";
-BI.shortcut('bi.date_time_popup', BI.DateTimePopup);
+BI.shortcut("bi.date_time_popup", BI.DateTimePopup);

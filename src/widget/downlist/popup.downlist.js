@@ -19,7 +19,7 @@ BI.DownListPopup = BI.inherit(BI.Pane, {
             baseCls: "bi-down-list-popup",
             items: [],
             chooseType: BI.Selection.Multi
-        })
+        });
     },
     _init: function () {
         BI.DownListPopup.superclass._init.apply(this, arguments);
@@ -46,7 +46,7 @@ BI.DownListPopup = BI.inherit(BI.Pane, {
             var changedValue = value;
             if (BI.isNotNull(self.childValueMap[value])) {
                 changedValue = self.childValueMap[value];
-                self.fireEvent(BI.DownListPopup.EVENT_SON_VALUE_CHANGE, changedValue, self.fatherValueMap[value])
+                self.fireEvent(BI.DownListPopup.EVENT_SON_VALUE_CHANGE, changedValue, self.fatherValueMap[value]);
             } else {
                 self.fireEvent(BI.DownListPopup.EVENT_CHANGE, changedValue, object);
             }
@@ -122,7 +122,7 @@ BI.DownListPopup = BI.inherit(BI.Pane, {
                         self.childValueMap[self._createChildValue(fatherValue, childValue)] = childValue;
                         child.value = self._createChildValue(fatherValue, childValue);
                         item.el.childValues.push(child.value);
-                    })
+                    });
                 } else {
                     item.type = "bi.down_list_item";
                     item.title = item.title || item.text;
@@ -130,7 +130,7 @@ BI.DownListPopup = BI.inherit(BI.Pane, {
                     item.isNeedAdjustWidth = false;
                     item.logic = {
                         dynamic: true
-                    }
+                    };
                 }
                 var el_done = {};
                 el_done.el = item;
@@ -139,7 +139,7 @@ BI.DownListPopup = BI.inherit(BI.Pane, {
             if (self._isGroup(item_done.items)) {
                 BI.each(item_done.items, function (i, item) {
                     self.singleValues.push(item.el.value);
-                })
+                });
             }
 
             result.push(item_done);
@@ -173,7 +173,7 @@ BI.DownListPopup = BI.inherit(BI.Pane, {
     },
 
     _createChildValue: function (fatherValue, childValue) {
-        return fatherValue + "_" + childValue
+        return fatherValue + "_" + childValue;
     },
 
     populate: function (items) {
@@ -195,14 +195,14 @@ BI.DownListPopup = BI.inherit(BI.Pane, {
         var self = this;
         var valueArray = [];
         BI.each(valueItem, function (i, item) {
-                var value;
-                if (BI.isNotNull(item.childValue)) {
-                    value = self._createChildValue(item.value, item.childValue);
-                } else {
-                    value = item.value;
-                }
-                valueArray.push(value);
+            var value;
+            if (BI.isNotNull(item.childValue)) {
+                value = self._createChildValue(item.value, item.childValue);
+            } else {
+                value = item.value;
             }
+            valueArray.push(value);
+        }
         );
         this.popup.setValue(valueArray);
     },

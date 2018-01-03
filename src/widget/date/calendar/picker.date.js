@@ -9,9 +9,9 @@ BI.DatePicker = BI.inherit(BI.Widget, {
         return BI.extend(conf, {
             baseCls: "bi-date-picker bi-background",
             height: 25,
-            min: '1900-01-01', //最小日期
-            max: '2099-12-31' //最大日期
-        })
+            min: "1900-01-01", // 最小日期
+            max: "2099-12-31" // 最大日期
+        });
     },
 
     _init: function () {
@@ -30,12 +30,12 @@ BI.DatePicker = BI.inherit(BI.Widget, {
                 self.setValue({
                     year: self.year.getValue() - 1,
                     month: 11
-                })
+                });
             } else {
                 self.setValue({
                     year: self.year.getValue(),
                     month: self.month.getValue() - 1
-                })
+                });
             }
             self.fireEvent(BI.DatePicker.EVENT_CHANGE);
             self._checkLeftValid();
@@ -54,12 +54,12 @@ BI.DatePicker = BI.inherit(BI.Widget, {
                 self.setValue({
                     year: self.year.getValue() + 1,
                     month: 0
-                })
+                });
             } else {
                 self.setValue({
                     year: self.year.getValue(),
                     month: self.month.getValue() + 1
-                })
+                });
             }
             self.fireEvent(BI.DatePicker.EVENT_CHANGE);
             self._checkLeftValid();
@@ -77,7 +77,7 @@ BI.DatePicker = BI.inherit(BI.Widget, {
                 month: self.month.getValue()
             });
             self.fireEvent(BI.DatePicker.EVENT_CHANGE);
-        })
+        });
         this.month = BI.createWidget({
             type: "bi.month_date_combo"
         });
@@ -106,11 +106,11 @@ BI.DatePicker = BI.inherit(BI.Widget, {
                 el: this.right,
                 width: 25
             }]
-        })
+        });
         this.setValue({
             year: this._year,
             month: this._month
-        })
+        });
     },
 
     _checkLeftValid: function () {
@@ -142,8 +142,8 @@ BI.DatePicker = BI.inherit(BI.Widget, {
         return {
             year: this.year.getValue(),
             month: this.month.getValue()
-        }
+        };
     }
 });
-BI.DatePicker.EVENT_CHANGE = "EVENT_CHANGE"
+BI.DatePicker.EVENT_CHANGE = "EVENT_CHANGE";
 BI.shortcut("bi.date_picker", BI.DatePicker);

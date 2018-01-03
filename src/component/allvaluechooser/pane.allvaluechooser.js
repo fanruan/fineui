@@ -26,7 +26,7 @@ BI.AllValueChooserPane = BI.inherit(BI.AbstractAllValueChooser, {
             this.items = o.items;
         }
         this.list = BI.createWidget({
-            type: 'bi.multi_select_list',
+            type: "bi.multi_select_list",
             element: this,
             itemsCreator: BI.bind(this._itemsCreator, this),
             valueFormatter: BI.bind(this._valueFormatter, this),
@@ -59,4 +59,4 @@ BI.AllValueChooserPane = BI.inherit(BI.AbstractAllValueChooser, {
     }
 });
 BI.AllValueChooserPane.EVENT_CHANGE = "AllValueChooserPane.EVENT_CHANGE";
-BI.shortcut('bi.all_value_chooser_pane', BI.AllValueChooserPane);
+BI.shortcut("bi.all_value_chooser_pane", BI.AllValueChooserPane);

@@ -11,8 +11,8 @@ BI.YearPopup = BI.inherit(BI.Widget, {
         return BI.extend(BI.YearPopup.superclass._defaultConfig.apply(this, arguments), {
             baseCls: "bi-year-popup",
             behaviors: {},
-            min: '1900-01-01', //最小日期
-            max: '2099-12-31' //最大日期
+            min: "1900-01-01", // 最小日期
+            max: "2099-12-31" // 最大日期
         });
     },
 

@@ -45,7 +45,7 @@ BI.AbstractAllValueChooser = BI.inherit(BI.Widget, {
         } else {
             call(this.items);
         }
-        function call(items) {
+        function call (items) {
             var keywords = (options.keywords || []).slice();
             if (options.keyword) {
                 keywords.push(options.keyword);
@@ -54,7 +54,7 @@ BI.AbstractAllValueChooser = BI.inherit(BI.Widget, {
                 var search = BI.Func.getSearchResult(items, kw);
                 items = search.matched.concat(search.finded);
             });
-            if (options.selectedValues) {//过滤
+            if (options.selectedValues) {// 过滤
                 var filter = BI.makeObject(options.selectedValues, true);
                 items = BI.filter(items, function (i, ob) {
                     return !filter[ob.value];

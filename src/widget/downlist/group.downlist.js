@@ -13,7 +13,7 @@ BI.DownListGroup = BI.inherit(BI.Widget, {
                     el: {}
                 }
             ]
-        })
+        });
     },
     _init: function () {
         BI.DownListGroup.superclass._init.apply(this, arguments);
@@ -23,7 +23,7 @@ BI.DownListGroup = BI.inherit(BI.Widget, {
             element: this,
             type: "bi.button_tree",
             items: o.items,
-            chooseType: 0,//0单选，1多选
+            chooseType: 0, // 0单选，1多选
             layouts: [{
                 type: "bi.vertical",
                 hgap: 0,
@@ -35,16 +35,16 @@ BI.DownListGroup = BI.inherit(BI.Widget, {
             if(type === BI.Events.CLICK) {
                 self.fireEvent(BI.DownListGroup.EVENT_CHANGE, arguments);
             }
-        })
+        });
     },
-    getValue:function(){
+    getValue: function () {
         return this.downlistgroup.getValue();
     },
-    setValue:function(v){
+    setValue: function (v) {
         this.downlistgroup.setValue(v);
     }
 
 
-})
+});
 BI.DownListGroup.EVENT_CHANGE = "EVENT_CHANGE";
 BI.shortcut("bi.down_list_group", BI.DownListGroup);
