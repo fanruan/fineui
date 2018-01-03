@@ -23,6 +23,11 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 
     var hasProto = '__proto__' in {};
 
+    var isIE = function isIE() {
+        return (/(msie|trident)/i.test(navigator.userAgent.toLowerCase())
+        );
+    };
+
     var getIEVersion = function getIEVersion() {
         var version = 0;
         var agent = navigator.userAgent.toLowerCase();
@@ -39,7 +44,7 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
         }
         return version;
     };
-    var isIE9Below = getIEVersion() < 9;
+    var isIE9Below = isIE() && getIEVersion() < 9;
 
     var _toString = Object.prototype.toString;
 
