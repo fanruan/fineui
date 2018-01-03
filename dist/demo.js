@@ -10477,10 +10477,10 @@ BI.shortcut("demo.tmp", Demo.Func);
         },
         watch: {
             "*.*.n": function () {
-                
+                debugger
             },
             "arr.**": function () {
-                
+                debugger
             },
             "arr.1.*": function () {
                 this.button.setText(this.model.name + "-" + this.model.arr[1].n);
