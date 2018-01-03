@@ -128,6 +128,40 @@
                 }) : old.apply(this, arguments);
             };
         });
+        BI.isEmpty = function (ob) {
+            if (BI.isPlainObject(ob) && ob.__ob__) {
+                return BI.keys(ob).length === 0;
+            }
+            return _.isEmpty(ob);
+        };
+        BI.keys = function (ob) {
+            var keys = _.keys(ob);
+            var nKeys = [];
+            for (var i = 0; i < keys.length; i++) {
+                if (!(keys[i] in Fix.$$skipArray)) {
+                    nKeys.push(keys[i]);
+                }
+            }
+            return nKeys;
+        };
+        BI.values = function (ob) {
+            var keys = BI.keys(obj);
+            var length = keys.length;
+            var values = [];
+            for (var i = 0; i < length; i++) {
+                values[i] = obj[keys[i]];
+            }
+            return values;
+        };
+        BI.size = function (ob) {
+            if (BI.isPlainObject(ob) && ob.__ob__) {
+                return BI.keys(ob).length;
+            }
+            return _.size(ob);
+        };
+        BI.isEmptyObject = function (ob) {
+            return BI.size(ob) === 0;
+        };
     }
     BI.watch = Fix.watch;
 }());
