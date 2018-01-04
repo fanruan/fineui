@@ -10,7 +10,6 @@ BI.RelationViewItem = BI.inherit(BI.BasicButton, {
     _defaultConfig: function () {
         return BI.extend(BI.RelationViewItem.superclass._defaultConfig.apply(this, arguments), {
             baseCls: "bi-relation-view-item bi-list-item-active",
-            height: 25,
             hoverIn: BI.emptyFn,
             hoverOut: BI.emptyFn
         });
@@ -20,29 +19,47 @@ BI.RelationViewItem = BI.inherit(BI.BasicButton, {
         BI.RelationViewItem.superclass._init.apply(this, arguments);
         var self = this, o = this.options;
         this.element.hover(o.hoverIn, o.hoverOut);
-        var items = [];
+        o.text = BI.isArray(o.text) ? o.text : [o.text];
+        var body = [];
+        var header = {
+            type: "bi.vertical_adapt",
+            cls: "primary-key-font",
+            items: []
+        };
         if (o.isPrimary) {
-            items.push({
+            header.items.push({
                 type: "bi.icon",
                 width: 16,
                 height: 16,
                 title: BI.i18nText("BI-Primary_Key")
             });
         }
-        items.push({
+        header.items.push({
             type: "bi.label",
-            text: o.text,
+            text: o.text.length > 1 ? BI.i18nText("BI-Basic_Union_Relation") : o.text[0],
             value: o.value,
-            height: o.height,
+            height: 25,
             textAlign: "left",
             width: o.isPrimary ? 70 : 90,
             lgap: o.isPrimary ? 0 : 10
         });
+        if(o.text.length > 1){
+            body = BI.map(o.text, function (idx, text) {
+                return {
+                    type: "bi.label",
+                    text: text,
+                    value: o.value,
+                    height: 25,
+                    textAlign: "left",
+                    width: 70,
+                    lgap: 20
+                }
+            })
+        }
         BI.createWidget({
-            type: "bi.vertical_adapt",
+            type: "bi.vertical",
             element: this,
-            items: items,
-            cls: "primary-key-font",
+            items: BI.concat([header], body),
             lgap: 5
         });
     },
