@@ -14825,7 +14825,6 @@ BI.RelationViewItem = BI.inherit(BI.BasicButton, {
     _defaultConfig: function () {
         return BI.extend(BI.RelationViewItem.superclass._defaultConfig.apply(this, arguments), {
             baseCls: "bi-relation-view-item bi-list-item-active",
-            height: 25,
             hoverIn: BI.emptyFn,
             hoverOut: BI.emptyFn
         });
@@ -14835,29 +14834,48 @@ BI.RelationViewItem = BI.inherit(BI.BasicButton, {
         BI.RelationViewItem.superclass._init.apply(this, arguments);
         var self = this, o = this.options;
         this.element.hover(o.hoverIn, o.hoverOut);
-        var items = [];
+        o.text = BI.isArray(o.text) ? o.text : [o.text];
+        var body = [];
+        var header = {
+            type: "bi.vertical_adapt",
+
+            cls: "primary-key-font",
+            items: []
+        };
         if (o.isPrimary) {
-            items.push({
+            header.items.push({
                 type: "bi.icon",
                 width: 16,
                 height: 16,
                 title: BI.i18nText("BI-Primary_Key")
             });
         }
-        items.push({
+        header.items.push({
             type: "bi.label",
-            text: o.text,
+            text: o.text.length > 1 ? BI.i18nText("BI-Basic_Union_Relation") : o.text[0],
             value: o.value,
-            height: o.height,
+            height: 25,
             textAlign: "left",
             width: o.isPrimary ? 70 : 90,
             lgap: o.isPrimary ? 0 : 10
         });
+        if(o.text.length > 1){
+            body = BI.map(o.text, function (idx, text) {
+                return {
+                    type: "bi.label",
+                    text: text,
+                    value: o.value,
+                    height: 25,
+                    textAlign: "left",
+                    width: 90,
+                    lgap: 20
+                }
+            })
+        }
         BI.createWidget({
-            type: "bi.vertical_adapt",
+            type: "bi.vertical",
             element: this,
-            items: items,
-            cls: "primary-key-font",
+            items: BI.concat([header], body),
             lgap: 5
         });
     },
@@ -15107,7 +15125,7 @@ BI.RelationView = BI.inherit(BI.Widget, {
                 // }
                 var draw = function (i, j, direction, isForeign) {
                     var x = offsetWidths[j] + (widths[j] - views[i][j].getWidth()) / 2;
-                    var y = offsetHeights[i] + (heights[i] - views[i][j].getHeight()) / 2;
+                    var y = offsetHeights[i];
                     var path = "", position;
                     switch (direction) {
                         case top:
@@ -15362,8 +15380,10 @@ BI.RelationViewRegion = BI.inherit(BI.BasicButton, {
     _createItems: function (items) {
         var self = this;
         return BI.map(items, function (i, item) {
+            var texts = BI.isArray(item.text) ? item.text : [item.text];
             return BI.extend(item, {
                 type: "bi.relation_view_item",
+                height: texts.length > 1 ? (texts.length + 1) * 25 : 25,
                 hoverIn: function () {
                     self.setValue(item.value);
                     self.fireEvent(BI.RelationViewRegion.EVENT_HOVER_IN, item.value);
@@ -15389,7 +15409,11 @@ BI.RelationViewRegion = BI.inherit(BI.BasicButton, {
     },
 
     getHeight: function () {
-        return this.button_group.getAllButtons().length * 25 + 25 + 2 * 20 + 3;
+        var height = 0;
+        BI.each(this.button_group.getAllButtons(), function (idx, button) {
+            height += button.getHeight();
+        });
+        return height + 25 + 2 * 20 + 3;
     },
 
     // 获取上方开始划线的位置
