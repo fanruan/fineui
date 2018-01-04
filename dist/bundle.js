@@ -92336,7 +92336,7 @@ BI.SelectTreePopup = BI.inherit(BI.Pane, {
 
     populate: function (items) {
         BI.SelectTreePopup.superclass.populate.apply(this, arguments);
-        this.tree.populate(items);
+        this.tree.populate(this._formatItems(BI.Tree.transformToTreeFormat(items)));
     }
 });
 
