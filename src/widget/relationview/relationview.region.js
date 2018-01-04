@@ -77,8 +77,10 @@ BI.RelationViewRegion = BI.inherit(BI.BasicButton, {
     _createItems: function (items) {
         var self = this;
         return BI.map(items, function (i, item) {
+            var texts = BI.isArray(item.text) ? item.text : [item.text];
             return BI.extend(item, {
                 type: "bi.relation_view_item",
+                height: texts.length > 1 ? (texts.length + 1) * 25 : 25,
                 hoverIn: function () {
                     self.setValue(item.value);
                     self.fireEvent(BI.RelationViewRegion.EVENT_HOVER_IN, item.value);
@@ -104,7 +106,11 @@ BI.RelationViewRegion = BI.inherit(BI.BasicButton, {
     },
 
     getHeight: function () {
-        return this.button_group.getAllButtons().length * 25 + 25 + 2 * 20 + 3;
+        var height = 0;
+        BI.each(this.button_group.getAllButtons(), function (idx, button) {
+            height += button.getHeight();
+        });
+        return height + 25 + 2 * 20 + 3;
     },
 
     // 获取上方开始划线的位置

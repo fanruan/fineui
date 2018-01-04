@@ -11,18 +11,18 @@ Demo.RelationView = BI.inherit(BI.Widget, {
             items: [
                 {
                     primary: {
-                        region: "B", regionText: "比", regionTitle: "bbb", regionHandler: function () {
+                        region: "B", regionText: "比", text: ["try", "try1"], regionTitle: "bbb", regionHandler: function () {
                             alert("a");
                         },
 
-
+                        isPrimary: true,
                         title: "b2...",
-                        value: "b2", text: "b2字段",
+                        value: "b2",
                         handler: function () {
                             alert("d");
                         }
                     },
-                    foreign: {region: "C", value: "c1", text: "c1字段"}
+                    foreign: {region: "C", text: ["try", "try1"], value: "c1"}
                 },
                 {
                     primary: {region: "A", value: "a1", text: "a1字段"},
