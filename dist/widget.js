@@ -14838,7 +14838,6 @@ BI.RelationViewItem = BI.inherit(BI.BasicButton, {
         var body = [];
         var header = {
             type: "bi.vertical_adapt",
-
             cls: "primary-key-font",
             items: []
         };
@@ -14867,7 +14866,7 @@ BI.RelationViewItem = BI.inherit(BI.BasicButton, {
                     value: o.value,
                     height: 25,
                     textAlign: "left",
-                    width: 90,
+                    width: 70,
                     lgap: 20
                 }
             })
@@ -15368,7 +15367,7 @@ BI.RelationViewRegion = BI.inherit(BI.BasicButton, {
                 cls: "relation-view-region-container bi-card bi-border " + (o.belongPackage ? "" : "other-package"),
                 items: [{
                     type: "bi.vertical_adapt",
-                    cls: "relation-view-region-title bi-border-bottom",
+                    cls: "relation-view-region-title bi-border-bottom bi-background",
                     items: [this.preview, this.title]
                 }, this.button_group]
             }],

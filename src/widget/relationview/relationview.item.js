@@ -23,7 +23,6 @@ BI.RelationViewItem = BI.inherit(BI.BasicButton, {
         var body = [];
         var header = {
             type: "bi.vertical_adapt",
-
             cls: "primary-key-font",
             items: []
         };
@@ -52,7 +51,7 @@ BI.RelationViewItem = BI.inherit(BI.BasicButton, {
                     value: o.value,
                     height: 25,
                     textAlign: "left",
-                    width: 90,
+                    width: 70,
                     lgap: 20
                 }
             })
