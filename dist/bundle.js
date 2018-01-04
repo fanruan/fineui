@@ -90921,15 +90921,14 @@ BI.RelationViewItem = BI.inherit(BI.BasicButton, {
                     height: 25,
                     textAlign: "left",
                     width: 70,
-                    lgap: 20
+                    lgap: 15
                 }
             })
         }
         BI.createWidget({
             type: "bi.vertical",
             element: this,
-            items: BI.concat([header], body),
-            lgap: 5
+            items: BI.concat([header], body)
         });
     },
 
@@ -91044,6 +91043,12 @@ BI.RelationView = BI.inherit(BI.Widget, {
                     line.hide();
                 }
             });
+        });
+    },
+
+    doRedMark: function (keyword) {
+        BI.each(this.storeViews, function (idx, view) {
+            view.doRedMark(keyword);
         });
     },
 
