@@ -102,6 +102,12 @@ BI.RelationView = BI.inherit(BI.Widget, {
         });
     },
 
+    doRedMark: function (keyword) {
+        BI.each(this.storeViews, function (idx, view) {
+            view.doRedMark(keyword);
+        });
+    },
+
     populate: function (items) {
         var self = this, o = this.options, c = this._const;
         o.items = items || [];
