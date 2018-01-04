@@ -15107,7 +15107,7 @@ BI.RelationView = BI.inherit(BI.Widget, {
                 // }
                 var draw = function (i, j, direction, isForeign) {
                     var x = offsetWidths[j] + (widths[j] - views[i][j].getWidth()) / 2;
-                    var y = offsetHeights[i] + (heights[i] - views[i][j].getHeight()) / 2;
+                    var y = offsetHeights[i];
                     var path = "", position;
                     switch (direction) {
                         case top:
