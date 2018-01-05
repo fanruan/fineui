@@ -3464,6 +3464,7 @@ BI.DownListCombo = BI.inherit(BI.Widget, {
             direction: "bottom",
             trigger: "click",
             container: null,
+            stopPropagation: false,
             el: {}
         });
     },
@@ -3496,6 +3497,7 @@ BI.DownListCombo = BI.inherit(BI.Widget, {
             container: o.container,
             adjustLength: o.adjustLength,
             direction: o.direction,
+            stopPropagation: o.stopPropagation,
             el: BI.createWidget(o.el, {
                 type: "bi.icon_trigger",
                 extraCls: o.iconCls ? o.iconCls : "pull-down-font",
@@ -14867,15 +14869,14 @@ BI.RelationViewItem = BI.inherit(BI.BasicButton, {
                     height: 25,
                     textAlign: "left",
                     width: 70,
-                    lgap: 20
+                    lgap: 15
                 }
             })
         }
         BI.createWidget({
             type: "bi.vertical",
             element: this,
-            items: BI.concat([header], body),
-            lgap: 5
+            items: BI.concat([header], body)
         });
     },
 
@@ -14993,6 +14994,12 @@ BI.RelationView = BI.inherit(BI.Widget, {
         });
     },
 
+    doRedMark: function (keyword) {
+        BI.each(this.storeViews, function (idx, view) {
+            view.doRedMark(keyword);
+        });
+    },
+
     populate: function (items) {
         var self = this, o = this.options, c = this._const;
         o.items = items || [];
@@ -15058,6 +15065,7 @@ BI.RelationView = BI.inherit(BI.Widget, {
                     text: items.length > 0 ? items[0].regionText : "",
                     handler: items.length > 0 ? items[0].regionHandler : BI.emptyFn,
                     items: items,
+                    disabled: items[0].disabled,
                     belongPackage: items.length > 0 ? items[0].belongPackage : true
                 });
                 if (BI.isNotNull(items[0]) && BI.isNotNull(items[0].keyword)) {
@@ -15227,6 +15235,7 @@ BI.RelationViewRegionContainer = BI.inherit(BI.Widget, {
             header: o.header,
             text: o.text,
             handler: o.handler,
+            disabled: o.disabled,
             items: o.items,
             belongPackage: o.belongPackage
         });
