@@ -52,15 +52,14 @@ BI.RelationViewItem = BI.inherit(BI.BasicButton, {
                     height: 25,
                     textAlign: "left",
                     width: 70,
-                    lgap: 20
+                    lgap: 15
                 }
             })
         }
         BI.createWidget({
             type: "bi.vertical",
             element: this,
-            items: BI.concat([header], body),
-            lgap: 5
+            items: BI.concat([header], body)
         });
     },
 

@@ -102,6 +102,12 @@ BI.RelationView = BI.inherit(BI.Widget, {
         });
     },
 
+    doRedMark: function (keyword) {
+        BI.each(this.storeViews, function (idx, view) {
+            view.doRedMark(keyword);
+        });
+    },
+
     populate: function (items) {
         var self = this, o = this.options, c = this._const;
         o.items = items || [];
@@ -167,6 +173,7 @@ BI.RelationView = BI.inherit(BI.Widget, {
                     text: items.length > 0 ? items[0].regionText : "",
                     handler: items.length > 0 ? items[0].regionHandler : BI.emptyFn,
                     items: items,
+                    disabled: items[0].disabled,
                     belongPackage: items.length > 0 ? items[0].belongPackage : true
                 });
                 if (BI.isNotNull(items[0]) && BI.isNotNull(items[0].keyword)) {

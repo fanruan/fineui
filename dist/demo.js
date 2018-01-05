@@ -13067,7 +13067,7 @@ Demo.RelationView = BI.inherit(BI.Widget, {
         baseCls: "demo-relation-view"
     },
     render: function () {
-        var relationview = BI.createWidget({
+        this.relationview = BI.createWidget({
             type: "bi.relation_view",
             items: [
                 {
@@ -13079,6 +13079,7 @@ Demo.RelationView = BI.inherit(BI.Widget, {
                         isPrimary: true,
                         title: "b2...",
                         value: "b2",
+                        //disabled: true,
                         handler: function () {
                             alert("d");
                         }
@@ -13118,9 +13119,12 @@ Demo.RelationView = BI.inherit(BI.Widget, {
         return {
             type: "bi.float_center_adapt",
             items: [{
-                el: relationview
+                el: this.relationview
             }]
         };
+    },
+    mounted: function () {
+        this.relationview.doRedMark("A")
     }
 });
 BI.shortcut("demo.relation_view", Demo.RelationView);/**
