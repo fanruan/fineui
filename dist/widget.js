@@ -3464,6 +3464,7 @@ BI.DownListCombo = BI.inherit(BI.Widget, {
             direction: "bottom",
             trigger: "click",
             container: null,
+            stopPropagation: false,
             el: {}
         });
     },
@@ -3496,6 +3497,7 @@ BI.DownListCombo = BI.inherit(BI.Widget, {
             container: o.container,
             adjustLength: o.adjustLength,
             direction: o.direction,
+            stopPropagation: o.stopPropagation,
             el: BI.createWidget(o.el, {
                 type: "bi.icon_trigger",
                 extraCls: o.iconCls ? o.iconCls : "pull-down-font",
@@ -15220,7 +15222,7 @@ BI.RelationViewRegionContainer = BI.inherit(BI.Widget, {
     _defaultConfig: function () {
         return BI.extend(BI.RelationViewRegionContainer.superclass._defaultConfig.apply(this, arguments), {
             baseCls: "bi-relation-view-region-container",
-            width: 150
+            width: 200
         });
     },
 
@@ -15230,6 +15232,7 @@ BI.RelationViewRegionContainer = BI.inherit(BI.Widget, {
         this.region = BI.createWidget({
             type: "bi.relation_view_region",
             value: o.value,
+            width: o.width,
             header: o.header,
             text: o.text,
             handler: o.handler,
