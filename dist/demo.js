@@ -13079,6 +13079,7 @@ Demo.RelationView = BI.inherit(BI.Widget, {
                         isPrimary: true,
                         title: "b2...",
                         value: "b2",
+                        //disabled: true,
                         handler: function () {
                             alert("d");
                         }
