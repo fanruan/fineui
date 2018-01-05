@@ -18,6 +18,7 @@ BI.RelationViewRegionContainer = BI.inherit(BI.Widget, {
             header: o.header,
             text: o.text,
             handler: o.handler,
+            disabled: o.disabled,
             items: o.items,
             belongPackage: o.belongPackage
         });
