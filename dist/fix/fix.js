@@ -1122,10 +1122,17 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
         }
     }
 
-    function createWatcher(vm, keyOrFn, handler) {
-        return watch(vm.model, keyOrFn, _.bind(handler, vm.$$model ? vm.model : vm), {
+    function createWatcher(vm, keyOrFn, cb, options) {
+        if (isPlainObject(cb)) {
+            options = cb;
+            cb = cb.handler;
+        }
+        if (typeof cb === 'string') {
+            cb = vm[cb];
+        }
+        return watch(vm.model, keyOrFn, _.bind(cb, vm.$$model ? vm.model : vm), _.extend({
             sync: true
-        });
+        }, options));
     }
 
     function initMethods(vm, methods) {
