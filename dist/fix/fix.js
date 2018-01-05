@@ -1267,7 +1267,7 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
             var childContext = _.isFunction(this.childContext) ? this.childContext() : this.childContext;
             var watch$$1 = _.isFunction(this.watch) ? this.watch() : this.watch;
             var actions = _.isFunction(this.actions) ? this.actions() : this.actions;
-            var keys = _.keys(this.$$model).concat(_.keys(state)).concat(_.keys(computed)).concat(context);
+            var keys = _.keys(this.$$model).concat(_.keys(state)).concat(_.keys(computed)).concat(context || []);
             defineProps(this, keys);
             childContext && defineContext(this, childContext);
             this.$$model && (this.model.__ob__ = this.$$model.__ob__);
