@@ -17267,13 +17267,13 @@ BI.PopoverSection.EVENT_CLOSE = "EVENT_CLOSE";(function () {
                 return _numberFormat(text + "", format.substring(0, numMod));
             }
             return _numberFormat((-text) + "", format.substr(numMod + 1));
-            
+
         }
         // 兼容格式处理负数的情况(copy:fr-jquery.format.js)
         if (+text < 0 && format.charAt(0) !== "-") {
             return _numberFormat((-text) + "", "-" + format);
         }
-        
+
         var tp = text.split("."), fp = format.split("."),
             tleft = tp[0] || "", fleft = fp[0] || "",
             tright = tp[1] || "", fright = fp[1] || "";
@@ -17301,7 +17301,7 @@ BI.PopoverSection.EVENT_CLOSE = "EVENT_CLOSE";(function () {
             return left + right;
         }
         return left + "." + right;
-        
+
     }
 
     /**
@@ -17484,7 +17484,7 @@ BI.PopoverSection.EVENT_CLOSE = "EVENT_CLOSE";(function () {
 
     // replace the html special tags
     BI.htmlEncode = function (text) {
-        return (text == null) ? "" : String(text).replace(/&/g, "&amp;").replace(/\"/g, "&quot;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
+        return (text == null) ? '' : String(text).replace(/&/g, '&amp;').replace(/\"/g, '&quot;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/\s/g, '&nbsp;');
     };
     // html decode
     BI.htmlDecode = function (text) {
@@ -17602,7 +17602,7 @@ BI.PopoverSection.EVENT_CLOSE = "EVENT_CLOSE";(function () {
         }
         a.push("}");
         return a.join("");
-        
+
     };
 
     BI.jsonDecode = function (text) {
@@ -17827,8 +17827,8 @@ BI.PopoverSection.EVENT_CLOSE = "EVENT_CLOSE";(function () {
             return parseInt(str);
         }
         return parseFloat(str);
-            
-        
+
+
     };
 
     BI.object2Date = function (obj) {
@@ -17848,7 +17848,7 @@ BI.PopoverSection.EVENT_CLOSE = "EVENT_CLOSE";(function () {
         }
 
         return new Date();
-        
+
     };
 
     BI.object2Time = function (obj) {
@@ -17875,7 +17875,7 @@ BI.PopoverSection.EVENT_CLOSE = "EVENT_CLOSE";(function () {
             return dt;
         }
         return new Date();
-        
+
     };
 })();
 /**
