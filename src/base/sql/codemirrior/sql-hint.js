@@ -239,13 +239,11 @@
         var desc = {};
         var cur = editor.getCursor();
         var token = editor.getTokenAt(cur);
+        var collection =  
         BI.each(BI.FormulaCollections, function (idx, formula) {
             if(formula.lastIndexOf(token.string, 0) == 0 && !BI.contains(functions, formula)) {
                 functions.push(formula);
             }
-        });
-        BI.each(BI.FormulaJson, function (idx, formula) {
-            desc[formula.name.toLowerCase()] = formula.def;
         });
         keywords = BI.concat(BI.keys(keywords), functions);
         identifierQuote = getIdentifierQuote(editor);

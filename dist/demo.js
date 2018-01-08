@@ -844,7 +844,7 @@ Demo.SQLEditor = BI.inherit(BI.Widget, {
             type : 'bi.sql_editor',
             width : 300,
             height : 200,
-            value : "select * from DEMO_CONTRACT where 合同类型 = '长期协议' and 购买数量 = sum([1,2,3,4])"
+            value : "select * from DEMO_CONTRACT where 合同类型 = ${长期协议} and 购买数量 = sum([1,2,3,4])"
         });
         BI.createWidget({
             type: "bi.left",
