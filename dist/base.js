@@ -20685,16 +20685,16 @@ BI.Trigger = BI.inherit(BI.Single, {
         keywords = getKeywords(editor);
         var keywordsCount = BI.size(keywords);
         var functions = [];
-        var desc = {};
         var cur = editor.getCursor();
         var token = editor.getTokenAt(cur);
-        var collection =  
-        BI.each(BI.FormulaCollections, function (idx, formula) {
-            if(formula.lastIndexOf(token.string, 0) == 0 && !BI.contains(functions, formula)) {
-                functions.push(formula);
-            }
-        });
-        keywords = BI.concat(BI.keys(keywords), functions);
+        if(options.supportFunction){
+            BI.each(BI.FormulaCollections, function (idx, formula) {
+                if(formula.lastIndexOf(token.string, 0) == 0 && !BI.contains(functions, formula)) {
+                    functions.push(formula);
+                }
+            });
+            keywords = BI.concat(BI.keys(keywords), functions);
+        }
         identifierQuote = getIdentifierQuote(editor);
 
         if (defaultTableName && !defaultTable) {defaultTable = findTableByAlias(defaultTableName, editor);}
@@ -21065,7 +21065,7 @@ BI.SQLEditor = BI.inherit(BI.Widget, {
             value: "",
             lineHeight: 2,
             showHint: true,
-            supportFunction: true
+            supportFunction: false
         });
     },
     _init: function () {
@@ -21083,7 +21083,8 @@ BI.SQLEditor = BI.inherit(BI.Widget, {
             self._checkWaterMark();
             if (o.showHint) {
                 CodeMirror.showHint(cm, CodeMirror.sqlHint, {
-                    completeSingle: false
+                    completeSingle: false,
+                    supportFunction: o.supportFunction
                 });
             }
             BI.nextTick(function () {
