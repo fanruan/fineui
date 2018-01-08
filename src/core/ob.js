@@ -8,11 +8,11 @@ BI.OB = function (config) {
     if (BI.isFunction(this.props)) {
         props = this.props(config);
     }
-    this.options = $.extend(this._defaultConfig(config), props, config);
+    this.options = ($ || _).extend(this._defaultConfig(config), props, config);
     this._init();
     this._initRef();
 };
-$.extend(BI.OB.prototype, {
+_.extend(BI.OB.prototype, {
     props: {},
     init: null,
     destroyed: null,

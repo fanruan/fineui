@@ -2,7 +2,7 @@
  * 对数组对象的扩展
  * @class Array
  */
-$.extend(Array.prototype, {
+_.extend(Array.prototype, {
     contains: function (o) {
         return this.indexOf(o) > -1;
     },

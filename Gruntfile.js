@@ -139,7 +139,26 @@ module.exports = function (grunt) {
             demoCss: {
                 src: ['demo/css/**/*.css'],
                 dest: 'dist/demo.css'
-            }
+            },
+            utilsJs: {
+                src: [
+                    'src/core/underscore.js',
+                    'src/core/foundation.js',
+                    'src/core/var.js',
+                    'src/core/proto/array.js',
+                    'src/core/proto/number.js',
+                    'src/core/proto/string.js',
+                    'src/core/base.js',
+                    'src/core/ob.js',
+                    'src/core/alias.js',
+                    'src/core/inject.js',
+                    'src/core/utils/*.js',
+
+                    'src/data/data.js',
+                    'src/data/**/*.js'
+                ],
+                dest: 'utils/utils.js'
+            },
         },
 
         less: {
