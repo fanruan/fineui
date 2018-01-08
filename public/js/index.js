@@ -119,5 +119,6 @@ BI.i18n = {
     "BI-Basic_Simple_Thursday": "四",
     "BI-Multi_Date_Year_Prev": "年前",
     "BI-Tiao_Data": "条数据",
-    "BI-Basic_Italic": "斜体"
+    "BI-Basic_Italic": "斜体",
+    "BI-Basic_Union_Relation": "联合关联"
 };

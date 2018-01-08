@@ -11158,7 +11158,7 @@ if (!window.BI) {
     window.BI = {};
 }
 
-!(function ($, undefined) {
+!(function (undefined) {
     var traverse = function (func, context) {
         return function (value, key, obj) {
             return func.call(context, key, value, obj);
@@ -12312,7 +12312,7 @@ if (!window.BI) {
             });
         }
     });
-})(jQuery);/**
+})();/**
  * 客户端观察者，主要处理事件的添加、删除、执行等
  * @class BI.OB
  * @abstract
@@ -12322,11 +12322,11 @@ BI.OB = function (config) {
     if (BI.isFunction(this.props)) {
         props = this.props(config);
     }
-    this.options = $.extend(this._defaultConfig(config), props, config);
+    this.options = ($ || _).extend(this._defaultConfig(config), props, config);
     this._init();
     this._initRef();
 };
-$.extend(BI.OB.prototype, {
+_.extend(BI.OB.prototype, {
     props: {},
     init: null,
     destroyed: null,
@@ -14695,7 +14695,7 @@ BI.IntegerBufferSet.prototype = {
     };
 })();window.BI = window.BI || {};
 
-$.extend(BI, {
+_.extend(BI, {
     $defaultImport: function (options, type) {
         var config;
         if (BI.isObject(options)) {
@@ -17494,7 +17494,7 @@ BI.PopoverSection.EVENT_CLOSE = "EVENT_CLOSE";(function () {
     BI.cjkEncodeDO = function (o) {
         if (BI.isPlainObject(o)) {
             var result = {};
-            $.each(o, function (k, v) {
+            _.each(o, function (v, k) {
                 if (!(typeof v === "string")) {
                     v = BI.jsonEncode(v);
                 }
@@ -17610,7 +17610,7 @@ BI.PopoverSection.EVENT_CLOSE = "EVENT_CLOSE";(function () {
         try {
             // 注意0啊
             // var jo = $.parseJSON(text) || {};
-            var jo = $.parseJSON(text);
+            var jo = $ ? $.parseJSON(text): window.JSON.parse(text);
             if (jo == null) {
                 jo = {};
             }
@@ -17647,7 +17647,7 @@ BI.PopoverSection.EVENT_CLOSE = "EVENT_CLOSE";(function () {
                 return new Date(o.__time__);
             }
             for (var a in o) {
-                if (o[a] == o || typeof o[a] === "object" || $.isFunction(o[a])) {
+                if (o[a] == o || typeof o[a] === "object" || _.isFunction(o[a])) {
                     break;
                 }
                 o[a] = arguments.callee(o[a]);
@@ -20662,7 +20662,7 @@ BI.HorizontalFillLayoutLogic = BI.inherit(BI.Logic, {
  * 对数组对象的扩展
  * @class Array
  */
-$.extend(Array.prototype, {
+_.extend(Array.prototype, {
     contains: function (o) {
         return this.indexOf(o) > -1;
     },
@@ -21567,7 +21567,7 @@ Number.prototype.div = function (arg) {
  * 对字符串对象的扩展
  * @class String
  */
-$.extend(String.prototype, {
+_.extend(String.prototype, {
 
     /**
      * 判断字符串是否已指定的字符串开始
@@ -21625,7 +21625,7 @@ $.extend(String.prototype, {
         } else {
             src += "&";
         }
-        $.each(paras, function (name, value) {
+        _.each(paras, function (value, name) {
             if (typeof(name) === "string") {
                 src += name + "=" + value + "&";
             }
@@ -21652,7 +21652,7 @@ $.extend(String.prototype, {
             return this;
         }
         return start + this;
-        
+
     },
 
     /**
@@ -21684,7 +21684,7 @@ $.extend(String.prototype, {
  * 对字符串对象的扩展
  * @class String
  */
-$.extend(String, {
+_.extend(String, {
 
     /**
      * 对字符串中的'和\做编码处理
@@ -99047,5 +99047,6 @@ BI.i18n = {
     "BI-Basic_Simple_Thursday": "四",
     "BI-Multi_Date_Year_Prev": "年前",
     "BI-Tiao_Data": "条数据",
-    "BI-Basic_Italic": "斜体"
+    "BI-Basic_Italic": "斜体",
+    "BI-Basic_Union_Relation": "联合关联"
 };

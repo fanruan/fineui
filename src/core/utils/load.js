@@ -1,6 +1,6 @@
 window.BI = window.BI || {};
 
-$.extend(BI, {
+_.extend(BI, {
     $defaultImport: function (options, type) {
         var config;
         if (BI.isObject(options)) {

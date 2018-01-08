@@ -301,7 +301,7 @@
     BI.cjkEncodeDO = function (o) {
         if (BI.isPlainObject(o)) {
             var result = {};
-            $.each(o, function (k, v) {
+            _.each(o, function (v, k) {
                 if (!(typeof v === "string")) {
                     v = BI.jsonEncode(v);
                 }
@@ -417,7 +417,7 @@
         try {
             // 注意0啊
             // var jo = $.parseJSON(text) || {};
-            var jo = $.parseJSON(text);
+            var jo = $ ? $.parseJSON(text): window.JSON.parse(text);
             if (jo == null) {
                 jo = {};
             }
@@ -454,7 +454,7 @@
                 return new Date(o.__time__);
             }
             for (var a in o) {
-                if (o[a] == o || typeof o[a] === "object" || $.isFunction(o[a])) {
+                if (o[a] == o || typeof o[a] === "object" || _.isFunction(o[a])) {
                     break;
                 }
                 o[a] = arguments.callee(o[a]);
