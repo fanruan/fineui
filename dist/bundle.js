@@ -64190,7 +64190,7 @@ BI.ArrowTreeGroupNodeCheckbox = BI.inherit(BI.IconButton, {
             this.element.removeClass("pull-right-font").addClass("pull-down-font");
         } else {
             this.element.removeClass("pull-down-font").addClass("pull-right-font");
-        }so
+        }
     }
 });
 BI.shortcut("bi.arrow_tree_group_node_checkbox", BI.ArrowTreeGroupNodeCheckbox);/**
