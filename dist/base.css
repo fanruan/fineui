@@ -1043,6 +1043,16 @@ body .bi-button.button-ignore.disabled.clear:active,
 .bi-sql-editor .cm-s-default .cm-function {
   color: #3685f2;
 }
+.bi-sql-editor .param {
+  color: #ffffff;
+  padding: 0 5px;
+  margin: 1px 1px;
+  -webkit-border-radius: 2px;
+  -moz-border-radius: 2px;
+  border-radius: 2px;
+  background: #3f8ce8;
+  display: inline-block;
+}
 .CodeMirror-hints .sql-fr-function {
   color: #3685f2;
 }
