@@ -1303,6 +1303,13 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
         return Model;
     }();
 
+    Model.prototype.state = {};
+    Model.prototype.computed = {};
+    Model.prototype.context = [];
+    Model.prototype.childContext = [];
+    Model.prototype.watch = {};
+    Model.prototype.actions = {};
+
     function toJSON(model) {
         var result = void 0;
         if (_.isArray(model)) {
