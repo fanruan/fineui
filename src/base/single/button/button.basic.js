@@ -19,6 +19,7 @@ BI.BasicButton = BI.inherit(BI.Single, {
             forceSelected: false, // 点击即选中, 选中了就不会被取消,与once的区别是forceSelected不影响事件的触发
             forceNotSelected: false, // 无论怎么点击都不会被选中
             disableSelected: false, // 使能选中
+            level: "common",
 
             shadow: false,
             isShadowShowingOnSelected: false,  // 选中状态下是否显示阴影
@@ -39,6 +40,7 @@ BI.BasicButton = BI.inherit(BI.Single, {
         if (opts.shadow) {
             this._createShadow();
         }
+        this.element.addClass("button-" + opts.level);
     },
 
     _createShadow: function () {
