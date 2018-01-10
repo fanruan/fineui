@@ -141,7 +141,7 @@ module.exports = function (grunt) {
                 dest: "dist/demo.css"
             },
             fineuiJs: {
-                src: ["dist/core.js", "dist/fix/fix.js", "dist/fix/fix.compact.js", "dist/base.js", "dist/case.js", "dist/widget.js"],
+                src: ["dist/polyfill.js", "dist/core.js", "dist/fix/fix.js", "dist/fix/fix.compact.js", "dist/base.js", "dist/case.js", "dist/widget.js"],
                 dest: "dist/fineui.js"
             },
             fineuiCss: {
