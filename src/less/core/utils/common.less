@@ -650,45 +650,6 @@
   }
 }
 
-// 文字和背景hover和active时变化
-.bi-list-item-active4 {
-  &:hover, &.hover {
-    color: @color-bi-text-highlight;
-    & .bi-input {
-      color: @color-bi-text-highlight;
-    }
-    & .bi-textarea {
-      color: @color-bi-text-highlight;
-    }
-    background-color: @color-bi-background-light-highlight;
-  }
-  &.active, &:active {
-    color: @color-bi-text;
-    & .bi-input {
-      color: @color-bi-text;
-    }
-    & .bi-textarea {
-      color: @color-bi-text;
-    }
-    background-color: @color-bi-background-highlight;
-  }
-  &.disabled {
-    &, &:hover, &:active {
-      background-color: transparent !important;
-      color: @color-bi-text-disabled !important;
-      & .bi-input {
-        color: @color-bi-text-disabled !important;
-      }
-      & .bi-textarea {
-        color: @color-bi-text-disabled !important;
-      }
-      & .bi-high-light {
-        color: @color-bi-text-disabled !important;
-      }
-    }
-  }
-}
-
 //有选中效果
 .bi-list-item-select {
   &:hover, &.hover {
@@ -714,6 +675,55 @@
       color: @color-bi-text;
     }
   }
+  &.button-warning {
+    & {
+      color: @color-bi-text-failure;
+      & .bi-input {
+        color: @color-bi-text-failure;
+      }
+      & .bi-textarea {
+        color: @color-bi-text-failure;
+      }
+      & .bi-high-light {
+        color: @color-bi-text-failure;
+      }
+      &.bi-high-light-border{
+        border-color: @color-bi-border-failure;
+      }
+    }
+    &:hover, &.hover {
+      color: @color-bi-text-failure;
+      & .bi-input {
+        color: @color-bi-text-failure;
+      }
+      & .bi-textarea {
+        color: @color-bi-text-failure;
+      }
+      background-color: @color-bi-background-light-failure;
+      & .bi-high-light {
+        color: @color-bi-text-failure;
+      }
+      &.bi-high-light-border{
+        border-color: @color-bi-border-failure;
+      }
+    }
+    &:active, &.active {
+      color: @color-bi-text;
+      & .bi-input {
+        color: @color-bi-text;
+      }
+      & .bi-textarea {
+        color: @color-bi-text;
+      }
+      background-color: @color-bi-background-failure;
+      & .bi-high-light {
+        color: @color-bi-text;
+      }
+      &.bi-high-light-border{
+        border-color: @color-bi-border-failure;
+      }
+    }
+  }
   &.disabled {
     &, &:hover, &:active {
       color: @color-bi-text-disabled !important;
@@ -726,6 +736,9 @@
       background-color: transparent !important;
       & .bi-high-light {
         color: @color-bi-text-disabled !important;
+      }
+      &.bi-high-light-border{
+        border-color: @color-bi-border-disabled;
       }
     }
   }
