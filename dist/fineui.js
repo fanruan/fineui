@@ -1,4 +1,177 @@
-/*!
+// Production steps of ECMA-262, Edition 5, 15.4.4.14
+// Reference: http://es5.github.io/#x15.4.4.14
+if (!Array.prototype.indexOf) {
+    Array.prototype.indexOf = function (searchElement, fromIndex) {
+
+        var k;
+
+        // 1. Let o be the result of calling ToObject passing
+        //    the this value as the argument.
+        if (this == null) {
+            throw new TypeError("\"this\" is null or not defined");
+        }
+
+        var o = Object(this);
+
+        // 2. Let lenValue be the result of calling the Get
+        //    internal method of o with the argument "length".
+        // 3. Let len be ToUint32(lenValue).
+        var len = o.length >>> 0;
+
+        // 4. If len is 0, return -1.
+        if (len === 0) {
+            return -1;
+        }
+
+        // 5. If argument fromIndex was passed let n be
+        //    ToInteger(fromIndex); else let n be 0.
+        var n = fromIndex | 0;
+
+        // 6. If n >= len, return -1.
+        if (n >= len) {
+            return -1;
+        }
+
+        // 7. If n >= 0, then Let k be n.
+        // 8. Else, n<0, Let k be len - abs(n).
+        //    If k is less than 0, then let k be 0.
+        k = Math.max(n >= 0 ? n : len - Math.abs(n), 0);
+
+        // 9. Repeat, while k < len
+        while (k < len) {
+            // a. Let Pk be ToString(k).
+            //   This is implicit for LHS operands of the in operator
+            // b. Let kPresent be the result of calling the
+            //    HasProperty internal method of o with argument Pk.
+            //   This step can be combined with c
+            // c. If kPresent is true, then
+            //    i.  Let elementK be the result of calling the Get
+            //        internal method of o with the argument ToString(k).
+            //   ii.  Let same be the result of applying the
+            //        Strict Equality Comparison Algorithm to
+            //        searchElement and elementK.
+            //  iii.  If same is true, return k.
+            if (k in o && o[k] === searchElement) {
+                return k;
+            }
+            k++;
+        }
+        return -1;
+    };
+}
+if (!Array.prototype.lastIndexOf) {
+    Array.prototype.lastIndexOf = function (searchElement /* , fromIndex*/) {
+        "use strict";
+
+        if (this === void 0 || this === null) {
+            throw new TypeError();
+        }
+
+        var n, k,
+            t = Object(this),
+            len = t.length >>> 0;
+        if (len === 0) {
+            return -1;
+        }
+
+        n = len - 1;
+        if (arguments.length > 1) {
+            n = Number(arguments[1]);
+            if (n != n) {
+                n = 0;
+            } else if (n != 0 && n != (1 / 0) && n != -(1 / 0)) {
+                n = (n > 0 || -1) * Math.floor(Math.abs(n));
+            }
+        }
+
+        for (k = n >= 0
+            ? Math.min(n, len - 1)
+            : len - Math.abs(n); k >= 0; k--) {
+            if (k in t && t[k] === searchElement) {
+                return k;
+            }
+        }
+        return -1;
+    };
+}
+/**
+ * 特殊情况
+ * Created by wang on 15/6/23.
+ */
+// 解决console未定义问题 guy
+window.console = window.console || (function () {
+    var c = {};
+    c.log = c.warn = c.debug = c.info = c.error = c.time = c.dir = c.profile
+            = c.clear = c.exception = c.trace = c.assert = function () {
+        };
+    return c;
+})();
+/*
+ * 前端缓存
+ */
+window.localStorage || (window.localStorage = {
+    items: {},
+    setItem: function (k, v) {
+        BI.Cache.addCookie(k, v);
+    },
+    getItem: function (k) {
+        return BI.Cache.getCookie(k);
+    },
+    removeItem: function (k) {
+        BI.Cache.deleteCookie(k);
+    },
+    key: function () {
+
+    },
+    clear: function () {
+        this.items = {};
+    }
+});if (typeof Set !== "undefined" && Set.toString().match(/native code/)) {
+
+} else {
+    Set = function () {
+        this.set = {};
+    };
+    Set.prototype.has = function (key) {
+        return this.set[key] !== undefined;
+    };
+    Set.prototype.add = function (key) {
+        this.set[key] = 1;
+    };
+    Set.prototype.clear = function () {
+        this.set = {};
+    };
+}// 修复ie9下sort方法的bug
+!function (window) {
+    var ua = window.navigator.userAgent.toLowerCase(),
+        reg = /msie|applewebkit.+safari/;
+    if (reg.test(ua)) {
+        var _sort = Array.prototype.sort;
+        Array.prototype.sort = function (fn) {
+            if (!!fn && typeof fn === "function") {
+                if (this.length < 2) {
+                    return this;
+                }
+                var i = 0, j = i + 1, l = this.length, tmp, r = false, t = 0;
+                for (; i < l; i++) {
+                    for (j = i + 1; j < l; j++) {
+                        t = fn.call(this, this[i], this[j]);
+                        r = (typeof t === "number" ? t :
+                            t ? 1 : 0) > 0;
+                        if (r === true) {
+                            tmp = this[i];
+                            this[i] = this[j];
+                            this[j] = tmp;
+                        }
+                    }
+                }
+                return this;
+            }
+            return _sort.call(this);
+            
+        };
+    }
+}(window);/*!
  * jQuery JavaScript Library v1.9.1
  * http://jquery.com/
  *
@@ -25790,7 +25963,1528 @@ Data.Constant = BICst = {};
 };
 Data.Source = BISource = {
 
-};/* !
+};function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+(function (global, factory) {
+    typeof exports === 'object' && typeof module !== 'undefined' ? factory(exports) : typeof define === 'function' && define.amd ? define(['exports'], factory) : factory(global.Fix = global.Fix || {});
+})(this, function (exports) {
+    'use strict';
+
+    function noop(a, b, c) {}
+
+    function isNative(Ctor) {
+        return typeof Ctor === 'function' && /native code/.test(Ctor.toString());
+    }
+
+    var rhashcode = /\d\.\d{4}/;
+
+    //生成UUID http://stackoverflow.com/questions/105034/how-to-create-a-guid-uuid-in-javascript
+    function makeHashCode(prefix) {
+        /* istanbul ignore next*/
+        prefix = prefix || 'bi';
+        /* istanbul ignore next*/
+        return String(Math.random() + Math.random()).replace(rhashcode, prefix);
+    }
+
+    var hasProto = '__proto__' in {};
+
+    var isIE = function isIE() {
+        return (/(msie|trident)/i.test(navigator.userAgent.toLowerCase())
+        );
+    };
+
+    var getIEVersion = function getIEVersion() {
+        var version = 0;
+        var agent = navigator.userAgent.toLowerCase();
+        var v1 = agent.match(/(?:msie\s([\w.]+))/);
+        var v2 = agent.match(/(?:trident.*rv:([\w.]+))/);
+        if (v1 && v2 && v1[1] && v2[1]) {
+            version = Math.max(v1[1] * 1, v2[1] * 1);
+        } else if (v1 && v1[1]) {
+            version = v1[1] * 1;
+        } else if (v2 && v2[1]) {
+            version = v2[1] * 1;
+        } else {
+            version = 0;
+        }
+        return version;
+    };
+    var isIE9Below = isIE() && getIEVersion() < 9;
+
+    var _toString = Object.prototype.toString;
+
+    function isPlainObject(obj) {
+        return _toString.call(obj) === '[object Object]';
+    }
+
+    function remove(arr, item) {
+        if (arr && arr.length) {
+            var _index = arr.indexOf(item);
+            if (_index > -1) {
+                return arr.splice(_index, 1);
+            }
+        }
+    }
+
+    var bailRE = /[^\w.$]/;
+
+    function parsePath(path) {
+        if (bailRE.test(path)) {
+            return;
+        }
+        var segments = path.split('.');
+        return function (obj) {
+            for (var i = 0; i < segments.length; i++) {
+                if (!obj) return;
+                obj = obj[segments[i]];
+            }
+            return obj;
+        };
+    }
+
+    var nextTick = function () {
+        var callbacks = [];
+        var pending = false;
+        var timerFunc = void 0;
+
+        function nextTickHandler() {
+            pending = false;
+            var copies = callbacks.slice(0);
+            callbacks.length = 0;
+            for (var i = 0; i < copies.length; i++) {
+                copies[i]();
+            }
+        }
+
+        // An asynchronous deferring mechanism.
+        // In pre 2.4, we used to use microtasks (Promise/MutationObserver)
+        // but microtasks actually has too high a priority and fires in between
+        // supposedly sequential events (e.g. #4521, #6690) or even between
+        // bubbling of the same event (#6566). Technically setImmediate should be
+        // the ideal choice, but it's not available everywhere; and the only polyfill
+        // that consistently queues the callback after all DOM events triggered in the
+        // same loop is by using MessageChannel.
+        /* istanbul ignore if */
+        if (typeof setImmediate !== 'undefined' && isNative(setImmediate)) {
+            timerFunc = function timerFunc() {
+                setImmediate(nextTickHandler);
+            };
+        } else if (typeof MessageChannel !== 'undefined' && (isNative(MessageChannel) ||
+        // PhantomJS
+        MessageChannel.toString() === '[object MessageChannelConstructor]')) {
+            var channel = new MessageChannel();
+            var port = channel.port2;
+            channel.port1.onmessage = nextTickHandler;
+            timerFunc = function timerFunc() {
+                port.postMessage(1);
+            };
+        } else
+            /* istanbul ignore next */
+            if (typeof Promise !== 'undefined' && isNative(Promise)) {
+                // use microtask in non-DOM environments, e.g. Weex
+                var p = Promise.resolve();
+                timerFunc = function timerFunc() {
+                    p.then(nextTickHandler);
+                };
+            } else {
+                // fallback to setTimeout
+                timerFunc = function timerFunc() {
+                    setTimeout(nextTickHandler, 0);
+                };
+            }
+
+        return function queueNextTick(cb, ctx) {
+            var _resolve = void 0;
+            callbacks.push(function () {
+                if (cb) {
+                    // try {
+                    cb.call(ctx);
+                    // } catch (e) {
+                    // }
+                } else if (_resolve) {
+                    _resolve(ctx);
+                }
+            });
+            if (!pending) {
+                pending = true;
+                timerFunc();
+            }
+            // $flow-disable-line
+            if (!cb && typeof Promise !== 'undefined') {
+                return new Promise(function (resolve, reject) {
+                    _resolve = resolve;
+                });
+            }
+        };
+    }();
+
+    var falsy;
+    var $$skipArray = {
+        __ob__: falsy,
+        $accessors: falsy,
+        $vbthis: falsy,
+        $vbsetter: falsy
+    };
+
+    var uid = 0;
+
+    /**
+     * A dep is an observable that can have multiple
+     * directives subscribing to it.
+     */
+
+    var Dep = function () {
+        function Dep() {
+            _classCallCheck(this, Dep);
+
+            this.id = uid++;
+            this.subs = [];
+        }
+
+        Dep.prototype.addSub = function addSub(sub) {
+            this.subs.push(sub);
+        };
+
+        Dep.prototype.removeSub = function removeSub(sub) {
+            remove(this.subs, sub);
+        };
+
+        Dep.prototype.depend = function depend() {
+            if (Dep.target) {
+                Dep.target.addDep(this);
+            }
+        };
+
+        Dep.prototype.notify = function notify() {
+            // stabilize the subscriber list first
+            var subs = this.subs.slice();
+            for (var i = 0, l = subs.length; i < l; i++) {
+                subs[i].update();
+            }
+        };
+
+        return Dep;
+    }();
+
+    // the current target watcher being evaluated.
+    // this is globally unique because there could be only one
+    // watcher being evaluated at any time.
+
+
+    Dep.target = null;
+    var targetStack = [];
+
+    function pushTarget(_target) {
+        if (Dep.target) targetStack.push(Dep.target);
+        Dep.target = _target;
+    }
+
+    function popTarget() {
+        Dep.target = targetStack.pop();
+    }
+
+    var arrayProto = Array.prototype;
+    var arrayMethods = [];
+    _.each(['push', 'pop', 'shift', 'unshift', 'splice', 'sort', 'reverse'], function (method) {
+        var original = arrayProto[method];
+        arrayMethods[method] = function mutator() {
+            for (var _len = arguments.length, args = Array(_len), _key = 0; _key < _len; _key++) {
+                args[_key] = arguments[_key];
+            }
+
+            var ob = this.__ob__;
+            var inserted = void 0;
+            switch (method) {
+                case 'push':
+                case 'unshift':
+                    inserted = args;
+                    break;
+                case 'splice':
+                    inserted = args.slice(2);
+                    break;
+            }
+            if (inserted) inserted = ob.observeArray(inserted);
+            switch (method) {
+                case 'push':
+                case 'unshift':
+                    args = inserted;
+                    break;
+                case 'splice':
+                    args = [args[0], args[1]].concat(inserted ? inserted : []);
+                    break;
+            }
+            var result = original.apply(this, args);
+            notify(ob.parent, ob.parentKey, ob.dep);
+            return result;
+        };
+    });
+
+    //如果浏览器不支持ecma262v5的Object.defineProperties或者存在BUG，比如IE8
+    //标准浏览器使用__defineGetter__, __defineSetter__实现
+    var canHideProperty = true;
+    try {
+        Object.defineProperty({}, '_', {
+            value: 'x'
+        });
+        delete $$skipArray.$vbsetter;
+        delete $$skipArray.$vbthis;
+    } catch (e) {
+        /* istanbul ignore next*/
+        canHideProperty = false;
+    }
+
+    var createViewModel = Object.defineProperties;
+    var defineProperty = void 0;
+
+    var timeBucket = new Date() - 0;
+    /* istanbul ignore if*/
+    if (!canHideProperty) {
+        if ('__defineGetter__' in {}) {
+            defineProperty = function defineProperty(obj, prop, desc) {
+                if ('value' in desc) {
+                    obj[prop] = desc.value;
+                }
+                if ('get' in desc) {
+                    obj.__defineGetter__(prop, desc.get);
+                }
+                if ('set' in desc) {
+                    obj.__defineSetter__(prop, desc.set);
+                }
+                return obj;
+            };
+            createViewModel = function createViewModel(obj, descs) {
+                for (var prop in descs) {
+                    if (descs.hasOwnProperty(prop)) {
+                        defineProperty(obj, prop, descs[prop]);
+                    }
+                }
+                return obj;
+            };
+        }
+        /* istanbul ignore if*/
+        if (isIE9Below) {
+            var VBClassPool = {};
+            window.execScript([// jshint ignore:line
+            'Function parseVB(code)', '\tExecuteGlobal(code)', 'End Function' //转换一段文本为VB代码
+            ].join('\n'), 'VBScript');
+
+            var VBMediator = function VBMediator(instance, accessors, name, value) {
+                // jshint ignore:line
+                var accessor = accessors[name];
+                if (arguments.length === 4) {
+                    accessor.set.call(instance, value);
+                } else {
+                    return accessor.get.call(instance);
+                }
+            };
+            createViewModel = function createViewModel(name, accessors, properties) {
+                // jshint ignore:line
+                var buffer = [];
+                buffer.push('\tPrivate [$vbsetter]', '\tPublic  [$accessors]', '\tPublic Default Function [$vbthis](ac' + timeBucket + ', s' + timeBucket + ')', '\t\tSet  [$accessors] = ac' + timeBucket + ': set [$vbsetter] = s' + timeBucket, '\t\tSet  [$vbthis]    = Me', //链式调用
+                '\tEnd Function');
+                //添加普通属性,因为VBScript对象不能像JS那样随意增删属性，必须在这里预先定义好
+                var uniq = {
+                    $vbthis: true,
+                    $vbsetter: true,
+                    $accessors: true
+                };
+                for (name in $$skipArray) {
+                    if (!uniq[name]) {
+                        buffer.push('\tPublic [' + name + ']');
+                        uniq[name] = true;
+                    }
+                }
+                //添加访问器属性 
+                for (name in accessors) {
+                    if (uniq[name]) {
+                        continue;
+                    }
+                    uniq[name] = true;
+                    buffer.push(
+                    //由于不知对方会传入什么,因此set, let都用上
+                    '\tPublic Property Let [' + name + '](val' + timeBucket + ')', //setter
+                    '\t\tCall [$vbsetter](Me, [$accessors], "' + name + '", val' + timeBucket + ')', '\tEnd Property', '\tPublic Property Set [' + name + '](val' + timeBucket + ')', //setter
+                    '\t\tCall [$vbsetter](Me, [$accessors], "' + name + '", val' + timeBucket + ')', '\tEnd Property', '\tPublic Property Get [' + name + ']', //getter
+                    '\tOn Error Resume Next', //必须优先使用set语句,否则它会误将数组当字符串返回
+                    '\t\tSet[' + name + '] = [$vbsetter](Me, [$accessors],"' + name + '")', '\tIf Err.Number <> 0 Then', '\t\t[' + name + '] = [$vbsetter](Me, [$accessors],"' + name + '")', '\tEnd If', '\tOn Error Goto 0', '\tEnd Property');
+                }
+
+                for (name in properties) {
+                    if (!uniq[name]) {
+                        uniq[name] = true;
+                        buffer.push('\tPublic [' + name + ']');
+                    }
+                }
+
+                buffer.push('\tPublic [hasOwnProperty]');
+                buffer.push('End Class');
+                var body = buffer.join('\r\n');
+                var className = VBClassPool[body];
+                if (!className) {
+                    className = makeHashCode('VBClass');
+                    window.parseVB('Class ' + className + body);
+                    window.parseVB(['Function ' + className + 'Factory(acc, vbm)', //创建实例并传入两个关键的参数
+                    '\tDim o', '\tSet o = (New ' + className + ')(acc, vbm)', '\tSet ' + className + 'Factory = o', 'End Function'].join('\r\n'));
+                    VBClassPool[body] = className;
+                }
+                var ret = window[className + 'Factory'](accessors, VBMediator); //得到其产品
+                return ret; //得到其产品
+            };
+        }
+    }
+
+    var createViewModel$1 = createViewModel;
+
+    var arrayKeys = _.keys(arrayMethods);
+
+    var observerState = {
+        shouldConvert: true
+    };
+
+    function def(obj, key, val, enumerable) {
+        Object.defineProperty(obj, key, {
+            value: val,
+            enumerable: !!enumerable,
+            writable: true,
+            configurable: true
+        });
+    }
+
+    /**
+     * Observer class that are attached to each observed
+     * object. Once attached, the observer converts target
+     * object's property keys into getter/setters that
+     * collect dependencies and dispatches updates.
+     */
+
+    var Observer = function () {
+        function Observer(value) {
+            _classCallCheck(this, Observer);
+
+            this.value = value;
+            this.dep = new Dep();
+            this.vmCount = 0;
+            if (_.isArray(value)) {
+                var augment = hasProto ? protoAugment : copyAugment;
+                augment(value, arrayMethods, arrayKeys);
+                this.model = this.observeArray(value);
+            } else {
+                this.model = this.walk(value);
+            }
+            if (isIE9Below) {
+                this.model['__ob__'] = this;
+            } else {
+                def(this.model, "__ob__", this);
+            }
+        }
+
+        Observer.prototype.walk = function walk(obj) {
+            return defineReactive(obj, this);
+        };
+
+        Observer.prototype.observeArray = function observeArray(items) {
+            for (var i = 0, l = items.length; i < l; i++) {
+                var ob = observe(items[i], this, i);
+                items[i] = ob ? ob.model : items[i];
+            }
+            return items;
+        };
+
+        return Observer;
+    }();
+
+    function protoAugment(target, src, keys) {
+        /* eslint-disable no-proto */
+        target.__proto__ = src;
+        /* eslint-enable no-proto */
+    }
+
+    /* istanbul ignore next */
+    function copyAugment(target, src, keys) {
+        for (var i = 0, l = keys.length; i < l; i++) {
+            var key = keys[i];
+            target[key] = src[key];
+        }
+    }
+
+    function observe(value, parentObserver, parentKey) {
+        if (!_.isObject(value)) {
+            return;
+        }
+        var ob = void 0;
+        if (value.__ob__ instanceof Observer) {
+            ob = value.__ob__;
+        } else if (observerState.shouldConvert && (_.isArray(value) || isPlainObject(value))) {
+            ob = new Observer(value);
+        }
+        ob.parent = parentObserver || ob.parent;
+        ob.parentKey = parentKey;
+        return ob;
+    }
+
+    function notify(observer, key, dep) {
+        dep.notify();
+        if (observer) {
+            //触发a.*绑定的依赖
+            _.each(observer._deps, function (dep) {
+                dep.notify();
+            });
+            //触发a.**绑定的依赖
+            var parent = observer,
+                root = observer,
+                route = key || "";
+            while (parent) {
+                _.each(parent._scopeDeps, function (dep) {
+                    dep.notify();
+                });
+                if (parent.parentKey != null) {
+                    route = parent.parentKey + '.' + route;
+                }
+                root = parent;
+                parent = parent.parent;
+            }
+            for (var _key2 in root._globalDeps) {
+                var reg = new RegExp(_key2);
+                if (reg.test(route)) {
+                    root._globalDeps[_key2].notify();
+                }
+            }
+        }
+    }
+
+    function defineReactive(obj, observer, shallow) {
+        var props = {};
+        var model = void 0;
+        // if (typeof Proxy === 'function') {
+        //     const deps = {}, childObs = {}, cache = {}
+        //     _.each(obj, function (val, key) {
+        //         if (key in $$skipArray) {
+        //             return
+        //         }
+        //         cache[key] = val
+        //         const dep = deps[key] = (observer && observer['__dep' + key]) || new Dep()
+        //         observer && (observer['__dep' + key] = dep)
+        //         childObs[key] = !shallow && observe(val, observer, key)
+        //     })
+        //     return model = new Proxy(props, {
+        //         has: function (target, key) {
+        //             return key in obj;
+        //         },
+        //         get: function (target, key) {
+        //             if (key in $$skipArray) {
+        //                 return target[key]
+        //             }
+        //             const value = cache[key]
+        //             if (Dep.target) {
+        //                 deps[key].depend()
+        //                 if (childObs[key]) {
+        //                     childObs[key].dep.depend()
+        //                     if (_.isArray(value)) {
+        //                         dependArray(value)
+        //                     }
+        //                 }
+        //             }
+        //             return value
+        //         },
+        //         set: function (target, key, newVal) {
+        //             if (key in $$skipArray) {
+        //                 return target[key] = newVal
+        //             }
+        //             const value = cache[key], dep = deps[key]
+        //             if (newVal === value || (newVal !== newVal && value !== value)) {
+        //                 return newVal
+        //             }
+        //             cache[key] = newVal
+        //             childObs[key] = !shallow && observe(newVal, observer, key)
+        //             obj[key] = childObs[key] ? childObs[key].model : newVal
+        //             notify(model, key, dep)
+        //             return obj[key]
+        //         }
+        //     })
+        // }
+        _.each(obj, function (val, key) {
+            if (key in $$skipArray) {
+                return;
+            }
+            var dep = observer && observer['__dep' + key] || new Dep();
+            observer && (observer['__dep' + key] = dep);
+            var childOb = !shallow && observe(val, observer, key);
+            props[key] = {
+                enumerable: true,
+                configurable: true,
+                get: function reactiveGetter() {
+                    var value = val;
+                    if (Dep.target) {
+                        dep.depend();
+                        if (childOb) {
+                            childOb.dep.depend();
+                            if (_.isArray(value)) {
+                                dependArray(value);
+                            }
+                        }
+                    }
+                    return value;
+                },
+                set: function reactiveSetter(newVal) {
+                    var value = val;
+                    if (newVal === value || newVal !== newVal && value !== value) {
+                        return;
+                    }
+                    val = newVal;
+                    childOb = !shallow && observe(newVal, observer, key);
+                    obj[key] = childOb ? childOb.model : newVal;
+                    notify(model.__ob__, key, dep);
+                }
+            };
+        });
+        return model = createViewModel$1(obj, props);
+    }
+
+    /**
+     * Set a property on an object. Adds the new property and
+     * triggers change notification if the property doesn't
+     * already exist.
+     */
+    function set(target, key, val) {
+        if (_.isArray(target)) {
+            target.length = Math.max(target.length, key);
+            target.splice(key, 1, val);
+            return val;
+        }
+        if (_.has(target, key)) {
+            target[key] = val;
+            return val;
+        }
+        var ob = target.__ob__;
+        if (!ob) {
+            target[key] = val;
+            return val;
+        }
+        ob.value[key] = val;
+        target = defineReactive(ob.value, ob);
+        notify(ob, key, ob.dep);
+        return target;
+    }
+
+    /**
+     * Delete a property and trigger change if necessary.
+     */
+    function del(target, key) {
+        if (_.isArray(target)) {
+            target.splice(key, 1);
+            return;
+        }
+        var ob = target.__ob__;
+        if (!_.has(target, key)) {
+            return;
+        }
+        if (!ob) {
+            delete target[key];
+            return target;
+        }
+        delete ob.value[key];
+        target = defineReactive(ob.value, ob);
+        notify(ob, key, ob.dep);
+        return target;
+    }
+
+    /**
+     * Collect dependencies on array elements when the array is touched, since
+     * we cannot intercept array element access like property getters.
+     */
+    function dependArray(value) {
+        for (var e, i = 0, l = value.length; i < l; i++) {
+            e = value[i];
+            e && e.__ob__ && e.__ob__.dep.depend();
+            if (_.isArray(e)) {
+                dependArray(e);
+            }
+        }
+    }
+
+    var queue = [];
+    var activatedChildren = [];
+    var has = {};
+    var waiting = false;
+    var flushing = false;
+    var index = 0;
+
+    function resetSchedulerState() {
+        index = queue.length = activatedChildren.length = 0;
+        has = {};
+        waiting = flushing = false;
+    }
+
+    function flushSchedulerQueue() {
+        flushing = true;
+        var watcher = void 0,
+            id = void 0;
+
+        // Sort queue before flush.
+        // This ensures that:
+        // 1. Components are updated from parent to child. (because parent is always
+        //    created before the child)
+        // 2. A component's user watchers are run before its render watcher (because
+        //    user watchers are created before the render watcher)
+        // 3. If a component is destroyed during a parent component's watcher run,
+        //    its watchers can be skipped.
+        queue.sort(function (a, b) {
+            return a.id - b.id;
+        });
+
+        // do not cache length because more watchers might be pushed
+        // as we run existing watchers
+        for (index = 0; index < queue.length; index++) {
+            watcher = queue[index];
+            id = watcher.id;
+            has[id] = null;
+            watcher.run();
+        }
+
+        resetSchedulerState();
+    }
+
+    function queueWatcher(watcher) {
+        var id = watcher.id;
+        if (has[id] == null) {
+            has[id] = true;
+            if (!flushing) {
+                queue.push(watcher);
+            } else {
+                // if already flushing, splice the watcher based on its id
+                // if already past its id, it will be run next immediately.
+                var i = queue.length - 1;
+                while (i > index && queue[i].id > watcher.id) {
+                    i--;
+                }
+                queue.splice(i + 1, 0, watcher);
+            }
+            // queue the flush
+            if (!waiting) {
+                waiting = true;
+                nextTick(flushSchedulerQueue);
+            }
+        }
+    }
+
+    var uid$1 = 0;
+
+    var Watcher = function () {
+        function Watcher(vm, expOrFn, cb, options) {
+            _classCallCheck(this, Watcher);
+
+            this.vm = vm;
+            // vm._watchers || (vm._watchers = [])
+            // vm._watchers.push(this)
+            // options
+            if (options) {
+                this.deep = !!options.deep;
+                this.user = !!options.user;
+                this.lazy = !!options.lazy;
+                this.sync = !!options.sync;
+            } else {
+                this.deep = this.user = this.lazy = this.sync = false;
+            }
+            this.cb = cb;
+            this.id = ++uid$1; // uid for batching
+            this.active = true;
+            this.dirty = this.lazy; // for lazy watchers
+            this.deps = [];
+            this.newDeps = [];
+            this.depIds = new Set();
+            this.newDepIds = new Set();
+            this.expression = '';
+            // parse expression for getter
+            if (typeof expOrFn === 'function') {
+                this.getter = expOrFn;
+            } else {
+                this.getter = parsePath(expOrFn);
+                if (!this.getter) {
+                    this.getter = function () {};
+                }
+            }
+            this.value = this.lazy ? undefined : this.get();
+        }
+
+        Watcher.prototype.get = function get() {
+            pushTarget(this);
+            var value = void 0;
+            var vm = this.vm;
+            try {
+                value = this.getter.call(vm, vm);
+            } catch (e) {
+                // if (this.user) {
+                // } else {
+                throw e;
+                // }
+            } finally {
+                // "touch" every property so they are all tracked as
+                // dependencies for deep watching
+                if (this.deep) {
+                    traverse(value);
+                }
+                popTarget();
+                this.cleanupDeps();
+            }
+            return value;
+        };
+
+        Watcher.prototype.addDep = function addDep(dep) {
+            var id = dep.id;
+            if (!this.newDepIds.has(id)) {
+                this.newDepIds.add(id);
+                this.newDeps.push(dep);
+                if (!this.depIds.has(id)) {
+                    dep.addSub(this);
+                }
+            }
+        };
+
+        Watcher.prototype.cleanupDeps = function cleanupDeps() {
+            var i = this.deps.length;
+            while (i--) {
+                var dep = this.deps[i];
+                if (!this.newDepIds.has(dep.id)) {
+                    dep.removeSub(this);
+                }
+            }
+            var tmp = this.depIds;
+            this.depIds = this.newDepIds;
+            this.newDepIds = tmp;
+            this.newDepIds.clear();
+            tmp = this.deps;
+            this.deps = this.newDeps;
+            this.newDeps = tmp;
+            this.newDeps.length = 0;
+        };
+
+        Watcher.prototype.update = function update() {
+            /* istanbul ignore else */
+            if (this.lazy) {
+                this.dirty = true;
+            } else if (this.sync) {
+                this.run();
+            } else {
+                queueWatcher(this);
+            }
+        };
+
+        Watcher.prototype.run = function run() {
+            if (this.active) {
+                var value = this.get();
+                if (value !== this.value ||
+                // Deep watchers and watchers on Object/Arrays should fire even
+                // when the value is the same, because the value may
+                // have mutated.
+                _.isObject(value) || this.deep) {
+                    // set new value
+                    var oldValue = this.value;
+                    this.value = value;
+                    if (this.user) {
+                        // try {
+                        this.cb.call(this.vm, value, oldValue);
+                        // } catch (e) {
+                        // }
+                    } else {
+                        this.cb.call(this.vm, value, oldValue);
+                    }
+                }
+            }
+        };
+
+        Watcher.prototype.evaluate = function evaluate() {
+            this.value = this.get();
+            this.dirty = false;
+        };
+
+        Watcher.prototype.depend = function depend() {
+            var i = this.deps.length;
+            while (i--) {
+                this.deps[i].depend();
+            }
+        };
+
+        Watcher.prototype.teardown = function teardown() {
+            if (this.active) {
+                // remove self from vm's watcher list
+                // this is a somewhat expensive operation so we skip it
+                // if the vm is being destroyed.
+                remove(this.vm._watchers, this);
+                var i = this.deps.length;
+                while (i--) {
+                    this.deps[i].removeSub(this);
+                }
+                this.active = false;
+            }
+        };
+
+        return Watcher;
+    }();
+
+    var seenObjects = new Set();
+
+    function traverse(val) {
+        seenObjects.clear();
+        _traverse(val, seenObjects);
+    }
+
+    function _traverse(val, seen) {
+        var i = void 0,
+            keys = void 0;
+        var isA = _.isArray(val);
+        if (!isA && !_.isObject(val)) {
+            return;
+        }
+        if (val.__ob__) {
+            var depId = val.__ob__.dep.id;
+            if (seen.has(depId)) {
+                return;
+            }
+            seen.add(depId);
+        }
+        if (isA) {
+            i = val.length;
+            while (i--) {
+                _traverse(val[i], seen);
+            }
+        } else {
+            keys = _.keys(val);
+            i = keys.length;
+            while (i--) {
+                _traverse(val[keys[i]], seen);
+            }
+        }
+    }
+
+    var falsy$1;
+    var operators = {
+        '||': falsy$1,
+        '&&': falsy$1,
+        '(': falsy$1,
+        ')': falsy$1
+    };
+
+    function runBinaryFunction(binarys) {
+        var expr = '';
+        for (var i = 0, len = binarys.length; i < len; i++) {
+            if (_.isBoolean(binarys[i]) || _.has(operators, binarys[i])) {
+                expr += binarys[i];
+            } else {
+                expr += 'false';
+            }
+        }
+        return new Function('return ' + expr)();
+    }
+
+    function routeToRegExp(route) {
+        route = route.replace(/\*./g, '[a-zA-Z0-9_]+.');
+        return '^' + route + '$';
+    }
+
+    function watch(model, expOrFn, cb, options) {
+        if (isPlainObject(cb)) {
+            options = cb;
+            cb = cb.handler;
+        }
+        if (typeof cb === 'string') {
+            cb = model[cb];
+        }
+        options = options || {};
+        options.user = true;
+        var exps = void 0;
+        if (_.isFunction(expOrFn) || !(exps = expOrFn.match(/[a-zA-Z0-9_.*]+|[|][|]|[&][&]|[(]|[)]/g)) || exps.length === 1 && !/\*/.test(expOrFn)) {
+            var watcher = new Watcher(model, expOrFn, cb, options);
+            if (options.immediate) {
+                cb(watcher.value);
+            }
+            return function unwatchFn() {
+                watcher.teardown();
+            };
+        }
+        var watchers = [];
+        var fns = exps.slice();
+        var complete = false,
+            running = false;
+        var callback = function callback(index) {
+            if (complete === true) {
+                return;
+            }
+            fns[index] = true;
+            if (runBinaryFunction(fns)) {
+                complete = true;
+                cb();
+            }
+            if (!running) {
+                running = true;
+                nextTick(function () {
+                    complete = false;
+                    running = false;
+                    fns = exps.slice();
+                });
+            }
+        };
+        _.each(exps, function (exp, i) {
+            if (_.has(operators, exp)) {
+                return;
+            }
+            //a.**或a.*形式
+            if (/^[1-9a-zA-Z.]+(\*\*$|\*$)/.test(exp) || exp === "**") {
+                var isGlobal = /\*\*$/.test(exp);
+                if (isGlobal) {
+                    //a.**的形式
+                    exp = exp.replace(".**", "");
+                } else {
+                    //a.*的形式
+                    exp = exp.replace(".*", "");
+                }
+                var getter = exp === "**" ? function (m) {
+                    return m;
+                } : parsePath(exp);
+                var v = getter.call(model, model);
+                var dep = new Dep();
+                if (isGlobal) {
+                    (v.__ob__._scopeDeps || (v.__ob__._scopeDeps = [])).push(dep);
+                } else {
+                    (v.__ob__._deps || (v.__ob__._deps = [])).push(dep);
+                }
+                var w = new Watcher(model, function () {
+                    dep.depend();
+                    return NaN;
+                }, function () {
+                    callback(i);
+                });
+                watchers.push(function unwatchFn() {
+                    w.teardown();
+                    v.__ob__._scopeDeps && remove(v.__ob__._scopeDeps, dep);
+                    v.__ob__._deps && remove(v.__ob__._deps, dep);
+                });
+                return;
+            }
+            if (/\*\*$|\*$/.test(exp)) {
+                throw new Error('not support');
+            }
+            //其他含有*的情况，如*.a,*.*.a,a.*.a.*
+            if (/\*/.test(exp)) {
+                //补全路径
+                var parent = model.__ob__.parent,
+                    root = model.__ob__;
+                while (parent) {
+                    exp = '*.' + exp;
+                    root = parent;
+                    parent = parent.parent;
+                }
+                var regStr = routeToRegExp(exp);
+                var _dep = new Dep();
+                root._globalDeps || (root._globalDeps = {});
+                root._globalDeps[regStr] = _dep;
+
+                var _w = new Watcher(model, function () {
+                    _dep.depend();
+                    return NaN;
+                }, function () {
+                    callback(i);
+                });
+                watchers.push(function unwatchFn() {
+                    _w.teardown();
+                    root._globalDeps && delete root._globalDeps[regStr];
+                });
+                return;
+            }
+            var watcher = new Watcher(model, exp, function () {
+                callback(i);
+            }, options);
+            watchers.push(function unwatchFn() {
+                watcher.teardown();
+            });
+        });
+        return watchers;
+    }
+
+    var computedWatcherOptions = { lazy: true };
+
+    function initState(vm, state) {
+        if (state) {
+            vm.$$state = observe(state).model;
+        }
+    }
+
+    function initComputed(vm, computed) {
+        var watchers = vm._computedWatchers = {};
+
+        defineComputed(vm, computed);
+
+        for (var key in computed) {
+            var userDef = computed[key],
+                context = vm.$$model ? vm.model : vm;
+            var getter = typeof userDef === "function" ? _.bind(userDef, context) : _.bind(userDef.get, context);
+
+            watchers[key] = new Watcher(vm.$$computed, getter || noop, noop, computedWatcherOptions);
+        }
+    }
+
+    function defineComputed(vm, computed) {
+        var props = {};
+        // if (typeof Proxy === 'function') {
+        //     return vm.$$computed = new Proxy(props, {
+        //         has: function (target, key) {
+        //             return computed && key in computed
+        //         },
+        //         get: function (target, key) {
+        //             return createComputedGetter(vm, key)()
+        //         }
+        //     })
+        // }
+        var shouldCache = true;
+        for (var key in computed) {
+            if (!(key in vm)) {
+                var sharedPropertyDefinition = {
+                    enumerable: true,
+                    configurable: true,
+                    get: noop,
+                    set: noop
+                };
+                var userDef = computed[key];
+                if (typeof userDef === "function") {
+                    sharedPropertyDefinition.get = createComputedGetter(vm, key);
+                    sharedPropertyDefinition.set = noop;
+                } else {
+                    sharedPropertyDefinition.get = userDef.get ? shouldCache && userDef.cache !== false ? createComputedGetter(key) : userDef.get : noop;
+                    sharedPropertyDefinition.set = userDef.set ? userDef.set : noop;
+                }
+
+                props[key] = sharedPropertyDefinition;
+            }
+        }
+        vm.$$computed = createViewModel$1({}, props);
+    }
+
+    function createComputedGetter(vm, key) {
+        return function computedGetter() {
+            var watcher = vm._computedWatchers && vm._computedWatchers[key];
+            if (watcher) {
+                if (watcher.dirty) {
+                    watcher.evaluate();
+                }
+                if (Dep.target) {
+                    watcher.depend();
+                }
+                return watcher.value;
+            }
+        };
+    }
+
+    function initWatch(vm, watch$$1) {
+        vm._watchers || (vm._watchers = []);
+        for (var key in watch$$1) {
+            var handler = watch$$1[key];
+            if (_.isArray(handler)) {
+                for (var i = 0; i < handler.length; i++) {
+                    vm._watchers.push(createWatcher(vm, key, handler[i]));
+                }
+            } else {
+                vm._watchers.push(createWatcher(vm, key, handler));
+            }
+        }
+    }
+
+    function createWatcher(vm, keyOrFn, cb, options) {
+        if (isPlainObject(cb)) {
+            options = cb;
+            cb = cb.handler;
+        }
+        if (typeof cb === 'string') {
+            cb = vm[cb];
+        }
+        return watch(vm.model, keyOrFn, _.bind(cb, vm.$$model ? vm.model : vm), _.extend({
+            sync: true
+        }, options));
+    }
+
+    function initMethods(vm, methods) {
+        for (var key in methods) {
+            vm[key] = methods[key] == null ? noop : _.bind(methods[key], vm.$$model ? vm.model : vm);
+        }
+    }
+
+    function defineProps(vm, keys) {
+        var props = {};
+        // if (typeof Proxy === 'function') {
+        //     return vm.model = new Proxy(props, {
+        //         has: function (target, key) {
+        //             return keys.indexOf(key) > -1;
+        //         },
+        //         get: function (target, key) {
+        //             if (key in $$skipArray) {
+        //                 return props[key]
+        //             }
+        //             if (vm.$$computed && key in vm.$$computed) {
+        //                 return vm.$$computed[key]
+        //             }
+        //             if (vm.$$state && key in vm.$$state) {
+        //                 return vm.$$state[key]
+        //             }
+        //             return vm.$$model[key]
+        //         },
+        //         set: function (target, key, val) {
+        //             if (key in $$skipArray) {
+        //                 return props[key] = val
+        //             }
+        //             if (vm.$$state && key in vm.$$state) {
+        //                 return vm.$$state[key] = val
+        //             }
+        //             if (vm.$$model && key in vm.$$model) {
+        //                 return vm.$$model[key] = val
+        //             }
+        //         }
+        //     })
+        // }
+
+        var _loop = function _loop(i, len) {
+            var key = keys[i];
+            if (!(key in $$skipArray)) {
+                props[key] = {
+                    enumerable: true,
+                    configurable: true,
+                    get: function get() {
+                        if (vm.$$computed && key in vm.$$computed) {
+                            return vm.$$computed[key];
+                        }
+                        if (vm.$$state && key in vm.$$state) {
+                            return vm.$$state[key];
+                        }
+                        if (vm.$$model && key in vm.$$model) {
+                            return vm.$$model[key];
+                        }
+                        var p = vm._parent;
+                        while (p) {
+                            if (p.$$context && key in p.$$context) {
+                                return p.$$context[key];
+                            }
+                            p = p._parent;
+                        }
+                    },
+                    set: function set(val) {
+                        if (vm.$$state && key in vm.$$state) {
+                            return vm.$$state[key] = val;
+                        }
+                        if (vm.$$model && key in vm.$$model) {
+                            return vm.$$model[key] = val;
+                        }
+                        var p = vm._parent;
+                        while (p) {
+                            if (p.$$context && key in p.$$context) {
+                                return p.$$context[key] = val;
+                            }
+                            p = p._parent;
+                        }
+                    }
+                };
+            }
+        };
+
+        for (var i = 0, len = keys.length; i < len; i++) {
+            _loop(i, len);
+        }
+        vm.model = createViewModel$1({}, props);
+    }
+
+    function defineContext(vm, keys) {
+        var props = {};
+
+        var _loop2 = function _loop2(i, len) {
+            var key = keys[i];
+            if (!(key in $$skipArray)) {
+                props[key] = {
+                    enumerable: true,
+                    configurable: true,
+                    get: function get() {
+                        return vm.model[key];
+                    },
+                    set: function set(val) {
+                        return vm.model[key] = val;
+                    }
+                };
+            }
+        };
+
+        for (var i = 0, len = keys.length; i < len; i++) {
+            _loop2(i, len);
+        }
+        vm.$$context = createViewModel$1({}, props);
+    }
+
+    var Model = function () {
+        function Model(model) {
+            _classCallCheck(this, Model);
+
+            if (model instanceof Observer || model instanceof Model) {
+                model = model.model;
+            }
+            if (model && model.__ob__) {
+                this.$$model = model;
+            } else {
+                this.options = model || {};
+            }
+            this._parent = Model.target;
+            var state = _.isFunction(this.state) ? this.state() : this.state;
+            var computed = _.isFunction(this.computed) ? this.computed() : this.computed;
+            var context = _.isFunction(this.context) ? this.context() : this.context;
+            var childContext = _.isFunction(this.childContext) ? this.childContext() : this.childContext;
+            var watch$$1 = _.isFunction(this.watch) ? this.watch() : this.watch;
+            var actions = _.isFunction(this.actions) ? this.actions() : this.actions;
+            var keys = _.keys(this.$$model).concat(_.keys(state)).concat(_.keys(computed)).concat(context || []);
+            defineProps(this, keys);
+            childContext && defineContext(this, childContext);
+            this.$$model && (this.model.__ob__ = this.$$model.__ob__);
+            this._init();
+            initState(this, state);
+            initComputed(this, computed);
+            initWatch(this, watch$$1);
+            initMethods(this, actions);
+            if (this.$$model) {
+                return this.model;
+            }
+        }
+
+        Model.prototype._init = function _init() {};
+
+        Model.prototype.destroy = function destroy() {
+            for (var _key3 in this._computedWatchers) {
+                this._computedWatchers[_key3].teardown();
+            }
+            _.each(this._watchers, function (unwatches) {
+                unwatches = _.isArray(unwatches) ? unwatches : [unwatches];
+                _.each(unwatches, function (unwatch) {
+                    unwatch();
+                });
+            });
+            this._watchers && (this._watchers = []);
+            this.destroyed && this.destroyed();
+            this.$$model = null;
+            this.$$computed = null;
+            this.$$state = null;
+        };
+
+        return Model;
+    }();
+
+    Model.prototype.state = {};
+    Model.prototype.computed = {};
+    Model.prototype.context = [];
+    Model.prototype.childContext = [];
+    Model.prototype.watch = {};
+    Model.prototype.actions = {};
+
+    function toJSON(model) {
+        var result = void 0;
+        if (_.isArray(model)) {
+            result = [];
+            for (var i = 0, len = model.length; i < len; i++) {
+                result[i] = toJSON(model[i]);
+            }
+        } else if (isPlainObject(model)) {
+            result = {};
+            for (var _key4 in model) {
+                if (!_.has($$skipArray, _key4)) {
+                    result[_key4] = toJSON(model[_key4]);
+                }
+            }
+        } else {
+            result = model;
+        }
+        return result;
+    }
+
+    function define(model) {
+        return new Observer(model).model;
+    }
+    var version = '2.0';
+
+    exports.define = define;
+    exports.version = version;
+    exports.$$skipArray = $$skipArray;
+    exports.Model = Model;
+    exports.observerState = observerState;
+    exports.Observer = Observer;
+    exports.observe = observe;
+    exports.notify = notify;
+    exports.defineReactive = defineReactive;
+    exports.set = set;
+    exports.del = del;
+    exports.Watcher = Watcher;
+    exports.pushTarget = pushTarget;
+    exports.popTarget = popTarget;
+    exports.watch = watch;
+    exports.toJSON = toJSON;
+
+    exports.__esModule = true;
+});;(function () {
+    function initWatch (vm, watch) {
+        vm._watchers || (vm._watchers = []);
+        for (var key in watch) {
+            var handler = watch[key];
+            if (BI.isArray(handler)) {
+                for (var i = 0; i < handler.length; i++) {
+                    vm._watchers.push(createWatcher(vm, key, handler[i]));
+                }
+            } else {
+                vm._watchers.push(createWatcher(vm, key, handler));
+            }
+        }
+    }
+
+    function createWatcher (vm, keyOrFn, handler) {
+        return Fix.watch(vm.model, keyOrFn, _.bind(handler, vm), {
+            store: vm.store
+        });
+    }
+
+    var target = null;
+    var targetStack = [];
+
+    function pushTarget (_target) {
+        if (target) targetStack.push(target);
+        Fix.Model.target = target = _target;
+    }
+
+    function popTarget () {
+        Fix.Model.target = target = targetStack.pop();
+    }
+
+    var oldWatch = Fix.watch;
+    Fix.watch = function (model, expOrFn, cb, options) {
+        if (BI.isPlainObject(cb)) {
+            options = cb;
+            cb = cb.handler;
+        }
+        if (typeof cb === "string") {
+            cb = model[cb];
+        }
+        return oldWatch.call(this, model, expOrFn, function () {
+            options && options.store && pushTarget(options.store);
+            var res = cb.apply(this, arguments);
+            options && options.store && popTarget();
+            return res;
+        }, options);
+    };
+
+    function findStore (widget) {
+        var p = widget;
+        while (p) {
+            if (p.store || p.__cacheStore) {
+                break;
+            }
+            p = p._parent || (p.options && p.options.element);
+        }
+        if (p) {
+            widget.__cacheStore = p.store;
+            return p.__cacheStore || p.store;
+        }
+    }
+
+    var _init = BI.Widget.prototype._init;
+    BI.Widget.prototype._init = function () {
+        var needPop = false;
+        if (window.Fix && this._store) {
+            var store = findStore(this.options.element);
+            if (store) {
+                pushTarget(store);
+                needPop = true;
+            }
+            this.store = this._store();
+            needPop && popTarget();
+            needPop = false;
+            pushTarget(this.store);
+            if (this.store instanceof Fix.Model) {
+                this.model = this.store.model;
+            } else {
+                this.model = this.store;
+            }
+            initWatch(this, this.watch);
+            needPop = true;
+        }
+        _init.apply(this, arguments);
+        needPop && popTarget();
+    };
+
+    var unMount = BI.Widget.prototype.__d;
+    BI.Widget.prototype.__d = function () {
+        unMount.apply(this, arguments);
+        this.store && BI.isFunction(this.store.destroy) && this.store.destroy();
+        BI.each(this._watchers, function (i, unwatches) {
+            unwatches = BI.isArray(unwatches) ? unwatches : [unwatches];
+            BI.each(unwatches, function (j, unwatch) {
+                unwatch();
+            });
+        });
+        this._watchers && (this._watchers = []);
+        if (this.store) {
+            this.store._parent && (this.store._parent = null);
+            this.store = null;
+        }
+    };
+
+    _.each(["_mount"], function (name) {
+        var old = BI.Widget.prototype[name];
+        old && (BI.Widget.prototype[name] = function () {
+            this.store && pushTarget(this.store);
+            var res = old.apply(this, arguments);
+            this.store && popTarget();
+            return res;
+        });
+    });
+
+    if (BI.isIE9Below()) {
+        _.each(["each", "map", "reduce", "reduceRight", "find", "filter", "reject", "every", "all", "some", "any", "max", "min",
+            "sortBy", "groupBy", "indexBy", "countBy", "partition",
+            "keys", "allKeys", "values", "pairs", "invert",
+            "mapObject", "findKey", "pick", "omit", "tap"], function (name) {
+            var old = BI[name];
+            BI[name] = function (obj, fn) {
+                return typeof fn === "function" ? old(obj, function (key, value) {
+                    if (!(key in Fix.$$skipArray)) {
+                        return fn.apply(this, arguments);
+                    }
+                }) : old.apply(this, arguments);
+            };
+        });
+        BI.isEmpty = function (ob) {
+            if (BI.isPlainObject(ob) && ob.__ob__) {
+                return BI.keys(ob).length === 0;
+            }
+            return _.isEmpty(ob);
+        };
+        BI.keys = function (ob) {
+            var keys = _.keys(ob);
+            var nKeys = [];
+            for (var i = 0; i < keys.length; i++) {
+                if (!(keys[i] in Fix.$$skipArray)) {
+                    nKeys.push(keys[i]);
+                }
+            }
+            return nKeys;
+        };
+        BI.values = function (ob) {
+            var keys = BI.keys(obj);
+            var length = keys.length;
+            var values = [];
+            for (var i = 0; i < length; i++) {
+                values[i] = obj[keys[i]];
+            }
+            return values;
+        };
+        BI.size = function (ob) {
+            if (BI.isPlainObject(ob) && ob.__ob__) {
+                return BI.keys(ob).length;
+            }
+            return _.size(ob);
+        };
+        BI.isEmptyObject = function (ob) {
+            return BI.size(ob) === 0;
+        };
+    }
+    BI.watch = Fix.watch;
+}());/* !
  * jQuery Mousewheel 3.1.13
  *
  * Copyright jQuery Foundation and other contributors
@@ -98466,711 +100160,4 @@ BI.ValueChooserPane = BI.inherit(BI.AbstractValueChooser, {
     }
 });
 BI.ValueChooserPane.EVENT_CHANGE = "ValueChooserPane.EVENT_CHANGE";
-BI.shortcut("bi.value_chooser_pane", BI.ValueChooserPane);(function () {
-    var Events = {
-
-        // Bind an event to a `callback` function. Passing `"all"` will bind
-        // the callback to all events fired.
-        on: function (name, callback, context) {
-            if (!eventsApi(this, "on", name, [callback, context]) || !callback) return this;
-            this._events || (this._events = {});
-            var events = this._events[name] || (this._events[name] = []);
-            events.push({callback: callback, context: context, ctx: context || this});
-            return this;
-        },
-
-        // Bind an event to only be triggered a single time. After the first time
-        // the callback is invoked, it will be removed.
-        once: function (name, callback, context) {
-            if (!eventsApi(this, "once", name, [callback, context]) || !callback) return this;
-            var self = this;
-            var once = _.once(function () {
-                self.off(name, once);
-                callback.apply(this, arguments);
-            });
-            once._callback = callback;
-            return this.on(name, once, context);
-        },
-
-        // Remove one or many callbacks. If `context` is null, removes all
-        // callbacks with that function. If `callback` is null, removes all
-        // callbacks for the event. If `name` is null, removes all bound
-        // callbacks for all events.
-        off: function (name, callback, context) {
-            if (!this._events || !eventsApi(this, "off", name, [callback, context])) return this;
-
-            // Remove all callbacks for all events.
-            if (!name && !callback && !context) {
-                this._events = void 0;
-                return this;
-            }
-
-            var names = name ? [name] : _.keys(this._events);
-            for (var i = 0, length = names.length; i < length; i++) {
-                name = names[i];
-
-                // Bail out if there are no events stored.
-                var events = this._events[name];
-                if (!events) continue;
-
-                // Remove all callbacks for this event.
-                if (!callback && !context) {
-                    delete this._events[name];
-                    continue;
-                }
-
-                // Find any remaining events.
-                var remaining = [];
-                for (var j = 0, k = events.length; j < k; j++) {
-                    var event = events[j];
-                    if (
-                        callback && callback !== event.callback &&
-                        callback !== event.callback._callback ||
-                        context && context !== event.context
-                    ) {
-                        remaining.push(event);
-                    }
-                }
-
-                // Replace events if there are any remaining.  Otherwise, clean up.
-                if (remaining.length) {
-                    this._events[name] = remaining;
-                } else {
-                    delete this._events[name];
-                }
-            }
-
-            return this;
-        },
-
-        un: function () {
-            this.off.apply(this, arguments);
-        },
-
-        // Trigger one or many events, firing all bound callbacks. Callbacks are
-        // passed the same arguments as `trigger` is, apart from the event name
-        // (unless you're listening on `"all"`, which will cause your callback to
-        // receive the true name of the event as the first argument).
-        trigger: function (name) {
-            if (!this._events) return this;
-            var args = slice.call(arguments, 1);
-            if (!eventsApi(this, "trigger", name, args)) return this;
-            var events = this._events[name];
-            var allEvents = this._events.all;
-            if (events) triggerEvents(events, args);
-            if (allEvents) triggerEvents(allEvents, arguments);
-            return this;
-        },
-
-        fireEvent: function () {
-            this.trigger.apply(this, arguments);
-        },
-
-        // Inversion-of-control versions of `on` and `once`. Tell *this* object to
-        // listen to an event in another object ... keeping track of what it's
-        // listening to.
-        listenTo: function (obj, name, callback) {
-            var listeningTo = this._listeningTo || (this._listeningTo = {});
-            var id = obj._listenId || (obj._listenId = _.uniqueId("l"));
-            listeningTo[id] = obj;
-            if (!callback && typeof name === "object") callback = this;
-            obj.on(name, callback, this);
-            return this;
-        },
-
-        listenToOnce: function (obj, name, callback) {
-            if (typeof name === "object") {
-                for (var event in name) this.listenToOnce(obj, event, name[event]);
-                return this;
-            }
-            if (eventSplitter.test(name)) {
-                var names = name.split(eventSplitter);
-                for (var i = 0, length = names.length; i < length; i++) {
-                    this.listenToOnce(obj, names[i], callback);
-                }
-                return this;
-            }
-            if (!callback) return this;
-            var once = _.once(function () {
-                this.stopListening(obj, name, once);
-                callback.apply(this, arguments);
-            });
-            once._callback = callback;
-            return this.listenTo(obj, name, once);
-        },
-
-        // Tell this object to stop listening to either specific events ... or
-        // to every object it's currently listening to.
-        stopListening: function (obj, name, callback) {
-            var listeningTo = this._listeningTo;
-            if (!listeningTo) return this;
-            var remove = !name && !callback;
-            if (!callback && typeof name === "object") callback = this;
-            if (obj) (listeningTo = {})[obj._listenId] = obj;
-            for (var id in listeningTo) {
-                obj = listeningTo[id];
-                obj.off(name, callback, this);
-                if (remove || _.isEmpty(obj._events)) delete this._listeningTo[id];
-            }
-            return this;
-        }
-
-    };
-
-    // Regular expression used to split event strings.
-    var eventSplitter = /\s+/;
-
-    // Implement fancy features of the Events API such as multiple event
-    // names `"change blur"` and jQuery-style event maps `{change: action}`
-    // in terms of the existing API.
-    var eventsApi = function (obj, action, name, rest) {
-        if (!name) return true;
-
-        // Handle event maps.
-        if (typeof name === "object") {
-            for (var key in name) {
-                obj[action].apply(obj, [key, name[key]].concat(rest));
-            }
-            return false;
-        }
-
-        // Handle space separated event names.
-        if (eventSplitter.test(name)) {
-            var names = name.split(eventSplitter);
-            for (var i = 0, length = names.length; i < length; i++) {
-                obj[action].apply(obj, [names[i]].concat(rest));
-            }
-            return false;
-        }
-
-        return true;
-    };
-
-    // A difficult-to-believe, but optimized internal dispatch function for
-    // triggering events. Tries to keep the usual cases speedy (most internal
-    // BI events have 3 arguments).
-    var triggerEvents = function (events, args) {
-        var ev, i = -1, l = events.length, a1 = args[0], a2 = args[1], a3 = args[2];
-        switch (args.length) {
-            case 0:
-                while (++i < l) (ev = events[i]).callback.call(ev.ctx);
-                return;
-            case 1:
-                while (++i < l) (ev = events[i]).callback.call(ev.ctx, a1);
-                return;
-            case 2:
-                while (++i < l) (ev = events[i]).callback.call(ev.ctx, a1, a2);
-                return;
-            case 3:
-                while (++i < l) (ev = events[i]).callback.call(ev.ctx, a1, a2, a3);
-                return;
-            default:
-                while (++i < l) (ev = events[i]).callback.apply(ev.ctx, args);
-                return;
-        }
-    };
-
-    // BI.Router
-    // ---------------
-
-    // Routers map faux-URLs to actions, and fire events when routes are
-    // matched. Creating a new one sets its `routes` hash, if not set statically.
-    var Router = BI.Router = function (options) {
-        options || (options = {});
-        if (options.routes) this.routes = options.routes;
-        this._bindRoutes();
-        this._init.apply(this, arguments);
-    };
-
-    // Cached regular expressions for matching named param parts and splatted
-    // parts of route strings.
-    var optionalParam = /\((.*?)\)/g;
-    var namedParam = /(\(\?)?:\w+/g;
-    var splatParam = /\*\w+/g;
-    var escapeRegExp = /[\-{}\[\]+?.,\\\^$|#\s]/g;
-
-    // Set up all inheritable **BI.Router** properties and methods.
-    _.extend(Router.prototype, Events, {
-
-        // _init is an empty function by default. Override it with your own
-        // initialization logic.
-        _init: function () {
-        },
-
-        // Manually bind a single named route to a callback. For example:
-        //
-        //     this.route('search/:query/p:num', 'search', function(query, num) {
-        //       ...
-        //     });
-        //
-        route: function (route, name, callback) {
-            if (!_.isRegExp(route)) route = this._routeToRegExp(route);
-            if (_.isFunction(name)) {
-                callback = name;
-                name = "";
-            }
-            if (!callback) callback = this[name];
-            var router = this;
-            BI.history.route(route, function (fragment) {
-                var args = router._extractParameters(route, fragment);
-                if (router.execute(callback, args, name) !== false) {
-                    router.trigger.apply(router, ["route:" + name].concat(args));
-                    router.trigger("route", name, args);
-                    BI.history.trigger("route", router, name, args);
-                }
-            });
-            return this;
-        },
-
-        // Execute a route handler with the provided parameters.  This is an
-        // excellent place to do pre-route setup or post-route cleanup.
-        execute: function (callback, args, name) {
-            if (callback) callback.apply(this, args);
-        },
-
-        // Simple proxy to `BI.history` to save a fragment into the history.
-        navigate: function (fragment, options) {
-            BI.history.navigate(fragment, options);
-            return this;
-        },
-
-        // Bind all defined routes to `BI.history`. We have to reverse the
-        // order of the routes here to support behavior where the most general
-        // routes can be defined at the bottom of the route map.
-        _bindRoutes: function () {
-            if (!this.routes) return;
-            this.routes = _.result(this, "routes");
-            var route, routes = _.keys(this.routes);
-            while ((route = routes.pop()) != null) {
-                this.route(route, this.routes[route]);
-            }
-        },
-
-        // Convert a route string into a regular expression, suitable for matching
-        // against the current location hash.
-        _routeToRegExp: function (route) {
-            route = route.replace(escapeRegExp, "\\$&")
-                .replace(optionalParam, "(?:$1)?")
-                .replace(namedParam, function (match, optional) {
-                    return optional ? match : "([^/?]+)";
-                })
-                .replace(splatParam, "([^?]*?)");
-            return new RegExp("^" + route + "(?:\\?([\\s\\S]*))?$");
-        },
-
-        // Given a route, and a URL fragment that it matches, return the array of
-        // extracted decoded parameters. Empty or unmatched parameters will be
-        // treated as `null` to normalize cross-browser behavior.
-        _extractParameters: function (route, fragment) {
-            var params = route.exec(fragment).slice(1);
-            return _.map(params, function (param, i) {
-                // Don't decode the search params.
-                if (i === params.length - 1) return param || null;
-                return param ? decodeURIComponent(param) : null;
-            });
-        }
-
-    });
-
-    // History
-    // ----------------
-
-    // Handles cross-browser history management, based on either
-    // [pushState](http://diveintohtml5.info/history.html) and real URLs, or
-    // [onhashchange](https://developer.mozilla.org/en-US/docs/DOM/window.onhashchange)
-    // and URL fragments. If the browser supports neither (old IE, natch),
-    // falls back to polling.
-    var History = function () {
-        this.handlers = [];
-        _.bindAll(this, "checkUrl");
-
-        // Ensure that `History` can be used outside of the browser.
-        if (typeof window !== "undefined") {
-            this.location = window.location;
-            this.history = window.history;
-        }
-    };
-
-    // Cached regex for stripping a leading hash/slash and trailing space.
-    var routeStripper = /^[#\/]|\s+$/g;
-
-    // Cached regex for stripping leading and trailing slashes.
-    var rootStripper = /^\/+|\/+$/g;
-
-    // Cached regex for stripping urls of hash.
-    var pathStripper = /#.*$/;
-
-    // Has the history handling already been started?
-    History.started = false;
-
-    // Set up all inheritable **BI.History** properties and methods.
-    _.extend(History.prototype, Events, {
-
-        // The default interval to poll for hash changes, if necessary, is
-        // twenty times a second.
-        interval: 50,
-
-        // Are we at the app root?
-        atRoot: function () {
-            var path = this.location.pathname.replace(/[^\/]$/, "$&/");
-            return path === this.root && !this.getSearch();
-        },
-
-        // In IE6, the hash fragment and search params are incorrect if the
-        // fragment contains `?`.
-        getSearch: function () {
-            var match = this.location.href.replace(/#.*/, "").match(/\?.+/);
-            return match ? match[0] : "";
-        },
-
-        // Gets the true hash value. Cannot use location.hash directly due to bug
-        // in Firefox where location.hash will always be decoded.
-        getHash: function (window) {
-            var match = (window || this).location.href.match(/#(.*)$/);
-            return match ? match[1] : "";
-        },
-
-        // Get the pathname and search params, without the root.
-        getPath: function () {
-            var path = decodeURI(this.location.pathname + this.getSearch());
-            var root = this.root.slice(0, -1);
-            if (!path.indexOf(root)) path = path.slice(root.length);
-            return path.charAt(0) === "/" ? path.slice(1) : path;
-        },
-
-        // Get the cross-browser normalized URL fragment from the path or hash.
-        getFragment: function (fragment) {
-            if (fragment == null) {
-                if (this._hasPushState || !this._wantsHashChange) {
-                    fragment = this.getPath();
-                } else {
-                    fragment = this.getHash();
-                }
-            }
-            return fragment.replace(routeStripper, "");
-        },
-
-        // Start the hash change handling, returning `true` if the current URL matches
-        // an existing route, and `false` otherwise.
-        start: function (options) {
-            if (History.started) throw new Error("BI.history has already been started");
-            History.started = true;
-
-            // Figure out the initial configuration. Do we need an iframe?
-            // Is pushState desired ... is it available?
-            this.options = _.extend({root: "/"}, this.options, options);
-            this.root = this.options.root;
-            this._wantsHashChange = this.options.hashChange !== false;
-            this._hasHashChange = "onhashchange" in window;
-            this._wantsPushState = !!this.options.pushState;
-            this._hasPushState = !!(this.options.pushState && this.history && this.history.pushState);
-            this.fragment = this.getFragment();
-
-            // Normalize root to always include a leading and trailing slash.
-            this.root = ("/" + this.root + "/").replace(rootStripper, "/");
-
-            // Transition from hashChange to pushState or vice versa if both are
-            // requested.
-            if (this._wantsHashChange && this._wantsPushState) {
-
-                // If we've started off with a route from a `pushState`-enabled
-                // browser, but we're currently in a browser that doesn't support it...
-                if (!this._hasPushState && !this.atRoot()) {
-                    var root = this.root.slice(0, -1) || "/";
-                    this.location.replace(root + "#" + this.getPath());
-                    // Return immediately as browser will do redirect to new url
-                    return true;
-
-                    // Or if we've started out with a hash-based route, but we're currently
-                    // in a browser where it could be `pushState`-based instead...
-                } else if (this._hasPushState && this.atRoot()) {
-                    this.navigate(this.getHash(), {replace: true});
-                }
-
-            }
-
-            // Proxy an iframe to handle location events if the browser doesn't
-            // support the `hashchange` event, HTML5 history, or the user wants
-            // `hashChange` but not `pushState`.
-            if (!this._hasHashChange && this._wantsHashChange && (!this._wantsPushState || !this._hasPushState)) {
-                var iframe = document.createElement("iframe");
-                iframe.src = "javascript:0";
-                iframe.style.display = "none";
-                iframe.tabIndex = -1;
-                var body = document.body;
-                // Using `appendChild` will throw on IE < 9 if the document is not ready.
-                this.iframe = body.insertBefore(iframe, body.firstChild).contentWindow;
-                this.iframe.document.open().close();
-                this.iframe.location.hash = "#" + this.fragment;
-            }
-
-            // Add a cross-platform `addEventListener` shim for older browsers.
-            var addEventListener = window.addEventListener || function (eventName, listener) {
-                return attachEvent("on" + eventName, listener);
-            };
-
-            // Depending on whether we're using pushState or hashes, and whether
-            // 'onhashchange' is supported, determine how we check the URL state.
-            if (this._hasPushState) {
-                addEventListener("popstate", this.checkUrl, false);
-            } else if (this._wantsHashChange && this._hasHashChange && !this.iframe) {
-                addEventListener("hashchange", this.checkUrl, false);
-            } else if (this._wantsHashChange) {
-                this._checkUrlInterval = setInterval(this.checkUrl, this.interval);
-            }
-
-            if (!this.options.silent) return this.loadUrl();
-        },
-
-        // Disable BI.history, perhaps temporarily. Not useful in a real app,
-        // but possibly useful for unit testing Routers.
-        stop: function () {
-            // Add a cross-platform `removeEventListener` shim for older browsers.
-            var removeEventListener = window.removeEventListener || function (eventName, listener) {
-                return detachEvent("on" + eventName, listener);
-            };
-
-            // Remove window listeners.
-            if (this._hasPushState) {
-                removeEventListener("popstate", this.checkUrl, false);
-            } else if (this._wantsHashChange && this._hasHashChange && !this.iframe) {
-                removeEventListener("hashchange", this.checkUrl, false);
-            }
-
-            // Clean up the iframe if necessary.
-            if (this.iframe) {
-                document.body.removeChild(this.iframe.frameElement);
-                this.iframe = null;
-            }
-
-            // Some environments will throw when clearing an undefined interval.
-            if (this._checkUrlInterval) clearInterval(this._checkUrlInterval);
-            History.started = false;
-        },
-
-        // Add a route to be tested when the fragment changes. Routes added later
-        // may override previous routes.
-        route: function (route, callback) {
-            this.handlers.unshift({route: route, callback: callback});
-        },
-
-        // Checks the current URL to see if it has changed, and if it has,
-        // calls `loadUrl`, normalizing across the hidden iframe.
-        checkUrl: function (e) {
-            var current = this.getFragment();
-
-            // If the user pressed the back button, the iframe's hash will have
-            // changed and we should use that for comparison.
-            if (current === this.fragment && this.iframe) {
-                current = this.getHash(this.iframe);
-            }
-
-            if (current === this.fragment) return false;
-            if (this.iframe) this.navigate(current);
-            this.loadUrl();
-        },
-
-        // Attempt to load the current URL fragment. If a route succeeds with a
-        // match, returns `true`. If no defined routes matches the fragment,
-        // returns `false`.
-        loadUrl: function (fragment) {
-            fragment = this.fragment = this.getFragment(fragment);
-            return _.any(this.handlers, function (handler) {
-                if (handler.route.test(fragment)) {
-                    handler.callback(fragment);
-                    return true;
-                }
-            });
-        },
-
-        // Save a fragment into the hash history, or replace the URL state if the
-        // 'replace' option is passed. You are responsible for properly URL-encoding
-        // the fragment in advance.
-        //
-        // The options object can contain `trigger: true` if you wish to have the
-        // route callback be fired (not usually desirable), or `replace: true`, if
-        // you wish to modify the current URL without adding an entry to the history.
-        navigate: function (fragment, options) {
-            if (!History.started) return false;
-            if (!options || options === true) options = {trigger: !!options};
-
-            // Normalize the fragment.
-            fragment = this.getFragment(fragment || "");
-
-            // Don't include a trailing slash on the root.
-            var root = this.root;
-            if (fragment === "" || fragment.charAt(0) === "?") {
-                root = root.slice(0, -1) || "/";
-            }
-            var url = root + fragment;
-
-            // Strip the hash and decode for matching.
-            fragment = decodeURI(fragment.replace(pathStripper, ""));
-
-            if (this.fragment === fragment) return;
-            this.fragment = fragment;
-
-            // If pushState is available, we use it to set the fragment as a real URL.
-            if (this._hasPushState) {
-                this.history[options.replace ? "replaceState" : "pushState"]({}, document.title, url);
-
-                // If hash changes haven't been explicitly disabled, update the hash
-                // fragment to store history.
-            } else if (this._wantsHashChange) {
-                this._updateHash(this.location, fragment, options.replace);
-                if (this.iframe && (fragment !== this.getHash(this.iframe))) {
-                    // Opening and closing the iframe tricks IE7 and earlier to push a
-                    // history entry on hash-tag change.  When replace is true, we don't
-                    // want this.
-                    if (!options.replace) this.iframe.document.open().close();
-                    this._updateHash(this.iframe.location, fragment, options.replace);
-                }
-
-                // If you've told us that you explicitly don't want fallback hashchange-
-                // based history, then `navigate` becomes a page refresh.
-            } else {
-                return this.location.assign(url);
-            }
-            if (options.trigger) return this.loadUrl(fragment);
-        },
-
-        // Update the hash location, either replacing the current entry, or adding
-        // a new one to the browser history.
-        _updateHash: function (location, fragment, replace) {
-            if (replace) {
-                var href = location.href.replace(/(javascript:|#).*$/, "");
-                location.replace(href + "#" + fragment);
-            } else {
-                // Some browsers require that `hash` contains a leading #.
-                location.hash = "#" + fragment;
-            }
-        }
-
-    });
-
-    // Create the default BI.history.
-    BI.history = new History;
-}());BI.servletURL = "https://fanruan.coding.me/fineui/dist/";
-BI.resourceURL = "https://fanruan.coding.me/fineui/dist/resource/";
-BI.i18n = {
-    "BI-Multi_Date_Quarter_End": "季度末",
-    "BI-Multi_Date_Month_Begin": "月初",
-    "BI-Multi_Date_YMD": "年/月/日",
-    "BI-Custom_Color": "自定义颜色",
-    "BI-Numerical_Interval_Input_Data": "请输入数值",
-    "BI-Please_Input_Natural_Number": "请输入非负整数",
-    "BI-No_More_Data": "无更多数据",
-    "BI-Basic_Altogether": "共",
-    "BI-Basic_Sunday": "星期日",
-    "BI-Widget_Background_Colour": "组件背景",
-    "BI-Color_Picker_Error_Text": "请输入0~255的正整数",
-    "BI-Multi_Date_Month": "月",
-    "BI-No_Selected_Item": "没有可选项",
-    "BI-Multi_Date_Year_Begin": "年初",
-    "BI-Quarter_1": "第1季度",
-    "BI-Quarter_2": "第2季度",
-    "BI-Quarter_3": "第3季度",
-    "BI-Quarter_4": "第4季度",
-    "BI-Multi_Date_Year_Next": "年后",
-    "BI-Multi_Date_Month_Prev": "个月前",
-    "BI-Month_Trigger_Error_Text": "请输入1~12的正整数",
-    "BI-Less_And_Equal": "小于等于",
-    "BI-Year_Trigger_Invalid_Text": "请输入有效时间",
-    "BI-Multi_Date_Week_Next": "周后",
-    "BI-Font_Size": "字号",
-    "BI-Basic_Total": "共",
-    "BI-Already_Selected": "已选择",
-    "BI-Formula_Insert": "插入",
-    "BI-Select_All": "全选",
-    "BI-Basic_Tuesday": "星期二",
-    "BI-Multi_Date_Month_End": "月末",
-    "BI-Load_More": "点击加载更多数据",
-    "BI-Basic_September": "九月",
-    "BI-Current_Is_Last_Page": "当前已是最后一页",
-    "BI-Basic_Auto": "自动",
-    "BI-Basic_Count": "个",
-    "BI-Basic_Value": "值",
-    "BI-Basic_Unrestricted": "无限制",
-    "BI-Quarter_Trigger_Error_Text": "请输入1~4的正整数",
-    "BI-Basic_More": "更多",
-    "BI-Basic_Wednesday": "星期三",
-    "BI-Basic_Bold": "加粗",
-    "BI-Basic_Simple_Saturday": "六",
-    "BI-Multi_Date_Month_Next": "个月后",
-    "BI-Basic_March": "三月",
-    "BI-Current_Is_First_Page": "当前已是第一页",
-    "BI-Basic_Thursday": "星期四",
-    "BI-Basic_Prompt": "提示",
-    "BI-Multi_Date_Today": "今天",
-    "BI-Multi_Date_Quarter_Prev": "个季度前",
-    "BI-Row_Header": "行表头",
-    "BI-Date_Trigger_Error_Text": "日期格式示例:2015-3-11",
-    "BI-Basic_Cancel": "取消",
-    "BI-Basic_January": "一月",
-    "BI-Basic_June": "六月",
-    "BI-Basic_July": "七月",
-    "BI-Basic_April": "四月",
-    "BI-Multi_Date_Quarter_Begin": "季度初",
-    "BI-Multi_Date_Week": "周",
-    "BI-Click_Blank_To_Select": "点按\"空格键\"选中匹配项",
-    "BI-Basic_August": "八月",
-    "BI-Word_Align_Left": "文字居左",
-    "BI-Basic_November": "十一月",
-    "BI-Font_Colour": "字体颜色",
-    "BI-Multi_Date_Day_Prev": "天前",
-    "BI-Select_Part": "部分选择",
-    "BI-Multi_Date_Day_Next": "天后",
-    "BI-Less_Than": "小于",
-    "BI-Basic_February": "二月",
-    "BI-Multi_Date_Year": "年",
-    "BI-Number_Index": "序号",
-    "BI-Multi_Date_Week_Prev": "周前",
-    "BI-Next_Page": "下一页",
-    "BI-Right_Page": "向右翻页",
-    "BI-Numerical_Interval_Signal_Value": "前后值相等，请将操作符改为“≤”",
-    "BI-Basic_December": "十二月",
-    "BI-Basic_Saturday": "星期六",
-    "BI-Basic_Simple_Wednesday": "三",
-    "BI-Multi_Date_Quarter_Next": "个季度后",
-    "BI-Basic_October": "十月",
-    "BI-Basic_Simple_Friday": "五",
-    "BI-Primary_Key": "主键",
-    "BI-Basic_Save": "保存",
-    "BI-Numerical_Interval_Number_Value": "请保证前面的数值小于/等于后面的数值",
-    "BI-Previous_Page": "上一页",
-    "BI-No_Select": "搜索结果为空",
-    "BI-Basic_Clears": "清空",
-    "BI-Created_By_Me": "我创建的",
-    "BI-Basic_Simple_Tuesday": "二",
-    "BI-Word_Align_Right": "文字居右",
-    "BI-Summary_Values": "汇总",
-    "BI-Basic_Clear": "清除",
-    "BI-Upload_File_Size_Error": "文件大小不支",
-    "BI-Up_Page": "向上翻页",
-    "BI-Basic_Simple_Sunday": "日",
-    "BI-Multi_Date_Relative_Current_Time": "相对当前时间",
-    "BI-Selected_Data": "已选数据：",
-    "BI-Multi_Date_Quarter": "季度",
-    "BI-Check_Selected": "查看已选",
-    "BI-Basic_Search": "搜索",
-    "BI-Basic_May": "五月",
-    "BI-Continue_Select": "继续选择",
-    "BI-Please_Input_Positive_Integer": "请输入正整数",
-    "BI-Upload_File_Type_Error": "文件类型不支持",
-    "BI-Basic_Friday": "星期五",
-    "BI-Down_Page": "向下翻页",
-    "BI-Basic_Monday": "星期一",
-    "BI-Left_Page": "向左翻页",
-    "BI-Transparent_Color": "透明",
-    "BI-Basic_Simple_Monday": "一",
-    "BI-Multi_Date_Year_End": "年末",
-    "BI-Time_Interval_Error_Text": "请保证前面时间小于/等于后面的时间",
-    "BI-Basic_Time": "时间",
-    "BI-Basic_OK": "确定",
-    "BI-Basic_Sure": "确定",
-    "BI-Basic_Simple_Thursday": "四",
-    "BI-Multi_Date_Year_Prev": "年前",
-    "BI-Tiao_Data": "条数据",
-    "BI-Basic_Italic": "斜体",
-    "BI-Basic_Union_Relation": "联合关联"
-};
+BI.shortcut("bi.value_chooser_pane", BI.ValueChooserPane);
