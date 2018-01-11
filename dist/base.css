@@ -84,6 +84,9 @@
   border-right: 6px solid transparent;
   border-bottom: 6px solid #3f8ce8;
 }
+.bi-combo.bi-combo-popup {
+  display: block !important;
+}
 .bi-bubble-popup-view {
 
 }
