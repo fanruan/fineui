@@ -8,6 +8,7 @@ Demo.VerticalLayout = BI.inherit(BI.Widget, {
     render: function () {
         return {
             type: "bi.vertical",
+            vgap: 10,
             items: [{
                 type: "bi.label",
                 cls: "layout-bg3",

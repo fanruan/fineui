@@ -7457,69 +7457,68 @@ Demo.FlowLayout = BI.inherit(BI.Widget, {
                     type: "bi.label",
                     height: 30,
                     text: "Left-1",
-                    cls: "layout-bg1",
-                    hgap: 20
+                    cls: "layout-bg1"
+                    
                 }, {
                     type: "bi.label",
                     height: 30,
                     text: "Left-2",
-                    cls: "layout-bg2",
-                    hgap: 20
+                    cls: "layout-bg2"
+                    
                 }, {
                     type: "bi.label",
                     height: 30,
                     text: "Left-3",
-                    cls: "layout-bg3",
-                    hgap: 20
+                    cls: "layout-bg3"
+                    
                 }, {
                     type: "bi.label",
                     height: 30,
                     text: "Left-4",
-                    cls: "layout-bg4",
-                    hgap: 20
+                    cls: "layout-bg4"
+                    
                 }, {
                     type: "bi.label",
                     height: 30,
                     text: "Left-5",
-                    cls: "layout-bg5",
-                    hgap: 20
+                    cls: "layout-bg5"
+                    
                 }],
-                hgap: 20,
-                vgap: 20
+                hgap: 20
             }, {
                 type: "bi.right",
+                hgap: 20,
                 items: [{
                     type: "bi.label",
                     height: 30,
                     text: "Right-1",
-                    cls: "layout-bg1",
-                    hgap: 20
+                    cls: "layout-bg1"
+                    
                 }, {
                     type: "bi.label",
                     height: 30,
                     text: "Right-2",
-                    cls: "layout-bg2",
-                    hgap: 20
+                    cls: "layout-bg2"
+                    
                 }, {
                     type: "bi.label",
                     height: 30,
                     text: "Right-3",
-                    cls: "layout-bg3",
-                    hgap: 20
+                    cls: "layout-bg3"
+                    
                 }, {
                     type: "bi.label",
                     height: 30,
                     text: "Right-4",
-                    cls: "layout-bg4",
-                    hgap: 20
+                    cls: "layout-bg4"
+                    
                 }, {
                     type: "bi.label",
                     height: 30,
                     text: "Right-5",
-                    cls: "layout-bg5",
-                    hgap: 20
+                    cls: "layout-bg5"
+                    
                 }],
-                hgap: 20,
                 vgap: 20
             }]
         };
@@ -7787,6 +7786,7 @@ Demo.Horizontal = BI.inherit(BI.Widget, {
     render: function () {
         return {
             type: "bi.horizontal",
+            hgap: 10,
             items: [{
                 type: "bi.label",
                 whiteSpace: "normal",
@@ -8166,6 +8166,7 @@ Demo.VerticalLayout = BI.inherit(BI.Widget, {
     render: function () {
         return {
             type: "bi.vertical",
+            vgap: 10,
             items: [{
                 type: "bi.label",
                 cls: "layout-bg3",
@@ -8190,6 +8191,7 @@ Demo.VtapeLayout = BI.inherit(BI.Widget, {
     render: function () {
         return {
             type: "bi.vtape",
+            vgap: 10,
             items: [
                 {
                     height: 100,
@@ -8197,7 +8199,9 @@ Demo.VtapeLayout = BI.inherit(BI.Widget, {
                         type: "bi.label",
                         text: "1",
                         cls: "layout-bg1"
-                    }
+                    },
+                    tgap: 10,
+                    vgap: 10
                 }, {
                     height: 200,
                     el: {
