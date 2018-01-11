@@ -1,3 +1,47 @@
+.bi-bubble {
+  font-size: 14px;
+}
+.bi-bubble .bubble-text {
+  -webkit-border-radius: 2px;
+  -moz-border-radius: 2px;
+  border-radius: 2px;
+  background: #ffecec;
+  color: #ff4949;
+}
+
 .bi-tip {
   position: fixed !important;
+}
+
+.bi-toast {
+  font-size: 14px;
+  -webkit-border-radius: 2px;
+  -moz-border-radius: 2px;
+  border-radius: 2px;
+}
+.bi-toast.toast-success {
+  background: #e1f4e7;
+  color: #5cb75d;
+}
+.bi-toast.toast-warning {
+  background: #ffecec;
+  color: #ff4949;
+}
+
+.bi-tooltip {
+  max-width: 250px;
+  -webkit-border-radius: 2px;
+  -moz-border-radius: 2px;
+  border-radius: 2px;
+  font-size: 12px;
+}
+.bi-tooltip.tooltip-success {
+  background: #fff5c1;
+  border: 1px solid #fff5c1;
+  color: #1a1a1a;
+}
+.bi-tooltip.tooltip-warning {
+  background: #ffecec;
+  color: #ff4949;
+  border: 1px solid #f4cbcb;
 }
