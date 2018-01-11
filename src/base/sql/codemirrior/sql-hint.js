@@ -236,18 +236,16 @@
         keywords = getKeywords(editor);
         var keywordsCount = BI.size(keywords);
         var functions = [];
-        var desc = {};
         var cur = editor.getCursor();
         var token = editor.getTokenAt(cur);
-        BI.each(BI.FormulaCollections, function (idx, formula) {
-            if(formula.lastIndexOf(token.string, 0) == 0 && !BI.contains(functions, formula)) {
-                functions.push(formula);
-            }
-        });
-        BI.each(BI.FormulaJson, function (idx, formula) {
-            desc[formula.name.toLowerCase()] = formula.def;
-        });
-        keywords = BI.concat(BI.keys(keywords), functions);
+        if(options.supportFunction){
+            BI.each(BI.FormulaCollections, function (idx, formula) {
+                if(formula.lastIndexOf(token.string, 0) == 0 && !BI.contains(functions, formula)) {
+                    functions.push(formula);
+                }
+            });
+            keywords = BI.concat(BI.keys(keywords), functions);
+        }
         identifierQuote = getIdentifierQuote(editor);
 
         if (defaultTableName && !defaultTable) {defaultTable = findTableByAlias(defaultTableName, editor);}

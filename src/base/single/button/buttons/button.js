@@ -19,7 +19,6 @@
                 isShadowShowingOnSelected: true,
                 readonly: true,
                 iconClass: "",
-                level: "common",
                 block: false, // 是否块状显示，即不显示边框，没有最小宽度的限制
                 clear: false, // 是否去掉边框和背景
                 textAlign: "center",
@@ -56,7 +55,7 @@
                 });
                 BI.createWidget({
                     type: "bi.horizontal_auto",
-                    cls: "button-" + o.level + " " + o.iconClass,
+                    cls: o.iconClass,
                     element: this,
                     hgap: o.hgap,
                     vgap: o.vgap,
@@ -72,7 +71,6 @@
             } else {
                 this.text = BI.createWidget({
                     type: "bi.label",
-                    cls: "button-" + o.level,
                     textAlign: o.textAlign,
                     whiteSpace: o.whiteSpace,
                     forceCenter: o.forceCenter,

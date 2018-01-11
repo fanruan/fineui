@@ -7,7 +7,8 @@ BI.SQLEditor = BI.inherit(BI.Widget, {
             baseCls: "bi-sql-editor",
             value: "",
             lineHeight: 2,
-            showHint: true
+            showHint: true,
+            supportFunction: false
         });
     },
     _init: function () {
@@ -25,7 +26,8 @@ BI.SQLEditor = BI.inherit(BI.Widget, {
             self._checkWaterMark();
             if (o.showHint) {
                 CodeMirror.showHint(cm, CodeMirror.sqlHint, {
-                    completeSingle: false
+                    completeSingle: false,
+                    supportFunction: o.supportFunction
                 });
             }
             BI.nextTick(function () {
@@ -82,6 +84,18 @@ BI.SQLEditor = BI.inherit(BI.Widget, {
         this.editor.focus();
     },
 
+    insertParam: function (param) {
+        var value = param;
+        var from = this.editor.getCursor();
+        this.editor.replaceSelection(param);
+        var to = this.editor.getCursor();
+        var options = {className: "param", atomic: true};
+        options.value = value;
+        this.editor.markText(from, to, options);
+        this.editor.replaceSelection(" ");
+        this.editor.focus();
+    },
+
     _checkWaterMark: function () {
         var o = this.options;
         if (!this.disabledWaterMark && BI.isEmptyString(this.editor.getValue()) && BI.isKey(o.watermark)) {
@@ -91,12 +105,54 @@ BI.SQLEditor = BI.inherit(BI.Widget, {
         }
     },
 
+    _analyzeContent: function (v) {
+        var regx = /\$[\{][^\}]*[\}]|[^\$\{]*[^\$\{]/g;
+        return v.match(regx);
+    },
+
     getValue: function () {
-        return this.editor.getValue();
+        return this.editor.getValue("\n", function (line) {
+            var rawText = line.text, value = line.text, num = 0;
+            value.text = rawText;
+            _.forEach(_.sortBy(line.markedSpans, "from"), function (i, ms) {
+                switch (i.marker.className) {
+                    case "param":
+                    case "error-param":
+                        var fieldNameLength = i.to - i.from;
+                        value = value.substr(0, i.from + num) + "$\{" + i.marker.value + "\}" + value.substr(i.to + num, value.length);
+                        // 加上${}的偏移
+                        num += 3;
+                        // 加上实际值和显示值的长度差的偏移
+                        num += (i.marker.value.length - fieldNameLength);
+                        break;
+                }
+            });
+            return value;
+        });
     },
 
     setValue: function (v) {
-        this.editor.setValue(v);
+        var self = this, result;
+        this.refresh();
+        self.editor.setValue("");
+        result = this._analyzeContent(v || "");
+        BI.each(result, function (i, item) {
+            var fieldRegx = /\$[\{][^\}]*[\}]/;
+            var str = item.match(fieldRegx);
+            if (BI.isNotEmptyArray(str)) {
+                self.insertParam(str[0].substring(2, item.length - 1));
+            } else {
+                self.insertString(item);
+            }
+        });
+        this._checkWaterMark();
+    },
+
+    refresh: function () {
+        var self = this;
+        BI.nextTick(function () {
+            self.editor.refresh();
+        });
     }
 });
 BI.shortcut("bi.sql_editor", BI.SQLEditor);

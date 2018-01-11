@@ -16,9 +16,9 @@ BI.ArrowTreeGroupNodeCheckbox = BI.inherit(BI.IconButton, {
     setSelected: function (v) {
         BI.ArrowTreeGroupNodeCheckbox.superclass.setSelected.apply(this, arguments);
         if(v) {
-            this.element.removeClass("pull-down-font").addClass("pull-right-font");
-        } else {
             this.element.removeClass("pull-right-font").addClass("pull-down-font");
+        } else {
+            this.element.removeClass("pull-down-font").addClass("pull-right-font");
         }
     }
 });

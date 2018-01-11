@@ -844,7 +844,7 @@ Demo.SQLEditor = BI.inherit(BI.Widget, {
             type : 'bi.sql_editor',
             width : 300,
             height : 200,
-            value : "select * from DEMO_CONTRACT where 合同类型 = '长期协议' and 购买数量 = sum([1,2,3,4])"
+            value : "select * from DEMO_CONTRACT where 合同类型 = ${长期协议} and 购买数量 = sum([1,2,3,4])"
         });
         BI.createWidget({
             type: "bi.left",
@@ -11854,8 +11854,10 @@ Demo.Items = BI.inherit(BI.Widget, {
         return {
             type: "bi.vertical",
             items: [{
-                type: "bi.label",
+                type: "bi.text_button",
+                cls: "bi-list-item-select bi-high-light-border bi-border",
                 height: 30,
+                level: "warning",
                 text: "单选item"
             }, {
                 type: "bi.single_select_item",
