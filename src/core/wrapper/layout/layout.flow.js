@@ -37,17 +37,25 @@ BI.FloatLeftLayout = BI.inherit(BI.Layout, {
         if (BI.isNotNull(item.top)) {
             w.element.css({top: item.top});
         }
-        if ((item.lgap || 0) + o.hgap + o.lgap !== 0) {
-            w.element.css("margin-left", (item.lgap || 0) + o.hgap + o.lgap);
+        if (o.vgap + o.tgap + (item.tgap || 0) + (item.vgap || 0) !== 0) {
+            w.element.css({
+                "margin-top": o.vgap + o.tgap + (item.tgap || 0) + (item.vgap || 0) + "px"
+            });
         }
-        if ((item.rgap || 0) + o.hgap + o.rgap !== 0) {
-            w.element.css("margin-right", (item.rgap || 0) + o.hgap + o.rgap);
+        if (o.hgap + o.lgap + (item.lgap || 0) + (item.hgap || 0) !== 0) {
+            w.element.css({
+                "margin-left": (i === 0 ? o.hgap : 0) + o.lgap + (item.lgap || 0) + (item.hgap || 0) +"px"
+            });
         }
-        if ((item.tgap || 0) + o.vgap + o.tgap !== 0) {
-            w.element.css("margin-top", (item.tgap || 0) + o.vgap + o.tgap);
+        if (o.hgap + o.rgap + (item.rgap || 0) + (item.hgap || 0) !== 0) {
+            w.element.css({
+                "margin-right": o.hgap + o.rgap + (item.rgap || 0) + (item.hgap || 0) + "px"
+            });
         }
-        if ((item.bgap || 0) + o.vgap + o.bgap !== 0) {
-            w.element.css("margin-bottom", (item.bgap || 0) + o.vgap + o.bgap);
+        if (o.vgap + o.bgap + (item.bgap || 0) + (item.vgap || 0) !== 0) {
+            w.element.css({
+                "margin-bottom": o.vgap + o.bgap + (item.bgap || 0) + (item.vgap || 0) + "px"
+            });
         }
         return w;
     },
@@ -102,17 +110,25 @@ BI.FloatRightLayout = BI.inherit(BI.Layout, {
         if (BI.isNotNull(item.top)) {
             w.element.css({top: item.top});
         }
-        if ((item.lgap || 0) + o.hgap + o.lgap !== 0) {
-            w.element.css("margin-left", (item.lgap || 0) + o.hgap + o.lgap);
+        if (o.vgap + o.tgap + (item.tgap || 0) + (item.vgap || 0) !== 0) {
+            w.element.css({
+                "margin-top": o.vgap + o.tgap + (item.tgap || 0) + (item.vgap || 0) + "px"
+            });
         }
-        if ((item.rgap || 0) + o.hgap + o.rgap !== 0) {
-            w.element.css("margin-right", (item.rgap || 0) + o.hgap + o.rgap);
+        if (o.hgap + o.lgap + (item.lgap || 0) + (item.hgap || 0) !== 0) {
+            w.element.css({
+                "margin-left": o.hgap + o.lgap + (item.lgap || 0) + (item.hgap || 0) +"px"
+            });
         }
-        if ((item.tgap || 0) + o.vgap + o.tgap !== 0) {
-            w.element.css("margin-top", (item.tgap || 0) + o.vgap + o.tgap);
+        if (o.hgap + o.rgap + (item.rgap || 0) + (item.hgap || 0) !== 0) {
+            w.element.css({
+                "margin-right": (i === 0 ? o.hgap : 0) + o.rgap + (item.rgap || 0) + (item.hgap || 0) + "px"
+            });
         }
-        if ((item.bgap || 0) + o.vgap + o.bgap !== 0) {
-            w.element.css("margin-bottom", (item.bgap || 0) + o.vgap + o.bgap);
+        if (o.vgap + o.bgap + (item.bgap || 0) + (item.vgap || 0) !== 0) {
+            w.element.css({
+                "margin-bottom": o.vgap + o.bgap + (item.bgap || 0) + (item.vgap || 0) + "px"
+            });
         }
         return w;
     },
