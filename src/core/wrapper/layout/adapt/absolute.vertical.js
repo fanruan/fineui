@@ -28,15 +28,15 @@ BI.AbsoluteVerticalLayout = BI.inherit(BI.Layout, {
             position: "absolute",
             left: item.lgap,
             right: item.rgap,
-            top: o.vgap + o.tgap + (item.tgap || 0),
-            bottom: o.vgap + o.bgap + (item.bgap || 0),
+            top: o.vgap + o.tgap + (item.tgap || 0) + (item.vgap || 0),
+            bottom: o.vgap + o.bgap + (item.bgap || 0) + (item.vgap || 0),
             margin: "auto"
         });
-        if (o.hgap + o.lgap + (item.lgap || 0) !== 0) {
-            w.element.css("left", o.hgap + o.lgap + (item.lgap || 0));
+        if (o.hgap + o.lgap + (item.hgap || 0) + (item.lgap || 0) !== 0) {
+            w.element.css("left", o.hgap + o.lgap + (item.lgap || 0) + (item.hgap || 0));
         }
-        if (o.hgap + o.rgap + (item.rgap || 0) !== 0) {
-            w.element.css("right", o.hgap + o.rgap + (item.rgap || 0));
+        if (o.hgap + o.rgap + (item.hgap || 0) + (item.rgap || 0) !== 0) {
+            w.element.css("right", o.hgap + o.rgap + (item.rgap || 0) + (item.hgap || 0));
         }
         return w;
     },
