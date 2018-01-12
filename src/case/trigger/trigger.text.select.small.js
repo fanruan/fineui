@@ -17,34 +17,42 @@ BI.SmallSelectTextTrigger = BI.inherit(BI.Trigger, {
         this.options.height -= 2;
         BI.SmallSelectTextTrigger.superclass._init.apply(this, arguments);
         var self = this, o = this.options;
+        var obj = this._digest(o.text, o.items);
         this.trigger = BI.createWidget({
             type: "bi.small_text_trigger",
             element: this,
-            height: o.height - 2
+            height: o.height - 2,
+            text: obj.text,
+            cls: obj.cls
         });
-        if (BI.isKey(o.text)) {
-            this.setValue(o.text);
-        }
     },
 
-    setValue: function (vals) {
+    _digest: function(vals, items){
         var o = this.options;
         vals = BI.isArray(vals) ? vals : [vals];
         var result = [];
-        var items = BI.Tree.transformToArrayFormat(this.options.items);
-        BI.each(items, function (i, item) {
+        var formatItems = BI.Tree.transformToArrayFormat(items);
+        BI.each(formatItems, function (i, item) {
             if (BI.deepContains(vals, item.value) && !result.contains(item.text || item.value)) {
                 result.push(item.text || item.value);
             }
         });
 
         if (result.length > 0) {
-            this.trigger.element.removeClass("bi-water-mark");
-            this.trigger.setText(result.join(","));
+            return {
+                cls: "",
+                text: result.join(",")
+            }
         } else {
-            this.trigger.element.addClass("bi-water-mark");
-            this.trigger.setText(o.text);
+            return {
+                cls: "bi-water-mark",
+                text: o.text
+            }
         }
+    },
+
+    setValue: function (vals) {
+        this.trigger.setText(this._digest(vals, this.options.items));
     },
 
     populate: function (items) {

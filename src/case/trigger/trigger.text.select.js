@@ -21,29 +21,31 @@ BI.SelectTextTrigger = BI.inherit(BI.Trigger, {
         this.trigger = BI.createWidget({
             type: "bi.text_trigger",
             element: this,
-            height: o.height
+            height: o.height,
+            text: this._digest(o.text, o.items)
         });
-        if (BI.isKey(o.text)) {
-            this.setValue(o.text);
-        }
     },
-
-    setValue: function (vals) {
+    
+    _digest: function(vals, items){
         var o = this.options;
         vals = BI.isArray(vals) ? vals : [vals];
         var result = [];
-        var items = BI.Tree.transformToArrayFormat(this.options.items);
-        BI.each(items, function (i, item) {
+        var formatItems = BI.Tree.transformToArrayFormat(items);
+        BI.each(formatItems, function (i, item) {
             if (BI.deepContains(vals, item.value) && !result.contains(item.text || item.value)) {
                 result.push(item.text || item.value);
             }
         });
 
         if (result.length > 0) {
-            this.trigger.setText(result.join(","));
+            return result.join(",");
         } else {
-            this.trigger.setText(o.text);
+            return o.text;
         }
+    },
+
+    setValue: function (vals) {
+        this.trigger.setText(this._digest(vals, this.options.items));
     },
 
     populate: function (items) {

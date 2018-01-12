@@ -14846,7 +14846,7 @@ BI.RelationViewItem = BI.inherit(BI.BasicButton, {
         if (o.isPrimary) {
             header.items.push({
                 type: "bi.icon",
-                width: 16,
+                width: 12,
                 height: 16,
                 title: BI.i18nText("BI-Primary_Key")
             });

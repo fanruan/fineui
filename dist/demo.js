@@ -1808,7 +1808,7 @@ Demo.IconTextValueCombo = BI.inherit(BI.Widget, {
             type: "bi.horizontal_auto",
             items: [{
                 type: "bi.icon_text_value_combo",
-                text: "默认值",
+                value: "默认值",
                 width: 300,
                 items: [{
                     text: "MVC-1",
@@ -1885,7 +1885,7 @@ Demo.TextValueCombo = BI.inherit(BI.Widget, {
         return {
             type: "bi.horizontal_auto",
             items: [{
-                type: "bi.icon_text_value_combo",
+                type: "bi.text_value_combo",
                 value: "默认值",
                 width: 300,
                 items: [{
