@@ -69691,7 +69691,8 @@ BI.TextValueCombo = BI.inherit(BI.Widget, {
         this.trigger = BI.createWidget(o.el, {
             type: "bi.select_text_trigger",
             items: o.items,
-            height: o.height
+            height: o.height,
+            text: o.value
         });
         this.popup = BI.createWidget({
             type: "bi.text_value_combo_popup",
