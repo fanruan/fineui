@@ -65887,9 +65887,7 @@ BI.shortcut("bi.complex_canvas", BI.ComplexCanvas);/**
 BI.ArrowTreeGroupNodeCheckbox = BI.inherit(BI.IconButton, {
     _defaultConfig: function () {
         return BI.extend(BI.ArrowTreeGroupNodeCheckbox.superclass._defaultConfig.apply(this, arguments), {
-            extraCls: "bi-arrow-tree-group-node",
-            iconWidth: 13,
-            iconHeight: 13
+            extraCls: "bi-arrow-tree-group-node"
         });
     },
     _init: function () {
@@ -65912,9 +65910,7 @@ BI.shortcut("bi.arrow_tree_group_node_checkbox", BI.ArrowTreeGroupNodeCheckbox);
 BI.CheckingMarkNode = BI.inherit(BI.IconButton, {
     _defaultConfig: function () {
         return BI.extend( BI.CheckingMarkNode.superclass._defaultConfig.apply(this, arguments), {
-            extraCls: "check-mark-font",
-            iconWidth: 13,
-            iconHeight: 13
+            extraCls: "check-mark-font"
         });
     },
     _init: function () {
@@ -66018,9 +66014,7 @@ BI.shortcut("bi.mid_tree_node_checkbox", BI.MidTreeNodeCheckbox);/**
 BI.TreeGroupNodeCheckbox = BI.inherit(BI.IconButton, {
     _defaultConfig: function () {
         return BI.extend( BI.TreeGroupNodeCheckbox.superclass._defaultConfig.apply(this, arguments), {
-            extraCls: "tree-node-triangle-collapse-font",
-            iconWidth: 13,
-            iconHeight: 13
+            extraCls: "tree-node-triangle-collapse-font"
         });
     },
     _init: function () {
