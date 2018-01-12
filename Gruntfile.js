@@ -34,7 +34,7 @@ module.exports = function (grunt) {
                 dest: "dist/core.js"
             },
 
-            //最基础的控件
+            // 最基础的控件
             baseJs: {
                 src: [
                     "src/third/**/*.js",
@@ -55,7 +55,7 @@ module.exports = function (grunt) {
                 ],
                 dest: "dist/base.js"
             },
-            //实现好的一些基础实例
+            // 实现好的一些基础实例
             caseJs: {
                 src: [
                     "src/case/combo/popup.bubble.js",
@@ -182,6 +182,13 @@ module.exports = function (grunt) {
                 cwd: "public/less",
                 src: ["**/*.less"],
                 dest: "public/css",
+                ext: ".css"
+            },
+            src: {
+                expand: true,
+                cwd: "src/less",
+                src: ["**/*.less"],
+                dest: "src/css",
                 ext: ".css"
             },
             dev: {

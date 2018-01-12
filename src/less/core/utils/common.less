@@ -675,6 +675,15 @@
       color: @color-bi-text;
     }
   }
+  &.button-success {
+    &:active, &.active {
+      color: @color-bi-text;
+      background-color: @color-bi-background-success;
+      & .bi-high-light {
+        color: @color-bi-text;
+      }
+    }
+  }
   &.button-warning {
     & {
       color: @color-bi-text-failure;

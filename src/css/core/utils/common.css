@@ -49,7 +49,7 @@
   color: #3d4d66;
 }
 .bi-theme-dark .bi-background {
-  background-color: #191b2b;
+  background-color: #191B2B;
   color: #cccccc;
 }
 .bi-theme-dark .bi-background .bi-input {
@@ -693,6 +693,15 @@
 }
 .bi-list-item-select:active .bi-high-light,
 .bi-list-item-select.active .bi-high-light {
+  color: #ffffff;
+}
+.bi-list-item-select.button-success:active,
+.bi-list-item-select.button-success.active {
+  color: #ffffff;
+  background-color: #58cc7d;
+}
+.bi-list-item-select.button-success:active .bi-high-light,
+.bi-list-item-select.button-success.active .bi-high-light {
   color: #ffffff;
 }
 .bi-list-item-select.button-warning {
