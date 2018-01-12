@@ -14,22 +14,22 @@ BI.SelectIconTextTrigger = BI.inherit(BI.Trigger, {
         this.options.height -= 2;
         BI.SelectIconTextTrigger.superclass._init.apply(this, arguments);
         var self = this, o = this.options;
+        var obj = this._digist(o.value, o.items);
         this.trigger = BI.createWidget({
             type: "bi.icon_text_trigger",
             element: this,
+            text: obj.text,
+            iconClass: obj.iconClass,
             height: o.height
         });
-        if (BI.isKey(o.value)) {
-            this.setValue(o.value);
-        }
     },
-
-    setValue: function (vals) {
+    
+    _digist: function (vals, items) {
         var o = this.options;
         vals = BI.isArray(vals) ? vals : [vals];
         var result;
-        var items = BI.Tree.transformToArrayFormat(this.options.items);
-        BI.any(items, function (i, item) {
+        var formatItems = BI.Tree.transformToArrayFormat(items);
+        BI.any(formatItems, function (i, item) {
             if (BI.deepContains(vals, item.value)) {
                 result = {
                     text: item.text || item.value,
@@ -40,12 +40,22 @@ BI.SelectIconTextTrigger = BI.inherit(BI.Trigger, {
         });
 
         if (BI.isNotNull(result)) {
-            this.trigger.setText(result.text);
-            this.trigger.setIcon(result.iconClass);
+            return {
+                text: result.text,
+                iconClass: result.iconClass
+            };
         } else {
-            this.trigger.setText(o.value);
-            this.trigger.setIcon("");
+            return {
+                text: o.value,
+                iconClass: ""
+            };
         }
+    },
+
+    setValue: function (vals) {
+        var obj = this._digist(vals, this.options.items);
+        this.trigger.setText(obj.text);
+        this.trigger.setIcon(obj.iconClass);
     },
 
     populate: function (items) {
