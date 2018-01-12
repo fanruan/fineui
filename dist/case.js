@@ -13687,6 +13687,9 @@ BI.IconTextTrigger = BI.inherit(BI.Trigger, {
             textAlign: "left",
             height: o.height,
             text: o.text,
+            title: function () {
+                return o.text;
+            },
             hgap: c.hgap
         });
         this.trigerButton = BI.createWidget({
@@ -13724,7 +13727,6 @@ BI.IconTextTrigger = BI.inherit(BI.Trigger, {
 
     setValue: function (value) {
         this.text.setValue(value);
-        this.text.setTitle(value);
     },
 
     setIcon: function (iconCls) {
@@ -13746,7 +13748,6 @@ BI.IconTextTrigger = BI.inherit(BI.Trigger, {
 
     setText: function (text) {
         this.text.setText(text);
-        this.text.setTitle(text);
     }
 });
 BI.shortcut("bi.icon_text_trigger", BI.IconTextTrigger);/**
@@ -13765,22 +13766,22 @@ BI.SelectIconTextTrigger = BI.inherit(BI.Trigger, {
         this.options.height -= 2;
         BI.SelectIconTextTrigger.superclass._init.apply(this, arguments);
         var self = this, o = this.options;
+        var obj = this._digist(o.value, o.items);
         this.trigger = BI.createWidget({
             type: "bi.icon_text_trigger",
             element: this,
+            text: obj.text,
+            iconClass: obj.iconClass,
             height: o.height
         });
-        if (BI.isKey(o.value)) {
-            this.setValue(o.value);
-        }
     },
-
-    setValue: function (vals) {
+    
+    _digist: function (vals, items) {
         var o = this.options;
         vals = BI.isArray(vals) ? vals : [vals];
         var result;
-        var items = BI.Tree.transformToArrayFormat(this.options.items);
-        BI.any(items, function (i, item) {
+        var formatItems = BI.Tree.transformToArrayFormat(items);
+        BI.any(formatItems, function (i, item) {
             if (BI.deepContains(vals, item.value)) {
                 result = {
                     text: item.text || item.value,
@@ -13791,12 +13792,22 @@ BI.SelectIconTextTrigger = BI.inherit(BI.Trigger, {
         });
 
         if (BI.isNotNull(result)) {
-            this.trigger.setText(result.text);
-            this.trigger.setIcon(result.iconClass);
+            return {
+                text: result.text,
+                iconClass: result.iconClass
+            };
         } else {
-            this.trigger.setText(o.value);
-            this.trigger.setIcon("");
+            return {
+                text: o.value,
+                iconClass: ""
+            };
         }
+    },
+
+    setValue: function (vals) {
+        var obj = this._digist(vals, this.options.items);
+        this.trigger.setText(obj.text);
+        this.trigger.setIcon(obj.iconClass);
     },
 
     populate: function (items) {
@@ -13831,6 +13842,9 @@ BI.TextTrigger = BI.inherit(BI.Trigger, {
             textAlign: "left",
             height: o.height,
             text: o.text,
+            title: function () {
+                return o.text;
+            },
             hgap: c.hgap,
             readonly: o.readonly
         });
@@ -13854,14 +13868,8 @@ BI.TextTrigger = BI.inherit(BI.Trigger, {
         });
     },
 
-    setValue: function (value) {
-        this.text.setValue(value);
-        this.text.setTitle(value);
-    },
-
     setText: function (text) {
         this.text.setText(text);
-        this.text.setTitle(text);
     }
 });
 BI.shortcut("bi.text_trigger", BI.TextTrigger);/**
@@ -13887,29 +13895,31 @@ BI.SelectTextTrigger = BI.inherit(BI.Trigger, {
         this.trigger = BI.createWidget({
             type: "bi.text_trigger",
             element: this,
-            height: o.height
+            height: o.height,
+            text: this._digest(o.text, o.items)
         });
-        if (BI.isKey(o.text)) {
-            this.setValue(o.text);
-        }
     },
-
-    setValue: function (vals) {
+    
+    _digest: function(vals, items){
         var o = this.options;
         vals = BI.isArray(vals) ? vals : [vals];
         var result = [];
-        var items = BI.Tree.transformToArrayFormat(this.options.items);
-        BI.each(items, function (i, item) {
+        var formatItems = BI.Tree.transformToArrayFormat(items);
+        BI.each(formatItems, function (i, item) {
             if (BI.deepContains(vals, item.value) && !result.contains(item.text || item.value)) {
                 result.push(item.text || item.value);
             }
         });
 
         if (result.length > 0) {
-            this.trigger.setText(result.join(","));
+            return result.join(",");
         } else {
-            this.trigger.setText(o.text);
+            return o.text;
         }
+    },
+
+    setValue: function (vals) {
+        this.trigger.setText(this._digest(vals, this.options.items));
     },
 
     populate: function (items) {
@@ -13935,34 +13945,42 @@ BI.SmallSelectTextTrigger = BI.inherit(BI.Trigger, {
         this.options.height -= 2;
         BI.SmallSelectTextTrigger.superclass._init.apply(this, arguments);
         var self = this, o = this.options;
+        var obj = this._digest(o.text, o.items);
         this.trigger = BI.createWidget({
             type: "bi.small_text_trigger",
             element: this,
-            height: o.height - 2
+            height: o.height - 2,
+            text: obj.text,
+            cls: obj.cls
         });
-        if (BI.isKey(o.text)) {
-            this.setValue(o.text);
-        }
     },
 
-    setValue: function (vals) {
+    _digest: function(vals, items){
         var o = this.options;
         vals = BI.isArray(vals) ? vals : [vals];
         var result = [];
-        var items = BI.Tree.transformToArrayFormat(this.options.items);
-        BI.each(items, function (i, item) {
+        var formatItems = BI.Tree.transformToArrayFormat(items);
+        BI.each(formatItems, function (i, item) {
             if (BI.deepContains(vals, item.value) && !result.contains(item.text || item.value)) {
                 result.push(item.text || item.value);
             }
         });
 
         if (result.length > 0) {
-            this.trigger.element.removeClass("bi-water-mark");
-            this.trigger.setText(result.join(","));
+            return {
+                cls: "",
+                text: result.join(",")
+            }
         } else {
-            this.trigger.element.addClass("bi-water-mark");
-            this.trigger.setText(o.text);
+            return {
+                cls: "bi-water-mark",
+                text: o.text
+            }
         }
+    },
+
+    setValue: function (vals) {
+        this.trigger.setText(this._digest(vals, this.options.items));
     },
 
     populate: function (items) {

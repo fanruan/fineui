@@ -26,6 +26,9 @@ BI.TextTrigger = BI.inherit(BI.Trigger, {
             textAlign: "left",
             height: o.height,
             text: o.text,
+            title: function () {
+                return o.text;
+            },
             hgap: c.hgap,
             readonly: o.readonly
         });
@@ -49,14 +52,8 @@ BI.TextTrigger = BI.inherit(BI.Trigger, {
         });
     },
 
-    setValue: function (value) {
-        this.text.setValue(value);
-        this.text.setTitle(value);
-    },
-
     setText: function (text) {
         this.text.setText(text);
-        this.text.setTitle(text);
     }
 });
 BI.shortcut("bi.text_trigger", BI.TextTrigger);
