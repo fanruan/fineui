@@ -5,9 +5,7 @@
 BI.ArrowTreeGroupNodeCheckbox = BI.inherit(BI.IconButton, {
     _defaultConfig: function () {
         return BI.extend(BI.ArrowTreeGroupNodeCheckbox.superclass._defaultConfig.apply(this, arguments), {
-            extraCls: "bi-arrow-tree-group-node",
-            iconWidth: 13,
-            iconHeight: 13
+            extraCls: "bi-arrow-tree-group-node"
         });
     },
     _init: function () {

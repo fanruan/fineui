@@ -7,9 +7,7 @@
 BI.TreeGroupNodeCheckbox = BI.inherit(BI.IconButton, {
     _defaultConfig: function () {
         return BI.extend( BI.TreeGroupNodeCheckbox.superclass._defaultConfig.apply(this, arguments), {
-            extraCls: "tree-node-triangle-collapse-font",
-            iconWidth: 13,
-            iconHeight: 13
+            extraCls: "tree-node-triangle-collapse-font"
         });
     },
     _init: function () {
