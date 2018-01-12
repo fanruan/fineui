@@ -1,3 +1,38 @@
-.bi-editor {
+.bi-code-editor .param {
+  color: #ffffff;
+  padding: 0 5px;
+  margin: 1px 1px;
+  -webkit-border-radius: 2px;
+  -moz-border-radius: 2px;
+  border-radius: 2px;
+  background: #3f8ce8;
+  display: inline-block;
+}
+.bi-code-editor .error-param {
+  color: #ff4949;
+  padding: 0 5px;
+  margin: 1px 1px;
+  display: inline-block;
+}
+
+
+.bi-multifile-editor .multifile-editor {
+  text-align: right;
+  cursor: pointer;
+  font-size: 100px;
+  z-index: 2;
+}
+
+
+
+
+
+.bi-textarea-editor {
+  overflow: hidden;
+  overflow-x: hidden;
+  overflow-y: hidden;
+}
+.bi-textarea-editor .textarea-editor-content {
   font-size: 12px;
+  border: none;
 }

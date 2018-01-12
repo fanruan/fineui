@@ -1,3 +1,8 @@
+
+.bi-arrangement-droppable {
+  z-index: 100000;
+}
+
 .bi-arrangement .arrangement-helper {
   background: #3f8ce8;
   z-index: 1000000000;
@@ -42,12 +47,28 @@
   -moz-border-radius: 2px;
   border-radius: 2px;
 }
+.bi-date-trigger {
+  -webkit-border-radius: 2px;
+  -moz-border-radius: 2px;
+  border-radius: 2px;
+}
 .bi-down-list-popup .list-group-item-text {
   max-width: 203px;
 }
 .bi-down-list-popup .bi-down-list-item .list-item-text {
   max-width: 203px;
 }
+.bi-down-list-popup .list-group-item-text {
+  max-width: 203px;
+}
+.bi-down-list-popup .bi-down-list-item .list-item-text {
+  max-width: 203px;
+}
+
+.bi-excel-table-header-cell {
+  font-weight: bold;
+}
+
 .bi-excel-table > div.bottom-right > div > div > table {
   border-right: 1px solid #d4dadd;
 }
@@ -56,6 +77,21 @@
 }
 .bi-excel-table-header-cell {
   font-weight: bold;
+}
+
+.bi-file-manager-nav-button .file-manager-nav-button-text {
+  max-width: 200px;
+}
+.bi-file-manager-nav-button .file-manager-nav-button-text.active {
+  background-color: #fafbfc;
+  color: #999999;
+}
+.bi-file-manager-nav-button .file-manager-nav-button-triangle {
+  z-index: 1;
+}
+.bi-theme-dark .bi-file-manager-nav-button .file-manager-nav-button-text.active {
+  background-color: #191B2B;
+  color: #999999;
 }
 .bi-file-manager-nav-button .file-manager-nav-button-text {
   max-width: 200px;
@@ -78,6 +114,10 @@
 .bi-interactive-arrangement .interactive-arrangement-dragtag-icon {
   z-index: 1000000000;
 }
+.bi-interval-slider-label {
+  min-height: 50px;
+}
+
 .bi-interval-slider {
   min-height: 70px;
 }
@@ -89,11 +129,47 @@
   -moz-border-radius: 2px;
   border-radius: 2px;
 }
+.bi-month-trigger {
+  -webkit-border-radius: 2px;
+  -moz-border-radius: 2px;
+  border-radius: 2px;
+}
 .bi-multidate-combo {
   -webkit-border-radius: 2px;
   -moz-border-radius: 2px;
   border-radius: 2px;
 }
+.bi-multidate-combo {
+  -webkit-border-radius: 2px;
+  -moz-border-radius: 2px;
+  border-radius: 2px;
+}
+
+
+
+.bi-multidate-popup .multidate-popup-label {
+  color: #3685f2;
+  font-size: 14px;
+}
+.bi-multidate-popup .multidate-popup-item:active,
+.bi-multidate-popup .multidate-popup-item.active {
+  background-color: #3685f2;
+  color: #ffffff;
+  -webkit-border-radius: 2px 2px 0 0;
+  -moz-border-radius: 2px 2px 0 0;
+  border-radius: 2px 2px 0 0;
+}
+.bi-multidate-popup .multidate-popup-button {
+  color: #3685f2;
+  font-size: 14px;
+}
+
+
+.bi-multidate-segment .bi-multidate-editor {
+  font-size: 14px;
+}
+
+
 .bi-multidate-popup .multidate-popup-label {
   color: #3685f2;
   font-size: 14px;
@@ -116,8 +192,26 @@
 .bi-multi-select-check-pane .multi-select-check-selected {
   text-decoration: underline;
 }
+.bi-multi-select-check-pane .multi-select-check-selected {
+  text-decoration: underline;
+}
+
 .bi-multi-select-combo .multi-select-trigger-icon-button {
   font-size: 16px;
+}
+.bi-multi-select-combo .multi-select-trigger-icon-button {
+  font-size: 16px;
+}
+
+.bi-multi-select-insert-combo .multi-select-trigger-icon-button {
+  font-size: 16px;
+}
+
+
+.bi-multi-select-trigger {
+  -webkit-border-radius: 2px 2px 2px 2px;
+  -moz-border-radius: 2px 2px 2px 2px;
+  border-radius: 2px 2px 2px 2px;
 }
 .bi-multi-select-insert-combo .multi-select-trigger-icon-button {
   font-size: 16px;
@@ -130,8 +224,17 @@
 .bi-multi-select-search-pane .multi-select-toolbar {
   color: #ff4949;
 }
+.bi-multi-select-search-pane .multi-select-toolbar {
+  color: #ff4949;
+}
 .bi-multi-select-check-selected-button {
   z-index: 1;
+}
+.bi-multi-select-check-selected-button {
+  z-index: 1;
+}
+.bi-multi-tree-check-pane .multi-tree-check-selected {
+  color: #3685f2;
 }
 .bi-multi-tree-check-pane .multi-tree-check-selected {
   color: #3685f2;
@@ -139,12 +242,27 @@
 .bi-multi-tree-combo .multi-select-trigger-icon-button {
   font-size: 16px;
 }
+.bi-multi-tree-combo .multi-select-trigger-icon-button {
+  font-size: 16px;
+}
+.bi-multi-tree-popup .popup-view-tree {
+  min-height: 170px;
+}
 .bi-multi-tree-popup .popup-view-tree {
   min-height: 170px;
 }
 .bi-multi-tree-check-selected-button .trigger-check-selected {
   color: #3685f2;
   z-index: 1;
+}
+.bi-multi-tree-check-selected-button .trigger-check-selected {
+  color: #3685f2;
+  z-index: 1;
+}
+.bi-number-editor {
+  -webkit-border-radius: 2px;
+  -moz-border-radius: 2px;
+  border-radius: 2px;
 }
 .bi-number-editor {
   -webkit-border-radius: 2px;
@@ -200,6 +318,15 @@
   -o-user-select: text;
   user-select: text;
 }
+.bi-page-table-cell {
+  -webkit-user-select: text;
+  -khtml-user-select: text;
+  -moz-user-select: text;
+  -ms-user-select: text;
+  -o-user-select: text;
+  user-select: text;
+}
+
 .bi-path-chooser .path-chooser-radio {
   z-index: 1;
 }
@@ -211,6 +338,19 @@
   min-width: 80px;
   max-width: 220px;
 }
+.bi-preview-table-cell {
+  min-height: 25px;
+  min-width: 80px;
+  max-width: 220px;
+}
+
+.bi-preview-table-header-cell {
+  font-weight: bold;
+  min-height: 25px;
+  min-width: 80px;
+  max-width: 220px;
+}
+
 .bi-preview-table {
   -webkit-user-select: text;
   -khtml-user-select: text;
@@ -225,7 +365,7 @@
 }
 .bi-theme-dark .bi-preview-table > div > table > thead > tr.odd,
 .bi-theme-dark .bi-preview-table > div > div > div > table > thead > tr.odd {
-  background-color: #191b2b;
+  background-color: #191B2B;
 }
 .bi-preview-table-header-cell {
   font-weight: bold;
@@ -237,6 +377,21 @@
   -webkit-border-radius: 2px;
   -moz-border-radius: 2px;
   border-radius: 2px;
+}
+.bi-quarter-trigger {
+  -webkit-border-radius: 2px;
+  -moz-border-radius: 2px;
+  border-radius: 2px;
+}
+
+.bi-relation-view-region .relation-view-region-container {
+  z-index: 1;
+  -webkit-border-radius: 2px;
+  -moz-border-radius: 2px;
+  border-radius: 2px;
+}
+.bi-relation-view-region .relation-view-region-container.other-package {
+  border-style: dashed;
 }
 .bi-relation-view-region .relation-view-region-container {
   z-index: 1;
@@ -261,6 +416,52 @@
   /*W3C标准(IE9+，Safari5.1+,Chrome10.0+,Opera10.6+都符合box-sizing的w3c标准语法)*/
 }
 .bi-sequence-table-dynamic-number .sequence-table-number-cell {
+  -webkit-box-sizing: border-box;
+  /*Safari3.2+*/
+  -moz-box-sizing: border-box;
+  /*Firefox3.5+*/
+  -ms-box-sizing: border-box;
+  /*IE8*/
+  box-sizing: border-box;
+  /*W3C标准(IE9+，Safari5.1+,Chrome10.0+,Opera10.6+都符合box-sizing的w3c标准语法)*/
+}
+.bi-sequence-table-dynamic-number .sequence-table-title-cell {
+  overflow: hidden;
+  overflow-x: hidden;
+  overflow-y: hidden;
+  -webkit-box-sizing: border-box;
+  /*Safari3.2+*/
+  -moz-box-sizing: border-box;
+  /*Firefox3.5+*/
+  -ms-box-sizing: border-box;
+  /*IE8*/
+  box-sizing: border-box;
+  /*W3C标准(IE9+，Safari5.1+,Chrome10.0+,Opera10.6+都符合box-sizing的w3c标准语法)*/
+}
+.bi-sequence-table-dynamic-number .sequence-table-number-cell {
+  -webkit-box-sizing: border-box;
+  /*Safari3.2+*/
+  -moz-box-sizing: border-box;
+  /*Firefox3.5+*/
+  -ms-box-sizing: border-box;
+  /*IE8*/
+  box-sizing: border-box;
+  /*W3C标准(IE9+，Safari5.1+,Chrome10.0+,Opera10.6+都符合box-sizing的w3c标准语法)*/
+}
+.bi-sequence-table-list-number .sequence-table-title-cell {
+  overflow: hidden;
+  overflow-x: hidden;
+  overflow-y: hidden;
+  -webkit-box-sizing: border-box;
+  /*Safari3.2+*/
+  -moz-box-sizing: border-box;
+  /*Firefox3.5+*/
+  -ms-box-sizing: border-box;
+  /*IE8*/
+  box-sizing: border-box;
+  /*W3C标准(IE9+，Safari5.1+,Chrome10.0+,Opera10.6+都符合box-sizing的w3c标准语法)*/
+}
+.bi-sequence-table-list-number .sequence-table-number-cell {
   -webkit-box-sizing: border-box;
   /*Safari3.2+*/
   -moz-box-sizing: border-box;
@@ -316,6 +517,36 @@
   box-sizing: border-box;
   /*W3C标准(IE9+，Safari5.1+,Chrome10.0+,Opera10.6+都符合box-sizing的w3c标准语法)*/
 }
+.bi-sequence-table-tree-number .sequence-table-title-cell {
+  overflow: hidden;
+  overflow-x: hidden;
+  overflow-y: hidden;
+  -webkit-box-sizing: border-box;
+  /*Safari3.2+*/
+  -moz-box-sizing: border-box;
+  /*Firefox3.5+*/
+  -ms-box-sizing: border-box;
+  /*IE8*/
+  box-sizing: border-box;
+  /*W3C标准(IE9+，Safari5.1+,Chrome10.0+,Opera10.6+都符合box-sizing的w3c标准语法)*/
+}
+.bi-sequence-table-tree-number .sequence-table-number-cell {
+  -webkit-box-sizing: border-box;
+  /*Safari3.2+*/
+  -moz-box-sizing: border-box;
+  /*Firefox3.5+*/
+  -ms-box-sizing: border-box;
+  /*IE8*/
+  box-sizing: border-box;
+  /*W3C标准(IE9+，Safari5.1+,Chrome10.0+,Opera10.6+都符合box-sizing的w3c标准语法)*/
+}
+.bi-single-slider-label {
+  min-height: 50px;
+}
+
+.bi-single-slider-normal {
+  min-height: 30px;
+}
 .bi-single-slider-label {
   min-height: 50px;
 }
@@ -333,6 +564,27 @@
   -webkit-border-radius: 7px;
   -moz-border-radius: 7px;
   border-radius: 7px;
+}
+.bi-single-slider-button .slider-button {
+  cursor: ew-resize;
+  -webkit-box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+  -moz-box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+  -webkit-border-radius: 7px;
+  -moz-border-radius: 7px;
+  border-radius: 7px;
+}
+.bi-slider-track .gray-track {
+  background-color: rgba(153, 153, 153, 0.3);
+  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr=#4d999999,endColorstr=#4d999999);
+  -webkit-border-radius: 3px;
+  -moz-border-radius: 3px;
+  border-radius: 3px;
+}
+.bi-slider-track .blue-track {
+  -webkit-border-radius: 3px;
+  -moz-border-radius: 3px;
+  border-radius: 3px;
 }
 .bi-slider-track .gray-track {
   background-color: rgba(153, 153, 153, 0.3);
@@ -366,6 +618,26 @@
 }
 .bi-theme-dark .bi-year-popup .year-popup-navigation > .first-element {
   border-left: none;
+}
+.bi-year-popup .year-popup-navigation {
+  line-height: 30px;
+}
+.bi-year-popup .year-popup-navigation > .center-element {
+  border-left: 1px solid #d4dadd;
+}
+.bi-year-popup .year-popup-navigation > .first-element {
+  border-left: none;
+}
+.bi-theme-dark .bi-year-popup .year-popup-navigation > .center-element {
+  border-left: 1px solid #525466;
+}
+.bi-theme-dark .bi-year-popup .year-popup-navigation > .first-element {
+  border-left: none;
+}
+.bi-year-trigger {
+  -webkit-border-radius: 2px;
+  -moz-border-radius: 2px;
+  border-radius: 2px;
 }
 .bi-year-trigger {
   -webkit-border-radius: 2px;

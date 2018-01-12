@@ -5845,7 +5845,8 @@ BI.TextValueCombo = BI.inherit(BI.Widget, {
         this.trigger = BI.createWidget(o.el, {
             type: "bi.select_text_trigger",
             items: o.items,
-            height: o.height
+            height: o.height,
+            text: o.value
         });
         this.popup = BI.createWidget({
             type: "bi.text_value_combo_popup",
@@ -8021,8 +8022,8 @@ BI.Panel = BI.inherit(BI.Widget, {
         return {
             el: {
                 type: "bi.left_right_vertical_adapt",
-                cls: "panel-title bi-tips bi-border-bottom bi-background",
-                height: 30,
+                cls: "panel-title bi-border-bottom bi-background",
+                height: 29,
                 items: {
                     left: [this.text],
                     right: [this.button_group]
