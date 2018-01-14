@@ -611,45 +611,6 @@
   }
 }
 
-// 文字和背景hover和active时变化(红)
-.bi-list-item-active3 {
-  &:hover, &.hover {
-    color: @color-bi-text-failure;
-    & .bi-input {
-      color: @color-bi-text-failure;
-    }
-    & .bi-textarea {
-      color: @color-bi-text-failure;
-    }
-    background-color: @color-bi-background-light-failure;
-  }
-  &.active, &:active {
-    color: @color-bi-text;
-    & .bi-input {
-      color: @color-bi-text;
-    }
-    & .bi-textarea {
-      color: @color-bi-text;
-    }
-    background-color: @color-bi-background-failure;
-  }
-  &.disabled {
-    &, &:hover, &:active {
-      background-color: transparent !important;
-      color: @color-bi-text-disabled !important;
-      & .bi-input {
-        color: @color-bi-text-disabled !important;
-      }
-      & .bi-textarea {
-        color: @color-bi-text-disabled !important;
-      }
-      & .bi-high-light {
-        color: @color-bi-text-disabled !important;
-      }
-    }
-  }
-}
-
 //有选中效果
 .bi-list-item-select {
   &:hover, &.hover {
@@ -679,8 +640,17 @@
     &:active, &.active {
       color: @color-bi-text;
       background-color: @color-bi-background-success;
+      & .bi-input {
+        color: @color-bi-text;
+      }
+      & .bi-textarea {
+        color: @color-bi-text;
+      }
       & .bi-high-light {
         color: @color-bi-text;
+      }
+      &.bi-high-light-border {
+        border-color: @color-bi-border-success;
       }
     }
   }
@@ -696,7 +666,7 @@
       & .bi-high-light {
         color: @color-bi-text-failure;
       }
-      &.bi-high-light-border{
+      &.bi-high-light-border {
         border-color: @color-bi-border-failure;
       }
     }
@@ -712,7 +682,7 @@
       & .bi-high-light {
         color: @color-bi-text-failure;
       }
-      &.bi-high-light-border{
+      &.bi-high-light-border {
         border-color: @color-bi-border-failure;
       }
     }
@@ -728,7 +698,7 @@
       & .bi-high-light {
         color: @color-bi-text;
       }
-      &.bi-high-light-border{
+      &.bi-high-light-border {
         border-color: @color-bi-border-failure;
       }
     }
@@ -746,7 +716,7 @@
       & .bi-high-light {
         color: @color-bi-text-disabled !important;
       }
-      &.bi-high-light-border{
+      &.bi-high-light-border {
         border-color: @color-bi-border-disabled;
       }
     }
