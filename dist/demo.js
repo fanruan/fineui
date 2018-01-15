@@ -843,6 +843,7 @@ Demo.SQLEditor = BI.inherit(BI.Widget, {
         var self = this;
         this.formula = BI.createWidget({
             type : 'bi.sql_editor',
+            supportParam: true,
             width : 300,
             height : 200,
             value : "select * from DEMO_CONTRACT where 合同类型 = ${长期协议} and 购买数量 = sum([1,2,3,4])"
