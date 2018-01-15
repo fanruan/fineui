@@ -35,6 +35,7 @@ Demo.Editor = BI.inherit(BI.Widget, {
             cls: "mvc-border",
             watermark: "输入'a'会有错误信息且回车键不能退出编辑",
             errorText: "字段不可重名",
+            value: "a",
             validationChecker: function (v) {
                 if (v == "a") {
                     return false;

@@ -26812,6 +26812,7 @@ BI.ButtonGroup = BI.inherit(BI.Widget, {
             baseCls: "bi-button-group",
             behaviors: {},
             items: [],
+            value: "",
             chooseType: BI.Selection.Single,
             layouts: [{
                 type: "bi.center",
@@ -26823,14 +26824,18 @@ BI.ButtonGroup = BI.inherit(BI.Widget, {
 
     _init: function () {
         BI.ButtonGroup.superclass._init.apply(this, arguments);
+        var o = this.options;
         var behaviors = {};
-        BI.each(this.options.behaviors, function (key, rule) {
+        BI.each(o.behaviors, function (key, rule) {
             behaviors[key] = BI.BehaviorFactory.createBehavior(key, {
                 rule: rule
             });
         });
         this.behaviors = behaviors;
-        this.populate(this.options.items);
+        this.populate(o.items);
+        if(BI.isKey(o.value) || BI.isNotEmptyArray(o.value)){
+            this.setValue(o.value);
+        }
     },
 
     _createBtns: function (items) {
@@ -43861,6 +43866,7 @@ BI.Editor = BI.inherit(BI.Single, {
             type: "bi.input",
             element: "<input type='" + o.inputType + "'/>",
             root: true,
+            value: o.value,
             watermark: o.watermark,
             validationChecker: o.validationChecker,
             quitChecker: o.quitChecker,
@@ -44003,7 +44009,8 @@ BI.Editor = BI.inherit(BI.Single, {
             return false;
         });
         if (BI.isKey(this.options.value) || BI.isEmptyString(this.options.value)) {
-            this.setValue(this.options.value);
+            this._checkError();
+            this._checkWaterMark();
         } else {
             this._checkWaterMark();
         }
@@ -45207,6 +45214,9 @@ BI.Input = BI.inherit(BI.Single, {
             .focusout(function (e) {
                 self._blurDebounce();
             });
+        if (BI.isKey(this.options.value) || BI.isEmptyString(this.options.value)) {
+            this.setValue(this.options.value);
+        }
     },
 
     _focus: function () {
@@ -67730,6 +67740,7 @@ BI.StaticCombo = BI.inherit(BI.Widget, {
             type: "bi.text_icon_item",
             cls: "bi-select-text-trigger bi-border pull-down-font",
             text: o.text,
+            value: o.value,
             readonly: true,
             textLgap: 5,
             height: o.height - 2
@@ -67738,7 +67749,8 @@ BI.StaticCombo = BI.inherit(BI.Widget, {
             type: "bi.text_value_combo_popup",
             textAlign: o.textAlign,
             chooseType: o.chooseType,
-            items: o.items
+            items: o.items,
+            value: o.value
         });
         this.popup.on(BI.Controller.EVENT_CHANGE, function () {
             self.fireEvent(BI.Controller.EVENT_CHANGE, arguments);
@@ -68122,7 +68134,8 @@ BI.shortcut("bi.small_text_value_combo", BI.SmallTextValueCombo);BI.TextValueCom
             chooseType: o.chooseType,
             layouts: [{
                 type: "bi.vertical"
-            }]
+            }],
+            value: o.value
         });
 
         this.popup.on(BI.Controller.EVENT_CHANGE, function (type, val, obj) {
