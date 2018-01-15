@@ -18577,27 +18577,13 @@ BI.LayerController = BI.inherit(BI.Controller, {
     },
 
     make: function (name, container, op) {
-        if (this.has(name)) {
-            return this.get(name);
+        if (BI.isWidget(container)) {
+            op = op || {};
+            op.container = container;
+        } else {
+            op = container;
         }
-        op || (op = {});
-        var widget = BI.createWidget((op.render || {}), {
-            type: "bi.layout"
-        });
-        BI.createWidget({
-            type: "bi.absolute",
-            element: container || this.options.render,
-            items: [BI.extend({
-                el: widget
-            }, {
-                top: 0,
-                left: 0,
-                right: 0,
-                bottom: 0
-            }, op.offset)]
-        });
-        this.add(name, widget, widget);
-        return widget;
+        return this.create(name, null, op);
     },
 
     create: function (name, from, op) {
@@ -28096,7 +28082,6 @@ BI.BasicButton = BI.inherit(BI.Single, {
             forceSelected: false, // 点击即选中, 选中了就不会被取消,与once的区别是forceSelected不影响事件的触发
             forceNotSelected: false, // 无论怎么点击都不会被选中
             disableSelected: false, // 使能选中
-            level: "common",
 
             shadow: false,
             isShadowShowingOnSelected: false,  // 选中状态下是否显示阴影
@@ -28117,7 +28102,9 @@ BI.BasicButton = BI.inherit(BI.Single, {
         if (opts.shadow) {
             this._createShadow();
         }
-        this.element.addClass("button-" + opts.level);
+        if (opts.level) {
+            this.element.addClass("button-" + opts.level);
+        }
     },
 
     _createShadow: function () {
@@ -43918,6 +43905,7 @@ BI.shortcut("bi.image_button", BI.ImageButton);(function ($) {
                 isShadowShowingOnSelected: true,
                 readonly: true,
                 iconClass: "",
+                level: "common",
                 block: false, // 是否块状显示，即不显示边框，没有最小宽度的限制
                 clear: false, // 是否去掉边框和背景
                 textAlign: "center",
