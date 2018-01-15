@@ -1,3 +1,11 @@
+input,
+textarea {
+  border: 1px solid #d4dadd;
+}
+.bi-theme-dark input,
+.bi-theme-dark textarea {
+  border: 1px solid #525466;
+}
 .base-disabled {
   cursor: default !important;
   color: #9ea6b2 !important;
