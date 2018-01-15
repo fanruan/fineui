@@ -1115,6 +1115,9 @@ body .bi-button.button-ignore.disabled.clear:active,
 .bi-textarea-editor .textarea-editor-content {
   border: none;
 }
+.x-icon.b-font {
+  margin: auto;
+}
 .bi-file {
   opacity: 0;
   filter: alpha(opacity=0);
