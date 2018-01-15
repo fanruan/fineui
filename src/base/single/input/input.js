@@ -57,6 +57,9 @@ BI.Input = BI.inherit(BI.Single, {
             .focusout(function (e) {
                 self._blurDebounce();
             });
+        if (BI.isKey(this.options.value) || BI.isEmptyString(this.options.value)) {
+            this.setValue(this.options.value);
+        }
     },
 
     _focus: function () {

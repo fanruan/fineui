@@ -32,6 +32,7 @@ BI.Editor = BI.inherit(BI.Single, {
             type: "bi.input",
             element: "<input type='" + o.inputType + "'/>",
             root: true,
+            value: o.value,
             watermark: o.watermark,
             validationChecker: o.validationChecker,
             quitChecker: o.quitChecker,
@@ -174,7 +175,8 @@ BI.Editor = BI.inherit(BI.Single, {
             return false;
         });
         if (BI.isKey(this.options.value) || BI.isEmptyString(this.options.value)) {
-            this.setValue(this.options.value);
+            this._checkError();
+            this._checkWaterMark();
         } else {
             this._checkWaterMark();
         }

@@ -19,7 +19,8 @@ BI.TextValueComboPopup = BI.inherit(BI.Pane, {
             chooseType: o.chooseType,
             layouts: [{
                 type: "bi.vertical"
-            }]
+            }],
+            value: o.value
         });
 
         this.popup.on(BI.Controller.EVENT_CHANGE, function (type, val, obj) {

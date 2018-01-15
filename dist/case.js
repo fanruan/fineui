@@ -5584,6 +5584,7 @@ BI.StaticCombo = BI.inherit(BI.Widget, {
             type: "bi.text_icon_item",
             cls: "bi-select-text-trigger bi-border pull-down-font",
             text: o.text,
+            value: o.value,
             readonly: true,
             textLgap: 5,
             height: o.height - 2
@@ -5592,7 +5593,8 @@ BI.StaticCombo = BI.inherit(BI.Widget, {
             type: "bi.text_value_combo_popup",
             textAlign: o.textAlign,
             chooseType: o.chooseType,
-            items: o.items
+            items: o.items,
+            value: o.value
         });
         this.popup.on(BI.Controller.EVENT_CHANGE, function () {
             self.fireEvent(BI.Controller.EVENT_CHANGE, arguments);
@@ -5976,7 +5978,8 @@ BI.shortcut("bi.small_text_value_combo", BI.SmallTextValueCombo);BI.TextValueCom
             chooseType: o.chooseType,
             layouts: [{
                 type: "bi.vertical"
-            }]
+            }],
+            value: o.value
         });
 
         this.popup.on(BI.Controller.EVENT_CHANGE, function (type, val, obj) {
