@@ -67603,6 +67603,7 @@ BI.IconTextValueCombo = BI.inherit(BI.Widget, {
             type: "bi.select_icon_text_trigger",
             items: o.items,
             height: o.height,
+            text: o.text,
             value: o.value
         });
         this.popup = BI.createWidget({
@@ -75956,7 +75957,7 @@ BI.SelectIconTextTrigger = BI.inherit(BI.Trigger, {
             };
         } else {
             return {
-                text: o.value,
+                text: o.text,
                 iconClass: ""
             };
         }

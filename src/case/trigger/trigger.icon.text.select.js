@@ -46,7 +46,7 @@ BI.SelectIconTextTrigger = BI.inherit(BI.Trigger, {
             };
         } else {
             return {
-                text: o.value,
+                text: o.text,
                 iconClass: ""
             };
         }
