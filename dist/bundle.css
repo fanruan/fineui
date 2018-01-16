@@ -264,11 +264,6 @@ textarea {
   margin: 0;
   padding: 0;
   outline: none;
-  border: 1px solid #d4dadd;
-}
-.bi-theme-dark input,
-.bi-theme-dark textarea {
-  border: 1px solid #525466;
 }
 ul {
   list-style: disc;
@@ -280,6 +275,14 @@ i {
   -webkit-font-smoothing: antialiased;
   -webkit-text-stroke-width: 0.2px;
   -moz-osx-font-smoothing: grayscale;
+}
+input,
+textarea {
+  border: 1px solid #d4dadd;
+}
+.bi-theme-dark input,
+.bi-theme-dark textarea {
+  border: 1px solid #525466;
 }
 .base-disabled {
   cursor: default !important;
@@ -1320,9 +1323,6 @@ i {
   -o-align-items: center;
   align-items: center;
 }
-.bi-flex-center-layout > * {
-  margin: auto;
-}
 .bi-flex-center-layout {
   display: box;
   /* OLD - Android 4.4- */
@@ -1363,9 +1363,6 @@ i {
   -o-align-items: center;
   align-items: center;
 }
-.bi-flex-center-layout > * {
-  margin: auto;
-}
 
 .bi-flex-horizontal-layout {
   display: box;
@@ -1436,9 +1433,6 @@ i {
   -ms-flex-align: end;
   -o-align-items: flex-end;
   align-items: flex-end;
-}
-.bi-flex-horizontal-layout > * {
-  margin: auto;
 }
 
 .bi-flex-vertical-center {
@@ -1517,9 +1511,6 @@ i {
   -o-align-items: stretch;
   align-items: stretch;
 }
-.bi-flex-vertical-center > * {
-  margin: auto;
-}
 
 .bi-flex-wrapper-center-layout .flex-wrapper-center-layout-wrapper {
   display: box;
@@ -1563,9 +1554,6 @@ i {
   min-width: 100%;
   min-height: 100%;
   float: left;
-}
-.bi-flex-wrapper-center-layout > * {
-  margin: auto;
 }
 
 .bi-flex-wrapper-horizontal-layout .flex-wrapper-horizontal-layout-wrapper {
@@ -1636,9 +1624,6 @@ i {
   -ms-align-items: flex-end;
   -o-align-items: flex-end;
   align-items: flex-end;
-}
-.bi-flex-wrapper-horizontal-layout .flex-wrapper-horizontal-layout-wrapper > * {
-  margin: auto;
 }
 
 .bi-flex-wrapper-vertical-center .flex-wrapper-vertical-center-wrapper {
@@ -1718,9 +1703,6 @@ i {
   -o-align-items: stretch;
   align-items: stretch;
 }
-.bi-flex-wrapper-vertical-center .flex-wrapper-vertical-center-wrapper > * {
-  margin: auto;
-}
 .bi-flex-horizontal-layout {
   display: box;
   /* OLD - Android 4.4- */
@@ -1790,9 +1772,6 @@ i {
   -ms-flex-align: end;
   -o-align-items: flex-end;
   align-items: flex-end;
-}
-.bi-flex-horizontal-layout > * {
-  margin: auto;
 }
 .bi-flex-vertical-center {
   display: box;
@@ -1870,9 +1849,6 @@ i {
   -o-align-items: stretch;
   align-items: stretch;
 }
-.bi-flex-vertical-center > * {
-  margin: auto;
-}
 .bi-flex-wrapper-center-layout .flex-wrapper-center-layout-wrapper {
   display: box;
   /* OLD - Android 4.4- */
@@ -1915,9 +1891,6 @@ i {
   min-width: 100%;
   min-height: 100%;
   float: left;
-}
-.bi-flex-wrapper-center-layout > * {
-  margin: auto;
 }
 .bi-flex-wrapper-horizontal-layout .flex-wrapper-horizontal-layout-wrapper {
   display: box;
@@ -1987,9 +1960,6 @@ i {
   -ms-align-items: flex-end;
   -o-align-items: flex-end;
   align-items: flex-end;
-}
-.bi-flex-wrapper-horizontal-layout .flex-wrapper-horizontal-layout-wrapper > * {
-  margin: auto;
 }
 .bi-flex-wrapper-vertical-center .flex-wrapper-vertical-center-wrapper {
   display: box;
@@ -2067,38 +2037,6 @@ i {
   -ms-align-items: stretch;
   -o-align-items: stretch;
   align-items: stretch;
-}
-.bi-flex-wrapper-vertical-center .flex-wrapper-vertical-center-wrapper > * {
-  margin: auto;
-}
-.bi-inline-center-adapt-layout:after {
-  display: inline-block;
-  width: 0;
-  min-height: 100%;
-  vertical-align: middle;
-  content: ' ';
-}
-.bi-inline-center-adapt-layout:after {
-  display: inline-block;
-  width: 0;
-  min-height: 100%;
-  vertical-align: middle;
-  content: ' ';
-}
-
-.bi-inline-vertical-adapt-layout:after {
-  display: inline-block;
-  width: 0;
-  min-height: 100%;
-  vertical-align: middle;
-  content: ' ';
-}
-.bi-inline-vertical-adapt-layout:after {
-  display: inline-block;
-  width: 0;
-  min-height: 100%;
-  vertical-align: middle;
-  content: ' ';
 }
 .bi-theme-dark {
   background-color: #191B2B;
@@ -3223,6 +3161,9 @@ body .bi-button.button-ignore.disabled.clear:active,
 }
 .bi-textarea-editor .textarea-editor-content {
   border: none;
+}
+.x-icon.b-font {
+  margin: auto;
 }
 .bi-file {
   opacity: 0;
