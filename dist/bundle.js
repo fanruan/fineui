@@ -74555,25 +74555,31 @@ BI.MultiSelectBar = BI.inherit(BI.BasicButton, {
             disableSelected: true,
             isHalfCheckedBySelectedValue: function (selectedValues) {
                 return selectedValues.length > 0;
-            }
+            },
+            halfSelected: false
         });
     },
     _init: function () {
         BI.MultiSelectBar.superclass._init.apply(this, arguments);
         var self = this, o = this.options;
+        var isSelect = o.selected === true;
+        var isHalfSelect = !o.selected && o.halfSelected;
         this.checkbox = BI.createWidget({
             type: "bi.checkbox",
             stopPropagation: true,
             handler: function () {
                 self.setSelected(self.isSelected());
-            }
+            },
+            selected: isSelect,
+            invisible: isHalfSelect
         });
         this.half = BI.createWidget({
             type: "bi.half_icon_button",
             stopPropagation: true,
             handler: function () {
                 self.setSelected(true);
-            }
+            },
+            invisible: isSelect || !isHalfSelect
         });
         this.checkbox.on(BI.Controller.EVENT_CHANGE, function () {
             self.fireEvent(BI.Controller.EVENT_CHANGE, BI.Events.CLICK, self.isSelected(), self);
@@ -74612,7 +74618,10 @@ BI.MultiSelectBar = BI.inherit(BI.BasicButton, {
                 el: this.text
             }]
         });
-        this.half.invisible();
+    },
+
+    _setSelected: function (v) {
+        this.checkbox.setSelected(!!v);
     },
 
     // 自己手动控制选中
@@ -74631,8 +74640,9 @@ BI.MultiSelectBar = BI.inherit(BI.BasicButton, {
     },
 
     setHalfSelected: function (b) {
-        this._half = !!b;
+        this.halfSelected = !!b;
         if (b === true) {
+            this.checkbox.setSelected(false);
             this.half.visible();
             this.checkbox.invisible();
         } else {
@@ -74642,7 +74652,7 @@ BI.MultiSelectBar = BI.inherit(BI.BasicButton, {
     },
 
     isHalfSelected: function () {
-        return !!this._half;
+        return !this.isSelected() && !!this.halfSelected;
     },
 
     isSelected: function () {
@@ -74652,7 +74662,7 @@ BI.MultiSelectBar = BI.inherit(BI.BasicButton, {
     setValue: function (selectedValues) {
         BI.MultiSelectBar.superclass.setValue.apply(this, arguments);
         var isAllChecked = this.options.isAllCheckedBySelectedValue.apply(this, arguments);
-        this.setSelected(isAllChecked);
+        this._setSelected(isAllChecked);
         !isAllChecked && this.setHalfSelected(this.options.isHalfCheckedBySelectedValue.apply(this, arguments));
     }
 });

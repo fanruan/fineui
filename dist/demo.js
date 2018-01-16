@@ -196,6 +196,28 @@ $(function () {
                     iconClass: "close-font",
                     height: 30
                 }
+            }, {
+                el: {
+                    type: "bi.multi_select_bar",
+                    selected: true,
+                    halfSelected: true
+                }
+            }, {
+                el: {
+                    type: "bi.multi_select_bar",
+                    selected: true,
+                    halfSelected: false
+                }
+            }, {
+                el: {
+                    type: "bi.multi_select_bar",
+                    selected: false,
+                    halfSelected: true
+                }
+            }, {
+                el: {
+                    type: "bi.multi_select_bar"
+                }
             }
         ];
         BI.each(items, function (i, item) {
