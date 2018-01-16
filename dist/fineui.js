@@ -43999,7 +43999,7 @@ BI.shortcut("bi.image_button", BI.ImageButton);(function ($) {
                 shadow: props.clear !== true,
                 isShadowShowingOnSelected: true,
                 readonly: true,
-                iconClass: "",
+                iconCls: "",
                 level: "common",
                 block: false, // 是否块状显示，即不显示边框，没有最小宽度的限制
                 clear: false, // 是否去掉边框和背景
@@ -44025,7 +44025,7 @@ BI.shortcut("bi.image_button", BI.ImageButton);(function ($) {
             } else {
                 this.element.css({lineHeight: o.height + "px"});
             }
-            if (BI.isKey(o.iconClass)) {
+            if (BI.isKey(o.iconCls)) {
                 this.icon = BI.createWidget({
                     type: "bi.icon",
                     width: 18
@@ -44037,7 +44037,7 @@ BI.shortcut("bi.image_button", BI.ImageButton);(function ($) {
                 });
                 BI.createWidget({
                     type: "bi.horizontal_auto",
-                    cls: o.iconClass,
+                    cls: o.iconCls,
                     element: this,
                     hgap: o.hgap,
                     vgap: o.vgap,
@@ -63945,7 +63945,7 @@ BI.IconChangeButton = BI.inherit(BI.Single, {
         var conf = BI.IconChangeButton.superclass._defaultConfig.apply(this, arguments);
         return BI.extend(conf, {
             baseCls: "bi-icon-change-button",
-            iconClass: "",
+            iconCls: "",
             iconWidth: null,
             iconHeight: null,
 
@@ -63970,7 +63970,7 @@ BI.IconChangeButton = BI.inherit(BI.Single, {
         this.button = BI.createWidget({
             type: "bi.icon_button",
             element: this,
-            cls: o.iconClass,
+            cls: o.iconCls,
             height: o.height,
             iconWidth: o.iconWidth,
             iconHeight: o.iconHeight,
@@ -64007,9 +64007,9 @@ BI.IconChangeButton = BI.inherit(BI.Single, {
 
     setIcon: function (cls) {
         var o = this.options;
-        if (o.iconClass !== cls) {
-            this.element.removeClass(o.iconClass).addClass(cls);
-            o.iconClass = cls;
+        if (o.iconCls !== cls) {
+            this.element.removeClass(o.iconCls).addClass(cls);
+            o.iconCls = cls;
         }
     }
 });
@@ -64158,8 +64158,7 @@ BI.SingleSelectIconTextItem = BI.inherit(BI.Single, {
     _defaultConfig: function () {
         return BI.extend(BI.SingleSelectIconTextItem.superclass._defaultConfig.apply(this, arguments), {
             extraCls: "bi-single-select-icon-text-item bi-list-item-active",
-            iconClass: "",
-            hgap: 10,
+            iconCls: "",
             height: 25
         });
     },
@@ -64169,7 +64168,7 @@ BI.SingleSelectIconTextItem = BI.inherit(BI.Single, {
         this.text = BI.createWidget({
             type: "bi.icon_text_item",
             element: this,
-            cls: o.iconClass,
+            cls: o.iconCls,
             once: o.once,
             selected: o.selected,
             height: o.height,
@@ -69137,7 +69136,7 @@ BI.IconCombo = BI.inherit(BI.Widget, {
             baseCls: "bi-icon-combo",
             width: 24,
             height: 24,
-            iconClass: "",
+            iconCls: "",
             el: {},
             popup: {},
             minWidth: 100,
@@ -69157,7 +69156,7 @@ BI.IconCombo = BI.inherit(BI.Widget, {
         var self = this, o = this.options;
         this.trigger = BI.createWidget(o.el, {
             type: "bi.icon_combo_trigger",
-            iconClass: o.iconClass,
+            iconCls: o.iconCls,
             title: o.title,
             items: o.items,
             width: o.width,
@@ -69294,7 +69293,7 @@ BI.IconComboTrigger = BI.inherit(BI.Trigger, {
             extraCls: "bi-icon-combo-trigger",
             el: {},
             items: [],
-            iconClass: "",
+            iconCls: "",
             width: 25,
             height: 25,
             isShowDown: true
@@ -69306,7 +69305,7 @@ BI.IconComboTrigger = BI.inherit(BI.Trigger, {
         var o = this.options, self = this;
         this.button = BI.createWidget(o.el, {
             type: "bi.icon_change_button",
-            cls: "icon-combo-trigger-icon " + o.iconClass,
+            cls: "icon-combo-trigger-icon " + o.iconCls,
             disableSelected: true,
             width: o.width,
             height: o.height,
@@ -69344,7 +69343,7 @@ BI.IconComboTrigger = BI.inherit(BI.Trigger, {
     populate: function (items) {
         var o = this.options;
         this.options.items = items || [];
-        this.button.setIcon(o.iconClass);
+        this.button.setIcon(o.iconCls);
         this.button.setSelected(false);
         this.down.setSelected(false);
     },
@@ -69352,19 +69351,19 @@ BI.IconComboTrigger = BI.inherit(BI.Trigger, {
     setValue: function (v) {
         BI.IconComboTrigger.superclass.setValue.apply(this, arguments);
         var o = this.options;
-        var iconClass = "";
+        var iconCls = "";
         v = BI.isArray(v) ? v[0] : v;
         if (BI.any(this.options.items, function (i, item) {
             if (v === item.value) {
-                iconClass = item.iconClass;
+                iconCls = item.iconCls;
                 return true;
             }
         })) {
-            this.button.setIcon(iconClass);
+            this.button.setIcon(iconCls);
             this.button.setSelected(true);
             this.down.setSelected(true);
         } else {
-            this.button.setIcon(o.iconClass);
+            this.button.setIcon(o.iconCls);
             this.button.setSelected(false);
             this.down.setSelected(false);
         }
@@ -77655,7 +77654,7 @@ BI.IconTextTrigger = BI.inherit(BI.Trigger, {
             items: [{
                 el: {
                     type: "bi.icon_change_button",
-                    cls: "icon-combo-trigger-icon " + o.iconClass,
+                    cls: "icon-combo-trigger-icon " + o.iconCls,
                     ref: function (_ref) {
                         self.icon = _ref;
                     },
@@ -77719,11 +77718,11 @@ BI.SelectIconTextTrigger = BI.inherit(BI.Trigger, {
             type: "bi.icon_text_trigger",
             element: this,
             text: obj.text,
-            iconClass: obj.iconClass,
+            iconCls: obj.iconCls,
             height: o.height
         });
     },
-    
+
     _digist: function (vals, items) {
         var o = this.options;
         vals = BI.isArray(vals) ? vals : [vals];
@@ -77733,7 +77732,7 @@ BI.SelectIconTextTrigger = BI.inherit(BI.Trigger, {
             if (BI.deepContains(vals, item.value)) {
                 result = {
                     text: item.text || item.value,
-                    iconClass: item.iconClass
+                    iconCls: item.iconCls
                 };
                 return true;
             }
@@ -77742,12 +77741,12 @@ BI.SelectIconTextTrigger = BI.inherit(BI.Trigger, {
         if (BI.isNotNull(result)) {
             return {
                 text: result.text,
-                iconClass: result.iconClass
+                iconCls: result.iconCls
             };
         } else {
             return {
                 text: o.text,
-                iconClass: ""
+                iconCls: ""
             };
         }
     },
@@ -77755,7 +77754,7 @@ BI.SelectIconTextTrigger = BI.inherit(BI.Trigger, {
     setValue: function (vals) {
         var obj = this._digist(vals, this.options.items);
         this.trigger.setText(obj.text);
-        this.trigger.setIcon(obj.iconClass);
+        this.trigger.setIcon(obj.iconCls);
     },
 
     populate: function (items) {
@@ -81450,8 +81449,7 @@ BI.DownListCombo = BI.inherit(BI.Widget, {
     _defaultConfig: function () {
         return BI.extend(BI.DownListCombo.superclass._defaultConfig.apply(this, arguments), {
             baseCls: "bi-down-list-combo",
-            invalid: false,
-            height: 25,
+            height: 24,
             items: [],
             adjustLength: 0,
             direction: "bottom",
@@ -90964,12 +90962,12 @@ BI.NumberInterval = BI.inherit(BI.Single, {
             height: o.height - 2,
             items: [{
                 text: "(" + BI.i18nText("BI-Less_Than") + ")",
-                iconClass: "less-font",
+                iconCls: "less-font",
                 value: 0
             }, {
                 text: "(" + BI.i18nText("BI-Less_And_Equal") + ")",
                 value: 1,
-                iconClass: "less-equal-font"
+                iconCls: "less-equal-font"
             }]
         });
         if (o.closemin === true) {
@@ -90983,12 +90981,12 @@ BI.NumberInterval = BI.inherit(BI.Single, {
             height: o.height - 2,
             items: [{
                 text: "(" + BI.i18nText("BI-Less_Than") + ")",
-                iconClass: "less-font",
+                iconCls: "less-font",
                 value: 0
             }, {
                 text: "(" + BI.i18nText("BI-Less_And_Equal") + ")",
                 value: 1,
-                iconClass: "less-equal-font"
+                iconCls: "less-equal-font"
             }]
         });
         if (o.closemax === true) {
@@ -91104,7 +91102,7 @@ BI.NumberInterval = BI.inherit(BI.Single, {
             self.element.removeClass("number-error");
             o.validation = "valid";
             return "";
-                    
+
         }
         if (smallValue > bigValue) {
             self.element.addClass("number-error");
@@ -91118,11 +91116,11 @@ BI.NumberInterval = BI.inherit(BI.Single, {
         self.element.removeClass("number-error");
         o.validation = "valid";
         return "";
-                    
-                
-            
 
-        
+
+
+
+
     },
 
     _setTitle: function (v) {

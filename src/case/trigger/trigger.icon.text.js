@@ -46,7 +46,7 @@ BI.IconTextTrigger = BI.inherit(BI.Trigger, {
             items: [{
                 el: {
                     type: "bi.icon_change_button",
-                    cls: "icon-combo-trigger-icon " + o.iconClass,
+                    cls: "icon-combo-trigger-icon " + o.iconCls,
                     ref: function (_ref) {
                         self.icon = _ref;
                     },

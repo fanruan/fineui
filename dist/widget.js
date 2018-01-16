@@ -3457,8 +3457,7 @@ BI.DownListCombo = BI.inherit(BI.Widget, {
     _defaultConfig: function () {
         return BI.extend(BI.DownListCombo.superclass._defaultConfig.apply(this, arguments), {
             baseCls: "bi-down-list-combo",
-            invalid: false,
-            height: 25,
+            height: 24,
             items: [],
             adjustLength: 0,
             direction: "bottom",
@@ -12971,12 +12970,12 @@ BI.NumberInterval = BI.inherit(BI.Single, {
             height: o.height - 2,
             items: [{
                 text: "(" + BI.i18nText("BI-Less_Than") + ")",
-                iconClass: "less-font",
+                iconCls: "less-font",
                 value: 0
             }, {
                 text: "(" + BI.i18nText("BI-Less_And_Equal") + ")",
                 value: 1,
-                iconClass: "less-equal-font"
+                iconCls: "less-equal-font"
             }]
         });
         if (o.closemin === true) {
@@ -12990,12 +12989,12 @@ BI.NumberInterval = BI.inherit(BI.Single, {
             height: o.height - 2,
             items: [{
                 text: "(" + BI.i18nText("BI-Less_Than") + ")",
-                iconClass: "less-font",
+                iconCls: "less-font",
                 value: 0
             }, {
                 text: "(" + BI.i18nText("BI-Less_And_Equal") + ")",
                 value: 1,
-                iconClass: "less-equal-font"
+                iconCls: "less-equal-font"
             }]
         });
         if (o.closemax === true) {
@@ -13111,7 +13110,7 @@ BI.NumberInterval = BI.inherit(BI.Single, {
             self.element.removeClass("number-error");
             o.validation = "valid";
             return "";
-                    
+
         }
         if (smallValue > bigValue) {
             self.element.addClass("number-error");
@@ -13125,11 +13124,11 @@ BI.NumberInterval = BI.inherit(BI.Single, {
         self.element.removeClass("number-error");
         o.validation = "valid";
         return "";
-                    
-                
-            
 
-        
+
+
+
+
     },
 
     _setTitle: function (v) {

@@ -19,11 +19,11 @@ BI.SelectIconTextTrigger = BI.inherit(BI.Trigger, {
             type: "bi.icon_text_trigger",
             element: this,
             text: obj.text,
-            iconClass: obj.iconClass,
+            iconCls: obj.iconCls,
             height: o.height
         });
     },
-    
+
     _digist: function (vals, items) {
         var o = this.options;
         vals = BI.isArray(vals) ? vals : [vals];
@@ -33,7 +33,7 @@ BI.SelectIconTextTrigger = BI.inherit(BI.Trigger, {
             if (BI.deepContains(vals, item.value)) {
                 result = {
                     text: item.text || item.value,
-                    iconClass: item.iconClass
+                    iconCls: item.iconCls
                 };
                 return true;
             }
@@ -42,12 +42,12 @@ BI.SelectIconTextTrigger = BI.inherit(BI.Trigger, {
         if (BI.isNotNull(result)) {
             return {
                 text: result.text,
-                iconClass: result.iconClass
+                iconCls: result.iconCls
             };
         } else {
             return {
                 text: o.text,
-                iconClass: ""
+                iconCls: ""
             };
         }
     },
@@ -55,7 +55,7 @@ BI.SelectIconTextTrigger = BI.inherit(BI.Trigger, {
     setValue: function (vals) {
         var obj = this._digist(vals, this.options.items);
         this.trigger.setText(obj.text);
-        this.trigger.setIcon(obj.iconClass);
+        this.trigger.setIcon(obj.iconCls);
     },
 
     populate: function (items) {
