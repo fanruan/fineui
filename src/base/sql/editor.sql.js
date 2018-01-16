@@ -8,7 +8,8 @@ BI.SQLEditor = BI.inherit(BI.Widget, {
             value: "",
             lineHeight: 2,
             showHint: true,
-            supportFunction: false
+            supportFunction: false,
+            supportParam: false
         });
     },
     _init: function () {
@@ -132,14 +133,14 @@ BI.SQLEditor = BI.inherit(BI.Widget, {
     },
 
     setValue: function (v) {
-        var self = this, result;
+        var self = this, result, o = this.options;
         this.refresh();
         self.editor.setValue("");
         result = this._analyzeContent(v || "");
         BI.each(result, function (i, item) {
             var fieldRegx = /\$[\{][^\}]*[\}]/;
             var str = item.match(fieldRegx);
-            if (BI.isNotEmptyArray(str)) {
+            if (BI.isNotEmptyArray(str) && o.supportParam) {
                 self.insertParam(str[0].substring(2, item.length - 1));
             } else {
                 self.insertString(item);

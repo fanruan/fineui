@@ -196,6 +196,28 @@ $(function () {
                     iconClass: "close-font",
                     height: 30
                 }
+            }, {
+                el: {
+                    type: "bi.multi_select_bar",
+                    selected: true,
+                    halfSelected: true
+                }
+            }, {
+                el: {
+                    type: "bi.multi_select_bar",
+                    selected: true,
+                    halfSelected: false
+                }
+            }, {
+                el: {
+                    type: "bi.multi_select_bar",
+                    selected: false,
+                    halfSelected: true
+                }
+            }, {
+                el: {
+                    type: "bi.multi_select_bar"
+                }
             }
         ];
         BI.each(items, function (i, item) {
@@ -704,6 +726,7 @@ BI.shortcut("demo.code_editor", Demo.CodeEditor);Demo.Editor = BI.inherit(BI.Wid
             cls: "mvc-border",
             watermark: "输入'a'会有错误信息且回车键不能退出编辑",
             errorText: "字段不可重名",
+            value: "a",
             validationChecker: function (v) {
                 if (v == "a") {
                     return false;
@@ -842,6 +865,7 @@ Demo.SQLEditor = BI.inherit(BI.Widget, {
         var self = this;
         this.formula = BI.createWidget({
             type : 'bi.sql_editor',
+            supportParam: true,
             width : 300,
             height : 200,
             value : "select * from DEMO_CONTRACT where 合同类型 = ${长期协议} and 购买数量 = sum([1,2,3,4])"
@@ -1808,7 +1832,8 @@ Demo.IconTextValueCombo = BI.inherit(BI.Widget, {
             type: "bi.horizontal_auto",
             items: [{
                 type: "bi.icon_text_value_combo",
-                value: "默认值",
+                text: "默认值",
+                value: 1,
                 width: 300,
                 items: [{
                     text: "MVC-1",

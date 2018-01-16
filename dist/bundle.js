@@ -26894,6 +26894,7 @@ BI.ButtonGroup = BI.inherit(BI.Widget, {
             baseCls: "bi-button-group",
             behaviors: {},
             items: [],
+            value: "",
             chooseType: BI.Selection.Single,
             layouts: [{
                 type: "bi.center",
@@ -26905,14 +26906,18 @@ BI.ButtonGroup = BI.inherit(BI.Widget, {
 
     _init: function () {
         BI.ButtonGroup.superclass._init.apply(this, arguments);
+        var o = this.options;
         var behaviors = {};
-        BI.each(this.options.behaviors, function (key, rule) {
+        BI.each(o.behaviors, function (key, rule) {
             behaviors[key] = BI.BehaviorFactory.createBehavior(key, {
                 rule: rule
             });
         });
         this.behaviors = behaviors;
-        this.populate(this.options.items);
+        this.populate(o.items);
+        if(BI.isKey(o.value) || BI.isNotEmptyArray(o.value)){
+            this.setValue(o.value);
+        }
     },
 
     _createBtns: function (items) {
@@ -43944,6 +43949,7 @@ BI.Editor = BI.inherit(BI.Single, {
             type: "bi.input",
             element: "<input type='" + o.inputType + "'/>",
             root: true,
+            value: o.value,
             watermark: o.watermark,
             validationChecker: o.validationChecker,
             quitChecker: o.quitChecker,
@@ -44086,7 +44092,8 @@ BI.Editor = BI.inherit(BI.Single, {
             return false;
         });
         if (BI.isKey(this.options.value) || BI.isEmptyString(this.options.value)) {
-            this.setValue(this.options.value);
+            this._checkError();
+            this._checkWaterMark();
         } else {
             this._checkWaterMark();
         }
@@ -45290,6 +45297,9 @@ BI.Input = BI.inherit(BI.Single, {
             .focusout(function (e) {
                 self._blurDebounce();
             });
+        if (BI.isKey(this.options.value) || BI.isEmptyString(this.options.value)) {
+            this.setValue(this.options.value);
+        }
     },
 
     _focus: function () {
@@ -46940,7 +46950,8 @@ BI.SQLEditor = BI.inherit(BI.Widget, {
             value: "",
             lineHeight: 2,
             showHint: true,
-            supportFunction: false
+            supportFunction: false,
+            supportParam: false
         });
     },
     _init: function () {
@@ -47064,14 +47075,14 @@ BI.SQLEditor = BI.inherit(BI.Widget, {
     },
 
     setValue: function (v) {
-        var self = this, result;
+        var self = this, result, o = this.options;
         this.refresh();
         self.editor.setValue("");
         result = this._analyzeContent(v || "");
         BI.each(result, function (i, item) {
             var fieldRegx = /\$[\{][^\}]*[\}]/;
             var str = item.match(fieldRegx);
-            if (BI.isNotEmptyArray(str)) {
+            if (BI.isNotEmptyArray(str) && o.supportParam) {
                 self.insertParam(str[0].substring(2, item.length - 1));
             } else {
                 self.insertString(item);
@@ -67687,6 +67698,7 @@ BI.IconTextValueCombo = BI.inherit(BI.Widget, {
             type: "bi.select_icon_text_trigger",
             items: o.items,
             height: o.height,
+            text: o.text,
             value: o.value
         });
         this.popup = BI.createWidget({
@@ -67813,6 +67825,7 @@ BI.StaticCombo = BI.inherit(BI.Widget, {
             type: "bi.text_icon_item",
             cls: "bi-select-text-trigger bi-border pull-down-font",
             text: o.text,
+            value: o.value,
             readonly: true,
             textLgap: 5,
             height: o.height - 2
@@ -67821,7 +67834,8 @@ BI.StaticCombo = BI.inherit(BI.Widget, {
             type: "bi.text_value_combo_popup",
             textAlign: o.textAlign,
             chooseType: o.chooseType,
-            items: o.items
+            items: o.items,
+            value: o.value
         });
         this.popup.on(BI.Controller.EVENT_CHANGE, function () {
             self.fireEvent(BI.Controller.EVENT_CHANGE, arguments);
@@ -68205,7 +68219,8 @@ BI.shortcut("bi.small_text_value_combo", BI.SmallTextValueCombo);BI.TextValueCom
             chooseType: o.chooseType,
             layouts: [{
                 type: "bi.vertical"
-            }]
+            }],
+            value: o.value
         });
 
         this.popup.on(BI.Controller.EVENT_CHANGE, function (type, val, obj) {
@@ -74636,25 +74651,31 @@ BI.MultiSelectBar = BI.inherit(BI.BasicButton, {
             disableSelected: true,
             isHalfCheckedBySelectedValue: function (selectedValues) {
                 return selectedValues.length > 0;
-            }
+            },
+            halfSelected: false
         });
     },
     _init: function () {
         BI.MultiSelectBar.superclass._init.apply(this, arguments);
         var self = this, o = this.options;
+        var isSelect = o.selected === true;
+        var isHalfSelect = !o.selected && o.halfSelected;
         this.checkbox = BI.createWidget({
             type: "bi.checkbox",
             stopPropagation: true,
             handler: function () {
                 self.setSelected(self.isSelected());
-            }
+            },
+            selected: isSelect,
+            invisible: isHalfSelect
         });
         this.half = BI.createWidget({
             type: "bi.half_icon_button",
             stopPropagation: true,
             handler: function () {
                 self.setSelected(true);
-            }
+            },
+            invisible: isSelect || !isHalfSelect
         });
         this.checkbox.on(BI.Controller.EVENT_CHANGE, function () {
             self.fireEvent(BI.Controller.EVENT_CHANGE, BI.Events.CLICK, self.isSelected(), self);
@@ -74693,7 +74714,10 @@ BI.MultiSelectBar = BI.inherit(BI.BasicButton, {
                 el: this.text
             }]
         });
-        this.half.invisible();
+    },
+
+    _setSelected: function (v) {
+        this.checkbox.setSelected(!!v);
     },
 
     // 自己手动控制选中
@@ -74712,8 +74736,9 @@ BI.MultiSelectBar = BI.inherit(BI.BasicButton, {
     },
 
     setHalfSelected: function (b) {
-        this._half = !!b;
+        this.halfSelected = !!b;
         if (b === true) {
+            this.checkbox.setSelected(false);
             this.half.visible();
             this.checkbox.invisible();
         } else {
@@ -74723,7 +74748,7 @@ BI.MultiSelectBar = BI.inherit(BI.BasicButton, {
     },
 
     isHalfSelected: function () {
-        return !!this._half;
+        return !this.isSelected() && !!this.halfSelected;
     },
 
     isSelected: function () {
@@ -74733,7 +74758,7 @@ BI.MultiSelectBar = BI.inherit(BI.BasicButton, {
     setValue: function (selectedValues) {
         BI.MultiSelectBar.superclass.setValue.apply(this, arguments);
         var isAllChecked = this.options.isAllCheckedBySelectedValue.apply(this, arguments);
-        this.setSelected(isAllChecked);
+        this._setSelected(isAllChecked);
         !isAllChecked && this.setHalfSelected(this.options.isHalfCheckedBySelectedValue.apply(this, arguments));
     }
 });
@@ -76027,7 +76052,7 @@ BI.SelectIconTextTrigger = BI.inherit(BI.Trigger, {
             };
         } else {
             return {
-                text: o.value,
+                text: o.text,
                 iconClass: ""
             };
         }
