@@ -30567,7 +30567,7 @@ BI.Switcher = BI.inherit(BI.Widget, {
 
     _initSwitcher: function () {
         this.switcher = BI.createWidget(this.options.el, {
-            value: o.value
+            value: this.options.value
         });
     },
 
