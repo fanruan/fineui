@@ -9,7 +9,8 @@ BI.SingleTreePopup = BI.inherit(BI.Pane, {
         return BI.extend(BI.SingleTreePopup.superclass._defaultConfig.apply(this, arguments), {
             baseCls: "bi-single-level-tree",
             tipText: BI.i18nText("BI-No_Selected_Item"),
-            items: []
+            items: [],
+            value: ""
         });
     },
 
@@ -17,13 +18,14 @@ BI.SingleTreePopup = BI.inherit(BI.Pane, {
         BI.SingleTreePopup.superclass._init.apply(this, arguments);
 
         var self = this, o = this.options;
-
+        
         this.tree = BI.createWidget({
             type: "bi.level_tree",
             expander: {
                 isDefaultInit: true
             },
             items: o.items,
+            value: o.value,
             chooseType: BI.Selection.Single
         });
 

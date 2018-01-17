@@ -29530,11 +29530,15 @@ BI.TreeView = BI.inherit(BI.Pane, {
             });
         }
 
+        if (!this.nodes) {
+            return;
+        }
+
         BI.each(this.nodes.getNodes(), function (i, node) {
             node.halfCheck = false;
             setNode(node.children);
         });
-        this.nodes && this.nodes.checkAllNodes(checked);
+        this.nodes.checkAllNodes(checked);
     },
 
     expandAll: function (flag) {
@@ -30696,14 +30700,17 @@ BI.Combo = BI.inherit(BI.Widget, {
     },
 
     _initCombo: function () {
-        this.combo = BI.createWidget(this.options.el);
+        this.combo = BI.createWidget(this.options.el, {
+            value: this.options.value
+        });
     },
 
     _assertPopupView: function () {
-        var self = this;
+        var self = this, o = this.options;
         if (this.popupView == null) {
             this.popupView = BI.createWidget(this.options.popup, {
-                type: "bi.popup_view"
+                type: "bi.popup_view",
+                value: o.value
             });
             this.popupView.on(BI.Controller.EVENT_CHANGE, function (type, value, obj) {
                 if (type === BI.Events.CLICK) {
@@ -30894,14 +30901,20 @@ BI.Combo = BI.inherit(BI.Widget, {
     },
 
     setValue: function (v) {
-        this._assertPopupView();
         this.combo.setValue(v);
-        this.popupView && this.popupView.setValue(v);
+        if (BI.isNull(this.popupView)) {
+            this.options.popup.value = v;
+        } else {
+            this.popupView.setValue(v);
+        }
     },
 
     getValue: function () {
-        this._assertPopupView();
-        return this.popupView && this.popupView.getValue();
+        if (BI.isNull(this.popupView)) {
+            return this.options.popup.value;
+        } else {
+            return this.popupView.getValue();
+        }
     },
 
     isViewVisible: function () {
@@ -31080,11 +31093,13 @@ BI.Expander = BI.inherit(BI.Widget, {
     },
 
     _initExpander: function () {
-        this.expander = BI.createWidget(this.options.el);
+        this.expander = BI.createWidget(this.options.el, {
+            value: this.options.value
+        });
     },
 
     _assertPopupView: function () {
-        var self = this;
+        var self = this, o = this.options;
         if (this.popupView == null) {
             this.popupView = BI.createWidget(this.options.popup, {
                 type: "bi.button_group",
@@ -31093,7 +31108,8 @@ BI.Expander = BI.inherit(BI.Widget, {
                     type: "bi.vertical",
                     hgap: 0,
                     vgap: 0
-                }]
+                }],
+                value: o.value
             });
             this.popupView.on(BI.Controller.EVENT_CHANGE, function (type, value, obj) {
                 self.fireEvent(BI.Controller.EVENT_CHANGE, arguments);
@@ -31157,14 +31173,20 @@ BI.Expander = BI.inherit(BI.Widget, {
     },
 
     setValue: function (v) {
-        // this._assertPopupView();
         this.expander.setValue(v);
-        this.popupView && this.popupView.setValue(v);
+        if (BI.isNull(this.popupView)) {
+            this.options.popup.value = v;
+        } else {
+            this.popupView.setValue(v);
+        }
     },
 
     getValue: function () {
-        // this._assertPopupView();
-        return this.popupView ? this.popupView.getValue() : [];
+        if (BI.isNull(this.popupView)) {
+            return this.options.popup.value;
+        } else {
+            return this.popupView.getValue();
+        }
     },
 
     isViewVisible: function () {
@@ -32056,8 +32078,11 @@ BI.Searcher = BI.inherit(BI.Widget, {
     },
 
     setValue: function (v) {
-        this._assertPopupView();
-        this.popupView && this.popupView.setValue(v);
+        if (BI.isNull(this.popupView)) {
+            this.options.popup.value = v;
+        } else {
+            this.popupView.setValue(v);
+        }
     },
 
     getKeyword: function () {
@@ -32077,6 +32102,9 @@ BI.Searcher = BI.inherit(BI.Widget, {
             return this.popupView.getValue();
         } else if (o.adapter && o.adapter.getValue) {
             return o.adapter.getValue();
+        }
+        if (BI.isNull(this.popupView)) {
+            return o.popup.value;
         }
         return this.popupView.getValue();
         
@@ -32232,7 +32260,9 @@ BI.Switcher = BI.inherit(BI.Widget, {
     },
 
     _initSwitcher: function () {
-        this.switcher = BI.createWidget(this.options.el);
+        this.switcher = BI.createWidget(this.options.el, {
+            value: o.value
+        });
     },
 
     _assertPopupView: function () {
@@ -32246,7 +32276,8 @@ BI.Switcher = BI.inherit(BI.Widget, {
                     type: "bi.vertical",
                     hgap: 0,
                     vgap: 0
-                }]
+                }],
+                value: o.value
             });
             this.popupView.on(BI.Controller.EVENT_CHANGE, function (type, value, obj) {
                 self.fireEvent(BI.Controller.EVENT_CHANGE, arguments);
@@ -32306,14 +32337,20 @@ BI.Switcher = BI.inherit(BI.Widget, {
     },
 
     setValue: function (v) {
-        this._assertPopupView();
         this.switcher.setValue(v);
-        this.popupView && this.popupView.setValue(v);
+        if (BI.isNull(this.popupView)) {
+            this.options.popup.value = v;
+        } else {
+            this.popupView.setValue(v);
+        }
     },
 
     getValue: function () {
-        this._assertPopupView();
-        return this.popupView ? this.popupView.getValue() : [];
+        if (BI.isNull(this.popupView)) {
+            return this.options.popup.value;
+        } else {
+            return this.popupView.getValue();
+        }
     },
 
     setAdapter: function (adapter) {
@@ -42944,7 +42981,7 @@ BI.PopupView = BI.inherit(BI.Widget, {
 
     _createView: function () {
         var o = this.options;
-        this.button_group = BI.createWidget(o.el, {type: "bi.button_group"});
+        this.button_group = BI.createWidget(o.el, {type: "bi.button_group", value: o.value});
         this.button_group.element.css({"min-height": o.minHeight + "px"});
         return this.button_group;
     },
@@ -43076,7 +43113,8 @@ BI.SearcherView = BI.inherit(BI.Pane, {
             },
             layouts: [{
                 type: "bi.vertical"
-            }]
+            }],
+            value: o.value
         });
         this.matcher.on(BI.Controller.EVENT_CHANGE, function (type, val, ob) {
             self.fireEvent(BI.Controller.EVENT_CHANGE, arguments);
@@ -43104,7 +43142,8 @@ BI.SearcherView = BI.inherit(BI.Pane, {
             },
             layouts: [{
                 type: "bi.vertical"
-            }]
+            }],
+            value: o.value
         });
         this.searcher.on(BI.Controller.EVENT_CHANGE, function (type, val, ob) {
             self.fireEvent(BI.Controller.EVENT_CHANGE, arguments);
@@ -61538,7 +61577,8 @@ BI.CustomTree = BI.inherit(BI.Widget, {
                     args[0] = self._formatItems(items);
                     callback.apply(null, args);
                 }]);
-            }
+            },
+            value: o.value
         });
         this.tree.on(BI.Controller.EVENT_CHANGE, function (type, val, obj) {
             self.fireEvent(BI.Controller.EVENT_CHANGE, arguments);
@@ -67592,25 +67632,42 @@ BI.ColorChooser = BI.inherit(BI.Widget, {
     _init: function () {
         BI.ColorChooser.superclass._init.apply(this, arguments);
         var self = this, o = this.options;
-        this.trigger = BI.createWidget(BI.extend({
-            type: "bi.color_chooser_trigger",
-            width: o.width,
-            height: o.height
-        }, o.el));
-        this.colorPicker = BI.createWidget({
-            type: "bi.color_chooser_popup"
-        });
 
         this.combo = BI.createWidget({
             type: "bi.combo",
             element: this,
             adjustLength: 1,
-            el: this.trigger,
+            el: BI.extend({
+                type: "bi.color_chooser_trigger",
+                ref: function (_ref) {
+                    self.trigger = _ref;
+                },
+                width: o.width,
+                height: o.height
+            }, o.el),
             popup: {
-                el: this.colorPicker,
+                el: {
+                    type: "bi.color_chooser_popup",
+                    ref: function (_ref) {
+                        self.colorPicker = _ref;
+                    },
+                    listeners: [{
+                        eventName: BI.ColorChooserPopup.EVENT_VALUE_CHANGE,
+                        action: function () {
+                            fn();
+                        }
+                    }, {
+                        eventName: BI.ColorChooserPopup.EVENT_CHANGE,
+                        action: function () {
+                            fn();
+                            self.combo.hideView();
+                        }
+                    }]
+                },
                 stopPropagation: false,
                 minWidth: 202
-            }
+            },
+            value: o.value
         });
 
         var fn = function () {
@@ -67623,15 +67680,6 @@ BI.ColorChooser = BI.inherit(BI.Widget, {
             que.unshift(color);
             BI.Cache.setItem("colors", BI.array2String(que.toArray()));
         };
-
-        this.colorPicker.on(BI.ColorChooserPopup.EVENT_VALUE_CHANGE, function () {
-            fn();
-        });
-
-        this.colorPicker.on(BI.ColorChooserPopup.EVENT_CHANGE, function () {
-            fn();
-            self.combo.hideView();
-        });
         this.combo.on(BI.Combo.EVENT_BEFORE_POPUPVIEW, function () {
             self.colorPicker.setStoreColors(BI.string2Array(BI.Cache.getItem("colors") || ""));
         });
@@ -67658,7 +67706,7 @@ BI.ColorChooser = BI.inherit(BI.Widget, {
     },
 
     getValue: function () {
-        return this.colorPicker.getValue();
+        return this.combo.getValue();
     }
 });
 BI.ColorChooser.EVENT_CHANGE = "ColorChooser.EVENT_CHANGE";
@@ -67683,7 +67731,8 @@ BI.ColorChooserPopup = BI.inherit(BI.Widget, {
         BI.ColorChooserPopup.superclass._init.apply(this, arguments);
         var self = this, o = this.options;
         this.colorEditor = BI.createWidget({
-            type: "bi.color_picker_editor"
+            type: "bi.color_picker_editor",
+            value: o.value
         });
 
         this.colorEditor.on(BI.ColorPickerEditor.EVENT_CHANGE, function () {
@@ -67719,7 +67768,8 @@ BI.ColorChooserPopup = BI.inherit(BI.Widget, {
                 disabled: true
             }]],
             width: 190,
-            height: 25
+            height: 25,
+            value: o.value
         });
         this.storeColors.on(BI.ColorPicker.EVENT_CHANGE, function () {
             self.setValue(this.getValue()[0]);
@@ -67729,7 +67779,8 @@ BI.ColorChooserPopup = BI.inherit(BI.Widget, {
         this.colorPicker = BI.createWidget({
             type: "bi.color_picker",
             width: 190,
-            height: 50
+            height: 50,
+            value: o.value
         });
 
         this.colorPicker.on(BI.ColorPicker.EVENT_CHANGE, function () {
@@ -68142,7 +68193,8 @@ BI.ColorPicker = BI.inherit(BI.Widget, {
             }),
             layouts: [{
                 type: "bi.grid"
-            }]
+            }],
+            value: o.value
         });
         this.colors.on(BI.ButtonGroup.EVENT_CHANGE, function () {
             self.fireEvent(BI.ColorPicker.EVENT_CHANGE, arguments);
@@ -77263,7 +77315,8 @@ BI.LevelTree = BI.inherit(BI.Widget, {
                 chooseType: 0
             },
             expander: {},
-            items: []
+            items: [],
+            value: ""
         });
     },
 
@@ -77332,6 +77385,7 @@ BI.LevelTree = BI.inherit(BI.Widget, {
             }, o.expander),
 
             items: this._formatItems(BI.Tree.transformToTreeFormat(nodes), 0),
+            value: o.value,
 
             el: BI.extend({
                 type: "bi.button_tree",
@@ -77423,6 +77477,9 @@ BI.SimpleTreeView = BI.inherit(BI.Widget, {
         if (BI.isNotEmptyArray(o.items)) {
             this.populate();
         }
+        if (BI.isNotNull(o.value)) {
+            this.setValue(o.value);
+        }
     },
 
     populate: function (items, keyword) {
@@ -77434,7 +77491,7 @@ BI.SimpleTreeView = BI.inherit(BI.Widget, {
         });
     },
 
-    setValue: function (v) {
+    _digest: function (v) {
         v || (v = []);
         var self = this, map = {};
         var selected = [];
@@ -77462,8 +77519,11 @@ BI.SimpleTreeView = BI.inherit(BI.Widget, {
                 }
             }
         });
+        return BI.makeObject(v.concat(selected));
+    },
 
-        this.tree.setValue(BI.makeObject(v.concat(selected)));
+    setValue: function (v) {
+        this.tree.setValue(this._digest(v));
     },
 
     _getValue: function () {
@@ -77843,7 +77903,7 @@ BI.SelectTextTrigger = BI.inherit(BI.Trigger, {
             type: "bi.text_trigger",
             element: this,
             height: o.height,
-            text: this._digest(o.text, o.items)
+            text: this._digest(o.value, o.items)
         });
     },
     
@@ -85733,7 +85793,8 @@ BI.MultiLayerSelectTreeCombo = BI.inherit(BI.Widget, {
             isDefaultInit: false,
             height: 30,
             text: "",
-            items: []
+            items: [],
+            value: ""
         });
     },
 
@@ -85745,13 +85806,15 @@ BI.MultiLayerSelectTreeCombo = BI.inherit(BI.Widget, {
             type: "bi.single_tree_trigger",
             text: o.text,
             height: o.height,
-            items: o.items
+            items: o.items,
+            value: o.value
         });
 
         this.popup = BI.createWidget({
             type: "bi.multilayer_select_tree_popup",
             isDefaultInit: o.isDefaultInit,
-            items: o.items
+            items: o.items,
+            value: o.value
         });
 
         this.combo = BI.createWidget({
@@ -85802,7 +85865,8 @@ BI.MultiLayerSelectLevelTree = BI.inherit(BI.Widget, {
             baseCls: "bi-multilayer-select-level-tree",
             isDefaultInit: false,
             items: [],
-            itemsCreator: BI.emptyFn
+            itemsCreator: BI.emptyFn,
+            value: ""
         });
     },
 
@@ -85874,6 +85938,7 @@ BI.MultiLayerSelectLevelTree = BI.inherit(BI.Widget, {
 
             items: this._formatItems(BI.Tree.transformToTreeFormat(nodes), 0),
             itemsCreator: o.itemsCreator,
+            value: o.value,
 
             el: {
                 type: "bi.button_tree",
@@ -85932,7 +85997,8 @@ BI.MultiLayerSelectTreePopup = BI.inherit(BI.Pane, {
             tipText: BI.i18nText("BI-No_Selected_Item"),
             isDefaultInit: false,
             itemsCreator: BI.emptyFn,
-            items: []
+            items: [],
+            value: ""
         });
     },
 
@@ -85945,6 +86011,7 @@ BI.MultiLayerSelectTreePopup = BI.inherit(BI.Pane, {
             type: "bi.multilayer_select_level_tree",
             isDefaultInit: o.isDefaultInit,
             items: o.items,
+            value: o.value,
             itemsCreator: o.itemsCreator
         });
 
@@ -86273,7 +86340,8 @@ BI.MultiLayerSingleTreeCombo = BI.inherit(BI.Widget, {
             height: 30,
             text: "",
             itemsCreator: BI.emptyFn,
-            items: []
+            items: [],
+            value: ""
         });
     },
 
@@ -86285,13 +86353,15 @@ BI.MultiLayerSingleTreeCombo = BI.inherit(BI.Widget, {
             type: "bi.single_tree_trigger",
             text: o.text,
             height: o.height,
-            items: o.items
+            items: o.items,
+            value: o.value
         });
 
         this.popup = BI.createWidget({
             type: "bi.multilayer_single_tree_popup",
             isDefaultInit: o.isDefaultInit,
-            items: o.items
+            items: o.items,
+            value: o.value
         });
 
         this.combo = BI.createWidget({
@@ -86413,6 +86483,7 @@ BI.MultiLayerSingleLevelTree = BI.inherit(BI.Widget, {
             },
 
             items: this._formatItems(BI.Tree.transformToTreeFormat(nodes), 0),
+            value: o.value,
             itemsCreator: function (op, callback) {
                 o.itemsCreator(op, function (items) {
                     callback(BI.Tree.transformToTreeFormat(items), 0);
@@ -86490,7 +86561,8 @@ BI.MultiLayerSingleTreePopup = BI.inherit(BI.Pane, {
             type: "bi.multilayer_single_level_tree",
             isDefaultInit: o.isDefaultInit,
             items: o.items,
-            itemsCreator: o.itemsCreator
+            itemsCreator: o.itemsCreator,
+            value: o.value
         });
 
         BI.createWidget({
@@ -94087,7 +94159,8 @@ BI.SelectTreeCombo = BI.inherit(BI.Widget, {
             baseCls: "bi-select-tree-combo",
             height: 30,
             text: "",
-            items: []
+            items: [],
+            value: ""
         });
     },
 
@@ -94099,12 +94172,14 @@ BI.SelectTreeCombo = BI.inherit(BI.Widget, {
             type: "bi.single_tree_trigger",
             text: o.text,
             height: o.height,
-            items: o.items
+            items: o.items,
+            value: o.value
         });
 
         this.popup = BI.createWidget({
             type: "bi.select_level_tree",
-            items: o.items
+            items: o.items,
+            value: o.value
         });
 
         this.combo = BI.createWidget({
@@ -94226,7 +94301,8 @@ BI.SelectTreePopup = BI.inherit(BI.Pane, {
         return BI.extend(BI.SelectTreePopup.superclass._defaultConfig.apply(this, arguments), {
             baseCls: "bi-select-level-tree",
             tipText: BI.i18nText("BI-No_Selected_Item"),
-            items: []
+            items: [],
+            value: ""
         });
     },
 
@@ -94275,6 +94351,7 @@ BI.SelectTreePopup = BI.inherit(BI.Pane, {
                 isDefaultInit: true
             },
             items: this._formatItems(BI.Tree.transformToTreeFormat(o.items)),
+            value: o.value,
             chooseType: BI.Selection.Single
         });
 
@@ -98193,7 +98270,8 @@ BI.SingleTreeCombo = BI.inherit(BI.Widget, {
             trigger: {},
             height: 24,
             text: "",
-            items: []
+            items: [],
+            value: ""
         });
     },
 
@@ -98205,12 +98283,14 @@ BI.SingleTreeCombo = BI.inherit(BI.Widget, {
             type: "bi.single_tree_trigger",
             text: o.text,
             height: o.height,
-            items: o.items
+            items: o.items,
+            value: o.value
         }, o.trigger));
 
         this.popup = BI.createWidget({
             type: "bi.single_level_tree",
-            items: o.items
+            items: o.items,
+            value: o.value
         });
 
         this.combo = BI.createWidget({
@@ -98265,7 +98345,8 @@ BI.SingleTreePopup = BI.inherit(BI.Pane, {
         return BI.extend(BI.SingleTreePopup.superclass._defaultConfig.apply(this, arguments), {
             baseCls: "bi-single-level-tree",
             tipText: BI.i18nText("BI-No_Selected_Item"),
-            items: []
+            items: [],
+            value: ""
         });
     },
 
@@ -98273,13 +98354,14 @@ BI.SingleTreePopup = BI.inherit(BI.Pane, {
         BI.SingleTreePopup.superclass._init.apply(this, arguments);
 
         var self = this, o = this.options;
-
+        
         this.tree = BI.createWidget({
             type: "bi.level_tree",
             expander: {
                 isDefaultInit: true
             },
             items: o.items,
+            value: o.value,
             chooseType: BI.Selection.Single
         });
 
@@ -98328,7 +98410,8 @@ BI.SingleTreeTrigger = BI.inherit(BI.Trigger, {
             baseCls: "bi-single-tree-trigger",
             height: 24,
             text: "",
-            items: []
+            items: [],
+            value: ""
         });
     },
 
@@ -98342,7 +98425,8 @@ BI.SingleTreeTrigger = BI.inherit(BI.Trigger, {
             element: this,
             text: o.text,
             items: o.items,
-            height: o.height
+            height: o.height,
+            value: o.value
         });
     },
 
@@ -98409,7 +98493,8 @@ BI.SwitchTree = BI.inherit(BI.Widget, {
                 this.levelTree = BI.createWidget({
                     type: "bi.multilayer_single_level_tree",
                     isDefaultInit: true,
-                    items: BI.deepClone(o.items)
+                    items: BI.deepClone(o.items),
+                    value: o.value
                 });
                 this.levelTree.on(BI.LevelTree.EVENT_CHANGE, function () {
                     self.fireEvent(BI.SwitchTree.EVENT_CHANGE, arguments);
@@ -98418,7 +98503,8 @@ BI.SwitchTree = BI.inherit(BI.Widget, {
             case BI.SwitchTree.SelectType.MultiSelect:
                 this.tree = BI.createWidget({
                     type: "bi.simple_tree",
-                    items: this._removeIsParent(BI.deepClone(o.items))
+                    items: this._removeIsParent(BI.deepClone(o.items)),
+                    value: o.value
                 });
                 this.tree.on(BI.SimpleTreeView.EVENT_CHANGE, function () {
                     self.fireEvent(BI.SwitchTree.EVENT_CHANGE, arguments);

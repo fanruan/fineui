@@ -14,7 +14,8 @@ BI.MultiLayerSingleTreeCombo = BI.inherit(BI.Widget, {
             height: 30,
             text: "",
             itemsCreator: BI.emptyFn,
-            items: []
+            items: [],
+            value: ""
         });
     },
 
@@ -26,13 +27,15 @@ BI.MultiLayerSingleTreeCombo = BI.inherit(BI.Widget, {
             type: "bi.single_tree_trigger",
             text: o.text,
             height: o.height,
-            items: o.items
+            items: o.items,
+            value: o.value
         });
 
         this.popup = BI.createWidget({
             type: "bi.multilayer_single_tree_popup",
             isDefaultInit: o.isDefaultInit,
-            items: o.items
+            items: o.items,
+            value: o.value
         });
 
         this.combo = BI.createWidget({

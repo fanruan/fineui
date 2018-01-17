@@ -22,7 +22,7 @@ BI.SelectTextTrigger = BI.inherit(BI.Trigger, {
             type: "bi.text_trigger",
             element: this,
             height: o.height,
-            text: this._digest(o.text, o.items)
+            text: this._digest(o.value, o.items)
         });
     },
     

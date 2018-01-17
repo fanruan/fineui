@@ -33,7 +33,8 @@ BI.SwitchTree = BI.inherit(BI.Widget, {
                 this.levelTree = BI.createWidget({
                     type: "bi.multilayer_single_level_tree",
                     isDefaultInit: true,
-                    items: BI.deepClone(o.items)
+                    items: BI.deepClone(o.items),
+                    value: o.value
                 });
                 this.levelTree.on(BI.LevelTree.EVENT_CHANGE, function () {
                     self.fireEvent(BI.SwitchTree.EVENT_CHANGE, arguments);
@@ -42,7 +43,8 @@ BI.SwitchTree = BI.inherit(BI.Widget, {
             case BI.SwitchTree.SelectType.MultiSelect:
                 this.tree = BI.createWidget({
                     type: "bi.simple_tree",
-                    items: this._removeIsParent(BI.deepClone(o.items))
+                    items: this._removeIsParent(BI.deepClone(o.items)),
+                    value: o.value
                 });
                 this.tree.on(BI.SimpleTreeView.EVENT_CHANGE, function () {
                     self.fireEvent(BI.SwitchTree.EVENT_CHANGE, arguments);

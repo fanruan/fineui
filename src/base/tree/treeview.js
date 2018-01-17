@@ -442,11 +442,15 @@ BI.TreeView = BI.inherit(BI.Pane, {
             });
         }
 
+        if (!this.nodes) {
+            return;
+        }
+
         BI.each(this.nodes.getNodes(), function (i, node) {
             node.halfCheck = false;
             setNode(node.children);
         });
-        this.nodes && this.nodes.checkAllNodes(checked);
+        this.nodes.checkAllNodes(checked);
     },
 
     expandAll: function (flag) {

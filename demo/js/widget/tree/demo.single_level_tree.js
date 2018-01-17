@@ -9,7 +9,8 @@ Demo.SingleLevelTree = BI.inherit(BI.Widget, {
         var self = this;
         var tree = BI.createWidget({
             type: "bi.single_level_tree",
-            items: BI.deepClone(Demo.CONSTANTS.LEVELTREE)
+            items: BI.deepClone(Demo.CONSTANTS.LEVELTREE),
+            value: "11"
         });
 
         return {
@@ -32,7 +33,7 @@ Demo.SingleLevelTree = BI.inherit(BI.Widget, {
                     height: 25,
                     text: "setValue (第二级文件1)",
                     handler: function () {
-                        tree.setValue(["第二级文件1"]);
+                        tree.setValue(["2"]);
                     }
                 },
                 height: 25
