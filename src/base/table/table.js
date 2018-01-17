@@ -1580,12 +1580,20 @@ BI.Table = BI.inherit(BI.Widget, {
         
     },
 
+    _empty: function () {
+        this.scrollBottomRight && this.scrollBottomRight.destroy();
+        this.topLeft && this.topLeft.destroy();
+        this.topRight && this.topRight.destroy();
+        this.bottomLeft && this.bottomLeft.destroy();
+        this.bottomRight && this.bottomRight.destroy();
+    },
+
     populate: function (items, header) {
         this.options.items = items || [];
         if (header) {
             this.options.header = header;
         }
-        this.empty();
+        this._empty();
         if (this.options.isNeedFreeze) {
             this._createFreezeTable();
         } else {
