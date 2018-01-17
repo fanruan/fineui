@@ -9,7 +9,8 @@ BI.SelectTreePopup = BI.inherit(BI.Pane, {
         return BI.extend(BI.SelectTreePopup.superclass._defaultConfig.apply(this, arguments), {
             baseCls: "bi-select-level-tree",
             tipText: BI.i18nText("BI-No_Selected_Item"),
-            items: []
+            items: [],
+            value: ""
         });
     },
 
@@ -58,6 +59,7 @@ BI.SelectTreePopup = BI.inherit(BI.Pane, {
                 isDefaultInit: true
             },
             items: this._formatItems(BI.Tree.transformToTreeFormat(o.items)),
+            value: o.value,
             chooseType: BI.Selection.Single
         });
 

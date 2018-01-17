@@ -10,7 +10,8 @@ BI.SingleTreeCombo = BI.inherit(BI.Widget, {
             trigger: {},
             height: 24,
             text: "",
-            items: []
+            items: [],
+            value: ""
         });
     },
 
@@ -22,12 +23,14 @@ BI.SingleTreeCombo = BI.inherit(BI.Widget, {
             type: "bi.single_tree_trigger",
             text: o.text,
             height: o.height,
-            items: o.items
+            items: o.items,
+            value: o.value
         }, o.trigger));
 
         this.popup = BI.createWidget({
             type: "bi.single_level_tree",
-            items: o.items
+            items: o.items,
+            value: o.value
         });
 
         this.combo = BI.createWidget({

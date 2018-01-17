@@ -16,6 +16,7 @@ Demo.SelectTreeCombo = BI.inherit(BI.Widget, {
                 ref: function (_ref) {
                     self.tree = _ref;
                 },
+                value: "11",
                 text: "默认值",
                 items: items,
                 width: 300
@@ -30,7 +31,7 @@ Demo.SelectTreeCombo = BI.inherit(BI.Widget, {
                 type: "bi.button",
                 text: "setVlaue (第二级文件1)",
                 handler: function () {
-                    self.tree.setValue(["第二级文件1"]);
+                    self.tree.setValue(["2"]);
                 },
                 width: 300
             }],

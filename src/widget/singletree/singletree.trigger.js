@@ -10,7 +10,8 @@ BI.SingleTreeTrigger = BI.inherit(BI.Trigger, {
             baseCls: "bi-single-tree-trigger",
             height: 24,
             text: "",
-            items: []
+            items: [],
+            value: ""
         });
     },
 
@@ -24,7 +25,8 @@ BI.SingleTreeTrigger = BI.inherit(BI.Trigger, {
             element: this,
             text: o.text,
             items: o.items,
-            height: o.height
+            height: o.height,
+            value: o.value
         });
     },
 

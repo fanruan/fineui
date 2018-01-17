@@ -3735,53 +3735,97 @@ BI.shortcut("demo.level_tree", Demo.Func);Demo.Func = BI.inherit(BI.Widget, {
         // value值一定要是字符串
         var tree = BI.createWidget({
             type: "bi.simple_tree",
-            items: []
+            items: [{
+                id: 1,
+                text: "第一项",
+                value: "1"
+            }, {
+                id: 2,
+                text: "第二项",
+                value: "2"
+            }, {
+                id: 3,
+                text: "第三项",
+                value: "3",
+                open: true
+            }, {
+                id: 11,
+                pId: 1,
+                text: "子项1",
+                value: "11"
+            }, {
+                id: 12,
+                pId: 1,
+                text: "子项2",
+                value: "12"
+            }, {
+                id: 13,
+                pId: 1,
+                text: "子项3",
+                value: "13"
+            }, {
+                id: 31,
+                pId: 3,
+                text: "子项1",
+                value: "31"
+            }, {
+                id: 32,
+                pId: 3,
+                text: "子项2",
+                value: "32"
+            }, {
+                id: 33,
+                pId: 3,
+                text: "子项3",
+                value: "33"
+            }],
+            value: ["31", "32", "33"]
         });
 
-        tree.populate([{
-            id: 1,
-            text: "第一项",
-            value: "1"
-        }, {
-            id: 2,
-            text: "第二项",
-            value: "2"
-        }, {
-            id: 3,
-            text: "第三项",
-            value: "3",
-            open: true
-        }, {
-            id: 11,
-            pId: 1,
-            text: "子项1",
-            value: "11"
-        }, {
-            id: 12,
-            pId: 1,
-            text: "子项2",
-            value: "12"
-        }, {
-            id: 13,
-            pId: 1,
-            text: "子项3",
-            value: "13"
-        }, {
-            id: 31,
-            pId: 3,
-            text: "子项1",
-            value: "31"
-        }, {
-            id: 32,
-            pId: 3,
-            text: "子项2",
-            value: "32"
-        }, {
-            id: 33,
-            pId: 3,
-            text: "子项3",
-            value: "33"
-        }], "z");
+        // tree.populate([{
+        //     id: 1,
+        //     text: "第一项",
+        //     value: "1"
+        // }, {
+        //     id: 2,
+        //     text: "第二项",
+        //     value: "2"
+        // }, {
+        //     id: 3,
+        //     text: "第三项",
+        //     value: "3",
+        //     open: true
+        // }, {
+        //     id: 11,
+        //     pId: 1,
+        //     text: "子项1",
+        //     value: "11"
+        // }, {
+        //     id: 12,
+        //     pId: 1,
+        //     text: "子项2",
+        //     value: "12"
+        // }, {
+        //     id: 13,
+        //     pId: 1,
+        //     text: "子项3",
+        //     value: "13"
+        // }, {
+        //     id: 31,
+        //     pId: 3,
+        //     text: "子项1",
+        //     value: "31"
+        // }, {
+        //     id: 32,
+        //     pId: 3,
+        //     text: "子项2",
+        //     value: "32"
+        // }, {
+        //     id: 33,
+        //     pId: 3,
+        //     text: "子项3",
+        //     value: "33"
+        // }], "z");
         BI.createWidget({
             type: "bi.vtape",
             element: this,
@@ -13122,7 +13166,8 @@ Demo.MultiLayerSelectTreeCombo = BI.inherit(BI.Widget, {
                 },
                 text: "默认值",
                 items: items,
-                width: 300
+                width: 300,
+                value: ["第五级文件1"]
             }, {
                 type: "bi.button",
                 text: "getVlaue",
@@ -13161,6 +13206,7 @@ Demo.SelectTreeCombo = BI.inherit(BI.Widget, {
                 ref: function (_ref) {
                     self.tree = _ref;
                 },
+                value: "11",
                 text: "默认值",
                 items: items,
                 width: 300
@@ -13175,7 +13221,7 @@ Demo.SelectTreeCombo = BI.inherit(BI.Widget, {
                 type: "bi.button",
                 text: "setVlaue (第二级文件1)",
                 handler: function () {
-                    self.tree.setValue(["第二级文件1"]);
+                    self.tree.setValue(["2"]);
                 },
                 width: 300
             }],
@@ -13340,7 +13386,8 @@ Demo.SingleTreeCombo = BI.inherit(BI.Widget, {
                 },
                 text: "默认值",
                 items: items,
-                width: 300
+                width: 300,
+                value: "11"
             }, {
                 type: "bi.button",
                 text: "getVlaue",
@@ -13352,7 +13399,7 @@ Demo.SingleTreeCombo = BI.inherit(BI.Widget, {
                 type: "bi.button",
                 text: "setVlaue (第二级文件1)",
                 handler: function () {
-                    self.tree.setValue(["第二级文件1"]);
+                    self.tree.setValue(["2"]);
                 },
                 width: 300
             }],
@@ -14065,23 +14112,24 @@ BI.shortcut("demo.preview_table", Demo.Func);Demo.Func = BI.inherit(BI.Widget, {
             isNeedMerge: true,
             isNeedFreeze: true,
             mergeCols: [0, 1],
-            columnSize: ["", "", ""],
-            items: items,
-            header: header
+            items: [],
+            header: []
         });
         BI.createWidget({
             type: "bi.absolute",
             element: this,
             items: [{
                 el: {
-                    type: "bi.grid",
-                    columns: 2,
-                    rows: 2,
-                    items: [{
-                        column: 0,
-                        row: 0,
-                        el: table1
-                    }]
+                    type: "bi.tab",
+                    defaultShowIndex: 1,
+                    cardCreator: function (v) {
+                        switch (v) {
+                            case 1:
+                                table1.attr("columnSize", ["", "", ""]);
+                                table1.populate(items, header);
+                                return table1;
+                        }
+                    }
                 },
                 left: 10,
                 right: 10,
@@ -14292,7 +14340,8 @@ Demo.MultiLayerSelectLevelTree = BI.inherit(BI.Widget, {
         var self = this;
         var tree = BI.createWidget({
             type: "bi.multilayer_select_level_tree",
-            items: BI.deepClone(Demo.CONSTANTS.TREE)
+            items: BI.deepClone(Demo.CONSTANTS.TREE),
+            value: "第五级文件1"
         });
 
         return {
@@ -14337,7 +14386,8 @@ Demo.MultiLayerSingleLevelTree = BI.inherit(BI.Widget, {
         var self = this;
         var tree = BI.createWidget({
             type: "bi.multilayer_single_level_tree",
-            items: BI.deepClone(Demo.CONSTANTS.TREE)
+            items: BI.deepClone(Demo.CONSTANTS.TREE),
+            value: "第五级文件1"
         });
 
         return {
@@ -14382,7 +14432,8 @@ Demo.SelectLevelTree = BI.inherit(BI.Widget, {
         var self = this;
         var tree = BI.createWidget({
             type: "bi.select_level_tree",
-            items: BI.deepClone(Demo.CONSTANTS.LEVELTREE)
+            items: BI.deepClone(Demo.CONSTANTS.LEVELTREE),
+            value: "11"
         });
 
         return {
@@ -14405,7 +14456,7 @@ Demo.SelectLevelTree = BI.inherit(BI.Widget, {
                     height: 25,
                     text: "setValue (第二级文件1)",
                     handler: function () {
-                        tree.setValue(["第二级文件1"]);
+                        tree.setValue(["2"]);
                     }
                 },
                 height: 25
@@ -14427,7 +14478,8 @@ Demo.SingleLevelTree = BI.inherit(BI.Widget, {
         var self = this;
         var tree = BI.createWidget({
             type: "bi.single_level_tree",
-            items: BI.deepClone(Demo.CONSTANTS.LEVELTREE)
+            items: BI.deepClone(Demo.CONSTANTS.LEVELTREE),
+            value: "11"
         });
 
         return {
@@ -14450,7 +14502,7 @@ Demo.SingleLevelTree = BI.inherit(BI.Widget, {
                     height: 25,
                     text: "setValue (第二级文件1)",
                     handler: function () {
-                        tree.setValue(["第二级文件1"]);
+                        tree.setValue(["2"]);
                     }
                 },
                 height: 25
@@ -14472,7 +14524,8 @@ Demo.SwitchTree = BI.inherit(BI.Widget, {
         var self = this;
         var tree = BI.createWidget({
             type: "bi.switch_tree",
-            items: BI.deepClone(Demo.CONSTANTS.TREE)
+            items: BI.deepClone(Demo.CONSTANTS.TREE),
+            value: "第五级文件1"
         });
 
         return {

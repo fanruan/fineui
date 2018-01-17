@@ -12,7 +12,8 @@ BI.LevelTree = BI.inherit(BI.Widget, {
                 chooseType: 0
             },
             expander: {},
-            items: []
+            items: [],
+            value: ""
         });
     },
 
@@ -81,6 +82,7 @@ BI.LevelTree = BI.inherit(BI.Widget, {
             }, o.expander),
 
             items: this._formatItems(BI.Tree.transformToTreeFormat(nodes), 0),
+            value: o.value,
 
             el: BI.extend({
                 type: "bi.button_tree",

@@ -129,23 +129,24 @@ Demo.Func = BI.inherit(BI.Widget, {
             isNeedMerge: true,
             isNeedFreeze: true,
             mergeCols: [0, 1],
-            columnSize: ["", "", ""],
-            items: items,
-            header: header
+            items: [],
+            header: []
         });
         BI.createWidget({
             type: "bi.absolute",
             element: this,
             items: [{
                 el: {
-                    type: "bi.grid",
-                    columns: 2,
-                    rows: 2,
-                    items: [{
-                        column: 0,
-                        row: 0,
-                        el: table1
-                    }]
+                    type: "bi.tab",
+                    defaultShowIndex: 1,
+                    cardCreator: function (v) {
+                        switch (v) {
+                            case 1:
+                                table1.attr("columnSize", ["", "", ""]);
+                                table1.populate(items, header);
+                                return table1;
+                        }
+                    }
                 },
                 left: 10,
                 right: 10,

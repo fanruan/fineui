@@ -126,11 +126,13 @@ BI.Expander = BI.inherit(BI.Widget, {
     },
 
     _initExpander: function () {
-        this.expander = BI.createWidget(this.options.el);
+        this.expander = BI.createWidget(this.options.el, {
+            value: this.options.value
+        });
     },
 
     _assertPopupView: function () {
-        var self = this;
+        var self = this, o = this.options;
         if (this.popupView == null) {
             this.popupView = BI.createWidget(this.options.popup, {
                 type: "bi.button_group",
@@ -139,7 +141,8 @@ BI.Expander = BI.inherit(BI.Widget, {
                     type: "bi.vertical",
                     hgap: 0,
                     vgap: 0
-                }]
+                }],
+                value: o.value
             });
             this.popupView.on(BI.Controller.EVENT_CHANGE, function (type, value, obj) {
                 self.fireEvent(BI.Controller.EVENT_CHANGE, arguments);
@@ -203,14 +206,20 @@ BI.Expander = BI.inherit(BI.Widget, {
     },
 
     setValue: function (v) {
-        // this._assertPopupView();
         this.expander.setValue(v);
-        this.popupView && this.popupView.setValue(v);
+        if (BI.isNull(this.popupView)) {
+            this.options.popup.value = v;
+        } else {
+            this.popupView.setValue(v);
+        }
     },
 
     getValue: function () {
-        // this._assertPopupView();
-        return this.popupView ? this.popupView.getValue() : [];
+        if (BI.isNull(this.popupView)) {
+            return this.options.popup.value;
+        } else {
+            return this.popupView.getValue();
+        }
     },
 
     isViewVisible: function () {

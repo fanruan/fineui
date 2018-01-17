@@ -13,7 +13,8 @@ BI.MultiLayerSelectTreePopup = BI.inherit(BI.Pane, {
             tipText: BI.i18nText("BI-No_Selected_Item"),
             isDefaultInit: false,
             itemsCreator: BI.emptyFn,
-            items: []
+            items: [],
+            value: ""
         });
     },
 
@@ -26,6 +27,7 @@ BI.MultiLayerSelectTreePopup = BI.inherit(BI.Pane, {
             type: "bi.multilayer_select_level_tree",
             isDefaultInit: o.isDefaultInit,
             items: o.items,
+            value: o.value,
             itemsCreator: o.itemsCreator
         });
 

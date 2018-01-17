@@ -80,6 +80,7 @@ BI.MultiLayerSingleLevelTree = BI.inherit(BI.Widget, {
             },
 
             items: this._formatItems(BI.Tree.transformToTreeFormat(nodes), 0),
+            value: o.value,
             itemsCreator: function (op, callback) {
                 o.itemsCreator(op, function (items) {
                     callback(BI.Tree.transformToTreeFormat(items), 0);

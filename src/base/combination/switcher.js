@@ -123,7 +123,9 @@ BI.Switcher = BI.inherit(BI.Widget, {
     },
 
     _initSwitcher: function () {
-        this.switcher = BI.createWidget(this.options.el);
+        this.switcher = BI.createWidget(this.options.el, {
+            value: o.value
+        });
     },
 
     _assertPopupView: function () {
@@ -137,7 +139,8 @@ BI.Switcher = BI.inherit(BI.Widget, {
                     type: "bi.vertical",
                     hgap: 0,
                     vgap: 0
-                }]
+                }],
+                value: o.value
             });
             this.popupView.on(BI.Controller.EVENT_CHANGE, function (type, value, obj) {
                 self.fireEvent(BI.Controller.EVENT_CHANGE, arguments);
@@ -197,14 +200,20 @@ BI.Switcher = BI.inherit(BI.Widget, {
     },
 
     setValue: function (v) {
-        this._assertPopupView();
         this.switcher.setValue(v);
-        this.popupView && this.popupView.setValue(v);
+        if (BI.isNull(this.popupView)) {
+            this.options.popup.value = v;
+        } else {
+            this.popupView.setValue(v);
+        }
     },
 
     getValue: function () {
-        this._assertPopupView();
-        return this.popupView ? this.popupView.getValue() : [];
+        if (BI.isNull(this.popupView)) {
+            return this.options.popup.value;
+        } else {
+            return this.popupView.getValue();
+        }
     },
 
     setAdapter: function (adapter) {

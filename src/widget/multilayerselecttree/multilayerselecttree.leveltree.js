@@ -10,7 +10,8 @@ BI.MultiLayerSelectLevelTree = BI.inherit(BI.Widget, {
             baseCls: "bi-multilayer-select-level-tree",
             isDefaultInit: false,
             items: [],
-            itemsCreator: BI.emptyFn
+            itemsCreator: BI.emptyFn,
+            value: ""
         });
     },
 
@@ -82,6 +83,7 @@ BI.MultiLayerSelectLevelTree = BI.inherit(BI.Widget, {
 
             items: this._formatItems(BI.Tree.transformToTreeFormat(nodes), 0),
             itemsCreator: o.itemsCreator,
+            value: o.value,
 
             el: {
                 type: "bi.button_tree",
