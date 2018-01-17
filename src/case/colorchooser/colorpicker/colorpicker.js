@@ -161,7 +161,8 @@ BI.ColorPicker = BI.inherit(BI.Widget, {
             }),
             layouts: [{
                 type: "bi.grid"
-            }]
+            }],
+            value: o.value
         });
         this.colors.on(BI.ButtonGroup.EVENT_CHANGE, function () {
             self.fireEvent(BI.ColorPicker.EVENT_CHANGE, arguments);

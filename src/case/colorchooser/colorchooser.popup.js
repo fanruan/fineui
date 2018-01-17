@@ -19,7 +19,8 @@ BI.ColorChooserPopup = BI.inherit(BI.Widget, {
         BI.ColorChooserPopup.superclass._init.apply(this, arguments);
         var self = this, o = this.options;
         this.colorEditor = BI.createWidget({
-            type: "bi.color_picker_editor"
+            type: "bi.color_picker_editor",
+            value: o.value
         });
 
         this.colorEditor.on(BI.ColorPickerEditor.EVENT_CHANGE, function () {
@@ -55,7 +56,8 @@ BI.ColorChooserPopup = BI.inherit(BI.Widget, {
                 disabled: true
             }]],
             width: 190,
-            height: 25
+            height: 25,
+            value: o.value
         });
         this.storeColors.on(BI.ColorPicker.EVENT_CHANGE, function () {
             self.setValue(this.getValue()[0]);
@@ -65,7 +67,8 @@ BI.ColorChooserPopup = BI.inherit(BI.Widget, {
         this.colorPicker = BI.createWidget({
             type: "bi.color_picker",
             width: 190,
-            height: 50
+            height: 50,
+            value: o.value
         });
 
         this.colorPicker.on(BI.ColorPicker.EVENT_CHANGE, function () {

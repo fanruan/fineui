@@ -26,7 +26,8 @@ BI.MultiLayerSingleTreePopup = BI.inherit(BI.Pane, {
             type: "bi.multilayer_single_level_tree",
             isDefaultInit: o.isDefaultInit,
             items: o.items,
-            itemsCreator: o.itemsCreator
+            itemsCreator: o.itemsCreator,
+            value: o.value
         });
 
         BI.createWidget({

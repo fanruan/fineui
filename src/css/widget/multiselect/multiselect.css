@@ -1,0 +1,14 @@
+.bi-multi-select-combo .multi-select-trigger-icon-button {
+  font-size: 16px;
+}
+
+.bi-multi-select-insert-combo .multi-select-trigger-icon-button {
+  font-size: 16px;
+}
+
+
+.bi-multi-select-trigger {
+  -webkit-border-radius: 2px 2px 2px 2px;
+  -moz-border-radius: 2px 2px 2px 2px;
+  border-radius: 2px 2px 2px 2px;
+}

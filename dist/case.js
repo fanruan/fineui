@@ -11,7 +11,7 @@ BI.IconChangeButton = BI.inherit(BI.Single, {
         var conf = BI.IconChangeButton.superclass._defaultConfig.apply(this, arguments);
         return BI.extend(conf, {
             baseCls: "bi-icon-change-button",
-            iconClass: "",
+            iconCls: "",
             iconWidth: null,
             iconHeight: null,
 
@@ -36,7 +36,7 @@ BI.IconChangeButton = BI.inherit(BI.Single, {
         this.button = BI.createWidget({
             type: "bi.icon_button",
             element: this,
-            cls: o.iconClass,
+            cls: o.iconCls,
             height: o.height,
             iconWidth: o.iconWidth,
             iconHeight: o.iconHeight,
@@ -73,9 +73,9 @@ BI.IconChangeButton = BI.inherit(BI.Single, {
 
     setIcon: function (cls) {
         var o = this.options;
-        if (o.iconClass !== cls) {
-            this.element.removeClass(o.iconClass).addClass(cls);
-            o.iconClass = cls;
+        if (o.iconCls !== cls) {
+            this.element.removeClass(o.iconCls).addClass(cls);
+            o.iconCls = cls;
         }
     }
 });
@@ -224,8 +224,7 @@ BI.SingleSelectIconTextItem = BI.inherit(BI.Single, {
     _defaultConfig: function () {
         return BI.extend(BI.SingleSelectIconTextItem.superclass._defaultConfig.apply(this, arguments), {
             extraCls: "bi-single-select-icon-text-item bi-list-item-active",
-            iconClass: "",
-            hgap: 10,
+            iconCls: "",
             height: 25
         });
     },
@@ -235,7 +234,7 @@ BI.SingleSelectIconTextItem = BI.inherit(BI.Single, {
         this.text = BI.createWidget({
             type: "bi.icon_text_item",
             element: this,
-            cls: o.iconClass,
+            cls: o.iconCls,
             once: o.once,
             selected: o.selected,
             height: o.height,
@@ -2047,9 +2046,7 @@ BI.shortcut("bi.complex_canvas", BI.ComplexCanvas);/**
 BI.ArrowTreeGroupNodeCheckbox = BI.inherit(BI.IconButton, {
     _defaultConfig: function () {
         return BI.extend(BI.ArrowTreeGroupNodeCheckbox.superclass._defaultConfig.apply(this, arguments), {
-            extraCls: "bi-arrow-tree-group-node",
-            iconWidth: 13,
-            iconHeight: 13
+            extraCls: "bi-arrow-tree-group-node"
         });
     },
     _init: function () {
@@ -2072,9 +2069,7 @@ BI.shortcut("bi.arrow_tree_group_node_checkbox", BI.ArrowTreeGroupNodeCheckbox);
 BI.CheckingMarkNode = BI.inherit(BI.IconButton, {
     _defaultConfig: function () {
         return BI.extend( BI.CheckingMarkNode.superclass._defaultConfig.apply(this, arguments), {
-            extraCls: "check-mark-font",
-            iconWidth: 13,
-            iconHeight: 13
+            extraCls: "check-mark-font"
         });
     },
     _init: function () {
@@ -2178,9 +2173,7 @@ BI.shortcut("bi.mid_tree_node_checkbox", BI.MidTreeNodeCheckbox);/**
 BI.TreeGroupNodeCheckbox = BI.inherit(BI.IconButton, {
     _defaultConfig: function () {
         return BI.extend( BI.TreeGroupNodeCheckbox.superclass._defaultConfig.apply(this, arguments), {
-            extraCls: "tree-node-triangle-collapse-font",
-            iconWidth: 13,
-            iconHeight: 13
+            extraCls: "tree-node-triangle-collapse-font"
         });
     },
     _init: function () {
@@ -3665,25 +3658,42 @@ BI.ColorChooser = BI.inherit(BI.Widget, {
     _init: function () {
         BI.ColorChooser.superclass._init.apply(this, arguments);
         var self = this, o = this.options;
-        this.trigger = BI.createWidget(BI.extend({
-            type: "bi.color_chooser_trigger",
-            width: o.width,
-            height: o.height
-        }, o.el));
-        this.colorPicker = BI.createWidget({
-            type: "bi.color_chooser_popup"
-        });
 
         this.combo = BI.createWidget({
             type: "bi.combo",
             element: this,
             adjustLength: 1,
-            el: this.trigger,
+            el: BI.extend({
+                type: "bi.color_chooser_trigger",
+                ref: function (_ref) {
+                    self.trigger = _ref;
+                },
+                width: o.width,
+                height: o.height
+            }, o.el),
             popup: {
-                el: this.colorPicker,
+                el: {
+                    type: "bi.color_chooser_popup",
+                    ref: function (_ref) {
+                        self.colorPicker = _ref;
+                    },
+                    listeners: [{
+                        eventName: BI.ColorChooserPopup.EVENT_VALUE_CHANGE,
+                        action: function () {
+                            fn();
+                        }
+                    }, {
+                        eventName: BI.ColorChooserPopup.EVENT_CHANGE,
+                        action: function () {
+                            fn();
+                            self.combo.hideView();
+                        }
+                    }]
+                },
                 stopPropagation: false,
                 minWidth: 202
-            }
+            },
+            value: o.value
         });
 
         var fn = function () {
@@ -3696,15 +3706,6 @@ BI.ColorChooser = BI.inherit(BI.Widget, {
             que.unshift(color);
             BI.Cache.setItem("colors", BI.array2String(que.toArray()));
         };
-
-        this.colorPicker.on(BI.ColorChooserPopup.EVENT_VALUE_CHANGE, function () {
-            fn();
-        });
-
-        this.colorPicker.on(BI.ColorChooserPopup.EVENT_CHANGE, function () {
-            fn();
-            self.combo.hideView();
-        });
         this.combo.on(BI.Combo.EVENT_BEFORE_POPUPVIEW, function () {
             self.colorPicker.setStoreColors(BI.string2Array(BI.Cache.getItem("colors") || ""));
         });
@@ -3731,7 +3732,7 @@ BI.ColorChooser = BI.inherit(BI.Widget, {
     },
 
     getValue: function () {
-        return this.colorPicker.getValue();
+        return this.combo.getValue();
     }
 });
 BI.ColorChooser.EVENT_CHANGE = "ColorChooser.EVENT_CHANGE";
@@ -3756,7 +3757,8 @@ BI.ColorChooserPopup = BI.inherit(BI.Widget, {
         BI.ColorChooserPopup.superclass._init.apply(this, arguments);
         var self = this, o = this.options;
         this.colorEditor = BI.createWidget({
-            type: "bi.color_picker_editor"
+            type: "bi.color_picker_editor",
+            value: o.value
         });
 
         this.colorEditor.on(BI.ColorPickerEditor.EVENT_CHANGE, function () {
@@ -3792,7 +3794,8 @@ BI.ColorChooserPopup = BI.inherit(BI.Widget, {
                 disabled: true
             }]],
             width: 190,
-            height: 25
+            height: 25,
+            value: o.value
         });
         this.storeColors.on(BI.ColorPicker.EVENT_CHANGE, function () {
             self.setValue(this.getValue()[0]);
@@ -3802,7 +3805,8 @@ BI.ColorChooserPopup = BI.inherit(BI.Widget, {
         this.colorPicker = BI.createWidget({
             type: "bi.color_picker",
             width: 190,
-            height: 50
+            height: 50,
+            value: o.value
         });
 
         this.colorPicker.on(BI.ColorPicker.EVENT_CHANGE, function () {
@@ -4215,7 +4219,8 @@ BI.ColorPicker = BI.inherit(BI.Widget, {
             }),
             layouts: [{
                 type: "bi.grid"
-            }]
+            }],
+            value: o.value
         });
         this.colors.on(BI.ButtonGroup.EVENT_CHANGE, function () {
             self.fireEvent(BI.ColorPicker.EVENT_CHANGE, arguments);
@@ -5209,7 +5214,7 @@ BI.IconCombo = BI.inherit(BI.Widget, {
             baseCls: "bi-icon-combo",
             width: 24,
             height: 24,
-            iconClass: "",
+            iconCls: "",
             el: {},
             popup: {},
             minWidth: 100,
@@ -5229,7 +5234,7 @@ BI.IconCombo = BI.inherit(BI.Widget, {
         var self = this, o = this.options;
         this.trigger = BI.createWidget(o.el, {
             type: "bi.icon_combo_trigger",
-            iconClass: o.iconClass,
+            iconCls: o.iconCls,
             title: o.title,
             items: o.items,
             width: o.width,
@@ -5366,7 +5371,7 @@ BI.IconComboTrigger = BI.inherit(BI.Trigger, {
             extraCls: "bi-icon-combo-trigger",
             el: {},
             items: [],
-            iconClass: "",
+            iconCls: "",
             width: 25,
             height: 25,
             isShowDown: true
@@ -5378,7 +5383,7 @@ BI.IconComboTrigger = BI.inherit(BI.Trigger, {
         var o = this.options, self = this;
         this.button = BI.createWidget(o.el, {
             type: "bi.icon_change_button",
-            cls: "icon-combo-trigger-icon " + o.iconClass,
+            cls: "icon-combo-trigger-icon " + o.iconCls,
             disableSelected: true,
             width: o.width,
             height: o.height,
@@ -5416,7 +5421,7 @@ BI.IconComboTrigger = BI.inherit(BI.Trigger, {
     populate: function (items) {
         var o = this.options;
         this.options.items = items || [];
-        this.button.setIcon(o.iconClass);
+        this.button.setIcon(o.iconCls);
         this.button.setSelected(false);
         this.down.setSelected(false);
     },
@@ -5424,19 +5429,19 @@ BI.IconComboTrigger = BI.inherit(BI.Trigger, {
     setValue: function (v) {
         BI.IconComboTrigger.superclass.setValue.apply(this, arguments);
         var o = this.options;
-        var iconClass = "";
+        var iconCls = "";
         v = BI.isArray(v) ? v[0] : v;
         if (BI.any(this.options.items, function (i, item) {
             if (v === item.value) {
-                iconClass = item.iconClass;
+                iconCls = item.iconCls;
                 return true;
             }
         })) {
-            this.button.setIcon(iconClass);
+            this.button.setIcon(iconCls);
             this.button.setSelected(true);
             this.down.setSelected(true);
         } else {
-            this.button.setIcon(o.iconClass);
+            this.button.setIcon(o.iconCls);
             this.button.setSelected(false);
             this.down.setSelected(false);
         }
@@ -5464,6 +5469,7 @@ BI.IconTextValueCombo = BI.inherit(BI.Widget, {
             type: "bi.select_icon_text_trigger",
             items: o.items,
             height: o.height,
+            text: o.text,
             value: o.value
         });
         this.popup = BI.createWidget({
@@ -5590,6 +5596,7 @@ BI.StaticCombo = BI.inherit(BI.Widget, {
             type: "bi.text_icon_item",
             cls: "bi-select-text-trigger bi-border pull-down-font",
             text: o.text,
+            value: o.value,
             readonly: true,
             textLgap: 5,
             height: o.height - 2
@@ -5598,7 +5605,8 @@ BI.StaticCombo = BI.inherit(BI.Widget, {
             type: "bi.text_value_combo_popup",
             textAlign: o.textAlign,
             chooseType: o.chooseType,
-            items: o.items
+            items: o.items,
+            value: o.value
         });
         this.popup.on(BI.Controller.EVENT_CHANGE, function () {
             self.fireEvent(BI.Controller.EVENT_CHANGE, arguments);
@@ -5851,7 +5859,8 @@ BI.TextValueCombo = BI.inherit(BI.Widget, {
         this.trigger = BI.createWidget(o.el, {
             type: "bi.select_text_trigger",
             items: o.items,
-            height: o.height
+            height: o.height,
+            text: o.value
         });
         this.popup = BI.createWidget({
             type: "bi.text_value_combo_popup",
@@ -5981,7 +5990,8 @@ BI.shortcut("bi.small_text_value_combo", BI.SmallTextValueCombo);BI.TextValueCom
             chooseType: o.chooseType,
             layouts: [{
                 type: "bi.vertical"
-            }]
+            }],
+            value: o.value
         });
 
         this.popup.on(BI.Controller.EVENT_CHANGE, function (type, val, obj) {
@@ -8027,8 +8037,8 @@ BI.Panel = BI.inherit(BI.Widget, {
         return {
             el: {
                 type: "bi.left_right_vertical_adapt",
-                cls: "panel-title bi-tips bi-border-bottom bi-background",
-                height: 30,
+                cls: "panel-title bi-border-bottom bi-background",
+                height: 29,
                 items: {
                     left: [this.text],
                     right: [this.button_group]
@@ -9561,10 +9571,6 @@ BI.RichEditorParamAction = BI.inherit(BI.RichEditorAction, {
         BI.RichEditorParamAction.superclass._init.apply(this, arguments);
     },
 
-    _isParam: function (sel) {
-        return sel.attr("data-type") === "param";
-    },
-
     _createBlankNode: function () {
         return $("<span>").html("&nbsp;");
     },
@@ -9573,10 +9579,8 @@ BI.RichEditorParamAction = BI.inherit(BI.RichEditorAction, {
         var o = this.options;
         var instance = o.editor.selectedInstance;
         var next = $param.next();
-        if (next.length === 0 || this._isParam(next)) {
-            var preNode = this._createBlankNode();
+        if (next.length === 0) {
             var nextNode = this._createBlankNode();
-            $param.before(preNode);
             $param.after(nextNode);
             instance.setFocus(nextNode[0]);
         } else {
@@ -9584,70 +9588,131 @@ BI.RichEditorParamAction = BI.inherit(BI.RichEditorAction, {
         }
     },
 
-    _get$Sel: function () {
-        var o = this.options;
-        var instance = o.editor.selectedInstance;
-        var sel = $(instance.selElm());
-        if (sel[0].nodeType === 3 && this._isParam(sel.parent())) {
-            sel = sel.parent();
-        }
-        return sel;
-    },
-
     addParam: function (param) {
         var o = this.options;
-        var sel = this._get$Sel();
-        var $param = $("<span>").attr({
-            "data-type": "param",
-            "data-value": param
-        }).css({
-            color: "white",
-            backgroundColor: "#009de3",
-            padding: "0 5px"
-        }).text(param).keydown(function (e) {
-            if (e.keyCode === BI.KeyCode.BACKSPACE || e.keyCode === BI.KeyCode.DELETE) {
-                $param.destroy();
-            }
-            e.stopEvent();
-            return false;
-        });
-        var wrapper = o.editor.instance.getElm().element;
-        if (wrapper.find(sel).length <= 0) {
-            wrapper.append($param);
-        } else {
-            sel.after($param);
-        }
-        this._addBlank($param);
-    },
-
-    keydown: function (e) {
-        var o = this.options;
-        var sel = this._get$Sel();
-        if (e.keyCode === 229) {// 中文输入法
-            if (this._isParam(sel)) {
-                this._addBlank(sel);
-                e.stopEvent();
-                return false;
-            }
-        }
-        if (BI.Key[e.keyCode] || e.keyCode === BI.KeyCode.TAB || e.keyCode === BI.KeyCode.ENTER || e.keyCode === BI.KeyCode.SPACE) {
-            if (this._isParam(sel)) {
-                e.stopEvent();
-                return false;
-            }
-        }
-        if (e.keyCode === BI.KeyCode.BACKSPACE || e.keyCode === BI.KeyCode.DELETE) {
-            if (this._isParam(sel)) {
-                sel.destroy();
-                e.preventDefault();
-                return false;
-            }
-        }
-    },
-
-    key: function (e) {
+        var instance = o.editor.instance;
+        var image = new Image();
+        var canvas = document.createElement("canvas");
+        $("body").append(canvas);
+        canvas.width = BI.DOM.getTextSizeWidth(param, 14) + 6;
+        canvas.height = 16;
+        var ctx = canvas.getContext("2d");
+        ctx.font = "14px Georgia";
+        ctx.fillStyle = "#ffffff";
+        ctx.fillText(param, 3, 14);
+        image.src = canvas.toDataURL("image/png");
+        image.alt = param;
+        $(image).css({"background-color": "#3f8ce8", "vertical-align": "sub", "margin": "0 3px;"});
+        instance.getElm().element.append(image);
+        this._addBlank($(image));
+        $(canvas).destroy();
     }
-});/**
+});
+
+// /**
+//  *
+//  * Created by GUY on 2017/09/18.
+//  * @class BI.RichEditorParamAction
+//  * @extends BI.Widget
+//  */
+// BI.RichEditorParamAction = BI.inherit(BI.RichEditorAction, {
+//     _defaultConfig: function () {
+//         return BI.extend(BI.RichEditorParamAction.superclass._defaultConfig.apply(this, arguments), {});
+//     },
+//
+//     _init: function () {
+//         BI.RichEditorParamAction.superclass._init.apply(this, arguments);
+//     },
+//
+//     _isParam: function (sel) {
+//         return sel.attr("data-type") === "param";
+//     },
+//
+//     _createBlankNode: function () {
+//         return $("<span>").html("&nbsp;");
+//     },
+//
+//     _addBlank: function ($param) {
+//         var o = this.options;
+//         var instance = o.editor.selectedInstance;
+//         var next = $param.next();
+//         if (next.length === 0 || this._isParam(next)) {
+//             var preNode = this._createBlankNode();
+//             var nextNode = this._createBlankNode();
+//             $param.before(preNode);
+//             $param.after(nextNode);
+//             instance.setFocus(nextNode[0]);
+//         } else {
+//             instance.setFocus(next[0]);
+//         }
+//     },
+//
+//     _get$Sel: function () {
+//         var o = this.options;
+//         var instance = o.editor.selectedInstance;
+//         var sel = $(instance.selElm());
+//         if (sel[0].nodeType === 3 && this._isParam(sel.parent())) {
+//             sel = sel.parent();
+//         }
+//         return sel;
+//     },
+//
+//     addParam: function (param) {
+//         var o = this.options;
+//         var sel = this._get$Sel();
+//         var $param = $("<span>").attr({
+//             "data-type": "param",
+//             "data-value": param
+//         }).css({
+//             color: "white",
+//             backgroundColor: "#009de3",
+//             padding: "0 5px"
+//         }).text(param).keydown(function (e) {
+//             if (e.keyCode === BI.KeyCode.BACKSPACE || e.keyCode === BI.KeyCode.DELETE) {
+//                 $param.destroy();
+//             }
+//             e.stopEvent();
+//             return false;
+//         });
+//         var wrapper = o.editor.instance.getElm().element;
+//         if (wrapper.find(sel).length <= 0) {
+//             wrapper.append($param);
+//         } else {
+//             sel.after($param);
+//         }
+//         this._addBlank($param);
+//     },
+//
+//     keydown: function (e) {
+//         var o = this.options;
+//         var sel = this._get$Sel();
+//         if (e.keyCode === 229) {// 中文输入法
+//             if (this._isParam(sel)) {
+//                 this._addBlank(sel);
+//                 e.stopEvent();
+//                 return false;
+//             }
+//         }
+//         if (BI.Key[e.keyCode] || e.keyCode === BI.KeyCode.TAB || e.keyCode === BI.KeyCode.ENTER || e.keyCode === BI.KeyCode.SPACE) {
+//             if (this._isParam(sel)) {
+//                 e.stopEvent();
+//                 return false;
+//             }
+//         }
+//         if (e.keyCode === BI.KeyCode.BACKSPACE || e.keyCode === BI.KeyCode.DELETE) {
+//             if (this._isParam(sel)) {
+//                 sel.destroy();
+//                 e.preventDefault();
+//                 return false;
+//             }
+//         }
+//     },
+//
+//     key: function (e) {
+//     }
+// });
+
+/**
  * 颜色选择
  *
  * Created by GUY on 2015/11/26.
@@ -12357,25 +12422,31 @@ BI.MultiSelectBar = BI.inherit(BI.BasicButton, {
             disableSelected: true,
             isHalfCheckedBySelectedValue: function (selectedValues) {
                 return selectedValues.length > 0;
-            }
+            },
+            halfSelected: false
         });
     },
     _init: function () {
         BI.MultiSelectBar.superclass._init.apply(this, arguments);
         var self = this, o = this.options;
+        var isSelect = o.selected === true;
+        var isHalfSelect = !o.selected && o.halfSelected;
         this.checkbox = BI.createWidget({
             type: "bi.checkbox",
             stopPropagation: true,
             handler: function () {
                 self.setSelected(self.isSelected());
-            }
+            },
+            selected: isSelect,
+            invisible: isHalfSelect
         });
         this.half = BI.createWidget({
             type: "bi.half_icon_button",
             stopPropagation: true,
             handler: function () {
                 self.setSelected(true);
-            }
+            },
+            invisible: isSelect || !isHalfSelect
         });
         this.checkbox.on(BI.Controller.EVENT_CHANGE, function () {
             self.fireEvent(BI.Controller.EVENT_CHANGE, BI.Events.CLICK, self.isSelected(), self);
@@ -12414,7 +12485,10 @@ BI.MultiSelectBar = BI.inherit(BI.BasicButton, {
                 el: this.text
             }]
         });
-        this.half.invisible();
+    },
+
+    _setSelected: function (v) {
+        this.checkbox.setSelected(!!v);
     },
 
     // 自己手动控制选中
@@ -12433,8 +12507,9 @@ BI.MultiSelectBar = BI.inherit(BI.BasicButton, {
     },
 
     setHalfSelected: function (b) {
-        this._half = !!b;
+        this.halfSelected = !!b;
         if (b === true) {
+            this.checkbox.setSelected(false);
             this.half.visible();
             this.checkbox.invisible();
         } else {
@@ -12444,7 +12519,7 @@ BI.MultiSelectBar = BI.inherit(BI.BasicButton, {
     },
 
     isHalfSelected: function () {
-        return !!this._half;
+        return !this.isSelected() && !!this.halfSelected;
     },
 
     isSelected: function () {
@@ -12454,7 +12529,7 @@ BI.MultiSelectBar = BI.inherit(BI.BasicButton, {
     setValue: function (selectedValues) {
         BI.MultiSelectBar.superclass.setValue.apply(this, arguments);
         var isAllChecked = this.options.isAllCheckedBySelectedValue.apply(this, arguments);
-        this.setSelected(isAllChecked);
+        this._setSelected(isAllChecked);
         !isAllChecked && this.setHalfSelected(this.options.isHalfCheckedBySelectedValue.apply(this, arguments));
     }
 });
@@ -13266,7 +13341,8 @@ BI.LevelTree = BI.inherit(BI.Widget, {
                 chooseType: 0
             },
             expander: {},
-            items: []
+            items: [],
+            value: ""
         });
     },
 
@@ -13335,6 +13411,7 @@ BI.LevelTree = BI.inherit(BI.Widget, {
             }, o.expander),
 
             items: this._formatItems(BI.Tree.transformToTreeFormat(nodes), 0),
+            value: o.value,
 
             el: BI.extend({
                 type: "bi.button_tree",
@@ -13426,6 +13503,9 @@ BI.SimpleTreeView = BI.inherit(BI.Widget, {
         if (BI.isNotEmptyArray(o.items)) {
             this.populate();
         }
+        if (BI.isNotNull(o.value)) {
+            this.setValue(o.value);
+        }
     },
 
     populate: function (items, keyword) {
@@ -13437,7 +13517,7 @@ BI.SimpleTreeView = BI.inherit(BI.Widget, {
         });
     },
 
-    setValue: function (v) {
+    _digest: function (v) {
         v || (v = []);
         var self = this, map = {};
         var selected = [];
@@ -13465,8 +13545,11 @@ BI.SimpleTreeView = BI.inherit(BI.Widget, {
                 }
             }
         });
+        return BI.makeObject(v.concat(selected));
+    },
 
-        this.tree.setValue(BI.makeObject(v.concat(selected)));
+    setValue: function (v) {
+        this.tree.setValue(this._digest(v));
     },
 
     _getValue: function () {
@@ -13637,6 +13720,9 @@ BI.IconTextTrigger = BI.inherit(BI.Trigger, {
             textAlign: "left",
             height: o.height,
             text: o.text,
+            title: function () {
+                return o.text;
+            },
             hgap: c.hgap
         });
         this.trigerButton = BI.createWidget({
@@ -13654,7 +13740,7 @@ BI.IconTextTrigger = BI.inherit(BI.Trigger, {
             items: [{
                 el: {
                     type: "bi.icon_change_button",
-                    cls: "icon-combo-trigger-icon " + o.iconClass,
+                    cls: "icon-combo-trigger-icon " + o.iconCls,
                     ref: function (_ref) {
                         self.icon = _ref;
                     },
@@ -13674,7 +13760,6 @@ BI.IconTextTrigger = BI.inherit(BI.Trigger, {
 
     setValue: function (value) {
         this.text.setValue(value);
-        this.text.setTitle(value);
     },
 
     setIcon: function (iconCls) {
@@ -13696,7 +13781,6 @@ BI.IconTextTrigger = BI.inherit(BI.Trigger, {
 
     setText: function (text) {
         this.text.setText(text);
-        this.text.setTitle(text);
     }
 });
 BI.shortcut("bi.icon_text_trigger", BI.IconTextTrigger);/**
@@ -13715,38 +13799,48 @@ BI.SelectIconTextTrigger = BI.inherit(BI.Trigger, {
         this.options.height -= 2;
         BI.SelectIconTextTrigger.superclass._init.apply(this, arguments);
         var self = this, o = this.options;
+        var obj = this._digist(o.value, o.items);
         this.trigger = BI.createWidget({
             type: "bi.icon_text_trigger",
             element: this,
+            text: obj.text,
+            iconCls: obj.iconCls,
             height: o.height
         });
-        if (BI.isKey(o.value)) {
-            this.setValue(o.value);
-        }
     },
 
-    setValue: function (vals) {
+    _digist: function (vals, items) {
         var o = this.options;
         vals = BI.isArray(vals) ? vals : [vals];
         var result;
-        var items = BI.Tree.transformToArrayFormat(this.options.items);
-        BI.any(items, function (i, item) {
+        var formatItems = BI.Tree.transformToArrayFormat(items);
+        BI.any(formatItems, function (i, item) {
             if (BI.deepContains(vals, item.value)) {
                 result = {
                     text: item.text || item.value,
-                    iconClass: item.iconClass
+                    iconCls: item.iconCls
                 };
                 return true;
             }
         });
 
         if (BI.isNotNull(result)) {
-            this.trigger.setText(result.text);
-            this.trigger.setIcon(result.iconClass);
+            return {
+                text: result.text,
+                iconCls: result.iconCls
+            };
         } else {
-            this.trigger.setText(o.value);
-            this.trigger.setIcon("");
+            return {
+                text: o.text,
+                iconCls: ""
+            };
         }
+    },
+
+    setValue: function (vals) {
+        var obj = this._digist(vals, this.options.items);
+        this.trigger.setText(obj.text);
+        this.trigger.setIcon(obj.iconCls);
     },
 
     populate: function (items) {
@@ -13781,6 +13875,9 @@ BI.TextTrigger = BI.inherit(BI.Trigger, {
             textAlign: "left",
             height: o.height,
             text: o.text,
+            title: function () {
+                return o.text;
+            },
             hgap: c.hgap,
             readonly: o.readonly
         });
@@ -13804,14 +13901,8 @@ BI.TextTrigger = BI.inherit(BI.Trigger, {
         });
     },
 
-    setValue: function (value) {
-        this.text.setValue(value);
-        this.text.setTitle(value);
-    },
-
     setText: function (text) {
         this.text.setText(text);
-        this.text.setTitle(text);
     }
 });
 BI.shortcut("bi.text_trigger", BI.TextTrigger);/**
@@ -13837,29 +13928,31 @@ BI.SelectTextTrigger = BI.inherit(BI.Trigger, {
         this.trigger = BI.createWidget({
             type: "bi.text_trigger",
             element: this,
-            height: o.height
+            height: o.height,
+            text: this._digest(o.value, o.items)
         });
-        if (BI.isKey(o.text)) {
-            this.setValue(o.text);
-        }
     },
-
-    setValue: function (vals) {
+    
+    _digest: function(vals, items){
         var o = this.options;
         vals = BI.isArray(vals) ? vals : [vals];
         var result = [];
-        var items = BI.Tree.transformToArrayFormat(this.options.items);
-        BI.each(items, function (i, item) {
+        var formatItems = BI.Tree.transformToArrayFormat(items);
+        BI.each(formatItems, function (i, item) {
             if (BI.deepContains(vals, item.value) && !result.contains(item.text || item.value)) {
                 result.push(item.text || item.value);
             }
         });
 
         if (result.length > 0) {
-            this.trigger.setText(result.join(","));
+            return result.join(",");
         } else {
-            this.trigger.setText(o.text);
+            return o.text;
         }
+    },
+
+    setValue: function (vals) {
+        this.trigger.setText(this._digest(vals, this.options.items));
     },
 
     populate: function (items) {
@@ -13885,34 +13978,42 @@ BI.SmallSelectTextTrigger = BI.inherit(BI.Trigger, {
         this.options.height -= 2;
         BI.SmallSelectTextTrigger.superclass._init.apply(this, arguments);
         var self = this, o = this.options;
+        var obj = this._digest(o.text, o.items);
         this.trigger = BI.createWidget({
             type: "bi.small_text_trigger",
             element: this,
-            height: o.height - 2
+            height: o.height - 2,
+            text: obj.text,
+            cls: obj.cls
         });
-        if (BI.isKey(o.text)) {
-            this.setValue(o.text);
-        }
     },
 
-    setValue: function (vals) {
+    _digest: function(vals, items){
         var o = this.options;
         vals = BI.isArray(vals) ? vals : [vals];
         var result = [];
-        var items = BI.Tree.transformToArrayFormat(this.options.items);
-        BI.each(items, function (i, item) {
+        var formatItems = BI.Tree.transformToArrayFormat(items);
+        BI.each(formatItems, function (i, item) {
             if (BI.deepContains(vals, item.value) && !result.contains(item.text || item.value)) {
                 result.push(item.text || item.value);
             }
         });
 
         if (result.length > 0) {
-            this.trigger.element.removeClass("bi-water-mark");
-            this.trigger.setText(result.join(","));
+            return {
+                cls: "",
+                text: result.join(",")
+            }
         } else {
-            this.trigger.element.addClass("bi-water-mark");
-            this.trigger.setText(o.text);
+            return {
+                cls: "bi-water-mark",
+                text: o.text
+            }
         }
+    },
+
+    setValue: function (vals) {
+        this.trigger.setText(this._digest(vals, this.options.items));
     },
 
     populate: function (items) {

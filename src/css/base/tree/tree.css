@@ -1,0 +1,21 @@
+.bi-branch-tree .bi-branch-tree-view {
+  min-width: 300px;
+}
+
+.bi-display-tree .ztree * {
+  color: #999999;
+}
+.bi-display-tree .ztree li a,
+.bi-display-tree .ztree li span {
+  cursor: default !important;
+}
+.bi-display-tree .ztree li a:hover {
+  text-decoration: none;
+}
+.bi-display-tree .ztree li a.curSelectedNode {
+  padding-top: 1px;
+  border: none;
+  background-color: inherit;
+  opacity: 1;
+  filter: alpha(opacity=100);
+}

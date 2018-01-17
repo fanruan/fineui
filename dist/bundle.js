@@ -17102,7 +17102,63 @@ BI.Layout = BI.inherit(BI.Widget, {
 
     }
 });
-BI.shortcut("bi.layout", BI.Layout);/**
+BI.shortcut("bi.layout", BI.Layout);BI.Plugin = BI.Plugin || {};
+!(function () {
+    var _WidgetsPlugin = {};
+    var _ObjectPlugin = {};
+    BI.extend(BI.Plugin, {
+
+        getWidget: function (type, options) {
+            if (_WidgetsPlugin[type]) {
+                var res;
+                for (var i = _WidgetsPlugin[type].length - 1; i >= 0; i--) {
+                    if (res = _WidgetsPlugin[type][i](options)) {
+                        return res;
+                    }
+                }
+            }
+            return options;
+        },
+
+        registerWidget: function (type, fn) {
+            if (!_WidgetsPlugin[type]) {
+                _WidgetsPlugin[type] = [];
+            }
+            if (_WidgetsPlugin[type].length > 0) {
+                console.log("组件已经注册过了!");
+            }
+            _WidgetsPlugin[type].push(fn);
+        },
+
+        relieveWidget: function (type) {
+            delete _WidgetsPlugin[type];
+        },
+
+        getObject: function (type, object) {
+            if (_ObjectPlugin[type]) {
+                var res;
+                for (var i = 0, len = _ObjectPlugin[type].length; i < len; i++) {
+                    res = _ObjectPlugin[type][i](object);
+                }
+            }
+            return res || object;
+        },
+
+        registerObject: function (type, fn) {
+            if (!_ObjectPlugin[type]) {
+                _ObjectPlugin[type] = [];
+            }
+            if (_ObjectPlugin[type].length > 0) {
+                console.log("对象已经注册过了!");
+            }
+            _ObjectPlugin[type].push(fn);
+        },
+
+        relieveObject: function (type) {
+            delete _ObjectPlugin[type];
+        }
+    });
+})();/**
  * guy
  * 由一个元素切换到另一个元素的行为
  * @class BI.Action
@@ -17952,7 +18008,102 @@ BI.RedMarkBehavior = BI.inherit(BI.Behavior, {
             }
         });
     }
-});/**
+});// 工程配置
+(function () {
+    // 注册布局
+    var isSupportFlex = BI.isSupportCss3("flex");
+    BI.Plugin.registerWidget("bi.horizontal", function (ob) {
+        if (isSupportFlex) {
+            return BI.extend(ob, {type: "bi.flex_horizontal"});
+        }
+        return ob;
+        
+    });
+    BI.Plugin.registerWidget("bi.center_adapt", function (ob) {
+        if (isSupportFlex && ob.items && ob.items.length <= 1) {
+            // 有滚动条的情况下需要用到flex_wrapper_center布局
+            if (ob.scrollable === true || ob.scrollx === true || ob.scrolly === true) {
+                // 不是IE用flex_wrapper_center布局
+                if (!BI.isIE()) {
+                    return BI.extend(ob, {type: "bi.flex_wrapper_center"});
+                }
+                return ob;
+            }
+            return BI.extend(ob, {type: "bi.flex_center"});
+        }
+        return ob;
+        
+    });
+    BI.Plugin.registerWidget("bi.vertical_adapt", function (ob) {
+        if (isSupportFlex) {
+            // 有滚动条的情况下需要用到flex_wrapper_center布局
+            if (ob.scrollable === true || ob.scrollx === true || ob.scrolly === true) {
+                // 不是IE用flex_wrapper_center布局
+                if (!BI.isIE()) {
+                    return BI.extend({}, ob, {type: "bi.flex_wrapper_vertical_center"});
+                }
+                return ob;
+            }
+            return BI.extend(ob, {type: "bi.flex_vertical_center"});
+        }
+        return ob;
+        
+    });
+    BI.Plugin.registerWidget("bi.float_center_adapt", function (ob) {
+        if (isSupportFlex) {
+            // 有滚动条的情况下需要用到flex_wrapper_center布局
+            if (ob.scrollable === true || ob.scrollx === true || ob.scrolly === true) {
+                // 不是IE用flex_wrapper_center布局
+                if (!BI.isIE()) {
+                    return BI.extend({}, ob, {type: "bi.flex_wrapper_center"});
+                }
+                return ob;
+            }
+            return BI.extend(ob, {type: "bi.flex_center"});
+        }
+        return ob;
+        
+    });
+    // 注册滚动条
+    BI.Plugin.registerWidget("bi.grid_table_scrollbar", function (ob) {
+        if (BI.isIE9Below()) {
+            return BI.extend(ob, {type: "bi.native_table_scrollbar"});
+        }
+        return ob;
+        
+    });
+    BI.Plugin.registerWidget("bi.grid_table_horizontal_scrollbar", function (ob) {
+        if (BI.isIE9Below()) {
+            return BI.extend(ob, {type: "bi.native_table_horizontal_scrollbar"});
+        }
+        return ob;
+        
+    });
+
+    // 注册控件
+    BI.Plugin.registerWidget("bi.grid_table", function (ob) {
+        // 非chrome下滚动条滑动效果不好，禁止掉
+        if (!(BI.isChrome() && BI.isWindows() && !BI.isEdge())) {
+            return BI.extend(ob, {type: "bi.quick_grid_table"});
+        }
+        return ob;
+        
+    });
+    BI.Plugin.registerWidget("bi.collection_table", function (ob) {
+        // 非chrome下滚动条滑动效果不好，禁止掉
+        if (!(BI.isChrome() && BI.isWindows() && !BI.isEdge())) {
+            return BI.extend(ob, {type: "bi.quick_collection_table"});
+        }
+        return ob;
+        
+    });
+    // IE8下滚动条用原生的
+    $(function () {
+        if (BI.isIE9Below()) {
+            BI.GridTableScrollbar.SIZE = 18;
+        }
+    });
+}());/**
  * guy
  * 控制器
  * Controller层超类
@@ -18404,27 +18555,13 @@ BI.LayerController = BI.inherit(BI.Controller, {
     },
 
     make: function (name, container, op) {
-        if (this.has(name)) {
-            return this.get(name);
+        if (BI.isWidget(container)) {
+            op = op || {};
+            op.container = container;
+        } else {
+            op = container;
         }
-        op || (op = {});
-        var widget = BI.createWidget((op.render || {}), {
-            type: "bi.layout"
-        });
-        BI.createWidget({
-            type: "bi.absolute",
-            element: container || this.options.render,
-            items: [BI.extend({
-                el: widget
-            }, {
-                top: 0,
-                left: 0,
-                right: 0,
-                bottom: 0
-            }, op.offset)]
-        });
-        this.add(name, widget, widget);
-        return widget;
+        return this.create(name, null, op);
     },
 
     create: function (name, from, op) {
@@ -20602,63 +20739,7 @@ BI.HorizontalFillLayoutLogic = BI.inherit(BI.Logic, {
     _init: function () {
         BI.HorizontalFillLayoutLogic.superclass._init.apply(this, arguments);
     }
-});BI.Plugin = BI.Plugin || {};
-!(function () {
-    var _WidgetsPlugin = {};
-    var _ObjectPlugin = {};
-    BI.extend(BI.Plugin, {
-
-        getWidget: function (type, options) {
-            if (_WidgetsPlugin[type]) {
-                var res;
-                for (var i = _WidgetsPlugin[type].length - 1; i >= 0; i--) {
-                    if (res = _WidgetsPlugin[type][i](options)) {
-                        return res;
-                    }
-                }
-            }
-            return options;
-        },
-
-        registerWidget: function (type, fn) {
-            if (!_WidgetsPlugin[type]) {
-                _WidgetsPlugin[type] = [];
-            }
-            if (_WidgetsPlugin[type].length > 0) {
-                console.log("组件已经注册过了!");
-            }
-            _WidgetsPlugin[type].push(fn);
-        },
-
-        relieveWidget: function (type) {
-            delete _WidgetsPlugin[type];
-        },
-
-        getObject: function (type, object) {
-            if (_ObjectPlugin[type]) {
-                var res;
-                for (var i = 0, len = _ObjectPlugin[type].length; i < len; i++) {
-                    res = _ObjectPlugin[type][i](object);
-                }
-            }
-            return res || object;
-        },
-
-        registerObject: function (type, fn) {
-            if (!_ObjectPlugin[type]) {
-                _ObjectPlugin[type] = [];
-            }
-            if (_ObjectPlugin[type].length > 0) {
-                console.log("对象已经注册过了!");
-            }
-            _ObjectPlugin[type].push(fn);
-        },
-
-        relieveObject: function (type) {
-            delete _ObjectPlugin[type];
-        }
-    });
-})();/**
+});/**
  * 对数组对象的扩展
  * @class Array
  */
@@ -22188,10 +22269,10 @@ BI.AbsoluteCenterLayout = BI.inherit(BI.Layout, {
         var w = BI.AbsoluteCenterLayout.superclass._addElement.apply(this, arguments);
         w.element.css({
             position: "absolute",
-            left: o.hgap + o.lgap + (item.lgap || 0),
-            right: o.hgap + o.rgap + (item.rgap || 0),
-            top: o.vgap + o.tgap + (item.tgap || 0),
-            bottom: o.vgap + o.bgap + (item.bgap || 0),
+            left: o.hgap + o.lgap + (item.lgap || 0) + (item.hgap || 0),
+            right: o.hgap + o.rgap + (item.rgap || 0) + (item.hgap || 0),
+            top: o.vgap + o.tgap + (item.tgap || 0) + (item.vgap || 0),
+            bottom: o.vgap + o.bgap + (item.bgap || 0) + (item.vgap || 0),
             margin: "auto"
         });
         return w;
@@ -22234,15 +22315,15 @@ BI.AbsoluteHorizontalLayout = BI.inherit(BI.Layout, {
         var w = BI.AbsoluteHorizontalLayout.superclass._addElement.apply(this, arguments);
         w.element.css({
             position: "absolute",
-            left: o.hgap + o.lgap + (item.lgap || 0),
-            right: o.hgap + o.rgap + (item.rgap || 0),
+            left: o.hgap + o.lgap + (item.lgap || 0) + (item.hgap || 0),
+            right: o.hgap + o.rgap + (item.rgap || 0) + (item.hgap || 0),
             margin: "auto"
         });
-        if (o.vgap + o.tgap + (item.tgap || 0) !== 0) {
-            w.element.css("top", o.vgap + o.tgap + (item.tgap || 0));
+        if (o.vgap + o.tgap + (item.vgap || 0) + (item.tgap || 0) !== 0) {
+            w.element.css("top", o.vgap + o.tgap + (item.tgap || 0) + (item.vgap || 0));
         }
-        if (o.vgap + o.bgap + (item.bgap || 0) !== 0) {
-            w.element.css("bottom", o.vgap + o.bgap + (item.bgap || 0));
+        if (o.vgap + o.bgap + (item.vgap || 0) + (item.bgap || 0) !== 0) {
+            w.element.css("bottom", o.vgap + o.bgap + (item.bgap || 0) + (item.vgap || 0));
         }
         return w;
     },
@@ -22286,15 +22367,15 @@ BI.AbsoluteVerticalLayout = BI.inherit(BI.Layout, {
             position: "absolute",
             left: item.lgap,
             right: item.rgap,
-            top: o.vgap + o.tgap + (item.tgap || 0),
-            bottom: o.vgap + o.bgap + (item.bgap || 0),
+            top: o.vgap + o.tgap + (item.tgap || 0) + (item.vgap || 0),
+            bottom: o.vgap + o.bgap + (item.bgap || 0) + (item.vgap || 0),
             margin: "auto"
         });
-        if (o.hgap + o.lgap + (item.lgap || 0) !== 0) {
-            w.element.css("left", o.hgap + o.lgap + (item.lgap || 0));
+        if (o.hgap + o.lgap + (item.hgap || 0) + (item.lgap || 0) !== 0) {
+            w.element.css("left", o.hgap + o.lgap + (item.lgap || 0) + (item.hgap || 0));
         }
-        if (o.hgap + o.rgap + (item.rgap || 0) !== 0) {
-            w.element.css("right", o.hgap + o.rgap + (item.rgap || 0));
+        if (o.hgap + o.rgap + (item.hgap || 0) + (item.rgap || 0) !== 0) {
+            w.element.css("right", o.hgap + o.rgap + (item.rgap || 0) + (item.hgap || 0));
         }
         return w;
     },
@@ -22374,24 +22455,24 @@ BI.CenterAdaptLayout = BI.inherit(BI.Layout, {
             padding: "0",
             border: "none"
         });
-        if (o.hgap + o.lgap + (item.lgap || 0) !== 0) {
+        if (o.vgap + o.tgap + (item.tgap || 0) + (item.vgap || 0) !== 0) {
             w.element.css({
-                "margin-left": o.hgap + o.lgap + (item.lgap || 0) + "px"
+                "margin-top": o.vgap + o.tgap + (item.tgap || 0) + (item.vgap || 0) + "px"
             });
         }
-        if (o.hgap + o.rgap + (item.rgap || 0) !== 0) {
+        if (o.hgap + o.lgap + (item.lgap || 0) + (item.hgap || 0) !== 0) {
             w.element.css({
-                "margin-right": o.hgap + o.rgap + (item.rgap || 0) + "px"
+                "margin-left": (i === 0 ? o.hgap : 0) + o.lgap + (item.lgap || 0) + (item.hgap || 0) +"px"
             });
         }
-        if (o.vgap + o.tgap + (item.tgap || 0) !== 0) {
+        if (o.hgap + o.rgap + (item.rgap || 0) + (item.hgap || 0) !== 0) {
             w.element.css({
-                "margin-top": o.vgap + o.tgap + (item.tgap || 0) + "px"
+                "margin-right": o.hgap + o.rgap + (item.rgap || 0) + (item.hgap || 0) + "px"
             });
         }
-        if (o.vgap + o.bgap + (item.bgap || 0) !== 0) {
+        if (o.vgap + o.bgap + (item.bgap || 0) + (item.vgap || 0) !== 0) {
             w.element.css({
-                "margin-bottom": o.vgap + o.bgap + (item.bgap || 0) + "px"
+                "margin-bottom": o.vgap + o.bgap + (item.bgap || 0) + (item.vgap || 0) + "px"
             });
         }
         return td;
@@ -22491,24 +22572,24 @@ BI.HorizontalAdaptLayout = BI.inherit(BI.Layout, {
             padding: "0",
             border: "none"
         });
-        if (o.hgap + o.lgap + (item.lgap || 0) !== 0) {
+        if (o.vgap + o.tgap + (item.tgap || 0) + (item.vgap || 0) !== 0) {
             w.element.css({
-                "margin-left": o.hgap + o.lgap + (item.lgap || 0) + "px"
+                "margin-top": o.vgap + o.tgap + (item.tgap || 0) + (item.vgap || 0) + "px"
             });
         }
-        if (o.hgap + o.rgap + (item.rgap || 0) !== 0) {
+        if (o.hgap + o.lgap + (item.lgap || 0) + (item.hgap || 0) !== 0) {
             w.element.css({
-                "margin-right": o.hgap + o.rgap + (item.rgap || 0) + "px"
+                "margin-left": (i === 0 ? o.hgap : 0) + o.lgap + (item.lgap || 0) + (item.hgap || 0) +"px"
             });
         }
-        if (o.vgap + o.tgap + (item.tgap || 0) !== 0) {
+        if (o.hgap + o.rgap + (item.rgap || 0) + (item.hgap || 0) !== 0) {
             w.element.css({
-                "margin-top": o.vgap + o.tgap + (item.tgap || 0) + "px"
+                "margin-right": o.hgap + o.rgap + (item.rgap || 0) + (item.hgap || 0) + "px"
             });
         }
-        if (o.vgap + o.bgap + (item.bgap || 0) !== 0) {
+        if (o.vgap + o.bgap + (item.bgap || 0) + (item.vgap || 0) !== 0) {
             w.element.css({
-                "margin-bottom": o.vgap + o.bgap + (item.bgap || 0) + "px"
+                "margin-bottom": o.vgap + o.bgap + (item.bgap || 0) + (item.vgap || 0) + "px"
             });
         }
         return td;
@@ -22781,24 +22862,24 @@ BI.VerticalAdaptLayout = BI.inherit(BI.Layout, {
             padding: "0",
             border: "none"
         });
-        if (o.hgap + o.lgap + (item.lgap || 0) !== 0) {
+        if (o.vgap + o.tgap + (item.tgap || 0) + (item.vgap || 0) !== 0) {
             w.element.css({
-                "margin-left": o.hgap + o.lgap + (item.lgap || 0) + "px"
+                "margin-top": o.vgap + o.tgap + (item.tgap || 0) + (item.vgap || 0) + "px"
             });
         }
-        if (o.hgap + o.rgap + (item.rgap || 0) !== 0) {
+        if (o.hgap + o.lgap + (item.lgap || 0) + (item.hgap || 0) !== 0) {
             w.element.css({
-                "margin-right": o.hgap + o.rgap + (item.rgap || 0) + "px"
+                "margin-left": (i === 0 ? o.hgap : 0) + o.lgap + (item.lgap || 0) + (item.hgap || 0) +"px"
             });
         }
-        if (o.vgap + o.tgap + (item.tgap || 0) !== 0) {
+        if (o.hgap + o.rgap + (item.rgap || 0) + (item.hgap || 0) !== 0) {
             w.element.css({
-                "margin-top": o.vgap + o.tgap + (item.tgap || 0) + "px"
+                "margin-right": o.hgap + o.rgap + (item.rgap || 0) + (item.hgap || 0) + "px"
             });
         }
-        if (o.vgap + o.bgap + (item.bgap || 0) !== 0) {
+        if (o.vgap + o.bgap + (item.bgap || 0) + (item.vgap || 0) !== 0) {
             w.element.css({
-                "margin-bottom": o.vgap + o.bgap + (item.bgap || 0) + "px"
+                "margin-bottom": o.vgap + o.bgap + (item.bgap || 0) + (item.vgap || 0) + "px"
             });
         }
         return td;
@@ -22863,24 +22944,24 @@ BI.HorizontalAutoLayout = BI.inherit(BI.Layout, {
             position: "relative",
             margin: "0px auto"
         });
-        if (o.hgap + o.lgap + (item.lgap || 0) !== 0) {
+        if (o.vgap + o.tgap + (item.tgap || 0) + (item.vgap || 0) !== 0) {
             w.element.css({
-                "margin-left": o.hgap + o.lgap + (item.lgap || 0) + "px"
+                "margin-top": (i === 0 ? o.vgap : 0) + o.tgap + (item.tgap || 0) + (item.vgap || 0) + "px"
             });
         }
-        if (o.hgap + o.rgap + (item.rgap || 0) !== 0) {
+        if (o.hgap + o.lgap + (item.lgap || 0) + (item.hgap || 0) !== 0) {
             w.element.css({
-                "margin-right": o.hgap + o.rgap + (item.rgap || 0) + "px"
+                "margin-left": o.hgap + o.lgap + (item.lgap || 0) + (item.hgap || 0) +"px"
             });
         }
-        if (o.vgap + o.tgap + (item.tgap || 0) !== 0) {
+        if (o.hgap + o.rgap + (item.rgap || 0) + (item.hgap || 0) !== 0) {
             w.element.css({
-                "margin-top": o.vgap + o.tgap + (item.tgap || 0) + "px"
+                "margin-right": o.hgap + o.rgap + (item.rgap || 0) + (item.hgap || 0) + "px"
             });
         }
-        if (o.vgap + o.bgap + (item.bgap || 0) !== 0) {
+        if (o.vgap + o.bgap + (item.bgap || 0) + (item.vgap || 0) !== 0) {
             w.element.css({
-                "margin-bottom": o.vgap + o.bgap + (item.bgap || 0) + "px"
+                "margin-bottom": o.vgap + o.bgap + (item.bgap || 0) + (item.vgap || 0) + "px"
             });
         }
         return w;
@@ -23104,24 +23185,24 @@ BI.FlexHorizontalLayout = BI.inherit(BI.Layout, {
         var o = this.options;
         var w = BI.FlexHorizontalLayout.superclass._addElement.apply(this, arguments);
         w.element.css({position: "relative", "flex-shrink": "0"});
-        if (o.hgap + o.lgap + (item.lgap || 0) > 0) {
+        if (o.vgap + o.tgap + (item.tgap || 0) + (item.vgap || 0) !== 0) {
             w.element.css({
-                "margin-left": o.hgap + o.lgap + (item.lgap || 0) + "px"
+                "margin-top": o.vgap + o.tgap + (item.tgap || 0) + (item.vgap || 0) + "px"
             });
         }
-        if (o.hgap + o.rgap + (item.rgap || 0) > 0) {
+        if (o.hgap + o.lgap + (item.lgap || 0) + (item.hgap || 0) !== 0) {
             w.element.css({
-                "margin-right": o.hgap + o.rgap + (item.rgap || 0) + "px"
+                "margin-left": (i === 0 ? o.hgap : 0) + o.lgap + (item.lgap || 0) + (item.hgap || 0) +"px"
             });
         }
-        if (o.vgap + o.tgap + (item.tgap || 0) > 0) {
+        if (o.hgap + o.rgap + (item.rgap || 0) + (item.hgap || 0) !== 0) {
             w.element.css({
-                "margin-top": o.vgap + o.tgap + (item.tgap || 0) + "px"
+                "margin-right": o.hgap + o.rgap + (item.rgap || 0) + (item.hgap || 0) + "px"
             });
         }
-        if (o.vgap + o.bgap + (item.bgap || 0) > 0) {
+        if (o.vgap + o.bgap + (item.bgap || 0) + (item.vgap || 0) !== 0) {
             w.element.css({
-                "margin-bottom": o.vgap + o.bgap + (item.bgap || 0) + "px"
+                "margin-bottom": o.vgap + o.bgap + (item.bgap || 0) + (item.vgap || 0) + "px"
             });
         }
         return w;
@@ -23168,24 +23249,24 @@ BI.FlexVerticalCenter = BI.inherit(BI.Layout, {
         var o = this.options;
         var w = BI.FlexVerticalCenter.superclass._addElement.apply(this, arguments);
         w.element.css({position: "relative", "flex-shrink": "0"});
-        if (o.hgap + o.lgap + (item.lgap || 0) > 0) {
+        if (o.vgap + o.tgap + (item.tgap || 0) + (item.vgap || 0) !== 0) {
             w.element.css({
-                "margin-left": o.hgap + o.lgap + (item.lgap || 0) + "px"
+                "margin-top": o.vgap + o.tgap + (item.tgap || 0) + (item.vgap || 0) + "px"
             });
         }
-        if (o.hgap + o.rgap + (item.rgap || 0) > 0) {
+        if (o.hgap + o.lgap + (item.lgap || 0) + (item.hgap || 0) !== 0) {
             w.element.css({
-                "margin-right": o.hgap + o.rgap + (item.rgap || 0) + "px"
+                "margin-left": (i === 0 ? o.hgap : 0) + o.lgap + (item.lgap || 0) + (item.hgap || 0) +"px"
             });
         }
-        if (o.vgap + o.tgap + (item.tgap || 0) > 0) {
+        if (o.hgap + o.rgap + (item.rgap || 0) + (item.hgap || 0) !== 0) {
             w.element.css({
-                "margin-top": o.vgap + o.tgap + (item.tgap || 0) + "px"
+                "margin-right": o.hgap + o.rgap + (item.rgap || 0) + (item.hgap || 0) + "px"
             });
         }
-        if (o.vgap + o.bgap + (item.bgap || 0) > 0) {
+        if (o.vgap + o.bgap + (item.bgap || 0) + (item.vgap || 0) !== 0) {
             w.element.css({
-                "margin-bottom": o.vgap + o.bgap + (item.bgap || 0) + "px"
+                "margin-bottom": o.vgap + o.bgap + (item.bgap || 0) + (item.vgap || 0) + "px"
             });
         }
         return w;
@@ -23288,24 +23369,24 @@ BI.FlexHorizontalLayout = BI.inherit(BI.Layout, {
         var o = this.options;
         var w = BI.FlexHorizontalLayout.superclass._addElement.apply(this, arguments);
         w.element.css({position: "relative"});
-        if (o.hgap + o.lgap + (item.lgap || 0) > 0) {
+        if (o.vgap + o.tgap + (item.tgap || 0) + (item.vgap || 0) !== 0) {
             w.element.css({
-                "margin-left": o.hgap + o.lgap + (item.lgap || 0) + "px"
+                "margin-top": o.vgap + o.tgap + (item.tgap || 0) + (item.vgap || 0) + "px"
             });
         }
-        if (o.hgap + o.rgap + (item.rgap || 0) > 0) {
+        if (o.hgap + o.lgap + (item.lgap || 0) + (item.hgap || 0) !== 0) {
             w.element.css({
-                "margin-right": o.hgap + o.rgap + (item.rgap || 0) + "px"
+                "margin-left": (i === 0 ? o.hgap : 0) + o.lgap + (item.lgap || 0) + (item.hgap || 0) +"px"
             });
         }
-        if (o.vgap + o.tgap + (item.tgap || 0) > 0) {
+        if (o.hgap + o.rgap + (item.rgap || 0) + (item.hgap || 0) !== 0) {
             w.element.css({
-                "margin-top": o.vgap + o.tgap + (item.tgap || 0) + "px"
+                "margin-right": o.hgap + o.rgap + (item.rgap || 0) + (item.hgap || 0) + "px"
             });
         }
-        if (o.vgap + o.bgap + (item.bgap || 0) > 0) {
+        if (o.vgap + o.bgap + (item.bgap || 0) + (item.vgap || 0) !== 0) {
             w.element.css({
-                "margin-bottom": o.vgap + o.bgap + (item.bgap || 0) + "px"
+                "margin-bottom": o.vgap + o.bgap + (item.bgap || 0) + (item.vgap || 0) + "px"
             });
         }
         return w;
@@ -23373,24 +23454,24 @@ BI.FlexVerticalCenter = BI.inherit(BI.Layout, {
         var o = this.options;
         var w = BI.FlexVerticalCenter.superclass._addElement.apply(this, arguments);
         w.element.css({position: "relative"});
-        if (o.hgap + o.lgap + (item.lgap || 0) > 0) {
+        if (o.vgap + o.tgap + (item.tgap || 0) + (item.vgap || 0) !== 0) {
             w.element.css({
-                "margin-left": o.hgap + o.lgap + (item.lgap || 0) + "px"
+                "margin-top": o.vgap + o.tgap + (item.tgap || 0) + (item.vgap || 0) + "px"
             });
         }
-        if (o.hgap + o.rgap + (item.rgap || 0) > 0) {
+        if (o.hgap + o.lgap + (item.lgap || 0) + (item.hgap || 0) !== 0) {
             w.element.css({
-                "margin-right": o.hgap + o.rgap + (item.rgap || 0) + "px"
+                "margin-left": (i === 0 ? o.hgap : 0) + o.lgap + (item.lgap || 0) + (item.hgap || 0) +"px"
             });
         }
-        if (o.vgap + o.tgap + (item.tgap || 0) > 0) {
+        if (o.hgap + o.rgap + (item.rgap || 0) + (item.hgap || 0) !== 0) {
             w.element.css({
-                "margin-top": o.vgap + o.tgap + (item.tgap || 0) + "px"
+                "margin-right": o.hgap + o.rgap + (item.rgap || 0) + (item.hgap || 0) + "px"
             });
         }
-        if (o.vgap + o.bgap + (item.bgap || 0) > 0) {
+        if (o.vgap + o.bgap + (item.bgap || 0) + (item.vgap || 0) !== 0) {
             w.element.css({
-                "margin-bottom": o.vgap + o.bgap + (item.bgap || 0) + "px"
+                "margin-bottom": o.vgap + o.bgap + (item.bgap || 0) + (item.vgap || 0) + "px"
             });
         }
         return w;
@@ -24214,17 +24295,25 @@ BI.FloatLeftLayout = BI.inherit(BI.Layout, {
         if (BI.isNotNull(item.top)) {
             w.element.css({top: item.top});
         }
-        if ((item.lgap || 0) + o.hgap + o.lgap !== 0) {
-            w.element.css("margin-left", (item.lgap || 0) + o.hgap + o.lgap);
+        if (o.vgap + o.tgap + (item.tgap || 0) + (item.vgap || 0) !== 0) {
+            w.element.css({
+                "margin-top": o.vgap + o.tgap + (item.tgap || 0) + (item.vgap || 0) + "px"
+            });
         }
-        if ((item.rgap || 0) + o.hgap + o.rgap !== 0) {
-            w.element.css("margin-right", (item.rgap || 0) + o.hgap + o.rgap);
+        if (o.hgap + o.lgap + (item.lgap || 0) + (item.hgap || 0) !== 0) {
+            w.element.css({
+                "margin-left": (i === 0 ? o.hgap : 0) + o.lgap + (item.lgap || 0) + (item.hgap || 0) +"px"
+            });
         }
-        if ((item.tgap || 0) + o.vgap + o.tgap !== 0) {
-            w.element.css("margin-top", (item.tgap || 0) + o.vgap + o.tgap);
+        if (o.hgap + o.rgap + (item.rgap || 0) + (item.hgap || 0) !== 0) {
+            w.element.css({
+                "margin-right": o.hgap + o.rgap + (item.rgap || 0) + (item.hgap || 0) + "px"
+            });
         }
-        if ((item.bgap || 0) + o.vgap + o.bgap !== 0) {
-            w.element.css("margin-bottom", (item.bgap || 0) + o.vgap + o.bgap);
+        if (o.vgap + o.bgap + (item.bgap || 0) + (item.vgap || 0) !== 0) {
+            w.element.css({
+                "margin-bottom": o.vgap + o.bgap + (item.bgap || 0) + (item.vgap || 0) + "px"
+            });
         }
         return w;
     },
@@ -24279,17 +24368,25 @@ BI.FloatRightLayout = BI.inherit(BI.Layout, {
         if (BI.isNotNull(item.top)) {
             w.element.css({top: item.top});
         }
-        if ((item.lgap || 0) + o.hgap + o.lgap !== 0) {
-            w.element.css("margin-left", (item.lgap || 0) + o.hgap + o.lgap);
+        if (o.vgap + o.tgap + (item.tgap || 0) + (item.vgap || 0) !== 0) {
+            w.element.css({
+                "margin-top": o.vgap + o.tgap + (item.tgap || 0) + (item.vgap || 0) + "px"
+            });
         }
-        if ((item.rgap || 0) + o.hgap + o.rgap !== 0) {
-            w.element.css("margin-right", (item.rgap || 0) + o.hgap + o.rgap);
+        if (o.hgap + o.lgap + (item.lgap || 0) + (item.hgap || 0) !== 0) {
+            w.element.css({
+                "margin-left": o.hgap + o.lgap + (item.lgap || 0) + (item.hgap || 0) +"px"
+            });
         }
-        if ((item.tgap || 0) + o.vgap + o.tgap !== 0) {
-            w.element.css("margin-top", (item.tgap || 0) + o.vgap + o.tgap);
+        if (o.hgap + o.rgap + (item.rgap || 0) + (item.hgap || 0) !== 0) {
+            w.element.css({
+                "margin-right": (i === 0 ? o.hgap : 0) + o.rgap + (item.rgap || 0) + (item.hgap || 0) + "px"
+            });
         }
-        if ((item.bgap || 0) + o.vgap + o.bgap !== 0) {
-            w.element.css("margin-bottom", (item.bgap || 0) + o.vgap + o.bgap);
+        if (o.vgap + o.bgap + (item.bgap || 0) + (item.vgap || 0) !== 0) {
+            w.element.css({
+                "margin-bottom": o.vgap + o.bgap + (item.bgap || 0) + (item.vgap || 0) + "px"
+            });
         }
         return w;
     },
@@ -24493,24 +24590,25 @@ BI.HorizontalLayout = BI.inherit(BI.Layout, {
             padding: "0",
             border: "none"
         });
-        if (o.hgap + o.lgap + (item.lgap || 0) > 0) {
+
+        if (o.vgap + o.tgap + (item.tgap || 0) + (item.vgap || 0) !== 0) {
             w.element.css({
-                "margin-left": o.hgap + o.lgap + (item.lgap || 0) + "px"
+                "margin-top": o.vgap + o.tgap + (item.tgap || 0) + (item.vgap || 0) + "px"
             });
         }
-        if (o.hgap + o.rgap + (item.rgap || 0) > 0) {
+        if (o.hgap + o.lgap + (item.lgap || 0) + (item.hgap || 0) !== 0) {
             w.element.css({
-                "margin-right": o.hgap + o.rgap + (item.rgap || 0) + "px"
+                "margin-left": (i === 0 ? o.hgap : 0) + o.lgap + (item.lgap || 0) + (item.hgap || 0) +"px"
             });
         }
-        if (o.vgap + o.tgap + (item.tgap || 0) > 0) {
+        if (o.hgap + o.rgap + (item.rgap || 0) + (item.hgap || 0) !== 0) {
             w.element.css({
-                "margin-top": o.vgap + o.tgap + (item.tgap || 0) + "px"
+                "margin-right": o.hgap + o.rgap + (item.rgap || 0) + (item.hgap || 0) + "px"
             });
         }
-        if (o.vgap + o.bgap + (item.bgap || 0) > 0) {
+        if (o.vgap + o.bgap + (item.bgap || 0) + (item.vgap || 0) !== 0) {
             w.element.css({
-                "margin-bottom": o.vgap + o.bgap + (item.bgap || 0) + "px"
+                "margin-bottom": o.vgap + o.bgap + (item.bgap || 0) + (item.vgap || 0) + "px"
             });
         }
         return td;
@@ -24861,7 +24959,7 @@ BI.HTapeLayout = BI.inherit(BI.Layout, {
             } else {
                 w = self.getWidgetByName(self.getName() + i + "");
             }
-            w.element.css({position: "absolute", top: o.vgap + o.tgap + "px", bottom: o.vgap + o.bgap + "px"});
+            w.element.css({position: "absolute", top: (item.vgap || 0) + (item.tgap || 0) + o.vgap + o.tgap + "px", bottom: (item.bgap || 0) + (item.vgap || 0) + o.vgap + o.bgap + "px"});
         });
 
         var left = {}, right = {};
@@ -24871,13 +24969,13 @@ BI.HTapeLayout = BI.inherit(BI.Layout, {
         BI.any(items, function (i, item) {
             var w = self.getWidgetByName(self.getName() + i + "");
             if (BI.isNull(left[i])) {
-                left[i] = left[i - 1] + items[i - 1].width + 2 * o.hgap + o.lgap + o.rgap;
+                left[i] = left[i - 1] + items[i - 1].width + (items[i - 1].lgap || 0) + 2 * (items[i - 1].hgap || 0) + o.hgap + o.lgap + o.rgap;
             }
             if (item.width < 1 && item.width >= 0) {
                 w.element.css({left: left[i] * 100 + "%", width: item.width * 100 + "%"});
             } else {
                 w.element.css({
-                    left: left[i] + o.hgap + o.lgap + "px",
+                    left: left[i] + (item.lgap || 0) + (item.hgap || 0) + o.hgap + o.lgap + "px",
                     width: BI.isNumber(item.width) ? item.width : ""
                 });
             }
@@ -24888,13 +24986,13 @@ BI.HTapeLayout = BI.inherit(BI.Layout, {
         BI.backAny(items, function (i, item) {
             var w = self.getWidgetByName(self.getName() + i + "");
             if (BI.isNull(right[i])) {
-                right[i] = right[i + 1] + items[i + 1].width + 2 * o.hgap + o.lgap + o.rgap;
+                right[i] = right[i + 1] + items[i + 1].width + (items[i + 1].rgap || 0) + 2 * (items[i + 1].hgap || 0) + o.hgap + o.lgap + o.rgap;
             }
             if (item.width < 1 && item.width >= 0) {
                 w.element.css({right: right[i] * 100 + "%", width: item.width * 100 + "%"});
             } else {
                 w.element.css({
-                    right: right[i] + o.hgap + o.rgap + "px",
+                    right: right[i] + (item.rgap || 0) + (item.hgap || 0) + o.hgap + o.rgap + "px",
                     width: BI.isNumber(item.width) ? item.width : ""
                 });
             }
@@ -24966,7 +25064,7 @@ BI.VTapeLayout = BI.inherit(BI.Layout, {
             } else {
                 w = self.getWidgetByName(self.getName() + i + "");
             }
-            w.element.css({position: "absolute", left: o.hgap + o.lgap + "px", right: o.hgap + o.rgap + "px"});
+            w.element.css({position: "absolute", left: (item.lgap || 0) + (item.hgap || 0) + o.hgap + o.lgap + "px", right: + (item.hgap || 0) + (item.rgap || 0) + o.hgap + o.rgap + "px"});
         });
 
         var top = {}, bottom = {};
@@ -24976,13 +25074,13 @@ BI.VTapeLayout = BI.inherit(BI.Layout, {
         BI.any(items, function (i, item) {
             var w = self.getWidgetByName(self.getName() + i + "");
             if (BI.isNull(top[i])) {
-                top[i] = top[i - 1] + items[i - 1].height + 2 * o.vgap + o.tgap + o.bgap;
+                top[i] = top[i - 1] + items[i - 1].height + (items[i - 1].tgap || 0) + 2 * (items[i - 1].vgap || 0) + o.vgap + o.tgap + o.bgap;
             }
             if (item.height < 1 && item.height >= 0) {
                 w.element.css({top: top[i] * 100 + "%", height: item.height * 100 + "%"});
             } else {
                 w.element.css({
-                    top: top[i] + o.vgap + o.tgap + "px",
+                    top: top[i] + (item.vgap || 0) + (item.tgap || 0) + o.vgap + o.tgap + "px",
                     height: BI.isNumber(item.height) ? item.height : ""
                 });
             }
@@ -24993,13 +25091,13 @@ BI.VTapeLayout = BI.inherit(BI.Layout, {
         BI.backAny(items, function (i, item) {
             var w = self.getWidgetByName(self.getName() + i + "");
             if (BI.isNull(bottom[i])) {
-                bottom[i] = bottom[i + 1] + items[i + 1].height + 2 * o.vgap + o.tgap + o.bgap;
+                bottom[i] = bottom[i + 1] + items[i + 1].height + (items[i + 1].bgap || 0) + 2 * (items[i + 1].vgap || 0) + o.vgap + o.tgap + o.bgap;
             }
             if (item.height < 1 && item.height >= 0) {
                 w.element.css({bottom: bottom[i] * 100 + "%", height: item.height * 100 + "%"});
             } else {
                 w.element.css({
-                    bottom: bottom[i] + o.vgap + o.bgap + "px",
+                    bottom: bottom[i] + (item.vgap || 0) + (item.bgap || 0) + o.vgap + o.bgap + "px",
                     height: BI.isNumber(item.height) ? item.height : ""
                 });
             }
@@ -25196,24 +25294,24 @@ BI.VerticalLayout = BI.inherit(BI.Layout, {
         w.element.css({
             position: "relative"
         });
-        if (o.vgap + o.tgap + (item.tgap || 0) !== 0) {
+        if (o.vgap + o.tgap + (item.tgap || 0) + (item.vgap || 0) !== 0) {
             w.element.css({
-                "margin-top": o.vgap + o.tgap + (item.tgap || 0) + "px"
+                "margin-top": (i === 0 ? o.vgap : 0) + o.tgap + (item.tgap || 0) + (item.vgap || 0) + "px"
             });
         }
-        if (o.hgap + o.lgap + (item.lgap || 0) !== 0) {
+        if (o.hgap + o.lgap + (item.lgap || 0) + (item.hgap || 0) !== 0) {
             w.element.css({
-                "margin-left": o.hgap + o.lgap + (item.lgap || 0) + "px"
+                "margin-left": o.hgap + o.lgap + (item.lgap || 0) + (item.hgap || 0) +"px"
             });
         }
-        if (o.hgap + o.rgap + (item.rgap || 0) !== 0) {
+        if (o.hgap + o.rgap + (item.rgap || 0) + (item.hgap || 0) !== 0) {
             w.element.css({
-                "margin-right": o.hgap + o.rgap + (item.rgap || 0) + "px"
+                "margin-right": o.hgap + o.rgap + (item.rgap || 0) + (item.hgap || 0) + "px"
             });
         }
-        if (o.vgap + o.bgap + (item.bgap || 0) !== 0) {
+        if (o.vgap + o.bgap + (item.bgap || 0) + (item.vgap || 0) !== 0) {
             w.element.css({
-                "margin-bottom": o.vgap + o.bgap + (item.bgap || 0) + "px"
+                "margin-bottom": o.vgap + o.bgap + (item.bgap || 0) + (item.vgap || 0) + "px"
             });
         }
         return w;
@@ -26405,6 +26503,9 @@ BI.BasicButton = BI.inherit(BI.Single, {
         if (opts.shadow) {
             this._createShadow();
         }
+        if (opts.level) {
+            this.element.addClass("button-" + opts.level);
+        }
     },
 
     _createShadow: function () {
@@ -26793,6 +26894,7 @@ BI.ButtonGroup = BI.inherit(BI.Widget, {
             baseCls: "bi-button-group",
             behaviors: {},
             items: [],
+            value: "",
             chooseType: BI.Selection.Single,
             layouts: [{
                 type: "bi.center",
@@ -26804,14 +26906,18 @@ BI.ButtonGroup = BI.inherit(BI.Widget, {
 
     _init: function () {
         BI.ButtonGroup.superclass._init.apply(this, arguments);
+        var o = this.options;
         var behaviors = {};
-        BI.each(this.options.behaviors, function (key, rule) {
+        BI.each(o.behaviors, function (key, rule) {
             behaviors[key] = BI.BehaviorFactory.createBehavior(key, {
                 rule: rule
             });
         });
         this.behaviors = behaviors;
-        this.populate(this.options.items);
+        this.populate(o.items);
+        if(BI.isKey(o.value) || BI.isNotEmptyArray(o.value)){
+            this.setValue(o.value);
+        }
     },
 
     _createBtns: function (items) {
@@ -27730,11 +27836,15 @@ BI.TreeView = BI.inherit(BI.Pane, {
             });
         }
 
+        if (!this.nodes) {
+            return;
+        }
+
         BI.each(this.nodes.getNodes(), function (i, node) {
             node.halfCheck = false;
             setNode(node.children);
         });
-        this.nodes && this.nodes.checkAllNodes(checked);
+        this.nodes.checkAllNodes(checked);
     },
 
     expandAll: function (flag) {
@@ -28896,14 +29006,17 @@ BI.Combo = BI.inherit(BI.Widget, {
     },
 
     _initCombo: function () {
-        this.combo = BI.createWidget(this.options.el);
+        this.combo = BI.createWidget(this.options.el, {
+            value: this.options.value
+        });
     },
 
     _assertPopupView: function () {
-        var self = this;
+        var self = this, o = this.options;
         if (this.popupView == null) {
             this.popupView = BI.createWidget(this.options.popup, {
-                type: "bi.popup_view"
+                type: "bi.popup_view",
+                value: o.value
             });
             this.popupView.on(BI.Controller.EVENT_CHANGE, function (type, value, obj) {
                 if (type === BI.Events.CLICK) {
@@ -29094,14 +29207,20 @@ BI.Combo = BI.inherit(BI.Widget, {
     },
 
     setValue: function (v) {
-        this._assertPopupView();
         this.combo.setValue(v);
-        this.popupView && this.popupView.setValue(v);
+        if (BI.isNull(this.popupView)) {
+            this.options.popup.value = v;
+        } else {
+            this.popupView.setValue(v);
+        }
     },
 
     getValue: function () {
-        this._assertPopupView();
-        return this.popupView && this.popupView.getValue();
+        if (BI.isNull(this.popupView)) {
+            return this.options.popup.value;
+        } else {
+            return this.popupView.getValue();
+        }
     },
 
     isViewVisible: function () {
@@ -29280,11 +29399,13 @@ BI.Expander = BI.inherit(BI.Widget, {
     },
 
     _initExpander: function () {
-        this.expander = BI.createWidget(this.options.el);
+        this.expander = BI.createWidget(this.options.el, {
+            value: this.options.value
+        });
     },
 
     _assertPopupView: function () {
-        var self = this;
+        var self = this, o = this.options;
         if (this.popupView == null) {
             this.popupView = BI.createWidget(this.options.popup, {
                 type: "bi.button_group",
@@ -29293,7 +29414,8 @@ BI.Expander = BI.inherit(BI.Widget, {
                     type: "bi.vertical",
                     hgap: 0,
                     vgap: 0
-                }]
+                }],
+                value: o.value
             });
             this.popupView.on(BI.Controller.EVENT_CHANGE, function (type, value, obj) {
                 self.fireEvent(BI.Controller.EVENT_CHANGE, arguments);
@@ -29357,14 +29479,20 @@ BI.Expander = BI.inherit(BI.Widget, {
     },
 
     setValue: function (v) {
-        // this._assertPopupView();
         this.expander.setValue(v);
-        this.popupView && this.popupView.setValue(v);
+        if (BI.isNull(this.popupView)) {
+            this.options.popup.value = v;
+        } else {
+            this.popupView.setValue(v);
+        }
     },
 
     getValue: function () {
-        // this._assertPopupView();
-        return this.popupView ? this.popupView.getValue() : [];
+        if (BI.isNull(this.popupView)) {
+            return this.options.popup.value;
+        } else {
+            return this.popupView.getValue();
+        }
     },
 
     isViewVisible: function () {
@@ -30256,8 +30384,11 @@ BI.Searcher = BI.inherit(BI.Widget, {
     },
 
     setValue: function (v) {
-        this._assertPopupView();
-        this.popupView && this.popupView.setValue(v);
+        if (BI.isNull(this.popupView)) {
+            this.options.popup.value = v;
+        } else {
+            this.popupView.setValue(v);
+        }
     },
 
     getKeyword: function () {
@@ -30277,6 +30408,9 @@ BI.Searcher = BI.inherit(BI.Widget, {
             return this.popupView.getValue();
         } else if (o.adapter && o.adapter.getValue) {
             return o.adapter.getValue();
+        }
+        if (BI.isNull(this.popupView)) {
+            return o.popup.value;
         }
         return this.popupView.getValue();
         
@@ -30432,7 +30566,9 @@ BI.Switcher = BI.inherit(BI.Widget, {
     },
 
     _initSwitcher: function () {
-        this.switcher = BI.createWidget(this.options.el);
+        this.switcher = BI.createWidget(this.options.el, {
+            value: o.value
+        });
     },
 
     _assertPopupView: function () {
@@ -30446,7 +30582,8 @@ BI.Switcher = BI.inherit(BI.Widget, {
                     type: "bi.vertical",
                     hgap: 0,
                     vgap: 0
-                }]
+                }],
+                value: o.value
             });
             this.popupView.on(BI.Controller.EVENT_CHANGE, function (type, value, obj) {
                 self.fireEvent(BI.Controller.EVENT_CHANGE, arguments);
@@ -30506,14 +30643,20 @@ BI.Switcher = BI.inherit(BI.Widget, {
     },
 
     setValue: function (v) {
-        this._assertPopupView();
         this.switcher.setValue(v);
-        this.popupView && this.popupView.setValue(v);
+        if (BI.isNull(this.popupView)) {
+            this.options.popup.value = v;
+        } else {
+            this.popupView.setValue(v);
+        }
     },
 
     getValue: function () {
-        this._assertPopupView();
-        return this.popupView ? this.popupView.getValue() : [];
+        if (BI.isNull(this.popupView)) {
+            return this.options.popup.value;
+        } else {
+            return this.popupView.getValue();
+        }
     },
 
     setAdapter: function (adapter) {
@@ -41144,7 +41287,7 @@ BI.PopupView = BI.inherit(BI.Widget, {
 
     _createView: function () {
         var o = this.options;
-        this.button_group = BI.createWidget(o.el, {type: "bi.button_group"});
+        this.button_group = BI.createWidget(o.el, {type: "bi.button_group", value: o.value});
         this.button_group.element.css({"min-height": o.minHeight + "px"});
         return this.button_group;
     },
@@ -41276,7 +41419,8 @@ BI.SearcherView = BI.inherit(BI.Pane, {
             },
             layouts: [{
                 type: "bi.vertical"
-            }]
+            }],
+            value: o.value
         });
         this.matcher.on(BI.Controller.EVENT_CHANGE, function (type, val, ob) {
             self.fireEvent(BI.Controller.EVENT_CHANGE, arguments);
@@ -41304,7 +41448,8 @@ BI.SearcherView = BI.inherit(BI.Pane, {
             },
             layouts: [{
                 type: "bi.vertical"
-            }]
+            }],
+            value: o.value
         });
         this.searcher.on(BI.Controller.EVENT_CHANGE, function (type, val, ob) {
             self.fireEvent(BI.Controller.EVENT_CHANGE, arguments);
@@ -42199,7 +42344,7 @@ BI.shortcut("bi.image_button", BI.ImageButton);(function ($) {
                 shadow: props.clear !== true,
                 isShadowShowingOnSelected: true,
                 readonly: true,
-                iconClass: "",
+                iconCls: "",
                 level: "common",
                 block: false, // 是否块状显示，即不显示边框，没有最小宽度的限制
                 clear: false, // 是否去掉边框和背景
@@ -42225,7 +42370,7 @@ BI.shortcut("bi.image_button", BI.ImageButton);(function ($) {
             } else {
                 this.element.css({lineHeight: o.height + "px"});
             }
-            if (BI.isKey(o.iconClass)) {
+            if (BI.isKey(o.iconCls)) {
                 this.icon = BI.createWidget({
                     type: "bi.icon",
                     width: 18
@@ -42237,7 +42382,7 @@ BI.shortcut("bi.image_button", BI.ImageButton);(function ($) {
                 });
                 BI.createWidget({
                     type: "bi.horizontal_auto",
-                    cls: "button-" + o.level + " " + o.iconClass,
+                    cls: o.iconCls,
                     element: this,
                     hgap: o.hgap,
                     vgap: o.vgap,
@@ -42253,7 +42398,6 @@ BI.shortcut("bi.image_button", BI.ImageButton);(function ($) {
             } else {
                 this.text = BI.createWidget({
                     type: "bi.label",
-                    cls: "button-" + o.level,
                     textAlign: o.textAlign,
                     whiteSpace: o.whiteSpace,
                     forceCenter: o.forceCenter,
@@ -43844,6 +43988,7 @@ BI.Editor = BI.inherit(BI.Single, {
             type: "bi.input",
             element: "<input type='" + o.inputType + "'/>",
             root: true,
+            value: o.value,
             watermark: o.watermark,
             validationChecker: o.validationChecker,
             quitChecker: o.quitChecker,
@@ -43986,7 +44131,8 @@ BI.Editor = BI.inherit(BI.Single, {
             return false;
         });
         if (BI.isKey(this.options.value) || BI.isEmptyString(this.options.value)) {
-            this.setValue(this.options.value);
+            this._checkError();
+            this._checkWaterMark();
         } else {
             this._checkWaterMark();
         }
@@ -45190,6 +45336,9 @@ BI.Input = BI.inherit(BI.Single, {
             .focusout(function (e) {
                 self._blurDebounce();
             });
+        if (BI.isKey(this.options.value) || BI.isEmptyString(this.options.value)) {
+            this.setValue(this.options.value);
+        }
     },
 
     _focus: function () {
@@ -46840,7 +46989,8 @@ BI.SQLEditor = BI.inherit(BI.Widget, {
             value: "",
             lineHeight: 2,
             showHint: true,
-            supportFunction: false
+            supportFunction: false,
+            supportParam: false
         });
     },
     _init: function () {
@@ -46964,14 +47114,14 @@ BI.SQLEditor = BI.inherit(BI.Widget, {
     },
 
     setValue: function (v) {
-        var self = this, result;
+        var self = this, result, o = this.options;
         this.refresh();
         self.editor.setValue("");
         result = this._analyzeContent(v || "");
         BI.each(result, function (i, item) {
             var fieldRegx = /\$[\{][^\}]*[\}]/;
             var str = item.match(fieldRegx);
-            if (BI.isNotEmptyArray(str)) {
+            if (BI.isNotEmptyArray(str) && o.supportParam) {
                 self.insertParam(str[0].substring(2, item.length - 1));
             } else {
                 self.insertString(item);
@@ -59741,7 +59891,8 @@ BI.CustomTree = BI.inherit(BI.Widget, {
                     args[0] = self._formatItems(items);
                     callback.apply(null, args);
                 }]);
-            }
+            },
+            value: o.value
         });
         this.tree.on(BI.Controller.EVENT_CHANGE, function (type, val, obj) {
             self.fireEvent(BI.Controller.EVENT_CHANGE, arguments);
@@ -62148,7 +62299,7 @@ BI.IconChangeButton = BI.inherit(BI.Single, {
         var conf = BI.IconChangeButton.superclass._defaultConfig.apply(this, arguments);
         return BI.extend(conf, {
             baseCls: "bi-icon-change-button",
-            iconClass: "",
+            iconCls: "",
             iconWidth: null,
             iconHeight: null,
 
@@ -62173,7 +62324,7 @@ BI.IconChangeButton = BI.inherit(BI.Single, {
         this.button = BI.createWidget({
             type: "bi.icon_button",
             element: this,
-            cls: o.iconClass,
+            cls: o.iconCls,
             height: o.height,
             iconWidth: o.iconWidth,
             iconHeight: o.iconHeight,
@@ -62210,9 +62361,9 @@ BI.IconChangeButton = BI.inherit(BI.Single, {
 
     setIcon: function (cls) {
         var o = this.options;
-        if (o.iconClass !== cls) {
-            this.element.removeClass(o.iconClass).addClass(cls);
-            o.iconClass = cls;
+        if (o.iconCls !== cls) {
+            this.element.removeClass(o.iconCls).addClass(cls);
+            o.iconCls = cls;
         }
     }
 });
@@ -62361,8 +62512,7 @@ BI.SingleSelectIconTextItem = BI.inherit(BI.Single, {
     _defaultConfig: function () {
         return BI.extend(BI.SingleSelectIconTextItem.superclass._defaultConfig.apply(this, arguments), {
             extraCls: "bi-single-select-icon-text-item bi-list-item-active",
-            iconClass: "",
-            hgap: 10,
+            iconCls: "",
             height: 25
         });
     },
@@ -62372,7 +62522,7 @@ BI.SingleSelectIconTextItem = BI.inherit(BI.Single, {
         this.text = BI.createWidget({
             type: "bi.icon_text_item",
             element: this,
-            cls: o.iconClass,
+            cls: o.iconCls,
             once: o.once,
             selected: o.selected,
             height: o.height,
@@ -64184,9 +64334,7 @@ BI.shortcut("bi.complex_canvas", BI.ComplexCanvas);/**
 BI.ArrowTreeGroupNodeCheckbox = BI.inherit(BI.IconButton, {
     _defaultConfig: function () {
         return BI.extend(BI.ArrowTreeGroupNodeCheckbox.superclass._defaultConfig.apply(this, arguments), {
-            extraCls: "bi-arrow-tree-group-node",
-            iconWidth: 13,
-            iconHeight: 13
+            extraCls: "bi-arrow-tree-group-node"
         });
     },
     _init: function () {
@@ -64209,9 +64357,7 @@ BI.shortcut("bi.arrow_tree_group_node_checkbox", BI.ArrowTreeGroupNodeCheckbox);
 BI.CheckingMarkNode = BI.inherit(BI.IconButton, {
     _defaultConfig: function () {
         return BI.extend( BI.CheckingMarkNode.superclass._defaultConfig.apply(this, arguments), {
-            extraCls: "check-mark-font",
-            iconWidth: 13,
-            iconHeight: 13
+            extraCls: "check-mark-font"
         });
     },
     _init: function () {
@@ -64315,9 +64461,7 @@ BI.shortcut("bi.mid_tree_node_checkbox", BI.MidTreeNodeCheckbox);/**
 BI.TreeGroupNodeCheckbox = BI.inherit(BI.IconButton, {
     _defaultConfig: function () {
         return BI.extend( BI.TreeGroupNodeCheckbox.superclass._defaultConfig.apply(this, arguments), {
-            extraCls: "tree-node-triangle-collapse-font",
-            iconWidth: 13,
-            iconHeight: 13
+            extraCls: "tree-node-triangle-collapse-font"
         });
     },
     _init: function () {
@@ -65802,25 +65946,42 @@ BI.ColorChooser = BI.inherit(BI.Widget, {
     _init: function () {
         BI.ColorChooser.superclass._init.apply(this, arguments);
         var self = this, o = this.options;
-        this.trigger = BI.createWidget(BI.extend({
-            type: "bi.color_chooser_trigger",
-            width: o.width,
-            height: o.height
-        }, o.el));
-        this.colorPicker = BI.createWidget({
-            type: "bi.color_chooser_popup"
-        });
 
         this.combo = BI.createWidget({
             type: "bi.combo",
             element: this,
             adjustLength: 1,
-            el: this.trigger,
+            el: BI.extend({
+                type: "bi.color_chooser_trigger",
+                ref: function (_ref) {
+                    self.trigger = _ref;
+                },
+                width: o.width,
+                height: o.height
+            }, o.el),
             popup: {
-                el: this.colorPicker,
+                el: {
+                    type: "bi.color_chooser_popup",
+                    ref: function (_ref) {
+                        self.colorPicker = _ref;
+                    },
+                    listeners: [{
+                        eventName: BI.ColorChooserPopup.EVENT_VALUE_CHANGE,
+                        action: function () {
+                            fn();
+                        }
+                    }, {
+                        eventName: BI.ColorChooserPopup.EVENT_CHANGE,
+                        action: function () {
+                            fn();
+                            self.combo.hideView();
+                        }
+                    }]
+                },
                 stopPropagation: false,
                 minWidth: 202
-            }
+            },
+            value: o.value
         });
 
         var fn = function () {
@@ -65833,15 +65994,6 @@ BI.ColorChooser = BI.inherit(BI.Widget, {
             que.unshift(color);
             BI.Cache.setItem("colors", BI.array2String(que.toArray()));
         };
-
-        this.colorPicker.on(BI.ColorChooserPopup.EVENT_VALUE_CHANGE, function () {
-            fn();
-        });
-
-        this.colorPicker.on(BI.ColorChooserPopup.EVENT_CHANGE, function () {
-            fn();
-            self.combo.hideView();
-        });
         this.combo.on(BI.Combo.EVENT_BEFORE_POPUPVIEW, function () {
             self.colorPicker.setStoreColors(BI.string2Array(BI.Cache.getItem("colors") || ""));
         });
@@ -65868,7 +66020,7 @@ BI.ColorChooser = BI.inherit(BI.Widget, {
     },
 
     getValue: function () {
-        return this.colorPicker.getValue();
+        return this.combo.getValue();
     }
 });
 BI.ColorChooser.EVENT_CHANGE = "ColorChooser.EVENT_CHANGE";
@@ -65893,7 +66045,8 @@ BI.ColorChooserPopup = BI.inherit(BI.Widget, {
         BI.ColorChooserPopup.superclass._init.apply(this, arguments);
         var self = this, o = this.options;
         this.colorEditor = BI.createWidget({
-            type: "bi.color_picker_editor"
+            type: "bi.color_picker_editor",
+            value: o.value
         });
 
         this.colorEditor.on(BI.ColorPickerEditor.EVENT_CHANGE, function () {
@@ -65929,7 +66082,8 @@ BI.ColorChooserPopup = BI.inherit(BI.Widget, {
                 disabled: true
             }]],
             width: 190,
-            height: 25
+            height: 25,
+            value: o.value
         });
         this.storeColors.on(BI.ColorPicker.EVENT_CHANGE, function () {
             self.setValue(this.getValue()[0]);
@@ -65939,7 +66093,8 @@ BI.ColorChooserPopup = BI.inherit(BI.Widget, {
         this.colorPicker = BI.createWidget({
             type: "bi.color_picker",
             width: 190,
-            height: 50
+            height: 50,
+            value: o.value
         });
 
         this.colorPicker.on(BI.ColorPicker.EVENT_CHANGE, function () {
@@ -66352,7 +66507,8 @@ BI.ColorPicker = BI.inherit(BI.Widget, {
             }),
             layouts: [{
                 type: "bi.grid"
-            }]
+            }],
+            value: o.value
         });
         this.colors.on(BI.ButtonGroup.EVENT_CHANGE, function () {
             self.fireEvent(BI.ColorPicker.EVENT_CHANGE, arguments);
@@ -67346,7 +67502,7 @@ BI.IconCombo = BI.inherit(BI.Widget, {
             baseCls: "bi-icon-combo",
             width: 24,
             height: 24,
-            iconClass: "",
+            iconCls: "",
             el: {},
             popup: {},
             minWidth: 100,
@@ -67366,7 +67522,7 @@ BI.IconCombo = BI.inherit(BI.Widget, {
         var self = this, o = this.options;
         this.trigger = BI.createWidget(o.el, {
             type: "bi.icon_combo_trigger",
-            iconClass: o.iconClass,
+            iconCls: o.iconCls,
             title: o.title,
             items: o.items,
             width: o.width,
@@ -67503,7 +67659,7 @@ BI.IconComboTrigger = BI.inherit(BI.Trigger, {
             extraCls: "bi-icon-combo-trigger",
             el: {},
             items: [],
-            iconClass: "",
+            iconCls: "",
             width: 25,
             height: 25,
             isShowDown: true
@@ -67515,7 +67671,7 @@ BI.IconComboTrigger = BI.inherit(BI.Trigger, {
         var o = this.options, self = this;
         this.button = BI.createWidget(o.el, {
             type: "bi.icon_change_button",
-            cls: "icon-combo-trigger-icon " + o.iconClass,
+            cls: "icon-combo-trigger-icon " + o.iconCls,
             disableSelected: true,
             width: o.width,
             height: o.height,
@@ -67553,7 +67709,7 @@ BI.IconComboTrigger = BI.inherit(BI.Trigger, {
     populate: function (items) {
         var o = this.options;
         this.options.items = items || [];
-        this.button.setIcon(o.iconClass);
+        this.button.setIcon(o.iconCls);
         this.button.setSelected(false);
         this.down.setSelected(false);
     },
@@ -67561,19 +67717,19 @@ BI.IconComboTrigger = BI.inherit(BI.Trigger, {
     setValue: function (v) {
         BI.IconComboTrigger.superclass.setValue.apply(this, arguments);
         var o = this.options;
-        var iconClass = "";
+        var iconCls = "";
         v = BI.isArray(v) ? v[0] : v;
         if (BI.any(this.options.items, function (i, item) {
             if (v === item.value) {
-                iconClass = item.iconClass;
+                iconCls = item.iconCls;
                 return true;
             }
         })) {
-            this.button.setIcon(iconClass);
+            this.button.setIcon(iconCls);
             this.button.setSelected(true);
             this.down.setSelected(true);
         } else {
-            this.button.setIcon(o.iconClass);
+            this.button.setIcon(o.iconCls);
             this.button.setSelected(false);
             this.down.setSelected(false);
         }
@@ -67601,6 +67757,7 @@ BI.IconTextValueCombo = BI.inherit(BI.Widget, {
             type: "bi.select_icon_text_trigger",
             items: o.items,
             height: o.height,
+            text: o.text,
             value: o.value
         });
         this.popup = BI.createWidget({
@@ -67727,6 +67884,7 @@ BI.StaticCombo = BI.inherit(BI.Widget, {
             type: "bi.text_icon_item",
             cls: "bi-select-text-trigger bi-border pull-down-font",
             text: o.text,
+            value: o.value,
             readonly: true,
             textLgap: 5,
             height: o.height - 2
@@ -67735,7 +67893,8 @@ BI.StaticCombo = BI.inherit(BI.Widget, {
             type: "bi.text_value_combo_popup",
             textAlign: o.textAlign,
             chooseType: o.chooseType,
-            items: o.items
+            items: o.items,
+            value: o.value
         });
         this.popup.on(BI.Controller.EVENT_CHANGE, function () {
             self.fireEvent(BI.Controller.EVENT_CHANGE, arguments);
@@ -67988,7 +68147,8 @@ BI.TextValueCombo = BI.inherit(BI.Widget, {
         this.trigger = BI.createWidget(o.el, {
             type: "bi.select_text_trigger",
             items: o.items,
-            height: o.height
+            height: o.height,
+            text: o.value
         });
         this.popup = BI.createWidget({
             type: "bi.text_value_combo_popup",
@@ -68118,7 +68278,8 @@ BI.shortcut("bi.small_text_value_combo", BI.SmallTextValueCombo);BI.TextValueCom
             chooseType: o.chooseType,
             layouts: [{
                 type: "bi.vertical"
-            }]
+            }],
+            value: o.value
         });
 
         this.popup.on(BI.Controller.EVENT_CHANGE, function (type, val, obj) {
@@ -70164,8 +70325,8 @@ BI.Panel = BI.inherit(BI.Widget, {
         return {
             el: {
                 type: "bi.left_right_vertical_adapt",
-                cls: "panel-title bi-tips bi-border-bottom bi-background",
-                height: 30,
+                cls: "panel-title bi-border-bottom bi-background",
+                height: 29,
                 items: {
                     left: [this.text],
                     right: [this.button_group]
@@ -71698,10 +71859,6 @@ BI.RichEditorParamAction = BI.inherit(BI.RichEditorAction, {
         BI.RichEditorParamAction.superclass._init.apply(this, arguments);
     },
 
-    _isParam: function (sel) {
-        return sel.attr("data-type") === "param";
-    },
-
     _createBlankNode: function () {
         return $("<span>").html("&nbsp;");
     },
@@ -71710,10 +71867,8 @@ BI.RichEditorParamAction = BI.inherit(BI.RichEditorAction, {
         var o = this.options;
         var instance = o.editor.selectedInstance;
         var next = $param.next();
-        if (next.length === 0 || this._isParam(next)) {
-            var preNode = this._createBlankNode();
+        if (next.length === 0) {
             var nextNode = this._createBlankNode();
-            $param.before(preNode);
             $param.after(nextNode);
             instance.setFocus(nextNode[0]);
         } else {
@@ -71721,70 +71876,131 @@ BI.RichEditorParamAction = BI.inherit(BI.RichEditorAction, {
         }
     },
 
-    _get$Sel: function () {
-        var o = this.options;
-        var instance = o.editor.selectedInstance;
-        var sel = $(instance.selElm());
-        if (sel[0].nodeType === 3 && this._isParam(sel.parent())) {
-            sel = sel.parent();
-        }
-        return sel;
-    },
-
     addParam: function (param) {
         var o = this.options;
-        var sel = this._get$Sel();
-        var $param = $("<span>").attr({
-            "data-type": "param",
-            "data-value": param
-        }).css({
-            color: "white",
-            backgroundColor: "#009de3",
-            padding: "0 5px"
-        }).text(param).keydown(function (e) {
-            if (e.keyCode === BI.KeyCode.BACKSPACE || e.keyCode === BI.KeyCode.DELETE) {
-                $param.destroy();
-            }
-            e.stopEvent();
-            return false;
-        });
-        var wrapper = o.editor.instance.getElm().element;
-        if (wrapper.find(sel).length <= 0) {
-            wrapper.append($param);
-        } else {
-            sel.after($param);
-        }
-        this._addBlank($param);
-    },
-
-    keydown: function (e) {
-        var o = this.options;
-        var sel = this._get$Sel();
-        if (e.keyCode === 229) {// 中文输入法
-            if (this._isParam(sel)) {
-                this._addBlank(sel);
-                e.stopEvent();
-                return false;
-            }
-        }
-        if (BI.Key[e.keyCode] || e.keyCode === BI.KeyCode.TAB || e.keyCode === BI.KeyCode.ENTER || e.keyCode === BI.KeyCode.SPACE) {
-            if (this._isParam(sel)) {
-                e.stopEvent();
-                return false;
-            }
-        }
-        if (e.keyCode === BI.KeyCode.BACKSPACE || e.keyCode === BI.KeyCode.DELETE) {
-            if (this._isParam(sel)) {
-                sel.destroy();
-                e.preventDefault();
-                return false;
-            }
-        }
-    },
-
-    key: function (e) {
+        var instance = o.editor.instance;
+        var image = new Image();
+        var canvas = document.createElement("canvas");
+        $("body").append(canvas);
+        canvas.width = BI.DOM.getTextSizeWidth(param, 14) + 6;
+        canvas.height = 16;
+        var ctx = canvas.getContext("2d");
+        ctx.font = "14px Georgia";
+        ctx.fillStyle = "#ffffff";
+        ctx.fillText(param, 3, 14);
+        image.src = canvas.toDataURL("image/png");
+        image.alt = param;
+        $(image).css({"background-color": "#3f8ce8", "vertical-align": "sub", "margin": "0 3px;"});
+        instance.getElm().element.append(image);
+        this._addBlank($(image));
+        $(canvas).destroy();
     }
-});/**
+});
+
+// /**
+//  *
+//  * Created by GUY on 2017/09/18.
+//  * @class BI.RichEditorParamAction
+//  * @extends BI.Widget
+//  */
+// BI.RichEditorParamAction = BI.inherit(BI.RichEditorAction, {
+//     _defaultConfig: function () {
+//         return BI.extend(BI.RichEditorParamAction.superclass._defaultConfig.apply(this, arguments), {});
+//     },
+//
+//     _init: function () {
+//         BI.RichEditorParamAction.superclass._init.apply(this, arguments);
+//     },
+//
+//     _isParam: function (sel) {
+//         return sel.attr("data-type") === "param";
+//     },
+//
+//     _createBlankNode: function () {
+//         return $("<span>").html("&nbsp;");
+//     },
+//
+//     _addBlank: function ($param) {
+//         var o = this.options;
+//         var instance = o.editor.selectedInstance;
+//         var next = $param.next();
+//         if (next.length === 0 || this._isParam(next)) {
+//             var preNode = this._createBlankNode();
+//             var nextNode = this._createBlankNode();
+//             $param.before(preNode);
+//             $param.after(nextNode);
+//             instance.setFocus(nextNode[0]);
+//         } else {
+//             instance.setFocus(next[0]);
+//         }
+//     },
+//
+//     _get$Sel: function () {
+//         var o = this.options;
+//         var instance = o.editor.selectedInstance;
+//         var sel = $(instance.selElm());
+//         if (sel[0].nodeType === 3 && this._isParam(sel.parent())) {
+//             sel = sel.parent();
+//         }
+//         return sel;
+//     },
+//
+//     addParam: function (param) {
+//         var o = this.options;
+//         var sel = this._get$Sel();
+//         var $param = $("<span>").attr({
+//             "data-type": "param",
+//             "data-value": param
+//         }).css({
+//             color: "white",
+//             backgroundColor: "#009de3",
+//             padding: "0 5px"
+//         }).text(param).keydown(function (e) {
+//             if (e.keyCode === BI.KeyCode.BACKSPACE || e.keyCode === BI.KeyCode.DELETE) {
+//                 $param.destroy();
+//             }
+//             e.stopEvent();
+//             return false;
+//         });
+//         var wrapper = o.editor.instance.getElm().element;
+//         if (wrapper.find(sel).length <= 0) {
+//             wrapper.append($param);
+//         } else {
+//             sel.after($param);
+//         }
+//         this._addBlank($param);
+//     },
+//
+//     keydown: function (e) {
+//         var o = this.options;
+//         var sel = this._get$Sel();
+//         if (e.keyCode === 229) {// 中文输入法
+//             if (this._isParam(sel)) {
+//                 this._addBlank(sel);
+//                 e.stopEvent();
+//                 return false;
+//             }
+//         }
+//         if (BI.Key[e.keyCode] || e.keyCode === BI.KeyCode.TAB || e.keyCode === BI.KeyCode.ENTER || e.keyCode === BI.KeyCode.SPACE) {
+//             if (this._isParam(sel)) {
+//                 e.stopEvent();
+//                 return false;
+//             }
+//         }
+//         if (e.keyCode === BI.KeyCode.BACKSPACE || e.keyCode === BI.KeyCode.DELETE) {
+//             if (this._isParam(sel)) {
+//                 sel.destroy();
+//                 e.preventDefault();
+//                 return false;
+//             }
+//         }
+//     },
+//
+//     key: function (e) {
+//     }
+// });
+
+/**
  * 颜色选择
  *
  * Created by GUY on 2015/11/26.
@@ -74494,25 +74710,31 @@ BI.MultiSelectBar = BI.inherit(BI.BasicButton, {
             disableSelected: true,
             isHalfCheckedBySelectedValue: function (selectedValues) {
                 return selectedValues.length > 0;
-            }
+            },
+            halfSelected: false
         });
     },
     _init: function () {
         BI.MultiSelectBar.superclass._init.apply(this, arguments);
         var self = this, o = this.options;
+        var isSelect = o.selected === true;
+        var isHalfSelect = !o.selected && o.halfSelected;
         this.checkbox = BI.createWidget({
             type: "bi.checkbox",
             stopPropagation: true,
             handler: function () {
                 self.setSelected(self.isSelected());
-            }
+            },
+            selected: isSelect,
+            invisible: isHalfSelect
         });
         this.half = BI.createWidget({
             type: "bi.half_icon_button",
             stopPropagation: true,
             handler: function () {
                 self.setSelected(true);
-            }
+            },
+            invisible: isSelect || !isHalfSelect
         });
         this.checkbox.on(BI.Controller.EVENT_CHANGE, function () {
             self.fireEvent(BI.Controller.EVENT_CHANGE, BI.Events.CLICK, self.isSelected(), self);
@@ -74551,7 +74773,10 @@ BI.MultiSelectBar = BI.inherit(BI.BasicButton, {
                 el: this.text
             }]
         });
-        this.half.invisible();
+    },
+
+    _setSelected: function (v) {
+        this.checkbox.setSelected(!!v);
     },
 
     // 自己手动控制选中
@@ -74570,8 +74795,9 @@ BI.MultiSelectBar = BI.inherit(BI.BasicButton, {
     },
 
     setHalfSelected: function (b) {
-        this._half = !!b;
+        this.halfSelected = !!b;
         if (b === true) {
+            this.checkbox.setSelected(false);
             this.half.visible();
             this.checkbox.invisible();
         } else {
@@ -74581,7 +74807,7 @@ BI.MultiSelectBar = BI.inherit(BI.BasicButton, {
     },
 
     isHalfSelected: function () {
-        return !!this._half;
+        return !this.isSelected() && !!this.halfSelected;
     },
 
     isSelected: function () {
@@ -74591,7 +74817,7 @@ BI.MultiSelectBar = BI.inherit(BI.BasicButton, {
     setValue: function (selectedValues) {
         BI.MultiSelectBar.superclass.setValue.apply(this, arguments);
         var isAllChecked = this.options.isAllCheckedBySelectedValue.apply(this, arguments);
-        this.setSelected(isAllChecked);
+        this._setSelected(isAllChecked);
         !isAllChecked && this.setHalfSelected(this.options.isHalfCheckedBySelectedValue.apply(this, arguments));
     }
 });
@@ -75403,7 +75629,8 @@ BI.LevelTree = BI.inherit(BI.Widget, {
                 chooseType: 0
             },
             expander: {},
-            items: []
+            items: [],
+            value: ""
         });
     },
 
@@ -75472,6 +75699,7 @@ BI.LevelTree = BI.inherit(BI.Widget, {
             }, o.expander),
 
             items: this._formatItems(BI.Tree.transformToTreeFormat(nodes), 0),
+            value: o.value,
 
             el: BI.extend({
                 type: "bi.button_tree",
@@ -75563,6 +75791,9 @@ BI.SimpleTreeView = BI.inherit(BI.Widget, {
         if (BI.isNotEmptyArray(o.items)) {
             this.populate();
         }
+        if (BI.isNotNull(o.value)) {
+            this.setValue(o.value);
+        }
     },
 
     populate: function (items, keyword) {
@@ -75574,7 +75805,7 @@ BI.SimpleTreeView = BI.inherit(BI.Widget, {
         });
     },
 
-    setValue: function (v) {
+    _digest: function (v) {
         v || (v = []);
         var self = this, map = {};
         var selected = [];
@@ -75602,8 +75833,11 @@ BI.SimpleTreeView = BI.inherit(BI.Widget, {
                 }
             }
         });
+        return BI.makeObject(v.concat(selected));
+    },
 
-        this.tree.setValue(BI.makeObject(v.concat(selected)));
+    setValue: function (v) {
+        this.tree.setValue(this._digest(v));
     },
 
     _getValue: function () {
@@ -75774,6 +76008,9 @@ BI.IconTextTrigger = BI.inherit(BI.Trigger, {
             textAlign: "left",
             height: o.height,
             text: o.text,
+            title: function () {
+                return o.text;
+            },
             hgap: c.hgap
         });
         this.trigerButton = BI.createWidget({
@@ -75791,7 +76028,7 @@ BI.IconTextTrigger = BI.inherit(BI.Trigger, {
             items: [{
                 el: {
                     type: "bi.icon_change_button",
-                    cls: "icon-combo-trigger-icon " + o.iconClass,
+                    cls: "icon-combo-trigger-icon " + o.iconCls,
                     ref: function (_ref) {
                         self.icon = _ref;
                     },
@@ -75811,7 +76048,6 @@ BI.IconTextTrigger = BI.inherit(BI.Trigger, {
 
     setValue: function (value) {
         this.text.setValue(value);
-        this.text.setTitle(value);
     },
 
     setIcon: function (iconCls) {
@@ -75833,7 +76069,6 @@ BI.IconTextTrigger = BI.inherit(BI.Trigger, {
 
     setText: function (text) {
         this.text.setText(text);
-        this.text.setTitle(text);
     }
 });
 BI.shortcut("bi.icon_text_trigger", BI.IconTextTrigger);/**
@@ -75852,38 +76087,48 @@ BI.SelectIconTextTrigger = BI.inherit(BI.Trigger, {
         this.options.height -= 2;
         BI.SelectIconTextTrigger.superclass._init.apply(this, arguments);
         var self = this, o = this.options;
+        var obj = this._digist(o.value, o.items);
         this.trigger = BI.createWidget({
             type: "bi.icon_text_trigger",
             element: this,
+            text: obj.text,
+            iconCls: obj.iconCls,
             height: o.height
         });
-        if (BI.isKey(o.value)) {
-            this.setValue(o.value);
-        }
     },
 
-    setValue: function (vals) {
+    _digist: function (vals, items) {
         var o = this.options;
         vals = BI.isArray(vals) ? vals : [vals];
         var result;
-        var items = BI.Tree.transformToArrayFormat(this.options.items);
-        BI.any(items, function (i, item) {
+        var formatItems = BI.Tree.transformToArrayFormat(items);
+        BI.any(formatItems, function (i, item) {
             if (BI.deepContains(vals, item.value)) {
                 result = {
                     text: item.text || item.value,
-                    iconClass: item.iconClass
+                    iconCls: item.iconCls
                 };
                 return true;
             }
         });
 
         if (BI.isNotNull(result)) {
-            this.trigger.setText(result.text);
-            this.trigger.setIcon(result.iconClass);
+            return {
+                text: result.text,
+                iconCls: result.iconCls
+            };
         } else {
-            this.trigger.setText(o.value);
-            this.trigger.setIcon("");
+            return {
+                text: o.text,
+                iconCls: ""
+            };
         }
+    },
+
+    setValue: function (vals) {
+        var obj = this._digist(vals, this.options.items);
+        this.trigger.setText(obj.text);
+        this.trigger.setIcon(obj.iconCls);
     },
 
     populate: function (items) {
@@ -75918,6 +76163,9 @@ BI.TextTrigger = BI.inherit(BI.Trigger, {
             textAlign: "left",
             height: o.height,
             text: o.text,
+            title: function () {
+                return o.text;
+            },
             hgap: c.hgap,
             readonly: o.readonly
         });
@@ -75941,14 +76189,8 @@ BI.TextTrigger = BI.inherit(BI.Trigger, {
         });
     },
 
-    setValue: function (value) {
-        this.text.setValue(value);
-        this.text.setTitle(value);
-    },
-
     setText: function (text) {
         this.text.setText(text);
-        this.text.setTitle(text);
     }
 });
 BI.shortcut("bi.text_trigger", BI.TextTrigger);/**
@@ -75974,29 +76216,31 @@ BI.SelectTextTrigger = BI.inherit(BI.Trigger, {
         this.trigger = BI.createWidget({
             type: "bi.text_trigger",
             element: this,
-            height: o.height
+            height: o.height,
+            text: this._digest(o.value, o.items)
         });
-        if (BI.isKey(o.text)) {
-            this.setValue(o.text);
-        }
     },
-
-    setValue: function (vals) {
+    
+    _digest: function(vals, items){
         var o = this.options;
         vals = BI.isArray(vals) ? vals : [vals];
         var result = [];
-        var items = BI.Tree.transformToArrayFormat(this.options.items);
-        BI.each(items, function (i, item) {
+        var formatItems = BI.Tree.transformToArrayFormat(items);
+        BI.each(formatItems, function (i, item) {
             if (BI.deepContains(vals, item.value) && !result.contains(item.text || item.value)) {
                 result.push(item.text || item.value);
             }
         });
 
         if (result.length > 0) {
-            this.trigger.setText(result.join(","));
+            return result.join(",");
         } else {
-            this.trigger.setText(o.text);
+            return o.text;
         }
+    },
+
+    setValue: function (vals) {
+        this.trigger.setText(this._digest(vals, this.options.items));
     },
 
     populate: function (items) {
@@ -76022,34 +76266,42 @@ BI.SmallSelectTextTrigger = BI.inherit(BI.Trigger, {
         this.options.height -= 2;
         BI.SmallSelectTextTrigger.superclass._init.apply(this, arguments);
         var self = this, o = this.options;
+        var obj = this._digest(o.text, o.items);
         this.trigger = BI.createWidget({
             type: "bi.small_text_trigger",
             element: this,
-            height: o.height - 2
+            height: o.height - 2,
+            text: obj.text,
+            cls: obj.cls
         });
-        if (BI.isKey(o.text)) {
-            this.setValue(o.text);
-        }
     },
 
-    setValue: function (vals) {
+    _digest: function(vals, items){
         var o = this.options;
         vals = BI.isArray(vals) ? vals : [vals];
         var result = [];
-        var items = BI.Tree.transformToArrayFormat(this.options.items);
-        BI.each(items, function (i, item) {
+        var formatItems = BI.Tree.transformToArrayFormat(items);
+        BI.each(formatItems, function (i, item) {
             if (BI.deepContains(vals, item.value) && !result.contains(item.text || item.value)) {
                 result.push(item.text || item.value);
             }
         });
 
         if (result.length > 0) {
-            this.trigger.element.removeClass("bi-water-mark");
-            this.trigger.setText(result.join(","));
+            return {
+                cls: "",
+                text: result.join(",")
+            }
         } else {
-            this.trigger.element.addClass("bi-water-mark");
-            this.trigger.setText(o.text);
+            return {
+                cls: "bi-water-mark",
+                text: o.text
+            }
         }
+    },
+
+    setValue: function (vals) {
+        this.trigger.setText(this._digest(vals, this.options.items));
     },
 
     populate: function (items) {
@@ -79571,8 +79823,7 @@ BI.DownListCombo = BI.inherit(BI.Widget, {
     _defaultConfig: function () {
         return BI.extend(BI.DownListCombo.superclass._defaultConfig.apply(this, arguments), {
             baseCls: "bi-down-list-combo",
-            invalid: false,
-            height: 25,
+            height: 24,
             items: [],
             adjustLength: 0,
             direction: "bottom",
@@ -83856,7 +84107,8 @@ BI.MultiLayerSelectTreeCombo = BI.inherit(BI.Widget, {
             isDefaultInit: false,
             height: 30,
             text: "",
-            items: []
+            items: [],
+            value: ""
         });
     },
 
@@ -83868,13 +84120,15 @@ BI.MultiLayerSelectTreeCombo = BI.inherit(BI.Widget, {
             type: "bi.single_tree_trigger",
             text: o.text,
             height: o.height,
-            items: o.items
+            items: o.items,
+            value: o.value
         });
 
         this.popup = BI.createWidget({
             type: "bi.multilayer_select_tree_popup",
             isDefaultInit: o.isDefaultInit,
-            items: o.items
+            items: o.items,
+            value: o.value
         });
 
         this.combo = BI.createWidget({
@@ -83925,7 +84179,8 @@ BI.MultiLayerSelectLevelTree = BI.inherit(BI.Widget, {
             baseCls: "bi-multilayer-select-level-tree",
             isDefaultInit: false,
             items: [],
-            itemsCreator: BI.emptyFn
+            itemsCreator: BI.emptyFn,
+            value: ""
         });
     },
 
@@ -83997,6 +84252,7 @@ BI.MultiLayerSelectLevelTree = BI.inherit(BI.Widget, {
 
             items: this._formatItems(BI.Tree.transformToTreeFormat(nodes), 0),
             itemsCreator: o.itemsCreator,
+            value: o.value,
 
             el: {
                 type: "bi.button_tree",
@@ -84055,7 +84311,8 @@ BI.MultiLayerSelectTreePopup = BI.inherit(BI.Pane, {
             tipText: BI.i18nText("BI-No_Selected_Item"),
             isDefaultInit: false,
             itemsCreator: BI.emptyFn,
-            items: []
+            items: [],
+            value: ""
         });
     },
 
@@ -84068,6 +84325,7 @@ BI.MultiLayerSelectTreePopup = BI.inherit(BI.Pane, {
             type: "bi.multilayer_select_level_tree",
             isDefaultInit: o.isDefaultInit,
             items: o.items,
+            value: o.value,
             itemsCreator: o.itemsCreator
         });
 
@@ -84396,7 +84654,8 @@ BI.MultiLayerSingleTreeCombo = BI.inherit(BI.Widget, {
             height: 30,
             text: "",
             itemsCreator: BI.emptyFn,
-            items: []
+            items: [],
+            value: ""
         });
     },
 
@@ -84408,13 +84667,15 @@ BI.MultiLayerSingleTreeCombo = BI.inherit(BI.Widget, {
             type: "bi.single_tree_trigger",
             text: o.text,
             height: o.height,
-            items: o.items
+            items: o.items,
+            value: o.value
         });
 
         this.popup = BI.createWidget({
             type: "bi.multilayer_single_tree_popup",
             isDefaultInit: o.isDefaultInit,
-            items: o.items
+            items: o.items,
+            value: o.value
         });
 
         this.combo = BI.createWidget({
@@ -84536,6 +84797,7 @@ BI.MultiLayerSingleLevelTree = BI.inherit(BI.Widget, {
             },
 
             items: this._formatItems(BI.Tree.transformToTreeFormat(nodes), 0),
+            value: o.value,
             itemsCreator: function (op, callback) {
                 o.itemsCreator(op, function (items) {
                     callback(BI.Tree.transformToTreeFormat(items), 0);
@@ -84613,7 +84875,8 @@ BI.MultiLayerSingleTreePopup = BI.inherit(BI.Pane, {
             type: "bi.multilayer_single_level_tree",
             isDefaultInit: o.isDefaultInit,
             items: o.items,
-            itemsCreator: o.itemsCreator
+            itemsCreator: o.itemsCreator,
+            value: o.value
         });
 
         BI.createWidget({
@@ -89085,12 +89348,12 @@ BI.NumberInterval = BI.inherit(BI.Single, {
             height: o.height - 2,
             items: [{
                 text: "(" + BI.i18nText("BI-Less_Than") + ")",
-                iconClass: "less-font",
+                iconCls: "less-font",
                 value: 0
             }, {
                 text: "(" + BI.i18nText("BI-Less_And_Equal") + ")",
                 value: 1,
-                iconClass: "less-equal-font"
+                iconCls: "less-equal-font"
             }]
         });
         if (o.closemin === true) {
@@ -89104,12 +89367,12 @@ BI.NumberInterval = BI.inherit(BI.Single, {
             height: o.height - 2,
             items: [{
                 text: "(" + BI.i18nText("BI-Less_Than") + ")",
-                iconClass: "less-font",
+                iconCls: "less-font",
                 value: 0
             }, {
                 text: "(" + BI.i18nText("BI-Less_And_Equal") + ")",
                 value: 1,
-                iconClass: "less-equal-font"
+                iconCls: "less-equal-font"
             }]
         });
         if (o.closemax === true) {
@@ -89225,7 +89488,7 @@ BI.NumberInterval = BI.inherit(BI.Single, {
             self.element.removeClass("number-error");
             o.validation = "valid";
             return "";
-                    
+
         }
         if (smallValue > bigValue) {
             self.element.addClass("number-error");
@@ -89239,11 +89502,11 @@ BI.NumberInterval = BI.inherit(BI.Single, {
         self.element.removeClass("number-error");
         o.validation = "valid";
         return "";
-                    
-                
-            
 
-        
+
+
+
+
     },
 
     _setTitle: function (v) {
@@ -90960,7 +91223,7 @@ BI.RelationViewItem = BI.inherit(BI.BasicButton, {
         if (o.isPrimary) {
             header.items.push({
                 type: "bi.icon",
-                width: 16,
+                width: 12,
                 height: 16,
                 title: BI.i18nText("BI-Primary_Key")
             });
@@ -92210,7 +92473,8 @@ BI.SelectTreeCombo = BI.inherit(BI.Widget, {
             baseCls: "bi-select-tree-combo",
             height: 30,
             text: "",
-            items: []
+            items: [],
+            value: ""
         });
     },
 
@@ -92222,12 +92486,14 @@ BI.SelectTreeCombo = BI.inherit(BI.Widget, {
             type: "bi.single_tree_trigger",
             text: o.text,
             height: o.height,
-            items: o.items
+            items: o.items,
+            value: o.value
         });
 
         this.popup = BI.createWidget({
             type: "bi.select_level_tree",
-            items: o.items
+            items: o.items,
+            value: o.value
         });
 
         this.combo = BI.createWidget({
@@ -92349,7 +92615,8 @@ BI.SelectTreePopup = BI.inherit(BI.Pane, {
         return BI.extend(BI.SelectTreePopup.superclass._defaultConfig.apply(this, arguments), {
             baseCls: "bi-select-level-tree",
             tipText: BI.i18nText("BI-No_Selected_Item"),
-            items: []
+            items: [],
+            value: ""
         });
     },
 
@@ -92398,6 +92665,7 @@ BI.SelectTreePopup = BI.inherit(BI.Pane, {
                 isDefaultInit: true
             },
             items: this._formatItems(BI.Tree.transformToTreeFormat(o.items)),
+            value: o.value,
             chooseType: BI.Selection.Single
         });
 
@@ -96316,7 +96584,8 @@ BI.SingleTreeCombo = BI.inherit(BI.Widget, {
             trigger: {},
             height: 24,
             text: "",
-            items: []
+            items: [],
+            value: ""
         });
     },
 
@@ -96328,12 +96597,14 @@ BI.SingleTreeCombo = BI.inherit(BI.Widget, {
             type: "bi.single_tree_trigger",
             text: o.text,
             height: o.height,
-            items: o.items
+            items: o.items,
+            value: o.value
         }, o.trigger));
 
         this.popup = BI.createWidget({
             type: "bi.single_level_tree",
-            items: o.items
+            items: o.items,
+            value: o.value
         });
 
         this.combo = BI.createWidget({
@@ -96388,7 +96659,8 @@ BI.SingleTreePopup = BI.inherit(BI.Pane, {
         return BI.extend(BI.SingleTreePopup.superclass._defaultConfig.apply(this, arguments), {
             baseCls: "bi-single-level-tree",
             tipText: BI.i18nText("BI-No_Selected_Item"),
-            items: []
+            items: [],
+            value: ""
         });
     },
 
@@ -96396,13 +96668,14 @@ BI.SingleTreePopup = BI.inherit(BI.Pane, {
         BI.SingleTreePopup.superclass._init.apply(this, arguments);
 
         var self = this, o = this.options;
-
+        
         this.tree = BI.createWidget({
             type: "bi.level_tree",
             expander: {
                 isDefaultInit: true
             },
             items: o.items,
+            value: o.value,
             chooseType: BI.Selection.Single
         });
 
@@ -96451,7 +96724,8 @@ BI.SingleTreeTrigger = BI.inherit(BI.Trigger, {
             baseCls: "bi-single-tree-trigger",
             height: 24,
             text: "",
-            items: []
+            items: [],
+            value: ""
         });
     },
 
@@ -96465,7 +96739,8 @@ BI.SingleTreeTrigger = BI.inherit(BI.Trigger, {
             element: this,
             text: o.text,
             items: o.items,
-            height: o.height
+            height: o.height,
+            value: o.value
         });
     },
 
@@ -96532,7 +96807,8 @@ BI.SwitchTree = BI.inherit(BI.Widget, {
                 this.levelTree = BI.createWidget({
                     type: "bi.multilayer_single_level_tree",
                     isDefaultInit: true,
-                    items: BI.deepClone(o.items)
+                    items: BI.deepClone(o.items),
+                    value: o.value
                 });
                 this.levelTree.on(BI.LevelTree.EVENT_CHANGE, function () {
                     self.fireEvent(BI.SwitchTree.EVENT_CHANGE, arguments);
@@ -96541,7 +96817,8 @@ BI.SwitchTree = BI.inherit(BI.Widget, {
             case BI.SwitchTree.SelectType.MultiSelect:
                 this.tree = BI.createWidget({
                     type: "bi.simple_tree",
-                    items: this._removeIsParent(BI.deepClone(o.items))
+                    items: this._removeIsParent(BI.deepClone(o.items)),
+                    value: o.value
                 });
                 this.tree.on(BI.SimpleTreeView.EVENT_CHANGE, function () {
                     self.fireEvent(BI.SwitchTree.EVENT_CHANGE, arguments);

@@ -10,20 +10,20 @@ Demo.TextValueCombo = BI.inherit(BI.Widget, {
         return {
             type: "bi.horizontal_auto",
             items: [{
-                type: "bi.icon_text_value_combo",
-                text: "默认值",
+                type: "bi.text_value_combo",
+                value: "默认值",
                 width: 300,
                 items: [{
                     text: "MVC-1",
-                    iconClass: "date-font",
+                    iconCls: "date-font",
                     value: 1
                 }, {
                     text: "MVC-2",
-                    iconClass: "search-font",
+                    iconCls: "search-font",
                     value: 2
                 }, {
                     text: "MVC-3",
-                    iconClass: "pull-right-font",
+                    iconCls: "pull-right-font",
                     value: 3
                 }]
             }],

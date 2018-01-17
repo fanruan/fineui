@@ -1,5 +1,17 @@
 @import "../../index";
 
+input,
+textarea {
+  border: 1px solid @color-bi-border-line;
+}
+
+.bi-theme-dark {
+  input,
+  textarea {
+    border: 1px solid @color-bi-border-line-theme-dark;
+  }
+}
+
 .base-disabled {
   cursor: default !important;
   color: @color-bi-text-disabled !important;
@@ -636,6 +648,73 @@
       color: @color-bi-text;
     }
   }
+  &.button-success {
+    &:active, &.active {
+      color: @color-bi-text;
+      background-color: @color-bi-background-success;
+      & .bi-input {
+        color: @color-bi-text;
+      }
+      & .bi-textarea {
+        color: @color-bi-text;
+      }
+      & .bi-high-light {
+        color: @color-bi-text;
+      }
+      &.bi-high-light-border {
+        border-color: @color-bi-border-success;
+      }
+    }
+  }
+  &.button-warning {
+    & {
+      color: @color-bi-text-failure;
+      & .bi-input {
+        color: @color-bi-text-failure;
+      }
+      & .bi-textarea {
+        color: @color-bi-text-failure;
+      }
+      & .bi-high-light {
+        color: @color-bi-text-failure;
+      }
+      &.bi-high-light-border {
+        border-color: @color-bi-border-failure;
+      }
+    }
+    &:hover, &.hover {
+      color: @color-bi-text-failure;
+      & .bi-input {
+        color: @color-bi-text-failure;
+      }
+      & .bi-textarea {
+        color: @color-bi-text-failure;
+      }
+      background-color: @color-bi-background-light-failure;
+      & .bi-high-light {
+        color: @color-bi-text-failure;
+      }
+      &.bi-high-light-border {
+        border-color: @color-bi-border-failure;
+      }
+    }
+    &:active, &.active {
+      color: @color-bi-text;
+      & .bi-input {
+        color: @color-bi-text;
+      }
+      & .bi-textarea {
+        color: @color-bi-text;
+      }
+      background-color: @color-bi-background-failure;
+      & .bi-high-light {
+        color: @color-bi-text;
+      }
+      &.bi-high-light-border {
+        border-color: @color-bi-border-failure;
+      }
+    }
+  }
   &.disabled {
     &, &:hover, &:active {
       color: @color-bi-text-disabled !important;
@@ -648,6 +727,9 @@
       background-color: transparent !important;
       & .bi-high-light {
         color: @color-bi-text-disabled !important;
+      }
+      &.bi-high-light-border {
+        border-color: @color-bi-border-disabled;
       }
     }
   }

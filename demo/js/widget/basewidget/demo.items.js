@@ -9,8 +9,10 @@ Demo.Items = BI.inherit(BI.Widget, {
         return {
             type: "bi.vertical",
             items: [{
-                type: "bi.label",
+                type: "bi.text_button",
+                cls: "bi-list-item-select bi-high-light-border bi-border",
                 height: 30,
+                level: "warning",
                 text: "单选item"
             }, {
                 type: "bi.single_select_item",

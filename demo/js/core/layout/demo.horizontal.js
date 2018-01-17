@@ -8,6 +8,7 @@ Demo.Horizontal = BI.inherit(BI.Widget, {
     render: function () {
         return {
             type: "bi.horizontal",
+            hgap: 10,
             items: [{
                 type: "bi.label",
                 whiteSpace: "normal",

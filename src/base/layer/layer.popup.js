@@ -93,7 +93,7 @@ BI.PopupView = BI.inherit(BI.Widget, {
 
     _createView: function () {
         var o = this.options;
-        this.button_group = BI.createWidget(o.el, {type: "bi.button_group"});
+        this.button_group = BI.createWidget(o.el, {type: "bi.button_group", value: o.value});
         this.button_group.element.css({"min-height": o.minHeight + "px"});
         return this.button_group;
     },

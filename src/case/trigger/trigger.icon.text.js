@@ -26,6 +26,9 @@ BI.IconTextTrigger = BI.inherit(BI.Trigger, {
             textAlign: "left",
             height: o.height,
             text: o.text,
+            title: function () {
+                return o.text;
+            },
             hgap: c.hgap
         });
         this.trigerButton = BI.createWidget({
@@ -43,7 +46,7 @@ BI.IconTextTrigger = BI.inherit(BI.Trigger, {
             items: [{
                 el: {
                     type: "bi.icon_change_button",
-                    cls: "icon-combo-trigger-icon " + o.iconClass,
+                    cls: "icon-combo-trigger-icon " + o.iconCls,
                     ref: function (_ref) {
                         self.icon = _ref;
                     },
@@ -63,7 +66,6 @@ BI.IconTextTrigger = BI.inherit(BI.Trigger, {
 
     setValue: function (value) {
         this.text.setValue(value);
-        this.text.setTitle(value);
     },
 
     setIcon: function (iconCls) {
@@ -85,7 +87,6 @@ BI.IconTextTrigger = BI.inherit(BI.Trigger, {
 
     setText: function (text) {
         this.text.setText(text);
-        this.text.setTitle(text);
     }
 });
 BI.shortcut("bi.icon_text_trigger", BI.IconTextTrigger);

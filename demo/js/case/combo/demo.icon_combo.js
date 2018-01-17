@@ -15,21 +15,20 @@ Demo.IconCombo = BI.inherit(BI.Widget, {
             type: "bi.horizontal_auto",
             items: [{
                 type: "bi.icon_combo",
-                trigger: "click-hover",
                 container: "body",
                 ref: function (_ref) {
                     self.refs = _ref;
                 },
-                iconClass: "search-font",
+                iconCls: "search-font",
                 items: [{
                     value: "第一项",
-                    iconClass: "close-font"
+                    iconCls: "close-font"
                 }, {
                     value: "第二项",
-                    iconClass: "search-font"
+                    iconCls: "search-font"
                 }, {
                     value: "第三项",
-                    iconClass: "copy-font"
+                    iconCls: "copy-font"
                 }]
             }],
             vgap: 20

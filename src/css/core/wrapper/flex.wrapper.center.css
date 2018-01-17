@@ -41,6 +41,3 @@
   min-height: 100%;
   float: left;
 }
-.bi-flex-wrapper-center-layout > * {
-  margin: auto;
-}

@@ -39,6 +39,9 @@ BI.BasicButton = BI.inherit(BI.Single, {
         if (opts.shadow) {
             this._createShadow();
         }
+        if (opts.level) {
+            this.element.addClass("button-" + opts.level);
+        }
     },
 
     _createShadow: function () {

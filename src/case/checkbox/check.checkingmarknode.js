@@ -6,9 +6,7 @@
 BI.CheckingMarkNode = BI.inherit(BI.IconButton, {
     _defaultConfig: function () {
         return BI.extend( BI.CheckingMarkNode.superclass._defaultConfig.apply(this, arguments), {
-            extraCls: "check-mark-font",
-            iconWidth: 13,
-            iconHeight: 13
+            extraCls: "check-mark-font"
         });
     },
     _init: function () {

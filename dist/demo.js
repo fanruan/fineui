@@ -73,7 +73,7 @@ $(function () {
                     type: "bi.button",
                     text: "带图标的按钮",
                     // level: 'ignore',
-                    iconClass: "close-font",
+                    iconCls: "close-font",
                     height: 30
                 }
             }, {
@@ -133,7 +133,7 @@ $(function () {
                     text: "带图标的按钮",
                     block: true,
                     // level: 'ignore',
-                    iconClass: "close-font",
+                    iconCls: "close-font",
                     height: 30
                 }
             }, {
@@ -193,8 +193,30 @@ $(function () {
                     text: "带图标的按钮",
                     clear: true,
                     // level: 'ignore',
-                    iconClass: "close-font",
+                    iconCls: "close-font",
                     height: 30
+                }
+            }, {
+                el: {
+                    type: "bi.multi_select_bar",
+                    selected: true,
+                    halfSelected: true
+                }
+            }, {
+                el: {
+                    type: "bi.multi_select_bar",
+                    selected: true,
+                    halfSelected: false
+                }
+            }, {
+                el: {
+                    type: "bi.multi_select_bar",
+                    selected: false,
+                    halfSelected: true
+                }
+            }, {
+                el: {
+                    type: "bi.multi_select_bar"
                 }
             }
         ];
@@ -704,6 +726,7 @@ BI.shortcut("demo.code_editor", Demo.CodeEditor);Demo.Editor = BI.inherit(BI.Wid
             cls: "mvc-border",
             watermark: "输入'a'会有错误信息且回车键不能退出编辑",
             errorText: "字段不可重名",
+            value: "a",
             validationChecker: function (v) {
                 if (v == "a") {
                     return false;
@@ -842,6 +865,7 @@ Demo.SQLEditor = BI.inherit(BI.Widget, {
         var self = this;
         this.formula = BI.createWidget({
             type : 'bi.sql_editor',
+            supportParam: true,
             width : 300,
             height : 200,
             value : "select * from DEMO_CONTRACT where 合同类型 = ${长期协议} and 购买数量 = sum([1,2,3,4])"
@@ -1773,21 +1797,20 @@ Demo.IconCombo = BI.inherit(BI.Widget, {
             type: "bi.horizontal_auto",
             items: [{
                 type: "bi.icon_combo",
-                trigger: "click-hover",
                 container: "body",
                 ref: function (_ref) {
                     self.refs = _ref;
                 },
-                iconClass: "search-font",
+                iconCls: "search-font",
                 items: [{
                     value: "第一项",
-                    iconClass: "close-font"
+                    iconCls: "close-font"
                 }, {
                     value: "第二项",
-                    iconClass: "search-font"
+                    iconCls: "search-font"
                 }, {
                     value: "第三项",
-                    iconClass: "copy-font"
+                    iconCls: "copy-font"
                 }]
             }],
             vgap: 20
@@ -1809,18 +1832,19 @@ Demo.IconTextValueCombo = BI.inherit(BI.Widget, {
             items: [{
                 type: "bi.icon_text_value_combo",
                 text: "默认值",
+                value: 1,
                 width: 300,
                 items: [{
                     text: "MVC-1",
-                    iconClass: "close-font",
+                    iconCls: "close-font",
                     value: 1
                 }, {
                     text: "MVC-2",
-                    iconClass: "date-font",
+                    iconCls: "date-font",
                     value: 2
                 }, {
                     text: "MVC-3",
-                    iconClass: "search-close-h-font",
+                    iconCls: "search-close-h-font",
                     value: 3
                 }]
             }],
@@ -1885,20 +1909,20 @@ Demo.TextValueCombo = BI.inherit(BI.Widget, {
         return {
             type: "bi.horizontal_auto",
             items: [{
-                type: "bi.icon_text_value_combo",
-                text: "默认值",
+                type: "bi.text_value_combo",
+                value: "默认值",
                 width: 300,
                 items: [{
                     text: "MVC-1",
-                    iconClass: "date-font",
+                    iconCls: "date-font",
                     value: 1
                 }, {
                     text: "MVC-2",
-                    iconClass: "search-font",
+                    iconCls: "search-font",
                     value: 2
                 }, {
                     text: "MVC-3",
-                    iconClass: "pull-right-font",
+                    iconCls: "pull-right-font",
                     value: 3
                 }]
             }],
@@ -3711,53 +3735,97 @@ BI.shortcut("demo.level_tree", Demo.Func);Demo.Func = BI.inherit(BI.Widget, {
         // value值一定要是字符串
         var tree = BI.createWidget({
             type: "bi.simple_tree",
-            items: []
+            items: [{
+                id: 1,
+                text: "第一项",
+                value: "1"
+            }, {
+                id: 2,
+                text: "第二项",
+                value: "2"
+            }, {
+                id: 3,
+                text: "第三项",
+                value: "3",
+                open: true
+            }, {
+                id: 11,
+                pId: 1,
+                text: "子项1",
+                value: "11"
+            }, {
+                id: 12,
+                pId: 1,
+                text: "子项2",
+                value: "12"
+            }, {
+                id: 13,
+                pId: 1,
+                text: "子项3",
+                value: "13"
+            }, {
+                id: 31,
+                pId: 3,
+                text: "子项1",
+                value: "31"
+            }, {
+                id: 32,
+                pId: 3,
+                text: "子项2",
+                value: "32"
+            }, {
+                id: 33,
+                pId: 3,
+                text: "子项3",
+                value: "33"
+            }],
+            value: ["31", "32", "33"]
         });
 
-        tree.populate([{
-            id: 1,
-            text: "第一项",
-            value: "1"
-        }, {
-            id: 2,
-            text: "第二项",
-            value: "2"
-        }, {
-            id: 3,
-            text: "第三项",
-            value: "3",
-            open: true
-        }, {
-            id: 11,
-            pId: 1,
-            text: "子项1",
-            value: "11"
-        }, {
-            id: 12,
-            pId: 1,
-            text: "子项2",
-            value: "12"
-        }, {
-            id: 13,
-            pId: 1,
-            text: "子项3",
-            value: "13"
-        }, {
-            id: 31,
-            pId: 3,
-            text: "子项1",
-            value: "31"
-        }, {
-            id: 32,
-            pId: 3,
-            text: "子项2",
-            value: "32"
-        }, {
-            id: 33,
-            pId: 3,
-            text: "子项3",
-            value: "33"
-        }], "z");
+        // tree.populate([{
+        //     id: 1,
+        //     text: "第一项",
+        //     value: "1"
+        // }, {
+        //     id: 2,
+        //     text: "第二项",
+        //     value: "2"
+        // }, {
+        //     id: 3,
+        //     text: "第三项",
+        //     value: "3",
+        //     open: true
+        // }, {
+        //     id: 11,
+        //     pId: 1,
+        //     text: "子项1",
+        //     value: "11"
+        // }, {
+        //     id: 12,
+        //     pId: 1,
+        //     text: "子项2",
+        //     value: "12"
+        // }, {
+        //     id: 13,
+        //     pId: 1,
+        //     text: "子项3",
+        //     value: "13"
+        // }, {
+        //     id: 31,
+        //     pId: 3,
+        //     text: "子项1",
+        //     value: "31"
+        // }, {
+        //     id: 32,
+        //     pId: 3,
+        //     text: "子项2",
+        //     value: "32"
+        // }, {
+        //     id: 33,
+        //     pId: 3,
+        //     text: "子项3",
+        //     value: "33"
+        // }], "z");
         BI.createWidget({
             type: "bi.vtape",
             element: this,
@@ -7457,69 +7525,68 @@ Demo.FlowLayout = BI.inherit(BI.Widget, {
                     type: "bi.label",
                     height: 30,
                     text: "Left-1",
-                    cls: "layout-bg1",
-                    hgap: 20
+                    cls: "layout-bg1"
+                    
                 }, {
                     type: "bi.label",
                     height: 30,
                     text: "Left-2",
-                    cls: "layout-bg2",
-                    hgap: 20
+                    cls: "layout-bg2"
+                    
                 }, {
                     type: "bi.label",
                     height: 30,
                     text: "Left-3",
-                    cls: "layout-bg3",
-                    hgap: 20
+                    cls: "layout-bg3"
+                    
                 }, {
                     type: "bi.label",
                     height: 30,
                     text: "Left-4",
-                    cls: "layout-bg4",
-                    hgap: 20
+                    cls: "layout-bg4"
+                    
                 }, {
                     type: "bi.label",
                     height: 30,
                     text: "Left-5",
-                    cls: "layout-bg5",
-                    hgap: 20
+                    cls: "layout-bg5"
+                    
                 }],
-                hgap: 20,
-                vgap: 20
+                hgap: 20
             }, {
                 type: "bi.right",
+                hgap: 20,
                 items: [{
                     type: "bi.label",
                     height: 30,
                     text: "Right-1",
-                    cls: "layout-bg1",
-                    hgap: 20
+                    cls: "layout-bg1"
+                    
                 }, {
                     type: "bi.label",
                     height: 30,
                     text: "Right-2",
-                    cls: "layout-bg2",
-                    hgap: 20
+                    cls: "layout-bg2"
+                    
                 }, {
                     type: "bi.label",
                     height: 30,
                     text: "Right-3",
-                    cls: "layout-bg3",
-                    hgap: 20
+                    cls: "layout-bg3"
+                    
                 }, {
                     type: "bi.label",
                     height: 30,
                     text: "Right-4",
-                    cls: "layout-bg4",
-                    hgap: 20
+                    cls: "layout-bg4"
+                    
                 }, {
                     type: "bi.label",
                     height: 30,
                     text: "Right-5",
-                    cls: "layout-bg5",
-                    hgap: 20
+                    cls: "layout-bg5"
+                    
                 }],
-                hgap: 20,
                 vgap: 20
             }]
         };
@@ -7787,6 +7854,7 @@ Demo.Horizontal = BI.inherit(BI.Widget, {
     render: function () {
         return {
             type: "bi.horizontal",
+            hgap: 10,
             items: [{
                 type: "bi.label",
                 whiteSpace: "normal",
@@ -8166,6 +8234,7 @@ Demo.VerticalLayout = BI.inherit(BI.Widget, {
     render: function () {
         return {
             type: "bi.vertical",
+            vgap: 10,
             items: [{
                 type: "bi.label",
                 cls: "layout-bg3",
@@ -8190,6 +8259,7 @@ Demo.VtapeLayout = BI.inherit(BI.Widget, {
     render: function () {
         return {
             type: "bi.vtape",
+            vgap: 10,
             items: [
                 {
                     height: 100,
@@ -8197,7 +8267,9 @@ Demo.VtapeLayout = BI.inherit(BI.Widget, {
                         type: "bi.label",
                         text: "1",
                         cls: "layout-bg1"
-                    }
+                    },
+                    tgap: 10,
+                    vgap: 10
                 }, {
                     height: 200,
                     el: {
@@ -11699,7 +11771,7 @@ Demo.Buttons = BI.inherit(BI.Widget, {
                 type: "bi.button",
                 text: "带图标的按钮",
                 // level: 'ignore',
-                iconClass: "close-font",
+                iconCls: "close-font",
                 height: 30
             }
         }, {
@@ -11759,7 +11831,7 @@ Demo.Buttons = BI.inherit(BI.Widget, {
                 text: "带图标的按钮",
                 block: true,
                 // level: 'ignore',
-                iconClass: "close-font",
+                iconCls: "close-font",
                 height: 30
             }
         }, {
@@ -11819,7 +11891,7 @@ Demo.Buttons = BI.inherit(BI.Widget, {
                 text: "带图标的按钮",
                 clear: true,
                 // level: 'ignore',
-                iconClass: "close-font",
+                iconCls: "close-font",
                 height: 30
             }
         }, {
@@ -11854,8 +11926,10 @@ Demo.Items = BI.inherit(BI.Widget, {
         return {
             type: "bi.vertical",
             items: [{
-                type: "bi.label",
+                type: "bi.text_button",
+                cls: "bi-list-item-select bi-high-light-border bi-border",
                 height: 30,
+                level: "warning",
                 text: "单选item"
             }, {
                 type: "bi.single_select_item",
@@ -11878,61 +11952,6 @@ Demo.Items = BI.inherit(BI.Widget, {
 
 
 BI.shortcut("demo.items", Demo.Items);/**
- * Created by Dailer on 2017/7/25.
- */
-
-Demo.LoadingMask = BI.inherit(BI.Widget, {
-
-    render: function () {
-        var vessel = this;
-        var self = this;
-        var left = BI.createWidget({
-            type: "bi.center_adapt",
-            items: [{
-                type: "bi.button",
-                text: "LoadingMask",
-                height: 30,
-                handler: function () {
-                    var mask = BI.createWidget({
-                        type: "bi.loading_mask",
-                        masker: vessel,
-                        text: "加载中...3s后结束"
-                    });
-                    setTimeout(function () {
-                        mask.destroy();
-                    }, 3000);
-                }
-            }]
-        });
-        var right = BI.createWidget({
-            type: "bi.center_adapt",
-            items: [{
-                type: "bi.button",
-                text: "CancelLoadingMask",
-                height: 30,
-                handler: function () {
-                    var mask = BI.createWidget({
-                        type: "bi.loading_cancel_mask",
-                        masker: vessel,
-                        text: "正在加载数据"
-                    });
-                    mask.on(BI.LoadingCancelMask.EVENT_VALUE_CANCEL, function () {
-                        mask.destroy();
-                        BI.Msg.toast("取消加载了...");
-                    });
-                }
-            }]
-        });
-        BI.createWidget({
-            type: "bi.center_adapt",
-            element: vessel,
-            items: [left, right],
-            hgap: 20
-        });
-    }
-});
-
-BI.shortcut("demo.loading_mask", Demo.LoadingMask);/**
  * Created by Dailer on 2017/7/25.
  */
 
@@ -13147,7 +13166,8 @@ Demo.MultiLayerSelectTreeCombo = BI.inherit(BI.Widget, {
                 },
                 text: "默认值",
                 items: items,
-                width: 300
+                width: 300,
+                value: ["第五级文件1"]
             }, {
                 type: "bi.button",
                 text: "getVlaue",
@@ -13186,6 +13206,7 @@ Demo.SelectTreeCombo = BI.inherit(BI.Widget, {
                 ref: function (_ref) {
                     self.tree = _ref;
                 },
+                value: "11",
                 text: "默认值",
                 items: items,
                 width: 300
@@ -13200,7 +13221,7 @@ Demo.SelectTreeCombo = BI.inherit(BI.Widget, {
                 type: "bi.button",
                 text: "setVlaue (第二级文件1)",
                 handler: function () {
-                    self.tree.setValue(["第二级文件1"]);
+                    self.tree.setValue(["2"]);
                 },
                 width: 300
             }],
@@ -13365,7 +13386,8 @@ Demo.SingleTreeCombo = BI.inherit(BI.Widget, {
                 },
                 text: "默认值",
                 items: items,
-                width: 300
+                width: 300,
+                value: "11"
             }, {
                 type: "bi.button",
                 text: "getVlaue",
@@ -13377,7 +13399,7 @@ Demo.SingleTreeCombo = BI.inherit(BI.Widget, {
                 type: "bi.button",
                 text: "setVlaue (第二级文件1)",
                 handler: function () {
-                    self.tree.setValue(["第二级文件1"]);
+                    self.tree.setValue(["2"]);
                 },
                 width: 300
             }],
@@ -14318,7 +14340,8 @@ Demo.MultiLayerSelectLevelTree = BI.inherit(BI.Widget, {
         var self = this;
         var tree = BI.createWidget({
             type: "bi.multilayer_select_level_tree",
-            items: BI.deepClone(Demo.CONSTANTS.TREE)
+            items: BI.deepClone(Demo.CONSTANTS.TREE),
+            value: "第五级文件1"
         });
 
         return {
@@ -14363,7 +14386,8 @@ Demo.MultiLayerSingleLevelTree = BI.inherit(BI.Widget, {
         var self = this;
         var tree = BI.createWidget({
             type: "bi.multilayer_single_level_tree",
-            items: BI.deepClone(Demo.CONSTANTS.TREE)
+            items: BI.deepClone(Demo.CONSTANTS.TREE),
+            value: "第五级文件1"
         });
 
         return {
@@ -14408,7 +14432,8 @@ Demo.SelectLevelTree = BI.inherit(BI.Widget, {
         var self = this;
         var tree = BI.createWidget({
             type: "bi.select_level_tree",
-            items: BI.deepClone(Demo.CONSTANTS.LEVELTREE)
+            items: BI.deepClone(Demo.CONSTANTS.LEVELTREE),
+            value: "11"
         });
 
         return {
@@ -14431,7 +14456,7 @@ Demo.SelectLevelTree = BI.inherit(BI.Widget, {
                     height: 25,
                     text: "setValue (第二级文件1)",
                     handler: function () {
-                        tree.setValue(["第二级文件1"]);
+                        tree.setValue(["2"]);
                     }
                 },
                 height: 25
@@ -14453,7 +14478,8 @@ Demo.SingleLevelTree = BI.inherit(BI.Widget, {
         var self = this;
         var tree = BI.createWidget({
             type: "bi.single_level_tree",
-            items: BI.deepClone(Demo.CONSTANTS.LEVELTREE)
+            items: BI.deepClone(Demo.CONSTANTS.LEVELTREE),
+            value: "11"
         });
 
         return {
@@ -14476,7 +14502,7 @@ Demo.SingleLevelTree = BI.inherit(BI.Widget, {
                     height: 25,
                     text: "setValue (第二级文件1)",
                     handler: function () {
-                        tree.setValue(["第二级文件1"]);
+                        tree.setValue(["2"]);
                     }
                 },
                 height: 25
@@ -14498,7 +14524,8 @@ Demo.SwitchTree = BI.inherit(BI.Widget, {
         var self = this;
         var tree = BI.createWidget({
             type: "bi.switch_tree",
-            items: BI.deepClone(Demo.CONSTANTS.TREE)
+            items: BI.deepClone(Demo.CONSTANTS.TREE),
+            value: "第五级文件1"
         });
 
         return {

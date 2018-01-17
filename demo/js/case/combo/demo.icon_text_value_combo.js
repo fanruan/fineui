@@ -12,18 +12,19 @@ Demo.IconTextValueCombo = BI.inherit(BI.Widget, {
             items: [{
                 type: "bi.icon_text_value_combo",
                 text: "默认值",
+                value: 1,
                 width: 300,
                 items: [{
                     text: "MVC-1",
-                    iconClass: "close-font",
+                    iconCls: "close-font",
                     value: 1
                 }, {
                     text: "MVC-2",
-                    iconClass: "date-font",
+                    iconCls: "date-font",
                     value: 2
                 }, {
                     text: "MVC-3",
-                    iconClass: "search-close-h-font",
+                    iconCls: "search-close-h-font",
                     value: 3
                 }]
             }],

@@ -54,7 +54,7 @@ Demo.Button = BI.inherit(BI.Widget, {
                     type: "bi.button",
                     text: "带图标的按钮",
                     // level: 'ignore',
-                    iconClass: "close-font",
+                    iconCls: "close-font",
                     height: 30
                 }
             }, {
@@ -114,7 +114,7 @@ Demo.Button = BI.inherit(BI.Widget, {
                     text: "带图标的按钮",
                     block: true,
                     // level: 'ignore',
-                    iconClass: "close-font",
+                    iconCls: "close-font",
                     height: 30
                 }
             }, {
@@ -174,8 +174,30 @@ Demo.Button = BI.inherit(BI.Widget, {
                     text: "带图标的按钮",
                     clear: true,
                     // level: 'ignore',
-                    iconClass: "close-font",
+                    iconCls: "close-font",
                     height: 30
+                }
+            }, {
+                el: {
+                    type: "bi.multi_select_bar",
+                    selected: true,
+                    halfSelected: true
+                }
+            }, {
+                el: {
+                    type: "bi.multi_select_bar",
+                    selected: true,
+                    halfSelected: false
+                }
+            }, {
+                el: {
+                    type: "bi.multi_select_bar",
+                    selected: false,
+                    halfSelected: true
+                }
+            }, {
+                el: {
+                    type: "bi.multi_select_bar"
                 }
             }
         ];

@@ -28,27 +28,13 @@ BI.LayerController = BI.inherit(BI.Controller, {
     },
 
     make: function (name, container, op) {
-        if (this.has(name)) {
-            return this.get(name);
+        if (BI.isWidget(container)) {
+            op = op || {};
+            op.container = container;
+        } else {
+            op = container;
         }
-        op || (op = {});
-        var widget = BI.createWidget((op.render || {}), {
-            type: "bi.layout"
-        });
-        BI.createWidget({
-            type: "bi.absolute",
-            element: container || this.options.render,
-            items: [BI.extend({
-                el: widget
-            }, {
-                top: 0,
-                left: 0,
-                right: 0,
-                bottom: 0
-            }, op.offset)]
-        });
-        this.add(name, widget, widget);
-        return widget;
+        return this.create(name, null, op);
     },
 
     create: function (name, from, op) {
