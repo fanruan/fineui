@@ -55,7 +55,8 @@ BI.SearcherView = BI.inherit(BI.Pane, {
             },
             layouts: [{
                 type: "bi.vertical"
-            }]
+            }],
+            value: o.value
         });
         this.matcher.on(BI.Controller.EVENT_CHANGE, function (type, val, ob) {
             self.fireEvent(BI.Controller.EVENT_CHANGE, arguments);
@@ -83,7 +84,8 @@ BI.SearcherView = BI.inherit(BI.Pane, {
             },
             layouts: [{
                 type: "bi.vertical"
-            }]
+            }],
+            value: o.value
         });
         this.searcher.on(BI.Controller.EVENT_CHANGE, function (type, val, ob) {
             self.fireEvent(BI.Controller.EVENT_CHANGE, arguments);

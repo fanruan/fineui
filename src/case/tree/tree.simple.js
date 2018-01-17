@@ -40,6 +40,9 @@ BI.SimpleTreeView = BI.inherit(BI.Widget, {
         if (BI.isNotEmptyArray(o.items)) {
             this.populate();
         }
+        if (BI.isNotNull(o.value)) {
+            this.setValue(o.value);
+        }
     },
 
     populate: function (items, keyword) {
@@ -51,7 +54,7 @@ BI.SimpleTreeView = BI.inherit(BI.Widget, {
         });
     },
 
-    setValue: function (v) {
+    _digest: function (v) {
         v || (v = []);
         var self = this, map = {};
         var selected = [];
@@ -79,8 +82,11 @@ BI.SimpleTreeView = BI.inherit(BI.Widget, {
                 }
             }
         });
+        return BI.makeObject(v.concat(selected));
+    },
 
-        this.tree.setValue(BI.makeObject(v.concat(selected)));
+    setValue: function (v) {
+        this.tree.setValue(this._digest(v));
     },
 
     _getValue: function () {

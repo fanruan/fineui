@@ -9,7 +9,8 @@ Demo.SwitchTree = BI.inherit(BI.Widget, {
         var self = this;
         var tree = BI.createWidget({
             type: "bi.switch_tree",
-            items: BI.deepClone(Demo.CONSTANTS.TREE)
+            items: BI.deepClone(Demo.CONSTANTS.TREE),
+            value: "第五级文件1"
         });
 
         return {

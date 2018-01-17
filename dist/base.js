@@ -1963,11 +1963,15 @@ BI.TreeView = BI.inherit(BI.Pane, {
             });
         }
 
+        if (!this.nodes) {
+            return;
+        }
+
         BI.each(this.nodes.getNodes(), function (i, node) {
             node.halfCheck = false;
             setNode(node.children);
         });
-        this.nodes && this.nodes.checkAllNodes(checked);
+        this.nodes.checkAllNodes(checked);
     },
 
     expandAll: function (flag) {
@@ -3129,14 +3133,17 @@ BI.Combo = BI.inherit(BI.Widget, {
     },
 
     _initCombo: function () {
-        this.combo = BI.createWidget(this.options.el);
+        this.combo = BI.createWidget(this.options.el, {
+            value: this.options.value
+        });
     },
 
     _assertPopupView: function () {
-        var self = this;
+        var self = this, o = this.options;
         if (this.popupView == null) {
             this.popupView = BI.createWidget(this.options.popup, {
-                type: "bi.popup_view"
+                type: "bi.popup_view",
+                value: o.value
             });
             this.popupView.on(BI.Controller.EVENT_CHANGE, function (type, value, obj) {
                 if (type === BI.Events.CLICK) {
@@ -3327,14 +3334,20 @@ BI.Combo = BI.inherit(BI.Widget, {
     },
 
     setValue: function (v) {
-        this._assertPopupView();
         this.combo.setValue(v);
-        this.popupView && this.popupView.setValue(v);
+        if (BI.isNull(this.popupView)) {
+            this.options.popup.value = v;
+        } else {
+            this.popupView.setValue(v);
+        }
     },
 
     getValue: function () {
-        this._assertPopupView();
-        return this.popupView && this.popupView.getValue();
+        if (BI.isNull(this.popupView)) {
+            return this.options.popup.value;
+        } else {
+            return this.popupView.getValue();
+        }
     },
 
     isViewVisible: function () {
@@ -3513,11 +3526,13 @@ BI.Expander = BI.inherit(BI.Widget, {
     },
 
     _initExpander: function () {
-        this.expander = BI.createWidget(this.options.el);
+        this.expander = BI.createWidget(this.options.el, {
+            value: this.options.value
+        });
     },
 
     _assertPopupView: function () {
-        var self = this;
+        var self = this, o = this.options;
         if (this.popupView == null) {
             this.popupView = BI.createWidget(this.options.popup, {
                 type: "bi.button_group",
@@ -3526,7 +3541,8 @@ BI.Expander = BI.inherit(BI.Widget, {
                     type: "bi.vertical",
                     hgap: 0,
                     vgap: 0
-                }]
+                }],
+                value: o.value
             });
             this.popupView.on(BI.Controller.EVENT_CHANGE, function (type, value, obj) {
                 self.fireEvent(BI.Controller.EVENT_CHANGE, arguments);
@@ -3590,14 +3606,20 @@ BI.Expander = BI.inherit(BI.Widget, {
     },
 
     setValue: function (v) {
-        // this._assertPopupView();
         this.expander.setValue(v);
-        this.popupView && this.popupView.setValue(v);
+        if (BI.isNull(this.popupView)) {
+            this.options.popup.value = v;
+        } else {
+            this.popupView.setValue(v);
+        }
     },
 
     getValue: function () {
-        // this._assertPopupView();
-        return this.popupView ? this.popupView.getValue() : [];
+        if (BI.isNull(this.popupView)) {
+            return this.options.popup.value;
+        } else {
+            return this.popupView.getValue();
+        }
     },
 
     isViewVisible: function () {
@@ -4489,8 +4511,11 @@ BI.Searcher = BI.inherit(BI.Widget, {
     },
 
     setValue: function (v) {
-        this._assertPopupView();
-        this.popupView && this.popupView.setValue(v);
+        if (BI.isNull(this.popupView)) {
+            this.options.popup.value = v;
+        } else {
+            this.popupView.setValue(v);
+        }
     },
 
     getKeyword: function () {
@@ -4510,6 +4535,9 @@ BI.Searcher = BI.inherit(BI.Widget, {
             return this.popupView.getValue();
         } else if (o.adapter && o.adapter.getValue) {
             return o.adapter.getValue();
+        }
+        if (BI.isNull(this.popupView)) {
+            return o.popup.value;
         }
         return this.popupView.getValue();
         
@@ -4665,7 +4693,9 @@ BI.Switcher = BI.inherit(BI.Widget, {
     },
 
     _initSwitcher: function () {
-        this.switcher = BI.createWidget(this.options.el);
+        this.switcher = BI.createWidget(this.options.el, {
+            value: o.value
+        });
     },
 
     _assertPopupView: function () {
@@ -4679,7 +4709,8 @@ BI.Switcher = BI.inherit(BI.Widget, {
                     type: "bi.vertical",
                     hgap: 0,
                     vgap: 0
-                }]
+                }],
+                value: o.value
             });
             this.popupView.on(BI.Controller.EVENT_CHANGE, function (type, value, obj) {
                 self.fireEvent(BI.Controller.EVENT_CHANGE, arguments);
@@ -4739,14 +4770,20 @@ BI.Switcher = BI.inherit(BI.Widget, {
     },
 
     setValue: function (v) {
-        this._assertPopupView();
         this.switcher.setValue(v);
-        this.popupView && this.popupView.setValue(v);
+        if (BI.isNull(this.popupView)) {
+            this.options.popup.value = v;
+        } else {
+            this.popupView.setValue(v);
+        }
     },
 
     getValue: function () {
-        this._assertPopupView();
-        return this.popupView ? this.popupView.getValue() : [];
+        if (BI.isNull(this.popupView)) {
+            return this.options.popup.value;
+        } else {
+            return this.popupView.getValue();
+        }
     },
 
     setAdapter: function (adapter) {
@@ -15377,7 +15414,7 @@ BI.PopupView = BI.inherit(BI.Widget, {
 
     _createView: function () {
         var o = this.options;
-        this.button_group = BI.createWidget(o.el, {type: "bi.button_group"});
+        this.button_group = BI.createWidget(o.el, {type: "bi.button_group", value: o.value});
         this.button_group.element.css({"min-height": o.minHeight + "px"});
         return this.button_group;
     },
@@ -15509,7 +15546,8 @@ BI.SearcherView = BI.inherit(BI.Pane, {
             },
             layouts: [{
                 type: "bi.vertical"
-            }]
+            }],
+            value: o.value
         });
         this.matcher.on(BI.Controller.EVENT_CHANGE, function (type, val, ob) {
             self.fireEvent(BI.Controller.EVENT_CHANGE, arguments);
@@ -15537,7 +15575,8 @@ BI.SearcherView = BI.inherit(BI.Pane, {
             },
             layouts: [{
                 type: "bi.vertical"
-            }]
+            }],
+            value: o.value
         });
         this.searcher.on(BI.Controller.EVENT_CHANGE, function (type, val, ob) {
             self.fireEvent(BI.Controller.EVENT_CHANGE, arguments);
@@ -33971,7 +34010,8 @@ BI.CustomTree = BI.inherit(BI.Widget, {
                     args[0] = self._formatItems(items);
                     callback.apply(null, args);
                 }]);
-            }
+            },
+            value: o.value
         });
         this.tree.on(BI.Controller.EVENT_CHANGE, function (type, val, obj) {
             self.fireEvent(BI.Controller.EVENT_CHANGE, arguments);

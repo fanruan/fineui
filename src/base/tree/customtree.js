@@ -90,7 +90,8 @@ BI.CustomTree = BI.inherit(BI.Widget, {
                     args[0] = self._formatItems(items);
                     callback.apply(null, args);
                 }]);
-            }
+            },
+            value: o.value
         });
         this.tree.on(BI.Controller.EVENT_CHANGE, function (type, val, obj) {
             self.fireEvent(BI.Controller.EVENT_CHANGE, arguments);

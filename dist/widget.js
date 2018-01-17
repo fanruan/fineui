@@ -7742,7 +7742,8 @@ BI.MultiLayerSelectTreeCombo = BI.inherit(BI.Widget, {
             isDefaultInit: false,
             height: 30,
             text: "",
-            items: []
+            items: [],
+            value: ""
         });
     },
 
@@ -7754,13 +7755,15 @@ BI.MultiLayerSelectTreeCombo = BI.inherit(BI.Widget, {
             type: "bi.single_tree_trigger",
             text: o.text,
             height: o.height,
-            items: o.items
+            items: o.items,
+            value: o.value
         });
 
         this.popup = BI.createWidget({
             type: "bi.multilayer_select_tree_popup",
             isDefaultInit: o.isDefaultInit,
-            items: o.items
+            items: o.items,
+            value: o.value
         });
 
         this.combo = BI.createWidget({
@@ -7811,7 +7814,8 @@ BI.MultiLayerSelectLevelTree = BI.inherit(BI.Widget, {
             baseCls: "bi-multilayer-select-level-tree",
             isDefaultInit: false,
             items: [],
-            itemsCreator: BI.emptyFn
+            itemsCreator: BI.emptyFn,
+            value: ""
         });
     },
 
@@ -7883,6 +7887,7 @@ BI.MultiLayerSelectLevelTree = BI.inherit(BI.Widget, {
 
             items: this._formatItems(BI.Tree.transformToTreeFormat(nodes), 0),
             itemsCreator: o.itemsCreator,
+            value: o.value,
 
             el: {
                 type: "bi.button_tree",
@@ -7941,7 +7946,8 @@ BI.MultiLayerSelectTreePopup = BI.inherit(BI.Pane, {
             tipText: BI.i18nText("BI-No_Selected_Item"),
             isDefaultInit: false,
             itemsCreator: BI.emptyFn,
-            items: []
+            items: [],
+            value: ""
         });
     },
 
@@ -7954,6 +7960,7 @@ BI.MultiLayerSelectTreePopup = BI.inherit(BI.Pane, {
             type: "bi.multilayer_select_level_tree",
             isDefaultInit: o.isDefaultInit,
             items: o.items,
+            value: o.value,
             itemsCreator: o.itemsCreator
         });
 
@@ -8282,7 +8289,8 @@ BI.MultiLayerSingleTreeCombo = BI.inherit(BI.Widget, {
             height: 30,
             text: "",
             itemsCreator: BI.emptyFn,
-            items: []
+            items: [],
+            value: ""
         });
     },
 
@@ -8294,13 +8302,15 @@ BI.MultiLayerSingleTreeCombo = BI.inherit(BI.Widget, {
             type: "bi.single_tree_trigger",
             text: o.text,
             height: o.height,
-            items: o.items
+            items: o.items,
+            value: o.value
         });
 
         this.popup = BI.createWidget({
             type: "bi.multilayer_single_tree_popup",
             isDefaultInit: o.isDefaultInit,
-            items: o.items
+            items: o.items,
+            value: o.value
         });
 
         this.combo = BI.createWidget({
@@ -8422,6 +8432,7 @@ BI.MultiLayerSingleLevelTree = BI.inherit(BI.Widget, {
             },
 
             items: this._formatItems(BI.Tree.transformToTreeFormat(nodes), 0),
+            value: o.value,
             itemsCreator: function (op, callback) {
                 o.itemsCreator(op, function (items) {
                     callback(BI.Tree.transformToTreeFormat(items), 0);
@@ -8499,7 +8510,8 @@ BI.MultiLayerSingleTreePopup = BI.inherit(BI.Pane, {
             type: "bi.multilayer_single_level_tree",
             isDefaultInit: o.isDefaultInit,
             items: o.items,
-            itemsCreator: o.itemsCreator
+            itemsCreator: o.itemsCreator,
+            value: o.value
         });
 
         BI.createWidget({
@@ -16096,7 +16108,8 @@ BI.SelectTreeCombo = BI.inherit(BI.Widget, {
             baseCls: "bi-select-tree-combo",
             height: 30,
             text: "",
-            items: []
+            items: [],
+            value: ""
         });
     },
 
@@ -16108,12 +16121,14 @@ BI.SelectTreeCombo = BI.inherit(BI.Widget, {
             type: "bi.single_tree_trigger",
             text: o.text,
             height: o.height,
-            items: o.items
+            items: o.items,
+            value: o.value
         });
 
         this.popup = BI.createWidget({
             type: "bi.select_level_tree",
-            items: o.items
+            items: o.items,
+            value: o.value
         });
 
         this.combo = BI.createWidget({
@@ -16235,7 +16250,8 @@ BI.SelectTreePopup = BI.inherit(BI.Pane, {
         return BI.extend(BI.SelectTreePopup.superclass._defaultConfig.apply(this, arguments), {
             baseCls: "bi-select-level-tree",
             tipText: BI.i18nText("BI-No_Selected_Item"),
-            items: []
+            items: [],
+            value: ""
         });
     },
 
@@ -16284,6 +16300,7 @@ BI.SelectTreePopup = BI.inherit(BI.Pane, {
                 isDefaultInit: true
             },
             items: this._formatItems(BI.Tree.transformToTreeFormat(o.items)),
+            value: o.value,
             chooseType: BI.Selection.Single
         });
 
@@ -20202,7 +20219,8 @@ BI.SingleTreeCombo = BI.inherit(BI.Widget, {
             trigger: {},
             height: 24,
             text: "",
-            items: []
+            items: [],
+            value: ""
         });
     },
 
@@ -20214,12 +20232,14 @@ BI.SingleTreeCombo = BI.inherit(BI.Widget, {
             type: "bi.single_tree_trigger",
             text: o.text,
             height: o.height,
-            items: o.items
+            items: o.items,
+            value: o.value
         }, o.trigger));
 
         this.popup = BI.createWidget({
             type: "bi.single_level_tree",
-            items: o.items
+            items: o.items,
+            value: o.value
         });
 
         this.combo = BI.createWidget({
@@ -20274,7 +20294,8 @@ BI.SingleTreePopup = BI.inherit(BI.Pane, {
         return BI.extend(BI.SingleTreePopup.superclass._defaultConfig.apply(this, arguments), {
             baseCls: "bi-single-level-tree",
             tipText: BI.i18nText("BI-No_Selected_Item"),
-            items: []
+            items: [],
+            value: ""
         });
     },
 
@@ -20282,13 +20303,14 @@ BI.SingleTreePopup = BI.inherit(BI.Pane, {
         BI.SingleTreePopup.superclass._init.apply(this, arguments);
 
         var self = this, o = this.options;
-
+        
         this.tree = BI.createWidget({
             type: "bi.level_tree",
             expander: {
                 isDefaultInit: true
             },
             items: o.items,
+            value: o.value,
             chooseType: BI.Selection.Single
         });
 
@@ -20337,7 +20359,8 @@ BI.SingleTreeTrigger = BI.inherit(BI.Trigger, {
             baseCls: "bi-single-tree-trigger",
             height: 24,
             text: "",
-            items: []
+            items: [],
+            value: ""
         });
     },
 
@@ -20351,7 +20374,8 @@ BI.SingleTreeTrigger = BI.inherit(BI.Trigger, {
             element: this,
             text: o.text,
             items: o.items,
-            height: o.height
+            height: o.height,
+            value: o.value
         });
     },
 
@@ -20418,7 +20442,8 @@ BI.SwitchTree = BI.inherit(BI.Widget, {
                 this.levelTree = BI.createWidget({
                     type: "bi.multilayer_single_level_tree",
                     isDefaultInit: true,
-                    items: BI.deepClone(o.items)
+                    items: BI.deepClone(o.items),
+                    value: o.value
                 });
                 this.levelTree.on(BI.LevelTree.EVENT_CHANGE, function () {
                     self.fireEvent(BI.SwitchTree.EVENT_CHANGE, arguments);
@@ -20427,7 +20452,8 @@ BI.SwitchTree = BI.inherit(BI.Widget, {
             case BI.SwitchTree.SelectType.MultiSelect:
                 this.tree = BI.createWidget({
                     type: "bi.simple_tree",
-                    items: this._removeIsParent(BI.deepClone(o.items))
+                    items: this._removeIsParent(BI.deepClone(o.items)),
+                    value: o.value
                 });
                 this.tree.on(BI.SimpleTreeView.EVENT_CHANGE, function () {
                     self.fireEvent(BI.SwitchTree.EVENT_CHANGE, arguments);

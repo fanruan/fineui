@@ -247,8 +247,11 @@ BI.Searcher = BI.inherit(BI.Widget, {
     },
 
     setValue: function (v) {
-        this._assertPopupView();
-        this.popupView && this.popupView.setValue(v);
+        if (BI.isNull(this.popupView)) {
+            this.options.popup.value = v;
+        } else {
+            this.popupView.setValue(v);
+        }
     },
 
     getKeyword: function () {
@@ -268,6 +271,9 @@ BI.Searcher = BI.inherit(BI.Widget, {
             return this.popupView.getValue();
         } else if (o.adapter && o.adapter.getValue) {
             return o.adapter.getValue();
+        }
+        if (BI.isNull(this.popupView)) {
+            return o.popup.value;
         }
         return this.popupView.getValue();
         

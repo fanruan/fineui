@@ -18,7 +18,8 @@ Demo.MultiLayerSelectTreeCombo = BI.inherit(BI.Widget, {
                 },
                 text: "默认值",
                 items: items,
-                width: 300
+                width: 300,
+                value: ["第五级文件1"]
             }, {
                 type: "bi.button",
                 text: "getVlaue",
