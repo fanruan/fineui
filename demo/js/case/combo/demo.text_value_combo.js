@@ -15,15 +15,15 @@ Demo.TextValueCombo = BI.inherit(BI.Widget, {
                 width: 300,
                 items: [{
                     text: "MVC-1",
-                    iconClass: "date-font",
+                    iconCls: "date-font",
                     value: 1
                 }, {
                     text: "MVC-2",
-                    iconClass: "search-font",
+                    iconCls: "search-font",
                     value: 2
                 }, {
                     text: "MVC-3",
-                    iconClass: "pull-right-font",
+                    iconCls: "pull-right-font",
                     value: 3
                 }]
             }],

@@ -11,7 +11,7 @@ BI.IconChangeButton = BI.inherit(BI.Single, {
         var conf = BI.IconChangeButton.superclass._defaultConfig.apply(this, arguments);
         return BI.extend(conf, {
             baseCls: "bi-icon-change-button",
-            iconClass: "",
+            iconCls: "",
             iconWidth: null,
             iconHeight: null,
 
@@ -36,7 +36,7 @@ BI.IconChangeButton = BI.inherit(BI.Single, {
         this.button = BI.createWidget({
             type: "bi.icon_button",
             element: this,
-            cls: o.iconClass,
+            cls: o.iconCls,
             height: o.height,
             iconWidth: o.iconWidth,
             iconHeight: o.iconHeight,
@@ -73,9 +73,9 @@ BI.IconChangeButton = BI.inherit(BI.Single, {
 
     setIcon: function (cls) {
         var o = this.options;
-        if (o.iconClass !== cls) {
-            this.element.removeClass(o.iconClass).addClass(cls);
-            o.iconClass = cls;
+        if (o.iconCls !== cls) {
+            this.element.removeClass(o.iconCls).addClass(cls);
+            o.iconCls = cls;
         }
     }
 });

@@ -10,7 +10,7 @@ BI.IconComboTrigger = BI.inherit(BI.Trigger, {
             extraCls: "bi-icon-combo-trigger",
             el: {},
             items: [],
-            iconClass: "",
+            iconCls: "",
             width: 25,
             height: 25,
             isShowDown: true
@@ -22,7 +22,7 @@ BI.IconComboTrigger = BI.inherit(BI.Trigger, {
         var o = this.options, self = this;
         this.button = BI.createWidget(o.el, {
             type: "bi.icon_change_button",
-            cls: "icon-combo-trigger-icon " + o.iconClass,
+            cls: "icon-combo-trigger-icon " + o.iconCls,
             disableSelected: true,
             width: o.width,
             height: o.height,
@@ -60,7 +60,7 @@ BI.IconComboTrigger = BI.inherit(BI.Trigger, {
     populate: function (items) {
         var o = this.options;
         this.options.items = items || [];
-        this.button.setIcon(o.iconClass);
+        this.button.setIcon(o.iconCls);
         this.button.setSelected(false);
         this.down.setSelected(false);
     },
@@ -68,19 +68,19 @@ BI.IconComboTrigger = BI.inherit(BI.Trigger, {
     setValue: function (v) {
         BI.IconComboTrigger.superclass.setValue.apply(this, arguments);
         var o = this.options;
-        var iconClass = "";
+        var iconCls = "";
         v = BI.isArray(v) ? v[0] : v;
         if (BI.any(this.options.items, function (i, item) {
             if (v === item.value) {
-                iconClass = item.iconClass;
+                iconCls = item.iconCls;
                 return true;
             }
         })) {
-            this.button.setIcon(iconClass);
+            this.button.setIcon(iconCls);
             this.button.setSelected(true);
             this.down.setSelected(true);
         } else {
-            this.button.setIcon(o.iconClass);
+            this.button.setIcon(o.iconCls);
             this.button.setSelected(false);
             this.down.setSelected(false);
         }

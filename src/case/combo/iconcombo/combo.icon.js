@@ -10,7 +10,7 @@ BI.IconCombo = BI.inherit(BI.Widget, {
             baseCls: "bi-icon-combo",
             width: 24,
             height: 24,
-            iconClass: "",
+            iconCls: "",
             el: {},
             popup: {},
             minWidth: 100,
@@ -30,7 +30,7 @@ BI.IconCombo = BI.inherit(BI.Widget, {
         var self = this, o = this.options;
         this.trigger = BI.createWidget(o.el, {
             type: "bi.icon_combo_trigger",
-            iconClass: o.iconClass,
+            iconCls: o.iconCls,
             title: o.title,
             items: o.items,
             width: o.width,

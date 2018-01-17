@@ -8,8 +8,7 @@ BI.SingleSelectIconTextItem = BI.inherit(BI.Single, {
     _defaultConfig: function () {
         return BI.extend(BI.SingleSelectIconTextItem.superclass._defaultConfig.apply(this, arguments), {
             extraCls: "bi-single-select-icon-text-item bi-list-item-active",
-            iconClass: "",
-            hgap: 10,
+            iconCls: "",
             height: 25
         });
     },
@@ -19,7 +18,7 @@ BI.SingleSelectIconTextItem = BI.inherit(BI.Single, {
         this.text = BI.createWidget({
             type: "bi.icon_text_item",
             element: this,
-            cls: o.iconClass,
+            cls: o.iconCls,
             once: o.once,
             selected: o.selected,
             height: o.height,

@@ -5,8 +5,7 @@ BI.DownListCombo = BI.inherit(BI.Widget, {
     _defaultConfig: function () {
         return BI.extend(BI.DownListCombo.superclass._defaultConfig.apply(this, arguments), {
             baseCls: "bi-down-list-combo",
-            invalid: false,
-            height: 25,
+            height: 24,
             items: [],
             adjustLength: 0,
             direction: "bottom",
