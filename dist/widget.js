@@ -3976,6 +3976,26 @@ BI.DownListPopup = BI.inherit(BI.Pane, {
         return valueArray;
     },
 
+    _checkValues: function (values) {
+        var self = this;
+        var value = [];
+        BI.each(this.options.items, function (idx, itemGroup) {
+            BI.each(itemGroup, function (id, item) {
+                if(BI.isNotNull(item.children)){
+                    var childValues = BI.pluck(item.children, "value");
+                    if(BI.contains(childValues, values[idx])){
+                        value.push(values[idx]);
+                    }
+                }else{
+                    if(item.value === values[idx]){
+                        value.push(values[idx]);
+                    }
+                }
+            })
+        });
+        return value;
+    },
+
     populate: function (items) {
         BI.DownListPopup.superclass.populate.apply(this, arguments);
         var self = this;
@@ -3997,7 +4017,7 @@ BI.DownListPopup = BI.inherit(BI.Pane, {
 
     getValue: function () {
         var self = this, result = [];
-        var values = this.popup.getValue();
+        var values = this._checkValues(this.popup.getValue());
         BI.each(values, function (i, value) {
             var valueItem = {};
             if (BI.isNotNull(self.childValueMap[value])) {
