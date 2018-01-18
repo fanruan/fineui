@@ -28,7 +28,8 @@ BI.DownListGroupItem = BI.inherit(BI.BasicButton, {
             type: "bi.icon_button",
             cls: o.iconCls1,
             width: 25,
-            forceNotSelected: true
+            forceNotSelected: true,
+            selected: this._digest(o.value)
         });
 
         this.icon2 = BI.createWidget({
@@ -70,6 +71,14 @@ BI.DownListGroupItem = BI.inherit(BI.BasicButton, {
         });
     },
 
+    _digest: function (v) {
+        var self = this, o = this.options;
+        v = BI.isArray(v) ? v : [v];
+        return BI.any(v, function (idx, value) {
+            return BI.contains(o.childValues, value);
+        });
+    },
+
     hover: function () {
         BI.DownListGroupItem.superclass.hover.apply(this, arguments);
         this.icon1.element.addClass("hover");
@@ -99,16 +108,7 @@ BI.DownListGroupItem = BI.inherit(BI.BasicButton, {
     },
 
     setValue: function (v) {
-        var self = this, o = this.options;
-        v = BI.isArray(v) ? v : [v];
-        BI.find(v, function (idx, value) {
-            if (BI.contains(o.childValues, value)) {
-                self.icon1.setSelected(true);
-                return true;
-            }
-            self.icon1.setSelected(false);
-            
-        });
+        this.icon1.setSelected(this._digest(v));
     }
 });
 BI.DownListGroupItem.EVENT_CHANGE = "EVENT_CHANGE";

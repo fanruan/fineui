@@ -26,6 +26,7 @@ Demo.Downlist = BI.inherit(BI.Widget, {
                     self.downlist = _ref;
                 },
                 cls: "layout-bg3",
+                value: [{"childValue":22,"value":11},{"value":18},{"value":20}],
                 height: 30,
                 width: 100,
                 items: [
@@ -38,8 +39,7 @@ Demo.Downlist = BI.inherit(BI.Widget, {
                         children: [{
                             text: "column 1.1",
                             value: 21,
-                            cls: "dot-e-font",
-                            selected: true
+                            cls: "dot-e-font"
                         }, {
                             text: "column 1.222222222222222222222222222222222222",
                             cls: "dot-e-font",
@@ -70,8 +70,7 @@ Demo.Downlist = BI.inherit(BI.Widget, {
                     [{
                         text: "column 8",
                         value: 18,
-                        cls: "dot-e-font",
-                        selected: true
+                        cls: "dot-e-font"
                     },
                     {
 
@@ -83,8 +82,7 @@ Demo.Downlist = BI.inherit(BI.Widget, {
                     [{
                         text: "column 10",
                         value: 20,
-                        cls: "dot-e-font",
-                        selected: true
+                        cls: "dot-e-font"
                     },
                     {
 

@@ -39,6 +39,7 @@ BI.DownListPopup = BI.inherit(BI.Pane, {
                 hgap: this.constants.hgap,
                 vgap: this.constants.vgap
             }],
+            value: this._digest(o.value),
             chooseType: o.chooseType
         });
 
@@ -176,6 +177,22 @@ BI.DownListPopup = BI.inherit(BI.Pane, {
         return fatherValue + "_" + childValue;
     },
 
+    _digest: function (valueItem) {
+        var self = this;
+        var valueArray = [];
+        BI.each(valueItem, function (i, item) {
+                var value;
+                if (BI.isNotNull(item.childValue)) {
+                    value = self._createChildValue(item.value, item.childValue);
+                } else {
+                    value = item.value;
+                }
+                valueArray.push(value);
+            }
+        );
+        return valueArray;
+    },
+
     populate: function (items) {
         BI.DownListPopup.superclass.populate.apply(this, arguments);
         var self = this;
@@ -192,19 +209,7 @@ BI.DownListPopup = BI.inherit(BI.Pane, {
     },
 
     setValue: function (valueItem) {
-        var self = this;
-        var valueArray = [];
-        BI.each(valueItem, function (i, item) {
-            var value;
-            if (BI.isNotNull(item.childValue)) {
-                value = self._createChildValue(item.value, item.childValue);
-            } else {
-                value = item.value;
-            }
-            valueArray.push(value);
-        }
-        );
-        this.popup.setValue(valueArray);
+        this.popup.setValue(this._digest(valueItem));
     },
 
     getValue: function () {

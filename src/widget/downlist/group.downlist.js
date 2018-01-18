@@ -28,7 +28,8 @@ BI.DownListGroup = BI.inherit(BI.Widget, {
                 type: "bi.vertical",
                 hgap: 0,
                 vgap: 0
-            }]
+            }],
+            value: o.value
         });
         this.downlistgroup.on(BI.Controller.EVENT_CHANGE, function (type) {
             self.fireEvent(BI.Controller.EVENT_CHANGE, arguments);
