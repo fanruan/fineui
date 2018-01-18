@@ -10,7 +10,6 @@ BI.IconCombo = BI.inherit(BI.Widget, {
             baseCls: "bi-icon-combo",
             width: 24,
             height: 24,
-            iconCls: "",
             el: {},
             popup: {},
             minWidth: 100,
@@ -36,12 +35,14 @@ BI.IconCombo = BI.inherit(BI.Widget, {
             width: o.width,
             height: o.height,
             iconWidth: o.iconWidth,
-            iconHeight: o.iconHeight
+            iconHeight: o.iconHeight,
+            value: o.value
         });
         this.popup = BI.createWidget(o.popup, {
             type: "bi.icon_combo_popup",
             chooseType: o.chooseType,
-            items: o.items
+            items: o.items,
+            value: o.value
         });
         this.popup.on(BI.IconComboPopup.EVENT_CHANGE, function () {
             self.setValue(self.popup.getValue());

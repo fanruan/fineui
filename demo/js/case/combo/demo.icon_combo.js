@@ -19,7 +19,7 @@ Demo.IconCombo = BI.inherit(BI.Widget, {
                 ref: function (_ref) {
                     self.refs = _ref;
                 },
-                iconCls: "search-font",
+                value: "第二项",
                 items: [{
                     value: "第一项",
                     iconCls: "close-font"
