@@ -69845,6 +69845,7 @@ BI.TextValueCombo = BI.inherit(BI.Widget, {
             baseClass: "bi-text-value-combo",
             height: 30,
             chooseType: BI.ButtonGroup.CHOOSE_TYPE_SINGLE,
+            text: "",
             value: "",
             el: {}
         });
@@ -69857,11 +69858,13 @@ BI.TextValueCombo = BI.inherit(BI.Widget, {
             type: "bi.select_text_trigger",
             items: o.items,
             height: o.height,
-            text: o.value
+            text: o.text,
+            value: o.value
         });
         this.popup = BI.createWidget({
             type: "bi.text_value_combo_popup",
             chooseType: o.chooseType,
+            value: o.value,
             items: o.items
         });
         this.popup.on(BI.TextValueComboPopup.EVENT_CHANGE, function () {
@@ -69882,9 +69885,6 @@ BI.TextValueCombo = BI.inherit(BI.Widget, {
                 maxHeight: 300
             }
         });
-        if (BI.isKey(o.value)) {
-            this.setValue(o.value);
-        }
     },
 
     setValue: function (v) {
