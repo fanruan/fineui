@@ -6,12 +6,16 @@ Demo.TextValueCombo = BI.inherit(BI.Widget, {
         baseCls: ""
     },
     render: function () {
-
+        var combo;
         return {
             type: "bi.horizontal_auto",
             items: [{
                 type: "bi.text_value_combo",
-                value: "默认值",
+                ref: function () {
+                    combo = this;
+                },
+                text: "默认值",
+                value: 2,
                 width: 300,
                 items: [{
                     text: "MVC-1",
@@ -26,6 +30,13 @@ Demo.TextValueCombo = BI.inherit(BI.Widget, {
                     iconCls: "pull-right-font",
                     value: 3
                 }]
+            }, {
+                type: "bi.button",
+                width: 90,
+                height: 25,
+                handler: function () {
+                    combo.setValue("");
+                }
             }],
             vgap: 20
         };

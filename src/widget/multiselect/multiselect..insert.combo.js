@@ -48,7 +48,8 @@ BI.MultiSelectInsertCombo = BI.inherit(BI.Single, {
                     }
                     callback.apply(self, arguments);
                 });
-            }
+            },
+            value: o.value
         });
 
         this.trigger.on(BI.MultiSelectTrigger.EVENT_START, function () {
@@ -157,6 +158,7 @@ BI.MultiSelectInsertCombo = BI.inherit(BI.Single, {
                     });
                 }
             },
+            value: o.value,
             hideChecker: function (e) {
                 return triggerBtn.element.find(e.target).length === 0;
             }

@@ -52,7 +52,7 @@ BI.IconTextTrigger = BI.inherit(BI.Trigger, {
                     },
                     disableSelected: true
                 },
-                width: o.triggerWidth || o.height
+                width: BI.isEmptyString(o.iconCls)? 0 : (o.triggerWidth || o.height)
             },
             {
                 el: this.text

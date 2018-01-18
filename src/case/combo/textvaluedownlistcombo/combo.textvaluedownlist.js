@@ -16,10 +16,16 @@ BI.TextValueDownListCombo = BI.inherit(BI.Widget, {
 
         this._createValueMap();
 
+        var value;
+        if(BI.isNotNull(o.value)){
+            value = this._digest(o.value);
+        }
         this.trigger = BI.createWidget({
             type: "bi.down_list_select_text_trigger",
             height: o.height,
-            items: o.items
+            items: o.items,
+            text: o.text,
+            value: value
         });
 
         this.combo = BI.createWidget({
@@ -29,6 +35,7 @@ BI.TextValueDownListCombo = BI.inherit(BI.Widget, {
             adjustLength: 2,
             height: o.height,
             el: this.trigger,
+            value: BI.isNull(value) ? [] : [value],
             items: BI.deepClone(o.items)
         });
 
@@ -57,10 +64,14 @@ BI.TextValueDownListCombo = BI.inherit(BI.Widget, {
         });
     },
 
+    _digest: function (v) {
+        return this.valueMap[v];
+    },
+
     setValue: function (v) {
-        v = this.valueMap[v];
+        v = this._digest(v);
         this.combo.setValue([v]);
-        this.trigger.setValue(v.childValue || v.value);
+        this.trigger.setValue(v);
     },
 
     getValue: function () {

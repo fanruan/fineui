@@ -22,7 +22,8 @@ BI.DownListCombo = BI.inherit(BI.Widget, {
         this.popupview = BI.createWidget({
             type: "bi.down_list_popup",
             items: o.items,
-            chooseType: o.chooseType
+            chooseType: o.chooseType,
+            value: o.value
         });
 
         this.popupview.on(BI.DownListPopup.EVENT_CHANGE, function (value) {

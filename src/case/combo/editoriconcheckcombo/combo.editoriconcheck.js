@@ -27,7 +27,8 @@ BI.EditorIconCheckCombo = BI.inherit(BI.Widget, {
             quitChecker: o.quitChecker,
             allowBlank: o.allowBlank,
             watermark: o.watermark,
-            errorText: o.errorText
+            errorText: o.errorText,
+            value: o.value
         });
         this.trigger.on(BI.EditorTrigger.EVENT_CHANGE, function () {
             self.popup.setValue(this.getValue());
@@ -36,7 +37,8 @@ BI.EditorIconCheckCombo = BI.inherit(BI.Widget, {
         this.popup = BI.createWidget({
             type: "bi.text_value_check_combo_popup",
             chooseType: o.chooseType,
-            items: o.items
+            items: o.items,
+            value: o.value
         });
         this.popup.on(BI.TextValueCheckComboPopup.EVENT_CHANGE, function () {
             self.setValue(self.popup.getValue());

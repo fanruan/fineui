@@ -19,7 +19,7 @@ BI.MultiSelectCheckSelectedButton = BI.inherit(BI.Single, {
 
     _init: function () {
         BI.MultiSelectCheckSelectedButton.superclass._init.apply(this, arguments);
-        var self = this;
+        var self = this, o = this.options;
         this.numberCounter = BI.createWidget({
             type: "bi.text_button",
             element: this,
@@ -43,6 +43,9 @@ BI.MultiSelectCheckSelectedButton = BI.inherit(BI.Single, {
             self.numberCounter.setText(self.numberCounter.getTag());
         });
         this.setVisible(false);
+        if(BI.isNotNull(o.value)){
+            this.setValue(o.value);
+        }
     },
 
     setValue: function (ob) {

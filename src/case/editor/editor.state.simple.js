@@ -130,6 +130,9 @@ BI.SimpleStateEditor = BI.inherit(BI.Widget, {
             items: [this.editor]
         });
         this._showHint();
+        if(BI.isNotNull(o.text)){
+            this.setState(o.text);
+        }
     },
 
     doRedMark: function () {

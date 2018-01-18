@@ -49,7 +49,8 @@ BI.MultiTreeSearcher = BI.inherit(BI.Widget, {
                 itemsCreator: function (op, callback) {
                     op.keyword = self.editor.getValue();
                     o.itemsCreator(op, callback);
-                }
+                },
+                value: o.value
             }, o.popup),
 
             adapter: o.adapter,
@@ -70,6 +71,9 @@ BI.MultiTreeSearcher = BI.inherit(BI.Widget, {
         this.searcher.on(BI.Searcher.EVENT_CHANGE, function () {
             self.fireEvent(BI.MultiTreeSearcher.EVENT_CHANGE, arguments);
         });
+        if (BI.isNotNull(o.value)) {
+            this.setState(o.value);
+        }
     },
 
     adjustView: function () {

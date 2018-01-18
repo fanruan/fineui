@@ -14,6 +14,7 @@ BI.TreeView = BI.inherit(BI.Pane, {
     },
     _init: function () {
         BI.TreeView.superclass._init.apply(this, arguments);
+        var o = this.options;
         this._stop = false;
 
         this._createTree();
@@ -29,7 +30,9 @@ BI.TreeView = BI.inherit(BI.Pane, {
             element: this,
             items: [this.tip]
         });
-
+        if(BI.isNotNull(o.value)){
+            this.setSelectedValue(o.value);
+        }
     },
 
     _createTree: function () {

@@ -5157,7 +5157,8 @@ BI.EditorIconCheckCombo = BI.inherit(BI.Widget, {
             quitChecker: o.quitChecker,
             allowBlank: o.allowBlank,
             watermark: o.watermark,
-            errorText: o.errorText
+            errorText: o.errorText,
+            value: o.value
         });
         this.trigger.on(BI.EditorTrigger.EVENT_CHANGE, function () {
             self.popup.setValue(this.getValue());
@@ -5166,7 +5167,8 @@ BI.EditorIconCheckCombo = BI.inherit(BI.Widget, {
         this.popup = BI.createWidget({
             type: "bi.text_value_check_combo_popup",
             chooseType: o.chooseType,
-            items: o.items
+            items: o.items,
+            value: o.value
         });
         this.popup.on(BI.TextValueCheckComboPopup.EVENT_CHANGE, function () {
             self.setValue(self.popup.getValue());
@@ -5674,12 +5676,15 @@ BI.TextValueCheckCombo = BI.inherit(BI.Widget, {
         this.trigger = BI.createWidget({
             type: "bi.select_text_trigger",
             items: o.items,
-            height: o.height
+            height: o.height,
+            text: o.text,
+            value: o.value
         });
         this.popup = BI.createWidget({
             type: "bi.text_value_check_combo_popup",
             chooseType: o.chooseType,
-            items: o.items
+            items: o.items,
+            value: o.value
         });
         this.popup.on(BI.TextValueCheckComboPopup.EVENT_CHANGE, function () {
             self.setValue(self.popup.getValue());
@@ -5749,12 +5754,14 @@ BI.SmallTextValueCheckCombo = BI.inherit(BI.Widget, {
             type: "bi.small_select_text_trigger",
             items: o.items,
             height: o.height,
-            text: o.text
+            text: o.text,
+            value: o.value
         });
         this.popup = BI.createWidget({
             type: "bi.text_value_check_combo_popup",
             chooseType: o.chooseType,
-            items: o.items
+            items: o.items,
+            value: o.value
         });
         this.popup.on(BI.TextValueCheckComboPopup.EVENT_CHANGE, function () {
             self.setValue(self.popup.getValue());
@@ -5807,7 +5814,8 @@ BI.shortcut("bi.small_text_value_check_combo", BI.SmallTextValueCheckCombo);BI.T
             chooseType: o.chooseType,
             layouts: [{
                 type: "bi.vertical"
-            }]
+            }],
+            value: o.value
         });
 
         this.popup.on(BI.Controller.EVENT_CHANGE, function (type, val, obj) {
@@ -5861,6 +5869,7 @@ BI.TextValueCombo = BI.inherit(BI.Widget, {
             baseClass: "bi-text-value-combo",
             height: 30,
             chooseType: BI.ButtonGroup.CHOOSE_TYPE_SINGLE,
+            text: "",
             value: "",
             el: {}
         });
@@ -5873,11 +5882,13 @@ BI.TextValueCombo = BI.inherit(BI.Widget, {
             type: "bi.select_text_trigger",
             items: o.items,
             height: o.height,
-            text: o.value
+            text: o.text,
+            value: o.value
         });
         this.popup = BI.createWidget({
             type: "bi.text_value_combo_popup",
             chooseType: o.chooseType,
+            value: o.value,
             items: o.items
         });
         this.popup.on(BI.TextValueComboPopup.EVENT_CHANGE, function () {
@@ -5898,9 +5909,6 @@ BI.TextValueCombo = BI.inherit(BI.Widget, {
                 maxHeight: 300
             }
         });
-        if (BI.isKey(o.value)) {
-            this.setValue(o.value);
-        }
     },
 
     setValue: function (v) {
@@ -6058,10 +6066,16 @@ BI.TextValueDownListCombo = BI.inherit(BI.Widget, {
 
         this._createValueMap();
 
+        var value;
+        if(BI.isNotNull(o.value)){
+            value = this._digest(o.value);
+        }
         this.trigger = BI.createWidget({
             type: "bi.down_list_select_text_trigger",
             height: o.height,
-            items: o.items
+            items: o.items,
+            text: o.text,
+            value: value
         });
 
         this.combo = BI.createWidget({
@@ -6071,6 +6085,7 @@ BI.TextValueDownListCombo = BI.inherit(BI.Widget, {
             adjustLength: 2,
             height: o.height,
             el: this.trigger,
+            value: BI.isNull(value) ? [] : [value],
             items: BI.deepClone(o.items)
         });
 
@@ -6099,10 +6114,14 @@ BI.TextValueDownListCombo = BI.inherit(BI.Widget, {
         });
     },
 
+    _digest: function (v) {
+        return this.valueMap[v];
+    },
+
     setValue: function (v) {
-        v = this.valueMap[v];
+        v = this._digest(v);
         this.combo.setValue([v]);
-        this.trigger.setValue(v.childValue || v.value);
+        this.trigger.setValue(v);
     },
 
     getValue: function () {
@@ -6142,7 +6161,8 @@ BI.DownListSelectTextTrigger = BI.inherit(BI.Trigger, {
             element: this,
             height: o.height,
             items: this._formatItemArray(o.items),
-            text: o.text
+            text: o.text,
+            value: BI.isNull(o.value) ? "" : o.value.childValue || o.value.value
         });
     },
 
@@ -6163,7 +6183,7 @@ BI.DownListSelectTextTrigger = BI.inherit(BI.Trigger, {
     },
 
     setValue: function (vals) {
-        this.trigger.setValue(vals);
+        this.trigger.setValue(vals.childValue || vals.value);
     },
 
     populate: function (items) {
@@ -7251,6 +7271,9 @@ BI.StateEditor = BI.inherit(BI.Widget, {
             items: [this.editor]
         });
         this._showHint();
+        if(BI.isNotNull(o.text)){
+            this.setState(o.text);
+        }
     },
 
     doRedMark: function () {
@@ -7525,6 +7548,9 @@ BI.SimpleStateEditor = BI.inherit(BI.Widget, {
             items: [this.editor]
         });
         this._showHint();
+        if(BI.isNotNull(o.text)){
+            this.setState(o.text);
+        }
     },
 
     doRedMark: function () {
@@ -8150,6 +8176,9 @@ BI.SelectList = BI.inherit(BI.Widget, {
         if (o.items.length <= 0) {
             this.toolbar.setVisible(false);
             this.toolbar.setEnable(false);
+        }
+        if(BI.isNotNull(o.value)){
+            this.setValue(o.value);
         }
     },
 
@@ -13759,7 +13788,7 @@ BI.IconTextTrigger = BI.inherit(BI.Trigger, {
                     },
                     disableSelected: true
                 },
-                width: o.triggerWidth || o.height
+                width: BI.isEmptyString(o.iconCls)? 0 : (o.triggerWidth || o.height)
             },
             {
                 el: this.text

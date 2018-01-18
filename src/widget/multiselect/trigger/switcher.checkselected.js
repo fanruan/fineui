@@ -24,7 +24,8 @@ BI.MultiSelectCheckSelectedSwitcher = BI.inherit(BI.Widget, {
 
         this.button = BI.createWidget(o.el, {
             type: "bi.multi_select_check_selected_button",
-            itemsCreator: o.itemsCreator
+            itemsCreator: o.itemsCreator,
+            value: o.value
         });
         this.button.on(BI.Events.VIEW, function () {
             self.fireEvent(BI.Events.VIEW, arguments);
@@ -40,7 +41,8 @@ BI.MultiSelectCheckSelectedSwitcher = BI.inherit(BI.Widget, {
                 itemsCreator: o.itemsCreator,
                 onClickContinueSelect: function () {
                     self.switcher.hideView();
-                }
+                },
+                value: o.value
             }, o.popup),
             adapter: o.adapter,
             masker: o.masker

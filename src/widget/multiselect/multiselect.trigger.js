@@ -41,7 +41,8 @@ BI.MultiSelectTrigger = BI.inherit(BI.Trigger, {
             valueFormatter: o.valueFormatter,
             popup: {},
             adapter: o.adapter,
-            masker: o.masker
+            masker: o.masker,
+            value: o.value
         });
         this.searcher.on(BI.MultiSelectSearcher.EVENT_START, function () {
             self.fireEvent(BI.MultiSelectTrigger.EVENT_START);
@@ -63,7 +64,8 @@ BI.MultiSelectTrigger = BI.inherit(BI.Trigger, {
             valueFormatter: o.valueFormatter,
             itemsCreator: o.itemsCreator,
             adapter: o.adapter,
-            masker: o.masker
+            masker: o.masker,
+            value: o.value
         });
         this.numberCounter.on(BI.MultiSelectCheckSelectedSwitcher.EVENT_TRIGGER_CHANGE, function () {
             self.fireEvent(BI.MultiSelectTrigger.EVENT_COUNTER_CLICK);

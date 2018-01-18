@@ -12,6 +12,7 @@ Demo.TextValueCheckCombo = BI.inherit(BI.Widget, {
             items: [{
                 type: "bi.text_value_check_combo",
                 text: "默认值",
+                value: 1,
                 width: 300,
                 items: [{
                     text: "MVC-1",
