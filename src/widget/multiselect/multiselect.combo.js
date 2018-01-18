@@ -23,7 +23,10 @@ BI.MultiSelectCombo = BI.inherit(BI.Single, {
             self.trigger.getSearcher().setState(self.storeValue);
             self.trigger.getCounter().setButtonChecked(self.storeValue);
         };
-        this.storeValue = {};
+        this.storeValue = o.value || {};
+        
+        this._assertValue(this.storeValue);
+        
         // 标记正在请求数据
         this.requesting = false;
 
@@ -48,7 +51,8 @@ BI.MultiSelectCombo = BI.inherit(BI.Single, {
                     }
                     callback.apply(self, arguments);
                 });
-            }
+            },
+            value: this.storeValue
         });
 
         this.trigger.on(BI.MultiSelectTrigger.EVENT_START, function () {
@@ -153,6 +157,7 @@ BI.MultiSelectCombo = BI.inherit(BI.Single, {
                     });
                 }
             },
+            value: o.value,
             hideChecker: function (e) {
                 return triggerBtn.element.find(e.target).length === 0;
             }

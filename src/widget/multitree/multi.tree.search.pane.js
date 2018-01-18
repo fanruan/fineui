@@ -27,7 +27,8 @@ BI.MultiTreeSearchPane = BI.inherit(BI.Pane, {
             itemsCreator: function (op, callback) {
                 op.keyword = opts.keywordGetter();
                 opts.itemsCreator(op, callback);
-            }
+            },
+            value: opts.value
         });
 
         this.partTree.on(BI.Controller.EVENT_CHANGE, function () {

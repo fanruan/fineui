@@ -27,6 +27,9 @@ BI.MultiSelectLoader = BI.inherit(BI.Widget, {
         var self = this, opts = this.options;
         var hasNext = false;
 
+        this.storeValue = opts.value || {};
+        this._assertValue(this.storeValue);
+
         this.button_group = BI.createWidget({
             type: "bi.select_list",
             element: this,
@@ -93,7 +96,8 @@ BI.MultiSelectLoader = BI.inherit(BI.Widget, {
             },
             hasNext: function () {
                 return hasNext;
-            }
+            },
+            value: this.storeValue
         });
         this.button_group.on(BI.Controller.EVENT_CHANGE, function () {
             self.fireEvent(BI.Controller.EVENT_CHANGE, arguments);

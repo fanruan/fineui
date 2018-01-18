@@ -25,7 +25,8 @@ BI.MultiSelectPopupView = BI.inherit(BI.Widget, {
             type: "bi.multi_select_loader",
             itemsCreator: opts.itemsCreator,
             valueFormatter: opts.valueFormatter,
-            onLoaded: opts.onLoaded
+            onLoaded: opts.onLoaded,
+            value: opts.value
         });
 
         this.popupView = BI.createWidget({
@@ -36,7 +37,8 @@ BI.MultiSelectPopupView = BI.inherit(BI.Widget, {
             maxHeight: opts.maxHeight,
             element: this,
             buttons: [BI.i18nText("BI-Basic_Clears"), BI.i18nText("BI-Basic_Sure")],
-            el: this.loader
+            el: this.loader,
+            value: opts.value
         });
 
         this.popupView.on(BI.MultiPopupView.EVENT_CHANGE, function () {

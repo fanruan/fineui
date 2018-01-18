@@ -26,7 +26,7 @@ BI.MultiSelectCheckPane = BI.inherit(BI.Widget, {
 
         var self = this, opts = this.options;
 
-        this.storeValue = {};
+        this.storeValue = opts.value || {};
         this.display = BI.createWidget({
             type: "bi.display_selected_list",
             items: opts.items,

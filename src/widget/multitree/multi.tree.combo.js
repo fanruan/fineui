@@ -31,6 +31,8 @@ BI.MultiTreeCombo = BI.inherit(BI.Single, {
         var isInit = false;
         var want2showCounter = false;
 
+        this.storeValue = {value: o.value || {}};
+
         this.trigger = BI.createWidget({
             type: "bi.multi_select_trigger",
             height: o.height,
@@ -50,7 +52,8 @@ BI.MultiTreeCombo = BI.inherit(BI.Single, {
                     type: "bi.multi_tree_check_pane",
                     itemsCreator: o.itemsCreator
                 }
-            }
+            },
+            value: {value: o.value || {}}
 
         });
 
@@ -106,12 +109,12 @@ BI.MultiTreeCombo = BI.inherit(BI.Single, {
                     });
                 }
             },
+            value: {value: o.value || {}},
             hideChecker: function (e) {
                 return triggerBtn.element.find(e.target).length === 0;
             }
         });
-
-        this.storeValue = {value: {}};
+        
         var change = false;
         var clear = false;          // 标识当前是否点击了清空
 

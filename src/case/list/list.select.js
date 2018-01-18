@@ -80,6 +80,9 @@ BI.SelectList = BI.inherit(BI.Widget, {
             this.toolbar.setVisible(false);
             this.toolbar.setEnable(false);
         }
+        if(BI.isNotNull(o.value)){
+            this.setValue(o.value);
+        }
     },
 
     _checkAllSelected: function () {

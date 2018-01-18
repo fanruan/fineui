@@ -27,7 +27,8 @@ BI.MultiTreePopup = BI.inherit(BI.Pane, {
             height: 400,
             cls: "popup-view-tree",
             itemsCreator: opts.itemsCreator,
-            onLoaded: opts.onLoaded
+            onLoaded: opts.onLoaded,
+            value: opts.value || {}
         });
 
         this.popupView = BI.createWidget({

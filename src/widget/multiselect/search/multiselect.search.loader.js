@@ -20,13 +20,14 @@ BI.MultiSelectSearchLoader = BI.inherit(BI.Widget, {
 
         var self = this, opts = this.options;
         var hasNext = false;
-
+        this.storeValue = BI.deepClone(opts.value);
         this.button_group = BI.createWidget({
             type: "bi.select_list",
             element: this,
             logic: {
                 dynamic: false
             },
+            value: opts.value,
             el: {
                 tipText: BI.i18nText("BI-No_Select"),
                 el: {

@@ -35,7 +35,10 @@ Demo.MultiTreeCombo = BI.inherit(BI.Widget, {
                         items: items
                     });
                 },
-                width: 300
+                width: 300,
+                value: {
+                    "根目录": {}
+                }
             }, {
                 type: "bi.button",
                 text: "getValue",

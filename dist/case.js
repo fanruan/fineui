@@ -7271,6 +7271,9 @@ BI.StateEditor = BI.inherit(BI.Widget, {
             items: [this.editor]
         });
         this._showHint();
+        if(BI.isNotNull(o.text)){
+            this.setState(o.text);
+        }
     },
 
     doRedMark: function () {
@@ -7545,6 +7548,9 @@ BI.SimpleStateEditor = BI.inherit(BI.Widget, {
             items: [this.editor]
         });
         this._showHint();
+        if(BI.isNotNull(o.text)){
+            this.setState(o.text);
+        }
     },
 
     doRedMark: function () {
@@ -8170,6 +8176,9 @@ BI.SelectList = BI.inherit(BI.Widget, {
         if (o.items.length <= 0) {
             this.toolbar.setVisible(false);
             this.toolbar.setEnable(false);
+        }
+        if(BI.isNotNull(o.value)){
+            this.setValue(o.value);
         }
     },
 
@@ -13779,7 +13788,7 @@ BI.IconTextTrigger = BI.inherit(BI.Trigger, {
                     },
                     disableSelected: true
                 },
-                width: o.triggerWidth || o.height
+                width: BI.isEmptyString(o.iconCls)? 0 : (o.triggerWidth || o.height)
             },
             {
                 el: this.text
