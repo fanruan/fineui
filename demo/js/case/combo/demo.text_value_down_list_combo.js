@@ -16,6 +16,8 @@ Demo.TextValueDownListCombo = BI.inherit(BI.Widget, {
                 ref: function (_ref) {
                     self.refs = _ref;
                 },
+                text: "默认值",
+                value: 11,
                 items: [
                     [{
                         el: {
@@ -35,13 +37,16 @@ Demo.TextValueDownListCombo = BI.inherit(BI.Widget, {
                         value: 3
                     }]
                 ]
+            }, {
+                type: "bi.button",
+                width: 90,
+                height: 25,
+                handler: function () {
+                    self.refs.setValue(2);
+                }
             }],
             vgap: 20
         };
-    },
-
-    mounted: function () {
-        this.refs.setValue(2);
     }
 });
 

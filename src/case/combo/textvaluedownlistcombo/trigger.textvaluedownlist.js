@@ -23,7 +23,8 @@ BI.DownListSelectTextTrigger = BI.inherit(BI.Trigger, {
             element: this,
             height: o.height,
             items: this._formatItemArray(o.items),
-            text: o.text
+            text: o.text,
+            value: BI.isNull(o.value) ? "" : o.value.childValue || o.value.value
         });
     },
 
@@ -44,7 +45,7 @@ BI.DownListSelectTextTrigger = BI.inherit(BI.Trigger, {
     },
 
     setValue: function (vals) {
-        this.trigger.setValue(vals);
+        this.trigger.setValue(vals.childValue || vals.value);
     },
 
     populate: function (items) {
