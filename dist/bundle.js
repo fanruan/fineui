@@ -79855,7 +79855,8 @@ BI.DownListCombo = BI.inherit(BI.Widget, {
         this.popupview = BI.createWidget({
             type: "bi.down_list_popup",
             items: o.items,
-            chooseType: o.chooseType
+            chooseType: o.chooseType,
+            value: o.value
         });
 
         this.popupview.on(BI.DownListPopup.EVENT_CHANGE, function (value) {
@@ -79949,7 +79950,8 @@ BI.DownListGroup = BI.inherit(BI.Widget, {
                 type: "bi.vertical",
                 hgap: 0,
                 vgap: 0
-            }]
+            }],
+            value: o.value
         });
         this.downlistgroup.on(BI.Controller.EVENT_CHANGE, function (type) {
             self.fireEvent(BI.Controller.EVENT_CHANGE, arguments);
@@ -80076,7 +80078,8 @@ BI.shortcut("bi.down_list_item", BI.DownListItem);BI.DownListGroupItem = BI.inhe
             type: "bi.icon_button",
             cls: o.iconCls1,
             width: 25,
-            forceNotSelected: true
+            forceNotSelected: true,
+            selected: this._digest(o.value)
         });
 
         this.icon2 = BI.createWidget({
@@ -80118,6 +80121,14 @@ BI.shortcut("bi.down_list_item", BI.DownListItem);BI.DownListGroupItem = BI.inhe
         });
     },
 
+    _digest: function (v) {
+        var self = this, o = this.options;
+        v = BI.isArray(v) ? v : [v];
+        return BI.any(v, function (idx, value) {
+            return BI.contains(o.childValues, value);
+        });
+    },
+
     hover: function () {
         BI.DownListGroupItem.superclass.hover.apply(this, arguments);
         this.icon1.element.addClass("hover");
@@ -80147,16 +80158,7 @@ BI.shortcut("bi.down_list_item", BI.DownListItem);BI.DownListGroupItem = BI.inhe
     },
 
     setValue: function (v) {
-        var self = this, o = this.options;
-        v = BI.isArray(v) ? v : [v];
-        BI.find(v, function (idx, value) {
-            if (BI.contains(o.childValues, value)) {
-                self.icon1.setSelected(true);
-                return true;
-            }
-            self.icon1.setSelected(false);
-            
-        });
+        this.icon1.setSelected(this._digest(v));
     }
 });
 BI.DownListGroupItem.EVENT_CHANGE = "EVENT_CHANGE";
@@ -80201,6 +80203,7 @@ BI.DownListPopup = BI.inherit(BI.Pane, {
                 hgap: this.constants.hgap,
                 vgap: this.constants.vgap
             }],
+            value: this._digest(o.value),
             chooseType: o.chooseType
         });
 
@@ -80338,6 +80341,22 @@ BI.DownListPopup = BI.inherit(BI.Pane, {
         return fatherValue + "_" + childValue;
     },
 
+    _digest: function (valueItem) {
+        var self = this;
+        var valueArray = [];
+        BI.each(valueItem, function (i, item) {
+                var value;
+                if (BI.isNotNull(item.childValue)) {
+                    value = self._createChildValue(item.value, item.childValue);
+                } else {
+                    value = item.value;
+                }
+                valueArray.push(value);
+            }
+        );
+        return valueArray;
+    },
+
     populate: function (items) {
         BI.DownListPopup.superclass.populate.apply(this, arguments);
         var self = this;
@@ -80354,19 +80373,7 @@ BI.DownListPopup = BI.inherit(BI.Pane, {
     },
 
     setValue: function (valueItem) {
-        var self = this;
-        var valueArray = [];
-        BI.each(valueItem, function (i, item) {
-            var value;
-            if (BI.isNotNull(item.childValue)) {
-                value = self._createChildValue(item.value, item.childValue);
-            } else {
-                value = item.value;
-            }
-            valueArray.push(value);
-        }
-        );
-        this.popup.setValue(valueArray);
+        this.popup.setValue(this._digest(valueItem));
     },
 
     getValue: function () {
