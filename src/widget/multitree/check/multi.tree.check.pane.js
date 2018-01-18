@@ -62,7 +62,8 @@ BI.MultiTreeCheckPane = BI.inherit(BI.Pane, {
             itemsCreator: function (op, callback) {
                 op.type = BI.TreeView.REQ_TYPE_GET_SELECTED_DATA;
                 opts.itemsCreator(op, callback);
-            }
+            },
+            value: (opts.value || {}).value
         });
 
         this.display.on(BI.Events.AFTERINIT, function () {

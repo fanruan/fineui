@@ -115,7 +115,8 @@ BI.PopupView = BI.inherit(BI.Widget, {
             type: "bi.center",
             cls: "list-view-tab",
             height: 25,
-            items: o.tabs
+            items: o.tabs,
+            value: o.value
         });
     },
 

@@ -47,7 +47,8 @@ BI.MultiSelectSearcher = BI.inherit(BI.Widget, {
                     op.keyword = self.editor.getValue();
                     this.setKeyword(op.keyword);
                     o.itemsCreator(op, callback);
-                }
+                },
+                value: o.value
             }, o.popup),
 
             adapter: o.adapter,
@@ -72,6 +73,9 @@ BI.MultiSelectSearcher = BI.inherit(BI.Widget, {
             var keywords = this.getKeywords();
             self.fireEvent(BI.MultiSelectSearcher.EVENT_SEARCHING, keywords);
         });
+        if(BI.isNotNull(o.value)){
+            this.setState(o.value);
+        }
     },
 
     adjustView: function () {

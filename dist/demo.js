@@ -12621,7 +12621,11 @@ Demo.MultiSelectCombo = BI.inherit(BI.Widget, {
         var widget = BI.createWidget({
             type: "bi.multi_select_combo",
             itemsCreator: BI.bind(this._itemsCreator, this),
-            width: 200
+            width: 200,
+            value: {
+                type: 1,
+                value: ["柳州市城贸金属材料有限责任公司", "柳州市建福房屋租赁有限公司", "柳州市迅昌数码办公设备有限责任公司"]
+            }
         });
 
         widget.on(BI.MultiSelectCombo.EVENT_CONFIRM, function () {
@@ -12727,7 +12731,10 @@ Demo.MultiTreeCombo = BI.inherit(BI.Widget, {
                         items: items
                     });
                 },
-                width: 300
+                width: 300,
+                value: {
+                    "根目录": {}
+                }
             }, {
                 type: "bi.button",
                 text: "getValue",
