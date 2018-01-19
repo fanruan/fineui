@@ -12694,6 +12694,7 @@ BI.Widget = BI.inherit(BI.OB, {
         this._initElement();
         this._initEffects();
         this.created && this.created();
+        this._children = {};
     },
 
     /**
@@ -12704,7 +12705,6 @@ BI.Widget = BI.inherit(BI.OB, {
         var o = this.options;
         this.widgetName = o.widgetName || BI.uniqueId("widget");
         this._isRoot = o.root;
-        this._children = {};
         if (BI.isWidget(o.element)) {
             if (o.element instanceof BI.Widget) {
                 this._parent = o.element;
