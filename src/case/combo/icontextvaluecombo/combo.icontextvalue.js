@@ -24,7 +24,8 @@ BI.IconTextValueCombo = BI.inherit(BI.Widget, {
         });
         this.popup = BI.createWidget({
             type: "bi.icon_text_value_combo_popup",
-            items: o.items
+            items: o.items,
+            value: o.value
         });
         this.popup.on(BI.IconTextValueComboPopup.EVENT_CHANGE, function () {
             self.setValue(self.popup.getValue());
@@ -54,7 +55,8 @@ BI.IconTextValueCombo = BI.inherit(BI.Widget, {
     },
 
     getValue: function () {
-        return this.textIconCombo.getValue();
+        var value = this.textIconCombo.getValue();
+        return BI.isNull(value) ? [] : (BI.isArray(value) ? value : [value]);
     },
 
     populate: function (items) {

@@ -5291,7 +5291,8 @@ BI.IconCombo = BI.inherit(BI.Widget, {
     },
 
     getValue: function () {
-        return this.iconCombo.getValue();
+        var value = this.iconCombo.getValue();
+        return BI.isNull(value) ? [] : (BI.isArray(value) ? value : [value]);
     },
 
     populate: function (items) {
@@ -5392,7 +5393,8 @@ BI.IconComboTrigger = BI.inherit(BI.Trigger, {
         }
         this.button = BI.createWidget(o.el, {
             type: "bi.icon_change_button",
-            cls: "icon-combo-trigger-icon " + iconCls,
+            cls: "icon-combo-trigger-icon",
+            iconCls: iconCls,
             disableSelected: true,
             width: o.width,
             height: o.height,
@@ -5489,7 +5491,8 @@ BI.IconTextValueCombo = BI.inherit(BI.Widget, {
         });
         this.popup = BI.createWidget({
             type: "bi.icon_text_value_combo_popup",
-            items: o.items
+            items: o.items,
+            value: o.value
         });
         this.popup.on(BI.IconTextValueComboPopup.EVENT_CHANGE, function () {
             self.setValue(self.popup.getValue());
@@ -5519,7 +5522,8 @@ BI.IconTextValueCombo = BI.inherit(BI.Widget, {
     },
 
     getValue: function () {
-        return this.textIconCombo.getValue();
+        var value = this.textIconCombo.getValue();
+        return BI.isNull(value) ? [] : (BI.isArray(value) ? value : [value]);
     },
 
     populate: function (items) {
@@ -5550,7 +5554,8 @@ BI.IconTextValueComboPopup = BI.inherit(BI.Pane, {
             chooseType: BI.ButtonGroup.CHOOSE_TYPE_SINGLE,
             layouts: [{
                 type: "bi.vertical"
-            }]
+            }],
+            value: o.value
         });
 
         this.popup.on(BI.Controller.EVENT_CHANGE, function (type, val, obj) {
@@ -5650,7 +5655,8 @@ BI.StaticCombo = BI.inherit(BI.Widget, {
     },
 
     getValue: function () {
-        return this.combo.getValue();
+        var value = this.combo.getValue();
+        return BI.isNull(value) ? [] : (BI.isArray(value) ? value : [value]);
     }
 });
 BI.StaticCombo.EVENT_CHANGE = "EVENT_CHANGE";
@@ -5723,7 +5729,8 @@ BI.TextValueCheckCombo = BI.inherit(BI.Widget, {
     },
 
     getValue: function () {
-        return this.textIconCheckCombo.getValue();
+        var value = this.textIconCheckCombo.getValue();
+        return BI.isNull(value) ? [] : (BI.isArray(value) ? value : [value]);
     },
 
     populate: function (items) {
@@ -5916,7 +5923,8 @@ BI.TextValueCombo = BI.inherit(BI.Widget, {
     },
 
     getValue: function () {
-        return this.textIconCombo.getValue();
+        var value = this.textIconCombo.getValue();
+        return BI.isNull(value) ? [] : (BI.isArray(value) ? value : [value]);
     },
 
     populate: function (items) {
