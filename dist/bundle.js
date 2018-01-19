@@ -12480,6 +12480,8 @@ BI.Widget = BI.inherit(BI.OB, {
         });
     },
 
+    beforeInit: null,
+
     // 生命周期函数
     beforeCreate: null,
 
@@ -12502,15 +12504,22 @@ BI.Widget = BI.inherit(BI.OB, {
 
     _init: function () {
         BI.Widget.superclass._init.apply(this, arguments);
-        this.beforeCreate && this.beforeCreate();
         this._initRoot();
         this._initElementWidth();
         this._initElementHeight();
         this._initVisual();
         this._initState();
-        this._initElement();
-        this._initEffects();
-        this.created && this.created();
+        var func = function () {
+            this.beforeCreate && this.beforeCreate();
+            this._initElement();
+            this._initEffects();
+            this.created && this.created();
+        };
+        if (this.beforeInit) {
+            this.beforeInit(BI.bind(func, this));
+        } else {
+            func.call(this);
+        }
     },
 
     /**
