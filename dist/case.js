@@ -12606,6 +12606,9 @@ BI.BranchRelation = BI.inherit(BI.Widget, {
 
     _init: function () {
         BI.BranchRelation.superclass._init.apply(this, arguments);
+    },
+
+    mounted: function () {
         this.populate(this.options.items);
     },
 
@@ -12990,7 +12993,7 @@ BI.BranchRelation = BI.inherit(BI.Widget, {
             return r;
         }
         return [sNodes];
-        
+
     },
 
     populate: function (items) {
