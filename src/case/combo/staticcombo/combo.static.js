@@ -62,7 +62,8 @@ BI.StaticCombo = BI.inherit(BI.Widget, {
     },
 
     getValue: function () {
-        return this.combo.getValue();
+        var value = this.combo.getValue();
+        return BI.isNull(value) ? [] : (BI.isArray(value) ? value : [value]);
     }
 });
 BI.StaticCombo.EVENT_CHANGE = "EVENT_CHANGE";

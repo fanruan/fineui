@@ -85,7 +85,8 @@ BI.IconCombo = BI.inherit(BI.Widget, {
     },
 
     getValue: function () {
-        return this.iconCombo.getValue();
+        var value = this.iconCombo.getValue();
+        return BI.isNull(value) ? [] : (BI.isArray(value) ? value : [value]);
     },
 
     populate: function (items) {

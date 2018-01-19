@@ -41,8 +41,17 @@ Demo.TextValueDownListCombo = BI.inherit(BI.Widget, {
                 type: "bi.button",
                 width: 90,
                 height: 25,
+                text: "setValue",
                 handler: function () {
                     self.refs.setValue(2);
+                }
+            }, {
+                type: "bi.button",
+                width: 90,
+                height: 25,
+                text: "getValue",
+                handler: function () {
+                    BI.Msg.alert("", JSON.stringify(self.refs.getValue()));
                 }
             }],
             vgap: 20
