@@ -346,7 +346,6 @@
   font-weight: bold;
   min-height: 25px;
   min-width: 80px;
-  max-width: 220px;
 }
 
 .bi-preview-table {
@@ -369,7 +368,6 @@
   font-weight: bold;
   min-height: 25px;
   min-width: 80px;
-  max-width: 220px;
 }
 .bi-quarter-trigger {
   -webkit-border-radius: 2px;
