@@ -12690,7 +12690,6 @@ BI.Widget = BI.inherit(BI.OB, {
     },
 
     _render: function(){
-        this._children = {};
         this.beforeCreate && this.beforeCreate();
         this._initElement();
         this._initEffects();
@@ -12732,6 +12731,7 @@ BI.Widget = BI.inherit(BI.OB, {
         if (o.data) {
             this.element.data(o.data);
         }
+        this._children = {};
     },
 
     _initElementWidth: function () {
@@ -27506,7 +27506,7 @@ Data.Source = BISource = {
         needPop && popTarget();
     };
 
-    var _init = BI.Widget.prototype._render;
+    var _render = BI.Widget.prototype._render;
     BI.Widget.prototype._render = function () {
         if (window.Fix && this._store) {
             initWatch(this, this.watch);
