@@ -12690,11 +12690,11 @@ BI.Widget = BI.inherit(BI.OB, {
     },
 
     _render: function(){
+        this._children = {};
         this.beforeCreate && this.beforeCreate();
         this._initElement();
         this._initEffects();
         this.created && this.created();
-        this._children = {};
     },
 
     /**
