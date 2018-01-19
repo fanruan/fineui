@@ -13,7 +13,7 @@ Demo.Func = BI.inherit(BI.Widget, {
     render: function () {
         return {
             type: "bi.navigation",
-            defaultShowIndex: 0,
+            showIndex: 0,
             tab: {
                 height: 30,
                 items: [{

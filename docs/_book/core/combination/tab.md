@@ -55,7 +55,7 @@ BI.createWidget({
 | :------ |:-------------  | :-----| :----|:----
 | direction | 控件位置 | string | top,bottom,left,right,custom | "bottom"|
 | single | 是否为单页 | boolean | true,false | false |
-| defaultShowIndex | 是否默认显示tab页 | number,falser | number,false | false |
+| showIndex | 是否默认显示tab页 | number,falser | number,false | false |
 | tab | tab标签页 | object | — | { } |
 | logic | 布局逻辑 | object | — | {dynamic:false} |
 | cardCreator | 面板构造器| function | — | function (v) {return BI.createWidget();} |
