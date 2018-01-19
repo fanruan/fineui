@@ -4200,7 +4200,7 @@ _.extend(BI.OB.prototype, {
             }
             return configFn(providers[type]);
         }
-        BI.Plugin.registerWidget(type, configFn);
+        BI.Plugin.configWidget(type, configFn);
     };
 
     var actions = {};
