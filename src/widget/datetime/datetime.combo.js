@@ -21,7 +21,7 @@ BI.DateTimeCombo = BI.inherit(BI.Single, {
         BI.DateTimeCombo.superclass._init.apply(this, arguments);
         var self = this, opts = this.options;
         var date = Date.getDate();
-        this.storeValue = {
+        this.storeValue = BI.isNotNull(opts.value) ? opts.value : {
             year: date.getFullYear(),
             month: date.getMonth(),
             day: date.getDate(),
@@ -32,13 +32,15 @@ BI.DateTimeCombo = BI.inherit(BI.Single, {
         this.trigger = BI.createWidget({
             type: "bi.date_time_trigger",
             min: this.constants.DATE_MIN_VALUE,
-            max: this.constants.DATE_MAX_VALUE
+            max: this.constants.DATE_MAX_VALUE,
+            value: opts.value
         });
 
         this.popup = BI.createWidget({
             type: "bi.date_time_popup",
             min: this.constants.DATE_MIN_VALUE,
-            max: this.constants.DATE_MAX_VALUE
+            max: this.constants.DATE_MAX_VALUE,
+            value: opts.value
         });
         self.setValue(this.storeValue);
 

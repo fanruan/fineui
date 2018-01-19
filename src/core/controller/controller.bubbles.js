@@ -16,8 +16,16 @@ BI.BubblesController = BI.inherit(BI.Controller, {
 
     _init: function () {
         BI.BubblesController.superclass._init.apply(this, arguments);
+        var self = this;
         this.bubblesManager = {};
         this.storeBubbles = {};
+        BI.Resizers.add("bubbleController" + BI.uniqueId(), function () {
+            BI.each(self.bubblesManager, function (name) {
+                self.remove(name);
+            });
+            self.bubblesManager = {};
+            self.storeBubbles = {};
+        });
     },
 
     _createBubble: function (direct, text, height) {

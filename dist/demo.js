@@ -12337,7 +12337,15 @@ Demo.CustomDateTime = BI.inherit(BI.Widget, {
                         eventName: BI.DateTimeCombo.EVENT_CANCEL,
                         action: function () {
                         }
-                    }]
+                    }],
+                    value: {
+                        year: 2017,
+                        month: 2,
+                        day: 23,
+                        hour: 12,
+                        minute: 11,
+                        second: 1
+                    }
                 },
                 top: 200,
                 left: 200
