@@ -4122,7 +4122,7 @@ BI.Navigation = BI.inherit(BI.Widget, {
                 dynamic: false
             },
             single: false,
-            defaultShowIndex: false,
+            showIndex: false,
             tab: false,
             cardCreator: function (v) {
                 return BI.createWidget();
@@ -4166,8 +4166,8 @@ BI.Navigation = BI.inherit(BI.Widget, {
 
     mounted: function () {
         var o = this.options;
-        if (o.defaultShowIndex !== false) {
-            this.setSelect(o.defaultShowIndex);
+        if (o.showIndex !== false) {
+            this.setSelect(o.showIndex);
         }
     },
 
@@ -4874,7 +4874,7 @@ BI.Tab = BI.inherit(BI.Widget, {
             logic: {
                 dynamic: false
             },
-            defaultShowIndex: false,
+            showIndex: false,
             tab: false,
             cardCreator: function (v) {
                 return BI.createWidget();
@@ -4941,8 +4941,8 @@ BI.Tab = BI.inherit(BI.Widget, {
 
     mounted: function () {
         var o = this.options;
-        if (o.defaultShowIndex !== false) {
-            this.setSelect(o.defaultShowIndex);
+        if (o.showIndex !== false) {
+            this.setSelect(o.showIndex);
         }
     },
 

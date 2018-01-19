@@ -20505,7 +20505,7 @@ BI.SwitchTree = BI.inherit(BI.Widget, {
             type: "bi.tab",
             element: this,
             tab: null,
-            defaultShowIndex: BI.SwitchTree.SelectType.SingleSelect,
+            showIndex: BI.SwitchTree.SelectType.SingleSelect,
             cardCreator: BI.bind(this._createTree, this)
         });
     },
