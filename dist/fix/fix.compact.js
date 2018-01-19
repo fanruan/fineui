@@ -87,7 +87,7 @@
         needPop && popTarget();
     };
 
-    var _init = BI.Widget.prototype._render;
+    var _render = BI.Widget.prototype._render;
     BI.Widget.prototype._render = function () {
         if (window.Fix && this._store) {
             initWatch(this, this.watch);
