@@ -18188,8 +18188,16 @@ BI.BubblesController = BI.inherit(BI.Controller, {
 
     _init: function () {
         BI.BubblesController.superclass._init.apply(this, arguments);
+        var self = this;
         this.bubblesManager = {};
         this.storeBubbles = {};
+        BI.Resizers.add("bubbleController" + BI.uniqueId(), function () {
+            BI.each(self.bubblesManager, function (name) {
+                self.remove(name);
+            });
+            self.bubblesManager = {};
+            self.storeBubbles = {};
+        });
     },
 
     _createBubble: function (direct, text, height) {
@@ -79180,7 +79188,7 @@ BI.DateTimeCombo = BI.inherit(BI.Single, {
         BI.DateTimeCombo.superclass._init.apply(this, arguments);
         var self = this, opts = this.options;
         var date = Date.getDate();
-        this.storeValue = {
+        this.storeValue = BI.isNotNull(opts.value) ? opts.value : {
             year: date.getFullYear(),
             month: date.getMonth(),
             day: date.getDate(),
@@ -79191,13 +79199,15 @@ BI.DateTimeCombo = BI.inherit(BI.Single, {
         this.trigger = BI.createWidget({
             type: "bi.date_time_trigger",
             min: this.constants.DATE_MIN_VALUE,
-            max: this.constants.DATE_MAX_VALUE
+            max: this.constants.DATE_MAX_VALUE,
+            value: opts.value
         });
 
         this.popup = BI.createWidget({
             type: "bi.date_time_popup",
             min: this.constants.DATE_MIN_VALUE,
-            max: this.constants.DATE_MAX_VALUE
+            max: this.constants.DATE_MAX_VALUE,
+            value: opts.value
         });
         self.setValue(this.storeValue);
 
@@ -79396,15 +79406,7 @@ BI.DateTimePopup = BI.inherit(BI.Widget, {
             }]
         });
 
-        var date = Date.getDate();
-        this.dateCombo.setValue({
-            year: date.getFullYear(),
-            month: date.getMonth(),
-            day: date.getDate()
-        });
-        this.hour.setValue(date.getHours());
-        this.minute.setValue(date.getMinutes());
-        this.second.setValue(date.getSeconds());
+        this.setValue(opts.value);
 
         this.dateButton = BI.createWidget({
             type: "bi.grid",
@@ -79608,6 +79610,7 @@ BI.DateTimeTrigger = BI.inherit(BI.Trigger, {
                 el: this.text
             }]
         });
+        this.setValue(o.value);
     },
 
     _printTime: function (v) {
