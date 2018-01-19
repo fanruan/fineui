@@ -64,6 +64,7 @@
 
     var _init = BI.Widget.prototype._init;
     BI.Widget.prototype._init = function () {
+        var self = this;
         var needPop = false;
         if (window.Fix && this._store) {
             var store = findStore(this.options.element);
@@ -80,7 +81,13 @@
             } else {
                 this.model = this.store;
             }
-            initWatch(this, this.watch);
+            if (this.beforeInit) {
+                this.on(BI.Events.INIT, function () {
+                    initWatch(self, self.watch);
+                });
+            } else {
+                initWatch(this, this.watch);
+            }
             needPop = true;
         }
         _init.apply(this, arguments);

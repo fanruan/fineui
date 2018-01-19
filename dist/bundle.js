@@ -12510,10 +12510,12 @@ BI.Widget = BI.inherit(BI.OB, {
         this._initVisual();
         this._initState();
         var func = function () {
+            this.fireEvent(BI.Events.INIT);
             this.beforeCreate && this.beforeCreate();
             this._initElement();
             this._initEffects();
             this.created && this.created();
+            this.fireEvent(BI.Events.AFTERINIT);
         };
         if (this.beforeInit) {
             this.beforeInit(BI.bind(func, this));
