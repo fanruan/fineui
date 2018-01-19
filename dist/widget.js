@@ -3977,23 +3977,35 @@ BI.DownListPopup = BI.inherit(BI.Pane, {
     },
 
     _checkValues: function (values) {
-        var self = this;
+        var self = this, o = this.options;
         var value = [];
-        BI.each(this.options.items, function (idx, itemGroup) {
+        BI.each(o.items, function (idx, itemGroup) {
             BI.each(itemGroup, function (id, item) {
                 if(BI.isNotNull(item.children)){
                     var childValues = BI.pluck(item.children, "value");
-                    if(BI.contains(childValues, values[idx])){
-                        value.push(values[idx]);
+                    if(BI.contains(childValues, valueGetter(idx))){
+                        value.push(valueGetter(idx));
                     }
                 }else{
-                    if(item.value === values[idx]){
-                        value.push(values[idx]);
+                    if(item.value === valueGetter(idx)){
+                        value.push(valueGetter(idx));
                     }
                 }
             })
         });
         return value;
+
+        function valueGetter(index) {
+            switch (o.chooseType) {
+                case BI.Selection.Single:
+                    return values[0];
+                    break;
+                case BI.Selection.Multi:
+                    return values[index];
+                default:
+                    break;
+            }
+        }
     },
 
     populate: function (items) {

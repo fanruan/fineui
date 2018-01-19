@@ -1997,8 +1997,17 @@ Demo.TextValueDownListCombo = BI.inherit(BI.Widget, {
                 type: "bi.button",
                 width: 90,
                 height: 25,
+                text: "setValue",
                 handler: function () {
                     self.refs.setValue(2);
+                }
+            }, {
+                type: "bi.button",
+                width: 90,
+                height: 25,
+                text: "getValue",
+                handler: function () {
+                    BI.Msg.alert("", JSON.stringify(self.refs.getValue()));
                 }
             }],
             vgap: 20
@@ -2014,13 +2023,16 @@ Demo.TextValueCheckCombo = BI.inherit(BI.Widget, {
         baseCls: ""
     },
     render: function () {
-
+        var self = this;
         return {
             type: "bi.horizontal_auto",
             items: [{
                 type: "bi.text_value_check_combo",
+                ref: function () {
+                    self.combo = this;
+                },
                 text: "默认值",
-                value: 1,
+                //value: 1,
                 width: 300,
                 items: [{
                     text: "MVC-1",
@@ -2032,6 +2044,13 @@ Demo.TextValueCheckCombo = BI.inherit(BI.Widget, {
                     text: "MVC-3",
                     value: 3
                 }]
+            }, {
+                type: "bi.button",
+                width: 90,
+                height: 25,
+                handler: function () {
+                    BI.Msg.alert("", JSON.stringify(self.combo.getValue()));
+                }
             }],
             vgap: 20
         };

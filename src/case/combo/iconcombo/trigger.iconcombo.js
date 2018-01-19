@@ -27,7 +27,8 @@ BI.IconComboTrigger = BI.inherit(BI.Trigger, {
         }
         this.button = BI.createWidget(o.el, {
             type: "bi.icon_change_button",
-            cls: "icon-combo-trigger-icon " + iconCls,
+            cls: "icon-combo-trigger-icon",
+            iconCls: iconCls,
             disableSelected: true,
             width: o.width,
             height: o.height,

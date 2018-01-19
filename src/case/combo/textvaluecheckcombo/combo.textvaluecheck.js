@@ -67,7 +67,8 @@ BI.TextValueCheckCombo = BI.inherit(BI.Widget, {
     },
 
     getValue: function () {
-        return this.textIconCheckCombo.getValue();
+        var value = this.textIconCheckCombo.getValue();
+        return BI.isNull(value) ? [] : (BI.isArray(value) ? value : [value]);
     },
 
     populate: function (items) {
