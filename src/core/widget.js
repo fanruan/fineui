@@ -47,13 +47,13 @@ BI.Widget = BI.inherit(BI.OB, {
 
     _init: function () {
         BI.Widget.superclass._init.apply(this, arguments);
+        this._initRoot();
+        this._initElementWidth();
+        this._initElementHeight();
+        this._initVisual();
+        this._initState();
         var func = function () {
             this.beforeCreate && this.beforeCreate();
-            this._initRoot();
-            this._initElementWidth();
-            this._initElementHeight();
-            this._initVisual();
-            this._initState();
             this._initElement();
             this._initEffects();
             this.created && this.created();
