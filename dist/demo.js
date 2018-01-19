@@ -4617,7 +4617,7 @@ BI.shortcut("demo.sort_tree", Demo.SortTree);Demo.Center = BI.inherit(BI.Widget,
                 self.tab = this;
             },
             single: true,
-            defaultShowIndex: "demo.face",
+            showIndex: "demo.face",
             cardCreator: function (v) {
                 return BI.createWidget({
                     type: v
@@ -6564,7 +6564,7 @@ BI.shortcut("demo.loader", Demo.Func);Demo.Func = BI.inherit(BI.Widget, {
     render: function () {
         return {
             type: "bi.navigation",
-            defaultShowIndex: 0,
+            showIndex: 0,
             tab: {
                 height: 30,
                 items: [{
@@ -10772,7 +10772,7 @@ BI.shortcut("demo.tmp", Demo.Func);
             var self = this;
             return {
                 type: "bi.tab",
-                defaultShowIndex: this.constant.TAB1,
+                showIndex: this.constant.TAB1,
                 single: true,
                 tab: {
                     type: "bi.button_group",
@@ -14316,7 +14316,7 @@ BI.shortcut("demo.preview_table", Demo.Func);Demo.Func = BI.inherit(BI.Widget, {
             items: [{
                 el: {
                     type: "bi.tab",
-                    defaultShowIndex: 1,
+                    showIndex: 1,
                     cardCreator: function (v) {
                         switch (v) {
                             case 1:

@@ -138,7 +138,7 @@
             var self = this;
             return {
                 type: "bi.tab",
-                defaultShowIndex: this.constant.TAB1,
+                showIndex: this.constant.TAB1,
                 single: true,
                 tab: {
                     type: "bi.button_group",

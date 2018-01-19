@@ -10,7 +10,7 @@ Demo.Center = BI.inherit(BI.Widget, {
                 self.tab = this;
             },
             single: true,
-            defaultShowIndex: "demo.face",
+            showIndex: "demo.face",
             cardCreator: function (v) {
                 return BI.createWidget({
                     type: v

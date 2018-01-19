@@ -138,7 +138,7 @@ Demo.Func = BI.inherit(BI.Widget, {
             items: [{
                 el: {
                     type: "bi.tab",
-                    defaultShowIndex: 1,
+                    showIndex: 1,
                     cardCreator: function (v) {
                         switch (v) {
                             case 1:
