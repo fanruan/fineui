@@ -12559,7 +12559,6 @@ BI.Widget = BI.inherit(BI.OB, {
         if (o.data) {
             this.element.data(o.data);
         }
-        this._children = {};
     },
 
     _initElementWidth: function () {
