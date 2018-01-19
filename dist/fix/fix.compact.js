@@ -81,17 +81,18 @@
             } else {
                 this.model = this.store;
             }
-            if (this.beforeInit) {
-                this.on(BI.Events.INIT, function () {
-                    initWatch(self, self.watch);
-                });
-            } else {
-                initWatch(this, this.watch);
-            }
             needPop = true;
         }
         _init.apply(this, arguments);
         needPop && popTarget();
+    };
+
+    var _init = BI.Widget.prototype._render;
+    BI.Widget.prototype._render = function () {
+        if (window.Fix && this._store) {
+            initWatch(this, this.watch);
+        }
+        _render.apply(this, arguments);
     };
 
     var unMount = BI.Widget.prototype.__d;

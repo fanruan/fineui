@@ -12682,19 +12682,18 @@ BI.Widget = BI.inherit(BI.OB, {
         this._initElementHeight();
         this._initVisual();
         this._initState();
-        var func = function () {
-            this.fireEvent(BI.Events.INIT);
-            this.beforeCreate && this.beforeCreate();
-            this._initElement();
-            this._initEffects();
-            this.created && this.created();
-            this.fireEvent(BI.Events.AFTERINIT);
-        };
         if (this.beforeInit) {
-            this.beforeInit(BI.bind(func, this));
+            this.beforeInit(BI.bind(this._render, this));
         } else {
-            func.call(this);
+            this._render();
         }
+    },
+
+    _render: function(){
+        this.beforeCreate && this.beforeCreate();
+        this._initElement();
+        this._initEffects();
+        this.created && this.created();
     },
 
     /**
@@ -27484,6 +27483,7 @@ Data.Source = BISource = {
 
     var _init = BI.Widget.prototype._init;
     BI.Widget.prototype._init = function () {
+        var self = this;
         var needPop = false;
         if (window.Fix && this._store) {
             var store = findStore(this.options.element);
@@ -27500,11 +27500,18 @@ Data.Source = BISource = {
             } else {
                 this.model = this.store;
             }
-            initWatch(this, this.watch);
             needPop = true;
         }
         _init.apply(this, arguments);
         needPop && popTarget();
+    };
+
+    var _init = BI.Widget.prototype._render;
+    BI.Widget.prototype._render = function () {
+        if (window.Fix && this._store) {
+            initWatch(this, this.watch);
+        }
+        _render.apply(this, arguments);
     };
 
     var unMount = BI.Widget.prototype.__d;
