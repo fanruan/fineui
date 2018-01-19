@@ -36,6 +36,7 @@ BI.DateTimeTrigger = BI.inherit(BI.Trigger, {
                 el: this.text
             }]
         });
+        this.setValue(o.value);
     },
 
     _printTime: function (v) {
