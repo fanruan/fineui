@@ -66,7 +66,7 @@ BI.LayerController = BI.inherit(BI.Controller, {
                 top: 0,
                 bottom: 0
             }]
-        });
+        }, context);
         BI.createWidget({
             type: "bi.absolute",
             element: op.container || this.options.render,

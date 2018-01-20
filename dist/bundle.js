@@ -18449,19 +18449,19 @@ BI.FloatBoxController = BI.inherit(BI.Controller, {
         return BI.isNotNull(this.floatManager[name]);
     },
 
-    create: function (name, section, options) {
+    create: function (name, section, options, context) {
         if (this._check(name)) {
             return this;
         }
         var floatbox = BI.createWidget({
             type: "bi.float_box"
-        }, options);
+        }, options, context);
         floatbox.populate(section);
-        this.add(name, floatbox, options);
+        this.add(name, floatbox, options, context);
         return this;
     },
 
-    add: function (name, floatbox, options) {
+    add: function (name, floatbox, options, context) {
         var self = this;
         options || (options = {});
         if (this._check(name)) {
@@ -18474,7 +18474,7 @@ BI.FloatBoxController = BI.inherit(BI.Controller, {
                 el: (this.floatLayer[name] = BI.createWidget({
                     type: "bi.absolute",
                     items: [floatbox]
-                })),
+                }, context)),
                 left: 0,
                 right: 0,
                 top: 0,
@@ -18630,7 +18630,7 @@ BI.LayerController = BI.inherit(BI.Controller, {
                 top: 0,
                 bottom: 0
             }]
-        });
+        }, context);
         BI.createWidget({
             type: "bi.absolute",
             element: op.container || this.options.render,
