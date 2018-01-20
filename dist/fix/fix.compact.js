@@ -23,12 +23,24 @@
     var targetStack = [];
 
     function pushTarget (_target) {
-        if (target) targetStack.push(target);
+        if (_target) targetStack.push(_target);
         Fix.Model.target = target = _target;
     }
 
     function popTarget () {
         Fix.Model.target = target = targetStack.pop();
+    }
+
+    var context = null;
+    var contextStack = [];
+
+    function pushContext (_context) {
+        if (_context) contextStack.push(_context);
+        Fix.Model.context = context = _context;
+    }
+
+    function popContext () {
+        Fix.Model.context = context = contextStack.pop();
     }
 
     var oldWatch = Fix.watch;
@@ -62,12 +74,27 @@
         }
     }
 
+    var _create = BI.createWidget;
+    BI.createWidget = function (item, options, context) {
+        var pushed = false;
+        if (BI.isWidget(options)) {
+            pushContext(options);
+            pushed = true;
+        } else if (context != null) {
+            pushContext(context);
+            pushed = true;
+        }
+        var result = _create.apply(this, arguments);
+        pushed && popContext();
+        return result;
+    };
+
     var _init = BI.Widget.prototype._init;
     BI.Widget.prototype._init = function () {
         var self = this;
         var needPop = false;
         if (window.Fix && this._store) {
-            var store = findStore(this.options.element);
+            var store = findStore(this.options.element || context);
             if (store) {
                 pushTarget(store);
                 needPop = true;

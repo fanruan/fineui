@@ -113,7 +113,7 @@ BI.DivisionLayout = BI.inherit(BI.Layout, {
                     throw new Error("item be required");
                 }
                 if(!this.hasWidget(this.getName() + i + "_" + j)) {
-                    var w = BI.createWidget(map[i][j]);
+                    var w = BI.createWidget(map[i][j], this);
                     this.addWidget(this.getName() + i + "_" + j, w);
                 } else {
                     w = this.getWidgetByName(this.getName() + i + "_" + j);

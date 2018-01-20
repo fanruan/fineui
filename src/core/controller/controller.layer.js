@@ -37,7 +37,7 @@ BI.LayerController = BI.inherit(BI.Controller, {
         return this.create(name, null, op);
     },
 
-    create: function (name, from, op) {
+    create: function (name, from, op, context) {
         if (this.has(name)) {
             return this.get(name);
         }
@@ -56,7 +56,7 @@ BI.LayerController = BI.inherit(BI.Controller, {
         var widget = BI.createWidget((op.render || {}), {
             type: "bi.layout",
             cls: op.cls
-        });
+        }, context);
         var layout = BI.createWidget({
             type: "bi.absolute",
             items: [{

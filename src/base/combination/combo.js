@@ -220,7 +220,7 @@ BI.Combo = BI.inherit(BI.Widget, {
             this.popupView = BI.createWidget(this.options.popup, {
                 type: "bi.popup_view",
                 value: o.value
-            });
+            }, this);
             this.popupView.on(BI.Controller.EVENT_CHANGE, function (type, value, obj) {
                 if (type === BI.Events.CLICK) {
                     self.combo.setValue(self.getValue());

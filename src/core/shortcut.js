@@ -17,10 +17,15 @@
         return new cls(config);
     };
 
-    BI.createWidget = function (item, options) {
+    BI.createWidget = function (item, options, context) {
         var el, w;
         item || (item = {});
-        options || (options = {});
+        if (BI.isWidget(options)) {
+            context = options;
+            options = {};
+        } else {
+            options || (options = {});
+        }
         if (BI.isEmpty(item) && BI.isEmpty(options)) {
             return BI.createWidget({
                 type: "bi.layout"

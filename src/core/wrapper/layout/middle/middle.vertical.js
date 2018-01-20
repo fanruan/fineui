@@ -39,12 +39,12 @@ BI.VerticalCenterLayout = BI.inherit(BI.Layout, {
                 el: BI.createWidget({
                     type: "bi.default",
                     cls: "center-element " + (i === 0 ? "first-element " : "") + (i === items.length - 1 ? "last-element" : "")
-                })
+                }, this)
             });
         });
         BI.each(items, function (i, item) {
             if (item) {
-                var w = BI.createWidget(item);
+                var w = BI.createWidget(item, this);
                 w.element.css({
                     position: "absolute",
                     left: o.hgap + o.lgap,

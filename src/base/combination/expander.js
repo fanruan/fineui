@@ -143,7 +143,7 @@ BI.Expander = BI.inherit(BI.Widget, {
                     vgap: 0
                 }],
                 value: o.value
-            });
+            }, this);
             this.popupView.on(BI.Controller.EVENT_CHANGE, function (type, value, obj) {
                 self.fireEvent(BI.Controller.EVENT_CHANGE, arguments);
                 if (type === BI.Events.CLICK) {
