@@ -66,7 +66,7 @@
             if (p.store || p.__cacheStore) {
                 break;
             }
-            p = p._parent || (p.options && p.options.element);
+            p = p._parent || (p.options && p.options.element) || context;
         }
         if (p) {
             widget.__cacheStore = p.store;
