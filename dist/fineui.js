@@ -11888,7 +11888,7 @@ if (!window.BI) {
                 clone = {};
 
                 for (var i in obj) {
-                    if (_.has(obj, i)) {
+                    if (BI.has(obj, i)) {
                         clone[i] = BI.deepClone(obj[i]);
                     }
                 }

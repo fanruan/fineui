@@ -1262,11 +1262,11 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
             }
             this._parent = Model.target;
             var state = _.isFunction(this.state) ? this.state() : this.state;
-            var computed = _.isFunction(this.computed) ? this.computed() : this.computed;
-            var context = _.isFunction(this.context) ? this.context() : this.context;
-            var childContext = _.isFunction(this.childContext) ? this.childContext() : this.childContext;
-            var watch$$1 = _.isFunction(this.watch) ? this.watch() : this.watch;
-            var actions = _.isFunction(this.actions) ? this.actions() : this.actions;
+            var computed = this.computed;
+            var context = this.context;
+            var childContext = this.childContext;
+            var watch$$1 = this.watch;
+            var actions = this.actions;
             var keys = _.keys(this.$$model).concat(_.keys(state)).concat(_.keys(computed)).concat(context || []);
             defineProps(this, keys);
             childContext && defineContext(this, childContext);
@@ -1302,13 +1302,6 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 
         return Model;
     }();
-
-    Model.prototype.state = {};
-    Model.prototype.computed = {};
-    Model.prototype.context = [];
-    Model.prototype.childContext = [];
-    Model.prototype.watch = {};
-    Model.prototype.actions = {};
 
     function toJSON(model) {
         var result = void 0;
