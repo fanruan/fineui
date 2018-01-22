@@ -77805,9 +77805,6 @@ BI.IconTextTrigger = BI.inherit(BI.Trigger, {
             textAlign: "left",
             height: o.height,
             text: o.text,
-            title: function () {
-                return o.text;
-            },
             hgap: c.hgap
         });
         this.trigerButton = BI.createWidget({
