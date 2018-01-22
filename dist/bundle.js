@@ -23901,7 +23901,7 @@ BI.CardLayout = BI.inherit(BI.Layout, {
         BI.each(items, function (i, item) {
             if (item) {
                 if (!self.hasWidget(item.cardName)) {
-                    var w = BI.createWidget(item, this);
+                    var w = BI.createWidget(item, self);
                     w.on(BI.Events.DESTROY, function () {
                         var index = BI.findIndex(o.items, function (i, tItem) {
                             return tItem.cardName == item.cardName;
@@ -24490,7 +24490,7 @@ BI.GridLayout = BI.inherit(BI.Layout, {
     },
 
     stroke: function (items) {
-        var o = this.options;
+        var self = this, o = this.options;
         var rows = o.rows || o.items.length, columns = o.columns || ((o.items[0] && o.items[0].length) | 0);
         var width = 100 / columns, height = 100 / rows;
         var els = [];
@@ -24537,11 +24537,11 @@ BI.GridLayout = BI.inherit(BI.Layout, {
         BI.each(items, function (i, item) {
             if (BI.isArray(item)) {
                 BI.each(item, function (j, el) {
-                    els[i][j] = BI.createWidget(el, this);
+                    els[i][j] = BI.createWidget(el, self);
                 });
                 return;
             }
-            els[item.row][item.column] = BI.createWidget(item, this);
+            els[item.row][item.column] = BI.createWidget(item, self);
         });
         for (var i = 0; i < rows; i++) {
             for (var j = 0; j < columns; j++) {
@@ -24997,7 +24997,7 @@ BI.HTapeLayout = BI.inherit(BI.Layout, {
         items = BI.compact(items);
         BI.each(items, function (i, item) {
             if (!self.hasWidget(self.getName() + i + "")) {
-                var w = BI.createWidget(item, this);
+                var w = BI.createWidget(item, self);
                 self.addWidget(self.getName() + i + "", w);
             } else {
                 w = self.getWidgetByName(self.getName() + i + "");
@@ -25102,7 +25102,7 @@ BI.VTapeLayout = BI.inherit(BI.Layout, {
         items = BI.compact(items);
         BI.each(items, function (i, item) {
             if (!self.hasWidget(self.getName() + i + "")) {
-                var w = BI.createWidget(item, this);
+                var w = BI.createWidget(item, self);
                 self.addWidget(self.getName() + i + "", w);
             } else {
                 w = self.getWidgetByName(self.getName() + i + "");
@@ -25598,12 +25598,12 @@ BI.CenterLayout = BI.inherit(BI.Layout, {
                 el: BI.createWidget({
                     type: "bi.default",
                     cls: "center-element " + (i === 0 ? "first-element " : "") + (i === items.length - 1 ? "last-element" : "")
-                }, this)
+                }, self)
             });
         });
         BI.each(items, function (i, item) {
             if (item) {
-                var w = BI.createWidget(item, this);
+                var w = BI.createWidget(item, self);
                 w.element.css({
                     position: "absolute",
                     left: o.hgap + o.lgap,
@@ -25667,7 +25667,7 @@ BI.FloatCenterLayout = BI.inherit(BI.Layout, {
         BI.each(items, function (i) {
             var widget = BI.createWidget({
                 type: "bi.default"
-            }, this);
+            }, self);
             widget.element.addClass("center-element " + (i === 0 ? "first-element " : "") + (i === items.length - 1 ? "last-element" : "")).css({
                 width: width + "%",
                 height: "100%"
@@ -25678,7 +25678,7 @@ BI.FloatCenterLayout = BI.inherit(BI.Layout, {
         });
         BI.each(items, function (i, item) {
             if (item) {
-                var w = BI.createWidget(item, this);
+                var w = BI.createWidget(item, self);
                 w.element.css({
                     position: "absolute",
                     left: o.hgap + o.lgap,
@@ -25735,7 +25735,7 @@ BI.HorizontalCenterLayout = BI.inherit(BI.Layout, {
     },
 
     stroke: function (items) {
-        var o = this.options;
+        var self = this, o = this.options;
         var list = [];
         BI.each(items, function (i) {
             list.push({
@@ -25744,12 +25744,12 @@ BI.HorizontalCenterLayout = BI.inherit(BI.Layout, {
                 el: BI.createWidget({
                     type: "bi.default",
                     cls: "center-element " + (i === 0 ? "first-element " : "") + (i === items.length - 1 ? "last-element" : "")
-                }, this)
+                }, self)
             });
         });
         BI.each(items, function (i, item) {
             if (item) {
-                var w = BI.createWidget(item, this);
+                var w = BI.createWidget(item, self);
                 w.element.css({
                     position: "absolute",
                     left: o.hgap + o.lgap,
@@ -25816,12 +25816,12 @@ BI.VerticalCenterLayout = BI.inherit(BI.Layout, {
                 el: BI.createWidget({
                     type: "bi.default",
                     cls: "center-element " + (i === 0 ? "first-element " : "") + (i === items.length - 1 ? "last-element" : "")
-                }, this)
+                }, self)
             });
         });
         BI.each(items, function (i, item) {
             if (item) {
-                var w = BI.createWidget(item, this);
+                var w = BI.createWidget(item, self);
                 w.element.css({
                     position: "absolute",
                     left: o.hgap + o.lgap,
@@ -76077,9 +76077,6 @@ BI.IconTextTrigger = BI.inherit(BI.Trigger, {
             textAlign: "left",
             height: o.height,
             text: o.text,
-            title: function () {
-                return o.text;
-            },
             hgap: c.hgap
         });
         this.trigerButton = BI.createWidget({

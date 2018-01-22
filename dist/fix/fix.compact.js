@@ -116,10 +116,14 @@
 
     var _render = BI.Widget.prototype._render;
     BI.Widget.prototype._render = function () {
+        var needPop = false;
         if (window.Fix && this._store) {
+            needPop = true;
+            pushTarget(this.store);
             initWatch(this, this.watch);
         }
         _render.apply(this, arguments);
+        needPop && popTarget();
     };
 
     var unMount = BI.Widget.prototype.__d;
