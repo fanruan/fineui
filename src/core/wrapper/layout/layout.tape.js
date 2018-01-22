@@ -47,7 +47,7 @@ BI.HTapeLayout = BI.inherit(BI.Layout, {
         items = BI.compact(items);
         BI.each(items, function (i, item) {
             if (!self.hasWidget(self.getName() + i + "")) {
-                var w = BI.createWidget(item, this);
+                var w = BI.createWidget(item, self);
                 self.addWidget(self.getName() + i + "", w);
             } else {
                 w = self.getWidgetByName(self.getName() + i + "");
@@ -152,7 +152,7 @@ BI.VTapeLayout = BI.inherit(BI.Layout, {
         items = BI.compact(items);
         BI.each(items, function (i, item) {
             if (!self.hasWidget(self.getName() + i + "")) {
-                var w = BI.createWidget(item, this);
+                var w = BI.createWidget(item, self);
                 self.addWidget(self.getName() + i + "", w);
             } else {
                 w = self.getWidgetByName(self.getName() + i + "");
