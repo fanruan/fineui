@@ -22,7 +22,8 @@ BI.YearCombo = BI.inherit(BI.Widget, {
         this.trigger = BI.createWidget({
             type: "bi.year_trigger",
             min: o.min,
-            max: o.max
+            max: o.max,
+            value: o.value || ""
         });
         this.trigger.on(BI.YearTrigger.EVENT_FOCUS, function () {
             self.storeValue = this.getKey();
@@ -74,7 +75,8 @@ BI.YearCombo = BI.inherit(BI.Widget, {
                     behaviors: o.behaviors,
                     min: o.min,
                     max: o.max
-                }
+                },
+                value: o.value || ""
             }
         });
         this.combo.on(BI.Combo.EVENT_BEFORE_POPUPVIEW, function () {

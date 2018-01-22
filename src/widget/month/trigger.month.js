@@ -83,6 +83,7 @@ BI.MonthTrigger = BI.inherit(BI.Trigger, {
                 }
             ]
         });
+        this.setValue(o.value);
     },
     setValue: function (v) {
         if(BI.isNotNull(v)) {

@@ -19,7 +19,7 @@ BI.QuarterPopup = BI.inherit(BI.Widget, {
         var self = this, o = this.options;
 
         var items = [{
-            text: Date._QN[01],
+            text: Date._QN[1],
             value: 1
         }, {
             text: Date._QN[2],
@@ -50,7 +50,8 @@ BI.QuarterPopup = BI.inherit(BI.Widget, {
             items: BI.createItems(items, {}),
             layouts: [{
                 type: "bi.vertical"
-            }]
+            }],
+            value: o.value
         });
 
         this.quarter.on(BI.Controller.EVENT_CHANGE, function (type) {

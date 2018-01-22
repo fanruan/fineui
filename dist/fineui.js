@@ -27351,11 +27351,11 @@ Data.Source = BISource = {
             }
             this._parent = Model.target;
             var state = _.isFunction(this.state) ? this.state() : this.state;
-            var computed = _.isFunction(this.computed) ? this.computed() : this.computed;
-            var context = _.isFunction(this.context) ? this.context() : this.context;
-            var childContext = _.isFunction(this.childContext) ? this.childContext() : this.childContext;
-            var watch$$1 = _.isFunction(this.watch) ? this.watch() : this.watch;
-            var actions = _.isFunction(this.actions) ? this.actions() : this.actions;
+            var computed = this.computed;
+            var context = this.context;
+            var childContext = this.childContext;
+            var watch$$1 = this.watch;
+            var actions = this.actions;
             var keys = _.keys(this.$$model).concat(_.keys(state)).concat(_.keys(computed)).concat(context || []);
             defineProps(this, keys);
             childContext && defineContext(this, childContext);
@@ -27391,13 +27391,6 @@ Data.Source = BISource = {
 
         return Model;
     }();
-
-    Model.prototype.state = {};
-    Model.prototype.computed = {};
-    Model.prototype.context = [];
-    Model.prototype.childContext = [];
-    Model.prototype.watch = {};
-    Model.prototype.actions = {};
 
     function toJSON(model) {
         var result = void 0;
@@ -69540,15 +69533,14 @@ BI.IconTextValueCombo = BI.inherit(BI.Widget, {
         return BI.extend(BI.IconTextValueCombo.superclass._defaultConfig.apply(this, arguments), {
             baseClass: "bi-icon-text-value-combo",
             height: 30,
-            value: "",
-            el: {}
+            value: ""
         });
     },
 
     _init: function () {
         BI.IconTextValueCombo.superclass._init.apply(this, arguments);
         var self = this, o = this.options;
-        this.trigger = BI.createWidget(o.el, {
+        this.trigger = BI.createWidget({
             type: "bi.select_icon_text_trigger",
             items: o.items,
             height: o.height,
@@ -69738,15 +69730,14 @@ BI.TextValueCheckCombo = BI.inherit(BI.Widget, {
             width: 100,
             height: 24,
             chooseType: BI.ButtonGroup.CHOOSE_TYPE_SINGLE,
-            value: "",
-            el: {}
+            value: ""
         });
     },
 
     _init: function () {
         BI.TextValueCheckCombo.superclass._init.apply(this, arguments);
         var self = this, o = this.options;
-        this.trigger = BI.createWidget(o.el, {
+        this.trigger = BI.createWidget({
             type: "bi.select_text_trigger",
             items: o.items,
             height: o.height,
@@ -69944,15 +69935,14 @@ BI.TextValueCombo = BI.inherit(BI.Widget, {
             height: 30,
             chooseType: BI.ButtonGroup.CHOOSE_TYPE_SINGLE,
             text: "",
-            value: "",
-            el: {}
+            value: ""
         });
     },
 
     _init: function () {
         BI.TextValueCombo.superclass._init.apply(this, arguments);
         var self = this, o = this.options;
-        this.trigger = BI.createWidget(o.el, {
+        this.trigger = BI.createWidget({
             type: "bi.select_text_trigger",
             items: o.items,
             height: o.height,
@@ -80566,6 +80556,7 @@ BI.shortcut("bi.date_combo", BI.DateCombo);BI.DateTrigger = BI.inherit(BI.Trigge
                 el: this.editor
             }]
         });
+        this.setValue(o.value);
     },
     _dateCheck: function (date) {
         return Date.parseDateTime(date, "%Y-%x-%d").print("%Y-%x-%d") == date || Date.parseDateTime(date, "%Y-%X-%d").print("%Y-%X-%d") == date || Date.parseDateTime(date, "%Y-%x-%e").print("%Y-%x-%e") == date || Date.parseDateTime(date, "%Y-%X-%e").print("%Y-%X-%e") == date;
@@ -80842,6 +80833,7 @@ BI.DatePaneWidget = BI.inherit(BI.Widget, {
             self.setValue(self.selectedTime);
             self.fireEvent(BI.DateCalendarPopup.EVENT_CHANGE);
         });
+        this.setValue(o.selectedTime);
 
     },
 
@@ -84579,7 +84571,8 @@ BI.MonthCombo = BI.inherit(BI.Widget, {
         var self = this, o = this.options;
 
         this.trigger = BI.createWidget({
-            type: "bi.month_trigger"
+            type: "bi.month_trigger",
+            value: o.value
         });
 
         this.trigger.on(BI.MonthTrigger.EVENT_CONFIRM, function (v) {
@@ -84607,7 +84600,8 @@ BI.MonthCombo = BI.inherit(BI.Widget, {
 
         this.popup = BI.createWidget({
             type: "bi.month_popup",
-            behaviors: o.behaviors
+            behaviors: o.behaviors,
+            value: o.value
         });
         this.popup.on(BI.MonthPopup.EVENT_CHANGE, function () {
             self.setValue(self.popup.getValue());
@@ -84705,7 +84699,8 @@ BI.MonthPopup = BI.inherit(BI.Widget, {
                 type: "bi.center_adapt",
                 vgap: 1,
                 hgap: 2
-            }]
+            }],
+            value: o.value
         });
 
         this.month.on(BI.Controller.EVENT_CHANGE, function (type) {
@@ -84810,6 +84805,7 @@ BI.MonthTrigger = BI.inherit(BI.Trigger, {
                 }
             ]
         });
+        this.setValue(o.value);
     },
     setValue: function (v) {
         if(BI.isNotNull(v)) {
@@ -85010,11 +85006,12 @@ BI.MultiDateCombo = BI.inherit(BI.Single, {
         var self = this, opts = this.options;
         this.storeTriggerValue = "";
         var date = Date.getDate();
-        this.storeValue = null;
+        this.storeValue = opts.value;
         this.trigger = BI.createWidget({
             type: "bi.date_trigger",
             min: this.constants.DATE_MIN_VALUE,
-            max: this.constants.DATE_MAX_VALUE
+            max: this.constants.DATE_MAX_VALUE,
+            value: opts.value
         });
         this.trigger.on(BI.DateTrigger.EVENT_KEY_DOWN, function () {
             if (self.combo.isViewVisible()) {
@@ -85068,7 +85065,8 @@ BI.MultiDateCombo = BI.inherit(BI.Single, {
         this.popup = BI.createWidget({
             type: "bi.multidate_popup",
             min: this.constants.DATE_MIN_VALUE,
-            max: this.constants.DATE_MAX_VALUE
+            max: this.constants.DATE_MAX_VALUE,
+            value: opts.value
         });
         this.popup.on(BI.MultiDatePopup.BUTTON_CLEAR_EVENT_CHANGE, function () {
             self.setValue();
@@ -85162,6 +85160,8 @@ BI.MultiDateCombo = BI.inherit(BI.Single, {
                 self.comboWrapper = _ref;
             }
         });
+
+        this._checkDynamicValue(opts.value);
     },
 
     _checkDynamicValue: function (v) {
@@ -85559,6 +85559,7 @@ BI.MultiDatePopup = BI.inherit(BI.Widget, {
                 height: 30
             }]
         });
+        this.setValue(opts.value);
     },
     _setInnerValue: function (obj) {
         if (this.dateTab.getSelect() === BI.MultiDateCombo.MULTI_DATE_YMD_CARD) {
@@ -91331,6 +91332,8 @@ BI.NumberInterval = BI.inherit(BI.Single, {
         self._setComboValueChangedEvent(self.smallCombo);
         self._setEditorValueChangedEvent(self.bigEditor);
         self._setEditorValueChangedEvent(self.smallEditor);
+        
+        this.setValue(o.value);
     },
 
     _checkValidation: function () {
@@ -92823,7 +92826,8 @@ BI.QuarterCombo = BI.inherit(BI.Widget, {
         var self = this, o = this.options;
         this.storeValue = "";
         this.trigger = BI.createWidget({
-            type: "bi.quarter_trigger"
+            type: "bi.quarter_trigger",
+            value: o.value
         });
 
         this.trigger.on(BI.QuarterTrigger.EVENT_FOCUS, function () {
@@ -92850,7 +92854,8 @@ BI.QuarterCombo = BI.inherit(BI.Widget, {
         });
         this.popup = BI.createWidget({
             type: "bi.quarter_popup",
-            behaviors: o.behaviors
+            behaviors: o.behaviors,
+            value: o.value
         });
 
         this.popup.on(BI.QuarterPopup.EVENT_CHANGE, function () {
@@ -92908,7 +92913,7 @@ BI.QuarterPopup = BI.inherit(BI.Widget, {
         var self = this, o = this.options;
 
         var items = [{
-            text: Date._QN[01],
+            text: Date._QN[1],
             value: 1
         }, {
             text: Date._QN[2],
@@ -92939,7 +92944,8 @@ BI.QuarterPopup = BI.inherit(BI.Widget, {
             items: BI.createItems(items, {}),
             layouts: [{
                 type: "bi.vertical"
-            }]
+            }],
+            value: o.value
         });
 
         this.quarter.on(BI.Controller.EVENT_CHANGE, function (type) {
@@ -93046,6 +93052,7 @@ BI.QuarterTrigger = BI.inherit(BI.Trigger, {
                 }
             ]
         });
+        this.setValue(o.value);
     },
 
     setValue: function (v) {
@@ -98777,11 +98784,12 @@ BI.TimeInterval = BI.inherit(BI.Single, {
         });
     },
     _init: function () {
-        var self = this;
+        var self = this, o = this.options;
         BI.TimeInterval.superclass._init.apply(this, arguments);
 
-        this.left = this._createCombo();
-        this.right = this._createCombo();
+        o.value = o.value || {};
+        this.left = this._createCombo(o.value.start);
+        this.right = this._createCombo(o.value.end);
         this.label = BI.createWidget({
             type: "bi.label",
             height: this.constants.height,
@@ -98822,10 +98830,11 @@ BI.TimeInterval = BI.inherit(BI.Single, {
         });
     },
 
-    _createCombo: function () {
+    _createCombo: function (v) {
         var self = this;
         var combo = BI.createWidget({
-            type: "bi.multidate_combo"
+            type: "bi.multidate_combo",
+            value: v
         });
         combo.on(BI.MultiDateCombo.EVENT_ERROR, function () {
             self._clearTitle();
@@ -98969,7 +98978,8 @@ BI.YearCombo = BI.inherit(BI.Widget, {
         this.trigger = BI.createWidget({
             type: "bi.year_trigger",
             min: o.min,
-            max: o.max
+            max: o.max,
+            value: o.value || ""
         });
         this.trigger.on(BI.YearTrigger.EVENT_FOCUS, function () {
             self.storeValue = this.getKey();
@@ -99021,7 +99031,8 @@ BI.YearCombo = BI.inherit(BI.Widget, {
                     behaviors: o.behaviors,
                     min: o.min,
                     max: o.max
-                }
+                },
+                value: o.value || ""
             }
         });
         this.combo.on(BI.Combo.EVENT_BEFORE_POPUPVIEW, function () {
@@ -99084,7 +99095,7 @@ BI.YearPopup = BI.inherit(BI.Widget, {
 
     _init: function () {
         BI.YearPopup.superclass._init.apply(this, arguments);
-        var self = this;
+        var self = this, o = this.options;
 
         this.selectedYear = this._year = Date.getDate().getFullYear();
 
@@ -99131,6 +99142,10 @@ BI.YearPopup = BI.inherit(BI.Widget, {
             self.fireEvent(BI.Controller.EVENT_CHANGE, arguments);
             self.fireEvent(BI.YearPopup.EVENT_CHANGE, self.selectedYear);
         });
+
+        if(BI.isKey(o.value)){
+            this.setValue(o.value);
+        }
     },
 
     getValue: function () {
@@ -99191,7 +99206,8 @@ BI.YearTrigger = BI.inherit(BI.Trigger, {
             hgap: c.hgap,
             vgap: c.vgap,
             allowBlank: true,
-            errorText: c.errorText
+            errorText: c.errorText,
+            value: o.value
         });
         this.editor.on(BI.SignEditor.EVENT_FOCUS, function () {
             self.fireEvent(BI.YearTrigger.EVENT_FOCUS);
@@ -99275,14 +99291,18 @@ BI.YearMonthCombo = BI.inherit(BI.Widget, {
         BI.YearMonthCombo.superclass._init.apply(this, arguments);
         var self = this, o = this.options;
 
+        o.value = o.value || {};
+
         this.year = BI.createWidget({
             type: "bi.year_combo",
-            behaviors: o.yearBehaviors
+            behaviors: o.yearBehaviors,
+            value: o.value.year
         });
 
         this.month = BI.createWidget({
             type: "bi.month_combo",
-            behaviors: o.monthBehaviors
+            behaviors: o.monthBehaviors,
+            value: o.value.month
         });
 
         this.year.on(BI.YearCombo.EVENT_CONFIRM, function () {
@@ -99342,14 +99362,18 @@ BI.YearQuarterCombo = BI.inherit(BI.Widget, {
         BI.YearQuarterCombo.superclass._init.apply(this, arguments);
         var self = this, o = this.options;
 
+        o.value = o.value || {};
+
         this.year = BI.createWidget({
             type: "bi.year_combo",
-            behaviors: o.yearBehaviors
+            behaviors: o.yearBehaviors,
+            value: o.value.year
         });
 
         this.quarter = BI.createWidget({
             type: "bi.quarter_combo",
-            behaviors: o.quarterBehaviors
+            behaviors: o.quarterBehaviors,
+            value: o.value.quarter
         });
 
         this.year.on(BI.YearCombo.EVENT_CONFIRM, function () {

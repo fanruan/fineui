@@ -14,7 +14,8 @@ Demo.Quarter = BI.inherit(BI.Widget, {
                 width: 300,
                 ref: function () {
                     self.quartercombo = this;
-                }
+                },
+                value: 3
             }, {
                 type: "bi.button",
                 text: "getValue",

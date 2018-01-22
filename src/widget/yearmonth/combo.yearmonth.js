@@ -17,14 +17,18 @@ BI.YearMonthCombo = BI.inherit(BI.Widget, {
         BI.YearMonthCombo.superclass._init.apply(this, arguments);
         var self = this, o = this.options;
 
+        o.value = o.value || {};
+
         this.year = BI.createWidget({
             type: "bi.year_combo",
-            behaviors: o.yearBehaviors
+            behaviors: o.yearBehaviors,
+            value: o.value.year
         });
 
         this.month = BI.createWidget({
             type: "bi.month_combo",
-            behaviors: o.monthBehaviors
+            behaviors: o.monthBehaviors,
+            value: o.value.month
         });
 
         this.year.on(BI.YearCombo.EVENT_CONFIRM, function () {

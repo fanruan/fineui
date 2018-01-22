@@ -18,7 +18,8 @@ BI.QuarterCombo = BI.inherit(BI.Widget, {
         var self = this, o = this.options;
         this.storeValue = "";
         this.trigger = BI.createWidget({
-            type: "bi.quarter_trigger"
+            type: "bi.quarter_trigger",
+            value: o.value
         });
 
         this.trigger.on(BI.QuarterTrigger.EVENT_FOCUS, function () {
@@ -45,7 +46,8 @@ BI.QuarterCombo = BI.inherit(BI.Widget, {
         });
         this.popup = BI.createWidget({
             type: "bi.quarter_popup",
-            behaviors: o.behaviors
+            behaviors: o.behaviors,
+            value: o.value
         });
 
         this.popup.on(BI.QuarterPopup.EVENT_CHANGE, function () {

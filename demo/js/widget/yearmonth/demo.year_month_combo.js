@@ -15,7 +15,11 @@ Demo.YearMonthCombo = BI.inherit(BI.Widget, {
                 ref: function (_ref) {
                     self.widget = _ref;
                 },
-                width: 300
+                width: 300,
+                value:{
+                    year: 2018,
+                    month: 0
+                }
             }, {
                 type: "bi.button",
                 text: "getValue",

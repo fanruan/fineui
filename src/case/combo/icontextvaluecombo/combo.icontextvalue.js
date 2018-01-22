@@ -7,15 +7,14 @@ BI.IconTextValueCombo = BI.inherit(BI.Widget, {
         return BI.extend(BI.IconTextValueCombo.superclass._defaultConfig.apply(this, arguments), {
             baseClass: "bi-icon-text-value-combo",
             height: 30,
-            value: "",
-            el: {}
+            value: ""
         });
     },
 
     _init: function () {
         BI.IconTextValueCombo.superclass._init.apply(this, arguments);
         var self = this, o = this.options;
-        this.trigger = BI.createWidget(o.el, {
+        this.trigger = BI.createWidget({
             type: "bi.select_icon_text_trigger",
             items: o.items,
             height: o.height,

@@ -16,7 +16,11 @@ Demo.YearQuarterCombo = BI.inherit(BI.Widget, {
                     self.widget = _ref;
                 },
                 yearBehaviors: {},
-                quarterBehaviors: {}
+                quarterBehaviors: {},
+                value: {
+                    year: 2018,
+                    quarter: 1
+                }
             }, {
                 type: "bi.button",
                 text: "getValue",
