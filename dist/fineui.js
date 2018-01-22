@@ -69735,8 +69735,7 @@ BI.TextValueCheckCombo = BI.inherit(BI.Widget, {
             width: 100,
             height: 24,
             chooseType: BI.ButtonGroup.CHOOSE_TYPE_SINGLE,
-            value: "",
-            el: {}
+            value: ""
         });
     },
 
