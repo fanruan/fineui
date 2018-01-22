@@ -16,6 +16,17 @@ Demo.TimeInterval = BI.inherit(BI.Widget, {
                 ref: function (_ref) {
                     self.interval = _ref;
                 },
+                value: {
+                    start: {
+                        type: 1,
+                        value: 2
+                    },
+                    end: {
+                        year: 2018,
+                        month: 0,
+                        day: 12
+                    }
+                },
                 width: 300
             }, {
                 type: "bi.button",

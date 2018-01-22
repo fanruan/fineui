@@ -14,7 +14,8 @@ Demo.Year = BI.inherit(BI.Widget, {
                 width: 300,
                 ref: function () {
                     self.yearcombo = this;
-                }
+                },
+                value: 2017
             }, {
                 type: "bi.button",
                 text: "getValue",

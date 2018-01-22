@@ -20,7 +20,12 @@ Demo.Date = BI.inherit(BI.Widget, {
                 ref: function () {
                     self.datecombo = this;
                 },
-                width: 300
+                width: 300,
+                value: {
+                    year: 2018,
+                    month: 1,
+                    day: 23
+                }
             }, {
                 type: "bi.button",
                 text: "getVlaue",

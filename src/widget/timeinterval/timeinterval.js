@@ -18,11 +18,12 @@ BI.TimeInterval = BI.inherit(BI.Single, {
         });
     },
     _init: function () {
-        var self = this;
+        var self = this, o = this.options;
         BI.TimeInterval.superclass._init.apply(this, arguments);
 
-        this.left = this._createCombo();
-        this.right = this._createCombo();
+        o.value = o.value || {};
+        this.left = this._createCombo(o.value.start);
+        this.right = this._createCombo(o.value.end);
         this.label = BI.createWidget({
             type: "bi.label",
             height: this.constants.height,
@@ -63,10 +64,11 @@ BI.TimeInterval = BI.inherit(BI.Single, {
         });
     },
 
-    _createCombo: function () {
+    _createCombo: function (v) {
         var self = this;
         var combo = BI.createWidget({
-            type: "bi.multidate_combo"
+            type: "bi.multidate_combo",
+            value: v
         });
         combo.on(BI.MultiDateCombo.EVENT_ERROR, function () {
             self._clearTitle();

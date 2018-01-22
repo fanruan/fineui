@@ -98,6 +98,7 @@ BI.DateTrigger = BI.inherit(BI.Trigger, {
                 el: this.editor
             }]
         });
+        this.setValue(o.value);
     },
     _dateCheck: function (date) {
         return Date.parseDateTime(date, "%Y-%x-%d").print("%Y-%x-%d") == date || Date.parseDateTime(date, "%Y-%X-%d").print("%Y-%X-%d") == date || Date.parseDateTime(date, "%Y-%x-%e").print("%Y-%x-%e") == date || Date.parseDateTime(date, "%Y-%X-%e").print("%Y-%X-%e") == date;

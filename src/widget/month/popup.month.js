@@ -60,7 +60,8 @@ BI.MonthPopup = BI.inherit(BI.Widget, {
                 type: "bi.center_adapt",
                 vgap: 1,
                 hgap: 2
-            }]
+            }],
+            value: o.value
         });
 
         this.month.on(BI.Controller.EVENT_CHANGE, function (type) {

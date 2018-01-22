@@ -18,7 +18,8 @@ BI.MonthCombo = BI.inherit(BI.Widget, {
         var self = this, o = this.options;
 
         this.trigger = BI.createWidget({
-            type: "bi.month_trigger"
+            type: "bi.month_trigger",
+            value: o.value
         });
 
         this.trigger.on(BI.MonthTrigger.EVENT_CONFIRM, function (v) {
@@ -46,7 +47,8 @@ BI.MonthCombo = BI.inherit(BI.Widget, {
 
         this.popup = BI.createWidget({
             type: "bi.month_popup",
-            behaviors: o.behaviors
+            behaviors: o.behaviors,
+            value: o.value
         });
         this.popup.on(BI.MonthPopup.EVENT_CHANGE, function () {
             self.setValue(self.popup.getValue());

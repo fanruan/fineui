@@ -35,7 +35,7 @@ BI.YearPopup = BI.inherit(BI.Widget, {
 
     _init: function () {
         BI.YearPopup.superclass._init.apply(this, arguments);
-        var self = this;
+        var self = this, o = this.options;
 
         this.selectedYear = this._year = Date.getDate().getFullYear();
 
@@ -82,6 +82,10 @@ BI.YearPopup = BI.inherit(BI.Widget, {
             self.fireEvent(BI.Controller.EVENT_CHANGE, arguments);
             self.fireEvent(BI.YearPopup.EVENT_CHANGE, self.selectedYear);
         });
+
+        if(BI.isKey(o.value)){
+            this.setValue(o.value);
+        }
     },
 
     getValue: function () {

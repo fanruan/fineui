@@ -37,7 +37,8 @@ BI.YearTrigger = BI.inherit(BI.Trigger, {
             hgap: c.hgap,
             vgap: c.vgap,
             allowBlank: true,
-            errorText: c.errorText
+            errorText: c.errorText,
+            value: o.value
         });
         this.editor.on(BI.SignEditor.EVENT_FOCUS, function () {
             self.fireEvent(BI.YearTrigger.EVENT_FOCUS);

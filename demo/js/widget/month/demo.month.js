@@ -14,7 +14,8 @@ Demo.Month = BI.inherit(BI.Widget, {
                 width: 300,
                 ref: function () {
                     self.monthcombo = this;
-                }
+                },
+                value: 11
             }, {
                 type: "bi.button",
                 text: "getValue",
