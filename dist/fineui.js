@@ -27351,11 +27351,11 @@ Data.Source = BISource = {
             }
             this._parent = Model.target;
             var state = _.isFunction(this.state) ? this.state() : this.state;
-            var computed = _.isFunction(this.computed) ? this.computed() : this.computed;
-            var context = _.isFunction(this.context) ? this.context() : this.context;
-            var childContext = _.isFunction(this.childContext) ? this.childContext() : this.childContext;
-            var watch$$1 = _.isFunction(this.watch) ? this.watch() : this.watch;
-            var actions = _.isFunction(this.actions) ? this.actions() : this.actions;
+            var computed = this.computed;
+            var context = this.context;
+            var childContext = this.childContext;
+            var watch$$1 = this.watch;
+            var actions = this.actions;
             var keys = _.keys(this.$$model).concat(_.keys(state)).concat(_.keys(computed)).concat(context || []);
             defineProps(this, keys);
             childContext && defineContext(this, childContext);
@@ -27391,13 +27391,6 @@ Data.Source = BISource = {
 
         return Model;
     }();
-
-    Model.prototype.state = {};
-    Model.prototype.computed = {};
-    Model.prototype.context = [];
-    Model.prototype.childContext = [];
-    Model.prototype.watch = {};
-    Model.prototype.actions = {};
 
     function toJSON(model) {
         var result = void 0;
@@ -27560,10 +27553,14 @@ Data.Source = BISource = {
 
     var _render = BI.Widget.prototype._render;
     BI.Widget.prototype._render = function () {
+        var needPop = false;
         if (window.Fix && this._store) {
+            needPop = true;
+            pushTarget(this.store);
             initWatch(this, this.watch);
         }
         _render.apply(this, arguments);
+        needPop && popTarget();
     };
 
     var unMount = BI.Widget.prototype.__d;
@@ -69540,8 +69537,7 @@ BI.IconTextValueCombo = BI.inherit(BI.Widget, {
         return BI.extend(BI.IconTextValueCombo.superclass._defaultConfig.apply(this, arguments), {
             baseClass: "bi-icon-text-value-combo",
             height: 30,
-            value: "",
-            el: {}
+            value: ""
         });
     },
 
