@@ -35,7 +35,7 @@ BI.FloatCenterLayout = BI.inherit(BI.Layout, {
         BI.each(items, function (i) {
             var widget = BI.createWidget({
                 type: "bi.default"
-            }, this);
+            }, self);
             widget.element.addClass("center-element " + (i === 0 ? "first-element " : "") + (i === items.length - 1 ? "last-element" : "")).css({
                 width: width + "%",
                 height: "100%"
@@ -46,7 +46,7 @@ BI.FloatCenterLayout = BI.inherit(BI.Layout, {
         });
         BI.each(items, function (i, item) {
             if (item) {
-                var w = BI.createWidget(item, this);
+                var w = BI.createWidget(item, self);
                 w.element.css({
                     position: "absolute",
                     left: o.hgap + o.lgap,

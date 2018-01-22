@@ -45,7 +45,7 @@ BI.GridLayout = BI.inherit(BI.Layout, {
     },
 
     stroke: function (items) {
-        var o = this.options;
+        var self = this, o = this.options;
         var rows = o.rows || o.items.length, columns = o.columns || ((o.items[0] && o.items[0].length) | 0);
         var width = 100 / columns, height = 100 / rows;
         var els = [];
@@ -92,11 +92,11 @@ BI.GridLayout = BI.inherit(BI.Layout, {
         BI.each(items, function (i, item) {
             if (BI.isArray(item)) {
                 BI.each(item, function (j, el) {
-                    els[i][j] = BI.createWidget(el, this);
+                    els[i][j] = BI.createWidget(el, self);
                 });
                 return;
             }
-            els[item.row][item.column] = BI.createWidget(item, this);
+            els[item.row][item.column] = BI.createWidget(item, self);
         });
         for (var i = 0; i < rows; i++) {
             for (var j = 0; j < columns; j++) {
