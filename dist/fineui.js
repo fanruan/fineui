@@ -106,7 +106,35 @@ window.console = window.console || (function () {
         };
     return c;
 })();
-/*
+if (!Function.prototype.bind) {
+    Function.prototype.bind = function(oThis) {
+        if (typeof this !== 'function') {
+            // closest thing possible to the ECMAScript 5
+            // internal IsCallable function
+            throw new TypeError('Function.prototype.bind - what is trying to be bound is not callable');
+        }
+
+        var aArgs   = Array.prototype.slice.call(arguments, 1),
+            fToBind = this,
+            fNOP    = function() {},
+            fBound  = function() {
+                return fToBind.apply(this instanceof fNOP
+                        ? this
+                        : oThis,
+                    // 获取调用时(fBound)的传参.bind 返回的函数入参往往是这么传递的
+                    aArgs.concat(Array.prototype.slice.call(arguments)));
+            };
+
+        // 维护原型关系
+        if (this.prototype) {
+            // Function.prototype doesn't have a prototype property
+            fNOP.prototype = this.prototype;
+        }
+        fBound.prototype = new fNOP();
+
+        return fBound;
+    };
+}/*
  * 前端缓存
  */
 window.localStorage || (window.localStorage = {
@@ -21488,7 +21516,46 @@ Date.parseDateTime = function (str, fmt) {
 };
 
 Date.getDate = function () {
-    var dt = new (Function.prototype.bind.apply(Date, BI.concat([null], [].slice.apply(arguments))))();
+    var length = arguments.length;
+    var args = arguments;
+    var dt;
+    switch (length) {
+        // new Date()
+        case 0:
+            dt = new Date();
+            break;
+        // new Date(long)
+        case 1:
+            dt = new Date(args[0]);
+            break;
+        // new Date(year, month)
+        case 2:
+            dt = new Date(args[0], args[1]);
+            break;
+        // new Date(year, month, day)
+        case 3:
+            dt = new Date(args[0], args[1], args[2]);
+            break;
+        // new Date(year, month, day, hour)
+        case 4:
+            dt = new Date(args[0], args[1], args[2], args[3]);
+            break;
+        // new Date(year, month, day, hour, minute)
+        case 5:
+            dt = new Date(args[0], args[1], args[2], args[3], args[4]);
+            break;
+        // new Date(year, month, day, hour, minute, second)
+        case 6:
+            dt = new Date(args[0], args[1], args[2], args[3], args[4], args[5]);
+            break;
+        // new Date(year, month, day, hour, minute, second, millisecond)
+        case 7:
+            dt = new Date(args[0], args[1], args[2], args[3], args[4], args[5], args[6]);
+            break;
+        default:
+            dt = new Date();
+            break;
+    }
     if(BI.isNotNull(Date.timeZone) && (arguments.length === 0 || (arguments.length === 1 && BI.isNumber(arguments[0])))) {
         var localTime = dt.getTime();
         var localOffset = dt.getTimezoneOffset() * 60000; // 获得当地时间偏移的毫秒数
@@ -21500,7 +21567,46 @@ Date.getDate = function () {
 };
 
 Date.getTime = function () {
-    var dt = Function.prototype.bind.apply(Date.getDate, BI.concat([null], [].slice.apply(arguments)))();
+    var length = arguments.length;
+    var args = arguments;
+    var dt;
+    switch (length) {
+        // new Date()
+        case 0:
+            dt = new Date();
+            break;
+        // new Date(long)
+        case 1:
+            dt = new Date(args[0]);
+            break;
+        // new Date(year, month)
+        case 2:
+            dt = new Date(args[0], args[1]);
+            break;
+        // new Date(year, month, day)
+        case 3:
+            dt = new Date(args[0], args[1], args[2]);
+            break;
+        // new Date(year, month, day, hour)
+        case 4:
+            dt = new Date(args[0], args[1], args[2], args[3]);
+            break;
+        // new Date(year, month, day, hour, minute)
+        case 5:
+            dt = new Date(args[0], args[1], args[2], args[3], args[4]);
+            break;
+        // new Date(year, month, day, hour, minute, second)
+        case 6:
+            dt = new Date(args[0], args[1], args[2], args[3], args[4], args[5]);
+            break;
+        // new Date(year, month, day, hour, minute, second, millisecond)
+        case 7:
+            dt = new Date(args[0], args[1], args[2], args[3], args[4], args[5], args[6]);
+            break;
+        default:
+            dt = new Date();
+            break;
+    }
     if(BI.isNotNull(Date.timeZone)) {
         return dt.getTime() - Date.timeZone - dt.getTimezoneOffset() * 60000;
     }
