@@ -37,6 +37,9 @@ BI.FloatLeftLayout = BI.inherit(BI.Layout, {
         if (BI.isNotNull(item.top)) {
             w.element.css({top: item.top});
         }
+        if (BI.isNotNull(item.bottom)) {
+            w.element.css({bottom: item.bottom});
+        }
         if (o.vgap + o.tgap + (item.tgap || 0) + (item.vgap || 0) !== 0) {
             w.element.css({
                 "margin-top": o.vgap + o.tgap + (item.tgap || 0) + (item.vgap || 0) + "px"
@@ -109,6 +112,9 @@ BI.FloatRightLayout = BI.inherit(BI.Layout, {
         }
         if (BI.isNotNull(item.top)) {
             w.element.css({top: item.top});
+        }
+        if (BI.isNotNull(item.bottom)) {
+            w.element.css({bottom: item.bottom});
         }
         if (o.vgap + o.tgap + (item.tgap || 0) + (item.vgap || 0) !== 0) {
             w.element.css({

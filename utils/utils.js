@@ -2722,7 +2722,7 @@ if (!window.BI) {
                 clone = {};
 
                 for (var i in obj) {
-                    if (_.has(obj, i)) {
+                    if (BI.has(obj, i)) {
                         clone[i] = BI.deepClone(obj[i]);
                     }
                 }
@@ -4200,7 +4200,7 @@ _.extend(BI.OB.prototype, {
             }
             return configFn(providers[type]);
         }
-        BI.Plugin.registerWidget(type, configFn);
+        BI.Plugin.configWidget(type, configFn);
     };
 
     var actions = {};

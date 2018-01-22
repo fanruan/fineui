@@ -119,7 +119,7 @@ BI.Searcher = BI.inherit(BI.Widget, {
             BI.Maskers.create(this.getName(), o.adapter, BI.extend({
                 container: this,
                 render: this.popupView
-            }, o.masker));
+            }, o.masker), this);
         }
     },
 
@@ -276,7 +276,7 @@ BI.Searcher = BI.inherit(BI.Widget, {
             return o.popup.value;
         }
         return this.popupView.getValue();
-        
+
     },
 
     populate: function (result, searchResult, keyword) {

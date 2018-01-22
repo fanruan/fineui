@@ -4436,19 +4436,16 @@ ul.ztree.zTreeDragUL {
 .bi-preview-table-cell {
   min-height: 25px;
   min-width: 80px;
-  max-width: 220px;
 }
 .bi-preview-table-cell {
   min-height: 25px;
   min-width: 80px;
-  max-width: 220px;
 }
 
 .bi-preview-table-header-cell {
   font-weight: bold;
   min-height: 25px;
   min-width: 80px;
-  max-width: 220px;
 }
 
 .bi-preview-table {
@@ -4471,7 +4468,6 @@ ul.ztree.zTreeDragUL {
   font-weight: bold;
   min-height: 25px;
   min-width: 80px;
-  max-width: 220px;
 }
 .bi-quarter-trigger {
   -webkit-border-radius: 2px;

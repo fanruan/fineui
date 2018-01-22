@@ -37,7 +37,7 @@ BI.HorizontalLayout = BI.inherit(BI.Layout, {
         var td;
         var width = o.columnSize[i] <= 1 ? (o.columnSize[i] * 100 + "%") : o.columnSize[i];
         if (!this.hasWidget(this._getChildName(i))) {
-            var w = BI.createWidget(item);
+            var w = BI.createWidget(item, this);
             w.element.css({position: "relative", margin: "0px auto"});
             td = BI.createWidget({
                 type: "bi.default",
@@ -46,7 +46,7 @@ BI.HorizontalLayout = BI.inherit(BI.Layout, {
                     width: width
                 },
                 items: [w]
-            });
+            }, this);
             this.addWidget(this._getChildName(i), td);
         } else {
             td = this.getWidgetByName(this._getChildName(i));

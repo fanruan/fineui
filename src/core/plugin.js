@@ -2,9 +2,15 @@ BI.Plugin = BI.Plugin || {};
 !(function () {
     var _WidgetsPlugin = {};
     var _ObjectPlugin = {};
+    var _ConfigPlugin = {};
     BI.extend(BI.Plugin, {
 
         getWidget: function (type, options) {
+            if (_ConfigPlugin[type]) {
+                for (var i = _ConfigPlugin[type].length - 1; i >= 0; i--) {
+                    _ConfigPlugin[type][i](options);
+                }
+            }
             if (_WidgetsPlugin[type]) {
                 var res;
                 for (var i = _WidgetsPlugin[type].length - 1; i >= 0; i--) {
@@ -14,6 +20,13 @@ BI.Plugin = BI.Plugin || {};
                 }
             }
             return options;
+        },
+
+        configWidget: function (type, fn) {
+            if (!_ConfigPlugin[type]) {
+                _ConfigPlugin[type] = [];
+            }
+            _ConfigPlugin[type].push(fn);
         },
 
         registerWidget: function (type, fn) {

@@ -17,9 +17,15 @@
         return new cls(config);
     };
 
-    BI.createWidget = function (item, options) {
+    BI.createWidget = function (item, options, context) {
         var el, w;
-        options || (options = {});
+        item || (item = {});
+        if (BI.isWidget(options)) {
+            context = options;
+            options = {};
+        } else {
+            options || (options = {});
+        }
         if (BI.isEmpty(item) && BI.isEmpty(options)) {
             return BI.createWidget({
                 type: "bi.layout"
@@ -28,17 +34,17 @@
         if (BI.isWidget(item)) {
             return item;
         }
-        if (item && (item.type || options.type)) {
+        if (item.type || options.type) {
             el = BI.extend({}, options, item);
             w = BI.Plugin.getWidget(el.type, el);
             return w.type === el.type ? BI.Plugin.getObject(el.type, createWidget(w)) : BI.createWidget(BI.extend({}, item, {type: w.type}, options));
         }
-        if (item && item.el && (item.el.type || options.type)) {
+        if (item.el && (item.el.type || options.type)) {
             el = BI.extend({}, options, item.el);
             w = BI.Plugin.getWidget(el.type, el);
             return w.type === el.type ? BI.Plugin.getObject(el.type, createWidget(w)) : BI.createWidget(BI.extend({}, item, {type: w.type}, options));
         }
-        if (item && BI.isWidget(item.el)) {
+        if (BI.isWidget(item.el)) {
             return item.el;
         }
         throw new Error("无法根据item创建组件");
