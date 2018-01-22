@@ -202,6 +202,7 @@ BI.MultiDatePopup = BI.inherit(BI.Widget, {
                 height: 30
             }]
         });
+        this.setValue(opts.value);
     },
     _setInnerValue: function (obj) {
         if (this.dateTab.getSelect() === BI.MultiDateCombo.MULTI_DATE_YMD_CARD) {

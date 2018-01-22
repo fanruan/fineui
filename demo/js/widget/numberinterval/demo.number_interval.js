@@ -26,7 +26,12 @@ Demo.NumericalInterval = BI.inherit(BI.Widget, {
                 ref: function (_ref) {
                     self.numerical = _ref;
                 },
-                width: 500
+                width: 500,
+                value: {
+                    max: 300,
+                    closeMax: true,
+                    closeMin: false
+                }
             }, {
                 type: "bi.label",
                 ref: function (_ref) {

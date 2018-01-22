@@ -85,6 +85,7 @@ BI.QuarterTrigger = BI.inherit(BI.Trigger, {
                 }
             ]
         });
+        this.setValue(o.value);
     },
 
     setValue: function (v) {

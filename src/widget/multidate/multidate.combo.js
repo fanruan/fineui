@@ -23,11 +23,12 @@ BI.MultiDateCombo = BI.inherit(BI.Single, {
         var self = this, opts = this.options;
         this.storeTriggerValue = "";
         var date = Date.getDate();
-        this.storeValue = null;
+        this.storeValue = opts.value;
         this.trigger = BI.createWidget({
             type: "bi.date_trigger",
             min: this.constants.DATE_MIN_VALUE,
-            max: this.constants.DATE_MAX_VALUE
+            max: this.constants.DATE_MAX_VALUE,
+            value: opts.value
         });
         this.trigger.on(BI.DateTrigger.EVENT_KEY_DOWN, function () {
             if (self.combo.isViewVisible()) {
@@ -81,7 +82,8 @@ BI.MultiDateCombo = BI.inherit(BI.Single, {
         this.popup = BI.createWidget({
             type: "bi.multidate_popup",
             min: this.constants.DATE_MIN_VALUE,
-            max: this.constants.DATE_MAX_VALUE
+            max: this.constants.DATE_MAX_VALUE,
+            value: opts.value
         });
         this.popup.on(BI.MultiDatePopup.BUTTON_CLEAR_EVENT_CHANGE, function () {
             self.setValue();
@@ -175,6 +177,8 @@ BI.MultiDateCombo = BI.inherit(BI.Single, {
                 self.comboWrapper = _ref;
             }
         });
+
+        this._checkDynamicValue(opts.value);
     },
 
     _checkDynamicValue: function (v) {

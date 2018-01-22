@@ -59,6 +59,7 @@ BI.DatePaneWidget = BI.inherit(BI.Widget, {
             self.setValue(self.selectedTime);
             self.fireEvent(BI.DateCalendarPopup.EVENT_CHANGE);
         });
+        this.setValue(o.selectedTime);
 
     },
 

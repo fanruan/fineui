@@ -17,7 +17,7 @@ BI.TextValueCheckCombo = BI.inherit(BI.Widget, {
     _init: function () {
         BI.TextValueCheckCombo.superclass._init.apply(this, arguments);
         var self = this, o = this.options;
-        this.trigger = BI.createWidget(o.el, {
+        this.trigger = BI.createWidget({
             type: "bi.select_text_trigger",
             items: o.items,
             height: o.height,

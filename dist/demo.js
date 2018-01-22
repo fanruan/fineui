@@ -12232,7 +12232,7 @@ BI.shortcut("demo.tips", Demo.Tips);Demo.DatePane = BI.inherit(BI.Widget, {
                     type: "bi.date_pane",
                     selectedTime: {
                         year: 2017,
-                        month: 12,
+                        month: 11,
                         day: 11
                     },
                     ref: function (_ref) {
@@ -12289,7 +12289,12 @@ Demo.Date = BI.inherit(BI.Widget, {
                 ref: function () {
                     self.datecombo = this;
                 },
-                width: 300
+                width: 300,
+                value: {
+                    year: 2018,
+                    month: 1,
+                    day: 23
+                }
             }, {
                 type: "bi.button",
                 text: "getVlaue",
@@ -12381,119 +12386,6 @@ BICst.CONF.GROUP.NUMBER.WEEKDAY = 21;
 BICst.CONF.GROUP.NUMBER.RENAME = 22;
 BICst.CONF.GROUP.NUMBER.DELETE = 23;
 
-// 数值字段汇总设置
-var items = [[{
-    text: BI.i18nText("BI-Basic_Qiu_Sum"),
-    value: BICst.CONF.GROUP.NUMBER.SUM,
-    cls: "dot-ha-font"
-}, {
-    text: BI.i18nText("BI-Basic_Qiu_Avg"),
-    value: BICst.CONF.GROUP.NUMBER.AVG,
-    cls: "dot-ha-font"
-}, {
-    text: BI.i18nText("BI-Basic_Qiu_Median"),
-    value: BICst.CONF.GROUP.NUMBER.MEDIAN,
-    cls: "dot-ha-font"
-}, {
-    text: BI.i18nText("BI-Basic_Qiu_Max"),
-    value: BICst.CONF.GROUP.NUMBER.MAX,
-    cls: "dot-ha-font"
-}, {
-    text: BI.i18nText("BI-Basic_Qiu_Min"),
-    value: BICst.CONF.GROUP.NUMBER.MIN,
-    cls: "dot-ha-font"
-}, {
-    text: BI.i18nText("BI-Basic_Qiu_Standard_Deviation"),
-    value: BICst.CONF.GROUP.NUMBER.STANDARD_DEVIATION,
-    cls: "dot-ha-font"
-}, {
-    text: BI.i18nText("BI-Basic_Qiu_Variance"),
-    value: BICst.CONF.GROUP.NUMBER.VARIANCE,
-    cls: "dot-ha-font"
-}, {
-    text: BI.i18nText("BI-Basic_No_Repeat_Count"),
-    value: BICst.CONF.GROUP.NUMBER.COUNT,
-    cls: "dot-ha-font"
-}, {
-    text: BI.i18nText("BI-Basic_Record_Count"),
-    value: BICst.CONF.GROUP.NUMBER.RECORD_COUNT,
-    cls: "dot-ha-font"
-}], [{
-    text: BI.i18nText("BI-Basic_None"),
-    value: BICst.CONF.GROUP.NUMBER.NONE,
-    cls: "dot-ha-font"
-}, {
-    el: {
-        text: BI.i18nText("BI-Basic_Qiu_Same_Period"),
-        value: BICst.CONF.GROUP.NUMBER.PERIOD,
-        cls: "dot-ha-font"
-    },
-    children: [{
-        text: BI.i18nText("BI-Basic_Multi_Date_Year"),
-        value: BICst.CONF.GROUP.NUMBER.YEAR,
-        cls: "dot-ha-font"
-    }, {
-        text: BI.i18nText("BI-Basic_Quarter"),
-        value: BICst.CONF.GROUP.NUMBER.QUARTER,
-        cls: "dot-ha-font"
-    }, {
-        text: BI.i18nText("BI-Basic_Multi_Date_Month"),
-        value: BICst.CONF.GROUP.NUMBER.MONTH,
-        cls: "dot-ha-font"
-    }, {
-        text: BI.i18nText("BI-Basic_Multi_Date_Week"),
-        value: BICst.CONF.GROUP.NUMBER.WEEK,
-        cls: "dot-ha-font"
-    }, {
-        text: BI.i18nText("BI-Basic_Week_XingQi"),
-        value: BICst.CONF.GROUP.NUMBER.WEEKDAY,
-        cls: "dot-ha-font"
-    }]
-}, {
-    text: BI.i18nText("BI-Basic_Qiu_Same_Ring"),
-    value: BICst.CONF.GROUP.NUMBER.RING,
-    cls: "dot-ha-font"
-}, {
-    el: {
-        text: BI.i18nText("BI-Basic_Qiu_Same_Period_Rate"),
-        value: BICst.CONF.GROUP.NUMBER.PERIOD_RATE,
-        cls: "dot-ha-font"
-    },
-    children: [{
-        text: BI.i18nText("BI-Basic_Multi_Date_Year"),
-        value: BICst.CONF.GROUP.NUMBER.YEAR,
-        cls: "dot-ha-font"
-    }, {
-        text: BI.i18nText("BI-Basic_Quarter"),
-        value: BICst.CONF.GROUP.NUMBER.QUARTER,
-        cls: "dot-ha-font"
-    }, {
-        text: BI.i18nText("BI-Basic_Multi_Date_Month"),
-        value: BICst.CONF.GROUP.NUMBER.MONTH,
-        cls: "dot-ha-font"
-    }, {
-        text: BI.i18nText("BI-Basic_Multi_Date_Week"),
-        value: BICst.CONF.GROUP.NUMBER.WEEK,
-        cls: "dot-ha-font"
-    }, {
-        text: BI.i18nText("BI-Basic_Week_XingQi"),
-        value: BICst.CONF.GROUP.NUMBER.WEEKDAY,
-        cls: "dot-ha-font"
-    }]
-}, {
-    text: BI.i18nText("BI-Basic_Qiu_Same_Ring_Rate"),
-    value: BICst.CONF.GROUP.NUMBER.RING_RATE,
-    cls: "dot-ha-font"
-}], [{
-    text: BI.i18nText("BI-Basic_Rename"),
-    value: BICst.CONF.GROUP.NUMBER.RENAME,
-    cls: "widget-combo-rename-edit-font"
-}], [{
-    text: BI.i18nText("BI-Basic_Remove"),
-    value: BICst.CONF.GROUP.NUMBER.DELETE,
-    cls: "delete-h-font"
-}]];
-
 Demo.Downlist = BI.inherit(BI.Widget, {
     props: {
         baseCls: "demo-downlist"
@@ -12522,98 +12414,97 @@ Demo.Downlist = BI.inherit(BI.Widget, {
                     self.downlist = _ref;
                 },
                 cls: "layout-bg3",
-                //value: [{"childValue":22,"value":11},{"value":18},{"value":20}],
+                value: [{"childValue":22,"value":11},{"value":18},{"value":20}],
                 height: 30,
                 width: 100,
-                items: items
-                // items: [
-                //     [{
-                //         el: {
-                //             text: "column 1111",
-                //             iconCls1: "check-mark-e-font",
-                //             value: 11
-                //         },
-                //         children: [{
-                //             text: "column 1.1",
-                //             value: 21,
-                //             cls: "dot-e-font"
-                //         }, {
-                //             text: "column 1.222222222222222222222222222222222222",
-                //             cls: "dot-e-font",
-                //             value: 22
-                //         }]
-                //     }],
-                //     [{
-                //         el: {
-                //             type: "bi.icon_text_icon_item",
-                //             text: "column 2",
-                //             iconCls1: "chart-type-e-font",
-                //             cls: "dot-e-font",
-                //             value: 12
-                //         },
-                //         disabled: true,
-                //         children: [{
-                //             type: "bi.icon_text_item",
-                //             cls: "dot-e-font",
-                //             height: 25,
-                //             text: "column 2.1",
-                //             value: 11
-                //         }, {
-                //             text: "column 2.2",
-                //             value: 12,
-                //             cls: "dot-e-font"
-                //         }]
-                //     }],
-                //     [{
-                //         text: "column 8",
-                //         value: 18,
-                //         cls: "dot-e-font"
-                //     },
-                //     {
-                //
-                //         text: "column 9",
-                //         cls: "dot-e-font",
-                //         value: 19
-                //     }
-                //     ],
-                //     [{
-                //         text: "column 10",
-                //         value: 20,
-                //         cls: "dot-e-font"
-                //     },
-                //     {
-                //
-                //         text: "column 11",
-                //         cls: "dot-e-font",
-                //         value: 21
-                //     },
-                //     {
-                //
-                //         text: "column 12",
-                //         cls: "dot-e-font",
-                //         value: 22
-                //     },
-                //     {
-                //
-                //         text: "column 13",
-                //         cls: "dot-e-font",
-                //         value: 23
-                //     },
-                //     {
-                //
-                //         text: "column 14",
-                //         cls: "dot-e-font",
-                //         value: 24
-                //     },
-                //     {
-                //
-                //         text: "column 15",
-                //         cls: "dot-e-font",
-                //         value: 23
-                //     }
-                //     ]
-                //
-                // ]
+                items: [
+                    [{
+                        el: {
+                            text: "column 1111",
+                            iconCls1: "check-mark-e-font",
+                            value: 11
+                        },
+                        children: [{
+                            text: "column 1.1",
+                            value: 21,
+                            cls: "dot-e-font"
+                        }, {
+                            text: "column 1.222222222222222222222222222222222222",
+                            cls: "dot-e-font",
+                            value: 22
+                        }]
+                    }],
+                    [{
+                        el: {
+                            type: "bi.icon_text_icon_item",
+                            text: "column 2",
+                            iconCls1: "chart-type-e-font",
+                            cls: "dot-e-font",
+                            value: 12
+                        },
+                        disabled: true,
+                        children: [{
+                            type: "bi.icon_text_item",
+                            cls: "dot-e-font",
+                            height: 25,
+                            text: "column 2.1",
+                            value: 11
+                        }, {
+                            text: "column 2.2",
+                            value: 12,
+                            cls: "dot-e-font"
+                        }]
+                    }],
+                    [{
+                        text: "column 8",
+                        value: 18,
+                        cls: "dot-e-font"
+                    },
+                    {
+
+                        text: "column 9",
+                        cls: "dot-e-font",
+                        value: 19
+                    }
+                    ],
+                    [{
+                        text: "column 10",
+                        value: 20,
+                        cls: "dot-e-font"
+                    },
+                    {
+
+                        text: "column 11",
+                        cls: "dot-e-font",
+                        value: 21
+                    },
+                    {
+
+                        text: "column 12",
+                        cls: "dot-e-font",
+                        value: 22
+                    },
+                    {
+
+                        text: "column 13",
+                        cls: "dot-e-font",
+                        value: 23
+                    },
+                    {
+
+                        text: "column 14",
+                        cls: "dot-e-font",
+                        value: 24
+                    },
+                    {
+
+                        text: "column 15",
+                        cls: "dot-e-font",
+                        value: 23
+                    }
+                    ]
+
+                ]
             }, {
                 type: "bi.label",
                 text: "显示选择值",
@@ -12752,7 +12643,8 @@ Demo.Month = BI.inherit(BI.Widget, {
                 width: 300,
                 ref: function () {
                     self.monthcombo = this;
-                }
+                },
+                value: 11
             }, {
                 type: "bi.button",
                 text: "getValue",
@@ -12979,7 +12871,12 @@ Demo.NumericalInterval = BI.inherit(BI.Widget, {
                 ref: function (_ref) {
                     self.numerical = _ref;
                 },
-                width: 500
+                width: 500,
+                value: {
+                    max: 300,
+                    closeMax: true,
+                    closeMin: false
+                }
             }, {
                 type: "bi.label",
                 ref: function (_ref) {
@@ -13260,7 +13157,8 @@ Demo.Quarter = BI.inherit(BI.Widget, {
                 width: 300,
                 ref: function () {
                     self.quartercombo = this;
-                }
+                },
+                value: 3
             }, {
                 type: "bi.button",
                 text: "getValue",
@@ -14518,6 +14416,17 @@ Demo.TimeInterval = BI.inherit(BI.Widget, {
                 ref: function (_ref) {
                     self.interval = _ref;
                 },
+                value: {
+                    start: {
+                        type: 1,
+                        value: 2
+                    },
+                    end: {
+                        year: 2018,
+                        month: 0,
+                        day: 12
+                    }
+                },
                 width: 300
             }, {
                 type: "bi.button",
@@ -14788,7 +14697,8 @@ Demo.Year = BI.inherit(BI.Widget, {
                 width: 300,
                 ref: function () {
                     self.yearcombo = this;
-                }
+                },
+                value: 2017
             }, {
                 type: "bi.button",
                 text: "getValue",
@@ -14826,7 +14736,11 @@ Demo.YearMonthCombo = BI.inherit(BI.Widget, {
                 ref: function (_ref) {
                     self.widget = _ref;
                 },
-                width: 300
+                width: 300,
+                value:{
+                    year: 2018,
+                    month: 0
+                }
             }, {
                 type: "bi.button",
                 text: "getValue",
@@ -14868,7 +14782,11 @@ Demo.YearQuarterCombo = BI.inherit(BI.Widget, {
                     self.widget = _ref;
                 },
                 yearBehaviors: {},
-                quarterBehaviors: {}
+                quarterBehaviors: {},
+                value: {
+                    year: 2018,
+                    quarter: 1
+                }
             }, {
                 type: "bi.button",
                 text: "getValue",
