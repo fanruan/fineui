@@ -20528,15 +20528,45 @@ BI.extend(BI.DOM, {
         };
     };
 
-    BI.Constants = {
-        getConstant: function (type) {
-            return constantInjection[type];
+    var points = {};
+    BI.point = function (type, action, pointFn, after) {
+        if (!points[type]) {
+            points[type] = {};
         }
+        if (!points[type][action]) {
+            points[type][action] = {};
+            points[type][action][after ? "after" : "before"] = [];
+        }
+        points[type][action][after ? "after" : "before"].push(pointFn);
     };
 
+    var callPoint = function (inst, type) {
+        if (points[type]) {
+            for (var action in points[type]) {
+                var fns = points[type][action].before;
+                if (fns) {
+                    BI.aspect.before(inst, action, function () {
+                        for (var i = 0, len = fns.length; i < len; i++) {
+                            fns[i].apply(inst, arguments);
+                        }
+                    });
+                }
+                fns = points[type][action].after;
+                if (fns) {
+                    BI.aspect.after(inst, action, function () {
+                        for (var i = 0, len = fns.length; i < len; i++) {
+                            fns[i].apply(inst, arguments);
+                        }
+                    });
+                }
+            }
+        }
+    };
     BI.Models = {
         getModel: function (type, config) {
-            return new modelInjection[type](config);
+            var inst = new modelInjection[type](config);
+            callPoint(inst, type);
+            return inst;
         }
     };
 
@@ -20547,10 +20577,9 @@ BI.extend(BI.DOM, {
             if (stores[type]) {
                 return stores[type];
             }
-            return stores[type] = new storeInjection[type](config);
-        },
-        releaseStore: function (type) {
-            delete stores[type];
+            stores[type] = new storeInjection[type](config);
+            callPoint(stores[type], type);
+            return stores[type];
         }
     };
 
@@ -20561,10 +20590,9 @@ BI.extend(BI.DOM, {
             if (services[type]) {
                 return services[type];
             }
-            return services[type] = new serviceInjection[type](config);
-        },
-        releaseService: function (type) {
-            delete services[type];
+            services[type] = new serviceInjection[type](config);
+            callPoint(services[type], type);
+            return services[type];
         }
     };
 
@@ -20579,10 +20607,6 @@ BI.extend(BI.DOM, {
                 providerInstance[type] = new providers[type].$get()(config);
             }
             return providerInstance[type];
-        },
-        releaseProvider: function (type) {
-            delete providers[type];
-            delete providerInstance[type];
         }
     };
 
