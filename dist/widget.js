@@ -12865,6 +12865,7 @@ BI.NumberEditor = BI.inherit(BI.Widget, {
             self.fireEvent(BI.NumberEditor.EVENT_CHANGE);
         });
         this.editor.on(BI.TextEditor.EVENT_CONFIRM, function () {
+            this.setValue(BI.parseFloat(this.getValue()));
             self.fireEvent(BI.NumberEditor.EVENT_CONFIRM);
         });
         this.topBtn = BI.createWidget({
@@ -13175,8 +13176,6 @@ BI.NumberInterval = BI.inherit(BI.Single, {
         self._setComboValueChangedEvent(self.smallCombo);
         self._setEditorValueChangedEvent(self.bigEditor);
         self._setEditorValueChangedEvent(self.smallEditor);
-        
-        this.setValue(o.value);
     },
 
     _checkValidation: function () {
