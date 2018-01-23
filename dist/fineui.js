@@ -12559,6 +12559,13 @@ _.extend(BI.OB.prototype, {
         }
     },
 
+    //释放当前对象
+    _purgeRef: function(){
+        if (this.options.ref) {
+            this.options.ref.call(null);
+        }
+    },
+
     _getEvents: function () {
         if (!$.isArray(this.events)) {
             this.events = [];
@@ -12654,6 +12661,7 @@ _.extend(BI.OB.prototype, {
 
     destroy: function () {
         this.destroyed && this.destroyed();
+        this._purgeRef();
         this.purgeListeners();
     }
 });/**
@@ -13117,6 +13125,7 @@ BI.Widget = BI.inherit(BI.OB, {
         this.__d();
         this.element.destroy();
         this.fireEvent(BI.Events.DESTROY);
+        this._purgeRef();
         this.purgeListeners();
     }
 });(function () {
@@ -20549,25 +20558,26 @@ BI.extend(BI.DOM, {
     var callPoint = function (inst, type) {
         if (points[type]) {
             for (var action in points[type]) {
-                var fns = points[type][action].before;
-                if (fns) {
+                var bfns = points[type][action].before;
+                if (bfns) {
                     BI.aspect.before(inst, action, function () {
-                        for (var i = 0, len = fns.length; i < len; i++) {
-                            fns[i].apply(inst, arguments);
+                        for (var i = 0, len = bfns.length; i < len; i++) {
+                            bfns[i].apply(inst, arguments);
                         }
                     });
                 }
-                fns = points[type][action].after;
-                if (fns) {
+                var afns = points[type][action].after;
+                if (afns) {
                     BI.aspect.after(inst, action, function () {
-                        for (var i = 0, len = fns.length; i < len; i++) {
-                            fns[i].apply(inst, arguments);
+                        for (var i = 0, len = afns.length; i < len; i++) {
+                            afns[i].apply(inst, arguments);
                         }
                     });
                 }
             }
         }
     };
+
     BI.Models = {
         getModel: function (type, config) {
             var inst = new modelInjection[type](config);

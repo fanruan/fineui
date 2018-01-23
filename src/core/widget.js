@@ -459,6 +459,7 @@ BI.Widget = BI.inherit(BI.OB, {
         this.__d();
         this.element.destroy();
         this.fireEvent(BI.Events.DESTROY);
+        this._purgeRef();
         this.purgeListeners();
     }
 });
