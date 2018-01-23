@@ -59,7 +59,7 @@ BI.Widget = BI.inherit(BI.OB, {
         }
     },
 
-    _render: function(){
+    _render: function () {
         this.beforeCreate && this.beforeCreate();
         this._initElement();
         this._initEffects();
