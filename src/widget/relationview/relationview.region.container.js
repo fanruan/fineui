@@ -5,7 +5,7 @@ BI.RelationViewRegionContainer = BI.inherit(BI.Widget, {
     _defaultConfig: function () {
         return BI.extend(BI.RelationViewRegionContainer.superclass._defaultConfig.apply(this, arguments), {
             baseCls: "bi-relation-view-region-container",
-            width: 200
+            width: 210
         });
     },
 
