@@ -89688,8 +89688,6 @@ BI.NumberInterval = BI.inherit(BI.Single, {
         self._setComboValueChangedEvent(self.smallCombo);
         self._setEditorValueChangedEvent(self.bigEditor);
         self._setEditorValueChangedEvent(self.smallEditor);
-        
-        this.setValue(o.value);
     },
 
     _checkValidation: function () {
