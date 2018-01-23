@@ -53,13 +53,18 @@ BI.Widget = BI.inherit(BI.OB, {
         this._initVisual();
         this._initState();
         if (this.beforeInit) {
+            this.__asking = true;
             this.beforeInit(BI.bind(this._render, this));
+            if (this.__asking === true) {
+                this.__async = true;
+            }
         } else {
             this._render();
         }
     },
 
     _render: function () {
+        this.__asking = false;
         this.beforeCreate && this.beforeCreate();
         this._initElement();
         this._initEffects();
