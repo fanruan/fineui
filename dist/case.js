@@ -13300,6 +13300,7 @@ BI.DisplayTree = BI.inherit(BI.TreeView, {
                 selectedMulti: false,
                 dblClickExpand: false,
                 showIcon: false,
+                nameIsHTML: true,
                 showTitle: false
             },
             data: {
