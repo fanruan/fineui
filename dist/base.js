@@ -33425,7 +33425,7 @@ BI.Table = BI.inherit(BI.Widget, {
 
     _empty: function () {
         this.scrollBottomRight && this.scrollBottomRight.destroy();
-        BI.each(this.partitions._children, function (name, child) {
+        BI.each(this.partitions && this.partitions._children, function (name, child) {
             child && child.destroy();
         });
     },
