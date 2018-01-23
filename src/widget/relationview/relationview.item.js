@@ -23,36 +23,34 @@ BI.RelationViewItem = BI.inherit(BI.BasicButton, {
         var body = [];
         var header = {
             type: "bi.vertical_adapt",
-            cls: "primary-key-font",
-            items: []
+            items: [{
+                type: "bi.center_adapt",
+                cls: o.isPrimary ? "primary-key-region primary-key-font" : "",
+                items: [{
+                    type: "bi.icon",
+                    title: o.isPrimary ? BI.i18nText("BI-Primary_Key") : ""
+                }],
+                width: 36,
+                height: 16
+            }, {
+                type: "bi.label",
+                text: o.text.length > 1 ? BI.i18nText("BI-Basic_Union_Relation") : o.text[0],
+                value: o.value,
+                height: 24,
+                textAlign: "left"
+            }]
         };
-        if (o.isPrimary) {
-            header.items.push({
-                type: "bi.icon",
-                width: 12,
-                height: 16,
-                title: BI.i18nText("BI-Primary_Key")
-            });
-        }
-        header.items.push({
-            type: "bi.label",
-            text: o.text.length > 1 ? BI.i18nText("BI-Basic_Union_Relation") : o.text[0],
-            value: o.value,
-            height: 25,
-            textAlign: "left",
-            width: o.isPrimary ? 70 : 90,
-            lgap: o.isPrimary ? 0 : 10
-        });
         if(o.text.length > 1){
             body = BI.map(o.text, function (idx, text) {
                 return {
-                    type: "bi.label",
-                    text: text,
-                    value: o.value,
-                    height: 25,
-                    textAlign: "left",
-                    width: 70,
-                    lgap: 15
+                    el: {
+                        type: "bi.label",
+                        text: text,
+                        value: o.value,
+                        height: 24,
+                        textAlign: "left"
+                    },
+                    lgap: 49
                 }
             })
         }
