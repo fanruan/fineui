@@ -12865,6 +12865,7 @@ BI.NumberEditor = BI.inherit(BI.Widget, {
             self.fireEvent(BI.NumberEditor.EVENT_CHANGE);
         });
         this.editor.on(BI.TextEditor.EVENT_CONFIRM, function () {
+            this.setValue(BI.parseFloat(this.getValue()));
             self.fireEvent(BI.NumberEditor.EVENT_CONFIRM);
         });
         this.topBtn = BI.createWidget({
