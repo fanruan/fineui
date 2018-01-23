@@ -25,9 +25,9 @@ BI.RelationViewRegion = BI.inherit(BI.BasicButton, {
 
         this.preview = BI.createWidget({
             type: "bi.icon_button",
-            cls: "relation-table-preview-font",
-            width: 25,
-            height: 25,
+            cls: "eye relation-table-preview-font",
+            width: 36,
+            height: 24,
             stopPropagation: true
         });
         this.preview.on(BI.IconButton.EVENT_CHANGE, function () {
@@ -36,11 +36,12 @@ BI.RelationViewRegion = BI.inherit(BI.BasicButton, {
 
         this.title = BI.createWidget({
             type: "bi.label",
-            height: 25,
+            height: 24,
             width: 70,
             text: o.text,
             value: o.value,
-            textAlign: "left"
+            textAlign: "left",
+            disabled: o.disabled
         });
         // title放body上
         if (BI.isKey(o.header)) {
@@ -80,7 +81,8 @@ BI.RelationViewRegion = BI.inherit(BI.BasicButton, {
             var texts = BI.isArray(item.text) ? item.text : [item.text];
             return BI.extend(item, {
                 type: "bi.relation_view_item",
-                height: texts.length > 1 ? (texts.length + 1) * 25 : 25,
+                height: texts.length > 1 ? (texts.length + 1) * 24 : 24,
+                cls: i === items.length - 1 ? "" : "split-line",
                 hoverIn: function () {
                     self.setValue(item.value);
                     self.fireEvent(BI.RelationViewRegion.EVENT_HOVER_IN, item.value);
@@ -107,10 +109,12 @@ BI.RelationViewRegion = BI.inherit(BI.BasicButton, {
 
     getHeight: function () {
         var height = 0;
-        BI.each(this.button_group.getAllButtons(), function (idx, button) {
-            height += button.getHeight();
+        var buttons = this.button_group.getAllButtons();
+        BI.each(buttons, function (idx, button) {
+            //获取item高度的时候加上边框
+            height += button.getHeight() + (idx === buttons.length - 1 ? 0 : 1);
         });
-        return height + 25 + 2 * 20 + 3;
+        return height + 24 + 2 * 20 + 3;
     },
 
     // 获取上方开始划线的位置
