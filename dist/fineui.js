@@ -27972,6 +27972,16 @@ BI.Pane = BI.inherit(BI.Widget, {
 
     _init: function () {
         BI.Pane.superclass._init.apply(this, arguments);
+        if (this.beforeInit) {
+            this.loading();
+        }
+    },
+
+    _render: function () {
+        BI.Pane.superclass._render.apply(this, arguments);
+        if (this.beforeInit) {
+            this.loaded();
+        }
     },
 
     _assertTip: function () {
