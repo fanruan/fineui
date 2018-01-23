@@ -20540,6 +20540,12 @@ BI.extend(BI.DOM, {
         points[type][action][after ? "after" : "before"].push(pointFn);
     };
 
+    BI.Constants = {
+        getConstant: function (type) {
+            return constantInjection[type];
+        }
+    };
+
     var callPoint = function (inst, type) {
         if (points[type]) {
             for (var action in points[type]) {
