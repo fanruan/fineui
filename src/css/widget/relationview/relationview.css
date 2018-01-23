@@ -1,3 +1,6 @@
+.bi-relation-view-item .primary-key-region {
+  font-size: 16px;
+}
 
 .bi-relation-view-region .relation-view-region-container {
   z-index: 1;
@@ -7,4 +10,10 @@
 }
 .bi-relation-view-region .relation-view-region-container.other-package {
   border-style: dashed;
+}
+.bi-relation-view-region .relation-view-region-container .relation-view-region-title .eye {
+  font-size: 16px;
+}
+.bi-relation-view-region .relation-view-region-container .split-line {
+  border-bottom: 1px solid #cccccc;
 }
