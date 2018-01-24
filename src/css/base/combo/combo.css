@@ -36,4 +36,5 @@
 
 .bi-combo.bi-combo-popup {
   display: block !important;
+  visibility: visible !important;
 }
