@@ -20366,7 +20366,11 @@ BI.extend(BI.DOM, {
                 if (bfns) {
                     BI.aspect.before(inst, action, function () {
                         for (var i = 0, len = bfns.length; i < len; i++) {
-                            bfns[i].apply(inst, arguments);
+                            try {
+                                bfns[i].apply(inst, arguments);
+                            } catch (e) {
+                                console.error(e);
+                            }
                         }
                     });
                 }
@@ -20374,7 +20378,11 @@ BI.extend(BI.DOM, {
                 if (afns) {
                     BI.aspect.after(inst, action, function () {
                         for (var i = 0, len = afns.length; i < len; i++) {
-                            afns[i].apply(inst, arguments);
+                            try {
+                                afns[i].apply(inst, arguments);
+                            } catch (e) {
+                                console.error(e);
+                            }
                         }
                     });
                 }
