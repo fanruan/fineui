@@ -21,7 +21,8 @@ BI.RelationViewRegionContainer = BI.inherit(BI.Widget, {
             handler: o.handler,
             disabled: o.disabled,
             items: o.items,
-            belongPackage: o.belongPackage
+            isView: o.isView,
+            keyword: o.keyword
         });
         this.region.on(BI.RelationViewRegion.EVENT_PREVIEW, function (v) {
             self.fireEvent(BI.RelationViewRegionContainer.EVENT_PREVIEW, v);
@@ -39,14 +40,6 @@ BI.RelationViewRegionContainer = BI.inherit(BI.Widget, {
             width: this.region.getWidth(),
             height: this.region.getHeight()
         });
-    },
-
-    doRedMark: function () {
-        this.region.doRedMark.apply(this.region, arguments);
-    },
-
-    unRedMark: function () {
-        this.region.unRedMark.apply(this.region, arguments);
     },
 
     getWidth: function () {
