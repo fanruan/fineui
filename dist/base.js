@@ -3802,7 +3802,11 @@ BI.shortcut("bi.combo_group", BI.ComboGroup);BI.VirtualGroup = BI.inherit(BI.Wid
     },
 
     render: function () {
-        this.populate(this.options.items);
+        var o = this.options;
+        this.populate(o.items);
+        if (BI.isKey(o.value)) {
+            this.setValue(o.value);
+        }
     },
 
     _packageBtns: function (items) {
