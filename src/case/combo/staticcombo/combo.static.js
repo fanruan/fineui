@@ -19,14 +19,11 @@ BI.StaticCombo = BI.inherit(BI.Widget, {
     _init: function () {
         BI.StaticCombo.superclass._init.apply(this, arguments);
         var self = this, o = this.options;
-        this.trigger = BI.createWidget(o.el, {
-            type: "bi.text_icon_item",
-            cls: "bi-select-text-trigger bi-border pull-down-font",
-            text: o.text,
-            value: o.value,
-            readonly: true,
-            textLgap: 5,
-            height: o.height - 2
+        this.trigger = BI.createWidget({
+            type: "bi.select_text_trigger",
+            items: o.items,
+            height: o.height,
+            text: o.text
         });
         this.popup = BI.createWidget({
             type: "bi.text_value_combo_popup",
