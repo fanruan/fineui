@@ -73,41 +73,6 @@ BI.RelationView = BI.inherit(BI.Widget, {
         });
     },
 
-    previewRelationTables: function (relationTables, show) {
-        if (!show) {
-            BI.each(this.storeViews, function (i, view) {
-                view.toggleRegion(true);
-                view.setPreviewSelected(false);
-            });
-            BI.each(this.lines, function (i, lines) {
-                BI.each(lines, function (j, line) {
-                    line.show();
-                });
-            });
-            return;
-        }
-        BI.each(this.storeViews, function (id, view) {
-            if (!relationTables.contains(id)) {
-                view.toggleRegion(false);
-            } else {
-                view.setPreviewSelected(true);
-            }
-        });
-        BI.each(this.lines, function (id, lines) {
-            BI.each(lines, function (cId, line) {
-                if (!relationTables.contains(id) || !relationTables.contains(cId)) {
-                    line.hide();
-                }
-            });
-        });
-    },
-
-    doRedMark: function (keyword) {
-        BI.each(this.storeViews, function (idx, view) {
-            view.doRedMark(keyword);
-        });
-    },
-
     populate: function (items) {
         var self = this, o = this.options, c = this._const;
         o.items = items || [];
@@ -172,13 +137,11 @@ BI.RelationView = BI.inherit(BI.Widget, {
                     header: items[0].regionTitle,
                     text: items.length > 0 ? items[0].regionText : "",
                     handler: items.length > 0 ? items[0].regionHandler : BI.emptyFn,
+                    isView: items[0].isView,
+                    keyword: items[0].keyword,
                     items: items,
-                    disabled: items[0].disabled,
-                    belongPackage: items.length > 0 ? items[0].belongPackage : true
+                    disabled: items[0].disabled
                 });
-                if (BI.isNotNull(items[0]) && BI.isNotNull(items[0].keyword)) {
-                    views[i][j].doRedMark(items[0].keyword);
-                }
                 views[i][j].on(BI.RelationViewRegionContainer.EVENT_HOVER_IN, function (v) {
                     self._hoverIn(v);
                 });

@@ -93327,41 +93327,6 @@ BI.RelationView = BI.inherit(BI.Widget, {
         });
     },
 
-    previewRelationTables: function (relationTables, show) {
-        if (!show) {
-            BI.each(this.storeViews, function (i, view) {
-                view.toggleRegion(true);
-                view.setPreviewSelected(false);
-            });
-            BI.each(this.lines, function (i, lines) {
-                BI.each(lines, function (j, line) {
-                    line.show();
-                });
-            });
-            return;
-        }
-        BI.each(this.storeViews, function (id, view) {
-            if (!relationTables.contains(id)) {
-                view.toggleRegion(false);
-            } else {
-                view.setPreviewSelected(true);
-            }
-        });
-        BI.each(this.lines, function (id, lines) {
-            BI.each(lines, function (cId, line) {
-                if (!relationTables.contains(id) || !relationTables.contains(cId)) {
-                    line.hide();
-                }
-            });
-        });
-    },
-
-    doRedMark: function (keyword) {
-        BI.each(this.storeViews, function (idx, view) {
-            view.doRedMark(keyword);
-        });
-    },
-
     populate: function (items) {
         var self = this, o = this.options, c = this._const;
         o.items = items || [];
@@ -93426,13 +93391,11 @@ BI.RelationView = BI.inherit(BI.Widget, {
                     header: items[0].regionTitle,
                     text: items.length > 0 ? items[0].regionText : "",
                     handler: items.length > 0 ? items[0].regionHandler : BI.emptyFn,
+                    isView: items[0].isView,
+                    keyword: items[0].keyword,
                     items: items,
-                    disabled: items[0].disabled,
-                    belongPackage: items.length > 0 ? items[0].belongPackage : true
+                    disabled: items[0].disabled
                 });
-                if (BI.isNotNull(items[0]) && BI.isNotNull(items[0].keyword)) {
-                    views[i][j].doRedMark(items[0].keyword);
-                }
                 views[i][j].on(BI.RelationViewRegionContainer.EVENT_HOVER_IN, function (v) {
                     self._hoverIn(v);
                 });
@@ -93600,7 +93563,8 @@ BI.RelationViewRegionContainer = BI.inherit(BI.Widget, {
             handler: o.handler,
             disabled: o.disabled,
             items: o.items,
-            belongPackage: o.belongPackage
+            isView: o.isView,
+            keyword: o.keyword
         });
         this.region.on(BI.RelationViewRegion.EVENT_PREVIEW, function (v) {
             self.fireEvent(BI.RelationViewRegionContainer.EVENT_PREVIEW, v);
@@ -93618,14 +93582,6 @@ BI.RelationViewRegionContainer = BI.inherit(BI.Widget, {
             width: this.region.getWidth(),
             height: this.region.getHeight()
         });
-    },
-
-    doRedMark: function () {
-        this.region.doRedMark.apply(this.region, arguments);
-    },
-
-    unRedMark: function () {
-        this.region.unRedMark.apply(this.region, arguments);
     },
 
     getWidth: function () {
@@ -93688,8 +93644,7 @@ BI.RelationViewRegion = BI.inherit(BI.BasicButton, {
             text: "",
             value: "",
             header: "",
-            items: [],
-            belongPackage: true
+            items: []
         });
     },
 
@@ -93702,7 +93657,8 @@ BI.RelationViewRegion = BI.inherit(BI.BasicButton, {
             cls: "eye relation-table-preview-font",
             width: 36,
             height: 24,
-            stopPropagation: true
+            stopPropagation: true,
+            selected: o.isView
         });
         this.preview.on(BI.IconButton.EVENT_CHANGE, function () {
             self.fireEvent(BI.RelationViewRegion.EVENT_PREVIEW, this.isSelected());
@@ -93715,7 +93671,8 @@ BI.RelationViewRegion = BI.inherit(BI.BasicButton, {
             text: o.text,
             value: o.value,
             textAlign: "left",
-            disabled: o.disabled
+            disabled: o.disabled,
+            keyword: o.keyword
         });
         // title放body上
         if (BI.isKey(o.header)) {
@@ -93737,7 +93694,7 @@ BI.RelationViewRegion = BI.inherit(BI.BasicButton, {
             element: this,
             items: [{
                 type: "bi.vertical",
-                cls: "relation-view-region-container bi-card bi-border " + (o.belongPackage ? "" : "other-package"),
+                cls: "relation-view-region-container bi-card bi-border",
                 items: [{
                     type: "bi.vertical_adapt",
                     cls: "relation-view-region-title bi-border-bottom bi-background",
@@ -93767,14 +93724,6 @@ BI.RelationViewRegion = BI.inherit(BI.BasicButton, {
                 }
             });
         });
-    },
-
-    doRedMark: function () {
-        this.title.doRedMark.apply(this.title, arguments);
-    },
-
-    unRedMark: function () {
-        this.title.unRedMark.apply(this.title, arguments);
     },
 
     getWidth: function () {

@@ -14,8 +14,7 @@ BI.RelationViewRegion = BI.inherit(BI.BasicButton, {
             text: "",
             value: "",
             header: "",
-            items: [],
-            belongPackage: true
+            items: []
         });
     },
 
@@ -28,7 +27,8 @@ BI.RelationViewRegion = BI.inherit(BI.BasicButton, {
             cls: "eye relation-table-preview-font",
             width: 36,
             height: 24,
-            stopPropagation: true
+            stopPropagation: true,
+            selected: o.isView
         });
         this.preview.on(BI.IconButton.EVENT_CHANGE, function () {
             self.fireEvent(BI.RelationViewRegion.EVENT_PREVIEW, this.isSelected());
@@ -41,7 +41,8 @@ BI.RelationViewRegion = BI.inherit(BI.BasicButton, {
             text: o.text,
             value: o.value,
             textAlign: "left",
-            disabled: o.disabled
+            disabled: o.disabled,
+            keyword: o.keyword
         });
         // title放body上
         if (BI.isKey(o.header)) {
@@ -63,7 +64,7 @@ BI.RelationViewRegion = BI.inherit(BI.BasicButton, {
             element: this,
             items: [{
                 type: "bi.vertical",
-                cls: "relation-view-region-container bi-card bi-border " + (o.belongPackage ? "" : "other-package"),
+                cls: "relation-view-region-container bi-card bi-border",
                 items: [{
                     type: "bi.vertical_adapt",
                     cls: "relation-view-region-title bi-border-bottom bi-background",
@@ -93,14 +94,6 @@ BI.RelationViewRegion = BI.inherit(BI.BasicButton, {
                 }
             });
         });
-    },
-
-    doRedMark: function () {
-        this.title.doRedMark.apply(this.title, arguments);
-    },
-
-    unRedMark: function () {
-        this.title.unRedMark.apply(this.title, arguments);
     },
 
     getWidth: function () {

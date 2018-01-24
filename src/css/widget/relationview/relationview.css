@@ -8,9 +8,6 @@
   -moz-border-radius: 2px;
   border-radius: 2px;
 }
-.bi-relation-view-region .relation-view-region-container.other-package {
-  border-style: dashed;
-}
 .bi-relation-view-region .relation-view-region-container .relation-view-region-title .eye {
   font-size: 16px;
 }
