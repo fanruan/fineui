@@ -12358,6 +12358,13 @@ _.extend(BI.OB.prototype, {
         }
     },
 
+    //释放当前对象
+    _purgeRef: function(){
+        if (this.options.ref) {
+            this.options.ref.call(null);
+        }
+    },
+
     _getEvents: function () {
         if (!$.isArray(this.events)) {
             this.events = [];
@@ -12453,6 +12460,7 @@ _.extend(BI.OB.prototype, {
 
     destroy: function () {
         this.destroyed && this.destroyed();
+        this._purgeRef();
         this.purgeListeners();
     }
 });/**
@@ -12510,13 +12518,18 @@ BI.Widget = BI.inherit(BI.OB, {
         this._initVisual();
         this._initState();
         if (this.beforeInit) {
+            this.__asking = true;
             this.beforeInit(BI.bind(this._render, this));
+            if (this.__asking === true) {
+                this.__async = true;
+            }
         } else {
             this._render();
         }
     },
 
     _render: function () {
+        this.__asking = false;
         this.beforeCreate && this.beforeCreate();
         this._initElement();
         this._initEffects();
@@ -12916,6 +12929,7 @@ BI.Widget = BI.inherit(BI.OB, {
         this.__d();
         this.element.destroy();
         this.fireEvent(BI.Events.DESTROY);
+        this._purgeRef();
         this.purgeListeners();
     }
 });(function () {
@@ -20327,15 +20341,52 @@ BI.extend(BI.DOM, {
         };
     };
 
+    var points = {};
+    BI.point = function (type, action, pointFn, after) {
+        if (!points[type]) {
+            points[type] = {};
+        }
+        if (!points[type][action]) {
+            points[type][action] = {};
+            points[type][action][after ? "after" : "before"] = [];
+        }
+        points[type][action][after ? "after" : "before"].push(pointFn);
+    };
+
     BI.Constants = {
         getConstant: function (type) {
             return constantInjection[type];
         }
     };
 
+    var callPoint = function (inst, type) {
+        if (points[type]) {
+            for (var action in points[type]) {
+                var bfns = points[type][action].before;
+                if (bfns) {
+                    BI.aspect.before(inst, action, function () {
+                        for (var i = 0, len = bfns.length; i < len; i++) {
+                            bfns[i].apply(inst, arguments);
+                        }
+                    });
+                }
+                var afns = points[type][action].after;
+                if (afns) {
+                    BI.aspect.after(inst, action, function () {
+                        for (var i = 0, len = afns.length; i < len; i++) {
+                            afns[i].apply(inst, arguments);
+                        }
+                    });
+                }
+            }
+        }
+    };
+
     BI.Models = {
         getModel: function (type, config) {
-            return new modelInjection[type](config);
+            var inst = new modelInjection[type](config);
+            callPoint(inst, type);
+            return inst;
         }
     };
 
@@ -20346,10 +20397,9 @@ BI.extend(BI.DOM, {
             if (stores[type]) {
                 return stores[type];
             }
-            return stores[type] = new storeInjection[type](config);
-        },
-        releaseStore: function (type) {
-            delete stores[type];
+            stores[type] = new storeInjection[type](config);
+            callPoint(stores[type], type);
+            return stores[type];
         }
     };
 
@@ -20360,10 +20410,9 @@ BI.extend(BI.DOM, {
             if (services[type]) {
                 return services[type];
             }
-            return services[type] = new serviceInjection[type](config);
-        },
-        releaseService: function (type) {
-            delete services[type];
+            services[type] = new serviceInjection[type](config);
+            callPoint(services[type], type);
+            return services[type];
         }
     };
 
@@ -20378,10 +20427,6 @@ BI.extend(BI.DOM, {
                 providerInstance[type] = new providers[type].$get()(config);
             }
             return providerInstance[type];
-        },
-        releaseProvider: function (type) {
-            delete providers[type];
-            delete providerInstance[type];
         }
     };
 
@@ -26218,6 +26263,16 @@ BI.Pane = BI.inherit(BI.Widget, {
 
     _init: function () {
         BI.Pane.superclass._init.apply(this, arguments);
+        if (this.__async) {
+            this.loading();
+        }
+    },
+
+    _render: function () {
+        BI.Pane.superclass._render.apply(this, arguments);
+        if (this.__async) {
+            this.loaded();
+        }
     },
 
     _assertTip: function () {
@@ -29786,28 +29841,35 @@ BI.shortcut("bi.combo_group", BI.ComboGroup);BI.VirtualGroup = BI.inherit(BI.Wid
     },
 
     render: function () {
-        this.populate(this.options.items);
+        var o = this.options;
+        this.populate(o.items);
+        if (BI.isKey(o.value)) {
+            this.setValue(o.value);
+        }
     },
 
     _packageBtns: function (items) {
         var o = this.options;
-
+        var map = this.buttonMap = {};
         for (var i = o.layouts.length - 1; i > 0; i--) {
             items = BI.map(items, function (k, it) {
+                var el = BI.stripEL(it);
                 return BI.extend({}, o.layouts[i], {
                     items: [
                         BI.extend({}, o.layouts[i].el, {
-                            el: BI.stripEL(it)
+                            el: BI.extend({
+                                ref: function (_ref) {
+                                    if (BI.isKey(map[el.value])) {
+                                        map[el.value] = _ref;
+                                    }
+                                }
+                            }, el)
                         })
                     ]
                 });
             });
         }
         return items;
-    },
-
-    _packageItems: function (items, packBtns) {
-        return BI.createItems(BI.makeArrayByArray(items, {}), BI.clone(packBtns));
     },
 
     _packageLayout: function (items) {
@@ -29830,11 +29892,40 @@ BI.shortcut("bi.combo_group", BI.ComboGroup);BI.VirtualGroup = BI.inherit(BI.Wid
     },
 
     setValue: function (v) {
-        // this.layouts.setValue(v);
+        v = BI.isArray(v) ? v : [v];
+        BI.each(this.buttonMap, function (key, item) {
+            if (item) {
+                if (v.deepContains(key)) {
+                    item.setSelected && item.setSelected(true);
+                } else {
+                    item.setSelected && item.setSelected(false);
+                }
+            }
+        });
+    },
+
+    getNotSelectedValue: function () {
+        var v = [];
+        BI.each(this.buttonMap, function (i, item) {
+            if (item) {
+                if (item.isEnabled() && !(item.isSelected && item.isSelected())) {
+                    v.push(item.getValue());
+                }
+            }
+        });
+        return v;
     },
 
     getValue: function () {
-        return this.layouts.getValue();
+        var v = [];
+        BI.each(this.buttonMap, function (i, item) {
+            if (item) {
+                if (item.isEnabled() && item.isSelected && item.isSelected()) {
+                    v.push(item.getValue());
+                }
+            }
+        });
+        return v;
     },
 
     populate: function (items) {

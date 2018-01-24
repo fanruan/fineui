@@ -224,6 +224,16 @@ BI.Pane = BI.inherit(BI.Widget, {
 
     _init: function () {
         BI.Pane.superclass._init.apply(this, arguments);
+        if (this.__async) {
+            this.loading();
+        }
+    },
+
+    _render: function () {
+        BI.Pane.superclass._render.apply(this, arguments);
+        if (this.__async) {
+            this.loaded();
+        }
     },
 
     _assertTip: function () {
@@ -3792,28 +3802,35 @@ BI.shortcut("bi.combo_group", BI.ComboGroup);BI.VirtualGroup = BI.inherit(BI.Wid
     },
 
     render: function () {
-        this.populate(this.options.items);
+        var o = this.options;
+        this.populate(o.items);
+        if (BI.isKey(o.value)) {
+            this.setValue(o.value);
+        }
     },
 
     _packageBtns: function (items) {
         var o = this.options;
-
+        var map = this.buttonMap = {};
         for (var i = o.layouts.length - 1; i > 0; i--) {
             items = BI.map(items, function (k, it) {
+                var el = BI.stripEL(it);
                 return BI.extend({}, o.layouts[i], {
                     items: [
                         BI.extend({}, o.layouts[i].el, {
-                            el: BI.stripEL(it)
+                            el: BI.extend({
+                                ref: function (_ref) {
+                                    if (BI.isKey(map[el.value])) {
+                                        map[el.value] = _ref;
+                                    }
+                                }
+                            }, el)
                         })
                     ]
                 });
             });
         }
         return items;
-    },
-
-    _packageItems: function (items, packBtns) {
-        return BI.createItems(BI.makeArrayByArray(items, {}), BI.clone(packBtns));
     },
 
     _packageLayout: function (items) {
@@ -3836,11 +3853,40 @@ BI.shortcut("bi.combo_group", BI.ComboGroup);BI.VirtualGroup = BI.inherit(BI.Wid
     },
 
     setValue: function (v) {
-        // this.layouts.setValue(v);
+        v = BI.isArray(v) ? v : [v];
+        BI.each(this.buttonMap, function (key, item) {
+            if (item) {
+                if (v.deepContains(key)) {
+                    item.setSelected && item.setSelected(true);
+                } else {
+                    item.setSelected && item.setSelected(false);
+                }
+            }
+        });
+    },
+
+    getNotSelectedValue: function () {
+        var v = [];
+        BI.each(this.buttonMap, function (i, item) {
+            if (item) {
+                if (item.isEnabled() && !(item.isSelected && item.isSelected())) {
+                    v.push(item.getValue());
+                }
+            }
+        });
+        return v;
     },
 
     getValue: function () {
-        return this.layouts.getValue();
+        var v = [];
+        BI.each(this.buttonMap, function (i, item) {
+            if (item) {
+                if (item.isEnabled() && item.isSelected && item.isSelected()) {
+                    v.push(item.getValue());
+                }
+            }
+        });
+        return v;
     },
 
     populate: function (items) {

@@ -44,6 +44,13 @@ _.extend(BI.OB.prototype, {
         }
     },
 
+    //释放当前对象
+    _purgeRef: function(){
+        if (this.options.ref) {
+            this.options.ref.call(null);
+        }
+    },
+
     _getEvents: function () {
         if (!$.isArray(this.events)) {
             this.events = [];
@@ -139,6 +146,7 @@ _.extend(BI.OB.prototype, {
 
     destroy: function () {
         this.destroyed && this.destroyed();
+        this._purgeRef();
         this.purgeListeners();
     }
 });
