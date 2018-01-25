@@ -21130,7 +21130,6 @@ $(function () {
     /** Adds the number of days array to the Date object. */
     Date._MD = [31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];
 });
-
 /** Constants used for time computations */
 Date.SECOND = 1000;
 Date.MINUTE = 60 * Date.SECOND;
@@ -21156,7 +21155,7 @@ Date.prototype.getMonthDays = function (month) {
         return 29;
     }
     return Date._MD[month];
-    
+
 };
 
 /**
@@ -21616,7 +21615,7 @@ Date.getDate = function () {
         return new Date(utc + Date.timeZone);// + Pool.timeZone.offset);
     }
     return dt;
-    
+
 };
 
 Date.getTime = function () {
@@ -21664,7 +21663,7 @@ Date.getTime = function () {
         return dt.getTime() - Date.timeZone - dt.getTimezoneOffset() * 60000;
     }
     return dt.getTime();
-    
+
 };
 /*
  * 给jQuery.Event对象添加的工具方法
