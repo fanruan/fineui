@@ -3,22 +3,21 @@ Demo.Button = BI.inherit(BI.Widget, {
         baseCls: "demo-button"
     },
     render: function () {
-        var items = [
-            {
-                el: {
-                    type: "bi.button",
-                    text: "一般按钮",
-                    level: "common",
-                    height: 30
-                }
-            }, {
-                el: {
-                    type: "bi.button",
-                    text: "表示成功状态按钮",
-                    level: "success",
-                    height: 30
-                }
-            },
+        var items = [{
+            el: {
+                type: "bi.button",
+                text: "一般按钮",
+                level: "common",
+                height: 30
+            }
+        }, {
+            el: {
+                type: "bi.button",
+                text: "表示成功状态按钮",
+                level: "success",
+                height: 30
+            }
+        },
             {
                 el: {
                     type: "bi.button",
@@ -179,25 +178,9 @@ Demo.Button = BI.inherit(BI.Widget, {
                 }
             }, {
                 el: {
-                    type: "bi.multi_select_bar",
-                    selected: true,
-                    halfSelected: true
-                }
-            }, {
-                el: {
-                    type: "bi.multi_select_bar",
-                    selected: true,
-                    halfSelected: false
-                }
-            }, {
-                el: {
-                    type: "bi.multi_select_bar",
-                    selected: false,
-                    halfSelected: true
-                }
-            }, {
-                el: {
-                    type: "bi.multi_select_bar"
+                    type: "bi.text_button",
+                    text: "文字按钮",
+                    height: 30
                 }
             }
         ];

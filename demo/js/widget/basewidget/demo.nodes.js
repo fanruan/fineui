@@ -17,13 +17,6 @@ Demo.Nodes = BI.inherit(BI.Widget, {
             }, {
                 type: "bi.label",
                 height: 30,
-                text: "三角形的节点"
-            }, {
-                type: "bi.triangle_group_node",
-                text: "三角形的节点"
-            }, {
-                type: "bi.label",
-                height: 30,
                 text: "箭头节点"
             }, {
                 type: "bi.arrow_group_node",

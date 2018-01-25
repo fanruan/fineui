@@ -411,7 +411,7 @@ BI.ArrowNode = BI.inherit(BI.NodeButton, {
         var self = this, o = this.options;
         BI.ArrowNode.superclass._init.apply(this, arguments);
         this.checkbox = BI.createWidget({
-            type: "bi.arrow_tree_group_node_checkbox",
+            type: "bi.arrow_group_node_checkbox",
             iconWidth: 13,
             iconHeight: 13
         });
@@ -976,88 +976,6 @@ BI.PlusGroupNode = BI.inherit(BI.NodeButton, {
 });
 
 BI.shortcut("bi.plus_group_node", BI.PlusGroupNode);/**
- * 三角号表示的组节点
- * Created by GUY on 2015/9/6.
- * @class BI.TriangleGroupNode
- * @extends BI.NodeButton
- */
-BI.TriangleGroupNode = BI.inherit(BI.NodeButton, {
-    _defaultConfig: function () {
-        var conf = BI.TriangleGroupNode.superclass._defaultConfig.apply(this, arguments);
-        return BI.extend(conf, {
-            baseCls: (conf.baseCls || "") + " bi-triangle-group-node bi-list-item",
-            logic: {
-                dynamic: false
-            },
-            id: "",
-            pId: "",
-            open: false,
-            height: 25
-        });
-    },
-    _init: function () {
-        BI.TriangleGroupNode.superclass._init.apply(this, arguments);
-        var self = this, o = this.options;
-        this.checkbox = BI.createWidget({
-            iconWidth: 13,
-            iconHeight: 13,
-            type: "bi.tree_group_node_checkbox"
-        });
-        this.text = BI.createWidget({
-            type: "bi.label",
-            textAlign: "left",
-            whiteSpace: "nowrap",
-            textHeight: o.height,
-            height: o.height,
-            hgap: o.hgap,
-            text: o.text,
-            value: o.value,
-            py: o.py,
-            keyword: o.keyword
-        });
-        this.checkbox.on(BI.Controller.EVENT_CHANGE, function (type) {
-            if (type === BI.Events.CLICK) {
-                self.setSelected(self.isSelected());
-            }
-            self.fireEvent(BI.Controller.EVENT_CHANGE, arguments);
-        });
-        var type = BI.LogicFactory.createLogicTypeByDirection(BI.Direction.Left);
-        var items = BI.LogicFactory.createLogicItemsByDirection(BI.Direction.Left, {
-            width: 25,
-            el: this.checkbox
-        }, this.text);
-        BI.createWidget(BI.extend({
-            element: this
-        }, BI.LogicFactory.createLogic(type, BI.extend(o.logic, {
-            items: items
-        }))));
-    },
-
-    doRedMark: function () {
-        this.text.doRedMark.apply(this.text, arguments);
-    },
-
-    unRedMark: function () {
-        this.text.unRedMark.apply(this.text, arguments);
-    },
-
-    doClick: function () {
-        BI.TriangleGroupNode.superclass.doClick.apply(this, arguments);
-        this.checkbox.setSelected(this.isOpened());
-    },
-
-    setOpened: function (v) {
-        BI.TriangleGroupNode.superclass.setOpened.apply(this, arguments);
-        this.checkbox.setSelected(v);
-    },
-
-    setText: function (text) {
-        BI.TriangleGroupNode.superclass.setText.apply(this, arguments);
-        this.text.setText(text);
-    }
-});
-
-BI.shortcut("bi.triangle_group_node", BI.TriangleGroupNode);/**
  * guy
  * 复选框item
  * @type {*|void|Object}
@@ -2046,7 +1964,7 @@ BI.shortcut("bi.complex_canvas", BI.ComplexCanvas);/**
 BI.ArrowTreeGroupNodeCheckbox = BI.inherit(BI.IconButton, {
     _defaultConfig: function () {
         return BI.extend(BI.ArrowTreeGroupNodeCheckbox.superclass._defaultConfig.apply(this, arguments), {
-            extraCls: "bi-arrow-tree-group-node"
+            extraCls: "bi-arrow-group-node-checkbox"
         });
     },
     _init: function () {
@@ -2061,7 +1979,7 @@ BI.ArrowTreeGroupNodeCheckbox = BI.inherit(BI.IconButton, {
         }
     }
 });
-BI.shortcut("bi.arrow_tree_group_node_checkbox", BI.ArrowTreeGroupNodeCheckbox);/**
+BI.shortcut("bi.arrow_group_node_checkbox", BI.ArrowTreeGroupNodeCheckbox);/**
  * 十字型的树节点
  * @class BI.CheckingMarkNode
  * @extends BI.IconButton
@@ -2165,31 +2083,6 @@ BI.MidTreeNodeCheckbox = BI.inherit(BI.IconButton, {
     }
 });
 BI.shortcut("bi.mid_tree_node_checkbox", BI.MidTreeNodeCheckbox);/**
- * 三角形的树节点
- * Created by GUY on 2015/9/6.
- * @class BI.TreeGroupNodeCheckbox
- * @extends BI.IconButton
- */
-BI.TreeGroupNodeCheckbox = BI.inherit(BI.IconButton, {
-    _defaultConfig: function () {
-        return BI.extend( BI.TreeGroupNodeCheckbox.superclass._defaultConfig.apply(this, arguments), {
-            extraCls: "tree-node-triangle-collapse-font"
-        });
-    },
-    _init: function () {
-        BI.TreeGroupNodeCheckbox.superclass._init.apply(this, arguments);
-
-    },
-    setSelected: function (v) {
-        BI.TreeGroupNodeCheckbox.superclass.setSelected.apply(this, arguments);
-        if(v) {
-            this.element.removeClass("tree-node-triangle-collapse-font").addClass("tree-node-triangle-expand-font");
-        } else {
-            this.element.removeClass("tree-node-triangle-expand-font").addClass("tree-node-triangle-collapse-font");
-        }
-    }
-});
-BI.shortcut("bi.tree_group_node_checkbox", BI.TreeGroupNodeCheckbox);/**
  * 十字型的树节点
  * @class BI.TreeNodeCheckbox
  * @extends BI.IconButton
