@@ -13,7 +13,8 @@ Demo.ClearEditor = BI.inherit(BI.Widget, {
                 return v != "a";
             },
             watermark: "可以设置标记的输入框",
-            text: "这是一个遮罩"
+            value: "这是一个遮罩",
+            keyword: "z"
         });
         BI.createWidget({
             type: "bi.vertical",
