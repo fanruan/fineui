@@ -8,7 +8,8 @@ Demo.Button = BI.inherit(BI.Widget, {
                 el: {
                     type: "bi.text_button",
                     text: "文字按钮",
-                    height: 30
+                    height: 30,
+                    keyword: "w"
                 }
             }
         ];

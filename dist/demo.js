@@ -272,7 +272,8 @@ BI.shortcut("demo.image_button", Demo.Button);Demo.Button = BI.inherit(BI.Widget
                 el: {
                     type: "bi.text_button",
                     text: "文字按钮",
-                    height: 30
+                    height: 30,
+                    keyword: "w"
                 }
             }
         ];
@@ -2248,7 +2249,8 @@ Demo.ClearEditor = BI.inherit(BI.Widget, {
                 return v != "a";
             },
             watermark: "可以设置标记的输入框",
-            text: "这是一个遮罩"
+            value: "这是一个遮罩",
+            keyword: "z"
         });
         BI.createWidget({
             type: "bi.vertical",
