@@ -13866,7 +13866,9 @@ BI.SelectTextTrigger = BI.inherit(BI.Trigger, {
     },
 
     setValue: function (vals) {
-        this.trigger.setText(this._digest(vals, this.options.items));
+        if (!this.isReadOnly()) {
+            this.trigger.setText(this._digest(vals, this.options.items));
+        }
     },
 
     populate: function (items) {
