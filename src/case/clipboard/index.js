@@ -8,7 +8,9 @@ BI.ClipBoard = BI.inherit(BI.BasicButton, {
     _defaultConfig: function () {
         return BI.extend(BI.ClipBoard.superclass._defaultConfig.apply(this, arguments), {
             extraCls: "bi-clipboard",
-            el: {},
+            el: {
+                type: "bi.layout"
+            },
             copy: BI.emptyFn,
             afterCopy: BI.emptyFn
         });

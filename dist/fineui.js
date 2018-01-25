@@ -27188,14 +27188,14 @@ Data.Source = BISource = {
         var fns = exps.slice();
         var complete = false,
             running = false;
-        var callback = function callback(index) {
+        var callback = function callback(index, newValue, oldValue) {
             if (complete === true) {
                 return;
             }
             fns[index] = true;
             if (runBinaryFunction(fns)) {
                 complete = true;
-                cb();
+                cb(newValue, oldValue, index);
             }
             if (!running) {
                 running = true;
@@ -27233,8 +27233,8 @@ Data.Source = BISource = {
                 var w = new Watcher(model, function () {
                     dep.depend();
                     return NaN;
-                }, function () {
-                    callback(i);
+                }, function (newValue, oldValue) {
+                    callback(i, newValue, oldValue);
                 });
                 watchers.push(function unwatchFn() {
                     w.teardown();
@@ -27246,11 +27246,21 @@ Data.Source = BISource = {
             if (/\*\*$|\*$/.test(exp)) {
                 throw new Error('not support');
             }
-            //其他含有*的情况，如*.a,*.*.a,a.*.a.*
+            //其他含有*的情况，如*.a,*.*.a,a.*.a
             if (/\*/.test(exp)) {
+                var currentModel = model;
+                //先获取到能获取到的对象
+                var paths = exp.split(".");
+                for (var _i = 0, len = paths.length; _i < len; _i++) {
+                    if (paths[_i] === "*") {
+                        break;
+                    }
+                    currentModel = model[paths[_i]];
+                }
+                exp = exp.substr(exp.indexOf("*"));
                 //补全路径
-                var parent = model.__ob__.parent,
-                    root = model.__ob__;
+                var parent = currentModel.__ob__.parent,
+                    root = currentModel.__ob__;
                 while (parent) {
                     exp = '*.' + exp;
                     root = parent;
@@ -27261,11 +27271,11 @@ Data.Source = BISource = {
                 root._globalDeps || (root._globalDeps = {});
                 root._globalDeps[regStr] = _dep;
 
-                var _w = new Watcher(model, function () {
+                var _w = new Watcher(currentModel, function () {
                     _dep.depend();
                     return NaN;
-                }, function () {
-                    callback(i);
+                }, function (newValue, oldValue) {
+                    callback(i, newValue, oldValue);
                 });
                 watchers.push(function unwatchFn() {
                     _w.teardown();
@@ -27273,8 +27283,8 @@ Data.Source = BISource = {
                 });
                 return;
             }
-            var watcher = new Watcher(model, exp, function () {
-                callback(i);
+            var watcher = new Watcher(model, exp, function (newValue, oldValue) {
+                callback(i, newValue, oldValue);
             }, options);
             watchers.push(function unwatchFn() {
                 watcher.teardown();
@@ -67700,7 +67710,9 @@ BI.ClipBoard = BI.inherit(BI.BasicButton, {
     _defaultConfig: function () {
         return BI.extend(BI.ClipBoard.superclass._defaultConfig.apply(this, arguments), {
             extraCls: "bi-clipboard",
-            el: {},
+            el: {
+                type: "bi.layout"
+            },
             copy: BI.emptyFn,
             afterCopy: BI.emptyFn
         });
