@@ -52,7 +52,8 @@ BI.ShelterEditor = BI.inherit(BI.Widget, {
             tipType: o.tipType,
             textAlign: o.textAlign,
             height: o.height,
-            hgap: 4
+            hgap: 4,
+            keyword: o.keyword
         });
         BI.createWidget({
             type: "bi.absolute",
@@ -222,7 +223,7 @@ BI.ShelterEditor = BI.inherit(BI.Widget, {
 
     setValue: function (k) {
         this.editor.setValue(k);
-        this._checkText();
+        this._checkText();node
     },
 
     getValue: function () {

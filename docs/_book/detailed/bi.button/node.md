@@ -21,7 +21,7 @@ BI.createWidget({
         height: 30,
         text: "三角形的节点"
     }, {
-        type: "bi.triangle_group_node",
+        type: "bi.arrow_group_node",
         text: "三角形的节点"
     }, {
         type: "bi.label",

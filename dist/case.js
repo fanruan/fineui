@@ -6316,7 +6316,8 @@ BI.ShelterEditor = BI.inherit(BI.Widget, {
             tipType: o.tipType,
             textAlign: o.textAlign,
             height: o.height,
-            hgap: 4
+            hgap: 4,
+            keyword: o.keyword
         });
         BI.createWidget({
             type: "bi.absolute",
@@ -6486,7 +6487,7 @@ BI.ShelterEditor = BI.inherit(BI.Widget, {
 
     setValue: function (k) {
         this.editor.setValue(k);
-        this._checkText();
+        this._checkText();node
     },
 
     getValue: function () {
@@ -13845,6 +13846,7 @@ BI.SelectTextTrigger = BI.inherit(BI.Trigger, {
             type: "bi.text_trigger",
             element: this,
             height: o.height,
+            readonly: o.readonly,
             text: this._digest(o.value, o.items)
         });
     },
@@ -13868,9 +13870,7 @@ BI.SelectTextTrigger = BI.inherit(BI.Trigger, {
     },
 
     setValue: function (vals) {
-        if (!this.isReadOnly()) {
-            this.trigger.setText(this._digest(vals, this.options.items));
-        }
+        this.trigger.setText(this._digest(vals, this.options.items));
     },
 
     populate: function (items) {
