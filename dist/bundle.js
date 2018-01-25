@@ -68127,10 +68127,11 @@ BI.StaticCombo = BI.inherit(BI.Widget, {
         BI.StaticCombo.superclass._init.apply(this, arguments);
         var self = this, o = this.options;
         this.trigger = BI.createWidget({
-            type: "bi.select_text_trigger",
+            type: "bi.text_trigger",
             items: o.items,
             height: o.height,
-            text: o.text
+            text: o.text,
+            readonly: true
         });
         this.popup = BI.createWidget({
             type: "bi.text_value_combo_popup",
@@ -68158,11 +68159,11 @@ BI.StaticCombo = BI.inherit(BI.Widget, {
     },
 
     populate: function (items) {
-        this.popup.populate(items);
+        this.combo.populate(items);
     },
 
     setValue: function (v) {
-        this.popup.setValue(v);
+        this.combo.setValue(v);
     },
 
     getValue: function () {
