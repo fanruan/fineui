@@ -940,14 +940,14 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
         var fns = exps.slice();
         var complete = false,
             running = false;
-        var callback = function callback(index) {
+        var callback = function callback(index, newValue, oldValue) {
             if (complete === true) {
                 return;
             }
             fns[index] = true;
             if (runBinaryFunction(fns)) {
                 complete = true;
-                cb();
+                cb(newValue, oldValue, index);
             }
             if (!running) {
                 running = true;
@@ -985,8 +985,8 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
                 var w = new Watcher(model, function () {
                     dep.depend();
                     return NaN;
-                }, function () {
-                    callback(i);
+                }, function (newValue, oldValue) {
+                    callback(i, newValue, oldValue);
                 });
                 watchers.push(function unwatchFn() {
                     w.teardown();
@@ -1026,8 +1026,8 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
                 var _w = new Watcher(currentModel, function () {
                     _dep.depend();
                     return NaN;
-                }, function () {
-                    callback(i);
+                }, function (newValue, oldValue) {
+                    callback(i, newValue, oldValue);
                 });
                 watchers.push(function unwatchFn() {
                     _w.teardown();
@@ -1035,8 +1035,8 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
                 });
                 return;
             }
-            var watcher = new Watcher(model, exp, function () {
-                callback(i);
+            var watcher = new Watcher(model, exp, function (newValue, oldValue) {
+                callback(i, newValue, oldValue);
             }, options);
             watchers.push(function unwatchFn() {
                 watcher.teardown();
