@@ -68158,11 +68158,11 @@ BI.StaticCombo = BI.inherit(BI.Widget, {
     },
 
     populate: function (items) {
-        this.combo.populate(items);
+        this.popup.populate(items);
     },
 
     setValue: function (v) {
-        this.combo.setValue(v);
+        this.popup.setValue(v);
     },
 
     getValue: function () {
