@@ -21,6 +21,7 @@ BI.StaticCombo = BI.inherit(BI.Widget, {
         var self = this, o = this.options;
         this.trigger = BI.createWidget({
             type: "bi.text_trigger",
+            cls: "bi-border",
             items: o.items,
             height: o.height,
             text: o.text,
