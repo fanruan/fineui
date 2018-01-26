@@ -16688,7 +16688,8 @@ BI.TextButton = BI.inherit(BI.BasicButton, {
             rgap: o.rgap,
             text: o.text,
             value: o.value,
-            py: o.py
+            py: o.py,
+            keyword: o.keyword
         });
     },
 

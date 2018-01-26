@@ -42734,7 +42734,8 @@ BI.TextButton = BI.inherit(BI.BasicButton, {
             rgap: o.rgap,
             text: o.text,
             value: o.value,
-            py: o.py
+            py: o.py,
+            keyword: o.keyword
         });
     },
 
@@ -68910,6 +68911,7 @@ BI.ShelterEditor = BI.inherit(BI.Widget, {
         });
         this._showHint();
         self._checkText();
+        this.text.doRedMark(o.keyword);
     },
 
     _checkText: function () {
@@ -76359,6 +76361,7 @@ BI.SelectTextTrigger = BI.inherit(BI.Trigger, {
             type: "bi.text_trigger",
             element: this,
             height: o.height,
+            readonly: o.readonly,
             text: this._digest(o.value, o.items)
         });
     },
@@ -76382,9 +76385,7 @@ BI.SelectTextTrigger = BI.inherit(BI.Trigger, {
     },
 
     setValue: function (vals) {
-        if (!this.isReadOnly()) {
-            this.trigger.setText(this._digest(vals, this.options.items));
-        }
+        this.trigger.setText(this._digest(vals, this.options.items));
     },
 
     populate: function (items) {

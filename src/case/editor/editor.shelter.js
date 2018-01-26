@@ -132,6 +132,7 @@ BI.ShelterEditor = BI.inherit(BI.Widget, {
         });
         this._showHint();
         self._checkText();
+        this.text.doRedMark(o.keyword);
     },
 
     _checkText: function () {
