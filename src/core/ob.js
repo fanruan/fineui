@@ -8,7 +8,7 @@ BI.OB = function (config) {
     if (BI.isFunction(this.props)) {
         props = this.props(config);
     }
-    this.options = ($ || _).extend(this._defaultConfig(config), props, config);
+    this.options = (window.$ || window._).extend(this._defaultConfig(config), props, config);
     this._init();
     this._initRef();
 };
@@ -29,7 +29,7 @@ _.extend(BI.OB.prototype, {
     _initListeners: function () {
         var self = this;
         if (this.options.listeners != null) {
-            $.each(this.options.listeners, function (i, lis) {
+            _.each(this.options.listeners, function (lis) {
                 (lis.target ? lis.target : self)[lis.once ? "once" : "on"]
                 (lis.eventName, _.bind(lis.action, self));
             });
@@ -52,7 +52,7 @@ _.extend(BI.OB.prototype, {
     },
 
     _getEvents: function () {
-        if (!$.isArray(this.events)) {
+        if (!_.isArray(this.events)) {
             this.events = [];
         }
         return this.events;
@@ -66,7 +66,7 @@ _.extend(BI.OB.prototype, {
     on: function (eventName, fn) {
         eventName = eventName.toLowerCase();
         var fns = this._getEvents()[eventName];
-        if (!$.isArray(fns)) {
+        if (!_.isArray(fns)) {
             fns = [];
             this._getEvents()[eventName] = fns;
         }
@@ -98,9 +98,9 @@ _.extend(BI.OB.prototype, {
             delete this._getEvents()[eventName];
         } else {
             var fns = this._getEvents()[eventName];
-            if ($.isArray(fns)) {
+            if (_.isArray(fns)) {
                 var newFns = [];
-                $.each(fns, function (idx, ifn) {
+                _.each(fns, function (ifn) {
                     if (ifn != fn) {
                         newFns.push(ifn);
                     }

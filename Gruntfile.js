@@ -79,15 +79,6 @@ module.exports = function (grunt) {
                 ],
                 dest: "dist/router.js"
             },
-            chartJs: {
-                src: [
-                    "src/addons/chart/chart.js",
-                    "src/addons/chart/chart.combine.js",
-                    "src/addons/chart/factory.charts.js",
-                    "src/addons/chart/**/*.js"
-                ],
-                dest: "dist/chart.js"
-            },
             coreCss: {
                 src: ["src/css/core/**/*.css", "src/css/theme/**/*.css"],
                 dest: "dist/core.css"
@@ -157,6 +148,8 @@ module.exports = function (grunt) {
                     "src/core/proto/array.js",
                     "src/core/proto/number.js",
                     "src/core/proto/string.js",
+                    "src/core/proto/date.js",
+                    "src/core/proto/function.js",
                     "src/core/base.js",
                     "src/core/ob.js",
                     "src/core/alias.js",
