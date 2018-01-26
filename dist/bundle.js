@@ -92051,6 +92051,9 @@ BI.ResponisveTable = BI.inherit(BI.Widget, {
             baseCls: "bi-responsive-table",
             isNeedFreeze: false, // 是否需要冻结单元格
             freezeCols: [], // 冻结的列号,从0开始,isNeedFreeze为true时生效
+            logic: { // 冻结的页面布局逻辑
+                dynamic: false
+            },
 
             isNeedMerge: false, // 是否需要合并单元格
             mergeCols: [], // 合并的单元格列号
@@ -92082,6 +92085,7 @@ BI.ResponisveTable = BI.inherit(BI.Widget, {
         this.table = BI.createWidget({
             type: "bi.table_view",
             element: this,
+            logic: o.logic,
 
             isNeedFreeze: o.isNeedFreeze,
             freezeCols: o.freezeCols,
