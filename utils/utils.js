@@ -4804,27 +4804,31 @@ _.extend(BI.OB.prototype, {
             for (var action in points[type]) {
                 var bfns = points[type][action].before;
                 if (bfns) {
-                    BI.aspect.before(inst, action, function () {
-                        for (var i = 0, len = bfns.length; i < len; i++) {
-                            try {
-                                bfns[i].apply(inst, arguments);
-                            } catch (e) {
-                                console.error(e);
+                    BI.aspect.before(inst, action, function (bfns) {
+                        return function () {
+                            for (var i = 0, len = bfns.length; i < len; i++) {
+                                try {
+                                    bfns[i].apply(inst, arguments);
+                                } catch (e) {
+                                    console.error(e);
+                                }
                             }
-                        }
-                    });
+                        };
+                    }(bfns));
                 }
                 var afns = points[type][action].after;
                 if (afns) {
-                    BI.aspect.after(inst, action, function () {
-                        for (var i = 0, len = afns.length; i < len; i++) {
-                            try {
-                                afns[i].apply(inst, arguments);
-                            } catch (e) {
-                                console.error(e);
+                    BI.aspect.after(inst, action, function (afns) {
+                        return function () {
+                            for (var i = 0, len = afns.length; i < len; i++) {
+                                try {
+                                    afns[i].apply(inst, arguments);
+                                } catch (e) {
+                                    console.error(e);
+                                }
                             }
                         }
-                    });
+                    }(afns));
                 }
             }
         }
