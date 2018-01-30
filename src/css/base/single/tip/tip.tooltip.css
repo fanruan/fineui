@@ -4,14 +4,13 @@
   -moz-border-radius: 2px;
   border-radius: 2px;
   font-size: 12px;
+  color: #ffffff;
 }
 .bi-tooltip.tooltip-success {
-  background: #fff5c1;
-  border: 1px solid #fff5c1;
-  color: #1a1a1a;
+  background: #647185;
+  border: 1px solid #647185;
 }
 .bi-tooltip.tooltip-warning {
-  background: #ffecec;
-  color: #ff4949;
-  border: 1px solid #f4cbcb;
+  background: #ff4949;
+  border: 1px solid #e85050;
 }
