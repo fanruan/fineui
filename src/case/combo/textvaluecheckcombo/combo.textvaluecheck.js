@@ -59,7 +59,8 @@ BI.TextValueCheckCombo = BI.inherit(BI.Widget, {
     },
 
     setValue: function (v) {
-        this.textIconCheckCombo.setValue(v);
+        this.trigger.setValue(v);
+        this.popup.setValue(v);
     },
 
     setWarningTitle: function (title) {
@@ -67,7 +68,7 @@ BI.TextValueCheckCombo = BI.inherit(BI.Widget, {
     },
 
     getValue: function () {
-        var value = this.textIconCheckCombo.getValue();
+        var value = this.popup.getValue();
         return BI.isNull(value) ? [] : (BI.isArray(value) ? value : [value]);
     },
 

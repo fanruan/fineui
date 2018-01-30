@@ -57,11 +57,11 @@ BI.StaticCombo = BI.inherit(BI.Widget, {
     },
 
     setValue: function (v) {
-        this.combo.setValue(v);
+        this.popup.setValue(v);
     },
 
     getValue: function () {
-        var value = this.combo.getValue();
+        var value = this.popup.getValue();
         return BI.isNull(value) ? [] : (BI.isArray(value) ? value : [value]);
     }
 });

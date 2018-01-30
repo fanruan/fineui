@@ -54,7 +54,7 @@ BI.SmallTextValueCheckCombo = BI.inherit(BI.Widget, {
     },
 
     getValue: function () {
-        return this.SmallTextIconCheckCombo.getValue();
+        return this.popup.getValue();
     },
 
     populate: function (items) {
