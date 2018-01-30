@@ -16647,7 +16647,7 @@ BI.Layout = BI.inherit(BI.Widget, {
     _addElement: function (i, item) {
         var self = this, w;
         if (!this.hasWidget(this._getChildName(i))) {
-            w = BI.createWidget(item, this);
+            w = BI.createWidget(item);
             w.on(BI.Events.DESTROY, function () {
                 BI.each(self._children, function (name, child) {
                     if (child === w) {
@@ -22599,7 +22599,7 @@ BI.CenterAdaptLayout = BI.inherit(BI.Layout, {
         var td;
         var width = o.columnSize[i] <= 1 ? (o.columnSize[i] * 100 + "%") : o.columnSize[i];
         if (!this.hasWidget(this._getChildName(i))) {
-            var w = BI.createWidget(item, this);
+            var w = BI.createWidget(item);
             w.element.css({position: "relative", top: "0", left: "0", margin: "0px auto"});
             td = BI.createWidget({
                 type: "bi.default",
@@ -22608,7 +22608,7 @@ BI.CenterAdaptLayout = BI.inherit(BI.Layout, {
                     width: width
                 },
                 items: [w]
-            }, this);
+            });
             this.addWidget(this._getChildName(i), td);
         } else {
             td = this.getWidgetByName(this._getChildName(i));
@@ -22717,7 +22717,7 @@ BI.HorizontalAdaptLayout = BI.inherit(BI.Layout, {
         var td;
         var width = o.columnSize[i] <= 1 ? (o.columnSize[i] * 100 + "%") : o.columnSize[i];
         if (!this.hasWidget(this._getChildName(i))) {
-            var w = BI.createWidget(item, this);
+            var w = BI.createWidget(item);
             w.element.css({position: "relative", top: "0", left: "0", margin: "0px auto"});
             td = BI.createWidget({
                 type: "bi.default",
@@ -22726,7 +22726,7 @@ BI.HorizontalAdaptLayout = BI.inherit(BI.Layout, {
                     width: width
                 },
                 items: [w]
-            }, this);
+            });
             this.addWidget(this._getChildName(i), td);
         } else {
             td = this.getWidgetByName(this._getChildName(i));
@@ -22840,7 +22840,7 @@ BI.LeftRightVerticalAdaptLayout = BI.inherit(BI.Layout, {
                 hgap: o.lhgap,
                 lgap: o.llgap,
                 rgap: o.lrgap
-            }, this);
+            });
             left.element.css("height", "100%");
             BI.createWidget({
                 type: "bi.left",
@@ -22855,7 +22855,7 @@ BI.LeftRightVerticalAdaptLayout = BI.inherit(BI.Layout, {
                 hgap: o.rhgap,
                 lgap: o.rlgap,
                 rgap: o.rrgap
-            }, this);
+            });
             right.element.css("height", "100%");
             BI.createWidget({
                 type: "bi.right",
@@ -22905,7 +22905,7 @@ BI.LeftVerticalAdaptLayout = BI.inherit(BI.Layout, {
             lgap: o.lgap,
             hgap: o.hgap,
             rgap: o.rgap
-        }, this);
+        });
         left.element.css("height", "100%");
         BI.createWidget({
             type: "bi.left",
@@ -22953,7 +22953,7 @@ BI.RightVerticalAdaptLayout = BI.inherit(BI.Layout, {
             lgap: o.lgap,
             hgap: o.hgap,
             rgap: o.rgap
-        }, this);
+        });
         right.element.css("height", "100%");
         BI.createWidget({
             type: "bi.right",
@@ -23006,7 +23006,7 @@ BI.VerticalAdaptLayout = BI.inherit(BI.Layout, {
         var td;
         var width = o.columnSize[i] <= 1 ? (o.columnSize[i] * 100 + "%") : o.columnSize[i];
         if (!this.hasWidget(this._getChildName(i))) {
-            var w = BI.createWidget(item, this);
+            var w = BI.createWidget(item);
             w.element.css({position: "relative", top: "0", left: "0", margin: "0px auto"});
             td = BI.createWidget({
                 type: "bi.default",
@@ -23015,7 +23015,7 @@ BI.VerticalAdaptLayout = BI.inherit(BI.Layout, {
                     width: width
                 },
                 items: [w]
-            }, this);
+            });
             this.addWidget(this._getChildName(i), td);
         } else {
             td = this.getWidgetByName(this._getChildName(i));
@@ -23205,7 +23205,7 @@ BI.FloatCenterAdaptLayout = BI.inherit(BI.Layout, {
             bgap: o.bgap,
             lgap: o.lgap,
             rgap: o.rgap
-        }, this);
+        });
 
         this.container = BI.createWidget({
             type: "bi.left",
@@ -23273,7 +23273,7 @@ BI.FloatHorizontalLayout = BI.inherit(BI.Layout, {
             bgap: o.bgap,
             lgap: o.lgap,
             rgap: o.rgap
-        }, this);
+        });
 
         this.container = BI.createWidget({
             type: "bi.left",
@@ -23912,7 +23912,7 @@ BI.BorderLayout = BI.inherit(BI.Layout, {
             if (item != null) {
                 if (item.el) {
                     if (!this.hasWidget(this.getName() + "north")) {
-                        var w = BI.createWidget(item, this);
+                        var w = BI.createWidget(item);
                         this.addWidget(this.getName() + "north", w);
                     }
                     this.getWidgetByName(this.getName() + "north").element.height(item.height)
@@ -23932,7 +23932,7 @@ BI.BorderLayout = BI.inherit(BI.Layout, {
             if (item != null) {
                 if (item.el) {
                     if (!this.hasWidget(this.getName() + "south")) {
-                        var w = BI.createWidget(item, this);
+                        var w = BI.createWidget(item);
                         this.addWidget(this.getName() + "south", w);
                     }
                     this.getWidgetByName(this.getName() + "south").element.height(item.height)
@@ -23952,7 +23952,7 @@ BI.BorderLayout = BI.inherit(BI.Layout, {
             if (item != null) {
                 if (item.el) {
                     if (!this.hasWidget(this.getName() + "west")) {
-                        var w = BI.createWidget(item, this);
+                        var w = BI.createWidget(item);
                         this.addWidget(this.getName() + "west", w);
                     }
                     this.getWidgetByName(this.getName() + "west").element.width(item.width)
@@ -23972,7 +23972,7 @@ BI.BorderLayout = BI.inherit(BI.Layout, {
             if (item != null) {
                 if (item.el) {
                     if (!this.hasWidget(this.getName() + "east")) {
-                        var w = BI.createWidget(item, this);
+                        var w = BI.createWidget(item);
                         this.addWidget(this.getName() + "east", w);
                     }
                     this.getWidgetByName(this.getName() + "east").element.width(item.width)
@@ -23991,7 +23991,7 @@ BI.BorderLayout = BI.inherit(BI.Layout, {
             item = regions["center"];
             if (item != null) {
                 if (!this.hasWidget(this.getName() + "center")) {
-                    var w = BI.createWidget(item, this);
+                    var w = BI.createWidget(item);
                     this.addWidget(this.getName() + "center", w);
                 }
                 this.getWidgetByName(this.getName() + "center").element
@@ -24035,7 +24035,7 @@ BI.CardLayout = BI.inherit(BI.Layout, {
         BI.each(items, function (i, item) {
             if (item) {
                 if (!self.hasWidget(item.cardName)) {
-                    var w = BI.createWidget(item, self);
+                    var w = BI.createWidget(item);
                     w.on(BI.Events.DESTROY, function () {
                         var index = BI.findIndex(o.items, function (i, tItem) {
                             return tItem.cardName == item.cardName;
@@ -24105,7 +24105,7 @@ BI.CardLayout = BI.inherit(BI.Layout, {
         if (this.isCardExisted(cardName)) {
             throw new Error("cardName is already exist");
         }
-        var widget = BI.createWidget(cardItem, this);
+        var widget = BI.createWidget(cardItem);
         widget.element.css({
             position: "relative",
             top: "0",
@@ -24386,7 +24386,7 @@ BI.DivisionLayout = BI.inherit(BI.Layout, {
                     throw new Error("item be required");
                 }
                 if(!this.hasWidget(this.getName() + i + "_" + j)) {
-                    var w = BI.createWidget(map[i][j], this);
+                    var w = BI.createWidget(map[i][j]);
                     this.addWidget(this.getName() + i + "_" + j, w);
                 } else {
                     w = this.getWidgetByName(this.getName() + i + "_" + j);
@@ -24671,18 +24671,18 @@ BI.GridLayout = BI.inherit(BI.Layout, {
         BI.each(items, function (i, item) {
             if (BI.isArray(item)) {
                 BI.each(item, function (j, el) {
-                    els[i][j] = BI.createWidget(el, self);
+                    els[i][j] = BI.createWidget(el);
                 });
                 return;
             }
-            els[item.row][item.column] = BI.createWidget(item, self);
+            els[item.row][item.column] = BI.createWidget(item);
         });
         for (var i = 0; i < rows; i++) {
             for (var j = 0; j < columns; j++) {
                 if (!els[i][j]) {
                     els[i][j] = BI.createWidget({
                         type: "bi.layout"
-                    }, this);
+                    });
                 }
                 first(els[i][j], i, j);
                 els[i][j].element.css({
@@ -24741,7 +24741,7 @@ BI.HorizontalLayout = BI.inherit(BI.Layout, {
         var td;
         var width = o.columnSize[i] <= 1 ? (o.columnSize[i] * 100 + "%") : o.columnSize[i];
         if (!this.hasWidget(this._getChildName(i))) {
-            var w = BI.createWidget(item, this);
+            var w = BI.createWidget(item);
             w.element.css({position: "relative", margin: "0px auto"});
             td = BI.createWidget({
                 type: "bi.default",
@@ -24750,7 +24750,7 @@ BI.HorizontalLayout = BI.inherit(BI.Layout, {
                     width: width
                 },
                 items: [w]
-            }, this);
+            });
             this.addWidget(this._getChildName(i), td);
         } else {
             td = this.getWidgetByName(this._getChildName(i));
@@ -25053,7 +25053,7 @@ BI.TableLayout = BI.inherit(BI.Layout, {
             type: "bi.absolute",
             height: BI.isArray(o.rowSize) ? o.rowSize[this.rows] : o.rowSize,
             items: abs
-        }, this);
+        });
         if (this.rows > 0) {
             this.getWidgetByName(this.getName() + (this.rows - 1)).element.css({
                 "margin-bottom": o.vgap
@@ -25131,7 +25131,7 @@ BI.HTapeLayout = BI.inherit(BI.Layout, {
         items = BI.compact(items);
         BI.each(items, function (i, item) {
             if (!self.hasWidget(self.getName() + i + "")) {
-                var w = BI.createWidget(item, self);
+                var w = BI.createWidget(item);
                 self.addWidget(self.getName() + i + "", w);
             } else {
                 w = self.getWidgetByName(self.getName() + i + "");
@@ -25236,7 +25236,7 @@ BI.VTapeLayout = BI.inherit(BI.Layout, {
         items = BI.compact(items);
         BI.each(items, function (i, item) {
             if (!self.hasWidget(self.getName() + i + "")) {
-                var w = BI.createWidget(item, self);
+                var w = BI.createWidget(item);
                 self.addWidget(self.getName() + i + "", w);
             } else {
                 w = self.getWidgetByName(self.getName() + i + "");
@@ -25371,10 +25371,10 @@ BI.TdLayout = BI.inherit(BI.Layout, {
         var tr = BI.createWidget({
             type: "bi.default",
             tagName: "tr"
-        }, this);
+        });
 
         for (var i = 0; i < arr.length; i++) {
-            var w = BI.createWidget(arr[i], this);
+            var w = BI.createWidget(arr[i]);
             w.element.css({position: "relative", top: "0", left: "0", margin: "0px auto"});
             if (arr[i].lgap) {
                 w.element.css({"margin-left": arr[i].lgap + "px"});
@@ -25396,7 +25396,7 @@ BI.TdLayout = BI.inherit(BI.Layout, {
                 },
                 tagName: "td",
                 items: [w]
-            }, this);
+            });
             td.element.css({
                 position: "relative",
                 "vertical-align": "middle",
@@ -25600,7 +25600,7 @@ BI.WindowLayout = BI.inherit(BI.Layout, {
                     throw new Error("item be required");
                 }
                 if (!this.hasWidget(this.getName() + i + "_" + j)) {
-                    var w = BI.createWidget(o.items[i][j], this);
+                    var w = BI.createWidget(o.items[i][j]);
                     w.element.css({position: "absolute"});
                     this.addWidget(this.getName() + i + "_" + j, w);
                 }
@@ -25732,12 +25732,12 @@ BI.CenterLayout = BI.inherit(BI.Layout, {
                 el: BI.createWidget({
                     type: "bi.default",
                     cls: "center-element " + (i === 0 ? "first-element " : "") + (i === items.length - 1 ? "last-element" : "")
-                }, self)
+                })
             });
         });
         BI.each(items, function (i, item) {
             if (item) {
-                var w = BI.createWidget(item, self);
+                var w = BI.createWidget(item);
                 w.element.css({
                     position: "absolute",
                     left: o.hgap + o.lgap,
@@ -25801,7 +25801,7 @@ BI.FloatCenterLayout = BI.inherit(BI.Layout, {
         BI.each(items, function (i) {
             var widget = BI.createWidget({
                 type: "bi.default"
-            }, self);
+            });
             widget.element.addClass("center-element " + (i === 0 ? "first-element " : "") + (i === items.length - 1 ? "last-element" : "")).css({
                 width: width + "%",
                 height: "100%"
@@ -25812,7 +25812,7 @@ BI.FloatCenterLayout = BI.inherit(BI.Layout, {
         });
         BI.each(items, function (i, item) {
             if (item) {
-                var w = BI.createWidget(item, self);
+                var w = BI.createWidget(item);
                 w.element.css({
                     position: "absolute",
                     left: o.hgap + o.lgap,
@@ -25878,12 +25878,12 @@ BI.HorizontalCenterLayout = BI.inherit(BI.Layout, {
                 el: BI.createWidget({
                     type: "bi.default",
                     cls: "center-element " + (i === 0 ? "first-element " : "") + (i === items.length - 1 ? "last-element" : "")
-                }, self)
+                })
             });
         });
         BI.each(items, function (i, item) {
             if (item) {
-                var w = BI.createWidget(item, self);
+                var w = BI.createWidget(item);
                 w.element.css({
                     position: "absolute",
                     left: o.hgap + o.lgap,
@@ -25950,12 +25950,12 @@ BI.VerticalCenterLayout = BI.inherit(BI.Layout, {
                 el: BI.createWidget({
                     type: "bi.default",
                     cls: "center-element " + (i === 0 ? "first-element " : "") + (i === items.length - 1 ? "last-element" : "")
-                }, self)
+                })
             });
         });
         BI.each(items, function (i, item) {
             if (item) {
-                var w = BI.createWidget(item, self);
+                var w = BI.createWidget(item);
                 w.element.css({
                     position: "absolute",
                     left: o.hgap + o.lgap,
@@ -41515,7 +41515,7 @@ BI.PopupView = BI.inherit(BI.Widget, {
 
     _createView: function () {
         var o = this.options;
-        this.button_group = BI.createWidget(o.el, {type: "bi.button_group", value: o.value}, this);
+        this.button_group = BI.createWidget(o.el, {type: "bi.button_group", value: o.value});
         this.button_group.element.css({"min-height": o.minHeight + "px"});
         return this.button_group;
     },
@@ -41525,7 +41525,7 @@ BI.PopupView = BI.inherit(BI.Widget, {
         if (false === o.tool) {
             return;
         }
-        return BI.createWidget(o.tool, this);
+        return BI.createWidget(o.tool);
     },
 
     _createTab: function () {
@@ -41539,7 +41539,7 @@ BI.PopupView = BI.inherit(BI.Widget, {
             height: 25,
             items: o.tabs,
             value: o.value
-        }, this);
+        });
     },
 
     _createToolBar: function () {
@@ -41557,7 +41557,7 @@ BI.PopupView = BI.inherit(BI.Widget, {
                 shadow: true,
                 isShadowShowingOnSelected: true
             })
-        }, this);
+        });
     },
 
     getView: function () {

@@ -80,10 +80,10 @@ BI.TdLayout = BI.inherit(BI.Layout, {
         var tr = BI.createWidget({
             type: "bi.default",
             tagName: "tr"
-        }, this);
+        });
 
         for (var i = 0; i < arr.length; i++) {
-            var w = BI.createWidget(arr[i], this);
+            var w = BI.createWidget(arr[i]);
             w.element.css({position: "relative", top: "0", left: "0", margin: "0px auto"});
             if (arr[i].lgap) {
                 w.element.css({"margin-left": arr[i].lgap + "px"});
@@ -105,7 +105,7 @@ BI.TdLayout = BI.inherit(BI.Layout, {
                 },
                 tagName: "td",
                 items: [w]
-            }, this);
+            });
             td.element.css({
                 position: "relative",
                 "vertical-align": "middle",

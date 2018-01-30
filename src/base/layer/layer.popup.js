@@ -93,7 +93,7 @@ BI.PopupView = BI.inherit(BI.Widget, {
 
     _createView: function () {
         var o = this.options;
-        this.button_group = BI.createWidget(o.el, {type: "bi.button_group", value: o.value}, this);
+        this.button_group = BI.createWidget(o.el, {type: "bi.button_group", value: o.value});
         this.button_group.element.css({"min-height": o.minHeight + "px"});
         return this.button_group;
     },
@@ -103,7 +103,7 @@ BI.PopupView = BI.inherit(BI.Widget, {
         if (false === o.tool) {
             return;
         }
-        return BI.createWidget(o.tool, this);
+        return BI.createWidget(o.tool);
     },
 
     _createTab: function () {
@@ -117,7 +117,7 @@ BI.PopupView = BI.inherit(BI.Widget, {
             height: 25,
             items: o.tabs,
             value: o.value
-        }, this);
+        });
     },
 
     _createToolBar: function () {
@@ -135,7 +135,7 @@ BI.PopupView = BI.inherit(BI.Widget, {
                 shadow: true,
                 isShadowShowingOnSelected: true
             })
-        }, this);
+        });
     },
 
     getView: function () {

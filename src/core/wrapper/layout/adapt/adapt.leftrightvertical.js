@@ -43,7 +43,7 @@ BI.LeftRightVerticalAdaptLayout = BI.inherit(BI.Layout, {
                 hgap: o.lhgap,
                 lgap: o.llgap,
                 rgap: o.lrgap
-            }, this);
+            });
             left.element.css("height", "100%");
             BI.createWidget({
                 type: "bi.left",
@@ -58,7 +58,7 @@ BI.LeftRightVerticalAdaptLayout = BI.inherit(BI.Layout, {
                 hgap: o.rhgap,
                 lgap: o.rlgap,
                 rgap: o.rrgap
-            }, this);
+            });
             right.element.css("height", "100%");
             BI.createWidget({
                 type: "bi.right",
@@ -108,7 +108,7 @@ BI.LeftVerticalAdaptLayout = BI.inherit(BI.Layout, {
             lgap: o.lgap,
             hgap: o.hgap,
             rgap: o.rgap
-        }, this);
+        });
         left.element.css("height", "100%");
         BI.createWidget({
             type: "bi.left",
@@ -156,7 +156,7 @@ BI.RightVerticalAdaptLayout = BI.inherit(BI.Layout, {
             lgap: o.lgap,
             hgap: o.hgap,
             rgap: o.rgap
-        }, this);
+        });
         right.element.css("height", "100%");
         BI.createWidget({
             type: "bi.right",

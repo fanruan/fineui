@@ -39,12 +39,12 @@ BI.HorizontalCenterLayout = BI.inherit(BI.Layout, {
                 el: BI.createWidget({
                     type: "bi.default",
                     cls: "center-element " + (i === 0 ? "first-element " : "") + (i === items.length - 1 ? "last-element" : "")
-                }, self)
+                })
             });
         });
         BI.each(items, function (i, item) {
             if (item) {
-                var w = BI.createWidget(item, self);
+                var w = BI.createWidget(item);
                 w.element.css({
                     position: "absolute",
                     left: o.hgap + o.lgap,

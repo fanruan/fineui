@@ -51,7 +51,7 @@ BI.FloatHorizontalLayout = BI.inherit(BI.Layout, {
             bgap: o.bgap,
             lgap: o.lgap,
             rgap: o.rgap
-        }, this);
+        });
 
         this.container = BI.createWidget({
             type: "bi.left",

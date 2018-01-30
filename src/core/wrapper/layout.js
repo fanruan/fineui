@@ -85,7 +85,7 @@ BI.Layout = BI.inherit(BI.Widget, {
     _addElement: function (i, item) {
         var self = this, w;
         if (!this.hasWidget(this._getChildName(i))) {
-            w = BI.createWidget(item, this);
+            w = BI.createWidget(item);
             w.on(BI.Events.DESTROY, function () {
                 BI.each(self._children, function (name, child) {
                     if (child === w) {

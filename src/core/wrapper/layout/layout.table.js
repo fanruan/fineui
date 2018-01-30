@@ -114,7 +114,7 @@ BI.TableLayout = BI.inherit(BI.Layout, {
             type: "bi.absolute",
             height: BI.isArray(o.rowSize) ? o.rowSize[this.rows] : o.rowSize,
             items: abs
-        }, this);
+        });
         if (this.rows > 0) {
             this.getWidgetByName(this.getName() + (this.rows - 1)).element.css({
                 "margin-bottom": o.vgap
