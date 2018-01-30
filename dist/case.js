@@ -459,8 +459,10 @@ BI.ArrowNode = BI.inherit(BI.NodeButton, {
         BI.ArrowNode.superclass.doClick.apply(this, arguments);
         this.checkbox.setSelected(this.isOpened());
     },
-    setValue: function (v) {
-        this.text.setValue(v);
+    
+    setText: function (text) {
+        BI.ArrowNode.superclass.setText.apply(this, arguments);
+        this.text.setText(text);
     },
 
     setOpened: function (v) {
