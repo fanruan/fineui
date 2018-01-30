@@ -5188,11 +5188,12 @@ BI.IconCombo = BI.inherit(BI.Widget, {
     },
 
     setValue: function (v) {
-        this.iconCombo.setValue(v);
+        this.trigger.setValue(v);
+        this.popup.setValue(v);
     },
 
     getValue: function () {
-        var value = this.iconCombo.getValue();
+        var value = this.popup.getValue();
         return BI.isNull(value) ? [] : (BI.isArray(value) ? value : [value]);
     },
 
@@ -5418,11 +5419,12 @@ BI.IconTextValueCombo = BI.inherit(BI.Widget, {
     },
 
     setValue: function (v) {
-        this.textIconCombo.setValue(v);
+        this.trigger.setValue(v);
+        this.popup.setValue(v);
     },
 
     getValue: function () {
-        var value = this.textIconCombo.getValue();
+        var value = this.popup.getValue();
         return BI.isNull(value) ? [] : (BI.isArray(value) ? value : [value]);
     },
 
@@ -5550,11 +5552,11 @@ BI.StaticCombo = BI.inherit(BI.Widget, {
     },
 
     setValue: function (v) {
-        this.combo.setValue(v);
+        this.popup.setValue(v);
     },
 
     getValue: function () {
-        var value = this.combo.getValue();
+        var value = this.popup.getValue();
         return BI.isNull(value) ? [] : (BI.isArray(value) ? value : [value]);
     }
 });
@@ -5620,7 +5622,8 @@ BI.TextValueCheckCombo = BI.inherit(BI.Widget, {
     },
 
     setValue: function (v) {
-        this.textIconCheckCombo.setValue(v);
+        this.trigger.setValue(v);
+        this.popup.setValue(v);
     },
 
     setWarningTitle: function (title) {
@@ -5628,7 +5631,7 @@ BI.TextValueCheckCombo = BI.inherit(BI.Widget, {
     },
 
     getValue: function () {
-        var value = this.textIconCheckCombo.getValue();
+        var value = this.popup.getValue();
         return BI.isNull(value) ? [] : (BI.isArray(value) ? value : [value]);
     },
 
@@ -5694,7 +5697,7 @@ BI.SmallTextValueCheckCombo = BI.inherit(BI.Widget, {
     },
 
     getValue: function () {
-        return this.SmallTextIconCheckCombo.getValue();
+        return this.popup.getValue();
     },
 
     populate: function (items) {
@@ -5817,11 +5820,12 @@ BI.TextValueCombo = BI.inherit(BI.Widget, {
     },
 
     setValue: function (v) {
-        this.textIconCombo.setValue(v);
+        this.trigger.setValue(v);
+        this.popup.setValue(v);
     },
 
     getValue: function () {
-        var value = this.textIconCombo.getValue();
+        var value = this.popup.getValue();
         return BI.isNull(value) ? [] : (BI.isArray(value) ? value : [value]);
     },
 
@@ -5883,11 +5887,12 @@ BI.SmallTextValueCombo = BI.inherit(BI.Widget, {
     },
 
     setValue: function (v) {
-        this.SmallTextValueCombo.setValue(v);
+        this.trigger.setValue(v);
+        this.popup.setValue(v);
     },
 
     getValue: function () {
-        return this.SmallTextValueCombo.getValue();
+        return this.popup.getValue();
     },
 
     populate: function (items) {

@@ -50,11 +50,12 @@ BI.SmallTextValueCombo = BI.inherit(BI.Widget, {
     },
 
     setValue: function (v) {
-        this.SmallTextValueCombo.setValue(v);
+        this.trigger.setValue(v);
+        this.popup.setValue(v);
     },
 
     getValue: function () {
-        return this.SmallTextValueCombo.getValue();
+        return this.popup.getValue();
     },
 
     populate: function (items) {

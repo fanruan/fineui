@@ -195,21 +195,9 @@ Demo.WIDGET_CONFIG = [{
     id: 415,
     text: "路径选择"
 }, {
-    pId: 415,
-    text: "bi.path_chooser",
-    value: "demo.path_chooser"
-}, {
-    pId: 415,
-    text: "bi.direction_path_chooser",
-    value: "demo.direction_path_chooser"
-}, {
     pId: 4,
     id: 416,
     text: "关联视图"
-}, {
-    pId: 416,
-    text: "bi.relation_view",
-    value: "demo.relation_view"
 }, {
     pId: 4,
     id: 417,

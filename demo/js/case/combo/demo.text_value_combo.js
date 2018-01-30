@@ -35,7 +35,7 @@ Demo.TextValueCombo = BI.inherit(BI.Widget, {
                 width: 90,
                 height: 25,
                 handler: function () {
-                    combo.setValue("");
+                    combo.setValue(3);
                 }
             }],
             vgap: 20

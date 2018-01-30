@@ -81,11 +81,12 @@ BI.IconCombo = BI.inherit(BI.Widget, {
     },
 
     setValue: function (v) {
-        this.iconCombo.setValue(v);
+        this.trigger.setValue(v);
+        this.popup.setValue(v);
     },
 
     getValue: function () {
-        var value = this.iconCombo.getValue();
+        var value = this.popup.getValue();
         return BI.isNull(value) ? [] : (BI.isArray(value) ? value : [value]);
     },
 
