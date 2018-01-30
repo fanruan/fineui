@@ -11,23 +11,11 @@ Demo.Bubble = BI.inherit(BI.Widget, {
                         btns.push(_ref);
                     },
                     type: "bi.button",
-                    text: "bubble测试",
+                    text: "bubble测试(消息)",
                     height: 30,
                     handler: function () {
-                        BI.Bubbles.show("singleBubble1", "bubble测试", this);
-                    }
-                }
-            }, {
-                el: {
-                    ref: function (_ref) {
-                        btns.push(_ref);
-                    },
-                    type: "bi.button",
-                    text: "bubble测试(居中显示)",
-                    height: 30,
-                    handler: function () {
-                        BI.Bubbles.show("singleBubble2", "bubble测试", this, {
-                            offsetStyle: "center"
+                        BI.Bubbles.show("singleBubble1", "bubble测试", this, {
+                            level: "common"
                         });
                     }
                 }
@@ -37,11 +25,41 @@ Demo.Bubble = BI.inherit(BI.Widget, {
                         btns.push(_ref);
                     },
                     type: "bi.button",
-                    text: "bubble测试(右边显示)",
+                    text: "bubble测试(成功)",
+                    height: 30,
+                    handler: function () {
+                        BI.Bubbles.show("singleBubble2", "bubble测试", this, {
+                            offsetStyle: "center",
+                            level: "success"
+                        });
+                    }
+                }
+            }, {
+                el: {
+                    ref: function (_ref) {
+                        btns.push(_ref);
+                    },
+                    type: "bi.button",
+                    text: "bubble测试(错误)",
                     height: 30,
                     handler: function () {
                         BI.Bubbles.show("singleBubble3", "bubble测试", this, {
-                            offsetStyle: "right"
+                            offsetStyle: "right",
+                            level: "error"
+                        });
+                    }
+                }
+            }, {
+                el: {
+                    ref: function (_ref) {
+                        btns.push(_ref);
+                    },
+                    type: "bi.button",
+                    text: "bubble测试(警告)",
+                    height: 30,
+                    handler: function () {
+                        BI.Bubbles.show("singleBubble4", "bubble测试", this, {
+                            level: "warning"
                         });
                     }
                 }

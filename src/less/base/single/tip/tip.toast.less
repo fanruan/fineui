@@ -2,13 +2,23 @@
 
 .bi-toast{
   font-size: @font-size-14;
+  color: @color-bi-text;
+  max-width: 400px;
+  min-width: 150px;
   .border-radius(2px);
   &.toast-success{
-    background: @color-bi-background-light-success;
-    color: @color-bi-text-success;
+    background: @color-bi-background-success;
   }
   &.toast-warning{
-    background: @color-bi-background-light-failure;
-    color: @color-bi-text-failure;
+    background: @color-bi-background-warning;
+  }
+  &.toast-error{
+    background: @color-bi-background-failure;
+  }
+  &.toast-normal{
+    background: @color-bi-background-highlight;
+  }
+  & .toast-icon{
+    font-size: 16px;
   }
 }

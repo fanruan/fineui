@@ -1183,8 +1183,22 @@ body .bi-button.button-ignore.disabled.clear:active,
   -webkit-border-radius: 2px;
   -moz-border-radius: 2px;
   border-radius: 2px;
+}
+.bi-bubble .bubble-error {
   background: #ffecec;
   color: #ff4949;
+}
+.bi-bubble .bubble-common {
+  background: #eaf2fd;
+  color: #3685f2;
+}
+.bi-bubble .bubble-success {
+  background: #e1f4e7;
+  color: #5cb75d;
+}
+.bi-bubble .bubble-warning {
+  background: #feeed7;
+  color: #faaa39;
 }
 
 .bi-tip {
@@ -1193,17 +1207,27 @@ body .bi-button.button-ignore.disabled.clear:active,
 
 .bi-toast {
   font-size: 14px;
+  color: #ffffff;
+  max-width: 400px;
+  min-width: 150px;
   -webkit-border-radius: 2px;
   -moz-border-radius: 2px;
   border-radius: 2px;
 }
 .bi-toast.toast-success {
-  background: #e1f4e7;
-  color: #5cb75d;
+  background: #58cc7d;
 }
 .bi-toast.toast-warning {
-  background: #ffecec;
-  color: #ff4949;
+  background: #faaa39;
+}
+.bi-toast.toast-error {
+  background: #ff4949;
+}
+.bi-toast.toast-normal {
+  background: #3f8ce8;
+}
+.bi-toast .toast-icon {
+  font-size: 16px;
 }
 
 .bi-tooltip {
@@ -1225,17 +1249,27 @@ body .bi-button.button-ignore.disabled.clear:active,
 }
 .bi-toast {
   font-size: 14px;
+  color: #ffffff;
+  max-width: 400px;
+  min-width: 150px;
   -webkit-border-radius: 2px;
   -moz-border-radius: 2px;
   border-radius: 2px;
 }
 .bi-toast.toast-success {
-  background: #e1f4e7;
-  color: #5cb75d;
+  background: #58cc7d;
 }
 .bi-toast.toast-warning {
-  background: #ffecec;
-  color: #ff4949;
+  background: #faaa39;
+}
+.bi-toast.toast-error {
+  background: #ff4949;
+}
+.bi-toast.toast-normal {
+  background: #3f8ce8;
+}
+.bi-toast .toast-icon {
+  font-size: 16px;
 }
 .bi-tooltip {
   max-width: 250px;
