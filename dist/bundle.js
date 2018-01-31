@@ -18243,10 +18243,11 @@ BI.BubblesController = BI.inherit(BI.Controller, {
         });
     },
 
-    _createBubble: function (direct, text, height) {
+    _createBubble: function (direct, text, level, height) {
         return BI.createWidget({
             type: "bi.bubble",
             text: text,
+            level: level,
             height: height || 35,
             direction: direct
         });
@@ -18325,11 +18326,12 @@ BI.BubblesController = BI.inherit(BI.Controller, {
         opt || (opt = {});
         var container = opt.container || context;
         var offsetStyle = opt.offsetStyle || {};
+        var level = opt.level || "error";
         if (!this.storeBubbles[name]) {
             this.storeBubbles[name] = {};
         }
         if (!this.storeBubbles[name]["top"]) {
-            this.storeBubbles[name]["top"] = this._createBubble("top", text);
+            this.storeBubbles[name]["top"] = this._createBubble("top", text, level);
         }
         BI.createWidget({
             type: "bi.absolute",
@@ -18344,7 +18346,7 @@ BI.BubblesController = BI.inherit(BI.Controller, {
         this.get(name).invisible();
         if (!$.isTopSpaceEnough(context, this.get(name))) {
             if (!this.storeBubbles[name]["left"]) {
-                this.storeBubbles[name]["left"] = this._createBubble("left", text, 30);
+                this.storeBubbles[name]["left"] = this._createBubble("left", text, level, 30);
             }
             BI.createWidget({
                 type: "bi.absolute",
@@ -18359,7 +18361,7 @@ BI.BubblesController = BI.inherit(BI.Controller, {
             this.get(name).invisible();
             if (!$.isLeftSpaceEnough(context, this.get(name))) {
                 if (!this.storeBubbles[name]["right"]) {
-                    this.storeBubbles[name]["right"] = this._createBubble("right", text, 30);
+                    this.storeBubbles[name]["right"] = this._createBubble("right", text, level, 30);
                 }
                 BI.createWidget({
                     type: "bi.absolute",
@@ -18374,7 +18376,7 @@ BI.BubblesController = BI.inherit(BI.Controller, {
                 this.get(name).invisible();
                 if (!$.isRightSpaceEnough(context, this.get(name))) {
                     if (!this.storeBubbles[name]["bottom"]) {
-                        this.storeBubbles[name]["bottom"] = this._createBubble("bottom", text);
+                        this.storeBubbles[name]["bottom"] = this._createBubble("bottom", text, level);
                     }
                     BI.createWidget({
                         type: "bi.absolute",
@@ -40748,11 +40750,15 @@ $.extend(BI, {
             prompt: function (title, message, value, callback, min_width) {
                 // BI.Msg.prompt(title, message, value, callback, min_width);
             },
-            toast: function (message, level, context) {
+            toast: function (message, options, context) {
+                options = options || {};
                 context = context || $("body");
+                var level = options.level || "normal";
+                var autoClose = BI.isNull(options.autoClose) ? true : options.autoClose;
                 var toast = BI.createWidget({
                     type: "bi.toast",
                     level: level,
+                    autoClose: autoClose,
                     text: message
                 });
                 BI.createWidget({
@@ -40761,16 +40767,12 @@ $.extend(BI, {
                     items: [{
                         el: toast,
                         left: "50%",
-                        top: 0
+                        top: 10
                     }]
                 });
-                if (toast.element.outerWidth() > context.outerWidth()) {
-                    toast.setWidth(context.width());
-                }
                 toast.element.css({"margin-left": -1 * toast.element.outerWidth() / 2});
-                toast.invisible();
                 toast.element.slideDown(500, function () {
-                    BI.delay(function () {
+                    autoClose && BI.delay(function () {
                         toast.element.slideUp(500, function () {
                             toast.destroy();
                         });
@@ -46346,6 +46348,7 @@ BI.Bubble = BI.inherit(BI.Tip, {
             extraCls: "bi-bubble",
             direction: "top",
             text: "",
+            level: "error",
             height: 35
         });
     },
@@ -46365,10 +46368,11 @@ BI.Bubble = BI.inherit(BI.Tip, {
     },
 
     _createBubbleText: function () {
+        var o = this.options;
         return (this.text = BI.createWidget({
             type: "bi.label",
-            cls: "bubble-text",
-            text: this.options.text,
+            cls: "bubble-text" + (" bubble-" + o.level),
+            text: o.text,
             hgap: 10,
             height: 30
         }));
@@ -46449,20 +46453,19 @@ BI.shortcut("bi.bubble", BI.Bubble);/**
 BI.Toast = BI.inherit(BI.Tip, {
     _const: {
         minWidth: 200,
-        hgap: 20
+        hgap: 10
     },
 
     _defaultConfig: function () {
         return BI.extend(BI.Toast.superclass._defaultConfig.apply(this, arguments), {
             extraCls: "bi-toast",
             text: "",
-            level: "success", // success或warning
-            height: 30
+            level: "success" // success或warning
         });
     },
     _init: function () {
         BI.Toast.superclass._init.apply(this, arguments);
-        var o = this.options;
+        var self = this, o = this.options;
         this.element.css({
             minWidth: this._const.minWidth + "px"
         });
@@ -46474,17 +46477,57 @@ BI.Toast = BI.inherit(BI.Tip, {
         };
         this.element.bind({click: fn, mousedown: fn, mouseup: fn, mouseover: fn, mouseenter: fn, mouseleave: fn, mousemove: fn});
 
-        this.text = BI.createWidget({
-            type: "bi.label",
-            element: this,
-            text: o.text,
-            height: 30,
-            hgap: this._const.hgap
-        });
-    },
+        var cls = "close-font";
+        switch(o.level) {
+            case "success":
+                break;
+            case "error":
+                break;
+            case "warning":
+                break;
+            case "normal":
+            default:
+                break;
+        }
 
-    setWidth: function (width) {
-        this.element.width(width);
+        var items = [{
+            type: "bi.center_adapt",
+            cls: cls + " toast-icon",
+            items: [{
+                type: "bi.icon"
+            }],
+            width: 36
+        }, {
+            el: {
+                type: "bi.label",
+                whiteSpace: "normal",
+                text: o.text,
+                textAlign: "left"
+            },
+            rgap: o.autoClose ? this._const.hgap : 0
+        }];
+
+        var columnSize = [36, ""];
+
+        if(o.autoClose === false) {
+            items.push({
+                type: "bi.icon_button",
+                cls: "close-font toast-icon",
+                handler: function () {
+                    self.destroy();
+                },
+                width: 36
+            });
+            columnSize.push(36);
+        }
+
+        this.text = BI.createWidget({
+            type: "bi.horizontal_adapt",
+            element: this,
+            items: items,
+            vgap: 5,
+            columnSize: columnSize
+        });
     },
 
     setText: function (text) {

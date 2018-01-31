@@ -11,6 +11,7 @@ BI.Bubble = BI.inherit(BI.Tip, {
             extraCls: "bi-bubble",
             direction: "top",
             text: "",
+            level: "error",
             height: 35
         });
     },
@@ -30,10 +31,11 @@ BI.Bubble = BI.inherit(BI.Tip, {
     },
 
     _createBubbleText: function () {
+        var o = this.options;
         return (this.text = BI.createWidget({
             type: "bi.label",
-            cls: "bubble-text",
-            text: this.options.text,
+            cls: "bubble-text" + (" bubble-" + o.level),
+            text: o.text,
             hgap: 10,
             height: 30
         }));

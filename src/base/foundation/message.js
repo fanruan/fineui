@@ -18,11 +18,15 @@ $.extend(BI, {
             prompt: function (title, message, value, callback, min_width) {
                 // BI.Msg.prompt(title, message, value, callback, min_width);
             },
-            toast: function (message, level, context) {
+            toast: function (message, options, context) {
+                options = options || {};
                 context = context || $("body");
+                var level = options.level || "normal";
+                var autoClose = BI.isNull(options.autoClose) ? true : options.autoClose;
                 var toast = BI.createWidget({
                     type: "bi.toast",
                     level: level,
+                    autoClose: autoClose,
                     text: message
                 });
                 BI.createWidget({
@@ -31,16 +35,12 @@ $.extend(BI, {
                     items: [{
                         el: toast,
                         left: "50%",
-                        top: 0
+                        top: 10
                     }]
                 });
-                if (toast.element.outerWidth() > context.outerWidth()) {
-                    toast.setWidth(context.width());
-                }
                 toast.element.css({"margin-left": -1 * toast.element.outerWidth() / 2});
-                toast.invisible();
                 toast.element.slideDown(500, function () {
-                    BI.delay(function () {
+                    autoClose && BI.delay(function () {
                         toast.element.slideUp(500, function () {
                             toast.destroy();
                         });

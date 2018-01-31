@@ -1460,23 +1460,11 @@ BI.shortcut("demo.table_view", Demo.Func);Demo.Bubble = BI.inherit(BI.Widget, {
                         btns.push(_ref);
                     },
                     type: "bi.button",
-                    text: "bubble测试",
+                    text: "bubble测试(消息)",
                     height: 30,
                     handler: function () {
-                        BI.Bubbles.show("singleBubble1", "bubble测试", this);
-                    }
-                }
-            }, {
-                el: {
-                    ref: function (_ref) {
-                        btns.push(_ref);
-                    },
-                    type: "bi.button",
-                    text: "bubble测试(居中显示)",
-                    height: 30,
-                    handler: function () {
-                        BI.Bubbles.show("singleBubble2", "bubble测试", this, {
-                            offsetStyle: "center"
+                        BI.Bubbles.show("singleBubble1", "bubble测试", this, {
+                            level: "common"
                         });
                     }
                 }
@@ -1486,11 +1474,41 @@ BI.shortcut("demo.table_view", Demo.Func);Demo.Bubble = BI.inherit(BI.Widget, {
                         btns.push(_ref);
                     },
                     type: "bi.button",
-                    text: "bubble测试(右边显示)",
+                    text: "bubble测试(成功)",
+                    height: 30,
+                    handler: function () {
+                        BI.Bubbles.show("singleBubble2", "bubble测试", this, {
+                            offsetStyle: "center",
+                            level: "success"
+                        });
+                    }
+                }
+            }, {
+                el: {
+                    ref: function (_ref) {
+                        btns.push(_ref);
+                    },
+                    type: "bi.button",
+                    text: "bubble测试(错误)",
                     height: 30,
                     handler: function () {
                         BI.Bubbles.show("singleBubble3", "bubble测试", this, {
-                            offsetStyle: "right"
+                            offsetStyle: "right",
+                            level: "error"
+                        });
+                    }
+                }
+            }, {
+                el: {
+                    ref: function (_ref) {
+                        btns.push(_ref);
+                    },
+                    type: "bi.button",
+                    text: "bubble测试(警告)",
+                    height: 30,
+                    handler: function () {
+                        BI.Bubbles.show("singleBubble4", "bubble测试", this, {
+                            level: "warning"
                         });
                     }
                 }
@@ -1551,7 +1569,7 @@ BI.shortcut("demo.title", Demo.Title);Demo.Toast = BI.inherit(BI.Widget, {
             {
                 el: {
                     type: "bi.button",
-                    text: "简单Toast测试",
+                    text: "简单Toast测试(success)",
                     height: 30,
                     handler: function () {
                         BI.Msg.toast("这是一条简单的数据");
@@ -1560,29 +1578,45 @@ BI.shortcut("demo.title", Demo.Title);Demo.Toast = BI.inherit(BI.Widget, {
             }, {
                 el: {
                     type: "bi.button",
-                    text: "很长的Toast测试",
+                    text: "很长的Toast测试(normal)",
                     height: 30,
                     handler: function () {
-                        BI.Msg.toast("这是一条很长很长很长很长很长很长很长很长很长很长很长很长很长很长很长很长很长很长很长很长很长很长很长很长很长很长很长很长很长很长很长很长很长很长很长很长很长很长很长很长很长很长很长很长很长很长很长很长的数据");
+                        BI.Msg.toast("这是一条很长很长很长很长很长很长很长很长很长很长很长很长很长很长很长很长很长很长很长很长很长很长很长很长很长很长很长很长很长很长很长很长很长很长很长很长很长很长很长很长很长很长很长很长很长很长很长很长的数据", {
+                            level: "normal"
+                        });
                     }
                 }
             }, {
                 el: {
                     type: "bi.button",
-                    text: "非常长的Toast测试",
+                    text: "非常长的Toast测试(warning)",
                     height: 30,
                     handler: function () {
-                        BI.Msg.toast("这是一条非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长的数据");
+                        BI.Msg.toast("这是一条非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长的数据", {
+                            level: "warning"
+                        });
                     }
                 }
             }, {
                 el: {
                     type: "bi.button",
-                    text: "错误提示Toast测试",
-                    level: "warning",
+                    text: "错误提示Toast测试(error)",
                     height: 30,
                     handler: function () {
-                        BI.Msg.toast("错误提示Toast测试", "warning");
+                        BI.Msg.toast("错误提示Toast测试", {
+                            level: "error"
+                        });
+                    }
+                }
+            }, {
+                el: {
+                    type: "bi.button",
+                    text: "错误提示Toast测试(error), 此toast不会自动消失",
+                    height: 30,
+                    handler: function () {
+                        BI.Msg.toast("错误提示Toast测试", {
+                            autoClose: false
+                        });
                     }
                 }
             }
