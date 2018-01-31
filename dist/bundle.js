@@ -63142,7 +63142,7 @@ BI.IconArrowNode = BI.inherit(BI.NodeButton, {
         BI.IconArrowNode.superclass._init.apply(this, arguments);
         var self = this, o = this.options;
         this.checkbox = BI.createWidget({
-            type: "bi.tree_group_node_checkbox",
+            type: "bi.arrow_group_node_checkbox",
             width: 23,
             stopPropagation: true
         });

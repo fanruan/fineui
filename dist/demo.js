@@ -11621,6 +11621,10 @@ Demo.Nodes = BI.inherit(BI.Widget, {
             }, {
                 type: "bi.arrow_group_node",
                 text: "箭头节点"
+            }, {
+                type: "bi.icon_arrow_node",
+                iconCls: "search-font",
+                text: "箭头图标节点"
             }]
         };
     }
