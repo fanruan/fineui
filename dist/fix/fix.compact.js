@@ -23,7 +23,7 @@
     var targetStack = [];
 
     function pushTarget (_target) {
-        if (_target) targetStack.push(_target);
+        if (target) targetStack.push(target)
         Fix.Model.target = target = _target;
     }
 
@@ -35,7 +35,7 @@
     var contextStack = [];
 
     function pushContext (_context) {
-        if (_context) contextStack.push(_context);
+        if (context) contextStack.push(context)
         Fix.Model.context = context = _context;
     }
 
