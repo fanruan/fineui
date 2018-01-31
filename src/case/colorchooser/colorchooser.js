@@ -50,6 +50,7 @@ BI.ColorChooser = BI.inherit(BI.Widget, {
                     }]
                 },
                 stopPropagation: false,
+                minWidth: 202,
                 minWidth: 202
             },
             value: o.value
