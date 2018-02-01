@@ -187,11 +187,6 @@
     * [time_interval](detailed/date/time_interval.md)
 * 数值区间控件
     * [number_interval](detailed/number_interval.md)
-* 路径选择
-    * [path_chooser](detailed/path/path_chooser.md)
-    * [direction_path_chooser](detailed/path/direction_path_chooser.md)
-* 关联视图
-    * [relation_view](detailed/relation_view.md)
 * 文件管理
     * [file_manager](detailed/file_manager.md)
 
