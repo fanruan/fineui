@@ -53,7 +53,6 @@ BI.EditorTrigger = BI.inherit(BI.Trigger, {
                 }, {
                     el: {
                         type: "bi.trigger_icon_button",
-                        cls: "bi-border-left",
                         width: o.triggerWidth || o.height
                     },
                     width: o.triggerWidth || o.height
