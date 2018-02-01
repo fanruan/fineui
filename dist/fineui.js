@@ -65313,11 +65313,6 @@ BI.PlusGroupNode = BI.inherit(BI.NodeButton, {
 BI.shortcut("bi.plus_group_node", BI.PlusGroupNode);/**
  * Created by Windy on 2018/2/1.
  */
-/**
- * guy
- * 复选框item
- * @type {*|void|Object}
- */
 BI.Switch = BI.inherit(BI.BasicButton, {
 
     props: {
