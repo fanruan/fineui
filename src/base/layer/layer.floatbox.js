@@ -65,7 +65,7 @@ BI.FloatBox = BI.inherit(BI.Widget, {
                                 el: {
                                     type: "bi.icon_button",
                                     cls: "bi-message-close close-font",
-                                    height: 50,
+                                    height: 36,
                                     handler: function () {
                                         self.currentSectionProvider.close();
                                     }
@@ -74,7 +74,7 @@ BI.FloatBox = BI.inherit(BI.Widget, {
                             }
                         }
                     },
-                    height: 50
+                    height: 36
                 },
                 center: {
                     el: {
