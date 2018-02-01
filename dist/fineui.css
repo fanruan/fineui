@@ -3167,6 +3167,21 @@ body .bi-button.button-ignore.disabled.ghost .b-font:before,
 .bi-single-select-icon-text-item.active .b-font:before {
   color: #3685f2;
 }
+.bi-switch {
+  -webkit-border-radius: 40px 40px 40px 40px;
+  -moz-border-radius: 40px 40px 40px 40px;
+  border-radius: 40px 40px 40px 40px;
+  background-color: #d4dadd;
+}
+.bi-switch:active,
+.bi-switch.active {
+  background-color: #3f8ce8;
+}
+.bi-switch .circle-button {
+  -webkit-border-radius: 9px 9px 9px 9px;
+  -moz-border-radius: 9px 9px 9px 9px;
+  border-radius: 9px 9px 9px 9px;
+}
 .bi-code-editor .param {
   color: #ffffff;
   padding: 0 5px;

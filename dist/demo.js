@@ -11594,6 +11594,9 @@ Demo.Items = BI.inherit(BI.Widget, {
             }, {
                 type: "bi.multi_select_item",
                 text: "复选项"
+            }, {
+                type: "bi.switch",
+                selected: true
             }],
             hgap: 300
         };
