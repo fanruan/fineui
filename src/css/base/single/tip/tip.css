@@ -1,3 +1,70 @@
+.bi-bubble {
+  font-size: 14px;
+}
+.bi-bubble .bubble-text {
+  -webkit-border-radius: 2px;
+  -moz-border-radius: 2px;
+  border-radius: 2px;
+}
+.bi-bubble .bubble-error {
+  background: #ffecec;
+  color: #ff4949;
+}
+.bi-bubble .bubble-common {
+  background: #eaf2fd;
+  color: #3685f2;
+}
+.bi-bubble .bubble-success {
+  background: #e1f4e7;
+  color: #5cb75d;
+}
+.bi-bubble .bubble-warning {
+  background: #feeed7;
+  color: #faaa39;
+}
+
 .bi-tip {
   position: fixed !important;
+}
+
+.bi-toast {
+  font-size: 14px;
+  color: #ffffff;
+  max-width: 400px;
+  min-width: 150px;
+  -webkit-border-radius: 2px;
+  -moz-border-radius: 2px;
+  border-radius: 2px;
+}
+.bi-toast.toast-success {
+  background: #58cc7d;
+}
+.bi-toast.toast-warning {
+  background: #faaa39;
+}
+.bi-toast.toast-error {
+  background: #ff4949;
+}
+.bi-toast.toast-normal {
+  background: #3f8ce8;
+}
+.bi-toast .toast-icon {
+  font-size: 16px;
+}
+
+.bi-tooltip {
+  max-width: 250px;
+  -webkit-border-radius: 2px;
+  -moz-border-radius: 2px;
+  border-radius: 2px;
+  font-size: 12px;
+  color: #ffffff;
+}
+.bi-tooltip.tooltip-success {
+  background: #647185;
+  border: 1px solid #647185;
+}
+.bi-tooltip.tooltip-warning {
+  background: #ff4949;
+  border: 1px solid #e85050;
 }

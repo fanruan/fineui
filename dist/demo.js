@@ -5654,6 +5654,14 @@ Demo.FIX_CONFIG = [{
     value: "demo.down_list"
 }, {
     pId: 4,
+    id: 421,
+    text: "单选下拉框"
+}, {
+    pId: 421,
+    text: "bi.single_select_combo",
+    value: "demo.single_select_combo"
+}, {
+    pId: 4,
     id: 406,
     text: "复选下拉框"
 }, {
@@ -5750,18 +5758,6 @@ Demo.FIX_CONFIG = [{
     value: "demo.number_interval"
 }, {
     pId: 4,
-    id: 415,
-    text: "路径选择"
-}, {
-    pId: 4,
-    id: 416,
-    text: "关联视图"
-}, {
-    pId: 4,
-    id: 417,
-    text: "布局"
-}, {
-    pId: 4,
     id: 419,
     text: "文件管理"
 }, {
@@ -5772,14 +5768,6 @@ Demo.FIX_CONFIG = [{
     id: 420,
     text: "滚动sliders",
     value: "demo.slider"
-}, {
-    pId: 4,
-    id: 421,
-    text: "单选下拉框"
-}, {
-    pId: 421,
-    text: "bi.single_select_combo",
-    value: "demo.single_select_combo"
 }];Demo.Func = BI.inherit(BI.Widget, {
     props: {
         baseCls: "demo-func"
