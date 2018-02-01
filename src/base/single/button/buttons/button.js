@@ -22,6 +22,7 @@
                 level: "common",
                 block: false, // 是否块状显示，即不显示边框，没有最小宽度的限制
                 clear: false, // 是否去掉边框和背景
+                ghost: false, // 是否幽灵显示, 即正常状态无背景
                 textAlign: "center",
                 whiteSpace: "nowrap",
                 forceCenter: false,

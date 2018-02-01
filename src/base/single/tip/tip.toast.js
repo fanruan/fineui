@@ -31,17 +31,20 @@ BI.Toast = BI.inherit(BI.Tip, {
             return false;
         };
         this.element.bind({click: fn, mousedown: fn, mouseup: fn, mouseover: fn, mouseenter: fn, mouseleave: fn, mousemove: fn});
-
         var cls = "close-font";
         switch(o.level) {
             case "success":
+                cls = "toast-success-font";
                 break;
             case "error":
+                cls = "toast-error-font";
                 break;
             case "warning":
+                cls = "toast-warning-font";
                 break;
             case "normal":
             default:
+                cls = "toast-message-font";
                 break;
         }
 

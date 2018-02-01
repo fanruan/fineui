@@ -42579,6 +42579,7 @@ BI.shortcut("bi.image_button", BI.ImageButton);(function ($) {
                 level: "common",
                 block: false, // 是否块状显示，即不显示边框，没有最小宽度的限制
                 clear: false, // 是否去掉边框和背景
+                ghost: false, // 是否幽灵显示, 即正常状态无背景
                 textAlign: "center",
                 whiteSpace: "nowrap",
                 forceCenter: false,
@@ -46476,17 +46477,20 @@ BI.Toast = BI.inherit(BI.Tip, {
             return false;
         };
         this.element.bind({click: fn, mousedown: fn, mouseup: fn, mouseover: fn, mouseenter: fn, mouseleave: fn, mousemove: fn});
-
         var cls = "close-font";
         switch(o.level) {
             case "success":
+                cls = "toast-success-font";
                 break;
             case "error":
+                cls = "toast-error-font";
                 break;
             case "warning":
+                cls = "toast-warning-font";
                 break;
             case "normal":
             default:
+                cls = "toast-message-font";
                 break;
         }
 
@@ -66154,6 +66158,7 @@ BI.ColorChooser = BI.inherit(BI.Widget, {
                     }]
                 },
                 stopPropagation: false,
+                minWidth: 202,
                 minWidth: 202
             },
             value: o.value
@@ -76369,7 +76374,6 @@ BI.TextTrigger = BI.inherit(BI.Trigger, {
         });
         this.trigerButton = BI.createWidget({
             type: "bi.trigger_icon_button",
-            cls: "bi-border-left",
             width: o.triggerWidth || o.height
         });
 
