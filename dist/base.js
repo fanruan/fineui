@@ -16520,7 +16520,7 @@ BI.shortcut("bi.image_button", BI.ImageButton);(function ($) {
             return BI.extend(conf, {
                 baseCls: (conf.baseCls || "") + " bi-button",
                 minWidth: (props.block === true || props.clear === true) ? 0 : 90,
-                shadow: props.clear !== true,
+                shadow: props.clear !== true && props.ghost !== true,
                 isShadowShowingOnSelected: true,
                 readonly: true,
                 iconCls: "",
@@ -16599,6 +16599,9 @@ BI.shortcut("bi.image_button", BI.ImageButton);(function ($) {
             }
             if (o.clear === true) {
                 this.element.addClass("clear");
+            }
+            if (o.ghost === true) {
+                this.element.addClass("ghost");
             }
             if (o.minWidth > 0) {
                 this.element.css({"min-width": o.minWidth + "px"});

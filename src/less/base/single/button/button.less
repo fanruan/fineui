@@ -21,12 +21,28 @@ body .bi-button, #body .bi-button {
       .opacity(0.75);
     }
   }
+  &.ghost {
+    font-size: inherit;
+    background-color: transparent;
+  }
   &.button-common {
     &, & .b-font:before {
       color: @color-bi-text;
     }
     &.clear, &.clear .b-font:before {
       color: @color-bi-text-highlight;
+    }
+    &.ghost{
+      &, & .b-font:before{
+        color: @color-bi-text-highlight;
+      }
+      &:hover{
+        color: @color-bi-text;
+        background-color: @color-bi-background-highlight;
+      }
+      &:active{
+        background-color: @color-bi-background-dark-highlight;
+      }
     }
   }
   &.button-ignore {
@@ -106,6 +122,14 @@ body .bi-button, #body .bi-button {
         .opacity(1);
       }
     }
+    &.ghost {
+      &, & .b-font:before {
+        color: @color-bi-text-highlight !important;
+      }
+      background: transparent !important;
+      border-color: @color-bi-text-highlight !important;
+      .opacity(0.5);
+    }
   }
 }
 
@@ -119,5 +143,35 @@ body .bi-button, #body .bi-button {
   & .bi-button-mask {
     .opacity(0.2);
     background-color: @color-bi-button-mask;
+  }
+}
+
+.bi-theme-dark {
+  body .bi-button, #body .bi-button {
+    &.button-common {
+      &.ghost{
+        &, & .b-font:before{
+          color: @color-bi-text;
+          border-color: @color-bi-border-default;
+        }
+        &:hover{
+          color: @color-bi-text-normal;
+          background-color: @color-bi-background-default;
+        }
+        &:active{
+          .background-color(@color-bi-background-default, 90%);
+        }
+      }
+    }
+    &.button-common.disabled{
+      &.ghost {
+        &, & .b-font:before {
+          color: @color-bi-text !important;
+        }
+        background: transparent !important;
+        border-color: @color-bi-border-default !important;
+        .opacity(0.5);
+      }
+    }
   }
 }
