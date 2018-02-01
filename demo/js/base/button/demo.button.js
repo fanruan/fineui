@@ -28,6 +28,13 @@ Demo.Button = BI.inherit(BI.Widget, {
             }, {
                 el: {
                     type: "bi.button",
+                    text: "表示错误状态的按钮",
+                    level: "error",
+                    height: 30
+                }
+            }, {
+                el: {
+                    type: "bi.button",
                     text: "表示忽略状态的按钮",
                     level: "ignore",
                     height: 30

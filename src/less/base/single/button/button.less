@@ -17,8 +17,11 @@ body .bi-button, #body .bi-button {
     font-size: inherit;
     border-width: 0;
     background-color: transparent;
-    &:hover, &:active {
-      .opacity(0.75);
+    &:hover {
+      .opacity(0.9);
+    }
+    &:active {
+      .opacity(0.8);
     }
   }
   &.ghost {
@@ -41,17 +44,17 @@ body .bi-button, #body .bi-button {
         background-color: @color-bi-background-highlight;
       }
       &:active{
-        background-color: @color-bi-background-dark-highlight;
+        background-color: @color-bi-background-highlight;
       }
     }
   }
   &.button-ignore {
     & {
       &, & .b-font:before {
-        color: @color-bi-text-black;
+        color: @color-bi-text-highlight;
       }
       background-color: @color-bi-background-default;
-      border-color: @color-bi-border-line;
+      border-color: @color-bi-border-highlight;
     }
     &.clear {
       background-color: transparent;
@@ -79,6 +82,22 @@ body .bi-button, #body .bi-button {
       &, & .b-font:before {
         color: @color-bi-text;
       }
+      background-color: @color-bi-background-warning;
+      border-color: @color-bi-border-warning;
+    }
+    &.clear {
+      &, & .b-font:before {
+        color: @color-bi-text-redmark;
+      }
+      background-color: transparent;
+      border-width: 0;
+    }
+  }
+  &.button-error {
+    & {
+      &, & .b-font:before {
+        color: @color-bi-text;
+      }
       background-color: @color-bi-background-failure;
       border-color: @color-bi-border-failure;
     }
@@ -92,6 +111,7 @@ body .bi-button, #body .bi-button {
   }
   &.button-common.disabled,
   &.button-success.disabled,
+  &.button-error.disabled,
   &.button-warning.disabled {
     &, &.base-disabled {
       &, & .b-font:before {
@@ -111,6 +131,7 @@ body .bi-button, #body .bi-button {
   &.button-common.disabled,
   &.button-success.disabled,
   &.button-warning.disabled,
+  &.button-error.disabled,
   &.button-ignore.disabled {
     &.clear {
       &, & .b-font:before {
@@ -134,15 +155,19 @@ body .bi-button, #body .bi-button {
 }
 
 .bi-basic-button {
-  &.button-common, &.button-success, &.button-warning {
-    & .bi-button-mask {
-      .opacity(0.2);
-      background-color: @color-bi-background-default;
+  &.button-common, &.button-success, &.button-warning, &.button-error, &.button-ignore {
+    &:hover{
+      & .bi-button-mask {
+        .opacity(0.1);
+        background-color: @color-bi-background-default;
+      }
     }
-  }
-  & .bi-button-mask {
-    .opacity(0.2);
-    background-color: @color-bi-button-mask;
+    &:active{
+      & .bi-button-mask {
+        .opacity(0.1);
+        background-color: @color-bi-button-mask;
+      }
+    }
   }
 }
 
