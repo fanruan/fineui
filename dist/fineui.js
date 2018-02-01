@@ -43101,7 +43101,7 @@ BI.FloatBox = BI.inherit(BI.Widget, {
                                 el: {
                                     type: "bi.icon_button",
                                     cls: "bi-message-close close-font",
-                                    height: 50,
+                                    height: 36,
                                     handler: function () {
                                         self.currentSectionProvider.close();
                                     }
@@ -43110,7 +43110,7 @@ BI.FloatBox = BI.inherit(BI.Widget, {
                             }
                         }
                     },
-                    height: 50
+                    height: 36
                 },
                 center: {
                     el: {
@@ -44415,6 +44415,9 @@ BI.shortcut("bi.image_button", BI.ImageButton);(function ($) {
             }
             if (o.clear === true) {
                 this.element.addClass("clear");
+            }
+            if (o.ghost === true) {
+                this.element.addClass("ghost");
             }
             if (o.minWidth > 0) {
                 this.element.css({"min-width": o.minWidth + "px"});
@@ -65308,6 +65311,52 @@ BI.PlusGroupNode = BI.inherit(BI.NodeButton, {
 });
 
 BI.shortcut("bi.plus_group_node", BI.PlusGroupNode);/**
+ * Created by Windy on 2018/2/1.
+ */
+BI.Switch = BI.inherit(BI.BasicButton, {
+
+    props: {
+        extraCls: "bi-switch",
+        height: 22,
+        width: 44,
+        logic: {
+            dynamic: false
+        }
+    },
+
+    render: function () {
+        var self = this;
+        return {
+            type: "bi.absolute",
+            ref: function () {
+                self.layout = this;
+            },
+            items: [{
+                el: {
+                    type: "bi.text_button",
+                    cls: "circle-button bi-card"
+                },
+                width: 18,
+                height: 18,
+                top: 2,
+                left: this.options.selected ? 24 : 2
+            }]
+        }
+    },
+
+    setSelected: function (v) {
+        BI.Switch.superclass.setSelected.apply(this, arguments);
+        this.layout.attr("items")[0].left = v ? 24 : 2;
+        this.layout.resize();
+    },
+
+    doClick: function () {
+        BI.Switch.superclass.doClick.apply(this, arguments);
+        this.fireEvent(BI.Switch.EVENT_CHANGE);
+    }
+});
+BI.Switch.EVENT_CHANGE = "EVENT_CHANGE";
+BI.shortcut("bi.switch", BI.Switch);/**
  * guy
  * 复选框item
  * @type {*|void|Object}
@@ -77901,7 +77950,6 @@ BI.EditorTrigger = BI.inherit(BI.Trigger, {
                 }, {
                     el: {
                         type: "bi.trigger_icon_button",
-                        cls: "bi-border-left",
                         width: o.triggerWidth || o.height
                     },
                     width: o.triggerWidth || o.height
@@ -77982,7 +78030,6 @@ BI.IconTextTrigger = BI.inherit(BI.Trigger, {
         });
         this.trigerButton = BI.createWidget({
             type: "bi.trigger_icon_button",
-            cls: "bi-border-left",
             width: o.triggerWidth || o.height
         });
 

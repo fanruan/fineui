@@ -15285,7 +15285,7 @@ BI.FloatBox = BI.inherit(BI.Widget, {
                                 el: {
                                     type: "bi.icon_button",
                                     cls: "bi-message-close close-font",
-                                    height: 50,
+                                    height: 36,
                                     handler: function () {
                                         self.currentSectionProvider.close();
                                     }
@@ -15294,7 +15294,7 @@ BI.FloatBox = BI.inherit(BI.Widget, {
                             }
                         }
                     },
-                    height: 50
+                    height: 36
                 },
                 center: {
                     el: {
@@ -16599,6 +16599,9 @@ BI.shortcut("bi.image_button", BI.ImageButton);(function ($) {
             }
             if (o.clear === true) {
                 this.element.addClass("clear");
+            }
+            if (o.ghost === true) {
+                this.element.addClass("ghost");
             }
             if (o.minWidth > 0) {
                 this.element.css({"min-width": o.minWidth + "px"});

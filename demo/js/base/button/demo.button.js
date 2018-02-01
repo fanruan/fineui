@@ -28,6 +28,13 @@ Demo.Button = BI.inherit(BI.Widget, {
             }, {
                 el: {
                     type: "bi.button",
+                    text: "表示错误状态的按钮",
+                    level: "error",
+                    height: 30
+                }
+            }, {
+                el: {
+                    type: "bi.button",
                     text: "表示忽略状态的按钮",
                     level: "ignore",
                     height: 30
@@ -182,13 +189,28 @@ Demo.Button = BI.inherit(BI.Widget, {
                     text: "文字按钮",
                     height: 30
                 }
+            }, {
+                el: {
+                    type: "bi.button",
+                    text: "幽灵按钮（common）",
+                    ghost: true,
+                    height: 30
+                }
+            }, {
+                el: {
+                    type: "bi.button",
+                    text: "幽灵按钮（common）灰化",
+                    disabled: true,
+                    ghost: true,
+                    height: 30
+                }
             }
         ];
-        BI.each(items, function (i, item) {
-            item.el.handler = function () {
-                BI.Msg.alert("按钮", this.options.text);
-            };
-        });
+        // BI.each(items, function (i, item) {
+        //     item.el.handler = function () {
+        //         BI.Msg.alert("按钮", this.options.text);
+        //     };
+        // });
         return {
             type: "bi.left",
             vgap: 100,

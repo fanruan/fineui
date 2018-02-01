@@ -25,11 +25,19 @@ body .bi-button.clear,
   background-color: transparent;
 }
 body .bi-button.clear:hover,
-#body .bi-button.clear:hover,
+#body .bi-button.clear:hover {
+  opacity: 0.9;
+  filter: alpha(opacity=90);
+}
 body .bi-button.clear:active,
 #body .bi-button.clear:active {
-  opacity: 0.75;
-  filter: alpha(opacity=75);
+  opacity: 0.8;
+  filter: alpha(opacity=80);
+}
+body .bi-button.ghost,
+#body .bi-button.ghost {
+  font-size: inherit;
+  background-color: transparent;
 }
 body .bi-button.button-common,
 #body .bi-button.button-common,
@@ -43,16 +51,31 @@ body .bi-button.button-common.clear .b-font:before,
 #body .bi-button.button-common.clear .b-font:before {
   color: #3685f2;
 }
+body .bi-button.button-common.ghost,
+#body .bi-button.button-common.ghost,
+body .bi-button.button-common.ghost .b-font:before,
+#body .bi-button.button-common.ghost .b-font:before {
+  color: #3685f2;
+}
+body .bi-button.button-common.ghost:hover,
+#body .bi-button.button-common.ghost:hover {
+  color: #ffffff;
+  background-color: #3f8ce8;
+}
+body .bi-button.button-common.ghost:active,
+#body .bi-button.button-common.ghost:active {
+  background-color: #3f8ce8;
+}
 body .bi-button.button-ignore,
 #body .bi-button.button-ignore {
   background-color: #ffffff;
-  border-color: #d4dadd;
+  border-color: #178cdf;
 }
 body .bi-button.button-ignore,
 #body .bi-button.button-ignore,
 body .bi-button.button-ignore .b-font:before,
 #body .bi-button.button-ignore .b-font:before {
-  color: #1a1a1a;
+  color: #3685f2;
 }
 body .bi-button.button-ignore.clear,
 #body .bi-button.button-ignore.clear {
@@ -83,8 +106,8 @@ body .bi-button.button-success.clear .b-font:before,
 }
 body .bi-button.button-warning,
 #body .bi-button.button-warning {
-  background-color: #ff4949;
-  border-color: #e85050;
+  background-color: #faaa39;
+  border-color: #fbb03b;
 }
 body .bi-button.button-warning,
 #body .bi-button.button-warning,
@@ -101,18 +124,44 @@ body .bi-button.button-warning.clear,
 #body .bi-button.button-warning.clear,
 body .bi-button.button-warning.clear .b-font:before,
 #body .bi-button.button-warning.clear .b-font:before {
+  color: #faaa39;
+}
+body .bi-button.button-error,
+#body .bi-button.button-error {
+  background-color: #ff4949;
+  border-color: #e85050;
+}
+body .bi-button.button-error,
+#body .bi-button.button-error,
+body .bi-button.button-error .b-font:before,
+#body .bi-button.button-error .b-font:before {
+  color: #ffffff;
+}
+body .bi-button.button-error.clear,
+#body .bi-button.button-error.clear {
+  background-color: transparent;
+  border-width: 0;
+}
+body .bi-button.button-error.clear,
+#body .bi-button.button-error.clear,
+body .bi-button.button-error.clear .b-font:before,
+#body .bi-button.button-error.clear .b-font:before {
   color: #ff4949;
 }
 body .bi-button.button-common.disabled,
 #body .bi-button.button-common.disabled,
 body .bi-button.button-success.disabled,
 #body .bi-button.button-success.disabled,
+body .bi-button.button-error.disabled,
+#body .bi-button.button-error.disabled,
 body .bi-button.button-warning.disabled,
 #body .bi-button.button-warning.disabled,
 body .bi-button.button-common.disabled.base-disabled,
 #body .bi-button.button-common.disabled.base-disabled,
 body .bi-button.button-success.disabled.base-disabled,
 #body .bi-button.button-success.disabled.base-disabled,
+body .bi-button.button-error.disabled.base-disabled,
+#body .bi-button.button-error.disabled.base-disabled,
 body .bi-button.button-warning.disabled.base-disabled,
 #body .bi-button.button-warning.disabled.base-disabled {
   background: #cccccc !important;
@@ -122,24 +171,32 @@ body .bi-button.button-common.disabled,
 #body .bi-button.button-common.disabled,
 body .bi-button.button-success.disabled,
 #body .bi-button.button-success.disabled,
+body .bi-button.button-error.disabled,
+#body .bi-button.button-error.disabled,
 body .bi-button.button-warning.disabled,
 #body .bi-button.button-warning.disabled,
 body .bi-button.button-common.disabled.base-disabled,
 #body .bi-button.button-common.disabled.base-disabled,
 body .bi-button.button-success.disabled.base-disabled,
 #body .bi-button.button-success.disabled.base-disabled,
+body .bi-button.button-error.disabled.base-disabled,
+#body .bi-button.button-error.disabled.base-disabled,
 body .bi-button.button-warning.disabled.base-disabled,
 #body .bi-button.button-warning.disabled.base-disabled,
 body .bi-button.button-common.disabled .b-font:before,
 #body .bi-button.button-common.disabled .b-font:before,
 body .bi-button.button-success.disabled .b-font:before,
 #body .bi-button.button-success.disabled .b-font:before,
+body .bi-button.button-error.disabled .b-font:before,
+#body .bi-button.button-error.disabled .b-font:before,
 body .bi-button.button-warning.disabled .b-font:before,
 #body .bi-button.button-warning.disabled .b-font:before,
 body .bi-button.button-common.disabled.base-disabled .b-font:before,
 #body .bi-button.button-common.disabled.base-disabled .b-font:before,
 body .bi-button.button-success.disabled.base-disabled .b-font:before,
 #body .bi-button.button-success.disabled.base-disabled .b-font:before,
+body .bi-button.button-error.disabled.base-disabled .b-font:before,
+#body .bi-button.button-error.disabled.base-disabled .b-font:before,
 body .bi-button.button-warning.disabled.base-disabled .b-font:before,
 #body .bi-button.button-warning.disabled.base-disabled .b-font:before {
   color: #ffffff !important;
@@ -161,6 +218,8 @@ body .bi-button.button-success.disabled.clear,
 #body .bi-button.button-success.disabled.clear,
 body .bi-button.button-warning.disabled.clear,
 #body .bi-button.button-warning.disabled.clear,
+body .bi-button.button-error.disabled.clear,
+#body .bi-button.button-error.disabled.clear,
 body .bi-button.button-ignore.disabled.clear,
 #body .bi-button.button-ignore.disabled.clear {
   background: transparent !important;
@@ -172,6 +231,8 @@ body .bi-button.button-success.disabled.clear,
 #body .bi-button.button-success.disabled.clear,
 body .bi-button.button-warning.disabled.clear,
 #body .bi-button.button-warning.disabled.clear,
+body .bi-button.button-error.disabled.clear,
+#body .bi-button.button-error.disabled.clear,
 body .bi-button.button-ignore.disabled.clear,
 #body .bi-button.button-ignore.disabled.clear,
 body .bi-button.button-common.disabled.clear .b-font:before,
@@ -180,6 +241,8 @@ body .bi-button.button-success.disabled.clear .b-font:before,
 #body .bi-button.button-success.disabled.clear .b-font:before,
 body .bi-button.button-warning.disabled.clear .b-font:before,
 #body .bi-button.button-warning.disabled.clear .b-font:before,
+body .bi-button.button-error.disabled.clear .b-font:before,
+#body .bi-button.button-error.disabled.clear .b-font:before,
 body .bi-button.button-ignore.disabled.clear .b-font:before,
 #body .bi-button.button-ignore.disabled.clear .b-font:before {
   color: #9ea6b2 !important;
@@ -190,6 +253,8 @@ body .bi-button.button-success.disabled.clear:hover,
 #body .bi-button.button-success.disabled.clear:hover,
 body .bi-button.button-warning.disabled.clear:hover,
 #body .bi-button.button-warning.disabled.clear:hover,
+body .bi-button.button-error.disabled.clear:hover,
+#body .bi-button.button-error.disabled.clear:hover,
 body .bi-button.button-ignore.disabled.clear:hover,
 #body .bi-button.button-ignore.disabled.clear:hover,
 body .bi-button.button-common.disabled.clear:active,
@@ -198,20 +263,95 @@ body .bi-button.button-success.disabled.clear:active,
 #body .bi-button.button-success.disabled.clear:active,
 body .bi-button.button-warning.disabled.clear:active,
 #body .bi-button.button-warning.disabled.clear:active,
+body .bi-button.button-error.disabled.clear:active,
+#body .bi-button.button-error.disabled.clear:active,
 body .bi-button.button-ignore.disabled.clear:active,
 #body .bi-button.button-ignore.disabled.clear:active {
   opacity: 1;
   filter: alpha(opacity=100);
 }
-.bi-basic-button.button-common .bi-button-mask,
-.bi-basic-button.button-success .bi-button-mask,
-.bi-basic-button.button-warning .bi-button-mask {
-  opacity: 0.2;
-  filter: alpha(opacity=20);
+body .bi-button.button-common.disabled.ghost,
+#body .bi-button.button-common.disabled.ghost,
+body .bi-button.button-success.disabled.ghost,
+#body .bi-button.button-success.disabled.ghost,
+body .bi-button.button-warning.disabled.ghost,
+#body .bi-button.button-warning.disabled.ghost,
+body .bi-button.button-error.disabled.ghost,
+#body .bi-button.button-error.disabled.ghost,
+body .bi-button.button-ignore.disabled.ghost,
+#body .bi-button.button-ignore.disabled.ghost {
+  background: transparent !important;
+  border-color: #3685f2 !important;
+  opacity: 0.5;
+  filter: alpha(opacity=50);
+}
+body .bi-button.button-common.disabled.ghost,
+#body .bi-button.button-common.disabled.ghost,
+body .bi-button.button-success.disabled.ghost,
+#body .bi-button.button-success.disabled.ghost,
+body .bi-button.button-warning.disabled.ghost,
+#body .bi-button.button-warning.disabled.ghost,
+body .bi-button.button-error.disabled.ghost,
+#body .bi-button.button-error.disabled.ghost,
+body .bi-button.button-ignore.disabled.ghost,
+#body .bi-button.button-ignore.disabled.ghost,
+body .bi-button.button-common.disabled.ghost .b-font:before,
+#body .bi-button.button-common.disabled.ghost .b-font:before,
+body .bi-button.button-success.disabled.ghost .b-font:before,
+#body .bi-button.button-success.disabled.ghost .b-font:before,
+body .bi-button.button-warning.disabled.ghost .b-font:before,
+#body .bi-button.button-warning.disabled.ghost .b-font:before,
+body .bi-button.button-error.disabled.ghost .b-font:before,
+#body .bi-button.button-error.disabled.ghost .b-font:before,
+body .bi-button.button-ignore.disabled.ghost .b-font:before,
+#body .bi-button.button-ignore.disabled.ghost .b-font:before {
+  color: #3685f2 !important;
+}
+.bi-basic-button.button-common:hover .bi-button-mask,
+.bi-basic-button.button-success:hover .bi-button-mask,
+.bi-basic-button.button-warning:hover .bi-button-mask,
+.bi-basic-button.button-error:hover .bi-button-mask,
+.bi-basic-button.button-ignore:hover .bi-button-mask {
+  opacity: 0.1;
+  filter: alpha(opacity=10);
   background-color: #ffffff;
 }
-.bi-basic-button .bi-button-mask {
-  opacity: 0.2;
-  filter: alpha(opacity=20);
+.bi-basic-button.button-common:active .bi-button-mask,
+.bi-basic-button.button-success:active .bi-button-mask,
+.bi-basic-button.button-warning:active .bi-button-mask,
+.bi-basic-button.button-error:active .bi-button-mask,
+.bi-basic-button.button-ignore:active .bi-button-mask {
+  opacity: 0.1;
+  filter: alpha(opacity=10);
   background-color: #1a1a1a;
+}
+.bi-theme-dark body .bi-button.button-common.ghost,
+.bi-theme-dark #body .bi-button.button-common.ghost,
+.bi-theme-dark body .bi-button.button-common.ghost .b-font:before,
+.bi-theme-dark #body .bi-button.button-common.ghost .b-font:before {
+  color: #ffffff;
+  border-color: #ffffff;
+}
+.bi-theme-dark body .bi-button.button-common.ghost:hover,
+.bi-theme-dark #body .bi-button.button-common.ghost:hover {
+  color: #3d4d66;
+  background-color: #ffffff;
+}
+.bi-theme-dark body .bi-button.button-common.ghost:active,
+.bi-theme-dark #body .bi-button.button-common.ghost:active {
+  background-color: rgba(255, 255, 255, 0.9);
+  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr=#e6ffffff,endColorstr=#e6ffffff);
+}
+.bi-theme-dark body .bi-button.button-common.disabled.ghost,
+.bi-theme-dark #body .bi-button.button-common.disabled.ghost {
+  background: transparent !important;
+  border-color: #ffffff !important;
+  opacity: 0.5;
+  filter: alpha(opacity=50);
+}
+.bi-theme-dark body .bi-button.button-common.disabled.ghost,
+.bi-theme-dark #body .bi-button.button-common.disabled.ghost,
+.bi-theme-dark body .bi-button.button-common.disabled.ghost .b-font:before,
+.bi-theme-dark #body .bi-button.button-common.disabled.ghost .b-font:before {
+  color: #ffffff !important;
 }

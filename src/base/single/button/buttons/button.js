@@ -95,6 +95,9 @@
             if (o.clear === true) {
                 this.element.addClass("clear");
             }
+            if (o.ghost === true) {
+                this.element.addClass("ghost");
+            }
             if (o.minWidth > 0) {
                 this.element.css({"min-width": o.minWidth + "px"});
             }
