@@ -1,3 +1,8 @@
+
+.bi-excel-table-header-cell {
+  font-weight: bold;
+}
+
 .bi-excel-table > div.bottom-right > div > div > table {
   border-right: 1px solid #d4dadd;
 }
