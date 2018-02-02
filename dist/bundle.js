@@ -67645,7 +67645,77 @@ BI.BubblePopupBarView = BI.inherit(BI.BubblePopupView, {
     }
 });
 BI.BubblePopupBarView.EVENT_CLICK_TOOLBAR_BUTTON = "EVENT_CLICK_TOOLBAR_BUTTON";
-BI.shortcut("bi.bubble_bar_popup_view", BI.BubblePopupBarView);/**
+BI.shortcut("bi.bubble_bar_popup_view", BI.BubblePopupBarView);
+
+/**
+ * Created by Windy on 2018/2/2.
+ *
+ * @class BI.TextBubblePopupBarView
+ * @extends BI.BubblePopupView
+ */
+BI.TextBubblePopupBarView = BI.inherit(BI.Widget, {
+    
+    props: {
+        baseCls: "bi-text-bubble-bar-popup-view",
+        text: "",
+        width: 250
+    },
+
+    render: function(){
+        var self = this, o = this.options;
+        return {
+            type: "bi.bubble_bar_popup_view",
+            ref: function () {
+                self.popup = this;
+            },
+            el: {
+                type: "bi.vertical",
+                items: [{
+                    type: "bi.label",
+                    text: o.text,
+                    whiteSpace: "normal",
+                    textAlign: "left",
+                    ref: function () {
+                        self.text = this;
+                    }
+                }],
+                hgap: 10,
+                tgap: 25,
+                bgap: 10
+            },
+            buttons: [{
+                type: "bi.button",
+                value: BI.i18nText("BI-Basic_Sure"),
+                height: 24,
+                handler: function () {
+                    self.fireEvent(BI.BubblePopupBarView.EVENT_CLICK_TOOLBAR_BUTTON, true);
+                }
+            }, {
+                type: "bi.button",
+                value: BI.i18nText("BI-Basic_Cancel"),
+                level: "ignore",
+                height: 24,
+                handler: function () {
+                    self.fireEvent(BI.BubblePopupBarView.EVENT_CLICK_TOOLBAR_BUTTON, false);
+                }
+            }]
+        }
+    },
+
+    populate: function (v) {
+        this.text.setText(v || this.options.text);
+    },
+
+    showLine: function (direction) {
+        this.popup.showLine(direction);
+    },
+
+    hideLine: function () {
+        this.popup.hideLine();
+    }
+});
+BI.TextBubblePopupBarView.EVENT_CHANGE = "EVENT_CHANGE";
+BI.shortcut("bi.text_bubble_bar_popup_view", BI.TextBubblePopupBarView);/**
  * Created by Young's on 2016/4/28.
  */
 BI.EditorIconCheckCombo = BI.inherit(BI.Widget, {
