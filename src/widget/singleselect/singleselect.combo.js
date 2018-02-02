@@ -168,7 +168,7 @@ BI.SingleSelectCombo = BI.inherit(BI.Single, {
             type: "bi.trigger_icon_button",
             width: o.height,
             height: o.height,
-            cls: "single-select-trigger-icon-button bi-border-left"
+            cls: "single-select-trigger-icon-button"
         });
         triggerBtn.on(BI.TriggerIconButton.EVENT_CHANGE, function () {
             if (self.combo.isViewVisible()) {
