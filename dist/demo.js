@@ -4709,77 +4709,7 @@ BI.shortcut("demo.sort_tree", Demo.SortTree);Demo.Center = BI.inherit(BI.Widget,
         this.tab.setSelect(v);
     }
 });
-BI.shortcut("demo.center", Demo.Center);Demo.Func = BI.inherit(BI.Widget, {
-    props: {
-        baseCls: "demo-func"
-    },
-    render: function () {
-        var self = this;
-        return {
-            type: "bi.tab",
-            ref: function () {
-                self.tab = this;
-            },
-            single: true,
-            cardCreator: function (v) {
-                return {
-                    type: v
-                };
-            }
-        };
-    },
-
-    mounted: function () {
-        var self = this;
-        var items = [[{
-            data: [
-                {x: "孙林", y: 789},
-                {x: "金士鹏", y: 156},
-                {x: "张珊", y: 289},
-                {x: "孙阳", y: 562},
-                {x: "袁成洁", y: 546},
-                {x: "张颖", y: 218},
-                {x: "王伟", y: 541},
-                {x: "张武", y: 219},
-                {x: "韩文", y: 345}
-            ],
-            name: "测试1",
-            stack: 1
-        }, {
-            data: [
-                {x: "孙林", y: 789},
-                {x: "金士鹏", y: 156},
-                {x: "张珊", y: 289},
-                {x: "孙阳", y: 562},
-                {x: "袁成洁", y: 546},
-                {x: "张颖", y: 218},
-                {x: "王伟", y: 541},
-                {x: "张武", y: 219},
-                {x: "韩文", y: 345}
-            ],
-            name: "测试2",
-            stack: 1
-        }]];
-        var types = ["bi.axis_chart", "bi.line_chart", "bi.bar_chart"];
-        var index = 0;
-        this.tab.setSelect(types[index]);
-        this.tab.populate(BI.deepClone(items));
-        this.interval = setInterval(function () {
-            index++;
-            if (index >= types.length) {
-                index = 0;
-            }
-            self.tab.setSelect(types[index]);
-            self.tab.populate(BI.deepClone(items));
-        }, 2000);
-    },
-
-    destroyed: function () {
-        clearInterval(this.interval);
-    }
-});
-BI.shortcut("demo.axis_chart", Demo.Func);
-Demo.TreeValueChooser = BI.inherit(BI.Widget, {
+BI.shortcut("demo.center", Demo.Center);Demo.TreeValueChooser = BI.inherit(BI.Widget, {
     props: {
         baseCls: "demo-tree-value-chooser-combo"
     },
@@ -4851,18 +4781,7 @@ BI.shortcut("demo.value_chooser_combo", Demo.ValueChooserCombo);Demo.ValueChoose
         };
     }
 });
-BI.shortcut("demo.value_chooser_pane", Demo.ValueChooserPane);Demo.ADDONS_CONFIG = [{
-    id: 1000,
-    text: "addons"
-}, {
-    pId: 1000,
-    id: 1001,
-    text: "拓展图表控件"
-}, {
-    pId: 1001,
-    text: "柱状图",
-    value: "demo.axis_chart"
-}];Demo.BASE_CONFIG = [{
+BI.shortcut("demo.value_chooser_pane", Demo.ValueChooserPane);Demo.BASE_CONFIG = [{
     id: 2,
     text: "基础控件",
     open: false
@@ -14096,7 +14015,7 @@ Demo.YearQuarterCombo = BI.inherit(BI.Widget, {
     }
 });
 
-BI.shortcut("demo.year_quarter_combo", Demo.YearQuarterCombo);Demo.CONFIG = Demo.CORE_CONFIG.concat(Demo.BASE_CONFIG).concat(Demo.CASE_CONFIG).concat(Demo.WIDGET_CONFIG).concat(Demo.COMPONENT_CONFIG).concat(Demo.FIX_CONFIG).concat(Demo.ADDONS_CONFIG).concat(Demo.CATEGORY_CONFIG);
+BI.shortcut("demo.year_quarter_combo", Demo.YearQuarterCombo);Demo.CONFIG = Demo.CORE_CONFIG.concat(Demo.BASE_CONFIG).concat(Demo.CASE_CONFIG).concat(Demo.WIDGET_CONFIG).concat(Demo.COMPONENT_CONFIG).concat(Demo.FIX_CONFIG).concat(Demo.CATEGORY_CONFIG);
 
 Demo.CONSTANTS = {
     SIMPLE_ITEMS: BI.map("柳州市城贸金属材料有限责任公司 柳州市建福房屋租赁有限公司 柳州市迅昌数码办公设备有限责任公司 柳州市河海贸易有限责任公司 柳州市花篮制衣厂 柳州市兴溪物资有限公司 柳州市针织总厂 柳州市衡管物资有限公司 柳州市琪成机电设备有限公司 柳州市松林工程机械修理厂".match(/[^\s]+/g), function (i, v) {
