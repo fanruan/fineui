@@ -5611,6 +5611,285 @@ BI.IconTextValueComboPopup = BI.inherit(BI.Pane, {
 });
 BI.IconTextValueComboPopup.EVENT_CHANGE = "EVENT_CHANGE";
 BI.shortcut("bi.icon_text_value_combo_popup", BI.IconTextValueComboPopup);/**
+ * Created by Windy on 2018/2/2.
+ */
+BI.SearchTextValueCombo = BI.inherit(BI.Widget, {
+
+    props: {
+        baseCls: "bi-search-text-value-combo",
+        height: 30,
+        text: "",
+        items: []
+    },
+
+    render: function () {
+        var self = this, o = this.options;
+        return {
+            type: "bi.absolute",
+            items: [{
+                el: {
+                    type: "bi.combo",
+                    adjustLength: 2,
+                    toggle: false,
+                    ref: function () {
+                        self.combo = this;
+                    },
+                    el: {
+                        type: "bi.search_text_value_trigger",
+                        ref: function () {
+                            self.trigger = this;
+                        },
+                        items: o.items,
+                        height: o.height - 2,
+                        text: o.text,
+                        value: o.value,
+                        listeners: [{
+                            eventName: BI.SearchTextValueTrigger.EVENT_CHANGE,
+                            action: function () {
+                                self.setValue(this.getValue());
+                                self.combo.hideView();
+                                self.fireEvent(BI.SearchTextValueCombo.EVENT_CHANGE);
+                            }
+                        }]
+                    },
+                    popup: {
+                        el:{
+                            type: "bi.text_value_combo_popup",
+                            chooseType: BI.ButtonGroup.CHOOSE_TYPE_SINGLE,
+                            value: o.value,
+                            items: o.items,
+                            ref: function () {
+                                self.popup = this;
+                                self.trigger.getSearcher().setAdapter(self.popup);
+                            },
+                            listeners: [{
+                                eventName: BI.TextValueComboPopup.EVENT_CHANGE,
+                                action: function () {
+                                    self.setValue(this.getValue());
+                                    self.combo.hideView();
+                                    self.fireEvent(BI.SearchTextValueCombo.EVENT_CHANGE);
+                                }
+                            }]
+                        },
+                        maxHeight: 300
+                    },
+                    listeners: [{
+                        eventName: BI.Combo.EVENT_AFTER_HIDEVIEW,
+                        action: function(){
+                            self.trigger.stopEditing();
+                        }
+                    }]
+                },
+                left: 0,
+                right: 0,
+                bottom: 0,
+                top: 0
+            }, {
+                el: {
+                    type: "bi.trigger_icon_button",
+                    width: o.height,
+                    handler: function () {
+                        if (self.combo.isViewVisible()) {
+                            self.combo.hideView();
+                        } else {
+                            self.combo.showView();
+                        }
+                    }
+                },
+                right: 0,
+                bottom: 0,
+                top: 0
+            }]
+        }
+    },
+
+    populate: function (items) {
+        this.combo.populate(items);
+    },
+
+    setValue: function (v) {
+        this.combo.setValue(v);
+    },
+
+    getValue: function () {
+        var value = this.popup.getValue();
+        return BI.isNull(value) ? [] : (BI.isArray(value) ? value : [value]);
+    }
+});
+BI.SearchTextValueCombo.EVENT_CHANGE = "EVENT_CHANGE";
+BI.shortcut("bi.search_text_value_combo", BI.SearchTextValueCombo);/**
+ * Created by Windy on 2018/2/5.
+ */
+BI.SearchTextValueComboPopup = BI.inherit(BI.Pane, {
+    
+    props: {
+        baseCls: "bi-search-text-value-popup"
+    },
+    
+    render: function () {
+        var self = this, o = this.options;
+        return {
+            type: "bi.vertical",
+            items: [{
+                type: "bi.button_group",
+                ref: function () {
+                    self.popup = this;
+                },
+                items: BI.createItems(o.items, {
+                    type: "bi.single_select_item",
+                    textAlign: o.textAlign,
+                    height: 30
+                }),
+                chooseType: BI.ButtonGroup.CHOOSE_TYPE_SINGLE,
+                layouts: [{
+                    type: "bi.vertical"
+                }],
+                behaviors: {
+                    redmark: function () {
+                        return true;
+                    }
+                },
+                value: o.value,
+                listeners: [{
+                    eventName: BI.Controller.EVENT_CHANGE,
+                    action: function (type, val, obj) {
+                        self.fireEvent(BI.Controller.EVENT_CHANGE, arguments);
+                        if (type === BI.Events.CLICK) {
+                            self.fireEvent(BI.SearchTextValueComboPopup.EVENT_CHANGE, val, obj);
+                        }
+                    }
+                }]
+            }]
+        };
+    },
+
+    populate: function (finded, matched, keyword) {
+        var items = BI.concat(finded, matched);
+        BI.SearchTextValueComboPopup.superclass.populate.apply(this, items);
+        items = BI.createItems(items, {
+            type: "bi.single_select_item",
+            height: 30
+        });
+        this.popup.populate(items, keyword);
+    },
+
+    getValue: function () {
+        return this.popup.getValue();
+    },
+
+    setValue: function (v) {
+        this.popup.setValue(v);
+    }
+
+});
+BI.SearchTextValueComboPopup.EVENT_CHANGE = "EVENT_CHANGE";
+BI.shortcut("bi.search_text_value_combo_popup", BI.SearchTextValueComboPopup);/**
+ * Created by Windy on 2018/2/2.
+ */
+BI.SearchTextValueTrigger = BI.inherit(BI.Trigger, {
+
+    props: {
+        baseCls: "bi-search-text-value-trigger bi-border",
+        height: 30
+    },
+
+    render: function () {
+        var self = this, o = this.options;
+        return {
+            type: "bi.htape",
+            items: [
+                {
+                    el: {
+                        type: "bi.searcher",
+                        ref: function () {
+                            self.searcher = this;
+                        },
+                        isAutoSearch: false,
+                        el: {
+                            type: "bi.state_editor",
+                            ref: function () {
+                                self.editor = this;
+                            },
+                            text: this._digest(o.value, o.items),
+                            value: o.value,
+                            height: o.height
+                        },
+                        popup: {
+                            type: "bi.search_text_value_combo_popup",
+                            cls: "bi-card",
+                            chooseType: BI.ButtonGroup.CHOOSE_TYPE_SINGLE
+                        },
+                        onSearch: function (obj, callback) {
+                            var keyword = obj.keyword;
+                            var finding = BI.Func.getSearchResult(o.items, keyword);
+                            var matched = finding.matched, finded = finding.finded;
+                            callback(finded, matched);
+                        },
+                        listeners: [{
+                            eventName: BI.Searcher.EVENT_CHANGE,
+                            action: function () {
+                                self.fireEvent(BI.SearchTextValueTrigger.EVENT_CHANGE);
+                            }
+                        }]
+                    }
+                }, {
+                    el: {
+                        type: "bi.layout",
+                        width: 30
+                    },
+                    width: 30
+                }
+            ]
+        }
+    },
+
+    _setState: function (v) {
+        this.editor.setState(v);
+    },
+
+    _digest: function(vals, items){
+        var o = this.options;
+        vals = BI.isArray(vals) ? vals : [vals];
+        var result = [];
+        var formatItems = BI.Tree.transformToArrayFormat(items);
+        BI.each(formatItems, function (i, item) {
+            if (BI.deepContains(vals, item.value) && !result.contains(item.text || item.value)) {
+                result.push(item.text || item.value);
+            }
+        });
+
+        if (result.length > 0) {
+            return result.join(",");
+        } else {
+            return o.text;
+        }
+    },
+
+    stopEditing: function () {
+        this.searcher.stopSearch();
+    },
+
+    getSearcher: function () {
+        return this.searcher;
+    },
+
+    populate: function (items) {
+        this.options.items = items;
+    },
+
+    setValue: function (vals) {
+        this._setState(this._digest(vals, this.options.items));
+    },
+
+    getValue: function () {
+        return this.searcher.getValue();
+    }
+});
+BI.SearchTextValueTrigger.EVENT_SEARCHING = "EVENT_SEARCHING";
+BI.SearchTextValueTrigger.EVENT_STOP = "EVENT_STOP";
+BI.SearchTextValueTrigger.EVENT_START = "EVENT_START";
+BI.SearchTextValueTrigger.EVENT_CHANGE = "EVENT_CHANGE";
+BI.shortcut("bi.search_text_value_trigger", BI.SearchTextValueTrigger);/**
  * 单选combo
  *
  * @class BI.StaticCombo
@@ -7216,7 +7495,7 @@ BI.StateEditor = BI.inherit(BI.Widget, {
         });
         this.text = BI.createWidget({
             type: "bi.text_button",
-            cls: "state-editor-infinite-text bi-disabled",
+            cls: "state-editor-infinite-text",
             textAlign: "left",
             height: o.height,
             text: BI.i18nText("BI-Basic_Unrestricted"),

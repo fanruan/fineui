@@ -204,6 +204,18 @@ Demo.Button = BI.inherit(BI.Widget, {
                     ghost: true,
                     height: 30
                 }
+            }, {
+                el: {
+                    type: "bi.button",
+                    text: "弹出bubble",
+                    bubble: function () {
+                        return BI.parseInt(Math.random() * 100) % 10 + "提示"
+                    },
+                    handler: function () {
+                        BI.Msg.toast("1111");
+                    },
+                    height: 30
+                }
             }
         ];
         // BI.each(items, function (i, item) {
