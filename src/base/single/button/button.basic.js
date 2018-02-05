@@ -23,7 +23,8 @@ BI.BasicButton = BI.inherit(BI.Single, {
             shadow: false,
             isShadowShowingOnSelected: false,  // 选中状态下是否显示阴影
             trigger: null,
-            handler: BI.emptyFn
+            handler: BI.emptyFn,
+            bubble: null
         });
     },
     _init: function () {
@@ -215,7 +216,69 @@ BI.BasicButton = BI.inherit(BI.Single, {
             if (!self.isEnabled() || (self.isOnce() && self.isSelected())) {
                 return;
             }
+            if(BI.isKey(o.bubble) || BI.isFunction(o.bubble)) {
+                if(BI.isNull(self.combo)){
+                    var popup;
+                    BI.createWidget({
+                        type: "bi.absolute",
+                        element: self,
+                        items: [{
+                            el: {
+                                type: "bi.bubble_combo",
+                                trigger: "",
+                                ref: function () {
+                                    self.combo = this;
+                                },
+                                el: {
+                                    type: "bi.layout",
+                                    height: "100%"
+                                },
+                                popup: {
+                                    type: "bi.text_bubble_bar_popup_view",
+                                    text: getBubble(),
+                                    ref: function () {
+                                        popup = this;
+                                    },
+                                    listeners: [{
+                                        eventName: BI.BubblePopupBarView.EVENT_CLICK_TOOLBAR_BUTTON,
+                                        action: function (v) {
+                                            self.combo.hideView();
+                                            if(v){
+                                                onClick.apply(self, arguments);
+                                            }
+                                        }
+                                    }]
+                                },
+                                listeners: [{
+                                    eventName: BI.BubbleCombo.EVENT_BEFORE_POPUPVIEW,
+                                    action: function () {
+                                        popup.populate(getBubble());
+                                    }
+                                }]
+                            },
+                            left: 0,
+                            right: 0,
+                            bottom: 0,
+                            top: 0
+                        }]
+                    });
+                }
+                if (self.combo.isViewVisible()) {
+                    self.combo.hideView();
+                } else {
+                    self.combo.showView();
+                }
+                return;
+            }
             onClick.apply(self, arguments);
+        }
+
+        function getBubble() {
+            var bubble = self.options.bubble;
+            if(BI.isFunction(bubble)) {
+                return bubble();
+            }
+            return bubble;
         }
     },
 

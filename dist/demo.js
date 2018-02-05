@@ -223,6 +223,18 @@ $(function () {
                     ghost: true,
                     height: 30
                 }
+            }, {
+                el: {
+                    type: "bi.button",
+                    text: "弹出bubble",
+                    bubble: function () {
+                        return BI.parseInt(Math.random() * 100) % 10 + "提示"
+                    },
+                    handler: function () {
+                        BI.Msg.toast("1111");
+                    },
+                    height: 30
+                }
             }
         ];
         // BI.each(items, function (i, item) {
@@ -1944,6 +1956,79 @@ Demo.IconTextValueCombo = BI.inherit(BI.Widget, {
 });
 
 BI.shortcut("demo.icon_text_value_combo", Demo.IconTextValueCombo);/**
+ * Created by Windy on 2018/2/4.
+ */
+Demo.SearchTextValueCombo = BI.inherit(BI.Widget, {
+    props: {
+        baseCls: ""
+    },
+    render: function () {
+        var combo;
+        return {
+            type: "bi.horizontal_auto",
+            items: [{
+                type: "bi.search_text_value_combo",
+                ref: function () {
+                    combo = this;
+                },
+                text: "默认值",
+                value: 2,
+                width: 300,
+                items: [{
+                    text: "ABC-1",
+                    iconCls: "date-font",
+                    value: 1
+                }, {
+                    text: "BCD-2",
+                    iconCls: "search-font",
+                    value: 2
+                }, {
+                    text: "CDE-3",
+                    iconCls: "pull-right-font",
+                    value: 3
+                }, {
+                    text: "DEF-3",
+                    iconCls: "pull-right-font",
+                    value: 4
+                }, {
+                    text: "FEG-3",
+                    iconCls: "pull-right-font",
+                    value: 5
+                }, {
+                    text: "FGH-3",
+                    iconCls: "pull-right-font",
+                    value: 6
+                }, {
+                    text: "GHI-3",
+                    iconCls: "pull-right-font",
+                    value: 7
+                }, {
+                    text: "HIJ-3",
+                    iconCls: "pull-right-font",
+                    value: 8
+                }, {
+                    text: "IJK-3",
+                    iconCls: "pull-right-font",
+                    value: 9
+                }, {
+                    text: "JKL-3",
+                    iconCls: "pull-right-font",
+                    value: 10
+                }]
+            }, {
+                type: "bi.button",
+                width: 90,
+                height: 25,
+                handler: function () {
+                    combo.setValue(3);
+                }
+            }],
+            vgap: 20
+        };
+    }
+});
+
+BI.shortcut("demo.search_text_value_combo", Demo.SearchTextValueCombo);/**
  * Created by Dailer on 2017/7/11.
  */
 Demo.StaticCombo = BI.inherit(BI.Widget, {
@@ -5118,6 +5203,10 @@ BI.shortcut("demo.value_chooser_pane", Demo.ValueChooserPane);Demo.ADDONS_CONFIG
     pId: 306,
     text: "bi.text_value_combo",
     value: "demo.text_value_combo"
+}, {
+    pId: 306,
+    text: "bi.search_text_value_combo",
+    value: "demo.search_text_value_combo"
 }, {
     pId: 306,
     text: "bi.icon_text_value_combo",
