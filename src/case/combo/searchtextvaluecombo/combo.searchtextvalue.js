@@ -59,14 +59,17 @@ BI.SearchTextValueCombo = BI.inherit(BI.Widget, {
                                 }
                             }]
                         },
-                        maxHeight: 300
+                        maxHeight: 302
                     },
                     listeners: [{
                         eventName: BI.Combo.EVENT_AFTER_HIDEVIEW,
                         action: function(){
                             self.trigger.stopEditing();
                         }
-                    }]
+                    }],
+                    hideChecker: function (e) {
+                        return self.triggerBtn.element.find(e.target).length === 0;
+                    }
                 },
                 left: 0,
                 right: 0,
@@ -75,7 +78,12 @@ BI.SearchTextValueCombo = BI.inherit(BI.Widget, {
             }, {
                 el: {
                     type: "bi.trigger_icon_button",
+                    cls: "trigger-icon-button",
+                    ref: function () {
+                        self.triggerBtn = this;
+                    },
                     width: o.height,
+                    height: o.height,
                     handler: function () {
                         if (self.combo.isViewVisible()) {
                             self.combo.hideView();
