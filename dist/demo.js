@@ -12114,7 +12114,8 @@ Demo.Downlist = BI.inherit(BI.Widget, {
 
                         text: "column 15",
                         cls: "dot-e-font",
-                        value: 23
+                        value: 23,
+                        bubble: "hahahaha"
                     }
                     ]
 

@@ -35,7 +35,8 @@ BI.DownListItem = BI.inherit(BI.Single, {
             textVgap: o.textVgap,
             textLgap: o.textLgap,
             textRgap: o.textRgap,
-            father: o.father
+            father: o.father,
+            bubble: o.bubble
         });
         this.text.on(BI.Controller.EVENT_CHANGE, function () {
             self.fireEvent(BI.Controller.EVENT_CHANGE, arguments);
