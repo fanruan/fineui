@@ -24037,7 +24037,7 @@ BI.CardLayout = BI.inherit(BI.Layout, {
         BI.each(items, function (i, item) {
             if (item) {
                 if (!self.hasWidget(item.cardName)) {
-                    var w = BI.createWidget(item, self);
+                    var w = BI.createWidget(item);
                     w.on(BI.Events.DESTROY, function () {
                         var index = BI.findIndex(o.items, function (i, tItem) {
                             return tItem.cardName == item.cardName;
@@ -24107,7 +24107,7 @@ BI.CardLayout = BI.inherit(BI.Layout, {
         if (this.isCardExisted(cardName)) {
             throw new Error("cardName is already exist");
         }
-        var widget = BI.createWidget(cardItem, this);
+        var widget = BI.createWidget(cardItem);
         widget.element.css({
             position: "relative",
             top: "0",
