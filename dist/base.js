@@ -16582,7 +16582,7 @@ BI.shortcut("bi.image_button", BI.ImageButton);(function ($) {
             var conf = BI.Button.superclass._defaultConfig.apply(this, arguments);
             return BI.extend(conf, {
                 baseCls: (conf.baseCls || "") + " bi-button",
-                minWidth: (props.block === true || props.clear === true) ? 0 : 90,
+                minWidth: (props.block === true || props.clear === true) ? 0 : 80,
                 shadow: props.clear !== true,
                 isShadowShowingOnSelected: true,
                 readonly: true,

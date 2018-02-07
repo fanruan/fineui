@@ -42634,7 +42634,7 @@ BI.shortcut("bi.image_button", BI.ImageButton);(function ($) {
             var conf = BI.Button.superclass._defaultConfig.apply(this, arguments);
             return BI.extend(conf, {
                 baseCls: (conf.baseCls || "") + " bi-button",
-                minWidth: (props.block === true || props.clear === true) ? 0 : 90,
+                minWidth: (props.block === true || props.clear === true) ? 0 : 80,
                 shadow: props.clear !== true,
                 isShadowShowingOnSelected: true,
                 readonly: true,
@@ -71024,7 +71024,7 @@ BI.Panel = BI.inherit(BI.Widget, {
         return {
             el: {
                 type: "bi.left_right_vertical_adapt",
-                cls: "panel-title bi-border-bottom bi-background",
+                cls: "panel-title bi-border-bottom",
                 height: 29,
                 items: {
                     left: [this.text],
@@ -71033,7 +71033,7 @@ BI.Panel = BI.inherit(BI.Widget, {
                 lhgap: 10,
                 rhgap: 10
             },
-            height: 30
+            height: 29
         };
     },
 
