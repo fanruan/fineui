@@ -2017,6 +2017,7 @@ Demo.SearchTextValueCombo = BI.inherit(BI.Widget, {
                 }]
             }, {
                 type: "bi.button",
+                text: "setValue(3)",
                 width: 90,
                 height: 25,
                 handler: function () {
