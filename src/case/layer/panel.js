@@ -57,7 +57,7 @@ BI.Panel = BI.inherit(BI.Widget, {
         return {
             el: {
                 type: "bi.left_right_vertical_adapt",
-                cls: "panel-title bi-border-bottom bi-background",
+                cls: "panel-title bi-border-bottom",
                 height: 29,
                 items: {
                     left: [this.text],
@@ -66,7 +66,7 @@ BI.Panel = BI.inherit(BI.Widget, {
                 lhgap: 10,
                 rhgap: 10
             },
-            height: 30
+            height: 29
         };
     },
 
