@@ -20080,6 +20080,7 @@ BI.Label = BI.inherit(BI.Single, {
         var json = this._createJson();
         if (BI.isNumber(o.width) && o.width > 0) {
             if (BI.isNumber(o.textWidth) && o.textWidth > 0) {
+                json.width = o.textWidth;
                 if (BI.isNumber(o.height) && o.height > 0) {
                     BI.createWidget({
                         type: "bi.adaptive",
@@ -20099,7 +20100,6 @@ BI.Label = BI.inherit(BI.Single, {
                     this.element.css({"line-height": o.height + "px"});
                     return;
                 }
-                json.width = o.textWidth;
                 BI.createWidget({
                     type: "bi.vertical_adapt",
                     scrollable: o.whiteSpace === "normal",
