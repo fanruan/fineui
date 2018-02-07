@@ -14,9 +14,11 @@ Demo.IconTextValueCombo = BI.inherit(BI.Widget, {
                 text: "默认值",
                 value: 1,
                 width: 300,
+                iconHeight: 16,
+                iconWidth: 16,
                 items: [{
                     text: "MVC-1",
-                    iconCls: "close-font",
+                    iconCls: "check-box-icon",
                     value: 1
                 }, {
                     text: "MVC-2",

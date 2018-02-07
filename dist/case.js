@@ -5493,6 +5493,8 @@ BI.IconTextValueCombo = BI.inherit(BI.Widget, {
         return BI.extend(BI.IconTextValueCombo.superclass._defaultConfig.apply(this, arguments), {
             baseClass: "bi-icon-text-value-combo",
             height: 30,
+            iconHeight: null,
+            iconWidth: null,
             value: ""
         });
     },
@@ -5505,12 +5507,16 @@ BI.IconTextValueCombo = BI.inherit(BI.Widget, {
             items: o.items,
             height: o.height,
             text: o.text,
-            value: o.value
+            value: o.value,
+            iconHeight: o.iconHeight,
+            iconWidth: o.iconWidth
         });
         this.popup = BI.createWidget({
             type: "bi.icon_text_value_combo_popup",
             items: o.items,
-            value: o.value
+            value: o.value,
+            iconHeight: o.iconHeight,
+            iconWidth: o.iconWidth
         });
         this.popup.on(BI.IconTextValueComboPopup.EVENT_CHANGE, function () {
             self.setValue(self.popup.getValue());
@@ -5568,7 +5574,9 @@ BI.IconTextValueComboPopup = BI.inherit(BI.Pane, {
             type: "bi.button_group",
             items: BI.createItems(o.items, {
                 type: "bi.single_select_icon_text_item",
-                height: 30
+                height: 30,
+                iconHeight: o.iconHeight,
+                iconWidth: o.iconWidth
             }),
             chooseType: BI.ButtonGroup.CHOOSE_TYPE_SINGLE,
             layouts: [{
@@ -5729,11 +5737,11 @@ BI.shortcut("bi.search_text_value_combo", BI.SearchTextValueCombo);/**
  * Created by Windy on 2018/2/5.
  */
 BI.SearchTextValueComboPopup = BI.inherit(BI.Pane, {
-    
+
     props: {
         baseCls: "bi-search-text-value-popup"
     },
-    
+
     render: function () {
         var self = this, o = this.options;
         return {
@@ -5771,8 +5779,8 @@ BI.SearchTextValueComboPopup = BI.inherit(BI.Pane, {
         };
     },
 
-    populate: function (finded, matched, keyword) {
-        var items = BI.concat(finded, matched);
+    populate: function (find, match, keyword) {
+        var items = BI.concat(find, match);
         BI.SearchTextValueComboPopup.superclass.populate.apply(this, items);
         items = BI.createItems(items, {
             type: "bi.single_select_item",
@@ -5830,8 +5838,8 @@ BI.SearchTextValueTrigger = BI.inherit(BI.Trigger, {
                         onSearch: function (obj, callback) {
                             var keyword = obj.keyword;
                             var finding = BI.Func.getSearchResult(o.items, keyword);
-                            var matched = finding.matched, finded = finding.finded;
-                            callback(finded, matched);
+                            var matched = finding.match, find = finding.find;
+                            callback(find, matched);
                         },
                         listeners: [{
                             eventName: BI.Searcher.EVENT_CHANGE,
@@ -14038,7 +14046,9 @@ BI.IconTextTrigger = BI.inherit(BI.Trigger, {
         var conf = BI.IconTextTrigger.superclass._defaultConfig.apply(this, arguments);
         return BI.extend(conf, {
             baseCls: (conf.baseCls || "") + " bi-text-trigger",
-            height: 24
+            height: 24,
+            iconHeight: null,
+            iconWidth: null
         });
     },
 
@@ -14070,6 +14080,8 @@ BI.IconTextTrigger = BI.inherit(BI.Trigger, {
                     ref: function (_ref) {
                         self.icon = _ref;
                     },
+                    iconHeight: o.iconHeight,
+                    iconWidth: o.iconWidth,
                     disableSelected: true
                 },
                 width: BI.isEmptyString(o.iconCls)? 0 : (o.triggerWidth || o.height)
@@ -14117,7 +14129,9 @@ BI.SelectIconTextTrigger = BI.inherit(BI.Trigger, {
     _defaultConfig: function () {
         return BI.extend(BI.SelectIconTextTrigger.superclass._defaultConfig.apply(this, arguments), {
             baseCls: "bi-select-text-trigger bi-border",
-            height: 24
+            height: 24,
+            iconHeight: null,
+            iconWidth: null
         });
     },
 
@@ -14131,7 +14145,9 @@ BI.SelectIconTextTrigger = BI.inherit(BI.Trigger, {
             element: this,
             text: obj.text,
             iconCls: obj.iconCls,
-            height: o.height
+            height: o.height,
+            iconHeight: o.iconHeight,
+            iconWidth: o.iconWidth
         });
     },
 

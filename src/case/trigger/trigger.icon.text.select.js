@@ -6,7 +6,9 @@ BI.SelectIconTextTrigger = BI.inherit(BI.Trigger, {
     _defaultConfig: function () {
         return BI.extend(BI.SelectIconTextTrigger.superclass._defaultConfig.apply(this, arguments), {
             baseCls: "bi-select-text-trigger bi-border",
-            height: 24
+            height: 24,
+            iconHeight: null,
+            iconWidth: null
         });
     },
 
@@ -20,7 +22,9 @@ BI.SelectIconTextTrigger = BI.inherit(BI.Trigger, {
             element: this,
             text: obj.text,
             iconCls: obj.iconCls,
-            height: o.height
+            height: o.height,
+            iconHeight: o.iconHeight,
+            iconWidth: o.iconWidth
         });
     },
 

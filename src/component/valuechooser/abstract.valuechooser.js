@@ -62,7 +62,7 @@ BI.AbstractValueChooser = BI.inherit(BI.Widget, {
             }
             BI.each(keywords, function (i, kw) {
                 var search = BI.Func.getSearchResult(items, kw);
-                items = search.matched.concat(search.finded);
+                items = search.match.concat(search.find);
             });
             if (options.selectedValues) {// 过滤
                 var filter = BI.makeObject(options.selectedValues, true);

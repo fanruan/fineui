@@ -4546,8 +4546,8 @@ BI.Searcher = BI.inherit(BI.Widget, {
         if (o.isAutoSearch) {
             var items = (o.adapter && ((o.adapter.getItems && o.adapter.getItems()) || o.adapter.attr("items"))) || [];
             var finding = BI.Func.getSearchResult(items, keyword);
-            var matched = finding.matched, finded = finding.finded;
-            this.popupView.populate(finded, matched, keyword);
+            var match = finding.match, find = finding.find;
+            this.popupView.populate(find, match, keyword);
             o.isAutoSync && o.adapter && o.adapter.getValue && this.popupView.setValue(o.adapter.getValue());
             self.fireEvent(BI.Searcher.EVENT_SEARCHING);
             return;
@@ -20080,6 +20080,7 @@ BI.Label = BI.inherit(BI.Single, {
         var json = this._createJson();
         if (BI.isNumber(o.width) && o.width > 0) {
             if (BI.isNumber(o.textWidth) && o.textWidth > 0) {
+                json.width = o.textWidth;
                 if (BI.isNumber(o.height) && o.height > 0) {
                     BI.createWidget({
                         type: "bi.adaptive",
@@ -20099,7 +20100,6 @@ BI.Label = BI.inherit(BI.Single, {
                     this.element.css({"line-height": o.height + "px"});
                     return;
                 }
-                json.width = o.textWidth;
                 BI.createWidget({
                     type: "bi.vertical_adapt",
                     scrollable: o.whiteSpace === "normal",

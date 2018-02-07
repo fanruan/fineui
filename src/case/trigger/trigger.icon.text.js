@@ -14,7 +14,9 @@ BI.IconTextTrigger = BI.inherit(BI.Trigger, {
         var conf = BI.IconTextTrigger.superclass._defaultConfig.apply(this, arguments);
         return BI.extend(conf, {
             baseCls: (conf.baseCls || "") + " bi-text-trigger",
-            height: 24
+            height: 24,
+            iconHeight: null,
+            iconWidth: null
         });
     },
 
@@ -46,6 +48,8 @@ BI.IconTextTrigger = BI.inherit(BI.Trigger, {
                     ref: function (_ref) {
                         self.icon = _ref;
                     },
+                    iconHeight: o.iconHeight,
+                    iconWidth: o.iconWidth,
                     disableSelected: true
                 },
                 width: BI.isEmptyString(o.iconCls)? 0 : (o.triggerWidth || o.height)

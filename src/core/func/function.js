@@ -35,13 +35,13 @@ BI.extend(BI.Func, {
         param || (param = "text");
         if (!BI.isKey(keyword)) {
             return {
-                finded: BI.deepClone(items),
-                matched: isArray ? [] : {}
+                find: BI.deepClone(items),
+                match: isArray ? [] : {}
             };
         }
         var t, text, py;
         keyword = BI.toUpperCase(keyword);
-        var matched = isArray ? [] : {}, finded = isArray ? [] : {};
+        var matched = isArray ? [] : {}, find = isArray ? [] : {};
         BI.each(items, function (i, item) {
             item = BI.deepClone(item);
             t = BI.stripEL(item);
@@ -54,19 +54,19 @@ BI.extend(BI.Func, {
                 if (text === keyword) {
                     isArray ? matched.push(item) : (matched[i] = item);
                 } else {
-                    isArray ? finded.push(item) : (finded[i] = item);
+                    isArray ? find.push(item) : (find[i] = item);
                 }
             } else if (pidx = py.indexOf(keyword), (pidx > -1 && Math.floor(pidx / text.length) === Math.floor((pidx + keyword.length - 1) / text.length))) {
                 if (text === keyword || keyword.length === text.length) {
                     isArray ? matched.push(item) : (matched[i] = item);
                 } else {
-                    isArray ? finded.push(item) : (finded[i] = item);
+                    isArray ? find.push(item) : (find[i] = item);
                 }
             }
         });
         return {
-            matched: matched,
-            finded: finded
+            match: matched,
+            find: find
         };
     }
 });

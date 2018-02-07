@@ -168,8 +168,8 @@ BI.Searcher = BI.inherit(BI.Widget, {
         if (o.isAutoSearch) {
             var items = (o.adapter && ((o.adapter.getItems && o.adapter.getItems()) || o.adapter.attr("items"))) || [];
             var finding = BI.Func.getSearchResult(items, keyword);
-            var matched = finding.matched, finded = finding.finded;
-            this.popupView.populate(finded, matched, keyword);
+            var match = finding.match, find = finding.find;
+            this.popupView.populate(find, match, keyword);
             o.isAutoSync && o.adapter && o.adapter.getValue && this.popupView.setValue(o.adapter.getValue());
             self.fireEvent(BI.Searcher.EVENT_SEARCHING);
             return;

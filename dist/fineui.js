@@ -16372,360 +16372,7 @@ BI.Region.prototype = {
         pos.push(this.y + this.h / 2);
         return pos;
     }
-};// ;
-// !(function (BI) {
-//
-//     if (BI.isIE()) {
-//         XMLSerializer = null;
-//         DOMParser = null;
-//     }
-//
-//
-//     var XML = {
-//         Document: {
-//             NodeType: {
-//                 ELEMENT: 1,
-//                 ATTRIBUTE: 2,
-//                 TEXT: 3,
-//                 CDATA_SECTION: 4,
-//                 ENTITY_REFERENCE: 5,
-//                 ENTITY: 6,
-//                 PROCESSING_INSTRUCTION: 7,
-//                 COMMENT: 8,
-//                 DOCUMENT: 9,
-//                 DOCUMENT_TYPE: 10,
-//                 DOCUMENT_FRAGMENT: 11,
-//                 NOTATION: 12
-//             }
-//         }
-//     };
-//
-//     XML.ResultType = {
-//         single: 'single',
-//         array: 'array'
-//     };
-//
-//     XML.fromString = function (xmlStr) {
-//         try {
-//             var parser = new DOMParser();
-//             return parser.parseFromString(xmlStr, "text/xml");
-//         } catch (e) {
-//             var arrMSXML = ["MSXML2.DOMDocument.6.0", "MSXML2.DOMDocument.3.0"];
-//             for (var i = 0; i < arrMSXML.length; i++) {
-//                 try {
-//                     var xmlDoc = new ActiveXObject(arrMSXML[i]);
-//                     xmlDoc.setProperty("SelectionLanguage", "XPath");
-//                     xmlDoc.async = false;
-//                     xmlDoc.loadXML(xmlStr);
-//                     return xmlDoc;
-//                 } catch (xmlError) {
-//                 }
-//             }
-//         }
-//     };
-//
-//     XML.toString = function (xmlNode) {
-//         if (!BI.isIE()) {
-//             var xmlSerializer = new XMLSerializer();
-//             return xmlSerializer.serializeToString(xmlNode);
-//         } else
-//             return xmlNode.xml;
-//     };
-//
-//     XML.getNSResolver = function (str) {
-//         if (!str) {
-//             return null;
-//         }
-//         var list = str.split(' ');
-//         var namespaces = {};
-//         for (var i = 0; i < list.length; i++) {
-//             var pair = list[i].split('=');
-//             var fix = BI.trim(pair[0]).replace("xmlns:", "");
-//             namespaces[fix] = BI.trim(pair[1]).replace(/"/g, "").replace(/'/g, "");
-//         }
-//         return function (prefix) {
-//             return namespaces[prefix];
-//         };
-//     };
-//
-//     XML.eval = function (context, xpathExp, resultType, namespaces) {
-//         if ((BI.isIE() && ('undefined' === typeof(context.selectSingleNode) || 'undefined' === typeof(context.selectNodes)))) {
-//             return XML.eval2(context, xpathExp, resultType, namespaces);
-//         } else {
-//             if (BI.isIE()) {
-//                 namespaces = namespaces ? namespaces : "";
-//                 var doc = (context.nodeType == XML.Document.NodeType.DOCUMENT) ? context : context.ownerDocument;
-//                 doc.setProperty("SelectionNamespaces", namespaces);
-//                 var result;
-//                 if (resultType == this.ResultType.single) {
-//                     result = context.selectSingleNode(xpathExp);
-//                 } else {
-//                     result = context.selectNodes(xpathExp) || [];
-//                 }
-//                 doc.setProperty("SelectionNamespaces", "");
-//                 return result;
-//             } else {
-//                 var node = context;
-//                 var xmlDoc = (context.nodeName.indexOf("document") == -1) ? context.ownerDocument : context;
-//                 var retType = (resultType == this.ResultType.single) ? XPathResult.FIRST_ORDERED_NODE_TYPE : XPathResult.ANY_TYPE;
-//                 var col = xmlDoc.evaluate(xpathExp, node, XML.getNSResolver(namespaces), retType, null);
-//
-//                 if (retType == XPathResult.FIRST_ORDERED_NODE_TYPE) {
-//                     return col.singleNodeValue;
-//                 } else {
-//                     var thisColMemb = col.iterateNext();
-//                     var rowsCol = [];
-//                     while (thisColMemb) {
-//                         rowsCol[rowsCol.length] = thisColMemb;
-//                         thisColMemb = col.iterateNext();
-//                     }
-//                     return rowsCol;
-//                 }
-//             }
-//         }
-//     };
-//
-//     XML.eval2 = function (context, xpathExp, resultType, namespaces) {
-//         if (resultType !== "single" && resultType !== undefined && resultType !== null) {
-//             throw new Error("justep.SimpleXML.eval only be resultType='single', not" + resultType);
-//         }
-//
-//         if (context === null || context === undefined || xpathExp === null || xpathExp === undefined) {
-//             return context;
-//         }
-//
-//         if (context.nodeType == XML.Document.NodeType.DOCUMENT) {
-//             context = context.documentElement;
-//         }
-//
-//         var childs, i;
-//         if (xpathExp.indexOf("/") != -1) {
-//             var items = xpathExp.split("/");
-//             var isAbs = xpathExp.substring(0, 1) == "/";
-//             for (i = 0; i < items.length; i++) {
-//                 var item = items[i];
-//                 if (item === "") {
-//                     continue;
-//                 } else {
-//                     var next = null;
-//                     var ii = i + 1;
-//                     for (; ii < items.length; ii++) {
-//                         if (next === null) {
-//                             next = items[ii];
-//                         } else {
-//                             next = next + "/" + items[ii];
-//                         }
-//                     }
-//
-//                     if (item == ".") {
-//                         return this.eval(context, next, resultType);
-//
-//                     } else if (item == "..") {
-//                         return this.eval2(context.parentNode, next, resultType);
-//
-//                     } else if (item == "*") {
-//                         if (isAbs) {
-//                             return this.eval2(context, next, resultType);
-//
-//                         } else {
-//                             childs = context.childNodes;
-//                             for (var j = 0; j < childs.length; j++) {
-//                                 var tmp = this.eval2(childs[j], next, resultType);
-//                                 if (tmp !== null) {
-//                                     return tmp;
-//                                 }
-//                             }
-//                             return null;
-//                         }
-//
-//                     } else {
-//                         if (isAbs) {
-//                             if (context.nodeName == item) {
-//                                 return this.eval2(context, next, resultType);
-//                             } else {
-//                                 return null;
-//                             }
-//                         } else {
-//                             var child = this.getChildByName(context, item);
-//                             if (child !== null) {
-//                                 return this.eval2(child, next, resultType);
-//                             } else {
-//                                 return null;
-//                             }
-//
-//                         }
-//                     }
-//
-//                 }
-//             }
-//
-//             return null;
-//
-//         } else {
-//             if ("text()" == xpathExp) {
-//                 childs = context.childNodes;
-//                 for (i = 0; i < childs.length; i++) {
-//                     if (childs[i].nodeType == XML.Document.NodeType.TEXT) {
-//                         return childs[i];
-//                     }
-//                 }
-//                 return null;
-//             } else {
-//                 return this.getChildByName(context, xpathExp);
-//             }
-//         }
-//     };
-//
-//     XML.getChildByName = function (context, name) {
-//         if (context === null || context === undefined || name === null || name === undefined) {
-//             return null;
-//         }
-//
-//         if (context.nodeType == XML.Document.NodeType.DOCUMENT) {
-//             context = context.documentElement;
-//         }
-//
-//         var childs = context.childNodes;
-//         for (var i = 0; i < childs.length; i++) {
-//             if (childs[i].nodeType == XML.Document.NodeType.ELEMENT && (childs[i].nodeName == name || name == "*")) {
-//                 return childs[i];
-//             }
-//         }
-//
-//         return null;
-//     };
-//
-//     XML.appendChildren = function (context, xpathExp, nodes, isBefore) {
-//         nodes = (typeof nodes.length != "undefined") ? nodes : [nodes];
-//         var finded = this.eval(context, xpathExp);
-//         var count = finded.length;
-//         for (var i = 0; i < count; i++) {
-//             if (isBefore && finded[i].firstNode) {
-//                 this._insertBefore(finded[i], nodes, finded[i].firstNode);
-//             } else {
-//                 for (var j = 0; j < nodes.length; j++) {
-//                     finded[i].appendChild(nodes[j]);
-//                 }
-//             }
-//         }
-//         return count;
-//     };
-//
-//     XML.removeNodes = function (context, xpathExp) {
-//         var nodes = this.eval(context, xpathExp);
-//         for (var i = 0; i < nodes.length; i++) {
-//             nodes[i].parentNode.removeChild(nodes[i]);
-//         }
-//     };
-//
-//     XML._insertBefore = function (parent, newchildren, refchild) {
-//         for (var i = 0; i < newchildren.length; i++) {
-//             parent.insertBefore(newchildren[i], refchild);
-//         }
-//     };
-//
-//     XML.insertNodes = function (context, xpathExp, nodes, isBefore) {
-//         nodes = (typeof nodes.length != "undefined") ? nodes : [nodes];
-//         var finded = this.eval(context, xpathExp);
-//         var count = finded.length;
-//         for (var i = 0; i < count; i++) {
-//             var refnode = (isBefore) ? finded[i] : finded[i].nextSibling;
-//             this._insertBefore(finded[i].parentNode, nodes, refnode);
-//         }
-//         return count;
-//     };
-//
-//     XML.replaceNodes = function (context, xpathExp, nodes) {
-//         nodes = (typeof nodes.length != "undefined") ? nodes : [nodes];
-//         var finded = this.eval(context, xpathExp);
-//         var count = finded.length;
-//         for (var i = 0; i < count; i++) {
-//             var refnode = finded[i];
-//             var parent = refnode.parentNode;
-//             this._insertBefore(parent, nodes, refnode);
-//             parent.removeChild(refnode);
-//         }
-//         return count;
-//     };
-//
-//     XML.setNodeText = function (context, xpathExp, text) {
-//         var finded = this.eval(context, xpathExp, this.ResultType.single);
-//         if (finded === null) {
-//             return;
-//         }
-//         if (finded.nodeType == XML.Document.NodeType.ELEMENT) {
-//             var textNode = this.eval(finded, "./text()", this.ResultType.single);
-//             if (!textNode) {
-//                 textNode = finded.ownerDocument.createTextNode("");
-//                 finded.appendChild(textNode);
-//             }
-//             textNode.nodeValue = text;
-//         } else {
-//             finded.nodeValue = text;
-//         }
-//         return;
-//     };
-//
-//     XML.getNodeText = function (context, xpathExp, defaultValue) {
-//         var finded = xpathExp ? this.eval(context, xpathExp, this.ResultType.single) : context;
-//         if (finded && (finded.nodeType == XML.Document.NodeType.ELEMENT)) {
-//             finded = this.eval(finded, "./text()", this.ResultType.single);
-//         }
-//         return (finded && finded.nodeValue) ? "" + finded.nodeValue : (defaultValue !== undefined) ? defaultValue : null;
-//     };
-//
-//     XML.Namespaces = {
-//         XMLSCHEMA: "http://www.w3.org/2001/XMLSchema#",
-//         XMLSCHEMA_STRING: "http://www.w3.org/2001/XMLSchema#String",
-//         XMLSCHEMA_LONG: "http://www.w3.org/2001/XMLSchema#Long",
-//         XMLSCHEMA_INTEGER: 'http://www.w3.org/2001/XMLSchema#Integer',
-//         XMLSCHEMA_FLOAT: 'http://www.w3.org/2001/XMLSchema#Float',
-//         XMLSCHEMA_DOUBLE: 'http://www.w3.org/2001/XMLSchema#Double',
-//         XMLSCHEMA_DECIMAL: 'http://www.w3.org/2001/XMLSchema#Decimal',
-//         XMLSCHEMA_DATE: 'http://www.w3.org/2001/XMLSchema#Date',
-//         XMLSCHEMA_TIME: 'http://www.w3.org/2001/XMLSchema#Time',
-//         XMLSCHEMA_DATETIME: 'http://www.w3.org/2001/XMLSchema#DateTime',
-//         XMLSCHEMA_BOOLEAN: 'http://www.w3.org/2001/XMLSchema#Boolean',
-//         XMLSCHEMA_SYMBOL: 'http://www.w3.org/2001/XMLSchema#Symbol',
-//         JUSTEPSCHEMA: "http://www.justep.com/xbiz#",
-//         RDF: "http://www.w3.org/1999/02/22-rdf-syntax-ns#",
-//         JUSTEP: "http://www.justep.com/x5#",
-//         'get': function (type) {
-//             type = type ? type.toLowerCase() : "string";
-//             if ("string" == type) {
-//                 return XML.Namespaces.XMLSCHEMA_STRING;
-//             }
-//             else if ("integer" == type) {
-//                 return XML.Namespaces.XMLSCHEMA_INTEGER;
-//             }
-//             else if ("long" == type) {
-//                 return XML.Namespaces.XMLSCHEMA_LONG;
-//             }
-//             else if ("float" == type) {
-//                 return XML.Namespaces.XMLSCHEMA_FLOAT;
-//             }
-//             else if ("double" == type) {
-//                 return XML.Namespaces.XMLSCHEMA_DOUBLE;
-//             }
-//             else if ("decimal" == type) {
-//                 return XML.Namespaces.XMLSCHEMA_DECIMAL;
-//             }
-//             else if ("date" == type) {
-//                 return XML.Namespaces.XMLSCHEMA_DATE;
-//             }
-//             else if ("time" == type) {
-//                 return XML.Namespaces.XMLSCHEMA_TIME;
-//             }
-//             else if ("datetime" == type) {
-//                 return XML.Namespaces.XMLSCHEMA_DATETIME;
-//             }
-//             else if ("boolean" == type) {
-//                 return XML.Namespaces.XMLSCHEMA_BOOLEAN;
-//             }
-//         }
-//     };
-// })(BI);
-BI.BehaviorFactory = {
+};BI.BehaviorFactory = {
     createBehavior: function (key, options) {
         var behavior;
         switch (key) {
@@ -20212,13 +19859,13 @@ BI.extend(BI.Func, {
         param || (param = "text");
         if (!BI.isKey(keyword)) {
             return {
-                finded: BI.deepClone(items),
-                matched: isArray ? [] : {}
+                find: BI.deepClone(items),
+                match: isArray ? [] : {}
             };
         }
         var t, text, py;
         keyword = BI.toUpperCase(keyword);
-        var matched = isArray ? [] : {}, finded = isArray ? [] : {};
+        var matched = isArray ? [] : {}, find = isArray ? [] : {};
         BI.each(items, function (i, item) {
             item = BI.deepClone(item);
             t = BI.stripEL(item);
@@ -20231,19 +19878,19 @@ BI.extend(BI.Func, {
                 if (text === keyword) {
                     isArray ? matched.push(item) : (matched[i] = item);
                 } else {
-                    isArray ? finded.push(item) : (finded[i] = item);
+                    isArray ? find.push(item) : (find[i] = item);
                 }
             } else if (pidx = py.indexOf(keyword), (pidx > -1 && Math.floor(pidx / text.length) === Math.floor((pidx + keyword.length - 1) / text.length))) {
                 if (text === keyword || keyword.length === text.length) {
                     isArray ? matched.push(item) : (matched[i] = item);
                 } else {
-                    isArray ? finded.push(item) : (finded[i] = item);
+                    isArray ? find.push(item) : (find[i] = item);
                 }
             }
         });
         return {
-            matched: matched,
-            finded: finded
+            match: matched,
+            find: find
         };
     }
 });
@@ -32362,8 +32009,8 @@ BI.Searcher = BI.inherit(BI.Widget, {
         if (o.isAutoSearch) {
             var items = (o.adapter && ((o.adapter.getItems && o.adapter.getItems()) || o.adapter.attr("items"))) || [];
             var finding = BI.Func.getSearchResult(items, keyword);
-            var matched = finding.matched, finded = finding.finded;
-            this.popupView.populate(finded, matched, keyword);
+            var match = finding.match, find = finding.find;
+            this.popupView.populate(find, match, keyword);
             o.isAutoSync && o.adapter && o.adapter.getValue && this.popupView.setValue(o.adapter.getValue());
             self.fireEvent(BI.Searcher.EVENT_SEARCHING);
             return;
@@ -47896,6 +47543,7 @@ BI.Label = BI.inherit(BI.Single, {
         var json = this._createJson();
         if (BI.isNumber(o.width) && o.width > 0) {
             if (BI.isNumber(o.textWidth) && o.textWidth > 0) {
+                json.width = o.textWidth;
                 if (BI.isNumber(o.height) && o.height > 0) {
                     BI.createWidget({
                         type: "bi.adaptive",
@@ -47915,7 +47563,6 @@ BI.Label = BI.inherit(BI.Single, {
                     this.element.css({"line-height": o.height + "px"});
                     return;
                 }
-                json.width = o.textWidth;
                 BI.createWidget({
                     type: "bi.vertical_adapt",
                     scrollable: o.whiteSpace === "normal",
@@ -69889,6 +69536,8 @@ BI.IconTextValueCombo = BI.inherit(BI.Widget, {
         return BI.extend(BI.IconTextValueCombo.superclass._defaultConfig.apply(this, arguments), {
             baseClass: "bi-icon-text-value-combo",
             height: 30,
+            iconHeight: null,
+            iconWidth: null,
             value: ""
         });
     },
@@ -69901,12 +69550,16 @@ BI.IconTextValueCombo = BI.inherit(BI.Widget, {
             items: o.items,
             height: o.height,
             text: o.text,
-            value: o.value
+            value: o.value,
+            iconHeight: o.iconHeight,
+            iconWidth: o.iconWidth
         });
         this.popup = BI.createWidget({
             type: "bi.icon_text_value_combo_popup",
             items: o.items,
-            value: o.value
+            value: o.value,
+            iconHeight: o.iconHeight,
+            iconWidth: o.iconWidth
         });
         this.popup.on(BI.IconTextValueComboPopup.EVENT_CHANGE, function () {
             self.setValue(self.popup.getValue());
@@ -69964,7 +69617,9 @@ BI.IconTextValueComboPopup = BI.inherit(BI.Pane, {
             type: "bi.button_group",
             items: BI.createItems(o.items, {
                 type: "bi.single_select_icon_text_item",
-                height: 30
+                height: 30,
+                iconHeight: o.iconHeight,
+                iconWidth: o.iconWidth
             }),
             chooseType: BI.ButtonGroup.CHOOSE_TYPE_SINGLE,
             layouts: [{
@@ -70125,11 +69780,11 @@ BI.shortcut("bi.search_text_value_combo", BI.SearchTextValueCombo);/**
  * Created by Windy on 2018/2/5.
  */
 BI.SearchTextValueComboPopup = BI.inherit(BI.Pane, {
-    
+
     props: {
         baseCls: "bi-search-text-value-popup"
     },
-    
+
     render: function () {
         var self = this, o = this.options;
         return {
@@ -70167,8 +69822,8 @@ BI.SearchTextValueComboPopup = BI.inherit(BI.Pane, {
         };
     },
 
-    populate: function (finded, matched, keyword) {
-        var items = BI.concat(finded, matched);
+    populate: function (find, match, keyword) {
+        var items = BI.concat(find, match);
         BI.SearchTextValueComboPopup.superclass.populate.apply(this, items);
         items = BI.createItems(items, {
             type: "bi.single_select_item",
@@ -70226,8 +69881,8 @@ BI.SearchTextValueTrigger = BI.inherit(BI.Trigger, {
                         onSearch: function (obj, callback) {
                             var keyword = obj.keyword;
                             var finding = BI.Func.getSearchResult(o.items, keyword);
-                            var matched = finding.matched, finded = finding.finded;
-                            callback(finded, matched);
+                            var matched = finding.match, find = finding.find;
+                            callback(find, matched);
                         },
                         listeners: [{
                             eventName: BI.Searcher.EVENT_CHANGE,
@@ -78434,7 +78089,9 @@ BI.IconTextTrigger = BI.inherit(BI.Trigger, {
         var conf = BI.IconTextTrigger.superclass._defaultConfig.apply(this, arguments);
         return BI.extend(conf, {
             baseCls: (conf.baseCls || "") + " bi-text-trigger",
-            height: 24
+            height: 24,
+            iconHeight: null,
+            iconWidth: null
         });
     },
 
@@ -78466,6 +78123,8 @@ BI.IconTextTrigger = BI.inherit(BI.Trigger, {
                     ref: function (_ref) {
                         self.icon = _ref;
                     },
+                    iconHeight: o.iconHeight,
+                    iconWidth: o.iconWidth,
                     disableSelected: true
                 },
                 width: BI.isEmptyString(o.iconCls)? 0 : (o.triggerWidth || o.height)
@@ -78513,7 +78172,9 @@ BI.SelectIconTextTrigger = BI.inherit(BI.Trigger, {
     _defaultConfig: function () {
         return BI.extend(BI.SelectIconTextTrigger.superclass._defaultConfig.apply(this, arguments), {
             baseCls: "bi-select-text-trigger bi-border",
-            height: 24
+            height: 24,
+            iconHeight: null,
+            iconWidth: null
         });
     },
 
@@ -78527,7 +78188,9 @@ BI.SelectIconTextTrigger = BI.inherit(BI.Trigger, {
             element: this,
             text: obj.text,
             iconCls: obj.iconCls,
-            height: o.height
+            height: o.height,
+            iconHeight: o.iconHeight,
+            iconWidth: o.iconWidth
         });
     },
 
@@ -87211,7 +86874,7 @@ BI.MultiSelectSearchLoader = BI.inherit(BI.Widget, {
         });
         if (BI.isKey(keyword)) {
             var search = BI.Func.getSearchResult(newValues, keyword);
-            values = search.matched.concat(search.finded);
+            values = search.matched.concat(search.find);
         }
         return BI.map(values, function (i, v) {
             return {
@@ -92466,7 +92129,7 @@ BI.SingleSelectSearchLoader = BI.inherit(BI.Widget, {
         });
         if (BI.isKey(keyword)) {
             var search = BI.Func.getSearchResult(newValues, keyword);
-            values = search.matched.concat(search.finded);
+            values = search.match.concat(search.find);
         }
         return BI.map(values, function (i, v) {
             return {
@@ -93783,7 +93446,7 @@ BI.SingleSelectSearchLoader = BI.inherit(BI.Widget, {
         });
         if (BI.isKey(keyword)) {
             var search = BI.Func.getSearchResult(newValues, keyword);
-            values = search.matched.concat(search.finded);
+            values = search.match.concat(search.find);
         }
         return BI.map(values, function (i, v) {
             return {
@@ -96676,7 +96339,7 @@ BI.AbstractAllValueChooser = BI.inherit(BI.Widget, {
             }
             BI.each(keywords, function (i, kw) {
                 var search = BI.Func.getSearchResult(items, kw);
-                items = search.matched.concat(search.finded);
+                items = search.match.concat(search.find);
             });
             if (options.selectedValues) {// 过滤
                 var filter = BI.makeObject(options.selectedValues, true);
@@ -96963,8 +96626,8 @@ BI.shortcut("bi.all_value_chooser_pane", BI.AllValueChooserPane);BI.AbstractTree
                     self._deleteNode(selectedValues, p);
                 } else {
                     var searched = [];
-                    var finded = search(parentValues, notSelectedValue, [], searched);
-                    if (finded && BI.isNotEmptyArray(searched)) {
+                    var find = search(parentValues, notSelectedValue, [], searched);
+                    if (find && BI.isNotEmptyArray(searched)) {
                         BI.each(searched, function (i, arr) {
                             var node = self._getNode(selectedValues, arr);
                             if (node) {
@@ -96983,17 +96646,17 @@ BI.shortcut("bi.all_value_chooser_pane", BI.AllValueChooserPane);BI.AbstractTree
             // 例如选中了中国-江苏，取消南京
             // important 选中了中国-江苏，取消了江苏，但是搜索的是南京
             if (isChild(selectedValues, p)) {
-                var result = [], finded = false;
+                var result = [], find = false;
                 // 如果parentValues中有匹配的值，说明搜索结果不在当前值下
                 if (isSearchValueInParent(p)) {
-                    finded = true;
+                    find = true;
                 } else {
                     // 从当前值开始搜
-                    finded = search(parentValues, notSelectedValue, result);
+                    find = search(parentValues, notSelectedValue, result);
                     p = parentValues;
                 }
 
-                if (finded === true) {
+                if (find === true) {
                     // 去掉点击的节点之后的结果集
                     expandSelectedValue(selectedValues, p, notSelectedValue);
                     // 添加去掉搜索的结果集
@@ -97442,13 +97105,13 @@ BI.shortcut("bi.all_value_chooser_pane", BI.AllValueChooserPane);BI.AbstractTree
 
     _isMatch: function (parentValues, value, keyword) {
         var node = this._getTreeNode(parentValues, value);
-        var finded = BI.Func.getSearchResult([node.text || node.value], keyword);
-        return finded.finded.length > 0 || finded.matched.length > 0;
+        var find = BI.Func.getSearchResult([node.text || node.value], keyword);
+        return find.find.length > 0 || find.match.length > 0;
     },
 
     _getTreeNode: function (parentValues, v) {
         var self = this;
-        var findedParentNode;
+        var findParentNode;
         var index = 0;
         this.tree.traverse(function (node) {
             if (self.tree.isRoot(node)) {
@@ -97458,7 +97121,7 @@ BI.shortcut("bi.all_value_chooser_pane", BI.AllValueChooserPane);BI.AbstractTree
                 return false;
             }
             if (index === parentValues.length && node.value === v) {
-                findedParentNode = node;
+                findParentNode = node;
                 return false;
             }
             if (node.value === parentValues[index]) {
@@ -97467,7 +97130,7 @@ BI.shortcut("bi.all_value_chooser_pane", BI.AllValueChooserPane);BI.AbstractTree
             }
             return true;
         });
-        return findedParentNode;
+        return findParentNode;
     },
 
     _getChildren: function (parentValues) {
@@ -97650,7 +97313,7 @@ BI.AbstractValueChooser = BI.inherit(BI.Widget, {
             }
             BI.each(keywords, function (i, kw) {
                 var search = BI.Func.getSearchResult(items, kw);
-                items = search.matched.concat(search.finded);
+                items = search.match.concat(search.find);
             });
             if (options.selectedValues) {// 过滤
                 var filter = BI.makeObject(options.selectedValues, true);
