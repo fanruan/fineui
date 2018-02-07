@@ -135,8 +135,8 @@ BI.AbstractTreeValueChooser = BI.inherit(BI.Widget, {
                     self._deleteNode(selectedValues, p);
                 } else {
                     var searched = [];
-                    var finded = search(parentValues, notSelectedValue, [], searched);
-                    if (finded && BI.isNotEmptyArray(searched)) {
+                    var find = search(parentValues, notSelectedValue, [], searched);
+                    if (find && BI.isNotEmptyArray(searched)) {
                         BI.each(searched, function (i, arr) {
                             var node = self._getNode(selectedValues, arr);
                             if (node) {
@@ -155,17 +155,17 @@ BI.AbstractTreeValueChooser = BI.inherit(BI.Widget, {
             // 例如选中了中国-江苏，取消南京
             // important 选中了中国-江苏，取消了江苏，但是搜索的是南京
             if (isChild(selectedValues, p)) {
-                var result = [], finded = false;
+                var result = [], find = false;
                 // 如果parentValues中有匹配的值，说明搜索结果不在当前值下
                 if (isSearchValueInParent(p)) {
-                    finded = true;
+                    find = true;
                 } else {
                     // 从当前值开始搜
-                    finded = search(parentValues, notSelectedValue, result);
+                    find = search(parentValues, notSelectedValue, result);
                     p = parentValues;
                 }
 
-                if (finded === true) {
+                if (find === true) {
                     // 去掉点击的节点之后的结果集
                     expandSelectedValue(selectedValues, p, notSelectedValue);
                     // 添加去掉搜索的结果集
@@ -614,13 +614,13 @@ BI.AbstractTreeValueChooser = BI.inherit(BI.Widget, {
 
     _isMatch: function (parentValues, value, keyword) {
         var node = this._getTreeNode(parentValues, value);
-        var finded = BI.Func.getSearchResult([node.text || node.value], keyword);
-        return finded.finded.length > 0 || finded.matched.length > 0;
+        var find = BI.Func.getSearchResult([node.text || node.value], keyword);
+        return find.find.length > 0 || find.match.length > 0;
     },
 
     _getTreeNode: function (parentValues, v) {
         var self = this;
-        var findedParentNode;
+        var findParentNode;
         var index = 0;
         this.tree.traverse(function (node) {
             if (self.tree.isRoot(node)) {
@@ -630,7 +630,7 @@ BI.AbstractTreeValueChooser = BI.inherit(BI.Widget, {
                 return false;
             }
             if (index === parentValues.length && node.value === v) {
-                findedParentNode = node;
+                findParentNode = node;
                 return false;
             }
             if (node.value === parentValues[index]) {
@@ -639,7 +639,7 @@ BI.AbstractTreeValueChooser = BI.inherit(BI.Widget, {
             }
             return true;
         });
-        return findedParentNode;
+        return findParentNode;
     },
 
     _getChildren: function (parentValues) {

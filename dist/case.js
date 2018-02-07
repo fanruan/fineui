@@ -5729,11 +5729,11 @@ BI.shortcut("bi.search_text_value_combo", BI.SearchTextValueCombo);/**
  * Created by Windy on 2018/2/5.
  */
 BI.SearchTextValueComboPopup = BI.inherit(BI.Pane, {
-    
+
     props: {
         baseCls: "bi-search-text-value-popup"
     },
-    
+
     render: function () {
         var self = this, o = this.options;
         return {
@@ -5771,8 +5771,8 @@ BI.SearchTextValueComboPopup = BI.inherit(BI.Pane, {
         };
     },
 
-    populate: function (finded, matched, keyword) {
-        var items = BI.concat(finded, matched);
+    populate: function (find, match, keyword) {
+        var items = BI.concat(find, match);
         BI.SearchTextValueComboPopup.superclass.populate.apply(this, items);
         items = BI.createItems(items, {
             type: "bi.single_select_item",
@@ -5830,8 +5830,8 @@ BI.SearchTextValueTrigger = BI.inherit(BI.Trigger, {
                         onSearch: function (obj, callback) {
                             var keyword = obj.keyword;
                             var finding = BI.Func.getSearchResult(o.items, keyword);
-                            var matched = finding.matched, finded = finding.finded;
-                            callback(finded, matched);
+                            var matched = finding.match, find = finding.find;
+                            callback(find, matched);
                         },
                         listeners: [{
                             eventName: BI.Searcher.EVENT_CHANGE,

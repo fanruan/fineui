@@ -2,11 +2,11 @@
  * Created by Windy on 2018/2/5.
  */
 BI.SearchTextValueComboPopup = BI.inherit(BI.Pane, {
-    
+
     props: {
         baseCls: "bi-search-text-value-popup"
     },
-    
+
     render: function () {
         var self = this, o = this.options;
         return {
@@ -44,8 +44,8 @@ BI.SearchTextValueComboPopup = BI.inherit(BI.Pane, {
         };
     },
 
-    populate: function (finded, matched, keyword) {
-        var items = BI.concat(finded, matched);
+    populate: function (find, match, keyword) {
+        var items = BI.concat(find, match);
         BI.SearchTextValueComboPopup.superclass.populate.apply(this, items);
         items = BI.createItems(items, {
             type: "bi.single_select_item",
