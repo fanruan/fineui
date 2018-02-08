@@ -27,7 +27,7 @@ BI.TextTrigger = BI.inherit(BI.Trigger, {
             height: o.height,
             text: o.text,
             title: function () {
-                return o.text;
+                return self.text.getText();
             },
             hgap: c.hgap,
             readonly: o.readonly

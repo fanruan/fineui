@@ -12057,18 +12057,17 @@ Demo.Downlist = BI.inherit(BI.Widget, {
                             text: "column 2",
                             iconCls1: "chart-type-e-font",
                             cls: "dot-e-font",
-                            value: 12
+                            value: 11
                         },
-                        disabled: true,
                         children: [{
                             type: "bi.icon_text_item",
                             cls: "dot-e-font",
                             height: 25,
                             text: "column 2.1",
-                            value: 11
+                            value: 21
                         }, {
                             text: "column 2.2",
-                            value: 12,
+                            value: 22,
                             cls: "dot-e-font"
                         }]
                     }],
