@@ -4908,22 +4908,22 @@ BI.BubbleCombo = BI.inherit(BI.Widget, {
             case "left,top":
             case "left,bottom":
                 this._createLeftTriangle();
-                this.combo.getView().showLine("right");
+                //this.combo.getView().showLine("right");
                 break;
             case "right,top":
             case "right,bottom":
                 this._createRightTriangle();
-                this.combo.getView().showLine("left");
+                //this.combo.getView().showLine("left");
                 break;
             case "top,left":
             case "top,right":
                 this._createTopTriangle();
-                this.combo.getView().showLine("bottom");
+                //this.combo.getView().showLine("bottom");
                 break;
             case "bottom,left":
             case "bottom,right":
                 this._createBottomTriangle();
-                this.combo.getView().showLine("top");
+                //this.combo.getView().showLine("top");
                 break;
         }
     },
@@ -4931,7 +4931,7 @@ BI.BubbleCombo = BI.inherit(BI.Widget, {
     _hideTriangle: function () {
         this.triangle && this.triangle.destroy();
         this.triangle = null;
-        this.combo.getView() && this.combo.getView().hideLine();
+        //this.combo.getView() && this.combo.getView().hideLine();
     },
 
     hideView: function () {
