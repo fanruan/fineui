@@ -62,6 +62,26 @@
         return text;
     }
 
+    //'#.##'之类的格式处理 1.324e-18 这种的科学数字
+    function _dealNumberPrecision (text, fright) {
+        if(/[eE]/.test(text)){
+            var precision = 0, i = 0, ch;
+
+            if(/[%‰]$/.test(fright)){
+                precision = /[%]$/.test(fright) ? 2 : 3;
+            }
+
+            for(var len = fright.length; i < len; i++) {
+                if((ch = fright.charAt(i)) == '0' || ch == '#'){
+                    precision++;
+                }
+            }
+            return Number(text).toFixed(precision);
+        }
+
+        return text;
+    }
+
     /**
      * 数字格式
      */
@@ -81,9 +101,9 @@
                 return _numberFormat((-text) + "", '-' + format);
             }
         }
-        var tp = text.split('.'), fp = format.split('.'),
-            tleft = tp[0] || '', fleft = fp[0] || '',
-            tright = tp[1] || '', fright = fp[1] || '';
+        var fp = format.split('.'), fleft = fp[0] || '', fright = fp[1] || '';
+        text = _dealNumberPrecision(text, fright);
+        var tp = text.split('.'), tleft = tp[0] || '', tright = tp[1] || '';
         //百分比,千分比的小数点移位处理
         if (/[%‰]$/.test(format)) {
             var paddingZero = /[%]$/.test(format) ? '00' : '000';
