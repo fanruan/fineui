@@ -39,13 +39,11 @@ $.extend(BI, {
                     }]
                 });
                 toast.element.css({"margin-left": -1 * toast.element.outerWidth() / 2});
-                toast.element.slideDown(500, function () {
-                    autoClose && BI.delay(function () {
-                        toast.element.slideUp(500, function () {
-                            toast.destroy();
-                        });
-                    }, 5000);
-                });
+                toast.element.show();
+                autoClose && BI.delay(function () {
+                    toast.element.hide();
+                    toast.destroy();
+                }, 5000);
             },
             _show: function (hasCancel, title, message, callback) {
                 $mask = $("<div class=\"bi-z-index-mask\">").css({
