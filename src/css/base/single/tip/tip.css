@@ -23,11 +23,9 @@
   color: #faaa39;
 }
 
-.bi-tip {
-  position: fixed !important;
-}
 
 .bi-toast {
+  position: fixed !important;
   font-size: 14px;
   color: #ffffff;
   max-width: 400px;
@@ -53,6 +51,7 @@
 }
 
 .bi-tooltip {
+  position: fixed !important;
   max-width: 250px;
   -webkit-border-radius: 2px;
   -moz-border-radius: 2px;
