@@ -23,7 +23,7 @@ BI.DateTrigger = BI.inherit(BI.Trigger, {
             validationChecker: function (v) {
                 var date = v.match(/\d+/g);
                 self._autoAppend(v, date);
-                return self._dateCheck(v) && Date.checkLegal(v) && self._checkVoid({
+                return self._dateCheck(v) && BI.checkDateLegal(v) && self._checkVoid({
                     year: date[0],
                     month: date[1],
                     day: date[2]
@@ -101,21 +101,21 @@ BI.DateTrigger = BI.inherit(BI.Trigger, {
         this.setValue(o.value);
     },
     _dateCheck: function (date) {
-        return Date.parseDateTime(date, "%Y-%x-%d").print("%Y-%x-%d") == date || Date.parseDateTime(date, "%Y-%X-%d").print("%Y-%X-%d") == date || Date.parseDateTime(date, "%Y-%x-%e").print("%Y-%x-%e") == date || Date.parseDateTime(date, "%Y-%X-%e").print("%Y-%X-%e") == date;
+        return BI.parseDateTime(date, "%Y-%x-%d").print("%Y-%x-%d") == date || BI.parseDateTime(date, "%Y-%X-%d").print("%Y-%X-%d") == date || BI.parseDateTime(date, "%Y-%x-%e").print("%Y-%x-%e") == date || BI.parseDateTime(date, "%Y-%X-%e").print("%Y-%X-%e") == date;
     },
     _checkVoid: function (obj) {
-        return !Date.checkVoid(obj.year, obj.month, obj.day, this.options.min, this.options.max)[0];
+        return !BI.checkDateVoid(obj.year, obj.month, obj.day, this.options.min, this.options.max)[0];
     },
     _autoAppend: function (v, dateObj) {
         var self = this;
-        var date = Date.parseDateTime(v, "%Y-%X-%d").print("%Y-%X-%d");
+        var date = BI.parseDateTime(v, "%Y-%X-%d").print("%Y-%X-%d");
         var yearCheck = function (v) {
-            return Date.parseDateTime(v, "%Y").print("%Y") == v && date >= self.options.min && date <= self.options.max;
+            return BI.parseDateTime(v, "%Y").print("%Y") == v && date >= self.options.min && date <= self.options.max;
         };
         var monthCheck = function (v) {
-            return Date.parseDateTime(v, "%Y-%X").print("%Y-%X") == v && date >= self.options.min && date <= self.options.max;
+            return BI.parseDateTime(v, "%Y-%X").print("%Y-%X") == v && date >= self.options.min && date <= self.options.max;
         };
-        if (BI.isNotNull(dateObj) && Date.checkLegal(v)) {
+        if (BI.isNotNull(dateObj) && BI.checkDateLegal(v)) {
             switch (v.length) {
                 case this._const.yearLength:
                     if (yearCheck(v)) {
@@ -133,7 +133,7 @@ BI.DateTrigger = BI.inherit(BI.Trigger, {
 
     setValue: function (v) {
         var type, value, self = this;
-        var date = Date.getDate();
+        var date = BI.getDate();
         this.store_value = v;
         if (BI.isNotNull(v)) {
             type = v.type || BI.DateTrigger.MULTI_DATE_CALENDAR; value = v.value;
@@ -150,62 +150,62 @@ BI.DateTrigger = BI.inherit(BI.Trigger, {
         switch (type) {
             case BI.DateTrigger.MULTI_DATE_YEAR_PREV:
                 var text = value + BI.DateTrigger.MULTI_DATE_SEGMENT_NUM[BI.DateTrigger.MULTI_DATE_YEAR_PREV];
-                date = Date.getDate((date.getFullYear() - 1 * value), date.getMonth(), date.getDate());
+                date = BI.getDate((date.getFullYear() - 1 * value), date.getMonth(), BI.getDate());
                 _setInnerValue(date, text);
                 break;
             case BI.DateTrigger.MULTI_DATE_YEAR_AFTER:
                 var text = value + BI.DateTrigger.MULTI_DATE_SEGMENT_NUM[BI.DateTrigger.MULTI_DATE_YEAR_AFTER];
-                date = Date.getDate((date.getFullYear() + 1 * value), date.getMonth(), date.getDate());
+                date = BI.getDate((date.getFullYear() + 1 * value), date.getMonth(), BI.getDate());
                 _setInnerValue(date, text);
                 break;
             case BI.DateTrigger.MULTI_DATE_YEAR_BEGIN:
                 var text = BI.DateTrigger.MULTI_DATE_SEGMENT_NUM[BI.DateTrigger.MULTI_DATE_YEAR_BEGIN];
-                date = Date.getDate(date.getFullYear(), 0, 1);
+                date = BI.getDate(date.getFullYear(), 0, 1);
                 _setInnerValue(date, text);
                 break;
             case BI.DateTrigger.MULTI_DATE_YEAR_END:
                 var text = BI.DateTrigger.MULTI_DATE_SEGMENT_NUM[BI.DateTrigger.MULTI_DATE_YEAR_END];
-                date = Date.getDate(date.getFullYear(), 11, 31);
+                date = BI.getDate(date.getFullYear(), 11, 31);
                 _setInnerValue(date, text);
                 break;
             case BI.DateTrigger.MULTI_DATE_QUARTER_PREV:
                 var text = value + BI.DateTrigger.MULTI_DATE_SEGMENT_NUM[BI.DateTrigger.MULTI_DATE_QUARTER_PREV];
-                date = Date.getDate().getBeforeMulQuarter(value);
+                date = BI.getDate().getBeforeMulQuarter(value);
                 _setInnerValue(date, text);
                 break;
             case BI.DateTrigger.MULTI_DATE_QUARTER_AFTER:
                 var text = value + BI.DateTrigger.MULTI_DATE_SEGMENT_NUM[BI.DateTrigger.MULTI_DATE_QUARTER_AFTER];
-                date = Date.getDate().getAfterMulQuarter(value);
+                date = BI.getDate().getAfterMulQuarter(value);
                 _setInnerValue(date, text);
                 break;
             case BI.DateTrigger.MULTI_DATE_QUARTER_BEGIN:
                 var text = BI.DateTrigger.MULTI_DATE_SEGMENT_NUM[BI.DateTrigger.MULTI_DATE_QUARTER_BEGIN];
-                date = Date.getDate().getQuarterStartDate();
+                date = BI.getDate().getQuarterStartDate();
                 _setInnerValue(date, text);
                 break;
             case BI.DateTrigger.MULTI_DATE_QUARTER_END:
                 var text = BI.DateTrigger.MULTI_DATE_SEGMENT_NUM[BI.DateTrigger.MULTI_DATE_QUARTER_END];
-                date = Date.getDate().getQuarterEndDate();
+                date = BI.getDate().getQuarterEndDate();
                 _setInnerValue(date, text);
                 break;
             case BI.DateTrigger.MULTI_DATE_MONTH_PREV:
                 var text = value + BI.DateTrigger.MULTI_DATE_SEGMENT_NUM[BI.DateTrigger.MULTI_DATE_MONTH_PREV];
-                date = Date.getDate().getBeforeMultiMonth(value);
+                date = BI.getDate().getBeforeMultiMonth(value);
                 _setInnerValue(date, text);
                 break;
             case BI.DateTrigger.MULTI_DATE_MONTH_AFTER:
                 var text = value + BI.DateTrigger.MULTI_DATE_SEGMENT_NUM[BI.DateTrigger.MULTI_DATE_MONTH_AFTER];
-                date = Date.getDate().getAfterMultiMonth(value);
+                date = BI.getDate().getAfterMultiMonth(value);
                 _setInnerValue(date, text);
                 break;
             case BI.DateTrigger.MULTI_DATE_MONTH_BEGIN:
                 var text = BI.DateTrigger.MULTI_DATE_SEGMENT_NUM[BI.DateTrigger.MULTI_DATE_MONTH_BEGIN];
-                date = Date.getDate(date.getFullYear(), date.getMonth(), 1);
+                date = BI.getDate(date.getFullYear(), date.getMonth(), 1);
                 _setInnerValue(date, text);
                 break;
             case BI.DateTrigger.MULTI_DATE_MONTH_END:
                 var text = BI.DateTrigger.MULTI_DATE_SEGMENT_NUM[BI.DateTrigger.MULTI_DATE_MONTH_END];
-                date = Date.getDate(date.getFullYear(), date.getMonth(), (date.getLastDateOfMonth()).getDate());
+                date = BI.getDate(date.getFullYear(), date.getMonth(), (date.getLastDateOfMonth()).getDate());
                 _setInnerValue(date, text);
                 break;
             case BI.DateTrigger.MULTI_DATE_WEEK_PREV:
@@ -230,7 +230,7 @@ BI.DateTrigger = BI.inherit(BI.Trigger, {
                 break;
             case BI.DateTrigger.MULTI_DATE_DAY_TODAY:
                 var text = BI.DateTrigger.MULTI_DATE_SEGMENT_NUM[BI.DateTrigger.MULTI_DATE_DAY_TODAY];
-                date = Date.getDate();
+                date = BI.getDate();
                 _setInnerValue(date, text);
                 break;
             default:

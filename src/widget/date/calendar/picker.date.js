@@ -17,8 +17,8 @@ BI.DatePicker = BI.inherit(BI.Widget, {
     _init: function () {
         BI.DatePicker.superclass._init.apply(this, arguments);
         var self = this, o = this.options;
-        this._year = Date.getDate().getFullYear();
-        this._month = Date.getDate().getMonth();
+        this._year = BI.getDate().getFullYear();
+        this._month = BI.getDate().getMonth();
         this.left = BI.createWidget({
             type: "bi.icon_button",
             cls: "pre-page-h-font",
@@ -115,14 +115,14 @@ BI.DatePicker = BI.inherit(BI.Widget, {
 
     _checkLeftValid: function () {
         var o = this.options;
-        var valid = !(this._month === 0 && this._year === Date.parseDateTime(o.min, "%Y-%X-%d").getFullYear());
+        var valid = !(this._month === 0 && this._year === BI.parseDateTime(o.min, "%Y-%X-%d").getFullYear());
         this.left.setEnable(valid);
         return valid;
     },
 
     _checkRightValid: function () {
         var o = this.options;
-        var valid = !(this._month === 11 && this._year === Date.parseDateTime(o.max, "%Y-%X-%d").getFullYear());
+        var valid = !(this._month === 11 && this._year === BI.parseDateTime(o.max, "%Y-%X-%d").getFullYear());
         this.right.setEnable(valid);
         return valid;
     },

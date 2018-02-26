@@ -20,11 +20,11 @@ BI.DateTimeCombo = BI.inherit(BI.Single, {
     _init: function () {
         BI.DateTimeCombo.superclass._init.apply(this, arguments);
         var self = this, opts = this.options;
-        var date = Date.getDate();
+        var date = BI.getDate();
         this.storeValue = BI.isNotNull(opts.value) ? opts.value : {
             year: date.getFullYear(),
             month: date.getMonth(),
-            day: date.getDate(),
+            day: BI.getDate(),
             hour: date.getHours(),
             minute: date.getMinutes(),
             second: date.getSeconds()

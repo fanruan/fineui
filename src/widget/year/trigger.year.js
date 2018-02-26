@@ -29,7 +29,7 @@ BI.YearTrigger = BI.inherit(BI.Trigger, {
             height: o.height,
             validationChecker: function (v) {
                 self.editor.setErrorText(!BI.isPositiveInteger(v) ? c.errorText : c.errorTextInvalid);
-                return v === "" || (BI.isPositiveInteger(v) && !Date.checkVoid(v, 1, 1, o.min, o.max)[0]);
+                return v === "" || (BI.isPositiveInteger(v) && !BI.checkDateVoid(v, 1, 1, o.min, o.max)[0]);
             },
             quitChecker: function (v) {
                 return false;

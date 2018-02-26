@@ -144,26 +144,26 @@ BI.TimeInterval = BI.inherit(BI.Single, {
         return combo;
     },
     _dateCheck: function (date) {
-        return Date.parseDateTime(date, "%Y-%x-%d").print("%Y-%x-%d") == date || Date.parseDateTime(date, "%Y-%X-%d").print("%Y-%X-%d") == date || Date.parseDateTime(date, "%Y-%x-%e").print("%Y-%x-%e") == date || Date.parseDateTime(date, "%Y-%X-%e").print("%Y-%X-%e") == date;
+        return BI.parseDateTime(date, "%Y-%x-%d").print("%Y-%x-%d") == date || BI.parseDateTime(date, "%Y-%X-%d").print("%Y-%X-%d") == date || BI.parseDateTime(date, "%Y-%x-%e").print("%Y-%x-%e") == date || BI.parseDateTime(date, "%Y-%X-%e").print("%Y-%X-%e") == date;
     },
     _checkVoid: function (obj) {
-        return !Date.checkVoid(obj.year, obj.month, obj.day, this.constants.DATE_MIN_VALUE, this.constants.DATE_MAX_VALUE)[0];
+        return !BI.checkDateVoid(obj.year, obj.month, obj.day, this.constants.DATE_MIN_VALUE, this.constants.DATE_MAX_VALUE)[0];
     },
     _check: function (smallDate, bigDate) {
         var smallObj = smallDate.match(/\d+/g), bigObj = bigDate.match(/\d+/g);
-        return this._dateCheck(smallDate) && Date.checkLegal(smallDate) && this._checkVoid({
+        return this._dateCheck(smallDate) && BI.checkDateLegal(smallDate) && this._checkVoid({
             year: smallObj[0],
             month: smallObj[1],
             day: smallObj[2]
-        }) && this._dateCheck(bigDate) && Date.checkLegal(bigDate) && this._checkVoid({
+        }) && this._dateCheck(bigDate) && BI.checkDateLegal(bigDate) && this._checkVoid({
             year: bigObj[0],
             month: bigObj[1],
             day: bigObj[2]
         });
     },
     _compare: function (smallDate, bigDate) {
-        smallDate = Date.parseDateTime(smallDate, "%Y-%X-%d").print("%Y-%X-%d");
-        bigDate = Date.parseDateTime(bigDate, "%Y-%X-%d").print("%Y-%X-%d");
+        smallDate = BI.parseDateTime(smallDate, "%Y-%X-%d").print("%Y-%X-%d");
+        bigDate = BI.parseDateTime(bigDate, "%Y-%X-%d").print("%Y-%X-%d");
         return BI.isNotNull(smallDate) && BI.isNotNull(bigDate) && smallDate > bigDate;
     },
     _setTitle: function (v) {

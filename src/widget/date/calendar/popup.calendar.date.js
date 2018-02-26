@@ -34,7 +34,7 @@ BI.DateCalendarPopup = BI.inherit(BI.Widget, {
         BI.DateCalendarPopup.superclass._init.apply(this, arguments);
         var self = this,
             o = this.options;
-        this.today = Date.getDate();
+        this.today = BI.getDate();
         this._year = this.today.getFullYear();
         this._month = this.today.getMonth();
         this._day = this.today.getDate();

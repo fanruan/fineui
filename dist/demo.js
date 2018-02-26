@@ -1627,7 +1627,8 @@ BI.shortcut("demo.title", Demo.Title);Demo.Toast = BI.inherit(BI.Widget, {
                     height: 30,
                     handler: function () {
                         BI.Msg.toast("这是一条非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长的数据", {
-                            level: "warning"
+                            level: "warning",
+                            autoClose: false
                         });
                     }
                 }
@@ -2294,7 +2295,7 @@ BI.shortcut("demo.text_value_check_combo", Demo.TextValueCheckCombo);Demo.Func =
             },
             year: date.getFullYear(),
             month: date.getMonth(),
-            day: date.getDate()
+            day: BI.getDate()
         };
     },
 
@@ -2303,7 +2304,7 @@ BI.shortcut("demo.text_value_check_combo", Demo.TextValueCheckCombo);Demo.Func =
         this.calendar.setValue({
             year: date.getFullYear(),
             month: date.getMonth(),
-            day: date.getDate()
+            day: BI.getDate()
         });
     }
 });
@@ -10692,7 +10693,9 @@ BI.shortcut("demo.tmp", Demo.Func);
     var model = Fix.define({
         name: "原始属性",
         arr: [{
-            n: "a"
+            n: {
+                ss: "a"
+            }
         }, {
             n: 0
         }]
@@ -10703,13 +10706,13 @@ BI.shortcut("demo.tmp", Demo.Func);
             return model;
         },
         watch: {
-            "*.*.n": function () {
-                debugger
-            },
-            "**": function () {
-                debugger
-            },
-            "arr.1.*": function () {
+            // "*.*.n": function () {
+            //     debugger
+            // },
+            // "**": function () {
+            //     debugger
+            // },
+            "arr.*.n.*": function () {
                 this.button.setText(this.model.name + "-" + this.model.arr[1].n);
             }
         },
@@ -10724,8 +10727,8 @@ BI.shortcut("demo.tmp", Demo.Func);
                             self.button = this;
                         },
                         handler: function () {
-                            self.model.arr[0].n += 1;
-                            self.model.arr[1].n += 1;
+                            self.model.arr[0].n.ss += 1;
+                            // self.model.arr[1].n += 1;
                         },
                         text: this.model.name + "-" + this.model.arr[1].n
                     }
@@ -11206,6 +11209,11 @@ BI.shortcut("demo.tmp", Demo.Func);
                 this.button.setText(this.model.b);
             }
         },
+
+        // 首先create demo.Fix，按stores数据流走，这样的话，会在原本的init调用前做一些工作，然后再原本的render前也做些工作。
+        // 原本的render执行时会create return的内容，此时布局被create
+        // 布局不走store数据流，create时对items逐个addElement,即create每个item,然后add进父亲（此时确定父子关系）
+        // 对item的button进行create,button指定element进行create
         render: function () {
             var self = this;
             return {

@@ -17,3 +17,17 @@
 .bi-message-close {
   font-size: 25px;
 }
+
+.bi-message-animate {
+  @val: opacity .3s, transform .4s, -webkit-transform .4s;
+  .transition(@val);
+}
+
+.bi-message-enter {
+  opacity: 1;
+}
+
+.bi-message-leave {
+  opacity: 0;
+  transform: translateY(-100%);
+}
