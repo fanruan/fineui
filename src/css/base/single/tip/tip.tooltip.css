@@ -1,4 +1,5 @@
 .bi-tooltip {
+  position: fixed !important;
   max-width: 250px;
   -webkit-border-radius: 2px;
   -moz-border-radius: 2px;

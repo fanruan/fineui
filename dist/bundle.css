@@ -2941,6 +2941,19 @@ li.CodeMirror-hint-active {
 .bi-message-close {
   font-size: 25px;
 }
+.bi-message-animate {
+  -webkit-transition: opacity 0.3s, transform 0.4s, -webkit-transform 0.4s;
+  -moz-transition: opacity 0.3s, transform 0.4s, -webkit-transform 0.4s;
+  -o-transition: opacity 0.3s, transform 0.4s, -webkit-transform 0.4s;
+  transition: opacity 0.3s, transform 0.4s, -webkit-transform 0.4s;
+}
+.bi-message-enter {
+  opacity: 1;
+}
+.bi-message-leave {
+  opacity: 0;
+  transform: translateY(-100%);
+}
 .bi-multi-list-view .bi-button-mask {
   opacity: 0.1;
   filter: alpha(opacity=10);
@@ -3631,6 +3644,7 @@ body .bi-button.button-ignore.disabled.ghost .b-font:before,
   border: 1px solid #e85050;
 }
 .bi-toast {
+  position: fixed !important;
   font-size: 14px;
   color: #ffffff;
   max-width: 400px;
@@ -3655,6 +3669,7 @@ body .bi-button.button-ignore.disabled.ghost .b-font:before,
   font-size: 16px;
 }
 .bi-tooltip {
+  position: fixed !important;
   max-width: 250px;
   -webkit-border-radius: 2px;
   -moz-border-radius: 2px;
