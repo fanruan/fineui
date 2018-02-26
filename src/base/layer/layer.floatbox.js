@@ -99,7 +99,7 @@ BI.FloatBox = BI.inherit(BI.Widget, {
                             bottom: 0
                         }]
                     },
-                    height: 60
+                    height: 44
                 }
             }
         });

@@ -41081,7 +41081,7 @@ BI.FloatBox = BI.inherit(BI.Widget, {
                             bottom: 0
                         }]
                     },
-                    height: 60
+                    height: 44
                 }
             }
         });
@@ -70299,7 +70299,6 @@ BI.BarPopoverSection = BI.inherit(BI.PopoverSection, {
             type: "bi.button",
             text: this.options.btns[0],
             warningTitle: o.warningTitle,
-            height: 30,
             value: 0,
             handler: function (v) {
                 self.end();
@@ -70309,7 +70308,6 @@ BI.BarPopoverSection = BI.inherit(BI.PopoverSection, {
         this.cancel = BI.createWidget({
             type: "bi.button",
             text: this.options.btns[1],
-            height: 30,
             value: 1,
             level: "ignore",
             handler: function (v) {
