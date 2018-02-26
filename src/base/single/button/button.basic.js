@@ -200,7 +200,10 @@ BI.BasicButton = BI.inherit(BI.Single, {
         });
 
         // 之后的300ms点击无效
-        var onClick = BI.debounce(this._doClick, BI.EVENT_RESPONSE_TIME, true);
+        var onClick = BI.debounce(this._doClick, BI.EVENT_RESPONSE_TIME, {
+            "leading": true,
+            "trailing": false
+        });
 
         function ev (e) {
             if (o.stopEvent) {
@@ -216,8 +219,8 @@ BI.BasicButton = BI.inherit(BI.Single, {
             if (!self.isEnabled() || (self.isOnce() && self.isSelected())) {
                 return;
             }
-            if(BI.isKey(o.bubble) || BI.isFunction(o.bubble)) {
-                if(BI.isNull(self.combo)){
+            if (BI.isKey(o.bubble) || BI.isFunction(o.bubble)) {
+                if (BI.isNull(self.combo)) {
                     var popup;
                     BI.createWidget({
                         type: "bi.absolute",
@@ -243,7 +246,7 @@ BI.BasicButton = BI.inherit(BI.Single, {
                                         eventName: BI.BubblePopupBarView.EVENT_CLICK_TOOLBAR_BUTTON,
                                         action: function (v) {
                                             self.combo.hideView();
-                                            if(v){
+                                            if (v) {
                                                 onClick.apply(self, arguments);
                                             }
                                         }
@@ -273,9 +276,9 @@ BI.BasicButton = BI.inherit(BI.Single, {
             onClick.apply(self, arguments);
         }
 
-        function getBubble() {
+        function getBubble () {
             var bubble = self.options.bubble;
-            if(BI.isFunction(bubble)) {
+            if (BI.isFunction(bubble)) {
                 return bubble();
             }
             return bubble;

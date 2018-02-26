@@ -63,7 +63,10 @@ BI.Searcher = BI.inherit(BI.Widget, {
         });
         o.isDefaultInit && (this._assertPopupView());
 
-        var search = BI.debounce(BI.bind(this._search, this), BI.EVENT_RESPONSE_TIME, true);
+        var search = BI.debounce(BI.bind(this._search, this), BI.EVENT_RESPONSE_TIME, {
+            "leading": true,
+            "trailing": false
+        });
         this.editor.on(BI.Controller.EVENT_CHANGE, function (type) {
             switch (type) {
                 case BI.Events.STARTEDIT:

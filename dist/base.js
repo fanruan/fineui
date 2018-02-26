@@ -801,7 +801,10 @@ BI.BasicButton = BI.inherit(BI.Single, {
         });
 
         // 之后的300ms点击无效
-        var onClick = BI.debounce(this._doClick, BI.EVENT_RESPONSE_TIME, true);
+        var onClick = BI.debounce(this._doClick, BI.EVENT_RESPONSE_TIME, {
+            "leading": true,
+            "trailing": false
+        });
 
         function ev (e) {
             if (o.stopEvent) {
@@ -817,8 +820,8 @@ BI.BasicButton = BI.inherit(BI.Single, {
             if (!self.isEnabled() || (self.isOnce() && self.isSelected())) {
                 return;
             }
-            if(BI.isKey(o.bubble) || BI.isFunction(o.bubble)) {
-                if(BI.isNull(self.combo)){
+            if (BI.isKey(o.bubble) || BI.isFunction(o.bubble)) {
+                if (BI.isNull(self.combo)) {
                     var popup;
                     BI.createWidget({
                         type: "bi.absolute",
@@ -844,7 +847,7 @@ BI.BasicButton = BI.inherit(BI.Single, {
                                         eventName: BI.BubblePopupBarView.EVENT_CLICK_TOOLBAR_BUTTON,
                                         action: function (v) {
                                             self.combo.hideView();
-                                            if(v){
+                                            if (v) {
                                                 onClick.apply(self, arguments);
                                             }
                                         }
@@ -874,9 +877,9 @@ BI.BasicButton = BI.inherit(BI.Single, {
             onClick.apply(self, arguments);
         }
 
-        function getBubble() {
+        function getBubble () {
             var bubble = self.options.bubble;
-            if(BI.isFunction(bubble)) {
+            if (BI.isFunction(bubble)) {
                 return bubble();
             }
             return bubble;
@@ -3162,7 +3165,10 @@ BI.Combo = BI.inherit(BI.Widget, {
                                 }
                             }
                         }
-                    }, BI.EVENT_RESPONSE_TIME, true);
+                    }, BI.EVENT_RESPONSE_TIME, {
+                        "leading": true,
+                        "trailing": false
+                    });
                     self.element.off(ev + "." + self.getName()).on(ev + "." + self.getName(), function (e) {
                         debounce(e);
                         st(e);
@@ -3182,7 +3188,10 @@ BI.Combo = BI.inherit(BI.Widget, {
                                 }
                             }
                         }
-                    }, BI.EVENT_RESPONSE_TIME, true);
+                    }, BI.EVENT_RESPONSE_TIME, {
+                        "leading": true,
+                        "trailing": false
+                    });
                     self.element.off("click." + self.getName()).on("click." + self.getName(), function (e) {
                         debounce(e);
                         st(e);
@@ -3596,7 +3605,10 @@ BI.Expander = BI.inherit(BI.Widget, {
                                     }
                                 }
                             }
-                        }, BI.EVENT_RESPONSE_TIME, true));
+                        }, BI.EVENT_RESPONSE_TIME, {
+                            "leading": true,
+                            "trailing": false
+                        }));
                     }
                     break;
             }
@@ -4441,7 +4453,10 @@ BI.Searcher = BI.inherit(BI.Widget, {
         });
         o.isDefaultInit && (this._assertPopupView());
 
-        var search = BI.debounce(BI.bind(this._search, this), BI.EVENT_RESPONSE_TIME, true);
+        var search = BI.debounce(BI.bind(this._search, this), BI.EVENT_RESPONSE_TIME, {
+            "leading": true,
+            "trailing": false
+        });
         this.editor.on(BI.Controller.EVENT_CHANGE, function (type) {
             switch (type) {
                 case BI.Events.STARTEDIT:
@@ -4799,7 +4814,10 @@ BI.Switcher = BI.inherit(BI.Widget, {
                                     }
                                 }
                             }
-                        }, BI.EVENT_RESPONSE_TIME, true));
+                        }, BI.EVENT_RESPONSE_TIME, {
+                            "leading": true,
+                            "trailing": false
+                        }));
                     }
                     break;
             }
@@ -19553,8 +19571,14 @@ BI.Input = BI.inherit(BI.Single, {
             self.onKeyDown(keyCode, ctrlKey);
             self._keydown_ = false;
         }, 300);
-        var _clk = BI.debounce(BI.bind(this._click, this), BI.EVENT_RESPONSE_TIME, true);
-        this._blurDebounce = BI.debounce(BI.bind(this._blur, this), BI.EVENT_RESPONSE_TIME, true);
+        var _clk = BI.debounce(BI.bind(this._click, this), BI.EVENT_RESPONSE_TIME, {
+            "leading": true,
+            "trailing": false
+        });
+        this._blurDebounce = BI.debounce(BI.bind(this._blur, this), BI.EVENT_RESPONSE_TIME, {
+            "leading": true,
+            "trailing": false
+        });
         this.element
             .keydown(function (e) {
                 inputEventValid = false;
@@ -19569,7 +19593,7 @@ BI.Input = BI.inherit(BI.Single, {
             })
             .on("input propertychange", function (e) {
                 // 这个事件在input的属性发生改变的时候就会触发（class的变化也算）
-                if(BI.isNotNull(e.keyCode)) {
+                if (BI.isNotNull(e.keyCode)) {
                     inputEventValid = true;
                     self._keydown_ = true;
                     _keydown(e.keyCode);
@@ -19608,6 +19632,7 @@ BI.Input = BI.inherit(BI.Single, {
         } else {
             blur();
         }
+
         function blur () {
             if (!self.isValid() && self.options.quitChecker.apply(self, [BI.trim(self.getValue())]) !== false) {
                 self.element.val(self._lastValidValue ? self._lastValidValue : "");
@@ -19717,8 +19742,8 @@ BI.Input = BI.inherit(BI.Single, {
         this.setValid(
             (o.allowBlank === true && BI.trim(v) == "") ||
             (BI.isNotEmptyString(BI.trim(v))
-            && (v === this._lastValidValue ||
-            o.validationChecker.apply(this, [BI.trim(v)]) !== false))
+                && (v === this._lastValidValue ||
+                    o.validationChecker.apply(this, [BI.trim(v)]) !== false))
         );
     },
 

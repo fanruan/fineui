@@ -9599,7 +9599,7 @@ if ( typeof define === "function" && define.amd && define.amd.jQuery ) {
 })( window );/**
  * @license
  * Lodash (Custom Build) <https://lodash.com/>
- * Build: `lodash core plus="debounce,throttle,get,findIndex,findLastIndex,findKey,findLastKey,isArrayLike,invert,invertBy,uniq,uniqBy,zip,unzip"`
+ * Build: `lodash core plus="debounce,throttle,get,findIndex,findLastIndex,findKey,findLastKey,isArrayLike,invert,invertBy,uniq,uniqBy,omit,omitBy,zip,unzip,range"`
  * Copyright JS Foundation and other contributors <https://js.foundation/>
  * Released under MIT license <https://lodash.com/license>
  * Based on Underscore.js 1.8.3 <http://underscorejs.org/LICENSE>
@@ -10545,6 +10545,9 @@ if ( typeof define === "function" && define.amd && define.amd.jQuery ) {
    */
   var nativeObjectToString = objectProto.toString;
 
+  /** Used to infer the `Object` constructor. */
+  var objectCtorString = funcToString.call(Object);
+
   /** Used to restore the original `_` reference in `_.noConflict`. */
   var oldDash = root._;
 
@@ -10576,7 +10579,8 @@ if ( typeof define === "function" && define.amd && define.amd.jQuery ) {
   }());
 
   /* Built-in method references for those with the same name as other `lodash` methods. */
-  var nativeGetSymbols = Object.getOwnPropertySymbols,
+  var nativeCeil = Math.ceil,
+      nativeGetSymbols = Object.getOwnPropertySymbols,
       nativeIsBuffer = Buffer ? Buffer.isBuffer : undefined,
       nativeIsFinite = root.isFinite,
       nativeKeys = overArg(Object.keys, Object),
@@ -12380,6 +12384,29 @@ if ( typeof define === "function" && define.amd && define.amd.jQuery ) {
   }
 
   /**
+   * The base implementation of `_.range` and `_.rangeRight` which doesn't
+   * coerce arguments.
+   *
+   * @private
+   * @param {number} start The start of the range.
+   * @param {number} end The end of the range.
+   * @param {number} step The value to increment or decrement by.
+   * @param {boolean} [fromRight] Specify iterating from right to left.
+   * @returns {Array} Returns the range of numbers.
+   */
+  function baseRange(start, end, step, fromRight) {
+    var index = -1,
+        length = nativeMax(nativeCeil((end - start) / (step || 1)), 0),
+        result = Array(length);
+
+    while (length--) {
+      result[fromRight ? length : ++index] = start;
+      start += step;
+    }
+    return result;
+  }
+
+  /**
    * The base implementation of `_.rest` which doesn't validate or coerce arguments.
    *
    * @private
@@ -12593,6 +12620,20 @@ if ( typeof define === "function" && define.amd && define.amd.jQuery ) {
       }
     }
     return result;
+  }
+
+  /**
+   * The base implementation of `_.unset`.
+   *
+   * @private
+   * @param {Object} object The object to modify.
+   * @param {Array|string} path The property path to unset.
+   * @returns {boolean} Returns `true` if the property is deleted, else `false`.
+   */
+  function baseUnset(object, path) {
+    path = castPath(path, object);
+    object = parent(object, path);
+    return object == null || delete object[toKey(last(path))];
   }
 
   /**
@@ -13262,6 +13303,31 @@ if ( typeof define === "function" && define.amd && define.amd.jQuery ) {
   }
 
   /**
+   * Creates a `_.range` or `_.rangeRight` function.
+   *
+   * @private
+   * @param {boolean} [fromRight] Specify iterating from right to left.
+   * @returns {Function} Returns the new range function.
+   */
+  function createRange(fromRight) {
+    return function(start, end, step) {
+      if (step && typeof step != 'number' && isIterateeCall(start, end, step)) {
+        end = step = undefined;
+      }
+      // Ensure the sign of `-0` is preserved.
+      start = toFinite(start);
+      if (end === undefined) {
+        end = start;
+        start = 0;
+      } else {
+        end = toFinite(end);
+      }
+      step = step === undefined ? (start < end ? 1 : -1) : toFinite(step);
+      return baseRange(start, end, step, fromRight);
+    };
+  }
+
+  /**
    * Creates a function that wraps `func` to continue currying.
    *
    * @private
@@ -13393,6 +13459,19 @@ if ( typeof define === "function" && define.amd && define.amd.jQuery ) {
     }
     var setter = data ? baseSetData : setData;
     return setWrapToString(setter(result, newData), func, bitmask);
+  }
+
+  /**
+   * Used by `_.omit` to customize its `_.cloneDeep` use to only clone plain
+   * objects.
+   *
+   * @private
+   * @param {*} value The value to inspect.
+   * @param {string} key The key of the property to inspect.
+   * @returns {*} Returns the uncloned value or `undefined` to defer cloning to `_.cloneDeep`.
+   */
+  function customOmitClone(value) {
+    return isPlainObject(value) ? undefined : value;
   }
 
   /**
@@ -16782,6 +16861,47 @@ if ( typeof define === "function" && define.amd && define.amd.jQuery ) {
   }
 
   /**
+   * Checks if `value` is a plain object, that is, an object created by the
+   * `Object` constructor or one with a `[[Prototype]]` of `null`.
+   *
+   * @static
+   * @memberOf _
+   * @since 0.8.0
+   * @category Lang
+   * @param {*} value The value to check.
+   * @returns {boolean} Returns `true` if `value` is a plain object, else `false`.
+   * @example
+   *
+   * function Foo() {
+   *   this.a = 1;
+   * }
+   *
+   * _.isPlainObject(new Foo);
+   * // => false
+   *
+   * _.isPlainObject([1, 2, 3]);
+   * // => false
+   *
+   * _.isPlainObject({ 'x': 0, 'y': 0 });
+   * // => true
+   *
+   * _.isPlainObject(Object.create(null));
+   * // => true
+   */
+  function isPlainObject(value) {
+    if (!isObjectLike(value) || baseGetTag(value) != objectTag) {
+      return false;
+    }
+    var proto = getPrototype(value);
+    if (proto === null) {
+      return true;
+    }
+    var Ctor = hasOwnProperty.call(proto, 'constructor') && proto.constructor;
+    return typeof Ctor == 'function' && Ctor instanceof Ctor &&
+      funcToString.call(Ctor) == objectCtorString;
+  }
+
+  /**
    * Checks if `value` is classified as a `RegExp` object.
    *
    * @static
@@ -17502,6 +17622,72 @@ if ( typeof define === "function" && define.amd && define.amd.jQuery ) {
   }
 
   /**
+   * The opposite of `_.pick`; this method creates an object composed of the
+   * own and inherited enumerable property paths of `object` that are not omitted.
+   *
+   * **Note:** This method is considerably slower than `_.pick`.
+   *
+   * @static
+   * @since 0.1.0
+   * @memberOf _
+   * @category Object
+   * @param {Object} object The source object.
+   * @param {...(string|string[])} [paths] The property paths to omit.
+   * @returns {Object} Returns the new object.
+   * @example
+   *
+   * var object = { 'a': 1, 'b': '2', 'c': 3 };
+   *
+   * _.omit(object, ['a', 'c']);
+   * // => { 'b': '2' }
+   */
+  var omit = flatRest(function(object, paths) {
+    var result = {};
+    if (object == null) {
+      return result;
+    }
+    var isDeep = false;
+    paths = arrayMap(paths, function(path) {
+      path = castPath(path, object);
+      isDeep || (isDeep = path.length > 1);
+      return path;
+    });
+    copyObject(object, getAllKeysIn(object), result);
+    if (isDeep) {
+      result = baseClone(result, CLONE_DEEP_FLAG | CLONE_FLAT_FLAG | CLONE_SYMBOLS_FLAG, customOmitClone);
+    }
+    var length = paths.length;
+    while (length--) {
+      baseUnset(result, paths[length]);
+    }
+    return result;
+  });
+
+  /**
+   * The opposite of `_.pickBy`; this method creates an object composed of
+   * the own and inherited enumerable string keyed properties of `object` that
+   * `predicate` doesn't return truthy for. The predicate is invoked with two
+   * arguments: (value, key).
+   *
+   * @static
+   * @memberOf _
+   * @since 4.0.0
+   * @category Object
+   * @param {Object} object The source object.
+   * @param {Function} [predicate=_.identity] The function invoked per property.
+   * @returns {Object} Returns the new object.
+   * @example
+   *
+   * var object = { 'a': 1, 'b': '2', 'c': 3 };
+   *
+   * _.omitBy(object, _.isNumber);
+   * // => { 'b': '2' }
+   */
+  function omitBy(object, predicate) {
+    return pickBy(object, negate(baseIteratee(predicate)));
+  }
+
+  /**
    * Creates an object composed of the picked `object` properties.
    *
    * @static
@@ -17521,6 +17707,37 @@ if ( typeof define === "function" && define.amd && define.amd.jQuery ) {
   var pick = flatRest(function(object, paths) {
     return object == null ? {} : basePick(object, paths);
   });
+
+  /**
+   * Creates an object composed of the `object` properties `predicate` returns
+   * truthy for. The predicate is invoked with two arguments: (value, key).
+   *
+   * @static
+   * @memberOf _
+   * @since 4.0.0
+   * @category Object
+   * @param {Object} object The source object.
+   * @param {Function} [predicate=_.identity] The function invoked per property.
+   * @returns {Object} Returns the new object.
+   * @example
+   *
+   * var object = { 'a': 1, 'b': '2', 'c': 3 };
+   *
+   * _.pickBy(object, _.isNumber);
+   * // => { 'a': 1, 'c': 3 }
+   */
+  function pickBy(object, predicate) {
+    if (object == null) {
+      return {};
+    }
+    var props = arrayMap(getAllKeysIn(object), function(prop) {
+      return [prop];
+    });
+    predicate = baseIteratee(predicate);
+    return basePickBy(object, props, function(value, path) {
+      return predicate(value, path[0]);
+    });
+  }
 
   /**
    * This method is like `_.get` except that if the resolved value is a
@@ -17900,6 +18117,49 @@ if ( typeof define === "function" && define.amd && define.amd.jQuery ) {
   }
 
   /**
+   * Creates an array of numbers (positive and/or negative) progressing from
+   * `start` up to, but not including, `end`. A step of `-1` is used if a negative
+   * `start` is specified without an `end` or `step`. If `end` is not specified,
+   * it's set to `start` with `start` then set to `0`.
+   *
+   * **Note:** JavaScript follows the IEEE-754 standard for resolving
+   * floating-point values which can produce unexpected results.
+   *
+   * @static
+   * @since 0.1.0
+   * @memberOf _
+   * @category Util
+   * @param {number} [start=0] The start of the range.
+   * @param {number} end The end of the range.
+   * @param {number} [step=1] The value to increment or decrement by.
+   * @returns {Array} Returns the range of numbers.
+   * @see _.inRange, _.rangeRight
+   * @example
+   *
+   * _.range(4);
+   * // => [0, 1, 2, 3]
+   *
+   * _.range(-4);
+   * // => [0, -1, -2, -3]
+   *
+   * _.range(1, 5);
+   * // => [1, 2, 3, 4]
+   *
+   * _.range(0, 20, 5);
+   * // => [0, 5, 10, 15]
+   *
+   * _.range(0, -4, -1);
+   * // => [0, -1, -2, -3]
+   *
+   * _.range(1, 4, 0);
+   * // => [1, 1, 1]
+   *
+   * _.range(0);
+   * // => []
+   */
+  var range = createRange();
+
+  /**
    * This method returns a new empty array.
    *
    * @static
@@ -18035,8 +18295,11 @@ if ( typeof define === "function" && define.amd && define.amd.jQuery ) {
   lodash.matches = matches;
   lodash.mixin = mixin;
   lodash.negate = negate;
+  lodash.omit = omit;
+  lodash.omitBy = omitBy;
   lodash.once = once;
   lodash.pick = pick;
+  lodash.range = range;
   lodash.slice = slice;
   lodash.sortBy = sortBy;
   lodash.tap = tap;
@@ -33712,7 +33975,10 @@ BI.BasicButton = BI.inherit(BI.Single, {
         });
 
         // 之后的300ms点击无效
-        var onClick = BI.debounce(this._doClick, BI.EVENT_RESPONSE_TIME, true);
+        var onClick = BI.debounce(this._doClick, BI.EVENT_RESPONSE_TIME, {
+            "leading": true,
+            "trailing": false
+        });
 
         function ev (e) {
             if (o.stopEvent) {
@@ -33728,8 +33994,8 @@ BI.BasicButton = BI.inherit(BI.Single, {
             if (!self.isEnabled() || (self.isOnce() && self.isSelected())) {
                 return;
             }
-            if(BI.isKey(o.bubble) || BI.isFunction(o.bubble)) {
-                if(BI.isNull(self.combo)){
+            if (BI.isKey(o.bubble) || BI.isFunction(o.bubble)) {
+                if (BI.isNull(self.combo)) {
                     var popup;
                     BI.createWidget({
                         type: "bi.absolute",
@@ -33755,7 +34021,7 @@ BI.BasicButton = BI.inherit(BI.Single, {
                                         eventName: BI.BubblePopupBarView.EVENT_CLICK_TOOLBAR_BUTTON,
                                         action: function (v) {
                                             self.combo.hideView();
-                                            if(v){
+                                            if (v) {
                                                 onClick.apply(self, arguments);
                                             }
                                         }
@@ -33785,9 +34051,9 @@ BI.BasicButton = BI.inherit(BI.Single, {
             onClick.apply(self, arguments);
         }
 
-        function getBubble() {
+        function getBubble () {
             var bubble = self.options.bubble;
-            if(BI.isFunction(bubble)) {
+            if (BI.isFunction(bubble)) {
                 return bubble();
             }
             return bubble;
@@ -36073,7 +36339,10 @@ BI.Combo = BI.inherit(BI.Widget, {
                                 }
                             }
                         }
-                    }, BI.EVENT_RESPONSE_TIME, true);
+                    }, BI.EVENT_RESPONSE_TIME, {
+                        "leading": true,
+                        "trailing": false
+                    });
                     self.element.off(ev + "." + self.getName()).on(ev + "." + self.getName(), function (e) {
                         debounce(e);
                         st(e);
@@ -36093,7 +36362,10 @@ BI.Combo = BI.inherit(BI.Widget, {
                                 }
                             }
                         }
-                    }, BI.EVENT_RESPONSE_TIME, true);
+                    }, BI.EVENT_RESPONSE_TIME, {
+                        "leading": true,
+                        "trailing": false
+                    });
                     self.element.off("click." + self.getName()).on("click." + self.getName(), function (e) {
                         debounce(e);
                         st(e);
@@ -36507,7 +36779,10 @@ BI.Expander = BI.inherit(BI.Widget, {
                                     }
                                 }
                             }
-                        }, BI.EVENT_RESPONSE_TIME, true));
+                        }, BI.EVENT_RESPONSE_TIME, {
+                            "leading": true,
+                            "trailing": false
+                        }));
                     }
                     break;
             }
@@ -37352,7 +37627,10 @@ BI.Searcher = BI.inherit(BI.Widget, {
         });
         o.isDefaultInit && (this._assertPopupView());
 
-        var search = BI.debounce(BI.bind(this._search, this), BI.EVENT_RESPONSE_TIME, true);
+        var search = BI.debounce(BI.bind(this._search, this), BI.EVENT_RESPONSE_TIME, {
+            "leading": true,
+            "trailing": false
+        });
         this.editor.on(BI.Controller.EVENT_CHANGE, function (type) {
             switch (type) {
                 case BI.Events.STARTEDIT:
@@ -37710,7 +37988,10 @@ BI.Switcher = BI.inherit(BI.Widget, {
                                     }
                                 }
                             }
-                        }, BI.EVENT_RESPONSE_TIME, true));
+                        }, BI.EVENT_RESPONSE_TIME, {
+                            "leading": true,
+                            "trailing": false
+                        }));
                     }
                     break;
             }
@@ -52464,8 +52745,14 @@ BI.Input = BI.inherit(BI.Single, {
             self.onKeyDown(keyCode, ctrlKey);
             self._keydown_ = false;
         }, 300);
-        var _clk = BI.debounce(BI.bind(this._click, this), BI.EVENT_RESPONSE_TIME, true);
-        this._blurDebounce = BI.debounce(BI.bind(this._blur, this), BI.EVENT_RESPONSE_TIME, true);
+        var _clk = BI.debounce(BI.bind(this._click, this), BI.EVENT_RESPONSE_TIME, {
+            "leading": true,
+            "trailing": false
+        });
+        this._blurDebounce = BI.debounce(BI.bind(this._blur, this), BI.EVENT_RESPONSE_TIME, {
+            "leading": true,
+            "trailing": false
+        });
         this.element
             .keydown(function (e) {
                 inputEventValid = false;
@@ -52480,7 +52767,7 @@ BI.Input = BI.inherit(BI.Single, {
             })
             .on("input propertychange", function (e) {
                 // 这个事件在input的属性发生改变的时候就会触发（class的变化也算）
-                if(BI.isNotNull(e.keyCode)) {
+                if (BI.isNotNull(e.keyCode)) {
                     inputEventValid = true;
                     self._keydown_ = true;
                     _keydown(e.keyCode);
@@ -52519,6 +52806,7 @@ BI.Input = BI.inherit(BI.Single, {
         } else {
             blur();
         }
+
         function blur () {
             if (!self.isValid() && self.options.quitChecker.apply(self, [BI.trim(self.getValue())]) !== false) {
                 self.element.val(self._lastValidValue ? self._lastValidValue : "");
@@ -52628,8 +52916,8 @@ BI.Input = BI.inherit(BI.Single, {
         this.setValid(
             (o.allowBlank === true && BI.trim(v) == "") ||
             (BI.isNotEmptyString(BI.trim(v))
-            && (v === this._lastValidValue ||
-            o.validationChecker.apply(this, [BI.trim(v)]) !== false))
+                && (v === this._lastValidValue ||
+                    o.validationChecker.apply(this, [BI.trim(v)]) !== false))
         );
     },
 

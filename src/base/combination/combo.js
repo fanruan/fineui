@@ -162,7 +162,10 @@ BI.Combo = BI.inherit(BI.Widget, {
                                 }
                             }
                         }
-                    }, BI.EVENT_RESPONSE_TIME, true);
+                    }, BI.EVENT_RESPONSE_TIME, {
+                        "leading": true,
+                        "trailing": false
+                    });
                     self.element.off(ev + "." + self.getName()).on(ev + "." + self.getName(), function (e) {
                         debounce(e);
                         st(e);
@@ -182,7 +185,10 @@ BI.Combo = BI.inherit(BI.Widget, {
                                 }
                             }
                         }
-                    }, BI.EVENT_RESPONSE_TIME, true);
+                    }, BI.EVENT_RESPONSE_TIME, {
+                        "leading": true,
+                        "trailing": false
+                    });
                     self.element.off("click." + self.getName()).on("click." + self.getName(), function (e) {
                         debounce(e);
                         st(e);

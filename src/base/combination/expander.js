@@ -118,7 +118,10 @@ BI.Expander = BI.inherit(BI.Widget, {
                                     }
                                 }
                             }
-                        }, BI.EVENT_RESPONSE_TIME, true));
+                        }, BI.EVENT_RESPONSE_TIME, {
+                            "leading": true,
+                            "trailing": false
+                        }));
                     }
                     break;
             }

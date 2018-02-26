@@ -25,8 +25,14 @@ BI.Input = BI.inherit(BI.Single, {
             self.onKeyDown(keyCode, ctrlKey);
             self._keydown_ = false;
         }, 300);
-        var _clk = BI.debounce(BI.bind(this._click, this), BI.EVENT_RESPONSE_TIME, true);
-        this._blurDebounce = BI.debounce(BI.bind(this._blur, this), BI.EVENT_RESPONSE_TIME, true);
+        var _clk = BI.debounce(BI.bind(this._click, this), BI.EVENT_RESPONSE_TIME, {
+            "leading": true,
+            "trailing": false
+        });
+        this._blurDebounce = BI.debounce(BI.bind(this._blur, this), BI.EVENT_RESPONSE_TIME, {
+            "leading": true,
+            "trailing": false
+        });
         this.element
             .keydown(function (e) {
                 inputEventValid = false;
@@ -41,7 +47,7 @@ BI.Input = BI.inherit(BI.Single, {
             })
             .on("input propertychange", function (e) {
                 // 这个事件在input的属性发生改变的时候就会触发（class的变化也算）
-                if(BI.isNotNull(e.keyCode)) {
+                if (BI.isNotNull(e.keyCode)) {
                     inputEventValid = true;
                     self._keydown_ = true;
                     _keydown(e.keyCode);
@@ -80,6 +86,7 @@ BI.Input = BI.inherit(BI.Single, {
         } else {
             blur();
         }
+
         function blur () {
             if (!self.isValid() && self.options.quitChecker.apply(self, [BI.trim(self.getValue())]) !== false) {
                 self.element.val(self._lastValidValue ? self._lastValidValue : "");
@@ -189,8 +196,8 @@ BI.Input = BI.inherit(BI.Single, {
         this.setValid(
             (o.allowBlank === true && BI.trim(v) == "") ||
             (BI.isNotEmptyString(BI.trim(v))
-            && (v === this._lastValidValue ||
-            o.validationChecker.apply(this, [BI.trim(v)]) !== false))
+                && (v === this._lastValidValue ||
+                    o.validationChecker.apply(this, [BI.trim(v)]) !== false))
         );
     },
 
