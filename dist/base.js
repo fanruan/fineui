@@ -14768,6 +14768,7 @@ $.extend(BI, {
                 var autoClose = BI.isNull(options.autoClose) ? true : options.autoClose;
                 var toast = BI.createWidget({
                     type: "bi.toast",
+                    cls: "bi-message-animate bi-message-leave",
                     level: level,
                     autoClose: autoClose,
                     text: message
@@ -14782,13 +14783,14 @@ $.extend(BI, {
                     }]
                 });
                 toast.element.css({"margin-left": -1 * toast.element.outerWidth() / 2});
-                toast.element.slideDown(500, function () {
-                    autoClose && BI.delay(function () {
-                        toast.element.slideUp(500, function () {
-                            toast.destroy();
-                        });
-                    }, 5000);
-                });
+                toast.element.removeClass("bi-message-leave").addClass("bi-message-enter");
+
+                autoClose && BI.delay(function () {
+                    toast.element.removeClass("bi-message-enter").addClass("bi-message-leave");
+                    BI.delay(function () {
+                        toast.destroy();
+                    }, 1000);
+                }, 5000);
             },
             _show: function (hasCancel, title, message, callback) {
                 $mask = $("<div class=\"bi-z-index-mask\">").css({
@@ -15382,7 +15384,7 @@ BI.FloatBox = BI.inherit(BI.Widget, {
                             bottom: 0
                         }]
                     },
-                    height: 60
+                    height: 44
                 }
             }
         });

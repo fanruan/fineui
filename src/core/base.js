@@ -548,7 +548,7 @@ if (!window.BI) {
 
             // Date
             if (type === "[object Date]") {
-                return Date.getDate(obj.getTime());
+                return BI.getDate(obj.getTime());
             }
 
             var i, clone, key;
@@ -784,7 +784,7 @@ if (!window.BI) {
             if (Date.now) {
                 return Date.now();
             }
-            return Date.getDate().getTime();
+            return BI.getDate().getTime();
 
 
         },
@@ -1047,6 +1047,357 @@ if (!window.BI) {
                 prand = (mult * prand + incr) % modu;
             }
             return unescape(enc_str);
+        },
+
+        /**
+         * 对字符串中的'和\做编码处理
+         * @static
+         * @param {String} string 要做编码处理的字符串
+         * @return {String} 编码后的字符串
+         */
+        escape: function (string) {
+            return string.replace(/('|\\)/g, "\\$1");
+        },
+
+        /**
+         * 让字符串通过指定字符做补齐的函数
+         *
+         *      var s = BI.leftPad('123', 5, '0');//s的值为：'00123'
+         *
+         * @static
+         * @param {String} val 原始值
+         * @param {Number} size 总共需要的位数
+         * @param {String} ch 用于补齐的字符
+         * @return {String}  补齐后的字符串
+         */
+        leftPad: function (val, size, ch) {
+            var result = String(val);
+            if (!ch) {
+                ch = " ";
+            }
+            while (result.length < size) {
+                result = ch + result;
+            }
+            return result.toString();
+        },
+
+        /**
+         * 对字符串做替换的函数
+         *
+         *      var cls = 'my-class', text = 'Some text';
+         *      var res = BI.format('<div class="{0}>{1}</div>"', cls, text);
+         *      //res的值为：'<div class="my-class">Some text</div>';
+         *
+         * @static
+         * @param {String} format 要做替换的字符串，替换字符串1，替换字符串2...
+         * @return {String} 做了替换后的字符串
+         */
+        format: function (format) {
+            var args = Array.prototype.slice.call(arguments, 1);
+            return format.replace(/\{(\d+)\}/g, function (m, i) {
+                return args[i];
+            });
+        }
+    });
+
+    // 日期相关方法
+    _.extend(BI, {
+        /**
+         * 是否是闰年
+         * @param year
+         * @returns {boolean}
+         */
+        isLeapYear: function (year) {
+            return (year % 4 === 0 && year % 100 !== 0) || year % 400 === 0;
+        },
+
+        /**
+         * 检测是否在有效期
+         *
+         * @param YY 年
+         * @param MM 月
+         * @param DD 日
+         * @param minDate '1900-01-01'
+         * @param maxDate '2099-12-31'
+         * @returns {Array} 若无效返回无效状态
+         */
+        checkDateVoid: function (YY, MM, DD, minDate, maxDate) {
+            var back = [];
+            YY = YY | 0;
+            MM = MM | 0;
+            DD = DD | 0;
+            minDate = BI.isString(minDate) ? minDate.match(/\d+/g) : minDate;
+            maxDate = BI.isString(maxDate) ? maxDate.match(/\d+/g) : maxDate;
+            if (YY < minDate[0]) {
+                back = ["y"];
+            } else if (YY > maxDate[0]) {
+                back = ["y", 1];
+            } else if (YY >= minDate[0] && YY <= maxDate[0]) {
+                if (YY == minDate[0]) {
+                    if (MM < minDate[1]) {
+                        back = ["m"];
+                    } else if (MM == minDate[1]) {
+                        if (DD < minDate[2]) {
+                            back = ["d"];
+                        }
+                    }
+                }
+                if (YY == maxDate[0]) {
+                    if (MM > maxDate[1]) {
+                        back = ["m", 1];
+                    } else if (MM == maxDate[1]) {
+                        if (DD > maxDate[2]) {
+                            back = ["d", 1];
+                        }
+                    }
+                }
+            }
+            return back;
+        },
+
+        checkDateLegal: function (str) {
+            var ar = str.match(/\d+/g);
+            var YY = ar[0] | 0, MM = ar[1] | 0, DD = ar[2] | 0;
+            if (ar.length <= 1) {
+                return true;
+            }
+            if (ar.length <= 2) {
+                return MM >= 1 && MM <= 12;
+            }
+            var MD = Date._MD.slice(0);
+            MD[1] = BI.isLeapYear(YY) ? 29 : 28;
+            return MM >= 1 && MM <= 12 && DD <= MD[MM - 1];
+        },
+
+        parseDateTime: function (str, fmt) {
+            var today = BI.getDate();
+            var y = 0;
+            var m = 0;
+            var d = 1;
+            // wei : 对于fmt为‘YYYYMM’或者‘YYYYMMdd’的格式，str的值为类似'201111'的形式，因为年月之间没有分隔符，所以正则表达式分割无效，导致bug7376。
+            var a = str.split(/\W+/);
+            if (fmt.toLowerCase() == "%y%x" || fmt.toLowerCase() == "%y%x%d") {
+                var yearlength = 4;
+                var otherlength = 2;
+                a[0] = str.substring(0, yearlength);
+                a[1] = str.substring(yearlength, yearlength + otherlength);
+                a[2] = str.substring(yearlength + otherlength, yearlength + otherlength * 2);
+            }
+            var b = fmt.match(/%./g);
+            var i = 0, j = 0;
+            var hr = 0;
+            var min = 0;
+            var sec = 0;
+            for (i = 0; i < a.length; ++i) {
+                switch (b[i]) {
+                    case "%d":
+                    case "%e":
+                        d = parseInt(a[i], 10);
+                        break;
+
+                    case "%X":
+                        m = parseInt(a[i], 10) - 1;
+                        break;
+                    case "%x":
+                        m = parseInt(a[i], 10) - 1;
+                        break;
+
+                    case "%Y":
+                    case "%y":
+                        y = parseInt(a[i], 10);
+                        (y < 100) && (y += (y > 29) ? 1900 : 2000);
+                        break;
+
+                    case "%b":
+                    case "%B":
+                        for (j = 0; j < 12; ++j) {
+                            if (Date._MN[j].substr(0, a[i].length).toLowerCase() == a[i].toLowerCase()) {
+                                m = j;
+                                break;
+                            }
+                        }
+                        break;
+
+                    case "%H":
+                    case "%I":
+                    case "%k":
+                    case "%l":
+                        hr = parseInt(a[i], 10);
+                        break;
+
+                    case "%P":
+                    case "%p":
+                        if (/pm/i.test(a[i]) && hr < 12) {
+                            hr += 12;
+                        } else if (/am/i.test(a[i]) && hr >= 12) {
+                            hr -= 12;
+                        }
+                        break;
+
+                    case "%M":
+                        min = parseInt(a[i], 10);
+                    case "%S":
+                        sec = parseInt(a[i], 10);
+                        break;
+                }
+            }
+            //    if (!a[i]) {
+            //        continue;
+            //	}
+            if (isNaN(y)) {
+                y = today.getFullYear();
+            }
+            if (isNaN(m)) {
+                m = today.getMonth();
+            }
+            if (isNaN(d)) {
+                d = today.getDate();
+            }
+            if (isNaN(hr)) {
+                hr = today.getHours();
+            }
+            if (isNaN(min)) {
+                min = today.getMinutes();
+            }
+            if (isNaN(sec)) {
+                sec = today.getSeconds();
+            }
+            if (y != 0) {
+                return BI.getDate(y, m, d, hr, min, sec);
+            }
+            y = 0;
+            m = -1;
+            d = 0;
+            for (i = 0; i < a.length; ++i) {
+                if (a[i].search(/[a-zA-Z]+/) != -1) {
+                    var t = -1;
+                    for (j = 0; j < 12; ++j) {
+                        if (Date._MN[j].substr(0, a[i].length).toLowerCase() == a[i].toLowerCase()) {
+                            t = j;
+                            break;
+                        }
+                    }
+                    if (t != -1) {
+                        if (m != -1) {
+                            d = m + 1;
+                        }
+                        m = t;
+                    }
+                } else if (parseInt(a[i], 10) <= 12 && m == -1) {
+                    m = a[i] - 1;
+                } else if (parseInt(a[i], 10) > 31 && y == 0) {
+                    y = parseInt(a[i], 10);
+                    (y < 100) && (y += (y > 29) ? 1900 : 2000);
+                } else if (d == 0) {
+                    d = a[i];
+                }
+            }
+            if (y == 0) {
+                y = today.getFullYear();
+            }
+            if (m != -1 && d != 0) {
+                return BI.getDate(y, m, d, hr, min, sec);
+            }
+            return today;
+        },
+
+        getDate: function () {
+            var length = arguments.length;
+            var args = arguments;
+            var dt;
+            switch (length) {
+                // new Date()
+                case 0:
+                    dt = new Date();
+                    break;
+                // new Date(long)
+                case 1:
+                    dt = new Date(args[0]);
+                    break;
+                // new Date(year, month)
+                case 2:
+                    dt = new Date(args[0], args[1]);
+                    break;
+                // new Date(year, month, day)
+                case 3:
+                    dt = new Date(args[0], args[1], args[2]);
+                    break;
+                // new Date(year, month, day, hour)
+                case 4:
+                    dt = new Date(args[0], args[1], args[2], args[3]);
+                    break;
+                // new Date(year, month, day, hour, minute)
+                case 5:
+                    dt = new Date(args[0], args[1], args[2], args[3], args[4]);
+                    break;
+                // new Date(year, month, day, hour, minute, second)
+                case 6:
+                    dt = new Date(args[0], args[1], args[2], args[3], args[4], args[5]);
+                    break;
+                // new Date(year, month, day, hour, minute, second, millisecond)
+                case 7:
+                    dt = new Date(args[0], args[1], args[2], args[3], args[4], args[5], args[6]);
+                    break;
+                default:
+                    dt = new Date();
+                    break;
+            }
+            if (BI.isNotNull(Date.timeZone) && (arguments.length === 0 || (arguments.length === 1 && BI.isNumber(arguments[0])))) {
+                var localTime = dt.getTime();
+                var localOffset = dt.getTimezoneOffset() * 60000; // 获得当地时间偏移的毫秒数
+                var utc = localTime + localOffset; // utc即GMT时间标准时区
+                return new Date(utc + Date.timeZone);// + Pool.timeZone.offset);
+            }
+            return dt;
+
+        },
+
+        getTime: function () {
+            var length = arguments.length;
+            var args = arguments;
+            var dt;
+            switch (length) {
+                // new Date()
+                case 0:
+                    dt = new Date();
+                    break;
+                // new Date(long)
+                case 1:
+                    dt = new Date(args[0]);
+                    break;
+                // new Date(year, month)
+                case 2:
+                    dt = new Date(args[0], args[1]);
+                    break;
+                // new Date(year, month, day)
+                case 3:
+                    dt = new Date(args[0], args[1], args[2]);
+                    break;
+                // new Date(year, month, day, hour)
+                case 4:
+                    dt = new Date(args[0], args[1], args[2], args[3]);
+                    break;
+                // new Date(year, month, day, hour, minute)
+                case 5:
+                    dt = new Date(args[0], args[1], args[2], args[3], args[4]);
+                    break;
+                // new Date(year, month, day, hour, minute, second)
+                case 6:
+                    dt = new Date(args[0], args[1], args[2], args[3], args[4], args[5]);
+                    break;
+                // new Date(year, month, day, hour, minute, second, millisecond)
+                case 7:
+                    dt = new Date(args[0], args[1], args[2], args[3], args[4], args[5], args[6]);
+                    break;
+                default:
+                    dt = new Date();
+                    break;
+            }
+            if (BI.isNotNull(Date.timeZone)) {
+                return dt.getTime() - Date.timeZone - dt.getTimezoneOffset() * 60000;
+            }
+            return dt.getTime();
+
         }
     });
 

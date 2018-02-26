@@ -154,7 +154,7 @@
                 if (newnum.length > orilen) {
                     newnum = newnum.substr(1);
                 } else {
-                    newnum = String.leftPad(newnum, orilen, "0");
+                    newnum = BI.leftPad(newnum, orilen, "0");
                     result.leftPlus = false;
                 }
                 right = right.replace(/^[0-9]+/, newnum);
@@ -497,6 +497,8 @@
             text = _eFormat(text, fmt);
         } else {
             // 数字格式
+            var s = [];
+            BI.clamp(s);
             text = _numberFormat(text, fmt);
         }
         // ¤ - 货币格式
@@ -566,14 +568,14 @@
                     } else if (len < 2) {
                         str = date.getMonth() + 1;
                     } else {
-                        str = String.leftPad(date.getMonth() + 1 + "", 2, "0");
+                        str = BI.leftPad(date.getMonth() + 1 + "", 2, "0");
                     }
                     break;
                 case "d": // 日
                     if (len > 1) {
-                        str = String.leftPad(date.getDate() + "", 2, "0");
+                        str = BI.leftPad(BI.getDate() + "", 2, "0");
                     } else {
-                        str = date.getDate();
+                        str = BI.getDate();
                     }
                     break;
                 case "h": // 时(12)
@@ -582,28 +584,28 @@
                         hour = 12;
                     }
                     if (len > 1) {
-                        str = String.leftPad(hour + "", 2, "0");
+                        str = BI.leftPad(hour + "", 2, "0");
                     } else {
                         str = hour;
                     }
                     break;
                 case "H": // 时(24)
                     if (len > 1) {
-                        str = String.leftPad(date.getHours() + "", 2, "0");
+                        str = BI.leftPad(date.getHours() + "", 2, "0");
                     } else {
                         str = date.getHours();
                     }
                     break;
                 case "m":
                     if (len > 1) {
-                        str = String.leftPad(date.getMinutes() + "", 2, "0");
+                        str = BI.leftPad(date.getMinutes() + "", 2, "0");
                     } else {
                         str = date.getMinutes();
                     }
                     break;
                 case "s":
                     if (len > 1) {
-                        str = String.leftPad(date.getSeconds() + "", 2, "0");
+                        str = BI.leftPad(date.getSeconds() + "", 2, "0");
                     } else {
                         str = date.getSeconds();
                     }

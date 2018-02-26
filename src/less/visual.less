@@ -176,6 +176,87 @@
 .triangle-top() {
   position: absolute;
   width: 16px;
+  height: 5px;
+  border-bottom: 1px solid #ffffff;
+
+  &:before {
+    position: absolute;
+    top: 0px;
+    right: 0px;
+    bottom: 0px;
+    border-bottom: 7px solid #ccc;
+    border-left: 8px solid transparent;
+    border-right: 8px solid transparent;
+    content: "";
+  }
+  &:after {
+    position: absolute;
+    right: 1px;
+    top: 1px;
+    bottom: 0px;
+    border-bottom: 6px solid #ffffff;
+    border-left: 7px solid transparent;
+    border-right: 7px solid transparent;
+    content: "";
+  }
+}
+
+.triangle-bottom() {
+  position: absolute;
+  width: 16px;
+  height: 10px;
+  border-top: 1px solid #ffffff;
+
+  &:after {
+    position: absolute;
+    right: 1px;
+    top: 0px;
+    border-top: 6px solid #ffffff;
+    border-left: 7px solid transparent;
+    border-right: 7px solid transparent;
+    content: "";
+  }
+  &:before {
+    position: absolute;
+    border-top: 7px solid #cccccc;
+    border-left: 8px solid transparent;
+    border-right: 8px solid transparent;
+    content: "";
+  }
+
+}
+
+.triangle-left() {
+  position: absolute;
+  width: 16px;
+  height: 6px;
+  border-bottom: 1px solid #f5f5f5;
+
+  &:before {
+    position: absolute;
+    top: 0px;
+    right: 0px;
+    bottom: 0px;
+    border-bottom: 10px solid #ccc;
+    border-left: 8px solid transparent;
+    border-right: 8px solid transparent;
+    content: "";
+  }
+  &:after {
+    position: absolute;
+    right: 1px;
+    top: 1px;
+    bottom: 0px;
+    border-bottom: 9px solid #ffffff;
+    border-left: 7px solid transparent;
+    border-right: 7px solid transparent;
+    content: "";
+  }
+}
+
+.triangle-right() {
+  position: absolute;
+  width: 16px;
   height: 10px;
   border-bottom: 1px solid #f5f5f5;
 
@@ -194,34 +275,9 @@
     right: 1px;
     top: 1px;
     bottom: 0px;
-    border-bottom: 9px solid #f5f5f5;
+    border-bottom: 9px solid #ffffff;
     border-left: 7px solid transparent;
     border-right: 7px solid transparent;
     content: "";
   }
-}
-
-.triangle-bottom() {
-  position: absolute;
-  width: 16px;
-  height: 10px;
-  border-top: 1px solid #f5f5f5;
-
-  &:after {
-    position: absolute;
-    right: 1px;
-    top: -1px;
-    border-top: 9px solid #f5f5f5;
-    border-left: 7px solid transparent;
-    border-right: 7px solid transparent;
-    content: "";
-  }
-  &:before {
-    position: absolute;
-    border-top: 10px solid #cccccc;
-    border-left: 8px solid transparent;
-    border-right: 8px solid transparent;
-    content: "";
-  }
-
 }

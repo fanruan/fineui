@@ -1495,6 +1495,7 @@ BI.shortcut("demo.table_view", Demo.Func);Demo.Bubble = BI.inherit(BI.Widget, {
                     },
                     type: "bi.button",
                     text: "bubble测试(消息)",
+                    title: "123",
                     height: 30,
                     handler: function () {
                         BI.Bubbles.show("singleBubble1", "bubble测试", this, {
@@ -1627,7 +1628,8 @@ BI.shortcut("demo.title", Demo.Title);Demo.Toast = BI.inherit(BI.Widget, {
                     height: 30,
                     handler: function () {
                         BI.Msg.toast("这是一条非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长非常长的数据", {
-                            level: "warning"
+                            level: "warning",
+                            autoClose: false
                         });
                     }
                 }
@@ -1823,17 +1825,70 @@ BI.shortcut("demo.tree_view", Demo.Func);Demo.Func = BI.inherit(BI.Widget, {
                 }
             }]
         });
+
+        var combo3 = BI.createWidget({
+            type: "bi.bubble_combo",
+            el: {
+                type: "bi.button",
+                text: "测试",
+                height: 25
+            },
+            popup: {
+                type: "bi.text_bubble_bar_popup_view",
+                text: "我有很多文字很多文字很多文字很多文字很多文字很多文字很多文字很多文字很多文字很多文字很多文字很多文字很多文字很多文字很多文字很多文字很多文字很多文字很多文字很多文字很多文字很多文字很多文字很多文字很多文字很多文字很多文字很多文字很多文字很多文字很多文字很多文字很多文字很多文字很多文字很多文字很多文字很多文字",
+                ref: function () {
+                    self.popup = this;
+                }
+            },
+            listeners: [{
+                eventName: BI.BubbleCombo.EVENT_BEFORE_POPUPVIEW,
+                action: function () {
+                    self.popup.populate((count++) % 2 === 1 ? "我的文字变少了" : "我有很多文字很多文字很多文字很多文字很多文字很多文字很多文字很多文字很多文字很多文字很多文字很多文字很多文字很多文字很多文字很多文字很多文字很多文字很多文字很多文字很多文字很多文字很多文字很多文字很多文字很多文字很多文字很多文字很多文字很多文字很多文字很多文字很多文字很多文字很多文字很多文字很多文字很多文字");
+                }
+            }]
+        });
+
+        var combo4 = BI.createWidget({
+            type: "bi.bubble_combo",
+            el: {
+                type: "bi.button",
+                text: "测试",
+                height: 25
+            },
+            popup: {
+                type: "bi.text_bubble_bar_popup_view",
+                text: "我有很多文字很多文字很多文字很多文字很多文字很多文字很多文字很多文字很多文字很多文字很多文字很多文字很多文字很多文字很多文字很多文字很多文字很多文字很多文字很多文字很多文字很多文字很多文字很多文字很多文字很多文字很多文字很多文字很多文字很多文字很多文字很多文字很多文字很多文字很多文字很多文字很多文字很多文字",
+                ref: function () {
+                    self.popup = this;
+                }
+            },
+            listeners: [{
+                eventName: BI.BubbleCombo.EVENT_BEFORE_POPUPVIEW,
+                action: function () {
+                    self.popup.populate((count++) % 2 === 1 ? "我的文字变少了" : "我有很多文字很多文字很多文字很多文字很多文字很多文字很多文字很多文字很多文字很多文字很多文字很多文字很多文字很多文字很多文字很多文字很多文字很多文字很多文字很多文字很多文字很多文字很多文字很多文字很多文字很多文字很多文字很多文字很多文字很多文字很多文字很多文字很多文字很多文字很多文字很多文字很多文字很多文字");
+                }
+            }]
+        });
+
         BI.createWidget({
             type: "bi.absolute",
             element: this,
             items: [{
                 el: combo1,
-                left: 100,
-                top: 100
+                left: 10,
+                top: 10
             }, {
                 el: combo2,
-                left: 100,
-                bottom: 100
+                left: 10,
+                bottom: 10
+            }, {
+                el: combo3,
+                right: 10,
+                bottom: 10
+            }, {
+                el: combo4,
+                right: 10,
+                top: 10
             }]
         });
     }
@@ -2241,7 +2296,7 @@ BI.shortcut("demo.text_value_check_combo", Demo.TextValueCheckCombo);Demo.Func =
             },
             year: date.getFullYear(),
             month: date.getMonth(),
-            day: date.getDate()
+            day: BI.getDate()
         };
     },
 
@@ -2250,7 +2305,7 @@ BI.shortcut("demo.text_value_check_combo", Demo.TextValueCheckCombo);Demo.Func =
         this.calendar.setValue({
             year: date.getFullYear(),
             month: date.getMonth(),
-            day: date.getDate()
+            day: BI.getDate()
         });
     }
 });

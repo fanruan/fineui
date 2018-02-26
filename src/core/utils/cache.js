@@ -51,7 +51,7 @@ BI.Cache = {
         // 判断是否设置过期时间
         if (expiresHours && expiresHours > 0) {
             var date = new Date();
-            date.setTime(date.getTime() + expiresHours * 3600 * 1000);
+            date.setTime(BI.getTime() + expiresHours * 3600 * 1000);
             cookieString = cookieString + "; expires=" + date.toGMTString();
         }
         if (path) {
@@ -66,7 +66,7 @@ BI.Cache = {
     },
     deleteCookie: function (name, path) {
         var date = new Date();
-        date.setTime(date.getTime() - 10000);
+        date.setTime(BI.getTime() - 10000);
         var cookieString = name + "=v; expires=" + date.toGMTString();
         if (path) {
             cookieString = cookieString + "; path=" + path;

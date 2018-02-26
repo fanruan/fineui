@@ -47,10 +47,10 @@ BI.DateTimeTrigger = BI.inherit(BI.Trigger, {
         var self = this;
         var value = v, dateStr;
         if(BI.isNull(value)) {
-            value = Date.getDate();
+            value = BI.getDate();
             dateStr = value.print("%Y-%X-%d %H:%M:%S");
         } else {
-            var date = Date.getDate(value.year, value.month, value.day, value.hour, value.minute, value.second);
+            var date = BI.getDate(value.year, value.month, value.day, value.hour, value.minute, value.second);
             dateStr = date.print("%Y-%X-%d %H:%M:%S");
 
         }

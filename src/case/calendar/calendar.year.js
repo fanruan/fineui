@@ -26,7 +26,7 @@ BI.YearCalendar = BI.inherit(BI.Widget, {
         var items = [];
         BI.each(BI.range(BI.YearCalendar.INTERVAL), function (i) {
             var td = {};
-            if (Date.checkVoid(start + i, 1, 1, o.min, o.max)[0]) {
+            if (BI.checkDateVoid(start + i, 1, 1, o.min, o.max)[0]) {
                 td.disabled = true;
             }
             td.text = start + i;
@@ -38,7 +38,7 @@ BI.YearCalendar = BI.inherit(BI.Widget, {
     _init: function () {
         BI.YearCalendar.superclass._init.apply(this, arguments);
         var self = this, o = this.options;
-        this.currentYear = Date.getDate().getFullYear();
+        this.currentYear = BI.getDate().getFullYear();
         var years = this._yearCreator(o.year || this.currentYear);
 
         // 纵向排列年
@@ -101,14 +101,14 @@ BI.YearCalendar = BI.inherit(BI.Widget, {
         var o = this.options;
         var Y = o.year;
         Y = Y | 0;
-        return !!Date.checkVoid(BI.YearCalendar.getStartYear(Y) - 1, 1, 1, o.min, o.max)[0];
+        return !!BI.checkDateVoid(BI.YearCalendar.getStartYear(Y) - 1, 1, 1, o.min, o.max)[0];
     },
 
     isFinalYear: function () {
         var o = this.options, c = this._const;
         var Y = o.year;
         Y = Y | 0;
-        return !!Date.checkVoid(BI.YearCalendar.getEndYear(Y) + 1, 1, 1, o.min, o.max)[0];
+        return !!BI.checkDateVoid(BI.YearCalendar.getEndYear(Y) + 1, 1, 1, o.min, o.max)[0];
     },
 
     setValue: function (val) {
@@ -125,7 +125,7 @@ BI.extend(BI.YearCalendar, {
 
     // 获取显示的第一年
     getStartYear: function (year) {
-        var cur = Date.getDate().getFullYear();
+        var cur = BI.getDate().getFullYear();
         return year - ((year - cur + 3) % BI.YearCalendar.INTERVAL + 12) % BI.YearCalendar.INTERVAL;
     },
 
@@ -134,7 +134,7 @@ BI.extend(BI.YearCalendar, {
     },
 
     getPageByYear: function (year) {
-        var cur = Date.getDate().getFullYear();
+        var cur = BI.getDate().getFullYear();
         year = BI.YearCalendar.getStartYear(year);
         return (year - cur + 3) / BI.YearCalendar.INTERVAL;
     }

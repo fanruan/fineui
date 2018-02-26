@@ -20,7 +20,7 @@ BI.Calendar = BI.inherit(BI.Widget, {
     },
 
     _dateCreator: function (Y, M, D) {
-        var self = this, o = this.options, log = {}, De = Date.getDate();
+        var self = this, o = this.options, log = {}, De = BI.getDate();
         var mins = o.min.match(/\d+/g);
         var maxs = o.max.match(/\d+/g);
         Y < (mins[0] | 0) && (Y = (mins[0] | 0));
@@ -30,7 +30,7 @@ BI.Calendar = BI.inherit(BI.Widget, {
         log.ymd = [De.getFullYear(), De.getMonth(), De.getDate()];
 
         var MD = Date._MD.slice(0);
-        MD[1] = Date.isLeap(log.ymd[0]) ? 29 : 28;
+        MD[1] = BI.isLeapYear(log.ymd[0]) ? 29 : 28;
 
         De.setFullYear(log.ymd[0], log.ymd[1], 1);
         log.FDay = De.getDay();
@@ -57,7 +57,7 @@ BI.Calendar = BI.inherit(BI.Widget, {
                 MM === 12 && (YY += 1);
                 MM = MM === 12 ? 1 : MM + 1;
             }
-            if (Date.checkVoid(YY, MM, DD, mins, maxs)[0]) {
+            if (BI.checkDateVoid(YY, MM, DD, mins, maxs)[0]) {
                 td.disabled = true;
             }
             td.text = DD;
@@ -130,20 +130,20 @@ BI.Calendar = BI.inherit(BI.Widget, {
 
     isFrontDate: function () {
         var o = this.options, c = this._const;
-        var Y = o.year, M = o.month, De = Date.getDate(), day = De.getDay();
+        var Y = o.year, M = o.month, De = BI.getDate(), day = De.getDay();
         Y = Y | 0;
         De.setFullYear(Y, M, 1);
         var newDate = De.getOffsetDate(-1 * (day + 1));
-        return !!Date.checkVoid(newDate.getFullYear(), newDate.getMonth(), newDate.getDate(), o.min, o.max)[0];
+        return !!BI.checkDateVoid(newDate.getFullYear(), newDate.getMonth(), newDate.getDate(), o.min, o.max)[0];
     },
 
     isFinalDate: function () {
         var o = this.options, c = this._const;
-        var Y = o.year, M = o.month, De = Date.getDate(), day = De.getDay();
+        var Y = o.year, M = o.month, De = BI.getDate(), day = De.getDay();
         Y = Y | 0;
         De.setFullYear(Y, M, 1);
         var newDate = De.getOffsetDate(42 - day);
-        return !!Date.checkVoid(newDate.getFullYear(), newDate.getMonth(), newDate.getDate(), o.min, o.max)[0];
+        return !!BI.checkDateVoid(newDate.getFullYear(), newDate.getMonth(), newDate.getDate(), o.min, o.max)[0];
     },
 
     setValue: function (ob) {
@@ -162,14 +162,14 @@ BI.Calendar = BI.inherit(BI.Widget, {
 
 BI.extend(BI.Calendar, {
     getPageByDateJSON: function (json) {
-        var year = Date.getDate().getFullYear();
-        var month = Date.getDate().getMonth();
+        var year = BI.getDate().getFullYear();
+        var month = BI.getDate().getMonth();
         var page = (json.year - year) * 12;
         page += json.month - month;
         return page;
     },
     getDateJSONByPage: function (v) {
-        var months = Date.getDate().getMonth();
+        var months = BI.getDate().getMonth();
         var page = v;
 
         // 对当前page做偏移,使到当前年初
@@ -181,7 +181,7 @@ BI.extend(BI.Calendar, {
         }
         var month = page >= 0 ? (page % 12) : ((12 + page % 12) % 12);
         return {
-            year: Date.getDate().getFullYear() + year,
+            year: BI.getDate().getFullYear() + year,
             month: month
         };
     }
