@@ -25905,8 +25905,6 @@ Data.Source = BISource = {
 
     function noop(a, b, c) {}
 
-    //程序自带的，二进制代码，无法看到方法体，显示的是native code
-    // alert(Array.prototype.sort)
     function isNative(Ctor) {
         return typeof Ctor === 'function' && /native code/.test(Ctor.toString());
     }
@@ -25968,7 +25966,6 @@ Data.Source = BISource = {
             return;
         }
         var segments = path.split('.');
-        // 把形如a.*.b中的b对应value拿到手
         return function (obj) {
             for (var i = 0; i < segments.length; i++) {
                 if (!obj) return;
@@ -26006,8 +26003,8 @@ Data.Source = BISource = {
                 setImmediate(nextTickHandler);
             };
         } else if (typeof MessageChannel !== 'undefined' && (isNative(MessageChannel) ||
-                // PhantomJS
-                MessageChannel.toString() === '[object MessageChannelConstructor]')) {
+        // PhantomJS
+        MessageChannel.toString() === '[object MessageChannelConstructor]')) {
             var channel = new MessageChannel();
             var port = channel.port2;
             channel.port1.onmessage = nextTickHandler;
@@ -26015,19 +26012,19 @@ Data.Source = BISource = {
                 port.postMessage(1);
             };
         } else
-        /* istanbul ignore next */
-        if (typeof Promise !== 'undefined' && isNative(Promise)) {
-            // use microtask in non-DOM environments, e.g. Weex
-            var p = Promise.resolve();
-            timerFunc = function timerFunc() {
-                p.then(nextTickHandler);
-            };
-        } else {
-            // fallback to setTimeout
-            timerFunc = function timerFunc() {
-                setTimeout(nextTickHandler, 0);
-            };
-        }
+            /* istanbul ignore next */
+            if (typeof Promise !== 'undefined' && isNative(Promise)) {
+                // use microtask in non-DOM environments, e.g. Weex
+                var p = Promise.resolve();
+                timerFunc = function timerFunc() {
+                    p.then(nextTickHandler);
+                };
+            } else {
+                // fallback to setTimeout
+                timerFunc = function timerFunc() {
+                    setTimeout(nextTickHandler, 0);
+                };
+            }
 
         return function queueNextTick(cb, ctx) {
             var _resolve = void 0;
@@ -26069,7 +26066,6 @@ Data.Source = BISource = {
      * directives subscribing to it.
      */
 
-// 订阅器
     var Dep = function () {
         function Dep() {
             _classCallCheck(this, Dep);
@@ -26086,7 +26082,6 @@ Data.Source = BISource = {
             remove(this.subs, sub);
         };
 
-        //target是全局唯一的watcher对象,watcher对象的addDep会distinct地addSub当前Dep对象
         Dep.prototype.depend = function depend() {
             if (Dep.target) {
                 Dep.target.addDep(this);
@@ -26203,7 +26198,7 @@ Data.Source = BISource = {
         if (isIE9Below) {
             var VBClassPool = {};
             window.execScript([// jshint ignore:line
-                'Function parseVB(code)', '\tExecuteGlobal(code)', 'End Function' //转换一段文本为VB代码
+            'Function parseVB(code)', '\tExecuteGlobal(code)', 'End Function' //转换一段文本为VB代码
             ].join('\n'), 'VBScript');
 
             var VBMediator = function VBMediator(instance, accessors, name, value) {
@@ -26219,7 +26214,7 @@ Data.Source = BISource = {
                 // jshint ignore:line
                 var buffer = [];
                 buffer.push('\tPrivate [$vbsetter]', '\tPublic  [$accessors]', '\tPublic Default Function [$vbthis](ac' + timeBucket + ', s' + timeBucket + ')', '\t\tSet  [$accessors] = ac' + timeBucket + ': set [$vbsetter] = s' + timeBucket, '\t\tSet  [$vbthis]    = Me', //链式调用
-                    '\tEnd Function');
+                '\tEnd Function');
                 //添加普通属性,因为VBScript对象不能像JS那样随意增删属性，必须在这里预先定义好
                 var uniq = {
                     $vbthis: true,
@@ -26232,19 +26227,19 @@ Data.Source = BISource = {
                         uniq[name] = true;
                     }
                 }
-                //添加访问器属性
+                //添加访问器属性 
                 for (name in accessors) {
                     if (uniq[name]) {
                         continue;
                     }
                     uniq[name] = true;
                     buffer.push(
-                        //由于不知对方会传入什么,因此set, let都用上
-                        '\tPublic Property Let [' + name + '](val' + timeBucket + ')', //setter
-                        '\t\tCall [$vbsetter](Me, [$accessors], "' + name + '", val' + timeBucket + ')', '\tEnd Property', '\tPublic Property Set [' + name + '](val' + timeBucket + ')', //setter
-                        '\t\tCall [$vbsetter](Me, [$accessors], "' + name + '", val' + timeBucket + ')', '\tEnd Property', '\tPublic Property Get [' + name + ']', //getter
-                        '\tOn Error Resume Next', //必须优先使用set语句,否则它会误将数组当字符串返回
-                        '\t\tSet[' + name + '] = [$vbsetter](Me, [$accessors],"' + name + '")', '\tIf Err.Number <> 0 Then', '\t\t[' + name + '] = [$vbsetter](Me, [$accessors],"' + name + '")', '\tEnd If', '\tOn Error Goto 0', '\tEnd Property');
+                    //由于不知对方会传入什么,因此set, let都用上
+                    '\tPublic Property Let [' + name + '](val' + timeBucket + ')', //setter
+                    '\t\tCall [$vbsetter](Me, [$accessors], "' + name + '", val' + timeBucket + ')', '\tEnd Property', '\tPublic Property Set [' + name + '](val' + timeBucket + ')', //setter
+                    '\t\tCall [$vbsetter](Me, [$accessors], "' + name + '", val' + timeBucket + ')', '\tEnd Property', '\tPublic Property Get [' + name + ']', //getter
+                    '\tOn Error Resume Next', //必须优先使用set语句,否则它会误将数组当字符串返回
+                    '\t\tSet[' + name + '] = [$vbsetter](Me, [$accessors],"' + name + '")', '\tIf Err.Number <> 0 Then', '\t\t[' + name + '] = [$vbsetter](Me, [$accessors],"' + name + '")', '\tEnd If', '\tOn Error Goto 0', '\tEnd Property');
                 }
 
                 for (name in properties) {
@@ -26262,7 +26257,7 @@ Data.Source = BISource = {
                     className = makeHashCode('VBClass');
                     window.parseVB('Class ' + className + body);
                     window.parseVB(['Function ' + className + 'Factory(acc, vbm)', //创建实例并传入两个关键的参数
-                        '\tDim o', '\tSet o = (New ' + className + ')(acc, vbm)', '\tSet ' + className + 'Factory = o', 'End Function'].join('\r\n'));
+                    '\tDim o', '\tSet o = (New ' + className + ')(acc, vbm)', '\tSet ' + className + 'Factory = o', 'End Function'].join('\r\n'));
                     VBClassPool[body] = className;
                 }
                 var ret = window[className + 'Factory'](accessors, VBMediator); //得到其产品
@@ -26296,18 +26291,14 @@ Data.Source = BISource = {
      */
 
     var Observer = function () {
-        //传入想要构造成ob对象的{}
         function Observer(value) {
             _classCallCheck(this, Observer);
 
-            // value, dep, vmCount三个私有属性
             this.value = value;
             this.dep = new Dep();
             this.vmCount = 0;
-            //处理数组类型
             if (_.isArray(value)) {
                 var augment = hasProto ? protoAugment : copyAugment;
-                //替换数组中的原型方法
                 augment(value, arrayMethods, arrayKeys);
                 this.model = this.observeArray(value);
             } else {
@@ -26349,23 +26340,16 @@ Data.Source = BISource = {
         }
     }
 
-    //将正常的对象变成ob对象
-    // value为parentKey对应初始值，parentOb为Observer对象(对应想要构造成Ob的obj)，parentKey为obj重的key
     function observe(value, parentObserver, parentKey) {
-        //value不是对象的话没有必要把他也ob化
         if (!_.isObject(value)) {
             return;
         }
         var ob = void 0;
-        //如果value已经Ob化
         if (value.__ob__ instanceof Observer) {
             ob = value.__ob__;
-            //observerState.shouldConvert默认为true,貌似也没有谁改过他
         } else if (observerState.shouldConvert && (_.isArray(value) || isPlainObject(value))) {
-            //数组或者对象，递归以value创建Ob
             ob = new Observer(value);
         }
-        //建立子到父的映射
         ob.parent = parentObserver || ob.parent;
         ob.parentKey = parentKey;
         return ob;
@@ -26401,8 +26385,6 @@ Data.Source = BISource = {
         }
     }
 
-    //@1再Observer构造函数中调用walk的时候调用此函数的情况
-    //@1 obj为传入Observer构造函数的plainObj, observer为当前构造的Observer对象的引用，调用walk时shallow并没有传递
     function defineReactive(obj, observer, shallow) {
         var props = {};
         var model = void 0;
@@ -26454,17 +26436,12 @@ Data.Source = BISource = {
         //     })
         // }
         _.each(obj, function (val, key) {
-            //跳过对象中的_ob_
             if (key in $$skipArray) {
                 return;
             }
-            //给当前obj的每个子属性也添加dep(子属性也要ob化)，以__dep+key的形式确定当前key是否已经ob化
             var dep = observer && observer['__dep' + key] || new Dep();
-            //赋予当前observer以__dep+key属性，对应为新建或者之前已将添加过的Dep对象
             observer && (observer['__dep' + key] = dep);
-            //@1 必走observe，如果value是非对象，直接出来
             var childOb = !shallow && observe(val, observer, key);
-            //属性转化成存取器属性
             props[key] = {
                 enumerable: true,
                 configurable: true,
@@ -26633,7 +26610,6 @@ Data.Source = BISource = {
             // vm._watchers || (vm._watchers = [])
             // vm._watchers.push(this)
             // options
-            // user初始默认为true，其他是undefined
             if (options) {
                 this.deep = !!options.deep;
                 this.user = !!options.user;
@@ -26652,7 +26628,6 @@ Data.Source = BISource = {
             this.newDepIds = new Set();
             this.expression = '';
             // parse expression for getter
-            //形如a.*.b的正则那么传进来的就是function
             if (typeof expOrFn === 'function') {
                 this.getter = expOrFn;
             } else {
@@ -26698,7 +26673,6 @@ Data.Source = BISource = {
             }
         };
 
-        //交换newXXX和XXX,并清空newXXX
         Watcher.prototype.cleanupDeps = function cleanupDeps() {
             var i = this.deps.length;
             while (i--) {
@@ -26732,10 +26706,10 @@ Data.Source = BISource = {
             if (this.active) {
                 var value = this.get();
                 if (value !== this.value ||
-                    // Deep watchers and watchers on Object/Arrays should fire even
-                    // when the value is the same, because the value may
-                    // have mutated.
-                    _.isObject(value) || this.deep) {
+                // Deep watchers and watchers on Object/Arrays should fire even
+                // when the value is the same, because the value may
+                // have mutated.
+                _.isObject(value) || this.deep) {
                     // set new value
                     var oldValue = this.value;
                     this.value = value;
@@ -26836,7 +26810,7 @@ Data.Source = BISource = {
     }
 
     function routeToRegExp(route) {
-        route = route.replace(/\*/g, '[a-zA-Z0-9_]+');
+        route = route.replace(/\*./g, '[a-zA-Z0-9_]+.');
         return '^' + route + '$';
     }
 
@@ -26919,45 +26893,35 @@ Data.Source = BISource = {
                 });
                 return;
             }
-            // if (/\*\*$|\*$/.test(exp)) {
-            //     throw new Error('not support');
-            // }
+            if (/\*\*$|\*$/.test(exp)) {
+                throw new Error('not support');
+            }
             //其他含有*的情况，如*.a,*.*.a,a.*.a
             if (/\*/.test(exp)) {
                 var currentModel = model;
                 //先获取到能获取到的对象
-                // var paths = exp.split(".");
-                // //当前model中一层层剥取，尽量取到接近监听字符串的叶子
-                // //比如arr.*.n model就剥到arr那一层
-                // for (var _i = 0, len = paths.length; _i < len; _i++) {
-                //     if (paths[_i] === "*") {
-                //         break;
-                //     }
-                //     currentModel = model[paths[_i]];
-                // }
-                // exp = exp.substr(exp.indexOf("*"));
-                // //补全路径
-                // //初始父亲为当前剥取到的model的父亲，根为剥去到的model所在Ob(parent也是为了找根，辅助用的)
-                // var parent = currentModel.__ob__.parent,
-                //     root = currentModel.__ob__;
-                // while (parent) {
-                //     //用*来补全剥去的路径
-                //     exp = '*.' + exp;
-                //     //向上溯源
-                //     root = parent;
-                //     parent = parent.parent;
-                // }
-                var root = currentModel.__ob__;
+                var paths = exp.split(".");
+                for (var _i = 0, len = paths.length; _i < len; _i++) {
+                    if (paths[_i] === "*") {
+                        break;
+                    }
+                    currentModel = model[paths[_i]];
+                }
+                exp = exp.substr(exp.indexOf("*"));
+                //补全路径
+                var parent = currentModel.__ob__.parent,
+                    root = currentModel.__ob__;
+                while (parent) {
+                    exp = '*.' + exp;
+                    root = parent;
+                    parent = parent.parent;
+                }
                 var regStr = routeToRegExp(exp);
                 var _dep = new Dep();
-                //Ob的构造函数中是没有_globalDeps的，初始化
                 root._globalDeps || (root._globalDeps = {});
                 root._globalDeps[regStr] = _dep;
 
                 var _w = new Watcher(currentModel, function () {
-                    //调用将_dep加入到全局Dep.target(此时是_w)的sub队列中
-                    //_dep的队列中将会有_w,_w会记录当前_dep在自己的属性中
-                    //双向绑定
                     _dep.depend();
                     return NaN;
                 }, function (newValue, oldValue) {
@@ -27212,14 +27176,11 @@ Data.Source = BISource = {
             var watch$$1 = this.watch;
             var actions = this.actions;
             var keys = _.keys(this.$$model).concat(_.keys(state)).concat(_.keys(computed)).concat(context || []);
-            // 为model对象添加model
             defineProps(this, keys);
             childContext && defineContext(this, childContext);
             this.$$model && (this.model.__ob__ = this.$$model.__ob__);
             this._init();
-            //state中return的对象被包装成ob对象后，ob的model赋值给model的$$state
             initState(this, state);
-            //model中添加$$computed对象，里面的属性是存取器属性
             initComputed(this, computed);
             initWatch(this, watch$$1);
             initMethods(this, actions);
@@ -27294,25 +27255,20 @@ Data.Source = BISource = {
 
     exports.__esModule = true;
 });;(function () {
-    // vm 当前组件 watch 组件中定义的watch
     function initWatch (vm, watch) {
-
         vm._watchers || (vm._watchers = []);
         for (var key in watch) {
             var handler = watch[key];
-            // 居然还能是funtion 数组?
             if (BI.isArray(handler)) {
                 for (var i = 0; i < handler.length; i++) {
                     vm._watchers.push(createWatcher(vm, key, handler[i]));
                 }
             } else {
-                // watch的各项存入数组
                 vm._watchers.push(createWatcher(vm, key, handler));
             }
         }
     }
 
-    // vm 当前组件 key 组件中定义的watch的key值 handler key对应的方法回调
     function createWatcher (vm, keyOrFn, handler) {
         return Fix.watch(vm.model, keyOrFn, _.bind(handler, vm), {
             store: vm.store
@@ -27344,10 +27300,7 @@ Data.Source = BISource = {
     }
 
     var oldWatch = Fix.watch;
-
-    //model 当前组件的model, exp为watch key值 cb为方法回调 options中有当前store
     Fix.watch = function (model, expOrFn, cb, options) {
-        // 为sync的传递服务
         if (BI.isPlainObject(cb)) {
             options = cb;
             cb = cb.handler;
@@ -27357,7 +27310,6 @@ Data.Source = BISource = {
         }
         return oldWatch.call(this, model, expOrFn, function () {
             options && options.store && pushTarget(options.store);
-            //每次watch调用前先将store压栈，之后再出栈
             var res = cb.apply(this, arguments);
             options && options.store && popTarget();
             return res;
@@ -27394,26 +27346,18 @@ Data.Source = BISource = {
     };
 
     var _init = BI.Widget.prototype._init;
-    //以老王的布局穿插理论来看，父子组件间的布局走着玩意是无视store啥的
-    //另外，只有init的组件有element的在create时就指定了父亲
     BI.Widget.prototype._init = function () {
         var self = this;
         var needPop = false;
         if (window.Fix && this._store) {
-            // @1.形如{type: "xxx"} 无context为null，此时返回null
             var store = findStore(this.options.element || context);
             if (store) {
                 pushTarget(store);
                 needPop = true;
             }
-            //widget中指定的store或者model
             this.store = this._store();
-
-            //@1则不走
             needPop && popTarget();
             needPop = false;
-
-            //@1则赋值与全局target作为当前target(环境)，入栈是在render入栈 为什么不在此处压栈？
             pushTarget(this.store);
             if (this.store instanceof Fix.Model) {
                 this.model = this.store.model;
@@ -27422,28 +27366,19 @@ Data.Source = BISource = {
             }
             needPop = true;
         }
-        //@2进入
         _init.apply(this, arguments);
-
-        //为true则必然之前将当前组件环境推进栈中，完成后出来时候要pop，以回到初始化当前组件前(父组件)所在状态，同@3，needPop也与3同步
-        //对于没有render的组件，这个会直接执行，之后再搞子组件，而不是像render递归到最后
         needPop && popTarget();
     };
 
     var _render = BI.Widget.prototype._render;
-
-    // @2_init中走render
     BI.Widget.prototype._render = function () {
         var needPop = false;
         if (window.Fix && this._store) {
             needPop = true;
-            //入栈,可以想见，init中指定了全局的target,而这边会依据此target,将此target压入栈中
             pushTarget(this.store);
             initWatch(this, this.watch);
         }
-        //子组件来一遍
         _render.apply(this, arguments);
-        //@3如果当前组件没有指定store,加入数据流，那么他初始化完成的时候不应该去做出栈操作
         needPop && popTarget();
     };
 
@@ -42910,7 +42845,7 @@ BI.FloatBox = BI.inherit(BI.Widget, {
                             bottom: 0
                         }]
                     },
-                    height: 60
+                    height: 44
                 }
             }
         });
@@ -72128,7 +72063,6 @@ BI.BarPopoverSection = BI.inherit(BI.PopoverSection, {
             type: "bi.button",
             text: this.options.btns[0],
             warningTitle: o.warningTitle,
-            height: 30,
             value: 0,
             handler: function (v) {
                 self.end();
@@ -72138,7 +72072,6 @@ BI.BarPopoverSection = BI.inherit(BI.PopoverSection, {
         this.cancel = BI.createWidget({
             type: "bi.button",
             text: this.options.btns[1],
-            height: 30,
             value: 1,
             level: "ignore",
             handler: function (v) {
