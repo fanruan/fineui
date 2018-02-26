@@ -1,7 +1,7 @@
 /**
  * @license
  * Lodash (Custom Build) <https://lodash.com/>
- * Build: `lodash core plus="debounce,throttle"`
+ * Build: `lodash core plus="debounce,throttle,get"`
  * Copyright JS Foundation and other contributors <https://js.foundation/>
  * Released under MIT license <https://lodash.com/license>
  * Based on Underscore.js 1.8.3 <http://underscorejs.org/LICENSE>
@@ -7963,6 +7963,7 @@
   lodash.every = every;
   lodash.find = find;
   lodash.forEach = forEach;
+  lodash.get = get;
   lodash.has = has;
   lodash.head = head;
   lodash.identity = identity;
