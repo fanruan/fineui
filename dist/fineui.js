@@ -18220,7 +18220,7 @@ if (!window.BI) {
     _.each(["where", "findWhere", "contains", "invoke", "pluck", "shuffle", "sample", "toArray", "size"], function (name) {
         BI[name] = _apply(name);
     });
-    _.each(["each", "map", "reduce", "reduceRight", "find", "filter", "reject", "every", "all", "some", "any", "max", "min",
+    _.each(["get", "each", "map", "reduce", "reduceRight", "find", "filter", "reject", "every", "all", "some", "any", "max", "min",
         "sortBy", "groupBy", "indexBy", "countBy", "partition"], function (name) {
         if (name === "any") {
             BI[name] = _applyFunc("some");
