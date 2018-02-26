@@ -561,8 +561,8 @@ BI.DatePicker = BI.inherit(BI.Widget, {
     _init: function () {
         BI.DatePicker.superclass._init.apply(this, arguments);
         var self = this, o = this.options;
-        this._year = Date.getDate().getFullYear();
-        this._month = Date.getDate().getMonth();
+        this._year = BI.getDate().getFullYear();
+        this._month = BI.getDate().getMonth();
         this.left = BI.createWidget({
             type: "bi.icon_button",
             cls: "pre-page-h-font",
@@ -659,14 +659,14 @@ BI.DatePicker = BI.inherit(BI.Widget, {
 
     _checkLeftValid: function () {
         var o = this.options;
-        var valid = !(this._month === 0 && this._year === Date.parseDateTime(o.min, "%Y-%X-%d").getFullYear());
+        var valid = !(this._month === 0 && this._year === BI.parseDateTime(o.min, "%Y-%X-%d").getFullYear());
         this.left.setEnable(valid);
         return valid;
     },
 
     _checkRightValid: function () {
         var o = this.options;
-        var valid = !(this._month === 11 && this._year === Date.parseDateTime(o.max, "%Y-%X-%d").getFullYear());
+        var valid = !(this._month === 11 && this._year === BI.parseDateTime(o.max, "%Y-%X-%d").getFullYear());
         this.right.setEnable(valid);
         return valid;
     },
@@ -726,7 +726,7 @@ BI.DateCalendarPopup = BI.inherit(BI.Widget, {
         BI.DateCalendarPopup.superclass._init.apply(this, arguments);
         var self = this,
             o = this.options;
-        this.today = Date.getDate();
+        this.today = BI.getDate();
         this._year = this.today.getFullYear();
         this._month = this.today.getMonth();
         this._day = this.today.getDate();
@@ -939,7 +939,7 @@ BI.shortcut("bi.date_combo", BI.DateCombo);BI.DateTrigger = BI.inherit(BI.Trigge
             validationChecker: function (v) {
                 var date = v.match(/\d+/g);
                 self._autoAppend(v, date);
-                return self._dateCheck(v) && Date.checkLegal(v) && self._checkVoid({
+                return self._dateCheck(v) && BI.checkDateLegal(v) && self._checkVoid({
                     year: date[0],
                     month: date[1],
                     day: date[2]
@@ -1017,21 +1017,21 @@ BI.shortcut("bi.date_combo", BI.DateCombo);BI.DateTrigger = BI.inherit(BI.Trigge
         this.setValue(o.value);
     },
     _dateCheck: function (date) {
-        return Date.parseDateTime(date, "%Y-%x-%d").print("%Y-%x-%d") == date || Date.parseDateTime(date, "%Y-%X-%d").print("%Y-%X-%d") == date || Date.parseDateTime(date, "%Y-%x-%e").print("%Y-%x-%e") == date || Date.parseDateTime(date, "%Y-%X-%e").print("%Y-%X-%e") == date;
+        return BI.parseDateTime(date, "%Y-%x-%d").print("%Y-%x-%d") == date || BI.parseDateTime(date, "%Y-%X-%d").print("%Y-%X-%d") == date || BI.parseDateTime(date, "%Y-%x-%e").print("%Y-%x-%e") == date || BI.parseDateTime(date, "%Y-%X-%e").print("%Y-%X-%e") == date;
     },
     _checkVoid: function (obj) {
-        return !Date.checkVoid(obj.year, obj.month, obj.day, this.options.min, this.options.max)[0];
+        return !BI.checkDateVoid(obj.year, obj.month, obj.day, this.options.min, this.options.max)[0];
     },
     _autoAppend: function (v, dateObj) {
         var self = this;
-        var date = Date.parseDateTime(v, "%Y-%X-%d").print("%Y-%X-%d");
+        var date = BI.parseDateTime(v, "%Y-%X-%d").print("%Y-%X-%d");
         var yearCheck = function (v) {
-            return Date.parseDateTime(v, "%Y").print("%Y") == v && date >= self.options.min && date <= self.options.max;
+            return BI.parseDateTime(v, "%Y").print("%Y") == v && date >= self.options.min && date <= self.options.max;
         };
         var monthCheck = function (v) {
-            return Date.parseDateTime(v, "%Y-%X").print("%Y-%X") == v && date >= self.options.min && date <= self.options.max;
+            return BI.parseDateTime(v, "%Y-%X").print("%Y-%X") == v && date >= self.options.min && date <= self.options.max;
         };
-        if (BI.isNotNull(dateObj) && Date.checkLegal(v)) {
+        if (BI.isNotNull(dateObj) && BI.checkDateLegal(v)) {
             switch (v.length) {
                 case this._const.yearLength:
                     if (yearCheck(v)) {
@@ -1049,7 +1049,7 @@ BI.shortcut("bi.date_combo", BI.DateCombo);BI.DateTrigger = BI.inherit(BI.Trigge
 
     setValue: function (v) {
         var type, value, self = this;
-        var date = Date.getDate();
+        var date = BI.getDate();
         this.store_value = v;
         if (BI.isNotNull(v)) {
             type = v.type || BI.DateTrigger.MULTI_DATE_CALENDAR; value = v.value;
@@ -1066,62 +1066,62 @@ BI.shortcut("bi.date_combo", BI.DateCombo);BI.DateTrigger = BI.inherit(BI.Trigge
         switch (type) {
             case BI.DateTrigger.MULTI_DATE_YEAR_PREV:
                 var text = value + BI.DateTrigger.MULTI_DATE_SEGMENT_NUM[BI.DateTrigger.MULTI_DATE_YEAR_PREV];
-                date = Date.getDate((date.getFullYear() - 1 * value), date.getMonth(), date.getDate());
+                date = BI.getDate((date.getFullYear() - 1 * value), date.getMonth(), BI.getDate());
                 _setInnerValue(date, text);
                 break;
             case BI.DateTrigger.MULTI_DATE_YEAR_AFTER:
                 var text = value + BI.DateTrigger.MULTI_DATE_SEGMENT_NUM[BI.DateTrigger.MULTI_DATE_YEAR_AFTER];
-                date = Date.getDate((date.getFullYear() + 1 * value), date.getMonth(), date.getDate());
+                date = BI.getDate((date.getFullYear() + 1 * value), date.getMonth(), BI.getDate());
                 _setInnerValue(date, text);
                 break;
             case BI.DateTrigger.MULTI_DATE_YEAR_BEGIN:
                 var text = BI.DateTrigger.MULTI_DATE_SEGMENT_NUM[BI.DateTrigger.MULTI_DATE_YEAR_BEGIN];
-                date = Date.getDate(date.getFullYear(), 0, 1);
+                date = BI.getDate(date.getFullYear(), 0, 1);
                 _setInnerValue(date, text);
                 break;
             case BI.DateTrigger.MULTI_DATE_YEAR_END:
                 var text = BI.DateTrigger.MULTI_DATE_SEGMENT_NUM[BI.DateTrigger.MULTI_DATE_YEAR_END];
-                date = Date.getDate(date.getFullYear(), 11, 31);
+                date = BI.getDate(date.getFullYear(), 11, 31);
                 _setInnerValue(date, text);
                 break;
             case BI.DateTrigger.MULTI_DATE_QUARTER_PREV:
                 var text = value + BI.DateTrigger.MULTI_DATE_SEGMENT_NUM[BI.DateTrigger.MULTI_DATE_QUARTER_PREV];
-                date = Date.getDate().getBeforeMulQuarter(value);
+                date = BI.getDate().getBeforeMulQuarter(value);
                 _setInnerValue(date, text);
                 break;
             case BI.DateTrigger.MULTI_DATE_QUARTER_AFTER:
                 var text = value + BI.DateTrigger.MULTI_DATE_SEGMENT_NUM[BI.DateTrigger.MULTI_DATE_QUARTER_AFTER];
-                date = Date.getDate().getAfterMulQuarter(value);
+                date = BI.getDate().getAfterMulQuarter(value);
                 _setInnerValue(date, text);
                 break;
             case BI.DateTrigger.MULTI_DATE_QUARTER_BEGIN:
                 var text = BI.DateTrigger.MULTI_DATE_SEGMENT_NUM[BI.DateTrigger.MULTI_DATE_QUARTER_BEGIN];
-                date = Date.getDate().getQuarterStartDate();
+                date = BI.getDate().getQuarterStartDate();
                 _setInnerValue(date, text);
                 break;
             case BI.DateTrigger.MULTI_DATE_QUARTER_END:
                 var text = BI.DateTrigger.MULTI_DATE_SEGMENT_NUM[BI.DateTrigger.MULTI_DATE_QUARTER_END];
-                date = Date.getDate().getQuarterEndDate();
+                date = BI.getDate().getQuarterEndDate();
                 _setInnerValue(date, text);
                 break;
             case BI.DateTrigger.MULTI_DATE_MONTH_PREV:
                 var text = value + BI.DateTrigger.MULTI_DATE_SEGMENT_NUM[BI.DateTrigger.MULTI_DATE_MONTH_PREV];
-                date = Date.getDate().getBeforeMultiMonth(value);
+                date = BI.getDate().getBeforeMultiMonth(value);
                 _setInnerValue(date, text);
                 break;
             case BI.DateTrigger.MULTI_DATE_MONTH_AFTER:
                 var text = value + BI.DateTrigger.MULTI_DATE_SEGMENT_NUM[BI.DateTrigger.MULTI_DATE_MONTH_AFTER];
-                date = Date.getDate().getAfterMultiMonth(value);
+                date = BI.getDate().getAfterMultiMonth(value);
                 _setInnerValue(date, text);
                 break;
             case BI.DateTrigger.MULTI_DATE_MONTH_BEGIN:
                 var text = BI.DateTrigger.MULTI_DATE_SEGMENT_NUM[BI.DateTrigger.MULTI_DATE_MONTH_BEGIN];
-                date = Date.getDate(date.getFullYear(), date.getMonth(), 1);
+                date = BI.getDate(date.getFullYear(), date.getMonth(), 1);
                 _setInnerValue(date, text);
                 break;
             case BI.DateTrigger.MULTI_DATE_MONTH_END:
                 var text = BI.DateTrigger.MULTI_DATE_SEGMENT_NUM[BI.DateTrigger.MULTI_DATE_MONTH_END];
-                date = Date.getDate(date.getFullYear(), date.getMonth(), (date.getLastDateOfMonth()).getDate());
+                date = BI.getDate(date.getFullYear(), date.getMonth(), (date.getLastDateOfMonth()).getDate());
                 _setInnerValue(date, text);
                 break;
             case BI.DateTrigger.MULTI_DATE_WEEK_PREV:
@@ -1146,7 +1146,7 @@ BI.shortcut("bi.date_combo", BI.DateCombo);BI.DateTrigger = BI.inherit(BI.Trigge
                 break;
             case BI.DateTrigger.MULTI_DATE_DAY_TODAY:
                 var text = BI.DateTrigger.MULTI_DATE_SEGMENT_NUM[BI.DateTrigger.MULTI_DATE_DAY_TODAY];
-                date = Date.getDate();
+                date = BI.getDate();
                 _setInnerValue(date, text);
                 break;
             default:
@@ -1247,7 +1247,7 @@ BI.DatePaneWidget = BI.inherit(BI.Widget, {
         BI.DatePaneWidget.superclass._init.apply(this, arguments);
         var self = this, o = this.options;
 
-        this.today = Date.getDate();
+        this.today = BI.getDate();
         this._year = this.today.getFullYear();
         this._month = this.today.getMonth();
 
@@ -1312,7 +1312,7 @@ BI.DatePaneWidget = BI.inherit(BI.Widget, {
     },
 
     _getNewCurrentDate: function () {
-        var today = Date.getDate();
+        var today = BI.getDate();
         return {
             year: today.getFullYear(),
             month: today.getMonth()
@@ -1374,11 +1374,11 @@ BI.DateTimeCombo = BI.inherit(BI.Single, {
     _init: function () {
         BI.DateTimeCombo.superclass._init.apply(this, arguments);
         var self = this, opts = this.options;
-        var date = Date.getDate();
+        var date = BI.getDate();
         this.storeValue = BI.isNotNull(opts.value) ? opts.value : {
             year: date.getFullYear(),
             month: date.getMonth(),
-            day: date.getDate(),
+            day: BI.getDate(),
             hour: date.getHours(),
             minute: date.getMinutes(),
             second: date.getSeconds()
@@ -1617,11 +1617,11 @@ BI.DateTimePopup = BI.inherit(BI.Widget, {
     setValue: function (v) {
         var value = v, date;
         if (BI.isNull(value)) {
-            date = Date.getDate();
+            date = BI.getDate();
             this.dateCombo.setValue({
                 year: date.getFullYear(),
                 month: date.getMonth(),
-                day: date.getDate()
+                day: BI.getDate()
             });
             this.hour.setValue(date.getHours());
             this.minute.setValue(date.getMinutes());
@@ -1808,10 +1808,10 @@ BI.DateTimeTrigger = BI.inherit(BI.Trigger, {
         var self = this;
         var value = v, dateStr;
         if(BI.isNull(value)) {
-            value = Date.getDate();
+            value = BI.getDate();
             dateStr = value.print("%Y-%X-%d %H:%M:%S");
         } else {
-            var date = Date.getDate(value.year, value.month, value.day, value.hour, value.minute, value.second);
+            var date = BI.getDate(value.year, value.month, value.day, value.hour, value.minute, value.second);
             dateStr = date.print("%Y-%X-%d %H:%M:%S");
 
         }
@@ -4610,39 +4610,39 @@ BI.MultiDateCard = BI.inherit(BI.Widget, {
         var type = valueObject.type, value = valueObject.value;
         switch (type) {
             case BI.MultiDateCombo.DATE_TYPE.MULTI_DATE_DAY_PREV:
-                return Date.getDate().getOffsetDate(-1 * value);
+                return BI.getDate().getOffsetDate(-1 * value);
             case BI.MultiDateCombo.DATE_TYPE.MULTI_DATE_DAY_AFTER:
-                return Date.getDate().getOffsetDate(value);
+                return BI.getDate().getOffsetDate(value);
             case BI.MultiDateCombo.DATE_TYPE.MULTI_DATE_DAY_TODAY:
-                return Date.getDate();
+                return BI.getDate();
             case BI.MultiDateCombo.DATE_TYPE.MULTI_DATE_MONTH_PREV:
-                return Date.getDate().getBeforeMultiMonth(value);
+                return BI.getDate().getBeforeMultiMonth(value);
             case BI.MultiDateCombo.DATE_TYPE.MULTI_DATE_MONTH_AFTER:
-                return Date.getDate().getAfterMultiMonth(value);
+                return BI.getDate().getAfterMultiMonth(value);
             case BI.MultiDateCombo.DATE_TYPE.MULTI_DATE_MONTH_BEGIN:
-                return Date.getDate(Date.getDate().getFullYear(), Date.getDate().getMonth(), 1);
+                return BI.getDate(BI.getDate().getFullYear(), BI.getDate().getMonth(), 1);
             case BI.MultiDateCombo.DATE_TYPE.MULTI_DATE_MONTH_END:
-                return Date.getDate(Date.getDate().getFullYear(), Date.getDate().getMonth(), (Date.getDate().getLastDateOfMonth()).getDate());
+                return BI.getDate(BI.getDate().getFullYear(), BI.getDate().getMonth(), (BI.getDate().getLastDateOfMonth()).getDate());
             case BI.MultiDateCombo.DATE_TYPE.MULTI_DATE_QUARTER_PREV:
-                return Date.getDate().getBeforeMulQuarter(value);
+                return BI.getDate().getBeforeMulQuarter(value);
             case BI.MultiDateCombo.DATE_TYPE.MULTI_DATE_QUARTER_AFTER:
-                return Date.getDate().getAfterMulQuarter(value);
+                return BI.getDate().getAfterMulQuarter(value);
             case BI.MultiDateCombo.DATE_TYPE.MULTI_DATE_QUARTER_BEGIN:
-                return Date.getDate().getQuarterStartDate();
+                return BI.getDate().getQuarterStartDate();
             case BI.MultiDateCombo.DATE_TYPE.MULTI_DATE_QUARTER_END:
-                return Date.getDate().getQuarterEndDate();
+                return BI.getDate().getQuarterEndDate();
             case BI.MultiDateCombo.DATE_TYPE.MULTI_DATE_WEEK_PREV:
-                return Date.getDate().getOffsetDate(-7 * value);
+                return BI.getDate().getOffsetDate(-7 * value);
             case BI.MultiDateCombo.DATE_TYPE.MULTI_DATE_WEEK_AFTER:
-                return Date.getDate().getOffsetDate(7 * value);
+                return BI.getDate().getOffsetDate(7 * value);
             case BI.MultiDateCombo.DATE_TYPE.MULTI_DATE_YEAR_PREV:
-                return Date.getDate((Date.getDate().getFullYear() - 1 * value), Date.getDate().getMonth(), Date.getDate().getDate());
+                return BI.getDate((BI.getDate().getFullYear() - 1 * value), BI.getDate().getMonth(), BI.getDate().getDate());
             case BI.MultiDateCombo.DATE_TYPE.MULTI_DATE_YEAR_AFTER:
-                return Date.getDate((Date.getDate().getFullYear() + 1 * value), Date.getDate().getMonth(), Date.getDate().getDate());
+                return BI.getDate((BI.getDate().getFullYear() + 1 * value), BI.getDate().getMonth(), BI.getDate().getDate());
             case BI.MultiDateCombo.DATE_TYPE.MULTI_DATE_YEAR_BEGIN:
-                return Date.getDate(Date.getDate().getFullYear(), 0, 1);
+                return BI.getDate(BI.getDate().getFullYear(), 0, 1);
             case BI.MultiDateCombo.DATE_TYPE.MULTI_DATE_YEAR_END:
-                return Date.getDate(Date.getDate().getFullYear(), 11, 31);
+                return BI.getDate(BI.getDate().getFullYear(), 11, 31);
         }
     }
 });
@@ -4671,7 +4671,7 @@ BI.MultiDateCombo = BI.inherit(BI.Single, {
         BI.MultiDateCombo.superclass._init.apply(this, arguments);
         var self = this, opts = this.options;
         this.storeTriggerValue = "";
-        var date = Date.getDate();
+        var date = BI.getDate();
         this.storeValue = opts.value;
         this.trigger = BI.createWidget({
             type: "bi.date_trigger",
@@ -4740,11 +4740,11 @@ BI.MultiDateCombo = BI.inherit(BI.Single, {
             self.fireEvent(BI.MultiDateCombo.EVENT_CONFIRM);
         });
         this.popup.on(BI.MultiDatePopup.BUTTON_lABEL_EVENT_CHANGE, function () {
-            var date = Date.getDate();
+            var date = BI.getDate();
             self.setValue({
                 year: date.getFullYear(),
                 month: date.getMonth(),
-                day: date.getDate()
+                day: BI.getDate()
             });
             self.combo.hideView();
             self.fireEvent(BI.MultiDateCombo.EVENT_CONFIRM);
@@ -5184,7 +5184,7 @@ BI.MultiDatePopup = BI.inherit(BI.Widget, {
                     self.ymd.setValue({
                         year: date.getFullYear(),
                         month: date.getMonth(),
-                        day: date.getDate()
+                        day: BI.getDate()
                     });
                     self._setInnerValue(self.ymd);
                     break;
@@ -5299,12 +5299,12 @@ BI.MultiDatePopup = BI.inherit(BI.Widget, {
                 break;
             default:
                 if (this._checkValueValid(value)) {
-                    var date = Date.getDate();
+                    var date = BI.getDate();
                     this.dateTab.setSelect(BI.MultiDateCombo.MULTI_DATE_YMD_CARD);
                     this.ymd.setValue({
                         year: date.getFullYear(),
                         month: date.getMonth(),
-                        day: date.getDate()
+                        day: BI.getDate()
                     });
                     this.textButton.setValue(BI.i18nText("BI-Multi_Date_Today"));
                 } else {
@@ -17318,26 +17318,26 @@ BI.TimeInterval = BI.inherit(BI.Single, {
         return combo;
     },
     _dateCheck: function (date) {
-        return Date.parseDateTime(date, "%Y-%x-%d").print("%Y-%x-%d") == date || Date.parseDateTime(date, "%Y-%X-%d").print("%Y-%X-%d") == date || Date.parseDateTime(date, "%Y-%x-%e").print("%Y-%x-%e") == date || Date.parseDateTime(date, "%Y-%X-%e").print("%Y-%X-%e") == date;
+        return BI.parseDateTime(date, "%Y-%x-%d").print("%Y-%x-%d") == date || BI.parseDateTime(date, "%Y-%X-%d").print("%Y-%X-%d") == date || BI.parseDateTime(date, "%Y-%x-%e").print("%Y-%x-%e") == date || BI.parseDateTime(date, "%Y-%X-%e").print("%Y-%X-%e") == date;
     },
     _checkVoid: function (obj) {
-        return !Date.checkVoid(obj.year, obj.month, obj.day, this.constants.DATE_MIN_VALUE, this.constants.DATE_MAX_VALUE)[0];
+        return !BI.checkDateVoid(obj.year, obj.month, obj.day, this.constants.DATE_MIN_VALUE, this.constants.DATE_MAX_VALUE)[0];
     },
     _check: function (smallDate, bigDate) {
         var smallObj = smallDate.match(/\d+/g), bigObj = bigDate.match(/\d+/g);
-        return this._dateCheck(smallDate) && Date.checkLegal(smallDate) && this._checkVoid({
+        return this._dateCheck(smallDate) && BI.checkDateLegal(smallDate) && this._checkVoid({
             year: smallObj[0],
             month: smallObj[1],
             day: smallObj[2]
-        }) && this._dateCheck(bigDate) && Date.checkLegal(bigDate) && this._checkVoid({
+        }) && this._dateCheck(bigDate) && BI.checkDateLegal(bigDate) && this._checkVoid({
             year: bigObj[0],
             month: bigObj[1],
             day: bigObj[2]
         });
     },
     _compare: function (smallDate, bigDate) {
-        smallDate = Date.parseDateTime(smallDate, "%Y-%X-%d").print("%Y-%X-%d");
-        bigDate = Date.parseDateTime(bigDate, "%Y-%X-%d").print("%Y-%X-%d");
+        smallDate = BI.parseDateTime(smallDate, "%Y-%X-%d").print("%Y-%X-%d");
+        bigDate = BI.parseDateTime(bigDate, "%Y-%X-%d").print("%Y-%X-%d");
         return BI.isNotNull(smallDate) && BI.isNotNull(bigDate) && smallDate > bigDate;
     },
     _setTitle: function (v) {
@@ -17505,7 +17505,7 @@ BI.YearPopup = BI.inherit(BI.Widget, {
         BI.YearPopup.superclass._init.apply(this, arguments);
         var self = this, o = this.options;
 
-        this.selectedYear = this._year = Date.getDate().getFullYear();
+        this.selectedYear = this._year = BI.getDate().getFullYear();
 
         var backBtn = BI.createWidget({
             type: "bi.icon_button",
@@ -17562,8 +17562,8 @@ BI.YearPopup = BI.inherit(BI.Widget, {
 
     setValue: function (v) {
         var o = this.options;
-        if (Date.checkVoid(v, 1, 1, o.min, o.max)[0]) {
-            v = Date.getDate().getFullYear();
+        if (BI.checkDateVoid(v, 1, 1, o.min, o.max)[0]) {
+            v = BI.getDate().getFullYear();
             this.selectedYear = "";
             this.navigation.setSelect(BI.YearCalendar.getPageByYear(v));
             this.navigation.setValue("");
@@ -17606,7 +17606,7 @@ BI.YearTrigger = BI.inherit(BI.Trigger, {
             height: o.height,
             validationChecker: function (v) {
                 self.editor.setErrorText(!BI.isPositiveInteger(v) ? c.errorText : c.errorTextInvalid);
-                return v === "" || (BI.isPositiveInteger(v) && !Date.checkVoid(v, 1, 1, o.min, o.max)[0]);
+                return v === "" || (BI.isPositiveInteger(v) && !BI.checkDateVoid(v, 1, 1, o.min, o.max)[0]);
             },
             quitChecker: function (v) {
                 return false;

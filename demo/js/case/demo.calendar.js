@@ -16,7 +16,7 @@ Demo.Func = BI.inherit(BI.Widget, {
             },
             year: date.getFullYear(),
             month: date.getMonth(),
-            day: date.getDate()
+            day: BI.getDate()
         };
     },
 
@@ -25,7 +25,7 @@ Demo.Func = BI.inherit(BI.Widget, {
         this.calendar.setValue({
             year: date.getFullYear(),
             month: date.getMonth(),
-            day: date.getDate()
+            day: BI.getDate()
         });
     }
 });

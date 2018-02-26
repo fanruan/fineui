@@ -11896,7 +11896,7 @@ if (!window.BI) {
 
             // Date
             if (type === "[object Date]") {
-                return Date.getDate(obj.getTime());
+                return BI.getDate(obj.getTime());
             }
 
             var i, clone, key;
@@ -12132,7 +12132,7 @@ if (!window.BI) {
             if (Date.now) {
                 return Date.now();
             }
-            return Date.getDate().getTime();
+            return BI.getDate().getTime();
 
 
 
@@ -12396,6 +12396,357 @@ if (!window.BI) {
                 prand = (mult * prand + incr) % modu;
             }
             return unescape(enc_str);
+        },
+
+        /**
+         * 对字符串中的'和\做编码处理
+         * @static
+         * @param {String} string 要做编码处理的字符串
+         * @return {String} 编码后的字符串
+         */
+        escape: function (string) {
+            return string.replace(/('|\\)/g, "\\$1");
+        },
+
+        /**
+         * 让字符串通过指定字符做补齐的函数
+         *
+         *      var s = BI.leftPad('123', 5, '0');//s的值为：'00123'
+         *
+         * @static
+         * @param {String} val 原始值
+         * @param {Number} size 总共需要的位数
+         * @param {String} ch 用于补齐的字符
+         * @return {String}  补齐后的字符串
+         */
+        leftPad: function (val, size, ch) {
+            var result = String(val);
+            if (!ch) {
+                ch = " ";
+            }
+            while (result.length < size) {
+                result = ch + result;
+            }
+            return result.toString();
+        },
+
+        /**
+         * 对字符串做替换的函数
+         *
+         *      var cls = 'my-class', text = 'Some text';
+         *      var res = BI.format('<div class="{0}>{1}</div>"', cls, text);
+         *      //res的值为：'<div class="my-class">Some text</div>';
+         *
+         * @static
+         * @param {String} format 要做替换的字符串，替换字符串1，替换字符串2...
+         * @return {String} 做了替换后的字符串
+         */
+        format: function (format) {
+            var args = Array.prototype.slice.call(arguments, 1);
+            return format.replace(/\{(\d+)\}/g, function (m, i) {
+                return args[i];
+            });
+        }
+    });
+
+    // 日期相关方法
+    _.extend(BI, {
+        /**
+         * 是否是闰年
+         * @param year
+         * @returns {boolean}
+         */
+        isLeapYear: function (year) {
+            return (year % 4 === 0 && year % 100 !== 0) || year % 400 === 0;
+        },
+
+        /**
+         * 检测是否在有效期
+         *
+         * @param YY 年
+         * @param MM 月
+         * @param DD 日
+         * @param minDate '1900-01-01'
+         * @param maxDate '2099-12-31'
+         * @returns {Array} 若无效返回无效状态
+         */
+        checkDateVoid: function (YY, MM, DD, minDate, maxDate) {
+            var back = [];
+            YY = YY | 0;
+            MM = MM | 0;
+            DD = DD | 0;
+            minDate = BI.isString(minDate) ? minDate.match(/\d+/g) : minDate;
+            maxDate = BI.isString(maxDate) ? maxDate.match(/\d+/g) : maxDate;
+            if (YY < minDate[0]) {
+                back = ["y"];
+            } else if (YY > maxDate[0]) {
+                back = ["y", 1];
+            } else if (YY >= minDate[0] && YY <= maxDate[0]) {
+                if (YY == minDate[0]) {
+                    if (MM < minDate[1]) {
+                        back = ["m"];
+                    } else if (MM == minDate[1]) {
+                        if (DD < minDate[2]) {
+                            back = ["d"];
+                        }
+                    }
+                }
+                if (YY == maxDate[0]) {
+                    if (MM > maxDate[1]) {
+                        back = ["m", 1];
+                    } else if (MM == maxDate[1]) {
+                        if (DD > maxDate[2]) {
+                            back = ["d", 1];
+                        }
+                    }
+                }
+            }
+            return back;
+        },
+
+        checkDateLegal: function (str) {
+            var ar = str.match(/\d+/g);
+            var YY = ar[0] | 0, MM = ar[1] | 0, DD = ar[2] | 0;
+            if (ar.length <= 1) {
+                return true;
+            }
+            if (ar.length <= 2) {
+                return MM >= 1 && MM <= 12;
+            }
+            var MD = Date._MD.slice(0);
+            MD[1] = BI.isLeapYear(YY) ? 29 : 28;
+            return MM >= 1 && MM <= 12 && DD <= MD[MM - 1];
+        },
+
+        parseDateTime: function (str, fmt) {
+            var today = BI.getDate();
+            var y = 0;
+            var m = 0;
+            var d = 1;
+            // wei : 对于fmt为‘YYYYMM’或者‘YYYYMMdd’的格式，str的值为类似'201111'的形式，因为年月之间没有分隔符，所以正则表达式分割无效，导致bug7376。
+            var a = str.split(/\W+/);
+            if (fmt.toLowerCase() == "%y%x" || fmt.toLowerCase() == "%y%x%d") {
+                var yearlength = 4;
+                var otherlength = 2;
+                a[0] = str.substring(0, yearlength);
+                a[1] = str.substring(yearlength, yearlength + otherlength);
+                a[2] = str.substring(yearlength + otherlength, yearlength + otherlength * 2);
+            }
+            var b = fmt.match(/%./g);
+            var i = 0, j = 0;
+            var hr = 0;
+            var min = 0;
+            var sec = 0;
+            for (i = 0; i < a.length; ++i) {
+                switch (b[i]) {
+                    case "%d":
+                    case "%e":
+                        d = parseInt(a[i], 10);
+                        break;
+
+                    case "%X":
+                        m = parseInt(a[i], 10) - 1;
+                        break;
+                    case "%x":
+                        m = parseInt(a[i], 10) - 1;
+                        break;
+
+                    case "%Y":
+                    case "%y":
+                        y = parseInt(a[i], 10);
+                        (y < 100) && (y += (y > 29) ? 1900 : 2000);
+                        break;
+
+                    case "%b":
+                    case "%B":
+                        for (j = 0; j < 12; ++j) {
+                            if (Date._MN[j].substr(0, a[i].length).toLowerCase() == a[i].toLowerCase()) {
+                                m = j;
+                                break;
+                            }
+                        }
+                        break;
+
+                    case "%H":
+                    case "%I":
+                    case "%k":
+                    case "%l":
+                        hr = parseInt(a[i], 10);
+                        break;
+
+                    case "%P":
+                    case "%p":
+                        if (/pm/i.test(a[i]) && hr < 12) {
+                            hr += 12;
+                        } else if (/am/i.test(a[i]) && hr >= 12) {
+                            hr -= 12;
+                        }
+                        break;
+
+                    case "%M":
+                        min = parseInt(a[i], 10);
+                    case "%S":
+                        sec = parseInt(a[i], 10);
+                        break;
+                }
+            }
+            //    if (!a[i]) {
+            //        continue;
+            //	}
+            if (isNaN(y)) {
+                y = today.getFullYear();
+            }
+            if (isNaN(m)) {
+                m = today.getMonth();
+            }
+            if (isNaN(d)) {
+                d = today.getDate();
+            }
+            if (isNaN(hr)) {
+                hr = today.getHours();
+            }
+            if (isNaN(min)) {
+                min = today.getMinutes();
+            }
+            if (isNaN(sec)) {
+                sec = today.getSeconds();
+            }
+            if (y != 0) {
+                return BI.getDate(y, m, d, hr, min, sec);
+            }
+            y = 0;
+            m = -1;
+            d = 0;
+            for (i = 0; i < a.length; ++i) {
+                if (a[i].search(/[a-zA-Z]+/) != -1) {
+                    var t = -1;
+                    for (j = 0; j < 12; ++j) {
+                        if (Date._MN[j].substr(0, a[i].length).toLowerCase() == a[i].toLowerCase()) {
+                            t = j;
+                            break;
+                        }
+                    }
+                    if (t != -1) {
+                        if (m != -1) {
+                            d = m + 1;
+                        }
+                        m = t;
+                    }
+                } else if (parseInt(a[i], 10) <= 12 && m == -1) {
+                    m = a[i] - 1;
+                } else if (parseInt(a[i], 10) > 31 && y == 0) {
+                    y = parseInt(a[i], 10);
+                    (y < 100) && (y += (y > 29) ? 1900 : 2000);
+                } else if (d == 0) {
+                    d = a[i];
+                }
+            }
+            if (y == 0) {
+                y = today.getFullYear();
+            }
+            if (m != -1 && d != 0) {
+                return BI.getDate(y, m, d, hr, min, sec);
+            }
+            return today;
+        },
+
+        getDate: function () {
+            var length = arguments.length;
+            var args = arguments;
+            var dt;
+            switch (length) {
+                // new Date()
+                case 0:
+                    dt = new Date();
+                    break;
+                // new Date(long)
+                case 1:
+                    dt = new Date(args[0]);
+                    break;
+                // new Date(year, month)
+                case 2:
+                    dt = new Date(args[0], args[1]);
+                    break;
+                // new Date(year, month, day)
+                case 3:
+                    dt = new Date(args[0], args[1], args[2]);
+                    break;
+                // new Date(year, month, day, hour)
+                case 4:
+                    dt = new Date(args[0], args[1], args[2], args[3]);
+                    break;
+                // new Date(year, month, day, hour, minute)
+                case 5:
+                    dt = new Date(args[0], args[1], args[2], args[3], args[4]);
+                    break;
+                // new Date(year, month, day, hour, minute, second)
+                case 6:
+                    dt = new Date(args[0], args[1], args[2], args[3], args[4], args[5]);
+                    break;
+                // new Date(year, month, day, hour, minute, second, millisecond)
+                case 7:
+                    dt = new Date(args[0], args[1], args[2], args[3], args[4], args[5], args[6]);
+                    break;
+                default:
+                    dt = new Date();
+                    break;
+            }
+            if (BI.isNotNull(Date.timeZone) && (arguments.length === 0 || (arguments.length === 1 && BI.isNumber(arguments[0])))) {
+                var localTime = dt.getTime();
+                var localOffset = dt.getTimezoneOffset() * 60000; // 获得当地时间偏移的毫秒数
+                var utc = localTime + localOffset; // utc即GMT时间标准时区
+                return new Date(utc + Date.timeZone);// + Pool.timeZone.offset);
+            }
+            return dt;
+
+        },
+
+        getTime: function () {
+            var length = arguments.length;
+            var args = arguments;
+            var dt;
+            switch (length) {
+                // new Date()
+                case 0:
+                    dt = new Date();
+                    break;
+                // new Date(long)
+                case 1:
+                    dt = new Date(args[0]);
+                    break;
+                // new Date(year, month)
+                case 2:
+                    dt = new Date(args[0], args[1]);
+                    break;
+                // new Date(year, month, day)
+                case 3:
+                    dt = new Date(args[0], args[1], args[2]);
+                    break;
+                // new Date(year, month, day, hour)
+                case 4:
+                    dt = new Date(args[0], args[1], args[2], args[3]);
+                    break;
+                // new Date(year, month, day, hour, minute)
+                case 5:
+                    dt = new Date(args[0], args[1], args[2], args[3], args[4]);
+                    break;
+                // new Date(year, month, day, hour, minute, second)
+                case 6:
+                    dt = new Date(args[0], args[1], args[2], args[3], args[4], args[5]);
+                    break;
+                // new Date(year, month, day, hour, minute, second, millisecond)
+                case 7:
+                    dt = new Date(args[0], args[1], args[2], args[3], args[4], args[5], args[6]);
+                    break;
+                default:
+                    dt = new Date();
+                    break;
+            }
+            if (BI.isNotNull(Date.timeZone)) {
+                return dt.getTime() - Date.timeZone - dt.getTimezoneOffset() * 60000;
+            }
+            return dt.getTime();
+
         }
     });
 
@@ -13429,7 +13780,7 @@ BI.Cache = {
         // 判断是否设置过期时间
         if (expiresHours && expiresHours > 0) {
             var date = new Date();
-            date.setTime(date.getTime() + expiresHours * 3600 * 1000);
+            date.setTime(BI.getTime() + expiresHours * 3600 * 1000);
             cookieString = cookieString + "; expires=" + date.toGMTString();
         }
         if (path) {
@@ -13444,7 +13795,7 @@ BI.Cache = {
     },
     deleteCookie: function (name, path) {
         var date = new Date();
-        date.setTime(date.getTime() - 10000);
+        date.setTime(BI.getTime() - 10000);
         var cookieString = name + "=v; expires=" + date.toGMTString();
         if (path) {
             cookieString = cookieString + "; path=" + path;
@@ -17294,7 +17645,7 @@ BI.PopoverSection.EVENT_CLOSE = "EVENT_CLOSE";(function () {
                 if (newnum.length > orilen) {
                     newnum = newnum.substr(1);
                 } else {
-                    newnum = String.leftPad(newnum, orilen, "0");
+                    newnum = BI.leftPad(newnum, orilen, "0");
                     result.leftPlus = false;
                 }
                 right = right.replace(/^[0-9]+/, newnum);
@@ -17637,6 +17988,8 @@ BI.PopoverSection.EVENT_CLOSE = "EVENT_CLOSE";(function () {
             text = _eFormat(text, fmt);
         } else {
             // 数字格式
+            var s = [];
+            BI.clamp(s);
             text = _numberFormat(text, fmt);
         }
         // ¤ - 货币格式
@@ -17706,14 +18059,14 @@ BI.PopoverSection.EVENT_CLOSE = "EVENT_CLOSE";(function () {
                     } else if (len < 2) {
                         str = date.getMonth() + 1;
                     } else {
-                        str = String.leftPad(date.getMonth() + 1 + "", 2, "0");
+                        str = BI.leftPad(date.getMonth() + 1 + "", 2, "0");
                     }
                     break;
                 case "d": // 日
                     if (len > 1) {
-                        str = String.leftPad(date.getDate() + "", 2, "0");
+                        str = BI.leftPad(BI.getDate() + "", 2, "0");
                     } else {
-                        str = date.getDate();
+                        str = BI.getDate();
                     }
                     break;
                 case "h": // 时(12)
@@ -17722,28 +18075,28 @@ BI.PopoverSection.EVENT_CLOSE = "EVENT_CLOSE";(function () {
                         hour = 12;
                     }
                     if (len > 1) {
-                        str = String.leftPad(hour + "", 2, "0");
+                        str = BI.leftPad(hour + "", 2, "0");
                     } else {
                         str = hour;
                     }
                     break;
                 case "H": // 时(24)
                     if (len > 1) {
-                        str = String.leftPad(date.getHours() + "", 2, "0");
+                        str = BI.leftPad(date.getHours() + "", 2, "0");
                     } else {
                         str = date.getHours();
                     }
                     break;
                 case "m":
                     if (len > 1) {
-                        str = String.leftPad(date.getMinutes() + "", 2, "0");
+                        str = BI.leftPad(date.getMinutes() + "", 2, "0");
                     } else {
                         str = date.getMinutes();
                     }
                     break;
                 case "s":
                     if (len > 1) {
-                        str = String.leftPad(date.getSeconds() + "", 2, "0");
+                        str = BI.leftPad(date.getSeconds() + "", 2, "0");
                     } else {
                         str = date.getSeconds();
                     }
@@ -20816,20 +21169,20 @@ Date.prototype.getMonthDays = function (month) {
  * @returns {Date}
  */
 Date.prototype.getLastDateOfMonth = function () {
-    return Date.getDate(this.getFullYear(), this.getMonth(), this.getMonthDays());
+    return BI.getDate(this.getFullYear(), this.getMonth(), this.getMonthDays());
 };
 
 /** Returns the number of day in the year. */
 Date.prototype.getDayOfYear = function () {
-    var now = Date.getDate(this.getFullYear(), this.getMonth(), this.getDate(), 0, 0, 0);
-    var then = Date.getDate(this.getFullYear(), 0, 0, 0, 0, 0);
+    var now = BI.getDate(this.getFullYear(), this.getMonth(), this.getDate(), 0, 0, 0);
+    var then = BI.getDate(this.getFullYear(), 0, 0, 0, 0, 0);
     var time = now - then;
     return Math.floor(time / Date.DAY);
 };
 
 /** Returns the number of the week in year, as defined in ISO 8601. */
 Date.prototype.getWeekNumber = function () {
-    var d = Date.getDate(this.getFullYear(), this.getMonth(), this.getDate(), 0, 0, 0);
+    var d = BI.getDate(this.getFullYear(), this.getMonth(), this.getDate(), 0, 0, 0);
     // 周一是一周第一天
     var week = d.getDay() === 0 ? 7 : d.getDay();
     // var week = d.getDay();
@@ -20853,17 +21206,17 @@ Date.prototype.getQuarter = function () {
 
 // 离当前时间多少天的时间
 Date.prototype.getOffsetDate = function (offset) {
-    return Date.getDate(Date.getTime(this.getFullYear(), this.getMonth(), this.getDate(), this.getHours(), this.getMinutes(), this.getSeconds()) + offset * 864e5);
+    return BI.getDate(BI.getTime(this.getFullYear(), this.getMonth(), this.getDate(), this.getHours(), this.getMinutes(), this.getSeconds()) + offset * 864e5);
 };
 
 Date.prototype.getAfterMulQuarter = function (n) {
-    var dt = Date.getDate(Date.getTime(this.getFullYear(), this.getMonth(), this.getDate(), this.getHours(), this.getMinutes(), this.getSeconds()));
+    var dt = BI.getDate(BI.getTime(this.getFullYear(), this.getMonth(), this.getDate(), this.getHours(), this.getMinutes(), this.getSeconds()));
     dt.setMonth(dt.getMonth() + n * 3);
     return dt;
 };
 // 获得n个季度前的日期
 Date.prototype.getBeforeMulQuarter = function (n) {
-    var dt = Date.getDate(Date.getTime(this.getFullYear(), this.getMonth(), this.getDate(), this.getHours(), this.getMinutes(), this.getSeconds()));
+    var dt = BI.getDate(BI.getTime(this.getFullYear(), this.getMonth(), this.getDate(), this.getHours(), this.getMinutes(), this.getSeconds()));
     dt.setMonth(dt.getMonth() - n * 3);
     return dt;
 };
@@ -20887,29 +21240,29 @@ Date.prototype.getQuarterStartMonth = function () {
 };
 // 获得本季度的起始日期
 Date.prototype.getQuarterStartDate = function () {
-    return Date.getDate(this.getFullYear(), this.getQuarterStartMonth(), 1);
+    return BI.getDate(this.getFullYear(), this.getQuarterStartMonth(), 1);
 };
 // 得到本季度的结束日期
 Date.prototype.getQuarterEndDate = function () {
     var quarterEndMonth = this.getQuarterStartMonth() + 2;
-    return Date.getDate(this.getFullYear(), quarterEndMonth, this.getMonthDays(quarterEndMonth));
+    return BI.getDate(this.getFullYear(), quarterEndMonth, this.getMonthDays(quarterEndMonth));
 };
 Date.prototype.getAfterMultiMonth = function (n) {
-    var dt = Date.getDate(Date.getTime(this.getFullYear(), this.getMonth(), this.getDate(), this.getHours(), this.getMinutes(), this.getSeconds()));
+    var dt = BI.getDate(BI.getTime(this.getFullYear(), this.getMonth(), this.getDate(), this.getHours(), this.getMinutes(), this.getSeconds()));
     dt.setMonth(dt.getMonth() + n | 0);
     return dt;
 };
 Date.prototype.getBeforeMultiMonth = function (n) {
-    var dt = Date.getDate(Date.getTime(this.getFullYear(), this.getMonth(), this.getDate(), this.getHours(), this.getMinutes(), this.getSeconds()));
+    var dt = BI.getDate(BI.getTime(this.getFullYear(), this.getMonth(), this.getDate(), this.getHours(), this.getMinutes(), this.getSeconds()));
     dt.setMonth(dt.getMonth() - n | 0);
     return dt;
 };
 
 // 指定日期n个月之前或之后的日期
 Date.prototype.getOffsetMonth = function (n) {
-    var dt = Date.getDate(Date.getTime(this.getFullYear(), this.getMonth(), this.getDate(), this.getHours(), this.getMinutes(), this.getSeconds()));
+    var dt = BI.getDate(BI.getTime(this.getFullYear(), this.getMonth(), this.getDate(), this.getHours(), this.getMinutes(), this.getSeconds()));
     var day = dt.getDate();
-    var monthDay = Date.getDate(dt.getFullYear(), dt.getMonth() + parseInt(n), 1).getMonthDays();
+    var monthDay = BI.getDate(dt.getFullYear(), dt.getMonth() + parseInt(n), 1).getMonthDays();
     if (day > monthDay) {
         day = monthDay;
     }
@@ -20933,7 +21286,7 @@ Date.prototype.getWeekEndDate = function () {
 Date.prototype.equalsTo = function (date) {
     return ((this.getFullYear() == date.getFullYear()) &&
     (this.getMonth() == date.getMonth()) &&
-    (this.getDate() == date.getDate()) &&
+    (this.getDate() == BI.getDate()) &&
     (this.getHours() == date.getHours()) &&
     (this.getMinutes() == date.getMinutes()) &&
     (this.getSeconds() == date.getSeconds()));
@@ -20941,7 +21294,7 @@ Date.prototype.equalsTo = function (date) {
 
 /** Set only the year, month, date parts (keep existing time) */
 Date.prototype.setDateOnly = function (date) {
-    var tmp = Date.getDate(date);
+    var tmp = BI.getDate(date);
     this.setDate(1);
     this.setFullYear(tmp.getFullYear());
     this.setMonth(tmp.getMonth());
@@ -21019,304 +21372,6 @@ Date.prototype.print = function (str) {
     }
 
     return str;
-};
-
-/**
- * 是否是闰年
- * @param year
- * @returns {boolean}
- */
-Date.isLeap = function (year) {
-    return (year % 4 === 0 && year % 100 !== 0) || year % 400 === 0;
-};
-
-/**
- * 检测是否在有效期
- *
- * @param YY 年
- * @param MM 月
- * @param DD 日
- * @param minDate '1900-01-01'
- * @param maxDate '2099-12-31'
- * @returns {Array} 若无效返回无效状态
- */
-Date.checkVoid = function (YY, MM, DD, minDate, maxDate) {
-    var back = [];
-    YY = YY | 0;
-    MM = MM | 0;
-    DD = DD | 0;
-    minDate = BI.isString(minDate) ? minDate.match(/\d+/g) : minDate;
-    maxDate = BI.isString(maxDate) ? maxDate.match(/\d+/g) : maxDate;
-    if (YY < minDate[0]) {
-        back = ["y"];
-    } else if (YY > maxDate[0]) {
-        back = ["y", 1];
-    } else if (YY >= minDate[0] && YY <= maxDate[0]) {
-        if (YY == minDate[0]) {
-            if (MM < minDate[1]) {
-                back = ["m"];
-            } else if (MM == minDate[1]) {
-                if (DD < minDate[2]) {
-                    back = ["d"];
-                }
-            }
-        }
-        if (YY == maxDate[0]) {
-            if (MM > maxDate[1]) {
-                back = ["m", 1];
-            } else if (MM == maxDate[1]) {
-                if (DD > maxDate[2]) {
-                    back = ["d", 1];
-                }
-            }
-        }
-    }
-    return back;
-};
-
-Date.checkLegal = function (str) {
-    var ar = str.match(/\d+/g);
-    var YY = ar[0] | 0, MM = ar[1] | 0, DD = ar[2] | 0;
-    if (ar.length <= 1) {
-        return true;
-    }
-    if (ar.length <= 2) {
-        return MM >= 1 && MM <= 12;
-    }
-    var MD = Date._MD.slice(0);
-    MD[1] = Date.isLeap(YY) ? 29 : 28;
-    return MM >= 1 && MM <= 12 && DD <= MD[MM - 1];
-};
-
-Date.parseDateTime = function (str, fmt) {
-    var today = Date.getDate();
-    var y = 0;
-    var m = 0;
-    var d = 1;
-    // wei : 对于fmt为‘YYYYMM’或者‘YYYYMMdd’的格式，str的值为类似'201111'的形式，因为年月之间没有分隔符，所以正则表达式分割无效，导致bug7376。
-    var a = str.split(/\W+/);
-    if (fmt.toLowerCase() == "%y%x" || fmt.toLowerCase() == "%y%x%d") {
-        var yearlength = 4;
-        var otherlength = 2;
-        a[0] = str.substring(0, yearlength);
-        a[1] = str.substring(yearlength, yearlength + otherlength);
-        a[2] = str.substring(yearlength + otherlength, yearlength + otherlength * 2);
-    }
-    var b = fmt.match(/%./g);
-    var i = 0, j = 0;
-    var hr = 0;
-    var min = 0;
-    var sec = 0;
-    for (i = 0; i < a.length; ++i) {
-        switch (b[i]) {
-            case "%d":
-            case "%e":
-                d = parseInt(a[i], 10);
-                break;
-
-            case "%X":
-                m = parseInt(a[i], 10) - 1;
-                break;
-            case "%x":
-                m = parseInt(a[i], 10) - 1;
-                break;
-
-            case "%Y":
-            case "%y":
-                y = parseInt(a[i], 10);
-                (y < 100) && (y += (y > 29) ? 1900 : 2000);
-                break;
-
-            case "%b":
-            case "%B":
-                for (j = 0; j < 12; ++j) {
-                    if (Date._MN[j].substr(0, a[i].length).toLowerCase() == a[i].toLowerCase()) {
-                        m = j;
-                        break;
-                    }
-                }
-                break;
-
-            case "%H":
-            case "%I":
-            case "%k":
-            case "%l":
-                hr = parseInt(a[i], 10);
-                break;
-
-            case "%P":
-            case "%p":
-                if (/pm/i.test(a[i]) && hr < 12) {
-                    hr += 12;
-                } else if (/am/i.test(a[i]) && hr >= 12) {
-                    hr -= 12;
-                }
-                break;
-
-            case "%M":
-                min = parseInt(a[i], 10);
-            case "%S":
-                sec = parseInt(a[i], 10);
-                break;
-        }
-    }
-    //    if (!a[i]) {
-    //        continue;
-    //	}
-    if (isNaN(y)) {
-        y = today.getFullYear();
-    }
-    if (isNaN(m)) {
-        m = today.getMonth();
-    }
-    if (isNaN(d)) {
-        d = today.getDate();
-    }
-    if (isNaN(hr)) {
-        hr = today.getHours();
-    }
-    if (isNaN(min)) {
-        min = today.getMinutes();
-    }
-    if (isNaN(sec)) {
-        sec = today.getSeconds();
-    }
-    if (y != 0) {
-        return Date.getDate(y, m, d, hr, min, sec);
-    }
-    y = 0;
-    m = -1;
-    d = 0;
-    for (i = 0; i < a.length; ++i) {
-        if (a[i].search(/[a-zA-Z]+/) != -1) {
-            var t = -1;
-            for (j = 0; j < 12; ++j) {
-                if (Date._MN[j].substr(0, a[i].length).toLowerCase() == a[i].toLowerCase()) {
-                    t = j;
-                    break;
-                }
-            }
-            if (t != -1) {
-                if (m != -1) {
-                    d = m + 1;
-                }
-                m = t;
-            }
-        } else if (parseInt(a[i], 10) <= 12 && m == -1) {
-            m = a[i] - 1;
-        } else if (parseInt(a[i], 10) > 31 && y == 0) {
-            y = parseInt(a[i], 10);
-            (y < 100) && (y += (y > 29) ? 1900 : 2000);
-        } else if (d == 0) {
-            d = a[i];
-        }
-    }
-    if (y == 0) {
-        y = today.getFullYear();
-    }
-    if (m != -1 && d != 0) {
-        return Date.getDate(y, m, d, hr, min, sec);
-    }
-    return today;
-};
-
-Date.getDate = function () {
-    var length = arguments.length;
-    var args = arguments;
-    var dt;
-    switch (length) {
-        // new Date()
-        case 0:
-            dt = new Date();
-            break;
-        // new Date(long)
-        case 1:
-            dt = new Date(args[0]);
-            break;
-        // new Date(year, month)
-        case 2:
-            dt = new Date(args[0], args[1]);
-            break;
-        // new Date(year, month, day)
-        case 3:
-            dt = new Date(args[0], args[1], args[2]);
-            break;
-        // new Date(year, month, day, hour)
-        case 4:
-            dt = new Date(args[0], args[1], args[2], args[3]);
-            break;
-        // new Date(year, month, day, hour, minute)
-        case 5:
-            dt = new Date(args[0], args[1], args[2], args[3], args[4]);
-            break;
-        // new Date(year, month, day, hour, minute, second)
-        case 6:
-            dt = new Date(args[0], args[1], args[2], args[3], args[4], args[5]);
-            break;
-        // new Date(year, month, day, hour, minute, second, millisecond)
-        case 7:
-            dt = new Date(args[0], args[1], args[2], args[3], args[4], args[5], args[6]);
-            break;
-        default:
-            dt = new Date();
-            break;
-    }
-    if(BI.isNotNull(Date.timeZone) && (arguments.length === 0 || (arguments.length === 1 && BI.isNumber(arguments[0])))) {
-        var localTime = dt.getTime();
-        var localOffset = dt.getTimezoneOffset() * 60000; // 获得当地时间偏移的毫秒数
-        var utc = localTime + localOffset; // utc即GMT时间标准时区
-        return new Date(utc + Date.timeZone);// + Pool.timeZone.offset);
-    }
-    return dt;
-
-};
-
-Date.getTime = function () {
-    var length = arguments.length;
-    var args = arguments;
-    var dt;
-    switch (length) {
-        // new Date()
-        case 0:
-            dt = new Date();
-            break;
-        // new Date(long)
-        case 1:
-            dt = new Date(args[0]);
-            break;
-        // new Date(year, month)
-        case 2:
-            dt = new Date(args[0], args[1]);
-            break;
-        // new Date(year, month, day)
-        case 3:
-            dt = new Date(args[0], args[1], args[2]);
-            break;
-        // new Date(year, month, day, hour)
-        case 4:
-            dt = new Date(args[0], args[1], args[2], args[3]);
-            break;
-        // new Date(year, month, day, hour, minute)
-        case 5:
-            dt = new Date(args[0], args[1], args[2], args[3], args[4]);
-            break;
-        // new Date(year, month, day, hour, minute, second)
-        case 6:
-            dt = new Date(args[0], args[1], args[2], args[3], args[4], args[5]);
-            break;
-        // new Date(year, month, day, hour, minute, second, millisecond)
-        case 7:
-            dt = new Date(args[0], args[1], args[2], args[3], args[4], args[5], args[6]);
-            break;
-        default:
-            dt = new Date();
-            break;
-    }
-    if(BI.isNotNull(Date.timeZone)) {
-        return dt.getTime() - Date.timeZone - dt.getTimezoneOffset() * 60000;
-    }
-    return dt.getTime();
-
 };
 /*
  * 给jQuery.Event对象添加的工具方法
@@ -21779,63 +21834,6 @@ _.extend(String.prototype, {
             offset += loc + sub.length;
         }
         return location;
-    }
-});
-
-/**
- * 对字符串对象的扩展
- * @class String
- */
-_.extend(String, {
-
-    /**
-     * 对字符串中的'和\做编码处理
-     * @static
-     * @param {String} string 要做编码处理的字符串
-     * @return {String} 编码后的字符串
-     */
-    escape: function (string) {
-        return string.replace(/('|\\)/g, "\\$1");
-    },
-
-    /**
-     * 让字符串通过指定字符做补齐的函数
-     *
-     *      var s = String.leftPad('123', 5, '0');//s的值为：'00123'
-     *
-     * @static
-     * @param {String} val 原始值
-     * @param {Number} size 总共需要的位数
-     * @param {String} ch 用于补齐的字符
-     * @return {String}  补齐后的字符串
-     */
-    leftPad: function (val, size, ch) {
-        var result = String(val);
-        if (!ch) {
-            ch = " ";
-        }
-        while (result.length < size) {
-            result = ch + result;
-        }
-        return result.toString();
-    },
-
-    /**
-     * 对字符串做替换的函数
-     *
-     *      var cls = 'my-class', text = 'Some text';
-     *      var res = String.format('<div class="{0}>{1}</div>"', cls, text);
-     *      //res的值为：'<div class="my-class">Some text</div>';
-     *
-     * @static
-     * @param {String} format 要做替换的字符串，替换字符串1，替换字符串2...
-     * @return {String} 做了替换后的字符串
-     */
-    format: function (format) {
-        var args = Array.prototype.slice.call(arguments, 1);
-        return format.replace(/\{(\d+)\}/g, function (m, i) {
-            return args[i];
-        });
     }
 });BI.EventListener = {
     listen: function listen (target, eventType, callback) {
@@ -65715,7 +65713,7 @@ BI.Calendar = BI.inherit(BI.Widget, {
     },
 
     _dateCreator: function (Y, M, D) {
-        var self = this, o = this.options, log = {}, De = Date.getDate();
+        var self = this, o = this.options, log = {}, De = BI.getDate();
         var mins = o.min.match(/\d+/g);
         var maxs = o.max.match(/\d+/g);
         Y < (mins[0] | 0) && (Y = (mins[0] | 0));
@@ -65725,7 +65723,7 @@ BI.Calendar = BI.inherit(BI.Widget, {
         log.ymd = [De.getFullYear(), De.getMonth(), De.getDate()];
 
         var MD = Date._MD.slice(0);
-        MD[1] = Date.isLeap(log.ymd[0]) ? 29 : 28;
+        MD[1] = BI.isLeapYear(log.ymd[0]) ? 29 : 28;
 
         De.setFullYear(log.ymd[0], log.ymd[1], 1);
         log.FDay = De.getDay();
@@ -65752,7 +65750,7 @@ BI.Calendar = BI.inherit(BI.Widget, {
                 MM === 12 && (YY += 1);
                 MM = MM === 12 ? 1 : MM + 1;
             }
-            if (Date.checkVoid(YY, MM, DD, mins, maxs)[0]) {
+            if (BI.checkDateVoid(YY, MM, DD, mins, maxs)[0]) {
                 td.disabled = true;
             }
             td.text = DD;
@@ -65825,20 +65823,20 @@ BI.Calendar = BI.inherit(BI.Widget, {
 
     isFrontDate: function () {
         var o = this.options, c = this._const;
-        var Y = o.year, M = o.month, De = Date.getDate(), day = De.getDay();
+        var Y = o.year, M = o.month, De = BI.getDate(), day = De.getDay();
         Y = Y | 0;
         De.setFullYear(Y, M, 1);
         var newDate = De.getOffsetDate(-1 * (day + 1));
-        return !!Date.checkVoid(newDate.getFullYear(), newDate.getMonth(), newDate.getDate(), o.min, o.max)[0];
+        return !!BI.checkDateVoid(newDate.getFullYear(), newDate.getMonth(), newDate.getDate(), o.min, o.max)[0];
     },
 
     isFinalDate: function () {
         var o = this.options, c = this._const;
-        var Y = o.year, M = o.month, De = Date.getDate(), day = De.getDay();
+        var Y = o.year, M = o.month, De = BI.getDate(), day = De.getDay();
         Y = Y | 0;
         De.setFullYear(Y, M, 1);
         var newDate = De.getOffsetDate(42 - day);
-        return !!Date.checkVoid(newDate.getFullYear(), newDate.getMonth(), newDate.getDate(), o.min, o.max)[0];
+        return !!BI.checkDateVoid(newDate.getFullYear(), newDate.getMonth(), newDate.getDate(), o.min, o.max)[0];
     },
 
     setValue: function (ob) {
@@ -65857,14 +65855,14 @@ BI.Calendar = BI.inherit(BI.Widget, {
 
 BI.extend(BI.Calendar, {
     getPageByDateJSON: function (json) {
-        var year = Date.getDate().getFullYear();
-        var month = Date.getDate().getMonth();
+        var year = BI.getDate().getFullYear();
+        var month = BI.getDate().getMonth();
         var page = (json.year - year) * 12;
         page += json.month - month;
         return page;
     },
     getDateJSONByPage: function (v) {
-        var months = Date.getDate().getMonth();
+        var months = BI.getDate().getMonth();
         var page = v;
 
         // 对当前page做偏移,使到当前年初
@@ -65876,7 +65874,7 @@ BI.extend(BI.Calendar, {
         }
         var month = page >= 0 ? (page % 12) : ((12 + page % 12) % 12);
         return {
-            year: Date.getDate().getFullYear() + year,
+            year: BI.getDate().getFullYear() + year,
             month: month
         };
     }
@@ -65910,7 +65908,7 @@ BI.YearCalendar = BI.inherit(BI.Widget, {
         var items = [];
         BI.each(BI.range(BI.YearCalendar.INTERVAL), function (i) {
             var td = {};
-            if (Date.checkVoid(start + i, 1, 1, o.min, o.max)[0]) {
+            if (BI.checkDateVoid(start + i, 1, 1, o.min, o.max)[0]) {
                 td.disabled = true;
             }
             td.text = start + i;
@@ -65922,7 +65920,7 @@ BI.YearCalendar = BI.inherit(BI.Widget, {
     _init: function () {
         BI.YearCalendar.superclass._init.apply(this, arguments);
         var self = this, o = this.options;
-        this.currentYear = Date.getDate().getFullYear();
+        this.currentYear = BI.getDate().getFullYear();
         var years = this._yearCreator(o.year || this.currentYear);
 
         // 纵向排列年
@@ -65985,14 +65983,14 @@ BI.YearCalendar = BI.inherit(BI.Widget, {
         var o = this.options;
         var Y = o.year;
         Y = Y | 0;
-        return !!Date.checkVoid(BI.YearCalendar.getStartYear(Y) - 1, 1, 1, o.min, o.max)[0];
+        return !!BI.checkDateVoid(BI.YearCalendar.getStartYear(Y) - 1, 1, 1, o.min, o.max)[0];
     },
 
     isFinalYear: function () {
         var o = this.options, c = this._const;
         var Y = o.year;
         Y = Y | 0;
-        return !!Date.checkVoid(BI.YearCalendar.getEndYear(Y) + 1, 1, 1, o.min, o.max)[0];
+        return !!BI.checkDateVoid(BI.YearCalendar.getEndYear(Y) + 1, 1, 1, o.min, o.max)[0];
     },
 
     setValue: function (val) {
@@ -66009,7 +66007,7 @@ BI.extend(BI.YearCalendar, {
 
     // 获取显示的第一年
     getStartYear: function (year) {
-        var cur = Date.getDate().getFullYear();
+        var cur = BI.getDate().getFullYear();
         return year - ((year - cur + 3) % BI.YearCalendar.INTERVAL + 12) % BI.YearCalendar.INTERVAL;
     },
 
@@ -66018,7 +66016,7 @@ BI.extend(BI.YearCalendar, {
     },
 
     getPageByYear: function (year) {
-        var cur = Date.getDate().getFullYear();
+        var cur = BI.getDate().getFullYear();
         year = BI.YearCalendar.getStartYear(year);
         return (year - cur + 3) / BI.YearCalendar.INTERVAL;
     }
@@ -79091,8 +79089,8 @@ BI.DatePicker = BI.inherit(BI.Widget, {
     _init: function () {
         BI.DatePicker.superclass._init.apply(this, arguments);
         var self = this, o = this.options;
-        this._year = Date.getDate().getFullYear();
-        this._month = Date.getDate().getMonth();
+        this._year = BI.getDate().getFullYear();
+        this._month = BI.getDate().getMonth();
         this.left = BI.createWidget({
             type: "bi.icon_button",
             cls: "pre-page-h-font",
@@ -79189,14 +79187,14 @@ BI.DatePicker = BI.inherit(BI.Widget, {
 
     _checkLeftValid: function () {
         var o = this.options;
-        var valid = !(this._month === 0 && this._year === Date.parseDateTime(o.min, "%Y-%X-%d").getFullYear());
+        var valid = !(this._month === 0 && this._year === BI.parseDateTime(o.min, "%Y-%X-%d").getFullYear());
         this.left.setEnable(valid);
         return valid;
     },
 
     _checkRightValid: function () {
         var o = this.options;
-        var valid = !(this._month === 11 && this._year === Date.parseDateTime(o.max, "%Y-%X-%d").getFullYear());
+        var valid = !(this._month === 11 && this._year === BI.parseDateTime(o.max, "%Y-%X-%d").getFullYear());
         this.right.setEnable(valid);
         return valid;
     },
@@ -79256,7 +79254,7 @@ BI.DateCalendarPopup = BI.inherit(BI.Widget, {
         BI.DateCalendarPopup.superclass._init.apply(this, arguments);
         var self = this,
             o = this.options;
-        this.today = Date.getDate();
+        this.today = BI.getDate();
         this._year = this.today.getFullYear();
         this._month = this.today.getMonth();
         this._day = this.today.getDate();
@@ -79469,7 +79467,7 @@ BI.shortcut("bi.date_combo", BI.DateCombo);BI.DateTrigger = BI.inherit(BI.Trigge
             validationChecker: function (v) {
                 var date = v.match(/\d+/g);
                 self._autoAppend(v, date);
-                return self._dateCheck(v) && Date.checkLegal(v) && self._checkVoid({
+                return self._dateCheck(v) && BI.checkDateLegal(v) && self._checkVoid({
                     year: date[0],
                     month: date[1],
                     day: date[2]
@@ -79547,21 +79545,21 @@ BI.shortcut("bi.date_combo", BI.DateCombo);BI.DateTrigger = BI.inherit(BI.Trigge
         this.setValue(o.value);
     },
     _dateCheck: function (date) {
-        return Date.parseDateTime(date, "%Y-%x-%d").print("%Y-%x-%d") == date || Date.parseDateTime(date, "%Y-%X-%d").print("%Y-%X-%d") == date || Date.parseDateTime(date, "%Y-%x-%e").print("%Y-%x-%e") == date || Date.parseDateTime(date, "%Y-%X-%e").print("%Y-%X-%e") == date;
+        return BI.parseDateTime(date, "%Y-%x-%d").print("%Y-%x-%d") == date || BI.parseDateTime(date, "%Y-%X-%d").print("%Y-%X-%d") == date || BI.parseDateTime(date, "%Y-%x-%e").print("%Y-%x-%e") == date || BI.parseDateTime(date, "%Y-%X-%e").print("%Y-%X-%e") == date;
     },
     _checkVoid: function (obj) {
-        return !Date.checkVoid(obj.year, obj.month, obj.day, this.options.min, this.options.max)[0];
+        return !BI.checkDateVoid(obj.year, obj.month, obj.day, this.options.min, this.options.max)[0];
     },
     _autoAppend: function (v, dateObj) {
         var self = this;
-        var date = Date.parseDateTime(v, "%Y-%X-%d").print("%Y-%X-%d");
+        var date = BI.parseDateTime(v, "%Y-%X-%d").print("%Y-%X-%d");
         var yearCheck = function (v) {
-            return Date.parseDateTime(v, "%Y").print("%Y") == v && date >= self.options.min && date <= self.options.max;
+            return BI.parseDateTime(v, "%Y").print("%Y") == v && date >= self.options.min && date <= self.options.max;
         };
         var monthCheck = function (v) {
-            return Date.parseDateTime(v, "%Y-%X").print("%Y-%X") == v && date >= self.options.min && date <= self.options.max;
+            return BI.parseDateTime(v, "%Y-%X").print("%Y-%X") == v && date >= self.options.min && date <= self.options.max;
         };
-        if (BI.isNotNull(dateObj) && Date.checkLegal(v)) {
+        if (BI.isNotNull(dateObj) && BI.checkDateLegal(v)) {
             switch (v.length) {
                 case this._const.yearLength:
                     if (yearCheck(v)) {
@@ -79579,7 +79577,7 @@ BI.shortcut("bi.date_combo", BI.DateCombo);BI.DateTrigger = BI.inherit(BI.Trigge
 
     setValue: function (v) {
         var type, value, self = this;
-        var date = Date.getDate();
+        var date = BI.getDate();
         this.store_value = v;
         if (BI.isNotNull(v)) {
             type = v.type || BI.DateTrigger.MULTI_DATE_CALENDAR; value = v.value;
@@ -79596,62 +79594,62 @@ BI.shortcut("bi.date_combo", BI.DateCombo);BI.DateTrigger = BI.inherit(BI.Trigge
         switch (type) {
             case BI.DateTrigger.MULTI_DATE_YEAR_PREV:
                 var text = value + BI.DateTrigger.MULTI_DATE_SEGMENT_NUM[BI.DateTrigger.MULTI_DATE_YEAR_PREV];
-                date = Date.getDate((date.getFullYear() - 1 * value), date.getMonth(), date.getDate());
+                date = BI.getDate((date.getFullYear() - 1 * value), date.getMonth(), BI.getDate());
                 _setInnerValue(date, text);
                 break;
             case BI.DateTrigger.MULTI_DATE_YEAR_AFTER:
                 var text = value + BI.DateTrigger.MULTI_DATE_SEGMENT_NUM[BI.DateTrigger.MULTI_DATE_YEAR_AFTER];
-                date = Date.getDate((date.getFullYear() + 1 * value), date.getMonth(), date.getDate());
+                date = BI.getDate((date.getFullYear() + 1 * value), date.getMonth(), BI.getDate());
                 _setInnerValue(date, text);
                 break;
             case BI.DateTrigger.MULTI_DATE_YEAR_BEGIN:
                 var text = BI.DateTrigger.MULTI_DATE_SEGMENT_NUM[BI.DateTrigger.MULTI_DATE_YEAR_BEGIN];
-                date = Date.getDate(date.getFullYear(), 0, 1);
+                date = BI.getDate(date.getFullYear(), 0, 1);
                 _setInnerValue(date, text);
                 break;
             case BI.DateTrigger.MULTI_DATE_YEAR_END:
                 var text = BI.DateTrigger.MULTI_DATE_SEGMENT_NUM[BI.DateTrigger.MULTI_DATE_YEAR_END];
-                date = Date.getDate(date.getFullYear(), 11, 31);
+                date = BI.getDate(date.getFullYear(), 11, 31);
                 _setInnerValue(date, text);
                 break;
             case BI.DateTrigger.MULTI_DATE_QUARTER_PREV:
                 var text = value + BI.DateTrigger.MULTI_DATE_SEGMENT_NUM[BI.DateTrigger.MULTI_DATE_QUARTER_PREV];
-                date = Date.getDate().getBeforeMulQuarter(value);
+                date = BI.getDate().getBeforeMulQuarter(value);
                 _setInnerValue(date, text);
                 break;
             case BI.DateTrigger.MULTI_DATE_QUARTER_AFTER:
                 var text = value + BI.DateTrigger.MULTI_DATE_SEGMENT_NUM[BI.DateTrigger.MULTI_DATE_QUARTER_AFTER];
-                date = Date.getDate().getAfterMulQuarter(value);
+                date = BI.getDate().getAfterMulQuarter(value);
                 _setInnerValue(date, text);
                 break;
             case BI.DateTrigger.MULTI_DATE_QUARTER_BEGIN:
                 var text = BI.DateTrigger.MULTI_DATE_SEGMENT_NUM[BI.DateTrigger.MULTI_DATE_QUARTER_BEGIN];
-                date = Date.getDate().getQuarterStartDate();
+                date = BI.getDate().getQuarterStartDate();
                 _setInnerValue(date, text);
                 break;
             case BI.DateTrigger.MULTI_DATE_QUARTER_END:
                 var text = BI.DateTrigger.MULTI_DATE_SEGMENT_NUM[BI.DateTrigger.MULTI_DATE_QUARTER_END];
-                date = Date.getDate().getQuarterEndDate();
+                date = BI.getDate().getQuarterEndDate();
                 _setInnerValue(date, text);
                 break;
             case BI.DateTrigger.MULTI_DATE_MONTH_PREV:
                 var text = value + BI.DateTrigger.MULTI_DATE_SEGMENT_NUM[BI.DateTrigger.MULTI_DATE_MONTH_PREV];
-                date = Date.getDate().getBeforeMultiMonth(value);
+                date = BI.getDate().getBeforeMultiMonth(value);
                 _setInnerValue(date, text);
                 break;
             case BI.DateTrigger.MULTI_DATE_MONTH_AFTER:
                 var text = value + BI.DateTrigger.MULTI_DATE_SEGMENT_NUM[BI.DateTrigger.MULTI_DATE_MONTH_AFTER];
-                date = Date.getDate().getAfterMultiMonth(value);
+                date = BI.getDate().getAfterMultiMonth(value);
                 _setInnerValue(date, text);
                 break;
             case BI.DateTrigger.MULTI_DATE_MONTH_BEGIN:
                 var text = BI.DateTrigger.MULTI_DATE_SEGMENT_NUM[BI.DateTrigger.MULTI_DATE_MONTH_BEGIN];
-                date = Date.getDate(date.getFullYear(), date.getMonth(), 1);
+                date = BI.getDate(date.getFullYear(), date.getMonth(), 1);
                 _setInnerValue(date, text);
                 break;
             case BI.DateTrigger.MULTI_DATE_MONTH_END:
                 var text = BI.DateTrigger.MULTI_DATE_SEGMENT_NUM[BI.DateTrigger.MULTI_DATE_MONTH_END];
-                date = Date.getDate(date.getFullYear(), date.getMonth(), (date.getLastDateOfMonth()).getDate());
+                date = BI.getDate(date.getFullYear(), date.getMonth(), (date.getLastDateOfMonth()).getDate());
                 _setInnerValue(date, text);
                 break;
             case BI.DateTrigger.MULTI_DATE_WEEK_PREV:
@@ -79676,7 +79674,7 @@ BI.shortcut("bi.date_combo", BI.DateCombo);BI.DateTrigger = BI.inherit(BI.Trigge
                 break;
             case BI.DateTrigger.MULTI_DATE_DAY_TODAY:
                 var text = BI.DateTrigger.MULTI_DATE_SEGMENT_NUM[BI.DateTrigger.MULTI_DATE_DAY_TODAY];
-                date = Date.getDate();
+                date = BI.getDate();
                 _setInnerValue(date, text);
                 break;
             default:
@@ -79777,7 +79775,7 @@ BI.DatePaneWidget = BI.inherit(BI.Widget, {
         BI.DatePaneWidget.superclass._init.apply(this, arguments);
         var self = this, o = this.options;
 
-        this.today = Date.getDate();
+        this.today = BI.getDate();
         this._year = this.today.getFullYear();
         this._month = this.today.getMonth();
 
@@ -79842,7 +79840,7 @@ BI.DatePaneWidget = BI.inherit(BI.Widget, {
     },
 
     _getNewCurrentDate: function () {
-        var today = Date.getDate();
+        var today = BI.getDate();
         return {
             year: today.getFullYear(),
             month: today.getMonth()
@@ -79904,11 +79902,11 @@ BI.DateTimeCombo = BI.inherit(BI.Single, {
     _init: function () {
         BI.DateTimeCombo.superclass._init.apply(this, arguments);
         var self = this, opts = this.options;
-        var date = Date.getDate();
+        var date = BI.getDate();
         this.storeValue = BI.isNotNull(opts.value) ? opts.value : {
             year: date.getFullYear(),
             month: date.getMonth(),
-            day: date.getDate(),
+            day: BI.getDate(),
             hour: date.getHours(),
             minute: date.getMinutes(),
             second: date.getSeconds()
@@ -80147,11 +80145,11 @@ BI.DateTimePopup = BI.inherit(BI.Widget, {
     setValue: function (v) {
         var value = v, date;
         if (BI.isNull(value)) {
-            date = Date.getDate();
+            date = BI.getDate();
             this.dateCombo.setValue({
                 year: date.getFullYear(),
                 month: date.getMonth(),
-                day: date.getDate()
+                day: BI.getDate()
             });
             this.hour.setValue(date.getHours());
             this.minute.setValue(date.getMinutes());
@@ -80338,10 +80336,10 @@ BI.DateTimeTrigger = BI.inherit(BI.Trigger, {
         var self = this;
         var value = v, dateStr;
         if(BI.isNull(value)) {
-            value = Date.getDate();
+            value = BI.getDate();
             dateStr = value.print("%Y-%X-%d %H:%M:%S");
         } else {
-            var date = Date.getDate(value.year, value.month, value.day, value.hour, value.minute, value.second);
+            var date = BI.getDate(value.year, value.month, value.day, value.hour, value.minute, value.second);
             dateStr = date.print("%Y-%X-%d %H:%M:%S");
 
         }
@@ -83140,39 +83138,39 @@ BI.MultiDateCard = BI.inherit(BI.Widget, {
         var type = valueObject.type, value = valueObject.value;
         switch (type) {
             case BI.MultiDateCombo.DATE_TYPE.MULTI_DATE_DAY_PREV:
-                return Date.getDate().getOffsetDate(-1 * value);
+                return BI.getDate().getOffsetDate(-1 * value);
             case BI.MultiDateCombo.DATE_TYPE.MULTI_DATE_DAY_AFTER:
-                return Date.getDate().getOffsetDate(value);
+                return BI.getDate().getOffsetDate(value);
             case BI.MultiDateCombo.DATE_TYPE.MULTI_DATE_DAY_TODAY:
-                return Date.getDate();
+                return BI.getDate();
             case BI.MultiDateCombo.DATE_TYPE.MULTI_DATE_MONTH_PREV:
-                return Date.getDate().getBeforeMultiMonth(value);
+                return BI.getDate().getBeforeMultiMonth(value);
             case BI.MultiDateCombo.DATE_TYPE.MULTI_DATE_MONTH_AFTER:
-                return Date.getDate().getAfterMultiMonth(value);
+                return BI.getDate().getAfterMultiMonth(value);
             case BI.MultiDateCombo.DATE_TYPE.MULTI_DATE_MONTH_BEGIN:
-                return Date.getDate(Date.getDate().getFullYear(), Date.getDate().getMonth(), 1);
+                return BI.getDate(BI.getDate().getFullYear(), BI.getDate().getMonth(), 1);
             case BI.MultiDateCombo.DATE_TYPE.MULTI_DATE_MONTH_END:
-                return Date.getDate(Date.getDate().getFullYear(), Date.getDate().getMonth(), (Date.getDate().getLastDateOfMonth()).getDate());
+                return BI.getDate(BI.getDate().getFullYear(), BI.getDate().getMonth(), (BI.getDate().getLastDateOfMonth()).getDate());
             case BI.MultiDateCombo.DATE_TYPE.MULTI_DATE_QUARTER_PREV:
-                return Date.getDate().getBeforeMulQuarter(value);
+                return BI.getDate().getBeforeMulQuarter(value);
             case BI.MultiDateCombo.DATE_TYPE.MULTI_DATE_QUARTER_AFTER:
-                return Date.getDate().getAfterMulQuarter(value);
+                return BI.getDate().getAfterMulQuarter(value);
             case BI.MultiDateCombo.DATE_TYPE.MULTI_DATE_QUARTER_BEGIN:
-                return Date.getDate().getQuarterStartDate();
+                return BI.getDate().getQuarterStartDate();
             case BI.MultiDateCombo.DATE_TYPE.MULTI_DATE_QUARTER_END:
-                return Date.getDate().getQuarterEndDate();
+                return BI.getDate().getQuarterEndDate();
             case BI.MultiDateCombo.DATE_TYPE.MULTI_DATE_WEEK_PREV:
-                return Date.getDate().getOffsetDate(-7 * value);
+                return BI.getDate().getOffsetDate(-7 * value);
             case BI.MultiDateCombo.DATE_TYPE.MULTI_DATE_WEEK_AFTER:
-                return Date.getDate().getOffsetDate(7 * value);
+                return BI.getDate().getOffsetDate(7 * value);
             case BI.MultiDateCombo.DATE_TYPE.MULTI_DATE_YEAR_PREV:
-                return Date.getDate((Date.getDate().getFullYear() - 1 * value), Date.getDate().getMonth(), Date.getDate().getDate());
+                return BI.getDate((BI.getDate().getFullYear() - 1 * value), BI.getDate().getMonth(), BI.getDate().getDate());
             case BI.MultiDateCombo.DATE_TYPE.MULTI_DATE_YEAR_AFTER:
-                return Date.getDate((Date.getDate().getFullYear() + 1 * value), Date.getDate().getMonth(), Date.getDate().getDate());
+                return BI.getDate((BI.getDate().getFullYear() + 1 * value), BI.getDate().getMonth(), BI.getDate().getDate());
             case BI.MultiDateCombo.DATE_TYPE.MULTI_DATE_YEAR_BEGIN:
-                return Date.getDate(Date.getDate().getFullYear(), 0, 1);
+                return BI.getDate(BI.getDate().getFullYear(), 0, 1);
             case BI.MultiDateCombo.DATE_TYPE.MULTI_DATE_YEAR_END:
-                return Date.getDate(Date.getDate().getFullYear(), 11, 31);
+                return BI.getDate(BI.getDate().getFullYear(), 11, 31);
         }
     }
 });
@@ -83201,7 +83199,7 @@ BI.MultiDateCombo = BI.inherit(BI.Single, {
         BI.MultiDateCombo.superclass._init.apply(this, arguments);
         var self = this, opts = this.options;
         this.storeTriggerValue = "";
-        var date = Date.getDate();
+        var date = BI.getDate();
         this.storeValue = opts.value;
         this.trigger = BI.createWidget({
             type: "bi.date_trigger",
@@ -83270,11 +83268,11 @@ BI.MultiDateCombo = BI.inherit(BI.Single, {
             self.fireEvent(BI.MultiDateCombo.EVENT_CONFIRM);
         });
         this.popup.on(BI.MultiDatePopup.BUTTON_lABEL_EVENT_CHANGE, function () {
-            var date = Date.getDate();
+            var date = BI.getDate();
             self.setValue({
                 year: date.getFullYear(),
                 month: date.getMonth(),
-                day: date.getDate()
+                day: BI.getDate()
             });
             self.combo.hideView();
             self.fireEvent(BI.MultiDateCombo.EVENT_CONFIRM);
@@ -83714,7 +83712,7 @@ BI.MultiDatePopup = BI.inherit(BI.Widget, {
                     self.ymd.setValue({
                         year: date.getFullYear(),
                         month: date.getMonth(),
-                        day: date.getDate()
+                        day: BI.getDate()
                     });
                     self._setInnerValue(self.ymd);
                     break;
@@ -83829,12 +83827,12 @@ BI.MultiDatePopup = BI.inherit(BI.Widget, {
                 break;
             default:
                 if (this._checkValueValid(value)) {
-                    var date = Date.getDate();
+                    var date = BI.getDate();
                     this.dateTab.setSelect(BI.MultiDateCombo.MULTI_DATE_YMD_CARD);
                     this.ymd.setValue({
                         year: date.getFullYear(),
                         month: date.getMonth(),
-                        day: date.getDate()
+                        day: BI.getDate()
                     });
                     this.textButton.setValue(BI.i18nText("BI-Multi_Date_Today"));
                 } else {
@@ -95848,26 +95846,26 @@ BI.TimeInterval = BI.inherit(BI.Single, {
         return combo;
     },
     _dateCheck: function (date) {
-        return Date.parseDateTime(date, "%Y-%x-%d").print("%Y-%x-%d") == date || Date.parseDateTime(date, "%Y-%X-%d").print("%Y-%X-%d") == date || Date.parseDateTime(date, "%Y-%x-%e").print("%Y-%x-%e") == date || Date.parseDateTime(date, "%Y-%X-%e").print("%Y-%X-%e") == date;
+        return BI.parseDateTime(date, "%Y-%x-%d").print("%Y-%x-%d") == date || BI.parseDateTime(date, "%Y-%X-%d").print("%Y-%X-%d") == date || BI.parseDateTime(date, "%Y-%x-%e").print("%Y-%x-%e") == date || BI.parseDateTime(date, "%Y-%X-%e").print("%Y-%X-%e") == date;
     },
     _checkVoid: function (obj) {
-        return !Date.checkVoid(obj.year, obj.month, obj.day, this.constants.DATE_MIN_VALUE, this.constants.DATE_MAX_VALUE)[0];
+        return !BI.checkDateVoid(obj.year, obj.month, obj.day, this.constants.DATE_MIN_VALUE, this.constants.DATE_MAX_VALUE)[0];
     },
     _check: function (smallDate, bigDate) {
         var smallObj = smallDate.match(/\d+/g), bigObj = bigDate.match(/\d+/g);
-        return this._dateCheck(smallDate) && Date.checkLegal(smallDate) && this._checkVoid({
+        return this._dateCheck(smallDate) && BI.checkDateLegal(smallDate) && this._checkVoid({
             year: smallObj[0],
             month: smallObj[1],
             day: smallObj[2]
-        }) && this._dateCheck(bigDate) && Date.checkLegal(bigDate) && this._checkVoid({
+        }) && this._dateCheck(bigDate) && BI.checkDateLegal(bigDate) && this._checkVoid({
             year: bigObj[0],
             month: bigObj[1],
             day: bigObj[2]
         });
     },
     _compare: function (smallDate, bigDate) {
-        smallDate = Date.parseDateTime(smallDate, "%Y-%X-%d").print("%Y-%X-%d");
-        bigDate = Date.parseDateTime(bigDate, "%Y-%X-%d").print("%Y-%X-%d");
+        smallDate = BI.parseDateTime(smallDate, "%Y-%X-%d").print("%Y-%X-%d");
+        bigDate = BI.parseDateTime(bigDate, "%Y-%X-%d").print("%Y-%X-%d");
         return BI.isNotNull(smallDate) && BI.isNotNull(bigDate) && smallDate > bigDate;
     },
     _setTitle: function (v) {
@@ -96035,7 +96033,7 @@ BI.YearPopup = BI.inherit(BI.Widget, {
         BI.YearPopup.superclass._init.apply(this, arguments);
         var self = this, o = this.options;
 
-        this.selectedYear = this._year = Date.getDate().getFullYear();
+        this.selectedYear = this._year = BI.getDate().getFullYear();
 
         var backBtn = BI.createWidget({
             type: "bi.icon_button",
@@ -96092,8 +96090,8 @@ BI.YearPopup = BI.inherit(BI.Widget, {
 
     setValue: function (v) {
         var o = this.options;
-        if (Date.checkVoid(v, 1, 1, o.min, o.max)[0]) {
-            v = Date.getDate().getFullYear();
+        if (BI.checkDateVoid(v, 1, 1, o.min, o.max)[0]) {
+            v = BI.getDate().getFullYear();
             this.selectedYear = "";
             this.navigation.setSelect(BI.YearCalendar.getPageByYear(v));
             this.navigation.setValue("");
@@ -96136,7 +96134,7 @@ BI.YearTrigger = BI.inherit(BI.Trigger, {
             height: o.height,
             validationChecker: function (v) {
                 self.editor.setErrorText(!BI.isPositiveInteger(v) ? c.errorText : c.errorTextInvalid);
-                return v === "" || (BI.isPositiveInteger(v) && !Date.checkVoid(v, 1, 1, o.min, o.max)[0]);
+                return v === "" || (BI.isPositiveInteger(v) && !BI.checkDateVoid(v, 1, 1, o.min, o.max)[0]);
             },
             quitChecker: function (v) {
                 return false;

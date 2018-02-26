@@ -130,11 +130,11 @@ BI.DateTimePopup = BI.inherit(BI.Widget, {
     setValue: function (v) {
         var value = v, date;
         if (BI.isNull(value)) {
-            date = Date.getDate();
+            date = BI.getDate();
             this.dateCombo.setValue({
                 year: date.getFullYear(),
                 month: date.getMonth(),
-                day: date.getDate()
+                day: BI.getDate()
             });
             this.hour.setValue(date.getHours());
             this.minute.setValue(date.getMinutes());
