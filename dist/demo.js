@@ -1495,6 +1495,7 @@ BI.shortcut("demo.table_view", Demo.Func);Demo.Bubble = BI.inherit(BI.Widget, {
                     },
                     type: "bi.button",
                     text: "bubble测试(消息)",
+                    title: "123",
                     height: 30,
                     handler: function () {
                         BI.Bubbles.show("singleBubble1", "bubble测试", this, {
