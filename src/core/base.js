@@ -164,6 +164,9 @@ if (!window.BI) {
     });
     _.each(["each", "map", "reduce", "reduceRight", "find", "filter", "reject", "every", "all", "some", "any", "max", "min",
         "sortBy", "groupBy", "indexBy", "countBy", "partition"], function (name) {
+        if (name === "any") {
+            BI[name] = _applyFunc("some");
+        }
         BI[name] = _applyFunc(name);
     });
     _.extend(BI, {
@@ -446,7 +449,7 @@ if (!window.BI) {
                 };
             }
             var F = function () {
-                }, spp = sp.prototype;
+            }, spp = sp.prototype;
             F.prototype = spp;
             sb.prototype = new F();
             sb.superclass = spp;
@@ -782,7 +785,6 @@ if (!window.BI) {
                 return Date.now();
             }
             return Date.getDate().getTime();
-
 
 
         },

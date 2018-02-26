@@ -14,7 +14,7 @@ module.exports = function (grunt) {
             coreJs: {
                 src: [
                     "src/core/jquery.js",
-                    "src/core/underscore.js",
+                    "src/core/lodash.js",
                     "src/core/foundation.js",
                     // 'src/core/mvc/**/*.js',
                     "src/core/base.js",
@@ -142,7 +142,7 @@ module.exports = function (grunt) {
             },
             utilsJs: {
                 src: [
-                    "src/core/underscore.js",
+                    "src/core/lodash.js",
                     "src/core/foundation.js",
                     "src/core/var.js",
                     "src/core/proto/array.js",
