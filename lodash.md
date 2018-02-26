@@ -1,3 +1,1 @@
-### lodash build命令
-
-lodash core plus=debounce,throttle,get
+lodash core plus=debounce,throttle,get,findIndex,findLastIndex,findKey,findLastKey,isArrayLike,invert,invertBy,uniq,uniqBy,zip,unzip

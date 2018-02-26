@@ -9599,7 +9599,7 @@ if ( typeof define === "function" && define.amd && define.amd.jQuery ) {
 })( window );/**
  * @license
  * Lodash (Custom Build) <https://lodash.com/>
- * Build: `lodash core plus="debounce,throttle,get"`
+ * Build: `lodash core plus="debounce,throttle,get,findIndex,findLastIndex,findKey,findLastKey,isArrayLike,invert,invertBy,uniq,uniqBy,zip,unzip"`
  * Copyright JS Foundation and other contributors <https://js.foundation/>
  * Released under MIT license <https://lodash.com/license>
  * Based on Underscore.js 1.8.3 <http://underscorejs.org/LICENSE>
@@ -9972,6 +9972,27 @@ if ( typeof define === "function" && define.amd && define.amd.jQuery ) {
   }
 
   /**
+   * This function is like `arrayIncludes` except that it accepts a comparator.
+   *
+   * @private
+   * @param {Array} [array] The array to inspect.
+   * @param {*} target The value to search for.
+   * @param {Function} comparator The comparator invoked per element.
+   * @returns {boolean} Returns `true` if `target` is found, else `false`.
+   */
+  function arrayIncludesWith(array, value, comparator) {
+    var index = -1,
+        length = array == null ? 0 : array.length;
+
+    while (++index < length) {
+      if (comparator(value, array[index])) {
+        return true;
+      }
+    }
+    return false;
+  }
+
+  /**
    * A specialized version of `_.map` for arrays without support for iteratee
    * shorthands.
    *
@@ -10075,6 +10096,28 @@ if ( typeof define === "function" && define.amd && define.amd.jQuery ) {
    */
   function asciiToArray(string) {
     return string.split('');
+  }
+
+  /**
+   * The base implementation of methods like `_.findKey` and `_.findLastKey`,
+   * without support for iteratee shorthands, which iterates over `collection`
+   * using `eachFunc`.
+   *
+   * @private
+   * @param {Array|Object} collection The collection to inspect.
+   * @param {Function} predicate The function invoked per iteration.
+   * @param {Function} eachFunc The function to iterate over `collection`.
+   * @returns {*} Returns the found element or its key, else `undefined`.
+   */
+  function baseFindKey(collection, predicate, eachFunc) {
+    var result;
+    eachFunc(collection, function(value, key, collection) {
+      if (predicate(value, key, collection)) {
+        result = key;
+        return false;
+      }
+    });
+    return result;
   }
 
   /**
@@ -11730,6 +11773,18 @@ if ( typeof define === "function" && define.amd && define.amd.jQuery ) {
   var baseFor = createBaseFor();
 
   /**
+   * This function is like `baseFor` except that it iterates over properties
+   * in the opposite order.
+   *
+   * @private
+   * @param {Object} object The object to iterate over.
+   * @param {Function} iteratee The function invoked per iteration.
+   * @param {Function} keysFunc The function to get the keys of `object`.
+   * @returns {Object} Returns `object`.
+   */
+  var baseForRight = createBaseFor(true);
+
+  /**
    * The base implementation of `_.forOwn` without support for iteratee shorthands.
    *
    * @private
@@ -11739,6 +11794,18 @@ if ( typeof define === "function" && define.amd && define.amd.jQuery ) {
    */
   function baseForOwn(object, iteratee) {
     return object && baseFor(object, iteratee, keys);
+  }
+
+  /**
+   * The base implementation of `_.forOwnRight` without support for iteratee shorthands.
+   *
+   * @private
+   * @param {Object} object The object to iterate over.
+   * @param {Function} iteratee The function invoked per iteration.
+   * @returns {Object} Returns `object`.
+   */
+  function baseForOwnRight(object, iteratee) {
+    return object && baseForRight(object, iteratee, keys);
   }
 
   /**
@@ -11843,6 +11910,24 @@ if ( typeof define === "function" && define.amd && define.amd.jQuery ) {
    */
   function baseHasIn(object, key) {
     return object != null && key in Object(object);
+  }
+
+  /**
+   * The base implementation of `_.invert` and `_.invertBy` which inverts
+   * `object` with values transformed by `iteratee` and set by `setter`.
+   *
+   * @private
+   * @param {Object} object The object to iterate over.
+   * @param {Function} setter The function to set `accumulator` values.
+   * @param {Function} iteratee The iteratee to transform values.
+   * @param {Object} accumulator The initial inverted object.
+   * @returns {Function} Returns `accumulator`.
+   */
+  function baseInverter(object, setter, iteratee, accumulator) {
+    baseForOwn(object, function(value, key, object) {
+      setter(accumulator, iteratee(value), key, object);
+    });
+    return accumulator;
   }
 
   /**
@@ -12447,6 +12532,67 @@ if ( typeof define === "function" && define.amd && define.amd.jQuery ) {
     }
     var result = (value + '');
     return (result == '0' && (1 / value) == -INFINITY) ? '-0' : result;
+  }
+
+  /**
+   * The base implementation of `_.uniqBy` without support for iteratee shorthands.
+   *
+   * @private
+   * @param {Array} array The array to inspect.
+   * @param {Function} [iteratee] The iteratee invoked per element.
+   * @param {Function} [comparator] The comparator invoked per element.
+   * @returns {Array} Returns the new duplicate free array.
+   */
+  function baseUniq(array, iteratee, comparator) {
+    var index = -1,
+        includes = arrayIncludes,
+        length = array.length,
+        isCommon = true,
+        result = [],
+        seen = result;
+
+    if (comparator) {
+      isCommon = false;
+      includes = arrayIncludesWith;
+    }
+    else if (length >= LARGE_ARRAY_SIZE) {
+      var set = iteratee ? null : createSet(array);
+      if (set) {
+        return setToArray(set);
+      }
+      isCommon = false;
+      includes = cacheHas;
+      seen = new SetCache;
+    }
+    else {
+      seen = iteratee ? [] : result;
+    }
+    outer:
+    while (++index < length) {
+      var value = array[index],
+          computed = iteratee ? iteratee(value) : value;
+
+      value = (comparator || value !== 0) ? value : 0;
+      if (isCommon && computed === computed) {
+        var seenIndex = seen.length;
+        while (seenIndex--) {
+          if (seen[seenIndex] === computed) {
+            continue outer;
+          }
+        }
+        if (iteratee) {
+          seen.push(computed);
+        }
+        result.push(value);
+      }
+      else if (!includes(seen, computed, comparator)) {
+        if (seen !== result) {
+          seen.push(computed);
+        }
+        result.push(value);
+      }
+    }
+    return result;
   }
 
   /**
@@ -13067,6 +13213,20 @@ if ( typeof define === "function" && define.amd && define.amd.jQuery ) {
   }
 
   /**
+   * Creates a function like `_.invertBy`.
+   *
+   * @private
+   * @param {Function} setter The function to set accumulator values.
+   * @param {Function} toIteratee The function to resolve iteratees.
+   * @returns {Function} Returns the new inverter function.
+   */
+  function createInverter(setter, toIteratee) {
+    return function(object, iteratee) {
+      return baseInverter(object, setter, toIteratee(iteratee), {});
+    };
+  }
+
+  /**
    * Creates a function that wraps `func` to invoke it with the `this` binding
    * of `thisArg` and `partials` prepended to the arguments it receives.
    *
@@ -13143,6 +13303,17 @@ if ( typeof define === "function" && define.amd && define.amd.jQuery ) {
     result.placeholder = placeholder;
     return setWrapToString(result, func, bitmask);
   }
+
+  /**
+   * Creates a set object of `values`.
+   *
+   * @private
+   * @param {Array} values The values to add to the set.
+   * @returns {Object} Returns the new set.
+   */
+  var createSet = !(Set && (1 / setToArray(new Set([,-0]))[1]) == INFINITY) ? noop : function(values) {
+    return new Set(values);
+  };
 
   /**
    * Creates a function that either curries or invokes `func` with optional
@@ -14474,6 +14645,56 @@ if ( typeof define === "function" && define.amd && define.amd.jQuery ) {
   }
 
   /**
+   * This method is like `_.findIndex` except that it iterates over elements
+   * of `collection` from right to left.
+   *
+   * @static
+   * @memberOf _
+   * @since 2.0.0
+   * @category Array
+   * @param {Array} array The array to inspect.
+   * @param {Function} [predicate=_.identity] The function invoked per iteration.
+   * @param {number} [fromIndex=array.length-1] The index to search from.
+   * @returns {number} Returns the index of the found element, else `-1`.
+   * @example
+   *
+   * var users = [
+   *   { 'user': 'barney',  'active': true },
+   *   { 'user': 'fred',    'active': false },
+   *   { 'user': 'pebbles', 'active': false }
+   * ];
+   *
+   * _.findLastIndex(users, function(o) { return o.user == 'pebbles'; });
+   * // => 2
+   *
+   * // The `_.matches` iteratee shorthand.
+   * _.findLastIndex(users, { 'user': 'barney', 'active': true });
+   * // => 0
+   *
+   * // The `_.matchesProperty` iteratee shorthand.
+   * _.findLastIndex(users, ['active', false]);
+   * // => 2
+   *
+   * // The `_.property` iteratee shorthand.
+   * _.findLastIndex(users, 'active');
+   * // => 0
+   */
+  function findLastIndex(array, predicate, fromIndex) {
+    var length = array == null ? 0 : array.length;
+    if (!length) {
+      return -1;
+    }
+    var index = length - 1;
+    if (fromIndex !== undefined) {
+      index = toInteger(fromIndex);
+      index = fromIndex < 0
+        ? nativeMax(length + index, 0)
+        : nativeMin(index, length - 1);
+    }
+    return baseFindIndex(array, baseIteratee(predicate, 3), index, true);
+  }
+
+  /**
    * Flattens `array` a single level deep.
    *
    * @static
@@ -14645,6 +14866,108 @@ if ( typeof define === "function" && define.amd && define.amd.jQuery ) {
     }
     return baseSlice(array, start, end);
   }
+
+  /**
+   * Creates a duplicate-free version of an array, using
+   * [`SameValueZero`](http://ecma-international.org/ecma-262/7.0/#sec-samevaluezero)
+   * for equality comparisons, in which only the first occurrence of each element
+   * is kept. The order of result values is determined by the order they occur
+   * in the array.
+   *
+   * @static
+   * @memberOf _
+   * @since 0.1.0
+   * @category Array
+   * @param {Array} array The array to inspect.
+   * @returns {Array} Returns the new duplicate free array.
+   * @example
+   *
+   * _.uniq([2, 1, 2]);
+   * // => [2, 1]
+   */
+  function uniq(array) {
+    return (array && array.length) ? baseUniq(array) : [];
+  }
+
+  /**
+   * This method is like `_.uniq` except that it accepts `iteratee` which is
+   * invoked for each element in `array` to generate the criterion by which
+   * uniqueness is computed. The order of result values is determined by the
+   * order they occur in the array. The iteratee is invoked with one argument:
+   * (value).
+   *
+   * @static
+   * @memberOf _
+   * @since 4.0.0
+   * @category Array
+   * @param {Array} array The array to inspect.
+   * @param {Function} [iteratee=_.identity] The iteratee invoked per element.
+   * @returns {Array} Returns the new duplicate free array.
+   * @example
+   *
+   * _.uniqBy([2.1, 1.2, 2.3], Math.floor);
+   * // => [2.1, 1.2]
+   *
+   * // The `_.property` iteratee shorthand.
+   * _.uniqBy([{ 'x': 1 }, { 'x': 2 }, { 'x': 1 }], 'x');
+   * // => [{ 'x': 1 }, { 'x': 2 }]
+   */
+  function uniqBy(array, iteratee) {
+    return (array && array.length) ? baseUniq(array, baseIteratee(iteratee, 2)) : [];
+  }
+
+  /**
+   * This method is like `_.zip` except that it accepts an array of grouped
+   * elements and creates an array regrouping the elements to their pre-zip
+   * configuration.
+   *
+   * @static
+   * @memberOf _
+   * @since 1.2.0
+   * @category Array
+   * @param {Array} array The array of grouped elements to process.
+   * @returns {Array} Returns the new array of regrouped elements.
+   * @example
+   *
+   * var zipped = _.zip(['a', 'b'], [1, 2], [true, false]);
+   * // => [['a', 1, true], ['b', 2, false]]
+   *
+   * _.unzip(zipped);
+   * // => [['a', 'b'], [1, 2], [true, false]]
+   */
+  function unzip(array) {
+    if (!(array && array.length)) {
+      return [];
+    }
+    var length = 0;
+    array = arrayFilter(array, function(group) {
+      if (isArrayLikeObject(group)) {
+        length = nativeMax(group.length, length);
+        return true;
+      }
+    });
+    return baseTimes(length, function(index) {
+      return arrayMap(array, baseProperty(index));
+    });
+  }
+
+  /**
+   * Creates an array of grouped elements, the first of which contains the
+   * first elements of the given arrays, the second of which contains the
+   * second elements of the given arrays, and so on.
+   *
+   * @static
+   * @memberOf _
+   * @since 0.1.0
+   * @category Array
+   * @param {...Array} [arrays] The arrays to process.
+   * @returns {Array} Returns the new array of grouped elements.
+   * @example
+   *
+   * _.zip(['a', 'b'], [1, 2], [true, false]);
+   * // => [['a', 1, true], ['b', 2, false]]
+   */
+  var zip = baseRest(unzip);
 
   /*------------------------------------------------------------------------*/
 
@@ -16029,6 +16352,35 @@ if ( typeof define === "function" && define.amd && define.amd.jQuery ) {
   }
 
   /**
+   * This method is like `_.isArrayLike` except that it also checks if `value`
+   * is an object.
+   *
+   * @static
+   * @memberOf _
+   * @since 4.0.0
+   * @category Lang
+   * @param {*} value The value to check.
+   * @returns {boolean} Returns `true` if `value` is an array-like object,
+   *  else `false`.
+   * @example
+   *
+   * _.isArrayLikeObject([1, 2, 3]);
+   * // => true
+   *
+   * _.isArrayLikeObject(document.body.children);
+   * // => true
+   *
+   * _.isArrayLikeObject('abc');
+   * // => false
+   *
+   * _.isArrayLikeObject(_.noop);
+   * // => false
+   */
+  function isArrayLikeObject(value) {
+    return isObjectLike(value) && isArrayLike(value);
+  }
+
+  /**
    * Checks if `value` is classified as a boolean primitive or object.
    *
    * @static
@@ -16856,6 +17208,84 @@ if ( typeof define === "function" && define.amd && define.amd.jQuery ) {
   });
 
   /**
+   * This method is like `_.find` except that it returns the key of the first
+   * element `predicate` returns truthy for instead of the element itself.
+   *
+   * @static
+   * @memberOf _
+   * @since 1.1.0
+   * @category Object
+   * @param {Object} object The object to inspect.
+   * @param {Function} [predicate=_.identity] The function invoked per iteration.
+   * @returns {string|undefined} Returns the key of the matched element,
+   *  else `undefined`.
+   * @example
+   *
+   * var users = {
+   *   'barney':  { 'age': 36, 'active': true },
+   *   'fred':    { 'age': 40, 'active': false },
+   *   'pebbles': { 'age': 1,  'active': true }
+   * };
+   *
+   * _.findKey(users, function(o) { return o.age < 40; });
+   * // => 'barney' (iteration order is not guaranteed)
+   *
+   * // The `_.matches` iteratee shorthand.
+   * _.findKey(users, { 'age': 1, 'active': true });
+   * // => 'pebbles'
+   *
+   * // The `_.matchesProperty` iteratee shorthand.
+   * _.findKey(users, ['active', false]);
+   * // => 'fred'
+   *
+   * // The `_.property` iteratee shorthand.
+   * _.findKey(users, 'active');
+   * // => 'barney'
+   */
+  function findKey(object, predicate) {
+    return baseFindKey(object, baseIteratee(predicate, 3), baseForOwn);
+  }
+
+  /**
+   * This method is like `_.findKey` except that it iterates over elements of
+   * a collection in the opposite order.
+   *
+   * @static
+   * @memberOf _
+   * @since 2.0.0
+   * @category Object
+   * @param {Object} object The object to inspect.
+   * @param {Function} [predicate=_.identity] The function invoked per iteration.
+   * @returns {string|undefined} Returns the key of the matched element,
+   *  else `undefined`.
+   * @example
+   *
+   * var users = {
+   *   'barney':  { 'age': 36, 'active': true },
+   *   'fred':    { 'age': 40, 'active': false },
+   *   'pebbles': { 'age': 1,  'active': true }
+   * };
+   *
+   * _.findLastKey(users, function(o) { return o.age < 40; });
+   * // => returns 'pebbles' assuming `_.findKey` returns 'barney'
+   *
+   * // The `_.matches` iteratee shorthand.
+   * _.findLastKey(users, { 'age': 36, 'active': true });
+   * // => 'barney'
+   *
+   * // The `_.matchesProperty` iteratee shorthand.
+   * _.findLastKey(users, ['active', false]);
+   * // => 'fred'
+   *
+   * // The `_.property` iteratee shorthand.
+   * _.findLastKey(users, 'active');
+   * // => 'pebbles'
+   */
+  function findLastKey(object, predicate) {
+    return baseFindKey(object, baseIteratee(predicate, 3), baseForOwnRight);
+  }
+
+  /**
    * Gets the value at `path` of `object`. If the resolved value is
    * `undefined`, the `defaultValue` is returned in its place.
    *
@@ -16945,6 +17375,72 @@ if ( typeof define === "function" && define.amd && define.amd.jQuery ) {
   function hasIn(object, path) {
     return object != null && hasPath(object, path, baseHasIn);
   }
+
+  /**
+   * Creates an object composed of the inverted keys and values of `object`.
+   * If `object` contains duplicate values, subsequent values overwrite
+   * property assignments of previous values.
+   *
+   * @static
+   * @memberOf _
+   * @since 0.7.0
+   * @category Object
+   * @param {Object} object The object to invert.
+   * @returns {Object} Returns the new inverted object.
+   * @example
+   *
+   * var object = { 'a': 1, 'b': 2, 'c': 1 };
+   *
+   * _.invert(object);
+   * // => { '1': 'c', '2': 'b' }
+   */
+  var invert = createInverter(function(result, value, key) {
+    if (value != null &&
+        typeof value.toString != 'function') {
+      value = nativeObjectToString.call(value);
+    }
+
+    result[value] = key;
+  }, constant(identity));
+
+  /**
+   * This method is like `_.invert` except that the inverted object is generated
+   * from the results of running each element of `object` thru `iteratee`. The
+   * corresponding inverted value of each inverted key is an array of keys
+   * responsible for generating the inverted value. The iteratee is invoked
+   * with one argument: (value).
+   *
+   * @static
+   * @memberOf _
+   * @since 4.1.0
+   * @category Object
+   * @param {Object} object The object to invert.
+   * @param {Function} [iteratee=_.identity] The iteratee invoked per element.
+   * @returns {Object} Returns the new inverted object.
+   * @example
+   *
+   * var object = { 'a': 1, 'b': 2, 'c': 1 };
+   *
+   * _.invertBy(object);
+   * // => { '1': ['a', 'c'], '2': ['b'] }
+   *
+   * _.invertBy(object, function(value) {
+   *   return 'group' + value;
+   * });
+   * // => { 'group1': ['a', 'c'], 'group2': ['b'] }
+   */
+  var invertBy = createInverter(function(result, value, key) {
+    if (value != null &&
+        typeof value.toString != 'function') {
+      value = nativeObjectToString.call(value);
+    }
+
+    if (hasOwnProperty.call(result, value)) {
+      result[value].push(key);
+    } else {
+      result[value] = [key];
+    }
+  }, baseIteratee);
 
   /**
    * Creates an array of the own enumerable property names of `object`.
@@ -17531,6 +18027,8 @@ if ( typeof define === "function" && define.amd && define.amd.jQuery ) {
   lodash.filter = filter;
   lodash.flatten = flatten;
   lodash.flattenDeep = flattenDeep;
+  lodash.invert = invert;
+  lodash.invertBy = invertBy;
   lodash.iteratee = iteratee;
   lodash.keys = keys;
   lodash.map = map;
@@ -17545,7 +18043,11 @@ if ( typeof define === "function" && define.amd && define.amd.jQuery ) {
   lodash.throttle = throttle;
   lodash.thru = thru;
   lodash.toArray = toArray;
+  lodash.uniq = uniq;
+  lodash.uniqBy = uniqBy;
+  lodash.unzip = unzip;
   lodash.values = values;
+  lodash.zip = zip;
 
   // Add aliases.
   lodash.extend = assignIn;
@@ -17560,6 +18062,10 @@ if ( typeof define === "function" && define.amd && define.amd.jQuery ) {
   lodash.escape = escape;
   lodash.every = every;
   lodash.find = find;
+  lodash.findIndex = findIndex;
+  lodash.findKey = findKey;
+  lodash.findLastIndex = findLastIndex;
+  lodash.findLastKey = findLastKey;
   lodash.forEach = forEach;
   lodash.get = get;
   lodash.has = has;
@@ -17568,6 +18074,7 @@ if ( typeof define === "function" && define.amd && define.amd.jQuery ) {
   lodash.indexOf = indexOf;
   lodash.isArguments = isArguments;
   lodash.isArray = isArray;
+  lodash.isArrayLike = isArrayLike;
   lodash.isBoolean = isBoolean;
   lodash.isDate = isDate;
   lodash.isEmpty = isEmpty;
@@ -18023,8 +18530,9 @@ if (!window.BI) {
         "sortBy", "groupBy", "indexBy", "countBy", "partition"], function (name) {
         if (name === "any") {
             BI[name] = _applyFunc("some");
+        } else {
+            BI[name] = _applyFunc(name);
         }
-        BI[name] = _applyFunc(name);
     });
     _.extend(BI, {
         clamp: function (value, minValue, maxValue) {
@@ -18447,6 +18955,11 @@ if (!window.BI) {
                 }
             }
             return true;
+        },
+
+        contains: function (obj, target, fromIndex) {
+            if (!_.isArrayLike(obj)) obj = _.values(obj);
+            return _.indexOf(obj, target, typeof fromIndex === "number" && fromIndex) >= 0;
         },
 
         deepContains: function (obj, copy) {
@@ -102894,7 +103407,7 @@ BI.shortcut("bi.value_chooser_pane", BI.ValueChooserPane);(function () {
         // returns `false`.
         loadUrl: function (fragment) {
             fragment = this.fragment = this.getFragment(fragment);
-            return _.any(this.handlers, function (handler) {
+            return _.some(this.handlers, function (handler) {
                 if (handler.route.test(fragment)) {
                     handler.callback(fragment);
                     return true;

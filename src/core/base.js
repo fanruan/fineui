@@ -166,8 +166,9 @@ if (!window.BI) {
         "sortBy", "groupBy", "indexBy", "countBy", "partition"], function (name) {
         if (name === "any") {
             BI[name] = _applyFunc("some");
+        } else {
+            BI[name] = _applyFunc(name);
         }
-        BI[name] = _applyFunc(name);
     });
     _.extend(BI, {
         clamp: function (value, minValue, maxValue) {
@@ -590,6 +591,11 @@ if (!window.BI) {
                 }
             }
             return true;
+        },
+
+        contains: function (obj, target, fromIndex) {
+            if (!_.isArrayLike(obj)) obj = _.values(obj);
+            return _.indexOf(obj, target, typeof fromIndex === "number" && fromIndex) >= 0;
         },
 
         deepContains: function (obj, copy) {
