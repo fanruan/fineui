@@ -869,7 +869,11 @@ BI.shortcut("demo.multifile_editor", Demo.CodeEditor);Demo.RichEditor = BI.inher
     },
 
     mounted: function () {
-        this.editor.setValue("这是一条<font size=\"4\" color=\"#009de3\">测试</font>数据");
+        var image = BI.DOM.getImage("测试");
+        var src = image.src;
+        var style = image.style;
+
+        this.editor.setValue("<div>这是一条<font size=\"4\" color=\"#009de3\">测试</font>数据<img width='" + image.width + "' height='" + image.height + "' src='" + src + "' style='" + style + "' /></div>");
     }
 });
 BI.shortcut("demo.rich_editor", Demo.RichEditor);/**

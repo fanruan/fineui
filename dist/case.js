@@ -9956,20 +9956,12 @@ BI.RichEditorParamAction = BI.inherit(BI.RichEditorAction, {
         var o = this.options;
         var instance = o.editor.instance;
         var image = new Image();
-        var canvas = document.createElement("canvas");
-        $("body").append(canvas);
-        canvas.width = BI.DOM.getTextSizeWidth(param, 14) + 6;
-        canvas.height = 16;
-        var ctx = canvas.getContext("2d");
-        ctx.font = "14px Georgia";
-        ctx.fillStyle = "#ffffff";
-        ctx.fillText(param, 3, 14);
-        image.src = canvas.toDataURL("image/png");
+        var attrs = BI.DOM.getImage(param);
+        image.src = attrs.src;
         image.alt = param;
-        $(image).css({"background-color": "#3f8ce8", "vertical-align": "sub", "margin": "0 3px;"});
+        image.style = attrs.style;
         instance.getElm().element.append(image);
         this._addBlank($(image));
-        $(canvas).destroy();
     }
 });
 

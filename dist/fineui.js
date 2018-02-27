@@ -27669,8 +27669,8 @@ BI.extend(BI.Func, {
         name = name || "";
         while (true) {
             if (BI.every(array, function (i, item) {
-                return item.name !== name;
-            })) {
+                    return item.name !== name;
+                })) {
                 break;
             }
             name = src + (idx++);
@@ -27952,6 +27952,27 @@ BI.extend(BI.DOM, {
             ul.destroy();
         }
         return this._scrollWidth;
+    },
+
+    getImage: function (param) {
+        var image = new Image();
+        var canvas = document.createElement("canvas");
+        $("body").append(canvas);
+        var w = BI.DOM.getTextSizeWidth(param, 14) + 6;
+        canvas.width = w;
+        canvas.height = 16;
+        var ctx = canvas.getContext("2d");
+        ctx.font = "14px Georgia";
+        ctx.fillStyle = "#ffffff";
+        ctx.fillText(param, 3, 14);
+        $(canvas).destroy();
+        return {
+            width: w,
+            height: 16,
+            src: canvas.toDataURL("image/png"),
+            style: "background-color: #3f8ce8; vertical-align: sub; margin: 0 3px;",
+            alt: param
+        };
     }
 });(function () {
     var constantInjection = {};
@@ -81501,20 +81522,12 @@ BI.RichEditorParamAction = BI.inherit(BI.RichEditorAction, {
         var o = this.options;
         var instance = o.editor.instance;
         var image = new Image();
-        var canvas = document.createElement("canvas");
-        $("body").append(canvas);
-        canvas.width = BI.DOM.getTextSizeWidth(param, 14) + 6;
-        canvas.height = 16;
-        var ctx = canvas.getContext("2d");
-        ctx.font = "14px Georgia";
-        ctx.fillStyle = "#ffffff";
-        ctx.fillText(param, 3, 14);
-        image.src = canvas.toDataURL("image/png");
+        var attrs = BI.DOM.getImage(param);
+        image.src = attrs.src;
         image.alt = param;
-        $(image).css({"background-color": "#3f8ce8", "vertical-align": "sub", "margin": "0 3px;"});
+        image.style = attrs.style;
         instance.getElm().element.append(image);
         this._addBlank($(image));
-        $(canvas).destroy();
     }
 });
 
