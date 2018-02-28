@@ -193,7 +193,7 @@ BI.MultiSelectList = BI.inherit(BI.Widget, {
             o.itemsCreator({
                 type: BI.MultiSelectList.REQ_GET_ALL_DATA
             }, function (ob) {
-                self._allData = BI.pluck(ob.items, "value");
+                self._allData = BI.map(ob.items, "value");
                 digest(self._allData);
             });
         } else {
@@ -218,7 +218,7 @@ BI.MultiSelectList = BI.inherit(BI.Widget, {
             type: BI.MultiSelectList.REQ_GET_ALL_DATA,
             keyword: self.trigger.getKeyword()
         }, function (ob) {
-            var items = BI.pluck(ob.items, "value");
+            var items = BI.map(ob.items, "value");
             if (self.storeValue.type === res.type) {
                 var change = false;
                 var map = self._makeMap(self.storeValue.value);
