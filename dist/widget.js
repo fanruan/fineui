@@ -2352,25 +2352,38 @@ BI.DownListPopup = BI.inherit(BI.Pane, {
         var value = [];
         BI.each(o.items, function (idx, itemGroup) {
             BI.each(itemGroup, function (id, item) {
-                if(BI.isNotNull(item.children)){
-                    var childValues = BI.pluck(item.children, "value");
-                    if(BI.contains(childValues, valueGetter(idx))){
-                        value.push(valueGetter(idx));
+                if(BI.isNotNull(item.children)) {
+                    var childValues = BI.map(item.children, "value");
+                    var v = joinValue(childValues, valueGetter(idx));
+                    if(BI.isNotEmptyString(v)) {
+                        value.push(v);
                     }
                 }else{
-                    if(item.value === valueGetter(idx)){
-                        value.push(valueGetter(idx));
+                    if(item.value === valueGetter(idx)[0]) {
+                        value.push(valueGetter(idx)[0]);
                     }
                 }
-            })
+            });
         });
         return value;
 
-        function valueGetter(index) {
+        function joinValue (sources, targets) {
+            var value = "";
+            BI.some(sources, function (idx, s) {
+                return BI.some(targets, function (id, t) {
+                    if(s === t) {
+                        value = s;
+                        return true;
+                    }
+                });
+            });
+            return value;
+        }
+
+        function valueGetter (index) {
             switch (o.chooseType) {
                 case BI.Selection.Single:
                     return values[0];
-                    break;
                 case BI.Selection.Multi:
                     return values[index];
                 default:
@@ -2398,9 +2411,17 @@ BI.DownListPopup = BI.inherit(BI.Pane, {
         this.popup.setValue(this._digest(valueItem));
     },
 
+    _getValue: function () {
+        var v = [];
+        BI.each(this.popup.getAllButtons(), function (i, item) {
+            i % 2 === 0 && v.push(item.getValue());
+        });
+        return v;
+    },
+
     getValue: function () {
         var self = this, result = [];
-        var values = this._checkValues(this.popup.getValue());
+        var values = this._checkValues(this._getValue());
         BI.each(values, function (i, value) {
             var valueItem = {};
             if (BI.isNotNull(self.childValueMap[value])) {
@@ -7384,7 +7405,7 @@ BI.MultiSelectInsertCombo = BI.inherit(BI.Single, {
             type: BI.MultiSelectInsertCombo.REQ_GET_ALL_DATA,
             keywords: keywords
         }, function (ob) {
-            var values = BI.pluck(ob.items, "value");
+            var values = BI.map(ob.items, "value");
             digest(values);
         });
 
@@ -7407,7 +7428,7 @@ BI.MultiSelectInsertCombo = BI.inherit(BI.Single, {
             type: BI.MultiSelectInsertCombo.REQ_GET_ALL_DATA,
             keywords: [this.trigger.getKey()]
         }, function (ob) {
-            var items = BI.pluck(ob.items, "value");
+            var items = BI.map(ob.items, "value");
             if (self.storeValue.type === res.type) {
                 var change = false;
                 var map = self._makeMap(self.storeValue.value);
@@ -7741,7 +7762,7 @@ BI.MultiSelectCombo = BI.inherit(BI.Single, {
             type: BI.MultiSelectCombo.REQ_GET_ALL_DATA,
             keywords: keywords
         }, function (ob) {
-            var values = BI.pluck(ob.items, "value");
+            var values = BI.map(ob.items, "value");
             digest(values);
         });
 
@@ -7764,7 +7785,7 @@ BI.MultiSelectCombo = BI.inherit(BI.Single, {
             type: BI.MultiSelectCombo.REQ_GET_ALL_DATA,
             keywords: [this.trigger.getKey()]
         }, function (ob) {
-            var items = BI.pluck(ob.items, "value");
+            var items = BI.map(ob.items, "value");
             if (self.storeValue.type === res.type) {
                 var change = false;
                 var map = self._makeMap(self.storeValue.value);
@@ -9194,7 +9215,7 @@ BI.MultiSelectInsertList = BI.inherit(BI.Widget, {
             o.itemsCreator({
                 type: BI.MultiSelectInsertList.REQ_GET_ALL_DATA
             }, function (ob) {
-                self._allData = BI.pluck(ob.items, "value");
+                self._allData = BI.map(ob.items, "value");
                 digest(self._allData);
             });
         } else {
@@ -9219,7 +9240,7 @@ BI.MultiSelectInsertList = BI.inherit(BI.Widget, {
             type: BI.MultiSelectInsertList.REQ_GET_ALL_DATA,
             keyword: self.trigger.getKeyword()
         }, function (ob) {
-            var items = BI.pluck(ob.items, "value");
+            var items = BI.map(ob.items, "value");
             if (self.storeValue.type === res.type) {
                 var change = false;
                 var map = self._makeMap(self.storeValue.value);
@@ -9508,7 +9529,7 @@ BI.MultiSelectList = BI.inherit(BI.Widget, {
             o.itemsCreator({
                 type: BI.MultiSelectList.REQ_GET_ALL_DATA
             }, function (ob) {
-                self._allData = BI.pluck(ob.items, "value");
+                self._allData = BI.map(ob.items, "value");
                 digest(self._allData);
             });
         } else {
@@ -9533,7 +9554,7 @@ BI.MultiSelectList = BI.inherit(BI.Widget, {
             type: BI.MultiSelectList.REQ_GET_ALL_DATA,
             keyword: self.trigger.getKeyword()
         }, function (ob) {
-            var items = BI.pluck(ob.items, "value");
+            var items = BI.map(ob.items, "value");
             if (self.storeValue.type === res.type) {
                 var change = false;
                 var map = self._makeMap(self.storeValue.value);
@@ -14025,7 +14046,7 @@ BI.SingleSelectCombo = BI.inherit(BI.Single, {
             type: BI.SingleSelectCombo.REQ_GET_ALL_DATA,
             keywords: keywords
         }, function (ob) {
-            var values = BI.pluck(ob.items, "value");
+            var values = BI.map(ob.items, "value");
             digest(values);
         });
 
@@ -14048,7 +14069,7 @@ BI.SingleSelectCombo = BI.inherit(BI.Single, {
             type: BI.SingleSelectCombo.REQ_GET_ALL_DATA,
             keywords: [this.trigger.getKey()]
         }, function (ob) {
-            var items = BI.pluck(ob.items, "value");
+            var items = BI.map(ob.items, "value");
             if (self.storeValue.type === res.type) {
                 var change = false;
                 var map = self._makeMap(self.storeValue.value);
@@ -15342,7 +15363,7 @@ BI.SingleSelectCombo = BI.inherit(BI.Single, {
             type: BI.SingleSelectCombo.REQ_GET_ALL_DATA,
             keywords: keywords
         }, function (ob) {
-            var values = BI.pluck(ob.items, "value");
+            var values = BI.map(ob.items, "value");
             digest(values);
         });
 
@@ -15365,7 +15386,7 @@ BI.SingleSelectCombo = BI.inherit(BI.Single, {
             type: BI.SingleSelectCombo.REQ_GET_ALL_DATA,
             keywords: [this.trigger.getKey()]
         }, function (ob) {
-            var items = BI.pluck(ob.items, "value");
+            var items = BI.map(ob.items, "value");
             if (self.storeValue.type === res.type) {
                 var change = false;
                 var map = self._makeMap(self.storeValue.value);

@@ -57,7 +57,7 @@ Demo.Downlist = BI.inherit(BI.Widget, {
                 value: [{"childValue":22,"value":11},{"value":18},{"value":20}],
                 height: 30,
                 width: 100,
-                items: [
+                items: [[{text: "temp", value: 1111111}],
                     [{
                         el: {
                             text: "column 1111",
@@ -80,17 +80,17 @@ Demo.Downlist = BI.inherit(BI.Widget, {
                             text: "column 2",
                             iconCls1: "chart-type-e-font",
                             cls: "dot-e-font",
-                            value: 11
+                            value: 12
                         },
                         children: [{
                             type: "bi.icon_text_item",
                             cls: "dot-e-font",
                             height: 25,
                             text: "column 2.1",
-                            value: 21
+                            value: 11
                         }, {
                             text: "column 2.2",
-                            value: 22,
+                            value: 12,
                             cls: "dot-e-font"
                         }]
                     }],
@@ -139,7 +139,7 @@ Demo.Downlist = BI.inherit(BI.Widget, {
 
                         text: "column 15",
                         cls: "dot-e-font",
-                        value: 23,
+                        value: 25,
                         bubble: "hahahaha"
                     }
                     ]

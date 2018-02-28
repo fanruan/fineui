@@ -198,25 +198,38 @@ BI.DownListPopup = BI.inherit(BI.Pane, {
         var value = [];
         BI.each(o.items, function (idx, itemGroup) {
             BI.each(itemGroup, function (id, item) {
-                if(BI.isNotNull(item.children)){
-                    var childValues = BI.pluck(item.children, "value");
-                    if(BI.contains(childValues, valueGetter(idx))){
-                        value.push(valueGetter(idx));
+                if(BI.isNotNull(item.children)) {
+                    var childValues = BI.map(item.children, "value");
+                    var v = joinValue(childValues, valueGetter(idx));
+                    if(BI.isNotEmptyString(v)) {
+                        value.push(v);
                     }
                 }else{
-                    if(item.value === valueGetter(idx)){
-                        value.push(valueGetter(idx));
+                    if(item.value === valueGetter(idx)[0]) {
+                        value.push(valueGetter(idx)[0]);
                     }
                 }
-            })
+            });
         });
         return value;
 
-        function valueGetter(index) {
+        function joinValue (sources, targets) {
+            var value = "";
+            BI.some(sources, function (idx, s) {
+                return BI.some(targets, function (id, t) {
+                    if(s === t) {
+                        value = s;
+                        return true;
+                    }
+                });
+            });
+            return value;
+        }
+
+        function valueGetter (index) {
             switch (o.chooseType) {
                 case BI.Selection.Single:
                     return values[0];
-                    break;
                 case BI.Selection.Multi:
                     return values[index];
                 default:
@@ -244,9 +257,17 @@ BI.DownListPopup = BI.inherit(BI.Pane, {
         this.popup.setValue(this._digest(valueItem));
     },
 
+    _getValue: function () {
+        var v = [];
+        BI.each(this.popup.getAllButtons(), function (i, item) {
+            i % 2 === 0 && v.push(item.getValue());
+        });
+        return v;
+    },
+
     getValue: function () {
         var self = this, result = [];
-        var values = this._checkValues(this.popup.getValue());
+        var values = this._checkValues(this._getValue());
         BI.each(values, function (i, value) {
             var valueItem = {};
             if (BI.isNotNull(self.childValueMap[value])) {
