@@ -1,7 +1,7 @@
 /**
  * @license
  * Lodash (Custom Build) <https://lodash.com/>
- * Build: `lodash core plus="debounce,throttle,get,findIndex,findLastIndex,findKey,findLastKey,isArrayLike,invert,invertBy,uniq,uniqBy,omit,omitBy,zip,unzip,rest,range,random"`
+ * Build: `lodash core plus="debounce,throttle,get,findIndex,findLastIndex,findKey,findLastKey,isArrayLike,invert,invertBy,uniq,uniqBy,omit,omitBy,zip,unzip,rest,range,random,reject,intersection,drop"`
  * Copyright JS Foundation and other contributors <https://js.foundation/>
  * Released under MIT license <https://lodash.com/license>
  * Based on Underscore.js 1.8.3 <http://underscorejs.org/LICENSE>
@@ -2322,6 +2322,69 @@
   }
 
   /**
+   * The base implementation of methods like `_.intersection`, without support
+   * for iteratee shorthands, that accepts an array of arrays to inspect.
+   *
+   * @private
+   * @param {Array} arrays The arrays to inspect.
+   * @param {Function} [iteratee] The iteratee invoked per element.
+   * @param {Function} [comparator] The comparator invoked per element.
+   * @returns {Array} Returns the new array of shared values.
+   */
+  function baseIntersection(arrays, iteratee, comparator) {
+    var includes = comparator ? arrayIncludesWith : arrayIncludes,
+        length = arrays[0].length,
+        othLength = arrays.length,
+        othIndex = othLength,
+        caches = Array(othLength),
+        maxLength = Infinity,
+        result = [];
+
+    while (othIndex--) {
+      var array = arrays[othIndex];
+      if (othIndex && iteratee) {
+        array = arrayMap(array, baseUnary(iteratee));
+      }
+      maxLength = nativeMin(array.length, maxLength);
+      caches[othIndex] = !comparator && (iteratee || (length >= 120 && array.length >= 120))
+        ? new SetCache(othIndex && array)
+        : undefined;
+    }
+    array = arrays[0];
+
+    var index = -1,
+        seen = caches[0];
+
+    outer:
+    while (++index < length && result.length < maxLength) {
+      var value = array[index],
+          computed = iteratee ? iteratee(value) : value;
+
+      value = (comparator || value !== 0) ? value : 0;
+      if (!(seen
+            ? cacheHas(seen, computed)
+            : includes(result, computed, comparator)
+          )) {
+        othIndex = othLength;
+        while (--othIndex) {
+          var cache = caches[othIndex];
+          if (!(cache
+                ? cacheHas(cache, computed)
+                : includes(arrays[othIndex], computed, comparator))
+              ) {
+            continue outer;
+          }
+        }
+        if (seen) {
+          seen.push(computed);
+        }
+        result.push(value);
+      }
+    }
+    return result;
+  }
+
+  /**
    * The base implementation of `_.invert` and `_.invertBy` which inverts
    * `object` with values transformed by `iteratee` and set by `setter`.
    *
@@ -3072,6 +3135,17 @@
     return arrayReduce(actions, function(result, action) {
       return action.func.apply(action.thisArg, arrayPush([result], action.args));
     }, result);
+  }
+
+  /**
+   * Casts `value` to an empty array if it's not an array like object.
+   *
+   * @private
+   * @param {*} value The value to inspect.
+   * @returns {Array|Object} Returns the cast array-like object.
+   */
+  function castArrayLikeObject(value) {
+    return isArrayLikeObject(value) ? value : [];
   }
 
   /**
@@ -5095,6 +5169,40 @@
   }
 
   /**
+   * Creates a slice of `array` with `n` elements dropped from the beginning.
+   *
+   * @static
+   * @memberOf _
+   * @since 0.5.0
+   * @category Array
+   * @param {Array} array The array to query.
+   * @param {number} [n=1] The number of elements to drop.
+   * @param- {Object} [guard] Enables use as an iteratee for methods like `_.map`.
+   * @returns {Array} Returns the slice of `array`.
+   * @example
+   *
+   * _.drop([1, 2, 3]);
+   * // => [2, 3]
+   *
+   * _.drop([1, 2, 3], 2);
+   * // => [3]
+   *
+   * _.drop([1, 2, 3], 5);
+   * // => []
+   *
+   * _.drop([1, 2, 3], 0);
+   * // => [1, 2, 3]
+   */
+  function drop(array, n, guard) {
+    var length = array == null ? 0 : array.length;
+    if (!length) {
+      return [];
+    }
+    n = (guard || n === undefined) ? 1 : toInteger(n);
+    return baseSlice(array, n < 0 ? 0 : n, length);
+  }
+
+  /**
    * This method is like `_.find` except that it returns the index of the first
    * element `predicate` returns truthy for instead of the element itself.
    *
@@ -5285,6 +5393,30 @@
     }
     return baseIndexOf(array, value, index);
   }
+
+  /**
+   * Creates an array of unique values that are included in all given arrays
+   * using [`SameValueZero`](http://ecma-international.org/ecma-262/7.0/#sec-samevaluezero)
+   * for equality comparisons. The order and references of result values are
+   * determined by the first array.
+   *
+   * @static
+   * @memberOf _
+   * @since 0.1.0
+   * @category Array
+   * @param {...Array} [arrays] The arrays to inspect.
+   * @returns {Array} Returns the new array of intersecting values.
+   * @example
+   *
+   * _.intersection([2, 1], [2, 3]);
+   * // => [2]
+   */
+  var intersection = baseRest(function(arrays) {
+    var mapped = arrayMap(arrays, castArrayLikeObject);
+    return (mapped.length && mapped[0] === arrays[0])
+      ? baseIntersection(mapped)
+      : [];
+  });
 
   /**
    * Gets the last element of `array`.
@@ -6068,6 +6200,45 @@
         initAccum = arguments.length < 3;
 
     return func(collection, baseIteratee(iteratee, 4), accumulator, initAccum, baseEach);
+  }
+
+  /**
+   * The opposite of `_.filter`; this method returns the elements of `collection`
+   * that `predicate` does **not** return truthy for.
+   *
+   * @static
+   * @memberOf _
+   * @since 0.1.0
+   * @category Collection
+   * @param {Array|Object} collection The collection to iterate over.
+   * @param {Function} [predicate=_.identity] The function invoked per iteration.
+   * @returns {Array} Returns the new filtered array.
+   * @see _.filter
+   * @example
+   *
+   * var users = [
+   *   { 'user': 'barney', 'age': 36, 'active': false },
+   *   { 'user': 'fred',   'age': 40, 'active': true }
+   * ];
+   *
+   * _.reject(users, function(o) { return !o.active; });
+   * // => objects for ['fred']
+   *
+   * // The `_.matches` iteratee shorthand.
+   * _.reject(users, { 'age': 40, 'active': true });
+   * // => objects for ['barney']
+   *
+   * // The `_.matchesProperty` iteratee shorthand.
+   * _.reject(users, ['active', false]);
+   * // => objects for ['fred']
+   *
+   * // The `_.property` iteratee shorthand.
+   * _.reject(users, 'active');
+   * // => objects for ['barney']
+   */
+  function reject(collection, predicate) {
+    var func = isArray(collection) ? arrayFilter : baseFilter;
+    return func(collection, negate(baseIteratee(predicate, 3)));
   }
 
   /**
@@ -8807,9 +8978,11 @@
   lodash.defaults = defaults;
   lodash.defer = defer;
   lodash.delay = delay;
+  lodash.drop = drop;
   lodash.filter = filter;
   lodash.flatten = flatten;
   lodash.flattenDeep = flattenDeep;
+  lodash.intersection = intersection;
   lodash.invert = invert;
   lodash.invertBy = invertBy;
   lodash.iteratee = iteratee;
@@ -8823,6 +8996,7 @@
   lodash.once = once;
   lodash.pick = pick;
   lodash.range = range;
+  lodash.reject = reject;
   lodash.rest = rest;
   lodash.slice = slice;
   lodash.sortBy = sortBy;
