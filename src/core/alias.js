@@ -573,9 +573,9 @@
                     break;
                 case "d": // 日
                     if (len > 1) {
-                        str = BI.leftPad(BI.getDate() + "", 2, "0");
+                        str = BI.leftPad(date.getDate() + "", 2, "0");
                     } else {
-                        str = BI.getDate();
+                        str = date.getDate();
                     }
                     break;
                 case "h": // 时(12)

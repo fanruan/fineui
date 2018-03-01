@@ -149,7 +149,7 @@ Date.prototype.getWeekEndDate = function () {
 Date.prototype.equalsTo = function (date) {
     return ((this.getFullYear() == date.getFullYear()) &&
     (this.getMonth() == date.getMonth()) &&
-    (this.getDate() == BI.getDate()) &&
+    (this.getDate() == date.getDate()) &&
     (this.getHours() == date.getHours()) &&
     (this.getMinutes() == date.getMinutes()) &&
     (this.getSeconds() == date.getSeconds()));

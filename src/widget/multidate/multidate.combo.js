@@ -95,7 +95,7 @@ BI.MultiDateCombo = BI.inherit(BI.Single, {
             self.setValue({
                 year: date.getFullYear(),
                 month: date.getMonth(),
-                day: BI.getDate()
+                day: date.getDate()
             });
             self.combo.hideView();
             self.fireEvent(BI.MultiDateCombo.EVENT_CONFIRM);

@@ -2300,7 +2300,7 @@ BI.shortcut("demo.text_value_check_combo", Demo.TextValueCheckCombo);Demo.Func =
             },
             year: date.getFullYear(),
             month: date.getMonth(),
-            day: BI.getDate()
+            day: date.getDate()
         };
     },
 
@@ -2309,7 +2309,7 @@ BI.shortcut("demo.text_value_check_combo", Demo.TextValueCheckCombo);Demo.Func =
         this.calendar.setValue({
             year: date.getFullYear(),
             month: date.getMonth(),
-            day: BI.getDate()
+            day: date.getDate()
         });
     }
 });

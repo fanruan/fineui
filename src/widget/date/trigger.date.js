@@ -150,12 +150,12 @@ BI.DateTrigger = BI.inherit(BI.Trigger, {
         switch (type) {
             case BI.DateTrigger.MULTI_DATE_YEAR_PREV:
                 var text = value + BI.DateTrigger.MULTI_DATE_SEGMENT_NUM[BI.DateTrigger.MULTI_DATE_YEAR_PREV];
-                date = BI.getDate((date.getFullYear() - 1 * value), date.getMonth(), BI.getDate());
+                date = BI.getDate((date.getFullYear() - 1 * value), date.getMonth(), date.getDate());
                 _setInnerValue(date, text);
                 break;
             case BI.DateTrigger.MULTI_DATE_YEAR_AFTER:
                 var text = value + BI.DateTrigger.MULTI_DATE_SEGMENT_NUM[BI.DateTrigger.MULTI_DATE_YEAR_AFTER];
-                date = BI.getDate((date.getFullYear() + 1 * value), date.getMonth(), BI.getDate());
+                date = BI.getDate((date.getFullYear() + 1 * value), date.getMonth(), date.getDate());
                 _setInnerValue(date, text);
                 break;
             case BI.DateTrigger.MULTI_DATE_YEAR_BEGIN:
