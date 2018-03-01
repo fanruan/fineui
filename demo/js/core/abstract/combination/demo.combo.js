@@ -197,7 +197,7 @@ Demo.Func = BI.inherit(BI.Widget, {
                     text: "全选",
                     onCheck: function (v) {
                         if (v) {
-                            multiCombo.setValue(BI.pluck(BI.deepClone(self.years), "value"));
+                            multiCombo.setValue(BI.map(BI.deepClone(self.years), "value"));
                         } else {
                             multiCombo.setValue([]);
                         }

@@ -236,7 +236,7 @@ BI.MultiSelectCombo = BI.inherit(BI.Single, {
             type: BI.MultiSelectCombo.REQ_GET_ALL_DATA,
             keywords: keywords
         }, function (ob) {
-            var values = BI.pluck(ob.items, "value");
+            var values = BI.map(ob.items, "value");
             digest(values);
         });
 
@@ -259,7 +259,7 @@ BI.MultiSelectCombo = BI.inherit(BI.Single, {
             type: BI.MultiSelectCombo.REQ_GET_ALL_DATA,
             keywords: [this.trigger.getKey()]
         }, function (ob) {
-            var items = BI.pluck(ob.items, "value");
+            var items = BI.map(ob.items, "value");
             if (self.storeValue.type === res.type) {
                 var change = false;
                 var map = self._makeMap(self.storeValue.value);
