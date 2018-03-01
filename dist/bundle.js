@@ -73775,6 +73775,9 @@ BI.ColorChooserPopup = BI.inherit(BI.Widget, {
                 height: 20
             }]
         });
+        if (BI.isNotNull(o.value)) {
+            this.setValue(o.value);
+        }
     },
 
     setStoreColors: function (colors) {
@@ -79809,6 +79812,10 @@ BI.RichEditorAction = BI.inherit(BI.Widget, {
         }
         if (this.options.css) {
             for (var itm in this.options.css) {
+                if (this.options.css[itm] == null) {
+                    this.activate($(elm).css(itm));
+                    return true;
+                }
                 if ($(elm).css(itm) == this.options.css[itm]) {
                     this.activate();
                     return true;
@@ -80770,7 +80777,8 @@ BI.RichEditorColorChooser = BI.inherit(BI.RichEditorAction, {
         return BI.extend(BI.RichEditorColorChooser.superclass._defaultConfig.apply(this, arguments), {
             width: 20,
             height: 20,
-            command: "foreColor"
+            command: "foreColor",
+            css: {color: null}
         });
     },
 
@@ -80795,9 +80803,13 @@ BI.RichEditorColorChooser = BI.inherit(BI.RichEditorAction, {
     },
 
     hideIf: function (e) {
-        if(!this.colorchooser.element.find(e.target).length > 0) {
+        if (!this.colorchooser.element.find(e.target).length > 0) {
             this.colorchooser.hideView();
         }
+    },
+
+    activate: function (rgb) {
+        this.colorchooser.setValue(BI.DOM.rgb2hex(rgb));
     },
 
     deactivate: function () {

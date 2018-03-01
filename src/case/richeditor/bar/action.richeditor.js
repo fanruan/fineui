@@ -44,6 +44,10 @@ BI.RichEditorAction = BI.inherit(BI.Widget, {
         }
         if (this.options.css) {
             for (var itm in this.options.css) {
+                if (this.options.css[itm] == null) {
+                    this.activate($(elm).css(itm));
+                    return true;
+                }
                 if ($(elm).css(itm) == this.options.css[itm]) {
                     this.activate();
                     return true;
