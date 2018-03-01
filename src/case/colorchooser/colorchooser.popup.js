@@ -164,6 +164,9 @@ BI.ColorChooserPopup = BI.inherit(BI.Widget, {
                 height: 20
             }]
         });
+        if (BI.isNotNull(o.value)) {
+            this.setValue(o.value);
+        }
     },
 
     setStoreColors: function (colors) {

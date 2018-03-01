@@ -9599,7 +9599,7 @@ if ( typeof define === "function" && define.amd && define.amd.jQuery ) {
 })( window );/**
  * @license
  * Lodash (Custom Build) <https://lodash.com/>
- * Build: `lodash core plus="debounce,throttle,get,findIndex,findLastIndex,findKey,findLastKey,isArrayLike,invert,invertBy,uniq,uniqBy,omit,omitBy,zip,unzip,rest,range,random"`
+ * Build: `lodash core plus="debounce,throttle,get,findIndex,findLastIndex,findKey,findLastKey,isArrayLike,invert,invertBy,uniq,uniqBy,omit,omitBy,zip,unzip,rest,range,random,reject,intersection,drop,countBy"`
  * Copyright JS Foundation and other contributors <https://js.foundation/>
  * Released under MIT license <https://lodash.com/license>
  * Based on Underscore.js 1.8.3 <http://underscorejs.org/LICENSE>
@@ -9889,6 +9889,27 @@ if ( typeof define === "function" && define.amd && define.amd.jQuery ) {
       case 3: return func.call(thisArg, args[0], args[1], args[2]);
     }
     return func.apply(thisArg, args);
+  }
+
+  /**
+   * A specialized version of `baseAggregator` for arrays.
+   *
+   * @private
+   * @param {Array} [array] The array to iterate over.
+   * @param {Function} setter The function to set `accumulator` values.
+   * @param {Function} iteratee The iteratee to transform keys.
+   * @param {Object} accumulator The initial aggregated object.
+   * @returns {Function} Returns `accumulator`.
+   */
+  function arrayAggregator(array, setter, iteratee, accumulator) {
+    var index = -1,
+        length = array == null ? 0 : array.length;
+
+    while (++index < length) {
+      var value = array[index];
+      setter(accumulator, value, iteratee(value), array);
+    }
+    return accumulator;
   }
 
   /**
@@ -11475,6 +11496,24 @@ if ( typeof define === "function" && define.amd && define.amd.jQuery ) {
   }
 
   /**
+   * Aggregates elements of `collection` on `accumulator` with keys transformed
+   * by `iteratee` and values set by `setter`.
+   *
+   * @private
+   * @param {Array|Object} collection The collection to iterate over.
+   * @param {Function} setter The function to set `accumulator` values.
+   * @param {Function} iteratee The iteratee to transform keys.
+   * @param {Object} accumulator The initial aggregated object.
+   * @returns {Function} Returns `accumulator`.
+   */
+  function baseAggregator(collection, setter, iteratee, accumulator) {
+    baseEach(collection, function(value, key, collection) {
+      setter(accumulator, value, iteratee(value), collection);
+    });
+    return accumulator;
+  }
+
+  /**
    * The base implementation of `_.assign` without support for multiple sources
    * or `customizer` functions.
    *
@@ -11917,6 +11956,69 @@ if ( typeof define === "function" && define.amd && define.amd.jQuery ) {
    */
   function baseHasIn(object, key) {
     return object != null && key in Object(object);
+  }
+
+  /**
+   * The base implementation of methods like `_.intersection`, without support
+   * for iteratee shorthands, that accepts an array of arrays to inspect.
+   *
+   * @private
+   * @param {Array} arrays The arrays to inspect.
+   * @param {Function} [iteratee] The iteratee invoked per element.
+   * @param {Function} [comparator] The comparator invoked per element.
+   * @returns {Array} Returns the new array of shared values.
+   */
+  function baseIntersection(arrays, iteratee, comparator) {
+    var includes = comparator ? arrayIncludesWith : arrayIncludes,
+        length = arrays[0].length,
+        othLength = arrays.length,
+        othIndex = othLength,
+        caches = Array(othLength),
+        maxLength = Infinity,
+        result = [];
+
+    while (othIndex--) {
+      var array = arrays[othIndex];
+      if (othIndex && iteratee) {
+        array = arrayMap(array, baseUnary(iteratee));
+      }
+      maxLength = nativeMin(array.length, maxLength);
+      caches[othIndex] = !comparator && (iteratee || (length >= 120 && array.length >= 120))
+        ? new SetCache(othIndex && array)
+        : undefined;
+    }
+    array = arrays[0];
+
+    var index = -1,
+        seen = caches[0];
+
+    outer:
+    while (++index < length && result.length < maxLength) {
+      var value = array[index],
+          computed = iteratee ? iteratee(value) : value;
+
+      value = (comparator || value !== 0) ? value : 0;
+      if (!(seen
+            ? cacheHas(seen, computed)
+            : includes(result, computed, comparator)
+          )) {
+        othIndex = othLength;
+        while (--othIndex) {
+          var cache = caches[othIndex];
+          if (!(cache
+                ? cacheHas(cache, computed)
+                : includes(arrays[othIndex], computed, comparator))
+              ) {
+            continue outer;
+          }
+        }
+        if (seen) {
+          seen.push(computed);
+        }
+        result.push(value);
+      }
+    }
+    return result;
   }
 
   /**
@@ -12673,6 +12775,17 @@ if ( typeof define === "function" && define.amd && define.amd.jQuery ) {
   }
 
   /**
+   * Casts `value` to an empty array if it's not an array like object.
+   *
+   * @private
+   * @param {*} value The value to inspect.
+   * @returns {Array|Object} Returns the cast array-like object.
+   */
+  function castArrayLikeObject(value) {
+    return isArrayLikeObject(value) ? value : [];
+  }
+
+  /**
    * Casts `value` to a path array if it's not one.
    *
    * @private
@@ -12997,6 +13110,23 @@ if ( typeof define === "function" && define.amd && define.amd.jQuery ) {
    */
   function copySymbolsIn(source, object) {
     return copyObject(source, getSymbolsIn(source), object);
+  }
+
+  /**
+   * Creates a function like `_.groupBy`.
+   *
+   * @private
+   * @param {Function} setter The function to set accumulator values.
+   * @param {Function} [initializer] The accumulator object initializer.
+   * @returns {Function} Returns the new aggregator function.
+   */
+  function createAggregator(setter, initializer) {
+    return function(collection, iteratee) {
+      var func = isArray(collection) ? arrayAggregator : baseAggregator,
+          accumulator = initializer ? initializer() : {};
+
+      return func(collection, setter, baseIteratee(iteratee, 2), accumulator);
+    };
   }
 
   /**
@@ -14693,6 +14823,40 @@ if ( typeof define === "function" && define.amd && define.amd.jQuery ) {
   }
 
   /**
+   * Creates a slice of `array` with `n` elements dropped from the beginning.
+   *
+   * @static
+   * @memberOf _
+   * @since 0.5.0
+   * @category Array
+   * @param {Array} array The array to query.
+   * @param {number} [n=1] The number of elements to drop.
+   * @param- {Object} [guard] Enables use as an iteratee for methods like `_.map`.
+   * @returns {Array} Returns the slice of `array`.
+   * @example
+   *
+   * _.drop([1, 2, 3]);
+   * // => [2, 3]
+   *
+   * _.drop([1, 2, 3], 2);
+   * // => [3]
+   *
+   * _.drop([1, 2, 3], 5);
+   * // => []
+   *
+   * _.drop([1, 2, 3], 0);
+   * // => [1, 2, 3]
+   */
+  function drop(array, n, guard) {
+    var length = array == null ? 0 : array.length;
+    if (!length) {
+      return [];
+    }
+    n = (guard || n === undefined) ? 1 : toInteger(n);
+    return baseSlice(array, n < 0 ? 0 : n, length);
+  }
+
+  /**
    * This method is like `_.find` except that it returns the index of the first
    * element `predicate` returns truthy for instead of the element itself.
    *
@@ -14883,6 +15047,30 @@ if ( typeof define === "function" && define.amd && define.amd.jQuery ) {
     }
     return baseIndexOf(array, value, index);
   }
+
+  /**
+   * Creates an array of unique values that are included in all given arrays
+   * using [`SameValueZero`](http://ecma-international.org/ecma-262/7.0/#sec-samevaluezero)
+   * for equality comparisons. The order and references of result values are
+   * determined by the first array.
+   *
+   * @static
+   * @memberOf _
+   * @since 0.1.0
+   * @category Array
+   * @param {...Array} [arrays] The arrays to inspect.
+   * @returns {Array} Returns the new array of intersecting values.
+   * @example
+   *
+   * _.intersection([2, 1], [2, 3]);
+   * // => [2]
+   */
+  var intersection = baseRest(function(arrays) {
+    var mapped = arrayMap(arrays, castArrayLikeObject);
+    return (mapped.length && mapped[0] === arrays[0])
+      ? baseIntersection(mapped)
+      : [];
+  });
 
   /**
    * Gets the last element of `array`.
@@ -15414,6 +15602,36 @@ if ( typeof define === "function" && define.amd && define.amd.jQuery ) {
   /*------------------------------------------------------------------------*/
 
   /**
+   * Creates an object composed of keys generated from the results of running
+   * each element of `collection` thru `iteratee`. The corresponding value of
+   * each key is the number of times the key was returned by `iteratee`. The
+   * iteratee is invoked with one argument: (value).
+   *
+   * @static
+   * @memberOf _
+   * @since 0.5.0
+   * @category Collection
+   * @param {Array|Object} collection The collection to iterate over.
+   * @param {Function} [iteratee=_.identity] The iteratee to transform keys.
+   * @returns {Object} Returns the composed aggregate object.
+   * @example
+   *
+   * _.countBy([6.1, 4.2, 6.3], Math.floor);
+   * // => { '4': 1, '6': 2 }
+   *
+   * // The `_.property` iteratee shorthand.
+   * _.countBy(['one', 'two', 'three'], 'length');
+   * // => { '3': 2, '5': 1 }
+   */
+  var countBy = createAggregator(function(result, value, key) {
+    if (hasOwnProperty.call(result, key)) {
+      ++result[key];
+    } else {
+      baseAssignValue(result, key, 1);
+    }
+  });
+
+  /**
    * Checks if `predicate` returns truthy for **all** elements of `collection`.
    * Iteration is stopped once `predicate` returns falsey. The predicate is
    * invoked with three arguments: (value, index|key, collection).
@@ -15666,6 +15884,45 @@ if ( typeof define === "function" && define.amd && define.amd.jQuery ) {
         initAccum = arguments.length < 3;
 
     return func(collection, baseIteratee(iteratee, 4), accumulator, initAccum, baseEach);
+  }
+
+  /**
+   * The opposite of `_.filter`; this method returns the elements of `collection`
+   * that `predicate` does **not** return truthy for.
+   *
+   * @static
+   * @memberOf _
+   * @since 0.1.0
+   * @category Collection
+   * @param {Array|Object} collection The collection to iterate over.
+   * @param {Function} [predicate=_.identity] The function invoked per iteration.
+   * @returns {Array} Returns the new filtered array.
+   * @see _.filter
+   * @example
+   *
+   * var users = [
+   *   { 'user': 'barney', 'age': 36, 'active': false },
+   *   { 'user': 'fred',   'age': 40, 'active': true }
+   * ];
+   *
+   * _.reject(users, function(o) { return !o.active; });
+   * // => objects for ['fred']
+   *
+   * // The `_.matches` iteratee shorthand.
+   * _.reject(users, { 'age': 40, 'active': true });
+   * // => objects for ['barney']
+   *
+   * // The `_.matchesProperty` iteratee shorthand.
+   * _.reject(users, ['active', false]);
+   * // => objects for ['fred']
+   *
+   * // The `_.property` iteratee shorthand.
+   * _.reject(users, 'active');
+   * // => objects for ['barney']
+   */
+  function reject(collection, predicate) {
+    var func = isArray(collection) ? arrayFilter : baseFilter;
+    return func(collection, negate(baseIteratee(predicate, 3)));
   }
 
   /**
@@ -18415,14 +18672,17 @@ if ( typeof define === "function" && define.amd && define.amd.jQuery ) {
   lodash.chain = chain;
   lodash.compact = compact;
   lodash.concat = concat;
+  lodash.countBy = countBy;
   lodash.create = create;
   lodash.debounce = debounce;
   lodash.defaults = defaults;
   lodash.defer = defer;
   lodash.delay = delay;
+  lodash.drop = drop;
   lodash.filter = filter;
   lodash.flatten = flatten;
   lodash.flattenDeep = flattenDeep;
+  lodash.intersection = intersection;
   lodash.invert = invert;
   lodash.invertBy = invertBy;
   lodash.iteratee = iteratee;
@@ -18436,6 +18696,7 @@ if ( typeof define === "function" && define.amd && define.amd.jQuery ) {
   lodash.once = once;
   lodash.pick = pick;
   lodash.range = range;
+  lodash.reject = reject;
   lodash.rest = rest;
   lodash.slice = slice;
   lodash.sortBy = sortBy;
@@ -73791,6 +74052,9 @@ BI.ColorChooserPopup = BI.inherit(BI.Widget, {
                 height: 20
             }]
         });
+        if (BI.isNotNull(o.value)) {
+            this.setValue(o.value);
+        }
     },
 
     setStoreColors: function (colors) {
@@ -79825,6 +80089,10 @@ BI.RichEditorAction = BI.inherit(BI.Widget, {
         }
         if (this.options.css) {
             for (var itm in this.options.css) {
+                if (this.options.css[itm] == null) {
+                    this.activate($(elm).css(itm));
+                    return true;
+                }
                 if ($(elm).css(itm) == this.options.css[itm]) {
                     this.activate();
                     return true;
@@ -80786,7 +81054,8 @@ BI.RichEditorColorChooser = BI.inherit(BI.RichEditorAction, {
         return BI.extend(BI.RichEditorColorChooser.superclass._defaultConfig.apply(this, arguments), {
             width: 20,
             height: 20,
-            command: "foreColor"
+            command: "foreColor",
+            css: {color: null}
         });
     },
 
@@ -80811,9 +81080,13 @@ BI.RichEditorColorChooser = BI.inherit(BI.RichEditorAction, {
     },
 
     hideIf: function (e) {
-        if(!this.colorchooser.element.find(e.target).length > 0) {
+        if (!this.colorchooser.element.find(e.target).length > 0) {
             this.colorchooser.hideView();
         }
+    },
+
+    activate: function (rgb) {
+        this.colorchooser.setValue(BI.DOM.rgb2hex(rgb));
     },
 
     deactivate: function () {

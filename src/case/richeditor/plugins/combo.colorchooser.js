@@ -10,7 +10,8 @@ BI.RichEditorColorChooser = BI.inherit(BI.RichEditorAction, {
         return BI.extend(BI.RichEditorColorChooser.superclass._defaultConfig.apply(this, arguments), {
             width: 20,
             height: 20,
-            command: "foreColor"
+            command: "foreColor",
+            css: {color: null}
         });
     },
 
@@ -35,9 +36,13 @@ BI.RichEditorColorChooser = BI.inherit(BI.RichEditorAction, {
     },
 
     hideIf: function (e) {
-        if(!this.colorchooser.element.find(e.target).length > 0) {
+        if (!this.colorchooser.element.find(e.target).length > 0) {
             this.colorchooser.hideView();
         }
+    },
+
+    activate: function (rgb) {
+        this.colorchooser.setValue(BI.DOM.rgb2hex(rgb));
     },
 
     deactivate: function () {
