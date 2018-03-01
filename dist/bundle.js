@@ -80161,6 +80161,13 @@ BI.RichEditorParamAction = BI.inherit(BI.RichEditorAction, {
         }
     },
 
+    _get$Sel: function () {
+        var o = this.options;
+        var instance = o.editor.selectedInstance;
+        var sel = $(instance.selElm());
+        return sel;
+    },
+
     addParam: function (param) {
         var o = this.options;
         var instance = o.editor.instance;
@@ -80169,7 +80176,14 @@ BI.RichEditorParamAction = BI.inherit(BI.RichEditorAction, {
         image.src = attrs.src;
         image.alt = param;
         image.style = attrs.style;
-        instance.getElm().element.append(image);
+
+        var sel = this._get$Sel();
+        var wrapper = o.editor.instance.getElm().element;
+        if (wrapper.find(sel).length <= 0) {
+            wrapper.append(image);
+        } else {
+            sel.after(image);
+        }
         this._addBlank($(image));
     }
 });
