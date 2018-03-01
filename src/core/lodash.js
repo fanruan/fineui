@@ -1,7 +1,7 @@
 /**
  * @license
  * Lodash (Custom Build) <https://lodash.com/>
- * Build: `lodash core plus="debounce,throttle,get,findIndex,findLastIndex,findKey,findLastKey,isArrayLike,invert,invertBy,uniq,uniqBy,omit,omitBy,zip,unzip,rest,range,random,reject,intersection,drop"`
+ * Build: `lodash core plus="debounce,throttle,get,findIndex,findLastIndex,findKey,findLastKey,isArrayLike,invert,invertBy,uniq,uniqBy,omit,omitBy,zip,unzip,rest,range,random,reject,intersection,drop,countBy"`
  * Copyright JS Foundation and other contributors <https://js.foundation/>
  * Released under MIT license <https://lodash.com/license>
  * Based on Underscore.js 1.8.3 <http://underscorejs.org/LICENSE>
@@ -291,6 +291,27 @@
       case 3: return func.call(thisArg, args[0], args[1], args[2]);
     }
     return func.apply(thisArg, args);
+  }
+
+  /**
+   * A specialized version of `baseAggregator` for arrays.
+   *
+   * @private
+   * @param {Array} [array] The array to iterate over.
+   * @param {Function} setter The function to set `accumulator` values.
+   * @param {Function} iteratee The iteratee to transform keys.
+   * @param {Object} accumulator The initial aggregated object.
+   * @returns {Function} Returns `accumulator`.
+   */
+  function arrayAggregator(array, setter, iteratee, accumulator) {
+    var index = -1,
+        length = array == null ? 0 : array.length;
+
+    while (++index < length) {
+      var value = array[index];
+      setter(accumulator, value, iteratee(value), array);
+    }
+    return accumulator;
   }
 
   /**
@@ -1874,6 +1895,24 @@
       }
     }
     return -1;
+  }
+
+  /**
+   * Aggregates elements of `collection` on `accumulator` with keys transformed
+   * by `iteratee` and values set by `setter`.
+   *
+   * @private
+   * @param {Array|Object} collection The collection to iterate over.
+   * @param {Function} setter The function to set `accumulator` values.
+   * @param {Function} iteratee The iteratee to transform keys.
+   * @param {Object} accumulator The initial aggregated object.
+   * @returns {Function} Returns `accumulator`.
+   */
+  function baseAggregator(collection, setter, iteratee, accumulator) {
+    baseEach(collection, function(value, key, collection) {
+      setter(accumulator, value, iteratee(value), collection);
+    });
+    return accumulator;
   }
 
   /**
@@ -3473,6 +3512,23 @@
    */
   function copySymbolsIn(source, object) {
     return copyObject(source, getSymbolsIn(source), object);
+  }
+
+  /**
+   * Creates a function like `_.groupBy`.
+   *
+   * @private
+   * @param {Function} setter The function to set accumulator values.
+   * @param {Function} [initializer] The accumulator object initializer.
+   * @returns {Function} Returns the new aggregator function.
+   */
+  function createAggregator(setter, initializer) {
+    return function(collection, iteratee) {
+      var func = isArray(collection) ? arrayAggregator : baseAggregator,
+          accumulator = initializer ? initializer() : {};
+
+      return func(collection, setter, baseIteratee(iteratee, 2), accumulator);
+    };
   }
 
   /**
@@ -5946,6 +6002,36 @@
   }
 
   /*------------------------------------------------------------------------*/
+
+  /**
+   * Creates an object composed of keys generated from the results of running
+   * each element of `collection` thru `iteratee`. The corresponding value of
+   * each key is the number of times the key was returned by `iteratee`. The
+   * iteratee is invoked with one argument: (value).
+   *
+   * @static
+   * @memberOf _
+   * @since 0.5.0
+   * @category Collection
+   * @param {Array|Object} collection The collection to iterate over.
+   * @param {Function} [iteratee=_.identity] The iteratee to transform keys.
+   * @returns {Object} Returns the composed aggregate object.
+   * @example
+   *
+   * _.countBy([6.1, 4.2, 6.3], Math.floor);
+   * // => { '4': 1, '6': 2 }
+   *
+   * // The `_.property` iteratee shorthand.
+   * _.countBy(['one', 'two', 'three'], 'length');
+   * // => { '3': 2, '5': 1 }
+   */
+  var countBy = createAggregator(function(result, value, key) {
+    if (hasOwnProperty.call(result, key)) {
+      ++result[key];
+    } else {
+      baseAssignValue(result, key, 1);
+    }
+  });
 
   /**
    * Checks if `predicate` returns truthy for **all** elements of `collection`.
@@ -8973,6 +9059,7 @@
   lodash.chain = chain;
   lodash.compact = compact;
   lodash.concat = concat;
+  lodash.countBy = countBy;
   lodash.create = create;
   lodash.debounce = debounce;
   lodash.defaults = defaults;
