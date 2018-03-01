@@ -18198,6 +18198,21 @@ if ( typeof define === "function" && define.amd && define.amd.jQuery ) {
     return baseRandom(lower, upper);
   }
 
+    // Converts lists into objects. Pass either a single array of `[key, value]`
+    // pairs, or two parallel arrays of the same length -- one of keys, and one of
+    // the corresponding values.
+    function object (list, values) {
+        var result = {};
+        for (var i = 0, length = list && list.length; i < length; i++) {
+            if (values) {
+                result[list[i]] = values[i];
+            } else {
+                result[list[i][0]] = list[i][1];
+            }
+        }
+        return result;
+    }
+
   /*------------------------------------------------------------------------*/
 
   /**
@@ -18745,6 +18760,7 @@ if ( typeof define === "function" && define.amd && define.amd.jQuery ) {
   lodash.size = size;
   lodash.some = some;
   lodash.uniqueId = uniqueId;
+  lodash.object = object;
 
   // Add aliases.
   lodash.each = forEach;
@@ -25732,9 +25748,9 @@ BI.PopoverSection.EVENT_CLOSE = "EVENT_CLOSE";(function () {
                     break;
                 case "d": // 日
                     if (len > 1) {
-                        str = BI.leftPad(BI.getDate() + "", 2, "0");
+                        str = BI.leftPad(date.getDate() + "", 2, "0");
                     } else {
-                        str = BI.getDate();
+                        str = date.getDate();
                     }
                     break;
                 case "h": // 时(12)
@@ -28967,7 +28983,7 @@ Date.prototype.getWeekEndDate = function () {
 Date.prototype.equalsTo = function (date) {
     return ((this.getFullYear() == date.getFullYear()) &&
     (this.getMonth() == date.getMonth()) &&
-    (this.getDate() == BI.getDate()) &&
+    (this.getDate() == date.getDate()) &&
     (this.getHours() == date.getHours()) &&
     (this.getMinutes() == date.getMinutes()) &&
     (this.getSeconds() == date.getSeconds()));

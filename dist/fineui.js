@@ -18399,6 +18399,21 @@ if ( typeof define === "function" && define.amd && define.amd.jQuery ) {
     return baseRandom(lower, upper);
   }
 
+    // Converts lists into objects. Pass either a single array of `[key, value]`
+    // pairs, or two parallel arrays of the same length -- one of keys, and one of
+    // the corresponding values.
+    function object (list, values) {
+        var result = {};
+        for (var i = 0, length = list && list.length; i < length; i++) {
+            if (values) {
+                result[list[i]] = values[i];
+            } else {
+                result[list[i][0]] = list[i][1];
+            }
+        }
+        return result;
+    }
+
   /*------------------------------------------------------------------------*/
 
   /**
@@ -18946,6 +18961,7 @@ if ( typeof define === "function" && define.amd && define.amd.jQuery ) {
   lodash.size = size;
   lodash.some = some;
   lodash.uniqueId = uniqueId;
+  lodash.object = object;
 
   // Add aliases.
   lodash.each = forEach;
@@ -25933,9 +25949,9 @@ BI.PopoverSection.EVENT_CLOSE = "EVENT_CLOSE";(function () {
                     break;
                 case "d": // 日
                     if (len > 1) {
-                        str = BI.leftPad(BI.getDate() + "", 2, "0");
+                        str = BI.leftPad(date.getDate() + "", 2, "0");
                     } else {
-                        str = BI.getDate();
+                        str = date.getDate();
                     }
                     break;
                 case "h": // 时(12)
@@ -29168,7 +29184,7 @@ Date.prototype.getWeekEndDate = function () {
 Date.prototype.equalsTo = function (date) {
     return ((this.getFullYear() == date.getFullYear()) &&
     (this.getMonth() == date.getMonth()) &&
-    (this.getDate() == BI.getDate()) &&
+    (this.getDate() == date.getDate()) &&
     (this.getHours() == date.getHours()) &&
     (this.getMinutes() == date.getMinutes()) &&
     (this.getSeconds() == date.getSeconds()));
@@ -87452,12 +87468,12 @@ BI.shortcut("bi.date_combo", BI.DateCombo);BI.DateTrigger = BI.inherit(BI.Trigge
         switch (type) {
             case BI.DateTrigger.MULTI_DATE_YEAR_PREV:
                 var text = value + BI.DateTrigger.MULTI_DATE_SEGMENT_NUM[BI.DateTrigger.MULTI_DATE_YEAR_PREV];
-                date = BI.getDate((date.getFullYear() - 1 * value), date.getMonth(), BI.getDate());
+                date = BI.getDate((date.getFullYear() - 1 * value), date.getMonth(), date.getDate());
                 _setInnerValue(date, text);
                 break;
             case BI.DateTrigger.MULTI_DATE_YEAR_AFTER:
                 var text = value + BI.DateTrigger.MULTI_DATE_SEGMENT_NUM[BI.DateTrigger.MULTI_DATE_YEAR_AFTER];
-                date = BI.getDate((date.getFullYear() + 1 * value), date.getMonth(), BI.getDate());
+                date = BI.getDate((date.getFullYear() + 1 * value), date.getMonth(), date.getDate());
                 _setInnerValue(date, text);
                 break;
             case BI.DateTrigger.MULTI_DATE_YEAR_BEGIN:
@@ -87764,7 +87780,7 @@ BI.DateTimeCombo = BI.inherit(BI.Single, {
         this.storeValue = BI.isNotNull(opts.value) ? opts.value : {
             year: date.getFullYear(),
             month: date.getMonth(),
-            day: BI.getDate(),
+            day: date.getDate(),
             hour: date.getHours(),
             minute: date.getMinutes(),
             second: date.getSeconds()
@@ -88007,7 +88023,7 @@ BI.DateTimePopup = BI.inherit(BI.Widget, {
             this.dateCombo.setValue({
                 year: date.getFullYear(),
                 month: date.getMonth(),
-                day: BI.getDate()
+                day: date.getDate()
             });
             this.hour.setValue(date.getHours());
             this.minute.setValue(date.getMinutes());
@@ -91151,7 +91167,7 @@ BI.MultiDateCombo = BI.inherit(BI.Single, {
             self.setValue({
                 year: date.getFullYear(),
                 month: date.getMonth(),
-                day: BI.getDate()
+                day: date.getDate()
             });
             self.combo.hideView();
             self.fireEvent(BI.MultiDateCombo.EVENT_CONFIRM);
@@ -91591,7 +91607,7 @@ BI.MultiDatePopup = BI.inherit(BI.Widget, {
                     self.ymd.setValue({
                         year: date.getFullYear(),
                         month: date.getMonth(),
-                        day: BI.getDate()
+                        day: date.getDate()
                     });
                     self._setInnerValue(self.ymd);
                     break;
@@ -91711,7 +91727,7 @@ BI.MultiDatePopup = BI.inherit(BI.Widget, {
                     this.ymd.setValue({
                         year: date.getFullYear(),
                         month: date.getMonth(),
-                        day: BI.getDate()
+                        day: date.getDate()
                     });
                     this.textButton.setValue(BI.i18nText("BI-Multi_Date_Today"));
                 } else {

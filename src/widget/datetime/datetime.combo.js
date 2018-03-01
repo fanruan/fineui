@@ -24,7 +24,7 @@ BI.DateTimeCombo = BI.inherit(BI.Single, {
         this.storeValue = BI.isNotNull(opts.value) ? opts.value : {
             year: date.getFullYear(),
             month: date.getMonth(),
-            day: BI.getDate(),
+            day: date.getDate(),
             hour: date.getHours(),
             minute: date.getMinutes(),
             second: date.getSeconds()

@@ -161,7 +161,7 @@ BI.MultiDatePopup = BI.inherit(BI.Widget, {
                     self.ymd.setValue({
                         year: date.getFullYear(),
                         month: date.getMonth(),
-                        day: BI.getDate()
+                        day: date.getDate()
                     });
                     self._setInnerValue(self.ymd);
                     break;
@@ -281,7 +281,7 @@ BI.MultiDatePopup = BI.inherit(BI.Widget, {
                     this.ymd.setValue({
                         year: date.getFullYear(),
                         month: date.getMonth(),
-                        day: BI.getDate()
+                        day: date.getDate()
                     });
                     this.textButton.setValue(BI.i18nText("BI-Multi_Date_Today"));
                 } else {
