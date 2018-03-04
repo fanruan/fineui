@@ -88756,13 +88756,13 @@ BI.DownListPopup = BI.inherit(BI.Pane, {
             BI.each(itemGroup, function (id, item) {
                 if(BI.isNotNull(item.children)) {
                     var childValues = BI.map(item.children, "value");
-                    var v = joinValue(childValues, valueGetter(idx));
+                    var v = joinValue(childValues, values[idx]);
                     if(BI.isNotEmptyString(v)) {
                         value.push(v);
                     }
                 }else{
-                    if(item.value === valueGetter(idx)[0]) {
-                        value.push(valueGetter(idx)[0]);
+                    if(item.value === values[idx][0]) {
+                        value.push(values[idx][0]);
                     }
                 }
             });
@@ -88780,17 +88780,6 @@ BI.DownListPopup = BI.inherit(BI.Pane, {
                 });
             });
             return value;
-        }
-
-        function valueGetter (index) {
-            switch (o.chooseType) {
-                case BI.Selection.Single:
-                    return values[0];
-                case BI.Selection.Multi:
-                    return values[index];
-                default:
-                    break;
-            }
         }
     },
 
