@@ -33892,7 +33892,591 @@ Data.Constant = BICst = {};
 };
 Data.Source = BISource = {
 
-};function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+};(function () {
+    var Events = {
+
+        // Bind an event to a `callback` function. Passing `"all"` will bind
+        // the callback to all events fired.
+        on: function (name, callback, context) {
+            if (!eventsApi(this, "on", name, [callback, context]) || !callback) return this;
+            this._events || (this._events = {});
+            var events = this._events[name] || (this._events[name] = []);
+            events.push({callback: callback, context: context, ctx: context || this});
+            return this;
+        },
+
+        // Bind an event to only be triggered a single time. After the first time
+        // the callback is invoked, it will be removed.
+        once: function (name, callback, context) {
+            if (!eventsApi(this, "once", name, [callback, context]) || !callback) return this;
+            var self = this;
+            var once = _.once(function () {
+                self.off(name, once);
+                callback.apply(this, arguments);
+            });
+            once._callback = callback;
+            return this.on(name, once, context);
+        },
+
+        // Remove one or many callbacks. If `context` is null, removes all
+        // callbacks with that function. If `callback` is null, removes all
+        // callbacks for the event. If `name` is null, removes all bound
+        // callbacks for all events.
+        off: function (name, callback, context) {
+            if (!this._events || !eventsApi(this, "off", name, [callback, context])) return this;
+
+            // Remove all callbacks for all events.
+            if (!name && !callback && !context) {
+                this._events = void 0;
+                return this;
+            }
+
+            var names = name ? [name] : _.keys(this._events);
+            for (var i = 0, length = names.length; i < length; i++) {
+                name = names[i];
+
+                // Bail out if there are no events stored.
+                var events = this._events[name];
+                if (!events) continue;
+
+                // Remove all callbacks for this event.
+                if (!callback && !context) {
+                    delete this._events[name];
+                    continue;
+                }
+
+                // Find any remaining events.
+                var remaining = [];
+                for (var j = 0, k = events.length; j < k; j++) {
+                    var event = events[j];
+                    if (
+                        callback && callback !== event.callback &&
+                        callback !== event.callback._callback ||
+                        context && context !== event.context
+                    ) {
+                        remaining.push(event);
+                    }
+                }
+
+                // Replace events if there are any remaining.  Otherwise, clean up.
+                if (remaining.length) {
+                    this._events[name] = remaining;
+                } else {
+                    delete this._events[name];
+                }
+            }
+
+            return this;
+        },
+
+        un: function () {
+            this.off.apply(this, arguments);
+        },
+
+        // Trigger one or many events, firing all bound callbacks. Callbacks are
+        // passed the same arguments as `trigger` is, apart from the event name
+        // (unless you're listening on `"all"`, which will cause your callback to
+        // receive the true name of the event as the first argument).
+        trigger: function (name) {
+            if (!this._events) return this;
+            var args = slice.call(arguments, 1);
+            if (!eventsApi(this, "trigger", name, args)) return this;
+            var events = this._events[name];
+            var allEvents = this._events.all;
+            if (events) triggerEvents(events, args);
+            if (allEvents) triggerEvents(allEvents, arguments);
+            return this;
+        },
+
+        fireEvent: function () {
+            this.trigger.apply(this, arguments);
+        },
+
+        // Inversion-of-control versions of `on` and `once`. Tell *this* object to
+        // listen to an event in another object ... keeping track of what it's
+        // listening to.
+        listenTo: function (obj, name, callback) {
+            var listeningTo = this._listeningTo || (this._listeningTo = {});
+            var id = obj._listenId || (obj._listenId = _.uniqueId("l"));
+            listeningTo[id] = obj;
+            if (!callback && typeof name === "object") callback = this;
+            obj.on(name, callback, this);
+            return this;
+        },
+
+        listenToOnce: function (obj, name, callback) {
+            if (typeof name === "object") {
+                for (var event in name) this.listenToOnce(obj, event, name[event]);
+                return this;
+            }
+            if (eventSplitter.test(name)) {
+                var names = name.split(eventSplitter);
+                for (var i = 0, length = names.length; i < length; i++) {
+                    this.listenToOnce(obj, names[i], callback);
+                }
+                return this;
+            }
+            if (!callback) return this;
+            var once = _.once(function () {
+                this.stopListening(obj, name, once);
+                callback.apply(this, arguments);
+            });
+            once._callback = callback;
+            return this.listenTo(obj, name, once);
+        },
+
+        // Tell this object to stop listening to either specific events ... or
+        // to every object it's currently listening to.
+        stopListening: function (obj, name, callback) {
+            var listeningTo = this._listeningTo;
+            if (!listeningTo) return this;
+            var remove = !name && !callback;
+            if (!callback && typeof name === "object") callback = this;
+            if (obj) (listeningTo = {})[obj._listenId] = obj;
+            for (var id in listeningTo) {
+                obj = listeningTo[id];
+                obj.off(name, callback, this);
+                if (remove || _.isEmpty(obj._events)) delete this._listeningTo[id];
+            }
+            return this;
+        }
+
+    };
+
+    // Regular expression used to split event strings.
+    var eventSplitter = /\s+/;
+
+    // Implement fancy features of the Events API such as multiple event
+    // names `"change blur"` and jQuery-style event maps `{change: action}`
+    // in terms of the existing API.
+    var eventsApi = function (obj, action, name, rest) {
+        if (!name) return true;
+
+        // Handle event maps.
+        if (typeof name === "object") {
+            for (var key in name) {
+                obj[action].apply(obj, [key, name[key]].concat(rest));
+            }
+            return false;
+        }
+
+        // Handle space separated event names.
+        if (eventSplitter.test(name)) {
+            var names = name.split(eventSplitter);
+            for (var i = 0, length = names.length; i < length; i++) {
+                obj[action].apply(obj, [names[i]].concat(rest));
+            }
+            return false;
+        }
+
+        return true;
+    };
+
+    // A difficult-to-believe, but optimized internal dispatch function for
+    // triggering events. Tries to keep the usual cases speedy (most internal
+    // BI events have 3 arguments).
+    var triggerEvents = function (events, args) {
+        var ev, i = -1, l = events.length, a1 = args[0], a2 = args[1], a3 = args[2];
+        switch (args.length) {
+            case 0:
+                while (++i < l) (ev = events[i]).callback.call(ev.ctx);
+                return;
+            case 1:
+                while (++i < l) (ev = events[i]).callback.call(ev.ctx, a1);
+                return;
+            case 2:
+                while (++i < l) (ev = events[i]).callback.call(ev.ctx, a1, a2);
+                return;
+            case 3:
+                while (++i < l) (ev = events[i]).callback.call(ev.ctx, a1, a2, a3);
+                return;
+            default:
+                while (++i < l) (ev = events[i]).callback.apply(ev.ctx, args);
+                return;
+        }
+    };
+
+    // BI.Router
+    // ---------------
+
+    // Routers map faux-URLs to actions, and fire events when routes are
+    // matched. Creating a new one sets its `routes` hash, if not set statically.
+    var Router = BI.Router = function (options) {
+        options || (options = {});
+        if (options.routes) this.routes = options.routes;
+        this._bindRoutes();
+        this._init.apply(this, arguments);
+    };
+
+    // Cached regular expressions for matching named param parts and splatted
+    // parts of route strings.
+    var optionalParam = /\((.*?)\)/g;
+    var namedParam = /(\(\?)?:\w+/g;
+    var splatParam = /\*\w+/g;
+    var escapeRegExp = /[\-{}\[\]+?.,\\\^$|#\s]/g;
+
+    // Set up all inheritable **BI.Router** properties and methods.
+    _.extend(Router.prototype, Events, {
+
+        // _init is an empty function by default. Override it with your own
+        // initialization logic.
+        _init: function () {
+        },
+
+        // Manually bind a single named route to a callback. For example:
+        //
+        //     this.route('search/:query/p:num', 'search', function(query, num) {
+        //       ...
+        //     });
+        //
+        route: function (route, name, callback) {
+            if (!_.isRegExp(route)) route = this._routeToRegExp(route);
+            if (_.isFunction(name)) {
+                callback = name;
+                name = "";
+            }
+            if (!callback) callback = this[name];
+            var router = this;
+            BI.history.route(route, function (fragment) {
+                var args = router._extractParameters(route, fragment);
+                if (router.execute(callback, args, name) !== false) {
+                    router.trigger.apply(router, ["route:" + name].concat(args));
+                    router.trigger("route", name, args);
+                    BI.history.trigger("route", router, name, args);
+                }
+            });
+            return this;
+        },
+
+        // Execute a route handler with the provided parameters.  This is an
+        // excellent place to do pre-route setup or post-route cleanup.
+        execute: function (callback, args, name) {
+            if (callback) callback.apply(this, args);
+        },
+
+        // Simple proxy to `BI.history` to save a fragment into the history.
+        navigate: function (fragment, options) {
+            BI.history.navigate(fragment, options);
+            return this;
+        },
+
+        // Bind all defined routes to `BI.history`. We have to reverse the
+        // order of the routes here to support behavior where the most general
+        // routes can be defined at the bottom of the route map.
+        _bindRoutes: function () {
+            if (!this.routes) return;
+            this.routes = _.result(this, "routes");
+            var route, routes = _.keys(this.routes);
+            while ((route = routes.pop()) != null) {
+                this.route(route, this.routes[route]);
+            }
+        },
+
+        // Convert a route string into a regular expression, suitable for matching
+        // against the current location hash.
+        _routeToRegExp: function (route) {
+            route = route.replace(escapeRegExp, "\\$&")
+                .replace(optionalParam, "(?:$1)?")
+                .replace(namedParam, function (match, optional) {
+                    return optional ? match : "([^/?]+)";
+                })
+                .replace(splatParam, "([^?]*?)");
+            return new RegExp("^" + route + "(?:\\?([\\s\\S]*))?$");
+        },
+
+        // Given a route, and a URL fragment that it matches, return the array of
+        // extracted decoded parameters. Empty or unmatched parameters will be
+        // treated as `null` to normalize cross-browser behavior.
+        _extractParameters: function (route, fragment) {
+            var params = route.exec(fragment).slice(1);
+            return _.map(params, function (param, i) {
+                // Don't decode the search params.
+                if (i === params.length - 1) return param || null;
+                return param ? decodeURIComponent(param) : null;
+            });
+        }
+
+    });
+
+    // History
+    // ----------------
+
+    // Handles cross-browser history management, based on either
+    // [pushState](http://diveintohtml5.info/history.html) and real URLs, or
+    // [onhashchange](https://developer.mozilla.org/en-US/docs/DOM/window.onhashchange)
+    // and URL fragments. If the browser supports neither (old IE, natch),
+    // falls back to polling.
+    var History = function () {
+        this.handlers = [];
+        this.checkUrl = _.bind(this.checkUrl, this);
+
+        // Ensure that `History` can be used outside of the browser.
+        if (typeof window !== "undefined") {
+            this.location = window.location;
+            this.history = window.history;
+        }
+    };
+
+    // Cached regex for stripping a leading hash/slash and trailing space.
+    var routeStripper = /^[#\/]|\s+$/g;
+
+    // Cached regex for stripping leading and trailing slashes.
+    var rootStripper = /^\/+|\/+$/g;
+
+    // Cached regex for stripping urls of hash.
+    var pathStripper = /#.*$/;
+
+    // Has the history handling already been started?
+    History.started = false;
+
+    // Set up all inheritable **BI.History** properties and methods.
+    _.extend(History.prototype, Events, {
+
+        // The default interval to poll for hash changes, if necessary, is
+        // twenty times a second.
+        interval: 50,
+
+        // Are we at the app root?
+        atRoot: function () {
+            var path = this.location.pathname.replace(/[^\/]$/, "$&/");
+            return path === this.root && !this.getSearch();
+        },
+
+        // In IE6, the hash fragment and search params are incorrect if the
+        // fragment contains `?`.
+        getSearch: function () {
+            var match = this.location.href.replace(/#.*/, "").match(/\?.+/);
+            return match ? match[0] : "";
+        },
+
+        // Gets the true hash value. Cannot use location.hash directly due to bug
+        // in Firefox where location.hash will always be decoded.
+        getHash: function (window) {
+            var match = (window || this).location.href.match(/#(.*)$/);
+            return match ? match[1] : "";
+        },
+
+        // Get the pathname and search params, without the root.
+        getPath: function () {
+            var path = decodeURI(this.location.pathname + this.getSearch());
+            var root = this.root.slice(0, -1);
+            if (!path.indexOf(root)) path = path.slice(root.length);
+            return path.charAt(0) === "/" ? path.slice(1) : path;
+        },
+
+        // Get the cross-browser normalized URL fragment from the path or hash.
+        getFragment: function (fragment) {
+            if (fragment == null) {
+                if (this._hasPushState || !this._wantsHashChange) {
+                    fragment = this.getPath();
+                } else {
+                    fragment = this.getHash();
+                }
+            }
+            return fragment.replace(routeStripper, "");
+        },
+
+        // Start the hash change handling, returning `true` if the current URL matches
+        // an existing route, and `false` otherwise.
+        start: function (options) {
+            if (History.started) throw new Error("BI.history has already been started");
+            History.started = true;
+
+            // Figure out the initial configuration. Do we need an iframe?
+            // Is pushState desired ... is it available?
+            this.options = _.extend({root: "/"}, this.options, options);
+            this.root = this.options.root;
+            this._wantsHashChange = this.options.hashChange !== false;
+            this._hasHashChange = "onhashchange" in window;
+            this._wantsPushState = !!this.options.pushState;
+            this._hasPushState = !!(this.options.pushState && this.history && this.history.pushState);
+            this.fragment = this.getFragment();
+
+            // Normalize root to always include a leading and trailing slash.
+            this.root = ("/" + this.root + "/").replace(rootStripper, "/");
+
+            // Transition from hashChange to pushState or vice versa if both are
+            // requested.
+            if (this._wantsHashChange && this._wantsPushState) {
+
+                // If we've started off with a route from a `pushState`-enabled
+                // browser, but we're currently in a browser that doesn't support it...
+                if (!this._hasPushState && !this.atRoot()) {
+                    var root = this.root.slice(0, -1) || "/";
+                    this.location.replace(root + "#" + this.getPath());
+                    // Return immediately as browser will do redirect to new url
+                    return true;
+
+                    // Or if we've started out with a hash-based route, but we're currently
+                    // in a browser where it could be `pushState`-based instead...
+                } else if (this._hasPushState && this.atRoot()) {
+                    this.navigate(this.getHash(), {replace: true});
+                }
+
+            }
+
+            // Proxy an iframe to handle location events if the browser doesn't
+            // support the `hashchange` event, HTML5 history, or the user wants
+            // `hashChange` but not `pushState`.
+            if (!this._hasHashChange && this._wantsHashChange && (!this._wantsPushState || !this._hasPushState)) {
+                var iframe = document.createElement("iframe");
+                iframe.src = "javascript:0";
+                iframe.style.display = "none";
+                iframe.tabIndex = -1;
+                var body = document.body;
+                // Using `appendChild` will throw on IE < 9 if the document is not ready.
+                this.iframe = body.insertBefore(iframe, body.firstChild).contentWindow;
+                this.iframe.document.open().close();
+                this.iframe.location.hash = "#" + this.fragment;
+            }
+
+            // Add a cross-platform `addEventListener` shim for older browsers.
+            var addEventListener = window.addEventListener || function (eventName, listener) {
+                return attachEvent("on" + eventName, listener);
+            };
+
+            // Depending on whether we're using pushState or hashes, and whether
+            // 'onhashchange' is supported, determine how we check the URL state.
+            if (this._hasPushState) {
+                addEventListener("popstate", this.checkUrl, false);
+            } else if (this._wantsHashChange && this._hasHashChange && !this.iframe) {
+                addEventListener("hashchange", this.checkUrl, false);
+            } else if (this._wantsHashChange) {
+                this._checkUrlInterval = setInterval(this.checkUrl, this.interval);
+            }
+
+            if (!this.options.silent) return this.loadUrl();
+        },
+
+        // Disable BI.history, perhaps temporarily. Not useful in a real app,
+        // but possibly useful for unit testing Routers.
+        stop: function () {
+            // Add a cross-platform `removeEventListener` shim for older browsers.
+            var removeEventListener = window.removeEventListener || function (eventName, listener) {
+                return detachEvent("on" + eventName, listener);
+            };
+
+            // Remove window listeners.
+            if (this._hasPushState) {
+                removeEventListener("popstate", this.checkUrl, false);
+            } else if (this._wantsHashChange && this._hasHashChange && !this.iframe) {
+                removeEventListener("hashchange", this.checkUrl, false);
+            }
+
+            // Clean up the iframe if necessary.
+            if (this.iframe) {
+                document.body.removeChild(this.iframe.frameElement);
+                this.iframe = null;
+            }
+
+            // Some environments will throw when clearing an undefined interval.
+            if (this._checkUrlInterval) clearInterval(this._checkUrlInterval);
+            History.started = false;
+        },
+
+        // Add a route to be tested when the fragment changes. Routes added later
+        // may override previous routes.
+        route: function (route, callback) {
+            this.handlers.unshift({route: route, callback: callback});
+        },
+
+        // Checks the current URL to see if it has changed, and if it has,
+        // calls `loadUrl`, normalizing across the hidden iframe.
+        checkUrl: function (e) {
+            var current = this.getFragment();
+
+            // If the user pressed the back button, the iframe's hash will have
+            // changed and we should use that for comparison.
+            if (current === this.fragment && this.iframe) {
+                current = this.getHash(this.iframe);
+            }
+
+            if (current === this.fragment) return false;
+            if (this.iframe) this.navigate(current);
+            this.loadUrl();
+        },
+
+        // Attempt to load the current URL fragment. If a route succeeds with a
+        // match, returns `true`. If no defined routes matches the fragment,
+        // returns `false`.
+        loadUrl: function (fragment) {
+            fragment = this.fragment = this.getFragment(fragment);
+            return _.some(this.handlers, function (handler) {
+                if (handler.route.test(fragment)) {
+                    handler.callback(fragment);
+                    return true;
+                }
+            });
+        },
+
+        // Save a fragment into the hash history, or replace the URL state if the
+        // 'replace' option is passed. You are responsible for properly URL-encoding
+        // the fragment in advance.
+        //
+        // The options object can contain `trigger: true` if you wish to have the
+        // route callback be fired (not usually desirable), or `replace: true`, if
+        // you wish to modify the current URL without adding an entry to the history.
+        navigate: function (fragment, options) {
+            if (!History.started) return false;
+            if (!options || options === true) options = {trigger: !!options};
+
+            // Normalize the fragment.
+            fragment = this.getFragment(fragment || "");
+
+            // Don't include a trailing slash on the root.
+            var root = this.root;
+            if (fragment === "" || fragment.charAt(0) === "?") {
+                root = root.slice(0, -1) || "/";
+            }
+            var url = root + fragment;
+
+            // Strip the hash and decode for matching.
+            fragment = decodeURI(fragment.replace(pathStripper, ""));
+
+            if (this.fragment === fragment) return;
+            this.fragment = fragment;
+
+            // If pushState is available, we use it to set the fragment as a real URL.
+            if (this._hasPushState) {
+                this.history[options.replace ? "replaceState" : "pushState"]({}, document.title, url);
+
+                // If hash changes haven't been explicitly disabled, update the hash
+                // fragment to store history.
+            } else if (this._wantsHashChange) {
+                this._updateHash(this.location, fragment, options.replace);
+                if (this.iframe && (fragment !== this.getHash(this.iframe))) {
+                    // Opening and closing the iframe tricks IE7 and earlier to push a
+                    // history entry on hash-tag change.  When replace is true, we don't
+                    // want this.
+                    if (!options.replace) this.iframe.document.open().close();
+                    this._updateHash(this.iframe.location, fragment, options.replace);
+                }
+
+                // If you've told us that you explicitly don't want fallback hashchange-
+                // based history, then `navigate` becomes a page refresh.
+            } else {
+                return this.location.assign(url);
+            }
+            if (options.trigger) return this.loadUrl(fragment);
+        },
+
+        // Update the hash location, either replacing the current entry, or adding
+        // a new one to the browser history.
+        _updateHash: function (location, fragment, replace) {
+            if (replace) {
+                var href = location.href.replace(/(javascript:|#).*$/, "");
+                location.replace(href + "#" + fragment);
+            } else {
+                // Some browsers require that `hash` contains a leading #.
+                location.hash = "#" + fragment;
+            }
+        }
+
+    });
+
+    // Create the default BI.history.
+    BI.history = new History;
+}());function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
 (function (global, factory) {
     typeof exports === 'object' && typeof module !== 'undefined' ? factory(exports) : typeof define === 'function' && define.amd ? define(['exports'], factory) : factory(global.Fix = global.Fix || {});
@@ -35455,7 +36039,130 @@ Data.Source = BISource = {
         };
     }
     BI.watch = Fix.watch;
-}());/* !
+}());BI.servletURL = "https://fanruan.coding.me/fineui/dist/";
+BI.resourceURL = "https://fanruan.coding.me/fineui/dist/resource/";
+BI.i18n = {
+    "BI-Multi_Date_Quarter_End": "季度末",
+    "BI-Multi_Date_Month_Begin": "月初",
+    "BI-Multi_Date_YMD": "年/月/日",
+    "BI-Custom_Color": "自定义颜色",
+    "BI-Numerical_Interval_Input_Data": "请输入数值",
+    "BI-Please_Input_Natural_Number": "请输入非负整数",
+    "BI-No_More_Data": "无更多数据",
+    "BI-Basic_Altogether": "共",
+    "BI-Basic_Sunday": "星期日",
+    "BI-Widget_Background_Colour": "组件背景",
+    "BI-Color_Picker_Error_Text": "请输入0~255的正整数",
+    "BI-Multi_Date_Month": "月",
+    "BI-No_Selected_Item": "没有可选项",
+    "BI-Multi_Date_Year_Begin": "年初",
+    "BI-Quarter_1": "第1季度",
+    "BI-Quarter_2": "第2季度",
+    "BI-Quarter_3": "第3季度",
+    "BI-Quarter_4": "第4季度",
+    "BI-Multi_Date_Year_Next": "年后",
+    "BI-Multi_Date_Month_Prev": "个月前",
+    "BI-Month_Trigger_Error_Text": "请输入1~12的正整数",
+    "BI-Less_And_Equal": "小于等于",
+    "BI-Year_Trigger_Invalid_Text": "请输入有效时间",
+    "BI-Multi_Date_Week_Next": "周后",
+    "BI-Font_Size": "字号",
+    "BI-Basic_Total": "共",
+    "BI-Already_Selected": "已选择",
+    "BI-Formula_Insert": "插入",
+    "BI-Select_All": "全选",
+    "BI-Basic_Tuesday": "星期二",
+    "BI-Multi_Date_Month_End": "月末",
+    "BI-Load_More": "点击加载更多数据",
+    "BI-Basic_September": "九月",
+    "BI-Current_Is_Last_Page": "当前已是最后一页",
+    "BI-Basic_Auto": "自动",
+    "BI-Basic_Count": "个",
+    "BI-Basic_Value": "值",
+    "BI-Basic_Unrestricted": "无限制",
+    "BI-Quarter_Trigger_Error_Text": "请输入1~4的正整数",
+    "BI-Basic_More": "更多",
+    "BI-Basic_Wednesday": "星期三",
+    "BI-Basic_Bold": "加粗",
+    "BI-Basic_Simple_Saturday": "六",
+    "BI-Multi_Date_Month_Next": "个月后",
+    "BI-Basic_March": "三月",
+    "BI-Current_Is_First_Page": "当前已是第一页",
+    "BI-Basic_Thursday": "星期四",
+    "BI-Basic_Prompt": "提示",
+    "BI-Multi_Date_Today": "今天",
+    "BI-Multi_Date_Quarter_Prev": "个季度前",
+    "BI-Row_Header": "行表头",
+    "BI-Date_Trigger_Error_Text": "日期格式示例:2015-3-11",
+    "BI-Basic_Cancel": "取消",
+    "BI-Basic_January": "一月",
+    "BI-Basic_June": "六月",
+    "BI-Basic_July": "七月",
+    "BI-Basic_April": "四月",
+    "BI-Multi_Date_Quarter_Begin": "季度初",
+    "BI-Multi_Date_Week": "周",
+    "BI-Click_Blank_To_Select": "点按\"空格键\"选中匹配项",
+    "BI-Basic_August": "八月",
+    "BI-Word_Align_Left": "文字居左",
+    "BI-Basic_November": "十一月",
+    "BI-Font_Colour": "字体颜色",
+    "BI-Multi_Date_Day_Prev": "天前",
+    "BI-Select_Part": "部分选择",
+    "BI-Multi_Date_Day_Next": "天后",
+    "BI-Less_Than": "小于",
+    "BI-Basic_February": "二月",
+    "BI-Multi_Date_Year": "年",
+    "BI-Number_Index": "序号",
+    "BI-Multi_Date_Week_Prev": "周前",
+    "BI-Next_Page": "下一页",
+    "BI-Right_Page": "向右翻页",
+    "BI-Numerical_Interval_Signal_Value": "前后值相等，请将操作符改为“≤”",
+    "BI-Basic_December": "十二月",
+    "BI-Basic_Saturday": "星期六",
+    "BI-Basic_Simple_Wednesday": "三",
+    "BI-Multi_Date_Quarter_Next": "个季度后",
+    "BI-Basic_October": "十月",
+    "BI-Basic_Simple_Friday": "五",
+    "BI-Primary_Key": "主键",
+    "BI-Basic_Save": "保存",
+    "BI-Numerical_Interval_Number_Value": "请保证前面的数值小于/等于后面的数值",
+    "BI-Previous_Page": "上一页",
+    "BI-No_Select": "搜索结果为空",
+    "BI-Basic_Clears": "清空",
+    "BI-Created_By_Me": "我创建的",
+    "BI-Basic_Simple_Tuesday": "二",
+    "BI-Word_Align_Right": "文字居右",
+    "BI-Summary_Values": "汇总",
+    "BI-Basic_Clear": "清除",
+    "BI-Upload_File_Size_Error": "文件大小不支",
+    "BI-Up_Page": "向上翻页",
+    "BI-Basic_Simple_Sunday": "日",
+    "BI-Multi_Date_Relative_Current_Time": "相对当前时间",
+    "BI-Selected_Data": "已选数据：",
+    "BI-Multi_Date_Quarter": "季度",
+    "BI-Check_Selected": "查看已选",
+    "BI-Basic_Search": "搜索",
+    "BI-Basic_May": "五月",
+    "BI-Continue_Select": "继续选择",
+    "BI-Please_Input_Positive_Integer": "请输入正整数",
+    "BI-Upload_File_Type_Error": "文件类型不支持",
+    "BI-Basic_Friday": "星期五",
+    "BI-Down_Page": "向下翻页",
+    "BI-Basic_Monday": "星期一",
+    "BI-Left_Page": "向左翻页",
+    "BI-Transparent_Color": "透明",
+    "BI-Basic_Simple_Monday": "一",
+    "BI-Multi_Date_Year_End": "年末",
+    "BI-Time_Interval_Error_Text": "请保证前面时间小于/等于后面的时间",
+    "BI-Basic_Time": "时间",
+    "BI-Basic_OK": "确定",
+    "BI-Basic_Sure": "确定",
+    "BI-Basic_Simple_Thursday": "四",
+    "BI-Multi_Date_Year_Prev": "年前",
+    "BI-Tiao_Data": "条数据",
+    "BI-Basic_Italic": "斜体",
+    "BI-Basic_Union_Relation": "联合关联"
+};/* !
  * jQuery Mousewheel 3.1.13
  *
  * Copyright jQuery Foundation and other contributors
