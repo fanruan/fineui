@@ -100,24 +100,24 @@ module.exports = function (grunt) {
                 dest: "dist/resource.css"
             },
 
-            publicBundleJs: {
-                src: ["public/js/**/*.js", "public/js/index.js"],
-                dest: "public/bundle.js"
-            },
-
             bundleJs: {
                 src: ["dist/core.js", "dist/base.js", "dist/case.js", "dist/widget.js", "dist/router.js", "public/js/**/*.js", "public/js/index.js"],
                 dest: "dist/bundle.js"
             },
 
-            publicBundleCss: {
-                src: ["public/css/app.css", "public/css/**/*.css"],
-                dest: "public/bundle.css"
-            },
-
             bundleCss: {
                 src: ["dist/core.css", "dist/base.css", "dist/widget.css", "public/css/app.css", "public/css/**/*.css"],
                 dest: "dist/bundle.css"
+            },
+
+            fineuiJs: {
+                src: ["dist/polyfill.js", "dist/core.js", "dist/fix/fix.js", "dist/fix/fix.compact.js", "dist/base.js", "dist/case.js", "dist/widget.js", "dist/router.js", "ui/js/**/*.js", "ui/js/index.js"],
+                dest: "dist/fineui.js"
+            },
+
+            fineuiCss: {
+                src: ["dist/core.css", "dist/base.css", "dist/widget.css", "ui/css/app.css", "ui/css/**/*.css"],
+                dest: "dist/fineui.css"
             },
 
             configJs: {
@@ -131,14 +131,6 @@ module.exports = function (grunt) {
             demoCss: {
                 src: ["demo/css/**/*.css"],
                 dest: "dist/demo.css"
-            },
-            fineuiJs: {
-                src: ["dist/polyfill.js", "dist/core.js", "dist/fix/fix.js", "dist/fix/fix.compact.js", "public/js/index.js", "dist/base.js", "dist/case.js", "dist/widget.js", "dist/router.js"],
-                dest: "dist/fineui.js"
-            },
-            fineuiCss: {
-                src: ["dist/core.css", "dist/base.css", "dist/widget.css"],
-                dest: "dist/fineui.css"
             },
             utilsJs: {
                 src: [
@@ -176,6 +168,13 @@ module.exports = function (grunt) {
                 cwd: "public/less",
                 src: ["**/*.less"],
                 dest: "public/css",
+                ext: ".css"
+            },
+            ui: {
+                expand: true,
+                cwd: "ui/less",
+                src: ["**/*.less"],
+                dest: "ui/css",
                 ext: ".css"
             },
             src: {

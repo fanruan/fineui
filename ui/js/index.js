@@ -1,5 +1,5 @@
-BI.servletURL = "https://fanruan.coding.me/fineui/dist/";
-BI.resourceURL = "https://fanruan.coding.me/fineui/dist/resource/";
+BI.servletURL = "${serverURL}";
+BI.resourceURL = "decision/file?path=/com/fr/web/ui/resource";
 BI.i18n = {
     "BI-Multi_Date_Quarter_End": "季度末",
     "BI-Multi_Date_Month_Begin": "月初",
