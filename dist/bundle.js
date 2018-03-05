@@ -19508,7 +19508,7 @@ if (!window.BI) {
     _.each(["keys", "allKeys", "values", "pairs", "invert", "create", "functions", "extend", "extendOwn",
         "defaults", "clone", "property", "propertyOf", "matcher", "isEqual", "isMatch", "isEmpty",
         "isElement", "isNumber", "isString", "isArray", "isObject", "isArguments", "isFunction", "isFinite",
-        "isBoolean", "isDate", "isRegExp", "isError", "isNaN", "isUndefined"], function (name) {
+        "isBoolean", "isDate", "isRegExp", "isError", "isNaN", "isUndefined", "zipObject"], function (name) {
         BI[name] = _apply(name);
     });
     _.each(["mapObject", "findKey", "pick", "omit", "tap"], function (name) {
