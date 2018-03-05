@@ -26407,8 +26407,16 @@ BI.BubblesController = BI.inherit(BI.Controller, {
 
     _init: function () {
         BI.BubblesController.superclass._init.apply(this, arguments);
+        var self = this;
         this.bubblesManager = {};
         this.storeBubbles = {};
+        BI.Resizers.add("bubbleController" + BI.uniqueId(), function () {
+            BI.each(self.bubblesManager, function (name) {
+                self.remove(name);
+            });
+            self.bubblesManager = {};
+            self.storeBubbles = {};
+        });
     },
 
     _createBubble: function (direct, text, level, height) {
@@ -26424,60 +26432,60 @@ BI.BubblesController = BI.inherit(BI.Controller, {
     _getOffsetLeft: function (name, context, offsetStyle) {
         var left = 0;
         if ("center" === offsetStyle) {
-            left = (context.element.bounds().width - this.get(name).element.bounds().width) / 2;
+            left = context.element.offset().left + (context.element.bounds().width - this.get(name).element.bounds().width) / 2;
             if (left < 0) {
                 left = 0;
             }
             return left;
         }
         if ("right" === offsetStyle) {
-            left = context.element.bounds().width - this.get(name).element.bounds().width;
+            left = context.element.offset().left + context.element.bounds().width - this.get(name).element.bounds().width;
             if (left < 0) {
                 left = 0;
             }
             return left;
         }
-        return left;
+        return context.element.offset().left;
     },
 
     _getOffsetTop: function (name, context, offsetStyle) {
         var top = 0;
         if ("center" === offsetStyle) {
-            top = (context.element.bounds().height - this.get(name).element.bounds().height) / 2;
+            top = context.element.offset().top + (context.element.bounds().height - this.get(name).element.bounds().height) / 2;
             if (top < 0) {
                 top = 0;
             }
             return top;
         } else if ("right" === offsetStyle) {
-            top = context.element.bounds().height - this.get(name).element.bounds().height;
+            top = context.element.offset().top + context.element.bounds().height - this.get(name).element.bounds().height;
             if (top < 0) {
                 top = 0;
             }
             return top;
         }
-        return top;
+        return context.element.offset().top;
     },
 
     _getLeftPosition: function (name, context, offsetStyle) {
-        var position = {left: - this.get(name).element.bounds().width};
+        var position = $.getLeftPosition(context, this.get(name));
         position.top = this._getOffsetTop(name, context, offsetStyle);
         return position;
     },
 
     _getBottomPosition: function (name, context, offsetStyle) {
-        var position = {top: context.element.bounds().height};
+        var position = $.getBottomPosition(context, this.get(name));
         position.left = this._getOffsetLeft(name, context, offsetStyle);
         return position;
     },
 
     _getTopPosition: function (name, context, offsetStyle) {
-        var position = {top: -35};
+        var position = $.getTopPosition(context, this.get(name));
         position.left = this._getOffsetLeft(name, context, offsetStyle);
         return position;
     },
 
     _getRightPosition: function (name, context, offsetStyle) {
-        var position = {left: context.element.bounds().width};
+        var position = $.getRightPosition(context, this.get(name));
         position.top = this._getOffsetTop(name, context, offsetStyle);
         return position;
     },
