@@ -3645,7 +3645,6 @@ body .bi-button.button-ignore.disabled.ghost .b-font:before,
   border: 1px solid #e85050;
 }
 .bi-toast {
-  position: fixed !important;
   font-size: 14px;
   color: #ffffff;
   max-width: 400px;
@@ -3670,7 +3669,6 @@ body .bi-button.button-ignore.disabled.ghost .b-font:before,
   font-size: 16px;
 }
 .bi-tooltip {
-  position: fixed !important;
   max-width: 250px;
   -webkit-border-radius: 2px;
   -moz-border-radius: 2px;
