@@ -73,6 +73,8 @@
         }
         if (!points[type][action]) {
             points[type][action] = {};
+        }
+        if (!points[type][action][after ? "after" : "before"]) {
             points[type][action][after ? "after" : "before"] = [];
         }
         points[type][action][after ? "after" : "before"].push(pointFn);
