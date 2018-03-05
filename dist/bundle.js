@@ -9599,7 +9599,7 @@ if ( typeof define === "function" && define.amd && define.amd.jQuery ) {
 })( window );/**
  * @license
  * Lodash (Custom Build) <https://lodash.com/>
- * Build: `lodash core plus="debounce,throttle,get,findIndex,findLastIndex,findKey,findLastKey,isArrayLike,invert,invertBy,uniq,uniqBy,omit,omitBy,zip,unzip,rest,range,random,reject,intersection,drop,countBy"`
+ * Build: `lodash core plus="debounce,throttle,get,findIndex,findLastIndex,findKey,findLastKey,isArrayLike,invert,invertBy,uniq,uniqBy,omit,omitBy,zip,unzip,rest,range,random,reject,intersection,drop,countBy,union,zipObject"`
  * Copyright JS Foundation and other contributors <https://js.foundation/>
  * Released under MIT license <https://lodash.com/license>
  * Based on Underscore.js 1.8.3 <http://underscorejs.org/LICENSE>
@@ -12775,6 +12775,28 @@ if ( typeof define === "function" && define.amd && define.amd.jQuery ) {
   }
 
   /**
+   * This base implementation of `_.zipObject` which assigns values using `assignFunc`.
+   *
+   * @private
+   * @param {Array} props The property identifiers.
+   * @param {Array} values The property values.
+   * @param {Function} assignFunc The function to assign values.
+   * @returns {Object} Returns the new object.
+   */
+  function baseZipObject(props, values, assignFunc) {
+    var index = -1,
+        length = props.length,
+        valsLength = values.length,
+        result = {};
+
+    while (++index < length) {
+      var value = index < valsLength ? values[index] : undefined;
+      assignFunc(result, props[index], value);
+    }
+    return result;
+  }
+
+  /**
    * Casts `value` to an empty array if it's not an array like object.
    *
    * @private
@@ -15151,6 +15173,26 @@ if ( typeof define === "function" && define.amd && define.amd.jQuery ) {
   }
 
   /**
+   * Creates an array of unique values, in order, from all given arrays using
+   * [`SameValueZero`](http://ecma-international.org/ecma-262/7.0/#sec-samevaluezero)
+   * for equality comparisons.
+   *
+   * @static
+   * @memberOf _
+   * @since 0.1.0
+   * @category Array
+   * @param {...Array} [arrays] The arrays to inspect.
+   * @returns {Array} Returns the new array of combined values.
+   * @example
+   *
+   * _.union([2], [1, 2]);
+   * // => [2, 1]
+   */
+  var union = baseRest(function(arrays) {
+    return baseUniq(baseFlatten(arrays, 1, isArrayLikeObject, true));
+  });
+
+  /**
    * Creates a duplicate-free version of an array, using
    * [`SameValueZero`](http://ecma-international.org/ecma-262/7.0/#sec-samevaluezero)
    * for equality comparisons, in which only the first occurrence of each element
@@ -15251,6 +15293,26 @@ if ( typeof define === "function" && define.amd && define.amd.jQuery ) {
    * // => [['a', 1, true], ['b', 2, false]]
    */
   var zip = baseRest(unzip);
+
+  /**
+   * This method is like `_.fromPairs` except that it accepts two arrays,
+   * one of property identifiers and one of corresponding values.
+   *
+   * @static
+   * @memberOf _
+   * @since 0.4.0
+   * @category Array
+   * @param {Array} [props=[]] The property identifiers.
+   * @param {Array} [values=[]] The property values.
+   * @returns {Object} Returns the new object.
+   * @example
+   *
+   * _.zipObject(['a', 'b'], [1, 2]);
+   * // => { 'a': 1, 'b': 2 }
+   */
+  function zipObject(props, values) {
+    return baseZipObject(props || [], values || [], assignValue);
+  }
 
   /*------------------------------------------------------------------------*/
 
@@ -18198,21 +18260,6 @@ if ( typeof define === "function" && define.amd && define.amd.jQuery ) {
     return baseRandom(lower, upper);
   }
 
-    // Converts lists into objects. Pass either a single array of `[key, value]`
-    // pairs, or two parallel arrays of the same length -- one of keys, and one of
-    // the corresponding values.
-    function object (list, values) {
-        var result = {};
-        for (var i = 0, length = list && list.length; i < length; i++) {
-            if (values) {
-                result[list[i]] = values[i];
-            } else {
-                result[list[i][0]] = list[i][1];
-            }
-        }
-        return result;
-    }
-
   /*------------------------------------------------------------------------*/
 
   /**
@@ -18704,11 +18751,13 @@ if ( typeof define === "function" && define.amd && define.amd.jQuery ) {
   lodash.throttle = throttle;
   lodash.thru = thru;
   lodash.toArray = toArray;
+  lodash.union = union;
   lodash.uniq = uniq;
   lodash.uniqBy = uniqBy;
   lodash.unzip = unzip;
   lodash.values = values;
   lodash.zip = zip;
+  lodash.zipObject = zipObject;
 
   // Add aliases.
   lodash.extend = assignIn;
@@ -18760,7 +18809,6 @@ if ( typeof define === "function" && define.amd && define.amd.jQuery ) {
   lodash.size = size;
   lodash.some = some;
   lodash.uniqueId = uniqueId;
-  lodash.object = object;
 
   // Add aliases.
   lodash.each = forEach;
@@ -19460,7 +19508,7 @@ if (!window.BI) {
     _.each(["keys", "allKeys", "values", "pairs", "invert", "create", "functions", "extend", "extendOwn",
         "defaults", "clone", "property", "propertyOf", "matcher", "isEqual", "isMatch", "isEmpty",
         "isElement", "isNumber", "isString", "isArray", "isObject", "isArguments", "isFunction", "isFinite",
-        "isBoolean", "isDate", "isRegExp", "isError", "isNaN", "isUndefined"], function (name) {
+        "isBoolean", "isDate", "isRegExp", "isError", "isNaN", "isUndefined", "zipObject"], function (name) {
         BI[name] = _apply(name);
     });
     _.each(["mapObject", "findKey", "pick", "omit", "tap"], function (name) {
@@ -26116,8 +26164,16 @@ BI.BubblesController = BI.inherit(BI.Controller, {
 
     _init: function () {
         BI.BubblesController.superclass._init.apply(this, arguments);
+        var self = this;
         this.bubblesManager = {};
         this.storeBubbles = {};
+        BI.Resizers.add("bubbleController" + BI.uniqueId(), function () {
+            BI.each(self.bubblesManager, function (name) {
+                self.remove(name);
+            });
+            self.bubblesManager = {};
+            self.storeBubbles = {};
+        });
     },
 
     _createBubble: function (direct, text, level, height) {
@@ -26133,60 +26189,60 @@ BI.BubblesController = BI.inherit(BI.Controller, {
     _getOffsetLeft: function (name, context, offsetStyle) {
         var left = 0;
         if ("center" === offsetStyle) {
-            left = (context.element.bounds().width - this.get(name).element.bounds().width) / 2;
+            left = context.element.offset().left + (context.element.bounds().width - this.get(name).element.bounds().width) / 2;
             if (left < 0) {
                 left = 0;
             }
             return left;
         }
         if ("right" === offsetStyle) {
-            left = context.element.bounds().width - this.get(name).element.bounds().width;
+            left = context.element.offset().left + context.element.bounds().width - this.get(name).element.bounds().width;
             if (left < 0) {
                 left = 0;
             }
             return left;
         }
-        return left;
+        return context.element.offset().left;
     },
 
     _getOffsetTop: function (name, context, offsetStyle) {
         var top = 0;
         if ("center" === offsetStyle) {
-            top = (context.element.bounds().height - this.get(name).element.bounds().height) / 2;
+            top = context.element.offset().top + (context.element.bounds().height - this.get(name).element.bounds().height) / 2;
             if (top < 0) {
                 top = 0;
             }
             return top;
         } else if ("right" === offsetStyle) {
-            top = context.element.bounds().height - this.get(name).element.bounds().height;
+            top = context.element.offset().top + context.element.bounds().height - this.get(name).element.bounds().height;
             if (top < 0) {
                 top = 0;
             }
             return top;
         }
-        return top;
+        return context.element.offset().top;
     },
 
     _getLeftPosition: function (name, context, offsetStyle) {
-        var position = {left: - this.get(name).element.bounds().width};
+        var position = $.getLeftPosition(context, this.get(name));
         position.top = this._getOffsetTop(name, context, offsetStyle);
         return position;
     },
 
     _getBottomPosition: function (name, context, offsetStyle) {
-        var position = {top: context.element.bounds().height};
+        var position = $.getBottomPosition(context, this.get(name));
         position.left = this._getOffsetLeft(name, context, offsetStyle);
         return position;
     },
 
     _getTopPosition: function (name, context, offsetStyle) {
-        var position = {top: -35};
+        var position = $.getTopPosition(context, this.get(name));
         position.left = this._getOffsetLeft(name, context, offsetStyle);
         return position;
     },
 
     _getRightPosition: function (name, context, offsetStyle) {
-        var position = {left: context.element.bounds().width};
+        var position = $.getRightPosition(context, this.get(name));
         position.top = this._getOffsetTop(name, context, offsetStyle);
         return position;
     },
@@ -86992,13 +87048,13 @@ BI.DownListPopup = BI.inherit(BI.Pane, {
             BI.each(itemGroup, function (id, item) {
                 if(BI.isNotNull(item.children)) {
                     var childValues = BI.map(item.children, "value");
-                    var v = joinValue(childValues, valueGetter(idx));
+                    var v = joinValue(childValues, values[idx]);
                     if(BI.isNotEmptyString(v)) {
                         value.push(v);
                     }
                 }else{
-                    if(item.value === valueGetter(idx)[0]) {
-                        value.push(valueGetter(idx)[0]);
+                    if(item.value === values[idx][0]) {
+                        value.push(values[idx][0]);
                     }
                 }
             });
@@ -87016,17 +87072,6 @@ BI.DownListPopup = BI.inherit(BI.Pane, {
                 });
             });
             return value;
-        }
-
-        function valueGetter (index) {
-            switch (o.chooseType) {
-                case BI.Selection.Single:
-                    return values[0];
-                case BI.Selection.Multi:
-                    return values[index];
-                default:
-                    break;
-            }
         }
     },
 

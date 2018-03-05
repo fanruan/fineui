@@ -1,7 +1,7 @@
 /**
  * @license
  * Lodash (Custom Build) <https://lodash.com/>
- * Build: `lodash core plus="debounce,throttle,get,findIndex,findLastIndex,findKey,findLastKey,isArrayLike,invert,invertBy,uniq,uniqBy,omit,omitBy,zip,unzip,rest,range,random,reject,intersection,drop,countBy"`
+ * Build: `lodash core plus="debounce,throttle,get,findIndex,findLastIndex,findKey,findLastKey,isArrayLike,invert,invertBy,uniq,uniqBy,omit,omitBy,zip,unzip,rest,range,random,reject,intersection,drop,countBy,union,zipObject"`
  * Copyright JS Foundation and other contributors <https://js.foundation/>
  * Released under MIT license <https://lodash.com/license>
  * Based on Underscore.js 1.8.3 <http://underscorejs.org/LICENSE>
@@ -3177,6 +3177,28 @@
   }
 
   /**
+   * This base implementation of `_.zipObject` which assigns values using `assignFunc`.
+   *
+   * @private
+   * @param {Array} props The property identifiers.
+   * @param {Array} values The property values.
+   * @param {Function} assignFunc The function to assign values.
+   * @returns {Object} Returns the new object.
+   */
+  function baseZipObject(props, values, assignFunc) {
+    var index = -1,
+        length = props.length,
+        valsLength = values.length,
+        result = {};
+
+    while (++index < length) {
+      var value = index < valsLength ? values[index] : undefined;
+      assignFunc(result, props[index], value);
+    }
+    return result;
+  }
+
+  /**
    * Casts `value` to an empty array if it's not an array like object.
    *
    * @private
@@ -5553,6 +5575,26 @@
   }
 
   /**
+   * Creates an array of unique values, in order, from all given arrays using
+   * [`SameValueZero`](http://ecma-international.org/ecma-262/7.0/#sec-samevaluezero)
+   * for equality comparisons.
+   *
+   * @static
+   * @memberOf _
+   * @since 0.1.0
+   * @category Array
+   * @param {...Array} [arrays] The arrays to inspect.
+   * @returns {Array} Returns the new array of combined values.
+   * @example
+   *
+   * _.union([2], [1, 2]);
+   * // => [2, 1]
+   */
+  var union = baseRest(function(arrays) {
+    return baseUniq(baseFlatten(arrays, 1, isArrayLikeObject, true));
+  });
+
+  /**
    * Creates a duplicate-free version of an array, using
    * [`SameValueZero`](http://ecma-international.org/ecma-262/7.0/#sec-samevaluezero)
    * for equality comparisons, in which only the first occurrence of each element
@@ -5653,6 +5695,26 @@
    * // => [['a', 1, true], ['b', 2, false]]
    */
   var zip = baseRest(unzip);
+
+  /**
+   * This method is like `_.fromPairs` except that it accepts two arrays,
+   * one of property identifiers and one of corresponding values.
+   *
+   * @static
+   * @memberOf _
+   * @since 0.4.0
+   * @category Array
+   * @param {Array} [props=[]] The property identifiers.
+   * @param {Array} [values=[]] The property values.
+   * @returns {Object} Returns the new object.
+   * @example
+   *
+   * _.zipObject(['a', 'b'], [1, 2]);
+   * // => { 'a': 1, 'b': 2 }
+   */
+  function zipObject(props, values) {
+    return baseZipObject(props || [], values || [], assignValue);
+  }
 
   /*------------------------------------------------------------------------*/
 
@@ -8600,21 +8662,6 @@
     return baseRandom(lower, upper);
   }
 
-    // Converts lists into objects. Pass either a single array of `[key, value]`
-    // pairs, or two parallel arrays of the same length -- one of keys, and one of
-    // the corresponding values.
-    function object (list, values) {
-        var result = {};
-        for (var i = 0, length = list && list.length; i < length; i++) {
-            if (values) {
-                result[list[i]] = values[i];
-            } else {
-                result[list[i][0]] = list[i][1];
-            }
-        }
-        return result;
-    }
-
   /*------------------------------------------------------------------------*/
 
   /**
@@ -9106,11 +9153,13 @@
   lodash.throttle = throttle;
   lodash.thru = thru;
   lodash.toArray = toArray;
+  lodash.union = union;
   lodash.uniq = uniq;
   lodash.uniqBy = uniqBy;
   lodash.unzip = unzip;
   lodash.values = values;
   lodash.zip = zip;
+  lodash.zipObject = zipObject;
 
   // Add aliases.
   lodash.extend = assignIn;
@@ -9162,7 +9211,6 @@
   lodash.size = size;
   lodash.some = some;
   lodash.uniqueId = uniqueId;
-  lodash.object = object;
 
   // Add aliases.
   lodash.each = forEach;
@@ -10668,7 +10716,7 @@ if (!window.BI) {
     _.each(["keys", "allKeys", "values", "pairs", "invert", "create", "functions", "extend", "extendOwn",
         "defaults", "clone", "property", "propertyOf", "matcher", "isEqual", "isMatch", "isEmpty",
         "isElement", "isNumber", "isString", "isArray", "isObject", "isArguments", "isFunction", "isFinite",
-        "isBoolean", "isDate", "isRegExp", "isError", "isNaN", "isUndefined"], function (name) {
+        "isBoolean", "isDate", "isRegExp", "isError", "isNaN", "isUndefined", "zipObject"], function (name) {
         BI[name] = _apply(name);
     });
     _.each(["mapObject", "findKey", "pick", "omit", "tap"], function (name) {
