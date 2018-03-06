@@ -11,7 +11,7 @@ BI.IconComboTrigger = BI.inherit(BI.Trigger, {
             el: {},
             items: [],
             iconCls: "",
-            width: 36,
+            width: 28,
             height: 24,
             isShowDown: true,
             value: ""

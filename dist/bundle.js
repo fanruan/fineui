@@ -75495,7 +75495,7 @@ BI.IconCombo = BI.inherit(BI.Widget, {
     _defaultConfig: function () {
         return BI.extend(BI.IconCombo.superclass._defaultConfig.apply(this, arguments), {
             baseCls: "bi-icon-combo",
-            width: 36,
+            width: 28,
             height: 24,
             el: {},
             popup: {},
@@ -75659,7 +75659,7 @@ BI.IconComboTrigger = BI.inherit(BI.Trigger, {
             el: {},
             items: [],
             iconCls: "",
-            width: 36,
+            width: 28,
             height: 24,
             isShowDown: true,
             value: ""
