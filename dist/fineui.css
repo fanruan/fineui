@@ -3645,7 +3645,6 @@ body .bi-button.button-ignore.disabled.ghost .b-font:before,
   border: 1px solid #e85050;
 }
 .bi-toast {
-  position: fixed !important;
   font-size: 14px;
   color: #ffffff;
   max-width: 400px;
@@ -3670,7 +3669,6 @@ body .bi-button.button-ignore.disabled.ghost .b-font:before,
   font-size: 16px;
 }
 .bi-tooltip {
-  position: fixed !important;
   max-width: 250px;
   -webkit-border-radius: 2px;
   -moz-border-radius: 2px;
@@ -5143,4 +5141,1587 @@ ul.ztree.zTreeDragUL {
   -webkit-border-radius: 2px;
   -moz-border-radius: 2px;
   border-radius: 2px;
+}
+html,
+button,
+input,
+select,
+textarea,
+* {
+  font-family: "Microsoft YaHei", "Hiragino Sans GB W3";
+}
+html {
+  height: 100%;
+  overflow: hidden;
+}
+body {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  margin: 0;
+  padding: 0;
+  top: 0;
+  left: 0;
+  background-repeat: repeat;
+  -webkit-user-select: none;
+  -khtml-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  -o-user-select: none;
+  user-select: none;
+  color: #3d4d66;
+  font: normal 12px "Microsoft YaHei", "Hiragino Sans GB W3";
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-decoration: none;
+  -kthml-user-focus: normal;
+  -moz-user-focus: normal;
+  -moz-outline: 0 none;
+  outline: 0 none;
+}
+div::-webkit-scrollbar,
+textarea::-webkit-scrollbar {
+  -webkit-appearance: none;
+  background-color: rgba(102, 102, 102, 0.05);
+  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr=#0d666666,endColorstr=#0d666666);
+  width: 6px;
+  height: 6px;
+}
+div::-webkit-scrollbar-thumb,
+textarea::-webkit-scrollbar-thumb {
+  -webkit-border-radius: 0;
+  -moz-border-radius: 0;
+  border-radius: 0;
+  background-color: rgba(102, 102, 102, 0.3);
+  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr=#4d666666,endColorstr=#4d666666);
+}
+div::-webkit-scrollbar-thumb:hover,
+textarea::-webkit-scrollbar-thumb:hover {
+  background-color: rgba(102, 102, 102, 0.7);
+  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr=#b3666666,endColorstr=#b3666666);
+}
+.bi-theme-dark div::-webkit-scrollbar,
+.bi-theme-dark textarea::-webkit-scrollbar {
+  -webkit-appearance: none;
+  background-color: rgba(204, 204, 204, 0.05);
+  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr=#0dcccccc,endColorstr=#0dcccccc);
+  width: 6px;
+  height: 6px;
+}
+.bi-theme-dark div::-webkit-scrollbar-thumb,
+.bi-theme-dark textarea::-webkit-scrollbar-thumb {
+  -webkit-border-radius: 0;
+  -moz-border-radius: 0;
+  border-radius: 0;
+  background-color: rgba(204, 204, 204, 0.3);
+  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr=#4dcccccc,endColorstr=#4dcccccc);
+}
+.bi-theme-dark div::-webkit-scrollbar-thumb:hover,
+.bi-theme-dark textarea::-webkit-scrollbar-thumb:hover {
+  background-color: rgba(204, 204, 204, 0.7);
+  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr=#b3cccccc,endColorstr=#b3cccccc);
+}
+.farbtastic .wheel {
+  background: url('decision/file?path=/com/fr/web/ui/images/1x/background/wheel.png') no-repeat center center;
+  _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='decision/file?path=/com/fr/web/ui/images/1x/background/wheel.png');
+  _background: none;
+}
+.farbtastic .overlay {
+  background: url('decision/file?path=/com/fr/web/ui/images/1x/background/mask.png') no-repeat center center;
+  _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='decision/file?path=/com/fr/web/ui/images/1x/background/mask.png');
+  _background: none;
+}
+.farbtastic .marker {
+  background: url('decision/file?path=/com/fr/web/ui/images/1x/background/marker.png') no-repeat center center;
+  _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='decision/file?path=/com/fr/web/ui/images/1x/background/marker.png');
+  _background: none;
+}
+.bi-display-tree .ztree li span.button.switch.center_open {
+  background: url('decision/file?path=/com/fr/web/ui/images/1x/icon/tree_vertical_line_3.png') no-repeat center center;
+  _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='decision/file?path=/com/fr/web/ui/images/1x/icon/tree_vertical_line_3.png');
+  _background: none;
+}
+.bi-display-tree .ztree li span.button.switch.roots_open {
+  background: url('decision/file?path=/com/fr/web/ui/images/1x/icon/tree_vertical_line_2.png') no-repeat center center;
+  _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='decision/file?path=/com/fr/web/ui/images/1x/icon/tree_vertical_line_2.png');
+  _background: none;
+}
+.bi-display-tree .ztree li span.button.switch.bottom_open {
+  background: url('decision/file?path=/com/fr/web/ui/images/1x/icon/tree_vertical_line_4.png') no-repeat center center;
+  _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='decision/file?path=/com/fr/web/ui/images/1x/icon/tree_vertical_line_4.png');
+  _background: none;
+}
+.ztree li ul.line {
+  background: url('decision/file?path=/com/fr/web/ui/images/1x/icon/tree_vertical_line_1.png') repeat-y 0 0;
+  _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='decision/file?path=/com/fr/web/ui/images/1x/icon/tree_vertical_line_1.png');
+  _background: none;
+}
+.bi-theme-dark .ztree li ul.line {
+  background: url('decision/file?path=/com/fr/web/ui/images/1x/icon/dark/tree_vertical_line_1.png') repeat-y 0 0;
+  _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='decision/file?path=/com/fr/web/ui/images/1x/icon/dark/tree_vertical_line_1.png');
+  _background: none;
+}
+.ztree li span.button.chk.checkbox_false_full {
+  background: url('decision/file?path=/com/fr/web/ui/images/1x/icon/check_box_normal.png') no-repeat center center;
+  _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='decision/file?path=/com/fr/web/ui/images/1x/icon/check_box_normal.png');
+  _background: none;
+}
+.ztree li span.button.chk.checkbox_false_full_focus {
+  background: url('decision/file?path=/com/fr/web/ui/images/1x/icon/check_box_normal.png') no-repeat center center;
+  _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='decision/file?path=/com/fr/web/ui/images/1x/icon/check_box_normal.png');
+  _background: none;
+}
+.ztree li span.button.chk.checkbox_false_part {
+  background: url('decision/file?path=/com/fr/web/ui/images/1x/icon/half_selected.png') no-repeat center center;
+  _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='decision/file?path=/com/fr/web/ui/images/1x/icon/half_selected.png');
+  _background: none;
+}
+.ztree li span.button.chk.checkbox_false_part_focus {
+  background: url('decision/file?path=/com/fr/web/ui/images/1x/icon/half_selected.png') no-repeat center center;
+  _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='decision/file?path=/com/fr/web/ui/images/1x/icon/half_selected.png');
+  _background: none;
+}
+.ztree li span.button.chk.checkbox_true_full {
+  background: url('decision/file?path=/com/fr/web/ui/images/1x/icon/check_box_active.png') no-repeat center center;
+  _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='decision/file?path=/com/fr/web/ui/images/1x/icon/check_box_active.png');
+  _background: none;
+}
+.ztree li span.button.chk.checkbox_true_full_focus {
+  background: url('decision/file?path=/com/fr/web/ui/images/1x/icon/check_box_active.png') no-repeat center center;
+  _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='decision/file?path=/com/fr/web/ui/images/1x/icon/check_box_active.png');
+  _background: none;
+}
+.ztree li span.button.chk.checkbox_true_part {
+  background: url('decision/file?path=/com/fr/web/ui/images/1x/icon/half_selected.png') no-repeat center center;
+  _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='decision/file?path=/com/fr/web/ui/images/1x/icon/half_selected.png');
+  _background: none;
+}
+.ztree li span.button.chk.checkbox_true_part_focus {
+  background: url('decision/file?path=/com/fr/web/ui/images/1x/icon/half_selected.png') no-repeat center center;
+  _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='decision/file?path=/com/fr/web/ui/images/1x/icon/half_selected.png');
+  _background: none;
+}
+.ztree li span.button.root_open {
+  background: url('decision/file?path=/com/fr/web/ui/images/1x/icon/tree_expand_1.png') no-repeat center center;
+  _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='decision/file?path=/com/fr/web/ui/images/1x/icon/tree_expand_1.png');
+  _background: none;
+}
+.bi-theme-dark .ztree li span.button.root_open {
+  background: url('decision/file?path=/com/fr/web/ui/images/1x/icon/dark/tree_expand_1.png') no-repeat center center;
+  _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='decision/file?path=/com/fr/web/ui/images/1x/icon/dark/tree_expand_1.png');
+  _background: none;
+}
+.ztree li span.button.root_close {
+  background: url('decision/file?path=/com/fr/web/ui/images/1x/icon/tree_collapse_1.png') no-repeat center center;
+  _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='decision/file?path=/com/fr/web/ui/images/1x/icon/tree_collapse_1.png');
+  _background: none;
+}
+.bi-theme-dark .ztree li span.button.root_close {
+  background: url('decision/file?path=/com/fr/web/ui/images/1x/icon/dark/tree_collapse_1.png') no-repeat center center;
+  _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='decision/file?path=/com/fr/web/ui/images/1x/icon/dark/tree_collapse_1.png');
+  _background: none;
+}
+.ztree li span.button.roots_open {
+  background: url('decision/file?path=/com/fr/web/ui/images/1x/icon/tree_expand_2.png') no-repeat center center;
+  _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='decision/file?path=/com/fr/web/ui/images/1x/icon/tree_expand_2.png');
+  _background: none;
+}
+.bi-theme-dark .ztree li span.button.roots_open {
+  background: url('decision/file?path=/com/fr/web/ui/images/1x/icon/dark/tree_expand_2.png') no-repeat center center;
+  _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='decision/file?path=/com/fr/web/ui/images/1x/icon/dark/tree_expand_2.png');
+  _background: none;
+}
+.ztree li span.button.roots_close {
+  background: url('decision/file?path=/com/fr/web/ui/images/1x/icon/tree_collapse_2.png') no-repeat center center;
+  _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='decision/file?path=/com/fr/web/ui/images/1x/icon/tree_collapse_2.png');
+  _background: none;
+}
+.bi-theme-dark .ztree li span.button.roots_close {
+  background: url('decision/file?path=/com/fr/web/ui/images/1x/icon/dark/tree_collapse_2.png') no-repeat center center;
+  _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='decision/file?path=/com/fr/web/ui/images/1x/icon/dark/tree_collapse_2.png');
+  _background: none;
+}
+.ztree li span.button.center_open {
+  background: url('decision/file?path=/com/fr/web/ui/images/1x/icon/tree_expand_3.png') no-repeat center center;
+  _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='decision/file?path=/com/fr/web/ui/images/1x/icon/tree_expand_3.png');
+  _background: none;
+}
+.bi-theme-dark .ztree li span.button.center_open {
+  background: url('decision/file?path=/com/fr/web/ui/images/1x/icon/dark/tree_expand_3.png') no-repeat center center;
+  _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='decision/file?path=/com/fr/web/ui/images/1x/icon/dark/tree_expand_3.png');
+  _background: none;
+}
+.ztree li span.button.center_close {
+  background: url('decision/file?path=/com/fr/web/ui/images/1x/icon/tree_collapse_3.png') no-repeat center center;
+  _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='decision/file?path=/com/fr/web/ui/images/1x/icon/tree_collapse_3.png');
+  _background: none;
+}
+.bi-theme-dark .ztree li span.button.center_close {
+  background: url('decision/file?path=/com/fr/web/ui/images/1x/icon/dark/tree_collapse_3.png') no-repeat center center;
+  _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='decision/file?path=/com/fr/web/ui/images/1x/icon/dark/tree_collapse_3.png');
+  _background: none;
+}
+.ztree li span.button.bottom_open {
+  background: url('decision/file?path=/com/fr/web/ui/images/1x/icon/tree_expand_4.png') no-repeat center center;
+  _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='decision/file?path=/com/fr/web/ui/images/1x/icon/tree_expand_4.png');
+  _background: none;
+}
+.bi-theme-dark .ztree li span.button.bottom_open {
+  background: url('decision/file?path=/com/fr/web/ui/images/1x/icon/dark/tree_expand_4.png') no-repeat center center;
+  _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='decision/file?path=/com/fr/web/ui/images/1x/icon/dark/tree_expand_4.png');
+  _background: none;
+}
+.ztree li span.button.bottom_close {
+  background: url('decision/file?path=/com/fr/web/ui/images/1x/icon/tree_collapse_4.png') no-repeat center center;
+  _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='decision/file?path=/com/fr/web/ui/images/1x/icon/tree_collapse_4.png');
+  _background: none;
+}
+.bi-theme-dark .ztree li span.button.bottom_close {
+  background: url('decision/file?path=/com/fr/web/ui/images/1x/icon/dark/tree_collapse_4.png') no-repeat center center;
+  _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='decision/file?path=/com/fr/web/ui/images/1x/icon/dark/tree_collapse_4.png');
+  _background: none;
+}
+.ztree li span.button.roots_docu {
+  background: url('decision/file?path=/com/fr/web/ui/images/1x/icon/tree_vertical_line_2.png') no-repeat center center;
+  _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='decision/file?path=/com/fr/web/ui/images/1x/icon/tree_vertical_line_2.png');
+  _background: none;
+}
+.bi-theme-dark .ztree li span.button.roots_docu {
+  background: url('decision/file?path=/com/fr/web/ui/images/1x/icon/dark/tree_vertical_line_2.png') no-repeat center center;
+  _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='decision/file?path=/com/fr/web/ui/images/1x/icon/dark/tree_vertical_line_2.png');
+  _background: none;
+}
+.ztree li span.button.center_docu {
+  background: url('decision/file?path=/com/fr/web/ui/images/1x/icon/tree_vertical_line_3.png') no-repeat center center;
+  _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='decision/file?path=/com/fr/web/ui/images/1x/icon/tree_vertical_line_3.png');
+  _background: none;
+}
+.bi-theme-dark .ztree li span.button.center_docu {
+  background: url('decision/file?path=/com/fr/web/ui/images/1x/icon/dark/tree_vertical_line_3.png') no-repeat center center;
+  _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='decision/file?path=/com/fr/web/ui/images/1x/icon/dark/tree_vertical_line_3.png');
+  _background: none;
+}
+.ztree li span.button.bottom_docu {
+  background: url('decision/file?path=/com/fr/web/ui/images/1x/icon/tree_vertical_line_4.png') no-repeat center center;
+  _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='decision/file?path=/com/fr/web/ui/images/1x/icon/tree_vertical_line_4.png');
+  _background: none;
+}
+.bi-theme-dark .ztree li span.button.bottom_docu {
+  background: url('decision/file?path=/com/fr/web/ui/images/1x/icon/dark/tree_vertical_line_4.png') no-repeat center center;
+  _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='decision/file?path=/com/fr/web/ui/images/1x/icon/dark/tree_vertical_line_4.png');
+  _background: none;
+}
+.ztree li span.button.ico_loading {
+  background: url('decision/file?path=/com/fr/web/ui/images/1x/icon/loading.gif') no-repeat center center;
+  _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='decision/file?path=/com/fr/web/ui/images/1x/icon/loading.gif');
+  _background: none;
+}
+.base-line-conn-background {
+  background: url('decision/file?path=/com/fr/web/ui/images/1x/icon/tree_vertical_line_1.png') repeat-y 0 0;
+  _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='decision/file?path=/com/fr/web/ui/images/1x/icon/tree_vertical_line_1.png');
+  _background: none;
+}
+.bi-theme-dark .base-line-conn-background {
+  background: url('decision/file?path=/com/fr/web/ui/images/1x/icon/dark/tree_vertical_line_1.png') repeat-y 0 0;
+  _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='decision/file?path=/com/fr/web/ui/images/1x/icon/dark/tree_vertical_line_1.png');
+  _background: none;
+}
+.first-line-conn-background {
+  background: url('decision/file?path=/com/fr/web/ui/images/1x/icon/tree_vertical_line_2.png') no-repeat center center;
+  _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='decision/file?path=/com/fr/web/ui/images/1x/icon/tree_vertical_line_2.png');
+  _background: none;
+}
+.bi-theme-dark .first-line-conn-background {
+  background: url('decision/file?path=/com/fr/web/ui/images/1x/icon/dark/tree_vertical_line_2.png') no-repeat center center;
+  _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='decision/file?path=/com/fr/web/ui/images/1x/icon/dark/tree_vertical_line_2.png');
+  _background: none;
+}
+.mid-line-conn-background {
+  background: url('decision/file?path=/com/fr/web/ui/images/1x/icon/tree_vertical_line_3.png') no-repeat center center;
+  _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='decision/file?path=/com/fr/web/ui/images/1x/icon/tree_vertical_line_3.png');
+  _background: none;
+}
+.bi-theme-dark .mid-line-conn-background {
+  background: url('decision/file?path=/com/fr/web/ui/images/1x/icon/dark/tree_vertical_line_3.png') no-repeat center center;
+  _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='decision/file?path=/com/fr/web/ui/images/1x/icon/dark/tree_vertical_line_3.png');
+  _background: none;
+}
+.last-line-conn-background {
+  background: url('decision/file?path=/com/fr/web/ui/images/1x/icon/tree_vertical_line_4.png') no-repeat center center;
+  _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='decision/file?path=/com/fr/web/ui/images/1x/icon/tree_vertical_line_4.png');
+  _background: none;
+}
+.bi-theme-dark .last-line-conn-background {
+  background: url('decision/file?path=/com/fr/web/ui/images/1x/icon/dark/tree_vertical_line_4.png') no-repeat center center;
+  _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='decision/file?path=/com/fr/web/ui/images/1x/icon/dark/tree_vertical_line_4.png');
+  _background: none;
+}
+.loading-background {
+  background: url('decision/file?path=/com/fr/web/ui/images/1x/icon/loading.gif') no-repeat center center;
+  _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='decision/file?path=/com/fr/web/ui/images/1x/icon/loading.gif');
+  _background: none;
+}
+.auto-color-background {
+  background: url('decision/file?path=/com/fr/web/ui/images/1x/background/auto_color.png') no-repeat center center;
+  _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='decision/file?path=/com/fr/web/ui/images/1x/background/auto_color.png');
+  _background: none;
+}
+.trans-color-background {
+  background: url('decision/file?path=/com/fr/web/ui/images/1x/background/trans_color.png') no-repeat center center;
+  _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='decision/file?path=/com/fr/web/ui/images/1x/background/trans_color.png');
+  _background: none;
+}
+@font-face {
+  font-family: 'bi';
+  src: url('decision/file?path=/com/fr/web/ui/font/iconfont.eot'), /* IE6-IE8 */ url('decision/file?path=/com/fr/web/ui/font/iconfont.woff') format('woff'), /* chrome、firefox */ url('decision/file?path=/com/fr/web/ui/font/iconfont.ttf') format('truetype'), /* chrome、firefox、opera、Safari, Android, iOS 4.2+*/ url('decision/file?path=/com/fr/web/ui/font/iconfont.svg#svgFontName') format('svg');
+  /*  iOS 4.1- */
+}
+.b-font {
+  font-family: "bi";
+  font-style: normal;
+  -webkit-font-smoothing: antialiased;
+  -webkit-text-stroke-width: 0.2px;
+  -moz-osx-font-smoothing: grayscale;
+}
+.close-font .b-font {
+  *zoom: expression( this.runtimeStyle['zoom'] = '1',this.innerHTML = '&#xe6d0;');
+}
+.close-font .b-font:before {
+  content: "\e6d0";
+  color: inherit;
+}
+.close-font.disabled .b-font:before {
+  content: "\e6d0";
+  color: inherit;
+}
+.close-h-font .b-font {
+  *zoom: expression( this.runtimeStyle['zoom'] = '1',this.innerHTML = '&#xe6d0;');
+}
+.close-h-font .b-font:before {
+  content: "\e6d0";
+  color: inherit;
+}
+.close-h-font:hover .b-font:before,
+.close-h-font.hover .b-font:before {
+  content: "\e6d0";
+  color: inherit;
+}
+.close-h-font.disabled .b-font:before {
+  content: "\e6d0";
+  color: inherit;
+}
+.close-ha-font .b-font {
+  *zoom: expression( this.runtimeStyle['zoom'] = '1',this.innerHTML = '&#xe6d0;');
+}
+.close-ha-font .b-font:before {
+  content: "\e6d0";
+  color: inherit;
+}
+.close-ha-font:hover .b-font:before,
+.close-ha-font.hover .b-font:before {
+  content: "\e6d0";
+  color: inherit;
+}
+.close-ha-font:active .b-font:before,
+.close-ha-font.active .b-font:before {
+  content: "\e6d0";
+  color: #3f8ce8;
+}
+.close-ha-font.disabled .b-font:before {
+  content: "\e6d0";
+  color: inherit;
+}
+.search-close-h-font .b-font {
+  *zoom: expression( this.runtimeStyle['zoom'] = '1',this.innerHTML = '&#xe6d0;');
+}
+.search-close-h-font .b-font:before {
+  content: "\e6d0";
+  color: inherit;
+}
+.search-close-h-font:hover .b-font:before,
+.search-close-h-font.hover .b-font:before {
+  content: "\e6d0";
+  color: #ff4949;
+}
+.search-close-h-font.disabled .b-font:before {
+  content: "\e6d0";
+  color: inherit;
+}
+.pre-page-h-font .b-font {
+  *zoom: expression( this.runtimeStyle['zoom'] = '1',this.innerHTML = '&#xe70d;');
+}
+.pre-page-h-font .b-font:before {
+  content: "\e70d";
+  color: inherit;
+}
+.pre-page-h-font:hover .b-font:before,
+.pre-page-h-font.hover .b-font:before {
+  content: "\e70d";
+  color: inherit;
+}
+.pre-page-h-font.disabled .b-font:before {
+  content: "\e70d";
+  color: inherit;
+}
+.next-page-h-font .b-font {
+  *zoom: expression( this.runtimeStyle['zoom'] = '1',this.innerHTML = '&#xe70c;');
+}
+.next-page-h-font .b-font:before {
+  content: "\e70c";
+  color: inherit;
+}
+.next-page-h-font:hover .b-font:before,
+.next-page-h-font.hover .b-font:before {
+  content: "\e70c";
+  color: inherit;
+}
+.next-page-h-font.disabled .b-font:before {
+  content: "\e70c";
+  color: inherit;
+}
+.search-font .b-font {
+  *zoom: expression( this.runtimeStyle['zoom'] = '1',this.innerHTML = '&#xe6dc;');
+}
+.search-font .b-font:before {
+  content: "\e6dc";
+  color: inherit;
+}
+.search-font.disabled .b-font:before {
+  content: "\e6dc";
+  color: inherit;
+}
+.date-font .b-font {
+  *zoom: expression( this.runtimeStyle['zoom'] = '1',this.innerHTML = '&#xe733;');
+}
+.date-font .b-font:before {
+  content: "\e733";
+  color: inherit;
+}
+.date-font.disabled .b-font:before {
+  content: "\e733";
+  color: inherit;
+}
+.date-change-h-font .b-font {
+  *zoom: expression( this.runtimeStyle['zoom'] = '1',this.innerHTML = '&#xe72f;');
+}
+.date-change-h-font .b-font:before {
+  content: "\e72f";
+  color: inherit;
+}
+.date-change-h-font:hover .b-font:before,
+.date-change-h-font.hover .b-font:before {
+  content: "\e72f";
+  color: inherit;
+}
+.date-change-h-font.disabled .b-font:before {
+  content: "\e72f";
+  color: inherit;
+}
+.dot-font .b-font {
+  *zoom: expression( this.runtimeStyle['zoom'] = '1',this.innerHTML = '&#xe762;');
+}
+.dot-font .b-font:before {
+  content: "\e762";
+  color: #1a1a1a;
+}
+.dot-font.disabled .b-font:before {
+  content: "\e762";
+  color: #1a1a1a;
+}
+.dot-h-font .b-font {
+  *zoom: expression( this.runtimeStyle['zoom'] = '1',this.innerHTML = '&#xe762;');
+}
+.dot-h-font .b-font:before {
+  content: "\e762";
+  color: #1a1a1a;
+}
+.dot-h-font:hover .b-font:before,
+.dot-h-font.hover .b-font:before {
+  content: "\e762";
+  color: inherit;
+}
+.dot-h-font.disabled .b-font:before {
+  content: "\e762";
+  color: #1a1a1a;
+}
+.dot-ha-font .b-font {
+  *zoom: expression( this.runtimeStyle['zoom'] = '1',this.innerHTML = '&#xe762;');
+}
+.dot-ha-font .b-font:before {
+  content: "\e762";
+  color: #ffffff;
+}
+.dot-ha-font:hover .b-font:before,
+.dot-ha-font.hover .b-font:before {
+  content: "\e762";
+  color: #999999;
+}
+.dot-ha-font:active .b-font:before,
+.dot-ha-font.active .b-font:before {
+  content: "\e762";
+  color: #1a1a1a;
+}
+.dot-ha-font.disabled .b-font:before {
+  content: "\e762";
+  color: #ffffff;
+}
+.dot-e-font .b-font {
+  *zoom: expression( this.runtimeStyle['zoom'] = '1',this.innerHTML = '&#xe762;');
+}
+.dot-e-font .b-font:before {
+  content: "\e762";
+  color: #ffffff;
+}
+.dot-e-font:hover .b-font:before,
+.dot-e-font.hover .b-font:before {
+  content: "\e762";
+  color: #999999;
+}
+.dot-e-font.active .b-font:before {
+  content: "\e762";
+  color: #1a1a1a;
+}
+.dot-e-font:active .b-font:before {
+  content: "\e762";
+  color: #3685f2;
+}
+.dot-e-font.disabled .b-font:before {
+  content: "\e762";
+  color: #ffffff;
+}
+.pull-right-font .b-font {
+  *zoom: expression( this.runtimeStyle['zoom'] = '1',this.innerHTML = '&#xe70c;');
+}
+.pull-right-font .b-font:before {
+  content: "\e70c";
+  color: inherit;
+}
+.pull-right-font.disabled .b-font:before {
+  content: "\e70c";
+  color: inherit;
+}
+.pull-right-h-font .b-font {
+  *zoom: expression( this.runtimeStyle['zoom'] = '1',this.innerHTML = '&#xe70c;');
+}
+.pull-right-h-font .b-font:before {
+  content: "\e70c";
+  color: inherit;
+}
+.pull-right-h-font:hover .b-font:before,
+.pull-right-h-font.hover .b-font:before {
+  content: "\e70c";
+  color: inherit;
+}
+.pull-right-h-font.disabled .b-font:before {
+  content: "\e70c";
+  color: inherit;
+}
+.pull-right-ha-font .b-font {
+  *zoom: expression( this.runtimeStyle['zoom'] = '1',this.innerHTML = '&#xe70c;');
+}
+.pull-right-ha-font .b-font:before {
+  content: "\e70c";
+  color: inherit;
+}
+.pull-right-ha-font:hover .b-font:before,
+.pull-right-ha-font.hover .b-font:before {
+  content: "\e70c";
+  color: inherit;
+}
+.pull-right-ha-font:active .b-font:before,
+.pull-right-ha-font.active .b-font:before {
+  content: "\e70c";
+  color: #3f8ce8;
+}
+.pull-right-ha-font.disabled .b-font:before {
+  content: "\e70c";
+  color: inherit;
+}
+.pull-right-e-font .b-font {
+  *zoom: expression( this.runtimeStyle['zoom'] = '1',this.innerHTML = '&#xe70c;');
+}
+.pull-right-e-font .b-font:before {
+  content: "\e70c";
+  color: inherit;
+}
+.pull-right-e-font:hover .b-font:before,
+.pull-right-e-font.hover .b-font:before {
+  content: "\e70c";
+  color: inherit;
+}
+.pull-right-e-font.active .b-font:before {
+  content: "\e70c";
+  color: #3f8ce8;
+}
+.pull-right-e-font:active .b-font:before {
+  content: "\e70c";
+  color: #3f8ce8;
+}
+.pull-right-e-font.disabled .b-font:before {
+  content: "\e70c";
+  color: inherit;
+}
+.copy-font .b-font {
+  *zoom: expression( this.runtimeStyle['zoom'] = '1',this.innerHTML = '&#xe6bd;');
+}
+.copy-font .b-font:before {
+  content: "\e6bd";
+  color: inherit;
+}
+.copy-font.disabled .b-font:before {
+  content: "\e6bd";
+  color: inherit;
+}
+.copy-h-font .b-font {
+  *zoom: expression( this.runtimeStyle['zoom'] = '1',this.innerHTML = '&#xe6bd;');
+}
+.copy-h-font .b-font:before {
+  content: "\e6bd";
+  color: #1a1a1a;
+}
+.copy-h-font:hover .b-font:before,
+.copy-h-font.hover .b-font:before {
+  content: "\e6bd";
+  color: inherit;
+}
+.copy-h-font.disabled .b-font:before {
+  content: "\e6bd";
+  color: #1a1a1a;
+}
+.copy-ha-font .b-font {
+  *zoom: expression( this.runtimeStyle['zoom'] = '1',this.innerHTML = '&#xe6bd;');
+}
+.copy-ha-font .b-font:before {
+  content: "\e6bd";
+  color: inherit;
+}
+.copy-ha-font:hover .b-font:before,
+.copy-ha-font.hover .b-font:before {
+  content: "\e6bd";
+  color: inherit;
+}
+.copy-ha-font:active .b-font:before,
+.copy-ha-font.active .b-font:before {
+  content: "\e6bd";
+  color: #3f8ce8;
+}
+.copy-ha-font.disabled .b-font:before {
+  content: "\e6bd";
+  color: inherit;
+}
+.copy-e-font .b-font {
+  *zoom: expression( this.runtimeStyle['zoom'] = '1',this.innerHTML = '&#xe6bd;');
+}
+.copy-e-font .b-font:before {
+  content: "\e6bd";
+  color: inherit;
+}
+.copy-e-font:hover .b-font:before,
+.copy-e-font.hover .b-font:before {
+  content: "\e6bd";
+  color: inherit;
+}
+.copy-e-font.active .b-font:before {
+  content: "\e6bd";
+  color: #3f8ce8;
+}
+.copy-e-font:active .b-font:before {
+  content: "\e6bd";
+  color: #3f8ce8;
+}
+.copy-e-font.disabled .b-font:before {
+  content: "\e6bd";
+  color: inherit;
+}
+.check-mark-font .b-font {
+  *zoom: expression( this.runtimeStyle['zoom'] = '1',this.innerHTML = '&#xe6cf;');
+}
+.check-mark-font .b-font:before {
+  content: "\e6cf";
+  color: inherit;
+}
+.check-mark-font.disabled .b-font:before {
+  content: "\e6cf";
+  color: inherit;
+}
+.check-mark-h-font .b-font {
+  *zoom: expression( this.runtimeStyle['zoom'] = '1',this.innerHTML = '&#xe6cf;');
+}
+.check-mark-h-font .b-font:before {
+  content: "\e6cf";
+  color: inherit;
+}
+.check-mark-h-font:hover .b-font:before,
+.check-mark-h-font.hover .b-font:before {
+  content: "\e6cf";
+  color: inherit;
+}
+.check-mark-h-font.disabled .b-font:before {
+  content: "\e6cf";
+  color: inherit;
+}
+.check-mark-ha-font .b-font {
+  *zoom: expression( this.runtimeStyle['zoom'] = '1',this.innerHTML = '&#xe6cf;');
+}
+.check-mark-ha-font .b-font:before {
+  content: "\e6cf";
+  color: inherit;
+}
+.check-mark-ha-font:hover .b-font:before,
+.check-mark-ha-font.hover .b-font:before {
+  content: "\e6cf";
+  color: inherit;
+}
+.check-mark-ha-font:active .b-font:before,
+.check-mark-ha-font.active .b-font:before {
+  content: "\e6cf";
+  color: #3f8ce8;
+}
+.check-mark-ha-font.disabled .b-font:before {
+  content: "\e6cf";
+  color: inherit;
+}
+.check-mark-e-font .b-font {
+  *zoom: expression( this.runtimeStyle['zoom'] = '1',this.innerHTML = '&#xe6cf;');
+}
+.check-mark-e-font .b-font:before {
+  content: "\e6cf";
+  color: inherit;
+}
+.check-mark-e-font:hover .b-font:before,
+.check-mark-e-font.hover .b-font:before {
+  content: "\e6cf";
+  color: inherit;
+}
+.check-mark-e-font.active .b-font:before {
+  content: "\e6cf";
+  color: #3f8ce8;
+}
+.check-mark-e-font:active .b-font:before {
+  content: "\e6cf";
+  color: #3f8ce8;
+}
+.check-mark-e-font.disabled .b-font:before {
+  content: "\e6cf";
+  color: inherit;
+}
+/** dashboard组件/控件 下拉列表图标字体 ~end~**/
+.row-pre-page-h-font .b-font {
+  *zoom: expression( this.runtimeStyle['zoom'] = '1',this.innerHTML = '&#xe6d9;');
+}
+.row-pre-page-h-font .b-font:before {
+  content: "\e6d9";
+  color: inherit;
+}
+.row-pre-page-h-font:hover .b-font:before,
+.row-pre-page-h-font.hover .b-font:before {
+  content: "\e6d9";
+  color: inherit;
+}
+.row-pre-page-h-font.disabled .b-font:before {
+  content: "\e6d9";
+  color: inherit;
+}
+.row-next-page-h-font .b-font {
+  *zoom: expression( this.runtimeStyle['zoom'] = '1',this.innerHTML = '&#xe6d8;');
+}
+.row-next-page-h-font .b-font:before {
+  content: "\e6d8";
+  color: inherit;
+}
+.row-next-page-h-font:hover .b-font:before,
+.row-next-page-h-font.hover .b-font:before {
+  content: "\e6d8";
+  color: inherit;
+}
+.row-next-page-h-font.disabled .b-font:before {
+  content: "\e6d8";
+  color: inherit;
+}
+.column-pre-page-h-font .b-font {
+  *zoom: expression( this.runtimeStyle['zoom'] = '1',this.innerHTML = '&#xe6d6;');
+}
+.column-pre-page-h-font .b-font:before {
+  content: "\e6d6";
+  color: inherit;
+}
+.column-pre-page-h-font:hover .b-font:before,
+.column-pre-page-h-font.hover .b-font:before {
+  content: "\e6d6";
+  color: inherit;
+}
+.column-pre-page-h-font.disabled .b-font:before {
+  content: "\e6d6";
+  color: inherit;
+}
+.column-next-page-h-font .b-font {
+  *zoom: expression( this.runtimeStyle['zoom'] = '1',this.innerHTML = '&#xe6d7;');
+}
+.column-next-page-h-font .b-font:before {
+  content: "\e6d7";
+  color: inherit;
+}
+.column-next-page-h-font:hover .b-font:before,
+.column-next-page-h-font.hover .b-font:before {
+  content: "\e6d7";
+  color: inherit;
+}
+.column-next-page-h-font.disabled .b-font:before {
+  content: "\e6d7";
+  color: inherit;
+}
+.trigger-triangle-font .b-font {
+  *zoom: expression( this.runtimeStyle['zoom'] = '1',this.innerHTML = '&#xe6f0;');
+}
+.trigger-triangle-font .b-font:before {
+  content: "\e6f0";
+  color: #999999;
+}
+.trigger-triangle-font:hover .b-font:before,
+.trigger-triangle-font.hover .b-font:before {
+  content: "\e6f0";
+  color: #999999;
+}
+.trigger-triangle-font:active .b-font:before,
+.trigger-triangle-font.active .b-font:before {
+  content: "\e6f0";
+  color: #3685f2;
+}
+.trigger-triangle-font.disabled .b-font:before {
+  content: "\e6f0";
+  color: #999999;
+}
+.pull-down-font .b-font {
+  *zoom: expression( this.runtimeStyle['zoom'] = '1',this.innerHTML = '&#xe70b;');
+}
+.pull-down-font .b-font:before {
+  content: "\e70b";
+  color: inherit;
+}
+.pull-down-font.disabled .b-font:before {
+  content: "\e70b";
+  color: inherit;
+}
+.pull-down-h-font .b-font {
+  *zoom: expression( this.runtimeStyle['zoom'] = '1',this.innerHTML = '&#xe70b;');
+}
+.pull-down-h-font .b-font:before {
+  content: "\e70b";
+  color: inherit;
+}
+.pull-down-h-font:hover .b-font:before,
+.pull-down-h-font.hover .b-font:before {
+  content: "\e70b";
+  color: inherit;
+}
+.pull-down-h-font.disabled .b-font:before {
+  content: "\e70b";
+  color: inherit;
+}
+.pull-down-ha-font .b-font {
+  *zoom: expression( this.runtimeStyle['zoom'] = '1',this.innerHTML = '&#xe70b;');
+}
+.pull-down-ha-font .b-font:before {
+  content: "\e70b";
+  color: inherit;
+}
+.pull-down-ha-font:hover .b-font:before,
+.pull-down-ha-font.hover .b-font:before {
+  content: "\e70b";
+  color: inherit;
+}
+.pull-down-ha-font:active .b-font:before,
+.pull-down-ha-font.active .b-font:before {
+  content: "\e70b";
+  color: #3f8ce8;
+}
+.pull-down-ha-font.disabled .b-font:before {
+  content: "\e70b";
+  color: inherit;
+}
+.check-font .b-font {
+  *zoom: expression( this.runtimeStyle['zoom'] = '1',this.innerHTML = '&#xe6cf;');
+}
+.check-font .b-font:before {
+  content: "\e6cf";
+  color: #3685f2;
+}
+.check-font.disabled .b-font:before {
+  content: "\e6cf";
+  color: #3685f2;
+}
+.item-check-font .b-font {
+  *zoom: expression( this.runtimeStyle['zoom'] = '1',this.innerHTML = '&#xe6cf;');
+}
+.item-check-font .b-font:before {
+  content: "\e6cf";
+  color: #ffffff;
+}
+.item-check-font:hover .b-font:before,
+.item-check-font.hover .b-font:before {
+  content: "\e6cf";
+  color: #999999;
+}
+.item-check-font:active .b-font:before,
+.item-check-font.active .b-font:before {
+  content: "\e6cf";
+  color: #3f8ce8;
+}
+.item-check-font.disabled .b-font:before {
+  content: "\e6cf";
+  color: #ffffff;
+}
+.primary-key-font .b-font {
+  *zoom: expression( this.runtimeStyle['zoom'] = '1',this.innerHTML = '&#xe740;');
+}
+.primary-key-font .b-font:before {
+  content: "\e740";
+  color: inherit;
+}
+.primary-key-font:hover .b-font:before,
+.primary-key-font.hover .b-font:before {
+  content: "\e740";
+  color: inherit;
+}
+.primary-key-font.disabled .b-font:before {
+  content: "\e740";
+  color: inherit;
+}
+.drag-tag-font .b-font {
+  *zoom: expression( this.runtimeStyle['zoom'] = '1',this.innerHTML = '&#xe6d0;');
+}
+.drag-tag-font .b-font:before {
+  content: "\e6d0";
+  color: #faaa39;
+}
+.drag-tag-font.disabled .b-font:before {
+  content: "\e6d0";
+  color: #faaa39;
+}
+.less-font .b-font {
+  *zoom: expression( this.runtimeStyle['zoom'] = '1',this.innerHTML = '&#xe75f;');
+}
+.less-font .b-font:before {
+  content: "\e75f";
+  color: inherit;
+}
+.less-font:hover .b-font:before,
+.less-font.hover .b-font:before {
+  content: "\e75f";
+  color: inherit;
+}
+.less-font:active .b-font:before,
+.less-font.active .b-font:before {
+  content: "\e75f";
+  color: #3f8ce8;
+}
+.less-font.disabled .b-font:before {
+  content: "\e75f";
+  color: inherit;
+}
+.less-equal-font .b-font {
+  *zoom: expression( this.runtimeStyle['zoom'] = '1',this.innerHTML = '&#xe760;');
+}
+.less-equal-font .b-font:before {
+  content: "\e760";
+  color: inherit;
+}
+.less-equal-font:hover .b-font:before,
+.less-equal-font.hover .b-font:before {
+  content: "\e760";
+  color: inherit;
+}
+.less-equal-font:active .b-font:before,
+.less-equal-font.active .b-font:before {
+  content: "\e760";
+  color: #3f8ce8;
+}
+.less-equal-font.disabled .b-font:before {
+  content: "\e760";
+  color: inherit;
+}
+.text-bold-font .b-font {
+  *zoom: expression( this.runtimeStyle['zoom'] = '1',this.innerHTML = '&#xe75b;');
+}
+.text-bold-font .b-font:before {
+  content: "\e75b";
+  color: inherit;
+}
+.text-bold-font.disabled .b-font:before {
+  content: "\e75b";
+  color: inherit;
+}
+.text-italic-font .b-font {
+  *zoom: expression( this.runtimeStyle['zoom'] = '1',this.innerHTML = '&#xe75c;');
+}
+.text-italic-font .b-font:before {
+  content: "\e75c";
+  color: inherit;
+}
+.text-italic-font.disabled .b-font:before {
+  content: "\e75c";
+  color: inherit;
+}
+.text-underline-font .b-font {
+  *zoom: expression( this.runtimeStyle['zoom'] = '1',this.innerHTML = '&#xe75d;');
+}
+.text-underline-font .b-font:before {
+  content: "\e75d";
+  color: inherit;
+}
+.text-underline-font.disabled .b-font:before {
+  content: "\e75d";
+  color: inherit;
+}
+.text-color-font .b-font {
+  *zoom: expression( this.runtimeStyle['zoom'] = '1',this.innerHTML = '&#xe75a;');
+}
+.text-color-font .b-font:before {
+  content: "\e75a";
+  color: inherit;
+}
+.text-color-font.disabled .b-font:before {
+  content: "\e75a";
+  color: inherit;
+}
+.text-background-font .b-font {
+  *zoom: expression( this.runtimeStyle['zoom'] = '1',this.innerHTML = '&#xe758;');
+}
+.text-background-font .b-font:before {
+  content: "\e758";
+  color: inherit;
+}
+.text-background-font.disabled .b-font:before {
+  content: "\e758";
+  color: inherit;
+}
+.text-color-underline-font .b-font {
+  *zoom: expression( this.runtimeStyle['zoom'] = '1',this.innerHTML = '&#xe75d;');
+}
+.text-color-underline-font .b-font:before {
+  content: "\e75d";
+  color: inherit;
+}
+.text-color-underline-font.disabled .b-font:before {
+  content: "\e75d";
+  color: inherit;
+}
+.text-align-left-font .b-font {
+  *zoom: expression( this.runtimeStyle['zoom'] = '1',this.innerHTML = '&#xe6ca;');
+}
+.text-align-left-font .b-font:before {
+  content: "\e6ca";
+  color: inherit;
+}
+.text-align-left-font.disabled .b-font:before {
+  content: "\e6ca";
+  color: inherit;
+}
+.text-align-center-font .b-font {
+  *zoom: expression( this.runtimeStyle['zoom'] = '1',this.innerHTML = '&#xe6bf;');
+}
+.text-align-center-font .b-font:before {
+  content: "\e6bf";
+  color: inherit;
+}
+.text-align-center-font.disabled .b-font:before {
+  content: "\e6bf";
+  color: inherit;
+}
+.text-align-right-font .b-font {
+  *zoom: expression( this.runtimeStyle['zoom'] = '1',this.innerHTML = '&#xe6c8;');
+}
+.text-align-right-font .b-font:before {
+  content: "\e6c8";
+  color: inherit;
+}
+.text-align-right-font.disabled .b-font:before {
+  content: "\e6c8";
+  color: inherit;
+}
+.toast-error-font .b-font {
+  *zoom: expression( this.runtimeStyle['zoom'] = '1',this.innerHTML = '&#xe757;');
+}
+.toast-error-font .b-font:before {
+  content: "\e757";
+  color: inherit;
+}
+.toast-error-font.disabled .b-font:before {
+  content: "\e757";
+  color: inherit;
+}
+.toast-success-font .b-font {
+  *zoom: expression( this.runtimeStyle['zoom'] = '1',this.innerHTML = '&#xe756;');
+}
+.toast-success-font .b-font:before {
+  content: "\e756";
+  color: inherit;
+}
+.toast-success-font.disabled .b-font:before {
+  content: "\e756";
+  color: inherit;
+}
+.toast-warning-font .b-font {
+  *zoom: expression( this.runtimeStyle['zoom'] = '1',this.innerHTML = '&#xe755;');
+}
+.toast-warning-font .b-font:before {
+  content: "\e755";
+  color: inherit;
+}
+.toast-warning-font.disabled .b-font:before {
+  content: "\e755";
+  color: inherit;
+}
+.toast-message-font .b-font {
+  *zoom: expression( this.runtimeStyle['zoom'] = '1',this.innerHTML = '&#xe74b;');
+}
+.toast-message-font .b-font:before {
+  content: "\e74b";
+  color: inherit;
+}
+.toast-message-font.disabled .b-font:before {
+  content: "\e74b";
+  color: inherit;
+}
+.tree-collapse-icon-type1 .x-icon {
+  display: block;
+  background: url('decision/file?path=/com/fr/web/ui/images/2x/icon/tree_collapse_1.png') no-repeat 0px 0px;
+  _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='decision/file?path=/com/fr/web/ui/images/2x/icon/tree_collapse_1.png');
+  background-size: contain;
+  _background: none;
+}
+.tree-collapse-icon-type1 .x-icon.hack {
+  background: url('decision/file?path=/com/fr/web/ui/images/1x/icon/tree_collapse_1.png') no-repeat 0px 0px;
+  _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='decision/file?path=/com/fr/web/ui/images/1x/icon/tree_collapse_1.png');
+  _background: none;
+}
+.tree-collapse-icon-type2 .x-icon {
+  display: block;
+  background: url('decision/file?path=/com/fr/web/ui/images/2x/icon/tree_collapse_2.png') no-repeat 0px 0px;
+  _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='decision/file?path=/com/fr/web/ui/images/2x/icon/tree_collapse_2.png');
+  background-size: contain;
+  _background: none;
+}
+.tree-collapse-icon-type2 .x-icon.hack {
+  background: url('decision/file?path=/com/fr/web/ui/images/1x/icon/tree_collapse_2.png') no-repeat 0px 0px;
+  _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='decision/file?path=/com/fr/web/ui/images/1x/icon/tree_collapse_2.png');
+  _background: none;
+}
+.tree-collapse-icon-type3 .x-icon {
+  display: block;
+  background: url('decision/file?path=/com/fr/web/ui/images/2x/icon/tree_collapse_3.png') no-repeat 0px 0px;
+  _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='decision/file?path=/com/fr/web/ui/images/2x/icon/tree_collapse_3.png');
+  background-size: contain;
+  _background: none;
+}
+.tree-collapse-icon-type3 .x-icon.hack {
+  background: url('decision/file?path=/com/fr/web/ui/images/1x/icon/tree_collapse_3.png') no-repeat 0px 0px;
+  _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='decision/file?path=/com/fr/web/ui/images/1x/icon/tree_collapse_3.png');
+  _background: none;
+}
+.tree-collapse-icon-type4 .x-icon {
+  display: block;
+  background: url('decision/file?path=/com/fr/web/ui/images/2x/icon/tree_collapse_4.png') no-repeat 0px 0px;
+  _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='decision/file?path=/com/fr/web/ui/images/2x/icon/tree_collapse_4.png');
+  background-size: contain;
+  _background: none;
+}
+.tree-collapse-icon-type4 .x-icon.hack {
+  background: url('decision/file?path=/com/fr/web/ui/images/1x/icon/tree_collapse_4.png') no-repeat 0px 0px;
+  _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='decision/file?path=/com/fr/web/ui/images/1x/icon/tree_collapse_4.png');
+  _background: none;
+}
+.tree-expand-icon-type1 .x-icon {
+  display: block;
+  background: url('decision/file?path=/com/fr/web/ui/images/2x/icon/tree_expand_1.png') no-repeat 0px 0px;
+  _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='decision/file?path=/com/fr/web/ui/images/2x/icon/tree_expand_1.png');
+  background-size: contain;
+  _background: none;
+}
+.tree-expand-icon-type1 .x-icon.hack {
+  background: url('decision/file?path=/com/fr/web/ui/images/1x/icon/tree_expand_1.png') no-repeat 0px 0px;
+  _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='decision/file?path=/com/fr/web/ui/images/1x/icon/tree_expand_1.png');
+  _background: none;
+}
+.tree-expand-icon-type2 .x-icon {
+  display: block;
+  background: url('decision/file?path=/com/fr/web/ui/images/2x/icon/tree_expand_2.png') no-repeat 0px 0px;
+  _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='decision/file?path=/com/fr/web/ui/images/2x/icon/tree_expand_2.png');
+  background-size: contain;
+  _background: none;
+}
+.tree-expand-icon-type2 .x-icon.hack {
+  background: url('decision/file?path=/com/fr/web/ui/images/1x/icon/tree_expand_2.png') no-repeat 0px 0px;
+  _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='decision/file?path=/com/fr/web/ui/images/1x/icon/tree_expand_2.png');
+  _background: none;
+}
+.tree-expand-icon-type3 .x-icon {
+  display: block;
+  background: url('decision/file?path=/com/fr/web/ui/images/2x/icon/tree_expand_3.png') no-repeat 0px 0px;
+  _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='decision/file?path=/com/fr/web/ui/images/2x/icon/tree_expand_3.png');
+  background-size: contain;
+  _background: none;
+}
+.tree-expand-icon-type3 .x-icon.hack {
+  background: url('decision/file?path=/com/fr/web/ui/images/1x/icon/tree_expand_3.png') no-repeat 0px 0px;
+  _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='decision/file?path=/com/fr/web/ui/images/1x/icon/tree_expand_3.png');
+  _background: none;
+}
+.tree-expand-icon-type4 .x-icon {
+  display: block;
+  background: url('decision/file?path=/com/fr/web/ui/images/2x/icon/tree_expand_4.png') no-repeat 0px 0px;
+  _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='decision/file?path=/com/fr/web/ui/images/2x/icon/tree_expand_4.png');
+  background-size: contain;
+  _background: none;
+}
+.tree-expand-icon-type4 .x-icon.hack {
+  background: url('decision/file?path=/com/fr/web/ui/images/1x/icon/tree_expand_4.png') no-repeat 0px 0px;
+  _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='decision/file?path=/com/fr/web/ui/images/1x/icon/tree_expand_4.png');
+  _background: none;
+}
+.tree-vertical-line-type2 .x-icon {
+  display: block;
+  background: url('decision/file?path=/com/fr/web/ui/images/2x/icon/tree_vertical_line_2.png') no-repeat 0px 0px;
+  _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='decision/file?path=/com/fr/web/ui/images/2x/icon/tree_vertical_line_2.png');
+  background-size: contain;
+  _background: none;
+}
+.tree-vertical-line-type2 .x-icon.hack {
+  background: url('decision/file?path=/com/fr/web/ui/images/1x/icon/tree_vertical_line_2.png') no-repeat 0px 0px;
+  _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='decision/file?path=/com/fr/web/ui/images/1x/icon/tree_vertical_line_2.png');
+  _background: none;
+}
+.tree-vertical-line-type3 .x-icon {
+  display: block;
+  background: url('decision/file?path=/com/fr/web/ui/images/2x/icon/tree_vertical_line_3.png') no-repeat 0px 0px;
+  _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='decision/file?path=/com/fr/web/ui/images/2x/icon/tree_vertical_line_3.png');
+  background-size: contain;
+  _background: none;
+}
+.tree-vertical-line-type3 .x-icon.hack {
+  background: url('decision/file?path=/com/fr/web/ui/images/1x/icon/tree_vertical_line_3.png') no-repeat 0px 0px;
+  _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='decision/file?path=/com/fr/web/ui/images/1x/icon/tree_vertical_line_3.png');
+  _background: none;
+}
+.tree-vertical-line-type4 .x-icon {
+  display: block;
+  background: url('decision/file?path=/com/fr/web/ui/images/2x/icon/tree_vertical_line_4.png') no-repeat 0px 0px;
+  _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='decision/file?path=/com/fr/web/ui/images/2x/icon/tree_vertical_line_4.png');
+  background-size: contain;
+  _background: none;
+}
+.tree-vertical-line-type4 .x-icon.hack {
+  background: url('decision/file?path=/com/fr/web/ui/images/1x/icon/tree_vertical_line_4.png') no-repeat 0px 0px;
+  _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='decision/file?path=/com/fr/web/ui/images/1x/icon/tree_vertical_line_4.png');
+  _background: none;
+}
+.bi-theme-dark .tree-collapse-icon-type1 .x-icon {
+  display: block;
+  background: url('decision/file?path=/com/fr/web/ui/images/2x/icon/dark/tree_collapse_1.png') no-repeat 0px 0px;
+  _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='decision/file?path=/com/fr/web/ui/images/2x/icon/dark/tree_collapse_1.png');
+  background-size: contain;
+  _background: none;
+}
+.bi-theme-dark .tree-collapse-icon-type1 .x-icon.hack {
+  background: url('decision/file?path=/com/fr/web/ui/images/1x/icon/dark/tree_collapse_1.png') no-repeat 0px 0px;
+  _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='decision/file?path=/com/fr/web/ui/images/1x/icon/dark/tree_collapse_1.png');
+  _background: none;
+}
+.bi-theme-dark .tree-collapse-icon-type2 .x-icon {
+  display: block;
+  background: url('decision/file?path=/com/fr/web/ui/images/2x/icon/dark/tree_collapse_2.png') no-repeat 0px 0px;
+  _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='decision/file?path=/com/fr/web/ui/images/2x/icon/dark/tree_collapse_2.png');
+  background-size: contain;
+  _background: none;
+}
+.bi-theme-dark .tree-collapse-icon-type2 .x-icon.hack {
+  background: url('decision/file?path=/com/fr/web/ui/images/1x/icon/dark/tree_collapse_2.png') no-repeat 0px 0px;
+  _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='decision/file?path=/com/fr/web/ui/images/1x/icon/dark/tree_collapse_2.png');
+  _background: none;
+}
+.bi-theme-dark .tree-collapse-icon-type3 .x-icon {
+  display: block;
+  background: url('decision/file?path=/com/fr/web/ui/images/2x/icon/dark/tree_collapse_3.png') no-repeat 0px 0px;
+  _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='decision/file?path=/com/fr/web/ui/images/2x/icon/dark/tree_collapse_3.png');
+  background-size: contain;
+  _background: none;
+}
+.bi-theme-dark .tree-collapse-icon-type3 .x-icon.hack {
+  background: url('decision/file?path=/com/fr/web/ui/images/1x/icon/dark/tree_collapse_3.png') no-repeat 0px 0px;
+  _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='decision/file?path=/com/fr/web/ui/images/1x/icon/dark/tree_collapse_3.png');
+  _background: none;
+}
+.bi-theme-dark .tree-collapse-icon-type4 .x-icon {
+  display: block;
+  background: url('decision/file?path=/com/fr/web/ui/images/2x/icon/dark/tree_collapse_4.png') no-repeat 0px 0px;
+  _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='decision/file?path=/com/fr/web/ui/images/2x/icon/dark/tree_collapse_4.png');
+  background-size: contain;
+  _background: none;
+}
+.bi-theme-dark .tree-collapse-icon-type4 .x-icon.hack {
+  background: url('decision/file?path=/com/fr/web/ui/images/1x/icon/dark/tree_collapse_4.png') no-repeat 0px 0px;
+  _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='decision/file?path=/com/fr/web/ui/images/1x/icon/dark/tree_collapse_4.png');
+  _background: none;
+}
+.bi-theme-dark .tree-expand-icon-type1 .x-icon {
+  display: block;
+  background: url('decision/file?path=/com/fr/web/ui/images/2x/icon/dark/tree_expand_1.png') no-repeat 0px 0px;
+  _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='decision/file?path=/com/fr/web/ui/images/2x/icon/dark/tree_expand_1.png');
+  background-size: contain;
+  _background: none;
+}
+.bi-theme-dark .tree-expand-icon-type1 .x-icon.hack {
+  background: url('decision/file?path=/com/fr/web/ui/images/1x/icon/dark/tree_expand_1.png') no-repeat 0px 0px;
+  _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='decision/file?path=/com/fr/web/ui/images/1x/icon/dark/tree_expand_1.png');
+  _background: none;
+}
+.bi-theme-dark .tree-expand-icon-type2 .x-icon {
+  display: block;
+  background: url('decision/file?path=/com/fr/web/ui/images/2x/icon/dark/tree_expand_2.png') no-repeat 0px 0px;
+  _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='decision/file?path=/com/fr/web/ui/images/2x/icon/dark/tree_expand_2.png');
+  background-size: contain;
+  _background: none;
+}
+.bi-theme-dark .tree-expand-icon-type2 .x-icon.hack {
+  background: url('decision/file?path=/com/fr/web/ui/images/1x/icon/dark/tree_expand_2.png') no-repeat 0px 0px;
+  _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='decision/file?path=/com/fr/web/ui/images/1x/icon/dark/tree_expand_2.png');
+  _background: none;
+}
+.bi-theme-dark .tree-expand-icon-type3 .x-icon {
+  display: block;
+  background: url('decision/file?path=/com/fr/web/ui/images/2x/icon/dark/tree_expand_3.png') no-repeat 0px 0px;
+  _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='decision/file?path=/com/fr/web/ui/images/2x/icon/dark/tree_expand_3.png');
+  background-size: contain;
+  _background: none;
+}
+.bi-theme-dark .tree-expand-icon-type3 .x-icon.hack {
+  background: url('decision/file?path=/com/fr/web/ui/images/1x/icon/dark/tree_expand_3.png') no-repeat 0px 0px;
+  _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='decision/file?path=/com/fr/web/ui/images/1x/icon/dark/tree_expand_3.png');
+  _background: none;
+}
+.bi-theme-dark .tree-expand-icon-type4 .x-icon {
+  display: block;
+  background: url('decision/file?path=/com/fr/web/ui/images/2x/icon/dark/tree_expand_4.png') no-repeat 0px 0px;
+  _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='decision/file?path=/com/fr/web/ui/images/2x/icon/dark/tree_expand_4.png');
+  background-size: contain;
+  _background: none;
+}
+.bi-theme-dark .tree-expand-icon-type4 .x-icon.hack {
+  background: url('decision/file?path=/com/fr/web/ui/images/1x/icon/dark/tree_expand_4.png') no-repeat 0px 0px;
+  _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='decision/file?path=/com/fr/web/ui/images/1x/icon/dark/tree_expand_4.png');
+  _background: none;
+}
+.bi-theme-dark .tree-vertical-line-type2 .x-icon {
+  display: block;
+  background: url('decision/file?path=/com/fr/web/ui/images/2x/icon/dark/tree_vertical_line_2.png') no-repeat 0px 0px;
+  _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='decision/file?path=/com/fr/web/ui/images/2x/icon/dark/tree_vertical_line_2.png');
+  background-size: contain;
+  _background: none;
+}
+.bi-theme-dark .tree-vertical-line-type2 .x-icon.hack {
+  background: url('decision/file?path=/com/fr/web/ui/images/1x/icon/dark/tree_vertical_line_2.png') no-repeat 0px 0px;
+  _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='decision/file?path=/com/fr/web/ui/images/1x/icon/dark/tree_vertical_line_2.png');
+  _background: none;
+}
+.bi-theme-dark .tree-vertical-line-type3 .x-icon {
+  display: block;
+  background: url('decision/file?path=/com/fr/web/ui/images/2x/icon/dark/tree_vertical_line_3.png') no-repeat 0px 0px;
+  _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='decision/file?path=/com/fr/web/ui/images/2x/icon/dark/tree_vertical_line_3.png');
+  background-size: contain;
+  _background: none;
+}
+.bi-theme-dark .tree-vertical-line-type3 .x-icon.hack {
+  background: url('decision/file?path=/com/fr/web/ui/images/1x/icon/dark/tree_vertical_line_3.png') no-repeat 0px 0px;
+  _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='decision/file?path=/com/fr/web/ui/images/1x/icon/dark/tree_vertical_line_3.png');
+  _background: none;
+}
+.bi-theme-dark .tree-vertical-line-type4 .x-icon {
+  display: block;
+  background: url('decision/file?path=/com/fr/web/ui/images/2x/icon/dark/tree_vertical_line_4.png') no-repeat 0px 0px;
+  _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='decision/file?path=/com/fr/web/ui/images/2x/icon/dark/tree_vertical_line_4.png');
+  background-size: contain;
+  _background: none;
+}
+.bi-theme-dark .tree-vertical-line-type4 .x-icon.hack {
+  background: url('decision/file?path=/com/fr/web/ui/images/1x/icon/dark/tree_vertical_line_4.png') no-repeat 0px 0px;
+  _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='decision/file?path=/com/fr/web/ui/images/1x/icon/dark/tree_vertical_line_4.png');
+  _background: none;
+}
+.check-box-icon .x-icon {
+  display: block;
+  background: url('decision/file?path=/com/fr/web/ui/images/2x/icon/check_box_normal.png') no-repeat 0 0;
+  _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='decision/file?path=/com/fr/web/ui/images/2x/icon/check_box_normal.png');
+  background-size: contain;
+  _background: none;
+}
+.check-box-icon .x-icon.hack {
+  background: url('decision/file?path=/com/fr/web/ui/images/1x/icon/check_box_normal.png') no-repeat 0 0;
+  _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='decision/file?path=/com/fr/web/ui/images/1x/icon/check_box_normal.png');
+  _background: none;
+}
+.check-box-icon:hover .x-icon,
+.check-box-icon.hover .x-icon {
+  display: block;
+  background: url('decision/file?path=/com/fr/web/ui/images/2x/icon/check_box_normal.png') no-repeat 0 0;
+  _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='decision/file?path=/com/fr/web/ui/images/2x/icon/check_box_normal.png');
+  background-size: contain;
+  _background: none;
+}
+.check-box-icon:hover .x-icon.hack,
+.check-box-icon.hover .x-icon.hack {
+  background: url('decision/file?path=/com/fr/web/ui/images/1x/icon/check_box_normal.png') no-repeat 0 0;
+  _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='decision/file?path=/com/fr/web/ui/images/1x/icon/check_box_normal.png');
+  _background: none;
+}
+.check-box-icon:active .x-icon,
+.check-box-icon.active .x-icon {
+  display: block;
+  background: url('decision/file?path=/com/fr/web/ui/images/2x/icon/check_box_active.png') no-repeat 0 0;
+  _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='decision/file?path=/com/fr/web/ui/images/2x/icon/check_box_active.png');
+  background-size: contain;
+  _background: none;
+}
+.check-box-icon:active .x-icon.hack,
+.check-box-icon.active .x-icon.hack {
+  background: url('decision/file?path=/com/fr/web/ui/images/1x/icon/check_box_active.png') no-repeat 0 0;
+  _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='decision/file?path=/com/fr/web/ui/images/1x/icon/check_box_active.png');
+  _background: none;
+}
+.check-box-icon.disabled .x-icon {
+  display: block;
+  background: url('decision/file?path=/com/fr/web/ui/images/2x/icon/check_box_disable.png') no-repeat 0 0;
+  _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='decision/file?path=/com/fr/web/ui/images/2x/icon/check_box_disable.png');
+  background-size: contain;
+  _background: none;
+}
+.check-box-icon.disabled .x-icon.hack {
+  background: url('decision/file?path=/com/fr/web/ui/images/1x/icon/check_box_disable.png') no-repeat 0 0;
+  _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='decision/file?path=/com/fr/web/ui/images/1x/icon/check_box_disable.png');
+  _background: none;
+}
+.check-box-icon.disabled.active .x-icon {
+  display: block;
+  background: url('decision/file?path=/com/fr/web/ui/images/2x/icon/check_box_disable2.png') no-repeat 0 0;
+  _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='decision/file?path=/com/fr/web/ui/images/2x/icon/check_box_disable2.png');
+  background-size: contain;
+  _background: none;
+}
+.check-box-icon.disabled.active .x-icon.hack {
+  background: url('decision/file?path=/com/fr/web/ui/images/1x/icon/check_box_disable2.png') no-repeat 0 0;
+  _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='decision/file?path=/com/fr/web/ui/images/1x/icon/check_box_disable2.png');
+  _background: none;
+}
+.radio-icon .x-icon {
+  display: block;
+  background: url('decision/file?path=/com/fr/web/ui/images/2x/icon/radio_normal.png') no-repeat 0 0;
+  _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='decision/file?path=/com/fr/web/ui/images/2x/icon/radio_normal.png');
+  background-size: contain;
+  _background: none;
+}
+.radio-icon .x-icon.hack {
+  background: url('decision/file?path=/com/fr/web/ui/images/1x/icon/radio_normal.png') no-repeat 0 0;
+  _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='decision/file?path=/com/fr/web/ui/images/1x/icon/radio_normal.png');
+  _background: none;
+}
+.radio-icon:hover .x-icon,
+.radio-icon.hover .x-icon {
+  display: block;
+  background: url('decision/file?path=/com/fr/web/ui/images/2x/icon/radio_normal.png') no-repeat 0 0;
+  _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='decision/file?path=/com/fr/web/ui/images/2x/icon/radio_normal.png');
+  background-size: contain;
+  _background: none;
+}
+.radio-icon:hover .x-icon.hack,
+.radio-icon.hover .x-icon.hack {
+  background: url('decision/file?path=/com/fr/web/ui/images/1x/icon/radio_normal.png') no-repeat 0 0;
+  _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='decision/file?path=/com/fr/web/ui/images/1x/icon/radio_normal.png');
+  _background: none;
+}
+.radio-icon:active .x-icon,
+.radio-icon.active .x-icon {
+  display: block;
+  background: url('decision/file?path=/com/fr/web/ui/images/2x/icon/radio_active.png') no-repeat 0 0;
+  _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='decision/file?path=/com/fr/web/ui/images/2x/icon/radio_active.png');
+  background-size: contain;
+  _background: none;
+}
+.radio-icon:active .x-icon.hack,
+.radio-icon.active .x-icon.hack {
+  background: url('decision/file?path=/com/fr/web/ui/images/1x/icon/radio_active.png') no-repeat 0 0;
+  _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='decision/file?path=/com/fr/web/ui/images/1x/icon/radio_active.png');
+  _background: none;
+}
+.radio-icon.disabled .x-icon {
+  display: block;
+  background: url('decision/file?path=/com/fr/web/ui/images/2x/icon/radio_disable.png') no-repeat 0 0;
+  _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='decision/file?path=/com/fr/web/ui/images/2x/icon/radio_disable.png');
+  background-size: contain;
+  _background: none;
+}
+.radio-icon.disabled .x-icon.hack {
+  background: url('decision/file?path=/com/fr/web/ui/images/1x/icon/radio_disable.png') no-repeat 0 0;
+  _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='decision/file?path=/com/fr/web/ui/images/1x/icon/radio_disable.png');
+  _background: none;
+}
+.radio-icon.disabled.active .x-icon {
+  display: block;
+  background: url('decision/file?path=/com/fr/web/ui/images/2x/icon/radio_disable2.png') no-repeat 0 0;
+  _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='decision/file?path=/com/fr/web/ui/images/2x/icon/radio_disable2.png');
+  background-size: contain;
+  _background: none;
+}
+.radio-icon.disabled.active .x-icon.hack {
+  background: url('decision/file?path=/com/fr/web/ui/images/1x/icon/radio_disable2.png') no-repeat 0 0;
+  _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='decision/file?path=/com/fr/web/ui/images/1x/icon/radio_disable2.png');
+  _background: none;
+}
+.check-half-select-icon .x-icon {
+  display: block;
+  background: url('decision/file?path=/com/fr/web/ui/images/2x/icon/half_selected.png') no-repeat 0px 0px;
+  _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='decision/file?path=/com/fr/web/ui/images/2x/icon/half_selected.png');
+  background-size: contain;
+  _background: none;
+}
+.check-half-select-icon .x-icon.hack {
+  background: url('decision/file?path=/com/fr/web/ui/images/1x/icon/half_selected.png') no-repeat 0px 0px;
+  _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='decision/file?path=/com/fr/web/ui/images/1x/icon/half_selected.png');
+  _background: none;
+}
+.slider-icon .x-icon {
+  display: block;
+  background: url('decision/file?path=/com/fr/web/ui/images/2x/icon/slider_normal_small.png') no-repeat 0 0;
+  _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='decision/file?path=/com/fr/web/ui/images/2x/icon/slider_normal_small.png');
+  background-size: contain;
+  _background: none;
+}
+.slider-icon .x-icon.hack {
+  background: url('decision/file?path=/com/fr/web/ui/images/1x/icon/slider_normal_small.png') no-repeat 0 0;
+  _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='decision/file?path=/com/fr/web/ui/images/1x/icon/slider_normal_small.png');
+  _background: none;
+}
+.slider-icon:hover .x-icon,
+.slider-icon.hover .x-icon {
+  display: block;
+  background: url('decision/file?path=/com/fr/web/ui/images/2x/icon/slider_active_small.png') no-repeat 0 0;
+  _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='decision/file?path=/com/fr/web/ui/images/2x/icon/slider_active_small.png');
+  background-size: contain;
+  _background: none;
+}
+.slider-icon:hover .x-icon.hack,
+.slider-icon.hover .x-icon.hack {
+  background: url('decision/file?path=/com/fr/web/ui/images/1x/icon/slider_active_small.png') no-repeat 0 0;
+  _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='decision/file?path=/com/fr/web/ui/images/1x/icon/slider_active_small.png');
+  _background: none;
+}
+.slider-icon.disabled .x-icon {
+  display: block;
+  background: url('decision/file?path=/com/fr/web/ui/images/2x/icon/slider_normal_small.png') no-repeat 0 0;
+  _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='decision/file?path=/com/fr/web/ui/images/2x/icon/slider_normal_small.png');
+  background-size: contain;
+  _background: none;
+}
+.slider-icon.disabled .x-icon.hack {
+  background: url('decision/file?path=/com/fr/web/ui/images/1x/icon/slider_normal_small.png') no-repeat 0 0;
+  _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='decision/file?path=/com/fr/web/ui/images/1x/icon/slider_normal_small.png');
+  _background: none;
 }
