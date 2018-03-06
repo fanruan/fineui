@@ -1,4 +1,5 @@
-BI.servletURL = "${serverURL}";
+BI.serverURL = "${serverURL}";
+BI.servletURL = "${servletURL}";
 BI.resourceURL = "decision/file?path=/com/fr/web/ui/resource";
 BI.i18n = {
     "BI-Multi_Date_Quarter_End": "季度末",
