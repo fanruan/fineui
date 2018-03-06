@@ -111,13 +111,18 @@ module.exports = function (grunt) {
             },
 
             fineuiJs: {
-                src: ["dist/polyfill.js", "dist/core.js", "dist/fix/fix.js", "dist/fix/fix.compact.js", "dist/base.js", "dist/case.js", "dist/widget.js", "dist/router.js", "ui/js/**/*.js", "ui/js/index.js"],
+                src: ["dist/polyfill.js", "dist/core.js", "dist/fix/fix.js", "dist/fix/fix.compact.js", "dist/base.js", "dist/case.js", "dist/widget.js", "dist/router.js"],
                 dest: "dist/fineui.js"
             },
 
             fineuiCss: {
                 src: ["dist/core.css", "dist/base.css", "dist/widget.css", "ui/css/app.css", "ui/css/**/*.css"],
                 dest: "dist/fineui.css"
+            },
+
+            envJs: {
+                src: ["ui/js/**/*.js", "ui/js/index.js"],
+                dest: "dist/env.js"
             },
 
             configJs: {
