@@ -94921,7 +94921,7 @@ BI.MultiSelectSearchLoader = BI.inherit(BI.Widget, {
         });
         if (BI.isKey(keyword)) {
             var search = BI.Func.getSearchResult(newValues, keyword);
-            values = search.matched.concat(search.find);
+            values = search.match.concat(search.find);
         }
         return BI.map(values, function (i, v) {
             return {
