@@ -9842,7 +9842,7 @@ if ( typeof define === "function" && define.amd && define.amd.jQuery ) {
 })( window );/**
  * @license
  * Lodash (Custom Build) <https://lodash.com/>
- * Build: `lodash core plus="debounce,throttle,get,findIndex,findLastIndex,findKey,findLastKey,isArrayLike,invert,invertBy,uniq,uniqBy,omit,omitBy,zip,unzip,rest,range,random,reject,intersection,drop,countBy,union,zipObject,initial"`
+ * Build: `lodash core plus="debounce,throttle,get,findIndex,findLastIndex,findKey,findLastKey,isArrayLike,invert,invertBy,uniq,uniqBy,omit,omitBy,zip,unzip,rest,range,random,reject,intersection,drop,countBy,union,zipObject,initial,cloneDeep,clamp,isPlainObject"`
  * Copyright JS Foundation and other contributors <https://js.foundation/>
  * Released under MIT license <https://lodash.com/license>
  * Based on Underscore.js 1.8.3 <http://underscorejs.org/LICENSE>
@@ -11822,6 +11822,27 @@ if ( typeof define === "function" && define.amd && define.amd.jQuery ) {
       result[index] = skip ? undefined : get(object, paths[index]);
     }
     return result;
+  }
+
+  /**
+   * The base implementation of `_.clamp` which doesn't coerce arguments.
+   *
+   * @private
+   * @param {number} number The number to clamp.
+   * @param {number} [lower] The lower bound.
+   * @param {number} upper The upper bound.
+   * @returns {number} Returns the clamped number.
+   */
+  function baseClamp(number, lower, upper) {
+    if (number === number) {
+      if (upper !== undefined) {
+        number = number <= upper ? number : upper;
+      }
+      if (lower !== undefined) {
+        number = number >= lower ? number : lower;
+      }
+    }
+    return number;
   }
 
   /**
@@ -16948,6 +16969,28 @@ if ( typeof define === "function" && define.amd && define.amd.jQuery ) {
   }
 
   /**
+   * This method is like `_.clone` except that it recursively clones `value`.
+   *
+   * @static
+   * @memberOf _
+   * @since 1.0.0
+   * @category Lang
+   * @param {*} value The value to recursively clone.
+   * @returns {*} Returns the deep cloned value.
+   * @see _.clone
+   * @example
+   *
+   * var objects = [{ 'a': 1 }, { 'b': 2 }];
+   *
+   * var deep = _.cloneDeep(objects);
+   * console.log(deep[0] === objects[0]);
+   * // => false
+   */
+  function cloneDeep(value) {
+    return baseClone(value, CLONE_DEEP_FLAG | CLONE_SYMBOLS_FLAG);
+  }
+
+  /**
    * Performs a
    * [`SameValueZero`](http://ecma-international.org/ecma-262/7.0/#sec-samevaluezero)
    * comparison between two values to determine if they are equivalent.
@@ -18453,6 +18496,41 @@ if ( typeof define === "function" && define.amd && define.amd.jQuery ) {
   /*------------------------------------------------------------------------*/
 
   /**
+   * Clamps `number` within the inclusive `lower` and `upper` bounds.
+   *
+   * @static
+   * @memberOf _
+   * @since 4.0.0
+   * @category Number
+   * @param {number} number The number to clamp.
+   * @param {number} [lower] The lower bound.
+   * @param {number} upper The upper bound.
+   * @returns {number} Returns the clamped number.
+   * @example
+   *
+   * _.clamp(-10, -5, 5);
+   * // => -5
+   *
+   * _.clamp(10, -5, 5);
+   * // => 5
+   */
+  function clamp(number, lower, upper) {
+    if (upper === undefined) {
+      upper = lower;
+      lower = undefined;
+    }
+    if (upper !== undefined) {
+      upper = toNumber(upper);
+      upper = upper === upper ? upper : 0;
+    }
+    if (lower !== undefined) {
+      lower = toNumber(lower);
+      lower = lower === lower ? lower : 0;
+    }
+    return baseClamp(toNumber(number), lower, upper);
+  }
+
+  /**
    * Produces a random number between the inclusive `lower` and `upper` bounds.
    * If only one argument is provided a number between `0` and the given number
    * is returned. If `floating` is `true`, or either `lower` or `upper` are
@@ -19031,7 +19109,9 @@ if ( typeof define === "function" && define.amd && define.amd.jQuery ) {
   /*------------------------------------------------------------------------*/
 
   // Add methods that return unwrapped values in chain sequences.
+  lodash.clamp = clamp;
   lodash.clone = clone;
+  lodash.cloneDeep = cloneDeep;
   lodash.escape = escape;
   lodash.every = every;
   lodash.find = find;
@@ -19058,6 +19138,7 @@ if ( typeof define === "function" && define.amd && define.amd.jQuery ) {
   lodash.isNull = isNull;
   lodash.isNumber = isNumber;
   lodash.isObject = isObject;
+  lodash.isPlainObject = isPlainObject;
   lodash.isRegExp = isRegExp;
   lodash.isString = isString;
   lodash.isUndefined = isUndefined;
@@ -19501,7 +19582,7 @@ if (!window.BI) {
         BI[name] = _apply(name);
     });
     _.each(["get", "each", "map", "reduce", "reduceRight", "find", "filter", "reject", "every", "all", "some", "any", "max", "min",
-        "sortBy", "groupBy", "indexBy", "countBy", "partition"], function (name) {
+        "sortBy", "groupBy", "indexBy", "countBy", "partition", "clamp"], function (name) {
         if (name === "any") {
             BI[name] = _applyFunc("some");
         } else {
@@ -19509,15 +19590,6 @@ if (!window.BI) {
         }
     });
     _.extend(BI, {
-        clamp: function (value, minValue, maxValue) {
-            if (value < minValue) {
-                value = minValue;
-            }
-            if (value > maxValue) {
-                value = maxValue;
-            }
-            return value;
-        },
         // 数数
         count: function (from, to, predicate) {
             var t;
@@ -19770,8 +19842,8 @@ if (!window.BI) {
     // 对象相关方法
     _.each(["keys", "allKeys", "values", "pairs", "invert", "create", "functions", "extend", "extendOwn",
         "defaults", "clone", "property", "propertyOf", "matcher", "isEqual", "isMatch", "isEmpty",
-        "isElement", "isNumber", "isString", "isArray", "isObject", "isArguments", "isFunction", "isFinite",
-        "isBoolean", "isDate", "isRegExp", "isError", "isNaN", "isUndefined", "zipObject"], function (name) {
+        "isElement", "isNumber", "isString", "isArray", "isObject", "isPlainObject", "isArguments", "isFunction", "isFinite",
+        "isBoolean", "isDate", "isRegExp", "isError", "isNaN", "isUndefined", "zipObject", "cloneDeep"], function (name) {
         BI[name] = _apply(name);
     });
     _.each(["mapObject", "findKey", "pick", "omit", "tap"], function (name) {
@@ -19838,10 +19910,6 @@ if (!window.BI) {
             return typeof  obj === "undefined" || obj === null;
         },
 
-        isPlainObject: function () {
-            return $.isPlainObject.apply($, arguments);
-        },
-
         isEmptyArray: function (arr) {
             return BI.isArray(arr) && BI.isEmpty(arr);
         },
@@ -19873,48 +19941,7 @@ if (!window.BI) {
 
     // deep方法
     _.extend(BI, {
-        /**
-         *完全克隆�?个js对象
-         * @param obj
-         * @returns {*}
-         */
-        deepClone: function (obj) {
-            if (obj === null || obj === undefined) {
-                return obj;
-            }
-
-            var type = Object.prototype.toString.call(obj);
-
-            // Date
-            if (type === "[object Date]") {
-                return BI.getDate(obj.getTime());
-            }
-
-            var i, clone, key;
-
-            // Array
-            if (type === "[object Array]") {
-                i = obj.length;
-
-                clone = [];
-
-                while (i--) {
-                    clone[i] = BI.deepClone(obj[i]);
-                }
-            }
-            // Object
-            else if (type === "[object Object]" && obj.constructor === Object) {
-                clone = {};
-
-                for (var i in obj) {
-                    if (BI.has(obj, i)) {
-                        clone[i] = BI.deepClone(obj[i]);
-                    }
-                }
-            }
-
-            return clone || obj;
-        },
+        deepClone: _.cloneDeep,
 
         isDeepMatch: function (object, attrs) {
             var keys = BI.keys(attrs), length = keys.length;
