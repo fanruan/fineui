@@ -340,7 +340,7 @@
   }
 }
 
-.icon_custom_select(@class, @iconPath, @hoverPath:none, @activePath, @selectPath) {
+.icon_custom_select(@class, @iconPath, @selectPath, @disablePath: @iconPath) {
   .@{class} {
     & .x-icon {
       display: block;
@@ -351,16 +351,16 @@
     }
     &.active .x-icon {
       display: block;
-      .image2xPath(@activePath, 0, 0);
+      .image2xPath(@selectPath, 0, 0);
       &.hack {
-        .imagePath(@activePath, 0, 0);
+        .imagePath(@selectPath, 0, 0);
       }
     }
     &.disabled .x-icon {
       display: block;
-      .image2xPath(@iconPath, 0, 0);
+      .image2xPath(@disablePath, 0, 0);
       &.hack {
-        .imagePath(@iconPath, 0, 0);
+        .imagePath(@disablePath, 0, 0);
       }
     }
   }

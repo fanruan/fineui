@@ -6559,21 +6559,6 @@ textarea::-webkit-scrollbar-thumb:hover {
   _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='decision/file?path=/com/fr/web/ui/images/1x/icon/check_box_normal.png');
   _background: none;
 }
-.check-box-icon:hover .x-icon,
-.check-box-icon.hover .x-icon {
-  display: block;
-  background: url('decision/file?path=/com/fr/web/ui/images/2x/icon/check_box_normal.png') no-repeat 0 0;
-  _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='decision/file?path=/com/fr/web/ui/images/2x/icon/check_box_normal.png');
-  background-size: contain;
-  _background: none;
-}
-.check-box-icon:hover .x-icon.hack,
-.check-box-icon.hover .x-icon.hack {
-  background: url('decision/file?path=/com/fr/web/ui/images/1x/icon/check_box_normal.png') no-repeat 0 0;
-  _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='decision/file?path=/com/fr/web/ui/images/1x/icon/check_box_normal.png');
-  _background: none;
-}
-.check-box-icon:active .x-icon,
 .check-box-icon.active .x-icon {
   display: block;
   background: url('decision/file?path=/com/fr/web/ui/images/2x/icon/check_box_active.png') no-repeat 0 0;
@@ -6581,7 +6566,6 @@ textarea::-webkit-scrollbar-thumb:hover {
   background-size: contain;
   _background: none;
 }
-.check-box-icon:active .x-icon.hack,
 .check-box-icon.active .x-icon.hack {
   background: url('decision/file?path=/com/fr/web/ui/images/1x/icon/check_box_active.png') no-repeat 0 0;
   _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='decision/file?path=/com/fr/web/ui/images/1x/icon/check_box_active.png');
@@ -6599,18 +6583,6 @@ textarea::-webkit-scrollbar-thumb:hover {
   _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='decision/file?path=/com/fr/web/ui/images/1x/icon/check_box_disable.png');
   _background: none;
 }
-.check-box-icon.disabled.active .x-icon {
-  display: block;
-  background: url('decision/file?path=/com/fr/web/ui/images/2x/icon/check_box_disable2.png') no-repeat 0 0;
-  _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='decision/file?path=/com/fr/web/ui/images/2x/icon/check_box_disable2.png');
-  background-size: contain;
-  _background: none;
-}
-.check-box-icon.disabled.active .x-icon.hack {
-  background: url('decision/file?path=/com/fr/web/ui/images/1x/icon/check_box_disable2.png') no-repeat 0 0;
-  _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='decision/file?path=/com/fr/web/ui/images/1x/icon/check_box_disable2.png');
-  _background: none;
-}
 .radio-icon .x-icon {
   display: block;
   background: url('decision/file?path=/com/fr/web/ui/images/2x/icon/radio_normal.png') no-repeat 0 0;
@@ -6623,21 +6595,6 @@ textarea::-webkit-scrollbar-thumb:hover {
   _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='decision/file?path=/com/fr/web/ui/images/1x/icon/radio_normal.png');
   _background: none;
 }
-.radio-icon:hover .x-icon,
-.radio-icon.hover .x-icon {
-  display: block;
-  background: url('decision/file?path=/com/fr/web/ui/images/2x/icon/radio_normal.png') no-repeat 0 0;
-  _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='decision/file?path=/com/fr/web/ui/images/2x/icon/radio_normal.png');
-  background-size: contain;
-  _background: none;
-}
-.radio-icon:hover .x-icon.hack,
-.radio-icon.hover .x-icon.hack {
-  background: url('decision/file?path=/com/fr/web/ui/images/1x/icon/radio_normal.png') no-repeat 0 0;
-  _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='decision/file?path=/com/fr/web/ui/images/1x/icon/radio_normal.png');
-  _background: none;
-}
-.radio-icon:active .x-icon,
 .radio-icon.active .x-icon {
   display: block;
   background: url('decision/file?path=/com/fr/web/ui/images/2x/icon/radio_active.png') no-repeat 0 0;
@@ -6645,7 +6602,6 @@ textarea::-webkit-scrollbar-thumb:hover {
   background-size: contain;
   _background: none;
 }
-.radio-icon:active .x-icon.hack,
 .radio-icon.active .x-icon.hack {
   background: url('decision/file?path=/com/fr/web/ui/images/1x/icon/radio_active.png') no-repeat 0 0;
   _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='decision/file?path=/com/fr/web/ui/images/1x/icon/radio_active.png');
@@ -6661,18 +6617,6 @@ textarea::-webkit-scrollbar-thumb:hover {
 .radio-icon.disabled .x-icon.hack {
   background: url('decision/file?path=/com/fr/web/ui/images/1x/icon/radio_disable.png') no-repeat 0 0;
   _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='decision/file?path=/com/fr/web/ui/images/1x/icon/radio_disable.png');
-  _background: none;
-}
-.radio-icon.disabled.active .x-icon {
-  display: block;
-  background: url('decision/file?path=/com/fr/web/ui/images/2x/icon/radio_disable2.png') no-repeat 0 0;
-  _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='decision/file?path=/com/fr/web/ui/images/2x/icon/radio_disable2.png');
-  background-size: contain;
-  _background: none;
-}
-.radio-icon.disabled.active .x-icon.hack {
-  background: url('decision/file?path=/com/fr/web/ui/images/1x/icon/radio_disable2.png') no-repeat 0 0;
-  _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='decision/file?path=/com/fr/web/ui/images/1x/icon/radio_disable2.png');
   _background: none;
 }
 .check-half-select-icon .x-icon {
