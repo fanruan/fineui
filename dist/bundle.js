@@ -89203,7 +89203,11 @@ BI.MonthCombo = BI.inherit(BI.Widget, {
     },
 
     getValue: function () {
-        return this.popup.getValue();
+        if (BI.isNull(this.popup)) {
+            return this.options.value || "";
+        } else {
+            return this.popup.getValue() || "";
+        }
     }
 });
 
@@ -96853,7 +96857,11 @@ BI.QuarterCombo = BI.inherit(BI.Widget, {
     },
 
     getValue: function () {
-        return this.popup.getValue() || "";
+        if (BI.isNull(this.popup)) {
+            return this.options.value || "";
+        } else {
+            return this.popup.getValue() || "";
+        }
     }
 });
 
@@ -102367,7 +102375,11 @@ BI.YearCombo = BI.inherit(BI.Widget, {
     },
 
     getValue: function () {
-        return this.popup.getValue();
+        if (BI.isNull(this.popup)) {
+            return this.options.value;
+        } else {
+            return this.popup.getValue();
+        }
     }
 });
 BI.YearCombo.EVENT_CONFIRM = "EVENT_CONFIRM";
@@ -102627,6 +102639,7 @@ BI.YearMonthCombo = BI.inherit(BI.Widget, {
         });
 
         this.month.on(BI.MonthCombo.EVENT_CONFIRM, function () {
+            self.getValue();
             self.fireEvent(BI.YearMonthCombo.EVENT_CONFIRM);
         });
         this.month.on(BI.MonthCombo.EVENT_BEFORE_POPUPVIEW, function () {
