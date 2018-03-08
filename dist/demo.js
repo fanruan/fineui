@@ -5497,23 +5497,23 @@ Demo.COMPONENT_CONFIG = [{
     value: "demo.searcher_view"
 }, {
     pId: 1,
-    text: "Widget",
+    text: "Widget(继承)",
     value: "demo.widget"
 }, {
     pId: 1,
-    text: "Single",
+    text: "Single(继承)",
     value: "demo.single"
 }, {
     pId: 1,
-    text: "BasicButton",
+    text: "BasicButton(继承)",
     value: "demo.basic_button"
 }, {
     pId: 1,
-    text: "NodeButton",
+    text: "NodeButton(继承)",
     value: "demo.node_button"
 }, {
     pId: 1,
-    text: "Pane",
+    text: "Pane(继承)",
     value: "demo.pane"
 }];// 定义Model路由
 var modelRouter = new (BI.inherit(BI.WRouter, {
@@ -8474,45 +8474,17 @@ Demo.Func = BI.inherit(BI.Widget, {
             height: 80,
             handler: function() {
                 BI.Popovers.remove(id);
-                BI.Popovers.create(id, new Demo.ExamplePopoverSection()).open(id);
+                BI.Popovers.create(id, {
+                    body: {
+                        type: "bi.label",
+                        text: "这个是body"
+                    }
+                }).open(id);
             }
         };
     }
 });
 
-Demo.ExamplePopoverSection = BI.inherit(BI.PopoverSection, {
-
-    rebuildSouth: function (south) {
-        var self = this, o = this.options;
-        this.sure = BI.createWidget({
-            type: 'bi.button',
-            text: "确定",
-            warningTitle: o.warningTitle,
-            height: 30,
-            value: 0,
-            handler: function (v) {
-                self.end();
-                self.close(v);
-            }
-        });
-        this.cancel = BI.createWidget({
-            type: 'bi.button',
-            text: "取消",
-            height: 30,
-            value: 1,
-            level: 'ignore',
-            handler: function (v) {
-                self.close(v);
-            }
-        });
-        BI.createWidget({
-            type: 'bi.right_vertical_adapt',
-            element: south,
-            lgap: 10,
-            items: [this.cancel, this.sure]
-        });
-    }
-});
 BI.shortcut("demo.popover", Demo.Func);/**
  * Created by Windy on 2017/12/13.
  */
