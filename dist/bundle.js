@@ -79051,8 +79051,8 @@ BI.LazyLoader = BI.inherit(BI.Widget, {
     _getNextItems: function (options) {
         var self = this, o = this.options;
         var lastNum = o.items.length - this._const.PAGE * (options.times - 1);
-        var lastItems = BI.take(o.items, lastNum);
-        var nextItems = BI.takeRight(lastItems, this._const.PAGE);
+        var lastItems = BI.takeRight(o.items, lastNum);
+        var nextItems = BI.take(lastItems, this._const.PAGE);
         return nextItems;
     },
 
