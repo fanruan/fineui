@@ -1,7 +1,7 @@
 /**
  * @license
  * Lodash (Custom Build) <https://lodash.com/>
- * Build: `lodash core plus="debounce,throttle,get,findIndex,findLastIndex,findKey,findLastKey,isArrayLike,invert,invertBy,uniq,uniqBy,omit,omitBy,zip,unzip,rest,range,random,reject,intersection,drop,countBy,union,zipObject"`
+ * Build: `lodash core plus="debounce,throttle,get,findIndex,findLastIndex,findKey,findLastKey,isArrayLike,invert,invertBy,uniq,uniqBy,omit,omitBy,zip,unzip,rest,range,random,reject,intersection,drop,countBy,union,zipObject,without"`
  * Copyright JS Foundation and other contributors <https://js.foundation/>
  * Released under MIT license <https://lodash.com/license>
  * Based on Underscore.js 1.8.3 <http://underscorejs.org/LICENSE>
@@ -2096,6 +2096,62 @@
       throw new TypeError(FUNC_ERROR_TEXT);
     }
     return setTimeout(function() { func.apply(undefined, args); }, wait);
+  }
+
+  /**
+   * The base implementation of methods like `_.difference` without support
+   * for excluding multiple arrays or iteratee shorthands.
+   *
+   * @private
+   * @param {Array} array The array to inspect.
+   * @param {Array} values The values to exclude.
+   * @param {Function} [iteratee] The iteratee invoked per element.
+   * @param {Function} [comparator] The comparator invoked per element.
+   * @returns {Array} Returns the new array of filtered values.
+   */
+  function baseDifference(array, values, iteratee, comparator) {
+    var index = -1,
+        includes = arrayIncludes,
+        isCommon = true,
+        length = array.length,
+        result = [],
+        valuesLength = values.length;
+
+    if (!length) {
+      return result;
+    }
+    if (iteratee) {
+      values = arrayMap(values, baseUnary(iteratee));
+    }
+    if (comparator) {
+      includes = arrayIncludesWith;
+      isCommon = false;
+    }
+    else if (values.length >= LARGE_ARRAY_SIZE) {
+      includes = cacheHas;
+      isCommon = false;
+      values = new SetCache(values);
+    }
+    outer:
+    while (++index < length) {
+      var value = array[index],
+          computed = iteratee == null ? value : iteratee(value);
+
+      value = (comparator || value !== 0) ? value : 0;
+      if (isCommon && computed === computed) {
+        var valuesIndex = valuesLength;
+        while (valuesIndex--) {
+          if (values[valuesIndex] === computed) {
+            continue outer;
+          }
+        }
+        result.push(value);
+      }
+      else if (!includes(values, computed, comparator)) {
+        result.push(value);
+      }
+    }
+    return result;
   }
 
   /**
@@ -5679,6 +5735,32 @@
   }
 
   /**
+   * Creates an array excluding all given values using
+   * [`SameValueZero`](http://ecma-international.org/ecma-262/7.0/#sec-samevaluezero)
+   * for equality comparisons.
+   *
+   * **Note:** Unlike `_.pull`, this method returns a new array.
+   *
+   * @static
+   * @memberOf _
+   * @since 0.1.0
+   * @category Array
+   * @param {Array} array The array to inspect.
+   * @param {...*} [values] The values to exclude.
+   * @returns {Array} Returns the new array of filtered values.
+   * @see _.difference, _.xor
+   * @example
+   *
+   * _.without([2, 1, 2, 3], 1, 2);
+   * // => [3]
+   */
+  var without = baseRest(function(array, values) {
+    return isArrayLikeObject(array)
+      ? baseDifference(array, values)
+      : [];
+  });
+
+  /**
    * Creates an array of grouped elements, the first of which contains the
    * first elements of the given arrays, the second of which contains the
    * second elements of the given arrays, and so on.
@@ -9158,6 +9240,7 @@
   lodash.uniqBy = uniqBy;
   lodash.unzip = unzip;
   lodash.values = values;
+  lodash.without = without;
   lodash.zip = zip;
   lodash.zipObject = zipObject;
 
@@ -10446,7 +10529,7 @@ if (!window.BI) {
         BI[name] = _apply(name);
     });
     _.each(["get", "each", "map", "reduce", "reduceRight", "find", "filter", "reject", "every", "all", "some", "any", "max", "min",
-        "sortBy", "groupBy", "indexBy", "countBy", "partition"], function (name) {
+        "sortBy", "groupBy", "indexBy", "countBy", "partition", "clamp"], function (name) {
         if (name === "any") {
             BI[name] = _applyFunc("some");
         } else {
@@ -10454,15 +10537,6 @@ if (!window.BI) {
         }
     });
     _.extend(BI, {
-        clamp: function (value, minValue, maxValue) {
-            if (value < minValue) {
-                value = minValue;
-            }
-            if (value > maxValue) {
-                value = maxValue;
-            }
-            return value;
-        },
         // 数数
         count: function (from, to, predicate) {
             var t;
@@ -10651,7 +10725,7 @@ if (!window.BI) {
 
     // 数组相关的方法
     _.each(["first", "initial", "last", "rest", "compact", "flatten", "without", "union", "intersection",
-        "difference", "zip", "unzip", "object", "indexOf", "lastIndexOf", "sortedIndex", "range"], function (name) {
+        "difference", "zip", "unzip", "object", "indexOf", "lastIndexOf", "sortedIndex", "range", "take", "takeRight"], function (name) {
         BI[name] = _apply(name);
     });
     _.each(["findIndex", "findLastIndex"], function (name) {
@@ -10715,8 +10789,8 @@ if (!window.BI) {
     // 对象相关方法
     _.each(["keys", "allKeys", "values", "pairs", "invert", "create", "functions", "extend", "extendOwn",
         "defaults", "clone", "property", "propertyOf", "matcher", "isEqual", "isMatch", "isEmpty",
-        "isElement", "isNumber", "isString", "isArray", "isObject", "isArguments", "isFunction", "isFinite",
-        "isBoolean", "isDate", "isRegExp", "isError", "isNaN", "isUndefined", "zipObject"], function (name) {
+        "isElement", "isNumber", "isString", "isArray", "isObject", "isPlainObject", "isArguments", "isFunction", "isFinite",
+        "isBoolean", "isDate", "isRegExp", "isError", "isNaN", "isUndefined", "zipObject", "cloneDeep"], function (name) {
         BI[name] = _apply(name);
     });
     _.each(["mapObject", "findKey", "pick", "omit", "tap"], function (name) {
@@ -10783,10 +10857,6 @@ if (!window.BI) {
             return typeof  obj === "undefined" || obj === null;
         },
 
-        isPlainObject: function () {
-            return $.isPlainObject.apply($, arguments);
-        },
-
         isEmptyArray: function (arr) {
             return BI.isArray(arr) && BI.isEmpty(arr);
         },
@@ -10818,48 +10888,7 @@ if (!window.BI) {
 
     // deep方法
     _.extend(BI, {
-        /**
-         *完全克隆�?个js对象
-         * @param obj
-         * @returns {*}
-         */
-        deepClone: function (obj) {
-            if (obj === null || obj === undefined) {
-                return obj;
-            }
-
-            var type = Object.prototype.toString.call(obj);
-
-            // Date
-            if (type === "[object Date]") {
-                return BI.getDate(obj.getTime());
-            }
-
-            var i, clone, key;
-
-            // Array
-            if (type === "[object Array]") {
-                i = obj.length;
-
-                clone = [];
-
-                while (i--) {
-                    clone[i] = BI.deepClone(obj[i]);
-                }
-            }
-            // Object
-            else if (type === "[object Object]" && obj.constructor === Object) {
-                clone = {};
-
-                for (var i in obj) {
-                    if (BI.has(obj, i)) {
-                        clone[i] = BI.deepClone(obj[i]);
-                    }
-                }
-            }
-
-            return clone || obj;
-        },
+        deepClone: _.cloneDeep,
 
         isDeepMatch: function (object, attrs) {
             var keys = BI.keys(attrs), length = keys.length;
