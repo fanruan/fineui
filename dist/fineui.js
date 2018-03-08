@@ -26821,6 +26821,7 @@ BI.LayerController = BI.inherit(BI.Controller, {
             op = op || {};
             op.container = container;
         } else {
+            context = op;
             op = container;
         }
         return this.create(name, null, op, context);
