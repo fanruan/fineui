@@ -359,7 +359,7 @@ if (!window.BI) {
 
     // 数组相关的方法
     _.each(["first", "initial", "last", "rest", "compact", "flatten", "without", "union", "intersection",
-        "difference", "zip", "unzip", "object", "indexOf", "lastIndexOf", "sortedIndex", "range"], function (name) {
+        "difference", "zip", "unzip", "object", "indexOf", "lastIndexOf", "sortedIndex", "range", "take", "takeRight"], function (name) {
         BI[name] = _apply(name);
     });
     _.each(["findIndex", "findLastIndex"], function (name) {

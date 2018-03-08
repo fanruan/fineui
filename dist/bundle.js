@@ -9599,7 +9599,7 @@ if ( typeof define === "function" && define.amd && define.amd.jQuery ) {
 })( window );/**
  * @license
  * Lodash (Custom Build) <https://lodash.com/>
- * Build: `lodash core plus="debounce,throttle,get,findIndex,findLastIndex,findKey,findLastKey,isArrayLike,invert,invertBy,uniq,uniqBy,omit,omitBy,zip,unzip,rest,range,random,reject,intersection,drop,countBy,union,zipObject,initial,cloneDeep,clamp,isPlainObject"`
+ * Build: `lodash core plus="debounce,throttle,get,findIndex,findLastIndex,findKey,findLastKey,isArrayLike,invert,invertBy,uniq,uniqBy,omit,omitBy,zip,unzip,rest,range,random,reject,intersection,drop,countBy,union,zipObject,initial,cloneDeep,clamp,isPlainObject,take,takeRight"`
  * Copyright JS Foundation and other contributors <https://js.foundation/>
  * Released under MIT license <https://lodash.com/license>
  * Based on Underscore.js 1.8.3 <http://underscorejs.org/LICENSE>
@@ -15213,6 +15213,74 @@ if ( typeof define === "function" && define.amd && define.amd.jQuery ) {
   }
 
   /**
+   * Creates a slice of `array` with `n` elements taken from the beginning.
+   *
+   * @static
+   * @memberOf _
+   * @since 0.1.0
+   * @category Array
+   * @param {Array} array The array to query.
+   * @param {number} [n=1] The number of elements to take.
+   * @param- {Object} [guard] Enables use as an iteratee for methods like `_.map`.
+   * @returns {Array} Returns the slice of `array`.
+   * @example
+   *
+   * _.take([1, 2, 3]);
+   * // => [1]
+   *
+   * _.take([1, 2, 3], 2);
+   * // => [1, 2]
+   *
+   * _.take([1, 2, 3], 5);
+   * // => [1, 2, 3]
+   *
+   * _.take([1, 2, 3], 0);
+   * // => []
+   */
+  function take(array, n, guard) {
+    if (!(array && array.length)) {
+      return [];
+    }
+    n = (guard || n === undefined) ? 1 : toInteger(n);
+    return baseSlice(array, 0, n < 0 ? 0 : n);
+  }
+
+  /**
+   * Creates a slice of `array` with `n` elements taken from the end.
+   *
+   * @static
+   * @memberOf _
+   * @since 3.0.0
+   * @category Array
+   * @param {Array} array The array to query.
+   * @param {number} [n=1] The number of elements to take.
+   * @param- {Object} [guard] Enables use as an iteratee for methods like `_.map`.
+   * @returns {Array} Returns the slice of `array`.
+   * @example
+   *
+   * _.takeRight([1, 2, 3]);
+   * // => [3]
+   *
+   * _.takeRight([1, 2, 3], 2);
+   * // => [2, 3]
+   *
+   * _.takeRight([1, 2, 3], 5);
+   * // => [1, 2, 3]
+   *
+   * _.takeRight([1, 2, 3], 0);
+   * // => []
+   */
+  function takeRight(array, n, guard) {
+    var length = array == null ? 0 : array.length;
+    if (!length) {
+      return [];
+    }
+    n = (guard || n === undefined) ? 1 : toInteger(n);
+    n = length - n;
+    return baseSlice(array, n < 0 ? 0 : n, length);
+  }
+
+  /**
    * Creates an array of unique values, in order, from all given arrays using
    * [`SameValueZero`](http://ecma-international.org/ecma-262/7.0/#sec-samevaluezero)
    * for equality comparisons.
@@ -18845,6 +18913,8 @@ if ( typeof define === "function" && define.amd && define.amd.jQuery ) {
   lodash.rest = rest;
   lodash.slice = slice;
   lodash.sortBy = sortBy;
+  lodash.take = take;
+  lodash.takeRight = takeRight;
   lodash.tap = tap;
   lodash.throttle = throttle;
   lodash.thru = thru;
@@ -19535,7 +19605,7 @@ if (!window.BI) {
 
     // 数组相关的方法
     _.each(["first", "initial", "last", "rest", "compact", "flatten", "without", "union", "intersection",
-        "difference", "zip", "unzip", "object", "indexOf", "lastIndexOf", "sortedIndex", "range"], function (name) {
+        "difference", "zip", "unzip", "object", "indexOf", "lastIndexOf", "sortedIndex", "range", "take", "takeRight"], function (name) {
         BI[name] = _apply(name);
     });
     _.each(["findIndex", "findLastIndex"], function (name) {
@@ -78981,8 +79051,8 @@ BI.LazyLoader = BI.inherit(BI.Widget, {
     _getNextItems: function (options) {
         var self = this, o = this.options;
         var lastNum = o.items.length - this._const.PAGE * (options.times - 1);
-        var lastItems = BI.last(o.items, lastNum);
-        var nextItems = BI.first(lastItems, this._const.PAGE);
+        var lastItems = BI.take(o.items, lastNum);
+        var nextItems = BI.takeRight(lastItems, this._const.PAGE);
         return nextItems;
     },
 
