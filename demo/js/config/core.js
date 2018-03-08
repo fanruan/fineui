@@ -174,22 +174,22 @@ Demo.CORE_CONFIG = [{
     value: "demo.searcher_view"
 }, {
     pId: 1,
-    text: "Widget",
+    text: "Widget(继承)",
     value: "demo.widget"
 }, {
     pId: 1,
-    text: "Single",
+    text: "Single(继承)",
     value: "demo.single"
 }, {
     pId: 1,
-    text: "BasicButton",
+    text: "BasicButton(继承)",
     value: "demo.basic_button"
 }, {
     pId: 1,
-    text: "NodeButton",
+    text: "NodeButton(继承)",
     value: "demo.node_button"
 }, {
     pId: 1,
-    text: "Pane",
+    text: "Pane(继承)",
     value: "demo.pane"
 }];
