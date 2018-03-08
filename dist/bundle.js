@@ -19321,7 +19321,7 @@ if (!window.BI) {
         BI[name] = _apply(name);
     });
     _.each(["get", "each", "map", "reduce", "reduceRight", "find", "filter", "reject", "every", "all", "some", "any", "max", "min",
-        "sortBy", "groupBy", "indexBy", "countBy", "partition"], function (name) {
+        "sortBy", "groupBy", "indexBy", "countBy", "partition", "clamp"], function (name) {
         if (name === "any") {
             BI[name] = _applyFunc("some");
         } else {
@@ -19329,15 +19329,6 @@ if (!window.BI) {
         }
     });
     _.extend(BI, {
-        clamp: function (value, minValue, maxValue) {
-            if (value < minValue) {
-                value = minValue;
-            }
-            if (value > maxValue) {
-                value = maxValue;
-            }
-            return value;
-        },
         // 数数
         count: function (from, to, predicate) {
             var t;
@@ -19526,7 +19517,7 @@ if (!window.BI) {
 
     // 数组相关的方法
     _.each(["first", "initial", "last", "rest", "compact", "flatten", "without", "union", "intersection",
-        "difference", "zip", "unzip", "object", "indexOf", "lastIndexOf", "sortedIndex", "range"], function (name) {
+        "difference", "zip", "unzip", "object", "indexOf", "lastIndexOf", "sortedIndex", "range", "take", "takeRight"], function (name) {
         BI[name] = _apply(name);
     });
     _.each(["findIndex", "findLastIndex"], function (name) {
@@ -19590,8 +19581,8 @@ if (!window.BI) {
     // 对象相关方法
     _.each(["keys", "allKeys", "values", "pairs", "invert", "create", "functions", "extend", "extendOwn",
         "defaults", "clone", "property", "propertyOf", "matcher", "isEqual", "isMatch", "isEmpty",
-        "isElement", "isNumber", "isString", "isArray", "isObject", "isArguments", "isFunction", "isFinite",
-        "isBoolean", "isDate", "isRegExp", "isError", "isNaN", "isUndefined", "zipObject"], function (name) {
+        "isElement", "isNumber", "isString", "isArray", "isObject", "isPlainObject", "isArguments", "isFunction", "isFinite",
+        "isBoolean", "isDate", "isRegExp", "isError", "isNaN", "isUndefined", "zipObject", "cloneDeep"], function (name) {
         BI[name] = _apply(name);
     });
     _.each(["mapObject", "findKey", "pick", "omit", "tap"], function (name) {
@@ -19658,10 +19649,6 @@ if (!window.BI) {
             return typeof  obj === "undefined" || obj === null;
         },
 
-        isPlainObject: function () {
-            return $.isPlainObject.apply($, arguments);
-        },
-
         isEmptyArray: function (arr) {
             return BI.isArray(arr) && BI.isEmpty(arr);
         },
@@ -19693,48 +19680,7 @@ if (!window.BI) {
 
     // deep方法
     _.extend(BI, {
-        /**
-         *完全克隆�?个js对象
-         * @param obj
-         * @returns {*}
-         */
-        deepClone: function (obj) {
-            if (obj === null || obj === undefined) {
-                return obj;
-            }
-
-            var type = Object.prototype.toString.call(obj);
-
-            // Date
-            if (type === "[object Date]") {
-                return BI.getDate(obj.getTime());
-            }
-
-            var i, clone, key;
-
-            // Array
-            if (type === "[object Array]") {
-                i = obj.length;
-
-                clone = [];
-
-                while (i--) {
-                    clone[i] = BI.deepClone(obj[i]);
-                }
-            }
-            // Object
-            else if (type === "[object Object]" && obj.constructor === Object) {
-                clone = {};
-
-                for (var i in obj) {
-                    if (BI.has(obj, i)) {
-                        clone[i] = BI.deepClone(obj[i]);
-                    }
-                }
-            }
-
-            return clone || obj;
-        },
+        deepClone: _.cloneDeep,
 
         isDeepMatch: function (object, attrs) {
             var keys = BI.keys(attrs), length = keys.length;
@@ -75578,7 +75524,7 @@ BI.IconCombo = BI.inherit(BI.Widget, {
     _defaultConfig: function () {
         return BI.extend(BI.IconCombo.superclass._defaultConfig.apply(this, arguments), {
             baseCls: "bi-icon-combo",
-            width: 24,
+            width: 28,
             height: 24,
             el: {},
             popup: {},
@@ -75742,8 +75688,8 @@ BI.IconComboTrigger = BI.inherit(BI.Trigger, {
             el: {},
             items: [],
             iconCls: "",
-            width: 25,
-            height: 25,
+            width: 28,
+            height: 24,
             isShowDown: true,
             value: ""
         });
@@ -75761,7 +75707,7 @@ BI.IconComboTrigger = BI.inherit(BI.Trigger, {
             cls: "icon-combo-trigger-icon",
             iconCls: iconCls,
             disableSelected: true,
-            width: o.width,
+            width: o.width - 12,
             height: o.height,
             iconWidth: o.iconWidth,
             iconHeight: o.iconHeight,
@@ -75772,7 +75718,7 @@ BI.IconComboTrigger = BI.inherit(BI.Trigger, {
             disableSelected: true,
             cls: "icon-combo-down-icon trigger-triangle-font",
             width: 12,
-            height: 8,
+            height: o.height,
             selected: BI.isNotEmptyString(iconCls)
         });
         this.down.setVisible(o.isShowDown);
@@ -79017,8 +78963,8 @@ BI.LazyLoader = BI.inherit(BI.Widget, {
     _getNextItems: function (options) {
         var self = this, o = this.options;
         var lastNum = o.items.length - this._const.PAGE * (options.times - 1);
-        var lastItems = BI.last(o.items, lastNum);
-        var nextItems = BI.first(lastItems, this._const.PAGE);
+        var lastItems = BI.takeRight(o.items, lastNum);
+        var nextItems = BI.take(lastItems, this._const.PAGE);
         return nextItems;
     },
 
