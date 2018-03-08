@@ -25313,32 +25313,7 @@ BI.ShowAction = BI.inherit(BI.Action, {
         tar.setVisible(false);
         callback && callback();
     }
-});/**
- * 弹出层
- * @class BI.PopoverSection
- * @extends BI.Widget
- * @abstract
- */
-BI.PopoverSection = BI.inherit(BI.Widget, {
-    _init: function () {
-        BI.PopoverSection.superclass._init.apply(this, arguments);
-    },
-
-    rebuildNorth: function (north) {
-        return true;
-    },
-    rebuildCenter: function (center) {},
-    rebuildSouth: function (south) {
-        return false;
-    },
-    close: function () {
-        this.fireEvent(BI.PopoverSection.EVENT_CLOSE);
-    },
-    end: function () {
-
-    }
-});
-BI.PopoverSection.EVENT_CLOSE = "EVENT_CLOSE";(function () {
+});(function () {
     if (!window.BI) {
         window.BI = {};
     }
@@ -26515,14 +26490,13 @@ BI.FloatBoxController = BI.inherit(BI.Controller, {
         return BI.isNotNull(this.floatManager[name]);
     },
 
-    create: function (name, section, options, context) {
+    create: function (name, options, context) {
         if (this._check(name)) {
             return this;
         }
         var floatbox = BI.createWidget({
             type: "bi.float_box"
         }, options, context);
-        floatbox.populate(section);
         this.add(name, floatbox, options, context);
         return this;
     },
@@ -26549,7 +26523,7 @@ BI.FloatBoxController = BI.inherit(BI.Controller, {
         });
         this.floatManager[name] = floatbox;
         (function (key) {
-            floatbox.on(BI.FloatBox.EVENT_FLOAT_BOX_CLOSED, function () {
+            floatbox.on(BI.FloatBox.EVENT_CLOSE, function () {
                 self.close(key);
             });
         })(name);

@@ -25313,32 +25313,7 @@ BI.ShowAction = BI.inherit(BI.Action, {
         tar.setVisible(false);
         callback && callback();
     }
-});/**
- * 弹出层
- * @class BI.PopoverSection
- * @extends BI.Widget
- * @abstract
- */
-BI.PopoverSection = BI.inherit(BI.Widget, {
-    _init: function () {
-        BI.PopoverSection.superclass._init.apply(this, arguments);
-    },
-
-    rebuildNorth: function (north) {
-        return true;
-    },
-    rebuildCenter: function (center) {},
-    rebuildSouth: function (south) {
-        return false;
-    },
-    close: function () {
-        this.fireEvent(BI.PopoverSection.EVENT_CLOSE);
-    },
-    end: function () {
-
-    }
-});
-BI.PopoverSection.EVENT_CLOSE = "EVENT_CLOSE";(function () {
+});(function () {
     if (!window.BI) {
         window.BI = {};
     }
@@ -26515,14 +26490,13 @@ BI.FloatBoxController = BI.inherit(BI.Controller, {
         return BI.isNotNull(this.floatManager[name]);
     },
 
-    create: function (name, section, options, context) {
+    create: function (name, options, context) {
         if (this._check(name)) {
             return this;
         }
         var floatbox = BI.createWidget({
             type: "bi.float_box"
         }, options, context);
-        floatbox.populate(section);
         this.add(name, floatbox, options, context);
         return this;
     },
@@ -26549,7 +26523,7 @@ BI.FloatBoxController = BI.inherit(BI.Controller, {
         });
         this.floatManager[name] = floatbox;
         (function (key) {
-            floatbox.on(BI.FloatBox.EVENT_FLOAT_BOX_CLOSED, function () {
+            floatbox.on(BI.FloatBox.EVENT_CLOSE, function () {
                 self.close(key);
             });
         })(name);
@@ -49081,17 +49055,14 @@ BI.FloatBox = BI.inherit(BI.Widget, {
         return BI.extend(BI.FloatBox.superclass._defaultConfig.apply(this, arguments), {
             baseCls: "bi-float-box bi-card",
             width: 600,
-            height: 500
+            height: 500,
+            header: null,
+            body: null,
+            footer: null
         });
     },
-    _init: function () {
-        BI.FloatBox.superclass._init.apply(this, arguments);
+    render: function () {
         var self = this, o = this.options;
-        this.showAction = new BI.ShowAction({
-            tar: this
-        });
-        this._center = BI.createWidget();
-        this._north = BI.createWidget();
         this.element.draggable && this.element.draggable({
             handle: ".bi-message-title",
             drag: function (e, ui) {
@@ -49112,102 +49083,91 @@ BI.FloatBox = BI.inherit(BI.Widget, {
                 BI.Resizers._resize();
             }
         });
-        this._south = BI.createWidget();
+        var items = {
+            north: {
+                el: {
+                    type: "bi.border",
+                    cls: "bi-message-title bi-background",
+                    items: {
+                        center: {
+                            el: {
+                                type: "bi.absolute",
+                                items: [{
+                                    el: BI.createWidget(o.header),
+                                    left: 10,
+                                    top: 0,
+                                    right: 0,
+                                    bottom: 0
+                                }]
+                            }
+                        },
+                        east: {
+                            el: {
+                                type: "bi.icon_button",
+                                cls: "bi-message-close close-font",
+                                height: 36,
+                                handler: function () {
+                                    self.close();
+                                }
+                            },
+                            width: 60
+                        }
+                    }
+                },
+                height: 36
+            },
+            center: {
+                el: {
+                    type: "bi.absolute",
+                    items: [{
+                        el: BI.createWidget(o.body),
+                        left: 20,
+                        top: 20,
+                        right: 20,
+                        bottom: 0
+                    }]
+                }
+            }
+        };
+        if (o.footer) {
+            items.south = {
+                el: {
+                    type: "bi.absolute",
+                    items: [{
+                        el: BI.createWidget(o.footer),
+                        left: 20,
+                        top: 0,
+                        right: 20,
+                        bottom: 0
+                    }]
+                },
+                height: 44
+            };
+        }
+
         BI.createWidget({
             type: "bi.border",
             element: this,
-            items: {
-                north: {
-                    el: {
-                        type: "bi.border",
-                        cls: "bi-message-title bi-background",
-                        items: {
-                            center: {
-                                el: {
-                                    type: "bi.absolute",
-                                    items: [{
-                                        el: this._north,
-                                        left: 10,
-                                        top: 0,
-                                        right: 0,
-                                        bottom: 0
-                                    }]
-                                }
-                            },
-                            east: {
-                                el: {
-                                    type: "bi.icon_button",
-                                    cls: "bi-message-close close-font",
-                                    height: 36,
-                                    handler: function () {
-                                        self.currentSectionProvider.close();
-                                    }
-                                },
-                                width: 60
-                            }
-                        }
-                    },
-                    height: 36
-                },
-                center: {
-                    el: {
-                        type: "bi.absolute",
-                        items: [{
-                            el: this._center,
-                            left: 20,
-                            top: 20,
-                            right: 20,
-                            bottom: 0
-                        }]
-                    }
-                },
-                south: {
-                    el: {
-                        type: "bi.absolute",
-                        items: [{
-                            el: this._south,
-                            left: 20,
-                            top: 0,
-                            right: 20,
-                            bottom: 0
-                        }]
-                    },
-                    height: 44
-                }
-            }
-        });
-    },
-
-    populate: function (sectionProvider) {
-        var self = this;
-        if (this.currentSectionProvider && this.currentSectionProvider !== sectionProvider) {
-            this.currentSectionProvider.destroy();
-        }
-        this.currentSectionProvider = sectionProvider;
-        sectionProvider.rebuildNorth(this._north);
-        sectionProvider.rebuildCenter(this._center);
-        sectionProvider.rebuildSouth(this._south);
-        sectionProvider.on(BI.PopoverSection.EVENT_CLOSE, function () {
-            self.close();
+            items: items
         });
     },
 
     show: function () {
-        this.showAction.actionPerformed();
+
     },
 
     hide: function () {
-        this.showAction.actionBack();
+
     },
 
     open: function () {
         this.show();
-        this.fireEvent(BI.FloatBox.EVENT_FLOAT_BOX_OPEN);
+        this.fireEvent(BI.FloatBox.EVENT_OPEN);
     },
 
     close: function () {
         this.hide();
-        this.fireEvent(BI.FloatBox.EVENT_FLOAT_BOX_CLOSED);
+        this.fireEvent(BI.FloatBox.EVENT_CLOSE);
     },
 
     setZindex: function (zindex) {
@@ -49215,14 +49175,52 @@ BI.FloatBox = BI.inherit(BI.Widget, {
     },
 
     destroyed: function () {
-        this.currentSectionProvider && this.currentSectionProvider.destroy();
     }
 });
 
 BI.shortcut("bi.float_box", BI.FloatBox);
 
-BI.FloatBox.EVENT_FLOAT_BOX_CLOSED = "EVENT_FLOAT_BOX_CLOSED";
-BI.FloatBox.EVENT_FLOAT_BOX_OPEN = "EVENT_FLOAT_BOX_CLOSED";
+BI.BarFloatBox = BI.inherit(BI.FloatBox, {
+    _defaultConfig: function () {
+        return BI.extend(BI.FloatBox.superclass._defaultConfig.apply(this, arguments), {
+            btns: [BI.i18nText(BI.i18nText("BI-Basic_Sure")), BI.i18nText(BI.i18nText("BI-Basic_Cancel"))]
+        });
+    },
+
+    beforeCreate: function () {
+        var self = this, o = this.options;
+        o.footer || (o.footer = {
+            type: "bi.right_vertical_adapt",
+            lgap: 10,
+            items: [{
+                type: "bi.button",
+                text: this.options.btns[1],
+                value: 1,
+                level: "ignore",
+                handler: function (v) {
+                    self.fireEvent(BI.FloatBox.EVENT_CANCEL, v);
+                    self.close(v);
+                }
+            }, {
+                type: "bi.button",
+                text: this.options.btns[0],
+                warningTitle: o.warningTitle,
+                value: 0,
+                handler: function (v) {
+                    self.fireEvent(BI.FloatBox.EVENT_CONFIRM, v);
+                    self.close(v);
+                }
+            }]
+        });
+    }
+});
+
+BI.shortcut("bi.bar_float_box", BI.BarFloatBox);
+
+BI.FloatBox.EVENT_CLOSE = "EVENT_CLOSE";
+BI.FloatBox.EVENT_OPEN = "EVENT_OPEN";
+BI.FloatBox.EVENT_CANCEL = "EVENT_CANCEL";
+BI.FloatBox.EVENT_CONFIRM = "EVENT_CONFIRM";
 /**
  * 下拉框弹出层, zIndex在1000w
  * @class BI.PopupView
@@ -78378,55 +78376,6 @@ BI.SimpleStateEditor.EVENT_SPACE = "EVENT_SPACE";
 BI.SimpleStateEditor.EVENT_EMPTY = "EVENT_EMPTY";
 
 BI.shortcut("bi.simple_state_editor", BI.SimpleStateEditor);/**
- * 有确定取消按钮的弹出层
- * @class BI.BarPopoverSection
- * @extends BI.PopoverSection
- * @abstract
- */
-BI.BarPopoverSection = BI.inherit(BI.PopoverSection, {
-    _defaultConfig: function () {
-        return BI.extend(BI.BarPopoverSection.superclass._defaultConfig.apply(this, arguments), {
-            btns: [BI.i18nText(BI.i18nText("BI-Basic_Sure")), BI.i18nText(BI.i18nText("BI-Basic_Cancel"))]
-        });
-    },
-
-    _init: function () {
-        BI.BarPopoverSection.superclass._init.apply(this, arguments);
-    },
-
-    rebuildSouth: function (south) {
-        var self = this, o = this.options;
-        this.sure = BI.createWidget({
-            type: "bi.button",
-            text: this.options.btns[0],
-            warningTitle: o.warningTitle,
-            value: 0,
-            handler: function (v) {
-                self.end();
-                self.close(v);
-            }
-        });
-        this.cancel = BI.createWidget({
-            type: "bi.button",
-            text: this.options.btns[1],
-            value: 1,
-            level: "ignore",
-            handler: function (v) {
-                self.close(v);
-            }
-        });
-        BI.createWidget({
-            type: "bi.right_vertical_adapt",
-            element: south,
-            lgap: 10,
-            items: [this.cancel, this.sure]
-        });
-    },
-
-    setConfirmButtonEnable: function (v) {
-        this.sure.setEnable(!!v);
-    }
-});/**
  * 下拉框弹出层的多选版本，toolbar带有若干按钮, zIndex在1000w
  * @class BI.MultiPopupView
  * @extends BI.Widget

@@ -27,14 +27,13 @@ BI.FloatBoxController = BI.inherit(BI.Controller, {
         return BI.isNotNull(this.floatManager[name]);
     },
 
-    create: function (name, section, options, context) {
+    create: function (name, options, context) {
         if (this._check(name)) {
             return this;
         }
         var floatbox = BI.createWidget({
             type: "bi.float_box"
         }, options, context);
-        floatbox.populate(section);
         this.add(name, floatbox, options, context);
         return this;
     },
@@ -61,7 +60,7 @@ BI.FloatBoxController = BI.inherit(BI.Controller, {
         });
         this.floatManager[name] = floatbox;
         (function (key) {
-            floatbox.on(BI.FloatBox.EVENT_FLOAT_BOX_CLOSED, function () {
+            floatbox.on(BI.FloatBox.EVENT_CLOSE, function () {
                 self.close(key);
             });
         })(name);
