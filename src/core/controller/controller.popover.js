@@ -31,9 +31,9 @@ BI.PopoverController = BI.inherit(BI.Controller, {
         if (this._check(name)) {
             return this;
         }
-        var popover = BI.createWidget({
+        var popover = BI.createWidget(options || {}, {
             type: "bi.popover"
-        }, options, context);
+        }, context);
         this.add(name, popover, options, context);
         return this;
     },

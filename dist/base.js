@@ -15309,7 +15309,7 @@ BI.shortcut("bi.grid_view", BI.GridView);/**
 BI.Popover = BI.inherit(BI.Widget, {
     _defaultConfig: function () {
         return BI.extend(BI.Popover.superclass._defaultConfig.apply(this, arguments), {
-            baseCls: "bi-float-box bi-card",
+            baseCls: "bi-popover bi-card",
             width: 600,
             height: 500,
             header: null,
@@ -15438,7 +15438,7 @@ BI.shortcut("bi.popover", BI.Popover);
 
 BI.BarPopover = BI.inherit(BI.Popover, {
     _defaultConfig: function () {
-        return BI.extend(BI.Popover.superclass._defaultConfig.apply(this, arguments), {
+        return BI.extend(BI.BarPopover.superclass._defaultConfig.apply(this, arguments), {
             btns: [BI.i18nText(BI.i18nText("BI-Basic_Sure")), BI.i18nText(BI.i18nText("BI-Basic_Cancel"))]
         });
     },
