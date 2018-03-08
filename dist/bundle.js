@@ -26599,10 +26599,9 @@ BI.LayerController = BI.inherit(BI.Controller, {
         if (this.has(name)) {
             return this.get(name);
         }
-        var widget = BI.createWidget((op.render || {}), {
-            type: "bi.layout",
-            cls: op.cls
-        }, context);
+        var widget = BI.createWidget((op.render || {}), BI.extend({
+            type: "bi.layout"
+        }, op), context);
         var layout = BI.createWidget({
             type: "bi.absolute",
             items: [{
@@ -89152,7 +89151,11 @@ BI.MonthCombo = BI.inherit(BI.Widget, {
     },
 
     getValue: function () {
-        return this.popup.getValue();
+        if (BI.isNull(this.popup)) {
+            return this.options.value || "";
+        } else {
+            return this.popup.getValue() || "";
+        }
     }
 });
 
@@ -96802,7 +96805,11 @@ BI.QuarterCombo = BI.inherit(BI.Widget, {
     },
 
     getValue: function () {
-        return this.popup.getValue() || "";
+        if (BI.isNull(this.popup)) {
+            return this.options.value || "";
+        } else {
+            return this.popup.getValue() || "";
+        }
     }
 });
 
@@ -102316,7 +102323,11 @@ BI.YearCombo = BI.inherit(BI.Widget, {
     },
 
     getValue: function () {
-        return this.popup.getValue();
+        if (BI.isNull(this.popup)) {
+            return this.options.value;
+        } else {
+            return this.popup.getValue();
+        }
     }
 });
 BI.YearCombo.EVENT_CONFIRM = "EVENT_CONFIRM";
@@ -102576,6 +102587,7 @@ BI.YearMonthCombo = BI.inherit(BI.Widget, {
         });
 
         this.month.on(BI.MonthCombo.EVENT_CONFIRM, function () {
+            self.getValue();
             self.fireEvent(BI.YearMonthCombo.EVENT_CONFIRM);
         });
         this.month.on(BI.MonthCombo.EVENT_BEFORE_POPUPVIEW, function () {

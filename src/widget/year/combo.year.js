@@ -97,7 +97,11 @@ BI.YearCombo = BI.inherit(BI.Widget, {
     },
 
     getValue: function () {
-        return this.popup.getValue();
+        if (BI.isNull(this.popup)) {
+            return this.options.value;
+        } else {
+            return this.popup.getValue();
+        }
     }
 });
 BI.YearCombo.EVENT_CONFIRM = "EVENT_CONFIRM";
