@@ -8475,9 +8475,17 @@ Demo.Func = BI.inherit(BI.Widget, {
             handler: function() {
                 BI.Popovers.remove(id);
                 BI.Popovers.create(id, {
+                    header: {
+                        type: "bi.label",
+                        text: "这个是header"
+                    },
                     body: {
                         type: "bi.label",
                         text: "这个是body"
+                    },
+                    footer: {
+                        type: "bi.label",
+                        text: "这个是footer"
                     }
                 }).open(id);
             }
