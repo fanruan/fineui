@@ -26816,14 +26816,14 @@ BI.LayerController = BI.inherit(BI.Controller, {
         });
     },
 
-    make: function (name, container, op) {
+    make: function (name, container, op, context) {
         if (BI.isWidget(container)) {
             op = op || {};
             op.container = container;
         } else {
             op = container;
         }
-        return this.create(name, null, op);
+        return this.create(name, null, op, context);
     },
 
     create: function (name, from, op, context) {
