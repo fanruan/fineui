@@ -26638,7 +26638,7 @@ BI.FloatBoxController = BI.inherit(BI.Controller, {
             this.get(name).setZindex(this.zindex++);
             this.floatContainer[name].visible();
             var floatbox = this.get(name);
-            floatbox.show();
+            floatbox.show && floatbox.show();
             var W = $(this.options.render).width(), H = $(this.options.render).height();
             var w = floatbox.element.width(), h = floatbox.element.height();
             var left = (W - w) / 2, top = (H - h) / 2;
