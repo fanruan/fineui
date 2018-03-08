@@ -1,7 +1,7 @@
 @font-face {
   font-family: 'bi';
-  src: url('decision/file?path=/com/fr/web/ui/font/iconfont.eot');
-  src: url('decision/file?path=/com/fr/web/ui/font/iconfont.eot?#iefix') format('embedded-opentype'), /* IE6-IE8 */ url('decision/file?path=/com/fr/web/ui/font/iconfont.woff') format('woff'), /* chrome、firefox */ url('decision/file?path=/com/fr/web/ui/font/iconfont.ttf') format('truetype'), /* chrome、firefox、opera、Safari, Android, iOS 4.2+*/ url('decision/file?path=/com/fr/web/ui/font/iconfont.svg#svgFontName') format('svg');
+  src: url('file?path=/com/fr/web/ui/font/iconfont.eot');
+  src: url('file?path=/com/fr/web/ui/font/iconfont.eot?#iefix') format('embedded-opentype'), /* IE6-IE8 */ url('file?path=/com/fr/web/ui/font/iconfont.woff') format('woff'), /* chrome、firefox */ url('file?path=/com/fr/web/ui/font/iconfont.ttf') format('truetype'), /* chrome、firefox、opera、Safari, Android, iOS 4.2+*/ url('file?path=/com/fr/web/ui/font/iconfont.svg#svgFontName') format('svg');
   /*  iOS 4.1- */
 }
 .b-font {
