@@ -26872,16 +26872,16 @@ BI.LayerController = BI.inherit(BI.Controller, {
             layout.element.css({
                 left: w.offset().left + (offset.left || 0),
                 top: w.offset().top + (offset.top || 0),
-                width: offset.width || (w.outerWidth() - (offset.right || 0)) || "",
-                height: offset.height || (w.outerHeight() - (offset.bottom || 0)) || ""
+                width: offset.width || (w.outerWidth() - (offset.left || 0) - (offset.right || 0)) || "",
+                height: offset.height || (w.outerHeight() - (offset.top || 0) - (offset.bottom || 0)) || ""
             });
             layout.element.on("__resize__", function () {
                 w.is(":visible") &&
                 layout.element.css({
                     left: w.offset().left + (offset.left || 0),
                     top: w.offset().top + (offset.top || 0),
-                    width: offset.width || (w.outerWidth() - (offset.right || 0)) || "",
-                    height: offset.height || (w.outerHeight() - (offset.bottom || 0)) || ""
+                    width: offset.width || (w.outerWidth() - (offset.left || 0) - (offset.right || 0)) || "",
+                    height: offset.height || (w.outerHeight() - (offset.top || 0) - (offset.bottom || 0)) || ""
                 });
             });
         }

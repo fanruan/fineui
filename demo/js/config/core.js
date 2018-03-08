@@ -162,6 +162,10 @@ Demo.CORE_CONFIG = [{
     text: "弹出层"
 }, {
     pId: 10202,
+    text: "layer",
+    value: "demo.layer"
+}, {
+    pId: 10202,
     text: "bi.popover",
     value: "demo.popover"
 }, {
