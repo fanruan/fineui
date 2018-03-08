@@ -49245,12 +49245,12 @@ BI.Popover = BI.inherit(BI.Widget, {
 
     open: function () {
         this.show();
-        this.fireEvent(BI.Popover.EVENT_OPEN);
+        this.fireEvent(BI.Popover.EVENT_OPEN, arguments);
     },
 
     close: function () {
         this.hide();
-        this.fireEvent(BI.Popover.EVENT_CLOSE);
+        this.fireEvent(BI.Popover.EVENT_CLOSE, arguments);
     },
 
     setZindex: function (zindex) {
