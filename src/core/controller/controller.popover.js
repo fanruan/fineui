@@ -1,25 +1,25 @@
 /**
  * guy
- * FloatBox弹出层控制器, z-index在100w层级
- * @class BI.FloatBoxController
+ * popover弹出层控制器, z-index在100w层级
+ * @class BI.popoverController
  * @extends BI.Controller
  */
-BI.FloatBoxController = BI.inherit(BI.Controller, {
+BI.PopoverController = BI.inherit(BI.Controller, {
     _defaultConfig: function () {
-        return BI.extend(BI.FloatBoxController.superclass._defaultConfig.apply(this, arguments), {
+        return BI.extend(BI.PopoverController.superclass._defaultConfig.apply(this, arguments), {
             modal: true, // 模态窗口
             render: "body"
         });
     },
 
     _init: function () {
-        BI.FloatBoxController.superclass._init.apply(this, arguments);
+        BI.PopoverController.superclass._init.apply(this, arguments);
         this.modal = this.options.modal;
         this.floatManager = {};
         this.floatLayer = {};
         this.floatContainer = {};
         this.floatOpened = {};
-        this.zindex = BI.zIndex_floatbox;
+        this.zindex = BI.zIndex_popover;
         this.zindexMap = {};
     },
 
@@ -31,14 +31,14 @@ BI.FloatBoxController = BI.inherit(BI.Controller, {
         if (this._check(name)) {
             return this;
         }
-        var floatbox = BI.createWidget({
-            type: "bi.float_box"
-        }, options, context);
-        this.add(name, floatbox, options, context);
+        var popover = BI.createWidget(options || {}, {
+            type: "bi.popover"
+        }, context);
+        this.add(name, popover, options, context);
         return this;
     },
 
-    add: function (name, floatbox, options, context) {
+    add: function (name, popover, options, context) {
         var self = this;
         options || (options = {});
         if (this._check(name)) {
@@ -50,7 +50,7 @@ BI.FloatBoxController = BI.inherit(BI.Controller, {
             items: [{
                 el: (this.floatLayer[name] = BI.createWidget({
                     type: "bi.absolute",
-                    items: [floatbox]
+                    items: [popover]
                 }, context)),
                 left: 0,
                 right: 0,
@@ -58,9 +58,9 @@ BI.FloatBoxController = BI.inherit(BI.Controller, {
                 bottom: 0
             }]
         });
-        this.floatManager[name] = floatbox;
+        this.floatManager[name] = popover;
         (function (key) {
-            floatbox.on(BI.FloatBox.EVENT_CLOSE, function () {
+            popover.on(BI.Popover.EVENT_CLOSE, function () {
                 self.close(key);
             });
         })(name);
@@ -91,10 +91,10 @@ BI.FloatBoxController = BI.inherit(BI.Controller, {
             this.modal && container.element.__buildZIndexMask__(this.zindex++);
             this.get(name).setZindex(this.zindex++);
             this.floatContainer[name].visible();
-            var floatbox = this.get(name);
-            floatbox.show();
+            var popover = this.get(name);
+            popover.show && popover.show();
             var W = $(this.options.render).width(), H = $(this.options.render).height();
-            var w = floatbox.element.width(), h = floatbox.element.height();
+            var w = popover.element.width(), h = popover.element.height();
             var left = (W - w) / 2, top = (H - h) / 2;
             if (left < 0) {
                 left = 0;
@@ -102,7 +102,7 @@ BI.FloatBoxController = BI.inherit(BI.Controller, {
             if (top < 0) {
                 top = 0;
             }
-            floatbox.element.css({
+            popover.element.css({
                 left: left + "px",
                 top: top + "px"
             });

@@ -2488,7 +2488,7 @@ BI.Layers = new BI.LayerController();
 BI.Maskers = new BI.MaskersController();
 BI.Bubbles = new BI.BubblesController();
 BI.Tooltips = new BI.TooltipsController();
-BI.Popovers = new BI.FloatBoxController();
+BI.Popovers = new BI.PopoverController();
 BI.Broadcasts = new BI.BroadcastController();
 BI.StyleLoaders = new BI.StyleLoaderManager();/**
  * canvas绘图
@@ -15302,14 +15302,14 @@ BI.GridView = BI.inherit(BI.Widget, {
 });
 BI.GridView.EVENT_SCROLL = "EVENT_SCROLL";
 BI.shortcut("bi.grid_view", BI.GridView);/**
- * floatBox弹出层，
- * @class BI.FloatBox
+ * Popover弹出层，
+ * @class BI.Popover
  * @extends BI.Widget
  */
-BI.FloatBox = BI.inherit(BI.Widget, {
+BI.Popover = BI.inherit(BI.Widget, {
     _defaultConfig: function () {
-        return BI.extend(BI.FloatBox.superclass._defaultConfig.apply(this, arguments), {
-            baseCls: "bi-float-box bi-card",
+        return BI.extend(BI.Popover.superclass._defaultConfig.apply(this, arguments), {
+            baseCls: "bi-popover bi-card",
             width: 600,
             height: 500,
             header: null,
@@ -15418,12 +15418,12 @@ BI.FloatBox = BI.inherit(BI.Widget, {
 
     open: function () {
         this.show();
-        this.fireEvent(BI.FloatBox.EVENT_OPEN);
+        this.fireEvent(BI.Popover.EVENT_OPEN, arguments);
     },
 
     close: function () {
         this.hide();
-        this.fireEvent(BI.FloatBox.EVENT_CLOSE);
+        this.fireEvent(BI.Popover.EVENT_CLOSE, arguments);
     },
 
     setZindex: function (zindex) {
@@ -15434,11 +15434,11 @@ BI.FloatBox = BI.inherit(BI.Widget, {
     }
 });
 
-BI.shortcut("bi.float_box", BI.FloatBox);
+BI.shortcut("bi.popover", BI.Popover);
 
-BI.BarFloatBox = BI.inherit(BI.FloatBox, {
+BI.BarPopover = BI.inherit(BI.Popover, {
     _defaultConfig: function () {
-        return BI.extend(BI.FloatBox.superclass._defaultConfig.apply(this, arguments), {
+        return BI.extend(BI.BarPopover.superclass._defaultConfig.apply(this, arguments), {
             btns: [BI.i18nText(BI.i18nText("BI-Basic_Sure")), BI.i18nText(BI.i18nText("BI-Basic_Cancel"))]
         });
     },
@@ -15454,7 +15454,7 @@ BI.BarFloatBox = BI.inherit(BI.FloatBox, {
                 value: 1,
                 level: "ignore",
                 handler: function (v) {
-                    self.fireEvent(BI.FloatBox.EVENT_CANCEL, v);
+                    self.fireEvent(BI.Popover.EVENT_CANCEL, v);
                     self.close(v);
                 }
             }, {
@@ -15463,7 +15463,7 @@ BI.BarFloatBox = BI.inherit(BI.FloatBox, {
                 warningTitle: o.warningTitle,
                 value: 0,
                 handler: function (v) {
-                    self.fireEvent(BI.FloatBox.EVENT_CONFIRM, v);
+                    self.fireEvent(BI.Popover.EVENT_CONFIRM, v);
                     self.close(v);
                 }
             }]
@@ -15471,12 +15471,12 @@ BI.BarFloatBox = BI.inherit(BI.FloatBox, {
     }
 });
 
-BI.shortcut("bi.bar_float_box", BI.BarFloatBox);
+BI.shortcut("bi.bar_popover", BI.BarPopover);
 
-BI.FloatBox.EVENT_CLOSE = "EVENT_CLOSE";
-BI.FloatBox.EVENT_OPEN = "EVENT_OPEN";
-BI.FloatBox.EVENT_CANCEL = "EVENT_CANCEL";
-BI.FloatBox.EVENT_CONFIRM = "EVENT_CONFIRM";
+BI.Popover.EVENT_CLOSE = "EVENT_CLOSE";
+BI.Popover.EVENT_OPEN = "EVENT_OPEN";
+BI.Popover.EVENT_CANCEL = "EVENT_CANCEL";
+BI.Popover.EVENT_CONFIRM = "EVENT_CONFIRM";
 /**
  * 下拉框弹出层, zIndex在1000w
  * @class BI.PopupView

@@ -9738,7 +9738,7 @@ _.extend(BI, {
     MIN: -0xfffffffffffffff,
     EVENT_RESPONSE_TIME: 200,
     zIndex_layer: 1e5,
-    zIndex_floatbox: 1e6,
+    zIndex_popover: 1e6,
     zIndex_popup: 1e7,
     zIndex_masker: 1e8,
     zIndex_tip: 1e9,

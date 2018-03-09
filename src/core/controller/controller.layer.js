@@ -27,14 +27,15 @@ BI.LayerController = BI.inherit(BI.Controller, {
         });
     },
 
-    make: function (name, container, op) {
+    make: function (name, container, op, context) {
         if (BI.isWidget(container)) {
             op = op || {};
             op.container = container;
         } else {
+            context = op;
             op = container;
         }
-        return this.create(name, null, op);
+        return this.create(name, null, op, context);
     },
 
     create: function (name, from, op, context) {
@@ -53,10 +54,9 @@ BI.LayerController = BI.inherit(BI.Controller, {
         if (this.has(name)) {
             return this.get(name);
         }
-        var widget = BI.createWidget((op.render || {}), {
-            type: "bi.layout",
-            cls: op.cls
-        }, context);
+        var widget = BI.createWidget((op.render || {}), BI.extend({
+            type: "bi.layout"
+        }, op), context);
         var layout = BI.createWidget({
             type: "bi.absolute",
             items: [{
@@ -83,16 +83,16 @@ BI.LayerController = BI.inherit(BI.Controller, {
             layout.element.css({
                 left: w.offset().left + (offset.left || 0),
                 top: w.offset().top + (offset.top || 0),
-                width: offset.width || (w.outerWidth() - (offset.right || 0)) || "",
-                height: offset.height || (w.outerHeight() - (offset.bottom || 0)) || ""
+                width: offset.width || (w.outerWidth() - (offset.left || 0) - (offset.right || 0)) || "",
+                height: offset.height || (w.outerHeight() - (offset.top || 0) - (offset.bottom || 0)) || ""
             });
             layout.element.on("__resize__", function () {
                 w.is(":visible") &&
                 layout.element.css({
                     left: w.offset().left + (offset.left || 0),
                     top: w.offset().top + (offset.top || 0),
-                    width: offset.width || (w.outerWidth() - (offset.right || 0)) || "",
-                    height: offset.height || (w.outerHeight() - (offset.bottom || 0)) || ""
+                    width: offset.width || (w.outerWidth() - (offset.left || 0) - (offset.right || 0)) || "",
+                    height: offset.height || (w.outerHeight() - (offset.top || 0) - (offset.bottom || 0)) || ""
                 });
             });
         }
