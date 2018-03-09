@@ -111,6 +111,10 @@ Demo.WIDGET_CONFIG = [{
     text: "bi.multi_select_combo",
     value: "demo.multi_select_combo"
 }, {
+    pId: 406,
+    text: "bi.multi_select_list",
+    value: "demo.multi_select_list"
+}, {
     pId: 4,
     id: 407,
     text: "简单下拉树"
@@ -150,6 +154,10 @@ Demo.WIDGET_CONFIG = [{
     pId: 411,
     text: "bi.multi_tree_combo",
     value: "demo.multi_tree_combo"
+}, {
+    pId: 411,
+    text: "bi.multi_select_tree",
+    value: "demo.multi_select_tree"
 }, {
     pId: 4,
     id: 412,

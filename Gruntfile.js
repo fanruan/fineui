@@ -100,24 +100,24 @@ module.exports = function (grunt) {
                 dest: "dist/resource.css"
             },
 
-            publicBundleJs: {
-                src: ["public/js/**/*.js", "public/js/index.js"],
-                dest: "public/bundle.js"
-            },
-
             bundleJs: {
                 src: ["dist/core.js", "dist/base.js", "dist/case.js", "dist/widget.js", "dist/router.js", "public/js/**/*.js", "public/js/index.js"],
                 dest: "dist/bundle.js"
             },
 
-            publicBundleCss: {
-                src: ["public/css/app.css", "public/css/**/*.css"],
-                dest: "public/bundle.css"
-            },
-
             bundleCss: {
                 src: ["dist/core.css", "dist/base.css", "dist/widget.css", "public/css/app.css", "public/css/**/*.css"],
                 dest: "dist/bundle.css"
+            },
+
+            fineuiJs: {
+                src: ["dist/_fineui.min.js", "src/base/formula/formulaeditor.js"],
+                dest: "dist/fineui.min.js"
+            },
+
+            fineuiCss: {
+                src: ["dist/core.css", "dist/base.css", "dist/widget.css", "ui/css/app.css", "ui/css/**/*.css"],
+                dest: "dist/fineui.css"
             },
 
             configJs: {
@@ -131,14 +131,6 @@ module.exports = function (grunt) {
             demoCss: {
                 src: ["demo/css/**/*.css"],
                 dest: "dist/demo.css"
-            },
-            fineuiJs: {
-                src: ["dist/polyfill.js", "dist/core.js", "dist/fix/fix.js", "dist/fix/fix.compact.js", "dist/base.js", "dist/case.js", "dist/widget.js"],
-                dest: "dist/fineui.js"
-            },
-            fineuiCss: {
-                src: ["dist/core.css", "dist/base.css", "dist/widget.css"],
-                dest: "dist/fineui.css"
             },
             utilsJs: {
                 src: [
@@ -178,6 +170,13 @@ module.exports = function (grunt) {
                 dest: "public/css",
                 ext: ".css"
             },
+            ui: {
+                expand: true,
+                cwd: "ui/less",
+                src: ["**/*.less"],
+                dest: "ui/css",
+                ext: ".css"
+            },
             src: {
                 expand: true,
                 cwd: "src/less",
@@ -200,7 +199,23 @@ module.exports = function (grunt) {
             dist: {
                 files: {
                     "dist/bundle.min.js": ["<%= concat.bundleJs.dest %>"],
-                    "dist/fineui.min.js": ["<%= concat.fineuiJs.dest %>"]
+                    "dist/_fineui.min.js": ["dist/polyfill.js", "dist/core.js", "dist/fix/fix.js", "dist/fix/fix.compact.js", "src/third/**/*.js",
+                        "src/base/formula/config.js",
+                        "src/base/pane.js",
+                        "src/base/single/single.js",
+                        "src/base/single/text.js",
+                        "src/base/single/button/button.basic.js",
+                        "src/base/single/button/button.node.js",
+                        "src/base/single/tip/tip.js",
+                        "src/base/combination/group.button.js",
+                        "src/base/combination/tree.button.js",
+                        "src/base/combination/map.button.js",
+                        "src/base/tree/treeview.js",
+                        "src/base/tree/asynctree.js",
+                        "src/base/tree/parttree.js",
+                        "src/base/**/*.js",
+                        "!src/base/formula/formulaeditor.js",
+                        "dist/case.js", "dist/widget.js", "dist/router.js", "ui/js/**/*.js"]
                 }
             }
         },
@@ -255,4 +270,5 @@ module.exports = function (grunt) {
 
     grunt.registerTask("default", ["less", "concat", "watch"]);
     grunt.registerTask("min", ["less", "concat", "uglify", "cssmin"]);
+    grunt.registerTask("build", ["less", "concat", "uglify", "cssmin", "uglify", "concat"]);
 };

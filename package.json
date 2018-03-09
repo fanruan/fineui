@@ -18,7 +18,8 @@
   "scripts": {
     "grunt": "grunt",
     "start": "node server.js",
-    "uglify": "grunt min"
+    "uglify": "grunt min",
+    "build": "grunt build"
   },
   "repository": {
     "type": "git",

@@ -1,6 +1,6 @@
 #### fineui.js
 
-整个fineui打包文件，不包括配置文件和路由
+整个fineui打包文件，不包括配置文件
 
 #### fineui.css
 

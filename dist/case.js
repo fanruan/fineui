@@ -5235,7 +5235,7 @@ BI.IconCombo = BI.inherit(BI.Widget, {
     _defaultConfig: function () {
         return BI.extend(BI.IconCombo.superclass._defaultConfig.apply(this, arguments), {
             baseCls: "bi-icon-combo",
-            width: 24,
+            width: 28,
             height: 24,
             el: {},
             popup: {},
@@ -5399,8 +5399,8 @@ BI.IconComboTrigger = BI.inherit(BI.Trigger, {
             el: {},
             items: [],
             iconCls: "",
-            width: 25,
-            height: 25,
+            width: 28,
+            height: 24,
             isShowDown: true,
             value: ""
         });
@@ -5418,7 +5418,7 @@ BI.IconComboTrigger = BI.inherit(BI.Trigger, {
             cls: "icon-combo-trigger-icon",
             iconCls: iconCls,
             disableSelected: true,
-            width: o.width,
+            width: o.width - 12,
             height: o.height,
             iconWidth: o.iconWidth,
             iconHeight: o.iconHeight,
@@ -5429,7 +5429,7 @@ BI.IconComboTrigger = BI.inherit(BI.Trigger, {
             disableSelected: true,
             cls: "icon-combo-down-icon trigger-triangle-font",
             width: 12,
-            height: 8,
+            height: o.height,
             selected: BI.isNotEmptyString(iconCls)
         });
         this.down.setVisible(o.isShowDown);
@@ -8001,55 +8001,6 @@ BI.SimpleStateEditor.EVENT_SPACE = "EVENT_SPACE";
 BI.SimpleStateEditor.EVENT_EMPTY = "EVENT_EMPTY";
 
 BI.shortcut("bi.simple_state_editor", BI.SimpleStateEditor);/**
- * 有确定取消按钮的弹出层
- * @class BI.BarPopoverSection
- * @extends BI.PopoverSection
- * @abstract
- */
-BI.BarPopoverSection = BI.inherit(BI.PopoverSection, {
-    _defaultConfig: function () {
-        return BI.extend(BI.BarPopoverSection.superclass._defaultConfig.apply(this, arguments), {
-            btns: [BI.i18nText(BI.i18nText("BI-Basic_Sure")), BI.i18nText(BI.i18nText("BI-Basic_Cancel"))]
-        });
-    },
-
-    _init: function () {
-        BI.BarPopoverSection.superclass._init.apply(this, arguments);
-    },
-
-    rebuildSouth: function (south) {
-        var self = this, o = this.options;
-        this.sure = BI.createWidget({
-            type: "bi.button",
-            text: this.options.btns[0],
-            warningTitle: o.warningTitle,
-            value: 0,
-            handler: function (v) {
-                self.end();
-                self.close(v);
-            }
-        });
-        this.cancel = BI.createWidget({
-            type: "bi.button",
-            text: this.options.btns[1],
-            value: 1,
-            level: "ignore",
-            handler: function (v) {
-                self.close(v);
-            }
-        });
-        BI.createWidget({
-            type: "bi.right_vertical_adapt",
-            element: south,
-            lgap: 10,
-            items: [this.cancel, this.sure]
-        });
-    },
-
-    setConfirmButtonEnable: function (v) {
-        this.sure.setEnable(!!v);
-    }
-});/**
  * 下拉框弹出层的多选版本，toolbar带有若干按钮, zIndex在1000w
  * @class BI.MultiPopupView
  * @extends BI.Widget
@@ -8674,8 +8625,8 @@ BI.LazyLoader = BI.inherit(BI.Widget, {
     _getNextItems: function (options) {
         var self = this, o = this.options;
         var lastNum = o.items.length - this._const.PAGE * (options.times - 1);
-        var lastItems = BI.last(o.items, lastNum);
-        var nextItems = BI.first(lastItems, this._const.PAGE);
+        var lastItems = BI.takeRight(o.items, lastNum);
+        var nextItems = BI.take(lastItems, this._const.PAGE);
         return nextItems;
     },
 

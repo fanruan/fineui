@@ -9599,7 +9599,7 @@ if ( typeof define === "function" && define.amd && define.amd.jQuery ) {
 })( window );/**
  * @license
  * Lodash (Custom Build) <https://lodash.com/>
- * Build: `lodash core plus="debounce,throttle,get,findIndex,findLastIndex,findKey,findLastKey,isArrayLike,invert,invertBy,uniq,uniqBy,omit,omitBy,zip,unzip,rest,range,random,reject,intersection,drop,countBy,union,zipObject"`
+ * Build: `lodash core plus="debounce,throttle,get,findIndex,findLastIndex,findKey,findLastKey,isArrayLike,invert,invertBy,uniq,uniqBy,omit,omitBy,zip,unzip,rest,range,random,reject,intersection,drop,countBy,union,zipObject,initial,cloneDeep,clamp,isPlainObject,take,takeRight,without"`
  * Copyright JS Foundation and other contributors <https://js.foundation/>
  * Released under MIT license <https://lodash.com/license>
  * Based on Underscore.js 1.8.3 <http://underscorejs.org/LICENSE>
@@ -11582,6 +11582,27 @@ if ( typeof define === "function" && define.amd && define.amd.jQuery ) {
   }
 
   /**
+   * The base implementation of `_.clamp` which doesn't coerce arguments.
+   *
+   * @private
+   * @param {number} number The number to clamp.
+   * @param {number} [lower] The lower bound.
+   * @param {number} upper The upper bound.
+   * @returns {number} Returns the clamped number.
+   */
+  function baseClamp(number, lower, upper) {
+    if (number === number) {
+      if (upper !== undefined) {
+        number = number <= upper ? number : upper;
+      }
+      if (lower !== undefined) {
+        number = number >= lower ? number : lower;
+      }
+    }
+    return number;
+  }
+
+  /**
    * The base implementation of `_.clone` and `_.cloneDeep` which tracks
    * traversed objects.
    *
@@ -11694,6 +11715,62 @@ if ( typeof define === "function" && define.amd && define.amd.jQuery ) {
       throw new TypeError(FUNC_ERROR_TEXT);
     }
     return setTimeout(function() { func.apply(undefined, args); }, wait);
+  }
+
+  /**
+   * The base implementation of methods like `_.difference` without support
+   * for excluding multiple arrays or iteratee shorthands.
+   *
+   * @private
+   * @param {Array} array The array to inspect.
+   * @param {Array} values The values to exclude.
+   * @param {Function} [iteratee] The iteratee invoked per element.
+   * @param {Function} [comparator] The comparator invoked per element.
+   * @returns {Array} Returns the new array of filtered values.
+   */
+  function baseDifference(array, values, iteratee, comparator) {
+    var index = -1,
+        includes = arrayIncludes,
+        isCommon = true,
+        length = array.length,
+        result = [],
+        valuesLength = values.length;
+
+    if (!length) {
+      return result;
+    }
+    if (iteratee) {
+      values = arrayMap(values, baseUnary(iteratee));
+    }
+    if (comparator) {
+      includes = arrayIncludesWith;
+      isCommon = false;
+    }
+    else if (values.length >= LARGE_ARRAY_SIZE) {
+      includes = cacheHas;
+      isCommon = false;
+      values = new SetCache(values);
+    }
+    outer:
+    while (++index < length) {
+      var value = array[index],
+          computed = iteratee == null ? value : iteratee(value);
+
+      value = (comparator || value !== 0) ? value : 0;
+      if (isCommon && computed === computed) {
+        var valuesIndex = valuesLength;
+        while (valuesIndex--) {
+          if (values[valuesIndex] === computed) {
+            continue outer;
+          }
+        }
+        result.push(value);
+      }
+      else if (!includes(values, computed, comparator)) {
+        result.push(value);
+      }
+    }
+    return result;
   }
 
   /**
@@ -15071,6 +15148,25 @@ if ( typeof define === "function" && define.amd && define.amd.jQuery ) {
   }
 
   /**
+   * Gets all but the last element of `array`.
+   *
+   * @static
+   * @memberOf _
+   * @since 0.1.0
+   * @category Array
+   * @param {Array} array The array to query.
+   * @returns {Array} Returns the slice of `array`.
+   * @example
+   *
+   * _.initial([1, 2, 3]);
+   * // => [1, 2]
+   */
+  function initial(array) {
+    var length = array == null ? 0 : array.length;
+    return length ? baseSlice(array, 0, -1) : [];
+  }
+
+  /**
    * Creates an array of unique values that are included in all given arrays
    * using [`SameValueZero`](http://ecma-international.org/ecma-262/7.0/#sec-samevaluezero)
    * for equality comparisons. The order and references of result values are
@@ -15170,6 +15266,74 @@ if ( typeof define === "function" && define.amd && define.amd.jQuery ) {
       end = end === undefined ? length : toInteger(end);
     }
     return baseSlice(array, start, end);
+  }
+
+  /**
+   * Creates a slice of `array` with `n` elements taken from the beginning.
+   *
+   * @static
+   * @memberOf _
+   * @since 0.1.0
+   * @category Array
+   * @param {Array} array The array to query.
+   * @param {number} [n=1] The number of elements to take.
+   * @param- {Object} [guard] Enables use as an iteratee for methods like `_.map`.
+   * @returns {Array} Returns the slice of `array`.
+   * @example
+   *
+   * _.take([1, 2, 3]);
+   * // => [1]
+   *
+   * _.take([1, 2, 3], 2);
+   * // => [1, 2]
+   *
+   * _.take([1, 2, 3], 5);
+   * // => [1, 2, 3]
+   *
+   * _.take([1, 2, 3], 0);
+   * // => []
+   */
+  function take(array, n, guard) {
+    if (!(array && array.length)) {
+      return [];
+    }
+    n = (guard || n === undefined) ? 1 : toInteger(n);
+    return baseSlice(array, 0, n < 0 ? 0 : n);
+  }
+
+  /**
+   * Creates a slice of `array` with `n` elements taken from the end.
+   *
+   * @static
+   * @memberOf _
+   * @since 3.0.0
+   * @category Array
+   * @param {Array} array The array to query.
+   * @param {number} [n=1] The number of elements to take.
+   * @param- {Object} [guard] Enables use as an iteratee for methods like `_.map`.
+   * @returns {Array} Returns the slice of `array`.
+   * @example
+   *
+   * _.takeRight([1, 2, 3]);
+   * // => [3]
+   *
+   * _.takeRight([1, 2, 3], 2);
+   * // => [2, 3]
+   *
+   * _.takeRight([1, 2, 3], 5);
+   * // => [1, 2, 3]
+   *
+   * _.takeRight([1, 2, 3], 0);
+   * // => []
+   */
+  function takeRight(array, n, guard) {
+    var length = array == null ? 0 : array.length;
+    if (!length) {
+      return [];
+    }
+    n = (guard || n === undefined) ? 1 : toInteger(n);
+    n = length - n;
+    return baseSlice(array, n < 0 ? 0 : n, length);
   }
 
   /**
@@ -15275,6 +15439,32 @@ if ( typeof define === "function" && define.amd && define.amd.jQuery ) {
       return arrayMap(array, baseProperty(index));
     });
   }
+
+  /**
+   * Creates an array excluding all given values using
+   * [`SameValueZero`](http://ecma-international.org/ecma-262/7.0/#sec-samevaluezero)
+   * for equality comparisons.
+   *
+   * **Note:** Unlike `_.pull`, this method returns a new array.
+   *
+   * @static
+   * @memberOf _
+   * @since 0.1.0
+   * @category Array
+   * @param {Array} array The array to inspect.
+   * @param {...*} [values] The values to exclude.
+   * @returns {Array} Returns the new array of filtered values.
+   * @see _.difference, _.xor
+   * @example
+   *
+   * _.without([2, 1, 2, 3], 1, 2);
+   * // => [3]
+   */
+  var without = baseRest(function(array, values) {
+    return isArrayLikeObject(array)
+      ? baseDifference(array, values)
+      : [];
+  });
 
   /**
    * Creates an array of grouped elements, the first of which contains the
@@ -16683,6 +16873,28 @@ if ( typeof define === "function" && define.amd && define.amd.jQuery ) {
    */
   function clone(value) {
     return baseClone(value, CLONE_SYMBOLS_FLAG);
+  }
+
+  /**
+   * This method is like `_.clone` except that it recursively clones `value`.
+   *
+   * @static
+   * @memberOf _
+   * @since 1.0.0
+   * @category Lang
+   * @param {*} value The value to recursively clone.
+   * @returns {*} Returns the deep cloned value.
+   * @see _.clone
+   * @example
+   *
+   * var objects = [{ 'a': 1 }, { 'b': 2 }];
+   *
+   * var deep = _.cloneDeep(objects);
+   * console.log(deep[0] === objects[0]);
+   * // => false
+   */
+  function cloneDeep(value) {
+    return baseClone(value, CLONE_DEEP_FLAG | CLONE_SYMBOLS_FLAG);
   }
 
   /**
@@ -18191,6 +18403,41 @@ if ( typeof define === "function" && define.amd && define.amd.jQuery ) {
   /*------------------------------------------------------------------------*/
 
   /**
+   * Clamps `number` within the inclusive `lower` and `upper` bounds.
+   *
+   * @static
+   * @memberOf _
+   * @since 4.0.0
+   * @category Number
+   * @param {number} number The number to clamp.
+   * @param {number} [lower] The lower bound.
+   * @param {number} upper The upper bound.
+   * @returns {number} Returns the clamped number.
+   * @example
+   *
+   * _.clamp(-10, -5, 5);
+   * // => -5
+   *
+   * _.clamp(10, -5, 5);
+   * // => 5
+   */
+  function clamp(number, lower, upper) {
+    if (upper === undefined) {
+      upper = lower;
+      lower = undefined;
+    }
+    if (upper !== undefined) {
+      upper = toNumber(upper);
+      upper = upper === upper ? upper : 0;
+    }
+    if (lower !== undefined) {
+      lower = toNumber(lower);
+      lower = lower === lower ? lower : 0;
+    }
+    return baseClamp(toNumber(number), lower, upper);
+  }
+
+  /**
    * Produces a random number between the inclusive `lower` and `upper` bounds.
    * If only one argument is provided a number between `0` and the given number
    * is returned. If `floating` is `true`, or either `lower` or `upper` are
@@ -18729,6 +18976,7 @@ if ( typeof define === "function" && define.amd && define.amd.jQuery ) {
   lodash.filter = filter;
   lodash.flatten = flatten;
   lodash.flattenDeep = flattenDeep;
+  lodash.initial = initial;
   lodash.intersection = intersection;
   lodash.invert = invert;
   lodash.invertBy = invertBy;
@@ -18747,6 +18995,8 @@ if ( typeof define === "function" && define.amd && define.amd.jQuery ) {
   lodash.rest = rest;
   lodash.slice = slice;
   lodash.sortBy = sortBy;
+  lodash.take = take;
+  lodash.takeRight = takeRight;
   lodash.tap = tap;
   lodash.throttle = throttle;
   lodash.thru = thru;
@@ -18756,6 +19006,7 @@ if ( typeof define === "function" && define.amd && define.amd.jQuery ) {
   lodash.uniqBy = uniqBy;
   lodash.unzip = unzip;
   lodash.values = values;
+  lodash.without = without;
   lodash.zip = zip;
   lodash.zipObject = zipObject;
 
@@ -18768,7 +19019,9 @@ if ( typeof define === "function" && define.amd && define.amd.jQuery ) {
   /*------------------------------------------------------------------------*/
 
   // Add methods that return unwrapped values in chain sequences.
+  lodash.clamp = clamp;
   lodash.clone = clone;
+  lodash.cloneDeep = cloneDeep;
   lodash.escape = escape;
   lodash.every = every;
   lodash.find = find;
@@ -18795,6 +19048,7 @@ if ( typeof define === "function" && define.amd && define.amd.jQuery ) {
   lodash.isNull = isNull;
   lodash.isNumber = isNumber;
   lodash.isObject = isObject;
+  lodash.isPlainObject = isPlainObject;
   lodash.isRegExp = isRegExp;
   lodash.isString = isString;
   lodash.isUndefined = isUndefined;
@@ -19238,7 +19492,7 @@ if (!window.BI) {
         BI[name] = _apply(name);
     });
     _.each(["get", "each", "map", "reduce", "reduceRight", "find", "filter", "reject", "every", "all", "some", "any", "max", "min",
-        "sortBy", "groupBy", "indexBy", "countBy", "partition"], function (name) {
+        "sortBy", "groupBy", "indexBy", "countBy", "partition", "clamp"], function (name) {
         if (name === "any") {
             BI[name] = _applyFunc("some");
         } else {
@@ -19246,15 +19500,6 @@ if (!window.BI) {
         }
     });
     _.extend(BI, {
-        clamp: function (value, minValue, maxValue) {
-            if (value < minValue) {
-                value = minValue;
-            }
-            if (value > maxValue) {
-                value = maxValue;
-            }
-            return value;
-        },
         // 数数
         count: function (from, to, predicate) {
             var t;
@@ -19443,7 +19688,7 @@ if (!window.BI) {
 
     // 数组相关的方法
     _.each(["first", "initial", "last", "rest", "compact", "flatten", "without", "union", "intersection",
-        "difference", "zip", "unzip", "object", "indexOf", "lastIndexOf", "sortedIndex", "range"], function (name) {
+        "difference", "zip", "unzip", "object", "indexOf", "lastIndexOf", "sortedIndex", "range", "take", "takeRight"], function (name) {
         BI[name] = _apply(name);
     });
     _.each(["findIndex", "findLastIndex"], function (name) {
@@ -19507,8 +19752,8 @@ if (!window.BI) {
     // 对象相关方法
     _.each(["keys", "allKeys", "values", "pairs", "invert", "create", "functions", "extend", "extendOwn",
         "defaults", "clone", "property", "propertyOf", "matcher", "isEqual", "isMatch", "isEmpty",
-        "isElement", "isNumber", "isString", "isArray", "isObject", "isArguments", "isFunction", "isFinite",
-        "isBoolean", "isDate", "isRegExp", "isError", "isNaN", "isUndefined", "zipObject"], function (name) {
+        "isElement", "isNumber", "isString", "isArray", "isObject", "isPlainObject", "isArguments", "isFunction", "isFinite",
+        "isBoolean", "isDate", "isRegExp", "isError", "isNaN", "isUndefined", "zipObject", "cloneDeep"], function (name) {
         BI[name] = _apply(name);
     });
     _.each(["mapObject", "findKey", "pick", "omit", "tap"], function (name) {
@@ -19575,10 +19820,6 @@ if (!window.BI) {
             return typeof  obj === "undefined" || obj === null;
         },
 
-        isPlainObject: function () {
-            return $.isPlainObject.apply($, arguments);
-        },
-
         isEmptyArray: function (arr) {
             return BI.isArray(arr) && BI.isEmpty(arr);
         },
@@ -19610,48 +19851,7 @@ if (!window.BI) {
 
     // deep方法
     _.extend(BI, {
-        /**
-         *完全克隆�?个js对象
-         * @param obj
-         * @returns {*}
-         */
-        deepClone: function (obj) {
-            if (obj === null || obj === undefined) {
-                return obj;
-            }
-
-            var type = Object.prototype.toString.call(obj);
-
-            // Date
-            if (type === "[object Date]") {
-                return BI.getDate(obj.getTime());
-            }
-
-            var i, clone, key;
-
-            // Array
-            if (type === "[object Array]") {
-                i = obj.length;
-
-                clone = [];
-
-                while (i--) {
-                    clone[i] = BI.deepClone(obj[i]);
-                }
-            }
-            // Object
-            else if (type === "[object Object]" && obj.constructor === Object) {
-                clone = {};
-
-                for (var i in obj) {
-                    if (BI.has(obj, i)) {
-                        clone[i] = BI.deepClone(obj[i]);
-                    }
-                }
-            }
-
-            return clone || obj;
-        },
+        deepClone: _.cloneDeep,
 
         isDeepMatch: function (object, attrs) {
             var keys = BI.keys(attrs), length = keys.length;
@@ -25196,32 +25396,7 @@ BI.ShowAction = BI.inherit(BI.Action, {
         tar.setVisible(false);
         callback && callback();
     }
-});/**
- * 弹出层
- * @class BI.PopoverSection
- * @extends BI.Widget
- * @abstract
- */
-BI.PopoverSection = BI.inherit(BI.Widget, {
-    _init: function () {
-        BI.PopoverSection.superclass._init.apply(this, arguments);
-    },
-
-    rebuildNorth: function (north) {
-        return true;
-    },
-    rebuildCenter: function (center) {},
-    rebuildSouth: function (south) {
-        return false;
-    },
-    close: function () {
-        this.fireEvent(BI.PopoverSection.EVENT_CLOSE);
-    },
-    end: function () {
-
-    }
-});
-BI.PopoverSection.EVENT_CLOSE = "EVENT_CLOSE";(function () {
+});(function () {
     if (!window.BI) {
         window.BI = {};
     }
@@ -26370,148 +26545,6 @@ BI.BubblesController = BI.inherit(BI.Controller, {
         return this;
     }
 });/**
- * guy
- * FloatBox弹出层控制器, z-index在100w层级
- * @class BI.FloatBoxController
- * @extends BI.Controller
- */
-BI.FloatBoxController = BI.inherit(BI.Controller, {
-    _defaultConfig: function () {
-        return BI.extend(BI.FloatBoxController.superclass._defaultConfig.apply(this, arguments), {
-            modal: true, // 模态窗口
-            render: "body"
-        });
-    },
-
-    _init: function () {
-        BI.FloatBoxController.superclass._init.apply(this, arguments);
-        this.modal = this.options.modal;
-        this.floatManager = {};
-        this.floatLayer = {};
-        this.floatContainer = {};
-        this.floatOpened = {};
-        this.zindex = BI.zIndex_floatbox;
-        this.zindexMap = {};
-    },
-
-    _check: function (name) {
-        return BI.isNotNull(this.floatManager[name]);
-    },
-
-    create: function (name, section, options, context) {
-        if (this._check(name)) {
-            return this;
-        }
-        var floatbox = BI.createWidget({
-            type: "bi.float_box"
-        }, options, context);
-        floatbox.populate(section);
-        this.add(name, floatbox, options, context);
-        return this;
-    },
-
-    add: function (name, floatbox, options, context) {
-        var self = this;
-        options || (options = {});
-        if (this._check(name)) {
-            return this;
-        }
-        this.floatContainer[name] = BI.createWidget({
-            type: "bi.absolute",
-            cls: "bi-popup-view",
-            items: [{
-                el: (this.floatLayer[name] = BI.createWidget({
-                    type: "bi.absolute",
-                    items: [floatbox]
-                }, context)),
-                left: 0,
-                right: 0,
-                top: 0,
-                bottom: 0
-            }]
-        });
-        this.floatManager[name] = floatbox;
-        (function (key) {
-            floatbox.on(BI.FloatBox.EVENT_FLOAT_BOX_CLOSED, function () {
-                self.close(key);
-            });
-        })(name);
-        BI.createWidget({
-            type: "bi.absolute",
-            element: options.container || this.options.render,
-            items: [{
-                el: this.floatContainer[name],
-                left: 0,
-                right: 0,
-                top: 0,
-                bottom: 0
-            }]
-        });
-        return this;
-    },
-
-    open: function (name) {
-        if (!this._check(name)) {
-            return this;
-        }
-        if (!this.floatOpened[name]) {
-            this.floatOpened[name] = true;
-            var container = this.floatContainer[name];
-            container.element.css("zIndex", this.zindex++);
-            this.modal && container.element.__hasZIndexMask__(this.zindexMap[name]) && container.element.__releaseZIndexMask__(this.zindexMap[name]);
-            this.zindexMap[name] = this.zindex;
-            this.modal && container.element.__buildZIndexMask__(this.zindex++);
-            this.get(name).setZindex(this.zindex++);
-            this.floatContainer[name].visible();
-            var floatbox = this.get(name);
-            floatbox.show();
-            var W = $(this.options.render).width(), H = $(this.options.render).height();
-            var w = floatbox.element.width(), h = floatbox.element.height();
-            var left = (W - w) / 2, top = (H - h) / 2;
-            if (left < 0) {
-                left = 0;
-            }
-            if (top < 0) {
-                top = 0;
-            }
-            floatbox.element.css({
-                left: left + "px",
-                top: top + "px"
-            });
-        }
-        return this;
-    },
-
-    close: function (name) {
-        if (!this._check(name)) {
-            return this;
-        }
-        if (this.floatOpened[name]) {
-            delete this.floatOpened[name];
-            this.floatContainer[name].invisible();
-            this.modal && this.floatContainer[name].element.__releaseZIndexMask__(this.zindexMap[name]);
-        }
-        return this;
-    },
-
-    get: function (name) {
-        return this.floatManager[name];
-    },
-
-    remove: function (name) {
-        if (!this._check(name)) {
-            return this;
-        }
-        this.floatContainer[name].destroy();
-        this.modal && this.floatContainer[name].element.__releaseZIndexMask__(this.zindexMap[name]);
-        delete this.floatManager[name];
-        delete this.floatLayer[name];
-        delete this.zindexMap[name];
-        delete this.floatContainer[name];
-        delete this.floatOpened[name];
-        return this;
-    }
-});/**
  * 弹出层面板控制器, z-index在10w层级
  *
  * Created by GUY on 2015/6/24.
@@ -26540,14 +26573,15 @@ BI.LayerController = BI.inherit(BI.Controller, {
         });
     },
 
-    make: function (name, container, op) {
+    make: function (name, container, op, context) {
         if (BI.isWidget(container)) {
             op = op || {};
             op.container = container;
         } else {
+            context = op;
             op = container;
         }
-        return this.create(name, null, op);
+        return this.create(name, null, op, context);
     },
 
     create: function (name, from, op, context) {
@@ -26566,10 +26600,9 @@ BI.LayerController = BI.inherit(BI.Controller, {
         if (this.has(name)) {
             return this.get(name);
         }
-        var widget = BI.createWidget((op.render || {}), {
-            type: "bi.layout",
-            cls: op.cls
-        }, context);
+        var widget = BI.createWidget((op.render || {}), BI.extend({
+            type: "bi.layout"
+        }, op), context);
         var layout = BI.createWidget({
             type: "bi.absolute",
             items: [{
@@ -26596,16 +26629,16 @@ BI.LayerController = BI.inherit(BI.Controller, {
             layout.element.css({
                 left: w.offset().left + (offset.left || 0),
                 top: w.offset().top + (offset.top || 0),
-                width: offset.width || (w.outerWidth() - (offset.right || 0)) || "",
-                height: offset.height || (w.outerHeight() - (offset.bottom || 0)) || ""
+                width: offset.width || (w.outerWidth() - (offset.left || 0) - (offset.right || 0)) || "",
+                height: offset.height || (w.outerHeight() - (offset.top || 0) - (offset.bottom || 0)) || ""
             });
             layout.element.on("__resize__", function () {
                 w.is(":visible") &&
                 layout.element.css({
                     left: w.offset().left + (offset.left || 0),
                     top: w.offset().top + (offset.top || 0),
-                    width: offset.width || (w.outerWidth() - (offset.right || 0)) || "",
-                    height: offset.height || (w.outerHeight() - (offset.bottom || 0)) || ""
+                    width: offset.width || (w.outerWidth() - (offset.left || 0) - (offset.right || 0)) || "",
+                    height: offset.height || (w.outerHeight() - (offset.top || 0) - (offset.bottom || 0)) || ""
                 });
             });
         }
@@ -26682,6 +26715,147 @@ BI.MaskersController = BI.inherit(BI.LayerController, {
     _init: function () {
         BI.MaskersController.superclass._init.apply(this, arguments);
         this.zindex = BI.zIndex_masker;
+    }
+});/**
+ * guy
+ * popover弹出层控制器, z-index在100w层级
+ * @class BI.popoverController
+ * @extends BI.Controller
+ */
+BI.PopoverController = BI.inherit(BI.Controller, {
+    _defaultConfig: function () {
+        return BI.extend(BI.PopoverController.superclass._defaultConfig.apply(this, arguments), {
+            modal: true, // 模态窗口
+            render: "body"
+        });
+    },
+
+    _init: function () {
+        BI.PopoverController.superclass._init.apply(this, arguments);
+        this.modal = this.options.modal;
+        this.floatManager = {};
+        this.floatLayer = {};
+        this.floatContainer = {};
+        this.floatOpened = {};
+        this.zindex = BI.zIndex_popover;
+        this.zindexMap = {};
+    },
+
+    _check: function (name) {
+        return BI.isNotNull(this.floatManager[name]);
+    },
+
+    create: function (name, options, context) {
+        if (this._check(name)) {
+            return this;
+        }
+        var popover = BI.createWidget(options || {}, {
+            type: "bi.popover"
+        }, context);
+        this.add(name, popover, options, context);
+        return this;
+    },
+
+    add: function (name, popover, options, context) {
+        var self = this;
+        options || (options = {});
+        if (this._check(name)) {
+            return this;
+        }
+        this.floatContainer[name] = BI.createWidget({
+            type: "bi.absolute",
+            cls: "bi-popup-view",
+            items: [{
+                el: (this.floatLayer[name] = BI.createWidget({
+                    type: "bi.absolute",
+                    items: [popover]
+                }, context)),
+                left: 0,
+                right: 0,
+                top: 0,
+                bottom: 0
+            }]
+        });
+        this.floatManager[name] = popover;
+        (function (key) {
+            popover.on(BI.Popover.EVENT_CLOSE, function () {
+                self.close(key);
+            });
+        })(name);
+        BI.createWidget({
+            type: "bi.absolute",
+            element: options.container || this.options.render,
+            items: [{
+                el: this.floatContainer[name],
+                left: 0,
+                right: 0,
+                top: 0,
+                bottom: 0
+            }]
+        });
+        return this;
+    },
+
+    open: function (name) {
+        if (!this._check(name)) {
+            return this;
+        }
+        if (!this.floatOpened[name]) {
+            this.floatOpened[name] = true;
+            var container = this.floatContainer[name];
+            container.element.css("zIndex", this.zindex++);
+            this.modal && container.element.__hasZIndexMask__(this.zindexMap[name]) && container.element.__releaseZIndexMask__(this.zindexMap[name]);
+            this.zindexMap[name] = this.zindex;
+            this.modal && container.element.__buildZIndexMask__(this.zindex++);
+            this.get(name).setZindex(this.zindex++);
+            this.floatContainer[name].visible();
+            var popover = this.get(name);
+            popover.show && popover.show();
+            var W = $(this.options.render).width(), H = $(this.options.render).height();
+            var w = popover.element.width(), h = popover.element.height();
+            var left = (W - w) / 2, top = (H - h) / 2;
+            if (left < 0) {
+                left = 0;
+            }
+            if (top < 0) {
+                top = 0;
+            }
+            popover.element.css({
+                left: left + "px",
+                top: top + "px"
+            });
+        }
+        return this;
+    },
+
+    close: function (name) {
+        if (!this._check(name)) {
+            return this;
+        }
+        if (this.floatOpened[name]) {
+            delete this.floatOpened[name];
+            this.floatContainer[name].invisible();
+            this.modal && this.floatContainer[name].element.__releaseZIndexMask__(this.zindexMap[name]);
+        }
+        return this;
+    },
+
+    get: function (name) {
+        return this.floatManager[name];
+    },
+
+    remove: function (name) {
+        if (!this._check(name)) {
+            return this;
+        }
+        this.floatContainer[name].destroy();
+        this.modal && this.floatContainer[name].element.__releaseZIndexMask__(this.zindexMap[name]);
+        delete this.floatManager[name];
+        delete this.floatLayer[name];
+        delete this.zindexMap[name];
+        delete this.floatContainer[name];
+        delete this.floatOpened[name];
+        return this;
     }
 });/**
  * window.resize 控制器
@@ -28304,6 +28478,8 @@ BI.extend(BI.DOM, {
         }
         if (!points[type][action]) {
             points[type][action] = {};
+        }
+        if (!points[type][action][after ? "after" : "before"]) {
             points[type][action][after ? "after" : "before"] = [];
         }
         points[type][action][after ? "after" : "before"].push(pointFn);
@@ -29887,7 +30063,7 @@ _.extend(BI, {
     MIN: -0xfffffffffffffff,
     EVENT_RESPONSE_TIME: 200,
     zIndex_layer: 1e5,
-    zIndex_floatbox: 1e6,
+    zIndex_popover: 1e6,
     zIndex_popup: 1e7,
     zIndex_masker: 1e8,
     zIndex_tip: 1e9,
@@ -36139,7 +36315,7 @@ BI.Layers = new BI.LayerController();
 BI.Maskers = new BI.MaskersController();
 BI.Bubbles = new BI.BubblesController();
 BI.Tooltips = new BI.TooltipsController();
-BI.Popovers = new BI.FloatBoxController();
+BI.Popovers = new BI.PopoverController();
 BI.Broadcasts = new BI.BroadcastController();
 BI.StyleLoaders = new BI.StyleLoaderManager();/**
  * canvas绘图
@@ -48953,26 +49129,23 @@ BI.GridView = BI.inherit(BI.Widget, {
 });
 BI.GridView.EVENT_SCROLL = "EVENT_SCROLL";
 BI.shortcut("bi.grid_view", BI.GridView);/**
- * floatBox弹出层，
- * @class BI.FloatBox
+ * Popover弹出层，
+ * @class BI.Popover
  * @extends BI.Widget
  */
-BI.FloatBox = BI.inherit(BI.Widget, {
+BI.Popover = BI.inherit(BI.Widget, {
     _defaultConfig: function () {
-        return BI.extend(BI.FloatBox.superclass._defaultConfig.apply(this, arguments), {
-            baseCls: "bi-float-box bi-card",
+        return BI.extend(BI.Popover.superclass._defaultConfig.apply(this, arguments), {
+            baseCls: "bi-popover bi-card",
             width: 600,
-            height: 500
+            height: 500,
+            header: null,
+            body: null,
+            footer: null
         });
     },
-    _init: function () {
-        BI.FloatBox.superclass._init.apply(this, arguments);
+    render: function () {
         var self = this, o = this.options;
-        this.showAction = new BI.ShowAction({
-            tar: this
-        });
-        this._center = BI.createWidget();
-        this._north = BI.createWidget();
         this.element.draggable && this.element.draggable({
             handle: ".bi-message-title",
             drag: function (e, ui) {
@@ -48993,102 +49166,91 @@ BI.FloatBox = BI.inherit(BI.Widget, {
                 BI.Resizers._resize();
             }
         });
-        this._south = BI.createWidget();
+        var items = {
+            north: {
+                el: {
+                    type: "bi.border",
+                    cls: "bi-message-title bi-background",
+                    items: {
+                        center: {
+                            el: {
+                                type: "bi.absolute",
+                                items: [{
+                                    el: BI.createWidget(o.header),
+                                    left: 10,
+                                    top: 0,
+                                    right: 0,
+                                    bottom: 0
+                                }]
+                            }
+                        },
+                        east: {
+                            el: {
+                                type: "bi.icon_button",
+                                cls: "bi-message-close close-font",
+                                height: 36,
+                                handler: function () {
+                                    self.close();
+                                }
+                            },
+                            width: 60
+                        }
+                    }
+                },
+                height: 36
+            },
+            center: {
+                el: {
+                    type: "bi.absolute",
+                    items: [{
+                        el: BI.createWidget(o.body),
+                        left: 20,
+                        top: 20,
+                        right: 20,
+                        bottom: 0
+                    }]
+                }
+            }
+        };
+        if (o.footer) {
+            items.south = {
+                el: {
+                    type: "bi.absolute",
+                    items: [{
+                        el: BI.createWidget(o.footer),
+                        left: 20,
+                        top: 0,
+                        right: 20,
+                        bottom: 0
+                    }]
+                },
+                height: 44
+            };
+        }
+
         BI.createWidget({
             type: "bi.border",
             element: this,
-            items: {
-                north: {
-                    el: {
-                        type: "bi.border",
-                        cls: "bi-message-title bi-background",
-                        items: {
-                            center: {
-                                el: {
-                                    type: "bi.absolute",
-                                    items: [{
-                                        el: this._north,
-                                        left: 10,
-                                        top: 0,
-                                        right: 0,
-                                        bottom: 0
-                                    }]
-                                }
-                            },
-                            east: {
-                                el: {
-                                    type: "bi.icon_button",
-                                    cls: "bi-message-close close-font",
-                                    height: 36,
-                                    handler: function () {
-                                        self.currentSectionProvider.close();
-                                    }
-                                },
-                                width: 60
-                            }
-                        }
-                    },
-                    height: 36
-                },
-                center: {
-                    el: {
-                        type: "bi.absolute",
-                        items: [{
-                            el: this._center,
-                            left: 20,
-                            top: 20,
-                            right: 20,
-                            bottom: 0
-                        }]
-                    }
-                },
-                south: {
-                    el: {
-                        type: "bi.absolute",
-                        items: [{
-                            el: this._south,
-                            left: 20,
-                            top: 0,
-                            right: 20,
-                            bottom: 0
-                        }]
-                    },
-                    height: 44
-                }
-            }
-        });
-    },
-
-    populate: function (sectionProvider) {
-        var self = this;
-        if (this.currentSectionProvider && this.currentSectionProvider !== sectionProvider) {
-            this.currentSectionProvider.destroy();
-        }
-        this.currentSectionProvider = sectionProvider;
-        sectionProvider.rebuildNorth(this._north);
-        sectionProvider.rebuildCenter(this._center);
-        sectionProvider.rebuildSouth(this._south);
-        sectionProvider.on(BI.PopoverSection.EVENT_CLOSE, function () {
-            self.close();
+            items: items
         });
     },
 
     show: function () {
-        this.showAction.actionPerformed();
+
     },
 
     hide: function () {
-        this.showAction.actionBack();
+
     },
 
     open: function () {
         this.show();
-        this.fireEvent(BI.FloatBox.EVENT_FLOAT_BOX_OPEN);
+        this.fireEvent(BI.Popover.EVENT_OPEN, arguments);
     },
 
     close: function () {
         this.hide();
-        this.fireEvent(BI.FloatBox.EVENT_FLOAT_BOX_CLOSED);
+        this.fireEvent(BI.Popover.EVENT_CLOSE, arguments);
     },
 
     setZindex: function (zindex) {
@@ -49096,14 +49258,52 @@ BI.FloatBox = BI.inherit(BI.Widget, {
     },
 
     destroyed: function () {
-        this.currentSectionProvider && this.currentSectionProvider.destroy();
     }
 });
 
-BI.shortcut("bi.float_box", BI.FloatBox);
+BI.shortcut("bi.popover", BI.Popover);
 
-BI.FloatBox.EVENT_FLOAT_BOX_CLOSED = "EVENT_FLOAT_BOX_CLOSED";
-BI.FloatBox.EVENT_FLOAT_BOX_OPEN = "EVENT_FLOAT_BOX_CLOSED";
+BI.BarPopover = BI.inherit(BI.Popover, {
+    _defaultConfig: function () {
+        return BI.extend(BI.BarPopover.superclass._defaultConfig.apply(this, arguments), {
+            btns: [BI.i18nText(BI.i18nText("BI-Basic_Sure")), BI.i18nText(BI.i18nText("BI-Basic_Cancel"))]
+        });
+    },
+
+    beforeCreate: function () {
+        var self = this, o = this.options;
+        o.footer || (o.footer = {
+            type: "bi.right_vertical_adapt",
+            lgap: 10,
+            items: [{
+                type: "bi.button",
+                text: this.options.btns[1],
+                value: 1,
+                level: "ignore",
+                handler: function (v) {
+                    self.fireEvent(BI.Popover.EVENT_CANCEL, v);
+                    self.close(v);
+                }
+            }, {
+                type: "bi.button",
+                text: this.options.btns[0],
+                warningTitle: o.warningTitle,
+                value: 0,
+                handler: function (v) {
+                    self.fireEvent(BI.Popover.EVENT_CONFIRM, v);
+                    self.close(v);
+                }
+            }]
+        });
+    }
+});
+
+BI.shortcut("bi.bar_popover", BI.BarPopover);
+
+BI.Popover.EVENT_CLOSE = "EVENT_CLOSE";
+BI.Popover.EVENT_OPEN = "EVENT_OPEN";
+BI.Popover.EVENT_CANCEL = "EVENT_CANCEL";
+BI.Popover.EVENT_CONFIRM = "EVENT_CONFIRM";
 /**
  * 下拉框弹出层, zIndex在1000w
  * @class BI.PopupView
@@ -75493,7 +75693,7 @@ BI.IconCombo = BI.inherit(BI.Widget, {
     _defaultConfig: function () {
         return BI.extend(BI.IconCombo.superclass._defaultConfig.apply(this, arguments), {
             baseCls: "bi-icon-combo",
-            width: 24,
+            width: 28,
             height: 24,
             el: {},
             popup: {},
@@ -75657,8 +75857,8 @@ BI.IconComboTrigger = BI.inherit(BI.Trigger, {
             el: {},
             items: [],
             iconCls: "",
-            width: 25,
-            height: 25,
+            width: 28,
+            height: 24,
             isShowDown: true,
             value: ""
         });
@@ -75676,7 +75876,7 @@ BI.IconComboTrigger = BI.inherit(BI.Trigger, {
             cls: "icon-combo-trigger-icon",
             iconCls: iconCls,
             disableSelected: true,
-            width: o.width,
+            width: o.width - 12,
             height: o.height,
             iconWidth: o.iconWidth,
             iconHeight: o.iconHeight,
@@ -75687,7 +75887,7 @@ BI.IconComboTrigger = BI.inherit(BI.Trigger, {
             disableSelected: true,
             cls: "icon-combo-down-icon trigger-triangle-font",
             width: 12,
-            height: 8,
+            height: o.height,
             selected: BI.isNotEmptyString(iconCls)
         });
         this.down.setVisible(o.isShowDown);
@@ -78259,55 +78459,6 @@ BI.SimpleStateEditor.EVENT_SPACE = "EVENT_SPACE";
 BI.SimpleStateEditor.EVENT_EMPTY = "EVENT_EMPTY";
 
 BI.shortcut("bi.simple_state_editor", BI.SimpleStateEditor);/**
- * 有确定取消按钮的弹出层
- * @class BI.BarPopoverSection
- * @extends BI.PopoverSection
- * @abstract
- */
-BI.BarPopoverSection = BI.inherit(BI.PopoverSection, {
-    _defaultConfig: function () {
-        return BI.extend(BI.BarPopoverSection.superclass._defaultConfig.apply(this, arguments), {
-            btns: [BI.i18nText(BI.i18nText("BI-Basic_Sure")), BI.i18nText(BI.i18nText("BI-Basic_Cancel"))]
-        });
-    },
-
-    _init: function () {
-        BI.BarPopoverSection.superclass._init.apply(this, arguments);
-    },
-
-    rebuildSouth: function (south) {
-        var self = this, o = this.options;
-        this.sure = BI.createWidget({
-            type: "bi.button",
-            text: this.options.btns[0],
-            warningTitle: o.warningTitle,
-            value: 0,
-            handler: function (v) {
-                self.end();
-                self.close(v);
-            }
-        });
-        this.cancel = BI.createWidget({
-            type: "bi.button",
-            text: this.options.btns[1],
-            value: 1,
-            level: "ignore",
-            handler: function (v) {
-                self.close(v);
-            }
-        });
-        BI.createWidget({
-            type: "bi.right_vertical_adapt",
-            element: south,
-            lgap: 10,
-            items: [this.cancel, this.sure]
-        });
-    },
-
-    setConfirmButtonEnable: function (v) {
-        this.sure.setEnable(!!v);
-    }
-});/**
  * 下拉框弹出层的多选版本，toolbar带有若干按钮, zIndex在1000w
  * @class BI.MultiPopupView
  * @extends BI.Widget
@@ -78932,8 +79083,8 @@ BI.LazyLoader = BI.inherit(BI.Widget, {
     _getNextItems: function (options) {
         var self = this, o = this.options;
         var lastNum = o.items.length - this._const.PAGE * (options.times - 1);
-        var lastItems = BI.last(o.items, lastNum);
-        var nextItems = BI.first(lastItems, this._const.PAGE);
+        var lastItems = BI.takeRight(o.items, lastNum);
+        var nextItems = BI.take(lastItems, this._const.PAGE);
         return nextItems;
     },
 
@@ -89001,7 +89152,11 @@ BI.MonthCombo = BI.inherit(BI.Widget, {
     },
 
     getValue: function () {
-        return this.popup.getValue();
+        if (BI.isNull(this.popup)) {
+            return this.options.value || "";
+        } else {
+            return this.popup.getValue() || "";
+        }
     }
 });
 
@@ -90302,6 +90457,418 @@ BI.YearCard = BI.inherit(BI.MultiDateCard, {
 BI.YearCard.EVENT_CHANGE = "EVENT_CHANGE";
 BI.shortcut("bi.yearcard", BI.YearCard);
 /**
+ * Created by roy on 15/8/14.
+ */
+BI.DownListCombo = BI.inherit(BI.Widget, {
+    _defaultConfig: function () {
+        return BI.extend(BI.DownListCombo.superclass._defaultConfig.apply(this, arguments), {
+            baseCls: "bi-multilayer-down-list-combo",
+            height: 24,
+            items: [],
+            adjustLength: 0,
+            direction: "bottom",
+            trigger: "click",
+            container: null,
+            stopPropagation: false,
+            el: {}
+        });
+    },
+
+    _init: function () {
+        BI.DownListCombo.superclass._init.apply(this, arguments);
+        var self = this, o = this.options;
+        this.popupview = BI.createWidget({
+            type: "bi.multi_layer_down_list_popup",
+            items: o.items,
+            chooseType: o.chooseType,
+            value: o.value
+        });
+
+        this.popupview.on(BI.DownListPopup.EVENT_CHANGE, function (value) {
+            self.fireEvent(BI.DownListCombo.EVENT_CHANGE, value);
+            self.downlistcombo.hideView();
+        });
+
+        this.popupview.on(BI.DownListPopup.EVENT_SON_VALUE_CHANGE, function (value, fatherValue) {
+            self.fireEvent(BI.DownListCombo.EVENT_SON_VALUE_CHANGE, value, fatherValue);
+            self.downlistcombo.hideView();
+        });
+
+
+        this.downlistcombo = BI.createWidget({
+            element: this,
+            type: "bi.combo",
+            trigger: o.trigger,
+            isNeedAdjustWidth: false,
+            container: o.container,
+            adjustLength: o.adjustLength,
+            direction: o.direction,
+            stopPropagation: o.stopPropagation,
+            el: BI.createWidget(o.el, {
+                type: "bi.icon_trigger",
+                extraCls: o.iconCls ? o.iconCls : "pull-down-font",
+                width: o.width,
+                height: o.height
+            }),
+            popup: {
+                el: this.popupview,
+                stopPropagation: true,
+                maxHeight: 1000
+            }
+        });
+
+        this.downlistcombo.on(BI.Combo.EVENT_BEFORE_POPUPVIEW, function () {
+            self.fireEvent(BI.DownListCombo.EVENT_BEFORE_POPUPVIEW);
+        });
+    },
+
+    hideView: function () {
+        this.downlistcombo.hideView();
+    },
+
+    showView: function () {
+        this.downlistcombo.showView();
+    },
+
+    populate: function (items) {
+        this.popupview.populate(items);
+    },
+
+    setValue: function (v) {
+        this.popupview.setValue(v);
+    },
+    getValue: function () {
+        return this.popupview.getValue();
+    }
+});
+BI.DownListCombo.EVENT_CHANGE = "EVENT_CHANGE";
+BI.DownListCombo.EVENT_SON_VALUE_CHANGE = "EVENT_SON_VALUE_CHANGE";
+BI.DownListCombo.EVENT_BEFORE_POPUPVIEW = "EVENT_BEFORE_POPUPVIEW";
+
+BI.shortcut("bi.multi_layer_down_list_combo", BI.DownListCombo);/**
+ * Created by roy on 15/9/8.
+ * 处理popup中的item分组样式
+ * 一个item分组中的成员大于一时，该分组设置为单选，并且默认状态第一个成员设置为已选择项
+ */
+BI.MultiLayerDownListPopup = BI.inherit(BI.Pane, {
+    constants: {
+        nextIcon: "pull-right-e-font",
+        height: 25,
+        iconHeight: 12,
+        iconWidth: 12,
+        hgap: 0,
+        vgap: 0,
+        border: 1
+    },
+    _defaultConfig: function () {
+        var conf = BI.MultiLayerDownListPopup.superclass._defaultConfig.apply(this, arguments);
+        return BI.extend(conf, {
+            baseCls: "bi-down-list-popup",
+            items: [],
+            chooseType: BI.Selection.Multi
+        });
+    },
+    _init: function () {
+        BI.MultiLayerDownListPopup.superclass._init.apply(this, arguments);
+        this.singleValues = [];
+        this.childValueMap = {};
+        this.fatherValueMap = {};
+        var self = this, o = this.options, children = this._createPopupItems(o.items);
+        this.popup = BI.createWidget({
+            type: "bi.button_tree",
+            items: BI.createItems(children,
+                {}, {
+                    adjustLength: -2
+                }
+            ),
+            layouts: [{
+                type: "bi.vertical",
+                hgap: this.constants.hgap,
+                vgap: this.constants.vgap
+            }],
+            value: this._digest(o.value),
+            chooseType: o.chooseType
+        });
+
+        this.popup.on(BI.ButtonTree.EVENT_CHANGE, function (value, object) {
+            var changedValue = value;
+            if (BI.isNotNull(self.childValueMap[value])) {
+                changedValue = self.childValueMap[value];
+                self.fireEvent(BI.MultiLayerDownListPopup.EVENT_SON_VALUE_CHANGE, changedValue, self.fatherValueMap[value]);
+            } else {
+                self.fireEvent(BI.MultiLayerDownListPopup.EVENT_CHANGE, changedValue, object);
+            }
+
+
+            if (!self.singleValues.contains(changedValue)) {
+                var item = self.getValue();
+                var result = [];
+                BI.each(item, function (i, valueObject) {
+                    if (valueObject.value != changedValue) {
+                        result.push(valueObject);
+                    }
+                });
+                self.setValue(result);
+            }
+
+        });
+
+        BI.createWidget({
+            type: "bi.vertical",
+            element: this,
+            items: [this.popup]
+        });
+
+    },
+    _createPopupItems: function (items) {
+        var self = this, result = [];
+        BI.each(items, function (i, it) {
+            var item_done = {
+                type: "bi.down_list_group",
+                items: []
+            };
+
+            BI.each(it, function (i, item) {
+                if (BI.isNotEmptyArray(item.children) && !BI.isEmpty(item.el)) {
+                    item.type = "bi.combo_group";
+                    item.cls = "down-list-group";
+                    item.trigger = "hover";
+                    item.isNeedAdjustWidth = false;
+                    item.el.title = item.el.title || item.el.text;
+                    item.el.type = "bi.down_list_group_item";
+                    item.el.logic = {
+                        dynamic: true
+                    };
+                    item.el.height = self.constants.height;
+                    item.el.iconCls2 = self.constants.nextIcon;
+                    item.popup = {
+                        lgap: 4,
+                        el: {
+                            type: "bi.button_tree",
+                            chooseType: 0,
+                            layouts: [{
+                                type: "bi.vertical"
+                            }]
+
+                        }
+                    };
+                    item.el.childValues = [];
+                    BI.each(item.children, function (i, child) {
+                        child = child.el ? BI.extend(child.el, {children: child.children}) : child;
+                        var fatherValue = BI.deepClone(item.el.value);
+                        var childValue = BI.deepClone(child.value);
+                        self.singleValues.push(child.value);
+                        child.type = "bi.down_list_item";
+                        child.extraCls = " child-down-list-item";
+                        child.title = child.title || child.text;
+                        child.textRgap = 10;
+                        child.isNeedAdjustWidth = false;
+                        child.logic = {
+                            dynamic: true
+                        };
+                        child.father = fatherValue;
+                        self.fatherValueMap[self._createChildValue(fatherValue, childValue)] = fatherValue;
+                        self.childValueMap[self._createChildValue(fatherValue, childValue)] = childValue;
+                        child.value = self._createChildValue(fatherValue, childValue);
+                        item.el.childValues.push(child.value);
+                        if (BI.isNotEmptyArray(child.children)) {
+                            child.type = "bi.down_list_group_item";
+                            self._createChildren(child);
+                            child.height = self.constants.height;
+                            child.iconCls2 = self.constants.nextIcon;
+                            item.el.childValues = BI.concat(item.el.childValues, child.childValues);
+                        }
+                    });
+                } else {
+                    item.type = "bi.down_list_item";
+                    item.title = item.title || item.text;
+                    item.textRgap = 10;
+                    item.isNeedAdjustWidth = false;
+                    item.logic = {
+                        dynamic: true
+                    };
+                }
+                var el_done = {};
+                el_done.el = item;
+                item_done.items.push(el_done);
+            });
+            if (self._isGroup(item_done.items)) {
+                BI.each(item_done.items, function (i, item) {
+                    self.singleValues.push(item.el.value);
+                });
+            }
+
+            result.push(item_done);
+            if (self._needSpliter(i, items.length)) {
+                var spliter_container = BI.createWidget({
+                    type: "bi.vertical",
+                    items: [{
+                        el: {
+                            type: "bi.layout",
+                            cls: "bi-down-list-spliter bi-border-top cursor-pointer",
+                            height: 0
+                        }
+
+                    }],
+                    cls: "bi-down-list-spliter-container cursor-pointer",
+                    lgap: 10,
+                    rgap: 10
+                });
+                result.push(spliter_container);
+            }
+        });
+        return result;
+    },
+
+    _createChildren: function (child) {
+        var self = this;
+        child.childValues = [];
+        BI.each(child.children, function (i, c) {
+            var fatherValue = BI.deepClone(child.value);
+            var childValue = BI.deepClone(c.value);
+            c.type = "bi.down_list_item";
+            c.title = c.title || c.text;
+            c.textRgap = 10;
+            c.isNeedAdjustWidth = false;
+            c.logic = {
+                dynamic: true
+            };
+            c.father = fatherValue;
+            self.fatherValueMap[self._createChildValue(fatherValue, childValue)] = fatherValue;
+            self.childValueMap[self._createChildValue(fatherValue, childValue)] = childValue;
+            c.value = self._createChildValue(fatherValue, childValue);
+            child.childValues.push(c.value);
+        });
+    },
+
+    _isGroup: function (i) {
+        return i.length > 1;
+    },
+
+    _needSpliter: function (i, itemLength) {
+        return i < itemLength - 1;
+    },
+
+    _createChildValue: function (fatherValue, childValue) {
+        var fValue = fatherValue;
+        if(BI.isArray(fatherValue)) {
+            fValue = fatherValue.join("_");
+        }
+        return fValue + "_" + childValue;
+    },
+
+    _digest: function (valueItem) {
+        var self = this;
+        var valueArray = [];
+        BI.each(valueItem, function (i, item) {
+                var value;
+                if (BI.isNotNull(item.childValue)) {
+                    value = self._createChildValue(item.value, item.childValue);
+                } else {
+                    value = item.value;
+                }
+                valueArray.push(value);
+            }
+        );
+        return valueArray;
+    },
+
+    _checkValues: function (values) {
+        var self = this, o = this.options;
+        var value = [];
+        BI.each(o.items, function (idx, itemGroup) {
+            BI.each(itemGroup, function (id, item) {
+                if(BI.isNotNull(item.children)) {
+                    var childValues = getChildrenValue(item);
+                    var v = joinValue(childValues, values[idx]);
+                    if(BI.isNotEmptyString(v)) {
+                        value.push(v);
+                    }
+                }else{
+                    if(item.value === values[idx][0]) {
+                        value.push(values[idx][0]);
+                    }
+                }
+            });
+        });
+        return value;
+
+        function joinValue (sources, targets) {
+            var value = "";
+            BI.some(sources, function (idx, s) {
+                return BI.some(targets, function (id, t) {
+                    if(s === t) {
+                        value = s;
+                        return true;
+                    }
+                });
+            });
+            return value;
+        }
+
+        function getChildrenValue (item) {
+            var children = [];
+            if(BI.isNotNull(item.children)) {
+                BI.each(item.children, function (idx, child) {
+                    children = BI.concat(children, getChildrenValue(child));
+                });
+            } else {
+                children.push(item.value);
+            }
+            return children;
+        }
+    },
+
+    populate: function (items) {
+        BI.MultiLayerDownListPopup.superclass.populate.apply(this, arguments);
+        var self = this;
+        self.childValueMap = {};
+        self.fatherValueMap = {};
+        self.singleValues = [];
+        var children = self._createPopupItems(items);
+        var popupItem = BI.createItems(children,
+            {}, {
+                adjustLength: -2
+            }
+        );
+        self.popup.populate(popupItem);
+    },
+
+    setValue: function (valueItem) {
+        this.popup.setValue(this._digest(valueItem));
+    },
+
+    _getValue: function () {
+        var v = [];
+        BI.each(this.popup.getAllButtons(), function (i, item) {
+            i % 2 === 0 && v.push(item.getValue());
+        });
+        return v;
+    },
+
+    getValue: function () {
+        var self = this, result = [];
+        var values = this._checkValues(this._getValue());
+        BI.each(values, function (i, value) {
+            var valueItem = {};
+            if (BI.isNotNull(self.childValueMap[value])) {
+                var fartherValue = self.fatherValueMap[value];
+                valueItem.childValue = self.childValueMap[value];
+                valueItem.value = fartherValue.split("_");
+            } else {
+                valueItem.value = value;
+            }
+            result.push(valueItem);
+        });
+        return result;
+    }
+
+
+});
+
+BI.MultiLayerDownListPopup.EVENT_CHANGE = "EVENT_CHANGE";
+BI.MultiLayerDownListPopup.EVENT_SON_VALUE_CHANGE = "EVENT_SON_VALUE_CHANGE";
+BI.shortcut("bi.multi_layer_down_list_popup", BI.MultiLayerDownListPopup);/**
  * @class BI.MultiLayerSelectTreeCombo
  * @extends BI.Widget
  */
@@ -93115,7 +93682,7 @@ BI.MultiSelectSearchLoader = BI.inherit(BI.Widget, {
         });
         if (BI.isKey(keyword)) {
             var search = BI.Func.getSearchResult(newValues, keyword);
-            values = search.matched.concat(search.find);
+            values = search.match.concat(search.find);
         }
         return BI.map(values, function (i, v) {
             return {
@@ -96651,7 +97218,11 @@ BI.QuarterCombo = BI.inherit(BI.Widget, {
     },
 
     getValue: function () {
-        return this.popup.getValue() || "";
+        if (BI.isNull(this.popup)) {
+            return this.options.value || "";
+        } else {
+            return this.popup.getValue() || "";
+        }
     }
 });
 
@@ -102165,7 +102736,11 @@ BI.YearCombo = BI.inherit(BI.Widget, {
     },
 
     getValue: function () {
-        return this.popup.getValue();
+        if (BI.isNull(this.popup)) {
+            return this.options.value;
+        } else {
+            return this.popup.getValue();
+        }
     }
 });
 BI.YearCombo.EVENT_CONFIRM = "EVENT_CONFIRM";
@@ -102425,6 +103000,7 @@ BI.YearMonthCombo = BI.inherit(BI.Widget, {
         });
 
         this.month.on(BI.MonthCombo.EVENT_CONFIRM, function () {
+            self.getValue();
             self.fireEvent(BI.YearMonthCombo.EVENT_CONFIRM);
         });
         this.month.on(BI.MonthCombo.EVENT_BEFORE_POPUPVIEW, function () {

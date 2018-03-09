@@ -9842,7 +9842,7 @@ if ( typeof define === "function" && define.amd && define.amd.jQuery ) {
 })( window );/**
  * @license
  * Lodash (Custom Build) <https://lodash.com/>
- * Build: `lodash core plus="debounce,throttle,get,findIndex,findLastIndex,findKey,findLastKey,isArrayLike,invert,invertBy,uniq,uniqBy,omit,omitBy,zip,unzip,rest,range,random,reject,intersection,drop,countBy,union,zipObject"`
+ * Build: `lodash core plus="debounce,throttle,get,findIndex,findLastIndex,findKey,findLastKey,isArrayLike,invert,invertBy,uniq,uniqBy,omit,omitBy,zip,unzip,rest,range,random,reject,intersection,drop,countBy,union,zipObject,initial,cloneDeep,clamp,isPlainObject,take,takeRight,without"`
  * Copyright JS Foundation and other contributors <https://js.foundation/>
  * Released under MIT license <https://lodash.com/license>
  * Based on Underscore.js 1.8.3 <http://underscorejs.org/LICENSE>
@@ -11825,6 +11825,27 @@ if ( typeof define === "function" && define.amd && define.amd.jQuery ) {
   }
 
   /**
+   * The base implementation of `_.clamp` which doesn't coerce arguments.
+   *
+   * @private
+   * @param {number} number The number to clamp.
+   * @param {number} [lower] The lower bound.
+   * @param {number} upper The upper bound.
+   * @returns {number} Returns the clamped number.
+   */
+  function baseClamp(number, lower, upper) {
+    if (number === number) {
+      if (upper !== undefined) {
+        number = number <= upper ? number : upper;
+      }
+      if (lower !== undefined) {
+        number = number >= lower ? number : lower;
+      }
+    }
+    return number;
+  }
+
+  /**
    * The base implementation of `_.clone` and `_.cloneDeep` which tracks
    * traversed objects.
    *
@@ -11937,6 +11958,62 @@ if ( typeof define === "function" && define.amd && define.amd.jQuery ) {
       throw new TypeError(FUNC_ERROR_TEXT);
     }
     return setTimeout(function() { func.apply(undefined, args); }, wait);
+  }
+
+  /**
+   * The base implementation of methods like `_.difference` without support
+   * for excluding multiple arrays or iteratee shorthands.
+   *
+   * @private
+   * @param {Array} array The array to inspect.
+   * @param {Array} values The values to exclude.
+   * @param {Function} [iteratee] The iteratee invoked per element.
+   * @param {Function} [comparator] The comparator invoked per element.
+   * @returns {Array} Returns the new array of filtered values.
+   */
+  function baseDifference(array, values, iteratee, comparator) {
+    var index = -1,
+        includes = arrayIncludes,
+        isCommon = true,
+        length = array.length,
+        result = [],
+        valuesLength = values.length;
+
+    if (!length) {
+      return result;
+    }
+    if (iteratee) {
+      values = arrayMap(values, baseUnary(iteratee));
+    }
+    if (comparator) {
+      includes = arrayIncludesWith;
+      isCommon = false;
+    }
+    else if (values.length >= LARGE_ARRAY_SIZE) {
+      includes = cacheHas;
+      isCommon = false;
+      values = new SetCache(values);
+    }
+    outer:
+    while (++index < length) {
+      var value = array[index],
+          computed = iteratee == null ? value : iteratee(value);
+
+      value = (comparator || value !== 0) ? value : 0;
+      if (isCommon && computed === computed) {
+        var valuesIndex = valuesLength;
+        while (valuesIndex--) {
+          if (values[valuesIndex] === computed) {
+            continue outer;
+          }
+        }
+        result.push(value);
+      }
+      else if (!includes(values, computed, comparator)) {
+        result.push(value);
+      }
+    }
+    return result;
   }
 
   /**
@@ -15314,6 +15391,25 @@ if ( typeof define === "function" && define.amd && define.amd.jQuery ) {
   }
 
   /**
+   * Gets all but the last element of `array`.
+   *
+   * @static
+   * @memberOf _
+   * @since 0.1.0
+   * @category Array
+   * @param {Array} array The array to query.
+   * @returns {Array} Returns the slice of `array`.
+   * @example
+   *
+   * _.initial([1, 2, 3]);
+   * // => [1, 2]
+   */
+  function initial(array) {
+    var length = array == null ? 0 : array.length;
+    return length ? baseSlice(array, 0, -1) : [];
+  }
+
+  /**
    * Creates an array of unique values that are included in all given arrays
    * using [`SameValueZero`](http://ecma-international.org/ecma-262/7.0/#sec-samevaluezero)
    * for equality comparisons. The order and references of result values are
@@ -15413,6 +15509,74 @@ if ( typeof define === "function" && define.amd && define.amd.jQuery ) {
       end = end === undefined ? length : toInteger(end);
     }
     return baseSlice(array, start, end);
+  }
+
+  /**
+   * Creates a slice of `array` with `n` elements taken from the beginning.
+   *
+   * @static
+   * @memberOf _
+   * @since 0.1.0
+   * @category Array
+   * @param {Array} array The array to query.
+   * @param {number} [n=1] The number of elements to take.
+   * @param- {Object} [guard] Enables use as an iteratee for methods like `_.map`.
+   * @returns {Array} Returns the slice of `array`.
+   * @example
+   *
+   * _.take([1, 2, 3]);
+   * // => [1]
+   *
+   * _.take([1, 2, 3], 2);
+   * // => [1, 2]
+   *
+   * _.take([1, 2, 3], 5);
+   * // => [1, 2, 3]
+   *
+   * _.take([1, 2, 3], 0);
+   * // => []
+   */
+  function take(array, n, guard) {
+    if (!(array && array.length)) {
+      return [];
+    }
+    n = (guard || n === undefined) ? 1 : toInteger(n);
+    return baseSlice(array, 0, n < 0 ? 0 : n);
+  }
+
+  /**
+   * Creates a slice of `array` with `n` elements taken from the end.
+   *
+   * @static
+   * @memberOf _
+   * @since 3.0.0
+   * @category Array
+   * @param {Array} array The array to query.
+   * @param {number} [n=1] The number of elements to take.
+   * @param- {Object} [guard] Enables use as an iteratee for methods like `_.map`.
+   * @returns {Array} Returns the slice of `array`.
+   * @example
+   *
+   * _.takeRight([1, 2, 3]);
+   * // => [3]
+   *
+   * _.takeRight([1, 2, 3], 2);
+   * // => [2, 3]
+   *
+   * _.takeRight([1, 2, 3], 5);
+   * // => [1, 2, 3]
+   *
+   * _.takeRight([1, 2, 3], 0);
+   * // => []
+   */
+  function takeRight(array, n, guard) {
+    var length = array == null ? 0 : array.length;
+    if (!length) {
+      return [];
+    }
+    n = (guard || n === undefined) ? 1 : toInteger(n);
+    n = length - n;
+    return baseSlice(array, n < 0 ? 0 : n, length);
   }
 
   /**
@@ -15518,6 +15682,32 @@ if ( typeof define === "function" && define.amd && define.amd.jQuery ) {
       return arrayMap(array, baseProperty(index));
     });
   }
+
+  /**
+   * Creates an array excluding all given values using
+   * [`SameValueZero`](http://ecma-international.org/ecma-262/7.0/#sec-samevaluezero)
+   * for equality comparisons.
+   *
+   * **Note:** Unlike `_.pull`, this method returns a new array.
+   *
+   * @static
+   * @memberOf _
+   * @since 0.1.0
+   * @category Array
+   * @param {Array} array The array to inspect.
+   * @param {...*} [values] The values to exclude.
+   * @returns {Array} Returns the new array of filtered values.
+   * @see _.difference, _.xor
+   * @example
+   *
+   * _.without([2, 1, 2, 3], 1, 2);
+   * // => [3]
+   */
+  var without = baseRest(function(array, values) {
+    return isArrayLikeObject(array)
+      ? baseDifference(array, values)
+      : [];
+  });
 
   /**
    * Creates an array of grouped elements, the first of which contains the
@@ -16926,6 +17116,28 @@ if ( typeof define === "function" && define.amd && define.amd.jQuery ) {
    */
   function clone(value) {
     return baseClone(value, CLONE_SYMBOLS_FLAG);
+  }
+
+  /**
+   * This method is like `_.clone` except that it recursively clones `value`.
+   *
+   * @static
+   * @memberOf _
+   * @since 1.0.0
+   * @category Lang
+   * @param {*} value The value to recursively clone.
+   * @returns {*} Returns the deep cloned value.
+   * @see _.clone
+   * @example
+   *
+   * var objects = [{ 'a': 1 }, { 'b': 2 }];
+   *
+   * var deep = _.cloneDeep(objects);
+   * console.log(deep[0] === objects[0]);
+   * // => false
+   */
+  function cloneDeep(value) {
+    return baseClone(value, CLONE_DEEP_FLAG | CLONE_SYMBOLS_FLAG);
   }
 
   /**
@@ -18434,6 +18646,41 @@ if ( typeof define === "function" && define.amd && define.amd.jQuery ) {
   /*------------------------------------------------------------------------*/
 
   /**
+   * Clamps `number` within the inclusive `lower` and `upper` bounds.
+   *
+   * @static
+   * @memberOf _
+   * @since 4.0.0
+   * @category Number
+   * @param {number} number The number to clamp.
+   * @param {number} [lower] The lower bound.
+   * @param {number} upper The upper bound.
+   * @returns {number} Returns the clamped number.
+   * @example
+   *
+   * _.clamp(-10, -5, 5);
+   * // => -5
+   *
+   * _.clamp(10, -5, 5);
+   * // => 5
+   */
+  function clamp(number, lower, upper) {
+    if (upper === undefined) {
+      upper = lower;
+      lower = undefined;
+    }
+    if (upper !== undefined) {
+      upper = toNumber(upper);
+      upper = upper === upper ? upper : 0;
+    }
+    if (lower !== undefined) {
+      lower = toNumber(lower);
+      lower = lower === lower ? lower : 0;
+    }
+    return baseClamp(toNumber(number), lower, upper);
+  }
+
+  /**
    * Produces a random number between the inclusive `lower` and `upper` bounds.
    * If only one argument is provided a number between `0` and the given number
    * is returned. If `floating` is `true`, or either `lower` or `upper` are
@@ -18972,6 +19219,7 @@ if ( typeof define === "function" && define.amd && define.amd.jQuery ) {
   lodash.filter = filter;
   lodash.flatten = flatten;
   lodash.flattenDeep = flattenDeep;
+  lodash.initial = initial;
   lodash.intersection = intersection;
   lodash.invert = invert;
   lodash.invertBy = invertBy;
@@ -18990,6 +19238,8 @@ if ( typeof define === "function" && define.amd && define.amd.jQuery ) {
   lodash.rest = rest;
   lodash.slice = slice;
   lodash.sortBy = sortBy;
+  lodash.take = take;
+  lodash.takeRight = takeRight;
   lodash.tap = tap;
   lodash.throttle = throttle;
   lodash.thru = thru;
@@ -18999,6 +19249,7 @@ if ( typeof define === "function" && define.amd && define.amd.jQuery ) {
   lodash.uniqBy = uniqBy;
   lodash.unzip = unzip;
   lodash.values = values;
+  lodash.without = without;
   lodash.zip = zip;
   lodash.zipObject = zipObject;
 
@@ -19011,7 +19262,9 @@ if ( typeof define === "function" && define.amd && define.amd.jQuery ) {
   /*------------------------------------------------------------------------*/
 
   // Add methods that return unwrapped values in chain sequences.
+  lodash.clamp = clamp;
   lodash.clone = clone;
+  lodash.cloneDeep = cloneDeep;
   lodash.escape = escape;
   lodash.every = every;
   lodash.find = find;
@@ -19038,6 +19291,7 @@ if ( typeof define === "function" && define.amd && define.amd.jQuery ) {
   lodash.isNull = isNull;
   lodash.isNumber = isNumber;
   lodash.isObject = isObject;
+  lodash.isPlainObject = isPlainObject;
   lodash.isRegExp = isRegExp;
   lodash.isString = isString;
   lodash.isUndefined = isUndefined;
@@ -19481,7 +19735,7 @@ if (!window.BI) {
         BI[name] = _apply(name);
     });
     _.each(["get", "each", "map", "reduce", "reduceRight", "find", "filter", "reject", "every", "all", "some", "any", "max", "min",
-        "sortBy", "groupBy", "indexBy", "countBy", "partition"], function (name) {
+        "sortBy", "groupBy", "indexBy", "countBy", "partition", "clamp"], function (name) {
         if (name === "any") {
             BI[name] = _applyFunc("some");
         } else {
@@ -19489,15 +19743,6 @@ if (!window.BI) {
         }
     });
     _.extend(BI, {
-        clamp: function (value, minValue, maxValue) {
-            if (value < minValue) {
-                value = minValue;
-            }
-            if (value > maxValue) {
-                value = maxValue;
-            }
-            return value;
-        },
         // 数数
         count: function (from, to, predicate) {
             var t;
@@ -19686,7 +19931,7 @@ if (!window.BI) {
 
     // 数组相关的方法
     _.each(["first", "initial", "last", "rest", "compact", "flatten", "without", "union", "intersection",
-        "difference", "zip", "unzip", "object", "indexOf", "lastIndexOf", "sortedIndex", "range"], function (name) {
+        "difference", "zip", "unzip", "object", "indexOf", "lastIndexOf", "sortedIndex", "range", "take", "takeRight"], function (name) {
         BI[name] = _apply(name);
     });
     _.each(["findIndex", "findLastIndex"], function (name) {
@@ -19750,8 +19995,8 @@ if (!window.BI) {
     // 对象相关方法
     _.each(["keys", "allKeys", "values", "pairs", "invert", "create", "functions", "extend", "extendOwn",
         "defaults", "clone", "property", "propertyOf", "matcher", "isEqual", "isMatch", "isEmpty",
-        "isElement", "isNumber", "isString", "isArray", "isObject", "isArguments", "isFunction", "isFinite",
-        "isBoolean", "isDate", "isRegExp", "isError", "isNaN", "isUndefined", "zipObject"], function (name) {
+        "isElement", "isNumber", "isString", "isArray", "isObject", "isPlainObject", "isArguments", "isFunction", "isFinite",
+        "isBoolean", "isDate", "isRegExp", "isError", "isNaN", "isUndefined", "zipObject", "cloneDeep"], function (name) {
         BI[name] = _apply(name);
     });
     _.each(["mapObject", "findKey", "pick", "omit", "tap"], function (name) {
@@ -19818,10 +20063,6 @@ if (!window.BI) {
             return typeof  obj === "undefined" || obj === null;
         },
 
-        isPlainObject: function () {
-            return $.isPlainObject.apply($, arguments);
-        },
-
         isEmptyArray: function (arr) {
             return BI.isArray(arr) && BI.isEmpty(arr);
         },
@@ -19853,48 +20094,7 @@ if (!window.BI) {
 
     // deep方法
     _.extend(BI, {
-        /**
-         *完全克隆�?个js对象
-         * @param obj
-         * @returns {*}
-         */
-        deepClone: function (obj) {
-            if (obj === null || obj === undefined) {
-                return obj;
-            }
-
-            var type = Object.prototype.toString.call(obj);
-
-            // Date
-            if (type === "[object Date]") {
-                return BI.getDate(obj.getTime());
-            }
-
-            var i, clone, key;
-
-            // Array
-            if (type === "[object Array]") {
-                i = obj.length;
-
-                clone = [];
-
-                while (i--) {
-                    clone[i] = BI.deepClone(obj[i]);
-                }
-            }
-            // Object
-            else if (type === "[object Object]" && obj.constructor === Object) {
-                clone = {};
-
-                for (var i in obj) {
-                    if (BI.has(obj, i)) {
-                        clone[i] = BI.deepClone(obj[i]);
-                    }
-                }
-            }
-
-            return clone || obj;
-        },
+        deepClone: _.cloneDeep,
 
         isDeepMatch: function (object, attrs) {
             var keys = BI.keys(attrs), length = keys.length;
@@ -25439,32 +25639,7 @@ BI.ShowAction = BI.inherit(BI.Action, {
         tar.setVisible(false);
         callback && callback();
     }
-});/**
- * 弹出层
- * @class BI.PopoverSection
- * @extends BI.Widget
- * @abstract
- */
-BI.PopoverSection = BI.inherit(BI.Widget, {
-    _init: function () {
-        BI.PopoverSection.superclass._init.apply(this, arguments);
-    },
-
-    rebuildNorth: function (north) {
-        return true;
-    },
-    rebuildCenter: function (center) {},
-    rebuildSouth: function (south) {
-        return false;
-    },
-    close: function () {
-        this.fireEvent(BI.PopoverSection.EVENT_CLOSE);
-    },
-    end: function () {
-
-    }
-});
-BI.PopoverSection.EVENT_CLOSE = "EVENT_CLOSE";(function () {
+});(function () {
     if (!window.BI) {
         window.BI = {};
     }
@@ -26613,148 +26788,6 @@ BI.BubblesController = BI.inherit(BI.Controller, {
         return this;
     }
 });/**
- * guy
- * FloatBox弹出层控制器, z-index在100w层级
- * @class BI.FloatBoxController
- * @extends BI.Controller
- */
-BI.FloatBoxController = BI.inherit(BI.Controller, {
-    _defaultConfig: function () {
-        return BI.extend(BI.FloatBoxController.superclass._defaultConfig.apply(this, arguments), {
-            modal: true, // 模态窗口
-            render: "body"
-        });
-    },
-
-    _init: function () {
-        BI.FloatBoxController.superclass._init.apply(this, arguments);
-        this.modal = this.options.modal;
-        this.floatManager = {};
-        this.floatLayer = {};
-        this.floatContainer = {};
-        this.floatOpened = {};
-        this.zindex = BI.zIndex_floatbox;
-        this.zindexMap = {};
-    },
-
-    _check: function (name) {
-        return BI.isNotNull(this.floatManager[name]);
-    },
-
-    create: function (name, section, options, context) {
-        if (this._check(name)) {
-            return this;
-        }
-        var floatbox = BI.createWidget({
-            type: "bi.float_box"
-        }, options, context);
-        floatbox.populate(section);
-        this.add(name, floatbox, options, context);
-        return this;
-    },
-
-    add: function (name, floatbox, options, context) {
-        var self = this;
-        options || (options = {});
-        if (this._check(name)) {
-            return this;
-        }
-        this.floatContainer[name] = BI.createWidget({
-            type: "bi.absolute",
-            cls: "bi-popup-view",
-            items: [{
-                el: (this.floatLayer[name] = BI.createWidget({
-                    type: "bi.absolute",
-                    items: [floatbox]
-                }, context)),
-                left: 0,
-                right: 0,
-                top: 0,
-                bottom: 0
-            }]
-        });
-        this.floatManager[name] = floatbox;
-        (function (key) {
-            floatbox.on(BI.FloatBox.EVENT_FLOAT_BOX_CLOSED, function () {
-                self.close(key);
-            });
-        })(name);
-        BI.createWidget({
-            type: "bi.absolute",
-            element: options.container || this.options.render,
-            items: [{
-                el: this.floatContainer[name],
-                left: 0,
-                right: 0,
-                top: 0,
-                bottom: 0
-            }]
-        });
-        return this;
-    },
-
-    open: function (name) {
-        if (!this._check(name)) {
-            return this;
-        }
-        if (!this.floatOpened[name]) {
-            this.floatOpened[name] = true;
-            var container = this.floatContainer[name];
-            container.element.css("zIndex", this.zindex++);
-            this.modal && container.element.__hasZIndexMask__(this.zindexMap[name]) && container.element.__releaseZIndexMask__(this.zindexMap[name]);
-            this.zindexMap[name] = this.zindex;
-            this.modal && container.element.__buildZIndexMask__(this.zindex++);
-            this.get(name).setZindex(this.zindex++);
-            this.floatContainer[name].visible();
-            var floatbox = this.get(name);
-            floatbox.show();
-            var W = $(this.options.render).width(), H = $(this.options.render).height();
-            var w = floatbox.element.width(), h = floatbox.element.height();
-            var left = (W - w) / 2, top = (H - h) / 2;
-            if (left < 0) {
-                left = 0;
-            }
-            if (top < 0) {
-                top = 0;
-            }
-            floatbox.element.css({
-                left: left + "px",
-                top: top + "px"
-            });
-        }
-        return this;
-    },
-
-    close: function (name) {
-        if (!this._check(name)) {
-            return this;
-        }
-        if (this.floatOpened[name]) {
-            delete this.floatOpened[name];
-            this.floatContainer[name].invisible();
-            this.modal && this.floatContainer[name].element.__releaseZIndexMask__(this.zindexMap[name]);
-        }
-        return this;
-    },
-
-    get: function (name) {
-        return this.floatManager[name];
-    },
-
-    remove: function (name) {
-        if (!this._check(name)) {
-            return this;
-        }
-        this.floatContainer[name].destroy();
-        this.modal && this.floatContainer[name].element.__releaseZIndexMask__(this.zindexMap[name]);
-        delete this.floatManager[name];
-        delete this.floatLayer[name];
-        delete this.zindexMap[name];
-        delete this.floatContainer[name];
-        delete this.floatOpened[name];
-        return this;
-    }
-});/**
  * 弹出层面板控制器, z-index在10w层级
  *
  * Created by GUY on 2015/6/24.
@@ -26783,14 +26816,15 @@ BI.LayerController = BI.inherit(BI.Controller, {
         });
     },
 
-    make: function (name, container, op) {
+    make: function (name, container, op, context) {
         if (BI.isWidget(container)) {
             op = op || {};
             op.container = container;
         } else {
+            context = op;
             op = container;
         }
-        return this.create(name, null, op);
+        return this.create(name, null, op, context);
     },
 
     create: function (name, from, op, context) {
@@ -26809,10 +26843,9 @@ BI.LayerController = BI.inherit(BI.Controller, {
         if (this.has(name)) {
             return this.get(name);
         }
-        var widget = BI.createWidget((op.render || {}), {
-            type: "bi.layout",
-            cls: op.cls
-        }, context);
+        var widget = BI.createWidget((op.render || {}), BI.extend({
+            type: "bi.layout"
+        }, op), context);
         var layout = BI.createWidget({
             type: "bi.absolute",
             items: [{
@@ -26839,16 +26872,16 @@ BI.LayerController = BI.inherit(BI.Controller, {
             layout.element.css({
                 left: w.offset().left + (offset.left || 0),
                 top: w.offset().top + (offset.top || 0),
-                width: offset.width || (w.outerWidth() - (offset.right || 0)) || "",
-                height: offset.height || (w.outerHeight() - (offset.bottom || 0)) || ""
+                width: offset.width || (w.outerWidth() - (offset.left || 0) - (offset.right || 0)) || "",
+                height: offset.height || (w.outerHeight() - (offset.top || 0) - (offset.bottom || 0)) || ""
             });
             layout.element.on("__resize__", function () {
                 w.is(":visible") &&
                 layout.element.css({
                     left: w.offset().left + (offset.left || 0),
                     top: w.offset().top + (offset.top || 0),
-                    width: offset.width || (w.outerWidth() - (offset.right || 0)) || "",
-                    height: offset.height || (w.outerHeight() - (offset.bottom || 0)) || ""
+                    width: offset.width || (w.outerWidth() - (offset.left || 0) - (offset.right || 0)) || "",
+                    height: offset.height || (w.outerHeight() - (offset.top || 0) - (offset.bottom || 0)) || ""
                 });
             });
         }
@@ -26925,6 +26958,147 @@ BI.MaskersController = BI.inherit(BI.LayerController, {
     _init: function () {
         BI.MaskersController.superclass._init.apply(this, arguments);
         this.zindex = BI.zIndex_masker;
+    }
+});/**
+ * guy
+ * popover弹出层控制器, z-index在100w层级
+ * @class BI.popoverController
+ * @extends BI.Controller
+ */
+BI.PopoverController = BI.inherit(BI.Controller, {
+    _defaultConfig: function () {
+        return BI.extend(BI.PopoverController.superclass._defaultConfig.apply(this, arguments), {
+            modal: true, // 模态窗口
+            render: "body"
+        });
+    },
+
+    _init: function () {
+        BI.PopoverController.superclass._init.apply(this, arguments);
+        this.modal = this.options.modal;
+        this.floatManager = {};
+        this.floatLayer = {};
+        this.floatContainer = {};
+        this.floatOpened = {};
+        this.zindex = BI.zIndex_popover;
+        this.zindexMap = {};
+    },
+
+    _check: function (name) {
+        return BI.isNotNull(this.floatManager[name]);
+    },
+
+    create: function (name, options, context) {
+        if (this._check(name)) {
+            return this;
+        }
+        var popover = BI.createWidget(options || {}, {
+            type: "bi.popover"
+        }, context);
+        this.add(name, popover, options, context);
+        return this;
+    },
+
+    add: function (name, popover, options, context) {
+        var self = this;
+        options || (options = {});
+        if (this._check(name)) {
+            return this;
+        }
+        this.floatContainer[name] = BI.createWidget({
+            type: "bi.absolute",
+            cls: "bi-popup-view",
+            items: [{
+                el: (this.floatLayer[name] = BI.createWidget({
+                    type: "bi.absolute",
+                    items: [popover]
+                }, context)),
+                left: 0,
+                right: 0,
+                top: 0,
+                bottom: 0
+            }]
+        });
+        this.floatManager[name] = popover;
+        (function (key) {
+            popover.on(BI.Popover.EVENT_CLOSE, function () {
+                self.close(key);
+            });
+        })(name);
+        BI.createWidget({
+            type: "bi.absolute",
+            element: options.container || this.options.render,
+            items: [{
+                el: this.floatContainer[name],
+                left: 0,
+                right: 0,
+                top: 0,
+                bottom: 0
+            }]
+        });
+        return this;
+    },
+
+    open: function (name) {
+        if (!this._check(name)) {
+            return this;
+        }
+        if (!this.floatOpened[name]) {
+            this.floatOpened[name] = true;
+            var container = this.floatContainer[name];
+            container.element.css("zIndex", this.zindex++);
+            this.modal && container.element.__hasZIndexMask__(this.zindexMap[name]) && container.element.__releaseZIndexMask__(this.zindexMap[name]);
+            this.zindexMap[name] = this.zindex;
+            this.modal && container.element.__buildZIndexMask__(this.zindex++);
+            this.get(name).setZindex(this.zindex++);
+            this.floatContainer[name].visible();
+            var popover = this.get(name);
+            popover.show && popover.show();
+            var W = $(this.options.render).width(), H = $(this.options.render).height();
+            var w = popover.element.width(), h = popover.element.height();
+            var left = (W - w) / 2, top = (H - h) / 2;
+            if (left < 0) {
+                left = 0;
+            }
+            if (top < 0) {
+                top = 0;
+            }
+            popover.element.css({
+                left: left + "px",
+                top: top + "px"
+            });
+        }
+        return this;
+    },
+
+    close: function (name) {
+        if (!this._check(name)) {
+            return this;
+        }
+        if (this.floatOpened[name]) {
+            delete this.floatOpened[name];
+            this.floatContainer[name].invisible();
+            this.modal && this.floatContainer[name].element.__releaseZIndexMask__(this.zindexMap[name]);
+        }
+        return this;
+    },
+
+    get: function (name) {
+        return this.floatManager[name];
+    },
+
+    remove: function (name) {
+        if (!this._check(name)) {
+            return this;
+        }
+        this.floatContainer[name].destroy();
+        this.modal && this.floatContainer[name].element.__releaseZIndexMask__(this.zindexMap[name]);
+        delete this.floatManager[name];
+        delete this.floatLayer[name];
+        delete this.zindexMap[name];
+        delete this.floatContainer[name];
+        delete this.floatOpened[name];
+        return this;
     }
 });/**
  * window.resize 控制器
@@ -30132,7 +30306,7 @@ _.extend(BI, {
     MIN: -0xfffffffffffffff,
     EVENT_RESPONSE_TIME: 200,
     zIndex_layer: 1e5,
-    zIndex_floatbox: 1e6,
+    zIndex_popover: 1e6,
     zIndex_popup: 1e7,
     zIndex_masker: 1e8,
     zIndex_tip: 1e9,
@@ -37947,7 +38121,7 @@ BI.Layers = new BI.LayerController();
 BI.Maskers = new BI.MaskersController();
 BI.Bubbles = new BI.BubblesController();
 BI.Tooltips = new BI.TooltipsController();
-BI.Popovers = new BI.FloatBoxController();
+BI.Popovers = new BI.PopoverController();
 BI.Broadcasts = new BI.BroadcastController();
 BI.StyleLoaders = new BI.StyleLoaderManager();/**
  * canvas绘图
@@ -50761,26 +50935,23 @@ BI.GridView = BI.inherit(BI.Widget, {
 });
 BI.GridView.EVENT_SCROLL = "EVENT_SCROLL";
 BI.shortcut("bi.grid_view", BI.GridView);/**
- * floatBox弹出层，
- * @class BI.FloatBox
+ * Popover弹出层，
+ * @class BI.Popover
  * @extends BI.Widget
  */
-BI.FloatBox = BI.inherit(BI.Widget, {
+BI.Popover = BI.inherit(BI.Widget, {
     _defaultConfig: function () {
-        return BI.extend(BI.FloatBox.superclass._defaultConfig.apply(this, arguments), {
-            baseCls: "bi-float-box bi-card",
+        return BI.extend(BI.Popover.superclass._defaultConfig.apply(this, arguments), {
+            baseCls: "bi-popover bi-card",
             width: 600,
-            height: 500
+            height: 500,
+            header: null,
+            body: null,
+            footer: null
         });
     },
-    _init: function () {
-        BI.FloatBox.superclass._init.apply(this, arguments);
+    render: function () {
         var self = this, o = this.options;
-        this.showAction = new BI.ShowAction({
-            tar: this
-        });
-        this._center = BI.createWidget();
-        this._north = BI.createWidget();
         this.element.draggable && this.element.draggable({
             handle: ".bi-message-title",
             drag: function (e, ui) {
@@ -50801,102 +50972,91 @@ BI.FloatBox = BI.inherit(BI.Widget, {
                 BI.Resizers._resize();
             }
         });
-        this._south = BI.createWidget();
+        var items = {
+            north: {
+                el: {
+                    type: "bi.border",
+                    cls: "bi-message-title bi-background",
+                    items: {
+                        center: {
+                            el: {
+                                type: "bi.absolute",
+                                items: [{
+                                    el: BI.createWidget(o.header),
+                                    left: 10,
+                                    top: 0,
+                                    right: 0,
+                                    bottom: 0
+                                }]
+                            }
+                        },
+                        east: {
+                            el: {
+                                type: "bi.icon_button",
+                                cls: "bi-message-close close-font",
+                                height: 36,
+                                handler: function () {
+                                    self.close();
+                                }
+                            },
+                            width: 60
+                        }
+                    }
+                },
+                height: 36
+            },
+            center: {
+                el: {
+                    type: "bi.absolute",
+                    items: [{
+                        el: BI.createWidget(o.body),
+                        left: 20,
+                        top: 20,
+                        right: 20,
+                        bottom: 0
+                    }]
+                }
+            }
+        };
+        if (o.footer) {
+            items.south = {
+                el: {
+                    type: "bi.absolute",
+                    items: [{
+                        el: BI.createWidget(o.footer),
+                        left: 20,
+                        top: 0,
+                        right: 20,
+                        bottom: 0
+                    }]
+                },
+                height: 44
+            };
+        }
+
         BI.createWidget({
             type: "bi.border",
             element: this,
-            items: {
-                north: {
-                    el: {
-                        type: "bi.border",
-                        cls: "bi-message-title bi-background",
-                        items: {
-                            center: {
-                                el: {
-                                    type: "bi.absolute",
-                                    items: [{
-                                        el: this._north,
-                                        left: 10,
-                                        top: 0,
-                                        right: 0,
-                                        bottom: 0
-                                    }]
-                                }
-                            },
-                            east: {
-                                el: {
-                                    type: "bi.icon_button",
-                                    cls: "bi-message-close close-font",
-                                    height: 36,
-                                    handler: function () {
-                                        self.currentSectionProvider.close();
-                                    }
-                                },
-                                width: 60
-                            }
-                        }
-                    },
-                    height: 36
-                },
-                center: {
-                    el: {
-                        type: "bi.absolute",
-                        items: [{
-                            el: this._center,
-                            left: 20,
-                            top: 20,
-                            right: 20,
-                            bottom: 0
-                        }]
-                    }
-                },
-                south: {
-                    el: {
-                        type: "bi.absolute",
-                        items: [{
-                            el: this._south,
-                            left: 20,
-                            top: 0,
-                            right: 20,
-                            bottom: 0
-                        }]
-                    },
-                    height: 44
-                }
-            }
-        });
-    },
-
-    populate: function (sectionProvider) {
-        var self = this;
-        if (this.currentSectionProvider && this.currentSectionProvider !== sectionProvider) {
-            this.currentSectionProvider.destroy();
-        }
-        this.currentSectionProvider = sectionProvider;
-        sectionProvider.rebuildNorth(this._north);
-        sectionProvider.rebuildCenter(this._center);
-        sectionProvider.rebuildSouth(this._south);
-        sectionProvider.on(BI.PopoverSection.EVENT_CLOSE, function () {
-            self.close();
+            items: items
         });
     },
 
     show: function () {
-        this.showAction.actionPerformed();
+
     },
 
     hide: function () {
-        this.showAction.actionBack();
+
     },
 
     open: function () {
         this.show();
-        this.fireEvent(BI.FloatBox.EVENT_FLOAT_BOX_OPEN);
+        this.fireEvent(BI.Popover.EVENT_OPEN, arguments);
     },
 
     close: function () {
         this.hide();
-        this.fireEvent(BI.FloatBox.EVENT_FLOAT_BOX_CLOSED);
+        this.fireEvent(BI.Popover.EVENT_CLOSE, arguments);
     },
 
     setZindex: function (zindex) {
@@ -50904,14 +51064,52 @@ BI.FloatBox = BI.inherit(BI.Widget, {
     },
 
     destroyed: function () {
-        this.currentSectionProvider && this.currentSectionProvider.destroy();
     }
 });
 
-BI.shortcut("bi.float_box", BI.FloatBox);
+BI.shortcut("bi.popover", BI.Popover);
 
-BI.FloatBox.EVENT_FLOAT_BOX_CLOSED = "EVENT_FLOAT_BOX_CLOSED";
-BI.FloatBox.EVENT_FLOAT_BOX_OPEN = "EVENT_FLOAT_BOX_CLOSED";
+BI.BarPopover = BI.inherit(BI.Popover, {
+    _defaultConfig: function () {
+        return BI.extend(BI.BarPopover.superclass._defaultConfig.apply(this, arguments), {
+            btns: [BI.i18nText(BI.i18nText("BI-Basic_Sure")), BI.i18nText(BI.i18nText("BI-Basic_Cancel"))]
+        });
+    },
+
+    beforeCreate: function () {
+        var self = this, o = this.options;
+        o.footer || (o.footer = {
+            type: "bi.right_vertical_adapt",
+            lgap: 10,
+            items: [{
+                type: "bi.button",
+                text: this.options.btns[1],
+                value: 1,
+                level: "ignore",
+                handler: function (v) {
+                    self.fireEvent(BI.Popover.EVENT_CANCEL, v);
+                    self.close(v);
+                }
+            }, {
+                type: "bi.button",
+                text: this.options.btns[0],
+                warningTitle: o.warningTitle,
+                value: 0,
+                handler: function (v) {
+                    self.fireEvent(BI.Popover.EVENT_CONFIRM, v);
+                    self.close(v);
+                }
+            }]
+        });
+    }
+});
+
+BI.shortcut("bi.bar_popover", BI.BarPopover);
+
+BI.Popover.EVENT_CLOSE = "EVENT_CLOSE";
+BI.Popover.EVENT_OPEN = "EVENT_OPEN";
+BI.Popover.EVENT_CANCEL = "EVENT_CANCEL";
+BI.Popover.EVENT_CONFIRM = "EVENT_CONFIRM";
 /**
  * 下拉框弹出层, zIndex在1000w
  * @class BI.PopupView
@@ -77301,7 +77499,7 @@ BI.IconCombo = BI.inherit(BI.Widget, {
     _defaultConfig: function () {
         return BI.extend(BI.IconCombo.superclass._defaultConfig.apply(this, arguments), {
             baseCls: "bi-icon-combo",
-            width: 24,
+            width: 28,
             height: 24,
             el: {},
             popup: {},
@@ -77465,8 +77663,8 @@ BI.IconComboTrigger = BI.inherit(BI.Trigger, {
             el: {},
             items: [],
             iconCls: "",
-            width: 25,
-            height: 25,
+            width: 28,
+            height: 24,
             isShowDown: true,
             value: ""
         });
@@ -77484,7 +77682,7 @@ BI.IconComboTrigger = BI.inherit(BI.Trigger, {
             cls: "icon-combo-trigger-icon",
             iconCls: iconCls,
             disableSelected: true,
-            width: o.width,
+            width: o.width - 12,
             height: o.height,
             iconWidth: o.iconWidth,
             iconHeight: o.iconHeight,
@@ -77495,7 +77693,7 @@ BI.IconComboTrigger = BI.inherit(BI.Trigger, {
             disableSelected: true,
             cls: "icon-combo-down-icon trigger-triangle-font",
             width: 12,
-            height: 8,
+            height: o.height,
             selected: BI.isNotEmptyString(iconCls)
         });
         this.down.setVisible(o.isShowDown);
@@ -80067,55 +80265,6 @@ BI.SimpleStateEditor.EVENT_SPACE = "EVENT_SPACE";
 BI.SimpleStateEditor.EVENT_EMPTY = "EVENT_EMPTY";
 
 BI.shortcut("bi.simple_state_editor", BI.SimpleStateEditor);/**
- * 有确定取消按钮的弹出层
- * @class BI.BarPopoverSection
- * @extends BI.PopoverSection
- * @abstract
- */
-BI.BarPopoverSection = BI.inherit(BI.PopoverSection, {
-    _defaultConfig: function () {
-        return BI.extend(BI.BarPopoverSection.superclass._defaultConfig.apply(this, arguments), {
-            btns: [BI.i18nText(BI.i18nText("BI-Basic_Sure")), BI.i18nText(BI.i18nText("BI-Basic_Cancel"))]
-        });
-    },
-
-    _init: function () {
-        BI.BarPopoverSection.superclass._init.apply(this, arguments);
-    },
-
-    rebuildSouth: function (south) {
-        var self = this, o = this.options;
-        this.sure = BI.createWidget({
-            type: "bi.button",
-            text: this.options.btns[0],
-            warningTitle: o.warningTitle,
-            value: 0,
-            handler: function (v) {
-                self.end();
-                self.close(v);
-            }
-        });
-        this.cancel = BI.createWidget({
-            type: "bi.button",
-            text: this.options.btns[1],
-            value: 1,
-            level: "ignore",
-            handler: function (v) {
-                self.close(v);
-            }
-        });
-        BI.createWidget({
-            type: "bi.right_vertical_adapt",
-            element: south,
-            lgap: 10,
-            items: [this.cancel, this.sure]
-        });
-    },
-
-    setConfirmButtonEnable: function (v) {
-        this.sure.setEnable(!!v);
-    }
-});/**
  * 下拉框弹出层的多选版本，toolbar带有若干按钮, zIndex在1000w
  * @class BI.MultiPopupView
  * @extends BI.Widget
@@ -80740,8 +80889,8 @@ BI.LazyLoader = BI.inherit(BI.Widget, {
     _getNextItems: function (options) {
         var self = this, o = this.options;
         var lastNum = o.items.length - this._const.PAGE * (options.times - 1);
-        var lastItems = BI.last(o.items, lastNum);
-        var nextItems = BI.first(lastItems, this._const.PAGE);
+        var lastItems = BI.takeRight(o.items, lastNum);
+        var nextItems = BI.take(lastItems, this._const.PAGE);
         return nextItems;
     },
 
@@ -90809,7 +90958,11 @@ BI.MonthCombo = BI.inherit(BI.Widget, {
     },
 
     getValue: function () {
-        return this.popup.getValue();
+        if (BI.isNull(this.popup)) {
+            return this.options.value || "";
+        } else {
+            return this.popup.getValue() || "";
+        }
     }
 });
 
@@ -92110,6 +92263,418 @@ BI.YearCard = BI.inherit(BI.MultiDateCard, {
 BI.YearCard.EVENT_CHANGE = "EVENT_CHANGE";
 BI.shortcut("bi.yearcard", BI.YearCard);
 /**
+ * Created by roy on 15/8/14.
+ */
+BI.DownListCombo = BI.inherit(BI.Widget, {
+    _defaultConfig: function () {
+        return BI.extend(BI.DownListCombo.superclass._defaultConfig.apply(this, arguments), {
+            baseCls: "bi-multilayer-down-list-combo",
+            height: 24,
+            items: [],
+            adjustLength: 0,
+            direction: "bottom",
+            trigger: "click",
+            container: null,
+            stopPropagation: false,
+            el: {}
+        });
+    },
+
+    _init: function () {
+        BI.DownListCombo.superclass._init.apply(this, arguments);
+        var self = this, o = this.options;
+        this.popupview = BI.createWidget({
+            type: "bi.multi_layer_down_list_popup",
+            items: o.items,
+            chooseType: o.chooseType,
+            value: o.value
+        });
+
+        this.popupview.on(BI.DownListPopup.EVENT_CHANGE, function (value) {
+            self.fireEvent(BI.DownListCombo.EVENT_CHANGE, value);
+            self.downlistcombo.hideView();
+        });
+
+        this.popupview.on(BI.DownListPopup.EVENT_SON_VALUE_CHANGE, function (value, fatherValue) {
+            self.fireEvent(BI.DownListCombo.EVENT_SON_VALUE_CHANGE, value, fatherValue);
+            self.downlistcombo.hideView();
+        });
+
+
+        this.downlistcombo = BI.createWidget({
+            element: this,
+            type: "bi.combo",
+            trigger: o.trigger,
+            isNeedAdjustWidth: false,
+            container: o.container,
+            adjustLength: o.adjustLength,
+            direction: o.direction,
+            stopPropagation: o.stopPropagation,
+            el: BI.createWidget(o.el, {
+                type: "bi.icon_trigger",
+                extraCls: o.iconCls ? o.iconCls : "pull-down-font",
+                width: o.width,
+                height: o.height
+            }),
+            popup: {
+                el: this.popupview,
+                stopPropagation: true,
+                maxHeight: 1000
+            }
+        });
+
+        this.downlistcombo.on(BI.Combo.EVENT_BEFORE_POPUPVIEW, function () {
+            self.fireEvent(BI.DownListCombo.EVENT_BEFORE_POPUPVIEW);
+        });
+    },
+
+    hideView: function () {
+        this.downlistcombo.hideView();
+    },
+
+    showView: function () {
+        this.downlistcombo.showView();
+    },
+
+    populate: function (items) {
+        this.popupview.populate(items);
+    },
+
+    setValue: function (v) {
+        this.popupview.setValue(v);
+    },
+    getValue: function () {
+        return this.popupview.getValue();
+    }
+});
+BI.DownListCombo.EVENT_CHANGE = "EVENT_CHANGE";
+BI.DownListCombo.EVENT_SON_VALUE_CHANGE = "EVENT_SON_VALUE_CHANGE";
+BI.DownListCombo.EVENT_BEFORE_POPUPVIEW = "EVENT_BEFORE_POPUPVIEW";
+
+BI.shortcut("bi.multi_layer_down_list_combo", BI.DownListCombo);/**
+ * Created by roy on 15/9/8.
+ * 处理popup中的item分组样式
+ * 一个item分组中的成员大于一时，该分组设置为单选，并且默认状态第一个成员设置为已选择项
+ */
+BI.MultiLayerDownListPopup = BI.inherit(BI.Pane, {
+    constants: {
+        nextIcon: "pull-right-e-font",
+        height: 25,
+        iconHeight: 12,
+        iconWidth: 12,
+        hgap: 0,
+        vgap: 0,
+        border: 1
+    },
+    _defaultConfig: function () {
+        var conf = BI.MultiLayerDownListPopup.superclass._defaultConfig.apply(this, arguments);
+        return BI.extend(conf, {
+            baseCls: "bi-down-list-popup",
+            items: [],
+            chooseType: BI.Selection.Multi
+        });
+    },
+    _init: function () {
+        BI.MultiLayerDownListPopup.superclass._init.apply(this, arguments);
+        this.singleValues = [];
+        this.childValueMap = {};
+        this.fatherValueMap = {};
+        var self = this, o = this.options, children = this._createPopupItems(o.items);
+        this.popup = BI.createWidget({
+            type: "bi.button_tree",
+            items: BI.createItems(children,
+                {}, {
+                    adjustLength: -2
+                }
+            ),
+            layouts: [{
+                type: "bi.vertical",
+                hgap: this.constants.hgap,
+                vgap: this.constants.vgap
+            }],
+            value: this._digest(o.value),
+            chooseType: o.chooseType
+        });
+
+        this.popup.on(BI.ButtonTree.EVENT_CHANGE, function (value, object) {
+            var changedValue = value;
+            if (BI.isNotNull(self.childValueMap[value])) {
+                changedValue = self.childValueMap[value];
+                self.fireEvent(BI.MultiLayerDownListPopup.EVENT_SON_VALUE_CHANGE, changedValue, self.fatherValueMap[value]);
+            } else {
+                self.fireEvent(BI.MultiLayerDownListPopup.EVENT_CHANGE, changedValue, object);
+            }
+
+
+            if (!self.singleValues.contains(changedValue)) {
+                var item = self.getValue();
+                var result = [];
+                BI.each(item, function (i, valueObject) {
+                    if (valueObject.value != changedValue) {
+                        result.push(valueObject);
+                    }
+                });
+                self.setValue(result);
+            }
+
+        });
+
+        BI.createWidget({
+            type: "bi.vertical",
+            element: this,
+            items: [this.popup]
+        });
+
+    },
+    _createPopupItems: function (items) {
+        var self = this, result = [];
+        BI.each(items, function (i, it) {
+            var item_done = {
+                type: "bi.down_list_group",
+                items: []
+            };
+
+            BI.each(it, function (i, item) {
+                if (BI.isNotEmptyArray(item.children) && !BI.isEmpty(item.el)) {
+                    item.type = "bi.combo_group";
+                    item.cls = "down-list-group";
+                    item.trigger = "hover";
+                    item.isNeedAdjustWidth = false;
+                    item.el.title = item.el.title || item.el.text;
+                    item.el.type = "bi.down_list_group_item";
+                    item.el.logic = {
+                        dynamic: true
+                    };
+                    item.el.height = self.constants.height;
+                    item.el.iconCls2 = self.constants.nextIcon;
+                    item.popup = {
+                        lgap: 4,
+                        el: {
+                            type: "bi.button_tree",
+                            chooseType: 0,
+                            layouts: [{
+                                type: "bi.vertical"
+                            }]
+
+                        }
+                    };
+                    item.el.childValues = [];
+                    BI.each(item.children, function (i, child) {
+                        child = child.el ? BI.extend(child.el, {children: child.children}) : child;
+                        var fatherValue = BI.deepClone(item.el.value);
+                        var childValue = BI.deepClone(child.value);
+                        self.singleValues.push(child.value);
+                        child.type = "bi.down_list_item";
+                        child.extraCls = " child-down-list-item";
+                        child.title = child.title || child.text;
+                        child.textRgap = 10;
+                        child.isNeedAdjustWidth = false;
+                        child.logic = {
+                            dynamic: true
+                        };
+                        child.father = fatherValue;
+                        self.fatherValueMap[self._createChildValue(fatherValue, childValue)] = fatherValue;
+                        self.childValueMap[self._createChildValue(fatherValue, childValue)] = childValue;
+                        child.value = self._createChildValue(fatherValue, childValue);
+                        item.el.childValues.push(child.value);
+                        if (BI.isNotEmptyArray(child.children)) {
+                            child.type = "bi.down_list_group_item";
+                            self._createChildren(child);
+                            child.height = self.constants.height;
+                            child.iconCls2 = self.constants.nextIcon;
+                            item.el.childValues = BI.concat(item.el.childValues, child.childValues);
+                        }
+                    });
+                } else {
+                    item.type = "bi.down_list_item";
+                    item.title = item.title || item.text;
+                    item.textRgap = 10;
+                    item.isNeedAdjustWidth = false;
+                    item.logic = {
+                        dynamic: true
+                    };
+                }
+                var el_done = {};
+                el_done.el = item;
+                item_done.items.push(el_done);
+            });
+            if (self._isGroup(item_done.items)) {
+                BI.each(item_done.items, function (i, item) {
+                    self.singleValues.push(item.el.value);
+                });
+            }
+
+            result.push(item_done);
+            if (self._needSpliter(i, items.length)) {
+                var spliter_container = BI.createWidget({
+                    type: "bi.vertical",
+                    items: [{
+                        el: {
+                            type: "bi.layout",
+                            cls: "bi-down-list-spliter bi-border-top cursor-pointer",
+                            height: 0
+                        }
+
+                    }],
+                    cls: "bi-down-list-spliter-container cursor-pointer",
+                    lgap: 10,
+                    rgap: 10
+                });
+                result.push(spliter_container);
+            }
+        });
+        return result;
+    },
+
+    _createChildren: function (child) {
+        var self = this;
+        child.childValues = [];
+        BI.each(child.children, function (i, c) {
+            var fatherValue = BI.deepClone(child.value);
+            var childValue = BI.deepClone(c.value);
+            c.type = "bi.down_list_item";
+            c.title = c.title || c.text;
+            c.textRgap = 10;
+            c.isNeedAdjustWidth = false;
+            c.logic = {
+                dynamic: true
+            };
+            c.father = fatherValue;
+            self.fatherValueMap[self._createChildValue(fatherValue, childValue)] = fatherValue;
+            self.childValueMap[self._createChildValue(fatherValue, childValue)] = childValue;
+            c.value = self._createChildValue(fatherValue, childValue);
+            child.childValues.push(c.value);
+        });
+    },
+
+    _isGroup: function (i) {
+        return i.length > 1;
+    },
+
+    _needSpliter: function (i, itemLength) {
+        return i < itemLength - 1;
+    },
+
+    _createChildValue: function (fatherValue, childValue) {
+        var fValue = fatherValue;
+        if(BI.isArray(fatherValue)) {
+            fValue = fatherValue.join("_");
+        }
+        return fValue + "_" + childValue;
+    },
+
+    _digest: function (valueItem) {
+        var self = this;
+        var valueArray = [];
+        BI.each(valueItem, function (i, item) {
+                var value;
+                if (BI.isNotNull(item.childValue)) {
+                    value = self._createChildValue(item.value, item.childValue);
+                } else {
+                    value = item.value;
+                }
+                valueArray.push(value);
+            }
+        );
+        return valueArray;
+    },
+
+    _checkValues: function (values) {
+        var self = this, o = this.options;
+        var value = [];
+        BI.each(o.items, function (idx, itemGroup) {
+            BI.each(itemGroup, function (id, item) {
+                if(BI.isNotNull(item.children)) {
+                    var childValues = getChildrenValue(item);
+                    var v = joinValue(childValues, values[idx]);
+                    if(BI.isNotEmptyString(v)) {
+                        value.push(v);
+                    }
+                }else{
+                    if(item.value === values[idx][0]) {
+                        value.push(values[idx][0]);
+                    }
+                }
+            });
+        });
+        return value;
+
+        function joinValue (sources, targets) {
+            var value = "";
+            BI.some(sources, function (idx, s) {
+                return BI.some(targets, function (id, t) {
+                    if(s === t) {
+                        value = s;
+                        return true;
+                    }
+                });
+            });
+            return value;
+        }
+
+        function getChildrenValue (item) {
+            var children = [];
+            if(BI.isNotNull(item.children)) {
+                BI.each(item.children, function (idx, child) {
+                    children = BI.concat(children, getChildrenValue(child));
+                });
+            } else {
+                children.push(item.value);
+            }
+            return children;
+        }
+    },
+
+    populate: function (items) {
+        BI.MultiLayerDownListPopup.superclass.populate.apply(this, arguments);
+        var self = this;
+        self.childValueMap = {};
+        self.fatherValueMap = {};
+        self.singleValues = [];
+        var children = self._createPopupItems(items);
+        var popupItem = BI.createItems(children,
+            {}, {
+                adjustLength: -2
+            }
+        );
+        self.popup.populate(popupItem);
+    },
+
+    setValue: function (valueItem) {
+        this.popup.setValue(this._digest(valueItem));
+    },
+
+    _getValue: function () {
+        var v = [];
+        BI.each(this.popup.getAllButtons(), function (i, item) {
+            i % 2 === 0 && v.push(item.getValue());
+        });
+        return v;
+    },
+
+    getValue: function () {
+        var self = this, result = [];
+        var values = this._checkValues(this._getValue());
+        BI.each(values, function (i, value) {
+            var valueItem = {};
+            if (BI.isNotNull(self.childValueMap[value])) {
+                var fartherValue = self.fatherValueMap[value];
+                valueItem.childValue = self.childValueMap[value];
+                valueItem.value = fartherValue.split("_");
+            } else {
+                valueItem.value = value;
+            }
+            result.push(valueItem);
+        });
+        return result;
+    }
+
+
+});
+
+BI.MultiLayerDownListPopup.EVENT_CHANGE = "EVENT_CHANGE";
+BI.MultiLayerDownListPopup.EVENT_SON_VALUE_CHANGE = "EVENT_SON_VALUE_CHANGE";
+BI.shortcut("bi.multi_layer_down_list_popup", BI.MultiLayerDownListPopup);/**
  * @class BI.MultiLayerSelectTreeCombo
  * @extends BI.Widget
  */
@@ -94923,7 +95488,7 @@ BI.MultiSelectSearchLoader = BI.inherit(BI.Widget, {
         });
         if (BI.isKey(keyword)) {
             var search = BI.Func.getSearchResult(newValues, keyword);
-            values = search.matched.concat(search.find);
+            values = search.match.concat(search.find);
         }
         return BI.map(values, function (i, v) {
             return {
@@ -98459,7 +99024,11 @@ BI.QuarterCombo = BI.inherit(BI.Widget, {
     },
 
     getValue: function () {
-        return this.popup.getValue() || "";
+        if (BI.isNull(this.popup)) {
+            return this.options.value || "";
+        } else {
+            return this.popup.getValue() || "";
+        }
     }
 });
 
@@ -103973,7 +104542,11 @@ BI.YearCombo = BI.inherit(BI.Widget, {
     },
 
     getValue: function () {
-        return this.popup.getValue();
+        if (BI.isNull(this.popup)) {
+            return this.options.value;
+        } else {
+            return this.popup.getValue();
+        }
     }
 });
 BI.YearCombo.EVENT_CONFIRM = "EVENT_CONFIRM";
@@ -104233,6 +104806,7 @@ BI.YearMonthCombo = BI.inherit(BI.Widget, {
         });
 
         this.month.on(BI.MonthCombo.EVENT_CONFIRM, function () {
+            self.getValue();
             self.fireEvent(BI.YearMonthCombo.EVENT_CONFIRM);
         });
         this.month.on(BI.MonthCombo.EVENT_BEFORE_POPUPVIEW, function () {
@@ -105499,4 +106073,712 @@ BI.ValueChooserPane = BI.inherit(BI.AbstractValueChooser, {
     }
 });
 BI.ValueChooserPane.EVENT_CHANGE = "ValueChooserPane.EVENT_CHANGE";
-BI.shortcut("bi.value_chooser_pane", BI.ValueChooserPane);
+BI.shortcut("bi.value_chooser_pane", BI.ValueChooserPane);(function () {
+    var Events = {
+
+        // Bind an event to a `callback` function. Passing `"all"` will bind
+        // the callback to all events fired.
+        on: function (name, callback, context) {
+            if (!eventsApi(this, "on", name, [callback, context]) || !callback) return this;
+            this._events || (this._events = {});
+            var events = this._events[name] || (this._events[name] = []);
+            events.push({callback: callback, context: context, ctx: context || this});
+            return this;
+        },
+
+        // Bind an event to only be triggered a single time. After the first time
+        // the callback is invoked, it will be removed.
+        once: function (name, callback, context) {
+            if (!eventsApi(this, "once", name, [callback, context]) || !callback) return this;
+            var self = this;
+            var once = _.once(function () {
+                self.off(name, once);
+                callback.apply(this, arguments);
+            });
+            once._callback = callback;
+            return this.on(name, once, context);
+        },
+
+        // Remove one or many callbacks. If `context` is null, removes all
+        // callbacks with that function. If `callback` is null, removes all
+        // callbacks for the event. If `name` is null, removes all bound
+        // callbacks for all events.
+        off: function (name, callback, context) {
+            if (!this._events || !eventsApi(this, "off", name, [callback, context])) return this;
+
+            // Remove all callbacks for all events.
+            if (!name && !callback && !context) {
+                this._events = void 0;
+                return this;
+            }
+
+            var names = name ? [name] : _.keys(this._events);
+            for (var i = 0, length = names.length; i < length; i++) {
+                name = names[i];
+
+                // Bail out if there are no events stored.
+                var events = this._events[name];
+                if (!events) continue;
+
+                // Remove all callbacks for this event.
+                if (!callback && !context) {
+                    delete this._events[name];
+                    continue;
+                }
+
+                // Find any remaining events.
+                var remaining = [];
+                for (var j = 0, k = events.length; j < k; j++) {
+                    var event = events[j];
+                    if (
+                        callback && callback !== event.callback &&
+                        callback !== event.callback._callback ||
+                        context && context !== event.context
+                    ) {
+                        remaining.push(event);
+                    }
+                }
+
+                // Replace events if there are any remaining.  Otherwise, clean up.
+                if (remaining.length) {
+                    this._events[name] = remaining;
+                } else {
+                    delete this._events[name];
+                }
+            }
+
+            return this;
+        },
+
+        un: function () {
+            this.off.apply(this, arguments);
+        },
+
+        // Trigger one or many events, firing all bound callbacks. Callbacks are
+        // passed the same arguments as `trigger` is, apart from the event name
+        // (unless you're listening on `"all"`, which will cause your callback to
+        // receive the true name of the event as the first argument).
+        trigger: function (name) {
+            if (!this._events) return this;
+            var args = slice.call(arguments, 1);
+            if (!eventsApi(this, "trigger", name, args)) return this;
+            var events = this._events[name];
+            var allEvents = this._events.all;
+            if (events) triggerEvents(events, args);
+            if (allEvents) triggerEvents(allEvents, arguments);
+            return this;
+        },
+
+        fireEvent: function () {
+            this.trigger.apply(this, arguments);
+        },
+
+        // Inversion-of-control versions of `on` and `once`. Tell *this* object to
+        // listen to an event in another object ... keeping track of what it's
+        // listening to.
+        listenTo: function (obj, name, callback) {
+            var listeningTo = this._listeningTo || (this._listeningTo = {});
+            var id = obj._listenId || (obj._listenId = _.uniqueId("l"));
+            listeningTo[id] = obj;
+            if (!callback && typeof name === "object") callback = this;
+            obj.on(name, callback, this);
+            return this;
+        },
+
+        listenToOnce: function (obj, name, callback) {
+            if (typeof name === "object") {
+                for (var event in name) this.listenToOnce(obj, event, name[event]);
+                return this;
+            }
+            if (eventSplitter.test(name)) {
+                var names = name.split(eventSplitter);
+                for (var i = 0, length = names.length; i < length; i++) {
+                    this.listenToOnce(obj, names[i], callback);
+                }
+                return this;
+            }
+            if (!callback) return this;
+            var once = _.once(function () {
+                this.stopListening(obj, name, once);
+                callback.apply(this, arguments);
+            });
+            once._callback = callback;
+            return this.listenTo(obj, name, once);
+        },
+
+        // Tell this object to stop listening to either specific events ... or
+        // to every object it's currently listening to.
+        stopListening: function (obj, name, callback) {
+            var listeningTo = this._listeningTo;
+            if (!listeningTo) return this;
+            var remove = !name && !callback;
+            if (!callback && typeof name === "object") callback = this;
+            if (obj) (listeningTo = {})[obj._listenId] = obj;
+            for (var id in listeningTo) {
+                obj = listeningTo[id];
+                obj.off(name, callback, this);
+                if (remove || _.isEmpty(obj._events)) delete this._listeningTo[id];
+            }
+            return this;
+        }
+
+    };
+
+    // Regular expression used to split event strings.
+    var eventSplitter = /\s+/;
+
+    // Implement fancy features of the Events API such as multiple event
+    // names `"change blur"` and jQuery-style event maps `{change: action}`
+    // in terms of the existing API.
+    var eventsApi = function (obj, action, name, rest) {
+        if (!name) return true;
+
+        // Handle event maps.
+        if (typeof name === "object") {
+            for (var key in name) {
+                obj[action].apply(obj, [key, name[key]].concat(rest));
+            }
+            return false;
+        }
+
+        // Handle space separated event names.
+        if (eventSplitter.test(name)) {
+            var names = name.split(eventSplitter);
+            for (var i = 0, length = names.length; i < length; i++) {
+                obj[action].apply(obj, [names[i]].concat(rest));
+            }
+            return false;
+        }
+
+        return true;
+    };
+
+    // A difficult-to-believe, but optimized internal dispatch function for
+    // triggering events. Tries to keep the usual cases speedy (most internal
+    // BI events have 3 arguments).
+    var triggerEvents = function (events, args) {
+        var ev, i = -1, l = events.length, a1 = args[0], a2 = args[1], a3 = args[2];
+        switch (args.length) {
+            case 0:
+                while (++i < l) (ev = events[i]).callback.call(ev.ctx);
+                return;
+            case 1:
+                while (++i < l) (ev = events[i]).callback.call(ev.ctx, a1);
+                return;
+            case 2:
+                while (++i < l) (ev = events[i]).callback.call(ev.ctx, a1, a2);
+                return;
+            case 3:
+                while (++i < l) (ev = events[i]).callback.call(ev.ctx, a1, a2, a3);
+                return;
+            default:
+                while (++i < l) (ev = events[i]).callback.apply(ev.ctx, args);
+                return;
+        }
+    };
+
+    // BI.Router
+    // ---------------
+
+    // Routers map faux-URLs to actions, and fire events when routes are
+    // matched. Creating a new one sets its `routes` hash, if not set statically.
+    var Router = BI.Router = function (options) {
+        options || (options = {});
+        if (options.routes) this.routes = options.routes;
+        this._bindRoutes();
+        this._init.apply(this, arguments);
+    };
+
+    // Cached regular expressions for matching named param parts and splatted
+    // parts of route strings.
+    var optionalParam = /\((.*?)\)/g;
+    var namedParam = /(\(\?)?:\w+/g;
+    var splatParam = /\*\w+/g;
+    var escapeRegExp = /[\-{}\[\]+?.,\\\^$|#\s]/g;
+
+    // Set up all inheritable **BI.Router** properties and methods.
+    _.extend(Router.prototype, Events, {
+
+        // _init is an empty function by default. Override it with your own
+        // initialization logic.
+        _init: function () {
+        },
+
+        // Manually bind a single named route to a callback. For example:
+        //
+        //     this.route('search/:query/p:num', 'search', function(query, num) {
+        //       ...
+        //     });
+        //
+        route: function (route, name, callback) {
+            if (!_.isRegExp(route)) route = this._routeToRegExp(route);
+            if (_.isFunction(name)) {
+                callback = name;
+                name = "";
+            }
+            if (!callback) callback = this[name];
+            var router = this;
+            BI.history.route(route, function (fragment) {
+                var args = router._extractParameters(route, fragment);
+                if (router.execute(callback, args, name) !== false) {
+                    router.trigger.apply(router, ["route:" + name].concat(args));
+                    router.trigger("route", name, args);
+                    BI.history.trigger("route", router, name, args);
+                }
+            });
+            return this;
+        },
+
+        // Execute a route handler with the provided parameters.  This is an
+        // excellent place to do pre-route setup or post-route cleanup.
+        execute: function (callback, args, name) {
+            if (callback) callback.apply(this, args);
+        },
+
+        // Simple proxy to `BI.history` to save a fragment into the history.
+        navigate: function (fragment, options) {
+            BI.history.navigate(fragment, options);
+            return this;
+        },
+
+        // Bind all defined routes to `BI.history`. We have to reverse the
+        // order of the routes here to support behavior where the most general
+        // routes can be defined at the bottom of the route map.
+        _bindRoutes: function () {
+            if (!this.routes) return;
+            this.routes = _.result(this, "routes");
+            var route, routes = _.keys(this.routes);
+            while ((route = routes.pop()) != null) {
+                this.route(route, this.routes[route]);
+            }
+        },
+
+        // Convert a route string into a regular expression, suitable for matching
+        // against the current location hash.
+        _routeToRegExp: function (route) {
+            route = route.replace(escapeRegExp, "\\$&")
+                .replace(optionalParam, "(?:$1)?")
+                .replace(namedParam, function (match, optional) {
+                    return optional ? match : "([^/?]+)";
+                })
+                .replace(splatParam, "([^?]*?)");
+            return new RegExp("^" + route + "(?:\\?([\\s\\S]*))?$");
+        },
+
+        // Given a route, and a URL fragment that it matches, return the array of
+        // extracted decoded parameters. Empty or unmatched parameters will be
+        // treated as `null` to normalize cross-browser behavior.
+        _extractParameters: function (route, fragment) {
+            var params = route.exec(fragment).slice(1);
+            return _.map(params, function (param, i) {
+                // Don't decode the search params.
+                if (i === params.length - 1) return param || null;
+                return param ? decodeURIComponent(param) : null;
+            });
+        }
+
+    });
+
+    // History
+    // ----------------
+
+    // Handles cross-browser history management, based on either
+    // [pushState](http://diveintohtml5.info/history.html) and real URLs, or
+    // [onhashchange](https://developer.mozilla.org/en-US/docs/DOM/window.onhashchange)
+    // and URL fragments. If the browser supports neither (old IE, natch),
+    // falls back to polling.
+    var History = function () {
+        this.handlers = [];
+        this.checkUrl = _.bind(this.checkUrl, this);
+
+        // Ensure that `History` can be used outside of the browser.
+        if (typeof window !== "undefined") {
+            this.location = window.location;
+            this.history = window.history;
+        }
+    };
+
+    // Cached regex for stripping a leading hash/slash and trailing space.
+    var routeStripper = /^[#\/]|\s+$/g;
+
+    // Cached regex for stripping leading and trailing slashes.
+    var rootStripper = /^\/+|\/+$/g;
+
+    // Cached regex for stripping urls of hash.
+    var pathStripper = /#.*$/;
+
+    // Has the history handling already been started?
+    History.started = false;
+
+    // Set up all inheritable **BI.History** properties and methods.
+    _.extend(History.prototype, Events, {
+
+        // The default interval to poll for hash changes, if necessary, is
+        // twenty times a second.
+        interval: 50,
+
+        // Are we at the app root?
+        atRoot: function () {
+            var path = this.location.pathname.replace(/[^\/]$/, "$&/");
+            return path === this.root && !this.getSearch();
+        },
+
+        // In IE6, the hash fragment and search params are incorrect if the
+        // fragment contains `?`.
+        getSearch: function () {
+            var match = this.location.href.replace(/#.*/, "").match(/\?.+/);
+            return match ? match[0] : "";
+        },
+
+        // Gets the true hash value. Cannot use location.hash directly due to bug
+        // in Firefox where location.hash will always be decoded.
+        getHash: function (window) {
+            var match = (window || this).location.href.match(/#(.*)$/);
+            return match ? match[1] : "";
+        },
+
+        // Get the pathname and search params, without the root.
+        getPath: function () {
+            var path = decodeURI(this.location.pathname + this.getSearch());
+            var root = this.root.slice(0, -1);
+            if (!path.indexOf(root)) path = path.slice(root.length);
+            return path.charAt(0) === "/" ? path.slice(1) : path;
+        },
+
+        // Get the cross-browser normalized URL fragment from the path or hash.
+        getFragment: function (fragment) {
+            if (fragment == null) {
+                if (this._hasPushState || !this._wantsHashChange) {
+                    fragment = this.getPath();
+                } else {
+                    fragment = this.getHash();
+                }
+            }
+            return fragment.replace(routeStripper, "");
+        },
+
+        // Start the hash change handling, returning `true` if the current URL matches
+        // an existing route, and `false` otherwise.
+        start: function (options) {
+            if (History.started) throw new Error("BI.history has already been started");
+            History.started = true;
+
+            // Figure out the initial configuration. Do we need an iframe?
+            // Is pushState desired ... is it available?
+            this.options = _.extend({root: "/"}, this.options, options);
+            this.root = this.options.root;
+            this._wantsHashChange = this.options.hashChange !== false;
+            this._hasHashChange = "onhashchange" in window;
+            this._wantsPushState = !!this.options.pushState;
+            this._hasPushState = !!(this.options.pushState && this.history && this.history.pushState);
+            this.fragment = this.getFragment();
+
+            // Normalize root to always include a leading and trailing slash.
+            this.root = ("/" + this.root + "/").replace(rootStripper, "/");
+
+            // Transition from hashChange to pushState or vice versa if both are
+            // requested.
+            if (this._wantsHashChange && this._wantsPushState) {
+
+                // If we've started off with a route from a `pushState`-enabled
+                // browser, but we're currently in a browser that doesn't support it...
+                if (!this._hasPushState && !this.atRoot()) {
+                    var root = this.root.slice(0, -1) || "/";
+                    this.location.replace(root + "#" + this.getPath());
+                    // Return immediately as browser will do redirect to new url
+                    return true;
+
+                    // Or if we've started out with a hash-based route, but we're currently
+                    // in a browser where it could be `pushState`-based instead...
+                } else if (this._hasPushState && this.atRoot()) {
+                    this.navigate(this.getHash(), {replace: true});
+                }
+
+            }
+
+            // Proxy an iframe to handle location events if the browser doesn't
+            // support the `hashchange` event, HTML5 history, or the user wants
+            // `hashChange` but not `pushState`.
+            if (!this._hasHashChange && this._wantsHashChange && (!this._wantsPushState || !this._hasPushState)) {
+                var iframe = document.createElement("iframe");
+                iframe.src = "javascript:0";
+                iframe.style.display = "none";
+                iframe.tabIndex = -1;
+                var body = document.body;
+                // Using `appendChild` will throw on IE < 9 if the document is not ready.
+                this.iframe = body.insertBefore(iframe, body.firstChild).contentWindow;
+                this.iframe.document.open().close();
+                this.iframe.location.hash = "#" + this.fragment;
+            }
+
+            // Add a cross-platform `addEventListener` shim for older browsers.
+            var addEventListener = window.addEventListener || function (eventName, listener) {
+                return attachEvent("on" + eventName, listener);
+            };
+
+            // Depending on whether we're using pushState or hashes, and whether
+            // 'onhashchange' is supported, determine how we check the URL state.
+            if (this._hasPushState) {
+                addEventListener("popstate", this.checkUrl, false);
+            } else if (this._wantsHashChange && this._hasHashChange && !this.iframe) {
+                addEventListener("hashchange", this.checkUrl, false);
+            } else if (this._wantsHashChange) {
+                this._checkUrlInterval = setInterval(this.checkUrl, this.interval);
+            }
+
+            if (!this.options.silent) return this.loadUrl();
+        },
+
+        // Disable BI.history, perhaps temporarily. Not useful in a real app,
+        // but possibly useful for unit testing Routers.
+        stop: function () {
+            // Add a cross-platform `removeEventListener` shim for older browsers.
+            var removeEventListener = window.removeEventListener || function (eventName, listener) {
+                return detachEvent("on" + eventName, listener);
+            };
+
+            // Remove window listeners.
+            if (this._hasPushState) {
+                removeEventListener("popstate", this.checkUrl, false);
+            } else if (this._wantsHashChange && this._hasHashChange && !this.iframe) {
+                removeEventListener("hashchange", this.checkUrl, false);
+            }
+
+            // Clean up the iframe if necessary.
+            if (this.iframe) {
+                document.body.removeChild(this.iframe.frameElement);
+                this.iframe = null;
+            }
+
+            // Some environments will throw when clearing an undefined interval.
+            if (this._checkUrlInterval) clearInterval(this._checkUrlInterval);
+            History.started = false;
+        },
+
+        // Add a route to be tested when the fragment changes. Routes added later
+        // may override previous routes.
+        route: function (route, callback) {
+            this.handlers.unshift({route: route, callback: callback});
+        },
+
+        // Checks the current URL to see if it has changed, and if it has,
+        // calls `loadUrl`, normalizing across the hidden iframe.
+        checkUrl: function (e) {
+            var current = this.getFragment();
+
+            // If the user pressed the back button, the iframe's hash will have
+            // changed and we should use that for comparison.
+            if (current === this.fragment && this.iframe) {
+                current = this.getHash(this.iframe);
+            }
+
+            if (current === this.fragment) return false;
+            if (this.iframe) this.navigate(current);
+            this.loadUrl();
+        },
+
+        // Attempt to load the current URL fragment. If a route succeeds with a
+        // match, returns `true`. If no defined routes matches the fragment,
+        // returns `false`.
+        loadUrl: function (fragment) {
+            fragment = this.fragment = this.getFragment(fragment);
+            return _.some(this.handlers, function (handler) {
+                if (handler.route.test(fragment)) {
+                    handler.callback(fragment);
+                    return true;
+                }
+            });
+        },
+
+        // Save a fragment into the hash history, or replace the URL state if the
+        // 'replace' option is passed. You are responsible for properly URL-encoding
+        // the fragment in advance.
+        //
+        // The options object can contain `trigger: true` if you wish to have the
+        // route callback be fired (not usually desirable), or `replace: true`, if
+        // you wish to modify the current URL without adding an entry to the history.
+        navigate: function (fragment, options) {
+            if (!History.started) return false;
+            if (!options || options === true) options = {trigger: !!options};
+
+            // Normalize the fragment.
+            fragment = this.getFragment(fragment || "");
+
+            // Don't include a trailing slash on the root.
+            var root = this.root;
+            if (fragment === "" || fragment.charAt(0) === "?") {
+                root = root.slice(0, -1) || "/";
+            }
+            var url = root + fragment;
+
+            // Strip the hash and decode for matching.
+            fragment = decodeURI(fragment.replace(pathStripper, ""));
+
+            if (this.fragment === fragment) return;
+            this.fragment = fragment;
+
+            // If pushState is available, we use it to set the fragment as a real URL.
+            if (this._hasPushState) {
+                this.history[options.replace ? "replaceState" : "pushState"]({}, document.title, url);
+
+                // If hash changes haven't been explicitly disabled, update the hash
+                // fragment to store history.
+            } else if (this._wantsHashChange) {
+                this._updateHash(this.location, fragment, options.replace);
+                if (this.iframe && (fragment !== this.getHash(this.iframe))) {
+                    // Opening and closing the iframe tricks IE7 and earlier to push a
+                    // history entry on hash-tag change.  When replace is true, we don't
+                    // want this.
+                    if (!options.replace) this.iframe.document.open().close();
+                    this._updateHash(this.iframe.location, fragment, options.replace);
+                }
+
+                // If you've told us that you explicitly don't want fallback hashchange-
+                // based history, then `navigate` becomes a page refresh.
+            } else {
+                return this.location.assign(url);
+            }
+            if (options.trigger) return this.loadUrl(fragment);
+        },
+
+        // Update the hash location, either replacing the current entry, or adding
+        // a new one to the browser history.
+        _updateHash: function (location, fragment, replace) {
+            if (replace) {
+                var href = location.href.replace(/(javascript:|#).*$/, "");
+                location.replace(href + "#" + fragment);
+            } else {
+                // Some browsers require that `hash` contains a leading #.
+                location.hash = "#" + fragment;
+            }
+        }
+
+    });
+
+    // Create the default BI.history.
+    BI.history = new History;
+}());BI.serverURL = "${serverURL}";
+BI.servletURL = "${servletURL}";
+BI.resourceURL = "file?path=/com/fr/web/ui/resource";
+BI.i18n = {
+    "BI-Multi_Date_Quarter_End": "季度末",
+    "BI-Multi_Date_Month_Begin": "月初",
+    "BI-Multi_Date_YMD": "年/月/日",
+    "BI-Custom_Color": "自定义颜色",
+    "BI-Numerical_Interval_Input_Data": "请输入数值",
+    "BI-Please_Input_Natural_Number": "请输入非负整数",
+    "BI-No_More_Data": "无更多数据",
+    "BI-Basic_Altogether": "共",
+    "BI-Basic_Sunday": "星期日",
+    "BI-Widget_Background_Colour": "组件背景",
+    "BI-Color_Picker_Error_Text": "请输入0~255的正整数",
+    "BI-Multi_Date_Month": "月",
+    "BI-No_Selected_Item": "没有可选项",
+    "BI-Multi_Date_Year_Begin": "年初",
+    "BI-Quarter_1": "第1季度",
+    "BI-Quarter_2": "第2季度",
+    "BI-Quarter_3": "第3季度",
+    "BI-Quarter_4": "第4季度",
+    "BI-Multi_Date_Year_Next": "年后",
+    "BI-Multi_Date_Month_Prev": "个月前",
+    "BI-Month_Trigger_Error_Text": "请输入1~12的正整数",
+    "BI-Less_And_Equal": "小于等于",
+    "BI-Year_Trigger_Invalid_Text": "请输入有效时间",
+    "BI-Multi_Date_Week_Next": "周后",
+    "BI-Font_Size": "字号",
+    "BI-Basic_Total": "共",
+    "BI-Already_Selected": "已选择",
+    "BI-Formula_Insert": "插入",
+    "BI-Select_All": "全选",
+    "BI-Basic_Tuesday": "星期二",
+    "BI-Multi_Date_Month_End": "月末",
+    "BI-Load_More": "点击加载更多数据",
+    "BI-Basic_September": "九月",
+    "BI-Current_Is_Last_Page": "当前已是最后一页",
+    "BI-Basic_Auto": "自动",
+    "BI-Basic_Count": "个",
+    "BI-Basic_Value": "值",
+    "BI-Basic_Unrestricted": "无限制",
+    "BI-Quarter_Trigger_Error_Text": "请输入1~4的正整数",
+    "BI-Basic_More": "更多",
+    "BI-Basic_Wednesday": "星期三",
+    "BI-Basic_Bold": "加粗",
+    "BI-Basic_Simple_Saturday": "六",
+    "BI-Multi_Date_Month_Next": "个月后",
+    "BI-Basic_March": "三月",
+    "BI-Current_Is_First_Page": "当前已是第一页",
+    "BI-Basic_Thursday": "星期四",
+    "BI-Basic_Prompt": "提示",
+    "BI-Multi_Date_Today": "今天",
+    "BI-Multi_Date_Quarter_Prev": "个季度前",
+    "BI-Row_Header": "行表头",
+    "BI-Date_Trigger_Error_Text": "日期格式示例:2015-3-11",
+    "BI-Basic_Cancel": "取消",
+    "BI-Basic_January": "一月",
+    "BI-Basic_June": "六月",
+    "BI-Basic_July": "七月",
+    "BI-Basic_April": "四月",
+    "BI-Multi_Date_Quarter_Begin": "季度初",
+    "BI-Multi_Date_Week": "周",
+    "BI-Click_Blank_To_Select": "点按\"空格键\"选中匹配项",
+    "BI-Basic_August": "八月",
+    "BI-Word_Align_Left": "文字居左",
+    "BI-Basic_November": "十一月",
+    "BI-Font_Colour": "字体颜色",
+    "BI-Multi_Date_Day_Prev": "天前",
+    "BI-Select_Part": "部分选择",
+    "BI-Multi_Date_Day_Next": "天后",
+    "BI-Less_Than": "小于",
+    "BI-Basic_February": "二月",
+    "BI-Multi_Date_Year": "年",
+    "BI-Number_Index": "序号",
+    "BI-Multi_Date_Week_Prev": "周前",
+    "BI-Next_Page": "下一页",
+    "BI-Right_Page": "向右翻页",
+    "BI-Numerical_Interval_Signal_Value": "前后值相等，请将操作符改为“≤”",
+    "BI-Basic_December": "十二月",
+    "BI-Basic_Saturday": "星期六",
+    "BI-Basic_Simple_Wednesday": "三",
+    "BI-Multi_Date_Quarter_Next": "个季度后",
+    "BI-Basic_October": "十月",
+    "BI-Basic_Simple_Friday": "五",
+    "BI-Primary_Key": "主键",
+    "BI-Basic_Save": "保存",
+    "BI-Numerical_Interval_Number_Value": "请保证前面的数值小于/等于后面的数值",
+    "BI-Previous_Page": "上一页",
+    "BI-No_Select": "搜索结果为空",
+    "BI-Basic_Clears": "清空",
+    "BI-Created_By_Me": "我创建的",
+    "BI-Basic_Simple_Tuesday": "二",
+    "BI-Word_Align_Right": "文字居右",
+    "BI-Summary_Values": "汇总",
+    "BI-Basic_Clear": "清除",
+    "BI-Upload_File_Size_Error": "文件大小不支",
+    "BI-Up_Page": "向上翻页",
+    "BI-Basic_Simple_Sunday": "日",
+    "BI-Multi_Date_Relative_Current_Time": "相对当前时间",
+    "BI-Selected_Data": "已选数据：",
+    "BI-Multi_Date_Quarter": "季度",
+    "BI-Check_Selected": "查看已选",
+    "BI-Basic_Search": "搜索",
+    "BI-Basic_May": "五月",
+    "BI-Continue_Select": "继续选择",
+    "BI-Please_Input_Positive_Integer": "请输入正整数",
+    "BI-Upload_File_Type_Error": "文件类型不支持",
+    "BI-Basic_Friday": "星期五",
+    "BI-Down_Page": "向下翻页",
+    "BI-Basic_Monday": "星期一",
+    "BI-Left_Page": "向左翻页",
+    "BI-Transparent_Color": "透明",
+    "BI-Basic_Simple_Monday": "一",
+    "BI-Multi_Date_Year_End": "年末",
+    "BI-Time_Interval_Error_Text": "请保证前面时间小于/等于后面的时间",
+    "BI-Basic_Time": "时间",
+    "BI-Basic_OK": "确定",
+    "BI-Basic_Sure": "确定",
+    "BI-Basic_Simple_Thursday": "四",
+    "BI-Multi_Date_Year_Prev": "年前",
+    "BI-Tiao_Data": "条数据",
+    "BI-Basic_Italic": "斜体",
+    "BI-Basic_Union_Relation": "联合关联"
+};
