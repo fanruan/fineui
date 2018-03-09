@@ -90854,7 +90854,8 @@ BI.MultiLayerDownListPopup = BI.inherit(BI.Pane, {
             if (BI.isNotNull(self.childValueMap[value])) {
                 var fartherValue = self.fatherValueMap[value];
                 valueItem.childValue = self.childValueMap[value];
-                valueItem.value = fartherValue.split("_");
+                var fatherArrayValue = (fartherValue + "").split("_");
+                valueItem.value = fatherArrayValue.length > 1 ? fatherArrayValue : fartherValue;
             } else {
                 valueItem.value = value;
             }
