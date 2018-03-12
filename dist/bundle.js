@@ -20921,7 +20921,7 @@ BI.Widget = BI.inherit(BI.OB, {
     _mount: function () {
         var self = this;
         var isMounted = this._isMounted;
-        if (isMounted || !this.isVisible()) {
+        if (isMounted || !this.isVisible() || this.__asking === true) {
             return;
         }
         if (this._isRoot === true) {
