@@ -19488,7 +19488,7 @@ if (!window.BI) {
     });
 
     // 集合相关方法
-    _.each(["where", "findWhere", "contains", "invoke", "pluck", "shuffle", "sample", "toArray", "size"], function (name) {
+    _.each(["where", "findWhere", "invoke", "pluck", "shuffle", "sample", "toArray", "size"], function (name) {
         BI[name] = _apply(name);
     });
     _.each(["get", "each", "map", "reduce", "reduceRight", "find", "filter", "reject", "every", "all", "some", "any", "max", "min",
@@ -52997,7 +52997,9 @@ BI.shortcut("bi.checkbox", BI.Checkbox);/**
                                 break;
                         }
                     };
-                    upload.onloadstart();
+                    if (isFunction(upload.onloadstart)) {
+                        upload.onloadstart();
+                    }
                 }
                 var boundary = "AjaxUploadBoundary" + (new Date).getTime();
                 xhr.setRequestHeader("Content-Type", "multipart/form-data; boundary=" + boundary);
@@ -84780,7 +84782,9 @@ BI.SmallSelectTextTrigger = BI.inherit(BI.Trigger, {
     },
 
     setValue: function (vals) {
-        this.trigger.setText(this._digest(vals, this.options.items));
+        var formatValue = this._digest(vals, this.options.items);
+        this.trigger.element.removeClass("bi-water-mark").addClass(formatValue.cls);
+        this.trigger.setText(formatValue.text);
     },
 
     populate: function (items) {
