@@ -5485,6 +5485,10 @@ Demo.COMPONENT_CONFIG = [{
     text: "弹出层"
 }, {
     pId: 10202,
+    text: "layer",
+    value: "demo.layer"
+}, {
+    pId: 10202,
     text: "bi.popover",
     value: "demo.popover"
 }, {
@@ -8466,30 +8470,100 @@ Demo.Func = BI.inherit(BI.Widget, {
         baseCls: "demo-func"
     },
     render: function () {
+        var self = this, id1 = BI.UUID(), id2 = BI.UUID();
+        return {
+            type: "bi.vertical",
+            vgap: 10,
+            items: [{
+                type: "bi.button",
+                text: "create形式创建layer, 遮住当前面板, 返回创建的面板对象",
+                height: 30,
+                handler: function () {
+                    BI.Layers.create(id1, self, {
+                        //偏移量
+                        offset: {
+                            left: 10,
+                            right: 10,
+                            top: 10,
+                            bottom: 10
+                        },
+                        type: "bi.center_adapt",
+                        cls: "bi-card",
+                        items: [{
+                            type: "bi.button",
+                            text: "点击关闭",
+                            handler: function () {
+                                BI.Layers.hide(id1);
+                            }
+                        }]
+                    });
+                    BI.Layers.show(id1);
+                }
+            }, {
+                type: "bi.button",
+                text: "make形式创建layer,可以指定放到哪个面板内,这里指定当前面板(默认放在body下撑满), 返回创建的面板对象",
+                height: 30,
+                handler: function () {
+                    BI.Layers.make(id2, self, {
+                        //偏移量
+                        offset: {
+                            left: 10,
+                            right: 10,
+                            top: 10,
+                            bottom: 10
+                        },
+                        type: "bi.center_adapt",
+                        cls: "bi-card",
+                        items: [{
+                            type: "bi.button",
+                            text: "点击关闭",
+                            handler: function () {
+                                BI.Layers.remove(id2);
+                            }
+                        }]
+                    });
+                    BI.Layers.show(id2);
+                }
+            }]
+        };
+    }
+});
+
+BI.shortcut("demo.layer", Demo.Func);/**
+ * Created by Windy on 2017/12/13.
+ */
+Demo.Func = BI.inherit(BI.Widget, {
+    props: {
+        baseCls: "demo-func"
+    },
+    render: function () {
         var id = BI.UUID();
         return {
-            type: "bi.text_button",
-            text: "点击弹出Popover",
-            width: 200,
-            height: 80,
-            handler: function () {
-                BI.Popovers.remove(id);
-                BI.Popovers.create(id, {
-                    type: "bi.bar_popover",
-                    header: {
-                        type: "bi.label",
-                        text: "这个是header"
-                    },
-                    body: {
-                        type: "bi.label",
-                        text: "这个是body"
-                    }
-                    // footer: {
-                    //     type: "bi.label",
-                    //     text: "这个是footer"
-                    // }
-                }).open(id);
-            }
+            type: "bi.vertical",
+            vgap: 10,
+            items: [{
+                type: "bi.text_button",
+                text: "点击弹出Popover",
+                height: 30,
+                handler: function () {
+                    BI.Popovers.remove(id);
+                    BI.Popovers.create(id, {
+                        type: "bi.bar_popover",
+                        header: {
+                            type: "bi.label",
+                            text: "这个是header"
+                        },
+                        body: {
+                            type: "bi.label",
+                            text: "这个是body"
+                        }
+                        // footer: {
+                        //     type: "bi.label",
+                        //     text: "这个是footer"
+                        // }
+                    }).open(id);
+                }
+            }]
         };
     }
 });
@@ -12059,6 +12133,10 @@ Demo.Downlist = BI.inherit(BI.Widget, {
     mounted: function () {
         var downlist = this.downlist;
         var label = this.label;
+        this.downlist.setValue([{
+            value: [11, 6],
+            childValue: 67
+        }]);
         downlist.on(BI.DownListCombo.EVENT_CHANGE, function (value, fatherValue) {
             label.setValue(JSON.stringify(downlist.getValue()));
         });
@@ -12079,14 +12157,30 @@ Demo.Downlist = BI.inherit(BI.Widget, {
                     self.downlist = _ref;
                 },
                 cls: "layout-bg3",
-                value: [{"childValue":22,"value":11},{"value":18},{"value":20}],
+                // value: [{"childValue":22,"value":11},{"value":18},{"value":20}],
                 height: 30,
                 width: 100,
-                items: [[{text: "temp", value: 1111111}],
+                items: [
                     [{
                         el: {
                             text: "column 1111",
-                            iconCls1: "check-mark-e-font",
+                            iconCls1: "dot-e-font",
+                            value: 12
+                        },
+                        children: [{
+                            text: "column 1.1",
+                            value: 21,
+                            cls: "dot-e-font"
+                        }, {
+                            text: "column 1.2",
+                            value: 22,
+                            cls: "dot-e-font"
+                        }]
+                    }],
+                    [{
+                        el: {
+                            text: "column 1111",
+                            iconCls1: "dot-e-font",
                             value: 11
                         },
                         children: [{
@@ -12094,80 +12188,75 @@ Demo.Downlist = BI.inherit(BI.Widget, {
                             value: 21,
                             cls: "dot-e-font"
                         }, {
-                            text: "column 1.222222222222222222222222222222222222",
-                            cls: "dot-e-font",
-                            value: 22
-                        }]
-                    }],
-                    [{
-                        el: {
-                            type: "bi.icon_text_icon_item",
-                            text: "column 2",
-                            iconCls1: "chart-type-e-font",
-                            cls: "dot-e-font",
-                            value: 12
-                        },
-                        children: [{
-                            type: "bi.icon_text_item",
-                            cls: "dot-e-font",
-                            height: 25,
-                            text: "column 2.1",
-                            value: 11
-                        }, {
-                            text: "column 2.2",
-                            value: 12,
+                            text: "column 1.2",
+                            value: 22,
                             cls: "dot-e-font"
                         }]
-                    }],
-                    [{
-                        text: "column 8",
-                        value: 18,
-                        cls: "dot-e-font"
-                    },
-                    {
-
-                        text: "column 9",
-                        cls: "dot-e-font",
-                        value: 19
-                    }
-                    ],
-                    [{
-                        text: "column 10",
-                        value: 20,
-                        cls: "dot-e-font"
-                    },
-                    {
-
-                        text: "column 11",
-                        cls: "dot-e-font",
-                        value: 21
-                    },
-                    {
-
-                        text: "column 12",
-                        cls: "dot-e-font",
-                        value: 22
-                    },
-                    {
-
-                        text: "column 13",
-                        cls: "dot-e-font",
-                        value: 23
-                    },
-                    {
-
-                        text: "column 14",
-                        cls: "dot-e-font",
-                        value: 24
-                    },
-                    {
-
-                        text: "column 15",
-                        cls: "dot-e-font",
-                        value: 25,
-                        bubble: "hahahaha"
-                    }
-                    ]
+                        // children: [{
+                        //     text: BI.i18nText("BI-Basic_None"),
+                        //     cls: "dot-e-font",
+                        //     value: 1
+                        // }, {
+                        //     text: BI.i18nText("BI-Basic_Calculate_Same_Period"),
+                        //     cls: "dot-e-font",
+                        //     value: 2
+                        // }, {
+                        //     text: BI.i18nText("BI-Basic_Calculate_Same_Ring"),
+                        //     cls: "dot-e-font",
+                        //     value: 3
+                        // }, {
+                        //     text: BI.i18nText("BI-Basic_Calculate_Same_Period_Rate"),
+                        //     cls: "dot-e-font",
+                        //     value: 4
+                        // }, {
+                        //     text: BI.i18nText("BI-Basic_Calculate_Same_Ring_Rate"),
+                        //     cls: "dot-e-font",
+                        //     value: 5
+                        // }, {
+                        //     el: {
+                        //         text: BI.i18nText("BI-Basic_Rank"),
+                        //         iconCls1: "dot-e-font",
+                        //         value: 6
+                        //     },
+                        //     children: [{
+                        //         text: "test1",
+                        //         cls: "dot-e-font",
+                        //         value: 67
+                        //     }, {
+                        //         text: "test2",
+                        //         cls: "dot-e-font",
+                        //         value: 68
+                        //     }]
+                        // }, {
+                        //     text: BI.i18nText("BI-Basic_Rank_In_Group"),
+                        //     cls: "dot-e-font",
+                        //     value: 7
+                        // }, {
+                        //     text: BI.i18nText("BI-Basic_Sum_Of_All"),
+                        //     cls: "dot-e-font",
+                        //     value: 8
+                        // }, {
+                        //     text: BI.i18nText("BI-Basic_Sum_Of_All_In_Group"),
+                        //     cls: "dot-e-font",
+                        //     value: 9
+                        // }, {
+                        //     text: BI.i18nText("BI-Basic_Sum_Of_Above"),
+                        //     cls: "dot-e-font",
+                        //     value: 10
+                        // }, {
+                        //     text: BI.i18nText("BI-Basic_Sum_Of_Above_In_Group"),
+                        //     cls: "dot-e-font",
+                        //     value: 11
+                        // }, {
+                        //     text: BI.i18nText("BI-Design_Current_Dimension_Percent"),
+                        //     cls: "dot-e-font",
+                        //     value: 12
+                        // }, {
+                        //     text: BI.i18nText("BI-Design_Current_Target_Percent"),
+                        //     cls: "dot-e-font",
+                        //     value: 13
+                        // }]
+                    }]
 
                 ]
             }, {
@@ -12181,7 +12270,7 @@ Demo.Downlist = BI.inherit(BI.Widget, {
             }],
             vgap: 20
         };
-    }
+    },
 });
 
 BI.shortcut("demo.down_list", Demo.Downlist);/**

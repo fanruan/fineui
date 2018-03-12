@@ -39,6 +39,7 @@ BI.YearMonthCombo = BI.inherit(BI.Widget, {
         });
 
         this.month.on(BI.MonthCombo.EVENT_CONFIRM, function () {
+            self.getValue();
             self.fireEvent(BI.YearMonthCombo.EVENT_CONFIRM);
         });
         this.month.on(BI.MonthCombo.EVENT_BEFORE_POPUPVIEW, function () {

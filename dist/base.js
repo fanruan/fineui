@@ -15418,12 +15418,12 @@ BI.Popover = BI.inherit(BI.Widget, {
 
     open: function () {
         this.show();
-        this.fireEvent(BI.Popover.EVENT_OPEN);
+        this.fireEvent(BI.Popover.EVENT_OPEN, arguments);
     },
 
     close: function () {
         this.hide();
-        this.fireEvent(BI.Popover.EVENT_CLOSE);
+        this.fireEvent(BI.Popover.EVENT_CLOSE, arguments);
     },
 
     setZindex: function (zindex) {
@@ -19170,7 +19170,9 @@ BI.shortcut("bi.checkbox", BI.Checkbox);/**
                                 break;
                         }
                     };
-                    upload.onloadstart();
+                    if (isFunction(upload.onloadstart)) {
+                        upload.onloadstart();
+                    }
                 }
                 var boundary = "AjaxUploadBoundary" + (new Date).getTime();
                 xhr.setRequestHeader("Content-Type", "multipart/form-data; boundary=" + boundary);
