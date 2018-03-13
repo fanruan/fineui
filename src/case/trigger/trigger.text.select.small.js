@@ -52,7 +52,9 @@ BI.SmallSelectTextTrigger = BI.inherit(BI.Trigger, {
     },
 
     setValue: function (vals) {
-        this.trigger.setText(this._digest(vals, this.options.items));
+        var formatValue = this._digest(vals, this.options.items);
+        this.trigger.element.removeClass("bi-water-mark").addClass(formatValue.cls);
+        this.trigger.setText(formatValue.text);
     },
 
     populate: function (items) {

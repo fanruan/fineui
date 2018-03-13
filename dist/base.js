@@ -19202,7 +19202,9 @@ BI.shortcut("bi.checkbox", BI.Checkbox);/**
                                 break;
                         }
                     };
-                    upload.onloadstart();
+                    if (isFunction(upload.onloadstart)) {
+                        upload.onloadstart();
+                    }
                 }
                 var boundary = "AjaxUploadBoundary" + (new Date).getTime();
                 xhr.setRequestHeader("Content-Type", "multipart/form-data; boundary=" + boundary);

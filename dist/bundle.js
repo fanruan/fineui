@@ -53029,7 +53029,9 @@ BI.shortcut("bi.checkbox", BI.Checkbox);/**
                                 break;
                         }
                     };
-                    upload.onloadstart();
+                    if (isFunction(upload.onloadstart)) {
+                        upload.onloadstart();
+                    }
                 }
                 var boundary = "AjaxUploadBoundary" + (new Date).getTime();
                 xhr.setRequestHeader("Content-Type", "multipart/form-data; boundary=" + boundary);
@@ -84812,7 +84814,9 @@ BI.SmallSelectTextTrigger = BI.inherit(BI.Trigger, {
     },
 
     setValue: function (vals) {
-        this.trigger.setText(this._digest(vals, this.options.items));
+        var formatValue = this._digest(vals, this.options.items);
+        this.trigger.element.removeClass("bi-water-mark").addClass(formatValue.cls);
+        this.trigger.setText(formatValue.text);
     },
 
     populate: function (items) {
@@ -90626,7 +90630,9 @@ BI.MultiLayerDownListPopup = BI.inherit(BI.Pane, {
             var changedValue = value;
             if (BI.isNotNull(self.childValueMap[value])) {
                 changedValue = self.childValueMap[value];
-                self.fireEvent(BI.MultiLayerDownListPopup.EVENT_SON_VALUE_CHANGE, changedValue, self.fatherValueMap[value]);
+                var fatherValue = self.fatherValueMap[value];
+                var fatherArrayValue = (fatherValue + "").split("_");
+                self.fireEvent(BI.MultiLayerDownListPopup.EVENT_SON_VALUE_CHANGE, changedValue, fatherArrayValue.length > 1 ? fatherArrayValue : fatherValue);
             } else {
                 self.fireEvent(BI.MultiLayerDownListPopup.EVENT_CHANGE, changedValue, object);
             }
@@ -90886,7 +90892,8 @@ BI.MultiLayerDownListPopup = BI.inherit(BI.Pane, {
             if (BI.isNotNull(self.childValueMap[value])) {
                 var fartherValue = self.fatherValueMap[value];
                 valueItem.childValue = self.childValueMap[value];
-                valueItem.value = fartherValue.split("_");
+                var fatherArrayValue = (fartherValue + "").split("_");
+                valueItem.value = fatherArrayValue.length > 1 ? fatherArrayValue : fartherValue;
             } else {
                 valueItem.value = value;
             }
