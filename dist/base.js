@@ -15307,11 +15307,20 @@ BI.shortcut("bi.grid_view", BI.GridView);/**
  * @extends BI.Widget
  */
 BI.Popover = BI.inherit(BI.Widget, {
+    _constant: {
+        SIZE: {
+            SMALL: "small",
+            NORMAL: "normal",
+            BIG: "big"
+        }
+    },
+
     _defaultConfig: function () {
         return BI.extend(BI.Popover.superclass._defaultConfig.apply(this, arguments), {
             baseCls: "bi-popover bi-card",
-            width: 600,
-            height: 500,
+            // width: 600,
+            // height: 500,
+            size: "normal", // small, normal, big
             header: null,
             body: null,
             footer: null
@@ -15401,15 +15410,38 @@ BI.Popover = BI.inherit(BI.Widget, {
             };
         }
 
-        BI.createWidget({
+        var size = this._calculateSize();
+
+        return {
             type: "bi.border",
-            element: this,
-            items: items
-        });
+            items: items,
+            width: size.width,
+            height: size.height
+        };
     },
 
-    show: function () {
-
+    _calculateSize: function () {
+        var o = this.options;
+        var size = {};
+        if (BI.isNotNull(o.size)) {
+            switch (o.size) {
+                case this._constant.SIZE.SMALL:
+                    size.width = 450;
+                    size.height = 220;
+                    break;
+                case this._constant.SIZE.BIG:
+                    size.width = 900;
+                    size.height = 500;
+                    break;
+                default:
+                    size.width = 550;
+                    size.height = 500;
+            }
+        }
+        return {
+            width: o.width || size.width,
+            height: o.height || size.height
+        };
     },
 
     hide: function () {
